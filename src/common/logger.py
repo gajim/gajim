@@ -339,13 +339,14 @@ class Logger:
 				SELECT contact_name, time, kind, show, message, subject FROM logs
 				WHERE jid_id = ? AND message LIKE ?
 				ORDER BY time
-				''', (jid_id,like_sql))
+				''', (jid_id, like_sql))
 
 		results = cur.fetchall()
 		return results
 
 	def date_has_logs(self, jid, year, month, day):
-		'''returns True if we have logs for given day, else False'''
+		'''returns True if we have logs (excluding statuses) for given date,
+		else False'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		
@@ -362,8 +363,22 @@ class Logger:
 			LIMIT 1
 			''' % (jid_id, start_of_day, last_second_of_day,
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
-		results = cur.fetchone()
-		if results:
+		result = cur.fetchone()
+		if result:
 			return True
 		else:
 			return False
+
+	def get_last_date_that_has_logs(self, jid):
+		'''returns last time (in seconds since EPOCH) for which
+		we had logs (excluding statuses)'''
+		jid = jid.lower()
+		jid_id = self.get_jid_id(jid)
+		cur.execute('''
+			SELECT time FROM logs
+			WHERE jid_id = ?
+			AND kind NOT IN (?, ?)
+			ORDER BY time DESC LIMIT 1
+			''', (jid_id, constants.KIND_STATUS, constants.KIND_GCSTATUS))
+		result = cur.fetchone()
+		return result

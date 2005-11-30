@@ -117,8 +117,16 @@ class HistoryWindow:
 		tag.set_property('foreground', 'grey')
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
 
-		date = time.localtime()
+		# select and show logs for last date we have logs with contact
+		# and if we don't have logs at all, default to today
+		result = gajim.logger.get_last_date_that_has_logs(self.jid)
+		tim = result[0]
+		if tim != '':
+			date = time.localtime(tim)
+		else:
+			date = time.localtime()
 		y, m, d = date[0], date[1], date[2]
+		self.calendar.select_day(d)
 		self.add_lines_for_date(y, m, d)
 		
 		self.window.show_all()
