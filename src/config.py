@@ -32,8 +32,9 @@ import cell_renderer_image
 
 try:
 	import gtkspell
+	HAS_GTK_SPELL = True
 except:
-	pass
+	HAS_GTK_SPELL = False
 
 from gajim import Contact
 from common import helpers
@@ -173,7 +174,7 @@ class PreferencesWindow:
 		if os.name == 'nt':
 			self.xml.get_widget('speller_checkbutton').set_no_show_all(True)
 		else:
-			if 'gtkspell' in globals():
+			if HAS_GTK_SPELL:
 				st = gajim.config.get('use_speller')
 				self.xml.get_widget('speller_checkbutton').set_active(st)
 			else:

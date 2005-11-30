@@ -34,8 +34,9 @@ import message_textview
 
 try:
 	import gtkspell
+	HAS_GTK_SPELL = True
 except:
-	pass
+	HAS_GTK_SPELL = False
 
 from common import gajim
 from common import helpers
@@ -716,7 +717,7 @@ class Chat:
 		gajim.last_message_time[self.account][jid] = 0
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		
-		if gajim.config.get('use_speller') and 'gtkspell' in globals():
+		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			try:
 				gtkspell.Spell(msg_textview)
 			except gobject.GError, msg:
@@ -765,8 +766,7 @@ class Chat:
 		self.notebook.append_page(child, tab_hbox)
 		
 		msg_textview.modify_font(font)
-		msg_textview.connect('size-request', self.size_request,
-			self.xmls[jid])
+		msg_textview.connect('size-request', self.size_request, self.xmls[jid])
 		# init new sent history for this conversation
 		self.sent_history[jid] = []
 		self.sent_history_pos[jid] = 0
