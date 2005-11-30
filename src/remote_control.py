@@ -515,7 +515,7 @@ class SignalObject(DbusPrototype):
 		add_contact = method(INTERFACE)(add_contact)
 
 class SessionBusNotPresent(Exception):
-	''' This exception indicates that there is no session daemon '''
+	'''This exception indicates that there is no session daemon'''
 	def __init__(self):
 		Exception.__init__(self)
 
@@ -523,9 +523,9 @@ class SessionBusNotPresent(Exception):
 		return _('Session bus is not available')
 
 class DbusNotSupported(Exception):
-	''' D-Bus is not installed or python bindings are missing '''
+	'''D-Bus is not installed or python bindings are missing'''
 	def __init__(self):
 		Exception.__init__(self)
 
 	def __str__(self):
-		return _('D-Bus is not present on this machine')
+		return _('D-Bus is not present on this machine or python module is missing')
