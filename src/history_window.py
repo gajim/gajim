@@ -209,6 +209,8 @@ class HistoryWindow:
 	
 	def add_new_line(self, contact_name, tim, kind, show, message):
 		'''add a new line in textbuffer'''
+		if not message: # None or ''
+			return
 		buf = self.history_buffer
 		end_iter = buf.get_end_iter()
 		
