@@ -135,7 +135,7 @@ class SignalObject(DbusPrototype):
 		'''get_status(account = None)
 		returns status (show to be exact) which is the global one
 		unless account is given'''
-		account = self._get_real_arguments(args, 1)
+		account = self._get_real_arguments(args, 1)[0]
 		accounts = gajim.contacts.keys()
 		if not account and len(accounts) == 1:
 			# if there is only one account in roster, take it as default
@@ -532,6 +532,7 @@ class SignalObject(DbusPrototype):
 		prefs_store = method(INTERFACE)(prefs_store)
 		remove_contact = method(INTERFACE)(remove_contact)
 		add_contact = method(INTERFACE)(add_contact)
+		get_status = method(INTERFACE)(get_status)
 
 class SessionBusNotPresent(Exception):
 	'''This exception indicates that there is no session daemon'''

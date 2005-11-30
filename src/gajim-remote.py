@@ -208,10 +208,9 @@ class GajimRemote:
 				],
 			
 			'get_status': [
-				_('Returns current status'),
+				_('Returns current status (the global one unless account is specified)'),
 					[
-						(_('account'), _('if specified, returns status for this account; '
-							'Else returns global status'), False)
+						(_('account'), _(''), False)
 					]
 				],
 				
@@ -562,7 +561,7 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 			elif self.argv_len == 5:
 				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4])
 			elif argv_len == 6:
-				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4], 
+				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4],
 					sys.argv[5])
 			return res
 		except Exception:
