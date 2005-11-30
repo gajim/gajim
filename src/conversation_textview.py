@@ -25,11 +25,6 @@ import time
 import tooltips
 import dialogs
 
-try:
-	import gtkspell
-except:
-	pass
-
 from common import gajim
 from common import helpers
 from common import i18n
