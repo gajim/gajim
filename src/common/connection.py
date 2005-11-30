@@ -2215,7 +2215,9 @@ class Connection:
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = show, status = status)
 		p = self.add_sha(p)
-		self.to_be_sent.append(p)
+		# send instantly so when we go offline, status is sent to gc before we
+		# disconnect from jabber server
+		self.connection.send(p)
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		'''role is for all the life of the room so it's based on nick'''

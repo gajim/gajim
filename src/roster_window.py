@@ -1491,12 +1491,12 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 														passphrase)
 					gajim.connections[account].gpg_passphrase(passphrase)
 					
-		gajim.connections[account].change_status(status, txt, sync, auto)
 		for room_jid in gajim.interface.instances[account]['gc']:
 			if room_jid != 'tabbed':
 				nick = gajim.interface.instances[account]['gc'][room_jid].nicks[room_jid]
 				gajim.connections[account].send_gc_status(nick, room_jid, status, 
 					txt)
+		gajim.connections[account].change_status(status, txt, sync, auto)
 		if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
 			gajim.sleeper_state[account] = 'online'
