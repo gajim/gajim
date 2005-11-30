@@ -955,10 +955,8 @@ class Interface:
 		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
 
 	def handle_event_signed_in(self, account, empty):
-		# SIGNED_IN event is emitted when we sign in
-
+		'''SIGNED_IN event is emitted when we sign in, so handle it'''
 		# join already open groupchats
-		print '\n\n\nsigned_in\n\n\n'
 		for room_jid in self.instances[account]['gc']:
 			if room_jid == 'tabbed':
 				continue
