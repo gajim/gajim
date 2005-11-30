@@ -45,10 +45,8 @@ GTKGUI_GLADE = 'gtkgui.glade'
 (
 C_CONTACT_NAME,
 C_TIME,
-C_KIND,
-C_SHOW,
 C_MESSAGE
-) = range(5)
+) = range(3)
 
 class HistoryWindow:
 	'''Class for browsing logs of conversations with contacts'''
@@ -66,8 +64,8 @@ class HistoryWindow:
 		self.query_entry = xml.get_widget('query_entry')
 		self.expander_vbox = xml.get_widget('expander_vbox')
 		self.results_treeview = xml.get_widget('results_treeview')
-		# contact_name, time, kind, show, message
-		model = gtk.ListStore(str,	str, str, str, str)
+		# contact_name, time, message
+		model = gtk.ListStore(str,	str, str)
 		self.results_treeview.set_model(model)
 		
 		col = gtk.TreeViewColumn(_('Name'))
@@ -81,18 +79,6 @@ class HistoryWindow:
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = C_TIME)
-		
-		col = gtk.TreeViewColumn(_('Kind'))
-		self.results_treeview.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer)
-		col.set_attributes(renderer, text = C_KIND)
-		
-		col = gtk.TreeViewColumn(_('Status'))
-		self.results_treeview.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer)
-		col.set_attributes(renderer, text = C_SHOW)
 		
 		col = gtk.TreeViewColumn(_('Message'))
 		self.results_treeview.append_column(col)
@@ -303,12 +289,16 @@ class HistoryWindow:
 		model.clear()
 		if text == '':
 			return
-		# contact_name, time, kind, show, message
+		# contact_name, time, kind, show, message, subject
 		results = gajim.logger.get_search_results_for_query(self.jid, text)
+		#FIXME: investigate on kind and put name for normal chatting
+		#and add "subject:  | message: " in message column is kind is 
+		# single*
+		# also do we need show at all?
 		for row in results:
 			local_time = time.localtime(row[1])
 			tim = time.strftime('%x', local_time)
-			iter = model.append((row[0], tim, row[2], row[3], row[4]))
+			iter = model.append((row[0], tim, row[4]))
 			
 	def on_results_treeview_row_activated(self, widget, path, column):
 		'''a row was double clicked, get date from row, and select it in calendar

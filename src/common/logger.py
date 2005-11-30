@@ -336,7 +336,7 @@ class Logger:
 		else: # user just typed something, we search in message column
 			like_sql = '%' + query + '%'
 			cur.execute('''
-				SELECT contact_name, time, kind, show, message FROM logs
+				SELECT contact_name, time, kind, show, message, subject FROM logs
 				WHERE jid_id = ? AND message LIKE ?
 				ORDER BY time
 				''', (jid_id,like_sql))
