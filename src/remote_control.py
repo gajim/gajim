@@ -86,7 +86,6 @@ class SignalObject(DbusPrototype):
 	def __init__(self, service):
 		self.first_show = True
 		self.vcard_account = None
-		self.disabled = False
 
 		# register our dbus API
 		if _version[1] >= 41:
@@ -115,8 +114,6 @@ class SignalObject(DbusPrototype):
 
 	def raise_signal(self, signal, arg):
 		''' raise a signal, with a single string message '''
-		if self.disabled :
-			return
 		if _version[1] >= 30:
 			from dbus import dbus_bindings
 			message = dbus_bindings.Signal(OBJ_PATH, INTERFACE, signal)
@@ -183,8 +180,6 @@ class SignalObject(DbusPrototype):
 		''' send_message(jid, message, keyID=None, account=None)
 		send 'message' to 'jid', using account (optional) 'account'.
 		if keyID is specified, encrypt the message with the pgp key '''
-		if self.disabled:
-			return
 		jid, message, keyID, account = self._get_real_arguments(args, 4)
 		if not jid or not message:
 			return None # or raise error
@@ -213,8 +208,6 @@ class SignalObject(DbusPrototype):
 	def open_chat(self, *args):
 		''' start_chat(jid, account=None) -> shows the tabbed window for new 
 		message to 'jid', using account(optional) 'account' '''
-		if self.disabled:
-			return
 		jid, account = self._get_real_arguments(args, 2)
 		if not jid:
 			# FIXME: raise exception for missing argument (dbus0.35+)
@@ -262,8 +255,6 @@ class SignalObject(DbusPrototype):
 	def change_status(self, *args, **keywords):
 		''' change_status(status, message, account). account is optional -
 		if not specified status is changed for all accounts. '''
-		if self.disabled:
-			return
 		status, message, account = self._get_real_arguments(args, 3)
 		if status not in ('offline', 'online', 'chat', 
 			'away', 'xa', 'dnd', 'invisible'):
@@ -281,8 +272,6 @@ class SignalObject(DbusPrototype):
 
 	def show_next_unread(self, *args):
 		''' Show the window(s) with next waiting messages in tabbed/group chats. '''
-		if self.disabled:
-			return
 		#FIXME: when systray is disabled this method does nothing.
 		#FIXME: show message from GC that refer to us (like systray does)
 		if len(gajim.interface.systray.jids) != 0:
@@ -311,8 +300,6 @@ class SignalObject(DbusPrototype):
 	def contact_info(self, *args):
 		''' get vcard info for a contact. This method returns nothing.
 		You have to register the 'VcardInfo' signal to get the real vcard. '''
-		if self.disabled:
-			return
 		[jid] = self._get_real_arguments(args, 1)
 		if not isinstance(jid, unicode):
 			jid = unicode(jid)
@@ -331,8 +318,6 @@ class SignalObject(DbusPrototype):
 
 	def list_accounts(self, *args):
 		''' list register accounts '''
-		if self.disabled:
-			return
 		if gajim.contacts:
 			result = gajim.contacts.keys()
 			if result and len(result) > 0:
@@ -342,10 +327,7 @@ class SignalObject(DbusPrototype):
 				return result_array
 		return None
 
-
 	def list_contacts(self, *args):
-		if self.disabled:
-			return
 		''' list all contacts in the roster. If the first argument is specified,
 		then return the contacts for the specified account '''
 		[for_account] = self._get_real_arguments(args, 1)
@@ -375,8 +357,6 @@ class SignalObject(DbusPrototype):
 
 	def toggle_roster_appearance(self, *args):
 		''' shows/hides the roster window '''
-		if self.disabled:
-			return
 		win = gajim.interface.roster.window
 		if win.get_property('visible'):
 			gobject.idle_add(win.hide)
