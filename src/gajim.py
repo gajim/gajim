@@ -958,19 +958,19 @@ class Interface:
 		# SIGNED_IN event is emitted when we sign in
 
 		# join already open groupchats
-		for acct in gajim.connections:
-			for room_jid in self.instances[acct]['gc']:
-				if room_jid == 'tabbed':
-					continue
-				if gajim.gc_connected[acct][room_jid]:
-					continue
-				room, server = gajim.get_room_name_and_server_from_room_jid(
-					room_jid)
-				nick = self.instances[acct]['gc'][room_jid].nicks[room_jid]
-				password = ''
-				if gajim.gc_passwords.has_key(room_jid):
-					password = gajim.gc_passwords[room_jid]
-				gajim.connections[acct].join_gc(nick, room, server, password)
+		print '\n\n\nsigned_in\n\n\n'
+		for room_jid in self.instances[account]['gc']:
+			if room_jid == 'tabbed':
+				continue
+			if gajim.gc_connected[account][room_jid]:
+				continue
+			room, server = gajim.get_room_name_and_server_from_room_jid(
+				room_jid)
+			nick = self.instances[account]['gc'][room_jid].nicks[room_jid]
+			password = ''
+			if gajim.gc_passwords.has_key(room_jid):
+				password = gajim.gc_passwords[room_jid]
+			gajim.connections[account].join_gc(nick, room, server, password)
 
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
