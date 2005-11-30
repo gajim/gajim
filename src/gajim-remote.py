@@ -557,7 +557,6 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 			return res
 		except Exception, e:
 			raise ServiceNotAvailable
-			send_error( + ': ' + str(e))
 		return None
 
 if __name__ == '__main__':
