@@ -1311,6 +1311,9 @@ class Connection:
 
 			# Get bookmarks from private namespace
 			self.get_bookmarks()
+
+			#Inform GUI we just signed in
+			self.dispatch('SIGNED_IN', ())
 		self.continue_connect_info = None
 
 	def _PrivateCB(self, con, iq_obj):
