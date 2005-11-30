@@ -59,6 +59,14 @@ class DbusNotSupported(Exception):
 	def __str__(self):
 		return _('D-Bus is not present on this machine or python module is missing')
 
+class SessionBusNotPresent(Exception):
+	'''This exception indicates that there is no session daemon'''
+	def __init__(self):
+		Exception.__init__(self)
+
+	def __str__(self):
+		return _('Session bus is not available')
+
 try:
 	import dbus
 except:
@@ -88,7 +96,7 @@ class GajimRemote:
 		#
 		self.commands = {
 			'help':[
-					_('show a help on specific command'),
+					_('shows a help on specific command'),
 					[
 						#User gets help for the command, specified by this parameter
 						(_('command'), 
@@ -100,110 +108,112 @@ class GajimRemote:
 					[]
 				], 
 			'show_next_unread': [
-					_('Popup a window with the next unread message'),
+					_('Popups a window with the next unread message'),
 					[]
 				],
 			'list_contacts': [
-					_('Print a list of all contacts in the roster. \
-Each contact appear on a separate line'),
+					_('Prints a list of all contacts in the roster. Each contact appear on a separate line'),
 					[
-						(_('account'), _('show only contacts of the \
-given account'), False)
+						(_('account'), _('show only contacts of the given account'), False)
 					]
 					
 				],	
 			'list_accounts': [
-					_('Print a list of registered accounts'),
+					_('Prints a list of registered accounts'),
 					[]
 				], 
 			'change_status': [
-					_('Change the status of account or accounts'),
+					_('Changes the status of account or accounts'),
 					[
-						(_('status'), _('one of: offline, online, chat, away, \
-xa, dnd, invisible '), True), 
+						(_('status'), _('one of: offline, online, chat, away, xa, dnd, invisible '), True), 
 						(_('message'), _('status message'), False), 
-						(_('account'), _('change status of account "account". \
-If not specified, try to change status of all accounts that \
-have "sync with global status" option set'), False)
+						(_('account'), _('change status of account "account". '
+		'If not specified, try to change status of all accounts that have '
+		'"sync with global status" option set'), False)
 					]
 				],
 			'open_chat': [ 
-					_('Show the chat dialog so that you can send messages to a \
-contact'), 
+					_('Shows the chat dialog so that you can send messages to a contact'), 
 					[
-						('jid', _('JID of the contact that you want to chat \
-with'),
+						('jid', _('JID of the contact that you want to chat with'),
 							True), 
-						(_('account'), _('if specified, contact is taken from \
-the contact list of this account'), False)
+						(_('account'), _('if specified, contact is taken from the '
+						'contact list of this account'), False)
 					]
 				],
 			'send_message':[
-					_('Send new message to a contact in the roster. Both OpenPGP \
-key and account are optional. If you want to set only \'account\', without \
-\'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'), 
+					_('Sends new message to a contact in the roster. Both OpenPGP key '
+					'and account are optional. If you want to set only \'account\', '
+					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'), 
 					[
-						('jid', _('JID of the contact that will receive the \
-message'), True),
+						('jid', _('JID of the contact that will receive the message'), True),
 						(_('message'), _('message contents'), True),
-						(_('pgp key'), _('if specified, the message will be \
-encrypted using this public key'), False),
-						(_('account'), _('if specified, the message will be \
-sent using this account'), False),
+						(_('pgp key'), _('if specified, the message will be encrypted '
+							'using this public key'), False),
+						(_('account'), _('if specified, the message will be sent '
+							'using this account'), False),
 					]
 				], 
 			'contact_info': [
-					_('Get detailed info on a contact'), 
+					_('Gets detailed info on a contact'), 
 					[
 						('jid', _('JID of the contact'), True)
 					]
 				],
 			'send_file': [
-					_('Send file to a contact'),
+					_('Sends file to a contact'),
 					[
 						(_('file'), _('File path'), True),
 						('jid', _('JID of the contact'), True),
-						(_('account'), _('if specified, file will be sent \
-using this account'), False)
+						(_('account'), _('if specified, file will be sent using this '
+							'account'), False)
 					]
 				],
 			'prefs_list': [
-					_('List all preferences and their values'),
+					_('Lists all preferences and their values'),
 					[ ]
 				],
 			'prefs_put': [
-					_('Set value of \'key\' to \'value\'.'),
+					_('Sets value of \'key\' to \'value\'.'),
 					[
-						(_('key=value'), _('\'key\' is the name of the preference, \
-\'value\' is the value to set it to'), True)
+						(_('key=value'), _('\'key\' is the name of the preference, '
+							'\'value\' is the value to set it to'), True)
 					]
 				],
 			'prefs_del': [
-					_('Delete a preference item'),
+					_('Deletes a preference item'),
 					[ 
 						(_('key'), _('name of the preference to be deleted'), True) 
 					]
 				],
 			'prefs_store': [
-					_('Write the current state of Gajim preferences to the \
-.config file'),
+					_('Writes the current state of Gajim preferences to the .config '
+						'file'),
 					[ ]
 				],
 			'remove_contact': [
-					_('Remove contact from roster'),
+					_('Removes contact from roster'),
 					[ 
 						('jid', _('JID of the contact'), True),
-						(_('account'), _('if specified, contact is taken from \
-the contact list of this account'), False)
+						(_('account'), _('if specified, contact is taken from the '
+							'contact list of this account'), False)
 						
 					]
 				],
 			'add_contact': [
-					_('Add contact to roster'),
+					_('Adds contact to roster'),
 					[ 
-						(_('account'), _('Add new contact to this account.'), True)
+						(_('account'), _('Adds new contact to this account.'), True)
 					]
-				]
+				],
+			
+			'get_status': [
+				_('Returns current status'),
+					[
+						(_('account'), _('if specified, returns status for this account; '
+							'Else returns global status'), False)
+					]
+				],
 				
 			}
 		if self.argv_len  < 2 or \
@@ -227,7 +237,7 @@ the contact list of this account'), False)
 				id = self.sbus.add_signal_receiver(self.show_vcard_info, 
 					'VcardInfo', INTERFACE, SERVICE, OBJ_PATH)
 			except Exception, e:
-				send_error(_('Service not available') + ': ' + str(e))
+				raise ServiceNotAvailable
 		
 		res = self.call_remote_method()
 		self.print_result(res)
@@ -245,8 +255,8 @@ the contact list of this account'), False)
 				
 				if res is False:
 					if self.argv_len < 4:
-						send_error(_('\'%s\' is not in your roster.\n\
-Please specify account for sending the message.') % sys.argv[2])
+						send_error(_('\'%s\' is not in your roster.\n'
+					'Please specify account for sending the message.') % sys.argv[2])
 					else:
 						send_error(_('You have no active account'))
 			elif self.command == 'list_accounts':
@@ -273,7 +283,7 @@ Please specify account for sending the message.') % sys.argv[2])
 		try:
 			self.sbus = dbus.SessionBus()
 		except:
-			send_error(_('Session bus is not available.') + ': ' + str(e))
+			raise SessionBusNotPresent
 		
 		if _version[1] >= 30:
 			obj = self.sbus.get_object(SERVICE, OBJ_PATH)
@@ -555,7 +565,7 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4], 
 					sys.argv[5])
 			return res
-		except Exception, e:
+		except Exception:
 			raise ServiceNotAvailable
 		return None
 

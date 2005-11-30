@@ -48,6 +48,9 @@ INTERFACE = 'org.gajim.dbus.RemoteInterface'
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 SERVICE = 'org.gajim.dbus'
 
+STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+	'invisible']
+
 class Remote:
 	def __init__(self):
 		self.signal_object = None
@@ -106,7 +109,8 @@ class SignalObject(DbusPrototype):
 				self.prefs_del,
 				self.prefs_put,
 				self.add_contact,
-				self.remove_contact
+				self.remove_contact,
+				self.get_status,
 			])
 
 	def raise_signal(self, signal, arg):
@@ -127,14 +131,29 @@ class SignalObject(DbusPrototype):
 	def VcardInfo(self, *vcard):
 		pass
 
+	def get_status(self, *args):
+		'''get_status(account = None)
+		returns status (show to be exact) which is the global one
+		unless account is given'''
+		account = self._get_real_arguments(args, 1)
+		accounts = gajim.contacts.keys()
+		if not account and len(accounts) == 1:
+			# if there is only one account in roster, take it as default
+			# if user did not ask for account
+			account = accounts[0] # FIXME: get global status, not the status from first (ask Yann)
+		if account: # return show for this account (either first or the specified)
+			index = gajim.connections[account].connected
+			return STATUS_LIST[index]
+
 	def send_file(self, *args):
-		''' send_file(file_path, jid, account=None) 
+		'''send_file(file_path, jid, account=None) 
 		send file, located at 'file_path' to 'jid', using account 
 		(optional) 'account' '''
 		file_path, jid, account = self._get_real_arguments(args, 3)
 		accounts = gajim.contacts.keys()
 		
 		# if there is only one account in roster, take it as default
+		# if user did not ask for account
 		if not account and len(accounts) == 1:
 			account = accounts[0]
 		if account:
