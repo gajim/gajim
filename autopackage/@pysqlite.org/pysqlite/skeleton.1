@@ -1,0 +1,22 @@
+# -*- shell-script-mode -*-
+
+[Meta]
+RootName: @pysqlite.org/pysqlite
+DisplayName: Python interface for the SQLite
+ShortName: pysqlite
+Skeleton-Author: Filippos Papadopoulos <filip@cs.uoi.gr>
+Skeleton-Version: 1
+
+[Notes]
+pysqlite is a Python DB-API 2.0 interface for the SQLite embedded relational database engine
+
+[Test]
+INTERFACE_VERSIONS=`python - <<EOF
+try:
+   import pysqlite2.dbapi2 as sql
+   print sql.version
+except:
+    pass
+EOF
+`
+SOFTWARE_VERSIONS="$INTERFACE_VERSIONS"
