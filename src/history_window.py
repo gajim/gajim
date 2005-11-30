@@ -309,7 +309,7 @@ class HistoryWindow:
 			iter = model.append((row[0], tim, row[2], row[3], row[4]))
 			
 	def on_results_treeview_row_activated(self, widget, path, column):
-		'''a row was double clicked, get date from row, and select it in caledar
+		'''a row was double clicked, get date from row, and select it in calendar
 		which results to showing conversation logs for that date'''
 		# get currently selected date
 		cur_year, cur_month, cur_day = self.calendar.get_date()
