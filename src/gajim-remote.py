@@ -272,7 +272,7 @@ class GajimRemote:
 				pref_keys = prefs_dict[0].keys()
 				pref_keys.sort()
 				for pref_key in pref_keys:
-					print pref_key, '=', prefs_dict[0	][pref_key]
+					print pref_key, '=', prefs_dict[0][pref_key]
 			elif res:
 				print res
 	
@@ -564,7 +564,8 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4],
 					sys.argv[5])
 			return res
-		except Exception:
+		except Exception, e:
+			print str(e)
 			raise ServiceNotAvailable
 		return None
 
