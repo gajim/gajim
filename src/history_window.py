@@ -275,7 +275,14 @@ class HistoryWindow:
 		the True/False thingy depending if it's expanded or not
 		this function is called in a timeout just after expanded state changes'''
 		parent = widget.get_parent() # vbox
-		parent.child_set_property(widget, 'expand', widget.get_expanded())
+		expanded = widget.get_expanded()
+		w, h = self.window.get_size()
+		if expanded: # resize to larger in height the window
+			self.window.resize(w, int(h*1.3))
+		else: # resize to smaller in height the window
+			self.window.resize(w, int(h/1.3))
+		# now set expand so if manually resizing scrolledwindow resizes too
+		parent.child_set_property(widget, 'expand', expanded)
 	
 	def on_search_expander_activate(self, widget):
 		if widget.get_expanded(): # it's the OPPOSITE!, it's not expanded
