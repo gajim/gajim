@@ -137,6 +137,8 @@ class TabbedChatWindow(chat.Chat):
 		if not real_jid: # this can happend if we're in a moderate room
 			return
 		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
+		if avatar_pixbuf in ('ask', None):
+			return
 		avatar_w = avatar_pixbuf.get_width()
 		avatar_h = avatar_pixbuf.get_height()
 		
