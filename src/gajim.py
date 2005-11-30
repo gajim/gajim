@@ -1097,18 +1097,33 @@ class Interface:
 		if gajim.config.get('useemoticons'):
 			# When an emoticon is bordered by an alpha-numeric character it is NOT
 			# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
-			emoticons_pattern = '(?<!\w)(?:'
-				# sort keys by length so :qwe emot is checked before :q
+			# We still allow multiple emoticons side-by-side like :P:P:P
+			# sort keys by length so :qwe emot is checked before :q
 			keys = self.emoticons.keys()
 			keys.sort(self.on_emoticon_sort)
+			emoticons_pattern_prematch = ''
+			emoticons_pattern_postmatch = ''
+			emoticon_length = 0
 			for emoticon in keys: # travel thru emoticons list
 				emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
 				emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
-			emoticons_pattern = emoticons_pattern[:-1] + ')(?!\w)'
-
+				if (emoticon_length != len(emoticon)):
+					# Build up expressions to match emoticons next to other emoticons
+					emoticons_pattern_prematch  = emoticons_pattern_prematch[:-1]  + ')|(?<='
+					emoticons_pattern_postmatch = emoticons_pattern_postmatch[:-1] + ')|(?='
+					emoticon_length = len(emoticon)
+				emoticons_pattern_prematch += emoticon_escaped  + '|'
+				emoticons_pattern_postmatch += emoticon_escaped + '|'
+			# We match from our list of emoticons, but they must either have
+			#  whitespace, or another emoticon next to it to match successfully
+			emoticons_pattern = '|' + \
+				'(?:(?<!\w' + emoticons_pattern_prematch[:-1]   + '))' + \
+				'(?:'       + emoticons_pattern[:-1]            + ')'  + \
+				'(?:(?!\w'  + emoticons_pattern_postmatch[:-1]  + '))'
+		
 		# because emoticons match later (in the string) they need to be after
 		# basic matches that may occur earlier
-		emot_and_basic_pattern = basic_pattern + '|' + emoticons_pattern
+		emot_and_basic_pattern = basic_pattern + emoticons_pattern
 		self.emot_and_basic_re = sre.compile(emot_and_basic_pattern, sre.IGNORECASE)
 		
 		# at least one character in 3 parts (before @, after @, after .)
