@@ -57,7 +57,7 @@ class Constants:
 	def __init__(self):
 		(
 			self.JID_NORMAL_TYPE,
-			self.JID_ROOM_TYPE # image to show state (online, new message etc)
+			self.JID_ROOM_TYPE
 		) = range(2)
 		
 		(

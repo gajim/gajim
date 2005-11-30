@@ -310,7 +310,7 @@ class HistoryWindow:
 			
 	def on_results_treeview_row_activated(self, widget, path, column):
 		'''a row was double clicked, get date from row, and select it in caledar
-		and also show conversation logs for that date'''
+		which results to showing conversation logs for that date'''
 		# get currently selected date
 		cur_year, cur_month, cur_day = self.calendar.get_date()
 		cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
