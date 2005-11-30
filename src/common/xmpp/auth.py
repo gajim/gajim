@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: auth.py,v 1.28 2005/05/07 02:42:04 snakeru Exp $
+# $Id: auth.py,v 1.33 2005/11/30 17:05:40 normanr Exp $
 
 """
 Provides library with all Non-SASL and SASL authentication mechanisms.
@@ -174,7 +174,7 @@ class SASL(PlugIn):
         data=base64.decodestring(incoming_data)
         self.DEBUG('Got challenge:'+data,'ok')
         for pair in data.split(','):
-            key,value=pair.split('=',1)
+            key,value=pair.split('=', 1)
             if value[:1]=='"' and value[-1:]=='"': value=value[1:-1]
             chal[key]=value
         if chal.has_key('qop') and chal['qop']=='auth':
@@ -199,7 +199,7 @@ class SASL(PlugIn):
                 if key in ['nc','qop','response','charset']: sasl_data+="%s=%s,"%(key,resp[key])
                 else: sasl_data+='%s="%s",'%(key,resp[key])
 ########################################3333
-            node=Node('response',attrs={'xmlns':NS_SASL},payload=[base64.encodestring(sasl_data[:-1]).replace('\n','')])
+            node=Node('response',attrs={'xmlns':NS_SASL},payload=[base64.encodestring(sasl_data[:-1]).replace('\r','').replace('\n','')])
             self._owner.send(node.__str__())
         elif chal.has_key('rspauth'): self._owner.send(Node('response',attrs={'xmlns':NS_SASL}).__str__())
         else: 
