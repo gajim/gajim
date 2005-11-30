@@ -1432,6 +1432,7 @@ class Connection:
 				our_jid = gajim.get_jid_from_account(self.name)
 				if jid and jid != our_jid:
 					self.dispatch('VCARD', {'jid': jid})
+					jid = gajim.get_jid_without_resource(jid)
 					# Write an empty file
 					path_to_file = os.path.join(gajim.VCARDPATH, jid)
 					fil = open(path_to_file, 'w')
