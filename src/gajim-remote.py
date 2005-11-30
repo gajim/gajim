@@ -43,10 +43,26 @@ def send_error(error_message):
 		sys.stderr.flush()
 		sys.exit(1)
 
+class ServiceNotAvailable(Exception):
+	''' This exception indicates that there is no session daemon '''
+	def __init__(self):
+		Exception.__init__(self)
+
+	def __str__(self):
+		return _('Service not available: Gajim is not running, or remote_control is False')
+
+class DbusModuleMissing(Exception):
+	''' This exception indicates that there is no session daemon '''
+	def __init__(self):
+		Exception.__init__(self)
+
+	def __str__(self):
+		return _('D-Bus python module is missing')
+
 try:
 	import dbus
 except:
-	send_error(_('Dbus is not supported.'))
+	raise DbusModuleMissing
 
 _version = getattr(dbus, 'version', (0, 20, 0))
 if _version[1] >= 41:
@@ -540,9 +556,9 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 					sys.argv[5])
 			return res
 		except Exception, e:
-			send_error(_('Service not available') + ': ' + str(e))
+			raise ServiceNotAvailable
+			send_error( + ': ' + str(e))
 		return None
-
 
 if __name__ == '__main__':
 	GajimRemote()
