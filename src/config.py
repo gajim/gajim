@@ -547,10 +547,8 @@ class PreferencesWindow:
 			jids = windows.keys()
 			for jid in jids:
 				window = windows[jid]
-				buf1[jid] = window.xmls[jid].get_widget('conversation_textview').\
-					get_buffer()
-				buf2[jid] = window.xmls[jid].get_widget('message_textview').\
-					get_buffer()
+				buf1[jid] = window.conversation_textviews[jid].get_buffer()
+				buf2[jid] = window.message_textviews[jid].get_buffer()
 				saved_var[jid] = window.save_var(jid)
 				window.window.destroy()
 			#open new tabbed chat windows
@@ -561,10 +559,8 @@ class PreferencesWindow:
 				if kind == 'gc':
 					gajim.interface.roster.new_room(jid, saved_var[jid]['nick'], acct)
 				window = windows[jid]
-				window.xmls[jid].get_widget('conversation_textview').set_buffer(
-					buf1[jid])
-				window.xmls[jid].get_widget('message_textview').set_buffer(
-					buf2[jid])
+				window.conversation_textviews[jid].set_buffer(buf1[jid])
+				window.message_textviews[jid].set_buffer(buf2[jid])
 				window.load_var(jid, saved_var[jid])
 
 	def split_windows(self, kind):
@@ -580,10 +576,8 @@ class PreferencesWindow:
 			jids.remove('tabbed')
 			for jid in jids:
 				window = windows[jid]
-				buf1[jid] = window.xmls[jid].get_widget('conversation_textview').\
-					get_buffer()
-				buf2[jid] = window.xmls[jid].get_widget('message_textview').\
-					get_buffer()
+				buf1[jid] = window.conversation_textviews[jid].get_buffer()
+				buf2[jid] = window.message_textviews[jid].get_buffer()
 				saved_var[jid] = window.save_var(jid)
 			windows['tabbed'].window.destroy()
 			#open new tabbed chat windows
@@ -594,10 +588,8 @@ class PreferencesWindow:
 				if kind == 'gc':
 					gajim.interface.roster.new_room(jid, saved_var[jid]['nick'], acct)
 				window = windows[jid]
-				window.xmls[jid].get_widget('conversation_textview').set_buffer(
-					buf1[jid])
-				window.xmls[jid].get_widget('message_textview').set_buffer(
-					buf2[jid])
+				window.conversation_textviews[jid].set_buffer(buf1[jid])
+				window.message_textviews[jid].set_buffer(buf2[jid])
 				window.load_var(jid, saved_var[jid])
 
 	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
@@ -619,7 +611,7 @@ class PreferencesWindow:
 				if jid == 'tabbed':
 					continue
 				window = windows[jid]
-				textview = window.xmls[jid].get_widget('message_textview')
+				textview = window.message_textviews[jid]
 				gtkspell.Spell(textview)
 
 	def remove_speller(self, kind):
@@ -630,7 +622,7 @@ class PreferencesWindow:
 				if jid == 'tabbed':
 					continue
 				window = windows[jid]
-				textview = window.xmls[jid].get_widget('message_textview')
+				textview = window.message_textviews[jid]
 				spell_obj = gtkspell.get_from_text_view(textview)
 				if spell_obj:
 					spell_obj.detach()
