@@ -123,17 +123,17 @@ class StatusTable:
 	def __init__(self):
 		self.current_row = 1
 		self.table = None
-		self.text_lable = None
+		self.text_label = None
 		self.spacer_label = '   '
 		
 	def create_table(self):
 		self.table = gtk.Table(3, 1)
 		self.table.set_property('column-spacing', 2)
-		self.text_lable = gtk.Label()
-		self.text_lable.set_line_wrap(True)
-		self.text_lable.set_alignment(0, 0)
-		self.text_lable.set_selectable(False)
-		self.table.attach(self.text_lable, 1, 4, 1, 2)
+		self.text_label = gtk.Label()
+		self.text_label.set_line_wrap(True)
+		self.text_label.set_alignment(0, 0)
+		self.text_label.set_selectable(False)
+		self.table.attach(self.text_label, 1, 4, 1, 2)
 		
 	def get_status_info(self, resource, priority, show, status):
 		str_status = resource + ' (' + unicode(priority) + ')'
@@ -161,14 +161,14 @@ class StatusTable:
 				image.set_from_file(file)
 				break
 		spacer = gtk.Label(self.spacer_label)
-		image.set_alignment(0., 1.)
+		image.set_alignment(0, 1.)
 		self.table.attach(spacer, 1, 2, self.current_row, 
 			self.current_row + 1, 0, 0, 0, 0)
 		self.table.attach(image, 2, 3, self.current_row, 
 			self.current_row + 1, 0, 0, 3, 0)
 		status_label = gtk.Label()
 		status_label.set_markup(str_status)
-		status_label.set_alignment(0., 0.)
+		status_label.set_alignment(0, 0)
 		self.table.attach(status_label, 3, 4, self.current_row,
 			self.current_row + 1, gtk.EXPAND | gtk.FILL, 0, 0, 0)
 	
@@ -294,22 +294,21 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			text = _('Gajim - %s') % message
 		else:
 			text = _('Gajim - %s') % helpers.get_uf_show('offline')
-		self.text_lable.set_markup(text)
+		self.text_label.set_markup(text)
 		self.hbox.add(self.table)
 		self.win.add(self.hbox)
 
-class GCTooltip(BaseTooltip, StatusTable):
+class GCTooltip(BaseTooltip):
 	''' Tooltip that is shown in the GC treeview '''
 	def __init__(self):
 		self.account = None
 
-		self.text_lable = gtk.Label()
-		self.text_lable.set_line_wrap(True)
-		self.text_lable.set_alignment(0., 0.)
-		self.text_lable.set_selectable(False)
+		self.text_label = gtk.Label()
+		self.text_label.set_line_wrap(True)
+		self.text_label.set_alignment(0, 0)
+		self.text_label.set_selectable(False)
 
 		BaseTooltip.__init__(self)
-		StatusTable.__init__(self)
 		
 	def populate(self, contact):
 		if not contact:
@@ -342,8 +341,8 @@ class GCTooltip(BaseTooltip, StatusTable):
 					'</span>' + gtkgui_helpers.escape_for_pango_markup(
 						contact.resource) 
 
-		self.text_lable.set_markup(info)
-		hbox.add(self.text_lable)
+		self.text_label.set_markup(info)
+		hbox.add(self.text_label)
 		self.win.add(hbox)
 
 class RosterTooltip(NotificationAreaTooltip):
@@ -351,7 +350,7 @@ class RosterTooltip(NotificationAreaTooltip):
 	def __init__(self):
 		self.account = None
 		self.image = gtk.Image()
-		self.image.set_alignment(0., 0.)
+		self.image.set_alignment(0, 0)
 		# padding is independent of the total length and better than alignment
 		self.image.set_padding(1, 2) 
 		NotificationAreaTooltip.__init__(self)
@@ -447,7 +446,7 @@ class RosterTooltip(NotificationAreaTooltip):
 						# escape markup entities. 
 						info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 		
-		self.text_lable.set_markup(info)
+		self.text_label.set_markup(info)
 		self.hbox.pack_start(self.image, False, False)
 		self.hbox.pack_start(self.table, True, True)
 		self.win.add(self.hbox)
@@ -455,10 +454,10 @@ class RosterTooltip(NotificationAreaTooltip):
 class FileTransfersTooltip(BaseTooltip):
 	''' Tooltip that is shown in the notification area '''
 	def __init__(self):
-		self.text_lable = gtk.Label()
-		self.text_lable.set_line_wrap(True)
-		self.text_lable.set_alignment(0, 0)
-		self.text_lable.set_selectable(False)
+		self.text_label = gtk.Label()
+		self.text_label.set_line_wrap(True)
+		self.text_label.set_alignment(0, 0)
+		self.text_label.set_selectable(False)
 		BaseTooltip.__init__(self)
 
 	def populate(self, file_props):
@@ -527,8 +526,8 @@ class FileTransfersTooltip(BaseTooltip):
 			status =  _('Not started')
 		
 		text += status
-		self.text_lable.set_markup(text)
-		self.hbox.add(self.text_lable)
+		self.text_label.set_markup(text)
+		self.hbox.add(self.text_label)
 		self.win.add(self.hbox)
 
 
