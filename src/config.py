@@ -49,14 +49,6 @@ gtk.glade.textdomain (APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-
-# helper function to create #aabbcc color string
-def mk_color_string(color):
-	return '#' + (hex(color.red) + '0')[2:4] + \
-		(hex(color.green) + '0')[2:4] + \
-		(hex(color.blue) + '0')[2:4]
-
-
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
 	'''Class for Preferences window'''
@@ -73,21 +65,21 @@ class PreferencesWindow:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
 		self.window = self.xml.get_widget('preferences_window')
 		self.iconset_combobox = self.xml.get_widget('iconset_combobox')
-		self.notify_on_new_message_radiobutton = self.xml.get_widget \
-			('notify_on_new_message_radiobutton')
-		self.popup_new_message_radiobutton = self.xml.get_widget \
-			('popup_new_message_radiobutton')
-		self.notify_on_signin_checkbutton = self.xml.get_widget \
-			('notify_on_signin_checkbutton')
-		self.notify_on_signout_checkbutton = self.xml.get_widget \
-			('notify_on_signout_checkbutton')
-		self.auto_popup_away_checkbutton = self.xml.get_widget \
-			('auto_popup_away_checkbutton')
+		self.notify_on_new_message_radiobutton = self.xml.get_widget(
+			'notify_on_new_message_radiobutton')
+		self.popup_new_message_radiobutton = self.xml.get_widget(
+			'popup_new_message_radiobutton')
+		self.notify_on_signin_checkbutton = self.xml.get_widget(
+			'notify_on_signin_checkbutton')
+		self.notify_on_signout_checkbutton = self.xml.get_widget(
+			'notify_on_signout_checkbutton')
+		self.auto_popup_away_checkbutton = self.xml.get_widget(
+			'auto_popup_away_checkbutton')
 		self.auto_away_checkbutton = self.xml.get_widget('auto_away_checkbutton')
-		self.auto_away_time_spinbutton = self.xml.get_widget \
-			('auto_away_time_spinbutton')
-		self.auto_away_message_entry = self.xml.get_widget \
-			('auto_away_message_entry')
+		self.auto_away_time_spinbutton = self.xml.get_widget(
+			'auto_away_time_spinbutton')
+		self.auto_away_message_entry = self.xml.get_widget(
+			'auto_away_message_entry')
 		self.auto_xa_checkbutton = self.xml.get_widget('auto_xa_checkbutton')
 		self.auto_xa_time_spinbutton = self.xml.get_widget(
 			'auto_xa_time_spinbutton')
@@ -116,7 +108,8 @@ class PreferencesWindow:
 		
 		# Display status msg under contact name in roster
 		st = gajim.config.get('show_status_msgs_in_roster')
-		self.xml.get_widget('show_status_msgs_in_roster_checkbutton').set_active(st)
+		self.xml.get_widget('show_status_msgs_in_roster_checkbutton').set_active(
+			st)
 		
 
 		#Use emoticons
@@ -131,9 +124,9 @@ class PreferencesWindow:
 		renderer_image = cell_renderer_image.CellRendererImage()
 		renderer_text = gtk.CellRendererText()
 		renderer_text.set_property('xpad', 5)
-		self.iconset_combobox.pack_start(renderer_image, expand=False)
-		self.iconset_combobox.pack_start(renderer_text, expand=True)
-		self.iconset_combobox.set_attributes(renderer_text, text=1)
+		self.iconset_combobox.pack_start(renderer_image, expand = False)
+		self.iconset_combobox.pack_start(renderer_text, expand = True)
+		self.iconset_combobox.set_attributes(renderer_text, text = 1)
 		self.iconset_combobox.add_attribute(renderer_image, 'image', 0)
 		self.iconset_combobox.set_model(model)
 		l = []
@@ -706,7 +699,7 @@ class PreferencesWindow:
 	
 	def on_preference_widget_color_set(self, widget, text):
 		color = widget.get_color()
-		color_string = mk_color_string(color)
+		color_string = gtkgui_helpers.make_color_string(color)
 		gajim.config.set(text, color_string)
 		self.update_text_tags()
 		gajim.interface.save_config()
