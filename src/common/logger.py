@@ -22,20 +22,15 @@ import sys
 import time
 import datetime
 
+from common import exceptions
 from common import i18n
 _ = i18n._
 
 try:
 	from pysqlite2 import dbapi2 as sqlite
 except ImportError:
-	error = _('pysqlite2 (aka python-pysqlite2) dependency is missing. '\
-		'After you install pysqlite3, if you want to migrate your logs '\
-		'to the new database, please read: http://trac.gajim.org/wiki/MigrateLogToDot9DB '\
-		'Exiting...'
-		)
-	print >> sys.stderr, error
-	sys.exit()
-	
+	raise exceptions.PysqliteNotAvailable
+
 GOT_JIDS_ALREADY_IN_DB = False # see get_jids_already_in_db()
 
 if os.name == 'nt':

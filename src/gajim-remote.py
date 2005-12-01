@@ -32,6 +32,7 @@ import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 import traceback
 
+from common import exceptions
 from common import i18n
 
 _ = i18n._
@@ -43,34 +44,10 @@ def send_error(error_message):
 		sys.stderr.flush()
 		sys.exit(1)
 
-class ServiceNotAvailable(Exception):
-	'''This exception is raised when we cannot use Gajim remotely'''
-	def __init__(self):
-		Exception.__init__(self)
-
-	def __str__(self):
-		return _('Service not available: Gajim is not running, or remote_control is False')
-
-class DbusNotSupported(Exception):
-	'''D-Bus is not installed or python bindings are missing'''
-	def __init__(self):
-		Exception.__init__(self)
-
-	def __str__(self):
-		return _('D-Bus is not present on this machine or python module is missing')
-
-class SessionBusNotPresent(Exception):
-	'''This exception indicates that there is no session daemon'''
-	def __init__(self):
-		Exception.__init__(self)
-
-	def __str__(self):
-		return _('Session bus is not available')
-
 try:
 	import dbus
 except:
-	raise DbusNotSupported
+	raise exceptions.DbusNotSupported
 
 _version = getattr(dbus, 'version', (0, 20, 0))
 if _version[1] >= 41:
@@ -236,7 +213,7 @@ class GajimRemote:
 				id = self.sbus.add_signal_receiver(self.show_vcard_info, 
 					'VcardInfo', INTERFACE, SERVICE, OBJ_PATH)
 			except Exception, e:
-				raise ServiceNotAvailable
+				raise exceptions.ServiceNotAvailable
 		
 		res = self.call_remote_method()
 		self.print_result(res)
@@ -282,7 +259,7 @@ class GajimRemote:
 		try:
 			self.sbus = dbus.SessionBus()
 		except:
-			raise SessionBusNotPresent
+			raise exceptions.SessionBusNotPresent
 		
 		if _version[1] >= 30:
 			obj = self.sbus.get_object(SERVICE, OBJ_PATH)
@@ -566,7 +543,7 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 			return res
 		except Exception, e:
 			print str(e)
-			raise ServiceNotAvailable
+			raise exceptions.ServiceNotAvailable
 		return None
 
 if __name__ == '__main__':
