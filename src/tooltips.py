@@ -309,6 +309,7 @@ class GCTooltip(BaseTooltip, StatusTable):
 		self.text_lable.set_selectable(False)
 
 		BaseTooltip.__init__(self)
+		StatusTable.__init__(self)
 		
 	def populate(self, contact):
 		if not contact:
