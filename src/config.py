@@ -835,8 +835,8 @@ class PreferencesWindow:
 				# on_msg_treemodel_row_changed but message is None
 				# (hasn't been added yet) so do not TB
 				return
-			gajim.config.set_per('statusmsg', val, 'message',
-						model[iter][1].decode('utf-8'))
+			msg = helpers.to_one_line(model[iter][1].decode('utf-8'))
+			gajim.config.set_per('statusmsg', val, 'message', msg)
 			iter = model.iter_next(iter)
 		gajim.interface.save_config()
 
@@ -889,6 +889,7 @@ class PreferencesWindow:
 		for msg in gajim.config.get_per('statusmsg'):
 			iter = model.append()
 			val = gajim.config.get_per('statusmsg', msg, 'message')
+			val = helpers.from_one_line(val)
 			model.set(iter, 0, msg, 1, val)
 
 	def on_msg_cell_edited(self, cell, row, new_text):

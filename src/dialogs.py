@@ -232,7 +232,9 @@ class ChangeStatusMessageDialog:
 		self.message_buffer.set_text(msg)
 		self.values = {'':''} # have an empty string selectable, so user can clear msg
 		for msg in gajim.config.get_per('statusmsg'):
-			self.values[msg] = gajim.config.get_per('statusmsg', msg, 'message')
+			val = gajim.config.get_per('statusmsg', msg, 'message')
+			val = helpers.from_one_line(val)
+			self.values[msg] = val
 		sorted_keys_list = helpers.get_sorted_keys(self.values)
 		liststore = gtk.ListStore(str, str)
 		message_comboboxentry = self.xml.get_widget('message_comboboxentry')
