@@ -23,7 +23,7 @@ import gtk.glade
 import gobject
 import pango
 import dialogs
-from config import mk_color_string
+import gtkgui_helpers
 
 from common import gajim
 from common import i18n
@@ -237,7 +237,7 @@ class GajimThemesWindow:
 		''' set color value in prefs and update the UI '''
 		if state:
 			color = widget.get_color()
-			color_string = mk_color_string(color)
+			color_string = gtkgui_helpers.make_color_string(color)
 		else:
 			color_string = ''
 		gajim.config.set_per('themes', self.current_theme, 
