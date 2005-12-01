@@ -406,8 +406,9 @@ class VcardWindow:
 
 	def on_publish_button_clicked(self, widget):
 		if gajim.connections[self.account].connected < 2:
-			ErrorDialog(_('You are not connected to the server'),
-                    _('Without a connection you can not publish your contact information.')).get_response()
+			dialogs.ErrorDialog(_('You are not connected to the server'),
+        		_('Without a connection you can not publish your contact '
+        			'information.')).get_response()
 			return
 		vcard = self.make_vcard()
 		nick = ''
