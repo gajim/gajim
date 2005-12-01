@@ -274,14 +274,29 @@ class VcardWindow:
 		self.xml.get_widget('os_label').set_text(os)
 
 	def fill_jabber_page(self):
+		tooltips = gtk.Tooltips()
 		self.xml.get_widget('nickname_label').set_text(self.contact.name)
 		self.xml.get_widget('jid_label').set_text(self.contact.jid)
 		uf_sub = helpers.get_uf_sub(self.contact.sub)
 		self.xml.get_widget('subscription_label').set_text(uf_sub)
+		eb = self.xml.get_widget('subscription_label_eventbox')
+		if self.contact.sub == 'from':
+			tt_text = _("This contact is interested in your presence information, but he/she is not interested in yours")
+		elif self.contact.sub == 'to':
+			tt_text = _("You are interested in the contact's presence information, but he/she is not interested in yours")
+		elif self.contact.sub == 'both':
+			tt_text = _("You and the contact are interested in each other's presence information")
+		else: # None
+			tt_text = _("You are not interested in the contact's presence, and neither he/she is interested in yours")
+		tooltips.set_tip(eb, tt_text)
+
 		label = self.xml.get_widget('ask_label')
-		
 		uf_ask = helpers.get_uf_ask(self.contact.ask)
 		label.set_text(uf_ask)
+		eb = self.xml.get_widget('ask_label_eventbox')
+		if self.contact.ask == 'subscribe':
+			tooltips.set_tip(eb,
+			_("You are waiting contact's answer about your subscription request"))
 		self.xml.get_widget('nickname_entry').set_text(self.contact.name)
 		log = 1
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
