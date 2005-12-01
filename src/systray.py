@@ -174,12 +174,12 @@ class Systray:
 
 			for account in gajim.connections:
 				#for chat_with
-				item = gtk.MenuItem(_('with account ') + account)
+				item = gtk.MenuItem(_('using account ') + account)
 				account_menu_for_chat_with.append(item)
 				group_menu = self.make_groups_submenus_for_chat_with(account)
 				item.set_submenu(group_menu)
 				#for new_message
-				item = gtk.MenuItem(_('with account ') + account)
+				item = gtk.MenuItem(_('using account ') + account)
 				item.connect('activate',
 					self.on_new_message_menuitem_activate, account)
 				account_menu_for_new_message.append(item)

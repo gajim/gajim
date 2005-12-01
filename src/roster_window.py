@@ -516,7 +516,7 @@ class RosterWindow:
 				if gajim.connections[account].connected <= 1:
 					#if offline or connecting
 					continue
-				item = gtk.MenuItem(_('with account %s') % account)
+				item = gtk.MenuItem(_('using account %s') % account)
 				sub_menu.append(item)
 				item.connect('activate', self.on_new_message_menuitem_activate, 
 									account)
