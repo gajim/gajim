@@ -40,11 +40,11 @@ except RuntimeError, msg:
 		sys.exit()
 pritext = ''
 if gtk.pygtk_version < (2, 6, 0):
-	pritext = _('Gajim needs PyGTK 2.6+')
-	sectext = _('Gajim needs PyGTK 2.6+ to run. Quiting...')
+	pritext = _('Gajim needs PyGTK 2.6 or above')
+	sectext = _('Gajim needs PyGTK 2.6 or above to run. Quiting...')
 elif gtk.gtk_version < (2, 6, 0):
-	pritext = _('Gajim needs GTK 2.6+')
-	sectext = _('Gajim needs GTK 2.6+ to run. Quiting...')
+	pritext = _('Gajim needs GTK 2.6 or above+')
+	sectext = _('Gajim needs GTK 2.6 or above to run. Quiting...')
 
 try:
 	import gtk.glade # check if user has libglade (in pygtk and in gtk)
@@ -58,7 +58,7 @@ except ImportError:
 try:
 	from common import check_paths
 except exceptions.PysqliteNotAvailable, e:
-	pritext = _('Gajim needs Pysqlite2')
+	pritext = _('Gajim needs Pysqlite2 to run')
 	sectext = str(e)
 
 if pritext:
