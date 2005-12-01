@@ -23,6 +23,7 @@ import gtk
 import os
 import sys
 
+from common import exceptions
 from common import gajim
 from time import time
 from common import i18n
@@ -57,15 +58,15 @@ class Remote:
 		if 'dbus' not in globals() and not os.name == 'nt':
 			print _('D-Bus python bindings are missing in this computer')
 			print _('D-Bus capabilities of Gajim cannot be used')
-			raise DbusNotSupported()
+			raise exceptions.DbusNotSupported
 		# dbus 0.23 leads to segfault with threads_init()
 		if sys.version[:4] >= '2.4' and _version[1] < 30:
-			raise DbusNotSupported()
+			raise exceptions.DbusNotSupported
 			
 		try:
 			session_bus = dbus.SessionBus()
 		except:
-			raise SessionBusNotPresent()
+			raise exceptions.SessionBusNotPresent
 		
 		if _version[1] >= 41:
 			service = dbus.service.BusName(SERVICE, bus=session_bus)
@@ -513,19 +514,3 @@ class SignalObject(DbusPrototype):
 		remove_contact = method(INTERFACE)(remove_contact)
 		add_contact = method(INTERFACE)(add_contact)
 		get_status = method(INTERFACE)(get_status)
-
-class SessionBusNotPresent(Exception):
-	'''This exception indicates that there is no session daemon'''
-	def __init__(self):
-		Exception.__init__(self)
-
-	def __str__(self):
-		return _('Session bus is not available')
-
-class DbusNotSupported(Exception):
-	'''D-Bus is not installed or python bindings are missing'''
-	def __init__(self):
-		Exception.__init__(self)
-
-	def __str__(self):
-		return _('D-Bus is not present on this machine or python module is missing')

@@ -30,6 +30,7 @@ src/tabbed_chat_window.py
 src/tooltips.py
 src/vcard.py
 src/common/check_paths.py
+src/common/exceptions.py
 src/common/GnuPG.py
 src/common/GnuPGInterface.py
 src/common/__init__.py
