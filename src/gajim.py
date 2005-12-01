@@ -27,6 +27,7 @@ import sys
 import os
 import pygtk
 
+from common import exceptions
 from common import i18n
 i18n.init()
 _ = i18n._
@@ -37,13 +38,13 @@ except RuntimeError, msg:
 	if str(msg) == 'could not open display':
 		print >> sys.stderr, _('Gajim needs Xserver to run. Quiting...')
 		sys.exit()
-
+pritext = ''
 if gtk.pygtk_version < (2, 6, 0):
-	print >> sys.stderr, _('Gajim needs PyGTK 2.6+ to run. Quiting...')
-	sys.exit()
+	pritext = _('Gajim needs PyGTK 2.6+')
+	sectext = _('Gajim needs PyGTK 2.6+ to run. Quiting...')
 elif gtk.gtk_version < (2, 6, 0):
-	print >> sys.stderr, _('Gajim needs GTK 2.6+ to run. Quiting...')
-	sys.exit()
+	pritext = _('Gajim needs GTK 2.6+')
+	sectext = _('Gajim needs GTK 2.6+ to run. Quiting...')
 
 try:
 	import gtk.glade # check if user has libglade (in pygtk and in gtk)
@@ -53,7 +54,14 @@ except ImportError:
 		sectext = _('Please remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
 	else:
 		sectext = _('Please make sure that gtk and pygtk have libglade support in your system.')
-	
+
+try:
+	from common import check_paths
+except exceptions.PysqliteNotAvailable, e:
+	pritext = _('Gajim needs Pysqlite2')
+	sectext = str(e)
+
+if pritext:
 	dlg = gtk.MessageDialog(None, 
 				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
 				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = pritext)
@@ -63,7 +71,6 @@ except ImportError:
 	dlg.destroy()
 	sys.exit()
 
-from common import check_paths
 check_paths.check_and_possibly_create_paths()
 
 path = os.getcwd()
