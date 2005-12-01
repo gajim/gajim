@@ -43,7 +43,7 @@ if gtk.pygtk_version < (2, 6, 0):
 	pritext = _('Gajim needs PyGTK 2.6 or above')
 	sectext = _('Gajim needs PyGTK 2.6 or above to run. Quiting...')
 elif gtk.gtk_version < (2, 6, 0):
-	pritext = _('Gajim needs GTK 2.6 or above+')
+	pritext = _('Gajim needs GTK 2.6 or above')
 	sectext = _('Gajim needs GTK 2.6 or above to run. Quiting...')
 
 try:
@@ -58,7 +58,7 @@ except ImportError:
 try:
 	from common import check_paths
 except exceptions.PysqliteNotAvailable, e:
-	pritext = _('Gajim needs Pysqlite2 to run')
+	pritext = _('Gajim needs PySQLite2 to run')
 	sectext = str(e)
 
 if pritext:
@@ -74,7 +74,7 @@ if pritext:
 check_paths.check_and_possibly_create_paths()
 
 path = os.getcwd()
-if '.svn' in os.listdir(path):
+if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
 	# import gtkexcepthook only for those that run svn
 	# those than run with --verbose run from terminal so no need to care
 	# about those
