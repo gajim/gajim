@@ -241,7 +241,7 @@ class RosterWindow:
 			return
 		contact_instances = gajim.get_contact_instances_from_jid(account, jid)
 		contact = gajim.get_highest_prio_contact_from_contacts(contact_instances)
-		name = contact.name
+		name = gtkgui_helpers.escape_for_pango_markup(contact.name)
 
 		if len(contact_instances) > 1:
 			name += ' (' + unicode(len(contact_instances)) + ')'
