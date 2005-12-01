@@ -31,8 +31,6 @@ try:
 except ImportError:
 	raise exceptions.PysqliteNotAvailable
 
-GOT_JIDS_ALREADY_IN_DB = False # see get_jids_already_in_db()
-
 if os.name == 'nt':
 	try:
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs.db
