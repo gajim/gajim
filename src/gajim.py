@@ -481,8 +481,7 @@ class Interface:
 					show_notification = True
 				if show_notification:
 					if msg_type == 'normal': # single message
-						notify.notify(
-							_('New Single Message'), jid, account, msg_type)
+						notify.notify(_('New Single Message'), jid, account, msg_type)
 					else: # chat message
 						notify.notify(_('New Message'), jid, account, msg_type)
 

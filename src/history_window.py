@@ -22,7 +22,6 @@ import gtk.glade
 import gobject
 import time
 import calendar
-import os
 
 import gtkgui_helpers
 

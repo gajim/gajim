@@ -29,8 +29,10 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-OPT_TYPE = 0
-OPT_VAL = 1
+(
+OPT_TYPE,
+OPT_VAL
+) = range(2)
 
 (
 C_PREFNAME,
