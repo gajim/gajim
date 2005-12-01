@@ -82,7 +82,7 @@ if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
 del path
 
 import gobject
-if sys.version[:4] >= '2.4':
+if sys.version[:4] >= '2.4': # FIXME: remove me when we abandon python23
 	gobject.threads_init()
 
 import pango
@@ -725,8 +725,8 @@ class Interface:
 		else:
 			# message from someone
 			nick = jids[1]
-		self.instances[account]['gc'][room_jid].on_message(room_jid, nick, array[1],
-			array[2])
+		self.instances[account]['gc'][room_jid].on_message(room_jid, nick,
+			array[1], array[2])
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 
@@ -926,7 +926,8 @@ class Interface:
 			msg_type = 'file-stopped'
 			event_type = _('File Transfer Stopped')
 		
-		if event_type == '': # FIXME: ugly workaround (this can happen Gajim sent, Gaim recvs)
+		if event_type == '': 
+			# FIXME: ugly workaround (this can happen Gajim sent, Gaim recvs)
 			# this should never happen but it does. see process_result() in socks5.py
 			# who calls this func (sth is really wrong unless this func is also registered
 			# as progress_cb
@@ -940,8 +941,7 @@ class Interface:
 			gajim.connections[account].connected in (2, 3)):
 			# we want to be notified and we are online/chat or we don't mind
 			# bugged when away/na/busy
-			notify.notify(event_type, jid, account,
-				msg_type, file_props)
+			notify.notify(event_type, jid, account, msg_type, file_props)
 
 	def handle_event_stanza_arrived(self, account, stanza):
 		if not self.instances.has_key(account):
@@ -1223,26 +1223,22 @@ class Interface:
 		self.handlers[ev[0]](account, ev[1])
 
 	def process_connections(self):
-		try:
-			# We copy the list of connections because one can disappear while we 
-			# process()
-			accounts = []
-			for account in gajim.connections:
-				accounts.append(account)
-			for account in accounts:
-				if gajim.connections[account].connected:
-					gajim.connections[account].process(0.01)
-				if gajim.socks5queue.connected:
-					gajim.socks5queue.process(0)
-			for account in gajim.events_for_ui: #when we create a new account we don't have gajim.connection
-				while len(gajim.events_for_ui[account]):
-					gajim.mutex_events_for_ui.lock(self.exec_event, account)
-					gajim.mutex_events_for_ui.unlock()
-			time.sleep(0.01) # so threads in connection.py have time to run
-			return True # renew timeout (loop for ever)
-		except KeyboardInterrupt: # FIXME: can this happen?? CTRL+C IS CATCHED BY SIGNAL
-			sys.exit()
-		return False
+		# We copy the list of connections because one can disappear while we 
+		# process()
+		accounts = []
+		for account in gajim.connections:
+			accounts.append(account)
+		for account in accounts:
+			if gajim.connections[account].connected:
+				gajim.connections[account].process(0.01)
+			if gajim.socks5queue.connected:
+				gajim.socks5queue.process(0)
+		for account in gajim.events_for_ui: #when we create a new account we don't have gajim.connection
+			while len(gajim.events_for_ui[account]):
+				gajim.mutex_events_for_ui.lock(self.exec_event, account)
+				gajim.mutex_events_for_ui.unlock()
+		time.sleep(0.01) # so threads in connection.py have time to run
+		return True # renew timeout (loop for ever)
 
 	def save_config(self):
 		err_str = parser.write()
@@ -1252,7 +1248,7 @@ class Interface:
 			# in case he or she cannot see the output of the console
 			dialogs.ErrorDialog(_('Could not save your settings and preferences'),
 				err_str).get_response()
-			sys.exit(1)
+			sys.exit()
 
 	def __init__(self):
 		gajim.interface = self
@@ -1270,21 +1266,24 @@ class Interface:
 		if len(gajim.config.get_per('emoticons')) == 0:
 			for emot in gajim.config.emoticons_default:
 				gajim.config.add_per('emoticons', emot)
-				gajim.config.set_per('emoticons', emot, 'path', gajim.config.emoticons_default[emot])
+				gajim.config.set_per('emoticons', emot, 'path',
+					gajim.config.emoticons_default[emot])
 		#add default status messages if there is not in the config file
 		if len(gajim.config.get_per('statusmsg')) == 0:
 			for msg in gajim.config.statusmsg_default:
 				gajim.config.add_per('statusmsg', msg)
-				gajim.config.set_per('statusmsg', msg, 'message', gajim.config.statusmsg_default[msg])
+				gajim.config.set_per('statusmsg', msg, 'message', 
+					gajim.config.statusmsg_default[msg])
 		#add default themes if there is not in the config file
 		theme = gajim.config.get('roster_theme')
 		if not theme in gajim.config.get_per('themes'):
 			gajim.config.set('roster_theme', 'green')
 		if len(gajim.config.get_per('themes')) == 0:
-			d = ['accounttextcolor', 'accountbgcolor', 'accountfont', 'accountfontattrs',
-				'grouptextcolor', 'groupbgcolor', 'groupfont', 'groupfontattrs', 
-				'contacttextcolor', 'contactbgcolor', 'contactfont', 'contactfontattrs', 
-				'bannertextcolor', 'bannerbgcolor']
+			d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
+				'accountfontattrs', 'grouptextcolor', 'groupbgcolor', 'groupfont',
+				'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 
+				'contactfont', 'contactfontattrs', 'bannertextcolor',
+				'bannerbgcolor']
 			
 			default = gajim.config.themes_default
 			for theme_name in default:
@@ -1391,8 +1390,8 @@ class Interface:
 		self.instances['preferences'] = config.PreferencesWindow()
 		
 		for account in gajim.connections:
-			self.instances[account]['xml_console'] = \
-				dialogs.XMLConsoleWindow(account)
+			self.instances[account]['xml_console'] = dialogs.XMLConsoleWindow(
+				account)
 
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(200, self.process_connections)
