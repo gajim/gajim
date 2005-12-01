@@ -281,7 +281,7 @@ class VcardWindow:
 		self.xml.get_widget('subscription_label').set_text(uf_sub)
 		eb = self.xml.get_widget('subscription_label_eventbox')
 		if self.contact.sub == 'from':
-			tt_text = _("This contact is interested in your presence information, but he/she is not interested in yours")
+			tt_text = _("This contact is interested in your presence information, but you are not interested in his/her presence")
 		elif self.contact.sub == 'to':
 			tt_text = _("You are interested in the contact's presence information, but he/she is not interested in yours")
 		elif self.contact.sub == 'both':
