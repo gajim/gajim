@@ -910,6 +910,8 @@ class TabbedChatWindow(chat.Chat):
 			pending_how_many, timeout)
 		
 		for row in rows: # row[0] time, row[1] has kind, row[2] the message
+			if not row[2]: # message is empty, we don't print it
+				continue
 			if row[1] in (constants.KIND_CHAT_MSG_SENT, constants.KIND_SINGLE_MSG_SENT):
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
