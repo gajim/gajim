@@ -250,15 +250,16 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 		return None
 
 def jid_is_transport(jid):
-	aim = jid.startswith('aim')
-	gg = jid.startswith('gadugadu')
-	irc = jid.startswith('irc')
-	icq = jid.startswith('icq')
-	msn = jid.startswith('msn')
-	sms = jid.startswith('sms')
-	yahoo = jid.startswith('yahoo')
+	aim = jid.startswith('aim.')
+	gg = jid.startswith('gg.') # gadugadu
+	irc = jid.startswith('irc.')
+	icq = jid.startswith('icq.')
+	msn = jid.startswith('msn.')
+	sms = jid.startswith('sms.')
+	tlen = jid.startswith('tlen.')
+	yahoo = jid.startswith('yahoo.')
 	
-	if aim or gg or irc or icq or msn or sms or yahoo:
+	if aim or gg or irc or icq or msn or sms or yahoo or tlen:
 		is_transport = True
 	else:
 		is_transport = False
