@@ -4,39 +4,16 @@ import sre
 import sys
 import time
 import signal
+import logger
+import i18n
+_ = i18n._
+from helpers import from_one_line, decode_string
 
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
 from pysqlite2 import dbapi2 as sqlite
 
-
-class Constants:
-	def __init__(self):
-		(
-			self.JID_NORMAL_TYPE,
-			self.JID_ROOM_TYPE # image to show state (online, new message etc)
-		) = range(2)
-		
-		(
-			self.KIND_STATUS,
-			self.KIND_GCSTATUS,
-			self.KIND_GC_MSG,
-			self.KIND_SINGLE_MSG_RECV,
-			self.KIND_CHAT_MSG_RECV,
-			self.KIND_SINGLE_MSG_SENT,
-			self.KIND_CHAT_MSG_SENT
-		) = range(7)
-		
-		(
-			self.SHOW_ONLINE,
-			self.SHOW_CHAT,
-			self.SHOW_AWAY,
-			self.SHOW_XA,
-			self.SHOW_DND,
-			self.SHOW_OFFLINE
-		) = range(6)
-
-constants = Constants()
+constants = logger.Constants()
 
 if os.name == 'nt':
 	try:
@@ -87,22 +64,6 @@ cur.executescript(
 
 con.commit()
 
-# (?<!\\) is a lookbehind assertion which asks anything but '\'
-# to match the regexp that follows it
-re = sre.compile(r'(?<!\\)\\n')
-
-def from_one_line(msg):
-	# So here match '\\n' but not if you have a '\' before that
-	msg = re.sub('\n', msg)
-	msg = msg.replace('\\\\', '\\')
-	# s12 = 'test\\ntest\\\\ntest'
-	# s13 = re.sub('\n', s12)
-	# s14 s13.replace('\\\\', '\\')
-	# s14
-	# 'test\ntest\\ntest'
-	return msg
-
-
 def get_jid(dirname, filename):
 	# jids.jid text column will be JID if TC-related, room_jid if GC-related,
 	# ROOM_JID/nick if pm-related. Here I get names from filenames
@@ -124,19 +85,14 @@ def get_jid(dirname, filename):
 
 def decode_jid(string):
 	'''try to decode (to make it Unicode instance) given jid'''
-	# by the time we go to iso15 it better be the one else we show bad characters
-	encodings = (sys.getfilesystemencoding(), 'utf-8', 'iso-8859-15')
-	for encoding in encodings:
-		try:
-			string = string.decode(encoding)
-		except UnicodeError:
-			continue
-		return string
-
-	return None
+	string = decode_string(string)
+	if isinstance(string, str):
+		return None # decode failed
+	return string
 
 def visit(arg, dirname, filenames):
-	print 'Visiting', dirname
+	s = _('Visiting %s') % dirname
+	print s
 	for filename in filenames:
 		# Don't take this file into account, this is dup info
 		# notifications are also in contact log file
@@ -154,10 +110,14 @@ def visit(arg, dirname, filenames):
 
 		if filename == os.path.basename(dirname): # gajim@conf/gajim@conf then gajim@conf is type room
 			jid_type = constants.JID_ROOM_TYPE
-			print 'Processing', jid.encode('utf-8'), 'of type room'
+			#Type of log
+			typ = 'room'
 		else:
 			jid_type = constants.JID_NORMAL_TYPE
-			print 'Processing', jid.encode('utf-8'), 'of type normal'
+			#Type of log
+			typ = _('normal')
+		s = _('Processing %s of type %s') % (jid.encode('utf-8'), typ)
+		print s
 
 		JID_ID = None
 		f = open(path_to_text_file, 'r')
@@ -233,12 +193,13 @@ def visit(arg, dirname, filenames):
 
 def migrate():
 	os.path.walk(PATH_TO_LOGS_BASE_DIR, visit, None)
+	s = '''We do not use plain-text files anymore, because they do not scale.
+Those files here are logs for Gajim up until 0.8.2
+We now use an sqlite database called logs.db found in ~/.gajim
+You can now safly remove your %s folder
+Thank you''' % PATH_TO_LOGS_BASE_DIR
 	f = open(os.path.join(PATH_TO_LOGS_BASE_DIR, 'README'), 'w')
-	f.write('We do not use plain-text files anymore, because they do not scale.\n')
-	f.write('Those files here are logs for Gajim up until 0.8.2\n')
-	f.write('We now use an sqlite database called logs.db found in ~/.gajim\n')
-	f.write('You can always run the migration script to import your old logs to the database\n')
-	f.write('Thank you\n')
+	f.write(s)
 	f.close()
 
 if __name__ == '__main__':
