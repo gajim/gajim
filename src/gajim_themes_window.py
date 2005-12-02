@@ -161,8 +161,7 @@ class GajimThemesWindow:
 	def set_theme_options(self, theme, option = 'account'):
 		self.no_update = True
 		self.options_combobox.set_active(self.options.index(option))
-		textcolor = gajim.config.get_per('themes', theme, 
-			option + 'textcolor')
+		textcolor = gajim.config.get_per('themes', theme, option + 'textcolor')
 		if textcolor:
 			state = True
 			self.text_colorbutton.set_color(gtk.gdk.color_parse(textcolor))
@@ -180,7 +179,7 @@ class GajimThemesWindow:
 		self.background_checkbutton.set_active(state)
 		self.background_colorbutton.set_sensitive(state)
 		
-		#get the font name before we set widgets and it will not be overriden
+		# get the font name before we set widgets and it will not be overriden
 		font_name = gajim.config.get_per('themes', theme, option + 'font')
 		font_attrs = gajim.config.get_per('themes', theme, option + 'fontattrs')
 		self._set_font_widgets(font_attrs)
@@ -228,10 +227,12 @@ class GajimThemesWindow:
 			self.current_option)
 		
 	def on_bold_togglebutton_toggled(self, widget):
-		self._set_font()
+		if not self.no_update:
+			self._set_font()
 	
 	def on_italic_togglebutton_toggled(self, widget):
-		self._set_font()
+		if not self.no_update:
+			self._set_font()
 	
 	def _set_color(self, state, widget, option):
 		''' set color value in prefs and update the UI '''
