@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-02 15:25+0200\n"
+"POT-Creation-Date: 2005-12-02 16:06+0200\n"
 "PO-Revision-Date: 2005-09-07 13:48+0200\n"
 "Last-Translator: Witek Kieraś <pambuk@gmail.com>\n"
 "Language-Team: none\n"
@@ -52,7 +52,8 @@ msgstr "Typ"
 msgid "(None)"
 msgstr "Żaden"
 
-#: ../src/advanced.py:183
+#. we talk about password
+#: ../src/advanced.py:184
 #, fuzzy
 msgid "Hidden"
 msgstr "Drugie imię:"
@@ -193,7 +194,7 @@ msgid "You must create your account before editing your personal information."
 msgstr "Musisz najpierw stworzyć konto by móc edytować informacje o sobie."
 
 #: ../src/config.py:1355 ../src/dialogs.py:650 ../src/dialogs.py:766
-#: ../src/disco.py:414 ../src/vcard.py:409 ../src/vcard.py:438
+#: ../src/disco.py:415 ../src/vcard.py:409 ../src/vcard.py:438
 msgid "You are not connected to the server"
 msgstr "Nie jesteś połączony z serwerem"
 
@@ -223,7 +224,7 @@ msgid "No key selected"
 msgstr "Nie wybrano żadnego klucza"
 
 #. Name column
-#: ../src/config.py:1619 ../src/disco.py:667 ../src/disco.py:1365
+#: ../src/config.py:1619 ../src/disco.py:668 ../src/disco.py:1366
 #: ../src/history_window.py:70
 msgid "Name"
 msgstr "Nazwa"
@@ -235,7 +236,7 @@ msgstr "Serwer"
 #. if not '@' or '@' starts the jid ==> agent
 #: ../src/config.py:1875 ../src/dialogs.py:118 ../src/dialogs.py:301
 #: ../src/dialogs.py:339 ../src/disco.py:114 ../src/disco.py:115
-#: ../src/disco.py:1150 ../src/roster_window.py:145
+#: ../src/disco.py:1151 ../src/roster_window.py:145
 #: ../src/roster_window.py:163 ../src/roster_window.py:185
 #: ../src/roster_window.py:2352 ../src/roster_window.py:2354
 #: ../src/roster_window.py:2427 ../src/roster_window.py:2435
@@ -477,7 +478,7 @@ msgstr "Już jesteś w pokoju %s"
 
 #: ../src/dialogs.py:380
 #, fuzzy
-msgid "The contact is already listed in your roster."
+msgid "This contact is already listed in your roster."
 msgstr "Kontakt \"%s\" zostanie usunięty z Twojej listy kontaktów."
 
 #: ../src/dialogs.py:442
@@ -670,83 +671,84 @@ msgstr "Komentarz: %s"
 msgid "Others"
 msgstr ""
 
-#: ../src/disco.py:116
+#. conference is a category for listing mostly groupchats in service discovery
+#: ../src/disco.py:117
 #, fuzzy
 msgid "Conference"
 msgstr "Ustawienia"
 
-#: ../src/disco.py:415
+#: ../src/disco.py:416
 msgid "Without a connection, you can not browse available services"
 msgstr "Nie możesz przeglądać usług, jeśli nie jesteś połączony."
 
-#: ../src/disco.py:489 ../src/disco.py:491
+#: ../src/disco.py:490 ../src/disco.py:492
 msgid "Service Discovery"
 msgstr "Przeglądanie usług"
 
-#: ../src/disco.py:569
+#: ../src/disco.py:570
 msgid "The service could not be found"
 msgstr ""
 
-#: ../src/disco.py:570
+#: ../src/disco.py:571
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
 msgstr ""
 
-#: ../src/disco.py:574 ../src/disco.py:857
+#: ../src/disco.py:575 ../src/disco.py:858
 #, fuzzy
 msgid "The service is not browsable"
 msgstr "Usługa jest niedostępna"
 
-#: ../src/disco.py:575
+#: ../src/disco.py:576
 msgid "This type of service does not contain any items to browse."
 msgstr ""
 
-#: ../src/disco.py:653
+#: ../src/disco.py:654
 #, fuzzy, python-format
 msgid "Browsing %s"
 msgstr "Wersja %s"
 
 #. Address column
-#: ../src/disco.py:674
+#: ../src/disco.py:675
 msgid "JID"
 msgstr ""
 
-#: ../src/disco.py:693
+#: ../src/disco.py:694
 #, fuzzy
 msgid "_Browse"
 msgstr "Prze_glądarka:"
 
-#: ../src/disco.py:858
+#: ../src/disco.py:859
 msgid "This service does not contain any items to browse."
 msgstr ""
 
-#: ../src/disco.py:1078 ../src/disco.py:1155
+#: ../src/disco.py:1079 ../src/disco.py:1156
 msgid "Re_gister"
 msgstr "Za_rejestruj"
 
-#: ../src/disco.py:1153 ../src/gtkgui.glade.h:334 ../src/roster_window.py:1064
+#: ../src/disco.py:1154 ../src/gtkgui.glade.h:334 ../src/roster_window.py:1064
 msgid "_Edit"
 msgstr "_Modyfikuj"
 
-#: ../src/disco.py:1190
+#: ../src/disco.py:1191
 #, python-format
 msgid "Scanning %d / %d.."
 msgstr ""
 
 #. Users column
-#: ../src/disco.py:1372
+#: ../src/disco.py:1373
 #, fuzzy
 msgid "Users"
 msgstr "Identyfikator użytkownika:"
 
 #. Description column
-#: ../src/disco.py:1379
+#: ../src/disco.py:1380
 #, fuzzy
 msgid "Description"
 msgstr "Opis: %s"
 
-#: ../src/disco.py:1406 ../src/gtkgui.glade.h:348
+#: ../src/disco.py:1407 ../src/gtkgui.glade.h:348
 msgid "_Join"
 msgstr "_Dołącz"
 
@@ -784,7 +786,7 @@ msgstr "Ty"
 msgid "Sender: %s"
 msgstr "Nadawca: %s"
 
-#: ../src/filetransfers_window.py:181 ../src/filetransfers_window.py:535
+#: ../src/filetransfers_window.py:181 ../src/filetransfers_window.py:536
 #: ../src/tooltips.py:484
 msgid "Recipient: "
 msgstr "Odbiorca: "
@@ -872,41 +874,41 @@ msgstr ""
 
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
-#. Only the last 's' should be translated.
+#. Only the 's' after / (which means second) should be translated.
 #: ../src/filetransfers_window.py:462
 #, python-format
-msgid "(%s/s)"
+msgid "(%(filesize_unit)d/s)"
 msgstr ""
 
-#: ../src/filetransfers_window.py:507 ../src/filetransfers_window.py:510
+#: ../src/filetransfers_window.py:508 ../src/filetransfers_window.py:511
 #, fuzzy
 msgid "Invalid File"
 msgstr "Niepoprawny wpis"
 
-#: ../src/filetransfers_window.py:507
+#: ../src/filetransfers_window.py:508
 #, fuzzy
 msgid "File: "
 msgstr "Plik: %s"
 
-#: ../src/filetransfers_window.py:511
+#: ../src/filetransfers_window.py:512
 #, fuzzy
 msgid "It is not possible to send empty files"
 msgstr "%s chce przesłać Ci plik:"
 
-#: ../src/filetransfers_window.py:531 ../src/tooltips.py:401
+#: ../src/filetransfers_window.py:532 ../src/tooltips.py:401
 #: ../src/tooltips.py:466
 msgid "Name: "
 msgstr "Nazwa: "
 
-#: ../src/filetransfers_window.py:533 ../src/tooltips.py:479
+#: ../src/filetransfers_window.py:534 ../src/tooltips.py:479
 msgid "Sender: "
 msgstr "Nadawca: "
 
-#: ../src/filetransfers_window.py:721
+#: ../src/filetransfers_window.py:722
 msgid "Pause"
 msgstr "Zatrzymaj"
 
-#: ../src/filetransfers_window.py:732 ../src/gtkgui.glade.h:328
+#: ../src/filetransfers_window.py:733 ../src/gtkgui.glade.h:328
 msgid "_Continue"
 msgstr "_Kontynuuj"
 

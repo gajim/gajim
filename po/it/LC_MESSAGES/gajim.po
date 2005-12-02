@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-02 15:25+0200\n"
+"POT-Creation-Date: 2005-12-02 16:06+0200\n"
 "PO-Revision-Date: 2005-11-30 20:19+0100\n"
 "Last-Translator: Matteo Dell'Amico <della@linux.it>\n"
 "Language-Team: Italian\n"
@@ -49,7 +49,8 @@ msgstr "Tipo"
 msgid "(None)"
 msgstr "(Nessuna)"
 
-#: ../src/advanced.py:183
+#. we talk about password
+#: ../src/advanced.py:184
 msgid "Hidden"
 msgstr "Nascosto"
 
@@ -191,7 +192,7 @@ msgstr ""
 "informazioni personali."
 
 #: ../src/config.py:1355 ../src/dialogs.py:650 ../src/dialogs.py:766
-#: ../src/disco.py:414 ../src/vcard.py:409 ../src/vcard.py:438
+#: ../src/disco.py:415 ../src/vcard.py:409 ../src/vcard.py:438
 msgid "You are not connected to the server"
 msgstr "Non si è connessi al server"
 
@@ -221,7 +222,7 @@ msgid "No key selected"
 msgstr "Nessuna chiave selezionata"
 
 #. Name column
-#: ../src/config.py:1619 ../src/disco.py:667 ../src/disco.py:1365
+#: ../src/config.py:1619 ../src/disco.py:668 ../src/disco.py:1366
 #: ../src/history_window.py:70
 msgid "Name"
 msgstr "Nome"
@@ -233,7 +234,7 @@ msgstr "Server"
 #. if not '@' or '@' starts the jid ==> agent
 #: ../src/config.py:1875 ../src/dialogs.py:118 ../src/dialogs.py:301
 #: ../src/dialogs.py:339 ../src/disco.py:114 ../src/disco.py:115
-#: ../src/disco.py:1150 ../src/roster_window.py:145
+#: ../src/disco.py:1151 ../src/roster_window.py:145
 #: ../src/roster_window.py:163 ../src/roster_window.py:185
 #: ../src/roster_window.py:2352 ../src/roster_window.py:2354
 #: ../src/roster_window.py:2427 ../src/roster_window.py:2435
@@ -470,7 +471,8 @@ msgid "Contact already in roster"
 msgstr "Contatto già nel roster"
 
 #: ../src/dialogs.py:380
-msgid "The contact is already listed in your roster."
+#, fuzzy
+msgid "This contact is already listed in your roster."
 msgstr "Il contatto è già presente nel roster."
 
 #: ../src/dialogs.py:442
@@ -663,24 +665,25 @@ msgstr "Commento: %s"
 msgid "Others"
 msgstr "Altri"
 
-#: ../src/disco.py:116
+#. conference is a category for listing mostly groupchats in service discovery
+#: ../src/disco.py:117
 msgid "Conference"
 msgstr "Conferenze"
 
-#: ../src/disco.py:415
+#: ../src/disco.py:416
 msgid "Without a connection, you can not browse available services"
 msgstr ""
 "Senza una connessione, non è possibile consultare i servizi disponibili"
 
-#: ../src/disco.py:489 ../src/disco.py:491
+#: ../src/disco.py:490 ../src/disco.py:492
 msgid "Service Discovery"
 msgstr "Ricerca servizi"
 
-#: ../src/disco.py:569
+#: ../src/disco.py:570
 msgid "The service could not be found"
 msgstr "Il servizio non è stato trovato"
 
-#: ../src/disco.py:570
+#: ../src/disco.py:571
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
@@ -688,56 +691,56 @@ msgstr ""
 "Il servizio all'indirizzo immesso non risponde o è inesistente. Controllare "
 "l'indirizzo e riprovare."
 
-#: ../src/disco.py:574 ../src/disco.py:857
+#: ../src/disco.py:575 ../src/disco.py:858
 msgid "The service is not browsable"
 msgstr "Non è possibile consultare il servizio"
 
-#: ../src/disco.py:575
+#: ../src/disco.py:576
 msgid "This type of service does not contain any items to browse."
 msgstr "Questo tipo di servizio non contiene oggetti da consultare."
 
-#: ../src/disco.py:653
+#: ../src/disco.py:654
 #, python-format
 msgid "Browsing %s"
 msgstr "Consultazione %s"
 
 #. Address column
-#: ../src/disco.py:674
+#: ../src/disco.py:675
 msgid "JID"
 msgstr "JID"
 
-#: ../src/disco.py:693
+#: ../src/disco.py:694
 msgid "_Browse"
 msgstr "_Consulta"
 
-#: ../src/disco.py:858
+#: ../src/disco.py:859
 msgid "This service does not contain any items to browse."
 msgstr "Questo servizio non contiene oggetti da consultare."
 
-#: ../src/disco.py:1078 ../src/disco.py:1155
+#: ../src/disco.py:1079 ../src/disco.py:1156
 msgid "Re_gister"
 msgstr "_Registra"
 
-#: ../src/disco.py:1153 ../src/gtkgui.glade.h:334 ../src/roster_window.py:1064
+#: ../src/disco.py:1154 ../src/gtkgui.glade.h:334 ../src/roster_window.py:1064
 msgid "_Edit"
 msgstr "_Modifica"
 
-#: ../src/disco.py:1190
+#: ../src/disco.py:1191
 #, python-format
 msgid "Scanning %d / %d.."
 msgstr "Analisi %d / %d..."
 
 #. Users column
-#: ../src/disco.py:1372
+#: ../src/disco.py:1373
 msgid "Users"
 msgstr "Utenti"
 
 #. Description column
-#: ../src/disco.py:1379
+#: ../src/disco.py:1380
 msgid "Description"
 msgstr "Descrizione"
 
-#: ../src/disco.py:1406 ../src/gtkgui.glade.h:348
+#: ../src/disco.py:1407 ../src/gtkgui.glade.h:348
 msgid "_Join"
 msgstr "_Entra"
 
@@ -774,7 +777,7 @@ msgstr "Tu"
 msgid "Sender: %s"
 msgstr "Mittente: %s"
 
-#: ../src/filetransfers_window.py:181 ../src/filetransfers_window.py:535
+#: ../src/filetransfers_window.py:181 ../src/filetransfers_window.py:536
 #: ../src/tooltips.py:484
 msgid "Recipient: "
 msgstr "Destinatario: "
@@ -862,38 +865,38 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
-#. Only the last 's' should be translated.
+#. Only the 's' after / (which means second) should be translated.
 #: ../src/filetransfers_window.py:462
 #, python-format
-msgid "(%s/s)"
-msgstr "(%s/s)"
+msgid "(%(filesize_unit)d/s)"
+msgstr ""
 
-#: ../src/filetransfers_window.py:507 ../src/filetransfers_window.py:510
+#: ../src/filetransfers_window.py:508 ../src/filetransfers_window.py:511
 msgid "Invalid File"
 msgstr "File non valido"
 
-#: ../src/filetransfers_window.py:507
+#: ../src/filetransfers_window.py:508
 msgid "File: "
 msgstr "File: "
 
-#: ../src/filetransfers_window.py:511
+#: ../src/filetransfers_window.py:512
 msgid "It is not possible to send empty files"
 msgstr "Non è possibile inviare file vuoti"
 
-#: ../src/filetransfers_window.py:531 ../src/tooltips.py:401
+#: ../src/filetransfers_window.py:532 ../src/tooltips.py:401
 #: ../src/tooltips.py:466
 msgid "Name: "
 msgstr "Nome: "
 
-#: ../src/filetransfers_window.py:533 ../src/tooltips.py:479
+#: ../src/filetransfers_window.py:534 ../src/tooltips.py:479
 msgid "Sender: "
 msgstr "Mittente: "
 
-#: ../src/filetransfers_window.py:721
+#: ../src/filetransfers_window.py:722
 msgid "Pause"
 msgstr "Pausa"
 
-#: ../src/filetransfers_window.py:732 ../src/gtkgui.glade.h:328
+#: ../src/filetransfers_window.py:733 ../src/gtkgui.glade.h:328
 msgid "_Continue"
 msgstr "_Continua"
 
@@ -4446,6 +4449,9 @@ msgstr "errore: impossibile aprire %s per lettura"
 #: ../src/common/optparser.py:157 ../src/common/optparser.py:158
 msgid "cyan"
 msgstr "cyan"
+
+#~ msgid "(%s/s)"
+#~ msgstr "(%s/s)"
 
 #~ msgid "Dbus is not supported."
 #~ msgstr "Dbus non è supportato."

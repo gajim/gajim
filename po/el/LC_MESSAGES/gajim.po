@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-02 15:25+0200\n"
+"POT-Creation-Date: 2005-12-02 16:06+0200\n"
 "PO-Revision-Date: 2005-09-01 17:31+0300\n"
 "Last-Translator: Filippos Papadopoulos <filip@cs.uoi.gr>\n"
 "Language-Team: Hellenic-Ελληνικά-Greek\n"
@@ -50,14 +50,13 @@ msgstr "Είδος"
 
 #. we talk about option description in advanced configuration editor
 #: ../src/advanced.py:112
-#, fuzzy
 msgid "(None)"
-msgstr "Τίποτα"
+msgstr "(Κενή)"
 
-#: ../src/advanced.py:183
-#, fuzzy
+#. we talk about password
+#: ../src/advanced.py:184
 msgid "Hidden"
-msgstr "Μέσο:"
+msgstr "Μυστικό"
 
 #: ../src/chat.py:182 ../src/gtkgui.glade.h:81
 msgid "Chat"
@@ -65,7 +64,7 @@ msgstr "Κουβέντα"
 
 #: ../src/chat.py:184 ../src/gtkgui.glade.h:148
 msgid "Group Chat"
-msgstr "Ομαδική Κουβέντα"
+msgstr "Ομαδική Συζήτηση"
 
 #. if we have 2 or more accounts
 #: ../src/chat.py:198
@@ -143,7 +142,7 @@ msgstr "Όλα τα αρχεία"
 
 #: ../src/config.py:982
 msgid "Wav Sounds"
-msgstr "Αρχεία Wav"
+msgstr "Αρχεία Ήχου Wav"
 
 #: ../src/config.py:1143
 msgid "OpenPGP is not usable in this computer"
@@ -198,7 +197,7 @@ msgstr ""
 "τροποποιείτε τις προσωπικές σας πληροφορίες"
 
 #: ../src/config.py:1355 ../src/dialogs.py:650 ../src/dialogs.py:766
-#: ../src/disco.py:414 ../src/vcard.py:409 ../src/vcard.py:438
+#: ../src/disco.py:415 ../src/vcard.py:409 ../src/vcard.py:438
 msgid "You are not connected to the server"
 msgstr "Δεν είστε συνδεδεμένος στον διακομιστή"
 
@@ -229,7 +228,7 @@ msgid "No key selected"
 msgstr "Καμία επιλογή κλειδιού"
 
 #. Name column
-#: ../src/config.py:1619 ../src/disco.py:667 ../src/disco.py:1365
+#: ../src/config.py:1619 ../src/disco.py:668 ../src/disco.py:1366
 #: ../src/history_window.py:70
 msgid "Name"
 msgstr "Όνομα"
@@ -241,7 +240,7 @@ msgstr "Διακομιστής"
 #. if not '@' or '@' starts the jid ==> agent
 #: ../src/config.py:1875 ../src/dialogs.py:118 ../src/dialogs.py:301
 #: ../src/dialogs.py:339 ../src/disco.py:114 ../src/disco.py:115
-#: ../src/disco.py:1150 ../src/roster_window.py:145
+#: ../src/disco.py:1151 ../src/roster_window.py:145
 #: ../src/roster_window.py:163 ../src/roster_window.py:185
 #: ../src/roster_window.py:2352 ../src/roster_window.py:2354
 #: ../src/roster_window.py:2427 ../src/roster_window.py:2435
@@ -317,14 +316,14 @@ msgstr ""
 "αφαιρέστε τον σελιδοδείκτη."
 
 #: ../src/config.py:2549
-#, fuzzy
 msgid "Invalid username"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
 #: ../src/config.py:2550
-#, fuzzy
 msgid "You must provide a username to configure this account."
-msgstr "Πρέπει να δώσετε ένα όνομα χρήστη για προσθήκη νέου λογαριασμού."
+msgstr ""
+"Πρέπει να δώσετε ένα όνομα χρήστη για την παραμετροποίηση του συγκεκριμένου "
+"λογαριασμού."
 
 #: ../src/config.py:2558 ../src/dialogs.py:785
 msgid "Invalid password"
@@ -335,9 +334,8 @@ msgid "You must enter a password for the new account."
 msgstr "Πρέπει να δώσετε έναν κωδικό για τον νέο λογαριασμό."
 
 #: ../src/config.py:2584
-#, fuzzy
 msgid "Account has been added successfully"
-msgstr "Ο σελιδοδείκτης προστέθηκε με επιτυχία"
+msgstr "Ο λογαριασμός προστέθηκε με επιτυχία"
 
 #: ../src/config.py:2585 ../src/config.py:2616
 #, fuzzy
@@ -350,13 +348,12 @@ msgstr ""
 "\"Επεξεργασία->Λογαριασμοί\" από το κεντρικό παράθυρο"
 
 #: ../src/config.py:2615
-#, fuzzy
 msgid "Your new account has been created successfully"
-msgstr "Ο σελιδοδείκτης προστέθηκε με επιτυχία"
+msgstr "Ο νέος σας λογαριασμός δημιουργήθηκε με επιτυχία"
 
 #: ../src/config.py:2630
 msgid "An error occured during account creation"
-msgstr ""
+msgstr "Σφάλμα κατά την διάρκεια δημιουργίας λογαριασμού"
 
 #: ../src/config.py:2707
 msgid "Account name is in use"
@@ -371,6 +368,8 @@ msgid ""
 "Text below this line is what has been said since the last time you paid "
 "attention to this group chat"
 msgstr ""
+"Το κείμενο κάτω από αυτή τη γραμμή είναι ότι έχει λεχθεί από την τελευταία "
+"φορά που κοιτάξατε αυτή την ομαδική συζήτηση"
 
 #: ../src/conversation_textview.py:236
 #, python-format
@@ -403,14 +402,14 @@ msgstr "Δικτυακή Ανα_ζήτηση γι' αυτό"
 
 #: ../src/conversation_textview.py:557
 msgid "Yesterday"
-msgstr ""
+msgstr "Χθες"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
 #: ../src/conversation_textview.py:561
 #, python-format
 msgid "%i days ago"
-msgstr ""
+msgstr "πριν από %i μέρες"
 
 #. if we have subject, show it too!
 #: ../src/conversation_textview.py:600
@@ -460,9 +459,8 @@ msgid "%s Status Message"
 msgstr "Μήνυμα για Κατάσταση %s"
 
 #: ../src/dialogs.py:221
-#, fuzzy
 msgid "Status Message"
-msgstr "Μήνυμα για Κατάσταση %s"
+msgstr "Μήνυμα Κατάστασης"
 
 #: ../src/dialogs.py:290
 #, python-format
@@ -476,22 +474,19 @@ msgid "Please fill in the data of the contact you want to add"
 msgstr "Παρακαλώ συμπληρώστε τα στοιχεία της επαφής που θέλετε να προσθέσετε"
 
 #: ../src/dialogs.py:372
-#, fuzzy
 msgid "Invalid User ID"
-msgstr "Μη έγκυρο Jabber ID"
+msgstr "Μη έγκυρη ταυτότητα χρήστη"
 
 #: ../src/dialogs.py:379
-#, fuzzy
 msgid "Contact already in roster"
-msgstr "Βρίσκεστε ήδη στο δωμάτιο %s"
+msgstr "Επαφή ήδη στην λίστα επαφών"
 
 #: ../src/dialogs.py:380
 #, fuzzy
-msgid "The contact is already listed in your roster."
-msgstr "Η επαφή \"%s\" θα αφαιρεθεί από την λίστα επαφών σας"
+msgid "This contact is already listed in your roster."
+msgstr "Αυτή η επαφή υπάρχει ήδη στην λίστα επαφών σας."
 
 #: ../src/dialogs.py:442
-#, fuzzy
 msgid "A GTK+ jabber client"
 msgstr "Ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
 
@@ -500,7 +495,8 @@ msgstr "Ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
 msgid "translator-credits"
 msgstr ""
 "Νίκος Κουρεμένος <kourem@gmail.com>\n"
-"Φίλιππος Παπαδόπουλος <psybases@gmail.com>"
+"Φίλιππος Παπαδόπουλος <psybases@gmail.com>\n"
+"Σταύρος Γιαννούρης <stavrosg2002@freemail.gr>"
 
 #: ../src/dialogs.py:604
 #, python-format
@@ -519,9 +515,9 @@ msgstr ""
 "συνδεδεμένος."
 
 #: ../src/dialogs.py:662
-#, fuzzy, python-format
+#, python-format
 msgid "Join Group Chat with account %s"
-msgstr "Συμμετοχή σε Ομαδική Συζήτηση ως %s"
+msgstr "Συμμετοχή σε Ομαδική Συζήτηση με χρήση του λογαριασμού %s"
 
 #: ../src/dialogs.py:664 ../src/gtkgui.glade.h:179
 msgid "Join Group Chat"
@@ -530,12 +526,11 @@ msgstr "Συμμετοχή σε Ομαδική Συζήτηση"
 #: ../src/dialogs.py:744
 #, fuzzy, python-format
 msgid "Start Chat with account %s"
-msgstr "για τον λογαριασμό %s"
+msgstr "Έναργξη Κουβέντας με χρήση του λογαριασμού %s"
 
 #: ../src/dialogs.py:746
-#, fuzzy
 msgid "Start Chat"
-msgstr "_Έναρξη κουβέντας"
+msgstr "Έναρξη κουβέντας"
 
 #: ../src/dialogs.py:747
 msgid ""
@@ -593,14 +588,13 @@ msgstr "Νέο Μονό Μήνυμα"
 
 #: ../src/dialogs.py:836 ../src/dialogs.py:840 ../src/gajim.py:445
 #: ../src/notify.py:96 ../src/notify.py:99
-#, fuzzy
 msgid "New Private Message"
-msgstr "_Αποστολή Προσωπικού Μηνύματος"
+msgstr "Νέο Προσωπικό Μήνυμα"
 
 #: ../src/dialogs.py:843
-#, fuzzy, python-format
+#, python-format
 msgid "From %s in room %s"
-msgstr "Ο %s είναι τώρα %s"
+msgstr "Από %s στο δωμάτιο %s"
 
 #: ../src/dialogs.py:845 ../src/dialogs.py:851 ../src/dialogs.py:868
 #, python-format
@@ -632,9 +626,9 @@ msgid "To %s"
 msgstr "σε %s"
 
 #: ../src/dialogs.py:1067
-#, fuzzy, python-format
+#, python-format
 msgid "Single Message with account %s"
-msgstr "Μονό Μήνυμα ως %s"
+msgstr "Μονό Μήνυμα με χρήση του λογαριασμού %s"
 
 #: ../src/dialogs.py:1069
 msgid "Single Message"
@@ -671,9 +665,9 @@ msgid "XML Console"
 msgstr "XML Κονσόλα"
 
 #: ../src/dialogs.py:1259
-#, fuzzy, python-format
+#, python-format
 msgid "You have been invited to the %(room_jid)s room by %(contact_jid)s"
-msgstr "Έχετε προσκληθεί στο δωμάτιο %s από τον/την %s"
+msgstr "Έχετε προσκληθεί στο δωμάτιο %(room_jid)s από τον/την %(contact_jid)s"
 
 #: ../src/dialogs.py:1262
 #, python-format
@@ -684,83 +678,79 @@ msgstr "Σχόλιο: %s"
 msgid "Others"
 msgstr ""
 
-#: ../src/disco.py:116
-#, fuzzy
+#. conference is a category for listing mostly groupchats in service discovery
+#: ../src/disco.py:117
 msgid "Conference"
-msgstr "Προτιμήσεις"
+msgstr "Ομαδικές συζητήσεις"
 
-#: ../src/disco.py:415
+#: ../src/disco.py:416
 msgid "Without a connection, you can not browse available services"
 msgstr "Πρέπει να συνδεθείτε για να περιηγηθείτε στις υπηρεσίες"
 
-#: ../src/disco.py:489 ../src/disco.py:491
+#: ../src/disco.py:490 ../src/disco.py:492
 msgid "Service Discovery"
 msgstr "Ανακάλυψη Υπηρεσιών"
 
-#: ../src/disco.py:569
+#: ../src/disco.py:570
 msgid "The service could not be found"
 msgstr ""
 
-#: ../src/disco.py:570
+#: ../src/disco.py:571
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
 msgstr ""
 
-#: ../src/disco.py:574 ../src/disco.py:857
-#, fuzzy
+#: ../src/disco.py:575 ../src/disco.py:858
 msgid "The service is not browsable"
-msgstr "Η υπηρεσία δεν είναι διαθέσιμη"
+msgstr "Η υπηρεσία δεν είναι περιηγήσιμη"
 
-#: ../src/disco.py:575
+#: ../src/disco.py:576
 msgid "This type of service does not contain any items to browse."
 msgstr ""
 
-#: ../src/disco.py:653
-#, fuzzy, python-format
+#: ../src/disco.py:654
+#, python-format
 msgid "Browsing %s"
-msgstr "Έκδοση %s"
+msgstr "Περιήγηση στο %s"
 
 #. Address column
-#: ../src/disco.py:674
+#: ../src/disco.py:675
 msgid "JID"
-msgstr ""
+msgstr "JID"
 
-#: ../src/disco.py:693
-#, fuzzy
+#: ../src/disco.py:694
 msgid "_Browse"
-msgstr "_Περιηγητής:"
+msgstr "_Περιήγηση"
 
-#: ../src/disco.py:858
+#: ../src/disco.py:859
 msgid "This service does not contain any items to browse."
 msgstr ""
 
-#: ../src/disco.py:1078 ../src/disco.py:1155
+#: ../src/disco.py:1079 ../src/disco.py:1156
 msgid "Re_gister"
 msgstr "_Εγγραφή"
 
-#: ../src/disco.py:1153 ../src/gtkgui.glade.h:334 ../src/roster_window.py:1064
+#: ../src/disco.py:1154 ../src/gtkgui.glade.h:334 ../src/roster_window.py:1064
 msgid "_Edit"
 msgstr "Επε_ξεργασία"
 
-#: ../src/disco.py:1190
+#: ../src/disco.py:1191
 #, python-format
 msgid "Scanning %d / %d.."
 msgstr ""
 
 #. Users column
-#: ../src/disco.py:1372
-#, fuzzy
+#: ../src/disco.py:1373
 msgid "Users"
-msgstr "Ταυτότητα Χρήστη:"
+msgstr "Χρήστες"
 
 #. Description column
-#: ../src/disco.py:1379
-#, fuzzy
+#: ../src/disco.py:1380
 msgid "Description"
-msgstr "Περιγραφή: %s"
+msgstr "Περιγραφή"
 
-#: ../src/disco.py:1406 ../src/gtkgui.glade.h:348
+#: ../src/disco.py:1407 ../src/gtkgui.glade.h:348
 msgid "_Join"
 msgstr "_Συμμετοχή"
 
@@ -769,9 +759,8 @@ msgid "File"
 msgstr "Αρχείο"
 
 #: ../src/filetransfers_window.py:98
-#, fuzzy
 msgid "Time"
-msgstr "Θέμα"
+msgstr "Χρόνος"
 
 #: ../src/filetransfers_window.py:110
 msgid "Progress"
@@ -798,7 +787,7 @@ msgstr "You"
 msgid "Sender: %s"
 msgstr "Αποστολέας: %s"
 
-#: ../src/filetransfers_window.py:181 ../src/filetransfers_window.py:535
+#: ../src/filetransfers_window.py:181 ../src/filetransfers_window.py:536
 #: ../src/tooltips.py:484
 msgid "Recipient: "
 msgstr "Παραλήπτης: "
@@ -886,41 +875,41 @@ msgstr ""
 
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
-#. Only the last 's' should be translated.
+#. Only the 's' after / (which means second) should be translated.
 #: ../src/filetransfers_window.py:462
 #, python-format
-msgid "(%s/s)"
+msgid "(%(filesize_unit)d/s)"
 msgstr ""
 
-#: ../src/filetransfers_window.py:507 ../src/filetransfers_window.py:510
+#: ../src/filetransfers_window.py:508 ../src/filetransfers_window.py:511
 #, fuzzy
 msgid "Invalid File"
 msgstr "Μη έγκυρη καταχώρηση"
 
-#: ../src/filetransfers_window.py:507
+#: ../src/filetransfers_window.py:508
 #, fuzzy
 msgid "File: "
 msgstr "Αρχείο: %s"
 
-#: ../src/filetransfers_window.py:511
+#: ../src/filetransfers_window.py:512
 #, fuzzy
 msgid "It is not possible to send empty files"
 msgstr "O %s επιθυμεί να σας στείλει ένα αρχείο:"
 
-#: ../src/filetransfers_window.py:531 ../src/tooltips.py:401
+#: ../src/filetransfers_window.py:532 ../src/tooltips.py:401
 #: ../src/tooltips.py:466
 msgid "Name: "
 msgstr "Όνομα: "
 
-#: ../src/filetransfers_window.py:533 ../src/tooltips.py:479
+#: ../src/filetransfers_window.py:534 ../src/tooltips.py:479
 msgid "Sender: "
 msgstr "Αποστολέας: "
 
-#: ../src/filetransfers_window.py:721
+#: ../src/filetransfers_window.py:722
 msgid "Pause"
 msgstr "Παύση"
 
-#: ../src/filetransfers_window.py:732 ../src/gtkgui.glade.h:328
+#: ../src/filetransfers_window.py:733 ../src/gtkgui.glade.h:328
 msgid "_Continue"
 msgstr "_Συνέχεια"
 
@@ -3017,7 +3006,7 @@ msgstr "_Τέλος"
 #: ../src/gtkgui.glade.h:338
 #, fuzzy
 msgid "_Group Chat"
-msgstr "Ομαδική Κουβέντα"
+msgstr "Ομαδική Συζήτηση"
 
 #: ../src/gtkgui.glade.h:339
 msgid "_Help"

@@ -458,8 +458,9 @@ _('Connection with peer cannot be established.'))
 			text += '\n'
 			#This should make the string Kb/s, 
 			#where 'Kb' part is taken from %s.
-			#Only the last 's' should be translated.
-			text += _('(%s/s)') % helpers.convert_bytes(speed)
+			#Only the 's' after / (which means second) should be translated.
+			text += _('(%(filesize_unit)d/s)') % {'filesize_unit':
+				helpers.convert_bytes(speed)}
 			self.model.set(iter, C_TIME, text)
 			
 			# try to guess what should be the status image

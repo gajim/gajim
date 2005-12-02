@@ -377,7 +377,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if jid in gajim.contacts[self.account] and _('not in the roster') not in \
 			gajim.contacts[self.account][jid][0].groups:
 			ErrorDialog(_('Contact already in roster'),
-			_('The contact is already listed in your roster.')).get_response()
+			_('This contact is already listed in your roster.')).get_response()
 			return
 
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()

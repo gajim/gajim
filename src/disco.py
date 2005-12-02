@@ -113,6 +113,7 @@ _cat_to_descr = {
 	'other':			(_('Others'),	2),
 	'gateway':		(_('Transports'),	0),
 	'_jid':			(_('Transports'),	0),
+	#conference is a category for listing mostly groupchats in service discovery
 	'conference':	(_('Conference'),	1),
 }
 

@@ -180,6 +180,7 @@ class AdvancedConfigurationWindow:
 			type = val[OPT_TYPE][0]
 		value = val[OPT_VAL]
 		if name in ('password', 'gpgpassword'):
+			#we talk about password
 			value = _('Hidden') # override passwords with this string
 		model.append(iter, [name, value, type])
 
