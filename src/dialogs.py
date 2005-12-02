@@ -22,6 +22,7 @@ import gtk
 import gtk.glade
 import gobject
 import os
+import Queue
 
 import gtkgui_helpers
 import vcard
@@ -1270,3 +1271,51 @@ class InvitationReceivedDialog:
 			room, server = gajim.get_room_name_and_server_from_room_jid(room_jid)
 			JoinGroupchatWindow(account, server = server, room = room)
 			
+class ProgressDialog:
+	def __init__(self, title, during_text, messages_queue):
+		'''during text is what to show during the procedure,
+		messages_queue has the message to show
+		in the textview'''
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'progress_dialog', APP)
+		dialog = xml.get_widget('progress_dialog')
+		self.label = xml.get_widget('label')
+		self.label.set_markup('<big>' + during_text + '</big>')
+		self.progressbar = xml.get_widget('progressbar')
+		self.textview_buffer = xml.get_widget('textview').get_buffer()
+		
+		dialog.set_title(title_text)
+		dialog.show_all()
+		xml.signal_autoconnect(self)
+		
+		self.update_progressbar_timeout_id = gobject.timeout_add(100,
+					self.update_progressbar)
+		
+		self.read_from_queue_id = gobject.timeout_add(1000,
+			self.read_from_queue_and_update_textview, messages_queue)
+	
+	def update_progressbar(self):
+		self.progressbar.pulse()
+		return True # loop forever
+	
+	def read_from_queue_and_update_textview(self, messages_queue):
+		try:
+			message = messages_queue.get_nowait()
+			print message
+		except Queue.Empty:
+			pass
+		else:
+			end_iter = self.textview_buffer.get_end_iter()
+			self.textview_buffer.insert(end_iter, message)
+
+		return True # loop for ever
+	
+	def on_progress_dialog_delete_event(self, widget, event):
+		return True # WM's X button or Escape key should not destroy the window
+
+	def done(self, done_text):
+		'''whatever we were doing is done (either we problems or not),
+		make close button sensitive and show the done_text in label'''
+		self.xml.get_widget('close_button').set_sensitive(True)
+		self.label.set_markup('<big>' + done_text + '</big')
+		gobject.source_remove(self.update_progressbar_timeout_id)
+		gobject.source_remove(self.read_from_queue_id)
