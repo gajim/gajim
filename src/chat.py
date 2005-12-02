@@ -330,13 +330,13 @@ class Chat:
 
 	def on_history_menuitem_clicked(self, widget = None, jid = None):
 		'''When history menuitem is pressed: call history window'''
-		if jid is None:
+		if jid is None: # None when viewing room and tc history
 			jid = self.get_active_jid()
 		if gajim.interface.instances['logs'].has_key(jid):
 			gajim.interface.instances['logs'][jid].window.present()
 		else:
-			gajim.interface.instances['logs'][jid] = history_window.HistoryWindow(jid,
-				self.account)
+			gajim.interface.instances['logs'][jid] = history_window.HistoryWindow(
+				jid, self.account)
 
 	def on_chat_window_focus_in_event(self, widget, event):
 		'''When window gets focus'''

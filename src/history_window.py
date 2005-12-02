@@ -238,9 +238,17 @@ class HistoryWindow:
 			tag_name = 'incoming'
 		elif kind in (constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV):
 			try:
+				# is he in our roster? if yes use the name
 				contact_name = gajim.contacts[self.account][self.jid][0].name
 			except:
-				contact_name = self.jid.split('@')[0]
+				room_jid, nick = gajim.get_room_and_nick_from_fjid(self.jid)
+				# do we have him as gc_contact?
+				if nick and gajim.gc_contacts[self.account].has_key(room_jid) and\
+					gajim.gc_contacts[self.account][room_jid].has_key(nick):
+					# so yes, it's pm!
+					contact_name = nick
+				else:
+					contact_name = self.jid.split('@')[0]
 			tag_name = 'incoming'
 		elif kind in (constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT):
 			contact_name = gajim.nicks[self.account]
