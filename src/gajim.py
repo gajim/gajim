@@ -71,6 +71,11 @@ if pritext:
 	dlg.destroy()
 	sys.exit()
 
+from common import logger
+LOG_DB_PATH = logger.LOG_DB_PATH
+NO_DB = False
+if not os.path.isfile(LOG_DB_PATH):
+	NO_DB = True
 check_paths.check_and_possibly_create_paths()
 
 path = os.getcwd()
@@ -1456,5 +1461,14 @@ if __name__ == '__main__':
 		except:
 			pass
 	
+	# Migrate old logs if user wnats that
+	NO_DB = True
+	if NO_DB:
+		dialog = dialogs.ConfirmationDialog(_('It is the first time you rin Gajim since the way logs are save changed. You can ask Gajim to migrate your old logs by pressing Ok button. This can take some minutes.'), _('Do you want to migrate your logs?'))
+		if dialog.get_response() == gtk.RESPONSE_OK:
+			from common import migrate_logs_to_dot9_db
+			migrate_logs_to_dot9_db.migrate()
+	del NO_DB
+
 	Interface()
 	gtk.main()
