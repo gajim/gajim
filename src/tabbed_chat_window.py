@@ -428,8 +428,6 @@ class TabbedChatWindow(chat.Chat):
 		# send the message
 		self.send_message(message)
 
-		message_buffer.set_text('')
-
 	def remove_tab(self, jid):
 		if time.time() - gajim.last_message_time[self.account][jid] < 2:
 			dialog = dialogs.ConfirmationDialog(
@@ -639,7 +637,6 @@ class TabbedChatWindow(chat.Chat):
 
 			if send_message:
 				self.send_message(message) # send the message
-				message_buffer.set_text('') # clear msg buffer (and tv of course)
 
 	def send_chatstate(self, state, jid = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
@@ -791,7 +788,7 @@ class TabbedChatWindow(chat.Chat):
 			gajim.connections[self.account].send_message(jid, message, keyID,
 				chatstate = chatstate_to_send)
 
-			message_buffer.set_text('')
+			message_buffer.set_text('') # clear message buffer (and tv of course)
 			self.print_conversation(message, jid, jid, encrypted = encrypted)
 
 	def on_contact_information_menuitem_clicked(self, widget):
