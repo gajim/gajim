@@ -508,6 +508,11 @@ class ConfirmationDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		HigDialog.__init__(self, None, 
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext)
+		
+		self.set_default_response(gtk.RESPONSE_OK)
+		
+		ok_button = self.action_area.get_children()[0] # right to left
+		ok_button.grab_focus()
 			
 class WarningDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):

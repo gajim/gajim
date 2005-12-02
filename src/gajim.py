@@ -1461,9 +1461,9 @@ if __name__ == '__main__':
 		except:
 			pass
 	
-	# Migrate old logs if user wnats that
+	# Migrate old logs if user wants that
 	if NO_DB:
-		dialog = dialogs.ConfirmationDialog(_('It is the first time you rin Gajim since the way logs are save changed. You can ask Gajim to migrate your old logs by pressing Ok button. This can take some minutes.'), _('Do you want to migrate your logs?'))
+		dialog = dialogs.ConfirmationDialog(_('Do you want to migrate your logs?'), _('It is the first time you run Gajim since the way logs are stored has changed. Gajim can migrate your logs at this state. Migrate?'))
 		if dialog.get_response() == gtk.RESPONSE_OK:
 			from common import migrate_logs_to_dot9_db
 			migrate_logs_to_dot9_db.migrate()
