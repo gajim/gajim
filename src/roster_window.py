@@ -2550,10 +2550,15 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
 		self.make_jabber_state_images()
-		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'irc': {},
-			'icq': {}, 'msn': {}, 'sms': {}, 'weather': {}, 'yahoo': {} }
 		
-		path = os.path.join(gajim.DATA_DIR, 'iconsets/transports')
+		#FIXME: why do we init this dict of dicts here?
+		#for loop below does it. maybe so we're sure we always have the keys?
+		#eventhough childs can be empty? I don't get it
+		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'irc': {},
+			'icq': {}, 'msn': {}, 'sms': {}, 'tlen': {}, 'weather': {},
+			'yahoo': {} }
+		
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
 		folders = os.listdir(path)
 		for transport in folders:
 			if transport == '.svn':
