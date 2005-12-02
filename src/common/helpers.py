@@ -483,6 +483,9 @@ def get_output_of_command(command):
 def get_global_show():
 	maxi = 0
 	for account in gajim.connections:
+		if not gajim.config.get_per('accounts', account,
+			'sync_with_global_status'):
+			continue
 		connected = gajim.connections[account].connected
 		if connected > maxi:
 			maxi = connected
