@@ -76,7 +76,6 @@ LOG_DB_PATH = logger.LOG_DB_PATH
 NO_DB = False
 if not os.path.isfile(LOG_DB_PATH):
 	NO_DB = True
-check_paths.check_and_possibly_create_paths()
 
 path = os.getcwd()
 if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
@@ -1463,11 +1462,9 @@ if __name__ == '__main__':
 	
 	# Migrate old logs if user wants that
 	if NO_DB:
-		dialog = dialogs.ConfirmationDialog(_('Do you want to migrate your logs?'), _('It is the first time you run Gajim since the way logs are stored has changed. Gajim can migrate your logs at this state. Migrate?'))
-		if dialog.get_response() == gtk.RESPONSE_OK:
-			from common import migrate_logs_to_dot9_db
-			migrate_logs_to_dot9_db.migrate()
+		pass # launch migration script
 	del NO_DB
+	check_paths.check_and_possibly_create_paths()
 
 	Interface()
 	gtk.main()
