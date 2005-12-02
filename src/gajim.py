@@ -1462,7 +1462,6 @@ if __name__ == '__main__':
 			pass
 	
 	# Migrate old logs if user wnats that
-	NO_DB = True
 	if NO_DB:
 		dialog = dialogs.ConfirmationDialog(_('It is the first time you rin Gajim since the way logs are save changed. You can ask Gajim to migrate your old logs by pressing Ok button. This can take some minutes.'), _('Do you want to migrate your logs?'))
 		if dialog.get_response() == gtk.RESPONSE_OK:

@@ -48,7 +48,7 @@ if os.name == 'nt':
 		PATH_TO_DB = '../src/logs.db'
 else:
 	PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
-	PATH_TO_DB = os.path.expanduser('~/.gajim/logs2.db') # database is called logs.db
+	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
 
 if os.path.exists(PATH_TO_DB):
 	print '%s already exists. Exiting..' % PATH_TO_DB
