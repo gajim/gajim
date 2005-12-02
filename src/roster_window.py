@@ -126,7 +126,8 @@ class RosterWindow:
 
 		our_jid = gajim.get_jid_from_account(account)
 
-		model.append(None, [self.jabber_state_images[show], account,
+		model.append(None, [self.jabber_state_images[show],
+			gtkgui_helpers.escape_for_pango_markup(account),
 			'account', our_jid, account, False, tls_pixbuf])
 
 	def remove_newly_added(self, jid, account):
