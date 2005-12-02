@@ -1272,20 +1272,20 @@ class InvitationReceivedDialog:
 			JoinGroupchatWindow(account, server = server, room = room)
 			
 class ProgressDialog:
-	def __init__(self, title, during_text, messages_queue):
+	def __init__(self, title_text, during_text, messages_queue):
 		'''during text is what to show during the procedure,
 		messages_queue has the message to show
 		in the textview'''
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'progress_dialog', APP)
-		dialog = xml.get_widget('progress_dialog')
-		self.label = xml.get_widget('label')
+		dialog = self.xml.get_widget('progress_dialog')
+		self.label = self.xml.get_widget('label')
 		self.label.set_markup('<big>' + during_text + '</big>')
-		self.progressbar = xml.get_widget('progressbar')
-		self.textview_buffer = xml.get_widget('textview').get_buffer()
+		self.progressbar = self.xml.get_widget('progressbar')
+		self.textview_buffer = self.xml.get_widget('textview').get_buffer()
 		
 		dialog.set_title(title_text)
 		dialog.show_all()
-		xml.signal_autoconnect(self)
+		self.xml.signal_autoconnect(self)
 		
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 					self.update_progressbar)
