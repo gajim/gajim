@@ -433,6 +433,12 @@ def get_avatar_pixbuf_from_cache(jid):
 	returns None if there is no image in vcard
 	returns 'ask' if cached vcard should not be used (user changed his vcard,
 	so we have new sha) or if we don't have the vcard'''
+
+	if gajim.config.get('hide_avatar_of_transport') and\
+		gajim.jid_is_transport(jid):
+		# don't show avatar for the transport itself
+		return None
+	
 	if jid not in os.listdir(gajim.VCARDPATH):
 		return 'ask'
 
