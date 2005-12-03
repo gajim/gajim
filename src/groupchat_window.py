@@ -1024,26 +1024,28 @@ current room topic.') % command, room_jid)
 									'enabled'):
 				sound = 'highlight'
 				
-		# Is it a history message? Don't want ping-floods when we join.
-		if not tim == time.localtime():
+		# Is it a history message? Don't want sound-floods when we join.
+		if tim != time.localtime():
 			sound = None
 			
 		return (highlight, sound)
 
 	def needs_highlight(self, text, nick):
-		'''checks text to see whether any of the words in muc_highlight_words
-		appear'''
+		'''checks text to see whether any of the words in (muc_highlight_words
+		and nick) appear'''
 		
-		words = gajim.config.get('muc_highlight_words').split(';')
-		words.append(nick)
+		special_words = gajim.config.get('muc_highlight_words').split(';')
+		special_words.append(nick)
 		# Strip empties: ''.split(';') == [''] and would highlight everything.
 		# Also lowercase everything for case insensitive compare.
-		words = [word.lower() for word in words if word]
+		special_words = [word.lower() for word in special_words if word]
 		text = text.lower()
 		
-		for word in words:
-			if word in text:
-				return True
+		text_splitted = text.split()
+		for word in text_splitted: # get each word of the text
+			for special_word in special_words:
+				if word.startswith(special_word):
+					return True
 		
 		return False
 
