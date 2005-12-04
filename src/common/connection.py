@@ -317,7 +317,7 @@ class Connection:
 		tim = time.localtime(timegm(tim))
 		frm = self.get_full_jid(msg)
 		jid = self.get_jid(msg)
-		no_log_for = gajim.config.get('accounts', self.name, 'no_log_for')
+		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		encrypted = False
 		chatstate = None
 		xtags = msg.getTags('x')
@@ -412,7 +412,7 @@ class Connection:
 				
 		who = self.get_full_jid(prs)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-		no_log_for = gajim.config.get('accounts', self.name, 'no_log_for')
+		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		status = prs.getStatus()
 		show = prs.getShow()
 		if not show in STATUS_LIST:
@@ -1923,7 +1923,7 @@ class Connection:
 				namespace = 'http://jabber.org/protocol/chatstates')
 		
 		self.to_be_sent.append(msg_iq)
-		no_log_for = gajim.config.get('accounts', self.name, 'no_log_for')
+		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		ji = gajim.get_jid_without_resource(jid)
 		if self.name not in no_log_for and ji not in no_log_for:
 			log_msg = msg
