@@ -23,6 +23,8 @@ import gtk
 import os
 import sys
 
+import systray
+
 from common import exceptions
 from common import gajim
 from time import time
@@ -274,29 +276,8 @@ class SignalObject(DbusPrototype):
 	def show_next_unread(self, *args):
 		''' Show the window(s) with next waiting messages in tabbed/group chats. '''
 		#FIXME: when systray is disabled this method does nothing.
-		#FIXME: show message from GC that refer to us (like systray does)
 		if len(gajim.interface.systray.jids) != 0:
-			account = gajim.interface.systray.jids[0][0]
-			jid = gajim.interface.systray.jids[0][1]
-			acc = gajim.interface.instances[account]
-			jid_tab = None
-			if acc['gc'].has_key(jid):
-				jid_tab = acc['gc'][jid]
-			elif acc['chats'].has_key(jid):
-				jid_tab = acc['chats'][jid]
-			else:
-				gajim.interface.roster.new_chat(
-					gajim.contacts[account][jid][0], account)
-				jid_tab = acc['chats'][jid]
-			if jid_tab:
-				jid_tab.set_active_tab(jid)
-				jid_tab.window.present()
-				# preserve the 'steal focus preservation'
-				if self._is_first():
-					jid_tab.window.window.focus()
-				else:
-					jid_tab.window.window.focus(long(time()))
-				
+			gajim.interface.systray.handle_first_event()
 
 	def contact_info(self, *args):
 		''' get vcard info for a contact. This method returns nothing.
