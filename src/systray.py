@@ -321,6 +321,7 @@ class Systray:
 		if w:
 			w.set_active_tab(jid)
 			w.window.present()
+			w.window.window.focus()
 			tv = w.conversation_textviews[jid]
 			tv.scroll_to_end()
 
