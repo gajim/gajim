@@ -316,6 +316,8 @@ class Connection:
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
 		frm = self.get_full_jid(msg)
+		jid = self.get_jid(msg)
+		no_log_for = gajim.config.get('accounts', self.name, 'no_log_for')
 		encrypted = False
 		chatstate = None
 		xtags = msg.getTags('x')
@@ -365,16 +367,19 @@ class Connection:
 				if not msg.getTag('body'): #no <body>
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
-				gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
+				if self.name not in no_log_for:
+					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 		elif mtype == 'chat': # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
-			if msg.getTag('body'):
+			if msg.getTag('body') and self.name not in no_log_for and jid not in\
+				no_log_for:
 				gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim, subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
 				chatstate))
 		else: # it's single message
-			gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim, subject = subject)
+			if self.name not in no_log_for and jid not in no_log_for:
+				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim, subject = subject)
 			if invite is not None:
 				item = invite.getTag('invite')
 				jid_from = item.getAttr('from')
@@ -407,6 +412,7 @@ class Connection:
 				
 		who = self.get_full_jid(prs)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+		no_log_for = gajim.config.get('accounts', self.name, 'no_log_for')
 		status = prs.getStatus()
 		show = prs.getShow()
 		if not show in STATUS_LIST:
@@ -464,7 +470,8 @@ class Connection:
 					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 						errmsg, errcode))
 			if not ptype or ptype == 'unavailable':
-				if gajim.config.get('log_contact_status_changes'):
+				if gajim.config.get('log_contact_status_changes') and self.name\
+					not in no_log_for and jid_stripped not in no_log_for:
 					gajim.logger.write('gcstatus', who, status, show)
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
@@ -513,7 +520,8 @@ class Connection:
 			else:
 				self.vcard_shas[jid_stripped] = avatar_sha
 		if not ptype or ptype == 'unavailable':
-			if gajim.config.get('log_contact_status_changes'):
+			if gajim.config.get('log_contact_status_changes') and self.name\
+				not in no_log_for and jid_stripped not in no_log_for:
 				gajim.logger.write('status', jid_stripped, status, show)
 			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
 				keyID))
@@ -1915,15 +1923,18 @@ class Connection:
 				namespace = 'http://jabber.org/protocol/chatstates')
 		
 		self.to_be_sent.append(msg_iq)
-		log_msg = msg
-		if subject:
-			log_msg = _('Subject: %s\n%s') % (subject, msg)
-		if log_msg:
-			if type == 'chat':
-				kind = 'chat_msg_sent'
-			else:
-				kind = 'single_msg_sent'
-			gajim.logger.write(kind, jid, log_msg)
+		no_log_for = gajim.config.get('accounts', self.name, 'no_log_for')
+		ji = gajim.get_jid_without_resource(jid)
+		if self.name not in no_log_for and ji not in no_log_for:
+			log_msg = msg
+			if subject:
+				log_msg = _('Subject: %s\n%s') % (subject, msg)
+			if log_msg:
+				if type == 'chat':
+					kind = 'chat_msg_sent'
+				else:
+					kind = 'single_msg_sent'
+				gajim.logger.write(kind, jid, log_msg)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 
 	def send_stanza(self, stanza):
