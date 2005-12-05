@@ -135,6 +135,7 @@ class HistoryWindow:
 			date = time.localtime(tim)
 
 		y, m, d = date[0], date[1], date[2]
+		m = gtkgui_helpers.make_python_month_gtk_month(m)
 		self.calendar.select_month(m, y)
 		self.calendar.select_day(d)
 		self.add_lines_for_date(y, m, d)
