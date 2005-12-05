@@ -131,6 +131,7 @@ class HistoryWindow:
 			date = time.localtime(tim)
 
 		y, m, d = date[0], date[1], date[2]
+		self.calendar.select_month(m, y)
 		self.calendar.select_day(d)
 		self.add_lines_for_date(y, m, d)
 		
