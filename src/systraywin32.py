@@ -223,7 +223,7 @@ class SystrayWin32(systray.Systray):
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
 		self.added_hide_menuitem = False
 		
-		self.tray_ico_imgs = self.load_icos()
+#		self.tray_ico_imgs = self.load_icos()
 		
 		#gajim.interface.roster.window.realize()
 		#gajim.interface.roster.window.show_all()
@@ -302,6 +302,7 @@ class SystrayWin32(systray.Systray):
 		self.systray_winapi.notify_icon.set_tooltip(text)
 
 	def set_img(self):
+		self.tray_ico_imgs = self.load_icos()
 		self.systray_winapi.remove_notify_icon()
 		if len(self.jids) > 0:
 			state = 'message'
@@ -315,18 +316,21 @@ class SystrayWin32(systray.Systray):
 
 	def load_icos(self):
 		'''load .ico files and return them to a dic of SHOW --> img_obj'''
-		#iconset = gajim.config.get('iconset')
-		#if not iconset:
-		#	iconset = 'sun'
-		iconset = 'gnome'
+		iconset = str(gajim.config.get('iconset'))
+		if not iconset:
+			iconset = 'sun'
 		
 		imgs = {}
-		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/icos/')
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', 'icos')
+		# icon folder for missing icons 
+		path_sun_iconset = os.path.join(gajim.DATA_DIR, 'iconsets', 'sun', '16x16', 'icos')
 		states_list = gajim.SHOW_LIST
 		# trayicon apart from show holds message state too
 		states_list.append('message')
 		for state in states_list:
-			path_to_ico = path + state + '.ico'
+			path_to_ico = os.path.join(path, state + '.ico')
+			if not os.path.isfile(path_to_ico):
+				path_to_ico = os.path.join(path_sun_iconset, state + '.ico')
 			if os.path.exists(path_to_ico):
 				hinst = win32gui.GetModuleHandle(None)
 				img_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
