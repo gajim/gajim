@@ -962,7 +962,7 @@ class Chat:
 		   not self.window.is_active() or \
 		   not end) and kind in ('incoming', 'incoming_queue'):
 			if self.widget_name == 'groupchat_window':
-				if text.find(self.nicks[jid]) == -1:
+				if not self.needs_highlight(text, self.nicks[jid]):
 					# Do not notify us for gc messages that are not for us
 					urgent = False
 					if not gajim.config.get('notify_on_all_muc_messages'):
