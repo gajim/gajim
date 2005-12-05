@@ -83,18 +83,17 @@ class Logger:
 			# db is not created here but in src/common/checks_paths.py
 			return
 		
-		global con, cur
 		# if locked, wait up to 20 sec to unlock
 		# before raise (hopefully should be enough)
-		con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
+		self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 			isolation_level = 'IMMEDIATE')
-		cur = con.cursor()
+		self.cur = self.con.cursor()
 		
 		self.get_jids_already_in_db()
 
 	def get_jids_already_in_db(self):
-		cur.execute('SELECT jid FROM jids')
-		rows = cur.fetchall() # list of tupples: (u'aaa@bbb',), (u'cc@dd',)]
+		self.cur.execute('SELECT jid FROM jids')
+		rows = self.cur.fetchall() # list of tupples: (u'aaa@bbb',), (u'cc@dd',)]
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
@@ -110,9 +109,9 @@ class Logger:
 		
 		possible_room_jid, possible_nick = jid.split('/', 1)
 		
-		cur.execute('SELECT jid_id FROM jids WHERE jid="%s" AND type=%d' %\
+		self.cur.execute('SELECT jid_id FROM jids WHERE jid="%s" AND type=%d' %\
 			(possible_room_jid, constants.JID_ROOM_TYPE))
-		row = cur.fetchone()
+		row = self.cur.fetchone()
 		if row is not None:
 			return True
 		else:
@@ -129,19 +128,19 @@ class Logger:
 			if not jid_is_from_pm: # it's normal jid with resource
 				jid = jid.split('/', 1)[0] # remove the resource
 		if jid in self.jids_already_in: # we already have jids in DB
-			cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
-			jid_id = cur.fetchone()[0]
+			self.cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
+			jid_id = self.cur.fetchone()[0]
 		else: # oh! a new jid :), we add it now
 			if typestr == 'ROOM':
 				typ = constants.JID_ROOM_TYPE
 			else:
 				typ = constants.JID_NORMAL_TYPE
-			cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, typ))
+			self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, typ))
 			try:
-				con.commit()
+				self.con.commit()
 			except sqlite.OperationalError, e:
 				print >> sys.stderr, str(e)
-			jid_id = cur.lastrowid
+			jid_id = self.cur.lastrowid
 			self.jids_already_in.append(jid)
 		return jid_id
 	
@@ -185,9 +184,9 @@ class Logger:
 	def commit_to_db(self, values):
 		#print 'saving', values
 		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
-		cur.execute(sql, values)
+		self.cur.execute(sql, values)
 		try:
-			con.commit()
+			self.con.commit()
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
 	
@@ -203,10 +202,9 @@ class Logger:
 		ROOM_JID/nick if pm-related.'''
 
 		if self.jids_already_in == []: # only happens if we just created the db
-			global con, cur
-			con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
+			self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 				isolation_level = 'IMMEDIATE')
-			cur = con.cursor()
+			self.cur = self.con.cursor()
 			
 		jid = jid.lower()
 		contact_name_col = None # holds nickname for kinds gcstatus, gc_msg
@@ -269,7 +267,7 @@ class Logger:
 		timed_out = now - (timeout * 60) # before that they are too old
 		# so if we ask last 5 lines and we have 2 pending we get
 		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
-		cur.execute('''
+		self.cur.execute('''
 			SELECT time, kind, message FROM logs
 			WHERE jid_id = %d AND kind IN	(%d, %d, %d, %d) AND time > %d
 			ORDER BY time DESC LIMIT %d OFFSET %d
@@ -278,7 +276,7 @@ class Logger:
 				timed_out, restore_how_many_rows, pending_how_many)
 			)
 
-		results = cur.fetchall()
+		results = self.cur.fetchall()
 		results.reverse()
 		return results
 	
@@ -303,14 +301,14 @@ class Logger:
 		seconds_in_a_day = 86400 # 60 * 60 * 24
 		last_second_of_day = start_of_day + seconds_in_a_day - 1
 		
-		cur.execute('''
+		self.cur.execute('''
 			SELECT contact_name, time, kind, show, message FROM logs
 			WHERE jid_id = %d
 			AND time BETWEEN %d AND %d
 			ORDER BY time
 			''' % (jid_id, start_of_day, last_second_of_day))
 		
-		results = cur.fetchall()
+		results = self.cur.fetchall()
 		return results
 
 	def get_search_results_for_query(self, jid, query):
@@ -321,20 +319,20 @@ class Logger:
 		jid_id = self.get_jid_id(jid)
 		if False: #query.startswith('SELECT '): # it's SQL query
 			try:
-				cur.execute(query)
+				self.cur.execute(query)
 			except sqlite.OperationalError, e:
 				results = [('', '', '', '', str(e))]
 				return results
 			
 		else: # user just typed something, we search in message column
 			like_sql = '%' + query + '%'
-			cur.execute('''
+			self.cur.execute('''
 				SELECT contact_name, time, kind, show, message, subject FROM logs
 				WHERE jid_id = ? AND message LIKE ?
 				ORDER BY time
 				''', (jid_id, like_sql))
 
-		results = cur.fetchall()
+		results = self.cur.fetchall()
 		return results
 
 	def date_has_logs(self, jid, year, month, day):
@@ -348,7 +346,7 @@ class Logger:
 		last_second_of_day = start_of_day + seconds_in_a_day - 1
 		
 		# just ask one row to see if we have sth for this date
-		cur.execute('''
+		self.cur.execute('''
 			SELECT log_line_id FROM logs
 			WHERE jid_id = %d
 			AND time BETWEEN %d AND %d
@@ -356,7 +354,7 @@ class Logger:
 			LIMIT 1
 			''' % (jid_id, start_of_day, last_second_of_day,
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
-		result = cur.fetchone()
+		result = self.cur.fetchone()
 		if result:
 			return True
 		else:
@@ -367,11 +365,11 @@ class Logger:
 		we had logs (excluding statuses)'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
-		cur.execute('''
+		self.cur.execute('''
 			SELECT time FROM logs
 			WHERE jid_id = ?
 			AND kind NOT IN (?, ?)
 			ORDER BY time DESC LIMIT 1
 			''', (jid_id, constants.KIND_STATUS, constants.KIND_GCSTATUS))
-		result = cur.fetchone()
+		result = self.cur.fetchone()
 		return result
