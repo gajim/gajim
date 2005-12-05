@@ -71,7 +71,7 @@ class Migration:
 		for filename in filenames:
 			# Don't take this file into account, this is dup info
 			# notifications are also in contact log file
-			if filename in ('notify.log', 'readme'):
+			if filename in ('notify.log', 'README'):
 				continue
 			path_to_text_file = os.path.join(dirname, filename)
 			if os.path.isdir(path_to_text_file):
@@ -203,11 +203,13 @@ class Migration:
 		self.con.commit()
 
 		os.path.walk(PATH_TO_LOGS_BASE_DIR, self.visit, None)
-		s = '''We do not use plain-text files anymore, because they do not scale.
+		s = '''
+
+We do not use plain-text files anymore, because they do not meet our needs.
 Those files here are logs for Gajim up until 0.8.2
-We now use an sqlite database called logs.db found in ~/.gajim
-You can now safly remove your %s folder
-Thank you''' % PATH_TO_LOGS_BASE_DIR
+We now use an sqlite database called logs.db found in %s
+You can now safely remove your %s folder
+Thank you''' % (os.path.dirname(PATH_TO_LOGS_BASE_DIR), PATH_TO_LOGS_BASE_DIR)
 		f = open(os.path.join(PATH_TO_LOGS_BASE_DIR, 'README'), 'w')
 		f.write(s)
 		f.close()

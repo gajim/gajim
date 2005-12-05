@@ -1288,6 +1288,7 @@ class ProgressDialog:
 		self.textview_buffer.create_mark('end', end_iter, False)
 		
 		self.dialog.set_title(title_text)
+		self.dialog.set_default_size(450, 500)
 		self.dialog.show_all()
 		self.xml.signal_autoconnect(self)
 		
@@ -1321,3 +1322,4 @@ class ProgressDialog:
 		gobject.source_remove(self.update_progressbar_timeout_id)
 		gobject.source_remove(self.read_from_queue_id)
 		self.read_from_queue_and_update_textview()
+		self.progressbar.set_fraction(1)

@@ -1397,7 +1397,7 @@ class Interface:
 
 def wait_migration(migration):
 	if not migration.DONE:
-		return True
+		return True # loop for ever
 	dialog.done(_('Logs have been successfully migrated to the database.'))
 	dialog.dialog.run()
 	dialog.dialog.destroy()
@@ -1463,19 +1463,20 @@ if __name__ == '__main__':
 		except:
 			pass
 	
-	# Migrate old logs if user wants that
+	# Migrate old logs if we have such olds logs
 	from common import logger
 	LOG_DB_PATH = logger.LOG_DB_PATH
-	if not os.path.isfile(LOG_DB_PATH):
-		import Queue
-		q = Queue.Queue(100)
+	if not os.path.exists(LOG_DB_PATH):
 		from common import migrate_logs_to_dot9_db
-		m = migrate_logs_to_dot9_db.Migration()
-		dialog = dialogs.ProgressDialog(_('Migrating logs...'), _('Please wait while logs are being migrated...'), q)
-		t = threading.Thread(target = m.migrate, args = (q,))
-		t.start()
-		gobject.timeout_add(500, wait_migration, m)
-		gtk.main()
+		if os.path.isdir(migrate_logs_to_dot9_db.PATH_TO_LOGS_BASE_DIR):
+			import Queue
+			q = Queue.Queue(100)
+			m = migrate_logs_to_dot9_db.Migration()
+			dialog = dialogs.ProgressDialog(_('Migrating Logs...'), _('Please wait while logs are being migrated...'), q)
+			t = threading.Thread(target = m.migrate, args = (q,))
+			t.start()
+			gobject.timeout_add(500, wait_migration, m)
+			gtk.main()
 	check_paths.check_and_possibly_create_paths()
 
 	Interface()
