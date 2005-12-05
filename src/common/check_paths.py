@@ -20,7 +20,7 @@ import os
 import sys
 import stat
 
-import gajim
+from common import gajim
 import logger
 import i18n
 

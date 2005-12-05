@@ -71,12 +71,6 @@ if pritext:
 	dlg.destroy()
 	sys.exit()
 
-from common import logger
-LOG_DB_PATH = logger.LOG_DB_PATH
-NO_DB = False
-if not os.path.isfile(LOG_DB_PATH):
-	NO_DB = True
-
 path = os.getcwd()
 if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
 	# import gtkexcepthook only for those that run svn
@@ -94,6 +88,7 @@ import sre
 import signal
 import getopt
 import time
+import threading
 
 import gtkgui_helpers
 import notify
@@ -1399,6 +1394,14 @@ class Interface:
 		gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add(500, self.read_sleepy)
 
+def wait_migration(migration):
+	if not migration.DONE:
+		return True
+	dialog.done(_('Logs have been successfully migrated to the database.'))
+	dialog.dialog.run()
+	dialog.dialog.destroy()
+	gtk.main_quit()
+
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
@@ -1460,9 +1463,18 @@ if __name__ == '__main__':
 			pass
 	
 	# Migrate old logs if user wants that
-	if NO_DB:
-		pass # launch migration script
-	del NO_DB
+	from common import logger
+	LOG_DB_PATH = logger.LOG_DB_PATH
+	if not os.path.isfile(LOG_DB_PATH):
+		import Queue
+		q = Queue.Queue(100)
+		from common import migrate_logs_to_dot9_db
+		m = migrate_logs_to_dot9_db.migration()
+		dialog = dialogs.ProgressDialog(_('Migrating logs...'), _('Please wait while logs are being migrated...'), q)
+		t = threading.Thread(target = m.migrate, args = (q,))
+		t.start()
+		gobject.timeout_add(500, wait_migration, m)
+		gtk.main()
 	check_paths.check_and_possibly_create_paths()
 
 	Interface()

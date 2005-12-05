@@ -22,7 +22,7 @@
 
 import sre
 import copy
-from common import i18n
+import i18n
 _ = i18n._
 
 OPT_TYPE = 0

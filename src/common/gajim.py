@@ -22,12 +22,12 @@ import sys
 import logging
 import mutex
 
-import common.config
+import config
 
 
 interface = None # The actual interface (the gtk one for the moment)
 version = '0.9'
-config = common.config.Config()
+config = config.Config()
 connections = {}
 verbose = False
 
@@ -37,8 +37,8 @@ h.setFormatter(f)
 log = logging.getLogger('Gajim')
 log.addHandler(h)
 
-import common.logger
-logger = common.logger.Logger() # init the logger
+import logger
+logger = logger.Logger() # init the logger
 
 if os.name == 'nt':
 	if '.svn' in os.listdir('.') or '_svn' in os.listdir('.'):

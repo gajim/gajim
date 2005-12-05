@@ -22,8 +22,8 @@ import sys
 import time
 import datetime
 
-from common import exceptions
-from common import i18n
+import exceptions
+import i18n
 _ = i18n._
 
 try:

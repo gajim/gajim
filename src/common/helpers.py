@@ -27,8 +27,8 @@ from pysqlite2 import dbapi2 as sqlite
 
 import gajim
 import logger
-from common import i18n
-from common.xmpp_stringprep import nodeprep, resourceprep, nameprep
+import i18n
+from xmpp_stringprep import nodeprep, resourceprep, nameprep
 
 try:
 	import winsound # windows-only built-in module for playing wav
