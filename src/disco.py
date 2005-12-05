@@ -284,7 +284,7 @@ class ServicesCache:
 			# Some services list it in features and respond to
 			# NS_DISCO_ITEMS anyways.
 			# Allow browsing for unknown types aswell.
-			if		(not features and not identities) or\
+			if (not features and not identities) or\
 					xmpp.NS_DISCO_ITEMS in features or\
 					xmpp.NS_BROWSE in features:
 				browser = AgentBrowser
@@ -771,7 +771,7 @@ class AgentBrowser:
 		if jid:
 			node = model[iter][1].decode('utf-8')
 			self.window.open(jid, node)
-	
+
 	def update_actions(self):
 		'''When we select a row:
 		activate action buttons based on the agent's info.'''
@@ -1082,6 +1082,18 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self.window.action_buttonbox.add(self.register_button)
 		self.register_button.show_all()
 
+		self.join_button = gtk.Button()
+		image = gtk.image_new_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_BUTTON)
+		label = gtk.Label(_('_Join'))
+		label.set_use_underline(True)
+		hbox = gtk.HBox()
+		hbox.pack_start(image, False, True, 6)
+		hbox.pack_end(label, True, True)
+		self.join_button.add(hbox)
+		self.join_button.connect('clicked', self.on_join_button_clicked)
+		self.window.action_buttonbox.add(self.join_button)
+		self.join_button.show_all()
+
 	def _clean_actions(self):
 		if self.register_button:
 			self.register_button.destroy()
@@ -1111,11 +1123,32 @@ class ToplevelAgentBrowser(AgentBrowser):
 			gajim.connections[self.account].request_register_agent_info(jid)
 			self.window.destroy(chain = True)
 
+	def on_join_button_clicked(self, widget):
+		'''When we want to join an IRC room or create a new MUC room:
+		Opens the join_groupchat_window.'''
+		model, iter = self.window.services_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		service = model[iter][0].decode('utf-8')
+		if service.find('@') != -1:
+			services = service.split('@', 1)
+			room = services[0]
+			service = services[1]
+		else:
+			room = ''
+		if not gajim.interface.instances[self.account].has_key('join_gc'):
+			dialogs.JoinGroupchatWindow(self.account, service, room)
+		else:
+			gajim.interface.instances[self.account]['join_gc'].window.present()
+		self.window.destroy(chain = True)
+
 	def update_actions(self):
 		if self.register_button:
 			self.register_button.set_sensitive(False)
 		if self.browse_button:
 			self.browse_button.set_sensitive(False)
+		if self.join_button:
+			self.join_button.set_sensitive(False)
 		model, iter = self.window.services_treeview.get_selection().get_selected()
 		if not iter:
 			return
@@ -1155,6 +1188,8 @@ class ToplevelAgentBrowser(AgentBrowser):
 			else:
 				self.register_button.set_label(_('Re_gister'))
 			self.register_button.set_sensitive(True)
+		if self.join_button and xmpp.NS_MUC in features:
+			self.join_button.set_sensitive(True)
 	
 	def _default_action(self, jid, node, identities, features, data):
 		if AgentBrowser._default_action(self, jid, node, identities, features, data):
