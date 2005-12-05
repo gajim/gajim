@@ -61,6 +61,7 @@ class HistoryWindow:
 		self.calendar = xml.get_widget('calendar')
 		self.history_buffer = xml.get_widget('history_textview').get_buffer()
 		self.query_entry = xml.get_widget('query_entry')
+		self.search_button = xml.get_widget('search_button')
 		query_builder_button = xml.get_widget('query_builder_button')
 		query_builder_button.hide()
 		query_builder_button.set_no_show_all(True)
@@ -316,6 +317,8 @@ class HistoryWindow:
 			gobject.timeout_add(200, self.set_unset_expand_on_expander, widget)
 		else:
 			gobject.timeout_add(200, self.set_unset_expand_on_expander, widget)
+			self.search_button.grab_default()
+			self.query_entry.grab_focus()
 	
 	def on_search_button_clicked(self, widget):
 		text = self.query_entry.get_text()
