@@ -35,6 +35,7 @@ import socket
 import random
 random.seed()
 import signal
+import base64
 if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
@@ -267,7 +268,8 @@ class Connection:
 			if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
 			vcard['PHOTO'].has_key('BINVAL'):
 				photo = vcard['PHOTO']['BINVAL']
-				avatar_sha = sha.sha(photo).hexdigest()
+				photo_decoded = base64.decodestring(photo)
+				avatar_sha = sha.sha(photo_decoded).hexdigest()
 			else:
 				avatar_sha = ''
 
@@ -2127,11 +2129,8 @@ class Connection:
 		if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
 		vcard['PHOTO'].has_key('BINVAL'):
 			photo = vcard['PHOTO']['BINVAL']
-			avatar_sha = sha.sha(photo).hexdigest()
-		else:
-			avatar_sha = ''
-
-		if avatar_sha:
+			photo_decoded = base64.decodestring(photo)
+			avatar_sha = sha.sha(photo_decoded).hexdigest()
 			iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
 
 		self.awaiting_answers[id] = (VCARD_PUBLISHED, iq2)
