@@ -25,7 +25,7 @@ else:
 	PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
 	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
 
-class migration:
+class Migration:
 	def __init__(self):
 		self.constants = logger.Constants()
 		self.DONE = False
@@ -145,7 +145,6 @@ class migration:
 						show = message_data[0]
 						message = ':'.join(message_data[1:]) # status msg
 
-#					message = decode_string(message)
 					message = message[:-1] # remove last \n
 					if not message:
 						continue
@@ -224,5 +223,5 @@ if __name__ == '__main__':
 	print 'Starting Logs Migration'
 	print '======================='
 	print 'Please do NOT run Gajim until this script is over'
-	m = migration()
+	m = Migration()
 	m.migrate()

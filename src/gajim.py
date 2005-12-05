@@ -1469,7 +1469,7 @@ if __name__ == '__main__':
 		import Queue
 		q = Queue.Queue(100)
 		from common import migrate_logs_to_dot9_db
-		m = migrate_logs_to_dot9_db.migration()
+		m = migrate_logs_to_dot9_db.Migration()
 		dialog = dialogs.ProgressDialog(_('Migrating logs...'), _('Please wait while logs are being migrated...'), q)
 		t = threading.Thread(target = m.migrate, args = (q,))
 		t.start()
