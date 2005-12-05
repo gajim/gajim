@@ -1018,7 +1018,7 @@ current room topic.') % command, room_jid)
 				sound = 'received'
 		
 		# Are any of the defined highlighting words in the text?
-		if self.needs_highlight(text, nick):
+		if self.needs_visual_notification(text, nick):
 			highlight = True
 			if gajim.config.get_per('soundevents', 'muc_message_highlight',
 									'enabled'):
@@ -1030,9 +1030,9 @@ current room topic.') % command, room_jid)
 			
 		return (highlight, sound)
 
-	def needs_highlight(self, text, nick):
+	def needs_visual_notification(self, text, nick):
 		'''checks text to see whether any of the words in (muc_highlight_words
-		and nick) appear'''
+		and nick) appear.'''
 		
 		special_words = gajim.config.get('muc_highlight_words').split(';')
 		special_words.append(nick)
