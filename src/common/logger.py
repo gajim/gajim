@@ -76,6 +76,8 @@ constants = Constants()
 
 class Logger:
 	def __init__(self):
+		self.jids_already_in = [] # holds jids that we already have in DB
+		
 		if not os.path.exists(LOG_DB_PATH):
 			# this can happen only the first time (the time we create the db)
 			# db is not created here but in src/common/checks_paths.py
@@ -93,7 +95,6 @@ class Logger:
 	def get_jids_already_in_db(self):
 		cur.execute('SELECT jid FROM jids')
 		rows = cur.fetchall() # list of tupples: (u'aaa@bbb',), (u'cc@dd',)]
-		self.jids_already_in = []
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
@@ -201,12 +202,11 @@ class Logger:
 		jids.jid text column will hold JID if TC-related, room_jid if GC-related,
 		ROOM_JID/nick if pm-related.'''
 
-		if not hasattr(self, 'get_jids_already_in_db'):
+		if self.jids_already_in == []: # only happens if we just created the db
 			global con, cur
 			con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 				isolation_level = 'IMMEDIATE')
 			cur = con.cursor()
-			self.get_jids_already_in_db()
 			
 		jid = jid.lower()
 		contact_name_col = None # holds nickname for kinds gcstatus, gc_msg
