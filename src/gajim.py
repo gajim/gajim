@@ -94,7 +94,6 @@ import sre
 import signal
 import getopt
 import time
-import base64
 
 import gtkgui_helpers
 import notify
