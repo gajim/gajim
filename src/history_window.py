@@ -61,10 +61,14 @@ class HistoryWindow:
 		self.calendar = xml.get_widget('calendar')
 		self.history_buffer = xml.get_widget('history_textview').get_buffer()
 		self.query_entry = xml.get_widget('query_entry')
+		query_builder_button = xml.get_widget('query_builder_button')
+		query_builder_button.hide()
+		query_builder_button.set_no_show_all(True)
 		self.expander_vbox = xml.get_widget('expander_vbox')
+		
 		self.results_treeview = xml.get_widget('results_treeview')
 		# contact_name, time, message
-		model = gtk.ListStore(str,	str, str)
+		model = gtk.ListStore(str, str, str)
 		self.results_treeview.set_model(model)
 		
 		col = gtk.TreeViewColumn(_('Name'))
