@@ -459,7 +459,7 @@ _('Connection with peer cannot be established.'))
 			#This should make the string Kb/s, 
 			#where 'Kb' part is taken from %s.
 			#Only the 's' after / (which means second) should be translated.
-			text += _('(%(filesize_unit)d/s)') % {'filesize_unit':
+			text += _('(%(filesize_unit)s/s)') % {'filesize_unit':
 				helpers.convert_bytes(speed)}
 			self.model.set(iter, C_TIME, text)
 			
