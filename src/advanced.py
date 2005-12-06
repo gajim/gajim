@@ -59,7 +59,7 @@ class AdvancedConfigurationWindow:
 		col = treeview.insert_column_with_attributes(-1, _('Preference Name'),
 			renderer_text, text = 0)
 		col.set_resizable(True)
-		
+
 		renderer_text = gtk.CellRendererText()
 		renderer_text.connect('edited', self.on_config_edited)
 		col = treeview.insert_column_with_attributes(-1, _('Value'),
@@ -76,13 +76,13 @@ class AdvancedConfigurationWindow:
 
 		# add data to model
 		gajim.config.foreach(self.fill, self.model)
-		
+
 		treeview.set_model(self.modelfilter)
-		
+
 		# connect signal for selection change
 		treeview.get_selection().connect('changed',
 			self.on_advanced_treeview_selection_changed)
-		
+
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 		gajim.interface.instances['advanced_config'] = self
@@ -96,7 +96,7 @@ class AdvancedConfigurationWindow:
 			cell.set_property('editable', False)
 		else:
 			cell.set_property('editable', True)
-	
+
 	def on_advanced_treeview_selection_changed(self, treeselection):
 		iter = treeselection.get_selected()
 		# Check for GtkTreeIter
@@ -110,7 +110,7 @@ class AdvancedConfigurationWindow:
 			else:
 				#we talk about option description in advanced configuration editor
 				self.desc_label.set_text(_('(None)'))
-	
+
 	def on_advanced_treeview_row_activated(self, treeview, path, column):
 		modelpath = self.modelfilter.convert_path_to_child_path(path)
 		modelrow = self.model[modelpath]
@@ -163,7 +163,7 @@ class AdvancedConfigurationWindow:
 				break
 			iter = model.iter_next(iter)
 		return iter
-		
+
 	def fill(self, model, name, parents, val):
 		iter = None
 		if parents:
@@ -171,7 +171,7 @@ class AdvancedConfigurationWindow:
 				iter2 = self.find_iter(model, iter, p)
 				if iter2:
 					iter = iter2
-		
+
 		if not val:
 			model.append(iter, [name, '', ''])
 			return
@@ -207,6 +207,6 @@ class AdvancedConfigurationWindow:
 		elif name.find(str) != -1:
 			return True
 		return False
-		
+
 	def on_advanced_entry_changed(self, widget):
 		self.modelfilter.refilter()

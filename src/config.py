@@ -52,11 +52,11 @@ GTKGUI_GLADE = 'gtkgui.glade'
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
 	'''Class for Preferences window'''
-	
+
 	def on_preferences_window_delete_event(self, widget, event):
 		self.window.hide()
 		return True # do NOT destroy the window
-	
+
 	def on_close_button_clicked(self, widget):
 		self.window.hide()
 
@@ -86,7 +86,7 @@ class PreferencesWindow:
 		self.auto_xa_message_entry = self.xml.get_widget('auto_xa_message_entry')
 		self.trayicon_checkbutton = self.xml.get_widget('trayicon_checkbutton')
 		self.notebook = self.xml.get_widget('preferences_notebook')
-		
+
 		#trayicon
 		if gajim.interface.systray_capabilities:
 			st = gajim.config.get('trayicon')
@@ -97,20 +97,20 @@ class PreferencesWindow:
 		#Save position
 		st = gajim.config.get('saveposition')
 		self.xml.get_widget('save_position_checkbutton').set_active(st)
-		
+
 		# Sort contacts by show
 		st = gajim.config.get('sort_by_show')
 		self.xml.get_widget('sort_by_show_checkbutton').set_active(st)
-		
+
 		# Display avatars in roster
 		st = gajim.config.get('show_avatars_in_roster')
 		self.xml.get_widget('show_avatars_in_roster_checkbutton').set_active(st)
-		
+
 		# Display status msg under contact name in roster
 		st = gajim.config.get('show_status_msgs_in_roster')
 		self.xml.get_widget('show_status_msgs_in_roster_checkbutton').set_active(
 			st)
-		
+
 
 		#Use emoticons
 		st = gajim.config.get('useemoticons')
@@ -155,14 +155,14 @@ class PreferencesWindow:
 		theme_combobox = self.xml.get_widget('theme_combobox')
 		cell = gtk.CellRendererText()
 		theme_combobox.pack_start(cell, True)
-		theme_combobox.add_attribute(cell, 'text', 0)  
+		theme_combobox.add_attribute(cell, 'text', 0)
 		model = gtk.ListStore(str)
 		theme_combobox.set_model(model)
 
 		#use tabbed chat window
 		st = gajim.config.get('usetabbedchat')
 		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
-		
+
 		#use speller
 		if os.name == 'nt':
 			self.xml.get_widget('speller_checkbutton').set_no_show_all(True)
@@ -172,7 +172,7 @@ class PreferencesWindow:
 				self.xml.get_widget('speller_checkbutton').set_active(st)
 			else:
 				self.xml.get_widget('speller_checkbutton').set_sensitive(False)
-		
+
 		#Print time
 		st = gajim.config.get('print_ichat_every_foo_minutes')
 		text = _('Every %s _minutes') % st
@@ -188,7 +188,7 @@ class PreferencesWindow:
 		#before time
 		st = gajim.config.get('before_time')
 		self.xml.get_widget('before_time_entry').set_text(st)
-		
+
 		#after time
 		st = gajim.config.get('after_time')
 		self.xml.get_widget('after_time_entry').set_text(st)
@@ -205,12 +205,12 @@ class PreferencesWindow:
 		colSt = gajim.config.get('inmsgcolor')
 		self.xml.get_widget('incoming_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
-		
+
 		#Color for outgoing messages
 		colSt = gajim.config.get('outmsgcolor')
 		self.xml.get_widget('outgoing_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
-		
+
 		#Color for status messages
 		colSt = gajim.config.get('statusmsgcolor')
 		self.xml.get_widget('status_msg_colorbutton').set_color(
@@ -253,7 +253,7 @@ class PreferencesWindow:
 		#Ignore messages from unknown contacts
 		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
 			set_active(gajim.config.get('ignore_unknown_contacts'))
-		
+
 		# send chat state notifications
 		st = gajim.config.get('chat_state_notifications')
 		combo = self.xml.get_widget('chat_states_combobox')
@@ -311,7 +311,7 @@ class PreferencesWindow:
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = 2)
 		self.fill_sound_treeview()
-		
+
 		#Autoaway
 		st = gajim.config.get('autoaway')
 		self.auto_away_checkbutton.set_active(st)
@@ -388,17 +388,17 @@ class PreferencesWindow:
 				gajim.config.get('custommailapp'))
 			self.xml.get_widget('custom_file_manager_entry').set_text(
 				gajim.config.get('custom_file_manager'))
-		
+
 		# log status changes of contacts
 		st = gajim.config.get('log_contact_status_changes')
 		self.xml.get_widget('log_show_changes_checkbutton').set_active(st)
-		
+
 		# send os info
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
-				
+
 		self.xml.signal_autoconnect(self)
-		
+
 		self.sound_tree.get_model().connect('row-changed',
 					self.on_sounds_treemodel_row_changed)
 		self.msg_tree.get_model().connect('row-changed',
@@ -409,7 +409,7 @@ class PreferencesWindow:
 	def on_preferences_window_show(self, widget):
 		self.update_preferences_window()
 		self.notebook.set_current_page(0)
-		
+
 	def update_preferences_window(self):
 		st = gajim.config.get('print_ichat_every_foo_minutes')
 		text = _('Every %s _minutes') % st
@@ -451,14 +451,14 @@ class PreferencesWindow:
 			gajim.config.set('show_roster_on_startup', True) # no tray, show roster!
 		gajim.interface.roster.draw_roster()
 		gajim.interface.save_config()
-	
+
 	def on_save_position_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'saveposition')
-	
+
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
 		gajim.interface.roster.draw_roster()
-		
+
 	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
 		gajim.interface.roster.draw_roster()
@@ -469,13 +469,13 @@ class PreferencesWindow:
 			else:
 				for room_jid in gcs:
 					gcs[room_jid].draw_all_roster()
-	
+
 	def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
 		gajim.interface.roster.draw_roster()
-	
+
 	def on_use_emoticons_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'useemoticons', 
+		self.on_checkbutton_toggled(widget, 'useemoticons',
 			[self.xml.get_widget('add_remove_emoticons_button')])
 		gajim.interface.init_emoticons()
 		gajim.interface.make_regexps()
@@ -491,7 +491,7 @@ class PreferencesWindow:
 				else:
 					for jid in windows.keys():
 						windows[jid].toggle_emoticons()
-		
+
 	def on_add_remove_emoticons_button_clicked(self, widget):
 		if gajim.interface.instances.has_key('manage_emots'):
 			gajim.interface.instances['manage_emots'].window.present()
@@ -505,19 +505,19 @@ class PreferencesWindow:
 		gajim.config.set('iconset', icon_string)
 		gajim.interface.roster.reload_jabber_state_images()
 		gajim.interface.save_config()
-	
+
 	def on_transports_iconsets_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
 		gajim.interface.roster.draw_roster()
 
 	def on_manage_theme_button_clicked(self, widget):
 		dialogs.GajimThemesWindow()
-	
+
 	def on_theme_combobox_changed(self, widget):
 		model = widget.get_model()
 		active = widget.get_active()
 		config_theme = model[active][0].decode('utf-8').replace(' ', '_')
-				
+
 		gajim.config.set('roster_theme', config_theme)
 
 		# begin repainting themed widgets throughout
@@ -582,7 +582,7 @@ class PreferencesWindow:
 
 	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'usetabbedchat')
-		
+
 		if widget.get_active():
 			self.merge_windows('chats')
 			self.merge_windows('gc')
@@ -635,7 +635,7 @@ class PreferencesWindow:
 			else:
 				for jid in window.keys():
 					window[jid].update_print_time()
-	
+
 	def on_time_never_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			gajim.config.set('print_time', 'never')
@@ -657,7 +657,7 @@ class PreferencesWindow:
 	def on_before_time_entry_focus_out_event(self, widget, event):
 		gajim.config.set('before_time', widget.get_text().decode('utf-8'))
 		gajim.interface.save_config()
-	
+
 	def on_after_time_entry_focus_out_event(self, widget, event):
 		gajim.config.set('after_time', widget.get_text().decode('utf-8'))
 		gajim.interface.save_config()
@@ -680,7 +680,7 @@ class PreferencesWindow:
 				else:
 					for jid in windows.keys():
 						windows[jid].update_tags()
-	
+
 	def update_text_font(self):
 		'''Update text font in Opened Chat Windows'''
 		for a in gajim.connections:
@@ -691,7 +691,7 @@ class PreferencesWindow:
 				else:
 					for jid in windows.keys():
 						windows[jid].update_font()
-	
+
 	def on_preference_widget_color_set(self, widget, text):
 		color = widget.get_color()
 		color_string = gtkgui_helpers.make_color_string(color)
@@ -704,19 +704,19 @@ class PreferencesWindow:
 		gajim.config.set(text, font)
 		self.update_text_font()
 		gajim.interface.save_config()
-	
+
 	def on_incoming_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'inmsgcolor')
-		
+
 	def on_outgoing_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'outmsgcolor')
-	
+
 	def on_status_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'statusmsgcolor')
-	
+
 	def on_conversation_fontbutton_font_set(self, widget):
 		self.on_preference_widget_font_set(widget, 'conversation_font')
-	
+
 	def on_reset_colors_button_clicked(self, widget):
 		for i in ('inmsgcolor', 'outmsgcolor', 'statusmsgcolor'):
 			gajim.config.set(i, gajim.interface.default_values[i])
@@ -762,24 +762,24 @@ class PreferencesWindow:
 			gajim.config.set('chat_state_notifications', 'composing_only')
 		else: # disabled
 			gajim.config.set('chat_state_notifications', 'disabled')
-			
+
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',
 				[self.xml.get_widget('soundplayer_hbox'),
 				self.xml.get_widget('sounds_scrolledwindow'),
 				self.xml.get_widget('browse_sounds_hbox')])
-	
+
 	def on_soundplayer_entry_changed(self, widget):
 		gajim.config.set('soundplayer', widget.get_text().decode('utf-8'))
 		gajim.interface.save_config()
-		
+
 	def on_prompt_online_status_message_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ask_online_status')
-	
+
 	def on_prompt_offline_status_message_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ask_offline_status')
-	
+
 	def on_sounds_treemodel_row_changed(self, model, path, iter):
 		sound_event = model.get_value(iter, 0).decode('utf-8')
 		gajim.config.set_per('soundevents', sound_event, 'enabled',
@@ -870,7 +870,7 @@ class PreferencesWindow:
 
 	def on_log_show_changes_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
-	
+
 	def on_send_os_info_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'send_os_info')
 
@@ -912,7 +912,7 @@ class PreferencesWindow:
 		model.remove(iter)
 		buf.set_text('')
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
-			
+
 	def on_msg_textview_changed(self, widget, data = None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
 		if not iter:
@@ -921,7 +921,7 @@ class PreferencesWindow:
 		first_iter, end_iter = buf.get_bounds()
 		name = model.get_value(iter, 0)
 		model.set_value(iter, 1, buf.get_text(first_iter, end_iter))
-	
+
 	def on_msg_treeview_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Delete:
 			self.on_delete_msg_button_clicked(widget)
@@ -1022,7 +1022,7 @@ class AccountModificationWindow:
 				return
 		if gajim.interface.instances.has_key('account_modification'):
 			del gajim.interface.instances['account_modification']
-	
+
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
 
@@ -1107,7 +1107,7 @@ class AccountModificationWindow:
 
 		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
 		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
-		
+
 		self.xml.get_widget('send_keepalive_checkbutton').set_active(
 			gajim.config.get_per('accounts', self.account,
 			'keep_alives_enabled'))
@@ -1214,16 +1214,16 @@ class AccountModificationWindow:
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
 			list_no_log_for.append(name)
 		config['no_log_for'] = ' '.join(list_no_log_for)
-		
+
 		config['sync_with_global_status'] = self.xml.get_widget(
 				'sync_with_global_status_checkbutton').get_active()
-		
+
 		active = self.proxy_combobox.get_active()
 		proxy = self.proxy_combobox.get_model()[active][0].decode('utf-8')
 		if proxy == 'None':
 			proxy = ''
 		config['proxy'] = proxy
-		
+
 		config['usessl'] = self.xml.get_widget('use_ssl_checkbutton').get_active()
 		config['name'] = n
 		config['hostname'] = hn
@@ -1306,7 +1306,7 @@ class AccountModificationWindow:
 			gajim.config.del_per('accounts', self.account)
 			gajim.config.add_per('accounts', name)
 			self.account = name
-			
+
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 		if config['savepass']:
@@ -1324,10 +1324,10 @@ class AccountModificationWindow:
 	def on_change_password_button_clicked(self, widget):
 		try:
 			dialog = dialogs.ChangePasswordDialog(self.account)
-		except RuntimeError: 
+		except RuntimeError:
 			#if we showed ErrorDialog, there will not be dialog instance
 			return
-			
+
 		new_password = dialog.run()
 		if new_password != -1:
 			gajim.connections[self.account].change_password(new_password)
@@ -1348,7 +1348,7 @@ class AccountModificationWindow:
 _('Without a connection, you can not edit your personal information.')
 ).get_response()
 			return
-		
+
 		# in infos the key jid is OUR jid so we save the vcardwindow instance there
 		if gajim.interface.instances[self.account]['infos'].has_key(jid):
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
@@ -1417,7 +1417,7 @@ _('There was a problem retrieving your OpenPGP secret keys.')).get_response()
 		isactive = widget.get_active()
 		gajim.config.set_per('accounts', self.account,
 			'keep_alives_enabled', isactive)
-	
+
 	def on_custom_host_port_checkbutton_toggled(self, widget):
 		isactive = widget.get_active()
 		self.xml.get_widget('custom_host_port_hbox').set_sensitive(isactive)
@@ -1472,7 +1472,7 @@ class ManageProxiesWindow:
 					update_proxy_list()
 		if gajim.interface.instances.has_key('account_modification'):
 			gajim.interface.instances['account_modification'].update_proxy_list()
-		del gajim.interface.instances['manage_proxies'] 
+		del gajim.interface.instances['manage_proxies']
 
 	def on_add_proxy_button_clicked(self, widget):
 		model = self.proxies_treeview.get_model()
@@ -1495,7 +1495,7 @@ class ManageProxiesWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
-	
+
 	def on_useauth_checkbutton_toggled(self, widget):
 		act = widget.get_active()
 		self.xml.get_widget('proxyuser_entry').set_sensitive(act)
@@ -1592,7 +1592,7 @@ class ManageProxiesWindow:
 class AccountsWindow:
 	'''Class for accounts window: list of accounts'''
 	def on_accounts_window_destroy(self, widget):
-		del gajim.interface.instances['accounts'] 
+		del gajim.interface.instances['accounts']
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
@@ -1622,7 +1622,7 @@ class AccountsWindow:
 
 	def on_accounts_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
-			self.window.destroy()	
+			self.window.destroy()
 
 	def init_accounts(self):
 		'''initialize listStore with existing accounts'''
@@ -1642,7 +1642,7 @@ class AccountsWindow:
 	def on_new_button_clicked(self, widget):
 		'''When new button is clicked: open an account information window'''
 		if gajim.interface.instances.has_key('account_creation_wizard'):
-			gajim.interface.instances['account_creation_wizard'].window.present()			
+			gajim.interface.instances['account_creation_wizard'].window.present()
 		else:
 			gajim.interface.instances['account_creation_wizard'] = \
 				AccountCreationWizardWindow()
@@ -1706,7 +1706,7 @@ class DataFormWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
-	
+
 	def on_checkbutton_toggled(self, widget, index):
 		self.config[index]['values'][0] = widget.get_active()
 
@@ -1727,7 +1727,7 @@ class DataFormWindow:
 	def on_textbuffer_changed(self, widget, index):
 		begin, end = widget.get_bounds()
 		self.config[index]['values'][0] = widget.get_text(begin, end)
-		
+
 	def fill_table(self):
 		'''see JEP0004'''
 		if self.config.has_key('title'):
@@ -1749,7 +1749,7 @@ class DataFormWindow:
 			if self.config[i].has_key('label'):
 				label = gtk.Label(self.config[i]['label'])
 				label.set_alignment(0.0, 0.5)
-				self.config_table.attach(label, 0, 1, nbrows, nbrows + 1, 
+				self.config_table.attach(label, 0, 1, nbrows, nbrows + 1,
 					gtk.FILL	| gtk.SHRINK)
 			desc = None
 			if self.config[i].has_key('desc'):
@@ -1937,9 +1937,9 @@ class ManageEmoticonsWindow:
 		renderer = cell_renderer_image.CellRendererImage()
 		col.pack_start(renderer, expand = False)
 		col.add_attribute(renderer, 'image', 2)
-		
+
 		self.fill_emot_treeview()
-		self.emot_tree.get_model().connect('row-changed', 
+		self.emot_tree.get_model().connect('row-changed',
 				self.on_emoticons_treemodel_row_changed)
 
 		self.window.show_all()
@@ -1949,7 +1949,7 @@ class ManageEmoticonsWindow:
 		gajim.interface.init_emoticons() # update emoticons
 		# remove us from open windows
 		del gajim.interface.instances['manage_emots']
-	
+
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
@@ -2073,7 +2073,7 @@ class ManageEmoticonsWindow:
 
 		file = os.path.join(os.getcwd(), file)
 		dialog.set_filename(file)
-		file = ''	
+		file = ''
 		ok = False
 		while not ok:
 			response = dialog.run()
@@ -2140,14 +2140,14 @@ class GroupchatConfigWindow(DataFormWindow):
 class RemoveAccountWindow:
 	'''ask for removing from gajim only or from gajim and server too
 	and do removing of the account given'''
-	
+
 	def on_remove_account_window_destroy(self, widget):
 		if gajim.interface.instances.has_key(self.account):
 			del gajim.interface.instances[self.account]['remove_account']
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
-	
+
 	def __init__(self, account):
 		self.account = account
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'remove_account_window', APP)
@@ -2166,8 +2166,8 @@ class RemoveAccountWindow:
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 			gajim.connections[self.account].change_status('offline', 'offline')
-		
-		if self.remove_and_unregister_radiobutton.get_active():  
+
+		if self.remove_and_unregister_radiobutton.get_active():
 			gajim.connections[self.account].unregister_account()
 		# Close all opened windows
 		gajim.interface.roster.close_all(gajim.interface.instances[self.account])
@@ -2220,7 +2220,7 @@ class ManageBookmarksWindow:
 				# make '1', '0', 'true', 'false' (or other) to True/False
 				autojoin = helpers.from_xs_boolean_to_python_boolean(
 					bookmark['autojoin'])
-				
+
 				self.treestore.append( iter, [
 						account,
 						bookmark['name'],
@@ -2232,7 +2232,7 @@ class ManageBookmarksWindow:
 		self.view = self.xml.get_widget('bookmarks_treeview')
 		self.view.set_model(self.treestore)
 		self.view.expand_all()
-		
+
 		renderer = gtk.CellRendererText()
 		column = gtk.TreeViewColumn('Bookmarks', renderer, text=1)
 		self.view.append_column(column)
@@ -2240,7 +2240,6 @@ class ManageBookmarksWindow:
 		self.selection = self.view.get_selection()
 		self.selection.connect('changed', self.bookmark_selected)
 
-		
 		#Prepare input fields
 		self.title_entry = self.xml.get_widget('title_entry')
 		self.title_entry.connect('changed', self.on_title_entry_changed)
@@ -2253,10 +2252,10 @@ class ManageBookmarksWindow:
 		self.pass_entry = self.xml.get_widget('pass_entry')
 		self.pass_entry.connect('changed', self.on_pass_entry_changed)
 		self.autojoin_checkbutton = self.xml.get_widget('autojoin_checkbutton')
-		
+
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
-	
+
 	def on_bookmarks_treeview_button_press_event(self, widget, event):
 		(model, iter) = self.selection.get_selected()
 		if not iter:
@@ -2274,7 +2273,7 @@ class ManageBookmarksWindow:
 		'''
 		Add a new bookmark.
 		'''
-		# Get the account that is currently used 
+		# Get the account that is currently used
 		# (the parent of the currently selected item)
 		(model, iter) = self.selection.get_selected()
 		if not iter: # Nothing selected, do nothing
@@ -2344,11 +2343,11 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 			for bm in account.iterchildren():
 				#Convert True/False/None to '1' or '0'
 				autojoin = unicode(int(bm[3]))
-				
+
 				#create the bookmark-dict
 				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
 					'password': bm[4], 'nick': bm[5] }
-				
+
 				gajim.connections[account_unicode].bookmarks.append(bmdict)
 
 			gajim.connections[account_unicode].store_bookmarks()
@@ -2395,7 +2394,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 			server = ''
 		self.room_entry.set_text(room)
 		self.server_entry.set_text(server)
-	
+
 		self.autojoin_checkbutton.set_active(model[iter][3])
 		self.pass_entry.set_text(model[iter][4])
 		self.nick_entry.set_text(model[iter][5])
@@ -2411,7 +2410,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		(model, iter) = self.selection.get_selected()
 		if iter:
 			model[iter][5] = self.nick_entry.get_text()
-	
+
 	def on_server_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
@@ -2456,11 +2455,11 @@ class AccountCreationWizardWindow:
 
 		# parse servers.xml
 		servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
-		servers = gtkgui_helpers.parse_server_xml(servers_xml) 
+		servers = gtkgui_helpers.parse_server_xml(servers_xml)
 		servers_model = gtk.ListStore(str, int)
 		for server in servers:
 			servers_model.append((str(server[0]), int(server[1])))
-		
+
 		# Put servers into comboboxentries
 		server_comboboxentry.set_model(servers_model)
 		server_comboboxentry.set_text_column(0)
@@ -2478,7 +2477,7 @@ class AccountCreationWizardWindow:
 
 		# some vars
 		self.update_progressbar_timeout_id = None
-		
+
 		self.notebook.set_current_page(0)
 		self.advanced_button.set_no_show_all(True)
 		self.xml.signal_autoconnect(self)
@@ -2487,7 +2486,7 @@ class AccountCreationWizardWindow:
 	def on_wizard_window_destroy(self, widget):
 		del gajim.interface.instances['account_creation_wizard']
 
-	def on_register_server_features_button_clicked(self, widget): 
+	def on_register_server_features_button_clicked(self, widget):
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
 
 	def on_save_password_checkbutton_toggled(self, widget):
@@ -2505,7 +2504,7 @@ class AccountCreationWizardWindow:
 			self.notebook.set_current_page(1) # Goto parameters page
 
 	def get_widgets(self):
-		widgets = {} 
+		widgets = {}
 		for widget in (
 						'username_entry',
 						'server_comboboxentry',
@@ -2533,7 +2532,7 @@ class AccountCreationWizardWindow:
 			self.notebook.set_current_page(1)
 			self.back_button.set_sensitive(True)
 			return
-		
+
 		else:
 			widgets = self.get_widgets()
 			username = widgets['username_entry'].get_text().decode('utf-8')
@@ -2602,13 +2601,13 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		self.go_online_checkbutton.show()
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
-		
-		finish_text = '<big><b>%s</b></big>\n\n%s' % ( 
+
+		finish_text = '<big><b>%s</b></big>\n\n%s' % (
 			_('Your new account has been created successfully'),
 _('You can set advanced account options by pressing Advanced button, or later by clicking in Accounts menuitem under Edit menu from the main window.'))
 		self.finish_label.set_markup(finish_text)
 		self.notebook.set_current_page(3) # show finish page
-		
+
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 
