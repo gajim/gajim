@@ -41,10 +41,7 @@ import logger
 logger = logger.Logger() # init the logger
 
 if os.name == 'nt':
-	if '.svn' in os.listdir('.') or '_svn' in os.listdir('.'):
-		DATA_DIR = os.path.join('..', 'data')
-	else: # we are normal users (not svn users)
-		DATA_DIR = 'data'
+	DATA_DIR = os.path.join('..', 'data')
 	try:
 		# Documents and Settings\[User Name]\Application Data\Gajim
 		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
