@@ -159,6 +159,7 @@ class Connection:
 		self.vcard_shas = {} # sha of contacts
 		self.status = ''
 		self.old_show = ''
+		# holds the actual hostname to which we are connected
 		self.connected_hostname = None
 		self.time_to_reconnect = None
 		self.new_account_info = None
@@ -1583,7 +1584,11 @@ class Connection:
 						answers = [x for x in dns.resolver.query(query, 'SRV')]
 						if answers:
 							for a in answers:
-								hosts.append({'host': str(a.target),
+								target = str(a.target)
+								if target.endswith('.'):
+									# target is f.e. talk.google.com. remove last dot
+									target = target[:-1]
+								hosts.append({'host': target,
 												'port': int(a.port),
 												'prio': int(a.priority),
 												'weight': int(a.weight)})
