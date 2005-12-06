@@ -112,7 +112,6 @@ class ConversationTextview(gtk.TextView):
 		tag = buffer.create_tag('underline')
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 
-		# FIXME: make it gtk.JUSTIFY_FILL when GTK+ REALLY supports it
 		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
 
 		# muc attention states (when we are mentioned in a muc)
