@@ -369,7 +369,8 @@ class PreferencesWindow:
 			self.applications_frame.set_no_show_all(True)
 			self.applications_frame.hide()
 		else:
-			self.applications_combobox = self.xml.get_widget('applications_combobox')
+			self.applications_combobox = self.xml.get_widget(
+				'applications_combobox')
 			if gajim.config.get('autodetect_browser_mailer'):
 				self.applications_combobox.set_active(0)
 				gtkgui_helpers.autodetect_browser_mailer()
@@ -527,7 +528,7 @@ class PreferencesWindow:
 
 	def merge_windows(self, kind):
 		for acct in gajim.connections:
-			#save buffers and close windows
+			# save buffers and close windows
 			buf1 = {}
 			buf2 = {}
 			saved_var = {}
@@ -539,7 +540,7 @@ class PreferencesWindow:
 				buf2[jid] = window.message_textviews[jid].get_buffer()
 				saved_var[jid] = window.save_var(jid)
 				window.window.destroy()
-			#open new tabbed chat windows
+			# open new tabbed chat windows
 			for jid in jids:
 				if kind == 'chats':
 					c = gajim.get_contact_instance_with_highest_priority(acct, jid)
@@ -553,7 +554,7 @@ class PreferencesWindow:
 
 	def split_windows(self, kind):
 		for acct in gajim.connections:
-			#save buffers and close tabbed chat windows
+			# save buffers and close tabbed chat windows
 			buf1 = {}
 			buf2 = {}
 			saved_var = {}
@@ -568,7 +569,7 @@ class PreferencesWindow:
 				buf2[jid] = window.message_textviews[jid].get_buffer()
 				saved_var[jid] = window.save_var(jid)
 			windows['tabbed'].window.destroy()
-			#open new tabbed chat windows
+			# open new tabbed chat windows
 			for jid in jids:
 				if kind == 'chats':
 					c = gajim.get_contact_instance_with_highest_priority(acct, jid)

@@ -296,7 +296,8 @@ class SystrayWin32(systray.Systray):
 		self.systray_winapi.notify_icon.set_tooltip(text)
 
 	def set_img(self):
-		self.tray_ico_imgs = self.load_icos()
+		self.tray_ico_imgs = self.load_icos() #FIXME: do not do this here
+		# see gajim.interface.roster.reload_jabber_state_images() to merge
 		self.systray_winapi.remove_notify_icon()
 		if len(self.jids) > 0:
 			state = 'message'

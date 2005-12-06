@@ -85,7 +85,7 @@ awaiting_events = {} # list of messages/FT reveived but not printed
 	# if type in ('chat', 'normal'): data = (message, subject, kind, time,
 		# encrypted, resource)
 		# kind can be (incoming, error)
-	# if type in file-request, file-request-error, file-send-error, file-error, 
+	# if type in file-request, file-request-error, file-send-error, file-error,
 	# file-completed, file-stopped:
 		# data = file_props
 nicks = {} # list of our nick names in each account
@@ -118,7 +118,7 @@ def get_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room
 	# gaim@conference.jabber.no/nick/nick-continued
 	return jid.split('/', 1)[1]
-	
+
 def get_room_name_and_server_from_room_jid(jid):
 	room_name = get_nick_from_jid(jid)
 	server = get_server_from_jid(jid)
@@ -169,7 +169,7 @@ def get_first_contact_instance_from_jid(account, jid):
 			get_room_and_nick_from_fjid(jid) # if we ban/kick we now real jid
 		if gc_contacts[account].has_key(room) and \
 		nick in gc_contacts[account][room]:
-			contact = gc_contacts[account][room][nick] 
+			contact = gc_contacts[account][room][nick]
 	return contact
 
 def get_contact_instance_with_highest_priority(account, jid):
@@ -178,7 +178,7 @@ def get_contact_instance_with_highest_priority(account, jid):
 
 def get_contact_name_from_jid(account, jid):
 	return contacts[account][jid][0].name
-	
+
 def get_highest_prio_contact_from_contacts(contacts):
 	prim_contact = None # primary contact
 	for contact in contacts:
@@ -197,7 +197,7 @@ def construct_fjid(room_jid, nick):
 	if isinstance(nick, str):
 		nick = unicode(nick, 'utf-8')
 	return room_jid + '/' + nick
-	
+
 def get_resource_from_jid(jid):
 	jids = jid.split('/', 1)
 	if len(jids) > 1:
@@ -255,7 +255,7 @@ def jid_is_transport(jid):
 	sms = jid.startswith('sms.')
 	tlen = jid.startswith('tlen.')
 	yahoo = jid.startswith('yahoo.')
-	
+
 	if aim or gg or irc or icq or msn or sms or yahoo or tlen:
 		is_transport = True
 	else:
