@@ -61,11 +61,11 @@ class GroupchatWindow(chat.Chat):
 		# we check that on opening new windows
 		self.always_compact_view = gajim.config.get('always_compact_view_gc')
 		chat.Chat.__init__(self, account, 'groupchat_window')
-		
+
 		# alphanum sorted
 		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact', 'help', 'invite',
 			'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part', 'say', 'topic']
-		
+
 		self.nicks = {} # our nick for each groupchat we are in
 		self.list_treeview = {}
 		self.subjects = {}
@@ -84,8 +84,8 @@ class GroupchatWindow(chat.Chat):
 		self.new_room(room_jid, nick)
 		self.show_title()
 		self.tooltip = tooltips.GCTooltip()
-		
-		
+
+
 		# NOTE: if it not a window event, connect in new_room function
 		signal_dict = {
 'on_groupchat_window_destroy': self.on_groupchat_window_destroy,
@@ -118,7 +118,7 @@ class GroupchatWindow(chat.Chat):
 			'contacts': gajim.gc_contacts[self.account][room_jid],
 			'connected': gajim.gc_connected[self.account][room_jid],
 		}
-		
+
 	def load_var(self, room_jid, var):
 		if not self.xmls.has_key(room_jid):
 			return
@@ -184,7 +184,7 @@ class GroupchatWindow(chat.Chat):
 			width, height = self.window.get_size()
 			gajim.config.set('gc-width', width)
 			gajim.config.set('gc-height', height)
-	
+
 	def on_groupchat_window_destroy(self, widget):
 		chat.Chat.on_window_destroy(self, widget, 'gc')
 		for room_jid in self.xmls:
@@ -201,17 +201,17 @@ class GroupchatWindow(chat.Chat):
 		'''checks and possibly adds focus out line for room_jid if it needs it
 		and does not already have it as last event. If it goes to add this line
 		it removes previous line first'''
-		
+
 		if room_jid == self.get_active_jid() and self.window.get_property('has-toplevel-focus'):
 			# it's the current room and it's the focused window.
 			# we have full focus (we are reading it!)
 			return
-		
+
 		if not self.allow_focus_out_line[room_jid]:
 			# if room did not receive focus-in from the last time we added
 			# --- line then do not readd
 			return
-		
+
 		print_focus_out_line = False
 		textview = self.conversation_textviews[room_jid]
 		buffer = textview.get_buffer()
@@ -219,7 +219,7 @@ class GroupchatWindow(chat.Chat):
 		if self.focus_out_end_iter_offset[room_jid] is None:
 			# this happens only first time we focus out on this room
 			print_focus_out_line = True
-			
+
 		else:
 			if self.focus_out_end_iter_offset[room_jid] != buffer.get_end_iter().get_offset():
 				# this means after last-focus something was printed
@@ -227,49 +227,49 @@ class GroupchatWindow(chat.Chat):
 				# only then print ---- line (eg. we avoid printing many following
 				# ---- lines)
 				print_focus_out_line = True
-		
+
 		if print_focus_out_line and buffer.get_char_count() > 0:
 			buffer.begin_user_action()
-			
+
 			# remove previous focus out line if such focus out line exists
 			if self.focus_out_end_iter_offset[room_jid] is not None:
 				end_iter_for_previous_line = buffer.get_iter_at_offset(
 					self.focus_out_end_iter_offset[room_jid])
 				begin_iter_for_previous_line = end_iter_for_previous_line.copy()
 				begin_iter_for_previous_line.backward_chars(2) # img_char+1 (the '\n')
-				
+
 				# remove focus out line
 				buffer.delete(begin_iter_for_previous_line,
 					end_iter_for_previous_line)
-			
+
 			# add the new focus out line
 			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
 			focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, '\n')
 			buffer.insert_pixbuf(end_iter, focus_out_line_pixbuf)
-			
+
 			end_iter = buffer.get_end_iter()
 			before_img_iter = end_iter.copy()
 			before_img_iter.backward_char() # one char back (an image also takes one char)
 			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
 			#FIXME: remove this workaround when bug is fixed
 			# c http://bugzilla.gnome.org/show_bug.cgi?id=318569
-			
+
 			self.allow_focus_out_line[room_jid] = False
-			
+
 			# update the iter we hold to make comparison the next time
 			self.focus_out_end_iter_offset[room_jid] = buffer.get_end_iter(
 				).get_offset()
-				
+
 			buffer.end_user_action()
-			
+
 			# scroll to the end (via idle in case the scrollbar has appeared)
 			gobject.idle_add(textview.scroll_to_end)
 
 	def on_chat_notebook_key_press_event(self, widget, event):
 		chat.Chat.on_chat_notebook_key_press_event(self, widget, event)
-	
+
 	def on_chat_notebook_switch_page(self, notebook, page, page_num):
 		old_child = notebook.get_nth_page(notebook.get_current_page())
 		new_child = notebook.get_nth_page(page_num)
@@ -286,12 +286,12 @@ class GroupchatWindow(chat.Chat):
 				break # so stop looping
 
 		subject = self.subjects[new_jid]
-		subject = gtkgui_helpers.escape_for_pango_markup(subject)
-		new_jid = gtkgui_helpers.escape_for_pango_markup(new_jid)
+		subject_escaped = gtkgui_helpers.escape_for_pango_markup(subject)
+		new_jid_escaped = gtkgui_helpers.escape_for_pango_markup(new_jid)
 
 		name_label = self.name_labels[new_jid]
 		name_label.set_markup('<span weight="heavy" size="x-large">%s</span>\n%s'\
-			% (new_jid, subject))
+			% (new_jid_escaped, subject_escaped))
 		event_box = name_label.get_parent()
 		if subject == '':
 			subject = _('This room has no subject')
@@ -568,7 +568,7 @@ class GroupchatWindow(chat.Chat):
 			nick = instance.input_entry.get_text().decode('utf-8')
 			self.nicks[room_jid] = nick
 			gajim.connections[self.account].change_gc_nick(room_jid, nick)
-	
+
 	def on_configure_room_menuitem_activate(self, widget):
 		room_jid = self.get_active_jid()
 		gajim.connections[self.account].request_gc_config(room_jid)
@@ -617,7 +617,7 @@ class GroupchatWindow(chat.Chat):
 		start_iter, end_iter = message_buffer.get_bounds()
 		message = message_buffer.get_text(start_iter, end_iter,
 			False).decode('utf-8')
-			
+
 		# construct event instance from binding
 		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
 		event.keyval = event_keyval
@@ -625,7 +625,7 @@ class GroupchatWindow(chat.Chat):
 		event.time = 0 # assign current time
 
 		if event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
-			if (event.state & gtk.gdk.CONTROL_MASK): # CTRL + SHIFT + TAB  
+			if (event.state & gtk.gdk.CONTROL_MASK): # CTRL + SHIFT + TAB
 				self.notebook.emit('key_press_event', event)
 		elif event.keyval == gtk.keysyms.Tab: # TAB
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
@@ -743,7 +743,7 @@ class GroupchatWindow(chat.Chat):
 		conv_textview = self.conversation_textviews[room_jid]
 		if message != '' or message != '\n':
 			self.save_sent_message(room_jid, message)
-			
+
 			if message.startswith('/') and not message.startswith('/me'):
 				message = message[1:]
 				message_array = message.split(' ', 1)
@@ -852,7 +852,7 @@ class GroupchatWindow(chat.Chat):
 							self.print_conversation(s, room_jid)
 					else:
 						self.get_command_help(command)
-				elif command == 'leave' or command == 'part' or command == 'close':	
+				elif command == 'leave' or command == 'part' or command == 'close':
 					# Leave the room and close the tab or window
 					# FIXME: Sometimes this doesn't actually leave the room.  Why?
 					reason = 'offline'
@@ -952,7 +952,7 @@ occupant specified by nickname from the room and optionally displays a \
 reason. Does NOT support spaces in nickname.') % command, room_jid)
 		elif command == 'me':
 			self.print_conversation(_('Usage: /%s <action>, sends action to the \
-current room. Use third person. (e.g. /%s explodes.)') % 
+current room. Use third person. (e.g. /%s explodes.)') %
 				(command, command), room_jid)
 		elif command == 'msg':
 			s = _('Usage: /%s <nickname> [message], opens a private message window and sends message to the occupant specified by nickname.') % command
@@ -988,7 +988,7 @@ current room topic.') % command, room_jid)
 
 
 		nick = self.nicks[room_jid]
-		
+
 		if kind == 'incoming': # it's a message NOT from us
 			# highlighting and sounds
 			(highlight, sound) = self.highlighting_for_message(text, nick, tim)
@@ -1000,53 +1000,52 @@ current room topic.') % command, room_jid)
 				helpers.play_sound('muc_message_received')
 			elif sound == 'highlight':
 				helpers.play_sound('muc_message_highlight')
-				
+
 			self.check_and_possibly_add_focus_out_line(room_jid)
 
-		
 		chat.Chat.print_conversation_line(self, text, room_jid, kind, contact,
 			tim, other_tags_for_name, [], other_tags_for_text)
-			
+
 	def highlighting_for_message(self, text, nick, tim):
 		'''Returns a 2-Tuple. The first says whether or not to highlight the
 		text, the second, what sound to play.'''
 		highlight, sound = (None, None)
-		
-		# Do we play a sound on every muc message?		
+
+		# Do we play a sound on every muc message?
 		if gajim.config.get_per('soundevents', 'muc_message_received', 'enabled'):
 			if gajim.config.get('notify_on_all_muc_messages'):
 				sound = 'received'
-		
+
 		# Are any of the defined highlighting words in the text?
 		if self.needs_visual_notification(text, nick):
 			highlight = True
 			if gajim.config.get_per('soundevents', 'muc_message_highlight',
 									'enabled'):
 				sound = 'highlight'
-				
+
 		# Is it a history message? Don't want sound-floods when we join.
 		if tim != time.localtime():
 			sound = None
-			
+
 		return (highlight, sound)
 
 	def needs_visual_notification(self, text, nick):
 		'''checks text to see whether any of the words in (muc_highlight_words
 		and nick) appear.'''
-		
+
 		special_words = gajim.config.get('muc_highlight_words').split(';')
 		special_words.append(nick)
 		# Strip empties: ''.split(';') == [''] and would highlight everything.
 		# Also lowercase everything for case insensitive compare.
 		special_words = [word.lower() for word in special_words if word]
 		text = text.lower()
-		
+
 		text_splitted = text.split()
 		for word in text_splitted: # get each word of the text
 			for special_word in special_words:
 				if word.startswith(special_word):
 					return True
-		
+
 		return False
 
 	def kick(self, widget, room_jid, nick):
@@ -1134,8 +1133,8 @@ current room topic.') % command, room_jid)
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
 			# we copy contact because c.jid must contain the fakeJid for vcard
-			c2 = Contact(jid = jid, name = c.name, groups = c.groups, 
-				show = c.show, status = c.status, sub = c.sub, 
+			c2 = Contact(jid = jid, name = c.name, groups = c.groups,
+				show = c.show, status = c.status, sub = c.sub,
 				resource = c.resource, role = c.role, affiliation = c.affiliation)
 			gajim.interface.instances[self.account]['infos'][jid] = \
 				vcard.VcardWindow(c2, self.account, False)
@@ -1148,7 +1147,7 @@ current room topic.') % command, room_jid)
 		dialogs.AddNewContactWindow(self.account, jid)
 
 	def on_send_pm(self, widget=None, model=None, iter=None, nick=None, msg=None):
-		'''opens a chat window and msg is not None sends private message to a 
+		'''opens a chat window and msg is not None sends private message to a
 		contact in a room'''
 		if nick is None:
 			nick = model[iter][C_NICK].decode('utf-8')
@@ -1159,7 +1158,7 @@ current room topic.') % command, room_jid)
 			u = Contact(jid = fjid, name =  nick, groups = ['none'], show = show,
 				sub = 'none')
 			gajim.interface.roster.new_chat(u, self.account)
-		
+
 		#make active here in case we need to send a message
 		gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
 
@@ -1211,7 +1210,7 @@ current room topic.') % command, room_jid)
 		user_affiliation = gajim.gc_contacts[self.account][room_jid][user_nick].\
 			affiliation
 		user_role = self.get_role(room_jid, user_nick)
-		
+
 		# making menu from glade
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'gc_occupants_menu', APP)
 
@@ -1273,7 +1272,7 @@ current room topic.') % command, room_jid)
 
 		item = xml.get_widget('information_menuitem')
 		item.connect('activate', self.on_info, room_jid, nick)
-		
+
 		item = xml.get_widget('history_menuitem')
 		item.connect('activate', self.on_history, room_jid, nick)
 
@@ -1322,7 +1321,7 @@ current room topic.') % command, room_jid)
 		message_textview = self.message_textviews[room_jid]
 		message_textview.set_sensitive(False)
 		self.xmls[room_jid].get_widget('send_button').set_sensitive(False)
-		
+
 	def iter_contact_rows(self, room_jid):
 		'''iterate over all contact rows in the tree model'''
 		model = self.list_treeview[room_jid].get_model()
@@ -1386,11 +1385,11 @@ current room topic.') % command, room_jid)
 			self.on_list_treeview_selection_changed)
 		list_treeview.connect('style-set', self.on_list_treeview_style_set)
 		self._last_selected_contact = None # None or holds jid, account tupple
-		
+
 		self.subject_tooltip[room_jid] = gtk.Tooltips()
-		
+
 		chat.Chat.new_tab(self, room_jid)
-				
+
 		# we want to know when the the widget resizes, because that is
 		# an indication that the hpaned has moved...
 		# FIXME: Find a better indicator that the hpaned has moved.
@@ -1400,7 +1399,7 @@ current room topic.') % command, room_jid)
 		self.name_labels[room_jid] = self.xmls[room_jid].get_widget(
 			'banner_name_label')
 		self.paint_banner(room_jid)
-		
+
 		# connect the menuitems to their respective functions
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_popup_menu', APP)
 		xm.signal_autoconnect(self)
@@ -1422,7 +1421,7 @@ current room topic.') % command, room_jid)
 
 		self.list_treeview[room_jid].append_column(column)
 		self.list_treeview[room_jid].set_model(store)
-		
+
 		# workaround to avoid gtk arrows to be shown
 		column = gtk.TreeViewColumn() # 2nd COLUMN
 		renderer = gtk.CellRendererPixbuf()
@@ -1469,7 +1468,7 @@ current room topic.') % command, room_jid)
 			qs[fjid] = []
 		qs[fjid].append(('chat', (msg, '', 'incoming', tim, False, '')))
 		self.nb_unread[room_jid] += 1
-		
+
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
 		iter = self.get_contact_iter(room_jid, nick)
@@ -1493,12 +1492,12 @@ current room topic.') % command, room_jid)
 		self.list_treeview[room_jid].expand_row(path[0:1], False)
 		self.list_treeview[room_jid].scroll_to_cell(path)
 		self.list_treeview[room_jid].set_cursor(path)
-			
+
 
 	def set_state_image(self, jid):
 		# FIXME: Tab notifications?
 		pass
-	
+
 	def on_list_treeview_motion_notify_event(self, widget, event):
 		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
@@ -1523,14 +1522,14 @@ current room topic.') % command, room_jid)
 					nick = model[iter][C_NICK].decode('utf-8')
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, gajim.gc_contacts[account][room_jid][nick])
-		
+
 	def on_list_treeview_leave_notify_event(self, widget, event):
 		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.id == props[0]:
 				self.tooltip.hide_tooltip()
-		
+
 	def show_tooltip(self, contact):
 		room_jid = self.get_active_jid()
 		pointer = self.list_treeview[room_jid].get_pointer()
@@ -1546,7 +1545,7 @@ current room topic.') % command, room_jid)
 				position[1] + rect.y))
 		else:
 			self.tooltip.hide_tooltip()
-	
+
 	def on_treeview_size_allocate(self, widget, allocation):
 		'''The MUC treeview has resized. Move the hpaneds in all tabs to match'''
 		thisroom_jid = self.get_active_jid()
@@ -1581,7 +1580,7 @@ current room topic.') % command, room_jid)
 			if len(path) == 2:
 				self.mk_menu(room_jid, event, iter)
 			return True
-		
+
 		elif event.button == 2: # middle click
 			try:
 				path, column, x, y = widget.get_path_at_pos(int(event.x),
@@ -1603,7 +1602,7 @@ current room topic.') % command, room_jid)
 				gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
 				gajim.interface.instances[self.account]['chats'][fjid].window.present()
 			return True
-			
+
 		elif event.button == 1: # left click
 			try:
 				path, column, x, y = widget.get_path_at_pos(int(event.x),
@@ -1653,7 +1652,7 @@ current room topic.') % command, room_jid)
 		model = widget.get_model()
 		image = gajim.interface.roster.jabber_state_images['opened']
 		model[iter][C_IMG] = image
-	
+
 	def on_list_treeview_row_collapsed(self, widget, iter, path):
 		'''When a row is collapsed: change the icon of the arrow'''
 		model = widget.get_model()
