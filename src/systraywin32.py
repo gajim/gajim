@@ -51,8 +51,8 @@ class SystrayWINAPI:
 		self.notify_icon = None            
 
 		# Sublass the window and inject a WNDPROC to process messages.
-		self._oldwndproc = win32gui.SetWindowLong(self._hwnd, win32con.GWL_WNDPROC,
-												self._wndproc)
+		self._oldwndproc = win32gui.SetWindowLong(self._hwnd,
+			win32con.GWL_WNDPROC, self._wndproc)
 
 
 	def add_notify_icon(self, menu, hicon=None, tooltip=None):
@@ -225,16 +225,10 @@ class SystrayWin32(systray.Systray):
 		
 #		self.tray_ico_imgs = self.load_icos()
 		
-		#gajim.interface.roster.window.realize()
-		#gajim.interface.roster.window.show_all()
 		w = gtk.Window() # just a window to pass
 		w.realize() # realize it so gtk window exists
 		self.systray_winapi = SystrayWINAPI(w)
 		
-		# this fails if you move the window
-		#self.systray_winapi = SystrayWINAPI(gajim.interface.roster.window)
-		
-
 		self.xml.signal_autoconnect(self)
 		
 		# Set up the callback messages
@@ -329,7 +323,7 @@ class SystrayWin32(systray.Systray):
 		states_list.append('message')
 		for state in states_list:
 			path_to_ico = os.path.join(path, state + '.ico')
-			if not os.path.isfile(path_to_ico):
+			if not os.path.isfile(path_to_ico): # fallback to sun iconset
 				path_to_ico = os.path.join(path_sun_iconset, state + '.ico')
 			if os.path.exists(path_to_ico):
 				hinst = win32gui.GetModuleHandle(None)
