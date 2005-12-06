@@ -141,7 +141,7 @@ def get_os_info():
 				elif path_to_file.endswith('lfs-release'): # file just has version
 					text = distro_name + ' ' + text
 				return text
-		
+
 		# our last chance, ask uname and strip it
 		uname_output = helpers.get_output_of_command('uname -a | cut -d" " -f1,3')
 		if uname_output is not None:
@@ -212,7 +212,7 @@ class Connection:
 		return p
 
 	# this is in features.py but it is blocking
-	def _discover(self, ns, jid, node = None): 
+	def _discover(self, ns, jid, node = None):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
@@ -221,10 +221,10 @@ class Connection:
 		self.to_be_sent.append(iq)
 
 	def discoverItems(self, jid, node = None):
-		'''According to JEP-0030: jid is mandatory, 
+		'''According to JEP-0030: jid is mandatory,
 		name, node, action is optional.'''
 		self._discover(common.xmpp.NS_DISCO_ITEMS, jid, node)
-	
+
 	def discoverInfo(self, jid, node = None):
 		'''According to JEP-0030:
 			For identity: category, type is mandatory, name is optional.
@@ -333,9 +333,9 @@ class Connection:
 				break
 			#invitations
 			elif xtag.getNamespace() == common.xmpp.NS_MUC_USER and \
-				xtag.getTag('invite'): 
+				xtag.getTag('invite'):
 				invite = xtag
-				
+
 			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
 			# invitation
 			# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
@@ -349,11 +349,11 @@ class Connection:
 			if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
 				chatstate = child.getName()
 				break
-			
+
 		if encTag and USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
-			
+
 			keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 			if keyID:
 				decmsg = self.gpg.decrypt(encmsg, keyID)
@@ -412,7 +412,7 @@ class Connection:
 				sigTag = x
 			if x.getNamespace() == common.xmpp.NS_VCARD_UPDATE:
 				avatar_sha = x.getTagData('photo')
-				
+
 		who = self.get_full_jid(prs)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
@@ -444,22 +444,22 @@ class Connection:
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
 						prio, keyID))
 				elif errcode == '401': # password required to join
-					self.dispatch('ERROR', (_('Unable to join room'), 
+					self.dispatch('ERROR', (_('Unable to join room'),
 						_('A password is required to join this room.')))
 				elif errcode == '403': # we are banned
-					self.dispatch('ERROR', (_('Unable to join room'), 
+					self.dispatch('ERROR', (_('Unable to join room'),
 						_('You are banned from this room.')))
 				elif errcode == '404': # room does not exist
-					self.dispatch('ERROR', (_('Unable to join room'), 
+					self.dispatch('ERROR', (_('Unable to join room'),
 						_('Such room does not exist.')))
 				elif errcode == '405':
-					self.dispatch('ERROR', (_('Unable to join room'), 
+					self.dispatch('ERROR', (_('Unable to join room'),
 						_('Room creation is restricted.')))
 				elif errcode == '406':
-					self.dispatch('ERROR', (_('Unable to join room'), 
+					self.dispatch('ERROR', (_('Unable to join room'),
 						_('Your registered nickname must be used.')))
 				elif errcode == '407':
-					self.dispatch('ERROR', (_('Unable to join room'), 
+					self.dispatch('ERROR', (_('Unable to join room'),
 						_('You are not in the members list.')))
 				elif errcode == '409': # nick conflict
 					# the jid_from in this case is FAKE JID: room_jid/nick
@@ -467,7 +467,7 @@ class Connection:
 					proposed_nickname = resource + \
 						gajim.config.get('gc_proposed_nick_char')
 					room_jid = gajim.get_room_from_fjid(who)
-					self.dispatch('ASK_NEW_NICK', (room_jid, _('Unable to join room'), 
+					self.dispatch('ASK_NEW_NICK', (room_jid, _('Unable to join room'),
 		_('Your desired nickname is in use or registered by another occupant.\nPlease specify another nickname below:'), proposed_nickname))
 				else:	# print in the window the error
 					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
@@ -539,11 +539,11 @@ class Connection:
 		self.dispatch('STATUS', 'offline')
 		self.connection = None
 		if not self.on_purpose:
-			self.dispatch('ERROR', 
+			self.dispatch('ERROR',
 			(_('Connection with account "%s" has been lost') % self.name,
 			_('To continue sending and receiving messages, you will need to reconnect.')))
 		self.on_purpose = False
-	
+
 	# END disconenctedCB
 
 	def _reconnect(self):
@@ -561,7 +561,7 @@ class Connection:
 			if self.retrycount > 10:
 				self.connected = 0
 				self.dispatch('STATUS', 'offline')
-				self.dispatch('ERROR', 
+				self.dispatch('ERROR',
 				(_('Connection with account "%s" has been lost') % self.name,
 				_('To continue sending and receiving messages, you will need to reconnect.')))
 				self.retrycount = 0
@@ -574,7 +574,7 @@ class Connection:
 			#reconnect succeeded
 			self.time_to_reconnect = None
 			self.retrycount = 0
-	
+
 	def _disconnectedReconnCB(self):
 		"""Called when we are disconnected"""
 		gajim.log.debug('disconnectedReconnCB')
@@ -590,12 +590,12 @@ class Connection:
 				self.dispatch('STATUS', 'connecting')
 				self.time_to_reconnect = time.time() + 10
 			else:
-				self.dispatch('ERROR', 
+				self.dispatch('ERROR',
 				(_('Connection with account "%s" has been lost') % self.name,
 				_('To continue sending and receiving messages, you will need to reconnect.')))
 		self.on_purpose = False
 	# END disconenctedReconnCB
-		
+
 	def _bytestreamErrorCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamErrorCB')
 		frm = self.get_full_jid(iq_obj)
@@ -610,7 +610,7 @@ class Connection:
 		file_props['error'] = -4
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
 		raise common.xmpp.NodeProcessed
-	
+
 	def _bytestreamSetCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamSetCB')
 		target = unicode(iq_obj.getAttr('to'))
@@ -623,9 +623,9 @@ class Connection:
 		for item in query.getChildren():
 			if item.getName() == 'streamhost':
 				host_dict={
-					'state': 0, 
-					'target': target, 
-					'id': id, 
+					'state': 0,
+					'target': target,
+					'id': id,
 					'sid': sid,
 					'initiator': self.get_full_jid(iq_obj)
 				}
@@ -645,7 +645,7 @@ class Connection:
 						file_props['streamhosts'] = streamhosts
 					if not gajim.socks5queue.get_file_props(self.name, sid):
 						gajim.socks5queue.add_file_props(self.name, file_props)
-					gajim.socks5queue.connect_to_hosts(self.name, sid, 
+					gajim.socks5queue.connect_to_hosts(self.name, sid,
 						self.send_success_connect_reply, None)
 				raise common.xmpp.NodeProcessed
 		fast = None
@@ -656,17 +656,17 @@ class Connection:
 		file_props['streamhosts'] = streamhosts
 		conn_err = False
 		if file_props['type'] == 'r':
-			gajim.socks5queue.connect_to_hosts(self.name, sid, 
+			gajim.socks5queue.connect_to_hosts(self.name, sid,
 				self.send_success_connect_reply, self._connect_error)
 		raise common.xmpp.NodeProcessed
-	
+
 	def send_success_connect_reply(self, streamhost):
-		''' send reply to the initiator of FT that we 
+		''' send reply to the initiator of FT that we
 		made a connection
 		'''
 		if streamhost is None:
 			return None
-		iq = common.xmpp.Iq(to = streamhost['initiator'], typ = 'result', 
+		iq = common.xmpp.Iq(to = streamhost['initiator'], typ = 'result',
 			frm = streamhost['target'])
 		iq.setAttr('id', streamhost['id'])
 		query = iq.setTag('query')
@@ -674,16 +674,16 @@ class Connection:
 		stream_tag = query.setTag('streamhost-used')
 		stream_tag.setAttr('jid', streamhost['jid'])
 		self.to_be_sent.append(iq)
-		
+
 	def _connect_error(self, to, _id, sid, code = 404):
 		msg_dict = {
-			404: 'Could not connect to given hosts', 
-			405: 'Cancel', 
-			406: 'Not acceptable', 
+			404: 'Could not connect to given hosts',
+			405: 'Cancel',
+			406: 'Not acceptable',
 		}
 		msg = msg_dict[code]
 		iq = None
-		iq = common.xmpp.Protocol(name = 'iq', to = to, 
+		iq = common.xmpp.Protocol(name = 'iq', to = to,
 			typ = 'error')
 		iq.setAttr('id', _id)
 		err = iq.setTag('error')
@@ -696,7 +696,7 @@ class Connection:
 				self.disconnect_transfer(file_props)
 				file_props['error'] = -3
 				self.dispatch('FILE_REQUEST_ERROR', (to, file_props))
-		
+
 	def _bytestreamResultCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamResultCB')
 		frm = self.get_full_jid(iq_obj)
@@ -705,7 +705,7 @@ class Connection:
 		streamhost = None
 		try:
 			streamhost = query.getTag('streamhost')
-		except: 
+		except:
 			pass
 		if streamhost is not None: # this is a result for proxy request
 			jid = None
@@ -737,7 +737,7 @@ class Connection:
 			file_props = self.files_props[id]
 		else:
 			raise common.xmpp.NodeProcessed
-		if streamhost is None: 
+		if streamhost is None:
 			# proxy approves the activate query
 			if real_id[:3] == 'au_':
 				id = real_id[3:]
@@ -756,17 +756,17 @@ class Connection:
 		if file_props.has_key('streamhost-used') and \
 			file_props['streamhost-used'] is True:
 			raise common.xmpp.NodeProcessed
-			
+
 		if real_id[:3] == 'au_':
 			gajim.socks5queue.send_file(file_props, self.name)
 			raise common.xmpp.NodeProcessed
-			
+
 		proxy = None
 		if file_props.has_key('proxyhosts'):
 			for proxyhost in file_props['proxyhosts']:
 				if proxyhost['jid'] == jid:
 					proxy = proxyhost
-		
+
 		if proxy != None:
 			file_props['streamhost-used'] = True
 			if not file_props.has_key('streamhosts'):
@@ -778,7 +778,7 @@ class Connection:
 			proxy['idx'] = receiver.queue_idx
 			gajim.socks5queue.on_success = self.proxy_auth_ok
 			raise common.xmpp.NodeProcessed
-			
+
 		else:
 			gajim.socks5queue.send_file(file_props, self.name)
 			if file_props.has_key('fast'):
@@ -786,43 +786,43 @@ class Connection:
 				if len(fasts) > 0:
 					self._connect_error(frm, fasts[0]['id'], file_props['sid'],
 						code = 406)
-			
+
 		raise common.xmpp.NodeProcessed
-	
+
 	def remove_all_transfers(self):
 		''' stops and removes all active connections from the socks5 pool '''
 		for file_props in self.files_props.values():
 			self.remove_transfer(file_props, remove_from_list = False)
 		del(self.files_props)
 		self.files_props = {}
-	
+
 	def remove_transfer(self, file_props, remove_from_list = True):
 		if file_props is None:
 			return
 		self.disconnect_transfer(file_props)
 		sid = file_props['sid']
 		gajim.socks5queue.remove_file_props(self.name, sid)
-		
+
 		if remove_from_list:
 			if self.files_props.has_key('sid'):
 				del(self.files_props['sid'])
-				
+
 	def disconnect_transfer(self, file_props):
 		if file_props is None:
 			return
 		if file_props.has_key('hash'):
 			gajim.socks5queue.remove_sender(file_props['hash'])
-		
+
 		if file_props.has_key('streamhosts'):
 			for host in file_props['streamhosts']:
 				if host.has_key('idx') and host['idx'] > 0:
 					gajim.socks5queue.remove_receiver(host['idx'])
 					gajim.socks5queue.remove_sender(host['idx'])
-			
+
 	def proxy_auth_ok(self, proxy):
 		'''cb, called after authentication to proxy server '''
 		file_props = self.files_props[proxy['sid']]
-		iq = common.xmpp.Protocol(name = 'iq', to = proxy['initiator'], 
+		iq = common.xmpp.Protocol(name = 'iq', to = proxy['initiator'],
 		typ = 'set')
 		auth_id = "au_" + proxy['sid']
 		iq.setID(auth_id)
@@ -833,7 +833,7 @@ class Connection:
 		activate.setData(file_props['proxy_receiver'])
 		iq.setID(auth_id)
 		self.to_be_sent.append(iq)
-		
+
 	def _discoGetCB(self, con, iq_obj):
 		''' get disco info '''
 		frm = self.get_full_jid(iq_obj)
@@ -855,16 +855,16 @@ class Connection:
 		feature = common.xmpp.Node('feature')
 		feature.setAttr('var', common.xmpp.NS_FILE)
 		query.addChild(node=feature)
-		
+
 		self.to_be_sent.append(iq)
 		raise common.xmpp.NodeProcessed
-	
+
 	def _siResultCB(self, con, iq_obj):
 		gajim.log.debug('_siResultCB')
 		id = iq_obj.getAttr('id')
 		if not self.files_props.has_key(id):
 			# no such jid
-			return 
+			return
 		file_props = self.files_props[id]
 		if file_props is None:
 			# file properties for jid is none
@@ -882,10 +882,10 @@ class Connection:
 			return
 		self.send_socks5_info(file_props, fast = True)
 		raise common.xmpp.NodeProcessed
-	
+
 	def _get_sha(self, sid, initiator, target):
 		return sha.new("%s%s%s" % (sid, initiator, target)).hexdigest()
-		
+
 	def result_socks5_sid(self, sid, hash_id):
 		''' store the result of sha message from auth  '''
 		if not self.files_props.has_key(sid):
@@ -893,14 +893,14 @@ class Connection:
 		file_props = self.files_props[sid]
 		file_props['hash'] = hash_id
 		return
-	
-	
+
+
 	def get_cached_proxies(self, proxy):
 		''' get cached entries for proxy and request the cache again '''
 		host = gajim.config.get_per('ft_proxies65_cache', proxy, 'host')
 		port = gajim.config.get_per('ft_proxies65_cache', proxy, 'port')
 		jid = gajim.config.get_per('ft_proxies65_cache', proxy, 'jid')
-		
+
 		iq = common.xmpp.Protocol(name = 'iq', to = proxy, typ = 'get')
 		query = iq.setTag('query')
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
@@ -911,8 +911,8 @@ class Connection:
 		if None not in (host, port, jid) or '' not in (host, port, jid):
 			return (host, port, jid)
 		return (None, None, None)
-		
-	def send_socks5_info(self, file_props, fast = True, receiver = None, 
+
+	def send_socks5_info(self, file_props, fast = True, receiver = None,
 		sender = None):
 		''' send iq for the present streamhosts and proxies '''
 		if type(self.peerhost) != tuple:
@@ -933,32 +933,32 @@ class Connection:
 				if host is None:
 					continue
 				host_dict={
-					'state': 0, 
-					'target': unicode(receiver), 
-					'id': file_props['sid'], 
-					'sid': file_props['sid'], 
+					'state': 0,
+					'target': unicode(receiver),
+					'id': file_props['sid'],
+					'sid': file_props['sid'],
 					'initiator': proxy,
 					'host': host,
 					'port': unicode(_port),
 					'jid': jid
 				}
 				proxyhosts.append(host_dict)
-		sha_str = self._get_sha(file_props['sid'], sender, 
+		sha_str = self._get_sha(file_props['sid'], sender,
 			receiver)
 		file_props['sha_str'] = sha_str
 		if not ft_override_host_to_send:
 			ft_override_host_to_send = self.peerhost[0]
 		ft_override_host_to_send = socket.gethostbyname(ft_override_host_to_send)
-		listener = gajim.socks5queue.start_listener(self.peerhost[0], port, 
+		listener = gajim.socks5queue.start_listener(self.peerhost[0], port,
 			sha_str, self.result_socks5_sid, file_props['sid'])
 		if listener == None:
 			file_props['error'] = -5
 			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props))
-			self._connect_error(unicode(receiver), file_props['sid'], 
+			self._connect_error(unicode(receiver), file_props['sid'],
 				file_props['sid'], code = 406)
 			return
-		
-		iq = common.xmpp.Protocol(name = 'iq', to = unicode(receiver), 
+
+		iq = common.xmpp.Protocol(name = 'iq', to = unicode(receiver),
 			typ = 'set')
 		file_props['request-id'] = 'id_' + file_props['sid']
 		iq.setID(file_props['request-id'])
@@ -980,12 +980,12 @@ class Connection:
 				streamhost.setAttr('port', proxyhost['port'])
 				streamhost.setAttr('host', proxyhost['host'])
 				streamhost.setAttr('jid', proxyhost['jid'])
-				
+
 				# don't add the proxy child tag for streamhosts, which are proxies
 				# proxy = streamhost.setTag('proxy')
 				# proxy.setNamespace(common.xmpp.NS_STREAM)
 		self.to_be_sent.append(iq)
-			
+
 	def _siSetCB(self, con, iq_obj):
 		gajim.log.debug('_siSetCB')
 		jid = self.get_jid(iq_obj)
@@ -1006,7 +1006,7 @@ class Connection:
 		file_desc_tag = file_tag.getTag('desc')
 		if file_desc_tag is not None:
 			file_props['desc'] = file_desc_tag.getData()
-		
+
 		if mime_type is not None:
 			file_props['mime-type'] = mime_type
 		our_jid = gajim.get_jid_from_account(self.name)
@@ -1018,7 +1018,7 @@ class Connection:
 		gajim.socks5queue.add_file_props(self.name, file_props)
 		self.dispatch('FILE_REQUEST', (jid, file_props))
 		raise common.xmpp.NodeProcessed
-	
+
 	def _siErrorCB(self, con, iq_obj):
 		gajim.log.debug('_siErrorCB')
 		si = iq_obj.getTag('si')
@@ -1028,7 +1028,7 @@ class Connection:
 		id = iq_obj.getAttr('id')
 		if not self.files_props.has_key(id):
 			# no such jid
-			return 
+			return
 		file_props = self.files_props[id]
 		if file_props is None:
 			# file properties for jid is none
@@ -1037,7 +1037,7 @@ class Connection:
 		file_props['error'] = -3
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
 		raise common.xmpp.NodeProcessed
-	
+
 	def send_file_rejection(self, file_props):
 		''' informs sender that we refuse to download the file '''
 		iq = common.xmpp.Protocol(name = 'iq',
@@ -1065,14 +1065,14 @@ class Connection:
 		field.delAttr('type')
 		field.setValue('http://jabber.org/protocol/bytestreams')
 		self.to_be_sent.append(iq)
-		
+
 	def send_file_request(self, file_props):
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = self.server_resource
 		frm = our_jid + '/' + resource
 		file_props['sender'] = frm
 		fjid = file_props['receiver'].jid + '/' + file_props['receiver'].resource
-		iq = common.xmpp.Protocol(name = 'iq', to = fjid, 
+		iq = common.xmpp.Protocol(name = 'iq', to = fjid,
 			typ = 'set')
 		iq.setID(file_props['sid'])
 		self.files_props[file_props['sid']] = file_props
@@ -1096,7 +1096,7 @@ class Connection:
 		field.setAttr('type', 'list-single')
 		field.addOption(common.xmpp.NS_BYTESTREAM)
 		self.to_be_sent.append(iq)
-		
+
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
@@ -1195,7 +1195,7 @@ class Connection:
 		who = self.get_full_jid(iq_obj)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
-	
+
 	def parse_data_form(self, node):
 		dic = {}
 		tag = node.getTag('title')
@@ -1250,7 +1250,7 @@ class Connection:
 					j += 1
 			i += 1
 		return dic
-		
+
 	def _MucOwnerCB(self, con, iq_obj):
 		gajim.log.debug('MucOwnerCB')
 		qp = iq_obj.getQueryPayload()
@@ -1334,11 +1334,11 @@ class Connection:
 		gajim.log.debug('PrivateCB')
 		storage = iq_obj.getTag('query').getTag('storage')
 		try:
-			ns = storage.getNamespace() 
+			ns = storage.getNamespace()
 		except AttributeError:
 			#Its a result for a 'set' Iq, so we don't do anything here
 			return
-		
+
 		if ns == 'storage:bookmarks':
 			#Bookmarked URLs and Conferences
 			#http://www.jabber.org/jeps/jep-0048.html
@@ -1362,7 +1362,7 @@ class Connection:
 			#http://www.jabber.org/jeps/jep-0049.html
 			#TODO: implement this
 			pass
-	
+
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':
 			iq = iq_obj.buildReply('result')
@@ -1370,7 +1370,7 @@ class Connection:
 			iq = iq_obj.buildReply('error')
 			iq.setError('not-authorized', 401)
 		self.to_be_sent.append(iq)
-	
+
 	def _HttpAuthCB(self, con, iq_obj):
 		gajim.log.debug('HttpAuthCB')
 		opt = gajim.config.get_per('accounts', self.name, 'http_auth')
@@ -1389,7 +1389,7 @@ class Connection:
 		jid_from = self.get_full_jid(iq_obj)
 		id = unicode(iq_obj.getID())
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
-		
+
 	def _StanzaArrivedCB(self, con, obj):
 		self.last_io = time.time()
 
@@ -1584,10 +1584,9 @@ class Connection:
 						answers = [x for x in dns.resolver.query(query, 'SRV')]
 						if answers:
 							for a in answers:
-								target = str(a.target)
-								if target.endswith('.'):
-									# target is f.e. talk.google.com. remove last dot
-									target = target[:-1]
+								target = dns.name.from_text(str(a.target))
+								# target is f.e. talk.google.com. remove last dot
+								target = target.to_text(omit_final_dot = True)
 								hosts.append({'host': target,
 												'port': int(a.port),
 												'prio': int(a.priority),
@@ -1664,17 +1663,17 @@ class Connection:
 			common.xmpp.NS_VCARD)
 		con.RegisterHandler('iq', self._rosterSetCB, 'set',
 			common.xmpp.NS_ROSTER)
-		con.RegisterHandler('iq', self._siSetCB, 'set', 
+		con.RegisterHandler('iq', self._siSetCB, 'set',
 			common.xmpp.NS_SI)
-		con.RegisterHandler('iq', self._siErrorCB, 'error', 
+		con.RegisterHandler('iq', self._siErrorCB, 'error',
 			common.xmpp.NS_SI)
-		con.RegisterHandler('iq', self._siResultCB, 'result', 
+		con.RegisterHandler('iq', self._siResultCB, 'result',
 			common.xmpp.NS_SI)
-		con.RegisterHandler('iq', self._discoGetCB, 'get', 
+		con.RegisterHandler('iq', self._discoGetCB, 'get',
 			common.xmpp.NS_DISCO)
-		con.RegisterHandler('iq', self._bytestreamSetCB, 'set', 
+		con.RegisterHandler('iq', self._bytestreamSetCB, 'set',
 			common.xmpp.NS_BYTESTREAM)
-		con.RegisterHandler('iq', self._bytestreamResultCB, 'result', 
+		con.RegisterHandler('iq', self._bytestreamResultCB, 'result',
 			common.xmpp.NS_BYTESTREAM)
 		con.RegisterHandler('iq', self._bytestreamErrorCB, 'error',
 			common.xmpp.NS_BYTESTREAM)
@@ -1763,7 +1762,7 @@ class Connection:
 		iq = self.build_privacy_rule('invisible', 'deny')
 		self.connection.SendAndCallForResponse(iq, self._continue_invisible,
 			{'msg': msg, 'signed': signed, 'initial': initial})
-	
+
 	def _continue_invisible(self, con, iq_obj, msg, signed, initial):
 		ptype = ''
 		show = ''
@@ -1791,7 +1790,7 @@ class Connection:
 
 			#Get bookmarks from private namespace
 			self.get_bookmarks()
-			
+
 			#Inform GUI we just signed in
 			self.dispatch('SIGNED_IN', ())
 
@@ -1884,7 +1883,7 @@ class Connection:
 			if self.connection:
 				self.connection.send(p)
 			self.dispatch('STATUS', show)
-	
+
 	def get_status(self):
 		return STATUS_LIST[self.connected]
 
@@ -1928,7 +1927,7 @@ class Connection:
 		if chatstate is not None:
 			msg_iq.setTag(chatstate, {},
 				namespace = 'http://jabber.org/protocol/chatstates')
-		
+
 		self.to_be_sent.append(msg_iq)
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		ji = gajim.get_jid_without_resource(jid)
@@ -2105,7 +2104,7 @@ class Connection:
 		self.awaiting_answers[id] = (VCARD_ARRIVED, jid)
 		self.to_be_sent.append(iq)
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
-	
+
 	def send_vcard(self, vcard):
 		if not self.connection:
 			return
