@@ -3369,7 +3369,7 @@ Agent JID - node</property>
 	      <child>
 		<widget class="GtkCheckButton" id="show_avatars_in_roster_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, Gajim will display an avatar, if one is set, for every contact in roster window</property>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will display avatars of contacts in roster window</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Display avatars of contacts in roster</property>
 		  <property name="use_underline">True</property>
@@ -3390,7 +3390,7 @@ Agent JID - node</property>
 	      <child>
 		<widget class="GtkCheckButton" id="show_status_msgs_in_roster_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, Gajim will display the status message, if not empty, for every contact under the contact name in roster window</property>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will display status messages of contacts under the contact name in roster window</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Display status messages of contacts in roster</property>
 		  <property name="use_underline">True</property>
