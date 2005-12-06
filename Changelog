@@ -129,7 +129,7 @@ Gajim 0.8.2 (XX December 2005)
 
   * Avatars and status messages in roster window
   * Improved service discovery window
-  * Emoticons selector, Cooler Popup Windows (notification-daemon). Read more information in case you did not notice something different
+  * Emoticons selector, Cooler Popup Windows (notification-daemon). Read more information in case you did not notice something different in http://trac.gajim.org/wiki/GajimDBus#notif_daemon
   * Caching of Avatars, Less UI freezing
   * New Account creation wizard
   * Better History Window with searching capabilities
@@ -138,5 +138,5 @@ Gajim 0.8.2 (XX December 2005)
   * A lot of new irc-like commands in group chat. Do for example /help invite
   * X11 Session Management support
   * Gajim registers and handles xmpp: and xmpp:// (GNOME/gconfd only)
-  * Migration to pysqlite for logs. If you want to migrate your old logs, please read this
+  * Use pysqlite for conversation history. Automigration for old logs 
   * New translations: Italian, Swedish, Slovak, Basque
