@@ -396,11 +396,6 @@ class PreferencesWindow:
 		# send os info
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
-		
-		# check for new version
-		st = gajim.config.get('check_for_new_version')
-		btn = self.xml.get_widget('check_for_new_version_checkbutton')
-		btn.set_active(st)
 				
 		self.xml.signal_autoconnect(self)
 		
@@ -878,9 +873,6 @@ class PreferencesWindow:
 	
 	def on_send_os_info_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'send_os_info')
-
-	def on_check_for_new_version_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'check_for_new_version')
 
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)

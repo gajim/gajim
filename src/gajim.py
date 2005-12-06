@@ -94,7 +94,6 @@ import gtkgui_helpers
 import notify
 
 import common.sleepy
-import check_for_new_version
 
 from common import socks5
 from common import gajim
@@ -1377,8 +1376,6 @@ class Interface:
 
 		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()
-		if gajim.config.get('check_for_new_version'):
-			check_for_new_version.Check_for_new_version_dialog()
 
 		self.init_emoticons()
 		self.make_regexps()

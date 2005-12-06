@@ -113,7 +113,6 @@ class Config:
 		'before_nickname': [ opt_str, '' ],
 		'after_nickname': [ opt_str, ':' ],
 		'send_os_info': [ opt_bool, True ],
-		'check_for_new_version': [ opt_bool, False ],
 		'usegpg': [ opt_bool, False ],
 		'use_gpg_agent': [ opt_bool, False ],
 		'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
