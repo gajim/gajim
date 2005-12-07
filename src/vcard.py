@@ -108,6 +108,22 @@ class VcardWindow:
 		if event.keyval == gtk.keysyms.Escape:
 			self.window.destroy()
 
+	def on_log_history_checkbutton_toggled(self, widget):
+		#log conversation history?
+		oldlog = True
+		no_log_for = gajim.config.get_per('accounts', self.account,
+			'no_log_for').split()
+		if self.contact.jid in no_log_for:
+			oldlog = False
+		log = widget.get_active()
+		if not log and not self.contact.jid in no_log_for:
+			no_log_for.append(self.contact.jid)
+		if log and self.contact.jid in no_log_for:
+			no_log_for.remove(self.contact.jid)
+		if oldlog != log:
+			gajim.config.set_per('accounts', self.account, 'no_log_for',
+				' '.join(no_log_for))
+	
 	def on_close_button_clicked(self, widget):
 		'''Save contact information and update the roster on the Jabber server'''
 		if self.vcard:
@@ -123,20 +139,6 @@ class VcardWindow:
 				gajim.interface.roster.tree.get_model().set_value(i, 1, new_name)
 			gajim.connections[self.account].update_contact(self.contact.jid,
 				self.contact.name, self.contact.groups)
-		#log history ?
-		oldlog = True
-		no_log_for = gajim.config.get_per('accounts', self.account,
-			'no_log_for').split()
-		if self.contact.jid in no_log_for:
-			oldlog = False
-		log = self.xml.get_widget('log_checkbutton').get_active()
-		if not log and not self.contact.jid in no_log_for:
-			no_log_for.append(self.contact.jid)
-		if log and self.contact.jid in no_log_for:
-			no_log_for.remove(self.contact.jid)
-		if oldlog != log:
-			gajim.config.set_per('accounts', self.account, 'no_log_for',
-				' '.join(no_log_for))
 		self.window.destroy()
 
 	def on_clear_button_clicked(self, widget):
@@ -298,11 +300,11 @@ class VcardWindow:
 			tooltips.set_tip(eb,
 			_("You are waiting contact's answer about your subscription request"))
 		self.xml.get_widget('nickname_entry').set_text(self.contact.name)
-		log = 1
+		log = True
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 			'no_log_for').split(' '):
-			log = 0
-		self.xml.get_widget('log_checkbutton').set_active(log)
+			log = False
+		self.xml.get_widget('log_history_checkbutton').set_active(log)
 		resources = '%s (%s)' % (self.contact.resource, unicode(
 			self.contact.priority))
 		uf_resources = self.contact.resource + _(' resource with priority ')\
