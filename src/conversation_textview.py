@@ -592,14 +592,14 @@ class ConversationTextview(gtk.TextView):
 			format = before_str + name + after_str + ' ' 
 			buffer.insert_with_tags_by_name(end_iter, format, *name_tags)
 
-		# detect urls formatting and if the user has it on emoticons
-		index = self.detect_and_print_special_text(text, jid, text_tags)
-
 		if subject: # if we have subject, show it too!
 			subject = _('Subject: %s\n') % subject
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, subject)
-		
+
+		# detect urls formatting and if the user has it on emoticons
+		index = self.detect_and_print_special_text(text, jid, text_tags)
+
 		# add the rest of text located in the index and after
 		end_iter = buffer.get_end_iter()
 		buffer.insert_with_tags_by_name(end_iter, text[index:], *text_tags)
