@@ -391,8 +391,8 @@ class Connection:
 				password = invite.getTagData('password')
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 			else:
-				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-					None))
+				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
+					subject, None))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
