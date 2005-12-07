@@ -210,7 +210,7 @@ class Interface:
 			answer = 'yes'
 		else:
 			answer = 'no'
-		gajim.connections[account].build_http_auth_answer(data[2], answer)
+		gajim.connections[account].build_http_auth_answer(data[3], answer)
 
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
