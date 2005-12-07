@@ -845,7 +845,7 @@ class TabbedChatWindow(chat.Chat):
 			typ = 'pm'
 
 		gajim.interface.roster.draw_contact(jid, self.account)
-		if jid == self.get_active_jid() and gajim.interface.systray_enabled:
+		if gajim.interface.systray_enabled:
 			gajim.interface.systray.remove_jid(jid, self.account, typ)
 		showOffline = gajim.config.get('showoffline')
 		if (contact.show == 'offline' or contact.show == 'error') and \
