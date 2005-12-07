@@ -6,7 +6,6 @@ gajim.desktop.in
 src/advanced.py
 src/cell_renderer_image.py
 src/chat.py
-src/check_for_new_version.py
 src/config.py
 src/conversation_textview.py
 src/dialogs.py
