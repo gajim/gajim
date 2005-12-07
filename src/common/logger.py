@@ -82,7 +82,9 @@ class Logger:
 			# this can happen only the first time (the time we create the db)
 			# db is not created here but in src/common/checks_paths.py
 			return
+		self.init_var()
 		
+	def init_var(self):
 		# if locked, wait up to 20 sec to unlock
 		# before raise (hopefully should be enough)
 		self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,

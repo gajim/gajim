@@ -1474,6 +1474,8 @@ if __name__ == '__main__':
 			t.start()
 			gobject.timeout_add(500, wait_migration, m)
 			gtk.main()
+			# Init logger values (self.con/cur, jid_already_in)
+			gajim.logger.init_var()
 	check_paths.check_and_possibly_create_paths()
 
 	Interface()
