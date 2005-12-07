@@ -2,7 +2,6 @@
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##

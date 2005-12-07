@@ -3,7 +3,6 @@
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Stéphan Kochen <stephan@kochen.nl>
 ##

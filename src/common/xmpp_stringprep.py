@@ -2,7 +2,6 @@
 ##
 ## Gajim Team:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Vincent Hanquez <tab@snarc.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##
 ##	Copyright (C) 2001-2005 Twisted Matrix Laboratories.
