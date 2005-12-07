@@ -6769,7 +6769,6 @@ Custom</property>
 		  <property name="active">True</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="on_log_history_checkbutton_toggled" last_modification_time="Wed, 07 Dec 2005 14:24:05 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>

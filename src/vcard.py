@@ -101,7 +101,7 @@ class VcardWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	def on_vcard_information_window_destroy(self, widget = None):
+	def on_vcard_information_window_destroy(self, widget):
 		del gajim.interface.instances[self.account]['infos'][self.jid]
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
@@ -304,7 +304,10 @@ class VcardWindow:
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 			'no_log_for').split(' '):
 			log = False
-		self.xml.get_widget('log_history_checkbutton').set_active(log)
+		checkbutton = self.xml.get_widget('log_history_checkbutton')
+		checkbutton.set_active(log)
+		checkbutton.connect('toggled', self.on_log_history_checkbutton_toggled)
+		
 		resources = '%s (%s)' % (self.contact.resource, unicode(
 			self.contact.priority))
 		uf_resources = self.contact.resource + _(' resource with priority ')\
