@@ -596,6 +596,7 @@ class ConversationTextview(gtk.TextView):
 			subject = _('Subject: %s\n') % subject
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, subject)
+			self.print_empty_line()
 
 		# detect urls formatting and if the user has it on emoticons
 		index = self.detect_and_print_special_text(text, jid, text_tags)
