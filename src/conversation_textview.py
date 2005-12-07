@@ -41,7 +41,7 @@ class ConversationTextview(gtk.TextView):
 	for chat/groupchat windows'''
 	def __init__(self, account):
 		gtk.TextView.__init__(self)
-		
+
 		# set properties
 		self.set_border_width(1)
 		self.set_accepts_tab(True)
@@ -50,12 +50,12 @@ class ConversationTextview(gtk.TextView):
 		self.set_wrap_mode(gtk.WRAP_WORD)
 		self.set_left_margin(2)
 		self.set_right_margin(2)
-		
+
 		# connect signals
 		self.connect('motion_notify_event', self.on_textview_motion_notify_event)
 		self.connect('populate_popup', self.on_textview_populate_popup)
 		self.connect('button_press_event', self.on_textview_button_press_event)
-		
+
 		self.account = account
 		self.change_cursor = None
 		self.last_time_printout = 0
@@ -236,7 +236,7 @@ class ConversationTextview(gtk.TextView):
 			menu.prepend(item)
 			submenu = gtk.Menu()
 			item.set_submenu(submenu)
-			
+
 			always_use_en = gajim.config.get('always_english_wikipedia')
 			if always_use_en:
 				link = 'http://en.wikipedia.org/wiki/Special:Search?search=%s'\
@@ -269,8 +269,8 @@ class ConversationTextview(gtk.TextView):
 					link = dict_link % self.selected_phrase
 					item.connect('activate', self.visit_url_from_menuitem, link)
 			submenu.append(item)
-			
-			
+
+
 			search_link = gajim.config.get('search_engine')
 			if search_link.find('%s') == -1:
 				#we must have %s in the url
@@ -281,9 +281,9 @@ class ConversationTextview(gtk.TextView):
 				link =  search_link % self.selected_phrase
 				item.connect('activate', self.visit_url_from_menuitem, link)
 			submenu.append(item)
-			
+
 		menu.show_all()
-			
+
 	def on_textview_button_press_event(self, widget, event):
 		# If we clicked on a taged text do NOT open the standard popup menu
 		# if normal text check if we have sth selected
@@ -332,7 +332,7 @@ class ConversationTextview(gtk.TextView):
 			instance = gajim.interface.instances[self.account]['join_gc']
 			instance.xml.get_widget('server_entry').set_text(server)
 			instance.xml.get_widget('room_entry').set_text(room)
-			gajim.interface.instances[self.account]['join_gc'].window.present()		
+			gajim.interface.instances[self.account]['join_gc'].window.present()
 		else:
 			try:
 				gajim.interface.instances[self.account]['join_gc'] = \
@@ -362,7 +362,7 @@ class ConversationTextview(gtk.TextView):
 			childs[5].connect('activate', self.on_start_chat_activate, text)
 			childs[6].connect('activate',
 				self.on_join_group_chat_menuitem_activate, text)
-				
+
 			allow_add = False
 			if gajim.contacts[self.account].has_key(text):
 				c = gajim.contacts[self.account][text][0]
@@ -370,13 +370,13 @@ class ConversationTextview(gtk.TextView):
 					allow_add = True
 			else: # he or she's not at all in the account contacts
 				allow_add = True
-			
+
 			if allow_add:
 				childs[7].connect('activate', self.on_add_to_roster_activate, text)
 				childs[7].show() # show add to roster menuitem
 			else:
 				childs[7].hide() # hide add to roster menuitem
-				
+
 			childs[0].hide() # copy link location
 			childs[1].hide() # open link in browser
 
@@ -406,7 +406,7 @@ class ConversationTextview(gtk.TextView):
 		last special text is printed) and then returns the index
 		after *last* special text, so we can print it in
 		print_conversation_line()'''
-		
+
 		buffer = self.get_buffer()
 
 		start = 0
@@ -520,7 +520,7 @@ class ConversationTextview(gtk.TextView):
 		buffer.insert(end_iter, '\n')
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
-			other_tags_for_name = [], other_tags_for_time = [], 
+			other_tags_for_name = [], other_tags_for_time = [],
 			other_tags_for_text = [], subject = None):
 		'''prints 'chat' type messages'''
 		if kind == 'status' and not gajim.config.get('print_status_in_chats'):
@@ -531,14 +531,14 @@ class ConversationTextview(gtk.TextView):
 		at_the_end = False
 		if self.at_the_end():
 			at_the_end = True
-			
+
 		if buffer.get_char_count() > 0:
 			buffer.insert(end_iter, '\n')
 		if kind == 'incoming_queue':
 			kind = 'incoming'
 		# print the time stamp
 		if not tim:
-			#We don't have tim for outgoing messages...
+			# We don't have tim for outgoing messages...
 			tim = time.localtime()
 		if gajim.config.get('print_time') == 'always':
 			before_str = gajim.config.get('before_time')
@@ -589,7 +589,7 @@ class ConversationTextview(gtk.TextView):
 			name_tags.append(kind)
 			before_str = gajim.config.get('before_nickname')
 			after_str = gajim.config.get('after_nickname')
-			format = before_str + name + after_str + ' ' 
+			format = before_str + name + after_str + ' '
 			buffer.insert_with_tags_by_name(end_iter, format, *name_tags)
 
 		if subject: # if we have subject, show it too!
