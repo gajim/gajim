@@ -969,6 +969,9 @@ class SingleMessageWindow:
 
 		self.subject = subject
 		self.message = message
+		self.to = to
+		self.from_whom = from_whom
+		self.resource = resource
 		
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'single_message_window', APP)
 		self.window = self.xml.get_widget('single_message_window')
@@ -983,6 +986,8 @@ class SingleMessageWindow:
 		self.send_button = self.xml.get_widget('send_button')
 		self.reply_button = self.xml.get_widget('reply_button')
 		self.send_and_close_button = self.xml.get_widget('send_and_close_button')
+		self.cancel_button = self.xml.get_widget('cancel_button')
+		self.close_button = self.xml.get_widget('close_button')
 		self.message_tv_buffer.connect('changed', self.update_char_counter)
 		
 		self.to_entry.set_text(to)
@@ -1002,26 +1007,11 @@ class SingleMessageWindow:
 		self.to_entry.set_no_show_all(True)
 		self.from_label.set_no_show_all(True)
 		self.from_entry.set_no_show_all(True)
+		self.close_button.set_no_show_all(True)
+		self.cancel_button.set_no_show_all(True)
 		
 		self.prepare_widgets_for(self.action)
 
-		if self.action == 'send':
-			if self.message: # we come from a reply?
-				self.message_textview.grab_focus()
-			else: # we write a new message
-				if to: # do we already have jid?
-					self.subject_entry.grab_focus()
-		elif self.action == 'receive':
-			self.from_whom = from_whom
-			fjid = from_whom # Full jid of sender (with resource)
-			if resource:
-				fjid += '/' + resource
-			self.from_entry.set_text(fjid)
-			self.from_entry.set_property('editable', False)
-			self.subject_entry.set_property('editable', False)
-			self.message_textview.set_editable(False)
-			self.reply_button.grab_focus()
-		
 		# set_text(None) raises TypeError exception
 		if self.subject is None:
 			self.subject = ''
@@ -1063,11 +1053,12 @@ class SingleMessageWindow:
 
 	def prepare_widgets_for(self, action):
 		if len(gajim.connections) > 1:
+			#FIXME: for Received with should become 'in'
 			title = _('Single Message with account %s') % self.account
 		else:
 			title = _('Single Message')
 
-		if action == 'send':
+		if action == 'send': # prepare UI for Sending
 			title = _('Send %s') % title
 			self.send_button.show()
 			self.send_and_close_button.show()
@@ -1076,7 +1067,17 @@ class SingleMessageWindow:
 			self.reply_button.hide()
 			self.from_label.hide()
 			self.from_entry.hide()
-		elif action == 'receive':
+			
+			if self.message: # we come from a reply?
+				self.message_textview.grab_focus()
+				self.cancel_button.hide()
+				self.close_button.show()
+			else: # we write a new message (not from reply)
+				self.close_button.hide()
+				if self.to: # do we already have jid?
+					self.subject_entry.grab_focus()
+			
+		elif action == 'receive': # prepare UI for Receiving
 			title = _('Received %s') % title
 			self.reply_button.show()
 			self.from_label.show()
@@ -1085,10 +1086,25 @@ class SingleMessageWindow:
 			self.send_and_close_button.hide()
 			self.to_label.hide()
 			self.to_entry.hide()
+			
+			fjid = self.from_whom 
+			if self.resource:
+				fjid += '/' + self.resource # Full jid of sender (with resource)
+			self.from_entry.set_text(fjid)
+			self.from_entry.set_property('editable', False)
+			self.subject_entry.set_property('editable', False)
+			self.message_textview.set_editable(False)
+			self.reply_button.grab_focus()
+			self.cancel_button.hide()
+			self.close_button.show()
 		
 		self.window.set_title(title)
 
 	def on_cancel_button_clicked(self, widget):
+		self.save_pos()
+		self.window.destroy()
+
+	def on_close_button_clicked(self, widget):
 		self.save_pos()
 		self.window.destroy()
 
@@ -1098,7 +1114,7 @@ class SingleMessageWindow:
 	
 	def send_single_message(self):
 		if gajim.connections[self.account].connected <= 1:
-			#if offline or connecting
+			# if offline or connecting
 			ErrorDialog(_('Connection not available'),
 		_('Please make sure you are connected with "%s".' % self.account)
 			).get_response()
@@ -1305,7 +1321,8 @@ class ProgressDialog:
 			message = self.messages_queue.get()
 			end_iter = self.textview_buffer.get_end_iter()
 			self.textview_buffer.insert(end_iter, message + '\n')
-			self.textview.scroll_to_mark(self.textview_buffer.get_mark('end'), 0, True, 0, 1)
+			self.textview.scroll_to_mark(self.textview_buffer.get_mark('end'), 0,
+				True, 0, 1)
 
 		return True # loop for ever
 	
