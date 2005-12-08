@@ -1015,7 +1015,7 @@ class SingleMessageWindow:
 			self.from_whom = from_whom
 			fjid = from_whom # Full jid of sender (with resource)
 			if resource:
-				fjid += resource
+				fjid += '/' + resource
 			self.from_entry.set_text(fjid)
 			self.from_entry.set_property('editable', False)
 			self.subject_entry.set_property('editable', False)
