@@ -1,3 +1,4 @@
+## -*- Mode: python; tab-width: 4; indent-tabs-mode: t; coding: utf-8; -*-
 ##	tabbed_chat_window.py
 ##
 ## Gajim Team:
@@ -157,7 +158,7 @@ class TabbedChatWindow(chat.Chat):
 		if self.show_bigger_avatar_timeout_id is not None:
 			gobject.source_remove(self.show_bigger_avatar_timeout_id)
 
-	def show_bigger_avatar(self, widget):
+	def show_bigger_avatar(self, small_avatar):
 		'''resizes the avatar, if needed, so it has at max half the screen size
 		and shows it'''
 		jid = self.get_active_jid()
@@ -177,17 +178,26 @@ class TabbedChatWindow(chat.Chat):
 			avatar_h = half_scr_h
 		window = gtk.Window(gtk.WINDOW_POPUP)
 		self.bigger_avatar_window = window
-		image = gtk.Image()
-		image.set_from_pixbuf(avatar_pixbuf)
-		window.add(image)
-
-		window.set_position(gtk.WIN_POS_MOUSE)
+		pixmap, mask = avatar_pixbuf.render_pixmap_and_mask()
+		window.set_size_request(avatar_w, avatar_h)
 		# we should make the cursor visible
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
 		window.set_events(gtk.gdk.POINTER_MOTION_MASK)
-		window.realize()
+		window.set_app_paintable(True)
 		
+		window.realize()
+		window.window.set_back_pixmap(pixmap, False) # make it transparent
+		window.window.shape_combine_mask(mask, 0, 0)
+
+		# make the bigger avatar window show up centered 
+		x0, y0 = small_avatar.window.get_origin()
+		x0 += small_avatar.allocation.x
+		y0 += small_avatar.allocation.y
+		center_x= x0 + (small_avatar.allocation.width / 2)
+		center_y = y0 + (small_avatar.allocation.height / 2)
+		pos_x, pos_y = center_x - (avatar_w / 2), center_y - (avatar_h / 2) 
+		window.move(pos_x, pos_y)
 		# make the cursor invisible so we can see the image
 		invisible_cursor = gtkgui_helpers.get_invisible_cursor()
 		window.window.set_cursor(invisible_cursor)
@@ -195,8 +205,6 @@ class TabbedChatWindow(chat.Chat):
 		# we should hide the window
 		window.connect('leave_notify_event',
 			self.on_window_avatar_leave_notify_event)
-		
-		
 		window.connect('motion-notify-event',
 			self.on_window_motion_notify_event)
 
