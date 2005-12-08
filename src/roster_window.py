@@ -2366,7 +2366,9 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			jid2 = model[iter2][C_JID].decode('utf-8')
 		# We first compare by show if sort_by_show is True
 		if type1 == 'contact' and type2 == 'contact' and \
-				gajim.config.get('sort_by_show'):
+			gajim.config.get('sort_by_show'):
+			if account1 and account2: # We an have contact without account
+				# during a short time ... why?
 				luser1 = gajim.contacts[account1][jid1]
 				luser2 = gajim.contacts[account2][jid2]
 				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
@@ -2390,7 +2392,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			return -1
 		if name2.lower() < name1.lower():
 			return 1
-		if type1 == 'contact' and type2 == 'contact':
+		if type1 == 'contact' and type2 == 'contact' and account1 and account2:
 			# We compare account names
 			if account1.lower() < account2.lower():
 				return -1
