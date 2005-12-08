@@ -5,21 +5,20 @@
 # This file is distributed under the same license as the gajim package.
 # Automatically generated, 2004.
 # , 2005.
-#
-#
-#: ../src/gajim-remote.py:190
+# 
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-07 18:40+0100\n"
-"PO-Revision-Date: 2005-11-27 23:05+0100\n"
+"PO-Revision-Date: 2005-12-08 10:56+0100\n"
 "Last-Translator: Yann Le Boulanger <asterix@lagaule.org>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: ../gajim.desktop.in.h:1
 msgid "A GTK+ Jabber client"
@@ -62,7 +61,7 @@ msgstr "Discussion"
 
 #: ../src/chat.py:184 ../src/gtkgui.glade.h:146
 msgid "Group Chat"
-msgstr "Groupes de Discussion"
+msgstr "Salons de Discussion"
 
 #. if we have 2 or more accounts
 #: ../src/chat.py:198
@@ -240,7 +239,7 @@ msgstr "Serveur"
 #: ../src/roster_window.py:2428 ../src/roster_window.py:2436
 #: ../src/systray.py:238
 msgid "Transports"
-msgstr "Transports"
+msgstr "Passerelles"
 
 #: ../src/config.py:1907
 #, python-format
@@ -359,7 +358,7 @@ msgid ""
 "attention to this group chat"
 msgstr ""
 "Le texte sous cette règle correspond à ce qui a été dit depuis la dernière "
-"fois que vous avez consulté ce groupe de discussion"
+"fois que vous avez consulté ce salon de discussion"
 
 #: ../src/conversation_textview.py:235
 #, python-format
@@ -471,7 +470,6 @@ msgid "Contact already in roster"
 msgstr "Contact déjà dans la liste"
 
 #: ../src/dialogs.py:381
-#, fuzzy
 msgid "This contact is already listed in your roster."
 msgstr "Le contact est déjà dans votre liste."
 
@@ -499,17 +497,17 @@ msgstr "Requête d'inscription de la part de %s"
 #: ../src/dialogs.py:652
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
-"Vous ne pouvez joindre un groupe de discussion tant que vous n'êtes pas "
+"Vous ne pouvez joindre un salon de discussion tant que vous n'êtes pas "
 "connecté."
 
 #: ../src/dialogs.py:663
 #, python-format
 msgid "Join Group Chat with account %s"
-msgstr "Rejoindre un groupe de discussion en tant que %s"
+msgstr "Rejoindre un salon de discussion en tant que %s"
 
 #: ../src/dialogs.py:665 ../src/gtkgui.glade.h:177
 msgid "Join Group Chat"
-msgstr "Rejoindre un groupe de discussion"
+msgstr "Rejoindre un salon de discussion"
 
 #: ../src/dialogs.py:745
 #, python-format
@@ -669,7 +667,7 @@ msgstr "Autres"
 #. conference is a category for listing mostly groupchats in service discovery
 #: ../src/disco.py:117
 msgid "Conference"
-msgstr "Conférence"
+msgstr "Conférences"
 
 #: ../src/disco.py:416
 msgid "Without a connection, you can not browse available services"
@@ -867,9 +865,9 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #. where 'Kb' part is taken from %s.
 #. Only the 's' after / (which means second) should be translated.
 #: ../src/filetransfers_window.py:462
-#, fuzzy, python-format
+#, python-format
 msgid "(%(filesize_unit)s/s)"
-msgstr "(%(filesize_unit)d/s)"
+msgstr "(%(filesize_unit)s/s)"
 
 #: ../src/filetransfers_window.py:508 ../src/filetransfers_window.py:511
 msgid "Invalid File"
@@ -1273,7 +1271,7 @@ msgstr "Impossible de sauver vos informations de configuration"
 #. loop for ever
 #: ../src/gajim.py:1398
 msgid "Logs have been successfully migrated to the database."
-msgstr ""
+msgstr "L'historique a été corectement récupéré."
 
 #: ../src/gajim.py:1417
 msgid "Session Management support not available (missing gnome.ui module)"
@@ -1282,11 +1280,11 @@ msgstr ""
 
 #: ../src/gajim.py:1472
 msgid "Migrating Logs..."
-msgstr ""
+msgstr "Migration de l'historique..."
 
 #: ../src/gajim.py:1472
 msgid "Please wait while logs are being migrated..."
-msgstr ""
+msgstr "Merci de patienter pendant la migration de l'historique..."
 
 #: ../src/gajim_themes_window.py:57
 msgid "Theme"
@@ -1477,7 +1475,7 @@ msgstr ""
 #: ../src/groupchat_window.py:941
 #, python-format
 msgid "Usage: /%s, sets the groupchat window to compact mode."
-msgstr "Usage : /%s, passe la fenêtre de groupe de discussion en vue compacte."
+msgstr "Usage : /%s, passe la fenêtre de salon de discussion en vue compacte."
 
 #: ../src/groupchat_window.py:944
 #, python-format
@@ -1937,7 +1935,7 @@ msgstr "Cliquez pour insérer une frimousse Alt+E)"
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
 msgstr ""
 "Cliquez pour voir les fonctionnalités du serveur jabber (comme les "
-"transports MSN, ICQ)"
+"passerelles MSN, ICQ)"
 
 #: ../src/gtkgui.glade.h:90
 msgid "Click to see past conversation in this room"
@@ -2213,20 +2211,17 @@ msgstr ""
 "notification"
 
 #: ../src/gtkgui.glade.h:157
-#, fuzzy
 msgid "If checked, Gajim will display avatars of contacts in roster window"
 msgstr ""
-"Si cette case est cochée, Gajim affichera l'avatar, s'il est disponible, de "
+"Si cette case est cochée, Gajim affichera l'avatar de "
 "chaque contact dans la fenêtre principale"
 
 #: ../src/gtkgui.glade.h:158
-#, fuzzy
 msgid ""
 "If checked, Gajim will display status messages of contacts under the contact "
 "name in roster window"
 msgstr ""
-"Si cette case est cochée, Gajim affichera le message d'état, s'il n'est pas "
-"vide, sous le nom de chaque contact dans la fenêtre principale"
+"Si cette case est cochée, Gajim affichera le message d'état, sous le nom de chaque contact dans la fenêtre principale"
 
 #: ../src/gtkgui.glade.h:159
 msgid "If checked, Gajim will join this group chat on startup"
@@ -2336,7 +2331,7 @@ msgstr "Identifiant Jabber :"
 
 #: ../src/gtkgui.glade.h:178
 msgid "Join _Group Chat"
-msgstr "Rejoindre un _groupe de discussion"
+msgstr "Rejoindre un _salon de discussion"
 
 #: ../src/gtkgui.glade.h:179
 msgid "Location"
@@ -2489,7 +2484,7 @@ msgstr "Proxy :"
 
 #: ../src/gtkgui.glade.h:219
 msgid "Query Builder..."
-msgstr ""
+msgstr "Construire une Requête..."
 
 #: ../src/gtkgui.glade.h:220
 msgid "Recently:"
@@ -2556,7 +2551,7 @@ msgstr "Fonction :"
 
 #: ../src/gtkgui.glade.h:233
 msgid "Room Configuration"
-msgstr "Configuration du groupe de discussion"
+msgstr "Configuration du salon de discussion"
 
 #: ../src/gtkgui.glade.h:234
 msgid "Room:"
@@ -2807,7 +2802,7 @@ msgstr "Utiliser les _frimousses"
 
 #: ../src/gtkgui.glade.h:295
 msgid "Use _transports iconsets"
-msgstr "Utiliser les icônes des _transports"
+msgstr "Utiliser les icônes des pa_sserelles"
 
 #: ../src/gtkgui.glade.h:296
 msgid "Use a single chat window with _tabs"
@@ -2958,7 +2953,7 @@ msgstr "_Finir"
 
 #: ../src/gtkgui.glade.h:333
 msgid "_Group Chat"
-msgstr "_Groupe de discussion"
+msgstr "_Salons de discussion"
 
 #: ../src/gtkgui.glade.h:334
 msgid "_Help"
@@ -3002,9 +2997,8 @@ msgid "_Kick"
 msgstr "_Éjecter"
 
 #: ../src/gtkgui.glade.h:346
-#, fuzzy
 msgid "_Log conversation history"
-msgstr "Historique de Conversation"
+msgstr "_Historique de Conversation"
 
 #: ../src/gtkgui.glade.h:347
 msgid "_Log status changes of contacts"
@@ -3318,7 +3312,7 @@ msgstr "Vous êtes déjà dans le salon %s"
 #: ../src/roster_window.py:311 ../src/roster_window.py:1779
 msgid "You cannot join a room while you are invisible"
 msgstr ""
-"Vous ne pouvez pas joindre un groupe de discussion tant que vous êtes "
+"Vous ne pouvez pas joindre un salon de discussion tant que vous êtes "
 "invisible."
 
 #: ../src/roster_window.py:464
@@ -3357,15 +3351,15 @@ msgstr "%s est maintenant %s (%s)"
 #: ../src/roster_window.py:823
 #, python-format
 msgid "Transport \"%s\" will be removed"
-msgstr "Le transport \"%s\" sera enlevé"
+msgstr "La passerelle \"%s\" sera enlevée"
 
 #: ../src/roster_window.py:823
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
 "this transport."
 msgstr ""
-"Vous ne pourrez plus envoyer et recevoir de messages aux contacts de ce "
-"transport."
+"Vous ne pourrez plus envoyer et recevoir de messages aux contacts de cette "
+"passerelle."
 
 #: ../src/roster_window.py:873
 msgid "Assign OpenPGP Key"
@@ -3595,8 +3589,8 @@ msgstr[1] "Gajim - %d messages simples non-lus"
 #, python-format
 msgid "Gajim - %d unread group chat message"
 msgid_plural "Gajim - %d unread group chat messages"
-msgstr[0] "Gajim - %d message de groupe non-lu"
-msgstr[1] "Gajim - %d messages de groupe non-lus"
+msgstr[0] "Gajim - %d message de salon non-lu"
+msgstr[1] "Gajim - %d messages de salon non-lus"
 
 #: ../src/tooltips.py:279
 #, python-format
@@ -3704,9 +3698,8 @@ msgid "The filesize of image \"%s\" is too large"
 msgstr "Le taille du fichier de l'image \"%s\" est trop importante"
 
 #: ../src/vcard.py:206
-#, fuzzy
 msgid "The file must not be more than 32 kilobytes."
-msgstr "Le fichier ne doit pas excéder les 8 kilobytes."
+msgstr "Le fichier ne doit pas excéder les 32 kilobytes."
 
 #: ../src/vcard.py:272
 msgid "?Client:Unknown"
@@ -3800,7 +3793,7 @@ msgstr ""
 
 #: ../src/common/exceptions.py:40
 msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
+msgstr "Service indisponible : Gajim n'est pas lancé ou remote_control est False"
 
 #: ../src/common/exceptions.py:48
 msgid "D-Bus is not present on this machine or python module is missing"
@@ -3960,7 +3953,6 @@ msgstr ""
 "de chaque contact dans la fenêtre principale."
 
 #: ../src/common/config.py:161
-#, fuzzy
 msgid ""
 "If True, Gajim will ask for avatar each contact that did not have an avatar "
 "last time or has one cached that is too old."
@@ -4047,11 +4039,11 @@ msgstr ""
 #. sorted alphanum
 #: ../src/common/config.py:343 ../src/common/optparser.py:162
 msgid "green"
-msgstr "vert"
+msgstr "Vert"
 
 #: ../src/common/config.py:347 ../src/common/optparser.py:148
 msgid "grocery"
-msgstr "épicerie"
+msgstr "Ėpicerie"
 
 #: ../src/common/config.py:351
 msgid "human"
@@ -4059,11 +4051,11 @@ msgstr "Humain"
 
 #: ../src/common/config.py:355
 msgid "marine"
-msgstr "bleu marine"
+msgstr "Marine"
 
 #: ../src/common/config.py:359 ../src/common/optparser.py:148
 msgid "plain"
-msgstr "standard"
+msgstr "Standard"
 
 #. password required to join
 #. we are banned
@@ -4218,7 +4210,7 @@ msgstr ""
 #, python-format
 msgid "Registration information for transport %s has not arrived in time"
 msgstr ""
-"L'information d'enregistrement pour le transport %s n'est pas arrivée à temps"
+"L'information d'enregistrement pour la passerelle %s n'est pas arrivée à temps"
 
 #: ../src/common/connection.py:2350
 msgid "Timeout"
@@ -4439,68 +4431,4 @@ msgstr "erreur: impossible d'ouvrir %s en lecture"
 
 #: ../src/common/optparser.py:157 ../src/common/optparser.py:158
 msgid "cyan"
-msgstr "cyan"
-
-#~ msgid "<b>Changes in latest version</b>"
-#~ msgstr "<b>Changements dans la dernière version</b>"
-
-#~ msgid "Check for new _version on Gajim startup"
-#~ msgstr "_Vérifier l'existence d'une nouvelle version au démarrage"
-
-#~ msgid "Log history"
-#~ msgstr "Historique"
-
-#~ msgid "New version of Gajim available"
-#~ msgstr "Une nouvelle version de Gajim est disponible"
-
-#~ msgid "Open Download Page"
-#~ msgstr "Ouvrir la page de téléchargement"
-
-#~ msgid ""
-#~ "It is the first time you run Gajim since the way logs are stored has "
-#~ "changed. Gajim can migrate your logs at this state. Migrate?"
-#~ msgstr ""
-#~ "C'est la première fois que vous lancez Gajim depuis que la gestion "
-#~ "del'historique a changé. Gajim peut récupérer votre ancien historique."
-#~ "Effectuer la migration ?"
-
-#~ msgid "(%s/s)"
-#~ msgstr "(%s/s)"
-
-#~ msgid "Dbus is not supported."
-#~ msgstr "Dbus n'est pas supporté."
-
-#~ msgid "Service not available"
-#~ msgstr "Service non disponible"
-
-#~ msgid "Session bus is not available."
-#~ msgstr "Le bus de session n'est pas disponible."
-
-#, fuzzy
-#~ msgid "with account %s"
-#~ msgstr "pour le compte %s"
-
-#, fuzzy
-#~ msgid "with account "
-#~ msgstr "compte : "
-
-#~ msgid "New Message as %s"
-#~ msgstr "Nouveau message en tant que %s"
-
-#~ msgid "Chat with"
-#~ msgstr "Discuter avec"
-
-#~ msgid "E-Mail"
-#~ msgstr "Courriel"
-
-#~ msgid "Send New Message"
-#~ msgstr "Envoyer un nouveau message"
-
-#~ msgid "as %s"
-#~ msgstr "en tant que %s"
-
-#~ msgid "as "
-#~ msgstr "avec "
-
-#~ msgid "Send _New Message"
-#~ msgstr "Envoyer un _nouveau message"
+msgstr "Cyan"
