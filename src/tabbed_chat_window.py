@@ -1,4 +1,3 @@
-## -*- Mode: python; tab-width: 4; indent-tabs-mode: t; coding: utf-8; -*-
 ##	tabbed_chat_window.py
 ##
 ## Gajim Team:
