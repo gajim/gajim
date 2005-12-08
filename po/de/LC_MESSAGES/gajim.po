@@ -9,13 +9,13 @@ msgstr ""
 "Project-Id-Version: gajim 0.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-07 18:40+0100\n"
-"PO-Revision-Date: 2005-11-26 19:17+0100\n"
+"PO-Revision-Date: 2005-12-08 09:38+0100\n"
 "Last-Translator: Fridtjof Busse <fridtjof@fbunet.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);"
 
 #: ../gajim.desktop.in.h:1
 msgid "A GTK+ Jabber client"
@@ -469,9 +469,8 @@ msgid "Contact already in roster"
 msgstr "Kontakt bereits im Roster"
 
 #: ../src/dialogs.py:381
-#, fuzzy
 msgid "This contact is already listed in your roster."
-msgstr "Der Kontakt ist bereit in Ihrem Roster."
+msgstr "Der Kontakt befindet sich bereit in Ihrem Roster."
 
 #: ../src/dialogs.py:443
 msgid "A GTK+ jabber client"
@@ -497,21 +496,20 @@ msgid "You can not join a group chat unless you are connected."
 msgstr "Sie können einem Chatraum erst beitreten, wenn Sie verbunden sind."
 
 #: ../src/dialogs.py:663
-#, fuzzy, python-format
+#, python-format
 msgid "Join Group Chat with account %s"
-msgstr "Betrete Chatraum als %s"
+msgstr "Betrete Chatraum mit Account %s"
 
 #: ../src/dialogs.py:665 ../src/gtkgui.glade.h:177
 msgid "Join Group Chat"
 msgstr "Betrete Chatraum"
 
 #: ../src/dialogs.py:745
-#, fuzzy, python-format
+#, python-format
 msgid "Start Chat with account %s"
-msgstr "für Konto %s"
+msgstr "Starte Chat mit Account %s"
 
 #: ../src/dialogs.py:747
-#, fuzzy
 msgid "Start Chat"
 msgstr "Chat starten"
 
@@ -609,9 +607,9 @@ msgid "To %s"
 msgstr "An %s"
 
 #: ../src/dialogs.py:1068
-#, fuzzy, python-format
+#, python-format
 msgid "Single Message with account %s"
-msgstr "Einzelne Nachricht als %s"
+msgstr "Einzelne Nachricht mit Account %s"
 
 #: ../src/dialogs.py:1070
 msgid "Single Message"
@@ -864,7 +862,7 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #: ../src/filetransfers_window.py:462
 #, python-format
 msgid "(%(filesize_unit)s/s)"
-msgstr ""
+msgstr "(%(filesize_unit)s/s)"
 
 #: ../src/filetransfers_window.py:508 ../src/filetransfers_window.py:511
 msgid "Invalid File"
@@ -896,9 +894,8 @@ msgid "_Continue"
 msgstr "_Fortsetzen"
 
 #: ../src/gajim-remote.py:76
-#, fuzzy
 msgid "shows a help on specific command"
-msgstr "zeige Hilfe für einen bestimmten Befehl"
+msgstr "zeige die Hilfe für einen bestimmten Befehl"
 
 #. User gets help for the command, specified by this parameter
 #: ../src/gajim-remote.py:79
@@ -914,16 +911,15 @@ msgid "Shows or hides the roster window"
 msgstr "Ein- oder Ausblenden des Hauptfensters"
 
 #: ../src/gajim-remote.py:88
-#, fuzzy
 msgid "Popups a window with the next unread message"
-msgstr "Zeige Fenster mit der nächsten ungelesenen Nachricht"
+msgstr "Zeige Popup-Fenster mit der nächsten ungelesenen Nachricht"
 
 #: ../src/gajim-remote.py:92
-#, fuzzy
 msgid ""
 "Prints a list of all contacts in the roster. Each contact appear on a "
 "separate line"
-msgstr "Gibt eine Liste aller Kontakte aus. Eine Zeile je Kontakt"
+msgstr ""
+"Gibt eine Liste aller Kontakte im Roster aus. Eine Zeile je Kontakt"
 
 #: ../src/gajim-remote.py:94 ../src/gajim-remote.py:107
 #: ../src/gajim-remote.py:117 ../src/gajim-remote.py:130
@@ -937,14 +933,12 @@ msgid "show only contacts of the given account"
 msgstr "zeige nur Kontakte für das gegebene Konto"
 
 #: ../src/gajim-remote.py:99
-#, fuzzy
 msgid "Prints a list of registered accounts"
-msgstr "Gibt Liste registrierter Konten aus"
+msgstr "Gibt eine Liste registrierter Konten aus"
 
 #: ../src/gajim-remote.py:103
-#, fuzzy
 msgid "Changes the status of account or accounts"
-msgstr "Ändere Status eines oder mehrerer Konten"
+msgstr "Ändere den Status eines oder mehrerer Konten"
 
 #: ../src/gajim-remote.py:105
 msgid "status"
@@ -972,10 +966,8 @@ msgstr ""
 "aktiviert ist"
 
 #: ../src/gajim-remote.py:113
-#, fuzzy
 msgid "Shows the chat dialog so that you can send messages to a contact"
-msgstr ""
-"Zeige Chatfenster, so dass eine Nachricht an einen Kontakt gesendet werden "
+msgstr "Zeige Chatfenster, so dass eine Nachricht an einen Kontakt gesendet werden "
 "kann"
 
 #: ../src/gajim-remote.py:115
@@ -987,15 +979,14 @@ msgid "if specified, contact is taken from the contact list of this account"
 msgstr "falls angegeben, wird der Kontakt von der Liste dieses Kontos gewählt"
 
 #: ../src/gajim-remote.py:122
-#, fuzzy
 msgid ""
 "Sends new message to a contact in the roster. Both OpenPGP key and account "
 "are optional. If you want to set only 'account', without 'OpenPGP key', just "
 "set 'OpenPGP key' to ''."
 msgstr ""
-"Sende neue Nachricht zu einem Kontakt. OpenPGP-Schlüssel und Konto sind "
-"optional. Falls nur Konto gesetzt werden soll, muss 'pgp key' zu '' gesetzt "
-"werden."
+"Sende neue Nachricht zu einem Kontakt im Roster. OpenPGP-Schlüssel und Konto sind "
+"optional. Falls nur 'Konto' gesetzt werden soll, ohne OpenGPG-Schlüssel, setzen Sie "
+"'OpenGPG-Schlüssel' einfach auf ''."
 
 #: ../src/gajim-remote.py:126
 msgid "JID of the contact that will receive the message"
@@ -1018,9 +1009,8 @@ msgid "if specified, the message will be sent using this account"
 msgstr "falls angegeben, wird die Nachricht über dieses Konto gesendet"
 
 #: ../src/gajim-remote.py:135
-#, fuzzy
 msgid "Gets detailed info on a contact"
-msgstr "Zeige Informationen über Kontakt"
+msgstr "Zeige detaillierte Informationen über Kontakt"
 
 #: ../src/gajim-remote.py:137 ../src/gajim-remote.py:144
 #: ../src/gajim-remote.py:174
@@ -1028,9 +1018,8 @@ msgid "JID of the contact"
 msgstr "JID des Kontakts"
 
 #: ../src/gajim-remote.py:141
-#, fuzzy
 msgid "Sends file to a contact"
-msgstr "Dem Kontakt eine Datei senden"
+msgstr "Sendet dem Kontakt eine Datei"
 
 #: ../src/gajim-remote.py:143
 msgid "file"
@@ -1045,12 +1034,10 @@ msgid "if specified, file will be sent using this account"
 msgstr "Falls angegeben, wird die Nachricht über dieses Konto gesendet"
 
 #: ../src/gajim-remote.py:150
-#, fuzzy
 msgid "Lists all preferences and their values"
 msgstr "Zeige alle Einstellung und ihre Werte"
 
 #: ../src/gajim-remote.py:154
-#, fuzzy
 msgid "Sets value of 'key' to 'value'."
 msgstr "Setze Wert von 'Schlüssel' auf 'Wert'."
 
@@ -1065,7 +1052,6 @@ msgstr ""
 "Wert"
 
 #: ../src/gajim-remote.py:161
-#, fuzzy
 msgid "Deletes a preference item"
 msgstr "Lösche eine Einstellung"
 
@@ -1078,28 +1064,24 @@ msgid "name of the preference to be deleted"
 msgstr "Name der zu löschenden Einstellung"
 
 #: ../src/gajim-remote.py:167
-#, fuzzy
 msgid "Writes the current state of Gajim preferences to the .config file"
 msgstr "Schreibe die aktuellen Gajim-Einstellung in die Konfigurationsdatei"
 
 #: ../src/gajim-remote.py:172
-#, fuzzy
 msgid "Removes contact from roster"
-msgstr "Von Kontaktliste entfernen"
+msgstr "Entfernt den Kontakt aus dem Roster"
 
 #: ../src/gajim-remote.py:181
-#, fuzzy
 msgid "Adds contact to roster"
-msgstr "Zur Kontaktliste hinzufügen"
+msgstr "Fügt Kontakt zum Roster hinzu"
 
 #: ../src/gajim-remote.py:183
-#, fuzzy
 msgid "Adds new contact to this account."
-msgstr "Füge neuen Kontakt zu diesem Konto hinzu"
+msgstr "Fügt neuen Kontakt zu diesem Konto hinzu"
 
 #: ../src/gajim-remote.py:188
 msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
+msgstr "Gibt derzeitigen Status zurück·(der globale, außer, es wird ein Account spezifiziert)"
 
 #: ../src/gajim-remote.py:211
 msgid "Missing argument \"contact_jid\""
@@ -1164,24 +1146,20 @@ msgid "Gajim needs Xserver to run. Quiting..."
 msgstr "Gajim benötigt einen laufenden Xserver. Breche ab..."
 
 #: ../src/gajim.py:43
-#, fuzzy
 msgid "Gajim needs PyGTK 2.6 or above"
-msgstr "Gajim benötigt PyGTK 2.6+. Breche ab..."
+msgstr "Gajim benötigt PyGTK 2.6 oder höher"
 
 #: ../src/gajim.py:44
-#, fuzzy
 msgid "Gajim needs PyGTK 2.6 or above to run. Quiting..."
-msgstr "Gajim benötigt PyGTK 2.6+. Breche ab..."
+msgstr "Gajim benötigt PyGTK 2.6 oder höher. Beende..."
 
 #: ../src/gajim.py:46
-#, fuzzy
 msgid "Gajim needs GTK 2.6 or above"
-msgstr "Gajim benötigt TGK 2.6+. Breche ab..."
+msgstr "Gajim benötigt GTK 2.6 oder höher"
 
 #: ../src/gajim.py:47
-#, fuzzy
 msgid "Gajim needs GTK 2.6 or above to run. Quiting..."
-msgstr "Gajim benötigt TGK 2.6+. Breche ab..."
+msgstr "Gajim benötigt GTK 2.6+. Breche ab..."
 
 #: ../src/gajim.py:52
 msgid "GTK+ runtime is missing libglade support"
@@ -1202,9 +1180,8 @@ msgstr ""
 "Unterstützung besitzen."
 
 #: ../src/gajim.py:61
-#, fuzzy
 msgid "Gajim needs PySQLite2 to run"
-msgstr "Gajim benötigt PyGTK 2.6+. Breche ab..."
+msgstr "Gajim benötigt PySQLite2 zum Starten"
 
 #. ('HTTP_AUTH', account, (method, url, transaction_id, iq_obj))
 #: ../src/gajim.py:207
@@ -1290,7 +1267,7 @@ msgstr "Konnte Einstellungen nicht speichern"
 #. loop for ever
 #: ../src/gajim.py:1398
 msgid "Logs have been successfully migrated to the database."
-msgstr ""
+msgstr "Logs wurden erfolgreich in die Datenbank migriert."
 
 #: ../src/gajim.py:1417
 msgid "Session Management support not available (missing gnome.ui module)"
@@ -1299,11 +1276,11 @@ msgstr ""
 
 #: ../src/gajim.py:1472
 msgid "Migrating Logs..."
-msgstr ""
+msgstr "Migriere Logs..."
 
 #: ../src/gajim.py:1472
 msgid "Please wait while logs are being migrated..."
-msgstr ""
+msgstr "Bitte warten Sie, während die Logs migriert werden..."
 
 #: ../src/gajim_themes_window.py:57
 msgid "Theme"
@@ -1347,9 +1324,8 @@ msgstr ""
 "geschlossen."
 
 #: ../src/groupchat_window.py:159
-#, fuzzy
 msgid "Do _not ask me again"
-msgstr "Nicht noch einmal fragen"
+msgstr "_Nicht noch einmal fragen"
 
 #: ../src/groupchat_window.py:297 ../src/groupchat_window.py:527
 msgid "This room has no subject"
@@ -1640,9 +1616,8 @@ msgid "<b>Description</b>"
 msgstr "<b>Beschreibung</b>"
 
 #: ../src/gtkgui.glade.h:10
-#, fuzzy
 msgid "<b>Format of a line</b>"
-msgstr "<b>Format einer Chat-Zeile</b>"
+msgstr "<b>Format einer Zeile</b>"
 
 #: ../src/gtkgui.glade.h:11
 msgid "<b>Interface Customization</b>"
@@ -1665,7 +1640,6 @@ msgid "<b>Personal Information</b>"
 msgstr "<b>Persönliche Informationen</b>"
 
 #: ../src/gtkgui.glade.h:16
-#, fuzzy
 msgid "<b>Please choose one of the options below:</b>"
 msgstr "<b>Bitte wählen Sie eine der Optionen:</b>"
 
@@ -1796,7 +1770,7 @@ msgstr "Sende _Betriebssystem-Information"
 
 #: ../src/gtkgui.glade.h:50
 msgid "Allow him/her to see my status"
-msgstr ""
+msgstr "Erlaube ihm/ihr meinen Status zu sehen"
 
 #: ../src/gtkgui.glade.h:51
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
@@ -1814,7 +1788,7 @@ msgstr "Erfrage Status-Nachricht beim: "
 
 #: ../src/gtkgui.glade.h:54
 msgid "Ask to see his/her status"
-msgstr ""
+msgstr "Darum bitten, seinen/ihren Status zu sehen"
 
 #: ../src/gtkgui.glade.h:55
 msgid "Ask:"
@@ -1878,7 +1852,7 @@ msgstr "Fett"
 
 #: ../src/gtkgui.glade.h:71
 msgid "Build custom query"
-msgstr ""
+msgstr "Personalisierte Anfrage bauen"
 
 #: ../src/gtkgui.glade.h:72
 msgid "C_onnect on Gajim startup"
@@ -2119,7 +2093,7 @@ msgstr "Schriftart:"
 
 #: ../src/gtkgui.glade.h:129
 msgid "Forbid him/her to see my status"
-msgstr ""
+msgstr "Verbiete ihm/ihr meinen Status zu sehen"
 
 #: ../src/gtkgui.glade.h:130
 msgid "Format: YYYY-MM-DD"
@@ -2238,18 +2212,16 @@ msgid "If checked, Gajim will also have a trayicon"
 msgstr "Wenn gewählt wird Gajim ein Tray-Symbol verwenden"
 
 #: ../src/gtkgui.glade.h:157
-#, fuzzy
 msgid "If checked, Gajim will display avatars of contacts in roster window"
-msgstr "Wenn aktiviert, wird Gajim einen Avatar einblenden"
+msgstr "Wenn aktiviert, wird Gajim einen Avatar im Roster-Fenster einblenden"
 
 #: ../src/gtkgui.glade.h:158
-#, fuzzy
 msgid ""
 "If checked, Gajim will display status messages of contacts under the contact "
 "name in roster window"
 msgstr ""
-"Wenn aktiviert wird Gajim für jeden Kontakt im Roster eine Statusnachricht, "
-"falls nicht leer, unter dem jeweiligen Kontaktnamen anzeigen"
+"Wenn aktiviert wird Gajim für jeden Kontakt im Roster eine Statusnachricht unter "
+"dem jeweiligen Kontaktnamen anzeigen"
 
 #: ../src/gtkgui.glade.h:159
 msgid "If checked, Gajim will join this group chat on startup"
@@ -2512,7 +2484,7 @@ msgstr "Proxy:"
 
 #: ../src/gtkgui.glade.h:219
 msgid "Query Builder..."
-msgstr ""
+msgstr "Anfrage-Baukasten..."
 
 #: ../src/gtkgui.glade.h:220
 msgid "Recently:"
@@ -2704,9 +2676,8 @@ msgid "Sort contacts by status"
 msgstr "Kontakte nach Status sortieren"
 
 #: ../src/gtkgui.glade.h:264
-#, fuzzy
 msgid "Sta_tus"
-msgstr "Status"
+msgstr "Sta_tus"
 
 #: ../src/gtkgui.glade.h:265
 msgid "Start _Chat"
@@ -3024,14 +2995,12 @@ msgid "_Kick"
 msgstr "_Rausschmeißen"
 
 #: ../src/gtkgui.glade.h:346
-#, fuzzy
 msgid "_Log conversation history"
-msgstr "Unterhaltungs-Verlauf"
+msgstr "Unterhaltungs-Ver_lauf"
 
 #: ../src/gtkgui.glade.h:347
-#, fuzzy
 msgid "_Log status changes of contacts"
-msgstr "Zeige die Statusnachricht von Kontakten im Roster"
+msgstr "_Logge die Statusveränderungen von Kontakten"
 
 #: ../src/gtkgui.glade.h:348
 msgid "_Mail client:"
@@ -3123,7 +3092,7 @@ msgstr "_Einstellungen"
 
 #: ../src/gtkgui.glade.h:371
 msgid "_Presence"
-msgstr "_Präsenz"
+msgstr "_Anwesenheit"
 
 #: ../src/gtkgui.glade.h:372
 msgid "_Publish"
@@ -3155,7 +3124,7 @@ msgstr "Ab_rufen"
 
 #: ../src/gtkgui.glade.h:379
 msgid "_Search"
-msgstr ""
+msgstr "_Suche"
 
 #. Make sure the character after "_" is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)
 #: ../src/gtkgui.glade.h:381
@@ -3250,14 +3219,12 @@ msgstr ""
 "funktionieren"
 
 #: ../src/history_window.py:83
-#, fuzzy
 msgid "Date"
-msgstr "Staat:"
+msgstr "Datum"
 
 #: ../src/history_window.py:91
-#, fuzzy
 msgid "Message"
-msgstr "_Nachricht"
+msgstr "Nachricht"
 
 #: ../src/history_window.py:100 ../src/history_window.py:102
 #, python-format
@@ -3270,9 +3237,9 @@ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s ist jezt %(status)s: %(status_msg)s"
 
 #: ../src/history_window.py:270
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s is now %(status)s"
-msgstr "%(nick)s ist jetzt %(status)s\n"
+msgstr "%(nick)s ist jetzt %(status)s"
 
 #: ../src/history_window.py:276
 #, python-format
@@ -3280,9 +3247,9 @@ msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Status ist jetzt: %(status)s: %(status_msg)s"
 
 #: ../src/history_window.py:279
-#, fuzzy, python-format
+#, python-format
 msgid "Status is now: %(status)s"
-msgstr "Status ist jetzt: %(status)s\n"
+msgstr "Status ist jetzt: %(status)s"
 
 #: ../src/notify.py:102
 #, python-format
@@ -3364,9 +3331,9 @@ msgid "using %s account"
 msgstr "mit %s Konto"
 
 #: ../src/roster_window.py:520
-#, fuzzy, python-format
+#, python-format
 msgid "using account %s"
-msgstr "mit %s Konto"
+msgstr "mit Konto %s"
 
 #: ../src/roster_window.py:531
 #, python-format
@@ -3438,14 +3405,13 @@ msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Wenn d\"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
 
 #: ../src/roster_window.py:1251
-#, fuzzy
 msgid "Authorization has been removed"
-msgstr "Autorisierung wurde erneut gesendet"
+msgstr "Autorisierung wurde entfernt"
 
 #: ../src/roster_window.py:1252
-#, fuzzy, python-format
+#, python-format
 msgid "Now \"%s\" will always see you as offline."
-msgstr "Sie werden den Kontakt ab sofort als offline sehen."
+msgstr "\"%s\" wird Sie nun immer als offline sehen."
 
 #: ../src/roster_window.py:1396
 #, python-format
@@ -3534,9 +3500,8 @@ msgstr "Ändere _Statusnachricht..."
 #. for chat_with
 #. for new_message
 #: ../src/systray.py:177 ../src/systray.py:182
-#, fuzzy
 msgid "using account "
-msgstr "mit %s Konto"
+msgstr "mit Konto"
 
 #: ../src/systray.py:203
 msgid "Hide this menu"
@@ -3730,9 +3695,8 @@ msgid "The filesize of image \"%s\" is too large"
 msgstr "Die Dateigröße des Bildes \"%s\" ist zu groß"
 
 #: ../src/vcard.py:206
-#, fuzzy
 msgid "The file must not be more than 32 kilobytes."
-msgstr "Die Datei darf nicht größer als 8 Kilobytes sein."
+msgstr "Die Datei darf nicht größer als 32 Kilobytes sein."
 
 #: ../src/vcard.py:272
 msgid "?Client:Unknown"
@@ -3747,16 +3711,20 @@ msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in his/her presence"
 msgstr ""
+"Dieser Kontakt ist an Ihren Anwesenheitsinformationen interessiert, aber Sie sind"
+"nicht an seiner/ihrer Anwesenheit interessiert"
 
 #: ../src/vcard.py:288
 msgid ""
 "You are interested in the contact's presence information, but he/she is not "
 "interested in yours"
 msgstr ""
+"Sie sind an den Anwesenheitsinformationen des Kontakts interessiert, aber er/sie"
+"ist nicht an ihren interessiert"
 
 #: ../src/vcard.py:290
 msgid "You and the contact are interested in each other's presence information"
-msgstr ""
+msgstr "Sie und der Kontakt sind an den Anwesenheitsinformationen des anderen interessiert"
 
 #. None
 #: ../src/vcard.py:292
@@ -3764,10 +3732,12 @@ msgid ""
 "You are not interested in the contact's presence, and neither he/she is "
 "interested in yours"
 msgstr ""
+"Sie sind nicht an der Anwesenheit des Kontakts interessiert, und er/sie ist"
+"nicht interessiert an ihrer"
 
 #: ../src/vcard.py:301
 msgid "You are waiting contact's answer about your subscription request"
-msgstr ""
+msgstr "Sie warten auf die Antwort des Kontaktes auf ihre Abonnement-Anfrage"
 
 #: ../src/vcard.py:310 ../src/vcard.py:329
 msgid " resource with priority "
@@ -3815,15 +3785,17 @@ msgid ""
 "pysqlite3, if you want to migrate your logs to the new database, please "
 "read: http://trac.gajim.org/wiki/MigrateLogToDot9DB Exiting..."
 msgstr ""
+"pysqlite2 (auch bekannt als python-pysqlite2) Abhängigkeit fehlt. Nachdem Sie pysqlite2"
+"installiert haben, wenn Sie Ihre Logs in die neue Datenbank migrieren möchte, lesen Sie"
+"bitte: http://trac.gajim.org/wiki/MigrateLogToDot9DB Beende..."
 
 #: ../src/common/exceptions.py:40
 msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
+msgstr "Dienst nicht verfügbar: Gajim ist nicht aktiv oder remote_control ist deaktiviert"
 
 #: ../src/common/exceptions.py:48
-#, fuzzy
 msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "D-Bus auf diesem Computer nicht vorhanden"
+msgstr "D-Bus auf diesem Computer nicht vorhanden oder das Python-Modul fehlt"
 
 #: ../src/common/exceptions.py:56
 msgid "Session bus is not available"
@@ -3978,13 +3950,12 @@ msgstr ""
 "nicht leer, unter dem jeweiligen Kontaktnamen im Roster anzeigen"
 
 #: ../src/common/config.py:161
-#, fuzzy
 msgid ""
 "If True, Gajim will ask for avatar each contact that did not have an avatar "
 "last time or has one cached that is too old."
 msgstr ""
 "Falls aktiviert fragt Gajim nach einem Avatar für jeden Kontakt, der beim "
-"letzten Malkeinen hatte oder einen veralteten hat."
+"letzten Mal keinen hatte oder einen veralteten hat."
 
 #: ../src/common/config.py:162
 msgid ""
@@ -4165,6 +4136,8 @@ msgid ""
 "Jid %s is not RFC compliant. It will not be added to your roster. Use roster "
 "management tools such as http://jru.jabberstudio.org/ to remove it"
 msgstr ""
+"Jid % ist nicht RfC-konform. Sie wird nicht zu ihrem Roster hinzugefügt. Verwenden"
+"Sie ein Roster-Managmenttool wie http://jru.jabberstudio.org/ um ihn zu entfernen."
 
 #: ../src/common/connection.py:1642 ../src/common/connection.py:1715
 #: ../src/common/connection.py:2045
@@ -4454,7 +4427,7 @@ msgstr "Fehler: %s kann nicht zum Lesen geöffnet werden"
 
 #: ../src/common/optparser.py:157 ../src/common/optparser.py:158
 msgid "cyan"
-msgstr ""
+msgstr "cyan"
 
 #~ msgid "<b>Changes in latest version</b>"
 #~ msgstr "<b>Änderungen in der neuesten Version</b>"
