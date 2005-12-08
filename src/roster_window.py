@@ -2357,15 +2357,16 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				return 1
 			if name2 == _('not in the roster'):
 				return -1
+		account1 = model[iter1][C_ACCOUNT]
+		account2 = model[iter2][C_ACCOUNT]
+		if account1 and account2:
+			account1 = account1.decode('utf-8')
+			account2 = account2.decode('utf-8')
+			jid1 = model[iter1][C_JID].decode('utf-8')
+			jid2 = model[iter2][C_JID].decode('utf-8')
+		# We first compare by show if sort_by_show is True
 		if type1 == 'contact' and type2 == 'contact' and \
 				gajim.config.get('sort_by_show'):
-			account1 = model[iter1][C_ACCOUNT]
-			account2 = model[iter2][C_ACCOUNT]
-			if account1 and account2:
-				account1 = account1.decode('utf-8')
-				account2 = account2.decode('utf-8')
-				jid1 = model[iter1][C_JID].decode('utf-8')
-				jid2 = model[iter2][C_JID].decode('utf-8')
 				luser1 = gajim.contacts[account1][jid1]
 				luser2 = gajim.contacts[account2][jid2]
 				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
@@ -2384,10 +2385,22 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 					return -1
 				elif show1 > show2:
 					return 1
+		# We compare names
 		if name1.lower() < name2.lower():
 			return -1
 		if name2.lower() < name1.lower():
 			return 1
+		if type1 == 'contact' and type2 == 'contact':
+			# We compare account names
+			if account1.lower() < account2.lower():
+				return -1
+			if account2.lower() < account1.lower():
+				return 1
+			# We compare jids
+			if jid1.lower() < jid2.lower():
+				return -1
+			if jid2.lower() < jid1.lower():
+				return 1
 		return 0
 
 	def drag_data_get_data(self, treeview, context, selection, target_id, etime):
