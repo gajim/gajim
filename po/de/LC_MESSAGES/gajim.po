@@ -1832,7 +1832,7 @@ msgstr "Kontakt automatisch autorisieren"
 
 #: ../src/gtkgui.glade.h:66
 msgid "Autoreconnect when connection is lost"
-msgstr "Automatisch neu verbinden wenn die Verbindung abbricht"
+msgstr "Automatisch neu verbinden, wenn die Verbindung abbricht"
 
 #: ../src/gtkgui.glade.h:67
 msgid "Before nickname:"
@@ -2015,7 +2015,7 @@ msgstr "Abteilung:"
 
 #: ../src/gtkgui.glade.h:108
 msgid "Display avatars of contacts in roster"
-msgstr "Zeige Avater von Kontakten im Roster"
+msgstr "Zeige Avatar von Kontakten im Roster"
 
 #: ../src/gtkgui.glade.h:109
 msgid "Display status messages of contacts in roster"
@@ -2209,7 +2209,7 @@ msgstr "Ich würde Dich gerne zu meiner Kontaktliste hinzufügen."
 
 #: ../src/gtkgui.glade.h:156
 msgid "If checked, Gajim will also have a trayicon"
-msgstr "Wenn gewählt wird Gajim ein Tray-Symbol verwenden"
+msgstr "Wenn gewählt, wird Gajim ein Tray-Symbol verwenden"
 
 #: ../src/gtkgui.glade.h:157
 msgid "If checked, Gajim will display avatars of contacts in roster window"
@@ -2225,7 +2225,7 @@ msgstr ""
 
 #: ../src/gtkgui.glade.h:159
 msgid "If checked, Gajim will join this group chat on startup"
-msgstr "Wenn gewählt tritt Gajim dem Chatraum beim Programmstart bei"
+msgstr "Wenn gewählt, tritt Gajim dem Chatraum beim Programmstart bei"
 
 #: ../src/gtkgui.glade.h:160
 msgid "If checked, Gajim will remember the password for this account"
@@ -2244,7 +2244,7 @@ msgid ""
 "If checked, Gajim will replace ascii smilies like ':)' with equivalent "
 "graphical emoticons"
 msgstr ""
-"Wenn gewählt wird Gajim ASCII-Smilies wie ':)' mit äquivalenten graphischen "
+"Wenn gewählt, wird Gajim ASCII-Smilies wie ':)' mit äquivalenten graphischen "
 "Emoticons ersetzen"
 
 #: ../src/gtkgui.glade.h:163
@@ -2252,7 +2252,7 @@ msgid ""
 "If checked, Gajim will send keep-alive packets so it prevents connection "
 "timeout which results in disconnection"
 msgstr ""
-"Wenn aktiviert, sendet Gajim regelmäßig keep-alive-Pakete um den "
+"Wenn aktiviert, sendet Gajim regelmäßig keep-alive-Pakete, um den "
 "Verbindungsabbruch aufgrund einer Zeitüberschreitung zu verhindern"
 
 #: ../src/gtkgui.glade.h:164
