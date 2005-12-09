@@ -3,6 +3,7 @@
 ## Contributors for this file:
 ## - Yann Le Boulanger <asterix@lagaule.org>
 ## - Nikos Kouremenos <kourem@gmail.com>
+## - Vincent Hanquez <tab@snarc.org>
 ##
 ##	Copyright (C) 2003-2005 Gajim Team
 ##
