@@ -443,12 +443,16 @@ class AboutDialog:
 		dlg.set_website('http://www.gajim.org')
 
 		authors = [
+			'Current Developers:',
 			'Yann Le Boulanger <asterix@lagaule.org>',
 			'Nikos Kouremenos <kourem@gmail.com>',
 			'Dimitur Kirov <dkirov@gmail.com>',
 			'Travis Shirk <travis@pobox.com>',
-			'Gajim patchers'
+			'',
+			'Read AUTHORS file for full list including past developers',
+			'Read THANKS file for contributors',
 		]
+		#FIXME: make See authors setence and Current devs sentence translatable
 		
 		dlg.set_authors(authors)
 		
@@ -456,7 +460,7 @@ class AboutDialog:
 			dlg.props.wrap_license = True
 
 		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(
-			gajim.DATA_DIR, 'pixmaps/gajim_about.png'))			
+			gajim.DATA_DIR, 'pixmaps', 'gajim_about.png'))			
 
 		dlg.set_logo(pixbuf)
 		#here you write your name in the form Name FamilyName <someone@somewhere>

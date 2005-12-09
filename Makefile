@@ -50,7 +50,7 @@ dist:
 	rm -rf gajim-$(VERSION)
 	mkdir gajim-$(VERSION)
 	cp -r data src po gajim-$(VERSION)/
-	cp AUTHORS gajim.1 gajim-remote.1 gajim.desktop.in COPYING Makefile Changelog README launch.sh gajim-$(VERSION)
+	cp AUTHORS gajim.1 gajim-remote.1 gajim.desktop.in COPYING THANKS Makefile Changelog README launch.sh gajim-$(VERSION)
 	mkdir gajim-$(VERSION)/scripts
 	for s in $(SCRIPTS) ; do \
 		cp $$s gajim-$(VERSION)/scripts/; \
@@ -89,6 +89,7 @@ install:
 		cp "./po/$$f" "$(DESTDIR)$(PREFIX)/share/locale/$$DST/"; \
 	done
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
+	cp THANKS "$(DESTDIR)$(PREFIX)/share/gajim/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
 	cp data/pixmaps/gajim.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 	cp data/pixmaps/gajim_about.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
