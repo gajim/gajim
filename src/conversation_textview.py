@@ -1,6 +1,6 @@
 ##	conversation_textview.py
 ##
-## Gajim Team:
+## Contributors for this file:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##

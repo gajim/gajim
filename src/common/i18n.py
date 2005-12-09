@@ -1,6 +1,6 @@
 ##	common/i18n.py
 ## -*- coding: utf-8 -*-
-## Gajim Team:
+## Contributors for this file:
 ##  - Yann Le Boulanger <asterix@lagaule.org>
 ##  - Nikos Kouremenos <kourem@gmail.com>
 ##

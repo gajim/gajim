@@ -1,6 +1,6 @@
 ##	common/config.py
 ##
-## Gajim Team:
+## Contributors for this file:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
