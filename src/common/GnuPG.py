@@ -4,7 +4,14 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##
-##	Copyright (C) 2003-2005 Gajim Team
+## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
+##                         Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
+##                    Vincent Hanquez <tab@snarc.org>
+##                    Nikos Kouremenos <nkour@jabber.org>
+##                    Dimitur Kirov <dkirov@gmail.com>
+##                    Travis Shirk <travis@pobox.com>
+##                    Norman Rasmussen <norman@rasmussen.co.za>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published

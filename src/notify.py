@@ -6,7 +6,14 @@
 ## - Dimitur Kirov <dkirov@gmail.com>
 ## - Andrew Sayman <lorien420@myrealbox.com>
 ##
-##	Copyright (C) 2003-2005 Gajim Team
+## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
+##                         Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
+##                    Vincent Hanquez <tab@snarc.org>
+##                    Nikos Kouremenos <nkour@jabber.org>
+##                    Dimitur Kirov <dkirov@gmail.com>
+##                    Travis Shirk <travis@pobox.com>
+##                    Norman Rasmussen <norman@rasmussen.co.za>
 ##
 ## DBUS/libnotify connection code:
 ## Copyright (C) 2005 by Sebastian Estienne
