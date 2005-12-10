@@ -1493,7 +1493,7 @@ class Connection:
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))
 		elif realm == '':
 			if event == common.xmpp.transports.DATA_RECEIVED:
-				self.dispatch('STANZA_ARRIVED', unicode(data))
+				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
 			elif event == common.xmpp.transports.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
 
