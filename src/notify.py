@@ -110,9 +110,10 @@ class DesktopNotification:
 		else:
 			actor = jid
 
-		# failsafe values
+		# defaul failsafe values
 		img = 'chat_msg_recv.png' # img to display
 		ntype = 'im'     # Notification Type
+		
 		txt = actor # default value of txt
 
 		if event_type == _('Contact Signed In'):
