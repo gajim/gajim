@@ -4,7 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Dimitur Kirov <dkirov@gmail.com>
-## - Andrew Sayman <lorien420@myrealbox.com>
+##	- Andrew Sayman <lorien420@myrealbox.com>
 ##
 ## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
