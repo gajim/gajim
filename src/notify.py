@@ -124,16 +124,20 @@ class DesktopNotification:
 			ntype = 'presence.offline'
 		elif event_type in (_('New Message'), _('New Single Message'),
 			_('New Private Message')):
-			img = 'chat.png' # FIXME: better img and split events
 			ntype = 'im.received'
 			if event_type == _('New Private Message'):
 				room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 				room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
 				txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
 					% {'nickname': nick, 'room_name': room_name}
+				img = 'priv_msg_recv.png'
 			else:
 				#we talk about a name here
 				txt = _('%s has sent you a new message.') % actor
+				if event_type == _('New Message'):
+					img = 'chat_msg_recv.png'
+				else: # New Single Message
+					img = 'single_msg_recv.png'
 		elif event_type == _('File Transfer Request'):
 			img = 'requested.png' # FIXME: better img
 			ntype = 'transfer'
