@@ -178,7 +178,8 @@ class RosterWindow:
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, [self.jabber_state_images['closed'],
-					g, 'group', g, account, False, None])
+					gtkgui_helpers.escape_for_pango_markup(g), 'group', g, account,
+					False, None])
 			if not gajim.groups[account].has_key(g): #It can probably never append
 				if account + g in self.collapsed_rows:
 					ishidden = False
