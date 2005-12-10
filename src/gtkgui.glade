@@ -14254,7 +14254,6 @@ Please wait...</property>
 
       <child>
 	<widget class="GtkHButtonBox" id="hbuttonbox19">
-	  <property name="border_width">2</property>
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 	  <property name="spacing">12</property>
