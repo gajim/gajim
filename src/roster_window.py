@@ -861,7 +861,7 @@ class RosterWindow:
 			#Remove resource indicator (Name (2))
 			contacts = gajim.contacts[account][jid]
 			name = contacts[0].name
-			model[iter][C_NAME] = name
+			model[iter][C_NAME] = gtkgui_helpers.escape_for_pango_markup(name)
 
 		model[iter][C_EDITABLE] = True # set 'editable' to True
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
@@ -2114,7 +2114,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				gajim.connections[account].update_contact(jid, new_text, u.groups)
 			self.draw_contact(jid, account)
 		elif type == 'group':
-			old_name = model[iter][C_NAME].decode('utf-8')
+			# in C_JID cilumn it's not escaped
+			old_name = model[iter][C_JID].decode('utf-8')
 			#  Groups maynot change name from or to 'not in the roster'
 			if _('not in the roster') in (new_text, old_name):
 				return
