@@ -473,8 +473,8 @@ class AboutDialog:
 		#here you write your name in the form Name FamilyName <someone@somewhere>
 		dlg.set_translator_credits(_('translator-credits'))
 		
-		artists = ['Dennis Craven', 'Membris Khan', 'Guillaume Morin',
-			'Christophe Got']
+		artists = ['Christophe Got', 'Dennis Craven', 'Guillaume Morin',
+			'Membris Khan']
 		dlg.set_artists(artists)
 
 		rep = dlg.run()
