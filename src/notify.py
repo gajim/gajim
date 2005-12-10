@@ -28,152 +28,36 @@
 ## GNU General Public License for more details.
 ##
 
-HAS_DBUS = True
-
-try:
-	import dbus
-except ImportError:
-	HAS_DBUS = False
-
 import os
 import sys
 import gajim
 import dialogs
+import gobject
 
 from common import gajim
+from common import exceptions
 from common import i18n
 i18n.init()
 _ = i18n._
 
-
-def dbus_get_interface():
-	try:
-		interface = 'org.freedesktop.Notifications'
-		path = '/org/freedesktop/Notifications'
-		bus = dbus.SessionBus()
-		obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
-		dbus_iface = dbus.Interface(obj, 'org.freedesktop.DBus')
-		running_services = dbus_iface.ListNames()
-		started = True
-		if interface not in running_services:
-			# try to start the service (notif-daemon)
-			if dbus_iface.StartServiceByName(interface, dbus.UInt32(0)) == 1:
-				started = True
-			else:
-				started = False
-		if not started:
-			return None
-		obj = bus.get_object(interface, path)
-		return dbus.Interface(obj, interface)
-	except Exception, e:
-		return None
-	except dbus.DBusException, e:
-		# This exception could give useful info about why notification breaks
-		print >> sys.stderr, e
-		return None
-
-def dbus_available():
-	if not HAS_DBUS:
-		return False
-	if dbus_get_interface() is None:
-		return False
-	else:
-		return True
-		
-def dbus_notify(event_type, jid, account, msg_type = '', file_props = None):
-	if jid in gajim.contacts[account]:
-		actor = gajim.get_first_contact_instance_from_jid(account, jid).name
-	else:
-		actor = jid
-	
-	# default value of txt
-	txt = actor
-
-	img = 'chat.png' # img to display
-	ntype = 'im'     # Notification Type
-
-	if event_type == _('Contact Signed In'):
-		img = 'online.png'
-		ntype = 'presence.online'
-	elif event_type == _('Contact Signed Out'):
-		img = 'offline.png'
-		ntype = 'presence.offline'
-	elif event_type in (_('New Message'), _('New Single Message'),
-		_('New Private Message')):
-		img = 'chat.png' # FIXME: better img and split events
-		ntype = 'im.received'
-		if event_type == _('New Private Message'):
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-			room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
-			txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
-				% {'nickname': nick, 'room_name': room_name}
-		else:
-			#we talk about a name here
-			txt = _('%s has sent you a new message.') % actor
-	elif event_type == _('File Transfer Request'):
-		img = 'requested.png' # FIXME: better img
-		ntype = 'transfer'
-		#we talk about a name here
-		txt = _('%s wants to send you a file.') % actor
-	elif event_type == _('File Transfer Error'):
-		img = 'error.png' # FIXME: better img
-		ntype = 'transfer.error'
-	elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
-		img = 'closed.png' # # FIXME: better img and split events
-		ntype = 'transfer.complete'
-		if file_props is not None:
-			if file_props['type'] == 'r':
-				# get the name of the sender, as it is in the roster
-				sender = unicode(file_props['sender']).split('/')[0]
-				name = gajim.get_first_contact_instance_from_jid( 
-					account, sender).name
-				filename = os.path.basename(file_props['file-name'])
-				if event_type == _('File Transfer Completed'):
-					txt = _('You successfully received %(filename)s from %(name)s.')\
-						% {'filename': filename, 'name': name}
-				else: # ft stopped
-					txt = _('File transfer of %(filename)s from %(name)s stopped.')\
-						% {'filename': filename, 'name': name}
-			else:
-				receiver = file_props['receiver']
-				if hasattr(receiver, 'jid'):
-					receiver = receiver.jid
-				receiver = receiver.split('/')[0]
-				# get the name of the contact, as it is in the roster
-				name = gajim.get_first_contact_instance_from_jid( 
-					account, receiver).name
-				filename = os.path.basename(file_props['file-name'])
-				if event_type == _('File Transfer Completed'):
-					txt = _('You successfully sent %(filename)s to %(name)s.')\
-						% {'filename': filename, 'name': name}
-				else: # ft stopped
-					txt = _('File transfer of %(filename)s to %(name)s stopped.')\
-						% {'filename': filename, 'name': name}
-		else:
-			txt = ''
-
-	iconset = gajim.config.get('iconset')
-	if not iconset:
-		iconset = 'sun'
-	# FIXME: use 32x32 or 48x48 someday
-	path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', img)
-	path = os.path.abspath(path)
-	notif = dbus_get_interface()
-	if notif is None:
-		raise dbus.DBusException()
-	notif.Notify(dbus.String(_('Gajim')), 
-		dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
-		dbus.String(event_type), dbus.String(txt),
-		[dbus.String(path)], [''], [''], True, dbus.UInt32(5))
+import dbus_support
+if dbus_support.supported:
+	import dbus
+	if dbus_support.version >= (0, 41, 0):
+		import dbus.glib
+		import dbus.service
 
 def notify(event_type, jid, account, msg_type = '', file_props = None):
-	if dbus_available() and gajim.config.get('use_notif_daemon'):
+	'''Notifies a user of an event. It first tries to a valid implementation of
+	the Desktop Notification Specification. If that fails, then we fall back to
+	the older style PopupNotificationWindow method.'''
+	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
-			dbus_notify(event_type, jid, account, msg_type, file_props)
+			DesktopNotification(event_type, jid, account, msg_type, file_props)
 			return
 		except dbus.DBusException, e:
 			# Connection to DBus failed, try popup
-			pass
+			print >> sys.stderr, e
 		except TypeError, e:
 			# This means that we sent the message incorrectly
 			print >> sys.stderr, e
@@ -181,4 +65,177 @@ def notify(event_type, jid, account, msg_type = '', file_props = None):
 		msg_type, file_props)
 	gajim.interface.roster.popup_notification_windows.append(instance)
 
+class NotificationResponseManager:
+	'''Collects references to pending DesktopNotifications and manages there
+	signalling. This is necessary due to a bug in DBus where you can't remove
+	a signal from an interface once it's connected.'''
+	def __init__(self):
+		self.pending = {}
+		self.interface = None
 
+	def attach_to_interface(self):
+		if self.interface is not None:
+			return
+		self.interface = dbus_support.get_notifications_interface()
+		self.interface.connect_to_signal('ActionInvoked', self.on_action_invoked)
+		self.interface.connect_to_signal('NotificationClosed', self.on_closed)
+	
+	def on_action_invoked(self, id, reason):
+		if self.pending.has_key(id):
+			notification = self.pending[id]
+			notification.on_action_invoked(id, reason)
+			del self.pending[id]
+		else:
+			# This happens in the case of a race condition where the user clicks
+			# on a popup before the program finishes registering this callback
+			gobject.timeout_add(1000, self.on_action_invoked, id, reason)
+
+	def on_closed(self, id, reason):
+		if self.pending.has_key(id):
+			del self.pending[id]
+	
+notification_response_manager = NotificationResponseManager()
+
+class DesktopNotification:
+	'''A DesktopNotification that interfaces with DBus via the Desktop
+	Notification specification'''
+	def __init__(self, event_type, jid, account, msg_type = '', file_props = None):
+		self.account = account
+		self.jid = jid
+		self.msg_type = msg_type
+		self.file_props = file_props
+
+		if jid in gajim.contacts[account]:
+			actor = gajim.get_first_contact_instance_from_jid(account, jid).name
+		else:
+			actor = jid
+		
+		# default value of txt
+		txt = actor
+
+		img = 'chat.png' # img to display
+		ntype = 'im'     # Notification Type
+
+		if event_type == _('Contact Signed In'):
+			img = 'online.png'
+			ntype = 'presence.online'
+		elif event_type == _('Contact Signed Out'):
+			img = 'offline.png'
+			ntype = 'presence.offline'
+		elif event_type in (_('New Message'), _('New Single Message'),
+			_('New Private Message')):
+			img = 'chat.png' # FIXME: better img and split events
+			ntype = 'im.received'
+			if event_type == _('New Private Message'):
+				room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+				room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
+				txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
+					% {'nickname': nick, 'room_name': room_name}
+			else:
+				#we talk about a name here
+				txt = _('%s has sent you a new message.') % actor
+		elif event_type == _('File Transfer Request'):
+			img = 'requested.png' # FIXME: better img
+			ntype = 'transfer'
+			#we talk about a name here
+			txt = _('%s wants to send you a file.') % actor
+		elif event_type == _('File Transfer Error'):
+			img = 'error.png' # FIXME: better img
+			ntype = 'transfer.error'
+		elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
+			img = 'closed.png' # # FIXME: better img and split events
+			ntype = 'transfer.complete'
+			if file_props is not None:
+				if file_props['type'] == 'r':
+					# get the name of the sender, as it is in the roster
+					sender = unicode(file_props['sender']).split('/')[0]
+					name = gajim.get_first_contact_instance_from_jid( 
+						account, sender).name
+					filename = os.path.basename(file_props['file-name'])
+					if event_type == _('File Transfer Completed'):
+						txt = _('You successfully received %(filename)s from %(name)s.')\
+							% {'filename': filename, 'name': name}
+					else: # ft stopped
+						txt = _('File transfer of %(filename)s from %(name)s stopped.')\
+							% {'filename': filename, 'name': name}
+				else:
+					receiver = file_props['receiver']
+					if hasattr(receiver, 'jid'):
+						receiver = receiver.jid
+					receiver = receiver.split('/')[0]
+					# get the name of the contact, as it is in the roster
+					name = gajim.get_first_contact_instance_from_jid( 
+						account, receiver).name
+					filename = os.path.basename(file_props['file-name'])
+					if event_type == _('File Transfer Completed'):
+						txt = _('You successfully sent %(filename)s to %(name)s.')\
+							% {'filename': filename, 'name': name}
+					else: # ft stopped
+						txt = _('File transfer of %(filename)s to %(name)s stopped.')\
+							% {'filename': filename, 'name': name}
+			else:
+				txt = ''
+
+		iconset = gajim.config.get('iconset')
+		if not iconset:
+			iconset = 'sun'
+		# FIXME: use 32x32 or 48x48 someday
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', img)
+		path = os.path.abspath(path)
+		self.notif = dbus_support.get_notifications_interface()
+		if self.notif is None:
+			raise dbus.DBusException()
+		self.id = self.notif.Notify(dbus.String(_('Gajim')), 
+			dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
+			dbus.String(event_type), dbus.String(txt),
+			[dbus.String(path)], {'default':0}, [''], True, dbus.UInt32(5))
+		notification_response_manager.attach_to_interface()
+		notification_response_manager.pending[self.id] = self
+		
+	def on_action_invoked(self, id, reason):
+		if self.notif is None:
+			return
+		self.notif.CloseNotification(dbus.UInt32(id))
+		self.notif = None
+		# use Contact class, new_chat expects it that way
+		# is it in the roster?
+		if gajim.contacts[self.account].has_key(self.jid):
+			contact = gajim.get_contact_instance_with_highest_priority(
+				self.account, self.jid)
+		else:
+			from gajim import Contact
+			keyID = ''
+			attached_keys = gajim.config.get_per('accounts', self.account,
+				'attached_gpg_keys').split()
+			if self.jid in attached_keys:
+				keyID = attached_keys[attached_keys.index(jid) + 1]
+			if self.msg_type.find('file') != 0:
+				if self.msg_type == 'pm':
+					room_jid, nick = self.jid.split('/', 1)
+					show = gajim.gc_contacts[self.account][room_jid][nick].show
+					contact = Contact(jid = self.jid, name = nick, groups = ['none'],
+						show = show, sub = 'none')
+				else:
+					contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
+						groups = [_('not in the roster')], show = 'not in the roster',
+						status = _('not in the roster'), sub = 'none', keyID = keyID)
+					gajim.contacts[self.account][self.jid] = [contact]
+					gajim.interface.roster.add_contact_to_roster(contact.jid,
+						self.account)
+
+		if self.msg_type == 'pm': # It's a private message
+			gajim.interface.roster.new_chat(contact, self.account)
+			chats_window = gajim.interface.instances[self.account]['chats'][self.jid]
+			chats_window.set_active_tab(self.jid)
+			chats_window.window.present()
+		elif self.msg_type in ('normal', 'file-request', 'file-request-error',
+			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
+			# Get the first single message event
+			ev = gajim.get_first_event(self.account, self.jid, self.msg_type)
+			gajim.interface.roster.open_event(self.account, self.jid, ev)
+
+		else: # 'chat'
+			gajim.interface.roster.new_chat(contact, self.account)
+			chats_window = gajim.interface.instances[self.account]['chats'][self.jid]
+			chats_window.set_active_tab(self.jid)
+			chats_window.window.present()

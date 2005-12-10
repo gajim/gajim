@@ -4,6 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Dimitur Kirov <dkirov@gmail.com>
+## - Andrew Sayman <lorien420@myrealbox.com>
 ##
 ## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
@@ -38,20 +39,17 @@ from common import i18n
 from dialogs import AddNewContactWindow
 _ = i18n._
 
-try:
+import dbus_support
+if dbus_support.supported:
 	import dbus
-	_version = getattr(dbus, 'version', (0, 20, 0))
-except ImportError:
-	_version = (0, 0, 0)
-	
-if _version >= (0, 41, 0):
-	import dbus.service
-	import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
-	DbusPrototype = dbus.service.Object
-elif _version >= (0, 20, 0):
-	DbusPrototype = dbus.Object
-else: #dbus is not defined
-	DbusPrototype = str 
+	if dbus_support.version >= (0, 41, 0):
+		import dbus.service
+		import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
+		DbusPrototype = dbus.service.Object
+	elif dbus_support.version >= (0, 20, 0):
+		DbusPrototype = dbus.Object
+	else: #dbus is not defined
+		DbusPrototype = str 
 
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
@@ -63,23 +61,12 @@ STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 class Remote:
 	def __init__(self):
 		self.signal_object = None
-		if 'dbus' not in globals() and not os.name == 'nt':
-			print _('D-Bus python bindings are missing in this computer')
-			print _('D-Bus capabilities of Gajim cannot be used')
-			raise exceptions.DbusNotSupported
-		# dbus 0.23 leads to segfault with threads_init()
-		if sys.version[:4] >= '2.4' and _version[1] < 30:
-			raise exceptions.DbusNotSupported
-			
-		try:
-			session_bus = dbus.SessionBus()
-		except:
-			raise exceptions.SessionBusNotPresent
+		session_bus = dbus_support.session_bus.SessionBus()
 		
-		if _version[1] >= 41:
+		if dbus_support.version[1] >= 41:
 			service = dbus.service.BusName(SERVICE, bus=session_bus)
 			self.signal_object = SignalObject(service)
-		elif _version[1] <= 40 and _version[1] >= 20:
+		elif dbus_support.version[1] <= 40 and dbus_support.version[1] >= 20:
 			service=dbus.Service(SERVICE, session_bus)
 			self.signal_object = SignalObject(service)
 
@@ -97,9 +84,9 @@ class SignalObject(DbusPrototype):
 		self.vcard_account = None
 
 		# register our dbus API
-		if _version[1] >= 41:
+		if dbus_support.version[1] >= 41:
 			DbusPrototype.__init__(self, service, OBJ_PATH)
-		elif _version[1] >= 30:
+		elif dbus_support.version[1] >= 30:
 			DbusPrototype.__init__(self, OBJ_PATH, service)
 		else:
 			DbusPrototype.__init__(self, OBJ_PATH, service, 
@@ -123,7 +110,7 @@ class SignalObject(DbusPrototype):
 
 	def raise_signal(self, signal, arg):
 		''' raise a signal, with a single string message '''
-		if _version[1] >= 30:
+		if dbus_support.version[1] >= 30:
 			from dbus import dbus_bindings
 			message = dbus_bindings.Signal(OBJ_PATH, INTERFACE, signal)
 			i = message.get_iter(True)
@@ -437,7 +424,7 @@ class SignalObject(DbusPrototype):
 
 	def _get_real_arguments(self, args, desired_length):
 		# supresses the first 'message' argument, which is set in dbus 0.23
-		if _version[1] == 20:
+		if dbus_support.version[1] == 20:
 			args=args[1:]
 		if desired_length > 0:
 			args = list(args)
@@ -473,14 +460,14 @@ class SignalObject(DbusPrototype):
 		return repr(contact_dict)
 	
 	
-	if _version[1] >= 30 and _version[1] <= 40:
+	if dbus_support.version[1] >= 30 and dbus_support.version[1] <= 40:
 		method = dbus.method
 		signal = dbus.signal
-	elif _version[1] >= 41:
+	elif dbus_support.version[1] >= 41:
 		method = dbus.service.method
 		signal = dbus.service.signal
 
-	if _version[1] >= 30:
+	if dbus_support.version[1] >= 30:
 		# prevent using decorators, because they are not supported 
 		# on python < 2.4
 		# FIXME: use decorators when python2.3 (and dbus 0.23) is OOOOOOLD
