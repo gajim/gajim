@@ -109,18 +109,12 @@ class DesktopNotification:
 			actor = gajim.get_first_contact_instance_from_jid(account, jid).name
 		else:
 			actor = jid
-		
-		# default value of txt
-		txt = actor
-
-		img = 'chat.png' # img to display
-		ntype = 'im'     # Notification Type
 
 		if event_type == _('Contact Signed In'):
-			img = 'online.png'
+			img = 'contact_online.png'
 			ntype = 'presence.online'
 		elif event_type == _('Contact Signed Out'):
-			img = 'offline.png'
+			img = 'contact_offline.png'
 			ntype = 'presence.offline'
 		elif event_type in (_('New Message'), _('New Single Message'),
 			_('New Private Message')):
@@ -182,18 +176,14 @@ class DesktopNotification:
 						img = 'ft_stopped.png'
 			else:
 				txt = ''
+		else: # failsafe values
+			img = 'chat_msg_recv.png' # img to display
+			ntype = 'im'     # Notification Type
+			txt = actor # default value of txt
 
 		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img)
 		path = os.path.abspath(path)
 		
-		if not os.path.exists(path): # we may use img from iconset
-			iconset = gajim.config.get('iconset')
-			iconset = gajim.config.get('iconset')
-			if not iconset:
-				iconset = 'sun'
-			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', img)
-			path = os.path.abspath(path)
-			
 		self.notif = dbus_support.get_notifications_interface()
 		if self.notif is None:
 			raise dbus.DBusException()
