@@ -1339,7 +1339,7 @@ class Interface:
 			try:
 				import remote_control
 				self.remote_ctrl = remote_control.Remote()
-			except (exceptions.DbusNotSupported, exceptions.SessionBusNotPresent):
+			except:
 				self.remote_ctrl = None
 		else:
 			self.remote_ctrl = None
