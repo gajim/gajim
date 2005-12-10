@@ -79,7 +79,7 @@ class NotificationResponseManager:
 		self.interface = dbus_support.get_notifications_interface()
 		self.interface.connect_to_signal('ActionInvoked', self.on_action_invoked)
 		self.interface.connect_to_signal('NotificationClosed', self.on_closed)
-	
+
 	def on_action_invoked(self, id, reason):
 		if self.pending.has_key(id):
 			notification = self.pending[id]
@@ -93,7 +93,7 @@ class NotificationResponseManager:
 	def on_closed(self, id, reason):
 		if self.pending.has_key(id):
 			del self.pending[id]
-	
+
 notification_response_manager = NotificationResponseManager()
 
 class DesktopNotification:
@@ -109,6 +109,11 @@ class DesktopNotification:
 			actor = gajim.get_first_contact_instance_from_jid(account, jid).name
 		else:
 			actor = jid
+
+		# failsafe values
+		img = 'chat_msg_recv.png' # img to display
+		ntype = 'im'     # Notification Type
+		txt = actor # default value of txt
 
 		if event_type == _('Contact Signed In'):
 			img = 'contact_online.png'
@@ -146,7 +151,7 @@ class DesktopNotification:
 				if file_props['type'] == 'r':
 					# get the name of the sender, as it is in the roster
 					sender = unicode(file_props['sender']).split('/')[0]
-					name = gajim.get_first_contact_instance_from_jid( 
+					name = gajim.get_first_contact_instance_from_jid(
 						account, sender).name
 					filename = os.path.basename(file_props['file-name'])
 					if event_type == _('File Transfer Completed'):
@@ -163,7 +168,7 @@ class DesktopNotification:
 						receiver = receiver.jid
 					receiver = receiver.split('/')[0]
 					# get the name of the contact, as it is in the roster
-					name = gajim.get_first_contact_instance_from_jid( 
+					name = gajim.get_first_contact_instance_from_jid(
 						account, receiver).name
 					filename = os.path.basename(file_props['file-name'])
 					if event_type == _('File Transfer Completed'):
@@ -176,24 +181,20 @@ class DesktopNotification:
 						img = 'ft_stopped.png'
 			else:
 				txt = ''
-		else: # failsafe values
-			img = 'chat_msg_recv.png' # img to display
-			ntype = 'im'     # Notification Type
-			txt = actor # default value of txt
 
 		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img)
 		path = os.path.abspath(path)
-		
+
 		self.notif = dbus_support.get_notifications_interface()
 		if self.notif is None:
 			raise dbus.DBusException()
-		self.id = self.notif.Notify(dbus.String(_('Gajim')), 
+		self.id = self.notif.Notify(dbus.String(_('Gajim')),
 			dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
 			dbus.String(event_type), dbus.String(txt),
 			[dbus.String(path)], {'default':0}, [''], True, dbus.UInt32(5))
 		notification_response_manager.attach_to_interface()
 		notification_response_manager.pending[self.id] = self
-		
+
 	def on_action_invoked(self, id, reason):
 		if self.notif is None:
 			return
