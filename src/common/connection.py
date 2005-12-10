@@ -1726,7 +1726,6 @@ class Connection:
 		if hasattr(con, 'Resource'):
 			self.server_resource = con.Resource
 		if auth:
-			con.initRoster()
 			self.last_io = time.time()
 			self.connected = 2
 			return con # return connection
@@ -1822,6 +1821,8 @@ class Connection:
 	def connect_and_init(self, show, msg, signed):
 		self.continue_connect_info = [show, msg, signed]
 		self.connection = self.connect_and_auth()
+		if self.connection:
+			self.connection.initRoster()
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		if sync:
@@ -2333,7 +2334,7 @@ class Connection:
 			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 			iq = common.xmpp.Iq(typ = 'set', to = hostname)
 			q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
-			self.to_be_sent.append(iq)
+			self.connection.send(iq)
 
 	def send_invite(self, room, to, reason=''):
 		'''sends invitation'''
