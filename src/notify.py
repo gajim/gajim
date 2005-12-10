@@ -140,10 +140,9 @@ class DesktopNotification:
 			#we talk about a name here
 			txt = _('%s wants to send you a file.') % actor
 		elif event_type == _('File Transfer Error'):
-			img = 'error.png' # FIXME: better img
+			img = 'ft_stopped.png'
 			ntype = 'transfer.error'
 		elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
-			img = 'closed.png' # # FIXME: better img and split events
 			ntype = 'transfer.complete'
 			if file_props is not None:
 				if file_props['type'] == 'r':
@@ -155,9 +154,11 @@ class DesktopNotification:
 					if event_type == _('File Transfer Completed'):
 						txt = _('You successfully received %(filename)s from %(name)s.')\
 							% {'filename': filename, 'name': name}
+						img = 'ft_done.png'
 					else: # ft stopped
 						txt = _('File transfer of %(filename)s from %(name)s stopped.')\
 							% {'filename': filename, 'name': name}
+						img = 'ft_stopped.png'
 				else:
 					receiver = file_props['receiver']
 					if hasattr(receiver, 'jid'):
@@ -170,18 +171,25 @@ class DesktopNotification:
 					if event_type == _('File Transfer Completed'):
 						txt = _('You successfully sent %(filename)s to %(name)s.')\
 							% {'filename': filename, 'name': name}
+						img = 'ft_done.png'
 					else: # ft stopped
 						txt = _('File transfer of %(filename)s to %(name)s stopped.')\
 							% {'filename': filename, 'name': name}
+						img = 'ft_stopped.png'
 			else:
 				txt = ''
 
-		iconset = gajim.config.get('iconset')
-		if not iconset:
-			iconset = 'sun'
-		# FIXME: use 32x32 or 48x48 someday
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', img)
+		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img)
 		path = os.path.abspath(path)
+		
+		if not os.path.exists(path): # we may use img from iconset
+			iconset = gajim.config.get('iconset')
+			iconset = gajim.config.get('iconset')
+			if not iconset:
+				iconset = 'sun'
+			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', img)
+			path = os.path.abspath(path)
+			
 		self.notif = dbus_support.get_notifications_interface()
 		if self.notif is None:
 			raise dbus.DBusException()
