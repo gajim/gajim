@@ -4,12 +4,12 @@ Index: Makefile
 +++ Makefile	(working copy)
 @@ -88,7 +88,6 @@
  		DST=`dirname "$$f"`; \
- 		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
+ 		cp "./po/$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
  	done
 -	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
+	cp THANKS "$(DESTDIR)$(PREFIX)/share/gajim/";
  	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
  	cp data/pixmaps/gajim.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
- 	cp data/pixmaps/gajim_about.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 Index: src/dialogs.py
 ===================================================================
 --- src/dialogs.py	(revision 4702)
