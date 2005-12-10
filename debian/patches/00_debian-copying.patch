@@ -1,8 +1,8 @@
 Index: Makefile
 ===================================================================
---- Makefile	(revision 2269)
+--- Makefile	(revision 4702)
 +++ Makefile	(working copy)
-@@ -64,7 +64,6 @@
+@@ -88,7 +88,6 @@
  		DST=`dirname "$$f"`; \
  		cp "$$f" "$(DESTDIR)$(PREFIX)/share/gajim/$$DST/"; \
  	done
@@ -12,9 +12,9 @@ Index: Makefile
  	cp data/pixmaps/gajim_about.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 Index: src/dialogs.py
 ===================================================================
---- src/dialogs.py	(revision 2272)
+--- src/dialogs.py	(revision 4702)
 +++ src/dialogs.py	(working copy)
-@@ -391,7 +391,7 @@
+@@ -443,7 +443,7 @@
  		dlg.set_version(gajim.version)
  		s = u'Copyright \xa9 2003-2005 Gajim Team'
  		dlg.set_copyright(s)

@@ -335,7 +335,7 @@
 +"                                                                "}
 --- Makefile
 +++ Makefile
-@@ -69,7 +69,7 @@
+@@ -91,7 +91,7 @@
  	done
  	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
  	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
