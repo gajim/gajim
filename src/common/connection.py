@@ -2335,6 +2335,8 @@ class Connection:
 			iq = common.xmpp.Iq(typ = 'set', to = hostname)
 			q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
 			self.connection.send(iq)
+			return True
+		return False
 
 	def send_invite(self, room, to, reason=''):
 		'''sends invitation'''

@@ -2187,7 +2187,10 @@ class RemoveAccountWindow:
 					# We don't remove account cause we canceled pw window
 					return
 				gajim.connections[self.account].password = passphrase
-			gajim.connections[self.account].unregister_account()
+			if not gajim.connections[self.account].unregister_account():
+				# unregistration failed, we don't remove the account
+				# Error message is send by connect_and_auth()
+				return
 		# Close all opened windows
 		gajim.interface.roster.close_all(gajim.interface.instances[self.account])
 		del gajim.connections[self.account]
