@@ -33,6 +33,8 @@ if os.path.isdir('../po'):
 else:
 	DIR = '../../locale'
 
+# set '' so each part of the locale that should be modified is set
+# according to the environment variables
 locale.setlocale(locale.LC_ALL, '')
 _translation = None
 
