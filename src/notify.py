@@ -139,7 +139,7 @@ class DesktopNotification:
 				else: # New Single Message
 					img = 'single_msg_recv.png'
 		elif event_type == _('File Transfer Request'):
-			img = 'requested.png' # FIXME: better img
+			img = 'ft_request.png'
 			ntype = 'transfer'
 			#we talk about a name here
 			txt = _('%s wants to send you a file.') % actor
