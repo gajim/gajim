@@ -70,7 +70,7 @@ class SessionBus:
 		if self.session_bus is None:
 			try:
 				self.session_bus = dbus.SessionBus()
-			except dbus.DBusException:
+			except dbus.dbus_bindings.DBusException:
 				self.session_bus = None
 				return False
 			if self.session_bus is None:
@@ -106,7 +106,7 @@ def get_interface(interface, path):
 	except Exception, e:
 		print >> sys.stderr, e
 		return None
-	except dbus.DBusException, e:
+	except dbus.dbus_bindings.DBusException, e:
 		# This exception could give useful info about why notification breaks
 		print >> sys.stderr, e
 		return None

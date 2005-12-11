@@ -55,7 +55,7 @@ def notify(event_type, jid, account, msg_type = '', file_props = None):
 		try:
 			DesktopNotification(event_type, jid, account, msg_type, file_props)
 			return
-		except dbus.DBusException, e:
+		except dbus.dbus_bindings.DBusException, e:
 			# Connection to DBus failed, try popup
 			print >> sys.stderr, e
 		except TypeError, e:
@@ -188,7 +188,7 @@ class DesktopNotification:
 
 		self.notif = dbus_support.get_notifications_interface()
 		if self.notif is None:
-			raise dbus.DBusException()
+			raise dbus.dbus_bindings.DBusException()
 		self.id = self.notif.Notify(dbus.String(_('Gajim')),
 			dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
 			dbus.String(event_type), dbus.String(txt),
