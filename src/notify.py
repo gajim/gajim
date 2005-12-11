@@ -201,45 +201,4 @@ class DesktopNotification:
 			return
 		self.notif.CloseNotification(dbus.UInt32(id))
 		self.notif = None
-		# use Contact class, new_chat expects it that way
-		# is it in the roster?
-		if gajim.contacts[self.account].has_key(self.jid):
-			contact = gajim.get_contact_instance_with_highest_priority(
-				self.account, self.jid)
-		else:
-			from gajim import Contact
-			keyID = ''
-			attached_keys = gajim.config.get_per('accounts', self.account,
-				'attached_gpg_keys').split()
-			if self.jid in attached_keys:
-				keyID = attached_keys[attached_keys.index(jid) + 1]
-			if self.msg_type.find('file') != 0:
-				if self.msg_type == 'pm':
-					room_jid, nick = self.jid.split('/', 1)
-					show = gajim.gc_contacts[self.account][room_jid][nick].show
-					contact = Contact(jid = self.jid, name = nick, groups = ['none'],
-						show = show, sub = 'none')
-				else:
-					contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
-						groups = [_('not in the roster')], show = 'not in the roster',
-						status = _('not in the roster'), sub = 'none', keyID = keyID)
-					gajim.contacts[self.account][self.jid] = [contact]
-					gajim.interface.roster.add_contact_to_roster(contact.jid,
-						self.account)
-
-		if self.msg_type == 'pm': # It's a private message
-			gajim.interface.roster.new_chat(contact, self.account)
-			chats_window = gajim.interface.instances[self.account]['chats'][self.jid]
-			chats_window.set_active_tab(self.jid)
-			chats_window.window.present()
-		elif self.msg_type in ('normal', 'file-request', 'file-request-error',
-			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
-			# Get the first single message event
-			ev = gajim.get_first_event(self.account, self.jid, self.msg_type)
-			gajim.interface.roster.open_event(self.account, self.jid, ev)
-
-		else: # 'chat'
-			gajim.interface.roster.new_chat(contact, self.account)
-			chats_window = gajim.interface.instances[self.account]['chats'][self.jid]
-			chats_window.set_active_tab(self.jid)
-			chats_window.window.present()
+		gajim.interface.handle_event(self.account, self.jid, self.msg_type)
