@@ -293,43 +293,7 @@ class Systray:
 		account = self.jids[0][0]
 		jid = self.jids[0][1]
 		typ = self.jids[0][2]
-		self.handle_event(account, jid, typ)
-
-	def handle_event(self, account, jid, typ):
-		wins = gajim.interface.instances[account]
-		w = None
-		if typ == 'gc':
-			if wins['gc'].has_key(jid):
-				w = wins['gc'][jid]
-		elif typ == 'chat':
-			if wins['chats'].has_key(jid):
-				w = wins['chats'][jid]
-			else:
-				gajim.interface.roster.new_chat(
-					gajim.contacts[account][jid][0], account)
-				w = wins['chats'][jid]
-		elif typ == 'pm':
-			if wins['chats'].has_key(jid):
-				w = wins['chats'][jid]
-			else:
-				room_jid, nick = jid.split('/', 1)
-				show = gajim.gc_contacts[account][room_jid][nick].show
-				c = Contact(jid = jid, name = nick, groups = ['none'],
-					show = show, ask = 'none')
-				gajim.interface.roster.new_chat(c, account)
-				w = wins['chats'][jid]
-		elif typ in ('normal', 'file-request', 'file-request-error',
-			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
-			# Get the first single message event
-			ev = gajim.get_first_event(account, jid, typ)
-			# Open the window
-			gajim.interface.roster.open_event(account, jid, ev)
-		if w:
-			w.set_active_tab(jid)
-			w.window.present()
-			w.window.window.focus()
-			tv = w.conversation_textviews[jid]
-			tv.scroll_to_end()
+		gajim.interface.handle_event(account, jid, typ)
 
 	def on_middle_click(self):
 		'''middle click raises window to have complete focus (fe. get kbd events)

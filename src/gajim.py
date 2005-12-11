@@ -1253,6 +1253,41 @@ class Interface:
 				err_str).get_response()
 			sys.exit()
 
+	def handle_event(self, account, jid, typ):
+		wins = self.instances[account]
+		w = None
+		if typ == 'gc':
+			if wins['gc'].has_key(jid):
+				w = wins['gc'][jid]
+		elif typ == 'chat':
+			if wins['chats'].has_key(jid):
+				w = wins['chats'][jid]
+			else:
+				self.roster.new_chat(gajim.contacts[account][jid][0], account)
+				w = wins['chats'][jid]
+		elif typ == 'pm':
+			if wins['chats'].has_key(jid):
+				w = wins['chats'][jid]
+			else:
+				room_jid, nick = jid.split('/', 1)
+				show = gajim.gc_contacts[account][room_jid][nick].show
+				c = Contact(jid = jid, name = nick, groups = ['none'],
+					show = show, ask = 'none')
+				self.roster.new_chat(c, account)
+				w = wins['chats'][jid]
+		elif typ in ('normal', 'file-request', 'file-request-error',
+			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
+			# Get the first single message event
+			ev = gajim.get_first_event(account, jid, typ)
+			# Open the window
+			self.roster.open_event(account, jid, ev)
+		if w:
+			w.set_active_tab(jid)
+			w.window.present()
+			w.window.window.focus()
+			tv = w.conversation_textviews[jid]
+			tv.scroll_to_end()
+
 	def __init__(self):
 		gajim.interface = self
 		self.default_values = {
