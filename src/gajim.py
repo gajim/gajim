@@ -700,17 +700,30 @@ class Interface:
 			self.remote_ctrl.raise_signal('OsInfo', (account, array))
 
 	def handle_event_gc_notify(self, account, array):
-		#('GC_NOTIFY', account, (jid, status, message, resource,
+		#('GC_NOTIFY', account, (room_jid, show, status, nick,
 		# role, affiliation, jid, reason, actor, statusCode, newNick))
-		jid = array[0].split('/')[0]
-		resource = array[3]
-		if not resource:
-			resource = ''
-		if self.instances[account]['gc'].has_key(jid): # ji is then room_jid
-			#FIXME: upgrade the chat instances (for pm)
-			#FIXME: real_jid can be None
-			self.instances[account]['gc'][jid].chg_contact_status(jid, resource,
-				array[1], array[2], array[4], array[5], array[6], array[7],
+		nick = array[3]
+		if not nick:
+			return
+		room_jid = array[0]
+		fjid = room_jid + '/' + nick
+		show = array[1]
+		status = array[2]
+		# print status in chat window and update status/GPG image
+		if self.instances[account]['chats'].has_key(fjid):
+			contact = self.instances[account]['chats'][fjid].contacts[fjid]
+			contact.show = show
+			contact.status = status
+			self.instances[account]['chats'][fjid].set_state_image(fjid)
+			uf_show = helpers.get_uf_show(show)
+			self.instances[account]['chats'][fjid].print_conversation(
+				_('%s is now %s (%s)') % (nick, uf_show, status), fjid,
+				'status')
+			self.instances[account]['chats'][fjid].draw_name_banner(contact)
+
+		if self.instances[account]['gc'].has_key(room_jid):
+			self.instances[account]['gc'][room_jid].chg_contact_status(room_jid,
+				nick, show, status, array[4], array[5], array[6], array[7],
 				array[8], array[9], array[10], account)
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
