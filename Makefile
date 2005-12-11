@@ -55,7 +55,7 @@ dist:
 	for s in $(SCRIPTS) ; do \
 		cp $$s gajim-$(VERSION)/scripts/; \
 	done
-	find gajim-$(VERSION) -name '.svn' -type d -exec rm -rf {} \;
+	find gajim-$(VERSION) -name '.svn' -type d | xargs rm -rf {} \;
 	find gajim-$(VERSION) -name '*.pyc' -exec rm {} \;
 	find gajim-$(VERSION) -name '*.pyo' -exec rm {} \;
 	find gajim-$(VERSION) -name '.*' -exec rm {} \;
