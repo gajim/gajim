@@ -30,6 +30,7 @@ import time
 import calendar
 
 import gtkgui_helpers
+import conversation_textview
 
 from common import gajim
 from common import helpers
@@ -65,7 +66,10 @@ class HistoryWindow:
 		self.window = xml.get_widget('history_window')
 		
 		self.calendar = xml.get_widget('calendar')
-		self.history_buffer = xml.get_widget('history_textview').get_buffer()
+		scrolledwindow = xml.get_widget('scrolledwindow')
+		self.history_textview = conversation_textview.ConversationTextview(account)
+		scrolledwindow.add(self.history_textview)
+		self.history_buffer = self.history_textview.get_buffer()
 		self.query_entry = xml.get_widget('query_entry')
 		self.search_button = xml.get_widget('search_button')
 		query_builder_button = xml.get_widget('query_builder_button')
@@ -114,23 +118,6 @@ class HistoryWindow:
 		# selected month is current month as calendar defaults to selecting
 		# current date
 		self.calendar.emit('month-changed')
-		
-
-		tag = self.history_buffer.create_tag('incoming')
-		color = gajim.config.get('inmsgcolor')
-		tag.set_property('foreground', color)
-
-		tag = self.history_buffer.create_tag('outgoing')
-		color = gajim.config.get('outmsgcolor')
-		tag.set_property('foreground', color)
-
-		tag = self.history_buffer.create_tag('status')
-		color = gajim.config.get('statusmsgcolor')
-		tag.set_property('foreground', color)
-
-		tag = self.history_buffer.create_tag('time_sometimes')
-		tag.set_property('foreground', 'grey')
-		tag.set_property('justification', gtk.JUSTIFY_CENTER)
 
 		# select and show logs for last date we have logs with contact
 		# and if we don't have logs at all, default to today
@@ -297,9 +284,9 @@ class HistoryWindow:
 
 		message = message + '\n'
 		if tag_msg:
-			buf.insert_with_tags_by_name(end_iter, message, tag_msg)
+			self.history_textview.print_real_text(message, tag_msg)
 		else:
-			buf.insert(end_iter, message)
+			self.history_textview.print_real_text(message)
 
 	def set_unset_expand_on_expander(self, widget):
 		'''expander has to have expand to TRUE so scrolledwindow resizes properly

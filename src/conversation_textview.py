@@ -624,11 +624,12 @@ class ConversationTextview(gtk.TextView):
 			self.print_empty_line()
 
 	def print_real_text(self, text, text_tags = [], name = None):
-		'''/me is replaces by name if name is given'''
+		'''this adds normal and special text. call this to add text'''
 		buffer = self.get_buffer()
-		# detect urls formatting and if the user has it on emoticons
+		# /me is replaced by name if name is given
 		if name and text.startswith('/me ') or text.startswith('/me\n'):
 			text = '* ' + name + text[3:]
+		# detect urls formatting and if the user has it on emoticons
 		index = self.detect_and_print_special_text(text, text_tags)
 
 		# add the rest of text located in the index and after
