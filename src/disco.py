@@ -929,6 +929,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self._progress = 0
 		self.tooltip = tooltips.ServiceDiscoveryTooltip()
 		self.register_button = None
+		self.join_button = None
 		# Keep track of our treeview signals
 		self._view_signals = []
 		self._scroll_signal = None
@@ -1107,6 +1108,9 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if self.register_button:
 			self.register_button.destroy()
 			self.register_button = None
+		if self.join_button:
+			self.join_button.destroy()
+			self.join_button = None
 		AgentBrowser._clean_actions(self)
 
 	def cleanup(self):
