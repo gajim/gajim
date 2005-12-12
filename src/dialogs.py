@@ -32,6 +32,7 @@ import Queue
 
 import gtkgui_helpers
 import vcard
+import conversation_textview
 
 try:
 	import gtkspell
@@ -993,8 +994,18 @@ class SingleMessageWindow:
 		self.to_label = self.xml.get_widget('to_label')
 		self.to_entry = self.xml.get_widget('to_entry')
 		self.subject_entry = self.xml.get_widget('subject_entry')
+		self.message_scrolledwindow = self.xml.get_widget(
+			'message_scrolledwindow')
 		self.message_textview = self.xml.get_widget('message_textview')
 		self.message_tv_buffer = self.message_textview.get_buffer()
+		self.conversation_scrolledwindow = self.xml.get_widget(
+			'conversation_scrolledwindow')
+		self.conversation_textview = conversation_textview.ConversationTextview(
+			account)
+		self.conversation_textview.show()
+		self.conversation_tv_buffer = self.conversation_textview.get_buffer()
+		self.xml.get_widget('conversation_scrolledwindow').add(
+			self.conversation_textview)
 		self.send_button = self.xml.get_widget('send_button')
 		self.reply_button = self.xml.get_widget('reply_button')
 		self.send_and_close_button = self.xml.get_widget('send_and_close_button')
@@ -1006,7 +1017,7 @@ class SingleMessageWindow:
 		
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			try:
-				gtkspell.Spell(self.message_textview)
+				gtkspell.Spell(self.conversation_textview)
 			except gobject.GError, msg:
 				#FIXME: add a ui for this use spell.set_language()
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
@@ -1021,6 +1032,8 @@ class SingleMessageWindow:
 		self.from_entry.set_no_show_all(True)
 		self.close_button.set_no_show_all(True)
 		self.cancel_button.set_no_show_all(True)
+		self.message_scrolledwindow.set_no_show_all(True)
+		self.conversation_scrolledwindow.set_no_show_all(True)
 		
 		self.prepare_widgets_for(self.action)
 
@@ -1028,11 +1041,6 @@ class SingleMessageWindow:
 		if self.subject is None:
 			self.subject = ''
 		self.subject_entry.set_text(self.subject)
-		self.message_tv_buffer.set_text(self.message)
-		if self.action == 'send' and self.message:
-			gobject.idle_add(self.set_cursor_to_end)
-		begin_iter = self.message_tv_buffer.get_start_iter()
-		self.message_tv_buffer.place_cursor(begin_iter)
 
 		self.xml.signal_autoconnect(self)
 
@@ -1079,11 +1087,15 @@ class SingleMessageWindow:
 			self.reply_button.hide()
 			self.from_label.hide()
 			self.from_entry.hide()
+			self.conversation_scrolledwindow.hide()
+			self.message_scrolledwindow.show()
 			
 			if self.message: # we come from a reply?
 				self.message_textview.grab_focus()
 				self.cancel_button.hide()
 				self.close_button.show()
+				self.message_tv_buffer.set_text(self.message)
+				gobject.idle_add(self.set_cursor_to_end)
 			else: # we write a new message (not from reply)
 				self.close_button.hide()
 				if self.to: # do we already have jid?
@@ -1098,14 +1110,17 @@ class SingleMessageWindow:
 			self.send_and_close_button.hide()
 			self.to_label.hide()
 			self.to_entry.hide()
-			
+			self.conversation_scrolledwindow.show()
+			self.message_scrolledwindow.hide()
+
+			if self.message:
+				self.conversation_textview.print_real_text(self.message)
 			fjid = self.from_whom 
 			if self.resource:
 				fjid += '/' + self.resource # Full jid of sender (with resource)
 			self.from_entry.set_text(fjid)
 			self.from_entry.set_property('editable', False)
 			self.subject_entry.set_property('editable', False)
-			self.message_textview.set_editable(False)
 			self.reply_button.grab_focus()
 			self.cancel_button.hide()
 			self.close_button.show()
