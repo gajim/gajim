@@ -324,14 +324,15 @@ class SystrayWin32(systray.Systray):
 		imgs = {}
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', 'icos')
 		# icon folder for missing icons 
-		path_sun_iconset = os.path.join(gajim.DATA_DIR, 'iconsets', 'sun', '16x16', 'icos')
+		path_dcraven_iconset = os.path.join(gajim.DATA_DIR, 'iconsets', 'dcraven', '16x16',
+			'icos')
 		states_list = gajim.SHOW_LIST
 		# trayicon apart from show holds message state too
 		states_list.append('message')
 		for state in states_list:
 			path_to_ico = os.path.join(path, state + '.ico')
-			if not os.path.isfile(path_to_ico): # fallback to sun iconset
-				path_to_ico = os.path.join(path_sun_iconset, state + '.ico')
+			if not os.path.isfile(path_to_ico): # fallback to dcraven iconset
+				path_to_ico = os.path.join(path_dcraven_iconset, state + '.ico')
 			if os.path.exists(path_to_ico):
 				hinst = win32gui.GetModuleHandle(None)
 				img_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
