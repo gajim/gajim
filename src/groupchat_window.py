@@ -382,7 +382,7 @@ class GroupchatWindow(chat.Chat):
 		role_iter = self.get_role_iter(room_jid, role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(gajim.interface.roster.jabber_state_images['closed'], 'role', role,
+				(gajim.interface.roster.jabber_state_images['16']['closed'], 'role', role,
 				'<b>%s</b>' % role_name))
 		iter = model.append(role_iter, (None, 'contact', nick, name))
 		if not gajim.gc_contacts[self.account][room_jid].has_key(nick):
@@ -402,7 +402,7 @@ class GroupchatWindow(chat.Chat):
 			return
 		model = self.list_treeview[room_jid].get_model()
 		contact = gajim.gc_contacts[self.account][room_jid][nick]
-		state_images = gajim.interface.roster.jabber_state_images
+		state_images = gajim.interface.roster.jabber_state_images['16']
 		if gajim.awaiting_events[self.account].has_key(room_jid + '/' + nick):
 			image = state_images['message']
 		else:
@@ -1656,11 +1656,11 @@ current room topic.') % command, room_jid)
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded: change the icon of the arrow'''
 		model = widget.get_model()
-		image = gajim.interface.roster.jabber_state_images['opened']
+		image = gajim.interface.roster.jabber_state_images['16']['opened']
 		model[iter][C_IMG] = image
 
 	def on_list_treeview_row_collapsed(self, widget, iter, path):
 		'''When a row is collapsed: change the icon of the arrow'''
 		model = widget.get_model()
-		image = gajim.interface.roster.jabber_state_images['closed']
+		image = gajim.interface.roster.jabber_state_images['16']['closed']
 		model[iter][C_IMG] = image
