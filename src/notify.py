@@ -201,4 +201,6 @@ class DesktopNotification:
 			return
 		self.notif.CloseNotification(dbus.UInt32(id))
 		self.notif = None
+		if not self.msg_type:
+			self.msg_type = 'chat'
 		gajim.interface.handle_event(self.account, self.jid, self.msg_type)
