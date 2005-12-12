@@ -405,7 +405,7 @@ class ConversationTextview(gtk.TextView):
 				# we launch the correct application
 				helpers.launch_browser_mailer(kind, word)
 
-	def detect_and_print_special_text(self, otext, jid, other_tags):
+	def detect_and_print_special_text(self, otext, other_tags):
 		'''detects special text (emots & links & formatting)
 		prints normal text before any special text it founts,
 		then print special text (that happens many times until
@@ -581,35 +581,14 @@ class ConversationTextview(gtk.TextView):
 				tim_format = time.strftime('%H:%M', tim)
 				buffer.insert_with_tags_by_name(end_iter, tim_format + '\n',
 					'time_sometimes')
-
+		other_text_tag = self.detect_other_text_tag(text, kind)
 		text_tags = other_tags_for_text[:] # create a new list
-		if kind == 'status':
-			text_tags.append(kind)
-		elif text.startswith('/me ') or text.startswith('/me\n'):
-			text = '* ' + name + text[3:]
-			text_tags.append(kind)
-
-		if name and len(text_tags) == len(other_tags_for_text):
-			# not status nor /me
-			name_tags = other_tags_for_name[:] # create a new list
-			name_tags.append(kind)
-			before_str = gajim.config.get('before_nickname')
-			after_str = gajim.config.get('after_nickname')
-			format = before_str + name + after_str + ' '
-			buffer.insert_with_tags_by_name(end_iter, format, *name_tags)
-
-		if subject: # if we have subject, show it too!
-			subject = _('Subject: %s\n') % subject
-			end_iter = buffer.get_end_iter()
-			buffer.insert(end_iter, subject)
-			self.print_empty_line()
-
-		# detect urls formatting and if the user has it on emoticons
-		index = self.detect_and_print_special_text(text, jid, text_tags)
-
-		# add the rest of text located in the index and after
-		end_iter = buffer.get_end_iter()
-		buffer.insert_with_tags_by_name(end_iter, text[index:], *text_tags)
+		if other_text_tag:
+			text_tags.append(other_text_tag)
+		else: # not status nor /me
+			self.print_name(name, kind, other_tags_for_name)
+		self.print_subject(subject)
+		self.print_real_text(text, text_tags, name)
 
 		# scroll to the end of the textview
 		if at_the_end or kind == 'outgoing':
@@ -618,3 +597,41 @@ class ConversationTextview(gtk.TextView):
 			gobject.idle_add(self.scroll_to_end)
 
 		buffer.end_user_action()
+
+	def detect_other_text_tag(self, text, kind):
+		if kind == 'status':
+			return kind
+		elif text.startswith('/me ') or text.startswith('/me\n'):
+			return kind
+
+	def print_name(self, name, kind, other_tags_for_name):
+		if name:
+			buffer = self.get_buffer()
+			end_iter = buffer.get_end_iter()
+			name_tags = other_tags_for_name[:] # create a new list
+			name_tags.append(kind)
+			before_str = gajim.config.get('before_nickname')
+			after_str = gajim.config.get('after_nickname')
+			format = before_str + name + after_str + ' '
+			buffer.insert_with_tags_by_name(end_iter, format, *name_tags)
+
+	def print_subject(self, subject):
+		if subject: # if we have subject, show it too!
+			subject = _('Subject: %s\n') % subject
+			buffer = self.get_buffer()
+			end_iter = buffer.get_end_iter()
+			buffer.insert(end_iter, subject)
+			self.print_empty_line()
+
+	def print_real_text(self, text, text_tags = [], name = None):
+		'''/me is replaces by name if name is given'''
+		buffer = self.get_buffer()
+		# detect urls formatting and if the user has it on emoticons
+		if name and text.startswith('/me ') or text.startswith('/me\n'):
+			text = '* ' + name + text[3:]
+		index = self.detect_and_print_special_text(text, text_tags)
+
+		# add the rest of text located in the index and after
+		end_iter = buffer.get_end_iter()
+		buffer.insert_with_tags_by_name(end_iter, text[index:], *text_tags)
+
