@@ -360,7 +360,7 @@ class TabbedChatWindow(chat.Chat):
 		state_images_16 = gajim.interface.roster.get_appropriate_state_images(jid)
 
 		# Set banner image
-		if state_images_32[show].get_pixbuf():
+		if state_images.has_key(show) and state_images_32[show].get_pixbuf():
 			# we have 32x32! use it!
 			banner_image = state_images_32[show]
 			use_size_32 = True
