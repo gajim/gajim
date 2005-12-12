@@ -70,7 +70,7 @@ class Config:
 		'last_status_msg_invisible': [ opt_str, '' ],
 		'last_status_msg_offline': [ opt_str, '' ],
 		'trayicon': [ opt_bool, True ],
-		'iconset': [ opt_str, 'sun' ],
+		'iconset': [ opt_str, 'dcraven' ],
 		'use_transports_iconsets': [ opt_bool, True ],
 		'inmsgcolor': [ opt_color, '#a34526' ],
 		'outmsgcolor': [ opt_color, '#164e6f' ],
