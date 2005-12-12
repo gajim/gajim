@@ -714,8 +714,32 @@ class GroupchatWindow(chat.Chat):
 			if (event.state & gtk.gdk.SHIFT_MASK):
 				self.last_key_tabs[room_jid] = False
 				return False
-			self.send_gc_message(message)
-			message_buffer.set_text('')
+			if gajim.config.get('send_on_ctrl_enter'):
+				# here, we emulate GTK default action on ENTER (add new line)
+				# normally I would add in keypress but it gets way to complex
+				# to get instant result on changing this advanced setting
+				if event.state == 0: # no ctrl, no shift just ENTER add newline
+					end_iter = message_buffer.get_end_iter()
+					message_buffer.insert_at_cursor('\n')
+					send_message = False
+				elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + ENTER
+					send_message = True
+			else: # send on Enter, do newline on Ctrl Enter
+				if event.state & gtk.gdk.CONTROL_MASK: # Ctrl + ENTER
+					end_iter = message_buffer.get_end_iter()
+					message_buffer.insert_at_cursor('\n')
+					send_message = False
+				else: # ENTER
+					send_message = True
+				
+			if gajim.connections[self.account].connected < 2:
+				# we are not connected
+				dialogs.ErrorDialog(_('A connection is not available'),
+					_('Your message can not be sent until you are connected.')).get_response()
+				send_message = False
+
+			if send_message:
+				self.send_gc_message(message) # send the message
 			return True
 		elif event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+UP
@@ -738,14 +762,13 @@ class GroupchatWindow(chat.Chat):
 		# send the message
 		self.send_gc_message(message)
 
-		message_buffer.set_text('')
-
 	def send_gc_message(self, message):
 		'''call this function to send our message'''
 		if not message:
 			return
 		room_jid = self.get_active_jid()
 		message_textview = self.message_textviews[room_jid]
+		message_buffer = message_textview.get_buffer()
 		conv_textview = self.conversation_textviews[room_jid]
 		if message != '' or message != '\n':
 			self.save_sent_message(room_jid, message)
@@ -922,6 +945,7 @@ class GroupchatWindow(chat.Chat):
 				return # don't print the command
 
 		gajim.connections[self.account].send_gc_message(room_jid, message)
+		message_buffer.set_text('')
 		message_textview.grab_focus()
 
 	def get_command_help(self, command):

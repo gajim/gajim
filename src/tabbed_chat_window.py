@@ -644,14 +644,14 @@ class TabbedChatWindow(chat.Chat):
 				# to get instant result on changing this advanced setting
 				if event.state == 0: # no ctrl, no shift just ENTER add newline
 					end_iter = message_buffer.get_end_iter()
-					message_buffer.insert(end_iter, '\n')
+					message_buffer.insert_at_cursor('\n')
 					send_message = False
 				elif event.state & gtk.gdk.CONTROL_MASK: # CTRL + ENTER
 					send_message = True
 			else: # send on Enter, do newline on Ctrl Enter
 				if event.state & gtk.gdk.CONTROL_MASK: # Ctrl + ENTER
 					end_iter = message_buffer.get_end_iter()
-					message_buffer.insert(end_iter, '\n')
+					message_buffer.insert_at_cursor('\n')
 					send_message = False
 				else: # ENTER
 					send_message = True
