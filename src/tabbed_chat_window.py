@@ -354,23 +354,36 @@ class TabbedChatWindow(chat.Chat):
 		child = self.childs[jid]
 		hb = self.notebook.get_tab_label(child).get_children()[0]
 		status_image = hb.get_children()[0]
-		state_images = gajim.interface.roster.get_appropriate_state_images(jid)
+		
+		state_images_32 = gajim.interface.roster.get_appropriate_state_images(jid,
+			size = '32')
+		state_images_16 = gajim.interface.roster.get_appropriate_state_images(jid)
 
 		# Set banner image
-		banner_image = state_images[show]
+		if state_images_32[show].get_pixbuf():
+			# we have 32x32! use it!
+			banner_image = state_images_32[show]
+			use_size_32 = True
+		else:
+			banner_image = state_images_16[show]
+			use_size_32 = False
+
 		banner_status_image = self.xmls[jid].get_widget('banner_status_image')
 		if banner_image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			banner_status_image.set_from_animation(banner_image.get_animation())
 		else:
 			pix = banner_image.get_pixbuf()
-			scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
-			banner_status_image.set_from_pixbuf(scaled_pix)
+			if use_size_32:
+				banner_status_image.set_from_pixbuf(pix)
+			else: # we need to scale 16x16 to 32x32
+				scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
+				banner_status_image.set_from_pixbuf(scaled_pix)
 
-		# Set tab image; unread messages show the 'message' image
+		# Set tab image (always 16x16); unread messages show the 'message' image
 		if self.nb_unread[jid] and gajim.config.get('show_unread_tab_icon'):
-			tab_image = state_images['message']
+			tab_image = state_images_16['message']
 		else:
-			tab_image = banner_image
+			tab_image = state_images_16[show]
 		if tab_image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			status_image.set_from_animation(tab_image.get_animation())
 		else:

@@ -74,7 +74,7 @@ class Systray:
 			state = 'message'
 		else:
 			state = self.status
-		image = gajim.interface.roster.jabber_state_images[state]
+		image = gajim.interface.roster.jabber_state_images['16'][state]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			self.img_tray.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
@@ -134,8 +134,8 @@ class Systray:
 		# We need our own set of status icons, let's make 'em!
 		iconset = gajim.config.get('iconset')
 		if not iconset:
-			iconset = 'sun'
-		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
+			iconset = 'dcraven'
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = gajim.interface.roster.load_iconset(path)
 
 		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
@@ -235,7 +235,7 @@ class Systray:
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
-		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = gajim.interface.roster.load_iconset(path)
 		
 		groups_menu = gtk.Menu()

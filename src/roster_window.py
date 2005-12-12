@@ -118,7 +118,7 @@ class RosterWindow:
 
 		if self.regroup:
 			show = helpers.get_global_show()
-			model.append(None, [self.jabber_state_images[show],
+			model.append(None, [self.jabber_state_images['16'][show],
 				_('Merged accounts'), 'account', '', 'all', False, None])
 			return
 
@@ -132,7 +132,7 @@ class RosterWindow:
 
 		our_jid = gajim.get_jid_from_account(account)
 
-		model.append(None, [self.jabber_state_images[show],
+		model.append(None, [self.jabber_state_images['16'][show],
 			gtkgui_helpers.escape_for_pango_markup(account),
 			'account', our_jid, account, False, tls_pixbuf])
 
@@ -177,7 +177,8 @@ class RosterWindow:
 			iterG = self.get_group_iter(g, account)
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
-				iterG = model.append(IterAcct, [self.jabber_state_images['closed'],
+				iterG = model.append(IterAcct, [
+					self.jabber_state_images['16']['closed'],
 					gtkgui_helpers.escape_for_pango_markup(g), 'group', g, account,
 					False, None])
 			if not gajim.groups[account].has_key(g): #It can probably never append
@@ -233,12 +234,13 @@ class RosterWindow:
 					if gajim.groups[account].has_key(group):
 						del gajim.groups[account][group]
 
-	def get_appropriate_state_images(self, jid):
-		'''check jid and return the appropriate state images dict'''
+	def get_appropriate_state_images(self, jid, size = '16'):
+		'''check jid and return the appropriate state images dict for
+		the demanded size'''
 		transport = gajim.get_transport_name_from_jid(jid)
 		if transport:
-			return self.transports_state_images[transport]
-		return self.jabber_state_images
+			return self.transports_state_images[size][transport]
+		return self.jabber_state_images[size]
 
 	def draw_contact(self, jid, account, selected = False, focus = False):
 		'''draw the correct state image, name BUT not avatar'''
@@ -283,8 +285,10 @@ class RosterWindow:
 				name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 
-		state_images = self.get_appropriate_state_images(jid)
+		
 		icon_name = helpers.get_icon_name_to_show(contact, account)
+		state_images = self.get_appropriate_state_images(jid, size = '16')
+		
 		img = state_images[icon_name]
 
 		for iter in iters:
@@ -1116,7 +1120,7 @@ class RosterWindow:
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
-		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = self.load_iconset(path)
 
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'account_context_menu', APP)
@@ -1198,7 +1202,7 @@ class RosterWindow:
 			iconset = gajim.config.get('iconset')
 			if not iconset:
 				iconset = 'sun'
-			path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
+			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			for account in gajim.connections:
 				state_images = self.load_iconset(path)
 				item = gtk.ImageMenuItem(account)
@@ -1429,7 +1433,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if accountIter:
-			model[accountIter][0] =	self.jabber_state_images['connecting']
+			model[accountIter][0] =	self.jabber_state_images['16']['connecting']
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status('connecting')
 
@@ -1450,7 +1454,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				passphrase, save = w.run()
 				if passphrase == -1:
 					if accountIter:
-						model[accountIter][0] =	self.jabber_state_images['offline']
+						model[accountIter][0] =	self.jabber_state_images['16']['offline']
 					if gajim.interface.systray_enabled:
 						gajim.interface.systray.change_status('offline')
 					self.update_status_combobox()
@@ -1626,7 +1630,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if accountIter:
-			model[accountIter][0] = self.jabber_state_images[status]
+			model[accountIter][0] = self.jabber_state_images['16'][status]
 		if status == 'offline':
 			if accountIter:
 				model[accountIter][6] = None
@@ -2023,7 +2027,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
 		type = model[iter][C_TYPE]
 		if type == 'group':
-			model.set_value(iter, 0, self.jabber_state_images['opened'])
+			model.set_value(iter, 0, self.jabber_state_images['16']['opened'])
 			jid = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
@@ -2050,7 +2054,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
 		type = model[iter][C_TYPE]
 		if type == 'group':
-			model.set_value(iter, 0, self.jabber_state_images['closed'])
+			model.set_value(iter, 0, self.jabber_state_images['16']['closed'])
 			jid = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
@@ -2139,12 +2143,13 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		else:
 			try:
 				# Object will add itself to the window dict
-				disco.ServiceDiscoveryWindow(account, address_entry=True)
+				disco.ServiceDiscoveryWindow(account, address_entry = True)
 			except RuntimeError:
 				pass
 
 	def load_iconset(self, path):
 		imgs = {}
+		path += '/'
 		for state in ('connecting', 'online', 'chat', 'away', 'xa',
 				'dnd', 'invisible', 'offline', 'error', 'requested',
 				'message', 'opened', 'closed', 'not in the roster',
@@ -2169,8 +2174,12 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'sun'
-		path = os.path.join(gajim.DATA_DIR, 'iconsets/' + iconset + '/16x16/')
-		self.jabber_state_images = self.load_iconset(path)
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
+		if os.path.exists(path):
+			self.jabber_state_images['32'] = self.load_iconset(path)
+
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		self.jabber_state_images['16'] = self.load_iconset(path)
 
 	def reload_jabber_state_images(self):
 		self.make_jabber_state_images()
@@ -2183,7 +2192,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			if model[iter][2] != '':
 				# If it's not change status message iter
 				# eg. if it has show parameter not ''
-				model[iter][1] = self.jabber_state_images[model[iter][2]]
+				model[iter][1] = self.jabber_state_images['16'][model[iter][2]]
 			iter = model.iter_next(iter)
 		# Update the systray
 		if gajim.interface.systray_enabled:
@@ -2545,7 +2554,10 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			self._on_treeview_selection_changed)
 
 		self._last_selected_contact = None # None or holds jid, account tupple
-		self.nb_unread = 0
+		self.jabber_state_images = {'16': {}, '32': {}}
+		self.transports_state_images = {'16': {}, '32': {}}
+		
+		self.nb_unread = 0 # number of unread messages
 		self.last_save_dir = None
 		self.editing_path = None  # path of row with cell in edit mode
 		self.add_new_contact_handler_id = False
@@ -2575,21 +2587,16 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		self.tree.set_model(model)
 		self.make_jabber_state_images()
 
-		#FIXME: why do we init this dict of dicts here?
-		#for loop below does it. maybe so we're sure we always have the keys?
-		#eventhough childs can be empty? I don't get it
-		self.transports_state_images = { 'aim': {}, 'gadugadu': {}, 'irc': {},
-			'icq': {}, 'msn': {}, 'sms': {}, 'tlen': {}, 'weather': {},
-			'yahoo': {} }
-
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
 		folders = os.listdir(path)
 		for transport in folders:
 			if transport == '.svn':
 				continue
-			folder = os.path.join(path, transport)
-			self.transports_state_images[transport] = self.load_iconset(
-				folder + '/16x16/')
+			folder = os.path.join(path, transport, '32x32')
+			if os.path.exists(folder):
+				self.transports_state_images['32'][transport] = self.load_iconset(	folder)
+			folder = os.path.join(path, transport, '16x16')
+			self.transports_state_images['16'][transport] = self.load_iconset(	folder)
 
 		# uf_show, img, show, sensitive
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)
@@ -2617,7 +2624,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 
 		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 			uf_show = helpers.get_uf_show(show)
-			liststore.append([uf_show, self.jabber_state_images[show], show, True])
+			liststore.append([uf_show, self.jabber_state_images['16'][show], show, True])
 		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
 		liststore.append(['SEPARATOR', None, '', True])
 
@@ -2631,7 +2638,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		liststore.append(['SEPARATOR', None, '', True])
 
 		uf_show = helpers.get_uf_show('offline')
-		liststore.append([uf_show, self.jabber_state_images['offline'],
+		liststore.append([uf_show, self.jabber_state_images['16']['offline'],
 			'offline', True])
 
 		status_combobox_items = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
