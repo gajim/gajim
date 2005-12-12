@@ -324,8 +324,8 @@ class SystrayWin32(systray.Systray):
 		imgs = {}
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', 'icos')
 		# icon folder for missing icons 
-		path_dcraven_iconset = os.path.join(gajim.DATA_DIR, 'iconsets', 'dcraven', '16x16',
-			'icos')
+		path_dcraven_iconset = os.path.join(gajim.DATA_DIR, 'iconsets', 'dcraven',
+			'16x16', 'icos')
 		states_list = gajim.SHOW_LIST
 		# trayicon apart from show holds message state too
 		states_list.append('message')
