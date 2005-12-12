@@ -8,6 +8,7 @@ src/cell_renderer_image.py
 src/chat.py
 src/config.py
 src/conversation_textview.py
+src/dbus_support.py
 src/dialogs.py
 src/disco.py
 src/filetransfers_window.py
