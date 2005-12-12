@@ -110,10 +110,6 @@ class DesktopNotification:
 		else:
 			actor = jid
 
-		# defaul failsafe values
-		img = 'chat_msg_recv.png' # img to display
-		ntype = 'im'     # Notification Type
-		
 		txt = actor # default value of txt
 
 		if event_type == _('Contact Signed In'):
@@ -182,6 +178,10 @@ class DesktopNotification:
 						img = 'ft_stopped.png'
 			else:
 				txt = ''
+		else:
+			# defaul failsafe values
+			img = 'chat_msg_recv.png' # img to display
+			ntype = 'im'	 # Notification Type
 
 		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img)
 		path = os.path.abspath(path)
