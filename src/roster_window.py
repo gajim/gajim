@@ -1119,7 +1119,7 @@ class RosterWindow:
 		# using self.jabber_status_images is poopoo
 		iconset = gajim.config.get('iconset')
 		if not iconset:
-			iconset = 'sun'
+			iconset = 'dcraven'
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = self.load_iconset(path)
 
@@ -1201,7 +1201,7 @@ class RosterWindow:
 			menu = gtk.Menu()
 			iconset = gajim.config.get('iconset')
 			if not iconset:
-				iconset = 'sun'
+				iconset = 'dcraven'
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			for account in gajim.connections:
 				state_images = self.load_iconset(path)
@@ -2173,7 +2173,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		'''initialise jabber_state_images dict'''
 		iconset = gajim.config.get('iconset')
 		if not iconset:
-			iconset = 'sun'
+			iconset = 'dcraven'
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
 		if os.path.exists(path):
 			self.jabber_state_images['32'] = self.load_iconset(path)

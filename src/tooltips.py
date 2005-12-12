@@ -210,7 +210,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 	def fill_table_with_accounts(self, accounts):
 		iconset = gajim.config.get('iconset')
 		if not iconset:
-			iconset = 'sun'
+			iconset = 'dcraven'
 		file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		for acct in accounts:
 			message = acct['message']
@@ -390,7 +390,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		else:
 			iconset = gajim.config.get('iconset')
 			if not iconset:
-				iconset = 'sun'
+				iconset = 'dcraven'
 			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 
 		files = []

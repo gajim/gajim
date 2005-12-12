@@ -234,7 +234,7 @@ class Systray:
 	def make_groups_submenus_for_chat_with(self, account):
 		iconset = gajim.config.get('iconset')
 		if not iconset:
-			iconset = 'sun'
+			iconset = 'dcraven'
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = gajim.interface.roster.load_iconset(path)
 		

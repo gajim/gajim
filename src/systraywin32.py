@@ -319,7 +319,7 @@ class SystrayWin32(systray.Systray):
 		'''load .ico files and return them to a dic of SHOW --> img_obj'''
 		iconset = str(gajim.config.get('iconset'))
 		if not iconset:
-			iconset = 'sun'
+			iconset = 'dcraven'
 		
 		imgs = {}
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16', 'icos')
