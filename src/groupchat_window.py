@@ -486,7 +486,13 @@ class GroupchatWindow(chat.Chat):
 					s = _('%s is now known as %s') % (nick, new_nick)
 				self.print_conversation(s, room_jid)
 
-			self.remove_contact(room_jid, nick)
+			if not gajim.awaiting_events[self.account].has_key(
+				room_jid + '/' + nick):
+				self.remove_contact(room_jid, nick)
+			else:
+				c = gajim.gc_contacts[self.account][room_jid][nick]
+				c.show = show
+				c.status = status
 			if nick == self.nicks[room_jid] and statusCode != '303': # We became offline
 				self.got_disconnected(room_jid)
 		else:

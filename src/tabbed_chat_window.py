@@ -828,7 +828,7 @@ class TabbedChatWindow(chat.Chat):
 		contact = self.contacts[jid]
 		# Is it a pm ?
 		is_pm = False
-		room_jid = jid.split('/', 1)[0]
+		room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 		gcs = gajim.interface.instances[self.account]['gc']
 		if gcs.has_key(room_jid):
 			is_pm = True
@@ -864,7 +864,6 @@ class TabbedChatWindow(chat.Chat):
 			del gajim.awaiting_events[self.account][jid]
 		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
-		room_jid = jid.split('/', 1)[0]
 		gcs = gajim.interface.instances[self.account]['gc']
 		if gcs.has_key(room_jid):
 			gcs[room_jid].draw_all_roster()
@@ -873,11 +872,13 @@ class TabbedChatWindow(chat.Chat):
 		gajim.interface.roster.draw_contact(jid, self.account)
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.remove_jid(jid, self.account, typ)
-		showOffline = gajim.config.get('showoffline')
-		if (contact.show == 'offline' or contact.show == 'error') and \
-			not showOffline and typ == 'chat':
-			if len(gajim.contacts[self.account][jid]) == 1:
+		if (contact.show == 'offline' or contact.show == 'error'):
+			showOffline = gajim.config.get('showoffline')
+			if not showOffline and typ == 'chat' and \
+				len(gajim.contacts[self.account][jid]) == 1:
 				gajim.interface.roster.really_remove_contact(contact, self.account)
+			elif typ == 'pm':
+				gcs[room_jid].remove_contact(room_jid, nick)
 
 	def print_conversation(self, text, jid, frm = '', tim = None,
 		encrypted = False, subject = None):
