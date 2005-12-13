@@ -2593,10 +2593,9 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			if transport == '.svn':
 				continue
 			folder = os.path.join(path, transport, '32x32')
-			if os.path.exists(folder):
-				self.transports_state_images['32'][transport] = self.load_iconset(	folder)
+			self.transports_state_images['32'][transport] = self.load_iconset(folder)
 			folder = os.path.join(path, transport, '16x16')
-			self.transports_state_images['16'][transport] = self.load_iconset(	folder)
+			self.transports_state_images['16'][transport] = self.load_iconset(folder)
 
 		# uf_show, img, show, sensitive
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)
