@@ -1286,7 +1286,7 @@ class Interface:
 				if gajim.gc_contacts[account][room_jid].has_key(nick):
 					show = gajim.gc_contacts[account][room_jid][nick].show
 				else:
-					show = 'offline':
+					show = 'offline'
 				c = Contact(jid = jid, name = nick, groups = ['none'],
 					show = show, ask = 'none')
 				self.roster.new_chat(c, account)
