@@ -793,6 +793,7 @@ class GroupchatWindow(chat.Chat):
 						nick = message_array[0]
 						gajim.connections[self.account].change_gc_nick(room_jid,
 							nick)
+						self.clear(message_textview)
 					else:
 						self.get_command_help(command)
 				elif command == 'query' or command == 'chat':
@@ -803,6 +804,7 @@ class GroupchatWindow(chat.Chat):
 						nicks = self.get_nick_list(room_jid)
 						if nick in nicks:
 							self.on_send_pm(nick = nick)
+							self.clear(message_textview)
 						else:
 							self.print_conversation(_('Nickname not found: %s') % nick,
 								room_jid)
@@ -818,6 +820,7 @@ class GroupchatWindow(chat.Chat):
 						if nick in room_nicks:
 							privmsg = ' '.join(message_array)
 							self.on_send_pm(nick=nick, msg=privmsg)
+							self.clear(message_textview)
 						else:
 							self.print_conversation(_('Nickname not found: %s') % nick,
 								room_jid)
@@ -833,6 +836,7 @@ class GroupchatWindow(chat.Chat):
 							new_topic)
 					else:
 						self.print_conversation(self.subjects[room_jid], room_jid)
+					self.clear(message_textview)
 				elif command == 'invite':
 					# invite a user to a room for a reason
 					# example: /invite user@example.com reason
@@ -847,6 +851,7 @@ class GroupchatWindow(chat.Chat):
 								'contact_jid': invitee,
 								'room_jid': room_jid}
 							self.print_conversation(s, room_jid)
+							self.clear(message_textview)
 						else:
 							#%s is something the user wrote but it is not a jid so we inform
 							s = _('%s does not appear to be a valid JID') % invitee
@@ -875,6 +880,7 @@ class GroupchatWindow(chat.Chat):
 											server = server, room = room, nick = nick)
 								except RuntimeError:
 									pass
+							self.clear(message_textview)
 						else:
 							#%s is something the user wrote but it is not a jid so we inform
 							s = _('%s does not appear to be a valid JID') % message_array
@@ -898,9 +904,11 @@ class GroupchatWindow(chat.Chat):
 							ban_jid = gajim.construct_fjid(room_jid, nick)
 							gajim.connections[self.account].gc_set_affiliation(room_jid,
 								ban_jid, 'outcast', reason)
+							self.clear(message_textview)
 						elif nick.find('@') >= 0:
 							gajim.connections[self.account].gc_set_affiliation(room_jid,
 								nick, 'outcast', reason)
+							self.clear(message_textview)
 						else:
 							self.print_conversation(_('Nickname not found: %s') % nick,
 								room_jid)
@@ -915,6 +923,7 @@ class GroupchatWindow(chat.Chat):
 						if nick in room_nicks:
 							gajim.connections[self.account].gc_set_role(room_jid, nick,
 								'none', reason)
+							self.clear(message_textview)
 						else:
 							self.print_conversation(_('Nickname not found: %s') % nick,
 								room_jid)
@@ -926,16 +935,12 @@ class GroupchatWindow(chat.Chat):
 						self.get_command_help(subcommand)
 					else:
 						self.get_command_help(command)
-				elif command == 'me':
-					if len(message_array):
-						gajim.connections[self.account].send_gc_message(room_jid,
-							'/' + message)
-					else:
-						self.get_command_help(command)
+					self.clear(message_textview)
 				elif command == 'say':
 					if len(message_array):
 						gajim.connections[self.account].send_gc_message(room_jid,
 							message[4:])
+						self.clear(message_textview)
 					else:
 						self.get_command_help(command)
 				else:
