@@ -1283,7 +1283,10 @@ class Interface:
 				w = wins['chats'][jid]
 			else:
 				room_jid, nick = jid.split('/', 1)
-				show = gajim.gc_contacts[account][room_jid][nick].show
+				if gajim.gc_contacts[account][room_jid].has_key(nick):
+					show = gajim.gc_contacts[account][room_jid][nick].show
+				else:
+					show = 'offline':
 				c = Contact(jid = jid, name = nick, groups = ['none'],
 					show = show, ask = 'none')
 				self.roster.new_chat(c, account)
