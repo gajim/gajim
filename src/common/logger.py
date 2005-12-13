@@ -209,6 +209,9 @@ class Logger:
 		jids.jid text column will hold JID if TC-related, room_jid if GC-related,
 		ROOM_JID/nick if pm-related.'''
 
+		# check_unique if True will not write a second log line that has 
+		# same time, same msg, same jid and same kind 
+		check_unique = False
 		if self.jids_already_in == []: # only happens if we just created the db
 			self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 				isolation_level = 'IMMEDIATE')
@@ -222,6 +225,9 @@ class Logger:
 		subject_col = subject
 		if tim:
 			time_col = int(float(time.mktime(tim)))
+			now = int(float(time.time()))
+			if kind == 'gc_msg' and time_col < now:
+				check_unique = True
 		else:
 			time_col = int(float(time.time()))
 		
@@ -252,6 +258,15 @@ class Logger:
 				nick = None
 			jid_id = self.get_jid_id(jid, 'ROOM') # re-get jid_id for the new jid
 			contact_name_col = nick
+			if check_unique: # check for same time, same msg, same jid, same kind
+				self.cur.execute('''
+					SELECT message FROM logs
+					WHERE time = ? AND message = ? AND jid_id = ?
+					AND kind = ?
+					''', (time_col, message_col, jid_id, constants.KIND_GC_MSG))
+				row = self.cur.fetchone()
+				if row:
+					return # do not add the same log line
 		else:
 			jid_id = self.get_jid_id(jid)
 		
