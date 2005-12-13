@@ -284,7 +284,7 @@ class HistoryWindow:
 
 		message = message + '\n'
 		if tag_msg:
-			self.history_textview.print_real_text(message, tag_msg)
+			self.history_textview.print_real_text(message, [tag_msg])
 		else:
 			self.history_textview.print_real_text(message)
 
