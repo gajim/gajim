@@ -2361,9 +2361,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		name2 = model[iter2][C_NAME]
 		if not name1 or not name2:
 			return 0
-		else:
-			name1 = name1.decode('utf-8')
-			name2 = name2.decode('utf-8')
+		name1 = name1.decode('utf-8')
+		name2 = name2.decode('utf-8')
 		type1 = model[iter1][C_TYPE]
 		type2 = model[iter2][C_TYPE]
 		if type1 == 'group':
@@ -2377,40 +2376,43 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				return -1
 		account1 = model[iter1][C_ACCOUNT]
 		account2 = model[iter2][C_ACCOUNT]
-		if account1 and account2:
-			account1 = account1.decode('utf-8')
-			account2 = account2.decode('utf-8')
-			jid1 = model[iter1][C_JID].decode('utf-8')
-			jid2 = model[iter2][C_JID].decode('utf-8')
+		if not account1 or not account2:
+			return 0
+		account1 = account1.decode('utf-8')
+		account2 = account2.decode('utf-8')
+		jid1 = model[iter1][C_JID].decode('utf-8')
+		jid2 = model[iter2][C_JID].decode('utf-8')
+		if type1 == 'contact':
+			luser1 = gajim.contacts[account1][jid1]
+			name1 = luser1[0].name
+		if type2 == 'contact':
+			luser2 = gajim.contacts[account2][jid2]
+			name2 = luser2[0].name
 		# We first compare by show if sort_by_show is True
 		if type1 == 'contact' and type2 == 'contact' and \
 			gajim.config.get('sort_by_show'):
-			if account1 and account2: # We an have contact without account
-				# during a short time ... why?
-				luser1 = gajim.contacts[account1][jid1]
-				luser2 = gajim.contacts[account2][jid2]
-				cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
-					'invisible': 5, 'offline': 6, 'not in the roster': 7, 'error': 8}
-				s = self.get_show(luser1)
-				if s in cshow:
-					show1 = cshow[s]
-				else:
-					show1 = 9
-				s = self.get_show(luser2)
-				if s in cshow:
-					show2 = cshow[s]
-				else:
-					show2 = 9
-				if show1 < show2:
-					return -1
-				elif show1 > show2:
-					return 1
+			cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
+				'invisible': 5, 'offline': 6, 'not in the roster': 7, 'error': 8}
+			s = self.get_show(luser1)
+			if s in cshow:
+				show1 = cshow[s]
+			else:
+				show1 = 9
+			s = self.get_show(luser2)
+			if s in cshow:
+				show2 = cshow[s]
+			else:
+				show2 = 9
+			if show1 < show2:
+				return -1
+			elif show1 > show2:
+				return 1
 		# We compare names
 		if name1.lower() < name2.lower():
 			return -1
 		if name2.lower() < name1.lower():
 			return 1
-		if type1 == 'contact' and type2 == 'contact' and account1 and account2:
+		if type1 == 'contact' and type2 == 'contact':
 			# We compare account names
 			if account1.lower() < account2.lower():
 				return -1
