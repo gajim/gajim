@@ -34,6 +34,7 @@ import systray
 
 from common import exceptions
 from common import gajim
+from common import helpers
 from time import time
 from common import i18n
 from dialogs import AddNewContactWindow
@@ -130,13 +131,12 @@ class SignalObject(DbusPrototype):
 		unless account is given'''
 		account = self._get_real_arguments(args, 1)[0]
 		accounts = gajim.contacts.keys()
-		if not account and len(accounts) == 1:
-			# if there is only one account in roster, take it as default
-			# if user did not ask for account
-			account = accounts[0] # FIXME: get global status, not the status from first (ask Yann)
-		if account: # return show for this account (either first or the specified)
-			index = gajim.connections[account].connected
-			return STATUS_LIST[index]
+		if not account:
+			# If user did not ask for account, returns the global status
+			return helpers.get_global_show()
+		# return show for the given account
+		index = gajim.connections[account].connected
+		return STATUS_LIST[index]
 
 	def send_file(self, *args):
 		'''send_file(file_path, jid, account=None) 
