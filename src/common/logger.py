@@ -370,7 +370,7 @@ class Logger:
 		
 		# just ask one row to see if we have sth for this date
 		self.cur.execute('''
-			SELECT log_line_id FROM logs
+			SELECT kind FROM logs
 			WHERE jid_id = %d
 			AND time BETWEEN %d AND %d
 			AND kind NOT IN (%d, %d)
