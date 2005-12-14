@@ -260,7 +260,7 @@ class Logger:
 			contact_name_col = nick
 			if check_unique: # check for same time, same msg, same jid, same kind
 				self.cur.execute('''
-					SELECT message FROM logs
+					SELECT log_line_id FROM logs
 					WHERE time = ? AND message = ? AND jid_id = ?
 					AND kind = ?
 					''', (time_col, message_col, jid_id, constants.KIND_GC_MSG))
