@@ -647,7 +647,9 @@ class Chat:
 
 	def size_request(self, msg_textview , requisition, xml_top):
 		''' When message_textview changes its size. If the new height
-		will enlarge the window, enable the scrollbar automatic policy'''
+		will enlarge the window, enable the scrollbar automatic policy
+		Also enable scrollbar automatic policy for horizontal scrollbar
+		if message we have in message_textview is too big'''
 		if msg_textview.window is None:
 			return
 		message_scrolledwindow = xml_top.get_widget('message_scrolledwindow')
@@ -667,13 +669,16 @@ class Chat:
 		if conversation_height < min_height:
 			min_height = conversation_height
 
+		# we don't want to always resize in height the message_textview
+		# so we have minimum on conversation_textview's scrolled window
+		# but we also want to avoid window resizing so if we reach that 
+		# minimum for conversation_textview and maximum for message_textview
+		# we set to automatic the scrollbar policy
 		diff_y =  message_height - requisition.height
-		if diff_y is not 0:
-			if  conversation_height + diff_y < min_height:
+		if diff_y != 0:
+			if conversation_height + diff_y < min_height:
 				if message_height + conversation_height - min_height > min_height:
 					message_scrolledwindow.set_property('vscrollbar-policy', 
-						gtk.POLICY_AUTOMATIC)
-					message_scrolledwindow.set_property('hscrollbar-policy', 
 						gtk.POLICY_AUTOMATIC)
 					message_scrolledwindow.set_property('height-request', 
 						message_height + conversation_height - min_height)
@@ -681,13 +686,16 @@ class Chat:
 			else:
 				message_scrolledwindow.set_property('vscrollbar-policy', 
 					gtk.POLICY_NEVER)
-				message_scrolledwindow.set_property('hscrollbar-policy', 
-					gtk.POLICY_NEVER)
 				message_scrolledwindow.set_property('height-request', -1)
+
+		conv_textview.bring_scroll_to_end(diff_y - 18)
+		
+		# enable scrollbar automatic policy for horizontal scrollbar
+		# if message we have in message_textview is too big
 		if requisition.width > message_width:
 			message_scrolledwindow.set_property('hscrollbar-policy', 
 				gtk.POLICY_AUTOMATIC)
-		conv_textview.bring_scroll_to_end(diff_y - 18)
+
 		return True
 
 	def on_tab_eventbox_button_press_event(self, widget, event, child):
