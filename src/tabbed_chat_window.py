@@ -545,7 +545,7 @@ class TabbedChatWindow(chat.Chat):
 		if self.kbd_activity_in_last_5_secs and message_buffer.get_char_count():
 			# Only composing if the keyboard activity was in text entry
 			self.send_chatstate('composing', jid)
-		elif self.mouse_over_in_last_5_secs:
+		elif self.mouse_over_in_last_5_secs and jid == self.get_active_jid():
 			self.send_chatstate('active', jid)
 		else:
 			if current_state == 'composing':
