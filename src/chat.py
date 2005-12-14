@@ -695,6 +695,9 @@ class Chat:
 		if requisition.width > message_width:
 			message_scrolledwindow.set_property('hscrollbar-policy', 
 				gtk.POLICY_AUTOMATIC)
+		else:
+			message_scrolledwindow.set_property('hscrollbar-policy', 
+				gtk.POLICY_NEVER)
 
 		return True
 
