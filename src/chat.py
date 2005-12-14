@@ -659,6 +659,7 @@ class Chat:
 		min_height = conversation_scrolledwindow.get_property('height-request')
 		conversation_height = conv_textview.window.get_size()[1]
 		message_height = msg_textview.window.get_size()[1]
+		message_width = msg_textview.window.get_size()[0]
 		# new tab is not exposed yet
 		if conversation_height < 2:
 			return
@@ -683,6 +684,9 @@ class Chat:
 				message_scrolledwindow.set_property('hscrollbar-policy', 
 					gtk.POLICY_NEVER)
 				message_scrolledwindow.set_property('height-request', -1)
+		if requisition.width > message_width:
+			message_scrolledwindow.set_property('hscrollbar-policy', 
+				gtk.POLICY_AUTOMATIC)
 		conv_textview.bring_scroll_to_end(diff_y - 18)
 		return True
 
