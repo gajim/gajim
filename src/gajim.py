@@ -1449,6 +1449,19 @@ class Interface:
 		gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add(500, self.read_sleepy)
 
+def test_migration(migration):
+	if not migration.PROCESSING:
+		dialog = gtk.Dialog()
+		#FIXME: translate these strings after 0.9
+		dialog = gtk.MessageDialog(None,
+			gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
+			gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = 'Migration failed')
+
+		dialog.format_secondary_text('Automatic migration failed. You can run it manually by doing /PATH/TO/GAJIM/src/common/migrate_logs_to_dot9_db.py.')
+		dialog.run()
+		dialog.destroy()
+		sys.exit()
+
 def wait_migration(migration):
 	if not migration.DONE:
 		return True # loop for ever
@@ -1530,6 +1543,8 @@ if __name__ == '__main__':
 			t = threading.Thread(target = m.migrate, args = (q,))
 			t.start()
 			gobject.timeout_add(500, wait_migration, m)
+			# In 10 seconds, we test if migration began
+			gobject.timeout_add(10000, test_migration, m)
 			gtk.main()
 			# Init logger values (self.con/cur, jid_already_in)
 			gajim.logger.init_vars()

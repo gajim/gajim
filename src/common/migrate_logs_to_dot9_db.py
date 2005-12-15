@@ -29,6 +29,7 @@ class Migration:
 	def __init__(self):
 		self.constants = logger.Constants()
 		self.DONE = False
+		self.PROCESSING = False
 
 		if os.path.exists(PATH_TO_DB):
 			print '%s already exists. Exiting..' % PATH_TO_DB
@@ -202,6 +203,7 @@ class Migration:
 
 		self.con.commit()
 
+		self.PROCESSING = True
 		os.path.walk(PATH_TO_LOGS_BASE_DIR, self.visit, None)
 		s = '''
 
