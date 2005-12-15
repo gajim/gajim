@@ -1455,12 +1455,12 @@ def test_migration(migration):
 		#FIXME: translate these strings after 0.9
 		dialog = gtk.MessageDialog(None,
 			gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-			gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = 'Migration failed')
+			gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = 'GUI Migration failed')
 
-		dialog.format_secondary_text('Automatic migration failed. You can run it manually by doing /PATH/TO/GAJIM/src/common/migrate_logs_to_dot9_db.py.')
+		dialog.format_secondary_text('Logs migration through graphical interface failed. The migration process will start in the background. Please wait a few minutes for Gajim to start.')
 		dialog.run()
 		dialog.destroy()
-		sys.exit()
+		gtk.main_quit()
 
 def wait_migration(migration):
 	if not migration.DONE:
@@ -1542,10 +1542,19 @@ if __name__ == '__main__':
 			dialog = dialogs.ProgressDialog(_('Migrating Logs...'), _('Please wait while logs are being migrated...'), q)
 			t = threading.Thread(target = m.migrate, args = (q,))
 			t.start()
-			gobject.timeout_add(500, wait_migration, m)
-			# In 10 seconds, we test if migration began
-			gobject.timeout_add(10000, test_migration, m)
+			id = gobject.timeout_add(500, wait_migration, m)
+			# In 1 seconds, we test if migration began
+			gobject.timeout_add(1000, test_migration, m)
 			gtk.main()
+			if not m.DONE:
+				# stop test_migration handler
+				gobject.source_remove(id)
+				# destroy the migration window
+				dialog.dialog.destroy()
+				# Force GTK to really destroy the window
+				while gtk.events_pending():
+					gtk.main_iteration(False)
+				m.migrate()
 			# Init logger values (self.con/cur, jid_already_in)
 			gajim.logger.init_vars()
 	check_paths.check_and_possibly_create_paths()
