@@ -373,7 +373,7 @@ class Interface:
 			# play sound
 			if old_show < 2 and new_show > 1:
 				if gajim.config.get_per('soundevents', 'contact_connected',
-					'enabled'):
+					'enabled') and gajim.allow_notifications[account]:
 					helpers.play_sound('contact_connected')
 				if not self.instances[account]['chats'].has_key(jid) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
