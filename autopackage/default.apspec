@@ -59,6 +59,7 @@ require @gtk.org/gtk 2.6
 require @gnome.org/pygtk 2.5
 require @gnome.org/pyglade 2.5
 require @glade.gnome.org/libglade 2
+require @pysqlite.org/pysqlite 2
 recommend @gtkspell.sourceforge.net/gtkspell 0
 if ! require @dnspython.org/dnspython 1; then
 recommend @pydns.sourceforge.net/pydns 2
