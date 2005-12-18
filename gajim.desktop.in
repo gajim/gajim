@@ -13,5 +13,4 @@ StartupWMClass=Gajim
 Terminal=false
 Type=Application
 X-ServiceTypes=DCOP/InstantMessenger
-X-DCOP-ServiceType=Unique
 X-DCOP-ServiceName=Gajim
