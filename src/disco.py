@@ -741,8 +741,8 @@ class AgentBrowser:
 		self.cache = window.cache
 
 		self._set_initial_title()
-		self._create_treemodel()
-		self._add_actions()
+		if not self._create_treemodel():
+			self._add_actions()
 
 		# This is a hack. The buttonbox apparently doesn't care about pack_start
 		# or pack_end, so we repack the close button here to make sure it's last
@@ -1035,10 +1035,12 @@ class ToplevelAgentBrowser(AgentBrowser):
 	def _create_treemodel(self):
 		# JID, node, icon, description, state
 		# State means 2 when error, 1 when fetching, 0 when succes.
+		view = self.window.services_treeview
+		if len(view.get_columns()):
+			return True # Returns an error not to draw buttons
 		model = gtk.TreeStore(str, str, gtk.gdk.Pixbuf, str, int)
 		model.set_sort_func(4, self._treemodel_sort_func)
 		model.set_sort_column_id(4, gtk.SORT_ASCENDING)
-		view = self.window.services_treeview
 		view.set_model(model)
 
 		col = gtk.TreeViewColumn()
