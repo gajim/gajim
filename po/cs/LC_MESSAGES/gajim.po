@@ -1,8 +1,3 @@
-# translation of gajim.po to 
-# translation of gajim.po to
-# translation of gajim.po to
-# translation of gajim.po to
-# translation of gajim.po to
 # translation of gajim.po to Czech
 # Czech translations for Gajim package.
 # 	Copyright (C) 2003-2005 Gajim Team
@@ -3026,7 +3021,7 @@ msgstr "_Přehrávač:"
 
 #: ../src/gtkgui.glade.h:368
 msgid "_Pop it up"
-msgstr "Zobrazit _popup"
+msgstr "Zobrazit o_kno se zprávou"
 
 #: ../src/gtkgui.glade.h:369
 msgid "_Port:"
