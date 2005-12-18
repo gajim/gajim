@@ -467,6 +467,5 @@ def make_python_month_gtk_month(month):
 
 def make_color_string(color):
 	'''create #aabbcc color string from gtk color'''
-	return '#' + (hex(color.red) + '0')[2:4] + \
-		(hex(color.green) + '0')[2:4] + \
-		(hex(color.blue) + '0')[2:4]
+	return '#' + hex(color.red)[-2:] + hex(color.green)[-2:] + \
+		hex(color.blue)[-2:]
