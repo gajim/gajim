@@ -608,7 +608,7 @@ msgstr "Do %s"
 #: ../src/dialogs.py:1057
 #, python-format
 msgid "Single Message with account %s"
-msgstr "Wyślij wiadomość z konta %s"
+msgstr "wiadomość z konta %s"
 
 #: ../src/dialogs.py:1059
 msgid "Single Message"
@@ -2610,7 +2610,7 @@ msgstr "Ustawia Wiadomość Dnia"
 
 #: ../src/gtkgui.glade.h:255
 msgid "Show All Pending _Events"
-msgstr "Pokaż wszystkie Oczekujące _Zdarzenia"
+msgstr "Pokaż wszystkie oczekujące _zdarzenia"
 
 #: ../src/gtkgui.glade.h:256
 msgid "Show _Offline Contacts"
