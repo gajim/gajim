@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-07 18:40+0100\n"
-"PO-Revision-Date: 2005-12-08 10:52+0100\n"
+"PO-Revision-Date: 2005-12-19 17:49+0100\n"
 "Last-Translator: Matteo Dell'Amico <della@linux.it>\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1770,7 +1770,7 @@ msgstr "Consentire invio di informazioni sull'_OS"
 
 #: ../src/gtkgui.glade.h:50
 msgid "Allow him/her to see my status"
-msgstr "Permettigli/le di vedere il mio stato"
+msgstr "Permetti di vedere il mio stato"
 
 #: ../src/gtkgui.glade.h:51
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
@@ -2089,7 +2089,7 @@ msgstr "Carattere:"
 
 #: ../src/gtkgui.glade.h:129
 msgid "Forbid him/her to see my status"
-msgstr "Proibiscigli/le di vedere il mio stato"
+msgstr "Proibisci di vedere il mio stato"
 
 #: ../src/gtkgui.glade.h:130
 msgid "Format: YYYY-MM-DD"
@@ -2500,8 +2500,7 @@ msgstr "Rimuovi trasferimento file dalla lista"
 
 #: ../src/gtkgui.glade.h:225
 msgid "Removes completed, canceled and failed file transfers from the list"
-msgstr ""
-"Rimuove dalla lista i trasferimenti di files completati, annullati e falliti"
+msgstr "Rimuove dalla lista i trasferimenti di file completati, annullati e falliti"
 
 #: ../src/gtkgui.glade.h:226
 msgid "Removing selected file transfer"
