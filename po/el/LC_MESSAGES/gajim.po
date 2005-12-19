@@ -915,7 +915,7 @@ msgstr "Θέλετε να αντικατασταθεί;"
 #: ../src/filetransfers_window.py:407
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
-msgstr ""
+msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
@@ -1096,7 +1096,7 @@ msgstr "Εμφανίζει όλες τις προτιμήσεις και τις 
 
 #: ../src/gajim-remote.py:154
 msgid "Sets value of 'key' to 'value'."
-msgstr ""
+msgstr "Καταχωρεί την 'τιμή' στην τιμή του 'κλειδιού'"
 
 #: ../src/gajim-remote.py:156
 msgid "key=value"
@@ -1218,20 +1218,20 @@ msgstr "Το Gajim απαιτεί GTK 2.6 ή νεότερο για να εκτε
 
 #: ../src/gajim.py:52
 msgid "GTK+ runtime is missing libglade support"
-msgstr ""
+msgstr "Η libglade λείπει από το GTK+"
 
 #: ../src/gajim.py:54
 #, python-format
 msgid "Please remove your current GTK+ runtime and install the latest stable version from %s"
-msgstr ""
+msgstr "Παρακαλώ απεγκαταστήστε την τρέχουσα έκοδση του GTK+ και εγκαταστήστε την τελευταία σταθερή έκδοση από %s"
 
 #: ../src/gajim.py:56
 msgid "Please make sure that gtk and pygtk have libglade support in your system."
-msgstr ""
+msgstr "Παρακαλώ βεβαιωθείτε ότι το GTK+ και το PyGTK του συστήματος σας έχουν υποστήριξη της libglade"
 
 #: ../src/gajim.py:61
 msgid "Gajim needs PySQLite2 to run"
-msgstr ""
+msgstr "Το Gajim χρειάζεται την PySQLite2 για να τρέξει"
 
 #. ('HTTP_AUTH', account, (method, url, transaction_id, iq_obj))
 #: ../src/gajim.py:207
@@ -1993,7 +1993,7 @@ msgstr "Τμήμα"
 
 #: ../src/gtkgui.glade.h:108
 msgid "Display avatars of contacts in roster"
-msgstr ""
+msgstr "Εμφάνιση των άβαταρ των επαφών στην λίστα επαφών"
 
 #: ../src/gtkgui.glade.h:109
 msgid "Display status messages of contacts in roster"
@@ -2001,7 +2001,7 @@ msgstr "Εμφάνιση των μηνυμάτων κατάστασης των �
 
 #: ../src/gtkgui.glade.h:110
 msgid "E-Mail:"
-msgstr "Ε-Mail"
+msgstr "Ε-Mail:"
 
 #: ../src/gtkgui.glade.h:111
 msgid "Edit Groups"
@@ -2168,11 +2168,11 @@ msgstr "Αν επιλεγεί, το Gajim θα έχει δικό του εικο
 
 #: ../src/gtkgui.glade.h:157
 msgid "If checked, Gajim will display avatars of contacts in roster window"
-msgstr ""
+msgstr "Αν επιλεγεί, το Gajim θα εμφανίζει τα άβαταρ των επαφών στην λίστα επαφών"
 
 #: ../src/gtkgui.glade.h:158
 msgid "If checked, Gajim will display status messages of contacts under the contact name in roster window"
-msgstr "Εάν επιλεγεί, το Gajim θα εμφανίζει τα μηνύματα κατάστασης των επαφών σας κάτω από τα ονόματα τους στη λίστα επαφών"
+msgstr "Αν επιλεγεί, το Gajim θα εμφανίζει τα μηνύματα κατάστασης των επαφών σας κάτω από τα ονόματα τους στη λίστα επαφών"
 
 #: ../src/gtkgui.glade.h:159
 msgid "If checked, Gajim will join this group chat on startup"
@@ -2529,7 +2529,7 @@ msgstr "Κα_θορισμός Avatar"
 
 #: ../src/gtkgui.glade.h:253
 msgid "Set an avatar when I connect"
-msgstr ""
+msgstr "Θέλω να καθορίσω το άβαταρ μου όταν συνδεθώ"
 
 #: ../src/gtkgui.glade.h:254
 msgid "Sets Message of the Day"
@@ -2537,7 +2537,7 @@ msgstr "Ορίζει το Μήνυμα της Ημέρας (MOTD)"
 
 #: ../src/gtkgui.glade.h:255
 msgid "Show All Pending _Events"
-msgstr ""
+msgstr "Εμφάνιση όλων των γεγονότων που εκρεμούν"
 
 #: ../src/gtkgui.glade.h:256
 msgid "Show _Offline Contacts"
@@ -3100,7 +3100,7 @@ msgstr "Σφάλμα κατά τη ανάλυση του αρχείου:"
 #: ../src/gtkgui_helpers.py:293
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
-msgstr ""
+msgstr "Αδυναμία εγγραφής στο %s. Δεν θα υπάρξει υποστήριξη για τον διαχειριστή συνεδριών"
 
 #: ../src/history_window.py:83
 msgid "Date"
@@ -3644,7 +3644,7 @@ msgstr "Το %s είναι κατάλογος αλλά θα έπρεπε να ε
 
 #: ../src/common/exceptions.py:29
 msgid "pysqlite2 (aka python-pysqlite2) dependency is missing. After you install pysqlite3, if you want to migrate your logs to the new database, please read: http://trac.gajim.org/wiki/MigrateLogToDot9DB Exiting..."
-msgstr ""
+msgstr "Η pysqlite2 (επίσης γνωστή ως python-sqlite2) λείπει. Παρακαλώ εγκαταστήστε την pysqlite2"
 
 #: ../src/common/exceptions.py:40
 msgid "Service not available: Gajim is not running, or remote_control is False"
@@ -3660,7 +3660,7 @@ msgstr "To Session bus δεν είναι διαθέσιμο"
 
 #: ../src/common/config.py:48
 msgid "Use DBus and Notification-Daemon to show notifications"
-msgstr ""
+msgstr "Χρήση του D-Bus και του δαίμονα ειδοποιήσεων για εμφάνιση ειδοποιήσεων"
 
 #: ../src/common/config.py:52
 msgid "Time in minutes, after which your status changes to away."
@@ -3680,7 +3680,7 @@ msgstr "Μη διαθέσιμος λόγω αδράνειας"
 
 #: ../src/common/config.py:82
 msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
-msgstr ""
+msgstr "Αν είναι αληθές, μην αφαιρείς */_. Έτσι το *αβγ* θα είναι μεν έντονο αλλά τα * * δεν θα αφαιρεθούν."
 
 #: ../src/common/config.py:118
 msgid "Add * and [n] in roster title?"
@@ -3714,7 +3714,7 @@ msgstr "Χρήση συμπαγούς προβολής κατά το άνοιγ�
 #: ../src/common/config.py:128
 #, python-format
 msgid "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
-msgstr ""
+msgstr "Είτε δικό σας url με ένα %s σε αυτό όπου %s είναι η λέξη/φρράση ή 'WIKTIONARY' που σημαίνει να γίνεται χρήση του wiktionary."
 
 #: ../src/common/config.py:131
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
@@ -3728,7 +3728,7 @@ msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/παρα�
 #. port, used for file transfers
 #: ../src/common/config.py:138
 msgid "Overrides the host we send for File Transfer in case of address translation/port forwarding."
-msgstr ""
+msgstr "Προέχει του κεντρικού υπολογιστή που αποστέλουμε για Μεταφορές Αρχείων σε περίπτωση που υπάρχει μετάφραση διεύθυνσης/προώθηση πόρτας"
 
 #: ../src/common/config.py:140
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3752,27 +3752,27 @@ msgstr "Μία λίστα με λέξεις χωρισμένες με ερωτη
 
 #: ../src/common/config.py:156
 msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
-msgstr ""
+msgstr "Αν είναι αληθές, το Gajim κλείνει όταν πατιέται το κουμπί Χ του διαχειριστή παραθύρων. Αυτή η ρύθμιση έχει νόημα μόνο εφόσον γίνεται χρήση εικονιδίου στην μπάρα ειδοποιήσεων."
 
 #: ../src/common/config.py:157
 msgid "If True, Gajim registers for xmpp:// on each startup."
-msgstr ""
+msgstr "Αν είναι αληθές, το Gajim καταχωρείται στο xmpp:// σε κάθε έναρξη του."
 
 #: ../src/common/config.py:158
 msgid "If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated."
-msgstr ""
+msgstr "Αν είναι αληθές, το Gajim θα εμφανίζει ένα εικονίδιο σε κάθε καρτέλα που έχει μη αναγνωσμένα μηνύματα. Σε μερικά θέματα, αυτό το εικονίδιο έχει κίνηση."
 
 #: ../src/common/config.py:159
 msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window"
-msgstr ""
+msgstr "Αν είναι αληθές, το Gajim θα εμφανίζει το μήνυμα κατάστασης, εφόσον δεν είναι άδειο, για κάθε επαφή κάτω από το όνομα επαφής στην λίστα επαφών"
 
 #: ../src/common/config.py:161
 msgid "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old."
-msgstr ""
+msgstr "Αν είναι αληθές, το Gajim θα κοιτάει αν κάθε επαφή που δεν είχε ως τώρα άβαταρ, έχει τώρα"
 
 #: ../src/common/config.py:162
 msgid "If False, you will no longer see status line in chats when a contact changes his or her status and/or his status message."
-msgstr ""
+msgstr "Αν είναι ψευδές, το Gajim δεν θα τυπώνει γραμμή σχετική με την κατάσταση στα παράθυρα συζητήσεων όταν η επαφή αλλάζει την κατάσταση και/ή τo μύνημα κατάστασης."
 
 #: ../src/common/config.py:322
 msgid "Sleeping"
@@ -3838,16 +3838,16 @@ msgstr "Ο ήχος που θα παιχθεί όταν ληφθεί οποιο�
 #: ../src/common/config.py:343
 #: ../src/common/optparser.py:162
 msgid "green"
-msgstr ""
+msgstr "πράσινο"
 
 #: ../src/common/config.py:347
 #: ../src/common/optparser.py:148
 msgid "grocery"
-msgstr ""
+msgstr "μανάβικο"
 
 #: ../src/common/config.py:351
 msgid "human"
-msgstr ""
+msgstr "ζεστό"
 
 #: ../src/common/config.py:355
 msgid "marine"
@@ -3856,7 +3856,7 @@ msgstr ""
 #: ../src/common/config.py:359
 #: ../src/common/optparser.py:148
 msgid "plain"
-msgstr ""
+msgstr "λιτό"
 
 #. password required to join
 #. we are banned
@@ -4009,7 +4009,7 @@ msgstr ""
 #: ../src/common/connection.py:2014
 #, python-format
 msgid "Registration information for transport %s has not arrived in time"
-msgstr ""
+msgstr "Πληροφορίες σχετικές με την καταχώριση δεν έφτασαν εγκαίρως για την μεταφορά %s"
 
 #: ../src/common/connection.py:2350
 msgid "Timeout"
@@ -4034,7 +4034,7 @@ msgstr "Μη έγκυρος χαρακτήρας στο όνομα του δια
 
 #: ../src/common/helpers.py:116
 msgid "Invalid character in resource."
-msgstr ""
+msgstr "Μη έγκυρος χαρακτήρας στον πόρο."
 
 #. GiB means gibibyte
 #: ../src/common/helpers.py:156
@@ -4232,7 +4232,7 @@ msgstr "Το αρχείο %s δε μπορεί να ανοιχθεί για αν
 #: ../src/common/optparser.py:157
 #: ../src/common/optparser.py:158
 msgid "cyan"
-msgstr ""
+msgstr "κυανό"
 
 #~ msgid "<b>Changes in latest version</b>"
 #~ msgstr "<b>Αλλαγές στην τελευταία έκδοση</b>"
