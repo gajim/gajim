@@ -620,6 +620,8 @@ _('This type of service does not contain any items to browse.')).get_response()
 
 	def on_go_button_clicked(self, widget):
 		jid = self.address_comboboxentry.child.get_text().decode('utf-8')
+		if jid == self.jid: # jid has not changed
+			return
 		if jid in self.latest_addresses:
 			self.latest_addresses.remove(jid)
 		self.latest_addresses.insert(0, jid)
@@ -741,8 +743,8 @@ class AgentBrowser:
 		self.cache = window.cache
 
 		self._set_initial_title()
-		if not self._create_treemodel():
-			self._add_actions()
+		self._create_treemodel()
+		self._add_actions()
 
 		# This is a hack. The buttonbox apparently doesn't care about pack_start
 		# or pack_end, so we repack the close button here to make sure it's last
@@ -1036,8 +1038,6 @@ class ToplevelAgentBrowser(AgentBrowser):
 		# JID, node, icon, description, state
 		# State means 2 when error, 1 when fetching, 0 when succes.
 		view = self.window.services_treeview
-		if len(view.get_columns()):
-			return True # Returns an error not to draw buttons
 		model = gtk.TreeStore(str, str, gtk.gdk.Pixbuf, str, int)
 		model.set_sort_func(4, self._treemodel_sort_func)
 		model.set_sort_column_id(4, gtk.SORT_ASCENDING)
