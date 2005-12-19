@@ -1975,20 +1975,20 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			return True
 		elif typ == 'file-request':
 			contact = gajim.get_contact_instance_with_highest_priority(account, jid)
-			ft.show_file_request(account, contact, data)
 			gajim.interface.remove_first_event(account, jid, typ)
+			ft.show_file_request(account, contact, data)
 			return True
 		elif typ in ('file-request-error', 'file-send-error'):
-			ft.show_send_error(data)
 			gajim.interface.remove_first_event(account, jid, typ)
+			ft.show_send_error(data)
 			return True
 		elif typ in ('file-error', 'file-stopped'):
-			ft.show_stopped(jid, data)
 			gajim.interface.remove_first_event(account, jid, typ)
+			ft.show_stopped(jid, data)
 			return True
 		elif typ == 'file-completed':
-			ft.show_completed(jid, data)
 			gajim.interface.remove_first_event(account, jid, typ)
+			ft.show_completed(jid, data)
 			return True
 		return False
 
