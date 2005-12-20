@@ -1988,10 +1988,6 @@ class ManageEmoticonsWindow:
 			pix = img.get_animation().get_static_image()
 		else:
 			return False
-
-		if pix.get_width() > 24 or pix.get_height() > 24:
-			dialogs.ErrorDialog(_('Image is too big'), _('Image for emoticon has to be less than or equal to 24 pixels in width and 24 in height.')).get_response()
-			return False
 		return True
 
 	def fill_emot_treeview(self):
