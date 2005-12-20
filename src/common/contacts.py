@@ -56,7 +56,7 @@ class Contact:
 			return self.jid + '/' + self.resource
 		return self.jid
 
-class Gc_contact:
+class GC_Contact:
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', nick='', show='', status='', role='',
 			affiliation='', jid = ''):
