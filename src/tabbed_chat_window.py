@@ -273,7 +273,9 @@ class TabbedChatWindow(chat.Chat):
 		
 		st = gajim.config.get('chat_state_notifications')
 		if contact.chatstate and st in ('composing_only', 'all'):
-			if st == 'all':
+			if contact.show == 'offline':
+				chatstate = ''
+			elif st == 'all':
 				chatstate = helpers.get_uf_chatstate(contact.chatstate)
 			else: # 'composing_only'
 				if chatstate in ('composing', 'paused'):
