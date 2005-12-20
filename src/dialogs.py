@@ -43,7 +43,6 @@ except:
 from filetransfers_window import FileTransfersWindow
 from gajim_themes_window import GajimThemesWindow
 from advanced import AdvancedConfigurationWindow
-from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
@@ -941,14 +940,15 @@ class PopupNotificationWindow:
 			if self.msg_type.find('file') != 0:
 				if self.msg_type == 'pm':
 					room_jid, nick = self.jid.split('/', 1)
-					show = gajim.gc_contacts[self.account][room_jid][nick].show
-					contact = Contact(jid = self.jid, name = nick, groups = ['none'],
-						show = show, sub = 'none')
+					gc_contact = gajim.contacts.get_gc_contact(self.account,
+						room_jid, nick)
+					contact = gajim.contacts.contact_from_gc_contact(gc_contact)
 				else:
-					contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
+					contact = gajim.contacts.create_contact(jid = self.jid,
+						name = self.jid.split('@')[0],
 						groups = [_('not in the roster')], show = 'not in the roster',
-						status = _('not in the roster'), sub = 'none', keyID = keyID)
-					gajim.contacts[self.account][self.jid] = [contact]
+						status = '', sub = 'none', keyID = keyID)
+					gajim.contacts.add_contact(self.account, contact)
 					gajim.interface.roster.add_contact_to_roster(contact.jid,
 						self.account)
 
