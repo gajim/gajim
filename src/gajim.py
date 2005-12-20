@@ -1090,7 +1090,7 @@ class Interface:
 		# so http://be) will match http://be and http://be)be) will match http://be)be
 
 		prefixes = (r'http://', r'https://', r'gopher://', r'news://', r'ftp://', 
-			r'ed2k://', r'magnet:', r'www\.', r'ftp\.')
+			r'ed2k://', r'irc://', r'magnet:', r'www\.', r'ftp\.')
 		# NOTE: it's ok to catch www.gr such stuff exist!
 		
 		#FIXME: recognize xmpp: and treat it specially
