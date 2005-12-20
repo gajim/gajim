@@ -203,6 +203,13 @@ class RosterWindow:
 		self.draw_contact(jid, account)
 		self.draw_avatar(jid, account)
 
+	def add_transport_to_roster(self, account, transport):
+		user1 = Contact(jid = transport, name = transport,
+			groups = [_('Transports')], show = 'offline', status = 'offline',
+			sub = 'from')
+		gajim.contacts[account][transport] = [user1]
+		gajim.interface.roster.add_contact_to_roster(transport, account)
+
 	def really_remove_contact(self, user, account):
 		if user.jid in gajim.newly_added[account]:
 			return

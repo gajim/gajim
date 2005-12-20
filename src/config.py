@@ -43,7 +43,6 @@ try:
 except:
 	HAS_GTK_SPELL = False
 
-from gajim import Contact
 from common import helpers
 from common import gajim
 from common import connection
@@ -1870,13 +1869,6 @@ class ServiceRegistrationWindow(DataFormWindow):
 				entry.grab_focus()
 		table.show_all()
 
-	def add_transport_to_roster(self):
-		user1 = Contact(jid = self.service, name = self.service,
-			groups = [_('Transports')], show = 'offline', status = 'offline',
-			sub = 'from')
-		gajim.contacts[self.account][self.service] = [user1]
-		gajim.interface.roster.add_contact_to_roster(self.service, self.account)
-
 	def on_ok_button_clicked(self, widget):
 		'''When Ok button is clicked:
 		send registration info to the core'''
@@ -1887,7 +1879,8 @@ class ServiceRegistrationWindow(DataFormWindow):
 		if self.infos.has_key('registered'):
 			del self.infos['registered']
 		else:
-			self.add_transport_to_roster()
+			gajim.interface.roster.add_transport_to_roster(self.account,
+				self.service)
 		gajim.connections[self.account].register_agent(self.service, self.infos)
 		self.window.destroy()
 
@@ -1896,7 +1889,8 @@ class ServiceRegistrationWindow(DataFormWindow):
 		if self.infos.has_key('registered'):
 			del self.infos['registered']
 		else:
-			self.add_transport_to_roster()
+			gajim.interface.roster.add_transport_to_roster(self.account,
+				self.service)
 		gajim.connections[self.account].register_agent(self.service, self.infos,
 			True) # True is for is_form
 		self.window.destroy()
