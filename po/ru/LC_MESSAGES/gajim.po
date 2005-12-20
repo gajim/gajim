@@ -1,34 +1,32 @@
-# translation of gajim2.po to Русский
-# translation of gajim.po to Русский
+# translation of gajim.po to
 # Russian translations for gajim package
 # Русский перевод для пакета gajim.
 # Copyright (C) 2005 THE gajim'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gajim package.
-# <nebulam51@gmail.com>, 2005.
-#  <nebulam51@gmail.com>, 2005.
-# Yakov Bezrukov <nebulam51@gmail.com>, 2005.
 #
 #
 #: ../src/gajim-remote.py:190
+# <nebulam51@gmail.com>, 2005.
+#  <nebulam51@gmail.com>, 2005.
+# Yakov Bezrukov <nebulam51@gmail.com>, 2005.
+# Yakov Bezrukov <bezrukov@isp.nsc.ru>, 2005.
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-07 18:40+0100\n"
-"PO-Revision-Date: 2005-08-27 02:25+0700\n"
-"Last-Translator: Yakov Bezrukov <nebulam51@gmail.com>\n"
-"Language-Team: Русский <ru@li.org>\n"
+"PO-Revision-Date: 2005-12-20 13:48+0000\n"
+"Last-Translator: Yakov Bezrukov <bezrukov@isp.nsc.ru>\n"
+"Language-Team:  <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: KBabel 1.10.1\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: KBabel 1.11\n"
 
 #: ../gajim.desktop.in.h:1
-#, fuzzy
 msgid "A GTK+ Jabber client"
-msgstr "Jabber-клиент на GTK"
+msgstr "Jabber-клиент на GTK+"
 
 #: ../gajim.desktop.in.h:2 ../src/gtkgui.glade.h:134 ../src/notify.py:158
 #: ../src/tooltips.py:285
@@ -36,9 +34,8 @@ msgid "Gajim"
 msgstr "Gajim"
 
 #: ../gajim.desktop.in.h:3
-#, fuzzy
 msgid "Jabber IM Client"
-msgstr "Jabber-клиент на GTK"
+msgstr "Jabber-клиент на GTK+"
 
 #: ../src/advanced.py:59
 msgid "Preference Name"
@@ -54,15 +51,13 @@ msgstr "Тип"
 
 #. we talk about option description in advanced configuration editor
 #: ../src/advanced.py:112
-#, fuzzy
 msgid "(None)"
-msgstr "Нет"
+msgstr "(Нет)"
 
 #. we talk about password
 #: ../src/advanced.py:184
-#, fuzzy
 msgid "Hidden"
-msgstr "Отчество:"
+msgstr "Скрытый"
 
 #: ../src/chat.py:182 ../src/gtkgui.glade.h:80
 msgid "Chat"
@@ -75,7 +70,7 @@ msgstr "Комната"
 #. if we have 2 or more accounts
 #: ../src/chat.py:198
 msgid "account: "
-msgstr "аккаунт: "
+msgstr "учетная запись: "
 
 #. Check if jid is already in roster
 #. Groups maynot change name from or to 'not in the roster'
@@ -161,19 +156,19 @@ msgstr "Вы сейчас подсоединены к серверу"
 
 #: ../src/config.py:1161
 msgid "To change the account name, you must be disconnected."
-msgstr "Для смены имени аккаунта необходимо отключиться."
+msgstr "Для смены имени учетной записи необходимо отключиться."
 
 #: ../src/config.py:1164 ../src/config.py:1168
 msgid "Invalid account name"
-msgstr "Неверное имя аккаунта"
+msgstr "Неверное имя учетной записи"
 
 #: ../src/config.py:1165
 msgid "Account name cannot be empty."
-msgstr "Имя аккаунта не может быть пустым."
+msgstr "Имя учетной записи не может быть пустым."
 
 #: ../src/config.py:1169
 msgid "Account name cannot contain spaces."
-msgstr "Имя аккаунта не может содержать пробелы."
+msgstr "Имя учетной записи не может содержать пробелы."
 
 #: ../src/config.py:1177 ../src/config.py:1183 ../src/config.py:1192
 #: ../src/config.py:2559
@@ -194,12 +189,11 @@ msgstr "В качестве номера порта должно выступа�
 
 #: ../src/config.py:1340
 msgid "No such account available"
-msgstr "Такой аккаунт недоступен"
+msgstr "Такая учетная запись недоступна"
 
 #: ../src/config.py:1341
 msgid "You must create your account before editing your personal information."
-msgstr ""
-"Перед редактированием личных данных необходимо сначала создать аккаунт."
+msgstr "Перед редактированием личных данных необходимо сначала создать учетную запись."
 
 #: ../src/config.py:1348 ../src/dialogs.py:651 ../src/dialogs.py:767
 #: ../src/disco.py:415 ../src/vcard.py:411 ../src/vcard.py:440
@@ -208,8 +202,7 @@ msgstr "Вы не подключены к серверу"
 
 #: ../src/config.py:1349
 msgid "Without a connection, you can not edit your personal information."
-msgstr ""
-"Чтобы отредактировать личную информацию нужно подсоединиться к серверу."
+msgstr "Чтобы отредактировать личную информацию нужно подсоединиться к серверу."
 
 #: ../src/config.py:1380
 msgid "Failed to get secret keys"
@@ -255,7 +248,7 @@ msgstr "Транспорты"
 #: ../src/config.py:1907
 #, python-format
 msgid "Edit %s"
-msgstr "Редактировать %s"
+msgstr "Править %s"
 
 #: ../src/config.py:1909
 #, python-format
@@ -291,12 +284,12 @@ msgstr "Картинки"
 #: ../src/config.py:2158
 #, python-format
 msgid "Removing %s account"
-msgstr "Удаление аккаунта %s"
+msgstr "Удаление учетной записи %s"
 
 #: ../src/config.py:2165
 #, python-format
 msgid "Account \"%s\" is connected to the server"
-msgstr "Аккаунт \"%s\" подключен к серверу"
+msgstr "Учетная запись \"%s\" подключена к серверу"
 
 #: ../src/config.py:2166
 msgid "If you remove it, the connection will be lost."
@@ -311,21 +304,18 @@ msgid "This bookmark has invalid data"
 msgstr "Эта закладка содержит неверные данные"
 
 #: ../src/config.py:2324
-msgid ""
-"Please be sure to fill out server and room fields or remove this bookmark."
+msgid "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Пожалуйста, удостоверьтесь что заполнены поля с именем сервера и комнаты "
 "либо удалите эту закладку."
 
 #: ../src/config.py:2541
-#, fuzzy
 msgid "Invalid username"
 msgstr "Неверное имя пользователя"
 
 #: ../src/config.py:2542
-#, fuzzy
 msgid "You must provide a username to configure this account."
-msgstr "Для добавления аккаунта необходимо ввести имя пользователя."
+msgstr "Для настройки учетной записи необходимо ввести имя пользователя."
 
 #: ../src/config.py:2550 ../src/dialogs.py:786
 msgid "Invalid password"
@@ -333,45 +323,42 @@ msgstr "Неверный пароль"
 
 #: ../src/config.py:2551
 msgid "You must enter a password for the new account."
-msgstr "Необходимо ввести пароль для нового аккаунта."
+msgstr "Необходимо ввести пароль для новой учетной записи."
 
 #: ../src/config.py:2576
-#, fuzzy
 msgid "Account has been added successfully"
-msgstr "Закладка успешно добавлена"
+msgstr "Учентая запись успешно добавлена"
 
 #: ../src/config.py:2577 ../src/config.py:2608
-#, fuzzy
 msgid ""
 "You can set advanced account options by pressing Advanced button, or later "
 "by clicking in Accounts menuitem under Edit menu from the main window."
 msgstr ""
-"Аккаунт был успешно добавлен. \n"
-"Вы можете настроить аккаунт используя \n"
-"\"Настройка->Аккаунты\" из главного окна."
+"Учентая запись была успешно добавлена. \n"
+"Вы можете настроить ее используя \n"
+"\"Настройка->Учентые записи\" из главного окна."
 
 #: ../src/config.py:2607
-#, fuzzy
 msgid "Your new account has been created successfully"
-msgstr "Закладка успешно добавлена"
+msgstr "Ваша новая учетная запись успешно создана"
 
 #: ../src/config.py:2622
 msgid "An error occured during account creation"
-msgstr ""
+msgstr "Произошла ошибка при создании учетной записи"
 
 #: ../src/config.py:2699
 msgid "Account name is in use"
-msgstr "Аккаунт уже используется"
+msgstr "Такое имя учетной записи уже используется"
 
 #: ../src/config.py:2700
 msgid "You already have an account using this name."
-msgstr "У меня уже есть аккаунт, который я хочу использовать."
+msgstr "У меня уже есть учетная запись, которую я хочу использовать."
 
 #: ../src/conversation_textview.py:176
 msgid ""
 "Text below this line is what has been said since the last time you paid "
 "attention to this group chat"
-msgstr ""
+msgstr "Текст под этой линией был сказан после того, как вы последний раз заглядывали в эту комнату"
 
 #: ../src/conversation_textview.py:235
 #, python-format
@@ -404,14 +391,14 @@ msgstr "_Поиск по Web"
 
 #: ../src/conversation_textview.py:556
 msgid "Yesterday"
-msgstr ""
+msgstr "Вчера"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
 #: ../src/conversation_textview.py:560
 #, python-format
 msgid "%i days ago"
-msgstr ""
+msgstr "%i дней назад"
 
 #. if we have subject, show it too!
 #: ../src/conversation_textview.py:596
@@ -437,7 +424,7 @@ msgstr "Не могу удалить последнюю группу"
 
 #: ../src/dialogs.py:106
 msgid "At least one contact group must be present."
-msgstr "В группе должен быть как минимум один аккаунт."
+msgstr "В группе должен быть как минимум один контакт."
 
 #: ../src/dialogs.py:127
 msgid "Group"
@@ -461,38 +448,33 @@ msgid "%s Status Message"
 msgstr "Сообщение о Статусе %s"
 
 #: ../src/dialogs.py:222
-#, fuzzy
 msgid "Status Message"
-msgstr "Сообщение о Статусе %s"
+msgstr "Сообщение о Статусе"
 
 #: ../src/dialogs.py:291
 #, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
-msgstr "Пожалуйста, заполните данные о вашем уже существующем аккаунте %s"
+msgstr "Пожалуйста, заполните данные о вашей уже существующей учетной записи %s"
 
 #: ../src/dialogs.py:293
 msgid "Please fill in the data of the contact you want to add"
-msgstr "Пожалуйста, заполните данные для аккаунта который вы хотите добавить"
+msgstr "Пожалуйста, заполните данные для контакта который вы хотите добавить"
 
 #: ../src/dialogs.py:373
-#, fuzzy
 msgid "Invalid User ID"
-msgstr "Неверный Jabber ID"
+msgstr "Неверный ID пользователя"
 
 #: ../src/dialogs.py:380
-#, fuzzy
 msgid "Contact already in roster"
-msgstr "Вы уже в комнате %s"
+msgstr "Контакт уже в ростере"
 
 #: ../src/dialogs.py:381
-#, fuzzy
 msgid "This contact is already listed in your roster."
-msgstr "Контакт \"%s\" будет удален из вашего ростера"
+msgstr "Этот контакт уже содержится в вашем ростере."
 
 #: ../src/dialogs.py:443
-#, fuzzy
 msgid "A GTK+ jabber client"
-msgstr "Jabber-клиент на GTK"
+msgstr "Jabber-клиент на GTK+"
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:465
@@ -502,7 +484,7 @@ msgstr "переводчики"
 #: ../src/dialogs.py:605
 #, python-format
 msgid "Subscription request for account %s from %s"
-msgstr "Запрос на подписку для аккаунта %s от %s"
+msgstr "Запрос на подписку для учетной записи %s от %s"
 
 #: ../src/dialogs.py:608
 #, python-format
@@ -514,23 +496,22 @@ msgid "You can not join a group chat unless you are connected."
 msgstr "Вы не можете зайти в комнату без подключения."
 
 #: ../src/dialogs.py:663
-#, fuzzy, python-format
+#, python-format
 msgid "Join Group Chat with account %s"
-msgstr "Войти в Комнату как %s"
+msgstr "Войти в Комнату с учетной записи %s"
 
 #: ../src/dialogs.py:665 ../src/gtkgui.glade.h:177
 msgid "Join Group Chat"
 msgstr "Войти в Комнату"
 
 #: ../src/dialogs.py:745
-#, fuzzy, python-format
+#, python-format
 msgid "Start Chat with account %s"
-msgstr "для аккаунта %s"
+msgstr "Начать Беседу с учетной записью %s"
 
 #: ../src/dialogs.py:747
-#, fuzzy
 msgid "Start Chat"
-msgstr "Начать Чат"
+msgstr "Начать Беседу"
 
 #: ../src/dialogs.py:748
 msgid ""
@@ -586,14 +567,13 @@ msgstr "Новое сообшение"
 
 #: ../src/dialogs.py:837 ../src/dialogs.py:841 ../src/gajim.py:437
 #: ../src/notify.py:96 ../src/notify.py:99
-#, fuzzy
 msgid "New Private Message"
-msgstr "_Отправить Личное Сообщение"
+msgstr "Новое Личное Сообщение"
 
 #: ../src/dialogs.py:844
-#, fuzzy, python-format
+#, python-format
 msgid "From %s in room %s"
-msgstr "%s %s"
+msgstr "От %s в комнате %s"
 
 #: ../src/dialogs.py:846 ../src/dialogs.py:852 ../src/dialogs.py:869
 #, python-format
@@ -625,9 +605,9 @@ msgid "To %s"
 msgstr "К %s"
 
 #: ../src/dialogs.py:1068
-#, fuzzy, python-format
+#, python-format
 msgid "Single Message with account %s"
-msgstr "Новое Сообщение как %s"
+msgstr "Новое Сообщение с учетной записи %s"
 
 #: ../src/dialogs.py:1070
 msgid "Single Message"
@@ -652,7 +632,7 @@ msgstr "RE: %s"
 #: ../src/dialogs.py:1131
 #, python-format
 msgid "%s wrote:\n"
-msgstr ""
+msgstr "%s написал:\n"
 
 #: ../src/dialogs.py:1175
 #, python-format
@@ -664,9 +644,9 @@ msgid "XML Console"
 msgstr "XML Консоль"
 
 #: ../src/dialogs.py:1260
-#, fuzzy, python-format
+#, python-format
 msgid "You have been invited to the %(room_jid)s room by %(contact_jid)s"
-msgstr "Вас в комнату %s приглашает %s"
+msgstr "%(contact_jid)s пригласил вас в комнату %(room_jid)s"
 
 #: ../src/dialogs.py:1263
 #, python-format
@@ -675,13 +655,12 @@ msgstr "Комментарий: %s"
 
 #: ../src/disco.py:113
 msgid "Others"
-msgstr ""
+msgstr "Другие"
 
 #. conference is a category for listing mostly groupchats in service discovery
 #: ../src/disco.py:117
-#, fuzzy
 msgid "Conference"
-msgstr "Настройки"
+msgstr "Комнаты"
 
 #: ../src/disco.py:416
 msgid "Without a connection, you can not browse available services"
@@ -693,41 +672,39 @@ msgstr "Обзор Сервисов"
 
 #: ../src/disco.py:573
 msgid "The service could not be found"
-msgstr ""
+msgstr "Сервис не обнаружен"
 
 #: ../src/disco.py:574
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
-msgstr ""
+msgstr "По этому адресу сервисы отсутствуют или не отвечают. Проверьте адрес и попробуйте еще раз."
 
 #: ../src/disco.py:578 ../src/disco.py:861
-#, fuzzy
 msgid "The service is not browsable"
-msgstr "Сервис недоступен"
+msgstr "Сервис недоступен для просмотра"
 
 #: ../src/disco.py:579
 msgid "This type of service does not contain any items to browse."
-msgstr ""
+msgstr "Этот сервис не содержит ничего, что можно было бы просмотреть."
 
 #: ../src/disco.py:657
-#, fuzzy, python-format
+#, python-format
 msgid "Browsing %s"
-msgstr "Версия %s"
+msgstr "Просматриваю %s"
 
 #. Address column
 #: ../src/disco.py:678
 msgid "JID"
-msgstr ""
+msgstr "JID"
 
 #: ../src/disco.py:697
-#, fuzzy
 msgid "_Browse"
-msgstr "_Браузер:"
+msgstr "_Браузер"
 
 #: ../src/disco.py:862
 msgid "This service does not contain any items to browse."
-msgstr ""
+msgstr "Этот сервис не содержит ничего, что можно было бы просмотреть."
 
 #: ../src/disco.py:1082 ../src/disco.py:1192
 msgid "Re_gister"
@@ -739,33 +716,30 @@ msgstr "_Присоединиться"
 
 #: ../src/disco.py:1190 ../src/gtkgui.glade.h:329 ../src/roster_window.py:1064
 msgid "_Edit"
-msgstr "_Редактировать"
+msgstr "_Правка"
 
 #: ../src/disco.py:1229
 #, python-format
 msgid "Scanning %d / %d.."
-msgstr ""
+msgstr "Сканирую %d / %d.."
 
 #. Users column
 #: ../src/disco.py:1411
-#, fuzzy
 msgid "Users"
-msgstr "ID пользователя:"
+msgstr "Пользователи"
 
 #. Description column
 #: ../src/disco.py:1418
-#, fuzzy
 msgid "Description"
-msgstr "Описание: %s"
+msgstr "Описание"
 
 #: ../src/filetransfers_window.py:83
 msgid "File"
 msgstr "Файл"
 
 #: ../src/filetransfers_window.py:98
-#, fuzzy
 msgid "Time"
-msgstr "Тема"
+msgstr "Время"
 
 #: ../src/filetransfers_window.py:110
 msgid "Progress"
@@ -832,11 +806,11 @@ msgstr "Отправить"
 
 #: ../src/filetransfers_window.py:277
 msgid "Gajim cannot access this file"
-msgstr ""
+msgstr "Нет доступа к файлу"
 
 #: ../src/filetransfers_window.py:278
 msgid "This file is being used by another process."
-msgstr ""
+msgstr "Файл занят другим процессом."
 
 #: ../src/filetransfers_window.py:302
 #, python-format
@@ -876,7 +850,7 @@ msgstr "Вы хотите переписать его?"
 #: ../src/filetransfers_window.py:407
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
-msgstr ""
+msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
@@ -884,22 +858,19 @@ msgstr ""
 #: ../src/filetransfers_window.py:462
 #, python-format
 msgid "(%(filesize_unit)s/s)"
-msgstr ""
+msgstr "(%(filesize_unit)s/s)"
 
 #: ../src/filetransfers_window.py:508 ../src/filetransfers_window.py:511
-#, fuzzy
 msgid "Invalid File"
-msgstr "Неверная запись"
+msgstr "Неверный файл"
 
 #: ../src/filetransfers_window.py:508
-#, fuzzy
 msgid "File: "
-msgstr "Файл: %s"
+msgstr "Файл: "
 
 #: ../src/filetransfers_window.py:512
-#, fuzzy
 msgid "It is not possible to send empty files"
-msgstr "%s хочет отправит вам файл:"
+msgstr "Нельзя отсылать пустые файлы"
 
 #: ../src/filetransfers_window.py:532 ../src/tooltips.py:401
 #: ../src/tooltips.py:466
@@ -919,15 +890,13 @@ msgid "_Continue"
 msgstr "_Продолжить"
 
 #: ../src/gajim-remote.py:76
-#, fuzzy
 msgid "shows a help on specific command"
-msgstr "показать помощь для данной команды"
+msgstr "показывает помощь для данной команды"
 
 #. User gets help for the command, specified by this parameter
 #: ../src/gajim-remote.py:79
-#, fuzzy
 msgid "command"
-msgstr "по_команде"
+msgstr "команда"
 
 #: ../src/gajim-remote.py:80
 msgid "show help on command"
@@ -938,17 +907,15 @@ msgid "Shows or hides the roster window"
 msgstr "Скрывает или показывает окно ростера"
 
 #: ../src/gajim-remote.py:88
-#, fuzzy
 msgid "Popups a window with the next unread message"
-msgstr "Показывать окно с последним непрочтенным сообщением"
+msgstr "Показывать окно с следующим непрочитанным сообщением"
 
 #: ../src/gajim-remote.py:92
-#, fuzzy
 msgid ""
 "Prints a list of all contacts in the roster. Each contact appear on a "
 "separate line"
 msgstr ""
-"Распечатать список всех контактов в ростере. Каждый контакт будет в "
+"Выводит список всех контактов в ростере. Каждый контакт будет в "
 "отдельной строке"
 
 #: ../src/gajim-remote.py:94 ../src/gajim-remote.py:107
@@ -956,21 +923,19 @@ msgstr ""
 #: ../src/gajim-remote.py:145 ../src/gajim-remote.py:175
 #: ../src/gajim-remote.py:183 ../src/gajim-remote.py:190
 msgid "account"
-msgstr "аккаунты"
+msgstr "Учетные записи"
 
 #: ../src/gajim-remote.py:94
 msgid "show only contacts of the given account"
-msgstr "показывать контакты только для данного аккаунта"
+msgstr "показывать контакты только для данной учетной записи"
 
 #: ../src/gajim-remote.py:99
-#, fuzzy
 msgid "Prints a list of registered accounts"
-msgstr "Распечатывает список зарегистрированных аккаунтов"
+msgstr "Показывает список зарегистрированных учетных записей"
 
 #: ../src/gajim-remote.py:103
-#, fuzzy
 msgid "Changes the status of account or accounts"
-msgstr "Изменить статус аккаунта или аккаунтов"
+msgstr "Изменить статус учетной записи или записей"
 
 #: ../src/gajim-remote.py:105
 msgid "status"
@@ -978,8 +943,7 @@ msgstr "статус"
 
 #: ../src/gajim-remote.py:105
 msgid "one of: offline, online, chat, away, xa, dnd, invisible "
-msgstr ""
-"один из: отключен, в сети, чат, отошел, недоступен, не беспокоить, невидимка"
+msgstr "один из: отключен, в сети, чат, отошел, недоступен, не беспокоить, невидимка"
 
 #: ../src/gajim-remote.py:106 ../src/gajim-remote.py:127
 msgid "message"
@@ -993,15 +957,11 @@ msgstr "сообщение сервера"
 msgid ""
 "change status of account \"account\". If not specified, try to change status "
 "of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"изменяте статус аккаунта \"account\". Если не указано, пытается изменить "
-"статус всех аккаунтов у которых установлена опция \"синхронизировать с "
-"глобальным статусом\""
+msgstr "изменяет статус учетной записи \"учетная запись\". Если не указано, пытается изменить статус всех учетных записей у которых установлена опция \"синхронизировать с глобальным статусом\""
 
 #: ../src/gajim-remote.py:113
-#, fuzzy
 msgid "Shows the chat dialog so that you can send messages to a contact"
-msgstr "Показать диалог чата чтобы вы могли отправлять сообщения контакту"
+msgstr "Показывает окно беседы, чтобы вы могли отправлять сообщения контакту"
 
 #: ../src/gajim-remote.py:115
 msgid "JID of the contact that you want to chat with"
@@ -1009,17 +969,16 @@ msgstr "JID контакта с которым вы хотели бы побес
 
 #: ../src/gajim-remote.py:117 ../src/gajim-remote.py:175
 msgid "if specified, contact is taken from the contact list of this account"
-msgstr "если указано, контакт будет взят из контакт-листа этого аккаунта"
+msgstr "если указано, контакт будет взят из контакт-листа этой учетной записи"
 
 #: ../src/gajim-remote.py:122
-#, fuzzy
 msgid ""
 "Sends new message to a contact in the roster. Both OpenPGP key and account "
 "are optional. If you want to set only 'account', without 'OpenPGP key', just "
 "set 'OpenPGP key' to ''."
 msgstr ""
 "Отправить новое сообщение контакту в ростере. Как OpenPGP ключ, так и "
-"аккаунт опциональны. Если вы хотите настроить лишь 'аккаунт', без 'OpenPGP "
+"учетная запись опциональны. Если вы хотите настроить лишь 'учетную запись', без 'OpenPGP "
 "ключа', просто установите 'OpenPGP ключ' в ''."
 
 #: ../src/gajim-remote.py:126
@@ -1036,18 +995,15 @@ msgstr "PGP ключ"
 
 #: ../src/gajim-remote.py:128
 msgid "if specified, the message will be encrypted using this public key"
-msgstr ""
-"если указано, сообщение будет зашифровано с использование открытого ключа"
+msgstr "если указано, сообщение будет зашифровано с использованием открытого ключа"
 
 #: ../src/gajim-remote.py:130
 msgid "if specified, the message will be sent using this account"
-msgstr ""
-"если указано, сообщение будет отправлено с использованием этого аккаунта"
+msgstr "если указано, сообщение будет отправлено с использованием этой учетной записи"
 
 #: ../src/gajim-remote.py:135
-#, fuzzy
 msgid "Gets detailed info on a contact"
-msgstr "Получить детальную информацию о контакте"
+msgstr "Получает детальную информацию о контакте"
 
 #: ../src/gajim-remote.py:137 ../src/gajim-remote.py:144
 #: ../src/gajim-remote.py:174
@@ -1055,9 +1011,8 @@ msgid "JID of the contact"
 msgstr "JID контакта"
 
 #: ../src/gajim-remote.py:141
-#, fuzzy
 msgid "Sends file to a contact"
-msgstr "Отправить контакту файл"
+msgstr "Отправляет контакту файл"
 
 #: ../src/gajim-remote.py:143
 msgid "file"
@@ -1069,59 +1024,55 @@ msgstr "Путь до файла"
 
 #: ../src/gajim-remote.py:145
 msgid "if specified, file will be sent using this account"
-msgstr "если указано, файл будет отправлен с использованием этого аккаунта"
+msgstr "если указано, файл будет отправлен с использованием этой учетной записи"
 
 #: ../src/gajim-remote.py:150
 msgid "Lists all preferences and their values"
-msgstr ""
+msgstr "Показывает все параметры с их значениями"
 
 #: ../src/gajim-remote.py:154
 msgid "Sets value of 'key' to 'value'."
-msgstr ""
+msgstr "Присваивает 'ключу' в 'значение'"
 
 #: ../src/gajim-remote.py:156
 msgid "key=value"
-msgstr ""
+msgstr "ключ=значение"
 
 #: ../src/gajim-remote.py:156
 msgid "'key' is the name of the preference, 'value' is the value to set it to"
-msgstr ""
+msgstr "'ключ' это название параметра, а 'значение' это то, что ему присваивают"
 
 #: ../src/gajim-remote.py:161
 msgid "Deletes a preference item"
-msgstr ""
+msgstr "Удаляет параметр"
 
 #: ../src/gajim-remote.py:163
-#, fuzzy
 msgid "key"
-msgstr "PGP ключ"
+msgstr "ключ"
 
 #: ../src/gajim-remote.py:163
 msgid "name of the preference to be deleted"
-msgstr ""
+msgstr "имя параметра который нужно удалить"
 
 #: ../src/gajim-remote.py:167
 msgid "Writes the current state of Gajim preferences to the .config file"
-msgstr ""
+msgstr "Сохраняет текущее состояние настроек Gajim в файл .config"
 
 #: ../src/gajim-remote.py:172
-#, fuzzy
 msgid "Removes contact from roster"
-msgstr "_Удалить из Ростера"
+msgstr "Удаляет контакт из ростера"
 
 #: ../src/gajim-remote.py:181
-#, fuzzy
 msgid "Adds contact to roster"
-msgstr "Добавить в Ростер"
+msgstr "Добавляет контакт в ростер"
 
 #: ../src/gajim-remote.py:183
-#, fuzzy
 msgid "Adds new contact to this account."
-msgstr "показывать контакты только для данного аккаунта"
+msgstr "Добавляет новый контакты для данной учетной записи"
 
 #: ../src/gajim-remote.py:188
 msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
+msgstr "Возвращает текущий статус (по-умолчанию глобальный, если не указана учетная запись)"
 
 #: ../src/gajim-remote.py:211
 msgid "Missing argument \"contact_jid\""
@@ -1134,11 +1085,11 @@ msgid ""
 "Please specify account for sending the message."
 msgstr ""
 "'%s' не в вашем ростере\n"
-"Пожалуйста укажите аккаунт для отправки сообщения."
+"Пожалуйста укажите учетную запись для отправки сообщения."
 
 #: ../src/gajim-remote.py:237
 msgid "You have no active account"
-msgstr "У вас нет активного аккаунта"
+msgstr "У вас нет активной учетной записи"
 
 #: ../src/gajim-remote.py:271
 #, python-format
@@ -1183,49 +1134,48 @@ msgstr ""
 
 #: ../src/gajim.py:39
 msgid "Gajim needs Xserver to run. Quiting..."
-msgstr ""
+msgstr "Gajim для запуска требуется X-сервер. Выхожу..."
 
 #: ../src/gajim.py:43
 msgid "Gajim needs PyGTK 2.6 or above"
-msgstr ""
+msgstr "Gajim требуется PyGTK 2.6 или выше"
 
 #: ../src/gajim.py:44
 msgid "Gajim needs PyGTK 2.6 or above to run. Quiting..."
-msgstr ""
+msgstr "Gajim для запуска требуется PyGTK 2.6 или выше. Выхожу..."
 
 #: ../src/gajim.py:46
 msgid "Gajim needs GTK 2.6 or above"
-msgstr ""
+msgstr "Gajim требуется GTK 2.6 или выше"
 
 #: ../src/gajim.py:47
 msgid "Gajim needs GTK 2.6 or above to run. Quiting..."
-msgstr ""
+msgstr "Gajim для запуска требуется GTK 2.6 или выше. Выхожу..."
 
 #: ../src/gajim.py:52
 msgid "GTK+ runtime is missing libglade support"
-msgstr ""
+msgstr "У GTK отсутствует поддержка libglade."
 
 #: ../src/gajim.py:54
 #, python-format
 msgid ""
 "Please remove your current GTK+ runtime and install the latest stable "
 "version from %s"
-msgstr ""
+msgstr "Пожалуйста, удалите вашу текущую версию GTK и установите последнюю стабильную версию с %s"
 
 #: ../src/gajim.py:56
-msgid ""
-"Please make sure that gtk and pygtk have libglade support in your system."
-msgstr ""
+msgid "Please make sure that gtk and pygtk have libglade support in your system."
+msgstr "Пожалуйста, удостоверьтесь что GTK и PyGTK поддерживают libglade."
 
 #: ../src/gajim.py:61
 msgid "Gajim needs PySQLite2 to run"
-msgstr ""
+msgstr "Gajim для запуска требуется PySQLite2"
 
 #. ('HTTP_AUTH', account, (method, url, transaction_id, iq_obj))
 #: ../src/gajim.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "HTTP (%s) Authorization for %s (id: %s)"
-msgstr "HTTP (%s) Авторизация для %s"
+msgstr "HTTP (%s) Авторизация для %s (id: %s)"
 
 #: ../src/gajim.py:208
 msgid "Do you accept this request?"
@@ -1245,9 +1195,9 @@ msgid "Authorization accepted"
 msgstr "Авторизация принята"
 
 #: ../src/gajim.py:573
-#, fuzzy, python-format
+#, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
-msgstr "Контакт \"%s\" авторизовал вас, теперь вы можете видеть его статус."
+msgstr "Контакт \"%s\" авторизовал вас, теперь вы можете видеть его или её статус."
 
 #: ../src/gajim.py:579
 #, python-format
@@ -1255,9 +1205,8 @@ msgid "Contact \"%s\" removed subscription from you"
 msgstr "Контакт \"%s\" отозвал подписку с вами"
 
 #: ../src/gajim.py:580
-#, fuzzy
 msgid "You will always see him or her as offline."
-msgstr "Вы всегда будете видеть его в оффлайне."
+msgstr "Вы всегда будете видеть его или её в оффлайне."
 
 #: ../src/gajim.py:604
 #, python-format
@@ -1278,46 +1227,44 @@ msgstr "Вы сейчас соединены без OpenPGP ключа."
 
 #: ../src/gajim.py:955
 msgid "vCard publication succeeded"
-msgstr ""
+msgstr "vCard успешно опубликован"
 
 #: ../src/gajim.py:955
-#, fuzzy
 msgid "Your personal information has been published successfully."
-msgstr "Закладка успешно добавлена"
+msgstr "Ваша информация о себе была успешно опубликована."
 
 #: ../src/gajim.py:958
 msgid "vCard publication failed"
-msgstr ""
+msgstr "Публикация vCard не удалась"
 
 #: ../src/gajim.py:958
 msgid ""
 "There was an error while publishing your personal information, try again "
 "later."
-msgstr ""
+msgstr "При публикации вашей личной информации произошла ошибка, попробуйте позже."
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
 #: ../src/gajim.py:1246
-#, fuzzy
 msgid "Could not save your settings and preferences"
-msgstr "Не могу сохранить ваши настройки"
+msgstr "Не могу сохранить ваши установки и настройки"
 
 #. loop for ever
 #: ../src/gajim.py:1398
 msgid "Logs have been successfully migrated to the database."
-msgstr ""
+msgstr "История успешно перенесена в БД."
 
 #: ../src/gajim.py:1417
 msgid "Session Management support not available (missing gnome.ui module)"
-msgstr ""
+msgstr "Отсутствует поддержка Управления Сессиями (отсутствует модуль gnome.ui)"
 
 #: ../src/gajim.py:1472
 msgid "Migrating Logs..."
-msgstr ""
+msgstr "Переношу Историю..."
 
 #: ../src/gajim.py:1472
 msgid "Please wait while logs are being migrated..."
-msgstr ""
+msgstr "Пожалуйста, дождитесь окончания переноса истории..."
 
 #: ../src/gajim_themes_window.py:57
 msgid "Theme"
@@ -1330,38 +1277,35 @@ msgstr "имя тeмы"
 
 #: ../src/gajim_themes_window.py:153
 msgid "You cannot delete your current theme"
-msgstr ""
+msgstr "Вы не можете удалить вашу текущую тему"
 
 #: ../src/gajim_themes_window.py:154
 msgid "Please first choose another for your current theme."
-msgstr ""
+msgstr "Пожалуйста, выберите сначала другую тему."
 
 #. if we are in many rooms
 #: ../src/groupchat_window.py:150
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to leave rooms \"%s\"?"
-msgstr "Вы точно хотите покинуть комнату \"%s\"?"
+msgstr "Вы точно хотите покинуть комнаты \"%s\"?"
 
 #: ../src/groupchat_window.py:151
-#, fuzzy
 msgid "If you close this window, you will be disconnected from these rooms."
-msgstr "Если вы закроете это окно, то вы выйдете из этой комнаты."
+msgstr "Если вы закроете это окно, то вы выйдете из этих комнат."
 
 #. just in one room
 #: ../src/groupchat_window.py:154
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to leave room \"%s\"?"
 msgstr "Вы точно хотите покинуть комнату \"%s\"?"
 
 #: ../src/groupchat_window.py:155
-#, fuzzy
 msgid "If you close this window, you will be disconnected from this room."
 msgstr "Если вы закроете это окно, то вы выйдете из этой комнаты."
 
 #: ../src/groupchat_window.py:159
-#, fuzzy
 msgid "Do _not ask me again"
-msgstr "Не переспрашивать"
+msgstr "Не _переспрашивать"
 
 #: ../src/groupchat_window.py:297 ../src/groupchat_window.py:527
 msgid "This room has no subject"
@@ -1369,30 +1313,30 @@ msgstr "У комнаты нет темы"
 
 #. do not print 'kicked by None'
 #: ../src/groupchat_window.py:455
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
-msgstr "%s был кикнут %s: %s"
+msgstr "%(nick)s выгнали из комнаты: %(reason)s"
 
 #: ../src/groupchat_window.py:459
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
-msgstr "%s был кикнут %s: %s"
+msgstr "%(who)s выгнал %(nick)s из комнаты: %(reason)s"
 
 #. do not print 'banned by None'
 #: ../src/groupchat_window.py:466
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s has been banned: %(reason)s"
-msgstr "%s был забанен %s: %s"
+msgstr "%(nick)s запретили заходить в комнату: %(reason)s"
 
 #: ../src/groupchat_window.py:470
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
-msgstr "%s был забанен %s: %s"
+msgstr "%(who)s запретил %(nick)s заходить в комнату: %(reason)s"
 
 #: ../src/groupchat_window.py:478
-#, fuzzy, python-format
+#, python-format
 msgid "You are now known as %s"
-msgstr "%s теперь известен как %s"
+msgstr "Вы теперь известны как %s"
 
 #: ../src/groupchat_window.py:480
 #, python-format
@@ -1446,28 +1390,28 @@ msgstr "Вы можете управлять закладками через м�
 #: ../src/groupchat_window.py:876 ../src/groupchat_window.py:890
 #, python-format
 msgid "Nickname not found: %s"
-msgstr ""
+msgstr "Ник не обнаружен: %s"
 
 #: ../src/groupchat_window.py:817
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
-msgstr ""
+msgstr "Пригласил %(contact_jid)s в %(room_jid)s."
 
 #. %s is something the user wrote but it is not a jid so we inform
 #: ../src/groupchat_window.py:823 ../src/groupchat_window.py:851
 #, python-format
 msgid "%s does not appear to be a valid JID"
-msgstr ""
+msgstr "%s не является нормальным JID"
 
 #: ../src/groupchat_window.py:914
 #, python-format
 msgid "No such command: /%s (if you want to sent this prefix it with /say)"
-msgstr ""
+msgstr "Команды /%s не существует (если вы хотите её просто передать, то добавьте это с префикс /say)"
 
 #: ../src/groupchat_window.py:924
-#, fuzzy, python-format
+#, python-format
 msgid "Commands: %s"
-msgstr "Комментарий: %s"
+msgstr "Команды: %s"
 
 #: ../src/groupchat_window.py:926
 #, python-format
@@ -1476,44 +1420,43 @@ msgid ""
 "of an occupant may be substituted, but not if it contains \"@\". If the JID "
 "is currently in the room, he/she/it will also be kicked. Does NOT support "
 "spaces in nickname."
-msgstr ""
+msgstr "Использование: /%s <ник|JID> [причина], запрещает JID заходить в комнату. Ник посетителя можно подставить, если он не содержит \"@\". Если JID в данный момент находится в комнате, то он/она/оно так же будет выгнан. НЕ поддерживает пробелы в никах."
 
 #: ../src/groupchat_window.py:932
 #, python-format
-msgid ""
-"Usage: /%s <nickname>, opens a private chat window to the specified occupant."
-msgstr ""
+msgid "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
+msgstr "Использование: /%s <ник>, открывает окно привата с указанным посетителем."
 
 #: ../src/groupchat_window.py:935
 #, python-format
 msgid "Usage: /%s, clears the text window."
-msgstr ""
+msgstr "Использование: /%s, очищает текстовое окно."
 
 #: ../src/groupchat_window.py:938
 #, python-format
 msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
 "specified."
-msgstr ""
+msgstr "Использование: /%s [причина], закрывает текущее окно или вкладку, с приводя причину, если она указана."
 
 #: ../src/groupchat_window.py:941
 #, python-format
 msgid "Usage: /%s, sets the groupchat window to compact mode."
-msgstr ""
+msgstr "Использование: /%s, переводит окно комнаты в компактный режим."
 
 #: ../src/groupchat_window.py:944
 #, python-format
 msgid ""
 "Usage: /%s <JID> [reason], invites JID to the current room, optionally "
 "providing a reason."
-msgstr ""
+msgstr "Использование: /%s <JID> [причина], приглашает JID в текущую комнату, с возможным указанием причины."
 
 #: ../src/groupchat_window.py:947
 #, python-format
 msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
 "using specified nickname."
-msgstr ""
+msgstr "Использование: /%s <комната>@<сервер>[/ник], предлагает присоединиться к комната@сервер, с возможным указанием ника."
 
 #: ../src/groupchat_window.py:950
 #, python-format
@@ -1521,42 +1464,41 @@ msgid ""
 "Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
 "from the room and optionally displays a reason. Does NOT support spaces in "
 "nickname."
-msgstr ""
+msgstr "Использование: /%s <ник> [причина], удаляет посетителя с указанным ником из комнаты с возможным указанием причины. НЕ поддерживает пробелы в нике."
 
 #: ../src/groupchat_window.py:954
 #, python-format
 msgid ""
 "Usage: /%s <action>, sends action to the current room. Use third person. (e."
 "g. /%s explodes.)"
-msgstr ""
+msgstr "Использование: /%s <действие>, совершает действие в текущей комнате. Используйте третье лицо (напр. /%s взрывается.)"
 
 #: ../src/groupchat_window.py:958
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message window and sends "
 "message to the occupant specified by nickname."
-msgstr ""
+msgstr "Использование: /%s <ник> [сообщение], открывает окно привата и отсылает сообщение посетителю с указанным ником."
 
 #: ../src/groupchat_window.py:961
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current room."
-msgstr ""
+msgstr "Использование: /%s <ник>, меняет ваш ник в текущей комнате."
 
 #: ../src/groupchat_window.py:964
 #, python-format
 msgid "Usage: /%s [topic], displays or updates the current room topic."
-msgstr ""
+msgstr "Использование: /%s [тема], показывает или изменяет текущую тему комнаты."
 
 #: ../src/groupchat_window.py:967
 #, python-format
-msgid ""
-"Usage: /%s <message>, sends a message without looking for other commands."
-msgstr ""
+msgid "Usage: /%s <message>, sends a message without looking for other commands."
+msgstr "Использование: /%s <сообщение>, отсылает сообщение без поиска других команд в нем."
 
 #: ../src/groupchat_window.py:969
 #, python-format
 msgid "No help info for /%s"
-msgstr ""
+msgstr "Нет подсказки для /%s"
 
 #. ask for reason
 #: ../src/groupchat_window.py:1054
@@ -1576,22 +1518,21 @@ msgstr "Забанить %s"
 
 #: ../src/gtkexcepthook.py:46
 msgid "A programming error has been detected"
-msgstr ""
+msgstr "Обнаружена ошибка в программе"
 
 #: ../src/gtkexcepthook.py:47
 msgid ""
 "It probably is not fatal, but should be reported to the developers "
 "nonetheless."
-msgstr ""
+msgstr "Возможно это не так страшно, но все равно стоит сообщить об этом разработчикам."
 
 #: ../src/gtkexcepthook.py:53
 msgid "_Report Bug"
-msgstr ""
+msgstr "_Сообщий об Ошибке"
 
 #: ../src/gtkexcepthook.py:76
-#, fuzzy
 msgid "Details"
-msgstr "Личная Информация"
+msgstr "Детали"
 
 #. this always tracebacks
 #: ../src/gtkgui.glade.h:1
@@ -1604,6 +1545,9 @@ msgid ""
 "\n"
 "Please wait..."
 msgstr ""
+"<b>Была создана учетная запись </b>\n"
+"\n"
+"Пожалуйста подождите..."
 
 #: ../src/gtkgui.glade.h:5
 msgid "<b>Advanced Configuration Editor</b>"
@@ -1619,14 +1563,12 @@ msgid "<b>Custom</b>"
 msgstr "<b>Пользовательские настройки</b>"
 
 #: ../src/gtkgui.glade.h:9
-#, fuzzy
 msgid "<b>Description</b>"
-msgstr "Описание: %s"
+msgstr "<b>Описание</b>"
 
 #: ../src/gtkgui.glade.h:10
-#, fuzzy
 msgid "<b>Format of a line</b>"
-msgstr "<b>Формат строки в чате</b>"
+msgstr "<b>Формат строки</b>"
 
 #: ../src/gtkgui.glade.h:11
 msgid "<b>Interface Customization</b>"
@@ -1645,19 +1587,16 @@ msgid "<b>OpenPGP</b>"
 msgstr "<b>OpenPGP</b>"
 
 #: ../src/gtkgui.glade.h:15
-#, fuzzy
 msgid "<b>Personal Information</b>"
-msgstr "_Редактировать Личную Информацию..."
+msgstr "<b>Личная Информация</b>"
 
 #: ../src/gtkgui.glade.h:16
-#, fuzzy
 msgid "<b>Please choose one of the options below:</b>"
-msgstr "<b>Пожалуйста, выберите одну из опций в списке ниже:</b>"
+msgstr "<b>Пожалуйста, выберите одну из опций из списка ниже:</b>"
 
 #: ../src/gtkgui.glade.h:17
-#, fuzzy
 msgid "<b>Please fill in the data for your new account</b>"
-msgstr "Пожалуйста, заполните данные для вашего нового аккаунта"
+msgstr "<b>Пожалуйста, заполните данные для вашей новой учетной записи</b>"
 
 #: ../src/gtkgui.glade.h:18
 msgid "<b>Preset Status Messages</b>"
@@ -1701,13 +1640,12 @@ msgid "About"
 msgstr "Подробнее"
 
 #: ../src/gtkgui.glade.h:29
-#, fuzzy
 msgid "Accept"
-msgstr "Аккаунты"
+msgstr "Принять"
 
 #: ../src/gtkgui.glade.h:30
 msgid "Account"
-msgstr "Аккаунты"
+msgstr "Учетные записи"
 
 #: ../src/gtkgui.glade.h:31
 msgid ""
@@ -1716,14 +1654,18 @@ msgid ""
 "Contact\n"
 "Banner"
 msgstr ""
+"Учетная запись\n"
+"Группа\n"
+"Контакт\n"
+"Баннер"
 
 #: ../src/gtkgui.glade.h:35
 msgid "Account Modification"
-msgstr "Изменение Аккаунта"
+msgstr "Изменение Учетной записи"
 
 #: ../src/gtkgui.glade.h:36
 msgid "Accounts"
-msgstr "Аккаунты"
+msgstr "Учетные записи"
 
 #: ../src/gtkgui.glade.h:37
 msgid "Activate/Disable notification for when a file transfer is complete"
@@ -1777,7 +1719,7 @@ msgstr "Отсылать информацию об _ОС"
 
 #: ../src/gtkgui.glade.h:50
 msgid "Allow him/her to see my status"
-msgstr ""
+msgstr "Позволить ему или ей видеть мой статус"
 
 #: ../src/gtkgui.glade.h:51
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
@@ -1793,7 +1735,7 @@ msgstr "Запрашивать сообщение о статусе в моме�
 
 #: ../src/gtkgui.glade.h:54
 msgid "Ask to see his/her status"
-msgstr ""
+msgstr "Попросить возможность видеть его или её статус"
 
 #: ../src/gtkgui.glade.h:55
 msgid "Ask:"
@@ -1836,9 +1778,8 @@ msgid "Automatically authorize contact"
 msgstr "Автоматически авторизовать контакт"
 
 #: ../src/gtkgui.glade.h:66
-#, fuzzy
 msgid "Autoreconnect when connection is lost"
-msgstr "Если вы удалите его, произойдет отключение."
+msgstr "Автоподключение при разрыве связи"
 
 #: ../src/gtkgui.glade.h:67
 msgid "Before nickname:"
@@ -1858,7 +1799,7 @@ msgstr "Жирный"
 
 #: ../src/gtkgui.glade.h:71
 msgid "Build custom query"
-msgstr ""
+msgstr "Составить свой запрос"
 
 #: ../src/gtkgui.glade.h:72
 msgid "C_onnect on Gajim startup"
@@ -1873,14 +1814,12 @@ msgid "Cancels the selected file transfer"
 msgstr "Отменяет выбранную передачу"
 
 #: ../src/gtkgui.glade.h:75
-#, fuzzy
 msgid "Cancels the selected file transfer and removes incomplete file"
-msgstr "Отменяет выбранную передачу"
+msgstr "Отменяет выбранную передачу и удаляет неполные файлы"
 
 #: ../src/gtkgui.glade.h:76
-#, fuzzy
 msgid "Chan_ge Password"
-msgstr "Изменить Пароль"
+msgstr "И_зменить Пароль"
 
 #: ../src/gtkgui.glade.h:77
 msgid "Change Password"
@@ -1888,7 +1827,7 @@ msgstr "Изменить Пароль"
 
 #: ../src/gtkgui.glade.h:78
 msgid "Change _Nickname"
-msgstr "Изменить _Ник:"
+msgstr "Изменить _Ник"
 
 #: ../src/gtkgui.glade.h:79
 msgid "Change _Subject"
@@ -1938,7 +1877,7 @@ msgstr "Щелкните для изменения пароль"
 
 #: ../src/gtkgui.glade.h:88
 msgid "Click to insert an emoticon (Alt+E)"
-msgstr ""
+msgstr "Щелкните, чтобы вставить смайлик (Alt+E)"
 
 #: ../src/gtkgui.glade.h:89
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
@@ -1968,7 +1907,7 @@ msgstr "Настроить _Комнату"
 
 #: ../src/gtkgui.glade.h:95
 msgid "Connect when I press Finish"
-msgstr ""
+msgstr "Подключиться когда я нажму Конец"
 
 #: ../src/gtkgui.glade.h:96
 msgid "Connection"
@@ -2007,9 +1946,8 @@ msgid "Deletes Message of the Day"
 msgstr "Удаляет фортунку"
 
 #: ../src/gtkgui.glade.h:105
-#, fuzzy
 msgid "Deny"
-msgstr "_Отклонить"
+msgstr "Отклонить"
 
 #: ../src/gtkgui.glade.h:106
 msgid "Deny authorization from contact so he cannot know when you're connected"
@@ -2020,13 +1958,12 @@ msgid "Department:"
 msgstr "Отделение:"
 
 #: ../src/gtkgui.glade.h:108
-#, fuzzy
 msgid "Display avatars of contacts in roster"
-msgstr "_Игнорировать события от контактов не из ростера"
+msgstr "Показавать аватары для контактов в ростере"
 
 #: ../src/gtkgui.glade.h:109
 msgid "Display status messages of contacts in roster"
-msgstr ""
+msgstr "Показать сообщения о статусе контакта в ростере"
 
 #: ../src/gtkgui.glade.h:110
 msgid "E-Mail:"
@@ -2038,7 +1975,7 @@ msgstr "Редактировать Группы"
 
 #: ../src/gtkgui.glade.h:112
 msgid "Edit Personal Information..."
-msgstr "_Редактировать Личную Информацию..."
+msgstr "Редактировать Личную Информацию..."
 
 #: ../src/gtkgui.glade.h:113
 msgid "Edit _Groups"
@@ -2091,7 +2028,6 @@ msgid "Filter:"
 msgstr "Фильтр:"
 
 #: ../src/gtkgui.glade.h:127
-#, fuzzy
 msgid "Font style:"
 msgstr "Шрифт:"
 
@@ -2101,7 +2037,7 @@ msgstr "Шрифт:"
 
 #: ../src/gtkgui.glade.h:129
 msgid "Forbid him/her to see my status"
-msgstr ""
+msgstr "Запретить ему или ей видеть мой статус"
 
 #: ../src/gtkgui.glade.h:130
 msgid "Format: YYYY-MM-DD"
@@ -2109,30 +2045,25 @@ msgstr "Формат: YYYY-MM-DD"
 
 #: ../src/gtkgui.glade.h:131
 msgid "Frequently Asked Questions (online)"
-msgstr ""
+msgstr "Частозадаваемые Вопросы (в сети)"
 
 #: ../src/gtkgui.glade.h:132
 msgid "From:"
 msgstr "От:"
 
 #: ../src/gtkgui.glade.h:133
-#, fuzzy
 msgid "G_o"
-msgstr "Вперед"
+msgstr "_Вперед"
 
 #: ../src/gtkgui.glade.h:135
 msgid "Gajim Themes Customization"
 msgstr "Настройка Тем для Gajim"
 
 #: ../src/gtkgui.glade.h:136
-#, fuzzy
 msgid ""
 "Gajim can send and receive meta-information related to a conversation you "
 "may have with a contact"
-msgstr ""
-"Если отмечено, то Gajim будет сообщать о возможности отсылать и получать "
-"метаданные относящиеся к беседе с контактом таких как например уведомление о "
-"печати сообщения"
+msgstr "Gajim может отсылать и получать метаданные относящиеся к беседе с контактом."
 
 #: ../src/gtkgui.glade.h:137
 msgid ""
@@ -2167,15 +2098,12 @@ msgstr ""
 "правом нижнем углу экрана"
 
 #: ../src/gtkgui.glade.h:141
-msgid ""
-"Gajim will only change the icon of the contact that sent the new message"
-msgstr ""
-"Gajim будет лишь менять иконку у контакта, от которого пришло сообщение"
+msgid "Gajim will only change the icon of the contact that sent the new message"
+msgstr "Gajim будет лишь менять иконку у контакта, от которого пришло сообщение"
 
 #: ../src/gtkgui.glade.h:142
-#, fuzzy
 msgid "Gajim: Account Creation Wizard"
-msgstr "Gajim: Мастер первого запуска"
+msgstr "Gajim: Мастер Создания Учетной Записи"
 
 #. Given Name
 #: ../src/gtkgui.glade.h:145
@@ -2192,7 +2120,7 @@ msgstr "HTTP Соединение"
 
 #: ../src/gtkgui.glade.h:149
 msgid "Help online"
-msgstr ""
+msgstr "Помощь онлайн"
 
 #: ../src/gtkgui.glade.h:150
 msgid "Hides the window"
@@ -2208,11 +2136,11 @@ msgstr "Хост: "
 
 #: ../src/gtkgui.glade.h:153
 msgid "I already have an account I want to use"
-msgstr "У меня уже есть аккаунт, который я хочу использовать"
+msgstr "У меня уже есть учетная запись, которую я хочу использовать"
 
 #: ../src/gtkgui.glade.h:154
 msgid "I want to _register for a new account"
-msgstr "Я хочу зарегистрировать новый аккаунт"
+msgstr "Я хочу _зарегистрировать новую учетную запись"
 
 #: ../src/gtkgui.glade.h:155
 msgid "I would like to add you to my contact list."
@@ -2220,39 +2148,38 @@ msgstr "Вы не возражаете, если я добавлю Вас в к�
 
 #: ../src/gtkgui.glade.h:156
 msgid "If checked, Gajim will also have a trayicon"
-msgstr "Если отмечено, Gajim будет помещать иконку в трей"
+msgstr "Если отмечено, то Gajim будет помещать иконку в трей"
 
 #: ../src/gtkgui.glade.h:157
-#, fuzzy
 msgid "If checked, Gajim will display avatars of contacts in roster window"
-msgstr "_Игнорировать события от контактов не из ростера"
+msgstr "Если отмечено, то Gajim будет показывать аватары контактов в окне ростера"
 
 #: ../src/gtkgui.glade.h:158
 msgid ""
 "If checked, Gajim will display status messages of contacts under the contact "
 "name in roster window"
-msgstr ""
+msgstr "Если отмечено, то Gajim будет отображать сообщение о статусе контакта под его именем в окне ростера"
 
 #: ../src/gtkgui.glade.h:159
 msgid "If checked, Gajim will join this group chat on startup"
-msgstr "Если отмечено, Gajim будет входить в комнату при запуске"
+msgstr "Если отмечено, то Gajim будет входить в комнату при запуске"
 
 #: ../src/gtkgui.glade.h:160
 msgid "If checked, Gajim will remember the password for this account"
-msgstr "Если отмечено, Gajim запомнит пароль аккаунта"
+msgstr "Если отмечено, то Gajim запомнит пароль учетной записи"
 
 #: ../src/gtkgui.glade.h:161
 msgid ""
 "If checked, Gajim will remember the roster and chat window positions in the "
 "screen and the sizes of them next time you run it"
-msgstr "Если отмечено, Gajim запомнит позицию и размер окна ростера"
+msgstr "Если отмечено, то Gajim запомнит позицию и размер окна ростера"
 
 #: ../src/gtkgui.glade.h:162
 msgid ""
 "If checked, Gajim will replace ascii smilies like ':)' with equivalent "
 "graphical emoticons"
 msgstr ""
-"Если отмечено, Gajim будет заменять текстовые смайлики, например ':)' их "
+"Если отмечено, то Gajim будет заменять текстовые смайлики, например ':)' их "
 "графическим эквивалентом"
 
 #: ../src/gtkgui.glade.h:163
@@ -2260,17 +2187,16 @@ msgid ""
 "If checked, Gajim will send keep-alive packets so it prevents connection "
 "timeout which results in disconnection"
 msgstr ""
-"Если отмечено, Gajim будет пинговать сервер чтобы избежать разрыва "
+"Если отмечено, то Gajim будет пинговать сервер чтобы избежать разрыва "
 "соединения по таймауту"
 
 #: ../src/gtkgui.glade.h:164
-#, fuzzy
 msgid ""
 "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
 "permission only for you"
 msgstr ""
 "Если отмечено, то Gajim сохранит пароль в ~/.gajim/config с доступом на "
-"чтение только для вас. И администратора системы, конечно же. "
+"чтение только для вас"
 
 #: ../src/gtkgui.glade.h:165
 msgid ""
@@ -2278,7 +2204,7 @@ msgid ""
 "from MSN will have the equivalent msn icon for status online, away, busy, "
 "etc...)"
 msgstr ""
-"Если отмечено, Gajim будет использовать для каждого протокола свои иконки "
+"Если отмечено, то Gajim будет использовать для каждого протокола свои иконки "
 "(например: Контакты с MSN будут иметь соответствующие иконки msn для "
 "статусов в сети, ушел, занят и т.д....)"
 
@@ -2288,22 +2214,20 @@ msgid ""
 "this account"
 msgstr ""
 "Если отмечено, Gajim, после запуска, будет автоматически подсоединяться к "
-"jabber серверу с использование этого аккаунта"
+"jabber серверу с использованием этой учетной записи"
 
 #: ../src/gtkgui.glade.h:167
 msgid ""
 "If checked, any change to the global status (handled by the combobox at the "
 "bottom of the roster window) will change the status of this account "
 "accordingly"
-msgstr ""
+msgstr "Если отмечено, то любые изменения глобального статуса (управляемого из выпадающего списка внизу окна ростера) повлекут за собой изменение статуса этой учетной записи"
 
 #: ../src/gtkgui.glade.h:168
 msgid ""
 "If you have 2 or more accounts and it is checked, Gajim will list all "
 "contacts as if you had one account"
-msgstr ""
-"Если у вас 2 и более аккаунтов, то отметив здесь, вы заставите Gajim "
-"выводить вместе контакты из всех аккаунтов"
+msgstr "Если у вас 2 и более учетных записей, то отметив здесь, вы заставите Gajim выводить вместе контакты из всех учетных записей"
 
 #: ../src/gtkgui.glade.h:169
 msgid "Incoming message:"
@@ -2315,13 +2239,12 @@ msgid "Info/Query"
 msgstr "Информация/Запрос"
 
 #: ../src/gtkgui.glade.h:172
-#, fuzzy
 msgid "Information about you, as stored in the server"
-msgstr "Информация о вас хранится на сервере как vCard"
+msgstr "Информация о вас, как она хранится на сервере"
 
 #: ../src/gtkgui.glade.h:173
 msgid "Invitation Received"
-msgstr ""
+msgstr "Получено Приглашение"
 
 #: ../src/gtkgui.glade.h:174
 msgid "Italic"
@@ -2345,7 +2268,7 @@ msgstr "Расположение"
 
 #: ../src/gtkgui.glade.h:180
 msgid "Manage Accounts"
-msgstr "Управление Аккаунтами"
+msgstr "Управление Учетными записями"
 
 #: ../src/gtkgui.glade.h:181
 msgid "Manage Bookmarks"
@@ -2426,9 +2349,8 @@ msgid "Password:"
 msgstr "Пароль:"
 
 #: ../src/gtkgui.glade.h:204
-#, fuzzy
 msgid "Personal Information"
-msgstr "_Редактировать Личную Информацию..."
+msgstr "Редактировать Личную Информацию"
 
 #: ../src/gtkgui.glade.h:205
 msgid "Phone No.:"
@@ -2474,8 +2396,8 @@ msgid ""
 "client with the highest priority gets the events"
 msgstr ""
 "Приоритет используется в Jabber для определения того, кто будет получать "
-"события от jabber сервера когда подсоединены два и более клиента с одним и "
-"тем же аккаунтом. Клиент с наибольшим приоритетом будет получать события"
+"события от jabber сервера когда подсоединены два и более клиента с одной и "
+"той же учетной записью. Клиент с наибольшим приоритетом будет получать события"
 
 #: ../src/gtkgui.glade.h:216
 msgid "Profile, Avatar"
@@ -2491,7 +2413,7 @@ msgstr "Прокси:"
 
 #: ../src/gtkgui.glade.h:219
 msgid "Query Builder..."
-msgstr ""
+msgstr "Редактор Запросов..."
 
 #: ../src/gtkgui.glade.h:220
 msgid "Recently:"
@@ -2502,14 +2424,12 @@ msgid "Register to"
 msgstr "Зарегистрировать в"
 
 #: ../src/gtkgui.glade.h:222
-#, fuzzy
 msgid "Remove account _only from Gajim"
-msgstr "Удалит аккаунт только из Gajim"
+msgstr "Удалит учетную запись _только из Gajim"
 
 #: ../src/gtkgui.glade.h:223
-#, fuzzy
 msgid "Remove account from Gajim and from _server"
-msgstr "Удалить аккаунт из Gajim и с сервера"
+msgstr "Удалить учетную запись из Gajim и с _сервера"
 
 #: ../src/gtkgui.glade.h:224
 msgid "Remove file transfer from the list."
@@ -2545,8 +2465,8 @@ msgid ""
 msgstr ""
 "Ресурс отправляется Jabber серверу для того, чтобы 'разделить' один и тот же "
 "JID на две и более части в зависимости от числа клиентов присоединенных к "
-"одному серверу с тем же самым вккаунтом. Так что вы можете быть подсоединены "
-"с ресурсами 'Дом' или 'Работа' на одном аккаунте одновременно. Ресурс, "
+"одному серверу с той же самой учетной записью. Так что вы можете быть подсоединены "
+"с ресурсами 'Дом' или 'Работа' на одном учетной записи одновременно. Ресурс, "
 "который имеет больший приоритет будет получать все события. (См. ниже)"
 
 #: ../src/gtkgui.glade.h:231
@@ -2575,7 +2495,7 @@ msgstr "Сохранить _положение и размер ростера и
 
 #: ../src/gtkgui.glade.h:237
 msgid "Save conversation _logs for all contacts"
-msgstr "_История всех контактов для этого аккаунта"
+msgstr "_История всех контактов для этой учетной записи"
 
 #: ../src/gtkgui.glade.h:238
 msgid "Save pass_word"
@@ -2598,9 +2518,8 @@ msgid "Send _File"
 msgstr "Отправить _Файл"
 
 #: ../src/gtkgui.glade.h:243
-#, fuzzy
 msgid "Send _New Message..."
-msgstr "_Новое Сообщение..."
+msgstr "Отправить _Новое Сообщение..."
 
 #: ../src/gtkgui.glade.h:244
 msgid "Send keep-alive packets"
@@ -2616,8 +2535,7 @@ msgstr "Отправить сообщение и закрыть окно"
 
 #: ../src/gtkgui.glade.h:247
 msgid "Sends a message to currently connected users to this server"
-msgstr ""
-"Отправляет сообщение пользователям подсоединенным к серверу в данный момент"
+msgstr "Отправляет сообщение пользователям подсоединенным к серверу в данный момент"
 
 #: ../src/gtkgui.glade.h:248
 msgid "Server:"
@@ -2641,7 +2559,7 @@ msgstr "Установить _Аватару"
 
 #: ../src/gtkgui.glade.h:253
 msgid "Set an avatar when I connect"
-msgstr ""
+msgstr "Установить аватару при подсоединении"
 
 #: ../src/gtkgui.glade.h:254
 msgid "Sets Message of the Day"
@@ -2649,21 +2567,19 @@ msgstr "Устанавливает фортунку"
 
 #: ../src/gtkgui.glade.h:255
 msgid "Show All Pending _Events"
-msgstr ""
+msgstr "Показать Непросмотренные _События"
 
 #: ../src/gtkgui.glade.h:256
 msgid "Show _Offline Contacts"
-msgstr "Показывать _Отключенные контакты"
+msgstr "Показать _Отключенных"
 
 #: ../src/gtkgui.glade.h:257
-#, fuzzy
 msgid "Show _Roster"
-msgstr "Показывать только в _ростере"
+msgstr "Показать _Ростер"
 
 #: ../src/gtkgui.glade.h:258
-#, fuzzy
 msgid "Show _XML Console"
-msgstr "_XML Консоль"
+msgstr "Показать _XML Консоль"
 
 #: ../src/gtkgui.glade.h:259
 msgid "Show only in _roster"
@@ -2686,9 +2602,8 @@ msgid "Sort contacts by status"
 msgstr "Сортировать контакты по статусу"
 
 #: ../src/gtkgui.glade.h:264
-#, fuzzy
 msgid "Sta_tus"
-msgstr "Статус"
+msgstr "Ста_тус"
 
 #: ../src/gtkgui.glade.h:265
 msgid "Start _Chat"
@@ -2737,17 +2652,15 @@ msgstr "Суффикс:"
 
 #: ../src/gtkgui.glade.h:277
 msgid "Synch_ronize account status with global status"
-msgstr "Син_хронизировать статус аккаунта с глобальным статусом"
+msgstr "Син_хронизировать статус учетной записи с глобальным статусом"
 
 #: ../src/gtkgui.glade.h:278
-#, fuzzy
 msgid "Text _color:"
-msgstr "Цвет текста"
+msgstr "Цвет _текста:"
 
 #: ../src/gtkgui.glade.h:279
-#, fuzzy
 msgid "Text _font:"
-msgstr "Цвет шрифта"
+msgstr "Цвет _шрифта:"
 
 #: ../src/gtkgui.glade.h:280
 msgid "The auto away status message"
@@ -2782,9 +2695,8 @@ msgid "Toggle Open_PGP Encryption"
 msgstr "Включить Open_PGP Шифрование"
 
 #: ../src/gtkgui.glade.h:287
-#, fuzzy
 msgid "Type your new status message:"
-msgstr "Сообщение о статусе для авто-отошел"
+msgstr "Введите ваше новое сообщение о статусе"
 
 #: ../src/gtkgui.glade.h:288
 msgid "Type:"
@@ -2844,23 +2756,23 @@ msgid ""
 "following methods may be used to inform you about it. NOTE: New message "
 "events only occur if it is a new message from a contact you are not already "
 "chatting with"
-msgstr ""
+msgstr "Когда происходит новое событие (приходит сообщение, запрос на передачу файла и т.д.) могут быть использованы следующие способы сообщения нем. ПРИМЕЧАНИЕ. Событие соответствующее новому сообщению, не происходит если вы уже беседуете с контактом"
 
 #: ../src/gtkgui.glade.h:302
-#, fuzzy
 msgid "When new event is received"
-msgstr "Когда получено новое сообщение"
+msgstr "Когда получено новое сообытие"
 
 #: ../src/gtkgui.glade.h:303
 msgid "Work"
 msgstr "Работа"
 
 #: ../src/gtkgui.glade.h:304
-#, fuzzy
 msgid ""
 "You need to have an account in order to connect\n"
 "to the Jabber network."
-msgstr "Необходимо создать аккаунт для присоединения к jabber сети"
+msgstr ""
+"Необходимо создать учетную запись для присоединения \n"
+"к Jabber сети."
 
 #: ../src/gtkgui.glade.h:306
 msgid "Your JID:"
@@ -2900,9 +2812,8 @@ msgid "_Authorize"
 msgstr "_Авторизовать"
 
 #: ../src/gtkgui.glade.h:316
-#, fuzzy
 msgid "_Background:"
-msgstr "Цвет фона"
+msgstr "Цвет _фона"
 
 #: ../src/gtkgui.glade.h:317
 msgid "_Ban"
@@ -2925,9 +2836,8 @@ msgid "_Compact View    Alt+C"
 msgstr "_Компактный Вид    Alt-C"
 
 #: ../src/gtkgui.glade.h:322
-#, fuzzy
 msgid "_Contents"
-msgstr "_Продолжить"
+msgstr "_Содержание"
 
 #: ../src/gtkgui.glade.h:324
 msgid "_Copy JID/Email Address"
@@ -2943,33 +2853,31 @@ msgstr "_Отклонить"
 
 #: ../src/gtkgui.glade.h:327
 msgid "_Discover Services"
-msgstr ""
+msgstr "_Просмотреть Сервисы"
 
 #: ../src/gtkgui.glade.h:328
 msgid "_Discover Services..."
-msgstr ""
+msgstr "_Просмотреть Сервисы..."
 
 #: ../src/gtkgui.glade.h:330
 msgid "_FAQ"
-msgstr ""
+msgstr "_ЧаВО"
 
 #: ../src/gtkgui.glade.h:331
-#, fuzzy
 msgid "_Filter:"
-msgstr "Фильтр:"
+msgstr "_Фильтр:"
 
 #: ../src/gtkgui.glade.h:332
 msgid "_Finish"
 msgstr "_Закончить"
 
 #: ../src/gtkgui.glade.h:333
-#, fuzzy
 msgid "_Group Chat"
-msgstr "Комната"
+msgstr "_Комната"
 
 #: ../src/gtkgui.glade.h:334
 msgid "_Help"
-msgstr ""
+msgstr "_Помощь"
 
 #: ../src/gtkgui.glade.h:335
 msgid "_Highlight misspelled words"
@@ -3001,22 +2909,20 @@ msgid "_Jabber ID:"
 msgstr "_Jabber ID:"
 
 #: ../src/gtkgui.glade.h:344
-#, fuzzy
 msgid "_Join New Room..."
-msgstr "Новая Комната"
+msgstr "_Войти в Новую Комнату..."
 
 #: ../src/gtkgui.glade.h:345
 msgid "_Kick"
 msgstr "_Выгнать"
 
 #: ../src/gtkgui.glade.h:346
-#, fuzzy
 msgid "_Log conversation history"
-msgstr "История"
+msgstr "_История Сообщения"
 
 #: ../src/gtkgui.glade.h:347
 msgid "_Log status changes of contacts"
-msgstr ""
+msgstr "_История изменений статуса контактов"
 
 #: ../src/gtkgui.glade.h:348
 msgid "_Mail client:"
@@ -3028,7 +2934,7 @@ msgstr "_Участник"
 
 #: ../src/gtkgui.glade.h:350
 msgid "_Merge accounts"
-msgstr "_Объединить аккаунты"
+msgstr "_Объединить Учетные записи"
 
 #: ../src/gtkgui.glade.h:351
 msgid "_Message"
@@ -3039,9 +2945,8 @@ msgid "_Modify"
 msgstr "_Изменить"
 
 #: ../src/gtkgui.glade.h:353
-#, fuzzy
 msgid "_Modify Account..."
-msgstr "_Редактировать Аккаунт..."
+msgstr "_Редактировать Учетную запись..."
 
 #: ../src/gtkgui.glade.h:354
 msgid "_Name: "
@@ -3141,7 +3046,7 @@ msgstr "_Получить"
 
 #: ../src/gtkgui.glade.h:379
 msgid "_Search"
-msgstr ""
+msgstr "_Поиск"
 
 #. Make sure the character after "_" is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)
 #: ../src/gtkgui.glade.h:381
@@ -3214,34 +3119,32 @@ msgstr "минут"
 
 #. we talk about file
 #: ../src/gtkgui_helpers.py:99 ../src/gtkgui_helpers.py:114
-#, fuzzy, python-format
+#, python-format
 msgid "Error: cannot open %s for reading"
-msgstr "ошибка: не могу открыть %s для чтения"
+msgstr "Ошибка: не могу открыть %s для чтения"
 
 #: ../src/gtkgui_helpers.py:253
 msgid "Error reading file:"
-msgstr ""
+msgstr "Ошибка чтения файла:"
 
 #: ../src/gtkgui_helpers.py:256
 msgid "Error parsing file:"
-msgstr ""
+msgstr "Ошибка обработки файла:"
 
 #. do not traceback (could be a permission problem)
 #. we talk about a file here
 #: ../src/gtkgui_helpers.py:293
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
-msgstr ""
+msgstr "Не могу писать в %s. Управление Сессиями будет недоступно"
 
 #: ../src/history_window.py:83
-#, fuzzy
 msgid "Date"
-msgstr "Штат:"
+msgstr "Дата"
 
 #: ../src/history_window.py:91
-#, fuzzy
 msgid "Message"
-msgstr "_Сообщение"
+msgstr "Сообщение"
 
 #: ../src/history_window.py:100 ../src/history_window.py:102
 #, python-format
@@ -3251,61 +3154,61 @@ msgstr "История %s"
 #: ../src/history_window.py:266
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
-msgstr ""
+msgstr "%(nick)s теперь %(status)s: %(status_msg)s"
 
 #: ../src/history_window.py:270
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s is now %(status)s"
-msgstr "%s %s (%s)"
+msgstr "%(nick)s теперь %(status)s"
 
 #: ../src/history_window.py:276
-#, fuzzy, python-format
+#, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
-msgstr "Статус установлен в: %s: %s"
+msgstr "Статус установлен в:  %(status)s: %(status_msg)s"
 
 #: ../src/history_window.py:279
-#, fuzzy, python-format
+#, python-format
 msgid "Status is now: %(status)s"
-msgstr "Статус установлен в: %s: %s"
+msgstr "Статус установлен в: %(status)s"
 
 #: ../src/notify.py:102
 #, python-format
 msgid "%(nickname)s in room %(room_name)s has sent you a new message."
-msgstr ""
+msgstr "%(nickname)s из комнаты %(room_name)s отправил вам новое сообщение."
 
 #. we talk about a name here
 #: ../src/notify.py:106
 #, python-format
 msgid "%s has sent you a new message."
-msgstr ""
+msgstr "%s отправил вам новое сообщение"
 
 #. we talk about a name here
 #: ../src/notify.py:111
-#, fuzzy, python-format
+#, python-format
 msgid "%s wants to send you a file."
-msgstr "%s хочет отправит вам файл:"
+msgstr "%s хочет отправит вам файл."
 
 #: ../src/notify.py:126
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
-msgstr ""
+msgstr "Успешно получен файл %(filename)s от %(name)s."
 
 #. ft stopped
 #: ../src/notify.py:129
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
-msgstr ""
+msgstr "Передача файла %(filename)s от %(name)s приостановлена."
 
 #: ../src/notify.py:141
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
-msgstr ""
+msgstr "%(name)s успешно получил отправленный вами файл %(filename)s."
 
 #. ft stopped
 #: ../src/notify.py:144
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
-msgstr ""
+msgstr "Передача файла %(filename)s к %(name)s приостановлена."
 
 #: ../src/remote_control.py:61
 msgid "D-Bus python bindings are missing in this computer"
@@ -3316,9 +3219,8 @@ msgid "D-Bus capabilities of Gajim cannot be used"
 msgstr "Возможности работы Gajim с D-Bus не могут быть использованы"
 
 #: ../src/roster_window.py:116
-#, fuzzy
 msgid "Merged accounts"
-msgstr "_Объединить аккаунты"
+msgstr "Объединенные учетные записи"
 
 #: ../src/roster_window.py:306
 #, python-format
@@ -3326,14 +3228,12 @@ msgid "You are already in room %s"
 msgstr "Вы уже в комнате %s"
 
 #: ../src/roster_window.py:311 ../src/roster_window.py:1779
-#, fuzzy
 msgid "You cannot join a room while you are invisible"
-msgstr "Вы не можете зайти в комнату без подключения."
+msgstr "Вы не можете зайти в комнату так как вы в режиме невидимости."
 
 #: ../src/roster_window.py:464
-#, fuzzy
 msgid "_Join New Room"
-msgstr "Новая Комната"
+msgstr "_Войти в Новую Комнату"
 
 #: ../src/roster_window.py:479
 msgid "Manage Bookmarks..."
@@ -3342,22 +3242,22 @@ msgstr "Управление Закладками..."
 #: ../src/roster_window.py:494
 #, python-format
 msgid "to %s account"
-msgstr "аккаунту %s"
+msgstr "учетной записи %s"
 
 #: ../src/roster_window.py:506
 #, python-format
 msgid "using %s account"
-msgstr "используя %s аккаунт"
+msgstr "используя %s учетную запись"
 
 #: ../src/roster_window.py:520
-#, fuzzy, python-format
+#, python-format
 msgid "using account %s"
-msgstr "используя %s аккаунт"
+msgstr "используя учетную запись %s"
 
 #: ../src/roster_window.py:531
 #, python-format
 msgid "for account %s"
-msgstr "для аккаунта %s"
+msgstr "для учетной записи %s"
 
 #: ../src/roster_window.py:705
 #, python-format
@@ -3370,12 +3270,10 @@ msgid "Transport \"%s\" will be removed"
 msgstr "Транспорт \"%s\" будет удален"
 
 #: ../src/roster_window.py:823
-#, fuzzy
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
 "this transport."
-msgstr ""
-"У вас теперь не будет возможности приема и отправки сообщения контактам с %s."
+msgstr "У вас теперь не будет возможности приема и отправки сообщения контактам через этот транспорт."
 
 #: ../src/roster_window.py:873
 msgid "Assign OpenPGP Key"
@@ -3390,9 +3288,8 @@ msgid "I would like to add you to my roster"
 msgstr "Вы не против если я добавлю Вас себе в ростер?"
 
 #: ../src/roster_window.py:1022
-#, fuzzy
 msgid "Re_name"
-msgstr "Переименовать"
+msgstr "П_ереименовать"
 
 #: ../src/roster_window.py:1043
 msgid "_Log on"
@@ -3403,9 +3300,8 @@ msgid "Log _off"
 msgstr "_Отключиться"
 
 #: ../src/roster_window.py:1146
-#, fuzzy
 msgid "_Change Status Message"
-msgstr "Сообщение о Статусе %s"
+msgstr "_Изменить Сообщение о Статусе"
 
 #: ../src/roster_window.py:1217
 msgid "Authorization has been sent"
@@ -3421,19 +3317,18 @@ msgid "Subscription request has been sent"
 msgstr "Был отправлен запрос на подписку "
 
 #: ../src/roster_window.py:1241
-#, fuzzy, python-format
+#, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
-msgstr "Если \"%s\" примет ваш запрос, вы будете знать его статус"
+msgstr "Если \"%s\" примет ваш запрос, вы будете знать его или её статус"
 
 #: ../src/roster_window.py:1251
-#, fuzzy
 msgid "Authorization has been removed"
-msgstr "Была отправлена авторизация"
+msgstr "Авторизация была удалена"
 
 #: ../src/roster_window.py:1252
-#, fuzzy, python-format
+#, python-format
 msgid "Now \"%s\" will always see you as offline."
-msgstr "Вы всегда будете видеть его в оффлайне."
+msgstr "Теперь \"%s\" всегда будет видеть вас в оффлайне."
 
 #: ../src/roster_window.py:1396
 #, python-format
@@ -3441,17 +3336,14 @@ msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Контакт \"%s\" будет удален из вашего ростера"
 
 #: ../src/roster_window.py:1397
-#, fuzzy
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
-msgstr ""
-"Если вы удалите контакт, вы так же удалите и авторизацию. Контакт \"%s\" "
-"будет всегда видеть вас так как будто вы в оффлайне."
+msgstr "Если вы удалите контакт, вы так же удалите и авторизацию. Вы будете видеть его или её всегда в оффлайне."
 
 #: ../src/roster_window.py:1398
 msgid "I want this contact to know my status after removal"
-msgstr ""
+msgstr "Я хочу чтобы этот контакт видел мой статус после удаления"
 
 #: ../src/roster_window.py:1440
 msgid "Password Required"
@@ -3460,7 +3352,7 @@ msgstr "Требуется Пароль"
 #: ../src/roster_window.py:1441
 #, python-format
 msgid "Enter your password for account %s"
-msgstr "Введите пароль для аккаунта %s"
+msgstr "Введите пароль для учетной записи %s"
 
 #: ../src/roster_window.py:1442
 msgid "Save password"
@@ -3481,21 +3373,21 @@ msgstr "Сохранить парольную фразу (небезопасно
 
 #: ../src/roster_window.py:1524 ../src/roster_window.py:1584
 msgid "You are participating in one or more group chats"
-msgstr ""
+msgstr "Вы находитесь в одной или более комнатах"
 
 #: ../src/roster_window.py:1525 ../src/roster_window.py:1585
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
-msgstr ""
+msgstr "Переход в состояние невидимости приведет к выходу из этих комнат. Вы точно хотите стать в невидимым?"
 
 #: ../src/roster_window.py:1544
 msgid "No account available"
-msgstr "Недоступен"
+msgstr "Неи доступной учетной записи"
 
 #: ../src/roster_window.py:1545
 msgid "You must create an account before you can chat with other contacts."
-msgstr "Для начала беседа прежде необходимо создать аккаунт."
+msgstr "Для начала беседы с другими людьми прежде необходимо создать учетную запись."
 
 #: ../src/roster_window.py:1938 ../src/roster_window.py:1944
 msgid "You have unread messages"
@@ -3510,26 +3402,22 @@ msgstr ""
 "истории."
 
 #: ../src/roster_window.py:2606
-#, fuzzy
 msgid "Change Status Message..."
-msgstr "Сообщение о Статусе %s"
+msgstr "Изменить Сообщение о Статусе..."
 
 #: ../src/systray.py:145
-#, fuzzy
 msgid "_Change Status Message..."
-msgstr "Сообщение о Статусе %s"
+msgstr "_Изменить Сообщение о Статусе..."
 
 #. for chat_with
 #. for new_message
 #: ../src/systray.py:177 ../src/systray.py:182
-#, fuzzy
 msgid "using account "
-msgstr "используя %s аккаунт"
+msgstr "используя учетную запись "
 
 #: ../src/systray.py:203
-#, fuzzy
 msgid "Hide this menu"
-msgstr "Скрывает окно"
+msgstr "Скрыть это меню"
 
 #: ../src/systray.py:264
 msgid "All contacts in this group are offline or have errors"
@@ -3537,12 +3425,12 @@ msgstr "Все контакты в это группе отключены или
 
 #: ../src/systraywin32.py:272 ../src/systraywin32.py:291
 #: ../src/tooltips.py:261
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim - %d unread message"
 msgid_plural "Gajim - %d unread messages"
-msgstr[0] "У вас есть непрочитанные сообщения"
-msgstr[1] "У вас есть непрочитанные сообщения"
-msgstr[2] "У вас есть непрочитанные сообщения"
+msgstr[0] "Gajim - %d непрочитанное сообщение"
+msgstr[1] "Gajim - %d непрочитанных сообщения"
+msgstr[2] "Gajim - %d непрочитанных сообщений"
 
 #. we talk about a contact here
 #: ../src/tabbed_chat_window.py:227
@@ -3600,28 +3488,28 @@ msgid "Encryption disabled"
 msgstr "Шифрование отключено"
 
 #: ../src/tooltips.py:267
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim - %d unread single message"
 msgid_plural "Gajim - %d unread single messages"
-msgstr[0] "У вас есть непрочитанные сообщения"
-msgstr[1] "У вас есть непрочитанные сообщения"
-msgstr[2] "У вас есть непрочитанные сообщения"
+msgstr[0] "Gajim - %d непрочитанное одиночное сообщение"
+msgstr[1] "Gajim - %d непрочитанных одиночных сообщения"
+msgstr[2] "Gajim - %d непрочитанных одиночных сообщений"
 
 #: ../src/tooltips.py:273
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim - %d unread group chat message"
 msgid_plural "Gajim - %d unread group chat messages"
-msgstr[0] "У вас есть непрочитанные сообщения"
-msgstr[1] "У вас есть непрочитанные сообщения"
-msgstr[2] "У вас есть непрочитанные сообщения"
+msgstr[0] "Gajim - %d непрочитанное сообщение в комнате"
+msgstr[1] "Gajim - %d непрочитанных сообщения в комнате"
+msgstr[2] "Gajim - %d непрочитанных сообщений в комнате"
 
 #: ../src/tooltips.py:279
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim - %d unread private message"
 msgid_plural "Gajim - %d unread private messages"
-msgstr[0] "У вас есть непрочитанные сообщения"
-msgstr[1] "У вас есть непрочитанные сообщения"
-msgstr[2] "У вас есть непрочитанные сообщения"
+msgstr[0] "Gajim - %d непрочитанное личное сообщение"
+msgstr[1] "Gajim - %d непрочитанных личных сообщения"
+msgstr[2] "Gajim - %d непрочитанных личных сообщения"
 
 #: ../src/tooltips.py:294 ../src/tooltips.py:296
 #, python-format
@@ -3700,13 +3588,15 @@ msgstr "Передается"
 
 #: ../src/tooltips.py:543
 msgid "This service has not yet responded with detailed information"
-msgstr ""
+msgstr "Этот сервис еще не сообщил информацию о себе"
 
 #: ../src/tooltips.py:545
 msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely legacy or broken"
 msgstr ""
+"Этот сервис не может предоставить информацию о себе . \n"
+"Похоже что он или неверно настроен или сломан"
 
 #: ../src/vcard.py:169
 msgid "Choose Avatar"
@@ -3720,9 +3610,8 @@ msgid "The filesize of image \"%s\" is too large"
 msgstr "Размер файла изображения \"%s\" слишком велик"
 
 #: ../src/vcard.py:206
-#, fuzzy
 msgid "The file must not be more than 32 kilobytes."
-msgstr "Размер файла не должен превышать 8 килобайт."
+msgstr "Размер файла не должен превышать 32 килобайта."
 
 #: ../src/vcard.py:272
 msgid "?Client:Unknown"
@@ -3736,28 +3625,28 @@ msgstr "Неизвестна"
 msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in his/her presence"
-msgstr ""
+msgstr "Этот контакт хочет знать о вашем присутствии, но вам информация о его или её присутствии не интересна"
 
 #: ../src/vcard.py:288
 msgid ""
 "You are interested in the contact's presence information, but he/she is not "
 "interested in yours"
-msgstr ""
+msgstr "Вам хочется получать информацию о присутствии контакта, но он или она не заинтересована в вашей."
 
 #: ../src/vcard.py:290
 msgid "You and the contact are interested in each other's presence information"
-msgstr ""
+msgstr "Вы и контакт оба желаете знать о присутствии друг друга"
 
 #. None
 #: ../src/vcard.py:292
 msgid ""
 "You are not interested in the contact's presence, and neither he/she is "
 "interested in yours"
-msgstr ""
+msgstr "Ни вы ни ваш контакт не желаете знать о присутствии друг друга"
 
 #: ../src/vcard.py:301
 msgid "You are waiting contact's answer about your subscription request"
-msgstr ""
+msgstr "Вы ожидаете ответа контакта на запрос на подписку"
 
 #: ../src/vcard.py:310 ../src/vcard.py:329
 msgid " resource with priority "
@@ -3769,13 +3658,11 @@ msgstr "Необходимо присоединиться к серверу дл
 
 #: ../src/vcard.py:441
 msgid "Without a connection, you can not get your contact information."
-msgstr ""
-"Необходимо присоединиться к серверу для получения информации о контакте"
+msgstr "Необходимо присоединиться к серверу для получения информации о контакте"
 
 #: ../src/common/check_paths.py:33
-#, fuzzy
 msgid "creating logs database"
-msgstr "создается директория %s"
+msgstr "создается БД истории"
 
 #: ../src/common/check_paths.py:73 ../src/common/check_paths.py:85
 #, python-format
@@ -3796,25 +3683,24 @@ msgid "creating %s directory"
 msgstr "создается директория %s"
 
 #: ../src/common/check_paths.py:92
-#, fuzzy, python-format
+#, python-format
 msgid "%s is directory but should be file"
-msgstr "%s должен быть директорией, а не файлом"
+msgstr "%s должен быть файлом, а не директорией"
 
 #: ../src/common/exceptions.py:29
 msgid ""
 "pysqlite2 (aka python-pysqlite2) dependency is missing. After you install "
 "pysqlite3, if you want to migrate your logs to the new database, please "
 "read: http://trac.gajim.org/wiki/MigrateLogToDot9DB Exiting..."
-msgstr ""
+msgstr "Отсутсвует pysqlite (или python-pysqlite2). После установки pysqlite2, если вы хотите перенести историю в новую БД, то прочитайте информацию по ссылке: http://trac.gajim.org/wiki/MigrateLogToDot9DB Выхожу..."
 
 #: ../src/common/exceptions.py:40
 msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
+msgstr "Сервис недоступен: Gajim не запущен или отключена функция удаленного управления"
 
 #: ../src/common/exceptions.py:48
-#, fuzzy
 msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "На машине отсутствует D-Bus"
+msgstr "На машине отсутствует D-Bus или модуль питона для нее"
 
 #: ../src/common/exceptions.py:56
 msgid "Session bus is not available"
@@ -3822,11 +3708,11 @@ msgstr "D-Bus сервер недоступен"
 
 #: ../src/common/config.py:48
 msgid "Use DBus and Notification-Daemon to show notifications"
-msgstr ""
+msgstr "Использовать DBus и Сервис Уведомлений для показа уведомлений"
 
 #: ../src/common/config.py:52
 msgid "Time in minutes, after which your status changes to away."
-msgstr ""
+msgstr "Время в минутах, после которого ваш статус изменится на Отошел."
 
 #: ../src/common/config.py:53
 msgid "Away as a result of being idle"
@@ -3834,65 +3720,63 @@ msgstr "Статус 'Отошел' ввиду отсутствия пользо
 
 #: ../src/common/config.py:55
 msgid "Time in minutes, after which your status changes to not available."
-msgstr ""
+msgstr "Время в минутах, после которого ваш статус изменится на Недоступен."
 
 #: ../src/common/config.py:56
 msgid "Not available as a result of being idle"
 msgstr "Статус 'Недоступен' ввиду отсутствия пользователя."
 
 #: ../src/common/config.py:82
-msgid ""
-"If True, do not remove */_ . So *abc* will be bold but with * * not removed."
-msgstr ""
+msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
+msgstr "Если True, то не будут удаляться */_. Так что *фыва* будут написаны полужирным шрифтом, но * * удалены не будут"
 
 #: ../src/common/config.py:118
 msgid "Add * and [n] in roster title?"
-msgstr ""
+msgstr "Добавлять * и [n] в окно ростера?"
 
 #: ../src/common/config.py:119
 msgid ""
 "How many lines to remember from previous conversation when a chat tab/window "
 "is reopened."
-msgstr ""
+msgstr "Сколько строк из предыдущей беседы выводить, когда вкладка/окно открываются вновь."
 
 #: ../src/common/config.py:120
 msgid "How many minutes should last lines from previous conversation last."
-msgstr ""
+msgstr "Сколько минут должны оставаться последние строки из предыдущей беседы."
 
 #: ../src/common/config.py:121
 msgid ""
 "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
 "Client default behaviour)."
-msgstr ""
+msgstr "Оправлять сообщения по Ctrl+Enter и Enter создает новую строку (как в Mirabilis ICQ)"
 
 #: ../src/common/config.py:123
 msgid "How many lines to store for Ctrl+KeyUP."
-msgstr ""
+msgstr "Сколько строк хранить для Ctrl+Стрелка вверх"
 
 #. which version created the config
 #: ../src/common/config.py:125
-#, fuzzy
 msgid "Use compact view when you open a chat window"
-msgstr "Область вверху окна чата"
+msgstr "Использовать компактный вид для окна беседы"
 
 #: ../src/common/config.py:126
 msgid "Use compact view when you open a group chat window"
-msgstr ""
+msgstr "Использовать компактный вид для окна комнаты"
 
 #: ../src/common/config.py:128
 #, python-format
 msgid ""
 "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
 "which means use wiktionary."
-msgstr ""
+msgstr "Введите свою ссылку с %s, в которой %s подменяет слово/фразу или 'WIKTIONARY', что значит: \"использовать wiktionary\"."
 
 #: ../src/common/config.py:131
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
+msgstr "Если отмечено, то Gajim'ом можно будет управлять удаленно с использованием gajim-remote."
 
 #: ../src/common/config.py:135
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
+msgstr "Спрашивать перед закрытием окна/вкладки комнаты."
 
 #. notif. on file complete
 #. port, used for file transfers
@@ -3900,64 +3784,63 @@ msgstr ""
 msgid ""
 "Overrides the host we send for File Transfer in case of address translation/"
 "port forwarding."
-msgstr ""
+msgstr "Указвает имя хоста, которое мы отсылаем при Передаче Файлов, в случае если мы за NAT или используется проброс портов."
 
 #: ../src/common/config.py:140
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
-msgstr ""
+msgstr "IEC утверждает что KiB = 1024 байт, KB = 1000 байт"
 
 #: ../src/common/config.py:148
-#, fuzzy
 msgid "Show tab when only one conversation?"
-msgstr "читает сообщение"
+msgstr "Показывать вкладку при одной беседе?"
 
 #: ../src/common/config.py:149
 msgid "Show tab border if one conversation?"
-msgstr ""
+msgstr "Показывать границу вкладки при одной беседе?"
 
 #: ../src/common/config.py:150
 msgid "Show close button in tab?"
-msgstr ""
+msgstr "Показывать кнопку закрытия на вкладке?"
 
 #: ../src/common/config.py:155
 msgid ""
 "A semicolon-separated list of words that will be highlighted in multi-user "
 "chat."
-msgstr ""
+msgstr "Список слов с ; в качестве разделителя, которые будут выделяться в комнате."
 
 #: ../src/common/config.py:156
 msgid ""
 "If True, quits Gajim when X button of Window Manager is clicked. This "
 "setting is taken into account only if trayicon is used."
-msgstr ""
+msgstr "Если True, то Gajim будет завершаться при нажатии на кнопку закрытия окна. Эта опция учитывается только если используется иконка для трея."
 
 #: ../src/common/config.py:157
 msgid "If True, Gajim registers for xmpp:// on each startup."
-msgstr ""
+msgstr "Если True, то Gajim будет регистрировать xmpp:// при каждом запуске"
 
 #: ../src/common/config.py:158
 msgid ""
 "If True, Gajim will display an icon on each tab containing unread messages. "
 "Depending on the theme, this icon may be animated."
-msgstr ""
+msgstr "Если True, то Gajim иконку на каждой вкладке, которая содержит непрочитанные сообщения. В зависимости от темы, она может быть анимированной."
 
 #: ../src/common/config.py:159
 msgid ""
 "If True, Gajim will display the status message, if not empty, for every "
 "contact under the contact name in roster window"
-msgstr ""
+msgstr "Если True, то Gajim будет отображать сообщение о статусе, если оно не пустое, для каждого контакта под именем контакта в окне ростера"
 
 #: ../src/common/config.py:161
 msgid ""
 "If True, Gajim will ask for avatar each contact that did not have an avatar "
 "last time or has one cached that is too old."
-msgstr ""
+msgstr "Если True, то Gajim будет запрашивать аватару для каждого контакта у которого её не было в последний раз или она уже слишком старая."
 
 #: ../src/common/config.py:162
 msgid ""
 "If False, you will no longer see status line in chats when a contact changes "
 "his or her status and/or his status message."
-msgstr ""
+msgstr "Если False, то вы больше не будете видеть статусную строку в окне беседы, когда контакт меняет его или её статус и/или сообщение о статусе."
 
 #: ../src/common/config.py:322
 msgid "Sleeping"
@@ -4015,35 +3898,34 @@ msgstr "Наслаждаюсь жизнью, чего и вам желаю."
 msgid ""
 "Sound to play when a MUC message contains one of the words in "
 "muc_highlight_words, or when a MUC message contains your nickname."
-msgstr ""
+msgstr "Звук, который нужно воспроизвести когда в MUC появляется сообщение, которое содержит слово из списка muc_highlight_words, или когда сообщение содержит ваш ник."
 
 #: ../src/common/config.py:338
 msgid ""
 "Sound to play when any MUC message arrives. (This setting is taken into "
 "account only if notify_on_all_muc_messages is True)"
-msgstr ""
+msgstr "Звук, который нужно воспроизводить когда приходит любое сообщение в MUC (Эта опция учитывается только тогда, когда notify_on_all_muc_messages установлено в True)"
 
 #. sorted alphanum
 #: ../src/common/config.py:343 ../src/common/optparser.py:162
 msgid "green"
-msgstr ""
+msgstr "зеленый"
 
 #: ../src/common/config.py:347 ../src/common/optparser.py:148
 msgid "grocery"
-msgstr ""
+msgstr "овошной"
 
 #: ../src/common/config.py:351
 msgid "human"
-msgstr ""
+msgstr "телесный"
 
 #: ../src/common/config.py:355
-#, fuzzy
 msgid "marine"
-msgstr "минут"
+msgstr "морской"
 
 #: ../src/common/config.py:359 ../src/common/optparser.py:148
 msgid "plain"
-msgstr ""
+msgstr "чистый"
 
 #. password required to join
 #. we are banned
@@ -4057,35 +3939,35 @@ msgstr "Не могу войти в комнату"
 
 #: ../src/common/connection.py:448
 msgid "A password is required to join this room."
-msgstr ""
+msgstr "Для входа в комнату необходим пароль."
 
 #: ../src/common/connection.py:451
-#, fuzzy
 msgid "You are banned from this room."
-msgstr "Вы уже в комнате %s"
+msgstr "Вам запрещено заходить в эту комнату."
 
 #: ../src/common/connection.py:454
 msgid "Such room does not exist."
-msgstr ""
+msgstr "Такой комнаты не существует."
 
 #: ../src/common/connection.py:457
 msgid "Room creation is restricted."
-msgstr ""
+msgstr "Запрещено созднание комнат."
 
 #: ../src/common/connection.py:460
 msgid "Your registered nickname must be used."
-msgstr ""
+msgstr "Вы должны использовать свой зарегистрированный ник."
 
 #: ../src/common/connection.py:463
-#, fuzzy
 msgid "You are not in the members list."
-msgstr "Вы не подключены к серверу"
+msgstr "Вы не находитесь в списке участников."
 
 #: ../src/common/connection.py:471
 msgid ""
 "Your desired nickname is in use or registered by another occupant.\n"
 "Please specify another nickname below:"
 msgstr ""
+"Ник, который вы указали уже используется другим посетителем.\n"
+"Пожалуйств, укажите другой ник ниже:"
 
 #: ../src/common/connection.py:497 ../src/common/connection.py:1959
 msgid "I would like to add you to my roster."
@@ -4111,7 +3993,7 @@ msgstr "%s отменил подписку с вами"
 #: ../src/common/connection.py:594
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
-msgstr "Связь с аккаунтом \"%s\" была потеряна"
+msgstr "Связь с учетной записью \"%s\" была потеряна"
 
 #: ../src/common/connection.py:544 ../src/common/connection.py:566
 #: ../src/common/connection.py:595
@@ -4123,7 +4005,7 @@ msgstr "Требуется переподключение для продолж�
 msgid ""
 "Jid %s is not RFC compliant. It will not be added to your roster. Use roster "
 "management tools such as http://jru.jabberstudio.org/ to remove it"
-msgstr ""
+msgstr "JID %s не соответствует RFC. Он не будет добавлен в ваш ростер. Используете утилиты для управления ростером такими как http://jru.jabberstudio.org/ для того, чтобы его удалить"
 
 #: ../src/common/connection.py:1642 ../src/common/connection.py:1715
 #: ../src/common/connection.py:2045
@@ -4132,9 +4014,9 @@ msgid "Could not connect to \"%s\""
 msgstr "Не могу соединиться с \"%s\""
 
 #: ../src/common/connection.py:1647
-#, fuzzy, python-format
+#, python-format
 msgid "Connected to server %s:%s with %s"
-msgstr "Подключен к серверу с %s"
+msgstr "Подключен к серверу %s: %s с %s"
 
 #: ../src/common/connection.py:1716
 msgid "Check your connection or try again later"
@@ -4191,35 +4073,31 @@ msgstr ""
 #: ../src/common/connection.py:2014
 #, python-format
 msgid "Registration information for transport %s has not arrived in time"
-msgstr ""
+msgstr "Регистрационная информация для транспорта %s не пришла вовремя"
 
 #: ../src/common/connection.py:2350
-#, fuzzy
 msgid "Timeout"
-msgstr "Тема"
+msgstr "Таймаут"
 
 #: ../src/common/connection.py:2391 ../src/common/connection.py:2403
 msgid "A protocol error has occured:"
-msgstr ""
+msgstr "Произошла ошибка протокола:"
 
 #: ../src/common/helpers.py:100
-#, fuzzy
 msgid "Invalid character in username."
-msgstr "Неверное имя пользователя"
+msgstr "Неверный символ в имени пользователя."
 
 #: ../src/common/helpers.py:105
-#, fuzzy
 msgid "Server address required."
-msgstr "Ответ сервера:"
+msgstr "Требуется адрес сервера."
 
 #: ../src/common/helpers.py:110
-#, fuzzy
 msgid "Invalid character in hostname."
-msgstr "Неверное имя аккаунта"
+msgstr "Неверный символ в имени сервера"
 
 #: ../src/common/helpers.py:116
 msgid "Invalid character in resource."
-msgstr ""
+msgstr "Неверный символ в ресурсе"
 
 #. GiB means gibibyte
 #: ../src/common/helpers.py:156
@@ -4264,36 +4142,32 @@ msgid "%s B"
 msgstr "%s B"
 
 #: ../src/common/helpers.py:186
-#, fuzzy
 msgid "_Busy"
-msgstr "Занят"
+msgstr "_Занят"
 
 #: ../src/common/helpers.py:188
 msgid "Busy"
 msgstr "Занят"
 
 #: ../src/common/helpers.py:191
-#, fuzzy
 msgid "_Not Available"
-msgstr "Недоступен"
+msgstr "_Недоступен"
 
 #: ../src/common/helpers.py:193
 msgid "Not Available"
 msgstr "Недоступен"
 
 #: ../src/common/helpers.py:196
-#, fuzzy
 msgid "_Free for Chat"
-msgstr "Готов Поболтать"
+msgstr "_Готов Поболтать"
 
 #: ../src/common/helpers.py:198
 msgid "Free for Chat"
 msgstr "Готов Поболтать"
 
 #: ../src/common/helpers.py:201
-#, fuzzy
 msgid "_Available"
-msgstr "Доступен"
+msgstr "_Доступен"
 
 #: ../src/common/helpers.py:203
 msgid "Available"
@@ -4304,27 +4178,24 @@ msgid "Connecting"
 msgstr "Соединяюсь"
 
 #: ../src/common/helpers.py:208
-#, fuzzy
 msgid "A_way"
-msgstr "Ушел"
+msgstr "_Ушел"
 
 #: ../src/common/helpers.py:210
 msgid "Away"
 msgstr "Ушел"
 
 #: ../src/common/helpers.py:213
-#, fuzzy
 msgid "_Offline"
-msgstr "Отключен"
+msgstr "_Отключен"
 
 #: ../src/common/helpers.py:215
 msgid "Offline"
 msgstr "Отключен"
 
 #: ../src/common/helpers.py:218
-#, fuzzy
 msgid "_Invisible"
-msgstr "Невидимка"
+msgstr "_Невидимка"
 
 #: ../src/common/helpers.py:220
 msgid "Invisible"
@@ -4423,291 +4294,5 @@ msgstr "ошибка: не могу открыть %s для чтения"
 
 #: ../src/common/optparser.py:157 ../src/common/optparser.py:158
 msgid "cyan"
-msgstr ""
+msgstr "синий"
 
-#~ msgid "<b>Changes in latest version</b>"
-#~ msgstr "<b>Изменения в последней версии</b>"
-
-#~ msgid "Check for new _version on Gajim startup"
-#~ msgstr "Проверять наличие новой версии Gajim при _запуске"
-
-#~ msgid "Log history"
-#~ msgstr "История:"
-
-#~ msgid "New version of Gajim available"
-#~ msgstr "Доступна новая версия Gajim"
-
-#~ msgid "Open Download Page"
-#~ msgstr "Открыть Страницу Загрузки"
-
-#~ msgid "Service not available"
-#~ msgstr "Сервис недоступен"
-
-#~ msgid "Session bus is not available."
-#~ msgstr "D-Bus сервер недоступен."
-
-#, fuzzy
-#~ msgid "with account %s"
-#~ msgstr "для аккаунта %s"
-
-#, fuzzy
-#~ msgid "with account "
-#~ msgstr "аккаунт: "
-
-#~ msgid "New Message as %s"
-#~ msgstr "Новое Сообщение как %s"
-
-#~ msgid "Chat with"
-#~ msgstr "Чат с"
-
-#~ msgid "E-Mail"
-#~ msgstr "Почта:"
-
-#, fuzzy
-#~ msgid "Send New Message"
-#~ msgstr "Новое Сообшение"
-
-#~ msgid "as %s"
-#~ msgstr "как %s"
-
-#~ msgid "as "
-#~ msgstr "как "
-
-#, fuzzy
-#~ msgid "Send _New Message"
-#~ msgstr "_Новое Сообщение"
-
-#~ msgid "Re_quest Authorization from"
-#~ msgstr "Запросить Авторизацию от"
-
-#~ msgid "Send Authorization to"
-#~ msgstr "Отправить Авторизацию к"
-
-#~ msgid "<b>Log</b>"
-#~ msgstr "<b>Лог</b>"
-
-#~ msgid "Log presences in _contact's log file"
-#~ msgstr "Вести лог состояний в логе _контакта"
-
-#~ msgid "Log presences in an _external file"
-#~ msgstr "Вести лог состояний во внешнем файле"
-
-#~ msgid "Unable to write file in %s"
-#~ msgstr "Не могу записать файл в %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "You can set advanced account options by pressing Advanced button,or later "
-#~ "by clicking in Accounts menuitem under Edit menu from the main window."
-#~ msgstr ""
-#~ "Аккаунт был успешно добавлен. \n"
-#~ "Вы можете настроить аккаунт используя \n"
-#~ "\"Настройка->Аккаунты\" из главного окна."
-
-#~ msgid ""
-#~ "When a new message is received which is not from a contact already in a "
-#~ "chat window, the three following actions may happen in order for you to "
-#~ "be informed about it"
-#~ msgstr ""
-#~ "Когда приходит сообщение от контакта с которым еще не открыто окно чата, "
-#~ "есть три возможных способа какими вы можете быть информированы об этом"
-
-#~ msgid "_Earliest"
-#~ msgstr "_Первый"
-
-#~ msgid "_Latest"
-#~ msgstr "П_оследний"
-
-#~ msgid "_Previous"
-#~ msgstr "П_редыдущий"
-
-#~ msgid "%s is now %s: %s"
-#~ msgstr "%s %s: %s"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "\n"
-#~ "== Original Message ==\n"
-#~ "%s"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "\n"
-#~ "== Исходное Сообщение ==\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "Emoticons"
-#~ msgstr "Управление Смайликами"
-
-#, fuzzy
-#~ msgid ""
-#~ "Your new account has been created successfully.\n"
-#~ "You can set advanced account options by pressing Advanced button,\n"
-#~ "or later by clicking in Accounts menuitem under Edit menu from the main "
-#~ "window."
-#~ msgstr ""
-#~ "Аккаунт был успешно добавлен. \n"
-#~ "Вы можете настроить аккаунт используя \n"
-#~ "\"Настройка->Аккаунты\" из главного окна."
-
-#~ msgid "Error:"
-#~ msgstr "Ошибка: "
-
-#~ msgid "Service Discovery using %s account"
-#~ msgstr "Обзор Сервисов для аккаунта %s"
-
-#~ msgid "Service"
-#~ msgstr "Сервис"
-
-#~ msgid "Node"
-#~ msgstr "Узел"
-
-#~ msgid ""
-#~ "Your new account has been created and added to your gajim configuration.\n"
-#~ "You can set advanced account options using \"Edit->Accounts\" in the main "
-#~ "window menu."
-#~ msgstr ""
-#~ "Ваш новый аккаунт был создан и добавлен в конфигурацию gajim. \n"
-#~ "Вы можете настроить аккаунт используя \n"
-#~ "\"Настройка->Аккаунты\" из главного окна."
-
-#~ msgid "You need to enter a valid server address to add an account."
-#~ msgstr "Для регистрации аккаунта необходимо ввести адрес сервера."
-
-#~ msgid "Contact names must be of the form \"user@servername\"."
-#~ msgstr "Контакт должен быть в формате \"имя_пользователя@сервер\"."
-
-#~ msgid "Invalid contact ID"
-#~ msgstr "Неверный ID контакта"
-
-#~ msgid "Contact ID must be of the form \"username@servername\"."
-#~ msgstr "ID контакта должен быть в формате \"имя_пользователя@сервер\"."
-
-#~ msgid "Account registration successful"
-#~ msgstr "Успешная регистрация аккаунта"
-
-#~ msgid "The account \"%s\" has been registered with the Jabber server."
-#~ msgstr "Аккаунт \"%s\" был зарегистрирован на Jabber сервере."
-
-#~ msgid "theme_name"
-#~ msgstr "имя_тeмы"
-
-#~ msgid "Edit"
-#~ msgstr "Редактировать"
-
-#, fuzzy
-#~ msgid "<b>Please fill in the data for your existing account</b>"
-#~ msgstr "Пожалуйста, заполните данные о вашем уже существующем аккаунте"
-
-#~ msgid "Check if you want to register for a new jabber account"
-#~ msgstr "Отметьте чтобы зарегистрировать новый jabber-аккаунт"
-
-#~ msgid "Click to get contact's extended information"
-#~ msgstr "Щелкните здесь для получения расширенной информации о контакте"
-
-#~ msgid "Enter your message:"
-#~ msgstr "Введите сообщение:"
-
-#~ msgid "_Compact View"
-#~ msgstr "_Компактный Вид"
-
-#~ msgid "_Nickname:"
-#~ msgstr "_Ник:"
-
-#~ msgid "_Refresh"
-#~ msgstr "_Обновить"
-
-#~ msgid "_Register new account"
-#~ msgstr "_Зарегистрировать новый аккаунт"
-
-#~ msgid "Gajim - a GTK+ Jabber client"
-#~ msgstr "Gajim - Jabber-клиент на GTK+"
-
-#~ msgid "You just received a new message in room \"%s\""
-#~ msgstr "Вы только что получили сообщение в комнате \"%s\""
-
-#~ msgid ""
-#~ "If you close this window and you have history disabled, this message will "
-#~ "be lost."
-#~ msgstr ""
-#~ "Если вы закроете окно и у вас отключена функция ведения истории "
-#~ "сообщений, то это сообщение будет потеряно."
-
-#~ msgid "New _Room"
-#~ msgstr "Новая _Комната"
-
-#~ msgid "Account:"
-#~ msgstr "Аккаунт:"
-
-#~ msgid "Always use compact _view"
-#~ msgstr "Всегда использовать компактный _вид"
-
-#~ msgid "Banner:"
-#~ msgstr "Баннер:"
-
-#~ msgid "Contact:"
-#~ msgstr "Контакт:"
-
-#~ msgid ""
-#~ "If checked, all chat and group chat windows will have the information "
-#~ "area in the top and the buttons area in the bottom hidden. You can quick "
-#~ "toggle compact view with Alt+C. NOTE: The last state you leave a window/"
-#~ "tab is not a permanent one"
-#~ msgstr ""
-#~ "Если отмечено, у всех окон чата или комнат будут скрыты информационное "
-#~ "поле сверху и область с кнопками внизу. Вы можете быстро включать "
-#~ "компактный режим с помощью ALT+C. ВНИМАНИЕ: Последнее состояние окна/"
-#~ "вкладки не сохраняется"
-
-#, fuzzy
-#~ msgid "Inactivate account"
-#~ msgstr "У вас нет активного аккаунта"
-
-#~ msgid "Join _Group Chat..."
-#~ msgstr "Войти в _Комнату..."
-
-#, fuzzy
-#~ msgid "Po_sition:"
-#~ msgstr "Должность:"
-
-#~ msgid "Show roster window on Gajim startup"
-#~ msgstr "Показывать окно ростера при запуске"
-
-#~ msgid "_Join Group Chat"
-#~ msgstr "_Войти в Комнату"
-
-#~ msgid "_Service Discovery"
-#~ msgstr "Просмотр _Сервисов"
-
-#~ msgid "_Service Discovery..."
-#~ msgstr "_Просмотр Сервисов..."
-
-#~ msgid "error appeared while processing xmpp:"
-#~ msgstr "произошла ошибка при обработке xmpp:"
-
-#~ msgid ""
-#~ "Cancels the selected file transfer. If there is an incomplete file, kept "
-#~ "in the file system it will be removed. This operation is not reversable"
-#~ msgstr ""
-#~ "Останавливает выбранную передачу. Если есть незавершенный файл, то он "
-#~ "будет удален. Операцию нельзя отменить."
-
-#~ msgid "Chan_ge"
-#~ msgstr "_Изменить"
-
-#~ msgid "Unknown type %s "
-#~ msgstr "Неизвестный тип %s "
-
-#~ msgid "Gajim disconnected you from %s"
-#~ msgstr "Gajim отсоединился от %s"
-
-#~ msgid ""
-#~ "%s seconds have passed and server did not reply to our keep-alive. If you "
-#~ "believe such disconnection should not have happened, you can disable "
-#~ "sending keep-alive packets by modifying this account."
-#~ msgstr ""
-#~ "Прошло %s секунд(а) и сервер не ответил на пинг. Если вы считаете,что "
-#~ "сервер работает нормально и этого не должно было случиться, то вы можете "
-#~ "отключить функцию отсылки пингов в настройках этого аккаунта."
