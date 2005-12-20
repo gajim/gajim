@@ -543,7 +543,7 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 				res = self.method(sys.argv[2], sys.argv[3])
 			elif self.argv_len == 5:
 				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4])
-			elif argv_len == 6:
+			elif self.argv_len == 6:
 				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4],
 					sys.argv[5])
 			return res
