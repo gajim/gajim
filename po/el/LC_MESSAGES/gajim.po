@@ -2148,7 +2148,7 @@ msgstr "Προσωπ. Σελίδα:"
 
 #: ../src/gtkgui.glade.h:152
 msgid "Hostname: "
-msgstr "Κεντρικός υπολογιστής:"
+msgstr "Ξένιος υπολογιστής:"
 
 #: ../src/gtkgui.glade.h:153
 msgid "I already have an account I want to use"
@@ -2851,7 +2851,7 @@ msgstr "_Ιστορικό"
 
 #: ../src/gtkgui.glade.h:337
 msgid "_Host:"
-msgstr "_Κεντρικός υπολογιστής:"
+msgstr "_Ξένιος υπολογιστής:"
 
 #. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
 #: ../src/gtkgui.glade.h:339
