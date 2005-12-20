@@ -175,6 +175,7 @@ class Connection:
 		self.to_be_sent = []
 		self.last_sent = []
 		self.files_props = {}
+		self.last_history_line = {}
 		self.password = gajim.config.get_per('accounts', name, 'password')
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
 		self.privacy_rules_supported = False
@@ -341,7 +342,6 @@ class Connection:
 			elif xtag.getNamespace() == common.xmpp.NS_MUC_USER and \
 				xtag.getTag('invite'):
 				invite = xtag
-
 			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
 			# invitation
 			# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
@@ -376,7 +376,8 @@ class Connection:
 				if not msg.getTag('body'): #no <body>
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
-				if self.name not in no_log_for:
+				if self.name not in no_log_for and not\
+					int(float(time.mktime(tim))) <= self.last_history_line[jid][0]:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 		elif mtype == 'chat': # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
@@ -2200,6 +2201,9 @@ class Connection:
 		if password:
 			t.setTagData('password', password)
 		self.to_be_sent.append(p)
+		#last date/time in history to avoid duplicate
+		jid='%s@%s' % (room, server)
+		self.last_history_line[jid]= gajim.logger.get_last_date_that_has_logs(jid)
 
 	def send_gc_message(self, jid, msg):
 		if not self.connection:
