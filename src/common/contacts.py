@@ -25,8 +25,8 @@
 class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-			ask='', resource='', priority=5, keyID='', role='', affiliation='',
-			our_chatstate=None, chatstate=None):
+			ask='', resource='', priority=5, keyID='', our_chatstate=None,
+			chatstate=None):
 		self.jid = jid
 		self.name = name
 		self.groups = groups
@@ -37,8 +37,6 @@ class Contact:
 		self.resource = resource
 		self.priority = priority
 		self.keyID = keyID
-		self.role = role
-		self.affiliation = affiliation
 
 		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
 		# we keep track of jep85 support by the peer by three extra states:
@@ -77,6 +75,12 @@ class Contacts:
 		self._contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
 		self._gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
 		self._sub_contacts = {} # {acct: {jid1: jid2}} means jid1 is sub of jid2
+
+	def create_contact(self, jid='', name='', groups=[], show='', status='',
+		sub='', ask='', resource='', priority=5, keyID='', our_chatstate=None,
+		chatstate=None):
+		return Contact(jid, name, groups, show, status, sub, ask, resource,
+			priority, keyID, our_chatstate, chatstate)
 
 	def add_contact(self, account, contact):
 		# No such account before ?
@@ -173,3 +177,9 @@ class Contacts:
 			contact = self.get_contact_instance_with_highest_priority(account,
 				parrent_jid)
 		return contact
+
+	def contact_from_gc_contact(self, gc_contact):
+		'''Create a Contact instance from a GC_Contact instance'''
+		return Contact(jid = gc_contact.get_full_jid(), name = gc_contact.nick,
+			groups = ['none'], show = gc_contact.show, status = gc_contact.status,
+			sub = 'none')
