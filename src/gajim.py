@@ -138,35 +138,6 @@ if profile:
 
 parser = optparser.OptionsParser(config_filename)
 
-class Contact:
-	'''Information concerning each contact'''
-	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-			ask='', resource='', priority=5, keyID='', role='', affiliation='',
-			our_chatstate=None, chatstate=None):
-		self.jid = jid
-		self.name = name
-		self.groups = groups
-		self.show = show
-		self.status = status
-		self.sub = sub
-		self.ask = ask
-		self.resource = resource
-		self.priority = priority
-		self.keyID = keyID
-		self.role = role
-		self.affiliation = affiliation
-
-		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
-		# we keep track of jep85 support by the peer by three extra states:
-		# None, False and 'ask'
-		# None if no info about peer
-		# False if peer does not support jep85
-		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
-		# this holds what WE SEND to contact (our current chatstate)
-		self.our_chatstate = our_chatstate
-		# this is contact's chatstate
-		self.chatstate = chatstate
-
 import roster_window
 import systray
 import dialogs
@@ -326,11 +297,7 @@ class Interface:
 				if (resources != [''] and (len(lcontact) != 1 or 
 					lcontact[0].show != 'offline')) and jid.find('@') > 0:
 					old_show = 0
-					contact1 = Contact(jid = contact1.jid, name = contact1.name,
-						groups = contact1.groups, show = contact1.show,
-						status = contact1.status, sub = contact1.sub,
-						ask = contact1.ask, resource = contact1.resource,
-						priority = contact1.priority, keyID = contact1.keyID)
+					contact1 = gajim.contacts.copy_contact(contact1)
 					lcontact.append(contact1)
 				contact1.resource = resource
 			if contact1.jid.find('@') > 0 and len(lcontact) == 1: # It's not an agent
@@ -518,8 +485,9 @@ class Interface:
 						show = model[i][3]
 					else:
 						show = 'offline'
-					c = Contact(jid = fjid, name = nick, groups = ['none'],
-						show = show, ask = 'none')
+					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
+						nick = nick, show = show)
+					c = gajim.contacts.contact_from_gc_contct(c)
 					self.roster.new_chat(c, account)
 				self.instances[account]['chats'][fjid].print_conversation(
 					'Error %s: %s' % (array[1], array[2]), fjid, 'status')
@@ -570,9 +538,9 @@ class Interface:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			name = jid.split('@', 1)[0]
 			name = name.split('%', 1)[0]
-			contact1 = Contact(jid = jid, name = name, groups = [_('General')],
-				show = 'online', status = 'online', ask = 'to',
-				resource = array[1], keyID = keyID)
+			contact1 = gajim.contacts.create_contact(jid = jid, name = name,
+				groups = [_('General')], show = 'online', status = 'online',
+				ask = 'to', resource = array[1], keyID = keyID)
 			gajim.contacts[account][jid] = [contact1]
 			self.roster.add_contact_to_roster(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
@@ -1287,8 +1255,9 @@ class Interface:
 					show = gajim.gc_contacts[account][room_jid][nick].show
 				else:
 					show = 'offline'
-				c = Contact(jid = jid, name = nick, groups = ['none'],
-					show = show, ask = 'none')
+				gc_c = gajim.contacts.create_gc_contact(room_jid = room_jid,
+					nick = nick, show = show)
+				c = gajim.contacts.contact_from_gc_contct(c)
 				self.roster.new_chat(c, account)
 				w = wins['chats'][jid]
 		elif typ in ('normal', 'file-request', 'file-request-error',
