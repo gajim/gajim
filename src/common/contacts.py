@@ -76,6 +76,20 @@ class Contacts:
 		self._gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
 		self._sub_contacts = {} # {acct: {jid1: jid2}} means jid1 is sub of jid2
 
+	def change_account_name(self, old_name, new_name):
+		self._contacts[new_name] = self._contacts[old_name]
+		self._gc_contacts[new_name] = self._gc_contacts[old_name]
+		self._contacts.remove(old_name)
+		self._gc_contacts.remove(old_name)
+
+	def add_account(self, account):
+		self._contacts[account] = {}
+		self._gc_contacts[account] = {}
+
+	def remove_account(self, account):
+		self._contacts.remove(account)
+		self._gc_contacts.remove(account)
+
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=5, keyID='', our_chatstate=None,
 		chatstate=None):
@@ -151,7 +165,7 @@ class Contacts:
 		if contact.jid in self._sub_contacts[account]:
 			return True
 	
-	def get_contact_instances_from_jid(self, account, jid):
+	def get_contacts_from_jid(self, account, jid):
 		''' we may have two or more resources on that jid '''
 		if jid in self._contacts[account]:
 			contacts_instances = self._contacts[account][jid]
@@ -167,16 +181,26 @@ class Contacts:
 				prim_contact = contact
 		return prim_contact
 
-	def get_contact_instance_with_highest_priority(self, account, jid):
-		contact_instances = self.get_contact_instances_from_jid(account, jid)
-		return self.get_highest_prio_contact_from_contacts(contact_instances)
+	def get_contact_with_highest_priority(self, account, jid):
+		contacts = self.get_contacts_from_jid(account, jid)
+		return self.get_highest_prio_contact_from_contacts(contacts)
+
+	def get_first_contact_from_jid(self, account, jid):
+		if jid in self._contacts[account]:
+			return self._contacts[account][jid][0]
+		else: # it's fake jid
+			room, nick = gajim.get_room_and_nick_from_fjid(jid)
+			if self._gc_contacts[account].has_key(room) and \
+				nick in self._gc_contacts[account][room]:
+				return self._gc_contacts[account][room][nick]
+		return None
 
 	def get_parent_contact(self, account, contact):
 		'''Returns the parent contact of contact if it's a sub-contact,
 		else contact'''
 		if is_subcontact(account, contact):
 			parrent_jid = self._sub_contacts[account][contact.jid]
-			return self.get_contact_instance_with_highest_priority(account,
+			return self.get_contact_with_highest_priority(account,
 				parrent_jid)
 		return contact
 
@@ -185,7 +209,7 @@ class Contacts:
 		sub-contact, else contact'''
 		while is_subcontact(account, contact):
 			parrent_jid = self._sub_contacts[account][contact.jid]
-			contact = self.get_contact_instance_with_highest_priority(account,
+			contact = self.get_contact_with_highest_priority(account,
 				parrent_jid)
 		return contact
 
@@ -194,3 +218,9 @@ class Contacts:
 		return Contact(jid = gc_contact.get_full_jid(), name = gc_contact.nick,
 			groups = ['none'], show = gc_contact.show, status = gc_contact.status,
 			sub = 'none')
+
+	def is_pm_from_jid(self, account, jid):
+		'''Returns True if the given jid is a private message jid'''
+		if jid in self._contacts[account]:
+			return False
+		return True

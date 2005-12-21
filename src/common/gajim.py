@@ -29,7 +29,7 @@ import logging
 import mutex
 
 import config
-
+from contacts import Contacts
 
 interface = None # The actual interface (the gtk one for the moment)
 version = '0.9'
@@ -77,8 +77,7 @@ last_message_time = {} # list of time of the latest incomming message
 							# {acct1: {jid1: time1, jid2: time2}, }
 encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}
 
-contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
-gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
+contacts = Contacts
 gc_connected = {} # tell if we are connected to the room or not {acct: {room_jid: True}}
 gc_passwords = {} # list of the pass required to enter a room {room_jid: password}
 
@@ -159,12 +158,6 @@ def get_real_jid_from_fjid(account, fjid):
 def get_room_from_fjid(jid):
 	return get_room_and_nick_from_fjid(jid)[0]
 
-def get_contact_instances_from_jid(account, jid):
-	''' we may have two or more resources on that jid '''
-	if jid in contacts[account]:
-		contacts_instances = contacts[account][jid]
-		return contacts_instances
-
 def get_first_contact_instance_from_jid(account, jid):
 	contact = None
 	if jid in contacts[account]:
@@ -178,20 +171,8 @@ def get_first_contact_instance_from_jid(account, jid):
 			contact = gc_contacts[account][room][nick]
 	return contact
 
-def get_contact_instance_with_highest_priority(account, jid):
-	contact_instances = contacts[account][jid]
-	return get_highest_prio_contact_from_contacts(contact_instances)
-
 def get_contact_name_from_jid(account, jid):
 	return contacts[account][jid][0].name
-
-def get_highest_prio_contact_from_contacts(contacts):
-	prim_contact = None # primary contact
-	for contact in contacts:
-		if prim_contact == None or int(contact.priority) > \
-			int(prim_contact.priority):
-			prim_contact = contact
-	return prim_contact
 
 def get_jid_without_resource(jid):
 	return jid.split('/')[0]
