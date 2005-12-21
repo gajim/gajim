@@ -156,13 +156,12 @@ class HistoryWindow:
 		so it runs progressively! yea :)
 		asks for days in this month if they have logs it bolds them (marks them)'''
 		weekday, days_in_this_month = calendar.monthrange(year, month)
-		# count from 1 (gtk counts from 1), so add 1 more
-		for day in xrange(1, days_in_this_month + 1):
-			#print 'ask for logs for date:', year, month, day
-			if gajim.logger.date_has_logs(self.jid, year, month, day):
-				widget.mark_day(day)
-			yield True # we have more work to do
-		yield False # we're done with this work
+		log_days = gajim.logger.get_days_with_logs(self.jid, year,
+			month, days_in_this_month)
+		for day in log_days:
+			widget.mark_day(day)
+			yield True
+		yield False
 	
 	def on_calendar_month_changed(self, widget):
 		year, month, day = widget.get_date() # integers

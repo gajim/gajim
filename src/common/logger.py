@@ -343,30 +343,53 @@ class Logger:
 		results = self.cur.fetchall()
 		return results
 
-	def date_has_logs(self, jid, year, month, day):
-		'''returns True if we have logs (excluding statuses) for given date,
-		else False'''
+	def get_days_with_logs(self, jid, year, month, max_day):
+		'''returns the list of days that have logs (not status messages)'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
-		
-		start_of_day = self.get_unix_time_from_date(year, month, day)
+		list = []
+
+		# First select all date of month whith logs we want
+		start_of_month = self.get_unix_time_from_date(year, month, 1)
 		seconds_in_a_day = 86400 # 60 * 60 * 24
-		last_second_of_day = start_of_day + seconds_in_a_day - 1
-		
-		# just ask one row to see if we have sth for this date
+		last_second_of_month = start_of_month + (seconds_in_a_day * max_day) - 1
+
 		self.cur.execute('''
-			SELECT kind FROM logs
+			SELECT time FROM logs
 			WHERE jid_id = %d
 			AND time BETWEEN %d AND %d
 			AND kind NOT IN (%d, %d)
-			LIMIT 1
-			''' % (jid_id, start_of_day, last_second_of_day,
+			ORDER BY time
+			''' % (jid_id, start_of_month, last_second_of_month,
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
+		result = self.cur.fetchall()
+
+		#Copy all interesant time in a temporary table 
+		self.cur.execute('CREATE TEMPORARY TABLE blabla(time,INTEGER)') 
+		for line in result: 
+			self.cur.execute(''' 
+				INSERT INTO blabla (time) VALUES (%d) 
+				''' % (line[0])) 
+
+		#then search in this small temp table for each day 
+		for day in xrange(1, max_day): 
+			start_of_day = self.get_unix_time_from_date(year, month, day) 
+			last_second_of_day = start_of_day + seconds_in_a_day - 1 
+
+			# just ask one row to see if we have sth for this date 
+			self.cur.execute(''' 
+				SELECT time FROM blabla 
+				WHERE time BETWEEN %d AND %d 
+				LIMIT 1 
+				''' % (start_of_day, last_second_of_day)) 
+			result = self.cur.fetchone() 
+			if result: 
+				list[0:0]=[day]
+
+		#Delete temporary table 
+		self.cur.execute('DROP TABLE blabla') 
 		result = self.cur.fetchone()
-		if result:
-			return True
-		else:
-			return False
+		return list
 
 	def get_last_date_that_has_logs(self, jid):
 		'''returns last time (in seconds since EPOCH) for which
