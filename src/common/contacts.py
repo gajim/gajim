@@ -81,6 +81,13 @@ class Contacts:
 		chatstate=None):
 		return Contact(jid, name, groups, show, status, sub, ask, resource,
 			priority, keyID, our_chatstate, chatstate)
+	
+	def copy_contact(self, contact):
+		return self.create_contact(jid = contact.jid, name = contact.name,
+			groups = contact.groups, show = contact.show, status = contact.status,
+			sub = contact.sub, ask = contact.ask, resource = contact.resource,
+			priority = contact.priority, keyID = contact.keyID,
+			our_chatstate = contact.our_chatstate, chatstate = contact.chatstate)
 
 	def add_contact(self, account, contact):
 		# No such account before ?
@@ -109,6 +116,10 @@ class Contacts:
 		if not len(self._contacts[account][contact.jid]):
 			self._contacts[account].remove(contact.jid)
 
+	def create_gc_contact(self, room_jid='', nick='', show='', status='',
+		role='', affiliation='', jid=''):
+		return GC_Contact(room_jid, nick, show, status, role, affiliation, jid)
+	
 	def add_gc_contact(self, account, gc_contact):
 		# No such account before ?
 		if not self._gc_contacts.has_key(account):
