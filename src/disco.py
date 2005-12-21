@@ -56,7 +56,6 @@ import gtk.glade
 import dialogs
 import tooltips
 
-from gajim import Contact
 from common import helpers
 from common import gajim
 from common import xmpp
