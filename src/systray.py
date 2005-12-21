@@ -33,7 +33,6 @@ import os
 import tooltips
 import gtkgui_helpers
 
-from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n

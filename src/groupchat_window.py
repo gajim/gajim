@@ -39,7 +39,6 @@ import gtkgui_helpers
 import history_window
 import tooltips
 
-from gajim import Contact
 from common import gajim
 from common import helpers
 from gettext import ngettext
@@ -370,12 +369,9 @@ class GroupchatWindow(chat.Chat):
 		role_name = helpers.get_uf_role(role, plural = True)
 
 		if jid:
-			jids = jid.split('/', 1)
-			j = jids[0]
-			if len(jids) > 1:
-				resource = jids[1]
+			jid = jid.split('/', 1)[0]
 		else:
-			j = ''
+			jid = ''
 
 		name = nick
 
@@ -387,8 +383,9 @@ class GroupchatWindow(chat.Chat):
 		iter = model.append(role_iter, (None, 'contact', nick, name))
 		if not gajim.gc_contacts[self.account][room_jid].has_key(nick):
 			gajim.gc_contacts[self.account][room_jid][nick] = \
-				Contact(jid = j, name = nick, show = show, resource = resource,
-				role = role, affiliation = affiliation, status = status)
+				gajim.contacts.create_gc_contact(room_jid = room_jid, nick = nick,
+				show = show, status = status, role = role,
+				affiliation = affiliation, jid = jid)
 		self.draw_contact(room_jid, nick)
 		if nick == self.nicks[room_jid]: # we became online
 			self.got_connected(room_jid)
@@ -1174,9 +1171,7 @@ current room topic.') % command, room_jid)
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
 			# we copy contact because c.jid must contain the fakeJid for vcard
-			c2 = Contact(jid = jid, name = c.name, groups = c.groups,
-				show = c.show, status = c.status, sub = c.sub,
-				resource = c.resource, role = c.role, affiliation = c.affiliation)
+			c2 = gajim.contacts.contact_from_gc_contact(c)
 			gajim.interface.instances[self.account]['infos'][jid] = \
 				vcard.VcardWindow(c2, self.account, False)
 
@@ -1195,10 +1190,8 @@ current room topic.') % command, room_jid)
 		room_jid = self.get_active_jid()
 		fjid = gajim.construct_fjid(room_jid, nick) # 'fake' jid
 		if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
-			show = gajim.gc_contacts[self.account][room_jid][nick].show
-			u = Contact(jid = fjid, name =  nick, groups = ['none'], show = show,
-				sub = 'none')
-			gajim.interface.roster.new_chat(u, self.account)
+			gc_c = gajim.gc_contacts[self.account][room_jid][nick]
+			gajim.interface.roster.new_chat(gc_c, self.account)
 
 		#make active here in case we need to send a message
 		gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
@@ -1525,10 +1518,8 @@ current room topic.') % command, room_jid)
 					gajim.interface.systray.add_jid(fjid, self.account, 'pm')
 			self.show_title()
 		else:
-			show = gajim.gc_contacts[self.account][room_jid][nick].show
-			c = Contact(jid = fjid, name = nick, groups = ['none'], show = show,
-				ask = 'none')
-			gajim.interface.roster.new_chat(c, self.account)
+			gc_c = gajim.gc_contacts[self.account][room_jid][nick]
+			gajim.interface.roster.new_chat(gc_c, self.account)
 		# Scroll to line
 		self.list_treeview[room_jid].expand_row(path[0:1], False)
 		self.list_treeview[room_jid].scroll_to_cell(path)
@@ -1636,10 +1627,8 @@ current room topic.') % command, room_jid)
 				nick = model[iter][C_NICK].decode('utf-8')
 				fjid = gajim.construct_fjid(room_jid, nick)
 				if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
-					show = gajim.gc_contacts[self.account][room_jid][nick].show
-					u = Contact(jid = fjid, name = nick, groups = ['none'],
-						show = show, sub = 'none')
-					gajim.interface.roster.new_chat(u, self.account)
+					gc_c = gajim.gc_contacts[self.account][room_jid][nick]
+					gajim.interface.roster.new_chat(gc_c, self.account)
 				gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
 				gajim.interface.instances[self.account]['chats'][fjid].window.present()
 			return True
@@ -1680,10 +1669,8 @@ current room topic.') % command, room_jid)
 			nick = model[iter][C_NICK].decode('utf-8')
 			jid = gajim.construct_fjid(room_jid, nick)
 			if not gajim.interface.instances[self.account]['chats'].has_key(jid):
-				show = gajim.gc_contacts[self.account][room_jid][nick].show
-				contact = Contact(jid = jid, name = nick, groups = ['none'],
-					show = show, sub = 'none')
-				gajim.interface.roster.new_chat(contact, self.account)
+				gc_c = gajim.gc_contacts[self.account][room_jid][nick]
+				gajim.interface.roster.new_chat(gc_c, self.account)
 				jid = contact.jid
 			gajim.interface.instances[self.account]['chats'][jid].set_active_tab(jid)
 			gajim.interface.instances[self.account]['chats'][jid].window.present()

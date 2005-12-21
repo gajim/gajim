@@ -42,7 +42,6 @@ import gtkgui_helpers
 import cell_renderer_image
 import tooltips
 
-from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
@@ -204,10 +203,10 @@ class RosterWindow:
 		self.draw_avatar(jid, account)
 
 	def add_transport_to_roster(self, account, transport):
-		user1 = Contact(jid = transport, name = transport,
+		c = gajim.contacts.create_contact(jid = transport, name = transport,
 			groups = [_('Transports')], show = 'offline', status = 'offline',
 			sub = 'from')
-		gajim.contacts[account][transport] = [user1]
+		gajim.contacts[account][transport] = [c]
 		gajim.interface.roster.add_contact_to_roster(transport, account)
 
 	def really_remove_contact(self, user, account):
@@ -668,9 +667,10 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact1 = Contact(jid = ji, name = name, groups = array[jid]['groups'],
-				show = show, status = status, sub = array[jid]['subscription'],
-				ask = array[jid]['ask'], resource = resource, keyID = keyID)
+			contact1 = gajim.contacts.create_contact(jid = ji, name = name,
+				groups = array[jid]['groups'], show = show, status = status,
+				sub = array[jid]['subscription'], ask = array[jid]['ask'],
+				resource = resource, keyID = keyID)
 
 			# when we draw the roster, we avoid having the same contact
 			# more than once (f.e. we avoid showing it twice when 2 resources)
@@ -790,9 +790,8 @@ class RosterWindow:
 				contacts = []
 				connection = gajim.connections[account]
 				# get our current contact info
-				contact = Contact(jid = jid, name = account,
-					show = connection.get_status(),
-					sub = 'both',
+				contact = gajim.contacts.create_contact(jid = jid, name = account,
+					show = connection.get_status(), sub = 'both',
 					status = connection.status,
 					resource = gajim.config.get_per('accounts', connection.name,
 						'resource'),
@@ -811,10 +810,11 @@ class RosterWindow:
 							show = roster.getShow(jid+'/'+resource)
 							if not show:
 								show = 'online'
-							contact = Contact(jid=jid, name=account,
-								show=show,
-								status=roster.getStatus(jid+'/'+resource), resource=resource,
-								priority=roster.getPriority(jid+'/'+resource))
+							contact = gajim.contacts.create_contact(jid = jid,
+								name = account, show = show,
+								status = roster.getStatus(jid+'/'+resource),
+								resource = resource,
+								priority = roster.getPriority(jid+'/'+resource))
 							contacts.append(contact)
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
@@ -1248,19 +1248,19 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = Contact(jid = jid, name = pseudo, groups = [group],
-				show = 'requested', status = '', ask = 'none',
+			c = gajim.contacts.create_contact(jid = jid, name = pseudo,
+				groups = [group], show = 'requested', status = '', ask = 'none',
 				sub = 'subscribe', keyID = keyID)
-			gajim.contacts[account][jid] = [user1]
+			gajim.contacts[account][jid] = [c]
 		else:
-			user1 = gajim.get_contact_instance_with_highest_priority(account, jid)
-			if not _('not in the roster') in user1.groups:
+			c = gajim.get_contact_instance_with_highest_priority(account, jid)
+			if not _('not in the roster') in c.groups:
 				dialogs.InformationDialog(_('Subscription request has been sent'),
 _('If "%s" accepts this request you will know his or her status.') %jid)
 				return
-			user1.groups = [group]
-			user1.name = pseudo
-			self.remove_contact(user1, account)
+			c.groups = [group]
+			c.name = pseudo
+			self.remove_contact(c, account)
 		self.add_contact_to_roster(jid, account)
 
 	def revoke_auth(self, widget, jid, account):
@@ -1425,10 +1425,10 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				self.remove_contact(u, account)
 			del gajim.contacts[account][u.jid]
 			if user.jid in gajim.interface.instances[account]['chats']:
-				user1 = Contact(jid = user.jid, name = user.name,
+				c = gajim.contacts.create_contact(jid = user.jid, name = user.name,
 					groups = [_('not in the roster')], show = 'not in the roster',
 					status = '', ask = 'none', keyID = user.keyID)
-				gajim.contacts[account][user.jid] = [user1]
+				gajim.contacts[account][user.jid] = [c]
 				self.add_contact_to_roster(user.jid, account)
 
 	def forget_gpg_passphrase(self, keyid):
@@ -1674,9 +1674,10 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact = Contact(jid = jid, name = jid.split('@')[0],
-				groups = [_('not in the roster')], show = 'not in the roster',
-				status = '', sub = 'none', keyID = keyID)
+			contact = gajim.contacts.create_contact(jid = jid,
+				name = jid.split('@')[0], groups = [_('not in the roster')],
+				show = 'not in the roster', status = '', sub = 'none',
+				keyID = keyID)
 			gajim.contacts[account][jid] = [contact]
 			self.add_contact_to_roster(contact.jid, account)
 
@@ -1707,10 +1708,11 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			user1 = Contact(jid = jid, name = jid.split('@')[0],
-				groups = [_('not in the roster')], show = 'not in the roster',
-				status = '', ask = 'none', keyID = keyID, resource = resource)
-			gajim.contacts[account][jid] = [user1]
+			c = gajim.contacts.create_contact(jid = jid,
+				name = jid.split('@')[0], groups = [_('not in the roster')],
+				show = 'not in the roster', status = '', ask = 'none',
+				keyID = keyID, resource = resource)
+			gajim.contacts[account][jid] = [c]
 			self.add_contact_to_roster(jid, account)
 
 		iters = self.get_contact_iter(jid, account)
