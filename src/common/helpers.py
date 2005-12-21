@@ -138,7 +138,7 @@ def temp_failure_retry(func, *args, **kwargs):
 	while True:
 		try:
 			return func(*args, **kwargs)
-		except (os.error, IOError, socket.error), ex:
+		except (os.error, IOError, select.error), ex:
 			if ex.errno == errno.EINTR:
 				continue
 			else:
