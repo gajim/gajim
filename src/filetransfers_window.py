@@ -177,7 +177,7 @@ class FileTransfersWindow:
 		helpers.convert_bytes(file_props['size'])
 		if file_props['type'] == 'r':
 			jid = unicode(file_props['sender']).split('/')[0]
-			sender_name = gajim.get_first_contact_instance_from_jid( 
+			sender_name = gajim.contacts.get_first_contact_from_jid( 
 				file_props['tt_account'], jid).name
 			sender = gtkgui_helpers.escape_for_pango_markup(sender_name)
 		else:
@@ -187,7 +187,7 @@ class FileTransfersWindow:
 		sectext += '\n\t' +_('Recipient: ')
 		if file_props['type'] == 's':
 			jid = unicode(file_props['receiver']).split('/')[0]
-			receiver_name = gajim.get_first_contact_instance_from_jid( 
+			receiver_name = gajim.contacts.get_first_contact_from_jid( 
 				file_props['tt_account'], jid).name
 			recipient = gtkgui_helpers.escape_for_pango_markup(receiver_name)
 		else:

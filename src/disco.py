@@ -1193,9 +1193,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if self.register_button and xmpp.NS_REGISTER in features:
 			# We can register this agent
 			registered_transports = []
-			contacts = gajim.contacts[self.account]
-			for j in contacts:
-				if _('Transports') in contacts[j][0].groups:
+			jid_list = gajim.contacts.get_jid_list(self.account)
+			for j in jid_list:
+				contact = gajim.contacts.get_first_contact_from_jid(self.account, j)
+				if _('Transports') in contact.groups:
 					registered_transports.append(j)
 			if jid in registered_transports:
 				self.register_button.set_label(_('_Edit'))

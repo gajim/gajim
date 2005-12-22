@@ -276,8 +276,10 @@ class Interface:
 		else:
 			ji = jid
 		# Update contact
-		if gajim.contacts[account].has_key(ji):
-			lcontact = gajim.contacts[account][ji]
+
+		jid_list = gajim.contacts.het_jid_list(account)
+		if ji in jid_list:
+			lcontact = gajim.contacts.get_contacts_from_jid(account, ji)
 			contact1 = None
 			resources = []
 			for c in lcontact:
@@ -291,7 +293,7 @@ class Interface:
 				if old_show == new_show and contact1.status == array[2]: #no change
 					return
 			else:
-				contact1 = gajim.contacts[account][ji][0]
+				contact1 = gajim.contacts.get_first_contact_from_jid(account, ji)
 				if contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
 				if (resources != [''] and (len(lcontact) != 1 or 
@@ -324,13 +326,13 @@ class Interface:
 			contact1.keyID = keyID
 		if jid.find('@') <= 0:
 			# It must be an agent
-			if gajim.contacts[account].has_key(ji):
+			if ji in jid_list:
 				# Update existing iter
 				self.roster.draw_contact(ji, account)
 		elif jid == gajim.get_jid_from_account(account):
 			# It's another of our resources.  We don't need to see that!
 			return
-		elif gajim.contacts[account].has_key(ji):
+		elif ji in jid_list:
 			# It isn't an agent
 			# reset chatstate if needed:
 			# (when contact signs out or has errors)
@@ -418,7 +420,7 @@ class Interface:
 			return
 
 		# Handle chat states  
-		contact = gajim.get_first_contact_instance_from_jid(account, jid)
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if self.instances[account]['chats'].has_key(jid):
 			chat_win = self.instances[account]['chats'][jid]
 			if chatstate is not None: # he or she sent us reply, so he supports jep85
@@ -520,8 +522,8 @@ class Interface:
 	def handle_event_subscribed(self, account, array):
 		#('SUBSCRIBED', account, (jid, resource))
 		jid = array[0]
-		if gajim.contacts[account].has_key(jid):
-			c = gajim.get_first_contact_instance_from_jid(account, jid)
+		if jid in gajim.contacts.get_jid_list(account):
+			c = gajim.contacts.get_first_contact_from_jid(account, jid)
 			c.resource = array[1]
 			self.roster.remove_contact(c, account)
 			if _('not in the roster') in c.groups:
@@ -541,7 +543,7 @@ class Interface:
 			contact1 = gajim.contacts.create_contact(jid = jid, name = name,
 				groups = [_('General')], show = 'online', status = 'online',
 				ask = 'to', resource = array[1], keyID = keyID)
-			gajim.contacts[account][jid] = [contact1]
+			gajim.contacts.add_contact(account, contact1)
 			self.roster.add_contact_to_roster(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his or her status.')
@@ -748,12 +750,12 @@ class Interface:
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
 		jid = array[0]
-		if not gajim.contacts[account].has_key(jid):
+		if not jid in gajim.contacts.get_jid_list(account):
 			return
-		contacts = gajim.contacts[account][jid]
+		contacts = gajim.contacts.get_contacts_from_jid(account, jid)
 		if not (array[2] or array[3]):
 			self.roster.remove_contact(contacts[0], account)
-			del gajim.contacts[account][jid]
+			gajim.contacts.remove_jid(account, jid)
 			#FIXME if it was the only one in its group, remove the group
 			return
 		for contact in contacts:
@@ -860,10 +862,10 @@ class Interface:
 
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
-		if not gajim.contacts[account].has_key(jid):
+		if jid not in gajim.contacts.get_jid_list(account):
 			return
 		file_props = array[1]
-		contact = gajim.contacts[account][jid][0]
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 
 		if gajim.popup_window(account):
 			self.instances['file_transfers'].show_file_request(account, contact,
@@ -1244,20 +1246,22 @@ class Interface:
 			if wins['chats'].has_key(jid):
 				w = wins['chats'][jid]
 			else:
-				self.roster.new_chat(gajim.contacts[account][jid][0], account)
+				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+				self.roster.new_chat(contact, account)
 				w = wins['chats'][jid]
 		elif typ == 'pm':
 			if wins['chats'].has_key(jid):
 				w = wins['chats'][jid]
 			else:
 				room_jid, nick = jid.split('/', 1)
-				if gajim.gc_contacts[account][room_jid].has_key(nick):
-					show = gajim.gc_contacts[account][room_jid][nick].show
+				gc_contact = gajim.contacts.get_gc_contact(account, room_jid, nick)
+				if gc_contact:
+					show = gc_contact.show
 				else:
 					show = 'offline'
-				gc_c = gajim.contacts.create_gc_contact(room_jid = room_jid,
-					nick = nick, show = show)
-				c = gajim.contacts.contact_from_gc_contct(c)
+					gc_contact = gajim.contacts.create_gc_contact(room_jid = room_jid,
+						nick = nick, show = show)
+				c = gajim.contacts.contact_from_gc_contct(gc_contact)
 				self.roster.new_chat(c, account)
 				w = wins['chats'][jid]
 		elif typ in ('normal', 'file-request', 'file-request-error',
@@ -1338,9 +1342,8 @@ class Interface:
 		for a in gajim.connections:
 			self.instances[a] = {'infos': {}, 'disco': {}, 'chats': {},
 				'gc': {}, 'gc_config': {}}
-			gajim.contacts[a] = {}
+			gajim.contacts.add_account(a)
 			gajim.groups[a] = {}
-			gajim.gc_contacts[a] = {}
 			gajim.gc_connected[a] = {}
 			gajim.newly_added[a] = []
 			gajim.to_be_removed[a] = []

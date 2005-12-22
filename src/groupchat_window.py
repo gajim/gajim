@@ -120,8 +120,6 @@ class GroupchatWindow(chat.Chat):
 			'nick': self.nicks[room_jid],
 			'model': self.list_treeview[room_jid].get_model(),
 			'subject': self.subjects[room_jid],
-			'contacts': gajim.gc_contacts[self.account][room_jid],
-			'connected': gajim.gc_connected[self.account][room_jid],
 		}
 
 	def load_var(self, room_jid, var):
@@ -131,8 +129,6 @@ class GroupchatWindow(chat.Chat):
 		self.list_treeview[room_jid].expand_all()
 		self.set_subject(room_jid, var['subject'])
 		self.subjects[room_jid] = var['subject']
-		gajim.gc_contacts[self.account][room_jid] = var['contacts']
-		gajim.gc_connected[self.account][room_jid] = var['connected']
 		if gajim.gc_connected[self.account][room_jid]:
 			self.got_connected(room_jid)
 
@@ -193,7 +189,7 @@ class GroupchatWindow(chat.Chat):
 	def on_groupchat_window_destroy(self, widget):
 		chat.Chat.on_window_destroy(self, widget, 'gc')
 		for room_jid in self.xmls:
-			del gajim.gc_contacts[self.account][room_jid]
+			gajim.contacts.remove_room(self.account, room_jid)
 			del gajim.gc_connected[self.account][room_jid]
 
 	def on_groupchat_window_focus_in_event(self, widget, event):
@@ -346,18 +342,15 @@ class GroupchatWindow(chat.Chat):
 				fin = True
 		return None
 
-	def get_nick_list(self, room_jid):
-		'''get nicks of contacts in a room'''
-		return gajim.gc_contacts[self.account][room_jid].keys()
-
 	def remove_contact(self, room_jid, nick):
 		'''Remove a user from the contacts_list'''
 		model = self.list_treeview[room_jid].get_model()
 		iter = self.get_contact_iter(room_jid, nick)
 		if not iter:
 			return
-		if gajim.gc_contacts[self.account][room_jid].has_key(nick):
-			del gajim.gc_contacts[self.account][room_jid][nick]
+		gc_contact = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
+		if gc_contact:
+			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		parent_iter = model.iter_parent(iter)
 		model.remove(iter)
 		if model.iter_n_children(parent_iter) == 0:
@@ -365,7 +358,6 @@ class GroupchatWindow(chat.Chat):
 
 	def add_contact_to_roster(self, room_jid, nick, show, role, jid, affiliation, status):
 		model = self.list_treeview[room_jid].get_model()
-		resource = ''
 		role_name = helpers.get_uf_role(role, plural = True)
 
 		if jid:
@@ -381,11 +373,11 @@ class GroupchatWindow(chat.Chat):
 				(gajim.interface.roster.jabber_state_images['16']['closed'], 'role', role,
 				'<b>%s</b>' % role_name))
 		iter = model.append(role_iter, (None, 'contact', nick, name))
-		if not gajim.gc_contacts[self.account][room_jid].has_key(nick):
-			gajim.gc_contacts[self.account][room_jid][nick] = \
-				gajim.contacts.create_gc_contact(room_jid = room_jid, nick = nick,
-				show = show, status = status, role = role,
+		if not nick in gajim.contacts.get_nick_list(self.account, room_jid, nick):
+			gc_contact = gajim.contacts.create_gc_contact(room_jid = room_jid,
+				nick = nick, show = show, status = status, role = role,
 				affiliation = affiliation, jid = jid)
+			gajim.contacts.add_gc_contact(self.account, gc_contact)
 		self.draw_contact(room_jid, nick)
 		if nick == self.nicks[room_jid]: # we became online
 			self.got_connected(room_jid)
@@ -398,15 +390,15 @@ class GroupchatWindow(chat.Chat):
 		if not iter:
 			return
 		model = self.list_treeview[room_jid].get_model()
-		contact = gajim.gc_contacts[self.account][room_jid][nick]
+		gc_contact = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 		state_images = gajim.interface.roster.jabber_state_images['16']
 		if gajim.awaiting_events[self.account].has_key(room_jid + '/' + nick):
 			image = state_images['message']
 		else:
-			image = state_images[contact.show]
+			image = state_images[gc_contact.show]
 
-		name = gtkgui_helpers.escape_for_pango_markup(contact.name)
-		status = contact.status
+		name = gtkgui_helpers.escape_for_pango_markup(gc_contact.name)
+		status = gc_contact.status
 		# add status msg, if not empty, under contact name in the treeview
 		if status and gajim.config.get('show_status_msgs_in_roster'):
 			status = status.strip()
@@ -425,13 +417,11 @@ class GroupchatWindow(chat.Chat):
 	def draw_roster(self, room_jid):
 		model = self.list_treeview[room_jid].get_model()
 		model.clear()
-		for nick in gajim.gc_contacts[self.account][room_jid]:
-			contact = gajim.gc_contacts[self.account][room_jid][nick]
-			fjid = contact.jid
-			if contact.resource:
-				fjid += '/' + contact.resource
-			self.add_contact_to_roster(room_jid, nick, contact.show, contact.role,
-				fjid, contact.affiliation, contact.status)
+		for nick in gajim.contact.get_nick_list(self.account, room_jid)0:
+			gc_contact = gajim.contact.get_gc_contact(self.account, room_jid, nick)
+			self.add_contact_to_roster(room_jid, nick, gc_contact.show,
+				gc_contact.role, gc_contact.jid, gc_contact.affiliation,
+				gc_contact.status)
 
 	def get_role(self, room_jid, nick):
 		if gajim.gc_contacts[self.account][room_jid].has_key(nick):
@@ -487,7 +477,7 @@ class GroupchatWindow(chat.Chat):
 				room_jid + '/' + nick):
 				self.remove_contact(room_jid, nick)
 			else:
-				c = gajim.gc_contacts[self.account][room_jid][nick]
+				c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 				c.show = show
 				c.status = status
 			if nick == self.nicks[room_jid] and statusCode != '303': # We became offline
@@ -504,7 +494,7 @@ class GroupchatWindow(chat.Chat):
 					self.add_contact_to_roster(room_jid, nick, show, role, jid,
 						affiliation, status)
 				else:
-					c = gajim.gc_contacts[self.account][room_jid][nick]
+					c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 					if c.show == show and c.status == status and \
 						c.affiliation == affiliation: #no change
 						return
@@ -544,7 +534,7 @@ class GroupchatWindow(chat.Chat):
 		# for room_jid & number of unread private msgs with each contact
 		# that we have
 		nb = 0
-		for nick in self.get_nick_list(room_jid):
+		for nick in gajim.contacts.get_nick_list(self.account, room_jid):
 			fjid = room_jid + '/' + nick
 			if gajim.awaiting_events[self.account].has_key(fjid):
 				# gc can only have messages as event
@@ -686,7 +676,8 @@ class GroupchatWindow(chat.Chat):
 						self.nick_hits[room_jid].pop(0)
 					else:
 						self.nick_hits[room_jid] = [] # clear the hit list
-						list_nick = self.get_nick_list(room_jid)
+						list_nick = gajim.contacts.get_nick_list(self.account,
+							room_jid)
 						for nick in list_nick:
 							if nick.lower().startswith(begin.lower()): # the word is the begining of a nick
 								self.nick_hits[room_jid].append(nick)
@@ -804,7 +795,7 @@ class GroupchatWindow(chat.Chat):
 					# example: /query foo
 					if len(message_array):
 						nick = message_array.pop(0)
-						nicks = self.get_nick_list(room_jid)
+						nicks = gajim.contacts.get_nick_list(self.account, room_jid)
 						if nick in nicks:
 							self.on_send_pm(nick = nick)
 							self.clear(message_textview)
@@ -819,7 +810,8 @@ class GroupchatWindow(chat.Chat):
 					if len(message_array):
 						message_array = message_array[0].split()
 						nick = message_array.pop(0)
-						room_nicks = self.get_nick_list(room_jid)
+						room_nicks = gajim.contacts.get_nick_list(self.account,
+							room_jid)
 						if nick in room_nicks:
 							privmsg = ' '.join(message_array)
 							self.on_send_pm(nick=nick, msg=privmsg)
@@ -901,7 +893,8 @@ class GroupchatWindow(chat.Chat):
 					if len(message_array):
 						message_array = message_array[0].split()
 						nick = message_array.pop(0)
-						room_nicks = self.get_nick_list(room_jid)
+						room_nicks = gajim.contacts.get_nick_list(self.account,
+							room_jid)
 						reason = ' '.join(message_array)
 						if nick in room_nicks:
 							ban_jid = gajim.construct_fjid(room_jid, nick)
@@ -921,7 +914,8 @@ class GroupchatWindow(chat.Chat):
 					if len(message_array):
 						message_array = message_array[0].split()
 						nick = message_array.pop(0)
-						room_nicks = self.get_nick_list(room_jid)
+						room_nicks = gajim.contacts.get_nick_list(self.account,
+							room_jid)
 						reason = ' '.join(message_array)
 						if nick in room_nicks:
 							gajim.connections[self.account].gc_set_role(room_jid, nick,
@@ -1159,7 +1153,7 @@ current room topic.') % command, room_jid)
 
 	def on_info(self, widget, room_jid, nick):
 		'''Call vcard_information_window class to display user's information'''
-		c = gajim.gc_contacts[self.account][room_jid][nick]
+		c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 		if c.jid and c.resource:
 			# on GC, we know resource only if we're mod and up
 			jid = c.jid
@@ -1190,7 +1184,7 @@ current room topic.') % command, room_jid)
 		room_jid = self.get_active_jid()
 		fjid = gajim.construct_fjid(room_jid, nick) # 'fake' jid
 		if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
-			gc_c = gajim.gc_contacts[self.account][room_jid][nick]
+			gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 			gajim.interface.roster.new_chat(gc_c, self.account)
 
 		#make active here in case we need to send a message
@@ -1234,15 +1228,15 @@ current room topic.') % command, room_jid)
 		'''Make contact's popup menu'''
 		model = self.list_treeview[room_jid].get_model()
 		nick = model[iter][C_NICK].decode('utf-8')
-		c = gajim.gc_contacts[self.account][room_jid][nick]
+		c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 		jid = c.jid
 		target_affiliation = c.affiliation
 		target_role = c.role
 
 		# looking for user's affiliation and role
 		user_nick = self.nicks[room_jid]
-		user_affiliation = gajim.gc_contacts[self.account][room_jid][user_nick].\
-			affiliation
+		user_affiliation = gajim.contacts.get_gc_contact(self.account, room_jid,
+			user_nick].affiliation
 		user_role = self.get_role(room_jid, user_nick)
 
 		# making menu from glade
@@ -1333,8 +1327,8 @@ current room topic.') % command, room_jid)
 				room_jid, show='offline', status=reason)
 		del self.nicks[room_jid]
 		# They can already be removed by the destroy function
-		if gajim.gc_contacts[self.account].has_key(room_jid):
-			del gajim.gc_contacts[self.account][room_jid]
+		if room_jid in gajim.contacts.get_room_list(self.account):
+			gajim.contacts.remove_room(self.account, room_jid)
 			del gajim.gc_connected[self.account][room_jid]
 		del self.list_treeview[room_jid]
 		del self.subjects[room_jid]
@@ -1350,7 +1344,11 @@ current room topic.') % command, room_jid)
 	def got_disconnected(self, room_jid):
 		model = self.list_treeview[room_jid].get_model()
 		model.clear()
-		gajim.gc_contacts[self.account][room_jid] = {}
+		nick_list = gajim.contacts.get_nick_list(self.account, room_jid)
+		for nick in nick_list:
+			gc_contact = gajim.contacts.get_gc_contact(self.account, room_jid,
+				nick)
+			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		gajim.gc_connected[self.account][room_jid] = False
 		message_textview = self.message_textviews[room_jid]
 		message_textview.set_sensitive(False)
@@ -1518,7 +1516,7 @@ current room topic.') % command, room_jid)
 					gajim.interface.systray.add_jid(fjid, self.account, 'pm')
 			self.show_title()
 		else:
-			gc_c = gajim.gc_contacts[self.account][room_jid][nick]
+			gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 			gajim.interface.roster.new_chat(gc_c, self.account)
 		# Scroll to line
 		self.list_treeview[room_jid].expand_row(path[0:1], False)
@@ -1553,7 +1551,8 @@ current room topic.') % command, room_jid)
 					self.tooltip.id = row
 					nick = model[iter][C_NICK].decode('utf-8')
 					self.tooltip.timeout = gobject.timeout_add(500,
-						self.show_tooltip, gajim.gc_contacts[account][room_jid][nick])
+						self.show_tooltip, gajim.contacts.get_gc_contact(account,
+						room_jid, nick))
 
 	def on_list_treeview_leave_notify_event(self, widget, event):
 		model = widget.get_model()
@@ -1627,7 +1626,8 @@ current room topic.') % command, room_jid)
 				nick = model[iter][C_NICK].decode('utf-8')
 				fjid = gajim.construct_fjid(room_jid, nick)
 				if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
-					gc_c = gajim.gc_contacts[self.account][room_jid][nick]
+					gc_c = gajim.contacts.get_gc_contact(self.account, room_jid,
+						nick)
 					gajim.interface.roster.new_chat(gc_c, self.account)
 				gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
 				gajim.interface.instances[self.account]['chats'][fjid].window.present()
@@ -1644,7 +1644,8 @@ current room topic.') % command, room_jid)
 			model = widget.get_model()
 			iter = model.get_iter(path)
 			nick = model[iter][C_NICK].decode('utf-8')
-			if not nick in gajim.gc_contacts[self.account][room_jid]: #it's a group
+			if not nick in gajim.get_nick_list(self.account, room_jid):
+				#it's a group
 				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 					if (widget.row_expanded(path)):
 						widget.collapse_row(path)
@@ -1669,9 +1670,9 @@ current room topic.') % command, room_jid)
 			nick = model[iter][C_NICK].decode('utf-8')
 			jid = gajim.construct_fjid(room_jid, nick)
 			if not gajim.interface.instances[self.account]['chats'].has_key(jid):
-				gc_c = gajim.gc_contacts[self.account][room_jid][nick]
+				gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 				gajim.interface.roster.new_chat(gc_c, self.account)
-				jid = contact.jid
+				jid = gc_c.jid
 			gajim.interface.instances[self.account]['chats'][jid].set_active_tab(jid)
 			gajim.interface.instances[self.account]['chats'][jid].window.present()
 

@@ -129,37 +129,28 @@ class Contacts:
 		# It was the last resource of this contact ?
 		if not len(self._contacts[account][contact.jid]):
 			self._contacts[account].remove(contact.jid)
-
-	def create_gc_contact(self, room_jid='', nick='', show='', status='',
-		role='', affiliation='', jid=''):
-		return GC_Contact(room_jid, nick, show, status, role, affiliation, jid)
 	
-	def add_gc_contact(self, account, gc_contact):
-		# No such account before ?
-		if not self._gc_contacts.has_key(account):
-			self._contacts[account] = {gc_contact.room_jid : {gc_contact.nick: \
-				gc_contact}}
+	def remove_jid(self, account, jid):
+		'''Removes all contacts for a given jid'''
+		if not self._contacts.has_key(account):
 			return
-		# No such room_jid before ?
-		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
-			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.nick: \
-				gc_contact}
+		if not self._contacts[account].has_key(contact.jid):
 			return
-		self._gc_contacts[account][gc_contact.room_jid][gc_contact.nick] = \
-				gc_contact
+		del self._contacts[account][jid]
 
-	def remove_gc_contact(self, account, gc_contact):
-		if not self._gc_contacts.has_key(account):
-			return
-		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
-			return
-		if not self._gc_contacts[account][gc_contact.room_jid].has_key(
-			gc_contact.nick):
-			return
-		self._gc_contacts[account][gc_contact.room_jid].remove(gc_contact.nick)
-		# It was the last nick in room ?
-		if not len(self._gc_contacts[account][gc_contact.room_jid]):
-			self._gc_contacts[account].remove(gc_contact.room_jid)
+	def get_contact(self, account, jid, resource = None):
+		'''Returns the list of contact instances for this jid (one per resource)
+		if no resource is given
+		returns the contact instance for the given resource if it's given
+		or None if there is not'''
+		if jid in self._contacts[account]:
+			contacts = self._contacts[account][jid]
+			if not resource:
+				return contacts
+			for c in contacts:
+				if c.resource == resource:
+					return c
+		return None
 
 	def is_subcontact(self, account, contact):
 		if contact.jid in self._sub_contacts[account]:
@@ -213,14 +204,87 @@ class Contacts:
 				parrent_jid)
 		return contact
 
+	def is_pm_from_jid(self, account, jid):
+		'''Returns True if the given jid is a private message jid'''
+		if jid in self._contacts[account]:
+			return False
+		return True
+
+	def is_pm_from_contact(self, account, contact):
+		'''Returns True if the given contact is a private message contact'''
+		if isinstance(contact, Contcat):
+			return False
+		return True
+
+	def get_jid_list(self, account):
+		return self._contacts[account].keys()
+
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
 		return Contact(jid = gc_contact.get_full_jid(), name = gc_contact.nick,
 			groups = ['none'], show = gc_contact.show, status = gc_contact.status,
 			sub = 'none')
 
-	def is_pm_from_jid(self, account, jid):
-		'''Returns True if the given jid is a private message jid'''
-		if jid in self._contacts[account]:
-			return False
-		return True
+	def create_gc_contact(self, room_jid='', nick='', show='', status='',
+		role='', affiliation='', jid=''):
+		return GC_Contact(room_jid, nick, show, status, role, affiliation, jid)
+	
+	def add_gc_contact(self, account, gc_contact):
+		# No such account before ?
+		if not self._gc_contacts.has_key(account):
+			self._contacts[account] = {gc_contact.room_jid : {gc_contact.nick: \
+				gc_contact}}
+			return
+		# No such room_jid before ?
+		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
+			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.nick: \
+				gc_contact}
+			return
+		self._gc_contacts[account][gc_contact.room_jid][gc_contact.nick] = \
+				gc_contact
+
+	def remove_gc_contact(self, account, gc_contact):
+		if not self._gc_contacts.has_key(account):
+			return
+		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
+			return
+		if not self._gc_contacts[account][gc_contact.room_jid].has_key(
+			gc_contact.nick):
+			return
+		self._gc_contacts[account][gc_contact.room_jid].remove(gc_contact.nick)
+		# It was the last nick in room ?
+		if not len(self._gc_contacts[account][gc_contact.room_jid]):
+			self._gc_contacts[account].remove(gc_contact.room_jid)
+
+	def remove_room(self, account, room_jid):
+		if not self._gc_contacts.has_key(account):
+			return
+		if not self._gc_contacts[account].has_key(room_jid):
+			return
+		self._gc_contacts[account].remove(room_jid)
+
+	def get_gc_contact(self, account, room_jid, nick):
+		if not self._gc_contacts.has_key(account):
+			return
+		if not self._gc_contacts[account].has_key(room_jid):
+			return
+		if not self._gc_contacts[account][room_jid].has_key(nick):
+			return
+		self._gc_contacts[account][room_jid].remove(nick)
+
+	def get_gc_list(self, account):
+		if not self._gc_contacts.has_key(account):
+			return []
+		return self._gc_contacts[account].keys()
+
+	def get_nick_list(self, account, room_jid):
+		gc_list = self.get_gc_list(account)
+		if not room_jid in gc_list:
+			return []
+		return self._gc_contacts[account][room_jid].keys()
+
+	def get_gc_contact(self, account, room_jid, nick):
+		nick_list = self.get_nick_list(account, room_jid)
+		if not nick in nick_list:
+			return None
+		return self._gc_contacts[account][room_jid][nick]

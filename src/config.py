@@ -549,7 +549,7 @@ class PreferencesWindow:
 			# open new tabbed chat windows
 			for jid in jids:
 				if kind == 'chats':
-					c = gajim.get_contact_instance_with_highest_priority(acct, jid)
+					c = gajim.contacts.get_contact_with_highest_priority(acct, jid)
 					gajim.interface.roster.new_chat(c, acct)
 				if kind == 'gc':
 					gajim.interface.roster.new_room(jid, saved_var[jid]['nick'], acct)
@@ -578,7 +578,7 @@ class PreferencesWindow:
 			# open new tabbed chat windows
 			for jid in jids:
 				if kind == 'chats':
-					c = gajim.get_contact_instance_with_highest_priority(acct, jid)
+					c = gajim.contacts.get_contact_with_highest_priority(acct, jid)
 					gajim.interface.roster.new_chat(c, acct)
 				if kind == 'gc':
 					gajim.interface.roster.new_room(jid, saved_var[jid]['nick'], acct)
@@ -1268,8 +1268,6 @@ class AccountModificationWindow:
 			gajim.allow_notifications[name] = \
 				gajim.allow_notifications[self.account]
 			gajim.groups[name] = gajim.groups[self.account]
-			gajim.contacts[name] = gajim.contacts[self.account]
-			gajim.gc_contacts[name] = gajim.gc_contacts[self.account]
 			gajim.gc_connected[name] = gajim.gc_connected[self.account]
 			gajim.newly_added[name] = gajim.newly_added[self.account]
 			gajim.to_be_removed[name] = gajim.to_be_removed[self.account]
@@ -1280,6 +1278,8 @@ class AccountModificationWindow:
 			gajim.status_before_autoaway[name] = \
 				gajim.status_before_autoaway[self.account]
 			gajim.events_for_ui[name] = gajim.events_for_ui[self.account]
+
+			gajim.contacts.change_account_name(self.account, name)
 
 			#upgrade account variable in opened windows
 			for kind in ('infos', 'disco', 'chats', 'gc', 'gc_config'):
@@ -1297,8 +1297,6 @@ class AccountModificationWindow:
 			del gajim.nicks[self.account]
 			del gajim.allow_notifications[self.account]
 			del gajim.groups[self.account]
-			del gajim.contacts[self.account]
-			del gajim.gc_contacts[self.account]
 			del gajim.gc_connected[self.account]
 			del gajim.newly_added[self.account]
 			del gajim.to_be_removed[self.account]
@@ -2195,8 +2193,7 @@ class RemoveAccountWindow:
 		del gajim.nicks[self.account]
 		del gajim.allow_notifications[self.account]
 		del gajim.groups[self.account]
-		del gajim.contacts[self.account]
-		del gajim.gc_contacts[self.account]
+		gajim.contacts.remove_account(self.account)
 		del gajim.gc_connected[self.account]
 		del gajim.to_be_removed[self.account]
 		del gajim.newly_added[self.account]
@@ -2737,8 +2734,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		gajim.awaiting_events[self.account] = {}
 		gajim.connections[self.account].connected = 0
 		gajim.groups[self.account] = {}
-		gajim.contacts[self.account] = {}
-		gajim.gc_contacts[self.account] = {}
+		gajim.contacts.add_account(self.account)
 		gajim.gc_connected[self.account] = {}
 		gajim.newly_added[self.account] = []
 		gajim.to_be_removed[self.account] = []
