@@ -27,7 +27,7 @@ from common import gajim
 
 
 STATE_UNKNOWN  = 'OS probably not supported'
-STATE_XA   = 'extented away'
+STATE_XA   = 'extended away'
 STATE_AWAY   = 'away'
 STATE_AWAKE    = 'awake'
 
