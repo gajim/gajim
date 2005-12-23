@@ -1,5 +1,21 @@
-Gajim 0.8.2 (06 Sep 2005)
+Gajim 0.9 (23 December 2005)
 
+  * Avatars and status messages in roster window
+  * Improved service discovery window
+  * Emoticons selector, Cooler Popup Windows (notification-daemon). Read more information in case you did not notice something different in http://trac.gajim.org/wiki/GajimDBus#notif_daemon
+  * Caching of Avatars, Less UI freezing
+  * New Account creation wizard
+  * Better History Window with searching capabilities
+  * Gajim now tries to reconnect to a jabber server if connection is lost
+  * Queue for all events (File Transfer, private messages, etc)
+  * A lot of new irc-like commands in group chat. Do for example /help invite
+  * X11 Session Management support
+  * Gajim registers and handles xmpp: and xmpp:// (GNOME/gconfd only)
+  * Use pysqlite for conversation history. Automigration for old logs 
+  * New translations: Italian, Swedish, Slovak, Basque
+
+Gajim 0.8.2 (06 Sep 2005)
+  
   * Fix so Gajim runs in pygtk2.8.x
   * Gajim can use pydns too (apart from dnspython) to do SRV lookup
   * Other minor fixes
@@ -124,19 +140,3 @@ Gajim 0.2 (8 June 2004)
 Gajim 0.1 (21 May 2004)
 
   * Initial release. 
-  
-Gajim 0.9 (XX December 2005)
-
-  * Avatars and status messages in roster window
-  * Improved service discovery window
-  * Emoticons selector, Cooler Popup Windows (notification-daemon). Read more information in case you did not notice something different in http://trac.gajim.org/wiki/GajimDBus#notif_daemon
-  * Caching of Avatars, Less UI freezing
-  * New Account creation wizard
-  * Better History Window with searching capabilities
-  * Gajim now tries to reconnect to a jabber server if connection is lost
-  * Queue for all events (File Transfer, private messages, etc)
-  * A lot of new irc-like commands in group chat. Do for example /help invite
-  * X11 Session Management support
-  * Gajim registers and handles xmpp: and xmpp:// (GNOME/gconfd only)
-  * Use pysqlite for conversation history. Automigration for old logs 
-  * New translations: Italian, Swedish, Slovak, Basque
