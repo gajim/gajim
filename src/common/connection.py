@@ -1287,7 +1287,7 @@ class Connection:
 			try:
 				j = helpers.parse_jid(jid)
 			except:
-				print >> sys.sterr, _('Jid %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it') % jid
+				print >> sys.stderr, _('JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it') % jid
 			else:
 				roster[j] = raw_roster[jid]
 
