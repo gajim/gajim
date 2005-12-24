@@ -108,3 +108,4 @@ def check_and_possibly_create_paths():
 			os.mkdir(VCARDPATH, 0700)
 		if not os.path.isfile(LOG_DB_PATH):
 			create_log_db()
+			gajim.logger.init_vars()
