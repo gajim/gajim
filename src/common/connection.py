@@ -377,7 +377,7 @@ class Connection:
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
 				if self.name not in no_log_for and not\
-					int(float(time.mktime(tim))) <= self.last_history_line[jid][0]:
+					int(float(time.mktime(tim))) <= self.last_history_line[jid]:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 		elif mtype == 'chat': # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
@@ -2203,7 +2203,10 @@ class Connection:
 		self.to_be_sent.append(p)
 		#last date/time in history to avoid duplicate
 		jid='%s@%s' % (room, server)
-		self.last_history_line[jid]= gajim.logger.get_last_date_that_has_logs(jid)
+		last_log = gajim.logger.get_last_date_that_has_logs(jid)
+		if not last_log:
+			last_log = 0
+		self.last_history_line[jid]= last_log
 
 	def send_gc_message(self, jid, msg):
 		if not self.connection:
