@@ -903,7 +903,6 @@ class PreferencesWindow:
 			return
 		self.xml.get_widget('delete_msg_button').set_sensitive(True)
 		buf = self.xml.get_widget('msg_textview').get_buffer()
-		name = model.get_value(iter, 0)
 		msg = model[iter][1]
 		buf.set_text(msg)
 
@@ -945,7 +944,7 @@ class PreferencesWindow:
 		for sound in sounds:
 			val = gajim.config.get_per('soundevents', sound, 'enabled')
 			path = gajim.config.get_per('soundevents', sound, 'path')
-			iter = model.append((sound, val, path))
+			model.append((sound, val, path))
 
 	def on_treeview_sounds_cursor_changed(self, widget, data = None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
@@ -1982,11 +1981,7 @@ class ManageEmoticonsWindow:
 		except:
 			return False
 		t = img.get_storage_type()
-		if t == gtk.IMAGE_PIXBUF:
-			pix = img.get_pixbuf()
-		elif t == gtk.IMAGE_ANIMATION:
-			pix = img.get_animation().get_static_image()
-		else:
+		if t not in (gtk.IMAGE_PIXBUF, gtk.IMAGE_ANIMATION)
 			return False
 		return True
 
@@ -2611,7 +2606,6 @@ _('You can set advanced account options by pressing Advanced button, or later by
 
 	def acc_is_ok(self, config):
 		'''Account creation succeeded'''
-		con = gajim.connections[self.account]
 		self.create_vars(config)
 		self.finish_button.set_sensitive(True)
 		self.finish_button.set_property('has-default', True)
