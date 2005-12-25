@@ -2149,6 +2149,8 @@ class Connection:
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
+		iq2 = iq.addChild(name="query", namespace="jabber:iq:private")
+		iq2.addChild(name="storage", namespace="storage:bookmarks")
 		self.to_be_sent.append(iq)
 
 	def store_bookmarks(self):
