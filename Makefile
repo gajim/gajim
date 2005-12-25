@@ -1,4 +1,4 @@
-VERSION		?= 0.9
+VERSION		?= 0.9.1
 
 GAJIM_AP	= 0 # do we build Autopackage?
 
