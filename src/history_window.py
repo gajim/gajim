@@ -327,7 +327,7 @@ class HistoryWindow:
 		for row in results:
 			local_time = time.localtime(row[1])
 			tim = time.strftime('%x', local_time)
-			iter = model.append((row[0], tim, row[4]))
+			model.append((row[0], tim, row[4]))
 			
 	def on_results_treeview_row_activated(self, widget, path, column):
 		'''a row was double clicked, get date from row, and select it in calendar
