@@ -605,10 +605,8 @@ class Connection:
 
 	def _bytestreamErrorCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamErrorCB')
-		frm = self.get_full_jid(iq_obj)
 		id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
-		streamhost =  query.getTag('streamhost')
 		jid = self.get_jid(iq_obj)
 		id = id[3:]
 		if not self.files_props.has_key(id):
@@ -655,13 +653,8 @@ class Connection:
 					gajim.socks5queue.connect_to_hosts(self.name, sid,
 						self.send_success_connect_reply, None)
 				raise common.xmpp.NodeProcessed
-		fast = None
-		try:
-			fast = query.getTag('fast')
-		except Exception, e:
-			pass
+
 		file_props['streamhosts'] = streamhosts
-		conn_err = False
 		if file_props['type'] == 'r':
 			gajim.socks5queue.connect_to_hosts(self.name, sid,
 				self.send_success_connect_reply, self._connect_error)
@@ -877,7 +870,6 @@ class Connection:
 			# file properties for jid is none
 			return
 		file_props['receiver'] = self.get_full_jid(iq_obj)
-		jid = self.get_jid(iq_obj)
 		si = iq_obj.getTag('si')
 		feature = si.setTag('feature')
 		if feature.getNamespace() != common.xmpp.NS_FEATURE:
@@ -900,7 +892,6 @@ class Connection:
 		file_props = self.files_props[sid]
 		file_props['hash'] = hash_id
 		return
-
 
 	def get_cached_proxies(self, proxy):
 		''' get cached entries for proxy and request the cache again '''
@@ -1001,7 +992,6 @@ class Connection:
 		mime_type = si.getAttr('mime-type')
 		if profile != common.xmpp.NS_FILE:
 			return
-		feature = si.getTag('feature')
 		file_tag = si.getTag('file')
 		file_props = {'type': 'r'}
 		for attribute in file_tag.getAttrs():
@@ -1350,7 +1340,6 @@ class Connection:
 			#Bookmarked URLs and Conferences
 			#http://www.jabber.org/jeps/jep-0048.html
 			confs = storage.getTags('conference')
-			urls = storage.getTags('url')
 			for conf in confs:
 				autojoin_val = conf.getAttr('autojoin')
 				if autojoin_val is None: # not there (it's optional)
@@ -1415,7 +1404,6 @@ class Connection:
 		if id not in self.awaiting_answers:
 			return
 		if self.awaiting_answers[id][0] == VCARD_PUBLISHED:
-			typ = iq_obj.getType()
 			if iq_obj.getType() == 'result':
 				self.dispatch('VCARD_PUBLISHED', ())
 				vcard_iq = self.awaiting_answers[id][1]
@@ -1519,7 +1507,6 @@ class Connection:
 			if h['weight'] >= r:
 				if h['weight'] <= min_w:
 					min_w = h['weight']
-					to_return = h
 		return h
 
 	def connect(self, data = None):
@@ -2162,8 +2149,6 @@ class Connection:
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name="query", namespace="jabber:iq:private")
-		iq3 = iq2.addChild(name="storage", namespace="storage:bookmarks")
 		self.to_be_sent.append(iq)
 
 	def store_bookmarks(self):
@@ -2193,7 +2178,6 @@ class Connection:
 		if not self.connection:
 			return
 		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
-		ptype = None
 		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
 			show = show, status = self.status)
 		p = self.add_sha(p)

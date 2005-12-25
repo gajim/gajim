@@ -182,7 +182,6 @@ class Chat:
 			start = '[' + unicode(unread) + '] '
 		elif unread == 1:
 			start = '* '
-		chat = self.names[jid]
 		if len(self.xmls) > 1: # if more than one tab in the same window
 			if self.widget_name == 'tabbed_chat_window':
 				add = _('Chat')
