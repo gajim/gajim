@@ -100,12 +100,13 @@ class ConversationTextview(gtk.TextView):
 		tag.set_property('foreground', color)
 
 		tag = buffer.create_tag('url')
-		tag.set_property('foreground', 'blue')
+		color = gajim.config.get('urlmsgcolor')
+		tag.set_property('foreground', color)
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 		tag.connect('event', self.hyperlink_handler, 'url')
 
 		tag = buffer.create_tag('mail')
-		tag.set_property('foreground', 'blue')
+		tag.set_property('foreground', color)
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 		tag.connect('event', self.hyperlink_handler, 'mail')
 

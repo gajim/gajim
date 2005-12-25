@@ -76,6 +76,7 @@ class Config:
 		'outmsgcolor': [ opt_color, '#164e6f' ],
 		'statusmsgcolor': [ opt_color, '#1eaa1e' ],
 		'markedmsgcolor': [ opt_color, '#ff8080' ],
+		'urlmsgcolor': [ opt_color, '#0000ff' ],
 		'collapsed_rows': [ opt_str, '' ],
 		'roster_theme': [ opt_str, 'green' ],
 		'saveposition': [ opt_bool, True ],

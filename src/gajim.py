@@ -1310,6 +1310,7 @@ class Interface:
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
 			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
+			'urlmsgcolor': gajim.config.get('urlmsgcolor'),
 		}
 
 		parser.read()

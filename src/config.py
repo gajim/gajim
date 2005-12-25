@@ -222,6 +222,11 @@ class PreferencesWindow:
 		colSt = gajim.config.get('statusmsgcolor')
 		self.xml.get_widget('status_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
+		
+        #Color for hyperlinks
+		colSt = gajim.config.get('urlmsgcolor')
+		self.xml.get_widget('url_msg_colorbutton').set_color(
+			gtk.gdk.color_parse(colSt))
 
 		#Font for messages
 		font = gajim.config.get('conversation_font')
@@ -719,6 +724,9 @@ class PreferencesWindow:
 	def on_outgoing_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'outmsgcolor')
 
+	def on_url_msg_colorbutton_color_set(self, widget):
+		self.on_preference_widget_color_set(widget, 'urlmsgcolor')
+
 	def on_status_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'statusmsgcolor')
 
@@ -726,7 +734,7 @@ class PreferencesWindow:
 		self.on_preference_widget_font_set(widget, 'conversation_font')
 
 	def on_reset_colors_button_clicked(self, widget):
-		for i in ('inmsgcolor', 'outmsgcolor', 'statusmsgcolor'):
+		for i in ('inmsgcolor', 'outmsgcolor', 'statusmsgcolor', 'urlmsgcolor'):
 			gajim.config.set(i, gajim.interface.default_values[i])
 
 		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
@@ -735,6 +743,8 @@ class PreferencesWindow:
 			gtk.gdk.color_parse(gajim.config.get('outmsgcolor')))
 		self.xml.get_widget('status_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(gajim.config.get('statusmsgcolor')))
+		self.xml.get_widget('url_msg_colorbutton').set_color(\
+			gtk.gdk.color_parse(gajim.config.get('urlmsgcolor')))
 		self.update_text_tags()
 		gajim.interface.save_config()
 
