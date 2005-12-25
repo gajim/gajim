@@ -1981,7 +1981,7 @@ class ManageEmoticonsWindow:
 		except:
 			return False
 		t = img.get_storage_type()
-		if t not in (gtk.IMAGE_PIXBUF, gtk.IMAGE_ANIMATION)
+		if t not in (gtk.IMAGE_PIXBUF, gtk.IMAGE_ANIMATION):
 			return False
 		return True
 
