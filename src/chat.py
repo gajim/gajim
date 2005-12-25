@@ -302,6 +302,53 @@ class Chat:
 			return 'chat'
 		return 'pm'
 
+	def get_nth_jid(self, page_number = None):
+		notebook = self.notebook
+		if page_number == None:
+			page_number = notebook.get_current_page()
+		nth_child = notebook.get_nth_page(page_number)
+		nth_jid = ''
+		for jid in self.xmls:
+			if self.childs[jid] == nth_child:
+				nth_jid = jid
+				break
+		return nth_jid
+
+	def move_to_next_unread_tab(self, forward):
+		ind = self.notebook.get_current_page()
+		current = ind
+		found = False
+		# loop until finding an unread tab or having done a complete cycle
+		while True: 
+			if forward == True: # look for the first unread tab on the right
+				ind = ind + 1
+				if ind >= self.notebook.get_n_pages():
+					ind = 0
+			else: # look for the first unread tab on the right
+				ind = ind - 1
+				if ind < 0:
+					ind = self.notebook.get_n_pages() - 1
+			if ind == current:
+				break # a complete cycle without finding an unread tab 
+			jid = self.get_nth_jid(ind)
+			if self.nb_unread[jid] > 0:
+				found = True
+				break # found
+		if found:
+			self.notebook.set_current_page(ind)
+		else: # not found
+			if forward: # CTRL + TAB
+				if current < (self.notebook.get_n_pages() - 1):
+					self.notebook.next_page()
+				else: # traverse for ever (eg. don't stop at last tab)
+					self.notebook.set_current_page(0)
+			else: # CTRL + SHIFT + TAB
+				if current > 0:
+					self.notebook.prev_page()
+				else: # traverse for ever (eg. don't stop at first tab)
+					self.notebook.set_current_page(
+						self.notebook.get_n_pages() - 1)
+		
 	def on_window_destroy(self, widget, kind): #kind is 'chats' or 'gc'
 		'''clean gajim.interface.instances[self.account][kind]'''
 		for jid in self.xmls:
@@ -321,14 +368,7 @@ class Chat:
 			del windows['tabbed']
 
 	def get_active_jid(self):
-		notebook = self.notebook
-		active_child = notebook.get_nth_page(notebook.get_current_page())
-		active_jid = ''
-		for jid in self.xmls:
-			if self.childs[jid] == active_child:
-				active_jid = jid
-				break
-		return active_jid
+		return self.get_nth_jid()
 
 	def on_close_button_clicked(self, button, jid):
 		'''When close button is pressed: close a tab'''
@@ -908,18 +948,10 @@ class Chat:
 					gtk.SCROLL_PAGE_BACKWARD, False)
 		elif event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + SHIFT + TAB
-				current = self.notebook.get_current_page()
-				if current > 0:
-					self.notebook.prev_page()
-				else: # traverse for ever (eg. don't stop at first tab)
-					self.notebook.set_current_page(self.notebook.get_n_pages()-1)
+				self.move_to_next_unread_tab(False)
 		elif event.keyval == gtk.keysyms.Tab: # TAB
 			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
-				current = self.notebook.get_current_page()
-				if current < (self.notebook.get_n_pages()-1):
-					self.notebook.next_page()
-				else: # traverse for ever (eg. don't stop at last tab)
-					self.notebook.set_current_page(0)
+				self.move_to_next_unread_tab(True)
 		elif (event.keyval == gtk.keysyms.l or event.keyval == gtk.keysyms.L) \
 				and event.state & gtk.gdk.CONTROL_MASK: # CTRL + L
 			conv_textview = self.conversation_textviews[jid]
