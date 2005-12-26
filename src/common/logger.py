@@ -404,7 +404,7 @@ class Logger:
 			''', (jid_id, constants.KIND_STATUS, constants.KIND_GCSTATUS))
 
 		results = self.cur.fetchone()
-		if len(results) > 0:
+		if results is not None:
 			result = results[0]
 		else:
 			result = None
