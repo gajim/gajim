@@ -4051,7 +4051,7 @@ msgstr "Vert"
 
 #: ../src/common/config.py:354 ../src/common/optparser.py:154
 msgid "grocery"
-msgstr "Ėpicerie"
+msgstr "épicerie"
 
 #: ../src/common/config.py:358
 msgid "human"
