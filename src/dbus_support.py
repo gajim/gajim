@@ -104,11 +104,7 @@ def get_interface(interface, path):
 		obj = bus.get_object(interface, path)
 		return dbus.Interface(obj, interface)
 	except Exception, e:
-		print >> sys.stderr, e
-		return None
-	except dbus.dbus_bindings.DBusException, e:
-		# This exception could give useful info about why notification breaks
-		print >> sys.stderr, e
+		gajim.log.debug(str(e))
 		return None
 
 
