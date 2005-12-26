@@ -64,7 +64,7 @@ dist:
 	@tar cjf gajim-$(VERSION).tar.bz2 gajim-$(VERSION)/
 	rm -rf gajim-$(VERSION)
 
-install:
+install: all
 	# Remove the old po folder if it exists
 	if [ -d $(DESTDIR)$(PREFIX)/share/gajim/po ] ; then \
 		rm -rf $(DESTDIR)$(PREFIX)/share/gajim/po; \
