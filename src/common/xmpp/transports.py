@@ -43,8 +43,11 @@ def temp_failure_retry(func, *args, **kwargs):
         try:
             return func(*args, **kwargs)
         except (os.error, IOError, select.error), ex:
-            print ex, dir(ex)
-            if ex.errno == errno.EINTR:
+            if hasattr(ex, 'errno'):
+            	errnum = ex.errno
+            else:
+            	errnum = int(str(ex)[0])
+            if errnum == errno.EINTR:
                 continue
             else:
                 raise
