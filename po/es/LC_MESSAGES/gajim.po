@@ -3436,8 +3436,8 @@ msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
 msgstr ""
-"Eliminando este contacto también se está eliminando la autorización. El "
-"contacto\"%s\" siempre te verá descnectado."
+"Eliminando este contacto también se está eliminando la autorización. Este "
+"contacto siempre te verá desconectado."
 
 #: ../src/roster_window.py:1409
 msgid "I want this contact to know my status after removal"
