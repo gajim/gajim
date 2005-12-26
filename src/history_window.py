@@ -326,7 +326,7 @@ class HistoryWindow:
 		# also do we need show at all?
 		for row in results:
 			local_time = time.localtime(row[1])
-			tim = time.strftime('%F %X', local_time)
+			tim = time.strftime('%Y-%m-%d %H:%M:%S', local_time)
 			model.append((row[0], tim, row[4]))
 			
 	def on_results_treeview_row_activated(self, widget, path, column):
@@ -338,7 +338,7 @@ class HistoryWindow:
 		model = widget.get_model()
 		iter = model.get_iter(path)
 		# make it (Y, M, D, ...)
-		tim = time.strptime(model[iter][C_TIME], '%F %X')
+		tim = time.strptime(model[iter][C_TIME], '%Y-%m-%d %H:%M:%S')
 		year = tim[0]
 		gtk_month = tim[1]
 		month = gtkgui_helpers.make_python_month_gtk_month(gtk_month)
