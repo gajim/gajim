@@ -57,10 +57,10 @@ def notify(event_type, jid, account, msg_type = '', file_props = None):
 			return
 		except dbus.dbus_bindings.DBusException, e:
 			# Connection to DBus failed, try popup
-			print >> sys.stderr, e
+			gajim.log.debug(str(e))
 		except TypeError, e:
 			# This means that we sent the message incorrectly
-			print >> sys.stderr, e
+			gajim.log.debug(str(e))
 	instance = dialogs.PopupNotificationWindow(event_type, jid, account,
 		msg_type, file_props)
 	gajim.interface.roster.popup_notification_windows.append(instance)
