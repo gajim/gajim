@@ -46,7 +46,7 @@ def temp_failure_retry(func, *args, **kwargs):
             if hasattr(ex, 'errno'):
             	errnum = ex.errno
             else:
-            	errnum = int(str(ex)[0])
+            	errnum = ex.args[0]
             if errnum == errno.EINTR:
                 continue
             else:
