@@ -402,5 +402,5 @@ class Logger:
 			AND kind NOT IN (?, ?)
 			ORDER BY time DESC LIMIT 1
 			''', (jid_id, constants.KIND_STATUS, constants.KIND_GCSTATUS))
-		result = self.cur.fetchone()
+		result = self.cur.fetchone()[0]
 		return result

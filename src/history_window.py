@@ -125,7 +125,7 @@ class HistoryWindow:
 		if result is None:
 			date = time.localtime()
 		else:
-			tim = result[0]
+			tim = result
 			date = time.localtime(tim)
 
 		y, m, d = date[0], date[1], date[2]

@@ -2190,7 +2190,7 @@ class Connection:
 		#last date/time in history to avoid duplicate
 		jid='%s@%s' % (room, server)
 		last_log = gajim.logger.get_last_date_that_has_logs(jid)
-		if not last_log:
+		if last_log is None:
 			last_log = 0
 		self.last_history_line[jid]= last_log
 
