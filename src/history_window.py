@@ -338,7 +338,7 @@ class HistoryWindow:
 		model = widget.get_model()
 		iter = model.get_iter(path)
 		# make it (Y, M, D, ...)
-		tim = time.strptime(model[iter][C_TIME], '%x')
+		tim = time.strptime(model[iter][C_TIME], '%c')
 		year = tim[0]
 		gtk_month = tim[1]
 		month = gtkgui_helpers.make_python_month_gtk_month(gtk_month)
@@ -349,3 +349,6 @@ class HistoryWindow:
 			self.calendar.select_month(month, year)
 		
 		self.calendar.select_day(day)
+		
+		#FIXME: start_iter.forward_search(string, TEXT_SEARCH_VISIBLE_ONLY, None)
+		# on double click and scroll there and maybe even highlight it
