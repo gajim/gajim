@@ -321,15 +321,28 @@ class HistoryWindow:
 			return
 		# contact_name, time, kind, show, message, subject
 		results = gajim.logger.get_search_results_for_query(self.jid, text)
-		#FIXME: investigate on kind and put name for normal chatting
-		#and add "subject:  | message: " in message column is kind is 
-		# single*
-		# also do we need show at all?
+		#FIXME:
+		# add "subject:  | message: " in message column if kind is single
+		# also do we need show at all? (we do not search on subject)
 		for row in results:
-			local_time = time.localtime(row[1])
-			tim = time.strftime('%x', local_time)
+			contact_name = row[0]
+			if not contact_name:
+				kind = row[2]
+				if kind == constants.KIND_CHAT_MSG_SENT: # it's us! :)
+					contact_name = gajim.nicks[self.account]
+				else:
+					if self.account and gajim.contacts[self.account].has_key(self.jid):
+						contact = gajim.get_first_contact_instance_from_jid(
+							self.account, self.jid)
+						contact_name = contact.name
+					else:
+						contact_name = self.jid
+			tim = row[1]
+			message = row[4]
+			local_time = time.localtime(tim)
+			date = time.strftime('%x', local_time)
 			# name, date, message, time (full unix time)
-			model.append((row[0], tim, row[4], row[1]))
+			model.append((contact_name, date, message, tim))
 			
 	def on_results_treeview_row_activated(self, widget, path, column):
 		'''a row was double clicked, get date from row, and select it in calendar
