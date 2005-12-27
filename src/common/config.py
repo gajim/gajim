@@ -171,6 +171,7 @@ class Config:
 		'log_contact_status_changes': [opt_bool, False],
 		'restored_messages_color': [opt_str, 'grey'],
 		'hide_avatar_of_transport': [opt_bool, False],
+		'roster_window_skip_taskbar': [opt_bool, False],
 	}
 
 	__options_per_key = {

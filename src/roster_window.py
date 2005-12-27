@@ -2550,6 +2550,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
 		self.window = self.xml.get_widget('roster_window')
+		if gajim.config.get('roster_window_skip_taskbar'):
+			self.window.set_property('skip-taskbar-hint', True)
 		self.tree = self.xml.get_widget('roster_treeview')
 		self.tree.get_selection().connect('changed',
 			self._on_treeview_selection_changed)
