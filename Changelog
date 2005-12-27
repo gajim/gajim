@@ -1,3 +1,8 @@
+Gajim 0.9.1 (27 December 2005)
+
+  * Fix bug when joining a Groupchat
+  * Fix bug when starting Gajim without old logs
+
 Gajim 0.9 (23 December 2005)
 
   * Avatars and status messages in roster window
