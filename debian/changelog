@@ -8,7 +8,7 @@ gajim (0.9.1-1) unstable; urgency=low
   * Gajim now depends on python-pysqlite2, recommands python-dbus, and
     suggests python-gnome2
 
- -- Yann Le Boulanger <asterix@lagaule.org>  Fri, 26 Dec 2005 19:30:54 +0100
+ -- Yann Le Boulanger <asterix@lagaule.org>  Fri, 27 Dec 2005 01:20:54 +0100
 
 gajim (0.8.2-1) unstable; urgency=low
 
