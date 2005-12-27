@@ -47,12 +47,13 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-# contact_name, time, kind, show, message
+# contact_name, date, message, time
 (
 C_CONTACT_NAME,
-C_TIME,
-C_MESSAGE
-) = range(3)
+C_DATE,
+C_MESSAGE,
+C_TIME
+) = range(4)
 
 class HistoryWindow:
 	'''Class for browsing logs of conversations with contacts'''
@@ -70,6 +71,7 @@ class HistoryWindow:
 		self.history_textview = conversation_textview.ConversationTextview(account)
 		scrolledwindow.add(self.history_textview)
 		self.history_buffer = self.history_textview.get_buffer()
+		self.history_buffer.create_tag('highlight', background = 'yellow')
 		self.query_entry = xml.get_widget('query_entry')
 		self.search_button = xml.get_widget('search_button')
 		query_builder_button = xml.get_widget('query_builder_button')
@@ -78,10 +80,9 @@ class HistoryWindow:
 		self.expander_vbox = xml.get_widget('expander_vbox')
 		
 		self.results_treeview = xml.get_widget('results_treeview')
-		# contact_name, time, message
-		model = gtk.ListStore(str, str, str)
+		# contact_name, date, message, time
+		model = gtk.ListStore(str, str, str, str)
 		self.results_treeview.set_model(model)
-		
 		col = gtk.TreeViewColumn(_('Name'))
 		self.results_treeview.append_column(col)
 		renderer = gtk.CellRendererText()
@@ -94,8 +95,8 @@ class HistoryWindow:
 		self.results_treeview.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text = C_TIME)
-		col.set_sort_column_id(C_TIME)
+		col.set_attributes(renderer, text = C_DATE)
+		col.set_sort_column_id(C_DATE)
 		col.set_resizable(True)
 		
 		col = gtk.TreeViewColumn(_('Message'))
@@ -326,8 +327,9 @@ class HistoryWindow:
 		# also do we need show at all?
 		for row in results:
 			local_time = time.localtime(row[1])
-			tim = time.strftime('%Y-%m-%d %H:%M:%S', local_time)
-			model.append((row[0], tim, row[4]))
+			tim = time.strftime('%x', local_time)
+			# name, date, message, time (full unix time)
+			model.append((row[0], tim, row[4], row[1]))
 			
 	def on_results_treeview_row_activated(self, widget, path, column):
 		'''a row was double clicked, get date from row, and select it in calendar
@@ -337,8 +339,8 @@ class HistoryWindow:
 		cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
 		model = widget.get_model()
 		iter = model.get_iter(path)
-		# make it (Y, M, D, ...)
-		tim = time.strptime(model[iter][C_TIME], '%Y-%m-%d %H:%M:%S')
+		# make it a tupple (Y, M, D, 0, 0, 0...)
+		tim = time.strptime(model[iter][C_DATE], '%x')
 		year = tim[0]
 		gtk_month = tim[1]
 		month = gtkgui_helpers.make_python_month_gtk_month(gtk_month)
@@ -349,7 +351,26 @@ class HistoryWindow:
 			self.calendar.select_month(month, year)
 		
 		self.calendar.select_day(day)
-		
-		# self.history_buffer.get_bounds()
-		#FIXME: start_iter.forward_search(string, TEXT_SEARCH_VISIBLE_ONLY, None)
-		# on double click and scroll there and maybe even highlight it
+		unix_time = model[iter][C_TIME]
+		self.scroll_to_result(unix_time)
+		#FIXME: one day do not search just for unix_time but the whole and user
+		# specific format of the textbuffer line [time] nick: message
+		# and highlight all that
+			
+	def scroll_to_result(self, unix_time):
+		'''scrolls to the result using unix_time and highlight line'''
+		start_iter = self.history_buffer.get_start_iter()
+		local_time = time.localtime(float(unix_time))
+		tim = time.strftime('%X', local_time)
+		result = start_iter.forward_search(tim, gtk.TEXT_SEARCH_VISIBLE_ONLY,
+			None)
+		if result is not None:
+			match_start_iter, match_end_iter = result
+			match_start_iter.backward_char() # include '[' or other character before time
+			match_end_iter.forward_line() # highlite all message not just time
+			self.history_buffer.apply_tag_by_name('highlight', match_start_iter,
+				match_end_iter)
+				
+			match_start_mark = self.history_buffer.create_mark('match_start',
+				match_start_iter, True)
+			self.history_textview.scroll_to_mark(match_start_mark, 0, True)
