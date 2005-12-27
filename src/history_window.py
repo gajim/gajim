@@ -356,7 +356,7 @@ class HistoryWindow:
 		#FIXME: one day do not search just for unix_time but the whole and user
 		# specific format of the textbuffer line [time] nick: message
 		# and highlight all that
-			
+
 	def scroll_to_result(self, unix_time):
 		'''scrolls to the result using unix_time and highlight line'''
 		start_iter = self.history_buffer.get_start_iter()
