@@ -824,7 +824,7 @@ class PopupNotificationWindow:
 		event_description_label = xml.get_widget('event_description_label')
 		eventbox = xml.get_widget('eventbox')
 		
-		event_type_label.set_markup('<span foreground='black' weight='bold'>%s</span>' %event_type)
+		event_type_label.set_markup('<span foreground="black" weight="bold">%s</span>' %event_type)
 
 		if self.jid in gajim.contacts[account]:
 			txt = gajim.contacts[account][self.jid][0].name
@@ -838,12 +838,12 @@ class PopupNotificationWindow:
 			limegreen = gtk.gdk.color_parse('limegreen')
 			close_button.modify_bg(gtk.STATE_NORMAL, limegreen)
 			eventbox.modify_bg(gtk.STATE_NORMAL, limegreen)
-			event_description_label.set_markup('<span foreground='black'>%s</span>' % txt)
+			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
 		elif event_type == _('Contact Signed Out'):
 			red = gtk.gdk.color_parse('red')
 			close_button.modify_bg(gtk.STATE_NORMAL, red)
 			eventbox.modify_bg(gtk.STATE_NORMAL, red)
-			event_description_label.set_markup('<span foreground='black'>%s</span>' % txt)
+			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
 		elif event_type in (_('New Message'), _('New Single Message'),
 			_('New Private Message')):
 			dodgerblue = gtk.gdk.color_parse('dodgerblue')
@@ -855,18 +855,18 @@ class PopupNotificationWindow:
 				txt = _('From %s in room %s') % (nick, room_name)
 			else:
 				txt = _('From %s') % txt
-			event_description_label.set_markup('<span foreground='black'>%s</span>' % txt)
+			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
 		elif event_type == _('File Transfer Request'):
 			bg_color = gtk.gdk.color_parse('khaki')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			txt = _('From %s') % txt
-			event_description_label.set_markup('<span foreground='black'>%s</span>' % txt)
+			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
 		elif event_type == _('File Transfer Error'):
 			bg_color = gtk.gdk.color_parse('firebrick')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
-			event_description_label.set_markup('<span foreground='black'>%s</span>' % txt)
+			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
 		elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
 			bg_color = gtk.gdk.color_parse('yellowgreen')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
@@ -889,7 +889,7 @@ class PopupNotificationWindow:
 					txt = _('To %s') % name
 			else:
 				txt = ''
-			event_description_label.set_markup('<span foreground='black'>%s</span>' % txt)
+			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
 		gajim.interface.roster.popups_notification_height += self.window_height
