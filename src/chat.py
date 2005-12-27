@@ -64,7 +64,6 @@ class Chat:
 		self.widget_name = widget_name
 
 		self.account = account
-		self.change_cursor = None
 		self.xmls = {}
 		self.conversation_textviews = {} # holds per jid conversation textview
 		self.message_textviews = {} # holds per jid message (where we write) textview
