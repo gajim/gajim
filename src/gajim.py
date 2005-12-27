@@ -59,7 +59,7 @@ except ImportError:
 	if os.name == 'nt':
 		sectext = _('Please remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
 	else:
-		sectext = _('Please make sure that gtk and pygtk have libglade support in your system.')
+		sectext = _('Please make sure that GTK+ and PyGTK have libglade support in your system.')
 
 try:
 	from common import check_paths

@@ -32,10 +32,7 @@ class PysqliteNotAvailable(Exception):
 		Exception.__init__(self)
 
 	def __str__(self):
-		return _('pysqlite2 (aka python-pysqlite2) dependency is missing. '\
-		'After you install pysqlite3, if you want to migrate your logs '\
-		'to the new database, please read: http://trac.gajim.org/wiki/MigrateLogToDot9DB '\
-		'Exiting...')
+		return _('pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting...')
 
 class ServiceNotAvailable(Exception):
 	'''This exception is raised when we cannot use Gajim remotely'''
