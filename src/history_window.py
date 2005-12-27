@@ -227,7 +227,7 @@ class HistoryWindow:
 				self.last_time_printout = tim
 				tim = time.strftime('%X ', time.localtime(float(tim)))
 				buf.insert_with_tags_by_name(end_iter, tim + '\n',
-					'time_sometimes')				
+					'time_sometimes')
 
 		tag_name = ''
 		tag_msg = ''
@@ -367,7 +367,7 @@ class HistoryWindow:
 		if result is not None:
 			match_start_iter, match_end_iter = result
 			match_start_iter.backward_char() # include '[' or other character before time
-			match_end_iter.forward_line() # highlite all message not just time
+			match_end_iter.forward_line() # highlight all message not just time
 			self.history_buffer.apply_tag_by_name('highlight', match_start_iter,
 				match_end_iter)
 				
