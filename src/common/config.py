@@ -172,7 +172,8 @@ class Config:
 		'restored_messages_color': [opt_str, 'grey'],
 		'hide_avatar_of_transport': [opt_bool, False],
 		'roster_window_skip_taskbar': [opt_bool, False],
-		'use_urgency_hit': [opt_bool, True, _('If True and installed GTK / PyGTK version are at least 2.8, use urgency hit')],
+		'use_urgency_hint': [opt_bool, True, _('If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash when holding pending events.')],
+		'notification_timeout': [opt_int, 5],
 	}
 
 	__options_per_key = {
