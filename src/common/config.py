@@ -172,6 +172,7 @@ class Config:
 		'restored_messages_color': [opt_str, 'grey'],
 		'hide_avatar_of_transport': [opt_bool, False],
 		'roster_window_skip_taskbar': [opt_bool, False],
+		'use_urgency_hit': [opt_bool, True, _('If True and installed GTK / PyGTK version are at least 2.8, use urgency hit')],
 	}
 
 	__options_per_key = {
