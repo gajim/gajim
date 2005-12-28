@@ -39,6 +39,8 @@ opt_int = [ 'integer', 0 ]
 opt_str = [ 'string', 0 ]
 opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
+opt_single_window_types = [('never', _('Never')), ('always', _('Always')),
+			('peracct', _('Per Account')), ('pertype', _('Per type'))]
 
 class Config:
 
@@ -82,6 +84,7 @@ class Config:
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False ],
 		'sort_by_show': [ opt_bool, True ],
+		# FIXME: Remove me
 		'usetabbedchat': [ opt_bool, True ],
 		'use_speller': [ opt_bool, False ],
 		'print_time': [ opt_str, 'always' ],
@@ -166,12 +169,15 @@ class Config:
 		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window')],
 		'show_avatars_in_roster': [opt_bool, True],
 		'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old.')],
-		#FIXME: remvoe you and make it Gajim will not; and/or his or *her* status messages
+		#FIXME: remove you and make it Gajim will not; and/or his or *her* status messages
 		'print_status_in_chats': [opt_bool, True, _('If False, you will no longer see status line in chats when a contact changes his or her status and/or his status message.')],
 		'log_contact_status_changes': [opt_bool, False],
 		'restored_messages_color': [opt_str, 'grey'],
 		'hide_avatar_of_transport': [opt_bool, False],
 		'roster_window_skip_taskbar': [opt_bool, False],
+		# TODO: Need to decide Gajim default.  methinks 'always'
+		'single_message_window': [opt_str, 'never',
+			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect')],
 	}
 
 	__options_per_key = {
