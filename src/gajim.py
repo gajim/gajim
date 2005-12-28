@@ -277,7 +277,7 @@ class Interface:
 			ji = jid
 		# Update contact
 
-		jid_list = gajim.contacts.het_jid_list(account)
+		jid_list = gajim.contacts.get_jid_list(account)
 		if ji in jid_list:
 			lcontact = gajim.contacts.get_contacts_from_jid(account, ji)
 			contact1 = None
