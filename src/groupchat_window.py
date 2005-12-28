@@ -424,8 +424,9 @@ class GroupchatWindow(chat.Chat):
 				gc_contact.status)
 
 	def get_role(self, room_jid, nick):
-		if gajim.gc_contacts[self.account][room_jid].has_key(nick):
-			return gajim.gc_contacts[self.account][room_jid][nick].role
+		gc_contact = gajim.contact.get_gc_contact(self.account, room_jid, nick)
+		if gc_contact:
+			return gc_contact.role
 		else:
 			return 'visitor'
 
