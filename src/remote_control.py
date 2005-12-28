@@ -107,6 +107,7 @@ class SignalObject(DbusPrototype):
 				self.add_contact,
 				self.remove_contact,
 				self.get_status,
+				self.get_status_message,
 			])
 
 	def raise_signal(self, signal, arg):
@@ -137,6 +138,20 @@ class SignalObject(DbusPrototype):
 		# return show for the given account
 		index = gajim.connections[account].connected
 		return STATUS_LIST[index]
+	
+	def get_status_message(self, *args):
+		'''get_status(account = None)
+		returns status which is the global one
+		unless account is given'''
+		account = self._get_real_arguments(args, 1)[0]
+		accounts = gajim.contacts.keys()
+		if not account:
+			# If user did not ask for account, returns the global status
+			return str(helpers.get_global_status())
+		# return show for the given account
+		status = gajim.connections[account].status
+		return str(status)
+		
 
 	def send_file(self, *args):
 		'''send_file(file_path, jid, account=None) 
@@ -488,3 +503,4 @@ class SignalObject(DbusPrototype):
 		remove_contact = method(INTERFACE)(remove_contact)
 		add_contact = method(INTERFACE)(add_contact)
 		get_status = method(INTERFACE)(get_status)
+		get_status_message = method(INTERFACE)(get_status_message)
