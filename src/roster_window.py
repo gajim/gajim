@@ -87,6 +87,8 @@ class RosterWindow:
 		model = self.tree.get_model()
 		root = self.get_account_iter(account)
 		group_iter = model.iter_children(root)
+		# C_NAME column contacts the pango escaped group name
+		name = gtkgui_helpers.escape_for_pango_markup(name)
 		while group_iter:
 			group_name = model[group_iter][C_NAME].decode('utf-8')
 			if name == group_name:
