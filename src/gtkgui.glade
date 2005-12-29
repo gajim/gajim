@@ -3717,7 +3717,7 @@ Per account
 Per type</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="focus_on_click">True</property>
-		      <signal name="changed" handler="on_single_window_type_combo_changed" last_modification_time="Wed, 28 Dec 2005 01:44:51 GMT"/>
+		      <signal name="changed" handler="on_one_window_type_combo_changed" last_modification_time="Thu, 29 Dec 2005 02:04:46 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>

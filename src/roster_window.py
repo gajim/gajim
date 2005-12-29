@@ -33,6 +33,7 @@ import time
 import common.sleepy
 import tabbed_chat_window
 import groupchat_window
+import message_window
 import history_window
 import dialogs
 import vcard
@@ -46,6 +47,7 @@ from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
+from message_window import MessageWindowMgr
 
 _ = i18n._
 APP = i18n.APP
@@ -1645,6 +1647,10 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		self.make_menu()
 
 	def new_chat(self, contact, account):
+		# Get target window
+		# FIXME: type arg
+		mw = self.msg_win_mgr.get_window(contact, account, None)
+
 		chats = gajim.interface.instances[account]['chats']
 		if gajim.config.get('usetabbedchat'):
 			if not chats.has_key('tabbed'):
@@ -2714,10 +2720,14 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			self.window.show_all()
 		else:
 			if not gajim.config.get('trayicon'):
-				# cannot happen via GUI, but I put this incase user touches config
-				self.window.show_all() # without trayicon, he or she should see the roster!
+				# cannot happen via GUI, but I put this incase user touches
+				# config. without trayicon, he or she should see the roster!
+				self.window.show_all()
 				gajim.config.set('show_roster_on_startup', True)
 
 		if len(gajim.connections) == 0: # if we have no account
 			gajim.interface.instances['account_creation_wizard'] = \
 				config.AccountCreationWizardWindow()
+
+		# This is the manager and factory of message windows
+		self.msg_win_mgr = MessageWindowMgr()
