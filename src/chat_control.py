@@ -32,11 +32,13 @@ GTKGUI_GLADE = 'gtkgui.glade'
 ####################
 
 class ChatControl(MessageControl):
-	'''A MessageControl of standard 1-1 chat'''
+	'''A MessageControl for standard 1-1 chat'''
 	def __init__(self, contact):
 		MessageControl.__init__(self, 'chat_child_vbox', contact);
 		self.always_compact_view = gajim.config.get('always_compact_view_chat')
 
+	def draw_widgets(self):
+		MessageControl.draw_widgets(self)
 
 # FIXME: Move this to a muc_control.py
 class MultiUserChatControl(MessageControl):

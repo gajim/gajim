@@ -146,7 +146,18 @@ class MessageControl(gtk.VBox):
 	def __init__(self, widget_name, contact):
 		gtk.VBox.__init__(self)
 
-		self.widget_name = widget_name
 		self.contact = contact
+		self.compact_view = False
+
+		self.widget_name = widget_name
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.widget = self.xml.get_widget(widget_name)
+
+		self.draw_widgets()
+	
+	def draw_banner(self):
+		# TODO
+		pass
+	def draw_widgets(self):
+		self.draw_banner()
+		# NOTE: Derived classes should implement this

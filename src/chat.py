@@ -255,8 +255,8 @@ class Chat:
 					color.blue = int((color.blue * p) + (mask * (1 - p)))
 				nickname.modify_fg(gtk.STATE_ACTIVE, color)
 		elif self.widget_name == 'groupchat_window':
-			nickname = hb.get_children()[0]
-			close_button = hb.get_children()[1]
+			nickname = hb.get_children()[1]
+			close_button = hb.get_children()[2]
 
 			has_focus = self.window.get_property('has-toplevel-focus')
 			current_tab = (self.notebook.page_num(child) == self.notebook.get_current_page())
