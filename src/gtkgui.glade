@@ -3686,7 +3686,7 @@ Agent JID - node</property>
 		  <child>
 		    <widget class="GtkLabel" id="label379">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Single message _window:</property>
+		      <property name="label" translatable="yes">One message _window:</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3709,14 +3709,15 @@ Agent JID - node</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkComboBox" id="message_window_type_combo">
+		    <widget class="GtkComboBox" id="one_window_type_combobox">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">Always
-Never
+		      <property name="items" translatable="yes">Never
+Always
 Per account
 Per type</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="changed" handler="on_single_window_type_combo_changed" last_modification_time="Wed, 28 Dec 2005 01:44:51 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>

@@ -39,7 +39,7 @@ opt_int = [ 'integer', 0 ]
 opt_str = [ 'string', 0 ]
 opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
-opt_single_window_types = ['never', 'always', 'peracct', 'pertype']
+opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
 
 class Config:
 
@@ -83,8 +83,6 @@ class Config:
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False ],
 		'sort_by_show': [ opt_bool, True ],
-		# FIXME: Remove me
-		'usetabbedchat': [ opt_bool, True ],
 		'use_speller': [ opt_bool, False ],
 		'print_time': [ opt_str, 'always' ],
 		'useemoticons': [ opt_bool, True ],
@@ -175,7 +173,7 @@ class Config:
 		'hide_avatar_of_transport': [opt_bool, False],
 		'roster_window_skip_taskbar': [opt_bool, False],
 		# TODO: Need to decide Gajim default.  methinks 'always'
-		'single_message_window': [opt_str, 'never',
+		'one_message_window': [opt_str, 'never',
 			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect')],
 	}
 

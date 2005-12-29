@@ -93,6 +93,8 @@ class PreferencesWindow:
 		self.auto_xa_message_entry = self.xml.get_widget('auto_xa_message_entry')
 		self.trayicon_checkbutton = self.xml.get_widget('trayicon_checkbutton')
 		self.notebook = self.xml.get_widget('preferences_notebook')
+		self.one_window_type_combobox =\
+			self.xml.get_widget('one_window_type_combobox')
 
 		#trayicon
 		if gajim.interface.systray_capabilities:
@@ -154,6 +156,14 @@ class PreferencesWindow:
 			if gajim.config.get('iconset') == l[i]:
 				self.iconset_combobox.set_active(i)
 
+		# Set default for single window type
+		choices = common.config.opt_one_window_types
+		type = gajim.config.get('one_message_window')
+		if type in choices:
+			self.one_window_type_combobox.set_active(choices.index(type))
+		else:
+			self.one_window_type_combobox.set_active(0)
+
 		# Use transports iconsets
 		st = gajim.config.get('use_transports_iconsets')
 		self.xml.get_widget('transports_iconsets_checkbutton').set_active(st)
@@ -165,10 +175,6 @@ class PreferencesWindow:
 		theme_combobox.add_attribute(cell, 'text', 0)
 		model = gtk.ListStore(str)
 		theme_combobox.set_model(model)
-
-		#use tabbed chat window
-		st = gajim.config.get('usetabbedchat')
-		self.xml.get_widget('use_tabbed_chat_window_checkbutton').set_active(st)
 
 		#use speller
 		if os.name == 'nt':
@@ -538,6 +544,7 @@ class PreferencesWindow:
 		gajim.interface.roster.change_roster_style(None)
 		gajim.interface.save_config()
 
+	# FIXME: Remove or implement for new window code
 	def merge_windows(self, kind):
 		for acct in gajim.connections:
 			# save buffers and close windows
@@ -564,6 +571,7 @@ class PreferencesWindow:
 				window.message_textviews[jid].set_buffer(buf2[jid])
 				window.load_var(jid, saved_var[jid])
 
+	# FIXME: Remove or implement for new window code
 	def split_windows(self, kind):
 		for acct in gajim.connections:
 			# save buffers and close tabbed chat windows
@@ -593,16 +601,12 @@ class PreferencesWindow:
 				window.message_textviews[jid].set_buffer(buf2[jid])
 				window.load_var(jid, saved_var[jid])
 
-	def on_use_tabbed_chat_window_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'usetabbedchat')
-
-		if widget.get_active():
-			self.merge_windows('chats')
-			self.merge_windows('gc')
-		else:
-			self.split_windows('chats')
-			self.split_windows('gc')
+	def on_one_window_type_combo_changed(self, widget):
+		active = widget.get_active()
+		config_type = common.config.opt_one_window_types[active]
+		gajim.config.set('one_message_window', config_type)
 		gajim.interface.save_config()
+		# FIXME: Update current windows? Meh
 
 	def apply_speller(self, kind):
 		for acct in gajim.connections:
