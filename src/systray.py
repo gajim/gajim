@@ -100,12 +100,12 @@ class Systray:
 		self.set_img()
 	
 	def start_chat(self, widget, account, jid):
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if gajim.interface.instances[account]['chats'].has_key(jid):
 			gajim.interface.instances[account]['chats'][jid].window.present()
 			gajim.interface.instances[account]['chats'][jid].set_active_tab(jid)
-		elif gajim.contacts[account].has_key(jid):
-			gajim.interface.roster.new_chat(
-				gajim.contacts[account][jid][0], account)
+		elif contact:
+			gajim.interface.roster.new_chat(contacts, account)
 			gajim.interface.instances[account]['chats'][jid].set_active_tab(jid)
 	
 	def on_new_message_menuitem_activate(self, widget, account):
@@ -248,8 +248,8 @@ class Systray:
 			groups_menu.append(item)
 			contacts_menu = gtk.Menu()
 			item.set_submenu(contacts_menu)
-			for contacts in gajim.contacts[account].values():
-				contact = gajim.get_highest_prio_contact_from_contacts(contacts)
+			for jid in gajim.contacts.get_jid_list(account):
+				contact = gajim.get_contact_with_highest_priority(account, jid)
 				if group in contact.groups and contact.show != 'offline' and \
 						contact.show != 'error':
 					at_least_one = True

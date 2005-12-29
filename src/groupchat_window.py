@@ -417,14 +417,14 @@ class GroupchatWindow(chat.Chat):
 	def draw_roster(self, room_jid):
 		model = self.list_treeview[room_jid].get_model()
 		model.clear()
-		for nick in gajim.contact.get_nick_list(self.account, room_jid)0:
-			gc_contact = gajim.contact.get_gc_contact(self.account, room_jid, nick)
+		for nick in gajim.contacts.get_nick_list(self.account, room_jid):
+			gc_contact = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 			self.add_contact_to_roster(room_jid, nick, gc_contact.show,
 				gc_contact.role, gc_contact.jid, gc_contact.affiliation,
 				gc_contact.status)
 
 	def get_role(self, room_jid, nick):
-		gc_contact = gajim.contact.get_gc_contact(self.account, room_jid, nick)
+		gc_contact = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 		if gc_contact:
 			return gc_contact.role
 		else:
@@ -1237,7 +1237,7 @@ current room topic.') % command, room_jid)
 		# looking for user's affiliation and role
 		user_nick = self.nicks[room_jid]
 		user_affiliation = gajim.contacts.get_gc_contact(self.account, room_jid,
-			user_nick].affiliation
+			user_nick).affiliation
 		user_role = self.get_role(room_jid, user_nick)
 
 		# making menu from glade

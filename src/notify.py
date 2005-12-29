@@ -105,8 +105,9 @@ class DesktopNotification:
 		self.msg_type = msg_type
 		self.file_props = file_props
 
-		if jid in gajim.contacts[account]:
-			actor = gajim.get_first_contact_instance_from_jid(account, jid).name
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		if contact:
+			actor = contact.name
 		else:
 			actor = jid
 
@@ -148,8 +149,8 @@ class DesktopNotification:
 				if file_props['type'] == 'r':
 					# get the name of the sender, as it is in the roster
 					sender = unicode(file_props['sender']).split('/')[0]
-					name = gajim.get_first_contact_instance_from_jid(
-						account, sender).name
+					name = gajim.contacts.get_first_contact_from_jid(account,
+						sender).name
 					filename = os.path.basename(file_props['file-name'])
 					if event_type == _('File Transfer Completed'):
 						txt = _('You successfully received %(filename)s from %(name)s.')\
@@ -165,8 +166,8 @@ class DesktopNotification:
 						receiver = receiver.jid
 					receiver = receiver.split('/')[0]
 					# get the name of the contact, as it is in the roster
-					name = gajim.get_first_contact_instance_from_jid(
-						account, receiver).name
+					name = gajim.contacts.get_first_contact_from_jid(account,
+						receiver).name
 					filename = os.path.basename(file_props['file-name'])
 					if event_type == _('File Transfer Completed'):
 						txt = _('You successfully sent %(filename)s to %(name)s.')\

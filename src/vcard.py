@@ -78,7 +78,7 @@ class VcardWindow:
 	'''Class for contact's information window'''
 
 	def __init__(self, contact, account, vcard = False):
-		#the contact variable is the jid if vcard is true
+		# the contact variable is the jid if vcard is true
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
 		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)

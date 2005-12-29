@@ -86,6 +86,9 @@ class Contacts:
 		self._contacts[account] = {}
 		self._gc_contacts[account] = {}
 
+	def get_accounts(self):
+		return self._contacts.keys()
+
 	def remove_account(self, account):
 		self._contacts.remove(account)
 		self._gc_contacts.remove(account)
