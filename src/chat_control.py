@@ -17,8 +17,10 @@ import gtk.glade
 import pango
 import gobject
 import gtkgui_helpers
+import message_window
 
 from common import gajim
+from message_window import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
 
@@ -31,16 +33,18 @@ APP = i18n.APP
 GTKGUI_GLADE = 'gtkgui.glade'
 ####################
 
-class ChatControl(MessageControl):
+class ChatControl(message_window.MessageControl):
 	'''A MessageControl for standard 1-1 chat'''
 	def __init__(self, contact):
 		MessageControl.__init__(self, 'chat_child_vbox', contact);
-		self.always_compact_view = gajim.config.get('always_compact_view_chat')
+		self.compact_view = gajim.config.get('always_compact_view_chat')
 
 	def draw_widgets(self):
+		# The name banner is drawn here
 		MessageControl.draw_widgets(self)
 
 # FIXME: Move this to a muc_control.py
-class MultiUserChatControl(MessageControl):
+class MultiUserChatControl(message_window.MessageControl):
 	def __init__(self, contact):
 		MessageControl.__init__(self, 'muc_child_vbox', contact);
+		self.compact_view = gajim.config.get('always_compact_view_gc')

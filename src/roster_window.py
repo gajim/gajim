@@ -34,6 +34,7 @@ import common.sleepy
 import tabbed_chat_window
 import groupchat_window
 import message_window
+import chat_control
 import history_window
 import dialogs
 import vcard
@@ -48,6 +49,7 @@ from common import gajim
 from common import helpers
 from common import i18n
 from message_window import MessageWindowMgr
+from chat_control import ChatControl
 
 _ = i18n._
 APP = i18n.APP
@@ -89,6 +91,8 @@ class RosterWindow:
 		model = self.tree.get_model()
 		root = self.get_account_iter(account)
 		group_iter = model.iter_children(root)
+		# C_NAME column contacts the pango escaped group name
+		name = gtkgui_helpers.escape_for_pango_markup(name)
 		while group_iter:
 			group_name = model[group_iter][C_NAME].decode('utf-8')
 			if name == group_name:
@@ -1648,9 +1652,11 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 
 	def new_chat(self, contact, account):
 		# Get target window
-		# FIXME: type arg
-		mw = self.msg_win_mgr.get_window(contact, account, None)
+		mw = self.msg_win_mgr.get_window(contact, account, None) # FIXME: type arg
+		chat_control = ChatControl(contact)
+		mw.new_tab(chat_control)
 
+		# REMOVE ME
 		chats = gajim.interface.instances[account]['chats']
 		if gajim.config.get('usetabbedchat'):
 			if not chats.has_key('tabbed'):

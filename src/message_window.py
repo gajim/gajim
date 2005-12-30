@@ -66,10 +66,40 @@ class MessageWindow:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
+		# Connect event handling for this Window
+		self.window.connect('delete-event', self._on_window_delete)
+		self.window.connect('destroy', self._on_window_destroy)
+		
 		self.window.show_all()
 
-	def new_tab(self, type, contact, acct):
-		pass
+	def _on_window_delete(self, win, event):
+		print "MessageWindow._on_window_delete:", win, event
+	def _on_window_destroy(self, win):
+		print "MessageWindow._on_window_destroy:", win
+
+	def new_tab(self, control):
+		assert(not self._controls.has_key(control.contact.jid))
+
+		self._controls[control.contact.jid] = control
+
+		# Add notebook page and connect up to the tab's close button
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_ebox', APP)
+		tab_label_box = xml.get_widget('chat_tab_ebox')
+		xml.signal_connect('on_close_button_clicked', self.on_close_button_clicked,
+					control.contact)
+		self.notebook.append_page(control.widget, tab_label_box)
+		
+
+		self.window.show_all()
+		
+	def on_close_button_clicked(self, button, contact):
+		'''When close button is pressed: close a tab'''
+		self.remove_tab(contact)
+	
+	def remove_tab(self, contact):
+		# TODO
+		print "MessageWindow.remove_tab"
+
 
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
@@ -103,7 +133,8 @@ class MessageWindowMgr:
 
 	def _gtkWinToMsgWin(self, gtk_win):
 		for w in self._windows:
-			if w.window == gtk_win:
+			win = self._windows[w].window
+			if win == gtk_win:
 				return w
 		return None
 
@@ -146,10 +177,10 @@ class MessageControl(gtk.VBox):
 	def __init__(self, widget_name, contact):
 		gtk.VBox.__init__(self)
 
+		self.widget_name = widget_name
 		self.contact = contact
 		self.compact_view = False
 
-		self.widget_name = widget_name
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.widget = self.xml.get_widget(widget_name)
 
