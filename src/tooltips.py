@@ -342,7 +342,7 @@ class GCTooltip(BaseTooltip):
 				# escape markup entities
 				info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 		
-		if contact.resource.strip() != '':
+		if hasattr(contact, 'resource') and contact.resource.strip() != '':
 			info += '\n<span weight="bold">' + _('Resource: ') + \
 					'</span>' + gtkgui_helpers.escape_for_pango_markup(
 						contact.resource) 
