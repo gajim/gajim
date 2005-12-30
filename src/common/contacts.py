@@ -139,7 +139,7 @@ class Contacts:
 		'''Removes all contacts for a given jid'''
 		if not self._contacts.has_key(account):
 			return
-		if not self._contacts[account].has_key(contact.jid):
+		if not self._contacts[account].has_key(jid):
 			return
 		del self._contacts[account][jid]
 
