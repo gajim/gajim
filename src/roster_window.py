@@ -2505,7 +2505,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 					break
 			else:
 				del gajim.groups[account][grp_source]
-		if not grp_dest in u.groups:
+		if not grp_dest in c.groups:
 			c.groups.append(grp_dest)
 			self.add_contact_to_roster(data, account)
 		gajim.connections[account].update_contact(c.jid, c.name, c.groups)
