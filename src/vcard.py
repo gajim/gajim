@@ -330,8 +330,9 @@ class VcardWindow:
 		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
 			'os': ''}}
 		i = 1
-		if gajim.contacts[self.account].has_key(self.contact.jid):
-			for c in gajim.contacts[self.account][self.contact.jid]:
+		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		if contact_list:
+			for c in contact_list:
 				if c.resource != self.contact.resource:
 					resources += '\n%s (%s)' % (c.resource,
 						unicode(c.priority))
