@@ -528,8 +528,6 @@ class Interface:
 			self.roster.remove_contact(c, account)
 			if _('not in the roster') in c.groups:
 				c.groups.remove(_('not in the roster'))
-			if len(c.groups) == 0:
-				c.groups = [_('General')]
 			self.roster.add_contact_to_roster(c.jid, account)
 			gajim.connections[account].update_contact(c.jid, c.name, c.groups)
 		else:
@@ -541,7 +539,7 @@ class Interface:
 			name = jid.split('@', 1)[0]
 			name = name.split('%', 1)[0]
 			contact1 = gajim.contacts.create_contact(jid = jid, name = name,
-				groups = [_('General')], show = 'online', status = 'online',
+				groups = None, show = 'online', status = 'online',
 				ask = 'to', resource = array[1], keyID = keyID)
 			gajim.contacts.add_contact(account, contact1)
 			self.roster.add_contact_to_roster(jid, account)

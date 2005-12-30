@@ -149,17 +149,13 @@ class RosterWindow:
 		if contact.jid.find('@') <= 0:
 			# if not '@' or '@' starts the jid ==> agent
 			contact.groups = [_('Transports')]
-		elif contact.groups == []:
-			contact.groups.append(_('General'))
 
 		hide = True
 		if contact.sub in ('both', 'to'):
 			hide = False
 		elif contact.ask == 'subscribe':
 			hide = False
-		# FIXME: uncomment when we support contacts in no group
-#		elif contact.name or len(contact.groups):
-		elif contact.name:
+		elif contact.name or len(contact.groups):
 			hide = False
 
 		# JEP-0162
@@ -172,7 +168,10 @@ class RosterWindow:
 			return
 
 		model = self.tree.get_model()
-		for g in contact.groups:
+		groups = contact.groups
+		if not groups:
+			groups = [_('General')]
+		for g in groups:
 			iterG = self.get_group_iter(g, account)
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
@@ -1244,8 +1243,8 @@ class RosterWindow:
 		if not pseudo:
 			pseudo = jid
 		gajim.connections[account].request_subscription(jid, txt)
-		if not group:
-			group = _('General')
+		if group:
+			group = [group]
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			keyID = ''
@@ -1254,18 +1253,17 @@ class RosterWindow:
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			contact = gajim.contacts.create_contact(jid = jid, name = pseudo,
-				groups = [group], show = 'requested', status = '', ask = 'none',
+				groups = group, show = 'requested', status = '', ask = 'none',
 				sub = 'subscribe', keyID = keyID)
-			gajim.contacts.add_contact(account, c)
+			gajim.contacts.add_contact(account, contact)
 		else:
-			c = gajim.contacts.get_contact_with_highest_priority(account, jid)
-			if not _('not in the roster') in c.groups:
+			if not _('not in the roster') in contact.groups:
 				dialogs.InformationDialog(_('Subscription request has been sent'),
-_('If "%s" accepts this request you will know his or her status.') %jid)
+_('If "%s" accepts this request you will know his or her status.') % jid)
 				return
-			c.groups = [group]
-			c.name = pseudo
-			self.remove_contact(c, account)
+			contact.groups = group
+			contact.name = pseudo
+			self.remove_contact(contact, account)
 		self.add_contact_to_roster(jid, account)
 
 	def revoke_auth(self, widget, jid, account):
