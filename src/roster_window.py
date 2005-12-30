@@ -2402,10 +2402,14 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		if type1 == 'contact':
 			lcontact1 = gajim.contacts.get_contact(account1, jid1)
 			contact1 = gajim.contacts.get_first_contact_from_jid(account1, jid1)
+			if not contact1:
+				return 0
 			name1 = contact1.name
 		if type2 == 'contact':
-			lcontact2 = gajim.contacts.get_contact(account1, jid2)
+			lcontact2 = gajim.contacts.get_contact(account2, jid2)
 			contact2 = gajim.contacts.get_first_contact_from_jid(account2, jid2)
+			if not contact2:
+				return 0
 			name2 = contact2.name
 		# We first compare by show if sort_by_show is True
 		if type1 == 'contact' and type2 == 'contact' and \
