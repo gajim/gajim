@@ -1645,7 +1645,7 @@ current room topic.') % command, room_jid)
 			model = widget.get_model()
 			iter = model.get_iter(path)
 			nick = model[iter][C_NICK].decode('utf-8')
-			if not nick in gajim.get_nick_list(self.account, room_jid):
+			if not nick in gajim.contacts.get_nick_list(self.account, room_jid):
 				#it's a group
 				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 					if (widget.row_expanded(path)):
