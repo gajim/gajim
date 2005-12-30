@@ -61,7 +61,7 @@ class GC_Contact:
 	def __init__(self, room_jid='', nick='', show='', status='', role='',
 			affiliation='', jid = ''):
 		self.room_jid = room_jid
-		self.nick = nick
+		self.name = name
 		self.show = show
 		self.status = status
 		self.role = role
@@ -69,7 +69,7 @@ class GC_Contact:
 		self.jid = jid
 
 	def get_full_jid(self):
-		return self.room_jid + '/' + self.nick
+		return self.room_jid + '/' + self.name
 
 class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
@@ -226,7 +226,7 @@ class Contacts:
 
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
-		return Contact(jid = gc_contact.get_full_jid(), name = gc_contact.nick,
+		return Contact(jid = gc_contact.get_full_jid(), name = gc_contact.name,
 			groups = ['none'], show = gc_contact.show, status = gc_contact.status,
 			sub = 'none')
 
@@ -237,15 +237,15 @@ class Contacts:
 	def add_gc_contact(self, account, gc_contact):
 		# No such account before ?
 		if not self._gc_contacts.has_key(account):
-			self._contacts[account] = {gc_contact.room_jid : {gc_contact.nick: \
+			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
 				gc_contact}}
 			return
 		# No such room_jid before ?
 		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
-			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.nick: \
+			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.name: \
 				gc_contact}
 			return
-		self._gc_contacts[account][gc_contact.room_jid][gc_contact.nick] = \
+		self._gc_contacts[account][gc_contact.room_jid][gc_contact.name] = \
 				gc_contact
 
 	def remove_gc_contact(self, account, gc_contact):
@@ -254,9 +254,9 @@ class Contacts:
 		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
 			return
 		if not self._gc_contacts[account][gc_contact.room_jid].has_key(
-			gc_contact.nick):
+			gc_contact.name):
 			return
-		del self._gc_contacts[account][gc_contact.room_jid][gc_contact.nick]
+		del self._gc_contacts[account][gc_contact.room_jid][gc_contact.name]
 		# It was the last nick in room ?
 		if not len(self._gc_contacts[account][gc_contact.room_jid]):
 			del self._gc_contacts[account][gc_contact.room_jid]

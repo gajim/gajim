@@ -397,7 +397,7 @@ class GroupchatWindow(chat.Chat):
 		else:
 			image = state_images[gc_contact.show]
 
-		name = gtkgui_helpers.escape_for_pango_markup(gc_contact.nick)
+		name = gtkgui_helpers.escape_for_pango_markup(gc_contact.name)
 		status = gc_contact.status
 		# add status msg, if not empty, under contact name in the treeview
 		if status and gajim.config.get('show_status_msgs_in_roster'):

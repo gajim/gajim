@@ -325,7 +325,7 @@ class GCTooltip(BaseTooltip):
 		if contact.jid.strip() != '':
 			info = '<span size="large" weight="bold">' + contact.jid + '</span>'
 		else:
-			info = '<span size="large" weight="bold">' + contact.nick + '</span>'
+			info = '<span size="large" weight="bold">' + contact.name + '</span>'
 			
 		info += '\n<span weight="bold">' + _('Role: ') + '</span>' + \
 			 helpers.get_uf_role(contact.role)
