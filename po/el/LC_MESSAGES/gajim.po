@@ -548,7 +548,7 @@ msgstr ""
 "Συμπληρώστε την ταυτότητα της επαφής προς την οποία\n"
 "θέλετε να στείλετε ένα μήνυμα συζήτησης"
 
-#. if offline or connecting
+#. if  or connecting
 #: ../src/dialogs.py:767 ../src/dialogs.py:1145 ../src/dialogs.py:1265
 msgid "Connection not available"
 msgstr "Σύνδεση μη διαθέσιμη"
@@ -750,7 +750,7 @@ msgstr "_Συμμετοχή"
 
 #: ../src/disco.py:1202 ../src/gtkgui.glade.h:330 ../src/roster_window.py:1075
 msgid "_Edit"
-msgstr "Επε_ξεργασία"
+msgstr "Ε_πεξεργασία"
 
 #: ../src/disco.py:1241
 #, python-format
@@ -3530,11 +3530,11 @@ msgstr ""
 
 #: ../src/roster_window.py:2636
 msgid "Change Status Message..."
-msgstr "Αλλαγή Μηνύμαος Κατάστασης..."
+msgstr "Αλλαγή Μηνύματος Κατάστασης..."
 
 #: ../src/systray.py:151
 msgid "_Change Status Message..."
-msgstr "Αλλαγή Μηνύμαος _Κατάστασης..."
+msgstr "Αλλαγή Μηνύματος _Κατάστασης..."
 
 #. for chat_with
 #. for new_message
