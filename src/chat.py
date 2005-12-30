@@ -190,7 +190,7 @@ class Chat:
 				add = _('Group Chat')
 		elif len(self.xmls) == 1: # just one tab
 			if self.widget_name == 'tabbed_chat_window':
-				c = gajim.get_first_contact_instance_from_jid(self.account, jid)
+				c = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 				if c is None:
 					add = ''
 				else:

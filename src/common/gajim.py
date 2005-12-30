@@ -158,19 +158,6 @@ def get_real_jid_from_fjid(account, fjid):
 def get_room_from_fjid(jid):
 	return get_room_and_nick_from_fjid(jid)[0]
 
-def get_first_contact_instance_from_jid(account, jid):
-	contact = None
-	if jid in contacts[account]:
-		contact = contacts[account][jid][0]
-	else: # it's fake jid
-		#FIXME: problem see comment in next line
-		room, nick = \
-			get_room_and_nick_from_fjid(jid) # if we ban/kick we now real jid
-		if gc_contacts[account].has_key(room) and \
-		nick in gc_contacts[account][room]:
-			contact = gc_contacts[account][room][nick]
-	return contact
-
 def get_contact_name_from_jid(account, jid):
 	return contacts[account][jid][0].name
 
