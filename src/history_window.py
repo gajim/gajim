@@ -237,7 +237,7 @@ class HistoryWindow:
 		if kind == constants.KIND_GC_MSG:
 			tag_name = 'incoming'
 		elif kind in (constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV):
-			contact = gajim.contacts.get_first_contactfrom_jid(self.account,
+			contact = gajim.contacts.get_first_contact_from_jid(self.account,
 				self.jid)
 			if contact:
 				# he is in our roster, use the name
