@@ -172,7 +172,8 @@ class Config:
 		'restored_messages_color': [opt_str, 'grey'],
 		'hide_avatar_of_transport': [opt_bool, False],
 		'roster_window_skip_taskbar': [opt_bool, False],
-		# TODO: Need to decide Gajim default.  methinks 'always'
+		'use_urgency_hint': [opt_bool, True, _('If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],
+		'notification_timeout': [opt_int, 5],
 		'one_message_window': [opt_str, 'never',
 			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect')],
 	}

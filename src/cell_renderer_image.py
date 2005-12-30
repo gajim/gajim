@@ -95,6 +95,8 @@ class CellRendererImage(gtk.GenericCellRenderer):
 			pix = self.image.get_pixbuf()
 		else:
 			return
+		if draw_rect.x < 1:
+			return
 		window.draw_pixbuf(widget.style.black_gc, pix,
 					draw_rect.x - pix_rect.x,
 					draw_rect.y - pix_rect.y,

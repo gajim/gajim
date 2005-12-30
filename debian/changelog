@@ -4,9 +4,9 @@ gajim (0.9.1-1) unstable; urgency=low
   * Gajim now reconnects when connection is lost Closes: #329376
   * Status-changer widget's behaviour has been improved Closes: #340499
   * Gajim now recommends python-dns Closes: #340492
-  * new russion translation Closes: #337971
-  * Gajim now depends on python-pysqlite2, recommands python-dbus, and
-    suggests python-gnome2
+  * new russian translation Closes: #337971
+  * Gajim now depends on python-pysqlite2, recommends python-dbus and
+    notification-daemon, and suggests python-gnome2
 
  -- Yann Le Boulanger <asterix@lagaule.org>  Fri, 27 Dec 2005 01:20:54 +0100
 

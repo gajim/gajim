@@ -32,7 +32,7 @@ import config
 
 
 interface = None # The actual interface (the gtk one for the moment)
-version = '0.9.1'
+version = '0.10'
 config = config.Config()
 connections = {}
 verbose = False

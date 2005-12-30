@@ -196,7 +196,13 @@ class GajimRemote:
 						(_('account'), _(''), False)
 					]
 				],
-				
+			
+			'get_status_message': [
+				_('Returns current status message(the global one unless account is specified)'),
+					[
+						(_('account'), _(''), False)
+					]
+				],				
 			}
 		if self.argv_len  < 2 or \
 			sys.argv[1] not in self.commands.keys(): # no args or bad args

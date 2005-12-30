@@ -496,6 +496,18 @@ def get_global_show():
 		if connected > maxi:
 			maxi = connected
 	return gajim.SHOW_LIST[maxi]
+	
+def get_global_status():
+	maxi = 0
+	for account in gajim.connections:
+		if not gajim.config.get_per('accounts', account,
+			'sync_with_global_status'):
+			continue
+		connected = gajim.connections[account].connected
+		if connected > maxi:
+			maxi = connected
+			status = gajim.connections[account].status
+	return status
 
 def get_icon_name_to_show(contact, account = None):
 	'''Get the icon name to show in online, away, requested, ...'''

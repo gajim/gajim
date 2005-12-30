@@ -25,6 +25,8 @@ Optionally:
 dnspython or pydns for SRV support; if you don't know what that is, you don't need it
 gtkspell and aspell-LANG where lang is your locale eg. en, fr etc
 GnomePythonExtras 2.10 or above so you can avoid compiling trayicon and gtkspell
+notification-daemon (and D-Bus) to get cooler popups
+D-Bus to have gajim-remote working
 
 NOTE TO PACKAGERS:
 Gajim is a GTK+ app and not a gnome one. Just do 'make' so you don't require gnomepythonextras
