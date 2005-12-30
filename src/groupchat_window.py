@@ -1186,7 +1186,8 @@ current room topic.') % command, room_jid)
 		fjid = gajim.construct_fjid(room_jid, nick) # 'fake' jid
 		if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
 			gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
-			gajim.interface.roster.new_chat(gc_c, self.account)
+			c = gajim.contacts.contact_from_gc_contact(gc_c)
+			gajim.interface.roster.new_chat(c, self.account)
 
 		#make active here in case we need to send a message
 		gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
