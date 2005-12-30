@@ -721,7 +721,7 @@ class RosterWindow:
 			gajim.interface.instances[account]['chats'][jid].print_conversation(
 				_('%s is now %s (%s)') % (name, uf_show, status), jid, 'status')
 
-			if contact == gajim.get_contact_instance_with_highest_priority(\
+			if contact == gajim.contacts.get_contact_with_highest_priority(
 				account, contact.jid):
 				gajim.interface.instances[account]['chats'][jid].draw_name_banner(contact)
 
