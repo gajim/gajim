@@ -22,6 +22,8 @@
 ## GNU General Public License for more details.
 ##
 
+import common.gajim
+
 class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
@@ -183,7 +185,7 @@ class Contacts:
 		if jid in self._contacts[account]:
 			return self._contacts[account][jid][0]
 		else: # it's fake jid
-			room, nick = gajim.get_room_and_nick_from_fjid(jid)
+			room, nick = common.gajim.get_room_and_nick_from_fjid(jid)
 			if self._gc_contacts[account].has_key(room) and \
 				nick in self._gc_contacts[account][room]:
 				return self._gc_contacts[account][room][nick]
