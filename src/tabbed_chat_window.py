@@ -340,14 +340,14 @@ class TabbedChatWindow(chat.Chat):
 		prio = 0
 		contact_list = gajim.contacts.get_contact(self.account, jid)
 		if contact_list:
-			contacts_list = [self.contacts[jid]]
+			contact_list = [self.contacts[jid]]
 
-		contact = contacts_list[0]
+		contact = contact_list[0]
 		show = contact.show
 		jid = contact.jid
 		keyID = contact.keyID
 
-		for u in contacts_list:
+		for u in contact_list:
 			if u.priority > prio:
 				prio = u.priority
 				show = u.show
