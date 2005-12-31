@@ -196,10 +196,21 @@ class MessageWindow:
 		self.window.set_title(title)
 		if urgent:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
+
+	def set_active_tab(self, jid):
+		ctl = self._controls[jid]
+		ctl_page = self.notebook.page_num(ctl.widget)
+		self.notebook.set_current_page(ctl_page)
 	
 	def remove_tab(self, contact):
-		# TODO
 		print "MessageWindow.remove_tab"
+		if len(self._controls) == 1:
+			# There is only one tab
+			# FIXME: Should we assert on contact?
+			self.window.destroy()
+		else:
+			pass
+		# TODO
 
 	def redraw_tab(self, contact, chatstate = None):
 		ctl = self._controls[contact.jid]
@@ -273,6 +284,12 @@ class MessageWindow:
 		for ctl in self._controls.values():
 			ctl.update_tags()
 
+	def get_control_from_jid(self, jid):
+		for ctl in self._controls.values():
+			if ctl.contact.jid == jid:
+				return ctl
+		return None
+
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
 
@@ -317,7 +334,16 @@ class MessageWindowMgr:
 		print "MessageWindowMgr._on_window_destroy:", win
 		# TODO: Clean up windows
 
-	def get_window(self, contact, acct, type):
+	def get_window(self, jid):
+		for win in self.windows.values():
+			if win.get_control_from_jid(jid):
+				return win
+		return None
+
+	def has_window(self, jid):
+		return self.get_window(jid)
+
+	def create_window(self, contact, acct, type):
 		key = None
 		if self.mode == self.CONFIG_NEVER:
 			key = contact.jid
@@ -336,6 +362,7 @@ class MessageWindowMgr:
 			print "Creating tabbed chat window for '%s'" % str(key)
 			win = self._new_window()
 			self.windows[key] = win
+	
 		assert(win)
 		return win
 

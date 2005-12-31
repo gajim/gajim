@@ -315,6 +315,7 @@ class RosterWindow:
 
 	def join_gc_room(self, account, room_jid, nick, password):
 		'''joins the room immediatelly'''
+		# FIXME
 		if room_jid in gajim.interface.instances[account]['gc'] and \
 		gajim.gc_connected[account][room_jid]:
 			dialogs.ErrorDialog(_('You are already in room %s') % room_jid
@@ -1355,6 +1356,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model[iter][C_TYPE]
+			# FIXME
 			if type in ('agent', 'contact'):
 				account = model[iter][C_ACCOUNT].decode('utf-8')
 				jid = model[iter][C_JID].decode('utf-8')
@@ -1649,7 +1651,9 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 
 	def new_chat(self, contact, account):
 		# Get target window, create a control, and associate it with the window
-		mw = gajim.interface.msg_win_mgr.get_window(contact, account,
+		mw = gajim.interface.msg_win_mgr.get_window(contact.jid)
+		if not mw:
+			mw = gajim.interface.msg_win_mgr.create_window(contact, account,
 								ChatControl.TYPE_ID)
 		chat_control = ChatControl(mw, contact, account)
 		mw.new_tab(chat_control)
@@ -1680,7 +1684,9 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 	def new_room(self, jid, nick, account):
 		# FIXME: Not contact.  Use jid and nick
 		# Get target window, create a control, and associate it with the window
-		mw = gajim.interface.msg_win_mgr.get_window(contact, account,
+		mw = gajim.interface.msg_win_mgr.get_window(contact.jid)
+		if not mw:
+			mw = gajim.interface.msg_win_mgr.create_window(contact, account,
 								GroupchatControl.TYPE_ID)
 		gc_control = ChatControl(mw, contact, account)
 		mw.new_tab(gc_control)
@@ -2006,14 +2012,16 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			if first_ev:
 				if self.open_event(account, jid, first_ev):
 					return
-			chats = gajim.interface.instances[account]['chats']
-			if chats.has_key(jid):
-				chats[jid].set_active_tab(jid)
+			# Get the window containing the chat
+			win = gajim.interface.msg_win_mgr.get_window(jid)
+			if win:
+				win.set_active_tab(jid)
 			elif gajim.contacts[account].has_key(jid):
-				c = gajim.get_contact_instance_with_highest_priority(account, jid)
-				self.new_chat(c, account)
-				chats[jid].set_active_tab(jid)
-			chats[jid].window.present()
+				contact = gajim.get_contact_instance_with_highest_priority(account, jid)
+				self.new_chat(contact, account)
+				win = gajim.interface.msg_win_mgr.get_window(jid)
+				win.set_active_tab(jid)
+			win.window.present()
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''
