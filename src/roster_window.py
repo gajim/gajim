@@ -2225,12 +2225,9 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 
 	def repaint_themed_widgets(self):
 		'''Notify windows that contain themed widgets to repaint them'''
+		for win in self.msg_win_mgr.windows():
+			win.repaint_themed_widgets()
 		for account in gajim.connections:
-			# Update opened chat windows/tabs
-			for jid in gajim.interface.instances[account]['chats']:
-				gajim.interface.instances[account]['chats'][jid].repaint_colored_widgets()
-			for jid in gajim.interface.instances[account]['gc']:
-				gajim.interface.instances[account]['gc'][jid].repaint_colored_widgets()
 			for addr in gajim.interface.instances[account]['disco']:
 				gajim.interface.instances[account]['disco'][addr].paint_banner()
 
