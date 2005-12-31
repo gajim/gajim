@@ -16097,7 +16097,7 @@ Banner</property>
   </child>
 </widget>
 
-<widget class="GtkMenu" id="gc_popup_menu">
+<widget class="GtkMenu" id="gc_control_popup_menu">
 
   <child>
     <widget class="GtkImageMenuItem" id="history_menuitem">
@@ -16210,7 +16210,7 @@ Banner</property>
   </child>
 </widget>
 
-<widget class="GtkMenu" id="tabbed_chat_popup_menu">
+<widget class="GtkMenu" id="chat_control_popup_menu">
 
   <child>
     <widget class="GtkImageMenuItem" id="history_menuitem">
@@ -19238,7 +19238,7 @@ Status message</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox3005">
+		<widget class="GtkHBox" id="actions_hbox">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
@@ -19764,7 +19764,7 @@ Status message</property>
 		  <property name="right_padding">3</property>
 
 		  <child>
-		    <widget class="GtkEventBox" id="eventbox8">
+		    <widget class="GtkEventBox" id="banner_eventbox">
 		      <property name="visible">True</property>
 		      <property name="visible_window">True</property>
 		      <property name="above_child">False</property>
@@ -19921,7 +19921,7 @@ topic</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox3011">
+		<widget class="GtkHBox" id="actions_eventbox">
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>

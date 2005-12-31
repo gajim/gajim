@@ -1654,20 +1654,20 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		chat_control = ChatControl(mw, contact, account)
 		mw.new_tab(chat_control)
 
-		# REMOVE
+		# REMOVE: eliminate all usage of gajim.interface.instances[account]['chats']
 		##################################
-		chats = gajim.interface.instances[account]['chats']
-		if gajim.config.get('usetabbedchat'):
-			if not chats.has_key('tabbed'):
-				chats['tabbed'] = tabbed_chat_window.TabbedChatWindow(contact,
-					account)
-			else:
-				chats['tabbed'].new_tab(contact)
-
-			chats[contact.jid] = chats['tabbed']
-		else:
-			chats[contact.jid] = tabbed_chat_window.TabbedChatWindow(contact,
-				account)
+#		chats = gajim.interface.instances[account]['chats']
+#		if gajim.config.get('usetabbedchat'):
+#			if not chats.has_key('tabbed'):
+#				chats['tabbed'] = tabbed_chat_window.TabbedChatWindow(contact,
+#					account)
+#			else:
+#				chats['tabbed'].new_tab(contact)
+#
+#			chats[contact.jid] = chats['tabbed']
+#		else:
+#			chats[contact.jid] = tabbed_chat_window.TabbedChatWindow(contact,
+#				account)
 		#######################
 
 	def new_chat_from_jid(self, account, jid):

@@ -1094,7 +1094,6 @@ class Chat:
 
 	def set_compact_view(self, state):
 		'''Toggle compact view. state is bool'''
-		self.compact_view_current_state = state
 
 		for jid in self.xmls:
 			if self.widget_name == 'tabbed_chat_window':

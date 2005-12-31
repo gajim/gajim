@@ -201,7 +201,7 @@ class MessageWindow:
 		# TODO
 		print "MessageWindow.remove_tab"
 
-	def redraw_tab(self, contact):
+	def redraw_tab(self, contact, chatstate = None):
 		ctl = self._controls[contact.jid]
 		ctl.update_state()
 
@@ -217,8 +217,9 @@ class MessageWindow:
 			close_button.hide()
 
 		# Update nick
-		nickname.set_max_width_chars(10)
-		(tab_label_str, tab_label_color) = ctl.markup_tab_label(contact.name)
+		nick_label.set_max_width_chars(10)
+		(tab_label_str, tab_label_color) = ctl.markup_tab_label(contact.name,
+									chatstate)
 		nick_label.set_markup(tab_label_str)
 		if tab_label_color:
 			nick_label.modify_fg(gtk.STATE_NORMAL, tab_label_color)
@@ -349,7 +350,8 @@ class MessageControl(gtk.VBox):
 		self.display_name = display_name
 		self.contact = contact
 		self.account = account
-		self.compact_view = False
+		self.compact_view_always = False
+		self.compact_view_current = False
 		self.nb_unread = 0
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
@@ -369,8 +371,15 @@ class MessageControl(gtk.VBox):
 		pass # NOTE: Derived classes SHOULD implement this
 	def update_tags(self):
 		pass # NOTE: Derived classes SHOULD implement this
-	def markup_tab_label(self, label_str):
-		return label_str
+	def markup_tab_label(self, label_str, chatstate):
+		# NOTE: Derived classes SHOULD implement this
+		# Reurn a markup'd label and optional gtk.Color
+		return (label_str, None)
+	def prepare_context_menu(self):
+		# NOTE: Derived classes SHOULD implement this
+		return None
+	def set_compact_view(self, state):
+		self.compact_view_current = state
 
 	def send_message(self, message, keyID = '', chatstate = None):
 		'''Send the given message to the active tab'''

@@ -497,9 +497,9 @@ class TabbedChatWindow(chat.Chat):
 		if contact.jid in gajim.encrypted_chats[self.account]:
 			self.xmls[contact.jid].get_widget('gpg_togglebutton').set_active(True)
 
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'tabbed_chat_popup_menu', APP)
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
 		xm.signal_autoconnect(self)
-		self.tabbed_chat_popup_menu = xm.get_widget('tabbed_chat_popup_menu')
+		self.tabbed_chat_popup_menu = xm.get_widget('chat_control_popup_menu')
 
 		self.redraw_tab(contact.jid)
 		self.draw_widgets(contact)

@@ -22,9 +22,16 @@ import gtkgui_helpers
 import message_window
 
 from common import gajim
+from common import helpers
 from message_window import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
+
+try:
+	import gtkspell
+	HAS_GTK_SPELL = True
+except:
+	HAS_GTK_SPELL = False
 
 ####################
 # FIXME: Can't this stuff happen once?
@@ -96,6 +103,15 @@ class ChatControlBase(MessageControl):
 		img = self.xml.get_widget('emoticons_button_image')
 		img.set_from_file(os.path.join(gajim.DATA_DIR, 'emoticons', 'smile.png'))
 		self.toggle_emoticons()
+
+		# Attach speller
+		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+			try:
+				gtkspell.Spell(self.msg_textview)
+			except gobject.GError, msg:
+				#FIXME: add a ui for this use spell.set_language()
+				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
+				gajim.config.set('use_speller', False)
 
 	def _paint_banner(self):
 		'''Repaint banner with theme color'''
@@ -209,8 +225,7 @@ class ChatControlBase(MessageControl):
 			self.clear(self.msg_textview) # clear message textview too
 			return True
 		elif message == '/compact':
-			# FIXME: Need this function
-			self.set_compact_view(not self.compact_view_current_state)
+			self.set_compact_view(not self.compact_view_current)
 			# FIXME: Need this function
 			self.clear(self.msg_textview)
 			return True
@@ -325,6 +340,15 @@ class ChatControlBase(MessageControl):
 		self.button_clicked = widget
 		self.emoticons_menu.popup(None, None, self.position_menu_under_button, 1, 0)
 
+	def on_actions_button_clicked(self, widget):
+		'''popup action menu'''
+		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
+		self.button_clicked = widget
+		
+		menu = self.prepare_context_menu()
+		menu.show_all()
+		menu.popup(None, None, self.position_menu_under_button, 1, 0)
+
 	def update_font(self):
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
 		self.conv_textview.modify_font(font)
@@ -333,17 +357,34 @@ class ChatControlBase(MessageControl):
 	def update_tags(self):
 		self.conv_textview.update_tags()
 
+	def set_compact_view(self, state):
+		'''Toggle compact view. state is bool'''
+		MessageControl.set_compact_view(self, state)
+
+		# make the last message visible, when changing to "full view"
+		if not state:
+			gobject.idle_add(self.conv_textview.scroll_to_end_iter)
+
+	def clear(self, tv):
+		buffer = tv.get_buffer()
+		start, end = buffer.get_bounds()
+		buffer.delete(start, end)
 
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, parent_win, 'chat_child_vbox', _('Chat'),
 					contact, acct);
-		self.compact_view = gajim.config.get('always_compact_view_chat')
+		self.compact_view_always = gajim.config.get('always_compact_view_chat')
+		self.set_compact_view(self.compact_view_always)
 
 		# chatstate timers and state
 		self._schedule_activity_timers()
 		self.reset_kbd_mouse_timeout_vars()
+
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
+		xm.signal_autoconnect(self)
+		self.popup_menu = xm.get_widget('chat_control_popup_menu')
 
 	def _schedule_activity_timers(self):
 		self.possible_paused_timeout_id = gobject.timeout_add(5000,
@@ -634,3 +675,83 @@ class ChatControl(ChatControlBase):
 		if num_unread: # if unread, text in the label becomes bold
 			label_str = '<b>' + unread + label_str + '</b>'
 		return (label_str, color)
+
+
+	def remove_possible_switch_to_menuitems(self, menu):
+		''' remove duplicate 'Switch to' if they exist and return clean menu'''
+		childs = menu.get_children()
+
+		contact = self.parent_win.get_active_contact()
+		jid = contact.jid
+		if _('not in the roster') in contact.groups: # for add_to_roster_menuitem
+			childs[5].show()
+			childs[5].set_no_show_all(False)
+		else:
+			childs[5].hide()
+			childs[5].set_no_show_all(True)
+		start_removing_from = 6 # this is from the seperator and after
+			
+# FIXME: GC only
+#		elif :
+#			start_removing_from = 7 # # this is from the seperator and after
+				
+		for child in childs[start_removing_from:]:
+			menu.remove(child)
+		return menu
+
+	def prepare_context_menu(self):
+		'''sets compact view menuitem active state
+		sets active and sensitivity state for toggle_gpg_menuitem
+		and remove possible 'Switch to' menuitems'''
+# FIXME: GC only
+#		if self.widget_name == 'groupchat_window':
+#			menu = self.gc_popup_menu
+#			childs = menu.get_children()
+#			# compact_view_menuitem
+#			childs[5].set_active(self.compact_view_current)
+		menu = self.popup_menu
+		childs = menu.get_children()
+		# check if gpg capabitlies or else make gpg toggle insensitive
+		contact = self.parent_win.get_active_contact()
+		jid = contact.jid
+		gpg_btn = self.xml.get_widget('gpg_togglebutton')
+		isactive = gpg_btn.get_active()
+		issensitive = gpg_btn.get_property('sensitive')
+		childs[3].set_active(isactive)
+		childs[3].set_property('sensitive', issensitive)
+		# If we don't have resource, we can't do file transfert
+		if not contact.resource:
+			childs[2].set_sensitive(False)
+		else:
+			childs[2].set_sensitive(True)
+		# compact_view_menuitem
+		childs[4].set_active(self.compact_view_current)
+		menu = self.remove_possible_switch_to_menuitems(menu)
+		
+		return menu
+
+	def set_compact_view(self, state):
+		'''Toggle compact view. state is bool'''
+		ChatControlBase.set_compact_view(self, state)
+
+		widgets = [
+		self.xml.get_widget('banner_eventbox'),
+		self.xml.get_widget('actions_hbox'),
+		]
+# FIXME GC only
+#		elif self.widget_name == 'groupchat_window':
+#			widgets = [self.xmls[jid].get_widget('banner_eventbox'),
+#				self.xmls[jid].get_widget('gc_actions_hbox'),
+#				self.xmls[jid].get_widget('list_scrolledwindow'),
+#				 ]
+		for widget in widgets:
+			if state:
+				widget.set_no_show_all(True)
+				widget.hide()
+			else:
+				widget.set_no_show_all(False)
+				widget.show_all()
+	def on_compact_view_menuitem_activate(self, widget):
+		isactive = widget.get_active()
+		self.set_compact_view(isactive)
+
