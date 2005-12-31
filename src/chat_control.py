@@ -56,8 +56,9 @@ class ChatControlBase(MessageControl):
 	def _update_banner_state_image(self):
 		pass # Derived types MAY implement this
 
-	def __init__(self, parent_win, widget_name, contact, acct):
-		MessageControl.__init__(self, parent_win, widget_name, contact, acct);
+	def __init__(self, parent_win, widget_name, display_name, contact, acct):
+		MessageControl.__init__(self, parent_win, widget_name, display_name,
+					contact, acct);
 
 		# FIXME: These are hidden from 0.8 on, but IMO all these things need
 		#        to be shown optionally.  Esp. the never-used Send button
@@ -324,11 +325,20 @@ class ChatControlBase(MessageControl):
 		self.button_clicked = widget
 		self.emoticons_menu.popup(None, None, self.position_menu_under_button, 1, 0)
 
+	def update_font(self):
+		font = pango.FontDescription(gajim.config.get('conversation_font'))
+		self.conv_textview.modify_font(font)
+		self.msg_textview.modify_font(font)
+
+	def update_tags(self):
+		self.conv_textview.update_tags()
+
 
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	def __init__(self, parent_win, contact, acct):
-		ChatControlBase.__init__(self, parent_win, 'chat_child_vbox', contact, acct);
+		ChatControlBase.__init__(self, parent_win, 'chat_child_vbox', _('Chat'),
+					contact, acct);
 		self.compact_view = gajim.config.get('always_compact_view_chat')
 
 		# chatstate timers and state
@@ -573,3 +583,54 @@ class ChatControl(ChatControlBase):
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
 			subject = subject)
 
+	def markup_tab_label(self, label_str, chatstate):
+		'''Markup the label if necessary.  Returns a tuple such as:
+		(new_label_str, color)
+		either of which can be None
+		if chatstate is given that means we have HE SENT US a chatstate'''
+			
+		unread = ''
+		num_unread = self.nb_unread
+		if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
+			unread = '*'
+		elif num_unread > 1:
+			unread = '[' + unicode(num_unread) + ']'
+
+		# Draw tab label using chatstate 
+		theme = gajim.config.get('roster_theme')
+		color = None
+		if chatstate is not None:
+			if chatstate == 'composing':
+				color = gajim.config.get_per('themes', theme,
+						'state_composing_color')
+			elif chatstate == 'inactive':
+				color = gajim.config.get_per('themes', theme,
+						'state_inactive_color')
+			elif chatstate == 'gone':
+				color = gajim.config.get_per('themes', theme,
+						'state_gone_color')
+			elif chatstate == 'paused':
+				color = gajim.config.get_per('themes', theme,
+						'state_paused_color')
+			else:
+				color = gajim.config.get_per('themes', theme,
+						'state_active_color')
+		if color:
+			color = gtk.gdk.colormap_get_system().alloc_color(color)
+			# We set the color for when it's the current tab or not
+			nickname.modify_fg(gtk.STATE_NORMAL, color)
+			# FIXME
+			#if chatstate in ('inactive', 'gone'):
+			# In inactive tab color to be lighter against the darker inactive
+			# background
+			if self.parent_win.get_active_control() != self:
+				p = 0.4
+				mask = 0
+				color.red = int((color.red * p) + (mask * (1 - p)))
+				color.green = int((color.green * p) + (mask * (1 - p)))
+				color.blue = int((color.blue * p) + (mask * (1 - p)))
+			nickname.modify_fg(gtk.STATE_ACTIVE, color)
+
+		if num_unread: # if unread, text in the label becomes bold
+			label_str = '<b>' + unread + label_str + '</b>'
+		return (label_str, color)

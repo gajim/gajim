@@ -38,8 +38,6 @@ from common import i18n
 i18n.init()
 _ = i18n._
 
-from message_window import MessageWindowMgr
-
 try:
 	import gtk
 except RuntimeError, msg:
@@ -1308,6 +1306,8 @@ class Interface:
 
 	def __init__(self):
 		gajim.interface = self
+		# This is the manager and factory of message windows set by the module
+		self.msg_win_mgr = None
 		self.default_values = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
@@ -1451,9 +1451,6 @@ class Interface:
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add(500, self.read_sleepy)
-
-		# This is the manager and factory of message windows
-		self.msg_win_mgr = MessageWindowMgr()
 
 def test_migration(migration):
 	if not migration.PROCESSING:

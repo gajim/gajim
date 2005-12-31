@@ -18,6 +18,8 @@ import pango
 import gobject
 
 import common
+import gtkgui_helpers
+
 from common import gajim
 
 ####################
@@ -69,11 +71,31 @@ class MessageWindow:
 		# Connect event handling for this Window
 		self.window.connect('delete-event', self._on_window_delete)
 		self.window.connect('destroy', self._on_window_destroy)
+
+		# Restore previous window position
+		if gajim.config.get('saveposition'):
+			# get window position and size from config
+			gtkgui_helpers.move_window(self.window,
+				gajim.config.get('msgwin-x-position'),
+				gajim.config.get('msgwin-y-position'))
+			gtkgui_helpers.resize_window(self.window,
+					gajim.config.get('msgwin-width'),
+					gajim.config.get('msgwin-height'))
 		
 		self.window.show_all()
 
 	def _on_window_delete(self, win, event):
 		print "MessageWindow._on_window_delete:", win, event
+		if gajim.config.get('saveposition'):
+			# save the window size and position
+			x, y = win.get_position()
+			gajim.config.set('msgwin-x-position', x)
+			gajim.config.set('msgwin-y-position', y)
+			width, height = win.get_size()
+			gajim.config.set('msgwin-width', width)
+			gajim.config.set('msgwin-height', height)
+
+		return False
 	def _on_window_destroy(self, win):
 		print "MessageWindow._on_window_destroy:", win
 
@@ -97,6 +119,7 @@ class MessageWindow:
 		self.notebook.append_page(control.widget, tab_label_box)
 
 		self.redraw_tab(control.contact)
+		self.show_title()
 		self.window.show_all()
 
 	def on_message_textview_mykeypress_event(self, widget, event_keyval,
@@ -143,6 +166,36 @@ class MessageWindow:
 	def on_close_button_clicked(self, button, contact):
 		'''When close button is pressed: close a tab'''
 		self.remove_tab(contact)
+
+	def show_title(self, urgent = True):
+		'''redraw the window's title'''
+		unread = 0
+		for ctl in self._controls.values():
+			unread += ctl.nb_unread
+		start = ''
+		if unread > 1:
+			start = '[' + unicode(unread) + '] '
+		elif unread == 1:
+			start = '* '
+
+		ctl = self.get_active_control()
+		if len(self._controls) > 1: # if more than one tab in the same window
+			add = ctl.display_name
+		elif len(self._controls) == 1: # just one tab
+			add = ctl.contact.name
+# FIXME: This is for GC only
+#			elif self.widget_name == 'groupchat_window':
+#				name = gajim.get_nick_from_jid(jid)
+#				add = name
+
+		title = start + add
+		if len(gajim.connections) >= 2: # if we have 2 or more accounts
+			title += ' (' + _('account: ') + ctl.account + ')'
+
+		# Update UI
+		self.window.set_title(title)
+		if urgent:
+			gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
 	
 	def remove_tab(self, contact):
 		# TODO
@@ -163,12 +216,15 @@ class MessageWindow:
 		else:
 			close_button.hide()
 
-		# FIXME: Handle nb_unread
-		num_unread = 0
-
 		# Update nick
-		nick_label.set_markup(contact.name)
+		nickname.set_max_width_chars(10)
+		(tab_label_str, tab_label_color) = ctl.markup_tab_label(contact.name)
+		nick_label.set_markup(tab_label_str)
+		if tab_label_color:
+			nick_label.modify_fg(gtk.STATE_NORMAL, tab_label_color)
+			nick_label.modify_fg(gtk.STATE_ACTIVE, tab_label_color)
 
+		num_unread = ctl.nb_unread
 		# Set tab image (always 16x16); unread messages show the 'message' image
 		img_16 = gajim.interface.roster.get_appropriate_state_images(contact.jid)
 		if num_unread and gajim.config.get('show_unread_tab_icon'):
@@ -192,11 +248,12 @@ class MessageWindow:
 				return ctl
 		return None
 
-	def get_active_contact(self):
+	def get_active_control(self):
 		notebook = self.notebook
 		active_widget = notebook.get_nth_page(notebook.get_current_page())
-		return self._widgetToControl(active_widget).contact
-		
+		return self._widgetToControl(active_widget)
+	def get_active_contact(self):
+		return self.get_active_control().contact
 	def get_active_jid(self):
 		return self.get_active_contact().jid
 
@@ -208,6 +265,12 @@ class MessageWindow:
 	def toggle_emoticons(self):
 		for ctl in self._controls.values():
 			ctl.toggle_emoticons()
+	def update_font(self):
+		for ctl in self._controls.values():
+			ctl.update_font()
+	def update_tags(self):
+		for ctl in self._controls.values():
+			ctl.update_tags()
 
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
@@ -248,8 +311,6 @@ class MessageWindowMgr:
 	def _on_window_delete(self, win, event):
 		# FIXME
 		print "MessageWindowMgr._on_window_delete:", win
-		msg_win = self._gtkWinToMsgWin(win)
-
 	def _on_window_destroy(self, win):
 		# FIXME
 		print "MessageWindowMgr._on_window_destroy:", win
@@ -280,14 +341,16 @@ class MessageWindowMgr:
 class MessageControl(gtk.VBox):
 	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
 
-	def __init__(self, parent_win, widget_name, contact, account):
+	def __init__(self, parent_win, widget_name, display_name, contact, account):
 		gtk.VBox.__init__(self)
 
 		self.parent_win = parent_win
 		self.widget_name = widget_name
+		self.display_name = display_name
 		self.contact = contact
 		self.account = account
 		self.compact_view = False
+		self.nb_unread = 0
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.widget = self.xml.get_widget(widget_name)
@@ -302,6 +365,12 @@ class MessageControl(gtk.VBox):
 		pass # NOTE: Derived classes SHOULD implement this
 	def toggle_emoticons(self):
 		pass # NOTE: Derived classes MAY implement this
+	def update_font(self):
+		pass # NOTE: Derived classes SHOULD implement this
+	def update_tags(self):
+		pass # NOTE: Derived classes SHOULD implement this
+	def markup_tab_label(self, label_str):
+		return label_str
 
 	def send_message(self, message, keyID = '', chatstate = None):
 		'''Send the given message to the active tab'''

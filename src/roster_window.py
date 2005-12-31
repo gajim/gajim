@@ -33,8 +33,6 @@ import time
 import common.sleepy
 import tabbed_chat_window
 import groupchat_window
-import message_window
-import chat_control
 import history_window
 import dialogs
 import vcard
@@ -48,6 +46,7 @@ from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
+from message_window import MessageWindowMgr
 from chat_control import ChatControl
 
 _ = i18n._
@@ -1655,7 +1654,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		chat_control = ChatControl(mw, contact, account)
 		mw.new_tab(chat_control)
 
-		# REMOVE ME
+		# REMOVE
+		##################################
 		chats = gajim.interface.instances[account]['chats']
 		if gajim.config.get('usetabbedchat'):
 			if not chats.has_key('tabbed'):
@@ -1668,6 +1668,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		else:
 			chats[contact.jid] = tabbed_chat_window.TabbedChatWindow(contact,
 				account)
+		#######################
 
 	def new_chat_from_jid(self, account, jid):
 		if gajim.contacts[account].has_key(jid):
@@ -2558,6 +2559,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
 		self.window = self.xml.get_widget('roster_window')
+		gajim.interface.msg_win_mgr = MessageWindowMgr()
 		if gajim.config.get('roster_window_skip_taskbar'):
 			self.window.set_property('skip-taskbar-hint', True)
 		self.tree = self.xml.get_widget('roster_treeview')

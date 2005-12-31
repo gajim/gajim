@@ -683,25 +683,8 @@ class PreferencesWindow:
 
 	def update_text_tags(self):
 		'''Update color tags in Opened Chat Windows'''
-		for a in gajim.connections:
-			for kind in ('chats', 'gc'):
-				windows = gajim.interface.instances[a][kind]
-				if windows.has_key('tabbed'):
-					windows['tabbed'].update_tags()
-				else:
-					for jid in windows.keys():
-						windows[jid].update_tags()
-
-	def update_text_font(self):
-		'''Update text font in Opened Chat Windows'''
-		for a in gajim.connections:
-			for kind in ('chats', 'gc'):
-				windows = gajim.interface.instances[a][kind]
-				if windows.has_key('tabbed'):
-					windows['tabbed'].update_font()
-				else:
-					for jid in windows.keys():
-						windows[jid].update_font()
+		for win in gajim.interface.msg_win_mgr.windows.values():
+			win.update_tags()
 
 	def on_preference_widget_color_set(self, widget, text):
 		color = widget.get_color()
@@ -715,6 +698,11 @@ class PreferencesWindow:
 		gajim.config.set(text, font)
 		self.update_text_font()
 		gajim.interface.save_config()
+
+	def update_text_font(self):
+		'''Update text font in Opened Chat Windows'''
+		for win in gajim.interface.msg_win_mgr.windows.values():
+			win.update_font()
 
 	def on_incoming_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'inmsgcolor')

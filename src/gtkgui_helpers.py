@@ -210,12 +210,15 @@ def move_window(window, x, y):
 
 def resize_window(window, w, h):
 	'''resizes window but also checks if huge window or negative values'''
+	if not w or not h:
+		return
 	if w > screen_w:
 		w = screen_w
 	if h > screen_h:
 		h = screen_h
 	window.resize(abs(w), abs(h))
 
+# FIXME: Remove or update??
 def one_window_opened(typ):
 	for account in gajim.connections:
 		if not gajim.interface.instances[account].has_key(typ):
