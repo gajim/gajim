@@ -953,22 +953,17 @@ class PopupNotificationWindow:
 					gajim.interface.roster.add_contact_to_roster(contact.jid,
 						self.account)
 
-		if self.msg_type == 'pm': # It's a private message
-			gajim.interface.roster.new_chat(contact, self.account)
-			chats_window = gajim.interface.instances[self.account]['chats'][self.jid]
-			chats_window.set_active_tab(self.jid)
-			chats_window.window.present()
-		elif self.msg_type in ('normal', 'file-request', 'file-request-error',
+		if self.msg_type in ('normal', 'file-request', 'file-request-error',
 			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 			# Get the first single message event
 			ev = gajim.get_first_event(self.account, self.jid, self.msg_type)
 			gajim.interface.roster.open_event(self.account, self.jid, ev)
-
-		else: # 'chat'
+		else: # chat or pm
+			assert(self.msg_type == 'chat' or self.msg_type == 'pm')
 			gajim.interface.roster.new_chat(contact, self.account)
-			chats_window = gajim.interface.instances[self.account]['chats'][self.jid]
-			chats_window.set_active_tab(self.jid)
-			chats_window.window.present()
+			msg_window = gajim.interface.msg_win_mgr.get_window(self.jid)
+			msg_window.set_active_tab(self.jid)
+			msg_window.window.present()
 
 		self.adjust_height_and_move_popup_notification_windows()
 

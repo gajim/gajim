@@ -101,13 +101,13 @@ class Systray:
 		self.set_img()
 	
 	def start_chat(self, widget, account, jid):
-		if gajim.interface.instances[account]['chats'].has_key(jid):
-			gajim.interface.instances[account]['chats'][jid].window.present()
-			gajim.interface.instances[account]['chats'][jid].set_active_tab(jid)
+		if gajim.interface.msg_win_mgr.has_window(jid):
+		        gajim.interface.msg_win_mgr.get_window(jid).set_active_tab(jid)
+		        gajim.interface.msg_win_mgr.get_window(jid).present()
 		elif gajim.contacts[account].has_key(jid):
-			gajim.interface.roster.new_chat(
-				gajim.contacts[account][jid][0], account)
-			gajim.interface.instances[account]['chats'][jid].set_active_tab(jid)
+			gajim.interface.roster.new_chat(gajim.contacts[account][jid][0],
+							account)
+		        gajim.interface.msg_win_mgr.get_window(jid).set_active_tab(jid)
 	
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When new message menuitem is activated:

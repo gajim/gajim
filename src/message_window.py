@@ -290,6 +290,24 @@ class MessageWindow:
 				return ctl
 		return None
 
+	def controls(self):
+		for ctl in self._controls.values():
+			yield ctl
+
+	def update_print_time(self):
+		if gajim.config.get('print_time') != 'sometimes':
+			for ctl in self.controls():
+				if ctl.print_time_timeout_id:
+					gobject.source_remove(ctl.print_time_timeout_id)
+					del ctl.print_time_timeout_id
+		else:
+			for ctl in self.controls():
+				if not ctl.print_time_timeout_id:
+					ctl.print_time_timeout()
+					ctl.print_time_timeout_id = gobject.timeout_add(300000,
+						ctl.print_time_timeout, None)
+
+
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
 
@@ -307,7 +325,7 @@ class MessageWindowMgr:
 		 CONFIG_ALWAYS: The key is MessageWindowMgr.MAIN_WIN 
 		 CONFIG_PERACCT: The key is the account name
 		 CONFIG_PERTYPE: The key is a message type constant'''
-		self.windows = {}
+		self._windows = {}
 		# Map the mode to a int constant for frequent compares
 		mode = gajim.config.get('one_message_window')
 		self.mode = common.config.opt_one_window_types.index(mode)
@@ -321,7 +339,7 @@ class MessageWindowMgr:
 		return win
 
 	def _gtkWinToMsgWin(self, gtk_win):
-		for w in self.windows.values():
+		for w in self._windows.values():
 			if w.window == gtk_win:
 				return w
 		return None
@@ -335,11 +353,10 @@ class MessageWindowMgr:
 		# TODO: Clean up windows
 
 	def get_window(self, jid):
-		for win in self.windows.values():
+		for win in self._windows.values():
 			if win.get_control_from_jid(jid):
 				return win
 		return None
-
 	def has_window(self, jid):
 		return self.get_window(jid)
 
@@ -356,15 +373,29 @@ class MessageWindowMgr:
 
 		win = None
 		try:
-			win = self.windows[key]
+			win = self._windows[key]
 		except KeyError:
 			# FIXME
 			print "Creating tabbed chat window for '%s'" % str(key)
 			win = self._new_window()
-			self.windows[key] = win
+			self._windows[key] = win
 	
 		assert(win)
 		return win
+
+	def get_control(self, jid):
+		win = self.get_window(jid)
+		if win:
+			return win.get_control_from_jid(jid)
+		return None
+
+	def windows(self):
+		for w in self._windows.values():
+			yield w
+	def controls(self):
+		for w in self._windows:
+			for c in w.controls():
+				yield c
 
 class MessageControl(gtk.VBox):
 	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
@@ -381,6 +412,7 @@ class MessageControl(gtk.VBox):
 		self.compact_view_always = False
 		self.compact_view_current = False
 		self.nb_unread = 0
+		self.print_time_timeout_id = None
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.widget = self.xml.get_widget(widget_name)
@@ -399,6 +431,12 @@ class MessageControl(gtk.VBox):
 		pass # NOTE: Derived classes SHOULD implement this
 	def update_tags(self):
 		pass # NOTE: Derived classes SHOULD implement this
+	def print_time_timeout(self, arg):
+		# NOTE: Derived classes SHOULD implement this
+		if self.print_time_timeout_id:
+			gobject.source_remove(self.print_time_timeout_id)
+			del self.print_time_timeout_id
+		return False
 	def markup_tab_label(self, label_str, chatstate):
 		# NOTE: Derived classes SHOULD implement this
 		# Reurn a markup'd label and optional gtk.Color

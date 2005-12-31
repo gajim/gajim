@@ -41,6 +41,7 @@ APP = i18n.APP
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
+################################################################################
 class ChatControlBase(MessageControl):
 	# FIXME
 	'''TODO
@@ -112,6 +113,8 @@ class ChatControlBase(MessageControl):
 				#FIXME: add a ui for this use spell.set_language()
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
 				gajim.config.set('use_speller', False)
+
+		self.print_time_timeout_id = None
 
 	def _paint_banner(self):
 		'''Repaint banner with theme color'''
@@ -371,6 +374,25 @@ class ChatControlBase(MessageControl):
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
 
+	def print_time_timeout(self, arg):
+		if gajim.config.get('print_time') == 'sometimes':
+			conv_textview = self.conv_textview
+			buffer = conv_textview.get_buffer()
+			end_iter = buffer.get_end_iter()
+			tim = time.localtime()
+			tim_format = time.strftime('%H:%M', tim)
+			buffer.insert_with_tags_by_name(end_iter, '\n' + tim_format,
+				'time_sometimes')
+			# scroll to the end of the textview
+			if conv_textview.at_the_end():
+				# we are at the end
+				conv_textview.scroll_to_end()
+			return True # loop again
+		if self.print_time_timeout_id:
+			del self.print_time_timeout_id
+		return False
+
+################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = 1
@@ -591,7 +613,7 @@ class ChatControl(ChatControlBase):
 		self.kbd_activity_in_last_30_secs = False
 
 	def print_conversation(self, text, frm = '', tim = None,
-		encrypted = False, subject = None):
+				encrypted = False, subject = None):
 		'''Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message

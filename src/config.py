@@ -502,7 +502,7 @@ class PreferencesWindow:
 
 	def toggle_emoticons(self):
 		'''Update emoticons state in Opened Chat Windows'''
-		for win in gajim.interface.msg_win_mgr.windows.values():
+		for win in gajim.interface.msg_win_mgr.windows():
 			win.toggle_emoticons()
 
 	def on_add_remove_emoticons_button_clicked(self, widget):
@@ -639,13 +639,8 @@ class PreferencesWindow:
 
 	def update_print_time(self):
 		'''Update time in Opened Chat Windows'''
-		for a in gajim.connections:
-			window = gajim.interface.instances[a]['chats']
-			if window.has_key('tabbed'):
-				window['tabbed'].update_print_time()
-			else:
-				for jid in window.keys():
-					window[jid].update_print_time()
+		for msg_win in gajim.interface.msg_win_mgr.windows():
+			msg_win.update_print_time()
 
 	def on_time_never_radiobutton_toggled(self, widget):
 		if widget.get_active():
@@ -683,7 +678,7 @@ class PreferencesWindow:
 
 	def update_text_tags(self):
 		'''Update color tags in Opened Chat Windows'''
-		for win in gajim.interface.msg_win_mgr.windows.values():
+		for win in gajim.interface.msg_win_mgr.windows():
 			win.update_tags()
 
 	def on_preference_widget_color_set(self, widget, text):
@@ -701,7 +696,7 @@ class PreferencesWindow:
 
 	def update_text_font(self):
 		'''Update text font in Opened Chat Windows'''
-		for win in gajim.interface.msg_win_mgr.windows.values():
+		for win in gajim.interface.msg_win_mgr.windows():
 			win.update_font()
 
 	def on_incoming_msg_colorbutton_color_set(self, widget):

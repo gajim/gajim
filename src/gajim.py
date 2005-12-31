@@ -375,6 +375,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_connected',
 					'enabled') and gajim.allow_notifications[account]:
 					helpers.play_sound('contact_connected')
+				# FIXME
 				if not self.instances[account]['chats'].has_key(jid) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
@@ -395,6 +396,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
 						'enabled'):
 					helpers.play_sound('contact_disconnected')
+				# FIXME
 				if not self.instances[account]['chats'].has_key(jid) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signout'):
@@ -437,6 +439,7 @@ class Interface:
 		if self.instances[account]['gc'].has_key(jid): # it's a Private Message
 			nick = gajim.get_nick_from_fjid(array[0])
 			fjid = array[0]
+			# FIXME
 			if not self.instances[account]['chats'].has_key(fjid) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
@@ -452,6 +455,7 @@ class Interface:
 
 		# Handle chat states  
 		contact = gajim.get_first_contact_instance_from_jid(account, jid)
+		# FIXME
 		if self.instances[account]['chats'].has_key(jid):
 			chat_win = self.instances[account]['chats'][jid]
 			if chatstate is not None: # he or she sent us reply, so he supports jep85
@@ -472,6 +476,7 @@ class Interface:
 			return
 
 		first = False
+		# FIXME
 		if not self.instances[account]['chats'].has_key(jid) and \
 			not gajim.awaiting_events[account].has_key(jid):
 			first = True
@@ -509,6 +514,7 @@ class Interface:
 		if jid in gcs:
 			if len(jids) > 1: # it's a pm
 				nick = jids[1]
+				# FIXME
 				if not self.instances[account]['chats'].has_key(fjid):
 					gc = gcs[jid]
 					tv = gc.list_treeview[jid]
@@ -521,6 +527,7 @@ class Interface:
 					c = Contact(jid = fjid, name = nick, groups = ['none'],
 						show = show, ask = 'none')
 					self.roster.new_chat(c, account)
+				# FIXME
 				self.instances[account]['chats'][fjid].print_conversation(
 					'Error %s: %s' % (array[1], array[2]), fjid, 'status')
 				return
@@ -676,6 +683,7 @@ class Interface:
 
 		# show avatar in chat
 		win = None
+		# FIXME
 		if self.instances[account]['chats'].has_key(jid):
 			win = self.instances[account]['chats'][jid]
 		elif resource and self.instances[account]['chats'].has_key(
@@ -710,6 +718,7 @@ class Interface:
 		show = array[1]
 		status = array[2]
 		# print status in chat window and update status/GPG image
+		# FIXME
 		if self.instances[account]['chats'].has_key(fjid):
 			contact = self.instances[account]['chats'][fjid].contacts[fjid]
 			contact.show = show
@@ -1273,12 +1282,14 @@ class Interface:
 			if wins['gc'].has_key(jid):
 				w = wins['gc'][jid]
 		elif typ == 'chat':
+			# FIXME
 			if wins['chats'].has_key(jid):
 				w = wins['chats'][jid]
 			else:
 				self.roster.new_chat(gajim.contacts[account][jid][0], account)
 				w = wins['chats'][jid]
 		elif typ == 'pm':
+			# FIXME
 			if wins['chats'].has_key(jid):
 				w = wins['chats'][jid]
 			else:

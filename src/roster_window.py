@@ -709,19 +709,21 @@ class RosterWindow:
 				self.add_contact_to_roster(contact.jid, account)
 			self.draw_contact(contact.jid, account)
 		# print status in chat window and update status/GPG image
-		if gajim.interface.instances[account]['chats'].has_key(contact.jid):
+		if gajim.interface.msg_win_mgr.has_window(contact.jid):
 			jid = contact.jid
-			gajim.interface.instances[account]['chats'][jid].set_state_image(jid)
+			win = gajim.interface.msg_win_mgr.get_window(contact.jid)
+			ctl = win.get_control_from_jid(jid)
+			ctl.update_state()
+	
 			name = contact.name
 			if contact.resource != '':
 				name += '/' + contact.resource
 			uf_show = helpers.get_uf_show(show)
-			gajim.interface.instances[account]['chats'][jid].print_conversation(
-				_('%s is now %s (%s)') % (name, uf_show, status), jid, 'status')
-
-			if contact == gajim.get_contact_instance_with_highest_priority(\
-				account, contact.jid):
-				gajim.interface.instances[account]['chats'][jid].draw_name_banner(contact)
+			ctl.print_conversation(_('%s is now %s (%s)') % (name, uf_show, status),
+						'status')
+			if contact == gajim.get_contact_instance_with_highest_priority(account,
+											contact.jid):
+				ctl.draw_banner()
 
 	def on_info(self, widget, user, account):
 		'''Call vcard_information_window class to display user's information'''
@@ -897,8 +899,9 @@ class RosterWindow:
 			keys[user.jid] = keyID[0]
 			for u in gajim.contacts[account][user.jid]:
 				u.keyID = keyID[0]
-			if gajim.interface.instances[account]['chats'].has_key(user.jid):
-				gajim.interface.instances[account]['chats'][user.jid].draw_widgets(user)
+			if gajim.interface.msg_win_mgr.has_window(user.jid):
+				ctl = gajim.interface.msg_win_mgr.get_control(user.jid)
+				ctl.draw_widgets()
 		keys_str = ''
 		for jid in keys:
 			keys_str += jid + ' ' + keys[jid] + ' '
@@ -1356,17 +1359,19 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model[iter][C_TYPE]
-			# FIXME
 			if type in ('agent', 'contact'):
 				account = model[iter][C_ACCOUNT].decode('utf-8')
 				jid = model[iter][C_JID].decode('utf-8')
-				if gajim.interface.instances[account]['chats'].has_key(jid):
-					gajim.interface.instances[account]['chats'][jid].set_active_tab(jid)
+				win = None
+				if gajim.interface.msg_win_mgr.has_window(jid):
+					win = gajim.interface.msg_win_mgr.get_window(jid)
 				elif gajim.contacts[account].has_key(jid):
-					c = gajim.get_contact_instance_with_highest_priority(account, jid)
+					c = gajim.get_contact_instance_with_highest_priority(account,
+												jid)
 					self.new_chat(c, account)
-					gajim.interface.instances[account]['chats'][jid].set_active_tab(jid)
-				gajim.interface.instances[account]['chats'][jid].window.present()
+					win = gajim.interface.msg_win_mgr.get_window(jid)
+				win.set_active_tab(jid)
+				win.window.present()
 			elif type == 'account':
 				account = model[iter][C_ACCOUNT]
 				if account != 'all':
@@ -1412,7 +1417,6 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			_('Contact "%s" will be removed from your roster') % (user.name),
 			_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'),
 			_('I want this contact to know my status after removal'))
-		# FIXME:
 		# maybe use 2 optionboxes from which the user can select? (better)
 		if window.get_response() == gtk.RESPONSE_OK:
 			remove_auth = True
@@ -1422,7 +1426,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			for u in gajim.contacts[account][user.jid]:
 				self.remove_contact(u, account)
 			del gajim.contacts[account][u.jid]
-			if user.jid in gajim.interface.instances[account]['chats']:
+			if gajim.interface.msg_win_mgr.has_window(user.jid):
 				user1 = Contact(jid = user.jid, name = user.name,
 					groups = [_('not in the roster')], show = 'not in the roster',
 					status = '', ask = 'none', keyID = user.keyID)
@@ -1657,11 +1661,8 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 								ChatControl.TYPE_ID)
 		chat_control = ChatControl(mw, contact, account)
 		mw.new_tab(chat_control)
-		# REMOVE: eliminate all usage of gajim.interface.instances[account]['chats']
-		##################################
 
 	def new_chat_from_jid(self, account, jid):
-		# FIXME
 		if gajim.contacts[account].has_key(jid):
 			contact = gajim.get_contact_instance_with_highest_priority(account, jid)
 		else:
@@ -1676,10 +1677,11 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			gajim.contacts[account][jid] = [contact]
 			self.add_contact_to_roster(contact.jid, account)
 
-		if not gajim.interface.instances[account]['chats'].has_key(jid):
+		if not gajim.interface.msg_win_mgr.has_window(contact.jid):
 			self.new_chat(contact, account)
-		gajim.interface.instances[account]['chats'][jid].set_active_tab(jid)
-		gajim.interface.instances[account]['chats'][jid].window.present()
+		mw = gajim.interface.msg_win_mgr.get_window(contact.jid)
+		mw.set_active_tab(jid)
+		mw.window.present()
 
 	def new_room(self, jid, nick, account):
 		# FIXME: Not contact.  Use jid and nick
@@ -1690,12 +1692,9 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 								GroupchatControl.TYPE_ID)
 		gc_control = ChatControl(mw, contact, account)
 		mw.new_tab(gc_control)
-		# REMOVE: eliminate all usage of gajim.interface.instances[account]['gc']
-		##################################
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,
-		# FIXME
-		msg_type = '', subject = None, resource = ''):
+			msg_type = '', subject = None, resource = ''):
 		'''when we receive a message'''
 		if not gajim.contacts[account].has_key(jid):
 			keyID = ''
@@ -1736,13 +1735,14 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			return
 
 		# We print if window is opened and it's not a single message
-		if gajim.interface.instances[account]['chats'].has_key(jid) and \
-			msg_type != 'normal':
-			typ = ''
-			if msg_type == 'error':
-				typ = 'status'
-			gajim.interface.instances[account]['chats'][jid].print_conversation(
-				msg, jid, typ, tim = tim, encrypted = encrypted, subject = subject)
+		if gajim.interface.msg_win_mgr.has_window(jid) and msg_type != 'normal':
+# FIXME: Remove
+#			typ = ''
+#			if msg_type == 'error':
+#				typ = 'status'
+			ctl = gajim.interface.msg_win_mgr.get_control(jid)
+			ctl.print_conversation(msg, jid, tim = tim, encrypted = encrypted,
+						subject = subject)
 			return
 
 		# We save it in a queue
@@ -1754,7 +1754,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		qs[jid].append((kind, (msg, subject, msg_type, tim, encrypted, resource)))
 		self.nb_unread += 1
 		if popup:
-			if not gajim.interface.instances[account]['chats'].has_key(jid):
+			if not gajim.interface.msg_win_mgr.has_window(jid):
 				c = gajim.get_contact_instance_with_highest_priority(account, jid)
 				self.new_chat(c, account)
 				if path:
@@ -1932,22 +1932,18 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 			recent = False
 			if self.nb_unread > 0:
 				unread = True
-			for account in accounts:
-				if gajim.interface.instances[account]['chats'].has_key('tabbed'):
-					wins = [gajim.interface.instances[account]['chats']['tabbed']]
-				else:
-					wins = gajim.interface.instances[account]['chats'].values()
-				for win in wins:
-					unrd = 0
-					for jid in win.nb_unread:
-						unrd += win.nb_unread[jid]
-					if unrd:
-						unread = True
+			for win in gajim.interface.msg_win_mgr.windows.values():
+				unrd = 0
+				for ctl in win.controls():
+					unrd += ctl.nb_unread
+				if unrd:
+					unread = True
+					break
+				for ctl in win.control():
+					jid = ctl.contact.jid
+					if time.time() - gajim.last_message_time[account][ji] < 2:
+						recent = True
 						break
-					for jid in win.contacts:
-						if time.time() - gajim.last_message_time[account][jid] < 2:
-							recent = True
-							break
 			if unread:
 				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
 					_('Messages will only be available for reading them later if you have history enabled.'))
@@ -2201,12 +2197,13 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		# Update the systray
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.set_img()
+
+		for ctl in gajim.interface.msg_win_mgr.controls():
+			ctl.update_state()
+
+		# FIXME: All of this will go away with the above
 		for account in gajim.connections:
-			# Update opened chat windows
-			for jid in gajim.interface.instances[account]['chats']:
-				if jid != 'tabbed':
-					gajim.interface.instances[account]['chats'][jid].set_state_image(
-						jid)
+			# FIXME
 			# Update opened groupchat windows
 			gcs = gajim.interface.instances[account]['gc']
 			if gcs.has_key('tabbed'):
@@ -2218,7 +2215,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 
 	def repaint_themed_widgets(self):
 		'''Notify windows that contain themed widgets to repaint them'''
-		for win in gajim.interface.msg_win_mgr.windows.values():
+		for win in gajim.interface.msg_win_mgr.windows():
 			win.repaint_themed_widgets()
 		for account in gajim.connections:
 			for addr in gajim.interface.instances[account]['disco']:
