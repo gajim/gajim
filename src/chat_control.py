@@ -232,13 +232,14 @@ class ChatControlBase(MessageControl):
 		else:
 			return False
 
-	def send_message(self, message, keyID = '', chatstate = None):
+	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
 		'''Send the given message to the active tab'''
 		if not message or message == '\n':
 			return
 
 		if not self._process_command(message):
-			MessageControl.send_message(self, message, keyID, chatstate)
+			MessageControl.send_message(self, message, keyID, type = type,
+					chatstate = chatstate)
 			# Record message history
 			self.save_sent_message(message)
 
@@ -528,7 +529,8 @@ class ChatControl(ChatControlBase):
 				gobject.source_remove(self.possible_inactive_timeout_id)
 				self._schedule_activity_timers()
 				
-		ChatControlBase.send_message(self, message, keyID, chatstate_to_send)
+		ChatControlBase.send_message(self, message, keyID, type = 'chat',
+				chatstate = chatstate_to_send)
 		self.print_conversation(message, self.contact.jid, encrypted = encrypted)
 
 	def check_for_possible_paused_chatstate(self, arg):
@@ -575,7 +577,7 @@ class ChatControl(ChatControlBase):
 			return True # loop forever
 
 		if not self.mouse_over_in_last_30_secs or self.kbd_activity_in_last_30_secs:
-			self.send_chatstate('inactive', jid)
+			self.send_chatstate('inactive', contact)
 
 		# assume no activity and let the motion-notify or 'insert-text' make them True
 		# refresh 30 seconds too or else it's 30 - 5 = 25 seconds!
@@ -757,3 +759,79 @@ class ChatControl(ChatControlBase):
 		isactive = widget.get_active()
 		self.set_compact_view(isactive)
 
+	def send_chatstate(self, state, contact = None):
+		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
+		to jid only if new chatstate is different
+		from the previous one
+		if jid is not specified, send to active tab'''
+		# JEP 85 does not allow resending the same chatstate
+		# this function checks for that and just returns so it's safe to call it
+		# with same state.
+		
+		# This functions also checks for violation in state transitions
+		# and raises RuntimeException with appropriate message
+		# more on that http://www.jabber.org/jeps/jep-0085.html#statechart
+
+		# do not send nothing if we have chat state notifications disabled
+		# that means we won't reply to the <active/> from other peer
+		# so we do not broadcast jep85 capabalities
+		chatstate_setting = gajim.config.get('chat_state_notifications')
+		if chatstate_setting == 'disabled':
+			return
+		elif chatstate_setting == 'composing_only' and state != 'active' and\
+			state != 'composing':
+			return
+
+		if contact is None:
+			contact = self.parent_win.get_active_contact()
+			jid = contact.jid
+		else:
+			jid = contact.jid
+
+		if contact is None:
+			# contact was from pm in MUC, and left the room so contact is None
+			# so we cannot send chatstate anymore
+			return
+
+		# Don't send chatstates to offline contacts
+		if contact.show == 'offline':
+			return
+
+		if contact.our_chatstate is False: # jid cannot do jep85
+			return
+
+		# if the new state we wanna send (state) equals 
+		# the current state (contact.our_chatstate) then return
+		if contact.our_chatstate == state:
+			return
+
+		if contact.our_chatstate is None:
+			# we don't know anything about jid, so return
+			# NOTE:
+			# send 'active', set current state to 'ask' and return is done
+			# in self.send_message() because we need REAL message (with <body>)
+			# for that procedure so return to make sure we send only once
+			# 'active' until we know peer supports jep85
+			return 
+
+		if contact.our_chatstate == 'ask':
+			return
+
+		# prevent going paused if we we were not composing (JEP violation)
+		if state == 'paused' and not contact.our_chatstate == 'composing':
+			MessageControl.send_message(self, jid, None, None,
+				chatstate = 'active') # go active before
+			contact.our_chatstate = 'active'
+			self.reset_kbd_mouse_timeout_vars()
+		
+		# if we're inactive prevent composing (JEP violation)
+		if contact.our_chatstate == 'inactive' and state == 'composing':
+			MessageControl.send_message(self, jid, None, None,
+				chatstate = 'active') # go active before
+			contact.our_chatstate = 'active'
+			self.reset_kbd_mouse_timeout_vars()
+
+		MessageControl.send_message(self, jid, None, None, chatstate = state)
+		contact.our_chatstate = state
+		if contact.our_chatstate == 'active':
+			self.reset_kbd_mouse_timeout_vars()

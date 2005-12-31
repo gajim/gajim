@@ -382,17 +382,15 @@ class MessageControl(gtk.VBox):
 	def set_compact_view(self, state):
 		self.compact_view_current = state
 
-	def send_message(self, message, keyID = '', chatstate = None):
+	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
 		'''Send the given message to the active tab'''
-		if not message or message == '\n':
-			return
-
 		# refresh timers
 		self.reset_kbd_mouse_timeout_vars()
 
 		jid = self.contact.jid
 		# Send and update history
-		gajim.connections[self.account].send_message(jid, message, keyID, chatstate)
+		gajim.connections[self.account].send_message(jid, message, keyID,
+						type = type, chatstate = chatstate)
 
 	def position_menu_under_button(self, menu):
 		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
