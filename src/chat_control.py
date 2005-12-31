@@ -12,6 +12,8 @@
 ## GNU General Public License for more details.
 ##
 
+import os, os.path
+import math
 import gtk
 import gtk.glade
 import pango
@@ -86,6 +88,13 @@ class ChatControlBase(MessageControl):
 		self.orig_msg = ''
 
 		self.nb_unread = 0
+
+		# Emoticons menu
+		# set image no matter if user wants at this time emoticons or not
+		# (so toggle works ok)
+		img = self.xml.get_widget('emoticons_button_image')
+		img.set_from_file(os.path.join(gajim.DATA_DIR, 'emoticons', 'smile.png'))
+		self.toggle_emoticons()
 
 	def _paint_banner(self):
 		'''Repaint banner with theme color'''
@@ -264,6 +273,57 @@ class ChatControlBase(MessageControl):
 								self.get_message_type(jid))
 			self.redraw_tab(jid)
 			self.show_title(urgent)
+
+	def toggle_emoticons(self):
+		'''hide show emoticons_button and make sure emoticons_menu is always there
+		when needed'''
+		emoticons_button = self.xml.get_widget('emoticons_button')
+		if gajim.config.get('useemoticons'):
+			self.emoticons_menu = self.prepare_emoticons_menu()
+			emoticons_button.show()
+			emoticons_button.set_no_show_all(False)
+		else:
+			self.emoticons_menu = None
+			emoticons_button.hide()
+			emoticons_button.set_no_show_all(True)
+
+	def prepare_emoticons_menu(self):
+		menu = gtk.Menu()
+	
+		def append_emoticon(w, d):
+			buffer = self.msg_textview.get_buffer()
+			if buffer.get_char_count():
+				buffer.insert_at_cursor(' %s ' % d)
+			else: # we are the beginning of buffer
+				buffer.insert_at_cursor('%s ' % d)
+			self.msg_textview.grab_focus()
+	
+		counter = 0
+		# Calculate the side lenght of the popup to make it a square
+		size = int(round(math.sqrt(len(gajim.interface.emoticons_images))))
+		for image in gajim.interface.emoticons_images:
+			item = gtk.MenuItem()
+			img = gtk.Image()
+			if type(image[1]) == gtk.gdk.PixbufAnimation:
+				img.set_from_animation(image[1])
+			else:
+				img.set_from_pixbuf(image[1])
+			item.add(img)
+			item.connect('activate', append_emoticon, image[0])
+			#FIXME: add tooltip with ascii
+			menu.attach(item,
+					counter % size, counter % size + 1,
+					counter / size, counter / size + 1)
+			counter += 1
+		menu.show_all()
+		return menu
+
+	def on_emoticons_button_clicked(self, widget):
+		'''popup emoticons menu'''
+		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
+		self.button_clicked = widget
+		self.emoticons_menu.popup(None, None, self.position_menu_under_button, 1, 0)
+
 
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
@@ -474,7 +534,6 @@ class ChatControl(ChatControlBase):
 		self.mouse_over_in_last_5_secs = False
 		self.mouse_over_in_last_30_secs = False
 		self.kbd_activity_in_last_30_secs = False
-
 
 	def print_conversation(self, text, frm = '', tim = None,
 		encrypted = False, subject = None):

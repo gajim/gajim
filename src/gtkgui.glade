@@ -19395,7 +19395,7 @@ Status message</property>
 		      <property name="spacing">6</property>
 
 		      <child>
-			<widget class="GtkButton" id="button28">
+			<widget class="GtkButton" id="emoticons_button">
 			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Click to insert an emoticon (Alt+E)</property>
 			  <property name="can_focus">True</property>
@@ -19410,7 +19410,7 @@ Status message</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkImage" id="image1337">
+				<widget class="GtkImage" id="emoticons_button_image">
 				  <property name="visible">True</property>
 				  <property name="xalign">0.5</property>
 				  <property name="yalign">0.5</property>
@@ -20034,7 +20034,7 @@ topic</property>
 		      <property name="spacing">6</property>
 
 		      <child>
-			<widget class="GtkButton" id="button31">
+			<widget class="GtkButton" id="emoticons_button">
 			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Click to insert an emoticon (Alt+E)</property>
 			  <property name="can_focus">True</property>
@@ -20049,7 +20049,7 @@ topic</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkImage" id="image1343">
+				<widget class="GtkImage" id="emoticons_button_image">
 				  <property name="visible">True</property>
 				  <property name="xalign">0.5</property>
 				  <property name="yalign">0.5</property>

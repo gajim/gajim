@@ -502,14 +502,8 @@ class PreferencesWindow:
 
 	def toggle_emoticons(self):
 		'''Update emoticons state in Opened Chat Windows'''
-		for a in gajim.connections:
-			for kind in ('chats', 'gc'):
-				windows = gajim.interface.instances[a][kind]
-				if windows.has_key('tabbed'):
-					windows['tabbed'].toggle_emoticons()
-				else:
-					for jid in windows.keys():
-						windows[jid].toggle_emoticons()
+		for win in gajim.interface.msg_win_mgr.windows.values():
+			win.toggle_emoticons()
 
 	def on_add_remove_emoticons_button_clicked(self, widget):
 		if gajim.interface.instances.has_key('manage_emots'):

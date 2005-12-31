@@ -202,7 +202,12 @@ class MessageWindow:
 
 	def is_active(self):
 		return self.window.is_active()
+	def get_origin(self):
+		return self.window.window.get_origin()
 
+	def toggle_emoticons(self):
+		for ctl in self._controls.values():
+			ctl.toggle_emoticons()
 
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
@@ -286,6 +291,8 @@ class MessageControl(gtk.VBox):
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.widget = self.xml.get_widget(widget_name)
+		# Autoconnect glade signals
+		self.xml.signal_autoconnect(self)
 
 	def draw_widgets(self):
 		pass # NOTE: Derived classes should implement this
@@ -293,6 +300,8 @@ class MessageControl(gtk.VBox):
 		pass # NOTE: Derived classes SHOULD implement this
 	def update_state(self):
 		pass # NOTE: Derived classes SHOULD implement this
+	def toggle_emoticons(self):
+		pass # NOTE: Derived classes MAY implement this
 
 	def send_message(self, message, keyID = '', chatstate = None):
 		'''Send the given message to the active tab'''
@@ -305,5 +314,34 @@ class MessageControl(gtk.VBox):
 		jid = self.contact.jid
 		# Send and update history
 		gajim.connections[self.account].send_message(jid, message, keyID, chatstate)
+
+	def position_menu_under_button(self, menu):
+		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
+		# pass btn instance when this bug is over
+		button = self.button_clicked
+		# here I get the coordinates of the button relative to
+		# window (self.window)
+		button_x, button_y = button.allocation.x, button.allocation.y
+		
+		# now convert them to X11-relative
+		window_x, window_y = self.parent_win.get_origin()
+		x = window_x + button_x
+		y = window_y + button_y
+
+		menu_width, menu_height = menu.size_request()
+
+		## should we pop down or up?
+		if (y + button.allocation.height + menu_height
+		    < gtk.gdk.screen_height()):
+			# now move the menu below the button
+			y += button.allocation.height
+		else:
+			# now move the menu above the button
+			y -= menu_height
+
+
+		# push_in is True so all the menuitems are always inside screen
+		push_in = True
+		return (x, y, push_in)
 
 
