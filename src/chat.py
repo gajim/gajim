@@ -60,6 +60,7 @@ class Chat:
 	def __init__(self, account, widget_name):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.window = self.xml.get_widget(widget_name)
+		print type(self.window)
 
 		self.widget_name = widget_name
 

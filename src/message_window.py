@@ -186,6 +186,24 @@ class MessageWindow:
 		for ctl in self._controls.values():
 			ctl.repaint_themed_widgets()
 
+	def _widgetToControl(self, widget):
+		for ctl in self._controls.values():
+			if ctl.widget == widget:
+				return ctl
+		return None
+
+	def get_active_contact(self):
+		notebook = self.notebook
+		active_widget = notebook.get_nth_page(notebook.get_current_page())
+		return self._widgetToControl(active_widget).contact
+		
+	def get_active_jid(self):
+		return self.get_active_contact().jid
+
+	def is_active(self):
+		return self.window.is_active()
+
+
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
 
@@ -257,11 +275,13 @@ class MessageWindowMgr:
 class MessageControl(gtk.VBox):
 	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
 
-	def __init__(self, widget_name, contact):
+	def __init__(self, parent_win, widget_name, contact, account):
 		gtk.VBox.__init__(self)
 
+		self.parent_win = parent_win
 		self.widget_name = widget_name
 		self.contact = contact
+		self.account = account
 		self.compact_view = False
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
@@ -273,3 +293,17 @@ class MessageControl(gtk.VBox):
 		pass # NOTE: Derived classes SHOULD implement this
 	def update_state(self):
 		pass # NOTE: Derived classes SHOULD implement this
+
+	def send_message(self, message, keyID = '', chatstate = None):
+		'''Send the given message to the active tab'''
+		if not message or message == '\n':
+			return
+
+		# refresh timers
+		self.reset_kbd_mouse_timeout_vars()
+
+		jid = self.contact.jid
+		# Send and update history
+		gajim.connections[self.account].send_message(jid, message, keyID, chatstate)
+
+

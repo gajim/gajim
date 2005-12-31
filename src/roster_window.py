@@ -1653,7 +1653,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 	def new_chat(self, contact, account):
 		# Get target window
 		mw = self.msg_win_mgr.get_window(contact, account, None) # FIXME: type arg
-		chat_control = ChatControl(contact)
+		chat_control = ChatControl(mw, contact, account)
 		mw.new_tab(chat_control)
 
 		# REMOVE ME
@@ -2225,7 +2225,7 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 
 	def repaint_themed_widgets(self):
 		'''Notify windows that contain themed widgets to repaint them'''
-		for win in self.msg_win_mgr.windows():
+		for win in self.msg_win_mgr.windows.values():
 			win.repaint_themed_widgets()
 		for account in gajim.connections:
 			for addr in gajim.interface.instances[account]['disco']:
