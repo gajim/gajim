@@ -31,8 +31,6 @@ import os
 import time
 
 import common.sleepy
-import tabbed_chat_window
-import groupchat_window
 import history_window
 import dialogs
 import vcard
@@ -48,6 +46,7 @@ from common import helpers
 from common import i18n
 from message_window import MessageWindowMgr
 from chat_control import ChatControl
+from groupchat_control import GroupchatControl
 
 _ = i18n._
 APP = i18n.APP
@@ -1649,28 +1648,16 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		self.make_menu()
 
 	def new_chat(self, contact, account):
-		# Get target window
-		mw = gajim.interface.msg_win_mgr.get_window(contact, account, None) # FIXME: type arg
+		# Get target window, create a control, and associate it with the window
+		mw = gajim.interface.msg_win_mgr.get_window(contact, account,
+								ChatControl.TYPE_ID)
 		chat_control = ChatControl(mw, contact, account)
 		mw.new_tab(chat_control)
-
 		# REMOVE: eliminate all usage of gajim.interface.instances[account]['chats']
 		##################################
-#		chats = gajim.interface.instances[account]['chats']
-#		if gajim.config.get('usetabbedchat'):
-#			if not chats.has_key('tabbed'):
-#				chats['tabbed'] = tabbed_chat_window.TabbedChatWindow(contact,
-#					account)
-#			else:
-#				chats['tabbed'].new_tab(contact)
-#
-#			chats[contact.jid] = chats['tabbed']
-#		else:
-#			chats[contact.jid] = tabbed_chat_window.TabbedChatWindow(contact,
-#				account)
-		#######################
 
 	def new_chat_from_jid(self, account, jid):
+		# FIXME
 		if gajim.contacts[account].has_key(jid):
 			contact = gajim.get_contact_instance_with_highest_priority(account, jid)
 		else:
@@ -1691,19 +1678,17 @@ _('If "%s" accepts this request you will know his or her status.') %jid)
 		gajim.interface.instances[account]['chats'][jid].window.present()
 
 	def new_room(self, jid, nick, account):
-		if gajim.config.get('usetabbedchat'):
-			if not gajim.interface.instances[account]['gc'].has_key('tabbed'):
-				gajim.interface.instances[account]['gc']['tabbed'] = \
-					groupchat_window.GroupchatWindow(jid, nick, account)
-			else:
-				gajim.interface.instances[account]['gc']['tabbed'].new_room(jid, nick)
-			gajim.interface.instances[account]['gc'][jid] = \
-				gajim.interface.instances[account]['gc']['tabbed']
-		else:
-			gajim.interface.instances[account]['gc'][jid] = \
-				groupchat_window.GroupchatWindow(jid, nick, account)
+		# FIXME: Not contact.  Use jid and nick
+		# Get target window, create a control, and associate it with the window
+		mw = gajim.interface.msg_win_mgr.get_window(contact, account,
+								GroupchatControl.TYPE_ID)
+		gc_control = ChatControl(mw, contact, account)
+		mw.new_tab(gc_control)
+		# REMOVE: eliminate all usage of gajim.interface.instances[account]['gc']
+		##################################
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,
+		# FIXME
 		msg_type = '', subject = None, resource = ''):
 		'''when we receive a message'''
 		if not gajim.contacts[account].has_key(jid):

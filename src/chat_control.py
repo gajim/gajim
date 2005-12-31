@@ -63,8 +63,8 @@ class ChatControlBase(MessageControl):
 	def _update_banner_state_image(self):
 		pass # Derived types MAY implement this
 
-	def __init__(self, parent_win, widget_name, display_name, contact, acct):
-		MessageControl.__init__(self, parent_win, widget_name, display_name,
+	def __init__(self, type_id, parent_win, widget_name, display_name, contact, acct):
+		MessageControl.__init__(self, type_id, parent_win, widget_name, display_name,
 					contact, acct);
 
 		# FIXME: These are hidden from 0.8 on, but IMO all these things need
@@ -372,9 +372,11 @@ class ChatControlBase(MessageControl):
 
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
+	TYPE_ID = 1
+
 	def __init__(self, parent_win, contact, acct):
-		ChatControlBase.__init__(self, parent_win, 'chat_child_vbox', _('Chat'),
-					contact, acct);
+		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
+				         _('Chat'), contact, acct);
 		self.compact_view_always = gajim.config.get('always_compact_view_chat')
 		self.set_compact_view(self.compact_view_always)
 

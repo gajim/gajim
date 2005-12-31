@@ -342,9 +342,10 @@ class MessageWindowMgr:
 class MessageControl(gtk.VBox):
 	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
 
-	def __init__(self, parent_win, widget_name, display_name, contact, account):
+	def __init__(self, type_id, parent_win, widget_name, display_name, contact, account):
 		gtk.VBox.__init__(self)
 
+		self.type_id = type_id
 		self.parent_win = parent_win
 		self.widget_name = widget_name
 		self.display_name = display_name
