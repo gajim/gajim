@@ -85,7 +85,12 @@ class MessageWindow:
 		self.window.show_all()
 
 	def _on_window_delete(self, win, event):
-		print "MessageWindow._on_window_delete:", win, event
+		# Make sure all controls are okay with being deleted
+		for ctl in self._controls.values():
+			if not ctl.check_delete():
+				return True # halt the delete
+
+		# FIXME: Do based on type, main, never, peracct, pertype
 		if gajim.config.get('saveposition'):
 			# save the window size and position
 			x, y = win.get_position()
@@ -96,8 +101,13 @@ class MessageWindow:
 			gajim.config.set('msgwin-height', height)
 
 		return False
+
 	def _on_window_destroy(self, win):
+		# FIXME
 		print "MessageWindow._on_window_destroy:", win
+		for ctl in self._controls.values():
+			ctl.shutdown()
+		self._controls.clear()
 
 	def new_tab(self, control):
 		assert(not self._controls.has_key(control.contact.jid))
@@ -284,11 +294,21 @@ class MessageWindow:
 		for ctl in self._controls.values():
 			ctl.update_tags()
 
-	def get_control_from_jid(self, jid):
-		for ctl in self._controls.values():
-			if ctl.contact.jid == jid:
-				return ctl
-		return None
+	def get_control(self, arg):
+		'''Return the MessageControl for jid or n, where n is the notebook page index'''
+		if isinstance(arg, unicode):
+			jid = arg
+			for ctl in self._controls.values():
+				if ctl.contact.jid == jid:
+					return ctl
+			return None
+		else:
+			page_num = arg
+			notebook = self.notebook
+			if page_num == None:
+				page_num = notebook.get_current_page()
+			nth_child = notebook.get_nth_page(page_num)
+			return self._widgetToControl(nth_child)
 
 	def controls(self):
 		for ctl in self._controls.values():
@@ -306,6 +326,41 @@ class MessageWindow:
 					ctl.print_time_timeout()
 					ctl.print_time_timeout_id = gobject.timeout_add(300000,
 						ctl.print_time_timeout, None)
+
+	def move_to_next_unread_tab(self, forward):
+		ind = self.notebook.get_current_page()
+		current = ind
+		found = False
+		# loop until finding an unread tab or having done a complete cycle
+		while True: 
+			if forward == True: # look for the first unread tab on the right
+				ind = ind + 1
+				if ind >= self.notebook.get_n_pages():
+					ind = 0
+			else: # look for the first unread tab on the right
+				ind = ind - 1
+				if ind < 0:
+					ind = self.notebook.get_n_pages() - 1
+			if ind == current:
+				break # a complete cycle without finding an unread tab 
+			ctl = self.get_control(ind)
+			if ctl.nb_unread > 0:
+				found = True
+				break # found
+		if found:
+			self.notebook.set_current_page(ind)
+		else: # not found
+			if forward: # CTRL + TAB
+				if current < (self.notebook.get_n_pages() - 1):
+					self.notebook.next_page()
+				else: # traverse for ever (eg. don't stop at last tab)
+					self.notebook.set_current_page(0)
+			else: # CTRL + SHIFT + TAB
+				if current > 0:
+					self.notebook.prev_page()
+				else: # traverse for ever (eg. don't stop at first tab)
+					self.notebook.set_current_page(
+						self.notebook.get_n_pages() - 1)
 
 
 class MessageWindowMgr:
@@ -334,7 +389,6 @@ class MessageWindowMgr:
 	def _new_window(self):
 		win = MessageWindow()
 		# we track the lifetime of this window
-		win.window.connect('delete-event', self._on_window_delete)
 		win.window.connect('destroy', self._on_window_destroy)
 		return win
 
@@ -344,17 +398,17 @@ class MessageWindowMgr:
 				return w
 		return None
 
-	def _on_window_delete(self, win, event):
-		# FIXME
-		print "MessageWindowMgr._on_window_delete:", win
 	def _on_window_destroy(self, win):
-		# FIXME
-		print "MessageWindowMgr._on_window_destroy:", win
-		# TODO: Clean up windows
+		for k in self._windows.keys():
+			if self._windows[k].window == win:
+				del self._windows[k]
+				return
+		# How was the window not in out list?!? Assert.
+		assert(False)
 
 	def get_window(self, jid):
 		for win in self._windows.values():
-			if win.get_control_from_jid(jid):
+			if win.get_control(jid):
 				return win
 		return None
 	def has_window(self, jid):
@@ -384,9 +438,10 @@ class MessageWindowMgr:
 		return win
 
 	def get_control(self, jid):
+		'''Amonst all windows, return the MessageControl for jid'''
 		win = self.get_window(jid)
 		if win:
-			return win.get_control_from_jid(jid)
+			return win.get_control(jid)
 		return None
 
 	def windows(self):
@@ -419,8 +474,11 @@ class MessageControl(gtk.VBox):
 		# Autoconnect glade signals
 		self.xml.signal_autoconnect(self)
 
+	def shutdown(self):
+		# NOTE: Derived classes MUST implement this
+		assert(False)
 	def draw_widgets(self):
-		pass # NOTE: Derived classes should implement this
+		pass # NOTE: Derived classes SHOULD implement this
 	def repaint_themed_widgets(self, theme):
 		pass # NOTE: Derived classes SHOULD implement this
 	def update_state(self):
@@ -445,7 +503,14 @@ class MessageControl(gtk.VBox):
 		# NOTE: Derived classes SHOULD implement this
 		return None
 	def set_compact_view(self, state):
+		# NOTE: Derived classes MAY implement this
 		self.compact_view_current = state
+	def check_delete(self):
+		'''Called when a window has been asked to delete itself.  If a control is 
+		not in a suitable shutdown state this method should return True to halt
+		the delete'''
+		# NOTE: Derived classes MAY implement this
+		return False
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
 		'''Send the given message to the active tab'''

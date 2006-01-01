@@ -712,7 +712,7 @@ class RosterWindow:
 		if gajim.interface.msg_win_mgr.has_window(contact.jid):
 			jid = contact.jid
 			win = gajim.interface.msg_win_mgr.get_window(contact.jid)
-			ctl = win.get_control_from_jid(jid)
+			ctl = win.get_control(jid)
 			ctl.update_state()
 	
 			name = contact.name

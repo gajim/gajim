@@ -14,12 +14,14 @@
 
 import os, os.path
 import math
+import time
 import gtk
 import gtk.glade
 import pango
 import gobject
 import gtkgui_helpers
 import message_window
+import dialogs
 
 from common import gajim
 from common import helpers
@@ -289,8 +291,7 @@ class ChatControlBase(MessageControl):
 			self.nb_unread += 1
 			if gajim.interface.systray_enabled and\
 				gajim.config.get('trayicon_notification_on_new_messages'):
-				gajim.interface.systray.add_jid(jid, self.account,
-								self.get_message_type(jid))
+				gajim.interface.systray.add_jid(jid, self.account, self.type)
 			self.redraw_tab(jid)
 			self.show_title(urgent)
 
@@ -395,11 +396,11 @@ class ChatControlBase(MessageControl):
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
-	TYPE_ID = 1
+	TYPE_ID = 'chat'
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
-				         _('Chat'), contact, acct);
+				         _('Chat'), contact, acct)
 		self.compact_view_always = gajim.config.get('always_compact_view_chat')
 		self.set_compact_view(self.compact_view_always)
 
@@ -857,3 +858,32 @@ class ChatControl(ChatControlBase):
 		contact.our_chatstate = state
 		if contact.our_chatstate == 'active':
 			self.reset_kbd_mouse_timeout_vars()
+
+	def shutdown(self):
+		# Send 'gone' chatstate
+		self.send_chatstate('gone', self.contact.jid)
+		self.contact.chatstate = None
+		self.contact.our_chatstate = None
+		# Disconnect timer callbacks
+		gobject.source_remove(self.possible_paused_timeout_id)
+		gobject.source_remove(self.possible_inactive_timeout_id)
+		if self.print_time_timeout_id:
+			gobject.source_remove(self.print_time_timeout_id)
+		# Clean up systray
+		if gajim.interface.systray_enabled and self.nb_unread > 0:
+			gajim.interface.systray.remove_jid(self.contact.jid, self.account,
+								self.type)
+
+	def check_delete(self):
+		jid = self.contact.jid
+		if time.time() - gajim.last_message_time[self.account][jid] < 2:
+			# 2 seconds
+			dialog = dialogs.ConfirmationDialog(
+				#%s is being replaced in the code with JID
+				_('You just received a new message from "%s"' % jid),
+				_('If you close this tab and you have history disabled, '\
+				'this message will be lost.'))
+			if dialog.get_response() != gtk.RESPONSE_OK:
+				return True #stop the propagation of the event
+		return False
+
