@@ -58,7 +58,7 @@ class Contact:
 
 class GC_Contact:
 	'''Information concerning each groupchat contact'''
-	def __init__(self, room_jid='', nick='', show='', status='', role='',
+	def __init__(self, room_jid='', name='', show='', status='', role='',
 			affiliation='', jid = ''):
 		self.room_jid = room_jid
 		self.name = name
@@ -230,9 +230,9 @@ class Contacts:
 			groups = ['none'], show = gc_contact.show, status = gc_contact.status,
 			sub = 'none')
 
-	def create_gc_contact(self, room_jid='', nick='', show='', status='',
+	def create_gc_contact(self, room_jid='', name='', show='', status='',
 		role='', affiliation='', jid=''):
-		return GC_Contact(room_jid, nick, show, status, role, affiliation, jid)
+		return GC_Contact(room_jid, name, show, status, role, affiliation, jid)
 	
 	def add_gc_contact(self, account, gc_contact):
 		# No such account before ?

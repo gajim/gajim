@@ -488,7 +488,7 @@ class Interface:
 					else:
 						show = 'offline'
 					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
-						nick = nick, show = show)
+						name = nick, show = show)
 					c = gajim.contacts.contact_from_gc_contct(c)
 					self.roster.new_chat(c, account)
 				self.instances[account]['chats'][fjid].print_conversation(
@@ -1258,7 +1258,7 @@ class Interface:
 				else:
 					show = 'offline'
 					gc_contact = gajim.contacts.create_gc_contact(room_jid = room_jid,
-						nick = nick, show = show)
+						name = nick, show = show)
 				c = gajim.contacts.contact_from_gc_contct(gc_contact)
 				self.roster.new_chat(c, account)
 				w = wins['chats'][jid]

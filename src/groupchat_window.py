@@ -375,7 +375,7 @@ class GroupchatWindow(chat.Chat):
 		iter = model.append(role_iter, (None, 'contact', nick, name))
 		if not nick in gajim.contacts.get_nick_list(self.account, room_jid):
 			gc_contact = gajim.contacts.create_gc_contact(room_jid = room_jid,
-				nick = nick, show = show, status = status, role = role,
+				name = nick, show = show, status = status, role = role,
 				affiliation = affiliation, jid = jid)
 			gajim.contacts.add_gc_contact(self.account, gc_contact)
 		self.draw_contact(room_jid, nick)
