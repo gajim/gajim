@@ -22,6 +22,8 @@
 ## GNU General Public License for more details.
 ##
 
+import common.gajim
+
 class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
@@ -59,7 +61,7 @@ class GC_Contact:
 	def __init__(self, room_jid='', nick='', show='', status='', role='',
 			affiliation='', jid = ''):
 		self.room_jid = room_jid
-		self.nick = nick
+		self.name = name
 		self.show = show
 		self.status = status
 		self.role = role
@@ -67,7 +69,7 @@ class GC_Contact:
 		self.jid = jid
 
 	def get_full_jid(self):
-		return self.room_jid + '/' + self.nick
+		return self.room_jid + '/' + self.name
 
 class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
@@ -137,7 +139,7 @@ class Contacts:
 		'''Removes all contacts for a given jid'''
 		if not self._contacts.has_key(account):
 			return
-		if not self._contacts[account].has_key(contact.jid):
+		if not self._contacts[account].has_key(jid):
 			return
 		del self._contacts[account][jid]
 
@@ -183,7 +185,7 @@ class Contacts:
 		if jid in self._contacts[account]:
 			return self._contacts[account][jid][0]
 		else: # it's fake jid
-			room, nick = gajim.get_room_and_nick_from_fjid(jid)
+			room, nick = common.gajim.get_room_and_nick_from_fjid(jid)
 			if self._gc_contacts[account].has_key(room) and \
 				nick in self._gc_contacts[account][room]:
 				return self._gc_contacts[account][room][nick]
@@ -224,7 +226,7 @@ class Contacts:
 
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
-		return Contact(jid = gc_contact.get_full_jid(), name = gc_contact.nick,
+		return Contact(jid = gc_contact.get_full_jid(), name = gc_contact.name,
 			groups = ['none'], show = gc_contact.show, status = gc_contact.status,
 			sub = 'none')
 
@@ -235,15 +237,15 @@ class Contacts:
 	def add_gc_contact(self, account, gc_contact):
 		# No such account before ?
 		if not self._gc_contacts.has_key(account):
-			self._contacts[account] = {gc_contact.room_jid : {gc_contact.nick: \
+			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
 				gc_contact}}
 			return
 		# No such room_jid before ?
 		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
-			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.nick: \
+			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.name: \
 				gc_contact}
 			return
-		self._gc_contacts[account][gc_contact.room_jid][gc_contact.nick] = \
+		self._gc_contacts[account][gc_contact.room_jid][gc_contact.name] = \
 				gc_contact
 
 	def remove_gc_contact(self, account, gc_contact):
@@ -252,9 +254,9 @@ class Contacts:
 		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
 			return
 		if not self._gc_contacts[account][gc_contact.room_jid].has_key(
-			gc_contact.nick):
+			gc_contact.name):
 			return
-		self._gc_contacts[account][gc_contact.room_jid].remove(gc_contact.nick)
+		del self._gc_contacts[account][gc_contact.room_jid][gc_contact.name]
 		# It was the last nick in room ?
 		if not len(self._gc_contacts[account][gc_contact.room_jid]):
 			del self._gc_contacts[account][gc_contact.room_jid]
