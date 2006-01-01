@@ -339,7 +339,7 @@ class TabbedChatWindow(chat.Chat):
 	def set_state_image(self, jid):
 		prio = 0
 		contact_list = gajim.contacts.get_contact(self.account, jid)
-		if contact_list:
+		if not contact_list:
 			contact_list = [self.contacts[jid]]
 
 		contact = contact_list[0]
