@@ -79,8 +79,8 @@ class Contacts:
 	def change_account_name(self, old_name, new_name):
 		self._contacts[new_name] = self._contacts[old_name]
 		self._gc_contacts[new_name] = self._gc_contacts[old_name]
-		self._contacts.remove(old_name)
-		self._gc_contacts.remove(old_name)
+		del self._contacts[old_name]
+		del self._gc_contacts[old_name]
 
 	def add_account(self, account):
 		self._contacts[account] = {}
@@ -90,8 +90,8 @@ class Contacts:
 		return self._contacts.keys()
 
 	def remove_account(self, account):
-		self._contacts.remove(account)
-		self._gc_contacts.remove(account)
+		del self._contacts[account]
+		del self._gc_contacts[account]
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=5, keyID='', our_chatstate=None,
@@ -131,7 +131,7 @@ class Contacts:
 			self._contacts[account][contact.jid].remove(contact)
 		# It was the last resource of this contact ?
 		if not len(self._contacts[account][contact.jid]):
-			self._contacts[account].remove(contact.jid)
+			del self._contacts[account][contact.jid]
 	
 	def remove_jid(self, account, jid):
 		'''Removes all contacts for a given jid'''
@@ -257,14 +257,14 @@ class Contacts:
 		self._gc_contacts[account][gc_contact.room_jid].remove(gc_contact.nick)
 		# It was the last nick in room ?
 		if not len(self._gc_contacts[account][gc_contact.room_jid]):
-			self._gc_contacts[account].remove(gc_contact.room_jid)
+			del self._gc_contacts[account][gc_contact.room_jid]
 
 	def remove_room(self, account, room_jid):
 		if not self._gc_contacts.has_key(account):
 			return
 		if not self._gc_contacts[account].has_key(room_jid):
 			return
-		self._gc_contacts[account].remove(room_jid)
+		del self._gc_contacts[account][room_jid]
 
 	def get_gc_contact(self, account, room_jid, nick):
 		if not self._gc_contacts.has_key(account):
@@ -273,7 +273,7 @@ class Contacts:
 			return
 		if not self._gc_contacts[account][room_jid].has_key(nick):
 			return
-		self._gc_contacts[account][room_jid].remove(nick)
+		del self._gc_contacts[account][room_jid][nick]
 
 	def get_gc_list(self, account):
 		if not self._gc_contacts.has_key(account):
