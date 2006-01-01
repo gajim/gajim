@@ -188,7 +188,7 @@ class Chat:
 				add = _('Group Chat')
 		elif len(self.xmls) == 1: # just one tab
 			if self.widget_name == 'tabbed_chat_window':
-				c = gajim.get_first_contact_instance_from_jid(self.account, jid)
+				c = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 				if c is None:
 					add = ''
 				else:
@@ -296,9 +296,9 @@ class Chat:
 	def get_message_type(self, jid):
 		if self.widget_name == 'groupchat_window':
 			return 'gc'
-		if gajim.contacts[self.account].has_key(jid):
-			return 'chat'
-		return 'pm'
+		if gajim.contacts.is_pm_from_jid(self.account, jid):
+			return 'pm'
+		return 'chat'
 
 	def get_nth_jid(self, page_number = None):
 		notebook = self.notebook
@@ -463,7 +463,7 @@ class Chat:
 
 		if self.widget_name == 'tabbed_chat_window':
 			jid = self.get_active_jid()
-			c = gajim.get_first_contact_instance_from_jid(self.account, jid)
+			c = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 			if _('not in the roster') in c.groups: # for add_to_roster_menuitem
 				childs[5].show()
 				childs[5].set_no_show_all(False)
@@ -501,7 +501,7 @@ class Chat:
 			childs[3].set_active(isactive)
 			childs[3].set_property('sensitive', issensitive)
 			# If we don't have resource, we can't do file transfert
-			c = gajim.get_first_contact_instance_from_jid(self.account, jid)
+			c = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 			if not c.resource:
 				childs[2].set_sensitive(False)
 			else:

@@ -43,7 +43,6 @@ except:
 from filetransfers_window import FileTransfersWindow
 from gajim_themes_window import GajimThemesWindow
 from advanced import AdvancedConfigurationWindow
-from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
@@ -107,11 +106,6 @@ class EditGroupsDialog:
 	def group_toggled_cb(self, cell, path):
 		self.changes_made = True
 		model = self.list.get_model()
-		if model[path][1] and len(self.user.groups) == 1: # we try to remove 
-																		  # the last group
-			ErrorDialog(_('Cannot remove last group'),
-					_('At least one contact group must be present.')).get_response()
-			return
 		model[path][1] = not model[path][1]
 		if model[path][1]:
 			self.user.groups.append(model[path][0].decode('utf-8'))
@@ -304,10 +298,10 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		liststore.append(['Jabber', ''])
 		self.agents = ['Jabber']
 		jid_agents = []
-		for j in gajim.contacts[account]:
-			user = gajim.contacts[account][j][0]
-			if _('Transports') in user.groups and user.show != 'offline' and \
-					user.show != 'error':
+		for j in gajim.contacts.get_jid_list(account):
+			contact = gajim.contacts.get_first_contact_from_jid(account, j)
+			if _('Transports') in contact.groups and contact.show != 'offline' and\
+					contact.show != 'error':
 				jid_agents.append(j)
 		for a in jid_agents:
 			if a.find('aim') > -1:
@@ -382,8 +376,9 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			return
 
 		# Check if jid is already in roster
-		if jid in gajim.contacts[self.account] and _('not in the roster') not in \
-			gajim.contacts[self.account][jid][0].groups:
+		if jid in gajim.contacts.get_jid_list(self.account) and \
+			_('not in the roster') not in \
+			gajim.contacts.get_first_contact_from_jid(self.account, jid).groups:
 			ErrorDialog(_('Contact already in roster'),
 			_('This contact is already listed in your roster.')).get_response()
 			return
@@ -629,7 +624,7 @@ class SubscriptionRequestWindow:
 		'''accept the request'''
 		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
-		if not gajim.contacts[self.account].has_key(self.jid):
+		if self.jid not in gajim.contacts.get_jid_list(self.account):
 			AddNewContactWindow(self.account, self.jid)
 
 	def on_contact_info_button_clicked(self, widget):
@@ -826,8 +821,8 @@ class PopupNotificationWindow:
 		
 		event_type_label.set_markup('<span foreground="black" weight="bold">%s</span>' %event_type)
 
-		if self.jid in gajim.contacts[account]:
-			txt = gajim.contacts[account][self.jid][0].name
+		if self.jid in gajim.contacts.get_jid_list(account):
+			txt = gajim.contacts.get_first_contact_from_jid(account, self.jid).name
 		else:
 			txt = self.jid
 
@@ -867,7 +862,8 @@ class PopupNotificationWindow:
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
 			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
-		elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
+		elif event_type in (_('File Transfer Completed'),
+			_('File Transfer Stopped')):
 			bg_color = gtk.gdk.color_parse('yellowgreen')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
@@ -875,8 +871,8 @@ class PopupNotificationWindow:
 				if file_props['type'] == 'r':
 					# get the name of the sender, as it is in the roster
 					sender = unicode(file_props['sender']).split('/')[0]
-					name = gajim.get_first_contact_instance_from_jid( 
-						account, sender).name
+					name = gajim.contacts.get_first_contact_from_jid(account,
+						sender).name
 					txt = _('From %s') % name
 				else:
 					receiver = file_props['receiver']
@@ -884,8 +880,8 @@ class PopupNotificationWindow:
 						receiver = receiver.jid
 					receiver = receiver.split('/')[0]
 					# get the name of the contact, as it is in the roster
-					name = gajim.get_first_contact_instance_from_jid( 
-						account, receiver).name
+					name = gajim.contacts.get_first_contact_from_jid(account,
+						receiver).name
 					txt = _('To %s') % name
 			else:
 				txt = ''
@@ -930,8 +926,8 @@ class PopupNotificationWindow:
 			return
 		# use Contact class, new_chat expects it that way
 		# is it in the roster?
-		if gajim.contacts[self.account].has_key(self.jid):
-			contact = gajim.get_contact_instance_with_highest_priority(
+		if self.jid in gajim.contacts.get_jid_list(self.account):
+			contact = gajim.contacts.get_contact_with_highest_priority(
 				self.account, self.jid)
 		else:
 			keyID = ''
@@ -942,14 +938,15 @@ class PopupNotificationWindow:
 			if self.msg_type.find('file') != 0:
 				if self.msg_type == 'pm':
 					room_jid, nick = self.jid.split('/', 1)
-					show = gajim.gc_contacts[self.account][room_jid][nick].show
-					contact = Contact(jid = self.jid, name = nick, groups = ['none'],
-						show = show, sub = 'none')
+					gc_contact = gajim.contacts.get_gc_contact(self.account,
+						room_jid, nick)
+					contact = gajim.contacts.contact_from_gc_contact(gc_contact)
 				else:
-					contact = Contact(jid = self.jid, name = self.jid.split('@')[0],
+					contact = gajim.contacts.create_contact(jid = self.jid,
+						name = self.jid.split('@')[0],
 						groups = [_('not in the roster')], show = 'not in the roster',
-						status = _('not in the roster'), sub = 'none', keyID = keyID)
-					gajim.contacts[self.account][self.jid] = [contact]
+						status = '', sub = 'none', keyID = keyID)
+					gajim.contacts.add_contact(self.account, contact)
 					gajim.interface.roster.add_contact_to_roster(contact.jid,
 						self.account)
 

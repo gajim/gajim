@@ -78,7 +78,7 @@ class VcardWindow:
 	'''Class for contact's information window'''
 
 	def __init__(self, contact, account, vcard = False):
-		#the contact variable is the jid if vcard is true
+		# the contact variable is the jid if vcard is true
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
 		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)
@@ -330,8 +330,9 @@ class VcardWindow:
 		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
 			'os': ''}}
 		i = 1
-		if gajim.contacts[self.account].has_key(self.contact.jid):
-			for c in gajim.contacts[self.account][self.contact.jid]:
+		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		if contact_list:
+			for c in contact_list:
 				if c.resource != self.contact.resource:
 					resources += '\n%s (%s)' % (c.resource,
 						unicode(c.priority))

@@ -338,17 +338,16 @@ class TabbedChatWindow(chat.Chat):
 
 	def set_state_image(self, jid):
 		prio = 0
-		if gajim.contacts[self.account].has_key(jid):
-			contacts_list = gajim.contacts[self.account][jid]
-		else:
-			contacts_list = [self.contacts[jid]]
+		contact_list = gajim.contacts.get_contact(self.account, jid)
+		if contact_list:
+			contact_list = [self.contacts[jid]]
 
-		contact = contacts_list[0]
+		contact = contact_list[0]
 		show = contact.show
 		jid = contact.jid
 		keyID = contact.keyID
 
-		for u in contacts_list:
+		for u in contact_list:
 			if u.priority > prio:
 				prio = u.priority
 				show = u.show
@@ -436,7 +435,7 @@ class TabbedChatWindow(chat.Chat):
 
 	def on_send_file_menuitem_activate(self, widget):
 		jid = self.get_active_jid()
-		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		contact = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 		gajim.interface.instances['file_transfers'].show_file_send_request( 
 			self.account, contact)
 
@@ -532,7 +531,7 @@ class TabbedChatWindow(chat.Chat):
 		in the last 5 seconds?
 		if yes we go active for mouse, composing for kbd
 		if no we go paused if we were previously composing '''
-		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		contact = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 		if jid not in self.xmls or contact is None:
 			# the tab with jid is no longer open or contact left
 			# stop timer
@@ -564,7 +563,7 @@ class TabbedChatWindow(chat.Chat):
 		in the last 30 seconds?
 		if yes we go active
 		if no we go inactive '''
-		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		contact = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 		if jid not in self.xmls or contact is None:
 			# the tab with jid is no longer open or contact left
 			return False # stop looping
@@ -691,7 +690,7 @@ class TabbedChatWindow(chat.Chat):
 		if jid is None:
 			jid = self.get_active_jid()
 			
-		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		contact = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 
 		if contact is None:
 			# contact was from pm in MUC, and left the room so contact is None
@@ -748,7 +747,7 @@ class TabbedChatWindow(chat.Chat):
 			return
 
 		jid = self.get_active_jid()
-		contact = gajim.get_first_contact_instance_from_jid(self.account, jid)
+		contact = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 		if contact is None:
 			# contact was from pm in MUC, and left the room, or we left the room
 			room, nick = gajim.get_room_and_nick_from_fjid(jid)
@@ -877,7 +876,7 @@ class TabbedChatWindow(chat.Chat):
 		if (contact.show == 'offline' or contact.show == 'error'):
 			showOffline = gajim.config.get('showoffline')
 			if not showOffline and typ == 'chat' and \
-				len(gajim.contacts[self.account][jid]) == 1:
+				len(gajim.contacts.get_contact(self.account, jid)) == 1:
 				gajim.interface.roster.really_remove_contact(contact, self.account)
 			elif typ == 'pm':
 				gcs[room_jid].remove_contact(room_jid, nick)

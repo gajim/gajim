@@ -186,25 +186,24 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 
 	def get_accounts_info(self):
 		accounts = []
-		if gajim.contacts:
-			for account in gajim.contacts.keys():
-				status_idx = gajim.connections[account].connected
-				# uncomment the following to hide offline accounts
-				# if status_idx == 0: continue
-				status = gajim.SHOW_LIST[status_idx]
-				message = gajim.connections[account].status
-				single_line = helpers.get_uf_show(status)
-				if message is None:
-					message = ''
-				else:
-					message = message.strip()
-				if message != '':
-					single_line += ': ' + message
-				# the other solution is to hide offline accounts
-				elif status == 'offline':
-					message = helpers.get_uf_show(status)
-				accounts.append({'name': account, 'status_line': single_line, 
-						'show': status, 'message': message})
+		for account in gajim.contacts.get_accounts():
+			status_idx = gajim.connections[account].connected
+			# uncomment the following to hide offline accounts
+			# if status_idx == 0: continue
+			status = gajim.SHOW_LIST[status_idx]
+			message = gajim.connections[account].status
+			single_line = helpers.get_uf_show(status)
+			if message is None:
+				message = ''
+			else:
+				message = message.strip()
+			if message != '':
+				single_line += ': ' + message
+			# the other solution is to hide offline accounts
+			elif status == 'offline':
+				message = helpers.get_uf_show(status)
+			accounts.append({'name': account, 'status_line': single_line, 
+					'show': status, 'message': message})
 		return accounts
 
 	def fill_table_with_accounts(self, accounts):
@@ -247,7 +246,8 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			chat_wins = gajim.interface.instances[acct]['chats']
 			for jid in chat_wins:
 				if jid != 'tabbed':
-					if gajim.contacts[acct].has_key(jid):
+					c = gajim.contacts.get_first_contact_from_jid(acct, jid)
+					if c:
 						unread_chat += chat_wins[jid].nb_unread[jid]
 					else:
 						unread_pm += chat_wins[jid].nb_unread[jid]
@@ -342,7 +342,7 @@ class GCTooltip(BaseTooltip):
 				# escape markup entities
 				info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 		
-		if contact.resource.strip() != '':
+		if hasattr(contact, 'resource') and contact.resource.strip() != '':
 			info += '\n<span weight="bold">' + _('Resource: ') + \
 					'</span>' + gtkgui_helpers.escape_for_pango_markup(
 						contact.resource) 
@@ -378,7 +378,8 @@ class RosterTooltip(NotificationAreaTooltip):
 			self.win.add(self.hbox)
 			return
 		# primary contact
-		prim_contact = gajim.get_highest_prio_contact_from_contacts(contacts)
+		prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
+			contacts)
 		
 		# try to find the image for the contact status
 		icon_name = helpers.get_icon_name_to_show(prim_contact)
@@ -484,7 +485,7 @@ class FileTransfersTooltip(BaseTooltip):
 		if file_props['type'] == 'r':
 			text += '\n<b>' + _('Sender: ') + '</b>'
 			sender = unicode(file_props['sender']).split('/')[0]
-			name = gajim.get_first_contact_instance_from_jid( 
+			name = gajim.contacts.get_first_contact_from_jid( 
 				file_props['tt_account'], sender).name
 		else:
 			text += '\n<b>' + _('Recipient: ') + '</b>' 
@@ -495,7 +496,7 @@ class FileTransfersTooltip(BaseTooltip):
 			if receiver.find('@') == -1:
 				name = receiver
 			else:
-				name = gajim.get_first_contact_instance_from_jid( 
+				name = gajim.contacts.get_first_contact_from_jid( 
 				file_props['tt_account'], receiver).name
 		text +=  gtkgui_helpers.escape_for_pango_markup(name)
 		text += '\n<b>' + _('Size: ') + '</b>' 

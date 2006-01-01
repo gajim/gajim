@@ -106,8 +106,8 @@ class HistoryWindow:
 		col.set_attributes(renderer, text = C_MESSAGE)
 		col.set_resizable(True)
 		
-		if account and gajim.contacts[account].has_key(jid):
-			contact = gajim.get_first_contact_instance_from_jid(account, jid)
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		if contact:
 			title = _('Conversation History with %s') % contact.name
 		else:
 			title = _('Conversation History with %s') % jid
@@ -237,14 +237,17 @@ class HistoryWindow:
 		if kind == constants.KIND_GC_MSG:
 			tag_name = 'incoming'
 		elif kind in (constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV):
-			try:
-				# is he in our roster? if yes use the name
-				contact_name = gajim.contacts[self.account][self.jid][0].name
-			except:
+			contact = gajim.contacts.get_first_contact_from_jid(self.account,
+				self.jid)
+			if contact:
+				# he is in our roster, use the name
+				contact_name = contact.name
+			else:
 				room_jid, nick = gajim.get_room_and_nick_from_fjid(self.jid)
 				# do we have him as gc_contact?
-				if nick and gajim.gc_contacts[self.account].has_key(room_jid) and\
-					gajim.gc_contacts[self.account][room_jid].has_key(nick):
+				gc_contact = gajim.contacts.get_gc_contact(self.account, room_jid,
+					nick)
+				if gc_contact:
 					# so yes, it's pm!
 					contact_name = nick
 				else:
