@@ -74,7 +74,7 @@ class Remote:
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
 			self.signal_object.raise_signal(signal, repr(arg))
-		
+
 
 class SignalObject(DbusPrototype):
 	''' Local object definition for /org/gajim/dbus/RemoteObject. This doc must 
@@ -121,7 +121,6 @@ class SignalObject(DbusPrototype):
 		else:
 			self.emit_signal(INTERFACE, signal, arg)
 
-	
 	# signals 
 	def VcardInfo(self, *vcard):
 		pass
@@ -131,7 +130,7 @@ class SignalObject(DbusPrototype):
 		returns status (show to be exact) which is the global one
 		unless account is given'''
 		account = self._get_real_arguments(args, 1)[0]
-		accounts = gajim.contacts.keys()
+		accounts = gajim.contacts.get_accounts()
 		if not account:
 			# If user did not ask for account, returns the global status
 			return helpers.get_global_show()
@@ -153,40 +152,48 @@ class SignalObject(DbusPrototype):
 		return str(status)
 		
 
-	def send_file(self, *args):
-		'''send_file(file_path, jid, account=None) 
-		send file, located at 'file_path' to 'jid', using account 
-		(optional) 'account' '''
-		file_path, jid, account = self._get_real_arguments(args, 3)
-		accounts = gajim.contacts.keys()
-		
+	def get_account_and_contact(self, account, jid):
+		''' get the account (if not given) and contact instance from jid'''
+		connected_account = None
+		contact = None
+		accounts = gajim.contacts.get_accounts()
 		# if there is only one account in roster, take it as default
 		# if user did not ask for account
 		if not account and len(accounts) == 1:
 			account = accounts[0]
 		if account:
-			if gajim.connections[account].connected > 1: # account is  online
-				connected_account = gajim.connections[account]
+			if gajim.connections[account].connected > 1: # account is connected
+				connected_account = account
+				contact = gajim.contacts.get_contact_with_highest_priority(account,
+					jid)
 		else:
 			for account in accounts:
-				if gajim.contacts[account].has_key(jid) and \
-					gajim.connections[account].connected > 1: # account is  online
-					connected_account = gajim.connections[account]
+				contact = gajim.contacts.get_contact_with_highest_priority(account,
+					jid)
+				if contact and gajim.connections[account].connected > 1:
+					# account is connected
+					connected_account = account
 					break
-		if gajim.contacts.has_key(account) and \
-			gajim.contacts[account].has_key(jid):
-			contact = gajim.get_highest_prio_contact_from_contacts(
-				gajim.contacts[account][jid])
-		else:
+		if not contact:
 			contact = jid
-		
+
+		return connected_account, contact
+
+	def send_file(self, *args):
+		'''send_file(file_path, jid, account=None) 
+		send file, located at 'file_path' to 'jid', using account 
+		(optional) 'account' '''
+		file_path, jid, account = self._get_real_arguments(args, 3)
+
+		connected_account, contact = self.get_account_and_contact(account, jid)
+
 		if connected_account:
 			if os.path.isfile(file_path): # is it file?
-				gajim.interface.instances['file_transfers'].send_file(account, 
-					contact, file_path)
+				gajim.interface.instances['file_transfers'].send_file(
+					connected_account, contact, file_path)
 				return True
 		return False
-		
+
 	def send_message(self, *args):
 		''' send_message(jid, message, keyID=None, account=None)
 		send 'message' to 'jid', using account (optional) 'account'.
@@ -196,23 +203,12 @@ class SignalObject(DbusPrototype):
 			return None # or raise error
 		if not keyID:
 			keyID = ''
-		connected_account = None
-		accounts = gajim.contacts.keys()
-		
-		# if there is only one account in roster, take it as default
-		if not account and len(accounts) == 1:
-			account = accounts[0]
-		if account:
-			if gajim.connections[account].connected > 1: # account is  online
-				connected_account = gajim.connections[account]
-		else:
-			for account in accounts:
-				if gajim.contacts[account].has_key(jid) and \
-					gajim.connections[account].connected > 1: # account is  online
-					connected_account = gajim.connections[account]
-					break
+
+		connected_account, contact = self.get_account_and_contact(account, jid)
+
 		if connected_account:
-			res = connected_account.send_message(jid, message, keyID)
+			connection = gajim.connections[connected_account]
+			res = connection.send_message(jid, message, keyID)
 			return True
 		return False
 
@@ -236,24 +232,25 @@ class SignalObject(DbusPrototype):
 		first_connected_acct = None
 		for acct in accounts:
 			if gajim.connections[acct].connected > 1: # account is  online
+				contact = gajim.contacts.get_first_contact_from_jid(acct, jid)
 				if gajim.interface.msg_win_mgr.has_window(jid):
 					connected_account = acct
 					break
 				# jid is in roster
-				elif gajim.contacts[acct].has_key(jid):
+				elif contact:
 					connected_account = acct
 					break
-				# we send the message to jid not in roster, because account is specified,
-				# or there is only one account
+				# we send the message to jid not in roster, because account is
+				# specified, or there is only one account
 				elif account: 
 					connected_account = acct
 				elif first_connected_acct is None:
 					first_connected_acct = acct
-		
+
 		# if jid is not a conntact, open-chat with first connected account
 		if connected_account is None and first_connected_acct:
 			connected_account = first_connected_acct
-		
+
 		if connected_account:
 			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
@@ -262,7 +259,7 @@ class SignalObject(DbusPrototype):
 				win.window.focus()
 			return True
 		return False
-	
+
 	def change_status(self, *args, **keywords):
 		''' change_status(status, message, account). account is optional -
 		if not specified status is changed for all accounts. '''
@@ -276,7 +273,7 @@ class SignalObject(DbusPrototype):
 				status, message)
 		else:
 			# account not specified, so change the status of all accounts
-			for acc in gajim.contacts.keys():
+			for acc in gajim.contacts.get_accounts():
 				gobject.idle_add(gajim.interface.roster.send_status, acc, 
 					status, message)
 		return None
@@ -297,10 +294,11 @@ class SignalObject(DbusPrototype):
 			# FIXME: raise exception for missing argument (0.3+)
 			return None
 
-		accounts = gajim.contacts.keys()
-		
+		accounts = gajim.contacts.get_accounts()
+
 		for account in accounts:
-			if gajim.contacts[account].__contains__(jid):
+			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+			if contact:
 				self.vcard_account =  account
 				gajim.connections[account].request_vcard(jid)
 				break
@@ -308,13 +306,12 @@ class SignalObject(DbusPrototype):
 
 	def list_accounts(self, *args):
 		''' list register accounts '''
-		if gajim.contacts:
-			result = gajim.contacts.keys()
-			if result and len(result) > 0:
-				result_array = []
-				for account in result:
-					result_array.append(account.encode('utf-8'))
-				return result_array
+		result = gajim.contacts.get_accounts()
+		if result and len(result) > 0:
+			result_array = []
+			for account in result:
+				result_array.append(account.encode('utf-8'))
+			return result_array
 		return None
 
 	def list_contacts(self, *args):
@@ -322,24 +319,22 @@ class SignalObject(DbusPrototype):
 		then return the contacts for the specified account '''
 		[for_account] = self._get_real_arguments(args, 1)
 		result = []
-		if not gajim.contacts or len(gajim.contacts) == 0:
+		accounts = gajim.contacts.get_accounts()
+		if len(accounts) == 0:
 			return None
 		if for_account:
-			if gajim.contacts.has_key(for_account):
-				for jid in gajim.contacts[for_account]:
-					item = self._serialized_contacts(
-						gajim.contacts[for_account][jid])
+			accounts_to_search = [for_account]
+		else:
+			accounts_to_search = accounts
+		for account in accounts_to_search:
+			if account in accounts:
+				for jid in gajim.contacts.get_jid_list(for_account):
+					item = self._serialized_contacts(gajim.contacts.get_contact(
+						for_account, jid))
 					if item:
 						result.append(item)
 			else:
-				# 'for_account: is not recognised:', 
-				return None
-		else:
-			for account in gajim.contacts:
-				for jid in gajim.contacts[account]:
-					item = self._serialized_contacts(gajim.contacts[account][jid])
-					if item:
-						result.append(item)
+				continue
 		# dbus 0.40 does not support return result as empty list
 		if result == []:
 			return None
@@ -407,27 +402,27 @@ class SignalObject(DbusPrototype):
 		
 	def add_contact(self, *args):
 		[account] = self._get_real_arguments(args, 1)
-		if gajim.contacts.has_key(account):
+		accounts = gajim.contacts.get_accounts()
+		if account in accounts:
 			AddNewContactWindow(account)
 			return True
 		return False
 	
 	def remove_contact(self, *args):
 		[jid, account] = self._get_real_arguments(args, 2)
-		accounts = gajim.contacts.keys()
+		accounts = gajim.contacts.get_accounts()
 		
 		# if there is only one account in roster, take it as default
 		if account:
 			accounts = [account]
-		else:
-			accounts = gajim.contacts.keys()
 		contact_exists = False
 		for account in accounts:
-			if gajim.contacts[account].has_key(jid):
+			contacts = gajim.contacts.get_contact(account, jid)
+			if contacts:
 				gajim.connections[account].unsubscribe(jid)
-				for contact in gajim.contacts[account][jid]:
+				for contact in contacts:
 					gajim.interface.roster.remove_contact(contact, account)
-				del gajim.contacts[account][jid]
+				gajim.contacts.remove_jid(account, jid)
 				contact_exists = True
 		return contact_exists
 		

@@ -371,8 +371,8 @@ class ConversationTextview(gtk.TextView):
 				self.on_join_group_chat_menuitem_activate, text)
 
 			allow_add = False
-			if gajim.contacts[self.account].has_key(text):
-				c = gajim.contacts[self.account][text][0]
+			c = gajim.contacts.get_first_contact_from_jid(self.account, text)
+			if c and not gajim.contacts.is_pm_from_contact(self.account, c):
 				if _('not in the roster') in c.groups:
 					allow_add = True
 			else: # he or she's not at all in the account contacts

@@ -33,7 +33,6 @@ import os
 import tooltips
 import gtkgui_helpers
 
-from gajim import Contact
 from common import gajim
 from common import helpers
 from common import i18n
@@ -101,10 +100,11 @@ class Systray:
 		self.set_img()
 	
 	def start_chat(self, widget, account, jid):
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if gajim.interface.msg_win_mgr.has_window(jid):
 		        gajim.interface.msg_win_mgr.get_window(jid).set_active_tab(jid)
 		        gajim.interface.msg_win_mgr.get_window(jid).present()
-		elif gajim.contacts[account].has_key(jid):
+		elif contact:
 			gajim.interface.roster.new_chat(gajim.contacts[account][jid][0],
 							account)
 		        gajim.interface.msg_win_mgr.get_window(jid).set_active_tab(jid)
@@ -249,8 +249,8 @@ class Systray:
 			groups_menu.append(item)
 			contacts_menu = gtk.Menu()
 			item.set_submenu(contacts_menu)
-			for contacts in gajim.contacts[account].values():
-				contact = gajim.get_highest_prio_contact_from_contacts(contacts)
+			for jid in gajim.contacts.get_jid_list(account):
+				contact = gajim.get_contact_with_highest_priority(account, jid)
 				if group in contact.groups and contact.show != 'offline' and \
 						contact.show != 'error':
 					at_least_one = True

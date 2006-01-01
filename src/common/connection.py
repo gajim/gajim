@@ -2182,7 +2182,8 @@ class Connection:
 		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
 		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
 			show = show, status = self.status)
-		p = self.add_sha(p)
+		if gajim.config.get('send_sha_in_gc_presence'):
+			p = self.add_sha(p)
 		t = p.setTag(common.xmpp.NS_MUC + ' x')
 		if password:
 			t.setTagData('password', password)
@@ -2228,7 +2229,8 @@ class Connection:
 		show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = show, status = status)
-		p = self.add_sha(p)
+		if gajim.config.get('send_sha_in_gc_presence'):
+			p = self.add_sha(p)
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server
 		self.connection.send(p)

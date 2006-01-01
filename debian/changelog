@@ -1,3 +1,9 @@
+gajim (0.9.1-2) unstable; urgency=low
+
+  * fix group bug Closes: #345306
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Fri, 30 Dec 2005 13:09:55 +0100
+
 gajim (0.9.1-1) unstable; urgency=low
 
   * new upstream release
