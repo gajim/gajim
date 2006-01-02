@@ -44,6 +44,11 @@ class GroupchatControl(ChatControlBase):
 		# if the room jid is in the list, the room has mentioned us
 		self.muc_attentions = []
 
+		# connect the menuitems to their respective functions
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_popup_menu', APP)
+		xm.signal_autoconnect(self)
+		self.gc_popup_menu = xm.get_widget('gc_popup_menu')
+
 	def markup_tab_label(self, label_str, chatstate):
 		'''Markup the label if necessary.  Returns a tuple such as:
 		(new_label_str, color)
@@ -82,3 +87,13 @@ class GroupchatControl(ChatControlBase):
 			label_str = '<b>' + str(num_unread) + label_str + '</b>'
 		return (label_str, color)
 
+	def prepare_context_menu(self):
+		'''sets compact view menuitem active state
+		sets active and sensitivity state for toggle_gpg_menuitem
+		and remove possible 'Switch to' menuitems'''
+		menu = self.gc_popup_menu
+		childs = menu.get_children()
+		# compact_view_menuitem
+		childs[5].set_active(self.compact_view_current_state)
+		menu = self.remove_possible_switch_to_menuitems(menu)
+		return menu

@@ -50,11 +50,18 @@ class MessageControl(gtk.VBox):
 		self.compact_view_current = False
 		self.nb_unread = 0
 		self.print_time_timeout_id = None
+		# FIXME: Make this a member like all the others
+		gajim.last_message_time[self.account][contact.jid] = 0
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.widget = self.xml.get_widget(widget_name)
 		# Autoconnect glade signals
 		self.xml.signal_autoconnect(self)
+
+	def set_control_active(self, state):
+		'''Called when the control becomes active (state is True)
+		or inactive (state is False)'''
+		pass  # Derived types MUST implement this method
 
 	def shutdown(self):
 		# NOTE: Derived classes MUST implement this
@@ -87,12 +94,12 @@ class MessageControl(gtk.VBox):
 	def set_compact_view(self, state):
 		# NOTE: Derived classes MAY implement this
 		self.compact_view_current = state
-	def check_delete(self):
-		'''Called when a window has been asked to delete itself.  If a control is 
-		not in a suitable shutdown state this method should return True to halt
-		the delete'''
+	def allow_shutdown(self):
+		'''Called to check is a control is allowed to shutdown.
+		If a control is not in a suitable shutdown state this method
+		should return False'''
 		# NOTE: Derived classes MAY implement this
-		return False
+		return True
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
 		'''Send the given message to the active tab'''

@@ -68,6 +68,8 @@ class MessageWindow:
 		else:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
+		self.notebook.connect('switch-page',
+					self._on_notebook_switch_page)
 
 		# Connect event handling for this Window
 		self.window.connect('delete-event', self._on_window_delete)
@@ -97,17 +99,20 @@ class MessageWindow:
 				widget.props.urgency_hint = False
 
 		ctl = self.get_active_control()
-		# Undo "unread" state display, etc.
-		if ctl.type_id == message_control.TYPE_GC:
-			self.redraw_tab(ctl.contact, 'active')
-		else:
-			# NOTE: we do not send any chatstate to preserve inactive, gone, etc.
-			self.redraw_tab(ctl.contact)
+		if ctl:
+			ctl.set_control_active(True)
+			# Undo "unread" state display, etc.
+			if ctl.type_id == message_control.TYPE_GC:
+				self.redraw_tab(ctl.contact, 'active')
+			else:
+				# NOTE: we do not send any chatstate to preserve
+				# inactive, gone, etc.
+				self.redraw_tab(ctl.contact)
 
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
 		for ctl in self._controls.values():
-			if not ctl.check_delete():
+			if not ctl.allow_shutdown():
 				return True # halt the delete
 
 		# FIXME: Do based on type, main, never, peracct, pertype
@@ -132,7 +137,11 @@ class MessageWindow:
 	def new_tab(self, control):
 		assert(not self._controls.has_key(control.contact.jid))
 		self._controls[control.contact.jid] = control
+		if len(self._controls) > 1:
+			self.notebook.set_show_tabs(True)
+			self.alignment.set_property('top-padding', 2)
 
+		# Connect to keyboard events
 		control.widget.connect('key_press_event',
 					self.on_conversation_textview_key_press_event)
 		# FIXME: need to get this event without access to message_textvier
@@ -146,11 +155,22 @@ class MessageWindow:
 		tab_label_box = xml.get_widget('chat_tab_ebox')
 		xml.signal_connect('on_close_button_clicked', self.on_close_button_clicked,
 					control.contact)
+		xml.signal_connect('on_tab_eventbox_button_press_event',
+				self.on_tab_eventbox_button_press_event, control.widget)
 		self.notebook.append_page(control.widget, tab_label_box)
+
 
 		self.redraw_tab(control.contact)
 		self.show_title()
 		self.window.show_all()
+		# NOTE: we do not call set_control_active(True) since we don't know whether
+		# the tab is the active one.
+
+	def on_tab_eventbox_button_press_event(self, widget, event, child):
+		if event.button == 3:
+			n = self.notebook.page_num(child)
+			self.notebook.set_current_page(n)
+			self.popup_menu(event)
 
 	def on_message_textview_mykeypress_event(self, widget, event_keyval,
 						event_keymod):
@@ -233,14 +253,27 @@ class MessageWindow:
 		self.notebook.set_current_page(ctl_page)
 	
 	def remove_tab(self, contact):
-		print "MessageWindow.remove_tab"
-		if len(self._controls) == 1:
-			# There is only one tab
-			# FIXME: Should we assert on contact?
-			self.window.destroy()
-		else:
-			pass
-		# TODO
+		ctl = self.get_control(contact.jid)
+		if len(self._controls) == 1 or not ctl.allow_shutdown():
+			return
+
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.remove_jid(contact.jid, ctl.account,
+								ctl.type)
+		ctl.shutdown()
+
+		self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
+
+		del self._controls[contact.jid]
+		del gajim.last_message_time[self.account][jid]
+
+		if len(self.xmls) == 1: # we now have only one tab
+			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
+			self.notebook.set_show_tabs(show_tabs_if_one_tab)
+			if not show_tabs_if_one_tab:
+				self.alignment.set_property('top-padding', 0)
+			
+			self.show_title()
 
 	def redraw_tab(self, contact, chatstate = None):
 		ctl = self._controls[contact.jid]
@@ -284,7 +317,7 @@ class MessageWindow:
 		for ctl in self._controls.values():
 			ctl.repaint_themed_widgets()
 
-	def _widgetToControl(self, widget):
+	def _widget_to_control(self, widget):
 		for ctl in self._controls.values():
 			if ctl.widget == widget:
 				return ctl
@@ -293,7 +326,7 @@ class MessageWindow:
 	def get_active_control(self):
 		notebook = self.notebook
 		active_widget = notebook.get_nth_page(notebook.get_current_page())
-		return self._widgetToControl(active_widget)
+		return self._widget_to_control(active_widget)
 	def get_active_contact(self):
 		return self.get_active_control().contact
 	def get_active_jid(self):
@@ -328,7 +361,7 @@ class MessageWindow:
 			if page_num == None:
 				page_num = notebook.get_current_page()
 			nth_child = notebook.get_nth_page(page_num)
-			return self._widgetToControl(nth_child)
+			return self._widget_to_control(nth_child)
 
 	def controls(self):
 		for ctl in self._controls.values():
@@ -381,7 +414,33 @@ class MessageWindow:
 				else: # traverse for ever (eg. don't stop at first tab)
 					self.notebook.set_current_page(
 						self.notebook.get_n_pages() - 1)
+	def popup_menu(self, event):
+		menu = self.get_active_control().prepare_context_menu()
+		# common menuitems (tab switches)
+		if len(self._controls) > 1: # if there is more than one tab
+			menu.append(gtk.SeparatorMenuItem()) # seperator
+			for ctl in self._controls.values():
+				jid = ctl.contact.jid
+				if jid != self.get_active_jid():
+					item = gtk.ImageMenuItem(_('Switch to %s') %\
+							self.names[jid])
+					img = gtk.image_new_from_stock(gtk.STOCK_JUMP_TO,
+									gtk.ICON_SIZE_MENU)
+					item.set_image(img)
+					item.connect('activate',
+						lambda obj, jid:self.set_active_tab(jid), jid)
+					menu.append(item)
+		# show the menu
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
 
+	def _on_notebook_switch_page(self, notebook, page, page_num):
+		old_no = notebook.get_current_page()
+		old_ctl = self._widget_to_control(notebook.get_nth_page(old_no))
+		old_ctl.set_control_active(False)
+		
+		new_ctl = self._widget_to_control(notebook.get_nth_page(page_num))
+		new_ctl.set_control_active(True)
 
 ################################################################################
 class MessageWindowMgr:

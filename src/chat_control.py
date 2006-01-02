@@ -79,18 +79,22 @@ class ChatControlBase(MessageControl):
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(None) # FIXME: remove account arg
 		self.conv_textview.show_all()
-		scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
-		scrolledwindow.add(self.conv_textview)
+		self.conv_scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
+		self.conv_scrolledwindow.add(self.conv_textview)
+		self.conv_scrolledwindow.get_vadjustment().connect('value-changed',
+			self.on_conversation_vadjustment_value_changed)
 		self.conv_textview.connect('key_press_event',
 				self.on_conversation_textview_key_press_event)
 		# add MessageTextView to UI and connect signals
-		message_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
+		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
 		self.msg_textview.connect('mykeypress',
 					self.on_message_textview_mykeypress_event)
-		message_scrolledwindow.add(self.msg_textview)
+		self.msg_scrolledwindow.add(self.msg_textview)
 		self.msg_textview.connect('key_press_event',
 					self.on_message_textview_key_press_event)
+		self.msg_textview.connect('size-request', self.size_request, self.xml)
+		self.update_font()
 
 		# the following vars are used to keep history of user's messages
 		self.sent_history = []
@@ -365,7 +369,6 @@ class ChatControlBase(MessageControl):
 	def set_compact_view(self, state):
 		'''Toggle compact view. state is bool'''
 		MessageControl.set_compact_view(self, state)
-
 		# make the last message visible, when changing to "full view"
 		if not state:
 			gobject.idle_add(self.conv_textview.scroll_to_end_iter)
@@ -403,6 +406,101 @@ class ChatControlBase(MessageControl):
 			gajim.interface.instances['logs'][jid] = history_window.HistoryWindow(
 				jid, self.account)
 
+	def set_control_active(self, state):
+		if state:
+			jid = self.contact.jid
+			if self.conv_textview.at_the_end():
+				#we are at the end
+				if self.nb_unread > 0:
+					self.nb_unread = 0 + self.get_specific_unread()
+					self.parent_win.redraw_tab(jid)
+					self.parent_win.show_title()
+					if gajim.interface.systray_enabled:
+						gajim.interface.systray.remove_jid(jid,
+										self.account,
+										self.type)
+			self.conv_textview.grab_focus()
+
+	def bring_scroll_to_end(self, textview, diff_y = 0):
+		''' scrolls to the end of textview if end is not visible '''
+		buffer = textview.get_buffer()
+		end_iter = buffer.get_end_iter()
+		end_rect = textview.get_iter_location(end_iter)
+		visible_rect = textview.get_visible_rect()
+		# scroll only if expected end is not visible
+		if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
+			gobject.idle_add(self.scroll_to_end_iter, textview)
+
+	def scroll_to_end_iter(self, textview):
+		buffer = textview.get_buffer()
+		end_iter = buffer.get_end_iter()
+		textview.scroll_to_iter(end_iter, 0, False, 1, 1)
+		return False
+
+	def size_request(self, msg_textview , requisition, xml_top):
+		''' When message_textview changes its size. If the new height
+		will enlarge the window, enable the scrollbar automatic policy
+		Also enable scrollbar automatic policy for horizontal scrollbar
+		if message we have in message_textview is too big'''
+		if msg_textview.window is None:
+			return
+
+		min_height = self.conv_scrolledwindow.get_property('height-request')
+		conversation_height = self.conv_textview.window.get_size()[1]
+		message_height = msg_textview.window.get_size()[1]
+		message_width = msg_textview.window.get_size()[0]
+		# new tab is not exposed yet
+		if conversation_height < 2:
+			return
+
+		if conversation_height < min_height:
+			min_height = conversation_height
+
+		# we don't want to always resize in height the message_textview
+		# so we have minimum on conversation_textview's scrolled window
+		# but we also want to avoid window resizing so if we reach that 
+		# minimum for conversation_textview and maximum for message_textview
+		# we set to automatic the scrollbar policy
+		diff_y =  message_height - requisition.height
+		if diff_y != 0:
+			if conversation_height + diff_y < min_height:
+				if message_height + conversation_height - min_height > min_height:
+					self.msg_scrolledwindow.set_property('vscrollbar-policy', 
+						gtk.POLICY_AUTOMATIC)
+					self.msg_scrolledwindow.set_property('height-request', 
+						message_height + conversation_height - min_height)
+					self.bring_scroll_to_end(msg_textview)
+			else:
+				self.msg_scrolledwindow.set_property('vscrollbar-policy', 
+					gtk.POLICY_NEVER)
+				self.msg_scrolledwindow.set_property('height-request', -1)
+
+		self.conv_textview.bring_scroll_to_end(diff_y - 18)
+		
+		# enable scrollbar automatic policy for horizontal scrollbar
+		# if message we have in message_textview is too big
+		if requisition.width > message_width:
+			self.msg_scrolledwindow.set_property('hscrollbar-policy', 
+				gtk.POLICY_AUTOMATIC)
+		else:
+			self.msg_scrolledwindow.set_property('hscrollbar-policy', 
+				gtk.POLICY_NEVER)
+
+		return True
+
+	def on_conversation_vadjustment_value_changed(self, widget):
+		if not self.nb_unread:
+			return
+		jid = self.contact.jid
+		if self.conv_textview.at_the_end() and self.window.is_active():
+			#we are at the end
+			self.nb_unread = self.get_specific_unread()
+			self.parent_win.redraw_tab(jid)
+			self.parent_win.show_title()
+			if gajim.interface.systray_enabled:
+				gajim.interface.systray.remove_jid(jid, self.account,
+									self.type_id)
+
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
@@ -421,6 +519,8 @@ class ChatControl(ChatControlBase):
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
 		xm.signal_autoconnect(self)
 		self.popup_menu = xm.get_widget('chat_control_popup_menu')
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'banner_eventbox', APP)
+		xm.signal_autoconnect(self)
 
 	def _schedule_activity_timers(self):
 		self.possible_paused_timeout_id = gobject.timeout_add(5000,
@@ -742,12 +842,6 @@ class ChatControl(ChatControlBase):
 		'''sets compact view menuitem active state
 		sets active and sensitivity state for toggle_gpg_menuitem
 		and remove possible 'Switch to' menuitems'''
-# FIXME: GC only
-#		if self.widget_name == 'groupchat_window':
-#			menu = self.gc_popup_menu
-#			childs = menu.get_children()
-#			# compact_view_menuitem
-#			childs[5].set_active(self.compact_view_current)
 		menu = self.popup_menu
 		childs = menu.get_children()
 		# check if gpg capabitlies or else make gpg toggle insensitive
@@ -790,6 +884,7 @@ class ChatControl(ChatControlBase):
 			else:
 				widget.set_no_show_all(False)
 				widget.show_all()
+
 	def on_compact_view_menuitem_activate(self, widget):
 		isactive = widget.get_active()
 		self.set_compact_view(isactive)
@@ -886,7 +981,7 @@ class ChatControl(ChatControlBase):
 			gajim.interface.systray.remove_jid(self.contact.jid, self.account,
 								self.type)
 
-	def check_delete(self):
+	def allow_shutdown(self):
 		jid = self.contact.jid
 		if time.time() - gajim.last_message_time[self.account][jid] < 2:
 			# 2 seconds
@@ -896,8 +991,8 @@ class ChatControl(ChatControlBase):
 				_('If you close this tab and you have history disabled, '\
 				'this message will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
-				return True #stop the propagation of the event
-		return False
+				return False #stop the propagation of the event
+		return True
 
 	def handle_incoming_chatstate(self):
 		''' handle incoming chatstate that jid SENT TO us '''
@@ -905,4 +1000,16 @@ class ChatControl(ChatControlBase):
 		# update chatstate in tab for this chat
 		self.parent_win.redraw_tab(self.contact, self.contact.chatstate)
 
+	def on_banner_eventbox_button_press_event(self, widget, event):
+		'''If right-clicked, show popup'''
+		if event.button == 3: # right click
+			self.parent_win.popup_menu(event)
 
+	def set_control_active(self, state):
+		ChatControlBase.set_control_active(self, state)
+		# send chatstate inactive to the one we're leaving
+		# and active to the one we visit
+		if state:
+			self.send_chatstate('active', self.contact.jid)
+		else:
+			self.send_chatstate('inactive', self.contact.jid)
