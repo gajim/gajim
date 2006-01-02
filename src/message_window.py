@@ -42,6 +42,10 @@ class MessageWindow:
 		self.widget_name = 'message_window'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, self.widget_name, APP)
 		self.window = self.xml.get_widget(self.widget_name)
+		# FIXME: assertion that !GTK_WIDGET_REALIZED fails
+		# gtk+ doesn't make use of the motion notify on gtkwindow by default
+		# so this line adds that
+		#self.window.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.alignment = self.xml.get_widget('alignment')
 		self.notebook = self.xml.get_widget('notebook')
 
@@ -70,6 +74,8 @@ class MessageWindow:
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 		self.notebook.connect('switch-page',
 					self._on_notebook_switch_page)
+		self.notebook.connect('key-press-event',
+					self._on_notebook_key_press)
 
 		# Connect event handling for this Window
 		self.window.connect('delete-event', self._on_window_delete)
@@ -85,12 +91,8 @@ class MessageWindow:
 			gtkgui_helpers.resize_window(self.window,
 					gajim.config.get('msgwin-width'),
 					gajim.config.get('msgwin-height'))
-		
-		self.window.show_all()
 
 	def _on_window_focus(self, widget, event):
-		# FIXME: 
-		print "_on_window_focus"
 		# window received focus, so if we had urgency REMOVE IT
 		# NOTE: we do not have to read the message (it maybe in a bg tab)
 		# to remove urgency hint so this functions does that
@@ -253,21 +255,26 @@ class MessageWindow:
 		self.notebook.set_current_page(ctl_page)
 	
 	def remove_tab(self, contact):
+		# Shutdown the MessageControl
 		ctl = self.get_control(contact.jid)
-		if len(self._controls) == 1 or not ctl.allow_shutdown():
+		if not ctl.allow_shutdown():
 			return
-
-		if gajim.interface.systray_enabled:
-			gajim.interface.systray.remove_jid(contact.jid, ctl.account,
-								ctl.type)
 		ctl.shutdown()
 
-		self.notebook.remove_page(self.notebook.page_num(self.childs[jid]))
+		# Update external state
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.remove_jid(contact.jid, ctl.account,
+								ctl.type_id)
+		del gajim.last_message_time[ctl.account][ctl.contact.jid]
+
+		if len(self._controls) == 1:
+			self.window.destroy()
+			return
+
+		self.notebook.remove_page(self.notebook.page_num(ctl.widget))
 
 		del self._controls[contact.jid]
-		del gajim.last_message_time[self.account][jid]
-
-		if len(self.xmls) == 1: # we now have only one tab
+		if len(self._controls) == 1: # we now have only one tab
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
 			if not show_tabs_if_one_tab:
@@ -442,6 +449,112 @@ class MessageWindow:
 		new_ctl = self._widget_to_control(notebook.get_nth_page(page_num))
 		new_ctl.set_control_active(True)
 
+	def _on_notebook_key_press(self, widget, event):
+		st = '1234567890' # alt+1 means the first tab (tab 0)
+		ctl = self.get_active_control()
+		jid = ctl.jid
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			if ctl.type == TYPE_CHAT:
+				self.remove_tab(jid)
+		elif event.keyval == gtk.keysyms.F4 and \
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
+				self.remove_tab(jid)
+		elif event.keyval == gtk.keysyms.w and \
+			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + W
+				self.remove_tab(jid)
+		elif event.string and event.string in st and \
+			(event.state & gtk.gdk.MOD1_MASK): # alt + 1,2,3..
+			self.notebook.set_current_page(st.index(event.string))
+		elif event.keyval == gtk.keysyms.c and \
+			(event.state & gtk.gdk.MOD1_MASK): # alt + C toggles compact view
+			ctl.set_compact_view(not self.compact_view_current_state)
+		# FIXME: Move this to ChatControlBase
+		elif event.keyval == gtk.keysyms.e and \
+			(event.state & gtk.gdk.MOD1_MASK): # alt + E opens emoticons menu
+			if gajim.config.get('useemoticons'):
+				msg_tv = self.message_textviews[jid]
+				def set_emoticons_menu_position(w, msg_tv = msg_tv):
+					window = msg_tv.get_window(gtk.TEXT_WINDOW_WIDGET)
+					# get the window position
+					origin = window.get_origin()
+					size = window.get_size()
+					buf = msg_tv.get_buffer()
+					# get the cursor position
+					cursor = msg_tv.get_iter_location(buf.get_iter_at_mark(
+						buf.get_insert()))
+					cursor =  msg_tv.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
+						cursor.x, cursor.y)
+					x = origin[0] + cursor[0]
+					y = origin[1] + size[1]
+					menu_width, menu_height = self.emoticons_menu.size_request()
+					#FIXME: get_line_count is not so good
+					#get the iter of cursor, then tv.get_line_yrange
+					# so we know in which y we are typing (not how many lines we have
+					# then go show just above the current cursor line for up
+					# or just below the current cursor line for down
+					#TEST with having 3 lines and writing in the 2nd
+					if y + menu_height > gtk.gdk.screen_height():
+						# move menu just above cursor
+						y -= menu_height + (msg_tv.allocation.height / buf.get_line_count())
+					#else: # move menu just below cursor
+					#	y -= (msg_tv.allocation.height / buf.get_line_count())
+					return (x, y, True) # push_in True
+				self.emoticons_menu.popup(None, None, set_emoticons_menu_position, 1, 0)
+		# FIXME Move to ChatControlBase
+		elif event.keyval == gtk.keysyms.Page_Down:
+			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
+				conv_textview = self.conversation_textviews[jid]
+				rect = conv_textview.get_visible_rect()
+				iter = conv_textview.get_iter_at_location(rect.x,
+					rect.y + rect.height)
+				conv_textview.scroll_to_iter(iter, 0.1, True, 0, 0)
+		# FIXME Move to ChatControlBase
+		elif event.keyval == gtk.keysyms.Page_Up: 
+			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
+				conv_textview = self.conversation_textviews[jid]
+				rect = conv_textview.get_visible_rect()
+				iter = conv_textview.get_iter_at_location(rect.x, rect.y)
+				conv_textview.scroll_to_iter(iter, 0.1, True, 0, 1)
+		# FIXME Move to ChatControlBase
+		elif event.keyval == gtk.keysyms.Up: 
+			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + UP
+				conversation_scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
+				conversation_scrolledwindow.emit('scroll-child',
+					gtk.SCROLL_PAGE_BACKWARD, False)
+		elif event.keyval == gtk.keysyms.ISO_Left_Tab: # SHIFT + TAB
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + SHIFT + TAB
+				self.move_to_next_unread_tab(False)
+		elif event.keyval == gtk.keysyms.Tab: # TAB
+			if event.state & gtk.gdk.CONTROL_MASK: # CTRL + TAB
+				self.move_to_next_unread_tab(True)
+		# FIXME Move to ChatControlBase
+		elif (event.keyval == gtk.keysyms.l or event.keyval == gtk.keysyms.L) \
+				and event.state & gtk.gdk.CONTROL_MASK: # CTRL + L
+			conv_textview = self.conversation_textviews[jid]
+			conv_textview.get_buffer().set_text('')
+		# FIXME Move to ChatControlBase
+		elif event.keyval == gtk.keysyms.v and event.state & gtk.gdk.CONTROL_MASK:
+			# CTRL + V
+			msg_textview = self.message_textviews[jid]
+			if not msg_textview.is_focus():
+				msg_textview.grab_focus()
+			msg_textview.emit('key_press_event', event)
+		elif event.state & gtk.gdk.CONTROL_MASK or \
+			  (event.keyval == gtk.keysyms.Control_L) or \
+			  (event.keyval == gtk.keysyms.Control_R):
+			# we pressed a control key or ctrl+sth: we don't block
+			# the event in order to let ctrl+c (copy text) and
+			# others do their default work
+			pass
+		# FIXME Move to ChatControlBase
+		else: # it's a normal key press make sure message_textview has focus
+			msg_textview = self.message_textviews[jid]
+			if msg_textview.get_property('sensitive'):
+				if not msg_textview.is_focus():
+					msg_textview.grab_focus()
+				msg_textview.emit('key_press_event', event)
+
+
 ################################################################################
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
@@ -468,6 +581,7 @@ class MessageWindowMgr:
 	
 	def _new_window(self):
 		win = MessageWindow()
+		win.window.show_all()
 		# we track the lifetime of this window
 		win.window.connect('destroy', self._on_window_destroy)
 		return win

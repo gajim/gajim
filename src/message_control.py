@@ -34,12 +34,10 @@ APP = i18n.APP
 GTKGUI_GLADE = 'gtkgui.glade'
 ####################
 
-class MessageControl(gtk.VBox):
+class MessageControl:
 	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
 
 	def __init__(self, type_id, parent_win, widget_name, display_name, contact, account):
-		gtk.VBox.__init__(self)
-
 		self.type_id = type_id
 		self.parent_win = parent_win
 		self.widget_name = widget_name
@@ -50,7 +48,7 @@ class MessageControl(gtk.VBox):
 		self.compact_view_current = False
 		self.nb_unread = 0
 		self.print_time_timeout_id = None
-		# FIXME: Make this a member like all the others
+		# FIXME: Make this a member
 		gajim.last_message_time[self.account][contact.jid] = 0
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
@@ -100,6 +98,14 @@ class MessageControl(gtk.VBox):
 		should return False'''
 		# NOTE: Derived classes MAY implement this
 		return True
+
+	def save_var(self, jid):
+		'''When called, the derived type should serialize it's state in the form of a
+		name/value (i.e. dict) result.
+		the return value must be compatible with wthe one given to load_var'''
+		pass # Derived classes SHOULD implement this
+	def load_var(self, jid, var):
+		pass # Derived classes SHOULD implement this
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
 		'''Send the given message to the active tab'''

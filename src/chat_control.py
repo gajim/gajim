@@ -188,11 +188,11 @@ class ChatControlBase(MessageControl):
 
 		if event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+UP
-				self.sent_messages_scroll(jid, 'up', widget.get_buffer())
+				self.sent_messages_scroll('up', widget.get_buffer())
 				return
 		elif event.keyval == gtk.keysyms.Down:
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+Down
-				self.sent_messages_scroll(jid, 'down', widget.get_buffer())
+				self.sent_messages_scroll('down', widget.get_buffer())
 				return
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
@@ -501,6 +501,30 @@ class ChatControlBase(MessageControl):
 				gajim.interface.systray.remove_jid(jid, self.account,
 									self.type_id)
 
+	def sent_messages_scroll(self, direction, conv_buf):
+		size = len(self.sent_history) 
+		if self.typing_new:
+			#user was typing something and then went into history, so save
+			#whatever is already typed
+			start_iter = conv_buf.get_start_iter()
+			end_iter = conv_buf.get_end_iter()
+			self.orig_msg = conv_buf.get_text(start_iter, end_iter, 0).decode('utf-8')
+			self.typing_new = False
+		if direction == 'up':
+			if self.sent_history_pos == 0:
+				return
+			self.sent_history_pos = self.sent_history_pos - 1
+			conv_buf.set_text(self.sent_history[self.sent_history_pos])
+		elif direction == 'down':
+			if self.sent_history_pos >= size - 1:
+				conv_buf.set_text(self.orig_msg);
+				self.typing_new = True
+				self.sent_history_pos = size
+				return
+
+			self.sent_history_pos = self.sent_history_pos + 1
+			conv_buf.set_text(self.sent_history[self.sent_history_pos])
+
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
@@ -512,15 +536,49 @@ class ChatControl(ChatControlBase):
 		self.compact_view_always = gajim.config.get('always_compact_view_chat')
 		self.set_compact_view(self.compact_view_always)
 
-		# chatstate timers and state
-		self._schedule_activity_timers()
-		self.reset_kbd_mouse_timeout_vars()
-
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
 		xm.signal_autoconnect(self)
 		self.popup_menu = xm.get_widget('chat_control_popup_menu')
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'banner_eventbox', APP)
 		xm.signal_autoconnect(self)
+
+		self.TARGET_TYPE_URI_LIST = 80
+		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
+		self.widget.connect('drag_data_received', self._on_drag_data_received)
+		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT |
+					gtk.DEST_DEFAULT_DROP,
+					self.dnd_list, gtk.gdk.ACTION_COPY)
+
+		# keep timeout id and window obj for possible big avatar
+		# it is on enter-notify and leave-notify so no need to be per jid
+		self.show_bigger_avatar_timeout_id = None
+		self.bigger_avatar_window = None
+		self.show_avatar(self.contact.resource)			
+
+		# chatstate timers and state
+		self.reset_kbd_mouse_timeout_vars()
+		self._schedule_activity_timers()
+		self.parent_win.window.connect('motion-notify-event',
+						self._on_window_motion_notify)
+
+	def save_var(self, jid):
+		gpg_enabled = self.xmls[jid].get_widget('gpg_togglebutton').get_active()
+		return {'gpg_enabled': gpg_enabled}
+
+	def load_var(self, jid, var):
+		if not self.xmls.has_key(jid):
+			return
+		self.xmls[jid].get_widget('gpg_togglebutton').set_active(
+			var['gpg_enabled'])
+
+	def _on_window_motion_notify(self, widget, event):
+		'''it gets called no matter if it is the active window or not'''
+		print "_on_window_motion_notify"
+		if widget.get_property('has-toplevel-focus'):
+			# change chatstate only if window is the active one
+			self.mouse_over_in_last_5_secs = True
+			self.mouse_over_in_last_30_secs = True
+
 
 	def _schedule_activity_timers(self):
 		self.possible_paused_timeout_id = gobject.timeout_add(5000,
@@ -1013,3 +1071,41 @@ class ChatControl(ChatControlBase):
 			self.send_chatstate('active', self.contact.jid)
 		else:
 			self.send_chatstate('inactive', self.contact.jid)
+
+	def show_avatar(self, resource = None):
+		jid = self.contact.jid
+		jid_with_resource = jid
+		if resource:
+			jid_with_resource += '/' + resource
+
+		# we assume contact has no avatar
+		scaled_pixbuf = None
+
+		real_jid = gajim.get_real_jid_from_fjid(self.account, jid)
+		pixbuf = None
+		if real_jid:
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
+		if not real_jid or pixbuf == 'ask':
+			# we don't have the vcard or it's pm and we don't have the real jid
+			gajim.connections[self.account].request_vcard(jid_with_resource)
+			return
+		if pixbuf is not None:
+			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'chat')
+
+		image = self.xml.get_widget('avatar_image')
+		image.set_from_pixbuf(scaled_pixbuf)
+		image.show_all()
+
+	def _on_drag_data_received(self, widget, context, x, y, selection, target_type,
+				timestamp):
+		# If not resource, we can't send file
+		if not self.contact.resource:
+			return
+		if target_type == self.TARGET_TYPE_URI_LIST:
+			uri = selection.data.strip()
+			uri_splitted = uri.split() # we may have more than one file dropped
+			for uri in uri_splitted:
+				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
+				if os.path.isfile(path): # is it file?
+					ft = gajim.interface.instances['file_transfers']
+					ft.send_file(self.account, self.contact, path)

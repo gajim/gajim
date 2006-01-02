@@ -250,7 +250,8 @@ class Systray:
 			contacts_menu = gtk.Menu()
 			item.set_submenu(contacts_menu)
 			for jid in gajim.contacts.get_jid_list(account):
-				contact = gajim.get_contact_with_highest_priority(account, jid)
+				contact = gajim.contacts.get_contact_with_highest_priority(account,
+					jid)
 				if group in contact.groups and contact.show != 'offline' and \
 						contact.show != 'error':
 					at_least_one = True

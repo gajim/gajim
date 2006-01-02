@@ -650,13 +650,11 @@ class Interface:
 		if gajim.interface.msg_win_mgr.has_window(jid):
 			win = gajim.interface.msg_type.get_window(jid)
 			ctl = win.get_control(jid)
-		# FIXME: Why is this needed
 		elif resource and gajim.interface.msg_win_mgr.has_window(jid + '/' + resource):
 			win = gajim.interface.msg_type.get_window(jid + '/' + resource)
 			ctl = win.get_control(jid + '/' + resource)
 		if win:
-			# FIXME: Are these args needed
-			ctl.show_avatar(jid, resource)
+			ctl.show_avatar()
 		# Show avatar in roster
 		self.roster.draw_avatar(jid, account)
 		if self.remote_ctrl:

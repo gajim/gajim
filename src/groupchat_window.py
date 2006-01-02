@@ -1330,7 +1330,7 @@ current room topic.') % command, room_jid)
 				room_jid, show='offline', status=reason)
 		del self.nicks[room_jid]
 		# They can already be removed by the destroy function
-		if room_jid in gajim.contacts.get_room_list(self.account):
+		if room_jid in gajim.contacts.get_gc_list(self.account):
 			gajim.contacts.remove_room(self.account, room_jid)
 			del gajim.gc_connected[self.account][room_jid]
 		del self.list_treeview[room_jid]
