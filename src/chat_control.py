@@ -20,12 +20,12 @@ import gtk.glade
 import pango
 import gobject
 import gtkgui_helpers
-import message_window
+import message_control
 import dialogs
 
 from common import gajim
 from common import helpers
-from message_window import MessageControl
+from message_control import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
 
@@ -406,7 +406,7 @@ class ChatControlBase(MessageControl):
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
-	TYPE_ID = 'chat'
+	TYPE_ID = message_control.TYPE_CHAT
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',

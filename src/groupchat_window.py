@@ -1184,6 +1184,7 @@ current room topic.') % command, room_jid)
 			nick = model[iter][C_NICK].decode('utf-8')
 		room_jid = self.get_active_jid()
 		fjid = gajim.construct_fjid(room_jid, nick) # 'fake' jid
+		# FIXME
 		if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
 			gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 			c = gajim.contacts.contact_from_gc_contact(gc_c)
@@ -1493,6 +1494,7 @@ current room topic.') % command, room_jid)
 			no_queue = False
 
 		# We print if window is opened
+		# FIXME
 		if gajim.interface.instances[self.account]['chats'].has_key(fjid):
 			chat_win = gajim.interface.instances[self.account]['chats'][fjid]
 			chat_win.print_conversation(msg, fjid, tim = tim)
@@ -1627,6 +1629,7 @@ current room topic.') % command, room_jid)
 			if len(path) == 2:
 				nick = model[iter][C_NICK].decode('utf-8')
 				fjid = gajim.construct_fjid(room_jid, nick)
+				# FIXME
 				if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
 					gc_c = gajim.contacts.get_gc_contact(self.account, room_jid,
 						nick)
@@ -1671,6 +1674,7 @@ current room topic.') % command, room_jid)
 			room_jid = self.get_active_jid()
 			nick = model[iter][C_NICK].decode('utf-8')
 			jid = gajim.construct_fjid(room_jid, nick)
+			# FIXME
 			if not gajim.interface.instances[self.account]['chats'].has_key(jid):
 				gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 				gajim.interface.roster.new_chat(gc_c, self.account)

@@ -19,6 +19,7 @@ import gobject
 
 import common
 import gtkgui_helpers
+import message_control
 
 from common import gajim
 
@@ -71,6 +72,7 @@ class MessageWindow:
 		# Connect event handling for this Window
 		self.window.connect('delete-event', self._on_window_delete)
 		self.window.connect('destroy', self._on_window_destroy)
+		self.window.connect('focus-in-event', self._on_window_focus)
 
 		# Restore previous window position
 		if gajim.config.get('saveposition'):
@@ -83,6 +85,24 @@ class MessageWindow:
 					gajim.config.get('msgwin-height'))
 		
 		self.window.show_all()
+
+	def _on_window_focus(self, widget, event):
+		# FIXME: 
+		print "_on_window_focus"
+		# window received focus, so if we had urgency REMOVE IT
+		# NOTE: we do not have to read the message (it maybe in a bg tab)
+		# to remove urgency hint so this functions does that
+		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
+			if widget.props.urgency_hint:
+				widget.props.urgency_hint = False
+
+		ctl = self.get_active_control()
+		# Undo "unread" state display, etc.
+		if ctl.type_id == message_control.TYPE_GC:
+			self.redraw_tab(ctl.contact, 'active')
+		else:
+			# NOTE: we do not send any chatstate to preserve inactive, gone, etc.
+			self.redraw_tab(ctl.contact)
 
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
@@ -363,6 +383,7 @@ class MessageWindow:
 						self.notebook.get_n_pages() - 1)
 
 
+################################################################################
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
 
@@ -451,104 +472,4 @@ class MessageWindowMgr:
 		for w in self._windows:
 			for c in w.controls():
 				yield c
-
-class MessageControl(gtk.VBox):
-	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
-
-	def __init__(self, type_id, parent_win, widget_name, display_name, contact, account):
-		gtk.VBox.__init__(self)
-
-		self.type_id = type_id
-		self.parent_win = parent_win
-		self.widget_name = widget_name
-		self.display_name = display_name
-		self.contact = contact
-		self.account = account
-		self.compact_view_always = False
-		self.compact_view_current = False
-		self.nb_unread = 0
-		self.print_time_timeout_id = None
-
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
-		self.widget = self.xml.get_widget(widget_name)
-		# Autoconnect glade signals
-		self.xml.signal_autoconnect(self)
-
-	def shutdown(self):
-		# NOTE: Derived classes MUST implement this
-		assert(False)
-	def draw_widgets(self):
-		pass # NOTE: Derived classes SHOULD implement this
-	def repaint_themed_widgets(self, theme):
-		pass # NOTE: Derived classes SHOULD implement this
-	def update_state(self):
-		pass # NOTE: Derived classes SHOULD implement this
-	def toggle_emoticons(self):
-		pass # NOTE: Derived classes MAY implement this
-	def update_font(self):
-		pass # NOTE: Derived classes SHOULD implement this
-	def update_tags(self):
-		pass # NOTE: Derived classes SHOULD implement this
-	def print_time_timeout(self, arg):
-		# NOTE: Derived classes SHOULD implement this
-		if self.print_time_timeout_id:
-			gobject.source_remove(self.print_time_timeout_id)
-			del self.print_time_timeout_id
-		return False
-	def markup_tab_label(self, label_str, chatstate):
-		# NOTE: Derived classes SHOULD implement this
-		# Reurn a markup'd label and optional gtk.Color
-		return (label_str, None)
-	def prepare_context_menu(self):
-		# NOTE: Derived classes SHOULD implement this
-		return None
-	def set_compact_view(self, state):
-		# NOTE: Derived classes MAY implement this
-		self.compact_view_current = state
-	def check_delete(self):
-		'''Called when a window has been asked to delete itself.  If a control is 
-		not in a suitable shutdown state this method should return True to halt
-		the delete'''
-		# NOTE: Derived classes MAY implement this
-		return False
-
-	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
-		'''Send the given message to the active tab'''
-		# refresh timers
-		self.reset_kbd_mouse_timeout_vars()
-
-		jid = self.contact.jid
-		# Send and update history
-		gajim.connections[self.account].send_message(jid, message, keyID,
-						type = type, chatstate = chatstate)
-
-	def position_menu_under_button(self, menu):
-		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
-		# pass btn instance when this bug is over
-		button = self.button_clicked
-		# here I get the coordinates of the button relative to
-		# window (self.window)
-		button_x, button_y = button.allocation.x, button.allocation.y
-		
-		# now convert them to X11-relative
-		window_x, window_y = self.parent_win.get_origin()
-		x = window_x + button_x
-		y = window_y + button_y
-
-		menu_width, menu_height = menu.size_request()
-
-		## should we pop down or up?
-		if (y + button.allocation.height + menu_height
-		    < gtk.gdk.screen_height()):
-			# now move the menu below the button
-			y += button.allocation.height
-		else:
-			# now move the menu above the button
-			y -= menu_height
-
-
-		# push_in is True so all the menuitems are always inside screen
-		push_in = True
-		return (x, y, push_in)
-
 

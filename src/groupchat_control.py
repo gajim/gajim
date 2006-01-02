@@ -17,6 +17,7 @@ import gtk.glade
 import pango
 import gobject
 import gtkgui_helpers
+import message_control
 
 from common import gajim
 from chat_control import ChatControl
@@ -25,7 +26,7 @@ from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
 
 class PrivateChatControl(ChatControl):
-	TYPE_ID = 'pm'
+	TYPE_ID = message_control.TYPE_PM
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControl.__init__(self, parent_win, contact, acct)
@@ -33,7 +34,7 @@ class PrivateChatControl(ChatControl):
 		self.display_name = _('Private char')
 
 class GroupchatControl(ChatControlBase):
-	TYPE_ID = 'gc'
+	TYPE_ID = message_control.TYPE_GC
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
