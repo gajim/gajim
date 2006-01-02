@@ -1942,16 +1942,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			recent = False
 			if self.nb_unread > 0:
 				unread = True
-			for win in gajim.interface.msg_win_mgr.windows.values():
+			for win in gajim.interface.msg_win_mgr.windows():
 				unrd = 0
 				for ctl in win.controls():
 					unrd += ctl.nb_unread
 				if unrd:
 					unread = True
 					break
-				for ctl in win.control():
+				for ctl in win.controls():
 					jid = ctl.contact.jid
-					if time.time() - gajim.last_message_time[account][ji] < 2:
+					if time.time() - gajim.last_message_time[acct][jid] < 2:
 						recent = True
 						break
 			if unread:

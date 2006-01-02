@@ -344,8 +344,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_connected',
 					'enabled') and gajim.allow_notifications[account]:
 					helpers.play_sound('contact_connected')
-				# FIXME
-				if not self.instances[account]['chats'].has_key(jid) and \
+				if not gajim.interface.msg_win_mgr.has_window(jid) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
 					gajim.allow_notifications[account]:
@@ -365,8 +364,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
 						'enabled'):
 					helpers.play_sound('contact_disconnected')
-				# FIXME
-				if not self.instances[account]['chats'].has_key(jid) and \
+				if not gajim.interface.msg_win_mgr.has_window(jid) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signout'):
 					show_notification = False
@@ -408,8 +406,7 @@ class Interface:
 		if self.instances[account]['gc'].has_key(jid): # it's a Private Message
 			nick = gajim.get_nick_from_fjid(array[0])
 			fjid = array[0]
-			# FIXME
-			if not self.instances[account]['chats'].has_key(fjid) and \
+			if not gajim.interface.msg_win_mgr.has_window(fjid) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
 					notify.notify(_('New Private Message'), fjid, account, 'pm')
@@ -424,15 +421,14 @@ class Interface:
 
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-		# FIXME
-		if self.instances[account]['chats'].has_key(jid):
-			chat_win = self.instances[account]['chats'][jid]
+		if gajim.interface.msg_win_mgr.has_window(jid):
+			chat_ctl = gajim.interface.msg_win_mgr.get_control(jid)
 			if chatstate is not None: # he or she sent us reply, so he supports jep85
 				contact.chatstate = chatstate
 				if contact.our_chatstate == 'ask': # we were jep85 disco?
 					contact.our_chatstate = 'active' # no more
 				
-				chat_win.handle_incoming_chatstate(account, contact)
+				chat_ctl.handle_incoming_chatstate()
 			elif contact.chatstate != 'active':
 				# got no valid jep85 answer, peer does not support it
 				contact.chatstate = False
@@ -445,8 +441,7 @@ class Interface:
 			return
 
 		first = False
-		# FIXME
-		if not self.instances[account]['chats'].has_key(jid) and \
+		if not gajim.interface.msg_win_mgr.has_window(jid) and \
 			not gajim.awaiting_events[account].has_key(jid):
 			first = True
 			if gajim.config.get('notify_on_new_message'):
@@ -483,8 +478,7 @@ class Interface:
 		if jid in gcs:
 			if len(jids) > 1: # it's a pm
 				nick = jids[1]
-				# FIXME
-				if not self.instances[account]['chats'].has_key(fjid):
+				if not gajim.interface.msg_win_mgr.has_window(fjid):
 					gc = gcs[jid]
 					tv = gc.list_treeview[jid]
 					model = tv.get_model()
@@ -497,10 +491,11 @@ class Interface:
 						name = nick, show = show)
 					c = gajim.contacts.contact_from_gc_contct(c)
 					self.roster.new_chat(c, account)
-				# FIXME
-				self.instances[account]['chats'][fjid].print_conversation(
-					'Error %s: %s' % (array[1], array[2]), fjid, 'status')
+				ctl = gajim.interface.msg_win_mgr.get_control(fjid)
+				ctl.print_conversation('Error %s: %s' % (array[1], array[2]),
+							'status')
 				return
+			# FIXME
 			gcs[jid].print_conversation('Error %s: %s' % \
 				(array[1], array[2]), jid)
 			if gcs[jid].get_active_jid() == jid:
@@ -651,14 +646,17 @@ class Interface:
 
 		# show avatar in chat
 		win = None
-		# FIXME
-		if self.instances[account]['chats'].has_key(jid):
-			win = self.instances[account]['chats'][jid]
-		elif resource and self.instances[account]['chats'].has_key(
-			jid + '/' + resource):
-			win = self.instances[account]['chats'][jid + '/' + resource]
+		ctl = None
+		if gajim.interface.msg_win_mgr.has_window(jid):
+			win = gajim.interface.msg_type.get_window(jid)
+			ctl = win.get_control(jid)
+		# FIXME: Why is this needed
+		elif resource and gajim.interface.msg_win_mgr.has_window(jid + '/' + resource):
+			win = gajim.interface.msg_type.get_window(jid + '/' + resource)
+			ctl = win.get_control(jid + '/' + resource)
 		if win:
-			win.show_avatar(jid, resource)
+			# FIXME: Are these args needed
+			ctl.show_avatar(jid, resource)
 		# Show avatar in roster
 		self.roster.draw_avatar(jid, account)
 		if self.remote_ctrl:
@@ -686,17 +684,16 @@ class Interface:
 		show = array[1]
 		status = array[2]
 		# print status in chat window and update status/GPG image
-		# FIXME
-		if self.instances[account]['chats'].has_key(fjid):
-			contact = self.instances[account]['chats'][fjid].contacts[fjid]
+		if gajim.interface.msg_win_mgr.has_window(fjid):
+			ctl = gajim.interface.msg_win_mgr.get_control(fjid)
+			contact = ctl.contact
 			contact.show = show
 			contact.status = status
-			self.instances[account]['chats'][fjid].set_state_image(fjid)
+			ctl.update_state()
 			uf_show = helpers.get_uf_show(show)
-			self.instances[account]['chats'][fjid].print_conversation(
-				_('%s is now %s (%s)') % (nick, uf_show, status), fjid,
-				'status')
-			self.instances[account]['chats'][fjid].draw_name_banner(contact)
+			ctl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
+						'status')
+			ctl.draw_banner()
 
 		if self.instances[account]['gc'].has_key(room_jid):
 			self.instances[account]['gc'][room_jid].chg_contact_status(room_jid,
@@ -1244,26 +1241,24 @@ class Interface:
 			sys.exit()
 
 	def handle_event(self, account, jid, typ):
-		wins = self.instances[account]
 		w = None
 		if typ == 'gc':
 			if wins['gc'].has_key(jid):
 				w = wins['gc'][jid]
 		elif typ == 'chat':
-			# FIXME
-			if wins['chats'].has_key(jid):
-				w = wins['chats'][jid]
+			if gajim.interface.msg_win_mgr.has_window(jid):
+				w = gajim.interface.msg_win_mgr.get_window(jid)
 			else:
 				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 				self.roster.new_chat(contact, account)
-				w = wins['chats'][jid]
+				w = gajim.interface.msg_win_mgr.get_window(jid)
 		elif typ == 'pm':
-			# FIXME
-			if wins['chats'].has_key(jid):
-				w = wins['chats'][jid]
+			if gajim.interface.msg_win_mgr.has_window(jid):
+				w = gajim.interface.msg_win_mgr.get_window(jid)
 			else:
 				room_jid, nick = jid.split('/', 1)
-				gc_contact = gajim.contacts.get_gc_contact(account, room_jid, nick)
+				gc_contact = gajim.contacts.get_gc_contact(account, room_jid,
+										nick)
 				if gc_contact:
 					show = gc_contact.show
 				else:
@@ -1272,7 +1267,7 @@ class Interface:
 						name = nick, show = show)
 				c = gajim.contacts.contact_from_gc_contct(gc_contact)
 				self.roster.new_chat(c, account)
-				w = wins['chats'][jid]
+				w = gajim.interface.msg_win_mgr.get_window(jid)
 		elif typ in ('normal', 'file-request', 'file-request-error',
 			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 			# Get the first single message event

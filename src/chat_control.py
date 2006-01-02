@@ -292,7 +292,7 @@ class ChatControlBase(MessageControl):
 			if gajim.interface.systray_enabled and\
 				gajim.config.get('trayicon_notification_on_new_messages'):
 				gajim.interface.systray.add_jid(jid, self.account, self.type)
-			self.redraw_tab(jid)
+			self.parent_win.redraw_tab(jid)
 			self.show_title(urgent)
 
 	def toggle_emoticons(self):
@@ -393,6 +393,16 @@ class ChatControlBase(MessageControl):
 			del self.print_time_timeout_id
 		return False
 
+	def on_history_menuitem_clicked(self, widget = None, jid = None):
+		'''When history menuitem is pressed: call history window'''
+		# FIXME for GC, jid is None
+		print widget, jid
+		if gajim.interface.instances['logs'].has_key(jid):
+			gajim.interface.instances['logs'][jid].window.present()
+		else:
+			gajim.interface.instances['logs'][jid] = history_window.HistoryWindow(
+				jid, self.account)
+
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
@@ -423,6 +433,7 @@ class ChatControl(ChatControlBase):
 		ChatControlBase.draw_widgets(self)
 
 	def _update_banner_state_image(self):
+		# FIXME: The cyling of contact_list ... is this necessary if I have the contact
 		contact = self.contact
 		show = contact.show
 		jid = contact.jid
@@ -453,9 +464,12 @@ class ChatControl(ChatControlBase):
 
 		self._update_gpg()
 
-	def draw_banner(self):
+	def draw_banner(self, chatstate = None):
 		'''Draw the fat line at the top of the window that 
-		houses the status icon, name, jid, and avatar'''
+		houses the status icon, name, jid, and avatar.  The chatstate arg should
+		only be used if the control's chatstate member is NOT to be use, such as
+		composing, paused, etc.
+		'''
 		ChatControlBase.draw_banner(self)
 
 		contact = self.contact
@@ -686,8 +700,7 @@ class ChatControl(ChatControlBase):
 		if color:
 			color = gtk.gdk.colormap_get_system().alloc_color(color)
 			# We set the color for when it's the current tab or not
-			nickname.modify_fg(gtk.STATE_NORMAL, color)
-			# FIXME
+			# FIXME: why was this only happening for inactive or gone
 			#if chatstate in ('inactive', 'gone'):
 			# In inactive tab color to be lighter against the darker inactive
 			# background
@@ -697,7 +710,6 @@ class ChatControl(ChatControlBase):
 				color.red = int((color.red * p) + (mask * (1 - p)))
 				color.green = int((color.green * p) + (mask * (1 - p)))
 				color.blue = int((color.blue * p) + (mask * (1 - p)))
-			nickname.modify_fg(gtk.STATE_ACTIVE, color)
 
 		if num_unread: # if unread, text in the label becomes bold
 			label_str = '<b>' + unread + label_str + '</b>'
@@ -746,7 +758,7 @@ class ChatControl(ChatControlBase):
 		issensitive = gpg_btn.get_property('sensitive')
 		childs[3].set_active(isactive)
 		childs[3].set_property('sensitive', issensitive)
-		# If we don't have resource, we can't do file transfert
+		# If we don't have resource, we can't do file transfer
 		if not contact.resource:
 			childs[2].set_sensitive(False)
 		else:
@@ -886,4 +898,11 @@ class ChatControl(ChatControlBase):
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return True #stop the propagation of the event
 		return False
+
+	def handle_incoming_chatstate(self):
+		''' handle incoming chatstate that jid SENT TO us '''
+		self.draw_banner()
+		# update chatstate in tab for this chat
+		self.parent_win.redraw_tab(self.contact, self.contact.chatstate)
+
 
