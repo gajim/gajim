@@ -66,10 +66,6 @@ class TabbedChatWindow(chat.Chat):
 		self.show_bigger_avatar_timeout_id = None
 		self.bigger_avatar_window = None
 		
-		# list that holds all the jid we have asked vcard once
-		# (so we do not have to ask again)
-		self.jids_for_which_we_asked_vcard_already = list()
-		
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
 		self.new_tab(contact)
