@@ -19557,12 +19557,11 @@ Status message</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkButton" id="button30">
+			<widget class="GtkButton" id="send_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="on_send_button_clicked" last_modification_time="Tue, 07 Jun 2005 20:31:28 GMT"/>
 
 			  <child>
 			    <widget class="GtkAlignment" id="alignment102">
@@ -20196,12 +20195,11 @@ topic</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkButton" id="button33">
+			<widget class="GtkButton" id="send_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="on_send_button_clicked" last_modification_time="Mon, 13 Jun 2005 11:04:33 GMT"/>
 
 			  <child>
 			    <widget class="GtkAlignment" id="alignment105">

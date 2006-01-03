@@ -98,6 +98,9 @@ class ChatControlBase(MessageControl):
 		self.msg_textview.connect('size-request', self.size_request, self.xml)
 		self.update_font()
 
+		# Hook up send button
+		self.xml.get_widget('send_button').connect('clicked',
+							self._on_send_button_clicked)
 
 		# the following vars are used to keep history of user's messages
 		self.sent_history = []
@@ -124,6 +127,16 @@ class ChatControlBase(MessageControl):
 				gajim.config.set('use_speller', False)
 
 		self.print_time_timeout_id = None
+
+	def _on_send_button_clicked(self, widget):
+		'''When send button is pressed: send the current message'''
+		message_buffer = self.msg_textview.get_buffer()
+		start_iter = message_buffer.get_start_iter()
+		end_iter = message_buffer.get_end_iter()
+		message = message_buffer.get_text(start_iter, end_iter, 0).decode('utf-8')
+
+		# send the message
+		self.send_message(message)
 
 	def _paint_banner(self):
 		'''Repaint banner with theme color'''
@@ -1279,4 +1292,64 @@ class ChatControl(ChatControlBase):
 										self.account)
 			elif typ == 'pm':
 				gcs[room_jid].remove_contact(room_jid, nick)
+
+	def show_bigger_avatar(self, small_avatar):
+		'''resizes the avatar, if needed, so it has at max half the screen size
+		and shows it'''
+		real_jid = gajim.get_real_jid_from_fjid(self.account, self.contact.jid)
+		if not real_jid: # this can happend if we're in a moderate room
+			return
+		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
+		screen_w = gtk.gdk.screen_width()
+		screen_h = gtk.gdk.screen_height()
+		avatar_w = avatar_pixbuf.get_width()
+		avatar_h = avatar_pixbuf.get_height()
+		half_scr_w = screen_w / 2
+		half_scr_h = screen_h / 2
+		if avatar_w > half_scr_w:
+			avatar_w = half_scr_w
+		if avatar_h > half_scr_h:
+			avatar_h = half_scr_h
+		window = gtk.Window(gtk.WINDOW_POPUP)
+		self.bigger_avatar_window = window
+		pixmap, mask = avatar_pixbuf.render_pixmap_and_mask()
+		window.set_size_request(avatar_w, avatar_h)
+		# we should make the cursor visible
+		# gtk+ doesn't make use of the motion notify on gtkwindow by default
+		# so this line adds that
+		window.set_events(gtk.gdk.POINTER_MOTION_MASK)
+		window.set_app_paintable(True)
+		
+		window.realize()
+		window.window.set_back_pixmap(pixmap, False) # make it transparent
+		window.window.shape_combine_mask(mask, 0, 0)
+
+		# make the bigger avatar window show up centered 
+		x0, y0 = small_avatar.window.get_origin()
+		x0 += small_avatar.allocation.x
+		y0 += small_avatar.allocation.y
+		center_x= x0 + (small_avatar.allocation.width / 2)
+		center_y = y0 + (small_avatar.allocation.height / 2)
+		pos_x, pos_y = center_x - (avatar_w / 2), center_y - (avatar_h / 2) 
+		window.move(pos_x, pos_y)
+		# make the cursor invisible so we can see the image
+		invisible_cursor = gtkgui_helpers.get_invisible_cursor()
+		window.window.set_cursor(invisible_cursor)
+
+		# we should hide the window
+		window.connect('leave_notify_event',
+			self._on_window_avatar_leave_notify_event)
+		window.connect('motion-notify-event',
+			self._on_window_motion_notify_event)
+
+		window.show_all()
+
+	def _on_window_avatar_leave_notify_event(self, widget, event):
+		'''we just left the popup window that holds avatar'''
+		self.bigger_avatar_window.destroy()
+
+	def _on_window_motion_notify_event(self, widget, event):
+		'''we just moved the mouse so show the cursor'''
+		cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
+		self.bigger_avatar_window.window.set_cursor(cursor)
 
