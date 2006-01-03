@@ -229,8 +229,9 @@ class Contacts:
 			sub = 'none')
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',
-		role='', affiliation='', jid=''):
-		return GC_Contact(room_jid, name, show, status, role, affiliation, jid)
+		role='', affiliation='', jid='', resource=''):
+		return GC_Contact(room_jid, name, show, status, role, affiliation, jid,
+			resource)
 	
 	def add_gc_contact(self, account, gc_contact):
 		# No such account before ?
