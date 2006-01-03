@@ -705,10 +705,15 @@ class RosterWindow:
 		contact.status = status
 		if show in ('offline', 'error') and \
 		   not gajim.awaiting_events[account].has_key(contact.jid):
-			if len(contact_instances) > 1 or not showOffline:
-				# if multiple resources or we don't show offline contacts
+			if len(contact_instances) > 1:
+				# if multiple resources
 				gajim.contacts.remove_contact(account, contact)
-			self.draw_contact(contact.jid, account)
+				self.draw_contact(contact.jid, account)
+			elif not showOffline:
+				# we don't show offline contacts
+				self.remove_contact(contact, account)
+			else:
+				self.draw_contact(contact.jid, account)
 		else:
 			if not self.get_contact_iter(contact.jid, account):
 				self.add_contact_to_roster(contact.jid, account)
