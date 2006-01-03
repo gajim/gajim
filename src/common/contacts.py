@@ -59,7 +59,7 @@ class Contact:
 class GC_Contact:
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', name='', show='', status='', role='',
-			affiliation='', jid = ''):
+			affiliation='', jid = '', resource = ''):
 		self.room_jid = room_jid
 		self.name = name
 		self.show = show
@@ -67,6 +67,7 @@ class GC_Contact:
 		self.role = role
 		self.affiliation = affiliation
 		self.jid = jid
+		self.resource = resource
 
 	def get_full_jid(self):
 		return self.room_jid + '/' + self.name
