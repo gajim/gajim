@@ -148,9 +148,9 @@ class MessageWindow:
 			self.alignment.set_property('top-padding', 2)
 
 		# Connect to keyboard events
-		if isinstance(control, ChatControlBase):
-			control.msg_textview.connect('mykeypress',
-						self._on_message_textview_mykeypress_event)
+		#if isinstance(control, ChatControlBase):
+		#	control.msg_textview.connect('mykeypress',
+		#				self._on_message_textview_mykeypress_event)
 
 		# Add notebook page and connect up to the tab's close button
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_ebox', APP)
@@ -432,14 +432,33 @@ class MessageWindow:
 		new_ctl.set_control_active(True)
 
 	def _on_notebook_key_press(self, widget, event):
-		print "MessageWindow._on_notebook_key_press event"
 		st = '1234567890' # alt+1 means the first tab (tab 0)
 		ctl = self.get_active_control()
 		contact = ctl.contact
 		jid = ctl.contact.jid
 
+		# CTRL mask
+		if event.state & gtk.gdk.CONTROL_MASK:
+			# Tab switch bindings
+			if event.keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
+				self.move_to_next_unread_tab(False)
+			elif event.keyval == gtk.keysyms.Tab: # CTRL + TAB
+				self.move_to_next_unread_tab(True)
+			elif event.keyval == gtk.keysyms.Page_Down or\
+			event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP|DOWN
+				# construct event instance from binding
+				event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
+				event.keyval = event_keyval
+				event.state = event_keymod
+				event.time = 0 # assign current time
+				self.notebook.emit('key_press_event', event)
+			elif event.keyval == gtk.keysyms.F4: # CTRL + F4
+				self.remove_tab(contact)
+			elif event.keyval == gtk.keysyms.w: # CTRL + W
+				self.remove_tab(contact)
+
 		# MOD1 (ALT) mask
-		if event.state & gtk.gdk.MOD1_MASK:
+		elif event.state & gtk.gdk.MOD1_MASK:
 			# Tab switch bindings
 			if event.keyval == gtk.keysyms.Right: # ALT + RIGHT
 				new = self.notebook.get_current_page() + 1
@@ -454,19 +473,12 @@ class MessageWindow:
 			elif event.string and event.string in st and \
 					(event.state & gtk.gdk.MOD1_MASK): # ALT + 1,2,3..
 				self.notebook.set_current_page(st.index(event.string))
+			elif event.keyval == gtk.keysyms.c: # ALT + C toggles compact view
+				ctl.set_compact_view(not ctl.compact_view_current)
 		# Close tab bindings
 		elif event.keyval == gtk.keysyms.Escape: # ESCAPE
 			if ctl.type_id == message_control.TYPE_CHAT:
 				self.remove_tab(contact)
-		elif event.keyval == gtk.keysyms.F4 and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + F4
-				self.remove_tab(contact)
-		elif event.keyval == gtk.keysyms.w and \
-			(event.state & gtk.gdk.CONTROL_MASK): # CTRL + W
-				self.remove_tab(contact)
-		elif event.keyval == gtk.keysyms.c and \
-			(event.state & gtk.gdk.MOD1_MASK): # alt + C toggles compact view
-			ctl.set_compact_view(not ctl.compact_view_current)
 
 		# FIXME: Move this to ChatControlBase
 		elif event.keyval == gtk.keysyms.e and \

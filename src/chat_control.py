@@ -161,7 +161,6 @@ class ChatControlBase(MessageControl):
 		return False
 
 	def _on_message_textview_key_press_event(self, widget, event):
-		print "_on_message_textview_key_press_event"
 		if event.state & gtk.gdk.SHIFT_MASK:
 			# SHIFT + PAGE_[UP|DOWN]: send to conv_textview
 			if event.keyval == gtk.keysyms.Page_Down or \
@@ -182,7 +181,6 @@ class ChatControlBase(MessageControl):
 		'''When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation'''
-		print "ChatControlBase._on_message_textview_mykeypress_event"
 
 		# NOTE: handles mykeypress which is custom signal connected to this
 		# CB in new_tab(). for this singal see message_textview.py
@@ -632,6 +630,7 @@ class ChatControl(ChatControlBase):
 
 	def _on_window_motion_notify(self, widget, event):
 		'''it gets called no matter if it is the active window or not'''
+		# FIXME NOT WORKING
 		print "_on_window_motion_notify"
 		if widget.get_property('has-toplevel-focus'):
 			# change chatstate only if window is the active one
