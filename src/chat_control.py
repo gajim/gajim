@@ -28,6 +28,8 @@ from common import helpers
 from message_control import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
+from common.logger import Constants
+constants = Constants()
 
 try:
 	import gtkspell
@@ -76,6 +78,8 @@ class ChatControlBase(MessageControl):
 			'underline_togglebutton'):
 			self.xml.get_widget(w).set_no_show_all(True)
 
+		self.widget.connect('key_press_event', self._on_keypress_event)
+
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(None) # FIXME: remove account arg
 		self.conv_textview.show_all()
@@ -83,22 +87,21 @@ class ChatControlBase(MessageControl):
 		self.conv_scrolledwindow.add(self.conv_textview)
 		self.conv_scrolledwindow.get_vadjustment().connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
-		self.conv_textview.connect('key_press_event',
-				self.on_conversation_textview_key_press_event)
 		# add MessageTextView to UI and connect signals
 		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
 		self.msg_textview.connect('mykeypress',
-					self.on_message_textview_mykeypress_event)
+					self._on_message_textview_mykeypress_event)
 		self.msg_scrolledwindow.add(self.msg_textview)
 		self.msg_textview.connect('key_press_event',
-					self.on_message_textview_key_press_event)
+					self._on_message_textview_key_press_event)
 		self.msg_textview.connect('size-request', self.size_request, self.xml)
 		self.update_font()
 
+
 		# the following vars are used to keep history of user's messages
 		self.sent_history = []
-		self.sent_history_pos = -1
+		self.sent_history_pos = 0
 		self.typing_new = False
 		self.orig_msg = ''
 
@@ -143,34 +146,43 @@ class ChatControlBase(MessageControl):
 			banner_name_label.modify_fg(gtk.STATE_NORMAL, None)
 
 
-	def on_conversation_textview_key_press_event(self, widget, event):
-		'''Handle events from the ConversationTextview'''
-		print "ChatControl.on_conversation_textview_key_press_event", event
+	def _on_keypress_event(self, widget, event):
 		if event.state & gtk.gdk.CONTROL_MASK:
-			# CTRL + l|L
+			# CTRL + l|L: clear conv_textview
 			if event.keyval == gtk.keysyms.l or event.keyval == gtk.keysyms.L:
 				self.conv_textview.get_buffer().set_text('')
-			# CTRL + v
+				return True
+			# CTRL + v: Paste into msg_textview
 			elif event.keyval == gtk.keysyms.v:
 				if not self.msg_textview.is_focus():
 					self.msg_textview.grab_focus()
+				# Paste into the msg textview
 				self.msg_textview.emit('key_press_event', event)
+		return False
 
-	def on_message_textview_key_press_event(self, widget, event):
-		print "ChatControl.on_message_textview_key_press_event", event
-
-		if event.keyval == gtk.keysyms.Page_Down: # PAGE DOWN
-			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE DOWN
+	def _on_message_textview_key_press_event(self, widget, event):
+		print "_on_message_textview_key_press_event"
+		if event.state & gtk.gdk.SHIFT_MASK:
+			# SHIFT + PAGE_[UP|DOWN]: send to conv_textview
+			if event.keyval == gtk.keysyms.Page_Down or \
+						event.keyval == gtk.keysyms.Page_Up:
 				self.conv_textview.emit('key_press_event', event)
-		elif event.keyval == gtk.keysyms.Page_Up: # PAGE UP
-			if event.state & gtk.gdk.SHIFT_MASK: # SHIFT + PAGE UP
-				self.conv_textview.emit('key_press_event', event)
+				return True
+		elif event.state & gtk.gdk.CONTROL_MASK or \
+			  (event.keyval == gtk.keysyms.Control_L) or \
+			  (event.keyval == gtk.keysyms.Control_R):
+			# we pressed a control key or ctrl+sth: we don't block
+			# the event in order to let ctrl+c (copy text) and
+			# others do their default work
+			self.conv_textview.emit('key_press_event', event)
+		return False
 
-	def on_message_textview_mykeypress_event(self, widget, event_keyval,
+	def _on_message_textview_mykeypress_event(self, widget, event_keyval,
 						event_keymod):
 		'''When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation'''
+		print "ChatControlBase._on_message_textview_mykeypress_event"
 
 		# NOTE: handles mykeypress which is custom signal connected to this
 		# CB in new_tab(). for this singal see message_textview.py
@@ -189,11 +201,9 @@ class ChatControlBase(MessageControl):
 		if event.keyval == gtk.keysyms.Up:
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+UP
 				self.sent_messages_scroll('up', widget.get_buffer())
-				return
 		elif event.keyval == gtk.keysyms.Down:
 			if event.state & gtk.gdk.CONTROL_MASK: # Ctrl+Down
 				self.sent_messages_scroll('down', widget.get_buffer())
-				return
 		elif event.keyval == gtk.keysyms.Return or \
 			event.keyval == gtk.keysyms.KP_Enter: # ENTER
 			# NOTE: SHIFT + ENTER is not needed to be emulated as it is not
@@ -295,8 +305,8 @@ class ChatControlBase(MessageControl):
 			self.nb_unread += 1
 			if gajim.interface.systray_enabled and\
 				gajim.config.get('trayicon_notification_on_new_messages'):
-				gajim.interface.systray.add_jid(jid, self.account, self.type)
-			self.parent_win.redraw_tab(jid)
+				gajim.interface.systray.add_jid(jid, self.account, self.type_id)
+			self.parent_win.redraw_tab(self.contact)
 			self.show_title(urgent)
 
 	def toggle_emoticons(self):
@@ -419,7 +429,7 @@ class ChatControlBase(MessageControl):
 						gajim.interface.systray.remove_jid(jid,
 										self.account,
 										self.type)
-			self.conv_textview.grab_focus()
+			self.msg_textview.grab_focus()
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
@@ -539,9 +549,8 @@ class ChatControl(ChatControlBase):
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
 		xm.signal_autoconnect(self)
 		self.popup_menu = xm.get_widget('chat_control_popup_menu')
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'banner_eventbox', APP)
-		xm.signal_autoconnect(self)
 
+		# Initialize drag-n-drop
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
 		self.widget.connect('drag_data_received', self._on_drag_data_received)
@@ -558,8 +567,58 @@ class ChatControl(ChatControlBase):
 		# chatstate timers and state
 		self.reset_kbd_mouse_timeout_vars()
 		self._schedule_activity_timers()
+
+		# Hook up signals
+		# FIXME: This does not seem to be working
 		self.parent_win.window.connect('motion-notify-event',
 						self._on_window_motion_notify)
+		message_tv_buffer = self.msg_textview.get_buffer()
+		message_tv_buffer.connect('changed', self._on_message_tv_buffer_changed)
+
+		self.xml.get_widget('banner_eventbox').connect('button-press-event',
+					self._on_banner_eventbox_button_press_event)
+		self.xml.get_widget('banner_eventbox').connect('button-press-event',
+					self._on_banner_eventbox_button_press_event)
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'avatar_eventbox', APP)
+		xm.signal_autoconnect(self)
+
+		if self.contact.jid in gajim.encrypted_chats[self.account]:
+			self.xml.get_widget('gpg_togglebutton').set_active(True)
+
+		# restore previous conversation
+		self.restore_conversation()
+
+		if gajim.awaiting_events[self.account].has_key(self.contact.jid):
+			self.read_queue()
+
+	def _on_avatar_eventbox_enter_notify_event(self, widget, event):
+		'''we enter the eventbox area so we under conditions add a timeout
+		to show a bigger avatar after 0.5 sec'''
+		jid = self.contact.jid
+		real_jid = gajim.get_real_jid_from_fjid(self.account, jid)
+		if not real_jid: # this can happend if we're in a moderate room
+			return
+		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
+		if avatar_pixbuf in ('ask', None):
+			return
+		avatar_w = avatar_pixbuf.get_width()
+		avatar_h = avatar_pixbuf.get_height()
+		
+		scaled_buf = self.xmls[jid].get_widget('avatar_image').get_pixbuf()
+		scaled_buf_w = scaled_buf.get_width()
+		scaled_buf_h = scaled_buf.get_height()
+		
+		# do we have something bigger to show?
+		if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
+			# wait for 0.5 sec in case we leave earlier
+			self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
+				self.show_bigger_avatar, widget)
+		
+	def _on_avatar_eventbox_leave_notify_event(self, widget, event):
+		'''we left the eventbox area that holds the avatar img'''
+		# did we add a timeout? if yes remove it
+		if self.show_bigger_avatar_timeout_id is not None:
+			gobject.source_remove(self.show_bigger_avatar_timeout_id)
 
 	def save_var(self, jid):
 		gpg_enabled = self.xmls[jid].get_widget('gpg_togglebutton').get_active()
@@ -949,8 +1008,7 @@ class ChatControl(ChatControlBase):
 
 	def send_chatstate(self, state, contact = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
-		to jid only if new chatstate is different
-		from the previous one
+		to contact only if new chatstate is different from the previous one
 		if jid is not specified, send to active tab'''
 		# JEP 85 does not allow resending the same chatstate
 		# this function checks for that and just returns so it's safe to call it
@@ -1058,7 +1116,7 @@ class ChatControl(ChatControlBase):
 		# update chatstate in tab for this chat
 		self.parent_win.redraw_tab(self.contact, self.contact.chatstate)
 
-	def on_banner_eventbox_button_press_event(self, widget, event):
+	def _on_banner_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
 			self.parent_win.popup_menu(event)
@@ -1109,3 +1167,117 @@ class ChatControl(ChatControlBase):
 				if os.path.isfile(path): # is it file?
 					ft = gajim.interface.instances['file_transfers']
 					ft.send_file(self.account, self.contact, path)
+
+	def _on_message_tv_buffer_changed(self, textbuffer):
+		self.kbd_activity_in_last_5_secs = True
+		self.kbd_activity_in_last_30_secs = True
+		if textbuffer.get_char_count():
+			self.send_chatstate('composing', self.contact)
+		else:
+			self.send_chatstate('active', self.contact)
+
+	def restore_conversation(self):
+		jid = self.contact.jid
+		# don't restore lines if it's a transport
+		if gajim.jid_is_transport(jid):
+			return
+		
+		# How many lines to restore and when to time them out
+		restore_how_many = gajim.config.get('restore_lines')
+		timeout = gajim.config.get('restore_timeout') # in minutes
+		# number of messages that are in queue and are already logged
+		pending_how_many = 0 # we want to avoid duplication
+		
+		if gajim.awaiting_events[self.account].has_key(jid):
+			events = gajim.awaiting_events[self.account][jid]
+			for event in events:
+				if event[0] == 'chat':
+					pending_how_many += 1
+
+		rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
+			pending_how_many, timeout)
+		
+		for row in rows: # row[0] time, row[1] has kind, row[2] the message
+			if not row[2]: # message is empty, we don't print it
+				continue
+			if row[1] in (constants.KIND_CHAT_MSG_SENT,
+					constants.KIND_SINGLE_MSG_SENT):
+				kind = 'outgoing'
+				name = gajim.nicks[self.account]
+			elif row[1] in (constants.KIND_SINGLE_MSG_RECV,
+					constants.KIND_CHAT_MSG_RECV):
+				kind = 'incoming'
+				name = self.contact.name
+
+			tim = time.localtime(float(row[0]))
+
+			ChatControlBase.print_conversation_line(self, row[2], kind, name, tim,
+								['small'],
+								['small', 'restored_message'],
+								['small', 'restored_message'],
+								False)
+		if len(rows):
+			self.conv_textview.print_empty_line()
+
+	def read_queue(self):
+		'''read queue and print messages containted in it'''
+		jid = self.contact.jid
+		l = gajim.awaiting_events[self.account][jid]
+
+		# Is it a pm ?
+		is_pm = False
+		room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+		# FIXME: Accessing gc's, here? 
+		gcs = gajim.interface.instances[self.account]['gc']
+		if gcs.has_key(room_jid):
+			is_pm = True
+		events_to_keep = []
+		for event in l:
+			typ = event[0]
+			if typ != 'chat':
+				events_to_keep.append(event)
+				continue
+			data = event[1]
+			kind = data[2]
+			if kind == 'error':
+				kind = 'status'
+			else:
+				kind = 'print_queue'
+			self.print_conversation(data[0], kind, tim = data[3],
+				encrypted = data[4], subject = data[1])
+
+			# remove from gc nb_unread if it's pm or from roster
+			if is_pm:
+				gcs[room_jid].nb_unread[room_jid] -= 1
+			else:
+				gajim.interface.roster.nb_unread -= 1
+
+		if is_pm:
+			gcs[room_jid].show_title()
+		else:
+			gajim.interface.roster.show_title()
+		# Keep only non-messages events
+		if len(events_to_keep):
+			gajim.awaiting_events[self.account][jid] = events_to_keep
+		else:
+			del gajim.awaiting_events[self.account][jid]
+		typ = 'chat' # Is it a normal chat or a pm ?
+		# reset to status image in gc if it is a pm
+		# FIXME: New data structure
+		gcs = gajim.interface.instances[self.account]['gc']
+		if gcs.has_key(room_jid):
+			gcs[room_jid].draw_all_roster()
+			typ = 'pm'
+
+		gajim.interface.roster.draw_contact(jid, self.account)
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.remove_jid(jid, self.account, typ)
+		if (self.contact.show == 'offline' or self.contact.show == 'error'):
+			showOffline = gajim.config.get('showoffline')
+			if not showOffline and typ == 'chat' and \
+				len(gajim.contacts[self.account][jid]) == 1:
+				gajim.interface.roster.really_remove_contact(self.contact,
+										self.account)
+			elif typ == 'pm':
+				gcs[room_jid].remove_contact(room_jid, nick)
+

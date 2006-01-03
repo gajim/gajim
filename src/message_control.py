@@ -61,6 +61,12 @@ class MessageControl:
 		or inactive (state is False)'''
 		pass  # Derived types MUST implement this method
 
+	def allow_shutdown(self):
+		'''Called to check is a control is allowed to shutdown.
+		If a control is not in a suitable shutdown state this method
+		should return False'''
+		# NOTE: Derived classes MAY implement this
+		return True
 	def shutdown(self):
 		# NOTE: Derived classes MUST implement this
 		assert(False)
@@ -92,12 +98,6 @@ class MessageControl:
 	def set_compact_view(self, state):
 		# NOTE: Derived classes MAY implement this
 		self.compact_view_current = state
-	def allow_shutdown(self):
-		'''Called to check is a control is allowed to shutdown.
-		If a control is not in a suitable shutdown state this method
-		should return False'''
-		# NOTE: Derived classes MAY implement this
-		return True
 
 	def save_var(self, jid):
 		'''When called, the derived type should serialize it's state in the form of a
@@ -106,6 +106,9 @@ class MessageControl:
 		pass # Derived classes SHOULD implement this
 	def load_var(self, jid, var):
 		pass # Derived classes SHOULD implement this
+
+	def get_specific_unread(self, jid):
+		return 0
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
 		'''Send the given message to the active tab'''

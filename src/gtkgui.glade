@@ -19081,7 +19081,6 @@ Maybe I'll refactor later</property>
 		      <property name="visible">True</property>
 		      <property name="visible_window">True</property>
 		      <property name="above_child">False</property>
-		      <signal name="button_press_event" handler="on_banner_eventbox_button_press_event" last_modification_time="Mon, 08 Aug 2005 10:39:20 GMT"/>
 
 		      <child>
 			<widget class="GtkHBox" id="hbox3004">
@@ -19150,8 +19149,8 @@ Status message</property>
 			      <property name="visible">True</property>
 			      <property name="visible_window">False</property>
 			      <property name="above_child">False</property>
-			      <signal name="enter_notify_event" handler="on_avatar_eventbox_enter_notify_event" last_modification_time="Sun, 02 Oct 2005 22:58:47 GMT"/>
-			      <signal name="leave_notify_event" handler="on_avatar_eventbox_leave_notify_event" last_modification_time="Sun, 02 Oct 2005 22:58:52 GMT"/>
+			      <signal name="enter_notify_event" handler="_on_avatar_eventbox_enter_notify_event" last_modification_time="Mon, 02 Jan 2006 23:13:50 GMT"/>
+			      <signal name="leave_notify_event" handler="_on_avatar_eventbox_leave_notify_event" last_modification_time="Mon, 02 Jan 2006 23:13:55 GMT"/>
 
 			      <child>
 				<widget class="GtkImage" id="avatar_image">
