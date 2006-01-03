@@ -1423,12 +1423,13 @@ class Interface:
 def test_migration(migration):
 	if not migration.PROCESSING:
 		dialog = gtk.Dialog()
-		#FIXME: translate these strings after 0.9
 		dialog = gtk.MessageDialog(None,
 			gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-			gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = 'GUI Migration failed')
+			gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
+				message_format = _('GUI Migration failed'))
 
-		dialog.format_secondary_text('Logs migration through graphical interface failed. The migration process will start in the background. Please wait a few minutes for Gajim to start.')
+		dialog.format_secondary_text(
+		_('Logs migration through graphical interface failed. The migration process will start in the background. Please wait a few minutes for Gajim to start.'))
 		dialog.run()
 		dialog.destroy()
 		gtk.main_quit()
