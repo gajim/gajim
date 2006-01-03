@@ -131,10 +131,7 @@ class Contacts:
 			return
 		if contact in self._contacts[account][contact.jid]:
 			self._contacts[account][contact.jid].remove(contact)
-		# It was the last resource of this contact ?
-		if not len(self._contacts[account][contact.jid]):
-			del self._contacts[account][contact.jid]
-	
+
 	def remove_jid(self, account, jid):
 		'''Removes all contacts for a given jid'''
 		if not self._contacts.has_key(account):
