@@ -19769,7 +19769,7 @@ Status message</property>
 		      <signal name="button_press_event" handler="on_banner_eventbox_button_press_event" last_modification_time="Mon, 08 Aug 2005 15:32:39 GMT"/>
 
 		      <child>
-			<widget class="GtkLabel" id="label375">
+			<widget class="GtkLabel" id="banner_name_label">
 			  <property name="visible">True</property>
 			  <property name="label">&lt;span weight=&quot;heavy&quot; size=&quot;large&quot;&gt;room jid&lt;/span&gt;
 topic</property>
@@ -19820,7 +19820,7 @@ topic</property>
 			  <property name="spacing">6</property>
 
 			  <child>
-			    <widget class="GtkScrolledWindow" id="scrolledwindow46">
+			    <widget class="GtkScrolledWindow" id="conversation_scrolledwindow">
 			      <property name="width_request">200</property>
 			      <property name="height_request">60</property>
 			      <property name="visible">True</property>
@@ -19842,7 +19842,7 @@ topic</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkScrolledWindow" id="scrolledwindow47">
+			    <widget class="GtkScrolledWindow" id="message_scrolledwindow">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>

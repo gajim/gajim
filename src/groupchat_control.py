@@ -24,6 +24,24 @@ from chat_control import ChatControl
 from chat_control import ChatControlBase
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
+from gettext import ngettext
+from common import i18n
+
+_ = i18n._
+Q_ = i18n.Q_
+APP = i18n.APP
+gtk.glade.bindtextdomain(APP, i18n.DIR)
+gtk.glade.textdomain(APP)
+
+GTKGUI_GLADE = 'gtkgui.glade'
+
+#(status_image, type, nick, shown_nick)
+(
+C_IMG, # image to show state (online, new message etc)
+C_TYPE, # type of the row ('contact' or 'group')
+C_NICK, # contact nickame or group name
+C_TEXT, # text shown in the cellrenderer
+) = range(4)
 
 class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
@@ -40,6 +58,9 @@ class GroupchatControl(ChatControlBase):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
 					'muc_child_vbox', _('Group Chat'), contact, acct);
 		self.compact_view_always = gajim.config.get('always_compact_view_gc')
+		# alphanum sorted
+		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact', 'help', 'invite',
+			'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part', 'say', 'topic']
 		# muc attention states (when we are mentioned in a muc)
 		# if the room jid is in the list, the room has mentioned us
 		self.muc_attentions = []
@@ -57,7 +78,7 @@ class GroupchatControl(ChatControlBase):
 			
 		num_unread = self.nb_unread
 
-		has_focus = self.parent_win.get_property('has-toplevel-focus')
+		has_focus = self.parent_win.window.get_property('has-toplevel-focus')
 		current_tab = self.parent_win.get_active_control() == self
 		color = None
 		theme = gajim.config.get('roster_theme')

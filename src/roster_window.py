@@ -46,6 +46,7 @@ from common import i18n
 from message_window import MessageWindowMgr
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
+from groupchat_control import PrivateChatControl
 
 _ = i18n._
 APP = i18n.APP
@@ -1697,14 +1698,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		mw.set_active_tab(jid)
 		mw.window.present()
 
-	def new_room(self, jid, nick, account):
+	def new_room(self, room_jid, nick, account):
+		print "new_room"
 		# FIXME: Not contact.  Use jid and nick
 		# Get target window, create a control, and associate it with the window
+		contact = gajim.contacts.create_contact(jid = room_jid)
 		mw = gajim.interface.msg_win_mgr.get_window(contact.jid)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account,
 								GroupchatControl.TYPE_ID)
-		gc_control = ChatControl(mw, contact, account)
+		gc_control = GroupchatControl(mw, contact, account)
 		mw.new_tab(gc_control)
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,

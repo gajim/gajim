@@ -267,14 +267,20 @@ class MessageWindow:
 		num_unread = ctl.nb_unread
 		# Set tab image (always 16x16); unread messages show the 'message' image
 		img_16 = gajim.interface.roster.get_appropriate_state_images(contact.jid)
-		if num_unread and gajim.config.get('show_unread_tab_icon'):
-			tab_img = img_16['message']
-		else:
-			tab_img = img_16[contact.show]
-		if tab_img.get_storage_type() == gtk.IMAGE_ANIMATION:
-			status_img.set_from_animation(tab_img.get_animation())
-		else:
-			status_img.set_from_pixbuf(tab_img.get_pixbuf())
+		tab_img = None
+		if ctl.type_id == message_control.TYPE_CHAT:
+			if num_unread and gajim.config.get('show_unread_tab_icon'):
+				tab_img = img_16['message']
+			else:
+				tab_img = img_16[contact.show]
+		elif ctl.type_id == message_control.TYPE_GC:
+			# FIXME: muc_active muc_inactive
+			pass
+		if tab_img:
+			if tab_img.get_storage_type() == gtk.IMAGE_ANIMATION:
+				status_img.set_from_animation(tab_img.get_animation())
+			else:
+				status_img.set_from_pixbuf(tab_img.get_pixbuf())
 
 	def repaint_themed_widgets(self):
 		'''Repaint controls in the window with theme color'''
