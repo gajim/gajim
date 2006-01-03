@@ -84,16 +84,6 @@ class MessageWindow:
 		self.window.connect('destroy', self._on_window_destroy)
 		self.window.connect('focus-in-event', self._on_window_focus)
 
-		# Restore previous window position
-		if gajim.config.get('saveposition'):
-			# get window position and size from config
-			gtkgui_helpers.move_window(self.window,
-				gajim.config.get('msgwin-x-position'),
-				gajim.config.get('msgwin-y-position'))
-			gtkgui_helpers.resize_window(self.window,
-					gajim.config.get('msgwin-width'),
-					gajim.config.get('msgwin-height'))
-
 		self.window.show_all()
 
 	def _on_window_focus(self, widget, event):
@@ -120,22 +110,9 @@ class MessageWindow:
 		for ctl in self._controls.values():
 			if not ctl.allow_shutdown():
 				return True # halt the delete
-
-		# FIXME: Do based on type, main, never, peracct, pertype
-		if gajim.config.get('saveposition'):
-			# save the window size and position
-			x, y = win.get_position()
-			gajim.config.set('msgwin-x-position', x)
-			gajim.config.set('msgwin-y-position', y)
-			width, height = win.get_size()
-			gajim.config.set('msgwin-width', width)
-			gajim.config.set('msgwin-height', height)
-
 		return False
 
 	def _on_window_destroy(self, win):
-		# FIXME
-		print "MessageWindow._on_window_destroy:", win
 		for ctl in self._controls.values():
 			ctl.shutdown()
 		self._controls.clear()
@@ -485,39 +462,6 @@ class MessageWindow:
 			if ctl.type_id == message_control.TYPE_CHAT:
 				self.remove_tab(contact)
 
-		# FIXME: Move this to ChatControlBase
-		elif event.keyval == gtk.keysyms.e and \
-			(event.state & gtk.gdk.MOD1_MASK): # alt + E opens emoticons menu
-			if gajim.config.get('useemoticons'):
-				msg_tv = self.message_textviews[jid]
-				def set_emoticons_menu_position(w, msg_tv = msg_tv):
-					window = msg_tv.get_window(gtk.TEXT_WINDOW_WIDGET)
-					# get the window position
-					origin = window.get_origin()
-					size = window.get_size()
-					buf = msg_tv.get_buffer()
-					# get the cursor position
-					cursor = msg_tv.get_iter_location(buf.get_iter_at_mark(
-						buf.get_insert()))
-					cursor =  msg_tv.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
-						cursor.x, cursor.y)
-					x = origin[0] + cursor[0]
-					y = origin[1] + size[1]
-					menu_width, menu_height = self.emoticons_menu.size_request()
-					#FIXME: get_line_count is not so good
-					#get the iter of cursor, then tv.get_line_yrange
-					# so we know in which y we are typing (not how many lines we have
-					# then go show just above the current cursor line for up
-					# or just below the current cursor line for down
-					#TEST with having 3 lines and writing in the 2nd
-					if y + menu_height > gtk.gdk.screen_height():
-						# move menu just above cursor
-						y -= menu_height + (msg_tv.allocation.height / buf.get_line_count())
-					#else: # move menu just below cursor
-					#	y -= (msg_tv.allocation.height / buf.get_line_count())
-					return (x, y, True) # push_in True
-				self.emoticons_menu.popup(None, None, set_emoticons_menu_position, 1, 0)
-
 ################################################################################
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
@@ -545,6 +489,7 @@ class MessageWindowMgr:
 	def _new_window(self):
 		win = MessageWindow()
 		# we track the lifetime of this window
+		win.window.connect('delete-event', self._on_window_delete)
 		win.window.connect('destroy', self._on_window_destroy)
 		return win
 
@@ -554,13 +499,24 @@ class MessageWindowMgr:
 				return w
 		return None
 
+	def _on_window_delete(self, win, event):
+		# FIXME: Do based on type, main, never, peracct, pertype
+		if gajim.config.get('saveposition'):
+			# save the window size and position
+			x, y = win.get_position()
+			if self.mode != self.CONFIG_NEVER:
+				gajim.config.set('msgwin-x-position', x)
+				gajim.config.set('msgwin-y-position', y)
+			width, height = win.get_size()
+			gajim.config.set('msgwin-width', width)
+			gajim.config.set('msgwin-height', height)
+		return False
+
 	def _on_window_destroy(self, win):
 		for k in self._windows.keys():
 			if self._windows[k].window == win:
 				del self._windows[k]
 				return
-		# How was the window not in out list?!? Assert.
-		assert(False)
 
 	def get_window(self, jid):
 		for win in self._windows.values():
@@ -589,6 +545,20 @@ class MessageWindowMgr:
 			print "Creating tabbed chat window for '%s'" % str(key)
 			win = self._new_window()
 			self._windows[key] = win
+
+		# Postion and size window based on saved state and window mode
+		if gajim.config.get('saveposition'):
+			# FIXME: Add a peracct and pertype positioning mode/config
+			print "x,y",gajim.config.get('msgwin-x-position'),gajim.config.get('msgwin-y-position')
+			print "width,height",gajim.config.get('msgwin-width'),gajim.config.get('msgwin-height')
+
+			if self.mode != self.CONFIG_NEVER:
+				gtkgui_helpers.move_window(win.window,
+					gajim.config.get('msgwin-x-position'),
+					gajim.config.get('msgwin-y-position'))
+			gtkgui_helpers.resize_window(win.window,
+					gajim.config.get('msgwin-width'),
+					gajim.config.get('msgwin-height'))
 	
 		assert(win)
 		return win

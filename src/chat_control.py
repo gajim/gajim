@@ -171,6 +171,38 @@ class ChatControlBase(MessageControl):
 					self.msg_textview.grab_focus()
 				# Paste into the msg textview
 				self.msg_textview.emit('key_press_event', event)
+		elif event.keyval == gtk.keysyms.e and \
+			(event.state & gtk.gdk.MOD1_MASK): # alt + E opens emoticons menu
+			if gajim.config.get('useemoticons'):
+				msg_tv = self.msg_textview
+				def set_emoticons_menu_position(w, msg_tv = self.msg_textview):
+					window = msg_tv.get_window(gtk.TEXT_WINDOW_WIDGET)
+					# get the window position
+					origin = window.get_origin()
+					size = window.get_size()
+					buf = msg_tv.get_buffer()
+					# get the cursor position
+					cursor = msg_tv.get_iter_location(buf.get_iter_at_mark(
+						buf.get_insert()))
+					cursor =  msg_tv.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
+						cursor.x, cursor.y)
+					x = origin[0] + cursor[0]
+					y = origin[1] + size[1]
+					menu_width, menu_height = self.emoticons_menu.size_request()
+					#FIXME: get_line_count is not so good
+					#get the iter of cursor, then tv.get_line_yrange
+					# so we know in which y we are typing (not how many lines we have
+					# then go show just above the current cursor line for up
+					# or just below the current cursor line for down
+					#TEST with having 3 lines and writing in the 2nd
+					if y + menu_height > gtk.gdk.screen_height():
+						# move menu just above cursor
+						y -= menu_height +\
+							(msg_tv.allocation.height / buf.get_line_count())
+					#else: # move menu just below cursor
+					#	y -= (msg_tv.allocation.height / buf.get_line_count())
+					return (x, y, True) # push_in True
+				self.emoticons_menu.popup(None, None, set_emoticons_menu_position, 1, 0)
 		return False
 
 	def _on_message_textview_key_press_event(self, widget, event):
@@ -1101,7 +1133,7 @@ class ChatControl(ChatControlBase):
 
 	def shutdown(self):
 		# Send 'gone' chatstate
-		self.send_chatstate('gone', self.contact.jid)
+		self.send_chatstate('gone', self.contact)
 		self.contact.chatstate = None
 		self.contact.our_chatstate = None
 		# Disconnect timer callbacks
@@ -1143,9 +1175,9 @@ class ChatControl(ChatControlBase):
 		# send chatstate inactive to the one we're leaving
 		# and active to the one we visit
 		if state:
-			self.send_chatstate('active', self.contact.jid)
+			self.send_chatstate('active', self.contact)
 		else:
-			self.send_chatstate('inactive', self.contact.jid)
+			self.send_chatstate('inactive', self.contact)
 
 	def show_avatar(self, resource = None):
 		jid = self.contact.jid
