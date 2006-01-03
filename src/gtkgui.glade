@@ -16218,7 +16218,7 @@ Banner</property>
       <property name="tooltip" translatable="yes">Click to see past conversations with this contact</property>
       <property name="label" translatable="yes">_History</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_history_menuitem_clicked" last_modification_time="Thu, 04 Aug 2005 13:53:23 GMT"/>
+      <signal name="activate" handler="_on_history_menuitem_clicked" last_modification_time="Tue, 03 Jan 2006 04:27:11 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image1241">
@@ -16239,7 +16239,7 @@ Banner</property>
       <property name="visible">True</property>
       <property name="label">gtk-dialog-info</property>
       <property name="use_stock">True</property>
-      <signal name="activate" handler="on_contact_information_menuitem_clicked" last_modification_time="Tue, 20 Sep 2005 18:08:14 GMT"/>
+      <signal name="activate" handler="_on_contact_information_menuitem_clicked" last_modification_time="Tue, 03 Jan 2006 04:27:04 GMT"/>
     </widget>
   </child>
 
@@ -16248,7 +16248,7 @@ Banner</property>
       <property name="visible">True</property>
       <property name="label" translatable="yes">Send _File</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_send_file_menuitem_activate" last_modification_time="Wed, 03 Aug 2005 15:21:47 GMT"/>
+      <signal name="activate" handler="_on_send_file_menuitem_activate" last_modification_time="Tue, 03 Jan 2006 04:26:55 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image1242">
@@ -16270,7 +16270,7 @@ Banner</property>
       <property name="label" translatable="yes">Toggle Open_PGP Encryption</property>
       <property name="use_underline">True</property>
       <property name="active">False</property>
-      <signal name="activate" handler="on_toggle_gpg_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 10:43:11 GMT"/>
+      <signal name="activate" handler="_on_toggle_gpg_menuitem_activate" last_modification_time="Tue, 03 Jan 2006 04:26:46 GMT"/>
     </widget>
   </child>
 
@@ -16280,7 +16280,7 @@ Banner</property>
       <property name="label" translatable="yes">_Compact View    Alt+C</property>
       <property name="use_underline">True</property>
       <property name="active">False</property>
-      <signal name="activate" handler="on_compact_view_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 13:07:17 GMT"/>
+      <signal name="activate" handler="_on_compact_view_menuitem_activate" last_modification_time="Tue, 03 Jan 2006 04:26:30 GMT"/>
     </widget>
   </child>
 
@@ -16289,7 +16289,7 @@ Banner</property>
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Add to Roster</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_add_to_roster_menuitem_activate" last_modification_time="Thu, 21 Jul 2005 22:46:10 GMT"/>
+      <signal name="activate" handler="_on_add_to_roster_menuitem_activate" last_modification_time="Tue, 03 Jan 2006 04:26:37 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image1243">

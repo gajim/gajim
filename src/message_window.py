@@ -214,7 +214,7 @@ class MessageWindow:
 		ctl = self.get_active_control()
 		if len(self._controls) > 1: # if more than one tab in the same window
 			add = ctl.display_name
-		elif len(self._controls) == 1: # just one tab
+		else:
 			add = ctl.contact.name
 # FIXME: This is for GC only
 #			elif self.widget_name == 'groupchat_window':
@@ -264,7 +264,6 @@ class MessageWindow:
 			self.show_title()
 
 	def redraw_tab(self, contact, chatstate = None):
-		print self._controls
 		ctl = self._controls[contact.jid]
 		ctl.update_state()
 
@@ -317,9 +316,15 @@ class MessageWindow:
 		active_widget = notebook.get_nth_page(notebook.get_current_page())
 		return self._widget_to_control(active_widget)
 	def get_active_contact(self):
-		return self.get_active_control().contact
+		ctl = self.get_active_control()
+		if ctl:
+			return ctl.contact
+		return None
 	def get_active_jid(self):
-		return self.get_active_contact().jid
+		contact = self.get_active_contact()
+		if contact:
+			return contact.jid
+		return None
 
 	def is_active(self):
 		return self.window.is_active()

@@ -648,10 +648,10 @@ class Interface:
 		win = None
 		ctl = None
 		if gajim.interface.msg_win_mgr.has_window(jid):
-			win = gajim.interface.msg_type.get_window(jid)
+			win = gajim.interface.msg_win_mgr.get_window(jid)
 			ctl = win.get_control(jid)
 		elif resource and gajim.interface.msg_win_mgr.has_window(jid + '/' + resource):
-			win = gajim.interface.msg_type.get_window(jid + '/' + resource)
+			win = gajim.interface.msg_win_mgr.get_window(jid + '/' + resource)
 			ctl = win.get_control(jid + '/' + resource)
 		if win:
 			ctl.show_avatar()

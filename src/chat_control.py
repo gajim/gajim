@@ -276,6 +276,15 @@ class ChatControlBase(MessageControl):
 		# Clear msg input
 		message_buffer = self.msg_textview.get_buffer()
 		message_buffer.set_text('') # clear message buffer (and tv of course)
+# FIXME GC ONLY
+#		if contact is None:
+#			# contact was from pm in MUC, and left the room, or we left the room
+#			room, nick = gajim.get_room_and_nick_from_fjid(jid)
+#			dialogs.ErrorDialog(_('Sending private message failed'),
+#				#in second %s code replaces with nickname
+#				_('You are no longer in room "%s" or "%s" has left.') % \
+#				(room, nick)).get_response()
+#			
 
 	def save_sent_message(self, message):
 		#save the message, so user can scroll though the list with key up/down
@@ -310,15 +319,18 @@ class ChatControlBase(MessageControl):
 		if kind == 'incoming_queue':
 			gajim.last_message_time[self.account][jid] = time.time()
 		urgent = True
-		if (jid != self.parent_win.get_active_jid() or \
-		   not self.parent_win.is_active() or not end) and\
-		   	kind in ('incoming', 'incoming_queue'):
+		if (not self.parent_win.get_active_jid() or\
+		jid != self.parent_win.get_active_jid() or \
+		not self.parent_win.is_active() or not end) and\
+	   	kind in ('incoming', 'incoming_queue'):
 			self.nb_unread += 1
 			if gajim.interface.systray_enabled and\
 				gajim.config.get('trayicon_notification_on_new_messages'):
 				gajim.interface.systray.add_jid(jid, self.account, self.type_id)
-			self.parent_win.redraw_tab(self.contact)
-			self.show_title(urgent)
+			# FIXME: This is one hairy race condition
+			if self.parent_win.get_active_control():
+				self.parent_win.redraw_tab(self.contact)
+				self.parent_win.show_title(urgent)
 
 	def toggle_emoticons(self):
 		'''hide show emoticons_button and make sure emoticons_menu is always there
@@ -434,12 +446,12 @@ class ChatControlBase(MessageControl):
 				#we are at the end
 				if self.nb_unread > 0:
 					self.nb_unread = 0 + self.get_specific_unread()
-					self.parent_win.redraw_tab(jid)
+					self.parent_win.redraw_tab(self.contact)
 					self.parent_win.show_title()
 					if gajim.interface.systray_enabled:
 						gajim.interface.systray.remove_jid(jid,
 										self.account,
-										self.type)
+										self.type_id)
 			self.msg_textview.grab_focus()
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
@@ -598,9 +610,6 @@ class ChatControl(ChatControlBase):
 
 		# restore previous conversation
 		self.restore_conversation()
-
-		if gajim.awaiting_events[self.account].has_key(self.contact.jid):
-			self.read_queue()
 
 	def _on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''we enter the eventbox area so we under conditions add a timeout
@@ -1014,10 +1023,6 @@ class ChatControl(ChatControlBase):
 				widget.set_no_show_all(False)
 				widget.show_all()
 
-	def on_compact_view_menuitem_activate(self, widget):
-		isactive = widget.get_active()
-		self.set_compact_view(isactive)
-
 	def send_chatstate(self, state, contact = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
 		to contact only if new chatstate is different from the previous one
@@ -1352,4 +1357,18 @@ class ChatControl(ChatControlBase):
 		'''we just moved the mouse so show the cursor'''
 		cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
 		self.bigger_avatar_window.window.set_cursor(cursor)
+
+	def _on_compact_view_menuitem_activate(self, widget):
+		isactive = widget.get_active()
+		self.set_compact_view(isactive)
+
+	def _on_send_file_menuitem_activate(self, widget):
+		gajim.interface.instances['file_transfers'].show_file_send_request( 
+			self.account, self.contact)
+
+	def _on_add_to_roster_menuitem_activate(self, widget):
+		dialogs.AddNewContactWindow(self.account, self.contact.jid)
+
+	def _on_contact_information_menuitem_clicked(self, widget):
+		gajim.interface.roster.on_info(widget, self.contact, self.account)
 

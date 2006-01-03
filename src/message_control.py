@@ -107,7 +107,7 @@ class MessageControl:
 	def load_var(self, jid, var):
 		pass # Derived classes SHOULD implement this
 
-	def get_specific_unread(self, jid):
+	def get_specific_unread(self):
 		return 0
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):

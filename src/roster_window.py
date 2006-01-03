@@ -1672,6 +1672,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 								ChatControl.TYPE_ID)
 		chat_control = ChatControl(mw, contact, account)
 		mw.new_tab(chat_control)
+		if gajim.awaiting_events[account].has_key(contact.jid):
+			# We call this here to avoid race conditions with widget validation
+			chat_control.read_queue()
 
 	def new_chat_from_jid(self, account, jid):
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
