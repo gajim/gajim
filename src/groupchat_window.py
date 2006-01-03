@@ -1159,17 +1159,11 @@ current room topic.') % command, room_jid)
 	def on_info(self, widget, room_jid, nick):
 		'''Call vcard_information_window class to display user's information'''
 		c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
-		if c.jid and c.resource:
-			# on GC, we know resource only if we're mod and up
-			jid = c.jid
-			fjid = c.jid + '/' + c.resource
-		else:
-			fjid = gajim.construct_fjid(room_jid, nick)
-			jid = fjid
+		jid = c.get_full_jid()
 		if gajim.interface.instances[self.account]['infos'].has_key(jid):
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
-			# we copy contact because c.jid must contain the fakeJid for vcard
+			# we create a Contact instance
 			c2 = gajim.contacts.contact_from_gc_contact(c)
 			gajim.interface.instances[self.account]['infos'][jid] = \
 				vcard.VcardWindow(c2, self.account, False)
