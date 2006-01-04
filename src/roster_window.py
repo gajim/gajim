@@ -2503,7 +2503,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# user1.groups
 		c = gajim.contacts.get_first_contact_from_jid(account, data)
 		if context.action != gtk.gdk.ACTION_COPY:
-			c.groups.remove(grp_source)
+			if grp_source in c.groups:
+				# Make sure contact was in a group
+				c.groups.remove(grp_source)
 			if model.iter_n_children(iter_group_source) == 1:
 				# this was the only child
 				model.remove(iter_group_source)
