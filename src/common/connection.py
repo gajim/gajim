@@ -1238,13 +1238,14 @@ class Connection:
 				for option_tag in option_tags:
 					dic[i]['options'][j] = {}
 					label = option_tag.getAttr('label')
-					if label:
-						dic[i]['options'][j]['label'] = label
 					tags = option_tag.getTags('value')
 					dic[i]['options'][j]['values'] = []
 					for tag in tags:
 						dic[i]['options'][j]['values'].append(tag.getData())
 					j += 1
+					if not label:
+						label = dic[i]['options'][j]['values'][0]
+					dic[i]['options'][j]['label'] = label
 				if not dic[i].has_key('values'):
 					dic[i]['values'] = [dic[i]['options'][0]['values'][0]]
 			i += 1
