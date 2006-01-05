@@ -119,9 +119,6 @@ class MessageControl:
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
 		'''Send the given message to the active tab'''
-		# refresh timers
-		self.reset_kbd_mouse_timeout_vars()
-
 		jid = self.contact.jid
 		# Send and update history
 		gajim.connections[self.account].send_message(jid, message, keyID,

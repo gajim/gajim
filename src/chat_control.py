@@ -588,6 +588,14 @@ class ChatControlBase(MessageControl):
 			self.sent_history_pos = self.sent_history_pos + 1
 			conv_buf.set_text(self.sent_history[self.sent_history_pos])
 
+	def lighten_color(self, color):
+		p = 0.4
+		mask = 0
+		color.red = int((color.red * p) + (mask * (1 - p)))
+		color.green = int((color.green * p) + (mask * (1 - p)))
+		color.blue = int((color.blue * p) + (mask * (1 - p)))
+		return color
+
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
@@ -802,6 +810,9 @@ class ChatControl(ChatControlBase):
 		if not message or message == '\n' or self._process_command(message):
 			return
 
+		# refresh timers
+		self.reset_kbd_mouse_timeout_vars()
+
 		contact = self.contact
 		jid = self.contact.jid
 
@@ -968,11 +979,7 @@ class ChatControl(ChatControlBase):
 			# In inactive tab color to be lighter against the darker inactive
 			# background
 			if self.parent_win.get_active_control() != self:
-				p = 0.4
-				mask = 0
-				color.red = int((color.red * p) + (mask * (1 - p)))
-				color.green = int((color.green * p) + (mask * (1 - p)))
-				color.blue = int((color.blue * p) + (mask * (1 - p)))
+				color = self.lighten_color(color)
 
 		label_str = self.contact.name
 		if num_unread: # if unread, text in the label becomes bold
@@ -991,7 +998,6 @@ class ChatControl(ChatControlBase):
 			tab_img = img_16[self.contact.show]
 
 		return tab_img
-
 
 	def remove_possible_switch_to_menuitems(self, menu):
 		''' remove duplicate 'Switch to' if they exist and return clean menu'''

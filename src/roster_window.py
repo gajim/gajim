@@ -325,8 +325,7 @@ class RosterWindow:
 
 	def join_gc_room(self, account, room_jid, nick, password):
 		'''joins the room immediatelly'''
-		# FIXME
-		if room_jid in gajim.interface.instances[account]['gc'] and \
+		if gajim.interface.msg_win_mgr.has_window(room_jid) and \
 		gajim.gc_connected[account][room_jid]:
 			dialogs.ErrorDialog(_('You are already in room %s') % room_jid
 				).get_response()
@@ -337,10 +336,11 @@ class RosterWindow:
 				).get_response()
 			return
 		room, server = room_jid.split('@')
-		if not room_jid in gajim.interface.instances[account]['gc']:
+		if not gajim.interface.msg_win_mgr.has_window(room_jid):
 			self.new_room(room_jid, nick, account)
-		gajim.interface.instances[account]['gc'][room_jid].set_active_tab(room_jid)
-		gajim.interface.instances[account]['gc'][room_jid].window.present()
+		gc_win = gajim.interface.msg_win_mgr.get_window(room_jid)
+		gc_win.set_active_tab(room_jid)
+		gc_win.window.present()
 		gajim.connections[account].join_gc(nick, room, server, password)
 		if password:
 			gajim.gc_passwords[room_jid] = password
@@ -1705,10 +1705,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		mw.window.present()
 
 	def new_room(self, room_jid, nick, account):
-		print "new_room"
-		# FIXME: Not contact.  Use jid and nick
 		# Get target window, create a control, and associate it with the window
-		contact = gajim.contacts.create_contact(jid = room_jid)
+		contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
 		mw = gajim.interface.msg_win_mgr.get_window(contact.jid)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account,

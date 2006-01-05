@@ -43,10 +43,10 @@ class MessageWindow:
 		self.widget_name = 'message_window'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, self.widget_name, APP)
 		self.window = self.xml.get_widget(self.widget_name)
-		# FIXME: assertion that !GTK_WIDGET_REALIZED fails
+# FIXME: assertion that !GTK_WIDGET_REALIZED fails
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
-		#self.window.set_events(gtk.gdk.POINTER_MOTION_MASK)
+#		self.window.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.alignment = self.xml.get_widget('alignment')
 
 		self.notebook = self.xml.get_widget('notebook')
@@ -312,16 +312,16 @@ class MessageWindow:
 		for ctl in self._controls.values():
 			ctl.update_tags()
 
-	def get_control(self, arg):
+	def get_control(self, key):
 		'''Return the MessageControl for jid or n, where n is the notebook page index'''
-		if isinstance(arg, unicode):
-			jid = arg
+		if isinstance(key, unicode):
+			jid = key
 			for ctl in self._controls.values():
 				if ctl.contact.jid == jid:
 					return ctl
 			return None
 		else:
-			page_num = arg
+			page_num = key
 			notebook = self.notebook
 			if page_num == None:
 				page_num = notebook.get_current_page()

@@ -403,7 +403,8 @@ class Interface:
 			elif gajim.connections[account].connected in (2, 3): # we're online or chat
 				show_notification = True
 
-		if self.instances[account]['gc'].has_key(jid): # it's a Private Message
+		chat_control = gajim.interface.msg_win_mgr.get_control(jid)
+		if chat_control and chat_control.type_id == TYPE_GC: # it's a Private Message
 			nick = gajim.get_nick_from_fjid(array[0])
 			fjid = array[0]
 			if not gajim.interface.msg_win_mgr.has_window(fjid) and \
@@ -411,8 +412,7 @@ class Interface:
 				if show_notification:
 					notify.notify(_('New Private Message'), fjid, account, 'pm')
 
-			self.instances[account]['gc'][jid].on_private_message(jid, nick,
-				array[1], array[2])
+			chat_control.on_private_message(nick, array[1], array[2])
 			return
 				
 		if gajim.config.get('ignore_unknown_contacts') and \
@@ -421,14 +421,14 @@ class Interface:
 
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-		if gajim.interface.msg_win_mgr.has_window(jid):
-			chat_ctl = gajim.interface.msg_win_mgr.get_control(jid)
+		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
+			ctl = gajim.interface.msg_win_mgr.get_control(jid)
 			if chatstate is not None: # he or she sent us reply, so he supports jep85
 				contact.chatstate = chatstate
 				if contact.our_chatstate == 'ask': # we were jep85 disco?
 					contact.our_chatstate = 'active' # no more
 				
-				chat_ctl.handle_incoming_chatstate()
+				ctl.handle_incoming_chatstate()
 			elif contact.chatstate != 'active':
 				# got no valid jep85 answer, peer does not support it
 				contact.chatstate = False
@@ -442,7 +442,7 @@ class Interface:
 
 		first = False
 		if not gajim.interface.msg_win_mgr.has_window(jid) and \
-			not gajim.awaiting_events[account].has_key(jid):
+		not gajim.awaiting_events[account].has_key(jid):
 			first = True
 			if gajim.config.get('notify_on_new_message'):
 				show_notification = False
@@ -704,7 +704,8 @@ class Interface:
 		# ('GC_MSG', account, (jid, msg, time))
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
-		if not self.instances[account]['gc'].has_key(room_jid):
+		gc_control = gajim.interface.msg_win_mgr.get_control(room_jid)
+		if not gc_control:
 			return
 		if len(jids) == 1:
 			# message from server
@@ -712,8 +713,7 @@ class Interface:
 		else:
 			# message from someone
 			nick = jids[1]
-		self.instances[account]['gc'][room_jid].on_message(room_jid, nick,
-			array[1], array[2])
+		gc_control.on_message(nick, array[1], array[2])
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 
