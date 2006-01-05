@@ -359,10 +359,8 @@ class ChatControlBase(MessageControl):
 			if gajim.interface.systray_enabled and\
 				gajim.config.get('trayicon_notification_on_new_messages'):
 				gajim.interface.systray.add_jid(jid, self.account, self.type_id)
-			# FIXME: This is one hairy race condition
-			if self.parent_win.get_active_control():
-				self.parent_win.redraw_tab(self.contact)
-				self.parent_win.show_title(urgent)
+			self.parent_win.redraw_tab(self.contact)
+			self.parent_win.show_title(urgent)
 
 	def toggle_emoticons(self):
 		'''hide show emoticons_button and make sure emoticons_menu is always there
@@ -935,12 +933,7 @@ class ChatControl(ChatControlBase):
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
 			subject = subject)
 
-	def markup_tab_label(self, label_str, chatstate):
-		'''Markup the label if necessary.  Returns a tuple such as:
-		(new_label_str, color)
-		either of which can be None
-		if chatstate is given that means we have HE SENT US a chatstate'''
-			
+	def get_tab_label(self, chatstate):
 		unread = ''
 		num_unread = self.nb_unread
 		if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
@@ -981,9 +974,23 @@ class ChatControl(ChatControlBase):
 				color.green = int((color.green * p) + (mask * (1 - p)))
 				color.blue = int((color.blue * p) + (mask * (1 - p)))
 
+		label_str = self.contact.name
 		if num_unread: # if unread, text in the label becomes bold
 			label_str = '<b>' + unread + label_str + '</b>'
 		return (label_str, color)
+
+	def get_tab_image(self):
+		num_unread = self.nb_unread
+		# Set tab image (always 16x16); unread messages show the 'message' image
+		img_16 = gajim.interface.roster.get_appropriate_state_images(self.contact.jid)
+		tab_img = None
+		
+		if num_unread and gajim.config.get('show_unread_tab_icon'):
+			tab_img = img_16['message']
+		else:
+			tab_img = img_16[self.contact.show]
+
+		return tab_img
 
 
 	def remove_possible_switch_to_menuitems(self, menu):
@@ -1114,19 +1121,17 @@ class ChatControl(ChatControlBase):
 
 		# prevent going paused if we we were not composing (JEP violation)
 		if state == 'paused' and not contact.our_chatstate == 'composing':
-			MessageControl.send_message(self, jid, None, None,
-				chatstate = 'active') # go active before
+			MessageControl.send_message(self, None, chatstate = 'active') # go active before
 			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()
 		
 		# if we're inactive prevent composing (JEP violation)
 		if contact.our_chatstate == 'inactive' and state == 'composing':
-			MessageControl.send_message(self, jid, None, None,
-				chatstate = 'active') # go active before
+			MessageControl.send_message(self, None, chatstate = 'active') # go active before
 			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()
 
-		MessageControl.send_message(self, jid, None, None, chatstate = state)
+		MessageControl.send_message(self, None, chatstate = state)
 		contact.our_chatstate = state
 		if contact.our_chatstate == 'active':
 			self.reset_kbd_mouse_timeout_vars()

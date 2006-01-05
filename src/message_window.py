@@ -257,25 +257,13 @@ class MessageWindow:
 
 		# Update nick
 		nick_label.set_max_width_chars(10)
-		(tab_label_str, tab_label_color) = ctl.markup_tab_label(contact.name,
-									chatstate)
+		(tab_label_str, tab_label_color) = ctl.get_tab_label(chatstate)
 		nick_label.set_markup(tab_label_str)
 		if tab_label_color:
 			nick_label.modify_fg(gtk.STATE_NORMAL, tab_label_color)
 			nick_label.modify_fg(gtk.STATE_ACTIVE, tab_label_color)
 
-		num_unread = ctl.nb_unread
-		# Set tab image (always 16x16); unread messages show the 'message' image
-		img_16 = gajim.interface.roster.get_appropriate_state_images(contact.jid)
-		tab_img = None
-		if ctl.type_id == message_control.TYPE_CHAT:
-			if num_unread and gajim.config.get('show_unread_tab_icon'):
-				tab_img = img_16['message']
-			else:
-				tab_img = img_16[contact.show]
-		elif ctl.type_id == message_control.TYPE_GC:
-			# FIXME: muc_active muc_inactive
-			pass
+		tab_img = ctl.get_tab_image()
 		if tab_img:
 			if tab_img.get_storage_type() == gtk.IMAGE_ANIMATION:
 				status_img.set_from_animation(tab_img.get_animation())

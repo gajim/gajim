@@ -88,10 +88,17 @@ class MessageControl:
 			gobject.source_remove(self.print_time_timeout_id)
 			del self.print_time_timeout_id
 		return False
-	def markup_tab_label(self, label_str, chatstate):
+	def get_tab_label(self, chatstate):
+		'''Return a suitable the tab label string.  Returns a tuple such as:
+		(label_str, color) either of which can be None
+		if chatstate is given that means we have HE SENT US a chatstate and
+		we want it displayed'''
 		# NOTE: Derived classes SHOULD implement this
 		# Reurn a markup'd label and optional gtk.Color
 		return (label_str, None)
+	def get_tab_image(self):
+		'''Return a suitable tab image for display.  None clears any current label.'''
+		return None
 	def prepare_context_menu(self):
 		# NOTE: Derived classes SHOULD implement this
 		return None
