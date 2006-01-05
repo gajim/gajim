@@ -182,11 +182,6 @@ class Contacts:
 	def get_first_contact_from_jid(self, account, jid):
 		if jid in self._contacts[account]:
 			return self._contacts[account][jid][0]
-		else: # it's fake jid
-			room, nick = common.gajim.get_room_and_nick_from_fjid(jid)
-			if self._gc_contacts[account].has_key(room) and \
-				nick in self._gc_contacts[account][room]:
-				return self._gc_contacts[account][room][nick]
 		return None
 
 	def get_parent_contact(self, account, contact):
