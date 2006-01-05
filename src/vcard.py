@@ -452,8 +452,7 @@ class VcardWindow:
 
 	def change_to_vcard(self):
 		self.xml.get_widget('information_notebook').remove_page(0)
-		#FIXME: make this string translatable for .10 [thanks Stian]
-		self.xml.get_widget('nickname_label').set_text('Personal details')
+		self.xml.get_widget('nickname_label').set_text(_('Personal details'))
 		
 		self.publish_button.show()
 		self.retrieve_button.show()

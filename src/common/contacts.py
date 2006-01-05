@@ -66,11 +66,12 @@ class Contact(ContactBase):
 class GC_Contact(ContactBase):
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', name='', show='', status='', role='',
-			affiliation='', jid = ''):
+			affiliation='', jid = '', resource = ''):
 		ContactBase.__init__(self, jid = jid, name = name, status = status, show = show)
 		self.room_jid = room_jid
 		self.role = role
 		self.affiliation = affiliation
+		self.resource = resource
 
 	def get_full_jid(self):
 		return self.room_jid + '/' + self.name
@@ -135,10 +136,7 @@ class Contacts:
 			return
 		if contact in self._contacts[account][contact.jid]:
 			self._contacts[account][contact.jid].remove(contact)
-		# It was the last resource of this contact ?
-		if not len(self._contacts[account][contact.jid]):
-			del self._contacts[account][contact.jid]
-	
+
 	def remove_jid(self, account, jid):
 		'''Removes all contacts for a given jid'''
 		if not self._contacts.has_key(account):
@@ -235,8 +233,9 @@ class Contacts:
 			sub = 'none')
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',
-		role='', affiliation='', jid=''):
-		return GC_Contact(room_jid, name, show, status, role, affiliation, jid)
+		role='', affiliation='', jid='', resource=''):
+		return GC_Contact(room_jid, name, show, status, role, affiliation, jid,
+			resource)
 	
 	def add_gc_contact(self, account, gc_contact):
 		# No such account before ?

@@ -356,14 +356,18 @@ class GroupchatWindow(chat.Chat):
 		if model.iter_n_children(parent_iter) == 0:
 			model.remove(parent_iter)
 
-	def add_contact_to_roster(self, room_jid, nick, show, role, jid, affiliation, status):
+	def add_contact_to_roster(self, room_jid, nick, show, role, affiliation, status, jid = ''):
 		model = self.list_treeview[room_jid].get_model()
 		role_name = helpers.get_uf_role(role, plural = True)
 
+		resource = ''
 		if jid:
-			jid = jid.split('/', 1)[0]
+			jids = jid.split('/', 1)
+			j = jids[0]
+			if len(jids) > 1:
+				resource = jids[1]
 		else:
-			jid = ''
+			j = ''
 
 		name = nick
 
@@ -376,7 +380,7 @@ class GroupchatWindow(chat.Chat):
 		if not nick in gajim.contacts.get_nick_list(self.account, room_jid):
 			gc_contact = gajim.contacts.create_gc_contact(room_jid = room_jid,
 				name = nick, show = show, status = status, role = role,
-				affiliation = affiliation, jid = jid)
+				affiliation = affiliation, jid = j, resource = resource)
 			gajim.contacts.add_gc_contact(self.account, gc_contact)
 		self.draw_contact(room_jid, nick)
 		if nick == self.nicks[room_jid]: # we became online
@@ -420,8 +424,8 @@ class GroupchatWindow(chat.Chat):
 		for nick in gajim.contacts.get_nick_list(self.account, room_jid):
 			gc_contact = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 			self.add_contact_to_roster(room_jid, nick, gc_contact.show,
-				gc_contact.role, gc_contact.jid, gc_contact.affiliation,
-				gc_contact.status)
+				gc_contact.role, gc_contact.affiliation, gc_contact.status,
+				gc_contact.jid)
 
 	def get_role(self, room_jid, nick):
 		gc_contact = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
@@ -486,14 +490,14 @@ class GroupchatWindow(chat.Chat):
 		else:
 			iter = self.get_contact_iter(room_jid, nick)
 			if not iter:
-				iter = self.add_contact_to_roster(room_jid, nick, show, role, jid,
-					affiliation, status)
+				iter = self.add_contact_to_roster(room_jid, nick, show, role,
+					affiliation, status, jid)
 			else:
 				actual_role = self.get_role(room_jid, nick)
 				if role != actual_role:
 					self.remove_contact(room_jid, nick)
-					self.add_contact_to_roster(room_jid, nick, show, role, jid,
-						affiliation, status)
+					self.add_contact_to_roster(room_jid, nick, show, role,
+						affiliation, status, jid)
 				else:
 					c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
 					if c.show == show and c.status == status and \
@@ -1155,17 +1159,11 @@ current room topic.') % command, room_jid)
 	def on_info(self, widget, room_jid, nick):
 		'''Call vcard_information_window class to display user's information'''
 		c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
-		if c.jid and c.resource:
-			# on GC, we know resource only if we're mod and up
-			jid = c.jid
-			fjid = c.jid + '/' + c.resource
-		else:
-			fjid = gajim.construct_fjid(room_jid, nick)
-			jid = fjid
+		jid = c.get_full_jid()
 		if gajim.interface.instances[self.account]['infos'].has_key(jid):
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
-			# we copy contact because c.jid must contain the fakeJid for vcard
+			# we create a Contact instance
 			c2 = gajim.contacts.contact_from_gc_contact(c)
 			gajim.interface.instances[self.account]['infos'][jid] = \
 				vcard.VcardWindow(c2, self.account, False)

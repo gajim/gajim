@@ -56,7 +56,7 @@ def notify(event_type, jid, account, msg_type = '', file_props = None):
 			DesktopNotification(event_type, jid, account, msg_type, file_props)
 			return
 		except dbus.dbus_bindings.DBusException, e:
-			# Connection to DBus failed, try popup
+			# Connection to D-Bus failed, try popup
 			gajim.log.debug(str(e))
 		except TypeError, e:
 			# This means that we sent the message incorrectly
@@ -112,12 +112,30 @@ class DesktopNotification:
 			actor = jid
 
 		txt = actor # default value of txt
+		transport_name = gajim.get_transport_name_from_jid(jid)
+		
+		if transport_name in ('aim', 'icq', 'msn', 'yahoo'):
+			prefix = transport_name
+		else:
+			prefix = 'jabber'
+		'''
+		if transport_name == 'aim':
+			prefix = 'aim'
+		elif transport_name == 'icq':
+			prefix = 'icq'
+		elif transport_name == 'msn':
+			prefix = 'msn'
+		elif transport_name == 'yahoo':
+			prefix = 'yahoo'
+		else:
+			prefix = 'jabber'
+		'''
 
 		if event_type == _('Contact Signed In'):
-			img = 'contact_online.png'
+			img = prefix + '_online.png'
 			ntype = 'presence.online'
 		elif event_type == _('Contact Signed Out'):
-			img = 'contact_offline.png'
+			img = prefix + '_offline.png'
 			ntype = 'presence.offline'
 		elif event_type in (_('New Message'), _('New Single Message'),
 			_('New Private Message')):

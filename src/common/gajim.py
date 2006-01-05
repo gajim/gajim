@@ -189,7 +189,8 @@ def get_number_of_accounts():
 	return len(connections.keys())
 
 def get_transport_name_from_jid(jid, use_config_setting = True):
-	'''returns 'aim', 'gg', 'irc' etc'''
+	'''returns 'aim', 'gg', 'irc' etc
+	if JID is not from transport returns None'''
 	#FIXME: jid can be None! one TB I saw had this problem:
 	# in the code block # it is a groupchat presence in handle_event_notify
 	# jid was None. Yann why?

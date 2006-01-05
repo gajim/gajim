@@ -708,10 +708,15 @@ class RosterWindow:
 		contact.status = status
 		if show in ('offline', 'error') and \
 		   not gajim.awaiting_events[account].has_key(contact.jid):
-			if len(contact_instances) > 1 or not showOffline:
-				# if multiple resources or we don't show offline contacts
+			if len(contact_instances) > 1:
+				# if multiple resources
 				gajim.contacts.remove_contact(account, contact)
-			self.draw_contact(contact.jid, account)
+				self.draw_contact(contact.jid, account)
+			elif not showOffline:
+				# we don't show offline contacts
+				self.remove_contact(contact, account)
+			else:
+				self.draw_contact(contact.jid, account)
 		else:
 			if not self.get_contact_iter(contact.jid, account):
 				self.add_contact_to_roster(contact.jid, account)
@@ -2500,7 +2505,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# user1.groups
 		c = gajim.contacts.get_first_contact_from_jid(account, data)
 		if context.action != gtk.gdk.ACTION_COPY:
-			c.groups.remove(grp_source)
+			if grp_source in c.groups:
+				# Make sure contact was in a group
+				c.groups.remove(grp_source)
 			if model.iter_n_children(iter_group_source) == 1:
 				# this was the only child
 				model.remove(iter_group_source)
