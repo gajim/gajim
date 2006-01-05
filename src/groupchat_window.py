@@ -1517,7 +1517,8 @@ current room topic.') % command, room_jid)
 			self.show_title()
 		else:
 			gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
-			gajim.interface.roster.new_chat(gc_c, self.account)
+			c = gajim.contacts.contact_from_gc_contact(gc_c)
+			gajim.interface.roster.new_chat(c, self.account)
 		# Scroll to line
 		self.list_treeview[room_jid].expand_row(path[0:1], False)
 		self.list_treeview[room_jid].scroll_to_cell(path)
@@ -1628,7 +1629,8 @@ current room topic.') % command, room_jid)
 				if not gajim.interface.instances[self.account]['chats'].has_key(fjid):
 					gc_c = gajim.contacts.get_gc_contact(self.account, room_jid,
 						nick)
-					gajim.interface.roster.new_chat(gc_c, self.account)
+					c = gajim.contacts.contact_from_gc_contact(gc_c)
+					gajim.interface.roster.new_chat(c, self.account)
 				gajim.interface.instances[self.account]['chats'][fjid].set_active_tab(fjid)
 				gajim.interface.instances[self.account]['chats'][fjid].window.present()
 			return True
@@ -1671,8 +1673,8 @@ current room topic.') % command, room_jid)
 			jid = gajim.construct_fjid(room_jid, nick)
 			if not gajim.interface.instances[self.account]['chats'].has_key(jid):
 				gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
-				gajim.interface.roster.new_chat(gc_c, self.account)
-				jid = gc_c.jid
+				c = gajim.contacts.contact_from_gc_contact(gc_c)
+				gajim.interface.roster.new_chat(c, self.account)
 			gajim.interface.instances[self.account]['chats'][jid].set_active_tab(jid)
 			gajim.interface.instances[self.account]['chats'][jid].window.present()
 
