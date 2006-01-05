@@ -641,7 +641,7 @@ class ChatControl(ChatControlBase):
 		# restore previous conversation
 		self.restore_conversation()
 
-	def _on_avatar_eventbox_enter_notify_event(self, widget, event):
+	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''we enter the eventbox area so we under conditions add a timeout
 		to show a bigger avatar after 0.5 sec'''
 		jid = self.contact.jid
@@ -664,7 +664,7 @@ class ChatControl(ChatControlBase):
 			self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
 				self.show_bigger_avatar, widget)
 		
-	def _on_avatar_eventbox_leave_notify_event(self, widget, event):
+	def on_avatar_eventbox_leave_notify_event(self, widget, event):
 		'''we left the eventbox area that holds the avatar img'''
 		# did we add a timeout? if yes remove it
 		if self.show_bigger_avatar_timeout_id is not None:
