@@ -416,7 +416,7 @@ class Interface:
 			return
 				
 		if gajim.config.get('ignore_unknown_contacts') and \
-			not gajim.contacts[account].has_key(jid):
+			not gajim.contacts.get_contact(account, jid):
 			return
 
 		# Handle chat states  
