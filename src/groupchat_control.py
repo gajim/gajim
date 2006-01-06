@@ -67,10 +67,17 @@ class GroupchatControl(ChatControlBase):
 		# alphanum sorted
 		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact', 'help', 'invite',
 			'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part', 'say', 'topic']
-		# muc attention states (when we are mentioned in a muc)
-		# if the room jid is in the list, the room has mentioned us
-		self.muc_attentions = []
-		self.list_treeview = None
+		# muc attention flag (when we are mentioned in a muc)
+		# if True, the room has mentioned us
+		self.attention_flag = False
+		self.room_creation = time.time()
+		self.nick_hits = 0
+		self.cmd_hits = 0
+		self.last_key_tabs = False
+
+		self.subject = ''
+		self.subject_tooltip = gtk.Tooltips()
+
 		self.allow_focus_out_line = True
 		# holds the iter's offset which points to the end of --- line
 		self.focus_out_end_iter_offset = None
@@ -79,6 +86,49 @@ class GroupchatControl(ChatControlBase):
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_control_popup_menu', APP)
 		xm.signal_autoconnect(self)
 		self.gc_popup_menu = xm.get_widget('gc_popup_menu')
+
+		self.name_label = self.xml.get_widget('banner_name_label')
+		self.hpaneds = self.xml.get_widget('hpaned')
+
+		list_treeview = self.list_treeview = self.xml.get_widget('list_treeview')
+		list_treeview.get_selection().connect('changed',
+			self.on_list_treeview_selection_changed)
+		list_treeview.connect('style-set', self.on_list_treeview_style_set)
+
+		self._last_selected_contact = None # None or holds jid, account tuple
+
+	def iter_contact_rows(self):
+		'''iterate over all contact rows in the tree model'''
+		model = self.list_treeview.get_model()
+		role_iter = model.get_iter_root()
+		while role_iter:
+			contact_iter = model.iter_children(role_iter)
+			while contact_iter:
+				yield model[contact_iter]
+				contact_iter = model.iter_next(contact_iter)
+			role_iter = model.iter_next(role_iter)
+
+	def on_list_treeview_style_set(self, treeview, style):
+		'''When style (theme) changes, redraw all contacts'''
+		# Get the room_jid from treeview
+		for contact in self.iter_contact_rows():
+			nick = contact[C_NICK].decode('utf-8')
+			self.draw_contact(nick)
+
+	def on_list_treeview_selection_changed(self, selection):
+		model, selected_iter = selection.get_selected()
+		self.draw_contact(nick)
+		if self._last_selected_contact is not None:
+			self.draw_contact(self._last_selected_contact)
+		if selected_iter is None:
+			self._last_selected_contact = None
+			return
+		contact = model[selected_iter]
+		nick = contact[C_NICK].decode('utf-8')
+		self._last_selected_contact = nick
+		if contact[C_TYPE] != 'contact':
+			return
+		self.draw_contact(nick, selected=True, focus=True)
 
 	def get_tab_label(self, chatstate):
 		'''Markup the label if necessary.  Returns a tuple such as:
@@ -93,26 +143,19 @@ class GroupchatControl(ChatControlBase):
 		color = None
 		theme = gajim.config.get('roster_theme')
 		if chatstate == 'attention' and (not has_focus or not current_tab):
-			if self.room_jid not in self.muc_attentions:
-				self.muc_attentions.append(self.room_jid)
+			attention_flag = True
 			color = gajim.config.get_per('themes', theme,
 							'state_muc_directed_msg')
 		elif chatstate:
 			if chatstate == 'active' or (current_tab and has_focus):
-				if self.room_jid in self.muc_attentions:
-					self.muc_attentions.remove(self.room_jid)
+				attention_flag = False
 				color = gajim.config.get_per('themes', theme,
 								'state_active_color')
 			elif chatstate == 'newmsg' and (not has_focus or not current_tab) and\
-			     self.room_jid not in self.muc_attentions:
+			     not self.attention_flag:
 				color = gajim.config.get_per('themes', theme, 'state_muc_msg')
 		if color:
 			color = gtk.gdk.colormap_get_system().alloc_color(color)
-			# We set the color for when it's the current tab or not
-			# FIXME: why was this only happening for inactive or gone
-			#if chatstate in ('inactive', 'gone'):
-			# In inactive tab color to be lighter against the darker inactive
-			# background
 			if self.parent_win.get_active_control() != self:
 				color = self.lighten_color(color)
 
@@ -362,3 +405,81 @@ class GroupchatControl(ChatControlBase):
 				if word.startswith(special_word):
 					return True
 		return False
+
+	def set_subject(self, subject):
+		self.subject= subject
+		full_subject = None
+
+		subject = gtkgui_helpers.reduce_chars_newlines(subject, 0, 2)
+		subject = gtkgui_helpers.escape_for_pango_markup(subject)
+		self.name_label.set_markup(
+		'<span weight="heavy" size="x-large">%s</span>\n%s' % (self.room_jid, subject))
+		event_box = name_label.get_parent()
+		if subject == '':
+			subject = _('This room has no subject')
+
+		if full_subject is not None:
+			subject = full_subject # tooltip must always hold ALL the subject
+		self.subject_tooltip.set_tip(event_box, subject)
+
+	def save_var(self):
+		return {
+			'nick': self.nick,
+			'model': self.list_treeview.get_model(),
+			'subject': self.subject,
+		}
+
+	def load_var(self, room_jid, var):
+		self.list_treeview.set_model(var['model'])
+		self.list_treeviewexpand_all()
+		self.set_subject(var['subject'])
+		self.subject= var['subject']
+		if gajim.gc_connected[self.account][room_jid]:
+			self.got_connected()
+
+	def got_connected(self):
+		gajim.gc_connected[self.account][self.room_jid] = True
+		message_textview = self.message_textviews[room_jid]
+		self.msg_textview.set_sensitive(True)
+		self.xml.get_widget('send_button').set_sensitive(True)
+
+	def got_disconnected(self):
+		model = self.list_treeview.get_model()
+		model.clear()
+		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
+		for nick in nick_list:
+			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+				nick)
+			gajim.contacts.remove_gc_contact(self.account, gc_contact)
+		gajim.gc_connected[self.account][self.room_jid] = False
+		self.msg_textview.set_sensitive(False)
+		self.xml.get_widget('send_button').set_sensitive(False)
+
+	def draw_contact(self, nick, selected=False, focus=False):
+		iter = self.get_contact_iter(self.room_jid, nick)
+		if not iter:
+			return
+		model = self.list_treeview.get_model()
+		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		state_images = gajim.interface.roster.jabber_state_images['16']
+		if gajim.awaiting_events[self.account].has_key(self.room_jid + '/' + nick):
+			image = state_images['message']
+		else:
+			image = state_images[gc_contact.show]
+
+		name = gtkgui_helpers.escape_for_pango_markup(gc_contact.name)
+		status = gc_contact.status
+		# add status msg, if not empty, under contact name in the treeview
+		if status and gajim.config.get('show_status_msgs_in_roster'):
+			status = status.strip()
+			if status != '':
+				status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 1)
+				# escape markup entities and make them small italic and fg color
+				color = gtkgui_helpers._get_fade_color(self.list_treeview,
+					selected, focus)
+				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
+				name += '\n' '<span size="small" style="italic" foreground="%s">%s</span>'\
+					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
+
+		model[iter][C_IMG] = image
+		model[iter][C_TEXT] = name

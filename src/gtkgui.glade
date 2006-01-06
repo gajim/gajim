@@ -19800,7 +19800,7 @@ topic</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHPaned" id="hpaned1">
+		<widget class="GtkHPaned" id="hpaned">
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
@@ -19884,7 +19884,7 @@ topic</property>
 		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkTreeView" id="treeview4">
+			<widget class="GtkTreeView" id="list_treeview">
 			  <property name="border_width">1</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>

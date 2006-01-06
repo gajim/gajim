@@ -121,9 +121,6 @@ class ConversationTextview(gtk.TextView):
 
 		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
 
-		# muc attention states (when we are mentioned in a muc)
-		# if the room jid is in the list, the room has mentioned us
-		self.muc_attentions = []
 		self.line_tooltip = tooltips.BaseTooltip()
 
 	def update_tags(self):
