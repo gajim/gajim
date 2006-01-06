@@ -84,11 +84,12 @@ class TabbedChatWindow(chat.Chat):
 		self.xml.signal_autoconnect(signal_dict)
 
 
-		if gajim.config.get('saveposition') and \
-			not gtkgui_helpers.one_window_opened('chats'):
-			# get window position and size from config
-			gtkgui_helpers.move_window(self.window, gajim.config.get('chat-x-position'),
-				gajim.config.get('chat-y-position'))
+		if gajim.config.get('saveposition'):
+			if gtkgui_helpers.one_window_opened('chats'):
+				# get window position and size from config
+				gtkgui_helpers.move_window(self.window, gajim.config.get('chat-x-position'),
+					gajim.config.get('chat-y-position'))
+			# Even if one is already opened we can use the saved size
 			gtkgui_helpers.resize_window(self.window, gajim.config.get('chat-width'),
 					gajim.config.get('chat-height'))
 
