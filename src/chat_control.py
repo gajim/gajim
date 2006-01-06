@@ -52,6 +52,9 @@ class ChatControlBase(MessageControl):
 	Contains a banner, ConversationTextview, MessageTextView
 	'''
 	
+	def draw_widgets(self):
+		self.draw_banner()
+		# Derived types MUST implement this
 	def draw_banner(self):
 		self._paint_banner()
 		self._update_banner_state_image()
@@ -59,9 +62,6 @@ class ChatControlBase(MessageControl):
 	def update_state(self):
 		self.draw_banner()
 		# Derived types SHOULD implement this
-	def draw_widgets(self):
-		self.draw_banner()
-		# Derived types MUST implement this
 	def repaint_themed_widgets(self):
 		self.draw_banner()
 		# NOTE: Derived classes MAY implement this
@@ -650,6 +650,7 @@ class ChatControl(ChatControlBase):
 		if self.contact.jid in gajim.encrypted_chats[self.account]:
 			self.xml.get_widget('gpg_togglebutton').set_active(True)
 
+		self.draw_widgets()
 		# restore previous conversation
 		self.restore_conversation()
 
@@ -1326,12 +1327,12 @@ class ChatControl(ChatControlBase):
 		else:
 			del gajim.awaiting_events[self.account][jid]
 		typ = 'chat' # Is it a normal chat or a pm ?
-		# reset to status image in gc if it is a pm
-		# FIXME: New data structure
-		gcs = gajim.interface.instances[self.account]['gc']
-		if gcs.has_key(room_jid):
-			gcs[room_jid].draw_all_roster()
-			typ = 'pm'
+#		# reset to status image in gc if it is a pm
+#		# FIXME: New data structure
+#		gcs = gajim.interface.instances[self.account]['gc']
+#		if gcs.has_key(room_jid):
+#			gcs[room_jid].draw_all_roster()
+#			typ = 'pm'
 
 		gajim.interface.roster.draw_contact(jid, self.account)
 		if gajim.interface.systray_enabled:

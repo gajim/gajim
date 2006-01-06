@@ -12,6 +12,7 @@
 ## GNU General Public License for more details.
 ##
 
+import os
 import time
 import gtk
 import gtk.glade
@@ -19,6 +20,16 @@ import pango
 import gobject
 import gtkgui_helpers
 import message_control
+import tooltips
+import dialogs
+import vcard
+import chat
+import cell_renderer_image
+import history_window
+import tooltips
+
+from common import gajim
+from common import helpers
 
 from common import gajim
 from chat_control import ChatControl
@@ -64,6 +75,9 @@ class GroupchatControl(ChatControlBase):
 		self.name = self.room_jid.split('@')[0]
 
 		self.compact_view_always = gajim.config.get('always_compact_view_gc')
+		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
+
+		self._last_selected_contact = None # None or holds jid, account tuple
 		# alphanum sorted
 		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact', 'help', 'invite',
 			'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part', 'say', 'topic']
@@ -78,6 +92,8 @@ class GroupchatControl(ChatControlBase):
 		self.subject = ''
 		self.subject_tooltip = gtk.Tooltips()
 
+		self.tooltip = tooltips.GCTooltip()
+
 		self.allow_focus_out_line = True
 		# holds the iter's offset which points to the end of --- line
 		self.focus_out_end_iter_offset = None
@@ -88,14 +104,69 @@ class GroupchatControl(ChatControlBase):
 		self.gc_popup_menu = xm.get_widget('gc_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
-		self.hpaneds = self.xml.get_widget('hpaned')
+
+		# set the position of the current hpaned
+		self.hpaned_position = gajim.config.get('gc-hpaned-position')
+		self.hpaned = self.xml.get_widget('hpaned')
+		self.hpaned.set_position(self.hpaned_position)
 
 		list_treeview = self.list_treeview = self.xml.get_widget('list_treeview')
 		list_treeview.get_selection().connect('changed',
 			self.on_list_treeview_selection_changed)
 		list_treeview.connect('style-set', self.on_list_treeview_style_set)
+		# we want to know when the the widget resizes, because that is
+		# an indication that the hpaned has moved...
+		# FIXME: Find a better indicator that the hpaned has moved.
+		self.list_treeview.connect('size-allocate', self.on_treeview_size_allocate)
 
-		self._last_selected_contact = None # None or holds jid, account tuple
+		#status_image, type, nickname, shown_nick
+		store = gtk.TreeStore(gtk.Image, str, str, str)
+		store.set_sort_column_id(C_TEXT, gtk.SORT_ASCENDING)
+		column = gtk.TreeViewColumn('contacts')
+		renderer_image = cell_renderer_image.CellRendererImage()
+		renderer_image.set_property('width', 20)
+		column.pack_start(renderer_image, expand = False)
+		column.add_attribute(renderer_image, 'image', 0)
+		renderer_text = gtk.CellRendererText()
+		column.pack_start(renderer_text, expand = True)
+		column.set_attributes(renderer_text, markup = C_TEXT)
+		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
+		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
+
+		self.list_treeview.append_column(column)
+		self.list_treeview.set_model(store)
+
+		# workaround to avoid gtk arrows to be shown
+		column = gtk.TreeViewColumn() # 2nd COLUMN
+		renderer = gtk.CellRendererPixbuf()
+		column.pack_start(renderer, expand = False)
+		self.list_treeview.append_column(column)
+		column.set_visible(False)
+		self.list_treeview.set_expander_column(column)
+
+		# set an empty subject to show the room_jid
+		self.set_subject('')
+		self.got_disconnected() #init some variables
+
+		self.draw_widgets()
+		self.conv_textview.grab_focus()
+		self.widget.show_all()
+
+	def tree_cell_data_func(self, column, renderer, model, iter, data=None):
+		theme = gajim.config.get('roster_theme')
+		if model.iter_parent(iter):
+			bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
+		else: # it is root (eg. group)
+			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
+		if bgcolor:
+			renderer.set_property('cell-background', bgcolor)
+		else:
+			renderer.set_property('cell-background', None)
+
+	def on_treeview_size_allocate(self, widget, allocation):
+		'''The MUC treeview has resized. Move the hpaned in all tabs to match'''
+		self.hpaned_position = self.hpaned.get_position()
+		self.hpaned.set_position(self.hpaned_position)
 
 	def iter_contact_rows(self):
 		'''iterate over all contact rows in the tree model'''
@@ -117,7 +188,7 @@ class GroupchatControl(ChatControlBase):
 
 	def on_list_treeview_selection_changed(self, selection):
 		model, selected_iter = selection.get_selected()
-		self.draw_contact(nick)
+		self.draw_contact(self.nick)
 		if self._last_selected_contact is not None:
 			self.draw_contact(self._last_selected_contact)
 		if selected_iter is None:
@@ -205,7 +276,7 @@ class GroupchatControl(ChatControlBase):
 			no_queue = False
 
 		# We print if window is opened
-		pm_control = gajim.interface.get_control(fjid)
+		pm_control = gajim.interface.msg_win_mgr.get_control(fjid)
 		if pm_control:
 			pm_control.print_conversation(msg, tim = tim)
 			return
@@ -415,7 +486,7 @@ class GroupchatControl(ChatControlBase):
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
 		self.name_label.set_markup(
 		'<span weight="heavy" size="x-large">%s</span>\n%s' % (self.room_jid, subject))
-		event_box = name_label.get_parent()
+		event_box = self.name_label.get_parent()
 		if subject == '':
 			subject = _('This room has no subject')
 
@@ -440,7 +511,6 @@ class GroupchatControl(ChatControlBase):
 
 	def got_connected(self):
 		gajim.gc_connected[self.account][self.room_jid] = True
-		message_textview = self.message_textviews[room_jid]
 		self.msg_textview.set_sensitive(True)
 		self.xml.get_widget('send_button').set_sensitive(True)
 
@@ -456,8 +526,22 @@ class GroupchatControl(ChatControlBase):
 		self.msg_textview.set_sensitive(False)
 		self.xml.get_widget('send_button').set_sensitive(False)
 
+	def draw_widgets(self):
+		ChatControlBase.draw_widgets(self)
+		self.draw_roster()
+
+	def draw_roster(self):
+		model = self.list_treeview.get_model()
+		model.clear()
+		print "draw_roster"
+		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+			self.add_contact_to_roster(self.room_jid, nick, gc_contact.show,
+				gc_contact.role, gc_contact.affiliation, gc_contact.status,
+				gc_contact.jid)
+
 	def draw_contact(self, nick, selected=False, focus=False):
-		iter = self.get_contact_iter(self.room_jid, nick)
+		iter = self.get_contact_iter(nick)
 		if not iter:
 			return
 		model = self.list_treeview.get_model()
@@ -484,3 +568,143 @@ class GroupchatControl(ChatControlBase):
 
 		model[iter][C_IMG] = image
 		model[iter][C_TEXT] = name
+
+	def chg_contact_status(self, nick, show, status, role, affiliation, jid, reason, actor,
+				statusCode, new_nick):
+		'''When an occupant changes his or her status'''
+		if show == 'invisible':
+			return
+		if not role:
+			role = 'visitor'
+		if not affiliation:
+			affiliation = 'none'
+		if show in ('offline', 'error'):
+			if statusCode == '307':
+				if actor is None: # do not print 'kicked by None'
+					s = _('%(nick)s has been kicked: %(reason)s') % {
+						'nick': nick,
+						'reason': reason }
+				else:
+					s = _('%(nick)s has been kicked by %(who)s: %(reason)s') % {
+						'nick': nick,
+						'who': actor,
+						'reason': reason }
+				self.print_conversation(s)
+			elif statusCode == '301':
+				if actor is None: # do not print 'banned by None'
+					s = _('%(nick)s has been banned: %(reason)s') % {
+						'nick': nick,
+						'reason': reason }
+				else:
+					s = _('%(nick)s has been banned by %(who)s: %(reason)s') % {
+						'nick': nick,
+						'who': actor,
+						'reason': reason }
+				self.print_conversation(s, self.room_jid)
+			elif statusCode == '303': # Someone changed his or her nick
+				if nick == self.nick: # We changed our nick
+					self.nick = new_nick
+					s = _('You are now known as %s') % new_nick
+				else:
+					s = _('%s is now known as %s') % (nick, new_nick)
+				self.print_conversation(s)
+
+			if not gajim.awaiting_events[self.account].has_key(self.room_jid + '/' + nick):
+				self.remove_contact(nick)
+			else:
+				c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+				c.show = show
+				c.status = status
+			if nick == self.nick and statusCode != '303': # We became offline
+				self.got_disconnected()
+		else:
+			iter = self.get_contact_iter(nick)
+			if not iter:
+				iter = self.add_contact_to_roster(nick, show, role,
+								affiliation, status, jid)
+			else:
+				actual_role = self.get_role(nick)
+				if role != actual_role:
+					self.remove_contact(nick)
+					self.add_contact_to_roster(nick, show, role,
+						affiliation, status, jid)
+				else:
+					c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+					if c.show == show and c.status == status and \
+						c.affiliation == affiliation: #no change
+						return
+					c.show = show
+					c.affiliation = affiliation
+					c.status = status
+					self.draw_contact(nick)
+		if (time.time() - self.room_creation) > 30 and \
+				nick != self.nick and statusCode != '303':
+			if show == 'offline':
+				st = _('%s has left') % nick
+			else:
+				st = _('%s is now %s') % (nick, helpers.get_uf_show(show))
+			if status:
+				st += ' (' + status + ')'
+			self.print_conversation(st)
+
+	def add_contact_to_roster(self, nick, show, role, affiliation, status, jid = ''):
+		model = self.list_treeview.get_model()
+		role_name = helpers.get_uf_role(role, plural = True)
+
+		resource = ''
+		if jid:
+			jids = jid.split('/', 1)
+			j = jids[0]
+			if len(jids) > 1:
+				resource = jids[1]
+		else:
+			j = ''
+
+		name = nick
+
+		role_iter = self.get_role_iter(role)
+		if not role_iter:
+			role_iter = model.append(None,
+				(gajim.interface.roster.jabber_state_images['16']['closed'], 'role', role,
+				'<b>%s</b>' % role_name))
+		iter = model.append(role_iter, (None, 'contact', nick, name))
+		if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+			gc_contact = gajim.contacts.create_gc_contact(room_jid = self.room_jid,
+				name = nick, show = show, status = status, role = role,
+				affiliation = affiliation, jid = j, resource = resource)
+			gajim.contacts.add_gc_contact(self.account, gc_contact)
+		self.draw_contact(nick)
+		if nick == self.nick: # we became online
+			self.got_connected()
+		self.list_treeview.expand_row((model.get_path(role_iter)), False)
+		return iter
+
+	def get_role_iter(self, role):
+		model = self.list_treeview.get_model()
+		fin = False
+		iter = model.get_iter_root()
+		if not iter:
+			return None
+		while not fin:
+			role_name = model[iter][C_NICK].decode('utf-8')
+			if role == role_name:
+				return iter
+			iter = model.iter_next(iter)
+			if not iter:
+				fin = True
+		return None
+
+	def remove_contact(self, nick):
+		'''Remove a user from the contacts_list'''
+		model = self.list_treeview.get_model()
+		iter = self.get_contact_iter(nick)
+		if not iter:
+			return
+		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		if gc_contact:
+			gajim.contacts.remove_gc_contact(self.account, gc_contact)
+		parent_iter = model.iter_parent(iter)
+		model.remove(iter)
+		if model.iter_n_children(parent_iter) == 0:
+			model.remove(parent_iter)
+

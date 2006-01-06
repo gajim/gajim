@@ -33,6 +33,8 @@ import sys
 import os
 import pygtk
 
+import message_control
+
 from common import exceptions
 from common import i18n
 i18n.init()
@@ -404,7 +406,7 @@ class Interface:
 				show_notification = True
 
 		chat_control = gajim.interface.msg_win_mgr.get_control(jid)
-		if chat_control and chat_control.type_id == TYPE_GC: # it's a Private Message
+		if chat_control and chat_control.type_id == message_control.TYPE_GC: # it's a Private Message
 			nick = gajim.get_nick_from_fjid(array[0])
 			fjid = array[0]
 			if not gajim.interface.msg_win_mgr.has_window(fjid) and \
@@ -693,10 +695,10 @@ class Interface:
 						'status')
 			ctl.draw_banner()
 
-		if self.instances[account]['gc'].has_key(room_jid):
-			self.instances[account]['gc'][room_jid].chg_contact_status(room_jid,
-				nick, show, status, array[4], array[5], array[6], array[7],
-				array[8], array[9], array[10], account)
+		gc_control = gajim.interface.msg_win_mgr.get_control(room_jid)
+		if gc_control:
+			gc_control.chg_contact_status(nick, show, status, array[4], array[5], array[6],
+							array[7], array[8], array[9], array[10])
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 

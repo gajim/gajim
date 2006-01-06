@@ -635,7 +635,7 @@ class RosterWindow:
 		# update gc's roster
                 for ctl in gajim.interface.msg_win_mgr.controls():
 			if ctl.type_id == message_control.TYPE_GC:
-				ctl.draw_all_roster()
+				ctl.draw_widgets()
 			
 	def draw_roster(self):
 		'''Clear and draw roster'''

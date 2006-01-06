@@ -235,6 +235,7 @@ class Contacts:
 			resource)
 	
 	def add_gc_contact(self, account, gc_contact):
+		print "add_gc_contact"
 		# No such account before ?
 		if not self._gc_contacts.has_key(account):
 			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
