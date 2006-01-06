@@ -451,6 +451,11 @@ class TabbedChatWindow(chat.Chat):
 		# send the message
 		self.send_message(message)
 
+	def on_toggle_gpg_menuitem_activate(self, widget):
+		jid = self.get_active_jid()
+		tb = self.xmls[jid].get_widget('gpg_togglebutton')
+		tb.set_active(not tb.get_active())
+
 	def remove_tab(self, jid):
 		if time.time() - gajim.last_message_time[self.account][jid] < 2:
 			dialog = dialogs.ConfirmationDialog(
