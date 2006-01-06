@@ -745,13 +745,16 @@ class TabbedChatWindow(chat.Chat):
 		jid = self.get_active_jid()
 		contact = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 		if contact is None:
-			# contact was from pm in MUC, and left the room, or we left the room
+			# contact was from pm in MUC
 			room, nick = gajim.get_room_and_nick_from_fjid(jid)
-			dialogs.ErrorDialog(_('Sending private message failed'),
-				#in second %s code replaces with nickname
-				_('You are no longer in room "%s" or "%s" has left.') % \
-				(room, nick)).get_response()
-			return
+			gc_contact = gajim.contacts.get_gc_contact(self.account, room, nick)
+			if not gc_contact:
+				# contact left the room, or we left the room
+				dialogs.ErrorDialog(_('Sending private message failed'),
+					#in second %s code replaces with nickname
+					_('You are no longer in room "%s" or "%s" has left.') % \
+					(room, nick)).get_response()
+				return
 
 		conv_textview = self.conversation_textviews[jid]
 		message_textview = self.message_textviews[jid]

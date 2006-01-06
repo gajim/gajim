@@ -148,18 +148,19 @@ def get_real_jid_from_fjid(account, fjid):
 	gcs = interface.instances[account]['gc']
 	if gcs.has_key(room_jid):
 		# It's a pm, so if we have real jid it's in contact.jid
-		if not gc_contacts[account][room_jid].has_key(nick):
+		gc_contact = contacts.get_gc_contact(account, room_jid, nick)
+		if not gc_contact:
 			return
-		contact = gc_contacts[account][room_jid][nick]
-		# contact.jid is None when it's not a real jid (we don't know real jid)
-		real_jid = contact.jid
+		# gc_contact.jid is None when it's not a real jid (we don't know real jid)
+		real_jid = gc_contact.jid
 	return real_jid
 
 def get_room_from_fjid(jid):
 	return get_room_and_nick_from_fjid(jid)[0]
 
 def get_contact_name_from_jid(account, jid):
-	return contacts[account][jid][0].name
+	c = contacts.get_first_contact_from_jid(account, jid)
+	return c.name
 
 def get_jid_without_resource(jid):
 	return jid.split('/')[0]

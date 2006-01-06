@@ -231,7 +231,8 @@ class GroupchatControl(ChatControlBase):
 			self.parent_win.show_title()
 		else:
 			gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-			gajim.interface.roster.new_chat(gc_c, self.account)
+			c = gajim.contacts.contact_from_gc_contact(gc_c)
+			gajim.interface.roster.new_chat(c, self.account)
 		# Scroll to line
 		self.list_treeview.expand_row(path[0:1], False)
 		self.list_treeview.scroll_to_cell(path)

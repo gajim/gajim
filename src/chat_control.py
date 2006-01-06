@@ -310,13 +310,17 @@ class ChatControlBase(MessageControl):
 		message_buffer.set_text('') # clear message buffer (and tv of course)
 # FIXME GC ONLY
 #		if contact is None:
-#			# contact was from pm in MUC, and left the room, or we left the room
+#			# contact was from pm in MUC
 #			room, nick = gajim.get_room_and_nick_from_fjid(jid)
-#			dialogs.ErrorDialog(_('Sending private message failed'),
-#				#in second %s code replaces with nickname
-#				_('You are no longer in room "%s" or "%s" has left.') % \
-#				(room, nick)).get_response()
-#			
+#			gc_contact = gajim.contacts.get_gc_contact(self.account, room, nick)
+#			if not gc_contact:
+#				# contact left the room, or we left the room
+#				dialogs.ErrorDialog(_('Sending private message failed'),
+#					#in second %s code replaces with nickname
+#					_('You are no longer in room "%s" or "%s" has left.') % \
+#					(room, nick)).get_response()
+#				return
+
 
 	def save_sent_message(self, message):
 		#save the message, so user can scroll though the list with key up/down
