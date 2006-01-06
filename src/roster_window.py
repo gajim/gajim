@@ -1529,11 +1529,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 														passphrase)
 					gajim.connections[account].gpg_passphrase(passphrase)
 
-		for room_jid in gajim.interface.instances[account]['gc']:
-			if room_jid != 'tabbed':
-				nick = gajim.interface.instances[account]['gc'][room_jid].nicks[room_jid]
-				gajim.connections[account].send_gc_status(nick, room_jid, status,
-					txt)
+		for gc_control in gajim.interface.msg_win_mgr.get_controls(message_control.TYPE_GC):
+			gajim.connections[account].send_gc_status(gc_control.nick, gc_control.room_jid,
+								status, txt)
 		gajim.connections[account].change_status(status, txt, sync, auto)
 		if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
@@ -1672,14 +1670,24 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.update_status_combobox()
 		self.make_menu()
 
-	def new_chat(self, contact, account):
+	def new_chat(self, contact, account, private_chat = False):
 		# Get target window, create a control, and associate it with the window
+		if not private_chat:
+			type = message_control.TYPE_CHAT
+		else:
+			type = message_control.TYPE_PM
+
 		mw = gajim.interface.msg_win_mgr.get_window(contact.jid)
 		if not mw:
-			mw = gajim.interface.msg_win_mgr.create_window(contact, account,
-								ChatControl.TYPE_ID)
-		chat_control = ChatControl(mw, contact, account)
+			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type)
+
+		if not private_chat:
+			chat_control = ChatControl(mw, contact, account)
+		else:
+			chat_control = PrivateChatControl(mw, contact, account)
+
 		mw.new_tab(chat_control)
+
 		if gajim.awaiting_events[account].has_key(contact.jid):
 			# We call this here to avoid race conditions with widget validation
 			chat_control.read_queue()

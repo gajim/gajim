@@ -63,6 +63,28 @@ class PrivateChatControl(ChatControl):
 		self.TYPE_ID = 'pm'
 		self.display_name = _('Private chat')
 
+	def send_message(self, message):
+		'''call this function to send our message'''
+		if not message:
+			return
+
+		# We need to make sure that we can still send through the room and that the 
+		# recipient did not go away
+		contact = gajim.contacts.get_first_contact_from_jid(self.account, self.contact.jid)
+		if contact is None:
+			# contact was from pm in MUC
+			room, nick = gajim.get_room_and_nick_from_fjid(self.contact.jid)
+			gc_contact = gajim.contacts.get_gc_contact(self.account, room, nick)
+			if not gc_contact:
+				dialogs.ErrorDialog(
+					_('Sending private message failed'),
+					#in second %s code replaces with nickname
+					_('You are no longer in room "%s" or "%s" has left.') % \
+					(room, nick)).get_response()
+				return
+
+		ChatControl.send_message(self, message)
+
 class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
 
@@ -255,7 +277,7 @@ class GroupchatControl(ChatControlBase):
 		menu = self.gc_popup_menu
 		childs = menu.get_children()
 		# compact_view_menuitem
-		childs[5].set_active(self.compact_view_current_state)
+		childs[5].set_active(self.compact_view_current)
 		menu = self.remove_possible_switch_to_menuitems(menu)
 		return menu
 
@@ -303,7 +325,8 @@ class GroupchatControl(ChatControlBase):
 		else:
 			gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 			c = gajim.contacts.contact_from_gc_contact(gc_c)
-			gajim.interface.roster.new_chat(c, self.account)
+			print "creating PM chat"
+			gajim.interface.roster.new_chat(c, self.account, private_chat = True)
 		# Scroll to line
 		self.list_treeview.expand_row(path[0:1], False)
 		self.list_treeview.scroll_to_cell(path)
@@ -536,9 +559,32 @@ class GroupchatControl(ChatControlBase):
 		print "draw_roster"
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-			self.add_contact_to_roster(self.room_jid, nick, gc_contact.show,
-				gc_contact.role, gc_contact.affiliation, gc_contact.status,
-				gc_contact.jid)
+			self.add_contact_to_roster(nick, gc_contact.show, gc_contact.role,
+						gc_contact.affiliation, gc_contact.status,
+						gc_contact.jid)
+
+	def on_send_pm(self, widget=None, model=None, iter=None, nick=None, msg=None):
+		'''opens a chat window and msg is not None sends private message to a
+		contact in a room'''
+		if nick is None:
+			nick = model[iter][C_NICK].decode('utf-8')
+		fjid = gajim.construct_fjid(self.room_jid, nick) # 'fake' jid
+
+		chat_win = gajim.interface.msg_win_mgr.get_window(fjid)
+		if not chat_win:
+			gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+			c = gajim.contacts.contact_from_gc_contact(gc_c)
+			print "creating PM chat"
+			gajim.interface.roster.new_chat(c, self.account, private_chat = True)
+			chat_win = gajim.interface.msg_win_mgr.get_window(fjid)
+		chat_control = chat_win.get_control(fjid)
+
+		#make active here in case we need to send a message
+		chat_win.set_active_tab(fjid)
+
+		if msg:
+			chat_control.send_message(msg)
+		chat_win.window.present()
 
 	def draw_contact(self, nick, selected=False, focus=False):
 		iter = self.get_contact_iter(nick)
@@ -708,3 +754,308 @@ class GroupchatControl(ChatControlBase):
 		if model.iter_n_children(parent_iter) == 0:
 			model.remove(parent_iter)
 
+	def _process_command(self, message):
+		if message[0] != '/':
+			return False
+
+		# Handle common commands
+		if ChatControlBase._process_command(self, message):
+			return True
+
+		message = message[1:]
+		message_array = message.split(' ', 1)
+		command = message_array.pop(0).lower()
+		if message_array == ['']:
+			message_array = []
+		
+		if command == 'nick':
+			# example: /nick foo
+			if len(message_array):
+				nick = message_array[0]
+				gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
+				self.clear(self.msg_textview)
+			else:
+				self.get_command_help(command)
+			return True
+		elif command == 'query' or command == 'chat':
+			# Open a chat window to the specified nick
+			# example: /query foo
+			if len(message_array):
+				nick = message_array.pop(0)
+				nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+				if nick in nicks:
+					self.on_send_pm(nick = nick)
+					self.clear(self.msg_textview)
+				else:
+					self.print_conversation(_('Nickname not found: %s') % nick)
+			else:
+				self.get_command_help(command)
+			return True
+		elif command == 'msg':
+			# Send a message to a nick.  Also opens a private message window.
+			# example: /msg foo Hey, what's up?
+			if len(message_array):
+				message_array = message_array[0].split()
+				nick = message_array.pop(0)
+				room_nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+				if nick in room_nicks:
+					privmsg = ' '.join(message_array)
+					self.on_send_pm(nick=nick, msg=privmsg)
+					self.clear(self.msg_textview)
+				else:
+					self.print_conversation(_('Nickname not found: %s') % nick)
+			else:
+				self.get_command_help(command)
+			return True
+		elif command == 'topic':
+			# display or change the room topic
+			# example: /topic : print topic
+			# /topic foo : change topic to foo
+			if len(message_array):
+				new_topic = message_array.pop(0)
+				gajim.connections[self.account].send_gc_subject(self.room_jid,
+					new_topic)
+			else:
+				self.print_conversation(self.subject)
+			self.clear(self.msg_textview)
+			return True
+		elif command == 'invite':
+			# invite a user to a room for a reason
+			# example: /invite user@example.com reason
+			if len(message_array):
+				message_array = message_array[0].split()
+				invitee = message_array.pop(0)
+				if invitee.find('@') >= 0:
+					reason = ' '.join(message_array)
+					gajim.connections[self.account].send_invite(self.room_jid,
+						invitee, reason)
+					s = _('Invited %(contact_jid)s to %(room_jid)s.') % {
+						'contact_jid': invitee,
+						'room_jid': self.room_jid}
+					self.print_conversation(s)
+					self.clear(self.msg_textview)
+				else:
+					#%s is something the user wrote but it is not a jid so we inform
+					s = _('%s does not appear to be a valid JID') % invitee
+					self.print_conversation(s)
+			else:
+				self.get_command_help(command)
+			return True
+		elif command == 'join':
+			# example: /join room@conference.example.com/nick
+			if len(message_array):
+				message_array = message_array[0]
+				if message_array.find('@') >= 0:
+					room, servernick = message_array.split('@')
+					if servernick.find('/') >= 0:
+						server, nick = servernick.split('/', 1)
+					else:
+						server = servernick
+						nick = ''
+					#join_gc window is needed in order to provide for password entry.
+					if gajim.interface.instances[self.account].has_key('join_gc'):
+						gajim.interface.instances[self.account]['join_gc'].\
+							window.present()
+					else:
+						try:
+							gajim.interface.instances[self.account]['join_gc'] =\
+								dialogs.JoinGroupchatWindow(self.account,
+									server = server, room = room, nick = nick)
+						except RuntimeError:
+							pass
+					self.clear(self.msg_textview)
+				else:
+					#%s is something the user wrote but it is not a jid so we inform
+					s = _('%s does not appear to be a valid JID') % message_array
+					self.print_conversation(s)
+			else:
+				self.get_command_help(command)
+			return True
+		elif command == 'leave' or command == 'part' or command == 'close':
+			# Leave the room and close the tab or window
+			# FIXME: Sometimes this doesn't actually leave the room.  Why?
+			reason = 'offline'
+			if len(message_array):
+				reason = message_array.pop(0)
+			self.remove_tab(reason)
+			return True
+		elif command == 'ban':
+			if len(message_array):
+				message_array = message_array[0].split()
+				nick = message_array.pop(0)
+				room_nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+				reason = ' '.join(message_array)
+				if nick in room_nicks:
+					ban_jid = gajim.construct_fjid(self.room_jid, nick)
+					gajim.connections[self.account].gc_set_affiliation(self.room_jid,
+						ban_jid, 'outcast', reason)
+					self.clear(self.msg_textview)
+				elif nick.find('@') >= 0:
+					gajim.connections[self.account].gc_set_affiliation(self.room_jid,
+						nick, 'outcast', reason)
+					self.clear(self.msg_textview)
+				else:
+					self.print_conversation(_('Nickname not found: %s') % nick)
+			else:
+				self.get_command_help(command)
+			return True
+		elif command == 'kick':
+			if len(message_array):
+				message_array = message_array[0].split()
+				nick = message_array.pop(0)
+				room_nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+				reason = ' '.join(message_array)
+				if nick in room_nicks:
+					gajim.connections[self.account].gc_set_role(self.room_jid, nick,
+						'none', reason)
+					self.clear(self.msg_textview)
+				else:
+					self.print_conversation(_('Nickname not found: %s') % nick)
+			else:
+				self.get_command_help(command)
+			return True
+		elif command == 'help':
+			if len(message_array):
+				subcommand = message_array.pop(0)
+				self.get_command_help(subcommand)
+			else:
+				self.get_command_help(command)
+			self.clear(self.msg_textview)
+			return True
+		elif command == 'say':
+			if len(message_array):
+				gajim.connections[self.account].send_gc_message(self.room_jid,
+										message[4:])
+				self.clear(self.msg_textview)
+			else:
+				self.get_command_help(command)
+			return True
+		else:
+			self.print_conversation(_('No such command: /%s (if you want to send this, '
+						'prefix it with /say)') % command)
+			return True
+
+		return False
+
+	def send_message(self, message):
+		'''call this function to send our message'''
+		if not message:
+			return
+
+		if message != '' or message != '\n':
+			self.save_sent_message(message)
+
+			if not self._process_command(message):
+				# Send the message
+				gajim.connections[self.account].send_gc_message(self.room_jid, message)
+				self.msg_textview.get_buffer().set_text('')
+				self.msg_textview.grab_focus()
+
+	def get_command_help(self, command):
+		if command == 'help':
+			self.print_conversation(_('Commands: %s') % self.muc_cmds)
+		elif command == 'ban':
+			s = _('Usage: /%s <nickname|JID> [reason], bans the JID from the room.'
+			' The nickname of an occupant may be substituted, but not if it contains "@".'
+			' If the JID is currently in the room, he/she/it will also be kicked.'
+			' Does NOT support spaces in nickname.') % command
+			self.print_conversation(s)
+		elif command == 'chat' or command == 'query':
+			self.print_conversation(_('Usage: /%s <nickname>, opens a private chat '
+						'window to the specified occupant.') % command)
+		elif command == 'clear':
+			self.print_conversation(_('Usage: /%s, clears the text window.') % command)
+		elif command == 'close' or command == 'leave' or command == 'part':
+			self.print_conversation(_('Usage: /%s [reason], closes the current window '
+						'or tab, displaying reason if specified.') % command)
+		elif command == 'compact':
+			self.print_conversation(_('Usage: /%s, sets the groupchat window to compact '
+						'mode.') % command)
+		elif command == 'invite':
+			self.print_conversation(_('Usage: /%s <JID> [reason], invites JID to the '
+						'current room, optionally providing a reason.') % command)
+		elif command == 'join':
+			self.print_conversation(_('Usage: /%s <room>@<server>[/nickname], offers to '
+						'join room@server optionally using specified '
+						'nickname.') % command)
+		elif command == 'kick':
+			self.print_conversation(_('Usage: /%s <nickname> [reason], removes the occupant '
+						'specified by nickname from the room and optionally '
+						'displays a reason. Does NOT support spaces in '
+						'nickname.') % command)
+		elif command == 'me':
+			self.print_conversation(_('Usage: /%s <action>, sends action to the current '
+						'room. Use third person. (e.g. /%s explodes.)') %\
+						(command, command))
+		elif command == 'msg':
+			s = _('Usage: /%s <nickname> [message], opens a private message window and '
+				'sends message to the occupant specified by nickname.') % command
+			self.print_conversation(s)
+		elif command == 'nick':
+			s = _('Usage: /%s <nickname>, changes your nickname in current room.') % command
+			self.print_conversation(s)
+		elif command == 'topic':
+			self.print_conversation(_('Usage: /%s [topic], displays or updates the current '
+						'room topic.') % command)
+		elif command == 'say':
+			self.print_conversation(_('Usage: /%s <message>, sends a message without '
+						'looking for other commands.') % command)
+		else:
+			self.print_conversation(_('No help info for /%s') % command)
+
+	def get_role(self, nick):
+		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		if gc_contact:
+			return gc_contact.role
+		else:
+			return 'visitor'
+
+	def show_change_nick_input_dialog(self, title, prompt, proposed_nick = None):
+		'''asks user for new nick and on ok it sets it on room'''
+		instance = dialogs.InputDialog(title, prompt, proposed_nick)
+		response = instance.get_response()
+		if response == gtk.RESPONSE_OK:
+			nick = instance.input_entry.get_text().decode('utf-8')
+			self.nick = nick
+			gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
+
+	def shutdown(self):
+		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
+							show='offline', status=reason)
+		# They can already be removed by the destroy function
+		if self.room_jid in gajim.contacts.get_gc_list(self.account):
+			gajim.contacts.remove_room(self.account, self.room_jid)
+			del gajim.gc_connected[self.account][self.room_jid]
+
+	def allow_shutdown(self):
+		# FIXME:
+		# whether to ask for comfirmation before closing muc
+		if gajim.config.get('confirm_close_muc'):
+			names = []
+			if not room_jid:
+				for r_jid in self.xmls:
+					if gajim.gc_connected[self.account][r_jid]:
+						names.append(gajim.get_nick_from_jid(r_jid))
+			else:
+				names = [room_jid]
+
+			rooms_no = len(names)
+			if rooms_no >= 2: # if we are in many rooms
+				pritext = _('Are you sure you want to leave rooms "%s"?') % ', '.join(names)
+				sectext = _('If you close this window, you will be disconnected from these rooms.')
+
+			elif rooms_no == 1: # just in one room
+				pritext = _('Are you sure you want to leave room "%s"?') % names[0]
+				sectext = _('If you close this window, you will be disconnected from this room.')
+
+			if rooms_no > 0:
+				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
+					_('Do _not ask me again'))
+
+				if dialog.is_checked():
+					gajim.config.set('confirm_close_muc', False)
+					dialog.destroy()
+
+				if dialog.get_response() != gtk.RESPONSE_OK:
+					return False
+		return True

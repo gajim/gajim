@@ -558,11 +558,18 @@ class MessageWindowMgr:
 		return win
 
 	def get_control(self, jid):
-		'''Amonst all windows, return the MessageControl for jid'''
+		'''Amongst all windows, return the MessageControl for jid'''
 		win = self.get_window(jid)
 		if win:
 			return win.get_control(jid)
 		return None
+
+	def get_controls(self, type):
+		ctls = []
+		for c in self.controls():
+			if c.type_id == type:
+				ctls.append(c)
+		return ctls
 
 	def windows(self):
 		for w in self._windows.values():

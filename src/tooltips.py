@@ -250,15 +250,13 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				else:
 					unread_pm += ctl.nb_unread
 
-			# FIXME
 			# we count unread gc/pm messages
-			gc_wins = gajim.interface.instances[acct]['gc']
-			for jid in gc_wins:
-				if jid != 'tabbed':
-					pm_msgs = gc_wins[jid].get_specific_unread(jid)
-					unread_gc += gc_wins[jid].nb_unread[jid]
-					unread_gc -= pm_msgs
-					unread_pm += pm_msgs
+			chat_t = message_control.TYPE_GC
+			for gc_control in gajim.interface.msg_win_mgr.get_controls(chat_t):
+				pm_msgs = gc_control.get_specific_unread()
+				unread_gc += gc_control.nb_unread
+				unread_gc -= pm_msgs
+				unread_pm += pm_msgs
 
 		if unread_chat or unread_single_chat or unread_gc or unread_pm:
 			text = ''

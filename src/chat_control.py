@@ -281,18 +281,16 @@ class ChatControlBase(MessageControl):
 	def _process_command(self, message):
 		if not message:
 			return False
+
 		if message == '/clear':
 			self.conv_textview.clear() # clear conversation
-			# FIXME: Need this function
 			self.clear(self.msg_textview) # clear message textview too
 			return True
 		elif message == '/compact':
 			self.set_compact_view(not self.compact_view_current)
-			# FIXME: Need this function
 			self.clear(self.msg_textview)
 			return True
-		else:
-			return False
+		return False
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
 		'''Send the given message to the active tab'''
@@ -308,19 +306,6 @@ class ChatControlBase(MessageControl):
 		# Clear msg input
 		message_buffer = self.msg_textview.get_buffer()
 		message_buffer.set_text('') # clear message buffer (and tv of course)
-# FIXME GC ONLY
-#		if contact is None:
-#			# contact was from pm in MUC
-#			room, nick = gajim.get_room_and_nick_from_fjid(jid)
-#			gc_contact = gajim.contacts.get_gc_contact(self.account, room, nick)
-#			if not gc_contact:
-#				# contact left the room, or we left the room
-#				dialogs.ErrorDialog(_('Sending private message failed'),
-#					#in second %s code replaces with nickname
-#					_('You are no longer in room "%s" or "%s" has left.') % \
-#					(room, nick)).get_response()
-#				return
-
 
 	def save_sent_message(self, message):
 		#save the message, so user can scroll though the list with key up/down
@@ -432,13 +417,6 @@ class ChatControlBase(MessageControl):
 
 	def update_tags(self):
 		self.conv_textview.update_tags()
-
-	def set_compact_view(self, state):
-		'''Toggle compact view. state is bool'''
-		MessageControl.set_compact_view(self, state)
-		# make the last message visible, when changing to "full view"
-		if not state:
-			gobject.idle_add(self.conv_textview.scroll_to_end_iter)
 
 	def clear(self, tv):
 		buffer = tv.get_buffer()
@@ -559,10 +537,10 @@ class ChatControlBase(MessageControl):
 		if not self.nb_unread:
 			return
 		jid = self.contact.jid
-		if self.conv_textview.at_the_end() and self.window.is_active():
+		if self.conv_textview.at_the_end() and self.parent_win.window.is_active():
 			#we are at the end
 			self.nb_unread = self.get_specific_unread()
-			self.parent_win.redraw_tab(jid)
+			self.parent_win.redraw_tab(self.contact)
 			self.parent_win.show_title()
 			if gajim.interface.systray_enabled:
 				gajim.interface.systray.remove_jid(jid, self.account,
@@ -599,6 +577,55 @@ class ChatControlBase(MessageControl):
 		color.green = int((color.green * p) + (mask * (1 - p)))
 		color.blue = int((color.blue * p) + (mask * (1 - p)))
 		return color
+
+	def remove_possible_switch_to_menuitems(self, menu):
+		''' remove duplicate 'Switch to' if they exist and return clean menu'''
+		childs = menu.get_children()
+
+		contact = self.parent_win.get_active_contact()
+		jid = contact.jid
+		if _('not in the roster') in contact.groups: # for add_to_roster_menuitem
+			childs[5].show()
+			childs[5].set_no_show_all(False)
+		else:
+			childs[5].hide()
+			childs[5].set_no_show_all(True)
+
+		if self.type_id == message_control.TYPE_GC:
+			start_removing_from = 7 # # this is from the seperator and after
+		else:
+			start_removing_from = 6 # this is from the seperator and after
+			
+		for child in childs[start_removing_from:]:
+			menu.remove(child)
+		return menu
+
+	def set_compact_view(self, state):
+		'''Toggle compact view. state is bool'''
+		MessageControl.set_compact_view(self, state)
+		# make the last message visible, when changing to "full view"
+		if not state:
+			gobject.idle_add(self.conv_textview.scroll_to_end_iter)
+		
+		if self.type_id == message_control.TYPE_GC:
+			widgets = [
+				self.xml.get_widget('banner_eventbox'),
+				self.xml.get_widget('gc_actions_hbox'),
+				self.xml.get_widget('list_scrolledwindow'),
+				]
+		else:
+			widgets = [
+				self.xml.get_widget('banner_eventbox'),
+				self.xml.get_widget('actions_hbox'),
+				]
+
+		for widget in widgets:
+			if state:
+				widget.set_no_show_all(True)
+				widget.hide()
+			else:
+				widget.set_no_show_all(False)
+				widget.show_all()
 
 ################################################################################
 class ChatControl(ChatControlBase):
@@ -1004,28 +1031,6 @@ class ChatControl(ChatControlBase):
 
 		return tab_img
 
-	def remove_possible_switch_to_menuitems(self, menu):
-		''' remove duplicate 'Switch to' if they exist and return clean menu'''
-		childs = menu.get_children()
-
-		contact = self.parent_win.get_active_contact()
-		jid = contact.jid
-		if _('not in the roster') in contact.groups: # for add_to_roster_menuitem
-			childs[5].show()
-			childs[5].set_no_show_all(False)
-		else:
-			childs[5].hide()
-			childs[5].set_no_show_all(True)
-		start_removing_from = 6 # this is from the seperator and after
-			
-# FIXME: GC only
-#		elif :
-#			start_removing_from = 7 # # this is from the seperator and after
-				
-		for child in childs[start_removing_from:]:
-			menu.remove(child)
-		return menu
-
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
 		sets active and sensitivity state for toggle_gpg_menuitem
@@ -1050,28 +1055,6 @@ class ChatControl(ChatControlBase):
 		menu = self.remove_possible_switch_to_menuitems(menu)
 		
 		return menu
-
-	def set_compact_view(self, state):
-		'''Toggle compact view. state is bool'''
-		ChatControlBase.set_compact_view(self, state)
-
-		widgets = [
-		self.xml.get_widget('banner_eventbox'),
-		self.xml.get_widget('actions_hbox'),
-		]
-# FIXME GC only
-#		elif self.widget_name == 'groupchat_window':
-#			widgets = [self.xmls[jid].get_widget('banner_eventbox'),
-#				self.xmls[jid].get_widget('gc_actions_hbox'),
-#				self.xmls[jid].get_widget('list_scrolledwindow'),
-#				 ]
-		for widget in widgets:
-			if state:
-				widget.set_no_show_all(True)
-				widget.hide()
-			else:
-				widget.set_no_show_all(False)
-				widget.show_all()
 
 	def send_chatstate(self, state, contact = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
@@ -1292,9 +1275,8 @@ class ChatControl(ChatControlBase):
 		# Is it a pm ?
 		is_pm = False
 		room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-		# FIXME: Accessing gc's, here? 
-		gcs = gajim.interface.instances[self.account]['gc']
-		if gcs.has_key(room_jid):
+		control = gajim.interface.msg_win_mgr.get_control(room_jid)
+		if control.type_id == message_control.TYPE_GC:
 			is_pm = True
 		events_to_keep = []
 		for event in l:
@@ -1309,16 +1291,16 @@ class ChatControl(ChatControlBase):
 			else:
 				kind = 'print_queue'
 			self.print_conversation(data[0], kind, tim = data[3],
-				encrypted = data[4], subject = data[1])
+						encrypted = data[4], subject = data[1])
 
 			# remove from gc nb_unread if it's pm or from roster
 			if is_pm:
-				gcs[room_jid].nb_unread[room_jid] -= 1
+				control.nb_unread -= 1
 			else:
 				gajim.interface.roster.nb_unread -= 1
 
 		if is_pm:
-			gcs[room_jid].show_title()
+			control.parent_win.show_title()
 		else:
 			gajim.interface.roster.show_title()
 		# Keep only non-messages events
@@ -1327,12 +1309,10 @@ class ChatControl(ChatControlBase):
 		else:
 			del gajim.awaiting_events[self.account][jid]
 		typ = 'chat' # Is it a normal chat or a pm ?
-#		# reset to status image in gc if it is a pm
-#		# FIXME: New data structure
-#		gcs = gajim.interface.instances[self.account]['gc']
-#		if gcs.has_key(room_jid):
-#			gcs[room_jid].draw_all_roster()
-#			typ = 'pm'
+		# reset to status image in gc if it is a pm
+		if is_pm:
+			control.draw_widgets()
+			typ = 'pm'
 
 		gajim.interface.roster.draw_contact(jid, self.account)
 		if gajim.interface.systray_enabled:
@@ -1344,7 +1324,7 @@ class ChatControl(ChatControlBase):
 				gajim.interface.roster.really_remove_contact(self.contact,
 										self.account)
 			elif typ == 'pm':
-				gcs[room_jid].remove_contact(room_jid, nick)
+				control.remove_contact(nick)
 
 	def show_bigger_avatar(self, small_avatar):
 		'''resizes the avatar, if needed, so it has at max half the screen size

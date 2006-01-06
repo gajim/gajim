@@ -36,6 +36,7 @@ import gtkgui_helpers
 import dialogs
 import vcard
 import cell_renderer_image
+import message_control
 
 try:
 	import gtkspell

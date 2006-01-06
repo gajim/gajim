@@ -19054,7 +19054,7 @@ Maybe I'll refactor later</property>
 	  <property name="show_tabs">True</property>
 	  <property name="show_border">True</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
-	  <property name="scrollable">False</property>
+	  <property name="scrollable">True</property>
 	  <property name="enable_popup">False</property>
 
 	  <child>
@@ -19875,7 +19875,7 @@ topic</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkScrolledWindow" id="scrolledwindow48">
+		    <widget class="GtkScrolledWindow" id="list_scrolledwindow">
 		      <property name="width_request">100</property>
 		      <property name="visible">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
@@ -20108,7 +20108,7 @@ topic</property>
 			      <property name="right_padding">0</property>
 
 			      <child>
-				<widget class="GtkHBox" id="hbox3015">
+				<widget class="GtkHBox" id="gc_actions_hbox">
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">2</property>
