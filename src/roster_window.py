@@ -39,6 +39,7 @@ import disco
 import gtkgui_helpers
 import cell_renderer_image
 import tooltips
+import message_control
 
 from common import gajim
 from common import helpers
@@ -66,6 +67,8 @@ C_SECPIXBUF, # secondary_pixbuf (holds avatar or padlock)
 
 
 GTKGUI_GLADE = 'gtkgui.glade'
+
+DEFAULT_ICONSET = 'dcraven'
 
 class RosterWindow:
 	'''Class for main window of gtkgui interface'''
@@ -627,15 +630,13 @@ class RosterWindow:
 	def change_roster_style(self, option):
 		model = self.tree.get_model()
 		model.foreach(self._change_style, option)
+		for win in gajim.interface.msg_win_mgr.windows():
+			win.repaint_themed_widgets()
 		# update gc's roster
-		for account in gajim.connections:
-			gcs = gajim.interface.instances[account]['gc']
-			if gcs.has_key('tabbed'):
-				gcs['tabbed'].draw_all_roster()
-			else:
-				for room_jid in gcs:
-					gcs[room_jid].draw_all_roster()
-
+                for ctl in gajim.interface.msg_win_mgr.controls():
+			if ctl.type_id == message_control.TYPE_GC:
+				ctl.draw_all_roster()
+			
 	def draw_roster(self):
 		'''Clear and draw roster'''
 		self.tree.get_model().clear()
@@ -1142,7 +1143,7 @@ class RosterWindow:
 		# using self.jabber_status_images is poopoo
 		iconset = gajim.config.get('iconset')
 		if not iconset:
-			iconset = 'dcraven'
+			iconset = DEFAULT_ICONSET
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = self.load_iconset(path)
 
@@ -1224,7 +1225,7 @@ class RosterWindow:
 			menu = gtk.Menu()
 			iconset = gajim.config.get('iconset')
 			if not iconset:
-				iconset = 'dcraven'
+				iconset = DEFAULT_ICONSET
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			for account in gajim.connections:
 				state_images = self.load_iconset(path)
@@ -2222,19 +2223,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.set_img()
 
-		for ctl in gajim.interface.msg_win_mgr.controls():
-			ctl.update_state()
+		for win in gajim.interface.msg_win_mgr.windows():
+			for ctl in gajim.interface.msg_win_mgr.controls():
+				ctl.update_state()
+			win.redraw_tab(ctl.contact)
 
-		# FIXME: All of this will go away with the above
-		for account in gajim.connections:
-			# FIXME
-			# Update opened groupchat windows
-			gcs = gajim.interface.instances[account]['gc']
-			if gcs.has_key('tabbed'):
-				gcs['tabbed'].draw_all_roster()
-			else:
-				for room_jid in gcs:
-					gcs[room_jid].draw_all_roster()
 		self.update_status_combobox()
 
 	def repaint_themed_widgets(self):

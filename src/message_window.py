@@ -568,7 +568,7 @@ class MessageWindowMgr:
 		for w in self._windows.values():
 			yield w
 	def controls(self):
-		for w in self._windows:
+		for w in self._windows.values():
 			for c in w.controls():
 				yield c
 
