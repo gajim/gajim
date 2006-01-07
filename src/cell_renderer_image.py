@@ -51,7 +51,7 @@ class CellRendererImage(gtk.GenericCellRenderer):
 			return
 		self.redraw = 1
 		col = tree.get_column(self.col_index)
-		cell_area = tree.get_cell_area((path[0]+1), col)
+		cell_area = tree.get_cell_area(path), col)
 		
 		tree.queue_draw_area(cell_area.x, cell_area.y,
 					cell_area.width, cell_area.height)
