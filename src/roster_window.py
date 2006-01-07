@@ -1252,6 +1252,8 @@ class RosterWindow:
 		gajim.connections[account].request_subscription(jid, txt)
 		if group:
 			group = [group]
+		else:
+			group = []
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			keyID = ''
