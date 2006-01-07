@@ -48,7 +48,7 @@ class MessageControl:
 		self.compact_view_current = False
 		self.nb_unread = 0
 		self.print_time_timeout_id = None
-		# FIXME: Make this a member
+
 		gajim.last_message_time[self.account][contact.jid] = 0
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)

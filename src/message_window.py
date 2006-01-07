@@ -176,33 +176,30 @@ class MessageWindow:
 		'''When close button is pressed: close a tab'''
 		self.remove_tab(contact)
 
-	def show_title(self, urgent = True):
+	def show_title(self, urgent = True, control = None):
 		'''redraw the window's title'''
+		print "show_title"
 		unread = 0
 		for ctl in self._controls.values():
 			unread += ctl.nb_unread
-		start = ''
+		unread_str = ''
 		if unread > 1:
-			start = '[' + unicode(unread) + '] '
+			unread_str = '[' + unicode(unread) + '] '
 		elif unread == 1:
-			start = '* '
+			unread_str = '* '
 
-		ctl = self.get_active_control()
-		if len(self._controls) > 1: # if more than one tab in the same window
-			add = ctl.display_name
+		if not control:
+			control = self.get_active_control()
+		if control.type_id == message_control.TYPE_GC:
+			title = control.room_jid
+		elif control.contact.name:
+			title = control.contact.name
 		else:
-			add = ctl.contact.name
-# FIXME: This is for GC only
-#			elif self.widget_name == 'groupchat_window':
-#				name = gajim.get_nick_from_jid(jid)
-#				add = name
+			title = control.contact.jid
 
-		title = start + add
-		if len(gajim.connections) >= 2: # if we have 2 or more accounts
-			title += ' (' + _('account: ') + ctl.account + ')'
-
-		# Update UI
+		title = unread_str + title
 		self.window.set_title(title)
+
 		if urgent:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
 
@@ -405,6 +402,7 @@ class MessageWindow:
 		
 		new_ctl = self._widget_to_control(notebook.get_nth_page(page_num))
 		new_ctl.set_control_active(True)
+		self.show_title(control = new_ctl)
 
 	def _on_notebook_key_press(self, widget, event):
 		st = '1234567890' # alt+1 means the first tab (tab 0)
