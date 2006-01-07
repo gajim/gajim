@@ -2660,7 +2660,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)
 		self.status_combobox = self.xml.get_widget('status_combobox')
 
-		cell = cell_renderer_image.CellRendererImage()
+		cell = cell_renderer_image.CellRendererImage(0, 1)
 		self.status_combobox.pack_start(cell, False)
 
 		# img to show is in in 2nd column of liststore
@@ -2721,7 +2721,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# this col has two cells: first one img, second one text
 		col = gtk.TreeViewColumn()
 
-		render_image = cell_renderer_image.CellRendererImage() # show img or +-
+		render_image = cell_renderer_image.CellRendererImage(0, 0) # show img or +-
 		col.pack_start(render_image, expand = False)
 		col.add_attribute(render_image, 'image', C_IMG)
 		col.set_cell_data_func(render_image, self.iconCellDataFunc, None)

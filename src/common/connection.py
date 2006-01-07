@@ -1265,10 +1265,10 @@ class Connection:
 					dic[i]['options'][j]['values'] = []
 					for tag in tags:
 						dic[i]['options'][j]['values'].append(tag.getData())
-					j += 1
 					if not label:
 						label = dic[i]['options'][j]['values'][0]
 					dic[i]['options'][j]['label'] = label
+					j += 1
 				if not dic[i].has_key('values'):
 					dic[i]['values'] = [dic[i]['options'][0]['values'][0]]
 			i += 1

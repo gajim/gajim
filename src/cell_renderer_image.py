@@ -33,9 +33,11 @@ class CellRendererImage(gtk.GenericCellRenderer):
 			'Image', gobject.PARAM_READWRITE),
 	}
 
-	def __init__(self):
+	def __init__(self, col_index, tv_index):
 		self.__gobject_init__()
 		self.image = None
+		self.col_index = col_index
+		self.tv_index = tv_index
 		self.iters = {}
 
 	def do_set_property(self, pspec, value):
@@ -45,10 +47,12 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		return getattr(self, pspec.name)
 
 	def func(self, model, path, iter, (image, tree)):
-		if model.get_value(iter, 0) != image:
+		if model.get_value(iter, self.tv_index) != image:
 			return
 		self.redraw = 1
-		cell_area = tree.get_cell_area(path, tree.get_column(0))
+		col = tree.get_column(self.col_index)
+		cell_area = tree.get_cell_area(path, col)
+		
 		tree.queue_draw_area(cell_area.x, cell_area.y,
 					cell_area.width, cell_area.height)
 
@@ -59,7 +63,8 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		iter = self.iters[image]
 		iter.advance()
 		model = tree.get_model()
-		model.foreach(self.func, (image, tree))
+		if model:
+			model.foreach(self.func, (image, tree))
 		if self.redraw:
 			gobject.timeout_add(iter.get_delay_time(),
 					self.animation_timeout, tree, image)

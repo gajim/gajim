@@ -234,7 +234,8 @@ class TabbedChatWindow(chat.Chat):
 		else:
 			tb.set_sensitive(False)
 			#we talk about a contact here
-			tt = _('%s has not broadcasted an OpenPGP key nor you have assigned one') % contact.name
+			tt = _('%s has not broadcast an OpenPGP key, nor has one neen assigned') %\
+					contact.name
 		tip = gtk.Tooltips()
 		tip.set_tip(self.xmls[jid].get_widget('gpg_eventbox'), tt)
 
