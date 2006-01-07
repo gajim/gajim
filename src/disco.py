@@ -1166,6 +1166,9 @@ class ToplevelAgentBrowser(AgentBrowser):
 		model, iter = self.window.services_treeview.get_selection().get_selected()
 		if not iter:
 			return
+		if not model[iter][0]:
+			# We're on a category row
+			return
 		if model[iter][4] != 0:
 			# We don't have the info (yet)
 			# It's either unknown or a transport, register button should be active
