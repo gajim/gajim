@@ -309,7 +309,7 @@ _('Connection with peer cannot be established.'))
 			file_size = file_props['size']
 			dl_finished = dl_size >= file_size
 			dialog = dialogs.FTOverwriteConfirmationDialog(
-				_('This file already exists'), _('Would you like to overwrite it?'),
+				_('This file already exists'), _('What do you want to do?'),
 				not dl_finished)
 			response = dialog.get_response()
 			if response == gtk.RESPONSE_CANCEL:
