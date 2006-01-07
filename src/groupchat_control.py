@@ -107,8 +107,8 @@ class GroupchatControl(ChatControlBase):
 		# if True, the room has mentioned us
 		self.attention_flag = False
 		self.room_creation = time.time()
-		self.nick_hits = 0
-		self.cmd_hits = 0
+		self.nick_hits = []
+		self.cmd_hits = []
 		self.last_key_tabs = False
 
 		self.subject = ''
@@ -126,6 +126,8 @@ class GroupchatControl(ChatControlBase):
 		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
+		self.parent_win.window.connect('focus-in-event',
+						self._on_window_focus_in_event)
 
 		# set the position of the current hpaned
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
@@ -173,6 +175,11 @@ class GroupchatControl(ChatControlBase):
 		self.draw_widgets()
 		self.conv_textview.grab_focus()
 		self.widget.show_all()
+
+	def _on_window_focus_in_event(self, widget, event):
+		'''When window gets focus'''
+		if self.parent_win.get_active_jid() == self.room_jid:
+			self.allow_focus_out_line = True
 
 	def tree_cell_data_func(self, column, renderer, model, iter, data=None):
 		theme = gajim.config.get('roster_theme')
@@ -1024,6 +1031,8 @@ class GroupchatControl(ChatControlBase):
 			gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
 
 	def shutdown(self):
+		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
+							show='offline', status='offline')
 		# They can already be removed by the destroy function
 		if self.room_jid in gajim.contacts.get_gc_list(self.account):
 			gajim.contacts.remove_room(self.account, self.room_jid)
@@ -1056,3 +1065,509 @@ class GroupchatControl(ChatControlBase):
 				dialog.destroy()
 
 		return retval
+
+	def set_control_active(self, state):
+		ChatControlBase.set_control_active(self, state)
+		if not state:
+			# add the focus-out line to the tab we are leaving
+			self.check_and_possibly_add_focus_out_line()
+
+	def get_specific_unread(self):
+		# returns the number of the number of unread msgs
+		# for room_jid & number of unread private msgs with each contact
+		# that we have
+		nb = 0
+		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+			fjid = self.room_jid + '/' + nick
+			if gajim.awaiting_events[self.account].has_key(fjid):
+				# gc can only have messages as event
+				nb += len(gajim.awaiting_events[self.account][fjid])
+		return nb
+
+	def on_change_subject_menuitem_activate(self, widget):
+		instance = dialogs.InputDialog(_('Changing Subject'),
+			_('Please specify the new subject:'), self.subject)
+		response = instance.get_response()
+		if response == gtk.RESPONSE_OK:
+			# Note, we don't update self.subject since we don't know whether it will work yet
+			subject = instance.input_entry.get_text().decode('utf-8')
+			gajim.connections[self.account].send_gc_subject(self.room_jid, subject)
+
+	def on_change_nick_menuitem_activate(self, widget):
+		title = _('Changing Nickname')
+		prompt = _('Please specify the new nickname you want to use:')
+		self.show_change_nick_input_dialog(title, prompt, self.nick)
+
+	def on_configure_room_menuitem_activate(self, widget):
+		gajim.connections[self.account].request_gc_config(self.room_jid)
+
+	def on_bookmark_room_menuitem_activate(self, widget):
+		bm = {
+			'name': self.name,
+			'jid': self.room_jid,
+			'autojoin': '0',
+			'password': '',
+			'nick': self.nick
+		}
+
+		for bookmark in gajim.connections[self.account].bookmarks:
+			if bookmark['jid'] == bm['jid']:
+				dialogs.ErrorDialog(
+					_('Bookmark already set'),
+					_('Room "%s" is already in your bookmarks.') % bm['jid']).\
+						get_response()
+				return
+
+		gajim.connections[self.account].bookmarks.append(bm)
+		gajim.connections[self.account].store_bookmarks()
+
+		gajim.interface.roster.make_menu()
+
+		dialogs.InformationDialog(
+				_('Bookmark has been added successfully'),
+				_('You can manage your bookmarks via Actions menu in your roster.'))
+
+	def handle_message_textview_mykey_press(self, widget, event_keyval, event_keymod):
+		# NOTE: handles mykeypress which is custom signal connected to this
+		# CB in new_room(). for this singal see message_textview.py
+
+		# construct event instance from binding
+		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
+		event.keyval = event_keyval
+		event.state = event_keymod
+		event.time = 0 # assign current time
+
+		message_buffer = widget.get_buffer()
+		start_iter, end_iter = message_buffer.get_bounds()
+		message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+
+		if event.keyval == gtk.keysyms.Tab: # TAB
+			cursor_position = message_buffer.get_insert()
+			end_iter = message_buffer.get_iter_at_mark(cursor_position)
+			text = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+			if not text or text.endswith(' '):
+				# if we are nick cycling, last char will always be space
+				if not self.last_key_tabs:
+					return False
+
+			splitted_text = text.split()
+			# command completion
+			if text.startswith('/') and len(splitted_text) == 1:
+				text = splitted_text[0]
+				if len(text) == 1: # user wants to cycle all commands
+					self.cmd_hits = self.muc_cmds
+				else:
+					# cycle possible commands depending on what the user typed
+					if self.last_key_tabs and len(self.cmd_hits) and \
+					self.cmd_hits[0].startswith(text.lstrip('/')):
+						self.cmd_hits.append(self.cmd_hits[0])
+						self.cmd_hits.pop(0)
+					else: # find possible commands
+						self.cmd_hits = []
+						for cmd in self.muc_cmds:
+							if cmd.startswith(text.lstrip('/')):
+								self.cmd_hits.append(cmd)
+				if len(self.cmd_hits):
+					message_buffer.delete(start_iter, end_iter)
+					message_buffer.insert_at_cursor('/' + self.cmd_hits[0] + ' ')
+					self.last_key_tabs = True
+				return True
+
+			# nick completion
+			# check if tab is pressed with empty message
+			if len(splitted_text): # if there are any words
+				begin = splitted_text[-1] # last word we typed
+
+				if len(self.nick_hits) and \
+						self.nick_hits[0].startswith(begin.replace(
+						self.gc_refer_to_nick_char, '')) and \
+						self.last_key_tabs: # we should cycle
+					self.nick_hits.append(self.nick_hits[0])
+					self.nick_hits.pop(0)
+				else:
+					self.nick_hits = [] # clear the hit list
+					list_nick = gajim.contacts.get_nick_list(self.account,
+										self.room_jid)
+					for nick in list_nick:
+						if nick.lower().startswith(begin.lower()):
+							# the word is the begining of a nick
+							self.nick_hits.append(nick)
+				if len(self.nick_hits):
+					if len(splitted_text) == 1: # This is the 1st word of the line
+						add = self.gc_refer_to_nick_char + ' '
+					else:
+						add = ' '
+					start_iter = end_iter.copy()
+					if self.last_key_tabs and begin.endswith(', '):
+						# have to accomodate for the added space from last
+						# completion
+						start_iter.backward_chars(len(begin) + 2)
+					elif self.last_key_tabs:
+						# have to accomodate for the added space from last
+						# completion
+						start_iter.backward_chars(len(begin) + 1)
+					else:
+						start_iter.backward_chars(len(begin))
+
+					message_buffer.delete(start_iter, end_iter)
+					message_buffer.insert_at_cursor(self.nick_hits[0] + add)
+					self.last_key_tabs = True
+					return True
+			self.last_key_tabs = False
+
+	def on_list_treeview_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			widget.get_selection().unselect_all()
+
+	def on_list_treeview_row_expanded(self, widget, iter, path):
+		'''When a row is expanded: change the icon of the arrow'''
+		model = widget.get_model()
+		image = gajim.interface.roster.jabber_state_images['16']['opened']
+		model[iter][C_IMG] = image
+
+	def on_list_treeview_row_collapsed(self, widget, iter, path):
+		'''When a row is collapsed: change the icon of the arrow'''
+		model = widget.get_model()
+		image = gajim.interface.roster.jabber_state_images['16']['closed']
+		model[iter][C_IMG] = image
+
+	def kick(self, widget, nick):
+		'''kick a user'''
+		# ask for reason
+		instance = dialogs.InputDialog(_('Kicking %s') % nick,
+					_('You may specify a reason below:'))
+		response = instance.get_response()
+		if response == gtk.RESPONSE_OK:
+			reason = instance.input_entry.get_text().decode('utf-8')
+		else:
+			return # stop kicking procedure
+		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'none',
+								reason)
+
+	def mk_menu(self, event, iter):
+		'''Make contact's popup menu'''
+		model = self.list_treeview.get_model()
+		nick = model[iter][C_NICK].decode('utf-8')
+		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		jid = c.jid
+		target_affiliation = c.affiliation
+		target_role = c.role
+
+		# looking for user's affiliation and role
+		user_nick = self.nick
+		user_affiliation = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+			user_nick).affiliation
+		user_role = self.get_role(user_nick)
+
+		# making menu from glade
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'gc_occupants_menu', APP)
+
+		# these conditions were taken from JEP 0045
+		item = xml.get_widget('kick_menuitem')
+		if user_role != 'moderator' or \
+			(user_affiliation == 'admin' and target_affiliation == 'owner') or \
+			(user_affiliation == 'member' and target_affiliation in ('admin', 'owner')) or \
+			(user_affiliation == 'none' and target_affiliation != 'none'):
+			item.set_sensitive(False)
+		item.connect('activate', self.kick, nick)
+
+		item = xml.get_widget('voice_checkmenuitem')
+		item.set_active(target_role != 'visitor')
+		if user_role != 'moderator' or \
+			user_affiliation == 'none' or \
+			(user_affiliation=='member' and target_affiliation!='none') or \
+			target_affiliation in ('admin', 'owner'):
+			item.set_sensitive(False)
+		item.connect('activate', self.on_voice_checkmenuitem_activate, nick)
+
+		item = xml.get_widget('moderator_checkmenuitem')
+		item.set_active(target_role == 'moderator')
+		if not user_affiliation in ('admin', 'owner') or \
+			target_affiliation in ('admin', 'owner'):
+			item.set_sensitive(False)
+		item.connect('activate', self.on_moderator_checkmenuitem_activate, nick)
+
+		item = xml.get_widget('ban_menuitem')
+		if not user_affiliation in ('admin', 'owner') or \
+			(target_affiliation in ('admin', 'owner') and\
+			user_affiliation != 'owner'):
+			item.set_sensitive(False)
+		item.connect('activate', self.ban, jid)
+
+		item = xml.get_widget('member_checkmenuitem')
+		item.set_active(target_affiliation != 'none')
+		if not user_affiliation in ('admin', 'owner') or \
+			(user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
+			item.set_sensitive(False)
+		item.connect('activate', self.on_member_checkmenuitem_activate, jid)
+
+		item = xml.get_widget('admin_checkmenuitem')
+		item.set_active(target_affiliation in ('admin', 'owner'))
+		if not user_affiliation == 'owner':
+			item.set_sensitive(False)
+		item.connect('activate', self.on_admin_checkmenuitem_activate, jid)
+
+		item = xml.get_widget('owner_checkmenuitem')
+		item.set_active(target_affiliation == 'owner')
+		if not user_affiliation == 'owner':
+			item.set_sensitive(False)
+		item.connect('activate', self.on_owner_checkmenuitem_activate, jid)
+
+		item = xml.get_widget('information_menuitem')
+		item.connect('activate', self.on_info, nick)
+
+		item = xml.get_widget('history_menuitem')
+		item.connect('activate', self.on_history, nick)
+
+		item = xml.get_widget('add_to_roster_menuitem')
+		if not jid:
+			item.set_sensitive(False)
+		item.connect('activate', self.on_add_to_roster, jid)
+
+		item = xml.get_widget('send_private_message_menuitem')
+		item.connect('activate', self.on_send_pm, model, iter)
+
+		# show the popup now!
+		menu = xml.get_widget('gc_occupants_menu')
+		menu.popup(None, None, None, event.button, event.time)
+		menu.show_all()
+
+	def _start_private_message(self, nick):
+		nick_jid = gajim.construct_fjid(self.room_jid, nick)
+
+		win = gajim.interface.msg_win_mgr.get_window(nick_jid)
+		if not win:
+			gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+			c = gajim.contacts.contact_from_gc_contact(gc_c)
+			gajim.interface.roster.new_chat(c, self.account)
+			win = gajim.interface.msg_win_mgr.get_window(nick_jid)
+		win.set_active_tab(nick_jid)
+		win.window.present()
+
+	def on_list_treeview_row_activated(self, widget, path, col = 0):
+		'''When an iter is double clicked: open the chat window'''
+		model = widget.get_model()
+		iter = model.get_iter(path)
+		if len(path) == 1: # It's a group
+			if (widget.row_expanded(path)):
+				widget.collapse_row(path)
+			else:
+				widget.expand_row(path, False)
+		else: # We want to send a private message
+			nick = model[iter][C_NICK].decode('utf-8')
+			win = self._start_private_message(nick)
+
+	def on_list_treeview_button_press_event(self, widget, event):
+		'''popup user's group's or agent menu'''
+		if event.button == 3: # right click
+			try:
+				path, column, x, y = widget.get_path_at_pos(int(event.x),
+					int(event.y))
+			except TypeError:
+				widget.get_selection().unselect_all()
+				return
+			widget.get_selection().select_path(path)
+			model = widget.get_model()
+			iter = model.get_iter(path)
+			if len(path) == 2:
+				self.mk_menu(event, iter)
+			return True
+
+		elif event.button == 2: # middle click
+			try:
+				path, column, x, y = widget.get_path_at_pos(int(event.x),
+					int(event.y))
+			except TypeError:
+				widget.get_selection().unselect_all()
+				return
+			widget.get_selection().select_path(path)
+			model = widget.get_model()
+			iter = model.get_iter(path)
+			if len(path) == 2:
+				nick = model[iter][C_NICK].decode('utf-8')
+				fjid = gajim.construct_fjid(self.room_jid, nick)
+				win = gajim.interface.msg_win_mgr.get_window(fjid)
+				if not win:
+					gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+						nick)
+					c = gajim.contacts.contact_from_gc_contact(gc_c)
+					gajim.interface.roster.new_chat(c, self.account,
+									private_chat = True)
+					win = gajim.interface.msg_win_mgr.get_window(fjid)
+				win.set_active_tab(fjid)
+				win.window.present()
+			return True
+
+		elif event.button == 1: # left click
+			try:
+				path, column, x, y = widget.get_path_at_pos(int(event.x),
+					int(event.y))
+			except TypeError:
+				widget.get_selection().unselect_all()
+				return
+
+			model = widget.get_model()
+			iter = model.get_iter(path)
+			nick = model[iter][C_NICK].decode('utf-8')
+			if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+				#it's a group
+				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
+					if (widget.row_expanded(path)):
+						widget.collapse_row(path)
+					else:
+						widget.expand_row(path, False)
+
+	def on_list_treeview_motion_notify_event(self, widget, event):
+		model = widget.get_model()
+		props = widget.get_path_at_pos(int(event.x), int(event.y))
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.id != props[0]:
+				self.tooltip.hide_tooltip()
+		if props:
+			[row, col, x, y] = props
+			iter = None
+			try:
+				iter = model.get_iter(row)
+			except:
+				self.tooltip.hide_tooltip()
+				return
+			typ = model[iter][C_TYPE].decode('utf-8')
+			if typ == 'contact':
+				account = self.account
+
+				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+					self.tooltip.id = row
+					nick = model[iter][C_NICK].decode('utf-8')
+					self.tooltip.timeout = gobject.timeout_add(500,
+						self.show_tooltip, gajim.contacts.get_gc_contact(account,
+						self.room_jid, nick))
+
+	def on_list_treeview_leave_notify_event(self, widget, event):
+		model = widget.get_model()
+		props = widget.get_path_at_pos(int(event.x), int(event.y))
+		if self.tooltip.timeout > 0:
+			if not props or self.tooltip.id == props[0]:
+				self.tooltip.hide_tooltip()
+
+	def show_tooltip(self, contact):
+		pointer = self.list_treeview.get_pointer()
+		props = self.list_treeview.get_path_at_pos(pointer[0], pointer[1])
+		if props and self.tooltip.id == props[0]:
+			# check if the current pointer is at the same path
+			# as it was before setting the timeout
+			rect =  self.list_treeview.get_cell_area(props[0],props[1])
+			position = self.list_treeview.window.get_origin()
+			pointer = self.parent_win.window.get_pointer()
+			self.tooltip.show_tooltip(contact, (0, rect.height),
+				(self.parent_win.window.get_screen().get_display().get_pointer()[1],
+				position[1] + rect.y))
+		else:
+			self.tooltip.hide_tooltip()
+
+
+	def grant_voice(self, widget, nick):
+		'''grant voice privilege to a user'''
+		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'participant')
+
+	def revoke_voice(self, widget, nick):
+		'''revoke voice privilege to a user'''
+		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'visitor')
+
+	def grant_moderator(self, widget, nick):
+		'''grant moderator privilege to a user'''
+		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'moderator')
+
+	def revoke_moderator(self, widget, nick):
+		'''revoke moderator privilege to a user'''
+		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'participant')
+
+	def ban(self, widget, jid):
+		'''ban a user'''
+		# to ban we know the real jid. so jid is not fakejid
+		nick = gajim.get_nick_from_jid(jid)
+		# ask for reason
+		instance = dialogs.InputDialog(_('Banning %s') % nick,
+			_('You may specify a reason below:'))
+		response = instance.get_response()
+		if response == gtk.RESPONSE_OK:
+			reason = instance.input_entry.get_text().decode('utf-8')
+		else:
+			return # stop banning procedure
+		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid,
+								'outcast', reason)
+
+	def grant_membership(self, widget, jid):
+		'''grant membership privilege to a user'''
+		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid,
+								'member')
+
+	def revoke_membership(self, widget, jid):
+		'''revoke membership privilege to a user'''
+		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid,
+								'none')
+
+	def grant_admin(self, widget, jid):
+		'''grant administrative privilege to a user'''
+		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid, 'admin')
+
+	def revoke_admin(self, widget, jid):
+		'''revoke administrative privilege to a user'''
+		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid,
+			'member')
+
+	def grant_owner(self, widget, jid):
+		'''grant owner privilege to a user'''
+		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid, 'owner')
+
+	def revoke_owner(self, widget, jid):
+		'''revoke owner privilege to a user'''
+		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid, 'admin')
+
+	def on_info(self, widget, ck):
+		'''Call vcard_information_window class to display user's information'''
+		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		jid = c.get_full_jid()
+		if gajim.interface.instances[self.account]['infos'].has_key(jid):
+			gajim.interface.instances[self.account]['infos'][jid].window.present()
+		else:
+			# we create a Contact instance
+			c2 = gajim.contacts.contact_from_gc_contact(c)
+			gajim.interface.instances[self.account]['infos'][jid] = \
+				vcard.VcardWindow(c2, self.account, False)
+
+	def on_history(self, widget, ck):
+		jid = gajim.construct_fjid(self.room_jid, nick)
+		self.on_history_menuitem_clicked(jid = jid)
+
+	def on_add_to_roster(self, widget, jid):
+		dialogs.AddNewContactWindow(self.account, jid)
+
+	def on_voice_checkmenuitem_activate(self, widget, nick):
+		if widget.get_active():
+			self.grant_voice(widget, nick)
+		else:
+			self.revoke_voice(widget, nick)
+
+	def on_moderator_checkmenuitem_activate(self, widget, nick):
+		if widget.get_active():
+			self.grant_moderator(widget, nick)
+		else:
+			self.revoke_moderator(widget, nick)
+
+	def on_member_checkmenuitem_activate(self, widget, jid):
+		if widget.get_active():
+			self.grant_membership(widget, jid)
+		else:
+			self.revoke_membership(widget, jid)
+
+	def on_admin_checkmenuitem_activate(self, widget, jid):
+		if widget.get_active():
+			self.grant_admin(widget, jid)
+		else:
+			self.revoke_admin(widget, jid)
+
+	def on_owner_checkmenuitem_activate(self, widget, jid):
+		if widget.get_active():
+			self.grant_owner(widget, jid)
+		else:
+			self.revoke_owner(widget, jid)

@@ -103,7 +103,6 @@ class Contacts:
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=5, keyID='', our_chatstate=None,
 		chatstate=None):
-		print "creating Contact:", jid
 		return Contact(jid, name, groups, show, status, sub, ask, resource,
 			priority, keyID, our_chatstate, chatstate)
 	
@@ -230,12 +229,10 @@ class Contacts:
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
-		print "creating GC_Contact:", jid
 		return GC_Contact(room_jid, name, show, status, role, affiliation, jid,
 			resource)
 	
 	def add_gc_contact(self, account, gc_contact):
-		print "add_gc_contact"
 		# No such account before ?
 		if not self._gc_contacts.has_key(account):
 			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \

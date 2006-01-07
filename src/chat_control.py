@@ -64,9 +64,12 @@ class ChatControlBase(MessageControl):
 		# Derived types SHOULD implement this
 	def repaint_themed_widgets(self):
 		self.draw_banner()
-		# NOTE: Derived classes MAY implement this
+		# Derived classes MAY implement this
 	def _update_banner_state_image(self):
 		pass # Derived types MAY implement this
+
+	def handle_message_textview_mykey_press(self):
+		pass # Derived should implement this rather than connecting to the event itself.
 
 	def __init__(self, type_id, parent_win, widget_name, display_name, contact, acct):
 		MessageControl.__init__(self, type_id, parent_win, widget_name, display_name,
@@ -271,12 +274,16 @@ class ChatControlBase(MessageControl):
 					send_message = True
 				
 			if gajim.connections[self.account].connected < 2: # we are not connected
-				dialogs.ErrorDialog(_('A connection is not available'),
-					_('Your message can not be sent until you are connected.')).get_response()
+				dialog = dialogs.ErrorDialog(_('A connection is not available'),
+					_('Your message can not be sent until you are connected.'))
+				dialog.get_response()
 				send_message = False
 
 			if send_message:
 				self.send_message(message) # send the message
+		else:
+			# Give the control itself a chance to process
+			self.handle_message_textview_mykey_press(widget, event_keyval, event_keymod)
 
 	def _process_command(self, message):
 		if not message:
@@ -584,16 +591,16 @@ class ChatControlBase(MessageControl):
 
 		contact = self.parent_win.get_active_contact()
 		jid = contact.jid
-		if _('not in the roster') in contact.groups: # for add_to_roster_menuitem
-			childs[5].show()
-			childs[5].set_no_show_all(False)
-		else:
-			childs[5].hide()
-			childs[5].set_no_show_all(True)
 
 		if self.type_id == message_control.TYPE_GC:
 			start_removing_from = 7 # # this is from the seperator and after
 		else:
+			if _('not in the roster') in contact.groups: # for add_to_roster_menuitem
+				childs[5].show()
+				childs[5].set_no_show_all(False)
+			else:
+				childs[5].hide()
+				childs[5].set_no_show_all(True)
 			start_removing_from = 6 # this is from the seperator and after
 			
 		for child in childs[start_removing_from:]:
@@ -723,13 +730,10 @@ class ChatControl(ChatControlBase):
 
 	def _on_window_motion_notify(self, widget, event):
 		'''it gets called no matter if it is the active window or not'''
-		# FIXME NOT WORKING
-		print "_on_window_motion_notify"
-		if widget.get_property('has-toplevel-focus'):
+		if self.parent_win.get_active_jid() == self.contact.jid:
 			# change chatstate only if window is the active one
 			self.mouse_over_in_last_5_secs = True
 			self.mouse_over_in_last_30_secs = True
-
 
 	def _schedule_activity_timers(self):
 		self.possible_paused_timeout_id = gobject.timeout_add(5000,

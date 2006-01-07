@@ -478,7 +478,7 @@ class Interface:
 		fjid = array[0]
 		jids = fjid.split('/', 1)
 		jid = jids[0]
-		gcs = gajim.interface.msg_win_mgr.get_controls(message_window.TYPE_GC)
+		gcs = gajim.interface.msg_win_mgr.get_controls(message_control.TYPE_GC)
 		for gc_control in gcs:
 			if jid == gc_control.contact.jid:
 				if len(jids) > 1: # it's a pm
