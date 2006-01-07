@@ -127,7 +127,7 @@ class PreferencesWindow:
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
 		# new model, image in 0, string in 1
 		model = gtk.ListStore(gtk.Image, str)
-		renderer_image = cell_renderer_image.CellRendererImage()
+		renderer_image = cell_renderer_image.CellRendererImage(0, 0)
 		renderer_text = gtk.CellRendererText()
 		renderer_text.set_property('xpad', 5)
 		self.iconset_combobox.pack_start(renderer_image, expand = False)
@@ -1950,7 +1950,7 @@ class ManageEmoticonsWindow:
 
 		col = gtk.TreeViewColumn(_('Image'))
 		self.emot_tree.append_column(col)
-		renderer = cell_renderer_image.CellRendererImage()
+		renderer = cell_renderer_image.CellRendererImage(1, 2)
 		col.pack_start(renderer, expand = False)
 		col.add_attribute(renderer, 'image', 2)
 
@@ -2005,12 +2005,7 @@ class ManageEmoticonsWindow:
 				continue
 			img = gtk.Image()
 			img.show()
-			if file.find('.gif') != -1:
-				pix = gtk.gdk.PixbufAnimation(file)
-				img.set_from_animation(pix)
-			else:
-				pix = gtk.gdk.pixbuf_new_from_file(file)
-				img.set_from_pixbuf(pix)
+			img.set_from_file(file)
 			model.set(iter, 2, img)
 
 	def on_emot_cell_edited(self, cell, row, new_text):
@@ -2103,12 +2098,7 @@ class ManageEmoticonsWindow:
 			model.set_value(iter, 1, file)
 			img = gtk.Image()
 			img.show()
-			if file.find('.gif') != -1:
-				pix = gtk.gdk.PixbufAnimation(file)
-				img.set_from_animation(pix)
-			else:
-				pix = gtk.gdk.pixbuf_new_from_file(file)
-				img.set_from_pixbuf(pix)
+			img.set_from_file(file)
 			model.set(iter, 2, img)
 
 	def on_button_new_emoticon_clicked(self, widget, data=None):
