@@ -881,7 +881,9 @@ class Connection:
 		file_props['receiver'] = self.get_full_jid(iq_obj)
 		si = iq_obj.getTag('si')
 		file_tag = si.getTag('file')
-		range_tag = file_tag.getTag('range')
+		range_tag = None
+		if file_tag:
+			range_tag = file_tag.getTag('range')
 		if range_tag:
 			offset = range_tag.getAttr('offset')
 			if offset:
