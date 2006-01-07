@@ -871,6 +871,15 @@ class Connection:
 			return
 		file_props['receiver'] = self.get_full_jid(iq_obj)
 		si = iq_obj.getTag('si')
+		file_tag = si.getTag('file')
+		range_tag = file_tag.getTag('range')
+		if range_tag:
+			offset = range_tag.getAttr('offset')
+			if offset:
+				file_props['offset'] = int(offset)
+			length = range_tag.getAttr('length')
+			if length:
+				file_props['length'] = int(length)
 		feature = si.setTag('feature')
 		if feature.getNamespace() != common.xmpp.NS_FEATURE:
 			return
@@ -1054,6 +1063,9 @@ class Connection:
 		si.setNamespace(common.xmpp.NS_SI)
 		file_tag = si.setTag('file')
 		file_tag.setNamespace(common.xmpp.NS_FILE)
+		if file_props.has_key('offset') and file_props['offset']:
+			range_tag = file_tag.setTag('range')
+			range_tag.setAttr('offset', file_props['offset'])
 		feature = si.setTag('feature')
 		feature.setNamespace(common.xmpp.NS_FEATURE)
 		_feature = common.xmpp.DataForm(typ='submit')
