@@ -2290,7 +2290,7 @@ class ManageBookmarksWindow:
 	def on_manage_bookmarks_window_destroy(self, widget, event):
 		del gajim.interface.instances['manage_bookmarks']
 
-	def on_add_bookmark_button_clicked(self,widget):
+	def on_add_bookmark_button_clicked(self, widget):
 		'''
 		Add a new bookmark.
 		'''
@@ -2310,7 +2310,9 @@ class ManageBookmarksWindow:
 			add_to = iter
 
 		account = model.get_value(add_to, 1)
-		self.treestore.append(add_to, [account,_('New Room'), '', False, '', ''])
+		nick = gajim.nicks[account]
+		self.treestore.append(add_to, [account, _('New Room'), '', False, '',
+			nick])
 
 		self.view.expand_row(model.get_path(add_to), True)
 
