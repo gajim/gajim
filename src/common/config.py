@@ -120,6 +120,7 @@ class Config:
 		'before_nickname': [ opt_str, '' ],
 		'after_nickname': [ opt_str, ':' ],
 		'send_os_info': [ opt_bool, True ],
+		'notify_on_new_gmail_email': [ opt_bool, True ],
 		'usegpg': [ opt_bool, False ],
 		'use_gpg_agent': [ opt_bool, False ],
 		'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],

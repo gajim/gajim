@@ -800,6 +800,10 @@ class Interface:
 		if gajim.show_notification(account):
 			notify.notify(_('File Transfer Error'),
 				jid, account, 'file-send-error', file_props)
+				
+	def handle_event_gmail_notify(self, account, jid):
+		if gajim.config.get('notify_on_new_gmail_email'):
+			notify.notify(_('New E-mail'), jid, account)
 
 	def add_event(self, account, jid, typ, args):
 		'''add an event to the awaiting_events var'''
@@ -1191,6 +1195,7 @@ class Interface:
 			'BOOKMARKS': self.handle_event_bookmarks,
 			'CON_TYPE': self.handle_event_con_type,
 			'FILE_REQUEST': self.handle_event_file_request,
+			'GMAIL_NOTIFY': self.handle_event_gmail_notify,
 			'FILE_REQUEST_ERROR': self.handle_event_file_request_error,
 			'FILE_SEND_ERROR': self.handle_event_file_send_error,
 			'STANZA_ARRIVED': self.handle_event_stanza_arrived,

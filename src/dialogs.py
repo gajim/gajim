@@ -909,6 +909,12 @@ class PopupNotificationWindow:
 			else:
 				txt = ''
 			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
+		elif event_type == _('New E-mail'):
+			dodgerblue = gtk.gdk.color_parse('dodgerblue')
+			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
+			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
+			txt = _('You have new E-mail on %s.') % (jid)
+			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
 		gajim.interface.roster.popups_notification_height += self.window_height

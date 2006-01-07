@@ -316,6 +316,15 @@ class Connection:
 			else:
 				self.dispatch('VCARD', vcard)
 
+	def _gMailCB(self, con, gm):
+		"""Called when we get notified of new mail messages in gmail account"""
+		if not gm.getTag('new-mail'):
+			return
+		if gm.getTag('new-mail').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
+			jid = gajim.get_jid_from_account(self.name)
+			gajim.log.debug(('Notifying user of new gmail e-mail on %s.') % (jid))
+			self.dispatch('GMAIL_NOTIFY', jid)
+			raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
 		"""Called when we receive a message"""
@@ -1706,6 +1715,8 @@ class Connection:
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',
 			common.xmpp.NS_HTTP_AUTH)
+		con.RegisterHandler('iq', self._gMailCB, 'set',
+			common.xmpp.NS_GMAILNOTIFY)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)
