@@ -300,6 +300,24 @@ _('Connection with peer cannot be established.'))
 		gajim.connections[account].send_file_request(file_props)
 		return True
 	
+	def confirm_overwrite_cb(self, dialog, file_props):
+		file_path = dialog.get_filename()
+		file_path = file_path.decode('utf-8')
+		if os.path.exists(file_path):
+			stat = os.stat(file_path)
+			dl_size = stat.st_size
+			file_size = file_props['size']
+			dl_finished = dl_size >= file_size
+			dialog = dialogs.FTOverwriteConfirmationDialog(
+				_('This file already exists'), _('What do you want to do?'),
+				not dl_finished)
+			response = dialog.get_response()
+			if response == gtk.RESPONSE_CANCEL:
+				return gtk.FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN
+			elif response == 100:
+				file_props['offset'] = dl_size
+		return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
+
 	def show_file_request(self, account, contact, file_props):
 		''' show dialog asking for comfirmation and store location of new
 		file requested by a contact'''
@@ -326,6 +344,8 @@ _('Connection with peer cannot be established.'))
 			gtk28 = False
 			if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
 				dialog.props.do_overwrite_confirmation = True
+				dialog.connect('confirm-overwrite', self.confirm_overwrite_cb,
+					file_props)
 				gtk28 = True
 			if last_save_dir and os.path.isdir(last_save_dir):
 				dialog.set_current_folder(last_save_dir)

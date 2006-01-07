@@ -316,6 +316,15 @@ class Connection:
 			else:
 				self.dispatch('VCARD', vcard)
 
+	def _gMailCB(self, con, gm):
+		"""Called when we get notified of new mail messages in gmail account"""
+		if not gm.getTag('new-mail'):
+			return
+		if gm.getTag('new-mail').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
+			jid = gajim.get_jid_from_account(self.name)
+			gajim.log.debug(('Notifying user of new gmail e-mail on %s.') % (jid))
+			self.dispatch('GMAIL_NOTIFY', jid)
+			raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
 		"""Called when we receive a message"""
@@ -871,6 +880,17 @@ class Connection:
 			return
 		file_props['receiver'] = self.get_full_jid(iq_obj)
 		si = iq_obj.getTag('si')
+		file_tag = si.getTag('file')
+		range_tag = None
+		if file_tag:
+			range_tag = file_tag.getTag('range')
+		if range_tag:
+			offset = range_tag.getAttr('offset')
+			if offset:
+				file_props['offset'] = int(offset)
+			length = range_tag.getAttr('length')
+			if length:
+				file_props['length'] = int(length)
 		feature = si.setTag('feature')
 		if feature.getNamespace() != common.xmpp.NS_FEATURE:
 			return
@@ -1054,6 +1074,9 @@ class Connection:
 		si.setNamespace(common.xmpp.NS_SI)
 		file_tag = si.setTag('file')
 		file_tag.setNamespace(common.xmpp.NS_FILE)
+		if file_props.has_key('offset') and file_props['offset']:
+			range_tag = file_tag.setTag('range')
+			range_tag.setAttr('offset', file_props['offset'])
 		feature = si.setTag('feature')
 		feature.setNamespace(common.xmpp.NS_FEATURE)
 		_feature = common.xmpp.DataForm(typ='submit')
@@ -1694,6 +1717,8 @@ class Connection:
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',
 			common.xmpp.NS_HTTP_AUTH)
+		con.RegisterHandler('iq', self._gMailCB, 'set',
+			common.xmpp.NS_GMAILNOTIFY)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)

@@ -366,6 +366,10 @@ class Socks5:
 		if self.fd == None:
 			try:
 				self.fd = open(self.file_props['file-name'],'rb')
+				if self.file_props.has_key('offset') and self.file_props['offset']:
+					self.size = self.file_props['offset']
+					self.fd.seek(self.size)
+					self.file_props['received-len'] = self.size
 			except IOError, e:
 				self.close_file()
 				raise IOError, e
@@ -383,11 +387,16 @@ class Socks5:
 		if self.file_props.has_key('fd'):
 			fd = self.file_props['fd']
 		else:
-			fd = open(self.file_props['file-name'],'wb')
+			offset = 0
+			opt = 'wb'
+			if self.file_props.has_key('offset') and self.file_props['offset']:
+				offset = self.file_props['offset']
+				opt = 'ab'
+			fd = open(self.file_props['file-name'], opt)
 			self.file_props['fd'] = fd
 			self.file_props['elapsed-time'] = 0
 			self.file_props['last-time'] = time.time()
-			self.file_props['received-len'] = 0
+			self.file_props['received-len'] = offset
 		return fd
 
 	def rem_fd(self, fd):

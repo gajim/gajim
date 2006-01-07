@@ -1259,6 +1259,8 @@ class RosterWindow:
 		gajim.connections[account].request_subscription(jid, txt)
 		if group:
 			group = [group]
+		else:
+			group = []
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			keyID = ''
@@ -2476,10 +2478,30 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2 \
 			and path_dest[1] == 0: # dropped before the first group
 			return
+		iter_dest = model.get_iter(path_dest)
+
+		if info == self.TARGET_TYPE_URI_LIST:
+			# User dropped a file on the roster
+			if len(path_dest) < 3:
+				return
+			account = model[iter_dest][C_ACCOUNT].decode('utf-8')
+			jid = model[iter_dest][C_JID].decode('utf-8')
+			type_dest = model[iter_dest][C_TYPE].decode('utf-8')
+			if type_dest != 'contact':
+				return
+			c = gajim.contacts.get_contact_with_highest_priority(account, jid)
+
+			uri = data.strip()
+			uri_splitted = uri.split() # we may have more than one file dropped
+			for uri in uri_splitted:
+				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
+				if os.path.isfile(path): # is it file?
+					gajim.interface.instances['file_transfers'].send_file(account, c,
+						path)
+			return
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
 			# dropped before a group : we drop it in the previous group
-			path_dest = (path_dest[1], path_dest[1]-1)
-		iter_dest = model.get_iter(path_dest)
+			path_dest = (path_dest[0], path_dest[1]-1)
 		iter_source = treeview.get_selection().get_selected()[1]
 		path_source = model.get_path(iter_source)
 		if len(path_dest) == 1: # dropped on an account
@@ -2730,10 +2752,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.tree.set_expander_column(col)
 
 		#signals
+		self.TARGET_TYPE_URI_LIST = 80
 		TARGETS = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0)]
-		self.tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK, TARGETS,
+		TARGETS2 = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
+					('text/uri-list', 0, self.TARGET_TYPE_URI_LIST)]
+		self.tree.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, TARGETS,
 			gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_COPY)
-		self.tree.enable_model_drag_dest(TARGETS, gtk.gdk.ACTION_DEFAULT)
+		self.tree.enable_model_drag_dest(TARGETS2, gtk.gdk.ACTION_DEFAULT)
 		self.tree.connect('drag_data_get', self.drag_data_get_data)
 		self.tree.connect('drag_data_received', self.drag_data_received_data)
 		self.xml.signal_autoconnect(self)

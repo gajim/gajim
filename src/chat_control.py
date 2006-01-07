@@ -661,7 +661,6 @@ class ChatControl(ChatControlBase):
 		self._schedule_activity_timers()
 
 		# Hook up signals
-		# FIXME: This does not seem to be working
 		self.parent_win.window.connect('motion-notify-event',
 						self._on_window_motion_notify)
 		message_tv_buffer = self.msg_textview.get_buffer()
@@ -672,6 +671,8 @@ class ChatControl(ChatControlBase):
 		self.xml.get_widget('banner_eventbox').connect('button-press-event',
 					self._on_banner_eventbox_button_press_event)
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'avatar_eventbox', APP)
+		xm.signal_autoconnect(self)
+		xm = gtk.glade.XML(GTKGUI_GLADE, 'gpg_togglebutton', APP)
 		xm.signal_autoconnect(self)
 
 		if self.contact.jid in gajim.encrypted_chats[self.account]:
@@ -833,8 +834,8 @@ class ChatControl(ChatControlBase):
 		else:
 			tb.set_sensitive(False)
 			#we talk about a contact here
-			tt = _('%s has not broadcasted an OpenPGP key nor you have '\
-				'assigned one') % self.contact.name
+			tt = _('%s has not broadcast an OpenPGP key, nor has one been assigned') %\
+					self.contact.name
 		gtk.Tooltips().set_tip(self.xml.get_widget('gpg_eventbox'), tt)
 
 	def send_message(self, message, keyID = '', chatstate = None):
@@ -1013,7 +1014,7 @@ class ChatControl(ChatControlBase):
 			if self.parent_win.get_active_control() != self:
 				color = self.lighten_color(color)
 
-		label_str = self.contact.name
+		label_str = gtkgui_helpers.escape_for_pango_markup(self.contact.name)
 		if num_unread: # if unread, text in the label becomes bold
 			label_str = '<b>' + unread + label_str + '</b>'
 		return (label_str, color)
@@ -1400,3 +1401,8 @@ class ChatControl(ChatControlBase):
 	def _on_contact_information_menuitem_clicked(self, widget):
 		gajim.interface.roster.on_info(widget, self.contact, self.account)
 
+	def on_toggle_gpg_menuitem_activate(self, widget):
+		print "toggling"
+		jid = self.get_active_jid()
+		tb = self.xml.get_widget('gpg_togglebutton')
+		tb.set_active(not tb.get_active())

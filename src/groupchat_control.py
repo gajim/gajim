@@ -668,6 +668,8 @@ class GroupchatControl(ChatControlBase):
 			if not iter:
 				iter = self.add_contact_to_roster(nick, show, role,
 								affiliation, status, jid)
+				if statusCode == '201': # We just created the room
+					gajim.connections[self.account].request_gc_config(room_jid)                          
 			else:
 				actual_role = self.get_role(nick)
 				if role != actual_role:

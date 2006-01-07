@@ -562,7 +562,30 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 	def is_checked(self):
 		''' Get active state of the checkbutton '''
 		return self.checkbutton.get_active()
-		
+
+class FTOverwriteConfirmationDialog(ConfirmationDialog):
+	'''HIG compliant confirmation dialog to overwrite or resume a file transfert'''
+	def __init__(self, pritext, sectext='', propose_resume=True):
+		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_CANCEL,
+			pritext, sectext)
+
+		if propose_resume:
+			b = gtk.Button('', gtk.STOCK_REFRESH)
+			align = b.get_children()[0]
+			hbox = align.get_children()[0]
+			label = hbox.get_children()[1]
+			label.set_text('_Resume')
+			label.set_use_underline(True)
+			self.add_action_widget(b, 100)
+
+		b = gtk.Button('', gtk.STOCK_SAVE_AS)
+		align = b.get_children()[0]
+		hbox = align.get_children()[0]
+		label = hbox.get_children()[1]
+		label.set_text('Re_place')
+		label.set_use_underline(True)
+		self.add_action_widget(b, 200)
+
 class InputDialog:
 	'''Class for Input dialog'''
 	def __init__(self, title, label_str, input_str = None, is_modal = True,
@@ -885,6 +908,12 @@ class PopupNotificationWindow:
 					txt = _('To %s') % name
 			else:
 				txt = ''
+			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
+		elif event_type == _('New E-mail'):
+			dodgerblue = gtk.gdk.color_parse('dodgerblue')
+			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
+			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
+			txt = _('You have new E-mail on %s.') % (jid)
 			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()

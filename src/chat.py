@@ -289,7 +289,7 @@ class Chat:
 			close_button.hide()
 
 		nickname.set_max_width_chars(10)
-		lbl = self.names[jid]
+		lbl = gtkgui_helpers.escape_for_pango_markup(self.names[jid])
 		if num_unread: # if unread, text in the label becomes bold
 			lbl = '<b>' + unread + lbl + '</b>'
 		nickname.set_markup(lbl)
