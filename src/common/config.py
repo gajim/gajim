@@ -137,6 +137,7 @@ class Config:
 		'autodetect_browser_mailer': [opt_bool, True],
 		'print_ichat_every_foo_minutes': [opt_int, 5],
 		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
+		'noconfirm_close_muc_rooms': [opt_str, '', _('A list of rooms that do not require confirmation before closing')],
 		'notify_on_file_complete': [opt_bool, True], # notif. on file complete
 		'file_transfers_port': [opt_int, 28011],  # port, used for file transfers
 		'ft_override_host_to_send': [opt_str, '', _('Overrides the host we send for File Transfer in case of address translation/port forwarding.')], 

@@ -123,7 +123,7 @@ class GroupchatControl(ChatControlBase):
 		# connect the menuitems to their respective functions
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_control_popup_menu', APP)
 		xm.signal_autoconnect(self)
-		self.gc_popup_menu = xm.get_widget('gc_popup_menu')
+		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
 
@@ -669,7 +669,7 @@ class GroupchatControl(ChatControlBase):
 				iter = self.add_contact_to_roster(nick, show, role,
 								affiliation, status, jid)
 				if statusCode == '201': # We just created the room
-					gajim.connections[self.account].request_gc_config(room_jid)                          
+					gajim.connections[self.account].request_gc_config(self.room_jid)                          
 			else:
 				actual_role = self.get_role(nick)
 				if role != actual_role:
@@ -879,7 +879,9 @@ class GroupchatControl(ChatControlBase):
 			reason = 'offline'
 			if len(message_array):
 				reason = message_array.pop(0)
-			self.remove_tab(reason)
+			gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
+							show='offline', status=reason)
+			self.parent_win.remove_tab(self.contact)
 			return True
 		elif command == 'ban':
 			if len(message_array):
@@ -1022,42 +1024,35 @@ class GroupchatControl(ChatControlBase):
 			gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
 
 	def shutdown(self):
-		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
-							show='offline', status=reason)
 		# They can already be removed by the destroy function
 		if self.room_jid in gajim.contacts.get_gc_list(self.account):
 			gajim.contacts.remove_room(self.account, self.room_jid)
 			del gajim.gc_connected[self.account][self.room_jid]
 
 	def allow_shutdown(self):
-		# FIXME:
+		retval = True
 		# whether to ask for comfirmation before closing muc
-		if gajim.config.get('confirm_close_muc'):
-			names = []
-			if not room_jid:
-				for r_jid in self.xmls:
-					if gajim.gc_connected[self.account][r_jid]:
-						names.append(gajim.get_nick_from_jid(r_jid))
-			else:
-				names = [room_jid]
+		if not gajim.config.get('confirm_close_muc'):
+			gajim.config.set('noconfirm_close_muc_rooms', '')
+		else:
+			excludes = gajim.config.get('noconfirm_close_muc_rooms')
+			excludes = excludes.split(' ')
+			if self.room_jid not in excludes:
+				pritext = _('Are you sure you want to leave room "%s"?') % self.name
+				sectext = _('If you close this window, you will be disconnected '
+						'from this room.')
 
-			rooms_no = len(names)
-			if rooms_no >= 2: # if we are in many rooms
-				pritext = _('Are you sure you want to leave rooms "%s"?') % ', '.join(names)
-				sectext = _('If you close this window, you will be disconnected from these rooms.')
-
-			elif rooms_no == 1: # just in one room
-				pritext = _('Are you sure you want to leave room "%s"?') % names[0]
-				sectext = _('If you close this window, you will be disconnected from this room.')
-
-			if rooms_no > 0:
 				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
-					_('Do _not ask me again'))
-
-				if dialog.is_checked():
-					gajim.config.set('confirm_close_muc', False)
-					dialog.destroy()
+							_('Do _not ask me about closing "%s" again' %\
+							self.name))
 
 				if dialog.get_response() != gtk.RESPONSE_OK:
-					return False
-		return True
+					retval = False
+
+				if dialog.is_checked():
+					excludes = gajim.config.get('noconfirm_close_muc_rooms')
+					excludes += ' %s' % self.room_jid
+					gajim.config.set('noconfirm_close_muc_rooms', excludes)
+				dialog.destroy()
+
+		return retval
