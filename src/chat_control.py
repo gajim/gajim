@@ -1179,6 +1179,9 @@ class ChatControl(ChatControlBase):
 			self.send_chatstate('inactive', self.contact)
 
 	def show_avatar(self, resource = None):
+		if not gajim.config.get('show_avatar_in_chat'):
+			return
+
 		jid = self.contact.jid
 		jid_with_resource = jid
 		if resource:

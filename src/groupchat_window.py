@@ -1162,13 +1162,12 @@ current room topic.') % command, room_jid)
 	def on_info(self, widget, room_jid, nick):
 		'''Call vcard_information_window class to display user's information'''
 		c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
-		jid = c.get_full_jid()
-		if gajim.interface.instances[self.account]['infos'].has_key(jid):
-			gajim.interface.instances[self.account]['infos'][jid].window.present()
+		# we create a Contact instance
+		c2 = gajim.contacts.contact_from_gc_contact(c)
+		if gajim.interface.instances[self.account]['infos'].has_key(c2.jid):
+			gajim.interface.instances[self.account]['infos'][c2.jid].window.present()
 		else:
-			# we create a Contact instance
-			c2 = gajim.contacts.contact_from_gc_contact(c)
-			gajim.interface.instances[self.account]['infos'][jid] = \
+			gajim.interface.instances[self.account]['infos'][c2.jid] = \
 				vcard.VcardWindow(c2, self.account, False)
 
 	def on_history(self, widget, room_jid, nick):
@@ -1676,14 +1675,13 @@ current room topic.') % command, room_jid)
 		else: # We want to send a private message
 			room_jid = self.get_active_jid()
 			nick = model[iter][C_NICK].decode('utf-8')
-			jid = gajim.construct_fjid(room_jid, nick)
-			# FIXME
-			if not gajim.interface.instances[self.account]['chats'].has_key(jid):
-				gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
-				c = gajim.contacts.contact_from_gc_contact(gc_c)
+			gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
+			c = gajim.contacts.contact_from_gc_contact(gc_c)
+			if not gajim.interface.instances[self.account]['chats'].has_key(c.jid):
 				gajim.interface.roster.new_chat(c, self.account)
-			gajim.interface.instances[self.account]['chats'][jid].set_active_tab(jid)
-			gajim.interface.instances[self.account]['chats'][jid].window.present()
+			gajim.interface.instances[self.account]['chats'][c.jid].set_active_tab(
+				c.jid)
+			gajim.interface.instances[self.account]['chats'][c.jid].window.present()
 
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded: change the icon of the arrow'''

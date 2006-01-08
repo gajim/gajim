@@ -122,12 +122,16 @@ class Contacts:
 		if not self._contacts[account].has_key(contact.jid):
 			self._contacts[account][contact.jid] = [contact]
 			return
+		contacts = self._contacts[account][contact.jid]
+		# We had only one that was offline, remove it
+		if len(contacts) == 1 and contacts[0].show == 'offline':
+			self.remove_contact(account, contacts[0])
 		# If same JID with same resource already exists, use the new one
-		for c in self._contacts[account][contact.jid]:
+		for c in contacts:
 			if c.resource == contact.resource:
 				self.remove_contact(account, c)
 				break
-		self._contacts[account][contact.jid].append(contact)
+		contacts.append(contact)
 
 	def remove_contact(self, account, contact):
 		if not self._contacts.has_key(account):
@@ -223,7 +227,13 @@ class Contacts:
 
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
-		return Contact(jid = gc_contact.get_full_jid(), name = gc_contact.name,
+		if gc_contact.jid:
+			jid = gc_contact.jid
+			resource = gc_contact.resource
+		else:
+			jid = gc_contact.get_full_jid()
+			resource = ''
+		return Contact(jid = jid, resource = resource, name = gc_contact.name,
 			groups = ['none'], show = gc_contact.show, status = gc_contact.status,
 			sub = 'none')
 

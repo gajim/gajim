@@ -330,10 +330,7 @@ class GroupchatControl(ChatControlBase):
 					gajim.interface.systray.add_jid(fjid, self.account, 'pm')
 			self.parent_win.show_title()
 		else:
-			gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-			c = gajim.contacts.contact_from_gc_contact(gc_c)
-			print "creating PM chat"
-			gajim.interface.roster.new_chat(c, self.account, private_chat = True)
+			self._start_private_message(nick)
 		# Scroll to line
 		self.list_treeview.expand_row(path[0:1], False)
 		self.list_treeview.scroll_to_cell(path)
@@ -577,21 +574,9 @@ class GroupchatControl(ChatControlBase):
 			nick = model[iter][C_NICK].decode('utf-8')
 		fjid = gajim.construct_fjid(self.room_jid, nick) # 'fake' jid
 
-		chat_win = gajim.interface.msg_win_mgr.get_window(fjid)
-		if not chat_win:
-			gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-			c = gajim.contacts.contact_from_gc_contact(gc_c)
-			print "creating PM chat"
-			gajim.interface.roster.new_chat(c, self.account, private_chat = True)
-			chat_win = gajim.interface.msg_win_mgr.get_window(fjid)
-		chat_control = chat_win.get_control(fjid)
-
-		#make active here in case we need to send a message
-		chat_win.set_active_tab(fjid)
-
+		self._start_private_message(nick)
 		if msg:
 			chat_control.send_message(msg)
-		chat_win.window.present()
 
 	def draw_contact(self, nick, selected=False, focus=False):
 		iter = self.get_contact_iter(nick)
@@ -1333,7 +1318,9 @@ class GroupchatControl(ChatControlBase):
 		menu.show_all()
 
 	def _start_private_message(self, nick):
-		nick_jid = gajim.construct_fjid(self.room_jid, nick)
+		gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		c = gajim.contacts.contact_from_gc_contact(gc_c)
+		nick_jid = c.jid
 
 		win = gajim.interface.msg_win_mgr.get_window(nick_jid)
 		if not win:
@@ -1355,7 +1342,7 @@ class GroupchatControl(ChatControlBase):
 				widget.expand_row(path, False)
 		else: # We want to send a private message
 			nick = model[iter][C_NICK].decode('utf-8')
-			win = self._start_private_message(nick)
+			self._start_private_message(nick)
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		'''popup user's group's or agent menu'''
@@ -1385,17 +1372,7 @@ class GroupchatControl(ChatControlBase):
 			iter = model.get_iter(path)
 			if len(path) == 2:
 				nick = model[iter][C_NICK].decode('utf-8')
-				fjid = gajim.construct_fjid(self.room_jid, nick)
-				win = gajim.interface.msg_win_mgr.get_window(fjid)
-				if not win:
-					gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
-						nick)
-					c = gajim.contacts.contact_from_gc_contact(gc_c)
-					gajim.interface.roster.new_chat(c, self.account,
-									private_chat = True)
-					win = gajim.interface.msg_win_mgr.get_window(fjid)
-				win.set_active_tab(fjid)
-				win.window.present()
+				self._start_private_message(nick)
 			return True
 
 		elif event.button == 1: # left click
@@ -1526,13 +1503,18 @@ class GroupchatControl(ChatControlBase):
 	def on_info(self, widget, ck):
 		'''Call vcard_information_window class to display user's information'''
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-		jid = c.get_full_jid()
-		if gajim.interface.instances[self.account]['infos'].has_key(jid):
-			gajim.interface.instances[self.account]['infos'][jid].window.present()
+#		jid = c.get_full_jid()
+#		if gajim.interface.instances[self.account]['infos'].has_key(jid):
+#			gajim.interface.instances[self.account]['infos'][jid].window.present()
+ 		# we create a Contact instance
+ 		c2 = gajim.contacts.contact_from_gc_contact(c)
+ 		if gajim.interface.instances[self.account]['infos'].has_key(c2.jid):
+ 			gajim.interface.instances[self.account]['infos'][c2.jid].window.present()
 		else:
-			# we create a Contact instance
-			c2 = gajim.contacts.contact_from_gc_contact(c)
-			gajim.interface.instances[self.account]['infos'][jid] = \
+#			# we create a Contact instance
+#			c2 = gajim.contacts.contact_from_gc_contact(c)
+#			gajim.interface.instances[self.account]['infos'][jid] = \
+ 			gajim.interface.instances[self.account]['infos'][c2.jid] = \
 				vcard.VcardWindow(c2, self.account, False)
 
 	def on_history(self, widget, ck):

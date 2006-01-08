@@ -464,7 +464,7 @@ class Chat:
 
 		if self.widget_name == 'tabbed_chat_window':
 			jid = self.get_active_jid()
-			c = gajim.contacts.get_first_contact_from_jid(self.account, jid)
+			c = self.contacts[jid]
 			if _('not in the roster') in c.groups: # for add_to_roster_menuitem
 				childs[5].show()
 				childs[5].set_no_show_all(False)
@@ -502,7 +502,7 @@ class Chat:
 			childs[3].set_active(isactive)
 			childs[3].set_property('sensitive', issensitive)
 			# If we don't have resource, we can't do file transfert
-			c = gajim.contacts.get_first_contact_from_jid(self.account, jid)
+			c = self.contacts[jid]
 			if not c.resource:
 				childs[2].set_sensitive(False)
 			else:
