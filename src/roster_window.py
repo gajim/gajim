@@ -1768,12 +1768,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		# We print if window is opened and it's not a single message
 		if gajim.interface.msg_win_mgr.has_window(jid) and msg_type != 'normal':
-# FIXME: Remove
-#			typ = ''
-#			if msg_type == 'error':
-#				typ = 'status'
+			typ = ''
+			if msg_type == 'error':
+				typ = 'status'
 			ctl = gajim.interface.msg_win_mgr.get_control(jid)
-			ctl.print_conversation(msg, jid, tim = tim, encrypted = encrypted,
+			ctl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
 						subject = subject)
 			return
 
@@ -1970,11 +1969,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				if unrd:
 					unread = True
 					break
+
 				for ctl in win.controls():
 					jid = ctl.contact.jid
-					if time.time() - gajim.last_message_time[acct][jid] < 2:
-						recent = True
-						break
+					if gajim.last_message_time[acct].has_key(jid):
+						if time.time() - gajim.last_message_time[acct][jid] < 2:
+							recent = True
+							break
 			if unread:
 				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
 					_('Messages will only be available for reading them later if you have history enabled.'))
