@@ -301,6 +301,8 @@ class TabbedChatWindow(chat.Chat):
 
 	def show_avatar(self, jid, resource):
 		# Get the XML instance
+		if not gajim.config.get('show_avatar_in_chat'):
+			return
 		jid_with_resource = jid
 		if resource:
 			jid_with_resource += '/' + resource
