@@ -118,12 +118,16 @@ class Contacts:
 		if not self._contacts[account].has_key(contact.jid):
 			self._contacts[account][contact.jid] = [contact]
 			return
+		contacts = self._contacts[account][contact.jid]
+		# We had only one that was offline, remove it
+		if len(contacts) == 1 and contacts[0].show == 'offline':
+			self.remove_contact(account, contacts[0])
 		# If same JID with same resource already exists, use the new one
-		for c in self._contacts[account][contact.jid]:
+		for c in contacts:
 			if c.resource == contact.resource:
 				self.remove_contact(account, c)
 				break
-		self._contacts[account][contact.jid].append(contact)
+		contacts.append(contact)
 
 	def remove_contact(self, account, contact):
 		if not self._contacts.has_key(account):
