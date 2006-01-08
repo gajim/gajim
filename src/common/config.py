@@ -41,6 +41,9 @@ opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
 opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
 
+DEFAULT_WINDOW_WIDTH  = 480
+DEFAULT_WINDOW_HEIGHT = 440
+
 class Config:
 
 	__options = {
@@ -97,10 +100,18 @@ class Config:
 		'gc-hpaned-position': [opt_int, 540],
 		'gc_refer_to_nick_char': [opt_str, ','],
 		'gc_proposed_nick_char': [opt_str, '_'],
-		'msgwin-x-position': [opt_int, 0],
-		'msgwin-y-position': [opt_int, 0],
-		'msgwin-width': [opt_int, 480],
-		'msgwin-height': [opt_int, 440],
+		'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
+		'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
+		'msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
+		'msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
+		'chat_msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
+		'chat_msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
+		'chat_msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
+		'chat_msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
+		'gc_msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
+		'gc_msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
+		'gc_msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
+		'gc_msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
 		'single_msg-x-position': [opt_int, 0],
 		'single_msg-y-position': [opt_int, 0],
 		'single_msg-width': [opt_int, 400],
@@ -210,7 +221,11 @@ class Config:
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
 			# proxy65 for FT
 			'file_transfer_proxies': [opt_str, 
-			'proxy.jabber.org, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se, proxy.netlab.cz, proxy65.jabber.ccc.de, proxy65.unstable.nl'] 
+			'proxy.jabber.org, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se, proxy.netlab.cz, proxy65.jabber.ccc.de, proxy65.unstable.nl'],
+			'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
+			'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
+			'msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
+			'msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],

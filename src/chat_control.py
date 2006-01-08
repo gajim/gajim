@@ -47,9 +47,7 @@ GTKGUI_GLADE = 'gtkgui.glade'
 
 ################################################################################
 class ChatControlBase(MessageControl):
-	# FIXME
-	'''TODO
-	Contains a banner, ConversationTextview, MessageTextView
+	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
 	
 	def draw_widgets(self):
@@ -84,7 +82,7 @@ class ChatControlBase(MessageControl):
 		self.widget.connect('key_press_event', self._on_keypress_event)
 
 		# Create textviews and connect signals
-		self.conv_textview = ConversationTextview(None) # FIXME: remove account arg
+		self.conv_textview = ConversationTextview(self.account)
 		self.conv_textview.show_all()
 		self.conv_scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
 		self.conv_scrolledwindow.add(self.conv_textview)
@@ -395,8 +393,7 @@ class ChatControlBase(MessageControl):
 			item.add(img)
 			item.connect('activate', append_emoticon, image[0])
 			#FIXME: add tooltip with ascii
-			menu.attach(item,
-					counter % size, counter % size + 1,
+			menu.attach(item, counter % size, counter % size + 1,
 					counter / size, counter / size + 1)
 			counter += 1
 		menu.show_all()
@@ -450,8 +447,6 @@ class ChatControlBase(MessageControl):
 
 	def on_history_menuitem_clicked(self, widget = None, jid = None):
 		'''When history menuitem is pressed: call history window'''
-		# FIXME for GC, jid is None
-		print widget, jid
 		if gajim.interface.instances['logs'].has_key(jid):
 			gajim.interface.instances['logs'][jid].window.present()
 		else:
@@ -747,6 +742,7 @@ class ChatControl(ChatControlBase):
 
 	def _update_banner_state_image(self):
 		# FIXME: The cyling of contact_list ... is this necessary if I have the contact
+		#        This will need to be triumphant when sending directly to a resource
 		contact = self.contact
 		show = contact.show
 		jid = contact.jid
@@ -900,7 +896,6 @@ class ChatControl(ChatControlBase):
 		message_buffer = self.msg_textview.get_buffer()
 		if self.kbd_activity_in_last_5_secs and message_buffer.get_char_count():
 			# Only composing if the keyboard activity was in text entry
-			# FIXME: Need send_chatstate
 			self.send_chatstate('composing')
 		elif self.mouse_over_in_last_5_secs and\
 			jid == self.parent_win.get_active_jid():

@@ -37,8 +37,12 @@ class MessageWindow:
 	'''Class for windows which contain message like things; chats,
 	groupchats, etc.'''
 
-	def __init__(self):
+	def __init__(self, acct, type):
 		self._controls = {}
+		# If None, the window is not tied to any specific account
+		self.account = acct
+		# If None, the window is not tied to any specific type
+		self.type = type
 
 		self.widget_name = 'message_window'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, self.widget_name, APP)
@@ -178,7 +182,6 @@ class MessageWindow:
 
 	def show_title(self, urgent = True, control = None):
 		'''redraw the window's title'''
-		print "show_title"
 		unread = 0
 		for ctl in self._controls.values():
 			unread += ctl.nb_unread
@@ -221,20 +224,20 @@ class MessageWindow:
 								ctl.type_id)
 		del gajim.last_message_time[ctl.account][ctl.contact.jid]
 
-		if len(self._controls) == 1:
-			self.window.destroy()
-			return
-
 		self.notebook.remove_page(self.notebook.page_num(ctl.widget))
 
 		del self._controls[contact.jid]
-		if len(self._controls) == 1: # we now have only one tab
+		if len(self._controls) == 1: # we are going from two tabs to one
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
 			if not show_tabs_if_one_tab:
 				self.alignment.set_property('top-padding', 0)
-			
 			self.show_title()
+		elif len(self._controls) == 0:
+			# FIXME: These are not called when the window is destroyed like this, fake it
+			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
+			gajim.interface.msg_win_mgr._on_window_destroy(self.window)
+			self.window.destroy()
 
 	def redraw_tab(self, contact, chatstate = None):
 		ctl = self._controls[contact.jid]
@@ -378,9 +381,9 @@ class MessageWindow:
 	def popup_menu(self, event):
 		menu = self.get_active_control().prepare_context_menu()
 		# common menuitems (tab switches)
-		if len(self._controls) > 1: # if there is more than one tab
+		if len(self.controls) > 1: # if there is more than one tab
 			menu.append(gtk.SeparatorMenuItem()) # seperator
-			for ctl in self._controls.values():
+			for ctl in self.controls.values():
 				jid = ctl.contact.jid
 				if jid != self.get_active_jid():
 					item = gtk.ImageMenuItem(_('Switch to %s') %\
@@ -477,37 +480,18 @@ class MessageWindowMgr:
 		self.mode = common.config.opt_one_window_types.index(mode)
 		assert(self.mode != -1)
 	
-	def _new_window(self):
-		win = MessageWindow()
+	def _new_window(self, acct, type):
+		win = MessageWindow(acct, type)
 		# we track the lifetime of this window
 		win.window.connect('delete-event', self._on_window_delete)
 		win.window.connect('destroy', self._on_window_destroy)
 		return win
 
-	def _gtkWinToMsgWin(self, gtk_win):
+	def _gtk_win_to_msg_win(self, gtk_win):
 		for w in self._windows.values():
 			if w.window == gtk_win:
 				return w
 		return None
-
-	def _on_window_delete(self, win, event):
-		# FIXME: Do based on type, main, never, peracct, pertype
-		if gajim.config.get('saveposition'):
-			# save the window size and position
-			x, y = win.get_position()
-			if self.mode != self.CONFIG_NEVER:
-				gajim.config.set('msgwin-x-position', x)
-				gajim.config.set('msgwin-y-position', y)
-			width, height = win.get_size()
-			gajim.config.set('msgwin-width', width)
-			gajim.config.set('msgwin-height', height)
-		return False
-
-	def _on_window_destroy(self, win):
-		for k in self._windows.keys():
-			if self._windows[k].window == win:
-				del self._windows[k]
-				return
 
 	def get_window(self, jid):
 		for win in self._windows.values():
@@ -517,8 +501,53 @@ class MessageWindowMgr:
 	def has_window(self, jid):
 		return self.get_window(jid)
 
-	def create_window(self, contact, acct, type):
-		key = None
+	def one_window_opened(self, contact, acct, type):
+		return self._windows[self._mode_to_key(contact, acct, type)] != None
+
+	def _size_window(self, win, acct, type):
+		'''Returns the size tuple: (width, height)'''
+		size = None
+		if not gajim.config.get('saveposition'):
+			size = (common.config.DEFAULT_WINDOW_WIDTH,
+				common.config.DEFAULT_WINDOW_HEIGHT)
+		else:
+			if self.mode == self.CONFIG_NEVER or self.mode == self.CONFIG_ALWAYS:
+				size = (gajim.config.get('msgwin-width'),
+					gajim.config.get('msgwin-height'))
+			elif self.mode == self.CONFIG_PERACCT:
+				size = (gajim.config.get_per('msgwin-width', acct),
+					gajim.config.get_per('msgwin-height', acct))
+			elif self.mode == self.CONFIG_PERTYPE:
+				if type == message_control.TYPE_PM:
+					type = message_control.TYPE_CHAT
+				opt_width = type + '-msgwin-width'
+				opt_height = type + '-msgwin-height'
+				size = (gajim.config.get(opt_width),
+					gajim.config.get(opt_height))
+		print "Window size:", size
+		gtkgui_helpers.resize_window(win.window, size[0], size[1])
+	
+	def _position_window(self, win, acct, type):
+		'''Returns the position tuple: (x, y)'''
+		if not gajim.config.get('saveposition') or self.mode == self.CONFIG_NEVER:
+			return
+
+		pos = (-1, -1)  # default is left up to the native window manager
+		if self.mode == self.CONFIG_ALWAYS:
+			pos = (gajim.config.get('msgwin-x-position'),
+				gajim.config.get('msgwin-y-position'))
+		elif self.mode == self.CONFIG_PERACCT:
+			pos = (gajim.config.get_per('msgwin-x-position', acct),
+				gajim.config.get_per('msgwin-y-position', acct))
+		elif self.mode == self.CONFIG_PERTYPE:
+			pos = (gajim.config.get(type + '-msgwin-x-position'),
+				gajim.config.get(type + '-msgwin-y-position'))
+
+		print "Window position:", pos
+		if pos[0] != -1 and pos[1] != -1:
+			gtkgui_helpers.move_window(win.window, pos[0], pos[1])
+
+	def _mode_to_key(self, contact, acct, type):
 		if self.mode == self.CONFIG_NEVER:
 			key = contact.jid
 		elif self.mode == self.CONFIG_ALWAYS:
@@ -528,31 +557,78 @@ class MessageWindowMgr:
 		elif self.mode == self.CONFIG_PERTYPE:
 			key = type
 
+	def create_window(self, contact, acct, type):
+		key = None
+		win_acct = None
+		win_type = None
+
+		key = self._mode_to_key(contact, acct, type)
+		if self.mode == self.CONFIG_PERACCT:
+			win_acct = acct
+		elif self.mode == self.CONFIG_PERTYPE:
+			win_type = type
+
 		win = None
 		try:
 			win = self._windows[key]
 		except KeyError:
-			# FIXME
-			print "Creating tabbed chat window for '%s'" % str(key)
-			win = self._new_window()
+			win = self._new_window(win_acct, win_type)
 			self._windows[key] = win
 
 		# Postion and size window based on saved state and window mode
-		if gajim.config.get('saveposition'):
-			# FIXME: Add a peracct and pertype positioning mode/config
-			print "x,y",gajim.config.get('msgwin-x-position'),gajim.config.get('msgwin-y-position')
-			print "width,height",gajim.config.get('msgwin-width'),gajim.config.get('msgwin-height')
-
-			if self.mode != self.CONFIG_NEVER:
-				gtkgui_helpers.move_window(win.window,
-					gajim.config.get('msgwin-x-position'),
-					gajim.config.get('msgwin-y-position'))
-			gtkgui_helpers.resize_window(win.window,
-					gajim.config.get('msgwin-width'),
-					gajim.config.get('msgwin-height'))
-	
-		assert(win)
+		self._position_window(win, acct, type)
+		self._size_window(win, acct, type)
 		return win
+
+	def _on_window_delete(self, win, event):
+		if not gajim.config.get('saveposition'):
+			return False
+		msg_win = self._gtk_win_to_msg_win(win)
+		
+		# Save widnow size and postion
+		pos_x_key = 'msgwin-x-position'
+		pos_y_key = 'msgwin-y-position'
+		size_width_key = 'msgwin-width'
+		size_height_key = 'msgwin-height'
+
+		acct = None
+		x, y = win.get_position()
+		width, height = win.get_size()
+
+		if self.mode == self.CONFIG_NEVER:
+			x = y = -1
+		elif self.mode == self.CONFIG_PERACCT:
+			acct = msg_win.account
+		elif self.mode == self.CONFIG_PERTYPE:
+			type = msg_win.type_id
+			pos_x_key = type + "-msgwin-x-position"
+			pos_y_key = type + "-msgwin-y-position"
+			size_width_key = type + "-msgwin-width"
+			size_height_key = type + "-msgwin-height"
+
+		print "saving acct:", acct
+		print "saving %s=%d" % (pos_x_key, x)
+		print "saving %s=%d" % (pos_y_key, y)
+		print "saving %s=%d" % (size_width_key, width)
+		print "saving %s=%d" % (size_height_key, height)
+		if acct:
+			gajim.config.set_per(pos_x_key, x, acct)
+			gajim.config.set_per(pos_y_key, y, acct)
+			gajim.config.set_per(size_width_key, width, acct)
+			gajim.config.set_per(size_height_key, height, acct)
+		else:
+			gajim.config.set(pos_x_key, x)
+			gajim.config.set(pos_y_key, y)
+			gajim.config.set(size_width_key, width)
+			gajim.config.set(size_height_key, height)
+
+		return False
+
+	def _on_window_destroy(self, win):
+		for k in self._windows.keys():
+			if self._windows[k].window == win:
+				del self._windows[k]
+				return
 
 	def get_control(self, jid):
 		'''Amongst all windows, return the MessageControl for jid'''
