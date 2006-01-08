@@ -451,33 +451,34 @@ class RosterWindow:
 				self.new_message_menuitem_handler_id)
 			self.new_message_menuitem_handler_id = None
 
-		#remove the existing submenus
+		# remove the existing submenus
 		add_new_contact_menuitem.remove_submenu()
 		service_disco_menuitem.remove_submenu()
 		join_gc_menuitem.remove_submenu()
 		new_message_menuitem.remove_submenu()
 		advanced_menuitem.remove_submenu()
 
-		#remove the existing accelerator
+		# remove the existing accelerator
 		if self.have_new_message_accel:
 			ag = gtk.accel_groups_from_object(self.window)[0]
 			new_message_menuitem.remove_accelerator(ag, gtk.keysyms.n,
 				gtk.gdk.CONTROL_MASK)
 			self.have_new_message_accel = False
 
-		#join gc
+		# join gc
 		sub_menu = gtk.Menu()
 		join_gc_menuitem.set_submenu(sub_menu)
 		at_least_one_account_connected = False
 		multiple_accounts = len(gajim.connections) >= 2 #FIXME: stop using bool var here
 		for account in gajim.connections:
-			if gajim.connections[account].connected <= 1: #if offline or connecting
+			if gajim.connections[account].connected <= 1: # if offline or connecting
 				continue
 			if not at_least_one_account_connected:
 				at_least_one_account_connected = True
 			if multiple_accounts:
 				label = gtk.Label()
 				label.set_markup('<u>' + account.upper() +'</u>')
+				label.set_use_underline(False)
 				item = gtk.MenuItem()
 				item.add(label)
 				item.connect('state-changed', self.on_bm_header_changed_state)
@@ -488,7 +489,7 @@ class RosterWindow:
 			sub_menu.append(item)
 
 			for bookmark in gajim.connections[account].bookmarks:
-				item = gtk.MenuItem(bookmark['name'])
+				item = gtk.MenuItem(bookmark['name'], False) # Do not use underline
 				item.connect('activate', self.on_bookmark_menuitem_activate,
 					account, bookmark)
 				sub_menu.append(item)
