@@ -747,6 +747,9 @@ class ChatControl(ChatControlBase):
 	def _update_banner_state_image(self):
 		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
 									self.contact.jid)
+		if not contact:
+			# For transient contacts
+			contact = self.contact
 		show = contact.show
 		jid = contact.jid
 
@@ -1031,6 +1034,9 @@ class ChatControl(ChatControlBase):
 		else:
 			contact = gajim.contacts.get_contact_with_highest_priority(self.account,
 									self.contact.jid)
+			if not contact:
+				# For transient contacts
+				contact = self.contact
 			tab_img = img_16[contact.show]
 
 		return tab_img

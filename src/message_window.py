@@ -127,11 +127,6 @@ class MessageWindow:
 			self.notebook.set_show_tabs(True)
 			self.alignment.set_property('top-padding', 2)
 
-		# Connect to keyboard events
-		#if isinstance(control, ChatControlBase):
-		#	control.msg_textview.connect('mykeypress',
-		#				self._on_message_textview_mykeypress_event)
-
 		# Add notebook page and connect up to the tab's close button
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_ebox', APP)
 		tab_label_box = xml.get_widget('chat_tab_ebox')
@@ -524,7 +519,6 @@ class MessageWindowMgr:
 				opt_height = type + '-msgwin-height'
 				size = (gajim.config.get(opt_width),
 					gajim.config.get(opt_height))
-		print "Window size:", size
 		gtkgui_helpers.resize_window(win.window, size[0], size[1])
 	
 	def _position_window(self, win, acct, type):
@@ -543,7 +537,6 @@ class MessageWindowMgr:
 			pos = (gajim.config.get(type + '-msgwin-x-position'),
 				gajim.config.get(type + '-msgwin-y-position'))
 
-		print "Window position:", pos
 		if pos[0] != -1 and pos[1] != -1:
 			gtkgui_helpers.move_window(win.window, pos[0], pos[1])
 
@@ -606,11 +599,6 @@ class MessageWindowMgr:
 			size_width_key = type + "-msgwin-width"
 			size_height_key = type + "-msgwin-height"
 
-		print "saving acct:", acct
-		print "saving %s=%d" % (pos_x_key, x)
-		print "saving %s=%d" % (pos_y_key, y)
-		print "saving %s=%d" % (size_width_key, width)
-		print "saving %s=%d" % (size_height_key, height)
 		if acct:
 			gajim.config.set_per(pos_x_key, x, acct)
 			gajim.config.set_per(pos_y_key, y, acct)

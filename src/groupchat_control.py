@@ -85,6 +85,7 @@ class PrivateChatControl(ChatControl):
 
 		ChatControl.send_message(self, message)
 
+
 class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
 
@@ -611,10 +612,12 @@ class GroupchatControl(ChatControlBase):
 		'''When an occupant changes his or her status'''
 		if show == 'invisible':
 			return
+
 		if not role:
 			role = 'visitor'
 		if not affiliation:
 			affiliation = 'none'
+
 		if show in ('offline', 'error'):
 			if statusCode == '307':
 				if actor is None: # do not print 'kicked by None'
@@ -676,6 +679,8 @@ class GroupchatControl(ChatControlBase):
 					c.affiliation = affiliation
 					c.status = status
 					self.draw_contact(nick)
+
+		self.parent_win.redraw_tab(self.contact)
 		if (time.time() - self.room_creation) > 30 and \
 				nick != self.nick and statusCode != '303':
 			if show == 'offline':
@@ -1324,9 +1329,7 @@ class GroupchatControl(ChatControlBase):
 
 		win = gajim.interface.msg_win_mgr.get_window(nick_jid)
 		if not win:
-			gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-			c = gajim.contacts.contact_from_gc_contact(gc_c)
-			gajim.interface.roster.new_chat(c, self.account)
+			gajim.interface.roster.new_chat(c, self.account, private_chat = True)
 			win = gajim.interface.msg_win_mgr.get_window(nick_jid)
 		win.set_active_tab(nick_jid)
 		win.window.present()

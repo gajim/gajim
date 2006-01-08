@@ -656,8 +656,9 @@ class Interface:
 		elif resource and gajim.interface.msg_win_mgr.has_window(jid + '/' + resource):
 			win = gajim.interface.msg_win_mgr.get_window(jid + '/' + resource)
 			ctl = win.get_control(jid + '/' + resource)
-		if win:
+		if win and ctl.type_id != message_control.TYPE_GC:
 			ctl.show_avatar()
+
 		# Show avatar in roster
 		self.roster.draw_avatar(jid, account)
 		if self.remote_ctrl:
@@ -696,10 +697,15 @@ class Interface:
 						'status')
 			ctl.draw_banner()
 
-		gc_control = gajim.interface.msg_win_mgr.get_control(room_jid)
-		if gc_control:
-			gc_control.chg_contact_status(nick, show, status, array[4], array[5], array[6],
-							array[7], array[8], array[9], array[10])
+		# Get the window and control for the updated status, this may be a PrivateChatControl
+		control = gajim.interface.msg_win_mgr.get_control(room_jid)
+		if control:
+			control.chg_contact_status(nick, show, status, array[4], array[5], array[6],
+						array[7], array[8], array[9], array[10])
+			# Find any PM chat through this room, and tell it to update.
+			pm_control = gajim.interface.msg_win_mgr.get_control(fjid)
+			if pm_control:
+				pm_control.parent_win.redraw_tab(pm_control.contact)
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
