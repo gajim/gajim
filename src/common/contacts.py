@@ -99,6 +99,7 @@ class Contacts:
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=5, keyID='', our_chatstate=None,
 		chatstate=None):
+		print "Creating contact:", jid
 		return Contact(jid, name, groups, show, status, sub, ask, resource,
 			priority, keyID, our_chatstate, chatstate)
 	
@@ -110,6 +111,7 @@ class Contacts:
 			our_chatstate = contact.our_chatstate, chatstate = contact.chatstate)
 
 	def add_contact(self, account, contact):
+		print "Adding contact:", contact.jid
 		# No such account before ?
 		if not self._contacts.has_key(account):
 			self._contacts[account] = {contact.jid : [contact]}
@@ -130,6 +132,7 @@ class Contacts:
 		contacts.append(contact)
 
 	def remove_contact(self, account, contact):
+		print "Removing contact:", contact.jid
 		if not self._contacts.has_key(account):
 			return
 		if not self._contacts[account].has_key(contact.jid):
@@ -138,6 +141,7 @@ class Contacts:
 			self._contacts[account][contact.jid].remove(contact)
 
 	def remove_jid(self, account, jid):
+		print "Adding jid:", jid
 		'''Removes all contacts for a given jid'''
 		if not self._contacts.has_key(account):
 			return
@@ -165,7 +169,7 @@ class Contacts:
 	
 	def get_contacts_from_jid(self, account, jid):
 		''' we may have two or more resources on that jid '''
-		if jid in self._contacts[account]:
+		if jid in self._contacts[account].keys():
 			contacts_instances = self._contacts[account][jid]
 			return contacts_instances
 		return []
@@ -175,12 +179,14 @@ class Contacts:
 			return None
 		prim_contact = contacts[0]
 		for contact in contacts[1:]:
+			print "checking priority of", contact.jid
 			if int(contact.priority) > int(prim_contact.priority):
 				prim_contact = contact
 		return prim_contact
 
 	def get_contact_with_highest_priority(self, account, jid):
 		contacts = self.get_contacts_from_jid(account, jid)
+		print "contacts:", contacts
 		return self.get_highest_prio_contact_from_contacts(contacts)
 
 	def get_first_contact_from_jid(self, account, jid):
@@ -235,10 +241,12 @@ class Contacts:
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
+		print "Creating GC contact:", room_jid, jid
 		return GC_Contact(room_jid, name, show, status, role, affiliation, jid,
 			resource)
 	
 	def add_gc_contact(self, account, gc_contact):
+		print "Adding GC contact:", gc_contact.room_jid
 		# No such account before ?
 		if not self._gc_contacts.has_key(account):
 			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
@@ -253,6 +261,7 @@ class Contacts:
 				gc_contact
 
 	def remove_gc_contact(self, account, gc_contact):
+		print "Adding GC contact:", gc_contact.room_jid
 		if not self._gc_contacts.has_key(account):
 			return
 		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
@@ -266,6 +275,7 @@ class Contacts:
 			del self._gc_contacts[account][gc_contact.room_jid]
 
 	def remove_room(self, account, room_jid):
+		print "Removing room:", room_jid
 		if not self._gc_contacts.has_key(account):
 			return
 		if not self._gc_contacts[account].has_key(room_jid):

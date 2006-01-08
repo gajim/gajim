@@ -155,5 +155,11 @@ tags:
 	-rm tags
 	exuberant-ctags -R
 
+sloccount:
+	if test -n "`which sloccount`"; then\
+	    sloccount ./src;\
+	    sloccount --cached --details ./src;\
+	fi
+
 .PHONY: all translation trayicon gtkspell idle clean dist install help\
-	uninstall tags
+	uninstall tags sloccount

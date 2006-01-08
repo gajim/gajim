@@ -744,9 +744,8 @@ class ChatControl(ChatControlBase):
 		ChatControlBase.draw_widgets(self)
 
 	def _update_banner_state_image(self):
-		# FIXME: The cyling of contact_list ... is this necessary if I have the contact
-		#        This will need to be triumphant when sending directly to a resource
-		contact = self.contact
+		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
+									self.contact.jid)
 		show = contact.show
 		jid = contact.jid
 
@@ -1030,7 +1029,9 @@ class ChatControl(ChatControlBase):
 		if num_unread and gajim.config.get('show_unread_tab_icon'):
 			tab_img = img_16['message']
 		else:
-			tab_img = img_16[self.contact.show]
+			contact = gajim.contacts.get_contact_with_highest_priority(self.account,
+									self.contact.jid)
+			tab_img = img_16[contact.show]
 
 		return tab_img
 
@@ -1407,7 +1408,6 @@ class ChatControl(ChatControlBase):
 		gajim.interface.roster.on_info(widget, self.contact, self.account)
 
 	def on_toggle_gpg_menuitem_activate(self, widget):
-		print "toggling"
 		jid = self.get_active_jid()
 		tb = self.xml.get_widget('gpg_togglebutton')
 		tb.set_active(not tb.get_active())

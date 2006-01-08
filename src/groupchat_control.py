@@ -560,7 +560,6 @@ class GroupchatControl(ChatControlBase):
 	def draw_roster(self):
 		model = self.list_treeview.get_model()
 		model.clear()
-		print "draw_roster"
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 			self.add_contact_to_roster(nick, gc_contact.show, gc_contact.role,

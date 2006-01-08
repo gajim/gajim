@@ -169,9 +169,9 @@ class RosterWindow:
 		if hide:
 			return
 		if contact.show in ('offline', 'error') and \
-		   not showOffline and (not _('Transports') in contact.groups or \
-			gajim.connections[account].connected < 2) and \
-		   not gajim.awaiting_events[account].has_key(jid):
+		not showOffline and (not _('Transports') in contact.groups or \
+		gajim.connections[account].connected < 2) and \
+		not gajim.awaiting_events[account].has_key(jid):
 			return
 
 		model = self.tree.get_model()
@@ -431,8 +431,8 @@ class RosterWindow:
 		'''create the main window's menus'''
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
-		add_new_contact_menuitem  = self.xml.get_widget('add_new_contact_menuitem')
-		service_disco_menuitem  = self.xml.get_widget('service_disco_menuitem')
+		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
+		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
 		show_offline_contacts_menuitem = self.xml.get_widget(
 			'show_offline_contacts_menuitem')
@@ -634,7 +634,7 @@ class RosterWindow:
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.repaint_themed_widgets()
 		# update gc's roster
-                for ctl in gajim.interface.msg_win_mgr.controls():
+		for ctl in gajim.interface.msg_win_mgr.controls():
 			if ctl.type_id == message_control.TYPE_GC:
 				ctl.draw_widgets()
 			
@@ -709,7 +709,7 @@ class RosterWindow:
 		contact.show = show
 		contact.status = status
 		if show in ('offline', 'error') and \
-		   not gajim.awaiting_events[account].has_key(contact.jid):
+		not gajim.awaiting_events[account].has_key(contact.jid):
 			if len(contact_instances) > 1:
 				# if multiple resources
 				gajim.contacts.remove_contact(account, contact)
@@ -755,7 +755,7 @@ class RosterWindow:
 		if props and self.tooltip.id == props[0]:
 			# check if the current pointer is at the same path
 			# as it was before setting the timeout
-			rect =  self.tree.get_cell_area(props[0], props[1])
+			rect = self.tree.get_cell_area(props[0], props[1])
 			position = self.tree.window.get_origin()
 			pointer = self.window.get_pointer()
 			self.tooltip.show_tooltip(contact, (pointer[0], rect.height),
@@ -1905,7 +1905,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if self._last_selected_contact is not None:
 			jid, account = self._last_selected_contact
 			self.draw_contact(jid, account, selected = True,
-					   focus = True)
+					focus = True)
 
 	def on_roster_window_focus_out_event(self, widget, event):
 		# if a contact row is selected, update colors (eg. for status msg)
@@ -1914,7 +1914,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if self._last_selected_contact is not None:
 			jid, account = self._last_selected_contact
 			self.draw_contact(jid, account, selected = True,
-					   focus = False)
+					focus = False)
 
 	def on_roster_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
@@ -2102,7 +2102,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self.collapsed_rows.append(account)
 
 	def on_editing_started(self, cell, event, row):
-		''' start editing a cell in the tree  '''
+		''' start editing a cell in the tree'''
 		path = self.tree.get_cursor()[0]
 		self.editing_path = path
 

@@ -381,9 +381,9 @@ class MessageWindow:
 	def popup_menu(self, event):
 		menu = self.get_active_control().prepare_context_menu()
 		# common menuitems (tab switches)
-		if len(self.controls) > 1: # if there is more than one tab
+		if len(self._controls) > 1: # if there is more than one tab
 			menu.append(gtk.SeparatorMenuItem()) # seperator
-			for ctl in self.controls.values():
+			for ctl in self._controls.values():
 				jid = ctl.contact.jid
 				if jid != self.get_active_jid():
 					item = gtk.ImageMenuItem(_('Switch to %s') %\
