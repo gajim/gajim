@@ -272,6 +272,10 @@ class GroupchatControl(ChatControlBase):
 			tab_image = img_16['muc_active']
 		return tab_image
 
+	def update_state(self):
+		ChatControlBase.update_state(self)
+		self.draw_roster()
+
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
 		sets active and sensitivity state for toggle_gpg_menuitem
