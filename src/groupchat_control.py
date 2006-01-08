@@ -264,9 +264,8 @@ class GroupchatControl(ChatControlBase):
 		# Set tab image (always 16x16); unread messages show the 'message' image
 		img_16 = gajim.interface.roster.get_appropriate_state_images(self.room_jid)
 
-		# nb_unread is the number directed messages (msgs that mention our nick)
 		tab_image = None
-		if self.nb_unread and gajim.config.get('show_unread_tab_icon'):
+		if self.attention_flag and gajim.config.get('show_unread_tab_icon'):
 			tab_image = img_16['message']
 		else:
 

@@ -2238,7 +2238,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		for win in gajim.interface.msg_win_mgr.windows():
 			for ctl in gajim.interface.msg_win_mgr.controls():
 				ctl.update_state()
-			win.redraw_tab(ctl.contact)
+				win.redraw_tab(ctl.contact)
 
 		self.update_status_combobox()
 
