@@ -514,7 +514,7 @@ class RosterWindow:
 				if gajim.connections[account].connected <= 1:
 					#if offline or connecting
 					continue
-				item = gtk.MenuItem(_('to %s account') % account)
+				item = gtk.MenuItem(_('to %s account') % account, False)
 				sub_menu.append(item)
 				item.connect('activate', self.on_add_new_contact, account)
 			add_new_contact_menuitem.set_submenu(sub_menu)
@@ -526,7 +526,7 @@ class RosterWindow:
 				if gajim.connections[account].connected <= 1:
 					#if offline or connecting
 					continue
-				item = gtk.MenuItem(_('using %s account') % account)
+				item = gtk.MenuItem(_('using %s account') % account, False)
 				sub_menu.append(item)
 				item.connect('activate', self.on_service_disco_menuitem_activate,
 					account)
@@ -540,7 +540,7 @@ class RosterWindow:
 				if gajim.connections[account].connected <= 1:
 					#if offline or connecting
 					continue
-				item = gtk.MenuItem(_('using account %s') % account)
+				item = gtk.MenuItem(_('using account %s') % account, False)
 				sub_menu.append(item)
 				item.connect('activate', self.on_new_message_menuitem_activate,
 									account)
@@ -551,7 +551,7 @@ class RosterWindow:
 			#Advanced Actions
 			sub_menu = gtk.Menu()
 			for account in gajim.connections:
-				item = gtk.MenuItem(_('for account %s') % account)
+				item = gtk.MenuItem(_('for account %s') % account, False)
 				sub_menu.append(item)
 				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
 					account)
