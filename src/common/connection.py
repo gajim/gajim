@@ -531,7 +531,7 @@ class Connection:
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
 
-		if avatar_sha:
+		if avatar_sha and ptype != 'error':
 			if self.vcard_shas.has_key(jid_stripped):
 				if avatar_sha != self.vcard_shas[jid_stripped]:
 					# avatar has been updated
