@@ -172,6 +172,9 @@ class ChatControlBase(MessageControl):
 					self.msg_textview.grab_focus()
 				# Paste into the msg textview
 				self.msg_textview.emit('key_press_event', event)
+			elif event.keyval == gtk.keysyms.u:
+				# emacs style clear line
+				self.clear(self.msg_textview) # clear message textview too
 		elif event.keyval == gtk.keysyms.e and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + E opens emoticons menu
 			if gajim.config.get('useemoticons'):
