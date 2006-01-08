@@ -700,7 +700,7 @@ class ChatControl(ChatControlBase):
 		avatar_w = avatar_pixbuf.get_width()
 		avatar_h = avatar_pixbuf.get_height()
 		
-		scaled_buf = self.xmls[jid].get_widget('avatar_image').get_pixbuf()
+		scaled_buf = self.xml.get_widget('avatar_image').get_pixbuf()
 		scaled_buf_w = scaled_buf.get_width()
 		scaled_buf_h = scaled_buf.get_height()
 		

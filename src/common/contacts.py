@@ -24,23 +24,16 @@
 
 import common.gajim
 
-class ContactBase:
-	def __init__(self, jid='', name='', show='', status=''):
-		self.jid = jid
-		self.name = name
-		self.show = show
-		self.status = status
-
-	def get_full_jid(self):
-		pass # Derived types MUST implement this method
-
-class Contact(ContactBase):
+class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
 			ask='', resource='', priority=5, keyID='', our_chatstate=None,
 			chatstate=None):
-		ContactBase.__init__(self, jid = jid, name = name, status = status, show = show)
+		self.jid = jid
+		self.name = name
 		self.groups = groups
+		self.show = show
+		self.status = status
 		self.sub = sub
 		self.ask = ask
 		self.resource = resource
@@ -63,14 +56,17 @@ class Contact(ContactBase):
 			return self.jid + '/' + self.resource
 		return self.jid
 
-class GC_Contact(ContactBase):
+class GC_Contact:
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', name='', show='', status='', role='',
 			affiliation='', jid = '', resource = ''):
-		ContactBase.__init__(self, jid = jid, name = name, status = status, show = show)
 		self.room_jid = room_jid
+		self.name = name
+		self.show = show
+		self.status = status
 		self.role = role
 		self.affiliation = affiliation
+		self.jid = jid
 		self.resource = resource
 
 	def get_full_jid(self):
