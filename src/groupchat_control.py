@@ -243,12 +243,12 @@ class GroupchatControl(ChatControlBase):
 		color = None
 		theme = gajim.config.get('roster_theme')
 		if chatstate == 'attention' and (not has_focus or not current_tab):
-			attention_flag = True
+			self.attention_flag = True
 			color = gajim.config.get_per('themes', theme,
 							'state_muc_directed_msg')
 		elif chatstate:
 			if chatstate == 'active' or (current_tab and has_focus):
-				attention_flag = False
+				self.attention_flag = False
 				color = gajim.config.get_per('themes', theme,
 								'state_active_color')
 			elif chatstate == 'newmsg' and (not has_focus or not current_tab) and\
@@ -256,12 +256,8 @@ class GroupchatControl(ChatControlBase):
 				color = gajim.config.get_per('themes', theme, 'state_muc_msg')
 		if color:
 			color = gtk.gdk.colormap_get_system().alloc_color(color)
-			if self.parent_win.get_active_control() != self:
-				color = self.lighten_color(color)
 
 		label_str = self.name
-		if num_unread: # if unread, text in the label becomes bold
-			label_str = '<b>' + str(num_unread) + label_str + '</b>'
 		return (label_str, color)
 
 	def get_tab_image(self):
@@ -380,7 +376,8 @@ class GroupchatControl(ChatControlBase):
 			# highlighting and sounds
 			(highlight, sound) = self.highlighting_for_message(text, tim)
 			if highlight:
-				self.redraw_tab(self.contact, 'attention') # muc-specific chatstate
+				# muc-specific chatstate
+				self.parent_win.redraw_tab(self.contact, 'attention')
 				other_tags_for_name.append('bold')
 				other_tags_for_text.append('marked')
 			if sound == 'received':
@@ -1051,6 +1048,7 @@ class GroupchatControl(ChatControlBase):
 		return retval
 
 	def set_control_active(self, state):
+		self.attention_flag = False
 		ChatControlBase.set_control_active(self, state)
 		if not state:
 			# add the focus-out line to the tab we are leaving

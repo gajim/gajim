@@ -229,13 +229,8 @@ class Contacts:
 
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
-		if gc_contact.jid:
-			jid = gc_contact.jid
-			resource = gc_contact.resource
-		else:
-			jid = gc_contact.get_full_jid()
-			resource = ''
-		return Contact(jid = jid, resource = resource, name = gc_contact.name,
+		jid = gc_contact.get_full_jid()
+		return Contact(jid = jid, resource = '', name = gc_contact.name,
 			groups = ['none'], show = gc_contact.show, status = gc_contact.status,
 			sub = 'none')
 

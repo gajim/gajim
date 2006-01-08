@@ -470,6 +470,7 @@ class ChatControlBase(MessageControl):
 										self.account,
 										self.type_id)
 			self.msg_textview.grab_focus()
+			self.parent_win.redraw_tab(self.contact, 'active')
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
@@ -1006,13 +1007,12 @@ class ChatControl(ChatControlBase):
 				color = gajim.config.get_per('themes', theme,
 						'state_active_color')
 		if color:
-			color = gtk.gdk.colormap_get_system().alloc_color(color)
 			# We set the color for when it's the current tab or not
-			# FIXME: why was this only happening for inactive or gone
-			#if chatstate in ('inactive', 'gone'):
+			color = gtk.gdk.colormap_get_system().alloc_color(color)
 			# In inactive tab color to be lighter against the darker inactive
 			# background
-			if self.parent_win.get_active_control() != self:
+			if chatstate in ('inactive', 'gone') and\
+			self.parent_win.get_active_control() != self:
 				color = self.lighten_color(color)
 
 		label_str = gtkgui_helpers.escape_for_pango_markup(self.contact.name)
