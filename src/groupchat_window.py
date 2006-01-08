@@ -1672,13 +1672,13 @@ current room topic.') % command, room_jid)
 		else: # We want to send a private message
 			room_jid = self.get_active_jid()
 			nick = model[iter][C_NICK].decode('utf-8')
-			jid = gajim.construct_fjid(room_jid, nick)
-			if not gajim.interface.instances[self.account]['chats'].has_key(jid):
-				gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
-				c = gajim.contacts.contact_from_gc_contact(gc_c)
+			gc_c = gajim.contacts.get_gc_contact(self.account, room_jid, nick)
+			c = gajim.contacts.contact_from_gc_contact(gc_c)
+			if not gajim.interface.instances[self.account]['chats'].has_key(c.jid):
 				gajim.interface.roster.new_chat(c, self.account)
-			gajim.interface.instances[self.account]['chats'][jid].set_active_tab(jid)
-			gajim.interface.instances[self.account]['chats'][jid].window.present()
+			gajim.interface.instances[self.account]['chats'][c.jid].set_active_tab(
+				c.jid)
+			gajim.interface.instances[self.account]['chats'][c.jid].window.present()
 
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded: change the icon of the arrow'''
