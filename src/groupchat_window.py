@@ -1412,6 +1412,7 @@ current room topic.') % command, room_jid)
 		self.focus_out_end_iter_offset[room_jid] = None
 		self.allow_focus_out_line[room_jid] = True
 		self.last_key_tabs[room_jid] = False
+		gajim.gc_connected[self.account][room_jid] = False
 		self.hpaneds[room_jid] = self.xmls[room_jid].get_widget('hpaned')
 		list_treeview = self.list_treeview[room_jid] = self.xmls[room_jid].get_widget(
 			'list_treeview')
