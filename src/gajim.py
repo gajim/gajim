@@ -965,7 +965,7 @@ class Interface:
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
 		# join already open groupchats
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(message_control.TYPE_GC):
-			room_jid = gc_control.contact.jid
+			room_jid = gc_control.room_jid
 			if gajim.gc_connected[account][room_jid]:
 				continue
 			room, server = gajim.get_room_name_and_server_from_room_jid(room_jid)

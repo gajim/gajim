@@ -244,7 +244,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		for acct in gajim.connections:
 			# we count unread chat/pm messages
 			for ctl in gajim.interface.msg_win_mgr.controls():
-				c = gajim.contacts.get_first_contact_from_jid(acct, jid)
+				c = gajim.contacts.get_first_contact_from_jid(acct, ctl.contact.jid)
 				if c:
 					unread_chat += ctl.nb_unread
 				else:

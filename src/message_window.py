@@ -497,7 +497,10 @@ class MessageWindowMgr:
 		return self.get_window(jid)
 
 	def one_window_opened(self, contact, acct, type):
-		return self._windows[self._mode_to_key(contact, acct, type)] != None
+		try:
+			return self._windows[self._mode_to_key(contact, acct, type)] != None
+		except KeyError:
+			return False
 
 	def _size_window(self, win, acct, type):
 		'''Returns the size tuple: (width, height)'''
@@ -566,11 +569,13 @@ class MessageWindowMgr:
 			win = self._windows[key]
 		except KeyError:
 			win = self._new_window(win_acct, win_type)
-			self._windows[key] = win
 
 		# Postion and size window based on saved state and window mode
-		self._position_window(win, acct, type)
-		self._size_window(win, acct, type)
+		if not self.one_window_opened(contact, acct, type):
+			self._position_window(win, acct, type)
+			self._size_window(win, acct, type)
+
+		self._windows[key] = win
 		return win
 
 	def _on_window_delete(self, win, event):

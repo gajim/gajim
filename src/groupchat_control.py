@@ -232,7 +232,7 @@ class GroupchatControl(ChatControlBase):
 		self.draw_contact(nick, selected=True, focus=True)
 
 	def get_tab_label(self, chatstate):
-		'''Markup the label if necessary.  Returns a tuple such as:
+		'''Markup the label if necessary. Returns a tuple such as:
 		(new_label_str, color)
 		either of which can be None
 		if chatstate is given that means we have HE SENT US a chatstate'''
@@ -253,7 +253,7 @@ class GroupchatControl(ChatControlBase):
 				color = gajim.config.get_per('themes', theme,
 								'state_active_color')
 			elif chatstate == 'newmsg' and (not has_focus or not current_tab) and\
-			     not self.attention_flag:
+					not self.attention_flag:
 				color = gajim.config.get_per('themes', theme, 'state_muc_msg')
 		if color:
 			color = gtk.gdk.colormap_get_system().alloc_color(color)
@@ -663,7 +663,7 @@ class GroupchatControl(ChatControlBase):
 				iter = self.add_contact_to_roster(nick, show, role,
 								affiliation, status, jid)
 				if statusCode == '201': # We just created the room
-					gajim.connections[self.account].request_gc_config(self.room_jid)                          
+					gajim.connections[self.account].request_gc_config(self.room_jid)
 			else:
 				actual_role = self.get_role(nick)
 				if role != actual_role:
@@ -790,7 +790,7 @@ class GroupchatControl(ChatControlBase):
 				self.get_command_help(command)
 			return True
 		elif command == 'msg':
-			# Send a message to a nick.  Also opens a private message window.
+			# Send a message to a nick. Also opens a private message window.
 			# example: /msg foo Hey, what's up?
 			if len(message_array):
 				message_array = message_array[0].split()
@@ -871,7 +871,7 @@ class GroupchatControl(ChatControlBase):
 			return True
 		elif command == 'leave' or command == 'part' or command == 'close':
 			# Leave the room and close the tab or window
-			# FIXME: Sometimes this doesn't actually leave the room.  Why?
+			# FIXME: Sometimes this doesn't actually leave the room. Why?
 			reason = 'offline'
 			if len(message_array):
 				reason = message_array.pop(0)
@@ -1435,7 +1435,7 @@ class GroupchatControl(ChatControlBase):
 		if props and self.tooltip.id == props[0]:
 			# check if the current pointer is at the same path
 			# as it was before setting the timeout
-			rect =  self.list_treeview.get_cell_area(props[0],props[1])
+			rect = self.list_treeview.get_cell_area(props[0],props[1])
 			position = self.list_treeview.window.get_origin()
 			pointer = self.parent_win.window.get_pointer()
 			self.tooltip.show_tooltip(contact, (0, rect.height),
