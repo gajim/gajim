@@ -771,8 +771,9 @@ class Interface:
 			return
 		for contact in contacts:
 			name = array[1]
-			if name:
-				contact.name = name
+			if not name:
+				name = ''
+			contact.name = name
 			contact.sub = array[2]
 			contact.ask = array[3]
 			if array[4]:

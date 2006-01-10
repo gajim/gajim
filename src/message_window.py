@@ -190,10 +190,8 @@ class MessageWindow:
 			control = self.get_active_control()
 		if control.type_id == message_control.TYPE_GC:
 			title = control.room_jid
-		elif control.contact.name:
-			title = control.contact.name
 		else:
-			title = control.contact.jid
+			title = control.contact.get_shown_name()
 
 		title = unread_str + title
 		self.window.set_title(title)
@@ -382,7 +380,7 @@ class MessageWindow:
 				jid = ctl.contact.jid
 				if jid != self.get_active_jid():
 					item = gtk.ImageMenuItem(_('Switch to %s') %\
-							ctl.contact.name)
+							ctl.contact.get_shown_name())
 					img = gtk.image_new_from_stock(gtk.STOCK_JUMP_TO,
 									gtk.ICON_SIZE_MENU)
 					item.set_image(img)

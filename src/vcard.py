@@ -135,7 +135,7 @@ class VcardWindow:
 		if self.vcard:
 			self.window.destroy()
 			return
-		#update contact.name if it's not ''
+		# update contact.name if it's not ''
 		name_entry = self.xml.get_widget('nickname_entry')
 		new_name = name_entry.get_text().decode('utf-8')
 		if new_name != self.contact.name and new_name != '':
@@ -283,7 +283,8 @@ class VcardWindow:
 
 	def fill_jabber_page(self):
 		tooltips = gtk.Tooltips()
-		self.xml.get_widget('nickname_label').set_text(self.contact.name)
+		self.xml.get_widget('nickname_label').set_text(
+			self.contact.get_shown_name())
 		self.xml.get_widget('jid_label').set_text(self.contact.jid)
 		uf_sub = helpers.get_uf_sub(self.contact.sub)
 		self.xml.get_widget('subscription_label').set_text(uf_sub)

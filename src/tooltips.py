@@ -323,7 +323,7 @@ class GCTooltip(BaseTooltip):
 		if contact.jid.strip() != '':
 			info = '<span size="large" weight="bold">' + contact.jid + '</span>'
 		else:
-			info = '<span size="large" weight="bold">' + contact.name + '</span>'
+			info = '<span size="large" weight="bold">' + contact.get_shown_name() + '</span>'
 			
 		info += '\n<span weight="bold">' + _('Role: ') + '</span>' + \
 			 helpers.get_uf_role(contact.role)
@@ -404,7 +404,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		
 		info = '<span size="large" weight="bold">' + prim_contact.jid + '</span>'
 		info += '\n<span weight="bold">' + _('Name: ') + '</span>' + \
-			gtkgui_helpers.escape_for_pango_markup(prim_contact.name)
+			gtkgui_helpers.escape_for_pango_markup(prim_contact.get_shown_name())
 		if prim_contact.sub:
 			info += '\n<span weight="bold">' + _('Subscription: ') + '</span>' + \
 				gtkgui_helpers.escape_for_pango_markup(prim_contact.sub)
@@ -484,7 +484,7 @@ class FileTransfersTooltip(BaseTooltip):
 			text += '\n<b>' + _('Sender: ') + '</b>'
 			sender = unicode(file_props['sender']).split('/')[0]
 			name = gajim.contacts.get_first_contact_from_jid( 
-				file_props['tt_account'], sender).name
+				file_props['tt_account'], sender).get_shown_name()
 		else:
 			text += '\n<b>' + _('Recipient: ') + '</b>' 
 			receiver = file_props['receiver']
@@ -495,7 +495,7 @@ class FileTransfersTooltip(BaseTooltip):
 				name = receiver
 			else:
 				name = gajim.contacts.get_first_contact_from_jid( 
-				file_props['tt_account'], receiver).name
+				file_props['tt_account'], receiver).get_shown_name()
 		text +=  gtkgui_helpers.escape_for_pango_markup(name)
 		text += '\n<b>' + _('Size: ') + '</b>' 
 		text += helpers.convert_bytes(file_props['size'])

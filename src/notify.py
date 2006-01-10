@@ -107,7 +107,7 @@ class DesktopNotification:
 
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if contact:
-			actor = contact.name
+			actor = contact.get_shown_name()
 		else:
 			actor = jid
 
@@ -168,7 +168,7 @@ class DesktopNotification:
 					# get the name of the sender, as it is in the roster
 					sender = unicode(file_props['sender']).split('/')[0]
 					name = gajim.contacts.get_first_contact_from_jid(account,
-						sender).name
+						sender).get_shown_name()
 					filename = os.path.basename(file_props['file-name'])
 					if event_type == _('File Transfer Completed'):
 						txt = _('You successfully received %(filename)s from %(name)s.')\
@@ -185,7 +185,7 @@ class DesktopNotification:
 					receiver = receiver.split('/')[0]
 					# get the name of the contact, as it is in the roster
 					name = gajim.contacts.get_first_contact_from_jid(account,
-						receiver).name
+						receiver).get_shown_name()
 					filename = os.path.basename(file_props['file-name'])
 					if event_type == _('File Transfer Completed'):
 						txt = _('You successfully sent %(filename)s to %(name)s.')\

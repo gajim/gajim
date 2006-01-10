@@ -199,9 +199,10 @@ class RosterWindow:
 			if g == _('Transports'):
 				typestr = 'agent'
 
+			name = contcat.get_shown_name()
 			# we add some values here. see draw_contact for more
-			model.append(iterG, (None, contact.name,
-				typestr, contact.jid, account, False, None))
+			model.append(iterG, (None, name, typestr, contact.jid, account,
+				False, None))
 
 			if gajim.groups[account][g]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
@@ -267,7 +268,7 @@ class RosterWindow:
 			contact_instances)
 		if not contact:
 			return
-		name = gtkgui_helpers.escape_for_pango_markup(contact.name)
+		name = gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name())
 
 		if len(contact_instances) > 1:
 			name += ' (' + unicode(len(contact_instances)) + ')'
@@ -665,10 +666,7 @@ class RosterWindow:
 			#get name
 			name = array[jid]['name']
 			if not name:
-				if ji.find('@') <= 0:
-					name = ji
-				else:
-					name = jid.split('@')[0]
+				name = ''
 			show = 'offline' # show is offline by default
 			status = '' #no status message by default
 
@@ -731,7 +729,7 @@ class RosterWindow:
 			ctl.update_ui()
 			win.redraw_tab(contact)
 	
-			name = contact.name
+			name = contact.get_shown_name()
 			if contact.resource != '':
 				name += '/' + contact.resource
 			uf_show = helpers.get_uf_show(show)
@@ -1255,8 +1253,6 @@ class RosterWindow:
 
 	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
 		'''Request subscription to a contact'''
-		if not pseudo:
-			pseudo = jid
 		gajim.connections[account].request_subscription(jid, txt)
 		if group:
 			group = [group]
@@ -1279,7 +1275,8 @@ class RosterWindow:
 _('If "%s" accepts this request you will know his or her status.') % jid)
 				return
 			contact.groups = group
-			contact.name = pseudo
+			if pseudo:
+				contact.name = pseudo
 			self.remove_contact(contact, account)
 		self.add_contact_to_roster(jid, account)
 
@@ -1434,7 +1431,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_req_usub(self, widget, contact, account):
 		'''Remove a contact'''
 		window = dialogs.ConfirmationDialogCheck(
-			_('Contact "%s" will be removed from your roster') % (contact.name),
+			_('Contact "%s" will be removed from your roster') % (
+			contact.get_shown_name()),
 			_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'),
 			_('I want this contact to know my status after removal'))
 		# maybe use 2 optionboxes from which the contact can select? (better)
@@ -2414,13 +2412,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			contact1 = gajim.contacts.get_first_contact_from_jid(account1, jid1)
 			if not contact1:
 				return 0
-			name1 = contact1.name
+			name1 = contact1.get_shown_name()
 		if type2 == 'contact':
 			lcontact2 = gajim.contacts.get_contact(account2, jid2)
 			contact2 = gajim.contacts.get_first_contact_from_jid(account2, jid2)
 			if not contact2:
 				return 0
-			name2 = contact2.name
+			name2 = contact2.get_shown_name()
 		# We first compare by show if sort_by_show is True
 		if type1 == 'contact' and type2 == 'contact' and \
 			gajim.config.get('sort_by_show'):

@@ -108,7 +108,7 @@ class HistoryWindow:
 		
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if contact:
-			title = _('Conversation History with %s') % contact.name
+			title = _('Conversation History with %s') % contact.get_shown_name()
 		else:
 			title = _('Conversation History with %s') % jid
 		self.window.set_title(title)
@@ -241,7 +241,7 @@ class HistoryWindow:
 				self.jid)
 			if contact:
 				# he is in our roster, use the name
-				contact_name = contact.name
+				contact_name = contact.get_shown_name()
 			else:
 				room_jid, nick = gajim.get_room_and_nick_from_fjid(self.jid)
 				# do we have him as gc_contact?
@@ -337,7 +337,7 @@ class HistoryWindow:
 					if self.account and gajim.contacts[self.account].has_key(self.jid):
 						contact = gajim.get_first_contact_instance_from_jid(
 							self.account, self.jid)
-						contact_name = contact.name
+						contact_name = contact.get_shown_name()
 					else:
 						contact_name = self.jid
 			tim = row[1]

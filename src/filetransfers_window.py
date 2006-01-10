@@ -178,7 +178,7 @@ class FileTransfersWindow:
 		if file_props['type'] == 'r':
 			jid = unicode(file_props['sender']).split('/')[0]
 			sender_name = gajim.contacts.get_first_contact_from_jid( 
-				file_props['tt_account'], jid).name
+				file_props['tt_account'], jid).get_shown_name()
 			sender = gtkgui_helpers.escape_for_pango_markup(sender_name)
 		else:
 			#You is a reply of who sent a file
@@ -188,7 +188,7 @@ class FileTransfersWindow:
 		if file_props['type'] == 's':
 			jid = unicode(file_props['receiver']).split('/')[0]
 			receiver_name = gajim.contacts.get_first_contact_from_jid( 
-				file_props['tt_account'], jid).name
+				file_props['tt_account'], jid).get_shown_name()
 			recipient = gtkgui_helpers.escape_for_pango_markup(receiver_name)
 		else:
 			#You is a reply of who received a file
@@ -567,7 +567,8 @@ _('Connection with peer cannot be established.'))
 		else:
 			file_name = file_props['name']
 		text_props = gtkgui_helpers.escape_for_pango_markup(file_name) + '\n'
-		text_props += gtkgui_helpers.escape_for_pango_markup(contact.name)
+		text_props += gtkgui_helpers.escape_for_pango_markup(
+			contact.get_shown_name())
 		self.model.set(iter, 1, text_labels, 2, text_props, C_SID,
 			file_props['type'] + file_props['sid'])
 		self.set_progress(file_props['type'], file_props['sid'], 0, iter)

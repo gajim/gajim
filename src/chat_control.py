@@ -791,7 +791,7 @@ class ChatControl(ChatControlBase):
 		jid = contact.jid
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
-		name = gtkgui_helpers.escape_for_pango_markup(contact.name)
+		name = gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name())
 		
 		status = contact.status
 		if status is not None:
@@ -841,7 +841,7 @@ class ChatControl(ChatControlBase):
 			tb.set_sensitive(False)
 			#we talk about a contact here
 			tt = _('%s has not broadcast an OpenPGP key, nor has one been assigned') %\
-					self.contact.name
+					self.contact.get_shown_name()
 		gtk.Tooltips().set_tip(self.xml.get_widget('gpg_eventbox'), tt)
 
 	def send_message(self, message, keyID = '', chatstate = None):
@@ -972,10 +972,10 @@ class ChatControl(ChatControlBase):
 			self.xml.get_widget('gpg_togglebutton').set_active(encrypted)
 			if not frm:
 				kind = 'incoming'
-				name = contact.name
+				name = contact.get_shown_name()
 			elif frm == 'print_queue': # incoming message, but do not update time
 				kind = 'incoming_queue'
-				name = contact.name
+				name = contact.get_shown_name()
 			else:
 				kind = 'outgoing'
 				name = gajim.nicks[self.account] 
@@ -1018,7 +1018,8 @@ class ChatControl(ChatControlBase):
 			self.parent_win.get_active_control() != self:
 				color = self.lighten_color(color)
 
-		label_str = gtkgui_helpers.escape_for_pango_markup(self.contact.name)
+		label_str = gtkgui_helpers.escape_for_pango_markup(
+			self.contact.get_shown_name())
 		if num_unread: # if unread, text in the label becomes bold
 			label_str = '<b>' + unread + label_str + '</b>'
 		return (label_str, color)
@@ -1268,7 +1269,7 @@ class ChatControl(ChatControlBase):
 			elif row[1] in (constants.KIND_SINGLE_MSG_RECV,
 					constants.KIND_CHAT_MSG_RECV):
 				kind = 'incoming'
-				name = self.contact.name
+				name = self.contact.get_shown_name()
 
 			tim = time.localtime(float(row[0]))
 

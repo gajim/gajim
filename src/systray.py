@@ -255,7 +255,7 @@ class Systray:
 				if group in contact.groups and contact.show != 'offline' and \
 						contact.show != 'error':
 					at_least_one = True
-					s = contact.name.replace('_', '__') # two _ show one _ and no underline happens
+					s = contact.get_shown_name().replace('_', '__') # two _ show one _ and no underline happens
 					item = gtk.ImageMenuItem(s)
 					# any given gtk widget can only be used in one place
 					# (here we use it in status menu too)

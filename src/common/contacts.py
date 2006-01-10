@@ -56,6 +56,11 @@ class Contact:
 			return self.jid + '/' + self.resource
 		return self.jid
 
+	def get_shown_name(self):
+		if self.name:
+			return self.name
+		return self.jid.split('@')[0]
+
 class GC_Contact:
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', name='', show='', status='', role='',
@@ -71,6 +76,9 @@ class GC_Contact:
 
 	def get_full_jid(self):
 		return self.room_jid + '/' + self.name
+
+	def get_shown_name(self):
+		return self.name
 
 class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
