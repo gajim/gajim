@@ -1500,7 +1500,7 @@ class GroupchatControl(ChatControlBase):
 		'''revoke owner privilege to a user'''
 		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid, 'admin')
 
-	def on_info(self, widget, ck):
+	def on_info(self, widget, nick):
 		'''Call vcard_information_window class to display user's information'''
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
  		c2 = gajim.contacts.contact_from_gc_contact(c)
