@@ -306,6 +306,9 @@ class MessageWindow:
 
 	def get_control(self, key):
 		'''Return the MessageControl for jid or n, where n is the notebook page index'''
+		if isinstance(key, str):
+			key = unicode(key, 'utf-8')
+
 		if isinstance(key, unicode):
 			jid = key
 			for ctl in self._controls.values():
@@ -448,6 +451,12 @@ class MessageWindow:
 		elif event.keyval == gtk.keysyms.Escape: # ESCAPE
 			if ctl.type_id == message_control.TYPE_CHAT:
 				self.remove_tab(contact)
+		else:
+			# If the active control has a message_textview pass the event to it
+			active_ctl = self.get_active_control()
+			if isinstance(active_ctl, ChatControlBase):
+				active_ctl.msg_textview.emit('key_press_event', event)
+				active_ctl.msg_textview.grab_focus()
 
 ################################################################################
 class MessageWindowMgr:
@@ -581,7 +590,7 @@ class MessageWindowMgr:
 			return False
 		msg_win = self._gtk_win_to_msg_win(win)
 		
-		# Save widnow size and postion
+		# Save window size and postion
 		pos_x_key = 'msgwin-x-position'
 		pos_y_key = 'msgwin-y-position'
 		size_width_key = 'msgwin-width'
@@ -603,10 +612,10 @@ class MessageWindowMgr:
 			size_height_key = type + "-msgwin-height"
 
 		if acct:
-			gajim.config.set_per(pos_x_key, x, acct)
-			gajim.config.set_per(pos_y_key, y, acct)
-			gajim.config.set_per(size_width_key, width, acct)
-			gajim.config.set_per(size_height_key, height, acct)
+			gajim.config.set_per('accounts', acct, pos_x_key, x)
+			gajim.config.set_per('accounts', acct, pos_y_key, y)
+			gajim.config.set_per('accounts', acct, size_width_key, width)
+			gajim.config.set_per('accounts', acct, size_height_key, height)
 		else:
 			gajim.config.set(pos_x_key, x)
 			gajim.config.set(pos_y_key, y)

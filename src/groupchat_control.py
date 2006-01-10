@@ -570,7 +570,7 @@ class GroupchatControl(ChatControlBase):
 
 		self._start_private_message(nick)
 		if msg:
-			chat_control.send_message(msg)
+			gajim.interface.msg_win_mgr.get_control(fjid).send_message(msg)
 
 	def draw_contact(self, nick, selected=False, focus=False):
 		iter = self.get_contact_iter(nick)
