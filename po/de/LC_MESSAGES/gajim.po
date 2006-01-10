@@ -1184,7 +1184,7 @@ msgstr "GTK+ runtine fehlt libglade-Unterstützung"
 msgid ""
 "Please remove your current GTK+ runtime and install the latest stable "
 "version from %s"
-msgstr "Bitte entfernen Sie ihre derzeitige"
+msgstr ""
 
 #: ../src/gajim.py:62
 #, fuzzy
@@ -1452,7 +1452,7 @@ msgstr "Spitzname nicht gefunden: %s"
 #: ../src/groupchat_window.py:846
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
-msgstr "%(contact_jid)s in $(room_jid)s eingeladen"
+msgstr "%(contact_jid)s in %(room_jid)s eingeladen"
 
 #. %s is something the user wrote but it is not a jid so we inform
 #: ../src/groupchat_window.py:853 ../src/groupchat_window.py:882
@@ -1502,7 +1502,7 @@ msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
 "specified."
 msgstr ""
-"Bedienung: /$s [Grund], schließt das aktuelle Fenster oder Tab, mit Anzeige "
+"Bedienung: /%s [Grund], schließt das aktuelle Fenster oder Tab, mit Anzeige "
 "eines Grundes falls angegeben."
 
 #: ../src/groupchat_window.py:974
@@ -1525,7 +1525,7 @@ msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
 "using specified nickname."
 msgstr ""
-"Bedienung: /$s <Raum>@<Server> [/Spitzname], bietet den Beitritt zu "
+"Bedienung: /%s <Raum>@<Server> [/Spitzname], bietet den Beitritt zu "
 "Raum@Server an, optional mit Spitznamen."
 
 #: ../src/groupchat_window.py:983
@@ -3314,7 +3314,7 @@ msgstr "Status ist jetzt: %(status)s"
 #, python-format
 msgid "%(nickname)s in room %(room_name)s has sent you a new message."
 msgstr ""
-"%(nickname)s im Raum %room_name)s hat Ihnen eine neue Nachricht gesendet."
+"%(nickname)s im Raum %(room_name)s hat Ihnen eine neue Nachricht gesendet."
 
 #. we talk about a name here
 #: ../src/notify.py:151
@@ -3550,7 +3550,7 @@ msgstr "Alle Kontakte dieser Gruppe sind abgemeldet oder haben Fehler"
 msgid "Gajim - %d unread message"
 msgid_plural "Gajim - %d unread messages"
 msgstr[0] "Gajim - %d ungelesene Nachricht"
-msgstr[1] "Gajim - Eine ungelesene Nachricht"
+msgstr[1] "Gajim - %d ungelesene Nachricht"
 
 #. we talk about a contact here
 #: ../src/tabbed_chat_window.py:236
