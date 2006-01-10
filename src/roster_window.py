@@ -157,6 +157,7 @@ class RosterWindow:
 			# if not '@' or '@' starts the jid ==> agent
 			contact.groups = [_('Transports')]
 
+		# JEP-0162
 		hide = True
 		if contact.sub in ('both', 'to'):
 			hide = False
@@ -165,10 +166,11 @@ class RosterWindow:
 		elif contact.name or len(contact.groups):
 			hide = False
 
-		# JEP-0162
-		if hide:
-			return
-		if contact.show in ('offline', 'error') and \
+		observer = False
+		if hide and contact.sub == 'from':
+			observer = True
+
+		if (contact.show in ('offline', 'error') or hide) and \
 		not showOffline and (not _('Transports') in contact.groups or \
 		gajim.connections[account].connected < 2) and \
 		not gajim.awaiting_events[account].has_key(jid):
@@ -176,6 +178,8 @@ class RosterWindow:
 
 		model = self.tree.get_model()
 		groups = contact.groups
+		if observer:
+			groups = [_('Observer')]
 		if not groups:
 			groups = [_('General')]
 		for g in groups:
