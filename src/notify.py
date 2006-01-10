@@ -212,10 +212,14 @@ class DesktopNotification:
 		if self.notif is None:
 			raise dbus.dbus_bindings.DBusException()
 		timeout = gajim.config.get('notification_timeout') # in seconds
-		self.id = self.notif.Notify(dbus.String(_('Gajim')),
+		try: self.id = self.notif.Notify(dbus.String(_('Gajim')),
 			dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
 			dbus.String(event_type), dbus.String(txt),
 			[dbus.String(path)], {'default': 0}, [''], True, dbus.UInt32(timeout))
+		except AttributeError: # For libnotify 0.3.x
+			self.id = self.notif.Notify(dbus.String(_('Gajim')),
+				dbus.String(path), dbus.UInt32(0), dbus.String(event_type),
+				dbus.String(txt), dbus.String(""), {}, dbus.UInt32(timeout/1000))
 		notification_response_manager.attach_to_interface()
 		notification_response_manager.pending[self.id] = self
 
