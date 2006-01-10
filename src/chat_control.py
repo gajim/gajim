@@ -1330,7 +1330,7 @@ class ChatControl(ChatControlBase):
 		if (self.contact.show == 'offline' or self.contact.show == 'error'):
 			showOffline = gajim.config.get('showoffline')
 			if not showOffline and typ == 'chat' and \
-				len(gajim.contacts[self.account][jid]) == 1:
+				len(gajim.contacts.get_contact(self.account, jid)) == 1:
 				gajim.interface.roster.really_remove_contact(self.contact,
 										self.account)
 			elif typ == 'pm':
