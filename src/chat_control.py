@@ -207,6 +207,9 @@ class ChatControlBase(MessageControl):
 		return False
 
 	def _on_message_textview_key_press_event(self, widget, event):
+		if self.widget_name == 'muc_child_vbox':
+			if event.keyval not in (gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab):
+				self.last_key_tabs = False
 		if event.state & gtk.gdk.SHIFT_MASK:
 			# SHIFT + PAGE_[UP|DOWN]: send to conv_textview
 			if event.keyval == gtk.keysyms.Page_Down or \
