@@ -23,7 +23,6 @@ import message_control
 import tooltips
 import dialogs
 import vcard
-import chat
 import cell_renderer_image
 import history_window
 import tooltips
@@ -173,7 +172,7 @@ class GroupchatControl(ChatControlBase):
 		self.set_subject('')
 		self.got_disconnected() #init some variables
 
-		self.draw_widgets()
+		self.update_ui()
 		self.conv_textview.grab_focus()
 		self.widget.show_all()
 
@@ -273,8 +272,8 @@ class GroupchatControl(ChatControlBase):
 			tab_image = img_16['muc_active']
 		return tab_image
 
-	def update_state(self):
-		ChatControlBase.update_state(self)
+	def update_ui(self):
+		ChatControlBase.update_ui(self)
 		self.draw_roster()
 
 	def prepare_context_menu(self):
@@ -507,20 +506,19 @@ class GroupchatControl(ChatControlBase):
 		return False
 
 	def set_subject(self, subject):
-		self.subject= subject
-		full_subject = None
+		self.subject = subject
 
+		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
 		subject = gtkgui_helpers.reduce_chars_newlines(subject, 0, 2)
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
 		self.name_label.set_markup(
 		'<span weight="heavy" size="x-large">%s</span>\n%s' % (self.room_jid, subject))
 		event_box = self.name_label.get_parent()
 		if subject == '':
-			subject = _('This room has no subject')
+			self.subject = _('This room has no subject')
 
-		if full_subject is not None:
-			subject = full_subject # tooltip must always hold ALL the subject
-		self.subject_tooltip.set_tip(event_box, subject)
+		# tooltip must always hold ALL the subject
+		self.subject_tooltip.set_tip(event_box, self.subject)
 
 	def save_var(self):
 		return {
@@ -553,10 +551,6 @@ class GroupchatControl(ChatControlBase):
 		gajim.gc_connected[self.account][self.room_jid] = False
 		self.msg_textview.set_sensitive(False)
 		self.xml.get_widget('send_button').set_sensitive(False)
-
-	def draw_widgets(self):
-		ChatControlBase.draw_widgets(self)
-		self.draw_roster()
 
 	def draw_roster(self):
 		model = self.list_treeview.get_model()
@@ -765,6 +759,9 @@ class GroupchatControl(ChatControlBase):
 		command = message_array.pop(0).lower()
 		if message_array == ['']:
 			message_array = []
+
+		if command == 'me':
+			return False # This is not really a command
 		
 		if command == 'nick':
 			# example: /nick foo

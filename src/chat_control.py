@@ -50,14 +50,11 @@ class ChatControlBase(MessageControl):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
 	
-	def draw_widgets(self):
-		self.draw_banner()
-		# Derived types MUST implement this
 	def draw_banner(self):
 		self._paint_banner()
 		self._update_banner_state_image()
 		# Derived types SHOULD implement this
-	def update_state(self):
+	def update_ui(self):
 		self.draw_banner()
 		# Derived types SHOULD implement this
 	def repaint_themed_widgets(self):
@@ -66,7 +63,7 @@ class ChatControlBase(MessageControl):
 	def _update_banner_state_image(self):
 		pass # Derived types MAY implement this
 
-	def handle_message_textview_mykey_press(self):
+	def handle_message_textview_mykey_press(self, widget, event_keyval, event_keymod):
 		pass # Derived should implement this rather than connecting to the event itself.
 
 	def __init__(self, type_id, parent_win, widget_name, display_name, contact, acct):
@@ -684,7 +681,7 @@ class ChatControl(ChatControlBase):
 		if self.contact.jid in gajim.encrypted_chats[self.account]:
 			self.xml.get_widget('gpg_togglebutton').set_active(True)
 
-		self.draw_widgets()
+		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
 
@@ -740,9 +737,9 @@ class ChatControl(ChatControlBase):
 		self.possible_inactive_timeout_id = gobject.timeout_add(30000,
 				self.check_for_possible_inactive_chatstate, None)
 
-	def draw_widgets(self):
+	def update_ui(self):
 		# The name banner is drawn here
-		ChatControlBase.draw_widgets(self)
+		ChatControlBase.update_ui(self)
 
 	def _update_banner_state_image(self):
 		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
@@ -1324,7 +1321,7 @@ class ChatControl(ChatControlBase):
 		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
 		if is_pm:
-			control.draw_widgets()
+			control.update_ui()
 			typ = 'pm'
 
 		gajim.interface.roster.draw_contact(jid, self.account)

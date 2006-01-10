@@ -2217,6 +2217,7 @@ class Connection:
 			t.setTagData('password', password)
 		self.to_be_sent.append(p)
 		#last date/time in history to avoid duplicate
+		# FIXME: This JID needs to be normalized; see #1364
 		jid='%s@%s' % (room, server)
 		last_log = gajim.logger.get_last_date_that_has_logs(jid)
 		if last_log is None:

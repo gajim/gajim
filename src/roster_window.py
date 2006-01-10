@@ -636,7 +636,7 @@ class RosterWindow:
 		# update gc's roster
 		for ctl in gajim.interface.msg_win_mgr.controls():
 			if ctl.type_id == message_control.TYPE_GC:
-				ctl.draw_widgets()
+				ctl.update_ui()
 			
 	def draw_roster(self):
 		'''Clear and draw roster'''
@@ -728,7 +728,7 @@ class RosterWindow:
 			jid = contact.jid
 			win = gajim.interface.msg_win_mgr.get_window(contact.jid)
 			ctl = win.get_control(jid)
-			ctl.update_state()
+			ctl.update_ui()
 			win.redraw_tab(contact)
 	
 			name = contact.name
@@ -920,7 +920,7 @@ class RosterWindow:
 				u.keyID = keyID[0]
 			if gajim.interface.msg_win_mgr.has_window(contact.jid):
 				ctl = gajim.interface.msg_win_mgr.get_control(contact.jid)
-				ctl.draw_widgets()
+				ctl.update_ui()
 		keys_str = ''
 		for jid in keys:
 			keys_str += jid + ' ' + keys[jid] + ' '
@@ -2237,7 +2237,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		for win in gajim.interface.msg_win_mgr.windows():
 			for ctl in gajim.interface.msg_win_mgr.controls():
-				ctl.update_state()
+				ctl.update_ui()
 				win.redraw_tab(ctl.contact)
 
 		self.update_status_combobox()

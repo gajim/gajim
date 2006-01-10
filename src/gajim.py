@@ -691,7 +691,7 @@ class Interface:
 			contact = ctl.contact
 			contact.show = show
 			contact.status = status
-			ctl.update_state()
+			ctl.update_ui()
 			uf_show = helpers.get_uf_show(show)
 			ctl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
 						'status')
@@ -966,7 +966,8 @@ class Interface:
 		# join already open groupchats
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(message_control.TYPE_GC):
 			room_jid = gc_control.room_jid
-			if gajim.gc_connected[account][room_jid]:
+			if gajim.gc_connected[account].has_key(room_jid) and\
+					gajim.gc_connected[account][room_jid]:
 				continue
 			room, server = gajim.get_room_name_and_server_from_room_jid(room_jid)
 			nick = gc_control.nick

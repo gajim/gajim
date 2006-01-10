@@ -138,7 +138,7 @@ class MessageWindow:
 
 
 		self.redraw_tab(control.contact)
-		control.draw_widgets()
+		control.update_ui()
 		self.window.show_all()
 		# NOTE: we do not call set_control_active(True) since we don't know whether
 		# the tab is the active one.
@@ -236,7 +236,7 @@ class MessageWindow:
 
 	def redraw_tab(self, contact, chatstate = None):
 		ctl = self._controls[contact.jid]
-		ctl.update_state()
+		ctl.update_ui()
 
 		hbox = self.notebook.get_tab_label(ctl.widget).get_children()[0]
 		status_img = hbox.get_children()[0]

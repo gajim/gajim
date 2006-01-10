@@ -70,11 +70,9 @@ class MessageControl:
 	def shutdown(self):
 		# NOTE: Derived classes MUST implement this
 		assert(False)
-	def draw_widgets(self):
-		pass # NOTE: Derived classes SHOULD implement this
 	def repaint_themed_widgets(self, theme):
 		pass # NOTE: Derived classes SHOULD implement this
-	def update_state(self):
+	def update_ui(self):
 		pass # NOTE: Derived classes SHOULD implement this
 	def toggle_emoticons(self):
 		pass # NOTE: Derived classes MAY implement this
