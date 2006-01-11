@@ -120,7 +120,6 @@ class MessageWindow:
 		self._controls.clear()
 
 	def new_tab(self, control):
-		assert(not self._controls.has_key(control.contact.jid))
 		self._controls[control.contact.jid] = control
 		if len(self._controls) > 1:
 			self.notebook.set_show_tabs(True)
