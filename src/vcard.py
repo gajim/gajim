@@ -201,7 +201,7 @@ class VcardWindow:
 			if response == gtk.RESPONSE_OK:
 				f = dialog.get_filename()
 				try:
-					f = f.decode(sys.getfilesystemencoding())
+					f = f.decode('utf-8')
 				except UnicodeError:
 					pass
 				else:
