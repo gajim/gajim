@@ -203,7 +203,7 @@ class RosterWindow:
 			if g == _('Transports'):
 				typestr = 'agent'
 
-			name = contcat.get_shown_name()
+			name = contact.get_shown_name()
 			# we add some values here. see draw_contact for more
 			model.append(iterG, (None, name, typestr, contact.jid, account,
 				False, None))
