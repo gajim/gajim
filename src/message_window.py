@@ -96,27 +96,27 @@ class MessageWindow:
 			if widget.props.urgency_hint:
 				widget.props.urgency_hint = False
 
-		ctl = self.get_active_control()
-		if ctl:
-			ctl.set_control_active(True)
+		ctrl = self.get_active_control()
+		if ctrl:
+			ctrl.set_control_active(True)
 			# Undo "unread" state display, etc.
-			if ctl.type_id == message_control.TYPE_GC:
-				self.redraw_tab(ctl.contact, 'active')
+			if ctrl.type_id == message_control.TYPE_GC:
+				self.redraw_tab(ctrl.contact, 'active')
 			else:
 				# NOTE: we do not send any chatstate to preserve
 				# inactive, gone, etc.
-				self.redraw_tab(ctl.contact)
+				self.redraw_tab(ctrl.contact)
 
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
-		for ctl in self._controls.values():
-			if not ctl.allow_shutdown():
+		for ctrl in self._controls.values():
+			if not ctrl.allow_shutdown():
 				return True # halt the delete
 		return False
 
 	def _on_window_destroy(self, win):
-		for ctl in self._controls.values():
-			ctl.shutdown()
+		for ctrl in self._controls.values():
+			ctrl.shutdown()
 		self._controls.clear()
 
 	def new_tab(self, control):
@@ -176,8 +176,8 @@ class MessageWindow:
 	def show_title(self, urgent = True, control = None):
 		'''redraw the window's title'''
 		unread = 0
-		for ctl in self._controls.values():
-			unread += ctl.nb_unread
+		for ctrl in self._controls.values():
+			unread += ctrl.nb_unread
 		unread_str = ''
 		if unread > 1:
 			unread_str = '[' + unicode(unread) + '] '
@@ -198,24 +198,24 @@ class MessageWindow:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
 
 	def set_active_tab(self, jid):
-		ctl = self._controls[jid]
-		ctl_page = self.notebook.page_num(ctl.widget)
-		self.notebook.set_current_page(ctl_page)
+		ctrl = self._controls[jid]
+		ctrl_page = self.notebook.page_num(ctrl.widget)
+		self.notebook.set_current_page(ctrl_page)
 	
 	def remove_tab(self, contact):
 		# Shutdown the MessageControl
-		ctl = self.get_control(contact.jid)
-		if not ctl.allow_shutdown():
+		ctrl = self.get_control(contact.jid)
+		if not ctrl.allow_shutdown():
 			return
-		ctl.shutdown()
+		ctrl.shutdown()
 
 		# Update external state
 		if gajim.interface.systray_enabled:
-			gajim.interface.systray.remove_jid(contact.jid, ctl.account,
-								ctl.type_id)
-		del gajim.last_message_time[ctl.account][ctl.contact.jid]
+			gajim.interface.systray.remove_jid(contact.jid, ctrl.account,
+								ctrl.type_id)
+		del gajim.last_message_time[ctrl.account][ctrl.contact.jid]
 
-		self.notebook.remove_page(self.notebook.page_num(ctl.widget))
+		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
 		del self._controls[contact.jid]
 		if len(self._controls) == 1: # we are going from two tabs to one
@@ -231,10 +231,10 @@ class MessageWindow:
 			self.window.destroy()
 
 	def redraw_tab(self, contact, chatstate = None):
-		ctl = self._controls[contact.jid]
-		ctl.update_ui()
+		ctrl = self._controls[contact.jid]
+		ctrl.update_ui()
 
-		hbox = self.notebook.get_tab_label(ctl.widget).get_children()[0]
+		hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
 		status_img = hbox.get_children()[0]
 		nick_label = hbox.get_children()[1]
 
@@ -247,13 +247,13 @@ class MessageWindow:
 
 		# Update nick
 		nick_label.set_max_width_chars(10)
-		(tab_label_str, tab_label_color) = ctl.get_tab_label(chatstate)
+		(tab_label_str, tab_label_color) = ctrl.get_tab_label(chatstate)
 		nick_label.set_markup(tab_label_str)
 		if tab_label_color:
 			nick_label.modify_fg(gtk.STATE_NORMAL, tab_label_color)
 			nick_label.modify_fg(gtk.STATE_ACTIVE, tab_label_color)
 
-		tab_img = ctl.get_tab_image()
+		tab_img = ctrl.get_tab_image()
 		if tab_img:
 			if tab_img.get_storage_type() == gtk.IMAGE_ANIMATION:
 				status_img.set_from_animation(tab_img.get_animation())
@@ -263,13 +263,13 @@ class MessageWindow:
 	def repaint_themed_widgets(self):
 		'''Repaint controls in the window with theme color'''
 		# iterate through controls and repaint
-		for ctl in self._controls.values():
-			ctl.repaint_themed_widgets()
+		for ctrl in self._controls.values():
+			ctrl.repaint_themed_widgets()
 
 	def _widget_to_control(self, widget):
-		for ctl in self._controls.values():
-			if ctl.widget == widget:
-				return ctl
+		for ctrl in self._controls.values():
+			if ctrl.widget == widget:
+				return ctrl
 		return None
 
 	def get_active_control(self):
@@ -277,9 +277,9 @@ class MessageWindow:
 		active_widget = notebook.get_nth_page(notebook.get_current_page())
 		return self._widget_to_control(active_widget)
 	def get_active_contact(self):
-		ctl = self.get_active_control()
-		if ctl:
-			return ctl.contact
+		ctrl = self.get_active_control()
+		if ctrl:
+			return ctrl.contact
 		return None
 	def get_active_jid(self):
 		contact = self.get_active_contact()
@@ -293,14 +293,14 @@ class MessageWindow:
 		return self.window.window.get_origin()
 
 	def toggle_emoticons(self):
-		for ctl in self._controls.values():
-			ctl.toggle_emoticons()
+		for ctrl in self._controls.values():
+			ctrl.toggle_emoticons()
 	def update_font(self):
-		for ctl in self._controls.values():
-			ctl.update_font()
+		for ctrl in self._controls.values():
+			ctrl.update_font()
 	def update_tags(self):
-		for ctl in self._controls.values():
-			ctl.update_tags()
+		for ctrl in self._controls.values():
+			ctrl.update_tags()
 
 	def get_control(self, key):
 		'''Return the MessageControl for jid or n, where n is the notebook page index'''
@@ -309,9 +309,9 @@ class MessageWindow:
 
 		if isinstance(key, unicode):
 			jid = key
-			for ctl in self._controls.values():
-				if ctl.contact.jid == jid:
-					return ctl
+			for ctrl in self._controls.values():
+				if ctrl.contact.jid == jid:
+					return ctrl
 			return None
 		else:
 			page_num = key
@@ -322,21 +322,21 @@ class MessageWindow:
 			return self._widget_to_control(nth_child)
 
 	def controls(self):
-		for ctl in self._controls.values():
-			yield ctl
+		for ctrl in self._controls.values():
+			yield ctrl
 
 	def update_print_time(self):
 		if gajim.config.get('print_time') != 'sometimes':
-			for ctl in self.controls():
-				if ctl.print_time_timeout_id:
-					gobject.source_remove(ctl.print_time_timeout_id)
-					del ctl.print_time_timeout_id
+			for ctrl in self.controls():
+				if ctrl.print_time_timeout_id:
+					gobject.source_remove(ctrl.print_time_timeout_id)
+					del ctrl.print_time_timeout_id
 		else:
-			for ctl in self.controls():
-				if not ctl.print_time_timeout_id:
-					ctl.print_time_timeout()
-					ctl.print_time_timeout_id = gobject.timeout_add(300000,
-						ctl.print_time_timeout, None)
+			for ctrl in self.controls():
+				if not ctrl.print_time_timeout_id:
+					ctrl.print_time_timeout()
+					ctrl.print_time_timeout_id = gobject.timeout_add(300000,
+						ctrl.print_time_timeout, None)
 
 	def move_to_next_unread_tab(self, forward):
 		ind = self.notebook.get_current_page()
@@ -354,8 +354,8 @@ class MessageWindow:
 					ind = self.notebook.get_n_pages() - 1
 			if ind == current:
 				break # a complete cycle without finding an unread tab 
-			ctl = self.get_control(ind)
-			if ctl.nb_unread > 0:
+			ctrl = self.get_control(ind)
+			if ctrl.nb_unread > 0:
 				found = True
 				break # found
 		if found:
@@ -377,11 +377,11 @@ class MessageWindow:
 		# common menuitems (tab switches)
 		if len(self._controls) > 1: # if there is more than one tab
 			menu.append(gtk.SeparatorMenuItem()) # seperator
-			for ctl in self._controls.values():
-				jid = ctl.contact.jid
+			for ctrl in self._controls.values():
+				jid = ctrl.contact.jid
 				if jid != self.get_active_jid():
 					item = gtk.ImageMenuItem(_('Switch to %s') %\
-							ctl.contact.get_shown_name())
+							ctrl.contact.get_shown_name())
 					img = gtk.image_new_from_stock(gtk.STOCK_JUMP_TO,
 									gtk.ICON_SIZE_MENU)
 					item.set_image(img)
@@ -394,18 +394,18 @@ class MessageWindow:
 
 	def _on_notebook_switch_page(self, notebook, page, page_num):
 		old_no = notebook.get_current_page()
-		old_ctl = self._widget_to_control(notebook.get_nth_page(old_no))
-		old_ctl.set_control_active(False)
+		old_ctrl = self._widget_to_control(notebook.get_nth_page(old_no))
+		old_ctrl.set_control_active(False)
 		
-		new_ctl = self._widget_to_control(notebook.get_nth_page(page_num))
-		new_ctl.set_control_active(True)
-		self.show_title(control = new_ctl)
+		new_ctrl = self._widget_to_control(notebook.get_nth_page(page_num))
+		new_ctrl.set_control_active(True)
+		self.show_title(control = new_ctrl)
 
 	def _on_notebook_key_press(self, widget, event):
 		st = '1234567890' # alt+1 means the first tab (tab 0)
-		ctl = self.get_active_control()
-		contact = ctl.contact
-		jid = ctl.contact.jid
+		ctrl = self.get_active_control()
+		contact = ctrl.contact
+		jid = ctrl.contact.jid
 
 		# CTRL mask
 		if event.state & gtk.gdk.CONTROL_MASK:
@@ -444,17 +444,17 @@ class MessageWindow:
 					(event.state & gtk.gdk.MOD1_MASK): # ALT + 1,2,3..
 				self.notebook.set_current_page(st.index(event.string))
 			elif event.keyval == gtk.keysyms.c: # ALT + C toggles compact view
-				ctl.set_compact_view(not ctl.compact_view_current)
+				ctrl.set_compact_view(not ctrl.compact_view_current)
 		# Close tab bindings
 		elif event.keyval == gtk.keysyms.Escape: # ESCAPE
-			if ctl.type_id == message_control.TYPE_CHAT:
+			if ctrl.type_id == message_control.TYPE_CHAT:
 				self.remove_tab(contact)
 		else:
 			# If the active control has a message_textview pass the event to it
-			active_ctl = self.get_active_control()
-			if isinstance(active_ctl, ChatControlBase):
-				active_ctl.msg_textview.emit('key_press_event', event)
-				active_ctl.msg_textview.grab_focus()
+			active_ctrl = self.get_active_control()
+			if isinstance(active_ctrl, ChatControlBase):
+				active_ctrl.msg_textview.emit('key_press_event', event)
+				active_ctrl.msg_textview.grab_focus()
 
 ################################################################################
 class MessageWindowMgr:
@@ -637,11 +637,11 @@ class MessageWindowMgr:
 		return None
 
 	def get_controls(self, type):
-		ctls = []
+		ctrls = []
 		for c in self.controls():
 			if c.type_id == type:
-				ctls.append(c)
-		return ctls
+				ctrls.append(c)
+		return ctrls
 
 	def windows(self):
 		for w in self._windows.values():
