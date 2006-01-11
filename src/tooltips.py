@@ -29,6 +29,7 @@ import gobject
 import os
 
 import gtkgui_helpers
+import message_control
 
 from common import gajim
 from common import helpers
