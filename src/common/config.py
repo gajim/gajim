@@ -184,7 +184,7 @@ class Config:
 		'use_urgency_hint': [opt_bool, True, _('If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],
 		'notification_timeout': [opt_int, 5],
 		'send_sha_in_gc_presence': [opt_bool, True, _('Jabberd1.4 does not like sha info when one join a password protected room. Turn this option to False to stop sending sha info in groupchat presences')],
-		'one_message_window': [opt_str, 'never',
+		'one_message_window': [opt_str, 'always',
 			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect')],
 		'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window')],
 	}
