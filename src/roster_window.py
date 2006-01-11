@@ -1687,10 +1687,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type)
 
 		if not private_chat:
-			print mw.window.get_property('visible')
-			print mw.window
 			chat_control = ChatControl(mw, contact, account)
-			print 'after contstruct'
 		else:
 			chat_control = PrivateChatControl(mw, contact, account)
 
