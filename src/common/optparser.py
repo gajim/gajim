@@ -128,8 +128,20 @@ class OptionsParser:
 		os.chmod(self.__filename, 0600)
 
 	def update_config(self, old_version, new_version):
-		if old_version < '0.9' and new_version == '0.9':
+		# Convert '0.x.y' to (0, x, y)
+		old_version = old_version.split('.')
+		old = []
+		while len(old_version):
+			old.append(int(old_version.pop(0)))
+		new_version = new_version.split('.')
+		new = []
+		while len(new_version):
+			new.append(int(new_version.pop(0)))
+
+		if old < (0, 9) and new >= (0, 9):
 			self.update_config_x_to_09()
+		if old < (0, 10) and new >= (0, 10):
+			self.update_config_09_to_010()
 	
 	def update_config_x_to_09(self):
 		# Var name that changed:
@@ -187,3 +199,7 @@ class OptionsParser:
 					gajim.config.emoticons_default[emot])
 		
 		gajim.config.set('version', '0.9')
+
+	def update_config_09_to_010(self):
+		if self.old_values.has_key('usetabbedchat') and not self.old_valuse['usetabbedchat']:
+			gajim.config.set('one_message_window', 'never')
