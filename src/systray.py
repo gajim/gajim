@@ -102,12 +102,12 @@ class Systray:
 	def start_chat(self, widget, account, jid):
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if gajim.interface.msg_win_mgr.has_window(jid):
-		        gajim.interface.msg_win_mgr.get_window(jid).set_active_tab(jid)
-		        gajim.interface.msg_win_mgr.get_window(jid).present()
+			gajim.interface.msg_win_mgr.get_window(jid).set_active_tab(jid)
+			gajim.interface.msg_win_mgr.get_window(jid).present()
 		elif contact:
 			gajim.interface.roster.new_chat(gajim.contacts[account][jid][0],
 							account)
-		        gajim.interface.msg_win_mgr.get_window(jid).set_active_tab(jid)
+			gajim.interface.msg_win_mgr.get_window(jid).set_active_tab(jid)
 	
 	def on_new_message_menuitem_activate(self, widget, account):
 		"""When new message menuitem is activated:

@@ -1503,11 +1503,11 @@ class GroupchatControl(ChatControlBase):
 	def on_info(self, widget, nick):
 		'''Call vcard_information_window class to display user's information'''
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
- 		c2 = gajim.contacts.contact_from_gc_contact(c)
- 		if gajim.interface.instances[self.account]['infos'].has_key(c2.jid):
- 			gajim.interface.instances[self.account]['infos'][c2.jid].window.present()
+		c2 = gajim.contacts.contact_from_gc_contact(c)
+		if gajim.interface.instances[self.account]['infos'].has_key(c2.jid):
+			gajim.interface.instances[self.account]['infos'][c2.jid].window.present()
 		else:
- 			gajim.interface.instances[self.account]['infos'][c2.jid] = \
+			gajim.interface.instances[self.account]['infos'][c2.jid] = \
 				vcard.VcardWindow(c2, self.account, False)
 
 	def on_history(self, widget, ck):
