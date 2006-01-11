@@ -220,9 +220,9 @@ class Interface:
 					(jid_from, file_props))
 				conn.disconnect_transfer(file_props)
 				return
-		ctl = gajim.interface.msg_win_mgr.get_control(jid_from)
-		if ctl and ctl.type_id == message_control.TYPE_GC:
-			ctl.print_conversation('Error %s: %s' % (array[2], array[1]))
+		ctrl = gajim.interface.msg_win_mgr.get_control(jid_from)
+		if ctrl and ctrl.type_id == message_control.TYPE_GC:
+			ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
 
 	def handle_event_con_type(self, account, con_type):
 		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
@@ -426,13 +426,13 @@ class Interface:
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
-			ctl = gajim.interface.msg_win_mgr.get_control(jid)
+			ctrl = gajim.interface.msg_win_mgr.get_control(jid)
 			if chatstate is not None: # he or she sent us reply, so he supports jep85
 				contact.chatstate = chatstate
 				if contact.our_chatstate == 'ask': # we were jep85 disco?
 					contact.our_chatstate = 'active' # no more
 				
-				ctl.handle_incoming_chatstate()
+				ctrl.handle_incoming_chatstate()
 			elif contact.chatstate != 'active':
 				# got no valid jep85 answer, peer does not support it
 				contact.chatstate = False
@@ -495,8 +495,8 @@ class Interface:
 							name = nick, show = show)
 						c = gajim.contacts.contact_from_gc_contct(c)
 						self.roster.new_chat(c, account, private_chat = True)
-					ctl = gajim.interface.msg_win_mgr.get_control(fjid)
-					ctl.print_conversation('Error %s: %s' % (array[1], array[2]),
+					ctrl = gajim.interface.msg_win_mgr.get_control(fjid)
+					ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
 								'status')
 					return
 	
@@ -649,15 +649,15 @@ class Interface:
 
 		# show avatar in chat
 		win = None
-		ctl = None
+		ctrl = None
 		if gajim.interface.msg_win_mgr.has_window(jid):
 			win = gajim.interface.msg_win_mgr.get_window(jid)
-			ctl = win.get_control(jid)
+			ctrl = win.get_control(jid)
 		elif resource and gajim.interface.msg_win_mgr.has_window(jid + '/' + resource):
 			win = gajim.interface.msg_win_mgr.get_window(jid + '/' + resource)
-			ctl = win.get_control(jid + '/' + resource)
-		if win and ctl.type_id != message_control.TYPE_GC:
-			ctl.show_avatar()
+			ctrl = win.get_control(jid + '/' + resource)
+		if win and ctrl.type_id != message_control.TYPE_GC:
+			ctrl.show_avatar()
 
 		# Show avatar in roster
 		self.roster.draw_avatar(jid, account)
@@ -687,15 +687,15 @@ class Interface:
 		status = array[2]
 		# print status in chat window and update status/GPG image
 		if gajim.interface.msg_win_mgr.has_window(fjid):
-			ctl = gajim.interface.msg_win_mgr.get_control(fjid)
-			contact = ctl.contact
+			ctrl = gajim.interface.msg_win_mgr.get_control(fjid)
+			contact = ctrl.contact
 			contact.show = show
 			contact.status = status
-			ctl.update_ui()
+			ctrl.update_ui()
 			uf_show = helpers.get_uf_show(show)
-			ctl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
+			ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
 						'status')
-			ctl.draw_banner()
+			ctrl.draw_banner()
 
 		# Get the window and control for the updated status, this may be a PrivateChatControl
 		control = gajim.interface.msg_win_mgr.get_control(room_jid)
@@ -1289,10 +1289,10 @@ class Interface:
 			w.set_active_tab(jid)
 			w.window.present()
 			w.window.window.focus()
-			ctl = w.get_control(jid)
+			ctrl = w.get_control(jid)
 			# Using isinstance here because we want to catch all derived types
-			if isinstance(ctl, ChatControlBase):
-				tv = ctl.conv_textview
+			if isinstance(ctrl, ChatControlBase):
+				tv = ctrl.conv_textview
 				tv.scroll_to_end()
 
 	def __init__(self):
