@@ -559,6 +559,7 @@ class MessageWindowMgr:
 			key = acct
 		elif self.mode == self.CONFIG_PERTYPE:
 			key = type
+		return key
 
 	def create_window(self, contact, acct, type):
 		key = None
