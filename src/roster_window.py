@@ -179,8 +179,8 @@ class RosterWindow:
 		model = self.tree.get_model()
 		groups = contact.groups
 		if observer:
-			groups = [_('Observer')]
-		if not groups:
+			groups = [_('Observers')]
+		if not groups: # FIXME: allow non groups contacts
 			groups = [_('General')]
 		for g in groups:
 			iterG = self.get_group_iter(g, account)
