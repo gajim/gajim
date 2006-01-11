@@ -990,10 +990,7 @@ class PopupNotificationWindow:
 			gajim.interface.roster.open_event(self.account, self.jid, ev)
 		else: # chat or pm
 			assert(self.msg_type == 'chat' or self.msg_type == 'pm')
-			gajim.interface.roster.new_chat(contact, self.account)
-			msg_window = gajim.interface.msg_win_mgr.get_window(self.jid)
-			msg_window.set_active_tab(self.jid)
-			msg_window.window.present()
+			gajim.interface.handle_event(self.account, contact.jid, self.msg_type)
 
 		self.adjust_height_and_move_popup_notification_windows()
 
