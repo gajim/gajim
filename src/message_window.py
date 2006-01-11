@@ -83,11 +83,10 @@ class MessageWindow:
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
 		# Connect event handling for this Window
+		#FIXME: add those in GLADE
 		self.window.connect('delete-event', self._on_window_delete)
 		self.window.connect('destroy', self._on_window_destroy)
 		self.window.connect('focus-in-event', self._on_window_focus)
-
-		self.window.show_all()
 
 	def _on_window_focus(self, widget, event):
 		# window received focus, so if we had urgency REMOVE IT
