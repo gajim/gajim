@@ -12,7 +12,7 @@
 ## GNU General Public License for more details.
 ##
 
-import os, os.path
+import os
 import math
 import time
 import gtk
