@@ -197,9 +197,10 @@ class DesktopNotification:
 						img = 'ft_stopped.png'
 			else:
 				txt = ''
-		elif event_type == _('New Email'):
+		elif event_type == _('New E-mail'):
 			txt = _('You have new E-mail on %s.') % (jid)
 			ntype = 'gmail.notify'
+			img = 'single_msg_recv.png' #FIXME: find a better image
 		else:
 			# defaul failsafe values
 			img = 'chat_msg_recv.png' # img to display
