@@ -1548,6 +1548,10 @@ if __name__ == '__main__':
 				# Force GTK to really destroy the window
 				while gtk.events_pending():
 					gtk.main_iteration(False)
+				# We can't use a SQLite object in another thread than the one in
+				# which it was created, so create a new Migration instance
+				del m
+				m = migrate_logs_to_dot9_db.Migration()
 				m.migrate()
 			# Init logger values (self.con/cur, jid_already_in)
 			gajim.logger.init_vars()
