@@ -17608,6 +17608,9 @@ Maybe I'll refactor later</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <signal name="delete_event" handler="_on_window_delete" last_modification_time="Thu, 12 Jan 2006 02:55:53 GMT"/>
+  <signal name="destroy" handler="_on_window_destroy" last_modification_time="Thu, 12 Jan 2006 02:56:25 GMT"/>
+  <signal name="focus_in_event" handler="_on_window_focus" last_modification_time="Thu, 12 Jan 2006 02:56:55 GMT"/>
 
   <child>
     <widget class="GtkAlignment" id="alignment99">

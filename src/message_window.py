@@ -46,7 +46,11 @@ class MessageWindow:
 
 		self.widget_name = 'message_window'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, self.widget_name, APP)
+		self.xml.signal_autoconnect(self)
 		self.window = self.xml.get_widget(self.widget_name)
+		# I don't really understand, but get_property('visible') returns True at this point,
+		# which seems way early.  Anyway, hide until first tab is shown
+		self.window.hide()
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
 		self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
@@ -81,12 +85,6 @@ class MessageWindow:
 		else:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
-
-		# Connect event handling for this Window
-		#FIXME: add those in GLADE
-		self.window.connect('delete-event', self._on_window_delete)
-		self.window.connect('destroy', self._on_window_destroy)
-		self.window.connect('focus-in-event', self._on_window_focus)
 
 	def _on_window_focus(self, widget, event):
 		# window received focus, so if we had urgency REMOVE IT
