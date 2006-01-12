@@ -1940,6 +1940,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				gajim.config.set('roster_width', width)
 				gajim.config.set('roster_height', height)
 
+		gajim.interface.msg_win_mgr.shutdown()
+
 		gajim.config.set('collapsed_rows', '\t'.join(self.collapsed_rows))
 		gajim.interface.save_config()
 		for account in gajim.connections:

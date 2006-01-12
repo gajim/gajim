@@ -104,18 +104,18 @@ class Config:
 		'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
 		'msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
-		'chat_msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
-		'chat_msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-		'chat_msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
-		'chat_msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
-		'gc_msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
-		'gc_msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-		'gc_msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
-		'gc_msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
-		'single_msg-x-position': [opt_int, 0],
-		'single_msg-y-position': [opt_int, 0],
-		'single_msg-width': [opt_int, 400],
-		'single_msg-height': [opt_int, 280],
+		'chat-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
+		'chat-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
+		'chat-msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
+		'chat-msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
+		'gc-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
+		'gc-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
+		'gc-msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
+		'gc-msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
+		'single-msg-x-position': [opt_int, 0],
+		'single-msg-y-position': [opt_int, 0],
+		'single-msg-width': [opt_int, 400],
+		'single-msg-height': [opt_int, 280],
 		'roster_x-position': [ opt_int, 0 ],
 		'roster_y-position': [ opt_int, 0 ],
 		'roster_width': [ opt_int, 150 ],

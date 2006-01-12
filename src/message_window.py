@@ -606,8 +606,8 @@ class MessageWindowMgr:
 				size = (gajim.config.get('msgwin-width'),
 					gajim.config.get('msgwin-height'))
 			elif self.mode == self.CONFIG_PERACCT:
-				size = (gajim.config.get_per('msgwin-width', acct),
-					gajim.config.get_per('msgwin-height', acct))
+				size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
+					gajim.config.get_per('accounts', acct, 'msgwin-height'))
 			elif self.mode == self.CONFIG_PERTYPE:
 				if type == message_control.TYPE_PM:
 					type = message_control.TYPE_CHAT
@@ -627,8 +627,8 @@ class MessageWindowMgr:
 			pos = (gajim.config.get('msgwin-x-position'),
 				gajim.config.get('msgwin-y-position'))
 		elif self.mode == self.CONFIG_PERACCT:
-			pos = (gajim.config.get_per('msgwin-x-position', acct),
-				gajim.config.get_per('msgwin-y-position', acct))
+			pos = (gajim.config.get_per('accounts', acct, 'msgwin-x-position'),
+				gajim.config.get_per('accounts', acct, 'msgwin-y-position'))
 		elif self.mode == self.CONFIG_PERTYPE:
 			pos = (gajim.config.get(type + '-msgwin-x-position'),
 				gajim.config.get(type + '-msgwin-y-position'))
@@ -673,42 +673,7 @@ class MessageWindowMgr:
 		return win
 
 	def _on_window_delete(self, win, event):
-		if not gajim.config.get('saveposition'):
-			return False
-		msg_win = self._gtk_win_to_msg_win(win)
-		
-		# Save window size and postion
-		pos_x_key = 'msgwin-x-position'
-		pos_y_key = 'msgwin-y-position'
-		size_width_key = 'msgwin-width'
-		size_height_key = 'msgwin-height'
-
-		acct = None
-		x, y = win.get_position()
-		width, height = win.get_size()
-
-		if self.mode == self.CONFIG_NEVER:
-			x = y = -1
-		elif self.mode == self.CONFIG_PERACCT:
-			acct = msg_win.account
-		elif self.mode == self.CONFIG_PERTYPE:
-			type = msg_win.type
-			pos_x_key = type + "-msgwin-x-position"
-			pos_y_key = type + "-msgwin-y-position"
-			size_width_key = type + "-msgwin-width"
-			size_height_key = type + "-msgwin-height"
-
-		if acct:
-			gajim.config.set_per('accounts', acct, pos_x_key, x)
-			gajim.config.set_per('accounts', acct, pos_y_key, y)
-			gajim.config.set_per('accounts', acct, size_width_key, width)
-			gajim.config.set_per('accounts', acct, size_height_key, height)
-		else:
-			gajim.config.set(pos_x_key, x)
-			gajim.config.set(pos_y_key, y)
-			gajim.config.set(size_width_key, width)
-			gajim.config.set(size_height_key, height)
-
+		self.save_state(self._gtk_win_to_msg_win(win))
 		return False
 
 	def _on_window_destroy(self, win):
@@ -738,3 +703,44 @@ class MessageWindowMgr:
 		for w in self._windows.values():
 			for c in w.controls():
 				yield c
+
+	def shutdown(self):
+		for w in self.windows():
+			self.save_state(w)
+			w.window.hide()
+
+	def save_state(self, msg_win):
+		if not gajim.config.get('saveposition'):
+			return False
+		
+		# Save window size and postion
+		pos_x_key = 'msgwin-x-position'
+		pos_y_key = 'msgwin-y-position'
+		size_width_key = 'msgwin-width'
+		size_height_key = 'msgwin-height'
+
+		acct = None
+		x, y = msg_win.window.get_position()
+		width, height = msg_win.window.get_size()
+
+		if self.mode == self.CONFIG_NEVER:
+			x = y = -1
+		elif self.mode == self.CONFIG_PERACCT:
+			acct = msg_win.account
+		elif self.mode == self.CONFIG_PERTYPE:
+			type = msg_win.type
+			pos_x_key = type + "-msgwin-x-position"
+			pos_y_key = type + "-msgwin-y-position"
+			size_width_key = type + "-msgwin-width"
+			size_height_key = type + "-msgwin-height"
+
+		if acct:
+			gajim.config.set_per('accounts', acct, pos_x_key, x)
+			gajim.config.set_per('accounts', acct, pos_y_key, y)
+			gajim.config.set_per('accounts', acct, size_width_key, width)
+			gajim.config.set_per('accounts', acct, size_height_key, height)
+		else:
+			gajim.config.set(pos_x_key, x)
+			gajim.config.set(pos_y_key, y)
+			gajim.config.set(size_width_key, width)
+			gajim.config.set(size_height_key, height)
