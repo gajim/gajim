@@ -71,15 +71,12 @@ class MessageWindow:
 			self.notebook.remove_page(0)
 		# Tab customizations
 		pref_pos = gajim.config.get('tabs_position')
-		if pref_pos != 'top':
-			if pref_pos == 'bottom':
-				nb_pos = gtk.POS_BOTTOM
-			elif pref_pos == 'left':
-				nb_pos = gtk.POS_LEFT
-			elif pref_pos == 'right':
-				nb_pos = gtk.POS_RIGHT
-			else:
-				nb_pos = gtk.POS_TOP
+		if pref_pos == 'bottom':
+			nb_pos = gtk.POS_BOTTOM
+		elif pref_pos == 'left':
+			nb_pos = gtk.POS_LEFT
+		elif pref_pos == 'right':
+			nb_pos = gtk.POS_RIGHT
 		else:
 			nb_pos = gtk.POS_TOP
 		self.notebook.set_tab_pos(nb_pos)
@@ -95,8 +92,6 @@ class MessageWindow:
 						self.on_tab_label_drag_data_received_cb)
 		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
 						gtk.gdk.ACTION_COPY)
-
-		self.window.show_all()
 
 	def _on_window_focus(self, widget, event):
 		# window received focus, so if we had urgency REMOVE IT
@@ -601,19 +596,18 @@ class MessageWindowMgr:
 		if not gajim.config.get('saveposition'):
 			size = (common.config.DEFAULT_WINDOW_WIDTH,
 				common.config.DEFAULT_WINDOW_HEIGHT)
-		else:
-			if self.mode == self.CONFIG_NEVER or self.mode == self.CONFIG_ALWAYS:
-				size = (gajim.config.get('msgwin-width'),
-					gajim.config.get('msgwin-height'))
-			elif self.mode == self.CONFIG_PERACCT:
-				size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
-					gajim.config.get_per('accounts', acct, 'msgwin-height'))
-			elif self.mode == self.CONFIG_PERTYPE:
-				if type == message_control.TYPE_PM:
-					type = message_control.TYPE_CHAT
-				opt_width = type + '-msgwin-width'
-				opt_height = type + '-msgwin-height'
-				size = (gajim.config.get(opt_width),
+		elif self.mode == self.CONFIG_NEVER or self.mode == self.CONFIG_ALWAYS:
+			size = (gajim.config.get('msgwin-width'),
+				gajim.config.get('msgwin-height'))
+		elif self.mode == self.CONFIG_PERACCT:
+			size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
+				gajim.config.get_per('accounts', acct, 'msgwin-height'))
+		elif self.mode == self.CONFIG_PERTYPE:
+			if type == message_control.TYPE_PM:
+				type = message_control.TYPE_CHAT
+			opt_width = type + '-msgwin-width'
+			opt_height = type + '-msgwin-height'
+			size = (gajim.config.get(opt_width),
 					gajim.config.get(opt_height))
 		gtkgui_helpers.resize_window(win.window, size[0], size[1])
 	
