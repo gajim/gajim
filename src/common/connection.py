@@ -71,6 +71,15 @@ except ImportError:
 	except ImportError:
 		gajim.log.debug("Could not load one of the supported DNS libraries (dnspython or pydns). SRV records will not be queried and you may need to set custom hostname/port for some servers to be accessible.")
 
+HAS_IDLE = True
+try:
+	import common.idle as idle # when we launch gajim from sources
+except:
+	try:
+		import idle # when Gajim is installed
+	except:
+		gajim.log.debug('Unable to load idle module')
+		HAS_IDLE = False
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
@@ -191,6 +200,12 @@ class Connection:
 			gajim.config.set('usegpg', True)
 		else:
 			gajim.config.set('usegpg', False)
+
+		try:
+			idle.init()
+		except:
+			HAS_IDLE = False
+
 		self.retrycount = 0
 	# END __init__
 
@@ -1201,6 +1216,18 @@ class Connection:
 		self.to_be_sent.append(iq_obj)
 		raise common.xmpp.NodeProcessed
 
+	def _IdleCB(self, con, iq_obj):
+		gajim.log.debug('IdleCB')
+		iq_obj = iq_obj.buildReply('result')
+		qp = iq_obj.getTag('query')
+		if not HAS_IDLE:
+			qp.attrs['seconds'] = '0';
+		else:
+			qp.attrs['seconds'] = idle.getIdleSec()
+
+		self.to_be_sent.append(iq_obj)
+		raise common.xmpp.NodeProcessed
+
 	def _VersionResultCB(self, con, iq_obj):
 		gajim.log.debug('VersionResultCB')
 		client_info = ''
@@ -1707,6 +1734,8 @@ class Connection:
 			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._VersionCB, 'get',
 			common.xmpp.NS_VERSION)
+		con.RegisterHandler('iq', self._IdleCB, 'get',
+			common.xmpp.NS_LAST)
 		con.RegisterHandler('iq', self._VersionResultCB, 'result',
 			common.xmpp.NS_VERSION)
 		con.RegisterHandler('iq', self._MucOwnerCB, 'result',
