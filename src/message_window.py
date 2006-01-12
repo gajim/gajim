@@ -37,6 +37,10 @@ class MessageWindow:
 	'''Class for windows which contain message like things; chats,
 	groupchats, etc.'''
 
+	# DND_TARGETS is the targets needed by drag_source_set and drag_dest_set
+	DND_TARGETS = [('GAJIM_TAB', 0, 81)]
+	hid = 0 # drag_data_received handler id
+	
 	def __init__(self, acct, type):
 		self._controls = {}
 		# If None, the window is not tied to any specific account
@@ -86,6 +90,14 @@ class MessageWindow:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
+		# set up DnD
+		self.hid = self.notebook.connect('drag_data_received',
+						self.on_tab_label_drag_data_received_cb)
+		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
+						gtk.gdk.ACTION_COPY)
+
+		self.window.show_all()
+
 	def _on_window_focus(self, widget, event):
 		# window received focus, so if we had urgency REMOVE IT
 		# NOTE: we do not have to read the message (it maybe in a bg tab)
@@ -132,6 +144,7 @@ class MessageWindow:
 				self.on_tab_eventbox_button_press_event, control.widget)
 		self.notebook.append_page(control.widget, tab_label_box)
 
+		self.setup_tab_dnd(control.widget)
 
 		self.redraw_tab(control.contact)
 		control.update_ui()
@@ -213,6 +226,7 @@ class MessageWindow:
 								ctrl.type_id)
 		del gajim.last_message_time[ctrl.account][ctrl.contact.jid]
 
+		self.disconnect_tab_dnd(ctrl.widget)
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
 		del self._controls[contact.jid]
@@ -226,8 +240,12 @@ class MessageWindow:
 			# FIXME: These are not called when the window is destroyed like this, fake it
 			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
 			gajim.interface.msg_win_mgr._on_window_destroy(self.window)
-			self.window.destroy()
+			# dnd clean up
+			self.notebook.disconnect(self.hid)
+			self.notebook.drag_dest_unset()
 
+			self.window.destroy()
+			
 	def redraw_tab(self, contact, chatstate = None):
 		ctrl = self._controls[contact.jid]
 		ctrl.update_ui()
@@ -454,6 +472,77 @@ class MessageWindow:
 				active_ctrl.msg_textview.emit('key_press_event', event)
 				active_ctrl.msg_textview.grab_focus()
 
+	def setup_tab_dnd(self, child):
+		'''Set tab label as drag source and connect the drag_data_get signal'''
+		tab_label = self.notebook.get_tab_label(child)
+		tab_label.dnd_handler = tab_label.connect('drag_data_get', 
+							  self.on_tab_label_drag_data_get_cb)
+		tab_label.drag_source_set(gtk.gdk.BUTTON1_MASK, self.DND_TARGETS,
+					 gtk.gdk.ACTION_COPY)
+		tab_label.page_num = self.notebook.page_num(child)
+
+	def on_tab_label_drag_data_get_cb(self, widget, drag_context, selection, info, time):
+		source_page_num = self.find_page_num_according_to_tab_label(widget)
+		# 8 is the data size for the string
+		selection.set(selection.target, 8, str(source_page_num))
+
+	def on_tab_label_drag_data_received_cb(self, widget, drag_context, x, y, selection,
+						type, time):
+		'''Reorder the tabs according to the drop position'''
+		source_page_num = int(selection.data)
+		dest_page_num, to_right = self.get_tab_at_xy(x, y)
+		source_child = self.notebook.get_nth_page(source_page_num)
+		source_tab_label = self.notebook.get_tab_label(source_child)
+		if dest_page_num != source_page_num:
+			self.notebook.reorder_child(source_child, dest_page_num)
+		
+	def get_tab_at_xy(self, x, y):
+		'''Thanks to Gaim
+		Return the tab under xy and
+		if its nearer from left or right side of the tab	
+		'''
+		page_num = -1
+		to_right = False
+		horiz = self.notebook.get_tab_pos() == gtk.POS_TOP or \
+			self.notebook.get_tab_pos() == gtk.POS_BOTTOM
+		for i in xrange(self.notebook.get_n_pages()):
+			page = self.notebook.get_nth_page(i)
+			tab = self.notebook.get_tab_label(page)
+			tab_alloc = tab.get_allocation()
+			if horiz:
+				if (x >= tab_alloc.x) and \
+					   (x <= (tab_alloc.x + tab_alloc.width)):
+					page_num = i
+					if x >= tab_alloc.x + (tab_alloc.width / 2.0):
+						to_right = True
+					break
+			else:
+				if (y >= tab_alloc.y) and \
+					   (y <= (tab_alloc.y + tab_alloc.height)):
+					page_num = i
+				
+					if y > tab_alloc.y + (tab_alloc.height / 2.0):
+						to_right = True
+					break
+		return (page_num, to_right)
+
+	def find_page_num_according_to_tab_label(self, tab_label):
+		'''Find the page num of the tab label'''
+		page_num = -1
+		for i in xrange(self.notebook.get_n_pages()):
+			page = self.notebook.get_nth_page(i)
+			tab = self.notebook.get_tab_label(page)
+			if tab == tab_label:
+				page_num = i
+				break
+		return page_num
+
+	def disconnect_tab_dnd(self, child):
+		'''Clean up DnD signals, source and dest'''
+		tab_label = self.notebook.get_tab_label(child)
+		tab_label.drag_source_unset()
+		tab_label.disconnect(tab_label.dnd_handler)
+
 ################################################################################
 class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
@@ -648,4 +737,3 @@ class MessageWindowMgr:
 		for w in self._windows.values():
 			for c in w.controls():
 				yield c
-
