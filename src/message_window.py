@@ -561,7 +561,6 @@ class MessageWindowMgr:
 		# Map the mode to a int constant for frequent compares
 		mode = gajim.config.get('one_message_window')
 		self.mode = common.config.opt_one_window_types.index(mode)
-		assert(self.mode != -1)
 	
 	def _new_window(self, acct, type):
 		win = MessageWindow(acct, type)
@@ -581,6 +580,7 @@ class MessageWindowMgr:
 			if win.get_control(jid):
 				return win
 		return None
+
 	def has_window(self, jid):
 		return self.get_window(jid)
 
