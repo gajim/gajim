@@ -452,10 +452,17 @@ class AboutDialog:
 			'Dimitur Kirov <dkirov@gmail.com>',
 			'Travis Shirk <travis@pobox.com>',
 			'',
-			'Read AUTHORS file for full list including past developers',
-			'Read THANKS file for contributors',
+			_('Read AUTHORS file for full list including past developers'),
+			'',
+			_('THANKS:'),
 		]
-		#FIXME: make See authors setence and Current devs sentence translatable
+
+		text = open('../THANKS').read()
+		text_splitted = text.split('\n')
+		text = '\n'.join(text_splitted[:-2]) # remove one english setence
+		# and add it manually as translatable
+		text += '\n' + _('Last but not least, we thank all the package maintainers') + '\n'
+		authors.append(text)
 		
 		dlg.set_authors(authors)
 		
