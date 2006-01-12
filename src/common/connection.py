@@ -78,7 +78,7 @@ except:
 	try:
 		import idle # when Gajim is installed
 	except:
-		gajim.log.debug('Unable to load idle module')
+		gajim.log.debug(_('Unable to load idle module'))
 		HAS_IDLE = False
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
