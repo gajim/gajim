@@ -22,6 +22,7 @@ import gobject
 import gtkgui_helpers
 import message_control
 import dialogs
+import history_window
 
 from common import gajim
 from common import helpers
@@ -448,13 +449,19 @@ class ChatControlBase(MessageControl):
 			del self.print_time_timeout_id
 		return False
 
-	def on_history_menuitem_clicked(self, widget = None, jid = None):
+	def _on_history_menuitem_activate(self, widget = None, jid = None):
+		if not jid:
+			jid = self.contact.jid
 		'''When history menuitem is pressed: call history window'''
 		if gajim.interface.instances['logs'].has_key(jid):
 			gajim.interface.instances['logs'][jid].window.present()
 		else:
-			gajim.interface.instances['logs'][jid] = history_window.HistoryWindow(
-				jid, self.account)
+			gajim.interface.instances['logs'][jid] = \
+				history_window.HistoryWindow(jid, self.account)
+
+	def _on_compact_view_menuitem_activate(self, widget):
+		isactive = widget.get_active()
+		self.set_compact_view(isactive)
 
 	def set_control_active(self, state):
 		if state:
@@ -1400,10 +1407,6 @@ class ChatControl(ChatControlBase):
 		cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
 		self.bigger_avatar_window.window.set_cursor(cursor)
 
-	def _on_compact_view_menuitem_activate(self, widget):
-		isactive = widget.get_active()
-		self.set_compact_view(isactive)
-
 	def _on_send_file_menuitem_activate(self, widget):
 		gajim.interface.instances['file_transfers'].show_file_send_request( 
 			self.account, self.contact)
@@ -1411,10 +1414,9 @@ class ChatControl(ChatControlBase):
 	def _on_add_to_roster_menuitem_activate(self, widget):
 		dialogs.AddNewContactWindow(self.account, self.contact.jid)
 
-	def _on_contact_information_menuitem_clicked(self, widget):
+	def _on_contact_information_menuitem_activate(self, widget):
 		gajim.interface.roster.on_info(widget, self.contact, self.account)
 
-	def on_toggle_gpg_menuitem_activate(self, widget):
-		jid = self.get_active_jid()
+	def _on_toggle_gpg_menuitem_activate(self, widget):
 		tb = self.xml.get_widget('gpg_togglebutton')
 		tb.set_active(not tb.get_active())

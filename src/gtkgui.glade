@@ -14678,10 +14678,10 @@ Banner</property>
       <property name="tooltip" translatable="yes">Click to see past conversation in this room</property>
       <property name="label" translatable="yes">_History</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_history_menuitem_clicked" last_modification_time="Thu, 04 Aug 2005 13:57:24 GMT"/>
+      <signal name="activate" handler="_on_history_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1053">
+	<widget class="GtkImage" id="image1359">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -14698,10 +14698,10 @@ Banner</property>
     <widget class="GtkImageMenuItem" id="configure_room_menuitem">
       <property name="label" translatable="yes">Configure _Room</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_configure_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:04:55 GMT"/>
+      <signal name="activate" handler="_on_configure_room_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1054">
+	<widget class="GtkImage" id="image1360">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-preferences</property>
 	  <property name="icon_size">1</property>
@@ -14718,10 +14718,10 @@ Banner</property>
     <widget class="GtkImageMenuItem" id="change_subject_menuitem">
       <property name="label" translatable="yes">Change _Subject</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_change_subject_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 11:05:10 GMT"/>
+      <signal name="activate" handler="_on_change_subject_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1055">
+	<widget class="GtkImage" id="image1361">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-edit</property>
 	  <property name="icon_size">1</property>
@@ -14738,10 +14738,10 @@ Banner</property>
     <widget class="GtkImageMenuItem" id="change_nick_menuitem">
       <property name="label" translatable="yes">Change _Nickname</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_change_nick_menuitem_activate" last_modification_time="Sat, 18 Jun 2005 20:23:46 GMT"/>
+      <signal name="activate" handler="_on_change_nick_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1056">
+	<widget class="GtkImage" id="image1362">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-redo</property>
 	  <property name="icon_size">1</property>
@@ -14758,10 +14758,10 @@ Banner</property>
     <widget class="GtkImageMenuItem" id="bookmark_room_menuitem">
       <property name="label" translatable="yes">_Bookmark This Room</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_bookmark_room_menuitem_activate" last_modification_time="Mon, 13 Jun 2005 12:43:29 GMT"/>
+      <signal name="activate" handler="_on_bookmark_room_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1057">
+	<widget class="GtkImage" id="image1363">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -14779,7 +14779,7 @@ Banner</property>
       <property name="label" translatable="yes">_Compact View    Alt+C</property>
       <property name="use_underline">True</property>
       <property name="active">False</property>
-      <signal name="activate" handler="on_compact_view_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 13:07:23 GMT"/>
+      <signal name="activate" handler="_on_compact_view_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
     </widget>
   </child>
 </widget>
@@ -14792,10 +14792,10 @@ Banner</property>
       <property name="tooltip" translatable="yes">Click to see past conversations with this contact</property>
       <property name="label" translatable="yes">_History</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="_on_history_menuitem_clicked" last_modification_time="Tue, 03 Jan 2006 04:27:11 GMT"/>
+      <signal name="activate" handler="_on_history_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:40:18 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1241">
+	<widget class="GtkImage" id="image1366">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -14813,7 +14813,7 @@ Banner</property>
       <property name="visible">True</property>
       <property name="label">gtk-dialog-info</property>
       <property name="use_stock">True</property>
-      <signal name="activate" handler="_on_contact_information_menuitem_clicked" last_modification_time="Tue, 03 Jan 2006 04:27:04 GMT"/>
+      <signal name="activate" handler="_on_contact_information_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:40:18 GMT"/>
     </widget>
   </child>
 
@@ -14825,7 +14825,7 @@ Banner</property>
       <signal name="activate" handler="_on_send_file_menuitem_activate" last_modification_time="Tue, 03 Jan 2006 04:26:55 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1242">
+	<widget class="GtkImage" id="image1367">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-file</property>
 	  <property name="icon_size">1</property>
@@ -14866,7 +14866,7 @@ Banner</property>
       <signal name="activate" handler="_on_add_to_roster_menuitem_activate" last_modification_time="Tue, 03 Jan 2006 04:26:37 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1243">
+	<widget class="GtkImage" id="image1368">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>

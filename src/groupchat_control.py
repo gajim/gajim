@@ -1071,7 +1071,7 @@ class GroupchatControl(ChatControlBase):
 				nb += len(gajim.awaiting_events[self.account][fjid])
 		return nb
 
-	def on_change_subject_menuitem_activate(self, widget):
+	def _on_change_subject_menuitem_activate(self, widget):
 		instance = dialogs.InputDialog(_('Changing Subject'),
 			_('Please specify the new subject:'), self.subject)
 		response = instance.get_response()
@@ -1080,15 +1080,15 @@ class GroupchatControl(ChatControlBase):
 			subject = instance.input_entry.get_text().decode('utf-8')
 			gajim.connections[self.account].send_gc_subject(self.room_jid, subject)
 
-	def on_change_nick_menuitem_activate(self, widget):
+	def _on_change_nick_menuitem_activate(self, widget):
 		title = _('Changing Nickname')
 		prompt = _('Please specify the new nickname you want to use:')
 		self.show_change_nick_input_dialog(title, prompt, self.nick)
 
-	def on_configure_room_menuitem_activate(self, widget):
+	def _on_configure_room_menuitem_activate(self, widget):
 		gajim.connections[self.account].request_gc_config(self.room_jid)
 
-	def on_bookmark_room_menuitem_activate(self, widget):
+	def _on_bookmark_room_menuitem_activate(self, widget):
 		bm = {
 			'name': self.name,
 			'jid': self.room_jid,
@@ -1510,9 +1510,9 @@ class GroupchatControl(ChatControlBase):
 			gajim.interface.instances[self.account]['infos'][c2.jid] = \
 				vcard.VcardWindow(c2, self.account, False)
 
-	def on_history(self, widget, ck):
+	def on_history(self, widget, nick):
 		jid = gajim.construct_fjid(self.room_jid, nick)
-		self.on_history_menuitem_clicked(jid = jid)
+		self._on_history_menuitem_activate(widget = widget, jid = jid)
 
 	def on_add_to_roster(self, widget, jid):
 		dialogs.AddNewContactWindow(self.account, jid)
