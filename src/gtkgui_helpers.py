@@ -464,3 +464,8 @@ def make_color_string(color):
 	'''create #aabbcc color string from gtk color'''
 	return '#' + hex(color.red)[-2:] + hex(color.green)[-2:] + \
 		hex(color.blue)[-2:]
+
+def make_pixbuf_grayscale(pixbuf):
+	pixbuf2 = pixbuf.copy()
+	pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
+	return pixbuf2

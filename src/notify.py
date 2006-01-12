@@ -47,13 +47,15 @@ if dbus_support.supported:
 		import dbus.glib
 		import dbus.service
 
-def notify(event_type, jid, account, msg_type = '', file_props = None):
+def notify(event_type, jid, account, msg_type = '', file_props = None,
+	path_to_image = None):
 	'''Notifies a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
 	the older style PopupNotificationWindow method.'''
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
-			DesktopNotification(event_type, jid, account, msg_type, file_props)
+			DesktopNotification(event_type, jid, account, msg_type, file_props,
+				path_to_image)
 			return
 		except dbus.dbus_bindings.DBusException, e:
 			# Connection to D-Bus failed, try popup
@@ -99,7 +101,8 @@ notification_response_manager = NotificationResponseManager()
 class DesktopNotification:
 	'''A DesktopNotification that interfaces with DBus via the Desktop
 	Notification specification'''
-	def __init__(self, event_type, jid, account, msg_type = '', file_props = None):
+	def __init__(self, event_type, jid, account, msg_type = '',
+		file_props = None, path_to_image = None):
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
@@ -118,24 +121,18 @@ class DesktopNotification:
 			prefix = transport_name
 		else:
 			prefix = 'jabber'
-		'''
-		if transport_name == 'aim':
-			prefix = 'aim'
-		elif transport_name == 'icq':
-			prefix = 'icq'
-		elif transport_name == 'msn':
-			prefix = 'msn'
-		elif transport_name == 'yahoo':
-			prefix = 'yahoo'
-		else:
-			prefix = 'jabber'
-		'''
 
 		if event_type == _('Contact Signed In'):
-			img = prefix + '_online.png'
+			if path_to_image is None:
+				img = prefix + '_online.png'
+			else:
+				img = path_to_image
 			ntype = 'presence.online'
 		elif event_type == _('Contact Signed Out'):
-			img = prefix + '_offline.png'
+			if path_to_image is None:
+				img = prefix + '_offline.png'
+			else:
+				img = path_to_image
 			ntype = 'presence.offline'
 		elif event_type in (_('New Message'), _('New Single Message'),
 			_('New Private Message')):

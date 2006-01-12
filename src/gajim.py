@@ -356,10 +356,27 @@ class Interface:
 					# check OUR status and if we allow notifications for that status
 					if gajim.config.get('autopopupaway'): # always notify
 						show_notification = True
-					elif gajim.connections[account].connected in (2, 3): # we're online or chat
+					elif gajim.connections[account].connected in (2, 3):
+						# we're online or chat
 						show_notification = True
 					if show_notification:
-						notify.notify(_('Contact Signed In'), jid, account)
+						avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
+							jid)
+						if avatar_pixbuf is None:
+							path_to_file = None
+						else:
+							avatar_pixbuf = gtkgui_helpers.get_scaled_pixbuf(
+								avatar_pixbuf, 'roster')
+							path_to_file = os.path.join(gajim.TMP, jid + '.png')
+							if not os.path.exists(path_to_file):
+								try:
+									avatar_pixbuf.save(path_to_file, 'png')
+								except gobject.GError, e:
+									path_to_file = None
+
+						notify.notify(_('Contact Signed In'), jid, account,
+							path_to_image = path_to_file)
+
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactPresence',
 						(account, array))
@@ -378,7 +395,24 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						notify.notify(_('Contact Signed Out'), jid, account)
+						avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
+							jid)
+						if avatar_pixbuf is None:
+							path_to_file = None
+						else:
+							avatar_pixbuf = gtkgui_helpers.get_scaled_pixbuf(
+								avatar_pixbuf, 'roster')
+							path_to_file = os.path.join(gajim.TMP, jid + '_BW.png')
+							if not os.path.exists(path_to_file):
+								try:
+									avatar_pixbuf = gtkgui_helpers.make_pixbuf_grayscale(
+										avatar_pixbuf)
+									avatar_pixbuf.save(path_to_file, 'png')
+								except gobject.GError, e:
+									path_to_file = None
+
+						notify.notify(_('Contact Signed Out'), jid, account,
+							path_to_image = path_to_file)
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactAbsence', (account, array))
 				# FIXME: stop non active file transfers
