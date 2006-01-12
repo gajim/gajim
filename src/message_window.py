@@ -604,7 +604,7 @@ class MessageWindowMgr:
 		elif self.mode == self.CONFIG_PERACCT:
 			acct = msg_win.account
 		elif self.mode == self.CONFIG_PERTYPE:
-			type = msg_win.type_id
+			type = msg_win.type
 			pos_x_key = type + "-msgwin-x-position"
 			pos_y_key = type + "-msgwin-y-position"
 			size_width_key = type + "-msgwin-width"
