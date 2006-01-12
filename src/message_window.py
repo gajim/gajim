@@ -199,10 +199,11 @@ class MessageWindow:
 			control = self.get_active_control()
 		if control.type_id == message_control.TYPE_GC:
 			title = control.room_jid
+			if gajim.config.get('notify_on_all_muc_messages'):
+				title = unread_str + title
 		else:
-			title = control.contact.get_shown_name()
+			title = unread_str + control.contact.get_shown_name()
 
-		title = unread_str + title
 		self.window.set_title(title)
 
 		if urgent:
