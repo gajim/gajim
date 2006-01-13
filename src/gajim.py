@@ -362,7 +362,7 @@ class Interface:
 					if show_notification:
 						avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
 							jid)
-						if avatar_pixbuf is None:
+						if avatar_pixbuf in (None, 'ask'):
 							path_to_file = None
 						else:
 							avatar_pixbuf = gtkgui_helpers.get_scaled_pixbuf(
@@ -397,7 +397,7 @@ class Interface:
 					if show_notification:
 						avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
 							jid)
-						if avatar_pixbuf is None:
+						if avatar_pixbuf in (None, 'ask'):
 							path_to_file = None
 						else:
 							avatar_pixbuf = gtkgui_helpers.get_scaled_pixbuf(
