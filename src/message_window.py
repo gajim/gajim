@@ -196,6 +196,9 @@ class MessageWindow:
 			title = control.room_jid
 			if gajim.config.get('notify_on_all_muc_messages'):
 				title = unread_str + title
+			elif control.attention_flag:
+				title = '* ' + title
+			urgent = control.attention_flag
 		else:
 			title = unread_str + control.contact.get_shown_name()
 
