@@ -2001,6 +2001,20 @@ class Connection:
 			return
 		self.to_be_sent.append(stanza)
 
+	def ack_subscribed(self, jid):
+		if not self.connection:
+			return
+		gajim.log.debug('ack\'ing subscription complete for %s' % jid)
+		p = common.xmpp.Presence(jid, 'subscribe')
+		self.to_be_sent.append(p)
+
+	def ack_unsubscribed(self, jid):
+		if not self.connection:
+			return
+		gajim.log.debug('ack\'ing unsubscription complete for %s' % jid)
+		p = common.xmpp.Presence(jid, 'unsubscribe')
+		self.to_be_sent.append(p)
+
 	def request_subscription(self, jid, msg):
 		if not self.connection:
 			return

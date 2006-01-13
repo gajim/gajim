@@ -585,12 +585,15 @@ class Interface:
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his or her status.')
 				% jid)
+		gajim.connections[account].ack_subscribed(jid)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Subscribed', (account, array))
 
 	def handle_event_unsubscribed(self, account, jid):
 		dialogs.InformationDialog(_('Contact "%s" removed subscription from you') % jid,
 				_('You will always see him or her as offline.'))
+		# FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does not show deny
+		gajim.connections[account].ack_unsubscribed(jid)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Unsubscribed', (account, jid))
 	
