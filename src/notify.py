@@ -210,13 +210,25 @@ class DesktopNotification:
 		if self.notif is None:
 			raise dbus.dbus_bindings.DBusException()
 		timeout = gajim.config.get('notification_timeout') # in seconds
+		# Determine the version of notifications
+		# FIXME: This code is blocking, as is the next set. That should be fixed
+		# now that we have a class to encapsulate this behavior
 		try:
-			self.id = self.notif.Notify(dbus.String(_('Gajim')),
-				dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
-				dbus.String(event_type), dbus.String(txt),
-				[dbus.String(path)], {'default': 0}, [''], True, dbus.UInt32(
-				timeout))
-		except AttributeError: # For libnotify 0.3.x
+			(name, vendor, version) = self.notif.GetServerInfo()
+		except:
+			# No way to determine the version number, set it to the latest
+			# since it doesn't properly support the version number
+			version = '0.3.1'
+		if version.startswith('0.2'):
+			try:
+				self.id = self.notif.Notify(dbus.String(_('Gajim')),
+					dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
+					dbus.String(event_type), dbus.String(txt),
+					[dbus.String(path)], {'default': 0}, [''], True, dbus.UInt32(
+					timeout))
+			except AttributeError:
+				version = '0.3.1' # we're actually dealing with the newer version
+		if version.startswith('0.3'):
 			self.id = self.notif.Notify(dbus.String(_('Gajim')),
 				dbus.String(path), dbus.UInt32(0), dbus.String(event_type),
 				dbus.String(txt), dbus.String(''), {}, dbus.UInt32(timeout*1000))
