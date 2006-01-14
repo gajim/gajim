@@ -9434,6 +9434,7 @@ Custom</property>
 	      <property name="invisible_char">*</property>
 	      <property name="activates_default">True</property>
 	      <signal name="key_press_event" handler="on_server_entry_key_press_event" last_modification_time="Fri, 25 Nov 2005 22:09:39 GMT"/>
+	      <signal name="changed" handler="on_required_entry_changed" last_modification_time="Sat, 14 Jan 2006 21:51:55 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -9457,6 +9458,7 @@ Custom</property>
 	      <property name="invisible_char">*</property>
 	      <property name="activates_default">True</property>
 	      <signal name="key_press_event" handler="on_room_entry_key_press_event" last_modification_time="Fri, 25 Nov 2005 22:07:30 GMT"/>
+	      <signal name="changed" handler="on_required_entry_changed" last_modification_time="Sat, 14 Jan 2006 21:51:39 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -9478,6 +9480,7 @@ Custom</property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">*</property>
 	      <property name="activates_default">True</property>
+	      <signal name="changed" handler="on_required_entry_changed" last_modification_time="Sat, 14 Jan 2006 21:51:24 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>

@@ -718,6 +718,19 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		elif room and server:
 			self.xml.get_widget('join_button').grab_focus()
 
+		self._empty_required_widgets = []
+		self._server_entry = self.xml.get_widget('server_entry')
+		self._room_entry = self.xml.get_widget('room_entry')
+		self._nickname_entry = self.xml.get_widget('nickname_entry')
+		if not self._server_entry.get_text():
+			self._empty_required_widgets.append(self._server_entry)
+		if not self._room_entry.get_text():
+			self._empty_required_widgets.append(self._room_entry)
+		if not self._nickname_entry.get_text():
+			self._empty_required_widgets.append(self._nickname_entry)
+		if len(self._empty_required_widgets):
+			self.xml.get_widget('join_button').set_sensitive(False)
+
 		self.window.show_all()
 
 	def on_join_groupchat_window_destroy(self, widget):
@@ -728,6 +741,16 @@ _('You can not join a group chat unless you are connected.')).get_response()
 	def on_join_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
 			widget.destroy()
+
+	def on_required_entry_changed(self, widget):
+		if not widget.get_text():
+			self._empty_required_widgets.append(widget)
+			self.xml.get_widget('join_button').set_sensitive(False)
+		else:
+			if widget in self._empty_required_widgets:
+				self._empty_required_widgets.remove(widget)
+				if len(self._empty_required_widgets) == 0:
+					self.xml.get_widget('join_button').set_sensitive(True)
 
 	def on_room_entry_key_press_event(self, widget, event):
 		# Check for pressed @ and jump to server_entry if found
