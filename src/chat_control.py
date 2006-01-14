@@ -1161,7 +1161,7 @@ class ChatControl(ChatControlBase):
 		# Clean up systray
 		if gajim.interface.systray_enabled and self.nb_unread > 0:
 			gajim.interface.systray.remove_jid(self.contact.jid, self.account,
-								self.type)
+								self.type_id)
 
 	def allow_shutdown(self):
 		jid = self.contact.jid
