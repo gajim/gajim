@@ -442,7 +442,8 @@ class Interface:
 				show_notification = True
 
 		chat_control = gajim.interface.msg_win_mgr.get_control(jid)
-		if chat_control and chat_control.type_id == message_control.TYPE_GC: # it's a Private Message
+		if chat_control and chat_control.type_id == message_control.TYPE_GC:
+			# it's a Private Message
 			nick = gajim.get_nick_from_fjid(array[0])
 			fjid = array[0]
 			if not gajim.interface.msg_win_mgr.has_window(fjid) and \

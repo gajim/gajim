@@ -170,9 +170,15 @@ class ChatControlBase(MessageControl):
 					self.msg_textview.grab_focus()
 				# Paste into the msg textview
 				self.msg_textview.emit('key_press_event', event)
+			# CTRL + u: emacs style clear line
 			elif event.keyval == gtk.keysyms.u:
-				# emacs style clear line
 				self.clear(self.msg_textview) # clear message textview too
+			elif event.keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
+				self.parent_win.move_to_next_unread_tab(False)
+				return True
+			elif event.keyval == gtk.keysyms.Tab: # CTRL + TAB
+				self.parent_win.move_to_next_unread_tab(True)
+				return True
 		elif event.keyval == gtk.keysyms.m and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + m opens emoticons menu
 			if gajim.config.get('useemoticons'):
@@ -212,14 +218,20 @@ class ChatControlBase(MessageControl):
 			if event.keyval not in (gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab):
 				self.last_key_tabs = False
 		if event.state & gtk.gdk.SHIFT_MASK:
+			# CTRL + SHIFT + TAB
+			if event.state & gtk.gdk.CONTROL_MASK and \
+					event.keyval == gtk.keysyms.ISO_Left_Tab:
+				self.parent_win.move_to_next_unread_tab(False)
+				return True
 			# SHIFT + PAGE_[UP|DOWN]: send to conv_textview
-			if event.keyval == gtk.keysyms.Page_Down or \
+			elif event.keyval == gtk.keysyms.Page_Down or \
 						event.keyval == gtk.keysyms.Page_Up:
 				self.conv_textview.emit('key_press_event', event)
 				return True
-		elif event.state & gtk.gdk.CONTROL_MASK or \
-			  (event.keyval == gtk.keysyms.Control_L) or \
-			  (event.keyval == gtk.keysyms.Control_R):
+		elif event.state & gtk.gdk.CONTROL_MASK:
+			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
+				self.parent_win.move_to_next_unread_tab(True)
+				return True
 			# we pressed a control key or ctrl+sth: we don't block
 			# the event in order to let ctrl+c (copy text) and
 			# others do their default work
