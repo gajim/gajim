@@ -176,6 +176,9 @@ class GroupchatControl(ChatControlBase):
 		self.conv_textview.grab_focus()
 		self.widget.show_all()
 
+	def notify_on_new_messages(self):
+		return gajim.config.get('notify_on_all_muc_messages') or self.attention_flag
+
 	def _on_window_focus_in_event(self, widget, event):
 		'''When window gets focus'''
 		if self.parent_win.get_active_jid() == self.room_jid:

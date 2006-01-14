@@ -350,12 +350,11 @@ class ChatControlBase(MessageControl):
 			gajim.last_message_time[self.account][jid] = time.time()
 		urgent = True
 		if (not self.parent_win.get_active_jid() or\
-		jid != self.parent_win.get_active_jid() or \
-		not self.parent_win.is_active() or not end) and\
-	   	kind in ('incoming', 'incoming_queue'):
+				jid != self.parent_win.get_active_jid() or \
+				not self.parent_win.is_active() or not end) and\
+				kind in ('incoming', 'incoming_queue'):
 			self.nb_unread += 1
-			if gajim.interface.systray_enabled and\
-				gajim.config.get('trayicon_notification_on_new_messages'):
+			if gajim.interface.systray_enabled and self.notify_on_new_messages():
 				gajim.interface.systray.add_jid(jid, self.account, self.type_id)
 			self.parent_win.redraw_tab(self.contact)
 			self.parent_win.show_title(urgent)
@@ -694,6 +693,9 @@ class ChatControl(ChatControlBase):
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
+
+	def notify_on_new_messages(self):
+		return gajim.config.get('trayicon_notification_on_new_messages')
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''we enter the eventbox area so we under conditions add a timeout

@@ -70,6 +70,9 @@ class MessageControl:
 	def shutdown(self):
 		# NOTE: Derived classes MUST implement this
 		pass
+	def notify_on_new_messages(self):
+		# NOTE: Derived classes MUST implement this
+		return False
 	def repaint_themed_widgets(self, theme):
 		pass # NOTE: Derived classes SHOULD implement this
 	def update_ui(self):
