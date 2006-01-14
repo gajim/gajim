@@ -530,12 +530,12 @@ class GroupchatControl(ChatControlBase):
 			'subject': self.subject,
 		}
 
-	def load_var(self, room_jid, var):
+	def load_var(self, var):
 		self.list_treeview.set_model(var['model'])
 		self.list_treeviewexpand_all()
 		self.set_subject(var['subject'])
 		self.subject= var['subject']
-		if gajim.gc_connected[self.account][room_jid]:
+		if gajim.gc_connected[self.account][self.room_jid]:
 			self.got_connected()
 
 	def got_connected(self):
