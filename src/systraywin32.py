@@ -310,6 +310,8 @@ class SystrayWin32(systray.Systray):
 		else:
 			state = self.status
 		hicon = self.tray_ico_imgs[state]
+		if hicon is None:
+			return
 		
 		self.systray_winapi.add_notify_icon(self.systray_context_menu, hicon,
 			'Gajim')
@@ -336,8 +338,12 @@ class SystrayWin32(systray.Systray):
 			if os.path.exists(path_to_ico):
 				hinst = win32gui.GetModuleHandle(None)
 				img_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
-				image = win32gui.LoadImage(hinst, path_to_ico, win32con.IMAGE_ICON, 
-					0, 0, img_flags)
-				imgs[state] = image
-		
+				try:
+					image = win32gui.LoadImage(hinst, path_to_ico,
+						win32con.IMAGE_ICON, 0, 0, img_flags)
+				except pywintypes.error:
+					imgs[state] = None
+				else:
+					imgs[state] = image
+
 		return imgs
