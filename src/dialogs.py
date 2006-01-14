@@ -437,7 +437,7 @@ class AboutDialog:
 		dlg = gtk.AboutDialog()
 		dlg.set_name('Gajim')
 		dlg.set_version(gajim.version)
-		s = u'Copyright \xa9 2003-2005 Gajim Team'
+		s = u'Copyright \xa9 2003-2006 Gajim Team'
 		dlg.set_copyright(s)
 		text = open('../COPYING').read()
 		dlg.set_license(text)
