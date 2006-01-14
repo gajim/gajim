@@ -612,7 +612,8 @@ class MessageWindowMgr:
 			opt_height = type + '-msgwin-height'
 			size = (gajim.config.get(opt_width),
 					gajim.config.get(opt_height))
-		gtkgui_helpers.resize_window(win.window, size[0], size[1])
+		if size[0] > 0  and size[1] > 0:
+			gtkgui_helpers.resize_window(win.window, size[0], size[1])
 	
 	def _position_window(self, win, acct, type):
 		'''Returns the position tuple: (x, y)'''
@@ -630,7 +631,7 @@ class MessageWindowMgr:
 			pos = (gajim.config.get(type + '-msgwin-x-position'),
 				gajim.config.get(type + '-msgwin-y-position'))
 
-		if pos[0] != -1 and pos[1] != -1:
+		if pos[0] > 0 and pos[1] > 0:
 			gtkgui_helpers.move_window(win.window, pos[0], pos[1])
 
 	def _mode_to_key(self, contact, acct, type):
@@ -708,7 +709,7 @@ class MessageWindowMgr:
 
 	def save_state(self, msg_win):
 		if not gajim.config.get('saveposition'):
-			return False
+			return
 		
 		# Save window size and postion
 		pos_x_key = 'msgwin-x-position'
@@ -719,6 +720,10 @@ class MessageWindowMgr:
 		acct = None
 		x, y = msg_win.window.get_position()
 		width, height = msg_win.window.get_size()
+
+		# If any of these values seem bogus don't update.
+		if x < 0 or y < 0 or width < 0 or height < 0:
+			return
 
 		if self.mode == self.CONFIG_NEVER:
 			x = y = -1
