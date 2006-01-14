@@ -305,8 +305,9 @@ def get_abspath_for_script(scriptname, want_type = False):
 	else:
 		return path_to_script
 
-def get_pixbuf_from_data(file_data):
-	'''Gets image data and returns gtk.gdk.Pixbuf'''
+def get_pixbuf_from_data(file_data, want_type = False):
+	'''Gets image data and returns gtk.gdk.Pixbuf
+	if want_type is True it also returns 'jpeg', 'png' etc'''
 	pixbufloader = gtk.gdk.PixbufLoader()
 	try:
 		pixbufloader.write(file_data)
@@ -315,7 +316,11 @@ def get_pixbuf_from_data(file_data):
 	except gobject.GError: # 'unknown image format'
 		pixbuf = None
 
-	return pixbuf
+	if want_type:
+		typ = pixbufloader.get_format()['name']
+		return pixbuf, typ
+	else:
+		return pixbuf
 
 def get_invisible_cursor():
 	pixmap = gtk.gdk.Pixmap(None, 1, 1, 1)
