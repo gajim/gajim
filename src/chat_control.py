@@ -173,8 +173,8 @@ class ChatControlBase(MessageControl):
 			elif event.keyval == gtk.keysyms.u:
 				# emacs style clear line
 				self.clear(self.msg_textview) # clear message textview too
-		elif event.keyval == gtk.keysyms.e and \
-			(event.state & gtk.gdk.MOD1_MASK): # alt + E opens emoticons menu
+		elif event.keyval == gtk.keysyms.m and \
+			(event.state & gtk.gdk.MOD1_MASK): # alt + m opens emoticons menu
 			if gajim.config.get('useemoticons'):
 				msg_tv = self.msg_textview
 				def set_emoticons_menu_position(w, msg_tv = self.msg_textview):
