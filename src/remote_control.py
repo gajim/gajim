@@ -254,7 +254,7 @@ class SignalObject(DbusPrototype):
 		if connected_account:
 			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
-			win = gajim.interface.msg_win_mgr.get_window(jid].window
+			win = gajim.interface.msg_win_mgr.get_window(jid).window
 			if win.get_property('visible'):
 				win.window.focus()
 			return True
