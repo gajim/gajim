@@ -459,6 +459,19 @@ class ConversationTextview(gtk.TextView):
 			img.show()
 			#add with possible animation
 			self.add_child_at_anchor(img, anchor)
+		elif special_text.startswith('http://') or \
+			special_text.startswith('www.') or \
+			special_text.startswith('ftp://') or \
+			special_text.startswith('ftp.') or \
+			special_text.startswith('https://') or \
+			special_text.startswith('gopher://') or \
+			special_text.startswith('news://') or \
+			special_text.startswith('ed2k://') or \
+			special_text.startswith('irc://') or \
+			special_text.startswith('magnet:'):
+			#it's a url
+			tags.append('url')
+			use_other_tags = False
 		elif special_text.startswith('mailto:'):
 			#it's a mail
 			tags.append('mail')
