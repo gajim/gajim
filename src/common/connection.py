@@ -395,7 +395,7 @@ class Connection:
 				msgtxt, tim))
 		elif mtype == 'groupchat':
 			if subject:
-				self.dispatch('GC_SUBJECT', (frm, subject))
+				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt))
 			else:
 				if not msg.getTag('body'): #no <body>
 					return

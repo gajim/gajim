@@ -765,14 +765,18 @@ class Interface:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 
 	def handle_event_gc_subject(self, account, array):
-		#('GC_SUBJECT', account, (jid, subject))
+		#('GC_SUBJECT', account, (jid, subject, body))
 		jids = array[0].split('/', 1)
 		jid = jids[0]
 		gc_control = gajim.interface.msg_win_mgr.get_control(jid)
 		if not gc_control:
 			return
 		gc_control.set_subject(array[1])
-		if len(jids) > 1:
+		# We can receive a subject with a body that contains "X has set the subject to Y" ...
+		if array[2]:
+			gc_control.print_conversation(array[2])
+		# ... Or the message comes from the occupant who set the subject
+		elif len(jids) > 1:
 			gc_control.print_conversation('%s has set the subject to %s' % (jids[1], array[1]))
 
 	def handle_event_gc_config(self, account, array):
