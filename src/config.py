@@ -534,69 +534,12 @@ class PreferencesWindow:
 		gajim.interface.roster.change_roster_style(None)
 		gajim.interface.save_config()
 
-	# FIXME: Remove or implement for new window code
-	def merge_windows(self, kind):
-		for acct in gajim.connections:
-			# save buffers and close windows
-			buf1 = {}
-			buf2 = {}
-			saved_var = {}
-			windows = gajim.interface.instances[acct][kind]
-			jids = windows.keys()
-			for jid in jids:
-				window = windows[jid]
-				buf1[jid] = window.conversation_textviews[jid].get_buffer()
-				buf2[jid] = window.message_textviews[jid].get_buffer()
-				saved_var[jid] = window.save_var(jid)
-				window.window.destroy()
-			# open new tabbed chat windows
-			for jid in jids:
-				if kind == 'chats':
-					c = gajim.contacts.get_contact_with_highest_priority(acct, jid)
-					gajim.interface.roster.new_chat(c, acct)
-				if kind == 'gc':
-					gajim.interface.roster.new_room(jid, saved_var[jid]['nick'], acct)
-				window = windows[jid]
-				window.conversation_textviews[jid].set_buffer(buf1[jid])
-				window.message_textviews[jid].set_buffer(buf2[jid])
-				window.load_var(jid, saved_var[jid])
-
-	# FIXME: Remove or implement for new window code
-	def split_windows(self, kind):
-		for acct in gajim.connections:
-			# save buffers and close tabbed chat windows
-			buf1 = {}
-			buf2 = {}
-			saved_var = {}
-			windows = gajim.interface.instances[acct][kind]
-			jids = windows.keys()
-			if not 'tabbed' in jids:
-				continue
-			jids.remove('tabbed')
-			for jid in jids:
-				window = windows[jid]
-				buf1[jid] = window.conversation_textviews[jid].get_buffer()
-				buf2[jid] = window.message_textviews[jid].get_buffer()
-				saved_var[jid] = window.save_var(jid)
-			windows['tabbed'].window.destroy()
-			# open new tabbed chat windows
-			for jid in jids:
-				if kind == 'chats':
-					c = gajim.contacts.get_contact_with_highest_priority(acct, jid)
-					gajim.interface.roster.new_chat(c, acct)
-				if kind == 'gc':
-					gajim.interface.roster.new_room(jid, saved_var[jid]['nick'], acct)
-				window = windows[jid]
-				window.conversation_textviews[jid].set_buffer(buf1[jid])
-				window.message_textviews[jid].set_buffer(buf2[jid])
-				window.load_var(jid, saved_var[jid])
-
 	def on_one_window_type_combo_changed(self, widget):
 		active = widget.get_active()
 		config_type = common.config.opt_one_window_types[active]
 		gajim.config.set('one_message_window', config_type)
 		gajim.interface.save_config()
-		# FIXME: Update current windows? Meh
+		gajim.interface.msg_win_mgr.reconfig()
 
 	def apply_speller(self, kind):
 		for acct in gajim.connections:

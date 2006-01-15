@@ -409,8 +409,9 @@ class MessageWindow:
 
 	def _on_notebook_switch_page(self, notebook, page, page_num):
 		old_no = notebook.get_current_page()
-		old_ctrl = self._widget_to_control(notebook.get_nth_page(old_no))
-		old_ctrl.set_control_active(False)
+		if old_no >= 0:
+			old_ctrl = self._widget_to_control(notebook.get_nth_page(old_no))
+			old_ctrl.set_control_active(False)
 		
 		new_ctrl = self._widget_to_control(notebook.get_nth_page(page_num))
 		new_ctrl.set_control_active(True)
@@ -706,6 +707,7 @@ class MessageWindowMgr:
 		for w in self.windows():
 			self.save_state(w)
 			w.window.hide()
+			w.window.destroy()
 
 	def save_state(self, msg_win):
 		if not gajim.config.get('saveposition'):
@@ -746,3 +748,35 @@ class MessageWindowMgr:
 			gajim.config.set(pos_y_key, y)
 			gajim.config.set(size_width_key, width)
 			gajim.config.set(size_height_key, height)
+
+	def reconfig(self):
+		for w in self._windows.values():
+			self.save_state(w)
+		# Map the mode to a int constant for frequent compares
+		mode = gajim.config.get('one_message_window')
+		if self.mode == common.config.opt_one_window_types.index(mode):
+			# No change
+			return
+		self.mode = common.config.opt_one_window_types.index(mode)
+
+		controls = []
+		for w in self._windows.values():
+			w.window.hide()
+			while w.notebook.get_n_pages():
+				page = w.notebook.get_nth_page(0)
+				ctrl = w._widget_to_control(page)
+				w.notebook.remove_page(0)
+				page.unparent()
+				controls.append(ctrl)
+			w.window.destroy()
+
+		for k in self._windows.keys():
+			del self._windows[k]
+		self._windows = {}
+
+		for ctrl in controls:
+			mw = self.get_window(ctrl.contact.jid)
+			if not mw:
+				mw = self.create_window(ctrl.contact, ctrl.account, ctrl.type_id)
+			ctrl.parent_win = mw
+			mw.new_tab(ctrl)
