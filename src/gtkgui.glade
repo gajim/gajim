@@ -17976,7 +17976,7 @@ Status message</property>
 		      <child>
 			<widget class="GtkButton" id="emoticons_button">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Click to insert an emoticon (Alt+E)</property>
+			  <property name="tooltip" translatable="yes">Click to insert an emoticon (Alt+M)</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -18075,7 +18075,7 @@ Status message</property>
 				  <child>
 				    <widget class="GtkLabel" id="label372">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)">_Actions</property>
+				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Actions</property>
 				      <property name="use_underline">True</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -18181,7 +18181,7 @@ Status message</property>
 				  <child>
 				    <widget class="GtkLabel" id="label373">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)">_Send</property>
+				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Send</property>
 				      <property name="use_underline">True</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -18614,7 +18614,7 @@ topic</property>
 		      <child>
 			<widget class="GtkButton" id="emoticons_button">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Click to insert an emoticon (Alt+E)</property>
+			  <property name="tooltip" translatable="yes">Click to insert an emoticon (Alt+M)</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -18713,7 +18713,7 @@ topic</property>
 				  <child>
 				    <widget class="GtkLabel" id="label376">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)">_Actions</property>
+				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Actions</property>
 				      <property name="use_underline">True</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -18819,7 +18819,7 @@ topic</property>
 				  <child>
 				    <widget class="GtkLabel" id="label377">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not E/e (conflicts with Alt+E that is supposed to show the Emoticon Selector)">_Send</property>
+				      <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Send</property>
 				      <property name="use_underline">True</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
