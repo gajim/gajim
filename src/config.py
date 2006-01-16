@@ -1911,17 +1911,17 @@ class GroupchatConfigWindow(DataFormWindow):
 	def on_add_button_clicked(self, widget):
 		affiliation = self.get_active_affiliation()
 		if affiliation == 'outcast':
-			title = _('Banning ...')
-			prompt = _('Who do you want to ban ? (jid, domain, ...)')
+			title = _('Banning...')
+			prompt = _('Whom do you want to ban? (JID, domain, ...)')
 		elif affiliation == 'member':
-			title = _('Becoming member')
-			prompt = _('Who do you want to make a member ? (jid, domain, ...)')
+			title = _('Adding Member')
+			prompt = _('Whom do you want to make a member? (JID, domain, ...)')
 		elif affiliation == 'owner':
-			title = _('Becoming owner')
-			prompt = _('Who do you want to make a owner ? (jid, domain, ...)')
+			title = _('Adding Owner')
+			prompt = _('Whom do you want to make a owner? (JID, domain, ...)')
 		else:
-			title = _('Becoming administrator')
-			prompt = _('Who do you want to make an administrator ? (jid, domain, ...)')
+			title = _('Adding Administrator')
+			prompt = _('Whom do you want to make an administrator? (JID, domain, ...)')
 			
 		instance = dialogs.InputDialog(title, prompt)
 		response = instance.get_response()
