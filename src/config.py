@@ -1853,7 +1853,7 @@ class GroupchatConfigWindow(DataFormWindow):
 		hbox = gtk.HBox(spacing = 5)
 		add_on_vbox.pack_start(hbox, False)
 		
-		label = gtk.Label('Edit affiliation list:')
+		label = gtk.Label(_('Edit affiliation list:'))
 		hbox.pack_start(label, False)
 		
 		liststore = gtk.ListStore(str, str)
@@ -1866,7 +1866,8 @@ class GroupchatConfigWindow(DataFormWindow):
 		liststore.append((_('Member List'), 'member'))
 		liststore.append((_('Owner List'), 'owner'))
 		liststore.append((_('Admin List'), 'admin'))
-		self.affiliation_combobox.connect('changed', self.on_affiliation_combobox_changed)
+		self.affiliation_combobox.connect('changed',
+			self.on_affiliation_combobox_changed)
 		hbox.pack_start(self.affiliation_combobox, False)
 
 		liststore = gtk.ListStore(str)
@@ -1876,10 +1877,10 @@ class GroupchatConfigWindow(DataFormWindow):
 		col = gtk.TreeViewColumn(_('JID'), renderer)
 		col.add_attribute(renderer, 'text', 0)
 		self.affiliation_treeview.append_column(col)
-		sc = gtk.ScrolledWindow()
-		sc.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
-		sc.add(self.affiliation_treeview)
-		add_on_vbox.pack_start(sc)
+		sw = gtk.ScrolledWindow()
+		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
+		sw.add(self.affiliation_treeview)
+		add_on_vbox.pack_start(sw)
 		
 		add_on_vbox.show_all()
 
