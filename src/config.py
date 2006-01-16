@@ -1871,7 +1871,7 @@ class GroupchatConfigWindow(DataFormWindow):
 
 		liststore = gtk.ListStore(str)
 		self.affiliation_treeview = gtk.TreeView(liststore)
-		self.affiliation_treeview.set_header_visible(False)
+		self.affiliation_treeview.set_headers_visible(False)
 		renderer = gtk.CellRendererText()
 		col = gtk.TreeViewColumn(_('JID'), renderer)
 		col.add_attribute(renderer, 'text', 0)
