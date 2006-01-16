@@ -523,21 +523,6 @@ class GroupchatControl(ChatControlBase):
 		# tooltip must always hold ALL the subject
 		self.subject_tooltip.set_tip(event_box, self.subject)
 
-	def save_var(self):
-		return {
-			'nick': self.nick,
-			'model': self.list_treeview.get_model(),
-			'subject': self.subject,
-		}
-
-	def load_var(self, var):
-		self.list_treeview.set_model(var['model'])
-		self.list_treeviewexpand_all()
-		self.set_subject(var['subject'])
-		self.subject= var['subject']
-		if gajim.gc_connected[self.account][self.room_jid]:
-			self.got_connected()
-
 	def got_connected(self):
 		gajim.gc_connected[self.account][self.room_jid] = True
 		self.msg_textview.set_sensitive(True)

@@ -738,13 +738,6 @@ class ChatControl(ChatControlBase):
 		if self.show_bigger_avatar_timeout_id is not None:
 			gobject.source_remove(self.show_bigger_avatar_timeout_id)
 
-	def save_var(self):
-		gpg_enabled = self.xml.get_widget('gpg_togglebutton').get_active()
-		return {'gpg_enabled': gpg_enabled}
-
-	def load_var(self, var):
-		self.xml.get_widget('gpg_togglebutton').set_active(var['gpg_enabled'])
-
 	def _on_window_motion_notify(self, widget, event):
 		'''it gets called no matter if it is the active window or not'''
 		if self.parent_win.get_active_jid() == self.contact.jid:

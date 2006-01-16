@@ -107,14 +107,6 @@ class MessageControl:
 		# NOTE: Derived classes MAY implement this
 		self.compact_view_current = state
 
-	def save_var(self):
-		'''When called, the derived type should serialize it's state in the form of a
-		name/value (i.e. dict) result.
-		the return value must be compatible with wthe one given to load_var'''
-		pass # Derived classes SHOULD implement this
-	def load_var(self, var):
-		pass # Derived classes SHOULD implement this
-
 	def get_specific_unread(self):
 		return 0
 
