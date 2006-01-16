@@ -1313,6 +1313,18 @@ class Connection:
 		dic = self.parse_data_form(node)
 		self.dispatch('GC_CONFIG', (self.get_full_jid(iq_obj), dic))
 
+	def _MucAdminCB(self, con, iq_obj):
+		gajim.log.debug('MucAdminCB')
+		items = iq_obj.getTag('query', namespace = common.xmpp.NS_MUC_ADMIN).getTags('item')
+		list = []
+		affiliation = ''
+		for item in items:
+			if item.has_attr('jid') and item.has_attr('affiliation'):
+				affiliation = item.getAttr('affiliation')
+				list.append(item.getAttr('jid'))
+
+		self.dispatch('GC_AFFILIATION', (self.get_full_jid(iq_obj), affiliation, list))
+
 	def _MucErrorCB(self, con, iq_obj):
 		gajim.log.debug('MucErrorCB')
 		jid = self.get_full_jid(iq_obj)
@@ -1740,6 +1752,8 @@ class Connection:
 			common.xmpp.NS_VERSION)
 		con.RegisterHandler('iq', self._MucOwnerCB, 'result',
 			common.xmpp.NS_MUC_OWNER)
+		con.RegisterHandler('iq', self._MucAdminCB, 'result',
+			common.xmpp.NS_MUC_ADMIN)
 		con.RegisterHandler('iq', self._getRosterCB, 'result',
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._PrivateCB, 'result',
@@ -2331,6 +2345,25 @@ class Connection:
 		item.setAttr('affiliation', affiliation)
 		if reason:
 			item.addChild(name = 'reason', payload = reason)
+		self.to_be_sent.append(iq)
+
+	def send_gc_affiliation_list(self, room_jid, affiliation, list):
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS = \
+			common.xmpp.NS_MUC_ADMIN)
+		item = iq.getTag('query')
+		for jid in list:
+			item.addChild('item', {'jid': jid, 'affiliation': affiliation})
+		self.to_be_sent.append(iq)
+	
+	def get_affiliation_list(self, room_jid, affiliation):
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ = 'get', to = room_jid, queryNS = \
+			common.xmpp.NS_MUC_ADMIN)
+		item = iq.getTag('query').setTag('item')
+		item.setAttr('affiliation', affiliation)
 		self.to_be_sent.append(iq)
 
 	def build_data_from_dict(self, query, config):

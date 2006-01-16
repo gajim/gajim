@@ -229,7 +229,7 @@ class PreferencesWindow:
 		self.xml.get_widget('status_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
 		
-        #Color for hyperlinks
+		#Color for hyperlinks
 		colSt = gajim.config.get('urlmsgcolor')
 		self.xml.get_widget('url_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
@@ -1092,7 +1092,7 @@ class AccountModificationWindow:
 		name = self.xml.get_widget('name_entry').get_text().decode('utf-8')
 		if gajim.connections.has_key(self.account):
 			if name != self.account and \
-			   gajim.connections[self.account].connected != 0:
+				gajim.connections[self.account].connected != 0:
 				dialogs.ErrorDialog(_('You are currently connected to the server'),
 		_('To change the account name, you must be disconnected.')).get_response()
 				return
@@ -1842,6 +1842,78 @@ class ServiceRegistrationWindow(DataFormWindow):
 			self.xml.signal_autoconnect(self)
 			self.window.show_all()
 
+class GroupchatConfigWindow(DataFormWindow):
+	'''GroupchatConfigWindow class'''
+	def __init__(self, account, room_jid, config):
+		DataFormWindow.__init__(self, account, config)
+		self.room_jid = room_jid
+
+		# Draw the edit affiliation list things		
+		add_on_vbox = self.xml.get_widget('add_on_vbox')
+		hbox = gtk.HBox(spacing = 5)
+		add_on_vbox.pack_start(hbox, False)
+		
+		label = gtk.Label('Edit affiliation list:')
+		hbox.pack_start(label, False)
+		
+		liststore = gtk.ListStore(str, str)
+		self.affiliation_combobox = gtk.ComboBox(liststore)
+		cell = gtk.CellRendererText()
+		self.affiliation_combobox.pack_start(cell, True)
+		self.affiliation_combobox.add_attribute(cell, 'text', 0)
+		liststore.append(('', ''))
+		liststore.append((_('Ban List'), 'outcast'))
+		liststore.append((_('Member List'), 'member'))
+		liststore.append((_('Owner List'), 'owner'))
+		liststore.append((_('Admin List'), 'admin'))
+		self.affiliation_combobox.connect('changed', self.on_affiliation_combobox_changed)
+		hbox.pack_start(self.affiliation_combobox, False)
+
+		liststore = gtk.ListStore(str)
+		self.affiliation_treeview = gtk.TreeView(liststore)
+		self.affiliation_treeview.set_header_visible(False)
+		renderer = gtk.CellRendererText()
+		col = gtk.TreeViewColumn(_('JID'), renderer)
+		col.add_attribute(renderer, 'text', 0)
+		self.affiliation_treeview.append_column(col)
+		sc = gtk.ScrolledWindow()
+		sc.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
+		sc.add(self.affiliation_treeview)
+		add_on_vbox.pack_start(sc)
+		
+		add_on_vbox.show_all()
+
+	def get_active_affiliation(self):
+		model = self.affiliation_combobox.get_model()
+		active_iter = self.affiliation_combobox.get_active()
+		if active_iter < 0:
+			return None
+		return model[active_iter][1]
+
+	def on_affiliation_combobox_changed(self, combobox):
+		tv = self.affiliation_treeview
+		tv.get_model().clear()
+
+		affiliation = self.get_active_affiliation()
+		if affiliation:
+			gajim.connections[self.account].get_affiliation_list(self.room_jid,
+				affiliation)
+
+	def affiliation_list_received(self, affiliation, list):
+		'''Fill the affiliation treeview'''
+		if affiliation != self.get_active_affiliation():
+			return
+		tv = self.affiliation_treeview
+		model = tv.get_model()
+		for jid in list:
+			model.append((jid,))
+
+	def on_data_form_window_destroy(self, widget):
+		del gajim.interface.instances[self.account]['gc_config'][self.room_jid]
+
+	def on_apply_button_clicked(self, widget):
+		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
+		self.window.destroy()
 
 #---------- ManageEmoticonsWindow class -------------#
 class ManageEmoticonsWindow:
@@ -2034,19 +2106,6 @@ class ManageEmoticonsWindow:
 	def on_emoticons_treeview_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Delete:
 			self.on_button_remove_emoticon_clicked(widget)
-
-class GroupchatConfigWindow(DataFormWindow):
-	'''GroupchatConfigWindow class'''
-	def __init__(self, account, room_jid, config):
-		DataFormWindow.__init__(self, account, config)
-		self.room_jid = room_jid
-
-	def on_data_form_window_destroy(self, widget):
-		del gajim.interface.instances[self.account]['gc_config'][self.room_jid]
-
-	def on_apply_button_clicked(self, widget):
-		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
-		self.window.destroy()
 
 #---------- RemoveAccountWindow class -------------#
 class RemoveAccountWindow:

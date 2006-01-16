@@ -785,7 +785,14 @@ class Interface:
 		if not self.instances[account]['gc_config'].has_key(jid):
 			self.instances[account]['gc_config'][jid] = \
 			config.GroupchatConfigWindow(account, jid, array[1])
-	
+
+	def handle_event_gc_affiliation(self, account, array):
+		#('GC_AFFILIATION', account, (room_jid, affiliation, list)) list is list
+		room_jid = array[0]
+		if self.instances[account]['gc_config'].has_key(room_jid):
+			self.instances[account]['gc_config'][room_jid].affiliation_list_received(
+				array[1], array[2])
+
 	def handle_event_gc_invitation(self, account, array):
 		#('GC_INVITATION', (room_jid, jid_from, reason, password))
 		dialogs.InvitationReceivedDialog(account, array[0], array[1],
@@ -1245,6 +1252,7 @@ class Interface:
 			'GC_SUBJECT': self.handle_event_gc_subject,
 			'GC_CONFIG': self.handle_event_gc_config,
 			'GC_INVITATION': self.handle_event_gc_invitation,
+			'GC_AFFILIATION': self.handle_event_gc_affiliation,
 			'BAD_PASSPHRASE': self.handle_event_bad_passphrase,
 			'ROSTER_INFO': self.handle_event_roster_info,
 			'BOOKMARKS': self.handle_event_bookmarks,
