@@ -1020,7 +1020,8 @@ class GroupchatControl(ChatControlBase):
 		else:
 			excludes = gajim.config.get('noconfirm_close_muc_rooms')
 			excludes = excludes.split(' ')
-			if self.room_jid not in excludes:
+			if gajim.gc_connected[self.account][self.room_jid] and \
+					self.room_jid not in excludes:
 				pritext = _('Are you sure you want to leave room "%s"?') % self.name
 				sectext = _('If you close this window, you will be disconnected '
 						'from this room.')
