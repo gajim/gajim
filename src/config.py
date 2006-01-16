@@ -1852,10 +1852,10 @@ class GroupchatConfigWindow(DataFormWindow):
 		add_on_vbox = self.xml.get_widget('add_on_vbox')
 		hbox = gtk.HBox(spacing = 5)
 		add_on_vbox.pack_start(hbox, False)
-		
+
 		label = gtk.Label(_('Edit affiliation list:'))
 		hbox.pack_start(label, False)
-		
+
 		liststore = gtk.ListStore(str, str)
 		self.affiliation_combobox = gtk.ComboBox(liststore)
 		cell = gtk.CellRendererText()
@@ -1870,9 +1870,26 @@ class GroupchatConfigWindow(DataFormWindow):
 			self.on_affiliation_combobox_changed)
 		hbox.pack_start(self.affiliation_combobox, False)
 
+		bb = gtk.HButtonBox()
+		bb.set_layout(gtk.BUTTONBOX_END)
+		bb.set_spacing(5)
+		hbox.pack_start(bb)
+		self.add_button = gtk.Button(stock = gtk.STOCK_ADD)
+		self.add_button.set_sensitive(False)
+		self.add_button.connect('clicked', self.on_add_button_clicked)
+		bb.pack_start(self.add_button)
+		self.remove_button = gtk.Button(stock = gtk.STOCK_REMOVE)
+		self.remove_button.set_sensitive(False)
+		self.remove_button.connect('clicked', self.on_remove_button_clicked)
+		bb.pack_start(self.remove_button)
+		save_button = gtk.Button(stock = gtk.STOCK_SAVE)
+		save_button.connect('clicked', self.on_save_button_clicked)
+		bb.pack_start(save_button)
+
 		liststore = gtk.ListStore(str)
 		self.affiliation_treeview = gtk.TreeView(liststore)
 		self.affiliation_treeview.set_headers_visible(False)
+		self.affiliation_treeview.connect('cursor-changed', self.on_affiliation_treeview_cursor_changed)
 		renderer = gtk.CellRendererText()
 		col = gtk.TreeViewColumn(_('JID'), renderer)
 		col.add_attribute(renderer, 'text', 0)
@@ -1881,8 +1898,8 @@ class GroupchatConfigWindow(DataFormWindow):
 		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
 		sw.add(self.affiliation_treeview)
 		add_on_vbox.pack_start(sw)
-		
-		add_on_vbox.show_all()
+
+		add_on_vbox.show_all() 
 
 	def get_active_affiliation(self):
 		model = self.affiliation_combobox.get_model()
@@ -1891,9 +1908,59 @@ class GroupchatConfigWindow(DataFormWindow):
 			return None
 		return model[active_iter][1]
 
+	def on_add_button_clicked(self, widget):
+		affiliation = self.get_active_affiliation()
+		if affiliation == 'outcast':
+			title = _('Banning ...')
+			prompt = _('Who do you want to ban ? (jid, domain, ...)')
+		elif affiliation == 'member':
+			title = _('Becoming member')
+			prompt = _('Who do you want to make a member ? (jid, domain, ...)')
+		elif affiliation == 'owner':
+			title = _('Becoming owner')
+			prompt = _('Who do you want to make a owner ? (jid, domain, ...)')
+		else:
+			title = _('Becoming administrator')
+			prompt = _('Who do you want to make an administrator ? (jid, domain, ...)')
+			
+		instance = dialogs.InputDialog(title, prompt)
+		response = instance.get_response()
+		if response != gtk.RESPONSE_OK:
+			return
+		jid = instance.input_entry.get_text().decode('utf-8')
+		if not jid:
+			return
+		model = self.affiliation_treeview.get_model()
+		model.append((jid,))
+
+	def on_remove_button_clicked(self, widget):
+		model, iter = self.affiliation_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		model.remove(iter)
+		self.remove_button.set_sensitive(False)
+
+	def	on_save_button_clicked(self, widget):
+		affiliation = self.get_active_affiliation()
+		if not affiliation:
+			return
+		list = []
+		model = self.affiliation_treeview.get_model()
+		iter = model.get_iter_first()
+		while iter:
+			list.append(model[iter][0])
+			iter = model.iter_next(iter)
+		gajim.connections[self.account].send_gc_affiliation_list(self.room_jid,
+				affiliation, list)
+
+	def on_affiliation_treeview_cursor_changed(self, widget):
+		self.remove_button.set_sensitive(True)
+
 	def on_affiliation_combobox_changed(self, combobox):
 		tv = self.affiliation_treeview
 		tv.get_model().clear()
+		self.add_button.set_sensitive(False)
+		self.remove_button.set_sensitive(False)
 
 		affiliation = self.get_active_affiliation()
 		if affiliation:
@@ -1902,8 +1969,12 @@ class GroupchatConfigWindow(DataFormWindow):
 
 	def affiliation_list_received(self, affiliation, list):
 		'''Fill the affiliation treeview'''
+		if not affiliation and self.get_active_affiliation():
+			# Empty list
+			self.add_button.set_sensitive(True)
 		if affiliation != self.get_active_affiliation():
 			return
+		self.add_button.set_sensitive(True)
 		tv = self.affiliation_treeview
 		model = tv.get_model()
 		for jid in list:
