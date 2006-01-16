@@ -1853,7 +1853,7 @@ class GroupchatConfigWindow(DataFormWindow):
 		hbox = gtk.HBox(spacing = 5)
 		add_on_vbox.pack_start(hbox, False)
 
-		label = gtk.Label(_('Edit affiliation list:'))
+		label = gtk.Label(_('Affiliations:'))
 		hbox.pack_start(label, False)
 
 		liststore = gtk.ListStore(str, str)
