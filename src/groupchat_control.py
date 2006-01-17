@@ -1001,7 +1001,6 @@ class GroupchatControl(ChatControlBase):
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
 			nick = instance.input_entry.get_text().decode('utf-8')
-			self.nick = nick
 			gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
 
 	def shutdown(self):
