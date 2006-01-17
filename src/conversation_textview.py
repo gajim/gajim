@@ -34,6 +34,7 @@ import dialogs
 from common import gajim
 from common import helpers
 from common import i18n
+from calendar import timegm
 
 _ = i18n._
 APP = i18n.APP
@@ -560,13 +561,8 @@ class ConversationTextview(gtk.TextView):
 		if gajim.config.get('print_time') == 'always':
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
-			msg_day = time.strftime('%j', tim)
-			day = time.strftime('%j')
-			diff_day = 0
-			while day != msg_day:
-				diff_day += 1
-				before_tim = time.localtime(time.time()-24*3600*diff_day)
-				day = time.strftime('%j', before_tim)
+			# get difference in days since epoch
+			diff_day = int(timegm(time.localtime()))/86400 - int(timegm(tim))/86400
 			if diff_day == 0:
 				day_str = ''
 			elif diff_day == 1:
