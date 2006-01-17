@@ -185,8 +185,7 @@ class OptionsParser:
 		for account in gajim.config.get_per('accounts'):
 			proxies = gajim.config.get_per('accounts', account,
 				'file_transfer_proxies')
-			for new in ('proxy.netlab.cz', 'proxy65.jabber.ccc.de',
-				'proxy65.unstable.nl'):
+			for new in ('proxy.netlab.cz', 'proxy65.jabber.ccc.de'):
 				if proxies.find(new) < 0:
 					proxies += ', ' + new
 			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
@@ -201,5 +200,6 @@ class OptionsParser:
 		gajim.config.set('version', '0.9')
 
 	def update_config_09_to_010(self):
-		if self.old_values.has_key('usetabbedchat') and not self.old_valuse['usetabbedchat']:
+		if self.old_values.has_key('usetabbedchat') and not self.old_values['usetabbedchat']:
 			gajim.config.set('one_message_window', 'never')
+
