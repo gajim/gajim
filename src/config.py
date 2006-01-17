@@ -1847,70 +1847,55 @@ class GroupchatConfigWindow(DataFormWindow):
 	def __init__(self, account, room_jid, config):
 		DataFormWindow.__init__(self, account, config)
 		self.room_jid = room_jid
-		self.removed_jid = []
+		self.remove_button = {}
+		self.affiliation_treeview = {}
+		self.removed_jid = {}
+		ui_list = {'outcast': _('Ban List'),
+			'member': _('Member List'),
+			'owner': _('Owner List'),
+			'admin':_('Administrator List')}
 
 		# Draw the edit affiliation list things		
 		add_on_vbox = self.xml.get_widget('add_on_vbox')
-		hbox = gtk.HBox(spacing = 5)
-		add_on_vbox.pack_start(hbox, False)
+		
+		for affiliation in ('outcast', 'member', 'owner', 'admin'):
+			self.removed_jid[affiliation] = []
+			hbox = gtk.HBox(spacing = 5)
+			add_on_vbox.pack_start(hbox, False)
 
-		label = gtk.Label(_('Affiliations:'))
-		hbox.pack_start(label, False)
+			label = gtk.Label(ui_list[affiliation])
+			hbox.pack_start(label, False)
 
-		liststore = gtk.ListStore(str, str)
-		self.affiliation_combobox = gtk.ComboBox(liststore)
-		cell = gtk.CellRendererText()
-		self.affiliation_combobox.pack_start(cell, True)
-		self.affiliation_combobox.add_attribute(cell, 'text', 0)
-		liststore.append(('', ''))
-		liststore.append((_('Ban List'), 'outcast'))
-		liststore.append((_('Member List'), 'member'))
-		liststore.append((_('Owner List'), 'owner'))
-		liststore.append((_('Admin List'), 'admin'))
-		self.affiliation_combobox.connect('changed',
-			self.on_affiliation_combobox_changed)
-		hbox.pack_start(self.affiliation_combobox, False)
+			bb = gtk.HButtonBox()
+			bb.set_layout(gtk.BUTTONBOX_END)
+			bb.set_spacing(5)
+			hbox.pack_start(bb)
+			add_button = gtk.Button(stock = gtk.STOCK_ADD)
+			add_button.connect('clicked', self.on_add_button_clicked, affiliation)
+			bb.pack_start(add_button)
+			self.remove_button[affiliation] = gtk.Button(stock = gtk.STOCK_REMOVE)
+			self.remove_button[affiliation].set_sensitive(False)
+			self.remove_button[affiliation].connect('clicked', self.on_remove_button_clicked, affiliation)
+			bb.pack_start(self.remove_button[affiliation])
 
-		bb = gtk.HButtonBox()
-		bb.set_layout(gtk.BUTTONBOX_END)
-		bb.set_spacing(5)
-		hbox.pack_start(bb)
-		self.add_button = gtk.Button(stock = gtk.STOCK_ADD)
-		self.add_button.set_sensitive(False)
-		self.add_button.connect('clicked', self.on_add_button_clicked)
-		bb.pack_start(self.add_button)
-		self.remove_button = gtk.Button(stock = gtk.STOCK_REMOVE)
-		self.remove_button.set_sensitive(False)
-		self.remove_button.connect('clicked', self.on_remove_button_clicked)
-		bb.pack_start(self.remove_button)
-		save_button = gtk.Button(stock = gtk.STOCK_SAVE)
-		save_button.connect('clicked', self.on_save_button_clicked)
-		bb.pack_start(save_button)
-
-		liststore = gtk.ListStore(str)
-		self.affiliation_treeview = gtk.TreeView(liststore)
-		self.affiliation_treeview.set_headers_visible(False)
-		self.affiliation_treeview.connect('cursor-changed', self.on_affiliation_treeview_cursor_changed)
-		renderer = gtk.CellRendererText()
-		col = gtk.TreeViewColumn(_('JID'), renderer)
-		col.add_attribute(renderer, 'text', 0)
-		self.affiliation_treeview.append_column(col)
-		sw = gtk.ScrolledWindow()
-		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
-		sw.add(self.affiliation_treeview)
-		add_on_vbox.pack_start(sw)
+			liststore = gtk.ListStore(str)
+			self.affiliation_treeview[affiliation] = gtk.TreeView(liststore)
+			self.affiliation_treeview[affiliation].set_headers_visible(False)
+			self.affiliation_treeview[affiliation].connect('cursor-changed', self.on_affiliation_treeview_cursor_changed, affiliation)
+			renderer = gtk.CellRendererText()
+			col = gtk.TreeViewColumn(_('JID'), renderer)
+			col.add_attribute(renderer, 'text', 0)
+			self.affiliation_treeview[affiliation].append_column(col)
+			sw = gtk.ScrolledWindow()
+			sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
+			sw.add(self.affiliation_treeview[affiliation])
+			add_on_vbox.pack_start(sw)
+			gajim.connections[self.account].get_affiliation_list(self.room_jid,
+				affiliation)
 
 		add_on_vbox.show_all() 
 
-	def get_active_affiliation(self):
-		model = self.affiliation_combobox.get_model()
-		active_iter = self.affiliation_combobox.get_active()
-		if active_iter < 0:
-			return None
-		return model[active_iter][1]
-
-	def on_add_button_clicked(self, widget):
-		affiliation = self.get_active_affiliation()
+	def on_add_button_clicked(self, widget, affiliation):
 		if affiliation == 'outcast':
 			title = _('Banning...')
 			prompt = _('Whom do you want to ban? (JID, domain, ...)')
@@ -1931,59 +1916,29 @@ class GroupchatConfigWindow(DataFormWindow):
 		jid = instance.input_entry.get_text().decode('utf-8')
 		if not jid:
 			return
-		model = self.affiliation_treeview.get_model()
+		model = self.affiliation_treeview[affiliation].get_model()
 		model.append((jid,))
-		if jid in self.removed_jid:
-			self.removed_jid.remove(jid)
+		if jid in self.removed_jid[affiliation]:
+			self.removed_jid[affiliation].remove(jid)
 
-	def on_remove_button_clicked(self, widget):
-		model, iter = self.affiliation_treeview.get_selection().get_selected()
+	def on_remove_button_clicked(self, widget, affiliation):
+		model, iter = self.affiliation_treeview[affiliation].get_selection()\
+			.get_selected()
 		if not iter:
 			return
 		jid = model[iter][0]
 		model.remove(iter)
-		self.removed_jid.append(jid)
-		self.remove_button.set_sensitive(False)
+		self.removed_jid[affiliation].append(jid)
+		self.remove_button[affiliation].set_sensitive(False)
 
-	def on_save_button_clicked(self, widget):
-		affiliation = self.get_active_affiliation()
-		if not affiliation:
-			return
-		list = {}
-		model = self.affiliation_treeview.get_model()
-		iter = model.get_iter_first()
-		while iter:
-			list[model[iter][0]] = affiliation
-			iter = model.iter_next(iter)
-		for jid in self.removed_jid:
-			list[jid] = 'none'
-		gajim.connections[self.account].send_gc_affiliation_list(self.room_jid,
-				list)
-
-	def on_affiliation_treeview_cursor_changed(self, widget):
-		self.remove_button.set_sensitive(True)
-
-	def on_affiliation_combobox_changed(self, combobox):
-		tv = self.affiliation_treeview
-		tv.get_model().clear()
-		self.add_button.set_sensitive(False)
-		self.remove_button.set_sensitive(False)
-		self.removed_jid = []
-
-		affiliation = self.get_active_affiliation()
-		if affiliation:
-			gajim.connections[self.account].get_affiliation_list(self.room_jid,
-				affiliation)
+	def on_affiliation_treeview_cursor_changed(self, widget, affiliation):
+		self.remove_button[affiliation].set_sensitive(True)
 
 	def affiliation_list_received(self, affiliation, list):
 		'''Fill the affiliation treeview'''
-		if not affiliation and self.get_active_affiliation():
-			# Empty list
-			self.add_button.set_sensitive(True)
-		if affiliation != self.get_active_affiliation():
+		if not affiliation:
 			return
-		self.add_button.set_sensitive(True)
-		tv = self.affiliation_treeview
+		tv = self.affiliation_treeview[affiliation]
 		model = tv.get_model()
 		for jid in list:
 			model.append((jid,))
@@ -1993,6 +1948,17 @@ class GroupchatConfigWindow(DataFormWindow):
 
 	def on_apply_button_clicked(self, widget):
 		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
+		for affiliation in ('outcast', 'member', 'owner', 'admin'):
+			list = {}
+			model = self.affiliation_treeview[affiliation].get_model()
+			iter = model.get_iter_first()
+			while iter:
+				list[model[iter][0]] = affiliation
+				iter = model.iter_next(iter)
+			for jid in self.removed_jid[affiliation]:
+				list[jid] = 'none'
+			gajim.connections[self.account].send_gc_affiliation_list(self.room_jid,
+				list)
 		self.window.destroy()
 
 #---------- ManageEmoticonsWindow class -------------#
