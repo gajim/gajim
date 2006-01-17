@@ -840,7 +840,7 @@ class Interface:
 
 	def save_avatar_files(self, jid, photo_decoded):
 		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
-		path_to_file = os.path.join(gajim.AVATARPATH, jid)
+		path_to_file = os.path.join(gajim.AVATAR_PATH, jid)
 		pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo_decoded,
 			want_type = True)
 		if typ in ('jpeg', 'png'):
