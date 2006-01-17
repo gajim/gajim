@@ -74,7 +74,7 @@ def create_log_db():
 def check_and_possibly_create_paths():
 	LOG_DB_PATH = logger.LOG_DB_PATH
 	VCARDPATH = gajim.VCARDPATH
-	AVATAR_PATH = gajim.AVATARPATH
+	AVATAR_PATH = gajim.AVATAR_PATH
 	dot_gajim = os.path.dirname(VCARDPATH)
 	if os.path.isfile(dot_gajim):
 		print _('%s is file but it should be a directory') % dot_gajim
