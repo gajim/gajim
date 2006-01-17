@@ -340,14 +340,32 @@ class Connection:
 			else:
 				self.dispatch('VCARD', vcard)
 
-	def _gMailCB(self, con, gm):
+	def _gMailNewMailCB(self, con, gm):
 		"""Called when we get notified of new mail messages in gmail account"""
 		if not gm.getTag('new-mail'):
 			return
 		if gm.getTag('new-mail').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
+			# we'll now ask the server for the exact number of new messages
 			jid = gajim.get_jid_from_account(self.name)
-			gajim.log.debug(('Notifying user of new gmail e-mail on %s.') % (jid))
-			self.dispatch('GMAIL_NOTIFY', jid)
+			gajim.log.debug(('Got notification of new gmail e-mail on %s. Asking the server for more info.') % (jid))
+			iq = common.xmpp.Iq(typ = 'get')
+			iq.setAttr('id', '13')
+			query = iq.setTag('query')
+			query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
+			self.to_be_sent.append(iq)
+			raise common.xmpp.NodeProcessed
+		
+	def _gMailQueryCB(self, con, gm):
+		"""Called when we receive results from Querying the server for mail messages in gmail account"""
+		if not gm.getTag('mailbox'):
+			return
+		if gm.getTag('mailbox').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
+			newmsgs = gm.getTag('mailbox').getAttr('total-matched')
+			if newmsgs != '0':
+				# there are new messages
+				jid = gajim.get_jid_from_account(self.name)
+				gajim.log.debug(('User has %s new gmail e-mails on %s.') % (newmsgs, jid))
+				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs))
 			raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
@@ -1769,7 +1787,9 @@ class Connection:
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',
 			common.xmpp.NS_HTTP_AUTH)
-		con.RegisterHandler('iq', self._gMailCB, 'set',
+		con.RegisterHandler('iq', self._gMailNewMailCB, 'set',
+			common.xmpp.NS_GMAILNOTIFY)
+		con.RegisterHandler('iq', self._gMailQueryCB, 'result',
 			common.xmpp.NS_GMAILNOTIFY)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)

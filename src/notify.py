@@ -48,14 +48,14 @@ if dbus_support.supported:
 		import dbus.service
 
 def notify(event_type, jid, account, msg_type = '', file_props = None,
-	path_to_image = None):
+	path_to_image = None, gmail_new_messages = None):
 	'''Notifies a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
 	the older style PopupNotificationWindow method.'''
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
 			DesktopNotification(event_type, jid, account, msg_type, file_props,
-				path_to_image)
+				path_to_image, gmail_new_messages)
 			return
 		except dbus.dbus_bindings.DBusException, e:
 			# Connection to D-Bus failed, try popup
@@ -64,7 +64,7 @@ def notify(event_type, jid, account, msg_type = '', file_props = None,
 			# This means that we sent the message incorrectly
 			gajim.log.debug(str(e))
 	instance = dialogs.PopupNotificationWindow(event_type, jid, account,
-		msg_type, file_props)
+		msg_type, file_props, gmail_new_messages)
 	gajim.interface.roster.popup_notification_windows.append(instance)
 
 class NotificationResponseManager:
@@ -102,7 +102,7 @@ class DesktopNotification:
 	'''A DesktopNotification that interfaces with DBus via the Desktop
 	Notification specification'''
 	def __init__(self, event_type, jid, account, msg_type = '',
-		file_props = None, path_to_image = None):
+		file_props = None, path_to_image = None, gmail_new_messages = None):
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
@@ -197,7 +197,8 @@ class DesktopNotification:
 			else:
 				txt = ''
 		elif event_type == _('New E-mail'):
-			txt = _('You have new E-mail on %s.') % (jid)
+			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
+			txt = _('%(new_mail_gajim_ui_msg)s on %(gmail_mail_address)s') % {'new_mail_gajim_ui_msg': text, 'gmail_mail_address': jid}
 			ntype = 'gmail.notify'
 			img = 'single_msg_recv.png' #FIXME: find a better image
 		else:

@@ -834,9 +834,11 @@ class Interface:
 			notify.notify(_('File Transfer Error'),
 				jid, account, 'file-send-error', file_props)
 
-	def handle_event_gmail_notify(self, account, jid):
+	def handle_event_gmail_notify(self, account, array):
+		jid = array[0]
+		newmsgs = array[1]
 		if gajim.config.get('notify_on_new_gmail_email'):
-			notify.notify(_('New E-mail'), jid, account)
+			notify.notify(_('New E-mail'), jid, account, 'gmail', gmail_new_messages = int(newmsgs))
 
 	def save_avatar_files(self, jid, photo_decoded):
 		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
@@ -1328,6 +1330,12 @@ class Interface:
 			ev = gajim.get_first_event(account, jid, typ)
 			# Open the window
 			self.roster.open_event(account, jid, ev)
+		elif typ == message_control.TYPE_GMAIL:
+			if gajim.config.get_per('accounts', account, 'savepass'):
+				url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') % (gajim.config.get_per('accounts', account, 'name'),gajim.config.get_per('accounts', account, 'password'))
+			else:
+				url = ('http://mail.google.com/')
+			helpers.launch_browser_mailer('url', url)
 		if w:
 			w.set_active_tab(jid)
 			w.window.present()

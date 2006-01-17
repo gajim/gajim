@@ -859,7 +859,7 @@ _('Without a connection, you can not change your password.')).get_response()
 
 
 class PopupNotificationWindow:
-	def __init__(self, event_type, jid, account, msg_type = '', file_props = None):
+	def __init__(self, event_type, jid, account, msg_type = '', file_props = None, gmail_new_messages = None):
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
@@ -947,7 +947,8 @@ class PopupNotificationWindow:
 			dodgerblue = gtk.gdk.color_parse('dodgerblue')
 			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
-			txt = _('You have new E-mail on %s.') % (jid)
+			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
+			txt = _('%(new_mail_gajim_ui_msg)s on %(gmail_mail_address)s') % {'new_mail_gajim_ui_msg': text, 'gmail_mail_address': jid}
 			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
