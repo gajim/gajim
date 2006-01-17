@@ -847,7 +847,7 @@ class Interface:
 			path_to_original_file = path_to_file + '.' + typ
 			pixbuf.save(path_to_original_file, typ)
 		else:
-			gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. skipping avatar of %s') % jid
+			gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. skipping avatar of %s' % jid)
 		# Generate and save the resized, color avatar
 		path_to_normal_file = path_to_file + '_notf_size_colored.png'
 		pixbuf = gtkgui_helpers.get_scaled_pixbuf(
