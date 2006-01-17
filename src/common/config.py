@@ -168,6 +168,8 @@ class Config:
 		'chat_avatar_height': [opt_int, 52],
 		'roster_avatar_width': [opt_int, 32],
 		'roster_avatar_height': [opt_int, 32],
+		'notification_avatar_width': [opt_int, 48],
+		'notification_avatar_height': [opt_int, 48],
 		'muc_highlight_words': [opt_str, '', _('A semicolon-separated list of words that will be highlighted in multi-user chat.')],
 		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used.')],
 		'set_xmpp://_handler_everytime': [opt_bool, False, _('If True, Gajim registers for xmpp:// on each startup.')],

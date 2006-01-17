@@ -74,6 +74,7 @@ def create_log_db():
 def check_and_possibly_create_paths():
 	LOG_DB_PATH = logger.LOG_DB_PATH
 	VCARDPATH = gajim.VCARDPATH
+	AVATARPATH = gajim.AVATARPATH
 	dot_gajim = os.path.dirname(VCARDPATH)
 	if os.path.isfile(dot_gajim):
 		print _('%s is file but it should be a directory') % dot_gajim
@@ -89,6 +90,14 @@ def check_and_possibly_create_paths():
 			os.mkdir(VCARDPATH, 0700)
 		elif os.path.isfile(VCARDPATH):
 			print _('%s is file but it should be a directory') % VCARDPATH
+			print _('Gajim will now exit')
+			sys.exit()
+			
+		if not os.path.exists(AVATARPATH):
+			print _('creating %s directory') % AVATARPATH
+			os.mkdir(AVATARPATH, 0700)
+		elif os.path.isfile(AVATARPATH):
+			print _('%s is file but it should be a directory') % AVATARPATH
 			print _('Gajim will now exit')
 			sys.exit()
 		

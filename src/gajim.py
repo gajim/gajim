@@ -360,22 +360,8 @@ class Interface:
 						# we're online or chat
 						show_notification = True
 					if show_notification:
-						avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
-							jid)
-						if avatar_pixbuf in (None, 'ask'):
-							path_to_file = None
-						else:
-							avatar_pixbuf = gtkgui_helpers.get_scaled_pixbuf(
-								avatar_pixbuf, 'roster')
-							path_to_file = os.path.join(gajim.TMP, jid + '.png')
-							if not os.path.exists(path_to_file):
-								try:
-									avatar_pixbuf.save(path_to_file, 'png')
-								except gobject.GError, e:
-									path_to_file = None
-
 						notify.notify(_('Contact Signed In'), jid, account,
-							path_to_image = path_to_file)
+							path_to_image = None)
 
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactPresence',
@@ -395,24 +381,8 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
-							jid)
-						if avatar_pixbuf in (None, 'ask'):
-							path_to_file = None
-						else:
-							avatar_pixbuf = gtkgui_helpers.get_scaled_pixbuf(
-								avatar_pixbuf, 'roster')
-							path_to_file = os.path.join(gajim.TMP, jid + '_BW.png')
-							if not os.path.exists(path_to_file):
-								try:
-									avatar_pixbuf = gtkgui_helpers.make_pixbuf_grayscale(
-										avatar_pixbuf)
-									avatar_pixbuf.save(path_to_file, 'png')
-								except gobject.GError, e:
-									path_to_file = None
-
 						notify.notify(_('Contact Signed Out'), jid, account,
-							path_to_image = path_to_file)
+							path_to_image = None)
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactAbsence', (account, array))
 				# FIXME: stop non active file transfers
@@ -863,10 +833,31 @@ class Interface:
 		if gajim.show_notification(account):
 			notify.notify(_('File Transfer Error'),
 				jid, account, 'file-send-error', file_props)
-				
+
 	def handle_event_gmail_notify(self, account, jid):
 		if gajim.config.get('notify_on_new_gmail_email'):
 			notify.notify(_('New E-mail'), jid, account)
+
+	def save_avatar_files(self, jid, photo_decoded):
+		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
+		path_to_file = os.path.join(gajim.AVATARPATH, jid)
+		pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo_decoded,
+			want_type = True)
+		if typ in ('jpeg', 'png'):
+			path_to_original_file = path_to_file + '.' + typ
+			pixbuf.save(path_to_original_file, typ)
+		else:
+			gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. skipping avatar of %s') % jid
+		# Generate and save the resized, color avatar
+		path_to_normal_file = path_to_file + '_notf_size_colored.png'
+		pixbuf = gtkgui_helpers.get_scaled_pixbuf(
+			gtkgui_helpers.get_pixbuf_from_data(photo_decoded), 'notification')
+		pixbuf.save(path_to_normal_file, 'png')
+		# Generate and save the resized, black and white avatar
+		path_to_bw_file = path_to_file + '_notf_size_bw.png'
+		bwbuf = gtkgui_helpers.get_scaled_pixbuf(
+			gtkgui_helpers.make_pixbuf_grayscale(pixbuf), 'notification')
+		bwbuf.save(path_to_bw_file, 'png')
 
 	def add_event(self, account, jid, typ, args):
 		'''add an event to the awaiting_events var'''

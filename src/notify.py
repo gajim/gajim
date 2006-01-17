@@ -123,16 +123,18 @@ class DesktopNotification:
 			prefix = 'jabber'
 
 		if event_type == _('Contact Signed In'):
-			if path_to_image is None:
+			path_to_file = os.path.join(gajim.AVATARPATH, jid) + '_notf_size_colored.png'
+			if not os.path.exists(path_to_file):
 				img = prefix + '_online.png'
 			else:
-				img = path_to_image
+				img = path_to_file
 			ntype = 'presence.online'
 		elif event_type == _('Contact Signed Out'):
-			if path_to_image is None:
+			path_to_file = os.path.join(gajim.AVATARPATH, jid) + '_notf_size_bw.png'
+			if not os.path.exists(path_to_file):
 				img = prefix + '_offline.png'
 			else:
-				img = path_to_image
+				img = path_to_file
 			ntype = 'presence.offline'
 		elif event_type in (_('New Message'), _('New Single Message'),
 			_('New Private Message')):

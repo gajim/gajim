@@ -288,6 +288,7 @@ class Connection:
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			vcard = self.node_to_dict(card)
+			photo_decoded = None
 			if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
 			vcard['PHOTO'].has_key('BINVAL'):
 				photo = vcard['PHOTO']['BINVAL']
@@ -309,6 +310,9 @@ class Connection:
 			fil = open(path_to_file, 'w')
 			fil.write(str(card))
 			fil.close()
+			# Save the decoded avatar to a separate file too, and generate files for dbus notifications
+			if photo_decoded:
+				gajim.interface.save_avatar_files(frm, photo_decoded)
 
 			vcard['jid'] = frm
 			vcard['resource'] = resource

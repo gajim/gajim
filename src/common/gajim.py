@@ -53,21 +53,25 @@ if os.name == 'nt':
 		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
 		VCARDPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
 		TMP = os.path.join(os.environ['tmp'], 'Gajim')
+		AVATARPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Avatars')
 	except KeyError:
 		# win9x, in cwd
 		LOGPATH = 'Logs' # deprecated
 		VCARDPATH = 'Vcards'
 		TMP = 'temporary files'
+		AVATARPATH = 'Avatars'
 else: # Unices
 	DATA_DIR = '../data'
 	LOGPATH = os.path.expanduser('~/.gajim/logs') # deprecated
 	VCARDPATH = os.path.expanduser('~/.gajim/vcards')
 	TMP = '/tmp'
+	AVATARPATH = os.path.expanduser('~/.gajim/avatars')
 
 try:
 	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
 	VCARDPATH = VCARDPATH.decode(sys.getfilesystemencoding())
 	TMP = TMP.decode(sys.getfilesystemencoding())
+	AVATARPATH = AVATARPATH.decode(sys.getfilesystemencoding())
 except:
 	pass
 

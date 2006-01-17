@@ -413,7 +413,7 @@ def _get_fade_color(treeview, selected, focused):
 
 def get_scaled_pixbuf(pixbuf, type):
 	'''returns scaled pixbuf, keeping ratio etc
-	type is either "chat" or "roster"'''
+	type is either "chat" or "roster" or "notification"'''
 	
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)
