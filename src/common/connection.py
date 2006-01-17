@@ -299,11 +299,6 @@ class Connection:
 
 			if avatar_sha:
 				card.getTag('PHOTO').setTagData('SHA', avatar_sha)
-			if frm != our_jid:
-				if avatar_sha:
-					self.vcard_shas[frm] = avatar_sha
-				elif self.vcard_shas.has_key(frm):
-					del self.vcard_shas[frm]
 
 			# Save it to file
 			path_to_file = os.path.join(gajim.VCARDPATH, frm)
@@ -312,7 +307,17 @@ class Connection:
 			fil.close()
 			# Save the decoded avatar to a separate file too, and generate files for dbus notifications
 			if photo_decoded:
-				gajim.interface.save_avatar_files(frm, photo_decoded)
+				if frm == our_jid and avatar_sha != self.vcard_sha:
+					gajim.interface.save_avatar_files(frm, photo_decoded)
+				elif frm != our_jid and (not self.vcard_shas.has_key(frm) or \
+					avatar_sha != self.vcard_shas[frm]):
+					gajim.interface.save_avatar_files(frm, photo_decoded)
+
+			if frm != our_jid:
+				if avatar_sha:
+					self.vcard_shas[frm] = avatar_sha
+				elif self.vcard_shas.has_key(frm):
+					del self.vcard_shas[frm]
 
 			vcard['jid'] = frm
 			vcard['resource'] = resource
