@@ -1847,6 +1847,7 @@ class GroupchatConfigWindow(DataFormWindow):
 	def __init__(self, account, room_jid, config):
 		DataFormWindow.__init__(self, account, config)
 		self.room_jid = room_jid
+		self.removed_jid = []
 
 		# Draw the edit affiliation list things		
 		add_on_vbox = self.xml.get_widget('add_on_vbox')
@@ -1932,26 +1933,32 @@ class GroupchatConfigWindow(DataFormWindow):
 			return
 		model = self.affiliation_treeview.get_model()
 		model.append((jid,))
+		if jid in self.removed_jid:
+			self.removed_jid.remove(jid)
 
 	def on_remove_button_clicked(self, widget):
 		model, iter = self.affiliation_treeview.get_selection().get_selected()
 		if not iter:
 			return
+		jid = model[iter][0]
 		model.remove(iter)
+		self.removed_jid.append(jid)
 		self.remove_button.set_sensitive(False)
 
-	def	on_save_button_clicked(self, widget):
+	def on_save_button_clicked(self, widget):
 		affiliation = self.get_active_affiliation()
 		if not affiliation:
 			return
-		list = []
+		list = {}
 		model = self.affiliation_treeview.get_model()
 		iter = model.get_iter_first()
 		while iter:
-			list.append(model[iter][0])
+			list[model[iter][0]] = affiliation
 			iter = model.iter_next(iter)
+		for jid in self.removed_jid:
+			list[jid] = 'none'
 		gajim.connections[self.account].send_gc_affiliation_list(self.room_jid,
-				affiliation, list)
+				list)
 
 	def on_affiliation_treeview_cursor_changed(self, widget):
 		self.remove_button.set_sensitive(True)
@@ -1961,6 +1968,7 @@ class GroupchatConfigWindow(DataFormWindow):
 		tv.get_model().clear()
 		self.add_button.set_sensitive(False)
 		self.remove_button.set_sensitive(False)
+		self.removed_jid = []
 
 		affiliation = self.get_active_affiliation()
 		if affiliation:

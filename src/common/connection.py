@@ -2347,14 +2347,14 @@ class Connection:
 			item.addChild(name = 'reason', payload = reason)
 		self.to_be_sent.append(iq)
 
-	def send_gc_affiliation_list(self, room_jid, affiliation, list):
+	def send_gc_affiliation_list(self, room_jid, list):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS = \
 			common.xmpp.NS_MUC_ADMIN)
 		item = iq.getTag('query')
 		for jid in list:
-			item.addChild('item', {'jid': jid, 'affiliation': affiliation})
+			item.addChild('item', {'jid': jid, 'affiliation': list[jid]})
 		self.to_be_sent.append(iq)
 	
 	def get_affiliation_list(self, room_jid, affiliation):
