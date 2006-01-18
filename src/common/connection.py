@@ -1345,12 +1345,20 @@ class Connection:
 	def _MucAdminCB(self, con, iq_obj):
 		gajim.log.debug('MucAdminCB')
 		items = iq_obj.getTag('query', namespace = common.xmpp.NS_MUC_ADMIN).getTags('item')
-		list = []
+		list = {}
 		affiliation = ''
 		for item in items:
 			if item.has_attr('jid') and item.has_attr('affiliation'):
+				jid = item.getAttr('jid')
 				affiliation = item.getAttr('affiliation')
-				list.append(item.getAttr('jid'))
+				list[jid] = {'affiliation': affiliation}
+				if item.has_attr('nick'):
+					list[jid]['nick'] = item.getAttr('nick')
+				if item.has_attr('role'):
+					list[jid]['role'] = item.getAttr('role')
+				reason = item.getTagData('reason')
+				if reason:
+					list[jid]['reason'] = reason
 
 		self.dispatch('GC_AFFILIATION', (self.get_full_jid(iq_obj), affiliation, list))
 
@@ -2385,7 +2393,10 @@ class Connection:
 			common.xmpp.NS_MUC_ADMIN)
 		item = iq.getTag('query')
 		for jid in list:
-			item.addChild('item', {'jid': jid, 'affiliation': list[jid]})
+			item_tag = item.addChild('item', {'jid': jid,
+				'affiliation': list[jid]['affiliation']})
+			if list[jid].has_key('reason') and list[jid]['reason']:
+				item_tag.setTagData('reason', list[jid]['reason'])
 		self.to_be_sent.append(iq)
 	
 	def get_affiliation_list(self, room_jid, affiliation):

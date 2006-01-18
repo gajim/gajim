@@ -1881,14 +1881,22 @@ class GroupchatConfigWindow(DataFormWindow):
 			self.remove_button[affiliation].connect('clicked', self.on_remove_button_clicked, affiliation)
 			bb.pack_start(self.remove_button[affiliation])
 
-			liststore = gtk.ListStore(str)
+			liststore = gtk.ListStore(str, str) # Jid, reason
 			self.affiliation_treeview[affiliation] = gtk.TreeView(liststore)
-			self.affiliation_treeview[affiliation].set_headers_visible(False)
 			self.affiliation_treeview[affiliation].connect('cursor-changed', self.on_affiliation_treeview_cursor_changed, affiliation)
 			renderer = gtk.CellRendererText()
 			col = gtk.TreeViewColumn(_('JID'), renderer)
 			col.add_attribute(renderer, 'text', 0)
 			self.affiliation_treeview[affiliation].append_column(col)
+
+			if affiliation == 'outcast':
+				renderer = gtk.CellRendererText()
+				renderer.set_property('editable', True)
+				renderer.connect('edited', self.on_cell_edited)
+				col = gtk.TreeViewColumn(_('Reason'), renderer)
+				col.add_attribute(renderer, 'text', 1)
+				self.affiliation_treeview[affiliation].append_column(col)
+
 			sw = gtk.ScrolledWindow()
 			sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
 			sw.add(self.affiliation_treeview[affiliation])
@@ -1897,6 +1905,12 @@ class GroupchatConfigWindow(DataFormWindow):
 				affiliation)
 
 		add_on_vbox.show_all() 
+
+	def on_cell_edited(self, cell, path, new_text):
+		model = self.affiliation_treeview['outcast'].get_model()
+		new_text = new_text.decode('utf-8')
+		iter = model.get_iter(path)
+		model[iter][1] = new_text
 
 	def on_add_button_clicked(self, widget, affiliation):
 		if affiliation == 'outcast':
@@ -1944,7 +1958,10 @@ class GroupchatConfigWindow(DataFormWindow):
 		tv = self.affiliation_treeview[affiliation]
 		model = tv.get_model()
 		for jid in list:
-			model.append((jid,))
+			reason = ''
+			if list[jid].has_key('reason'):
+				reason = list[jid]['reason']
+			model.append((jid,reason))
 
 	def on_data_form_window_destroy(self, widget):
 		del gajim.interface.instances[self.account]['gc_config'][self.room_jid]
@@ -1956,7 +1973,10 @@ class GroupchatConfigWindow(DataFormWindow):
 			model = self.affiliation_treeview[affiliation].get_model()
 			iter = model.get_iter_first()
 			while iter:
-				list[model[iter][0]] = affiliation
+				jid = model[iter][0].decode('utf-8')
+				list[jid] = {'affiliation': affiliation}
+				if affiliation == 'outcast':
+					list[jid]['reason'] = model[iter][1].decode('utf-8')
 				iter = model.iter_next(iter)
 			for jid in self.removed_jid[affiliation]:
 				list[jid] = 'none'
