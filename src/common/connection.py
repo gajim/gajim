@@ -366,7 +366,7 @@ class Connection:
 			if newmsgs != '0':
 				# there are new messages
 				jid = gajim.get_jid_from_account(self.name)
-				gajim.log.debug(('User has %s new gmail e-mails on %s.') % (newmsgs, jid))
+				gajim.log.debug(('You have %s new gmail e-mails on %s.') % (newmsgs, jid))
 				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs))
 			raise common.xmpp.NodeProcessed
 
