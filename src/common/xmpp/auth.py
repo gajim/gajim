@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: auth.py,v 1.33 2005/11/30 17:05:40 normanr Exp $
+# $Id: auth.py,v 1.35 2006/01/18 19:26:43 normanr Exp $
 
 """
 Provides library with all Non-SASL and SASL authentication mechanisms.
@@ -256,6 +256,51 @@ class Bind(PlugIn):
                 self.DEBUG('Session open failed.','error')
                 self.session=0
         elif resp: self.DEBUG('Binding failed: %s.'%resp.getTag('error'),'error')
+        else:
+            self.DEBUG('Binding failed: timeout expired.','error')
+            return ''
+
+class ComponentBind(PlugIn):
+    """ ComponentBind some JID to the current connection to allow router know of our location."""
+    def __init__(self):
+        PlugIn.__init__(self)
+        self.DBG_LINE='bind'
+        self.bound=None
+        self.needsUnregister=None
+
+    def plugin(self,owner):
+        """ Start resource binding, if allowed at this time. Used internally. """
+        if self._owner.Dispatcher.Stream.features:
+            try: self.FeaturesHandler(self._owner.Dispatcher,self._owner.Dispatcher.Stream.features)
+            except NodeProcessed: pass
+        else:
+            self._owner.RegisterHandler('features',self.FeaturesHandler,xmlns=NS_STREAMS)
+            self.needsUnregister=1
+
+    def plugout(self):
+        """ Remove ComponentBind handler from owner's dispatcher. Used internally. """
+        if self.needsUnregister:
+            self._owner.UnregisterHandler('features',self.FeaturesHandler,xmlns=NS_STREAMS)
+
+    def FeaturesHandler(self,conn,feats):
+        """ Determine if server supports resource binding and set some internal attributes accordingly. """
+        if not feats.getTag('bind',namespace=NS_BIND):
+            self.bound='failure'
+            self.DEBUG('Server does not requested binding.','error')
+            return
+        if feats.getTag('session',namespace=NS_SESSION): self.session=1
+        else: self.session=-1
+        self.bound=[]
+
+    def Bind(self,domain=None):
+        """ Perform binding. Use provided domain name (if not provided). """
+        while self.bound is None and self._owner.Process(1): pass
+        resp=self._owner.SendAndWaitForResponse(Protocol('bind',attrs={'name':domain},xmlns=NS_COMPONENT_1))
+        if resp and resp.getAttr('error'):
+            self.DEBUG('Binding failed: %s.'%resp.getAttr('error'),'error')
+        elif resp:
+            self.DEBUG('Successfully bound.','ok')
+            return 'ok'
         else:
             self.DEBUG('Binding failed: timeout expired.','error')
             return ''

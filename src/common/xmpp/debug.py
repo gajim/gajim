@@ -40,16 +40,16 @@ in this code
 
 
 import sys
+import traceback
 import time
 import os
 
 import types
 
-
-
-colornames = ['none', 'black', 'red', 'green', 'brown', 'blue', 'magenta',
-'cyan', 'light_gray', 'dark_gray', 'bright_red', 'bright_green', 'yellow',
-'bright_blue', 'purple', 'bright_cyan', 'white']
+if os.environ.has_key('TERM'):
+    colors_enabled=True
+else:
+    colors_enabled=False
 
 color_none         = chr(27) + "[0m"
 color_black        = chr(27) + "[30m"
@@ -69,11 +69,7 @@ color_purple       = chr(27) + "[35;1m"
 color_bright_cyan  = chr(27) + "[36;1m"
 color_white        = chr(27) + "[37;1m"
 
-if os.name == 'nt':
-    for colorname in colornames:
-        name = 'color_' + colorname
-        mod = compile("%s = ''" % name, 'gajim', 'exec')
-        eval(mod)
+
 """
 Define your flags in yor modules like this:
 
@@ -125,7 +121,7 @@ class Debug:
                   #
                   # active_flags are those that will trigger output
                   #
-                  active_flags = None, 
+                  active_flags = None,
                   #
                   # Log file should be file object or file namne
                   #
@@ -136,7 +132,7 @@ class Debug:
                   # with prefix = chr(27) + '[34m'
                   #      sufix = chr(27) + '[37;1m\n'
                   #
-                  prefix = 'DEBUG: ', 
+                  prefix = 'DEBUG: ',
                   sufix = '\n',
                   #
                   # If you want unix style timestamps, 
@@ -144,7 +140,7 @@ class Debug:
                   #  1 before prefix, good when prefix is a string
                   #  2 after prefix, good when prefix is a color
                   #
-                  time_stamp = 0,		  
+                  time_stamp = 0,
                   #
                   # flag_show should normaly be of, but can be turned on to get a
                   # good view of what flags are actually used for calls,
@@ -204,7 +200,7 @@ class Debug:
                 mod_name = ""
             self.show('Debug created for %s%s' % (caller.f_code.co_filename,
                                                    mod_name ))
-            self.show(' flags defined: %s' % ' '.join( self.active ))
+            self.show(' flags defined: %s' % ','.join( self.active ))
             
         if type(flag_show) in (type(''), type(None)):
             self.flag_show = flag_show
@@ -397,11 +393,18 @@ class Debug:
 
     colors={}
     def Show(self, flag, msg, prefix=''):
-        msg=msg.replace('\r','\\r').replace('\n','\\n')
-        if self.colors.has_key(prefix): msg=self.colors[prefix]+msg+color_none
+        msg=msg.replace('\r','\\r').replace('\n','\\n').replace('><','>\n  <')
+        if not colors_enabled: pass
+        elif self.colors.has_key(prefix): msg=self.colors[prefix]+msg+color_none
         else: msg=color_none+msg
-        if self.colors.has_key(flag): prefixcolor=self.colors[flag]
+        if not colors_enabled: prefixcolor=''
+        elif self.colors.has_key(flag): prefixcolor=self.colors[flag]
         else: prefixcolor=color_none
+        
+        if prefix=='error':
+            _exception = sys.exc_info()
+            if _exception[0]:
+                msg=msg+'\n'+''.join(traceback.format_exception(_exception[0], _exception[1], _exception[2])).rstrip()
         
         prefix= self.prefix+prefixcolor+(flag+' '*12)[:12]+' '+(prefix+' '*6)[:6]
         self.show(msg, flag, prefix)

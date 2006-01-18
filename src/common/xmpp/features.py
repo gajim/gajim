@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: features.py,v 1.20 2005/04/30 07:43:01 snakeru Exp $
+# $Id: features.py,v 1.22 2005/09/30 20:13:04 mikealbon Exp $
 
 """
 This module contains variable stuff that is not worth splitting into separate modules.
@@ -60,7 +60,7 @@ def discoverInfo(disp,jid,node=None):
     """ Query remote object about info that it publishes. Returns identities and features lists."""
     """ According to JEP-0030:
         query MAY have node attribute
-        identity: MUST HAVE category and type attributes and MAY HAVE name attribute.
+        identity: MUST HAVE category and name attributes and MAY HAVE type attribute.
         feature: MUST HAVE var attribute"""
     identities , features = [] , []
     for i in _discover(disp,NS_DISCO_INFO,jid,node):

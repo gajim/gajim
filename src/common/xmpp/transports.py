@@ -66,7 +66,7 @@ class error:
 
 class TCPsocket(PlugIn):
     """ This class defines direct TCP connection method. """
-    def __init__(self, server=None):
+    def __init__(self, server=None, use_srv=True):
         """ Cache connection point 'server'. 'server' is the tuple of (host, port)
             absolutely the same as standard tcp socket uses. """
         PlugIn.__init__(self)
@@ -165,12 +165,12 @@ class HTTPPROXYsocket(TCPsocket):
     """ HTTP (CONNECT) proxy connection class. Uses TCPsocket as the base class
         redefines only connect method. Allows to use HTTP proxies like squid with
         (optionally) simple authentication (using login and password). """
-    def __init__(self,proxy,server):
+    def __init__(self,proxy,server,use_srv=True):
         """ Caches proxy and target addresses.
             'proxy' argument is a dictionary with mandatory keys 'host' and 'port' (proxy address)
             and optional keys 'user' and 'password' to use for authentication.
             'server' argument is a tuple of host and port - just like TCPsocket uses. """
-        TCPsocket.__init__(self,server)
+        TCPsocket.__init__(self,server,use_srv)
         self.DBG_LINE=DBG_CONNECT_PROXY
         self._proxy=proxy
 
@@ -196,14 +196,23 @@ class HTTPPROXYsocket(TCPsocket):
             connector.append('Proxy-Authorization: Basic '+credentials)
         connector.append('\r\n')
         self.send('\r\n'.join(connector))
-        reply = self.receive().replace('\r','')
+        try: reply = self.receive().replace('\r','')
+        except IOError:
+            self.DEBUG('Proxy suddenly disconnected','error')
+            self._owner.disconnected()
+            return
         try: proto,code,desc=reply.split('\n')[0].split(' ',2)
         except: raise error('Invalid proxy reply')
         if code<>'200':
             self.DEBUG('Invalid proxy reply: %s %s %s'%(proto,code,desc),'error')
             self._owner.disconnected()
             return
-        while reply.find('\n\n') == -1: reply += self.receive().replace('\r','')
+        while reply.find('\n\n') == -1:
+            try: reply += self.receive().replace('\r','')
+            except IOError:
+                self.DEBUG('Proxy suddenly disconnected','error')
+                self._owner.disconnected()
+                return
         self.DEBUG("Authentification successfull. Jabber server contacted.",'ok')
         return 'ok'
 
@@ -247,8 +256,13 @@ class TLS(PlugIn):
         self._owner.Connection.send('<starttls xmlns="%s"/>'%NS_TLS)
         raise NodeProcessed
 
+    def pending_data(self,timeout=0):
+        """ Returns true if there possible is a data ready to be read. """
+        return self._tcpsock._seen_data or select.select([self._tcpsock._sock],[],[],timeout)[0]
+
     def _startSSL(self):
         """ Immidiatedly switch socket to TLS mode. Used internally."""
+        """ Here we should switch pending_data to hint mode."""
         tcpsock=self._owner.Connection
         tcpsock._sslObj    = socket.ssl(tcpsock._sock, None, None)
         tcpsock._sslIssuer = tcpsock._sslObj.issuer()

@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: dispatcher.py,v 1.35 2005/05/07 03:26:51 snakeru Exp $
+# $Id: dispatcher.py,v 1.40 2006/01/18 19:26:43 normanr Exp $
 
 """
 Main xmpppy mechanism. Provides library with methods to assign different handlers
@@ -115,18 +115,21 @@ class Dispatcher(PlugIn):
             Returns:
             1) length of processed data if some data were processed;
             2) '0' string if no data were processed but link is alive;
-            3) 0 (zero) if underlying connection is closed."""
+            3) 0 (zero) if underlying connection is closed.
+            Take note that in case of disconnection detect during Process() call
+            disconnect handlers are called automatically.
+        """
         for handler in self._cycleHandlers: handler(self)
         if len(self._pendingExceptions) > 0:
             _pendingException = self._pendingExceptions.pop()
             raise _pendingException[0], _pendingException[1], _pendingException[2]
         if self._owner.Connection.pending_data(timeout):
-            try: data=self._owner.Connection.receive()  
+            try: data=self._owner.Connection.receive()
             except IOError: return
             self.Stream.Parse(data)
             if len(self._pendingExceptions) > 0:
-  	             _pendingException = self._pendingExceptions.pop()
-  	             raise _pendingException[0], _pendingException[1], _pendingException[2]
+                _pendingException = self._pendingExceptions.pop()
+                raise _pendingException[0], _pendingException[1], _pendingException[2]
             return len(data)
         return '0'      # It means that nothing is received but link is alive.
         
@@ -234,12 +237,29 @@ class Dispatcher(PlugIn):
             3) data that comes along with event. Depends on event."""
         if self._eventHandler: self._eventHandler(realm,event,data)
 
-    def dispatch(self,stanza,session=None):
+    def dispatch(self,stanza,session=None,direct=0):
         """ Main procedure that performs XMPP stanza recognition and calling apppropriate handlers for it.
             Called internally. """
         if not session: session=self
         session.Stream._mini_dom=None
         name=stanza.getName()
+
+        if not direct and self._owner._component:
+            if name == 'route':
+                if stanza.getAttr('error') == None:
+                    if len(stanza.getChildren()) == 1:
+                        stanza = stanza.getChildren()[0]
+                        name=stanza.getName()
+                    else:
+                        for each in stanza.getChildren():
+                            self.dispatch(each,session,direct=1)
+                        return
+            elif name == 'presence':
+                return
+            elif name in ('features','bind'):
+                pass
+            else:
+                raise UnsupportedStanzaType(name)
 
         if name=='features': session.Stream.features=stanza
 
@@ -251,7 +271,7 @@ class Dispatcher(PlugIn):
             self.DEBUG("Unknown stanza: " + name,'warn')
             name='unknown'
         else:
-            self.DEBUG("Got %s stanza"%name, 'ok')
+            self.DEBUG("Got %s/%s stanza"%(xmlns,name), 'ok')
 
         if stanza.__class__.__name__=='Node': stanza=self.handlers[xmlns][name][type](node=stanza)
 
@@ -281,7 +301,6 @@ class Dispatcher(PlugIn):
                 try: cb(session,stanza,**args)
                 except Exception, typ:
                     if typ.__class__.__name__<>'NodeProcessed': raise
-                        
             else:
                 session.DEBUG("Expected stanza arrived!",'ok')
                 session._expected[ID]=stanza
@@ -344,6 +363,16 @@ class Dispatcher(PlugIn):
             stanza.setID(_ID)
         else: _ID=stanza.getID()
         if self._owner._registered_name and not stanza.getAttr('from'): stanza.setAttr('from',self._owner._registered_name)
+        if self._owner._component and stanza.getName()!='bind':
+            to=self._owner.Server
+            if stanza.getTo() and stanza.getTo().getDomain():
+                to=stanza.getTo().getDomain()
+            frm=stanza.getFrom()
+            if frm.getDomain():
+                frm=frm.getDomain()
+            route=Protocol('route',to=to,frm=frm,payload=[stanza])
+            stanza=route
+        stanza.setNamespace(self._owner.Namespace)
         stanza.setParent(self._metastream)
         self._owner_send(stanza)
         return _ID

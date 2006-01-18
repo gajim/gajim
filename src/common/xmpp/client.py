@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: client.py,v 1.35 2005/04/30 10:17:19 snakeru Exp $
+# $Id: client.py,v 1.52 2006/01/02 19:40:55 normanr Exp $
 
 """
 Provides PlugIn class functionality to develop extentions for xmpppy.
@@ -31,6 +31,7 @@ Debug.Debug.colors['nodebuilder']=debug.color_brown
 Debug.Debug.colors['client']=debug.color_cyan
 Debug.Debug.colors['component']=debug.color_cyan
 Debug.Debug.colors['dispatcher']=debug.color_green
+Debug.Debug.colors['browser']=debug.color_blue
 Debug.Debug.colors['auth']=debug.color_yellow
 Debug.Debug.colors['roster']=debug.color_magenta
 Debug.Debug.colors['ibb']=debug.color_yellow
@@ -111,6 +112,7 @@ class CommonClient:
         self._registered_name=None
         self.RegisterDisconnectHandler(self.DisconnectHandler)
         self.connected=''
+        self._component=0
 
     def RegisterDisconnectHandler(self,handler):
         """ Register handler that will be called on disconnect."""
@@ -147,6 +149,11 @@ class CommonClient:
         """ Example of reconnection method. In fact, it can be used to batch connection and auth as well. """
         handlerssave=self.Dispatcher.dumpHandlers()
         self.Dispatcher.PlugOut()
+        if self.__dict__.has_key('NonSASL'): self.NonSASL.PlugOut()
+        if self.__dict__.has_key('SASL'): self.SASL.PlugOut()
+        if self.__dict__.has_key('TLS'): self.TLS.PlugOut()
+        if self.__dict__.has_key('HTTPPROXYsocket'): self.HTTPPROXYsocket.PlugOut()
+        if self.__dict__.has_key('TCPsocket'): self.TCPsocket.PlugOut()
         if not self.connect(server=self._Server,proxy=self._Proxy): return
         if not self.auth(self._User,self._Password,self._Resource): return
         self.Dispatcher.restoreHandlers(handlerssave)
@@ -159,16 +166,20 @@ class CommonClient:
         if hasattr(self, 'Connection'):
             return self.Connection._sock.getsockname()
 
-    def connect(self,server=None,proxy=None, ssl=None):
-        """ Make a tcp/ip connection, protect it with tls/ssl if possible and start XMPP stream. """
+    def connect(self,server=None,proxy=None,ssl=None,use_srv=None):
+        """ Make a tcp/ip connection, protect it with tls/ssl if possible and start XMPP stream.
+            Returns None or 'tcp' or 'tls', depending on the result."""
         if not server: server=(self.Server,self.Port)
-        if proxy: connected=transports.HTTPPROXYsocket(proxy,server).PlugIn(self)
-        else: connected=transports.TCPsocket(server).PlugIn(self)
-        if not connected: return
+        if proxy: socket=transports.HTTPPROXYsocket(proxy,server,use_srv)
+        else: socket=transports.TCPsocket(server,use_srv)
+        connected=socket.PlugIn(self)
+        if not connected: 
+            socket.PlugOut()
+            return
         self._Server,self._Proxy=server,proxy
         self.connected='tcp'
         if (ssl is None and self.Connection.getPort() in (5223, 443)) or ssl:
-            try:
+            try:               # FIXME. This should be done in transports.py
                 transports.TLS().PlugIn(self,now=1)
                 self.connected='ssl'
             except socket.sslerror:
@@ -182,16 +193,16 @@ class CommonClient:
 
 class Client(CommonClient):
     """ Example client class, based on CommonClient. """
-    def connect(self,server=None,proxy=None,secure=None):
+    def connect(self,server=None,proxy=None,secure=None,use_srv=True):
         """ Connect to jabber server. If you want to specify different ip/port to connect to you can
-            pass it as tuple as first parameter. If there is HTTP proxy between you and server -
-            specify it's address and credentials (if needed) in the second argument
+            pass it as tuple as first parameter. If there is HTTP proxy between you and server 
+            specify it's address and credentials (if needed) in the second argument.
             If you want ssl/tls support to be discovered and enable automatically - leave third argument as None. (ssl will be autodetected only if port is 5223 or 443)
-            If you want to force SSL start (i.e. if port 5223 or 443 is remapped to some non-standard port) then set it to 1
-            If you want to disable tls/ssl support completely, set it to 0
+            If you want to force SSL start (i.e. if port 5223 or 443 is remapped to some non-standard port) then set it to 1.
+            If you want to disable tls/ssl support completely, set it to 0.
             Example: connect(('192.168.5.5',5222),{'host':'proxy.my.net','port':8080,'user':'me','password':'secret'})
-            Returns '' (on no connection) or 'tcp' or 'tls', depending on the result."""
-        if not CommonClient.connect(self,server,proxy,secure) or secure<>None and not secure: return self.connected
+            Returns '' or 'tcp' or 'tls', depending on the result."""
+        if not CommonClient.connect(self,server,proxy,secure,use_srv) or secure<>None and not secure: return self.connected
         transports.TLS().PlugIn(self)
         if not self.Dispatcher.Stream._document_attrs.has_key('version') or not self.Dispatcher.Stream._document_attrs['version']=='1.0': return self.connected
         while not self.Dispatcher.Stream.features and self.Process(): pass      # If we get version 1.0 stream the features tag MUST BE presented
@@ -247,19 +258,31 @@ class Client(CommonClient):
 
 class Component(CommonClient):
     """ Component class. The only difference from CommonClient is ability to perform component authentication. """
-    def __init__(self,server,port=5347,typ=None,debug=['always', 'nodebuilder']):
+    def __init__(self,server,port=5347,typ=None,debug=['always', 'nodebuilder'],domains=None,component=0):
         """ Init function for Components.
             As components use a different auth mechanism which includes the namespace of the component.
             Jabberd1.4 and Ejabberd use the default namespace then for all client messages.
-            Jabberd2 uses jabber:client."""
+            Jabberd2 uses jabber:client.
+            'server' argument is a server name that you are connecting to (f.e. "localhost").
+            'port' can be specified if 'server' resolves to correct IP. If it is not then you'll need to specify IP 
+            and port while calling "connect()"."""
         CommonClient.__init__(self,server,port=port,debug=debug)
         self.typ=typ
+        self.component=component
+        if domains:
+            self.domains=domains
+        else:
+            self.domains=[server]
     
     def connect(self,server=None,proxy=None):
         """ This will connect to the server, and if the features tag is found then set
-            the namespace to be jabber:client as that is required for jabberd2"""
+            the namespace to be jabber:client as that is required for jabberd2.
+            'server' and 'proxy' arguments have the same meaning as in xmpp.Client.connect() """
+        if self.component:
+            self.Namespace=auth.NS_COMPONENT_1
+            self.Server=server[0]
         CommonClient.connect(self,server=server,proxy=proxy)
-        if self.typ=='jabberd2' or not self.typ and self.Dispatcher.Stream.features != None:
+        if self.connected and (self.typ=='jabberd2' or not self.typ and self.Dispatcher.Stream.features != None):
                 self.defaultNamespace=auth.NS_CLIENT
                 self.Dispatcher.RegisterNamespace(self.defaultNamespace)
                 self.Dispatcher.RegisterProtocol('iq',dispatcher.Iq)
@@ -267,7 +290,32 @@ class Component(CommonClient):
                 self.Dispatcher.RegisterProtocol('presence',dispatcher.Presence)
         return self.connected
 
-    def auth(self,name,password,dup=None):
+    def auth(self,name,password,dup=None,sasl=0):
         """ Authenticate component "name" with password "password"."""
         self._User,self._Password,self._Resource=name,password,''
-        return auth.NonSASL(name,password,'').PlugIn(self)
+        try:
+            if self.component: sasl=1
+            if sasl: auth.SASL(name,password).PlugIn(self)
+            if not sasl or self.SASL.startsasl=='not-supported':
+                if auth.NonSASL(name,password,'').PlugIn(self):
+                    self.connected+='+old_auth'
+                    return 'old_auth'
+                return
+            self.SASL.auth()
+            while self.SASL.startsasl=='in-process' and self.Process(): pass
+            if self.SASL.startsasl=='success':
+                if self.component:
+                    self._component=self.component
+                    for domain in self.domains:
+                        auth.ComponentBind().PlugIn(self)
+                        while self.ComponentBind.bound is None: self.Process()
+                        if (not self.ComponentBind.Bind(domain)):
+                            self.ComponentBind.PlugOut()
+                            return
+                        self.ComponentBind.PlugOut()
+                self.connected+='+sasl'
+                return 'sasl'
+            else:
+                raise auth.NotAuthorized(self.SASL.startsasl)
+        except:
+            self.DEBUG(self.DBG,"Failed to authenticate %s"%name,'error')
