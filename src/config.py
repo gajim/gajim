@@ -1622,7 +1622,10 @@ class AccountsWindow:
 	def on_merge_checkbutton_toggled(self, widget):
 		gajim.config.set('mergeaccounts', widget.get_active())
 		gajim.interface.save_config()
-		gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
+		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
+			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
+		else:
+			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
 
 class DataFormWindow:
@@ -2219,6 +2222,10 @@ class RemoveAccountWindow:
 		del gajim.last_message_time[self.account]
 		del gajim.status_before_autoaway[self.account]
 		del gajim.events_for_ui[self.account]
+		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
+			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
+		else: 
+			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
@@ -2767,5 +2774,9 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
 		# refresh roster
+		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
+			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
+		else: 
+			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
 		gajim.interface.save_config()

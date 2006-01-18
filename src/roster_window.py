@@ -2631,6 +2631,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.service_disco_handler_id = False
 		self.new_message_menuitem_handler_id = False
 		self.regroup = gajim.config.get('mergeaccounts')
+		if len(gajim.connections) < 2: # Do not merge accounts if only one exists
+			self.regroup = False
 		#FIXME: When list_accel_closures will be wrapped in pygtk
 		# no need of this variable
 		self.have_new_message_accel = False # Is the "Ctrl+N" shown ?
