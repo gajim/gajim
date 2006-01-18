@@ -562,9 +562,9 @@ class ConversationTextview(gtk.TextView):
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
 			# get difference in days since epoch (86400 = 24*3600)
-			no_of_days_since_epoch = int(timegm(time.localtime())) / 86400 # for GMT time
-			no_of_days_since_epoch_for_msg = int(timegm(tim)) / 86400 # for GMT time
-			diff_day = no_of_days_since_epoch - no_of_days_since_epoch_for_msg
+			# number of days since epoch for current time (in GMT) -
+			# number of days since epoch for message (in GMT)
+			diff_day = int(timegm(time.localtime())) / 86400 - int(timegm(tim)) / 86400
 			if diff_day == 0:
 				day_str = ''
 			elif diff_day == 1:
