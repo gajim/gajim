@@ -1421,6 +1421,23 @@ class Connection:
 
 			# Get bookmarks from private namespace
 			self.get_bookmarks()
+			
+			# If it's a gmail account, inform the server that we want e-mail notifications
+			if our_jid.split('@')[1] == 'gmail.com':
+				gajim.log.debug(('%s is a gmail account. Setting option to get e-mail notifications on the server.') % (our_jid))
+				iq = common.xmpp.Iq(typ = 'set', to = our_jid)
+				iq.setAttr('id', 'MailNotify')
+				query = iq.setTag('usersetting')
+				query.setNamespace(common.xmpp.NS_GTALKSETTING)
+				query = query.setTag('mailnotifications')
+				query.setAttr('value', 'true')
+				self.to_be_sent.append(iq)
+				# Ask how many messages there are now
+				iq = common.xmpp.Iq(typ = 'get')
+				iq.setAttr('id', '13')
+				query = iq.setTag('query')
+				query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
+				self.to_be_sent.append(iq)
 
 			#Inform GUI we just signed in
 			self.dispatch('SIGNED_IN', ())

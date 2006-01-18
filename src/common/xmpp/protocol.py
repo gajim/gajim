@@ -87,6 +87,7 @@ NS_TLS          ='urn:ietf:params:xml:ns:xmpp-tls'
 NS_VACATION     ='http://jabber.org/protocol/vacation'
 NS_VCARD        ='vcard-temp'
 NS_GMAILNOTIFY  ='google:mail:notify'
+NS_GTALKSETTING ='google:setting'
 NS_VCARD_UPDATE =NS_VCARD+':x:update'
 NS_VERSION      ='jabber:iq:version'
 NS_WAITINGLIST  ='http://jabber.org/protocol/waitinglist'               # JEP-0130
