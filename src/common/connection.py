@@ -307,9 +307,11 @@ class Connection:
 			fil.close()
 			# Save the decoded avatar to a separate file too, and generate files for dbus notifications
 			if photo_decoded:
+				avatar_file = os.path.join(gajim.AVATAR_PATH, frm + '_notif_size_colored.png')
 				if frm == our_jid and avatar_sha != self.vcard_sha:
 					gajim.interface.save_avatar_files(frm, photo_decoded)
-				elif frm != our_jid and (not self.vcard_shas.has_key(frm) or \
+				elif frm != our_jid and (not os.path.exists(avatar_file) or \
+					not self.vcard_shas.has_key(frm) or \
 					avatar_sha != self.vcard_shas[frm]):
 					gajim.interface.save_avatar_files(frm, photo_decoded)
 
