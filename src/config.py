@@ -1881,7 +1881,7 @@ class GroupchatConfigWindow(DataFormWindow):
 			self.remove_button[affiliation].connect('clicked', self.on_remove_button_clicked, affiliation)
 			bb.pack_start(self.remove_button[affiliation])
 
-			liststore = gtk.ListStore(str, str) # Jid, reason
+			liststore = gtk.ListStore(str, str, str, str) # Jid, reason, nick, role
 			self.affiliation_treeview[affiliation] = gtk.TreeView(liststore)
 			self.affiliation_treeview[affiliation].connect('cursor-changed', self.on_affiliation_treeview_cursor_changed, affiliation)
 			renderer = gtk.CellRendererText()
@@ -1895,6 +1895,15 @@ class GroupchatConfigWindow(DataFormWindow):
 				renderer.connect('edited', self.on_cell_edited)
 				col = gtk.TreeViewColumn(_('Reason'), renderer)
 				col.add_attribute(renderer, 'text', 1)
+				self.affiliation_treeview[affiliation].append_column(col)
+			elif affiliation == 'member':
+				renderer = gtk.CellRendererText()
+				col = gtk.TreeViewColumn(_('Nick'), renderer)
+				col.add_attribute(renderer, 'text', 2)
+				self.affiliation_treeview[affiliation].append_column(col)
+				renderer = gtk.CellRendererText()
+				col = gtk.TreeViewColumn(_('Role'), renderer)
+				col.add_attribute(renderer, 'text', 3)
 				self.affiliation_treeview[affiliation].append_column(col)
 
 			sw = gtk.ScrolledWindow()
@@ -1934,7 +1943,7 @@ class GroupchatConfigWindow(DataFormWindow):
 		if not jid:
 			return
 		model = self.affiliation_treeview[affiliation].get_model()
-		model.append((jid,))
+		model.append((jid,'', '', ''))
 		if jid in self.removed_jid[affiliation]:
 			self.removed_jid[affiliation].remove(jid)
 
@@ -1961,7 +1970,13 @@ class GroupchatConfigWindow(DataFormWindow):
 			reason = ''
 			if list[jid].has_key('reason'):
 				reason = list[jid]['reason']
-			model.append((jid,reason))
+			nick = ''
+			if list[jid].has_key('nick'):
+				nick = list[jid]['nick']
+			role = ''
+			if list[jid].has_key('role'):
+				role = list[jid]['role']
+			model.append((jid,reason, nick, role))
 
 	def on_data_form_window_destroy(self, widget):
 		del gajim.interface.instances[self.account]['gc_config'][self.room_jid]
