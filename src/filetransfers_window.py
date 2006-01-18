@@ -266,7 +266,11 @@ _('Connection with peer cannot be established.'))
 				file_dir = None
 				files_path_list = dialog.get_filenames()
 				for file_path in files_path_list:
-					file_path = file_path.decode('utf8')
+					# decode as UTF-8 under win
+					if os.name == 'nt':
+						file_path = file_path.decode('utf8')
+					else:
+						file_path = file_path.decode(sys.getfilesystemencoding())
 					if self.send_file(account, contact, file_path) and file_dir is None:
 						file_dir = os.path.dirname(file_path)
 				if file_dir:
