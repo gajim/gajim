@@ -164,7 +164,7 @@ def get_os_info():
 	return 'N/A'
 
 class Connection:
-	"""Connection class"""
+	'''Connection class'''
 	def __init__(self, name):
 		self.name = name
 		self.connected = 0 # offline
@@ -273,8 +273,8 @@ class Connection:
 		return dict
 
 	def _vCardCB(self, con, vc):
-		"""Called when we receive a vCard
-		Parse the vCard and send it to plugins"""
+		'''Called when we receive a vCard
+		Parse the vCard and send it to plugins'''
 		if not vc.getTag('vCard'):
 			return
 		frm_iq = vc.getFrom()
@@ -343,13 +343,13 @@ class Connection:
 				self.dispatch('VCARD', vcard)
 
 	def _gMailNewMailCB(self, con, gm):
-		"""Called when we get notified of new mail messages in gmail account"""
+		'''Called when we get notified of new mail messages in gmail account'''
 		if not gm.getTag('new-mail'):
 			return
 		if gm.getTag('new-mail').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
 			# we'll now ask the server for the exact number of new messages
 			jid = gajim.get_jid_from_account(self.name)
-			gajim.log.debug(('Got notification of new gmail e-mail on %s. Asking the server for more info.') % (jid))
+			gajim.log.debug('Got notification of new gmail e-mail on %s. Asking the server for more info.' % jid) 
 			iq = common.xmpp.Iq(typ = 'get')
 			iq.setAttr('id', '13')
 			query = iq.setTag('query')
@@ -358,7 +358,7 @@ class Connection:
 			raise common.xmpp.NodeProcessed
 		
 	def _gMailQueryCB(self, con, gm):
-		"""Called when we receive results from Querying the server for mail messages in gmail account"""
+		'''Called when we receive results from Querying the server for mail messages in gmail account'''
 		if not gm.getTag('mailbox'):
 			return
 		if gm.getTag('mailbox').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
@@ -371,7 +371,7 @@ class Connection:
 			raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
-		"""Called when we receive a message"""
+		'''Called when we receive a message'''
 		msgtxt = msg.getBody()
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
@@ -456,7 +456,7 @@ class Connection:
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
-		"""Called when we receive a presence"""
+		'''Called when we receive a presence'''
 		ptype = prs.getType()
 		if ptype == 'available':
 			ptype = None
@@ -591,7 +591,7 @@ class Connection:
 	# END presenceCB
 
 	def _disconnectedCB(self):
-		"""Called when we are disconnected"""
+		'''Called when we are disconnected'''
 		gajim.log.debug('disconnectedCB')
 		if not self.connection:
 			return
@@ -636,7 +636,7 @@ class Connection:
 			self.retrycount = 0
 
 	def _disconnectedReconnCB(self):
-		"""Called when we are disconnected"""
+		'''Called when we are disconnected'''
 		gajim.log.debug('disconnectedReconnCB')
 		if not self.connection:
 			return
@@ -1629,11 +1629,11 @@ class Connection:
 		return h
 
 	def connect(self, data = None):
-		"""Connect and authenticate to the Jabber server
+		'''Connect and authenticate to the Jabber server
 		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')
 		data MUST contain name, hostname, resource, usessl, proxy,
 		use_custom_host, custom_host (if use_custom_host), custom_port (if
-		use_custom_host), """
+		use_custom_host), '''
 		if self.connection:
 			return self.connection, ''
 
