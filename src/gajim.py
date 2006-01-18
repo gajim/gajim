@@ -851,12 +851,12 @@ class Interface:
 		else:
 			gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. skipping avatar of %s' % jid)
 		# Generate and save the resized, color avatar
-		path_to_normal_file = path_to_file + '_notf_size_colored.png'
+		path_to_normal_file = path_to_file + '_notif_size_colored.png'
 		pixbuf = gtkgui_helpers.get_scaled_pixbuf(
 			gtkgui_helpers.get_pixbuf_from_data(photo_decoded), 'notification')
 		pixbuf.save(path_to_normal_file, 'png')
 		# Generate and save the resized, black and white avatar
-		path_to_bw_file = path_to_file + '_notf_size_bw.png'
+		path_to_bw_file = path_to_file + '_notif_size_bw.png'
 		bwbuf = gtkgui_helpers.get_scaled_pixbuf(
 			gtkgui_helpers.make_pixbuf_grayscale(pixbuf), 'notification')
 		bwbuf.save(path_to_bw_file, 'png')
