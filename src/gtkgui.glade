@@ -10754,6 +10754,8 @@ Custom</property>
 
 <widget class="GtkWindow" id="popup_notification_window">
   <property name="border_width">6</property>
+  <property name="width_request">312</property>
+  <property name="height_request">95</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_POPUP</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -10783,6 +10785,8 @@ Custom</property>
 
 	  <child>
 	    <widget class="GtkImage" id="notification_image">
+	      <property name="width_request">68</property>
+	      <property name="height_request">86</property>
 	      <property name="visible">True</property>
 	      <property name="xalign">0.5</property>
 	      <property name="yalign">0.5</property>
@@ -10810,6 +10814,7 @@ Custom</property>
 
 		  <child>
 		    <widget class="GtkLabel" id="event_type_label">
+		      <property name="width_request">196</property>
 		      <property name="visible">True</property>
 		      <property name="label">Event Type</property>
 		      <property name="use_underline">False</property>
@@ -10868,12 +10873,14 @@ Custom</property>
 
 	      <child>
 		<widget class="GtkLabel" id="event_description_label">
+		  <property name="width_request">218</property>
+		  <property name="height_request">64</property>
 		  <property name="visible">True</property>
 		  <property name="label">Event desc</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">False</property>
+		  <property name="wrap">True</property>
 		  <property name="selectable">False</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
