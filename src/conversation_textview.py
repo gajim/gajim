@@ -570,7 +570,7 @@ class ConversationTextview(gtk.TextView):
 			elif diff_day == 1:
 				day_str = _('Yesterday')
 			else:
-				# the number is >= 2
+				#the number is >= 2
 				# %i is day in year (1-365), %d (1-31) we want %i
 				day_str = _('%i days ago') % diff_day
 			format = before_str
