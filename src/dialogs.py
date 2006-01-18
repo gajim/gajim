@@ -688,6 +688,8 @@ class JoinGroupchatWindow:
 _('You can not join a group chat unless you are connected.')).get_response()
 			raise RuntimeError, 'You must be connected to join a groupchat'
 
+		self._empty_required_widgets = []
+
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'join_groupchat_window', APP)
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self.xml.get_widget('server_entry').set_text(server)
@@ -718,7 +720,6 @@ _('You can not join a group chat unless you are connected.')).get_response()
 		elif room and server:
 			self.xml.get_widget('join_button').grab_focus()
 
-		self._empty_required_widgets = []
 		self._server_entry = self.xml.get_widget('server_entry')
 		self._room_entry = self.xml.get_widget('room_entry')
 		self._nickname_entry = self.xml.get_widget('nickname_entry')
