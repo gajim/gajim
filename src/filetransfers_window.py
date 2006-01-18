@@ -265,12 +265,9 @@ _('Connection with peer cannot be established.'))
 			if response == gtk.RESPONSE_OK:
 				file_dir = None
 				files_path_list = dialog.get_filenames()
+				files_path_list = gtkgui_helpers.decode_filechooser_file_paths(
+					files_path_list)
 				for file_path in files_path_list:
-					# decode as UTF-8 under win
-					if os.name == 'nt':
-						file_path = file_path.decode('utf8')
-					else:
-						file_path = file_path.decode(sys.getfilesystemencoding())
 					if self.send_file(account, contact, file_path) and file_dir is None:
 						file_dir = os.path.dirname(file_path)
 				if file_dir:
@@ -306,7 +303,7 @@ _('Connection with peer cannot be established.'))
 	
 	def confirm_overwrite_cb(self, dialog, file_props):
 		file_path = dialog.get_filename()
-		file_path = file_path.decode('utf-8')
+		file_path = gtkgui_helpers.decode_filechooser_file_paths((file_path,))[0]
 		if os.path.exists(file_path):
 			stat = os.stat(file_path)
 			dl_size = stat.st_size
@@ -360,7 +357,8 @@ _('Connection with peer cannot be established.'))
 				response = dialog.run()
 				if response == gtk.RESPONSE_OK:
 					file_path = dialog.get_filename()
-					file_path = file_path.decode('utf-8')
+					file_path = gtkgui_helpers.decode_filechooser_file_paths(
+						(file_path,))[0]
 					if not gtk28 and os.path.exists(file_path):
 						primtext = _('This file already exists')
 						sectext = _('Would you like to overwrite it?')

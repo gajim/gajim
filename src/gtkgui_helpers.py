@@ -474,3 +474,20 @@ def make_pixbuf_grayscale(pixbuf):
 	pixbuf2 = pixbuf.copy()
 	pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
 	return pixbuf2
+
+def decode_filechooser_file_paths(file_paths):
+	'''decode as UTF-8 under Windows and
+	ask sys.getfilesystemencoding() in POSIX
+	file_paths MUST be LIST'''
+	file_paths_list = list()
+	
+	if os.name == 'nt': # decode as UTF-8 under Windows
+		for file_path in file_paths:
+			file_path = file_path.decode('utf8')
+			file_paths_list.append(file_path)
+	else:
+		for file_path in file_paths:
+			file_path = file_path.decode(sys.getfilesystemencoding())
+			file_paths_list.append(file_path)
+	
+	return file_paths_list
