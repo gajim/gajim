@@ -561,14 +561,16 @@ class ConversationTextview(gtk.TextView):
 		if gajim.config.get('print_time') == 'always':
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
-			# get difference in days since epoch
-			diff_day = int(timegm(time.localtime()))/86400 - int(timegm(tim))/86400
+			# get difference in days since epoch (86400 = 24*3600)
+			no_of_days_since_epoch = int(timegm(time.localtime())) / 86400 # for GMT time
+			no_of_days_snce_epoch_for_msg = int(timegm(tim)) / 86400 # for GMT time
+			diff_day = no_of_days_snce_epoch - no_of_days_snce_epoch_for_msg
 			if diff_day == 0:
 				day_str = ''
 			elif diff_day == 1:
 				day_str = _('Yesterday')
 			else:
-				#the number is >= 2
+				# the number is >= 2
 				# %i is day in year (1-365), %d (1-31) we want %i
 				day_str = _('%i days ago') % diff_day
 			format = before_str
