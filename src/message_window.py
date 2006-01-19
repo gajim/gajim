@@ -607,6 +607,10 @@ class MessageWindowMgr:
 					gajim.config.get(opt_height))
 		if size[0] > 0  and size[1] > 0:
 			gtkgui_helpers.resize_window(win.window, size[0], size[1])
+		else:
+			gtkgui_helpers.resize_window(win.window,
+						(common.config.DEFAULT_WINDOW_WIDTH,
+						common.config.DEFAULT_WINDOW_HEIGHT))
 	
 	def _position_window(self, win, acct, type):
 		'''Returns the position tuple: (x, y)'''
