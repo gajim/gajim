@@ -183,21 +183,23 @@ class MessageWindow:
 		'''redraw the window's title'''
 		unread = 0
 		for ctrl in self._controls.values():
+			if ctrl.type_id == message_control.TYPE_GC and not \
+				gajim.config.get('notify_on_all_muc_messages') and not \
+				ctrl.attention_flag:
+				continue
 			unread += ctrl.nb_unread
 		unread_str = ''
 		if unread > 1:
 			unread_str = '[' + unicode(unread) + '] '
 		elif unread == 1:
 			unread_str = '* '
+		else:
+			urgent = False
 
 		if not control:
 			control = self.get_active_control()
 		if control.type_id == message_control.TYPE_GC:
-			title = control.room_jid
-			if gajim.config.get('notify_on_all_muc_messages'):
-				title = unread_str + title
-			elif control.attention_flag:
-				title = '* ' + title
+			title = unread_str + control.room_jid
 			urgent = control.attention_flag
 		else:
 			title = unread_str + control.contact.get_shown_name()
