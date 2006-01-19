@@ -447,6 +447,17 @@ class PreferencesWindow:
 				theme_combobox.set_active(i)
 			i += 1
 		self.on_theme_combobox_changed(theme_combobox)
+		
+		# Notify user of new gmail e-mail messages,
+		# only show checkbox if user has a gtalk account
+		self.xml.get_widget('notify_gmail_checkbutton').hide()
+		for account in gajim.config.get_per('accounts'):
+			jid = gajim.get_jid_from_account(account)
+			if gajim.get_server_from_jid(jid) == 'gmail.com':
+				st = gajim.config.get('notify_on_new_gmail_email') 
+				self.xml.get_widget('notify_gmail_checkbutton').set_active(st)
+				self.xml.get_widget('notify_gmail_checkbutton').show()
+
 		#FIXME: move code from __init__ here
 
 	def on_preferences_window_key_press_event(self, widget, event):
@@ -809,6 +820,9 @@ class PreferencesWindow:
 
 	def on_send_os_info_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'send_os_info')
+		
+	def on_notify_gmail_checkbutton_toggled(self, widget): 
+		self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email')
 		
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
