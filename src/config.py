@@ -37,6 +37,7 @@ import dialogs
 import vcard
 import cell_renderer_image
 import message_control
+import chat_control
 
 try:
 	import gtkspell
@@ -541,40 +542,39 @@ class PreferencesWindow:
 		gajim.interface.save_config()
 		gajim.interface.msg_win_mgr.reconfig()
 
-	def apply_speller(self, kind):
+	def apply_speller(self):
 		for acct in gajim.connections:
-			windows = gajim.interface.instances[acct][kind]
-			jids = windows.keys()
-			for jid in jids:
-				if jid == 'tabbed':
-					continue
-				window = windows[jid]
-				textview = window.message_textviews[jid]
-				gtkspell.Spell(textview)
+			for ctrl in gajim.interface.msg_win_mgr.controls():
+				if isinstance(ctrl, chat_control.ChatControlBase):
+					try:
+						spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
+					except:
+						spell_obj = None
 
-	def remove_speller(self, kind):
+					print "Current: ", spell_obj
+					if not spell_obj:
+						gtkspell.Spell(ctrl.msg_textview)
+
+	def remove_speller(self):
 		for acct in gajim.connections:
-			windows = gajim.interface.instances[acct][kind]
-			jids = windows.keys()
-			for jid in jids:
-				if jid == 'tabbed':
-					continue
-				window = windows[jid]
-				textview = window.message_textviews[jid]
-				spell_obj = gtkspell.get_from_text_view(textview)
-				if spell_obj:
-					spell_obj.detach()
+			for ctrl in gajim.interface.msg_win_mgr.controls():
+				if isinstance(ctrl, chat_control.ChatControlBase):
+					try:
+						spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
+					except:
+						spell_obj = None
+					print "Current: ", spell_obj
+					if spell_obj:
+						spell_obj.detach()
 
 	def on_speller_checkbutton_toggled(self, widget):
 		active = widget.get_active()
 		gajim.config.set('use_speller', active)
 		gajim.interface.save_config()
 		if active:
-			self.apply_speller('chats')
-			self.apply_speller('gc')
+			self.apply_speller()
 		else:
-			self.remove_speller('chats')
-			self.remove_speller('gc')
+			self.remove_speller()
 
 	def update_print_time(self):
 		'''Update time in Opened Chat Windows'''
