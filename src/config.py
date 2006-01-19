@@ -551,7 +551,6 @@ class PreferencesWindow:
 					except:
 						spell_obj = None
 
-					print "Current: ", spell_obj
 					if not spell_obj:
 						gtkspell.Spell(ctrl.msg_textview)
 
@@ -563,7 +562,6 @@ class PreferencesWindow:
 						spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
 					except:
 						spell_obj = None
-					print "Current: ", spell_obj
 					if spell_obj:
 						spell_obj.detach()
 
