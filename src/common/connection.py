@@ -1422,9 +1422,11 @@ class Connection:
 			# Get bookmarks from private namespace
 			self.get_bookmarks()
 			
-			# If it's a gmail account, inform the server that we want e-mail notifications
-			if our_jid.split('@')[1] == 'gmail.com':
-				gajim.log.debug(('%s is a gmail account. Setting option to get e-mail notifications on the server.') % (our_jid))
+			# If it's a gmail account,
+			# inform the server that we want e-mail notifications
+			if gajim.get_server_from_jid(our_jid) == 'gmail.com':
+				gajim.log.debug(('%s is a gmail account. Setting option '
+					'to get e-mail notifications on the server.') % (our_jid))
 				iq = common.xmpp.Iq(typ = 'set', to = our_jid)
 				iq.setAttr('id', 'MailNotify')
 				query = iq.setTag('usersetting')
