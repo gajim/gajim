@@ -167,9 +167,9 @@ class MessageWindow:
 		if event.state & gtk.gdk.CONTROL_MASK:
 			# Tab switch bindings
 			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
-				self.notebook.emit('key_press_event', event)
+				self.move_to_next_unread_tab(True)
 			elif event.keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
-				self.notebook.emit('key_press_event', event)
+				self.move_to_next_unread_tab(False)
 			elif event.keyval == gtk.keysyms.Page_Down: # CTRL + PAGE DOWN
 				self.notebook.emit('key_press_event', event)
 			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
@@ -430,14 +430,6 @@ class MessageWindow:
 				self.move_to_next_unread_tab(False)
 			elif event.keyval == gtk.keysyms.Tab: # CTRL + TAB
 				self.move_to_next_unread_tab(True)
-			elif event.keyval == gtk.keysyms.Page_Down or\
-			event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP|DOWN
-				# construct event instance from binding
-				event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
-				event.keyval = event_keyval
-				event.state = event_keymod
-				event.time = 0 # assign current time
-				self.notebook.emit('key_press_event', event)
 			elif event.keyval == gtk.keysyms.F4: # CTRL + F4
 				self.remove_tab(contact)
 			elif event.keyval == gtk.keysyms.w: # CTRL + W
