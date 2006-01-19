@@ -790,8 +790,9 @@ _('You can not join a group chat unless you are connected.')).get_response()
 			jid = helpers.parse_jid(jid)
 		except:
 			ErrorDialog(_('Invalid room or server name'),
-		_('The room name or server name has not allowed characters.')
-			
+				_('The room name or server name has not allowed characters.'))
+			return
+
 		if jid in self.recently_groupchat:
 			self.recently_groupchat.remove(jid)
 		self.recently_groupchat.insert(0, jid)
