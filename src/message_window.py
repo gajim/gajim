@@ -455,7 +455,7 @@ class MessageWindow:
 				ctrl.set_compact_view(not ctrl.compact_view_current)
 		# Close tab bindings
 		elif event.keyval == gtk.keysyms.Escape: # ESCAPE
-			if ctrl.type_id == message_control.TYPE_CHAT:
+			if ctrl.type_id != message_control.TYPE_GC:
 				self.remove_tab(contact)
 		else:
 			# If the active control has a message_textview pass the event to it
