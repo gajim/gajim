@@ -602,7 +602,7 @@ ok_handler = None):
 		label = xml.get_widget('label')
 		self.input_entry = xml.get_widget('input_entry')
 		self.dialog.set_title(title)
-		label.set_text(label_str)
+		label.set_markup(label_str)
 		if input_str:
 			self.input_entry.set_text(input_str)
 			self.input_entry.select_region(0, -1) # select all

@@ -1651,11 +1651,16 @@ class DataFormWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	def on_data_form_window_destroy(self, widget):
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+	
+	def on_ok_button_clicked(self, widget):
+		'''NOTE: child class should implement this'''
 		pass
 
-	def on_close_button_clicked(self, widget):
-		self.window.destroy()
+	def on_data_form_window_destroy(self, widget):
+		'''NOTE: child class should implement this'''
+		pass
 
 	def on_checkbutton_toggled(self, widget, index):
 		self.config[index]['values'][0] = widget.get_active()
@@ -1715,10 +1720,10 @@ class DataFormWindow:
 				widget.set_alignment(0.0, 0.5)
 				max = 4
 			elif ctype == 'jid-multi':
-				#TODO
+				#FIXME
 				widget = gtk.Label('')
 			elif ctype == 'jid-single':
-				#TODO
+				#FIXME
 				widget = gtk.Label('')
 			elif ctype == 'list-multi':
 				j = 0
@@ -1782,7 +1787,28 @@ class DataFormWindow:
 
 class ServiceRegistrationWindow(DataFormWindow):
 	'''Class for Service registration window:
-	Window that appears when we want to subscribe to a service'''
+	Window that appears when we want to subscribe to a service
+	if is_form we use DataFormWindow else we use service_registarion_window'''
+	def __init__(self, service, infos, account, is_form):
+		self.service = service
+		self.infos = infos
+		self.account = account
+		self.is_form = is_form
+		if self.is_form:
+			DataFormWindow.__init__(self, account, infos)
+		else:
+			self.xml = gtk.glade.XML(GTKGUI_GLADE,	'service_registration_window', APP)
+			self.window = self.xml.get_widget('service_registration_window')
+			if infos.has_key('registered'):
+				self.window.set_title(_('Edit %s' % service))
+			else:
+				self.window.set_title(_('Register to %s' % service))
+			self.xml.get_widget('label').set_text(infos['instructions'])
+			self.entries = {}
+			self.draw_table()
+			self.xml.signal_autoconnect(self)
+			self.window.show_all()
+
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
 
@@ -1813,49 +1839,31 @@ class ServiceRegistrationWindow(DataFormWindow):
 		table.show_all()
 
 	def on_ok_button_clicked(self, widget):
-		'''When Ok button is clicked:
-		send registration info to the core'''
-		for name in self.entries.keys():
-			self.infos[name] = self.entries[name].get_text().decode('utf-8')
-		if self.infos.has_key('instructions'):
-			del self.infos['instructions']
-		if self.infos.has_key('registered'):
-			del self.infos['registered']
-		else:
-			gajim.interface.roster.add_transport_to_roster(self.account,
-				self.service)
-		gajim.connections[self.account].register_agent(self.service, self.infos)
-		self.window.destroy()
-
-	def on_apply_button_clicked(self, widget):
-		# We press apply button of the FormDataWindow
-		if self.infos.has_key('registered'):
-			del self.infos['registered']
-		else:
-			gajim.interface.roster.add_transport_to_roster(self.account,
-				self.service)
-		gajim.connections[self.account].register_agent(self.service, self.infos,
-			True) # True is for is_form
-		self.window.destroy()
-
-	def __init__(self, service, infos, account, is_form):
-		self.service = service
-		self.infos = infos
-		self.account = account
-		if is_form:
-			DataFormWindow.__init__(self, account, infos)
-		else:
-			self.xml = gtk.glade.XML(GTKGUI_GLADE,	'service_registration_window', APP)
-			self.window = self.xml.get_widget('service_registration_window')
-			if infos.has_key('registered'):
-				self.window.set_title(_('Edit %s' % service))
+		if self.is_form:
+			# We pressed OK button of the DataFormWindow
+			if self.infos.has_key('registered'):
+				del self.infos['registered']
 			else:
-				self.window.set_title(_('Register to %s' % service))
-			self.xml.get_widget('label').set_text(infos['instructions'])
-			self.entries = {}
-			self.draw_table()
-			self.xml.signal_autoconnect(self)
-			self.window.show_all()
+				gajim.interface.roster.add_transport_to_roster(self.account,
+					self.service)
+			gajim.connections[self.account].register_agent(self.service, self.infos,
+				True) # True is for is_form
+		else:
+			# we pressed OK of service_registration_window
+			# send registration info to the core
+			for name in self.entries.keys():
+				self.infos[name] = self.entries[name].get_text().decode('utf-8')
+			if self.infos.has_key('instructions'):
+				del self.infos['instructions']
+			if self.infos.has_key('registered'):
+				del self.infos['registered']
+			else:
+				gajim.interface.roster.add_transport_to_roster(self.account,
+					self.service)
+			gajim.connections[self.account].register_agent(self.service, self.infos)
+		
+		self.window.destroy()
+
 
 class GroupchatConfigWindow(DataFormWindow):
 	'''GroupchatConfigWindow class'''
@@ -1890,12 +1898,14 @@ class GroupchatConfigWindow(DataFormWindow):
 			bb.pack_start(add_button)
 			self.remove_button[affiliation] = gtk.Button(stock = gtk.STOCK_REMOVE)
 			self.remove_button[affiliation].set_sensitive(False)
-			self.remove_button[affiliation].connect('clicked', self.on_remove_button_clicked, affiliation)
+			self.remove_button[affiliation].connect('clicked',
+				self.on_remove_button_clicked, affiliation)
 			bb.pack_start(self.remove_button[affiliation])
 
 			liststore = gtk.ListStore(str, str, str, str) # Jid, reason, nick, role
 			self.affiliation_treeview[affiliation] = gtk.TreeView(liststore)
-			self.affiliation_treeview[affiliation].connect('cursor-changed', self.on_affiliation_treeview_cursor_changed, affiliation)
+			self.affiliation_treeview[affiliation].connect('cursor-changed',
+				self.on_affiliation_treeview_cursor_changed, affiliation)
 			renderer = gtk.CellRendererText()
 			col = gtk.TreeViewColumn(_('JID'), renderer)
 			col.add_attribute(renderer, 'text', 0)
@@ -1936,16 +1946,41 @@ class GroupchatConfigWindow(DataFormWindow):
 	def on_add_button_clicked(self, widget, affiliation):
 		if affiliation == 'outcast':
 			title = _('Banning...')
-			prompt = _('Whom do you want to ban? (JID, domain, ...)')
+			#You can move '\n' before user@domain if that line is TOO BIG
+			prompt = _('<b>Whom do you want to ban?</b>' '\n\n'
+				'Can be one of the following:' '\n'
+				'1. user@domain/resource (only that resource matches).' '\n'
+ 				'2. user@domain (any resource matches).' '\n'
+				'3. domain/resource (only that resource matches).' '\n'
+				'4. domain (the domain itself matches, as does any user@domain,' '\n'
+				'domain/resource, or address containing a subdomain.')
 		elif affiliation == 'member':
-			title = _('Adding Member')
-			prompt = _('Whom do you want to make a member? (JID, domain, ...)')
+			title = _('Adding Member...')
+			prompt = _('<b>Whom do you want to make a member?</b>' '\n\n'
+				'Can be one of the following:' '\n'
+				'1. user@domain/resource (only that resource matches).' '\n'
+ 				'2. user@domain (any resource matches).' '\n'
+				'3. domain/resource (only that resource matches).' '\n'
+				'4. domain (the domain itself matches, as does any user@domain,' '\n'
+				'domain/resource, or address containing a subdomain.')
 		elif affiliation == 'owner':
-			title = _('Adding Owner')
-			prompt = _('Whom do you want to make a owner? (JID, domain, ...)')
+			title = _('Adding Owner...')
+			prompt = _('<b>Whom do you want to make a owner?</b>' '\n\n'
+				'Can be one of the following:' '\n'
+				'1. user@domain/resource (only that resource matches).' '\n'
+ 				'2. user@domain (any resource matches).' '\n'
+				'3. domain/resource (only that resource matches).' '\n'
+				'4. domain (the domain itself matches, as does any user@domain,' '\n'
+				'domain/resource, or address containing a subdomain.')
 		else:
-			title = _('Adding Administrator')
-			prompt = _('Whom do you want to make an administrator? (JID, domain, ...)')
+			title = _('Adding Administrator...')
+			prompt = _('<b>Whom do you want to make an administrator?</b>' '\n\n'
+				'Can be one of the following:' '\n'
+				'1. user@domain/resource (only that resource matches).' '\n'
+ 				'2. user@domain (any resource matches).' '\n'
+				'3. domain/resource (only that resource matches).' '\n'
+				'4. domain (the domain itself matches, as does any user@domain,' '\n'
+				'domain/resource, or address containing a subdomain.')
 			
 		instance = dialogs.InputDialog(title, prompt)
 		response = instance.get_response()
@@ -1993,7 +2028,8 @@ class GroupchatConfigWindow(DataFormWindow):
 	def on_data_form_window_destroy(self, widget):
 		del gajim.interface.instances[self.account]['gc_config'][self.room_jid]
 
-	def on_apply_button_clicked(self, widget):
+	def on_ok_button_clicked(self, widget):
+		# We pressed OK button of the DataFormWindow
 		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
 		for affiliation in ('outcast', 'member', 'owner', 'admin'):
 			list = {}
