@@ -1114,6 +1114,7 @@ class SingleMessageWindow:
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			try:
 				gtkspell.Spell(self.conversation_textview)
+				gtkspell.Spell(self.message_textview)
 			except gobject.GError, msg:
 				#FIXME: add a ui for this use spell.set_language()
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
