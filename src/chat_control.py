@@ -498,7 +498,8 @@ class ChatControlBase(MessageControl):
 										self.account,
 										self.type_id)
 			self.msg_textview.grab_focus()
-			self.parent_win.redraw_tab(self.contact, 'active')
+			# Note, we send None chatstate to preserve current
+			self.parent_win.redraw_tab(self.contact)
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
