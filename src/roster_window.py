@@ -1003,7 +1003,7 @@ class RosterWindow:
 		history_menuitem.connect('activate', self.on_history, contact,
 			account)
 
-		if _('not in the roster') not in contact.groups:
+		if _('Not in Roster') not in contact.groups:
 			#contact is in normal group
 			edit_groups_menuitem.set_no_show_all(False)
 			assign_openpgp_key_menuitem.set_no_show_all(False)
@@ -1031,7 +1031,7 @@ class RosterWindow:
 				revoke_auth_menuitem.connect('activate', self.revoke_auth, jid,
 					account)
 
-		else: # contact is in group 'not in the roster'
+		else: # contact is in group 'Not in Roster'
 			add_to_roster_menuitem.set_no_show_all(False)
 			edit_groups_menuitem.hide()
 			edit_groups_menuitem.set_no_show_all(True)
@@ -1274,7 +1274,7 @@ class RosterWindow:
 				sub = 'subscribe', keyID = keyID)
 			gajim.contacts.add_contact(account, contact)
 		else:
-			if not _('not in the roster') in contact.groups:
+			if not _('Not in Roster') in contact.groups:
 				dialogs.InformationDialog(_('Subscription request has been sent'),
 _('If "%s" accepts this request you will know his or her status.') % jid)
 				return
@@ -1450,8 +1450,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.contacts.remove_jid(account, u.jid)
 			if gajim.interface.msg_win_mgr.has_window(contact.jid):
 				c = gajim.contacts.create_contact(jid = contact.jid,
-					name = contact.name, groups = [_('not in the roster')],
-					show = 'not in the roster', status = '', ask = 'none',
+					name = contact.name, groups = [_('Not in Roster')],
+					show = 'Not in Roster', status = '', ask = 'none',
 					keyID = contact.keyID)
 				gajim.contacts.add_contact(account, c)
 				self.add_contact_to_roster(contact.jid, account)
@@ -1708,8 +1708,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			contact = gajim.contacts.create_contact(jid = jid,
-				name = jid.split('@')[0], groups = [_('not in the roster')],
-				show = 'not in the roster', status = '', sub = 'none',
+				name = jid.split('@')[0], groups = [_('Not in Roster')],
+				show = 'Not in Roster', status = '', sub = 'none',
 				keyID = keyID)
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact_to_roster(contact.jid, account)
@@ -1741,8 +1741,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			contact = gajim.contacts.create_contact(jid = jid,
-				name = jid.split('@')[0], groups = [_('not in the roster')],
-				show = 'not in the roster', status = '', ask = 'none',
+				name = jid.split('@')[0], groups = [_('Not in Roster')],
+				show = 'Not in Roster', status = '', ask = 'none',
 				keyID = keyID, resource = resource)
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact_to_roster(jid, account)
@@ -2163,8 +2163,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		elif type == 'group':
 			# in C_JID cilumn it's not escaped
 			old_name = model[iter][C_JID].decode('utf-8')
-			# Groups maynot change name from or to 'not in the roster'
-			if _('not in the roster') in (new_text, old_name):
+			# Groups maynot change name from or to 'Not in Roster'
+			if _('Not in Roster') in (new_text, old_name):
 				return
 			# get all contacts in that group
 			for jid in gajim.contacts.get_jid_list(account):
@@ -2196,7 +2196,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		path += '/'
 		for state in ('connecting', 'online', 'chat', 'away', 'xa',
 				'dnd', 'invisible', 'offline', 'error', 'requested',
-				'message', 'opened', 'closed', 'not in the roster',
+				'message', 'opened', 'closed', 'Not in Roster',
 				'muc_active'):
 
 			# try to open a pixfile with the correct method
@@ -2403,9 +2403,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				return 1
 			if name2 == _('Transports'):
 				return -1
-			if name1 == _('not in the roster'):
+			if name1 == _('Not in Roster'):
 				return 1
-			if name2 == _('not in the roster'):
+			if name2 == _('Not in Roster'):
 				return -1
 		account1 = model[iter1][C_ACCOUNT]
 		account2 = model[iter2][C_ACCOUNT]
@@ -2431,7 +2431,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if type1 == 'contact' and type2 == 'contact' and \
 			gajim.config.get('sort_by_show'):
 			cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
-				'invisible': 5, 'offline': 6, 'not in the roster': 7, 'error': 8}
+				'invisible': 5, 'offline': 6, 'Not in Roster': 7, 'error': 8}
 			s = self.get_show(lcontact1)
 			if s in cshow:
 				show1 = cshow[s]
@@ -2518,7 +2518,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		iter_group_source = model.iter_parent(iter_source)
 		grp_source = model[iter_group_source][C_JID].decode('utf-8')
-		if grp_source == _('Transports') or grp_source == _('not in the roster'):
+		if grp_source == _('Transports') or grp_source == _('Not in Roster'):
 			return
 		account = model[iter_dest][C_ACCOUNT].decode('utf-8')
 		type_dest = model.get_value(iter_dest, C_TYPE)
@@ -2526,7 +2526,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
 		else:
 			grp_dest = model[model.iter_parent(iter_dest)][C_JID].decode('utf-8')
-		if grp_dest == _('Transports') or grp_dest == _('not in the roster'):
+		if grp_dest == _('Transports') or grp_dest == _('Not in Roster'):
 			return
 		if grp_source == grp_dest:
 			return

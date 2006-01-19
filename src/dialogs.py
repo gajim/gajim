@@ -117,7 +117,7 @@ class EditGroupsDialog:
 		store = gtk.ListStore(str, bool)
 		self.list.set_model(store)
 		for g in gajim.groups[self.account].keys():
-			if g in (_('Transports'), _('not in the roster')):
+			if g in (_('Transports'), _('Not in Roster')):
 				continue
 			iter = store.append()
 			store.set(iter, 0, g)
@@ -338,7 +338,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
 		for g in gajim.groups[account].keys():
-			if g != _('not in the roster') and g != _('Transports'):
+			if g != _('Not in Roster') and g != _('Transports'):
 				self.group_comboboxentry.append_text(g)
 
 		if not jid_agents:
@@ -377,7 +377,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 
 		# Check if jid is already in roster
 		if jid in gajim.contacts.get_jid_list(self.account) and \
-			_('not in the roster') not in \
+			_('Not in Roster') not in \
 			gajim.contacts.get_first_contact_from_jid(self.account, jid).groups:
 			ErrorDialog(_('Contact already in roster'),
 			_('This contact is already listed in your roster.')).get_response()
@@ -1058,7 +1058,7 @@ class PopupNotificationWindow:
 				else:
 					contact = gajim.contacts.create_contact(jid = self.jid,
 						name = self.jid.split('@')[0],
-						groups = [_('not in the roster')], show = 'not in the roster',
+						groups = [_('Not in Roster')], show = 'Not in Roster',
 						status = '', sub = 'none', keyID = keyID)
 					gajim.contacts.add_contact(self.account, contact)
 					gajim.interface.roster.add_contact_to_roster(contact.jid,

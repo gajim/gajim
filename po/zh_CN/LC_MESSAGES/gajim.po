@@ -73,7 +73,7 @@ msgid "account: "
 msgstr "账户："
 
 #. Check if jid is already in roster
-#. Groups maynot change name from or to 'not in the roster'
+#. Groups maynot change name from or to 'Not in Roster'
 #: ../src/chat.py:468
 #: ../src/conversation_textview.py:376
 #: ../src/dialogs.py:126
@@ -93,7 +93,7 @@ msgstr "账户："
 #: ../src/roster_window.py:2374
 #: ../src/roster_window.py:2461
 #: ../src/roster_window.py:2469
-msgid "not in the roster"
+msgid "Not in Roster"
 msgstr "不在名单中"
 
 #: ../src/chat.py:556
@@ -4137,7 +4137,7 @@ msgid "Invisible"
 msgstr "隐身"
 
 #: ../src/common/helpers.py:228
-msgid "Not in the roster"
+msgid "Not in Roster"
 msgstr "不在名单中"
 
 #: ../src/common/helpers.py:230

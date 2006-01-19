@@ -224,7 +224,7 @@ def get_uf_show(show, use_mnemonic = False):
 			uf_show = _('_Invisible')
 		else:
 			uf_show = _('Invisible')
-	elif show == 'not in the roster':
+	elif show == 'Not in Roster':
 		uf_show = _('Not in Roster')
 	elif show == 'requested':
 		uf_show = Q_('?contact has status:Unknown')
@@ -523,7 +523,7 @@ def get_icon_name_to_show(contact, account = None):
 	transport = gajim.get_transport_name_from_jid(contact.jid)
 	if transport:
 		return contact.show
-	return 'not in the roster'
+	return 'Not in Roster'
 
 def decode_string(string):
 	'''try to decode (to make it Unicode instance) given string'''

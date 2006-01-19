@@ -72,7 +72,7 @@ msgid "account: "
 msgstr "kontua: "
 
 #. Check if jid is already in roster
-#. Groups maynot change name from or to 'not in the roster'
+#. Groups maynot change name from or to 'Not in Roster'
 #: ../src/chat.py:467
 #: ../src/conversation_textview.py:376
 #: ../src/dialogs.py:120
@@ -91,7 +91,7 @@ msgstr "kontua: "
 #: ../src/roster_window.py:2392
 #: ../src/roster_window.py:2485
 #: ../src/roster_window.py:2493
-msgid "not in the roster"
+msgid "Not in Roster"
 msgstr "Zerrendan ez dago"
 
 #: ../src/chat.py:555
@@ -4162,7 +4162,7 @@ msgid "Invisible"
 msgstr "Ikusezin"
 
 #: ../src/common/helpers.py:228
-msgid "Not in the roster"
+msgid "Not in Roster"
 msgstr "Zerrendan ez dago"
 
 #: ../src/common/helpers.py:230
