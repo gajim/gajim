@@ -1904,6 +1904,8 @@ class GroupchatConfigWindow(DataFormWindow):
 
 			liststore = gtk.ListStore(str, str, str, str) # Jid, reason, nick, role
 			self.affiliation_treeview[affiliation] = gtk.TreeView(liststore)
+			self.affiliation_treeview[affiliation].get_selection().set_mode(
+				gtk.SELECTION_MULTIPLE)
 			self.affiliation_treeview[affiliation].connect('cursor-changed',
 				self.on_affiliation_treeview_cursor_changed, affiliation)
 			renderer = gtk.CellRendererText()
@@ -1947,39 +1949,21 @@ class GroupchatConfigWindow(DataFormWindow):
 		if affiliation == 'outcast':
 			title = _('Banning...')
 			#You can move '\n' before user@domain if that line is TOO BIG
-			prompt = _('<b>Whom do you want to ban?</b>' '\n\n'
-				'Can be one of the following:' '\n'
-				'1. user@domain/resource (only that resource matches).' '\n'
- 				'2. user@domain (any resource matches).' '\n'
-				'3. domain/resource (only that resource matches).' '\n'
-				'4. domain (the domain itself matches, as does any user@domain,' '\n'
-				'domain/resource, or address containing a subdomain.')
+			prompt = _('<b>Whom do you want to ban?</b>\n\n')
 		elif affiliation == 'member':
 			title = _('Adding Member...')
-			prompt = _('<b>Whom do you want to make a member?</b>' '\n\n'
-				'Can be one of the following:' '\n'
-				'1. user@domain/resource (only that resource matches).' '\n'
- 				'2. user@domain (any resource matches).' '\n'
-				'3. domain/resource (only that resource matches).' '\n'
-				'4. domain (the domain itself matches, as does any user@domain,' '\n'
-				'domain/resource, or address containing a subdomain.')
+			prompt = _('<b>Whom do you want to make a member?</b>\n\n')
 		elif affiliation == 'owner':
 			title = _('Adding Owner...')
-			prompt = _('<b>Whom do you want to make a owner?</b>' '\n\n'
-				'Can be one of the following:' '\n'
-				'1. user@domain/resource (only that resource matches).' '\n'
- 				'2. user@domain (any resource matches).' '\n'
-				'3. domain/resource (only that resource matches).' '\n'
-				'4. domain (the domain itself matches, as does any user@domain,' '\n'
-				'domain/resource, or address containing a subdomain.')
+			prompt = _('<b>Whom do you want to make a owner?</b>\n\n')
 		else:
 			title = _('Adding Administrator...')
-			prompt = _('<b>Whom do you want to make an administrator?</b>' '\n\n'
-				'Can be one of the following:' '\n'
-				'1. user@domain/resource (only that resource matches).' '\n'
- 				'2. user@domain (any resource matches).' '\n'
-				'3. domain/resource (only that resource matches).' '\n'
-				'4. domain (the domain itself matches, as does any user@domain,' '\n'
+			prompt = _('<b>Whom do you want to make an administrator?</b>\n\n')
+		prompt += _('Can be one of the following:\n'
+				'1. user@domain/resource (only that resource matches).\n'
+ 				'2. user@domain (any resource matches).\n'
+				'3. domain/resource (only that resource matches).\n'
+				'4. domain (the domain itself matches, as does any user@domain,\n'
 				'domain/resource, or address containing a subdomain.')
 			
 		instance = dialogs.InputDialog(title, prompt)
@@ -1995,13 +1979,17 @@ class GroupchatConfigWindow(DataFormWindow):
 			self.removed_jid[affiliation].remove(jid)
 
 	def on_remove_button_clicked(self, widget, affiliation):
-		model, iter = self.affiliation_treeview[affiliation].get_selection()\
-			.get_selected()
-		if not iter:
-			return
-		jid = model[iter][0]
-		model.remove(iter)
-		self.removed_jid[affiliation].append(jid)
+		selection = self.affiliation_treeview[affiliation].get_selection()
+		model, paths = selection.get_selected_rows()
+		row_refs = []
+		for path in paths:
+			row_refs.append(gtk.TreeRowReference(model, path))
+		for row_ref in row_refs:
+			path = row_ref.get_path()
+			iter = model.get_iter(path)
+			jid = model[iter][0]
+			model.remove(iter)
+			self.removed_jid[affiliation].append(jid)
 		self.remove_button[affiliation].set_sensitive(False)
 
 	def on_affiliation_treeview_cursor_changed(self, widget, affiliation):
