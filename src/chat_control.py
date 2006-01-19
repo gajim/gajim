@@ -792,12 +792,13 @@ class ChatControl(ChatControlBase):
 			banner_status_img.set_from_animation(banner_image.get_animation())
 		else:
 			pix = banner_image.get_pixbuf()
-			if use_size_32:
-				banner_status_img.set_from_pixbuf(pix)
-			else: # we need to scale 16x16 to 32x32
-				scaled_pix = pix.scale_simple(32, 32,
-								gtk.gdk.INTERP_BILINEAR)
-				banner_status_img.set_from_pixbuf(scaled_pix)
+			if pix is not None:
+				if use_size_32:
+					banner_status_img.set_from_pixbuf(pix)
+				else: # we need to scale 16x16 to 32x32
+					scaled_pix = pix.scale_simple(32, 32,
+									gtk.gdk.INTERP_BILINEAR)
+					banner_status_img.set_from_pixbuf(scaled_pix)
 
 		self._update_gpg()
 
