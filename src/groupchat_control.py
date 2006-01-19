@@ -239,8 +239,6 @@ class GroupchatControl(ChatControlBase):
 		either of which can be None
 		if chatstate is given that means we have HE SENT US a chatstate'''
 			
-		num_unread = self.nb_unread
-
 		has_focus = self.parent_win.window.get_property('has-toplevel-focus')
 		current_tab = self.parent_win.get_active_control() == self
 		color = None
