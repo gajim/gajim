@@ -471,7 +471,7 @@ class MessageWindow:
 		tab_label.dnd_handler = tab_label.connect('drag_data_get', 
 							  self.on_tab_label_drag_data_get_cb)
 		tab_label.drag_source_set(gtk.gdk.BUTTON1_MASK, self.DND_TARGETS,
-					 gtk.gdk.ACTION_COPY)
+					 gtk.gdk.ACTION_MOVE)
 		tab_label.page_num = self.notebook.page_num(child)
 
 	def on_tab_label_drag_data_get_cb(self, widget, drag_context, selection, info, time):
