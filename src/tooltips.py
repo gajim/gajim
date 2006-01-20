@@ -479,24 +479,18 @@ class FileTransfersTooltip(BaseTooltip):
 		text += '\n<b>' + _('Type: ') + '</b>'
 		if file_props['type'] == 'r':
 			text += _('Download')
-		else:
-			text += _('Upload')
-		if file_props['type'] == 'r':
 			text += '\n<b>' + _('Sender: ') + '</b>'
 			sender = unicode(file_props['sender']).split('/')[0]
 			name = gajim.contacts.get_first_contact_from_jid( 
 				file_props['tt_account'], sender).get_shown_name()
 		else:
+			text += _('Upload')
 			text += '\n<b>' + _('Recipient: ') + '</b>' 
 			receiver = file_props['receiver']
 			if hasattr(receiver, 'name'):
-				receiver = receiver.name
-			receiver = receiver.split('/')[0]
-			if receiver.find('@') == -1:
-				name = receiver
+				name = receiver.get_shown_name()
 			else:
-				name = gajim.contacts.get_first_contact_from_jid( 
-				file_props['tt_account'], receiver).get_shown_name()
+				name = receiver.split('/')[0]
 		text +=  gtkgui_helpers.escape_for_pango_markup(name)
 		text += '\n<b>' + _('Size: ') + '</b>' 
 		text += helpers.convert_bytes(file_props['size'])
