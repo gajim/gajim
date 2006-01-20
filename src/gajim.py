@@ -360,8 +360,13 @@ class Interface:
 						# we're online or chat
 						show_notification = True
 					if show_notification:
-						notify.notify(_('Contact Signed In'), jid, account,
-							path_to_image = None)
+						path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + '_notif_size_colored.png'
+						if not os.path.exists(path_to_file):
+							img = gajim.get_notification_image_prefix(jid) + '_online.png'
+						else:
+							img = path_to_file
+						path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+						notify.notify(_('Contact Signed In'), jid, account, path_to_image = path)
 
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactPresence',
@@ -381,8 +386,14 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						notify.notify(_('Contact Signed Out'), jid, account,
-							path_to_image = None)
+						path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + '_notif_size_bw.png'
+						if not os.path.exists(path_to_file):
+							img = gajim.get_notification_image_prefix(jid) + '_offline.png'
+						else:
+							img = path_to_file
+						path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+						notify.notify(_('Contact Signed Out'), jid, account, path_to_image = path)
+
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactAbsence', (account, array))
 				# FIXME: stop non active file transfers
@@ -419,7 +430,13 @@ class Interface:
 			if not gajim.interface.msg_win_mgr.has_window(fjid) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
-					notify.notify(_('New Private Message'), fjid, account, 'pm')
+					room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+					room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
+					txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
+						% {'nickname': nick, 'room_name': room_name}
+					img = 'priv_msg_recv.png'
+					path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+					notify.notify(_('New Private Message'), fjid, account, 'pm', path_to_image = path, text = txt)
 
 			chat_control.on_private_message(nick, array[1], array[2])
 			return
@@ -461,10 +478,17 @@ class Interface:
 				elif gajim.connections[account].connected in (2, 3): # we're online or chat
 					show_notification = True
 				if show_notification:
+					txt = _('%s has sent you a new message.') % gajim.get_actor(account, jid)
 					if msg_type == 'normal': # single message
-						notify.notify(_('New Single Message'), jid, account, msg_type)
+						img = 'single_msg_recv.png'
+						path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+						notify.notify(_('New Single Message'), jid, account, msg_type,
+							path_to_image = path, text = txt)
 					else: # chat message
-						notify.notify(_('New Message'), jid, account, msg_type)
+						img = 'chat_msg_recv.png'
+						path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+						notify.notify(_('New Message'), jid, account, msg_type,
+							path_to_image = path, text = txt)
 
 		# array : (contact, msg, time, encrypted, msg_type, subject)
 		self.roster.on_message(jid, array[1], array[2], account, array[3],
@@ -831,14 +855,20 @@ class Interface:
 		self.add_event(account, jid, 'file-send-error', file_props)
 
 		if gajim.show_notification(account):
+			img = 'ft_stopped.png'
+			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
 			notify.notify(_('File Transfer Error'),
-				jid, account, 'file-send-error', file_props)
+				jid, account, 'file-send-error', file_props, path_to_image = path)
 
 	def handle_event_gmail_notify(self, account, array):
 		jid = array[0]
-		newmsgs = array[1]
+		gmail_new_messages = int(array[1])
 		if gajim.config.get('notify_on_new_gmail_email'):
-			notify.notify(_('New E-mail'), jid, account, 'gmail', gmail_new_messages = int(newmsgs))
+			img = 'single_msg_recv.png' #FIXME: find a better image
+			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+			txt = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
+			txt = _('%(new_mail_gajim_ui_msg)s on %(gmail_mail_address)s') % {'new_mail_gajim_ui_msg': txt, 'gmail_mail_address': jid}
+			notify.notify(_('New E-mail'), jid, account, 'gmail', path_to_image = path, text = txt)
 
 	def save_avatar_files(self, jid, photo_decoded):
 		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
@@ -933,8 +963,10 @@ class Interface:
 		self.add_event(account, jid, 'file-request', file_props)
 
 		if gajim.show_notification(account):
-			notify.notify(_('File Transfer Request'),
-				jid, account, 'file-request')
+			img = 'ft_request.png'
+			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+			txt = _('%s wants to send you a file.') % gajim.get_actor(account, jid)
+			notify.notify(_('File Transfer Request'), jid, account, 'file-request', path_to_image = path, text = txt)
 
 	def handle_event_file_progress(self, account, file_props):
 		self.instances['file_transfers'].set_progress(file_props['type'], 
@@ -978,13 +1010,49 @@ class Interface:
 
 		if msg_type:
 			self.add_event(account, jid, msg_type, file_props)
+			
+		if file_props is not None:
+			if file_props['type'] == 'r':
+				# get the name of the sender, as it is in the roster
+				sender = unicode(file_props['sender']).split('/')[0]
+				name = gajim.contacts.get_first_contact_from_jid(account,
+					sender).get_shown_name()
+				filename = os.path.basename(file_props['file-name'])
+				if event_type == _('File Transfer Completed'):
+					txt = _('You successfully received %(filename)s from %(name)s.')\
+						% {'filename': filename, 'name': name}
+					img = 'ft_done.png'
+				else: # ft stopped
+					txt = _('File transfer of %(filename)s from %(name)s stopped.')\
+						% {'filename': filename, 'name': name}
+					img = 'ft_stopped.png'
+			else:
+				receiver = file_props['receiver']
+				if hasattr(receiver, 'jid'):
+					receiver = receiver.jid
+				receiver = receiver.split('/')[0]
+				# get the name of the contact, as it is in the roster
+				name = gajim.contacts.get_first_contact_from_jid(account,
+					receiver).get_shown_name()
+				filename = os.path.basename(file_props['file-name'])
+				if event_type == _('File Transfer Completed'):
+					txt = _('You successfully sent %(filename)s to %(name)s.')\
+						% {'filename': filename, 'name': name}
+					img = 'ft_done.png'
+				else: # ft stopped
+					txt = _('File transfer of %(filename)s to %(name)s stopped.')\
+						% {'filename': filename, 'name': name}
+					img = 'ft_stopped.png'
+			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+		else:
+			txt = ''
 
 		if gajim.config.get('notify_on_file_complete') and \
 			(gajim.config.get('autopopupaway') or \
 			gajim.connections[account].connected in (2, 3)):
 			# we want to be notified and we are online/chat or we don't mind
 			# bugged when away/na/busy
-			notify.notify(event_type, jid, account, msg_type, file_props)
+			notify.notify(event_type, jid, account, msg_type, path_to_image = path, text = txt)
 
 	def handle_event_stanza_arrived(self, account, stanza):
 		if not self.instances.has_key(account):

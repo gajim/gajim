@@ -269,6 +269,23 @@ def get_first_event(account, jid, typ = None):
 		if ev[0] == typ:
 			return ev
 	return None
+	
+def get_notification_image_prefix(jid):
+	'''returns the prefix for the notification images'''
+	transport_name = get_transport_name_from_jid(jid)
+	if transport_name in ('aim', 'icq', 'msn', 'yahoo'):
+		prefix = transport_name
+	else:
+		prefix = 'jabber'
+	return prefix
+
+def get_actor(account, jid):
+		contact = contacts.get_first_contact_from_jid(account, jid)
+		if contact:
+			actor = contact.get_shown_name()
+		else:
+			actor = jid
+		return actor
 
 def popup_window(account):
 	autopopup = config.get('autopopup')

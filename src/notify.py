@@ -47,15 +47,15 @@ if dbus_support.supported:
 		import dbus.glib
 		import dbus.service
 
-def notify(event_type, jid, account, msg_type = '', file_props = None,
-	path_to_image = None, gmail_new_messages = None):
+def notify(event_type, jid, account, msg_type = '', path_to_image = None,
+	text = None):
 	'''Notifies a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
 	the older style PopupNotificationWindow method.'''
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
-			DesktopNotification(event_type, jid, account, msg_type, file_props,
-				path_to_image, gmail_new_messages)
+			DesktopNotification(event_type, jid, account, msg_type, path_to_image,
+				text)
 			return
 		except dbus.dbus_bindings.DBusException, e:
 			# Connection to D-Bus failed, try popup
@@ -63,8 +63,7 @@ def notify(event_type, jid, account, msg_type = '', file_props = None,
 		except TypeError, e:
 			# This means that we sent the message incorrectly
 			gajim.log.debug(str(e))
-	instance = dialogs.PopupNotificationWindow(event_type, jid, account,
-		msg_type, file_props, gmail_new_messages)
+	instance = dialogs.PopupNotificationWindow(event_type, jid, account, msg_type, path_to_image, text)
 	gajim.interface.roster.popup_notification_windows.append(instance)
 
 class NotificationResponseManager:
@@ -102,112 +101,35 @@ class DesktopNotification:
 	'''A DesktopNotification that interfaces with DBus via the Desktop
 	Notification specification'''
 	def __init__(self, event_type, jid, account, msg_type = '',
-		file_props = None, path_to_image = None, gmail_new_messages = None):
+		path_to_image = None, text = None):
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
-		self.file_props = file_props
 
-		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-		if contact:
-			actor = contact.get_shown_name()
-		else:
-			actor = jid
-
-		txt = actor # default value of txt
-		transport_name = gajim.get_transport_name_from_jid(jid)
-		
-		if transport_name in ('aim', 'icq', 'msn', 'yahoo'):
-			prefix = transport_name
-		else:
-			prefix = 'jabber'
-
+		if not text:
+			text = gajim.get_actor(account, jid) # default value of text
+			
 		if event_type == _('Contact Signed In'):
-			path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + '_notif_size_colored.png'
-			if not os.path.exists(path_to_file):
-				img = prefix + '_online.png'
-			else:
-				img = path_to_file
 			ntype = 'presence.online'
 		elif event_type == _('Contact Signed Out'):
-			path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + '_notif_size_bw.png'
-			if not os.path.exists(path_to_file):
-				img = prefix + '_offline.png'
-			else:
-				img = path_to_file
 			ntype = 'presence.offline'
 		elif event_type in (_('New Message'), _('New Single Message'),
 			_('New Private Message')):
 			ntype = 'im.received'
-			if event_type == _('New Private Message'):
-				room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-				room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
-				txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
-					% {'nickname': nick, 'room_name': room_name}
-				img = 'priv_msg_recv.png'
-			else:
-				#we talk about a name here
-				txt = _('%s has sent you a new message.') % actor
-				if event_type == _('New Message'):
-					img = 'chat_msg_recv.png'
-				else: # New Single Message
-					img = 'single_msg_recv.png'
 		elif event_type == _('File Transfer Request'):
-			img = 'ft_request.png'
 			ntype = 'transfer'
-			#we talk about a name here
-			txt = _('%s wants to send you a file.') % actor
 		elif event_type == _('File Transfer Error'):
-			img = 'ft_stopped.png'
 			ntype = 'transfer.error'
 		elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
 			ntype = 'transfer.complete'
-			if file_props is not None:
-				if file_props['type'] == 'r':
-					# get the name of the sender, as it is in the roster
-					sender = unicode(file_props['sender']).split('/')[0]
-					name = gajim.contacts.get_first_contact_from_jid(account,
-						sender).get_shown_name()
-					filename = os.path.basename(file_props['file-name'])
-					if event_type == _('File Transfer Completed'):
-						txt = _('You successfully received %(filename)s from %(name)s.')\
-							% {'filename': filename, 'name': name}
-						img = 'ft_done.png'
-					else: # ft stopped
-						txt = _('File transfer of %(filename)s from %(name)s stopped.')\
-							% {'filename': filename, 'name': name}
-						img = 'ft_stopped.png'
-				else:
-					receiver = file_props['receiver']
-					if hasattr(receiver, 'jid'):
-						receiver = receiver.jid
-					receiver = receiver.split('/')[0]
-					# get the name of the contact, as it is in the roster
-					name = gajim.contacts.get_first_contact_from_jid(account,
-						receiver).get_shown_name()
-					filename = os.path.basename(file_props['file-name'])
-					if event_type == _('File Transfer Completed'):
-						txt = _('You successfully sent %(filename)s to %(name)s.')\
-							% {'filename': filename, 'name': name}
-						img = 'ft_done.png'
-					else: # ft stopped
-						txt = _('File transfer of %(filename)s to %(name)s stopped.')\
-							% {'filename': filename, 'name': name}
-						img = 'ft_stopped.png'
-			else:
-				txt = ''
 		elif event_type == _('New E-mail'):
-			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
-			txt = _('%(new_mail_gajim_ui_msg)s on %(gmail_mail_address)s') % {'new_mail_gajim_ui_msg': text, 'gmail_mail_address': jid}
 			ntype = 'gmail.notify'
-			img = 'single_msg_recv.png' #FIXME: find a better image
 		else:
-			# defaul failsafe values
-			img = 'chat_msg_recv.png' # img to display
-			ntype = 'im'	 # Notification Type
-
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img)
-		path = os.path.abspath(path)
+			# default failsafe values
+			path_to_image = os.path.abspath(
+				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+					'chat_msg_recv.png')) # img to display
+			ntype = 'im' # Notification Type
 
 		self.notif = dbus_support.get_notifications_interface()
 		if self.notif is None:
@@ -225,16 +147,16 @@ class DesktopNotification:
 		if version.startswith('0.2'):
 			try:
 				self.id = self.notif.Notify(dbus.String(_('Gajim')),
-					dbus.String(path), dbus.UInt32(0), ntype, dbus.Byte(0),
-					dbus.String(event_type), dbus.String(txt),
-					[dbus.String(path)], {'default': 0}, [''], True, dbus.UInt32(
-					timeout))
+					dbus.String(path_to_image), dbus.UInt32(0), ntype, dbus.Byte(0),
+					dbus.String(event_type), dbus.String(text),
+					[dbus.String(path_to_image)], {'default': 0}, [''], True,
+						dbus.UInt32(timeout))
 			except AttributeError:
 				version = '0.3.1' # we're actually dealing with the newer version
 		if version.startswith('0.3'):
 			self.id = self.notif.Notify(dbus.String(_('Gajim')),
-				dbus.String(path), dbus.UInt32(0), dbus.String(event_type),
-				dbus.String(txt), dbus.String(''), {}, dbus.UInt32(timeout*1000))
+				dbus.String(path_to_image), dbus.UInt32(0), dbus.String(event_type),
+				dbus.String(text), dbus.String(''), {}, dbus.UInt32(timeout*1000))
 		notification_response_manager.attach_to_interface()
 		notification_response_manager.pending[self.id] = self
 

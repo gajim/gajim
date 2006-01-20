@@ -867,11 +867,10 @@ _('Without a connection, you can not change your password.')).get_response()
 
 
 class PopupNotificationWindow:
-	def __init__(self, event_type, jid, account, msg_type = '', file_props = None, gmail_new_messages = None):
+	def __init__(self, event_type, jid, account, msg_type = '', path_to_image = None, text = None):
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
-		self.file_props = file_props
 		
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_notification_window', APP)
 		self.window = xml.get_widget('popup_notification_window')
@@ -884,121 +883,64 @@ class PopupNotificationWindow:
 		event_type_label.set_markup(
 			'<span foreground="black" weight="bold">%s</span>' % event_type)
 
-		if self.jid in gajim.contacts.get_jid_list(account):
-			txt = gajim.contacts.get_first_contact_from_jid(account,
-				self.jid).get_shown_name()
-		else:
-			txt = self.jid
+		if not text:
+			text = gajim.get_actor(account, jid) # default value of text
 
 		# set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
 		
-		# prefix for images
-		transport_name = gajim.get_transport_name_from_jid(jid)
-		if transport_name in ('aim', 'icq', 'msn', 'yahoo'):
-			prefix = transport_name
-		else:
-			prefix = 'jabber'
 		# default image
-		img = 'chat_msg_recv.png'
+		if not path_to_image:
+			path_to_image = os.path.abspath(
+				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'chat_msg_recv.png')) # img to display
 
 		if event_type == _('Contact Signed In'):
 			limegreen = gtk.gdk.color_parse('limegreen')
 			close_button.modify_bg(gtk.STATE_NORMAL, limegreen)
 			eventbox.modify_bg(gtk.STATE_NORMAL, limegreen)
 			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % txt)
-			path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + '_notif_size_colored.png'
-			if not os.path.exists(path_to_file):
-				img = prefix + '_online.png'
-			else:
-				img = path_to_file
+				'<span foreground="black">%s</span>' % text)
 		elif event_type == _('Contact Signed Out'):
 			red = gtk.gdk.color_parse('red')
 			close_button.modify_bg(gtk.STATE_NORMAL, red)
 			eventbox.modify_bg(gtk.STATE_NORMAL, red)
 			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % txt)
-			path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + '_notif_size_bw.png'
-			if not os.path.exists(path_to_file):
-				img = prefix + '_offline.png'
-			else:
-				img = path_to_file
+				'<span foreground="black">%s</span>' % text)
 		elif event_type in (_('New Message'), _('New Single Message'),
 			_('New Private Message')):
 			dodgerblue = gtk.gdk.color_parse('dodgerblue')
 			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
-			if event_type == _('New Private Message'):
-				room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-				room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
-				txt = _('From %s in room %s') % (nick, room_name)
-				img = 'priv_msg_recv.png'
-			else:
-				txt = _('From %s') % txt
-				if event_type == _('New Message'):
-					img = 'chat_msg_recv.png'
-				else: # New Single Message
-					img = 'single_msg_recv.png'
-			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
+			event_description_label.set_markup(
+				'<span foreground="black">%s</span>' % text)
 		elif event_type == _('File Transfer Request'):
 			bg_color = gtk.gdk.color_parse('khaki')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
-			txt = _('From %s') % txt
-			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
-			img = 'ft_request.png'
+			event_description_label.set_markup(
+				'<span foreground="black">%s</span>' % text)
 		elif event_type == _('File Transfer Error'):
 			bg_color = gtk.gdk.color_parse('firebrick')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
-			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
-			img = 'ft_stopped.png'
+			event_description_label.set_markup(
+				'<span foreground="black">%s</span>' % text)
 		elif event_type in (_('File Transfer Completed'),
 			_('File Transfer Stopped')):
 			bg_color = gtk.gdk.color_parse('yellowgreen')
 			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
 			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
-			if file_props is not None:
-				if file_props['type'] == 'r':
-					# get the name of the sender, as it is in the roster
-					sender = unicode(file_props['sender']).split('/')[0]
-					name = gajim.contacts.get_first_contact_from_jid(account,
-						sender).get_shown_name()
-					txt = _('From %s') % name
-					if event_type == _('File Transfer Completed'):
-						img = 'ft_done.png'
-					else: # ft stopped
-						img = 'ft_stopped.png'
-				else:
-					receiver = file_props['receiver']
-					if hasattr(receiver, 'jid'):
-						receiver = receiver.jid
-					receiver = receiver.split('/')[0]
-					# get the name of the contact, as it is in the roster
-					name = gajim.contacts.get_first_contact_from_jid(account,
-						receiver).get_shown_name()
-					txt = _('To %s') % name
-					if event_type == _('File Transfer Completed'):
-						img = 'ft_done.png'
-					else: # ft stopped
-						img = 'ft_stopped.png'
-			else:
-				txt = ''
-			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
+			event_description_label.set_markup(
+				'<span foreground="black">%s</span>' % text)
 		elif event_type == _('New E-mail'):
 			dodgerblue = gtk.gdk.color_parse('dodgerblue')
 			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
-			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
-			txt = _('%(new_mail_gajim_ui_msg)s on %(gmail_mail_address)s') % {'new_mail_gajim_ui_msg': text, 'gmail_mail_address': jid}
-			event_description_label.set_markup('<span foreground="black">%s</span>' % txt)
-			img = 'single_msg_recv.png' #FIXME: find a better image
+			event_description_label.set_markup(
+				'<span foreground="black">%s</span>' % text)
 			
 		# set the image
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img)
-		path = os.path.abspath(path)
-		image.set_from_file(path)
+		image.set_from_file(path_to_image)
 		
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
