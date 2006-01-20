@@ -670,6 +670,7 @@ class MessageWindowMgr:
 
 	def _on_window_delete(self, win, event):
 		self.save_state(self._gtk_win_to_msg_win(win))
+		gajim.interface.save_config()
 		return False
 
 	def _on_window_destroy(self, win):
@@ -705,6 +706,7 @@ class MessageWindowMgr:
 			self.save_state(w)
 			w.window.hide()
 			w.window.destroy()
+		gajim.interface.save_config()
 
 	def save_state(self, msg_win):
 		if not gajim.config.get('saveposition'):
@@ -725,6 +727,8 @@ class MessageWindowMgr:
 			return
 
 		if self.mode == self.CONFIG_NEVER:
+			# Use whatever is current to not overwrite the 'always' settings
+			# when going from never->always
 			x = y = -1
 		elif self.mode == self.CONFIG_PERACCT:
 			acct = msg_win.account
@@ -736,19 +740,22 @@ class MessageWindowMgr:
 			size_height_key = type + "-msgwin-height"
 
 		if acct:
-			gajim.config.set_per('accounts', acct, pos_x_key, x)
-			gajim.config.set_per('accounts', acct, pos_y_key, y)
+			if x >= 0 and y >= 0:
+				gajim.config.set_per('accounts', acct, pos_x_key, x)
+				gajim.config.set_per('accounts', acct, pos_y_key, y)
 			gajim.config.set_per('accounts', acct, size_width_key, width)
 			gajim.config.set_per('accounts', acct, size_height_key, height)
 		else:
-			gajim.config.set(pos_x_key, x)
-			gajim.config.set(pos_y_key, y)
+			if x >= 0 and y >= 0:
+				gajim.config.set(pos_x_key, x)
+				gajim.config.set(pos_y_key, y)
 			gajim.config.set(size_width_key, width)
 			gajim.config.set(size_height_key, height)
 
 	def reconfig(self):
 		for w in self._windows.values():
 			self.save_state(w)
+		gajim.interface.save_config()
 		# Map the mode to a int constant for frequent compares
 		mode = gajim.config.get('one_message_window')
 		if self.mode == common.config.opt_one_window_types.index(mode):
