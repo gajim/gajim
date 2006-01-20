@@ -202,10 +202,10 @@ class VcardWindow:
 				f = dialog.get_filename()
 				f = gtkgui_helpers.decode_filechooser_file_paths((f,))[0]
 				filesize = os.path.getsize(f) # in bytes
-				if filesize > 32768: # 32 kb
+				if filesize > 16384: # 16 kb
 					dialogs.ErrorDialog(_('The filesize of image "%s" is too large')\
 						% os.path.basename(f),
-					_('The file must not be more than 32 kilobytes.')).get_response()
+					_('The file must not be more than 16 kilobytes.')).get_response()
 					continue
 				if self.image_is_ok(f):
 					done = True
