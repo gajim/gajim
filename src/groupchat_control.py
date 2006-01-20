@@ -1044,6 +1044,8 @@ class GroupchatControl(ChatControlBase):
 		if not state:
 			# add the focus-out line to the tab we are leaving
 			self.check_and_possibly_add_focus_out_line()
+		# Sending active to undo unread state
+		self.parent_win.redraw_tab(self.contact, 'active')
 
 	def get_specific_unread(self):
 		# returns the number of the number of unread msgs
