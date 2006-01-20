@@ -884,7 +884,7 @@ class PopupNotificationWindow:
 			'<span foreground="black" weight="bold">%s</span>' % event_type)
 
 		if not text:
-			text = gajim.get_actor(account, jid) # default value of text
+			text = gajim.get_name_from_jid(account, jid) # default value of text
 
 		# set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))

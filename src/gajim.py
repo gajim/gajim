@@ -478,7 +478,7 @@ class Interface:
 				elif gajim.connections[account].connected in (2, 3): # we're online or chat
 					show_notification = True
 				if show_notification:
-					txt = _('%s has sent you a new message.') % gajim.get_actor(account, jid)
+					txt = _('%s has sent you a new message.') % gajim.get_name_from_jid(account, jid)
 					if msg_type == 'normal': # single message
 						img = 'single_msg_recv.png'
 						path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
@@ -965,7 +965,7 @@ class Interface:
 		if gajim.show_notification(account):
 			img = 'ft_request.png'
 			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
-			txt = _('%s wants to send you a file.') % gajim.get_actor(account, jid)
+			txt = _('%s wants to send you a file.') % gajim.get_name_from_jid(account, jid)
 			notify.notify(_('File Transfer Request'), jid, account, 'file-request', path_to_image = path, text = txt)
 
 	def handle_event_file_progress(self, account, file_props):

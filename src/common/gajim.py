@@ -279,13 +279,14 @@ def get_notification_image_prefix(jid):
 		prefix = 'jabber'
 	return prefix
 
-def get_actor(account, jid):
-		contact = contacts.get_first_contact_from_jid(account, jid)
-		if contact:
-			actor = contact.get_shown_name()
-		else:
-			actor = jid
-		return actor
+def get_name_from_jid(account, jid):
+	'''returns from JID's shown name and if no contact returns jids'''
+	contact = contacts.get_first_contact_from_jid(account, jid)
+	if contact:
+		actor = contact.get_shown_name()
+	else:
+		actor = jid
+	return actor
 
 def popup_window(account):
 	autopopup = config.get('autopopup')

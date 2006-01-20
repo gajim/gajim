@@ -107,7 +107,7 @@ class DesktopNotification:
 		self.msg_type = msg_type
 
 		if not text:
-			text = gajim.get_actor(account, jid) # default value of text
+			text = gajim.get_name_from_jid(account, jid) # default value of text
 			
 		if event_type == _('Contact Signed In'):
 			ntype = 'presence.online'
