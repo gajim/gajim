@@ -384,12 +384,14 @@ class PreferencesWindow:
 
 		#open links with
 		if os.name == 'nt':
-			self.applications_frame = self.xml.get_widget('applications_frame')
-			self.applications_frame.set_no_show_all(True)
-			self.applications_frame.hide()
+			applications_frame = self.xml.get_widget('applications_frame')
+			applications_frame.set_no_show_all(True)
+			applications_frame.hide()
 		else:
 			self.applications_combobox = self.xml.get_widget(
 				'applications_combobox')
+			self.xml.get_widget('custom_apps_frame').hide()
+			self.xml.get_widget('custom_apps_frame').set_no_show_all(True)
 			if gajim.config.get('autodetect_browser_mailer'):
 				self.applications_combobox.set_active(0)
 				gtkgui_helpers.autodetect_browser_mailer()
@@ -401,7 +403,8 @@ class PreferencesWindow:
 				self.applications_combobox.set_active(2)
 			elif gajim.config.get('openwith') == 'custom':
 				self.applications_combobox.set_active(3)
-				self.xml.get_widget('custom_apps_frame').set_sensitive(True)
+				self.xml.get_widget('custom_apps_frame').show()
+				
 			self.xml.get_widget('custom_browser_entry').set_text(
 				gajim.config.get('custombrowser'))
 			self.xml.get_widget('custom_mail_client_entry').set_text(
@@ -791,7 +794,7 @@ class PreferencesWindow:
 	def on_applications_combobox_changed(self, widget):
 		gajim.config.set('autodetect_browser_mailer', False)
 		if widget.get_active() == 3:
-			self.xml.get_widget('custom_apps_frame').set_sensitive(True)
+			self.xml.get_widget('custom_apps_frame').show()
 			gajim.config.set('openwith', 'custom')
 		else:
 			if widget.get_active() == 0:
@@ -800,7 +803,7 @@ class PreferencesWindow:
 				gajim.config.set('openwith', 'gnome-open')
 			elif widget.get_active() == 2:
 				gajim.config.set('openwith', 'kfmclient exec')
-			self.xml.get_widget('custom_apps_frame').set_sensitive(False)
+			self.xml.get_widget('custom_apps_frame').hide()
 		gajim.interface.save_config()
 
 	def on_custom_browser_entry_changed(self, widget):

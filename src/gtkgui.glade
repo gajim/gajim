@@ -5895,8 +5895,6 @@ Custom</property>
 
 			  <child>
 			    <widget class="GtkFrame" id="custom_apps_frame">
-			      <property name="visible">True</property>
-			      <property name="sensitive">False</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_NONE</property>
