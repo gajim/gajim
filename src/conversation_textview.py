@@ -469,6 +469,7 @@ class ConversationTextview(gtk.TextView):
 			special_text.startswith('news://') or \
 			special_text.startswith('ed2k://') or \
 			special_text.startswith('irc://') or \
+			special_text.startswith('sip:') or \
 			special_text.startswith('magnet:'):
 			#it's a url
 			tags.append('url')
