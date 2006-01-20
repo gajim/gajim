@@ -91,7 +91,7 @@ class MessageWindow:
 		self.hid = self.notebook.connect('drag_data_received',
 						self.on_tab_label_drag_data_received_cb)
 		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
-						gtk.gdk.ACTION_COPY)
+						gtk.gdk.ACTION_MOVE)
 
 	def _on_window_focus(self, widget, event):
 		# window received focus, so if we had urgency REMOVE IT
