@@ -145,7 +145,7 @@ class Config:
 		'always_english_wiktionary': [opt_bool, True],
 		'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.')],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
-		'autodetect_browser_mailer': [opt_bool, True],
+		'autodetect_browser_mailer': [opt_bool, False],
 		'print_ichat_every_foo_minutes': [opt_int, 5],
 		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
 		'noconfirm_close_muc_rooms': [opt_str, '', _('A list of rooms that do not require confirmation before closing')],

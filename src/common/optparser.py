@@ -200,6 +200,10 @@ class OptionsParser:
 		gajim.config.set('version', '0.9')
 
 	def update_config_09_to_010(self):
-		if self.old_values.has_key('usetabbedchat') and not self.old_values['usetabbedchat']:
+		if self.old_values.has_key('usetabbedchat') and not \
+			self.old_values['usetabbedchat']:
 			gajim.config.set('one_message_window', 'never')
+		if self.old_values.has_key('autodetect_browser_mailer') and \
+			self.old_values['autodetect_browser_mailer'] is True:
+			gajim.config.set('autodetect_browser_mailer', False)
 
