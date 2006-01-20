@@ -1548,32 +1548,8 @@ if __name__ == '__main__':
 					cli.set_restart_command(argv)
 				except TypeError:
 					cli.set_restart_command(len(argv), argv)
-	
-		# register (by default only the first time) xmmpi: to Gajim
-		try:
-			import gconf
-			# in try because daemon may not be there
-			client = gconf.client_get_default()
 		
-			we_set = False
-			if gajim.config.get('set_xmpp://_handler_everytime'):
-				we_set = True
-			elif client.get_string('/desktop/gnome/url-handlers/xmpp/command') is None:
-				we_set = True
-			
-			if we_set:
-				path_to_gajim_script, type = gtkgui_helpers.get_abspath_for_script(
-					'gajim-remote', True)
-				if path_to_gajim_script:
-					if type == 'svn':
-						command = path_to_gajim_script + ' open_chat %s'
-					else: # 'installed'
-						command = 'gajim-remote open_chat %s'
-					client.set_bool('/desktop/gnome/url-handlers/xmpp/enabled', True)
-					client.set_string('/desktop/gnome/url-handlers/xmpp/command', command)
-					client.set_bool('/desktop/gnome/url-handlers/xmpp/needs_terminal', False)
-		except:
-			pass
+		gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
 	
 	# Migrate old logs if we have such olds logs
 	from common import logger

@@ -491,3 +491,65 @@ def decode_filechooser_file_paths(file_paths):
 			file_paths_list.append(file_path)
 	
 	return file_paths_list
+
+def possibly_set_gajim_as_xmpp_handler():
+	'''registers (by default only the first time) xmmp: to Gajim.'''
+	try:
+		import gconf
+		# in try because daemon may not be there
+		client = gconf.client_get_default()
+	except:
+		return
+	
+	
+	path_to_dot_kde = os.path.expanduser('~/.kde')
+	if os.path.exists(path_to_dot_kde):
+		path_to_kde_file = os.path.join(path_to_dot_kde, 
+			'share/services/xmpp.protocol')
+	else:
+		path_to_kde_file = None
+	
+	if gajim.config.get('set_xmpp://_handler_everytime'):
+			# it's false by default
+			we_set = True
+	elif client.get_string('/desktop/gnome/url-handlers/xmpp/command') is None:
+		# only the first time (GNOME/GCONF)
+		we_set = True
+	elif not os.path.exists(path_to_kde_file): # only the first time (KDE)
+		we_set = True
+	else:
+		we_set = False
+		
+	if not we_set:
+		return
+	
+	path_to_gajim_script, typ = get_abspath_for_script('gajim-remote', True)
+	if path_to_gajim_script:
+		if typ == 'svn':
+			command = path_to_gajim_script + ' open_chat %s'
+		else: # 'installed'
+			command = 'gajim-remote open_chat %s'
+		
+		# setting for GNOME/Gconf
+		client.set_bool('/desktop/gnome/url-handlers/xmpp/enabled', True)
+		client.set_string('/desktop/gnome/url-handlers/xmpp/command', command)
+		client.set_bool('/desktop/gnome/url-handlers/xmpp/needs_terminal', False)
+		
+		# setting for KDE
+		if path_to_kde_file is not None: # user has run kde at least once
+			f = open(path_to_kde_file, 'w')
+			f.write('''\
+exec=%s "%%u"
+protocol=xmpp
+input=none
+output=none
+helper=true
+listing=false
+reading=false
+writing=false
+makedir=false
+deleting=false
+icon=gajim
+Description=xmpp
+''' % command)
+			f.close()
