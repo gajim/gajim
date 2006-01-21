@@ -2315,8 +2315,13 @@ class Connection:
 			iq4.setAttr('jid', bm['jid'])
 			iq4.setAttr('autojoin', bm['autojoin'])
 			iq4.setAttr('name', bm['name'])
-			iq5 = iq4.setTagData('nick', bm['nick'])
-			iq5 = iq4.setTagData('password', bm['password'])
+			# Only add optional elements if not empty
+			# Note: need to handle both None and '' as empty
+			#   thus shouldn't use "is not None"
+			if bm['nick']:
+				iq5 = iq4.setTagData('nick', bm['nick'])
+			if bm['password']:
+				iq5 = iq4.setTagData('password', bm['password'])
 		self.to_be_sent.append(iq)
 
 	def send_agent_status(self, agent, ptype):

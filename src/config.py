@@ -2477,46 +2477,54 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		(model, iter) = selection.get_selected()
 
 		if not iter:
-			#After removing the last bookmark for one account
-			#this will be None, so we will just:
+			# After removing the last bookmark for one account
+			# this will be None, so we will just:
 			return
 
 		widgets = [ self.title_entry, self.nick_entry, self.room_entry,
 			self.server_entry, self.pass_entry, self.autojoin_checkbutton ]
 
 		if model.iter_parent(iter):
-			#make the fields sensitive
+			# make the fields sensitive
 			for field in widgets:
 				field.set_sensitive(True)
 		else:
-			#Top-level has no data (it's the account fields)
-			#clear fields & make them insensitive
+			# Top-level has no data (it's the account fields)
+			# clear fields & make them insensitive
 			self.clear_fields()
 			for field in widgets:
 				field.set_sensitive(False)
 			return
 
-		#Fill in the data for childs
+		# Fill in the data for childs
 		self.title_entry.set_text(model[iter][1])
 		room_jid = model[iter][2].decode('utf-8')
 		try:
 			(room, server) = room_jid.split('@')
 		except ValueError:
-			#We just added this one
+			# We just added this one
 			room = ''
 			server = ''
 		self.room_entry.set_text(room)
 		self.server_entry.set_text(server)
 
 		self.autojoin_checkbutton.set_active(model[iter][3])
-		self.pass_entry.set_text(model[iter][4])
-		self.nick_entry.set_text(model[iter][5])
+		password = model[iter][4].decode('utf-8')
+		if password:
+			self.pass_entry.set_text(password)
+		else:
+			self.pass_entry.set_text('')
+		nick = model[iter][5].decode('utf-8')
+		if nick:
+			self.nick_entry.set_text(nick)
+		else:
+			self.nick_entry.set_text('')
 
 	def on_title_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
-		if iter: #After removing a bookmark, we got nothing selected
+		if iter: # After removing a bookmark, we got nothing selected
 			if model.iter_parent(iter):
-				#Don't clear the title field for account nodes
+				# Don't clear the title field for account nodes
 				model[iter][1] = self.title_entry.get_text()
 
 	def on_nick_entry_changed(self, widget):
