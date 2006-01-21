@@ -2033,7 +2033,7 @@ class GroupchatConfigWindow(DataFormWindow):
 					list[jid]['reason'] = model[iter][1].decode('utf-8')
 				iter = model.iter_next(iter)
 			for jid in self.removed_jid[affiliation]:
-				list[jid] = 'none'
+				list[jid] = {'affiliation': 'none'}
 			gajim.connections[self.account].send_gc_affiliation_list(self.room_jid,
 				list)
 		self.window.destroy()
