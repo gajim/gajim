@@ -855,10 +855,10 @@ class Interface:
 		self.add_event(account, jid, 'file-send-error', file_props)
 
 		if gajim.show_notification(account):
-			img = 'ft_stopped.png'
+			img = 'ft_error.png'
 			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
 			notify.notify(_('File Transfer Error'),
-				jid, account, 'file-send-error', file_props, path_to_image = path)
+				jid, account, 'file-send-error', path, file_props['name'])
 
 	def handle_event_gmail_notify(self, account, array):
 		jid = array[0]
@@ -945,8 +945,10 @@ class Interface:
 
 		if gajim.show_notification(account):
 			# check if we should be notified
+			img = 'ft_error.png'
+			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
 			notify.notify(_('File Transfer Error'),
-				jid, account, msg_type, file_props)
+				jid, account, msg_type, path, file_props['name'])
 
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
