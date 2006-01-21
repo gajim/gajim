@@ -204,25 +204,31 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 	# jid was None. Yann why?
 	if not jid or (use_config_setting and not config.get('use_transports_iconsets')):
 		return
-	host = jid.split('@')[-1]
-	if host.startswith('aim'):
+	
+	host = get_server_from_jid(jid)
+	# host is now f.e. icq.foo.org or just icq (sometimes on hacky transports)
+	host_splitted = host.split('.')
+	if len(host_splitted) != 0:
+		# now we support both 'icq.' and 'icq' but not icqsucks.org
+		host = host_splitted[0]
+
+	if host == 'aim':
 		return 'aim'
-	elif host.startswith('gg'):
+	elif host == 'gg':
 		return 'gadugadu'
-	elif host.startswith('irc'):
+	elif host == 'irc':
 		return 'irc'
-	# abc@icqsucks.org will match as ICQ, but what to do..
-	elif host.startswith('icq'):
+	elif host == 'icq':
 		return 'icq'
-	elif host.startswith('msn'):
+	elif host == 'msn':
 		return 'msn'
-	elif host.startswith('sms'):
+	elif host == 'sms':
 		return 'sms'
-	elif host.startswith('tlen'):
+	elif host == 'tlen':
 		return 'tlen'
-	elif host.startswith('weather'):
+	elif host == 'weather':
 		return 'weather'
-	elif host.startswith('yahoo'):
+	elif host == 'yahoo':
 		return 'yahoo'
 	else:
 		return None
