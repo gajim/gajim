@@ -645,7 +645,7 @@ class ChatControlBase(MessageControl):
 		if self.type_id == message_control.TYPE_GC:
 			widgets = [
 				self.xml.get_widget('banner_eventbox'),
-				self.xml.get_widget('gc_actions_hbox'),
+				self.xml.get_widget('actions_hbox'),
 				self.xml.get_widget('list_scrolledwindow'),
 				]
 		else:

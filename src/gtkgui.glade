@@ -18590,7 +18590,7 @@ topic</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="actions_eventbox">
+		<widget class="GtkHBox" id="actions_hbox">
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
