@@ -478,6 +478,9 @@ _('Connection with peer cannot be established.'))
 			# Kb/s
 			
 			# remaining time
+			if file_props.has_key('offset') and file_props['offset']:
+				transfered_size -= file_props['offset'] 
+				full_size -= file_props['offset']
 			eta, speed = self._get_eta_and_speed(full_size, transfered_size, 
 				file_props['elapsed-time'])
 			
