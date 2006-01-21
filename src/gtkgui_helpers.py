@@ -515,7 +515,7 @@ def possibly_set_gajim_as_xmpp_handler():
 	elif client.get_string('/desktop/gnome/url-handlers/xmpp/command') is None:
 		# only the first time (GNOME/GCONF)
 		we_set = True
-	elif path_to_kde_file or not os.path.exists(path_to_kde_file):
+	elif path_to_kde_file and not os.path.exists(path_to_kde_file):
 		# only the first time (KDE)
 		we_set = True
 	else:
