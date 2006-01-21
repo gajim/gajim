@@ -945,8 +945,13 @@ class PopupNotificationWindow:
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
 		gajim.interface.roster.popups_notification_height += self.window_height
-		self.window.move(gtk.gdk.screen_width() - window_width,
-			gtk.gdk.screen_height() - gajim.interface.roster.popups_notification_height)
+		pos_x = gajim.config.get('notification_position_x')
+		if pos_x < 0:
+			pos_x = gtk.gdk.screen_width() - window_width + pos_x + 1
+		pos_y = gajim.config.get('notification_position_y')
+		if pos_y < 0:
+			pos_y = gtk.gdk.screen_height() - gajim.interface.roster.popups_notification_height + pos_y + 1
+		self.window.move(pos_x, pos_y)
 
 		xml.signal_autoconnect(self)
 		self.window.show_all()

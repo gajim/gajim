@@ -168,6 +168,8 @@ class Config:
 		'chat_avatar_height': [opt_int, 52],
 		'roster_avatar_width': [opt_int, 32],
 		'roster_avatar_height': [opt_int, 32],
+		'notification_position_x': [opt_int, -1],
+		'notification_position_y': [opt_int, -1],
 		'notification_avatar_width': [opt_int, 48],
 		'notification_avatar_height': [opt_int, 48],
 		'muc_highlight_words': [opt_str, '', _('A semicolon-separated list of words that will be highlighted in multi-user chat.')],
