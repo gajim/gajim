@@ -475,6 +475,19 @@ def make_pixbuf_grayscale(pixbuf):
 	pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
 	return pixbuf2
 
+def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
+	'''Chooses between avatar image and default image.
+	Returns full path to the avatar image if it exists,
+	otherwise returns full path to the image.'''
+	img = None
+	if jid:
+		path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + suffix
+		if os.path.exists(path_to_file):
+			img = path_to_file
+	if not img:
+		img = generic
+	return os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+
 def decode_filechooser_file_paths(file_paths):
 	'''decode as UTF-8 under Windows and
 	ask sys.getfilesystemencoding() in POSIX

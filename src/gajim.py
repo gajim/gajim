@@ -360,12 +360,9 @@ class Interface:
 						# we're online or chat
 						show_notification = True
 					if show_notification:
-						path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + '_notif_size_colored.png'
-						if not os.path.exists(path_to_file):
-							img = gajim.get_notification_image_prefix(jid) + '_online.png'
-						else:
-							img = path_to_file
-						path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+						img = gajim.get_notification_image_prefix(jid) + '_online.png'
+						path = gtkgui_helpers.get_path_to_generic_or_avatar(img, jid = jid, 
+							suffix = '_notif_size_colored.png')
 						notify.notify(_('Contact Signed In'), jid, account, path_to_image = path)
 
 				if self.remote_ctrl:
@@ -386,12 +383,9 @@ class Interface:
 					elif gajim.connections[account].connected in (2, 3): # we're online or chat
 						show_notification = True
 					if show_notification:
-						path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + '_notif_size_bw.png'
-						if not os.path.exists(path_to_file):
-							img = gajim.get_notification_image_prefix(jid) + '_offline.png'
-						else:
-							img = path_to_file
-						path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+						img = gajim.get_notification_image_prefix(jid) + '_offline.png'
+						path = gtkgui_helpers.get_path_to_generic_or_avatar(img, jid = jid, 
+							suffix = '_notif_size_colored.png')
 						notify.notify(_('Contact Signed Out'), jid, account, path_to_image = path)
 
 				if self.remote_ctrl:
@@ -435,7 +429,7 @@ class Interface:
 					txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
 						% {'nickname': nick, 'room_name': room_name}
 					img = 'priv_msg_recv.png'
-					path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+					path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 					notify.notify(_('New Private Message'), fjid, account, 'pm', path_to_image = path, text = txt)
 
 			chat_control.on_private_message(nick, array[1], array[2])
@@ -481,12 +475,12 @@ class Interface:
 					txt = _('%s has sent you a new message.') % gajim.get_name_from_jid(account, jid)
 					if msg_type == 'normal': # single message
 						img = 'single_msg_recv.png'
-						path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+						path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 						notify.notify(_('New Single Message'), jid, account, msg_type,
 							path_to_image = path, text = txt)
 					else: # chat message
 						img = 'chat_msg_recv.png'
-						path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+						path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 						notify.notify(_('New Message'), jid, account, msg_type,
 							path_to_image = path, text = txt)
 
@@ -856,7 +850,7 @@ class Interface:
 
 		if gajim.show_notification(account):
 			img = 'ft_error.png'
-			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.notify(_('File Transfer Error'),
 				jid, account, 'file-send-error', path, file_props['name'])
 
@@ -865,9 +859,9 @@ class Interface:
 		gmail_new_messages = int(array[1])
 		if gajim.config.get('notify_on_new_gmail_email'):
 			img = 'single_msg_recv.png' #FIXME: find a better image
-			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
 			txt = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
 			txt = _('%(new_mail_gajim_ui_msg)s on %(gmail_mail_address)s') % {'new_mail_gajim_ui_msg': txt, 'gmail_mail_address': jid}
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.notify(_('New E-mail'), jid, account, 'gmail', path_to_image = path, text = txt)
 
 	def save_avatar_files(self, jid, photo_decoded):
@@ -946,7 +940,7 @@ class Interface:
 		if gajim.show_notification(account):
 			# check if we should be notified
 			img = 'ft_error.png'
-			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.notify(_('File Transfer Error'),
 				jid, account, msg_type, path, file_props['name'])
 
@@ -966,8 +960,8 @@ class Interface:
 
 		if gajim.show_notification(account):
 			img = 'ft_request.png'
-			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
 			txt = _('%s wants to send you a file.') % gajim.get_name_from_jid(account, jid)
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.notify(_('File Transfer Request'), jid, account, 'file-request', path_to_image = path, text = txt)
 
 	def handle_event_file_progress(self, account, file_props):
@@ -1045,7 +1039,7 @@ class Interface:
 					txt = _('File transfer of %(filename)s to %(name)s stopped.')\
 						% {'filename': filename, 'name': name}
 					img = 'ft_stopped.png'
-			path = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img))
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 		else:
 			txt = ''
 
