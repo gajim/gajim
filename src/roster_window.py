@@ -1518,16 +1518,27 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 							passphrase = self.gpg_passphrase[keyid]
 							save = False
 						else:
-							w = dialogs.PassphraseDialog(
-								_('Passphrase Required'),
-								_('Enter GPG key passphrase for account %s') % account,
-								_('Save passphrase'))
-							passphrase, save = w.run()
-						if passphrase == -1:
-							passphrase = None
-						else:
-							self.gpg_passphrase[keyid] = passphrase
-							gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
+							password_ok = False
+							count = 0
+							title = _('Passphrase Required')
+							second = _('Enter GPG key passphrase for account %s.') % \
+								account
+							while not password_ok and count < 3:
+								count += 1
+								w = dialogs.PassphraseDialog(title, second,
+									_('Save passphrase'))
+								passphrase, save = w.run()
+								if passphrase == -1:
+									passphrase = None
+									password_ok = True
+								else:
+									password_ok = gajim.connections[account].\
+										test_gpg_passphrase(passphrase)
+									title = _('Wrong Passphrase')
+									second = _('Please retype your GPG passphrase or press Cancel.')
+							if passphrase != None:
+								self.gpg_passphrase[keyid] = passphrase
+								gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
 						if save:
 							gajim.config.set_per('accounts', account, 'savegpgpass', True)
 							gajim.config.set_per('accounts', account, 'gpgpassword',

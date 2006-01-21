@@ -1916,6 +1916,13 @@ class Connection:
 			#Inform GUI we just signed in
 			self.dispatch('SIGNED_IN', ())
 
+	def test_gpg_passphrase(self, password):
+		self.gpg.passphrase = password
+		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
+		signed = self.gpg.sign('test', keyID)
+		self.gpg.password = None
+		return signed != 'BAD_PASSPHRASE'
+
 	def get_signed_msg(self, msg):
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
