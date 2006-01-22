@@ -371,15 +371,16 @@ class ChatControlBase(MessageControl):
 		if kind == 'incoming_queue':
 			gajim.last_message_time[self.account][jid] = time.time()
 		urgent = True
-		if (not self.parent_win.get_active_jid() or\
+		if (not self.parent_win.get_active_jid() or \
 				jid != self.parent_win.get_active_jid() or \
-				not self.parent_win.is_active() or not end) and\
+				not self.parent_win.is_active() or not end) and \
 				kind in ('incoming', 'incoming_queue'):
 			self.nb_unread += 1
 			if gajim.interface.systray_enabled and self.notify_on_new_messages():
 				gajim.interface.systray.add_jid(jid, self.account, self.type_id)
 			self.parent_win.redraw_tab(self.contact)
-			self.parent_win.show_title(urgent)
+			if not self.parent_win.is_active():
+				self.parent_win.show_title(urgent)
 
 	def toggle_emoticons(self):
 		'''hide show emoticons_button and make sure emoticons_menu is always there
