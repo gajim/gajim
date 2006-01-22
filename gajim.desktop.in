@@ -7,7 +7,6 @@ Version=0.9.1
 Encoding=UTF-8
 Exec=gajim
 Icon=gajim.png
-MimeType=application/x-executable
 StartupNotify=true
 StartupWMClass=Gajim
 Terminal=false
