@@ -385,7 +385,7 @@ class Interface:
 					if show_notification:
 						img = gajim.get_notification_image_prefix(jid) + '_offline.png'
 						path = gtkgui_helpers.get_path_to_generic_or_avatar(img, jid = jid, 
-							suffix = '_notif_size_colored.png')
+							suffix = '_notif_size_bw.png')
 						notify.notify(_('Contact Signed Out'), jid, account, path_to_image = path)
 
 				if self.remote_ctrl:
