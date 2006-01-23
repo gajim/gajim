@@ -97,9 +97,7 @@ class MessageWindow:
 		# window received focus, so if we had urgency REMOVE IT
 		# NOTE: we do not have to read the message (it maybe in a bg tab)
 		# to remove urgency hint so this functions does that
-		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
-			if widget.props.urgency_hint:
-				widget.props.urgency_hint = False
+		gtkgui_helpers.set_unset_urgency_hint(self.window, False)
 
 		ctrl = self.get_active_control()
 		if ctrl:
@@ -208,6 +206,8 @@ class MessageWindow:
 
 		if urgent:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
+		else:
+			gtkgui_helpers.set_unset_urgency_hint(self.window, False)
 
 	def set_active_tab(self, jid):
 		ctrl = self._controls[jid]

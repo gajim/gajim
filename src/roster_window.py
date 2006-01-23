@@ -1910,9 +1910,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# roster received focus, so if we had urgency REMOVE IT
 		# NOTE: we do not have to read the message to remove urgency
 		# so this functions does that
-		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
-			if widget.props.urgency_hint:
-				widget.props.urgency_hint = False
+		gtkgui_helpers.set_unset_urgency_hint(widget, False)
 
 		# if a contact row is selected, update colors (eg. for status msg)
 		# because gtk engines may differ in bg when window is selected
