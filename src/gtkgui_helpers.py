@@ -519,6 +519,8 @@ def possibly_set_gajim_as_xmpp_handler():
 	if os.path.exists(path_to_dot_kde):
 		path_to_kde_file = os.path.join(path_to_dot_kde, 
 			'share/services/xmpp.protocol')
+		if not os.path.exists(path_to_kde_file):
+			path_to_kde_file = None
 	else:
 		path_to_kde_file = None
 	
