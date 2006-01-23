@@ -870,8 +870,11 @@ class RosterWindow:
 					gajim.log.debug(
 					'Removing contact %s due to unregistered transport %s'\
 						% (jid, contact.jid))
+					gajim.connections[account].unsubscribe(c.jid)
 					# Transport contacts can't have 2 resources
+					gajim.contacts.remove_jid(account, c.jid)
 					self.remove_contact(c, account)
+			gajim.contacts.remove_jid(account, contact.jid)
 			gajim.contacts.remove_contact(account, contact)
 
 	def on_rename(self, widget, iter, path):
