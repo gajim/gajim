@@ -424,7 +424,7 @@ class Interface:
 			if not gajim.interface.msg_win_mgr.has_window(fjid) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
-					room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+					room_jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
 					room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
 					txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
 						% {'nickname': nick, 'room_name': room_name}
