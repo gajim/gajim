@@ -429,6 +429,9 @@ class Connection:
 			else:
 				if not msg.getTag('body'): #no <body>
 					return
+				# Ignore message from room in which we are not
+				if not self.last_history_line.has_key(jid):
+					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
 				if self.name not in no_log_for and not\
 					int(float(time.mktime(tim))) <= self.last_history_line[jid]:
