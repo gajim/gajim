@@ -512,7 +512,6 @@ def get_global_status():
 def get_icon_name_to_show(contact, account = None):
 	'''Get the icon name to show in online, away, requested, ...'''
 	if account and gajim.awaiting_events[account].has_key(contact.jid):
-		#FIXME: change icon for FT
 		return 'message'
 	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 		return contact.show
