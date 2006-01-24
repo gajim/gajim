@@ -112,13 +112,13 @@ class MessageWindow:
 
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
-		for ctrl in self._controls.values():
+		for ctrl in self.controls():
 			if not ctrl.allow_shutdown():
 				return True # halt the delete
 		return False
 
 	def _on_window_destroy(self, win):
-		for ctrl in self._controls.values():
+		for ctrl in self.controls():
 			ctrl.shutdown()
 		self._controls.clear()
 
@@ -180,7 +180,7 @@ class MessageWindow:
 	def show_title(self, urgent = True, control = None):
 		'''redraw the window's title'''
 		unread = 0
-		for ctrl in self._controls.values():
+		for ctrl in self.controls():
 			if ctrl.type_id == message_control.TYPE_GC and not \
 				gajim.config.get('notify_on_all_muc_messages') and not \
 				ctrl.attention_flag:
@@ -280,11 +280,11 @@ class MessageWindow:
 	def repaint_themed_widgets(self):
 		'''Repaint controls in the window with theme color'''
 		# iterate through controls and repaint
-		for ctrl in self._controls.values():
+		for ctrl in self.controls():
 			ctrl.repaint_themed_widgets()
 
 	def _widget_to_control(self, widget):
-		for ctrl in self._controls.values():
+		for ctrl in self.controls():
 			if ctrl.widget == widget:
 				return ctrl
 		return None
@@ -310,13 +310,13 @@ class MessageWindow:
 		return self.window.window.get_origin()
 
 	def toggle_emoticons(self):
-		for ctrl in self._controls.values():
+		for ctrl in self.controls():
 			ctrl.toggle_emoticons()
 	def update_font(self):
-		for ctrl in self._controls.values():
+		for ctrl in self.controls():
 			ctrl.update_font()
 	def update_tags(self):
-		for ctrl in self._controls.values():
+		for ctrl in self.controls():
 			ctrl.update_tags()
 
 	def get_control(self, key):
@@ -326,7 +326,7 @@ class MessageWindow:
 
 		if isinstance(key, unicode):
 			jid = key
-			for ctrl in self._controls.values():
+			for ctrl in self.controls():
 				if ctrl.contact.jid == jid:
 					return ctrl
 			return None
@@ -394,7 +394,7 @@ class MessageWindow:
 		# common menuitems (tab switches)
 		if len(self._controls) > 1: # if there is more than one tab
 			menu.append(gtk.SeparatorMenuItem()) # seperator
-			for ctrl in self._controls.values():
+			for ctrl in self.controls():
 				jid = ctrl.contact.jid
 				if jid != self.get_active_jid():
 					item = gtk.ImageMenuItem(_('Switch to %s') %\
@@ -567,13 +567,13 @@ class MessageWindowMgr:
 		return win
 
 	def _gtk_win_to_msg_win(self, gtk_win):
-		for w in self._windows.values():
+		for w in self.windows():
 			if w.window == gtk_win:
 				return w
 		return None
 
 	def get_window(self, jid):
-		for win in self._windows.values():
+		for win in self.windows():
 			if win.get_control(jid):
 				return win
 		return None
@@ -753,7 +753,7 @@ class MessageWindowMgr:
 			gajim.config.set(size_height_key, height)
 
 	def reconfig(self):
-		for w in self._windows.values():
+		for w in self.windows():
 			self.save_state(w)
 		gajim.interface.save_config()
 		# Map the mode to a int constant for frequent compares
@@ -764,7 +764,7 @@ class MessageWindowMgr:
 		self.mode = common.config.opt_one_window_types.index(mode)
 
 		controls = []
-		for w in self._windows.values():
+		for w in self.windows():
 			w.window.hide()
 			while w.notebook.get_n_pages():
 				page = w.notebook.get_nth_page(0)
