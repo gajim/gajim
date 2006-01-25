@@ -269,8 +269,10 @@ class GroupchatControl(ChatControlBase):
 		if self.attention_flag and gajim.config.get('show_unread_tab_icon'):
 			tab_image = img_16['message']
 		else:
-
-			tab_image = img_16['muc_active']
+			if gajim.gc_connected[self.account][self.room_jid]:
+				tab_image = img_16['muc_active']
+			else:
+				tab_image = img_16['muc_inactive']
 		return tab_image
 
 	def update_ui(self):

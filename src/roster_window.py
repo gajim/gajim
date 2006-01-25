@@ -2208,7 +2208,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		for state in ('connecting', 'online', 'chat', 'away', 'xa',
 				'dnd', 'invisible', 'offline', 'error', 'requested',
 				'message', 'opened', 'closed', 'Not in Roster',
-				'muc_active'):
+				'muc_active', 'muc_inactive'):
 
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
