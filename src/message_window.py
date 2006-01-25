@@ -641,8 +641,7 @@ class MessageWindowMgr:
 		else:
 			return
 
-		if pos[0] > 0 and pos[1] > 0:
-			gtkgui_helpers.move_window(win.window, pos[0], pos[1])
+		gtkgui_helpers.move_window(win.window, pos[0], pos[1])
 
 	def _mode_to_key(self, contact, acct, type):
 		if self.mode == self.ONE_MSG_WINDOW_NEVER:
@@ -709,6 +708,7 @@ class MessageWindowMgr:
 	def windows(self):
 		for w in self._windows.values():
 			yield w
+
 	def controls(self):
 		for w in self._windows.values():
 			for c in w.controls():
@@ -725,7 +725,7 @@ class MessageWindowMgr:
 		if not gajim.config.get('saveposition'):
 			return
 		
-		# Save window size and postion
+		# Save window size and position
 		pos_x_key = 'msgwin-x-position'
 		pos_y_key = 'msgwin-y-position'
 		size_width_key = 'msgwin-width'
@@ -737,33 +737,33 @@ class MessageWindowMgr:
 
 		# If any of these values seem bogus don't update.
 		if x < 0 or y < 0 or width < 0 or height < 0:
+			#print 'x', x, 'y', y, 'w', width, 'h', height
 			return
 
-		if self.mode == self.ONE_MSG_WINDOW_NEVER:
-			# Use whatever is current to not overwrite the 'always' settings
-			# when going from never->always
-			x = y = -1
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			acct = msg_win.account
 		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
 			type = msg_win.type
-			pos_x_key = type + "-msgwin-x-position"
-			pos_y_key = type + "-msgwin-y-position"
-			size_width_key = type + "-msgwin-width"
-			size_height_key = type + "-msgwin-height"
+			pos_x_key = type + '-msgwin-x-position'
+			pos_y_key = type + '-msgwin-y-position'
+			size_width_key = type + '-msgwin-width'
+			size_height_key = type + '-msgwin-height'
 
 		if acct:
-			if x >= 0 and y >= 0:
-				gajim.config.set_per('accounts', acct, pos_x_key, x)
-				gajim.config.set_per('accounts', acct, pos_y_key, y)
 			gajim.config.set_per('accounts', acct, size_width_key, width)
 			gajim.config.set_per('accounts', acct, size_height_key, height)
+
+			if self.mode != self.ONE_MSG_WINDOW_NEVER:
+				gajim.config.set_per('accounts', acct, pos_x_key, x)
+				gajim.config.set_per('accounts', acct, pos_y_key, y)
+		
 		else:
-			if x >= 0 and y >= 0:
-				gajim.config.set(pos_x_key, x)
-				gajim.config.set(pos_y_key, y)
 			gajim.config.set(size_width_key, width)
 			gajim.config.set(size_height_key, height)
+			
+			if self.mode != self.ONE_MSG_WINDOW_NEVER:
+				gajim.config.set(pos_x_key, x)
+				gajim.config.set(pos_y_key, y)
 
 	def reconfig(self):
 		for w in self.windows():
