@@ -305,7 +305,7 @@ class GroupchatControl(ChatControlBase):
 			no_queue = False
 
 		# We print if window is opened
-		pm_control = gajim.interface.msg_win_mgr.get_control(fjid)
+		pm_control = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
 		if pm_control:
 			pm_control.print_conversation(msg, tim = tim)
 			return
@@ -422,7 +422,7 @@ class GroupchatControl(ChatControlBase):
 		and does not already have it as last event. If it goes to add this line
 		it removes previous line first'''
 
-		win = gajim.interface.msg_win_mgr.get_window(self.room_jid)
+		win = gajim.interface.msg_win_mgr.get_window(self.room_jid, self.account)
 		if self.room_jid == win.get_active_jid() and\
 		win.window.get_property('has-toplevel-focus'):
 			# it's the current room and it's the focused window.
@@ -556,7 +556,7 @@ class GroupchatControl(ChatControlBase):
 
 		self._start_private_message(nick)
 		if msg:
-			gajim.interface.msg_win_mgr.get_control(fjid).send_message(msg)
+			gajim.interface.msg_win_mgr.get_control(fjid, self.account).send_message(msg)
 
 	def draw_contact(self, nick, selected=False, focus=False):
 		iter = self.get_contact_iter(nick)
@@ -860,7 +860,7 @@ class GroupchatControl(ChatControlBase):
 				reason = message_array.pop(0)
 			gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
 							show='offline', status=reason)
-			self.parent_win.remove_tab(self.contact)
+			self.parent_win.remove_tab(self)
 			return True
 		elif command == 'ban':
 			if len(message_array):
@@ -1312,11 +1312,11 @@ class GroupchatControl(ChatControlBase):
 		c = gajim.contacts.contact_from_gc_contact(gc_c)
 		nick_jid = c.jid
 
-		win = gajim.interface.msg_win_mgr.get_window(nick_jid)
+		win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
 		if not win:
 			gajim.interface.roster.new_chat(c, self.account, private_chat = True)
-			win = gajim.interface.msg_win_mgr.get_window(nick_jid)
-		win.set_active_tab(nick_jid)
+			win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
+		win.set_active_tab(nick_jid, self.account)
 		win.window.present()
 
 	def on_list_treeview_row_activated(self, widget, path, col = 0):

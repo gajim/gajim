@@ -178,7 +178,7 @@ class Interface:
 		title = data[1]
 		prompt = data[2]
 		proposed_nick = data[3]
-		gc_control = gajim.interface.msg_win_mgr.get_control(room_jid)
+		gc_control = gajim.interface.msg_win_mgr.get_control(room_jid, account)
 		if gc_control: # user may close the window before we are here
 			gc_control.show_change_nick_input_dialog(title, prompt, proposed_nick)
 
@@ -220,7 +220,7 @@ class Interface:
 					(jid_from, file_props))
 				conn.disconnect_transfer(file_props)
 				return
-		ctrl = gajim.interface.msg_win_mgr.get_control(jid_from)
+		ctrl = gajim.interface.msg_win_mgr.get_control(jid_from, account)
 		if ctrl and ctrl.type_id == message_control.TYPE_GC:
 			ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
 
@@ -241,7 +241,7 @@ class Interface:
 			if not gajim.gc_connected.has_key(account):
 				return
 			for room_jid in gajim.gc_connected[account]:
-				gc_control = gajim.interface.msg_win_mgr.get_control(room_jid)
+				gc_control = gajim.interface.msg_win_mgr.get_control(room_jid, account)
 				if gc_control:
 					gc_control.got_disconnected()
 		else:
@@ -348,7 +348,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_connected',
 					'enabled') and gajim.allow_notifications[account]:
 					helpers.play_sound('contact_connected')
-				if not gajim.interface.msg_win_mgr.has_window(jid) and \
+				if not gajim.interface.msg_win_mgr.has_window(jid, account) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
 					gajim.allow_notifications[account]:
@@ -373,7 +373,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
 						'enabled'):
 					helpers.play_sound('contact_disconnected')
-				if not gajim.interface.msg_win_mgr.has_window(jid) and \
+				if not gajim.interface.msg_win_mgr.has_window(jid, account) and \
 					not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signout'):
 					show_notification = False
@@ -416,12 +416,12 @@ class Interface:
 			elif gajim.connections[account].connected in (2, 3): # we're online or chat
 				show_notification = True
 
-		chat_control = gajim.interface.msg_win_mgr.get_control(jid)
+		chat_control = gajim.interface.msg_win_mgr.get_control(jid, account)
 		if chat_control and chat_control.type_id == message_control.TYPE_GC:
 			# it's a Private Message
 			nick = gajim.get_nick_from_fjid(array[0])
 			fjid = array[0]
-			if not gajim.interface.msg_win_mgr.has_window(fjid) and \
+			if not gajim.interface.msg_win_mgr.has_window(fjid, account) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
 					room_jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
@@ -435,6 +435,7 @@ class Interface:
 			chat_control.on_private_message(nick, array[1], array[2])
 			return
 				
+		# FIXME: This should happen first
 		if gajim.config.get('ignore_unknown_contacts') and \
 			not gajim.contacts.get_contact(account, jid):
 			return
@@ -442,13 +443,14 @@ class Interface:
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
-			ctrl = gajim.interface.msg_win_mgr.get_control(jid)
+			# FIXME: Why is this here?
+			#ctrl = gajim.interface.msg_win_mgr.get_control(jid,)
 			if chatstate is not None: # he or she sent us reply, so he supports jep85
 				contact.chatstate = chatstate
 				if contact.our_chatstate == 'ask': # we were jep85 disco?
 					contact.our_chatstate = 'active' # no more
 				
-				ctrl.handle_incoming_chatstate()
+				chat_control.handle_incoming_chatstate()
 			elif contact.chatstate != 'active':
 				# got no valid jep85 answer, peer does not support it
 				contact.chatstate = False
@@ -461,7 +463,7 @@ class Interface:
 			return
 
 		first = False
-		if not gajim.interface.msg_win_mgr.has_window(jid) and \
+		if not gajim.interface.msg_win_mgr.has_window(jid, account) and \
 		not gajim.awaiting_events[account].has_key(jid):
 			first = True
 			if gajim.config.get('notify_on_new_message'):
@@ -506,7 +508,7 @@ class Interface:
 			if jid == gc_control.contact.jid:
 				if len(jids) > 1: # it's a pm
 					nick = jids[1]
-					if not gajim.interface.msg_win_mgr.get_control(fjid):
+					if not gajim.interface.msg_win_mgr.get_control(fjid, account):
 						tv = gc_control.list_treeview
 						model = tv.get_model()
 						i = gc_control.get_contact_iter(nick)
@@ -518,7 +520,7 @@ class Interface:
 							name = nick, show = show)
 						c = gajim.contacts.contact_from_gc_contct(c)
 						self.roster.new_chat(c, account, private_chat = True)
-					ctrl = gajim.interface.msg_win_mgr.get_control(fjid)
+					ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
 					ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
 								'status')
 					return
@@ -676,12 +678,12 @@ class Interface:
 		# show avatar in chat
 		win = None
 		ctrl = None
-		if gajim.interface.msg_win_mgr.has_window(jid):
-			win = gajim.interface.msg_win_mgr.get_window(jid)
-			ctrl = win.get_control(jid)
-		elif resource and gajim.interface.msg_win_mgr.has_window(jid + '/' + resource):
-			win = gajim.interface.msg_win_mgr.get_window(jid + '/' + resource)
-			ctrl = win.get_control(jid + '/' + resource)
+		if gajim.interface.msg_win_mgr.has_window(jid, account):
+			win = gajim.interface.msg_win_mgr.get_window(jid, account)
+			ctrl = win.get_control(jid, account)
+		elif resource and gajim.interface.msg_win_mgr.has_window(jid + '/' + resource, account):
+			win = gajim.interface.msg_win_mgr.get_window(jid + '/' + resource, account)
+			ctrl = win.get_control(jid + '/' + resource, account)
 		if win and ctrl.type_id != message_control.TYPE_GC:
 			ctrl.show_avatar()
 
@@ -712,8 +714,8 @@ class Interface:
 		show = array[1]
 		status = array[2]
 		# print status in chat window and update status/GPG image
-		if gajim.interface.msg_win_mgr.has_window(fjid):
-			ctrl = gajim.interface.msg_win_mgr.get_control(fjid)
+		if gajim.interface.msg_win_mgr.has_window(fjid, account):
+			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
 			contact = ctrl.contact
 			contact.show = show
 			contact.status = status
@@ -724,12 +726,12 @@ class Interface:
 			ctrl.draw_banner()
 
 		# Get the window and control for the updated status, this may be a PrivateChatControl
-		control = gajim.interface.msg_win_mgr.get_control(room_jid)
+		control = gajim.interface.msg_win_mgr.get_control(room_jid, account)
 		if control:
 			control.chg_contact_status(nick, show, status, array[4], array[5], array[6],
 						array[7], array[8], array[9], array[10])
 			# Find any PM chat through this room, and tell it to update.
-			pm_control = gajim.interface.msg_win_mgr.get_control(fjid)
+			pm_control = gajim.interface.msg_win_mgr.get_control(fjid, account)
 			if pm_control:
 				pm_control.parent_win.redraw_tab(pm_control.contact)
 			if self.remote_ctrl:
@@ -739,7 +741,7 @@ class Interface:
 		# ('GC_MSG', account, (jid, msg, time))
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
-		gc_control = gajim.interface.msg_win_mgr.get_control(room_jid)
+		gc_control = gajim.interface.msg_win_mgr.get_control(room_jid, account)
 		if not gc_control:
 			return
 		if len(jids) == 1:
@@ -756,7 +758,7 @@ class Interface:
 		#('GC_SUBJECT', account, (jid, subject, body))
 		jids = array[0].split('/', 1)
 		jid = jids[0]
-		gc_control = gajim.interface.msg_win_mgr.get_control(jid)
+		gc_control = gajim.interface.msg_win_mgr.get_control(jid, account)
 		if not gc_control:
 			return
 		gc_control.set_subject(array[1])
@@ -1364,17 +1366,17 @@ class Interface:
 	def handle_event(self, account, jid, typ):
 		w = None
 		if typ == message_control.TYPE_GC:
-			w = gajim.interface.msg_win_mgr.get_window(jid)
+			w = gajim.interface.msg_win_mgr.get_window(jid, account)
 		elif typ == message_control.TYPE_CHAT:
-			if gajim.interface.msg_win_mgr.has_window(jid):
-				w = gajim.interface.msg_win_mgr.get_window(jid)
+			if gajim.interface.msg_win_mgr.has_window(jid, account):
+				w = gajim.interface.msg_win_mgr.get_window(jid, account)
 			else:
 				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 				self.roster.new_chat(contact, account)
-				w = gajim.interface.msg_win_mgr.get_window(jid)
+				w = gajim.interface.msg_win_mgr.get_window(jid, account)
 		elif typ == message_control.TYPE_PM:
-			if gajim.interface.msg_win_mgr.has_window(jid):
-				w = gajim.interface.msg_win_mgr.get_window(jid)
+			if gajim.interface.msg_win_mgr.has_window(jid, account):
+				w = gajim.interface.msg_win_mgr.get_window(jid, account)
 			else:
 				room_jid, nick = jid.split('/', 1)
 				gc_contact = gajim.contacts.get_gc_contact(account, room_jid,
@@ -1387,7 +1389,7 @@ class Interface:
 						name = nick, show = show)
 				c = gajim.contacts.contact_from_gc_contact(gc_contact)
 				self.roster.new_chat(c, account, private_chat = True)
-				w = gajim.interface.msg_win_mgr.get_window(jid)
+				w = gajim.interface.msg_win_mgr.get_window(jid, account)
 		elif typ in ('normal', 'file-request', 'file-request-error',
 			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 			# Get the first single message event
@@ -1401,10 +1403,10 @@ class Interface:
 				url = ('http://mail.google.com/')
 			helpers.launch_browser_mailer('url', url)
 		if w:
-			w.set_active_tab(jid)
+			w.set_active_tab(jid, account)
 			w.window.present()
 			w.window.window.focus()
-			ctrl = w.get_control(jid)
+			ctrl = w.get_control(jid, account)
 			# Using isinstance here because we want to catch all derived types
 			if isinstance(ctrl, ChatControlBase):
 				tv = ctrl.conv_textview

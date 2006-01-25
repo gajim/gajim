@@ -131,8 +131,8 @@ class MessageWindow:
 		# Add notebook page and connect up to the tab's close button
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_ebox', APP)
 		tab_label_box = xml.get_widget('chat_tab_ebox')
-		xml.signal_connect('on_close_button_clicked', self.on_close_button_clicked,
-					control.contact)
+		xml.signal_connect('on_close_button_clicked', self._on_close_button_clicked,
+					control)
 		xml.signal_connect('on_tab_eventbox_button_press_event',
 				self.on_tab_eventbox_button_press_event, control.widget)
 		self.notebook.append_page(control.widget, tab_label_box)
@@ -173,9 +173,9 @@ class MessageWindow:
 			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
 
-	def on_close_button_clicked(self, button, contact):
+	def _on_close_button_clicked(self, button, control):
 		'''When close button is pressed: close a tab'''
-		self.remove_tab(contact)
+		self.remove_tab(control)
 
 	def show_title(self, urgent = True, control = None):
 		'''redraw the window's title'''
@@ -209,28 +209,28 @@ class MessageWindow:
 		else:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, False)
 
-	def set_active_tab(self, jid):
+	def set_active_tab(self, jid, acct):
+		# FIXME: Use acct
 		ctrl = self._controls[jid]
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 	
-	def remove_tab(self, contact):
+	def remove_tab(self, ctrl):
 		# Shutdown the MessageControl
-		ctrl = self.get_control(contact.jid)
 		if not ctrl.allow_shutdown():
 			return
 		ctrl.shutdown()
 
 		# Update external state
 		if gajim.interface.systray_enabled:
-			gajim.interface.systray.remove_jid(contact.jid, ctrl.account,
+			gajim.interface.systray.remove_jid(ctrl.contact.jid, ctrl.account,
 								ctrl.type_id)
 		del gajim.last_message_time[ctrl.account][ctrl.contact.jid]
 
 		self.disconnect_tab_dnd(ctrl.widget)
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
-		del self._controls[contact.jid]
+		del self._controls[ctrl.contact.jid]
 		if len(self._controls) == 1: # we are going from two tabs to one
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
@@ -319,8 +319,10 @@ class MessageWindow:
 		for ctrl in self.controls():
 			ctrl.update_tags()
 
-	def get_control(self, key):
-		'''Return the MessageControl for jid or n, where n is the notebook page index'''
+	def get_control(self, key, acct):
+		'''Return the MessageControl for jid or n, where n is a notebook page index.
+		When key is an int index acct may be None'''
+		# FIXME: Use acct
 		if isinstance(key, str):
 			key = unicode(key, 'utf-8')
 
@@ -371,7 +373,7 @@ class MessageWindow:
 					ind = self.notebook.get_n_pages() - 1
 			if ind == current:
 				break # a complete cycle without finding an unread tab 
-			ctrl = self.get_control(ind)
+			ctrl = self.get_control(ind, None)
 			if ctrl.nb_unread > 0:
 				found = True
 				break # found
@@ -403,7 +405,8 @@ class MessageWindow:
 									gtk.ICON_SIZE_MENU)
 					item.set_image(img)
 					item.connect('activate',
-						lambda obj, jid:self.set_active_tab(jid), jid)
+						lambda obj, jid:self.set_active_tab(jid, ctrl.account),
+						jid)
 					menu.append(item)
 		# show the menu
 		menu.popup(None, None, None, event.button, event.time)
@@ -433,9 +436,9 @@ class MessageWindow:
 			elif event.keyval == gtk.keysyms.Tab: # CTRL + TAB
 				self.move_to_next_unread_tab(True)
 			elif event.keyval == gtk.keysyms.F4: # CTRL + F4
-				self.remove_tab(contact)
+				self.remove_tab(ctrl)
 			elif event.keyval == gtk.keysyms.w: # CTRL + W
-				self.remove_tab(contact)
+				self.remove_tab(ctrl)
 
 		# MOD1 (ALT) mask
 		elif event.state & gtk.gdk.MOD1_MASK:
@@ -457,7 +460,7 @@ class MessageWindow:
 				ctrl.set_compact_view(not ctrl.compact_view_current)
 		# Close tab bindings
 		elif event.keyval == gtk.keysyms.Escape: # ESCAPE
-			self.remove_tab(contact)
+			self.remove_tab(ctrl)
 		else:
 			# If the active control has a message_textview pass the event to it
 			active_ctrl = self.get_active_control()
@@ -572,14 +575,14 @@ class MessageWindowMgr:
 				return w
 		return None
 
-	def get_window(self, jid):
+	def get_window(self, jid, acct):
 		for win in self.windows():
-			if win.get_control(jid):
+			if win.get_control(jid, acct):
 				return win
 		return None
 
-	def has_window(self, jid):
-		return self.get_window(jid)
+	def has_window(self, jid, acct):
+		return self.get_window(jid, acct)
 
 	def one_window_opened(self, contact, acct, type):
 		try:
@@ -679,14 +682,15 @@ class MessageWindowMgr:
 				del self._windows[k]
 				return
 
-	def get_control(self, jid):
+	def get_control(self, jid, acct):
 		'''Amongst all windows, return the MessageControl for jid'''
-		win = self.get_window(jid)
+		win = self.get_window(jid, acct)
 		if win:
-			return win.get_control(jid)
+			return win.get_control(jid, acct)
 		return None
 
 	def get_controls(self, type):
+		# FIXME: Optionally accept an account arg
 		ctrls = []
 		for c in self.controls():
 			if c.type_id == type:
@@ -774,12 +778,10 @@ class MessageWindowMgr:
 				controls.append(ctrl)
 			w.window.destroy()
 
-		for k in self._windows.keys():
-			del self._windows[k]
 		self._windows = {}
 
 		for ctrl in controls:
-			mw = self.get_window(ctrl.contact.jid)
+			mw = self.get_window(ctrl.contact.jid, ctr.account)
 			if not mw:
 				mw = self.create_window(ctrl.contact, ctrl.account, ctrl.type_id)
 			ctrl.parent_win = mw

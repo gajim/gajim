@@ -153,7 +153,7 @@ def get_real_jid_from_fjid(account, fjid):
 	if not nick: # It's not a fake_jid, it is a real jid
 		return fjid # we return the real jid
 	real_jid = fjid
-	if interface.msg_win_mgr.get_control(room_jid):
+	if interface.msg_win_mgr.get_control(room_jid, account):
 		# It's a pm, so if we have real jid it's in contact.jid
 		gc_contact = contacts.get_gc_contact(account, room_jid, nick)
 		if not gc_contact:

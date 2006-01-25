@@ -333,8 +333,8 @@ class RosterWindow:
 
 	def join_gc_room(self, account, room_jid, nick, password):
 		'''joins the room immediatelly'''
-		if gajim.interface.msg_win_mgr.has_window(room_jid) and \
-		gajim.gc_connected[account][room_jid]:
+		if gajim.interface.msg_win_mgr.has_window(room_jid, account) and \
+				gajim.gc_connected[account][room_jid]:
 			dialogs.ErrorDialog(_('You are already in room %s') % room_jid
 				).get_response()
 			return
@@ -344,10 +344,10 @@ class RosterWindow:
 				).get_response()
 			return
 		room, server = room_jid.split('@')
-		if not gajim.interface.msg_win_mgr.has_window(room_jid):
+		if not gajim.interface.msg_win_mgr.has_window(room_jid, account):
 			self.new_room(room_jid, nick, account)
-		gc_win = gajim.interface.msg_win_mgr.get_window(room_jid)
-		gc_win.set_active_tab(room_jid)
+		gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
+		gc_win.set_active_tab(room_jid, account)
 		gc_win.window.present()
 		gajim.connections[account].join_gc(nick, room, server, password)
 		if password:
@@ -726,10 +726,10 @@ class RosterWindow:
 				self.add_contact_to_roster(contact.jid, account)
 			self.draw_contact(contact.jid, account)
 		# print status in chat window and update status/GPG image
-		if gajim.interface.msg_win_mgr.has_window(contact.jid):
+		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			jid = contact.jid
-			win = gajim.interface.msg_win_mgr.get_window(contact.jid)
-			ctl = win.get_control(jid)
+			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
+			ctl = win.get_control(jid, account)
 			ctl.update_ui()
 			win.redraw_tab(contact)
 	
@@ -923,8 +923,8 @@ class RosterWindow:
 			keys[contact.jid] = keyID[0]
 			for u in gajim.contacts.get_contact(account, contact.jid):
 				u.keyID = keyID[0]
-			if gajim.interface.msg_win_mgr.has_window(contact.jid):
-				ctl = gajim.interface.msg_win_mgr.get_control(contact.jid)
+			if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+				ctl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
 				ctl.update_ui()
 		keys_str = ''
 		for jid in keys:
@@ -1389,12 +1389,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				jid = model[iter][C_JID].decode('utf-8')
 				win = None
 				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
-				if gajim.interface.msg_win_mgr.has_window(c.jid):
-					win = gajim.interface.msg_win_mgr.get_window(c.jid)
+				if gajim.interface.msg_win_mgr.has_window(c.jid, account):
+					win = gajim.interface.msg_win_mgr.get_window(c.jid, account)
 				elif c:
 					self.new_chat(c, account)
-					win = gajim.interface.msg_win_mgr.get_window(jid)
-				win.set_active_tab(jid)
+					win = gajim.interface.msg_win_mgr.get_window(jid, account)
+				win.set_active_tab(jid, account)
 				win.window.present()
 			elif type == 'account':
 				account = model[iter][C_ACCOUNT]
@@ -1451,7 +1451,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			for u in gajim.contacts.get_contact(account, contact.jid):
 				self.remove_contact(u, account)
 			gajim.contacts.remove_jid(account, u.jid)
-			if gajim.interface.msg_win_mgr.has_window(contact.jid):
+			if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 				c = gajim.contacts.create_contact(jid = contact.jid,
 					name = contact.name, groups = [_('Not in Roster')],
 					show = 'Not in Roster', status = '', ask = 'none',
@@ -1548,8 +1548,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 														passphrase)
 					gajim.connections[account].gpg_passphrase(passphrase)
 
-		for gc_control in gajim.interface.msg_win_mgr.get_controls(
-			message_control.TYPE_GC):
+		for gc_control in gajim.interface.msg_win_mgr.get_controls(message_control.TYPE_GC):
 			if gc_control.account == account:
 				gajim.connections[account].send_gc_status(gc_control.nick,
 					gc_control.room_jid, status, txt)
@@ -1698,7 +1697,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		else:
 			type = message_control.TYPE_PM
 
-		mw = gajim.interface.msg_win_mgr.get_window(contact.jid)
+		mw = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type)
 
@@ -1728,16 +1727,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact_to_roster(contact.jid, account)
 
-		if not gajim.interface.msg_win_mgr.has_window(contact.jid):
+		if not gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			self.new_chat(contact, account)
-		mw = gajim.interface.msg_win_mgr.get_window(contact.jid)
-		mw.set_active_tab(jid)
+		mw = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
+		mw.set_active_tab(jid, account)
 		mw.window.present()
 
 	def new_room(self, room_jid, nick, account):
 		# Get target window, create a control, and associate it with the window
 		contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
-		mw = gajim.interface.msg_win_mgr.get_window(contact.jid)
+		mw = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account,
 								GroupchatControl.TYPE_ID)
@@ -1786,11 +1785,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 
 		# We print if window is opened and it's not a single message
-		if gajim.interface.msg_win_mgr.has_window(jid) and msg_type != 'normal':
+		if gajim.interface.msg_win_mgr.has_window(jid, account) and msg_type != 'normal':
 			typ = ''
 			if msg_type == 'error':
 				typ = 'status'
-			ctl = gajim.interface.msg_win_mgr.get_control(jid)
+			ctl = gajim.interface.msg_win_mgr.get_control(jid, account)
 			ctl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
 						subject = subject)
 			return
@@ -1804,7 +1803,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		qs[jid].append((kind, (msg, subject, msg_type, tim, encrypted, resource)))
 		self.nb_unread += 1
 		if popup:
-			if not gajim.interface.msg_win_mgr.has_window(jid):
+			if not gajim.interface.msg_win_mgr.has_window(jid, account):
 				self.new_chat(contact, account)
 				if path:
 					self.tree.expand_row(path[0:1], False)
@@ -2062,13 +2061,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					return
 			c = gajim.contacts.get_contact_with_highest_priority(account, jid)
 			# Get the window containing the chat
-			win = gajim.interface.msg_win_mgr.get_window(jid)
+			win = gajim.interface.msg_win_mgr.get_window(jid, account)
 			if win:
-				win.set_active_tab(jid)
+				win.set_active_tab(jid, account)
 			elif c:
 				self.new_chat(c, account)
-				win = gajim.interface.msg_win_mgr.get_window(jid)
-				win.set_active_tab(jid)
+				win = gajim.interface.msg_win_mgr.get_window(jid, account)
+				win.set_active_tab(jid, account)
 			win.window.present()
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):

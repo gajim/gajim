@@ -233,7 +233,7 @@ class SignalObject(DbusPrototype):
 		for acct in accounts:
 			if gajim.connections[acct].connected > 1: # account is  online
 				contact = gajim.contacts.get_first_contact_from_jid(acct, jid)
-				if gajim.interface.msg_win_mgr.has_window(jid):
+				if gajim.interface.msg_win_mgr.has_window(jid, acct):
 					connected_account = acct
 					break
 				# jid is in roster
@@ -254,7 +254,7 @@ class SignalObject(DbusPrototype):
 		if connected_account:
 			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
-			win = gajim.interface.msg_win_mgr.get_window(jid).window
+			win = gajim.interface.msg_win_mgr.get_window(jid, connected_account).window
 			if win.get_property('visible'):
 				win.window.focus()
 			return True
