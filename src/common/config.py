@@ -41,9 +41,6 @@ opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
 opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
 
-DEFAULT_WINDOW_WIDTH  = 480
-DEFAULT_WINDOW_HEIGHT = 440
-
 class Config:
 
 	__options = {

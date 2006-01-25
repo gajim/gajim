@@ -602,11 +602,10 @@ class MessageWindowMgr:
 
 	def _size_window(self, win, acct, type):
 		'''Resizes window from config settings'''
-		size = None
 		if not gajim.config.get('saveposition'):
-			size = (common.config.DEFAULT_WINDOW_WIDTH,
-				common.config.DEFAULT_WINDOW_HEIGHT)
-		elif self.mode == self.CONFIG_NEVER or self.mode == self.CONFIG_ALWAYS:
+			return
+			
+		if self.mode == self.CONFIG_NEVER or self.mode == self.CONFIG_ALWAYS:
 			size = (gajim.config.get('msgwin-width'),
 				gajim.config.get('msgwin-height'))
 		elif self.mode == self.CONFIG_PERACCT:
@@ -619,9 +618,10 @@ class MessageWindowMgr:
 			opt_height = type + '-msgwin-height'
 			size = (gajim.config.get(opt_width),
 					gajim.config.get(opt_height))
+		else:
+			return
 
-		if size is not None:
-			gtkgui_helpers.resize_window(win.window, size[0], size[1])
+		gtkgui_helpers.resize_window(win.window, size[0], size[1])
 	
 	def _position_window(self, win, acct, type):
 		'''Returns the position tuple: (x, y)'''
