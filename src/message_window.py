@@ -629,7 +629,6 @@ class MessageWindowMgr:
 		if not gajim.config.get('saveposition') or self.mode == self.ONE_MSG_WINDOW_NEVER:
 			return
 
-		pos = (-1, -1)  # default is left up to the native window manager
 		if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
 			pos = (gajim.config.get('msgwin-x-position'),
 				gajim.config.get('msgwin-y-position'))
@@ -639,6 +638,8 @@ class MessageWindowMgr:
 		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
 			pos = (gajim.config.get(type + '-msgwin-x-position'),
 				gajim.config.get(type + '-msgwin-y-position'))
+		else:
+			return
 
 		if pos[0] > 0 and pos[1] > 0:
 			gtkgui_helpers.move_window(win.window, pos[0], pos[1])
