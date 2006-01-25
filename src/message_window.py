@@ -737,7 +737,6 @@ class MessageWindowMgr:
 
 		# If any of these values seem bogus don't update.
 		if x < 0 or y < 0 or width < 0 or height < 0:
-			#print 'x', x, 'y', y, 'w', width, 'h', height
 			return
 
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
