@@ -1130,7 +1130,7 @@ class Interface:
 				break
 		if ask_message:
 			message = self.roster.get_status_message('online')
-			if message == -1:
+			if message == None:
 				return
 			for a in gajim.connections:
 				if gajim.config.get_per('accounts', a, 'autoconnect'):
