@@ -731,7 +731,7 @@ class Interface:
 			# Find any PM chat through this room, and tell it to update.
 			pm_control = gajim.interface.msg_win_mgr.get_control(fjid, account)
 			if pm_control:
-				pm_control.parent_win.redraw_tab(pm_control.contact)
+				pm_control.parent_win.redraw_tab(pm_control)
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
