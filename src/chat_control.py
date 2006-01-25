@@ -82,7 +82,8 @@ class ChatControlBase(MessageControl):
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
 		self.conv_textview.show_all()
-		self.conv_scrolledwindow = self.xml.get_widget('conversation_scrolledwindow')
+		self.conv_scrolledwindow = self.xml.get_widget(
+			'conversation_scrolledwindow')
 		self.conv_scrolledwindow.add(self.conv_textview)
 		self.conv_scrolledwindow.get_vadjustment().connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
@@ -122,7 +123,12 @@ class ChatControlBase(MessageControl):
 				gtkspell.Spell(self.msg_textview)
 			except gobject.GError, msg:
 				#FIXME: add a ui for this use spell.set_language()
-				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
+				dialogs.ErrorDialog(unicode(msg), _('If that is not your language '
+					'for which you want to highlight misspelled words, then please '
+					'set your $LANG as appropriate. Eg. for French do export '
+					'LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to '
+					'make it global in /etc/profile.\n\nHighlighting misspelled '
+					'words feature will not be used')).get_response()
 				gajim.config.set('use_speller', False)
 
 		self.print_time_timeout_id = None
@@ -429,7 +435,8 @@ class ChatControlBase(MessageControl):
 		'''popup emoticons menu'''
 		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
 		self.button_clicked = widget
-		self.emoticons_menu.popup(None, None, self.position_menu_under_button, 1, 0)
+		self.emoticons_menu.popup(None, None, self.position_menu_under_button, 1,
+			0)
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
