@@ -554,19 +554,21 @@ class MessageWindowMgr:
 	'''A manager and factory for MessageWindow objects'''
 
 	# These constants map to common.config.opt_one_window_types indices
-	CONFIG_NEVER   = 0
-	CONFIG_ALWAYS  = 1
-	CONFIG_PERACCT = 2
-	CONFIG_PERTYPE = 3
+	(
+	ONE_MSG_WINDOW_NEVER,
+	ONE_MSG_WINDOW_ALWAYS,
+	ONE_MSG_WINDOW_PERACCT,
+	ONE_MSG_WINDOW_PERTYPE
+	) = range(4)
 	# A key constant for the main window for all messages
 	MAIN_WIN = 'main'
 
 	def __init__(self):
 		''' A dictionary of windows; the key depends on the config:
-		 CONFIG_NEVER: The key is the contact JID
-		 CONFIG_ALWAYS: The key is MessageWindowMgr.MAIN_WIN 
-		 CONFIG_PERACCT: The key is the account name
-		 CONFIG_PERTYPE: The key is a message type constant'''
+		 ONE_MSG_WINDOW_NEVER: The key is the contact JID
+		 ONE_MSG_WINDOW_ALWAYS: The key is MessageWindowMgr.MAIN_WIN 
+		 ONE_MSG_WINDOW_PERACCT: The key is the account name
+		 ONE_MSG_WINDOW_PERTYPE: The key is a message type constant'''
 		self._windows = {}
 		# Map the mode to a int constant for frequent compares
 		mode = gajim.config.get('one_message_window')
@@ -601,17 +603,17 @@ class MessageWindowMgr:
 			return False
 
 	def _size_window(self, win, acct, type):
-		'''Resizes window from config settings'''
+		'''Resizes window according to config settings'''
 		if not gajim.config.get('saveposition'):
 			return
 			
-		if self.mode == self.CONFIG_NEVER or self.mode == self.CONFIG_ALWAYS:
+		if self.mode == self.ONE_MSG_WINDOW_NEVER or self.mode == self.ONE_MSG_WINDOW_ALWAYS:
 			size = (gajim.config.get('msgwin-width'),
 				gajim.config.get('msgwin-height'))
-		elif self.mode == self.CONFIG_PERACCT:
+		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
 				gajim.config.get_per('accounts', acct, 'msgwin-height'))
-		elif self.mode == self.CONFIG_PERTYPE:
+		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
 			if type == message_control.TYPE_PM:
 				type = message_control.TYPE_CHAT
 			opt_width = type + '-msgwin-width'
@@ -624,18 +626,18 @@ class MessageWindowMgr:
 		gtkgui_helpers.resize_window(win.window, size[0], size[1])
 	
 	def _position_window(self, win, acct, type):
-		'''Returns the position tuple: (x, y)'''
-		if not gajim.config.get('saveposition') or self.mode == self.CONFIG_NEVER:
+		'''Moves window according to config settings'''
+		if not gajim.config.get('saveposition') or self.mode == self.ONE_MSG_WINDOW_NEVER:
 			return
 
 		pos = (-1, -1)  # default is left up to the native window manager
-		if self.mode == self.CONFIG_ALWAYS:
+		if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
 			pos = (gajim.config.get('msgwin-x-position'),
 				gajim.config.get('msgwin-y-position'))
-		elif self.mode == self.CONFIG_PERACCT:
+		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			pos = (gajim.config.get_per('accounts', acct, 'msgwin-x-position'),
 				gajim.config.get_per('accounts', acct, 'msgwin-y-position'))
-		elif self.mode == self.CONFIG_PERTYPE:
+		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
 			pos = (gajim.config.get(type + '-msgwin-x-position'),
 				gajim.config.get(type + '-msgwin-y-position'))
 
@@ -643,13 +645,13 @@ class MessageWindowMgr:
 			gtkgui_helpers.move_window(win.window, pos[0], pos[1])
 
 	def _mode_to_key(self, contact, acct, type):
-		if self.mode == self.CONFIG_NEVER:
+		if self.mode == self.ONE_MSG_WINDOW_NEVER:
 			key = acct + contact.jid
-		elif self.mode == self.CONFIG_ALWAYS:
+		elif self.mode == self.ONE_MSG_WINDOW_ALWAYS:
 			key = self.MAIN_WIN
-		elif self.mode == self.CONFIG_PERACCT:
+		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			key = acct
-		elif self.mode == self.CONFIG_PERTYPE:
+		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
 			key = type
 		return key
 
@@ -659,9 +661,9 @@ class MessageWindowMgr:
 		win_type = None
 
 		key = self._mode_to_key(contact, acct, type)
-		if self.mode == self.CONFIG_PERACCT:
+		if self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			win_acct = acct
-		elif self.mode == self.CONFIG_PERTYPE:
+		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
 			win_type = type
 
 		win = None
@@ -737,13 +739,13 @@ class MessageWindowMgr:
 		if x < 0 or y < 0 or width < 0 or height < 0:
 			return
 
-		if self.mode == self.CONFIG_NEVER:
+		if self.mode == self.ONE_MSG_WINDOW_NEVER:
 			# Use whatever is current to not overwrite the 'always' settings
 			# when going from never->always
 			x = y = -1
-		elif self.mode == self.CONFIG_PERACCT:
+		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			acct = msg_win.account
-		elif self.mode == self.CONFIG_PERTYPE:
+		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
 			type = msg_win.type
 			pos_x_key = type + "-msgwin-x-position"
 			pos_y_key = type + "-msgwin-y-position"

@@ -99,16 +99,16 @@ class Config:
 		'gc_proposed_nick_char': [opt_str, '_'],
 		'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-		'msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
-		'msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
+		'msgwin-width': [opt_int, 480],
+		'msgwin-height': [opt_int, 440],
 		'chat-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'chat-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-		'chat-msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
-		'chat-msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
+		'chat-msgwin-width': [opt_int, 480],
+		'chat-msgwin-height': [opt_int, 440],
 		'gc-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'gc-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-		'gc-msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
-		'gc-msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
+		'gc-msgwin-width': [opt_int, 480],
+		'gc-msgwin-height': [opt_int, 440],
 		'single-msg-x-position': [opt_int, 0],
 		'single-msg-y-position': [opt_int, 0],
 		'single-msg-width': [opt_int, 400],
@@ -226,8 +226,8 @@ class Config:
 			'proxy.jabber.org, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se, proxy.netlab.cz, proxy65.jabber.ccc.de'],
 			'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 			'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-			'msgwin-width': [opt_int, DEFAULT_WINDOW_WIDTH],
-			'msgwin-height': [opt_int, DEFAULT_WINDOW_HEIGHT],
+			'msgwin-width': [opt_int, 480],
+			'msgwin-height': [opt_int, 440],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
