@@ -602,12 +602,12 @@ class MessageWindowMgr:
 		except KeyError:
 			return False
 
-	def _size_window(self, win, acct, type):
+	def _resize_window(self, win, acct, type):
 		'''Resizes window according to config settings'''
 		if not gajim.config.get('saveposition'):
 			return
 			
-		if self.mode == self.ONE_MSG_WINDOW_NEVER or self.mode == self.ONE_MSG_WINDOW_ALWAYS:
+		if self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_ALWAYS):
 			size = (gajim.config.get('msgwin-width'),
 				gajim.config.get('msgwin-height'))
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
@@ -618,8 +618,7 @@ class MessageWindowMgr:
 				type = message_control.TYPE_CHAT
 			opt_width = type + '-msgwin-width'
 			opt_height = type + '-msgwin-height'
-			size = (gajim.config.get(opt_width),
-					gajim.config.get(opt_height))
+			size = (gajim.config.get(opt_width), gajim.config.get(opt_height))
 		else:
 			return
 
@@ -675,7 +674,7 @@ class MessageWindowMgr:
 		# Position and size window based on saved state and window mode
 		if not self.one_window_opened(contact, acct, type):
 			self._position_window(win, acct, type)
-			self._size_window(win, acct, type)
+			self._resize_window(win, acct, type)
 
 		self._windows[key] = win
 		return win
