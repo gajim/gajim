@@ -1245,8 +1245,7 @@ class RosterWindow:
 
 		event_button = self.get_possible_button_event(event)
 
-		menu.popup(None, self.tree, None, event_button,
-			event.time)
+		menu.popup(None, self.tree, None, event_button, event.time)
 		menu.show_all()
 
 	def on_add_to_roster(self, widget, contact, account):
