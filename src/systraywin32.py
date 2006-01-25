@@ -263,6 +263,8 @@ class SystrayWin32(systray.Systray):
 			self.on_left_click()
 
 	def add_jid(self, jid, account, typ):
+		if self.systray_winapi.notify_icon is None:
+			return
 		systray.Systray.add_jid(self, jid, account, typ)
 
 		nb = gajim.interface.roster.nb_unread
