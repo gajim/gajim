@@ -378,7 +378,7 @@ class ChatControlBase(MessageControl):
 			self.nb_unread += 1
 			if gajim.interface.systray_enabled and self.notify_on_new_messages():
 				gajim.interface.systray.add_jid(jid, self.account, self.type_id)
-			self.parent_win.redraw_tab(self.contact)
+			self.parent_win.redraw_tab(self)
 			if not self.parent_win.is_active():
 				self.parent_win.show_title(urgent)
 
@@ -492,7 +492,7 @@ class ChatControlBase(MessageControl):
 				#we are at the end
 				if self.nb_unread > 0:
 					self.nb_unread = 0 + self.get_specific_unread()
-					self.parent_win.redraw_tab(self.contact)
+					self.parent_win.redraw_tab(self)
 					self.parent_win.show_title()
 					if gajim.interface.systray_enabled:
 						gajim.interface.systray.remove_jid(jid,
@@ -500,7 +500,7 @@ class ChatControlBase(MessageControl):
 										self.type_id)
 			self.msg_textview.grab_focus()
 			# Note, we send None chatstate to preserve current
-			self.parent_win.redraw_tab(self.contact)
+			self.parent_win.redraw_tab(self)
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
@@ -576,7 +576,7 @@ class ChatControlBase(MessageControl):
 		if self.conv_textview.at_the_end() and self.parent_win.window.is_active():
 			#we are at the end
 			self.nb_unread = self.get_specific_unread()
-			self.parent_win.redraw_tab(self.contact)
+			self.parent_win.redraw_tab(self)
 			self.parent_win.show_title()
 			if gajim.interface.systray_enabled:
 				gajim.interface.systray.remove_jid(jid, self.account,
@@ -1197,7 +1197,7 @@ class ChatControl(ChatControlBase):
 		''' handle incoming chatstate that jid SENT TO us '''
 		self.draw_banner()
 		# update chatstate in tab for this chat
-		self.parent_win.redraw_tab(self.contact, self.contact.chatstate)
+		self.parent_win.redraw_tab(self, self.contact.chatstate)
 
 	def _on_banner_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''

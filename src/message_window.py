@@ -42,6 +42,7 @@ class MessageWindow:
 	hid = 0 # drag_data_received handler id
 	
 	def __init__(self, acct, type):
+		# A dictionary of dictionaries where _contacts[account][jid] == A MessageControl
 		self._controls = {}
 		# If None, the window is not tied to any specific account
 		self.account = acct
@@ -93,6 +94,12 @@ class MessageWindow:
 		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
 						gtk.gdk.ACTION_MOVE)
 
+	def get_num_controls(self):
+		n = 0
+		for dict in self._controls.values():
+			n += len(dict)
+		return n
+
 	def _on_window_focus(self, widget, event):
 		# window received focus, so if we had urgency REMOVE IT
 		# NOTE: we do not have to read the message (it maybe in a bg tab)
@@ -104,11 +111,11 @@ class MessageWindow:
 			ctrl.set_control_active(True)
 			# Undo "unread" state display, etc.
 			if ctrl.type_id == message_control.TYPE_GC:
-				self.redraw_tab(ctrl.contact, 'active')
+				self.redraw_tab(ctrl, 'active')
 			else:
 				# NOTE: we do not send any chatstate to preserve
 				# inactive, gone, etc.
-				self.redraw_tab(ctrl.contact)
+				self.redraw_tab(ctrl)
 
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
@@ -123,8 +130,11 @@ class MessageWindow:
 		self._controls.clear()
 
 	def new_tab(self, control):
-		self._controls[control.contact.jid] = control
-		if len(self._controls) > 1:
+		if not self._controls.has_key(control.account):
+			self._controls[control.account] = {}
+		self._controls[control.account][control.contact.jid] = control
+
+		if self.get_num_controls() > 1:
 			self.notebook.set_show_tabs(True)
 			self.alignment.set_property('top-padding', 2)
 
@@ -139,8 +149,7 @@ class MessageWindow:
 
 		self.setup_tab_dnd(control.widget)
 
-		self.redraw_tab(control.contact)
-		control.update_ui()
+		self.redraw_tab(control)
 		self.window.show_all()
 		# NOTE: we do not call set_control_active(True) since we don't know whether
 		# the tab is the active one.
@@ -210,8 +219,7 @@ class MessageWindow:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, False)
 
 	def set_active_tab(self, jid, acct):
-		# FIXME: Use acct
-		ctrl = self._controls[jid]
+		ctrl = self._controls[acct][jid]
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 	
@@ -230,15 +238,18 @@ class MessageWindow:
 		self.disconnect_tab_dnd(ctrl.widget)
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
-		del self._controls[ctrl.contact.jid]
-		if len(self._controls) == 1: # we are going from two tabs to one
+		del self._controls[ctrl.account][ctrl.contact.jid]
+		if len(self._controls[ctrl.account]) == 0:
+			del self._controls[ctrl.account]
+
+		if self.get_num_controls() == 1: # we are going from two tabs to one
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
 			if not show_tabs_if_one_tab:
 				self.alignment.set_property('top-padding', 0)
 			self.show_title()
-		elif len(self._controls) == 0:
-			# FIXME: These are not called when the window is destroyed like this, fake it
+		elif self.get_num_controls() == 0:
+			# These are not called when the window is destroyed like this, fake it
 			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
 			gajim.interface.msg_win_mgr._on_window_destroy(self.window)
 			# dnd clean up
@@ -247,8 +258,7 @@ class MessageWindow:
 
 			self.window.destroy()
 			
-	def redraw_tab(self, contact, chatstate = None):
-		ctrl = self._controls[contact.jid]
+	def redraw_tab(self, ctrl, chatstate = None):
 		ctrl.update_ui()
 
 		hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
@@ -322,16 +332,15 @@ class MessageWindow:
 	def get_control(self, key, acct):
 		'''Return the MessageControl for jid or n, where n is a notebook page index.
 		When key is an int index acct may be None'''
-		# FIXME: Use acct
 		if isinstance(key, str):
 			key = unicode(key, 'utf-8')
 
 		if isinstance(key, unicode):
 			jid = key
-			for ctrl in self.controls():
-				if ctrl.contact.jid == jid:
-					return ctrl
-			return None
+			try:
+				return self._controls[acct][jid]
+			except:
+				return None
 		else:
 			page_num = key
 			notebook = self.notebook
@@ -341,8 +350,9 @@ class MessageWindow:
 			return self._widget_to_control(nth_child)
 
 	def controls(self):
-		for ctrl in self._controls.values():
-			yield ctrl
+		for ctrl_dict in self._controls.values():
+			for ctrl in ctrl_dict.values():
+				yield ctrl
 
 	def update_print_time(self):
 		if gajim.config.get('print_time') != 'sometimes':
@@ -394,7 +404,7 @@ class MessageWindow:
 	def popup_menu(self, event):
 		menu = self.get_active_control().prepare_context_menu()
 		# common menuitems (tab switches)
-		if len(self._controls) > 1: # if there is more than one tab
+		if self.get_num_controls() > 1: # if there is more than one tab
 			menu.append(gtk.SeparatorMenuItem()) # seperator
 			for ctrl in self.controls():
 				jid = ctrl.contact.jid
@@ -582,7 +592,7 @@ class MessageWindowMgr:
 		return None
 
 	def has_window(self, jid, acct):
-		return self.get_window(jid, acct)
+		return self.get_window(jid, acct) != None
 
 	def one_window_opened(self, contact, acct, type):
 		try:
@@ -637,7 +647,7 @@ class MessageWindowMgr:
 
 	def _mode_to_key(self, contact, acct, type):
 		if self.mode == self.CONFIG_NEVER:
-			key = contact.jid
+			key = acct + contact.jid
 		elif self.mode == self.CONFIG_ALWAYS:
 			key = self.MAIN_WIN
 		elif self.mode == self.CONFIG_PERACCT:
@@ -776,12 +786,14 @@ class MessageWindowMgr:
 				w.notebook.remove_page(0)
 				page.unparent()
 				controls.append(ctrl)
+			# Must clear _controls from window to prevent MessageControl.shutdown calls
+			w._controls = {}
 			w.window.destroy()
 
 		self._windows = {}
 
 		for ctrl in controls:
-			mw = self.get_window(ctrl.contact.jid, ctr.account)
+			mw = self.get_window(ctrl.contact.jid, ctrl.account)
 			if not mw:
 				mw = self.create_window(ctrl.contact, ctrl.account, ctrl.type_id)
 			ctrl.parent_win = mw

@@ -443,8 +443,6 @@ class Interface:
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
-			# FIXME: Why is this here?
-			#ctrl = gajim.interface.msg_win_mgr.get_control(jid,)
 			if chatstate is not None: # he or she sent us reply, so he supports jep85
 				contact.chatstate = chatstate
 				if contact.our_chatstate == 'ask': # we were jep85 disco?

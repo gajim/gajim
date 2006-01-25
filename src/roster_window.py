@@ -639,9 +639,9 @@ class RosterWindow:
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.repaint_themed_widgets()
 		# update gc's roster
-		for ctl in gajim.interface.msg_win_mgr.controls():
-			if ctl.type_id == message_control.TYPE_GC:
-				ctl.update_ui()
+		for ctrl in gajim.interface.msg_win_mgr.controls():
+			if ctrl.type_id == message_control.TYPE_GC:
+				ctrl.update_ui()
 			
 	def draw_roster(self):
 		'''Clear and draw roster'''
@@ -729,19 +729,19 @@ class RosterWindow:
 		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			jid = contact.jid
 			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
-			ctl = win.get_control(jid, account)
-			ctl.update_ui()
-			win.redraw_tab(contact)
+			ctrl = win.get_control(jid, account)
+			ctrl.update_ui()
+			win.redraw_tab(ctrl)
 	
 			name = contact.get_shown_name()
 			if contact.resource != '':
 				name += '/' + contact.resource
 			uf_show = helpers.get_uf_show(show)
-			ctl.print_conversation(_('%s is now %s (%s)') % (name, uf_show, status),
+			ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show, status),
 						'status')
 			if contact == gajim.contacts.get_contact_with_highest_priority(account,
 										contact.jid):
-				ctl.draw_banner()
+				ctrl.draw_banner()
 
 	def on_info(self, widget, contact, account):
 		'''Call vcard_information_window class to display contact's information'''
@@ -924,8 +924,8 @@ class RosterWindow:
 			for u in gajim.contacts.get_contact(account, contact.jid):
 				u.keyID = keyID[0]
 			if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-				ctl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
-				ctl.update_ui()
+				ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+				ctrl.update_ui()
 		keys_str = ''
 		for jid in keys:
 			keys_str += jid + ' ' + keys[jid] + ' '
@@ -1789,8 +1789,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			typ = ''
 			if msg_type == 'error':
 				typ = 'status'
-			ctl = gajim.interface.msg_win_mgr.get_control(jid, account)
-			ctl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
+			ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
+			ctrl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
 						subject = subject)
 			return
 
@@ -1982,14 +1982,14 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				unread = True
 			for win in gajim.interface.msg_win_mgr.windows():
 				unrd = 0
-				for ctl in win.controls():
-					unrd += ctl.nb_unread
+				for ctrl in win.controls():
+					unrd += ctrl.nb_unread
 				if unrd:
 					unread = True
 					break
 
-				for ctl in win.controls():
-					jid = ctl.contact.jid
+				for ctrl in win.controls():
+					jid = ctrl.contact.jid
 					if gajim.last_message_time[acct].has_key(jid):
 						if time.time() - gajim.last_message_time[acct][jid] < 2:
 							recent = True
@@ -2253,9 +2253,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.interface.systray.set_img()
 
 		for win in gajim.interface.msg_win_mgr.windows():
-			for ctl in gajim.interface.msg_win_mgr.controls():
-				ctl.update_ui()
-				win.redraw_tab(ctl.contact)
+			for ctrl in gajim.interface.msg_win_mgr.controls():
+				ctrl.update_ui()
+				win.redraw_tab(ctrl)
 
 		self.update_status_combobox()
 

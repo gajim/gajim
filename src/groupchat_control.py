@@ -374,7 +374,7 @@ class GroupchatControl(ChatControlBase):
 			else:
 				kind = 'incoming'
 				# muc-specific chatstate
-				self.parent_win.redraw_tab(self.contact, 'newmsg')
+				self.parent_win.redraw_tab(self, 'newmsg')
 		else:
 			kind = 'status'
 
@@ -383,7 +383,7 @@ class GroupchatControl(ChatControlBase):
 			(highlight, sound) = self.highlighting_for_message(text, tim)
 			if highlight:
 				# muc-specific chatstate
-				self.parent_win.redraw_tab(self.contact, 'attention')
+				self.parent_win.redraw_tab(self, 'attention')
 				other_tags_for_name.append('bold')
 				other_tags_for_text.append('marked')
 			if sound == 'received':
@@ -662,7 +662,7 @@ class GroupchatControl(ChatControlBase):
 					c.status = status
 					self.draw_contact(nick)
 
-		self.parent_win.redraw_tab(self.contact)
+		self.parent_win.redraw_tab(self)
 		if (time.time() - self.room_creation) > 30 and \
 				nick != self.nick and statusCode != '303':
 			if show == 'offline':
@@ -1047,7 +1047,7 @@ class GroupchatControl(ChatControlBase):
 			# add the focus-out line to the tab we are leaving
 			self.check_and_possibly_add_focus_out_line()
 		# Sending active to undo unread state
-		self.parent_win.redraw_tab(self.contact, 'active')
+		self.parent_win.redraw_tab(self, 'active')
 
 	def get_specific_unread(self):
 		# returns the number of the number of unread msgs
