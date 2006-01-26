@@ -91,7 +91,7 @@ class NotificationResponseManager:
 			# on a popup before the program finishes registering this callback
 			gobject.timeout_add(1000, self.on_action_invoked, id, reason)
 
-	def on_closed(self, id, reason):
+	def on_closed(self, id, reason = None):
 		if self.pending.has_key(id):
 			del self.pending[id]
 
