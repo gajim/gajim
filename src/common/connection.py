@@ -57,6 +57,7 @@ USE_GPG = GnuPG.USE_GPG
 
 from common import i18n
 _ = i18n._
+send_sha_in_gc_presence = True
 
 # determine which DNS resolution library is available
 HAS_DNSPYTHON = False
@@ -1454,35 +1455,49 @@ class Connection:
 		Private Data (JEP 048 and 049)
 		'''
 		gajim.log.debug('PrivateCB')
-		storage = iq_obj.getTag('query').getTag('storage')
-		try:
+		query = iq_obj.getTag('query')
+		storage = query.getTag('storage')
+		if storage:
 			ns = storage.getNamespace()
-		except AttributeError:
-			#Its a result for a 'set' Iq, so we don't do anything here
-			return
+			if ns == 'storage:bookmarks':
+				# Bookmarked URLs and Conferences
+				# http://www.jabber.org/jeps/jep-0048.html
+				confs = storage.getTags('conference')
+				for conf in confs:
+					autojoin_val = conf.getAttr('autojoin')
+					if autojoin_val is None: # not there (it's optional)
+						autojoin_val = False
+					bm = { 'name': conf.getAttr('name'),
+						   'jid': conf.getAttr('jid'),
+						   'autojoin': autojoin_val,
+						   'password': conf.getTagData('password'),
+					   	'nick': conf.getTagData('nick') }
 
-		if ns == 'storage:bookmarks':
-			#Bookmarked URLs and Conferences
-			#http://www.jabber.org/jeps/jep-0048.html
-			confs = storage.getTags('conference')
-			for conf in confs:
-				autojoin_val = conf.getAttr('autojoin')
-				if autojoin_val is None: # not there (it's optional)
-					autojoin_val = False
-				bm = { 'name': conf.getAttr('name'),
-					   'jid': conf.getAttr('jid'),
-					   'autojoin': autojoin_val,
-					   'password': conf.getTagData('password'),
-					   'nick': conf.getTagData('nick') }
+					self.bookmarks.append(bm)
+				self.dispatch('BOOKMARKS', self.bookmarks)
 
-				self.bookmarks.append(bm)
-			self.dispatch('BOOKMARKS', self.bookmarks)
+		gajim_tag = query.getTag('gajim')
+		if gajim_tag:
+			ns = gajim_tag.getNamespace()
+			if ns == 'gajim:metacontacts':
+				# Meta contacts list
+				children_list = {}
+				for child in gajim_tag.getChildren():
+					parent_jid = child.getAttr('name')
+					if not parent_jid:
+						continue
+					children_list[parent_jid] = []
+					for cchild in child.getChildren():
+						children_list[parent_jid].append(cchild.getAttr('name'))
+				self.dispatch('META_CONTACTS', children_list)
+				# We can now continue connection by requesting the roster
+				self.connection.initRoster()
 
-		elif ns == 'gajim:prefs':
-			#Preferences data
-			#http://www.jabber.org/jeps/jep-0049.html
-			#TODO: implement this
-			pass
+			elif ns == 'gajim:prefs':
+				# Preferences data
+				# http://www.jabber.org/jeps/jep-0049.html
+				#TODO: implement this
+				pass
 
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':
@@ -1950,7 +1965,8 @@ class Connection:
 		self.continue_connect_info = [show, msg, signed]
 		self.connection = self.connect_and_auth()
 		if self.connection:
-			self.connection.initRoster()
+			# Ask meta_contacts before roster
+			self.get_meta_contacts()
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		if sync:
@@ -2298,13 +2314,13 @@ class Connection:
 		self.to_be_sent.append(iq)
 
 	def get_bookmarks(self):
-		''' Get Bookmarks from storage as described in JEP 0048 '''
+		'''Get Bookmarks from storage as described in JEP 0048'''
 		self.bookmarks = [] #avoid multiple bookmarks when re-connecting
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name="query", namespace="jabber:iq:private")
-		iq2.addChild(name="storage", namespace="storage:bookmarks")
+		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2.addChild(name='storage', namespace='storage:bookmarks')
 		self.to_be_sent.append(iq)
 
 	def store_bookmarks(self):
@@ -2327,6 +2343,27 @@ class Connection:
 			if bm['password']:
 				iq5 = iq4.setTagData('password', bm['password'])
 		self.to_be_sent.append(iq)
+
+	def get_meta_contacts(self):
+		'''Get meta_contacts list from storage as described in JEP 0049'''
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ='get')
+		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2.addChild(name='gajim', namespace='gajim:metacontacts')
+		self.to_be_sent.append(iq)
+
+	def store_meta_contacts(self, children_list):
+		''' Send meta contacts to the storage namespace '''
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ='set')
+		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq3 = iq2.addChild(name='gajim', namespace='gajim:metacontacts')
+		for parent_jid in children_list:
+			parent_tag = iq3.addChild(name='parent', attrs = {'name': parent_jid})
+			for child_jid in children_list[parent_tag]:
+				parent_tag.addChild(name='child', attrs = {'name': child_jid})
 
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:

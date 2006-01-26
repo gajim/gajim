@@ -113,6 +113,12 @@ class RosterWindow:
 				if jid == model[contact_iter][C_JID].decode('utf-8') and \
 					account == model[contact_iter][C_ACCOUNT].decode('utf-8'):
 					found.append(contact_iter)
+				sub_contact_iter = model.iter_children(contact_iter)
+				while sub_contact_iter:
+					if jid == model[sub_contact_iter][C_JID].decode('utf-8') and \
+						account == model[sub_contact_iter][C_ACCOUNT].decode('utf-8'):
+						found.append(sub_contact_iter)
+					sub_contact_iter = model.iter_next(sub_contact_iter)
 				contact_iter = model.iter_next(contact_iter)
 			group_iter = model.iter_next(group_iter)
 		return found
@@ -147,16 +153,39 @@ class RosterWindow:
 			gajim.newly_added[account].remove(jid)
 			self.draw_contact(jid, account)
 
-	def add_contact_to_roster(self, jid, account):
+	def add_contact_to_roster(self, jid, account, force = False):
 		'''Add a contact to the roster and add groups if they aren't in roster'''
 		showOffline = gajim.config.get('showoffline')
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if not contact:
 			return
+		# If contact already in roster, do not add it
+		if len(self.get_contact_iter(contact.jid, account)):
+			return
 		if contact.jid.find('@') <= 0:
 			# if not '@' or '@' starts the jid ==> agent
 			contact.groups = [_('Transports')]
 
+		model = self.tree.get_model()
+		if gajim.contacts.is_subcontact(account, contact):
+			if contact.show in ('offline', 'error') and \
+				not showOffline and not gajim.awaiting_events[account].has_key(jid):
+				return
+			parent_contact = gajim.contacts.get_parent_contact(account, contact)
+			# is parent shown ?
+			parent_iters = self.get_contact_iter(parent_contact.jid, account)
+			if not len(parent_iters):
+				# Add parent and children
+				self.add_contact_to_roster(parent_contact.jid, account, True)
+				return
+			name = contact.get_shown_name()
+			for i in parent_iters:
+				# we add some values here. see draw_contact for more
+				model.append(i, (None, name, 'contact', contact.jid, account,
+					False, None))
+			self.draw_contact(contact.jid, account)
+			self.draw_avatar(contact.jid, account)
+			return
 		# JEP-0162
 		hide = True
 		if contact.sub in ('both', 'to'):
@@ -171,12 +200,17 @@ class RosterWindow:
 			observer = True
 
 		if (contact.show in ('offline', 'error') or hide) and \
-		not showOffline and (not _('Transports') in contact.groups or \
-		gajim.connections[account].connected < 2) and \
-		not gajim.awaiting_events[account].has_key(jid):
+			not showOffline and (not _('Transports') in contact.groups or \
+			gajim.connections[account].connected < 2) and \
+			not gajim.awaiting_events[account].has_key(jid) and not force:
 			return
 
-		model = self.tree.get_model()
+		# Remove child contacts that are already in roster to add them
+		# under this iter
+		children_contacts = gajim.contacts.get_children_contacts(account,
+			contact)
+		for cc in children_contacts:
+			self.remove_contact(cc, account)
 		groups = contact.groups
 		if observer:
 			groups = [_('Observers')]
@@ -212,6 +246,9 @@ class RosterWindow:
 				self.tree.expand_row(model.get_path(iterG), False)
 		self.draw_contact(jid, account)
 		self.draw_avatar(jid, account)
+		# put the children under this iter
+		for cc in children_contacts:
+			self.add_contact_to_roster(cc.jid, account)
 
 	def add_transport_to_roster(self, account, transport):
 		c = gajim.contacts.create_contact(jid = transport, name = transport,
@@ -227,7 +264,14 @@ class RosterWindow:
 			return
 		if contact.jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(contact.jid)
-		if gajim.config.get('showoffline'):
+		has_connected_children = False
+		children_contacts = gajim.contacts.get_children_contacts(account,
+			contact)
+		for cc in children_contacts:
+			if cc.show not in ('offline', 'error'):
+				has_connected_children = True
+				break
+		if gajim.config.get('showoffline') or has_connected_children:
 			self.draw_contact(contact.jid, account)
 			return
 		self.remove_contact(contact, account)
@@ -239,8 +283,23 @@ class RosterWindow:
 		model = self.tree.get_model()
 		for i in self.get_contact_iter(contact.jid, account):
 			parent_i = model.iter_parent(i)
-			group = model.get_value(parent_i, 3).decode('utf-8')
 			model.remove(i)
+			if gajim.contacts.is_subcontact(account, contact):
+				# Is it the last subcontact with offline parent?
+				parent_contact = gajim.contacts.get_parent_contact(account, contact)
+				if parent_contact.show in ('offline', 'error'):
+					has_another_child = False
+					children_contacts = gajim.contacts.get_children_contacts(account,
+						contact)
+					for cc in children_contacts:
+						if len(self.get_contact_iter(cc.jid, account)):
+							has_another_child = True
+							break
+					if not has_another_child:
+						# Remove parent contact
+						self.remove_contact(parent_contact, account)
+				return
+			group = model[parent_i][C_JID].decode('utf-8')
 			if model.iter_n_children(parent_i) == 0:
 				model.remove(parent_i)
 				# We need to check all contacts, even offline contacts
@@ -306,13 +365,19 @@ class RosterWindow:
 				name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 
-		
-		icon_name = helpers.get_icon_name_to_show(contact, account)
-		state_images = self.get_appropriate_state_images(jid, size = '16')
-		
-		img = state_images[icon_name]
-
 		for iter in iters:
+			icon_name = helpers.get_icon_name_to_show(contact, account)
+			path = model.get_path(iter)
+			if icon_name in ('error', 'offline') and gajim.contacts.has_children(
+				account, contact) and not self.tree.row_expanded(path):
+				# get children icon
+				#FIXME: improve that
+				cc = gajim.contacts.get_children_contacts(account, contact)[0]
+				icon_name = helpers.get_icon_name_to_show(cc)
+			state_images = self.get_appropriate_state_images(jid, size = '16')
+		
+			img = state_images[icon_name]
+
 			model[iter][C_IMG] = img
 			model[iter][C_NAME] = name
 
@@ -1047,6 +1112,8 @@ class RosterWindow:
 			add_to_roster_menuitem.connect('activate',
 				self.on_add_to_roster, contact, account)
 
+		#TODO create menu for sub contacts
+
 		event_button = self.get_possible_button_event(event)
 
 		roster_contact_context_menu.popup(None, None, None, event_button,
@@ -1384,6 +1451,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			iter = model.get_iter(path)
 			type = model[iter][C_TYPE]
 			if type in ('agent', 'contact'):
+				#TODO
 				account = model[iter][C_ACCOUNT].decode('utf-8')
 				jid = model[iter][C_JID].decode('utf-8')
 				win = None
@@ -1427,8 +1495,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model[iter][C_TYPE]
-			if type == 'group':
-				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
+			if type in ('group', 'contact'):
+				if x < 27: # first cell in 1st column (the arrow SINGLE clicked)
 					if (self.tree.row_expanded(path)):
 						self.tree.collapse_row(path)
 					else:
@@ -2094,6 +2162,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				if groupIter and gajim.groups[account][g]['expand']:
 					pathG = model.get_path(groupIter)
 					self.tree.expand_row(pathG, False)
+		elif type == 'contact':
+			jid =  model[iter][C_JID].decode('utf-8')
+			account = model[iter][C_ACCOUNT].decode('utf-8')
+			self.draw_contact(jid, account)
 
 	def on_roster_treeview_row_collapsed(self, widget, iter, path):
 		'''When a row is collapsed :
@@ -2116,6 +2188,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			account = accounts[0] # There is only one cause we don't use merge
 			if not account in self.collapsed_rows:
 				self.collapsed_rows.append(account)
+		elif type == 'contact':
+			jid =  model[iter][C_JID].decode('utf-8')
+			account = model[iter][C_ACCOUNT].decode('utf-8')
+			self.draw_contact(jid, account)
 
 	def on_editing_started(self, cell, event, row):
 		''' start editing a cell in the tree'''
@@ -2288,7 +2364,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				renderer.set_property('cell-background', color)
 			else:
 				renderer.set_property('cell-background', None)
-			renderer.set_property('xalign', 0.5)
+			renderer.set_property('xalign', 0.2)
 		else:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
@@ -2302,8 +2378,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					renderer.set_property('cell-background', color)
 				else:
 					renderer.set_property('cell-background', None)
-			renderer.set_property('xalign', 1)
-		renderer.set_property('width', 20)
+			parent_iter = model.iter_parent(iter)
+			if model[parent_iter][C_TYPE] == 'contact':
+				renderer.set_property('xalign', 1)
+			else:
+				renderer.set_property('xalign', 0.4)
+		renderer.set_property('width', 26)
 
 	def nameCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for name renderer'''
@@ -2357,7 +2437,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					renderer.set_property('cell-background', None)
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
-			renderer.set_property('xpad', 8)
+			parent_iter = model.iter_parent(iter)
+			if model[parent_iter][C_TYPE] == 'contact':
+				renderer.set_property('xpad', 16)
+			else:
+				renderer.set_property('xpad', 8)
 
 	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter, data=None):
 		'''When a row is added, set properties for secondary renderer (avatar or padlock)'''
@@ -2737,6 +2821,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			showOffline)
 
 		# columns
+#		col = gtk.TreeViewColumn()
+#		render_image = cell_renderer_image.CellRendererImage(0, 0)
+#		col.pack_start(render_image, expand = False)
+#		col.add_attribute(render_image, 'image', C_IMG)
+#		self.tree.append_column(col)
+#		self.tree.set_expander_column(col)
 
 		# this col has two cells: first one img, second one text
 		col = gtk.TreeViewColumn()
@@ -2770,7 +2860,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.tree.append_column(col)
 		col.set_visible(False)
 		self.tree.set_expander_column(col)
-
+		
 		#signals
 		self.TARGET_TYPE_URI_LIST = 80
 		TARGETS = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0)]

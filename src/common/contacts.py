@@ -85,17 +85,27 @@ class Contacts:
 	def __init__(self):
 		self._contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
 		self._gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
-		self._sub_contacts = {} # {acct: {jid1: jid2}} means jid1 is sub of jid2
+
+		# For meta contacts:
+		self._children_meta_contacts = {}
+		self._parent_meta_contacts = {}
 
 	def change_account_name(self, old_name, new_name):
 		self._contacts[new_name] = self._contacts[old_name]
 		self._gc_contacts[new_name] = self._gc_contacts[old_name]
+		self._children_meta_contacts[new_name] = self._children_meta_contacts[old_name]
+		self._parent_meta_contacts[new_name] = self._parent_meta_contacts[old_name]
 		del self._contacts[old_name]
 		del self._gc_contacts[old_name]
+		del self._children_meta_contacts[old_name]
+		del self._parent_meta_contacts[old_name]
 
 	def add_account(self, account):
 		self._contacts[account] = {}
 		self._gc_contacts[account] = {}
+		if not self._children_meta_contacts.has_key(account):
+			self._children_meta_contacts[account] = {}
+			self._parent_meta_contacts[account] = {}
 
 	def get_accounts(self):
 		return self._contacts.keys()
@@ -103,6 +113,8 @@ class Contacts:
 	def remove_account(self, account):
 		del self._contacts[account]
 		del self._gc_contacts[account]
+		del self._children_meta_contacts[account]
+		del self._parent_meta_contacts[account]
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=5, keyID='', our_chatstate=None,
@@ -167,10 +179,6 @@ class Contacts:
 					return c
 		return None
 
-	def is_subcontact(self, account, contact):
-		if contact.jid in self._sub_contacts[account]:
-			return True
-	
 	def get_contacts_from_jid(self, account, jid):
 		''' we may have two or more resources on that jid '''
 		if jid in self._contacts[account]:
@@ -201,22 +209,52 @@ class Contacts:
 			return self._contacts[account][jid][0]
 		return None
 
+	def define_meta_contacts(self, account, children_list):
+		self._children_meta_contacts[account] = children_list
+		self._parent_meta_contacts[account] = {}
+		for parent_jid in children_list:
+			for children_jid in children_list[parent_jid]:
+				self._parent_meta_contacts[account][children_jid] = parent_jid
+
+	def is_subcontact(self, account, contact):
+		jid = contact.jid
+		if jid in self._parent_meta_contacts[account] and \
+			self._contacts[account].has_key(
+			self._parent_meta_contacts[account][jid]):
+			return True
+
+	def has_children(self, account, contact):
+		jid = contact.jid
+		if jid in self._children_meta_contacts[account]:
+			for c in self._children_meta_contacts[account][jid]:
+				if self._contacts[account].has_key(c):
+					return True
+
+	def get_children_contacts(self, account, contact):
+		'''Returns the children contacts of contact if it's a parent-contact,
+		else []'''
+		jid = contact.jid
+		if jid not in self._children_meta_contacts[account]:
+			return []
+		contacts = []
+		for j in self._children_meta_contacts[account][jid]:
+			contacts.append(self.get_contact_with_highest_priority(account, j))
+		return contacts
+
 	def get_parent_contact(self, account, contact):
 		'''Returns the parent contact of contact if it's a sub-contact,
 		else contact'''
-		if is_subcontact(account, contact):
-			parrent_jid = self._sub_contacts[account][contact.jid]
-			return self.get_contact_with_highest_priority(account,
-				parrent_jid)
+		if self.is_subcontact(account, contact):
+			parent_jid = self._parent_meta_contacts[account][contact.jid]
+			return self.get_contact_with_highest_priority(account, parent_jid)
 		return contact
 
 	def get_master_contact(self, account, contact):
 		'''Returns the master contact of contact (parent of parent...) if it's a
 		sub-contact, else contact'''
-		while is_subcontact(account, contact):
-			parrent_jid = self._sub_contacts[account][contact.jid]
-			contact = self.get_contact_with_highest_priority(account,
-				parrent_jid)
+		while self.is_subcontact(account, contact):
+			parent_jid = self._parent_meta_contacts[account][contact.jid]
+			contact = self.get_contact_with_highest_priority(account, parent_jid)
 		return contact
 
 	def is_pm_from_jid(self, account, jid):
