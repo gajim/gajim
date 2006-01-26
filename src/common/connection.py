@@ -57,7 +57,6 @@ USE_GPG = GnuPG.USE_GPG
 
 from common import i18n
 _ = i18n._
-send_sha_in_gc_presence = True
 
 # determine which DNS resolution library is available
 HAS_DNSPYTHON = False
