@@ -225,6 +225,8 @@ class ChangeStatusMessageDialog:
 		
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
+		self.message_buffer.connect('changed',
+			self.toggle_sensitiviy_of_save_as_preset)
 		msg = None
 		if show:
 			msg = gajim.config.get('last_status_msg_' + show)
@@ -276,6 +278,14 @@ class ChangeStatusMessageDialog:
 		event.keyval == gtk.keysyms.KP_Enter:  # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)
+
+	def toggle_sensitiviy_of_save_as_preset(self, widget):
+		btn = self.xml.get_widget('save_as_preset_button')
+		if self.message_buffer.get_char_count() == 0:
+			btn.set_sensitive(False)
+		else:
+			btn.set_sensitive(True)
+		
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
