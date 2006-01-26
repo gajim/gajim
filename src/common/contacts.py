@@ -215,6 +215,24 @@ class Contacts:
 		for parent_jid in children_list:
 			for children_jid in children_list[parent_jid]:
 				self._parent_meta_contacts[account][children_jid] = parent_jid
+	
+	def add_subcontact(self, account, parent_jid, child_jid):
+		self._parent_meta_contacts[account][child_jid] = parent_jid
+		if self._children_meta_contacts[account].has_key(parent_jid):
+			self._children_meta_contacts[account][parent_jid].append(child_jid)
+		else:
+			self._children_meta_contacts[account][parent_jid] = [child_jid]
+		common.gajim.connections[account].store_meta_contacts(
+			self._children_meta_contacts[account])
+
+	def remove_subcontact(self, account, child_jid):
+		parent_jid = self._parent_meta_contacts[account][child_jid]
+		self._children_meta_contacts[account][parent_jid].remove(child_jid)
+		if len(self._children_meta_contacts[account][parent_jid]) == 0:
+			del self._children_meta_contacts[account][parent_jid]
+		del self._parent_meta_contacts[account][child_jid]
+		common.gajim.connections[account].store_meta_contacts(
+			self._children_meta_contacts[account])
 
 	def is_subcontact(self, account, contact):
 		jid = contact.jid

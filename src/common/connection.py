@@ -2361,8 +2361,9 @@ class Connection:
 		iq3 = iq2.addChild(name='gajim', namespace='gajim:metacontacts')
 		for parent_jid in children_list:
 			parent_tag = iq3.addChild(name='parent', attrs = {'name': parent_jid})
-			for child_jid in children_list[parent_tag]:
+			for child_jid in children_list[parent_jid]:
 				parent_tag.addChild(name='child', attrs = {'name': child_jid})
+		self.to_be_sent.append(iq)
 
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:

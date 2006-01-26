@@ -2565,8 +2565,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		model, iter = treeselection.get_selected()
 		path = model.get_path(iter)
 		data = ''
-		if len(path) == 3:
-			data = model[iter][C_JID].decode('utf-8')
+		if len(path) >= 3:
+			data = model[iter][C_JID]
 		selection.set(selection.target, 8, data)
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
@@ -2583,56 +2583,88 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			and path_dest[1] == 0: # dropped before the first group
 			return
 		iter_dest = model.get_iter(path_dest)
+		account = model[iter_dest][C_ACCOUNT].decode('utf-8')
+		type_dest = model[iter_dest][C_TYPE].decode('utf-8')
+		jid_dest = model[iter_dest][C_JID].decode('utf-8')
+		c_dest = gajim.contacts.get_contact_with_highest_priority(account,
+			jid_dest)
 
 		if info == self.TARGET_TYPE_URI_LIST:
 			# User dropped a file on the roster
 			if len(path_dest) < 3:
 				return
-			account = model[iter_dest][C_ACCOUNT].decode('utf-8')
-			jid = model[iter_dest][C_JID].decode('utf-8')
-			type_dest = model[iter_dest][C_TYPE].decode('utf-8')
 			if type_dest != 'contact':
 				return
-			c = gajim.contacts.get_contact_with_highest_priority(account, jid)
-
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				if os.path.isfile(path): # is it file?
-					gajim.interface.instances['file_transfers'].send_file(account, c,
-						path)
+					gajim.interface.instances['file_transfers'].send_file(account,
+						c_dest, path)
 			return
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
 			# dropped before a group : we drop it in the previous group
 			path_dest = (path_dest[0], path_dest[1]-1)
 		iter_source = treeview.get_selection().get_selected()[1]
 		path_source = model.get_path(iter_source)
-		if len(path_dest) == 1: # dropped on an account
+		type_source = model[iter_source][C_TYPE]
+		if type_dest == 'account': # dropped on an account
+			return
+		if type_source != 'contact': # source is not a contact
 			return
 		if path_dest[0] != path_source[0]: # dropped in another account
 			return
-		iter_group_source = model.iter_parent(iter_source)
-		grp_source = model[iter_group_source][C_JID].decode('utf-8')
+		it = iter_source
+		while model[it][C_TYPE] == 'contact':
+			it = model.iter_parent(it)
+		grp_source = model[it][C_JID].decode('utf-8')
 		if grp_source == _('Transports') or grp_source == _('Not in Roster'):
 			return
-		account = model[iter_dest][C_ACCOUNT].decode('utf-8')
-		type_dest = model.get_value(iter_dest, C_TYPE)
+		jid_source = data.decode('utf-8')
+		if jid_source == jid_dest:
+			return
+		c_source = gajim.contacts.get_contact_with_highest_priority(account,
+			jid_source)
+		# Get destination group
 		if type_dest == 'group':
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
 		else:
-			grp_dest = model[model.iter_parent(iter_dest)][C_JID].decode('utf-8')
+			it = iter_dest
+			while model[it][C_TYPE] == 'contact':
+				it = model.iter_parent(it)
+			grp_dest = model[it][C_JID].decode('utf-8')
 		if grp_dest == _('Transports') or grp_dest == _('Not in Roster'):
 			return
+		if gajim.contacts.is_subcontact(account, c_source):
+			# Remove meta contact
+			if context.action == gtk.gdk.ACTION_COPY:
+				return
+			c_source.groups = [grp_dest]
+			gajim.connections[account].update_contact(jid_source, c_source.name,
+				c_source.groups)
+			gajim.contacts.remove_subcontact(account, jid_source)
+			context.finish(True, True, etime)
+			self.add_contact_to_roster(jid_source, account)
+			return
 		if grp_source == grp_dest:
+			# Add meta contact
+			if context.action == gtk.gdk.ACTION_COPY:
+				# Keep only MOVE
+				return
+			jid_dest = model[iter_dest][C_JID].decode('utf-8')
+			gajim.contacts.add_subcontact(account, jid_dest, jid_source)
+			# remove the source row
+			context.finish(True, True, etime)
+			# Add it under parent contact
+			self.add_contact_to_roster(jid_source, account)
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
 		# user1.groups
-		c = gajim.contacts.get_first_contact_from_jid(account, data)
 		if context.action != gtk.gdk.ACTION_COPY:
 			if grp_source in c.groups:
 				# Make sure contact was in a group
-				c.groups.remove(grp_source)
+				c_source.groups.remove(grp_source)
 			if model.iter_n_children(iter_group_source) == 1:
 				# this was the only child
 				model.remove(iter_group_source)
@@ -2644,9 +2676,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			else:
 				del gajim.groups[account][grp_source]
 		if not grp_dest in c.groups:
-			c.groups.append(grp_dest)
-			self.add_contact_to_roster(data, account)
-		gajim.connections[account].update_contact(c.jid, c.name, c.groups)
+			c_source.groups.append(grp_dest)
+			self.add_contact_to_roster(jid_source, account)
+		gajim.connections[account].update_contact(jid_source, c_source.name,
+			c_source.groups)
 		if context.action in (gtk.gdk.ACTION_MOVE, gtk.gdk.ACTION_COPY):
 			context.finish(True, True, etime)
 		return
