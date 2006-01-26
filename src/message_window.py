@@ -53,9 +53,13 @@ class MessageWindow:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, self.widget_name, APP)
 		self.xml.signal_autoconnect(self)
 		self.window = self.xml.get_widget(self.widget_name)
-		# I don't really understand, but get_property('visible') returns True at this point,
+		
+		# FIXME:
+		# I don't really understand, but get_property('visible') returns True at
+		# this point,
 		# which seems way early.  Anyway, hide until first tab is shown
 		self.window.hide()
+		
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
 		self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
@@ -492,8 +496,8 @@ class MessageWindow:
 		# 8 is the data size for the string
 		selection.set(selection.target, 8, str(source_page_num))
 
-	def on_tab_label_drag_data_received_cb(self, widget, drag_context, x, y, selection,
-						type, time):
+	def on_tab_label_drag_data_received_cb(self, widget, drag_context, x, y,
+	selection, type, time):
 		'''Reorder the tabs according to the drop position'''
 		source_page_num = int(selection.data)
 		dest_page_num, to_right = self.get_tab_at_xy(x, y)
@@ -626,7 +630,8 @@ class MessageWindowMgr:
 	
 	def _position_window(self, win, acct, type):
 		'''Moves window according to config settings'''
-		if not gajim.config.get('saveposition') or self.mode == self.ONE_MSG_WINDOW_NEVER:
+		if not gajim.config.get('saveposition') or\
+		self.mode == self.ONE_MSG_WINDOW_NEVER:
 			return
 
 		if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
