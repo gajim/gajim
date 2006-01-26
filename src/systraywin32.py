@@ -263,8 +263,6 @@ class SystrayWin32(systray.Systray):
 			self.on_left_click()
 
 	def add_jid(self, jid, account, typ):
-		if self.systray_winapi.notify_icon is None:
-			return
 		systray.Systray.add_jid(self, jid, account, typ)
 
 		nb = gajim.interface.roster.nb_unread
@@ -306,7 +304,7 @@ class SystrayWin32(systray.Systray):
 	def set_img(self):
 		self.tray_ico_imgs = self.load_icos() #FIXME: do not do this here
 		# see gajim.interface.roster.reload_jabber_state_images() to merge
-		self.systray_winapi.remove_notify_icon()
+		
 		if len(self.jids) > 0:
 			state = 'message'
 		else:
@@ -315,6 +313,7 @@ class SystrayWin32(systray.Systray):
 		if hicon is None:
 			return
 		
+		self.systray_winapi.remove_notify_icon()
 		self.systray_winapi.add_notify_icon(self.systray_context_menu, hicon,
 			'Gajim')
 		self.systray_winapi.notify_icon.menu = self.systray_context_menu
