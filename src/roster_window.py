@@ -154,7 +154,9 @@ class RosterWindow:
 			self.draw_contact(jid, account)
 
 	def add_contact_to_roster(self, jid, account, force = False):
-		'''Add a contact to the roster and add groups if they aren't in roster'''
+		'''Add a contact to the roster and add groups if they aren't in roster
+		force is about	force to add it, even if it is offline and show offline
+		is False, because it has online children, so we need to show it'''
 		showOffline = gajim.config.get('showoffline')
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if not contact:
@@ -2821,12 +2823,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			showOffline)
 
 		# columns
-#		col = gtk.TreeViewColumn()
-#		render_image = cell_renderer_image.CellRendererImage(0, 0)
-#		col.pack_start(render_image, expand = False)
-#		col.add_attribute(render_image, 'image', C_IMG)
-#		self.tree.append_column(col)
-#		self.tree.set_expander_column(col)
 
 		# this col has two cells: first one img, second one text
 		col = gtk.TreeViewColumn()
