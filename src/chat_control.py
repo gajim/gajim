@@ -498,7 +498,7 @@ class ChatControlBase(MessageControl):
 			if self.conv_textview.at_the_end():
 				#we are at the end
 				if self.nb_unread > 0:
-					self.nb_unread = 0 + self.get_specific_unread()
+					self.nb_unread = self.get_specific_unread()
 					self.parent_win.redraw_tab(self)
 					self.parent_win.show_title()
 					if gajim.interface.systray_enabled:
@@ -580,7 +580,9 @@ class ChatControlBase(MessageControl):
 		if not self.nb_unread:
 			return
 		jid = self.contact.jid
-		if self.conv_textview.at_the_end() and self.parent_win.window.is_active():
+		if self.conv_textview.at_the_end() and \
+				self.parent_win.get_active_control() == self and \
+				self.parent_win.window.is_active():
 			#we are at the end
 			self.nb_unread = self.get_specific_unread()
 			self.parent_win.redraw_tab(self)

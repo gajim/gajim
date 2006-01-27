@@ -109,7 +109,10 @@ class MessageControl:
 		self.compact_view_current = state
 
 	def get_specific_unread(self):
-		return 0
+		n = 0
+		if gajim.awaiting_events[self.account].has_key(self.contact.jid):
+			n = len(gajim.awaiting_events[self.account][self.contact.jid])
+		return n
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
 		'''Send the given message to the active tab'''
