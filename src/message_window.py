@@ -212,6 +212,7 @@ class MessageWindow:
 				ctrl.attention_flag:
 				continue
 			unread += ctrl.nb_unread
+
 		unread_str = ''
 		if unread > 1:
 			unread_str = '[' + unicode(unread) + '] '
@@ -223,10 +224,14 @@ class MessageWindow:
 		if not control:
 			control = self.get_active_control()
 		if control.type_id == message_control.TYPE_GC:
-			title = unread_str + control.room_jid
+			name = control.room_jid.split('@')[0]
 			urgent = control.attention_flag
 		else:
-			title = unread_str + control.contact.get_shown_name()
+			name = control.contact.get_shown_name()
+
+		mc_type = control.display_name + ": "
+		account = ' (' + _('account: ') + self.get_active_control().account + ')'
+		title = unread_str + mc_type + name + account
 
 		self.window.set_title(title)
 
