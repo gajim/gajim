@@ -1398,7 +1398,7 @@ class Interface:
 			ev = gajim.get_first_event(account, jid, typ)
 			# Open the window
 			self.roster.open_event(account, jid, ev)
-		elif typ == message_control.TYPE_GMAIL:
+		elif typ == 'gmail':
 			if gajim.config.get_per('accounts', account, 'savepass'):
 				url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') % (gajim.config.get_per('accounts', account, 'name'),gajim.config.get_per('accounts', account, 'password'))
 			else:

@@ -24,7 +24,6 @@ from common import gajim
 TYPE_CHAT = 'chat'
 TYPE_GC = 'gc'
 TYPE_PM = 'pm'
-TYPE_GMAIL = 'gmail'
 
 ####################
 # FIXME: Can't this stuff happen once?
