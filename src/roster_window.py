@@ -2662,7 +2662,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# We upgrade only the first user because user2.groups is a pointer to
 		# user1.groups
 		if context.action != gtk.gdk.ACTION_COPY:
-			if grp_source in c.groups:
+			if grp_source in c_source.groups:
 				# Make sure contact was in a group
 				c_source.groups.remove(grp_source)
 			if model.iter_n_children(iter_group_source) == 1:
@@ -2675,7 +2675,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					break
 			else:
 				del gajim.groups[account][grp_source]
-		if not grp_dest in c.groups:
+		if not grp_dest in c_source.groups:
 			c_source.groups.append(grp_dest)
 			self.add_contact_to_roster(jid_source, account)
 		gajim.connections[account].update_contact(jid_source, c_source.name,
