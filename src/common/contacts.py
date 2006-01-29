@@ -256,7 +256,9 @@ class Contacts:
 			return []
 		contacts = []
 		for j in self._children_meta_contacts[account][jid]:
-			contacts.append(self.get_contact_with_highest_priority(account, j))
+			c = self.get_contact_with_highest_priority(account, j)
+			if c:
+				contacts.append(c)
 		return contacts
 
 	def get_parent_contact(self, account, contact):
