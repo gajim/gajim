@@ -433,8 +433,9 @@ class Connection:
 				if not self.last_history_line.has_key(jid):
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
-				if self.name not in no_log_for and not\
-					int(float(time.mktime(tim))) <= self.last_history_line[jid]:
+				if self.name not in no_log_for and jid in self.last_history_line \
+					and not int(float(time.mktime(tim))) <= \
+					self.last_history_line[jid]:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 		elif mtype == 'chat': # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
