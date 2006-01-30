@@ -370,13 +370,21 @@ class RosterWindow:
 		for iter in iters:
 			icon_name = helpers.get_icon_name_to_show(contact, account)
 			path = model.get_path(iter)
-			if icon_name in ('error', 'offline') and gajim.contacts.has_children(
-				account, contact) and not self.tree.row_expanded(path):
-				# get children icon
-				#FIXME: improve that
-				cc = gajim.contacts.get_children_contacts(account, contact)[0]
-				icon_name = helpers.get_icon_name_to_show(cc)
-			state_images = self.get_appropriate_state_images(jid, size = '16')
+			if gajim.contacts.has_children(account, contact):
+				if icon_name in ('error', 'offline') and not \
+					self.tree.row_expanded(path):
+					# get children icon
+					#FIXME: improve that
+					cc = gajim.contacts.get_children_contacts(account, contact)[0]
+					icon_name = helpers.get_icon_name_to_show(cc)
+				if self.tree.row_expanded(path):
+					state_images = self.get_appropriate_state_images(jid,
+						size = 'opened')
+				else:
+					state_images = self.get_appropriate_state_images(jid,
+						size = 'closed')
+			else:
+				state_images = self.get_appropriate_state_images(jid, size = '16')
 		
 			img = state_images[icon_name]
 
@@ -2279,14 +2287,19 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			except RuntimeError:
 				pass
 
-	def load_iconset(self, path):
+	def load_iconset(self, path, pixbuf2 = None):
+		'''load an iconset from the given path, and add pixbuf2 on top left of
+		each static images'''
 		imgs = {}
 		path += '/'
-		for state in ('connecting', 'online', 'chat', 'away', 'xa',
-				'dnd', 'invisible', 'offline', 'error', 'requested',
-				'message', 'opened', 'closed', 'Not in Roster',
-				'muc_active', 'muc_inactive'):
-
+		list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', 'invisible',
+			'offline', 'error', 'requested', 'message', 'opened', 'closed',
+			'Not in Roster', 'muc_active', 'muc_inactive')
+		if pixbuf2:
+			list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+				'invisible','offline', 'error', 'requested', 'message',
+				'Not in Roster')
+		for state in list:
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
 			files = []
@@ -2298,6 +2311,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			for file in files: # loop seeking for either gif or png
 				if os.path.exists(file):
 					image.set_from_file(file)
+					if pixbuf2 and image.get_storage_type() == gtk.IMAGE_PIXBUF:
+						pix = image.get_pixbuf()
+						pixbuf2.composite(pix, 0, 0, pixbuf2.props.width,
+							pixbuf2.props.height, 0, 0, 1.0, 1.0, gtk.gdk.INTERP_HYPER,
+							127)
+						image.set_from_pixbuf(pix)
 					break
 		return imgs
 
@@ -2311,6 +2330,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		self.jabber_state_images['16'] = self.load_iconset(path)
+		pix = gtk.gdk.pixbuf_new_from_file(os.path.join(path, 'opened.png'))
+		self.jabber_state_images['opened'] = self.load_iconset(path, pix)
+		pix = gtk.gdk.pixbuf_new_from_file(os.path.join(path, 'closed.png'))
+		self.jabber_state_images['closed'] = self.load_iconset(path, pix)
 
 	def reload_jabber_state_images(self):
 		self.make_jabber_state_images()
