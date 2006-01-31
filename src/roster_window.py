@@ -1527,7 +1527,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.connections[account].unsubscribe(contact.jid, remove_auth)
 			for u in gajim.contacts.get_contact(account, contact.jid):
 				self.remove_contact(u, account)
+			ccs = gajim.contacts.get_children_contacts(account, contact)
 			gajim.contacts.remove_jid(account, u.jid)
+			for cc in ccs:
+				cc.groups = contact.groups
+				self.add_contact_to_roster(cc.jid, account)
 			if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 				c = gajim.contacts.create_contact(jid = contact.jid,
 					name = contact.name, groups = [_('Not in Roster')],

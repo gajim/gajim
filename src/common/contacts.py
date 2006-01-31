@@ -164,6 +164,11 @@ class Contacts:
 		if not self._contacts[account].has_key(jid):
 			return
 		del self._contacts[account][jid]
+		if self._parent_meta_contacts[account].has_key(jid):
+			remove_subcontact(account, jid)
+		if self._children_meta_contacts[account].has_key(jid):
+			for cjid in self._children_meta_contacts[account][jid]:
+				self.remove_subcontact(account, cjid)
 
 	def get_contact(self, account, jid, resource = None):
 		'''Returns the list of contact instances for this jid (one per resource)
