@@ -2671,9 +2671,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			c_source.groups = [grp_dest]
 			gajim.connections[account].update_contact(jid_source, c_source.name,
 				c_source.groups)
+			parent_jid = gajim.contacts.get_parent_contact(account, c_source).jid
 			gajim.contacts.remove_subcontact(account, jid_source)
 			context.finish(True, True, etime)
 			self.add_contact_to_roster(jid_source, account)
+			self.draw_contact(parent_jid, account)
 			return
 		if grp_source == grp_dest:
 			# Add meta contact
@@ -2686,6 +2688,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			context.finish(True, True, etime)
 			# Add it under parent contact
 			self.add_contact_to_roster(jid_source, account)
+			self.draw_contact(jid_dest, account)
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
 		# user1.groups
