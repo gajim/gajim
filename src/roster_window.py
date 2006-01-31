@@ -2315,7 +2315,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 						pix = image.get_pixbuf()
 						pixbuf2.composite(pix, 0, 0, pixbuf2.props.width,
 							pixbuf2.props.height, 0, 0, 1.0, 1.0, gtk.gdk.INTERP_HYPER,
-							127)
+							255)
 						image.set_from_pixbuf(pix)
 					break
 		return imgs
