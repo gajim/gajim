@@ -2701,6 +2701,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				del gajim.groups[account][grp_source]
 		if not grp_dest in c_source.groups:
 			c_source.groups.append(grp_dest)
+			# Remove all rows because add_contact_ro_roster doesn't add it if one
+			# is already in roster
+			for i in self.get_contact_iter(jid_source, account):
+				model.remove(i)
 			self.add_contact_to_roster(jid_source, account)
 		gajim.connections[account].update_contact(jid_source, c_source.name,
 			c_source.groups)
