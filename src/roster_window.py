@@ -2821,7 +2821,20 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			folder = os.path.join(path, transport, '32x32')
 			self.transports_state_images['32'][transport] = self.load_iconset(folder)
 			folder = os.path.join(path, transport, '16x16')
+			iconset = gajim.config.get('iconset')
+			if not iconset:
+				iconset = 'dcraven'
+			iconset_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset,
+				'16x16')
 			self.transports_state_images['16'][transport] = self.load_iconset(folder)
+			pix = gtk.gdk.pixbuf_new_from_file(os.path.join(iconset_path,
+				'opened.png'))
+			self.transports_state_images['opened'][transport] = self.load_iconset(
+				path, pix)
+			pix = gtk.gdk.pixbuf_new_from_file(os.path.join(iconset_path,
+				'closed.png'))
+			self.transports_state_images['closed'][transport] = self.load_iconset(
+				path, pix)
 
 		# uf_show, img, show, sensitive
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)
