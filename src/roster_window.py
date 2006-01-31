@@ -2641,6 +2641,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':
 			it = model.iter_parent(it)
+		iter_group_source = it
 		grp_source = model[it][C_JID].decode('utf-8')
 		if grp_source == _('Transports') or grp_source == _('Not in Roster'):
 			return
