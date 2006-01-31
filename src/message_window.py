@@ -66,13 +66,7 @@ class MessageWindow:
 
 		# FIXME: Debugging #1389
 		print_children(self.window)
-		
-		# FIXME:
-		# I don't really understand, but get_property('visible') returns True at
-		# this point,
-		# which seems way early.  Anyway, hide until first tab is shown
-		self.window.hide()
-		
+
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
 		self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
