@@ -2778,8 +2778,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self._on_treeview_selection_changed)
 
 		self._last_selected_contact = None # None or holds jid, account tupple
-		self.jabber_state_images = {'16': {}, '32': {}}
-		self.transports_state_images = {'16': {}, '32': {}}
+		self.jabber_state_images = {'16': {}, '32': {}, 'opened': {},
+			'closed': {}}
+		self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
+			'closed': {}}
 		
 		self.nb_unread = 0 # number of unread messages
 		self.last_save_dir = None
