@@ -720,10 +720,11 @@ class MessageWindowMgr:
 			return win.get_control(jid, acct)
 		return None
 
-	def get_controls(self, type):
-		# FIXME: Optionally accept an account arg
+	def get_controls(self, type, acct = None):
 		ctrls = []
 		for c in self.controls():
+			if acct and c.account != acct:
+				continue
 			if c.type_id == type:
 				ctrls.append(c)
 		return ctrls
