@@ -356,10 +356,7 @@ def launch_browser_mailer(kind, uri):
 			pass
 
 	else:
-		if kind == 'url' and not\
-			(uri.startswith('http://') or uri.startswith('https://')):
-			uri = 'http://' + uri
-		elif kind == 'mail' and not uri.startswith('mailto:'):
+		if kind == 'mail' and not uri.startswith('mailto:'):
 			uri = 'mailto:' + uri
 
 		if gajim.config.get('openwith') == 'gnome-open':
