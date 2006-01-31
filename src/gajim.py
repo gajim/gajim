@@ -244,6 +244,7 @@ class Interface:
 				gc_control = gajim.interface.msg_win_mgr.get_control(room_jid, account)
 				if gc_control:
 					gc_control.got_disconnected()
+					gc_control.parent_win.redraw_tab(gc_control)
 		else:
 			gobject.timeout_add(30000, self.allow_notif, account)
 			model[self.roster.status_message_menuitem_iter][3] = True # sensitivity for this menuitem

@@ -539,6 +539,8 @@ class GroupchatControl(ChatControlBase):
 		gajim.gc_connected[self.account][self.room_jid] = False
 		self.msg_textview.set_sensitive(False)
 		self.xml.get_widget('send_button').set_sensitive(False)
+		# Note, since this method is called during initialization it is NOT safe
+		# to call self.parent_win.redraw_tab here
 
 	def draw_roster(self):
 		model = self.list_treeview.get_model()
@@ -639,6 +641,7 @@ class GroupchatControl(ChatControlBase):
 				c.status = status
 			if nick == self.nick and statusCode != '303': # We became offline
 				self.got_disconnected()
+				self.parent_win.redraw_tab(self)
 		else:
 			iter = self.get_contact_iter(nick)
 			if not iter:
