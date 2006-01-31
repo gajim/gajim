@@ -2334,10 +2334,22 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		self.jabber_state_images['16'] = self.load_iconset(path)
-		pix = gtk.gdk.pixbuf_new_from_file(os.path.join(path, 'opened.png'))
-		self.jabber_state_images['opened'] = self.load_iconset(path, pix)
-		pix = gtk.gdk.pixbuf_new_from_file(os.path.join(path, 'closed.png'))
-		self.jabber_state_images['closed'] = self.load_iconset(path, pix)
+		pixo = gtk.gdk.pixbuf_new_from_file(os.path.join(path, 'opened.png'))
+		self.jabber_state_images['opened'] = self.load_iconset(path, pixo)
+		pixc = gtk.gdk.pixbuf_new_from_file(os.path.join(path, 'closed.png'))
+		self.jabber_state_images['closed'] = self.load_iconset(path, pixc)
+
+		# update opened and closed transport iconsets
+		t_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
+		folders = os.listdir(t_path)
+		for transport in folders:
+			if transport == '.svn':
+				continue
+			folder = os.path.join(t_path, transport, '16x16')
+			self.transports_state_images['opened'][transport] = self.load_iconset(
+				folder, pixo)
+			self.transports_state_images['closed'][transport] = self.load_iconset(
+				folder, pixc)
 
 	def reload_jabber_state_images(self):
 		self.make_jabber_state_images()
@@ -2831,21 +2843,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.transports_state_images['32'][transport] = self.load_iconset(
 				folder)
 			folder = os.path.join(path, transport, '16x16')
-			iconset = gajim.config.get('iconset')
-			if not iconset:
-				iconset = 'dcraven'
-			iconset_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset,
-				'16x16')
 			self.transports_state_images['16'][transport] = self.load_iconset(
 				folder)
-			pix = gtk.gdk.pixbuf_new_from_file(os.path.join(iconset_path,
-				'opened.png'))
-			self.transports_state_images['opened'][transport] = self.load_iconset(
-				folder, pix)
-			pix = gtk.gdk.pixbuf_new_from_file(os.path.join(iconset_path,
-				'closed.png'))
-			self.transports_state_images['closed'][transport] = self.load_iconset(
-				folder, pix)
 
 		# uf_show, img, show, sensitive
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)
