@@ -1330,7 +1330,7 @@ _('Without a connection, you can not edit your personal information.')
 _('There was a problem retrieving your OpenPGP secret keys.')).get_response()
 			return
 		secret_keys['None'] = 'None'
-		instance = dialogs.ChooseGPGKeyDialog(_('Passphrase'),
+		instance = dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
 			_('Choose your OpenPGP key'), secret_keys)
 		keyID = instance.run()
 		if keyID is None:
