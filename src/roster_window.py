@@ -1766,8 +1766,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				for contact in lcontact:
 					lcontact_copy.append(contact)
 				for contact in lcontact_copy:
-					self.chg_contact_status(contact, 'offline', 'Disconnected',
-						account)
+					self.chg_contact_status(contact, 'offline', '', account)
 		self.update_status_combobox()
 		self.make_menu()
 
