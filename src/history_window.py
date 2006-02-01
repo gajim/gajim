@@ -334,9 +334,9 @@ class HistoryWindow:
 				if kind == constants.KIND_CHAT_MSG_SENT: # it's us! :)
 					contact_name = gajim.nicks[self.account]
 				else:
-					if self.account and gajim.contacts[self.account].has_key(self.jid):
-						contact = gajim.get_first_contact_instance_from_jid(
-							self.account, self.jid)
+					contact = gajim.contacts.get_first_contact_from_jid(self.account,
+						self.jid)
+					if contact:
 						contact_name = contact.get_shown_name()
 					else:
 						contact_name = self.jid
