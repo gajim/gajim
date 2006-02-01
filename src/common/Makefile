@@ -11,7 +11,7 @@ else
 # # We link with libXScrnsaver from monolithic X.Org X11
 CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -fpic -I/usr/include/python$(PYTHONVER) -I.
 LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0` -L/usr/X11R6$(LIBDIR) -lX11 -lXss -lXext
-# endif
+endif
 
 all: idle.so
 
