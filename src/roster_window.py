@@ -2562,9 +2562,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if not contact2:
 				return 0
 			name2 = contact2.get_shown_name()
-		# We first compare by show if sort_by_show is True
+		# We first compare by show if sort_by_show is True or if it's a child
+		# contact
 		if type1 == 'contact' and type2 == 'contact' and \
-			gajim.config.get('sort_by_show'):
+			(gajim.config.get('sort_by_show') or gajim.contacts.is_subcontact(
+			account1, contact1)):
 			cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
 				'invisible': 5, 'offline': 6, 'Not in Roster': 7, 'error': 8}
 			s = self.get_show(lcontact1)
