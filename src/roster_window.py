@@ -370,7 +370,7 @@ class RosterWindow:
 		for iter in iters:
 			icon_name = helpers.get_icon_name_to_show(contact, account)
 			path = model.get_path(iter)
-			if gajim.contacts.has_children(account, contact):
+			if model.iter_has_child(iter):
 				if icon_name in ('error', 'offline') and not \
 					self.tree.row_expanded(path):
 					# get children icon
