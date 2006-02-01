@@ -410,6 +410,9 @@ class RosterWindow:
 		'''joins the room immediatelly'''
 		if gajim.interface.msg_win_mgr.has_window(room_jid, account) and \
 				gajim.gc_connected[account][room_jid]:
+			win = gajim.interface.msg_win_mgr.get_window(room_jid,  account)
+			win.window.present()
+			win.set_active_tab(room_jid,  account)
 			dialogs.ErrorDialog(_('You are already in room %s') % room_jid
 				).get_response()
 			return
