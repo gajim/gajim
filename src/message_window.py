@@ -33,16 +33,6 @@ APP = i18n.APP
 GTKGUI_GLADE = 'gtkgui.glade'
 ####################
 
-# FIXME: Debugging #1389
-def print_children(widget):
-	print "widget: %s" % widget.get_name()
-	if isinstance(widget, gtk.Container):
-		for c in widget.get_children():
-			name = c.get_name()
-			sz = c.size_request()
-			print "child: %s, %s" % (name, str(sz))
-			print_children(c)
-
 class MessageWindow:
 	'''Class for windows which contain message like things; chats,
 	groupchats, etc.'''
@@ -63,9 +53,6 @@ class MessageWindow:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, self.widget_name, APP)
 		self.xml.signal_autoconnect(self)
 		self.window = self.xml.get_widget(self.widget_name)
-
-		# FIXME: Debugging #1389
-		print_children(self.window)
 
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
