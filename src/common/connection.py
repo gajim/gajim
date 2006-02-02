@@ -1499,6 +1499,17 @@ class Connection:
 				#TODO: implement this
 				pass
 
+	def _PrivateErrorCB(self, con, iq_obj):
+		gajim.log.debug('PrivateErrorCB')
+		query = iq_obj.getTag('query')
+		gajim_tag = query.getTag('gajim')
+		if gajim_tag:
+			ns = gajim_tag.getNamespace()
+			if ns == 'gajim:metacontacts':
+				# Private XML Storage (JEP49) is not supported by server
+				# Continue connecting
+				self.connection.initRoster()
+
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':
 			iq = iq_obj.buildReply('result')
@@ -1832,6 +1843,8 @@ class Connection:
 		con.RegisterHandler('iq', self._getRosterCB, 'result',
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._PrivateCB, 'result',
+			common.xmpp.NS_PRIVATE)
+		con.RegisterHandler('iq', self._PrivateErrorCB, 'error',
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',
 			common.xmpp.NS_HTTP_AUTH)
