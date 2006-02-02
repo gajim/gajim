@@ -956,6 +956,13 @@ class PreferencesWindow:
 		model.set_value(iter, 2, path_to_file)
 		model.set_value(iter, 1, 1)
 
+	def on_play_button_clicked(self, widget):
+		model, iter = self.sound_tree.get_selection().get_selected()
+		if not iter:
+			return
+		event = model[iter][0]
+		helpers.play_sound(event)
+
 	def on_open_advanced_editor_button_clicked(self, widget, data = None):
 		if gajim.interface.instances.has_key('advanced_config'):
 			gajim.interface.instances['advanced_config'].window.present()
