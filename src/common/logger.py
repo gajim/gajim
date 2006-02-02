@@ -101,7 +101,7 @@ class Logger:
 
 	def get_jids_already_in_db(self):
 		self.cur.execute('SELECT jid FROM jids')
-		rows = self.cur.fetchall() # list of tupples: (u'aaa@bbb',), (u'cc@dd',)]
+		rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
@@ -130,6 +130,8 @@ class Logger:
 		logs table has log_id, jid_id, contact_name, time, kind, show, message
 		so to ask logs we need jid_id that matches our jid in jids table
 		this method asks jid and returns the jid_id for later sql-ing on logs
+		typestr can be 'ROOM' or anything else depending on the type of JID
+		and is only needed to be specified when the JID is new in DB
 		'''
 		if jid.find('/') != -1: # if it has a /
 			jid_is_from_pm = self.jid_is_from_pm(jid)
@@ -364,14 +366,14 @@ class Logger:
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
 		result = self.cur.fetchall()
 
-		#Copy all interesant time in a temporary table 
+		# Copy all interesant time in a temporary table 
 		self.cur.execute('CREATE TEMPORARY TABLE blabla(time,INTEGER)') 
 		for line in result: 
 			self.cur.execute(''' 
 				INSERT INTO blabla (time) VALUES (%d) 
 				''' % (line[0])) 
 
-		#then search in this small temp table for each day 
+		# then search in this small temp table for each day 
 		for day in xrange(1, max_day): 
 			start_of_day = self.get_unix_time_from_date(year, month, day) 
 			last_second_of_day = start_of_day + seconds_in_a_day - 1 
@@ -386,7 +388,7 @@ class Logger:
 			if result: 
 				list[0:0]=[day]
 
-		#Delete temporary table 
+		# Delete temporary table 
 		self.cur.execute('DROP TABLE blabla') 
 		result = self.cur.fetchone()
 		return list
