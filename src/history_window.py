@@ -88,7 +88,6 @@ class HistoryWindow:
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = C_CONTACT_NAME)
-		col.set_sort_column_id(C_CONTACT_NAME)
 		col.set_resizable(True)
 		
 		col = gtk.TreeViewColumn(_('Date'))
