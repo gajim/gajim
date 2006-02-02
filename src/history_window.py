@@ -50,7 +50,7 @@ GTKGUI_GLADE = 'gtkgui.glade'
 # contact_name, date, message, time
 (
 C_CONTACT_NAME,
-C_DATE,
+C_UNIXTIME,
 C_MESSAGE,
 C_TIME
 ) = range(4)
@@ -94,8 +94,7 @@ class HistoryWindow:
 		self.results_treeview.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text = C_DATE)
-		col.set_sort_column_id(C_DATE)
+		col.set_attributes(renderer, text = C_UNIXTIME)
 		col.set_resizable(True)
 		
 		col = gtk.TreeViewColumn(_('Message'))
@@ -355,7 +354,7 @@ class HistoryWindow:
 		model = widget.get_model()
 		iter = model.get_iter(path)
 		# make it a tupple (Y, M, D, 0, 0, 0...)
-		tim = time.strptime(model[iter][C_DATE], '%x')
+		tim = time.strptime(model[iter][C_UNIXTIME], '%x')
 		year = tim[0]
 		gtk_month = tim[1]
 		month = gtkgui_helpers.make_python_month_gtk_month(gtk_month)
