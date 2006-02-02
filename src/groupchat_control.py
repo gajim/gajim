@@ -101,8 +101,9 @@ class GroupchatControl(ChatControlBase):
 
 		self._last_selected_contact = None # None or holds jid, account tuple
 		# alphanum sorted
-		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact', 'help', 'invite',
-			'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part', 'say', 'topic']
+		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact',
+			'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part',
+			'say', 'topic']
 		# muc attention flag (when we are mentioned in a muc)
 		# if True, the room has mentioned us
 		self.attention_flag = False
