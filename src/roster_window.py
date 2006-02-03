@@ -2285,7 +2285,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_service_disco_menuitem_activate(self, widget, account):
 		server_jid = gajim.config.get_per('accounts', account, 'hostname')
 		if gajim.interface.instances[account]['disco'].has_key(server_jid):
-			gajim.interface.instances[account]['disco'][server_jid].window.present()
+			gajim.interface.instances[account]['disco'][server_jid].\
+				window.present()
 		else:
 			try:
 				# Object will add itself to the window dict
