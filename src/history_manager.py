@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 ## history_manager.py
 ##
-## Copyright (C) 2006 Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -163,6 +163,7 @@ class HistoryManager:
 	def _fill_logs_listview(self, jid):
 		'''fill the listview with all messages that user sent to or
 		received from JID'''
+		self.logs_liststore.clear() # first clear the store
 		# no need to lower jid in this context as jid is already lowered
 		# as we use those jids from db
 		jid_id = self._get_jid_id(jid)
