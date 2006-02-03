@@ -2616,6 +2616,56 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			data = model[iter][C_JID]
 		selection.set(selection.target, 8, data)
 
+	def on_drop_in_contact(self, widget, account, c_source, c_dest, context,
+		etime):
+		# remove the source row
+		model = self.tree.get_model()
+		for i in self.get_contact_iter(c_source.jid, account):
+			model.remove(i)
+		gajim.contacts.add_subcontact(account, c_dest.jid, c_source.jid)
+		# Add it under parent contact
+		self.add_contact_to_roster(c_source.jid, account)
+		self.draw_contact(c_dest.jid, account)
+		context.finish(True, True, etime)
+
+	def on_drop_in_group(self, widget, account, c_source, grp_dest, context,
+		etime, grp_source = None):
+		if grp_source:
+			self.remove_contact_from_group(account, c_source, grp_source)
+		self.add_contact_to_group(account, c_source, grp_dest)
+		if context.action in (gtk.gdk.ACTION_MOVE, gtk.gdk.ACTION_COPY):
+			context.finish(True, True, etime)
+
+	def add_contact_to_group(self, account, contact, group):
+		model = self.tree.get_model()
+		if not group in contact.groups:
+			contact.groups.append(group)
+		# Remove all rows because add_contact_to_roster doesn't add it if one
+		# is already in roster
+		for i in self.get_contact_iter(contact.jid, account):
+			model.remove(i)
+		self.add_contact_to_roster(contact.jid, account)
+		gajim.connections[account].update_contact(contact.jid, contact.name,
+			contact.groups)
+
+	def remove_contact_from_group(self, account, contact, group):
+		if not group in contact.groups:
+			return
+		model = self.tree.get_model()
+		# Make sure contact was in the group
+		contact.groups.remove(group)
+		group_iter = self.get_group_iter(group, account)
+		if model.iter_n_children(group_iter) == 0:
+			# this was the only child
+			model.remove(group_iter)
+		# delete the group if it is empty (need to look for offline users too)
+		for jid in gajim.contacts.get_jid_list(account):
+			if group in gajim.contacts.get_contact_with_highest_priority(
+				account, jid).groups:
+				break
+		else:
+			del gajim.groups[account][group]
+
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
 		etime):
 		model = treeview.get_model()
@@ -2704,7 +2754,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 #			if context.action == gtk.gdk.ACTION_COPY:
 #				# Keep only MOVE
 #				return
-			jid_dest = model[iter_dest][C_JID].decode('utf-8')
 			gajim.contacts.add_subcontact(account, jid_dest, jid_source)
 			# remove the source row
 			context.finish(True, True, etime)
@@ -2714,32 +2763,24 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
 		# user1.groups
-		if context.action != gtk.gdk.ACTION_COPY:
-			if grp_source in c_source.groups:
-				# Make sure contact was in a group
-				c_source.groups.remove(grp_source)
-			if model.iter_n_children(iter_group_source) == 1:
-				# this was the only child
-				model.remove(iter_group_source)
-			# delete the group if it is empty (need to look for offline users too)
-			for jid in gajim.contacts.get_jid_list(account):
-				if grp_source in gajim.contacts.get_contact_with_highest_priority(
-					account, jid).groups:
-					break
-			else:
-				del gajim.groups[account][grp_source]
-		if not grp_dest in c_source.groups:
-			c_source.groups.append(grp_dest)
-			# Remove all rows because add_contact_ro_roster doesn't add it if one
-			# is already in roster
-			for i in self.get_contact_iter(jid_source, account):
-				model.remove(i)
-			self.add_contact_to_roster(jid_source, account)
-		gajim.connections[account].update_contact(jid_source, c_source.name,
-			c_source.groups)
-		if context.action in (gtk.gdk.ACTION_MOVE, gtk.gdk.ACTION_COPY):
-			context.finish(True, True, etime)
-		return
+		if context.action == gtk.gdk.ACTION_COPY:
+			self.on_drop_in_group(None, account, c_source, grp_dest, context,
+				etime)
+		else:
+			menu = gtk.Menu()
+			item = gtk.MenuItem(_('Drop %s in group %s') % (c_source.name,
+				grp_dest))
+			item.connect('activate', self.on_drop_in_group, account, c_source,
+				grp_dest, context, etime, grp_source)
+			menu.append(item)
+			item = gtk.MenuItem(_('Make %s as subcontact of %s') % (c_source.name,
+				c_dest.name))
+			item.connect('activate', self.on_drop_in_contact, account, c_source,
+				c_dest, context, etime)
+			menu.append(item)
+
+			menu.popup(None, None, None, 1, etime)
+			menu.show_all()
 
 	def show_title(self):
 		change_title_allowed = gajim.config.get('change_roster_title')
