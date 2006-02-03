@@ -723,7 +723,9 @@ class RosterWindow:
 			
 	def draw_roster(self):
 		'''Clear and draw roster'''
-		self.tree.get_model().clear()
+		# clear the model, only if it is not empty
+		if self.tree.get_model():
+			self.tree.get_model().clear()
 		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
 			for jid in gajim.contacts.get_jid_list(acct):
@@ -899,7 +901,8 @@ class RosterWindow:
 				# if we're online ...
 				if connection.connection:
 					roster = connection.connection.getRoster()
-					if roster.getItem(jid):
+					# in threadless connection when no roster stanza is sent, 'roster' is None
+					if roster and roster.getItem(jid):
 						resources = roster.getResources(jid)
 						# ...get the contact info for our other online resources
 						for resource in resources:

@@ -817,7 +817,7 @@ class Socks5Receiver(Socks5):
 	def connect(self):
 		''' create the socket and start the connect loop '''
 		self._sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self._sock.settimeout(50)
+		
 		# this will not block the GUI
 		self._sock.setblocking(False)
 		self.state = 0 # about to be connected

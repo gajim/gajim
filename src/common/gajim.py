@@ -26,7 +26,6 @@
 import os
 import sys
 import logging
-import mutex
 
 import config
 from contacts import Contacts
@@ -111,10 +110,6 @@ sleeper_state = {} # whether we pass auto away / xa or not
 #'autoaway': autoaway and use sleeper
 #'autoxa': autoxa and use sleeper
 status_before_autoaway = {}
-#queues of events from connections...
-events_for_ui = {}
-#... and its mutex
-mutex_events_for_ui = mutex.mutex()
 
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']

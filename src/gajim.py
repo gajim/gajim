@@ -105,6 +105,8 @@ import notify
 
 import common.sleepy
 
+from common.xmpp import idlequeue
+from common import nslookup
 from common import socks5
 from common import gajim
 from common import connection
@@ -152,6 +154,39 @@ import disco
 GTKGUI_GLADE = 'gtkgui.glade'
 
 
+class GlibIdleQueue(idlequeue.IdleQueue):
+	''' 
+	Extends IdleQueue to use glib io_add_wath, instead of select/poll
+	In another, `non gui' implementation of Gajim IdleQueue can be used safetly.
+	'''
+	def init_idle(self):
+		''' this method is called at the end of class constructor.
+		Creates a dict, which maps file/pipe/sock descriptor to glib event id'''
+		self.events = {}
+		if gtk.pygtk_version >= (2, 8, 0):
+			# time() is already called in glib, we just get the last value 
+			# overrides IdleQueue.current_time()
+			self.current_time = lambda: gobject.get_current_time()
+			
+	def add_idle(self, fd, flags):
+		''' this method is called when we plug a new idle object.
+		Start listening for events from fd
+		'''
+		res = gobject.io_add_watch(fd, flags, self.process_events, 
+										priority=gobject.PRIORITY_LOW)
+		# store the id of the watch, so that we can remove it on unplug
+		self.events[fd] = res
+	
+	def remove_idle(self, fd):
+		''' this method is called when we unplug a new idle object.
+		Stop listening for events from fd
+		'''
+		gobject.source_remove(self.events[fd])
+		del(self.events[fd])
+	
+	def process(self):
+		self.check_time_events()
+	
 class Interface:
 	def handle_event_roster(self, account, data):
 		#('ROSTER', account, array)
@@ -1333,27 +1368,17 @@ class Interface:
 			'SIGNED_IN': self.handle_event_signed_in,
 			'META_CONTACTS': self.handle_event_meta_contacts,
 		}
-
-	def exec_event(self, account):
-		ev = gajim.events_for_ui[account].pop(0)
-		self.handlers[ev[0]](account, ev[1])
+		gajim.handlers = self.handlers
 
 	def process_connections(self):
-		# We copy the list of connections because one can disappear while we 
-		# process()
-		accounts = []
-		for account in gajim.connections:
-			accounts.append(account)
-		for account in accounts:
-			if gajim.connections[account].connected:
-				gajim.connections[account].process(0.01)
-			if gajim.socks5queue.connected:
-				gajim.socks5queue.process(0)
-		for account in gajim.events_for_ui: #when we create a new account we don't have gajim.connection
-			while len(gajim.events_for_ui[account]):
-				gajim.mutex_events_for_ui.lock(self.exec_event, account)
-				gajim.mutex_events_for_ui.unlock()
-		time.sleep(0.01) # so threads in connection.py have time to run
+		''' called each XXX (200) miliseconds. For now it checks for idlequeue timeouts 
+		and FT events.
+		'''
+		gajim.idlequeue.process()
+		
+		# TODO: rewrite socks5 classes to work with idlequeue and remove these lines
+		if gajim.socks5queue.connected:
+			gajim.socks5queue.process(0)
 		return True # renew timeout (loop for ever)
 
 	def save_config(self):
@@ -1471,6 +1496,12 @@ class Interface:
 		gajim.socks5queue = socks5.SocksQueue(
 			self.handle_event_file_rcv_completed, 
 			self.handle_event_file_progress)
+		# in a nongui implementation, just call:
+		# gajim.idlequeue = IdleQueue() , and
+		# gajim.idlequeue.process() each foo miliseconds
+		gajim.idlequeue = GlibIdleQueue()
+		# resolve and keep current record of resolved hosts
+		gajim.resolver = nslookup.Resolver(gajim.idlequeue)
 		self.register_handlers()
 		for account in gajim.config.get_per('accounts'):
 			gajim.connections[account] = common.connection.Connection(account)
@@ -1495,7 +1526,6 @@ class Interface:
 			gajim.encrypted_chats[a] = []
 			gajim.last_message_time[a] = {}
 			gajim.status_before_autoaway[a] = ''
-			gajim.events_for_ui[a] = []
 
 		self.roster = roster_window.RosterWindow()
 		

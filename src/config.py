@@ -4,6 +4,7 @@
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Vincent Hanquez <tab@snarc.org>
+##	- Dimitur Kirov <dkirov@gmail.com>
 ##
 ## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
@@ -1229,7 +1230,6 @@ class AccountModificationWindow:
 				gajim.last_message_time[self.account]
 			gajim.status_before_autoaway[name] = \
 				gajim.status_before_autoaway[self.account]
-			gajim.events_for_ui[name] = gajim.events_for_ui[self.account]
 
 			gajim.contacts.change_account_name(self.account, name)
 
@@ -1256,7 +1256,6 @@ class AccountModificationWindow:
 			del gajim.encrypted_chats[self.account]
 			del gajim.last_message_time[self.account]
 			del gajim.status_before_autoaway[self.account]
-			del gajim.events_for_ui[self.account]
 			gajim.connections[self.account].name = name
 			gajim.connections[name] = gajim.connections[self.account]
 			del gajim.connections[self.account]
@@ -2266,7 +2265,9 @@ class RemoveAccountWindow:
 				_('If you remove it, the connection will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
-			gajim.connections[self.account].change_status('offline', 'offline')
+			# change status to offline only if we will not remove this JID from server
+			if not self.remove_and_unregister_radiobutton.get_active():
+				gajim.connections[self.account].change_status('offline', 'offline')
 
 		if self.remove_and_unregister_radiobutton.get_active():
 			if not gajim.connections[self.account].password:
@@ -2280,10 +2281,15 @@ class RemoveAccountWindow:
 					# We don't remove account cause we canceled pw window
 					return
 				gajim.connections[self.account].password = passphrase
-			if not gajim.connections[self.account].unregister_account():
-				# unregistration failed, we don't remove the account
-				# Error message is send by connect_and_auth()
-				return
+			gajim.connections[self.account].unregister_account(self._on_remove_success)
+		else:
+			self._on_remove_success(True)
+	
+	def _on_remove_success(self, res):
+		# action of unregistration has failed, we don't remove the account
+		# Error message is send by connect_and_auth()
+		if not res:
+			return
 		# Close all opened windows
 		gajim.interface.roster.close_all(gajim.interface.instances[self.account])
 		del gajim.connections[self.account]
@@ -2302,7 +2308,6 @@ class RemoveAccountWindow:
 		del gajim.encrypted_chats[self.account]
 		del gajim.last_message_time[self.account]
 		del gajim.status_before_autoaway[self.account]
-		del gajim.events_for_ui[self.account]
 		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
 		else: 
@@ -2828,7 +2833,6 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		con = connection.Connection(self.account)
 		if savepass:
 			con.password = password
-		gajim.events_for_ui[self.account] = []
 		if not self.modify:
 			con.new_account(self.account, config)
 			return
@@ -2858,7 +2862,6 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		gajim.encrypted_chats[self.account] = []
 		gajim.last_message_time[self.account] = {}
 		gajim.status_before_autoaway[self.account] = ''
-		gajim.events_for_ui[self.account] = []
 		# refresh accounts window
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
