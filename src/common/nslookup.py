@@ -208,7 +208,7 @@ class IdleCommand(IdleObject):
 			self.result = self.pipe.stdout.read()
 			self._return_result()
 			self.pipe.stdout.close()
-		
+			self.pipe.stdin.close()
 	def start(self):
 		if os.name == 'nt':
 			self._start_nt()
@@ -220,16 +220,19 @@ class IdleCommand(IdleObject):
 			self.result = ''
 			self._return_result()
 			return
+		# if gajim is started from noninteraactive shells stdin is closed and 
+		# cannot be forwarded, so we have to keep it open
 		self.pipe = Popen(self._compose_command_args(), stdout=PIPE, 
-			bufsize = 1024, shell = True, stderr = STDOUT, stdin = None)
+			bufsize = 1024, shell = True, stderr = STDOUT, stdin = PIPE)
 		if self.commandtimeout >= 0:
 			self.endtime = self.idlequeue.current_time()
 			self.idlequeue.set_alarm(self.wait_child, 0.1)
 	
 	def _start_posix(self):
-		self.pipe = os.popen(self._compose_command_line())
+		write_d, self.pipe = os.popen4(self._compose_command_line())
+		write_d.close()
 		self.fd = self.pipe.fileno()
-		fcntl.fcntl(self.pipe, fcntl.F_SETFL, os.O_NONBLOCK)
+		#~ fcntl.fcntl(self.pipe, fcntl.F_SETFL, os.O_NONBLOCK)
 		self.idlequeue.plug_idle(self, False, True)
 		if self.commandtimeout >= 0:
 			self.idlequeue.set_read_timeout(self.fd, self.commandtimeout)
