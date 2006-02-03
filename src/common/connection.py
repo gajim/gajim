@@ -282,8 +282,11 @@ class Connection:
 			if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
 			vcard['PHOTO'].has_key('BINVAL'):
 				photo = vcard['PHOTO']['BINVAL']
-				photo_decoded = base64.decodestring(photo)
-				avatar_sha = sha.sha(photo_decoded).hexdigest()
+				try:
+					photo_decoded = base64.decodestring(photo)
+					avatar_sha = sha.sha(photo_decoded).hexdigest()
+				except:
+					avatar_sha = ''
 			else:
 				avatar_sha = ''
 
