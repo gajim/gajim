@@ -256,9 +256,9 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		if self.state != 0:
 			return
 		self._sock.setblocking(False)
-		# connect_ex is better than try:connect
+		errnum = 0
 		try:
-			errnum = self._sock.connect_ex(self._server)
+			self._sock.connect(self._server)
 		except socket.error, e:
 			errnum = e[0]
 		# in progress, or would block

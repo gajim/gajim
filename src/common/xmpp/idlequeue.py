@@ -138,6 +138,8 @@ class IdleQueue:
 	
 	def process(self):
 		if not self.queue:
+			# check for timeouts/alert also when there are no active fds
+			self.check_time_events()
 			return True
 		try:
 			waiting_descriptors = self.selector.poll(0)
@@ -147,5 +149,64 @@ class IdleQueue:
 				raise
 		for fd, flags in waiting_descriptors:
 			self.process_events(fd, flags)
+		self.check_time_events()
+		return True
+
+class SelectIdleQueue(IdleQueue):
+	''' 
+	Extends IdleQueue to use select.select() for polling
+	This class exisists for the sake of gtk2.8 on windows, which
+	doesn't seem to support io_add_watch properly (yet)
+	'''
+	# TODO: remove this class and its reference gajim.py, when win-gtk2.8 is stable
+	def init_idle(self):
+		''' this method is called at the end of class constructor.
+		Creates a dict, which maps file/pipe/sock descriptor to glib event id'''
+		self.read_fds = {}
+		self.write_fds = {}
+		self.error_fds = {}
+	
+	def add_idle(self, fd, flags):
+		''' this method is called when we plug a new idle object.
+		Remove descriptor to read/write/error lists, according flags
+		'''
+		if flags & 3:
+			self.read_fds[fd] = fd
+		if flags & 4:
+			self.write_fds[fd] = fd
+		self.error_fds[fd] = fd
+	
+	def remove_idle(self, fd):
+		''' this method is called when we unplug a new idle object.
+		Remove descriptor from read/write/error lists
+		'''
+		if self.read_fds.has_key(fd):
+			del(self.read_fds[fd])
+		if self.write_fds.has_key(fd):
+			del(self.write_fds[fd])
+		if self.error_fds.has_key(fd):
+			del(self.error_fds[fd])
+	
+	def process(self):
+		if not self.write_fds and not self.read_fds:
+			self.check_time_events()
+			return True
+		try:
+			waiting_descriptors = select.select(self.read_fds.keys(), 
+				self.write_fds.keys(), self.error_fds.keys(), 0)
+		except select.error, e:
+			waiting_descriptors = ((),(),())
+			if e[0] != 4: # interrupt
+				raise
+		for fd in waiting_descriptors[0]:
+			self.queue.get(fd).pollin()
+			self.check_time_events()
+			return True
+		for fd in waiting_descriptors[1]:
+			self.queue.get(fd).pollout()
+			self.check_time_events()
+			return True
+		for fd in waiting_descriptors[2]:
+			self.queue.get(fd).pollend()
 		self.check_time_events()
 		return True
