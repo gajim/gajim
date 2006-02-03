@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 ## history_manager.py
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <nkour@jabber.org>
