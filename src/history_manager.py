@@ -1,18 +1,6 @@
 ## history_manager.py
 ##
-## Contributors for this file:
-## - Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
-##
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Nikos Kouremenos <nkour@jabber.org>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -190,8 +178,12 @@ class HistoryManager:
 			# exposed in UI (TreeViewColumns) are only time, message and subject
 			# but store in liststore log_line_id, jid_id, time, message and subject
 			time_ = row[2]
-			time_ = time.strftime('%x', time.localtime(float(time_)))
-			self.logs_liststore.append((row[0], row[1], time_, row[4], row[5]))
+			try:
+				time_ = time.strftime('%x', time.localtime(float(time_)))
+			except ValueError:
+				pass
+			else:
+				self.logs_liststore.append((row[0], row[1], time_, row[4], row[5]))
 
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
