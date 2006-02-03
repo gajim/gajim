@@ -532,7 +532,7 @@ class PreferencesWindow:
 
 	def on_transports_iconsets_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
-		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.reload_jabber_state_images()
 
 	def on_manage_theme_button_clicked(self, widget):
 		dialogs.GajimThemesWindow()
