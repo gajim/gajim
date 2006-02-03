@@ -188,6 +188,7 @@ class Config:
 		'one_message_window': [opt_str, 'always',
 			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect')],
 		'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window')],
+		'escape_key_closes': [opt_bool, True, _('If True, pressing the escape key closes a tab/window')],
 	}
 
 	__options_per_key = {

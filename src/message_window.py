@@ -472,7 +472,8 @@ class MessageWindow:
 			elif event.keyval == gtk.keysyms.c: # ALT + C toggles compact view
 				ctrl.set_compact_view(not ctrl.compact_view_current)
 		# Close tab bindings
-		elif event.keyval == gtk.keysyms.Escape: # ESCAPE
+		elif event.keyval == gtk.keysyms.Escape and \
+				gajim.config.get('escape_key_closes'): # Escape
 			self.remove_tab(ctrl)
 		else:
 			# If the active control has a message_textview pass the event to it
