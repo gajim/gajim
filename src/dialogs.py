@@ -337,7 +337,8 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			if jid_splited[1] in jid_agents:
 				uid = jid_splited[0].replace('%', '@')
 				self.uid_entry.set_text(uid)
-				self.protocol_combobox.set_active(jid_agents.index(jid_splited[1]) + 1)
+				self.protocol_combobox.set_active(jid_agents.index(jid_splited[1])\
+					+ 1)
 			else:
 				self.uid_entry.set_text(jid)
 				self.protocol_combobox.set_active(0)
