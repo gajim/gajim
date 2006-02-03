@@ -2686,8 +2686,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		if gajim.contacts.is_subcontact(account, c_source):
 			# Remove meta contact
-			if context.action == gtk.gdk.ACTION_COPY:
-				return
+			#FIXME: doesn't work under windows: http://bugzilla.gnome.org/show_bug.cgi?id=329797
+#			if context.action == gtk.gdk.ACTION_COPY:
+#				return
 			c_source.groups = [grp_dest]
 			gajim.connections[account].update_contact(jid_source, c_source.name,
 				c_source.groups)
