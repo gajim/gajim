@@ -533,24 +533,3 @@ def decode_string(string):
 		break
 	
 	return string
-
-def read_about_me_from_eds():
-	'''reads gnome-about-me information from Evolution Database'''
-	path_to_db = os.path.expanduser(
-		'~/.evolution/addressbook/local/system/addressbook.db')
-	if not os.path.exists(path_to_db):
-		return
-	
-	import dbhash
-	db = dbhash.open(path_to_db)
-	db.next() # throw to garbage first row (has db meta info)
-	for i in xrange(1, len(db)):
-		row = db.next()
-		if len(row) >= 2: # row[0] is key, row[1] has data
-			data = row[1]
-			if data.find('X-EVOLUTION-FILE-AS:Myself') == -1:
-				continue
-			nickname_start = data.find('NICKNAME:') + 9 # 9 = len('NICKNAME:')
-			nickname_end = data.find('\r\n', nickname_start)
-			nickname = data[nickname_start:nickname_end]
-			print nickname
