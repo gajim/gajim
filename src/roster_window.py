@@ -2699,9 +2699,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		if grp_source == grp_dest:
 			# Add meta contact
-			if context.action == gtk.gdk.ACTION_COPY:
-				# Keep only MOVE
-				return
+			#FIXME: doesn't work under windows: http://bugzilla.gnome.org/show_bug.cgi?id=329797
+#			if context.action == gtk.gdk.ACTION_COPY:
+#				# Keep only MOVE
+#				return
 			jid_dest = model[iter_dest][C_JID].decode('utf-8')
 			gajim.contacts.add_subcontact(account, jid_dest, jid_source)
 			# remove the source row
