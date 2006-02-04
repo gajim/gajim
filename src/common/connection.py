@@ -1198,6 +1198,18 @@ class Connection:
 		jid = self.get_full_jid(iq_obj)
 		self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
+	def _DiscoverInfoGetCB(self, con, iq_obj):
+		gajim.log.debug('DiscoverInfoGetCB')
+		iq = iq_obj.buildReply('result')
+		q = iq.getTag('query')
+		q.addChild('identity', attrs = {'type': 'pc', 'category': 'client'})
+		q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
+		q.addChild('feature', attrs = {'var': common.xmpp.NS_SI})
+		q.addChild('feature', attrs = {'var': common.xmpp.NS_FILE})
+		q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
+		self.connection.send(iq)
+		raise common.xmpp.NodeProcessed
+
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoErrorCB')
 		jid = self.get_full_jid(iq_obj)
@@ -1834,6 +1846,8 @@ class Connection:
 			common.xmpp.NS_GMAILNOTIFY)
 		con.RegisterHandler('iq', self._gMailQueryCB, 'result',
 			common.xmpp.NS_GMAILNOTIFY)
+		con.RegisterHandler('iq', self._DiscoverInfoGetCB, 'get',
+			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)
