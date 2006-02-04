@@ -2521,7 +2521,11 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		self.server_entry.set_text(server)
 
 		self.autojoin_checkbutton.set_active(model[iter][3])
-		password = model[iter][4].decode('utf-8')
+		if model[iter][4] is not None:
+			password = model[iter][4].decode('utf-8')
+		else:
+			password = None
+
 		if password:
 			self.pass_entry.set_text(password)
 		else:
