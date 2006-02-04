@@ -270,19 +270,26 @@ class Interface:
 		#('STATUS', account, status)
 		model = self.roster.status_combobox.get_model()
 		if status == 'offline':
-			model[self.roster.status_message_menuitem_iter][3] = False # sensitivity for this menuitem
+			# sensitivity for this menuitem
+			model[self.roster.status_message_menuitem_iter][3] = False
 			gajim.allow_notifications[account] = False
-			# we are disconnected from all gc
-			if not gajim.gc_connected.has_key(account):
-				return
-			for room_jid in gajim.gc_connected[account]:
-				gc_control = gajim.interface.msg_win_mgr.get_control(room_jid, account)
-				if gc_control:
-					gc_control.got_disconnected()
-					gc_control.parent_win.redraw_tab(gc_control)
+
 		else:
 			gobject.timeout_add(30000, self.allow_notif, account)
-			model[self.roster.status_message_menuitem_iter][3] = True # sensitivity for this menuitem
+			# sensitivity for this menuitem
+			model[self.roster.status_message_menuitem_iter][3] = True
+
+		# Inform all controls for this account of the connection state change
+		for ctrl in gajim.interface.msg_win_mgr.controls():
+			if ctrl.account == account:
+				if status == 'offline':
+					ctrl.got_disconnected()
+				else:
+					# Other code rejoins all GCs, so we don't do it here
+					if not ctrl.type_id == message_control.TYPE_GC:
+						ctrl.got_connected()
+				ctrl.parent_win.redraw_tab(ctrl)
+
 		self.roster.on_status_changed(account, status)
 		if account in self.show_vcard_when_connect:
 			jid = gajim.get_jid_from_account(account)

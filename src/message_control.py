@@ -115,6 +115,11 @@ class MessageControl:
 		# NOTE: Derived classes MAY implement this
 		self.compact_view_current = state
 
+	def got_connected(self):
+		pass
+	def got_disconnected(self):
+		pass
+
 	def get_specific_unread(self):
 		n = 0
 		if gajim.awaiting_events[self.account].has_key(self.contact.jid):

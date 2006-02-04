@@ -534,26 +534,22 @@ class GroupchatControl(ChatControlBase):
 
 	def got_connected(self):
 		gajim.gc_connected[self.account][self.room_jid] = True
-		self.msg_textview.set_sensitive(True)
-		self.xml.get_widget('send_button').set_sensitive(True)
+		ChatControlBase.got_connected(self)
 
 	def got_disconnected(self):
-		model = self.list_treeview.get_model()
-		model.clear()
+		self.list_treeview.get_model().clear()
 		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
 		for nick in nick_list:
 			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				nick)
 			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		gajim.gc_connected[self.account][self.room_jid] = False
-		self.msg_textview.set_sensitive(False)
-		self.xml.get_widget('send_button').set_sensitive(False)
 		# Note, since this method is called during initialization it is NOT safe
 		# to call self.parent_win.redraw_tab here
+		ChatControlBase.got_disconnected(self)
 
 	def draw_roster(self):
-		model = self.list_treeview.get_model()
-		model.clear()
+		self.list_treeview.get_model().clear()
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 			self.add_contact_to_roster(nick, gc_contact.show, gc_contact.role,

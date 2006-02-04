@@ -680,6 +680,14 @@ class ChatControlBase(MessageControl):
 				widget.set_no_show_all(False)
 				widget.show_all()
 
+	def got_connected(self):
+		self.msg_textview.set_sensitive(True)
+		self.xml.get_widget('send_button').set_sensitive(True)
+
+	def got_disconnected(self):
+		self.msg_textview.set_sensitive(False)
+		self.xml.get_widget('send_button').set_sensitive(False)
+
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
@@ -1454,3 +1462,10 @@ class ChatControl(ChatControlBase):
 	def _on_toggle_gpg_menuitem_activate(self, widget):
 		tb = self.xml.get_widget('gpg_togglebutton')
 		tb.set_active(not tb.get_active())
+
+	def got_connected(self):
+		ChatControlBase.got_connected(self)
+		# Refreshing contact
+		self.contact = gajim.contacts.get_contact_with_highest_priority(self.account,
+										self.contact.jid)
+		self.draw_banner()
