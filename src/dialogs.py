@@ -5,14 +5,12 @@
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2005 Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -1109,11 +1107,11 @@ class SingleMessageWindow:
 		if gajim.config.get('saveposition'):
 			# get window position and size from config
 			gtkgui_helpers.move_window(self.window,
-				gajim.config.get('single_msg-x-position'),
-				gajim.config.get('single_msg-y-position'))
+				gajim.config.get('single-msg-x-position'),
+				gajim.config.get('single-msg-y-position'))
 			gtkgui_helpers.resize_window(self.window,
-				gajim.config.get('single_msg-width'),
-				gajim.config.get('single_msg-height'))
+				gajim.config.get('single-msg-width'),
+				gajim.config.get('single-msg-height'))
 		self.window.show_all()
 
 	def set_cursor_to_end(self):
@@ -1124,11 +1122,12 @@ class SingleMessageWindow:
 		if gajim.config.get('saveposition'):
 			# save the window size and position
 			x, y = self.window.get_position()
-			gajim.config.set('single_msg-x-position', x)
-			gajim.config.set('single_msg-y-position', y)
+			gajim.config.set('single-msg-x-position', x)
+			gajim.config.set('single-msg-y-position', y)
 			width, height = self.window.get_size()
-			gajim.config.set('single_msg-width', width)
-			gajim.config.set('single_msg-height', height)
+			gajim.config.set('single-msg-width', width)
+			gajim.config.set('single-msg-height', height)
+			gajim.interface.save_config()
 
 	def on_single_message_window_delete_event(self, window, ev):
 		self.save_pos()
