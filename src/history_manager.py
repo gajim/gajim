@@ -191,19 +191,31 @@ class HistoryManager:
 	def on_logs_listview_key_press_event(self, widget, event):
 		liststore, list_of_paths = self.logs_listview.get_selection()\
 			.get_selected_rows()
-		if list_of_paths == []: # nothing is selected
+		paths_len = len(list_of_paths)
+		if paths_len == 0: # nothing is selected
 			return
 			
 		if event.keyval == gtk.keysyms.Delete:
-			dialog = dialogs.ConfirmationDialog(
-				_('Do you really want to delete the selected messages?'),
+			pri_text = i18n.ngettext(
+			'Do you really want to delete the selected message?',
+			'Do you really want to delete the selected messages?', paths_len)
+			dialog = dialogs.ConfirmationDialog(pri_text,
 				_('This is an irreversible operation.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 			
 			# delete rows from db (using log_line_id)
-			for path in list_of_paths:
+			list_of_rowrefs = []
+			for path in list_of_paths: # make them treerowrefs (it's needed)
+				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+			
+			for rowref in list_of_rowrefs:
+				path = rowref.get_path()
+				if path is None:
+					continue
 				log_line_id = liststore[path][0]
+				del liststore[path] # remove from UI
+				# remove from db
 				self.cur.execute('''
 					DELETE FROM logs
 					WHERE log_line_id = %s
