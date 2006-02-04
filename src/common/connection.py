@@ -1202,7 +1202,9 @@ class Connection:
 		gajim.log.debug('DiscoverInfoGetCB')
 		iq = iq_obj.buildReply('result')
 		q = iq.getTag('query')
-		q.addChild('identity', attrs = {'type': 'pc', 'category': 'client'})
+		q.addChild('identity', attrs = {'type': 'pc',
+						'category': 'client',
+						'name': 'Gajim'})
 		q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
 		q.addChild('feature', attrs = {'var': common.xmpp.NS_SI})
 		q.addChild('feature', attrs = {'var': common.xmpp.NS_FILE})
