@@ -626,9 +626,9 @@ ok_handler = None):
 			self.dialog.show_all()
 
 	def on_okbutton_clicked(self,  widget):
-		response = self.input_entry.get_text().decode('utf-8')
+		user_input = self.input_entry.get_text().decode('utf-8')
 		self.dialog.destroy()
-		self.ok_handler(response)
+		self.ok_handler(user_input)
 	
 	def on_cancelbutton_clicked(self,  widget):
 		self.dialog.destroy()
