@@ -1333,14 +1333,13 @@ class GroupchatControl(ChatControlBase):
 	def on_list_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the chat window'''
 		model = widget.get_model()
-		iter = model.get_iter(path)
 		if len(path) == 1: # It's a group
 			if (widget.row_expanded(path)):
 				widget.collapse_row(path)
 			else:
 				widget.expand_row(path, False)
 		else: # We want to send a private message
-			nick = model[iter][C_NICK].decode('utf-8')
+			nick = model[path][C_NICK].decode('utf-8')
 			self._start_private_message(nick)
 
 	def on_list_treeview_button_press_event(self, widget, event):

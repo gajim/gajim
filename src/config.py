@@ -1629,8 +1629,7 @@ class AccountsWindow:
 
 	def on_accounts_treeview_row_activated(self, widget, path, column):
 		model = widget.get_model()
-		iter = model.get_iter(path)
-		account = model[iter][0].decode('utf-8')
+		account = model[path][0].decode('utf-8')
 		self.show_modification_window(account)
 
 	def show_modification_window(self, account):

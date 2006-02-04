@@ -354,9 +354,8 @@ class HistoryWindow:
 		cur_year, cur_month, cur_day = self.calendar.get_date()
 		cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
 		model = widget.get_model()
-		iter = model.get_iter(path)
 		# make it a tupple (Y, M, D, 0, 0, 0...)
-		tim = time.strptime(model[iter][C_UNIXTIME], '%x')
+		tim = time.strptime(model[path][C_UNIXTIME], '%x')
 		year = tim[0]
 		gtk_month = tim[1]
 		month = gtkgui_helpers.make_python_month_gtk_month(gtk_month)
@@ -367,7 +366,7 @@ class HistoryWindow:
 			self.calendar.select_month(month, year)
 		
 		self.calendar.select_day(day)
-		unix_time = model[iter][C_TIME]
+		unix_time = model[path][C_TIME]
 		self.scroll_to_result(unix_time)
 		#FIXME: one day do not search just for unix_time but the whole and user
 		# specific format of the textbuffer line [time] nick: message

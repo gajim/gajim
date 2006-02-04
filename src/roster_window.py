@@ -2131,10 +2131,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the first event window'''
 		model = self.tree.get_model()
-		iter = model.get_iter(path)
-		account = model[iter][C_ACCOUNT].decode('utf-8')
-		type = model[iter][C_TYPE]
-		jid = model[iter][C_JID].decode('utf-8')
+		account = model[path][C_ACCOUNT].decode('utf-8')
+		type = model[path][C_TYPE]
+		jid = model[path][C_JID].decode('utf-8')
 		if type in ('group', 'account'):
 			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
