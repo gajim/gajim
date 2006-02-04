@@ -221,7 +221,9 @@ class MessageWindow:
 
 		prefix = ''
 		if self.get_num_controls() > 1:
-			prefix = "Chats: "
+			prefix = _('Chats: ')
+		#try to translate acct (which means account) to something short but
+		#that does make sense
 		account = ' (' + _('acct: ') + self.get_active_control().account + ')'
 		title = unread_str + prefix + name + account
 
