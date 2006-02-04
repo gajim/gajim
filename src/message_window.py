@@ -219,9 +219,11 @@ class MessageWindow:
 		else:
 			name = control.contact.get_shown_name()
 
-		mc_type = control.display_name + ": "
-		account = ' (' + _('account: ') + self.get_active_control().account + ')'
-		title = unread_str + mc_type + name + account
+		prefix = ''
+		if self.get_num_controls() > 1:
+			prefix = "Chats: "
+		account = ' (' + _('acct: ') + self.get_active_control().account + ')'
+		title = unread_str + prefix + name + account
 
 		self.window.set_title(title)
 
@@ -711,12 +713,12 @@ class MessageWindowMgr:
 			return win.get_control(jid, acct)
 		return None
 
-	def get_controls(self, type, acct = None):
+	def get_controls(self, type = None, acct = None):
 		ctrls = []
 		for c in self.controls():
 			if acct and c.account != acct:
 				continue
-			if c.type_id == type:
+			if not type or c.type_id == type:
 				ctrls.append(c)
 		return ctrls
 
