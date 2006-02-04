@@ -82,29 +82,30 @@ class HistoryManager:
 	def _init_jids_listview(self):
 		self.jids_liststore = gtk.ListStore(str) # jid
 		self.jids_listview.set_model(self.jids_liststore)
-		
+
 		renderer_text = gtk.CellRendererText() # holds jid
 		col = gtk.TreeViewColumn('Contacts', renderer_text, text = 0)
 		self.jids_listview.append_column(col)
-		
+
 	def _init_logs_listview(self):
 		# log_line_id (HIDDEN), jid_id (HIDDEN), time, message, subject
 		self.logs_liststore = gtk.ListStore(str, str, str, str, str)
 		self.logs_listview.set_model(self.logs_liststore)
-		
+		self.logs_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+
 		renderer_text = gtk.CellRendererText() # holds time
 		col = gtk.TreeViewColumn('Time', renderer_text, text = C_UNIXTIME)
 		col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
-		
-		
+
+
 		renderer_text = gtk.CellRendererText() # holds message
 		col = gtk.TreeViewColumn('Message', renderer_text, text = C_MESSAGE)
 		col.set_sort_column_id(C_MESSAGE) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
-		
+
 		renderer_text = gtk.CellRendererText() # holds subject
 		col = gtk.TreeViewColumn('Subject', renderer_text, text = C_SUBJECT)
 		col.set_sort_column_id(C_SUBJECT) # user can click this header and sort
@@ -186,6 +187,33 @@ class HistoryManager:
 				pass
 			else:
 				self.logs_liststore.append((row[0], row[1], time_, row[4], row[5]))
+
+	def on_logs_listview_key_press_event(self, widget, event):
+		liststore, list_of_paths = self.logs_listview.get_selection()\
+			.get_selected_rows()
+		if list_of_paths == []: # nothing is selected
+			return
+			
+		if event.keyval == gtk.keysyms.Delete:
+			dialog = dialogs.ConfirmationDialog(
+				_('Do you really want to delete the selected messages?'),
+				_('This is an irreversible operation.'))
+			if dialog.get_response() != gtk.RESPONSE_OK:
+				return
+			
+			# delete rows from db (using log_line_id)
+			for path in list_of_paths:
+				log_line_id = liststore[path][0]
+				self.cur.execute('''
+					DELETE FROM logs
+					WHERE log_line_id = %s
+					''' % (log_line_id,))
+		
+			self.con.commit()
+			
+
+	def delete_messages_from_log(self, selection):
+		pass
 
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application

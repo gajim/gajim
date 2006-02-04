@@ -83,6 +83,7 @@
 		  <property name="fixed_height_mode">False</property>
 		  <property name="hover_selection">False</property>
 		  <property name="hover_expand">False</property>
+		  <signal name="key_press_event" handler="on_logs_listview_key_press_event" last_modification_time="Sat, 04 Feb 2006 15:01:22 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
