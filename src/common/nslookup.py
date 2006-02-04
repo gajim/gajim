@@ -92,6 +92,9 @@ class Resolver:
 					except ValueError:
 						continue
 				elif prop_type.find('host') > -1:
+					# strip '.' at the end of hostname
+					if prop_value[-1] == '.':
+						prop_value = prop_value[:-1]
 					current_host['host'] = prop_value
 				if len(current_host) == 4:
 					hosts.append(current_host)
@@ -99,7 +102,8 @@ class Resolver:
 		return hosts
 	
 	def _parse_srv_result_posix(self, fqdn, result):
-		# typical output of bind-tools nslookup command
+		# typical output of bind-tools nslookup command:
+		# _xmpp-client._tcp.jabber.org    service = 30 30 5222 jabber.org.
 		if not result: 
 			return []
 		hosts = []
@@ -167,6 +171,7 @@ class Resolver:
 			self.handlers[host] = [on_ready]
 			self.start_resolve(host)
 
+# TODO: move IdleCommand class in other file, maybe helpers ?
 class IdleCommand(IdleObject):
 	def __init__(self, on_result):
 		# how long (sec.) to wait for result ( 0 - forever )
@@ -229,10 +234,9 @@ class IdleCommand(IdleObject):
 			self.idlequeue.set_alarm(self.wait_child, 0.1)
 	
 	def _start_posix(self):
-		write_d, self.pipe = os.popen4(self._compose_command_line())
-		write_d.close()
+		self.pipe = os.popen(self._compose_command_line())
 		self.fd = self.pipe.fileno()
-		#~ fcntl.fcntl(self.pipe, fcntl.F_SETFL, os.O_NONBLOCK)
+		fcntl.fcntl(self.pipe, fcntl.F_SETFL, os.O_NONBLOCK)
 		self.idlequeue.plug_idle(self, False, True)
 		if self.commandtimeout >= 0:
 			self.idlequeue.set_read_timeout(self.fd, self.commandtimeout)
@@ -271,11 +275,12 @@ class NsLookup(IdleCommand):
 		self.type = type.lower()
 		if not host_pattern.match(self.host):
 			# invalid host name
-			# TODO: notify user about this. Maybe message to stderr will be enough
+			print >> sys.stderr, 'Invalid host: %s' % self.host
 			self.host = None
 			self.canexecute = False
 			return
 		if not ns_type_pattern.match(self.type):
+			print >> sys.stderr, 'Invalid querytype: %s' % self.type
 			self.type = None
 			self.host = None
 			self.canexecute = False
@@ -289,6 +294,7 @@ class NsLookup(IdleCommand):
 			self.result_handler(self.host, self.result)
 		self.result_handler = None
 	
+# TODO: remove below lines if there is nothing more to test
 if __name__ == '__main__':
 	if os.name != 'posix':
 		sys.exit()
