@@ -2728,6 +2728,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# Get destination group
 		if type_dest == 'group':
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
+			if context.action == gtk.gdk.ACTION_COPY:
+				self.on_drop_in_group(None, account, c_source, grp_dest, context,
+					etime)
+				return
+			self.on_drop_in_group(None, account, c_source, grp_dest, context,
+				etime)
+			return
 		else:
 			it = iter_dest
 			while model[it][C_TYPE] == 'contact':
