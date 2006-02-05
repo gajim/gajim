@@ -280,7 +280,8 @@ class Interface:
 			model[self.roster.status_message_menuitem_iter][3] = True
 
 		# Inform all controls for this account of the connection state change
-		for ctrl in gajim.interface.msg_win_mgr.controls():
+		for ctrl in gajim.interface.msg_win_mgr.get_controls(
+			type = message_control.TYPE_GC):
 			if ctrl.account == account:
 				if status == 'offline':
 					ctrl.got_disconnected()
