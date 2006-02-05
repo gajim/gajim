@@ -290,7 +290,7 @@ class Contacts:
 
 	def is_pm_from_contact(self, account, contact):
 		'''Returns True if the given contact is a private message contact'''
-		if isinstance(contact, Contcat):
+		if isinstance(contact, Contact):
 			return False
 		return True
 
