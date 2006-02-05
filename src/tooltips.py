@@ -88,7 +88,8 @@ class BaseTooltip:
 			screen.get_height()
 		if self.prefered_position[1] + requisition.height > screen.get_height():
 			# flip tooltip up
-			self.prefered_position[1] -= requisition.height  + self.widget_height + 8
+			self.prefered_position[1] -= requisition.height  + self.widget_height \
+				+ 8
 		if self.prefered_position[1] < 0:
 			self.prefered_position[1] = 0
 		self.win.move(self.prefered_position[0], self.prefered_position[1])
@@ -96,14 +97,14 @@ class BaseTooltip:
 	def expose(self, widget, event):
 		style = self.win.get_style()
 		size = self.win.get_size()
-		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
-			self.win, 'tooltip', 0, 0, -1, 1)
-		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
-			self.win, 'tooltip', 0, size[1] - 1, -1, 1)
-		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
-			self.win, 'tooltip', 0, 0, 1, -1)
-		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None,
-			self.win, 'tooltip', size[0] - 1, 0, 1, -1)
+		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
+			None, self.win, 'tooltip', 0, 0, -1, 1)
+		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
+			None, self.win, 'tooltip', 0, size[1] - 1, -1, 1)
+		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
+			None, self.win, 'tooltip', 0, 0, 1, -1)
+		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
+			None, self.win, 'tooltip', size[0] - 1, 0, 1, -1)
 		return True
 	
 	def show_tooltip(self, data, widget_pos, win_size):
@@ -221,12 +222,13 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
 			message = gtkgui_helpers.escape_for_pango_markup(message)
 			if message:
-				self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
-					gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>' 
-					+ ' - ' + message)
+				self.add_status_row(file_path, acct['show'], '<span weight="bold">'\
+					+ gtkgui_helpers.escape_for_pango_markup(acct['name']) + \
+					'</span>' + ' - ' + message)
 			else:
-				self.add_status_row(file_path, acct['show'], '<span weight="bold">' + 
-					gtkgui_helpers.escape_for_pango_markup(acct['name']) + '</span>')
+				self.add_status_row(file_path, acct['show'], '<span weight="bold">'\
+					+ gtkgui_helpers.escape_for_pango_markup(acct['name']) + \
+					'</span>')
 
 	def populate(self, data):
 		self.create_window()
@@ -256,7 +258,8 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			# we count unread gc/pm messages
 			chat_t = message_control.TYPE_GC
 			for ctrl in gajim.interface.msg_win_mgr.get_controls(chat_t, acct):
-				# These are PMs for which the PrivateChatControl has not yet been created
+				# These are PMs for which the PrivateChatControl has not yet been
+				# created
 				pm_msgs = ctrl.get_specific_unread()
 				unread_gc += ctrl.nb_unread
 				unread_gc -= pm_msgs
@@ -327,7 +330,8 @@ class GCTooltip(BaseTooltip):
 		if contact.jid.strip() != '':
 			info = '<span size="large" weight="bold">' + contact.jid + '</span>'
 		else:
-			info = '<span size="large" weight="bold">' + contact.get_shown_name() + '</span>'
+			info = '<span size="large" weight="bold">' + contact.get_shown_name() \
+				+ '</span>'
 			
 		info += '\n<span weight="bold">' + _('Role: ') + '</span>' + \
 			 helpers.get_uf_role(contact.role)
@@ -433,8 +437,8 @@ class RosterTooltip(NotificationAreaTooltip):
 			info += '\n<span weight="bold">' + _('Status: ') + '</span>'
 			for contact in contacts:
 				if contact.resource:
-					status_line = self.get_status_info(contact.resource, contact.priority, 
-						contact.show, contact.status)
+					status_line = self.get_status_info(contact.resource,
+						contact.priority, contact.show, contact.status)
 					icon_name = helpers.get_icon_name_to_show(contact)
 					self.add_status_row(file_path, icon_name, status_line)
 					
@@ -543,8 +547,10 @@ class ServiceDiscoveryTooltip(BaseTooltip):
 		label.set_alignment(0, 0)
 		label.set_selectable(False)
 		if status == 1:
-			label.set_text(_('This service has not yet responded with detailed information'))
+			label.set_text(
+				_('This service has not yet responded with detailed information'))
 		elif status == 2:
-			label.set_text(_('This service could not respond with detailed information.\n'
-							 'It is most likely legacy or broken'))
+			label.set_text(
+				_('This service could not respond with detailed information.\n'
+				'It is most likely legacy or broken'))
 		self.win.add(label)
