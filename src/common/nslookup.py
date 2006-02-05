@@ -24,7 +24,7 @@
 
 import sys, os, sre
 
-from xmpp.idlequeue import IdleObject, IdleQueue
+from xmpp.idlequeue import *
 if os.name == 'nt':
 	from subprocess import *
 elif os.name == 'posix':
@@ -205,6 +205,7 @@ class IdleCommand(IdleObject):
 			if self.endtime < self.idlequeue.current_time():
 				self._return_result()
 				self.pipe.stdout.close()
+				self.pipe.stdin.close()
 			else:
 				# child is still active, continue to wait
 				self.idlequeue.set_alarm(self.wait_child, 0.1)
@@ -230,7 +231,7 @@ class IdleCommand(IdleObject):
 		self.pipe = Popen(self._compose_command_args(), stdout=PIPE, 
 			bufsize = 1024, shell = True, stderr = STDOUT, stdin = PIPE)
 		if self.commandtimeout >= 0:
-			self.endtime = self.idlequeue.current_time()
+			self.endtime = self.idlequeue.current_time() + self.commandtimeout
 			self.idlequeue.set_alarm(self.wait_child, 0.1)
 	
 	def _start_posix(self):
@@ -270,7 +271,7 @@ class IdleCommand(IdleObject):
 class NsLookup(IdleCommand):
 	def __init__(self, on_result, host='_xmpp-client', type = 'srv'):
 		IdleCommand.__init__(self, on_result)
-		self.commandtimeout = 30 
+		self.commandtimeout = 10 
 		self.host = host.lower()
 		self.type = type.lower()
 		if not host_pattern.match(self.host):
@@ -296,12 +297,14 @@ class NsLookup(IdleCommand):
 	
 # TODO: remove below lines if there is nothing more to test
 if __name__ == '__main__':
-	if os.name != 'posix':
-		sys.exit()
+	if os.name == 'posix':
+		idlequeue = IdleQueue()
+	elif os.name == 'nt':
+		idlequeue = SelectIdleQueue()
 	# testing Resolver class
 	import gobject
 	import gtk
-	idlequeue = IdleQueue()
+	
 	resolver = Resolver(idlequeue)
 	
 	def clicked(widget):
