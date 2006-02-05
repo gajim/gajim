@@ -1,13 +1,5 @@
 ##	message_control.py
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -75,48 +67,61 @@ class MessageControl:
 		should return False'''
 		# NOTE: Derived classes MAY implement this
 		return True
+
 	def shutdown(self):
 		# NOTE: Derived classes MUST implement this
 		pass
+
 	def notify_on_new_messages(self):
 		# NOTE: Derived classes MUST implement this
 		return False
+
 	def repaint_themed_widgets(self, theme):
 		pass # NOTE: Derived classes SHOULD implement this
+
 	def update_ui(self):
 		pass # NOTE: Derived classes SHOULD implement this
+
 	def toggle_emoticons(self):
 		pass # NOTE: Derived classes MAY implement this
+
 	def update_font(self):
 		pass # NOTE: Derived classes SHOULD implement this
+
 	def update_tags(self):
 		pass # NOTE: Derived classes SHOULD implement this
+
 	def print_time_timeout(self, arg):
 		# NOTE: Derived classes SHOULD implement this
 		if self.print_time_timeout_id:
 			gobject.source_remove(self.print_time_timeout_id)
 			del self.print_time_timeout_id
 		return False
+
 	def get_tab_label(self, chatstate):
 		'''Return a suitable the tab label string.  Returns a tuple such as:
 		(label_str, color) either of which can be None
 		if chatstate is given that means we have HE SENT US a chatstate and
 		we want it displayed'''
 		# NOTE: Derived classes SHOULD implement this
-		# Reurn a markup'd label and optional gtk.Color
-		return (label_str, None)
+		# Return a markup'd label and optional gtk.Color
+		return (label_str, None) #FIXME: label_str is not defined. pychecker your files
+
 	def get_tab_image(self):
 		'''Return a suitable tab image for display.  None clears any current label.'''
 		return None
+
 	def prepare_context_menu(self):
 		# NOTE: Derived classes SHOULD implement this
 		return None
+
 	def set_compact_view(self, state):
 		# NOTE: Derived classes MAY implement this
 		self.compact_view_current = state
 
 	def got_connected(self):
 		pass
+
 	def got_disconnected(self):
 		pass
 
