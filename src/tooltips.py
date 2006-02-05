@@ -365,6 +365,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		self.image.set_alignment(0, 0)
 		# padding is independent of the total length and better than alignment
 		self.image.set_padding(1, 2) 
+		self.avatar_image = gtk.Image()
 		NotificationAreaTooltip.__init__(self)
 
 	def populate(self, contacts):
@@ -459,9 +460,17 @@ class RosterTooltip(NotificationAreaTooltip):
 						# escape markup entities. 
 						info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 		
+		for type_ in ('jpeg', 'png'):
+			file = os.path.join(gajim.AVATAR_PATH, prim_contact.jid + '.' + type_)
+			if os.path.exists(file):
+				self.avatar_image.set_from_file(file)
+				break
+		else:
+			self.avatar_image.set_from_pixbuf(None)
 		self.text_label.set_markup(info)
 		self.hbox.pack_start(self.image, False, False)
 		self.hbox.pack_start(self.table, True, True)
+		self.hbox.pack_start(self.avatar_image, False, False)
 		self.win.add(self.hbox)
 
 class FileTransfersTooltip(BaseTooltip):
