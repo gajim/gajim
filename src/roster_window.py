@@ -302,6 +302,7 @@ class RosterWindow:
 					if not has_another_child:
 						# Remove parent contact
 						self.remove_contact(parent_contact, account)
+				self.draw_contact(parent_contact.jid, account)
 				return
 			group = model[parent_i][C_JID].decode('utf-8')
 			if model.iter_n_children(parent_i) == 0:
