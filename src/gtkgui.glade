@@ -3756,21 +3756,34 @@ Per type</property>
 		<widget class="GtkHBox" id="hbox2947">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">12</property>
+		  <property name="spacing">6</property>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="use_emoticons_checkbutton">
+		    <widget class="GtkEventBox" id="eventbox5">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">If checked, Gajim will replace ascii smilies like ':)' with equivalent graphical emoticons</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Use _emoticons</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">True</property>
-		      <property name="active">False</property>
-		      <property name="inconsistent">False</property>
-		      <property name="draw_indicator">True</property>
-		      <signal name="toggled" handler="on_use_emoticons_checkbutton_toggled" last_modification_time="Wed, 19 Jan 2005 23:02:04 GMT"/>
+		      <property name="tooltip" translatable="yes">If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons</property>
+		      <property name="visible_window">True</property>
+		      <property name="above_child">False</property>
+
+		      <child>
+			<widget class="GtkLabel" id="label381">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Emoticons:</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -3780,14 +3793,31 @@ Per type</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkButton" id="add_remove_emoticons_button">
+		    <widget class="GtkComboBox" id="emoticons_combobox">
+		      <property name="visible">True</property>
+		      <property name="items" translatable="yes">Animated
+Static
+Disabled</property>
+		      <property name="add_tearoffs">False</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="changed" handler="on_emoticons_combobox_changed" last_modification_time="Sun, 05 Feb 2006 14:06:24 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkButton" id="manage_emoticons_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Manage...</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
-		      <signal name="clicked" handler="on_add_remove_emoticons_button_clicked" last_modification_time="Wed, 06 Apr 2005 14:31:44 GMT"/>
+		      <signal name="clicked" handler="on_manage_emoticons_button_clicked" last_modification_time="Sun, 05 Feb 2006 14:08:33 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>

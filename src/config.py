@@ -12,8 +12,6 @@
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Nikos Kouremenos <nkour@jabber.org>
 ##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -122,12 +120,11 @@ class PreferencesWindow:
 		self.xml.get_widget('show_status_msgs_in_roster_checkbutton').set_active(
 			st)
 
-
-		#Use emoticons
+		# useemoticons
 		st = gajim.config.get('useemoticons')
-		self.xml.get_widget('use_emoticons_checkbutton').set_active(st)
-		self.xml.get_widget('add_remove_emoticons_button').set_sensitive(st)
-
+		if st:
+			self.xml.get_widget('emoticons_combobox').set_active(1) # FIXME
+			
 		#iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
 		# new model, image in 0, string in 1
@@ -505,9 +502,17 @@ class PreferencesWindow:
 		self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
 		gajim.interface.roster.draw_roster()
 
-	def on_use_emoticons_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'useemoticons',
-			[self.xml.get_widget('add_remove_emoticons_button')])
+	def on_emoticons_combobox_changed(self, widget):
+		active = widget.get_active()
+		if active == -1: # no active item
+			return
+		elif active == 0: # animated
+			gajim.config.set('useemoticons', True) # FIXME
+		elif active == 1: # static
+			gajim.config.set('useemoticons', True) # FIXME
+		else: # disabled
+			gajim.config.set('useemoticons', False)
+			
 		gajim.interface.init_emoticons()
 		gajim.interface.make_regexps()
 		self.toggle_emoticons()
@@ -517,7 +522,7 @@ class PreferencesWindow:
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.toggle_emoticons()
 
-	def on_add_remove_emoticons_button_clicked(self, widget):
+	def on_manage_emoticons_button_clicked(self, widget):
 		if gajim.interface.instances.has_key('manage_emots'):
 			gajim.interface.instances['manage_emots'].window.present()
 		else:
