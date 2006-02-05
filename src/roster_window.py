@@ -187,6 +187,8 @@ class RosterWindow:
 					False, None))
 			self.draw_contact(contact.jid, account)
 			self.draw_avatar(contact.jid, account)
+			# Redraw parent to change icon
+			self.draw_contact(parent_contact.jid, account)
 			return
 		# JEP-0162
 		hide = True
