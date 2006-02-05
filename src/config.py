@@ -1719,7 +1719,10 @@ class DataFormWindow:
 			max = 1
 			if ctype == 'boolean':
 				widget = gtk.CheckButton(desc, False)
-				widget.set_active(self.config[i]['values'][0])
+				activ = False
+				if self.config[i].has_key('values'):
+					activ = self.config[i]['values'][0]
+				widget.set_active(activ)
 				widget.connect('toggled', self.on_checkbutton_toggled, i)
 				max = 2
 			elif ctype == 'fixed':
