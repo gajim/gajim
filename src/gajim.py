@@ -913,11 +913,11 @@ class Interface:
 		path_to_file = os.path.join(gajim.AVATAR_PATH, jid)
 		pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo_decoded,
 			want_type = True)
-		if typ in ('jpeg', 'png'):
-			path_to_original_file = path_to_file + '.' + typ
-			pixbuf.save(path_to_original_file, typ)
-		else:
-			gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. skipping avatar of %s' % jid)
+		if typ not in ('jpeg', 'png'):
+			gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. saving %s\'avatar as png file (originaly %s)' % (jid, typ))
+			typ = 'png'
+		path_to_original_file = path_to_file + '.' + typ
+		pixbuf.save(path_to_original_file, typ)
 		# Generate and save the resized, color avatar
 		path_to_normal_file = path_to_file + '_notif_size_colored.png'
 		pixbuf = gtkgui_helpers.get_scaled_pixbuf(
