@@ -1379,14 +1379,9 @@ class Interface:
 		gajim.handlers = self.handlers
 
 	def process_connections(self):
-		''' called each XXX (200) miliseconds. For now it checks for idlequeue timeouts 
-		and FT events.
+		''' called each foo (200) miliseconds. Check for idlequeue timeouts.
 		'''
 		gajim.idlequeue.process()
-		
-		# TODO: rewrite socks5 classes to work with idlequeue and remove these lines
-		if gajim.socks5queue.connected:
-			gajim.socks5queue.process(0)
 		return True # renew timeout (loop for ever)
 
 	def save_config(self):
@@ -1501,9 +1496,6 @@ class Interface:
 			gajim.log.setLevel(gajim.logging.DEBUG)
 		else:
 			gajim.log.setLevel(None)
-		gajim.socks5queue = socks5.SocksQueue(
-			self.handle_event_file_rcv_completed, 
-			self.handle_event_file_progress)
 		
 		# pygtk2.8 on win, breaks io_add_watch. We use good old select.select()
 		if os.name == 'nt' and gtk.pygtk_version > (2, 8, 0):
@@ -1515,6 +1507,9 @@ class Interface:
 			gajim.idlequeue = GlibIdleQueue()
 		# resolve and keep current record of resolved hosts
 		gajim.resolver = nslookup.Resolver(gajim.idlequeue)
+		gajim.socks5queue = socks5.SocksQueue(gajim.idlequeue,
+			self.handle_event_file_rcv_completed, 
+			self.handle_event_file_progress)
 		self.register_handlers()
 		for account in gajim.config.get_per('accounts'):
 			gajim.connections[account] = common.connection.Connection(account)

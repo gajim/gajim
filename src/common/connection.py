@@ -824,7 +824,7 @@ class Connection:
 				file_props['streamhosts'] = []
 			file_props['streamhosts'].append(proxy)
 			file_props['is_a_proxy'] = True
-			receiver = socks5.Socks5Receiver(proxy, file_props['sid'], file_props)
+			receiver = socks5.Socks5Receiver(gajim.idlequeue, proxy, file_props['sid'], file_props)
 			gajim.socks5queue.add_receiver(self.name, receiver)
 			proxy['idx'] = receiver.queue_idx
 			gajim.socks5queue.on_success = self.proxy_auth_ok

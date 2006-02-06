@@ -155,6 +155,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.remove_timeout() 
 		self._owner.disconnected()
 		self.idlequeue.unplug_idle(self.fd)
+		# socket descriptor cannot be (un)plugged anymore
+		self.fd = -1
 		if self.on_disconnect:
 			self.on_disconnect()
 	
