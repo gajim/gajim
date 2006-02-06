@@ -131,7 +131,7 @@ class NBCommonClient(CommonClient):
 
 	def _on_connected(self):
 		self.connected = 'tcp'
-		if self._Ssl or self.Connection.getPort() in (5223, 443):
+		if self._Ssl is None or self.Connection.getPort() in (5223, 443) or self._Ssl:
 			try:
 				transports_nb.NonBlockingTLS().PlugIn(self, now=1)
 				self.connected = 'ssl'
