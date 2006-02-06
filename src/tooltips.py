@@ -464,6 +464,9 @@ class RosterTooltip(NotificationAreaTooltip):
 			file = os.path.join(gajim.AVATAR_PATH, prim_contact.jid + '.' + type_)
 			if os.path.exists(file):
 				self.avatar_image.set_from_file(file)
+				pix = self.avatar_image.get_pixbuf()
+				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+				self.avatar_image.set_from_pixbuf(pix)
 				break
 		else:
 			self.avatar_image.set_from_pixbuf(None)
