@@ -372,7 +372,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		self.create_window()
 		self.hbox = gtk.HBox()
 		self.hbox.set_homogeneous(False)
-		self.hbox.set_spacing(0)
+		self.hbox.set_spacing(2)
 		self.create_table()
 		if not contacts or len(contacts) == 0:
 			# Tooltip for merged accounts row
