@@ -182,7 +182,7 @@ class SocksQueue:
 			reader.file_props['paused'] = False
 			reader.file_props['stalled'] = False
 			reader.file_props['elapsed-time'] = 0
-			reader.file_props['last-time'] = time.time()
+			reader.file_props['last-time'] = self.idlequeue.current_time()
 			reader.file_props['received-len'] = 0
 			reader.pauses = 0
 			# start sending file to proxy
@@ -203,7 +203,7 @@ class SocksQueue:
 				self.process_result(result, sender)
 			else:
 				file_props['elapsed-time'] = 0
-				file_props['last-time'] = time.time()
+				file_props['last-time'] = self.idlequeue.current_time()
 				file_props['received-len'] = 0
 				sender.file_props = file_props
 				
@@ -341,7 +341,7 @@ class Socks5:
 			fd = open(self.file_props['file-name'], opt)
 			self.file_props['fd'] = fd
 			self.file_props['elapsed-time'] = 0
-			self.file_props['last-time'] = time.time()
+			self.file_props['last-time'] = self.idlequeue.current_time()
 			self.file_props['received-len'] = offset
 		return fd
 
@@ -400,7 +400,7 @@ class Socks5:
 					self.file_props['error'] = -1
 					return -1
 			self.size += lenn
-			current_time = time.time()
+			current_time = self.idlequeue.current_time()
 			self.file_props['elapsed-time'] += current_time - \
 				self.file_props['last-time']
 			self.file_props['last-time'] = current_time
@@ -443,7 +443,7 @@ class Socks5:
 			fd = self.get_fd()
 			fd.write(self.remaining_buff)
 			lenn = len(self.remaining_buff)
-			current_time = time.time()
+			current_time = self.idlequeue.current_time()
 			self.file_props['elapsed-time'] += current_time - \
 				self.file_props['last-time']
 			self.file_props['last-time'] = current_time
@@ -468,7 +468,7 @@ class Socks5:
 					if ord(buff[0]) == 0xD:  
 						first_byte = True  
 						buff = buff[1:]
-			current_time = time.time()
+			current_time = self.idlequeue.current_time()
 			self.file_props['elapsed-time'] += current_time - \
 				self.file_props['last-time']
 			self.file_props['last-time'] = current_time
@@ -679,7 +679,7 @@ class Socks5Sender(Socks5, IdleObject):
 		self.file_props['stalled'] = False
 		self.file_props['connected'] = True
 		self.file_props['elapsed-time'] = 0
-		self.file_props['last-time'] = time.time()
+		self.file_props['last-time'] = self.idlequeue.current_time()
 		self.file_props['received-len'] = 0
 		self.pauses = 0
 		self.state = 7
@@ -911,7 +911,7 @@ class Socks5Receiver(Socks5, IdleObject):
 				self.file_props['paused'] = False
 				self.file_props['stalled'] = False
 				self.file_props['elapsed-time'] = 0
-				self.file_props['last-time'] = time.time()
+				self.file_props['last-time'] = self.idlequeue.current_time()
 				self.file_props['received-len'] = 0
 				self.pauses = 0
 				# start sending file contents to socket
