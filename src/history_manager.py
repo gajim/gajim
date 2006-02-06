@@ -33,7 +33,7 @@ _ = i18n._
 gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
 gtk.glade.textdomain(i18n.APP)
 
-# log_line_id (HIDDEN), jid_id (HIDDEN), time, message, subject
+# time, message, subject
 (
 C_UNIXTIME,
 C_MESSAGE,
@@ -54,11 +54,19 @@ class HistoryManager:
 				'%s does not exist.' % LOG_DB_PATH).get_response()
 			sys.exit()
 		
-		self.xml = gtk.glade.XML('history_manager.glade',
+		xml = gtk.glade.XML('history_manager.glade',
 			'history_manager_window', i18n.APP)
-		self.window = self.xml.get_widget('history_manager_window')
-		self.jids_listview = self.xml.get_widget('jids_listview')
-		self.logs_listview = self.xml.get_widget('logs_listview')
+		self.window = xml.get_widget('history_manager_window')
+		self.jids_listview = xml.get_widget('jids_listview')
+		self.logs_listview = xml.get_widget('logs_listview')
+		self.search_entry = xml.get_widget('search_entry')
+		self.logs_scrolledwindow = xml.get_widget('logs_scrolledwindow')
+		self.search_results_scrolledwindow = xml.get_widget(
+			'search_results_scrolledwindow')
+		self.welcome_label = xml.get_widget('welcome_label')
+			
+		self.logs_scrolledwindow.set_no_show_all(True)
+		self.search_results_scrolledwindow.set_no_show_all(True)
 		
 		self.jids_already_in = [] # holds jids that we already have in DB
 		
@@ -72,20 +80,24 @@ class HistoryManager:
 		self._fill_jids_listview()
 		
 		
-		#self.jids_listview.get_selection().unselect_all()
+		self.search_entry.grab_focus()
 
 		self.window.maximize()
 		self.window.show_all()
 		
-		self.xml.signal_autoconnect(self)
+		xml.signal_autoconnect(self)
 	
 	def _init_jids_listview(self):
-		self.jids_liststore = gtk.ListStore(str) # jid
+		self.jids_liststore = gtk.ListStore(str, str) # jid, jid_id
 		self.jids_listview.set_model(self.jids_liststore)
+		self.jids_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
 		renderer_text = gtk.CellRendererText() # holds jid
 		col = gtk.TreeViewColumn('Contacts', renderer_text, text = 0)
 		self.jids_listview.append_column(col)
+		
+		self.jids_listview.get_selection().connect('changed',
+			self.on_jids_listview_selection_changed)
 
 	def _init_logs_listview(self):
 		# log_line_id (HIDDEN), jid_id (HIDDEN), time, message, subject
@@ -98,7 +110,6 @@ class HistoryManager:
 		col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
-
 
 		renderer_text = gtk.CellRendererText() # holds message
 		col = gtk.TreeViewColumn('Message', renderer_text, text = C_MESSAGE)
@@ -116,17 +127,36 @@ class HistoryManager:
 		gtk.main_quit()
 	
 	def _fill_jids_listview(self):
-		self.cur.execute('SELECT jid FROM jids')
+		self.cur.execute('SELECT jid, jid_id FROM jids')
 		rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
 		for row in rows:
-			# row[0] is first item of row (the only result here, the jid)
-			self.jids_already_in.append(row[0])
-			self.jids_liststore.append(row)
+			self.jids_already_in.append(row[0]) # jid
+			self.jids_liststore.append(row) # jid, jid_id
 	
-	def on_jids_listview_cursor_changed(self, widget, data = None):
-		model, iter_ = self.jids_listview.get_selection().get_selected()
-		jid = model[iter_][0] # jid
-		self._fill_logs_listview(jid)
+	def on_jids_listview_selection_changed(self, widget, data = None):
+		liststore, list_of_paths = self.jids_listview.get_selection()\
+			.get_selected_rows()
+		paths_len = len(list_of_paths)
+		if paths_len == 0: # nothing is selected
+			return
+		elif paths_len == 1:
+			do_clear = True
+		else:
+			do_clear = False
+		
+		self.welcome_label.hide()
+		self.logs_scrolledwindow.show()
+
+		list_of_rowrefs = []
+		for path in list_of_paths: # make them treerowrefs (it's needed)
+			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+		
+		for rowref in list_of_rowrefs:
+			path = rowref.get_path()
+			if path is None:
+				continue
+			jid = liststore[path][0] # jid
+			self._fill_logs_listview(jid, do_clear)
 	
 	def _get_jid_id(self, jid):
 		'''jids table has jid and jid_id
@@ -161,10 +191,11 @@ class HistoryManager:
 		else:
 			return False
 	
-	def _fill_logs_listview(self, jid):
+	def _fill_logs_listview(self, jid, do_clear = True):
 		'''fill the listview with all messages that user sent to or
 		received from JID'''
-		self.logs_liststore.clear() # first clear the store
+		if do_clear:
+			self.logs_liststore.clear() # clear the store
 		# no need to lower jid in this context as jid is already lowered
 		# as we use those jids from db
 		jid_id = self._get_jid_id(jid)
@@ -188,6 +219,21 @@ class HistoryManager:
 			else:
 				self.logs_liststore.append((row[0], row[1], time_, row[4], row[5]))
 
+	def _fill_search_results_listview(self, text):
+		'''ask db and fill listview with results that match text'''
+		# FIXME: check kind and set color accordingly
+		# exposed in UI (TreeViewColumns) are only JID, time, message and subject
+		# but store in liststore jid, time, message and subject
+		self.cur.execute('''
+			SELECT jid_id, time, kind, message, subject FROM logs
+			WHERE jid_id = %d
+			ORDER BY time
+			''' % (jid_id,))
+		
+		results = self.cur.fetchall()
+		for row in results:
+			pass
+
 	def on_logs_listview_key_press_event(self, widget, event):
 		liststore, list_of_paths = self.logs_listview.get_selection()\
 			.get_selected_rows()
@@ -197,14 +243,14 @@ class HistoryManager:
 			
 		if event.keyval == gtk.keysyms.Delete:
 			pri_text = i18n.ngettext(
-			'Do you really want to delete the selected message?',
-			'Do you really want to delete the selected messages?', paths_len)
+				'Do you really want to delete the selected message?',
+				'Do you really want to delete the selected messages?', paths_len)
 			dialog = dialogs.ConfirmationDialog(pri_text,
 				_('This is an irreversible operation.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
 				return
 			
-			# delete rows from db (using log_line_id)
+			# delete rows from db that match log_line_id
 			list_of_rowrefs = []
 			for path in list_of_paths: # make them treerowrefs (it's needed)
 				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
@@ -223,9 +269,59 @@ class HistoryManager:
 		
 			self.con.commit()
 			
+	def on_jids_listview_key_press_event(self, widget, event):
+		liststore, list_of_paths = self.jids_listview.get_selection()\
+			.get_selected_rows()
+		paths_len = len(list_of_paths)
+		if paths_len == 0: # nothing is selected
+			return
+			
+		if event.keyval == gtk.keysyms.Delete:
+			pri_text = i18n.ngettext(
+				'Do you really want to delete logs of the selected contact?',
+				'Do you really want to delete logs of the selected contacts?',
+				paths_len)
+			dialog = dialogs.ConfirmationDialog(pri_text,
+				_('This is an irreversible operation.'))
+			if dialog.get_response() != gtk.RESPONSE_OK:
+				return
 
-	def delete_messages_from_log(self, selection):
-		pass
+			# delete all rows from db that match jid_id
+			list_of_rowrefs = []
+			for path in list_of_paths: # make them treerowrefs (it's needed)
+				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+			
+			for rowref in list_of_rowrefs:
+				path = rowref.get_path()
+				if path is None:
+					continue
+				jid_id = liststore[path][1]
+				del liststore[path] # remove from UI
+				# remove from db
+				self.cur.execute('''
+					DELETE FROM logs
+					WHERE jid_id = %s
+					''' % (jid_id,))
+			
+			# now delete "jid, jid_id" row from jids table
+			self.cur.execute('''
+					DELETE FROM jids
+					WHERE jid_id = %s
+					''' % (jid_id,))
+		
+			self.con.commit()
+
+	def on_search_db_button_clicked(self, widget):
+		text = self.search_entry.get_text()
+		if text == '':
+			return
+		
+		self.welcome_label.hide()
+		self.search_results_scrolledwindow.show()
+	
+	def on_search_results_listview_row_activated(self, widget, path, column):
+		model = widget.get_model()
+		print model[path][0]
 
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application

@@ -53,7 +53,6 @@
 		  <property name="fixed_height_mode">False</property>
 		  <property name="hover_selection">False</property>
 		  <property name="hover_expand">False</property>
-		  <signal name="cursor_changed" handler="on_jids_listview_cursor_changed" last_modification_time="Thu, 02 Feb 2006 22:13:32 GMT"/>
 		  <signal name="key_press_event" handler="on_jids_listview_key_press_event" last_modification_time="Sat, 04 Feb 2006 22:27:05 GMT"/>
 		</widget>
 	      </child>
