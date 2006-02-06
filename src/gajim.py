@@ -911,6 +911,11 @@ class Interface:
 	def save_avatar_files(self, jid, photo_decoded):
 		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
 		path_to_file = os.path.join(gajim.AVATAR_PATH, jid)
+		# remove old avatars
+		for typ in ('jpeg', 'png'):
+			path_to_original_file = path_to_file + '.' + typ
+			if os.path.isfile(path_to_original_file):
+				os.remove(path_to_original_file)
 		pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo_decoded,
 			want_type = True)
 		if typ not in ('jpeg', 'png'):

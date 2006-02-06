@@ -307,6 +307,12 @@ class Connection:
 					not self.vcard_shas.has_key(frm) or \
 					avatar_sha != self.vcard_shas[frm]):
 					gajim.interface.save_avatar_files(frm, photo_decoded)
+			else:
+				for ext in ('.jpeg', '.png', '_notif_size_bw.png',
+					'_notif_size_colored.png'):
+					path = os.path.join(gajim.AVATAR_PATH, frm + ext)
+					if os.path.isfile(path):
+						os.remove(path)
 
 			if frm != our_jid:
 				if avatar_sha:
