@@ -129,7 +129,7 @@ class Logger:
 		'''jids table has jid and jid_id
 		logs table has log_id, jid_id, contact_name, time, kind, show, message
 		so to ask logs we need jid_id that matches our jid in jids table
-		this method asks jid and returns the jid_id for later sql-ing on logs
+		this method wants jid and returns the jid_id for later sql-ing on logs
 		typestr can be 'ROOM' or anything else depending on the type of JID
 		and is only needed to be specified when the JID is new in DB
 		'''

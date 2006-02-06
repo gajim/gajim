@@ -59,6 +59,7 @@ class HistoryManager:
 		self.window = xml.get_widget('history_manager_window')
 		self.jids_listview = xml.get_widget('jids_listview')
 		self.logs_listview = xml.get_widget('logs_listview')
+		self.search_results_listview = xml.get_widget('search_results_listview')
 		self.search_entry = xml.get_widget('search_entry')
 		self.logs_scrolledwindow = xml.get_widget('logs_scrolledwindow')
 		self.search_results_scrolledwindow = xml.get_widget(
@@ -76,9 +77,9 @@ class HistoryManager:
 
 		self._init_jids_listview()
 		self._init_logs_listview()
+		self._init_search_results_listview()
 		
 		self._fill_jids_listview()
-		
 		
 		self.search_entry.grab_focus()
 
@@ -122,6 +123,35 @@ class HistoryManager:
 		col.set_sort_column_id(C_SUBJECT) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
+
+	def _init_search_results_listview(self):
+		# log_line_id (HIDDEN), jid, time, message, subject
+		self.search_results_liststore = gtk.ListStore(str, str, str, str, str)
+		self.search_results_listview.set_model(self.search_results_liststore)
+		
+		renderer_text = gtk.CellRendererText() # holds JID (who said this)
+		col = gtk.TreeViewColumn('JID', renderer_text, text = 1)
+		col.set_sort_column_id(1) # user can click this header and sort
+		col.set_resizable(True)
+		self.search_results_listview.append_column(col)
+		
+		renderer_text = gtk.CellRendererText() # holds time
+		col = gtk.TreeViewColumn('Time', renderer_text, text = C_UNIXTIME)
+		col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
+		col.set_resizable(True)
+		self.search_results_listview.append_column(col)
+
+		renderer_text = gtk.CellRendererText() # holds message
+		col = gtk.TreeViewColumn('Message', renderer_text, text = C_MESSAGE)
+		col.set_sort_column_id(C_MESSAGE) # user can click this header and sort
+		col.set_resizable(True)
+		self.search_results_listview.append_column(col)
+
+		renderer_text = gtk.CellRendererText() # holds subject
+		col = gtk.TreeViewColumn('Subject', renderer_text, text = C_SUBJECT)
+		col.set_sort_column_id(C_SUBJECT) # user can click this header and sort
+		col.set_resizable(True)
+		self.search_results_listview.append_column(col)
 	
 	def on_history_manager_window_delete_event(self, widget, event):
 		gtk.main_quit()
@@ -145,6 +175,7 @@ class HistoryManager:
 			do_clear = False
 		
 		self.welcome_label.hide()
+		self.search_results_scrolledwindow.hide()
 		self.logs_scrolledwindow.show()
 
 		list_of_rowrefs = []
@@ -162,15 +193,23 @@ class HistoryManager:
 		'''jids table has jid and jid_id
 		logs table has log_id, jid_id, contact_name, time, kind, show, message
 		so to ask logs we need jid_id that matches our jid in jids table
-		this method asks jid and returns the jid_id for later sql-ing on logs
+		this method wants jid and returns the jid_id for later sql-ing on logs
 		'''
 		if jid.find('/') != -1: # if it has a /
 			jid_is_from_pm = self._jid_is_from_pm(jid)
 			if not jid_is_from_pm: # it's normal jid with resource
 				jid = jid.split('/', 1)[0] # remove the resource
-		self.cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
+		self.cur.execute('SELECT jid_id FROM jids WHERE jid = ?', (jid,))
 		jid_id = self.cur.fetchone()[0]
 		return jid_id
+
+	def _get_jid_from_jid_id(self, jid_id):
+		'''jids table has jid and jid_id
+		this method accepts jid_id and returns the jid for later sql-ing on logs
+		'''
+		self.cur.execute('SELECT jid FROM jids WHERE jid_id = ?', (jid_id,))
+		jid = self.cur.fetchone()[0]
+		return jid
 
 	def _jid_is_from_pm(self, jid):
 		'''if jid is gajim@conf/nkour it's likely a pm one, how we know
@@ -183,7 +222,7 @@ class HistoryManager:
 		
 		possible_room_jid, possible_nick = jid.split('/', 1)
 		
-		self.cur.execute('SELECT jid_id FROM jids WHERE jid="%s" AND type=%d' %\
+		self.cur.execute('SELECT jid_id FROM jids WHERE jid = ? AND type = ?',
 			(possible_room_jid, constants.JID_ROOM_TYPE))
 		row = self.cur.fetchone()
 		if row is not None:
@@ -201,9 +240,9 @@ class HistoryManager:
 		jid_id = self._get_jid_id(jid)
 		self.cur.execute('''
 			SELECT log_line_id, jid_id, time, kind, message, subject FROM logs
-			WHERE jid_id = %d
+			WHERE jid_id = ?
 			ORDER BY time
-			''' % (jid_id,))
+			''', (jid_id,))
 		
 		results = self.cur.fetchall()
 		for row in results:
@@ -224,15 +263,31 @@ class HistoryManager:
 		# FIXME: check kind and set color accordingly
 		# exposed in UI (TreeViewColumns) are only JID, time, message and subject
 		# but store in liststore jid, time, message and subject
+		print 'FILL RESULTS'
+		like_sql = '%' + text + '%'
 		self.cur.execute('''
-			SELECT jid_id, time, kind, message, subject FROM logs
-			WHERE jid_id = %d
+			SELECT log_line_id, jid_id, time, kind, message, subject FROM logs
+			WHERE message LIKE ? OR subject LIKE ?
 			ORDER BY time
-			''' % (jid_id,))
+			''', (like_sql, like_sql))
 		
 		results = self.cur.fetchall()
 		for row in results:
-			pass
+			# exposed in UI (TreeViewColumns) are only time, message and subject
+			# but store in liststore log_line_id, jid_id, time, message and subject
+			time_ = row[2]
+			print row
+			try:
+				time_ = time.strftime('%x', time.localtime(float(time_)))
+			except ValueError:
+				print 'BOO'
+				pass
+			else:
+				jid_id = row[1]
+				jid = self._get_jid_from_jid_id(jid_id)
+				
+				self.search_results_liststore.append((row[0], jid, time_,
+					row[4], row[5]))
 
 	def on_logs_listview_key_press_event(self, widget, event):
 		liststore, list_of_paths = self.logs_listview.get_selection()\
@@ -264,8 +319,8 @@ class HistoryManager:
 				# remove from db
 				self.cur.execute('''
 					DELETE FROM logs
-					WHERE log_line_id = %s
-					''' % (log_line_id,))
+					WHERE log_line_id = ?
+					''', (log_line_id,))
 		
 			self.con.commit()
 			
@@ -300,14 +355,14 @@ class HistoryManager:
 				# remove from db
 				self.cur.execute('''
 					DELETE FROM logs
-					WHERE jid_id = %s
-					''' % (jid_id,))
+					WHERE jid_id = ?
+					''', (jid_id,))
 			
 			# now delete "jid, jid_id" row from jids table
 			self.cur.execute('''
 					DELETE FROM jids
-					WHERE jid_id = %s
-					''' % (jid_id,))
+					WHERE jid_id = ?
+					''', (jid_id,))
 		
 			self.con.commit()
 
@@ -315,13 +370,17 @@ class HistoryManager:
 		text = self.search_entry.get_text()
 		if text == '':
 			return
-		
+
 		self.welcome_label.hide()
+		self.logs_scrolledwindow.hide()
 		self.search_results_scrolledwindow.show()
-	
+		
+		self._fill_search_results_listview(text)
+
 	def on_search_results_listview_row_activated(self, widget, path, column):
 		model = widget.get_model()
 		print model[path][0]
+		#FIXME: show logs for doube clicked jid and scroll to log_line_id
 
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
