@@ -131,7 +131,7 @@ class NBCommonClient(CommonClient):
 
 	def _on_connected(self):
 		self.connected = 'tcp'
-		if self._Ssl is None or self.Connection.getPort() in (5223, 443) or self._Ssl:
+		if (self._Ssl is None and self.Connection.getPort() in (5223, 443)) or self._Ssl:
 			try:
 				transports_nb.NonBlockingTLS().PlugIn(self, now=1)
 				self.connected = 'ssl'
@@ -181,7 +181,7 @@ class NonBlockingClient(NBCommonClient):
 			Returns '' or 'tcp' or 'tls', depending on the result.'''
 		self.__secure = secure
 		self.Connection = None
-		NBCommonClient.connect(self, server = server, proxy = proxy, 
+		NBCommonClient.connect(self, server = server, proxy = proxy, ssl = secure, 
 			on_stream_start = self._on_tcp_stream_start) 
 		return self.connected
 	
