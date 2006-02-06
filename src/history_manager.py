@@ -70,6 +70,7 @@ class HistoryManager:
 		self.search_results_scrolledwindow.set_no_show_all(True)
 		
 		self.jids_already_in = [] # holds jids that we already have in DB
+		self.AT_LEAST_ONE_DELETION_DONE = False
 		
 		self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 			isolation_level = 'IMMEDIATE')
@@ -154,6 +155,17 @@ class HistoryManager:
 		self.search_results_listview.append_column(col)
 	
 	def on_history_manager_window_delete_event(self, widget, event):
+		if self.AT_LEAST_ONE_DELETION_DONE:
+			dialog = dialogs.YesNoDialog(
+				_('Do you want to clean up the database?'),
+				_('Normally allocated database size will not be freed, '
+					'it will just become reusable. If you really want to reduce '
+					'database filesize, click YES, else click NO.'
+					'\n\nIn case you click YES, please wait...'))
+			if dialog.get_response() == gtk.RESPONSE_YES:
+				self.cur.execute('VACUUM')
+				self.con.commit()
+							
 		gtk.main_quit()
 	
 	def _fill_jids_listview(self):
@@ -324,6 +336,8 @@ class HistoryManager:
 		
 			self.con.commit()
 			
+			self.AT_LEAST_ONE_DELETION_DONE = True
+			
 	def on_jids_listview_key_press_event(self, widget, event):
 		liststore, list_of_paths = self.jids_listview.get_selection()\
 			.get_selected_rows()
@@ -358,13 +372,15 @@ class HistoryManager:
 					WHERE jid_id = ?
 					''', (jid_id,))
 			
-			# now delete "jid, jid_id" row from jids table
-			self.cur.execute('''
-					DELETE FROM jids
-					WHERE jid_id = ?
-					''', (jid_id,))
+				# now delete "jid, jid_id" row from jids table
+				self.cur.execute('''
+						DELETE FROM jids
+						WHERE jid_id = ?
+						''', (jid_id,))
 		
 			self.con.commit()
+			
+			self.AT_LEAST_ONE_DELETION_DONE = True
 
 	def on_search_db_button_clicked(self, widget):
 		text = self.search_entry.get_text()
