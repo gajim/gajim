@@ -2032,7 +2032,9 @@ class GroupchatConfigWindow(DataFormWindow):
 
 	def on_ok_button_clicked(self, widget):
 		# We pressed OK button of the DataFormWindow
-		gajim.connections[self.account].send_gc_config(self.room_jid, self.config)
+		if self.config:
+			gajim.connections[self.account].send_gc_config(self.room_jid,
+				self.config)
 		for affiliation in ('outcast', 'member', 'owner', 'admin'):
 			list = {}
 			model = self.affiliation_treeview[affiliation].get_model()
