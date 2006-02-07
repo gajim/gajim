@@ -277,13 +277,10 @@ class NsLookup(IdleCommand):
 		if not host_pattern.match(self.host):
 			# invalid host name
 			print >> sys.stderr, 'Invalid host: %s' % self.host
-			self.host = None
 			self.canexecute = False
 			return
 		if not ns_type_pattern.match(self.type):
 			print >> sys.stderr, 'Invalid querytype: %s' % self.type
-			self.type = None
-			self.host = None
 			self.canexecute = False
 			return
 	
