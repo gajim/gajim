@@ -292,13 +292,14 @@ class GroupchatControl(ChatControlBase):
 
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
-		sets active and sensitivity state for toggle_gpg_menuitem
-		and remove possible 'Switch to' menuitems'''
+		sets sensitivity state for configure_room'''
 		menu = self.gc_popup_menu
 		childs = menu.get_children()
 		# compact_view_menuitem
 		childs[5].set_active(self.compact_view_current)
-		menu = self.remove_possible_switch_to_menuitems(menu)
+		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, self.nick)
+		if c.affiliation not in ('owner', 'admin'):
+			childs[1].set_sensitive(False)
 		return menu
 
 	def on_message(self, nick, msg, tim):
