@@ -601,7 +601,6 @@ class Interface:
 			if _('Not in Roster') in c.groups:
 				c.groups.remove(_('Not in Roster'))
 			self.roster.add_contact_to_roster(c.jid, account)
-			gajim.connections[account].update_contact(c.jid, c.name, c.groups)
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,

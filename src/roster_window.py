@@ -1345,11 +1345,11 @@ class RosterWindow:
 
 	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
 		'''Request subscription to a contact'''
-		gajim.connections[account].request_subscription(jid, txt)
 		if group:
 			group = [group]
 		else:
 			group = []
+		gajim.connections[account].request_subscription(jid, txt, pseudo, group)
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			keyID = ''

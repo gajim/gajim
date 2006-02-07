@@ -2151,10 +2151,21 @@ class Connection:
 		p = common.xmpp.Presence(jid, 'unsubscribe')
 		self.connection.send(p)
 
-	def request_subscription(self, jid, msg):
+	def request_subscription(self, jid, msg, name = '', groups = []):
 		if not self.connection:
 			return
 		gajim.log.debug('subscription request for %s' % jid)
+		# RFC 3921 section 8.2
+		infos = {'jid': jid}
+		if name:
+			infos['name'] = name
+		iq = common.xmpp.Iq('set', common.xmpp.NS_ROSTER)
+		q = iq.getTag('query')
+		item = q.addChild('item', attrs = infos)
+		for g in groups:
+			item.addChild('group').setData(g)
+		self.connection.send(iq)
+
 		p = common.xmpp.Presence(jid, 'subscribe')
 		p = self.add_sha(p)
 		if not msg:
