@@ -31,7 +31,7 @@ exec python -OOt "$0" ${1+"$@"}
 # gajim-remote help will show you the DBUS API of Gajim
 
 import sys
-import gtk
+
 import gobject
 
 import signal
@@ -231,8 +231,9 @@ class GajimRemote:
 		self.print_result(res)
 		
 		if self.command == 'contact_info':
-			gobject.timeout_add(10000, self.gtk_quit) # wait 10 sec for response
-			gtk.main()
+			gobject.timeout_add(10000, self.gobject_quit) # wait 10 sec for response
+			self.loop = gobject.MainLoop()
+			self.loop.run()
 	
 	def print_result(self, res):
 		''' Print retrieved result to the output '''
@@ -519,7 +520,7 @@ class GajimRemote:
 			self.sbus.remove_signal_receiver(self.show_vcard_info, 'VcardInfo', 
 				INTERFACE, SERVICE, OBJ_PATH)
 	
-		gtk.main_quit()
+		self.loop.quit()
 		
 	def check_arguments(self):
 		''' Make check if all necessary arguments are given '''
@@ -530,11 +531,11 @@ class GajimRemote:
 				send_error(_('Argument "%s" is not specified. \n\
 Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 
-	def gtk_quit(self):
+	def gobject_quit(self):
 		if _version[1] >= 41:
 			self.sbus.remove_signal_receiver(self.show_vcard_info, 'VcardInfo', 
 				INTERFACE, SERVICE, OBJ_PATH)
-		gtk.main_quit()
+		self.loop.quit()
 	
 	# FIXME - didn't find more clever way for the below method.
 	# method(sys.argv[2:]) doesn't work, cos sys.argv[2:] is a tuple
