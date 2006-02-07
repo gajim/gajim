@@ -31,6 +31,7 @@ import gtkgui_helpers
 import message_control
 import tooltips
 import dialogs
+import config
 import vcard
 import cell_renderer_image
 import history_window
@@ -1087,7 +1088,14 @@ class GroupchatControl(ChatControlBase):
 		self.show_change_nick_input_dialog(title, prompt, self.nick)
 
 	def _on_configure_room_menuitem_activate(self, widget):
-		gajim.connections[self.account].request_gc_config(self.room_jid)
+		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, self.nick)
+		if c.affiliation == 'owner':
+			gajim.connections[self.account].request_gc_config(self.room_jid)
+		elif c.affiliation == 'admin':
+			if not gajim.interface.instances[self.account]['gc_config'].has_key(
+				self.room_jid):
+				gajim.interface.instances[self.account]['gc_config'][self.room_jid]\
+					= config.GroupchatConfigWindow(self.account, self.room_jid)
 
 	def _on_bookmark_room_menuitem_activate(self, widget):
 		bm = {

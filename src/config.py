@@ -1654,7 +1654,11 @@ class DataFormWindow:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'data_form_window', APP)
 		self.window = self.xml.get_widget('data_form_window')
 		self.config_table = self.xml.get_widget('config_table')
-		self.fill_table()
+		if config:
+			self.fill_table()
+		else:
+			self.config_table.set_no_show_all(True)
+			self.config_table.hide()
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -1877,8 +1881,8 @@ class ServiceRegistrationWindow(DataFormWindow):
 
 class GroupchatConfigWindow(DataFormWindow):
 	'''GroupchatConfigWindow class'''
-	def __init__(self, account, room_jid, config):
-		DataFormWindow.__init__(self, account, config)
+	def __init__(self, account, room_jid, config = None):
+		DataFormWindow.__init__(self, account, config = None)
 		self.room_jid = room_jid
 		self.remove_button = {}
 		self.affiliation_treeview = {}
