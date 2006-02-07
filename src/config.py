@@ -1882,7 +1882,7 @@ class ServiceRegistrationWindow(DataFormWindow):
 class GroupchatConfigWindow(DataFormWindow):
 	'''GroupchatConfigWindow class'''
 	def __init__(self, account, room_jid, config = None):
-		DataFormWindow.__init__(self, account, config = None)
+		DataFormWindow.__init__(self, account, config)
 		self.room_jid = room_jid
 		self.remove_button = {}
 		self.affiliation_treeview = {}
