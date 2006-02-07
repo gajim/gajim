@@ -216,16 +216,16 @@ class IdleCommand(IdleObject):
 			self.pipe.stdout.close()
 			self.pipe.stdin.close()
 	def start(self):
+		if not self.canexecute:
+			self.result = ''
+			self._return_result()
+			return
 		if os.name == 'nt':
 			self._start_nt()
 		elif os.name == 'posix':
 			self._start_posix()
 	
 	def _start_nt(self):
-		if not self.canexecute:
-			self.result = ''
-			self._return_result()
-			return
 		# if gajim is started from noninteraactive shells stdin is closed and 
 		# cannot be forwarded, so we have to keep it open
 		self.pipe = Popen(self._compose_command_args(), stdout=PIPE, 
