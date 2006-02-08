@@ -405,12 +405,15 @@ class Interface:
 						show_notification = True
 					if show_notification:
 						transport_name = gajim.get_transport_name_from_jid(jid)
-						img = os.path.join(gajim.DATA_DIR, 'iconsets',
-							'transports', transport_name, '48x48', 'online.png')
-						if not os.path.isfile(img):
+						img = None
+						if transport_name:
+							img = os.path.join(gajim.DATA_DIR, 'iconsets',
+								'transports', transport_name, '48x48',
+								'online.png')
+						if not img or not os.path.isfile(img):
 							iconset = gajim.config.get('iconset')
-							img = os.path.join(gajim.DATA_DIR, 'iconsets', iconset,
-								'48x48', 'online.png')
+							img = os.path.join(gajim.DATA_DIR, 'iconsets',
+									iconset, '48x48', 'online.png')
 						path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
 							jid = jid, suffix = '_notif_size_colored.png')
 						notify.notify(_('Contact Signed In'), jid, account,
