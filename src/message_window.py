@@ -219,7 +219,7 @@ class MessageWindow:
 		else:
 			name = control.contact.get_shown_name()
 
-		title = _('Gajim Messages')
+		title = _('Messages - Gajim')
 		if gajim.interface.msg_win_mgr.mode == MessageWindowMgr.ONE_MSG_WINDOW_NEVER:
 			title = title + ": " + name
 
