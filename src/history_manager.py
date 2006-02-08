@@ -399,10 +399,10 @@ class HistoryManager:
 		# as this is what db returns so I don't have to fight with types
 		jid_id = str(self._get_jid_id(jid))
 		
+		
 		iter_ = self.jids_liststore.get_iter_root()
 		while iter_:
 			# self.jids_liststore[iter_][1] holds jid_ids
-			print `self.jids_liststore[iter_][1]`
 			if self.jids_liststore[iter_][1] == jid_id:
 				break
 			iter_ = self.jids_liststore.iter_next(iter_)
@@ -412,7 +412,16 @@ class HistoryManager:
 
 		path = self.jids_liststore.get_path(iter_)
 		self.jids_listview.set_cursor(path)
-		#FIXME: scroll to log_line_id
+		
+		iter_ = self.logs_liststore.get_iter_root()
+		while iter_:
+			# self.logs_liststore[iter_][0] holds lon_line_ids
+			if self.logs_liststore[iter_][0] == log_line_id:
+				break
+			iter_ = self.logs_liststore.iter_next(iter_)
+		
+		path = self.logs_liststore.get_path(iter_)
+		self.logs_listview.scroll_to_cell(path)
 
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
