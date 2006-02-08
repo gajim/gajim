@@ -44,7 +44,7 @@ opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
 class Config:
 
 	__options = {
-		# name: [ type, value ]
+		# name: [ type, default_value, help_string ]
 		'verbose': [ opt_bool, False ],
 		'alwaysauth': [ opt_bool, False ],
 		'autopopup': [ opt_bool, False ],
