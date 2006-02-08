@@ -275,7 +275,7 @@ class HistoryManager:
 		# FIXME: check kind and set color accordingly
 		# exposed in UI (TreeViewColumns) are only JID, time, message and subject
 		# but store in liststore jid, time, message and subject
-		print 'FILL RESULTS'
+		self.search_results_liststore.clear()
 		like_sql = '%' + text + '%'
 		self.cur.execute('''
 			SELECT log_line_id, jid_id, time, kind, message, subject FROM logs
@@ -285,14 +285,12 @@ class HistoryManager:
 		
 		results = self.cur.fetchall()
 		for row in results:
-			# exposed in UI (TreeViewColumns) are only time, message and subject
+			# exposed in UI (TreeViewColumns) are only JID, time, message and subject
 			# but store in liststore log_line_id, jid_id, time, message and subject
 			time_ = row[2]
-			print row
 			try:
 				time_ = time.strftime('%x', time.localtime(float(time_)))
 			except ValueError:
-				print 'BOO'
 				pass
 			else:
 				jid_id = row[1]
@@ -394,9 +392,27 @@ class HistoryManager:
 		self._fill_search_results_listview(text)
 
 	def on_search_results_listview_row_activated(self, widget, path, column):
-		model = widget.get_model()
-		print model[path][0]
-		#FIXME: show logs for doube clicked jid and scroll to log_line_id
+		# get log_line_id, jid_id from row we double clicked
+		log_line_id = self.search_results_liststore[path][0]
+		jid = self.search_results_liststore[path][1]
+		# make it string as in gtk liststores I have them all as strings
+		# as this is what db returns so I don't have to fight with types
+		jid_id = str(self._get_jid_id(jid))
+		
+		iter_ = self.jids_liststore.get_iter_root()
+		while iter_:
+			# self.jids_liststore[iter_][1] holds jid_ids
+			print `self.jids_liststore[iter_][1]`
+			if self.jids_liststore[iter_][1] == jid_id:
+				break
+			iter_ = self.jids_liststore.iter_next(iter_)
+		
+		if iter_ is None:
+			return
+
+		path = self.jids_liststore.get_path(iter_)
+		self.jids_listview.set_cursor(path)
+		#FIXME: scroll to log_line_id
 
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
