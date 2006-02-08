@@ -219,15 +219,11 @@ class MessageWindow:
 		else:
 			name = control.contact.get_shown_name()
 
-		prefix = ''
-		if self.get_num_controls() > 1:
-			prefix = _('Chats: ')
-		#try to translate acct (which means account) to something short but
-		#that does make sense
-		account = ' (' + _('acct: ') + self.get_active_control().account + ')'
-		title = unread_str + prefix + name + account
+		title = _('Gajim Messages')
+		if gajim.interface.msg_win_mgr.mode == MessageWindowMgr.ONE_MSG_WINDOW_NEVER:
+			title = title + ": " + name
 
-		self.window.set_title(title)
+		self.window.set_title(unread_str + title)
 
 		if urgent:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
@@ -257,6 +253,13 @@ class MessageWindow:
 		del self._controls[ctrl.account][ctrl.contact.jid]
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]
+
+		# Notify a dupicate nick to update their banner and clear account display
+		for c in self.controls():
+			if c == self:
+				continue
+			if ctrl.contact.get_shown_name() == c.contact.get_shown_name():
+				c.draw_banner()
 
 		if self.get_num_controls() == 1: # we are going from two tabs to one
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')

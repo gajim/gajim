@@ -841,6 +841,17 @@ class ChatControl(ChatControlBase):
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
 		name = gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name())
+
+		# We know our contacts nick, but if there are any other controls 
+		# with the same nick we need to also display the account.
+		acct_info = ''
+		for ctrl in self.parent_win.controls():
+			if ctrl == self:
+				continue
+			if self.contact.get_shown_name() == ctrl.contact.get_shown_name():
+				acct_info = ' (%s)' % \
+						gtkgui_helpers.escape_for_pango_markup(self.account)
+				break
 		
 		status = contact.status
 		if status is not None:
@@ -870,10 +881,11 @@ class ChatControl(ChatControlBase):
 				else:
 					chatstate = ''
 			label_text = \
-			'<span weight="heavy" size="x-large">%s</span> %s' % (name,
-										chatstate)
+			'<span weight="heavy" size="x-large">%s</span>%s %s' % \
+				(name, acct_info, chatstate)
 		else:
-			label_text = '<span weight="heavy" size="x-large">%s</span>' % name
+			label_text = '<span weight="heavy" size="x-large">%s</span>%s' % \
+					(name, acct_info)
 		
 		if status is not None:
 			label_text += '\n%s' % status
