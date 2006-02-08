@@ -2072,7 +2072,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			for win in gajim.interface.msg_win_mgr.windows():
 				unrd = 0
 				for ctrl in win.controls():
-					unrd += ctrl.nb_unread
+					if ctrl.type_id == message_control.TYPE_GC:
+						if gajim.config.get('notify_on_all_muc_messages'):
+							unrd += ctrl.nb_unread
+						else:
+							if ctrl.attention_flag:
+								unrd += 1
 				if unrd:
 					unread = True
 					break
