@@ -45,9 +45,9 @@ _ = i18n._
 i18n.init()
 
 def send_error(error_message):
-		''' Writes error message to stderr and exits'''
-		print >> sys.stderr, error_message
-		sys.exit(1)
+		'''Writes error message to stderr and exits'''
+		print >> sys.stderr, error_message.encode('utf-8')
+		sys.exit()
 
 try:
 	import dbus
@@ -209,9 +209,9 @@ class GajimRemote:
 		self.command = sys.argv[1]
 		if self.command == 'help':
 			if self.argv_len == 3:
-				print self.help_on_command(sys.argv[2])
+				print self.help_on_command(sys.argv[2]).encode('utf-8')
 			else:
-				print self.compose_help()
+				print self.compose_help().encode('utf-8')
 			sys.exit()
 		
 		self.init_connection()
