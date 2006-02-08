@@ -1464,7 +1464,6 @@ class ChatControl(ChatControlBase):
 		tb.set_active(not tb.get_active())
 
 	def got_connected(self):
-		#FIXME: We can remove this function ? it's usefull only in GC
 		ChatControlBase.got_connected(self)
 		# Refreshing contact
 		self.contact = gajim.contacts.get_contact_with_highest_priority(
