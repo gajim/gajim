@@ -46,8 +46,7 @@ i18n.init()
 
 def send_error(error_message):
 		''' Writes error message to stderr and exits'''
-		sys.stderr.write(error_message + '\n')
-		sys.stderr.flush()
+		print >> sys.stderr, error_message
 		sys.exit(1)
 
 try:
