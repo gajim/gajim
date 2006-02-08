@@ -572,3 +572,8 @@ icon=gajim
 Description=xmpp
 ''' % command)
 			f.close()
+
+def escape_underscore(s):
+	'''Escape underlines to prevent them from being interpreted
+	as keyboard accelerators'''
+	return s.replace('_', '__')

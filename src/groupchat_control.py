@@ -21,7 +21,6 @@
 ##
 
 import os
-import re
 import time
 import gtk
 import gtk.glade
@@ -1037,7 +1036,7 @@ class GroupchatControl(ChatControlBase):
 				sectext = _('If you close this window, you will be disconnected '
 						'from this room.')
 
-				escaped_name = re.subn("_", "__", self.name)[0]
+				escaped_name = gtkgui_helpers.escape_underscore(self.name)
 				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
 							_('Do _not ask me about closing "%s" again' %\
 							escaped_name))
