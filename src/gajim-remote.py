@@ -31,12 +31,11 @@ exec python -OOt "$0" ${1+"$@"}
 # gajim-remote help will show you the DBUS API of Gajim
 
 import sys
-
-import gobject
-
+import locale
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 import traceback
+import gobject
 
 from common import exceptions
 from common import i18n
@@ -46,7 +45,8 @@ i18n.init()
 
 def send_error(error_message):
 		'''Writes error message to stderr and exits'''
-		print >> sys.stderr, error_message.encode('utf-8')
+		print >> sys.stderr, error_message.encode(
+			locale.getpreferredencoding())
 		sys.exit()
 
 try:
@@ -209,9 +209,10 @@ class GajimRemote:
 		self.command = sys.argv[1]
 		if self.command == 'help':
 			if self.argv_len == 3:
-				print self.help_on_command(sys.argv[2]).encode('utf-8')
+				print self.help_on_command(sys.argv[2]).encode(
+					locale.getpreferredencoding())
 			else:
-				print self.compose_help().encode('utf-8')
+				print self.compose_help().encode(locale.getpreferredencoding())
 			sys.exit()
 		
 		self.init_connection()
@@ -378,7 +379,8 @@ class GajimRemote:
 					res = self.print_info(level+1, val)
 					if res != '':
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
-		return ret_str
+		
+		return ret_str.encode(locale.getpreferredencoding())
 		
 	def unrepr(self, serialized_data):
 		''' works the same as eval, but only for structural values, 
