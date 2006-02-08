@@ -127,7 +127,7 @@ help:
 	@echo Usage:
 	@echo make			- builds all modules
 	@echo make clean		- delete built modules and object files
-	@echo make distclean		- clean plus deletion all other non-repository files
+	@echo make distclean		- clean plus deletion of all other non-repository files
 	@echo make install		- install binaries into the official directories
 	@echo make uninstall		- uninstall binaries from the official directories
 	@echo make help			- prints this help
