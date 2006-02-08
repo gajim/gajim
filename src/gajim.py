@@ -436,12 +436,15 @@ class Interface:
 						show_notification = True
 					if show_notification:
 						transport_name = gajim.get_transport_name_from_jid(jid)
-						img = os.path.join(gajim.DATA_DIR, 'iconsets',
-							'transports', transport_name, '48x48', 'offline.png')
-						if not os.path.isfile(img):
+						img = None
+						if transport_name:
+							img = os.path.join(gajim.DATA_DIR, 'iconsets',
+								'transports', transport_name, '48x48',
+								'offline.png')
+						if not img or not os.path.isfile(img):
 							iconset = gajim.config.get('iconset')
-							img = os.path.join(gajim.DATA_DIR, 'iconsets', iconset,
-								'48x48', 'offline.png')
+							img = os.path.join(gajim.DATA_DIR, 'iconsets',
+									iconset, '48x48', 'offline.png')
 						path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
 							jid = jid, suffix = '_notif_size_bw.png')
 						notify.notify(_('Contact Signed Out'), jid, account,
@@ -1693,7 +1696,8 @@ if __name__ == '__main__':
 			import Queue
 			q = Queue.Queue(100)
 			m = migrate_logs_to_dot9_db.Migration()
-			dialog = dialogs.ProgressDialog(_('Migrating Logs...'), _('Please wait while logs are being migrated...'), q)
+			dialog = dialogs.ProgressDialog(_('Migrating Logs...'),
+					_('Please wait while logs are being migrated...'), q)
 			t = threading.Thread(target = m.migrate, args = (q,))
 			t.start()
 			id = gobject.timeout_add(500, wait_migration, m)
