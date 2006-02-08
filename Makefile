@@ -39,6 +39,9 @@ gtkspell:
 idle:
 	${MAKE} -C src/common all;
 
+distclean: clean
+	-rm ./tags
+
 clean:
 	find . -name '*.pyc' -exec rm {} \;
 	find . -name '*.pyo' -exec rm {} \;
@@ -122,15 +125,16 @@ gajim.desktop: gajim.desktop.in
 #
 help:
 	@echo Usage:
-	@echo make					- builds all modules
-	@echo make clean			- delete built modules and object files
+	@echo make			- builds all modules
+	@echo make clean		- delete built modules and object files
+	@echo make distclean		- delete all other unnecessary file for a pristine dist
 	@echo make install		- install binaries into the official directories
 	@echo make uninstall		- uninstall binaries from the official directories
 	@echo make help			- prints this help
 	@echo
 	@echo make trayicon		- makes only trayicon module
 	@echo make idle			- makes only idle detection module
-	@echo make translation	- makes only translation \(mo files\)
+	@echo make translation 		- makes only translation \(mo files\)
 	@echo make gtkspell		- makes only gtkspell detection module
 	@echo make tags			- makes 'tags' file for use with ctags
 	@echo
@@ -155,5 +159,5 @@ tags:
 	-rm tags
 	exuberant-ctags -R
 
-.PHONY: all translation trayicon gtkspell idle clean dist install help\
+.PHONY: all translation trayicon gtkspell idle clean dist distclean install help\
 	uninstall tags
