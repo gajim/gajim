@@ -411,24 +411,24 @@ def _get_fade_color(treeview, selected, focused):
 			      int(bg.green*p + fg.green*q),
 			      int(bg.blue*p + fg.blue*q))
 
-def get_scaled_pixbuf(pixbuf, type):
+def get_scaled_pixbuf(pixbuf, kind):
 	'''returns scaled pixbuf, keeping ratio etc
-	type is either "chat" or "roster" or "notification"'''
+	kind is either "chat" or "roster" or "notification" or "tooltip"'''
 	
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)
 
 	# don't make avatars bigger than they are
-	if pixbuf.get_width() < gajim.config.get(type + '_avatar_width') and \
-		pixbuf.get_height() < gajim.config.get(type + '_avatar_height'):
+	if pixbuf.get_width() < gajim.config.get(kind + '_avatar_width') and \
+		pixbuf.get_height() < gajim.config.get(kind + '_avatar_height'):
 		return pixbuf # we don't want to make avatar bigger
 
 	ratio = float(pixbuf.get_width()) / float(pixbuf.get_height())
 	if ratio > 1:
-		w = gajim.config.get(type + '_avatar_width')
+		w = gajim.config.get(kind + '_avatar_width')
 		h = int(w / ratio)
 	else:
-		h = gajim.config.get(type + '_avatar_height')
+		h = gajim.config.get(kind + '_avatar_height')
 		w = int(h * ratio)
 	scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 	return scaled_buf

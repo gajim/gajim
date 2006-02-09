@@ -152,11 +152,6 @@ class VcardWindow:
 		self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
 		self.avatar_encoded = None
 
-	def image_is_ok(self, image):
-		if not os.path.exists(image):
-			return False
-		return True
-
 	def update_preview(self, widget):
 		path_to_file = widget.get_preview_filename()
 		if path_to_file is None or os.path.isdir(path_to_file):
@@ -198,30 +193,42 @@ class VcardWindow:
 		done = False
 		while not done:
 			response = dialog.run()
+
 			if response == gtk.RESPONSE_OK:
-				f = dialog.get_filename()
-				f = gtkgui_helpers.decode_filechooser_file_paths((f,))[0]
-				filesize = os.path.getsize(f) # in bytes
+				path_to_file = dialog.get_filename()
+				path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
+					(path_to_file,))[0]
+				filesize = os.path.getsize(path_to_file) # in bytes
 				if filesize > 16384: # 16 kb
-					dialogs.ErrorDialog(_('The filesize of image "%s" is too large')\
-						% os.path.basename(f),
-					_('The file must not be more than 16 kilobytes.')).get_response()
-					continue
-				if self.image_is_ok(f):
+					try:
+						pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
+						# get the image at 'notification size'
+						# and use that hoping size is okay
+						scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
+							'notification')
+					except gobject.GError, msg: # unknown format
+						dialogs.ErrorDialog(_('Could not load image'),
+							msg).get_response()
+						continue
+					else:
+						path_to_file = os.path.join(gajim.TMP, 'avatar_scaled.png')
+						scaled_pixbuf.save(path_to_file, 'png')
+						done = True
+				else:
 					done = True
 			else: # Cancel or WM X button
 				done = True
+				
 		dialog.destroy()
-
 		if response == gtk.RESPONSE_OK:
-			fd = open(f, 'rb')
+			fd = open(path_to_file, 'rb')
 			data = fd.read()
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
 			image = self.xml.get_widget('PHOTO_image')
 			image.set_from_pixbuf(pixbuf)
 			self.avatar_encoded = base64.encodestring(data)
 			# returns None if unknown type
-			self.avatar_mime_type = mimetypes.guess_type(f)[0]
+			self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
 
 	def set_value(self, entry_name, value):
 		try:
