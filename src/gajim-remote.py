@@ -340,36 +340,35 @@ class GajimRemote:
 		
 	def print_info(self, level, prop_dict):
 		''' return formated string from serialized vcard data '''
-		if prop_dict is None or type(prop_dict) \
-			not in (dict, list, tuple):
+		if prop_dict is None or not isinstance(prop_dict, dict, list, tuple):
 			return ''
 		ret_str = ''
-		if type(prop_dict) in (list, tuple):
+		if isinstance(prop_dict, list, tuple):
 			ret_str = ''
 			spacing = ' ' * level * 4
 			for val in prop_dict:
 				if val is None:
 					ret_str +='\t'
-				elif type(val) in (unicode, int, str):
+				elif isinstance(val, unicode, int, str):
 					ret_str +='\t' + str(val)
-				elif type(val) in (list, tuple):
+				elif isinstance(val, list, tuple):
 					res = ''
 					for items in val:
 						res += self.print_info(level+1, items)
 					if res != '':
 						ret_str += '\t' + res
-				elif type(val) == dict:
+				elif isinstance(val, dict):
 					ret_str += self.print_info(level+1, val)
 			ret_str = '%s(%s)\n' % (spacing, ret_str[1:])
 		elif isinstance(prop_dict, dict):
 			for key in prop_dict.keys():
 				val = prop_dict[key]
 				spacing = ' ' * level * 4
-				if type(val) in (unicode, int, str):
+				if isinstance(val, unicode, int, str):
 					if val is not None:
 						val = val.strip()
 						ret_str += '%s%-10s: %s\n' % (spacing, key, val)
-				elif type(val) in (list, tuple):
+				elif isinstance(val, list, tuple):
 					res = ''
 					for items in val:
 						res += self.print_info(level+1, items)
@@ -467,7 +466,7 @@ class GajimRemote:
 				if value[1] == '}':
 					break
 				key, next = self.unrepr(value[1:])
-				if type(key) not in (str, unicode):
+				if not isinstance(key, str, unicode):
 					send_error('Wrong string: %s' % value)
 				next = next.strip()
 				if not next or next[0] != ':':
