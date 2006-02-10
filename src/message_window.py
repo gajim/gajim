@@ -219,9 +219,17 @@ class MessageWindow:
 		else:
 			name = control.contact.get_shown_name()
 
-		title = _('Messages - Gajim')
-		if gajim.interface.msg_win_mgr.mode == MessageWindowMgr.ONE_MSG_WINDOW_NEVER:
-			title = title + ": " + name
+		window_mode = gajim.interface.msg_win_mgr.mode
+		if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
+			label = control.display_name
+		elif self.get_num_controls() == 1:
+			label = name
+		else:
+			label = _('Messages')
+		title = _('%s - Gajim') % label
+
+		if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERACCT:
+			title = title + ": " + control.account
 
 		self.window.set_title(unread_str + title)
 
@@ -806,7 +814,8 @@ class MessageWindowMgr:
 				w.notebook.remove_page(0)
 				page.unparent()
 				controls.append(ctrl)
-			# Must clear _controls from window to prevent MessageControl.shutdown calls
+			# Must clear _controls from window to prevent
+			# MessageControl.shutdown calls
 			w._controls = {}
 			w.window.destroy()
 
@@ -815,6 +824,7 @@ class MessageWindowMgr:
 		for ctrl in controls:
 			mw = self.get_window(ctrl.contact.jid, ctrl.account)
 			if not mw:
-				mw = self.create_window(ctrl.contact, ctrl.account, ctrl.type_id)
+				mw = self.create_window(ctrl.contact, ctrl.account,
+							ctrl.type_id)
 			ctrl.parent_win = mw
 			mw.new_tab(ctrl)
