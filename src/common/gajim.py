@@ -25,6 +25,7 @@
 
 import os
 import sys
+import tempfile
 import logging
 
 import config
@@ -51,20 +52,19 @@ if os.name == 'nt':
 		# Documents and Settings\[User Name]\Application Data\Gajim
 		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
 		VCARDPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
-		TMP = os.path.join(os.environ['tmp'], 'Gajim')
 		AVATAR_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Avatars')
 	except KeyError:
 		# win9x, in cwd
 		LOGPATH = 'Logs' # deprecated
 		VCARDPATH = 'Vcards'
-		TMP = 'temporary files'
 		AVATAR_PATH = 'Avatars'
 else: # Unices
 	DATA_DIR = '../data'
 	LOGPATH = os.path.expanduser('~/.gajim/logs') # deprecated
 	VCARDPATH = os.path.expanduser('~/.gajim/vcards')
-	TMP = '/tmp'
 	AVATAR_PATH = os.path.expanduser('~/.gajim/avatars')
+
+TMP = tempfile.gettempdir()
 
 try:
 	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
