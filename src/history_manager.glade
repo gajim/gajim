@@ -54,6 +54,7 @@
 		  <property name="hover_selection">False</property>
 		  <property name="hover_expand">False</property>
 		  <signal name="key_press_event" handler="on_jids_listview_key_press_event" last_modification_time="Sat, 04 Feb 2006 22:27:05 GMT"/>
+		  <signal name="button_press_event" handler="on_jids_listview_button_press_event" last_modification_time="Fri, 10 Feb 2006 15:11:21 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
@@ -281,6 +282,105 @@ You can select logs from the left and/or search database from below.
 	  <property name="padding">0</property>
 	  <property name="expand">False</property>
 	  <property name="fill">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkMenu" id="context_menu">
+
+  <child>
+    <widget class="GtkMenuItem" id="export_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Export</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_export_menuitem_activate" last_modification_time="Fri, 10 Feb 2006 15:15:30 GMT"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="delete_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Delete</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_delete_menuitem_activate" last_modification_time="Fri, 10 Feb 2006 15:20:26 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image2">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-remove</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkFileChooserDialog" id="filechooserdialog">
+  <property name="action">GTK_FILE_CHOOSER_ACTION_SAVE</property>
+  <property name="local_only">True</property>
+  <property name="select_multiple">False</property>
+  <property name="show_hidden">False</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="focus_on_map">True</property>
+
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="dialog-vbox1">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">24</property>
+
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="dialog-action_area1">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+
+	  <child>
+	    <widget class="GtkButton" id="cancel_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-6</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="save_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-save</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-5</property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
 	</packing>
       </child>
     </widget>

@@ -335,50 +335,130 @@ class HistoryManager:
 			self.con.commit()
 			
 			self.AT_LEAST_ONE_DELETION_DONE = True
+
+	def on_jids_listview_button_press_event(self, widget, event):
+		if event.button == 3: # right click
+			xml = gtk.glade.XML('history_manager.glade', 'context_menu', i18n.APP)
 			
+			liststore, list_of_paths = self.jids_listview.get_selection()\
+				.get_selected_rows()
+			
+			xml.signal_autoconnect(self)
+			xml.get_widget('context_menu').popup(None, None, None,
+				event.button, event.time)
+
+	def on_export_menuitem_activate(self, widget):
+		xml = gtk.glade.XML('history_manager.glade', 'filechooserdialog', i18n.APP)
+		xml.signal_autoconnect(self)
+		dlg = xml.get_widget('filechooserdialog')
+		response = dlg.run()
+		
+		if response == gtk.RESPONSE_OK: # user want us to export ;)
+			liststore, list_of_paths = self.jids_listview.get_selection()\
+				.get_selected_rows()
+			path_to_file = dlg.get_filename()
+			self._export_jids_logs_to_file(liststore, list_of_paths, path_to_file)
+		
+		dlg.destroy()	
+	
+	def on_delete_menuitem_activate(self, widget):
+		liststore, list_of_paths = self.jids_listview.get_selection()\
+			.get_selected_rows()
+		self._delete_jid_logs(liststore, list_of_paths)
+
 	def on_jids_listview_key_press_event(self, widget, event):
 		liststore, list_of_paths = self.jids_listview.get_selection()\
 			.get_selected_rows()
+		if event.keyval == gtk.keysyms.Delete:
+			self._delete_jid_logs(liststore, list_of_paths)
+
+	def _export_jids_logs_to_file(self, liststore, list_of_paths, path_to_file):
 		paths_len = len(list_of_paths)
 		if paths_len == 0: # nothing is selected
 			return
 			
-		if event.keyval == gtk.keysyms.Delete:
-			pri_text = i18n.ngettext(
-				'Do you really want to delete logs of the selected contact?',
-				'Do you really want to delete logs of the selected contacts?',
-				paths_len)
-			dialog = dialogs.ConfirmationDialog(pri_text,
-				_('This is an irreversible operation.'))
-			if dialog.get_response() != gtk.RESPONSE_OK:
-				return
+		# NOTE: it's impossible to have more than one selected and right click
+		# on a row and still have all those selected. Thank GTK God for that ;)
+		list_of_rowrefs = []
+		for path in list_of_paths: # make them treerowrefs (it's needed)
+			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+		
+		for rowref in list_of_rowrefs:
+			path = rowref.get_path()
+			if path is None:
+				continue
+			jid_id = liststore[path][1]
+			self.cur.execute('''
+				SELECT time, kind, message FROM logs
+				WHERE jid_id = ?
+				ORDER BY time
+				''', (jid_id,))
+	
+		results = self.cur.fetchall()
+		file_ = open(path_to_file, 'w')
+		for row in results:
+			# FIXME: check kind and say You or JID
+			# in store: time, kind, message FROM logs
+			# in text: JID or You, time, message
+			time_ = row[0]
+			kind = row[1]
+			if kind in (constants.KIND_SINGLE_MSG_RECV,
+				constants.KIND_CHAT_MSG_RECV):
+				who = self._get_jid_from_jid_id(jid_id)
+			elif kind in (constants.KIND_SINGLE_MSG_SENT,
+				constants.KIND_CHAT_MSG_SENT):
+				who = _('You')
+			else:
+				continue
 
-			# delete all rows from db that match jid_id
-			list_of_rowrefs = []
-			for path in list_of_paths: # make them treerowrefs (it's needed)
-				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
-			
-			for rowref in list_of_rowrefs:
-				path = rowref.get_path()
-				if path is None:
-					continue
-				jid_id = liststore[path][1]
-				del liststore[path] # remove from UI
-				# remove from db
-				self.cur.execute('''
-					DELETE FROM logs
+			message = row[2]
+			try:
+				time_ = time.strftime('%x', time.localtime(float(time_)))
+			except ValueError:
+				pass
+
+			file_.write(_('%(who)s on %(time)s said: %(message)s\n' % {'who': who,
+				'time': time_, 'message': message}))
+	
+	def _delete_jid_logs(self, liststore, list_of_paths):
+		paths_len = len(list_of_paths)
+		if paths_len == 0: # nothing is selected
+			return
+		pri_text = i18n.ngettext(
+			'Do you really want to delete logs of the selected contact?',
+			'Do you really want to delete logs of the selected contacts?',
+			paths_len)
+		dialog = dialogs.ConfirmationDialog(pri_text,
+			_('This is an irreversible operation.'))
+		if dialog.get_response() != gtk.RESPONSE_OK:
+			return
+
+		# delete all rows from db that match jid_id
+		list_of_rowrefs = []
+		for path in list_of_paths: # make them treerowrefs (it's needed)
+			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+		
+		for rowref in list_of_rowrefs:
+			path = rowref.get_path()
+			if path is None:
+				continue
+			jid_id = liststore[path][1]
+			del liststore[path] # remove from UI
+			# remove from db
+			self.cur.execute('''
+				DELETE FROM logs
+				WHERE jid_id = ?
+				''', (jid_id,))
+		
+			# now delete "jid, jid_id" row from jids table
+			self.cur.execute('''
+					DELETE FROM jids
 					WHERE jid_id = ?
 					''', (jid_id,))
-			
-				# now delete "jid, jid_id" row from jids table
-				self.cur.execute('''
-						DELETE FROM jids
-						WHERE jid_id = ?
-						''', (jid_id,))
+	
+		self.con.commit()
 		
-			self.con.commit()
-			
-			self.AT_LEAST_ONE_DELETION_DONE = True
+		self.AT_LEAST_ONE_DELETION_DONE = True
 
 	def on_search_db_button_clicked(self, widget):
 		text = self.search_entry.get_text()

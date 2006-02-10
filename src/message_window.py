@@ -163,7 +163,7 @@ class MessageWindow:
 		self.show_title()
 
 	def on_tab_eventbox_button_press_event(self, widget, event, child):
-		if event.button == 3:
+		if event.button == 3: # right click
 			n = self.notebook.page_num(child)
 			self.notebook.set_current_page(n)
 			self.popup_menu(event)
