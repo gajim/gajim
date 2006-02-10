@@ -75,7 +75,7 @@ try:
 except:
 	pass
 
-LANG = locale.getdefaultlocale() # en_US, fr_FR, el_GR etc..
+LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
 if LANG is None:
 	LANG = 'en'
 else:
