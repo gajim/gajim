@@ -27,6 +27,7 @@ import os
 import sys
 import tempfile
 import logging
+import locale
 
 import config
 from contacts import Contacts
@@ -74,11 +75,11 @@ try:
 except:
 	pass
 
-LANG = os.getenv('LANG') # en_US, fr_FR, el_GR etc..
-if LANG:
-	LANG = LANG[:2] # en, fr, el etc..
-else:
+LANG = locale.getdefaultlocale() # en_US, fr_FR, el_GR etc..
+if LANG is None:
 	LANG = 'en'
+else:
+	LANG = LANG[:2] # en, fr, el etc..
 
 last_message_time = {} # list of time of the latest incomming message
 							# {acct1: {jid1: time1, jid2: time2}, }
