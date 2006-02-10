@@ -28,6 +28,7 @@ import exceptions
 import dialogs
 from common.logger import LOG_DB_PATH, constants
 
+from common import gajim
 from common import i18n
 _ = i18n._
 gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
@@ -350,7 +351,12 @@ class HistoryManager:
 	def on_export_menuitem_activate(self, widget):
 		xml = gtk.glade.XML('history_manager.glade', 'filechooserdialog', i18n.APP)
 		xml.signal_autoconnect(self)
+		
 		dlg = xml.get_widget('filechooserdialog')
+		dlg.set_title(_('Exporting History Logs...'))
+		dlg.set_current_folder(gajim.HOME_DIR)
+		if gtk.pygtk_version > (2, 8, 0):
+			dlg.props.do_overwrite_confirmation = True
 		response = dlg.run()
 		
 		if response == gtk.RESPONSE_OK: # user want us to export ;)

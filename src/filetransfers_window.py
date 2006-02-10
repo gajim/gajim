@@ -257,8 +257,7 @@ _('Connection with peer cannot be established.'))
 		if last_send_dir and os.path.isdir(last_send_dir):
 			dialog.set_current_folder(last_send_dir)
 		else:
-			home_dir = os.path.expanduser('~')
-			dialog.set_current_folder(home_dir)
+			dialog.set_current_folder(gajim.HOME_DIR)
 		file_props = {}
 		while True:
 			response = dialog.run()
@@ -351,8 +350,7 @@ _('Connection with peer cannot be established.'))
 			if last_save_dir and os.path.isdir(last_save_dir):
 				dialog.set_current_folder(last_save_dir)
 			else:
-				home_dir = os.path.expanduser('~')
-				dialog.set_current_folder(home_dir)
+				dialog.set_current_folder(gajim.HOME_DIR)
 			while True:
 				response = dialog.run()
 				if response == gtk.RESPONSE_OK:

@@ -914,8 +914,7 @@ class PreferencesWindow:
 		if last_sounds_dir and os.path.isdir('last_sounds_dir'):
 			dialog.set_current_folder(last_sounds_dir)
 		else:
-			home_dir = os.path.expanduser('~')
-			dialog.set_current_folder(home_dir)
+			dialog.set_current_folder(gajim.HOME_DIR)
 
 		filter = gtk.FileFilter()
 		filter.set_name(_('All files'))
@@ -2176,8 +2175,7 @@ class ManageEmoticonsWindow:
 		if last_emoticons_dir and os.path.isdir('last_emoticons_dir'):
 			dialog.set_current_folder(last_emoticons_dir)
 		else:
-			home_dir = os.path.expanduser('~')
-			dialog.set_current_folder(home_dir)
+			dialog.set_current_folder(gajim.HOME_DIR)
 		filter = gtk.FileFilter()
 		filter.set_name(_('All files'))
 		filter.add_pattern('*')

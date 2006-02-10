@@ -65,6 +65,7 @@ else: # Unices
 	VCARDPATH = os.path.expanduser('~/.gajim/vcards')
 	AVATAR_PATH = os.path.expanduser('~/.gajim/avatars')
 
+HOME_DIR = os.path.expanduser('~')
 TMP = tempfile.gettempdir()
 
 try:
