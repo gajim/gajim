@@ -39,9 +39,9 @@ class NBCommonClient(CommonClient):
 			Full list: ['nodebuilder', 'dispatcher', 'gen_auth', 'SASL_auth', 'bind', 'socket', 
 			 'CONNECTproxy', 'TLS', 'roster', 'browser', 'ibb'] . '''
 		
-		if self.__class__.__name__ == 'NonBlockingClient': 
+		if isinstance(self, NonBlockingClient): 
 			self.Namespace, self.DBG = 'jabber:client', DBG_CLIENT
-		elif self.__class__.__name__ == 'NBCommonClient': 
+		elif isinstance(self, NBCommonClient): 
 			self.Namespace, self.DBG = dispatcher_nb.NS_COMPONENT_ACCEPT, DBG_COMPONENT
 		
 		self.defaultNamespace = self.Namespace
@@ -66,7 +66,6 @@ class NBCommonClient(CommonClient):
 		self.socket = None
 		self.on_connect = on_connect
 		self.on_connect_failure = on_connect_failure
-		#~ self.RegisterDisconnectHandler(self.DisconnectHandler)
 		
 	def set_idlequeue(self, idlequeue):
 		self.idlequeue = idlequeue
