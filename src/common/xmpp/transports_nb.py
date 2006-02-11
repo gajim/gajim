@@ -203,16 +203,23 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		except Exception, e:
 			if len(e.args)  > 0 and isinstance(e.args[0], int):
 				errnum = e[0]
+				print 'errnum:',errnum, e
 			# "received" will be empty anyhow 
-		
-		if not received and errnum != 2:
-			if errnum != 8: # EOF occurred in violation of protocol
+		if errnum == socket.SSL_ERROR_WANT_READ:
+			pass
+		elif errnum in [errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN]:
+			self.disconnect()
+			if self.on_connect_failure:
+				self.on_connect_failure()
+		elif not received :
+			if errnum != socket.SSL_ERROR_EOF: # 8 EOF occurred in violation of protocol
 				self.DEBUG('Socket error while receiving data', 'error')
 			if self.state >= 0:
 				self.disconnect()
 			return False
 		if self.state < 0:
 			return
+		
 		# we have received some bites, stop the timeout!
 		self.renew_send_timeout()
 		if self.on_receive:
