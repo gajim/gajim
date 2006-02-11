@@ -90,6 +90,8 @@ class IdleQueue:
 			del(self.alarms[alarm_time])
 		
 	def plug_idle(self, obj, writable = True, readable = True):
+		if obj.fd == -1:
+			return
 		if self.queue.has_key(obj.fd):
 			self.unplug_idle(obj.fd)
 		self.queue[obj.fd] = obj
@@ -133,6 +135,9 @@ class IdleQueue:
 			return True
 		
 		elif flags & 16: # closed channel
+			# io error, don't expect more events
+			self.remove_timeout(obj.fd)
+			self.unplug_idle(obj.fd)
 			obj.pollend()
 		return False
 	
