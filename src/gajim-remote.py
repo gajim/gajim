@@ -308,10 +308,10 @@ class GajimRemote:
 		if command in self.commands:
 			command_props = self.commands[command]
 			arguments_str = self.make_arguments_row(command_props[1])
-			str = _('Usage: %s %s %s \n\t') % (BASENAME, command, 
-					arguments_str)
+			str = _('Usage: %s %s %s \n\t %s') % (BASENAME, command, 
+					arguments_str, command_props[0])
 			if len(command_props[1]) > 0:
-				str += command_props[0] + '\n\n' + _('Arguments:') + '\n'
+				str += '\n\n' + _('Arguments:') + '\n'
 				for argument in command_props[1]:
 					str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
 			return str
@@ -349,8 +349,10 @@ class GajimRemote:
 			for val in prop_dict:
 				if val is None:
 					ret_str +='\t'
-				elif isinstance(val, (unicode, int, str)):
+				elif isinstance(val, (str, int)):
 					ret_str +='\t' + str(val)
+				elif isinstance(val, unicode):
+					ret_str +='\t' + val
 				elif isinstance(val, (list, tuple)):
 					res = ''
 					for items in val:
@@ -373,13 +375,17 @@ class GajimRemote:
 					for items in val:
 						res += self.print_info(level+1, items)
 					if res != '':
+						if isinstance(res, str):
+							res = res.decode('utf-8')
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
 				elif isinstance(val, dict):
 					res = self.print_info(level+1, val)
 					if res != '':
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
-		
-		return ret_str.encode(locale.getpreferredencoding())
+		if isinstance(ret_str, unicode):
+			return ret_str.encode(locale.getpreferredencoding())
+		else:
+			return ret_str
 		
 	def unrepr(self, serialized_data):
 		''' works the same as eval, but only for structural values, 
@@ -472,6 +478,10 @@ class GajimRemote:
 				if not next or next[0] != ':':
 					send_error('Wrong string: %s' % (value))
 				val, next = self.unrepr(next[1:])
+				if isinstance(key, str):
+					key = key.decode('utf-8')
+				if isinstance(val, str):
+					val = val.decode('utf-8')
 				_dict[key] = val
 				next = next.strip()
 				if not next:
@@ -494,6 +504,8 @@ class GajimRemote:
 				next = next.strip()
 				if not next:
 					send_error('Wrong string: %s' % val)
+				if isinstance(val, str):
+					val = val.decode('utf-8')
 				_tuple.append(val)
 				next = next.strip()
 				if not next:
@@ -537,22 +549,12 @@ Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
 				INTERFACE, SERVICE, OBJ_PATH)
 		self.loop.quit()
 	
-	# FIXME - didn't find more clever way for the below method.
-	# method(sys.argv[2:]) doesn't work, cos sys.argv[2:] is a tuple
 	def call_remote_method(self):
 		''' calls self.method with arguments from sys.argv[2:] '''
 		try:
-			if self.argv_len == 2:
-				res = self.method()
-			elif self.argv_len == 3:
-				res = self.method(sys.argv[2])
-			elif self.argv_len == 4:
-				res = self.method(sys.argv[2], sys.argv[3])
-			elif self.argv_len == 5:
-				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4])
-			elif self.argv_len == 6:
-				res = self.method(sys.argv[2], sys.argv[3], sys.argv[4],
-					sys.argv[5])
+			sys.argv.pop(0)
+			sys.argv.pop(0)
+			res = self.method(*sys.argv)
 			return res
 		except Exception, e:
 			print str(e)
