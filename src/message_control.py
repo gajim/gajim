@@ -37,11 +37,13 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class MessageControl:
 	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
 
-	def __init__(self, type_id, parent_win, widget_name, display_name, contact, account):
+	def __init__(self, type_id, parent_win, widget_name, display_names, contact, account):
+		'''The display_names argument is a two element tuple containing the desired
+		display name (pretty string) for the control in both singular and plural form'''
 		self.type_id = type_id
 		self.parent_win = parent_win
 		self.widget_name = widget_name
-		self.display_name = display_name
+		self.display_names = display_names
 		self.contact = contact
 		self.account = account
 		self.compact_view_always = False

@@ -69,7 +69,7 @@ class PrivateChatControl(ChatControl):
 	def __init__(self, parent_win, contact, acct):
 		ChatControl.__init__(self, parent_win, contact, acct)
 		self.TYPE_ID = 'pm'
-		self.display_name = _('Private chat')
+		self.display_names = (_('Private Chat'), _('Private Chats'))
 
 	def send_message(self, message):
 		'''call this function to send our message'''
@@ -99,7 +99,8 @@ class GroupchatControl(ChatControlBase):
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-					'muc_child_vbox', _('Group Chat'), contact, acct);
+					'muc_child_vbox', (_('Group Chat'), _('Group Chats')),
+					contact, acct);
 
 		self.room_jid = self.contact.jid
 		self.nick = contact.name

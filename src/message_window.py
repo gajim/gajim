@@ -220,10 +220,11 @@ class MessageWindow:
 			name = control.contact.get_shown_name()
 
 		window_mode = gajim.interface.msg_win_mgr.mode
-		if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
-			label = control.display_name
-		elif self.get_num_controls() == 1:
+		if self.get_num_controls() == 1:
 			label = name
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
+			# Show the plural form since number of tabs > 1
+			label = control.display_names[1]
 		else:
 			label = _('Messages')
 		title = _('%s - Gajim') % label

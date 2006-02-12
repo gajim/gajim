@@ -75,8 +75,8 @@ class ChatControlBase(MessageControl):
 	def handle_message_textview_mykey_press(self, widget, event_keyval, event_keymod):
 		pass # Derived should implement this rather than connecting to the event itself.
 
-	def __init__(self, type_id, parent_win, widget_name, display_name, contact, acct):
-		MessageControl.__init__(self, type_id, parent_win, widget_name, display_name,
+	def __init__(self, type_id, parent_win, widget_name, display_names, contact, acct):
+		MessageControl.__init__(self, type_id, parent_win, widget_name, display_names,
 					contact, acct);
 
 		# FIXME: These are hidden from 0.8 on, but IMO all these things need
@@ -695,7 +695,7 @@ class ChatControl(ChatControlBase):
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
-				         _('Chat'), contact, acct)
+					(_('Chat'), _('Chats')), contact, acct)
 		self.compact_view_always = gajim.config.get('always_compact_view_chat')
 		self.set_compact_view(self.compact_view_always)
 
