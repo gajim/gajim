@@ -340,18 +340,18 @@ class GajimRemote:
 		
 	def print_info(self, level, prop_dict):
 		''' return formated string from serialized vcard data '''
-		if prop_dict is None or not isinstance(prop_dict, dict, list, tuple):
+		if prop_dict is None or not isinstance(prop_dict, (dict, list, tuple)):
 			return ''
 		ret_str = ''
-		if isinstance(prop_dict, list, tuple):
+		if isinstance(prop_dict, (list, tuple)):
 			ret_str = ''
 			spacing = ' ' * level * 4
 			for val in prop_dict:
 				if val is None:
 					ret_str +='\t'
-				elif isinstance(val, unicode, int, str):
+				elif isinstance(val, (unicode, int, str)):
 					ret_str +='\t' + str(val)
-				elif isinstance(val, list, tuple):
+				elif isinstance(val, (list, tuple)):
 					res = ''
 					for items in val:
 						res += self.print_info(level+1, items)
@@ -364,11 +364,11 @@ class GajimRemote:
 			for key in prop_dict.keys():
 				val = prop_dict[key]
 				spacing = ' ' * level * 4
-				if isinstance(val, unicode, int, str):
+				if isinstance(val, (unicode, int, str)):
 					if val is not None:
 						val = val.strip()
 						ret_str += '%s%-10s: %s\n' % (spacing, key, val)
-				elif isinstance(val, list, tuple):
+				elif isinstance(val, (list, tuple)):
 					res = ''
 					for items in val:
 						res += self.print_info(level+1, items)
@@ -466,7 +466,7 @@ class GajimRemote:
 				if value[1] == '}':
 					break
 				key, next = self.unrepr(value[1:])
-				if not isinstance(key, str, unicode):
+				if not isinstance(key, (str, unicode)):
 					send_error('Wrong string: %s' % value)
 				next = next.strip()
 				if not next or next[0] != ':':
