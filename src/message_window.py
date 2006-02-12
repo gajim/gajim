@@ -687,18 +687,25 @@ class MessageWindowMgr:
 		key = None
 		win_acct = None
 		win_type = None
+		win_role = 'messages'
 
 		key = self._mode_to_key(contact, acct, type)
 		if self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			win_acct = acct
+			win_role = acct
 		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
 			win_type = type
+			win_role = type
+		elif self.mode == self.ONE_MSG_WINDOW_NEVER:
+			win_role = contact.jid
 
 		win = None
 		try:
 			win = self._windows[key]
 		except KeyError:
 			win = self._new_window(win_acct, win_type)
+
+		win.window.set_role(win_role)
 
 		# Position and size window based on saved state and window mode
 		if not self.one_window_opened(contact, acct, type):

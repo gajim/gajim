@@ -14,6 +14,7 @@
   <property name="default_height">400</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="role">roster</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
   <property name="skip_pager_hint">False</property>
@@ -414,6 +415,7 @@
   <property name="default_height">150</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="role">accounts</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
   <property name="skip_pager_hint">False</property>
@@ -2670,6 +2672,7 @@
   <property name="default_height">420</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="role">Service Discovery</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
   <property name="skip_pager_hint">False</property>
@@ -3271,6 +3274,7 @@ Agent JID - node</property>
   <property name="modal">False</property>
   <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
+  <property name="role">preferences</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
   <property name="skip_pager_hint">False</property>
@@ -9131,6 +9135,7 @@ Custom</property>
   <property name="default_height">350</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="role">history</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
   <property name="skip_pager_hint">False</property>
@@ -11674,6 +11679,7 @@ Static</property>
   <property name="default_height">540</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="role">ace</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
   <property name="skip_pager_hint">False</property>
