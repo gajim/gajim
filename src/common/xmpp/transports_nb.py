@@ -155,6 +155,12 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.remove_timeout() 
 		self._owner.disconnected()
 		self.idlequeue.unplug_idle(self.fd)
+		try:
+			self._sock.shutdown(socket.SHUT_RDWR)
+			self._sock.close()
+		except:
+			# socket is already closed
+			pass
 		# socket descriptor cannot be (un)plugged anymore
 		self.fd = -1
 		if self.on_disconnect:
