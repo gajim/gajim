@@ -783,6 +783,7 @@ _('Connection with peer cannot be established.'))
 			types = {'r' : 'download', 's' : 'upload'}
 			self.set_status(file_props['type'], file_props['sid'], types[sid[0]])
 			self.toggle_pause_continue(True)
+			file_props['continue_cb']()
 		elif self.is_transfer_active(file_props):
 			file_props['paused'] = True
 			self.set_status(file_props['type'], file_props['sid'], 'pause')

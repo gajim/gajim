@@ -44,7 +44,15 @@ STALLED_TIMEOUT = 10
 
 # after foo seconds of waiting to connect, disconnect from
 # streamhost and try next one
-CONNECT_TIMEOUT = 10
+CONNECT_TIMEOUT = 30
+
+# nothing received for the last foo seconds - stop transfer
+# if it is 0, then transfer will wait forever
+READ_TIMEOUT = 180
+
+# nothing sent for the last foo seconds - stop transfer
+# if it is 0, then transfer will wait forever
+SEND_TIMEOUT = 180
 
 class SocksQueue:
 	''' queue for all file requests objects '''
@@ -236,7 +244,6 @@ class SocksQueue:
 			reader.file_props['received-len'] = 0
 			reader.pauses = 0
 			# start sending file to proxy
-			# TODO: add timeout for stalled state
 			self.idlequeue.set_read_timeout(reader.fd, STALLED_TIMEOUT)
 			self.idlequeue.plug_idle(reader, True, False)
 			result = reader.write_next()
@@ -304,6 +311,8 @@ class SocksQueue:
 			return
 		if result in (0, -1) and self.complete_transfer_cb is not None:
 			account = actor.account
+			if account is None and actor.file_props.has_key('tt_account'):
+				account = actor.file_props['tt_account']
 			self.complete_transfer_cb(account, actor.file_props)
 		elif self.progress_transfer_cb is not None:
 			self.progress_transfer_cb(actor.account, actor.file_props)
@@ -507,31 +516,24 @@ class Socks5:
 				buff = self._recv(MAX_BUFF_LEN)
 			except Exception, e:
 				buff = ''
-			first_byte = False
-			if self.file_props['received-len'] == 0:  
-				if len(buff) > 0:  
-					# delimiter between auth and data  
-					if ord(buff[0]) == 0xD:  
-						first_byte = True  
-						buff = buff[1:]
 			current_time = self.idlequeue.current_time()
 			self.file_props['elapsed-time'] += current_time - \
 				self.file_props['last-time']
 			self.file_props['last-time'] = current_time
 			self.file_props['received-len'] += len(buff)
+			if len(buff) == 0:
+				# Transfer stopped  somehow:
+				# reset, paused or network error
+				self.rem_fd(fd)
+				self.disconnect(False)
+				self.file_props['error'] = -1
+				return 0
 			try:
 				fd.write(buff)
 			except IOError, e:
 				self.rem_fd(fd)
 				self.disconnect(False)
 				self.file_props['error'] = -6 # file system error
-				return 0
-			if len(buff) == 0 and first_byte is False:
-				# Transfer stopped  somehow:
-				# reset, paused or network error
-				self.rem_fd(fd)
-				self.disconnect(False)
-				self.file_props['error'] = -1
 				return 0
 			if self.file_props['received-len'] >= int(self.file_props['size']):
 				# transfer completed
@@ -554,14 +556,15 @@ class Socks5:
 		''' Closes open descriptors and remover socket descr. from idleque '''
 		# be sure that we don't leave open file
 		self.close_file()
+		self.idlequeue.remove_timeout(self.fd)
+		self.idlequeue.unplug_idle(self.fd)
 		try:
+			self._sock.shutdown(socket.SHUT_RDWR)
 			self._sock.close()
 		except:
 			# socket is already closed
 			pass
 		self.connected = False
-		self.idlequeue.remove_timeout(self.fd)
-		self.idlequeue.unplug_idle(self.fd)
 		self.fd = -1
 		self.state = -1
 	
@@ -636,6 +639,14 @@ class Socks5:
 		if version != 0x05 or method == 0xff:
 			self.disconnect()
 	
+	def continue_paused_transfer(self):
+		if self.state < 5:
+			return
+		if self.file_props['type'] == 'r':
+			self.idlequeue.plug_idle(self, False, True)
+		else:
+			self.idlequeue.plug_idle(self, True, False)
+	
 	def _get_sha1_auth(self):
 		''' get sha of sid + Initiator jid + Target jid '''
 		if self.file_props.has_key('is_a_proxy'):
@@ -663,8 +674,16 @@ class Socks5Sender(Socks5, IdleObject):
 	
 	def read_timeout(self):
 		self.idlequeue.remove_timeout(self.fd)
-		self.file_props['stalled'] = True
-		self.queue.process_result(None, self)
+		if self.state > 5:
+			# no activity for foo seconds
+			if self.file_props['stalled'] == False:
+				self.file_props['stalled'] = True
+				self.queue.process_result(-1, self)
+				if SEND_TIMEOUT > 0:
+					self.idlequeue.set_read_timeout(self.fd, SEND_TIMEOUT)
+			else:
+				# stop transfer, there is no error code for this 
+				self.pollend()
 	
 	def pollout(self):
 		if not self.connected:
@@ -677,12 +696,15 @@ class Socks5Sender(Socks5, IdleObject):
 			self.send_raw(self._get_request_buff(self.sha_msg, 0x00))
 		elif self.state == 7:
 			if self.file_props['paused']:
-				# TODO: better way is to remove it from idlequeue
+				self.file_props['continue_cb'] = self.continue_paused_transfer
+				self.idlequeue.plug_idle(self, False, False)
 				return 
 			result = self.write_next()
 			self.queue.process_result(result, self)
 			if result is None or result <= 0:
 				self.disconnect()
+				return
+			self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
 		elif self.state == 8:
 			self.disconnect()
 			return
@@ -696,6 +718,8 @@ class Socks5Sender(Socks5, IdleObject):
 	def pollend(self):
 		self.state = 8 # end connection
 		self.disconnect()
+		self.file_props['error'] = -1
+		self.queue.process_result(-1, self)
 	
 	def pollin(self):
 		if self.connected:
@@ -721,6 +745,7 @@ class Socks5Sender(Socks5, IdleObject):
 		self.file_props['started'] = True
 		self.file_props['completed'] = False
 		self.file_props['paused'] = False
+		self.file_props['continue_cb'] = self.continue_paused_transfer
 		self.file_props['stalled'] = False
 		self.file_props['connected'] = True
 		self.file_props['elapsed-time'] = 0
@@ -835,6 +860,7 @@ class Socks5Receiver(Socks5, IdleObject):
 		self.file_props['started'] = True
 		self.file_props['completed'] = False
 		self.file_props['paused'] = False
+		self.file_props['continue_cb'] = self.continue_paused_transfer
 		self.file_props['stalled'] = False
 		Socks5.__init__(self, idlequeue, streamhost['host'], int(streamhost['port']), 
 			streamhost['initiator'], streamhost['target'], sid)
@@ -843,11 +869,18 @@ class Socks5Receiver(Socks5, IdleObject):
 		self.idlequeue.remove_timeout(self.fd)
 		if self.state > 5:
 			# no activity for foo seconds
-			self.file_props['stalled'] = True
-			self.queue.process_result(-1, self)
+			if self.file_props['stalled'] == False:
+				self.file_props['stalled'] = True
+				if not self.file_props.has_key('received-len'):
+					self.file_props['received-len'] = 0
+				self.queue.process_result(-1, self)
+				if READ_TIMEOUT > 0:
+					self.idlequeue.set_read_timeout(self.fd, READ_TIMEOUT)
+			else:
+				# stop transfer, there is no error code for this 
+				self.pollend()
 		else:
-			self.queue.reconnect_receiver(self, self.streamhost )
-			self.idlequeue.unplug_idle(self.fd)
+			self.queue.reconnect_receiver(self, self.streamhost)
 	
 	def connect(self):
 		''' create the socket and plug it to the idlequeue '''
@@ -865,7 +898,6 @@ class Socks5Receiver(Socks5, IdleObject):
 		if self.state < 5:
 			return False
 		return True
-	
 	def pollout(self):
 		self.idlequeue.remove_timeout(self.fd)
 		if self.state == 0:
@@ -876,8 +908,8 @@ class Socks5Receiver(Socks5, IdleObject):
 		elif self.state == 3: # send 'connect' request
 			self.send_raw(self._get_request_buff(self._get_sha1_auth()))
 		elif self.file_props['type'] != 'r':
-			# TODO: better way to handle paused state
 			if self.file_props['paused'] == True:
+				self.idlequeue.plug_idle(self, False, False)
 				return
 			result = self.write_next()
 			self.queue.process_result(result, self)
@@ -885,10 +917,14 @@ class Socks5Receiver(Socks5, IdleObject):
 		self.state += 1
 		# unplug and plug for reading
 		self.idlequeue.plug_idle(self, False, True)
+		self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
 	
 	def pollend(self):
 		if self.state >= 5:
+			# error during transfer
 			self.disconnect()
+			self.file_props['error'] = -1
+			self.queue.process_result(-1, self)
 		else:
 			self.queue.reconnect_receiver(self, self.streamhost)
 	
@@ -896,15 +932,19 @@ class Socks5Receiver(Socks5, IdleObject):
 		self.idlequeue.remove_timeout(self.fd)
 		if self.connected:
 			if self.file_props['paused']:
+				self.idlequeue.plug_idle(self, False, False)
 				return
 			if self.state < 5:
+				self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
 				result = self.main(0)
 				self.queue.process_result(result, self)
 			elif self.state == 5: # wait for proxy reply
 				pass
 			elif self.file_props['type'] == 'r':
+				self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
 				result = self.get_file_contents(0)
 				self.queue.process_result(result, self)
+				
 		else:
 			self.disconnect()
 	
@@ -1000,9 +1040,8 @@ class Socks5Receiver(Socks5, IdleObject):
 			else:
 				# receiving file contents from socket
 				self.idlequeue.plug_idle(self, False, True)
-			
+			self.file_props['continue_cb'] = self.continue_paused_transfer
 			# we have set up the connection, next - retrieve file
-			# TODO: add timeout for stalled state
 			self.state = 6 
 		if self.state < 5:
 			self.idlequeue.plug_idle(self, True, False)
