@@ -142,6 +142,12 @@ class GajimRemote:
 						('jid', _('JID of the contact'), True)
 					]
 				],
+			'account_info': [
+					_('Gets detailed info on a account'), 
+					[
+						('account', _('Name of the account'), True)
+					]
+				],
 			'send_file': [
 					_('Sends file to a contact'),
 					[
@@ -252,6 +258,9 @@ class GajimRemote:
 				if isinstance(res, list):
 					for account in res:
 						print account
+			elif self.command == 'account_info':
+				if res:
+					print self.print_info(0, self.unrepr(res)[0])
 			elif self.command == 'list_contacts':
 				for single_res in res:
 					accounts = self.unrepr(single_res)
@@ -382,10 +391,12 @@ class GajimRemote:
 					res = self.print_info(level+1, val)
 					if res != '':
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
-		if isinstance(ret_str, unicode):
-			return ret_str.encode(locale.getpreferredencoding())
-		else:
-			return ret_str
+		
+		# utf-8 string come from gajim
+		# FIXME: why we have strings instead of unicode?
+		if isinstance(ret_str, str):
+			ret_str = ret_str.decode('utf-8')
+		return ret_str.encode(locale.getpreferredencoding())
 		
 	def unrepr(self, serialized_data):
 		''' works the same as eval, but only for structural values, 

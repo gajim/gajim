@@ -95,6 +95,7 @@ class SignalObject(DbusPrototype):
 				self.show_next_unread,
 				self.list_contacts,
 				self.list_accounts,
+				self.account_info,
 				self.change_status,
 				self.open_chat,
 				self.send_message,
@@ -310,10 +311,29 @@ class SignalObject(DbusPrototype):
 		if result and len(result) > 0:
 			result_array = []
 			for account in result:
-				result_array.append(account.encode('utf-8'))
+				result_array.append(account)
 			return result_array
 		return None
-
+		
+	def account_info(self, *args):
+		''' show info on account: resource, jid, nick, prio, message '''
+		[for_account] = self._get_real_arguments(args, 1)
+		if not gajim.connections.has_key(for_account):
+			# account is invalid
+			return None
+		account = gajim.connections[for_account]
+		result = {}
+		index = account.connected
+		result['status'] = STATUS_LIST[index]
+		result['name'] = account.name
+		result['jid'] = gajim.get_jid_from_account(account.name)
+		result['message'] = account.status
+		result['priority'] = unicode(gajim.config.get_per('accounts', 
+								account.name, 'priority'))
+		result['resource'] = unicode(gajim.config.get_per('accounts', 
+								account.name, 'resource'))
+		return repr(result)
+	
 	def list_contacts(self, *args):
 		''' list all contacts in the roster. If the first argument is specified,
 		then return the contacts for the specified account '''
@@ -499,3 +519,4 @@ class SignalObject(DbusPrototype):
 		add_contact = method(INTERFACE)(add_contact)
 		get_status = method(INTERFACE)(get_status)
 		get_status_message = method(INTERFACE)(get_status_message)
+		account_info = method(INTERFACE)(account_info)
