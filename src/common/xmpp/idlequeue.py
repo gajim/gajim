@@ -97,12 +97,15 @@ class IdleQueue:
 		self.queue[obj.fd] = obj
 		if writable:
 			if not readable:
-				flags = 4 # read only
+				flags = 20 # write only
 			else:
-				flags = 7 # both readable and writable
+				flags = 23 # both readable and writable
 		else:
-			flags = 3 # write only
-		flags |= 16 # hung up, closed channel
+			if readable:
+				flags = 19 # read only
+			else:
+				# when we paused a FT, we expect only a close event
+				flags = 16
 		self.add_idle(obj.fd, flags)
 	
 	def add_idle(self, fd, flags):
