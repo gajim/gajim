@@ -43,11 +43,12 @@ from common import i18n
 _ = i18n._
 i18n.init()
 
+PREFERRED_ENCODING = locale.getpreferredencoding()
+
 def send_error(error_message):
-		'''Writes error message to stderr and exits'''
-		print >> sys.stderr, error_message.encode(
-			locale.getpreferredencoding())
-		sys.exit()
+	'''Writes error message to stderr and exits'''
+	print >> sys.stderr, error_message.encode(PREFERRED_ENCODING)
+	sys.exit()
 
 try:
 	import dbus
@@ -63,6 +64,7 @@ OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 SERVICE = 'org.gajim.dbus'
 BASENAME = 'gajim-remote'
+
 
 class GajimRemote:
 	
@@ -215,10 +217,9 @@ class GajimRemote:
 		self.command = sys.argv[1]
 		if self.command == 'help':
 			if self.argv_len == 3:
-				print self.help_on_command(sys.argv[2]).encode(
-					locale.getpreferredencoding())
+				print self.help_on_command(sys.argv[2]).encode(PREFERRED_ENCODING)
 			else:
-				print self.compose_help().encode(locale.getpreferredencoding())
+				print self.compose_help().encode(PREFERRED_ENCODING)
 			sys.exit()
 		
 		self.init_connection()
@@ -385,7 +386,7 @@ class GajimRemote:
 						res += self.print_info(level+1, items)
 					if res != '':
 						if isinstance(res, str):
-							res = res.decode('utf-8')
+							res = res.decode(PREFERRED_ENCODING)
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
 				elif isinstance(val, dict):
 					res = self.print_info(level+1, val)
@@ -395,8 +396,8 @@ class GajimRemote:
 		# utf-8 string come from gajim
 		# FIXME: why we have strings instead of unicode?
 		if isinstance(ret_str, str):
-			ret_str = ret_str.decode('utf-8')
-		return ret_str.encode(locale.getpreferredencoding())
+			return ret_str
+		return ret_str.encode(PREFERRED_ENCODING)
 		
 	def unrepr(self, serialized_data):
 		''' works the same as eval, but only for structural values, 
@@ -490,9 +491,9 @@ class GajimRemote:
 					send_error('Wrong string: %s' % (value))
 				val, next = self.unrepr(next[1:])
 				if isinstance(key, str):
-					key = key.decode('utf-8')
+					key = key.decode(PREFERRED_ENCODING)
 				if isinstance(val, str):
-					val = val.decode('utf-8')
+					val = val.decode(PREFERRED_ENCODING)
 				_dict[key] = val
 				next = next.strip()
 				if not next:
@@ -551,8 +552,9 @@ class GajimRemote:
 		args = self.commands[self.command][1]
 		if len(args) > argv_len:
 			if args[argv_len][2]:
-				send_error(_('Argument "%s" is not specified. \n\
-Type "%s help %s" for more info') % (args[argv_len][0], BASENAME, self.command))
+				send_error(_('Argument "%s" is not specified. \n'
+					'Type "%s help %s" for more info') % 
+					(args[argv_len][0], BASENAME, self.command))
 
 	def gobject_quit(self):
 		if _version[1] >= 41:
