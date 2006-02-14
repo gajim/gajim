@@ -17,7 +17,7 @@
 Provides library with all Non-SASL and SASL authentication mechanisms.
 Can be used both for client and transport authentication.
 '''
-
+import sys
 from protocol import *
 from auth import *
 from client import PlugIn
@@ -65,7 +65,7 @@ class SASL(PlugIn):
 		''' Used to determine if server supports SASL auth. Used internally. '''
 		if not feats.getTag('mechanisms', namespace=NS_SASL):
 			self.startsasl='not-supported'
-			self.DEBUG('SASL not supported by server', 'error')
+			print >> sys.stderr, 'SASL not supported by server'
 			return
 		mecs=[]
 		for mec in feats.getTag('mechanisms', namespace=NS_SASL).getTags('mechanism'):
