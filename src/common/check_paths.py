@@ -86,14 +86,14 @@ def check_and_possibly_create_paths():
 			os.chmod(dot_gajim, 0700) # rwx------
 
 		if not os.path.exists(VCARD_PATH):
-			self.create_path(VCARD_PATH)
+			create_path(VCARD_PATH)
 		elif os.path.isfile(VCARD_PATH):
 			print _('%s is file but it should be a directory') % VCARD_PATH
 			print _('Gajim will now exit')
 			sys.exit()
 			
 		if not os.path.exists(AVATAR_PATH):
-			self.create_path(AVATAR_PATH)
+			create_path(AVATAR_PATH)
 		elif os.path.isfile(AVATAR_PATH):
 			print _('%s is file but it should be a directory') % AVATAR_PATH
 			print _('Gajim will now exit')
@@ -108,11 +108,11 @@ def check_and_possibly_create_paths():
 			
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that
-			self.create_path(dot_gajim)
+			create_path(dot_gajim)
 		if not os.path.isdir(VCARD_PATH):
-			self.create_path(VCARD_PATH)
+			create_path(VCARD_PATH)
 		if not os.path.exists(AVATAR_PATH):
-			self.create_path(AVATAR_PATH)
+			create_path(AVATAR_PATH)
 		if not os.path.isfile(LOG_DB_PATH):
 			create_log_db()
 			gajim.logger.init_vars()
