@@ -86,16 +86,14 @@ def check_and_possibly_create_paths():
 			os.chmod(dot_gajim, 0700) # rwx------
 
 		if not os.path.exists(VCARDPATH):
-			print _('creating %s directory') % VCARDPATH
-			os.mkdir(VCARDPATH, 0700)
+			self.create_path(VCARDPATH)
 		elif os.path.isfile(VCARDPATH):
 			print _('%s is file but it should be a directory') % VCARDPATH
 			print _('Gajim will now exit')
 			sys.exit()
 			
 		if not os.path.exists(AVATAR_PATH):
-			print _('creating %s directory') % AVATAR_PATH
-			os.mkdir(AVATAR_PATH, 0700)
+			self.create_path(AVATAR_PATH)
 		elif os.path.isfile(AVATAR_PATH):
 			print _('%s is file but it should be a directory') % AVATAR_PATH
 			print _('Gajim will now exit')
@@ -110,14 +108,15 @@ def check_and_possibly_create_paths():
 			
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that
-			print _('creating %s directory') % dot_gajim
-			os.mkdir(dot_gajim, 0700)
+			self.create_path(dot_gajim)
 		if not os.path.isdir(VCARDPATH):
-			print _('creating %s directory') % VCARDPATH
-			os.mkdir(VCARDPATH, 0700)
+			self.create_path(VCARDPATH)
 		if not os.path.exists(AVATAR_PATH):
-			print _('creating %s directory') % AVATAR_PATH
-			os.mkdir(AVATAR_PATH, 0700)
+			self.create_path(AVATAR_PATH)
 		if not os.path.isfile(LOG_DB_PATH):
 			create_log_db()
 			gajim.logger.init_vars()
+
+def create_path(directory):
+	print _('creating %s directory') % directory
+	os.mkdir(dot_gajim, 0700)
