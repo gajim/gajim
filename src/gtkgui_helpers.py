@@ -445,7 +445,7 @@ def get_avatar_pixbuf_from_cache(jid):
 		# don't show avatar for the transport itself
 		return None
 	
-	if jid not in os.listdir(gajim.VCARDPATH):
+	if jid not in os.listdir(gajim.VCARD_PATH):
 		return 'ask'
 
 	vcard_dict = gajim.connections.values()[0].get_cached_vcard(jid)

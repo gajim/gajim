@@ -52,17 +52,17 @@ if os.name == 'nt':
 	try:
 		# Documents and Settings\[User Name]\Application Data\Gajim
 		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
-		VCARDPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
+		VCARD_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
 		AVATAR_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Avatars')
 	except KeyError:
 		# win9x, in cwd
 		LOGPATH = 'Logs' # deprecated
-		VCARDPATH = 'Vcards'
+		VCARD_PATH = 'Vcards'
 		AVATAR_PATH = 'Avatars'
 else: # Unices
 	DATA_DIR = '../data'
 	LOGPATH = os.path.expanduser('~/.gajim/logs') # deprecated
-	VCARDPATH = os.path.expanduser('~/.gajim/vcards')
+	VCARD_PATH = os.path.expanduser('~/.gajim/vcards')
 	AVATAR_PATH = os.path.expanduser('~/.gajim/avatars')
 
 HOME_DIR = os.path.expanduser('~')
@@ -70,7 +70,7 @@ TMP = tempfile.gettempdir()
 
 try:
 	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
-	VCARDPATH = VCARDPATH.decode(sys.getfilesystemencoding())
+	VCARD_PATH = VCARD_PATH.decode(sys.getfilesystemencoding())
 	TMP = TMP.decode(sys.getfilesystemencoding())
 	AVATAR_PATH = AVATAR_PATH.decode(sys.getfilesystemencoding())
 except:

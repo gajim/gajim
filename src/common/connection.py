@@ -294,7 +294,7 @@ class Connection:
 				card.getTag('PHOTO').setTagData('SHA', avatar_sha)
 
 			# Save it to file
-			path_to_file = os.path.join(gajim.VCARDPATH, frm)
+			path_to_file = os.path.join(gajim.VCARD_PATH, frm)
 			fil = open(path_to_file, 'w')
 			fil.write(str(card))
 			fil.close()
@@ -1581,7 +1581,7 @@ class Connection:
 
 				# Save it to file
 				our_jid = gajim.get_jid_from_account(self.name)
-				path_to_file = os.path.join(gajim.VCARDPATH, our_jid)
+				path_to_file = os.path.join(gajim.VCARD_PATH, our_jid)
 				fil = open(path_to_file, 'w')
 				fil.write(str(vcard_iq))
 				fil.close()
@@ -1609,7 +1609,7 @@ class Connection:
 					self.dispatch('VCARD', {'jid': jid})
 					jid = gajim.get_jid_without_resource(jid)
 					# Write an empty file
-					path_to_file = os.path.join(gajim.VCARDPATH, jid)
+					path_to_file = os.path.join(gajim.VCARD_PATH, jid)
 					fil = open(path_to_file, 'w')
 					fil.close()
 		del self.awaiting_answers[id]
@@ -2283,7 +2283,7 @@ class Connection:
 		return {} if vcard was too old
 		return None if we don't have cached vcard'''
 		jid = gajim.get_jid_without_resource(fjid)
-		path_to_file = os.path.join(gajim.VCARDPATH, jid)
+		path_to_file = os.path.join(gajim.VCARD_PATH, jid)
 		if os.path.isfile(path_to_file):
 			# We have the vcard cached
 			f = open(path_to_file)

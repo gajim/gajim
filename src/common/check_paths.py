@@ -73,9 +73,9 @@ def create_log_db():
 
 def check_and_possibly_create_paths():
 	LOG_DB_PATH = logger.LOG_DB_PATH
-	VCARDPATH = gajim.VCARDPATH
+	VCARD_PATH = gajim.VCARD_PATH
 	AVATAR_PATH = gajim.AVATAR_PATH
-	dot_gajim = os.path.dirname(VCARDPATH)
+	dot_gajim = os.path.dirname(VCARD_PATH)
 	if os.path.isfile(dot_gajim):
 		print _('%s is file but it should be a directory') % dot_gajim
 		print _('Gajim will now exit')
@@ -85,10 +85,10 @@ def check_and_possibly_create_paths():
 		if s.st_mode & stat.S_IROTH: # others have read permission!
 			os.chmod(dot_gajim, 0700) # rwx------
 
-		if not os.path.exists(VCARDPATH):
-			self.create_path(VCARDPATH)
-		elif os.path.isfile(VCARDPATH):
-			print _('%s is file but it should be a directory') % VCARDPATH
+		if not os.path.exists(VCARD_PATH):
+			self.create_path(VCARD_PATH)
+		elif os.path.isfile(VCARD_PATH):
+			print _('%s is file but it should be a directory') % VCARD_PATH
 			print _('Gajim will now exit')
 			sys.exit()
 			
@@ -109,8 +109,8 @@ def check_and_possibly_create_paths():
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that
 			self.create_path(dot_gajim)
-		if not os.path.isdir(VCARDPATH):
-			self.create_path(VCARDPATH)
+		if not os.path.isdir(VCARD_PATH):
+			self.create_path(VCARD_PATH)
 		if not os.path.exists(AVATAR_PATH):
 			self.create_path(AVATAR_PATH)
 		if not os.path.isfile(LOG_DB_PATH):
