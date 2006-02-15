@@ -348,9 +348,9 @@ class SignalObject(DbusPrototype):
 			accounts_to_search = accounts
 		for account in accounts_to_search:
 			if account in accounts:
-				for jid in gajim.contacts.get_jid_list(for_account):
+				for jid in gajim.contacts.get_jid_list(account):
 					item = self._serialized_contacts(gajim.contacts.get_contact(
-						for_account, jid))
+						account, jid))
 					if item:
 						result.append(item)
 			else:
