@@ -115,6 +115,9 @@ def check_and_possibly_create_paths():
 		if not os.path.isdir(VCARDPATH):
 			print _('creating %s directory') % VCARDPATH
 			os.mkdir(VCARDPATH, 0700)
+		if not os.path.exists(AVATAR_PATH):
+			print _('creating %s directory') % AVATAR_PATH
+			os.mkdir(AVATAR_PATH, 0700)
 		if not os.path.isfile(LOG_DB_PATH):
 			create_log_db()
 			gajim.logger.init_vars()

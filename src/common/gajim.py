@@ -72,7 +72,7 @@ try:
 	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
 	VCARDPATH = VCARDPATH.decode(sys.getfilesystemencoding())
 	TMP = TMP.decode(sys.getfilesystemencoding())
-	AVATAR_PATH = AVATARPATH.decode(sys.getfilesystemencoding())
+	AVATAR_PATH = AVATAR_PATH.decode(sys.getfilesystemencoding())
 except:
 	pass
 
