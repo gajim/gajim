@@ -119,4 +119,4 @@ def check_and_possibly_create_paths():
 
 def create_path(directory):
 	print _('creating %s directory') % directory
-	os.mkdir(dot_gajim, 0700)
+	os.mkdir(directory, 0700)
