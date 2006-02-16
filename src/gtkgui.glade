@@ -5178,14 +5178,14 @@ Disabled</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkButton" id="sounds_button">
+				<widget class="GtkButton" id="browse_for_sounds_button">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label">...</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
-				  <signal name="clicked" handler="on_button_sounds_clicked" last_modification_time="Wed, 09 Feb 2005 23:29:56 GMT"/>
+				  <signal name="clicked" handler="on_browse_for_sounds_button_clicked" last_modification_time="Thu, 16 Feb 2006 14:51:54 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>

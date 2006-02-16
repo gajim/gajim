@@ -299,7 +299,9 @@ class PreferencesWindow:
 
 		#sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
-		model = gtk.ListStore(str,	bool, str)
+		
+		# active, event ui name, path to sound file, event_config_name
+		model = gtk.ListStore(bool, str, str, str)
 		self.sound_tree.set_model(model)
 
 		col = gtk.TreeViewColumn(_('Active'))
@@ -308,13 +310,13 @@ class PreferencesWindow:
 		renderer.set_property('activatable', True)
 		renderer.connect('toggled', self.sound_toggled_cb)
 		col.pack_start(renderer)
-		col.set_attributes(renderer, active = 1)
+		col.set_attributes(renderer, active = 0)
 
 		col = gtk.TreeViewColumn(_('Event'))
 		self.sound_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text = 0)
+		col.set_attributes(renderer, text = 1)
 
 		col = gtk.TreeViewColumn(_('Sound'))
 		self.sound_tree.append_column(col)
@@ -731,9 +733,9 @@ class PreferencesWindow:
 		self.on_checkbutton_toggled(widget, 'ask_offline_status')
 
 	def on_sounds_treemodel_row_changed(self, model, path, iter):
-		sound_event = model.get_value(iter, 0).decode('utf-8')
+		sound_event = model[iter][3].decode('utf-8')
 		gajim.config.set_per('soundevents', sound_event, 'enabled',
-					bool(model[path][1]))
+					bool(model[path][0]))
 		gajim.config.set_per('soundevents', sound_event, 'path',
 					model[iter][2].decode('utf-8'))
 		gajim.interface.save_config()
@@ -883,13 +885,27 @@ class PreferencesWindow:
 		model[path][1] = not model[path][1]
 
 	def fill_sound_treeview(self):
-		sounds = gajim.config.get_per('soundevents')
 		model = self.sound_tree.get_model()
 		model.clear()
-		for sound in sounds:
-			val = gajim.config.get_per('soundevents', sound, 'enabled')
-			path = gajim.config.get_per('soundevents', sound, 'path')
-			model.append((sound, val, path))
+		
+		# NOTE: sounds_ui_names MUST have all items of
+		# sounds = gajim.config.get_per('soundevents') as keys 
+		sounds_dict = {
+			'first_message_received': _('First Message Received'),
+			'next_message_received': _('Next Message Received'),
+			'contact_connected': _('Contact Connected'),
+			'contact_disconnected': _('Contact Disconnected'),
+			'message_sent': _('Message Sent'),
+			'muc_message_highlight': _('Group Chat Message Highlight'),
+			'muc_message_received': _('Group Chat Message Received')
+		}
+		
+		for sound_event_config_name, sound_ui_name in sounds_dict.items():
+			enabled = gajim.config.get_per('soundevents',
+				sound_event_config_name, 'enabled')
+			path = gajim.config.get_per('soundevents',
+				sound_event_config_name, 'path')
+			model.append((enabled, sound_ui_name, path, sound_event_config_name))
 
 	def on_treeview_sounds_cursor_changed(self, widget, data = None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
@@ -897,14 +913,14 @@ class PreferencesWindow:
 		if not iter:
 			sounds_entry.set_text('')
 			return
-		str = model[iter][2]
-		sounds_entry.set_text(str)
+		path_to_snd_file = model[iter][2]
+		sounds_entry.set_text(path_to_snd_file)
 
-	def on_button_sounds_clicked(self, widget, data = None):
+	def on_browse_for_sounds_button_clicked(self, widget, data = None):
 		(model, iter) = self.sound_tree.get_selection().get_selected()
 		if not iter:
 			return
-		file = model[iter][2].decode('utf-8')
+		path_to_snd_file = model[iter][2].decode('utf-8')
 		dialog = gtk.FileChooserDialog(_('Choose Sound'), None,
 					gtk.FILE_CHOOSER_ACTION_OPEN,
 					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
@@ -927,40 +943,41 @@ class PreferencesWindow:
 		dialog.add_filter(filter)
 		dialog.set_filter(filter)
 
-		file = os.path.join(os.getcwd(), file)
-		dialog.set_filename(file)
-		file = ''
+		path_to_snd_file = os.path.join(os.getcwd(), path_to_snd_file)
+		dialog.set_filename(path_to_snd_file)
+		path_to_snd_file = ''
 		while True:
 			response = dialog.run()
 			if response != gtk.RESPONSE_OK:
 				break
-			file = dialog.get_filename()
+			path_to_snd_file = dialog.get_filename()
 			try:
-				file = file.decode(sys.getfilesystemencoding())
+				path_to_snd_file = path_to_snd_file.decode(sys.getfilesystemencoding())
 			except:
 				pass
-			if os.path.exists(file):
+			if os.path.exists(path_to_snd_file):
 				break
 		dialog.destroy()
-		if file:
-			directory = os.path.dirname(file)
+		if path_to_snd_file:
+			directory = os.path.dirname(path_to_snd_file)
 			gajim.config.set('last_sounds_dir', directory)
-			self.xml.get_widget('sounds_entry').set_text(file)
-			model.set_value(iter, 2, file)
-			model.set_value(iter, 1, 1)
+			self.xml.get_widget('sounds_entry').set_text(path_to_snd_file)
+			
+			model[iter][2] = path_to_snd_file # set new path to sounds_model
+			model[iter][0] = True # set the sound to enabled
 
 	def on_sounds_entry_changed(self, widget):
-		path_to_file = widget.get_text()
+		path_to_snd_file = widget.get_text()
 		model, iter = self.sound_tree.get_selection().get_selected()
-		model.set_value(iter, 2, path_to_file)
-		model.set_value(iter, 1, 1)
+		model[iter][2] = path_to_snd_file # set new path to sounds_model
+		model[iter][0] = True # set the sound to enabled
 
 	def on_play_button_clicked(self, widget):
 		model, iter = self.sound_tree.get_selection().get_selected()
 		if not iter:
 			return
-		event = model[iter][0]
-		helpers.play_sound(event)
+		snd_event_config_name = model[iter][3]
+		helpers.play_sound(snd_event_config_name)
 
 	def on_open_advanced_editor_button_clicked(self, widget, data = None):
 		if gajim.interface.instances.has_key('advanced_config'):
