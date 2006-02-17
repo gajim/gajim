@@ -942,6 +942,8 @@ class Interface:
 				os.remove(path_to_original_file)
 		pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo_decoded,
 			want_type = True)
+		if pixbuf is None:
+			return
 		if typ not in ('jpeg', 'png'):
 			gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. saving %s\'avatar as png file (originaly %s)' % (jid, typ))
 			typ = 'png'
