@@ -882,7 +882,7 @@ class PreferencesWindow:
 
 	def sound_toggled_cb(self, cell, path):
 		model = self.sound_tree.get_model()
-		model[path][1] = not model[path][1]
+		model[path][0] = not model[path][0]
 
 	def fill_sound_treeview(self):
 		model = self.sound_tree.get_model()
