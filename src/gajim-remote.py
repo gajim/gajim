@@ -228,20 +228,10 @@ class GajimRemote:
 		if self.command == 'contact_info':
 			if self.argv_len < 3:
 				send_error(_('Missing argument "contact_jid"'))
-			try:
-				id = self.sbus.add_signal_receiver(self.show_vcard_info, 
-					'VcardInfo', INTERFACE, SERVICE, OBJ_PATH)
-			except Exception, e:
-				raise exceptions.ServiceNotAvailable
 		
 		res = self.call_remote_method()
 		self.print_result(res)
 		
-		if self.command == 'contact_info':
-			gobject.timeout_add(10000, self.gobject_quit) # wait 10 sec for response
-			self.loop = gobject.MainLoop()
-			self.loop.run()
-	
 	def print_result(self, res):
 		''' Print retrieved result to the output '''
 		if res is not None:
@@ -261,18 +251,17 @@ class GajimRemote:
 						print account
 			elif self.command == 'account_info':
 				if res:
-					print self.print_info(0, self.unrepr(res)[0])
+					print self.print_info(0, res, True)
 			elif self.command == 'list_contacts':
-				for single_res in res:
-					accounts = self.unrepr(single_res)
-					for account_dict in accounts:
-						print self.print_info(0, account_dict)
+				for account_dict in res:
+					print self.print_info(0, account_dict, True)
 			elif self.command == 'prefs_list':
-				prefs_dict = self.unrepr(res)
-				pref_keys = prefs_dict[0].keys()
+				pref_keys = res.keys()
 				pref_keys.sort()
 				for pref_key in pref_keys:
-					print pref_key, '=', prefs_dict[0][pref_key]
+					print pref_key, '=', res[pref_key]
+			elif self.command == 'contact_info':
+				print self.print_info(0, res, True)
 			elif res:
 				print res
 	
@@ -348,8 +337,8 @@ class GajimRemote:
 			str += '\n'
 		return str
 		
-	def print_info(self, level, prop_dict):
-		''' return formated string from serialized vcard data '''
+	def print_info(self, level, prop_dict, encode_return = False):
+		''' return formated string from data structure '''
 		if prop_dict is None or not isinstance(prop_dict, (dict, list, tuple)):
 			return ''
 		ret_str = ''
@@ -359,9 +348,9 @@ class GajimRemote:
 			for val in prop_dict:
 				if val is None:
 					ret_str +='\t'
-				elif isinstance(val, (str, int)):
+				elif isinstance(val, int):
 					ret_str +='\t' + str(val)
-				elif isinstance(val, unicode):
+				elif isinstance(val, (str, unicode)):
 					ret_str +='\t' + val
 				elif isinstance(val, (list, tuple)):
 					res = ''
@@ -385,167 +374,18 @@ class GajimRemote:
 					for items in val:
 						res += self.print_info(level+1, items)
 					if res != '':
-						if isinstance(res, str):
-							res = res.decode(PREFERRED_ENCODING)
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
 				elif isinstance(val, dict):
 					res = self.print_info(level+1, val)
 					if res != '':
 						ret_str += '%s%s: \n%s' % (spacing, key, res)
-		
-		# utf-8 string come from gajim
-		# FIXME: why we have strings instead of unicode?
-		if isinstance(ret_str, str):
-			return ret_str
-		return ret_str.encode(PREFERRED_ENCODING)
-		
-	def unrepr(self, serialized_data):
-		''' works the same as eval, but only for structural values, 
-		not functions! e.g. dicts, lists, strings, tuples '''
-		if not serialized_data:
-			return (None, '') 
-		value = serialized_data.strip()
-		first_char = value[0]
-		is_unicode  = False
-		is_int  = False
-		
-		if first_char == 'u':
-			is_unicode = True
-			value = value[1:]
-			first_char = value[0]
-		elif '0123456789.'.find(first_char) != -1:
-			is_int = True
-			_str = first_char
-			if first_char == '.':
-				is_float = True
-			else:
-				is_float =  False
-			for i in xrange(len(value) - 1):
-				chr = value[i+1]
-				if chr == '.':
-					is_float = True
-				elif '0123456789'.find(chr) == -1:
-					break
-				_str += chr
-			if is_float:
-				return (float(_str), value[len(_str):])
-			else:
-				return (int(_str), value[len(_str):])
-		elif first_char == 'N':
-			if value[1:4] == 'one':
-				return (None, value[4:])
-			else:
-				return (None, '')
-		if first_char == "'" or first_char == '"': # handle strings and unicode
-			if len(value) < 2:
-				return ('',value[1:])
-			_str = ''
-			previous_slash = False
-			slashes = 0
-			for i in xrange(len(value) - 1):
-				chr = value[i+1]
-				if previous_slash:
-					previous_slash = False
-					if chr == '\\':
-						_str += '\\'
-					elif chr == 'n':
-						_str += '\n'
-					elif chr == 't':
-						_str += '\t'
-					elif chr == 'r':
-						_str += '\r'
-					elif chr == 'b':
-						_str += '\b'
-					elif chr == '\'':
-						_str += '\''
-					elif chr == '\"':
-						_str += '\"'
-					elif chr in ('u', 'x') and is_unicode:
-						slashes -= 1
-						_str += '\\' + chr
-					else:
-						_str += chr
-				elif chr == first_char:
-					break
-				elif chr == '\\':
-					previous_slash = True
-					slashes += 1
-				else:
-					_str += chr
-			substr_len = len(_str) + 2 + slashes
-			if is_unicode and _str:
-				_str = _str.decode('unicode-escape').encode('utf-8')
-			return (_str, value[substr_len :])
-		elif first_char == '{': # dict
-			_dict = {}
-			if value[1] == '}':
-				return ({}, value[2:])
-			while True:
-				if value[1] == '}':
-					break
-				key, next = self.unrepr(value[1:])
-				if not isinstance(key, (str, unicode)):
-					send_error('Wrong string: %s' % value)
-				next = next.strip()
-				if not next or next[0] != ':':
-					send_error('Wrong string: %s' % (value))
-				val, next = self.unrepr(next[1:])
-				if isinstance(key, str):
-					key = key.decode(PREFERRED_ENCODING)
-				if isinstance(val, str):
-					val = val.decode(PREFERRED_ENCODING)
-				_dict[key] = val
-				next = next.strip()
-				if not next:
-					break
-				if next[0] == ',':
-					value = next
-				elif next[0] == '}':
-					break
-				else:
-					break
-			return (_dict, next[1:])
-		elif first_char in ('[', '('): # return list 
-			_tuple = []
-			if value[1] == ']':
-				return ([], value[2:])
-			while True:
-				if value[1] == ']':
-					break
-				val, next = self.unrepr(value[1:])
-				next = next.strip()
-				if not next:
-					send_error('Wrong string: %s' % val)
-				if isinstance(val, str):
-					val = val.decode('utf-8')
-				_tuple.append(val)
-				next = next.strip()
-				if not next:
-					break
-				if next[0] == ',':
-					value = next
-				elif next[0] in (']', ')'):
-					break
-			return (_tuple, next[1:])
-		
-	def show_vcard_info(self, *args, **keyword):
-		''' write user vcart in a formated output '''
-		props_dict = None
-		if _version[1] >= 30:
-			props_dict = self.unrepr(args[0])
-		else:
-			if args and len(args) >= 5:
-				props_dict = self.unrepr(args[4].get_args_list()[0])
-		if props_dict:
-			print self.print_info(0,props_dict[0])
-		# remove_signal_receiver is broken in lower versions (< 0.35), 
-		# so we leave the leak - nothing can be done
-		if _version[1] >= 41:
-			self.sbus.remove_signal_receiver(self.show_vcard_info, 'VcardInfo', 
-				INTERFACE, SERVICE, OBJ_PATH)
+		if (encode_return):
+			try:
+				ret_str = ret_str.encode(PREFERRED_ENCODING)
+			except:
+				pass
+		return ret_str
 	
-		self.loop.quit()
-		
 	def check_arguments(self):
 		''' Make check if all necessary arguments are given '''
 		argv_len = self.argv_len - 2
@@ -555,22 +395,15 @@ class GajimRemote:
 				send_error(_('Argument "%s" is not specified. \n'
 					'Type "%s help %s" for more info') % 
 					(args[argv_len][0], BASENAME, self.command))
-
-	def gobject_quit(self):
-		if _version[1] >= 41:
-			self.sbus.remove_signal_receiver(self.show_vcard_info, 'VcardInfo', 
-				INTERFACE, SERVICE, OBJ_PATH)
-		self.loop.quit()
 	
 	def call_remote_method(self):
 		''' calls self.method with arguments from sys.argv[2:] '''
 		try:
-			sys.argv.pop(0)
-			sys.argv.pop(0)
-			res = self.method(*sys.argv)
+			# make console arguments unicode
+			args = [dbus.String(i.decode(PREFERRED_ENCODING)) for i in sys.argv[2:]]
+			res = self.method(*args)
 			return res
-		except Exception, e:
-			print str(e)
+		except Exception:
 			raise exceptions.ServiceNotAvailable
 		return None
 

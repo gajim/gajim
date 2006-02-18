@@ -47,7 +47,7 @@ if dbus_support.supported:
 		import dbus.service
 		import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
 		DbusPrototype = dbus.service.Object
-	elif dbus_support.version >= (0, 20, 0):
+	elif dbus_support.version >= (0, 30, 0):
 		DbusPrototype = dbus.Object
 	else: #dbus is not defined
 		DbusPrototype = str 
@@ -67,7 +67,7 @@ class Remote:
 		if dbus_support.version[1] >= 41:
 			service = dbus.service.BusName(SERVICE, bus=session_bus)
 			self.signal_object = SignalObject(service)
-		elif dbus_support.version[1] <= 40 and dbus_support.version[1] >= 20:
+		else:
 			service=dbus.Service(SERVICE, session_bus)
 			self.signal_object = SignalObject(service)
 
@@ -113,19 +113,12 @@ class SignalObject(DbusPrototype):
 
 	def raise_signal(self, signal, arg):
 		''' raise a signal, with a single string message '''
-		if dbus_support.version[1] >= 30:
-			from dbus import dbus_bindings
-			message = dbus_bindings.Signal(OBJ_PATH, INTERFACE, signal)
-			i = message.get_iter(True)
-			i.append(arg)
-			self._connection.send(message)
-		else:
-			self.emit_signal(INTERFACE, signal, arg)
-
-	# signals 
-	def VcardInfo(self, *vcard):
-		pass
-
+		from dbus import dbus_bindings
+		message = dbus_bindings.Signal(OBJ_PATH, INTERFACE, signal)
+		i = message.get_iter(True)
+		i.append(arg)
+		self._connection.send(message)
+	
 	def get_status(self, *args):
 		'''get_status(account = None)
 		returns status (show to be exact) which is the global one
@@ -137,7 +130,7 @@ class SignalObject(DbusPrototype):
 			return helpers.get_global_show()
 		# return show for the given account
 		index = gajim.connections[account].connected
-		return STATUS_LIST[index]
+		return dbus.String(STATUS_LIST[index])
 	
 	def get_status_message(self, *args):
 		'''get_status(account = None)
@@ -150,7 +143,7 @@ class SignalObject(DbusPrototype):
 			return str(helpers.get_global_status())
 		# return show for the given account
 		status = gajim.connections[account].status
-		return str(status)
+		return dbus.String(status)
 		
 
 	def get_account_and_contact(self, account, jid):
@@ -177,7 +170,7 @@ class SignalObject(DbusPrototype):
 					break
 		if not contact:
 			contact = jid
-
+		
 		return connected_account, contact
 
 	def send_file(self, *args):
@@ -204,9 +197,9 @@ class SignalObject(DbusPrototype):
 			return None # or raise error
 		if not keyID:
 			keyID = ''
-
+		
 		connected_account, contact = self.get_account_and_contact(account, jid)
-
+		
 		if connected_account:
 			connection = gajim.connections[connected_account]
 			res = connection.send_message(jid, message, keyID)
@@ -222,7 +215,7 @@ class SignalObject(DbusPrototype):
 			return None
 		if jid.startswith('xmpp:'):
 			jid = jid[5:] # len('xmpp:') = 5
-
+		
 		if account:
 			accounts = [account]
 		else:
@@ -247,11 +240,11 @@ class SignalObject(DbusPrototype):
 					connected_account = acct
 				elif first_connected_acct is None:
 					first_connected_acct = acct
-
+		
 		# if jid is not a conntact, open-chat with first connected account
 		if connected_account is None and first_connected_acct:
 			connected_account = first_connected_acct
-
+		
 		if connected_account:
 			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
@@ -260,7 +253,7 @@ class SignalObject(DbusPrototype):
 				win.window.focus()
 			return True
 		return False
-
+		
 	def change_status(self, *args, **keywords):
 		''' change_status(status, message, account). account is optional -
 		if not specified status is changed for all accounts. '''
@@ -278,43 +271,40 @@ class SignalObject(DbusPrototype):
 				gobject.idle_add(gajim.interface.roster.send_status, acc, 
 					status, message)
 		return None
-
+	
 	def show_next_unread(self, *args):
 		''' Show the window(s) with next waiting messages in tabbed/group chats. '''
 		#FIXME: when systray is disabled this method does nothing.
 		if len(gajim.interface.systray.jids) != 0:
 			gajim.interface.systray.handle_first_event()
-
+	
 	def contact_info(self, *args):
-		''' get vcard info for a contact. This method returns nothing.
-		You have to register the 'VcardInfo' signal to get the real vcard. '''
+		''' get vcard info for a contact. Return cached value of the vcard.
+		'''
 		[jid] = self._get_real_arguments(args, 1)
 		if not isinstance(jid, unicode):
 			jid = unicode(jid)
 		if not jid:
 			# FIXME: raise exception for missing argument (0.3+)
 			return None
-
-		accounts = gajim.contacts.get_accounts()
-
-		for account in accounts:
-			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-			if contact:
-				self.vcard_account =  account
-				gajim.connections[account].request_vcard(jid)
-				break
-		return None
-
+	
+		cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
+		if cached_vcard:
+			return self._get_dbus_struct(cached_vcard)
+		
+		# return empty dict
+		return dbus.Dictionary({}, signature="sv")
+	
 	def list_accounts(self, *args):
 		''' list register accounts '''
 		result = gajim.contacts.get_accounts()
 		if result and len(result) > 0:
 			result_array = []
 			for account in result:
-				result_array.append(account)
+				result_array.append(dbus.String(account))
 			return result_array
 		return None
-		
+	
 	def account_info(self, *args):
 		''' show info on account: resource, jid, nick, prio, message '''
 		[for_account] = self._get_real_arguments(args, 1)
@@ -322,17 +312,17 @@ class SignalObject(DbusPrototype):
 			# account is invalid
 			return None
 		account = gajim.connections[for_account]
-		result = {}
+		result = dbus.Dictionary({}, signature="ss")
 		index = account.connected
-		result['status'] = STATUS_LIST[index]
-		result['name'] = account.name
-		result['jid'] = gajim.get_jid_from_account(account.name)
-		result['message'] = account.status
-		result['priority'] = unicode(gajim.config.get_per('accounts', 
-								account.name, 'priority'))
-		result['resource'] = unicode(gajim.config.get_per('accounts', 
-								account.name, 'resource'))
-		return repr(result)
+		result['status'] = dbus.String(STATUS_LIST[index])
+		result['name'] = dbus.String(account.name)
+		result['jid'] = dbus.String(gajim.get_jid_from_account(account.name))
+		result['message'] = dbus.String(account.status)
+		result['priority'] = dbus.String(unicode(gajim.config.get_per('accounts', 
+								account.name, 'priority')))
+		result['resource'] = dbus.String(unicode(gajim.config.get_per('accounts', 
+								account.name, 'resource')))
+		return result
 	
 	def list_contacts(self, *args):
 		''' list all contacts in the roster. If the first argument is specified,
@@ -349,8 +339,8 @@ class SignalObject(DbusPrototype):
 		for account in accounts_to_search:
 			if account in accounts:
 				for jid in gajim.contacts.get_jid_list(account):
-					item = self._serialized_contacts(gajim.contacts.get_contact(
-						account, jid))
+					item = self._contacts_as_dbus_structure(
+						gajim.contacts.get_contact(account, jid))
 					if item:
 						result.append(item)
 			else:
@@ -359,7 +349,7 @@ class SignalObject(DbusPrototype):
 		if result == []:
 			return None
 		return result
-
+	
 	def toggle_roster_appearance(self, *args):
 		''' shows/hides the roster window '''
 		win = gajim.interface.roster.window
@@ -374,7 +364,7 @@ class SignalObject(DbusPrototype):
 				win.window.focus(long(time()))
 
 	def prefs_list(self, *args):
-		prefs_dict = {}
+		prefs_dict = dbus.Dictionary({}, signature="ss")
 		def get_prefs(data, name, path, value):
 			if value is None:
 				return
@@ -383,9 +373,9 @@ class SignalObject(DbusPrototype):
 				for node in path:
 					key += node + "#"
 			key += name
-			prefs_dict[key] = unicode(value[1])
+			prefs_dict[dbus.String(key)] = dbus.String(value[1])
 		gajim.config.foreach(get_prefs)
-		return repr(prefs_dict)
+		return prefs_dict
 		
 	def prefs_store(self, *args):
 		try:
@@ -406,7 +396,7 @@ class SignalObject(DbusPrototype):
 		else:
 			gajim.config.del_per(key_path[0], key_path[1], key_path[2])
 		return True
-		
+	
 	def prefs_put(self, *args):
 		[key] = self._get_real_arguments(args, 1)
 		if not key:
@@ -419,7 +409,7 @@ class SignalObject(DbusPrototype):
 		subname, value = key_path[2].split('=', 1)
 		gajim.config.set_per(key_path[0], key_path[1], subname, value)
 		return True
-		
+	
 	def add_contact(self, *args):
 		[account] = self._get_real_arguments(args, 1)
 		accounts = gajim.contacts.get_accounts()
@@ -445,7 +435,7 @@ class SignalObject(DbusPrototype):
 				gajim.contacts.remove_jid(account, jid)
 				contact_exists = True
 		return contact_exists
-		
+	
 	def _is_first(self):
 		if self.first_show:
 			self.first_show = False
@@ -453,28 +443,53 @@ class SignalObject(DbusPrototype):
 		return False
 
 	def _get_real_arguments(self, args, desired_length):
-		# supresses the first 'message' argument, which is set in dbus 0.23
-		if dbus_support.version[1] == 20:
-			args=args[1:]
+		''' extend, or descend the length of args to match desired_length 
+		'''
+		args = list(args)
+		for i in range(len(args)):
+			if args[i]: 
+				args[i] = unicode(args[i])
+			else:
+				args[i] = None
 		if desired_length > 0:
-			args = list(args)
 			args.extend([None] * (desired_length - len(args)))
 			args = args[:desired_length]
 		return args
-
-	def _serialized_contacts(self, contacts):
-		''' get info from list of Contact objects and create a serialized
-		dict for sending it over dbus '''
+	
+	def _get_dbus_struct(self, obj):
+		''' recursively go through all the items and replace
+		them with their casted dbus equivalents
+		'''
+		if obj is None:
+			return dbus.String('')
+		if isinstance(obj, (unicode, str)):
+			return dbus.String(obj)
+		if isinstance(obj, int):
+			return dbus.UInt32(obj)
+		if isinstance(obj, float):
+			return dbus.Double(obj)
+		if isinstance(obj, (list, tuple)):
+			return [self._get_dbus_struct(i) for i in obj]
+		if isinstance(obj, dict):
+			result = dbus.Dictionary({}, signature="sv")
+			for key, value in obj.items():
+				result[dbus.String(key)] = self._get_dbus_struct(value)
+			return result
+		# unknown type
+		return dbus.Variant(obj) 
+	
+	def _contacts_as_dbus_structure(self, contacts):
+		''' get info from list of Contact objects and create dbus dict '''
 		if not contacts:
 			return None
 		prim_contact = None # primary contact
 		for contact in contacts:
 			if prim_contact == None or contact.priority > prim_contact.priority:
 				prim_contact = contact
-		contact_dict = {}
-		contact_dict['name'] = prim_contact.name
-		contact_dict['show'] = prim_contact.show
-		contact_dict['jid'] = prim_contact.jid
+		contact_dict = dbus.Dictionary({}, key_type=dbus.String, value_type=dbus.Variant)
+		contact_dict['name'] = dbus.Variant(dbus.String(prim_contact.name))
+		contact_dict['show'] = dbus.Variant(dbus.String(prim_contact.show))
+		contact_dict['jid'] = dbus.Variant(dbus.String(prim_contact.jid))
 		if prim_contact.keyID:
 			keyID = None
 			if len(prim_contact.keyID) == 8:
@@ -485,10 +500,10 @@ class SignalObject(DbusPrototype):
 				contact_dict['openpgp'] = keyID
 		contact_dict['resources'] = []
 		for contact in contacts:
-			contact_dict['resources'].append(tuple([contact.resource, 
-				contact.priority, contact.status]))
-		return repr(contact_dict)
-	
+			resource_props = [dbus.String(contact.resource), contact.priority, dbus.String(contact.status)]
+			contact_dict['resources'].append(tuple(resource_props))
+		contact_dict['resources'] = dbus.Variant(contact_dict['resources'])
+		return contact_dict
 	
 	if dbus_support.version[1] >= 30 and dbus_support.version[1] <= 40:
 		method = dbus.method
@@ -496,27 +511,25 @@ class SignalObject(DbusPrototype):
 	elif dbus_support.version[1] >= 41:
 		method = dbus.service.method
 		signal = dbus.service.signal
-
-	if dbus_support.version[1] >= 30:
-		# prevent using decorators, because they are not supported 
-		# on python < 2.4
-		# FIXME: use decorators when python2.3 (and dbus 0.23) is OOOOOOLD
-		toggle_roster_appearance = method(INTERFACE)(toggle_roster_appearance)
-		list_contacts = method(INTERFACE)(list_contacts)
-		list_accounts = method(INTERFACE)(list_accounts)
-		show_next_unread = method(INTERFACE)(show_next_unread)
-		change_status = method(INTERFACE)(change_status)
-		open_chat = method(INTERFACE)(open_chat)
-		contact_info = method(INTERFACE)(contact_info)
-		send_message = method(INTERFACE)(send_message)
-		send_file = method(INTERFACE)(send_file)
-		VcardInfo = signal(INTERFACE)(VcardInfo)
-		prefs_list = method(INTERFACE)(prefs_list)
-		prefs_put = method(INTERFACE)(prefs_put)
-		prefs_del = method(INTERFACE)(prefs_del)
-		prefs_store = method(INTERFACE)(prefs_store)
-		remove_contact = method(INTERFACE)(remove_contact)
-		add_contact = method(INTERFACE)(add_contact)
-		get_status = method(INTERFACE)(get_status)
-		get_status_message = method(INTERFACE)(get_status_message)
-		account_info = method(INTERFACE)(account_info)
+	
+	# prevent using decorators, because they are not supported 
+	# on python < 2.4
+	# FIXME: use decorators when python2.3 (and dbus 0.23) is OOOOOOLD
+	toggle_roster_appearance = method(INTERFACE)(toggle_roster_appearance)
+	list_contacts = method(INTERFACE)(list_contacts)
+	list_accounts = method(INTERFACE)(list_accounts)
+	show_next_unread = method(INTERFACE)(show_next_unread)
+	change_status = method(INTERFACE)(change_status)
+	open_chat = method(INTERFACE)(open_chat)
+	contact_info = method(INTERFACE)(contact_info)
+	send_message = method(INTERFACE)(send_message)
+	send_file = method(INTERFACE)(send_file)
+	prefs_list = method(INTERFACE)(prefs_list)
+	prefs_put = method(INTERFACE)(prefs_put)
+	prefs_del = method(INTERFACE)(prefs_del)
+	prefs_store = method(INTERFACE)(prefs_store)
+	remove_contact = method(INTERFACE)(remove_contact)
+	add_contact = method(INTERFACE)(add_contact)
+	get_status = method(INTERFACE)(get_status)
+	get_status_message = method(INTERFACE)(get_status_message)
+	account_info = method(INTERFACE)(account_info)
