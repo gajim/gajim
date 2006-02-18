@@ -90,8 +90,8 @@ if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
 del path
 
 import gobject
-if sys.version[:4] >= '2.4': # FIXME: remove me when we abandon python23
-	gobject.threads_init()
+# TODO remove this comment
+# testing how it works without threads_init
 
 import pango
 import sre
