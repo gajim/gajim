@@ -219,7 +219,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		elif not received :
 			if errnum != socket.SSL_ERROR_EOF: 
 				# 8 EOF occurred in violation of protocol
-				print >> sys.stderr, 'Socket error while receiving data'
+				self.DEBUG('Socket error while receiving data', 'error') 
 			if self.state >= 0:
 				self.disconnect()
 			return
