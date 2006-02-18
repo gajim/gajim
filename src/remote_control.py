@@ -59,6 +59,36 @@ SERVICE = 'org.gajim.dbus'
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 
+def get_dbus_struct(obj):
+	''' recursively go through all the items and replace
+	them with their casted dbus equivalents
+	'''
+	if obj is None:
+		return dbus.Variant(0)
+	if isinstance(obj, (unicode, str)):
+		return dbus.String(obj)
+	if isinstance(obj, int):
+		return dbus.Int32(obj)
+	if isinstance(obj, float):
+		return dbus.Double(obj)
+	if isinstance(obj, bool):
+		return dbus.Boolean(obj)
+	if isinstance(obj, (list, tuple)):
+		result = [dbus.Variant(get_dbus_struct(i)) for i in obj]
+		if result == []:
+			return dbus.Variant(0)
+		return result
+	if isinstance(obj, dict):
+		result = dbus.Dictionary({}, signature="sv")
+		for key, value in obj.items():
+			result[dbus.String(key)] = dbus.Variant(get_dbus_struct(
+													value))
+		if result == {}:
+			return dbus.Variant(0)
+		return result
+	# unknown type
+	return dbus.Variant(0) 
+
 class Remote:
 	def __init__(self):
 		self.signal_object = None
@@ -73,7 +103,8 @@ class Remote:
 
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
-			self.signal_object.raise_signal(signal, repr(arg))
+			self.signal_object.raise_signal(signal, 
+										get_dbus_struct(arg))
 
 
 class SignalObject(DbusPrototype):
@@ -290,7 +321,7 @@ class SignalObject(DbusPrototype):
 	
 		cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
 		if cached_vcard:
-			return self._get_dbus_struct(cached_vcard)
+			return get_dbus_struct(cached_vcard)
 		
 		# return empty dict
 		return dbus.Dictionary({}, signature="sv")
@@ -455,28 +486,6 @@ class SignalObject(DbusPrototype):
 			args.extend([None] * (desired_length - len(args)))
 			args = args[:desired_length]
 		return args
-	
-	def _get_dbus_struct(self, obj):
-		''' recursively go through all the items and replace
-		them with their casted dbus equivalents
-		'''
-		if obj is None:
-			return dbus.String('')
-		if isinstance(obj, (unicode, str)):
-			return dbus.String(obj)
-		if isinstance(obj, int):
-			return dbus.UInt32(obj)
-		if isinstance(obj, float):
-			return dbus.Double(obj)
-		if isinstance(obj, (list, tuple)):
-			return [self._get_dbus_struct(i) for i in obj]
-		if isinstance(obj, dict):
-			result = dbus.Dictionary({}, signature="sv")
-			for key, value in obj.items():
-				result[dbus.String(key)] = self._get_dbus_struct(value)
-			return result
-		# unknown type
-		return dbus.Variant(obj) 
 	
 	def _contacts_as_dbus_structure(self, contacts):
 		''' get info from list of Contact objects and create dbus dict '''
