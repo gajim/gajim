@@ -301,9 +301,15 @@ class NodeBuilder:
 		if data: 
 			self._parser.Parse(data,1)
 	
-		
+	def check_data_buffer(self):
+		if self.data_buffer:
+			self._ptr.data.append(''.join(self.data_buffer))
+			del self.data_buffer[:]
+			self.data_buffer = None
+	
 	def destroy(self):
 		""" Method used to allow class instance to be garbage-collected. """
+		self.check_data_buffer()
 		self._parser.StartElementHandler       = None
 		self._parser.EndElementHandler         = None
 		self._parser.CharacterDataHandler      = None
@@ -311,6 +317,7 @@ class NodeBuilder:
 
 	def starttag(self, tag, attrs):
 		"""XML Parser callback. Used internally"""
+		self.check_data_buffer()
 		attlist=attrs.keys()       #
 		for attr in attlist:       # FIXME: Crude hack. And it also slows down the whole library considerably.
 			sp=attr.rfind(" ")     #
@@ -339,9 +346,7 @@ class NodeBuilder:
 	def endtag(self, tag ):
 		"""XML Parser callback. Used internally"""
 		self.DEBUG(DBG_NODEBUILDER, "DEPTH -> %i , tag -> %s" % (self.__depth, tag), 'up')
-		if self.data_buffer:
-			self._ptr.data.append(''.join(self.data_buffer))
-			self.data_buffer = None
+		self.check_data_buffer()
 		if self.__depth == self._dispatch_depth:
 			self.dispatch(self._mini_dom)
 		elif self.__depth > self._dispatch_depth:
@@ -360,32 +365,26 @@ class NodeBuilder:
 			self.data_buffer = [data]
 			self.last_is_data = 1
 	
-	def handle_data(self, data, *args):
-		"""XML Parser callback. Used internally"""
-		self.DEBUG(DBG_NODEBUILDER, data, 'data')
-		if not self._ptr: return
-		if self.last_is_data:
-			self._ptr.data[-1] += data
-		else:
-			self._ptr.data.append(data)
-			self.last_is_data = 1
-
 	def handle_namespace_start(self, prefix, uri):
 		"""XML Parser callback. Used internally"""
+		self.check_data_buffer()
 		if prefix: self.namespaces[uri]=prefix+':'
 		else: self.xmlns=uri
 	def DEBUG(self, level, text, comment=None):
 		""" Gets all NodeBuilder walking events. Can be used for debugging if redefined."""
 	def getDom(self):
 		""" Returns just built Node. """
+		self.check_data_buffer()
 		return self._mini_dom
 	def dispatch(self,stanza):
 		""" Gets called when the NodeBuilder reaches some level of depth on it's way up with the built
 			node as argument. Can be redefined to convert incoming XML stanzas to program events. """
 	def stream_header_received(self,ns,tag,attrs):
 		""" Method called when stream just opened. """
+		self.check_data_buffer()
 	def stream_footer_received(self):
 		""" Method called when stream just closed. """
+		self.check_data_buffer()
 
 def XML2Node(xml):
 	""" Converts supplied textual string into XML node. Handy f.e. for reading configuration file.
