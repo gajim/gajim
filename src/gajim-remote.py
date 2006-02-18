@@ -398,9 +398,18 @@ class GajimRemote:
 	
 	def call_remote_method(self):
 		''' calls self.method with arguments from sys.argv[2:] '''
-		try:
+		args = sys.argv[2:]
+		if _version[1] >= 60:
 			# make console arguments unicode
-			args = [dbus.String(i.decode(PREFERRED_ENCODING)) for i in sys.argv[2:]]
+			args = [i.decode(PREFERRED_ENCODING) for i in sys.argv[2:]]
+		if _version[1] >= 41:
+			args = [dbus.String(i) for i in args]
+		else:
+			try:
+				args = [i.encode('utf-8') for i in args]
+			except:
+				pass
+		try:
 			res = self.method(*args)
 			return res
 		except Exception:

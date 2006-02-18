@@ -47,7 +47,7 @@ if dbus_support.supported:
 		import dbus.service
 		import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
 		DbusPrototype = dbus.service.Object
-	elif dbus_support.version >= (0, 30, 0):
+	elif dbus_support.version >= (0, 20, 0):
 		DbusPrototype = dbus.Object
 	else: #dbus is not defined
 		DbusPrototype = str 
@@ -55,6 +55,42 @@ if dbus_support.supported:
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 SERVICE = 'org.gajim.dbus'
+
+# type mapping, it is different in each version
+ident = lambda e: e
+if dbus_support.version[1] >= 43:
+	# in most cases it is a utf-8 string
+	DBUS_STRING = dbus.String
+	
+	# general type (for use in dicts, 
+	#   where all values should have the same type)
+	DBUS_VARIANT = dbus.Variant
+	DBUS_BOOLEAN = dbus.Boolean
+	DBUS_DOUBLE = dbus.Double
+	DBUS_INT32 = dbus.Int32
+	# dictionary with string key and binary value
+	DBUS_DICT_SV = lambda : dbus.Dictionary({}, signature="sv")
+	# dictionary with string key and value
+	DBUS_DICT_SS = lambda : dbus.Dictionary({}, signature="ss")
+	# empty type
+	DBUS_NONE = lambda : dbus.Variant(0)
+	
+else: # 33, 35, 36
+	DBUS_DICT_SV = lambda : {}
+	DBUS_DICT_SS = lambda : {}
+	DBUS_STRING = lambda e: unicode(e).encode('utf-8')
+	# this is the only way to return lists and dicts of mixed types
+	DBUS_VARIANT = lambda e: (isinstance(e, (str, unicode)) and \
+								DBUS_STRING(e)) or repr(e)
+	DBUS_NONE = lambda : ''
+	if dbus_support.version[1] >= 41: # 35, 36
+		DBUS_BOOLEAN = dbus.Boolean
+		DBUS_DOUBLE = dbus.Double
+		DBUS_INT32 = dbus.Int32
+	else: # 33
+		DBUS_BOOLEAN = ident
+		DBUS_INT32 = ident
+		DBUS_DOUBLE = ident
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
@@ -64,30 +100,30 @@ def get_dbus_struct(obj):
 	them with their casted dbus equivalents
 	'''
 	if obj is None:
-		return dbus.Variant(0)
+		return DBUS_NONE()
 	if isinstance(obj, (unicode, str)):
-		return dbus.String(obj)
+		return DBUS_STRING(obj)
 	if isinstance(obj, int):
-		return dbus.Int32(obj)
+		return DBUS_INT32(obj)
 	if isinstance(obj, float):
-		return dbus.Double(obj)
+		return DBUS_DOUBLE(obj)
 	if isinstance(obj, bool):
-		return dbus.Boolean(obj)
+		return DBUS_BOLEAN(obj)
 	if isinstance(obj, (list, tuple)):
-		result = [dbus.Variant(get_dbus_struct(i)) for i in obj]
+		result = [DBUS_VARIANT(get_dbus_struct(i)) for i in obj]
 		if result == []:
-			return dbus.Variant(0)
+			return DBUS_NONE()
 		return result
 	if isinstance(obj, dict):
-		result = dbus.Dictionary({}, signature="sv")
+		result = DBUS_DICT_SV()
 		for key, value in obj.items():
-			result[dbus.String(key)] = dbus.Variant(get_dbus_struct(
+			result[DBUS_STRING(key)] = DBUS_VARIANT(get_dbus_struct(
 													value))
 		if result == {}:
-			return dbus.Variant(0)
+			return DBUS_NONE()
 		return result
 	# unknown type
-	return dbus.Variant(0) 
+	return DBUS_NONE() 
 
 class Remote:
 	def __init__(self):
@@ -97,7 +133,7 @@ class Remote:
 		if dbus_support.version[1] >= 41:
 			service = dbus.service.BusName(SERVICE, bus=session_bus)
 			self.signal_object = SignalObject(service)
-		else:
+		elif dbus_support.version[1] <= 40 and dbus_support.version[1] >= 20:
 			service=dbus.Service(SERVICE, session_bus)
 			self.signal_object = SignalObject(service)
 
@@ -161,7 +197,7 @@ class SignalObject(DbusPrototype):
 			return helpers.get_global_show()
 		# return show for the given account
 		index = gajim.connections[account].connected
-		return dbus.String(STATUS_LIST[index])
+		return DBUS_STRING(STATUS_LIST[index])
 	
 	def get_status_message(self, *args):
 		'''get_status(account = None)
@@ -174,7 +210,7 @@ class SignalObject(DbusPrototype):
 			return str(helpers.get_global_status())
 		# return show for the given account
 		status = gajim.connections[account].status
-		return dbus.String(status)
+		return DBUS_STRING(status)
 		
 
 	def get_account_and_contact(self, account, jid):
@@ -324,7 +360,7 @@ class SignalObject(DbusPrototype):
 			return get_dbus_struct(cached_vcard)
 		
 		# return empty dict
-		return dbus.Dictionary({}, signature="sv")
+		return DBUS_DICT_SV()
 	
 	def list_accounts(self, *args):
 		''' list register accounts '''
@@ -332,7 +368,7 @@ class SignalObject(DbusPrototype):
 		if result and len(result) > 0:
 			result_array = []
 			for account in result:
-				result_array.append(dbus.String(account))
+				result_array.append(DBUS_STRING(account))
 			return result_array
 		return None
 	
@@ -343,15 +379,15 @@ class SignalObject(DbusPrototype):
 			# account is invalid
 			return None
 		account = gajim.connections[for_account]
-		result = dbus.Dictionary({}, signature="ss")
+		result = DBUS_DICT_SS()
 		index = account.connected
-		result['status'] = dbus.String(STATUS_LIST[index])
-		result['name'] = dbus.String(account.name)
-		result['jid'] = dbus.String(gajim.get_jid_from_account(account.name))
-		result['message'] = dbus.String(account.status)
-		result['priority'] = dbus.String(unicode(gajim.config.get_per('accounts', 
+		result['status'] = DBUS_STRING(STATUS_LIST[index])
+		result['name'] = DBUS_STRING(account.name)
+		result['jid'] = DBUS_STRING(gajim.get_jid_from_account(account.name))
+		result['message'] = DBUS_STRING(account.status)
+		result['priority'] = DBUS_STRING(unicode(gajim.config.get_per('accounts', 
 								account.name, 'priority')))
-		result['resource'] = dbus.String(unicode(gajim.config.get_per('accounts', 
+		result['resource'] = DBUS_STRING(unicode(gajim.config.get_per('accounts', 
 								account.name, 'resource')))
 		return result
 	
@@ -374,8 +410,6 @@ class SignalObject(DbusPrototype):
 						gajim.contacts.get_contact(account, jid))
 					if item:
 						result.append(item)
-			else:
-				continue
 		# dbus 0.40 does not support return result as empty list
 		if result == []:
 			return None
@@ -395,7 +429,7 @@ class SignalObject(DbusPrototype):
 				win.window.focus(long(time()))
 
 	def prefs_list(self, *args):
-		prefs_dict = dbus.Dictionary({}, signature="ss")
+		prefs_dict = DBUS_DICT_SS()
 		def get_prefs(data, name, path, value):
 			if value is None:
 				return
@@ -404,7 +438,7 @@ class SignalObject(DbusPrototype):
 				for node in path:
 					key += node + "#"
 			key += name
-			prefs_dict[dbus.String(key)] = dbus.String(value[1])
+			prefs_dict[DBUS_STRING(key)] = DBUS_STRING(value[1])
 		gajim.config.foreach(get_prefs)
 		return prefs_dict
 		
@@ -495,10 +529,10 @@ class SignalObject(DbusPrototype):
 		for contact in contacts:
 			if prim_contact == None or contact.priority > prim_contact.priority:
 				prim_contact = contact
-		contact_dict = dbus.Dictionary({}, key_type=dbus.String, value_type=dbus.Variant)
-		contact_dict['name'] = dbus.Variant(dbus.String(prim_contact.name))
-		contact_dict['show'] = dbus.Variant(dbus.String(prim_contact.show))
-		contact_dict['jid'] = dbus.Variant(dbus.String(prim_contact.jid))
+		contact_dict = DBUS_DICT_SV()
+		contact_dict['name'] = DBUS_VARIANT(DBUS_STRING(prim_contact.name))
+		contact_dict['show'] = DBUS_VARIANT(DBUS_STRING(prim_contact.show))
+		contact_dict['jid'] = DBUS_VARIANT(DBUS_STRING(prim_contact.jid))
 		if prim_contact.keyID:
 			keyID = None
 			if len(prim_contact.keyID) == 8:
@@ -509,9 +543,9 @@ class SignalObject(DbusPrototype):
 				contact_dict['openpgp'] = keyID
 		contact_dict['resources'] = []
 		for contact in contacts:
-			resource_props = [dbus.String(contact.resource), contact.priority, dbus.String(contact.status)]
+			resource_props = [DBUS_STRING(contact.resource), contact.priority, DBUS_STRING(contact.status)]
 			contact_dict['resources'].append(tuple(resource_props))
-		contact_dict['resources'] = dbus.Variant(contact_dict['resources'])
+		contact_dict['resources'] = DBUS_VARIANT(contact_dict['resources'])
 		return contact_dict
 	
 	if dbus_support.version[1] >= 30 and dbus_support.version[1] <= 40:
