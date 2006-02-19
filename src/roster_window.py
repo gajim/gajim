@@ -1491,7 +1491,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				win.set_active_tab(jid, account)
 				win.window.present()
 			elif type == 'account':
-				account = model[iter][C_ACCOUNT]
+				account = model[iter][C_ACCOUNT].decode('utf-8')
 				if account != 'all':
 					show = gajim.connections[account].connected
 					if show > 1: # We are connected
