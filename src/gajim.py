@@ -1149,6 +1149,7 @@ class Interface:
 	def handle_event_signed_in(self, account, empty):
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
 		# join already open groupchats
+		self.roster.menu_is_ready = False
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(message_control.TYPE_GC):
 			if account != gc_control.account:
 				continue

@@ -434,6 +434,9 @@ class RosterWindow:
 		if password:
 			gajim.gc_passwords[room_jid] = password
 
+	def on_actions_menuitem_activate(self, widget):
+		self.make_menu()
+
 	def on_bookmark_menuitem_activate(self, widget, account, bookmark):
 		self.join_gc_room(account, bookmark['jid'], bookmark['nick'],
 			bookmark['password'])
@@ -515,6 +518,8 @@ class RosterWindow:
 
 	def make_menu(self):
 		'''create the main window's menus'''
+		if self.menu_is_ready:
+			return
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
@@ -701,6 +706,8 @@ class RosterWindow:
 			show_offline_contacts_menuitem.set_sensitive(False)
 			profile_avatar_menuitem.set_sensitive(False)
 
+		self.menu_is_ready = True
+
 	def _change_style(self, model, path, iter, option):
 		if option is None:
 			model[iter][C_NAME] = model[iter][C_NAME]
@@ -733,7 +740,7 @@ class RosterWindow:
 			self.add_account_to_roster(acct)
 			for jid in gajim.contacts.get_jid_list(acct):
 				self.add_contact_to_roster(jid, acct)
-		self.make_menu() # re-make menu in case an account was removed
+#		self.make_menu() # re-make menu in case an account was removed
 		#FIXME: maybe move thie make_menu() in where we remove the account?
 
 	def fill_contacts_and_groups_dicts(self, array, account):
@@ -1776,8 +1783,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					lcontact_copy.append(contact)
 				for contact in lcontact_copy:
 					self.chg_contact_status(contact, 'offline', '', account)
+			self.menu_is_ready = False
 		self.update_status_combobox()
-		self.make_menu()
 
 	def new_chat(self, contact, account, private_chat = False):
 		# Get target window, create a control, and associate it with the window
@@ -2873,6 +2880,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.add_new_contact_handler_id = False
 		self.service_disco_handler_id = False
 		self.new_message_menuitem_handler_id = False
+		self.menu_is_ready = False
 		self.regroup = gajim.config.get('mergeaccounts')
 		if len(gajim.connections) < 2: # Do not merge accounts if only one exists
 			self.regroup = False
@@ -3021,7 +3029,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
 		self.tooltip = tooltips.RosterTooltip()
-		self.make_menu()
 		self.draw_roster()
 
 		if gajim.config.get('show_roster_on_startup'):
