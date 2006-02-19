@@ -2742,6 +2742,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# Get destination group
 		if type_dest == 'group':
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
+			if grp_dest == _('Transports') or grp_dest == _('Not in Roster'):
+				return
 			if context.action == gtk.gdk.ACTION_COPY:
 				self.on_drop_in_group(None, account, c_source, grp_dest, context,
 					etime)
@@ -2751,7 +2753,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		else:
 			it = iter_dest
-			while model[it][C_TYPE] == 'contact':
+			while model[it][C_TYPE] != 'group':
 				it = model.iter_parent(it)
 			grp_dest = model[it][C_JID].decode('utf-8')
 		if grp_dest == _('Transports') or grp_dest == _('Not in Roster'):
