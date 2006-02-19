@@ -891,7 +891,7 @@ class Interface:
 		# We received a bookmark item from the server (JEP48)
 		# Auto join GC windows if neccessary
 		
-		self.roster.make_menu() # update the menu to show our bookmarks
+		self.roster.menu_is_ready = False
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		# do not autojoin if we are invisible
 		if gajim.connections[account].connected == invisible_show:
