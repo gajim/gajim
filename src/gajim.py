@@ -891,7 +891,7 @@ class Interface:
 		# We received a bookmark item from the server (JEP48)
 		# Auto join GC windows if neccessary
 		
-		self.roster.menu_is_ready = False
+		self.roster.actions_menu_needs_rebuild = True
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		# do not autojoin if we are invisible
 		if gajim.connections[account].connected == invisible_show:
@@ -1149,7 +1149,7 @@ class Interface:
 	def handle_event_signed_in(self, account, empty):
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
 		# join already open groupchats
-		self.roster.menu_is_ready = False
+		self.roster.actions_menu_needs_rebuild = True
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(message_control.TYPE_GC):
 			if account != gc_control.account:
 				continue
