@@ -191,7 +191,7 @@ class Interface:
 	def handle_event_roster(self, account, data):
 		#('ROSTER', account, array)
 		self.roster.fill_contacts_and_groups_dicts(data, account)
-		self.roster.draw_roster()
+		self.roster.add_account_contacts(account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Roster', (account, data))
 

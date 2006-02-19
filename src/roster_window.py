@@ -738,8 +738,11 @@ class RosterWindow:
 			self.tree.get_model().clear()
 		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
-			for jid in gajim.contacts.get_jid_list(acct):
-				self.add_contact_to_roster(jid, acct)
+			self.add_account_contacts(acct)
+	
+	def add_account_contacts(self, account):
+		for jid in gajim.contacts.get_jid_list(account):
+			self.add_contact_to_roster(jid, account)
 
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
