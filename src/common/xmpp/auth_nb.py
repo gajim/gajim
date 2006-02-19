@@ -65,7 +65,7 @@ class SASL(PlugIn):
 		''' Used to determine if server supports SASL auth. Used internally. '''
 		if not feats.getTag('mechanisms', namespace=NS_SASL):
 			self.startsasl='not-supported'
-			print >> sys.stderr, 'SASL not supported by server'
+			self.DEBUG('SASL not supported by server', 'error')
 			return
 		mecs=[]
 		for mec in feats.getTag('mechanisms', namespace=NS_SASL).getTags('mechanism'):
@@ -74,7 +74,7 @@ class SASL(PlugIn):
 		self._owner.RegisterHandler('failure', self.SASLHandler, xmlns=NS_SASL)
 		self._owner.RegisterHandler('success', self.SASLHandler, xmlns=NS_SASL)
 		if "DIGEST-MD5" in mecs:
-			node=Node('auth',attrs={'xmlns':NS_SASL,'mechanism':'DIGEST-MD5'})
+			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
 		elif "PLAIN" in mecs:
 			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server, 
 																	self.username, self.password)
