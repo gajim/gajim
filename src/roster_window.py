@@ -518,7 +518,7 @@ class RosterWindow:
 
 	def make_menu(self):
 		'''create the main window's menus'''
-		if self.actions_menu_needs_rebuild:
+		if not self.actions_menu_needs_rebuild:
 			return
 		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
