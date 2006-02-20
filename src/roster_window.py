@@ -1552,7 +1552,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 				c = gajim.contacts.create_contact(jid = contact.jid,
 					name = contact.name, groups = [_('Not in Roster')],
-					show = 'Not in Roster', status = '', ask = 'none',
+					show = 'not in roster', status = '', ask = 'none',
 					keyID = contact.keyID)
 				gajim.contacts.add_contact(account, c)
 				self.add_contact_to_roster(contact.jid, account)
@@ -1819,7 +1819,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			contact = gajim.contacts.create_contact(jid = jid,
 				name = jid.split('@')[0], groups = [_('Not in Roster')],
-				show = 'Not in Roster', status = '', sub = 'none',
+				show = 'not in roster', status = '', sub = 'none',
 				keyID = keyID)
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact_to_roster(contact.jid, account)
@@ -1852,7 +1852,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			contact = gajim.contacts.create_contact(jid = jid,
 				name = jid.split('@')[0], groups = [_('Not in Roster')],
-				show = 'Not in Roster', status = '', ask = 'none',
+				show = 'not in roster', status = '', ask = 'none',
 				keyID = keyID, resource = resource)
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact_to_roster(jid, account)
@@ -2319,11 +2319,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		path += '/'
 		list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', 'invisible',
 			'offline', 'error', 'requested', 'message', 'opened', 'closed',
-			'Not in Roster', 'muc_active', 'muc_inactive')
+			'not in roster', 'muc_active', 'muc_inactive')
 		if pixbuf2:
 			list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 				'invisible','offline', 'error', 'requested', 'message',
-				'Not in Roster')
+				'not in roster')
 		for state in list:
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
@@ -2589,7 +2589,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			(gajim.config.get('sort_by_show') or gajim.contacts.is_subcontact(
 			account1, contact1)):
 			cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
-				'invisible': 5, 'offline': 6, 'Not in Roster': 7, 'error': 8}
+				'invisible': 5, 'offline': 6, 'not in roster': 7, 'error': 8}
 			s = self.get_show(lcontact1)
 			if s in cshow:
 				show1 = cshow[s]

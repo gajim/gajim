@@ -1021,7 +1021,7 @@ class PopupNotificationWindow:
 				else:
 					contact = gajim.contacts.create_contact(jid = self.jid,
 						name = self.jid.split('@')[0],
-						groups = [_('Not in Roster')], show = 'Not in Roster',
+						groups = [_('Not in Roster')], show = 'not in roster',
 						status = '', sub = 'none', keyID = keyID)
 					gajim.contacts.add_contact(self.account, contact)
 					gajim.interface.roster.add_contact_to_roster(contact.jid,

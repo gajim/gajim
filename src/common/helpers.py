@@ -224,7 +224,7 @@ def get_uf_show(show, use_mnemonic = False):
 			uf_show = _('_Invisible')
 		else:
 			uf_show = _('Invisible')
-	elif show == 'Not in Roster':
+	elif show == 'not in roster':
 		uf_show = _('Not in Roster')
 	elif show == 'requested':
 		uf_show = Q_('?contact has status:Unknown')
