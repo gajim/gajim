@@ -2194,6 +2194,7 @@ class Connection:
 			self.connection.getRoster().delItem(jid)
 		else:
 			self.connection.getRoster().Unsubscribe(jid)
+			self.update_contact(jid, '', [])
 
 	def _continue_unsubscribe(self, con, iq_obj, agent):
 		if iq_obj.getTag('error'):

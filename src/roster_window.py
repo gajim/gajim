@@ -1559,9 +1559,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			for cc in ccs:
 				cc.groups = contact.groups
 				self.add_contact_to_roster(cc.jid, account)
-			if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+			if not remove_auth:
+				contact.name = ''
+				contact.groups = []
+				contact.sub = 'from'
+				gajim.contacts.add_contact(account, contact)
+				self.add_contact_to_roster(contact.jid, account)
+			elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 				c = gajim.contacts.create_contact(jid = contact.jid,
-					name = contact.name, groups = [_('Not in Roster')],
+					name = '', groups = [_('Not in Roster')],
 					show = 'not in roster', status = '', ask = 'none',
 					keyID = contact.keyID)
 				gajim.contacts.add_contact(account, c)
