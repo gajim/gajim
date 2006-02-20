@@ -210,6 +210,11 @@ class GajimRemote:
 						(_('account'), _(''), False)
 					]
 				],				
+
+			'get_unread_msgs_number': [
+				_('Returns number of unreaded messages'),
+					[ ]
+				],
 			}
 		if self.argv_len  < 2 or \
 			sys.argv[1] not in self.commands.keys(): # no args or bad args

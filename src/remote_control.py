@@ -547,7 +547,10 @@ class SignalObject(DbusPrototype):
 			contact_dict['resources'].append(tuple(resource_props))
 		contact_dict['resources'] = DBUS_VARIANT(contact_dict['resources'])
 		return contact_dict
-	
+
+	def get_unread_msgs_number(self, *args):
+		return str(gajim.interface.roster.nb_unread)
+
 	if dbus_support.version[1] >= 30 and dbus_support.version[1] <= 40:
 		method = dbus.method
 		signal = dbus.signal
@@ -576,3 +579,4 @@ class SignalObject(DbusPrototype):
 	get_status = method(INTERFACE)(get_status)
 	get_status_message = method(INTERFACE)(get_status_message)
 	account_info = method(INTERFACE)(account_info)
+	get_unread_msgs_number = method(INTERFACE)(get_unread_msgs_number)
