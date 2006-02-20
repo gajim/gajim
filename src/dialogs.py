@@ -678,15 +678,14 @@ class SubscriptionRequestWindow:
 		if gajim.interface.instances[self.account]['infos'].has_key(self.jid):
 			gajim.interface.instances[self.account]['infos'][self.jid].window.present()
 		else:
+			contact = gajim.contacts.create_contact(jid = self.jid, name='',
+			groups=[], show='', status='', sub='', ask='', resource='',
+			priority=5, keyID='', our_chatstate=None, chatstate=None)
 			gajim.interface.instances[self.account]['infos'][self.jid] = \
-				vcard.VcardWindow(self.jid, self.account, True)
-			#remove the publish / retrieve buttons
-			vcard_xml = gajim.interface.instances[self.account]['infos'][self.jid].xml
-			hbuttonbox = vcard_xml.get_widget('information_hbuttonbox')
-			children = hbuttonbox.get_children()
-			hbuttonbox.remove(children[0])
-			hbuttonbox.remove(children[1])
-			vcard_xml.get_widget('nickname_label').set_text(self.jid)
+				vcard.VcardWindow(contact, self.account)
+			# Remove jabber page
+			gajim.interface.instances[self.account]['infos'][self.jid].xml.\
+				get_widget('information_notebook').remove_page(0)
 			gajim.connections[self.account].request_vcard(self.jid)
 	
 	def on_deny_button_clicked(self, widget):

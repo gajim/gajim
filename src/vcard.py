@@ -88,7 +88,7 @@ class VcardWindow:
 		self.publish_button.set_no_show_all(True)
 		self.retrieve_button.set_no_show_all(True)
 		
-		self.contact = contact #don't use it if vcard is true
+		self.contact = contact # don't use it if vcard is true
 		self.account = account
 		self.vcard = vcard
 		self.avatar_mime_type = None
@@ -137,6 +137,11 @@ class VcardWindow:
 			return
 		# update contact.name if it's not ''
 		name_entry = self.xml.get_widget('nickname_entry')
+		if not name_entry:
+			# This can happen when we don't show jabber page. For exemple when we
+			# show the vcard of a contact that request our subscription
+			self.window.destroy()
+			return
 		new_name = name_entry.get_text().decode('utf-8')
 		if new_name != self.contact.name and new_name != '':
 			self.contact.name = new_name
