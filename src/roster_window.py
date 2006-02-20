@@ -342,7 +342,7 @@ class RosterWindow:
 			name += ' (' + unicode(len(contact_instances)) + ')'
 
 		# FIXME: remove when we use metacontacts
-		# shoz (account_name) if there are 2 contact with same jid in merged mode
+		# show (account_name) if there are 2 contact with same jid in merged mode
 		if self.regroup:
 			add_acct = False
 			# look through all contacts of all accounts
@@ -370,27 +370,37 @@ class RosterWindow:
 				name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
 					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 
-		for iter in iters:
-			icon_name = helpers.get_icon_name_to_show(contact, account)
-			path = model.get_path(iter)
-			if model.iter_has_child(iter):
-				if icon_name in ('error', 'offline') and not \
-					self.tree.row_expanded(path):
-					# get children icon
-					#FIXME: improve that
-					cc = gajim.contacts.get_children_contacts(account, contact)[0]
-					icon_name = helpers.get_icon_name_to_show(cc)
-				if self.tree.row_expanded(path):
-					state_images = self.get_appropriate_state_images(jid,
-						size = 'opened')
-				else:
-					state_images = self.get_appropriate_state_images(jid,
-						size = 'closed')
+		iter = iters[0] # choose the icon with the first iter
+		icon_name = helpers.get_icon_name_to_show(contact, account)
+		path = model.get_path(iter)
+		if model.iter_has_child(iter):
+			if not self.tree.row_expanded(path) and icon_name != 'message':
+				child_iter = model.iter_children(iter)
+				if icon_name in ('error', 'offline'):
+					# get the icon from the first child as they are sorted by show
+					child_jid = model[child_iter][C_JID].decode('utf-8')
+					child_contact = gajim.contacts.get_contact_with_highest_priority(
+						account, child_jid)
+					icon_name = helpers.get_icon_name_to_show(child_contact, account)
+				while child_iter:
+					# a child has awaiting messages ?
+					child_jid = model[child_iter][C_JID].decode('utf-8')
+					if gajim.awaiting_events[account].has_key(child_jid):
+						icon_name = 'message'
+						break
+					child_iter = model.iter_next(child_iter)
+			if self.tree.row_expanded(path):
+				state_images = self.get_appropriate_state_images(jid,
+					size = 'opened')
 			else:
-				state_images = self.get_appropriate_state_images(jid, size = '16')
-		
-			img = state_images[icon_name]
+				state_images = self.get_appropriate_state_images(jid,
+					size = 'closed')
+		else:
+			state_images = self.get_appropriate_state_images(jid, size = '16')
+	
+		img = state_images[icon_name]
 
+		for iter in iters:
 			model[iter][C_IMG] = img
 			model[iter][C_NAME] = name
 
@@ -1910,6 +1920,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		else:
 			if no_queue: # We didn't have a queue: we change icons
 				self.draw_contact(jid, account)
+				# Redraw parent too
+				if gajim.contacts.is_subcontact(account, contact):
+					parent_contact = gajim.contacts.get_parent_contact(account,
+						contact)
+					self.draw_contact(parent_contact.jid, account)
 			if gajim.interface.systray_enabled:
 				gajim.interface.systray.add_jid(jid, account, kind)
 			self.show_title() # we show the * or [n]
@@ -2150,6 +2165,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		account = model[path][C_ACCOUNT].decode('utf-8')
 		type = model[path][C_TYPE]
 		jid = model[path][C_JID].decode('utf-8')
+		iter = model.get_iter(path)
 		if type in ('group', 'account'):
 			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
@@ -2157,6 +2173,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self.tree.expand_row(path, False)
 		else:
 			first_ev = gajim.get_first_event(account, jid)
+			if not first_ev and model.iter_has_child(iter):
+				child_iter = model.iter_children(iter)
+				while not first_ev and child_iter:
+					child_jid = model[child_iter][C_JID].decode('utf-8')
+					first_ev = gajim.get_first_event(account, child_jid)
+					if first_ev:
+						jid = child_jid
+					else:
+						child_iter = model.iter_next(child_iter)
 			if first_ev:
 				if self.open_event(account, jid, first_ev):
 					return

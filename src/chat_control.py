@@ -1390,6 +1390,13 @@ class ChatControl(ChatControlBase):
 			typ = 'pm'
 
 		gajim.interface.roster.draw_contact(jid, self.account)
+		# Redraw parent too
+		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
+			jid)
+		if gajim.contacts.is_subcontact(self.account, contact):
+			parent_contact = gajim.contacts.get_parent_contact(
+				self.account, contact)
+			gajim.interface.roster.draw_contact(parent_contact.jid, self.account)
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.remove_jid(jid, self.account, typ)
 		if (self.contact.show == 'offline' or self.contact.show == 'error'):
