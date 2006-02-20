@@ -519,7 +519,7 @@ def get_icon_name_to_show(contact, account = None):
 	transport = gajim.get_transport_name_from_jid(contact.jid)
 	if transport:
 		return contact.show
-	return 'Not in Roster'
+	return 'not in roster'
 
 def decode_string(string):
 	'''try to decode (to make it Unicode instance) given string'''
