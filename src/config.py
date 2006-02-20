@@ -2649,7 +2649,7 @@ class AccountCreationWizardWindow:
 		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
 
 	def on_save_password_checkbutton_toggled(self, widget):
-		self.xml.get_widget('pass_entry').grab_focus()
+		self.xml.get_widget('pass1_entry').grab_focus()
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
@@ -2667,7 +2667,8 @@ class AccountCreationWizardWindow:
 		for widget in (
 						'username_entry',
 						'server_comboboxentry',
-						'pass_entry',
+						'pass1_entry',
+						'pass2_entry',
 						'save_password_checkbutton',
 						'proxyhost_entry',
 						'proxyport_entry',
@@ -2685,9 +2686,13 @@ class AccountCreationWizardWindow:
 			if widget.get_active():
 				self.modify = True
 				self.xml.get_widget('server_features_button').hide()
+				self.xml.get_widget('pass2_entry').hide()
+				self.xml.get_widget('pass2_label').hide()
 			else:
 				self.modify = False
 				self.xml.get_widget('server_features_button').show()
+				self.xml.get_widget('pass2_entry').show()
+				self.xml.get_widget('pass2_label').show()
 			self.notebook.set_current_page(1)
 			self.back_button.set_sensitive(True)
 			return
@@ -2702,13 +2707,19 @@ class AccountCreationWizardWindow:
 				return
 			server = widgets['server_comboboxentry'].child.get_text()
 			savepass = widgets['save_password_checkbutton'].get_active()
-			password = widgets['pass_entry'].get_text()
+			password = widgets['pass1_entry'].get_text()
 
-			if not self.modify and password == '':
-				dialogs.ErrorDialog(_('Invalid password'),
-					_('You must enter a password for the new account.')).get_response()
-				return
+			if not self.modify:
+				if password == '':
+					dialogs.ErrorDialog(_('Invalid password'),
+						_('You must enter a password for the new account.')).get_response()
+					return
 
+				if widgets['pass2_entry'].get_text() != password:
+					dialogs.ErrorDialog(_('Passwords do not match'),
+						_('The passwords typed in both fields must be identical.')).get_response()
+					return
+			
 			jid = username + '@' + server
 			# check if jid is conform to RFC and stringprep it
 			try:
@@ -2742,7 +2753,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 				img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
 				self.notebook.set_current_page(3) # show finish page
 			else:
-				self.notebook.set_current_page(2) # show creqting page
+				self.notebook.set_current_page(2) # show creating page
 				self.update_progressbar_timeout_id = gobject.timeout_add(100,
 					self.update_progressbar)
 
