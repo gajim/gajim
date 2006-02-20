@@ -762,8 +762,8 @@ msgstr "E-Mail"
 #, fuzzy, python-format
 msgid "You have %d new E-mail message"
 msgid_plural "You have %d new E-mail messages"
-msgstr[0] "Sie haben ungelesene Nachrichten"
-msgstr[1] "Sie haben ungelesene Nachrichten"
+msgstr[0] "Sie haben %d ungelesene E-Mail-Nachricht"
+msgstr[1] "Sie haben %d ungelesene E-Mail-Nachrichten"
 
 #: ../src/dialogs.py:994 ../src/notify.py:201
 #, python-format
@@ -3719,28 +3719,28 @@ msgstr "Alle Kontakte dieser Gruppe sind abgemeldet oder haben Fehler"
 msgid "Gajim - %d unread message"
 msgid_plural "Gajim - %d unread messages"
 msgstr[0] "Gajim - %d ungelesene Nachricht"
-msgstr[1] "Gajim - %d ungelesene Nachricht"
+msgstr[1] "Gajim - %d ungelesene Nachrichten"
 
 #: ../src/tooltips.py:272
 #, python-format
 msgid "Gajim - %d unread single message"
 msgid_plural "Gajim - %d unread single messages"
-msgstr[0] "Gajim - %d ungelesene Nachricht"
-msgstr[1] "Gajim - Eine ungelesene Nachricht"
+msgstr[0] "Gajim - %d ungelesene Einzel-Nachricht"
+msgstr[1] "Gajim - %d ungelesene Einzel-Nachrichten"
 
 #: ../src/tooltips.py:278
 #, python-format
 msgid "Gajim - %d unread group chat message"
 msgid_plural "Gajim - %d unread group chat messages"
 msgstr[0] "Gajim - %d ungelesene Gruppenchat-Nachricht"
-msgstr[1] "Gajim - Eine ungelesene Nachricht"
+msgstr[1] "Gajim - %d ungelesene Gruppenchat-Nachrichten"
 
 #: ../src/tooltips.py:284
 #, python-format
 msgid "Gajim - %d unread private message"
 msgid_plural "Gajim - %d unread private messages"
 msgstr[0] "Gajim - %d ungelesene private Nachricht"
-msgstr[1] "Gajim - Eine ungelesene Nachricht"
+msgstr[1] "Gajim - %d ungelesene private Nachrichten"
 
 #: ../src/tooltips.py:299 ../src/tooltips.py:301
 #, python-format
