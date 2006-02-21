@@ -40,9 +40,12 @@ setup(
     version = '9',
     description = 'A Jabber client written in PyGTK',
     windows = [{'script': 'src/gajim.py',
+                'icon_resources': [(1, 'data/pixmaps/gajim.ico')]},
+               {'script': 'src/history_manager.py',
                 'icon_resources': [(1, 'data/pixmaps/gajim.ico')]}],
     options=opts,
 
     data_files=[('.', glob.glob('src/gtkgui.glade')),
+                ('.', glob.glob('src/history_manager.glade')),
     ],
 )
