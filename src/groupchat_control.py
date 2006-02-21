@@ -374,7 +374,8 @@ class GroupchatControl(ChatControlBase):
 
 	def print_conversation(self, text, contact = '', tim = None):
 		'''Print a line in the conversation:
-		if contact is set: it's a message from someone
+		if contact is set: it's a message from someone or an info message (contact
+		= 'info' in such a case)
 		if contact is not set: it's a message from the server or help'''
 		if isinstance(text, str):
 			text = unicode(text, 'utf-8')
@@ -383,6 +384,9 @@ class GroupchatControl(ChatControlBase):
 		if contact:
 			if contact == self.nick: # it's us
 				kind = 'outgoing'
+			elif contact == 'info':
+				kind = 'info'
+				contact = None
 			else:
 				kind = 'incoming'
 				# muc-specific chatstate
@@ -621,7 +625,7 @@ class GroupchatControl(ChatControlBase):
 						'nick': nick,
 						'who': actor,
 						'reason': reason }
-				self.print_conversation(s)
+				self.print_conversation(s, 'info')
 			elif statusCode == '301':
 				if actor is None: # do not print 'banned by None'
 					s = _('%(nick)s has been banned: %(reason)s') % {
@@ -632,14 +636,14 @@ class GroupchatControl(ChatControlBase):
 						'nick': nick,
 						'who': actor,
 						'reason': reason }
-				self.print_conversation(s, self.room_jid)
+				self.print_conversation(s, 'info')
 			elif statusCode == '303': # Someone changed his or her nick
 				if nick == self.nick: # We changed our nick
 					self.nick = new_nick
 					s = _('You are now known as %s') % new_nick
 				else:
 					s = _('%s is now known as %s') % (nick, new_nick)
-				self.print_conversation(s)
+				self.print_conversation(s, 'info')
 
 			if not gajim.awaiting_events[self.account].has_key(self.room_jid + '/' + nick):
 				self.remove_contact(nick)
@@ -781,7 +785,8 @@ class GroupchatControl(ChatControlBase):
 					self.on_send_pm(nick = nick)
 					self.clear(self.msg_textview)
 				else:
-					self.print_conversation(_('Nickname not found: %s') % nick)
+					self.print_conversation(_('Nickname not found: %s') % nick,
+						'info')
 			else:
 				self.get_command_help(command)
 			return True
@@ -797,7 +802,8 @@ class GroupchatControl(ChatControlBase):
 					self.on_send_pm(nick=nick, msg=privmsg)
 					self.clear(self.msg_textview)
 				else:
-					self.print_conversation(_('Nickname not found: %s') % nick)
+					self.print_conversation(_('Nickname not found: %s') % nick,
+						'info')
 			else:
 				self.get_command_help(command)
 			return True
@@ -810,7 +816,7 @@ class GroupchatControl(ChatControlBase):
 				gajim.connections[self.account].send_gc_subject(self.room_jid,
 					new_topic)
 			else:
-				self.print_conversation(self.subject)
+				self.print_conversation(self.subject, 'info')
 			self.clear(self.msg_textview)
 			return True
 		elif command == 'invite':
@@ -826,12 +832,12 @@ class GroupchatControl(ChatControlBase):
 					s = _('Invited %(contact_jid)s to %(room_jid)s.') % {
 						'contact_jid': invitee,
 						'room_jid': self.room_jid}
-					self.print_conversation(s)
+					self.print_conversation(s, 'info')
 					self.clear(self.msg_textview)
 				else:
 					#%s is something the user wrote but it is not a jid so we inform
 					s = _('%s does not appear to be a valid JID') % invitee
-					self.print_conversation(s)
+					self.print_conversation(s, 'info')
 			else:
 				self.get_command_help(command)
 			return True
@@ -861,7 +867,7 @@ class GroupchatControl(ChatControlBase):
 				else:
 					#%s is something the user wrote but it is not a jid so we inform
 					s = _('%s does not appear to be a valid JID') % message_array
-					self.print_conversation(s)
+					self.print_conversation(s, 'info')
 			else:
 				self.get_command_help(command)
 			return True
@@ -891,7 +897,8 @@ class GroupchatControl(ChatControlBase):
 						nick, 'outcast', reason)
 					self.clear(self.msg_textview)
 				else:
-					self.print_conversation(_('Nickname not found: %s') % nick)
+					self.print_conversation(_('Nickname not found: %s') % nick,
+						'info')
 			else:
 				self.get_command_help(command)
 			return True
@@ -906,7 +913,8 @@ class GroupchatControl(ChatControlBase):
 						'none', reason)
 					self.clear(self.msg_textview)
 				else:
-					self.print_conversation(_('Nickname not found: %s') % nick)
+					self.print_conversation(_('Nickname not found: %s') % nick,
+						'info')
 			else:
 				self.get_command_help(command)
 			return True
@@ -927,8 +935,8 @@ class GroupchatControl(ChatControlBase):
 				self.get_command_help(command)
 			return True
 		else:
-			self.print_conversation(_('No such command: /%s (if you want to send this, '
-						'prefix it with /say)') % command)
+			self.print_conversation(_('No such command: /%s (if you want to send '
+				'this, prefix it with /say)') % command, 'info')
 			return True
 
 		return False
@@ -949,55 +957,59 @@ class GroupchatControl(ChatControlBase):
 
 	def get_command_help(self, command):
 		if command == 'help':
-			self.print_conversation(_('Commands: %s') % self.muc_cmds)
+			self.print_conversation(_('Commands: %s') % self.muc_cmds, 'info')
 		elif command == 'ban':
 			s = _('Usage: /%s <nickname|JID> [reason], bans the JID from the room.'
-			' The nickname of an occupant may be substituted, but not if it contains "@".'
-			' If the JID is currently in the room, he/she/it will also be kicked.'
-			' Does NOT support spaces in nickname.') % command
-			self.print_conversation(s)
+				' The nickname of an occupant may be substituted, but not if it '
+				'contains "@". If the JID is currently in the room, he/she/it will '
+				'also be kicked. Does NOT support spaces in nickname.') % command
+			self.print_conversation(s, 'info')
 		elif command == 'chat' or command == 'query':
-			self.print_conversation(_('Usage: /%s <nickname>, opens a private chat '
-						'window to the specified occupant.') % command)
+			self.print_conversation(_('Usage: /%s <nickname>, opens a private chat'
+				' window to the specified occupant.') % command, 'info')
 		elif command == 'clear':
-			self.print_conversation(_('Usage: /%s, clears the text window.') % command)
+			self.print_conversation(
+				_('Usage: /%s, clears the text window.') % command, 'info')
 		elif command == 'close' or command == 'leave' or command == 'part':
-			self.print_conversation(_('Usage: /%s [reason], closes the current window '
-						'or tab, displaying reason if specified.') % command)
+			self.print_conversation(_('Usage: /%s [reason], closes the current '
+				'window or tab, displaying reason if specified.') % command, 'info')
 		elif command == 'compact':
-			self.print_conversation(_('Usage: /%s, sets the groupchat window to compact '
-						'mode.') % command)
+			self.print_conversation(_('Usage: /%s, sets the groupchat window to '
+				'compact mode.') % command, 'info')
 		elif command == 'invite':
-			self.print_conversation(_('Usage: /%s <JID> [reason], invites JID to the '
-						'current room, optionally providing a reason.') % command)
+			self.print_conversation(_('Usage: /%s <JID> [reason], invites JID to '
+				'the current room, optionally providing a reason.') % command,
+				'info')
 		elif command == 'join':
-			self.print_conversation(_('Usage: /%s <room>@<server>[/nickname], offers to '
-						'join room@server optionally using specified '
-						'nickname.') % command)
+			self.print_conversation(_('Usage: /%s <room>@<server>[/nickname], '
+				'offers to join room@server optionally using specified nickname.') \
+				% command, 'info')
 		elif command == 'kick':
-			self.print_conversation(_('Usage: /%s <nickname> [reason], removes the occupant '
-						'specified by nickname from the room and optionally '
-						'displays a reason. Does NOT support spaces in '
-						'nickname.') % command)
+			self.print_conversation(_('Usage: /%s <nickname> [reason], removes '
+				'the occupant specified by nickname from the room and optionally '
+				'displays a reason. Does NOT support spaces in nickname.') % \
+				command, 'info')
 		elif command == 'me':
-			self.print_conversation(_('Usage: /%s <action>, sends action to the current '
-						'room. Use third person. (e.g. /%s explodes.)') %\
-						(command, command))
+			self.print_conversation(_('Usage: /%s <action>, sends action to the '
+				'current room. Use third person. (e.g. /%s explodes.)') % \
+				(command, command), 'info')
 		elif command == 'msg':
-			s = _('Usage: /%s <nickname> [message], opens a private message window and '
-				'sends message to the occupant specified by nickname.') % command
-			self.print_conversation(s)
+			s = _('Usage: /%s <nickname> [message], opens a private message window'
+				'and sends message to the occupant specified by nickname.') % \
+				command
+			self.print_conversation(s, 'info')
 		elif command == 'nick':
-			s = _('Usage: /%s <nickname>, changes your nickname in current room.') % command
-			self.print_conversation(s)
+			s = _('Usage: /%s <nickname>, changes your nickname in current room.')\
+				% command
+			self.print_conversation(s, 'info')
 		elif command == 'topic':
-			self.print_conversation(_('Usage: /%s [topic], displays or updates the current '
-						'room topic.') % command)
+			self.print_conversation(_('Usage: /%s [topic], displays or updates the'
+				'current room topic.') % command, 'info')
 		elif command == 'say':
-			self.print_conversation(_('Usage: /%s <message>, sends a message without '
-						'looking for other commands.') % command)
+			self.print_conversation(_('Usage: /%s <message>, sends a message '
+				'without looking for other commands.') % command, 'info')
 		else:
-			self.print_conversation(_('No help info for /%s') % command)
+			self.print_conversation(_('No help info for /%s') % command, 'info')
 
 	def get_role(self, nick):
 		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
