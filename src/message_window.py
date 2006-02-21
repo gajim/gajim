@@ -331,11 +331,13 @@ class MessageWindow:
 		notebook = self.notebook
 		active_widget = notebook.get_nth_page(notebook.get_current_page())
 		return self._widget_to_control(active_widget)
+
 	def get_active_contact(self):
 		ctrl = self.get_active_control()
 		if ctrl:
 			return ctrl.contact
 		return None
+
 	def get_active_jid(self):
 		contact = self.get_active_contact()
 		if contact:
@@ -344,15 +346,18 @@ class MessageWindow:
 
 	def is_active(self):
 		return self.window.is_active()
+
 	def get_origin(self):
 		return self.window.window.get_origin()
 
 	def toggle_emoticons(self):
 		for ctrl in self.controls():
 			ctrl.toggle_emoticons()
+
 	def update_font(self):
 		for ctrl in self.controls():
 			ctrl.update_font()
+
 	def update_tags(self):
 		for ctrl in self.controls():
 			ctrl.update_tags()
@@ -429,6 +434,7 @@ class MessageWindow:
 				else: # traverse for ever (eg. don't stop at first tab)
 					self.notebook.set_current_page(
 						self.notebook.get_n_pages() - 1)
+
 	def popup_menu(self, event):
 		menu = self.get_active_control().prepare_context_menu()
 		# common menuitems (tab switches)
