@@ -37,7 +37,7 @@ else:
 # according to the environment variables
 locale.setlocale(locale.LC_ALL, '')
 
-## Add LANG to os.environ ##
+## Add, if needed, a value in LANG environmental variable ##
 # get LANG, fallback to ''; LANG can be 'en_US:el_GR.UTF-8:fr_FR'
 lang = os.environ.get('LANG', '')
 default_loc = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..

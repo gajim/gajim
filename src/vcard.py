@@ -138,7 +138,7 @@ class VcardWindow:
 		# update contact.name if it's not ''
 		name_entry = self.xml.get_widget('nickname_entry')
 		if not name_entry:
-			# This can happen when we don't show jabber page. For exemple when we
+			# This can happen when we don't show jabber page. For example when we
 			# show the vcard of a contact that request our subscription
 			self.window.destroy()
 			return
