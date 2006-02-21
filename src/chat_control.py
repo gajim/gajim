@@ -1414,6 +1414,12 @@ class ChatControl(ChatControlBase):
 		real_jid = gajim.get_real_jid_from_fjid(self.account, self.contact.jid)
 		if not real_jid: # this can happend if we're in a moderate room
 			return
+		# Hide the small avatar
+		image = self.xml.get_widget('avatar_image')
+		pixbuf = image.get_pixbuf()
+		pixbuf.fill(0xffffff00)
+		image.queue_draw()
+
 		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
 		screen_w = gtk.gdk.screen_width()
 		screen_h = gtk.gdk.screen_height()
@@ -1462,6 +1468,8 @@ class ChatControl(ChatControlBase):
 	def _on_window_avatar_leave_notify_event(self, widget, event):
 		'''we just left the popup window that holds avatar'''
 		self.bigger_avatar_window.destroy()
+		# Re-show the small avatar
+		self.show_avatar()
 
 	def _on_window_motion_notify_event(self, widget, event):
 		'''we just moved the mouse so show the cursor'''
