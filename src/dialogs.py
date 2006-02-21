@@ -521,6 +521,10 @@ class HigDialog(gtk.MessageDialog):
 		self.format_secondary_text(sectext)
 
 	def get_response(self):
+		# Give focus to top vbox
+		vb = self.get_children()[0].get_children()[0]
+		vb.set_flags(gtk.CAN_FOCUS)
+		vb.grab_focus()
 		self.show_all()
 		response = self.run()
 		self.destroy()
@@ -531,12 +535,7 @@ class ConfirmationDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		HigDialog.__init__(self, None, 
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext)
-		
-		self.set_default_response(gtk.RESPONSE_OK)
-		
-		ok_button = self.action_area.get_children()[0] # right to left
-		ok_button.grab_focus()
-			
+
 class WarningDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		'''HIG compliant warning dialog.'''
@@ -561,7 +560,6 @@ class ErrorDialog(HigDialog):
 		HigDialog.__init__( self, None, 
 				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, pritext, sectext)
 
-
 class YesNoDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		'''HIG compliant YesNo dialog.'''
@@ -575,13 +573,13 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 			pritext, sectext)
 
 		self.set_default_response(gtk.RESPONSE_OK)
-		
+
 		ok_button = self.action_area.get_children()[0] # right to left
 		ok_button.grab_focus()
-		
+
 		self.checkbutton = gtk.CheckButton(checktext)
 		self.vbox.pack_start(self.checkbutton, expand = False, fill = True)
-	
+
 	def is_checked(self):
 		''' Get active state of the checkbutton '''
 		return self.checkbutton.get_active()
