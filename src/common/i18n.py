@@ -36,16 +36,20 @@ else:
 # set '' so each part of the locale that should be modified is set
 # according to the environment variables
 locale.setlocale(locale.LC_ALL, '')
-# Add LANG to os.environ
-l = os.environ.get('LANG')
-if not l:
-	l = ''
-default_l = locale.getdefaultlocale()[0]
-if not default_l in l.split(':'):
-	l += ':' + default_l
-if l[0] == ':': #remove the forst :
-	l = l[1:]
-os.environ['LANG'] = l
+
+## Add LANG to os.environ ##
+# get LANG, fallback to ''; LANG can be 'en_US:el_GR.UTF-8:fr_FR'
+lang = os.environ.get('LANG', '')
+default_loc = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
+if default_loc not in lang.split(':'): # is the default locale a value of LANG?
+	# no, add it!
+	if lang == '':
+		lang = default_loc
+	else:
+		lang += ':' + default_loc
+
+os.environ['LANG'] = lang
+
 _translation = None
 
 def init():
