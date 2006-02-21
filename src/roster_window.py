@@ -2317,6 +2317,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				ctrl.update_ui()
 				win = gajim.interface.msg_win_mgr.get_window(jid, account)
 				win.redraw_tab(ctrl)
+				win.show_title()
 		elif type == 'group':
 			# in C_JID cilumn it's not escaped
 			old_name = model[iter][C_JID].decode('utf-8')
