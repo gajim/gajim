@@ -150,6 +150,15 @@ class VcardWindow:
 				gajim.interface.roster.tree.get_model().set_value(i, 1, new_name)
 			gajim.connections[self.account].update_contact(self.contact.jid,
 				self.contact.name, self.contact.groups)
+			# Update opened chat window
+			ctrl = gajim.interface.msg_win_mgr.get_control(self.contact.jid,
+				self.account)
+			if ctrl:
+				ctrl.update_ui()
+				win = gajim.interface.msg_win_mgr.get_window(self.contact.jid,
+					self.account)
+				win.redraw_tab(ctrl)
+				win.show_title()
 		self.window.destroy()
 
 	def on_clear_button_clicked(self, widget):
