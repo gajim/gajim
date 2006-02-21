@@ -386,14 +386,16 @@ class Connection:
 		encTag = None
 		decmsg = ''
 		invite = None
+		delayed = False
 		for xtag in xtags:
 			if xtag.getNamespace() == common.xmpp.NS_ENCRYPTED:
 				encTag = xtag
-				break
-			#invitations
+			# invitations
 			elif xtag.getNamespace() == common.xmpp.NS_MUC_USER and \
-				xtag.getTag('invite'):
+				xtag.getTag('invite') and not encTag:
 				invite = xtag
+			elif xtag.getNamespace() == common.xmpp.NS_DELAY:
+				delayed = True
 		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
 		# invitation
 		# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
@@ -402,12 +404,13 @@ class Connection:
 				room_jid = xtag.getAttr('jid')
 				self.dispatch('GC_INVITATION', (room_jid, frm, '', None))
 				return
-		# chatstates - look for chatstate tags in a message
-		children = msg.getChildren()
-		for child in children:
-			if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
-				chatstate = child.getName()
-				break
+		# chatstates - look for chatstate tags in a message if not delayed
+		if not delayed:
+			children = msg.getChildren()
+			for child in children:
+				if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
+					chatstate = child.getName()
+					break
 
 		if encTag and USE_GPG:
 			#decrypt
