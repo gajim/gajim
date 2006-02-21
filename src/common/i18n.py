@@ -36,6 +36,16 @@ else:
 # set '' so each part of the locale that should be modified is set
 # according to the environment variables
 locale.setlocale(locale.LC_ALL, '')
+# Add LANG to os.environ
+l = os.environ.get('LANG')
+if not l:
+	l = ''
+default_l = locale.getdefaultlocale()[0]
+if not default_l in l.split(':'):
+	l += ':' + default_l
+if l[0] == ':': #remove the forst :
+	l = l[1:]
+os.environ['LANG'] = l
 _translation = None
 
 def init():
