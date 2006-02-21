@@ -2311,6 +2311,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					u.name = new_text
 				gajim.connections[account].update_contact(jid, new_text, u.groups)
 			self.draw_contact(jid, account)
+			# Update opened chat
+			ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
+			if ctrl:
+				ctrl.update_ui()
+				win = gajim.interface.msg_win_mgr.get_window(jid, account)
+				win.redraw_tab(ctrl)
 		elif type == 'group':
 			# in C_JID cilumn it's not escaped
 			old_name = model[iter][C_JID].decode('utf-8')
