@@ -1022,6 +1022,8 @@ class GroupchatControl(ChatControlBase):
 		if self.room_jid in gajim.contacts.get_gc_list(self.account):
 			gajim.contacts.remove_room(self.account, self.room_jid)
 			del gajim.gc_connected[self.account][self.room_jid]
+		# Save hpaned position
+		gajim.config.set('gc-hpaned-position', self.hpaned_position)
 
 	def allow_shutdown(self):
 		retval = True
