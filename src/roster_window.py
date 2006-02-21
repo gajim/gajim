@@ -910,7 +910,7 @@ class RosterWindow:
 				connection = gajim.connections[account]
 				# get our current contact info
 				contact = gajim.contacts.create_contact(jid = jid, name = account,
-					show = connection.get_status(), sub = 'both',
+					show = connection.get_status(), sub = '',
 					status = connection.status,
 					resource = gajim.config.get_per('accounts', connection.name,
 						'resource'),
