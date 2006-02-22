@@ -33,6 +33,7 @@ import sys
 import gajim
 import dialogs
 import gobject
+import systray
 
 from common import gajim
 from common import exceptions
@@ -144,9 +145,9 @@ class DesktopNotification:
 			# No way to determine the version number, set it to the latest
 			# since it doesn't properly support the version number
 			try:
-			    (name, version, version, spec_version) = self.notif.GetServerInformation()
+				(name, version, version, spec_version) = self.notif.GetServerInformation()
 			except:
-			    version = '0.3.1'
+				version = '0.3.1'
 		if version.startswith('0.2'):
 			try:
 				self.id = self.notif.Notify(dbus.String(_('Gajim')),
@@ -158,13 +159,15 @@ class DesktopNotification:
 				version = '0.3.1' # we're actually dealing with the newer version
 		if version.startswith('0.3'):
 			if version >= ( 0, 3, 2):
-			    self.id = self.notif.Notify(dbus.String(_('Gajim')),
-				    dbus.UInt32(0), dbus.String(path_to_image), dbus.String(event_type),
-				    dbus.String(text), ( dbus.String(ntype), dbus.String(event_type) ), {}, dbus.UInt32(timeout*1000))
+				self.id = self.notif.Notify(dbus.String(_('Gajim')),
+					dbus.UInt32(0), dbus.String(path_to_image),
+					dbus.String(event_type), dbus.String(text), (dbus.String(ntype),
+					dbus.String(event_type)), {}, dbus.UInt32(timeout*1000))
 			else:
-			    self.id = self.notif.Notify(dbus.String(_('Gajim')),
-				    dbus.String(path_to_image), dbus.UInt32(0), dbus.String(event_type),
-				    dbus.String(text), dbus.String(''), {}, dbus.UInt32(timeout*1000))
+				self.id = self.notif.Notify(dbus.String(_('Gajim')),
+					dbus.String(path_to_image), dbus.UInt32(0),
+					dbus.String(event_type), dbus.String(text), dbus.String(''),
+					{}, dbus.UInt32(timeout*1000))
 		notification_response_manager.attach_to_interface()
 		notification_response_manager.pending[self.id] = self
 
