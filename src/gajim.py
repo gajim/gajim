@@ -372,6 +372,8 @@ class Interface:
 			contact1.status = array[2]
 			contact1.priority = priority
 			contact1.keyID = keyID
+			if contact1.jid not in gajim.newly_added[account]:
+				contact1.last_status_time = time.localtime()
 		if jid.find('@') <= 0:
 			# It must be an agent
 			if ji in jid_list:
@@ -756,6 +758,26 @@ class Interface:
 		self.roster.draw_avatar(jid, account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('VcardInfo', (account, vcard))
+
+	def handle_event_last_status_time(self, account, array):
+		# ('LAST_STATUS_TIME', account, (jid, resource, seconds, status))
+		win = None
+		if self.instances[account]['infos'].has_key(array[0]):
+			win = self.instances[account]['infos'][array[0]]
+		elif self.instances[account]['infos'].has_key(array[0] + '/' + array[1]):
+			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
+		if win:
+			c = gajim.contacts.get_contact(account, array[0], array[1])
+			# c is a list when no resource is given. it probably means that contact
+			# is offline, so only on Contact instance
+			if isinstance(c, list):
+				c = c[0]
+			c.last_status_time = time.localtime(time.time() - array[2])
+			if array[3]:
+				c.status = array[3]
+			win.set_last_status_time()
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
 
 	def handle_event_os_info(self, account, array):
 		win = None
@@ -1387,6 +1409,7 @@ class Interface:
 			'ACC_NOT_OK': self.handle_event_acc_not_ok,
 			'MYVCARD': self.handle_event_myvcard,
 			'VCARD': self.handle_event_vcard,
+			'LAST_STATUS_TIME': self.handle_event_last_status_time,
 			'OS_INFO': self.handle_event_os_info,
 			'GC_NOTIFY': self.handle_event_gc_notify,
 			'GC_MSG': self.handle_event_gc_msg,

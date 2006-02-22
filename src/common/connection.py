@@ -1266,7 +1266,7 @@ class Connection:
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
-	def _IdleCB(self, con, iq_obj):
+	def _LastCB(self, con, iq_obj):
 		gajim.log.debug('IdleCB')
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
@@ -1277,6 +1277,19 @@ class Connection:
 
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
+
+	def _LastResultCB(self, con, iq_obj):
+		gajim.log.debug('LastResultCB')
+		qp = iq_obj.getTag('query')
+		seconds = qp.getAttr('seconds')
+		status = qp.getData()
+		try:
+			seconds = int(seconds)
+		except:
+			return
+		who = self.get_full_jid(iq_obj)
+		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+		self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 
 	def _VersionResultCB(self, con, iq_obj):
 		gajim.log.debug('VersionResultCB')
@@ -1837,7 +1850,9 @@ class Connection:
 			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._VersionCB, 'get',
 			common.xmpp.NS_VERSION)
-		con.RegisterHandler('iq', self._IdleCB, 'get',
+		con.RegisterHandler('iq', self._LastCB, 'get',
+			common.xmpp.NS_LAST)
+		con.RegisterHandler('iq', self._LastResultCB, 'result',
 			common.xmpp.NS_LAST)
 		con.RegisterHandler('iq', self._VersionResultCB, 'result',
 			common.xmpp.NS_VERSION)
@@ -2272,13 +2287,23 @@ class Connection:
 	def account_changed(self, new_name):
 		self.name = new_name
 
+	def request_last_status_time(self, jid, resource):
+		if not self.connection:
+			return
+		to_whom_jid = jid
+		if resource:
+			to_whom_jid += '/' + resource
+		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
+			common.xmpp.NS_LAST)
+		self.connection.send(iq)
+
 	def request_os_info(self, jid, resource):
 		if not self.connection:
 			return
 		to_whom_jid = jid
 		if resource:
 			to_whom_jid += '/' + resource
-		iq = common.xmpp.Iq(to=to_whom_jid, typ = 'get', queryNS =\
+		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_VERSION)
 		self.connection.send(iq)
 

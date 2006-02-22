@@ -27,6 +27,7 @@
 import gtk
 import gobject
 import os
+import time
 
 import gtkgui_helpers
 import message_control
@@ -155,7 +156,7 @@ class StatusTable:
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
 	
-	def add_status_row(self, file_path, show, str_status):
+	def add_status_row(self, file_path, show, str_status, status_time = None):
 		''' appends a new row with status icon to the table '''
 		self.current_row += 1
 		state_file = show.replace(' ', '_')
@@ -178,6 +179,11 @@ class StatusTable:
 		status_label.set_markup(str_status)
 		status_label.set_alignment(0, 0)
 		self.table.attach(status_label, 3, 4, self.current_row,
+			self.current_row + 1, gtk.EXPAND | gtk.FILL, 0, 0, 0)
+		if status_time:
+			self.current_row += 1
+			status_time_label = gtk.Label(time.strftime("%c", status_time))
+			self.table.attach(status_time_label, 2, 4, self.current_row,
 			self.current_row + 1, gtk.EXPAND | gtk.FILL, 0, 0, 0)
 	
 class NotificationAreaTooltip(BaseTooltip, StatusTable):
@@ -441,7 +447,8 @@ class RosterTooltip(NotificationAreaTooltip):
 					status_line = self.get_status_info(contact.resource,
 						contact.priority, contact.show, contact.status)
 					icon_name = helpers.get_icon_name_to_show(contact)
-					self.add_status_row(file_path, icon_name, status_line)
+					self.add_status_row(file_path, icon_name, status_line,
+						contact.last_status_time)
 					
 		else: # only one resource
 			if contact.resource:
@@ -459,6 +466,9 @@ class RosterTooltip(NotificationAreaTooltip):
 						status = gtkgui_helpers.reduce_chars_newlines(status, 130, 5)
 						# escape markup entities. 
 						info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
+			if contact.last_status_time:
+				info += '\n<span weight="bold">' + _('Status time: ') + '%s</span>'\
+					% time.strftime('%c', contact.last_status_time)
 		
 		for type_ in ('jpeg', 'png'):
 			file = os.path.join(gajim.AVATAR_PATH, prim_contact.jid + '.' + type_)

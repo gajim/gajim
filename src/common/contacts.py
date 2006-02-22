@@ -28,7 +28,7 @@ class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
 			ask='', resource='', priority=5, keyID='', our_chatstate=None,
-			chatstate=None):
+			chatstate=None, last_status_time=None):
 		self.jid = jid
 		self.name = name
 		self.groups = groups
@@ -50,6 +50,7 @@ class Contact:
 		self.our_chatstate = our_chatstate
 		# this is contact's chatstate
 		self.chatstate = chatstate
+		self.last_status_time = last_status_time
 
 	def get_full_jid(self):
 		if self.resource:
@@ -118,16 +119,17 @@ class Contacts:
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=5, keyID='', our_chatstate=None,
-		chatstate=None):
+		chatstate=None, last_status_time=None):
 		return Contact(jid, name, groups, show, status, sub, ask, resource,
-			priority, keyID, our_chatstate, chatstate)
+			priority, keyID, our_chatstate, chatstate, last_status_time)
 	
 	def copy_contact(self, contact):
 		return self.create_contact(jid = contact.jid, name = contact.name,
 			groups = contact.groups, show = contact.show, status = contact.status,
 			sub = contact.sub, ask = contact.ask, resource = contact.resource,
 			priority = contact.priority, keyID = contact.keyID,
-			our_chatstate = contact.our_chatstate, chatstate = contact.chatstate)
+			our_chatstate = contact.our_chatstate, chatstate = contact.chatstate,
+			last_status_time = contact.last_status_time)
 
 	def add_contact(self, account, contact):
 		# No such account before ?

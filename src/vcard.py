@@ -31,6 +31,7 @@ import base64
 import mimetypes
 import os
 import sys
+import time
 import gtkgui_helpers
 import dialogs
 
@@ -274,7 +275,10 @@ class VcardWindow:
 						vcard[i], 0)
 				else:
 					self.set_value(i + '_entry', vcard[i])
-	
+
+	def set_last_status_time(self):
+		self.fill_status_label()
+
 	def set_os_info(self, resource, client_info, os_info):
 		i = 0
 		client = ''
@@ -297,6 +301,30 @@ class VcardWindow:
 			os = Q_('?OS:Unknown')
 		self.xml.get_widget('client_name_version_label').set_text(client)
 		self.xml.get_widget('os_label').set_text(os)
+
+	def fill_status_label(self):
+		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		# stats holds show and status message
+		stats = ''
+		one = True # Are we adding the first line ?
+		if contact_list:
+			for c in contact_list:
+				if not one:
+					stats += '\n'
+				stats += helpers.get_uf_show(c.show)
+				if c.status:
+					stats += ': ' + c.status
+				if c.last_status_time:
+					stats += '\n ' + _('since') + time.strftime(' %c',
+						c.last_status_time)
+				one = False
+		status_label = self.xml.get_widget('status_label')
+		status_label.set_max_width_chars(15)
+		status_label.set_text(stats)
+
+		tip = gtk.Tooltips()
+		status_label_eventbox = self.xml.get_widget('status_label_eventbox')
+		tip.set_tip(status_label_eventbox, stats)
 
 	def fill_jabber_page(self):
 		tooltips = gtk.Tooltips()
@@ -338,13 +366,15 @@ class VcardWindow:
 			+ unicode(self.contact.priority)
 		if not self.contact.status:
 			self.contact.status = ''
-		
-		# stats holds show and status message
-		stats = helpers.get_uf_show(self.contact.show)
-		if self.contact.status:
-			stats += ': ' + self.contact.status
-		gajim.connections[self.account].request_os_info(self.contact.jid,
+
+		# Request list time status
+		gajim.connections[self.account].request_last_status_time(self.contact.jid,
 			self.contact.resource)
+
+		# Request os info in contact is connected
+		if self.contact.show not in ('offline', 'error'):
+			gajim.connections[self.account].request_os_info(self.contact.jid,
+				self.contact.resource)
 		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
 			'os': ''}}
 		i = 1
@@ -354,29 +384,23 @@ class VcardWindow:
 				if c.resource != self.contact.resource:
 					resources += '\n%s (%s)' % (c.resource,
 						unicode(c.priority))
-					uf_resources += '\n' + c.resource + _(' resource with priority ')\
-						+ unicode(c.priority)
-					if not c.status:
-						c.status = ''
-					stats += '\n' + c.show + ': ' + c.status
-					gajim.connections[self.account].request_os_info(self.contact.jid,
+					uf_resources += '\n' + c.resource + \
+						_(' resource with priority ') + unicode(c.priority)
+					if c.show not in ('offline', 'error'):
+						gajim.connections[self.account].request_os_info(c.jid,
+							c.resource)
+					gajim.connections[self.account].request_last_status_time(c.jid,
 						c.resource)
 					self.os_info[i] = {'resource': c.resource, 'client': '',
 						'os': ''}
 					i += 1
 		self.xml.get_widget('resource_prio_label').set_text(resources)
-		tip = gtk.Tooltips()
 		resource_prio_label_eventbox = self.xml.get_widget(
 			'resource_prio_label_eventbox')
-		tip.set_tip(resource_prio_label_eventbox, uf_resources)
-		
-		tip = gtk.Tooltips()
-		status_label_eventbox = self.xml.get_widget('status_label_eventbox')
-		tip.set_tip(status_label_eventbox, stats)
-		status_label = self.xml.get_widget('status_label')
-		status_label.set_max_width_chars(15)
-		status_label.set_text(stats)
-		
+		tooltips.set_tip(resource_prio_label_eventbox, uf_resources)
+
+		self.fill_status_label()
+
 		gajim.connections[self.account].request_vcard(self.contact.jid)
 
 	def add_to_vcard(self, vcard, entry, txt):
