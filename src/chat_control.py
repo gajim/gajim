@@ -1307,6 +1307,8 @@ class ChatControl(ChatControlBase):
 		
 		# How many lines to restore and when to time them out
 		restore_how_many = gajim.config.get('restore_lines')
+		if restore_how_many <= 0:
+			return
 		timeout = gajim.config.get('restore_timeout') # in minutes
 		# number of messages that are in queue and are already logged
 		pending_how_many = 0 # we want to avoid duplication
