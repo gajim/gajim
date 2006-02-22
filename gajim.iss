@@ -29,7 +29,7 @@ Source: "po\*.mo"; DestDir: "{app}\po"; Flags: recursesubdirs
 
 [Icons]
 Name: "{group}\Gajim"; Filename: "{app}\src\Gajim.exe"; WorkingDir: "{app}\src"
-Name: "{group}\Gajim"; Filename: "{app}\src\history_manager.exe"; WorkingDir: "{app}\src"
+Name: "{group}\History Manager"; Filename: "{app}\src\history_manager.exe"; WorkingDir: "{app}\src"
 Name: "{group}\Uninstall Gajim"; Filename: "{app}\unins000.exe"; WorkingDir: "{app}"
 Name: "{userdesktop}\Gajim"; Filename: "{app}\src\gajim.exe"; WorkingDir: "{app}\src"; IconFilename: "{app}\data\pixmaps\gajim.ico"; Components: main; Tasks: desktopicon
 
