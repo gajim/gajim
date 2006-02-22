@@ -21,7 +21,8 @@ import xml.parsers.expat
 
 def XMLescape(txt):
 	"""Returns provided string with symbols & < > " replaced by their respective XML entities."""
-	return txt.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+	# replace also FORM FEED and ESC, because they are not valid XML chars
+	return txt.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;").replace(u'\x0C', "").replace(u'\x1B', "")
 
 ENCODING='utf-8'
 def ustr(what):
