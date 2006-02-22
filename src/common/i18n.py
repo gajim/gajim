@@ -41,14 +41,16 @@ locale.setlocale(locale.LC_ALL, '')
 # get LANG, fallback to ''; LANG can be 'en_US:el_GR.UTF-8:fr_FR'
 lang = os.environ.get('LANG', '')
 default_loc = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
-if default_loc not in lang.split(':'): # is the default locale a value of LANG?
+# is the default locale a value of LANG?
+if default_loc and default_loc not in lang.split(':'):
 	# no, add it!
 	if lang == '':
 		lang = default_loc
 	else:
 		lang += ':' + default_loc
 
-os.environ['LANG'] = lang
+if lang:
+	os.environ['LANG'] = lang
 
 _translation = None
 
