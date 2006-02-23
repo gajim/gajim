@@ -2230,6 +2230,7 @@ class Connection:
 		return
 
 	def update_contact(self, jid, name, groups):
+		'''update roster item on jabber server'''
 		if self.connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)

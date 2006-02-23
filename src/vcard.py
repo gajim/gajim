@@ -82,12 +82,14 @@ class VcardWindow:
 		# the contact variable is the jid if vcard is true
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
-		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)
 		
 		self.publish_button = self.xml.get_widget('publish_button')
 		self.retrieve_button = self.xml.get_widget('retrieve_button')
+		self.nickname_entry = self.xml.get_widget('nickname_entry')
+		
 		self.publish_button.set_no_show_all(True)
 		self.retrieve_button.set_no_show_all(True)
+		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)
 		
 		self.contact = contact # don't use it if vcard is true
 		self.account = account
@@ -95,15 +97,21 @@ class VcardWindow:
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
 
-		if vcard:
+		if vcard: # we view/edit our own vcard
 			self.jid = contact
-			# remove Jabber tab & show publish/retrieve/set_avatar buttons
+			# remove Jabber tab & show publish/retrieve/close/set_avatar buttons
+			# and make entries and textview editable
 			self.change_to_vcard()
-		else:
-			self.jid = contact.jid
+		else: # we see someone else's vcard
 			self.publish_button.hide()
 			self.retrieve_button.hide()
+			self.jid = contact.jid
 			self.fill_jabber_page()
+			
+			# if we are editing our own vcard publish button should publish
+			# vcard data we have typed including nickname, it's why we connect only
+			# here (when we see someone else's vcard)
+			self.nickname_entry.connect('changed', self.on_nickname_entry_changed)
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -131,27 +139,21 @@ class VcardWindow:
 			gajim.config.set_per('accounts', self.account, 'no_log_for',
 				' '.join(no_log_for))
 	
-	def on_close_button_clicked(self, widget):
-		'''Save contact information and update the roster on the Jabber server'''
-		if self.vcard:
-			self.window.destroy()
-			return
-		# update contact.name if it's not ''
-		name_entry = self.xml.get_widget('nickname_entry')
-		if not name_entry:
-			# This can happen when we don't show jabber page. For example when we
-			# show the vcard of a contact that request our subscription
-			self.window.destroy()
-			return
-		new_name = name_entry.get_text().decode('utf-8')
+	def on_nickname_entry_changed(self, widget):
+		'''Save contact information and update 
+		the roster item on the Jabber server'''
+		new_name = self.nickname_entry.get_text().decode('utf-8')
+		# update contact.name with new nickname if that is not ''
 		if new_name != self.contact.name and new_name != '':
 			self.contact.name = new_name
-			for i in gajim.interface.roster.get_contact_iter(self.contact.jid,
+			# update roster model
+			model = gajim.interface.roster.tree.get_model()
+			for iter_ in gajim.interface.roster.get_contact_iter(self.contact.jid,
 				self.account):
-				gajim.interface.roster.tree.get_model().set_value(i, 1, new_name)
+				model[iter_][1] = new_name
 			gajim.connections[self.account].update_contact(self.contact.jid,
 				self.contact.name, self.contact.groups)
-			# Update opened chat window
+			# update opened chat window
 			ctrl = gajim.interface.msg_win_mgr.get_control(self.contact.jid,
 				self.account)
 			if ctrl:
@@ -160,6 +162,8 @@ class VcardWindow:
 					self.account)
 				win.redraw_tab(ctrl)
 				win.show_title()
+
+	def on_close_button_clicked(self, widget):		
 		self.window.destroy()
 
 	def on_clear_button_clicked(self, widget):
@@ -351,7 +355,7 @@ class VcardWindow:
 		if self.contact.ask == 'subscribe':
 			tooltips.set_tip(eb,
 			_("You are waiting contact's answer about your subscription request"))
-		self.xml.get_widget('nickname_entry').set_text(self.contact.name)
+		self.nickname_entry.set_text(self.contact.name)
 		log = True
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 			'no_log_for').split(' '):
