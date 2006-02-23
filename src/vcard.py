@@ -111,7 +111,8 @@ class VcardWindow:
 			# if we are editing our own vcard publish button should publish
 			# vcard data we have typed including nickname, it's why we connect only
 			# here (when we see someone else's vcard)
-			self.nickname_entry.connect('changed', self.on_nickname_entry_changed)
+			self.nickname_entry.connect('focus-out-event',
+				self.on_nickname_entry_focus_out_event)
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -139,7 +140,7 @@ class VcardWindow:
 			gajim.config.set_per('accounts', self.account, 'no_log_for',
 				' '.join(no_log_for))
 	
-	def on_nickname_entry_changed(self, widget):
+	def on_nickname_entry_focus_out_event(self, widget, event):
 		'''Save contact information and update 
 		the roster item on the Jabber server'''
 		new_name = self.nickname_entry.get_text().decode('utf-8')
