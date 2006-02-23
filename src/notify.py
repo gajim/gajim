@@ -29,11 +29,9 @@
 ##
 
 import os
-import sys
 import gajim
 import dialogs
 import gobject
-import systray
 
 from common import gajim
 from common import exceptions
