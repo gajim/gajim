@@ -320,7 +320,7 @@ class VcardWindow:
 				if c.status:
 					stats += ': ' + c.status
 				if c.last_status_time:
-					stats += '\n ' + _('since') + time.strftime(' %c',
+					stats += '\n' + _('since %s') % time.strftime('%c',
 						c.last_status_time)
 				one = False
 		status_label = self.xml.get_widget('status_label')

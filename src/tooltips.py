@@ -467,8 +467,13 @@ class RosterTooltip(NotificationAreaTooltip):
 						# escape markup entities. 
 						info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 			if contact.last_status_time:
-				info += '\n<span weight="bold">' + _('Status time: ') + '%s</span>'\
-					% time.strftime('%c', contact.last_status_time)
+				if contact.show == 'offline':
+					text = _('Last status on %s')
+				else:
+					text = _('Since %s')
+				
+				text = text % time.strftime('%c', contact.last_status_time)
+				info += '\n<span style="italic">%s</span>' % text
 		
 		for type_ in ('jpeg', 'png'):
 			file = os.path.join(gajim.AVATAR_PATH, prim_contact.jid + '.' + type_)
