@@ -28,6 +28,7 @@ import gtk
 import gobject
 import os
 import time
+import locale
 
 import gtkgui_helpers
 import message_control
@@ -471,8 +472,11 @@ class RosterTooltip(NotificationAreaTooltip):
 					text = _('Last status on %s')
 				else:
 					text = _('Since %s')
-				
-				text = text % time.strftime('%c', contact.last_status_time)
+
+				# time.strftime returns locale encoded string
+				local_time = time.strftime('%c', contact.last_status_time)
+				local_time = local_time.decode(locale.getpreferredencoding()) 
+				text = text % local_time 
 				info += '\n<span style="italic">%s</span>' % text
 		
 		for type_ in ('jpeg', 'png'):
