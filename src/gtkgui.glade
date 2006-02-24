@@ -4679,7 +4679,7 @@ Disabled</property>
 				      <child>
 					<widget class="GtkRadioButton" id="notify_on_new_message_radiobutton">
 					  <property name="visible">True</property>
-					  <property name="tooltip" translatable="yes">Gajim will notify you for new message via a popup in the bottom right of the screen</property>
+					  <property name="tooltip" translatable="yes">Gajim will notify you for new events via a popup in the bottom right of the screen</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">_Notify me about it</property>
 					  <property name="use_underline">True</property>
@@ -4700,7 +4700,7 @@ Disabled</property>
 				      <child>
 					<widget class="GtkRadioButton" id="popup_new_message_radiobutton">
 					  <property name="visible">True</property>
-					  <property name="tooltip" translatable="yes">Gajim will automatically show the new received message in a new chat window or tab in an existing chat window</property>
+					  <property name="tooltip" translatable="yes">Gajim will automatically show new events by poping up the relative window</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">_Pop it up</property>
 					  <property name="use_underline">True</property>
@@ -4722,7 +4722,7 @@ Disabled</property>
 				      <child>
 					<widget class="GtkRadioButton" id="only_in_roster_radiobutton">
 					  <property name="visible">True</property>
-					  <property name="tooltip" translatable="yes">Gajim will only change the icon of the contact that sent the new message</property>
+					  <property name="tooltip" translatable="yes">Gajim will only change the icon of the contact that triggered the new event</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Show only in _roster</property>
 					  <property name="use_underline">True</property>
@@ -4748,7 +4748,7 @@ Disabled</property>
 			      <child>
 				<widget class="GtkEventBox" id="eventbox">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">When a new event (message, file transfer request etc..) is received, the following methods may be used to inform you about it. NOTE: New message events only occur if it is a new message from a contact you are not already chatting with</property>
+				  <property name="tooltip" translatable="yes">When a new event (message, file transfer request etc..) is received, the following methods may be used to inform you about it. Please note that events about new messages only occur if it is a new message from a contact you are not already chatting with</property>
 				  <property name="visible_window">True</property>
 				  <property name="above_child">False</property>
 
