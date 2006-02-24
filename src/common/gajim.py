@@ -217,6 +217,8 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 		return 'irc'
 	elif host == 'icq':
 		return 'icq'
+	elif host == 'jit':
+		return 'icq'
 	elif host == 'msn':
 		return 'msn'
 	elif host == 'sms':
@@ -234,7 +236,7 @@ def jid_is_transport(jid):
 	aim = jid.startswith('aim')
 	gg = jid.startswith('gg') # gadugadu
 	irc = jid.startswith('irc')
-	icq = jid.startswith('icq')
+	icq = jid.startswith('icq') or jid.startswith('jit')
 	msn = jid.startswith('msn')
 	sms = jid.startswith('sms')
 	tlen = jid.startswith('tlen')
