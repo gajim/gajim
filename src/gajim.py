@@ -338,7 +338,8 @@ class Interface:
 			if contact1:
 				if contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
-				if old_show == new_show and contact1.status == array[2]: #no change
+				if old_show == new_show and contact1.status == array[2] and \
+					contact1.priority == priority: # no change
 					return
 			else:
 				contact1 = gajim.contacts.get_first_contact_from_jid(account, ji)
