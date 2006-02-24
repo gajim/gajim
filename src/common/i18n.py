@@ -37,11 +37,10 @@ else:
 # according to the environment variables
 locale.setlocale(locale.LC_ALL, '')
 
-## For win: set, if needed, a value in LANG environmental variable ##
+## For windows: set, if needed, a value in LANG environmental variable ##
 if os.name == 'nt':
-	# get LANG, fallback to ''
-	lang = os.environ.get('LANG')
-	if not lang:
+	lang = os.getenv('LANG')
+	if lang is None:
 		default_lang = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
 		if default_lang:
 			lang = default_lang
