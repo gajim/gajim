@@ -20,11 +20,11 @@ Source: "dist\*.pyd"; DestDir: "{app}\src"
 Source: "dist\*.dll"; DestDir: "{app}\src"
 Source: "dist\*.zip"; DestDir: "{app}\src"
 Source: "COPYING"; DestDir: "{app}"
+Source: "THANKS"; DestDir: "{app}"
 Source: "dist\gajim.exe"; DestDir: "{app}\src"; components: main
 Source: "dist\history_manager.exe"; DestDir: "{app}\src"; components: main
 Source: "dist\*.glade"; DestDir: "{app}\src"
 Source: "data\*"; DestDir: "{app}\data"; Flags: recursesubdirs
-Source: "gtk\*"; DestDir: "{app}\src\gtk"; Flags: recursesubdirs
 Source: "po\*.mo"; DestDir: "{app}\po"; Flags: recursesubdirs
 
 [Icons]
