@@ -827,7 +827,6 @@ class AgentBrowser:
 		model = self.window.services_treeview.get_model()
 		model.clear()
 		self._total_items = self._progress = 0
-		self.window.progressbar.pulse()
 		self.window.progressbar.show()
 		self._pulse_timeout = gobject.timeout_add(250, self._pulse_timeout_cb)
 		self.cache.get_items(self.jid, self.node, self._agent_items,
