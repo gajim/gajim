@@ -1119,6 +1119,11 @@ class AccountModificationWindow:
 		if self.account in list_no_log_for:
 			self.xml.get_widget('log_history_checkbutton').set_active(0)
 
+	def opt_changed(self, opt, config):
+		if gajim.config.get_per('accounts', self.account, opt) != config[opt]:
+			return True
+		return False
+
 	def on_save_button_clicked(self, widget):
 		'''When save button is clicked: Save information in config file'''
 		config = {}
@@ -1273,19 +1278,49 @@ class AccountModificationWindow:
 			gajim.config.add_per('accounts', name)
 			self.account = name
 
+		if gajim.connections[self.account].connected != 0:
+			# Check if relogin is needed
+			relog = False
+			if self.opt_changed('priority', config):
+				relog = True
+			elif self.opt_changed('proxy', config):
+				relog = True
+			elif self.opt_changed('usessl', config):
+				relog = True
+			elif self.opt_changed('keyname', config):
+				relog = True
+			elif self.opt_changed('use_custom_host', config):
+				relog = True
+			elif config['use_custom_port']:
+				if self.opt_changed('custom_host', config) or self.opt_changed(
+					'custom_port', config):
+					relog = True
+		if relog:
+			dialog = dialogs.ConfirmationDialog(_('Relogin Now?'),
+				_('Some of the options you changed needs a relogin to be taken '
+				'into account. Do you want to relogin now?'))
+			if dialog.get_response() != gtk.RESPONSE_OK:
+				relog = False
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 		if config['savepass']:
 			gajim.connections[name].password = config['password']
 		else:
 			gajim.connections[name].password = None
-		#refresh accounts window
+		# refresh accounts window
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
-		#refresh roster
+		# refresh roster
 		gajim.interface.roster.draw_roster()
 		gajim.interface.save_config()
 		self.window.destroy()
+		if relog:
+			show_before = gajim.SHOW_LIST[gajim.connections[name].connected]
+			status_before = gajim.connections[name].status
+			gajim.interface.roster.send_status(name, 'offline',
+				_('Back in some minutes.'))
+			gobject.timeout_add(500, gajim.interface.roster.send_status, name,
+				show_before, status_before)
 
 	def on_change_password_button_clicked(self, widget):
 		try:
