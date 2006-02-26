@@ -439,7 +439,7 @@ def get_file_path_from_dnd_dropped_uri(uri):
 	return path
 
 def from_xs_boolean_to_python_boolean(value):
-	# this is xs:boolean so 'true','false','1','0'
+	# this is xs:boolean so 'true', 'false', '1', '0'
 	# convert those to True/False (python booleans)
 	if value in ('1', 'true'):
 		val = True
