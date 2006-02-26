@@ -309,9 +309,9 @@ class Systray:
 		self.on_tray_leave_notify_event(widget, None)
 		if event.button == 1: # Left click
 			self.on_left_click()
-		if event.button == 2: # middle click
+		elif event.button == 2: # middle click
 			self.on_middle_click()
-		if event.button == 3: # right click
+		elif event.button == 3: # right click
 			self.make_menu(event)
 	
 	def on_show_menuitem_activate(self, widget, show):

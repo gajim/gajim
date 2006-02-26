@@ -1026,7 +1026,7 @@ class ChatControl(ChatControlBase):
 				ChatControlBase.print_conversation_line(self, msg, 
 					'status', '', tim)
 				ec.append(jid)
-			if not encrypted and jid in ec:
+			elif not encrypted and jid in ec:
 				msg = _('Encryption disabled')
 				ChatControlBase.print_conversation_line(self, msg,
 					'status', '', tim)
@@ -1196,7 +1196,7 @@ class ChatControl(ChatControlBase):
 			self.reset_kbd_mouse_timeout_vars()
 		
 		# if we're inactive prevent composing (JEP violation)
-		if contact.our_chatstate == 'inactive' and state == 'composing':
+		elif contact.our_chatstate == 'inactive' and state == 'composing':
 			MessageControl.send_message(self, None, chatstate = 'active') # go active before
 			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()

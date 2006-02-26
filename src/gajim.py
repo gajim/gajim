@@ -359,7 +359,7 @@ class Interface:
 						gajim.to_be_removed[account].remove(contact1.jid)
 					gobject.timeout_add(5000, self.roster.remove_newly_added,
 						contact1.jid, account)
-				if old_show > 1 and new_show == 0 and gajim.connections[account].\
+				elif old_show > 1 and new_show == 0 and gajim.connections[account].\
 					connected > 1:
 					if not contact1.jid in gajim.to_be_removed[account]:
 						gajim.to_be_removed[account].append(contact1.jid)

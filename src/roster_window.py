@@ -218,7 +218,7 @@ class RosterWindow:
 		groups = contact.groups
 		if observer:
 			groups = [_('Observers')]
-		if not groups:
+		elif not groups:
 			groups = [_('General')]
 		for g in groups:
 			iterG = self.get_group_iter(g, account)
@@ -1410,9 +1410,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if event.keyval == gtk.keysyms.Menu:
 			self.show_treeview_menu(event)
 			return True
-		if event.keyval == gtk.keysyms.Escape:
+		elif event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
-		if event.keyval == gtk.keysyms.F2:
+		elif event.keyval == gtk.keysyms.F2:
 			treeselection = self.tree.get_selection()
 			model, iter = treeselection.get_selected()
 			if not iter:
@@ -1422,7 +1422,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				path = model.get_path(iter)
 				self.on_rename(widget, iter, path)
 
-		if event.keyval == gtk.keysyms.Delete:
+		elif event.keyval == gtk.keysyms.Delete:
 			treeselection = self.tree.get_selection()
 			model, iter = treeselection.get_selected()
 			if not iter:
@@ -1481,7 +1481,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.show_appropriate_context_menu(event, iter)
 			return True
 
-		if event.button == 2: # Middle click
+		elif event.button == 2: # Middle click
 			try:
 				path, column, x, y = self.tree.get_path_at_pos(int(event.x),
 					int(event.y))
@@ -1527,7 +1527,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					self.send_status(acct, current_show, message)
 			return True
 
-		if event.button == 1: # Left click
+		elif event.button == 1: # Left click
 			try:
 				path, column, x, y = self.tree.get_path_at_pos(int(event.x),
 					int(event.y))
@@ -1598,25 +1598,26 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if gajim.connections[account].connected < 2:
 				self.set_connecting_state(account)
 
-			if gajim.connections[account].connected < 2 and \
-				not gajim.connections[account].password:
-				passphrase = ''
-				w = dialogs.PassphraseDialog(
-					_('Password Required'),
-					_('Enter your password for account %s') % account,
-					_('Save password'))
-				passphrase, save = w.run()
-				if passphrase == -1:
-					if accountIter:
-						model[accountIter][0] =	self.jabber_state_images['16']['offline']
-					if gajim.interface.systray_enabled:
-						gajim.interface.systray.change_status('offline')
-					self.update_status_combobox()
-					return
-				gajim.connections[account].password = passphrase
-				if save:
-					gajim.config.set_per('accounts', account, 'savepass', True)
-					gajim.config.set_per('accounts', account, 'password', passphrase)
+				if not gajim.connections[account].password:
+					passphrase = ''
+					w = dialogs.PassphraseDialog(
+						_('Password Required'),
+						_('Enter your password for account %s') % account,
+						_('Save password'))
+					passphrase, save = w.run()
+					if passphrase == -1:
+						if accountIter:
+							model[accountIter][0] =	self.jabber_state_images['16']\
+								['offline']
+						if gajim.interface.systray_enabled:
+							gajim.interface.systray.change_status('offline')
+						self.update_status_combobox()
+						return
+					gajim.connections[account].password = passphrase
+					if save:
+						gajim.config.set_per('accounts', account, 'savepass', True)
+						gajim.config.set_per('accounts', account, 'password',
+							passphrase)
 
 			keyid = None
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
