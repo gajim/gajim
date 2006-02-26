@@ -318,11 +318,6 @@ class PreferencesWindow:
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = 1)
 
-		col = gtk.TreeViewColumn(_('Sound'))
-		self.sound_tree.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer)
-		col.set_attributes(renderer, text = 2)
 		self.fill_sound_treeview()
 
 		#Autoaway
