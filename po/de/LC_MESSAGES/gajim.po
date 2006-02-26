@@ -700,7 +700,7 @@ msgstr "Kontakt hat sich angemeldet"
 
 #: ../src/dialogs.py:916 ../src/gajim.py:384 ../src/notify.py:132
 msgid "Contact Signed Out"
-msgstr "Benutzer hat sich abgemeldet"
+msgstr "Kontakt hat sich abgemeldet"
 
 #. chat message
 #: ../src/dialogs.py:927 ../src/dialogs.py:939 ../src/gajim.py:467
