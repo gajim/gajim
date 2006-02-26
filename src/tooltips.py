@@ -394,7 +394,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		# primary contact
 		prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contacts)
-		
+			
 		# try to find the image for the contact status
 		icon_name = helpers.get_icon_name_to_show(prim_contact)
 		state_file = icon_name.replace(' ', '_')
@@ -435,6 +435,9 @@ class RosterTooltip(NotificationAreaTooltip):
 				info += '\n<span weight="bold">' + _('OpenPGP: ') + \
 					'</span>' + gtkgui_helpers.escape_for_pango_markup(keyID)
 
+		
+		our_jids = gajim.get_our_jids()
+		
 		num_resources = 0
 		for contact in contacts:
 			if contact.resource:
@@ -444,7 +447,9 @@ class RosterTooltip(NotificationAreaTooltip):
 			self.table.resize(2,1)
 			info += '\n<span weight="bold">' + _('Status: ') + '</span>'
 			for contact in contacts:
-				if contact.resource:
+				# only if we have resource and it's not us add resources info and
+				# images
+				if contact.resource and contact.jid not in our_jids:
 					status_line = self.get_status_info(contact.resource,
 						contact.priority, contact.show, contact.status)
 					icon_name = helpers.get_icon_name_to_show(contact)
@@ -490,7 +495,9 @@ class RosterTooltip(NotificationAreaTooltip):
 		else:
 			self.avatar_image.set_from_pixbuf(None)
 		self.text_label.set_markup(info)
-		self.hbox.pack_start(self.image, False, False)
+		
+		if prim_contact.jid not in our_jids: # do not add image if it's us
+			self.hbox.pack_start(self.image, False, False)
 		self.hbox.pack_start(self.table, True, True)
 		self.hbox.pack_start(self.avatar_image, False, False)
 		self.win.add(self.hbox)
