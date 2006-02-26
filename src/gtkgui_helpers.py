@@ -577,3 +577,16 @@ def escape_underscore(s):
 	'''Escape underlines to prevent them from being interpreted
 	as keyboard accelerators'''
 	return s.replace('_', '__')
+
+def get_state_image_from_file_path_show(file_path, show):
+	state_file = show.replace(' ', '_')
+	files = []
+	files.append(os.path.join(file_path, state_file + '.png'))
+	files.append(os.path.join(file_path, state_file + '.gif'))
+	image = gtk.Image()
+	image.set_from_pixbuf(None)
+	for file_ in files:
+		if os.path.exists(file_):
+			image.set_from_file(file_)
+			break
+	
