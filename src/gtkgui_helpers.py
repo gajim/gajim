@@ -589,4 +589,5 @@ def get_state_image_from_file_path_show(file_path, show):
 		if os.path.exists(file_):
 			image.set_from_file(file_)
 			break
-	
+
+	return image
