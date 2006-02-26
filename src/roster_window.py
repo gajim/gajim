@@ -2377,7 +2377,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					if pixbuf2 and image.get_storage_type() == gtk.IMAGE_PIXBUF:
 						# add pixbuf2 on top-left corner of image
 						pixbuf1 = image.get_pixbuf()
-						pixbuf2.composite(pix, 0, 0, pixbuf2.get_property('width'),
+						pixbuf2.composite(pixbuf1, 0, 0,
+							pixbuf2.get_property('width'),
 							pixbuf2.get_property('height'), 0, 0, 1.0, 1.0,
 							gtk.gdk.INTERP_HYPER, 255)
 						image.set_from_pixbuf(pixbuf1)
