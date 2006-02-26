@@ -316,11 +316,15 @@ class RosterWindow:
 					if gajim.groups[account].has_key(group):
 						del gajim.groups[account][group]
 
-	def get_appropriate_state_images(self, jid, size = '16'):
+	def get_appropriate_state_images(self, jid, size = '16',
+		icon_name = 'online'):
 		'''check jid and return the appropriate state images dict for
-		the demanded size'''
+		the demanded size. icon_name is taken into account when jis is from
+		transport: transport iconset doesn't contain all icons, so we fall back
+		to jabber one'''
 		transport = gajim.get_transport_name_from_jid(jid)
-		if transport:
+		if transport and icon_name in \
+			self.transports_state_images[size][transport]:
 			return self.transports_state_images[size][transport]
 		return self.jabber_state_images[size]
 
@@ -391,12 +395,13 @@ class RosterWindow:
 					child_iter = model.iter_next(child_iter)
 			if self.tree.row_expanded(path):
 				state_images = self.get_appropriate_state_images(jid,
-					size = 'opened')
+					size = 'opened', icon_name = icon_name)
 			else:
 				state_images = self.get_appropriate_state_images(jid,
-					size = 'closed')
+					size = 'closed', icon_name = icon_name)
 		else:
-			state_images = self.get_appropriate_state_images(jid, size = '16')
+			state_images = self.get_appropriate_state_images(jid,
+				icon_name = icon_name)
 	
 		img = state_images[icon_name]
 
@@ -2350,18 +2355,20 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			except RuntimeError:
 				pass
 
-	def load_iconset(self, path, pixbuf2 = None):
+	def load_iconset(self, path, pixbuf2 = None, transport = False):
 		'''load an iconset from the given path, and add pixbuf2 on top left of
 		each static images'''
 		imgs = {}
 		path += '/'
-		list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd', 'invisible',
-			'offline', 'error', 'requested', 'message', 'opened', 'closed',
-			'not in roster', 'muc_active', 'muc_inactive')
-		if pixbuf2:
+		if transport:
+			list = ('online', 'chat', 'away', 'xa', 'dnd', 'offline')
+		else:
 			list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-				'invisible','offline', 'error', 'requested', 'message',
-				'not in roster')
+				'invisible', 'offline', 'error', 'requested', 'message', 'opened',
+				'closed', 'not in roster', 'muc_active', 'muc_inactive')
+			if pixbuf2:
+				list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+					'offline', 'error', 'requested', 'message')
 		for state in list:
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
@@ -2408,9 +2415,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				continue
 			folder = os.path.join(t_path, transport, '16x16')
 			self.transports_state_images['opened'][transport] = self.load_iconset(
-				folder, pixo)
+				folder, pixo, transport = True)
 			self.transports_state_images['closed'][transport] = self.load_iconset(
-				folder, pixc)
+				folder, pixc, transport = True)
 
 	def reload_jabber_state_images(self):
 		self.make_jabber_state_images()
@@ -2957,10 +2964,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				continue
 			folder = os.path.join(path, transport, '32x32')
 			self.transports_state_images['32'][transport] = self.load_iconset(
-				folder)
+				folder, transport = True)
 			folder = os.path.join(path, transport, '16x16')
 			self.transports_state_images['16'][transport] = self.load_iconset(
-				folder)
+				folder, transport = True)
 
 		# uf_show, img, show, sensitive
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)

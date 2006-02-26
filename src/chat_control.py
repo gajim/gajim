@@ -803,8 +803,9 @@ class ChatControl(ChatControlBase):
 
 		# Set banner image
 		img_32 = gajim.interface.roster.get_appropriate_state_images(jid,
-									size = '32')
-		img_16 = gajim.interface.roster.get_appropriate_state_images(jid)
+			size = '32', icon_name = show)
+		img_16 = gajim.interface.roster.get_appropriate_state_images(jid,
+			icon_name = show)
 		if img_32.has_key(show) and img_32[show].get_pixbuf():
 			# we have 32x32! use it!
 			banner_image = img_32[show]
@@ -1088,10 +1089,11 @@ class ChatControl(ChatControlBase):
 	def get_tab_image(self):
 		num_unread = self.nb_unread
 		# Set tab image (always 16x16); unread messages show the 'message' image
-		img_16 = gajim.interface.roster.get_appropriate_state_images(self.contact.jid)
 		tab_img = None
 		
 		if num_unread and gajim.config.get('show_unread_tab_icon'):
+			img_16 = gajim.interface.roster.get_appropriate_state_images(
+				self.contact.jid, icon_name = 'message')
 			tab_img = img_16['message']
 		else:
 			contact = gajim.contacts.get_contact_with_highest_priority(self.account,
@@ -1099,6 +1101,8 @@ class ChatControl(ChatControlBase):
 			if not contact:
 				# For transient contacts
 				contact = self.contact
+			img_16 = gajim.interface.roster.get_appropriate_state_images(
+				self.contact.jid, icon_name = contact.show)
 			tab_img = img_16[contact.show]
 
 		return tab_img

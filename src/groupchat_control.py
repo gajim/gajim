@@ -274,7 +274,8 @@ class GroupchatControl(ChatControlBase):
 
 	def get_tab_image(self):
 		# Set tab image (always 16x16); unread messages show the 'message' image
-		img_16 = gajim.interface.roster.get_appropriate_state_images(self.room_jid)
+		img_16 = gajim.interface.roster.get_appropriate_state_images(
+			self.room_jid, icon_name = 'message')
 
 		tab_image = None
 		if self.attention_flag and gajim.config.get('show_unread_tab_icon'):
@@ -337,7 +338,8 @@ class GroupchatControl(ChatControlBase):
 			if no_queue: # We didn't have a queue: we change icons
 				model = self.list_treeview.get_model()
 				state_images =\
-					gajim.interface.roster.get_appropriate_state_images(self.room_jid)
+					gajim.interface.roster.get_appropriate_state_images(
+						self.room_jid, icon_name = 'message')
 				image = state_images['message']
 				model[iter][C_IMG] = image
 				if gajim.interface.systray_enabled:
