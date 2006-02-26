@@ -250,10 +250,18 @@ def jid_is_transport(jid):
 	return is_transport
 
 def get_jid_from_account(account_name):
+	'''return the jid we use in the given account'''
 	name = config.get_per('accounts', account_name, 'name')
 	hostname = config.get_per('accounts', account_name, 'hostname')
 	jid = name + '@' + hostname
 	return jid
+
+def get_our_jids():
+	'''returns a list of the jids we use in our accounts'''
+	our_jids = list()
+	for account in contacts.get_accounts():
+		our_jids.append(get_jid_from_account(account))
+	return our_jids
 
 def get_hostname_from_account(account_name, use_srv = False):
 	'''returns hostname (if custom hostname is used, that is returned)'''
