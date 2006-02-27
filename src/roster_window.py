@@ -2362,14 +2362,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		imgs = {}
 		path += '/'
 		if transport:
-			list = ('online', 'chat', 'away', 'xa', 'dnd', 'offline')
+			list = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
+				'not in roster')
 		else:
 			list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 				'invisible', 'offline', 'error', 'requested', 'message', 'opened',
 				'closed', 'not in roster', 'muc_active', 'muc_inactive')
 			if pixbuf2:
 				list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-					'offline', 'error', 'requested', 'message')
+					'offline', 'error', 'requested', 'message', 'not in roster')
 		for state in list:
 			# try to open a pixfile with the correct method
 			state_file = state.replace(' ', '_')
