@@ -1296,9 +1296,8 @@ class AccountModificationWindow:
 				('priority', 'proxy', 'usessl', 'keyname',
 				'use_custom_host', 'custom_host'))
 
-			if config.has_key('use_custom_port') and config['use_custom_port']:
-				if self.option_changed(config, 'custom_host') or\
-					self.option_changed(config, 'custom_port'):
+			if config['use_custom_host'] and (self.option_changed(config,
+				'custom_host') or self.option_changed(config, 'custom_port')):
 					relogin_needed = True
 
 		if relogin_needed:
