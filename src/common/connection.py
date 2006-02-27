@@ -74,6 +74,7 @@ distro_info = {
 	'Arch Linux': '/etc/arch-release',
 	'Aurox Linux': '/etc/aurox-release',
 	'Conectiva Linux': '/etc/conectiva-release',
+	'CRUX': '/usr/bin/crux',
 	'Debian GNU/Linux': '/etc/debian_release',
 	'Debian GNU/Linux': '/etc/debian_version',
 	'Fedora Linux': '/etc/fedora-release',
@@ -129,18 +130,22 @@ def get_os_info():
 		for distro_name in distro_info:
 			path_to_file = distro_info[distro_name]
 			if os.path.exists(path_to_file):
-				fd = open(path_to_file)
-				text = fd.readline().strip() #get only first line
-				fd.close()
-				if path_to_file.endswith('version'):
-					# sourcemage_version has all the info we need
-					if not os.path.basename(path_to_file).startswith('sourcemage'):
+				if os.access(path_to_file, os.X_OK): # is the file executable?
+					# yes, then run it and get output. (CRUX ONLY ATM)
+					text = helpers.get_output_of_command(path_to_file)
+				else:
+					fd = open(path_to_file)
+					text = fd.readline().strip() # get only first line
+					fd.close()
+					if path_to_file.endswith('version'):
+						# sourcemage_version has all the info we need
+						if not os.path.basename(path_to_file).startswith('sourcemage'):
+							text = distro_name + ' ' + text
+					elif path_to_file.endswith('aurox-release'):
+						# file doesn't have version
+						text = distro_name
+					elif path_to_file.endswith('lfs-release'): # file just has version
 						text = distro_name + ' ' + text
-				elif path_to_file.endswith('aurox-release'):
-					# file doesn't have version
-					text = distro_name
-				elif path_to_file.endswith('lfs-release'): # file just has version
-					text = distro_name + ' ' + text
 				return text
 
 		# our last chance, ask uname and strip it
@@ -161,7 +166,7 @@ class Connection:
 		self.status = ''
 		self.old_show = ''
 		# increase/decrease default timeout for server responses
-		self.try_connecting_for_foo_secs  = 45 
+		self.try_connecting_for_foo_secs = 45
 		# holds the actual hostname to which we are connected
 		self.connected_hostname = None
 		self.time_to_reconnect = None
@@ -348,14 +353,14 @@ class Connection:
 		if gm.getTag('new-mail').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
 			# we'll now ask the server for the exact number of new messages
 			jid = gajim.get_jid_from_account(self.name)
-			gajim.log.debug('Got notification of new gmail e-mail on %s. Asking the server for more info.' % jid) 
+			gajim.log.debug('Got notification of new gmail e-mail on %s. Asking the server for more info.' % jid)
 			iq = common.xmpp.Iq(typ = 'get')
 			iq.setAttr('id', '13')
 			query = iq.setTag('query')
 			query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
 			self.connection.send(iq)
 			raise common.xmpp.NodeProcessed
-		
+
 	def _gMailQueryCB(self, con, gm):
 		'''Called when we receive results from Querying the server for mail messages in gmail account'''
 		if not gm.getTag('mailbox'):
@@ -621,7 +626,7 @@ class Connection:
 		signed = self.get_signed_msg(self.status)
 		self.on_connect_auth = self._init_roster
 		self.connect_and_init(self.old_show, self.status, signed)
-		
+
 		if self.connected < 2: #connection failed
 			if self.retrycount > 10:
 				self.connected = 0
@@ -1407,7 +1412,7 @@ class Connection:
 		if not self.connection:
 			return
 		self.connection.getRoster(self._on_roster_set)
-	
+
 	def _on_roster_set(self, roster):
 		raw_roster = roster.getRaw()
 		roster = {}
@@ -1457,7 +1462,7 @@ class Connection:
 
 			# Get bookmarks from private namespace
 			self.get_bookmarks()
-			
+
 			# If it's a gmail account,
 			# inform the server that we want e-mail notifications
 			if gajim.get_server_from_jid(our_jid) == 'gmail.com':
@@ -1655,7 +1660,7 @@ class Connection:
 						self.dispatch('ACC_OK', (self.new_account_info))
 						self.new_account_info = None
 						self.connection = None
-					common.xmpp.features_nb.register(self.connection, data[0],	
+					common.xmpp.features_nb.register(self.connection, data[0],
 						req, _on_register_result)
 				is_form = data[2]
 				if is_form:
@@ -1761,22 +1766,22 @@ class Connection:
 			gajim.resolver.resolve('_xmpp-client._tcp.' + h.encode('utf-8'), self._on_resolve)
 		else:
 			self._on_resolve('', [])
-		
+
 	def _on_resolve(self, host, result_array):
 		# SRV query returned at least one valid result, we put it in hosts dict
-		if len(result_array) != 0: 
+		if len(result_array) != 0:
 			self._hosts = [i for i in result_array]
 		self.connect_to_next_host()
-	
+
 	def connect_to_next_host(self):
 		if len(self._hosts):
 			if gajim.verbose:
-				con = common.xmpp.NonBlockingClient(self._hostname, caller = self, 
-					on_connect = self.on_connect_success, 
+				con = common.xmpp.NonBlockingClient(self._hostname, caller = self,
+					on_connect = self.on_connect_success,
 					on_connect_failure = self.connect_to_next_host)
 			else:
-				con = common.xmpp.NonBlockingClient(self._hostname, debug = [], caller = self, 
-					on_connect = self.on_connect_success, 
+				con = common.xmpp.NonBlockingClient(self._hostname, debug = [], caller = self,
+					on_connect = self.on_connect_success,
 					on_connect_failure = self.connect_to_next_host)
 			# increase default timeout for server responses
 			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
@@ -1798,7 +1803,7 @@ class Connection:
 				self.dispatch('STATUS', 'offline')
 				self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
 					_('Check your connection or try again later.')))
-	
+
 	def _connect_success(self, con, con_type):
 		if not self.connected: # We went offline during connecting process
 			return None, ''
@@ -1885,7 +1890,7 @@ class Connection:
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		self.connection = con
 		con.auth(name, self.password, resource, 1, self.__on_auth)
-		
+
 	def __on_auth(self, con, auth):
 		if not con:
 			self.connected = 0
@@ -2011,12 +2016,12 @@ class Connection:
 	def connect_and_auth(self):
 		self.on_connect_success = self._connect_success
 		self.connect()
-		
+
 	def connect_and_init(self, show, msg, signed):
 		self.continue_connect_info = [show, msg, signed]
 		self.on_connect_auth = self._init_roster
 		self.connect_and_auth()
-		
+
 	def _init_roster(self, con):
 		self.connection = con
 		if self.connection:
@@ -2024,7 +2029,7 @@ class Connection:
 			self.connection.onreceive(None)
 			# Ask meta_contacts before roster
 			self.get_meta_contacts()
-	
+
 	def change_status(self, show, msg, sync = False, auto = False):
 		self.change_status2(show, msg, auto)
 
@@ -2062,7 +2067,7 @@ class Connection:
 			else:
 				self.time_to_reconnect = None
 				self._on_disconnected()
-			
+
 		elif show != 'offline' and self.connected:
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
@@ -2084,7 +2089,7 @@ class Connection:
 			if self.connection:
 				self.connection.send(p)
 			self.dispatch('STATUS', show)
-	
+
 	def _on_disconnected(self):
 		''' called when a disconnect request has completed successfully'''
 		self.dispatch('STATUS', 'offline')
@@ -2276,7 +2281,7 @@ class Connection:
 		self.name = name
 		self.on_connect_success = self._on_new_account
 		self.connect(config)
-		
+
 	def _on_new_account(self,con, con_type):
 		if not con_type:
 			self.dispatch('ACC_NOT_OK',
@@ -2284,7 +2289,7 @@ class Connection:
 			return
 		self.connection = con
 		common.xmpp.features_nb.getRegInfo(con, self._hostname)
-	
+
 	def account_changed(self, new_name):
 		self.name = new_name
 
@@ -2551,7 +2556,7 @@ class Connection:
 			if list[jid].has_key('reason') and list[jid]['reason']:
 				item_tag.setTagData('reason', list[jid]['reason'])
 		self.connection.send(iq)
-	
+
 	def get_affiliation_list(self, room_jid, affiliation):
 		if not self.connection:
 			return
@@ -2640,7 +2645,7 @@ class Connection:
 			self.connect_and_auth()
 		else:
 			_on_unregister_account_connect(self.connection)
-	
+
 	def send_invite(self, room, to, reason=''):
 		'''sends invitation'''
 		message=common.xmpp.Message(to = room)
@@ -2661,5 +2666,5 @@ class Connection:
 				self._reconnect()
 			else:
 				self.time_to_reconnect = None
-	
+
 # END Connection
