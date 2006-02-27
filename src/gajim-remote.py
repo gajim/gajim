@@ -253,7 +253,7 @@ class GajimRemote:
 			elif self.command == 'list_accounts':
 				if isinstance(res, list):
 					for account in res:
-						print account.encode(PREFERED_ENCODING)
+						print account.encode(PREFERRED_ENCODING)
 			elif self.command == 'account_info':
 				if res:
 					print self.print_info(0, res, True)
