@@ -253,7 +253,7 @@ class GajimRemote:
 			elif self.command == 'list_accounts':
 				if isinstance(res, list):
 					for account in res:
-						print account
+						print account.encode(PREFERED_ENCODING)
 			elif self.command == 'account_info':
 				if res:
 					print self.print_info(0, res, True)
@@ -264,11 +264,12 @@ class GajimRemote:
 				pref_keys = res.keys()
 				pref_keys.sort()
 				for pref_key in pref_keys:
-					print pref_key, '=', res[pref_key]
+					result = '%s = %s' % (pref_key, res[pref_key])
+					print result.encode(PREFERRED_ENCODING)
 			elif self.command == 'contact_info':
 				print self.print_info(0, res, True)
 			elif res:
-				print res
+				print unicode(res).encode(PREFERRED_ENCODING)
 	
 	def init_connection(self):
 		''' create the onnection to the session dbus,
@@ -404,7 +405,7 @@ class GajimRemote:
 	def call_remote_method(self):
 		''' calls self.method with arguments from sys.argv[2:] '''
 		args = sys.argv[2:]
-		if _version[1] >= 60:
+		if _version[1] <= 50:
 			# make console arguments unicode
 			args = [i.decode(PREFERRED_ENCODING) for i in sys.argv[2:]]
 		if _version[1] >= 41:
