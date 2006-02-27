@@ -60,7 +60,7 @@ def parse_jid(jidstring):
 	user_sep = jidstring.find('@')
 	res_sep  = jidstring.find('/')
 
-	if user_sep == -1:		
+	if user_sep == -1:
 		if res_sep == -1:
 			# host
 			server = jidstring
@@ -159,7 +159,7 @@ def convert_bytes(string):
 				bytes = round(bytes/align, 1)
 				if use_kib_mib:
 					#GiB means gibibyte
-					suffix = _('%s GiB') 
+					suffix = _('%s GiB')
 				else:
 					#GB means gigabyte
 					suffix = _('%s GB')
@@ -178,7 +178,7 @@ def convert_bytes(string):
 				#KB means kilo bytes
 				suffix = _('%s KB')
 	else:
-		#B means bytes 
+		#B means bytes
 		suffix = _('%s B')
 	return suffix % unicode(bytes)
 
@@ -231,7 +231,7 @@ def get_uf_show(show, use_mnemonic = False):
 	else:
 		uf_show = Q_('?contact has status:Has errors')
 	return unicode(uf_show)
-	
+
 def get_uf_sub(sub):
 	if sub == 'none':
 		uf_sub = Q_('?Subscription we already have:None')
@@ -243,9 +243,9 @@ def get_uf_sub(sub):
 		uf_sub = _('Both')
 	else:
 		uf_sub = sub
-	
+
 	return unicode(uf_sub)
-	
+
 def get_uf_ask(ask):
 	if ask is None:
 		uf_ask = Q_('?Ask (for Subscription):None')
@@ -253,7 +253,7 @@ def get_uf_ask(ask):
 		uf_ask = _('Subscribe')
 	else:
 		uf_ask = ask
-	
+
 	return unicode(uf_ask)
 
 def get_uf_role(role, plural = False):
@@ -323,7 +323,7 @@ def get_uf_chatstate(chatstate):
 	return ''
 
 def is_in_path(name_of_command, return_abs_path = False):
-	# if return_abs_path is True absolute path will be returned 
+	# if return_abs_path is True absolute path will be returned
 	# for name_of_command
 	# on failures False is returned
 	is_in_dir = False
@@ -340,7 +340,7 @@ def is_in_path(name_of_command, return_abs_path = False):
 			if return_abs_path:
 				found_in_which_dir = path_to_directory
 			break
-	
+
 	if found_in_which_dir:
 		abs_path = os.path.join(path_to_directory, name_of_command)
 		return abs_path
@@ -447,7 +447,7 @@ def from_xs_boolean_to_python_boolean(value):
 		val = False
 
 	return val
-			
+
 def ensure_unicode_string(s):
 	# py23 u'abc'.decode('utf-8') raises
 	# python24 does not. is python23 is ooold we can remove this func
@@ -480,7 +480,7 @@ def get_output_of_command(command):
 	output = child_stdout.readlines()
 	child_stdout.close()
 	child_stdin.close()
-	
+
 	return output
 
 def get_global_show():
@@ -493,7 +493,7 @@ def get_global_show():
 		if connected > maxi:
 			maxi = connected
 	return gajim.SHOW_LIST[maxi]
-	
+
 def get_global_status():
 	maxi = 0
 	for account in gajim.connections:
@@ -531,5 +531,5 @@ def decode_string(string):
 		except UnicodeError:
 			continue
 		break
-	
+
 	return string
