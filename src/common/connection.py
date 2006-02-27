@@ -130,8 +130,9 @@ def get_os_info():
 		for distro_name in distro_info:
 			path_to_file = distro_info[distro_name]
 			if os.path.exists(path_to_file):
-				if os.access(path_to_file, os.X_OK): # is the file executable?
-					# yes, then run it and get output. (CRUX ONLY ATM)
+				if os.access(path_to_file, os.X_OK):
+					# the file is executable (f.e. CRUX)
+					# yes, then run it and get the first line of output.
 					text = helpers.get_output_of_command(path_to_file)[0]
 				else:
 					fd = open(path_to_file)
