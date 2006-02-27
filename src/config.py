@@ -1298,7 +1298,7 @@ class AccountModificationWindow:
 
 			if config['use_custom_host'] and (self.option_changed(config,
 				'custom_host') or self.option_changed(config, 'custom_port')):
-					relogin_needed = True
+				relogin_needed = True
 
 		if relogin_needed:
 			dialog = dialogs.YesNoDialog(_('Relogin now?'),
