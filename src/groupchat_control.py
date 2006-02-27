@@ -76,7 +76,7 @@ class PrivateChatControl(ChatControl):
 		if not message:
 			return
 
-		# We need to make sure that we can still send through the room and that the 
+		# We need to make sure that we can still send through the room and that the
 		# recipient did not go away
 		contact = gajim.contacts.get_first_contact_from_jid(self.account, self.contact.jid)
 		if contact is None:
@@ -249,7 +249,7 @@ class GroupchatControl(ChatControlBase):
 		(new_label_str, color)
 		either of which can be None
 		if chatstate is given that means we have HE SENT US a chatstate'''
-			
+
 		has_focus = self.parent_win.window.get_property('has-toplevel-focus')
 		current_tab = self.parent_win.get_active_control() == self
 		color = None
@@ -767,7 +767,7 @@ class GroupchatControl(ChatControlBase):
 
 		if command == 'me':
 			return False # This is not really a command
-		
+
 		if command == 'nick':
 			# example: /nick foo
 			if len(message_array):
@@ -1042,29 +1042,21 @@ class GroupchatControl(ChatControlBase):
 	def allow_shutdown(self):
 		retval = True
 		# whether to ask for comfirmation before closing muc
-		if not gajim.config.get('confirm_close_muc'):
-			gajim.config.set('noconfirm_close_muc_rooms', '')
-		else:
-			excludes = gajim.config.get('noconfirm_close_muc_rooms')
-			excludes = excludes.split(' ')
-			if gajim.gc_connected[self.account][self.room_jid] and \
-					self.room_jid not in excludes:
+		if gajim.config.get('confirm_close_muc'):
+			if gajim.gc_connected[self.account][self.room_jid]:
 				pritext = _('Are you sure you want to leave room "%s"?') % self.name
 				sectext = _('If you close this window, you will be disconnected '
 						'from this room.')
 
-				escaped_name = gtkgui_helpers.escape_underscore(self.name)
 				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
-							_('Do _not ask me about closing "%s" again' %\
-							escaped_name))
+							_('Do _not ask me again'))
 
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					retval = False
 
-				if dialog.is_checked():
-					excludes = gajim.config.get('noconfirm_close_muc_rooms')
-					excludes += ' %s' % self.room_jid
-					gajim.config.set('noconfirm_close_muc_rooms', excludes)
+				if dialog.is_checked(): # user does not want to be asked again
+					gajim.config.set('confirm_close_muc', False)
+
 				dialog.destroy()
 
 		return retval
