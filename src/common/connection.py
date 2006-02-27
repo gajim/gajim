@@ -132,7 +132,7 @@ def get_os_info():
 			if os.path.exists(path_to_file):
 				if os.access(path_to_file, os.X_OK): # is the file executable?
 					# yes, then run it and get output. (CRUX ONLY ATM)
-					text = helpers.get_output_of_command(path_to_file)
+					text = helpers.get_output_of_command(path_to_file)[0]
 				else:
 					fd = open(path_to_file)
 					text = fd.readline().strip() # get only first line
