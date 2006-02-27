@@ -1,9 +1,9 @@
 ##	config.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2003-2005 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2003-2005 Vincent Hanquez <tab@snarc.org>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -1119,9 +1119,19 @@ class AccountModificationWindow:
 		if self.account in list_no_log_for:
 			self.xml.get_widget('log_history_checkbutton').set_active(0)
 
-	def opt_changed(self, opt, config):
+	def option_changed(self, config, opt): 
 		if gajim.config.get_per('accounts', self.account, opt) != config[opt]:
 			return True
+		return False
+
+	def options_changed_need_relogin(self, config, options):
+		'''accepts configuration and options
+		(tupple of strings of the name of options changed)
+		and returns True or False depending on if at least one of the options
+		need relogin to server to apply'''
+		for option in options:
+			if self.option_changed(config, option):
+				return True
 		return False
 
 	def on_save_button_clicked(self, widget):
@@ -1278,29 +1288,28 @@ class AccountModificationWindow:
 			gajim.config.add_per('accounts', name)
 			self.account = name
 
-		if gajim.connections[self.account].connected != 0:
-			# Check if relogin is needed
-			relog = False
-			if self.opt_changed('priority', config):
-				relog = True
-			elif self.opt_changed('proxy', config):
-				relog = True
-			elif self.opt_changed('usessl', config):
-				relog = True
-			elif self.opt_changed('keyname', config):
-				relog = True
-			elif self.opt_changed('use_custom_host', config):
-				relog = True
-			elif config['use_custom_port']:
-				if self.opt_changed('custom_host', config) or self.opt_changed(
-					'custom_port', config):
-					relog = True
-		if relog:
-			dialog = dialogs.ConfirmationDialog(_('Relogin Now?'),
-				_('Some of the options you changed needs a relogin to be taken '
-				'into account. Do you want to relogin now?'))
-			if dialog.get_response() != gtk.RESPONSE_OK:
-				relog = False
+		if gajim.connections[self.account].connected == 0: # we're disconnected
+			relogin_needed = False
+		else: # we're connected to the account we want to apply changes
+			# check if relogin is needed
+			relogin_needed = self.options_changed_need_relogin(config,
+				('priority', 'proxy', 'usessl', 'keyname',
+				'use_custom_host', 'custom_host'))
+
+			if config.has_key('use_custom_port') and config['use_custom_port']:
+				if self.option_changed(config, 'custom_host') or\
+					self.option_changed(config, 'custom_port'):
+					relogin_needed = True
+
+		if relogin_needed:
+			dialog = dialogs.YesNoDialog(_('Relogin now?'),
+				_('If you want all the changes to apply instantly, '
+				'you must relogin.'))
+			if dialog.get_response() == gtk.RESPONSE_YES:
+				do_relogin = True
+			else:
+				do_relogin = False
+
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 		if config['savepass']:
@@ -1314,11 +1323,12 @@ class AccountModificationWindow:
 		gajim.interface.roster.draw_roster()
 		gajim.interface.save_config()
 		self.window.destroy()
-		if relog:
+
+		if relogin_needed and do_relogin:
 			show_before = gajim.SHOW_LIST[gajim.connections[name].connected]
 			status_before = gajim.connections[name].status
 			gajim.interface.roster.send_status(name, 'offline',
-				_('Back in some minutes.'))
+				_('Be right back.'))
 			gobject.timeout_add(500, gajim.interface.roster.send_status, name,
 				show_before, status_before)
 
