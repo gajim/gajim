@@ -987,6 +987,7 @@ class Interface:
 		'''add an event to the awaiting_events var'''
 		# We add it to the awaiting_events queue
 		# Do we have a queue?
+		jid = gajim.get_jid_without_resource(jid)
 		qs = gajim.awaiting_events[account]
 		no_queue = False
 		if not qs.has_key(jid):
