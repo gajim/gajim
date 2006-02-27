@@ -253,7 +253,10 @@ class GajimRemote:
 			elif self.command == 'list_accounts':
 				if isinstance(res, list):
 					for account in res:
-						print account.encode(PREFERRED_ENCODING)
+						if isinstance(account, unicode):
+							print account.encode(PREFERRED_ENCODING)
+						else:
+							print account
 			elif self.command == 'account_info':
 				if res:
 					print self.print_info(0, res, True)
@@ -265,7 +268,10 @@ class GajimRemote:
 				pref_keys.sort()
 				for pref_key in pref_keys:
 					result = '%s = %s' % (pref_key, res[pref_key])
-					print result.encode(PREFERRED_ENCODING)
+					if isinstance(result, unicode):	
+						print result.encode(PREFERRED_ENCODING)
+					else:
+						print result
 			elif self.command == 'contact_info':
 				print self.print_info(0, res, True)
 			elif res:
