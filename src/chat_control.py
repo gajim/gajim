@@ -394,7 +394,9 @@ class ChatControlBase(MessageControl):
 				gajim.interface.systray.add_jid(jid, self.account, self.type_id)
 			self.parent_win.redraw_tab(self)
 			if not self.parent_win.is_active():
-				self.parent_win.show_title(urgent)
+				ctrl = gajim.interface.msg_win_mgr.get_control(jid,
+					self.account)
+				self.parent_win.show_title(urgent, ctrl)
 
 	def toggle_emoticons(self):
 		'''hide show emoticons_button and make sure emoticons_menu is always there
