@@ -420,9 +420,8 @@ class RosterTooltip(NotificationAreaTooltip):
 		# primary contact
 		prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contacts)
-		
 		# try to find the image for the contact status
-		icon_name = helpers.get_icon_name_to_show(prim_contact)
+		icon_name = prim_contact.show
 		state_file = icon_name.replace(' ', '_')
 		transport = gajim.get_transport_name_from_jid(prim_contact.jid)
 		if transport:
