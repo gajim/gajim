@@ -860,14 +860,15 @@ class RosterWindow:
 	def show_tooltip(self, contact):
 		pointer = self.tree.get_pointer()
 		props = self.tree.get_path_at_pos(pointer[0], pointer[1])
+		# check if the current pointer is at the same path
+		# as it was before setting the timeout
 		if props and self.tooltip.id == props[0]:
-			# check if the current pointer is at the same path
-			# as it was before setting the timeout
+			# bounding rectangle of coordinates for the cell within the treeview
 			rect = self.tree.get_cell_area(props[0], props[1])
+			
+			# position of the treeview on the screen
 			position = self.tree.window.get_origin()
-			pointer = self.window.get_pointer()
-			self.tooltip.show_tooltip(contact, (pointer[0], rect.height),
-				 (position[0], position[1] + rect.y))
+			self.tooltip.show_tooltip(contact, rect.height, position[1] + rect.y)
 		else:
 			self.tooltip.hide_tooltip()
 

@@ -41,23 +41,33 @@ _ = i18n._
 APP = i18n.APP
 
 class BaseTooltip:
-	''' Base Tooltip; Usage:
-		tooltip = BaseTooltip()
-		.... 
-		tooltip.show_tooltip('', window_positions, widget_positions)
-		#FIXME: what is window, what is widget?
-		....
-		if tooltip.timeout != 0:
-			tooltip.hide_tooltip()
+	''' Base Tooltip class;
+		Usage:
+			tooltip = BaseTooltip()
+			.... 
+			tooltip.show_tooltip(data, widget_height, widget_y_position)
+			....
+			if tooltip.timeout != 0:
+				tooltip.hide_tooltip()
+		
+		* data - the text to be displayed  (extenders override this argument and 
+			dislpay more complex contents)
+		* widget_height  - the height of the widget on which we want to show tooltip
+		* widget_y_position - the vertical position of the widget on the screen
+		
+		Tooltip is displayed aligned centered to the mouse poiner and 4px below the widget.
+		In case tooltip goes below the visible area it is shown above the widget.
 	'''
 	def __init__(self):
 		self.timeout = 0
-		self.prefered_position = [0, 0]
+		self.preferred_position = [0, 0]
 		self.win = None
 		self.id = None
 		
 	def populate(self, data):
-		''' this method must be overriden by all extenders '''
+		''' this method must be overriden by all extenders
+		This is the most simple implementation: show data as value of a label
+		'''
 		self.create_window()
 		self.win.add(gtk.Label(data))
 		
@@ -68,33 +78,34 @@ class BaseTooltip:
 		self.win.set_resizable(False)
 		self.win.set_name('gtk-tooltips')
 		
-		
 		self.win.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.win.connect_after('expose_event', self.expose)
-		self.win.connect('size-request', self.size_request)
+		self.win.connect('size-request', self.on_size_request)
 		self.win.connect('motion-notify-event', self.motion_notify_event)
+		self.screen = self.win.get_screen()
 	
 	def motion_notify_event(self, widget, event):
 		self.hide_tooltip()
 
-	def size_request(self, widget, requisition):
-		screen = self.win.get_screen()
-		half_width = requisition.width / 2 + 1
-		if self.prefered_position[0] < half_width:
-			self.prefered_position[0] = 0
-		elif self.prefered_position[0]  + requisition.width > screen.get_width() \
-				+ half_width:
-			self.prefered_position[0] = screen.get_width() - requisition.width
+	def on_size_request(self, widget, requisition):
+				half_width = requisition.width / 2 + 1
+		if self.preferred_position[0] < half_width:
+			self.preferred_position[0] = 0
+		elif self.preferred_position[0]  + requisition.width > \
+			self.screen.get_width() + half_width:
+			self.preferred_position[0] = self.screen.get_width() - \
+				requisition.width
 		else:
-			self.prefered_position[0] -= half_width 
+			self.preferred_position[0] -= half_width 
 			screen.get_height()
-		if self.prefered_position[1] + requisition.height > screen.get_height():
+		if self.preferred_position[1] + requisition.height > \
+			self.screen.get_height():
 			# flip tooltip up
-			self.prefered_position[1] -= requisition.height  + self.widget_height \
-				+ 8
-		if self.prefered_position[1] < 0:
-			self.prefered_position[1] = 0
-		self.win.move(self.prefered_position[0], self.prefered_position[1])
+			self.preferred_position[1] -= requisition.height  + \
+				self.widget_height + 8
+		if self.preferred_position[1] < 0:
+			self.preferred_position[1] = 0
+		self.win.move(self.preferred_position[0], self.preferred_position[1])
 
 	def expose(self, widget, event):
 		style = self.win.get_style()
@@ -109,12 +120,24 @@ class BaseTooltip:
 			None, self.win, 'tooltip', size[0] - 1, 0, 1, -1)
 		return True
 	
-	def show_tooltip(self, data, widget_pos, win_size):
+	def show_tooltip(self, data, widget_height, widget_y_position):
+		''' show tooltip on widget.
+		data contains needed data for tooltip contents
+		widget_height is the height of the widget on which we show the tooltip
+		widget_y_position is vertical position of the widget on the screen
+		'''
+		# set tooltip contents 
 		self.populate(data)
-		new_x = win_size[0] + widget_pos[0] 
-		new_y = win_size[1] + widget_pos[1] + 4
-		self.prefered_position = [new_x, new_y]
-		self.widget_height = widget_pos[1]
+		
+		# get the X position of mouse pointer on the screen
+		pointer_x = self.screen.get_display().get_pointer()[1]
+		
+		# get the prefered X position of the tooltip on the screen in case this position is > 
+		# than the height of the screen, tooltip will be shown above the widget
+		preferred_y = widget_y_position + widget_height + 4
+		
+		self.preferred_position = [pointer_x, preferred_y]
+		self.widget_height =widget_height
 		self.win.ensure_style()
 		self.win.show_all()
 
@@ -150,7 +173,7 @@ class StatusTable:
 		if status:
 			status = status.strip()
 			if status != '':
-				# make sure 'status' is unicode before we send to to reduce_chars...
+				# make sure 'status' is unicode before we send to to reduce_chars
 				if isinstance(status, str):
 					status = unicode(status, encoding='utf-8')
 				status = gtkgui_helpers.reduce_chars_newlines(status, 0, 1)
@@ -183,7 +206,10 @@ class StatusTable:
 			self.current_row + 1, gtk.EXPAND | gtk.FILL, 0, 0, 0)
 		if status_time:
 			self.current_row += 1
-			status_time_label = gtk.Label(time.strftime("%c", status_time))
+			# decode locale encoded string, the same way as below (10x nk)
+			local_time = time.strftime("%c", status_time)
+			local_time = local_time.decode(locale.getpreferredencoding()) 
+			status_time_label = gtk.Label(local_time)
 			self.table.attach(status_time_label, 2, 4, self.current_row,
 			self.current_row + 1, gtk.EXPAND | gtk.FILL, 0, 0, 0)
 	
@@ -394,7 +420,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		# primary contact
 		prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contacts)
-			
+		
 		# try to find the image for the contact status
 		icon_name = helpers.get_icon_name_to_show(prim_contact)
 		state_file = icon_name.replace(' ', '_')
@@ -435,9 +461,6 @@ class RosterTooltip(NotificationAreaTooltip):
 				info += '\n<span weight="bold">' + _('OpenPGP: ') + \
 					'</span>' + gtkgui_helpers.escape_for_pango_markup(keyID)
 
-		
-		our_jids = gajim.get_our_jids()
-		
 		num_resources = 0
 		for contact in contacts:
 			if contact.resource:
@@ -447,9 +470,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			self.table.resize(2,1)
 			info += '\n<span weight="bold">' + _('Status: ') + '</span>'
 			for contact in contacts:
-				# only if we have resource and it's not us add resources info and
-				# images
-				if contact.resource and contact.jid not in our_jids:
+				if contact.resource:
 					status_line = self.get_status_info(contact.resource,
 						contact.priority, contact.show, contact.status)
 					icon_name = helpers.get_icon_name_to_show(contact)
@@ -484,22 +505,21 @@ class RosterTooltip(NotificationAreaTooltip):
 				text = text % local_time 
 				info += '\n<span style="italic">%s</span>' % text
 		
-		for type_ in ('jpeg', 'png'):
-			file = os.path.join(gajim.AVATAR_PATH, prim_contact.jid + '.' + type_)
-			if os.path.exists(file):
-				self.avatar_image.set_from_file(file)
-				pix = self.avatar_image.get_pixbuf()
-				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-				self.avatar_image.set_from_pixbuf(pix)
-				break
-		else:
-			self.avatar_image.set_from_pixbuf(None)
+		# uncomment this
+		#~ for type_ in ('jpeg', 'png'):
+			#~ file = os.path.join(gajim.AVATAR_PATH, prim_contact.jid + '.' + type_)
+			#~ if os.path.exists(file):
+				#~ self.avatar_image.set_from_file(file)
+				#~ pix = self.avatar_image.get_pixbuf()
+				#~ pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+				#~ self.avatar_image.set_from_pixbuf(pix)
+				#~ break
+		#~ else:
+			#~ self.avatar_image.set_from_pixbuf(None)
 		self.text_label.set_markup(info)
-		
-		if prim_contact.jid not in our_jids: # do not add image if it's us
-			self.hbox.pack_start(self.image, False, False)
+		self.hbox.pack_start(self.image, False, False)
 		self.hbox.pack_start(self.table, True, True)
-		self.hbox.pack_start(self.avatar_image, False, False)
+		#~ self.hbox.pack_start(self.avatar_image, False, False)
 		self.win.add(self.hbox)
 
 class FileTransfersTooltip(BaseTooltip):

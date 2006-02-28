@@ -811,16 +811,18 @@ _('Connection with peer cannot be established.'))
 		pointer = self.tree.get_pointer()
 		props = self.tree.get_path_at_pos(pointer[0], 
 			pointer[1] - self.height_diff)
+		# check if the current pointer is at the same path
+		# as it was before setting the timeout
 		if props and self.tooltip.id == props[0]:
-			# check if the current pointer is at the same path
-			# as it was before setting the timeout
 			iter = self.model.get_iter(props[0])
 			sid = self.model[iter][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
+			# bounding rectangle of coordinates for the cell within the treeview
 			rect =  self.tree.get_cell_area(props[0],props[1])
+			# position of the treeview on the screen
 			position = widget.window.get_origin()
-			self.tooltip.show_tooltip(file_props , (pointer[0], rect.height ), 
-				(position[0], position[1] + rect.y + self.height_diff))
+			self.tooltip.show_tooltip(file_props , rect.height, 
+								position[1] + rect.y + self.height_diff)
 		else:
 			self.tooltip.hide_tooltip()
 	
