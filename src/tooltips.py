@@ -84,6 +84,18 @@ class BaseTooltip:
 		self.win.connect('motion-notify-event', self.motion_notify_event)
 		self.screen = self.win.get_screen()
 	
+	def _get_icon_name_for_tooltip(self, contact):
+		''' helper function used for tooltip contacts/acounts 
+		Tooltip on account has fake contact with sub == '', in this case we show
+		real status of the account
+		'''
+		if contact.ask == 'subscribe':
+			return 'requested'
+		elif contact.sub in ('both', 'to', ''):
+			return contact.show
+		return 'not in roster'
+
+
 	def motion_notify_event(self, widget, event):
 		self.hide_tooltip()
 
@@ -421,7 +433,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contacts)
 		# try to find the image for the contact status
-		icon_name = prim_contact.show
+		icon_name = self._get_icon_name_for_tooltip(prim_contact)
 		state_file = icon_name.replace(' ', '_')
 		transport = gajim.get_transport_name_from_jid(prim_contact.jid)
 		if transport:
@@ -472,7 +484,8 @@ class RosterTooltip(NotificationAreaTooltip):
 				if contact.resource:
 					status_line = self.get_status_info(contact.resource,
 						contact.priority, contact.show, contact.status)
-					icon_name = helpers.get_icon_name_to_show(contact)
+					
+					icon_name = self._get_icon_name_for_tooltip(contact)
 					self.add_status_row(file_path, icon_name, status_line,
 						contact.last_status_time)
 					
