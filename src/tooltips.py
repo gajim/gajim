@@ -88,8 +88,8 @@ class BaseTooltip:
 		self.hide_tooltip()
 
 	def on_size_request(self, widget, requisition):
-				half_width = requisition.width / 2 + 1
-		if self.preferred_position[0] < half_width:
+		half_width = requisition.width / 2 + 1
+		if self.preferred_position[0] < half_width: 
 			self.preferred_position[0] = 0
 		elif self.preferred_position[0]  + requisition.width > \
 			self.screen.get_width() + half_width:
@@ -97,7 +97,7 @@ class BaseTooltip:
 				requisition.width
 		else:
 			self.preferred_position[0] -= half_width 
-			screen.get_height()
+			self.screen.get_height()
 		if self.preferred_position[1] + requisition.height > \
 			self.screen.get_height():
 			# flip tooltip up
