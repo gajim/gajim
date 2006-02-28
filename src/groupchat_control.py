@@ -1446,15 +1446,13 @@ class GroupchatControl(ChatControlBase):
 	def show_tooltip(self, contact):
 		pointer = self.list_treeview.get_pointer()
 		props = self.list_treeview.get_path_at_pos(pointer[0], pointer[1])
+		# check if the current pointer is at the same path
+		# as it was before setting the timeout
 		if props and self.tooltip.id == props[0]:
-			# check if the current pointer is at the same path
-			# as it was before setting the timeout
 			rect = self.list_treeview.get_cell_area(props[0],props[1])
 			position = self.list_treeview.window.get_origin()
-			pointer = self.parent_win.window.get_pointer()
-			self.tooltip.show_tooltip(contact, (0, rect.height),
-				(self.parent_win.window.get_screen().get_display().get_pointer()[1],
-				position[1] + rect.y))
+			self.tooltip.show_tooltip(contact, rect.height, 
+											position[1] + rect.y)
 		else:
 			self.tooltip.hide_tooltip()
 
