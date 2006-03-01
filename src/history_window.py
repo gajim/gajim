@@ -208,7 +208,8 @@ class HistoryWindow:
 	
 	def add_new_line(self, contact_name, tim, kind, show, message):
 		'''add a new line in textbuffer'''
-		if not message: # None or ''
+		if not message and kind not in (constants.KIND_STATUS,
+			constants.KIND_GCSTATUS):
 			return
 		buf = self.history_buffer
 		end_iter = buf.get_end_iter()
@@ -236,7 +237,8 @@ class HistoryWindow:
 		
 		if kind == constants.KIND_GC_MSG:
 			tag_name = 'incoming'
-		elif kind in (constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV):
+		elif kind in (constants.KIND_SINGLE_MSG_RECV,
+		constants.KIND_CHAT_MSG_RECV):
 			contact = gajim.contacts.get_first_contact_from_jid(self.account,
 				self.jid)
 			if contact:
@@ -253,7 +255,8 @@ class HistoryWindow:
 				else:
 					contact_name = self.jid.split('@')[0]
 			tag_name = 'incoming'
-		elif kind in (constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT):
+		elif kind in (constants.KIND_SINGLE_MSG_SENT,
+		constants.KIND_CHAT_MSG_SENT):
 			contact_name = gajim.nicks[self.account]
 			tag_name = 'outgoing'
 		elif kind == constants.KIND_GCSTATUS:
