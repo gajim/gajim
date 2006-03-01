@@ -167,6 +167,9 @@ class MessageWindow:
 			n = self.notebook.page_num(child)
 			self.notebook.set_current_page(n)
 			self.popup_menu(event)
+		elif event.button == 2: # middle click
+			ctrl = self._widget_to_control(child)
+			self.remove_tab(ctrl)
 
 	def _on_message_textview_mykeypress_event(self, widget, event_keyval,
 						event_keymod):
