@@ -218,16 +218,20 @@ class Contacts:
 		return None
 
 	def define_meta_contacts(self, account, children_list):
-		self._children_meta_contacts[account] = children_list
 		self._parent_meta_contacts[account] = {}
 		for parent_jid in children_list:
+			parent_list = self._children_meta_contacts[account][parent_jid] = []
 			for children_jid in children_list[parent_jid]:
+				if not children_jid in parent_list[parent_jid]:
+					parent_list[parent_jid].append(children_jid)
 				self._parent_meta_contacts[account][children_jid] = parent_jid
 	
 	def add_subcontact(self, account, parent_jid, child_jid):
 		self._parent_meta_contacts[account][child_jid] = parent_jid
 		if self._children_meta_contacts[account].has_key(parent_jid):
-			self._children_meta_contacts[account][parent_jid].append(child_jid)
+			list = self._children_meta_contacts[account][parent_jid]
+			if not child_jid in list:
+				list.append(child_jid)
 		else:
 			self._children_meta_contacts[account][parent_jid] = [child_jid]
 		common.gajim.connections[account].store_meta_contacts(
