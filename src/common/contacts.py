@@ -48,6 +48,7 @@ class Contact:
 		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
 		# this holds what WE SEND to contact (our current chatstate)
 		self.our_chatstate = our_chatstate
+		self.msg_id = None
 		# this is contact's chatstate
 		self.chatstate = chatstate
 		self.last_status_time = last_status_time

@@ -388,23 +388,20 @@ class Connection:
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		encrypted = False
 		chatstate = None
-		xtags = msg.getTags('x')
-		encTag = None
+		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
 		decmsg = ''
+		# invitations
 		invite = None
-		delayed = False
-		for xtag in xtags:
-			if xtag.getNamespace() == common.xmpp.NS_ENCRYPTED:
-				encTag = xtag
-			# invitations
-			elif xtag.getNamespace() == common.xmpp.NS_MUC_USER and \
-				xtag.getTag('invite') and not encTag:
-				invite = xtag
-			elif xtag.getNamespace() == common.xmpp.NS_DELAY:
-				delayed = True
+		if not encTag:
+			invite = msg.getTag('x', namespace = common.xmpp.NS_MUC_USER)
+			if invite and not invite.getTag('invite'):
+				invite = None
+		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) != None
+		msg_id = None
 		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
 		# invitation
 		# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
+		xtags = msg.getTags('x')
 		for xtag in xtags:
 			if xtag.getNamespace() == common.xmpp.NS_CONFERENCE and not invite:
 				room_jid = xtag.getAttr('jid')
@@ -417,7 +414,13 @@ class Connection:
 				if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
 					chatstate = child.getName()
 					break
-
+			# No JEP-0085 support, fallback to JEP-0022
+			if not chatstate:
+				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
+				chatstate = 'active'
+				if not msgtxt and chatstate_child.getTag('composing'):
+ 					chatstate = 'composing'
+						
 		if encTag and USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
@@ -452,7 +455,7 @@ class Connection:
 				no_log_for:
 				gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim, subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate))
+				chatstate, msg_id))
 		else: # it's single message
 			if self.name not in no_log_for and jid not in no_log_for:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim, subject = subject)
@@ -465,7 +468,7 @@ class Connection:
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 			else:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, None))
+					subject, chatstate, msg_id))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
@@ -2105,7 +2108,7 @@ class Connection:
 		msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject)
 		self.connection.send(msg_iq)
 
-	def send_message(self, jid, msg, keyID, type = 'chat', subject='', chatstate = None):
+	def send_message(self, jid, msg, keyID, type = 'chat', subject='', chatstate = None, msg_id = None):
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
@@ -2133,12 +2136,18 @@ class Connection:
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
-		# chatstates - if peer supports jep85, send chatstates
+		# chatstates - if peer supports jep85 or jep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
 		if chatstate is not None:
-			msg_iq.setTag(chatstate, {},
-				namespace = 'http://jabber.org/protocol/chatstates')
+			# JEP-0085
+			msg_iq.setTag(chatstate, namespace = common.xmpp.NS_CHATSTATES)
+			# JEP-0022
+			chatstate_node = msg_iq.setTag('x', namespace = common.xmpp.NS_EVENT)
+			if msg_id:
+				chatstate_node.setTagData('id', msg_id)
+			if chatstate is 'composing' or msgtxt:
+				chatstate_node.addChild(name = 'composing') # we request JEP-0022 composing notification
 
 		self.connection.send(msg_iq)
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')

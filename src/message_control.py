@@ -133,12 +133,12 @@ class MessageControl:
 			n = len(gajim.awaiting_events[self.account][self.contact.jid])
 		return n
 
-	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
+	def send_message(self, message, keyID = '', type = 'chat', chatstate = None, msg_id = None):
 		'''Send the given message to the active tab'''
 		jid = self.contact.jid
 		# Send and update history
 		gajim.connections[self.account].send_message(jid, message, keyID,
-						type = type, chatstate = chatstate)
+						type = type, chatstate = chatstate, msg_id = msg_id)
 
 	def position_menu_under_button(self, menu):
 		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786

@@ -473,6 +473,7 @@ class Interface:
 		resource = gajim.get_resource_from_jid(array[0])
 		msg_type = array[4]
 		chatstate = array[6]
+		msg_id = array[7]
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
 
@@ -512,19 +513,21 @@ class Interface:
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
-			if chatstate is not None: # he or she sent us reply, so he supports jep85
+			if chatstate is not None: # he or she sent us reply, so he supports jep85 or jep22
 				contact.chatstate = chatstate
 				if contact.our_chatstate == 'ask': # we were jep85 disco?
 					contact.our_chatstate = 'active' # no more
 				
 				chat_control.handle_incoming_chatstate()
 			elif contact.chatstate != 'active':
-				# got no valid jep85 answer, peer does not support it
+				# got no valid jep85 no jep22 answer, peer does not support it
 				contact.chatstate = False
 		elif contact and chatstate == 'active':
 			# Brand new message, incoming.  
 			contact.our_chatstate = chatstate
 			contact.chatstate = chatstate
+			if msg_id: # Do not overwrite an existing msg_id with None
+				contact.msg_id = msg_id
 
 		if not array[1]: #empty message text
 			return

@@ -337,14 +337,14 @@ class ChatControlBase(MessageControl):
 			return True
 		return False
 
-	def send_message(self, message, keyID = '', type = 'chat', chatstate = None):
+	def send_message(self, message, keyID = '', type = 'chat', chatstate = None, msg_id = None):
 		'''Send the given message to the active tab'''
 		if not message or message == '\n':
 			return
 
 		if not self._process_command(message):
 			MessageControl.send_message(self, message, keyID, type = type,
-					chatstate = chatstate)
+					chatstate = chatstate, msg_id = msg_id)
 			# Record message history
 			self.save_sent_message(message)
 
@@ -974,7 +974,7 @@ class ChatControl(ChatControlBase):
 				self._schedule_activity_timers()
 				
 		ChatControlBase.send_message(self, message, keyID, type = 'chat',
-				chatstate = chatstate_to_send)
+				chatstate = chatstate_to_send, msg_id = contact.msg_id)
 		self.print_conversation(message, self.contact.jid, encrypted = encrypted)
 
 	def check_for_possible_paused_chatstate(self, arg):
