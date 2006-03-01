@@ -349,7 +349,7 @@ class Logger:
 		'''returns the list of days that have logs (not status messages)'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
-		list = []
+		days_with_logs = []
 
 		# First select all date of month whith logs we want
 		start_of_month = self.get_unix_time_from_date(year, month, 1)
@@ -374,7 +374,7 @@ class Logger:
 				''' % (line[0])) 
 
 		# then search in this small temp table for each day 
-		for day in xrange(1, max_day): 
+		for day in xrange(1, max_day + 1):  # count from 1 to 28 or to 30 or to 31
 			start_of_day = self.get_unix_time_from_date(year, month, day) 
 			last_second_of_day = start_of_day + seconds_in_a_day - 1 
 
@@ -386,12 +386,12 @@ class Logger:
 				''' % (start_of_day, last_second_of_day)) 
 			result = self.cur.fetchone() 
 			if result: 
-				list[0:0]=[day]
+				days_with_logs[0:0]=[day]
 
 		# Delete temporary table 
 		self.cur.execute('DROP TABLE blabla') 
 		result = self.cur.fetchone()
-		return list
+		return days_with_logs
 
 	def get_last_date_that_has_logs(self, jid):
 		'''returns last time (in seconds since EPOCH) for which
