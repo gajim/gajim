@@ -179,9 +179,7 @@ class ConversationTextview(gtk.TextView):
 			position = self.window.get_origin()
 			win = self.get_toplevel()
 			self.line_tooltip.show_tooltip(_('Text below this line is what has '
-			'been said since the last time you paid attention to this group chat'),
-				(0, 8), (win.get_screen().get_display().get_pointer()[1],
-				position[1] + pointer[1]))
+			'been said since the last time you paid attention to this group chat'),	8, position[1] + pointer[1])
 
 	def on_textview_motion_notify_event(self, widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
