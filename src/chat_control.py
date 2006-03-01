@@ -641,7 +641,7 @@ class ChatControlBase(MessageControl):
 		jid = contact.jid
 
 		if self.type_id == message_control.TYPE_GC:
-			start_removing_from = 7 # # this is from the seperator and after
+			start_removing_from = 6 # # this is from the seperator and after
 		else:
 			if _('Not in Roster') in contact.groups: # for add_to_roster_menuitem
 				childs[5].show()

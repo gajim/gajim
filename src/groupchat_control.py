@@ -301,6 +301,7 @@ class GroupchatControl(ChatControlBase):
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, self.nick)
 		if c.affiliation not in ('owner', 'admin'):
 			childs[1].set_sensitive(False)
+		menu = self.remove_possible_switch_to_menuitems(menu)
 		return menu
 
 	def on_message(self, nick, msg, tim):
