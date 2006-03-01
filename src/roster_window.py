@@ -2745,11 +2745,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			and path_dest[1] == 0: # dropped before the first group
 			return
 		iter_dest = model.get_iter(path_dest)
-		account = model[iter_dest][C_ACCOUNT].decode('utf-8')
 		type_dest = model[iter_dest][C_TYPE].decode('utf-8')
 		jid_dest = model[iter_dest][C_JID].decode('utf-8')
-		c_dest = gajim.contacts.get_contact_with_highest_priority(account,
-			jid_dest)
 
 		if info == self.TARGET_TYPE_URI_LIST:
 			# User dropped a file on the roster
@@ -2757,6 +2754,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				return
 			if type_dest != 'contact':
 				return
+			account = model[iter_dest][C_ACCOUNT].decode('utf-8')
+			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
+				jid_dest)
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
 			for uri in uri_splitted:
@@ -2775,8 +2775,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		if type_source != 'contact': # source is not a contact
 			return
-		if path_dest[0] != path_source[0]: # dropped in another account
-			return
+		account = model[iter_source][C_ACCOUNT].decode('utf-8')
+		if type_dest == 'contact':
+			dest_account = model[iter_dest][C_ACCOUNT].decode('utf-8')
+			if account != dest_account: # dropped on a contact from another account
+				return
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':
 			it = model.iter_parent(it)
@@ -2847,6 +2850,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			item.connect('activate', self.on_drop_in_group, account, c_source,
 				grp_dest, context, etime, grp_source)
 			menu.append(item)
+			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
+				jid_dest)
 			item = gtk.MenuItem(_('Make %s as subcontact of %s') % (c_source.name,
 				c_dest.name))
 			item.connect('activate', self.on_drop_in_contact, account, c_source,
