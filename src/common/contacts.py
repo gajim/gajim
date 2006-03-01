@@ -220,10 +220,10 @@ class Contacts:
 	def define_meta_contacts(self, account, children_list):
 		self._parent_meta_contacts[account] = {}
 		for parent_jid in children_list:
-			parent_list = self._children_meta_contacts[account][parent_jid] = []
+			list = self._children_meta_contacts[account][parent_jid] = []
 			for children_jid in children_list[parent_jid]:
-				if not children_jid in parent_list[parent_jid]:
-					parent_list[parent_jid].append(children_jid)
+				if not children_jid in list:
+					list.append(children_jid)
 				self._parent_meta_contacts[account][children_jid] = parent_jid
 	
 	def add_subcontact(self, account, parent_jid, child_jid):
