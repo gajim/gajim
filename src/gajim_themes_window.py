@@ -74,12 +74,17 @@ class GajimThemesWindow:
 		self.set_theme_options(self.current_theme, self.current_option)
 		
 		self.xml.signal_autoconnect(self)
+		self.window.connect('delete-event', self.on_themese_window_delete_event)
 		self.themes_tree.get_selection().connect('changed', 
 				self.selection_changed)
 		self.window.show_all()
-
+	
+	def on_themese_window_delete_event(self, widget, event):
+		self.window.hide()
+		return True # do NOT destroy the window
+	
 	def on_close_button_clicked(self, widget):
-		self.window.destroy()
+		self.window.hide()
 
 	def on_theme_cell_edited(self, cell, row, new_name):
 		model = self.themes_tree.get_model()

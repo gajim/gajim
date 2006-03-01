@@ -747,7 +747,7 @@ class ChatControl(ChatControlBase):
 
 	def notify_on_new_messages(self):
 		return gajim.config.get('trayicon_notification_on_new_messages')
-
+	
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''we enter the eventbox area so we under conditions add a timeout
 		to show a bigger avatar after 0.5 sec'''
@@ -833,7 +833,7 @@ class ChatControl(ChatControlBase):
 
 	def draw_banner(self, chatstate = None):
 		'''Draw the fat line at the top of the window that 
-		houses the status icon, name, jid, and avatar.  The chatstate arg should
+		houses the status icon, name, jid.  The chatstate arg should
 		only be used if the control's chatstate member is NOT to be use, such as
 		composing, paused, etc.
 		'''
@@ -870,6 +870,30 @@ class ChatControl(ChatControlBase):
 		#label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
 		#	% (name, fulljid)
 		
+		# get banner font settings
+		theme = gajim.config.get('roster_theme')
+		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
+		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
+		
+		if bannerfont:
+			font = pango.FontDescription(bannerfont)
+		else:
+			font = pango.FontDescription('Normal')
+		if bannerfontattrs:
+			# B is attribute set by default
+			if 'B' in bannerfontattrs:
+				font.set_weight(pango.WEIGHT_HEAVY)
+			if 'I' in bannerfontattrs:
+				font.set_style(pango.STYLE_ITALIC)
+		
+		font_attrs = 'font_desc="%s"' % font.to_string()
+		font_size = font.get_size()
+		
+		# in case there is no font specified we use x-large font size
+		if font_size == 0:
+			font_size = 'x-large'
+			font_attrs = '%s size="%s"' % (font_attrs, font_size)
+		
 		st = gajim.config.get('chat_state_notifications')
 		cs = contact.chatstate
 		if cs and st in ('composing_only', 'all'):
@@ -884,18 +908,19 @@ class ChatControl(ChatControlBase):
 				else:
 					chatstate = ''
 			label_text = \
-			'<span weight="heavy" size="x-large">%s</span>%s %s' % \
-				(name, acct_info, chatstate)
+			'<span %s>%s</span>%s %s' % \
+				(font_attrs, name, acct_info, chatstate)
 		else:
-			label_text = '<span weight="heavy" size="x-large">%s</span>%s' % \
-					(name, acct_info)
+			# weight="heavy" size="x-large"
+			label_text = '<span %s>%s</span>%s' % \
+					(font_attrs, name, acct_info)
 		
 		if status is not None:
 			label_text += '\n%s' % status
 
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
-
+	
 	def _update_gpg(self):
 		tb = self.xml.get_widget('gpg_togglebutton')
 		if self.contact.keyID: # we can do gpg

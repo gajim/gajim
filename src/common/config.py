@@ -260,7 +260,9 @@ class Config:
 			'contactfontattrs': [ opt_str, '' ],
 			'bannertextcolor': [ opt_color, 'black' ],
 			'bannerbgcolor': [ opt_color, '' ],
-
+			'bannerfont': [ opt_str, '' ],
+			'bannerfontattrs': [ opt_str, 'B' ],
+				
 			# http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
 			# FIXME: not black but the default color from gtk+ theme
 			'state_active_color': [ opt_color, 'black' ],

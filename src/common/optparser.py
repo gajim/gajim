@@ -162,7 +162,8 @@ class OptionsParser:
 		d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
 			'accountfontattrs', 'grouptextcolor', 'groupbgcolor', 'groupfont',
 			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
-			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor']
+			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont', 
+			'bannerfontattrs']
 		for theme_name in (_('grocery'), _('plain')):
 			if theme_name not in gajim.config.get_per('themes'):
 				gajim.config.add_per('themes', theme_name)

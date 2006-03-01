@@ -417,6 +417,8 @@ class PreferencesWindow:
 					self.on_msg_treemodel_row_changed)
 		self.msg_tree.get_model().connect('row-deleted',
 					self.on_msg_treemodel_row_deleted)
+		
+		self.theme_preferences = None
 
 	def on_preferences_window_show(self, widget):
 		self.update_preferences_window()
@@ -532,7 +534,10 @@ class PreferencesWindow:
 		gajim.interface.roster.reload_jabber_state_images()
 
 	def on_manage_theme_button_clicked(self, widget):
-		dialogs.GajimThemesWindow()
+		if self.theme_preferences is None:
+			self.theme_preferences = dialogs.GajimThemesWindow()
+		else:
+			self.theme_preferences.window.present()
 
 	def on_theme_combobox_changed(self, widget):
 		model = widget.get_model()
