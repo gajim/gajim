@@ -517,21 +517,20 @@ class RosterTooltip(NotificationAreaTooltip):
 				text = text % local_time 
 				info += '\n<span style="italic">%s</span>' % text
 		
-		# uncomment this
-		#~ for type_ in ('jpeg', 'png'):
-			#~ file = os.path.join(gajim.AVATAR_PATH, prim_contact.jid + '.' + type_)
-			#~ if os.path.exists(file):
-				#~ self.avatar_image.set_from_file(file)
-				#~ pix = self.avatar_image.get_pixbuf()
-				#~ pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-				#~ self.avatar_image.set_from_pixbuf(pix)
-				#~ break
-		#~ else:
-			#~ self.avatar_image.set_from_pixbuf(None)
+		for type_ in ('jpeg', 'png'):
+			file = os.path.join(gajim.AVATAR_PATH, prim_contact.jid + '.' + type_)
+			if os.path.exists(file):
+				self.avatar_image.set_from_file(file)
+				pix = self.avatar_image.get_pixbuf()
+				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+				self.avatar_image.set_from_pixbuf(pix)
+				break
+		else:
+			self.avatar_image.set_from_pixbuf(None)
 		self.text_label.set_markup(info)
 		self.hbox.pack_start(self.image, False, False)
 		self.hbox.pack_start(self.table, True, True)
-		#~ self.hbox.pack_start(self.avatar_image, False, False)
+		self.hbox.pack_start(self.avatar_image, False, False)
 		self.win.add(self.hbox)
 
 class FileTransfersTooltip(BaseTooltip):
