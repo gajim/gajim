@@ -664,7 +664,7 @@ msgstr "Commencer une discussion avec le compte %s"
 
 #: ../src/dialogs.py:814
 msgid "Start Chat"
-msgstr "_Commencer une discussion"
+msgstr "Commencer une discussion"
 
 #: ../src/dialogs.py:815
 msgid ""
