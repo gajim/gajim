@@ -776,10 +776,11 @@ class Interface:
 			# is offline, so only on Contact instance
 			if isinstance(c, list):
 				c = c[0]
-			c.last_status_time = time.localtime(time.time() - array[2])
-			if array[3]:
-				c.status = array[3]
-			win.set_last_status_time()
+			if c: # c can be none if it's a gc contact
+				c.last_status_time = time.localtime(time.time() - array[2])
+				if array[3]:
+					c.status = array[3]
+				win.set_last_status_time()
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
 
