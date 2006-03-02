@@ -1638,6 +1638,8 @@ class Connection:
 					path_to_file = os.path.join(gajim.VCARD_PATH, jid)
 					fil = open(path_to_file, 'w')
 					fil.close()
+				elif jid == our_jid:
+					self.dispatch('MYVCARD', {'jid': jid})
 		del self.awaiting_answers[id]
 
 	def _event_dispatcher(self, realm, event, data):
@@ -1667,6 +1669,7 @@ class Connection:
 						self.connection = None
 					common.xmpp.features_nb.register(self.connection, data[0],
 						req, _on_register_result)
+					return
 				is_form = data[2]
 				if is_form:
 					conf = self.parse_data_form(data[1])
