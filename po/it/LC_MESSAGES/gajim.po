@@ -1,17 +1,17 @@
 # Italian translations for gajim package
 # Traduzione italiana del pacchetto gajim.
-# Copyright (C) 2005 Mauro Brenna Andrea Ratti
+# Copyright (C) 2005-06 Mauro Brenna, Andrea Ratti, Matteo Dell'Amico
 # This file is distributed under the same license as the Gajim Package.
 # Mauro Brenna <malloblenne@gmail.com>, 2005.
 # Andrea Ratti <scimiot@yahoo.it>, 2005.
-# Matteo Dell'Amico <della@linux.it>, 2005.
+# Matteo Dell'Amico <della@linux.it>, 2005, 2006.
 #: ../src/gajim-remote.py:196 ../src/gajim-remote.py:203
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-01-19 23:09+0100\n"
-"PO-Revision-Date: 2005-12-19 17:49+0100\n"
+"PO-Revision-Date: 2006-03-02 15:11+0100\n"
 "Last-Translator: Matteo Dell'Amico <della@linux.it>\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -92,7 +92,7 @@ msgstr "Il messaggio non può venire inviato finché non si è connessi."
 #: ../src/roster_window.py:2521 ../src/roster_window.py:2529
 #: ../src/common/helpers.py:228
 msgid "Not in Roster"
-msgstr "non nel roster"
+msgstr "Non nei contatti"
 
 #: ../src/chat_control.py:672 ../src/gtkgui.glade.h:81
 msgid "Chat"
@@ -104,7 +104,7 @@ msgstr "Cifratura OpenPGP"
 
 #. we talk about a contact here
 #: ../src/chat_control.py:866
-#, fuzzy, python-format
+#, python-format
 msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 msgstr ""
 "%s non ha annunciato una chiave OpenPGP e non gliene è stata assegnata una"
@@ -271,22 +271,19 @@ msgstr "Registra a %s"
 
 #: ../src/config.py:1876
 msgid "Ban List"
-msgstr ""
+msgstr "Lista utenti bloccati"
 
 #: ../src/config.py:1877
-#, fuzzy
 msgid "Member List"
-msgstr "_Membro"
+msgstr "Lista membri"
 
 #: ../src/config.py:1878
-#, fuzzy
 msgid "Owner List"
-msgstr "_Proprietario"
+msgstr "Lista proprietari"
 
 #: ../src/config.py:1879
-#, fuzzy
 msgid "Administrator List"
-msgstr "_Amministratore"
+msgstr "Lista amministratori"
 
 #. Address column
 #: ../src/config.py:1912 ../src/disco.py:685
@@ -295,64 +292,56 @@ msgstr "JID"
 
 #: ../src/config.py:1920
 msgid "Reason"
-msgstr ""
+msgstr "Motivo"
 
 #: ../src/config.py:1925
-#, fuzzy
 msgid "Nick"
-msgstr "_Caccia"
+msgstr "Nickname"
 
 #: ../src/config.py:1929
-#, fuzzy
 msgid "Role"
-msgstr "Ruolo:"
+msgstr "Ruolo"
 
 #: ../src/config.py:1950
-#, fuzzy
 msgid "Banning..."
-msgstr "Sto bandendo %s"
+msgstr "Sto bloccando..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
 #: ../src/config.py:1952
-#, fuzzy
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
-msgstr "<b>Cosa fare?</b>"
+msgstr "<b>Chi si vuole bloccare?</b>\n\n"
 
 #: ../src/config.py:1954
 msgid "Adding Member..."
-msgstr ""
+msgstr "Aggiunta membro..."
 
 #: ../src/config.py:1955
-#, fuzzy
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
-msgstr "<b>Cosa fare?</b>"
+msgstr "<b>Chi si vuole rendere membro?</b>\n\n"
 
 #: ../src/config.py:1957
 msgid "Adding Owner..."
-msgstr ""
+msgstr "Aggiunta proprietario..."
 
 #: ../src/config.py:1958
-#, fuzzy
 msgid ""
 "<b>Whom do you want to make a owner?</b>\n"
 "\n"
-msgstr "<b>Cosa fare?</b>"
+msgstr "<b>Chi si vuole rendere proprietario?</b>\n\n"
 
 #: ../src/config.py:1960
-#, fuzzy
 msgid "Adding Administrator..."
-msgstr "_Amministratore"
+msgstr "Aggiunta amministratore..."
 
 #: ../src/config.py:1961
-#, fuzzy
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
-msgstr "<b>Cosa fare?</b>"
+msgstr "<b>Chi si vuole rendere amministratore?</b>\n\n"
 
 #: ../src/config.py:1962
 msgid ""
@@ -363,6 +352,12 @@ msgid ""
 "4. domain (the domain itself matches, as does any user@domain,\n"
 "domain/resource, or address containing a subdomain."
 msgstr ""
+"Può essere uno dei seguenti:\n"
+"1. utente@dominio/risorsa (corrisponde solo agli indirizzi con la risorsa data)\n"
+"2. utente@dominio (corrisponde a qualsiasi risorsa)\n"
+"3. dominio/risorsa (corrisponde solo agli indirizzi con la risorsa data)\n"
+"4. dominio (il dominio corrisponde, così come qualsiasi utente@dominio,\n"
+"dominio/risorsa, o indirizzo contenente un sottodominio)."
 
 #: ../src/config.py:2049
 msgid "Text"
@@ -591,11 +586,11 @@ msgstr "ID utente non valido"
 
 #: ../src/dialogs.py:382
 msgid "Contact already in roster"
-msgstr "Contatto già nel roster"
+msgstr "Contatto già presente nella lista"
 
 #: ../src/dialogs.py:383
 msgid "This contact is already listed in your roster."
-msgstr "Questo contatto è già presente nel roster."
+msgstr "Questo contatto è già presente nella lista."
 
 #: ../src/dialogs.py:445
 msgid "A GTK+ jabber client"
@@ -603,17 +598,17 @@ msgstr "Un client jabber GTK+"
 
 #: ../src/dialogs.py:455
 msgid "Read AUTHORS file for full list including past developers"
-msgstr ""
+msgstr "Leggere il file AUTHORS per la lista completa, comprendente anche gli sviluppatori non più attivi"
 
 #: ../src/dialogs.py:457
 msgid "THANKS:"
-msgstr ""
+msgstr "GRAZIE:"
 
 #. remove one english setence
 #. and add it manually as translatable
 #: ../src/dialogs.py:464
 msgid "Last but not least, we thank all the package maintainers"
-msgstr ""
+msgstr "Dulcis in fundo, ringranziamo tutti i gestori dei pacchetti"
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:477
@@ -647,13 +642,12 @@ msgid "Join Group Chat"
 msgstr "Entrare in chat di gruppo"
 
 #: ../src/dialogs.py:792
-#, fuzzy
 msgid "Invalid room or server name"
-msgstr "Nome utente non valido"
+msgstr "Nome della stanza o del server non valido"
 
 #: ../src/dialogs.py:793
 msgid "The room name or server name has not allowed characters."
-msgstr ""
+msgstr "Il nome della stanza o del server contiene caratteri non permessi."
 
 #: ../src/dialogs.py:812
 #, python-format
@@ -758,21 +752,20 @@ msgid "To %s"
 msgstr "A %s"
 
 #: ../src/dialogs.py:989 ../src/gajim.py:841 ../src/notify.py:199
-#, fuzzy
 msgid "New E-mail"
-msgstr "E-Mail"
+msgstr "Nuova e-mail"
 
 #: ../src/dialogs.py:993 ../src/notify.py:200
-#, fuzzy, python-format
+#, python-format
 msgid "You have %d new E-mail message"
 msgid_plural "You have %d new E-mail messages"
-msgstr[0] "Ci sono messaggi non letti"
-msgstr[1] "Ci sono messaggi non letti"
+msgstr[0] "C'è %d nuova e-mail"
+msgstr[1] "Ci sono %d nuove e-mail"
 
 #: ../src/dialogs.py:994 ../src/notify.py:201
 #, python-format
 msgid "%(new_mail_gajim_ui_msg)s on %(gmail_mail_address)s"
-msgstr ""
+msgstr "%(new_mail_gajim_ui_msg)s su %(gmail_mail_address)s"
 
 #. FIXME: for Received with should become 'in'
 #: ../src/dialogs.py:1181
@@ -988,9 +981,8 @@ msgid "This file already exists"
 msgstr "Questo file esiste già"
 
 #: ../src/filetransfers_window.py:313
-#, fuzzy
 msgid "What do you want to do?"
-msgstr "<b>Cosa fare?</b>"
+msgstr "Cosa fare?"
 
 #: ../src/filetransfers_window.py:328
 #, python-format
@@ -1080,7 +1072,7 @@ msgstr "mostra aiuto sul comando"
 
 #: ../src/gajim-remote.py:90
 msgid "Shows or hides the roster window"
-msgstr "Mostra o nascondi la finestra del roster"
+msgstr "Mostra o nascondi la lista contatti"
 
 #: ../src/gajim-remote.py:94
 msgid "Popups a window with the next unread message"
@@ -1090,9 +1082,7 @@ msgstr "Apre una finestra con il prossimo messaggio non letto"
 msgid ""
 "Prints a list of all contacts in the roster. Each contact appear on a "
 "separate line"
-msgstr ""
-"Stampa un elenco di tutti i contatti nel roster. Ogni contatto appare su una "
-"linea separata"
+msgstr "Stampa la lista contatti. Ogni contatto appare su una linea separata"
 
 #: ../src/gajim-remote.py:100 ../src/gajim-remote.py:113
 #: ../src/gajim-remote.py:123 ../src/gajim-remote.py:136
@@ -1158,10 +1148,7 @@ msgid ""
 "Sends new message to a contact in the roster. Both OpenPGP key and account "
 "are optional. If you want to set only 'account', without 'OpenPGP key', just "
 "set 'OpenPGP key' to ''."
-msgstr ""
-"Invia un nuovo messaggio ad un contatto nel roster. Sia la chiave OpenPGP "
-"che l'account sono opzionali. Se si vuole impostare solo 'account', senza "
-"'chiave OpenPGP', impostare 'chiave OpenPGP' a ''."
+msgstr "Invia un nuovo messaggio ad un membro della lista contatti. Sia la chiave OpenPGP che l'account sono opzionali. Se si vuole impostare solo 'account', senza 'chiave OpenPGP', impostare 'chiave OpenPGP' a ''."
 
 #: ../src/gajim-remote.py:132
 msgid "JID of the contact that will receive the message"
@@ -1244,11 +1231,11 @@ msgstr "Scrive lo stato corrente delle preferenze di Gajim nel file .config"
 
 #: ../src/gajim-remote.py:178
 msgid "Removes contact from roster"
-msgstr "Elimina il contatto dal roster"
+msgstr "Elimina il contatto dalla lista"
 
 #: ../src/gajim-remote.py:187
 msgid "Adds contact to roster"
-msgstr "Aggiunge il contatto al roster"
+msgstr "Aggiunge il contatto alla lista"
 
 #: ../src/gajim-remote.py:189
 msgid "Adds new contact to this account."
@@ -1261,12 +1248,9 @@ msgstr ""
 "account)"
 
 #: ../src/gajim-remote.py:201
-#, fuzzy
 msgid ""
 "Returns current status message(the global one unless account is specified)"
-msgstr ""
-"Restituisce lo stato corrente (quello globale se non è specificato un "
-"account)"
+msgstr "Restituisce il messaggio di stato corrente (quello globale se non è specificato un account)"
 
 #: ../src/gajim-remote.py:223
 msgid "Missing argument \"contact_jid\""
@@ -1278,7 +1262,7 @@ msgid ""
 "'%s' is not in your roster.\n"
 "Please specify account for sending the message."
 msgstr ""
-"'%s' non è nel roster.\n"
+"'%s' non appartiene alla lista contatti.\n"
 "Specificare l'account per l'invio del messaggio."
 
 #: ../src/gajim-remote.py:249
@@ -1361,10 +1345,9 @@ msgstr ""
 "da %s"
 
 #: ../src/gajim.py:66
-#, fuzzy
 msgid ""
 "Please make sure that GTK+ and PyGTK have libglade support in your system."
-msgstr "Verificare che gtk e pygtk abbiano supporto libglade sul sistema."
+msgstr "Verificare che GTK+ e PyGTK abbiano supporto libglade sul sistema."
 
 #: ../src/gajim.py:71
 msgid "Gajim needs PySQLite2 to run"
@@ -1451,15 +1434,17 @@ msgid "Could not save your settings and preferences"
 msgstr "Impossibile salvare impostazioni e preferenze"
 
 #: ../src/gajim.py:1502
-#, fuzzy
 msgid "GUI Migration failed"
-msgstr "Pubblicazione della vCard fallita"
+msgstr "Migrazione GUI fallita"
 
 #: ../src/gajim.py:1505
 msgid ""
 "Logs migration through graphical interface failed. The migration process "
 "will start in the background. Please wait a few minutes for Gajim to start."
 msgstr ""
+"La migrazione dei log tramite l'interfaccia grafica è fallita. Il processo \n"
+"di migrazione partirà in background. Attendere qualche minuto per l'avvio \n"
+"di Gajim."
 
 #. loop for ever
 #: ../src/gajim.py:1513
@@ -1497,7 +1482,7 @@ msgstr "Scegliere prima un altro tema."
 
 #: ../src/groupchat_control.py:63
 msgid "Private chat"
-msgstr ""
+msgstr "Chat privata"
 
 #: ../src/groupchat_control.py:79
 msgid "Sending private message failed"
@@ -1577,7 +1562,7 @@ msgid "%s does not appear to be a valid JID"
 msgstr "%s non sembra essere un JID valido"
 
 #: ../src/groupchat_control.py:917
-#, fuzzy, python-format
+#, python-format
 msgid "No such command: /%s (if you want to send this, prefix it with /say)"
 msgstr "Comando inesistente: /%s (per inviarlo, scrivere /say prima di esso)"
 
@@ -1706,9 +1691,9 @@ msgid "If you close this window, you will be disconnected from this room."
 msgstr "Chiudendo questa finestra, si verrà disconnessi da questa stanza."
 
 #: ../src/groupchat_control.py:1027
-#, fuzzy, python-format
+#, python-format
 msgid "Do _not ask me about closing \"%s\" again"
-msgstr "_Non chiedere più"
+msgstr "_Non chiedere più se chiudere \"%s\""
 
 #: ../src/groupchat_control.py:1061
 msgid "Changing Subject"
@@ -1741,7 +1726,7 @@ msgstr "Il segnalibro è stato aggiunto con successo"
 
 #: ../src/groupchat_control.py:1101
 msgid "You can manage your bookmarks via Actions menu in your roster."
-msgstr "È possibile gestire i segnalibri attraverso il menu Azioni nel roster."
+msgstr "È possibile gestire i segnalibri attraverso il menu Azioni nella finestra della lista contatti."
 
 #. ask for reason
 #: ../src/groupchat_control.py:1210
@@ -1975,6 +1960,8 @@ msgid ""
 "Animated\n"
 "Static"
 msgstr ""
+"Animato\n"
+"Statico"
 
 #: ../src/gtkgui.glade.h:54
 msgid "Ask status message when I:"
@@ -2089,10 +2076,7 @@ msgid ""
 "Check this option, only if someone you don't have in the roster spams/annoys "
 "you. Use with caution, cause it blocks all messages from any contact that is "
 "not in the roster"
-msgstr ""
-"Selezionare questa opzione solo se qualche utente fuori dal roster spamma o "
-"disturba. Attenzione, verranno bloccati tutti i messaggi ricevuti da "
-"contatti non presenti nel roster."
+msgstr "Selezionare questa opzione solo se qualche utente fuori dalla lista contatti spamma o disturba. Attenzione, verranno bloccati tutti i messaggi ricevuti da chi non è membro della lista contatti."
 
 #: ../src/gtkgui.glade.h:84
 msgid ""
@@ -2123,9 +2107,8 @@ msgid "Click to change account's password"
 msgstr "Cliccare per cambiare la password dell'account"
 
 #: ../src/gtkgui.glade.h:89
-#, fuzzy
 msgid "Click to insert an emoticon (Alt+M)"
-msgstr "Cliccare per inserire un emoticon (Alt+E)"
+msgstr "Cliccare per inserire un emoticon (Alt+M)"
 
 #: ../src/gtkgui.glade.h:90
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
@@ -2208,11 +2191,11 @@ msgstr "Dipartimento:"
 
 #: ../src/gtkgui.glade.h:109
 msgid "Display avatars of contacts in roster"
-msgstr "Mostra gli avatar dei contatti nel roster"
+msgstr "Mostra gli avatar dei contatti nella lista"
 
 #: ../src/gtkgui.glade.h:110
 msgid "Display status messages of contacts in roster"
-msgstr "Mostra i messaggi di stato dei contatti nel roster"
+msgstr "Mostra i messaggi di stato dei contatti nella lista"
 
 #: ../src/gtkgui.glade.h:111
 msgid "E-Mail:"
@@ -2231,9 +2214,8 @@ msgid "Edit _Groups"
 msgstr "Modifica _gruppi"
 
 #: ../src/gtkgui.glade.h:115
-#, fuzzy
 msgid "Emoticon set:"
-msgstr "Emoticon"
+msgstr "Emoticon:"
 
 #. XML Console enable checkbutton
 #: ../src/gtkgui.glade.h:117
@@ -2415,16 +2397,13 @@ msgstr "Se marcato, Gajim ha anche un'icona nell'area di notifica"
 
 #: ../src/gtkgui.glade.h:158
 msgid "If checked, Gajim will display avatars of contacts in roster window"
-msgstr ""
-"Se marcato, Gajim mostrerà gli avatar dei contatti nella finestra del roster"
+msgstr "Se marcato, Gajim mostrerà gli avatar dei contatti nella lista contatti"
 
 #: ../src/gtkgui.glade.h:159
 msgid ""
 "If checked, Gajim will display status messages of contacts under the contact "
 "name in roster window"
-msgstr ""
-"Se marcato, Gajim mostrerà il messaggio di stato di ogni contatto sotto il "
-"nome nella finestra del roster"
+msgstr "Se marcato, Gajim mostrerà il messaggio di stato di ogni membro della lista contatti sotto il suo nome"
 
 #: ../src/gtkgui.glade.h:160
 msgid "If checked, Gajim will join this group chat on startup"
@@ -2438,9 +2417,7 @@ msgstr "Se marcato, Gajim ricorderà la password per questo account"
 msgid ""
 "If checked, Gajim will remember the roster and chat window positions in the "
 "screen and the sizes of them next time you run it"
-msgstr ""
-"Se marcato, Gajim manterrà le posizioni delle finestre di chat e del roster "
-"sullo schermo la prossima volta che verrà eseguito"
+msgstr "Se marcato, Gajim manterrà le posizioni delle finestre di chat e della lista contatti sullo schermo la prossima volta che verrà eseguito"
 
 #: ../src/gtkgui.glade.h:163
 msgid ""
@@ -2489,9 +2466,7 @@ msgid ""
 "If checked, any change to the global status (handled by the combobox at the "
 "bottom of the roster window) will change the status of this account "
 "accordingly"
-msgstr ""
-"Se marcato, ogni cambio allo stato globale (gestito dalla combo box in fondo "
-"alla finestra del roster) cambierà di conseguenza lo stato di questo account"
+msgstr "Se marcato, ogni cambio allo stato globale (gestito dalla combo box sotto la lista contatti) cambierà di conseguenza lo stato di questo account"
 
 #: ../src/gtkgui.glade.h:169
 msgid ""
@@ -2536,7 +2511,7 @@ msgstr "Entra in chat di _gruppo"
 
 #: ../src/gtkgui.glade.h:180
 msgid "Location"
-msgstr "Posizione"
+msgstr "Indirizzo"
 
 #: ../src/gtkgui.glade.h:181
 msgid "Manage Accounts"
@@ -2582,6 +2557,10 @@ msgid ""
 "Per account\n"
 "Per type"
 msgstr ""
+"Mai\n"
+"Sempre\n"
+"Per account\n"
+"Per tipo"
 
 #: ../src/gtkgui.glade.h:195
 msgid "Nickname:"
@@ -2598,7 +2577,7 @@ msgstr "Notificare i contatti che eseguono:"
 
 #: ../src/gtkgui.glade.h:200
 msgid "Notify on new _Gmail e-mail"
-msgstr ""
+msgstr "Notifica le nuove e-mail su _Gmail"
 
 #: ../src/gtkgui.glade.h:201
 msgid "OS:"
@@ -2609,9 +2588,8 @@ msgid "On every _message"
 msgstr "In _tutti i messaggi"
 
 #: ../src/gtkgui.glade.h:203
-#, fuzzy
 msgid "One message _window:"
-msgstr "Invia messaggio e chiudi la finestra"
+msgstr "Una finestra messaggi:"
 
 #: ../src/gtkgui.glade.h:204
 msgid "Open..."
@@ -2651,7 +2629,7 @@ msgstr "Porta: "
 
 #: ../src/gtkgui.glade.h:215
 msgid "Position:"
-msgstr "Posizione:"
+msgstr "Titolo:"
 
 #: ../src/gtkgui.glade.h:216
 msgid "Postal Code:"
@@ -2773,7 +2751,7 @@ msgstr "Salva _passphrase (non sicuro)"
 
 #: ../src/gtkgui.glade.h:242
 msgid "Save _position and size for roster and chat windows"
-msgstr "Salva _posizione e dimensione delle finestre di roster e chat"
+msgstr "Salva _posizione e dimensione delle finestre di chat e lista contatti"
 
 #: ../src/gtkgui.glade.h:243
 msgid "Save conversation _logs for all contacts"
@@ -2784,9 +2762,8 @@ msgid "Save pass_word"
 msgstr "Salva pass_word"
 
 #: ../src/gtkgui.glade.h:245
-#, fuzzy
 msgid "Search"
-msgstr "_Cerca"
+msgstr "Cerca"
 
 #: ../src/gtkgui.glade.h:246
 msgid "Sen_d"
@@ -2862,7 +2839,7 @@ msgstr "Mostra contatti _offline"
 
 #: ../src/gtkgui.glade.h:264
 msgid "Show _Roster"
-msgstr "Mostra _roster"
+msgstr "Mostra lista _contatti"
 
 #: ../src/gtkgui.glade.h:265
 msgid "Show _XML Console"
@@ -2870,7 +2847,7 @@ msgstr "Mostra console _XML"
 
 #: ../src/gtkgui.glade.h:266
 msgid "Show only in _roster"
-msgstr "Mostra solo nel _roster"
+msgstr "Mostra solo nella lista _contatti"
 
 #: ../src/gtkgui.glade.h:267
 msgid "Shows a list of file transfers between you and other"
@@ -2987,7 +2964,7 @@ msgstr "Tipo:"
 
 #: ../src/gtkgui.glade.h:295
 msgid "URL:"
-msgstr ""
+msgstr "URL:"
 
 #: ../src/gtkgui.glade.h:296
 msgid "Underline"
@@ -3015,7 +2992,7 @@ msgstr "_Usa emoticon"
 
 #: ../src/gtkgui.glade.h:302
 msgid "Use _transports iconsets"
-msgstr "Usa il set di icone _trasporti"
+msgstr "Usa le icone dei _trasporti"
 
 #: ../src/gtkgui.glade.h:303
 msgid "Use authentication"
@@ -3077,7 +3054,7 @@ msgstr "_Aggiungi Contatto..."
 
 #: ../src/gtkgui.glade.h:316
 msgid "_Add to Roster"
-msgstr "_Aggiungi al roster"
+msgstr "_Aggiungi ai contatti"
 
 #: ../src/gtkgui.glade.h:317
 msgid "_Address:"
@@ -3190,7 +3167,7 @@ msgstr "_Icona nell'area di notifica"
 
 #: ../src/gtkgui.glade.h:347
 msgid "_Ignore events from contacts not in the roster"
-msgstr "_Ignora gli eventi da contatti non in roster"
+msgstr "_Ignora gli eventi da contatti non appartenenti alla lista"
 
 #: ../src/gtkgui.glade.h:348
 msgid "_Jabber ID:"
@@ -3318,7 +3295,7 @@ msgstr "_Elimina"
 
 #: ../src/gtkgui.glade.h:381 ../src/roster_window.py:1108
 msgid "_Remove from Roster"
-msgstr "_Elimina dal roster"
+msgstr "_Elimina dai contatti"
 
 #: ../src/gtkgui.glade.h:382
 msgid "_Rename"
@@ -3463,7 +3440,7 @@ msgstr "Lo stato ora è: %(status)s"
 #: ../src/message_window.py:398
 #, python-format
 msgid "Switch to %s"
-msgstr "Cambiare in %s"
+msgstr "Andare a %s"
 
 #: ../src/notify.py:145
 #, python-format
@@ -3510,9 +3487,8 @@ msgid "Merged accounts"
 msgstr "Account uniti"
 
 #: ../src/roster_window.py:182
-#, fuzzy
 msgid "Observers"
-msgstr "Server"
+msgstr "Osservatori"
 
 #: ../src/roster_window.py:338
 #, python-format
@@ -3574,7 +3550,7 @@ msgstr "Seleziona una chiave da applicare al contatto"
 
 #: ../src/roster_window.py:1027
 msgid "I would like to add you to my roster"
-msgstr "Vorrei aggiungerti al mio roster"
+msgstr "Vorrei aggiungerti ai miei contatti"
 
 #: ../src/roster_window.py:1060
 msgid "Re_name"
@@ -3622,7 +3598,7 @@ msgstr "Ora \"%s\" ti vedrà sempre come offline."
 #: ../src/roster_window.py:1438
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
-msgstr "Il contatto \"%s\" sarà rimosso dal tuo roster"
+msgstr "Il contatto \"%s\" sarà rimosso dalla tua lista"
 
 #: ../src/roster_window.py:1440
 msgid ""
@@ -3892,7 +3868,6 @@ msgid "Without a connection, you can not get your contact information."
 msgstr "Senza una connessione, non è possibile ottenere i dati personali."
 
 #: ../src/vcard.py:452
-#, fuzzy
 msgid "Personal details"
 msgstr "Informazioni personali"
 
@@ -3926,7 +3901,7 @@ msgstr "%s è una cartella ma dovrebbe essere un file"
 
 #: ../src/common/exceptions.py:35
 msgid "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
-msgstr ""
+msgstr "La dipendenza pysqlite2 (o python-pysqlite2) è mancante. Uscita..."
 
 #: ../src/common/exceptions.py:43
 msgid "Service not available: Gajim is not running, or remote_control is False"
@@ -3973,7 +3948,7 @@ msgstr ""
 
 #: ../src/common/config.py:133
 msgid "Add * and [n] in roster title?"
-msgstr "Aggiungere * e [n] al titolo del roster?"
+msgstr "Aggiungere * e [n] al titolo della lista contatti?"
 
 #: ../src/common/config.py:134
 msgid ""
@@ -4029,7 +4004,7 @@ msgstr "Chiedere prima di chiudere una finestra/scheda di chat di gruppo."
 
 #: ../src/common/config.py:151
 msgid "A list of rooms that do not require confirmation before closing"
-msgstr ""
+msgstr "Una lista di stanze che non richiedono conferma per la chiusura"
 
 #. notif. on file complete
 #. port, used for file transfers
@@ -4090,9 +4065,7 @@ msgstr ""
 msgid ""
 "If True, Gajim will display the status message, if not empty, for every "
 "contact under the contact name in roster window"
-msgstr ""
-"Se Vero, Gajim mostrerà il messaggio di stato, se non vuoto, per ogni "
-"contatto sotto il nome del contatto nella finestra del roster"
+msgstr "Se Vero, Gajim mostrerà il messaggio di stato, se non vuoto, per ogni contatto sotto il nome del contatto nella finestra dei contatti"
 
 #: ../src/common/config.py:179
 msgid ""
@@ -4116,13 +4089,13 @@ msgid ""
 "If True and installed GTK+ and PyGTK versions are at least 2.8, make the "
 "window flash (the default behaviour in most Window Managers) when holding "
 "pending events."
-msgstr ""
+msgstr "Se Vero e le versioni installate di GTK+ e PyGTK sono 2.8 o superiori, la finestra lampeggia (comportamento predefinito per la maggior parte dei gestori di finestre) quando contiene nuovi eventi."
 
 #: ../src/common/config.py:188
 msgid ""
 "Jabberd1.4 does not like sha info when one join a password protected room. "
 "Turn this option to False to stop sending sha info in groupchat presences"
-msgstr ""
+msgstr "Jabberd1.4 non vuole informazioni SHA quando ci si unisce ad una stanza protetta da password. Impostare a Falso per smettere di inviare informazioni SHA nella presenza sulle chat di gruppo"
 
 #: ../src/common/config.py:190
 msgid ""
@@ -4134,10 +4107,15 @@ msgid ""
 "specific window. Note, changing this option requires restarting Gajim before "
 "the changes will take effect"
 msgstr ""
+"Controlla la finestra dove vengono messi i nuovi messaggi.\n"
+"'always' - Tutti i messaggi vengono inviati ad una singola finestra.\n"
+"'never' - Ogni messaggio ottiene la sua finestra.\n"
+"'peracct' - I messaggi per ogni account vengono inviati ad una specifica finestra.\n"
+"'pertype' - Ogni tipo di messaggi (es., chat e chat di gruppo) viene inviato ad una specifica finestra. Nota, cambiare questa opzione richiede il riavvio di Gajim prima che le modifiche abbiano effetto"
 
 #: ../src/common/config.py:191
 msgid "If False, you will no longer see the avatar in the chat window"
-msgstr ""
+msgstr "Se Falso, l'avatar non verrà mostrato nella finestra di chat"
 
 #: ../src/common/config.py:352
 msgid "Sleeping"
@@ -4229,9 +4207,8 @@ msgid "plain"
 msgstr "semplice"
 
 #: ../src/common/connection.py:81
-#, fuzzy
 msgid "Unable to load idle module"
-msgstr "Non è possibile entrare nella stanza"
+msgstr "Impossibile caricare il modulo idle"
 
 #. password required to join
 #. we are banned
@@ -4277,7 +4254,7 @@ msgstr ""
 
 #: ../src/common/connection.py:557 ../src/common/connection.py:2097
 msgid "I would like to add you to my roster."
-msgstr "Vorrei aggiungerti al mio roster."
+msgstr "Vorrei aggiungerti ai miei contatti."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
 #: ../src/common/connection.py:562
@@ -4308,14 +4285,11 @@ msgstr ""
 "Per continuare a mandare e ricevere messaggi, è necessario riconnettersi."
 
 #: ../src/common/connection.py:1382
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
 "management tools such as http://jru.jabberstudio.org/ to remove it"
-msgstr ""
-"Il JID %s non rispetta le RFC. Non verrà aggiunto al tuo roster. Usare "
-"strumenti di gestione del roster come http://jru.jabberstudio.org/ per "
-"rimuoverlo"
+msgstr "Il JID %s non rispetta le RFC. Non verrà aggiunto ai contatti. Usare strumenti di gestione dei contatti come http://jru.jabberstudio.org/ per rimuoverlo"
 
 #: ../src/common/connection.py:1757 ../src/common/connection.py:1838
 #: ../src/common/connection.py:2183
@@ -4916,7 +4890,7 @@ msgstr "cyan"
 #~ msgstr "Inserire i dati per l'account esistente"
 
 #~ msgid "Show roster window on Gajim startup"
-#~ msgstr "Mostra la finestra del roster all'avvio di Gajim"
+#~ msgstr "Mostra la finestra dei contatti all'avvio di Gajim"
 
 #~ msgid "_Compact View"
 #~ msgstr "_Vista compatta"
