@@ -2796,6 +2796,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 				img = self.xml.get_widget('finish_image')
 				img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
 				self.notebook.set_current_page(3) # show finish page
+				self.xml.get_widget('show_vcard_checkbutton').set_active(False)
 			else:
 				self.notebook.set_current_page(2) # show creating page
 				self.update_progressbar_timeout_id = gobject.timeout_add(100,
@@ -2887,6 +2888,16 @@ _('You can set advanced account options by pressing Advanced button, or later by
 			jid_label.set_label(string)
 
 	def save_account(self, login, server, savepass, password):
+		if self.account in gajim.connections:
+			dialogs.ErrorDialog(_('Account name is in use'),
+				_('You already have an account using this name.')).get_response()
+			return
+		con = connection.Connection(self.account)
+		con.password = password
+
+		if not savepass:
+			password = ""
+
 		config = {}
 		config['name'] = login
 		config['hostname'] = server
@@ -2907,13 +2918,6 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		config['savegpgpass'] = False
 		config['gpgpassword'] = ''
 
-		if self.account in gajim.connections:
-			dialogs.ErrorDialog(_('Account name is in use'),
-				_('You already have an account using this name.')).get_response()
-			return
-		con = connection.Connection(self.account)
-		if savepass:
-			con.password = password
 		if not self.modify:
 			con.new_account(self.account, config)
 			return
