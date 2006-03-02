@@ -12521,7 +12521,7 @@ to the Jabber network.</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
-		      <property name="xalign">0.5</property>
+		      <property name="xalign">0</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
@@ -13017,7 +13017,7 @@ to the Jabber network.</property>
 		  <child>
 		    <widget class="GtkLabel" id="pass2_label">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Enter it again for confirmation:</property>
+		      <property name="label" translatable="yes">_Retype Password:</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
