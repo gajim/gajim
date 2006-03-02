@@ -1331,7 +1331,9 @@ class Interface:
 			r'(?<!\w|\<)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\w)|'\
 			r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
 
-		basic_pattern = links + mail + formatting
+		basic_pattern = links + mail
+		if gajim.config.get('ascii_formatting'):
+			basic_pattern += formatting
 		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
 		
 		emoticons_pattern = ''
