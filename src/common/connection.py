@@ -417,9 +417,10 @@ class Connection:
 			# No JEP-0085 support, fallback to JEP-0022
 			if not chatstate:
 				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
-				chatstate = 'active'
-				if not msgtxt and chatstate_child.getTag('composing'):
- 					chatstate = 'composing'
+				if chatstate_child:
+					chatstate = 'active'
+					if not msgtxt and chatstate_child.getTag('composing'):
+ 						chatstate = 'composing'
 						
 		if encTag and USE_GPG:
 			#decrypt
