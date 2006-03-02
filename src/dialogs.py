@@ -1028,7 +1028,8 @@ class PopupNotificationWindow:
 			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 			# Get the first single message event
 			ev = gajim.get_first_event(self.account, self.jid, self.msg_type)
-			gajim.interface.roster.open_event(self.account, self.jid, ev)
+			if ev:
+				gajim.interface.roster.open_event(self.account, self.jid, ev)
 		else: # chat or pm
 			gajim.interface.handle_event(self.account, contact.jid, self.msg_type)
 
