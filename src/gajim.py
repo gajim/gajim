@@ -992,6 +992,7 @@ class Interface:
 		# We add it to the awaiting_events queue
 		# Do we have a queue?
 		jid = gajim.get_jid_without_resource(jid)
+		print 'add_event', account, jid, typ
 		qs = gajim.awaiting_events[account]
 		no_queue = False
 		if not qs.has_key(jid):
@@ -1006,18 +1007,31 @@ class Interface:
 		if self.systray_enabled:
 			self.systray.add_jid(jid, account, typ)
 
+	def redraw_roster_systray(self, account, jid, typ = None):
+		self.roster.nb_unread -= 1
+		self.roster.show_title()
+		self.roster.draw_contact(jid, account)
+		if self.systray_enabled:
+			self.systray.remove_jid(jid, account, typ)
+
 	def remove_first_event(self, account, jid, typ = None):
 		qs = gajim.awaiting_events[account]
 		event = gajim.get_first_event(account, jid, typ)
 		qs[jid].remove(event)
-		self.roster.nb_unread -= 1
-		self.roster.show_title()
 		# Is it the last event?
 		if not len(qs[jid]):
 			del qs[jid]
-		self.roster.draw_contact(jid, account)
-		if self.systray_enabled:
-			self.systray.remove_jid(jid, account, typ)
+		self.redraw_roster_systray(account, jid, typ)
+
+	def remove_event(self, account, jid, event):
+		qs = gajim.awaiting_events[account]
+		if not event in qs[jid]:
+			return
+		qs[jid].remove(event)
+		# Is it the last event?
+		if not len(qs[jid]):
+			del qs[jid]
+		self.redraw_roster_systray(account, jid, event[0])
 
 	def handle_event_file_request_error(self, account, array):
 		jid = array[0]

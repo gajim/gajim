@@ -451,6 +451,20 @@ _('Connection with peer cannot be established.'))
 			if gajim.connections.has_key(account):
 				# there is a connection to the account
 				gajim.connections[account].remove_transfer(file_props)
+			if file_props['type'] == 'r': # we receive a file
+				other = file_props['sender']
+			else: # we send a file
+				other = file_props['receiver']
+			if isinstance(other, unicode):
+				jid = gajim.get_jid_without_resource(other)
+			else: # It's a Contact instance
+				jid = other.jid
+			if gajim.awaiting_events[account].has_key(jid):
+				for event in gajim.awaiting_events[account][jid]:
+					if event[0] in ('file-error', 'file-completed',
+						'file-request-error', 'file-send-error', 'file-stopped') and \
+						event[1]['sid'] == file_props['sid']:
+						gajim.interface.remove_event(account, jid, event)
 		del(self.files_props[sid[0]][sid[1:]])
 		del(file_props)
 		
