@@ -992,7 +992,6 @@ class Interface:
 		# We add it to the awaiting_events queue
 		# Do we have a queue?
 		jid = gajim.get_jid_without_resource(jid)
-		print 'add_event', account, jid, typ
 		qs = gajim.awaiting_events[account]
 		no_queue = False
 		if not qs.has_key(jid):
@@ -1097,7 +1096,10 @@ class Interface:
 		if file_props.has_key('stalled') and file_props['stalled'] or \
 			file_props.has_key('paused') and file_props['paused']:
 			return
-		jid = unicode(file_props['sender'])
+		if file_props['type'] == 'r': # we receive a file
+			jid = unicode(file_props['sender'])
+		else: # we send a file
+			jid = unicode(file_props['receiver'])
 
 		if gajim.popup_window(account):
 			if file_props['error'] == 0:
