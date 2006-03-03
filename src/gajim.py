@@ -388,7 +388,7 @@ class Interface:
 			# reset chatstate if needed:
 			# (when contact signs out or has errors)
 			if array[1] in ('offline', 'error'):
-				contact1.our_chatstate = contact1.chatstate = None
+				contact1.our_chatstate = contact1.chatstate = contact1.composing_jep = None
 			self.roster.chg_contact_status(contact1, array[1], array[2], account)
 			# play sound
 			if old_show < 2 and new_show > 1:
@@ -474,6 +474,7 @@ class Interface:
 		msg_type = array[4]
 		chatstate = array[6]
 		msg_id = array[7]
+		composing_jep = array[8]
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
 
@@ -512,6 +513,7 @@ class Interface:
 
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		contact.composing_jep = composing_jep
 		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
 			if chatstate is not None: # he or she sent us reply, so he supports jep85 or jep22
 				contact.chatstate = chatstate
@@ -520,7 +522,7 @@ class Interface:
 				
 				chat_control.handle_incoming_chatstate()
 			elif contact.chatstate != 'active':
-				# got no valid jep85 no jep22 answer, peer does not support it
+				# got no valid jep85 answer, peer does not support it
 				contact.chatstate = False
 		elif contact and chatstate == 'active':
 			# Brand new message, incoming.  

@@ -28,7 +28,7 @@ class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
 			ask='', resource='', priority=5, keyID='', our_chatstate=None,
-			chatstate=None, last_status_time=None):
+			chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
 		self.jid = jid
 		self.name = name
 		self.groups = groups
@@ -48,7 +48,11 @@ class Contact:
 		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
 		# this holds what WE SEND to contact (our current chatstate)
 		self.our_chatstate = our_chatstate
-		self.msg_id = None
+		self.msg_id = msg_id
+		# tell which JEP we're using for composing state
+		# None = have to ask, JEP-0022 = use this jep,
+		# JEP-0085 = use this jep, False = no composing support
+		self.composing_jep = composing_jep
 		# this is contact's chatstate
 		self.chatstate = chatstate
 		self.last_status_time = last_status_time
@@ -120,9 +124,10 @@ class Contacts:
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=5, keyID='', our_chatstate=None,
-		chatstate=None, last_status_time=None):
+		chatstate=None, last_status_time=None, composing_jep=None):
 		return Contact(jid, name, groups, show, status, sub, ask, resource,
-			priority, keyID, our_chatstate, chatstate, last_status_time)
+			priority, keyID, our_chatstate, chatstate, last_status_time,
+			composing_jep)
 	
 	def copy_contact(self, contact):
 		return self.create_contact(jid = contact.jid, name = contact.name,

@@ -398,6 +398,7 @@ class Connection:
 				invite = None
 		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) != None
 		msg_id = None
+		composing_jep = None
 		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
 		# invitation
 		# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
@@ -409,16 +410,19 @@ class Connection:
 				return
 		# chatstates - look for chatstate tags in a message if not delayed
 		if not delayed:
+			composing_jep = False
 			children = msg.getChildren()
 			for child in children:
 				if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
 					chatstate = child.getName()
+					composing_jep = 'JEP-0085'
 					break
 			# No JEP-0085 support, fallback to JEP-0022
 			if not chatstate:
 				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
 				if chatstate_child:
 					chatstate = 'active'
+					composing_jep = 'JEP-0022'
 					if not msgtxt and chatstate_child.getTag('composing'):
  						chatstate = 'composing'
 						
@@ -456,7 +460,7 @@ class Connection:
 				no_log_for:
 				gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim, subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id))
+				chatstate, msg_id, composing_jep))
 		else: # it's single message
 			if self.name not in no_log_for and jid not in no_log_for:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim, subject = subject)
@@ -469,7 +473,7 @@ class Connection:
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 			else:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, chatstate, msg_id))
+					subject, chatstate, msg_id, composing_jep))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
@@ -2112,7 +2116,8 @@ class Connection:
 		msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject)
 		self.connection.send(msg_iq)
 
-	def send_message(self, jid, msg, keyID, type = 'chat', subject='', chatstate = None, msg_id = None):
+	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
+					 chatstate = None, msg_id = None, composing_jep = None):
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
@@ -2144,14 +2149,19 @@ class Connection:
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
 		if chatstate is not None:
-			# JEP-0085
-			msg_iq.setTag(chatstate, namespace = common.xmpp.NS_CHATSTATES)
-			# JEP-0022
-			chatstate_node = msg_iq.setTag('x', namespace = common.xmpp.NS_EVENT)
-			if msg_id:
-				chatstate_node.setTagData('id', msg_id)
-			if chatstate is 'composing' or msgtxt:
-				chatstate_node.addChild(name = 'composing') # we request JEP-0022 composing notification
+			if composing_jep == 'JEP-0085' or not composing_jep:
+				# JEP-0085
+				msg_iq.setTag(chatstate, namespace = common.xmpp.NS_CHATSTATES)
+			if composing_jep == 'JEP-0022' or not composing_jep:
+				# JEP-0022
+				chatstate_node = msg_iq.setTag('x', namespace = common.xmpp.NS_EVENT)
+				if not msgtxt: # when no <body>, add <id>
+					if not msg_id: # avoid putting 'None' in <id> tag
+						msg_id = ''
+					chatstate_node.setTagData('id', msg_id)
+				# when msgtxt, requests JEP-0022 composing notification
+				if chatstate is 'composing' or msgtxt: 
+					chatstate_node.addChild(name = 'composing') 
 
 		self.connection.send(msg_iq)
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
