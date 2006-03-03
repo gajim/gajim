@@ -876,13 +876,11 @@ class GroupchatControl(ChatControlBase):
 			return True
 		elif command == 'leave' or command == 'part' or command == 'close':
 			# Leave the room and close the tab or window
-			# FIXME: Sometimes this doesn't actually leave the room. Why?
 			reason = 'offline'
 			if len(message_array):
 				reason = message_array.pop(0)
-			gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
-							show='offline', status=reason)
-			self.parent_win.remove_tab(self)
+			self.parent_win.remove_tab(self,reason)
+			self.clear(self.msg_textview)
 			return True
 		elif command == 'ban':
 			if len(message_array):
@@ -1030,9 +1028,9 @@ class GroupchatControl(ChatControlBase):
 			gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
 			self.nick = nick
 
-	def shutdown(self):
+	def shutdown(self, status='offline'):
 		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
-							show='offline', status='offline')
+							show='offline', status=status)
 		# They can already be removed by the destroy function
 		if self.room_jid in gajim.contacts.get_gc_list(self.account):
 			gajim.contacts.remove_room(self.account, self.room_jid)

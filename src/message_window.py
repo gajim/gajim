@@ -247,11 +247,14 @@ class MessageWindow:
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 	
-	def remove_tab(self, ctrl):
+	def remove_tab(self, ctrl,reason=None): # reason is only for gc (offline status message)
 		# Shutdown the MessageControl
 		if not ctrl.allow_shutdown():
 			return
-		ctrl.shutdown()
+		if reason is not None: # We are leaving gc with a status message
+			ctrl.shutdown(reason)
+		else: # We are leaving gc without status message or it's a chat
+			ctrl.shutdown()
 
 		# Update external state
 		if gajim.interface.systray_enabled:
