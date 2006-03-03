@@ -495,7 +495,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		'''Set some initial state on the window. Separated in a method because
 		it's handy to use within browser's cleanup method.'''
 		self.progressbar.hide()
-		self.window.set_title(_('Service Discovery'))
+		self.window.set_title(_('Service Discovery using account %s') % self.account)
 		self.banner.set_markup('<span weight="heavy" size="large">'\
 			'%s</span>\n' % _('Service Discovery'))
 		# FIXME: use self.banner_icon.clear() when we switch to GTK 2.8
@@ -661,8 +661,8 @@ class AgentBrowser:
 
 	def _set_initial_title(self):
 		'''Set the initial window title based on agent address.'''
-		self.window.window.set_title(_('Browsing %s') % \
-			self._get_agent_address())
+		self.window.window.set_title(_('Browsing %s using account %s') % \
+			(self._get_agent_address(), self.account))
 		self.window.banner.set_markup('<span weight="heavy" size="large">'\
 			'%s</span>\n' % self._get_agent_address())
 
