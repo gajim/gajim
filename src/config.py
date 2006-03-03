@@ -1713,12 +1713,12 @@ class DataFormWindow:
 		self.config = config
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'data_form_window', APP)
 		self.window = self.xml.get_widget('data_form_window')
-		self.config_table = self.xml.get_widget('config_table')
+		self.config_vbox = self.xml.get_widget('config_vbox')
 		if config:
-			self.fill_table()
+			self.fill_vbox()
 		else:
-			self.config_table.set_no_show_all(True)
-			self.config_table.hide()
+			self.config_vbox.set_no_show_all(True)
+			self.config_vbox.hide()
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -1754,7 +1754,7 @@ class DataFormWindow:
 		begin, end = widget.get_bounds()
 		self.config[index]['values'][0] = widget.get_text(begin, end)
 
-	def fill_table(self):
+	def fill_vbox(self):
 		'''see JEP0004'''
 		if self.config.has_key('title'):
 			self.window.set_title(self.config['title'])
@@ -1770,29 +1770,28 @@ class DataFormWindow:
 			if ctype == 'hidden':
 				i += 1
 				continue
-			nbrows = self.config_table.get_property('n-rows')
-			self.config_table.resize(nbrows + 1, 2)
+			hbox = gtk.HBox(spacing = 5)
+			label = gtk.Label('')
+			label.set_line_wrap(True)
+			label.set_alignment(0.0, 0.5)
+			label.set_property('width_request', 150)
+			hbox.pack_start(label, False)
 			if self.config[i].has_key('label'):
-				label = gtk.Label(self.config[i]['label'])
-				label.set_alignment(0.0, 0.5)
-				self.config_table.attach(label, 0, 1, nbrows, nbrows + 1,
-					gtk.FILL	| gtk.SHRINK)
-			desc = None
-			if self.config[i].has_key('desc'):
-				desc = self.config[i]['desc']
-			max = 1
+				label.set_text(self.config[i]['label'])
 			if ctype == 'boolean':
+				desc = None
+				if self.config[i].has_key('desc'):
+					desc = self.config[i]['desc']
 				widget = gtk.CheckButton(desc, False)
 				activ = False
 				if self.config[i].has_key('values'):
 					activ = self.config[i]['values'][0]
 				widget.set_active(activ)
 				widget.connect('toggled', self.on_checkbutton_toggled, i)
-				max = 2
 			elif ctype == 'fixed':
 				widget = gtk.Label('\n'.join(self.config[i]['values']))
+				widget.set_line_wrap(True)
 				widget.set_alignment(0.0, 0.5)
-				max = 4
 			elif ctype == 'jid-multi':
 				#FIXME
 				widget = gtk.Label('')
@@ -1806,12 +1805,12 @@ class DataFormWindow:
 					widget.resize(j + 1, 1)
 					child = gtk.CheckButton(self.config[i]['options'][j]['label'],
 						False)
-					if self.config[i]['options'][j]['values'][0] in self.config[i]['values']:
+					if self.config[i]['options'][j]['values'][0] in \
+					self.config[i]['values']:
 						child.set_active(True)
 					child.connect('toggled', self.on_checkbutton_toggled2, i, j)
 					widget.attach(child, 0, 1, j, j+1)
 					j += 1
-				max = 4
 			elif ctype == 'list-single':
 				widget = gtk.combo_box_new_text()
 				widget.connect('changed', self.on_combobox_changed, i)
@@ -1824,13 +1823,12 @@ class DataFormWindow:
 					widget.append_text(self.config[i]['options'][j]['label'])
 					j += 1
 				widget.set_active(index)
-				max = 3
 			elif ctype == 'text-multi':
 				widget = gtk.TextView()
+				widget.set_size_request(100, -1)
 				widget.get_buffer().connect('changed', self.on_textbuffer_changed, \
 					i)
 				widget.get_buffer().set_text('\n'.join(self.config[i]['values']))
-				max = 4
 			elif ctype == 'text-private':
 				widget = gtk.Entry()
 				widget.connect('changed', self.on_entry_changed, i)
@@ -1838,26 +1836,17 @@ class DataFormWindow:
 					self.config[i]['values'] = ['']
 				widget.set_text(self.config[i]['values'][0])
 				widget.set_visibility(False)
-				max = 3
 			elif ctype == 'text-single':
 				widget = gtk.Entry()
 				widget.connect('changed', self.on_entry_changed, i)
 				if not self.config[i].has_key('values'):
 					self.config[i]['values'] = ['']
 				widget.set_text(self.config[i]['values'][0])
-				max = 3
 			i += 1
-			if max < 4:
-				self.config_table.attach(widget, 1, max,
-							nbrows, nbrows + 1,
-							gtk.FILL | gtk.SHRINK)
-				widget = gtk.Label()
-				self.config_table.attach(widget, max, 4,
-							nbrows, nbrows + 1)
-			else:
-				self.config_table.attach(widget, 1, max,
-							nbrows, nbrows + 1)
-		self.config_table.show_all()
+			hbox.pack_start(widget, False)
+			hbox.pack_start(gtk.Label('')) # So that widhet doesn't take all space
+			self.config_vbox.pack_start(hbox, False)
+		self.config_vbox.show_all()
 
 class ServiceRegistrationWindow(DataFormWindow):
 	'''Class for Service registration window:

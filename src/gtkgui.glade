@@ -11329,33 +11329,16 @@ Static</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkTable" id="config_table">
+		    <widget class="GtkVBox" id="config_vbox">
 		      <property name="border_width">5</property>
 		      <property name="visible">True</property>
-		      <property name="n_rows">2</property>
-		      <property name="n_columns">4</property>
 		      <property name="homogeneous">False</property>
-		      <property name="row_spacing">5</property>
-		      <property name="column_spacing">5</property>
-
-		      <child>
-			<widget class="GtkHSeparator" id="hseparator13">
-			  <property name="visible">True</property>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">4</property>
-			  <property name="top_attach">1</property>
-			  <property name="bottom_attach">2</property>
-			  <property name="x_options">fill</property>
-			  <property name="y_options">fill</property>
-			</packing>
-		      </child>
+		      <property name="spacing">5</property>
 
 		      <child>
 			<widget class="GtkLabel" id="instructions_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes"></property>
+			  <property name="label" translatable="yes">label385</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -11371,13 +11354,25 @@ Static</property>
 			  <property name="angle">0</property>
 			</widget>
 			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">4</property>
-			  <property name="top_attach">0</property>
-			  <property name="bottom_attach">1</property>
-			  <property name="x_options">fill</property>
-			  <property name="y_options"></property>
+			  <property name="padding">5</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
 			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkHSeparator" id="hseparator15">
+			  <property name="visible">True</property>
+			</widget>
+			<packing>
+			  <property name="padding">5</property>
+			  <property name="expand">False</property>
+			  <property name="fill">True</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<placeholder/>
 		      </child>
 		    </widget>
 		    <packing>
