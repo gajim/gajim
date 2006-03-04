@@ -11921,7 +11921,6 @@ Static</property>
 
       <child>
 	<widget class="GtkLabel" id="restart_label">
-	  <property name="visible">False</property>
 	  <property name="label" translatable="yes">&lt;b&gt;NOTE:&lt;/b&gt; You should restart gajim for some setting to take effect</property>
 	  <property name="use_underline">True</property>
 	  <property name="use_markup">True</property>
@@ -18689,7 +18688,7 @@ topic</property>
 			  <property name="selectable">False</property>
 			  <property name="xalign">0.0500000007451</property>
 			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
+			  <property name="xpad">6</property>
 			  <property name="ypad">6</property>
 			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			  <property name="width_chars">-1</property>
