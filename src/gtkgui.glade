@@ -11920,10 +11920,10 @@ Static</property>
       </child>
 
       <child>
-	<widget class="GtkLabel" id="label384">
-	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">&lt;b&gt;NOTE:&lt;/b&gt; You may have to restart Gajim for some settings to apply.</property>
-	  <property name="use_underline">False</property>
+	<widget class="GtkLabel" id="restart_label">
+	  <property name="visible">False</property>
+	  <property name="label" translatable="yes">&lt;b&gt;NOTE:&lt;/b&gt; You should restart gajim for some setting to take effect</property>
+	  <property name="use_underline">True</property>
 	  <property name="use_markup">True</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>
 	  <property name="wrap">False</property>

@@ -26,6 +26,9 @@ _ = i18n._
 OPT_TYPE = 0
 OPT_VAL = 1
 OPT_DESC = 2
+# If OPT_RESTART is True - we need restart to use our changed option
+# OPT_DESC also should be there
+OPT_RESTART = 3
 
 opt_int = [ 'integer', 0 ]
 opt_str = [ 'string', 0 ]
@@ -37,7 +40,7 @@ class Config:
 
 	__options = {
 		# name: [ type, default_value, help_string ]
-		'verbose': [ opt_bool, False ],
+		'verbose': [ opt_bool, False, '', True ],
 		'alwaysauth': [ opt_bool, False ],
 		'autopopup': [ opt_bool, False ],
 		'notify_on_signin': [ opt_bool, True ],
@@ -46,7 +49,7 @@ class Config:
 		'autopopupaway': [ opt_bool, False ],
 		'use_notif_daemon': [ opt_bool, True , _('Use DBus and Notification-Daemon to show notifications') ],
 		'ignore_unknown_contacts': [ opt_bool, False ],
-		'showoffline': [ opt_bool, False ],
+		'showoffline': [ opt_bool, False, '', True ],
 		'autoaway': [ opt_bool, True ],
 		'autoawaytime': [ opt_int, 5, _('Time in minutes, after which your status changes to away.') ],
 		'autoaway_message': [ opt_str, _('Away as a result of being idle') ],
@@ -62,24 +65,24 @@ class Config:
 		'last_status_msg_dnd': [ opt_str, '' ],
 		'last_status_msg_invisible': [ opt_str, '' ],
 		'last_status_msg_offline': [ opt_str, '' ],
-		'trayicon': [ opt_bool, True ],
-		'iconset': [ opt_str, 'dcraven' ],
-		'use_transports_iconsets': [ opt_bool, True ],
-		'inmsgcolor': [ opt_color, '#a34526' ],
-		'outmsgcolor': [ opt_color, '#164e6f' ],
-		'statusmsgcolor': [ opt_color, '#1eaa1e' ],
-		'markedmsgcolor': [ opt_color, '#ff8080' ],
-		'urlmsgcolor': [ opt_color, '#0000ff' ],
-		'collapsed_rows': [ opt_str, '' ],
-		'roster_theme': [ opt_str, 'green' ],
+		'trayicon': [ opt_bool, True, '', True ],
+		'iconset': [ opt_str, 'dcraven', '', True ],
+		'use_transports_iconsets': [ opt_bool, True, '', True ],
+		'inmsgcolor': [ opt_color, '#a34526', '', True ],
+		'outmsgcolor': [ opt_color, '#164e6f', '', True ],
+		'statusmsgcolor': [ opt_color, '#1eaa1e', '', True ],
+		'markedmsgcolor': [ opt_color, '#ff8080', '', True ],
+		'urlmsgcolor': [ opt_color, '#0000ff', '', True ],
+		'collapsed_rows': [ opt_str, '', '', True ],
+		'roster_theme': [ opt_str, 'green', '', True ],
 		'saveposition': [ opt_bool, True ],
-		'mergeaccounts': [ opt_bool, False ],
-		'sort_by_show': [ opt_bool, True ],
-		'use_speller': [ opt_bool, False ],
+		'mergeaccounts': [ opt_bool, False, '', True ],
+		'sort_by_show': [ opt_bool, True, '', True ],
+		'use_speller': [ opt_bool, False, ],
 		'print_time': [ opt_str, 'always' ],
 		'useemoticons': [ opt_bool, True ],
 		'ascii_formatting': [ opt_bool, True,
-			_('Treat * / _ pairs as possible formatting characters.')],
+			_('Treat * / _ pairs as possible formatting characters.'), True],
 		'show_ascii_formatting_chars': [ opt_bool, False , _('If True, do not '
 			'remove */_ . So *abc* will be bold but with * * not removed.')],
 		'sounds_on': [ opt_bool, True ],
@@ -120,7 +123,7 @@ class Config:
 		'after_nickname': [ opt_str, ':' ],
 		'send_os_info': [ opt_bool, True ],
 		'notify_on_new_gmail_email': [ opt_bool, True ],
-		'usegpg': [ opt_bool, False ],
+		'usegpg': [ opt_bool, False, '', True ],
 		'use_gpg_agent': [ opt_bool, False ],
 		'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
 		'restore_lines': [opt_int, 4, _('How many lines to remember from previous conversation when a chat tab/window is reopened.')],
@@ -135,13 +138,13 @@ class Config:
 		'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
 		'always_english_wikipedia': [opt_bool, False],
 		'always_english_wiktionary': [opt_bool, True],
-		'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.')],
+		'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
-		'autodetect_browser_mailer': [opt_bool, False],
+		'autodetect_browser_mailer': [opt_bool, False, '', True],
 		'print_ichat_every_foo_minutes': [opt_int, 5],
 		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
-		'notify_on_file_complete': [opt_bool, True], # notif. on file complete
-		'file_transfers_port': [opt_int, 28011],  # port, used for file transfers
+		'notify_on_file_complete': [opt_bool, True],
+		'file_transfers_port': [opt_int, 28011],
 		'ft_override_host_to_send': [opt_str, '', _('Overrides the host we send for File Transfer in case of address translation/port forwarding.')], 
 		'conversation_font': [opt_str, ''],
 		'use_kib_mib': [opt_bool, False, _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.')],
@@ -152,7 +155,7 @@ class Config:
 		'last_emoticons_dir': [opt_str, ''],
 		'last_sounds_dir': [opt_str, ''],
 		'tabs_position': [opt_str, 'top'],
-		'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
+		'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?'), '', True],
 		'tabs_border': [opt_bool, False, _('Show tab border if one conversation?')],
 		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
 		'chat_avatar_width': [opt_int, 52],
@@ -169,8 +172,8 @@ class Config:
 		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used.')],
 		'set_xmpp://_handler_everytime': [opt_bool, False, _('If True, Gajim registers for xmpp:// on each startup.')],
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
-		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window')],
-		'show_avatars_in_roster': [opt_bool, True],
+		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window'), True],
+		'show_avatars_in_roster': [opt_bool, True, '', True],
 		'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old.')],
 		#FIXME: remove you and make it Gajim will not; and/or his or *her* status messages
 		'print_status_in_chats': [opt_bool, True, _('If False, you will no longer see status line in chats when a contact changes his or her status and/or his status message.')],
@@ -189,26 +192,26 @@ class Config:
 
 	__options_per_key = {
 		'accounts': ({
-			'name': [ opt_str, '' ],
-			'hostname': [ opt_str, '' ],
+			'name': [ opt_str, '', '', True ],
+			'hostname': [ opt_str, '', '', True ],
 			'savepass': [ opt_bool, False ],
 			'password': [ opt_str, '' ],
-			'resource': [ opt_str, 'gajim' ],
-			'priority': [ opt_int, 5 ],
-			'autoconnect': [ opt_bool, False ],
+			'resource': [ opt_str, 'gajim', '', True ],
+			'priority': [ opt_int, 5, '', True ],
+			'autoconnect': [ opt_bool, False, '', True ],
 			'autoreconnect': [ opt_bool, True ],
 			'active': [ opt_bool, True],
-			'proxy': [ opt_str, '' ],
-			'keyid': [ opt_str, '' ],
-			'keyname': [ opt_str, '' ],
-			'usessl': [ opt_bool, False ],
-			'use_srv': [ opt_bool, True ],
-			'use_custom_host': [ opt_bool, False ],
-			'custom_port': [ opt_int, 5222 ],
-			'custom_host': [ opt_str, '' ],
-			'savegpgpass': [ opt_bool, False ],
+			'proxy': [ opt_str, '', '', True ],
+			'keyid': [ opt_str, '', '', True ],
+			'keyname': [ opt_str, '', '', True ],
+			'usessl': [ opt_bool, False, '', True ],
+			'use_srv': [ opt_bool, True, '', True ],
+			'use_custom_host': [ opt_bool, False, '', True ],
+			'custom_port': [ opt_int, 5222, '', True ],
+			'custom_host': [ opt_str, '', '', True ],
+			'savegpgpass': [ opt_bool, False, '', True ],
 			'gpgpassword': [ opt_str, '' ],
-			'sync_with_global_status': [ opt_bool, False ],
+			'sync_with_global_status': [ opt_bool, False, ],
 			'no_log_for': [ opt_str, '' ],
 			'attached_gpg_keys': [ opt_str, '' ],
 			'keep_alives_enabled': [ opt_bool, True],
@@ -216,7 +219,6 @@ class Config:
 			'keep_alive_every_foo_secs': [ opt_int, 55 ],
 			# try for 2 minutes before giving up (aka. timeout after those seconds)
 			'try_connecting_for_foo_secs': [ opt_int, 60 ],
-			'max_stanza_per_sec': [ opt_int, 5],
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
 			# proxy65 for FT
 			'file_transfer_proxies': [opt_str, 
@@ -249,22 +251,22 @@ class Config:
 			'jid': [ opt_str, ''],
 		}, {}),
 		'themes': ({
-			'accounttextcolor': [ opt_color, 'black' ],
-			'accountbgcolor': [ opt_color, 'white' ],
-			'accountfont': [ opt_str, '' ],
-			'accountfontattrs': [ opt_str, 'B' ],
-			'grouptextcolor': [ opt_color, 'black' ],
-			'groupbgcolor': [ opt_color, 'white' ],
-			'groupfont': [ opt_str, '' ],
-			'groupfontattrs': [ opt_str, 'I' ],
-			'contacttextcolor': [ opt_color, 'black' ],
-			'contactbgcolor': [ opt_color, 'white' ],
-			'contactfont': [ opt_str, '' ],
-			'contactfontattrs': [ opt_str, '' ],
-			'bannertextcolor': [ opt_color, 'black' ],
-			'bannerbgcolor': [ opt_color, '' ],
-			'bannerfont': [ opt_str, '' ],
-			'bannerfontattrs': [ opt_str, 'B' ],
+			'accounttextcolor': [ opt_color, 'black', '', True ],
+			'accountbgcolor': [ opt_color, 'white', '', True ],
+			'accountfont': [ opt_str, '', '', True ],
+			'accountfontattrs': [ opt_str, 'B', '', True ],
+			'grouptextcolor': [ opt_color, 'black', '', True ],
+			'groupbgcolor': [ opt_color, 'white', '', True ],
+			'groupfont': [ opt_str, '', '', True ],
+			'groupfontattrs': [ opt_str, 'I', '', True ],
+			'contacttextcolor': [ opt_color, 'black', '', True ],
+			'contactbgcolor': [ opt_color, 'white', '', True ],
+			'contactfont': [ opt_str, '', '', True ],
+			'contactfontattrs': [ opt_str, '', '', True ],
+			'bannertextcolor': [ opt_color, 'black', '', True ],
+			'bannerbgcolor': [ opt_color, '', '', True ],
+			'bannerfont': [ opt_str, '', '', True ],
+			'bannerfontattrs': [ opt_str, 'B', '', True ],
 				
 			# http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
 			# FIXME: not black but the default color from gtk+ theme
@@ -471,6 +473,12 @@ class Config:
 		if len(self.__options[optname]) > OPT_DESC:
 			return self.__options[optname][OPT_DESC]
 
+	def get_restart(self, optname):
+		if not self.__options.has_key(optname):
+			return None
+		if len(self.__options[optname]) > OPT_RESTART:
+			return self.__options[optname][OPT_RESTART]
+
 	def add_per(self, typename, name): # per_group_of_option
 		if not self.__options_per_key.has_key(typename):
 #			raise RuntimeError, 'option %s does not exist' % typename
@@ -527,6 +535,40 @@ class Config:
 		if not obj.has_key(subname):
 			return None
 		return obj[subname][OPT_VAL]
+
+	def get_desc_per(self, optname, key = None, subname = None):
+		if not self.__options_per_key.has_key(optname):
+			return None
+		dict = self.__options_per_key[optname][1]
+		if not key:
+			return None
+		if not dict.has_key(key):
+			return None
+		obj = dict[key]
+		if not subname:
+			return None
+		if not obj.has_key(subname):
+			return None
+		if len(obj[subname]) > OPT_DESC:
+			return obj[subname][OPT_DESC]
+		return None
+
+	def get_restart_per(self, optname, key = None, subname = None):
+		if not self.__options_per_key.has_key(optname):
+			return False
+		dict = self.__options_per_key[optname][1]
+		if not key:
+			return False
+		if not dict.has_key(key):
+			return False
+		obj = dict[key]
+		if not subname:
+			return False
+		if not obj.has_key(subname):
+			return False
+		if len(obj[subname]) > OPT_RESTART:
+			return obj[subname][OPT_RESTART]
+		return False
 
 	def __init__(self):
 		#init default values

@@ -54,6 +54,12 @@ class AdvancedConfigurationWindow:
 		self.window = self.xml.get_widget('advanced_configuration_window')
 		self.entry = self.xml.get_widget('advanced_entry')
 		self.desc_label = self.xml.get_widget('advanced_desc_label')
+		self.restart_label = self.xml.get_widget('restart_label')
+
+		# Format:
+		# key = option name (root/subopt/opt separated by \n then)
+		# value = array(oldval, newval)
+		self.changed_opts = {}
 
 		treeview = self.xml.get_widget('advanced_treeview')
 		self.model = gtk.TreeStore(str, str, str)
@@ -91,6 +97,7 @@ class AdvancedConfigurationWindow:
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+		self.restart_label.hide()
 		gajim.interface.instances['advanced_config'] = self
 
 	def cb_value_column_data(self, col, cell, model, iter):
@@ -103,19 +110,42 @@ class AdvancedConfigurationWindow:
 		else:
 			cell.set_property('editable', True)
 
+	def get_option_path(self, model, iter):
+		# It looks like path made from reversed array
+		# path[0] is the true one optname
+		# path[1] is the key name
+		# path[2] is the root of tree
+		# last two is optional
+		path = [model[iter][0].decode('utf-8')]
+		parent = model.iter_parent(iter)
+		while parent:
+			path.append(model[parent][0].decode('utf-8'))
+			parent = model.iter_parent(parent)
+		return path
+
 	def on_advanced_treeview_selection_changed(self, treeselection):
-		iter = treeselection.get_selected()
+		model, iter = treeselection.get_selected()
 		# Check for GtkTreeIter
-		if iter[1]:
+		if iter:
+			opt_path = self.get_option_path(model, iter)
 			# Get text from first column in this row
-			opt = iter[0][iter[1]][0]
-			desc = gajim.config.get_desc(opt)
+			desc = None
+			if len(opt_path) == 3:
+				desc = gajim.config.get_desc_per(opt_path[2], opt_path[1],
+					opt_path[0])
+			elif len(opt_path) == 1:
+				desc = gajim.config.get_desc(opt_path[0])
 			if desc:
-				# FIXME: DESC IS ALREADY _() why again _()?
-				self.desc_label.set_text(_(desc))
+				self.desc_label.set_text(desc)
 			else:
 				#we talk about option description in advanced configuration editor
 				self.desc_label.set_text(_('(None)'))
+
+	def remember_option(self, option, oldval, newval):
+		if self.changed_opts.has_key(option):
+			self.changed_opts[option] = (self.changed_opts[option][0], newval)
+		else:
+			self.changed_opts[option] = (oldval, newval)
 
 	def on_advanced_treeview_row_activated(self, treeview, path, column):
 		modelpath = self.modelfilter.convert_path_to_child_path(path)
@@ -128,11 +158,30 @@ class AdvancedConfigurationWindow:
 				optname = optnamerow[0].decode('utf-8')
 				keyrow = self.model[modelpath[:2]]
 				key = keyrow[0].decode('utf-8')
+				gajim.config.get_desc_per(optname, key, option)
+				self.remember_option(option + '\n' + key + '\n' + optname,
+					modelrow[1], newval)
 				gajim.config.set_per(optname, key, option, newval)
 			else:
+				self.remember_option(option, modelrow[1], newval)
 				gajim.config.set(option, newval)
 			gajim.interface.save_config()
 			modelrow[1] = newval
+			self.check_for_restart()
+
+	def check_for_restart(self):
+		self.restart_label.hide()
+		for opt in self.changed_opts:
+			opt_path = opt.split('\n')
+			if len(opt_path)==3:
+				restart = gajim.config.get_restart_per(opt_path[2], opt_path[1],
+					opt_path[0])
+			else:
+				restart = gajim.config.get_restart(opt_path[0])
+			if restart:
+				if self.changed_opts[opt][0] != self.changed_opts[opt][1]:
+					self.restart_label.show()
+					break
 
 	def on_config_edited(self, cell, path, text):
 		# convert modelfilter path to model path
@@ -145,11 +194,15 @@ class AdvancedConfigurationWindow:
 			optname = optnamerow[0].decode('utf-8')
 			keyrow = self.model[modelpath[:2]]
 			key = keyrow[0].decode('utf-8')
+			self.remember_option(option + '\n' + key + '\n' + optname, modelrow[1],
+				text)
 			gajim.config.set_per(optname, key, option, text)
 		else:
+			self.remember_option(option, modelrow[1], text)
 			gajim.config.set(option, text)
 		gajim.interface.save_config()
 		modelrow[1] = text
+		self.check_for_restart()
 
 	def on_advanced_configuration_window_destroy(self, widget):
 		# update ui of preferences window to get possible changes we did
