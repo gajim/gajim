@@ -385,7 +385,9 @@ class RosterWindow:
 					child_jid = model[child_iter][C_JID].decode('utf-8')
 					child_contact = gajim.contacts.get_contact_with_highest_priority(
 						account, child_jid)
-					icon_name = helpers.get_icon_name_to_show(child_contact, account)
+					child_icon_name = helpers.get_icon_name_to_show(child_contact, account)
+					if child_icon_name not in ('error', 'not in roster'):
+						icon_name = child_icon_name
 				while child_iter:
 					# a child has awaiting messages ?
 					child_jid = model[child_iter][C_JID].decode('utf-8')
