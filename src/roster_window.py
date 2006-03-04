@@ -402,6 +402,10 @@ class RosterWindow:
 				state_images = self.get_appropriate_state_images(jid,
 					size = 'closed', icon_name = icon_name)
 		else:
+			# redraw parent
+			if gajim.contacts.is_subcontact(account, contact):
+				parent_jid = gajim.contacts.get_parent_contact(account, contact).jid
+				self.draw_contact(parent_jid, account)
 			state_images = self.get_appropriate_state_images(jid,
 				icon_name = icon_name)
 	
