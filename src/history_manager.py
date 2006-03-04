@@ -170,7 +170,7 @@ class HistoryManager:
 		gtk.main_quit()
 	
 	def _fill_jids_listview(self):
-		self.cur.execute('SELECT jid, jid_id FROM jids')
+		self.cur.execute('SELECT jid, jid_id FROM jids ORDER BY jid')
 		rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
 		for row in rows:
 			self.jids_already_in.append(row[0]) # jid
