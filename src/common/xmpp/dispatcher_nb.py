@@ -349,6 +349,7 @@ class Dispatcher(PlugIn):
 		if self._expected[self._witid] is None:
 			return
 		if self.on_responses.has_key(self._witid):
+			i = self._witid # copy id cause it can change in resp() call
 			self._owner.onreceive(None)
 			resp, args = self.on_responses[self._witid]
 			del(self.on_responses[self._witid])
@@ -356,6 +357,7 @@ class Dispatcher(PlugIn):
 				resp(self._expected[self._witid])
 			else:
 				resp(self._owner, self._expected[self._witid], **args)
+			del self._expected[i]
 	
 	def SendAndWaitForResponse(self, stanza, timeout=None, func=None, args=None):
 		''' Put stanza on the wire and wait for recipient's response to it. '''
