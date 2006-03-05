@@ -41,7 +41,7 @@ class Contact:
 		self.keyID = keyID
 
 		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
-		# we keep track of jep85 support by the peer by three extra states:
+		# we keep track of jep85 support with the peer by three extra states:
 		# None, False and 'ask'
 		# None if no info about peer
 		# False if peer does not support jep85
