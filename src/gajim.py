@@ -513,7 +513,8 @@ class Interface:
 
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-		contact.composing_jep = composing_jep
+		if contact:
+			contact.composing_jep = composing_jep
 		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
 			if chatstate is not None: # he or she sent us reply, so he supports jep85 or jep22
 				contact.chatstate = chatstate
