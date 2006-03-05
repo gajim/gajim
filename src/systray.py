@@ -27,9 +27,10 @@
 import gtk
 import gtk.glade
 import gobject
-import dialogs
 import os
 
+import dialogs
+import config
 import tooltips
 import gtkgui_helpers
 
@@ -223,10 +224,10 @@ class Systray:
 		win.present()
 
 	def on_preferences_menuitem_activate(self, widget):
-		if gajim.interface.instances['preferences'].window.get_property('visible'):
+		if gajim.interface.instances.has_key('preferences'):
 			gajim.interface.instances['preferences'].window.present()
 		else:
-			gajim.interface.instances['preferences'].window.show_all()
+			gajim.interface.instances['preferences'] = config.PreferencesWindow()
 
 	def on_quit_menuitem_activate(self, widget):	
 		gajim.interface.roster.on_quit_menuitem_activate(widget)
