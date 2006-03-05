@@ -2803,13 +2803,14 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
 			if grp_dest == _('Transports') or grp_dest == _('Not in Roster'):
 				return
-			if context.action == gtk.gdk.ACTION_COPY:
+			if not gajim.contacts.is_subcontact(account, c_source):
+				if context.action == gtk.gdk.ACTION_COPY:
+					self.on_drop_in_group(None, account, c_source, grp_dest, context,
+						etime)
+					return
 				self.on_drop_in_group(None, account, c_source, grp_dest, context,
-					etime)
+					etime, grp_source)
 				return
-			self.on_drop_in_group(None, account, c_source, grp_dest, context,
-				etime, grp_source)
-			return
 		else:
 			it = iter_dest
 			while model[it][C_TYPE] != 'group':
