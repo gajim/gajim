@@ -1324,7 +1324,7 @@ class Interface:
 		prefix_pattern = prefix_pattern[:-1] # remove last |
 		prefix_pattern = '(' + prefix_pattern + ')'
 			
-		links = r'\b' + prefix_pattern + r'\S*[^\s\W]|'
+		links = r'\b' + prefix_pattern + r'\S*[\w\/\=]|'
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
 		mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]|'
 
