@@ -2794,8 +2794,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if grp_source == _('Transports') or grp_source == _('Not in Roster'):
 			return
 		jid_source = data.decode('utf-8')
-		if jid_source == jid_dest:
-			return
 		c_source = gajim.contacts.get_contact_with_highest_priority(account,
 			jid_source)
 		# Get destination group
@@ -2818,6 +2816,17 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			grp_dest = model[it][C_JID].decode('utf-8')
 		if grp_dest == _('Transports') or grp_dest == _('Not in Roster'):
 			return
+		if jid_source == jid_dest:
+			if grp_source == grp_dest:
+				return
+			else:
+				if context.action == gtk.gdk.ACTION_COPY:
+					self.on_drop_in_group(None, account, c_source, grp_dest, context,
+						etime)
+					return
+				self.on_drop_in_group(None, account, c_source, grp_dest, context,
+					etime, grp_source)
+				return
 		if gajim.contacts.is_subcontact(account, c_source):
 			# Remove meta contact
 			#FIXME: doesn't work under windows: http://bugzilla.gnome.org/show_bug.cgi?id=329797
