@@ -2726,7 +2726,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# Make sure contact was in the group
 		contact.groups.remove(group)
 		group_iter = self.get_group_iter(group, account)
-		if model.iter_n_children(group_iter) == 0:
+		if model.iter_n_children(group_iter) == 1:
 			# this was the only child
 			model.remove(group_iter)
 		# delete the group if it is empty (need to look for offline users too)
