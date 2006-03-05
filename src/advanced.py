@@ -205,8 +205,6 @@ class AdvancedConfigurationWindow:
 		self.check_for_restart()
 
 	def on_advanced_configuration_window_destroy(self, widget):
-		# update ui of preferences window to get possible changes we did
-		gajim.interface.instances['preferences'].update_preferences_window()
 		del gajim.interface.instances['advanced_config']
 
 	def on_advanced_close_button_clicked(self, widget):

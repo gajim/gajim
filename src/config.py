@@ -52,12 +52,12 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class PreferencesWindow:
 	'''Class for Preferences window'''
 
-	def on_preferences_window_delete_event(self, widget, event):
-		self.window.hide()
-		return True # do NOT destroy the window
+	def on_preferences_window_destroy(self, widget):
+		'''close window'''
+		del gajim.interface.instances['preferences']
 
 	def on_close_button_clicked(self, widget):
-		self.window.hide()
+		self.window.destroy()
 
 	def __init__(self):
 		'''Initialize Preferences window'''
@@ -168,6 +168,15 @@ class PreferencesWindow:
 		theme_combobox.add_attribute(cell, 'text', 0)
 		model = gtk.ListStore(str)
 		theme_combobox.set_model(model)
+		
+		i = 0
+		for config_theme in gajim.config.get_per('themes'):
+			theme = config_theme.replace('_', ' ')
+			model.append([theme])
+			if gajim.config.get('roster_theme') == config_theme:
+			         theme_combobox.set_active(i)
+			i += 1
+		self.on_theme_combobox_changed(theme_combobox)
 
 		#use speller
 		if os.name == 'nt':
@@ -409,6 +418,20 @@ class PreferencesWindow:
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
 		
+		# Notify user of new gmail e-mail messages,
+		# only show checkbox if user has a gtalk account
+		notify_gmail_checkbutton = self.xml.get_widget('notify_gmail_checkbutton')
+		notify_gmail_checkbutton.set_no_show_all(True)
+		for account in gajim.config.get_per('accounts'):
+			jid = gajim.get_jid_from_account(account)
+			if gajim.get_server_from_jid(jid) == 'gmail.com':
+				st = gajim.config.get('notify_on_new_gmail_email')
+				notify_gmail_checkbutton.set_active(st)
+				notify_gmail_checkbutton.show()
+				break
+		else:
+			notify_gmail_checkbutton.hide()
+		
 		self.xml.signal_autoconnect(self)
 
 		self.sound_tree.get_model().connect('row-changed',
@@ -419,40 +442,9 @@ class PreferencesWindow:
 					self.on_msg_treemodel_row_deleted)
 		
 		self.theme_preferences = None
-
-	def on_preferences_window_show(self, widget):
-		self.update_preferences_window()
-		self.notebook.set_current_page(0)
-
-	def update_preferences_window(self):
-		st = gajim.config.get('print_ichat_every_foo_minutes')
-		text = _('Every %s _minutes') % st
-		self.xml.get_widget('time_sometimes_radiobutton').set_label(text)
-
-		#Themes
-		theme_combobox = self.xml.get_widget('theme_combobox')
-		model = theme_combobox.get_model()
-		model.clear()
-		i = 0
-		for config_theme in gajim.config.get_per('themes'):
-			theme = config_theme.replace('_', ' ')
-			model.append([theme])
-			if gajim.config.get('roster_theme') == config_theme:
-				theme_combobox.set_active(i)
-			i += 1
-		self.on_theme_combobox_changed(theme_combobox)
 		
-		# Notify user of new gmail e-mail messages,
-		# only show checkbox if user has a gtalk account
-		self.xml.get_widget('notify_gmail_checkbutton').hide()
-		for account in gajim.config.get_per('accounts'):
-			jid = gajim.get_jid_from_account(account)
-			if gajim.get_server_from_jid(jid) == 'gmail.com':
-				st = gajim.config.get('notify_on_new_gmail_email') 
-				self.xml.get_widget('notify_gmail_checkbutton').set_active(st)
-				self.xml.get_widget('notify_gmail_checkbutton').show()
-
-		#FIXME: move code from __init__ here
+		self.notebook.set_current_page(0)
+		self.window.show_all()
 
 	def on_preferences_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:

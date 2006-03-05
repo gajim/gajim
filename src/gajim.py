@@ -1675,7 +1675,6 @@ class Interface:
 		
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.instances['file_transfers'] = dialogs.FileTransfersWindow()
-		self.instances['preferences'] = config.PreferencesWindow()
 		
 		for account in gajim.connections:
 			self.instances[account]['xml_console'] = dialogs.XMLConsoleWindow(

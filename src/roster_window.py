@@ -1957,10 +1957,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.tree.set_cursor(path)
 
 	def on_preferences_menuitem_activate(self, widget):
-		if gajim.interface.instances['preferences'].window.get_property('visible'):
+		if gajim.interface.instances.has_key('preferences'):
 			gajim.interface.instances['preferences'].window.present()
 		else:
-			gajim.interface.instances['preferences'].window.show_all()
+			gajim.interface.instances['preferences'] = config.PreferencesWindow()
 
 	def on_add_new_contact(self, widget, account):
 		dialogs.AddNewContactWindow(account)
