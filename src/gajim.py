@@ -1713,7 +1713,7 @@ if __name__ == '__main__':
 		import psyco
 		psyco.full()
 	except ImportError:
-		pass
+		sys.exc_clear()
 
 	if os.name != 'nt':
 		# Session Management support
