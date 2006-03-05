@@ -79,7 +79,7 @@ class SASL(PlugIn):
 			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server, 
 																	self.username, self.password)
 			node=Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'}, 
-								payload=[base64.encodestring(sasl_data)])
+								payload=[base64.encodestring(sasl_data).replace('\n',''])
 		else:
 			self.startsasl='failure'
 			self.DEBUG('I can only use DIGEST-MD5 and PLAIN mecanisms.', 'error')
