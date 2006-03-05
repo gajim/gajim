@@ -402,7 +402,7 @@ class MessageWindow:
 		else:
 			for ctrl in self.controls():
 				if not ctrl.print_time_timeout_id:
-					ctrl.print_time_timeout()
+					ctrl.print_time_timeout(None)
 					ctrl.print_time_timeout_id = gobject.timeout_add(300000,
 						ctrl.print_time_timeout, None)
 
