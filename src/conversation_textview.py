@@ -30,6 +30,7 @@ import gobject
 import time
 import tooltips
 import dialogs
+import locale
 
 from common import gajim
 from common import helpers
