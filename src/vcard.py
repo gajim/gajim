@@ -34,6 +34,7 @@ import sys
 import time
 import gtkgui_helpers
 import dialogs
+import locale
 
 from common import helpers
 from common import gajim
@@ -321,7 +322,7 @@ class VcardWindow:
 					stats += ': ' + c.status
 				if c.last_status_time:
 					stats += '\n' + _('since %s') % time.strftime('%c',
-						c.last_status_time)
+						c.last_status_time).decode(locale.getpreferredencoding())
 				one = False
 		status_label = self.xml.get_widget('status_label')
 		status_label.set_max_width_chars(15)

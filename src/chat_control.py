@@ -31,6 +31,7 @@ import gtkgui_helpers
 import message_control
 import dialogs
 import history_window
+import locale
 
 from common import gajim
 from common import helpers
@@ -477,7 +478,8 @@ class ChatControlBase(MessageControl):
 			buffer = conv_textview.get_buffer()
 			end_iter = buffer.get_end_iter()
 			tim = time.localtime()
-			tim_format = time.strftime('%H:%M', tim)
+			tim_format = time.strftime('%H:%M', tim).decode(
+				locale.getpreferredencoding())
 			buffer.insert_with_tags_by_name(end_iter, '\n' + tim_format,
 				'time_sometimes')
 			# scroll to the end of the textview

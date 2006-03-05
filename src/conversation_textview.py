@@ -579,7 +579,8 @@ class ConversationTextview(gtk.TextView):
 			if day_str:
 				format += day_str + ' '
 			format += '%X' + after_str
-			tim_format = time.strftime(format, tim)
+			tim_format = time.strftime(format, tim).decode(
+				locale.getpreferredencoding())
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
 		elif gajim.config.get('print_time') == 'sometimes':
@@ -589,7 +590,8 @@ class ConversationTextview(gtk.TextView):
 			if seconds_passed > every_foo_seconds:
 				self.last_time_printout = time.mktime(tim)
 				end_iter = buffer.get_end_iter()
-				tim_format = time.strftime('%H:%M', tim)
+				tim_format = time.strftime('%H:%M', tim).decode(
+					locale.getpreferredencoding())
 				buffer.insert_with_tags_by_name(end_iter, tim_format + '\n',
 					'time_sometimes')
 		other_text_tag = self.detect_other_text_tag(text, kind)

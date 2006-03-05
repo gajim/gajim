@@ -23,6 +23,7 @@ import signal
 import gtk
 import gtk.glade
 import time
+import locale
 
 import exceptions
 import dialogs
@@ -265,7 +266,8 @@ class HistoryManager:
 			# but store in liststore log_line_id, jid_id, time, message and subject
 			time_ = row[2]
 			try:
-				time_ = time.strftime('%x', time.localtime(float(time_)))
+				time_ = time.strftime('%x', time.localtime(float(time_))).decode(
+					locale.getpreferredencoding())
 			except ValueError:
 				pass
 			else:
@@ -290,7 +292,8 @@ class HistoryManager:
 			# but store in liststore log_line_id, jid_id, time, message and subject
 			time_ = row[2]
 			try:
-				time_ = time.strftime('%x', time.localtime(float(time_)))
+				time_ = time.strftime('%x', time.localtime(float(time_))).decode(
+					locale.getpreferredencoding())
 			except ValueError:
 				pass
 			else:
@@ -419,7 +422,8 @@ class HistoryManager:
 
 			message = row[2]
 			try:
-				time_ = time.strftime('%x', time.localtime(float(time_)))
+				time_ = time.strftime('%x', time.localtime(float(time_))).decode(
+					locale.getpreferredencoding())
 			except ValueError:
 				pass
 
