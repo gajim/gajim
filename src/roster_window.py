@@ -2837,6 +2837,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 #			if context.action == gtk.gdk.ACTION_COPY:
 #				# Keep only MOVE
 #				return
+			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
+				jid_dest)
+			# are we creating a loop (child is parent and parent is child)?
+			if gajim.contacts.is_subcontact(account, c_dest) and \
+			gajim.contacts.get_parent_contact(account, c_dest).jid == jid_source:
+				return
 			gajim.contacts.add_subcontact(account, jid_dest, jid_source)
 			# remove the source row
 			context.finish(True, True, etime)
