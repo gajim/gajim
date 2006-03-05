@@ -2808,7 +2808,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					etime)
 				return
 			self.on_drop_in_group(None, account, c_source, grp_dest, context,
-				etime)
+				etime, grp_source)
 			return
 		else:
 			it = iter_dest
