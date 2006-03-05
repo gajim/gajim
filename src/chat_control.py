@@ -900,10 +900,10 @@ class ChatControl(ChatControlBase):
 		if cs and st in ('composing_only', 'all'):
 			if contact.show == 'offline':
 				chatstate = ''
-			elif st == 'all':
+			elif st == 'all' and contact.composing_jep == 'JEP-0085':
 				chatstate = helpers.get_uf_chatstate(cs)
-			else: # 'composing_only'
-				if chatstate in ('composing', 'paused'):
+			elif st == 'composing_only' or contact.composing_jep == 'JEP-0022':
+				if cs in ('composing', 'paused'):
 					# only print composing, paused
 					chatstate = helpers.get_uf_chatstate(cs)
 				else:
