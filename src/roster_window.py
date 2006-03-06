@@ -113,13 +113,29 @@ class RosterWindow:
 				if jid == model[contact_iter][C_JID].decode('utf-8') and \
 					account == model[contact_iter][C_ACCOUNT].decode('utf-8'):
 					found.append(contact_iter)
-				sub_contact_iter = model.iter_children(contact_iter)
-				while sub_contact_iter:
-					if jid == model[sub_contact_iter][C_JID].decode('utf-8') and \
-						account == model[sub_contact_iter][C_ACCOUNT].decode('utf-8'):
-						found.append(sub_contact_iter)
-					sub_contact_iter = model.iter_next(sub_contact_iter)
-				contact_iter = model.iter_next(contact_iter)
+				# find next contact iter
+				if model.iter_has_child(contact_iter):
+					# his first child if it has some
+					contact_iter = model.iter_children(contact_iter)
+				else:
+					next_contact_iter = model.iter_next(contact_iter)
+					if not next_contact_iter:
+						# now we need to go up
+						parent_iter = model.iter_parent(contact_iter)
+						parent_type = model[parent_iter][C_TYPE]
+						while parent_type != 'group':
+							contact_iter = model.iter_next(parent_iter)
+							if contact_iter:
+								break
+							else:
+								parent_iter = model.iter_parent(parent_iter)
+								parent_type = model[parent_iter][C_TYPE]
+						else:
+							# we tested all contacts in this group
+							contact_iter = None
+					else:
+						# his brother if he has
+						contact_iter = next_contact_iter
 			group_iter = model.iter_next(group_iter)
 		return found
 
