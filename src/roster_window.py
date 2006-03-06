@@ -169,10 +169,13 @@ class RosterWindow:
 			gajim.newly_added[account].remove(jid)
 			self.draw_contact(jid, account)
 
-	def add_contact_to_roster(self, jid, account, force = False):
+	def add_contact_to_roster(self, jid, account, force = False,
+	add_children = False):
 		'''Add a contact to the roster and add groups if they aren't in roster
 		force is about	force to add it, even if it is offline and show offline
-		is False, because it has online children, so we need to show it'''
+		is False, because it has online children, so we need to show it.
+		If add_children is True, we also add all children, even if they were not
+		already drawn'''
 		showOffline = gajim.config.get('showoffline')
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if not contact:
@@ -201,6 +204,9 @@ class RosterWindow:
 				# we add some values here. see draw_contact for more
 				model.append(i, (None, name, 'contact', contact.jid, account,
 					False, None))
+			if add_children:
+				for cc in gajim.contacts.get_children_contacts(account, contact):
+					self.add_contact_to_roster(cc.jid, account)
 			self.draw_contact(contact.jid, account)
 			self.draw_avatar(contact.jid, account)
 			# Redraw parent to change icon
@@ -231,7 +237,7 @@ class RosterWindow:
 			contact)
 		ccs = [] # children contacts that were relly in roster
 		for cc in children_contacts:
-			if self.get_contact_iter(cc.jid, account):
+			if self.get_contact_iter(cc.jid, account) or add_children:
 				self.remove_contact(cc, account)
 				ccs.append(cc)
 		groups = contact.groups
@@ -2857,7 +2863,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			parent_jid = gajim.contacts.get_parent_contact(account, c_source).jid
 			gajim.contacts.remove_subcontact(account, jid_source)
 			context.finish(True, True, etime)
-			self.add_contact_to_roster(jid_source, account)
+			self.add_contact_to_roster(jid_source, account, add_children = True)
 			self.draw_contact(parent_jid, account)
 			return
 		if grp_source == grp_dest:
@@ -2876,7 +2882,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			# remove the source row
 			context.finish(True, True, etime)
 			# Add it under parent contact
-			self.add_contact_to_roster(jid_source, account)
+			self.add_contact_to_roster(jid_source, account, add_children = True)
 			self.draw_contact(jid_dest, account)
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
