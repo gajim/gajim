@@ -195,7 +195,7 @@ class RosterWindow:
 			if not len(parent_iters):
 				# Add parent and children
 				self.add_contact_to_roster(parent_contact.jid, account, True)
-				return
+				parent_iters = self.get_contact_iter(parent_contact.jid, account)
 			name = contact.get_shown_name()
 			for i in parent_iters:
 				# we add some values here. see draw_contact for more
@@ -229,8 +229,11 @@ class RosterWindow:
 		# under this iter
 		children_contacts = gajim.contacts.get_children_contacts(account,
 			contact)
+		ccs = [] # children contacts that were relly in roster
 		for cc in children_contacts:
-			self.remove_contact(cc, account)
+			if self.get_contact_iter(cc.jid, account):
+				self.remove_contact(cc, account)
+				ccs.append(cc)
 		groups = contact.groups
 		if observer:
 			groups = [_('Observers')]
@@ -267,7 +270,7 @@ class RosterWindow:
 		self.draw_contact(jid, account)
 		self.draw_avatar(jid, account)
 		# put the children under this iter
-		for cc in children_contacts:
+		for cc in ccs:
 			self.add_contact_to_roster(cc.jid, account)
 
 	def add_transport_to_roster(self, account, transport):
