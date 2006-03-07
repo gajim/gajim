@@ -212,7 +212,8 @@ class ChooseGPGKeyDialog:
 class ChangeStatusMessageDialog:
 	def __init__(self, show = None):
 		self.show = show
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog', APP)
+		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog',
+			APP)
 		self.window = self.xml.get_widget('change_status_message_dialog')
 		if show:
 			uf_show = helpers.get_uf_show(show)
@@ -232,19 +233,23 @@ class ChangeStatusMessageDialog:
 			msg = ''
 		msg = helpers.from_one_line(msg)
 		self.message_buffer.set_text(msg)
-		self.values = {'':''} # have an empty string selectable, so user can clear msg
-		for msg in gajim.config.get_per('statusmsg'):
-			val = gajim.config.get_per('statusmsg', msg, 'message')
-			val = helpers.from_one_line(val)
-			self.values[msg] = val
-		sorted_keys_list = helpers.get_sorted_keys(self.values)
-		liststore = gtk.ListStore(str, str)
-		message_comboboxentry = self.xml.get_widget('message_comboboxentry')
-		message_comboboxentry.set_model(liststore)
-		message_comboboxentry.set_text_column(0)
-		message_comboboxentry.child.set_property('editable', False)
-		for val in sorted_keys_list:
-			message_comboboxentry.append_text(val)
+		
+		# have an empty string selectable, so user can clear msg
+		self.preset_messages_dict = {'': ''}
+		for msg_name in gajim.config.get_per('statusmsg'):
+			msg_text = gajim.config.get_per('statusmsg', msg_name, 'message')
+			msg_text = helpers.from_one_line(msg_text)
+			self.preset_messages_dict[msg_name] = msg_text
+		sorted_keys_list = helpers.get_sorted_keys(self.preset_messages_dict)
+		
+		self.message_liststore = gtk.ListStore(str) # msg_name
+		self.message_combobox = self.xml.get_widget('message_combobox')
+		self.message_combobox.set_model(self.message_liststore)
+		cellrenderertext = gtk.CellRendererText()
+		self.message_combobox.pack_start(cellrenderertext, True)
+		self.message_combobox.add_attribute(cellrenderertext, 'text', 0)
+		for msg_name in sorted_keys_list:
+			self.message_liststore.append((msg_name,))
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -254,7 +259,8 @@ class ChangeStatusMessageDialog:
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
-			message = self.message_buffer.get_text(beg, end).decode('utf-8').strip()
+			message = self.message_buffer.get_text(beg, end).decode('utf-8')\
+				.strip()
 			msg = helpers.to_one_line(message)
 			if self.show:
 				gajim.config.set('last_status_msg_' + self.show, msg)
@@ -263,13 +269,13 @@ class ChangeStatusMessageDialog:
 		self.window.destroy()
 		return message
 
-	def on_message_comboboxentry_changed(self, widget, data = None):
+	def on_message_combobox_changed(self, widget):
 		model = widget.get_model()
 		active = widget.get_active()
 		if active < 0:
 			return None
 		name = model[active][0].decode('utf-8')
-		self.message_buffer.set_text(self.values[name])
+		self.message_buffer.set_text(self.preset_messages_dict[name])
 	
 	def on_change_status_message_dialog_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Return or \
@@ -283,7 +289,25 @@ class ChangeStatusMessageDialog:
 			btn.set_sensitive(False)
 		else:
 			btn.set_sensitive(True)
-		
+	
+	def on_save_as_preset_button_clicked(self, widget):
+		start_iter, finish_iter = self.message_buffer.get_bounds()
+		status_message_to_save_as_preset = self.message_buffer.get_text(
+			start_iter, finish_iter)
+		dlg = InputDialog(_('Save as Preset Status Message'),
+			_('Please type a name for this status message'), is_modal = True)
+		response = dlg.get_response()
+		if response == gtk.RESPONSE_OK:
+			msg_name = dlg.input_entry.get_text()
+			# user_input holds the name that the user wants for the preset message
+			iter_ = self.message_liststore.append((msg_name,))
+			msg_text = helpers.to_one_line(status_message_to_save_as_preset)
+			gajim.config.add_per('statusmsg', msg_name)
+			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text)
+			self.preset_messages_dict[msg_name] = msg_text
+			# select in combobox the one we just saved 
+			self.message_combobox.set_active_iter(iter_)
+
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
@@ -611,6 +635,8 @@ class InputDialog:
 	'''Class for Input dialog'''
 	def __init__(self, title, label_str, input_str = None, is_modal = True,
 ok_handler = None):
+		# if modal is True you also need to call get_response()
+		# and ok_handler won't be used
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'input_dialog', APP)
 		self.dialog = xml.get_widget('input_dialog')
 		label = xml.get_widget('label')
@@ -643,7 +669,6 @@ ok_handler = None):
 			response = self.dialog.run()
 			self.dialog.destroy()
 		return response
-	
 
 class SubscriptionRequestWindow:
 	def __init__(self, jid, text, account):
