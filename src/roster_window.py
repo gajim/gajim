@@ -2236,6 +2236,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				win.set_active_tab(jid, account)
 			elif c:
 				self.new_chat(c, account)
+				gajim.last_message_time[account][c.jid] = 0 # long time ago
 				win = gajim.interface.msg_win_mgr.get_window(jid, account)
 				win.set_active_tab(jid, account)
 			win.window.present()

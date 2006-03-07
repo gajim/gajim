@@ -1489,6 +1489,7 @@ class Interface:
 			else:
 				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 				self.roster.new_chat(contact, account)
+				gajim.last_message_time[account][jid] = 0 # long time ago
 				w = gajim.interface.msg_win_mgr.get_window(jid, account)
 		elif typ == message_control.TYPE_PM:
 			if gajim.interface.msg_win_mgr.has_window(jid, account):
