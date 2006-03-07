@@ -1040,23 +1040,26 @@ class GroupchatControl(ChatControlBase):
 
 	def allow_shutdown(self):
 		retval = True
+		includes = gajim.config.get('confirm_close_muc_rooms').split(' ')
+		excludes = gajim.config.get('noconfirm_close_muc_rooms').split(' ')
 		# whether to ask for comfirmation before closing muc
-		if gajim.config.get('confirm_close_muc'):
-			if gajim.gc_connected[self.account][self.room_jid]:
-				pritext = _('Are you sure you want to leave room "%s"?') % self.name
-				sectext = _('If you close this window, you will be disconnected '
-						'from this room.')
+		if (gajim.config.get('confirm_close_muc') or self.room_jid in inclides) \
+		and gajim.gc_connected[self.account][self.room_jid] and self.room_jid not\
+		in excludes:
+			pritext = _('Are you sure you want to leave room "%s"?') % self.name
+			sectext = _('If you close this window, you will be disconnected '
+					'from this room.')
 
-				dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
-							_('Do _not ask me again'))
+			dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
+						_('Do _not ask me again'))
 
-				if dialog.get_response() != gtk.RESPONSE_OK:
-					retval = False
+			if dialog.get_response() != gtk.RESPONSE_OK:
+				retval = False
 
-				if dialog.is_checked(): # user does not want to be asked again
-					gajim.config.set('confirm_close_muc', False)
+			if dialog.is_checked(): # user does not want to be asked again
+				gajim.config.set('confirm_close_muc', False)
 
-				dialog.destroy()
+			dialog.destroy()
 
 		return retval
 
