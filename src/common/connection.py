@@ -204,7 +204,7 @@ class Connection:
 			HAS_IDLE = False
 		self.on_connect_success = None
 		self.retrycount = 0
-		self.auto_auth = [] # list of jid to auto-authorize
+		self.jids_for_auto_auth = [] # list of jid to auto-authorize
 	# END __init__
 
 	def get_full_jid(self, iq_obj):
@@ -567,7 +567,7 @@ class Connection:
 		if ptype == 'subscribe':
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0 or \
-			jid_stripped in self.auto_auth:
+			jid_stripped in self.jids_for_auto_auth:
 				if self.connection:
 					p = common.xmpp.Presence(who, 'subscribed')
 					p = self.add_sha(p)
@@ -2206,7 +2206,7 @@ class Connection:
 			return
 		gajim.log.debug('subscription request for %s' % jid)
 		if auto_auth:
-			self.auto_auth.append(jid)
+			self.jids_for_auto_auth.append(jid)
 		# RFC 3921 section 8.2
 		infos = {'jid': jid}
 		if name:
