@@ -1044,7 +1044,7 @@ class GroupchatControl(ChatControlBase):
 		includes = gajim.config.get('confirm_close_muc_rooms').split(' ')
 		excludes = gajim.config.get('noconfirm_close_muc_rooms').split(' ')
 		# whether to ask for comfirmation before closing muc
-		if (gajim.config.get('confirm_close_muc') or self.room_jid in inclides) \
+		if (gajim.config.get('confirm_close_muc') or self.room_jid in includes) \
 		and gajim.gc_connected[self.account][self.room_jid] and self.room_jid not\
 		in excludes:
 			pritext = _('Are you sure you want to leave room "%s"?') % self.name
@@ -1406,7 +1406,8 @@ class GroupchatControl(ChatControlBase):
 			model = widget.get_model()
 			iter = model.get_iter(path)
 			nick = model[iter][C_NICK].decode('utf-8')
-			if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+			if not nick in gajim.contacts.get_nick_list(self.account,
+			self.room_jid):
 				#it's a group
 				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
 					if (widget.row_expanded(path)):
