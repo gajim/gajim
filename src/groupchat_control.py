@@ -107,6 +107,7 @@ class GroupchatControl(ChatControlBase):
 		self.name = self.room_jid.split('@')[0]
 
 		self.compact_view_always = gajim.config.get('always_compact_view_gc')
+		self.set_compact_view(self.compact_view_always)
 		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 
 		self._last_selected_contact = None # None or holds jid, account tuple
