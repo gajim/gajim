@@ -166,6 +166,8 @@ class Config:
 		'roster_avatar_height': [opt_int, 32],
 		'tooltip_avatar_width': [opt_int, 125],
 		'tooltip_avatar_height': [opt_int, 125],
+		'vcard_avatar_width': [opt_int, 200],
+		'vcard_avatar_height': [opt_int, 200],
 		'notification_position_x': [opt_int, -1],
 		'notification_position_y': [opt_int, -1],
 		'notification_avatar_width': [opt_int, 48],
