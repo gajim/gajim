@@ -10818,7 +10818,7 @@ Custom</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1322">
+	<widget class="GtkImage" id="image1371">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-network</property>
 	  <property name="icon_size">1</property>
@@ -10838,7 +10838,7 @@ Custom</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1320">
+	<widget class="GtkImage" id="image1372">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -10852,13 +10852,13 @@ Custom</property>
   </child>
 
   <child>
-    <widget class="GtkImageMenuItem" id="new_message_menuitem">
+    <widget class="GtkImageMenuItem" id="single_message_menuitem">
       <property name="visible">True</property>
       <property name="label" translatable="yes">Send Single _Message</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1263">
+	<widget class="GtkImage" id="image1373">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -10894,7 +10894,7 @@ Custom</property>
       <signal name="activate" handler="on_show_roster_menuitem_activate" last_modification_time="Sat, 29 Oct 2005 23:55:24 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1264">
+	<widget class="GtkImage" id="image1374">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-home</property>
 	  <property name="icon_size">1</property>

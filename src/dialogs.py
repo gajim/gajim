@@ -1,10 +1,5 @@
 ##	dialogs.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Dimitur Kirov <dkirov@gmail.com>
-##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
@@ -1063,7 +1058,9 @@ class PopupNotificationWindow:
 
 class SingleMessageWindow:
 	'''SingleMessageWindow can send or show a received
-	singled message depending on action argument'''
+	singled message depending on action argument which can be 'send'
+	or 'receive'.
+	'''
 	def __init__(self, account, to = '', action = '', from_whom = '',
 	subject = '', message = '', resource = ''):
 		self.account = account

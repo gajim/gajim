@@ -1,18 +1,11 @@
 ##	systray.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Dimitur Kirov <dkirov@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -61,7 +54,7 @@ class Systray:
 	
 	def __init__(self):
 		self.jids = [] # Contain things like [account, jid, type_of_msg]
-		self.new_message_handler_id = None
+		self.single_message_handler_id = None
 		self.t = None
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
@@ -103,17 +96,16 @@ class Systray:
 	def start_chat(self, widget, account, jid):
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if gajim.interface.msg_win_mgr.has_window(jid, account):
-			gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(jid, account)
+			gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
+				jid, account)
 			gajim.interface.msg_win_mgr.get_window(jid, account).present()
 		elif contact:
-			gajim.interface.roster.new_chat(gajim.contacts[account][jid][0],
-							account)
-			gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(jid, account)
+			gajim.interface.roster.new_chat(contact, account)
+			gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
+				jid, account)
 	
-	def on_new_message_menuitem_activate(self, widget, account):
-		"""When new message menuitem is activated:
-		call the NewMessageDialog class"""
-		dialogs.NewMessageDialog(account)
+	def on_single_message_menuitem_activate(self, widget, account):
+		dialogs.SingleMessageWindow(account, action = 'send')
 
 	def make_menu(self, event = None):
 		'''create chat with and new message (sub) menus/menuitems
@@ -121,13 +113,13 @@ class Systray:
 		'''
 		
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
-		new_message_menuitem = self.xml.get_widget('new_message_menuitem')
+		single_message_menuitem = self.xml.get_widget('single_message_menuitem')
 		status_menuitem = self.xml.get_widget('status_menu')
 		
-		if self.new_message_handler_id:
-			new_message_menuitem.handler_disconnect(
-				self.new_message_handler_id)
-			self.new_message_handler_id = None
+		if self.single_message_handler_id:
+			single_message_menuitem.handler_disconnect(
+				self.single_message_handler_id)
+			self.single_message_handler_id = None
 
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
@@ -170,26 +162,26 @@ class Systray:
 
 		iskey = len(gajim.connections) > 0
 		chat_with_menuitem.set_sensitive(iskey)
-		new_message_menuitem.set_sensitive(iskey)
+		single_message_menuitem.set_sensitive(iskey)
 		
 		if len(gajim.connections) >= 2: # 2 or more connections? make submenus
 			account_menu_for_chat_with = gtk.Menu()
 			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
 
-			account_menu_for_new_message = gtk.Menu()
-			new_message_menuitem.set_submenu(account_menu_for_new_message)
+			account_menu_for_single_message = gtk.Menu()
+			single_message_menuitem.set_submenu(account_menu_for_single_message)
 
 			for account in gajim.connections:
 				#for chat_with
-				item = gtk.MenuItem(_('using account ') + account)
+				item = gtk.MenuItem(_('using account %s') % account)
 				account_menu_for_chat_with.append(item)
 				group_menu = self.make_groups_submenus_for_chat_with(account)
 				item.set_submenu(group_menu)
-				#for new_message
-				item = gtk.MenuItem(_('using account ') + account)
+				#for single message
+				item = gtk.MenuItem(_('using account %s') % account)
 				item.connect('activate',
-					self.on_new_message_menuitem_activate, account)
-				account_menu_for_new_message.append(item)
+					self.on_single_message_menuitem_activate, account)
+				account_menu_for_single_message.append(item)
 				
 		elif len(gajim.connections) == 1: # one account
 			# one account, no need to show 'as jid'
@@ -199,9 +191,9 @@ class Systray:
 			group_menu = self.make_groups_submenus_for_chat_with(account)
 			chat_with_menuitem.set_submenu(group_menu)
 					
-			# for new message
-			self.new_message_handler_id = new_message_menuitem.connect(
-				'activate', self.on_new_message_menuitem_activate, account)
+			# for single message
+			self.single_message_handler_id = single_message_menuitem.connect(
+				'activate', self.on_single_message_menuitem_activate, account)
 
 		if event is None:
 			# None means windows (we explicitly popup in systraywin32.py)
@@ -256,7 +248,7 @@ class Systray:
 				if group in contact.groups and contact.show != 'offline' and \
 						contact.show != 'error':
 					at_least_one = True
-					s = contact.get_shown_name().replace('_', '__') # two _ show one _ and no underline happens
+					s = gtkgui_helpers.escape_underscore(contact.get_shown_name())
 					item = gtk.ImageMenuItem(s)
 					# any given gtk widget can only be used in one place
 					# (here we use it in status menu too)
