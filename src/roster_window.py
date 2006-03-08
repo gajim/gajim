@@ -1398,13 +1398,15 @@ class RosterWindow:
 		dialogs.InformationDialog(_('Authorization has been sent'),
 			_('Now "%s" will know your status.') %jid)
 
-	def req_sub(self, widget, jid, txt, account, group=None, pseudo=None):
+	def req_sub(self, widget, jid, txt, account, group = None, pseudo = None,
+	auto_auth = False):
 		'''Request subscription to a contact'''
 		if group:
 			group = [group]
 		else:
 			group = []
-		gajim.connections[account].request_subscription(jid, txt, pseudo, group)
+		gajim.connections[account].request_subscription(jid, txt, pseudo, group,
+			auto_auth)
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			keyID = ''

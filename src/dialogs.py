@@ -416,10 +416,9 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		end_iter = message_buffer.get_end_iter()
 		message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
+		auto_auth = self.xml.get_widget('auto_authorize_checkbutton').get_active()
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
-			group = group, pseudo = nickname)
-		if self.xml.get_widget('auto_authorize_checkbutton').get_active():
-			gajim.connections[self.account].send_authorization(jid)
+			group = group, pseudo = nickname, auto_auth = auto_auth)
 		self.window.destroy()
 		
 	def fill_jid(self):
