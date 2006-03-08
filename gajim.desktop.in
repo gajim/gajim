@@ -1,6 +1,6 @@
 [Desktop Entry]
 Categories=Network;InstantMessaging;Application;GTK;GNOME;
-_Name=Gajim
+_Name=Gajim Instant Messenger
 _GenericName=Jabber IM Client
 _Comment=A GTK+ Jabber client
 Version=0.9.1
