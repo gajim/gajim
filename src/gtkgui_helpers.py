@@ -430,22 +430,28 @@ def get_scaled_pixbuf(pixbuf, kind):
 	scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 	return scaled_buf
 
-def get_avatar_pixbuf_from_cache(jid):
+def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False):
 	'''checks if jid has cached avatar and if that avatar is valid image
 	(can be shown)
 	returns None if there is no image in vcard
 	returns 'ask' if cached vcard should not be used (user changed his vcard,
 	so we have new sha) or if we don't have the vcard'''
 
+	jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
 	if gajim.config.get('hide_avatar_of_transport') and\
 		gajim.jid_is_transport(jid):
 		# don't show avatar for the transport itself
 		return None
-	
-	if jid not in os.listdir(gajim.VCARD_PATH):
+
+	if is_fake_jid:
+		path = os.path.join(gajim.VCARD_PATH, jid, nick)
+	else:
+		path = os.path.join(gajim.VCARD_PATH, jid)
+	if not os.path.isfile(path):
 		return 'ask'
 
-	vcard_dict = gajim.connections.values()[0].get_cached_vcard(jid)
+	vcard_dict = gajim.connections.values()[0].get_cached_vcard(fjid,
+		is_fake_jid)
 	if not vcard_dict: # This can happen if cached vcard is too old
 		return 'ask'
 	if not vcard_dict.has_key('PHOTO'):

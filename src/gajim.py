@@ -752,12 +752,14 @@ class Interface:
 		# show avatar in chat
 		win = None
 		ctrl = None
-		if gajim.interface.msg_win_mgr.has_window(jid, account):
+		if resource and gajim.interface.msg_win_mgr.has_window(
+		jid + '/' + resource, account):
+			win = gajim.interface.msg_win_mgr.get_window(jid + '/' + resource,
+				account)
+			ctrl = win.get_control(jid + '/' + resource, account)
+		elif gajim.interface.msg_win_mgr.has_window(jid, account):
 			win = gajim.interface.msg_win_mgr.get_window(jid, account)
 			ctrl = win.get_control(jid, account)
-		elif resource and gajim.interface.msg_win_mgr.has_window(jid + '/' + resource, account):
-			win = gajim.interface.msg_win_mgr.get_window(jid + '/' + resource, account)
-			ctrl = win.get_control(jid + '/' + resource, account)
 		if win and ctrl.type_id != message_control.TYPE_GC:
 			ctrl.show_avatar()
 

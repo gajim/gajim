@@ -1309,13 +1309,16 @@ class ChatControl(ChatControlBase):
 		# we assume contact has no avatar
 		scaled_pixbuf = None
 
-		real_jid = gajim.get_real_jid_from_fjid(self.account, jid)
 		pixbuf = None
-		if real_jid:
-			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
-		if not real_jid or pixbuf == 'ask':
-			# we don't have the vcard or it's pm and we don't have the real jid
-			gajim.connections[self.account].request_vcard(jid_with_resource)
+		is_fake = False
+		if gajim.contacts.is_pm_from_jid(self.account, jid):
+			is_fake = True
+		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid_with_resource,
+			is_fake)
+		if pixbuf == 'ask':
+			# we don't have the vcard
+			gajim.connections[self.account].request_vcard(jid_with_resource,
+				is_fake)
 			return
 		if pixbuf is not None:
 			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'chat')

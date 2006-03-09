@@ -205,6 +205,7 @@ class Connection:
 		self.on_connect_success = None
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
+		self.room_jids = [] # list of gc jids so that vcard are saved in a folder
 	# END __init__
 
 	def get_full_jid(self, iq_obj):
@@ -269,6 +270,23 @@ class Connection:
 					 dict[name][c.getName()] = c.getData()
 		return dict
 
+	def save_vcard_to_hd(self, full_jid, card):
+		jid, nick = gajim.get_room_and_nick_from_fjid(full_jid)
+		path = os.path.join(gajim.VCARD_PATH, jid)
+		if jid in self.room_jids:
+			# remove room_jid file if needed
+			if os.path.isfile(path):
+				os.remove(path)
+			# create folder if needed
+			if not os.path.isdir(path):
+				os.mkdir(path, 0700)
+			path_to_file = os.path.join(gajim.VCARD_PATH, jid, nick)
+		else:
+			path_to_file = path
+		fil = open(path_to_file, 'w')
+		fil.write(str(card))
+		fil.close()
+
 	def _vCardCB(self, con, vc):
 		'''Called when we receive a vCard
 		Parse the vCard and send it to plugins'''
@@ -281,7 +299,7 @@ class Connection:
 			who = self.get_full_jid(vc)
 			frm, resource = gajim.get_room_and_nick_from_fjid(who)
 		else:
-			frm = our_jid
+			who = frm = our_jid
 		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			card = vc.getChildren()[0]
 			vcard = self.node_to_dict(card)
@@ -301,10 +319,7 @@ class Connection:
 				card.getTag('PHOTO').setTagData('SHA', avatar_sha)
 
 			# Save it to file
-			path_to_file = os.path.join(gajim.VCARD_PATH, frm)
-			fil = open(path_to_file, 'w')
-			fil.write(str(card))
-			fil.close()
+			self.save_vcard_to_hd(who, card)
 			# Save the decoded avatar to a separate file too, and generate files for dbus notifications
 			if photo_decoded:
 				avatar_file = os.path.join(gajim.AVATAR_PATH, frm + '_notif_size_colored.png')
@@ -1613,10 +1628,7 @@ class Connection:
 
 				# Save it to file
 				our_jid = gajim.get_jid_from_account(self.name)
-				path_to_file = os.path.join(gajim.VCARD_PATH, our_jid)
-				fil = open(path_to_file, 'w')
-				fil.write(str(vcard_iq))
-				fil.close()
+				self.save_vcard_to_hd(our_jid, vcard_iq)
 
 				# Send new presence if sha changed and we are not invisible
 				if self.vcard_sha != new_sha and STATUS_LIST[self.connected] != \
@@ -1638,12 +1650,9 @@ class Connection:
 				jid = self.awaiting_answers[id][1]
 				our_jid = gajim.get_jid_from_account(self.name)
 				if jid and jid != our_jid:
-					self.dispatch('VCARD', {'jid': jid})
-					jid = gajim.get_jid_without_resource(jid)
 					# Write an empty file
-					path_to_file = os.path.join(gajim.VCARD_PATH, jid)
-					fil = open(path_to_file, 'w')
-					fil.close()
+					self.save_vcard_to_hd(jid, '')
+					self.dispatch('VCARD', {'jid': jid})
 				elif jid == our_jid:
 					self.dispatch('MYVCARD', {'jid': jid})
 		del self.awaiting_answers[id]
@@ -2342,35 +2351,39 @@ class Connection:
 			common.xmpp.NS_VERSION)
 		self.connection.send(iq)
 
-	def get_cached_vcard(self, fjid):
+	def get_cached_vcard(self, fjid, is_fake_jid = False):
 		'''return the vcard as a dict
 		return {} if vcard was too old
 		return None if we don't have cached vcard'''
-		jid = gajim.get_jid_without_resource(fjid)
-		path_to_file = os.path.join(gajim.VCARD_PATH, jid)
-		if os.path.isfile(path_to_file):
-			# We have the vcard cached
-			f = open(path_to_file)
-			c = f.read()
-			f.close()
-			card = common.xmpp.Node(node = c)
-			vcard = self.node_to_dict(card)
-			if vcard.has_key('PHOTO'):
-				if not isinstance(vcard['PHOTO'], dict):
-					del vcard['PHOTO']
-				elif vcard['PHOTO'].has_key('SHA'):
-					cached_sha = vcard['PHOTO']['SHA']
-					if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
-						cached_sha:
-						# user change his vcard so don't use the cached one
-						return {}
-			vcard['jid'] = jid
-			vcard['resource'] = gajim.get_resource_from_jid(fjid)
-			return vcard
-		return None
+		jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
+		if is_fake_jid:
+			path_to_file = os.path.join(gajim.VCARD_PATH, jid, nick)
+		else:
+			path_to_file = os.path.join(gajim.VCARD_PATH, jid)
+		if not os.path.isfile(path_to_file):
+			return None
+		# We have the vcard cached
+		f = open(path_to_file)
+		c = f.read()
+		f.close()
+		card = common.xmpp.Node(node = c)
+		vcard = self.node_to_dict(card)
+		if vcard.has_key('PHOTO'):
+			if not isinstance(vcard['PHOTO'], dict):
+				del vcard['PHOTO']
+			elif vcard['PHOTO'].has_key('SHA'):
+				cached_sha = vcard['PHOTO']['SHA']
+				if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
+					cached_sha:
+					# user change his vcard so don't use the cached one
+					return {}
+		vcard['jid'] = jid
+		vcard['resource'] = gajim.get_resource_from_jid(fjid)
+		return vcard
 
-	def request_vcard(self, jid = None):
-		'''request the VCARD'''
+	def request_vcard(self, jid = None, is_fake_jid = False):
+		'''request the VCARD. If is_fake_jid is True, it means we request a vcard
+		to a fake jid, like in private messages in groupchat'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'get')
@@ -2381,10 +2394,14 @@ class Connection:
 		id = self.connection.getAnID()
 		iq.setID(id)
 		self.awaiting_answers[id] = (VCARD_ARRIVED, jid)
+		if is_fake_jid:
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+			if not room_jid in self.room_jids:
+				self.room_jids.append(room_jid)
 		self.connection.send(iq)
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 
-	def send_vcard(self, vcard):
+	def send_vcard(self, vcard, is_fake_jid):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set')
