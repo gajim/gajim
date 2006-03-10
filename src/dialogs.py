@@ -1386,7 +1386,8 @@ class InvitationReceivedDialog:
 		dialog = xml.get_widget('invitation_received_dialog')
 		
 		pritext = _('You have been invited to the %(room_jid)s room by %(contact_jid)s') % {
-		 'room_jid': room_jid, 'contact_jid': contact_jid }
+			'room_jid': room_jid, 'contact_jid': contact_jid }
+		sectext = ''
 		if comment is not None:
 			sectext = _('Comment: %s') % comment
 
