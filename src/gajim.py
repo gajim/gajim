@@ -395,8 +395,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_connected',
 					'enabled') and gajim.allow_notifications[account]:
 					helpers.play_sound('contact_connected')
-				if not gajim.interface.msg_win_mgr.has_window(jid, account) and \
-					not gajim.awaiting_events[account].has_key(jid) and \
+				if not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
 					gajim.allow_notifications[account]:
 					show_notification = False
@@ -430,8 +429,7 @@ class Interface:
 				if gajim.config.get_per('soundevents', 'contact_disconnected',
 						'enabled'):
 					helpers.play_sound('contact_disconnected')
-				if not gajim.interface.msg_win_mgr.has_window(jid, account) and \
-					not gajim.awaiting_events[account].has_key(jid) and \
+				if not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signout'):
 					show_notification = False
 					# check OUR status and if we allow notifications for that status
