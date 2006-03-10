@@ -45,6 +45,7 @@ if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 from calendar import timegm
+from encodings.punycode import punycode_encode
 
 import common.xmpp
 
@@ -272,7 +273,8 @@ class Connection:
 
 	def save_vcard_to_hd(self, full_jid, card):
 		jid, nick = gajim.get_room_and_nick_from_fjid(full_jid)
-		path = os.path.join(gajim.VCARD_PATH, jid)
+		puny_jid = punycode_encode(jid)
+		path = os.path.join(gajim.VCARD_PATH, puny_jid)
 		if jid in self.room_jids:
 			# remove room_jid file if needed
 			if os.path.isfile(path):
@@ -280,7 +282,8 @@ class Connection:
 			# create folder if needed
 			if not os.path.isdir(path):
 				os.mkdir(path, 0700)
-			path_to_file = os.path.join(gajim.VCARD_PATH, jid, nick)
+			puny_nick = punycode_encode(nick)
+			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
 		else:
 			path_to_file = path
 		fil = open(path_to_file, 'w')
@@ -2356,10 +2359,12 @@ class Connection:
 		return {} if vcard was too old
 		return None if we don't have cached vcard'''
 		jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
+		puny_jid = punycode_encode(jid)
 		if is_fake_jid:
-			path_to_file = os.path.join(gajim.VCARD_PATH, jid, nick)
+			puny_nick = punycode_encode(nick)
+			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
 		else:
-			path_to_file = os.path.join(gajim.VCARD_PATH, jid)
+			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid)
 		if not os.path.isfile(path_to_file):
 			return None
 		# We have the vcard cached

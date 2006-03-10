@@ -23,6 +23,7 @@ import gobject
 import pango
 import os
 import sys
+from encodings.punycode import punycode_encode
 
 import vcard
 
@@ -443,10 +444,12 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False):
 		# don't show avatar for the transport itself
 		return None
 
+	puny_jid = punycode_encode(jid)
 	if is_fake_jid:
-		path = os.path.join(gajim.VCARD_PATH, jid, nick)
+		puny_nick = punycode_encode(nick)
+		path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
 	else:
-		path = os.path.join(gajim.VCARD_PATH, jid)
+		path = os.path.join(gajim.VCARD_PATH, puny_jid)
 	if not os.path.isfile(path):
 		return 'ask'
 
