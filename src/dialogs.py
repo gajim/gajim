@@ -1385,14 +1385,17 @@ class InvitationReceivedDialog:
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'invitation_received_dialog', APP)
 		dialog = xml.get_widget('invitation_received_dialog')
 		
-		pritext = _('You have been invited to the %(room_jid)s room by %(contact_jid)s') % {
+		#FIXME: use nickname instead of contact_jid
+		pritext = _('%(contact_jid)s has invited you to %(room_jid)s room') % {
 			'room_jid': room_jid, 'contact_jid': contact_jid }
-		sectext = ''
-		if comment is not None:
-			sectext = _('Comment: %s') % comment
+		
+		label_text = '<big><b>%s</b></big>' % pritext
 
-		xml.get_widget('label').set_markup(
-			'<span size="larger" weight="bold">' + pritext + '</span>\n\n' + sectext)
+		if comment is not None and comment != '': # only if not None and not ''
+			sectext = _('Comment: %s') % comment
+			label_text += '\n\n%s' % sectext
+
+		xml.get_widget('label').set_markup(label_text)
 		
 		response = dialog.run()
 		dialog.destroy()
