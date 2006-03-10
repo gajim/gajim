@@ -915,6 +915,8 @@ class ChatControl(ChatControlBase):
 					chatstate = helpers.get_uf_chatstate(cs)
 				else:
 					chatstate = ''
+			elif chatstate is None:
+				chatstate = helpers.get_uf_chatstate(cs)
 			label_text = \
 			'<span %s>%s</span>%s %s' % \
 				(font_attrs, name, acct_info, chatstate)
