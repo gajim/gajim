@@ -264,6 +264,8 @@ class VcardWindow:
 			if i == 'PHOTO':
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
 					get_avatar_pixbuf_encoded_mime(vcard[i])
+				if not pixbuf:
+					continue
 				image = self.xml.get_widget('PHOTO_image')
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 				image.set_from_pixbuf(pixbuf)
