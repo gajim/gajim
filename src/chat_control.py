@@ -1468,10 +1468,15 @@ class ChatControl(ChatControlBase):
 		real_jid = gajim.get_real_jid_from_fjid(self.account, self.contact.jid)
 		if not real_jid: # this can happend if we're in a moderate room
 			return
+		
 		# Hide the small avatar
+		# this code hides the small avatar when we show a bigger one in case
+		# the avatar has a transparency hole in the middle
+		# so when we show the big one we avoid seeing the small one behind.
+		# It's why I set it transparent.
 		image = self.xml.get_widget('avatar_image')
 		pixbuf = image.get_pixbuf()
-		pixbuf.fill(0xffffff00)
+		pixbuf.fill(0xffffff00) # RGBA
 		image.queue_draw()
 
 		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
