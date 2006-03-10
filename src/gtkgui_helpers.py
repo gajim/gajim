@@ -491,7 +491,8 @@ def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
 	Returns full path to the avatar image if it exists,
 	otherwise returns full path to the image.'''
 	if jid:
-		path_to_file = os.path.join(gajim.AVATAR_PATH, jid) + suffix
+		puny_jid = punycode_encode(jid)
+		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
 		if os.path.exists(path_to_file):
 			return path_to_file
 	return os.path.abspath(generic)

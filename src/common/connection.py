@@ -324,8 +324,10 @@ class Connection:
 			# Save it to file
 			self.save_vcard_to_hd(who, card)
 			# Save the decoded avatar to a separate file too, and generate files for dbus notifications
+			puny_jid = punycode_encode(frm)
 			if photo_decoded:
-				avatar_file = os.path.join(gajim.AVATAR_PATH, frm + '_notif_size_colored.png')
+				avatar_file = os.path.join(gajim.AVATAR_PATH,
+					puny_jid + '_notif_size_colored.png')
 				if frm == our_jid and avatar_sha != self.vcard_sha:
 					gajim.interface.save_avatar_files(frm, photo_decoded)
 				elif frm != our_jid and (not os.path.exists(avatar_file) or \
@@ -335,7 +337,7 @@ class Connection:
 			else:
 				for ext in ('.jpeg', '.png', '_notif_size_bw.png',
 					'_notif_size_colored.png'):
-					path = os.path.join(gajim.AVATAR_PATH, frm + ext)
+					path = os.path.join(gajim.AVATAR_PATH, puny_jid + ext)
 					if os.path.isfile(path):
 						os.remove(path)
 

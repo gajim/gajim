@@ -99,6 +99,7 @@ import signal
 import getopt
 import time
 import threading
+from encodings.punycode import punycode_encode
 
 import gtkgui_helpers
 import notify
@@ -964,7 +965,8 @@ class Interface:
 
 	def save_avatar_files(self, jid, photo_decoded):
 		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
-		path_to_file = os.path.join(gajim.AVATAR_PATH, jid)
+		puny_jid = punycode_encode(jid)
+		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
 		# remove old avatars
 		for typ in ('jpeg', 'png'):
 			path_to_original_file = path_to_file + '.' + typ

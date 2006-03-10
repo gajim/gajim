@@ -29,6 +29,7 @@ import gobject
 import os
 import time
 import locale
+from encodings.punycode import punycode_encode
 
 import gtkgui_helpers
 import message_control
@@ -518,7 +519,8 @@ class RosterTooltip(NotificationAreaTooltip):
 				info += '\n<span style="italic">%s</span>' % text
 		
 		for type_ in ('jpeg', 'png'):
-			file = os.path.join(gajim.AVATAR_PATH, prim_contact.jid + '.' + type_)
+			puny_jid = punycode_encode(prim_contact.jid)
+			file = os.path.join(gajim.AVATAR_PATH, puny_jid + '.' + type_)
 			if os.path.exists(file):
 				self.avatar_image.set_from_file(file)
 				pix = self.avatar_image.get_pixbuf()
