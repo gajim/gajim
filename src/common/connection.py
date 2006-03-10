@@ -2408,7 +2408,7 @@ class Connection:
 		self.connection.send(iq)
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 
-	def send_vcard(self, vcard, is_fake_jid):
+	def send_vcard(self, vcard):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set')
