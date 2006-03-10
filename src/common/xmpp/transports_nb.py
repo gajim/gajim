@@ -108,7 +108,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		try:
 			self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			self._sock.setblocking(False)
-		except:  
+		except:
+			sys.exc_clear()
 			if self.on_connect_failure:
 				self.on_connect_failure()
 			return False
@@ -160,7 +161,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._sock.close()
 		except:
 			# socket is already closed
-			pass
+			sys.exc_clear()
 		# socket descriptor cannot be (un)plugged anymore
 		self.fd = -1
 		if self.on_disconnect:
@@ -263,7 +264,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 					# we are not waiting for write 
 					self._plug_idle()
 				self._on_send()
-		except Exception, e:
+		except Exception:
+			sys.exc_clear()
 			if self.state < 0:
 				self.disconnect()
 				return
@@ -281,6 +283,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._sock.connect(self._server)
 		except socket.error, e:
 			errnum = e[0]
+			sys.exc_clear()
 		# in progress, or would block
 		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK): 
 			return
@@ -378,7 +381,9 @@ class NonBlockingTLS(PlugIn):
 	def plugout(self,now=0):
 		''' Unregisters TLS handler's from owner's dispatcher. Take note that encription
 			can not be stopped once started. You can only break the connection and start over.'''
-		self._owner.UnregisterHandler('features',self.FeaturesHandler,xmlns=NS_STREAMS)
+		# if dispatcher is not plugged we cannot (un)register handlers
+		if self._owner.__dict__.has_key('Dispatcher'):
+			self._owner.UnregisterHandler('features', self.FeaturesHandler,xmlns=NS_STREAMS)
 
 	def tls_start(self):
 		if self.on_tls_start:

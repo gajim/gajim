@@ -24,6 +24,7 @@ Dispatcher.SendAndWaitForResponce method will wait for reply stanza before givin
 '''
 
 import simplexml, sys
+from xml.parsers.expat import ExpatError
 from protocol import *
 from client import PlugIn
 
@@ -123,7 +124,12 @@ class Dispatcher(PlugIn):
 		if len(self._pendingExceptions) > 0:
 			_pendingException = self._pendingExceptions.pop()
 			raise _pendingException[0], _pendingException[1], _pendingException[2]
-		self.Stream.Parse(data)
+		try:
+			self.Stream.Parse(data)
+		except ExpatError:
+			sys.exc_clear()
+			self._owner.Connection.disconnect()
+			return 0
 		if len(self._pendingExceptions) > 0:
 			 _pendingException = self._pendingExceptions.pop()
 			 raise _pendingException[0], _pendingException[1], _pendingException[2]
