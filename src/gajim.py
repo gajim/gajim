@@ -1712,12 +1712,6 @@ def wait_migration(migration):
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
-	try: # Import Psyco if available
-		import psyco
-		psyco.full()
-	except ImportError:
-		sys.exc_clear()
-
 	if os.name != 'nt':
 		# Session Management support
 		try:
