@@ -843,6 +843,11 @@ class RosterWindow:
 					if contact1.resource:
 						jid_with_resource += '/' + contact1.resource
 					gajim.connections[account].request_vcard(jid_with_resource)
+			# If we already have a chat window opened, update it with new contact
+			# instance
+			chat_control = gajim.interface.msg_win_mgr.get_control(ji, account)
+			if chat_control:
+				chat_control.contact = contact1
 
 	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his or her status'''
