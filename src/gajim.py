@@ -899,20 +899,25 @@ class Interface:
 		if not jid in gajim.contacts.get_jid_list(account):
 			return
 		contacts = gajim.contacts.get_contacts_from_jid(account, jid)
-		if not (array[2] or array[3]):
+		# contact removes us.
+		name = array[1]
+		sub = array[2]
+		ask = array[3]
+		groups = array[4]
+		if (not sub or sub == 'none') and (not ask or ask == 'none') and \
+		not name and not groups:
 			self.roster.remove_contact(contacts[0], account)
 			gajim.contacts.remove_jid(account, jid)
 			#FIXME if it was the only one in its group, remove the group
 			return
 		for contact in contacts:
-			name = array[1]
 			if not name:
 				name = ''
 			contact.name = name
-			contact.sub = array[2]
-			contact.ask = array[3]
-			if array[4]:
-				contact.groups = array[4]
+			contact.sub = sub
+			contact.ask = ask
+			if groups:
+				contact.groups = groups
 		self.roster.draw_contact(jid, account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('RosterInfo', (account, array))
