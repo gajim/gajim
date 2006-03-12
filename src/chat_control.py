@@ -925,7 +925,7 @@ class ChatControl(ChatControlBase):
 			label_text = '<span %s>%s</span>%s' % \
 					(font_attrs, name, acct_info)
 		
-		if status is not None:
+		if status:
 			label_text += '\n%s' % status
 
 		# setup the label that holds name and jid
