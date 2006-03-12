@@ -222,8 +222,11 @@ class RosterWindow:
 			hide = False
 
 		observer = False
-		if hide and contact.sub == 'from':
-			observer = True
+		if hide:
+			if contact.sub == 'from':
+				observer = True
+			else:
+				return
 
 		if (contact.show in ('offline', 'error') or hide) and \
 			not showOffline and (not _('Transports') in contact.groups or \
