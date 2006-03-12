@@ -299,9 +299,16 @@ class GroupchatControl(ChatControlBase):
 		childs = menu.get_children()
 		# compact_view_menuitem
 		childs[5].set_active(self.compact_view_current)
-		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, self.nick)
-		if c.affiliation not in ('owner', 'admin'):
+		if gajim.gc_connected[self.account][self.room_jid]:
+			c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+				self.nick)
+			if c.affiliation not in ('owner', 'admin'):
+				childs[1].set_sensitive(False)
+		else:
+			# We are not connected to this groupchat, disable unusable menuitems
 			childs[1].set_sensitive(False)
+			childs[2].set_sensitive(False)
+			childs[3].set_sensitive(False)
 		menu = self.remove_possible_switch_to_menuitems(menu)
 		return menu
 
