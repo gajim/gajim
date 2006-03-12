@@ -403,6 +403,12 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			ErrorDialog(pritext, str(s)).get_response()
 			return
 
+		# No resource in jid
+		if jid.find('/') >= 0:
+			pritext = _('Invalid User ID')
+			ErrorDialog(pritext, _('The user ID must not contain a resource.')).get_response()
+			return
+
 		# Check if jid is already in roster
 		if jid in gajim.contacts.get_jid_list(self.account) and \
 			_('Not in Roster') not in \
