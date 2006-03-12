@@ -882,7 +882,11 @@ class RosterWindow:
 			if contact.resource != '':
 				name += '/' + contact.resource
 			uf_show = helpers.get_uf_show(show)
-			ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show, status),
+			if status: 
+				ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show, status),
+						'status')
+			else: # No status message
+				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
 						'status')
 			if contact == gajim.contacts.get_contact_with_highest_priority(account,
 										contact.jid):
