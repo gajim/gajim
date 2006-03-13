@@ -42,8 +42,11 @@ from common import i18n
 
 _ = i18n._
 i18n.init()
-
-PREFERRED_ENCODING = locale.getpreferredencoding()
+try:
+	PREFERRED_ENCODING = locale.getpreferredencoding()
+except:
+	sys.exc_clear()
+	PREFERRED_ENCODING = 'UTF-8'
 
 def send_error(error_message):
 	'''Writes error message to stderr and exits'''
@@ -411,16 +414,11 @@ class GajimRemote:
 	def call_remote_method(self):
 		''' calls self.method with arguments from sys.argv[2:] '''
 		args = sys.argv[2:]
-		if _version[1] <= 50:
-			# make console arguments unicode
-			args = [i.decode(PREFERRED_ENCODING) for i in sys.argv[2:]]
+		args = [i.decode(PREFERRED_ENCODING) for i in sys.argv[2:]]
 		if _version[1] >= 41:
 			args = [dbus.String(i) for i in args]
 		else:
-			try:
-				args = [i.encode('utf-8') for i in args]
-			except:
-				pass
+			args = [i.encode('UTF-8') for i in sys.argv[2:]]
 		try:
 			res = self.method(*args)
 			return res
