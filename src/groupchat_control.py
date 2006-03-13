@@ -302,7 +302,8 @@ class GroupchatControl(ChatControlBase):
 
 	def update_ui(self):
 		ChatControlBase.update_ui(self)
-		self.draw_roster()
+		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+			self.draw_contact(nick)
 
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
