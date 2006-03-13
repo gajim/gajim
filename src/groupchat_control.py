@@ -322,7 +322,6 @@ class GroupchatControl(ChatControlBase):
 			childs[1].set_sensitive(False)
 			childs[2].set_sensitive(False)
 			childs[3].set_sensitive(False)
-		menu = self.remove_possible_switch_to_menuitems(menu)
 		return menu
 
 	def on_message(self, nick, msg, tim):

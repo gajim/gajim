@@ -641,28 +641,6 @@ class ChatControlBase(MessageControl):
 		color.blue = int((color.blue * p) + (mask * (1 - p)))
 		return color
 
-	def remove_possible_switch_to_menuitems(self, menu):
-		''' remove duplicate 'Switch to' if they exist and return clean menu'''
-		childs = menu.get_children()
-
-		contact = self.parent_win.get_active_contact()
-		jid = contact.jid
-
-		if self.type_id == message_control.TYPE_GC:
-			start_removing_from = 6 # # this is from the seperator and after
-		else:
-			if _('Not in Roster') in contact.groups: # for add_to_roster_menuitem
-				childs[5].show()
-				childs[5].set_no_show_all(False)
-			else:
-				childs[5].hide()
-				childs[5].set_no_show_all(True)
-			start_removing_from = 6 # this is from the seperator and after
-			
-		for child in childs[start_removing_from:]:
-			menu.remove(child)
-		return menu
-
 	def set_compact_view(self, state):
 		'''Toggle compact view. state is bool'''
 		MessageControl.set_compact_view(self, state)
@@ -1147,8 +1125,7 @@ class ChatControl(ChatControlBase):
 
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
-		sets active and sensitivity state for toggle_gpg_menuitem
-		and remove possible 'Switch to' menuitems'''
+		sets active and sensitivity state for toggle_gpg_menuitem'''
 		menu = self.popup_menu
 		childs = menu.get_children()
 		# check if gpg capabitlies or else make gpg toggle insensitive
@@ -1164,9 +1141,16 @@ class ChatControl(ChatControlBase):
 			childs[2].set_sensitive(False)
 		else:
 			childs[2].set_sensitive(True)
+		
 		# compact_view_menuitem
 		childs[4].set_active(self.compact_view_current)
-		menu = self.remove_possible_switch_to_menuitems(menu)
+		
+		if _('Not in Roster') in contact.groups: # for add_to_roster_menuitem
+			childs[5].show()
+			childs[5].set_no_show_all(False)
+		else:
+			childs[5].hide()
+			childs[5].set_no_show_all(True)
 		
 		return menu
 
