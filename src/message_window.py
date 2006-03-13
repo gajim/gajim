@@ -293,8 +293,6 @@ class MessageWindow:
 			self.window.destroy()
 			
 	def redraw_tab(self, ctrl, chatstate = None):
-		ctrl.update_ui()
-
 		hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
 		status_img = hbox.get_children()[0]
 		nick_label = hbox.get_children()[1]
