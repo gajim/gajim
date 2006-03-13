@@ -493,7 +493,7 @@ class ChatControlBase(MessageControl):
 				conv_textview.scroll_to_end()
 			return True # loop again
 		if self.print_time_timeout_id:
-			del self.print_time_timeout_id
+			self.print_time_timeout_id = None
 		return False
 
 	def _on_history_menuitem_activate(self, widget = None, jid = None):
@@ -1245,6 +1245,7 @@ class ChatControl(ChatControlBase):
 		gobject.source_remove(self.possible_inactive_timeout_id)
 		if self.print_time_timeout_id:
 			gobject.source_remove(self.print_time_timeout_id)
+			self.print_time_timeout_id = None
 		# Clean up systray
 		if gajim.interface.systray_enabled and self.nb_unread > 0:
 			gajim.interface.systray.remove_jid(self.contact.jid, self.account,

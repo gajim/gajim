@@ -396,7 +396,7 @@ class MessageWindow:
 			for ctrl in self.controls():
 				if ctrl.print_time_timeout_id:
 					gobject.source_remove(ctrl.print_time_timeout_id)
-					del ctrl.print_time_timeout_id
+					ctrl.print_time_timeout_id = None
 		else:
 			for ctrl in self.controls():
 				if not ctrl.print_time_timeout_id:

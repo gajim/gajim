@@ -97,7 +97,7 @@ class MessageControl:
 		# NOTE: Derived classes SHOULD implement this
 		if self.print_time_timeout_id:
 			gobject.source_remove(self.print_time_timeout_id)
-			del self.print_time_timeout_id
+			self.print_time_timeout_id = None
 		return False
 
 	def get_tab_label(self, chatstate):
