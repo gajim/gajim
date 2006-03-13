@@ -621,7 +621,6 @@ class GroupchatControl(ChatControlBase):
 
 		model[iter][C_IMG] = image
 		model[iter][C_TEXT] = name
-		self.draw_avatar(nick)
 
 	def draw_avatar(self, nick):
 		model = self.list_treeview.get_model()
