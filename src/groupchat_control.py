@@ -159,23 +159,26 @@ class GroupchatControl(ChatControlBase):
 		#status_image, type, nickname, shown_nick
 		store = gtk.TreeStore(gtk.Image, str, str, str, gtk.gdk.Pixbuf)
 		store.set_sort_column_id(C_TEXT, gtk.SORT_ASCENDING)
-		column = gtk.TreeViewColumn('contacts')
+		self.list_treeview.set_model(store)
+
+		column = gtk.TreeViewColumn()
+
 		renderer_image = cell_renderer_image.CellRendererImage(0, 0)
-		renderer_image.set_property('width', 20)
 		column.pack_start(renderer_image, expand = False)
-		column.add_attribute(renderer_image, 'image', 0)
+		column.add_attribute(renderer_image, 'image', C_IMG)
+		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
+
 		renderer_text = gtk.CellRendererText()
 		column.pack_start(renderer_text, expand = True)
-		column.set_attributes(renderer_text, markup = C_TEXT)
+		column.add_attribute(renderer_text, 'markup', C_TEXT)
+		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
+
 		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
 		column.pack_start(renderer_pixbuf, expand = False)
 		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
-		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
-		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
-		column.set_cell_data_func(renderer_pixbuf, self.tree_cell_data_func, None)
+		column.set_cell_data_func(renderer_pixbuf, self.avatar_cell_data_func, None)
 
 		self.list_treeview.append_column(column)
-		self.list_treeview.set_model(store)
 
 		# workaround to avoid gtk arrows to be shown
 		column = gtk.TreeViewColumn() # 2nd COLUMN
@@ -211,6 +214,10 @@ class GroupchatControl(ChatControlBase):
 			renderer.set_property('cell-background', bgcolor)
 		else:
 			renderer.set_property('cell-background', None)
+
+	def avatar_cell_data_func(self, column, renderer, model, iter, data=None):
+		self.tree_cell_data_func(column, renderer, model, iter, data)
+		renderer.set_property('xalign', 1) # align pixbuf to the right
 
 	def on_treeview_size_allocate(self, widget, allocation):
 		'''The MUC treeview has resized. Move the hpaned in all tabs to match'''
@@ -1041,7 +1048,7 @@ class GroupchatControl(ChatControlBase):
 			self.print_conversation(s, 'info')
 		elif command == 'topic':
 			self.print_conversation(_('Usage: /%s [topic], displays or updates the'
-				'current room topic.') % command, 'info')
+				' current room topic.') % command, 'info')
 		elif command == 'say':
 			self.print_conversation(_('Usage: /%s <message>, sends a message '
 				'without looking for other commands.') % command, 'info')
