@@ -541,8 +541,11 @@ class GroupchatControl(ChatControlBase):
 		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
 		subject = gtkgui_helpers.reduce_chars_newlines(subject, 0, 2)
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
-		self.name_label.set_markup(
-		'<span weight="heavy" size="x-large">%s</span>\n%s' % (self.room_jid, subject))
+		text = '<span weight="heavy" size="x-large">%s</span>' % \
+			self.room_jid
+		if subject:
+			text += '\n%s' % subject
+		self.name_label.set_markup(text)
 		event_box = self.name_label.get_parent()
 		if subject == '':
 			self.subject = _('This room has no subject')
