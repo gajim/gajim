@@ -3101,7 +3101,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		# columns
 
-		# this col has two cells: first one img, second one text
+		# this col has 3 cells:
+		# first one img, second one text, third is sec pixbuf
 		col = gtk.TreeViewColumn()
 
 		render_image = cell_renderer_image.CellRendererImage(0, 0) # show img or +-

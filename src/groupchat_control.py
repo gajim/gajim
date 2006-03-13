@@ -161,32 +161,36 @@ class GroupchatControl(ChatControlBase):
 		store.set_sort_column_id(C_TEXT, gtk.SORT_ASCENDING)
 		self.list_treeview.set_model(store)
 
+		# columns
+
+		# this col has 3 cells:
+		# first one img, second one text, third is sec pixbuf
 		column = gtk.TreeViewColumn()
 
-		renderer_image = cell_renderer_image.CellRendererImage(0, 0)
+		renderer_image = cell_renderer_image.CellRendererImage(0, 0) # status img
 		column.pack_start(renderer_image, expand = False)
 		column.add_attribute(renderer_image, 'image', C_IMG)
 		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
 
-		renderer_text = gtk.CellRendererText()
+		renderer_text = gtk.CellRendererText() # nickname
 		column.pack_start(renderer_text, expand = True)
 		column.add_attribute(renderer_text, 'markup', C_TEXT)
 		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
 
 		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
-		column.pack_start(renderer_pixbuf, expand = False)
+		column.pack_start(renderer_pixbuf, expand = True)
 		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
 		column.set_cell_data_func(renderer_pixbuf, self.avatar_cell_data_func, None)
 
 		self.list_treeview.append_column(column)
 
 		# workaround to avoid gtk arrows to be shown
-		column = gtk.TreeViewColumn() # 2nd COLUMN
-		renderer = gtk.CellRendererPixbuf()
-		column.pack_start(renderer, expand = False)
-		self.list_treeview.append_column(column)
-		column.set_visible(False)
-		self.list_treeview.set_expander_column(column)
+		#column = gtk.TreeViewColumn() # 2nd COLUMN
+		#renderer = gtk.CellRendererPixbuf()
+		#column.pack_start(renderer, expand = False)
+		#self.list_treeview.append_column(column)
+		#column.set_visible(False)
+		#self.list_treeview.set_expander_column(column)
 
 		# set an empty subject to show the room_jid
 		self.set_subject('')
@@ -584,7 +588,8 @@ class GroupchatControl(ChatControlBase):
 	def draw_roster(self):
 		self.list_treeview.get_model().clear()
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
-			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+				nick)
 			self.add_contact_to_roster(nick, gc_contact.show, gc_contact.role,
 						gc_contact.affiliation, gc_contact.status,
 						gc_contact.jid)
@@ -728,7 +733,8 @@ class GroupchatControl(ChatControlBase):
 				st += ' (' + status + ')'
 			self.print_conversation(st)
 
-	def add_contact_to_roster(self, nick, show, role, affiliation, status, jid = ''):
+	def add_contact_to_roster(self, nick, show, role, affiliation, status,
+	jid = ''):
 		model = self.list_treeview.get_model()
 		role_name = helpers.get_uf_role(role, plural = True)
 
