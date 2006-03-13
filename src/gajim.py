@@ -764,7 +764,7 @@ class Interface:
 
 		# Show avatar in roster or gc_roster
 		gc_ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
-		if gc_ctrl:
+		if gc_ctrl and gc_ctrl.type_id == message_control.TYPE_GC:
 			gc_ctrl.draw_avatar(resource)
 		else:
 			self.roster.draw_avatar(jid, account)
