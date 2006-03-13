@@ -61,7 +61,8 @@ C_IMG, # image to show state (online, new message etc)
 C_TYPE, # type of the row ('contact' or 'group')
 C_NICK, # contact nickame or group name
 C_TEXT, # text shown in the cellrenderer
-) = range(4)
+C_AVATAR, # avatar of the contact
+) = range(5)
 
 class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
@@ -156,7 +157,7 @@ class GroupchatControl(ChatControlBase):
 		self.list_treeview.connect('size-allocate', self.on_treeview_size_allocate)
 
 		#status_image, type, nickname, shown_nick
-		store = gtk.TreeStore(gtk.Image, str, str, str)
+		store = gtk.TreeStore(gtk.Image, str, str, str, gtk.gdk.Pixbuf)
 		store.set_sort_column_id(C_TEXT, gtk.SORT_ASCENDING)
 		column = gtk.TreeViewColumn('contacts')
 		renderer_image = cell_renderer_image.CellRendererImage(0, 0)
@@ -166,8 +167,12 @@ class GroupchatControl(ChatControlBase):
 		renderer_text = gtk.CellRendererText()
 		column.pack_start(renderer_text, expand = True)
 		column.set_attributes(renderer_text, markup = C_TEXT)
+		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
+		column.pack_start(renderer_pixbuf, expand = False)
+		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
 		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
 		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
+		column.set_cell_data_func(renderer_pixbuf, self.tree_cell_data_func, None)
 
 		self.list_treeview.append_column(column)
 		self.list_treeview.set_model(store)
@@ -616,6 +621,21 @@ class GroupchatControl(ChatControlBase):
 
 		model[iter][C_IMG] = image
 		model[iter][C_TEXT] = name
+		self.draw_avatar(nick)
+
+	def draw_avatar(self, nick):
+		model = self.list_treeview.get_model()
+		iter = self.get_contact_iter(nick)
+		if gajim.config.get('show_avatars_in_roster'):
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.room_jid + \
+				'/' + nick, True)
+			if pixbuf in ('ask', None):
+				scaled_pixbuf = None
+			else:
+				scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
+		else:
+			scaled_pixbuf = None
+		model[iter][C_AVATAR] = scaled_pixbuf
 
 	def chg_contact_status(self, nick, show, status, role, affiliation, jid, reason, actor,
 				statusCode, new_nick):
@@ -720,15 +740,21 @@ class GroupchatControl(ChatControlBase):
 		role_iter = self.get_role_iter(role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(gajim.interface.roster.jabber_state_images['16']['closed'], 'role', role,
-				'<b>%s</b>' % role_name))
-		iter = model.append(role_iter, (None, 'contact', nick, name))
+				(gajim.interface.roster.jabber_state_images['16']['closed'], 'role',
+				role, '<b>%s</b>' % role_name, None))
+		iter = model.append(role_iter, (None, 'contact', nick, name, None))
 		if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			gc_contact = gajim.contacts.create_gc_contact(room_jid = self.room_jid,
 				name = nick, show = show, status = status, role = role,
 				affiliation = affiliation, jid = j, resource = resource)
 			gajim.contacts.add_gc_contact(self.account, gc_contact)
 		self.draw_contact(nick)
+		self.draw_avatar(nick)
+		if gajim.config.get('ask_avatars_on_startup'):
+			fjid = self.room_jid + '/' + nick
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fjid, True)
+			if pixbuf == 'ask':
+				gajim.connections[self.account].request_vcard(fjid, True)
 		if nick == self.nick: # we became online
 			self.got_connected()
 		self.list_treeview.expand_row((model.get_path(role_iter)), False)

@@ -325,19 +325,26 @@ class Connection:
 			self.save_vcard_to_hd(who, card)
 			# Save the decoded avatar to a separate file too, and generate files for dbus notifications
 			puny_jid = punycode_encode(frm)
+			puny_nick = None
+			begin_path = os.path.join(gajim.AVATAR_PATH, puny_jid)
+			if frm in self.room_jids:
+				puny_nick = punycode_encode(resource)
+				# create folder if needed
+				if not os.path.isdir(begin_path):
+					os.mkdir(begin_path, 0700)
+				begin_path = os.path.join(begin_path, puny_nick)
 			if photo_decoded:
-				avatar_file = os.path.join(gajim.AVATAR_PATH,
-					puny_jid + '_notif_size_colored.png')
+				avatar_file = begin_path + '_notif_size_colored.png'
 				if frm == our_jid and avatar_sha != self.vcard_sha:
-					gajim.interface.save_avatar_files(frm, photo_decoded)
+					gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
 				elif frm != our_jid and (not os.path.exists(avatar_file) or \
 					not self.vcard_shas.has_key(frm) or \
 					avatar_sha != self.vcard_shas[frm]):
-					gajim.interface.save_avatar_files(frm, photo_decoded)
+					gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
 			else:
 				for ext in ('.jpeg', '.png', '_notif_size_bw.png',
 					'_notif_size_colored.png'):
-					path = os.path.join(gajim.AVATAR_PATH, puny_jid + ext)
+					path = begin_path + ext
 					if os.path.isfile(path):
 						os.remove(path)
 

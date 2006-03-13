@@ -412,7 +412,10 @@ class VcardWindow:
 
 		self.fill_status_label()
 
-		gajim.connections[self.account].request_vcard(self.contact.jid)
+		is_fake = False
+		if gajim.contacts.is_pm_from_jid(self.account, self.contact.jid):
+			is_fake = True
+		gajim.connections[self.account].request_vcard(self.contact.jid, is_fake)
 
 	def add_to_vcard(self, vcard, entry, txt):
 		'''Add an information to the vCard dictionary'''

@@ -762,8 +762,12 @@ class Interface:
 		if win and ctrl.type_id != message_control.TYPE_GC:
 			ctrl.show_avatar()
 
-		# Show avatar in roster
-		self.roster.draw_avatar(jid, account)
+		# Show avatar in roster or gc_roster
+		gc_ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
+		if gc_ctrl:
+			gc_ctrl.draw_avatar(resource)
+		else:
+			self.roster.draw_avatar(jid, account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('VcardInfo', (account, vcard))
 
@@ -968,10 +972,12 @@ class Interface:
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.notify(_('New E-mail'), jid, account, 'gmail', path_to_image = path, text = txt)
 
-	def save_avatar_files(self, jid, photo_decoded):
+	def save_avatar_files(self, jid, photo_decoded, puny_nick = None):
 		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
 		puny_jid = punycode_encode(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
+		if puny_nick:
+			path_to_file = os.path.join(path_to_file, puny_nick)
 		# remove old avatars
 		for typ in ('jpeg', 'png'):
 			path_to_original_file = path_to_file + '.' + typ
