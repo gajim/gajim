@@ -192,6 +192,15 @@ class VcardWindow:
 			gtk.FILE_CHOOSER_ACTION_OPEN,
 			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		try:
+			if os.name == 'nt':
+				path = os.environ['USERPROFILE']
+			else:
+				path = os.environ['HOME']
+		except:
+			path = ''
+		if path:
+			dialog.set_current_folder(path)
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		filtr = gtk.FileFilter()
 		filtr.set_name(_('All files'))
