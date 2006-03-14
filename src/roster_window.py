@@ -1146,8 +1146,9 @@ class RosterWindow:
 			if not iconset:
 				iconset = DEFAULT_ICONSET
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
-			state_images = self.load_iconset(path)
 			for c in contacts:
+				# icon MUST be different instance for every item
+				state_images = self.load_iconset(path)
 				item = gtk.ImageMenuItem(c.resource + ' (' + str(c.priority) + ')')
 				icon_name = helpers.get_icon_name_to_show(c, account)
 				icon = state_images[icon_name]
