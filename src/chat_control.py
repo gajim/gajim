@@ -831,7 +831,10 @@ class ChatControl(ChatControlBase):
 		jid = contact.jid
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
-		name = gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name())
+		name = contact.get_shown_name()
+		if self.resource:
+			name += '/' + self.resource
+		name = gtkgui_helpers.escape_for_pango_markup(name)
 
 		# We know our contacts nick, but if there are any other controls 
 		# with the same nick we need to also display the account.
