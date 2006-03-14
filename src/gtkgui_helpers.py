@@ -439,6 +439,7 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False):
 	so we have new sha) or if we don't have the vcard'''
 
 	jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
+	nick = nick.replace('/', '_')
 	if gajim.config.get('hide_avatar_of_transport') and\
 		gajim.jid_is_transport(jid):
 		# don't show avatar for the transport itself

@@ -273,6 +273,7 @@ class Connection:
 
 	def save_vcard_to_hd(self, full_jid, card):
 		jid, nick = gajim.get_room_and_nick_from_fjid(full_jid)
+		nick = nick.replace('/', '_')
 		puny_jid = punycode_encode(jid)
 		path = os.path.join(gajim.VCARD_PATH, puny_jid)
 		if jid in self.room_jids:
@@ -328,7 +329,7 @@ class Connection:
 			puny_nick = None
 			begin_path = os.path.join(gajim.AVATAR_PATH, puny_jid)
 			if frm in self.room_jids:
-				puny_nick = punycode_encode(resource)
+				puny_nick = punycode_encode(resource.replace('/', '_'))
 				# create folder if needed
 				if not os.path.isdir(begin_path):
 					os.mkdir(begin_path, 0700)
@@ -2371,6 +2372,7 @@ class Connection:
 		return {} if vcard was too old
 		return None if we don't have cached vcard'''
 		jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
+		nick = nick.replace('/', '_')
 		puny_jid = punycode_encode(jid)
 		if is_fake_jid:
 			puny_nick = punycode_encode(nick)
