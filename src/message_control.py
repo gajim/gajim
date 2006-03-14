@@ -37,7 +37,7 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class MessageControl:
 	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
 
-	def __init__(self, type_id, parent_win, widget_name, display_names, contact, account):
+	def __init__(self, type_id, parent_win, widget_name, display_names, contact, account, resource = None):
 		'''The display_names argument is a two element tuple containing the desired
 		display name (pretty string) for the control in both singular and plural form'''
 		self.type_id = type_id
@@ -50,6 +50,7 @@ class MessageControl:
 		self.compact_view_current = False
 		self.nb_unread = 0
 		self.print_time_timeout_id = None
+		self.resource = resource
 
 		gajim.last_message_time[self.account][contact.jid] = 0
 
@@ -134,13 +135,13 @@ class MessageControl:
 		return n
 
 	def send_message(self, message, keyID = '', type = 'chat',
-					 chatstate = None, msg_id = None, composing_jep = None):
+	chatstate = None, msg_id = None, composing_jep = None, resource = None):
 		'''Send the given message to the active tab'''
 		jid = self.contact.jid
 		# Send and update history
 		gajim.connections[self.account].send_message(jid, message, keyID,
 						type = type, chatstate = chatstate, msg_id = msg_id,
-						composing_jep = composing_jep)
+						composing_jep = composing_jep, resource = self.resource)
 
 	def position_menu_under_button(self, menu):
 		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786

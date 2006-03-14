@@ -76,9 +76,9 @@ class ChatControlBase(MessageControl):
 	def handle_message_textview_mykey_press(self, widget, event_keyval, event_keymod):
 		pass # Derived should implement this rather than connecting to the event itself.
 
-	def __init__(self, type_id, parent_win, widget_name, display_names, contact, acct):
+	def __init__(self, type_id, parent_win, widget_name, display_names, contact, acct, resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name, display_names,
-					contact, acct);
+					contact, acct, resource = resource);
 
 		# FIXME: These are hidden from 0.8 on, but IMO all these things need
 		#        to be shown optionally.  Esp. the never-used Send button
@@ -343,15 +343,16 @@ class ChatControlBase(MessageControl):
 			return True
 		return False
 
-	def send_message(self, message, keyID = '', type = 'chat', chatstate = None, msg_id = None,
-					 composing_jep = None):
+	def send_message(self, message, keyID = '', type = 'chat', chatstate = None,
+	msg_id = None, composing_jep = None, resource = None):
 		'''Send the given message to the active tab'''
 		if not message or message == '\n':
 			return
 
 		if not self._process_command(message):
 			MessageControl.send_message(self, message, keyID, type = type,
-					chatstate = chatstate, msg_id = msg_id, composing_jep = composing_jep)
+				chatstate = chatstate, msg_id = msg_id,
+				composing_jep = composing_jep, resource = resource)
 			# Record message history
 			self.save_sent_message(message)
 
@@ -681,9 +682,9 @@ class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
 
-	def __init__(self, parent_win, contact, acct):
+	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
-					(_('Chat'), _('Chats')), contact, acct)
+					(_('Chat'), _('Chats')), contact, acct, resource)
 		self.compact_view_always = gajim.config.get('always_compact_view_chat')
 		self.set_compact_view(self.compact_view_always)
 

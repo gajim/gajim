@@ -1137,6 +1137,28 @@ class RosterWindow:
 		information_menuitem = childs[12]
 		history_menuitem = childs[13]
 
+		contacts = gajim.contacts.get_contact(account, jid)
+		if len(contacts) > 1: # sevral resources
+			sub_menu = gtk.Menu()
+			start_chat_menuitem.set_submenu(sub_menu)
+
+			iconset = gajim.config.get('iconset')
+			if not iconset:
+				iconset = DEFAULT_ICONSET
+			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+			state_images = self.load_iconset(path)
+			for c in contacts:
+				item = gtk.ImageMenuItem(c.resource + ' (' + str(c.priority) + ')')
+				icon_name = helpers.get_icon_name_to_show(c, account)
+				icon = state_images[icon_name]
+				item.set_image(icon)
+				sub_menu.append(item)
+				item.connect('activate', self.on_open_chat_window, c, account,
+					c.resource)
+
+		else: # one resource
+			start_chat_menuitem.connect('activate',
+				self.on_roster_treeview_row_activated, path)
 
 		if contact.resource:
 			send_file_menuitem.connect('activate',
@@ -1145,8 +1167,6 @@ class RosterWindow:
 			send_file_menuitem.hide()
 			send_file_menuitem.set_no_show_all(True)
 
-		start_chat_menuitem.connect('activate',
-			self.on_roster_treeview_row_activated, path)
 		send_single_message_menuitem.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, contact)
 		rename_menuitem.connect('activate', self.on_rename, iter, path)
@@ -1855,19 +1875,22 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
 
-	def new_chat(self, contact, account, private_chat = False):
+	def new_chat(self, contact, account, private_chat = False, resource = None):
 		# Get target window, create a control, and associate it with the window
 		if not private_chat:
 			type = message_control.TYPE_CHAT
 		else:
 			type = message_control.TYPE_PM
 
-		mw = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
+		fjid = contact.jid
+		if resource:
+			fjid += '/' + resource
+		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type)
 
 		if not private_chat:
-			chat_control = ChatControl(mw, contact, account)
+			chat_control = ChatControl(mw, contact, account, resource)
 		else:
 			chat_control = PrivateChatControl(mw, contact, account)
 
@@ -2217,6 +2240,19 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return True
 		return False
 
+	def on_open_chat_window(self, widget, contact, account, resource = None):
+		# Get the window containing the chat
+		fjid = contact.jid
+		if resource:
+			fjid += '/' + resource
+		win = gajim.interface.msg_win_mgr.get_window(fjid, account)
+		if not win:
+			self.new_chat(contact, account, resource = resource)
+			gajim.last_message_time[account][contact.jid] = 0 # long time ago
+			win = gajim.interface.msg_win_mgr.get_window(fjid, account)
+		win.set_active_tab(fjid, account)
+		win.window.present()
+
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the first event window'''
 		model = self.tree.get_model()
@@ -2244,16 +2280,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				if self.open_event(account, jid, first_ev):
 					return
 			c = gajim.contacts.get_contact_with_highest_priority(account, jid)
-			# Get the window containing the chat
-			win = gajim.interface.msg_win_mgr.get_window(jid, account)
-			if win:
-				win.set_active_tab(jid, account)
-			elif c:
-				self.new_chat(c, account)
-				gajim.last_message_time[account][c.jid] = 0 # long time ago
-				win = gajim.interface.msg_win_mgr.get_window(jid, account)
-				win.set_active_tab(jid, account)
-			win.window.present()
+			self.on_open_chat_window(widget, c, account)
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''

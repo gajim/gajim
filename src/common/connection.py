@@ -2140,11 +2140,14 @@ class Connection:
 		self.connection.send(msg_iq)
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
-					 chatstate = None, msg_id = None, composing_jep = None):
+	chatstate = None, msg_id = None, composing_jep = None, resource = None):
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
 			return
+		fjid = jid
+		if resource:
+			fjid += '/' + resource
 		msgtxt = msg
 		msgenc = ''
 		if keyID and USE_GPG:
@@ -2157,13 +2160,13 @@ class Connection:
 					msgtxt = _('[This message is encrypted]') +\
 						' ([This message is encrypted])' # one  in locale and one en
 		if type == 'chat':
-			msg_iq = common.xmpp.Message(to = jid, body = msgtxt, typ = type)
+			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type)
 		else:
 			if subject:
-				msg_iq = common.xmpp.Message(to = jid, body = msgtxt,
+				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
 					typ = 'normal', subject = subject)
 			else:
-				msg_iq = common.xmpp.Message(to = jid, body = msgtxt,
+				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
 					typ = 'normal')
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)

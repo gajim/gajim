@@ -139,7 +139,10 @@ class MessageWindow:
 	def new_tab(self, control):
 		if not self._controls.has_key(control.account):
 			self._controls[control.account] = {}
-		self._controls[control.account][control.contact.jid] = control
+		fjid = control.contact.jid
+		if control.resource:
+			fjid += '/' + control.resource
+		self._controls[control.account][fjid] = control
 
 		if self.get_num_controls() > 1:
 			self.notebook.set_show_tabs(True)
@@ -148,8 +151,8 @@ class MessageWindow:
 		# Add notebook page and connect up to the tab's close button
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_ebox', APP)
 		tab_label_box = xml.get_widget('chat_tab_ebox')
-		xml.signal_connect('on_close_button_clicked', self._on_close_button_clicked,
-					control)
+		xml.signal_connect('on_close_button_clicked',
+			self._on_close_button_clicked, control)
 		xml.signal_connect('on_tab_eventbox_button_press_event',
 				self.on_tab_eventbox_button_press_event, control.widget)
 		self.notebook.append_page(control.widget, tab_label_box)
@@ -668,9 +671,11 @@ class MessageWindowMgr:
 
 		gtkgui_helpers.move_window(win.window, pos[0], pos[1])
 
-	def _mode_to_key(self, contact, acct, type):
+	def _mode_to_key(self, contact, acct, type, resource = None):
 		if self.mode == self.ONE_MSG_WINDOW_NEVER:
 			key = acct + contact.jid
+			if resource:
+				key += '/' + resource
 		elif self.mode == self.ONE_MSG_WINDOW_ALWAYS:
 			key = self.MAIN_WIN
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
@@ -679,13 +684,13 @@ class MessageWindowMgr:
 			key = type
 		return key
 
-	def create_window(self, contact, acct, type):
+	def create_window(self, contact, acct, type, resource = None):
 		key = None
 		win_acct = None
 		win_type = None
 		win_role = 'messages'
 
-		key = self._mode_to_key(contact, acct, type)
+		key = self._mode_to_key(contact, acct, type, resource)
 		if self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			win_acct = acct
 			win_role = acct
