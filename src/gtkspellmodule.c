@@ -46,11 +46,12 @@ _wrap_gtkspell_new_attach (PyTypeObject *type, PyObject *args, PyObject *kwds)
 static PyObject *
 _wrap_gtkspell_set_language (gtkspell_SpellObject *self, PyObject *args, PyObject *kwds)
 {
-	gchar *lang;
+	gchar *lang = NULL;
 	gboolean result;
-	
 	char *argnames[] = {"language", NULL};
-	PyArg_ParseTupleAndKeywords (args, kwds, "s", argnames, &lang);
+
+        if (!PyArg_ParseTupleAndKeywords (args, kwds, "z", argnames, &lang))
+            return NULL;
 
 	result = gtkspell_set_language (self->spell, lang, NULL);	
 
@@ -80,9 +81,10 @@ _wrap_gtkspell_get_from_text_view (PyObject *junk, PyObject *args, PyObject *kwd
 	PyObject *pytextview;
         GtkTextView *textview;
        	gtkspell_SpellObject *self; 
-      
 	char *argnames[] = {"textview", NULL};
-        PyArg_ParseTupleAndKeywords (args, kwds, "O", argnames, &pytextview);
+
+	if (!PyArg_ParseTupleAndKeywords (args, kwds, "O", argnames, &pytextview))
+            return NULL;
 
         textview = GTK_TEXT_VIEW(((PyGObject *)pytextview)->obj);
 
@@ -202,3 +204,4 @@ initgtkspell(void)
         Py_FatalError ("can't initialise module gtkspell");
     }
 }
+
