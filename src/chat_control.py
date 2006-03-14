@@ -391,7 +391,8 @@ class ChatControlBase(MessageControl):
 		if not count_as_new:
 			return
 		if kind == 'incoming_queue':
-			gajim.last_message_time[self.account][jid] = time.time()
+			gajim.last_message_time[self.account][self.get_full_jid()] = \
+				time.time()
 		urgent = True
 		if (not self.parent_win.get_active_jid() or \
 				jid != self.parent_win.get_active_jid() or \
@@ -1254,7 +1255,8 @@ class ChatControl(ChatControlBase):
 
 	def allow_shutdown(self):
 		jid = self.contact.jid
-		if time.time() - gajim.last_message_time[self.account][jid] < 2:
+		if time.time() - gajim.last_message_time[self.account]\
+		[self.get_full_jid()] < 2:
 			# 2 seconds
 			dialog = dialogs.ConfirmationDialog(
 				#%s is being replaced in the code with JID

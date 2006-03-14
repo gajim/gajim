@@ -248,7 +248,8 @@ class MessageWindow:
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 	
-	def remove_tab(self, ctrl,reason=None): # reason is only for gc (offline status message)
+	def remove_tab(self, ctrl, reason = None):
+		'''reason is only for gc (offline status message)'''
 		# Shutdown the MessageControl
 		if not ctrl.allow_shutdown():
 			return
@@ -261,12 +262,12 @@ class MessageWindow:
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.remove_jid(ctrl.contact.jid, ctrl.account,
 								ctrl.type_id)
-		del gajim.last_message_time[ctrl.account][ctrl.contact.jid]
+		del gajim.last_message_time[ctrl.account][ctrl.get_full_jid()]
 
 		self.disconnect_tab_dnd(ctrl.widget)
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
-		fjid = control.get_full_jid()
+		fjid = ctrl.get_full_jid()
 		del self._controls[ctrl.account][fjid]
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]

@@ -2188,9 +2188,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					break
 
 				for ctrl in win.controls():
-					jid = ctrl.contact.jid
-					if gajim.last_message_time[acct].has_key(jid):
-						if time.time() - gajim.last_message_time[acct][jid] < 2:
+					fjid = ctrl.get_full_jid()
+					if gajim.last_message_time[acct].has_key(fjid):
+						if time.time() - gajim.last_message_time[acct][fjid] < 2:
 							recent = True
 							break
 			if unread:
@@ -2249,8 +2249,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		win = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		if not win:
 			self.new_chat(contact, account, resource = resource)
-			gajim.last_message_time[account][contact.jid] = 0 # long time ago
 			win = gajim.interface.msg_win_mgr.get_window(fjid, account)
+			ctrl = win.get_control(fjid, account)
+			# last message is long time ago
+			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
 		win.set_active_tab(fjid, account)
 		win.window.present()
 

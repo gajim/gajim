@@ -52,7 +52,7 @@ class MessageControl:
 		self.print_time_timeout_id = None
 		self.resource = resource
 
-		gajim.last_message_time[self.account][contact.jid] = 0
+		gajim.last_message_time[self.account][self.get_full_jid()] = 0
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.widget = self.xml.get_widget(widget_name)
