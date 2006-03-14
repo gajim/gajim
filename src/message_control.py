@@ -63,6 +63,7 @@ class MessageControl:
 		fjid = self.contact.jid
 		if self.resource:
 			fjid += '/' + self.resource
+		return fjid
 
 	def set_control_active(self, state):
 		'''Called when the control becomes active (state is True)
