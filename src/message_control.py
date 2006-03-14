@@ -59,6 +59,11 @@ class MessageControl:
 		# Autoconnect glade signals
 		self.xml.signal_autoconnect(self)
 
+	def get_full_jid(self):
+		fjid = self.contact.jid
+		if self.resource:
+			fjid += '/' + self.resource
+
 	def set_control_active(self, state):
 		'''Called when the control becomes active (state is True)
 		or inactive (state is False)'''

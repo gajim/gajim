@@ -139,9 +139,7 @@ class MessageWindow:
 	def new_tab(self, control):
 		if not self._controls.has_key(control.account):
 			self._controls[control.account] = {}
-		fjid = control.contact.jid
-		if control.resource:
-			fjid += '/' + control.resource
+		fjid = control.get_full_jid()
 		self._controls[control.account][fjid] = control
 
 		if self.get_num_controls() > 1:
@@ -268,7 +266,8 @@ class MessageWindow:
 		self.disconnect_tab_dnd(ctrl.widget)
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
-		del self._controls[ctrl.account][ctrl.contact.jid]
+		fjid = control.get_full_jid()
+		del self._controls[ctrl.account][fjid]
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]
 
