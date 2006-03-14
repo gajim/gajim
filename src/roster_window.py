@@ -871,26 +871,27 @@ class RosterWindow:
 				self.add_contact_to_roster(contact.jid, account)
 			self.draw_contact(contact.jid, account)
 		# print status in chat window and update status/GPG image
-		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-			jid = contact.jid
-			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
-			ctrl = win.get_control(jid, account)
-			ctrl.update_ui()
-			win.redraw_tab(ctrl)
-	
-			name = contact.get_shown_name()
-			if contact.resource != '':
-				name += '/' + contact.resource
-			uf_show = helpers.get_uf_show(show)
-			if status: 
-				ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show, status),
+		for j in (contact.jid, contact.get_full_jid()):
+			if gajim.interface.msg_win_mgr.has_window(j, account):
+				jid = contact.jid
+				win = gajim.interface.msg_win_mgr.get_window(j, account)
+				ctrl = win.get_control(j, account)
+				ctrl.update_ui()
+				win.redraw_tab(ctrl)
+
+				name = contact.get_shown_name()
+				if contact.resource != '':
+					name += '/' + contact.resource
+				uf_show = helpers.get_uf_show(show)
+				if status: 
+					ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
+						status), 'status')
+				else: # No status message
+					ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
 						'status')
-			else: # No status message
-				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
-						'status')
-			if contact == gajim.contacts.get_contact_with_highest_priority(account,
-										contact.jid):
-				ctrl.draw_banner()
+				if contact == gajim.contacts.get_contact_with_highest_priority(
+				account, contact.jid):
+					ctrl.draw_banner()
 
 	def on_info(self, widget, contact, account):
 		'''Call vcard_information_window class to display contact's information'''

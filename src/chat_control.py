@@ -785,7 +785,7 @@ class ChatControl(ChatControlBase):
 	def _update_banner_state_image(self):
 		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
 									self.contact.jid)
-		if not contact:
+		if not contact or self.resource:
 			# For transient contacts
 			contact = self.contact
 		show = contact.show
@@ -846,7 +846,7 @@ class ChatControl(ChatControlBase):
 				acct_info = ' (%s)' % \
 						gtkgui_helpers.escape_for_pango_markup(self.account)
 				break
-		
+
 		status = contact.status
 		if status is not None:
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
@@ -1119,7 +1119,7 @@ class ChatControl(ChatControlBase):
 		else:
 			contact = gajim.contacts.get_contact_with_highest_priority(self.account,
 									self.contact.jid)
-			if not contact:
+			if not contact or self.resource:
 				# For transient contacts
 				contact = self.contact
 			img_16 = gajim.interface.roster.get_appropriate_state_images(
