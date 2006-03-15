@@ -1936,7 +1936,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_message(self, jid, msg, tim, account, encrypted = False,
 			msg_type = '', subject = None, resource = ''):
 		'''when we receive a message'''
-		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		contact = None
+		# Try to catch the contact with correct resource
+		if resource:
+			fjid = jid + '/' + resource
+			contact = gajim.contacts.get_contact(account, jid, resource)
+		# Default to highest prio
+		if not contact:
+			fjid = jid
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
 		if not contact:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
@@ -1961,7 +1970,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# Do we have a queue?
 		qs = gajim.awaiting_events[account]
 		no_queue = True
-		if qs.has_key(jid):
+		if qs.has_key(fjid):
 			no_queue = False
 		popup = False
 		if autopopup and (autopopupaway or gajim.connections[account].connected \
@@ -1975,25 +1984,30 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 
 		# We print if window is opened and it's not a single message
-		if gajim.interface.msg_win_mgr.has_window(jid, account) and msg_type != 'normal':
+		# Look for a chat control that has the given resource, or default to one
+		# without resource
+		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
+		if not ctrl:
+			gajim.interface.msg_win_mgr.get_control(jid, account)
+		if ctrl and msg_type != 'normal':
 			typ = ''
 			if msg_type == 'error':
 				typ = 'status'
-			ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
 			ctrl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
 						subject = subject)
 			return
 
 		# We save it in a queue
 		if no_queue:
-			qs[jid] = []
+			qs[fjid] = []
 		kind = 'chat'
 		if msg_type == 'normal':
 			kind = 'normal'
-		qs[jid].append((kind, (msg, subject, msg_type, tim, encrypted, resource)))
+		qs[fjid].append((kind, (msg, subject, msg_type, tim, encrypted,
+			resource)))
 		self.nb_unread += 1
 		if popup:
-			if not gajim.interface.msg_win_mgr.has_window(jid, account):
+			if not ctrl:
 				self.new_chat(contact, account)
 				if path:
 					self.tree.expand_row(path[0:1], False)
