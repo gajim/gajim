@@ -69,7 +69,7 @@ class NBCommonClient(CommonClient):
 		
 	def set_idlequeue(self, idlequeue):
 		self.idlequeue = idlequeue
-		
+	
 	def disconnected(self):
 		''' Called on disconnection. Calls disconnect handlers and cleans things up. '''
 		self.connected=''
@@ -78,29 +78,21 @@ class NBCommonClient(CommonClient):
 		for i in self.disconnect_handlers: 
 			i()
 		self.disconnect_handlers.reverse()
-		if self.__dict__.has_key('NonBlockingTLS'): 
+		if self.__dict__.has_key('NonBlockingNonSASL'):
+			self.NonBlockingNonSASL.PlugOut()
+		if self.__dict__.has_key('SASL'):
+			self.SASL.PlugOut()
+		if self.__dict__.has_key('NonBlockingTLS'):
 			self.NonBlockingTLS.PlugOut()
+		if self.__dict__.has_key('NBHTTPPROXYsocket'):
+			self.NBHTTPPROXYsocket.PlugOut()
+		if self.__dict__.has_key('NonBlockingTcp'):
+			self.NonBlockingTcp.PlugOut()
 		
 	def reconnectAndReauth(self):
-		''' Example of reconnection method. In fact, it can be used to batch connection and auth as well. '''
-		handlerssave=self.Dispatcher.dumpHandlers()
-		self.Dispatcher.PlugOut()
-		if self.__dict__.has_key('NonBlockingNonSASL'): 
-			self.NonBlockingNonSASL.PlugOut()
-		if self.__dict__.has_key('SASL'): 
-			self.SASL.PlugOut()
-		if self.__dict__.has_key('NonBlockingTLS'): 
-			self.NonBlockingTLS.PlugOut()
-		if self.__dict__.has_key('NBHTTPPROXYsocket'): 
-			self.NBHTTPPROXYsocket.PlugOut()
-		if self.__dict__.has_key('NonBlockingTcp'): 
-			self.NonBlockingTcp.PlugOut()
-		if not self.connect(server=self._Server, proxy=self._Proxy): 
-			return
-		if not self.auth(self._User, self._Password, self._Resource): 
-			return
-		self.Dispatcher.restoreHandlers(handlerssave)
-		return self.connected
+		''' Just disconnect. We do reconnecting in connection.py '''
+		self.disconnect()
+		return '' 
 
 	def connect(self,server=None,proxy=None, ssl=None, on_stream_start = None):
 		''' Make a tcp/ip connection, protect it with tls/ssl if possible and start XMPP stream. '''

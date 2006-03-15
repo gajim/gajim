@@ -264,8 +264,10 @@ class NonBlockingTcp(PlugIn, IdleObject):
 					# we are not waiting for write 
 					self._plug_idle()
 				self._on_send()
-		except Exception:
+		except socket.error, e:
 			sys.exc_clear()
+			if e[0] == socket.SSL_ERROR_WANT_WRITE:
+				return True		
 			if self.state < 0:
 				self.disconnect()
 				return
@@ -308,8 +310,9 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		return True
 
 	def send(self, raw_data):
-		''' Writes raw outgoing data. Blocks until done.
-			If supplied data is unicode string, encodes it to utf-8 before send. '''
+		'''Append raw_data to the queue of messages to be send. 
+		If supplied data is unicode string, encode it to utf-8.
+		'''
 		if self.state <= 0:
 			return
 		r = raw_data
@@ -352,7 +355,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	def getPort(self):
 		''' Return the 'port' value that is connection is [will be] made to.'''
 		return self._server[1]
-	
+
 class NonBlockingTLS(PlugIn):
 	''' TLS connection used to encrypts already estabilished tcp connection.'''
 	def PlugIn(self, owner, now=0, on_tls_start = None):
