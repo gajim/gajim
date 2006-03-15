@@ -1821,6 +1821,7 @@ class Connection:
 			if self.last_connection:
 				self.last_connection.socket.disconnect()
 				self.last_connection = None
+				self.connection = None
 			if gajim.verbose:
 				con = common.xmpp.NonBlockingClient(self._hostname, caller = self,
 					on_connect = self.on_connect_success,
@@ -2116,6 +2117,9 @@ class Connection:
 				self._on_disconnected()
 
 		elif show != 'offline' and self.connected:
+			# dont'try to connect, when we are in state 'connecting'
+			if self.connected == 1:
+				return
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
