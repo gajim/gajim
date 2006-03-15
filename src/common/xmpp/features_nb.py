@@ -119,7 +119,11 @@ def _ReceivedRegInfo(con, resp, agent):
 	iq=Iq('get',NS_REGISTER,to=agent)
 	if not isResultNode(resp): 
 		return
-	df=resp.getTag('query',namespace=NS_REGISTER).getTag('x',namespace=NS_DATA)
+	tag=resp.getTag('query',namespace=NS_REGISTER)
+	if not tag:
+		con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,None,False))
+		return
+	df=tag.getTag('x',namespace=NS_DATA)
 	if df:
 		con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,DataForm(node=df),True))
 		return

@@ -1674,6 +1674,11 @@ class Connection:
 		if realm == common.xmpp.NS_REGISTER:
 			if event == common.xmpp.features_nb.REGISTER_DATA_RECEIVED:
 				# data is (agent, DataFrom, is_form)
+				if not data[1]: # wrong answer
+					self.dispatch('ERROR', (_('Invalid answer'),
+						_('Transport %s answered wrongly to register request.') % \
+						data[0]))
+					return
 				if self.new_account_info and\
 				self.new_account_info['hostname'] == data[0]:
 					#it's a new account
