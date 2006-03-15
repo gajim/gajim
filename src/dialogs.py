@@ -295,9 +295,11 @@ class ChangeStatusMessageDialog:
 		response = dlg.get_response()
 		if response == gtk.RESPONSE_OK:
 			msg_name = dlg.input_entry.get_text()
-			# user_input holds the name that the user wants for the preset message
-			iter_ = self.message_liststore.append((msg_name,))
 			msg_text = helpers.to_one_line(status_message_to_save_as_preset)
+			if not msg_name: # msg_name was ''
+				msg_name = msg_text
+			iter_ = self.message_liststore.append((msg_name,))
+			
 			gajim.config.add_per('statusmsg', msg_name)
 			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text)
 			self.preset_messages_dict[msg_name] = msg_text
