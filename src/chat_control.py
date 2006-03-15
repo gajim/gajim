@@ -1101,8 +1101,10 @@ class ChatControl(ChatControlBase):
 			self.parent_win.get_active_control() != self:
 				color = self.lighten_color(color)
 
-		label_str = gtkgui_helpers.escape_for_pango_markup(
-			self.contact.get_shown_name())
+		name = self.contact.get_shown_name()
+		if self.resource:
+			name += '/' + self.resource
+		label_str = gtkgui_helpers.escape_for_pango_markup(name)
 		if num_unread: # if unread, text in the label becomes bold
 			label_str = '<b>' + unread + label_str + '</b>'
 		return (label_str, color)

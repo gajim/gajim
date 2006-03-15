@@ -222,6 +222,8 @@ class MessageWindow:
 			urgent = control.attention_flag
 		else:
 			name = control.contact.get_shown_name()
+			if control.resource:
+				name += '/' + control.resource
 
 		window_mode = gajim.interface.msg_win_mgr.mode
 		if self.get_num_controls() == 1:
