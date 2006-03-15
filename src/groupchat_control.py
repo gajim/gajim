@@ -185,12 +185,12 @@ class GroupchatControl(ChatControlBase):
 		self.list_treeview.append_column(column)
 
 		# workaround to avoid gtk arrows to be shown
-		#column = gtk.TreeViewColumn() # 2nd COLUMN
-		#renderer = gtk.CellRendererPixbuf()
-		#column.pack_start(renderer, expand = False)
-		#self.list_treeview.append_column(column)
-		#column.set_visible(False)
-		#self.list_treeview.set_expander_column(column)
+		column = gtk.TreeViewColumn() # 2nd COLUMN
+		renderer = gtk.CellRendererPixbuf()
+		column.pack_start(renderer, expand = False)
+		self.list_treeview.append_column(column)
+		column.set_visible(False)
+		self.list_treeview.set_expander_column(column)
 
 		# set an empty subject to show the room_jid
 		self.set_subject('')
