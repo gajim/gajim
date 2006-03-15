@@ -162,6 +162,8 @@ class Connection:
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None # xmpppy instance
+		# this property is used to prevent double connections
+		self.last_connection = None # last TcpClient instance
 		self.gpg = None
 		self.vcard_sha = None
 		self.vcard_shas = {} # sha of contacts
@@ -1816,6 +1818,9 @@ class Connection:
 
 	def connect_to_next_host(self):
 		if len(self._hosts):
+			if self.last_connection:
+				self.last_connection.socket.disconnect()
+				self.last_connection = None
 			if gajim.verbose:
 				con = common.xmpp.NonBlockingClient(self._hostname, caller = self,
 					on_connect = self.on_connect_success,
@@ -1824,13 +1829,14 @@ class Connection:
 				con = common.xmpp.NonBlockingClient(self._hostname, debug = [], caller = self,
 					on_connect = self.on_connect_success,
 					on_connect_failure = self.connect_to_next_host)
+			self.last_connection = con
 			# increase default timeout for server responses
 			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
 			con.set_idlequeue(gajim.idlequeue)
 			host = self.select_next_host(self._hosts)
 			self._current_host = host
 			self._hosts.remove(host)
-			res = con.connect((host['host'], host['port']), proxy = self._proxy,
+			con.connect((host['host'], host['port']), proxy = self._proxy,
 				secure = self._secure)
 			return
 		else:

@@ -116,7 +116,7 @@ class NBCommonClient(CommonClient):
 
 	def _on_connected_failure(self): 
 		if self.socket:
-			self.socket.PlugOut()
+			self.socket.disconnect()
 		if self.on_connect_failure:
 			self.on_connect_failure()
 
