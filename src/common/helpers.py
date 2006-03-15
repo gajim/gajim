@@ -1,17 +1,10 @@
 ##	common/helpers.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -538,7 +531,7 @@ def decode_string(string):
 
 def get_windows_reg_env(varname, default=''):
 	'''asks for paths commonly used but not exposed as ENVs
-	in Windows 2003 those are:
+	in english Windows 2003 those are:
 	'AppData' = %USERPROFILE%\Application Data (also an ENV)
 	'Desktop' = %USERPROFILE%\Desktop
 	'Favorites' = %USERPROFILE%\Favorites
@@ -568,7 +561,7 @@ def get_windows_reg_env(varname, default=''):
 r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
 		try:
 	            	val = str(win32api.RegQueryValueEx(rkey, varname)[0])
-			val = win32api.ExpandEnvironmentStrings(v) # expand using environ
+			val = win32api.ExpandEnvironmentStrings(val) # expand using environ
 		except:
 			pass
 	finally:
@@ -578,3 +571,17 @@ r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
 def get_my_pictures_path():
 	'''windows-only atm. [Unix lives in the past]'''
 	return get_windows_reg_env('My Pictures')
+
+def get_desktop_path():
+	if os.name == 'nt':
+		path = get_windows_reg_env('Desktop')
+	else:
+		path = os.path.join(os.path.expanduser('~'), 'Desktop')
+	return path
+
+def get_documents_path():
+	if os.name == 'nt':
+		path = get_windows_reg_env('Personal')
+	else:
+		path = os.path.expanduser('~')
+	return path

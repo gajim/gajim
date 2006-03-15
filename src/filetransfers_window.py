@@ -1,8 +1,6 @@
 ##	filetransfers_window.py
 ##
-##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005
 ##                    Dimitur Kirov <dkirov@gmail.com>
@@ -253,7 +251,7 @@ _('Connection with peer cannot be established.'))
 		if last_send_dir and os.path.isdir(last_send_dir):
 			dialog.set_current_folder(last_send_dir)
 		else:
-			dialog.set_current_folder(gajim.HOME_DIR)
+			dialog.set_current_folder(helpers.get_documents_path())
 		file_props = {}
 		while True:
 			response = dialog.run()
@@ -343,10 +341,13 @@ _('Connection with peer cannot be established.'))
 				dialog.connect('confirm-overwrite', self.confirm_overwrite_cb,
 					file_props)
 				gtk28 = True
+			print last_save_dir
 			if last_save_dir and os.path.isdir(last_save_dir):
 				dialog.set_current_folder(last_save_dir)
+				print 'set last save', last_save_dir
 			else:
-				dialog.set_current_folder(gajim.HOME_DIR)
+				dialog.set_current_folder(helpers.get_desktop_path())
+				print 'set desktop', helpers.get_desktop_path()
 			while True:
 				response = dialog.run()
 				if response == gtk.RESPONSE_OK:
