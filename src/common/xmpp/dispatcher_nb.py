@@ -204,6 +204,8 @@ class Dispatcher(PlugIn):
 			xmlns=self._owner.defaultNamespace
 		if not typ and not ns: 
 			typ='default'
+		if self.handlers.has_key(xmlns):
+			return
 		if not self.handlers[xmlns].has_key(name): 
 			return
 		if not self.handlers[xmlns][name].has_key(typ+ns): 
