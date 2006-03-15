@@ -1937,15 +1937,19 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			msg_type = '', subject = None, resource = ''):
 		'''when we receive a message'''
 		contact = None
+		# if chat window will be for specific resource
+		resource_for_chat = resource
 		# Try to catch the contact with correct resource
 		if resource:
 			fjid = jid + '/' + resource
 			contact = gajim.contacts.get_contact(account, jid, resource)
 		# Default to highest prio
+		highest_contact = gajim.contacts.get_contact_with_highest_priority(
+			account, jid)
 		if not contact:
 			fjid = jid
-			contact = gajim.contacts.get_contact_with_highest_priority(account,
-				jid)
+			resource_for_chat = None
+			contact = highest_contact
 		if not contact:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
@@ -1967,6 +1971,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
 
+		# Look for a chat control that has the given resource
+		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
+		if not ctrl:
+			# if not, if message comes from highest prio, get control or open one
+			# without resource
+			if contact.resource == highest_contact.resource:
+				ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
+				fjid = jid
+				resource_for_chat = None
+
 		# Do we have a queue?
 		qs = gajim.awaiting_events[account]
 		no_queue = True
@@ -1984,11 +1998,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 
 		# We print if window is opened and it's not a single message
-		# Look for a chat control that has the given resource, or default to one
-		# without resource
-		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
-		if not ctrl:
-			gajim.interface.msg_win_mgr.get_control(jid, account)
 		if ctrl and msg_type != 'normal':
 			typ = ''
 			if msg_type == 'error':
@@ -2008,7 +2017,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.nb_unread += 1
 		if popup:
 			if not ctrl:
-				self.new_chat(contact, account)
+				self.new_chat(contact, account, resource = resource_for_chat)
 				if path:
 					self.tree.expand_row(path[0:1], False)
 					self.tree.expand_row(path[0:2], False)
