@@ -762,7 +762,9 @@ class GroupchatControl(ChatControlBase):
 			gajim.contacts.add_gc_contact(self.account, gc_contact)
 		self.draw_contact(nick)
 		self.draw_avatar(nick)
-		if gajim.config.get('ask_avatars_on_startup'):
+		# Do not ask avatar to irc rooms as irc transports reply with messages
+		if gajim.config.get('ask_avatars_on_startup') and \
+		not self.room_jid.startswith('irc'):
 			fjid = self.room_jid + '/' + nick
 			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fjid, True)
 			if pixbuf == 'ask':
