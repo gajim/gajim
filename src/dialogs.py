@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##	dialogs.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
@@ -470,7 +471,7 @@ class AboutDialog:
 		dlg = gtk.AboutDialog()
 		dlg.set_name('Gajim')
 		dlg.set_version(gajim.version)
-		s = u'Copyright \xa9 2003-2006 Gajim Team'
+		s = u'Copyright © 2003-2006 Gajim Team'
 		dlg.set_copyright(s)
 		text = open('../COPYING').read()
 		dlg.set_license(text)
@@ -485,7 +486,8 @@ class AboutDialog:
 			'Dimitur Kirov <dkirov@gmail.com>',
 			'Travis Shirk <travis@pobox.com>',
 			'',
-			_('Read AUTHORS file for full list including past developers'),
+			_('Past Developers:'),
+			'Vincent Hanquez <tab@snarc.org>',
 			'',
 			_('THANKS:'),
 		]
@@ -494,7 +496,8 @@ class AboutDialog:
 		text_splitted = text.split('\n')
 		text = '\n'.join(text_splitted[:-2]) # remove one english setence
 		# and add it manually as translatable
-		text += '\n' + _('Last but not least, we thank all the package maintainers') + '\n'
+		text += '\n%s\n' % _('Last but not least, we would like to thank all '
+			'the package maintainers.')
 		authors.append(text)
 		
 		dlg.set_authors(authors)
@@ -509,8 +512,8 @@ class AboutDialog:
 		#here you write your name in the form Name FamilyName <someone@somewhere>
 		dlg.set_translator_credits(_('translator-credits'))
 		
-		artists = ['Christophe Got', 'Dennis Craven', 'Guillaume Morin',
-			'Membris Khan']
+		artists = ['Anders Ström', 'Christophe Got', 'Dennis Craven',
+			'Guillaume Morin', 'Membris Khan']
 		dlg.set_artists(artists)
 
 		rep = dlg.run()
