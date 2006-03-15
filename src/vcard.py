@@ -194,7 +194,7 @@ class VcardWindow:
 			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		try:
 			if os.name == 'nt':
-				path = os.environ['USERPROFILE']
+				path = helpers.get_my_pictures_path()
 			else:
 				path = os.environ['HOME']
 		except:

@@ -38,6 +38,8 @@ from xmpp_stringprep import nodeprep, resourceprep, nameprep
 
 try:
 	import winsound # windows-only built-in module for playing wav
+	import win32api
+	import win32con
 except:
 	pass
 
@@ -533,3 +535,46 @@ def decode_string(string):
 		break
 
 	return string
+
+def get_windows_reg_env(varname, default=''):
+	'''asks for paths commonly used but not exposed as ENVs
+	in Windows 2003 those are:
+	'AppData' = %USERPROFILE%\Application Data (also an ENV)
+	'Desktop' = %USERPROFILE%\Desktop
+	'Favorites' = %USERPROFILE%\Favorites
+	'NetHood' = %USERPROFILE%\NetHood
+	'Personal' = D:\My Documents (PATH TO MY DOCUMENTS)
+	'PrintHood' = %USERPROFILE%\PrintHood
+	'Programs' = %USERPROFILE%\Start Menu\Programs
+	'Recent' = %USERPROFILE%\Recent
+	'SendTo' = %USERPROFILE%\SendTo
+	'Start Menu' = %USERPROFILE%\Start Menu
+	'Startup' = %USERPROFILE%\Start Menu\Programs\Startup
+	'Templates' = %USERPROFILE%\Templates
+	'My Pictures' = D:\My Documents\My Pictures
+	'Local Settings' = %USERPROFILE%\Local Settings
+	'Local AppData' = %USERPROFILE%\Local Settings\Application Data
+	'Cache' = %USERPROFILE%\Local Settings\Temporary Internet Files
+	'Cookies' = %USERPROFILE%\Cookies
+	'History' = %USERPROFILE%\Local Settings\History
+	'''
+
+	if os.name != 'nt':
+		return ''
+
+	val = default
+	try:
+        	rkey = win32api.RegOpenKey(win32con.HKEY_CURRENT_USER,
+r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
+		try:
+	            	val = str(win32api.RegQueryValueEx(rkey, varname)[0])
+			val = win32api.ExpandEnvironmentStrings(v) # expand using environ
+		except:
+			pass
+	finally:
+		win32api.RegCloseKey(rkey)
+	return val
+ 
+def get_my_pictures_path():
+	'''windows-only atm. [Unix lives in the past]'''
+	return get_windows_reg_env('My Pictures')
