@@ -2604,7 +2604,7 @@ msgstr "Vid varje _meddelande"
 
 #: ../src/gtkgui.glade.h:203
 msgid "One message _window:"
-msgstr "Ett medelendefönster:"
+msgstr "Ett meddelandefönster:"
 
 #: ../src/gtkgui.glade.h:204
 msgid "Open..."
