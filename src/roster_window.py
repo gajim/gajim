@@ -1095,7 +1095,7 @@ class RosterWindow:
 			gajim.interface.instances['logs'][contact.jid] = history_window.\
 				HistoryWindow(contact.jid, account)
 
-	def on_send_single_message_menuitem_activate(self, wiget, account,
+	def on_send_single_message_menuitem_activate(self, widget, account,
 	contact = None):
 		if contact is None:
 			dialogs.SingleMessageWindow(account, action = 'send')
@@ -1105,6 +1105,9 @@ class RosterWindow:
 	def on_send_file_menuitem_activate(self, widget, account, contact):
 		gajim.interface.instances['file_transfers'].show_file_send_request(
 			account, contact)
+	
+	def on_add_special_notification_menuitem_activate(self, widget, jid):
+		dialogs.AddSpecialNotificationDialog(jid)
 
 	def mk_menu_user(self, event, iter):
 		'''Make contact's popup menu'''
@@ -1118,25 +1121,28 @@ class RosterWindow:
 			APP)
 		roster_contact_context_menu = xml.get_widget(
 			'roster_contact_context_menu')
-		childs = roster_contact_context_menu.get_children()
+		#childs = roster_contact_context_menu.get_children()
 
-		start_chat_menuitem = childs[0]
-		send_single_message_menuitem = childs[1]
-		rename_menuitem = childs[2]
-		edit_groups_menuitem = childs[3]
-		# separator4 goes with assign_openpgp_key_menuitem
-		assign_openpgp_separator = childs[4]
-		send_file_menuitem = childs[5]
-		assign_openpgp_key_menuitem = childs[6]
+		start_chat_menuitem = xml.get_widget('start_chat_menuitem')
+		send_single_message_menuitem = xml.get_widget('send_single_message_menuitem')
+		rename_menuitem = xml.get_widget('rename_menuitem')
+		edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
+		# separator has with send file, assign_openpgp_key_menuitem, etc..
+		above_send_file_separator = xml.get_widget('above_send_file_separator')
+		send_file_menuitem = xml.get_widget('send_file_menuitem')
+		assign_openpgp_key_menuitem = xml.get_widget('assign_openpgp_key_menuitem')
+		add_special_notification_menuitem = xml.get_widget(
+			'add_special_notification_menuitem')
 
 		#skip a seperator
+		subscription_menuitem = xml.get_widget('subscription_menuitem')
 		send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem =\
-			childs[8].get_submenu().get_children()
-		add_to_roster_menuitem = childs[9]
-		remove_from_roster_menuitem = childs[10]
+			subscription_menuitem.get_submenu().get_children()
+		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
+		remove_from_roster_menuitem = xml.get_widget('remove_from_roster_menuitem')
 		#skip a seperator
-		information_menuitem = childs[12]
-		history_menuitem = childs[13]
+		information_menuitem = xml.get_widget('information_menuitem')
+		history_menuitem = xml.get_widget('history_menuitem')
 
 		contacts = gajim.contacts.get_contact(account, jid)
 		if len(contacts) > 1: # sevral resources
@@ -1198,6 +1204,8 @@ class RosterWindow:
 				send_auth_menuitem.connect('activate', self.authorize, jid, account)
 			if contact.sub in ('to', 'both'):
 				ask_auth_menuitem.set_sensitive(False)
+				add_special_notification_menuitem.connect('activate',
+					self.on_add_special_notification_menuitem_activate, jid)
 			else:
 				ask_auth_menuitem.connect('activate', self.req_sub, jid,
 					_('I would like to add you to my roster'), account)
@@ -1212,8 +1220,8 @@ class RosterWindow:
 			edit_groups_menuitem.hide()
 			edit_groups_menuitem.set_no_show_all(True)
 			# hide first of the two consecutive separators
-			assign_openpgp_separator.hide()
-			assign_openpgp_separator.set_no_show_all(True)
+			above_send_file_separator.hide()
+			above_send_file_separator.set_no_show_all(True)
 			assign_openpgp_key_menuitem.hide()
 			assign_openpgp_key_menuitem.set_no_show_all(True)
 

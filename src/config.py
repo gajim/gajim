@@ -913,43 +913,11 @@ class PreferencesWindow:
 		if not iter:
 			return
 		path_to_snd_file = model[iter][2].decode('utf-8')
-		dialog = gtk.FileChooserDialog(_('Choose Sound'), None,
-					gtk.FILE_CHOOSER_ACTION_OPEN,
-					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-					gtk.STOCK_OPEN, gtk.RESPONSE_OK))
-		dialog.set_default_response(gtk.RESPONSE_OK)
-		last_sounds_dir = gajim.config.get('last_sounds_dir')
-		if last_sounds_dir and os.path.isdir('last_sounds_dir'):
-			dialog.set_current_folder(last_sounds_dir)
-		else:
-			dialog.set_current_folder(gajim.HOME_DIR)
-
-		filter = gtk.FileFilter()
-		filter.set_name(_('All files'))
-		filter.add_pattern('*')
-		dialog.add_filter(filter)
-
-		filter = gtk.FileFilter()
-		filter.set_name(_('Wav Sounds'))
-		filter.add_pattern('*.wav')
-		dialog.add_filter(filter)
-		dialog.set_filter(filter)
-
 		path_to_snd_file = os.path.join(os.getcwd(), path_to_snd_file)
-		dialog.set_filename(path_to_snd_file)
-		path_to_snd_file = ''
-		while True:
-			response = dialog.run()
-			if response != gtk.RESPONSE_OK:
-				break
-			path_to_snd_file = dialog.get_filename()
-			try:
-				path_to_snd_file = path_to_snd_file.decode(sys.getfilesystemencoding())
-			except:
-				pass
-			if os.path.exists(path_to_snd_file):
-				break
-		dialog.destroy()
+		dlg_instance = dialogs.SoundChooserDialog(path_to_snd_file)
+		path_to_snd_file = dlg_instance.path_to_snd_file
+		dlg_instance.dialog.destroy()
+		
 		if path_to_snd_file:
 			directory = os.path.dirname(path_to_snd_file)
 			gajim.config.set('last_sounds_dir', directory)
