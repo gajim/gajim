@@ -128,7 +128,7 @@ class Dispatcher(PlugIn):
 			self.Stream.Parse(data)
 		except ExpatError:
 			sys.exc_clear()
-			self._owner.Connection.disconnect()
+			self._owner.Connection.pollend()
 			return 0
 		if len(self._pendingExceptions) > 0:
 			 _pendingException = self._pendingExceptions.pop()
