@@ -1984,8 +1984,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if not ctrl:
 			# if not, if message comes from highest prio, get control or open one
 			# without resource
-			if highest_contact.resource and contact.resource == \
-			highest_contact.resource:
+			if highest_contact and contact.resource == highest_contact.resource:
 				ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
 				fjid = jid
 				resource_for_chat = None
