@@ -3798,9 +3798,6 @@ Per type</property>
 		  <child>
 		    <widget class="GtkComboBox" id="emoticons_combobox">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes">Animated
-Static
-Disabled</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="focus_on_click">True</property>
 		      <signal name="changed" handler="on_emoticons_combobox_changed" last_modification_time="Sun, 05 Feb 2006 14:06:24 GMT"/>

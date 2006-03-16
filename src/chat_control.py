@@ -123,7 +123,8 @@ class ChatControlBase(MessageControl):
 		# set image no matter if user wants at this time emoticons or not
 		# (so toggle works ok)
 		img = self.xml.get_widget('emoticons_button_image')
-		img.set_from_file(os.path.join(gajim.DATA_DIR, 'emoticons', 'smile.png'))
+		img.set_from_file(os.path.join(gajim.DATA_DIR, 'emoticons', 'static',
+			'smile.png'))
 		self.toggle_emoticons()
 
 		# Attach speller

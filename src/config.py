@@ -112,13 +112,27 @@ class PreferencesWindow:
 		self.xml.get_widget('show_status_msgs_in_roster_checkbutton').set_active(
 			st)
 
-		# useemoticons
-		st = gajim.config.get('useemoticons')
-		if st:
-			self.xml.get_widget('emoticons_combobox').set_active(1) # FIXME
-		else:
-			self.xml.get_widget('emoticons_combobox').set_active(3) # FIXME
-			
+		# emoticons
+		emoticons_combobox = self.xml.get_widget('emoticons_combobox')
+		emoticons_list = os.listdir(os.path.join(gajim.DATA_DIR, 'emoticons'))
+		renderer_text = gtk.CellRendererText()
+		emoticons_combobox.pack_start(renderer_text, True)
+		emoticons_combobox.add_attribute(renderer_text, 'text', 0)
+		model = gtk.ListStore(str)
+		emoticons_combobox.set_model(model)
+		l = ['Disabled']
+		for dir in emoticons_list:
+			if dir != '.svn':
+				l.append(dir)
+		print l
+		for i in xrange(len(l)):
+			print l[i]
+			model.append([l[i]])
+			if gajim.config.get('emoticons_theme') == l[i]:
+				emoticons_combobox.set_active(i)
+		if not gajim.config.get('emoticons_theme'):
+			emoticons_combobox.set_active(0)
+
 		#iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
 		# new model, image in 0, string in 1
@@ -489,15 +503,13 @@ class PreferencesWindow:
 
 	def on_emoticons_combobox_changed(self, widget):
 		active = widget.get_active()
-		if active == -1: # no active item
-			return
-		elif active == 0: # animated
-			gajim.config.set('useemoticons', True) # FIXME
-		elif active == 1: # static
-			gajim.config.set('useemoticons', True) # FIXME
-		else: # disabled
-			gajim.config.set('useemoticons', False)
-			
+		model = widget.get_model()
+		emot_theme = model[active][0].decode('utf-8')
+		if emot_theme == _('Disabled'):
+			gajim.config.set('emoticons_theme', '')
+		else:
+			gajim.config.set('emoticons_theme', emot_theme)
+
 		gajim.interface.init_emoticons()
 		gajim.interface.make_regexps()
 		self.toggle_emoticons()
@@ -2094,6 +2106,7 @@ class ManageEmoticonsWindow:
 
 	def on_manage_emoticons_window_destroy(self, widget):
 		gajim.interface.init_emoticons() # update emoticons
+		gajim.interface.make_regexps()
 		# remove us from open windows
 		del gajim.interface.instances['manage_emots']
 
@@ -2128,9 +2141,14 @@ class ManageEmoticonsWindow:
 	def fill_emot_treeview(self):
 		model = self.emot_tree.get_model()
 		model.clear()
-		emots = gajim.config.get_per('emoticons')
+		emot_theme = gajim.config.get('emoticons_theme')
+		if not emot_theme:
+			return
+		path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
+		sys.path.append(path)
+		from emoticons import emoticons as emots
 		for emot in emots:
-			file = gajim.config.get_per('emoticons', emot, 'path')
+			file = os.path.join(path, emots[emot])
 			iter = model.append((emot, file, None))
 			if not os.path.exists(file):
 				continue
@@ -2138,6 +2156,8 @@ class ManageEmoticonsWindow:
 			img.show()
 			img.set_from_file(file)
 			model.set(iter, 2, img)
+		sys.path.remove(path)
+		del emots
 
 	def on_emot_cell_edited(self, cell, row, new_text):
 		emots = gajim.config.get_per('emoticons')

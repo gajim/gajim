@@ -1410,23 +1410,31 @@ class Interface:
 	def init_emoticons(self):
 		if not gajim.config.get('useemoticons'):
 			return
-	
+
 		#initialize emoticons dictionary and unique images list
 		self.emoticons_images = list()
 		self.emoticons = dict()
-	
-		emots = gajim.config.get_per('emoticons')
+
+		emot_theme = gajim.config.get('emoticons_theme')
+		if not emot_theme:
+			return
+		path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
+		sys.path.append(path)
+		from emoticons import emoticons as emots
 		for emot in emots:
-			emot_file = gajim.config.get_per('emoticons', emot, 'path')
+			emot_file = os.path.join(path, emots[emot])
 			if not self.image_is_ok(emot_file):
 				continue
 			# This avoids duplicated emoticons with the same image eg. :) and :-)
 			if not emot_file in self.emoticons.values():
-				pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 				if emot_file.endswith('.gif'):
 					pix = gtk.gdk.PixbufAnimation(emot_file)
+				else:
+					pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 				self.emoticons_images.append((emot, pix))
 			self.emoticons[emot.upper()] = emot_file
+		sys.path.remove(path)
+		del emots
 	
 	def register_handlers(self):
 		self.handlers = {
@@ -1562,12 +1570,6 @@ class Interface:
 		# Do not set gajim.verbose to False if -v option was given
 		if gajim.config.get('verbose'):
 			gajim.verbose = True
-		#add default emoticons if there is not in the config file
-		if len(gajim.config.get_per('emoticons')) == 0:
-			for emot in gajim.config.emoticons_default:
-				gajim.config.add_per('emoticons', emot)
-				gajim.config.set_per('emoticons', emot, 'path',
-					gajim.config.emoticons_default[emot])
 		#add default status messages if there is not in the config file
 		if len(gajim.config.get_per('statusmsg')) == 0:
 			for msg in gajim.config.statusmsg_default:
