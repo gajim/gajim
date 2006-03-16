@@ -154,7 +154,8 @@ class GroupchatControl(ChatControlBase):
 		# we want to know when the the widget resizes, because that is
 		# an indication that the hpaned has moved...
 		# FIXME: Find a better indicator that the hpaned has moved.
-		self.list_treeview.connect('size-allocate', self.on_treeview_size_allocate)
+		self.list_treeview.connect('size-allocate',
+			self.on_treeview_size_allocate)
 
 		#status_image, type, nickname, shown_nick
 		store = gtk.TreeStore(gtk.Image, str, str, str, gtk.gdk.Pixbuf)
@@ -167,6 +168,12 @@ class GroupchatControl(ChatControlBase):
 		# first one img, second one text, third is sec pixbuf
 		column = gtk.TreeViewColumn()
 
+		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
+		column.pack_start(renderer_pixbuf, expand = False)
+		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
+		column.set_cell_data_func(renderer_pixbuf, self.avatar_cell_data_func,
+			None)
+
 		renderer_image = cell_renderer_image.CellRendererImage(0, 0) # status img
 		column.pack_start(renderer_image, expand = False)
 		column.add_attribute(renderer_image, 'image', C_IMG)
@@ -176,11 +183,6 @@ class GroupchatControl(ChatControlBase):
 		column.pack_start(renderer_text, expand = True)
 		column.add_attribute(renderer_text, 'markup', C_TEXT)
 		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
-
-		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
-		column.pack_start(renderer_pixbuf, expand = True)
-		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
-		column.set_cell_data_func(renderer_pixbuf, self.avatar_cell_data_func, None)
 
 		self.list_treeview.append_column(column)
 
@@ -201,7 +203,8 @@ class GroupchatControl(ChatControlBase):
 		self.widget.show_all()
 
 	def notify_on_new_messages(self):
-		return gajim.config.get('notify_on_all_muc_messages') or self.attention_flag
+		return gajim.config.get('notify_on_all_muc_messages') or \
+			self.attention_flag
 
 	def _on_window_focus_in_event(self, widget, event):
 		'''When window gets focus'''
