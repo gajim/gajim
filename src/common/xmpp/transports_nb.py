@@ -236,7 +236,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.renew_send_timeout()
 		if self.on_receive:
 			if received.strip():
-				self.DEBUG(received,'got')
+				self.DEBUG(received, 'got')
 			if hasattr(self._owner, 'Dispatcher'):
 				self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
 			self.on_receive(received)
@@ -258,6 +258,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 				self.sendbuff = self.sendbuff[send_count:]
 				if not self.sendbuff and not self.sendqueue:
 					if self.state < 0:
+						self.idlequeue.unplug_idle(self.fd)
 						self._on_send()
 						self.disconnect()
 						return

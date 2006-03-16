@@ -126,6 +126,10 @@ class Dispatcher(PlugIn):
 			raise _pendingException[0], _pendingException[1], _pendingException[2]
 		try:
 			self.Stream.Parse(data)
+			# end stream:stream tag received
+			if self.Stream._NodeBuilder__depth == 0:
+				self._owner.Connection.disconnect()
+				return 0
 		except ExpatError:
 			sys.exc_clear()
 			self._owner.Connection.pollend()

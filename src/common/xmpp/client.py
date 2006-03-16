@@ -80,6 +80,7 @@ class PlugIn:
         for method in self._old_owners_methods: self._owner.__dict__[method.__name__]=method
         del self._owner.__dict__[self.__class__.__name__]
         if self.__class__.__dict__.has_key('plugout'): return self.plugout()
+        del self._owner
 
     def DEBUG(self,text,severity='info'):
         """ Feed a provided debug line to main instance's debug facility along with our ID string. """

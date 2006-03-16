@@ -78,6 +78,10 @@ class NBCommonClient(CommonClient):
 		for i in self.disconnect_handlers: 
 			i()
 		self.disconnect_handlers.reverse()
+		if self.__dict__.has_key('NonBlockingRoster'):
+			self.NonBlockingRoster.PlugOut()
+		if self.__dict__.has_key('NonBlockingBind'):
+			self.NonBlockingBind.PlugOut()
 		if self.__dict__.has_key('NonBlockingNonSASL'):
 			self.NonBlockingNonSASL.PlugOut()
 		if self.__dict__.has_key('SASL'):
