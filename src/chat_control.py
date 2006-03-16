@@ -1473,7 +1473,11 @@ class ChatControl(ChatControlBase):
 		pixbuf.fill(0xffffff00) # RGBA
 		image.queue_draw()
 
-		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
+		is_fake = False
+		if self.type_id == message_control.TYPE_PM:
+			is_fake = True
+		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid,
+			is_fake)
 		screen_w = gtk.gdk.screen_width()
 		screen_h = gtk.gdk.screen_height()
 		avatar_w = avatar_pixbuf.get_width()
