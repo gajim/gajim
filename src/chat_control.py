@@ -740,10 +740,11 @@ class ChatControl(ChatControlBase):
 		'''we enter the eventbox area so we under conditions add a timeout
 		to show a bigger avatar after 0.5 sec'''
 		jid = self.contact.jid
-		real_jid = gajim.get_real_jid_from_fjid(self.account, jid)
-		if not real_jid: # this can happend if we're in a moderate room
-			return
-		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid)
+		is_fake = False
+		if self.type_id == message_control.TYPE_PM:
+			is_fake = True
+		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid,
+			is_fake)
 		if avatar_pixbuf in ('ask', None):
 			return
 		avatar_w = avatar_pixbuf.get_width()
