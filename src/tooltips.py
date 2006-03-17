@@ -364,6 +364,7 @@ class GCTooltip(BaseTooltip):
 		self.text_label.set_line_wrap(True)
 		self.text_label.set_alignment(0, 0)
 		self.text_label.set_selectable(False)
+		self.avatar_image = gtk.Image()
 
 		BaseTooltip.__init__(self)
 		
@@ -372,6 +373,8 @@ class GCTooltip(BaseTooltip):
 			return
 		self.create_window()
 		hbox = gtk.HBox()
+		hbox.set_homogeneous(False)
+		hbox.set_spacing(2)
 		
 		if contact.jid.strip() != '':
 			info = '<span size="large" weight="bold">' + contact.jid + '</span>'
@@ -401,6 +404,23 @@ class GCTooltip(BaseTooltip):
 
 		self.text_label.set_markup(info)
 		hbox.add(self.text_label)
+
+		# Add avatar
+		puny_name = punycode_encode(contact.name)
+		puny_room = punycode_encode(contact.room_jid)
+		for type_ in ('jpeg', 'png'):
+			file = os.path.join(gajim.AVATAR_PATH, puny_room,
+				puny_name + '.' + type_)
+			if os.path.exists(file):
+				self.avatar_image.set_from_file(file)
+				pix = self.avatar_image.get_pixbuf()
+				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+				self.avatar_image.set_from_pixbuf(pix)
+				break
+		else:
+			self.avatar_image.set_from_pixbuf(None)
+		hbox.pack_start(self.avatar_image, False, False)
+
 		self.win.add(hbox)
 
 class RosterTooltip(NotificationAreaTooltip):
@@ -518,8 +538,8 @@ class RosterTooltip(NotificationAreaTooltip):
 				text = text % local_time 
 				info += '\n<span style="italic">%s</span>' % text
 		
+		puny_jid = punycode_encode(prim_contact.jid)
 		for type_ in ('jpeg', 'png'):
-			puny_jid = punycode_encode(prim_contact.jid)
 			file = os.path.join(gajim.AVATAR_PATH, puny_jid + '.' + type_)
 			if os.path.exists(file):
 				self.avatar_image.set_from_file(file)
