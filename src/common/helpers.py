@@ -53,7 +53,7 @@ def parse_jid(jidstring):
 
 	# Search for delimiters
 	user_sep = jidstring.find('@')
-	res_sep  = jidstring.find('/')
+	res_sep = jidstring.find('/')
 
 	if user_sep == -1:
 		if res_sep == -1:
@@ -408,7 +408,7 @@ def play_sound(event):
 	if os.name == 'nt':
 		try:
 			winsound.PlaySound(path_to_soundfile,
-								winsound.SND_FILENAME|winsound.SND_ASYNC)
+				winsound.SND_FILENAME|winsound.SND_ASYNC)
 		except:
 			pass
 	elif os.name == 'posix':
@@ -557,10 +557,10 @@ def get_windows_reg_env(varname, default=''):
 
 	val = default
 	try:
-        	rkey = win32api.RegOpenKey(win32con.HKEY_CURRENT_USER,
+		rkey = win32api.RegOpenKey(win32con.HKEY_CURRENT_USER,
 r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
 		try:
-	            	val = str(win32api.RegQueryValueEx(rkey, varname)[0])
+			val = str(win32api.RegQueryValueEx(rkey, varname)[0])
 			val = win32api.ExpandEnvironmentStrings(val) # expand using environ
 		except:
 			pass
