@@ -1133,6 +1133,9 @@ class RosterWindow:
 		assign_openpgp_key_menuitem = xml.get_widget('assign_openpgp_key_menuitem')
 		add_special_notification_menuitem = xml.get_widget(
 			'add_special_notification_menuitem')
+		
+		add_special_notification_menuitem.hide()
+		add_special_notification_menuitem.set_no_show_all(True)
 
 		#skip a seperator
 		subscription_menuitem = xml.get_widget('subscription_menuitem')
