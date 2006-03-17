@@ -54,16 +54,19 @@ if os.name == 'nt':
 		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
 		VCARD_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
 		AVATAR_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Avatars')
+		MY_EMOTS_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Emoticons')
 	except KeyError:
 		# win9x, in cwd
 		LOGPATH = 'Logs' # deprecated
 		VCARD_PATH = 'Vcards'
 		AVATAR_PATH = 'Avatars'
+		MY_EMOTS_PATH = 'Emoticons'
 else: # Unices
 	DATA_DIR = '../data'
 	LOGPATH = os.path.expanduser('~/.gajim/logs') # deprecated
 	VCARD_PATH = os.path.expanduser('~/.gajim/vcards')
 	AVATAR_PATH = os.path.expanduser('~/.gajim/avatars')
+	MY_EMOTS_PATH = os.path.expanduser('~/.gajim/emoticons')
 
 HOME_DIR = os.path.expanduser('~')
 TMP = tempfile.gettempdir()
@@ -73,6 +76,7 @@ try:
 	VCARD_PATH = VCARD_PATH.decode(sys.getfilesystemencoding())
 	TMP = TMP.decode(sys.getfilesystemencoding())
 	AVATAR_PATH = AVATAR_PATH.decode(sys.getfilesystemencoding())
+	MY_EMOTS_PATH = MY_EMOTS_PATH.decode(sys.getfilesystemencoding())
 except:
 	pass
 

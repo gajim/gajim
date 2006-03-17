@@ -1419,6 +1419,11 @@ class Interface:
 		if not emot_theme:
 			return
 		path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
+		if not os.path.exists(path):
+			# It's maybe a user theme
+			path = os.path.join(gajim.MY_EMOTS_PATH, emot_theme)
+			if not os.path.exists(path): # theme doesn't exists
+				return
 		sys.path.append(path)
 		from emoticons import emoticons as emots
 		for emot in emots:

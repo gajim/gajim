@@ -115,23 +115,24 @@ class PreferencesWindow:
 		# emoticons
 		emoticons_combobox = self.xml.get_widget('emoticons_combobox')
 		emoticons_list = os.listdir(os.path.join(gajim.DATA_DIR, 'emoticons'))
+		# user themes
+		if os.path.isdir(gajim.MY_EMOTS_PATH):
+			emoticons_list += os.listdir(gajim.MY_EMOTS_PATH)
 		renderer_text = gtk.CellRendererText()
 		emoticons_combobox.pack_start(renderer_text, True)
 		emoticons_combobox.add_attribute(renderer_text, 'text', 0)
 		model = gtk.ListStore(str)
 		emoticons_combobox.set_model(model)
-		l = ['Disabled']
 		for dir in emoticons_list:
 			if dir != '.svn':
 				l.append(dir)
-		print l
+		l.append('Disabled')
 		for i in xrange(len(l)):
-			print l[i]
 			model.append([l[i]])
 			if gajim.config.get('emoticons_theme') == l[i]:
 				emoticons_combobox.set_active(i)
 		if not gajim.config.get('emoticons_theme'):
-			emoticons_combobox.set_active(0)
+			emoticons_combobox.set_active(len(l))
 
 		#iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
