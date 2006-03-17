@@ -133,7 +133,7 @@ class PreferencesWindow:
 			if gajim.config.get('emoticons_theme') == l[i]:
 				emoticons_combobox.set_active(i)
 		if not gajim.config.get('emoticons_theme'):
-			emoticons_combobox.set_active(len(l))
+			emoticons_combobox.set_active(len(l)-1)
 
 		#iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
