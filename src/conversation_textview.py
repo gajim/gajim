@@ -418,7 +418,7 @@ class ConversationTextview(gtk.TextView):
 		index = 0
 
 		# basic: links + mail + formatting is always checked (we like that)
-		if gajim.config.get('useemoticons'): # search for emoticons & urls
+		if gajim.config.get('emoticons_theme'): # search for emoticons & urls
 			iterator = gajim.interface.emot_and_basic_re.finditer(otext)
 		else: # search for just urls + mail + formatting
 			iterator = gajim.interface.basic_pattern_re.finditer(otext)
@@ -448,7 +448,7 @@ class ConversationTextview(gtk.TextView):
 		buffer = self.get_buffer()
 
 		possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
-		if gajim.config.get('useemoticons') and \
+		if gajim.config.get('emoticons_theme') and \
 		possible_emot_ascii_caps in gajim.interface.emoticons.keys():
 			#it's an emoticon
 			emot_ascii = possible_emot_ascii_caps

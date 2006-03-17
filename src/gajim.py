@@ -1357,7 +1357,7 @@ class Interface:
 		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
 		
 		emoticons_pattern = ''
-		if gajim.config.get('useemoticons'):
+		if gajim.config.get('emoticons_theme'):
 			# When an emoticon is bordered by an alpha-numeric character it is NOT
 			# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
 			# We still allow multiple emoticons side-by-side like :P:P:P
@@ -1408,7 +1408,7 @@ class Interface:
 		helpers.launch_browser_mailer(kind, url)
 
 	def init_emoticons(self):
-		if not gajim.config.get('useemoticons'):
+		if not gajim.config.get('emoticons_theme'):
 			return
 
 		#initialize emoticons dictionary and unique images list

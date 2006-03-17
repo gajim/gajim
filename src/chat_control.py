@@ -207,7 +207,7 @@ class ChatControlBase(MessageControl):
 				return True
 		elif event.keyval == gtk.keysyms.m and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + m opens emoticons menu
-			if gajim.config.get('useemoticons'):
+			if gajim.config.get('emoticons_theme'):
 				msg_tv = self.msg_textview
 				def set_emoticons_menu_position(w, msg_tv = self.msg_textview):
 					window = msg_tv.get_window(gtk.TEXT_WINDOW_WIDGET)
@@ -412,7 +412,7 @@ class ChatControlBase(MessageControl):
 		'''hide show emoticons_button and make sure emoticons_menu is always there
 		when needed'''
 		emoticons_button = self.xml.get_widget('emoticons_button')
-		if gajim.config.get('useemoticons'):
+		if gajim.config.get('emoticons_theme'):
 			self.emoticons_menu = self.prepare_emoticons_menu()
 			emoticons_button.show()
 			emoticons_button.set_no_show_all(False)
