@@ -208,6 +208,6 @@ class OptionsParser:
 			self.old_values['autodetect_browser_mailer'] is True:
 			gajim.config.set('autodetect_browser_mailer', False)
 		if self.old_values.has_key('useemoticons') and \
-			not self.old_values['useemoticons']
+			not self.old_values['useemoticons']:
 			gajim.config.set('emoticons_theme', '')
 
