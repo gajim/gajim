@@ -123,6 +123,7 @@ class PreferencesWindow:
 		emoticons_combobox.add_attribute(renderer_text, 'text', 0)
 		model = gtk.ListStore(str)
 		emoticons_combobox.set_model(model)
+		l = []
 		for dir in emoticons_list:
 			if dir != '.svn':
 				l.append(dir)
