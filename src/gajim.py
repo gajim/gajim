@@ -892,7 +892,7 @@ class Interface:
 		#('GC_INVITATION', (room_jid, jid_from, reason, password))
 		jid = gajim.get_jid_without_resource(array[1])
 		room_jid = array[0]
-		if gajim.popup_window(account):
+		if gajim.popup_window(account) or not self.systray_enabled:
 			dialogs.InvitationReceivedDialog(account, room_jid, jid, array[3],
 				array[2])
 			return
