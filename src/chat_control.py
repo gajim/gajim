@@ -1460,10 +1460,13 @@ class ChatControl(ChatControlBase):
 	def show_bigger_avatar(self, small_avatar):
 		'''resizes the avatar, if needed, so it has at max half the screen size
 		and shows it'''
-		real_jid = gajim.get_real_jid_from_fjid(self.account, self.contact.jid)
-		if not real_jid: # this can happend if we're in a moderate room
+		is_fake = False
+		if self.type_id == message_control.TYPE_PM:
+			is_fake = True
+		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid,
+			is_fake)
+		if avatar_pixbuf in ('ask', None):
 			return
-		
 		# Hide the small avatar
 		# this code hides the small avatar when we show a bigger one in case
 		# the avatar has a transparency hole in the middle
@@ -1474,11 +1477,6 @@ class ChatControl(ChatControlBase):
 		pixbuf.fill(0xffffff00) # RGBA
 		image.queue_draw()
 
-		is_fake = False
-		if self.type_id == message_control.TYPE_PM:
-			is_fake = True
-		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid,
-			is_fake)
 		screen_w = gtk.gdk.screen_width()
 		screen_h = gtk.gdk.screen_height()
 		avatar_w = avatar_pixbuf.get_width()
