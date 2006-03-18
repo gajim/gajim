@@ -490,13 +490,14 @@ class Interface:
 		if chat_control and chat_control.type_id == message_control.TYPE_GC:
 			# it's a Private Message
 			fjid = array[0]
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
 			if not self.msg_win_mgr.has_window(fjid, account) and \
 				not gajim.awaiting_events[account].has_key(fjid):
 				if show_notification:
-					room_jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
-					room_name,t = gajim.get_room_name_and_server_from_room_jid(room_jid)
-					txt = _('%(nickname)s in room %(room_name)s has sent you a new message.')\
-						% {'nickname': nick, 'room_name': room_name}
+					room_name,t = gajim.get_room_name_and_server_from_room_jid(
+						room_jid)
+					txt = _('%(nickname)s in room %(room_name)s has sent you a new '
+						'message.') % {'nickname': nick, 'room_name': room_name}
 					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 						'priv_msg_recv.png')
 					path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
