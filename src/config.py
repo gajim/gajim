@@ -2308,7 +2308,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 				gajim.connections[account_unicode].bookmarks.append(bmdict)
 
 			gajim.connections[account_unicode].store_bookmarks()
-		gajim.interface.roster.make_menu()
+		gajim.interface.roster.actions_menu_needs_rebuild = True
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):

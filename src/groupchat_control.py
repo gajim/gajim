@@ -1183,7 +1183,7 @@ class GroupchatControl(ChatControlBase):
 		gajim.connections[self.account].bookmarks.append(bm)
 		gajim.connections[self.account].store_bookmarks()
 
-		gajim.interface.roster.make_menu()
+		gajim.interface.roster.actions_menu_needs_rebuild = True
 
 		dialogs.InformationDialog(
 				_('Bookmark has been added successfully'),
