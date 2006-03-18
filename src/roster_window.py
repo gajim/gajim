@@ -2796,8 +2796,24 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		etime):
 		# remove the source row
 		model = self.tree.get_model()
-		for i in self.get_contact_iter(c_source.jid, account):
-			model.remove(i)
+		for iter in self.get_contact_iter(c_source.jid, account):
+			# get group iter
+			iter_group = iter
+			while model[iter_group][C_TYPE] == 'contact':
+				iter_group = model.iter_parent(iter_group)
+			group = model[iter_group][C_JID].decode('utf-8')
+			model.remove(iter)
+			if model.iter_n_children(iter_group) == 0:
+				# this was the only child
+				model.remove(iter_group)
+				# delete the group if it is empty (need to look for offline users
+				# too)
+				for jid in gajim.contacts.get_jid_list(account):
+					if group in gajim.contacts.get_contact_with_highest_priority(
+					account, jid).groups:
+						break
+				else:
+					del gajim.groups[account][group]
 		gajim.contacts.add_subcontact(account, c_dest.jid, c_source.jid)
 		# Add it under parent contact
 		self.add_contact_to_roster(c_source.jid, account)
@@ -2834,13 +2850,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if model.iter_n_children(group_iter) == 1:
 			# this was the only child
 			model.remove(group_iter)
-		# delete the group if it is empty (need to look for offline users too)
-		for jid in gajim.contacts.get_jid_list(account):
-			if group in gajim.contacts.get_contact_with_highest_priority(
-				account, jid).groups:
-				break
-		else:
-			del gajim.groups[account][group]
+			# delete the group if it is empty (need to look for offline users too)
+			for jid in gajim.contacts.get_jid_list(account):
+				if group in gajim.contacts.get_contact_with_highest_priority(
+					account, jid).groups:
+					break
+			else:
+				del gajim.groups[account][group]
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
 		etime):
