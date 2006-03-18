@@ -576,7 +576,6 @@ class RosterWindow:
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
 		show_offline_contacts_menuitem = self.xml.get_widget(
 			'show_offline_contacts_menuitem')
-		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
 
 		# make it sensitive. it is insensitive only if no accounts are *available*
 		advanced_menuitem.set_sensitive(True)
@@ -736,10 +735,6 @@ class RosterWindow:
 			elif len(gajim.connections) == 0: # user has no accounts
 				advanced_menuitem.set_sensitive(False)
 
-		#FIXME: Gajim 0.9 should have this visible
-		profile_avatar_menuitem.set_no_show_all(True)
-		profile_avatar_menuitem.hide()
-
 		if at_least_one_account_connected:
 			new_message_menuitem.set_sensitive(True)
 			join_gc_menuitem.set_sensitive(True)
@@ -753,7 +748,6 @@ class RosterWindow:
 			add_new_contact_menuitem.set_sensitive(False)
 			service_disco_menuitem.set_sensitive(False)
 			show_offline_contacts_menuitem.set_sensitive(False)
-			profile_avatar_menuitem.set_sensitive(False)
 
 		self.actions_menu_needs_rebuild = False
 
