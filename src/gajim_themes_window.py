@@ -58,6 +58,11 @@ class GajimThemesWindow:
 		self.italic_togglebutton = self.xml.get_widget('italic_togglebutton')
 		self.themes_tree = self.xml.get_widget('themes_treeview')
 		self.theme_options_vbox = self.xml.get_widget('theme_options_vbox')
+		self.colorbuttons = {}
+		for chatstate in ('active', 'inactive', 'composing', 'paused', 'gone',
+		'muc_msg', 'muc_directed_msg'):
+			self.colorbuttons[chatstate] = self.xml.get_widget(chatstate + \
+				'_colorbutton')
 		model = gtk.ListStore(str)
 		self.themes_tree.set_model(model)
 		col = gtk.TreeViewColumn(_('Theme'))
@@ -203,6 +208,12 @@ class GajimThemesWindow:
 		self.text_fontbutton.set_sensitive(state)
 		self.no_update = False
 		gajim.interface.roster.change_roster_style(None)
+
+		for chatstate in ('active', 'inactive', 'composing', 'paused', 'gone',
+		'muc_msg', 'muc_directed_msg'):
+			color = gajim.config.get_per('themes', theme, 'state_' + chatstate + \
+				'_color')
+			self.colorbuttons[chatstate].set_color(gtk.gdk.color_parse(color))
 		
 	def on_textcolor_checkbutton_toggled(self, widget):
 		state = widget.get_active()
@@ -329,3 +340,38 @@ class GajimThemesWindow:
 		if font_description.get_style() != pango.STYLE_ITALIC:
 			font_props[1] = True
 		return font_props
+
+	def on_active_colorbutton_color_set(self, widget):
+		self.no_update = True
+		self._set_color(True, widget, 'state_active_color')
+		self.no_update = False
+
+	def on_inactive_colorbutton_color_set(self, widget):
+		self.no_update = True
+		self._set_color(True, widget, 'state_inactive_color')
+		self.no_update = False
+
+	def on_composing_colorbutton_color_set(self, widget):
+		self.no_update = True
+		self._set_color(True, widget, 'state_composing_color')
+		self.no_update = False
+
+	def on_paused_colorbutton_color_set(self, widget):
+		self.no_update = True
+		self._set_color(True, widget, 'state_paused_color')
+		self.no_update = False
+
+	def on_gone_colorbutton_color_set(self, widget):
+		self.no_update = True
+		self._set_color(True, widget, 'state_gone_color')
+		self.no_update = False
+
+	def on_muc_msg_colorbutton_color_set(self, widget):
+		self.no_update = True
+		self._set_color(True, widget, 'state_muc_msg_color')
+		self.no_update = False
+
+	def on_muc_directed_msg_colorbutton_color_set(self, widget):
+		self.no_update = True
+		self._set_color(True, widget, 'state_muc_directed_msg_color')
+		self.no_update = False

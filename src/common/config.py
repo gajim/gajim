@@ -278,8 +278,8 @@ class Config:
 			'state_gone_color': [ opt_color, 'grey' ],
 
 			# MUC chat states
-			'state_muc_msg': [ opt_color, 'mediumblue' ],
-			'state_muc_directed_msg': [ opt_color, 'red2' ],
+			'state_muc_msg_color': [ opt_color, 'mediumblue' ],
+			'state_muc_directed_msg_color': [ opt_color, 'red2' ],
 		}, {}),
 	}
 
