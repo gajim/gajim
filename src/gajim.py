@@ -885,14 +885,27 @@ class Interface:
 		#('GC_AFFILIATION', account, (room_jid, affiliation, list)) list is list
 		room_jid = array[0]
 		if self.instances[account]['gc_config'].has_key(room_jid):
-			self.instances[account]['gc_config'][room_jid].affiliation_list_received(
-				array[1], array[2])
+			self.instances[account]['gc_config'][room_jid].\
+				affiliation_list_received(array[1], array[2])
 
 	def handle_event_gc_invitation(self, account, array):
 		#('GC_INVITATION', (room_jid, jid_from, reason, password))
-		dialogs.InvitationReceivedDialog(account, array[0], array[1],
-			array[3], array[2])
-	
+		jid = gajim.get_jid_without_resource(array[1])
+		room_jid = array[0]
+		if gajim.popup_window(account):
+			dialogs.InvitationReceivedDialog(account, room_jid, jid, array[3],
+				array[2])
+			return
+
+		self.add_event(account, jid, 'gc-invitation', (room_jid, array[2],
+			array[3]))
+
+		if gajim.show_notification(account):
+			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+				'gc_invitation.png')
+			notify.notify(_('Groupchat Invitation'),
+				jid, account, 'gc-invitation', path, room_jid)
+
 	def handle_event_bad_passphrase(self, account, array):
 		use_gpg_agent = gajim.config.get('use_gpg_agent')
 		if use_gpg_agent:
@@ -1551,6 +1564,12 @@ class Interface:
 			else:
 				url = ('http://mail.google.com/')
 			helpers.launch_browser_mailer('url', url)
+		elif typ == 'gc-invitation':
+			ev = gajim.get_first_event(account, jid, typ)
+			data = ev[1]
+			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
+				data[1])
+			self.remove_first_event(account, jid, typ)
 		if w:
 			w.set_active_tab(jid, account)
 			w.window.present()
