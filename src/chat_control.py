@@ -1463,8 +1463,8 @@ class ChatControl(ChatControlBase):
 		is_fake = False
 		if self.type_id == message_control.TYPE_PM:
 			is_fake = True
-		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(real_jid,
-			is_fake)
+		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
+			self.contact.jid, is_fake)
 		if avatar_pixbuf in ('ask', None):
 			return
 		# Hide the small avatar
