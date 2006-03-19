@@ -27,6 +27,7 @@ from encodings.punycode import punycode_encode
 import socks5
 import common.xmpp
 
+from common import GnuPG
 from common import helpers
 from common import gajim
 from common import i18n
@@ -1229,7 +1230,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					if not msgtxt and chatstate_child.getTag('composing'):
 						chatstate = 'composing'
 		
-		if encTag and USE_GPG:
+		if encTag and GnuPG.USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
 			
@@ -1315,7 +1316,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		except:
 			prio = 0
 		keyID = ''
-		if sigTag and USE_GPG:
+		if sigTag and GnuPG.USE_GPG:
 			#verify
 			sigmsg = sigTag.getData()
 			keyID = self.gpg.verify(status, sigmsg)
