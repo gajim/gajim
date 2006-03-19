@@ -52,6 +52,7 @@ import weakref
 import gobject
 import gtk
 import gtk.glade
+import pango
 
 import dialogs
 import tooltips
@@ -496,12 +497,40 @@ _('Without a connection, you can not browse available services')).get_response()
 		it's handy to use within browser's cleanup method.'''
 		self.progressbar.hide()
 		self.window.set_title(_('Service Discovery using account %s') % self.account)
-		self.banner.set_markup('<span weight="heavy" size="large">'\
-			'%s</span>\n' % _('Service Discovery'))
+		self._set_window_banner_text(_('Service Discovery'))
 		# FIXME: use self.banner_icon.clear() when we switch to GTK 2.8
 		self.banner_icon.set_from_file(None)
 		self.banner_icon.hide()		# Just clearing it doesn't work
 
+	def _set_window_banner_text(self, text, text_after = None):
+		theme = gajim.config.get('roster_theme')
+		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
+		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
+		
+		if bannerfont:
+			font = pango.FontDescription(bannerfont)
+		else:
+			font = pango.FontDescription('Normal')
+		if bannerfontattrs:
+			# B is attribute set by default
+			if 'B' in bannerfontattrs:
+				font.set_weight(pango.WEIGHT_HEAVY)
+			if 'I' in bannerfontattrs:
+				font.set_style(pango.STYLE_ITALIC)
+		
+		font_attrs = 'font_desc="%s"' % font.to_string()
+		font_size = font.get_size()
+		
+		# in case there is no font specified we use x-large font size
+		if font_size == 0:
+			font_attrs = '%s size="large"' % font_attrs
+		markup = '<span %s>%s</span>' % (font_attrs, text)
+		if text_after:
+			font.set_weight(pango.WEIGHT_NORMAL)
+			markup = '%s\n<span font_desc="%s" size="small">%s</span>' % \
+									(markup, font.to_string(), text_after)
+		self.banner.set_markup(markup)
+	
 	def paint_banner(self):
 		'''Repaint the banner with theme color'''
 		theme = gajim.config.get('roster_theme')
@@ -663,8 +692,7 @@ class AgentBrowser:
 		'''Set the initial window title based on agent address.'''
 		self.window.window.set_title(_('Browsing %s using account %s') % \
 			(self._get_agent_address(), self.account))
-		self.window.banner.set_markup('<span weight="heavy" size="large">'\
-			'%s</span>\n' % self._get_agent_address())
+		self.window._set_window_banner_text(self._get_agent_address())
 
 	def _create_treemodel(self):
 		'''Create the treemodel for the services treeview. When subclassing,
@@ -716,14 +744,13 @@ class AgentBrowser:
 		if self.browse_button:
 			self.browse_button.destroy()
 			self.browse_button = None
-
+	
 	def _set_title(self, jid, node, identities, features, data):
 		'''Set the window title based on agent info.'''
 		# Set the banner and window title
 		if identities[0].has_key('name'):
 			name = identities[0]['name']
-			self.window.banner.set_markup('<span weight="heavy" size="large">'\
-				'%s</span>\n%s' % (self._get_agent_address(), name))
+			self.window._set_window_banner_text(self._get_agent_address(), name)
 
 		# Add an icon to the banner.
 		pix = self.cache.get_icon(identities)
