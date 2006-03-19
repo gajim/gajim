@@ -108,6 +108,7 @@ import common.sleepy
 
 from common.xmpp import idlequeue
 from common import nslookup
+from common import proxy65_manager
 from common import socks5
 from common import gajim
 from common import connection
@@ -1641,6 +1642,7 @@ class Interface:
 		gajim.socks5queue = socks5.SocksQueue(gajim.idlequeue,
 			self.handle_event_file_rcv_completed, 
 			self.handle_event_file_progress)
+		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
 		self.register_handlers()
 		for account in gajim.config.get_per('accounts'):
 			gajim.connections[account] = common.connection.Connection(account)

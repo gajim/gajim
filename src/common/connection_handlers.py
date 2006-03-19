@@ -97,23 +97,6 @@ class ConnectionBytestream:
 					gajim.socks5queue.remove_receiver(host['idx'])
 					gajim.socks5queue.remove_sender(host['idx'])
 	
-	def get_cached_proxies(self, proxy):
-		''' get cached entries for proxy and request the cache again '''
-		host = gajim.config.get_per('ft_proxies65_cache', proxy, 'host')
-		port = gajim.config.get_per('ft_proxies65_cache', proxy, 'port')
-		jid = gajim.config.get_per('ft_proxies65_cache', proxy, 'jid')
-
-		iq = common.xmpp.Protocol(name = 'iq', to = proxy, typ = 'get')
-		query = iq.setTag('query')
-		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		# FIXME bad logic - this should be somewhere else!
-		# this line should be put somewhere else
-		# self.connection.send(iq)
-		# ensure that we don;t return empty vars
-		if None not in (host, port, jid) or '' not in (host, port, jid):
-			return (host, port, jid)
-		return (None, None, None)
-
 	def send_socks5_info(self, file_props, fast = True, receiver = None,
 		sender = None):
 		''' send iq for the present streamhosts and proxies '''
@@ -131,7 +114,7 @@ class ConnectionBytestream:
 		if fast and cfg_proxies:
 			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
 			for proxy in proxies:
-				(host, _port, jid) = self.get_cached_proxies(proxy)
+				(host, _port, jid) = gajim.proxy65_manager.get_proxy(proxy)
 				if host is None:
 					continue
 				host_dict={
@@ -361,32 +344,8 @@ class ConnectionBytestream:
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		real_id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
-		streamhost = None
-		try:
-			streamhost = query.getTag('streamhost')
-		except:
-			pass
-		if streamhost is not None: # this is a result for proxy request
-			jid = None
-			try:
-				jid = streamhost.getAttr('jid')
-			except:
-				raise common.xmpp.NodeProcessed
-			proxyhosts = []
-			for item in query.getChildren():
-				if item.getName() == 'streamhost':
-					host = item.getAttr('host')
-					port = item.getAttr('port')
-					jid = item.getAttr('jid')
-					conf = gajim.config
-					conf.add_per('ft_proxies65_cache', jid)
-					conf.set_per('ft_proxies65_cache', jid,
-						'host', unicode(host))
-					conf.set_per('ft_proxies65_cache', jid,
-						'port', int(port))
-					conf.set_per('ft_proxies65_cache', jid,
-						'jid', unicode(jid))
-			raise common.xmpp.NodeProcessed
+		gajim.proxy65_manager.resolve_result(frm, query)
+		
 		try:
 			streamhost =  query.getTag('streamhost-used')
 		except: # this bytestream result is not what we need
@@ -1521,7 +1480,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		if not self.connection:
 			return
 		self.connection.getRoster(self._on_roster_set)
-
+		cfg_proxies = gajim.config.get_per('accounts', self.name,
+										'file_transfer_proxies')
+		if cfg_proxies:
+			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
+			for proxy in proxies:
+				gajim.proxy65_manager.resolve(proxy, self.connection)
+	
 	def _on_roster_set(self, roster):
 		raw_roster = roster.getRaw()
 		roster = {}
