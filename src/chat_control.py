@@ -884,11 +884,11 @@ class ChatControl(ChatControlBase):
 		
 		# in case there is no font specified we use x-large font size
 		if font_size == 0:
-			font_size = 'x-large'
-			font_attrs = '%s size="%s"' % (font_attrs, font_size)
+			font_attrs = '%s size="x-large"' % font_attrs
 		
 		st = gajim.config.get('chat_state_notifications')
 		cs = contact.chatstate
+		font.set_weight(pango.WEIGHT_NORMAL)
 		if cs and st in ('composing_only', 'all'):
 			if contact.show == 'offline':
 				chatstate = ''
@@ -902,16 +902,19 @@ class ChatControl(ChatControlBase):
 					chatstate = ''
 			elif chatstate is None:
 				chatstate = helpers.get_uf_chatstate(cs)
+			
 			label_text = \
-			'<span %s>%s</span>%s %s' % \
-				(font_attrs, name, acct_info, chatstate)
+	'<span %s>%s</span><span font_desc="%s" size="medium">%s %s</span>' % \
+				(font_attrs, name, font.to_string(), acct_info, chatstate)
 		else:
 			# weight="heavy" size="x-large"
-			label_text = '<span %s>%s</span>%s' % \
-					(font_attrs, name, acct_info)
+			label_text = \
+		'<span %s>%s</span><span font_desc="%s" size="medium">%s</span>' % \
+					(font_attrs, name, font.to_string(), acct_info)
 		
 		if status:
-			label_text += '\n%s' % status
+			label_text += '\n<span font_desc="%s" size="medium">%s</span>' %\
+											(font.to_string(), status)
 
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)

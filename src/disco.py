@@ -527,7 +527,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		markup = '<span %s>%s</span>' % (font_attrs, text)
 		if text_after:
 			font.set_weight(pango.WEIGHT_NORMAL)
-			markup = '%s\n<span font_desc="%s" size="small">%s</span>' % \
+			markup = '%s\n<span font_desc="%s" size="medium">%s</span>' % \
 									(markup, font.to_string(), text_after)
 		self.banner.set_markup(markup)
 	
