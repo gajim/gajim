@@ -22,6 +22,7 @@ import urllib
 import errno
 import sys
 import stat
+import sha
 from pysqlite2 import dbapi2 as sqlite
 
 import gajim
@@ -585,3 +586,103 @@ def get_documents_path():
 	else:
 		path = os.path.expanduser('~')
 	return path
+
+# moved from connection.py
+def get_full_jid_from_iq(iq_obj):
+	'''return the full jid (with resource) from an iq as unicode'''
+	return parse_jid(str(iq_obj.getFrom()))
+
+def get_jid_from_iq(iq_obj):
+	'''return the jid (without resource) from an iq as unicode'''
+	jid = get_full_jid_from_iq(iq_obj)
+	return gajim.get_jid_without_resource(jid)
+
+def get_auth_sha(sid, initiator, target):
+	''' return sha of sid + initiator + target used for proxy auth'''
+	return sha.new("%s%s%s" % (sid, initiator, target)).hexdigest()
+
+
+distro_info = {
+	'Arch Linux': '/etc/arch-release',
+	'Aurox Linux': '/etc/aurox-release',
+	'Conectiva Linux': '/etc/conectiva-release',
+	'CRUX': '/usr/bin/crux',
+	'Debian GNU/Linux': '/etc/debian_release',
+	'Debian GNU/Linux': '/etc/debian_version',
+	'Fedora Linux': '/etc/fedora-release',
+	'Gentoo Linux': '/etc/gentoo-release',
+	'Linux from Scratch': '/etc/lfs-release',
+	'Mandrake Linux': '/etc/mandrake-release',
+	'Slackware Linux': '/etc/slackware-release',
+	'Slackware Linux': '/etc/slackware-version',
+	'Solaris/Sparc': '/etc/release',
+	'Source Mage': '/etc/sourcemage_version',
+	'SUSE Linux': '/etc/SuSE-release',
+	'Sun JDS': '/etc/sun-release',
+	'PLD Linux': '/etc/pld-release',
+	'Yellow Dog Linux': '/etc/yellowdog-release',
+	# many distros use the /etc/redhat-release for compatibility
+	# so Redhat is the last
+	'Redhat Linux': '/etc/redhat-release'
+}
+
+def get_os_info():
+	if os.name == 'nt':
+		ver = os.sys.getwindowsversion()
+		ver_format = ver[3], ver[0], ver[1]
+		win_version = {
+			(1, 4, 0): '95',
+			(1, 4, 10): '98',
+			(1, 4, 90): 'ME',
+			(2, 4, 0): 'NT',
+			(2, 5, 0): '2000',
+			(2, 5, 1): 'XP',
+			(2, 5, 2): '2003'
+		}
+		if win_version.has_key(ver_format):
+			return 'Windows' + ' ' + win_version[ver_format]
+		else:
+			return 'Windows'
+	elif os.name == 'posix':
+		executable = 'lsb_release'
+		params = ' --id --codename --release --short'
+		full_path_to_executable = is_in_path(executable, return_abs_path = True)
+		if full_path_to_executable:
+			command = executable + params
+			child_stdin, child_stdout = os.popen2(command)
+			output = temp_failure_retry(child_stdout.readline).strip()
+			child_stdout.close()
+			child_stdin.close()
+			# some distros put n/a in places so remove them
+			pattern = sre.compile(r' n/a', sre.IGNORECASE)
+			output = sre.sub(pattern, '', output)
+			return output
+
+		# lsb_release executable not available, so parse files
+		for distro_name in distro_info:
+			path_to_file = distro_info[distro_name]
+			if os.path.exists(path_to_file):
+				if os.access(path_to_file, os.X_OK):
+					# the file is executable (f.e. CRUX)
+					# yes, then run it and get the first line of output.
+					text = get_output_of_command(path_to_file)[0]
+				else:
+					fd = open(path_to_file)
+					text = fd.readline().strip() # get only first line
+					fd.close()
+					if path_to_file.endswith('version'):
+						# sourcemage_version has all the info we need
+						if not os.path.basename(path_to_file).startswith('sourcemage'):
+							text = distro_name + ' ' + text
+					elif path_to_file.endswith('aurox-release'):
+						# file doesn't have version
+						text = distro_name
+					elif path_to_file.endswith('lfs-release'): # file just has version
+						text = distro_name + ' ' + text
+				return text
+
+		# our last chance, ask uname and strip it
+		uname_output = get_output_of_command('uname -a | cut -d" " -f1,3')
+		if uname_output is not None:
+			return uname_output[0] # only first line
+	return 'N/A'
