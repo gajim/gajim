@@ -56,4 +56,4 @@ class SessionBusNotPresent(Exception):
 		Exception.__init__(self)
 
 	def __str__(self):
-		return _('Session bus is not available')
+		return _('Session bus is not available.\nTry reading http://trac.gajim.org/wiki/GajimDBus')
