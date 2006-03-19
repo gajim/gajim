@@ -277,7 +277,7 @@ class GroupchatControl(ChatControlBase):
 		if chatstate == 'attention' and (not has_focus or not current_tab):
 			self.attention_flag = True
 			color = gajim.config.get_per('themes', theme,
-							'state_muc_directed_msg')
+							'state_muc_directed_msg_color')
 		elif chatstate:
 			if chatstate == 'active' or (current_tab and has_focus):
 				self.attention_flag = False
@@ -285,7 +285,7 @@ class GroupchatControl(ChatControlBase):
 								'state_active_color')
 			elif chatstate == 'newmsg' and (not has_focus or not current_tab) and\
 					not self.attention_flag:
-				color = gajim.config.get_per('themes', theme, 'state_muc_msg')
+				color = gajim.config.get_per('themes', theme, 'state_muc_msg_color')
 		if color:
 			color = gtk.gdk.colormap_get_system().alloc_color(color)
 
