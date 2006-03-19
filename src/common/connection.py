@@ -636,7 +636,12 @@ class Connection(ConnectionHandlers):
 					kind = 'single_msg_sent'
 				gajim.logger.write(kind, jid, log_msg)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
-
+	
+	def send_stanza(self, stanza):
+		''' send a stanza untouched '''
+		if not self.connection:
+			return
+		self.connection.send(stanza)
 	
 	def ack_subscribed(self, jid):
 		if not self.connection:
