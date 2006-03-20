@@ -82,7 +82,7 @@ class ChatControlBase(MessageControl):
 		if font.get_size() == 0:
 			font_attrs = '%s size="x-large"' % font_attrs
 		font.set_weight(pango.WEIGHT_NORMAL)
-		font_attrs_small = 'font_desc="%s" size="small"' % font.to_string()
+		font_attrs_small = 'font_desc="%s" size="medium"' % font.to_string()
 		return (font_attrs, font_attrs_small)
 			
 	def draw_banner(self):
@@ -754,7 +754,8 @@ class ChatControl(ChatControlBase):
 
 		if self.contact.jid in gajim.encrypted_chats[self.account]:
 			self.xml.get_widget('gpg_togglebutton').set_active(True)
-
+		
+		self.status_tooltip = gtk.Tooltips()
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
@@ -910,13 +911,16 @@ class ChatControl(ChatControlBase):
 			# weight="heavy" size="x-large"
 			label_text = '<span %s>%s</span><span %s>%s</span>' % \
 										(font_attrs, name, font_attrs_small, acct_info)
-		
 		if status:
 			label_text += '\n<span %s>%s</span>' %\
 											(font_attrs_small, status)
-
+			banner_eventbox = self.xml.get_widget('banner_eventbox')
+			self.status_tooltip.set_tip(banner_eventbox, status)
+		else:
+			self.status_tooltip.disable()
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
+		
 	
 	def _update_gpg(self):
 		tb = self.xml.get_widget('gpg_togglebutton')
