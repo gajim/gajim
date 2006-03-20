@@ -306,43 +306,16 @@ class HistoryManager:
 	def on_logs_listview_key_press_event(self, widget, event):
 		liststore, list_of_paths = self.logs_listview.get_selection()\
 			.get_selected_rows()
-		paths_len = len(list_of_paths)
-		if paths_len == 0: # nothing is selected
-			return
-			
 		if event.keyval == gtk.keysyms.Delete:
-			pri_text = i18n.ngettext(
-				'Do you really want to delete the selected message?',
-				'Do you really want to delete the selected messages?', paths_len)
-			dialog = dialogs.ConfirmationDialog(pri_text,
-				_('This is an irreversible operation.'))
-			if dialog.get_response() != gtk.RESPONSE_OK:
-				return
+			self._delete_logs(liststore, list_of_paths)
 			
-			# delete rows from db that match log_line_id
-			list_of_rowrefs = []
-			for path in list_of_paths: # make them treerowrefs (it's needed)
-				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
-			
-			for rowref in list_of_rowrefs:
-				path = rowref.get_path()
-				if path is None:
-					continue
-				log_line_id = liststore[path][0]
-				del liststore[path] # remove from UI
-				# remove from db
-				self.cur.execute('''
-					DELETE FROM logs
-					WHERE log_line_id = ?
-					''', (log_line_id,))
-		
-			self.con.commit()
-			
-			self.AT_LEAST_ONE_DELETION_DONE = True
-
-	def on_jids_listview_button_press_event(self, widget, event):
+	def on_listview_button_press_event(self, widget, event):
 		if event.button == 3: # right click
 			xml = gtk.glade.XML('history_manager.glade', 'context_menu', i18n.APP)
+			if widget.name != "jids_listview":
+				xml.get_widget('export_menuitem').hide()
+			xml.get_widget('delete_menuitem').connect('activate',\
+				self.on_delete_menuitem_activate, widget)
 			
 			liststore, list_of_paths = self.jids_listview.get_selection()\
 				.get_selected_rows()
@@ -350,6 +323,7 @@ class HistoryManager:
 			xml.signal_autoconnect(self)
 			xml.get_widget('context_menu').popup(None, None, None,
 				event.button, event.time)
+			return True
 
 	def on_export_menuitem_activate(self, widget):
 		xml = gtk.glade.XML('history_manager.glade', 'filechooserdialog', i18n.APP)
@@ -370,10 +344,14 @@ class HistoryManager:
 		
 		dlg.destroy()	
 	
-	def on_delete_menuitem_activate(self, widget):
-		liststore, list_of_paths = self.jids_listview.get_selection()\
-			.get_selected_rows()
-		self._delete_jid_logs(liststore, list_of_paths)
+	def on_delete_menuitem_activate(self, widget, listview):
+		liststore, list_of_paths = listview.get_selection().get_selected_rows()
+		if listview.name == "jids_listview":
+			self._delete_jid_logs(liststore, list_of_paths)
+		elif listview.name in ("logs_listview", "search_results_listview"):
+			self._delete_logs(liststore, list_of_paths)
+		else: # Huh ? We don't know this widget
+			return
 
 	def on_jids_listview_key_press_event(self, widget, event):
 		liststore, list_of_paths = self.jids_listview.get_selection()\
@@ -469,6 +447,41 @@ class HistoryManager:
 		self.con.commit()
 		
 		self.AT_LEAST_ONE_DELETION_DONE = True
+		
+	def _delete_logs(self, liststore, list_of_paths):
+		paths_len = len(list_of_paths)
+		if paths_len == 0: # nothing is selected
+			return
+			
+		pri_text = i18n.ngettext(
+			'Do you really want to delete the selected message?',
+			'Do you really want to delete the selected messages?', paths_len)
+		dialog = dialogs.ConfirmationDialog(pri_text,
+			_('This is an irreversible operation.'))
+		if dialog.get_response() != gtk.RESPONSE_OK:
+			return
+		
+		# delete rows from db that match log_line_id
+		list_of_rowrefs = []
+		for path in list_of_paths: # make them treerowrefs (it's needed)
+			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+		
+		for rowref in list_of_rowrefs:
+			path = rowref.get_path()
+			if path is None:
+				continue
+			log_line_id = liststore[path][0]
+			del liststore[path] # remove from UI
+			# remove from db
+			self.cur.execute('''
+				DELETE FROM logs
+				WHERE log_line_id = ?
+				''', (log_line_id,))
+	
+		self.con.commit()
+		
+		self.AT_LEAST_ONE_DELETION_DONE = True
+
 
 	def on_search_db_button_clicked(self, widget):
 		text = self.search_entry.get_text()

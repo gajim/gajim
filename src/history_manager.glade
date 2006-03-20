@@ -54,7 +54,7 @@
 		  <property name="hover_selection">False</property>
 		  <property name="hover_expand">False</property>
 		  <signal name="key_press_event" handler="on_jids_listview_key_press_event" last_modification_time="Sat, 04 Feb 2006 22:27:05 GMT"/>
-		  <signal name="button_press_event" handler="on_jids_listview_button_press_event" last_modification_time="Fri, 10 Feb 2006 15:11:21 GMT"/>
+		  <signal name="button_press_event" handler="on_listview_button_press_event" last_modification_time="Fri, 10 Feb 2006 15:11:21 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
@@ -118,6 +118,7 @@ You can select logs from the left and/or search database from below.
 		      <property name="fixed_height_mode">False</property>
 		      <property name="hover_selection">False</property>
 		      <property name="hover_expand">False</property>
+		      <signal name="button_press_event" handler="on_listview_button_press_event" last_modification_time="Fri, 10 Feb 2006 15:11:21 GMT"/>
 		      <signal name="key_press_event" handler="on_logs_listview_key_press_event" last_modification_time="Sat, 04 Feb 2006 15:01:22 GMT"/>
 		    </widget>
 		  </child>
@@ -148,6 +149,7 @@ You can select logs from the left and/or search database from below.
 		      <property name="fixed_height_mode">False</property>
 		      <property name="hover_selection">False</property>
 		      <property name="hover_expand">False</property>
+		      <signal name="button_press_event" handler="on_listview_button_press_event" last_modification_time="Fri, 10 Feb 2006 15:11:21 GMT"/>
 		      <signal name="row_activated" handler="on_search_results_listview_row_activated" last_modification_time="Sat, 04 Feb 2006 23:48:46 GMT"/>
 		    </widget>
 		  </child>
@@ -304,7 +306,6 @@ You can select logs from the left and/or search database from below.
       <property name="visible">True</property>
       <property name="label" translatable="yes">Delete</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="on_delete_menuitem_activate" last_modification_time="Fri, 10 Feb 2006 15:20:26 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image2">
