@@ -904,16 +904,16 @@ class ChatControl(ChatControlBase):
 				chatstate = helpers.get_uf_chatstate(cs)
 			
 			label_text = \
-	'<span %s>%s</span><span font_desc="%s" size="medium">%s %s</span>' % \
+	'<span %s>%s</span><span font_desc="%s" size="small">%s %s</span>' % \
 				(font_attrs, name, font.to_string(), acct_info, chatstate)
 		else:
 			# weight="heavy" size="x-large"
 			label_text = \
-		'<span %s>%s</span><span font_desc="%s" size="medium">%s</span>' % \
+		'<span %s>%s</span><span font_desc="%s" size="small">%s</span>' % \
 					(font_attrs, name, font.to_string(), acct_info)
 		
 		if status:
-			label_text += '\n<span font_desc="%s" size="medium">%s</span>' %\
+			label_text += '\n<span font_desc="%s" size="small">%s</span>' %\
 											(font.to_string(), status)
 
 		# setup the label that holds name and jid
