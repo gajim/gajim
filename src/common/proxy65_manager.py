@@ -39,8 +39,10 @@ class Proxy65Manager:
 		# dict {proxy: proxy properties}
 		self.idlequeue = idlequeue
 		self.proxies = {}
+		# dict {account: proxy} default proxy for account
+		self.default_proxies = {}
 	
-	def resolve(self, proxy, connection):
+	def resolve(self, proxy, connection, default = None):
 		''' start '''
 		if self.proxies.has_key(proxy):
 			resolver = self.proxies[proxy]
@@ -49,10 +51,9 @@ class Proxy65Manager:
 			resolver = ProxyResolver(proxy)
 			self.proxies[proxy] = resolver
 			resolver.add_connection(connection)
-		
-		if resolver.state == S_FINISHED:
-			# resolving this proxy is already started or completed
-			return
+		if default:
+			# add this proxy as default for account
+			self.default_proxies[default] = proxy
 	
 	def disconnect(self, connection):
 		for resolver in self.proxies.values():
@@ -78,7 +79,11 @@ class Proxy65Manager:
 				resolver.keep_conf()
 				break
 	
-	def get_proxy(self, proxy):
+	def get_default_for_name(self, account):
+		if self.default_proxies.has_key(account):
+			return self.default_proxies[account]
+	
+	def get_proxy(self, proxy, account):
 		if self.proxies.has_key(proxy):
 			resolver = self.proxies[proxy]
 			if resolver.state == S_FINISHED:

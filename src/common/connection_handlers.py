@@ -113,8 +113,15 @@ class ConnectionBytestream:
 		proxyhosts = []
 		if fast and cfg_proxies:
 			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
+			default = gajim.proxy65_manager.get_default_for_name(self.name)
+			if default:
+				# add/move default proxy at top of the others
+				if proxies.__contains__(default):
+					proxies.remove(default)
+				proxies.insert(0, default)
+			
 			for proxy in proxies:
-				(host, _port, jid) = gajim.proxy65_manager.get_proxy(proxy)
+				(host, _port, jid) = gajim.proxy65_manager.get_proxy(proxy, self.name)
 				if host is None:
 					continue
 				host_dict={
@@ -496,16 +503,16 @@ class ConnectionBytestream:
 
 class ConnectionDisco:
 	''' hold xmpppy handlers and public methods for discover services'''
-	def discoverItems(self, jid, node = None):
+	def discoverItems(self, jid, node = None, id_prefix = None):
 		'''According to JEP-0030: jid is mandatory,
 		name, node, action is optional.'''
-		self._discover(common.xmpp.NS_DISCO_ITEMS, jid, node)
+		self._discover(common.xmpp.NS_DISCO_ITEMS, jid, node, id_prefix)
 
-	def discoverInfo(self, jid, node = None):
+	def discoverInfo(self, jid, node = None, id_prefix = None):
 		'''According to JEP-0030:
 			For identity: category, type is mandatory, name is optional.
 			For feature: var is mandatory'''
-		self._discover(common.xmpp.NS_DISCO_INFO, jid, node)
+		self._discover(common.xmpp.NS_DISCO_INFO, jid, node, id_prefix)
 	
 	def request_register_agent_info(self, agent):
 		if not self.connection:
@@ -556,10 +563,13 @@ class ConnectionDisco:
 			common.xmpp.features_nb.register(self.connection, agent, info, None)
 	
 	
-	def _discover(self, ns, jid, node = None):
+	def _discover(self, ns, jid, node = None, id_prefix = None):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
+		if id_prefix:
+			id = self.connection.getAnID()
+			iq.setID('%s%s' % (id_prefix, id))
 		if node:
 			iq.setQuerynode(node)
 		self.connection.send(iq)
@@ -617,7 +627,14 @@ class ConnectionDisco:
 				attr[key] = i.getAttrs()[key]
 			items.append(attr)
 		jid = helpers.get_full_jid_from_iq(iq_obj)
-		self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
+		hostname = gajim.config.get_per('accounts', self.name, 
+													'hostname')
+		id = iq_obj.getID()
+		if jid == hostname and id[0] == 'p':
+			for item in items:
+				self.discoverInfo(item['jid'], id_prefix='p')
+		else:
+			self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
 	def _DiscoverInfoGetCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoGetCB')
@@ -662,7 +679,11 @@ class ConnectionDisco:
 			elif i.getName() == 'x' and i.getAttr('xmlns') == common.xmpp.NS_DATA:
 				data.append(common.xmpp.DataForm(node=i))
 		jid = helpers.get_full_jid_from_iq(iq_obj)
+		id = iq_obj.getID()
 		if identities: #if not: an error occured
+			if id[0] == 'p':
+				if features.__contains__(common.xmpp.NS_BYTESTREAM):
+					gajim.proxy65_manager.resolve(jid, self.connection, self.name)
 			self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
 				features, data))
 
@@ -1488,6 +1509,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
 			for proxy in proxies:
 				gajim.proxy65_manager.resolve(proxy, self.connection)
+			self.discoverItems(gajim.config.get_per('accounts', self.name, 
+												'hostname'), id_prefix='p')
 	
 	def _on_roster_set(self, roster):
 		raw_roster = roster.getRaw()
