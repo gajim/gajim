@@ -246,11 +246,6 @@ class Config:
 			'user': [ opt_str, '' ],
 			'pass': [ opt_str, '' ],
 		}, {}),
-		'ft_proxies65_cache': ({
-			'host': [ opt_str, ''],
-			'port': [ opt_str, '7777'],
-			'jid': [ opt_str, ''],
-		}, {}),
 		'themes': ({
 			'accounttextcolor': [ opt_color, 'black', '', True ],
 			'accountbgcolor': [ opt_color, 'white', '', True ],
@@ -516,8 +511,3 @@ class Config:
 		# set initial cache values for proxie65 hosts
 		for proxy in self.ft_proxies65_default:
 			default = self.ft_proxies65_default[proxy]
-			self.add_per('ft_proxies65_cache', proxy)
-			self.set_per('ft_proxies65_cache', proxy, 'host', default[0])
-			self.set_per('ft_proxies65_cache', proxy, 'port', default[1])
-			self.set_per('ft_proxies65_cache', proxy, 'jid', default[2])
-		return
