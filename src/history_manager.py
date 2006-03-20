@@ -312,9 +312,9 @@ class HistoryManager:
 	def on_listview_button_press_event(self, widget, event):
 		if event.button == 3: # right click
 			xml = gtk.glade.XML('history_manager.glade', 'context_menu', i18n.APP)
-			if widget.name != "jids_listview":
+			if widget.name != 'jids_listview':
 				xml.get_widget('export_menuitem').hide()
-			xml.get_widget('delete_menuitem').connect('activate',\
+			xml.get_widget('delete_menuitem').connect('activate',
 				self.on_delete_menuitem_activate, widget)
 			
 			liststore, list_of_paths = self.jids_listview.get_selection()\
@@ -346,9 +346,9 @@ class HistoryManager:
 	
 	def on_delete_menuitem_activate(self, widget, listview):
 		liststore, list_of_paths = listview.get_selection().get_selected_rows()
-		if listview.name == "jids_listview":
+		if listview.name == 'jids_listview':
 			self._delete_jid_logs(liststore, list_of_paths)
-		elif listview.name in ("logs_listview", "search_results_listview"):
+		elif listview.name in ('logs_listview', 'search_results_listview'):
 			self._delete_logs(liststore, list_of_paths)
 		else: # Huh ? We don't know this widget
 			return
