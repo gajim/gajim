@@ -308,7 +308,7 @@ def get_name_from_jid(account, jid):
 def popup_window(account):
 	autopopup = config.get('autopopup')
 	autopopupaway = config.get('autopopupaway')
-	if autopopup and (autopopupaway or connections[account].connected > 3):
+	if autopopup and (autopopupaway or connections[account].connected  in (2, 3)):
 		return True
 	return False
 
