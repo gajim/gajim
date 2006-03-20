@@ -59,7 +59,32 @@ GTKGUI_GLADE = 'gtkgui.glade'
 class ChatControlBase(MessageControl):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
-	
+	def get_font_attrs(self):
+		''' get pango font  attributes for banner from theme settings '''
+		theme = gajim.config.get('roster_theme')
+		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
+		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
+		
+		if bannerfont:
+			font = pango.FontDescription(bannerfont)
+		else:
+			font = pango.FontDescription('Normal')
+		if bannerfontattrs:
+			# B attribute is set by default
+			if 'B' in bannerfontattrs:
+				font.set_weight(pango.WEIGHT_HEAVY)
+			if 'I' in bannerfontattrs:
+				font.set_style(pango.STYLE_ITALIC)
+		
+		font_attrs = 'font_desc="%s"' % font.to_string()
+		
+		# in case there is no font specified we use x-large font size
+		if font.get_size() == 0:
+			font_attrs = '%s size="x-large"' % font_attrs
+		font.set_weight(pango.WEIGHT_NORMAL)
+		font_attrs_small = 'font_desc="%s" size="small"' % font.to_string()
+		return (font_attrs, font_attrs_small)
+			
 	def draw_banner(self):
 		self._paint_banner()
 		self._update_banner_state_image()
@@ -862,33 +887,9 @@ class ChatControl(ChatControlBase):
 		#	fulljid += '/' + self.contacts[jid].resource
 		#label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
 		#	% (name, fulljid)
-		
-		# get banner font settings
-		theme = gajim.config.get('roster_theme')
-		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
-		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
-		
-		if bannerfont:
-			font = pango.FontDescription(bannerfont)
-		else:
-			font = pango.FontDescription('Normal')
-		if bannerfontattrs:
-			# B is attribute set by default
-			if 'B' in bannerfontattrs:
-				font.set_weight(pango.WEIGHT_HEAVY)
-			if 'I' in bannerfontattrs:
-				font.set_style(pango.STYLE_ITALIC)
-		
-		font_attrs = 'font_desc="%s"' % font.to_string()
-		font_size = font.get_size()
-		
-		# in case there is no font specified we use x-large font size
-		if font_size == 0:
-			font_attrs = '%s size="x-large"' % font_attrs
-		
+		font_attrs, font_attrs_small = self.get_font_attrs()
 		st = gajim.config.get('chat_state_notifications')
 		cs = contact.chatstate
-		font.set_weight(pango.WEIGHT_NORMAL)
 		if cs and st in ('composing_only', 'all'):
 			if contact.show == 'offline':
 				chatstate = ''
@@ -903,18 +904,16 @@ class ChatControl(ChatControlBase):
 			elif chatstate is None:
 				chatstate = helpers.get_uf_chatstate(cs)
 			
-			label_text = \
-	'<span %s>%s</span><span font_desc="%s" size="small">%s %s</span>' % \
-				(font_attrs, name, font.to_string(), acct_info, chatstate)
+			label_text = '<span %s>%s</span><span %s>%s %s</span>' % \
+							(font_attrs, name, font_attrs_small, acct_info, chatstate)
 		else:
 			# weight="heavy" size="x-large"
-			label_text = \
-		'<span %s>%s</span><span font_desc="%s" size="small">%s</span>' % \
-					(font_attrs, name, font.to_string(), acct_info)
+			label_text = '<span %s>%s</span><span %s>%s</span>' % \
+										(font_attrs, name, font_attrs_small, acct_info)
 		
 		if status:
-			label_text += '\n<span font_desc="%s" size="small">%s</span>' %\
-											(font.to_string(), status)
+			label_text += '\n<span %s>%s</span>' %\
+											(font_attrs_small, status)
 
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)

@@ -560,10 +560,10 @@ class GroupchatControl(ChatControlBase):
 		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
 		subject = gtkgui_helpers.reduce_chars_newlines(subject, 0, 2)
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
-		text = '<span weight="heavy" size="x-large">%s</span>' % \
-			self.room_jid
+		font_attrs, font_attrs_small = self.get_font_attrs()
+		text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
 		if subject:
-			text += '\n%s' % subject
+			text += '\n<span %s>%s</span>' % (font_attrs_small, subject)
 		self.name_label.set_markup(text)
 		event_box = self.name_label.get_parent()
 		if subject == '':
