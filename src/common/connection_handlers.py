@@ -285,7 +285,9 @@ class ConnectionBytestream:
 	def _bytestreamErrorCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamErrorCB')
 		id = unicode(iq_obj.getAttr('id'))
+		frm = helpers.get_full_jid_from_iq(iq_obj)
 		query = iq_obj.getTag('query')
+		gajim.proxy65_manager.error_cb(frm, query)
 		jid = helpers.get_jid_from_iq(iq_obj)
 		id = id[3:]
 		if not self.files_props.has_key(id):

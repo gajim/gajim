@@ -626,6 +626,15 @@ distro_info = {
 	'Redhat Linux': '/etc/redhat-release'
 }
 
+def get_random_string_16():
+	''' create random string of length 16'''
+	rng = range(65, 90)
+	rng.extend(range(48, 57))
+	char_sequence = map(lambda e:chr(e), rng)
+	from random import sample
+	return reduce(lambda e1, e2: e1 + e2, 
+			sample(char_sequence, 16))
+	
 def get_os_info():
 	if os.name == 'nt':
 		ver = os.sys.getwindowsversion()

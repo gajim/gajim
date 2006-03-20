@@ -525,15 +525,6 @@ _('Connection with peer cannot be established.'))
 				return iter
 			iter = self.model.iter_next(iter)
 	
-	def get_sid(self):
-		''' create random string of length 16'''
-		rng = range(65, 90)
-		rng.extend(range(48, 57))
-		char_sequence = map(lambda e:chr(e), rng)
-		from random import sample
-		return reduce(lambda e1, e2: e1 + e2, 
-				sample(char_sequence, 16))
-	
 	def get_send_file_props(self, account, contact, file_path, file_name):
 		''' create new file_props dict and set initial file transfer 
 		properties in it'''
@@ -551,7 +542,7 @@ _('Connection with peer cannot be established.'))
 			return None
 		file_props['elapsed-time'] = 0
 		file_props['size'] = unicode(stat[6])
-		file_props['sid'] = self.get_sid()
+		file_props['sid'] = helpers.get_random_string_16()
 		file_props['completed'] = False
 		file_props['started'] = False
 		file_props['sender'] = account

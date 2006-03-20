@@ -18,12 +18,14 @@ import struct
 
 import common.xmpp
 from common import gajim
+from common import helpers
 from socks5 import Socks5
 from common.xmpp.idlequeue import IdleObject
 
 S_INITIAL = 0
 S_STARTED = 1
 S_RESOLVED = 2
+S_ACTIVATED = 3
 S_FINISHED = 4
 
 CONNECT_TIMEOUT = 20
@@ -68,6 +70,15 @@ class Proxy65Manager:
 				self.proxies[proxy].resolve_result(host, port, jid)
 				# we can have only one streamhost
 				raise common.xmpp.NodeProcessed
+	
+	def error_cb(self, proxy, query):
+		if not self.proxies.has_key(proxy):
+			return
+		resolver = self.proxies[proxy]
+		sid = query.getAttr('sid')
+		if resolver.sid == sid:
+			resolver.keep_conf()
+	
 	def get_proxy(self, proxy):
 		if self.proxies.has_key(proxy):
 			resolver = self.proxies[proxy]
@@ -87,11 +98,16 @@ class ProxyResolver:
 		self.host_tester.connect()
 	
 	def _on_connect_success(self):
-		conf = gajim.config
-		conf.add_per('ft_proxies65_cache', self.proxy)
-		conf.set_per('ft_proxies65_cache', self.proxy, 'host', self.host)
-		conf.set_per('ft_proxies65_cache', self.proxy, 'port', self.port)
-		conf.set_per('ft_proxies65_cache', self.proxy, 'jid', self.jid)
+		iq = common.xmpp.Protocol(name = 'iq', to = self.jid, typ = 'set')
+		query = iq.setTag('query')
+		query.setNamespace(common.xmpp.NS_BYTESTREAM)
+		query.setAttr('sid',  self.sid)
+		activate = query.setTag('activate')
+		# activate.setData(self.jid + "/" + self.sid)
+		self.active_connection.send(iq)
+		self.state = S_ACTIVATED
+		
+	def keep_conf(self):
 		self.state = S_FINISHED
 	
 	def _on_connect_failure(self):
@@ -139,6 +155,7 @@ class ProxyResolver:
 		self.jid = None
 		self.host = None
 		self.port = None
+		self.sid = helpers.get_random_string_16()
 		
 class HostTester(Socks5, IdleObject):
 	''' fake proxy tester. '''
