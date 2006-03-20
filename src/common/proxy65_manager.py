@@ -72,12 +72,11 @@ class Proxy65Manager:
 				raise common.xmpp.NodeProcessed
 	
 	def error_cb(self, proxy, query):
-		if not self.proxies.has_key(proxy):
-			return
-		resolver = self.proxies[proxy]
 		sid = query.getAttr('sid')
-		if resolver.sid == sid:
-			resolver.keep_conf()
+		for resolver in self.proxies.values():
+			if resolver.sid == sid:
+				resolver.keep_conf()
+				break
 	
 	def get_proxy(self, proxy):
 		if self.proxies.has_key(proxy):

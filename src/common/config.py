@@ -226,7 +226,7 @@ class Config:
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
 			# proxy65 for FT
 			'file_transfer_proxies': [opt_str, 
-			'proxy.jabber.org, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se, proxy.netlab.cz, proxy65.jabber.ccc.de'],
+			'proxy.jabber.org, proxy.netlab.cz, transfer.jabber.freenet.de, proxy65.jabber.ccc.de, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se'],
 			'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 			'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
 			'msgwin-width': [opt_int, 480],
