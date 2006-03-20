@@ -916,6 +916,7 @@ class ChatControl(ChatControlBase):
 											(font_attrs_small, status)
 			banner_eventbox = self.xml.get_widget('banner_eventbox')
 			self.status_tooltip.set_tip(banner_eventbox, status)
+			self.status_tooltip.enable()
 		else:
 			self.status_tooltip.disable()
 		# setup the label that holds name and jid
