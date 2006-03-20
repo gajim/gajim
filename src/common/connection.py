@@ -138,6 +138,7 @@ class Connection(ConnectionHandlers):
 		self.old_show = STATUS_LIST[self.connected]
 		self.connected = 0
 		self.dispatch('STATUS', 'offline')
+		gajim.proxy65_manager.disconnect(self.connection)
 		self.connection = None
 		if not self.on_purpose:
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
@@ -561,6 +562,7 @@ class Connection(ConnectionHandlers):
 	def _on_disconnected(self):
 		''' called when a disconnect request has completed successfully'''
 		self.dispatch('STATUS', 'offline')
+		gajim.proxy65_manager.disconnect(self.connection)
 		self.connection = None
 
 	def get_status(self):

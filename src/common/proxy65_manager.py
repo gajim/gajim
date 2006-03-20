@@ -54,8 +54,8 @@ class Proxy65Manager:
 			# resolving this proxy is already started or completed
 			return
 	
-	def diconnect(self, connection):
-		for resolver in self.proxies:
+	def disconnect(self, connection):
+		for resolver in self.proxies.values():
 			resolver.disconnect(connection)
 	
 	def resolve_result(self, proxy, query):
@@ -103,8 +103,11 @@ class ProxyResolver:
 		query.setAttr('sid',  self.sid)
 		activate = query.setTag('activate')
 		# activate.setData(self.jid + "/" + self.sid)
-		self.active_connection.send(iq)
-		self.state = S_ACTIVATED
+		if self.active_connection:
+			self.active_connection.send(iq)
+			self.state = S_ACTIVATED
+		else:
+			self.state = S_INITIAL
 		
 	def keep_conf(self):
 		self.state = S_FINISHED
@@ -119,11 +122,15 @@ class ProxyResolver:
 		if self.host_tester:
 			self.host_tester.disconnect()
 			self.host_tester = None
-		if self.connections.has_key(connection):
+		try:
 			self.connections.remove(connection)
-			if self.state == S_STARTED:
-				self.state = S_INITIAL
-				self.try_next_connection()
+		except ValueError:
+			pass
+		if self.state != S_FINISHED and connection == \
+								self.active_connection:
+			self.active_connection = None
+			self.state = S_INITIAL
+			self.try_next_connection()
 	
 	def try_next_connection(self):
 		''' try to resolve proxy with the next possible connection '''
@@ -149,6 +156,7 @@ class ProxyResolver:
 	def __init__(self, proxy):
 		self.proxy = proxy
 		self.state = S_INITIAL
+		self.active_connection = None
 		self.connections = []
 		self.host_tester = None
 		self.jid = None
