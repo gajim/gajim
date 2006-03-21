@@ -1401,7 +1401,10 @@ class ChatControl(ChatControlBase):
 	def read_queue(self):
 		'''read queue and print messages containted in it'''
 		jid = self.contact.jid
-		l = gajim.awaiting_events[self.account][jid]
+		fjid = jid
+		if self.resource:
+			fjid += '/' + self.resource
+		l = gajim.awaiting_events[self.account][fjid]
 
 		# Is it a pm ?
 		is_pm = False
@@ -1436,9 +1439,9 @@ class ChatControl(ChatControlBase):
 			gajim.interface.roster.show_title()
 		# Keep only non-messages events
 		if len(events_to_keep):
-			gajim.awaiting_events[self.account][jid] = events_to_keep
+			gajim.awaiting_events[self.account][fjid] = events_to_keep
 		else:
-			del gajim.awaiting_events[self.account][jid]
+			del gajim.awaiting_events[self.account][fjid]
 		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
 		if is_pm:

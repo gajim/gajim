@@ -1925,7 +1925,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		mw.new_tab(chat_control)
 
-		if gajim.awaiting_events[account].has_key(contact.jid):
+		if gajim.awaiting_events[account].has_key(fjid):
 			# We call this here to avoid race conditions with widget validation
 			chat_control.read_queue()
 
