@@ -523,7 +523,7 @@ class RosterWindow:
 		pass #FIXME: impement disco in users for 0.9
 	
 	def on_history_manager_menuitem_activate(self, widget):
-		os.system('python history_manager.py')
+		os.system('python history_manager.py &')
 
 	def get_and_connect_advanced_menuitem_menu(self, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_menuitem_menu', APP)
