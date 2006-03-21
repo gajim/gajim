@@ -86,7 +86,6 @@ class HistoryManager:
 		
 		self.search_entry.grab_focus()
 
-		self.window.maximize()
 		self.window.show_all()
 		
 		xml.signal_autoconnect(self)
@@ -159,7 +158,8 @@ class HistoryManager:
 	def on_history_manager_window_delete_event(self, widget, event):
 		if self.AT_LEAST_ONE_DELETION_DONE:
 			dialog = dialogs.YesNoDialog(
-				_('Do you want to clean up the database?'),
+				_('Do you want to clean up the database? '
+				'(STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)'),
 				_('Normally allocated database size will not be freed, '
 					'it will just become reusable. If you really want to reduce '
 					'database filesize, click YES, else click NO.'

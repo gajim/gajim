@@ -77,7 +77,8 @@
 
 You can select logs from the left and/or search database from below.
 
-&lt;b&gt;NOTE:&lt;/b&gt; If you plan to do massive deletions, please make sure Gajim is not running.</property>
+&lt;span background=&quot;lightyellow&quot;&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you plan to do massive deletions, please make sure Gajim is not running.
+Generally avoid deletions with contacts you currently chat with.&lt;/span&gt;</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
