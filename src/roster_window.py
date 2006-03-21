@@ -521,6 +521,9 @@ class RosterWindow:
 
 	def on_online_users_menuitem_activate(self, widget, account):
 		pass #FIXME: impement disco in users for 0.9
+	
+	def on_history_manager_menuitem_activate(self, widget):
+		os.system('python history_manager.py')
 
 	def get_and_connect_advanced_menuitem_menu(self, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_menuitem_menu', APP)
@@ -641,7 +644,7 @@ class RosterWindow:
 
 		if at_least_one_account_connected: #FIXME: move this below where we do this check
 			#and make sure it works
-			newitem = gtk.SeparatorMenuItem() # seperator
+			newitem = gtk.SeparatorMenuItem() # separator
 			sub_menu.append(newitem)
 
 			newitem = gtk.ImageMenuItem(_('Manage Bookmarks...'))
@@ -701,6 +704,16 @@ class RosterWindow:
 				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
 					account)
 				item.set_submenu(advanced_menuitem_menu)
+			
+			item = gtk.SeparatorMenuItem() # separator
+			sub_menu.append(item)
+			
+			item = gtk.ImageMenuItem(_('History Manager'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL,
+				gtk.ICON_SIZE_MENU)
+			item.set_image(icon)
+			sub_menu.append(item)
+			item.connect('activate', self.on_history_manager_menuitem_activate)
 
 			advanced_menuitem.set_submenu(sub_menu)
 			sub_menu.show_all()
@@ -1131,13 +1144,13 @@ class RosterWindow:
 		add_special_notification_menuitem.hide()
 		add_special_notification_menuitem.set_no_show_all(True)
 
-		#skip a seperator
+		#skip a separator
 		subscription_menuitem = xml.get_widget('subscription_menuitem')
 		send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem =\
 			subscription_menuitem.get_submenu().get_children()
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		remove_from_roster_menuitem = xml.get_widget('remove_from_roster_menuitem')
-		#skip a seperator
+		#skip a separator
 		information_menuitem = xml.get_widget('information_menuitem')
 		history_menuitem = xml.get_widget('history_menuitem')
 
@@ -1279,7 +1292,7 @@ class RosterWindow:
 		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
 							account)
 
-		item = gtk.SeparatorMenuItem() # seperator
+		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
 
 		item = gtk.ImageMenuItem(_('_Edit'))
@@ -1338,7 +1351,7 @@ class RosterWindow:
 		childs = account_context_menu.get_children()
 
 		status_menuitem = childs[0]
-		# we skip the seperator
+		# we skip the separator
 		# skip advanced_actions_menuitem, childs[2]
 		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
 		set_motd_menuitem = xml.get_widget('set_motd_menuitem')
@@ -1384,11 +1397,14 @@ class RosterWindow:
 		sub_menu.append(item)
 		item.connect('activate', self.change_status, account, 'offline')
 
-		xml_console_menuitem.connect('activate', self.on_xml_console_menuitem_activate,
+		xml_console_menuitem.connect('activate',
+			self.on_xml_console_menuitem_activate, account)
+		set_motd_menuitem.connect('activate', self.on_set_motd_menuitem_activate,
 			account)
-		set_motd_menuitem.connect('activate', self.on_set_motd_menuitem_activate, account)
-		update_motd_menuitem.connect('activate', self.on_update_motd_menuitem_activate, account)
-		delete_motd_menuitem.connect('activate', self.on_delete_motd_menuitem_activate, account)
+		update_motd_menuitem.connect('activate',
+			self.on_update_motd_menuitem_activate, account)
+		delete_motd_menuitem.connect('activate',
+			self.on_delete_motd_menuitem_activate, account)
 		edit_account_menuitem.connect('activate', self.on_edit_account, account)
 		service_discovery_menuitem.connect('activate',
 			self.on_service_disco_menuitem_activate, account)

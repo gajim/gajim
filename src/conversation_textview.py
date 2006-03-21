@@ -356,7 +356,7 @@ class ConversationTextview(gtk.TextView):
 			childs[1].connect('activate', self.on_open_link_activate, kind, text)
 			childs[2].hide() # copy mail address
 			childs[3].hide() # open mail composer
-			childs[4].hide() # jid section seperator
+			childs[4].hide() # jid section separator
 			childs[5].hide() # start chat
 			childs[6].hide() # join group chat
 			childs[7].hide() # add to roster
