@@ -703,8 +703,8 @@ def sanitize_filename(filename):
 	if os.name == 'nt':
 		filename = filename.replace('?', '').replace(':', '').replace('!', '')\
 			.replace('"', "'")
-	   # 48 is the limit; 44 is used to account for the extenstion.
-		if len(filename) > 44:
-			filename = filename[0:44]
+	   # 48 is the limit
+		if len(filename) > 48:
+			filename = filename[0:48]
 	
 	return filename
