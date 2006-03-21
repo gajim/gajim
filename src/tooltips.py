@@ -185,7 +185,7 @@ class StatusTable:
 				# make sure 'status' is unicode before we send to to reduce_chars
 				if isinstance(status, str):
 					status = unicode(status, encoding='utf-8')
-				status = gtkgui_helpers.reduce_chars_newlines(status, 130, 1)
+				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 1)
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
 	
@@ -357,7 +357,6 @@ class GCTooltip(BaseTooltip):
 	''' Tooltip that is shown in the GC treeview '''
 	def __init__(self):
 		self.account = None
-
 		self.text_label = gtk.Label()
 		self.text_label.set_line_wrap(True)
 		self.text_label.set_alignment(0, 0)
@@ -370,38 +369,32 @@ class GCTooltip(BaseTooltip):
 		if not contact:
 			return
 		self.create_window()
-		hbox = gtk.HBox()
-		hbox.set_homogeneous(False)
-		hbox.set_spacing(2)
+		vcard_table = gtk.Table(3, 1)
+		vcard_table.set_property('column-spacing', 2)
+		vcard_table.set_homogeneous(False)
+		vcard_current_row = 1
+		properties = []
 		
 		if contact.jid.strip() != '':
-			info = '<span size="large" weight="bold">' + contact.jid + '</span>'
+			jid_markup = '<span size="large" weight="bold">' + contact.jid + '</span>'
 		else:
-			info = '<span size="large" weight="bold">' + contact.get_shown_name() \
+			jid_markup = '<span size="large" weight="bold">' + contact.get_shown_name() \
 				+ '</span>'
-			
-		info += '\n<span weight="bold">' + _('Role: ') + '</span>' + \
-			 helpers.get_uf_role(contact.role)
-
-		info += '\n<span weight="bold">' + _('Affiliation: ') + '</span>' + \
-			contact.affiliation.capitalize()
-
-		info += '\n<span weight="bold">' + _('Status: ') + \
-					'</span>' + helpers.get_uf_show(contact.show)
-		
+		properties.append((jid_markup, None))	
+		properties.append((_('Role: '), helpers.get_uf_role(contact.role)))
+		properties.append((_('Affiliation: '), contact.affiliation.capitalize()))
+		show = helpers.get_uf_show(contact.show)
 		if contact.status:
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities
-				info += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
-		
+				show += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
+		properties.append((_('Status: '), show))
 		if hasattr(contact, 'resource') and contact.resource.strip() != '':
-			info += '\n<span weight="bold">' + _('Resource: ') + \
-					'</span>' + gtkgui_helpers.escape_for_pango_markup(
-						contact.resource) 
-
-		self.text_label.set_markup(info)
-		hbox.add(self.text_label)
+			properties.append((_('Resource: '), 
+				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
+		
+		
 
 		# Add avatar
 		puny_name = punycode_encode(contact.name)
@@ -417,9 +410,33 @@ class GCTooltip(BaseTooltip):
 				break
 		else:
 			self.avatar_image.set_from_pixbuf(None)
-		hbox.pack_start(self.avatar_image, False, False)
-
-		self.win.add(hbox)
+		while properties:
+			property = properties.pop(0)
+			vcard_current_row += 1
+			vertical_fill = gtk.FILL
+			if not properties:
+				vertical_fill |= gtk.EXPAND
+			label = gtk.Label()
+			label.set_alignment(0, 0)
+			if property[1]:
+				label.set_markup('<span weight="bold">%s</span>' % property[0])
+				vcard_table.attach(label, 1, 2, vcard_current_row, vcard_current_row + 1, 
+														gtk.FILL,  vertical_fill, 0, 0)
+				label = gtk.Label()
+				label.set_alignment(0, 0)
+				label.set_markup(property[1])
+				label.set_line_wrap(True)
+				vcard_table.attach(label, 2, 3, vcard_current_row, vcard_current_row + 1, 
+										gtk.EXPAND | gtk.FILL, vertical_fill, 0, 0)
+			else:
+				label.set_markup(property[0])
+				vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, 
+															gtk.FILL, vertical_fill, 0)
+		
+		self.avatar_image.set_alignment(0, 0)
+		vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row +1, 
+									gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
+		self.win.add(vcard_table)
 
 class RosterTooltip(NotificationAreaTooltip):
 	''' Tooltip that is shown in the roster treeview '''
@@ -434,9 +451,7 @@ class RosterTooltip(NotificationAreaTooltip):
 
 	def populate(self, contacts):
 		self.create_window()
-		self.vbox = gtk.VBox()
-		self.vbox.set_homogeneous(False)
-		self.vbox.set_spacing(2)
+		
 		self.create_table()
 		if not contacts or len(contacts) == 0:
 			# Tooltip for merged accounts row
@@ -445,8 +460,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			self.table.resize(2, 1)
 			self.spacer_label = ''
 			self.fill_table_with_accounts(accounts)
-			self.vbox.add(self.table)
-			self.win.add(self.vbox)
+			self.win.add(self.table)
 			return
 		
 		
@@ -524,8 +538,8 @@ class RosterTooltip(NotificationAreaTooltip):
 					status = contact.status.strip()
 					if status:
 						# reduce long status
-						# (no more than 130 chars on line and no more than 5 lines)
-						status = gtkgui_helpers.reduce_chars_newlines(status, 130, 5)
+						# (no more than 200 chars on line and no more than 5 lines)
+						status = gtkgui_helpers.reduce_chars_newlines(status, 200, 5)
 						# escape markup entities. 
 						status = gtkgui_helpers.escape_for_pango_markup(status)
 						show += ' - ' + status
@@ -575,9 +589,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		if table_size == 4:
 			vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row +1, 
 										gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
-		self.table.resize(table_size, vcard_current_row)
-		self.vbox.pack_start(vcard_table, True, True)
-		self.win.add(self.vbox)
+		self.win.add(vcard_table)
 
 class FileTransfersTooltip(BaseTooltip):
 	''' Tooltip that is shown in the notification area '''
