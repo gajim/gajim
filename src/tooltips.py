@@ -469,30 +469,12 @@ class RosterTooltip(NotificationAreaTooltip):
 		label.set_alignment(0, 0)
 		label.set_markup('<span size="large" weight="bold">' + prim_contact.jid + '</span>')
 		vcard_table.attach(label, 1, 5, vcard_current_row, vcard_current_row + 1, gtk.FILL, gtk.FILL, 0, 0)
-		vcard_current_row += 1
-		
-		label = gtk.Label()
-		label.set_alignment(0, 0)
-		label.set_markup('<span weight="bold">' + _('Name: ') + '</span>')
-		vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, gtk.FILL, 0, 0, 0)
-		
-		label = gtk.Label()
-		label.set_alignment(0, 0)
-		label.set_markup(gtkgui_helpers.escape_for_pango_markup(prim_contact.get_shown_name()))
-		vcard_table.attach(label, 3, 4, vcard_current_row, vcard_current_row + 1, 
-																				gtk.EXPAND | gtk.FILL, 0, 0, 0)
+		properties = []
+		properties.append(( _('Name: '), gtkgui_helpers.escape_for_pango_markup(
+																			prim_contact.get_shown_name())))
 		if prim_contact.sub:
-			vcard_current_row += 1
-			label = gtk.Label()
-			label.set_alignment(0, 0)
-			label.set_markup('<span weight="bold">' + _('Subscription: ') + '</span>')
-			vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, gtk.FILL, 0, 0, 0)
-			
-			label = gtk.Label()
-			label.set_alignment(0, 0)
-			label.set_markup(gtkgui_helpers.escape_for_pango_markup(prim_contact.sub))
-			vcard_table.attach(label, 3, 4, vcard_current_row, vcard_current_row + 1, gtk.FILL, 0, 0, 0)
-		
+			properties.append(( _('Subscription: '), 
+				gtkgui_helpers.escape_for_pango_markup(prim_contact.sub)))
 		if prim_contact.keyID:
 			keyID = None
 			if len(prim_contact.keyID) == 8:
@@ -500,41 +482,18 @@ class RosterTooltip(NotificationAreaTooltip):
 			elif len(prim_contact.keyID) == 16:
 				keyID = prim_contact.keyID[8:]
 			if keyID:
-				vcard_current_row += 1
-				label = gtk.Label()
-				label.set_alignment(0, 0)
-				label.set_markup('<span weight="bold">' + _('OpenPGP: ')  + '</span>')
-				vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, gtk.FILL, 0, 0, 0)
-				
-				label = gtk.Label()
-				label.set_alignment(0, 0)
-				label.set_markup(gtkgui_helpers.escape_for_pango_markup(keyID))
-				vcard_table.attach(label, 3, 4, vcard_current_row, vcard_current_row + 1, gtk.FILL, 0, 0, 0)
-		
+				properties.append((_('OpenPGP: '),
+					gtkgui_helpers.escape_for_pango_markup(keyID)))
 		num_resources = 0
 		for contact in contacts:
 			if contact.resource:
 				num_resources += 1
 		
 		if num_resources== 1 and contact.resource:
-			vcard_current_row += 1
-			label = gtk.Label()
-			label.set_alignment(0, 0)
-			label.set_markup('<span weight="bold">' + _('Resource: ')  + '</span>')
-			vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, gtk.FILL, 0, 0, 0)
-			
-			label = gtk.Label()
-			label.set_alignment(0, 0)
-			label.set_markup(gtkgui_helpers.escape_for_pango_markup(
-					contact.resource) + ' (' + unicode(contact.priority) + ')')
-			vcard_table.attach(label, 3, 4, vcard_current_row, vcard_current_row + 1, gtk.FILL, 0, 0, 0)
+			properties.append((_('Resource: '),	gtkgui_helpers.escape_for_pango_markup(
+												contact.resource) + ' (' + unicode(contact.priority) + ')'))
 		if num_resources > 1:
-			vcard_current_row += 1
-			label = gtk.Label()
-			label.set_alignment(0, 1)
-			label.set_markup('<span weight="bold">' + _('Status: ')  + '</span>')
-			vcard_table.attach(label, 1, 4, vcard_current_row, vcard_current_row + 1, gtk.FILL, 
-																															gtk.FILL, 0, 0)
+			properties.append((_('Status: '),	''))
 		
 		puny_jid = punycode_encode(prim_contact.jid)
 		for type_ in ('jpeg', 'png'):
@@ -547,9 +506,30 @@ class RosterTooltip(NotificationAreaTooltip):
 				break
 		else:
 			self.avatar_image.set_from_pixbuf(None)
+		
+		while properties:
+			property = properties.pop(0)
+			vcard_current_row += 1
+			label = gtk.Label()
+			label.set_alignment(0, 0)
+			label.set_markup('<span weight="bold">%s</span>' % property[0])
+			vertical_fill = gtk.FILL
+			if not properties:
+				vertical_fill |= gtk.EXPAND
+				
+			vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, 
+																						gtk.FILL,  vertical_fill, 0, 0)
+			label = gtk.Label()
+			if num_resources > 1 and not properties:
+				label.set_alignment(0, 1)
+			else:
+				label.set_alignment(0, 0)
+			label.set_markup(property[1])
+			vcard_table.attach(label, 3, 4, vcard_current_row, vcard_current_row + 1, 
+																	gtk.EXPAND | gtk.FILL, vertical_fill, 0, 0)
 		self.avatar_image.set_alignment(0, 0)
 		vcard_table.attach(self.avatar_image, 4, 5, 2, vcard_current_row +1, gtk.FILL, 
-																							gtk.FILL | gtk.EXPAND, 0, 0)
+																						gtk.FILL | gtk.EXPAND, 3, 0)
 		self.vbox.pack_start(vcard_table, True, True)
 		
 		if num_resources == 1: # only one resource
@@ -568,7 +548,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				label.set_alignment(0, 0)
 				label.set_markup('<span weight="bold">' + _('Status: ')  + '</span>')
 				vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, gtk.FILL, 
-																																gtk.FILL, 0, 0)
+																											gtk.FILL | gtk.EXPAND, 0, 0)
 				
 				label = gtk.Label()
 				label.set_alignment(0, 0)
