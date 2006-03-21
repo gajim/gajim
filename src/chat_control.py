@@ -82,7 +82,7 @@ class ChatControlBase(MessageControl):
 		if font.get_size() == 0:
 			font_attrs = '%s size="x-large"' % font_attrs
 		font.set_weight(pango.WEIGHT_NORMAL)
-		font_attrs_small = 'font_desc="%s" size="medium"' % font.to_string()
+		font_attrs_small = 'font_desc="%s" size="small"' % font.to_string()
 		return (font_attrs, font_attrs_small)
 			
 	def draw_banner(self):
