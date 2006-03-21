@@ -879,7 +879,7 @@ class ChatControl(ChatControlBase):
 		if status is not None:
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
 			status = gtkgui_helpers.reduce_chars_newlines(status, 0, 2)
-		status = gtkgui_helpers.escape_for_pango_markup(status)
+		status_escaped = gtkgui_helpers.escape_for_pango_markup(status)
 
 		#FIXME: uncomment me when we support sending messages to specific resource
 		# composing full jid
@@ -911,9 +911,9 @@ class ChatControl(ChatControlBase):
 			# weight="heavy" size="x-large"
 			label_text = '<span %s>%s</span><span %s>%s</span>' % \
 										(font_attrs, name, font_attrs_small, acct_info)
-		if status:
+		if status_escaped:
 			label_text += '\n<span %s>%s</span>' %\
-											(font_attrs_small, status)
+											(font_attrs_small, status_escaped)
 			banner_eventbox = self.xml.get_widget('banner_eventbox')
 			self.status_tooltip.set_tip(banner_eventbox, status)
 			self.status_tooltip.enable()
