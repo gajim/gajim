@@ -585,46 +585,42 @@ class RosterTooltip(NotificationAreaTooltip):
 class FileTransfersTooltip(BaseTooltip):
 	''' Tooltip that is shown in the notification area '''
 	def __init__(self):
-		self.text_label = gtk.Label()
-		self.text_label.set_line_wrap(True)
-		self.text_label.set_alignment(0, 0)
-		self.text_label.set_selectable(False)
 		BaseTooltip.__init__(self)
 
 	def populate(self, file_props):
+		ft_table = gtk.Table(2, 1)
+		ft_table.set_property('column-spacing', 2)
+		current_row = 1
 		self.create_window()
-		self.hbox = gtk.HBox()
-		text = '<b>' + _('Name: ') + '</b>' 
+		properties = []
 		name = file_props['name']
 		if file_props['type'] == 'r':
 			(file_path, file_name) = os.path.split(file_props['file-name'])
 		else:
 			file_name = file_props['name']
-		text += gtkgui_helpers.escape_for_pango_markup(file_name) 
-		text += '\n<b>' + _('Type: ') + '</b>'
+		properties.append((_('Name: '), 
+			gtkgui_helpers.escape_for_pango_markup(file_name)))
 		if file_props['type'] == 'r':
-			text += _('Download')
-			text += '\n<b>' + _('Sender: ') + '</b>'
+			type =  _('Download')
+			actor = _('Sender: ') 
 			sender = unicode(file_props['sender']).split('/')[0]
 			name = gajim.contacts.get_first_contact_from_jid( 
 				file_props['tt_account'], sender).get_shown_name()
 		else:
-			text += _('Upload')
-			text += '\n<b>' + _('Recipient: ') + '</b>' 
+			type = _('Upload')
+			actor = _('Recipient: ')
 			receiver = file_props['receiver']
 			if hasattr(receiver, 'name'):
 				name = receiver.get_shown_name()
 			else:
 				name = receiver.split('/')[0]
-		text +=  gtkgui_helpers.escape_for_pango_markup(name)
-		text += '\n<b>' + _('Size: ') + '</b>' 
-		text += helpers.convert_bytes(file_props['size'])
-		text += '\n<b>' + _('Transferred: ') + '</b>' 
+		properties.append((_('Type: '), type))
+		properties.append((actor, gtkgui_helpers.escape_for_pango_markup(name)))
+		
 		transfered_len = 0
 		if file_props.has_key('received-len'):
 			transfered_len = file_props['received-len']
-		text += helpers.convert_bytes(transfered_len)
-		text += '\n<b>' + _('Status: ') + '</b>' 
+		properties.append((_('Transferred: '), helpers.convert_bytes(transfered_len)))
 		status = '' 
 		if not file_props.has_key('started') or not file_props['started']:
 			status =  _('Not started')
@@ -649,11 +645,23 @@ class FileTransfersTooltip(BaseTooltip):
 					status = _('Transferring')
 		else:
 			status =  _('Not started')
+		properties.append((_('Status: '), status))
+		while properties:
+			property = properties.pop(0)
+			current_row += 1
+			label = gtk.Label()
+			label.set_alignment(0, 0)
+			label.set_markup('<span weight="bold">%s</span>' % property[0])
+			ft_table.attach(label, 1, 2, current_row, current_row + 1, 
+																gtk.FILL,  gtk.FILL, 0, 0)
+			label = gtk.Label()
+			label.set_alignment(0, 0)
+			label.set_line_wrap(True)
+			label.set_markup(property[1])
+			ft_table.attach(label, 2, 3, current_row, current_row + 1, 
+											gtk.EXPAND | gtk.FILL, gtk.FILL, 0, 0)
 		
-		text += status
-		self.text_label.set_markup(text)
-		self.hbox.add(self.text_label)
-		self.win.add(self.hbox)
+		self.win.add(ft_table)
 
 
 class ServiceDiscoveryTooltip(BaseTooltip):
