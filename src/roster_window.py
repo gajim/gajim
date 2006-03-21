@@ -523,7 +523,13 @@ class RosterWindow:
 		pass #FIXME: impement disco in users for 0.9
 	
 	def on_history_manager_menuitem_activate(self, widget):
-		os.system('python history_manager.py &')
+		if os.name == 'nt': # FIXME: test it actually works..
+			try:
+				os.startfile('history_manager.exe') # if pywin32 is installed we open
+			except: # FIXME: fallback (for windows svn users) to py
+				pass
+		else:
+			os.system('python history_manager.py &')
 
 	def get_and_connect_advanced_menuitem_menu(self, account):
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_menuitem_menu', APP)
