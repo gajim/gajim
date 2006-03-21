@@ -447,9 +447,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			self.vbox.add(self.table)
 			self.win.add(self.vbox)
 			return
-		vcard_table = gtk.Table(5, 1)
-		vcard_table.set_property('column-spacing', 2)
-		vcard_current_row = 1
+		
 		
 		# primary contact
 		prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
@@ -464,14 +462,34 @@ class RosterTooltip(NotificationAreaTooltip):
 			if not iconset:
 				iconset = 'dcraven'
 			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		puny_jid = punycode_encode(prim_contact.jid)
+		table_size = 3
+		
+		for type_ in ('jpeg', 'png'):
+			file = os.path.join(gajim.AVATAR_PATH, puny_jid + '.' + type_)
+			if os.path.exists(file):
+				self.avatar_image.set_from_file(file)
+				pix = self.avatar_image.get_pixbuf()
+				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+				self.avatar_image.set_from_pixbuf(pix)
+				table_size = 4
+				break
+		else:
+			self.avatar_image.set_from_pixbuf(None)
+		vcard_table = gtk.Table(table_size, 1)
+		vcard_table.set_property('column-spacing', 2)
+		vcard_table.set_homogeneous(False)
+		vcard_current_row = 1
 		
 		label = gtk.Label()
 		label.set_alignment(0, 0)
 		label.set_markup('<span size="large" weight="bold">' + prim_contact.jid + '</span>')
-		vcard_table.attach(label, 1, 5, vcard_current_row, vcard_current_row + 1, gtk.FILL, gtk.FILL, 0, 0)
+		
+		vcard_table.attach(label, 1, table_size, vcard_current_row, vcard_current_row + 1, 
+													gtk.EXPAND | gtk.FILL, gtk.FILL, 0, 0)
 		properties = []
 		properties.append(( _('Name: '), gtkgui_helpers.escape_for_pango_markup(
-																			prim_contact.get_shown_name())))
+												prim_contact.get_shown_name())))
 		if prim_contact.sub:
 			properties.append(( _('Subscription: '), 
 				gtkgui_helpers.escape_for_pango_markup(prim_contact.sub)))
@@ -491,71 +509,28 @@ class RosterTooltip(NotificationAreaTooltip):
 		
 		if num_resources== 1 and contact.resource:
 			properties.append((_('Resource: '),	gtkgui_helpers.escape_for_pango_markup(
-												contact.resource) + ' (' + unicode(contact.priority) + ')'))
+							contact.resource) + ' (' + unicode(contact.priority) + ')'))
 		if num_resources > 1:
 			properties.append((_('Status: '),	''))
-		
-		puny_jid = punycode_encode(prim_contact.jid)
-		for type_ in ('jpeg', 'png'):
-			file = os.path.join(gajim.AVATAR_PATH, puny_jid + '.' + type_)
-			if os.path.exists(file):
-				self.avatar_image.set_from_file(file)
-				pix = self.avatar_image.get_pixbuf()
-				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-				self.avatar_image.set_from_pixbuf(pix)
-				break
-		else:
-			self.avatar_image.set_from_pixbuf(None)
-		
-		while properties:
-			property = properties.pop(0)
-			vcard_current_row += 1
-			label = gtk.Label()
-			label.set_alignment(0, 0)
-			label.set_markup('<span weight="bold">%s</span>' % property[0])
-			vertical_fill = gtk.FILL
-			if not properties:
-				vertical_fill |= gtk.EXPAND
-				
-			vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, 
-																						gtk.FILL,  vertical_fill, 0, 0)
-			label = gtk.Label()
-			if num_resources > 1 and not properties:
-				label.set_alignment(0, 1)
-			else:
-				label.set_alignment(0, 0)
-			label.set_markup(property[1])
-			vcard_table.attach(label, 3, 4, vcard_current_row, vcard_current_row + 1, 
-																	gtk.EXPAND | gtk.FILL, vertical_fill, 0, 0)
-		self.avatar_image.set_alignment(0, 0)
-		vcard_table.attach(self.avatar_image, 4, 5, 2, vcard_current_row +1, gtk.FILL, 
-																						gtk.FILL | gtk.EXPAND, 3, 0)
-		self.vbox.pack_start(vcard_table, True, True)
-		
-		if num_resources == 1: # only one resource
+		else: # only one resource
 			if contact.show:
 				show = helpers.get_uf_show(contact.show) 
 				if contact.status:
 					status = contact.status.strip()
-					if status != '':
+					if status:
 						# reduce long status
 						# (no more than 130 chars on line and no more than 5 lines)
 						status = gtkgui_helpers.reduce_chars_newlines(status, 130, 5)
 						# escape markup entities. 
-						show += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
-				vcard_current_row += 1
-				label = gtk.Label()
-				label.set_alignment(0, 0)
-				label.set_markup('<span weight="bold">' + _('Status: ')  + '</span>')
-				vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, gtk.FILL, 
-																											gtk.FILL | gtk.EXPAND, 0, 0)
-				
-				label = gtk.Label()
-				label.set_alignment(0, 0)
-				label.set_markup(show)
-				label.set_line_wrap(True)
-				vcard_table.attach(label, 3, 5, vcard_current_row, vcard_current_row + 1, gtk.FILL, 0, 0, 0)
+						status = gtkgui_helpers.escape_for_pango_markup(status)
+						if len(status) > 10:
+							show += '\n' + status
+						else:
+							show += ' - ' + status
+				properties.append((_('Status: '),	show))
+			
 			if contact.last_status_time:
+				vcard_current_row += 1
 				if contact.show == 'offline':
 					text = _('Last status on %s')
 				else:
@@ -565,11 +540,40 @@ class RosterTooltip(NotificationAreaTooltip):
 				local_time = time.strftime('%c', contact.last_status_time)
 				local_time = local_time.decode(locale.getpreferredencoding()) 
 				text = text % local_time 
-				self.current_row += 1
+				properties.append((' <span style="italic">%s</span>' % text, None))
+		while properties:
+			property = properties.pop(0)
+			vcard_current_row += 1
+			vertical_fill = gtk.FILL
+			if not properties and table_size == 4:
+				vertical_fill |= gtk.EXPAND
+			label = gtk.Label()
+			label.set_alignment(0, 0)
+			if property[1]:
+				label.set_markup('<span weight="bold">%s</span>' % property[0])
+				vcard_table.attach(label, 1, 2, vcard_current_row, vcard_current_row + 1, 
+														gtk.FILL,  vertical_fill, 0, 0)
 				label = gtk.Label()
-				label.set_alignment(0, 0)
-				label.set_markup(' <span style="italic">%s</span>' % text)
-				self.vbox.pack_start(label, True, True)
+				if num_resources > 1 and not properties:
+					label.set_alignment(0, 1)
+				else:
+					label.set_alignment(0, 0)
+				label.set_markup(property[1])
+				vcard_table.attach(label, 2, 3, vcard_current_row, vcard_current_row + 1, 
+										gtk.EXPAND | gtk.FILL, vertical_fill, 0, 0)
+			else:
+				label.set_markup(property[0])
+				vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, 
+															gtk.FILL, vertical_fill, 0)
+		self.avatar_image.set_alignment(0, 0)
+		if table_size == 4:
+			vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row +1, 
+										gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 0)
+		self.table.resize(table_size, vcard_current_row)
+		self.vbox.pack_start(vcard_table, True, True)
+		
+		if num_resources == 1: # only one resource
+			pass
 		else:
 			for contact in contacts:
 				if contact.resource:
