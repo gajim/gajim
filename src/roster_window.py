@@ -713,7 +713,8 @@ class RosterWindow:
 			
 			item = gtk.SeparatorMenuItem() # separator
 			sub_menu.append(item)
-			
+
+			# History manager
 			item = gtk.ImageMenuItem(_('History Manager'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL,
 				gtk.ICON_SIZE_MENU)
@@ -750,7 +751,21 @@ class RosterWindow:
 				account = gajim.connections.keys()[0]
 				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
 					account)
+
+				item = gtk.SeparatorMenuItem() # separator
+				advanced_menuitem_menu.append(item)
+				item.show()
+
+				# History manager
+				item = gtk.ImageMenuItem(_('History Manager'))
+				icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL,
+					gtk.ICON_SIZE_MENU)
+				item.set_image(icon)
+				advanced_menuitem_menu.append(item)
+				item.connect('activate', self.on_history_manager_menuitem_activate)
+
 				advanced_menuitem.set_submenu(advanced_menuitem_menu)
+				item.show_all()
 			elif len(gajim.connections) == 0: # user has no accounts
 				advanced_menuitem.set_sensitive(False)
 
