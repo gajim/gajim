@@ -166,7 +166,7 @@ class StatusTable:
 		self.spacer_label = '   '
 		
 	def create_table(self):
-		self.table = gtk.Table(2, 1)
+		self.table = gtk.Table(4, 1)
 		self.table.set_property('column-spacing', 2)
 	
 	def add_text_row(self, text):
@@ -185,7 +185,7 @@ class StatusTable:
 				# make sure 'status' is unicode before we send to to reduce_chars
 				if isinstance(status, str):
 					status = unicode(status, encoding='utf-8')
-				status = gtkgui_helpers.reduce_chars_newlines(status, 35, 1)
+				status = gtkgui_helpers.reduce_chars_newlines(status, 130, 1)
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
 	
@@ -203,15 +203,16 @@ class StatusTable:
 				image.set_from_file(file)
 				break
 		spacer = gtk.Label(self.spacer_label)
-		image.set_alignment(1, 0)
+		image.set_alignment(1, 0.5)
 		self.table.attach(spacer, 1, 2, self.current_row, 
 			self.current_row + 1, 0, 0, 0, 0)
 		self.table.attach(image, 2, 3, self.current_row, 
-			self.current_row + 1, gtk.FILL, 0, 2, 0)
+			self.current_row + 1, gtk.FILL, gtk.FILL, 2, 0)
 		status_label = gtk.Label()
 		status_label.set_markup(str_status)
 		status_label.set_alignment(0, 0)
-		self.table.attach(status_label, 3, 5, self.current_row,
+		status_label.set_line_wrap(True)
+		self.table.attach(status_label, 3, 4, self.current_row,
 			self.current_row + 1, gtk.FILL | gtk.EXPAND, 0, 0, 0)
 		if status_time:
 			self.current_row += 1
@@ -480,15 +481,10 @@ class RosterTooltip(NotificationAreaTooltip):
 		vcard_table.set_property('column-spacing', 2)
 		vcard_table.set_homogeneous(False)
 		vcard_current_row = 1
-		
-		label = gtk.Label()
-		label.set_alignment(0, 0)
-		label.set_markup('<span size="large" weight="bold">' + prim_contact.jid + '</span>')
-		
-		vcard_table.attach(label, 1, table_size, vcard_current_row, vcard_current_row + 1, 
-													gtk.EXPAND | gtk.FILL, gtk.FILL, 0, 0)
 		properties = []
-		properties.append(( _('Name: '), gtkgui_helpers.escape_for_pango_markup(
+		jid_markup = '<span size="large" weight="bold">' + prim_contact.jid + '</span>'
+		properties.append((jid_markup, None))
+		properties.append((_('Name: '), gtkgui_helpers.escape_for_pango_markup(
 												prim_contact.get_shown_name())))
 		if prim_contact.sub:
 			properties.append(( _('Subscription: '), 
@@ -511,7 +507,16 @@ class RosterTooltip(NotificationAreaTooltip):
 			properties.append((_('Resource: '),	gtkgui_helpers.escape_for_pango_markup(
 							contact.resource) + ' (' + unicode(contact.priority) + ')'))
 		if num_resources > 1:
-			properties.append((_('Status: '),	''))
+			properties.append((_('Status: '),	' '))
+			for contact in contacts:
+				if contact.resource:
+					status_line = self.get_status_info(contact.resource,
+						contact.priority, contact.show, contact.status)
+					
+					icon_name = self._get_icon_name_for_tooltip(contact)
+					self.add_status_row(file_path, icon_name, status_line,
+						contact.last_status_time)
+			properties.append((self.table,	None))
 		else: # only one resource
 			if contact.show:
 				show = helpers.get_uf_show(contact.show) 
@@ -560,28 +565,18 @@ class RosterTooltip(NotificationAreaTooltip):
 				vcard_table.attach(label, 2, 3, vcard_current_row, vcard_current_row + 1, 
 										gtk.EXPAND | gtk.FILL, vertical_fill, 0, 0)
 			else:
-				label.set_markup(property[0])
+				if isinstance(property[0], unicode):
+					label.set_markup(property[0])
+				else:
+					label = property[0]
 				vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, 
 															gtk.FILL, vertical_fill, 0)
 		self.avatar_image.set_alignment(0, 0)
 		if table_size == 4:
 			vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row +1, 
-										gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 0)
+										gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
 		self.table.resize(table_size, vcard_current_row)
 		self.vbox.pack_start(vcard_table, True, True)
-		
-		if num_resources == 1: # only one resource
-			pass
-		else:
-			for contact in contacts:
-				if contact.resource:
-					status_line = self.get_status_info(contact.resource,
-						contact.priority, contact.show, contact.status)
-					
-					icon_name = self._get_icon_name_for_tooltip(contact)
-					self.add_status_row(file_path, icon_name, status_line,
-						contact.last_status_time)
-			self.vbox.pack_start(self.table, True, True)
 		self.win.add(self.vbox)
 
 class FileTransfersTooltip(BaseTooltip):
