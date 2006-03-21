@@ -68,6 +68,19 @@ class ConnectionBytestream:
 		stream_tag.setAttr('jid', streamhost['jid'])
 		self.connection.send(iq)
 	
+	def remove_transfers_for_contact(self, contact):
+		''' stop all active transfer for contact '''
+		for file_props in self.files_props.values():
+			receiver_jid = unicode(file_props['receiver']).split('/')[0]
+			if contact.jid == receiver_jid:
+				file_props['error'] = -5
+				self.remove_transfer(file_props)
+				self.dispatch('FILE_REQUEST_ERROR', (contact.jid, file_props))
+			sender_jid = unicode(file_props['sender']).split('/')[0]
+			if contact.jid == sender_jid:
+				file_props['error'] = -3
+				self.remove_transfer(file_props)
+	
 	def remove_all_transfers(self):
 		''' stops and removes all active connections from the socks5 pool '''
 		for file_props in self.files_props.values():
