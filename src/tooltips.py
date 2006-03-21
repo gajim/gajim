@@ -383,6 +383,9 @@ class GCTooltip(BaseTooltip):
 		properties.append((jid_markup, None))	
 		properties.append((_('Role: '), helpers.get_uf_role(contact.role)))
 		properties.append((_('Affiliation: '), contact.affiliation.capitalize()))
+		if hasattr(contact, 'resource') and contact.resource.strip() != '':
+			properties.append((_('Resource: '), 
+				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
 		show = helpers.get_uf_show(contact.show)
 		if contact.status:
 			status = contact.status.strip()
@@ -390,12 +393,7 @@ class GCTooltip(BaseTooltip):
 				# escape markup entities
 				show += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 		properties.append((_('Status: '), show))
-		if hasattr(contact, 'resource') and contact.resource.strip() != '':
-			properties.append((_('Resource: '), 
-				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
 		
-		
-
 		# Add avatar
 		puny_name = punycode_encode(contact.name)
 		puny_room = punycode_encode(contact.room_jid)
