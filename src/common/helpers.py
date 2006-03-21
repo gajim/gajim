@@ -695,3 +695,16 @@ def get_os_info():
 		if uname_output is not None:
 			return uname_output[0] # only first line
 	return 'N/A'
+
+def sanitize_filename(filename):
+	'''makes sure the filename we try to write does not contain
+	unacceptable characters'''
+	filename = filename.replace('/', '_')
+	if os.name == 'nt':
+		filename = filename.replace('?', '').replace(':', '').replace('!', '')\
+			.replace('"', "'")
+	   # 48 is the limit; 44 is used to account for the extenstion.
+		if len(filename) > 44:
+			filename = filename[0:44]
+	
+	return filename
