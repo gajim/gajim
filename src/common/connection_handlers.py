@@ -19,6 +19,7 @@
 
 import os
 import time
+import base64
 import socket
 
 from calendar import timegm

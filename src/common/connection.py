@@ -29,13 +29,11 @@
 import sys
 import os
 import time
-import sre
 import traceback
 import random
 random.seed()
 
 import signal
-import base64
 if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
