@@ -523,10 +523,7 @@ class RosterTooltip(NotificationAreaTooltip):
 						status = gtkgui_helpers.reduce_chars_newlines(status, 130, 5)
 						# escape markup entities. 
 						status = gtkgui_helpers.escape_for_pango_markup(status)
-						if len(status) > 10:
-							show += '\n' + status
-						else:
-							show += ' - ' + status
+						show += ' - ' + status
 				properties.append((_('Status: '),	show))
 			
 			if contact.last_status_time:
@@ -559,6 +556,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				else:
 					label.set_alignment(0, 0)
 				label.set_markup(property[1])
+				label.set_line_wrap(True)
 				vcard_table.attach(label, 2, 3, vcard_current_row, vcard_current_row + 1, 
 										gtk.EXPAND | gtk.FILL, vertical_fill, 0, 0)
 			else:
