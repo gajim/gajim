@@ -532,6 +532,7 @@ class RosterWindow:
 			os.system('python history_manager.py &')
 
 	def get_and_connect_advanced_menuitem_menu(self, account):
+		'''adds FOR ACCOUNT options'''
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_menuitem_menu', APP)
 		advanced_menuitem_menu = xml.get_widget('advanced_menuitem_menu')
 
@@ -711,17 +712,8 @@ class RosterWindow:
 					account)
 				item.set_submenu(advanced_menuitem_menu)
 			
-			item = gtk.SeparatorMenuItem() # separator
-			sub_menu.append(item)
-
-			# History manager
-			item = gtk.ImageMenuItem(_('History Manager'))
-			icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL,
-				gtk.ICON_SIZE_MENU)
-			item.set_image(icon)
-			sub_menu.append(item)
-			item.connect('activate', self.on_history_manager_menuitem_activate)
-
+			self._add_history_manager_menuitem(sub_menu)
+			
 			advanced_menuitem.set_submenu(sub_menu)
 			sub_menu.show_all()
 
@@ -752,20 +744,10 @@ class RosterWindow:
 				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
 					account)
 
-				item = gtk.SeparatorMenuItem() # separator
-				advanced_menuitem_menu.append(item)
-				item.show()
-
-				# History manager
-				item = gtk.ImageMenuItem(_('History Manager'))
-				icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL,
-					gtk.ICON_SIZE_MENU)
-				item.set_image(icon)
-				advanced_menuitem_menu.append(item)
-				item.connect('activate', self.on_history_manager_menuitem_activate)
+				self._add_history_manager_menuitem(advanced_menuitem_menu)
 
 				advanced_menuitem.set_submenu(advanced_menuitem_menu)
-				item.show_all()
+				advanced_menuitem_menu.show_all()
 			elif len(gajim.connections) == 0: # user has no accounts
 				advanced_menuitem.set_sensitive(False)
 
@@ -784,6 +766,20 @@ class RosterWindow:
 			show_offline_contacts_menuitem.set_sensitive(False)
 
 		self.actions_menu_needs_rebuild = False
+
+	def _add_history_manager_menuitem(self, menu):
+		'''adds a seperator and History Manager menuitem BELOW for account 
+		menuitems'''
+		item = gtk.SeparatorMenuItem() # separator
+		menu.append(item)
+		
+		# History manager
+		item = gtk.ImageMenuItem(_('History Manager'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL,
+			gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		menu.append(item)
+		item.connect('activate', self.on_history_manager_menuitem_activate)
 
 	def _change_style(self, model, path, iter, option):
 		if option is None:
