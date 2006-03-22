@@ -2456,7 +2456,7 @@ class AccountCreationWizardWindow:
 		del gajim.interface.instances['account_creation_wizard']
 
 	def on_register_server_features_button_clicked(self, widget):
-		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/')
+		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/oldnetwork.shtml')
 
 	def on_save_password_checkbutton_toggled(self, widget):
 		self.xml.get_widget('pass1_entry').grab_focus()
