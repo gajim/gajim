@@ -54,6 +54,17 @@ class ConnectionBytestream:
 	def __init__(self):
 		self.files_props = {}
 	
+	def is_transfer_stoped(self, file_props):
+		if file_props.has_key('error') and file_props['error'] != 0:
+			return True
+		if file_props.has_key('completed') and file_props['completed']:
+			return True
+		if file_props.has_key('connected') and file_props['connected'] == False:
+			return True
+		if not file_props.has_key('stopped') or not file_props['stopped']:
+			return False
+		return True
+	
 	def send_success_connect_reply(self, streamhost):
 		''' send reply to the initiator of FT that we
 		made a connection
@@ -72,6 +83,8 @@ class ConnectionBytestream:
 	def remove_transfers_for_contact(self, contact):
 		''' stop all active transfer for contact '''
 		for file_props in self.files_props.values():
+			if self.is_transfer_stoped(file_props):
+				continue
 			receiver_jid = unicode(file_props['receiver']).split('/')[0]
 			if contact.jid == receiver_jid:
 				file_props['error'] = -5
