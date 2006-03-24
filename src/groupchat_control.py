@@ -1458,7 +1458,12 @@ class GroupchatControl(ChatControlBase):
 			if not nick in gajim.contacts.get_nick_list(self.account,
 			self.room_jid):
 				#it's a group
-				if x < 20: # first cell in 1st column (the arrow SINGLE clicked)
+				col = widget.get_column(0)
+				avatar_cell = col.get_cell_renderers()[0]
+				(pos, avatar_size) = col.cell_get_position(avatar_cell)
+				status_cell = col.get_cell_renderers()[1]
+				(pos, status_size) = col.cell_get_position(status_cell)
+				if x > avatar_size and x < avatar_size + status_size:
 					if (widget.row_expanded(path)):
 						widget.collapse_row(path)
 					else:
