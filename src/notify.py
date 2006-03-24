@@ -159,8 +159,9 @@ class DesktopNotification:
 			if version >= ( 0, 3, 2):
 				self.id = self.notif.Notify(dbus.String(_('Gajim')),
 					dbus.UInt32(0), dbus.String(path_to_image),
-					dbus.String(event_type), dbus.String(text), (dbus.String(ntype),
-					dbus.String(event_type)), {}, dbus.UInt32(timeout*1000))
+					dbus.String(event_type), dbus.String(text), 
+					(dbus.String('default'), dbus.String(event_type)), {},
+					dbus.UInt32(timeout*1000))
 			else:
 				self.id = self.notif.Notify(dbus.String(_('Gajim')),
 					dbus.String(path_to_image), dbus.UInt32(0),
