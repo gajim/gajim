@@ -57,10 +57,8 @@ import pango
 import dialogs
 import tooltips
 
-from common import helpers
 from common import gajim
 from common import xmpp
-from common import connection
 from common import i18n
 
 _ = i18n._

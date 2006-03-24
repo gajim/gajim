@@ -23,7 +23,6 @@
 
 import gtk
 import gtk.glade
-import pango
 import gobject
 
 import common

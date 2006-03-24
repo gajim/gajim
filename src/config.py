@@ -19,7 +19,6 @@ import gtk
 import gtk.glade
 import gobject
 import os
-import sys
 import common.config
 import common.sleepy
 

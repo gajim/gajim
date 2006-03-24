@@ -26,7 +26,6 @@
 
 import gtk
 import gtk.glade
-import gobject
 import pango
 import dialogs
 import gtkgui_helpers

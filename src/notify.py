@@ -29,12 +29,10 @@
 ##
 
 import os
-import gajim
 import dialogs
 import gobject
 
 from common import gajim
-from common import exceptions
 from common import i18n
 i18n.init()
 _ = i18n._

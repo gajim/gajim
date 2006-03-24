@@ -22,7 +22,7 @@ import gtk
 import gtk.glade
 import gobject
 import os
-import Queue
+import sys
 
 import gtkgui_helpers
 import vcard
@@ -34,9 +34,12 @@ try:
 except:
 	HAS_GTK_SPELL = False
 
+# those imports are not used in this file, but in files that import dialog
+# so they can do dialog.GajimThemesWindow() for example
 from filetransfers_window import FileTransfersWindow
 from gajim_themes_window import GajimThemesWindow
 from advanced import AdvancedConfigurationWindow
+
 from common import gajim
 from common import helpers
 from common import i18n
@@ -1038,7 +1041,7 @@ class PopupNotificationWindow:
 			attached_keys = gajim.config.get_per('accounts', self.account,
 				'attached_gpg_keys').split()
 			if self.jid in attached_keys:
-				keyID = attached_keys[attached_keys.index(jid) + 1]
+				keyID = attached_keys[attached_keys.index(self.jid) + 1]
 			if self.msg_type.find('file') != 0:
 				if self.msg_type == 'pm':
 					room_jid, nick = self.jid.split('/', 1)
@@ -1117,7 +1120,7 @@ class SingleMessageWindow:
 				gtkspell.Spell(self.message_textview)
 			except gobject.GError, msg:
 				#FIXME: add a ui for this use spell.set_language()
-				dialogs.ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
+				ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
 				gajim.config.set('use_speller', False)
 		
 		self.send_button.set_no_show_all(True)

@@ -33,18 +33,13 @@ import dialogs
 import config
 import vcard
 import cell_renderer_image
-import history_window
-import tooltips
 
 from common import gajim
 from common import helpers
 
-from common import gajim
 from chat_control import ChatControl
 from chat_control import ChatControlBase
 from conversation_textview import ConversationTextview
-from message_textview import MessageTextView
-from gettext import ngettext
 from common import i18n
 
 _ = i18n._

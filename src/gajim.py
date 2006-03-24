@@ -31,7 +31,6 @@ exec python -OOt "$0" ${1+"$@"}
 
 import sys
 import os
-import pygtk
 
 import message_control
 
@@ -90,10 +89,7 @@ if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
 del path
 
 import gobject
-# TODO remove this comment
-# testing how it works without threads_init
 
-import pango
 import sre
 import signal
 import getopt
@@ -111,7 +107,6 @@ from common import nslookup
 from common import proxy65_manager
 from common import socks5
 from common import gajim
-from common import connection
 from common import helpers
 from common import optparser
 
@@ -151,7 +146,6 @@ import systray
 import dialogs
 import vcard
 import config
-import disco
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
@@ -599,7 +593,7 @@ class Interface:
 							show = 'offline'
 						gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
 							name = nick, show = show)
-						c = gajim.contacts.contact_from_gc_contct(c)
+						c = gajim.contacts.contact_from_gc_contact(gc_c)
 						self.roster.new_chat(c, account, private_chat = True)
 					ctrl = self.msg_win_mgr.get_control(fjid, account)
 					ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
@@ -1702,19 +1696,9 @@ class Interface:
 				self.systray_capabilities = True
 				self.systray = systraywin32.SystrayWin32()
 		else:
-			try:
-				import egg.trayicon # use gnomepythonextras trayicon
-			except:
-				try:
-					import trayicon # use the one we distribute
-				except: # user doesn't have trayicon capabilities
-					pass
-				else:
-					self.systray_capabilities = True
-					self.systray = systray.Systray()
-			else:
-				self.systray_capabilities = True
-				self.systray = systray.Systray()
+			self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
+			if self.systray_capabilities:
+			    self.systray = systray.Systray()
 
 		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()

@@ -20,11 +20,11 @@ import urllib
 import base64
 import mimetypes
 import os
-import sys
 import time
+import locale
+
 import gtkgui_helpers
 import dialogs
-import locale
 
 from common import helpers
 from common import gajim
@@ -502,8 +502,8 @@ class VcardWindow:
 			self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
-			ErrorDialog(_('You are not connected to the server'),
-						_('Without a connection, you can not get your contact information.')).get_response()
+			dialogs.ErrorDialog(_('You are not connected to the server'),
+    		    	_('Without a connection, you can not get your contact information.')).get_response()
 
 	def change_to_vcard(self):
 		self.xml.get_widget('information_notebook').remove_page(0)

@@ -98,18 +98,6 @@ class SystrayWINAPI:
 						msg_map[key] = value
 			self._message_map.update(msg_map)
 
-	def message_unmap(self, msg, callback=None):
-		if self._message_map.has_key(msg):
-			if callback:
-				cblist = self._message_map[key]
-				if isinstance(cblist, list):
-					if not len(cblist) < 2:
-						for i in xrange(len(cblist)):
-							if cblist[i] == callback:
-								del self._message_map[key][i]
-								return
-			del self._message_map[key]
-
 	def remove_notify_icon(self):
 		""" Removes the notify icon. """
 		if self.notify_icon:

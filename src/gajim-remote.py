@@ -34,8 +34,6 @@ import sys
 import locale
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
-import traceback
-import gobject
 
 from common import exceptions
 from common import i18n

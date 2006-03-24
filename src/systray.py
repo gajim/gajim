@@ -31,6 +31,8 @@ from common import gajim
 from common import helpers
 from common import i18n
 
+HAS_SYSTRAY_CAPABILITIES = True
+
 try:
 	import egg.trayicon as trayicon	# gnomepythonextras trayicon
 except:
@@ -38,7 +40,7 @@ except:
 		import trayicon # our trayicon
 	except:
 		gajim.log.debug('No trayicon module available')
-		pass
+		HAS_SYSTRAY_CAPABILITIES = False
 
 _ = i18n._
 APP = i18n.APP

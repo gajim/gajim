@@ -23,7 +23,6 @@ import gtk.glade
 import gobject
 import pango
 import os
-import sys
 import time
 
 import gtkgui_helpers

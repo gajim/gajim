@@ -13,10 +13,7 @@
 ##
 import gtk
 import gtk.glade
-import pango
 import gobject
-import common
-import gtkgui_helpers
 
 from common import gajim
 
@@ -112,9 +109,10 @@ class MessageControl:
 		(label_str, color) either of which can be None
 		if chatstate is given that means we have HE SENT US a chatstate and
 		we want it displayed'''
-		# NOTE: Derived classes SHOULD implement this
-		# Return a markup'd label and optional gtk.Color
-		return (label_str, None) #FIXME: label_str is not defined. pychecker your files
+		# NOTE: Derived classes MUST implement this
+		# Return a markup'd label and optional gtk.Color in a tupple like:
+		#return (label_str, None)
+		pass
 
 	def get_tab_image(self):
 		'''Return a suitable tab image for display.  None clears any current label.'''

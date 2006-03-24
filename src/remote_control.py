@@ -26,13 +26,8 @@
 ##
 
 import gobject
-import gtk
 import os
-import sys
 
-import systray
-
-from common import exceptions
 from common import gajim
 from common import helpers
 from time import time
@@ -108,7 +103,7 @@ def get_dbus_struct(obj):
 	if isinstance(obj, float):
 		return DBUS_DOUBLE(obj)
 	if isinstance(obj, bool):
-		return DBUS_BOLEAN(obj)
+		return DBUS_BOOLEAN(obj)
 	if isinstance(obj, (list, tuple)):
 		result = [DBUS_VARIANT(get_dbus_struct(i)) for i in obj]
 		if result == []:
