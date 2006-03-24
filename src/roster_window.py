@@ -2832,7 +2832,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_drop_in_contact(self, widget, account, c_source, c_dest, context,
 		etime):
 		# remove the source row
-		model = self.tree.get_model()
 		self.remove_contact(c_source, account)
 		# brother inherite big brother groups
 		c_source.groups = []
@@ -2956,14 +2955,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if jid_source == jid_dest:
 			if grp_source == grp_dest:
 				return
-			else:
-				if context.action == gtk.gdk.ACTION_COPY:
-					self.on_drop_in_group(None, account, c_source, grp_dest, context,
-						etime)
-					return
+			if context.action == gtk.gdk.ACTION_COPY:
 				self.on_drop_in_group(None, account, c_source, grp_dest, context,
-					etime, grp_source)
+					etime)
 				return
+			self.on_drop_in_group(None, account, c_source, grp_dest, context,
+				etime, grp_source)
+			return
 		if grp_source == grp_dest:
 			# Add meta contact
 			#FIXME: doesn't work under windows: http://bugzilla.gnome.org/show_bug.cgi?id=329797
@@ -2972,16 +2970,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 #				return
 			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
 				jid_dest)
-			# brother inherite big brother groups
-			c_source.groups = []
-			for g in c_dest.groups:
-				c_source.groups.append(g)
-			gajim.contacts.add_metacontact(account, jid_dest, account, jid_source)
-			# remove the source row
-			context.finish(True, True, etime)
-			# Add it under parent contact
-			self.add_contact_to_roster(jid_source, account)
-			self.draw_contact(jid_dest, account)
+			self.on_drop_in_contact(treeview, account, c_source, c_dest, context,
+				etime)
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
 		# user1.groups
