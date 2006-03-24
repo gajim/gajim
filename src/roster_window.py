@@ -2831,6 +2831,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def on_drop_in_contact(self, widget, account, c_source, c_dest, context,
 		etime):
+		# children must take the new tag too, so remember old tag
+		old_tag = gajim.contacts.get_metacontacts_tag(account, c_source.jid)
 		# remove the source row
 		self.remove_contact(c_source, account)
 		# brother inherite big brother groups
@@ -2838,9 +2840,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		for g in c_dest.groups:
 			c_source.groups.append(g)
 		gajim.contacts.add_metacontact(account, c_dest.jid, account, c_source.jid)
-		# Add it under parent contact
+		# add children too
+		all_jid = gajim.contacts.get_metacontacts_jid(old_tag)
+		for _account in all_jid:
+			for _jid in all_data[_account]:
+				gajim.contacts.add_metacontact(account, c_dest.jid, _account, _jid)
+				self.add_contact_to_roster(_jid, _account)
+				self.draw_contact(_jid, _account)
 		self.add_contact_to_roster(c_source.jid, account)
 		self.draw_contact(c_dest.jid, account)
+
 		context.finish(True, True, etime)
 
 	def on_drop_in_group(self, widget, account, c_source, grp_dest, context,
