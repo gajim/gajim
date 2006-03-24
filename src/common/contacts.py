@@ -313,7 +313,7 @@ class Contacts:
 		score = priority*10000
 		if not common.gajim.jid_is_transport(jid):
 			score += contact.priority*10
-		score += ['offline', 'invisible', 'dnd', 'xa', 'away', 'chat',
+		score += ['error', 'offline', 'invisible', 'dnd', 'xa', 'away', 'chat',
 			'online'].index(contact.show)
 		return score
 
