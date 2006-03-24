@@ -232,7 +232,9 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 
 	def get_accounts_info(self):
 		accounts = []
-		for account in gajim.contacts.get_accounts():
+		accounts_list = gajim.contacts.get_accounts()
+		accounts_list.sort()
+		for account in accounts_list:
 			status_idx = gajim.connections[account].connected
 			# uncomment the following to hide offline accounts
 			# if status_idx == 0: continue
