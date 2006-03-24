@@ -116,7 +116,7 @@ class Logger:
 		and after that all okay'''
 		
 		possible_room_jid, possible_nick = jid.split('/', 1)
-		
+
 		self.cur.execute('SELECT jid_id FROM jids WHERE jid="%s" AND type=%d' %\
 			(possible_room_jid, constants.JID_ROOM_TYPE))
 		row = self.cur.fetchone()
@@ -393,11 +393,11 @@ class Logger:
 		result = self.cur.fetchone()
 		return days_with_logs
 
-	def get_last_date_that_has_logs(self, jid):
+	def get_last_date_that_has_logs(self, jid, is_room = False):
 		'''returns last time (in seconds since EPOCH) for which
 		we had logs (excluding statuses)'''
 		jid = jid.lower()
-		jid_id = self.get_jid_id(jid)
+		jid_id = self.get_jid_id(jid, 'ROOM')
 		self.cur.execute('''
 			SELECT time FROM logs
 			WHERE jid_id = ?

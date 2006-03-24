@@ -860,7 +860,7 @@ class Connection(ConnectionHandlers):
 		#last date/time in history to avoid duplicate
 		# FIXME: This JID needs to be normalized; see #1364
 		jid='%s@%s' % (room, server)
-		last_log = gajim.logger.get_last_date_that_has_logs(jid)
+		last_log = gajim.logger.get_last_date_that_has_logs(jid, is_room = True)
 		if last_log is None:
 			last_log = 0
 		self.last_history_line[jid]= last_log
