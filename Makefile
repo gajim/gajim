@@ -97,7 +97,9 @@ install:
 	cp data/pixmaps/gajim.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 	cp data/pixmaps/gajim_about.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/applications";
-	cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/";
+	if [ -f gajim.desktop ]; then \
+		cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/"; \
+	fi;
 	mkdir -p "$(MANDIR)/man1";
 	cp gajim.1 "$(MANDIR)/man1";
 	cp gajim-remote.1 "$(MANDIR)/man1";
