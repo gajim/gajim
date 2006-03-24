@@ -121,6 +121,8 @@ class DesktopNotification:
 			ntype = 'transfer.complete'
 		elif event_type == _('New E-mail'):
 			ntype = 'gmail.notify'
+		elif event_type == _('Groupchat Invitation'):
+			ntype = 'im.invitation'
 		else:
 			# default failsafe values
 			path_to_image = os.path.abspath(
