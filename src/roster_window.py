@@ -2841,7 +2841,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			c_source.groups.append(g)
 		gajim.contacts.add_metacontact(account, c_dest.jid, account, c_source.jid)
 		# add children too
-		all_jid = gajim.contacts.get_metacontacts_jid(old_tag)
+		all_jid = gajim.contacts.get_metacontacts_jids(old_tag)
 		for _account in all_jid:
 			for _jid in all_data[_account]:
 				gajim.contacts.add_metacontact(account, c_dest.jid, _account, _jid)
