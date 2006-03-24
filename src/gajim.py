@@ -899,6 +899,7 @@ class Interface:
 		if gajim.show_notification(account):
 			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'gc_invitation.png')
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
 			notify.notify(_('Groupchat Invitation'),
 				jid, account, 'gc-invitation', path, room_jid)
 
