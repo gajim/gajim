@@ -1092,7 +1092,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		query = iq_obj.getTag('query')
 		storage_tag = query.getTag('storage')
 		if storage_tag:
-			ns = gajim_tag.getNamespace()
+			ns = storage_tag.getNamespace()
 			if ns == 'storage:metacontacts':
 				# Private XML Storage (JEP49) is not supported by server
 				# Continue connecting
