@@ -1357,7 +1357,7 @@ class ChatControl(ChatControlBase):
 		# don't restore lines if it's a transport
 		if gajim.jid_is_transport(jid):
 			return
-		
+
 		# How many lines to restore and when to time them out
 		restore_how_many = gajim.config.get('restore_lines')
 		if restore_how_many <= 0:
@@ -1365,7 +1365,7 @@ class ChatControl(ChatControlBase):
 		timeout = gajim.config.get('restore_timeout') # in minutes
 		# number of messages that are in queue and are already logged
 		pending_how_many = 0 # we want to avoid duplication
-		
+
 		if gajim.awaiting_events[self.account].has_key(jid):
 			events = gajim.awaiting_events[self.account][jid]
 			for event in events:
