@@ -169,49 +169,24 @@ class RosterWindow:
 			gajim.newly_added[account].remove(jid)
 			self.draw_contact(jid, account)
 
-	def add_contact_to_roster(self, jid, account, force = False,
-	add_children = False):
+	def add_contact_to_roster(self, jid, account):
 		'''Add a contact to the roster and add groups if they aren't in roster
 		force is about	force to add it, even if it is offline and show offline
 		is False, because it has online children, so we need to show it.
 		If add_children is True, we also add all children, even if they were not
 		already drawn'''
 		showOffline = gajim.config.get('showoffline')
+		model = self.tree.get_model()
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if not contact:
 			return
 		# If contact already in roster, do not add it
-		if len(self.get_contact_iter(contact.jid, account)):
+		if len(self.get_contact_iter(jid, account)):
 			return
 		if contact.jid.find('@') <= 0:
 			# if not '@' or '@' starts the jid ==> agent
 			contact.groups = [_('Transports')]
 
-		model = self.tree.get_model()
-		if gajim.contacts.is_subcontact(account, contact):
-			if contact.show in ('offline', 'error') and \
-				not showOffline and not gajim.awaiting_events[account].has_key(jid):
-				return
-			parent_contact = gajim.contacts.get_parent_contact(account, contact)
-			# is parent shown ?
-			parent_iters = self.get_contact_iter(parent_contact.jid, account)
-			if not len(parent_iters):
-				# Add parent and children
-				self.add_contact_to_roster(parent_contact.jid, account, True)
-				parent_iters = self.get_contact_iter(parent_contact.jid, account)
-			name = contact.get_shown_name()
-			for i in parent_iters:
-				# we add some values here. see draw_contact for more
-				model.append(i, (None, name, 'contact', contact.jid, account,
-					False, None))
-			if add_children:
-				for cc in gajim.contacts.get_children_contacts(account, contact):
-					self.add_contact_to_roster(cc.jid, account)
-			self.draw_contact(contact.jid, account)
-			self.draw_avatar(contact.jid, account)
-			# Redraw parent to change icon
-			self.draw_contact(parent_contact.jid, account)
-			return
 		# JEP-0162
 		hide = True
 		if contact.sub in ('both', 'to'):
@@ -228,21 +203,61 @@ class RosterWindow:
 			else:
 				return
 
+		if observer:
+			# if he has a tag, remove it
+			tag = gajim.contacts.get_metacontacts_tag(account, jid)
+			if tag:
+				gajim.contacts.remove_metacontact(account, jid)
+
+		# family is [{'account': acct, 'jid': jid, 'priority': prio}, ]
+		# 'priority' is optional
+		family = gajim.contacts.get_metacontacts_family(account, jid)
+
+		shown_family = [] # family members that are in roster.
+		if family:
+			for data in family:
+				_jid = data['jid']
+				_account = data['account']
+				if self.get_contact_iter(_jid, _account):
+					shown_family.append(data)
+				if _jid == jid:
+					our_data = data
+			shown_family.append(our_data)
+			big_brother_data = gajim.contacts.get_metacontacts_big_brother(
+				shown_family)
+			big_brother_jid = big_brother_data['jid']
+			big_brother_account = big_brother_data['account']
+			if big_brother_jid != jid:
+				# We are adding a child contact
+				if contact.show in ('offline', 'error') and \
+				not showOffline and not gajim.awaiting_events[account].has_key(jid):
+					return
+				parent_iters = self.get_contact_iter(big_brother_jid,
+					big_brother_account)
+				name = contact.get_shown_name()
+				for i in parent_iters:
+					# we add some values here. see draw_contact for more
+					model.append(i, (None, name, 'contact', jid, account,
+						False, None))
+				self.draw_contact(jid, account)
+				self.draw_avatar(jid, account)
+				# Redraw parent to change icon
+				self.draw_contact(big_brother_jid, big_brother_account)
+				return
+
 		if (contact.show in ('offline', 'error') or hide) and \
 			not showOffline and (not _('Transports') in contact.groups or \
 			gajim.connections[account].connected < 2) and \
-			not gajim.awaiting_events[account].has_key(jid) and not force:
+			not gajim.awaiting_events[account].has_key(jid):
 			return
 
-		# Remove child contacts that are already in roster to add them
+		# Remove brother contacts that are already in roster to add them
 		# under this iter
-		children_contacts = gajim.contacts.get_children_contacts(account,
-			contact)
-		ccs = [] # children contacts that were relly in roster
-		for cc in children_contacts:
-			if self.get_contact_iter(cc.jid, account) or add_children:
-				self.remove_contact(cc, account)
-				ccs.append(cc)
+		for data in shown_family:
+			contacts = gajim.contacts.get_contact(data['account'],
+				data['jid'])
+			for c in contacts:
+				self.remove_contact(c, data['account'])
 		groups = contact.groups
 		if observer:
 			groups = [_('Observers')]
@@ -256,7 +271,7 @@ class RosterWindow:
 					self.jabber_state_images['16']['closed'],
 					gtkgui_helpers.escape_for_pango_markup(g), 'group', g, account,
 					False, None])
-			if not gajim.groups[account].has_key(g): #It can probably never append
+			if not gajim.groups[account].has_key(g): # It can probably never append
 				if account + g in self.collapsed_rows:
 					ishidden = False
 				else:
@@ -279,8 +294,10 @@ class RosterWindow:
 		self.draw_contact(jid, account)
 		self.draw_avatar(jid, account)
 		# put the children under this iter
-		for cc in ccs:
-			self.add_contact_to_roster(cc.jid, account)
+		for data in shown_family:
+			contacts = gajim.contacts.get_contact(data['account'],
+				data['jid'])
+			self.add_contact_to_roster(data['jid'], data['account'])
 
 	def add_transport_to_roster(self, account, transport):
 		c = gajim.contacts.create_contact(jid = transport, name = transport,
@@ -292,20 +309,11 @@ class RosterWindow:
 	def really_remove_contact(self, contact, account):
 		if contact.jid in gajim.newly_added[account]:
 			return
-		if contact.jid.find('@') < 1 and gajim.connections[account].connected > 1: # It's an agent
+		if contact.jid.find('@') < 1 and gajim.connections[account].connected > 1:
+			# It's an agent
 			return
 		if contact.jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(contact.jid)
-		has_connected_children = False
-		children_contacts = gajim.contacts.get_children_contacts(account,
-			contact)
-		for cc in children_contacts:
-			if cc.show not in ('offline', 'error'):
-				has_connected_children = True
-				break
-		if gajim.config.get('showoffline') or has_connected_children:
-			self.draw_contact(contact.jid, account)
-			return
 		self.remove_contact(contact, account)
 
 	def remove_contact(self, contact, account):
@@ -313,36 +321,45 @@ class RosterWindow:
 		if contact.jid in gajim.to_be_removed[account]:
 			return
 		model = self.tree.get_model()
-		for i in self.get_contact_iter(contact.jid, account):
+		iters = self.get_contact_iter(contact.jid, account)
+		if not iters:
+			return
+		parent_iter = model.iter_parent(iters[0])
+		parent_type = model[parent_iter][C_TYPE]
+		# remember children to re-add them
+		children = []
+		child_iter = model.iter_children(iters[0])
+		while child_iter:
+			c_jid = model[child_iter][C_JID].decode('utf-8')
+			c_account = model[child_iter][C_ACCOUNT].decode('utf-8')
+			children.append((c_jid, c_account))
+			child_iter = model.iter_next(child_iter)
+		
+		# Remove iters and group iter if they are empty
+		for i in iters:
 			parent_i = model.iter_parent(i)
 			model.remove(i)
-			if gajim.contacts.is_subcontact(account, contact):
-				# Is it the last subcontact with offline parent?
-				parent_contact = gajim.contacts.get_parent_contact(account, contact)
-				if parent_contact.show in ('offline', 'error'):
-					has_another_child = False
-					children_contacts = gajim.contacts.get_children_contacts(account,
-						contact)
-					for cc in children_contacts:
-						if len(self.get_contact_iter(cc.jid, account)):
-							has_another_child = True
+			if parent_type == 'group':
+				group = model[parent_i][C_JID].decode('utf-8')
+				if model.iter_n_children(parent_i) == 0:
+					model.remove(parent_i)
+					# We need to check all contacts, even offline contacts
+					for jid in gajim.contacts.get_jid_list(account):
+						if group in gajim.contacts.get_contact_with_highest_priority(
+							account, jid).groups:
 							break
-					if not has_another_child:
-						# Remove parent contact
-						self.remove_contact(parent_contact, account)
-				self.draw_contact(parent_contact.jid, account)
-				return
-			group = model[parent_i][C_JID].decode('utf-8')
-			if model.iter_n_children(parent_i) == 0:
-				model.remove(parent_i)
-				# We need to check all contacts, even offline contacts
-				for jid in gajim.contacts.get_jid_list(account):
-					if group in gajim.contacts.get_contact_with_highest_priority(
-						account, jid).groups:
-						break
-				else:
-					if gajim.groups[account].has_key(group):
-						del gajim.groups[account][group]
+					else:
+						if gajim.groups[account].has_key(group):
+							del gajim.groups[account][group]
+
+		# re-add children
+		for child in children:
+			self.add_contact_to_roster(child[0], child[1])
+		# redraw parent
+		if parent_type == 'contact':
+			parent_jid = model[parent_iter][C_JID].decode('utf-8')
+			parent_account = model[parent_iter][C_ACCOUNT].decode('utf-8')
+			self.draw_contact(parent_jid, parent_account)
 
 	def get_appropriate_state_images(self, jid, size = '16',
 		icon_name = 'online'):
@@ -431,9 +448,7 @@ class RosterWindow:
 					size = 'closed', icon_name = icon_name)
 		else:
 			# redraw parent
-			if gajim.contacts.is_subcontact(account, contact):
-				parent_jid = gajim.contacts.get_parent_contact(account, contact).jid
-				self.draw_contact(parent_jid, account)
+			self.draw_parent_contact(jid, account)
 			state_images = self.get_appropriate_state_images(jid,
 				icon_name = icon_name)
 	
@@ -442,6 +457,18 @@ class RosterWindow:
 		for iter in iters:
 			model[iter][C_IMG] = img
 			model[iter][C_NAME] = name
+
+	def draw_parent_contact(self, jid, account):
+		model = self.tree.get_model()
+		iters = self.get_contact_iter(jid, account)
+		if not len(iters):
+			return
+		parent_iter = model.iter_parent(iters[0])
+		if model[parent_iter][C_TYPE] != 'contact':
+			# parent is not a contact
+			return
+		parent_jid = model[parent_iter][C_JID].decode('utf-8')
+		self.draw_contact(parent_jid, account)
 
 	def draw_avatar(self, jid, account):
 		'''draw the avatar'''
@@ -884,16 +911,8 @@ class RosterWindow:
 			if len(contact_instances) > 1:
 				# if multiple resources
 				gajim.contacts.remove_contact(account, contact)
-				self.draw_contact(contact.jid, account)
-			elif not showOffline:
-				# we don't show offline contacts
-				self.remove_contact(contact, account)
-			else:
-				self.draw_contact(contact.jid, account)
-		else:
-			if not self.get_contact_iter(contact.jid, account):
-				self.add_contact_to_roster(contact.jid, account)
-			self.draw_contact(contact.jid, account)
+		self.remove_contact(contact, account)
+		self.add_contact_to_roster(contact.jid, account)
 		# print status in chat window and update status/GPG image
 		for j in (contact.jid, contact.get_full_jid()):
 			if gajim.interface.msg_win_mgr.has_window(j, account):
@@ -1599,7 +1618,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			iter = model.get_iter(path)
 			type = model[iter][C_TYPE]
 			if type in ('agent', 'contact'):
-				#TODO
 				account = model[iter][C_ACCOUNT].decode('utf-8')
 				jid = model[iter][C_JID].decode('utf-8')
 				win = None
@@ -1665,11 +1683,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.connections[account].unsubscribe(contact.jid, remove_auth)
 			for u in gajim.contacts.get_contact(account, contact.jid):
 				self.remove_contact(u, account)
-			ccs = gajim.contacts.get_children_contacts(account, contact)
 			gajim.contacts.remove_jid(account, u.jid)
-			for cc in ccs:
-				cc.groups = contact.groups
-				self.add_contact_to_roster(cc.jid, account)
 			if not remove_auth:
 				contact.name = ''
 				contact.groups = []
@@ -2065,10 +2079,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if no_queue: # We didn't have a queue: we change icons
 				self.draw_contact(jid, account)
 				# Redraw parent too
-				if gajim.contacts.is_subcontact(account, contact):
-					parent_contact = gajim.contacts.get_parent_contact(account,
-						contact)
-					self.draw_contact(parent_contact.jid, account)
+				self.draw_parent_contact(jid, account)
 			if gajim.interface.systray_enabled:
 				gajim.interface.systray.add_jid(jid, account, kind)
 			self.show_title() # we show the * or [n]
@@ -2774,8 +2785,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# We first compare by show if sort_by_show is True or if it's a child
 		# contact
 		if type1 == 'contact' and type2 == 'contact' and \
-			(gajim.config.get('sort_by_show') or gajim.contacts.is_subcontact(
-			account1, contact1)):
+		gajim.config.get('sort_by_show'):
 			cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
 				'invisible': 5, 'offline': 6, 'not in roster': 7, 'error': 8}
 			s = self.get_show(lcontact1)
@@ -2823,25 +2833,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		etime):
 		# remove the source row
 		model = self.tree.get_model()
-		for iter in self.get_contact_iter(c_source.jid, account):
-			# get group iter
-			iter_group = iter
-			while model[iter_group][C_TYPE] == 'contact':
-				iter_group = model.iter_parent(iter_group)
-			group = model[iter_group][C_JID].decode('utf-8')
-			model.remove(iter)
-			if model.iter_n_children(iter_group) == 0:
-				# this was the only child
-				model.remove(iter_group)
-				# delete the group if it is empty (need to look for offline users
-				# too)
-				for jid in gajim.contacts.get_jid_list(account):
-					if group in gajim.contacts.get_contact_with_highest_priority(
-					account, jid).groups:
-						break
-				else:
-					del gajim.groups[account][group]
-		gajim.contacts.add_subcontact(account, c_dest.jid, c_source.jid)
+		self.remove_contact(c_source, account)
+		# brother inherite big brother groups
+		c_source.groups = []
+		for g in c_dest.groups:
+			c_source.groups.append(g)
+		gajim.contacts.add_metacontact(account, c_dest.jid, account, c_source.jid)
 		# Add it under parent contact
 		self.add_contact_to_roster(c_source.jid, account)
 		self.draw_contact(c_dest.jid, account)
@@ -2851,6 +2848,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		etime, grp_source = None):
 		if grp_source:
 			self.remove_contact_from_group(account, c_source, grp_source)
+		# remove tag
+		gajim.contacts.remove_metacontact(account, c_source.jid)
 		self.add_contact_to_group(account, c_source, grp_dest)
 		if context.action in (gtk.gdk.ACTION_MOVE, gtk.gdk.ACTION_COPY):
 			context.finish(True, True, etime)
@@ -2873,17 +2872,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		model = self.tree.get_model()
 		# Make sure contact was in the group
 		contact.groups.remove(group)
-		group_iter = self.get_group_iter(group, account)
-		if model.iter_n_children(group_iter) == 1:
-			# this was the only child
-			model.remove(group_iter)
-			# delete the group if it is empty (need to look for offline users too)
-			for jid in gajim.contacts.get_jid_list(account):
-				if group in gajim.contacts.get_contact_with_highest_priority(
-					account, jid).groups:
-					break
-			else:
-				del gajim.groups[account][group]
+		self.remove_contact(contact, account)
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
 		etime):
@@ -2919,6 +2908,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					gajim.interface.instances['file_transfers'].send_file(account,
 						c_dest, path)
 			return
+
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
 			# dropped before a group : we drop it in the previous group
 			path_dest = (path_dest[0], path_dest[1]-1)
@@ -2949,14 +2939,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
 			if grp_dest == _('Transports') or grp_dest == _('Not in Roster'):
 				return
-			if not gajim.contacts.is_subcontact(account, c_source):
-				if context.action == gtk.gdk.ACTION_COPY:
-					self.on_drop_in_group(None, account, c_source, grp_dest, context,
-						etime)
-					return
+			if context.action == gtk.gdk.ACTION_COPY:
 				self.on_drop_in_group(None, account, c_source, grp_dest, context,
-					etime, grp_source)
+					etime)
 				return
+			self.on_drop_in_group(None, account, c_source, grp_dest, context,
+				etime, grp_source)
+			return
 		else:
 			it = iter_dest
 			while model[it][C_TYPE] != 'group':
@@ -2975,20 +2964,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self.on_drop_in_group(None, account, c_source, grp_dest, context,
 					etime, grp_source)
 				return
-		if gajim.contacts.is_subcontact(account, c_source):
-			# Remove meta contact
-			#FIXME: doesn't work under windows: http://bugzilla.gnome.org/show_bug.cgi?id=329797
-#			if context.action == gtk.gdk.ACTION_COPY:
-#				return
-			c_source.groups = [grp_dest]
-			gajim.connections[account].update_contact(jid_source, c_source.name,
-				c_source.groups)
-			parent_jid = gajim.contacts.get_parent_contact(account, c_source).jid
-			gajim.contacts.remove_subcontact(account, jid_source)
-			context.finish(True, True, etime)
-			self.add_contact_to_roster(jid_source, account, add_children = True)
-			self.draw_contact(parent_jid, account)
-			return
 		if grp_source == grp_dest:
 			# Add meta contact
 			#FIXME: doesn't work under windows: http://bugzilla.gnome.org/show_bug.cgi?id=329797
@@ -2997,15 +2972,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 #				return
 			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
 				jid_dest)
-			# are we creating a loop (child is parent and parent is child)?
-			if gajim.contacts.is_subcontact(account, c_dest) and \
-			gajim.contacts.get_parent_contact(account, c_dest).jid == jid_source:
-				return
-			gajim.contacts.add_subcontact(account, jid_dest, jid_source)
+			# brother inherite big brother groups
+			c_source.groups = []
+			for g in c_dest.groups:
+				c_source.groups.append(g)
+			gajim.contacts.add_metacontact(account, jid_dest, account, jid_source)
 			# remove the source row
 			context.finish(True, True, etime)
 			# Add it under parent contact
-			self.add_contact_to_roster(jid_source, account, add_children = True)
+			self.add_contact_to_roster(jid_source, account)
 			self.draw_contact(jid_dest, account)
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
@@ -3022,7 +2997,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			menu.append(item)
 			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
 				jid_dest)
-			item = gtk.MenuItem(_('Make %s as subcontact of %s') % (c_source.name,
+			item = gtk.MenuItem(_('Make %s and %s metacontacts') % (c_source.name,
 				c_dest.name))
 			item.connect('activate', self.on_drop_in_contact, account, c_source,
 				c_dest, context, etime)
@@ -3077,14 +3052,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if selected_iter is None:
 			self._last_selected_contact = None
 			return
-		contact = model[selected_iter]
-		self._last_selected_contact = (contact[C_JID].decode('utf-8'),
-			contact[C_ACCOUNT].decode('utf-8'))
-		# FIXME: we first set last selected contact and then test if contact??
-		if contact[C_TYPE] != 'contact':
+		contact_row = model[selected_iter]
+		if contact_row[C_TYPE] != 'contact':
 			return
-		self.draw_contact(contact[C_JID].decode('utf-8'),
-			contact[C_ACCOUNT].decode('utf-8'), selected = True)
+		jid = contact_row[C_JID].decode('utf-8')
+		account = contact_row[C_ACCOUNT].decode('utf-8')
+		self._last_selected_contact = (jid, account)
+		self.draw_contact(jid, account, selected = True)
 
 	def __init__(self):
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)

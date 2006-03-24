@@ -1061,20 +1061,23 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					self.bookmarks.append(bm)
 				self.dispatch('BOOKMARKS', self.bookmarks)
 
-		gajim_tag = query.getTag('gajim')
-		if gajim_tag:
-			ns = gajim_tag.getNamespace()
-			if ns == 'gajim:metacontacts':
-				# Meta contacts list
-				children_list = {}
-				for child in gajim_tag.getChildren():
-					parent_jid = child.getAttr('name')
-					if not parent_jid:
-						continue
-					children_list[parent_jid] = []
-					for cchild in child.getChildren():
-						children_list[parent_jid].append(cchild.getAttr('name'))
-				self.dispatch('META_CONTACTS', children_list)
+			elif ns == 'storage:metacontacts':
+				# Metacontact tags
+				# http://www.jabber.org/jeps/jep-XXXX.html
+				meta_list = {}
+				metas = storage.getTags('meta')
+				for meta in metas:
+					jid = meta.getAttr('jid')
+					tag = meta.getAttr('tag')
+					data = {'jid': jid}
+					prio = meta.getAttr('priority')
+					if prio != None:
+						data['priority'] = prio
+					if meta_list.has_key(tag):
+						meta_list[tag].append(data)
+					else:
+						meta_list[tag] = [data]
+				self.dispatch('METACONTACTS', meta_list)
 				# We can now continue connection by requesting the roster
 				self.connection.initRoster()
 
@@ -1087,14 +1090,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 	def _PrivateErrorCB(self, con, iq_obj):
 		gajim.log.debug('PrivateErrorCB')
 		query = iq_obj.getTag('query')
-		gajim_tag = query.getTag('gajim')
-		if gajim_tag:
+		storage_tag = query.getTag('storage')
+		if storage_tag:
 			ns = gajim_tag.getNamespace()
-			if ns == 'gajim:metacontacts':
+			if ns == 'storage:metacontacts':
 				# Private XML Storage (JEP49) is not supported by server
 				# Continue connecting
 				self.connection.initRoster()
-	
+
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():

@@ -27,7 +27,7 @@ import common.gajim
 class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-			ask='', resource='', priority=5, keyID='', our_chatstate=None,
+			ask='', resource='', priority=0, keyID='', our_chatstate=None,
 			chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
 		self.jid = jid
 		self.name = name
@@ -93,25 +93,21 @@ class Contacts:
 		self._gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
 
 		# For meta contacts:
-		self._children_meta_contacts = {}
-		self._parent_meta_contacts = {}
+		self._metacontacts_tags = {}
 
 	def change_account_name(self, old_name, new_name):
 		self._contacts[new_name] = self._contacts[old_name]
 		self._gc_contacts[new_name] = self._gc_contacts[old_name]
-		self._children_meta_contacts[new_name] = self._children_meta_contacts[old_name]
-		self._parent_meta_contacts[new_name] = self._parent_meta_contacts[old_name]
+		self._metacontacts_tags[new_name] = self._metacontacts_tags[old_name]
 		del self._contacts[old_name]
 		del self._gc_contacts[old_name]
-		del self._children_meta_contacts[old_name]
-		del self._parent_meta_contacts[old_name]
+		del self._metacontacts_tags[old_name]
 
 	def add_account(self, account):
 		self._contacts[account] = {}
 		self._gc_contacts[account] = {}
-		if not self._children_meta_contacts.has_key(account):
-			self._children_meta_contacts[account] = {}
-			self._parent_meta_contacts[account] = {}
+		if not self._metacontacts_tags.has_key(account):
+			self._metacontacts_tags[account] = {}
 
 	def get_accounts(self):
 		return self._contacts.keys()
@@ -119,11 +115,10 @@ class Contacts:
 	def remove_account(self, account):
 		del self._contacts[account]
 		del self._gc_contacts[account]
-		del self._children_meta_contacts[account]
-		del self._parent_meta_contacts[account]
+		del self._metacontacts_tags[account]
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
-		sub='', ask='', resource='', priority=5, keyID='', our_chatstate=None,
+		sub='', ask='', resource='', priority=0, keyID='', our_chatstate=None,
 		chatstate=None, last_status_time=None, composing_jep=None):
 		return Contact(jid, name, groups, show, status, sub, ask, resource,
 			priority, keyID, our_chatstate, chatstate, last_status_time,
@@ -172,11 +167,8 @@ class Contacts:
 		if not self._contacts[account].has_key(jid):
 			return
 		del self._contacts[account][jid]
-		if self._parent_meta_contacts[account].has_key(jid):
-			self.remove_subcontact(account, jid)
-		if self._children_meta_contacts[account].has_key(jid):
-			for cjid in self._children_meta_contacts[account][jid]:
-				self.remove_subcontact(account, cjid)
+		# remove metacontacts info
+		self.remove_metacontact(account, jid)
 
 	def get_contact(self, account, jid, resource = None):
 		'''Returns the list of contact instances for this jid (one per resource)
@@ -222,77 +214,120 @@ class Contacts:
 			return self._contacts[account][jid][0]
 		return None
 
-	def define_meta_contacts(self, account, children_list):
-		self._parent_meta_contacts[account] = {}
-		for parent_jid in children_list:
-			list = self._children_meta_contacts[account][parent_jid] = []
-			for children_jid in children_list[parent_jid]:
-				if not children_jid in list:
-					list.append(children_jid)
-				self._parent_meta_contacts[account][children_jid] = parent_jid
-	
-	def add_subcontact(self, account, parent_jid, child_jid):
-		self._parent_meta_contacts[account][child_jid] = parent_jid
-		if self._children_meta_contacts[account].has_key(parent_jid):
-			list = self._children_meta_contacts[account][parent_jid]
-			if not child_jid in list:
-				list.append(child_jid)
+	def define_metacontacts(self, account, tags_list):
+		self._metacontacts_tags[account] = tags_list
+
+	def get_new_metacontacts_tag(self, jid):
+		if not jid in self._metacontacts_tags.keys():
+			return jid
+		#FIXME: can this append ?
+		assert False
+
+	def get_metacontacts_tag(self, account, jid):
+		'''Returns the tag of a jid'''
+		if not self._metacontacts_tags.has_key(account):
+			return None
+		for tag in self._metacontacts_tags[account]:
+			for data in self._metacontacts_tags[account][tag]:
+				if data['jid'] == jid:
+					return tag
+		return None
+
+	def add_metacontact(self, brother_account, brother_jid, account, jid):
+		tag = self.get_metacontacts_tag(brother_account, brother_jid)
+		if not tag:
+			tag = self.get_new_metacontacts_tag(brother_jid)
+			self._metacontacts_tags[brother_account][tag] = [{'jid': brother_jid,
+				'tag': tag}]
+			common.gajim.connections[brother_account].store_metacontacts(
+				self._metacontacts_tags[brother_account])
+		# be sure jid has no other tag
+		old_tag = self.get_metacontacts_tag(account, jid)
+		while old_tag:
+			self.remove_metacontact(account, jid)
+			old_tag = self.get_metacontacts_tag(account, jid)
+		if not self._metacontacts_tags[account].has_key(tag):
+			self._metacontacts_tags[account][tag] = [{'jid': jid, 'tag': tag}]
 		else:
-			self._children_meta_contacts[account][parent_jid] = [child_jid]
-		common.gajim.connections[account].store_meta_contacts(
-			self._children_meta_contacts[account])
+			self._metacontacts_tags[account][tag].append({'jid': jid,
+				'tag': tag})
+		common.gajim.connections[account].store_metacontacts(
+			self._metacontacts_tags[account])
 
-	def remove_subcontact(self, account, child_jid):
-		parent_jid = self._parent_meta_contacts[account][child_jid]
-		self._children_meta_contacts[account][parent_jid].remove(child_jid)
-		if len(self._children_meta_contacts[account][parent_jid]) == 0:
-			del self._children_meta_contacts[account][parent_jid]
-		del self._parent_meta_contacts[account][child_jid]
-		common.gajim.connections[account].store_meta_contacts(
-			self._children_meta_contacts[account])
+	def remove_metacontact(self, account, jid):
+		found = None
+		for tag in self._metacontacts_tags[account]:
+			for data in self._metacontacts_tags[account][tag]:
+				if data['jid'] == jid:
+					found = data
+					break
+			if found:
+				self._metacontacts_tags[account][tag].remove(data)
+				break
+		common.gajim.connections[account].store_metacontacts(
+			self._metacontacts_tags[account])
 
-	def is_subcontact(self, account, contact):
-		jid = contact.jid
-		if jid in self._parent_meta_contacts[account] and \
-			self._contacts[account].has_key(
-			self._parent_meta_contacts[account][jid]):
-			return True
+	def has_brother(self, account, jid):
+		for account in self._metacontacts_tags:
+			tag = self.get_metacontacts_tag(account, jid)
+			if tag and len(self._metacontacts_tags[account][tag]) > 1:
+				return True
+		return False
 
-	def has_children(self, account, contact):
-		jid = contact.jid
-		if jid in self._children_meta_contacts[account]:
-			for c in self._children_meta_contacts[account][jid]:
-				if self._contacts[account].has_key(c):
-					return True
+	def get_metacontacts_jids(self, tag):
+		'''Returns all jid for the given tag in the form {acct: [jid1, jid2],.}'''
+		answers = {}
+		for account in self._metacontacts_tags:
+			if self._metacontacts_tags[account].has_key(tag):
+				answers[account] = []
+				for data in self._metacontacts_tags[account][tag]:
+					answers[account].append(data['jid'])
+		return answers
 
-	def get_children_contacts(self, account, contact):
-		'''Returns the children contacts of contact if it's a parent-contact,
-		else []'''
-		jid = contact.jid
-		if jid not in self._children_meta_contacts[account]:
+	def get_metacontacts_family(self, account, jid):
+		'''return the family of the given jid, including jid in the form:
+		[{'account': acct, 'jid': jid, 'priority': prio}, ]
+		'priority' is optional'''
+		tag = self.get_metacontacts_tag(account, jid)
+		if not tag:
 			return []
-		contacts = []
-		for j in self._children_meta_contacts[account][jid]:
-			c = self.get_contact_with_highest_priority(account, j)
-			if c:
-				contacts.append(c)
-		return contacts
+		answers = []
+		for account in self._metacontacts_tags:
+			if self._metacontacts_tags[account].has_key(tag):
+				for data in self._metacontacts_tags[account][tag]:
+					data['account'] = account
+					answers.append(data)
+		return answers
 
-	def get_parent_contact(self, account, contact):
-		'''Returns the parent contact of contact if it's a sub-contact,
-		else contact'''
-		if self.is_subcontact(account, contact):
-			parent_jid = self._parent_meta_contacts[account][contact.jid]
-			return self.get_contact_with_highest_priority(account, parent_jid)
-		return contact
+	def _get_data_score(self, data):
+		'''compute thescore of a gived data
+		data is {'jid': jid, 'account': account, 'priority': priority}
+		priority is optional
+		score = meta_priority*10000 + is_jabber*priority*10 + status'''
+		jid = data['jid']
+		account = data['account']
+		priority = 0
+		if data.has_key('priority'):
+			priority = data['priority']
+		contact = self.get_contact_with_highest_priority(account, jid)
+		score = priority*10000
+		if not common.gajim.jid_is_transport(jid):
+			score += contact.priority*10
+		score += ['offline', 'invisible', 'dnd', 'xa', 'away', 'chat',
+			'online'].index(contact.show)
+		return score
 
-	def get_master_contact(self, account, contact):
-		'''Returns the master contact of contact (parent of parent...) if it's a
-		sub-contact, else contact'''
-		while self.is_subcontact(account, contact):
-			parent_jid = self._parent_meta_contacts[account][contact.jid]
-			contact = self.get_contact_with_highest_priority(account, parent_jid)
-		return contact
+	def get_metacontacts_big_brother(self, family):
+		'''which of the family will be the big brother under wich all
+		others will be ?'''
+		max_score = 0
+		max_data = family[0]
+		for data in family:
+			score = self._get_data_score(data)
+			if score > max_score:
+				max_score = score
+				max_data = data
+		return max_data
 
 	def is_pm_from_jid(self, account, jid):
 		'''Returns True if the given jid is a private message jid'''

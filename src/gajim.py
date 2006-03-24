@@ -1244,8 +1244,8 @@ class Interface:
 				password = gajim.gc_passwords[room_jid]
 			gajim.connections[account].join_gc(nick, room, server, password)
 
-	def handle_event_meta_contacts(self, account, children_list):
-		gajim.contacts.define_meta_contacts(account, children_list)
+	def handle_event_metacontacts(self, account, tags_list):
+		gajim.contacts.define_metacontacts(account, tags_list)
 
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
@@ -1505,7 +1505,7 @@ class Interface:
 			'VCARD_NOT_PUBLISHED': self.handle_event_vcard_not_published,
 			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
 			'SIGNED_IN': self.handle_event_signed_in,
-			'META_CONTACTS': self.handle_event_meta_contacts,
+			'METACONTACTS': self.handle_event_metacontacts,
 		}
 		gajim.handlers = self.handlers
 

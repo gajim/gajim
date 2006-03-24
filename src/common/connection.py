@@ -342,8 +342,8 @@ class Connection(ConnectionHandlers):
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 		gajim.log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
 			self._current_host['port'], con_type))
-		# Ask meta_contacts before roster
-		self.get_meta_contacts()
+		# Ask metacontacts before roster
+		self.get_metacontacts()
 		self._register_handlers(con, con_type)
 		return True
 
@@ -494,8 +494,8 @@ class Connection(ConnectionHandlers):
 		if self.connection:
 			con.set_send_timeout(self.keepalives, self.send_keepalive)
 			self.connection.onreceive(None)
-			# Ask meta_contacts before roster
-			self.get_meta_contacts()
+			# Ask metacontacts before roster
+			self.get_metacontacts()
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		if not show in STATUS_LIST:
@@ -807,26 +807,35 @@ class Connection(ConnectionHandlers):
 				iq5 = iq4.setTagData('password', bm['password'])
 		self.connection.send(iq)
 
-	def get_meta_contacts(self):
-		'''Get meta_contacts list from storage as described in JEP 0049'''
+	def get_metacontacts(self):
+		'''Get metacontacts list from storage as described in JEP 0049'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2.addChild(name='storage', namespace='storage:metacontacts')
+		self.connection.send(iq)
+
+		#FIXME: remove the old infos, remove that before 0.10
+		iq = common.xmpp.Iq(typ='set')
+		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq2.addChild(name='gajim', namespace='gajim:metacontacts')
 		self.connection.send(iq)
 
-	def store_meta_contacts(self, children_list):
+	def store_metacontacts(self, tags_list):
 		''' Send meta contacts to the storage namespace '''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
-		iq3 = iq2.addChild(name='gajim', namespace='gajim:metacontacts')
-		for parent_jid in children_list:
-			parent_tag = iq3.addChild(name='parent', attrs = {'name': parent_jid})
-			for child_jid in children_list[parent_jid]:
-				parent_tag.addChild(name='child', attrs = {'name': child_jid})
+		iq3 = iq2.addChild(name='storage', namespace='storage:metacontacts')
+		for tag in tags_list:
+			for data in tags_list[tag]:
+				jid = data['jid']
+				dict_ = {'jid': jid, 'tag': tag}
+				if data.has_key('priority'):
+					dict_['priority'] = data['priority']
+				iq3.addChild(name = 'meta', attrs = dict_)
 		self.connection.send(iq)
 
 	def send_agent_status(self, agent, ptype):
