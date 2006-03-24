@@ -164,6 +164,17 @@ class RosterWindow:
 			gtkgui_helpers.escape_for_pango_markup(account),
 			'account', our_jid, account, False, tls_pixbuf])
 
+	def draw_account(self, account):
+		model = self.tree.get_model()
+		iter = self.get_account_iter(account)
+		if gajim.con_types.has_key(account) and \
+		gajim.con_types[account] in ('tls', 'ssl'):
+			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
+				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
+			model[iter][C_SECPIXBUF] = tls_pixbuf
+		else:
+			model[iter][C_SECPIXBUF] = None
+
 	def remove_newly_added(self, jid, account):
 		if jid in gajim.newly_added[account]:
 			gajim.newly_added[account].remove(jid)

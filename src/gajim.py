@@ -258,6 +258,7 @@ class Interface:
 	def handle_event_con_type(self, account, con_type):
 		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
 		gajim.con_types[account] = con_type
+		self.roster.draw_account(account)
 
 	def allow_notif(self, account):
 		gajim.allow_notifications[account] = True
