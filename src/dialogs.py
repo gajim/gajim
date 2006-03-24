@@ -34,7 +34,7 @@ try:
 except:
 	HAS_GTK_SPELL = False
 
-# those imports are not used in this file, but in files that import dialog
+# those imports are not used in this file, but in files that 'import dialogs'
 # so they can do dialog.GajimThemesWindow() for example
 from filetransfers_window import FileTransfersWindow
 from gajim_themes_window import GajimThemesWindow
