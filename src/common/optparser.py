@@ -186,9 +186,8 @@ class OptionsParser:
 		for account in gajim.config.get_per('accounts'):
 			proxies = gajim.config.get_per('accounts', account,
 				'file_transfer_proxies')
-			for new in ('proxy.netlab.cz', 'proxy65.jabber.ccc.de'):
-				if proxies.find(new) < 0:
-					proxies += ', ' + new
+			if proxies.find('proxy.netlab.cz') < 0:
+				proxies += ', ' + 'proxy.netlab.cz'
 			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
 				proxies)
 		# Add some emots :-* :* >:) >:-) <3
@@ -210,4 +209,16 @@ class OptionsParser:
 		if self.old_values.has_key('useemoticons') and \
 			not self.old_values['useemoticons']:
 			gajim.config.set('emoticons_theme', '')
-
+		for account in gajim.config.get_per('accounts'):
+			proxies_str = gajim.config.get_per('accounts', account,
+											'file_transfer_proxies')
+			proxies = proxies_str.split(",").strip()
+			for wrong_proxy in ['proxy.jabber.cd.chalmers.se', 
+				'proxy65.jabber.autocom.pl', 'proxy65.jabber.ccc.de']: 
+				if wrong_proxy in proxies:
+					proxies.remove(wrong_proxy)
+			proxies.append('transfer.jabber.freenet.de')
+			proxies_str = ', '.join(proxies)
+			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
+																proxies_str)
+																										
