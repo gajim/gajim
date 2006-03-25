@@ -74,7 +74,7 @@ class Config:
 		'markedmsgcolor': [ opt_color, '#ff8080', '', True ],
 		'urlmsgcolor': [ opt_color, '#0000ff', '', True ],
 		'collapsed_rows': [ opt_str, '', '', True ],
-		'roster_theme': [ opt_str, 'green', '', True ],
+		'roster_theme': [ opt_str, 'system', '', True ],
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
@@ -316,7 +316,7 @@ class Config:
 					'', 'I', '#000000', '', '', '', '',
 					'#918caa' ],
 		
-		_('plain'): [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','' ],
+		_('system'): [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','' ],
 		
 	}
 	
