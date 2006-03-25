@@ -557,9 +557,6 @@ class RosterWindow:
 		server += '/announce/motd/delete'
 		gajim.connections[account].send_motd(server)
 
-	def on_online_users_menuitem_activate(self, widget, account):
-		pass #FIXME: impement disco in users for 0.9
-	
 	def on_history_manager_menuitem_activate(self, widget):
 		if os.name == 'nt': # FIXME: test it actually works..
 			try:
@@ -578,7 +575,6 @@ class RosterWindow:
 			'send_single_message_menuitem')
 		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
 		administrator_menuitem = xml.get_widget('administrator_menuitem')
-		online_users_menuitem = xml.get_widget('online_users_menuitem')
 		send_server_message_menuitem = xml.get_widget(
 			'send_server_message_menuitem')
 		set_motd_menuitem = xml.get_widget('set_motd_menuitem')
@@ -590,12 +586,6 @@ class RosterWindow:
 
 		xml_console_menuitem.connect('activate',
 			self.on_xml_console_menuitem_activate, account)
-
-		#FIXME: 0.9 should have this: it does disco in the place where users are
-		online_users_menuitem.set_no_show_all(True)
-		online_users_menuitem.hide()
-		online_users_menuitem.connect('activate',
-			self.on_online_users_menuitem_activate, account)
 
 		send_server_message_menuitem.connect('activate',
 			self.on_send_server_message_menuitem_activate, account)

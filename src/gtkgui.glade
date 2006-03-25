@@ -17263,7 +17263,7 @@ Maybe I'll refactor later</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1173">
+	<widget class="GtkImage" id="image1453">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -17297,20 +17297,13 @@ Maybe I'll refactor later</property>
 	<widget class="GtkMenu" id="administrator_menuitem_menu">
 
 	  <child>
-	    <widget class="GtkMenuItem" id="online_users_menuitem">
-	      <property name="label" translatable="yes">_Online Users</property>
-	      <property name="use_underline">True</property>
-	    </widget>
-	  </child>
-
-	  <child>
 	    <widget class="GtkImageMenuItem" id="send_server_message_menuitem">
 	      <property name="tooltip" translatable="yes">Sends a message to currently connected users to this server</property>
 	      <property name="label" translatable="yes">_Send Server Message</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1174">
+		<widget class="GtkImage" id="image1454">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-new</property>
 		  <property name="icon_size">1</property>
@@ -17352,7 +17345,7 @@ Maybe I'll refactor later</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1175">
+		<widget class="GtkImage" id="image1455">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-clear</property>
 		  <property name="icon_size">1</property>
