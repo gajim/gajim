@@ -909,13 +909,6 @@ class ChatControl(ChatControlBase):
 			status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 2)
 		status_escaped = gtkgui_helpers.escape_for_pango_markup(status)
 
-		#FIXME: uncomment me when we support sending messages to specific resource
-		# composing full jid
-		#fulljid = jid
-		#if self.contacts[jid].resource:
-		#	fulljid += '/' + self.contacts[jid].resource
-		#label_text = '<span weight="heavy" size="x-large">%s</span>\n%s' \
-		#	% (name, fulljid)
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		st = gajim.config.get('chat_state_notifications')
 		cs = contact.chatstate
