@@ -226,7 +226,7 @@ class Config:
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
 			# proxy65 for FT
 			'file_transfer_proxies': [opt_str, 
-			'proxy.jabber.org, proxy.netlab.cz, transfer.jabber.freenet.de, proxy65.jabber.ccc.de, proxy65.jabber.autocom.pl, proxy.jabber.cd.chalmers.se'],
+			'proxy.jabber.org, proxy.netlab.cz, transfer.jabber.freenet.de'],
 			'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 			'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
 			'msgwin-width': [opt_int, 480],
@@ -320,14 +320,6 @@ class Config:
 
 	}
 	
-	ft_proxies65_default = {
-		'proxy.jabber.org': [ '208.245.212.98', '7777', 'proxy.jabber.org' ],
-		'proxy65.jabber.autocom.pl': ['213.134.161.52', '7777', 'proxy65.jabber.autocom.pl'],
-		'proxy.jabber.cd.chalmers.se': ['129.16.79.37', '7777', 'proxy.jabber.cd.chalmers.se'],
-		'proxy.netlab.cz': ['82.119.241.3', '7777', 'proxy.netlab.cz'],
-		'proxy65.jabber.ccc.de': ['217.10.10.196', '7777', 'proxy65.jabber.ccc.de'],
-	}
-
 	def foreach(self, cb, data = None):
 		for opt in self.__options:
 			cb(data, opt, None, self.__options[opt])
@@ -508,6 +500,3 @@ class Config:
 			self.set_per('soundevents', event, 'enabled', default[0])
 			self.set_per('soundevents', event, 'path', default[1])
 
-		# set initial cache values for proxie65 hosts
-		for proxy in self.ft_proxies65_default:
-			default = self.ft_proxies65_default[proxy]
