@@ -131,7 +131,7 @@ class Config:
 		'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
-		'version': [ opt_str, '0.9' ], # which version created the config
+		'version': [ opt_str, '0.10' ], # which version created the config
 		'always_compact_view_chat': [opt_bool, False, _('Use compact view when you open a chat window')],
 		'always_compact_view_gc': [opt_bool, False, _('Use compact view when you open a group chat window')],
 		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
