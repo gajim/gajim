@@ -708,12 +708,14 @@ class ConnectionDisco:
 				data.append(common.xmpp.DataForm(node=i))
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		id = iq_obj.getID()
-		if identities: #if not: an error occured
-			if id[0] == 'p':
-				if features.__contains__(common.xmpp.NS_BYTESTREAM):
-					gajim.proxy65_manager.resolve(jid, self.connection, self.name)
-			self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
-				features, data))
+		if not identities: # ejabberd doesn't send identities when we browse online users
+		#FIXME: see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
+			identities = [{'category': 'server', 'type': 'im', 'name': node}]
+		if id[0] == 'p':
+			if features.__contains__(common.xmpp.NS_BYTESTREAM):
+				gajim.proxy65_manager.resolve(jid, self.connection, self.name)
+		self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
+			features, data))
 
 class ConnectionVcard:
 	def __init__(self):
