@@ -139,8 +139,6 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0,
 		reduced_text = reduce(lambda e, e1: e + '\n' + e1, lines)
 	else:
 		reduced_text = ''
-	if reduced_text != text and widget is not None:
-		pass # FIXME show tooltip
 	return reduced_text
 
 def escape_for_pango_markup(string):
