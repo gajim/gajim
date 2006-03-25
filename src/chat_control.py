@@ -167,6 +167,7 @@ class ChatControlBase(MessageControl):
 				gajim.config.set('use_speller', False)
 
 		self.print_time_timeout_id = None
+		self.style_event_id = 0
 
 	def _on_send_button_clicked(self, widget):
 		'''When send button is pressed: send the current message'''
@@ -192,18 +193,47 @@ class ChatControlBase(MessageControl):
 		# setting the bg color of the eventbox and the fg of the name_label
 		banner_eventbox = self.xml.get_widget('banner_eventbox')
 		banner_name_label = self.xml.get_widget('banner_name_label')
+		self.disconnect_style_event(banner_name_label)
 		if bgcolor:
 			banner_eventbox.modify_bg(gtk.STATE_NORMAL, 
 				gtk.gdk.color_parse(bgcolor))
+			default_bg = False
 		else:
-			banner_eventbox.modify_bg(gtk.STATE_NORMAL, None)
+			default_bg = True
 		if textcolor:
 			banner_name_label.modify_fg(gtk.STATE_NORMAL,
 				gtk.gdk.color_parse(textcolor))
+			default_fg = False
 		else:
-			banner_name_label.modify_fg(gtk.STATE_NORMAL, None)
-
-
+			default_fg = True
+		if default_bg or default_fg:
+			self._on_style_set_event(banner_name_label, None, default_fg, default_bg)
+	
+	def disconnect_style_event(self, widget):
+		if self.style_event_id:
+			widget.disconnect(self.style_event_id)
+			self.style_event_id = 0
+	
+	def connect_style_event(self, widget, set_fg = False, set_bg = False):
+		self.disconnect_style_event(widget)
+		self.style_event_id = widget.connect('style-set', self._on_style_set_event, 
+																	set_fg, set_bg)
+	
+	def _on_style_set_event(self, widget, style, *opts):
+		''' set style of widget from style class *.Frame.Eventbox 
+			opts[0] == True -> set fg color
+			opts[1] == True -> set bg color	'''
+		banner_eventbox = self.xml.get_widget('banner_eventbox')
+		self.disconnect_style_event(widget)
+		if opts[1]:
+			bg_color = widget.style.bg[gtk.STATE_SELECTED]
+			banner_eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
+		if opts[0]:
+			fg_color = widget.style.fg[gtk.STATE_SELECTED]
+			widget.modify_fg(gtk.STATE_NORMAL, fg_color)
+		widget.ensure_style()
+		self.connect_style_event(widget, opts[0], opts[1])
+	
 	def _on_keypress_event(self, widget, event):
 		if event.state & gtk.gdk.CONTROL_MASK:
 			# CTRL + l|L: clear conv_textview
