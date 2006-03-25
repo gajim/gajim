@@ -115,11 +115,9 @@ def get_default_font():
 	
 	return None
 	
-def reduce_chars_newlines(text, max_chars = 0, max_lines = 0, 
-	widget = None):
+def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
 	'''Cut the chars after 'max_chars' on each line
-	and show only the first 'max_lines'. If there is more text
-	to be shown, display the whole text in tooltip on 'widget'
+	and show only the first 'max_lines'.
 	If any of the params is not present (None or 0) the action
 	on it is not performed'''
 
