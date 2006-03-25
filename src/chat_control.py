@@ -1473,7 +1473,7 @@ class ChatControl(ChatControlBase):
 		# Redraw parent too
 		gajim.interface.roster.draw_parent_contact(jid, self.account)
 		if gajim.interface.systray_enabled:
-			gajim.interface.systray.remove_jid(jid, self.account, typ)
+			gajim.interface.systray.remove_jid(fjid, self.account, typ)
 		if (self.contact.show == 'offline' or self.contact.show == 'error'):
 			showOffline = gajim.config.get('showoffline')
 			if not showOffline and typ == 'chat' and \

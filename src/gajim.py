@@ -484,9 +484,9 @@ class Interface:
 				show_notification = True
 
 		chat_control = self.msg_win_mgr.get_control(jid, account)
+		jid_of_control = jid
 		if chat_control and chat_control.type_id == message_control.TYPE_GC:
 			# it's a Private Message
-			fjid = array[0]
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
 			if not self.msg_win_mgr.has_window(fjid, account) and \
 				not gajim.awaiting_events[account].has_key(fjid):
@@ -503,16 +503,20 @@ class Interface:
 			chat_control.on_private_message(nick, array[1], array[2])
 			return
 				
-		# FIXME: This should happen first
 		if gajim.config.get('ignore_unknown_contacts') and \
 			not gajim.contacts.get_contact(account, jid):
 			return
 
+		highest_contact = gajim.contacts.get_contact_with_highest_priority(
+			account, jid)
 		# Look for a chat control that has the given resource, or default to one
 		# without resource
 		ctrl = self.msg_win_mgr.get_control(fjid, account)
 		if ctrl:
 			chat_control = ctrl
+		elif resource != highest_contact.resource:
+			chat_control = None
+			jid_of_control = fjid
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if contact:
@@ -553,14 +557,14 @@ class Interface:
 						img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 							'single_msg_recv.png')
 						path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-						notify.notify(_('New Single Message'), jid, account, msg_type,
-							path_to_image = path, text = txt)
+						notify.notify(_('New Single Message'), jid_of_control,
+							account, msg_type, path_to_image = path, text = txt)
 					else: # chat message
 						img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 							'chat_msg_recv.png')
 						path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-						notify.notify(_('New Message'), jid, account, msg_type,
-							path_to_image = path, text = txt)
+						notify.notify(_('New Message'), jid_of_control, account,
+							msg_type, path_to_image = path, text = txt)
 
 		# array : (contact, msg, time, encrypted, msg_type, subject)
 		self.roster.on_message(jid, array[1], array[2], account, array[3],
@@ -1523,16 +1527,20 @@ class Interface:
 
 	def handle_event(self, account, jid, typ):
 		w = None
+		fjid = jid
+		resource = gajim.get_resource_from_jid(jid)
+		jid = gajim.get_jid_without_resource(jid)
 		if typ == message_control.TYPE_GC:
 			w = self.msg_win_mgr.get_window(jid, account)
 		elif typ == message_control.TYPE_CHAT:
-			if self.msg_win_mgr.has_window(jid, account):
-				w = self.msg_win_mgr.get_window(jid, account)
+			if self.msg_win_mgr.has_window(fjid, account):
+				w = self.msg_win_mgr.get_window(fjid, account)
 			else:
-				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-				self.roster.new_chat(contact, account)
-				w = self.msg_win_mgr.get_window(jid, account)
-				ctrl = w.get_control
+				contact = gajim.contacts.get_contact(account, jid, resource)
+				if isinstance(contact, list):
+					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+				self.roster.new_chat(contact, account, resource = resource)
+				w = self.msg_win_mgr.get_window(fjid, account)
 				gajim.last_message_time[account][jid] = 0 # long time ago
 		elif typ == message_control.TYPE_PM:
 			if self.msg_win_mgr.has_window(jid, account):
@@ -1569,10 +1577,10 @@ class Interface:
 				data[1])
 			self.remove_first_event(account, jid, typ)
 		if w:
-			w.set_active_tab(jid, account)
+			w.set_active_tab(fjid, account)
 			w.window.present()
 			w.window.window.focus()
-			ctrl = w.get_control(jid, account)
+			ctrl = w.get_control(fjid, account)
 			# Using isinstance here because we want to catch all derived types
 			if isinstance(ctrl, ChatControlBase):
 				tv = ctrl.conv_textview

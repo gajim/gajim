@@ -432,6 +432,12 @@ class RosterWindow:
 
 		iter = iters[0] # choose the icon with the first iter
 		icon_name = helpers.get_icon_name_to_show(contact, account)
+		# look if anotherresource has awaiting events
+		for c in contact_instances:
+			c_icon_name = helpers.get_icon_name_to_show(c, account)
+			if c_icon_name == 'message':
+				icon_name = c_icon_name
+				break
 		path = model.get_path(iter)
 		if model.iter_has_child(iter):
 			if not self.tree.row_expanded(path) and icon_name != 'message':
@@ -2082,7 +2088,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				# Redraw parent too
 				self.draw_parent_contact(jid, account)
 			if gajim.interface.systray_enabled:
-				gajim.interface.systray.add_jid(jid, account, kind)
+				gajim.interface.systray.add_jid(fjid, account, kind)
 			self.show_title() # we show the * or [n]
 			if not path:
 				self.add_contact_to_roster(jid, account)
@@ -2336,6 +2342,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		account = model[path][C_ACCOUNT].decode('utf-8')
 		type = model[path][C_TYPE]
 		jid = model[path][C_JID].decode('utf-8')
+		resource = None
 		iter = model.get_iter(path)
 		if type in ('group', 'account'):
 			if self.tree.row_expanded(path):
@@ -2344,6 +2351,14 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self.tree.expand_row(path, False)
 		else:
 			first_ev = gajim.get_first_event(account, jid)
+			if not first_ev:
+				# look in other resources
+				for c in gajim.contacts.get_contact(account, jid):
+					fjid = c.get_full_jid()
+					first_ev = gajim.get_first_event(account, fjid)
+					if first_ev:
+						resource = c.resource
+						break
 			if not first_ev and model.iter_has_child(iter):
 				child_iter = model.iter_children(iter)
 				while not first_ev and child_iter:
@@ -2354,10 +2369,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					else:
 						child_iter = model.iter_next(child_iter)
 			if first_ev:
-				if self.open_event(account, jid, first_ev):
+				fjid = jid
+				if resource:
+					fjid += '/' + resource
+				if self.open_event(account, fjid, first_ev):
 					return
 			c = gajim.contacts.get_contact_with_highest_priority(account, jid)
-			self.on_open_chat_window(widget, c, account)
+			self.on_open_chat_window(widget, c, account, resource = resource)
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''

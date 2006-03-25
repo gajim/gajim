@@ -506,6 +506,9 @@ def get_icon_name_to_show(contact, account = None):
 	'''Get the icon name to show in online, away, requested, ...'''
 	if account and gajim.awaiting_events[account].has_key(contact.jid):
 		return 'message'
+	if account and gajim.awaiting_events[account].has_key(
+	contact.get_full_jid()):
+		return 'message'
 	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 		return contact.show
 	if contact.sub in ('both', 'to'):
