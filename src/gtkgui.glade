@@ -18092,7 +18092,7 @@ Maybe I'll refactor later</property>
 </widget>
 
 <widget class="GtkWindow" id="message_window">
-  <property name="title" translatable="yes">window1</property>
+  <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -18111,7 +18111,7 @@ Maybe I'll refactor later</property>
   <signal name="focus_in_event" handler="_on_window_focus" last_modification_time="Thu, 12 Jan 2006 02:56:55 GMT"/>
 
   <child>
-    <widget class="GtkAlignment" id="alignment99">
+    <widget class="GtkAlignment" id="msg_window_alignment">
       <property name="visible">True</property>
       <property name="xalign">0.5</property>
       <property name="yalign">0.5</property>
