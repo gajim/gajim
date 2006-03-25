@@ -231,7 +231,7 @@ class ChatControlBase(MessageControl):
 		if opts[0]:
 			fg_color = widget.style.fg[gtk.STATE_SELECTED]
 			widget.modify_fg(gtk.STATE_NORMAL, fg_color)
-		widget.ensure_style()
+		widget.realize()
 		self.connect_style_event(widget, opts[0], opts[1])
 	
 	def _on_keypress_event(self, widget, event):

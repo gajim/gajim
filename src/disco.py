@@ -442,7 +442,7 @@ _('Without a connection, you can not browse available services')).get_response()
 		self.banner_icon = self.xml.get_widget('banner_agent_icon')
 		self.banner_eventbox = self.xml.get_widget('banner_agent_eventbox')
 		self.style_event_id = 0
-		self.banner.ensure_style()
+		self.banner.realize()
 		self.paint_banner()
 		self.filter_hbox = self.xml.get_widget('filter_hbox')
 		self.filter_hbox.set_no_show_all(True)
