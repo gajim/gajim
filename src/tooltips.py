@@ -1,11 +1,8 @@
 ##	tooltips.py
 ##
-## Copyright (C) 2005-2006 Gajim Team
-## 
-## Contributors for this file:
-##	- Dimitur Kirov <dkirov@gmail.com>
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -185,6 +182,7 @@ class StatusTable:
 				# make sure 'status' is unicode before we send to to reduce_chars
 				if isinstance(status, str):
 					status = unicode(status, encoding='utf-8')
+				# reduce to 200 chars, 1 line
 				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 1)
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)

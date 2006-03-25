@@ -906,7 +906,7 @@ class ChatControl(ChatControlBase):
 		status = contact.status
 		if status is not None:
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
-			status = gtkgui_helpers.reduce_chars_newlines(status, 0, 2)
+			status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 2)
 		status_escaped = gtkgui_helpers.escape_for_pango_markup(status)
 
 		#FIXME: uncomment me when we support sending messages to specific resource
