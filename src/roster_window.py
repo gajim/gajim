@@ -2844,7 +2844,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# add children too
 		all_jid = gajim.contacts.get_metacontacts_jids(old_tag)
 		for _account in all_jid:
-			for _jid in all_data[_account]:
+			for _jid in all_jid[_account]:
 				gajim.contacts.add_metacontact(account, c_dest.jid, _account, _jid)
 				self.add_contact_to_roster(_jid, _account)
 				self.draw_contact(_jid, _account)
