@@ -2530,7 +2530,7 @@ class AccountCreationWizardWindow:
 					dialogs.ErrorDialog(_('Passwords do not match'),
 						_('The passwords typed in both fields must be identical.')).get_response()
 					return
-			
+
 			jid = username + '@' + server
 			# check if jid is conform to RFC and stringprep it
 			try:
@@ -2538,6 +2538,18 @@ class AccountCreationWizardWindow:
 			except helpers.InvalidFormat, s:
 				pritext = _('Invalid Jabber ID')
 				dialogs.ErrorDialog(pritext, str(s)).get_response()
+				return
+
+			already_in_jids = []
+			for account in gajim.connections:
+				j = gajim.config.get_per('accounts', account, 'name')
+				j += '@' + gajim.config.get_per('accounts', account, 'hostname')
+				already_in_jids.append(j)
+
+			if jid in already_in_jids:
+				pritext = _('Duplicate Jabber ID')
+				sectext = _('This account is already configured in Gajim.')
+				dialogs.ErrorDialog(pritext, sectext).get_response()
 				return
 
 			self.account = server
