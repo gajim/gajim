@@ -24,6 +24,7 @@ import sys
 import stat
 import sha
 from pysqlite2 import dbapi2 as sqlite
+from encodings.punycode import punycode_encode
 
 import gajim
 import logger
@@ -702,12 +703,14 @@ def get_os_info():
 def sanitize_filename(filename):
 	'''makes sure the filename we try to write does not contain
 	unacceptable characters'''
+	filename = punycode_encode(filename)
 	filename = filename.replace('/', '_')
 	if os.name == 'nt':
 		filename = filename.replace('?', '').replace(':', '').replace('!', '')\
 			.replace('"', "'")
 	   # 48 is the limit
 		if len(filename) > 48:
+			extension = filename.split('.')[-1]
 			filename = filename[0:48]
 	
 	return filename

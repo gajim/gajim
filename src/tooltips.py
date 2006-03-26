@@ -19,7 +19,6 @@ import gobject
 import os
 import time
 import locale
-from encodings.punycode import punycode_encode
 
 import gtkgui_helpers
 import message_control
@@ -395,8 +394,8 @@ class GCTooltip(BaseTooltip):
 		properties.append((_('Status: '), show))
 		
 		# Add avatar
-		puny_name = punycode_encode(contact.name)
-		puny_room = punycode_encode(contact.room_jid)
+		puny_name = helpers.sanitize_filename(contact.name)
+		puny_room = helpers.sanitize_filename(contact.room_jid)
 		for type_ in ('jpeg', 'png'):
 			file = os.path.join(gajim.AVATAR_PATH, puny_room,
 				puny_name + '.' + type_)
@@ -475,7 +474,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			if not iconset:
 				iconset = 'dcraven'
 			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
-		puny_jid = punycode_encode(prim_contact.jid)
+		puny_jid = helpers.sanitize_filename(prim_contact.jid)
 		table_size = 3
 		
 		for type_ in ('jpeg', 'png'):

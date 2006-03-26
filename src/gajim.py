@@ -95,7 +95,6 @@ import signal
 import getopt
 import time
 import threading
-from encodings.punycode import punycode_encode
 
 import gtkgui_helpers
 import notify
@@ -994,7 +993,7 @@ class Interface:
 
 	def save_avatar_files(self, jid, photo_decoded, puny_nick = None):
 		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
-		puny_jid = punycode_encode(jid)
+		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
 		if puny_nick:
 			path_to_file = os.path.join(path_to_file, puny_nick)

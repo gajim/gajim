@@ -23,7 +23,6 @@ import gobject
 import pango
 import os
 import sys
-from encodings.punycode import punycode_encode
 
 import vcard
 
@@ -435,15 +434,14 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False):
 	so we have new sha) or if we don't have the vcard'''
 
 	jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
-	nick = nick.replace('/', '_')
 	if gajim.config.get('hide_avatar_of_transport') and\
 		gajim.jid_is_transport(jid):
 		# don't show avatar for the transport itself
 		return None
 
-	puny_jid = punycode_encode(jid)
+	puny_jid = helpers.sanitize_filename(jid)
 	if is_fake_jid:
-		puny_nick = punycode_encode(nick)
+		puny_nick = helpers.sanitize_filename(nick)
 		path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
 	else:
 		path = os.path.join(gajim.VCARD_PATH, puny_jid)
@@ -488,7 +486,7 @@ def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
 	Returns full path to the avatar image if it exists,
 	otherwise returns full path to the image.'''
 	if jid:
-		puny_jid = punycode_encode(jid)
+		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
 		if os.path.exists(path_to_file):
 			return path_to_file

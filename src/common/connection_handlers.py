@@ -24,7 +24,6 @@ import sha
 import socket
 
 from calendar import timegm
-from encodings.punycode import punycode_encode
 
 import socks5
 import common.xmpp
@@ -750,8 +749,7 @@ class ConnectionVcard:
 
 	def save_vcard_to_hd(self, full_jid, card):
 		jid, nick = gajim.get_room_and_nick_from_fjid(full_jid)
-		nick = nick.replace('/', '_')
-		puny_jid = punycode_encode(jid)
+		puny_jid = helpers.sanitize_filename(jid)
 		path = os.path.join(gajim.VCARD_PATH, puny_jid)
 		if jid in self.room_jids:
 			# remove room_jid file if needed
@@ -760,7 +758,7 @@ class ConnectionVcard:
 			# create folder if needed
 			if not os.path.isdir(path):
 				os.mkdir(path, 0700)
-			puny_nick = punycode_encode(nick)
+			puny_nick = helpers.sanitize_filename(nick)
 			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
 		else:
 			path_to_file = path
@@ -773,10 +771,9 @@ class ConnectionVcard:
 		return {} if vcard was too old
 		return None if we don't have cached vcard'''
 		jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
-		nick = nick.replace('/', '_')
-		puny_jid = punycode_encode(jid)
+		puny_jid = helpers.sanitize_filename(jid)
 		if is_fake_jid:
-			puny_nick = punycode_encode(nick)
+			puny_nick = helpers.sanitize_filename(nick)
 			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
 		else:
 			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid)
@@ -944,11 +941,11 @@ class ConnectionVcard:
 			# Save it to file
 			self.save_vcard_to_hd(who, card)
 			# Save the decoded avatar to a separate file too, and generate files for dbus notifications
-			puny_jid = punycode_encode(frm)
+			puny_jid = helpers.sanitize_filename(frm)
 			puny_nick = None
 			begin_path = os.path.join(gajim.AVATAR_PATH, puny_jid)
 			if frm in self.room_jids:
-				puny_nick = punycode_encode(resource.replace('/', '_'))
+				puny_nick = helpers.sanitize_filename(resource)
 				# create folder if needed
 				if not os.path.isdir(begin_path):
 					os.mkdir(begin_path, 0700)
