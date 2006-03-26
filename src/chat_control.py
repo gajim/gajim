@@ -726,10 +726,12 @@ class ChatControlBase(MessageControl):
 
 	def got_connected(self):
 		self.msg_textview.set_sensitive(True)
+		self.msg_textview.set_editable(True)
 		self.xml.get_widget('send_button').set_sensitive(True)
 
 	def got_disconnected(self):
 		self.msg_textview.set_sensitive(False)
+		self.msg_textview.set_editable(False)
 		self.xml.get_widget('send_button').set_sensitive(False)
 
 ################################################################################
