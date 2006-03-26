@@ -87,6 +87,7 @@ class Connection(ConnectionHandlers):
 			gajim.config.set('usegpg', False)
 		
 		self.on_connect_success = None
+		self.on_connect_failure = None
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
 		
@@ -320,9 +321,9 @@ class Connection(ConnectionHandlers):
 				secure = self._secure)
 			return
 		else:
-			self._connect_failure(None)
+			self.on_connect_failure()
 
-	def _connect_failure(self, con_type):
+	def _connect_failure(self, con_type = None):
 		if not con_type:
 			# we are not retrying, and not conecting
 			if not self.retrycount and self.connected != 0:
@@ -482,6 +483,7 @@ class Connection(ConnectionHandlers):
 
 	def connect_and_auth(self):
 		self.on_connect_success = self._connect_success
+		self.on_connect_failure = self._connect_failure
 		self.connect()
 
 	def connect_and_init(self, show, msg, signed):
@@ -734,9 +736,10 @@ class Connection(ConnectionHandlers):
 		self.new_account_info = config
 		self.name = name
 		self.on_connect_success = self._on_new_account
+		self.on_connect_failure = self._on_new_account
 		self.connect(config)
 
-	def _on_new_account(self,con, con_type):
+	def _on_new_account(self, con = None, con_type = None):
 		if not con_type:
 			self.dispatch('ACC_NOT_OK',
 				(_('Could not connect to "%s"') % self._hostname))
