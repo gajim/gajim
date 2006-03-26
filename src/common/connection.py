@@ -168,8 +168,8 @@ class Connection(ConnectionHandlers):
 					req['username'] = self.new_account_info['name']
 					req['password'] = self.new_account_info['password']
 					def _on_register_result(result):
-						if not result:
-							self.dispatch('ACC_NOT_OK', (self.connection.lastErr))
+						if not common.xmpp.isResultNode(result):
+							self.dispatch('ACC_NOT_OK', (result.getError()))
 							return
 						self.connected = 0
 						self.password = self.new_account_info['password']

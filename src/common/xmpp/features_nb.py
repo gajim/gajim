@@ -149,7 +149,7 @@ def register(disp, host, info, cb):
 		info=info.asDict()
 	for i in info.keys(): 
 		iq.setTag('query').setTagData(i,info[i])
-	_on_default_response(disp, iq, cb)
+	disp.SendAndCallForResponse(iq, cb)
 
 def unregister(disp, host, cb):
 	""" Unregisters with host (permanently removes account).
