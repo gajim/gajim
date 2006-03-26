@@ -2441,6 +2441,8 @@ class AccountCreationWizardWindow:
 		self.advanced_button = self.xml.get_widget('advanced_button')
 		self.finish_label = self.xml.get_widget('finish_label')
 		self.go_online_checkbutton = self.xml.get_widget('go_online_checkbutton')
+		self.show_vcard_checkbutton = self.xml.get_widget(
+			'show_vcard_checkbutton')
 		self.progressbar = self.xml.get_widget('progressbar')
 
 		# some vars
@@ -2561,7 +2563,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 				img = self.xml.get_widget('finish_image')
 				img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
 				self.notebook.set_current_page(3) # show finish page
-				self.xml.get_widget('show_vcard_checkbutton').set_active(False)
+				self.show_vcard_checkbutton.set_active(False)
 			else:
 				self.notebook.set_current_page(2) # show creating page
 				self.update_progressbar_timeout_id = gobject.timeout_add(100,
@@ -2578,6 +2580,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		self.finish_button.set_property('has-default', True)
 		self.advanced_button.show()
 		self.go_online_checkbutton.show()
+		self.show_vcard_checkbutton.show()
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
 
@@ -2595,6 +2598,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		self.back_button.show()
 		self.cancel_button.show()
 		self.go_online_checkbutton.hide()
+		self.show_vcard_checkbutton.hide()
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
 		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occured during account creation') , reason)
