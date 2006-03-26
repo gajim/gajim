@@ -138,9 +138,9 @@ class OptionsParser:
 		while len(new_version):
 			new.append(int(new_version.pop(0)))
 
-		if old < (0, 9) and new >= (0, 9):
+		if old < [0, 9] and new >= [0, 9]:
 			self.update_config_x_to_09()
-		if old < (0, 10) and new >= (0, 10):
+		if old < [0, 10] and new >= [0, 10]:
 			self.update_config_09_to_010()
 	
 	def update_config_x_to_09(self):
@@ -200,6 +200,7 @@ class OptionsParser:
 		gajim.config.set('version', '0.9')
 
 	def update_config_09_to_010(self):
+		print 'update to 0.10'
 		if self.old_values.has_key('usetabbedchat') and not \
 			self.old_values['usetabbedchat']:
 			gajim.config.set('one_message_window', 'never')
@@ -212,13 +213,20 @@ class OptionsParser:
 		for account in gajim.config.get_per('accounts'):
 			proxies_str = gajim.config.get_per('accounts', account,
 											'file_transfer_proxies')
-			proxies = proxies_str.split(",").strip()
+			proxies = proxies_str.split(',')
+			print proxies
+			for i in range(0, len(proxies)):
+				proxies[i] = proxies[i].strip()
+			print proxies
 			for wrong_proxy in ['proxy.jabber.cd.chalmers.se', 
 				'proxy65.jabber.autocom.pl', 'proxy65.jabber.ccc.de']: 
 				if wrong_proxy in proxies:
 					proxies.remove(wrong_proxy)
-			proxies.append('transfer.jabber.freenet.de')
+			if not 'transfer.jabber.freenet.de' in proxies:
+				proxies.append('transfer.jabber.freenet.de')
+			print proxies
 			proxies_str = ', '.join(proxies)
 			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
 																proxies_str)
 																										
+		gajim.config.set('version', '0.10')
