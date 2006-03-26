@@ -1850,7 +1850,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.update_status_combobox()
 			return
 		status = model[active][2].decode('utf-8')
-		one_connected = helpers.one_account_connected()
 		if active == 7: # We choose change status message (7 is that)
 			# do not change show, just show change status dialog
 			status = model[self.previous_status_combobox_active][2].decode('utf-8')
@@ -1871,6 +1870,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# after user chooses "Change status message" menuitem
 		# we can return to this show
 		self.previous_status_combobox_active = active
+		one_connected = helpers.one_account_connected()
 		if status == 'invisible':
 			bug_user = False
 			for acct in accounts:
@@ -1893,12 +1893,19 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if message is None: # user pressed Cancel to change status message dialog
 			self.update_status_combobox()
 			return
+		global_sync_accounts = []
+		for acct in accounts:
+			if gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
+				global_sync_accounts.append(acct)
+		one_with_global_sync_connected = helpers.one_account_connected(
+			global_sync_accounts)
 		for acct in accounts:
 			if not gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
 				continue
 			# we are connected (so we wanna change show and status)
 			# or no account is connected and we want to connect with new show and status
-			if not one_connected or gajim.connections[acct].connected > 1:
+			if not one_with_global_sync_connected or \
+			gajim.connections[acct].connected > 1:
 				self.send_status(acct, status, message)
 		self.update_status_combobox()
 

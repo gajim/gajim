@@ -458,10 +458,13 @@ def get_xmpp_show(show):
 		return None
 	return show
 
-def one_account_connected():
+def one_account_connected(account_list = None):
 	'''returns True if at least one account is connected, else False'''
+	if account_list is None:
+		accounts = gajim.connections.keys()
+	else:
+		accounts = account_list
 	one_connected = False
-	accounts = gajim.connections.keys()
 	for acct in accounts:
 		if gajim.connections[acct].connected > 1:
 			one_connected = True
