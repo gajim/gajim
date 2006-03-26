@@ -115,7 +115,6 @@ class GajimThemesWindow:
 			gajim.config.set('roster_theme', new_config_name)
 		model.set_value(iter, 0, new_name)
 		self.current_theme = new_name
-		gajim.interface.instances['preferences'].update_preferences_window()
 
 	def fill_themes_treeview(self):
 		self.xml.get_widget('remove_button').set_sensitive(False)
@@ -157,7 +156,6 @@ class GajimThemesWindow:
 		col = self.themes_tree.get_column(0)
 		path = model.get_path(iter)
 		self.themes_tree.set_cursor(path, col, True)
-		gajim.interface.instances['preferences'].update_preferences_window()
 
 	def on_remove_button_clicked(self, widget):
 		(model, iter) = self.themes_tree.get_selection().get_selected()
@@ -171,7 +169,6 @@ class GajimThemesWindow:
 		self.theme_options_vbox.set_sensitive(False)
 		gajim.config.del_per('themes', self.current_theme)
 		model.remove(iter)
-		gajim.interface.instances['preferences'].update_preferences_window()
 	
 	def set_theme_options(self, theme, option = 'account'):
 		self.no_update = True
