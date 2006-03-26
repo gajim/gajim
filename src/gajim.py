@@ -513,7 +513,7 @@ class Interface:
 		ctrl = self.msg_win_mgr.get_control(fjid, account)
 		if ctrl:
 			chat_control = ctrl
-		elif resource != highest_contact.resource:
+		elif not highest_contact or resource != highest_contact.resource:
 			chat_control = None
 			jid_of_control = fjid
 		# Handle chat states  
