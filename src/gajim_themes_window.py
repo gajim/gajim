@@ -262,8 +262,11 @@ class GajimThemesWindow:
 			color_string = gtkgui_helpers.make_color_string(color)
 		else:
 			color_string = ''
+		begin_option = ''
+		if not option.startswith('state'):
+			begin_option = self.current_option
 		gajim.config.set_per('themes', self.current_theme, 
-			self.current_option + option, color_string)
+			begin_option + option, color_string)
 		# use faster functions for this
 		if self.current_option == 'banner':
 			gajim.interface.roster.repaint_themed_widgets()
