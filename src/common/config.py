@@ -23,12 +23,15 @@ import copy
 import i18n
 _ = i18n._
 
-OPT_TYPE = 0
-OPT_VAL = 1
-OPT_DESC = 2
+
+(
+OPT_TYPE,
+OPT_VAL,
+OPT_DESC,
 # If OPT_RESTART is True - we need restart to use our changed option
 # OPT_DESC also should be there
-OPT_RESTART = 3
+OPT_RESTART,
+) = range(4)
 
 opt_int = [ 'integer', 0 ]
 opt_str = [ 'string', 0 ]
