@@ -704,9 +704,9 @@ def get_os_info():
 	return 'N/A'
 
 def sanitize_filename(filename):
-	'''makes sure the filename we try to write does not contain
-	unacceptable characters'''
-	filename = punycode_encode(filename)
+	'''makes sure the filename we will write does contain only
+	acceptable and latin characters'''
+	filename = punycode_encode(filename) # make it latin chars only
 	filename = filename.replace('/', '_')
 	if os.name == 'nt':
 		filename = filename.replace('?', '').replace(':', '').replace('!', '')\
