@@ -565,11 +565,14 @@ class RosterWindow:
 
 	def on_history_manager_menuitem_activate(self, widget):
 		if os.name == 'nt': # FIXME: test it actually works..
-			try:
-				os.startfile('history_manager.exe') # if pywin32 is installed we open
-			except: # FIXME: fallback (for windows svn users) to py
-				pass
-		else:
+			if os.path.exists('history_manager.exe'): # he's running stable
+				os.system('history_manager.exe')
+			else: # he is svn user
+				try:
+					os.startfile('history_manager.py')
+				except: # user doesn't have pywin32, too bad for him
+					pass
+		else: # Unix user
 			os.system('python history_manager.py &')
 
 	def get_and_connect_advanced_menuitem_menu(self, account):
