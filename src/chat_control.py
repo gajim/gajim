@@ -1433,7 +1433,7 @@ class ChatControl(ChatControlBase):
 		is_pm = False
 		room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 		control = gajim.interface.msg_win_mgr.get_control(room_jid, self.account)
-		if control.type_id == message_control.TYPE_GC:
+		if control and control.type_id == message_control.TYPE_GC:
 			is_pm = True
 		events_to_keep = []
 		for event in l:
