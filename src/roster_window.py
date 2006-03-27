@@ -566,7 +566,7 @@ class RosterWindow:
 	def on_history_manager_menuitem_activate(self, widget):
 		if os.name == 'nt': # FIXME: test it actually works..
 			if os.path.exists('history_manager.exe'): # he's running stable
-				os.system('history_manager.exe')
+				os.startfile('history_manager.exe')
 			else: # he is svn user
 				try:
 					os.startfile('history_manager.py')
