@@ -218,6 +218,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.disconnect()
 			if self.on_connect_failure:
 				self.on_connect_failure()
+			# don't proccess result, cas it will raise error
+			return
 		elif not received :
 			if errnum != socket.SSL_ERROR_EOF: 
 				# 8 EOF occurred in violation of protocol
@@ -292,7 +294,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			return
 		# 10056  - already connected, only on win32
 		# code 'WS*' is not available on GNU, so we use its numeric value
-		elif errnum not in (0, 10056): 
+		elif errnum not in (0, 10056, errno.EISCONN): 
 			self.remove_timeout()
 			if self.on_connect_failure:
 				self.on_connect_failure()
