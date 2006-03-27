@@ -1704,10 +1704,6 @@
 	      </child>
 
 	      <child>
-		<placeholder/>
-	      </child>
-
-	      <child>
 		<widget class="GtkFrame" id="frame37">
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
