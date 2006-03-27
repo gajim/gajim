@@ -2602,7 +2602,8 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		self.go_online_checkbutton.show()
 		self.show_vcard_checkbutton.show()
 		img = self.xml.get_widget('finish_image')
-		img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
+		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
+		img.set_from_file(path_to_file)
 
 		finish_text = '<big><b>%s</b></big>\n\n%s' % (
 			_('Your new account has been created successfully'),
