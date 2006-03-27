@@ -458,12 +458,16 @@ class Interface:
 			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) doesn't follow the JEP
 			# remove in 2007
 			# It's maybe a GC_NOTIFY (specialy for MSN gc)
-			self.handle_event_gc_notify(account, (jid, array[1], array[2], array[3], None, None, None, None, None, None, None))
+			self.handle_event_gc_notify(account, (jid, array[1], array[2],
+				array[3], None, None, None, None, None, None, None))
 			
 
 	def handle_event_msg(self, account, array):
 		# ('MSG', account, (jid, msg, time, encrypted, msg_type, subject,
 		# chatstate))
+		if not array[1]: # empty message text
+			return
+
 		jid = gajim.get_jid_without_resource(array[0])
 		resource = gajim.get_resource_from_jid(array[0])
 		fjid = jid + '/' + resource
@@ -473,6 +477,22 @@ class Interface:
 		composing_jep = array[8]
 		if jid.find('@') <= 0:
 			jid = jid.replace('@', '')
+		
+		chat_control = self.msg_win_mgr.get_control(jid, account)
+		
+		first = False
+		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
+			first = True
+		
+		# array: (contact, msg, time, encrypted, msg_type, subject)
+		self.roster.on_message(jid, array[1], array[2], account, array[3],
+			msg_type, array[5], resource)
+		if gajim.config.get_per('soundevents', 'first_message_received',
+			'enabled') and first:
+			helpers.play_sound('first_message_received')
+		if gajim.config.get_per('soundevents', 'next_message_received',
+			'enabled') and not first:
+			helpers.play_sound('next_message_received')
 
 		show_notification = False
 		if gajim.config.get('notify_on_new_message'):
@@ -482,7 +502,6 @@ class Interface:
 			elif gajim.connections[account].connected in (2, 3): # we're online or chat
 				show_notification = True
 
-		chat_control = self.msg_win_mgr.get_control(jid, account)
 		jid_of_control = jid
 		if chat_control and chat_control.type_id == message_control.TYPE_GC:
 			# it's a Private Message
@@ -497,11 +516,13 @@ class Interface:
 					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 						'priv_msg_recv.png')
 					path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-					notify.notify(_('New Private Message'), fjid, account, 'pm', path_to_image = path, text = txt)
+					notify.notify(_('New Private Message'), fjid, account, 'pm',
+						path_to_image = path, text = txt)
 
 			chat_control.on_private_message(nick, array[1], array[2])
 			return
 				
+		# THIS HAS TO BE AFTER PM handling so we can get PMs
 		if gajim.config.get('ignore_unknown_contacts') and \
 			not gajim.contacts.get_contact(account, jid):
 			return
@@ -520,16 +541,17 @@ class Interface:
 		elif resource != highest_contact.resource:
 			chat_control = None
 			jid_of_control = fjid
+
 		# Handle chat states  
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if contact:
 			contact.composing_jep = composing_jep
 		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
-			if chatstate is not None: # he or she sent us reply, so he supports jep85 or jep22
+			if chatstate is not None:
+				# other peer sent us reply, so he supports jep85 or jep22
 				contact.chatstate = chatstate
 				if contact.our_chatstate == 'ask': # we were jep85 disco?
 					contact.our_chatstate = 'active' # no more
-				
 				chat_control.handle_incoming_chatstate()
 			elif contact.chatstate != 'active':
 				# got no valid jep85 answer, peer does not support it
@@ -541,18 +563,14 @@ class Interface:
 			if msg_id: # Do not overwrite an existing msg_id with None
 				contact.msg_id = msg_id
 
-		if not array[1]: #empty message text
-			return
-
-		first = False
 		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
-			first = True
 			if gajim.config.get('notify_on_new_message'):
 				show_notification = False
 				# check OUR status and if we allow notifications for that status
 				if gajim.config.get('autopopupaway'): # always show notification
 					show_notification = True
-				elif gajim.connections[account].connected in (2, 3): # we're online or chat
+				elif gajim.connections[account].connected in (2, 3):
+					# we're online or chat
 					show_notification = True
 				if show_notification:
 					txt = _('%s has sent you a new message.') % gajim.get_name_from_jid(account, jid)
@@ -569,15 +587,6 @@ class Interface:
 						notify.notify(_('New Message'), jid_of_control, account,
 							msg_type, path_to_image = path, text = txt)
 
-		# array : (contact, msg, time, encrypted, msg_type, subject)
-		self.roster.on_message(jid, array[1], array[2], account, array[3],
-			msg_type, array[5], resource)
-		if gajim.config.get_per('soundevents', 'first_message_received',
-			'enabled') and first:
-			helpers.play_sound('first_message_received')
-		if gajim.config.get_per('soundevents', 'next_message_received',
-			'enabled') and not first:
-			helpers.play_sound('next_message_received')
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
 
