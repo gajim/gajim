@@ -304,19 +304,3 @@ def get_name_from_jid(account, jid):
 	else:
 		actor = jid
 	return actor
-
-def popup_window(account):
-	autopopup = config.get('autopopup')
-	autopopupaway = config.get('autopopupaway')
-	if autopopup and (autopopupaway or connections[account].connected  in (2, 3)):
-		return True
-	return False
-
-def show_notification(account):
-	if config.get('notify_on_new_message'):
-		# check OUR status and if we allow notifications for that status
-		if config.get('autopopupaway'): # always show notification
-			return True
-		if connections[account].connected in (2, 3): # we're online or chat
-			return True
-	return False

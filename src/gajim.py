@@ -395,14 +395,7 @@ class Interface:
 				if not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
 					gajim.allow_notifications[account]:
-					show_notification = False
-					# check OUR status and if we allow notifications for that status
-					if gajim.config.get('autopopupaway'): # always notify
-						show_notification = True
-					elif gajim.connections[account].connected in (2, 3):
-						# we're online or chat
-						show_notification = True
-					if show_notification:
+					if helpers.allow_showing_notification():
 						transport_name = gajim.get_transport_name_from_jid(jid)
 						img = None
 						if transport_name:
@@ -428,14 +421,7 @@ class Interface:
 					helpers.play_sound('contact_disconnected')
 				if not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signout'):
-					show_notification = False
-					# check OUR status and if we allow notifications for that status
-					if gajim.config.get('autopopupaway'): # always notify
-						show_notification = True
-					elif gajim.connections[account].connected in (2, 3):
-						# we're online or chat
-						show_notification = True
-					if show_notification:
+					if helpers.allow_showing_notification(account):
 						transport_name = gajim.get_transport_name_from_jid(jid)
 						img = None
 						if transport_name:
@@ -494,15 +480,13 @@ class Interface:
 			'enabled') and not first:
 			helpers.play_sound('next_message_received')
 
-		show_notification = gajim.show_notification()
-
 		jid_of_control = jid
 		if chat_control and chat_control.type_id == message_control.TYPE_GC:
 			# it's a Private Message
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
 			if not self.msg_win_mgr.has_window(fjid, account) and \
 				not gajim.awaiting_events[account].has_key(fjid):
-				if show_notification:
+				if helpers.allow_showing_notification(account):
 					room_name,t = gajim.get_room_name_and_server_from_room_jid(
 						room_jid)
 					txt = _('%(nickname)s in room %(room_name)s has sent you a new '
@@ -559,14 +543,7 @@ class Interface:
 
 		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
 			if gajim.config.get('notify_on_new_message'):
-				show_notification = False
-				# check OUR status and if we allow notifications for that status
-				if gajim.config.get('autopopupaway'): # always show notification
-					show_notification = True
-				elif gajim.connections[account].connected in (2, 3):
-					# we're online or chat
-					show_notification = True
-				if show_notification:
+				if helpers.allow_showing_notification(account):
 					txt = _('%s has sent you a new message.') % gajim.get_name_from_jid(account, jid)
 					if msg_type == 'normal': # single message
 						img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
@@ -899,7 +876,7 @@ class Interface:
 		#('GC_INVITATION', (room_jid, jid_from, reason, password))
 		jid = gajim.get_jid_without_resource(array[1])
 		room_jid = array[0]
-		if gajim.popup_window(account) or not self.systray_enabled:
+		if helpers.allow_popup_window(account) or not self.systray_enabled:
 			dialogs.InvitationReceivedDialog(account, room_jid, jid, array[3],
 				array[2])
 			return
@@ -907,7 +884,7 @@ class Interface:
 		self.add_event(account, jid, 'gc-invitation', (room_jid, array[2],
 			array[3]))
 
-		if gajim.show_notification(account):
+		if helpers.allow_showing_notification(account):
 			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'gc_invitation.png')
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
@@ -975,13 +952,13 @@ class Interface:
 		ft = self.instances['file_transfers']
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 
-		if gajim.popup_window(account):
+		if helpers.allow_popup_window(account):
 			ft.show_send_error(file_props)
 			return
 
 		self.add_event(account, jid, 'file-send-error', file_props)
 
-		if gajim.show_notification(account):
+		if helpers.allow_showing_notification(account):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'ft_error.png')
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.notify(_('File Transfer Error'),
@@ -1081,7 +1058,7 @@ class Interface:
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 		errno = file_props['error']
 
-		if gajim.popup_window(account):
+		if helpers.allow_popup_window(account):
 			if errno in (-4, -5):
 				ft.show_stopped(jid, file_props)
 			else:
@@ -1095,7 +1072,7 @@ class Interface:
 
 		self.add_event(account, jid, msg_type, file_props)
 
-		if gajim.show_notification(account):
+		if helpers.allow_showing_notification(account):
 			# check if we should be notified
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'ft_error.png')
 			
@@ -1110,14 +1087,14 @@ class Interface:
 		file_props = array[1]
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 
-		if gajim.popup_window(account):
+		if helpers.allow_popup_window(account):
 			self.instances['file_transfers'].show_file_request(account, contact,
 				file_props)
 			return
 
 		self.add_event(account, jid, 'file-request', file_props)
 
-		if gajim.show_notification(account):
+		if helpers.allow_showing_notification(account):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'ft_request.png')
 			txt = _('%s wants to send you a file.') % gajim.get_name_from_jid(account, jid)
@@ -1143,7 +1120,7 @@ class Interface:
 		else: # we send a file
 			jid = unicode(file_props['receiver'])
 
-		if gajim.popup_window(account):
+		if helpers.allow_popup_window(account):
 			if file_props['error'] == 0:
 				if gajim.config.get('notify_on_file_complete'):
 					ft.show_completed(jid, file_props)
