@@ -36,6 +36,7 @@ import time
 from errno import EWOULDBLOCK
 from errno import ENOBUFS
 from errno import EINTR
+from errno import EISCONN
 from xmpp.idlequeue import IdleObject
 MAX_BUFF_LEN = 65536
 
@@ -962,7 +963,7 @@ class Socks5Receiver(Socks5, IdleObject):
 					self.file_props, self.queue_idx)
 				return None
 			# win32 needs this
-			elif errnum != 10056 or self.state != 0:
+			elif errnum not in  (10056, EISCONN) or self.state != 0:
 				return None
 			else: # socket is already connected
 				self._sock.setblocking(False)
