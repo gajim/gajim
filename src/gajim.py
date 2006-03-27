@@ -494,13 +494,7 @@ class Interface:
 			'enabled') and not first:
 			helpers.play_sound('next_message_received')
 
-		show_notification = False
-		if gajim.config.get('notify_on_new_message'):
-			# check OUR status and if we allow notifications for that status
-			if gajim.config.get('autopopupaway'): # always show notification
-				show_notification = True
-			elif gajim.connections[account].connected in (2, 3): # we're online or chat
-				show_notification = True
+		show_notification = gajim.show_notification()
 
 		jid_of_control = jid
 		if chat_control and chat_control.type_id == message_control.TYPE_GC:
