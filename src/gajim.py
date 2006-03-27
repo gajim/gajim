@@ -464,7 +464,33 @@ class Interface:
 			jid = jid.replace('@', '')
 		
 		chat_control = self.msg_win_mgr.get_control(jid, account)
-		
+
+		# Handle chat states  
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		if contact:
+			contact.composing_jep = composing_jep
+		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
+			if chatstate is not None:
+				# other peer sent us reply, so he supports jep85 or jep22
+				contact.chatstate = chatstate
+				if contact.our_chatstate == 'ask': # we were jep85 disco?
+					contact.our_chatstate = 'active' # no more
+				chat_control.handle_incoming_chatstate()
+			elif contact.chatstate != 'active':
+				# got no valid jep85 answer, peer does not support it
+				contact.chatstate = False
+		elif contact and chatstate == 'active':
+			# Brand new message, incoming.  
+			contact.our_chatstate = chatstate
+			contact.chatstate = chatstate
+			if msg_id: # Do not overwrite an existing msg_id with None
+				contact.msg_id = msg_id
+
+		# THIS MUST BE AFTER chatstates handling
+		# AND BEFORE playsound (else we here sounding on chatstates!)
+		if not array[1]: # empty message text
+			return
+
 		first = False
 		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
 			first = True
@@ -515,31 +541,6 @@ class Interface:
 		elif resource != highest_contact.resource:
 			chat_control = None
 			jid_of_control = fjid
-
-		# Handle chat states  
-		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-		if contact:
-			contact.composing_jep = composing_jep
-		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
-			if chatstate is not None:
-				# other peer sent us reply, so he supports jep85 or jep22
-				contact.chatstate = chatstate
-				if contact.our_chatstate == 'ask': # we were jep85 disco?
-					contact.our_chatstate = 'active' # no more
-				chat_control.handle_incoming_chatstate()
-			elif contact.chatstate != 'active':
-				# got no valid jep85 answer, peer does not support it
-				contact.chatstate = False
-		elif contact and chatstate == 'active':
-			# Brand new message, incoming.  
-			contact.our_chatstate = chatstate
-			contact.chatstate = chatstate
-			if msg_id: # Do not overwrite an existing msg_id with None
-				contact.msg_id = msg_id
-
-		# THIS MUST BE AFTER chatstates handling
-		if not array[1]: # empty message text
-			return
 		
 		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
 			if gajim.config.get('notify_on_new_message'):
