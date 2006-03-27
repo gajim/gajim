@@ -451,8 +451,7 @@ class Interface:
 	def handle_event_msg(self, account, array):
 		# ('MSG', account, (jid, msg, time, encrypted, msg_type, subject,
 		# chatstate))
-		if not array[1]: # empty message text
-			return
+		
 
 		jid = gajim.get_jid_without_resource(array[0])
 		resource = gajim.get_resource_from_jid(array[0])
@@ -473,8 +472,8 @@ class Interface:
 		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
 			helpers.play_sound('first_message_received')
-		if gajim.config.get_per('soundevents', 'next_message_received',
-			'enabled') and not first:
+		elif gajim.config.get_per('soundevents', 'next_message_received',
+			'enabled'):
 			helpers.play_sound('next_message_received')
 
 		jid_of_control = jid
@@ -538,6 +537,10 @@ class Interface:
 			if msg_id: # Do not overwrite an existing msg_id with None
 				contact.msg_id = msg_id
 
+		# THIS MUST BE AFTER chatstates handling
+		if not array[1]: # empty message text
+			return
+		
 		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
 			if gajim.config.get('notify_on_new_message'):
 				if helpers.allow_showing_notification(account):
