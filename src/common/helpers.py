@@ -720,9 +720,9 @@ def sanitize_filename(filename):
 
 def allow_showing_notification(account):
 	'''is it allowed to show nofication?'''
-	if config.get('notify_on_new_message'):
+	if gajim.config.get('notify_on_new_message'):
 		# check OUR status and if we allow notifications for that status
-		if config.get('autopopupaway'): # always show notification
+		if gajim.config.get('autopopupaway'): # always show notification
 			return True
 		if connections[account].connected in (2, 3): # we're online or chat
 			return True
@@ -730,8 +730,8 @@ def allow_showing_notification(account):
 
 def allow_popup_window(account):
 	'''is it allowed to popup windows?'''
-	autopopup = config.get('autopopup')
-	autopopupaway = config.get('autopopupaway')
+	autopopup = gajim.config.get('autopopup')
+	autopopupaway = gajim.config.get('autopopupaway')
 	if autopopup and (autopopupaway or connections[account].connected  in (2, 3)):
 		return True
 	return False
