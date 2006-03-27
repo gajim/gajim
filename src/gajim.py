@@ -395,7 +395,7 @@ class Interface:
 				if not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
 					gajim.allow_notifications[account]:
-					if helpers.allow_showing_notification():
+					if helpers.allow_showing_notification(account):
 						transport_name = gajim.get_transport_name_from_jid(jid)
 						img = None
 						if transport_name:
