@@ -107,7 +107,10 @@ awaiting_events = {} # list of messages/FT reveived but not printed
 	# file-completed, file-stopped:
 		# data = file_props
 nicks = {} # list of our nick names in each account
-allow_notifications = {} # do we allow notifications for each account ?
+# should we block 'contact signed in' notifications for this account?
+# this is only only for the first 30 seconds after we change our show to sth
+# else than offline
+block_signed_in_notifications = {}
 con_types = {} # type of each connection (ssl, tls, tcp, ...)
 
 sleeper_state = {} # whether we pass auto away / xa or not

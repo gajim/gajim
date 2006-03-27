@@ -259,8 +259,8 @@ class Interface:
 		gajim.con_types[account] = con_type
 		self.roster.draw_account(account)
 
-	def allow_notif(self, account):
-		gajim.allow_notifications[account] = True
+	def unblock_signed_in_notifications(self, account):
+		gajim.block_signed_in_notifications[account] = False
 
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
@@ -268,10 +268,13 @@ class Interface:
 		if status == 'offline':
 			# sensitivity for this menuitem
 			model[self.roster.status_message_menuitem_iter][3] = False
-			gajim.allow_notifications[account] = False
-
+			gajim.block_signed_in_notifications[account] = True
 		else:
-			gobject.timeout_add(30000, self.allow_notif, account)
+			# 30 seconds after we change our status to sth else than offline
+			# we stop blocking notifications of any kind
+			# this prevents from getting the roster items as 'just signed in'
+			# contacts. 30 seconds should be enough time
+			gobject.timeout_add(30000, self.unblock_signed_in_notifications, account)
 			# sensitivity for this menuitem
 			model[self.roster.status_message_menuitem_iter][3] = True
 
@@ -390,11 +393,11 @@ class Interface:
 			# play sound
 			if old_show < 2 and new_show > 1:
 				if gajim.config.get_per('soundevents', 'contact_connected',
-					'enabled') and gajim.allow_notifications[account]:
+					'enabled') and not gajim.block_signed_in_notifications[account]:
 					helpers.play_sound('contact_connected')
 				if not gajim.awaiting_events[account].has_key(jid) and \
 					gajim.config.get('notify_on_signin') and \
-					gajim.allow_notifications[account]:
+					not gajim.block_signed_in_notifications[account]:
 					if helpers.allow_showing_notification(account):
 						transport_name = gajim.get_transport_name_from_jid(jid)
 						img = None
@@ -1655,7 +1658,7 @@ class Interface:
 			gajim.to_be_removed[a] = []
 			gajim.awaiting_events[a] = {}
 			gajim.nicks[a] = gajim.config.get_per('accounts', a, 'name')
-			gajim.allow_notifications[a] = False
+			gajim.block_signed_in_notifications[a] = True
 			gajim.sleeper_state[a] = 0
 			gajim.encrypted_chats[a] = []
 			gajim.last_message_time[a] = {}

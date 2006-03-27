@@ -719,8 +719,8 @@ def sanitize_filename(filename):
 	return filename
 
 def allow_showing_notification(account):
-	'''is it allowed to show nofication?'''
-	# check OUR status and if we allow notifications for that status
+	'''is it allowed to show nofication?
+	check OUR status and if we allow notifications for that status'''
 	if gajim.config.get('autopopupaway'): # always show notification
 		return True
 	if gajim.connections[account].connected in (2, 3): # we're online or chat
