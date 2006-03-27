@@ -118,6 +118,7 @@ def getRegInfo(disp, host, info={}, sync=True):
 def _ReceivedRegInfo(con, resp, agent):
 	iq=Iq('get',NS_REGISTER,to=agent)
 	if not isResultNode(resp): 
+		con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,None,False))
 		return
 	tag=resp.getTag('query',namespace=NS_REGISTER)
 	if not tag:
