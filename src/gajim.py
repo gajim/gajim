@@ -470,9 +470,6 @@ class Interface:
 		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
 			first = True
 		
-		# array: (contact, msg, time, encrypted, msg_type, subject)
-		self.roster.on_message(jid, array[1], array[2], account, array[3],
-			msg_type, array[5], resource)
 		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
 			helpers.play_sound('first_message_received')
@@ -558,6 +555,9 @@ class Interface:
 						notify.notify(_('New Message'), jid_of_control, account,
 							msg_type, path_to_image = path, text = txt)
 
+		# array: (contact, msg, time, encrypted, msg_type, subject)
+		self.roster.on_message(jid, array[1], array[2], account, array[3],
+			msg_type, array[5], resource)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
 
