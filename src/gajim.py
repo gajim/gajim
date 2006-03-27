@@ -319,8 +319,8 @@ class Interface:
 			ji = jid.replace('@', '')
 		else:
 			ji = jid
-		# Update contact
 
+		# Update contact
 		jid_list = gajim.contacts.get_jid_list(account)
 		if ji in jid_list:
 			lcontact = gajim.contacts.get_contacts_from_jid(account, ji)

@@ -724,7 +724,7 @@ def allow_showing_notification(account):
 		# check OUR status and if we allow notifications for that status
 		if gajim.config.get('autopopupaway'): # always show notification
 			return True
-		if connections[account].connected in (2, 3): # we're online or chat
+		if gajim.connections[account].connected in (2, 3): # we're online or chat
 			return True
 	return False
 
@@ -732,6 +732,7 @@ def allow_popup_window(account):
 	'''is it allowed to popup windows?'''
 	autopopup = gajim.config.get('autopopup')
 	autopopupaway = gajim.config.get('autopopupaway')
-	if autopopup and (autopopupaway or connections[account].connected  in (2, 3)):
+	if autopopup and (autopopupaway or \
+	gajim.connections[account].connected in (2, 3)): # we're online or chat
 		return True
 	return False
