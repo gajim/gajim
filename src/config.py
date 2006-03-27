@@ -2673,7 +2673,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		if len(name) == 0 or len(server) == 0:
 			jid_label.set_label('')
 		else:
-			string = '<span background="lightyellow">%s@%s</span>' % (name, server)
+			string = '<b>%s@%s</b>' % (name, server)
 			jid_label.set_label(string)
 
 	def save_account(self, login, server, savepass, password):
