@@ -564,10 +564,10 @@ class RosterWindow:
 		gajim.connections[account].send_motd(server)
 
 	def on_history_manager_menuitem_activate(self, widget):
-		if os.name == 'nt': # FIXME: test it actually works..
-			if os.path.exists('history_manager.exe'): # he's running stable
+		if os.name == 'nt':
+			if os.path.exists('history_manager.exe'): # user is running stable
 				os.startfile('history_manager.exe')
-			else: # he is svn user
+			else: # user is running svn
 				try:
 					os.startfile('history_manager.py')
 				except: # user doesn't have pywin32, too bad for him
