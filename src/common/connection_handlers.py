@@ -189,7 +189,8 @@ class ConnectionBytestream:
 		streamhost.setAttr('port', unicode(port))
 		streamhost.setAttr('host', ft_override_host_to_send)
 		streamhost.setAttr('jid', sender)
-		if fast and proxyhosts != []:
+		if fast and proxyhosts != [] and gajim.config.get_per('accounts',
+		self.name, 'use_ft_proxies'):
 			file_props['proxy_receiver'] = unicode(receiver)
 			file_props['proxy_sender'] = unicode(sender)
 			file_props['proxyhosts'] = proxyhosts
@@ -1533,14 +1534,18 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		if not self.connection:
 			return
 		self.connection.getRoster(self._on_roster_set)
+		if gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
+			self.discover_ft_proxies()
+	
+	def discover_ft_proxies(self):
 		cfg_proxies = gajim.config.get_per('accounts', self.name,
-										'file_transfer_proxies')
+			'file_transfer_proxies')
 		if cfg_proxies:
 			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
 			for proxy in proxies:
 				gajim.proxy65_manager.resolve(proxy, self.connection)
 			self.discoverItems(gajim.config.get_per('accounts', self.name, 
-												'hostname'), id_prefix='p')
+				'hostname'), id_prefix='p')
 	
 	def _on_roster_set(self, roster):
 		raw_roster = roster.getRaw()

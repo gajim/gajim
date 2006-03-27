@@ -1086,6 +1086,8 @@ class AccountModificationWindow:
 			'sync_with_global_status'))
 		self.xml.get_widget('autoconnect_checkbutton').set_active(
 			gajim.config.get_per('accounts', self.account, 'autoconnect'))
+		self.xml.get_widget('use_ft_proxies_checkbutton').set_active(
+			gajim.config.get_per('accounts', self.account, 'use_ft_proxies'))
 		list_no_log_for = gajim.config.get_per('accounts', self.account,
 			'no_log_for').split()
 		if self.account in list_no_log_for:
@@ -1174,6 +1176,8 @@ class AccountModificationWindow:
 
 		config['sync_with_global_status'] = self.xml.get_widget(
 				'sync_with_global_status_checkbutton').get_active()
+		config['use_ft_proxies'] = self.xml.get_widget(
+			'use_ft_proxies_checkbutton').get_active()
 
 		active = self.proxy_combobox.get_active()
 		proxy = self.proxy_combobox.get_model()[active][0].decode('utf-8')
@@ -1271,6 +1275,10 @@ class AccountModificationWindow:
 			if config['use_custom_host'] and (self.option_changed(config,
 				'custom_host') or self.option_changed(config, 'custom_port')):
 				relogin_needed = True
+
+			if self.option_changed(config, 'use_ft_proxies') and \
+			config['use_ft_proxies']:
+				gajim.connections[self.account].discover_ft_proxies()
 
 		if relogin_needed:
 			dialog = dialogs.YesNoDialog(_('Relogin now?'),

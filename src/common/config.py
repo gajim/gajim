@@ -230,6 +230,7 @@ class Config:
 			# proxy65 for FT
 			'file_transfer_proxies': [opt_str, 
 			'proxy.jabber.org, proxy.netlab.cz, transfer.jabber.freenet.de'],
+			'use_ft_proxies': [opt_bool, True, _('If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer.'), True],
 			'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 			'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
 			'msgwin-width': [opt_int, 480],
