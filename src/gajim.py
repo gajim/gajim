@@ -1546,10 +1546,11 @@ class Interface:
 				w = self.msg_win_mgr.get_window(fjid, account)
 				gajim.last_message_time[account][jid] = 0 # long time ago
 		elif typ == message_control.TYPE_PM:
-			if self.msg_win_mgr.has_window(jid, account):
-				w = self.msg_win_mgr.get_window(jid, account)
+			if self.msg_win_mgr.has_window(fjid, account):
+				w = self.msg_win_mgr.get_window(fjid, account)
 			else:
-				room_jid, nick = jid.split('/', 1)
+				room_jid = jid
+				nick = resource
 				gc_contact = gajim.contacts.get_gc_contact(account, room_jid,
 										nick)
 				if gc_contact:
@@ -1560,7 +1561,7 @@ class Interface:
 						name = nick, show = show)
 				c = gajim.contacts.contact_from_gc_contact(gc_contact)
 				self.roster.new_chat(c, account, private_chat = True)
-				w = self.msg_win_mgr.get_window(jid, account)
+				w = self.msg_win_mgr.get_window(fjid, account)
 		elif typ in ('normal', 'file-request', 'file-request-error',
 			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 			# Get the first single message event
