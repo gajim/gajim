@@ -89,24 +89,27 @@ class ChatControlBase(MessageControl):
 		self._paint_banner()
 		self._update_banner_state_image()
 		# Derived types SHOULD implement this
+
 	def update_ui(self):
 		self.draw_banner()
 		# Derived types SHOULD implement this
+
 	def repaint_themed_widgets(self):
 		self.draw_banner()
 		# Derived classes MAY implement this
+
 	def _update_banner_state_image(self):
 		pass # Derived types MAY implement this
 
-	def handle_message_textview_mykey_press(self, widget, event_keyval, event_keymod):
+	def handle_message_textview_mykey_press(self, widget, event_keyval,
+	event_keymod):
 		pass # Derived should implement this rather than connecting to the event itself.
 
 	def __init__(self, type_id, parent_win, widget_name, display_names, contact, acct, resource = None):
-		MessageControl.__init__(self, type_id, parent_win, widget_name, display_names,
-					contact, acct, resource = resource);
+		MessageControl.__init__(self, type_id, parent_win, widget_name,
+			display_names,	contact, acct, resource = resource);
 
-		# FIXME: These are hidden from 0.8 on, but IMO all these things need
-		#        to be shown optionally.  Esp. the never-used Send button
+		# FIXME: XHTML-IM
 		for w in ('bold_togglebutton', 'italic_togglebutton',
 			'underline_togglebutton'):
 			self.xml.get_widget(w).set_no_show_all(True)
@@ -890,17 +893,21 @@ class ChatControl(ChatControlBase):
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
 		name = contact.get_shown_name()
+		avoid_showing_account_too = False
 		if self.resource:
 			name += '/' + self.resource
+			avoid_showing_account_too = True
 		name = gtkgui_helpers.escape_for_pango_markup(name)
 
 		# We know our contacts nick, but if there are any other controls 
-		# with the same nick we need to also display the account.
+		# with the same nick we need to also display the account
+		# except if we are talking to two different resources of the same contact
 		acct_info = ''
 		for ctrl in self.parent_win.controls():
 			if ctrl == self:
 				continue
-			if self.contact.get_shown_name() == ctrl.contact.get_shown_name():
+			if self.contact.get_shown_name() == ctrl.contact.get_shown_name()\
+			and not avoid_showing_account_too:
 				acct_info = ' (%s)' % \
 						gtkgui_helpers.escape_for_pango_markup(self.account)
 				break
