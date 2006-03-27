@@ -185,7 +185,7 @@ class Contacts:
 		return None
 
 	def get_contacts_from_jid(self, account, jid):
-		''' we may have two or more resources on that jid '''
+		'''we may have two or more resources on that jid'''
 		if jid in self._contacts[account]:
 			contacts_instances = self._contacts[account][jid]
 			return contacts_instances
