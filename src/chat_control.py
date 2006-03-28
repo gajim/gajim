@@ -828,15 +828,15 @@ class ChatControl(ChatControlBase):
 	def _on_window_motion_notify(self, widget, event):
 		'''it gets called no matter if it is the active window or not'''
 		if self.parent_win.get_active_jid() == self.contact.jid:
-			# change chatstate only if window is the active one
+			# if window is the active one, change vars assisting chatstate
 			self.mouse_over_in_last_5_secs = True
 			self.mouse_over_in_last_30_secs = True
 
 	def _schedule_activity_timers(self):
 		self.possible_paused_timeout_id = gobject.timeout_add(5000,
-				self.check_for_possible_paused_chatstate, None)
+			self.check_for_possible_paused_chatstate, None)
 		self.possible_inactive_timeout_id = gobject.timeout_add(30000,
-				self.check_for_possible_inactive_chatstate, None)
+			self.check_for_possible_inactive_chatstate, None)
 
 	def update_ui(self):
 		# The name banner is drawn here
@@ -844,7 +844,7 @@ class ChatControl(ChatControlBase):
 
 	def _update_banner_state_image(self):
 		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
-									self.contact.jid)
+			self.contact.jid)
 		if not contact or self.resource:
 			# For transient contacts
 			contact = self.contact
@@ -950,8 +950,7 @@ class ChatControl(ChatControlBase):
 			self.status_tooltip.disable()
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
-		
-	
+
 	def _update_gpg(self):
 		tb = self.xml.get_widget('gpg_togglebutton')
 		if self.contact.keyID: # we can do gpg
@@ -966,7 +965,7 @@ class ChatControl(ChatControlBase):
 
 	def send_message(self, message, keyID = '', chatstate = None):
 		'''Send a message to contact'''
-		if not message or message == '\n' or self._process_command(message):
+		if message in ('', None, '\n') or self._process_command(message):
 			return
 
 		# refresh timers
@@ -1005,8 +1004,8 @@ class ChatControl(ChatControlBase):
 				self._schedule_activity_timers()
 				
 		ChatControlBase.send_message(self, message, keyID, type = 'chat',
-				chatstate = chatstate_to_send,
-				composing_jep = contact.composing_jep)
+			chatstate = chatstate_to_send,
+			composing_jep = contact.composing_jep)
 		self.print_conversation(message, self.contact.jid, encrypted = encrypted)
 
 	def check_for_possible_paused_chatstate(self, arg):
@@ -1066,7 +1065,7 @@ class ChatControl(ChatControlBase):
 		self.kbd_activity_in_last_30_secs = False
 
 	def print_conversation(self, text, frm = '', tim = None,
-				encrypted = False, subject = None):
+		encrypted = False, subject = None):
 		'''Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
@@ -1158,7 +1157,7 @@ class ChatControl(ChatControlBase):
 			tab_img = img_16['message']
 		else:
 			contact = gajim.contacts.get_contact_with_highest_priority(self.account,
-									self.contact.jid)
+				self.contact.jid)
 			if not contact or self.resource:
 				# For transient contacts
 				contact = self.contact
@@ -1194,9 +1193,9 @@ class ChatControl(ChatControlBase):
 		# check if gpg capabitlies or else make gpg toggle insensitive
 		gpg_btn = self.xml.get_widget('gpg_togglebutton')
 		isactive = gpg_btn.get_active()
-		issensitive = gpg_btn.get_property('sensitive')
+		is_sensitive = gpg_btn.get_property('sensitive')
 		toggle_gpg_menuitem.set_active(isactive)
-		toggle_gpg_menuitem.set_property('sensitive', issensitive)
+		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
 		
 		# If we don't have resource, we can't do file transfer
 		if contact.resource:
@@ -1315,13 +1314,12 @@ class ChatControl(ChatControlBase):
 								self.type_id)
 
 	def allow_shutdown(self):
-		jid = self.contact.jid
 		if time.time() - gajim.last_message_time[self.account]\
 		[self.get_full_jid()] < 2:
 			# 2 seconds
 			dialog = dialogs.ConfirmationDialog(
 				#%s is being replaced in the code with JID
-				_('You just received a new message from "%s"' % jid),
+				_('You just received a new message from "%s"' % self.contact.jid),
 				_('If you close this tab and you have history disabled, '\
 				'this message will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
@@ -1378,8 +1376,8 @@ class ChatControl(ChatControlBase):
 		image.set_from_pixbuf(scaled_pixbuf)
 		image.show_all()
 
-	def _on_drag_data_received(self, widget, context, x, y, selection, target_type,
-				timestamp):
+	def _on_drag_data_received(self, widget, context, x, y, selection,
+		target_type, timestamp):
 		# If not resource, we can't send file
 		if not self.contact.resource:
 			return
@@ -1448,10 +1446,10 @@ class ChatControl(ChatControlBase):
 	def read_queue(self):
 		'''read queue and print messages containted in it'''
 		jid = self.contact.jid
-		fjid = jid
+		jid_with_resource = jid
 		if self.resource:
-			fjid += '/' + self.resource
-		l = gajim.awaiting_events[self.account][fjid]
+			jid_with_resource += '/' + self.resource
+		l = gajim.awaiting_events[self.account][jid_with_resource]
 
 		# Is it a pm ?
 		is_pm = False
@@ -1486,9 +1484,9 @@ class ChatControl(ChatControlBase):
 			gajim.interface.roster.show_title()
 		# Keep only non-messages events
 		if len(events_to_keep):
-			gajim.awaiting_events[self.account][fjid] = events_to_keep
+			gajim.awaiting_events[self.account][jid_with_resource] = events_to_keep
 		else:
-			del gajim.awaiting_events[self.account][fjid]
+			del gajim.awaiting_events[self.account][jid_with_resource]
 		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
 		if is_pm:
@@ -1499,13 +1497,13 @@ class ChatControl(ChatControlBase):
 		# Redraw parent too
 		gajim.interface.roster.draw_parent_contact(jid, self.account)
 		if gajim.interface.systray_enabled:
-			gajim.interface.systray.remove_jid(fjid, self.account, typ)
+			gajim.interface.systray.remove_jid(jid_with_resource, self.account, typ)
 		if (self.contact.show == 'offline' or self.contact.show == 'error'):
 			showOffline = gajim.config.get('showoffline')
 			if not showOffline and typ == 'chat' and \
 				len(gajim.contacts.get_contact(self.account, jid)) == 1:
 				gajim.interface.roster.really_remove_contact(self.contact,
-										self.account)
+					self.account)
 			elif typ == 'pm':
 				control.remove_contact(nick)
 
@@ -1595,8 +1593,10 @@ class ChatControl(ChatControlBase):
 		gajim.interface.roster.on_info(widget, self.contact, self.account)
 
 	def _on_toggle_gpg_menuitem_activate(self, widget):
-		tb = self.xml.get_widget('gpg_togglebutton')
-		tb.set_active(not tb.get_active())
+		# update the button
+		# this is reverse logic, as we are on 'activate' (before change happens)
+		is_active = self.xml.get_widget('gpg_togglebutton').get_active()
+		tb.set_active(not is_active)
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)
