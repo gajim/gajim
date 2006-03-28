@@ -69,9 +69,9 @@ class MessageWindow:
 
 		self.notebook = self.xml.get_widget('notebook')
 		self.notebook.connect('switch-page',
-					self._on_notebook_switch_page)
+			self._on_notebook_switch_page)
 		self.notebook.connect('key-press-event',
-					self._on_notebook_key_press)
+			self._on_notebook_key_press)
 
 		# Remove the glade pages
 		while self.notebook.get_n_pages():
@@ -96,9 +96,9 @@ class MessageWindow:
 
 		# set up DnD
 		self.hid = self.notebook.connect('drag_data_received',
-						self.on_tab_label_drag_data_received_cb)
+			self.on_tab_label_drag_data_received_cb)
 		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
-						gtk.gdk.ACTION_MOVE)
+			gtk.gdk.ACTION_MOVE)
 
 	def get_num_controls(self):
 		n = 0
@@ -172,7 +172,7 @@ class MessageWindow:
 			self.remove_tab(ctrl)
 
 	def _on_message_textview_mykeypress_event(self, widget, event_keyval,
-						event_keymod):
+		event_keymod):
 		# NOTE: handles mykeypress which is custom signal; see message_textview.py
 
 		# construct event instance from binding
@@ -262,7 +262,7 @@ class MessageWindow:
 		# Update external state
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.remove_jid(ctrl.contact.jid, ctrl.account,
-								ctrl.type_id)
+				ctrl.type_id)
 		del gajim.last_message_time[ctrl.account][ctrl.get_full_jid()]
 
 		self.disconnect_tab_dnd(ctrl.widget)
@@ -515,13 +515,14 @@ class MessageWindow:
 					 gtk.gdk.ACTION_MOVE)
 		tab_label.page_num = self.notebook.page_num(child)
 
-	def on_tab_label_drag_data_get_cb(self, widget, drag_context, selection, info, time):
+	def on_tab_label_drag_data_get_cb(self, widget, drag_context, selection,
+		info, time):
 		source_page_num = self.find_page_num_according_to_tab_label(widget)
 		# 8 is the data size for the string
 		selection.set(selection.target, 8, str(source_page_num))
 
 	def on_tab_label_drag_data_received_cb(self, widget, drag_context, x, y,
-	selection, type, time):
+		selection, type, time):
 		'''Reorder the tabs according to the drop position'''
 		source_page_num = int(selection.data)
 		dest_page_num, to_right = self.get_tab_at_xy(x, y)
