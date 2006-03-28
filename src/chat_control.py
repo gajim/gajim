@@ -553,7 +553,6 @@ class ChatControlBase(MessageControl):
 
 	def _on_history_menuitem_activate(self, widget = None, jid = None):
 		'''When history menuitem is pressed: call history window'''
-		print 'this is never called'
 		if not jid:
 			jid = self.contact.jid
 		
@@ -745,9 +744,6 @@ class ChatControl(ChatControlBase):
 			(_('Chat'), _('Chats')), contact, acct, resource)
 		self.compact_view_always = gajim.config.get('always_compact_view_chat')
 		self.set_compact_view(self.compact_view_always)
-
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
-		xm.signal_autoconnect(self)
 
 		# Initialize drag-n-drop
 		self.TARGET_TYPE_URI_LIST = 80
@@ -1211,6 +1207,10 @@ class ChatControl(ChatControlBase):
 		else:
 			add_to_roster_menuitem.hide()
 			add_to_roster_menuitem.set_no_show_all(True)
+		
+		
+		# connect signals
+		xml.signal_autoconnect(self)
 		
 		return menu
 
