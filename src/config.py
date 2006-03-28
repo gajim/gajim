@@ -1217,8 +1217,8 @@ class AccountModificationWindow:
 			gajim.interface.instances[name] = gajim.interface.instances[self.account]
 			gajim.awaiting_events[name] = gajim.awaiting_events[self.account]
 			gajim.nicks[name] = gajim.nicks[self.account]
-			gajim.allow_notifications[name] = \
-				gajim.allow_notifications[self.account]
+			gajim.block_signed_in_notifications[name] = \
+				gajim.block_signed_in_notifications[self.account]
 			gajim.groups[name] = gajim.groups[self.account]
 			gajim.gc_connected[name] = gajim.gc_connected[self.account]
 			gajim.newly_added[name] = gajim.newly_added[self.account]
@@ -1246,7 +1246,7 @@ class AccountModificationWindow:
 			del gajim.interface.instances[self.account]
 			del gajim.awaiting_events[self.account]
 			del gajim.nicks[self.account]
-			del gajim.allow_notifications[self.account]
+			del gajim.block_signed_in_notifications[self.account]
 			del gajim.groups[self.account]
 			del gajim.gc_connected[self.account]
 			del gajim.newly_added[self.account]
@@ -2135,7 +2135,7 @@ class RemoveAccountWindow:
 		del gajim.interface.instances[self.account]
 		del gajim.awaiting_events[self.account]
 		del gajim.nicks[self.account]
-		del gajim.allow_notifications[self.account]
+		del gajim.block_signed_in_notifications[self.account]
 		del gajim.groups[self.account]
 		gajim.contacts.remove_account(self.account)
 		del gajim.gc_connected[self.account]
@@ -2730,7 +2730,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		gajim.newly_added[self.account] = []
 		gajim.to_be_removed[self.account] = []
 		gajim.nicks[self.account] = config['name']
-		gajim.allow_notifications[self.account] = False
+		gajim.block_signed_in_notifications[self.account] = True
 		gajim.sleeper_state[self.account] = 'off'
 		gajim.encrypted_chats[self.account] = []
 		gajim.last_message_time[self.account] = {}
