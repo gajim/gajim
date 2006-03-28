@@ -458,7 +458,7 @@ class Interface:
 
 		jid = gajim.get_jid_without_resource(array[0])
 		resource = gajim.get_resource_from_jid(array[0])
-		fjid = jid + '/' + resource
+		fjid = array[0]
 		msg_type = array[4]
 		chatstate = array[6]
 		msg_id = array[7]
@@ -495,9 +495,16 @@ class Interface:
 			return
 
 		first = False
+		pm = False
 		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
+			# It's a first message and not a Private Message
 			first = True
-		
+		elif chat_control and chat_control.type_id == message_control.TYPE_GC: 
+			# It's a Private message
+			pm = True
+			if not self.msg_win_mgr.has_window(fjid, account) and \
+				not gajim.awaiting_events[account].has_key(fjid):
+					first =True
 		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
 			helpers.play_sound('first_message_received')
@@ -506,11 +513,9 @@ class Interface:
 			helpers.play_sound('next_message_received')
 
 		jid_of_control = jid
-		if chat_control and chat_control.type_id == message_control.TYPE_GC:
-			# it's a Private Message
+		if pm:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
-			if not self.msg_win_mgr.has_window(fjid, account) and \
-				not gajim.awaiting_events[account].has_key(fjid):
+			if first:
 				if helpers.allow_showing_notification(account):
 					room_name,t = gajim.get_room_name_and_server_from_room_jid(
 						room_jid)
@@ -545,7 +550,7 @@ class Interface:
 			chat_control = None
 			jid_of_control = fjid
 		
-		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
+		if first:
 			if gajim.config.get('notify_on_new_message'):
 				if helpers.allow_showing_notification(account):
 					txt = _('%s has sent you a new message.') % gajim.get_name_from_jid(account, jid)

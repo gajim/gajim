@@ -2344,7 +2344,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			# last message is long time ago
 			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
 		win.set_active_tab(fjid, account)
-		win.window.present()
+		possibly_hold_msg_window_vbox = self.xml.get_widget(
+			'possibly_hold_msg_window_vbox')
+		
+		#notebook = win.window.get_children()[0]
+		notebook = win.xml.get_widget('notebook') 
+		notebook.reparent(possibly_hold_msg_window_vbox)
+		notebook.show_all()
+		win.window.hide()
+		#win.window.present()
+		print 'reparented'
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the first event window'''
