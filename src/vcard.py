@@ -329,7 +329,9 @@ class VcardWindow:
 						c.last_status_time).decode(locale.getpreferredencoding())
 				one = False
 		elif not self.vcard: # Maybe gc_vcard ?
-			stats = self.contact.status
+			stats = helpers.get_uf_show(self.contact.show)
+			if self.contact.status:
+				stats += ': ' + self.contact.status
 		status_label = self.xml.get_widget('status_label')
 		status_label.set_max_width_chars(15)
 		status_label.set_text(stats)
