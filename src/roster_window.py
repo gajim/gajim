@@ -194,8 +194,7 @@ class RosterWindow:
 		# If contact already in roster, do not add it
 		if len(self.get_contact_iter(jid, account)):
 			return
-		if contact.jid.find('@') <= 0:
-			# if not '@' or '@' starts the jid ==> agent
+		if gajim.jid_is_transport(contact.jid):
 			contact.groups = [_('Transports')]
 
 		# JEP-0162

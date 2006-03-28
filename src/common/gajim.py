@@ -240,21 +240,11 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 		return None
 
 def jid_is_transport(jid):
-	aim = jid.startswith('aim')
-	gg = jid.startswith('gg') # gadugadu
-	irc = jid.startswith('irc')
-	icq = jid.startswith('icq') or jid.startswith('jit')
-	msn = jid.startswith('msn')
-	sms = jid.startswith('sms')
-	tlen = jid.startswith('tlen')
-	yahoo = jid.startswith('yahoo')
-
-	if aim or gg or irc or icq or msn or sms or yahoo or tlen:
-		is_transport = True
+	# if not '@' or '@' starts the jid then it is transport
+	if jid.find('@') <= 0:
+		return True
 	else:
-		is_transport = False
-
-	return is_transport
+		return False
 
 def get_jid_from_account(account_name):
 	'''return the jid we use in the given account'''

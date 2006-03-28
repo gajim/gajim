@@ -317,7 +317,7 @@ class Interface:
 		if not resource:
 			resource = ''
 		priority = array[4]
-		if jid.find('@') <= 0:
+		if gajim.jid_is_transport(jid):
 			# It must be an agent
 			ji = jid.replace('@', '')
 		else:
@@ -374,7 +374,7 @@ class Interface:
 			contact1.keyID = keyID
 			if contact1.jid not in gajim.newly_added[account]:
 				contact1.last_status_time = time.localtime()
-		if jid.find('@') <= 0:
+		if gajim.jid_is_transport(jid):
 			# It must be an agent
 			if ji in jid_list:
 				# Update existing iter
@@ -463,7 +463,7 @@ class Interface:
 		chatstate = array[6]
 		msg_id = array[7]
 		composing_jep = array[8]
-		if jid.find('@') <= 0:
+		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
 		
 		chat_control = self.msg_win_mgr.get_control(jid, account)
@@ -605,7 +605,7 @@ class Interface:
 					gc_control.set_subject(gc_control.subject)
 				return
 
-		if jid.find('@') <= 0:
+		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
 		self.roster.on_message(jid, _('error while sending') + \
 			' \"%s\" ( %s )' % (array[3], array[2]), array[4], account, \
