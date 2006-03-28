@@ -775,14 +775,15 @@ class PreferencesWindow:
 		iter = model.get_iter_first()
 		while iter:
 			val = model[iter][0].decode('utf-8')
-			gajim.config.add_per('statusmsg', val)
-			if model[iter][1] is None: # here is the MESSAGE
-				# so when we press New this func is called by
-				# on_msg_treemodel_row_changed but message is None
-				# (hasn't been added yet) so do not TB
-				return
-			msg = helpers.to_one_line(model[iter][1].decode('utf-8'))
-			gajim.config.set_per('statusmsg', val, 'message', msg)
+			if val:
+				gajim.config.add_per('statusmsg', val)
+				if model[iter][1] is None: # here is the MESSAGE
+					# so when we press New this func is called by
+					# on_msg_treemodel_row_changed but message is None
+					# (hasn't been added yet) so do not TB
+					return
+				msg = helpers.to_one_line(model[iter][1].decode('utf-8'))
+				gajim.config.set_per('statusmsg', val, 'message', msg)
 			iter = model.iter_next(iter)
 		gajim.interface.save_config()
 
