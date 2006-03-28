@@ -1176,7 +1176,7 @@ class ChatControl(ChatControlBase):
 		and hide()/show() for add_to_roster_menuitem
 		'''
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
-		menu = xm.get_widget('chat_control_popup_menu')
+		menu = xml.get_widget('chat_control_popup_menu')
 		
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
@@ -1207,7 +1207,8 @@ class ChatControl(ChatControlBase):
 		# compact_view_menuitem
 		compact_view_menuitem.set_active(self.compact_view_current)
 		
-		if _('Not in Roster') in contact.groups: # for add_to_roster_menuitem
+		# add_to_roster_menuitem
+		if _('Not in Roster') in contact.groups:
 			add_to_roster_menuitem.show()
 			add_to_roster_menuitem.set_no_show_all(False)
 		else:
