@@ -750,7 +750,6 @@ class ChatControl(ChatControlBase):
 
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
 		xm.signal_autoconnect(self)
-		self.popup_menu = xm.get_widget('chat_control_popup_menu')
 
 		# Initialize drag-n-drop
 		self.TARGET_TYPE_URI_LIST = 80
@@ -1171,32 +1170,49 @@ class ChatControl(ChatControlBase):
 
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
-		sets active and sensitivity state for toggle_gpg_menuitem'''
-		menu = self.popup_menu
-		childs = menu.get_children()
-		# check if gpg capabitlies or else make gpg toggle insensitive
+		sets active and sensitivity state for toggle_gpg_menuitem
+		sets sensitivity for history_menuitem (False for tranasports)
+		and file_transfer_menuitem
+		and hide()/show() for add_to_roster_menuitem
+		'''
+		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
+		menu = xm.get_widget('chat_control_popup_menu')
+		
+		history_menuitem = xml.get_widget('history_menuitem')
+		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
+		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
+		send_file_menuitem = xml.get_widget('send_file_menuitem')
+		compact_view_menuitem = xml.get_widget('compact_view_menuitem')
+		
 		contact = self.parent_win.get_active_contact()
 		jid = contact.jid
+		
+		# history_menuitem
+		if gajim.jid_is_transport(jid):
+			history_menuitem.set_sensitive(False)
+		
+		# check if gpg capabitlies or else make gpg toggle insensitive
 		gpg_btn = self.xml.get_widget('gpg_togglebutton')
 		isactive = gpg_btn.get_active()
 		issensitive = gpg_btn.get_property('sensitive')
-		childs[3].set_active(isactive)
-		childs[3].set_property('sensitive', issensitive)
+		toggle_gpg_menuitem.set_active(isactive)
+		toggle_gpg_menuitem.set_property('sensitive', issensitive)
+		
 		# If we don't have resource, we can't do file transfer
-		if not contact.resource:
-			childs[2].set_sensitive(False)
+		if contact.resource:
+			send_file_menuitem.set_sensitive(True)
 		else:
-			childs[2].set_sensitive(True)
+			send_file_menuitem.set_sensitive(False)
 		
 		# compact_view_menuitem
-		childs[4].set_active(self.compact_view_current)
+		compact_view_menuitem.set_active(self.compact_view_current)
 		
 		if _('Not in Roster') in contact.groups: # for add_to_roster_menuitem
-			childs[5].show()
-			childs[5].set_no_show_all(False)
+			add_to_roster_menuitem.show()
+			add_to_roster_menuitem.set_no_show_all(False)
 		else:
-			childs[5].hide()
-			childs[5].set_no_show_all(True)
+			add_to_roster_menuitem.hide()
+			add_to_roster_menuitem.set_no_show_all(True)
 		
 		return menu
 
