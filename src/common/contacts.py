@@ -348,7 +348,7 @@ class Contacts:
 		'''Create a Contact instance from a GC_Contact instance'''
 		jid = gc_contact.get_full_jid()
 		return Contact(jid = jid, resource = '', name = gc_contact.name,
-			groups = ['none'], show = gc_contact.show, status = gc_contact.status,
+			groups = [], show = gc_contact.show, status = gc_contact.status,
 			sub = 'none')
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',
