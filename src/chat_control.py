@@ -1,13 +1,7 @@
 ##	chat_control.py
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -210,7 +204,8 @@ class ChatControlBase(MessageControl):
 		else:
 			default_fg = True
 		if default_bg or default_fg:
-			self._on_style_set_event(banner_name_label, None, default_fg, default_bg)
+			self._on_style_set_event(banner_name_label, None, default_fg,
+				default_bg)
 	
 	def disconnect_style_event(self, widget):
 		if self.style_event_id:
@@ -219,13 +214,13 @@ class ChatControlBase(MessageControl):
 	
 	def connect_style_event(self, widget, set_fg = False, set_bg = False):
 		self.disconnect_style_event(widget)
-		self.style_event_id = widget.connect('style-set', self._on_style_set_event, 
-																	set_fg, set_bg)
+		self.style_event_id = widget.connect('style-set',
+			self._on_style_set_event, set_fg, set_bg)
 	
 	def _on_style_set_event(self, widget, style, *opts):
-		''' set style of widget from style class *.Frame.Eventbox 
+		'''set style of widget from style class *.Frame.Eventbox 
 			opts[0] == True -> set fg color
-			opts[1] == True -> set bg color	'''
+			opts[1] == True -> set bg color'''
 		banner_eventbox = self.xml.get_widget('banner_eventbox')
 		self.disconnect_style_event(widget)
 		if opts[1]:
@@ -293,7 +288,8 @@ class ChatControlBase(MessageControl):
 					#else: # move menu just below cursor
 					#	y -= (msg_tv.allocation.height / buf.get_line_count())
 					return (x, y, True) # push_in True
-				self.emoticons_menu.popup(None, None, set_emoticons_menu_position, 1, 0)
+				self.emoticons_menu.popup(None, None, set_emoticons_menu_position,
+					1, 0)
 		return False
 
 	def _on_message_textview_key_press_event(self, widget, event):
@@ -327,7 +323,7 @@ class ChatControlBase(MessageControl):
 		return False
 
 	def _on_message_textview_mykeypress_event(self, widget, event_keyval,
-						event_keymod):
+		event_keymod):
 		'''When a key is pressed:
 		if enter is pressed without the shift key, message (if not empty) is sent
 		and printed in the conversation'''
@@ -434,8 +430,8 @@ class ChatControlBase(MessageControl):
 		self.orig_msg = ''
 
 	def print_conversation_line(self, text, kind, name, tim,
-				other_tags_for_name = [], other_tags_for_time = [], 
-				other_tags_for_text = [], count_as_new = True, subject = None):
+		other_tags_for_name = [], other_tags_for_time = [], 
+		other_tags_for_text = [], count_as_new = True, subject = None):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
 		textview = self.conv_textview
@@ -556,9 +552,11 @@ class ChatControlBase(MessageControl):
 		return False
 
 	def _on_history_menuitem_activate(self, widget = None, jid = None):
+		'''When history menuitem is pressed: call history window'''
+		print 'this is never called'
 		if not jid:
 			jid = self.contact.jid
-		'''When history menuitem is pressed: call history window'''
+		
 		if gajim.interface.instances['logs'].has_key(jid):
 			gajim.interface.instances['logs'][jid].window.present()
 		else:
@@ -666,7 +664,7 @@ class ChatControlBase(MessageControl):
 			self.parent_win.show_title()
 			if gajim.interface.systray_enabled:
 				gajim.interface.systray.remove_jid(jid, self.account,
-									self.type_id)
+					self.type_id)
 
 	def sent_messages_scroll(self, direction, conv_buf):
 		size = len(self.sent_history) 
@@ -744,7 +742,7 @@ class ChatControl(ChatControlBase):
 
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
-					(_('Chat'), _('Chats')), contact, acct, resource)
+			(_('Chat'), _('Chats')), contact, acct, resource)
 		self.compact_view_always = gajim.config.get('always_compact_view_chat')
 		self.set_compact_view(self.compact_view_always)
 
@@ -755,9 +753,10 @@ class ChatControl(ChatControlBase):
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
 		self.widget.connect('drag_data_received', self._on_drag_data_received)
-		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT |
-					gtk.DEST_DEFAULT_DROP,
-					self.dnd_list, gtk.gdk.ACTION_COPY)
+		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
+			gtk.DEST_DEFAULT_HIGHLIGHT |
+			gtk.DEST_DEFAULT_DROP,
+			self.dnd_list, gtk.gdk.ACTION_COPY)
 
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be per jid
@@ -771,12 +770,13 @@ class ChatControl(ChatControlBase):
 
 		# Hook up signals
 		self.parent_win.window.connect('motion-notify-event',
-						self._on_window_motion_notify)
+			self._on_window_motion_notify)
 		message_tv_buffer = self.msg_textview.get_buffer()
 		message_tv_buffer.connect('changed', self._on_message_tv_buffer_changed)
 
 		self.xml.get_widget('banner_eventbox').connect('button-press-event',
-					self._on_banner_eventbox_button_press_event)
+			self._on_banner_eventbox_button_press_event)
+
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'avatar_eventbox', APP)
 		xm.signal_autoconnect(self)
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gpg_togglebutton', APP)
