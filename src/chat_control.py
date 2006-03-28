@@ -777,8 +777,6 @@ class ChatControl(ChatControlBase):
 
 		self.xml.get_widget('banner_eventbox').connect('button-press-event',
 					self._on_banner_eventbox_button_press_event)
-		self.xml.get_widget('banner_eventbox').connect('button-press-event',
-					self._on_banner_eventbox_button_press_event)
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'avatar_eventbox', APP)
 		xm.signal_autoconnect(self)
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gpg_togglebutton', APP)
