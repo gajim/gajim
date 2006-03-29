@@ -73,15 +73,17 @@ class VcardWindow:
 		# the contact variable is the jid if vcard is true
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
-		
+
 		self.publish_button = self.xml.get_widget('publish_button')
 		self.retrieve_button = self.xml.get_widget('retrieve_button')
 		self.nickname_entry = self.xml.get_widget('nickname_entry')
-		
+		if not vcard: # Maybe gc_vcard ?
+			self.nickname_entry.set_property('editable', False)
+
 		self.publish_button.set_no_show_all(True)
 		self.retrieve_button.set_no_show_all(True)
 		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)
-		
+
 		self.contact = contact # don't use it if vcard is true
 		self.account = account
 		self.vcard = vcard
