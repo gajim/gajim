@@ -1086,7 +1086,7 @@ class RosterWindow:
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 		if row_type == 'contact':
 			# it's jid
-			# Remove resource indicator (Name (2))
+			# Remove possible resource indicator (Name (2))
 			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 			name = contact.name
 			model[iter][C_NAME] = gtkgui_helpers.escape_for_pango_markup(name)
@@ -1099,7 +1099,7 @@ class RosterWindow:
 			'attached_gpg_keys').split()
 		keys = {}
 		keyID = 'None'
-		for i in xrange(0, len(attached_keys)/2):
+		for i in xrange(len(attached_keys)/2):
 			keys[attached_keys[2*i]] = attached_keys[2*i+1]
 			if attached_keys[2*i] == contact.jid:
 				keyID = attached_keys[2*i+1]
@@ -1295,12 +1295,12 @@ class RosterWindow:
 		menu = gtk.Menu()
 
 		#FIXME: this fails. why?
-		#rename_item = gtk.ImageMenuItem(_('Re_name'))
-		#rename_icon = gtk.image_new_from_stock(gtk.STOCK_REFRESH,
-		#	gtk.ICON_SIZE_MENU)
-		#rename_item.set_image(rename_icon)
-		#menu.append(rename_item)
-		#rename_item.connect('activate', self.on_rename, iter, path)
+		rename_item = gtk.ImageMenuItem(_('Re_name'))
+		rename_icon = gtk.image_new_from_stock(gtk.STOCK_REFRESH,
+			gtk.ICON_SIZE_MENU)
+		rename_item.set_image(rename_icon)
+		menu.append(rename_item)
+		rename_item.connect('activate', self.on_rename, iter, path)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
@@ -1550,7 +1550,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if not iter:
 				return
 			type = model[iter][C_TYPE]
-			if type in ('contact', 'group'):
+			if type in ('contact', 'group', 'agent'):
 				path = model.get_path(iter)
 				self.on_rename(widget, iter, path)
 
@@ -2501,9 +2501,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				win.redraw_tab(ctrl)
 				win.show_title()
 		elif type == 'group':
-			# in C_JID cilumn it's not escaped
+			# in C_JID column, we hold the group name (which is not escaped)
 			old_name = model[iter][C_JID].decode('utf-8')
-			# Groups maynot change name from or to 'Not in Roster'
+			# Groups may not change name from or to 'Not in Roster'
 			if _('Not in Roster') in (new_text, old_name):
 				return
 			# get all contacts in that group
@@ -2511,14 +2511,22 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
 				if old_name in contact.groups:
-					#set them in the new one and remove it from the old
+					# set them in the new one and remove it from the old
 					self.remove_contact(contact, account)
 					contact.groups.remove(old_name)
 					contact.groups.append(new_text)
 					self.add_contact_to_roster(contact.jid, account)
 					gajim.connections[account].update_contact(contact.jid,
 						contact.name, contact.groups)
-		model.set_value(iter, 5, False)
+		elif type == 'agent':
+			old_text = gajim.contacts.get_contact_with_highest_priority(account,
+				jid).name
+			if old_text != new_text:
+				for u in gajim.contacts.get_contact(account, jid):
+					u.name = new_text
+				gajim.connections[account].update_contact(jid, new_text, u.groups)
+			self.draw_contact(jid, account)
+		model[iter][C_EDITABLE] = False
 
 	def on_service_disco_menuitem_activate(self, widget, account):
 		server_jid = gajim.config.get_per('accounts', account, 'hostname')
