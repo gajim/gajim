@@ -79,10 +79,38 @@ class EditGroupsDialog:
 			self.dialog.destroy()
 
 	def update_contact(self):
-		gajim.interface.roster.remove_contact(self.user, self.account)
-		gajim.interface.roster.add_contact_to_roster(self.user.jid, self.account)
-		gajim.connections[self.account].update_contact(self.user.jid,
-			self.user.name, self.user.groups)
+		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
+		all_jid = gajim.contacts.get_metacontacts_jids(tag)
+		for _account in all_jid:
+			for _jid in all_jid[_account]:
+				c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
+				if not c:
+					continue
+				gajim.interface.roster.remove_contact(c, _account)
+				gajim.interface.roster.add_contact_to_roster(_jid, _account)
+				gajim.connections[_account].update_contact(_jid, c.name, c.groups)
+
+	def remove_group(self, group):
+		'''add group group to self.user and all his brothers'''
+		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
+		all_jid = gajim.contacts.get_metacontacts_jids(tag)
+		for _account in all_jid:
+			for _jid in all_jid[_account]:
+				contacts = gajim.contacts.get_contact(_account, _jid)
+				for contact in contacts:
+					if group in contact.groups:
+						contact.groups.remove(group)
+
+	def add_group(self, group):
+		'''add group group to self.user and all his brothers'''
+		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
+		all_jid = gajim.contacts.get_metacontacts_jids(tag)
+		for _account in all_jid:
+			for _jid in all_jid[_account]:
+				contacts = gajim.contacts.get_contact(_account, _jid)
+				for contact in contacts:
+					if not group in contact.groups:
+						contact.groups.append(group)
 
 	def on_add_button_clicked(self, widget):
 		group = self.xml.get_widget('group_entry').get_text().decode('utf-8')
@@ -97,18 +125,18 @@ class EditGroupsDialog:
 			iter = model.iter_next(iter)
 		self.changes_made = True
 		model.append((group, True))
-		self.user.groups.append(group)
+		self.add_group(group)
 		self.update_contact()
 
 	def group_toggled_cb(self, cell, path):
 		self.changes_made = True
 		model = self.list.get_model()
 		model[path][1] = not model[path][1]
-		jid = model[path][0].decode('utf-8')
-		if model[path][1] and not jid in self.user.groups:
-			self.user.groups.append(jid)
-		elif jid in self.user.groups:
-			self.user.groups.remove(jid)
+		group = model[path][0].decode('utf-8')
+		if model[path][1]:
+			self.add_group(group)
+		else:
+			self.remove_group(group)
 		self.update_contact()
 
 	def init_list(self):
