@@ -2854,8 +2854,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			data = model[iter][C_JID]
 		selection.set(selection.target, 8, data)
 
-	def on_drop_in_contact(self, widget, account, c_source, c_dest, context,
-		etime):
+	def on_drop_in_contact(self, widget, account, c_source, c_dest,
+		was_big_brother, context, etime):
 		# children must take the new tag too, so remember old tag
 		old_tag = gajim.contacts.get_metacontacts_tag(account, c_source.jid)
 		# remove the source row
@@ -2865,13 +2865,17 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		for g in c_dest.groups:
 			c_source.groups.append(g)
 		gajim.contacts.add_metacontact(account, c_dest.jid, account, c_source.jid)
-		# add children too
-		all_jid = gajim.contacts.get_metacontacts_jids(old_tag)
-		for _account in all_jid:
-			for _jid in all_jid[_account]:
-				gajim.contacts.add_metacontact(account, c_dest.jid, _account, _jid)
-				self.add_contact_to_roster(_jid, _account)
-				self.draw_contact(_jid, _account)
+		if was_big_brother:
+			# add brothers too
+			all_jid = gajim.contacts.get_metacontacts_jids(old_tag)
+			for _account in all_jid:
+				for _jid in all_jid[_account]:
+					gajim.contacts.add_metacontact(account, c_dest.jid, _account,
+						_jid)
+					_c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
+					self.remove_contact(_c, _account)
+					self.add_contact_to_roster(_jid, _account)
+					self.draw_contact(_jid, _account)
 		self.add_contact_to_roster(c_source.jid, account)
 		self.draw_contact(c_dest.jid, account)
 
@@ -3004,8 +3008,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 #				return
 			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
 				jid_dest)
-			self.on_drop_in_contact(treeview, account, c_source, c_dest, context,
-				etime)
+			is_big_brother = False
+			if model.iter_has_child(iter_source):
+				is_big_brother = True
+			self.on_drop_in_contact(treeview, account, c_source, c_dest,
+				is_big_brother, context, etime)
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
 		# user1.groups
@@ -3023,8 +3030,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				jid_dest)
 			item = gtk.MenuItem(_('Make %s and %s metacontacts') % (c_source.name,
 				c_dest.name))
+			is_big_brother = False
+			if model.iter_has_child(iter_source):
+				is_big_brother = True
 			item.connect('activate', self.on_drop_in_contact, account, c_source,
-				c_dest, context, etime)
+				c_dest, is_big_brother, context, etime)
 			menu.append(item)
 
 			menu.popup(None, None, None, 1, etime)
