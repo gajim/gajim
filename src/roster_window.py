@@ -1062,7 +1062,7 @@ class RosterWindow:
 				if jid.endswith('@' + contact.jid):
 					c = gajim.contacts.get_first_contact_from_jid(account, jid)
 					gajim.log.debug(
-					'Removing contact %s due to unregistered transport %s'\
+						'Removing contact %s due to unregistered transport %s'\
 						% (jid, contact.jid))
 					gajim.connections[account].unsubscribe(c.jid)
 					# Transport contacts can't have 2 resources
@@ -1151,7 +1151,7 @@ class RosterWindow:
 	def on_add_special_notification_menuitem_activate(self, widget, jid):
 		dialogs.AddSpecialNotificationDialog(jid)
 
-	def mk_menu_user(self, event, iter):
+	def make_contact_menu(self, event, iter):
 		'''Make contact's popup menu'''
 		model = self.tree.get_model()
 		jid = model[iter][C_JID].decode('utf-8')
@@ -1163,7 +1163,6 @@ class RosterWindow:
 			APP)
 		roster_contact_context_menu = xml.get_widget(
 			'roster_contact_context_menu')
-		#childs = roster_contact_context_menu.get_children()
 
 		start_chat_menuitem = xml.get_widget('start_chat_menuitem')
 		send_single_message_menuitem = xml.get_widget('send_single_message_menuitem')
@@ -1178,6 +1177,12 @@ class RosterWindow:
 		
 		add_special_notification_menuitem.hide()
 		add_special_notification_menuitem.set_no_show_all(True)
+		
+		# add a special img for rename menuitem
+		path_to_rename_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_rename_img)
+		rename_menuitem.set_image(img)
 
 		#skip a separator
 		subscription_menuitem = xml.get_widget('subscription_menuitem')
@@ -1273,35 +1278,36 @@ class RosterWindow:
 			add_to_roster_menuitem.connect('activate',
 				self.on_add_to_roster, contact, account)
 
-		#TODO create menu for sub contacts
+		#FIXME: create menu for sub contacts
 
-		event_button = self.get_possible_button_event(event)
+		event_button = gtkgui_helpers.get_possible_button_event(event)
 
 		roster_contact_context_menu.popup(None, None, None, event_button,
 			event.time)
 		roster_contact_context_menu.show_all()
 
-	def mk_menu_g(self, event, iter):
+	def make_group_menu(self, event, iter):
 		'''Make group's popup menu'''
 		model = self.tree.get_model()
 		path = model.get_path(iter)
 
 		menu = gtk.Menu()
 
-		rename_item = gtk.ImageMenuItem(_('Re_name'))
-		rename_icon = gtk.image_new_from_stock(gtk.STOCK_REFRESH,
+		#FIXME: this fails. why?
+		#rename_item = gtk.ImageMenuItem(_('Re_name'))
+		#rename_icon = gtk.image_new_from_stock(gtk.STOCK_REFRESH,
 			gtk.ICON_SIZE_MENU)
-		rename_item.set_image(rename_icon)
-		menu.append(rename_item)
-		rename_item.connect('activate', self.on_rename, iter, path)
+		#rename_item.set_image(rename_icon)
+		#menu.append(rename_item)
+		#rename_item.connect('activate', self.on_rename, iter, path)
 
-		event_button = self.get_possible_button_event(event)
+		event_button = gtkgui_helpers.get_possible_button_event(event)
 
 		menu.popup(None, None, None, event_button, event.time)
 		menu.show_all()
 
-	def mk_menu_agent(self, event, iter):
-		'''Make agent's popup menu'''
+	def make_transport_menu(self, event, iter):
+		'''Make transport's popup menu'''
 		model = self.tree.get_model()
 		jid = model[iter][C_JID].decode('utf-8')
 		path = model.get_path(iter)
@@ -1325,7 +1331,7 @@ class RosterWindow:
 		if show in ('offline', 'error'):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
-							account)
+			account)
 
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
@@ -1335,6 +1341,15 @@ class RosterWindow:
 		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_edit_agent, contact, account)
+		
+		item = gtk.ImageMenuItem(_('_Rename'))
+		# add a special img for rename menuitem
+		path_to_rename_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_rename_img)
+		item.set_image(img)
+		menu.append(item)
+		item.connect('activate', self.on_rename, iter, path)
 
 		item = gtk.ImageMenuItem(_('_Remove from Roster'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
@@ -1342,26 +1357,18 @@ class RosterWindow:
 		menu.append(item)
 		item.connect('activate', self.on_remove_agent, contact, account)
 
-		event_button = self.get_possible_button_event(event)
+		event_button = gtkgui_helpers.get_possible_button_event(event)
 
 		menu.popup(None, None, None, event_button, event.time)
 		menu.show_all()
 
 	def on_edit_account(self, widget, account):
 		if gajim.interface.instances[account].has_key('account_modification'):
-			gajim.interface.instances[account]['account_modification'].window.present()
+			gajim.interface.instances[account]['account_modification'].\
+			window.present()
 		else:
 			gajim.interface.instances[account]['account_modification'] = \
 				config.AccountModificationWindow(account)
-
-	def get_possible_button_event(self, event):
-		'''mouse or keyboard caused the event?'''
-		if event.type == gtk.gdk.KEY_PRESS:
-			event_button = 0 # no event.button so pass 0
-		else: # BUTTON_PRESS event, so pass event.button
-			event_button = event.button
-
-		return event_button
 
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
@@ -1413,7 +1420,7 @@ class RosterWindow:
 		sub_menu.append(item)
 
 		item = gtk.ImageMenuItem(_('_Change Status Message'))
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'rename.png')
+		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
 		img = gtk.Image()
 		img.set_from_file(path)
 		item.set_image(img)
@@ -1450,11 +1457,10 @@ class RosterWindow:
 			self.on_new_message_menuitem_activate, account)
 		return account_context_menu
 
-	def mk_menu_account(self, event, iter):
+	def make_account_menu(self, event, iter):
 		'''Make account's popup menu'''
 		model = self.tree.get_model()
 		account = model[iter][C_ACCOUNT].decode('utf-8')
-
 
 		if account != 'all':
 			menu = self.build_account_menu(account)
@@ -1474,7 +1480,7 @@ class RosterWindow:
 				item.set_submenu(account_menu)
 				menu.append(item)
 
-		event_button = self.get_possible_button_event(event)
+		event_button = gtkgui_helpers.get_possible_button_event(event)
 
 		menu.popup(None, self.tree, None, event_button, event.time)
 		menu.show_all()
@@ -1567,13 +1573,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		model = self.tree.get_model()
 		type = model[iter][C_TYPE]
 		if type == 'group':
-			self.mk_menu_g(event, iter)
+			self.make_group_menu(event, iter)
 		elif type == 'agent':
-			self.mk_menu_agent(event, iter)
+			self.make_transport_menu(event, iter)
 		elif type == 'contact':
-			self.mk_menu_user(event, iter)
+			self.make_contact_menu(event, iter)
 		elif type == 'account':
-			self.mk_menu_account(event, iter)
+			self.make_account_menu(event, iter)
 
 	def show_treeview_menu(self, event):
 		try:
@@ -3168,7 +3174,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
 		liststore.append(['SEPARATOR', None, '', True])
 
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'rename.png')
+		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
 		img = gtk.Image()
 		img.set_from_file(path)
 		# sensitivity to False because by default we're offline

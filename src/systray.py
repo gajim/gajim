@@ -144,7 +144,7 @@ class Systray:
 		sub_menu.append(item)
 
 		item = gtk.ImageMenuItem(_('_Change Status Message...'))
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'rename.png')
+		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
 		img = gtk.Image()
 		img.set_from_file(path)
 		item.set_image(img)
