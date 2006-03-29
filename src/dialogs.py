@@ -104,10 +104,11 @@ class EditGroupsDialog:
 		self.changes_made = True
 		model = self.list.get_model()
 		model[path][1] = not model[path][1]
-		if model[path][1]:
-			self.user.groups.append(model[path][0].decode('utf-8'))
-		else:
-			self.user.groups.remove(model[path][0].decode('utf-8'))
+		jid = model[path][0].decode('utf-8')
+		if model[path][1] and not jid in self.user.groups:
+			self.user.groups.append(jid)
+		elif jid in self.user.groups:
+			self.user.groups.remove(jid)
 		self.update_contact()
 
 	def init_list(self):
