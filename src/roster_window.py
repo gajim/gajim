@@ -1294,7 +1294,6 @@ class RosterWindow:
 
 		menu = gtk.Menu()
 
-		#FIXME: this fails. why?
 		rename_item = gtk.ImageMenuItem(_('Re_name'))
 		rename_icon = gtk.image_new_from_stock(gtk.STOCK_REFRESH,
 			gtk.ICON_SIZE_MENU)
@@ -3007,7 +3006,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		if grp_source == grp_dest:
 			# Add meta contact
-			#FIXME: doesn't work under windows: http://bugzilla.gnome.org/show_bug.cgi?id=329797
+			#FIXME: doesn't work under windows:
+			# http://bugzilla.gnome.org/show_bug.cgi?id=329797
 #			if context.action == gtk.gdk.ACTION_COPY:
 #				# Keep only MOVE
 #				return
