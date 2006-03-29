@@ -2503,8 +2503,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		elif type == 'group':
 			# in C_JID column, we hold the group name (which is not escaped)
 			old_name = model[iter][C_JID].decode('utf-8')
-			# Groups may not change name from or to 'Not in Roster'
+			# Groups may not change name from or to 'Not in Roster' nor Transports
 			if _('Not in Roster') in (new_text, old_name):
+				return
+			if _('Transports') in (new_text, old_name):
 				return
 			# get all contacts in that group
 			for jid in gajim.contacts.get_jid_list(account):
@@ -2512,8 +2514,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					jid)
 				if old_name in contact.groups:
 					# set them in the new one and remove it from the old
-					self.remove_contact(contact, account)
 					contact.groups.remove(old_name)
+					self.remove_contact(contact, account)
 					contact.groups.append(new_text)
 					self.add_contact_to_roster(contact.jid, account)
 					gajim.connections[account].update_contact(contact.jid,
