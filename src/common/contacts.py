@@ -239,8 +239,9 @@ class Contacts:
 			tag = self.get_new_metacontacts_tag(brother_jid)
 			self._metacontacts_tags[brother_account][tag] = [{'jid': brother_jid,
 				'tag': tag}]
-			common.gajim.connections[brother_account].store_metacontacts(
-				self._metacontacts_tags[brother_account])
+			if brother_account != account:
+				common.gajim.connections[brother_account].store_metacontacts(
+					self._metacontacts_tags[brother_account])
 		# be sure jid has no other tag
 		old_tag = self.get_metacontacts_tag(account, jid)
 		while old_tag:
