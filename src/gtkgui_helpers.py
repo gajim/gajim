@@ -594,7 +594,7 @@ def get_state_image_from_file_path_show(file_path, show):
 
 	return image
 
-def get_possible_button_event(self, event):
+def get_possible_button_event(event):
 	'''mouse or keyboard caused the event?'''
 	if event.type == gtk.gdk.KEY_PRESS:
 		event_button = 0 # no event.button so pass 0
