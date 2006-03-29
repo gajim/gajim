@@ -357,6 +357,10 @@ class Dispatcher(PlugIn):
 		if data is None:
 			return
 		res = self.ProcessNonBlocking(data)
+		# 0 result indicates that we have closed the connection, e.g.
+		# we have released dispatcher, so self._owner has no methods
+		if not res:
+			return
 		self._owner.remove_timeout()
 		if self._expected[self._witid] is None:
 			return
