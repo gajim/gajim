@@ -1179,7 +1179,8 @@ class RosterWindow:
 		add_special_notification_menuitem.set_no_show_all(True)
 		
 		# add a special img for rename menuitem
-		path_to_rename_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
+		path_to_rename_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+			'kbd_input.png')
 		img = gtk.Image()
 		img.set_from_file(path_to_rename_img)
 		rename_menuitem.set_image(img)
@@ -1296,7 +1297,7 @@ class RosterWindow:
 		#FIXME: this fails. why?
 		#rename_item = gtk.ImageMenuItem(_('Re_name'))
 		#rename_icon = gtk.image_new_from_stock(gtk.STOCK_REFRESH,
-			gtk.ICON_SIZE_MENU)
+		#	gtk.ICON_SIZE_MENU)
 		#rename_item.set_image(rename_icon)
 		#menu.append(rename_item)
 		#rename_item.connect('activate', self.on_rename, iter, path)
@@ -1344,7 +1345,8 @@ class RosterWindow:
 		
 		item = gtk.ImageMenuItem(_('_Rename'))
 		# add a special img for rename menuitem
-		path_to_rename_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
+		path_to_rename_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+			'kbd_input.png')
 		img = gtk.Image()
 		img.set_from_file(path_to_rename_img)
 		item.set_image(img)
