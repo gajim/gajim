@@ -80,6 +80,13 @@ class EditGroupsDialog:
 
 	def update_contact(self):
 		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
+		if not tag:
+			gajim.interface.roster.remove_contact(self.user, self.account)
+			gajim.interface.roster.add_contact_to_roster(self.user.jid,
+				self.account)
+			gajim.connections[self.account].update_contact(self.user.jid,
+				self.user.name, self.user.groups)
+			return
 		all_jid = gajim.contacts.get_metacontacts_jids(tag)
 		for _account in all_jid:
 			for _jid in all_jid[_account]:
@@ -93,6 +100,10 @@ class EditGroupsDialog:
 	def remove_group(self, group):
 		'''add group group to self.user and all his brothers'''
 		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
+		if not tag:
+			if group in self.user.groups:
+				self.user.groups.remove(group)
+			return
 		all_jid = gajim.contacts.get_metacontacts_jids(tag)
 		for _account in all_jid:
 			for _jid in all_jid[_account]:
@@ -104,6 +115,10 @@ class EditGroupsDialog:
 	def add_group(self, group):
 		'''add group group to self.user and all his brothers'''
 		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
+		if not tag:
+			if group not in self.user.groups:
+				self.user.groups.append(group)
+			return
 		all_jid = gajim.contacts.get_metacontacts_jids(tag)
 		for _account in all_jid:
 			for _jid in all_jid[_account]:
