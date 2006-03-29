@@ -1223,8 +1223,12 @@ class Interface:
 
 	def handle_event_signed_in(self, account, empty):
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
-		# join already open groupchats
 		self.roster.actions_menu_needs_rebuild = True
+		invisible_show = gajim.SHOW_LIST.index('invisible')
+		# We cannot join rooms if we are invisible
+		if gajim.connections[account].connected == invisible_show:
+			return
+		# join already open groupchats
 		for gc_control in self.msg_win_mgr.get_controls(message_control.TYPE_GC):
 			if account != gc_control.account:
 				continue
