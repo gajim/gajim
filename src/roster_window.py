@@ -2900,11 +2900,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			contact.groups)
 
 	def remove_contact_from_group(self, account, contact, group):
-		if not group in contact.groups:
-			return
 		model = self.tree.get_model()
 		# Make sure contact was in the group
-		contact.groups.remove(group)
+		if group in contact.groups:
+			contact.groups.remove(group)
 		self.remove_contact(contact, account)
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
