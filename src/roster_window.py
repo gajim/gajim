@@ -390,7 +390,6 @@ class RosterWindow:
 		if len(contact_instances) > 1:
 			name += ' (' + unicode(len(contact_instances)) + ')'
 
-		# FIXME: remove when we use metacontacts
 		# show (account_name) if there are 2 contact with same jid in merged mode
 		if self.regroup:
 			add_acct = False
