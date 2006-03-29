@@ -858,6 +858,9 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+		if show == 'invisible':
+			# Never join a room when invisible
+			return
 		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
 			show = show, status = self.status)
 		if gajim.config.get('send_sha_in_gc_presence'):
