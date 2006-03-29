@@ -905,6 +905,8 @@ class Connection(ConnectionHandlers):
 	def send_gc_status(self, nick, jid, show, status):
 		if not self.connection:
 			return
+		if show == 'invisible':
+			show = 'offline'
 		ptype = None
 		if show == 'offline':
 			ptype = 'unavailable'
