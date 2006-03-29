@@ -2522,6 +2522,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					self.add_contact_to_roster(contact.jid, account)
 					gajim.connections[account].update_contact(contact.jid,
 						contact.name, contact.groups)
+			# If last removed iter was not visible, gajim.groups is not cleaned
+			if gajim.groups[account].has_key(old_name):
+				del gajim.groups[account][old_name]
 
 	def on_service_disco_menuitem_activate(self, widget, account):
 		server_jid = gajim.config.get_per('accounts', account, 'hostname')
