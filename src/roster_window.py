@@ -2484,7 +2484,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 		jid = model[iter][C_JID].decode('utf-8')
 		type = model[iter][C_TYPE]
-		if type == 'contact':
+		if type in ('contact', 'agent'):
 			old_text = gajim.contacts.get_contact_with_highest_priority(account,
 				jid).name
 			if old_text != new_text:
@@ -2517,14 +2517,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					self.add_contact_to_roster(contact.jid, account)
 					gajim.connections[account].update_contact(contact.jid,
 						contact.name, contact.groups)
-		elif type == 'agent':
-			old_text = gajim.contacts.get_contact_with_highest_priority(account,
-				jid).name
-			if old_text != new_text:
-				for u in gajim.contacts.get_contact(account, jid):
-					u.name = new_text
-				gajim.connections[account].update_contact(jid, new_text, u.groups)
-			self.draw_contact(jid, account)
 		model[iter][C_EDITABLE] = False
 
 	def on_service_disco_menuitem_activate(self, widget, account):
