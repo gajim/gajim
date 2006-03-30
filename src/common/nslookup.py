@@ -1,16 +1,6 @@
 ##	common/nslookup.py
 ##
-## Contributors for this file:
-##	- Dimitur Kirov <dkirov@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2006 Dimitur Kirov <dkirov@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -22,13 +12,17 @@
 ## GNU General Public License for more details.
 ##
 
-import sys, os, sre
+import sys
+import os
+import sre
 
 from xmpp.idlequeue import *
+
 if os.name == 'nt':
-	from subprocess import *
+	from subprocess import * # python24 only. we ask this for Windows
 elif os.name == 'posix':
 	import fcntl
+
 # it is good to check validity of arguments, when calling system commands
 ns_type_pattern = sre.compile('^[a-z]+$')
 
@@ -292,7 +286,7 @@ class NsLookup(IdleCommand):
 			self.result_handler(self.host, self.result)
 		self.result_handler = None
 	
-# TODO: remove below lines if there is nothing more to test
+# below lines is on how to use API and assist in testing
 if __name__ == '__main__':
 	if os.name == 'posix':
 		idlequeue = IdleQueue()
