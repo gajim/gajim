@@ -1,19 +1,8 @@
 ##	notify.py
 ##
-## Contributors for this file:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - Nikos Kouremenos <kourem@gmail.com>
-## - Dimitur Kirov <dkirov@gmail.com>
-## - Andrew Sayman <lorien420@myrealbox.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
 ##
 ## DBUS/libnotify connection code:
 ## Copyright (C) 2005 by Sebastian Estienne
@@ -129,39 +118,30 @@ class DesktopNotification:
 
 		if not text:
 			self.text = gajim.get_name_from_jid(account, jid) # default value of text
-
-		button_text = event_type
+			
 		if event_type == _('Contact Signed In'):
 			ntype = 'presence.online'
-			button_text = _('Start Chat with Contact')
 		elif event_type == _('Contact Signed Out'):
 			ntype = 'presence.offline'
 		elif event_type in (_('New Message'), _('New Single Message'),
 			_('New Private Message')):
 			ntype = 'im.received'
-			button_text = _('Focus Received Message')
 		elif event_type == _('File Transfer Request'):
 			ntype = 'transfer'
-			button_text = _('Manage File Transfer')
 		elif event_type == _('File Transfer Error'):
 			ntype = 'transfer.error'
-			button_text = _('Manage File Transfer')
 		elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
 			ntype = 'transfer.complete'
-			button_text = _('Manage File Transfer')
 		elif event_type == _('New E-mail'):
 			ntype = 'email.arrived'
-			button_text = _('View New E-Mail')
 		elif event_type == _('Groupchat Invitation'):
 			ntype = 'im.invitation'
-			button_text = _('Manage Invitation')
 		else:
 			# default failsafe values
 			self.path_to_image = os.path.abspath(
 				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 					'chat_msg_recv.png')) # img to display
 			ntype = 'im' # Notification Type
-		self.response_description = button_text
 
 		self.notif = dbus_support.get_notifications_interface()
 		if self.notif is None:
@@ -204,8 +184,7 @@ class DesktopNotification:
 					dbus.String(self.path_to_image), 
 					dbus.String(self.event_type),
 					dbus.String(self.text), 
-					( dbus.String(ntype),
-						dbus.String(self.response_description) ),
+					( dbus.String('default'), dbus.String(self.event_type) ),
 					hints, 
 					dbus.UInt32(timeout*1000),
 					reply_handler=self.attach_by_id,
