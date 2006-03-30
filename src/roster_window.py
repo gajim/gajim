@@ -1106,7 +1106,7 @@ class RosterWindow:
 			name = contact.name
 			model[iter][C_NAME] = gtkgui_helpers.escape_for_pango_markup(name)
 		elif row_type == 'group':
-			if jid in helpers.special_groups:
+			if jid in helpers.special_groups + (_('General'),):
 				return
 
 		model[iter][C_EDITABLE] = True # set 'editable' to True
