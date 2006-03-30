@@ -314,7 +314,23 @@ class RosterWindow:
 			return
 		if contact.jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(contact.jid)
-		self.remove_contact(contact, account)
+		# JEP-0162
+		hide = True
+		if contact.sub in ('both', 'to', 'from'):
+			hide = False
+		elif contact.ask == 'subscribe':
+			hide = False
+		elif contact.name or len(contact.groups):
+			hide = False
+
+		showOffline = gajim.config.get('showoffline')
+		if (contact.show in ('offline', 'error') or hide) and \
+			not showOffline and (not _('Transports') in contact.groups or \
+			gajim.connections[account].connected < 2) and \
+			not gajim.awaiting_events[account].has_key(contact.jid):
+			self.remove_contact(contact, account)
+		else:
+			self.draw_contact(contact.jid, account)
 
 	def remove_contact(self, contact, account):
 		'''Remove a contact from the roster'''
