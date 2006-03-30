@@ -1309,6 +1309,9 @@ class RosterWindow:
 		'''Make group's popup menu'''
 		model = self.tree.get_model()
 		path = model.get_path(iter)
+		group = model[iter][C_JID]
+		if group in helpers.special_groups + (_('General'),):
+			return
 
 		menu = gtk.Menu()
 
