@@ -915,28 +915,34 @@ class Interface:
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
 		jid = array[0]
-		if not jid in gajim.contacts.get_jid_list(account):
-			return
-		contacts = gajim.contacts.get_contacts_from_jid(account, jid)
-		# contact removes us.
 		name = array[1]
 		sub = array[2]
 		ask = array[3]
 		groups = array[4]
+		contacts = gajim.contacts.get_contacts_from_jid(account, jid)
+		# contact removes us.
 		if (not sub or sub == 'none') and (not ask or ask == 'none') and \
 		not name and not groups:
-			self.roster.remove_contact(contacts[0], account)
-			gajim.contacts.remove_jid(account, jid)
-			#FIXME if it was the only one in its group, remove the group
-			return
-		for contact in contacts:
-			if not name:
-				name = ''
-			contact.name = name
-			contact.sub = sub
-			contact.ask = ask
-			if groups:
-				contact.groups = groups
+			if contacts:
+				self.roster.remove_contact(contacts[0], account)
+				gajim.contacts.remove_jid(account, jid)
+				#FIXME if it was the only one in its group, remove the group
+				return
+		elif not contacts:
+			# Add it to roster
+			contact = gajim.contacts.create_contact(jid = jid, name = name,
+			groups = groups, show = 'offline', sub = sub, ask = ask)
+			gajim.contacts.add_contact(account, contact)
+			self.roster.add_contact_to_roster(jid, account)
+		else:
+			for contact in contacts:
+				if not name:
+					name = ''
+				contact.name = name
+				contact.sub = sub
+				contact.ask = ask
+				if groups:
+					contact.groups = groups
 		self.roster.draw_contact(jid, account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('RosterInfo', (account, array))
