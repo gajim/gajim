@@ -1694,11 +1694,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def on_req_usub(self, widget, contact, account):
 		'''Remove a contact'''
+		check_string = _('I want this contact to know my status after removal')
+		if contact.sub == 'to':
+			check_string = ''
 		window = dialogs.ConfirmationDialogCheck(
 			_('Contact "%s" will be removed from your roster') % (
 			contact.get_shown_name()),
-			_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'),
-			_('I want this contact to know my status after removal'))
+			_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'), check_string)
 		# maybe use 2 optionboxes from which the contact can select? (better)
 		if window.get_response() == gtk.RESPONSE_OK:
 			remove_auth = True
