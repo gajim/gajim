@@ -158,7 +158,7 @@ class EditGroupsDialog:
 		store = gtk.ListStore(str, bool)
 		self.list.set_model(store)
 		for g in gajim.groups[self.account].keys():
-			if g in (_('Transports'), _('Not in Roster')):
+			if g in gajim.special_groups:
 				continue
 			iter = store.append()
 			store.set(iter, 0, g)
@@ -416,7 +416,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
 		for g in gajim.groups[account].keys():
-			if g != _('Not in Roster') and g != _('Transports'):
+			if g not in gajim.special_groups:
 				self.group_comboboxentry.append_text(g)
 
 		if not jid_agents:

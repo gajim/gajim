@@ -2523,11 +2523,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		elif type == 'group':
 			# in C_JID column, we hold the group name (which is not escaped)
 			old_name = model[iter][C_JID].decode('utf-8')
-			# Groups may not change name from or to 'Not in Roster' nor Transports
-			if _('Not in Roster') in (new_text, old_name):
-				return
-			if _('Transports') in (new_text, old_name):
-				return
+			# Groups may not change name from or to a special groups
+			for g in gajim.special_groups:
+				if g in (new_text, old_name):
+					return
 			# get all contacts in that group
 			for jid in gajim.contacts.get_jid_list(account):
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
@@ -2991,7 +2990,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			it = model.iter_parent(it)
 		iter_group_source = it
 		grp_source = model[it][C_JID].decode('utf-8')
-		if grp_source == _('Transports') or grp_source == _('Not in Roster'):
+		if grp_source in gajim.special_groups:
 			return
 		jid_source = data.decode('utf-8')
 		c_source = gajim.contacts.get_contact_with_highest_priority(account,
@@ -2999,7 +2998,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# Get destination group
 		if type_dest == 'group':
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
-			if grp_dest == _('Transports') or grp_dest == _('Not in Roster'):
+			if grp_dest in gajim.special_groups:
 				return
 			if context.action == gtk.gdk.ACTION_COPY:
 				self.on_drop_in_group(None, account, c_source, grp_dest, context,
@@ -3013,7 +3012,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			while model[it][C_TYPE] != 'group':
 				it = model.iter_parent(it)
 			grp_dest = model[it][C_JID].decode('utf-8')
-		if grp_dest == _('Transports') or grp_dest == _('Not in Roster'):
+		if grp_dest in gajim.special_groups:
 			return
 		if jid_source == jid_dest:
 			if grp_source == grp_dest:

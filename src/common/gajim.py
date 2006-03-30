@@ -122,6 +122,7 @@ status_before_autoaway = {}
 
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
+special_groups = (_('Transports'), _('Not in Roster'), _('Observers'))
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
