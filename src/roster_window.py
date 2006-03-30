@@ -1708,7 +1708,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			for u in gajim.contacts.get_contact(account, contact.jid):
 				self.remove_contact(u, account)
 			gajim.contacts.remove_jid(account, u.jid)
-			if not remove_auth:
+			if not remove_auth and contact.sub == 'both':
 				contact.name = ''
 				contact.groups = []
 				contact.sub = 'from'
