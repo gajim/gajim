@@ -1111,11 +1111,19 @@ class AccountModificationWindow:
 		config = {}
 		name = self.xml.get_widget('name_entry').get_text().decode('utf-8')
 		if gajim.connections.has_key(self.account):
-			if name != self.account and \
-				gajim.connections[self.account].connected != 0:
-				dialogs.ErrorDialog(_('You are currently connected to the server'),
-		_('To change the account name, you must be disconnected.')).get_response()
-				return
+			if name != self.account:
+				if gajim.connections[self.account].connected != 0:
+					dialogs.ErrorDialog(
+						_('You are currently connected to the server'),
+						_('To change the account name, you must be disconnected.')).\
+						get_response()
+					return
+				if len(gajim.awaiting_events[self.account]):
+					dialogs.ErrorDialog(_('Unread events'),
+						_('To change the account name, you must read all pending '
+						'events.')).\
+						get_response()
+					return
 		if (name == ''):
 			dialogs.ErrorDialog(_('Invalid account name'),
 				_('Account name cannot be empty.')).get_response()
@@ -1643,6 +1651,11 @@ class AccountsWindow:
 		if not iter:
 			return
 		account = model.get_value(iter, 0).decode('utf-8')
+		if len(gajim.awaiting_events[account]):
+			dialogs.ErrorDialog(_('Unread events'),
+				_('Read all pending events before removing this account.')).\
+				get_response()
+			return
 		if gajim.interface.instances[account].has_key('remove_account'):
 			gajim.interface.instances[account]['remove_account'].window.present()
 		else:
