@@ -2518,7 +2518,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					# set them in the new one and remove it from the old
 					contact.groups.remove(old_name)
 					self.remove_contact(contact, account)
-					contact.groups.append(new_text)
+					if not new_text in contact.groups:
+						contact.groups.append(new_text)
 					self.add_contact_to_roster(contact.jid, account)
 					gajim.connections[account].update_contact(contact.jid,
 						contact.name, contact.groups)
