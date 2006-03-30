@@ -460,12 +460,12 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			return
 
 		# Check if jid is already in roster
-		if jid in gajim.contacts.get_jid_list(self.account) and \
-			_('Not in Roster') not in \
-			gajim.contacts.get_first_contact_from_jid(self.account, jid).groups:
-			ErrorDialog(_('Contact already in roster'),
-			_('This contact is already listed in your roster.')).get_response()
-			return
+		if jid in gajim.contacts.get_jid_list(self.account):
+			c = gajim.contacts.get_first_contact_from_jid(self.account, jid)
+			if _('Not in Roster') not in c.groups and c.sub in ('both', 'to'):
+				ErrorDialog(_('Contact already in roster'),
+				_('This contact is already listed in your roster.')).get_response()
+				return
 
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
 		start_iter = message_buffer.get_start_iter()
