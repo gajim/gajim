@@ -41,6 +41,8 @@ except:
 _ = i18n._
 Q_ = i18n.Q_
 
+special_groups = (_('Transports'), _('Not in Roster'), _('Observers'))
+
 class InvalidFormat(Exception):
 	pass
 
