@@ -129,7 +129,8 @@ class DesktopNotification:
 
 		if not text:
 			self.text = gajim.get_name_from_jid(account, jid) # default value of text
-			
+
+		button_text = event_type
 		if event_type == _('Contact Signed In'):
 			ntype = 'presence.online'
 			button_text = _('Start Chat with Contact')
@@ -160,7 +161,6 @@ class DesktopNotification:
 				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 					'chat_msg_recv.png')) # img to display
 			ntype = 'im' # Notification Type
-			button_text = event_type
 		self.response_description = button_text
 
 		self.notif = dbus_support.get_notifications_interface()
