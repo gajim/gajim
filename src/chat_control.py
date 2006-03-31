@@ -164,7 +164,6 @@ class ChatControlBase(MessageControl):
 					'words feature will not be used')).get_response()
 				gajim.config.set('use_speller', False)
 
-		self.print_time_timeout_id = None
 		self.style_event_id = 0
 
 	def _on_send_button_clicked(self, widget):
@@ -532,25 +531,6 @@ class ChatControlBase(MessageControl):
 		buffer = tv.get_buffer()
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
-
-	def print_time_timeout(self, arg):
-		if gajim.config.get('print_time') == 'sometimes':
-			conv_textview = self.conv_textview
-			buffer = conv_textview.get_buffer()
-			end_iter = buffer.get_end_iter()
-			tim = time.localtime()
-			tim_format = time.strftime('%H:%M', tim).decode(
-				locale.getpreferredencoding())
-			buffer.insert_with_tags_by_name(end_iter, '\n' + tim_format,
-				'time_sometimes')
-			# scroll to the end of the textview
-			if conv_textview.at_the_end():
-				# we are at the end
-				conv_textview.scroll_to_end()
-			return True # loop again
-		if self.print_time_timeout_id:
-			self.print_time_timeout_id = None
-		return False
 
 	def _on_history_menuitem_activate(self, widget = None, jid = None):
 		'''When history menuitem is pressed: call history window'''
@@ -1304,9 +1284,6 @@ class ChatControl(ChatControlBase):
 		# Disconnect timer callbacks
 		gobject.source_remove(self.possible_paused_timeout_id)
 		gobject.source_remove(self.possible_inactive_timeout_id)
-		if self.print_time_timeout_id:
-			gobject.source_remove(self.print_time_timeout_id)
-			self.print_time_timeout_id = None
 		# Clean up systray
 		if gajim.interface.systray_enabled and self.nb_unread > 0:
 			gajim.interface.systray.remove_jid(self.contact.jid, self.account,

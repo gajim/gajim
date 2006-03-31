@@ -395,19 +395,6 @@ class MessageWindow:
 			for ctrl in ctrl_dict.values():
 				yield ctrl
 
-	def update_print_time(self):
-		if gajim.config.get('print_time') != 'sometimes':
-			for ctrl in self.controls():
-				if ctrl.print_time_timeout_id:
-					gobject.source_remove(ctrl.print_time_timeout_id)
-					ctrl.print_time_timeout_id = None
-		else:
-			for ctrl in self.controls():
-				if not ctrl.print_time_timeout_id:
-					ctrl.print_time_timeout(None)
-					ctrl.print_time_timeout_id = gobject.timeout_add(300000,
-						ctrl.print_time_timeout, None)
-
 	def move_to_next_unread_tab(self, forward):
 		ind = self.notebook.get_current_page()
 		current = ind

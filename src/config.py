@@ -591,11 +591,6 @@ class PreferencesWindow:
 		else:
 			self.remove_speller()
 
-	def update_print_time(self):
-		'''Update time in Opened Chat Windows'''
-		for msg_win in gajim.interface.msg_win_mgr.windows():
-			msg_win.update_print_time()
-
 	def _set_sensitivity_for_before_after_time_widgets(self, sensitive):
 		self.xml.get_widget('before_time_label').set_sensitive(sensitive)
 		self.xml.get_widget('before_time_entry').set_sensitive(sensitive)
@@ -606,21 +601,18 @@ class PreferencesWindow:
 		if widget.get_active():
 			gajim.config.set('print_time', 'never')
 		self._set_sensitivity_for_before_after_time_widgets(False)
-		self.update_print_time()
 		gajim.interface.save_config()
 
 	def on_time_sometimes_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			gajim.config.set('print_time', 'sometimes')
 		self._set_sensitivity_for_before_after_time_widgets(False)
-		self.update_print_time()
 		gajim.interface.save_config()
 
 	def on_time_always_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			gajim.config.set('print_time', 'always')
 		self._set_sensitivity_for_before_after_time_widgets(True)
-		self.update_print_time()
 		gajim.interface.save_config()
 
 	def on_before_time_entry_focus_out_event(self, widget, event):

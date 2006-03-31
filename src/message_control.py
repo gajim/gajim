@@ -46,7 +46,6 @@ class MessageControl:
 		self.compact_view_always = False
 		self.compact_view_current = False
 		self.nb_unread = 0
-		self.print_time_timeout_id = None
 		self.resource = resource
 
 		gajim.last_message_time[self.account][self.get_full_jid()] = 0
@@ -96,13 +95,6 @@ class MessageControl:
 
 	def update_tags(self):
 		pass # NOTE: Derived classes SHOULD implement this
-
-	def print_time_timeout(self, arg):
-		# NOTE: Derived classes SHOULD implement this
-		if self.print_time_timeout_id:
-			gobject.source_remove(self.print_time_timeout_id)
-			self.print_time_timeout_id = None
-		return False
 
 	def get_tab_label(self, chatstate):
 		'''Return a suitable the tab label string.  Returns a tuple such as:
