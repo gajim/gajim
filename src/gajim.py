@@ -650,7 +650,7 @@ class Interface:
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his or her status.')
 				% jid)
-		if not gajim.config.get_per('accounts',account,'dont_ack_s10n'):
+		if not gajim.config.get_per('accounts', account, 'dont_ack_subscription'):
 			gajim.connections[account].ack_subscribed(jid)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Subscribed', (account, array))
@@ -1444,7 +1444,7 @@ class Interface:
 		if not os.path.exists(path):
 			# It's maybe a user theme
 			path = os.path.join(gajim.MY_EMOTS_PATH, emot_theme)
-			if not os.path.exists(path): # theme doesn't exists
+			if not os.path.exists(path): # theme doesn't exist
 				return
 		sys.path.append(path)
 		from emoticons import emoticons as emots

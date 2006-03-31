@@ -227,13 +227,13 @@ class Config:
 			# try for 2 minutes before giving up (aka. timeout after those seconds)
 			'try_connecting_for_foo_secs': [ opt_int, 60 ],
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
-			'dont_ack_s10n': [opt_bool, False],
+			'dont_ack_subscription': [opt_bool, False, _('Jabberd2 workaround')],
 			# proxy65 for FT
 			'file_transfer_proxies': [opt_str, 
 			'proxy.jabber.org, proxy.netlab.cz, transfer.jabber.freenet.de'],
 			'use_ft_proxies': [opt_bool, True, _('If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer.'), True],
-			'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
-			'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
+			'msgwin-x-position': [opt_int, -1], # Default is to let the wm decide
+			'msgwin-y-position': [opt_int, -1], # Default is to let the wm decide
 			'msgwin-width': [opt_int, 480],
 			'msgwin-height': [opt_int, 440],
 		}, {}),
