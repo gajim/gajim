@@ -553,7 +553,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				local_time = time.strftime('%c', contact.last_status_time)
 				local_time = local_time.decode(locale.getpreferredencoding()) 
 				text = text % local_time 
-				properties.append((' <span style="italic">%s</span>' % text, None))
+				properties.append(('<span style="italic">%s</span>' % text, None))
 		while properties:
 			property = properties.pop(0)
 			vcard_current_row += 1
