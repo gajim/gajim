@@ -3305,9 +3305,8 @@ Agent JID - node</property>
 
 	      <child>
 		<widget class="GtkCheckButton" id="trayicon_checkbutton">
-		  <property name="tooltip" translatable="yes">If checked, Gajim will also have a trayicon</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Icon in systray (aka. notification area)</property>
+		  <property name="label" translatable="yes">Use t_rayicon (aka. notification area icon)</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -3345,31 +3344,11 @@ Agent JID - node</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="sort_by_show_checkbutton">
-		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Sort contacts by status</property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="focus_on_click">True</property>
-		  <property name="active">False</property>
-		  <property name="inconsistent">False</property>
-		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="on_sort_by_show_checkbutton_toggled" last_modification_time="Sun, 29 May 2005 18:26:18 GMT"/>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
-		</packing>
-	      </child>
-
-	      <child>
 		<widget class="GtkCheckButton" id="show_avatars_in_roster_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, Gajim will display avatars of contacts in roster window</property>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will display avatars of contacts in roster window and in group chats</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Display avatars of contacts in roster</property>
+		  <property name="label" translatable="yes">Display a_vatars of contacts in roster</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -3388,9 +3367,9 @@ Agent JID - node</property>
 	      <child>
 		<widget class="GtkCheckButton" id="show_status_msgs_in_roster_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, Gajim will display status messages of contacts under the contact name in roster window</property>
+		  <property name="tooltip" translatable="yes">If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Display status messages of contacts in roster</property>
+		  <property name="label" translatable="yes">Display status _messages of contacts in roster</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -3398,6 +3377,26 @@ Agent JID - node</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
 		  <signal name="toggled" handler="on_show_status_msgs_in_roster_checkbutton_toggled" last_modification_time="Sun, 06 Nov 2005 13:15:30 GMT"/>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckButton" id="sort_by_show_checkbutton">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">_Sort contacts by status</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_sort_by_show_checkbutton_toggled" last_modification_time="Sun, 29 May 2005 18:26:18 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -3441,7 +3440,7 @@ Agent JID - node</property>
 			      <child>
 				<widget class="GtkLabel" id="label174">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Default _status iconset:</property>
+				  <property name="label" translatable="yes">Default status _iconset:</property>
 				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3515,8 +3514,8 @@ Agent JID - node</property>
 			      <child>
 				<widget class="GtkLabel" id="label249">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Theme:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">T_heme:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap">False</property>
@@ -3525,6 +3524,7 @@ Agent JID - node</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">theme_combobox</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -3555,7 +3555,7 @@ Agent JID - node</property>
 				<widget class="GtkButton" id="manage_theme_button">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Manage...</property>
+				  <property name="label" translatable="yes">Ma_nage...</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -3694,6 +3694,7 @@ Agent JID - node</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">1</property>
 		      <property name="ypad">0</property>
+		      <property name="mnemonic_widget">one_window_type_combobox</property>
 		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 		      <property name="width_chars">-1</property>
 		      <property name="single_line_mode">False</property>
@@ -3893,7 +3894,7 @@ Per type</property>
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Also known as iChat style</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Every 5 _minutes</property>
+				  <property name="label" translatable="yes">E_very 5 minutes</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -3950,8 +3951,8 @@ Per type</property>
 			      <child>
 				<widget class="GtkLabel" id="after_time_label">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">After time:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">_After time:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap">False</property>
@@ -3960,6 +3961,7 @@ Per type</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">after_time_entry</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -3978,8 +3980,8 @@ Per type</property>
 			      <child>
 				<widget class="GtkLabel" id="label231">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">After nickname:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">A_fter nickname:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap">False</property>
@@ -3988,6 +3990,7 @@ Per type</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">after_nickname_entry</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -4006,8 +4009,8 @@ Per type</property>
 			      <child>
 				<widget class="GtkLabel" id="label230">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Before nickname:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">B_efore nickname:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap">False</property>
@@ -4016,6 +4019,7 @@ Per type</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">before_nickname_entry</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -4034,8 +4038,8 @@ Per type</property>
 			      <child>
 				<widget class="GtkLabel" id="before_time_label">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Before time:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">_Before time:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap">False</property>
@@ -4044,6 +4048,7 @@ Per type</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">before_time_entry</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -4174,8 +4179,8 @@ Per type</property>
 			      <child>
 				<widget class="GtkLabel" id="label72">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Incoming message:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">_Incoming message:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_CENTER</property>
 				  <property name="wrap">True</property>
@@ -4184,6 +4189,7 @@ Per type</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">incoming_msg_colorbutton</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -4202,8 +4208,8 @@ Per type</property>
 			      <child>
 				<widget class="GtkLabel" id="label70">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Outgoing message:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">_Outgoing message:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_CENTER</property>
 				  <property name="wrap">True</property>
@@ -4212,6 +4218,7 @@ Per type</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">outgoing_msg_colorbutton</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -4230,8 +4237,8 @@ Per type</property>
 			      <child>
 				<widget class="GtkLabel" id="label71">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Status message:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">_Status message:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_CENTER</property>
 				  <property name="wrap">True</property>
@@ -4240,6 +4247,7 @@ Per type</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">status_msg_colorbutton</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -4358,7 +4366,7 @@ Per type</property>
 					  <child>
 					    <widget class="GtkLabel" id="label217">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Reset to Default Colors</property>
+					      <property name="label" translatable="yes">_Reset to Default Colors</property>
 					      <property name="use_underline">True</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -4397,8 +4405,8 @@ Per type</property>
 			      <child>
 				<widget class="GtkLabel" id="font_label">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Font:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">_Font:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap">False</property>
@@ -4407,6 +4415,7 @@ Per type</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">conversation_fontbutton</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -4446,8 +4455,8 @@ Per type</property>
 			      <child>
 				<widget class="GtkLabel" id="label371">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">URL:</property>
-				  <property name="use_underline">False</property>
+				  <property name="label" translatable="yes">_URL:</property>
+				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap">False</property>
@@ -4456,6 +4465,7 @@ Per type</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">url_msg_colorbutton</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
@@ -6060,8 +6070,8 @@ Custom</property>
 				      <child>
 					<widget class="GtkLabel" id="label355">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">File manager:</property>
-					  <property name="use_underline">False</property>
+					  <property name="label" translatable="yes">_File manager:</property>
+					  <property name="use_underline">True</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
 					  <property name="wrap">False</property>
@@ -6070,6 +6080,7 @@ Custom</property>
 					  <property name="yalign">0.5</property>
 					  <property name="xpad">0</property>
 					  <property name="ypad">0</property>
+					  <property name="mnemonic_widget">custom_file_manager_entry</property>
 					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 					  <property name="width_chars">-1</property>
 					  <property name="single_line_mode">False</property>
@@ -6360,7 +6371,7 @@ Custom</property>
 				  <child>
 				    <widget class="GtkLabel" id="label296">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Open...</property>
+				      <property name="label" translatable="yes">_Open...</property>
 				      <property name="use_underline">True</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
