@@ -210,7 +210,7 @@ class Systray:
 		self.systray_context_menu.show_all()
 
 	def on_show_all_events_menuitem_activate(self, widget):
-		while len(self.jids):
+		for i in range(len(self.jids)):
 			self.handle_first_event()
 
 	def on_show_roster_menuitem_activate(self, widget):
