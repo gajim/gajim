@@ -3948,7 +3948,7 @@ Per type</property>
 			      <property name="column_spacing">12</property>
 
 			      <child>
-				<widget class="GtkLabel" id="label229">
+				<widget class="GtkLabel" id="after_time_label">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">After time:</property>
 				  <property name="use_underline">False</property>
@@ -4032,7 +4032,7 @@ Per type</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="label228">
+				<widget class="GtkLabel" id="before_time_label">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Before time:</property>
 				  <property name="use_underline">False</property>
