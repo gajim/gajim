@@ -159,6 +159,8 @@ class Contacts:
 			return
 		if contact in self._contacts[account][contact.jid]:
 			self._contacts[account][contact.jid].remove(contact)
+		if len(self._contacts[account][contact.jid]) == 0:
+			del self._contacts[account][contact.jid]
 
 	def remove_jid(self, account, jid):
 		'''Removes all contacts for a given jid'''
