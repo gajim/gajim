@@ -650,7 +650,8 @@ class Interface:
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his or her status.')
 				% jid)
-		gajim.connections[account].ack_subscribed(jid)
+		if not gajim.config.get_per('accounts',account,'dont_ack_s10n'):
+			gajim.connections[account].ack_subscribed(jid)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Subscribed', (account, array))
 
