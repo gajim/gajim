@@ -301,12 +301,14 @@ class Interface:
 			self.remote_ctrl.raise_signal('AccountPresence', (status, account))
 	
 	def handle_event_notify(self, account, array):
-		#('NOTIFY', account, (jid, status, message, resource, priority, keyID))
+		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
+		# keyID))
 		# if we're here it means contact changed show
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible']
 		old_show = 0
 		new_show = statuss.index(array[1])
+		status_message = array[2]
 		jid = array[0].split('/')[0]
 		keyID = array[5]
 		attached_keys = gajim.config.get_per('accounts', account,
@@ -337,7 +339,7 @@ class Interface:
 			if contact1:
 				if contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
-				if old_show == new_show and contact1.status == array[2] and \
+				if old_show == new_show and contact1.status == status_message and \
 					contact1.priority == priority: # no change
 					return
 			else:
@@ -369,7 +371,7 @@ class Interface:
 						gobject.timeout_add(5000, self.roster.really_remove_contact,
 							contact1, account)
 			contact1.show = array[1]
-			contact1.status = array[2]
+			contact1.status = status_message
 			contact1.priority = priority
 			contact1.keyID = keyID
 			if contact1.jid not in gajim.newly_added[account]:
@@ -389,7 +391,8 @@ class Interface:
 			if array[1] in ('offline', 'error'):
 				contact1.our_chatstate = contact1.chatstate = contact1.composing_jep = None
 				gajim.connections[account].remove_transfers_for_contact(contact1)
-			self.roster.chg_contact_status(contact1, array[1], array[2], account)
+			self.roster.chg_contact_status(contact1, array[1], status_message,
+				account)
 			# play sound
 			if old_show < 2 and new_show > 1:
 				if gajim.config.get_per('soundevents', 'contact_connected',
@@ -411,8 +414,15 @@ class Interface:
 									iconset, '48x48', 'online.png')
 						path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
 							jid = jid, suffix = '_notif_size_colored.png')
+						if status_message:
+							text = _('%(nickname)s with status message: %(msg)s') %\
+								{'nickname': gajim.get_name_from_jid(account, jid),
+								'msg': status_message}
+						else:
+							# just the nickname
+							text = gajim.get_name_from_jid(account, jid)
 						notify.notify(_('Contact Signed In'), jid, account,
-							path_to_image = path)
+							path_to_image = path, text = text)
 
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactPresence',
@@ -437,8 +447,15 @@ class Interface:
 									iconset, '48x48', 'offline.png')
 						path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
 							jid = jid, suffix = '_notif_size_bw.png')
+						if status_message:
+							text = _('%(nickname)s with status message: %(msg)s') %\
+								{'nickname': gajim.get_name_from_jid(account, jid),
+								'msg': status_message}
+						else:
+							# just the nickname
+							text = gajim.get_name_from_jid(account, jid)
 						notify.notify(_('Contact Signed Out'), jid, account,
-							path_to_image = path)
+							path_to_image = path, text = text)
 
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactAbsence', (account, array))
@@ -447,14 +464,13 @@ class Interface:
 			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) doesn't follow the JEP
 			# remove in 2007
 			# It's maybe a GC_NOTIFY (specialy for MSN gc)
-			self.handle_event_gc_notify(account, (jid, array[1], array[2],
+			self.handle_event_gc_notify(account, (jid, array[1], status_message,
 				array[3], None, None, None, None, None, None, None))
 			
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
 		# chatstate))
-		
 
 		full_jid_with_resource = array[0]
 		jid = gajim.get_jid_without_resource(full_jid_with_resource)
