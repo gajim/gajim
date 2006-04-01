@@ -1099,6 +1099,9 @@ class RosterWindow:
 		row_type = model[iter][C_TYPE]
 		jid = model[iter][C_JID].decode('utf-8')
 		account = model[iter][C_ACCOUNT].decode('utf-8')
+		# account is offline, don't allow to rename
+		if gajim.connections[account].connected < 2:
+			return
 		if row_type == 'contact':
 			# it's jid
 			# Remove possible resource indicator (Name (2))
@@ -1183,13 +1186,15 @@ class RosterWindow:
 			'roster_contact_context_menu')
 
 		start_chat_menuitem = xml.get_widget('start_chat_menuitem')
-		send_single_message_menuitem = xml.get_widget('send_single_message_menuitem')
+		send_single_message_menuitem = xml.get_widget(
+			'send_single_message_menuitem')
 		rename_menuitem = xml.get_widget('rename_menuitem')
 		edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
 		# separator has with send file, assign_openpgp_key_menuitem, etc..
 		above_send_file_separator = xml.get_widget('above_send_file_separator')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
-		assign_openpgp_key_menuitem = xml.get_widget('assign_openpgp_key_menuitem')
+		assign_openpgp_key_menuitem = xml.get_widget(
+			'assign_openpgp_key_menuitem')
 		add_special_notification_menuitem = xml.get_widget(
 			'add_special_notification_menuitem')
 		
@@ -1297,6 +1302,14 @@ class RosterWindow:
 			add_to_roster_menuitem.connect('activate',
 				self.on_add_to_roster, contact, account)
 
+		# Unsensitive many items when account is offline
+		if gajim.connections[account].connected < 2:
+			for widget in [start_chat_menuitem, send_single_message_menuitem,
+			rename_menuitem, edit_groups_menuitem, send_file_menuitem,
+			subscription_menuitem, add_to_roster_menuitem,
+			remove_from_roster_menuitem]:
+				widget.set_sensitive(False)
+
 		#FIXME: create menu for sub contacts
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
@@ -1309,7 +1322,8 @@ class RosterWindow:
 		'''Make group's popup menu'''
 		model = self.tree.get_model()
 		path = model.get_path(iter)
-		group = model[iter][C_JID]
+		group = model[iter][C_JID].decode('utf-8')
+		account = model[iter][C_ACCOUNT].decode('utf-8')
 		if group in helpers.special_groups + (_('General'),):
 			return
 
@@ -1325,6 +1339,10 @@ class RosterWindow:
 		menu.append(rename_item)
 		rename_item.connect('activate', self.on_rename, iter, path)
 
+		# unsensitive if account is not connected
+		if gajim.connections[account].connected < 2:
+			rename_item.set_sensitive(False)
+
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
 		menu.popup(None, None, None, event_button, event.time)
@@ -1336,6 +1354,7 @@ class RosterWindow:
 		jid = model[iter][C_JID].decode('utf-8')
 		path = model.get_path(iter)
 		account = model[iter][C_ACCOUNT].decode('utf-8')
+		is_connected = gajim.connections[account].connected > 1
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		menu = gtk.Menu()
 
@@ -1344,7 +1363,7 @@ class RosterWindow:
 		item.set_image(icon)
 		menu.append(item)
 		show = contact.show
-		if show != 'offline' and show != 'error':
+		if (show != 'offline' and show != 'error') or not is_connected:
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, None, account)
 
@@ -1352,7 +1371,7 @@ class RosterWindow:
 		icon = gtk.image_new_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
-		if show in ('offline', 'error'):
+		if show in ('offline', 'error') or not is_connected:
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
 			account)
@@ -1365,6 +1384,8 @@ class RosterWindow:
 		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_edit_agent, contact, account)
+		if not is_connected:
+			item.set_sensitive(False)
 		
 		item = gtk.ImageMenuItem(_('_Rename'))
 		# add a special img for rename menuitem
@@ -1375,12 +1396,16 @@ class RosterWindow:
 		item.set_image(img)
 		menu.append(item)
 		item.connect('activate', self.on_rename, iter, path)
+		if not is_connected:
+			item.set_sensitive(False)
 
 		item = gtk.ImageMenuItem(_('_Remove from Roster'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_remove_agent, contact, account)
+		if not is_connected:
+			item.set_sensitive(False)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
@@ -1480,6 +1505,13 @@ class RosterWindow:
 			self.on_join_gc_activate, account)
 		new_message_menuitem.connect('activate',
 			self.on_new_message_menuitem_activate, account)
+
+		# Unsensitive some item if account is offline
+		if gajim.connections[account].connected < 2:
+			for widget in [set_motd_menuitem, update_motd_menuitem,
+			delete_motd_menuitem, service_discovery_menuitem, add_contact_menuitem,
+			join_group_chat_menuitem, new_message_menuitem]:
+				widget.set_sensitive(False)
 		return account_context_menu
 
 	def make_account_menu(self, event, iter):
