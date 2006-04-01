@@ -559,7 +559,8 @@ class Interface:
 			room_jid = jid
 			nick = resource
 			if first:
-				if helpers.allow_showing_notification(account):
+				if gajim.config.get('notify_on_new_message') and \
+				helpers.allow_showing_notification(account):
 					room_name, t = gajim.get_room_name_and_server_from_room_jid(
 						room_jid)
 					txt = _('%(nickname)s in room %(room_name)s says: %(message)s') \
