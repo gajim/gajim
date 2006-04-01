@@ -475,7 +475,7 @@ class Interface:
 		full_jid_with_resource = array[0]
 		jid = gajim.get_jid_without_resource(full_jid_with_resource)
 		resource = gajim.get_resource_from_jid(full_jid_with_resource)
-		
+
 		message = array[1]
 		msg_type = array[4]
 		chatstate = array[6]
@@ -483,11 +483,29 @@ class Interface:
 		composing_jep = array[8]
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
-		
-		chat_control = self.msg_win_mgr.get_control(jid, account)
 
+		highest_contact = gajim.contacts.get_contact_with_highest_priority(
+			account, jid)
+		# Look for a chat control that has the given resource, or default to one
+		# without resource
+		ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
+		if ctrl:
+			jid_of_control = full_jid_with_resource
+			chat_control = ctrl
+		elif not highest_contact or not highest_contact.resource:
+			# unknow contact or offline message
+			jid_of_control = jid
+			chat_control = self.msg_win_mgr.get_control(jid, account)
+		elif resource != highest_contact.resource:
+			jid_of_control = full_jid_with_resource
+			chat_control = None
+		else:
+			jid_of_control = jid
+			chat_control = self.msg_win_mgr.get_control(jid, account)
+
+		groupchat_control = self.msg_win_mgr.get_control(jid, account)
 		# Handle chat states  
-		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		contact = gajim.contacts.get_contact(account, jid, resource)
 		if contact:
 			contact.composing_jep = composing_jep
 		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
@@ -512,17 +530,18 @@ class Interface:
 		if not message: # empty message text
 			return
 
-		first = False
 		pm = False
-		if not chat_control and not gajim.awaiting_events[account].has_key(jid):
-			# It's a first message and not a Private Message
-			first = True
-		elif chat_control and chat_control.type_id == message_control.TYPE_GC: 
+		if groupchat_control and groupchat_control.type_id == \
+		message_control.TYPE_GC:
 			# It's a Private message
 			pm = True
-			if not self.msg_win_mgr.has_window(full_jid_with_resource, account) and \
-				not gajim.awaiting_events[account].has_key(full_jid_with_resource):
-					first = True
+
+		first = False
+		if not chat_control and not gajim.awaiting_events[account].has_key(
+		jid_of_control):
+			# It's a first message and not a Private Message
+			first = True
+
 		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
 			helpers.play_sound('first_message_received')
@@ -530,15 +549,16 @@ class Interface:
 			'enabled'):
 			helpers.play_sound('next_message_received')
 
-		jid_of_control = jid
 		if pm:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(full_jid_with_resource)
+			room_jid = jid
+			nick = resource
 			if first:
 				if helpers.allow_showing_notification(account):
-					room_name,t = gajim.get_room_name_and_server_from_room_jid(
+					room_name, t = gajim.get_room_name_and_server_from_room_jid(
 						room_jid)
-					txt = _('%(nickname)s in room %(room_name)s says: %(message)s') %\
-						{'nickname': nick, 'room_name': room_name, 'message': message}
+					txt = _('%(nickname)s in room %(room_name)s says: %(message)s') \
+						% {'nickname': nick, 'room_name': room_name,
+						'message': message}
 					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 						'priv_msg_recv.png')
 					path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
@@ -553,21 +573,6 @@ class Interface:
 			not gajim.contacts.get_contact(account, jid):
 			return
 
-		highest_contact = gajim.contacts.get_contact_with_highest_priority(
-			account, jid)
-		# Look for a chat control that has the given resource, or default to one
-		# without resource
-		ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
-		if ctrl:
-			chat_control = ctrl
-		elif not highest_contact or not highest_contact.resource:
-			# unknow contact or offline message
-			chat_control = None
-			jid_of_control = jid
-		elif resource != highest_contact.resource:
-			chat_control = None
-			jid_of_control = full_jid_with_resource
-		
 		if first:
 			if gajim.config.get('notify_on_new_message'):
 				if helpers.allow_showing_notification(account):
