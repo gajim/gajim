@@ -1299,6 +1299,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		if ptype == 'available':
 			ptype = None
 		gajim.log.debug('PresenceCB: %s' % ptype)
+		timestamp = None
 		is_gc = False # is it a GC presence ?
 		sigTag = None
 		avatar_sha = None
@@ -1310,6 +1311,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				sigTag = x
 			if x.getNamespace() == common.xmpp.NS_VCARD_UPDATE:
 				avatar_sha = x.getTagData('photo')
+			if x.getNamespace() == common.xmpp.NS_DELAY:
+				# JEP-0091
+				tim = prs.getTimestamp()
+				tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
+				timstamp = time.localtime(timegm(tim))
 
 		who = helpers.get_full_jid_from_iq(prs)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
@@ -1340,7 +1346,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				errcode = prs.getErrorCode()
 				if errcode == '502': # Internal Timeout:
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
-						prio, keyID))
+						prio, keyID, timestamp))
 				elif errcode == '401': # password required to join
 					self.dispatch('ERROR', (_('Unable to join room'),
 						_('A password is required to join this room.')))
@@ -1389,8 +1395,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					p = self.add_sha(p)
 					self.connection.send(p)
 				if who.find("@") <= 0:
-					self.dispatch('NOTIFY',
-						(jid_stripped, 'offline', 'offline', resource, prio, keyID))
+					self.dispatch('NOTIFY', (jid_stripped, 'offline', 'offline',
+						resource, prio, keyID, timestamp))
 			else:
 				if not status:
 					status = _('I would like to add you to my roster.')
@@ -1409,7 +1415,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			errcode = prs.getErrorCode()
 			if errcode == '502': # Internal Timeout:
 				self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
-					prio, keyID))
+					prio, keyID, timestamp))
 			else:	# print in the window the error
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
@@ -1426,7 +1432,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				not in no_log_for and jid_stripped not in no_log_for:
 				gajim.logger.write('status', jid_stripped, status, show)
 			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
-				keyID))
+				keyID, timestamp))
 	# END presenceCB
 	def _StanzaArrivedCB(self, con, obj):
 		self.last_io = gajim.idlequeue.current_time()
