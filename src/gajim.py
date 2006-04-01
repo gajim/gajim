@@ -569,7 +569,7 @@ class Interface:
 					notify.notify(_('New Private Message'), full_jid_with_resource,
 						account, 'pm', path_to_image = path, text = txt)
 
-			chat_control.on_private_message(nick, message, array[2])
+			groupchat_control.on_private_message(nick, message, array[2])
 			return
 				
 		# THIS HAS TO BE AFTER PM handling so we can get PMs
