@@ -452,13 +452,15 @@ class Interface:
 			
 
 	def handle_event_msg(self, account, array):
-		# ('MSG', account, (jid, msg, time, encrypted, msg_type, subject,
+		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
 		# chatstate))
 		
 
-		jid = gajim.get_jid_without_resource(array[0])
-		resource = gajim.get_resource_from_jid(array[0])
-		fjid = array[0]
+		full_jid_with_resource = array[0]
+		jid = gajim.get_jid_without_resource(full_jid_with_resource)
+		resource = gajim.get_resource_from_jid(full_jid_with_resource)
+		
+		message = array[1]
 		msg_type = array[4]
 		chatstate = array[6]
 		msg_id = array[7]
@@ -491,7 +493,7 @@ class Interface:
 
 		# THIS MUST BE AFTER chatstates handling
 		# AND BEFORE playsound (else we here sounding on chatstates!)
-		if not array[1]: # empty message text
+		if not message: # empty message text
 			return
 
 		first = False
@@ -502,9 +504,9 @@ class Interface:
 		elif chat_control and chat_control.type_id == message_control.TYPE_GC: 
 			# It's a Private message
 			pm = True
-			if not self.msg_win_mgr.has_window(fjid, account) and \
-				not gajim.awaiting_events[account].has_key(fjid):
-					first =True
+			if not self.msg_win_mgr.has_window(full_jid_with_resource, account) and \
+				not gajim.awaiting_events[account].has_key(full_jid_with_resource):
+					first = True
 		if gajim.config.get_per('soundevents', 'first_message_received',
 			'enabled') and first:
 			helpers.play_sound('first_message_received')
@@ -514,20 +516,20 @@ class Interface:
 
 		jid_of_control = jid
 		if pm:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(full_jid_with_resource)
 			if first:
 				if helpers.allow_showing_notification(account):
 					room_name,t = gajim.get_room_name_and_server_from_room_jid(
 						room_jid)
-					txt = _('%(nickname)s in room %(room_name)s has sent you a new '
-						'message.') % {'nickname': nick, 'room_name': room_name}
+					txt = _('%(nickname)s in room %(room_name)s says: %(message)s') %\
+						{'nickname': nick, 'room_name': room_name, 'message': message}
 					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 						'priv_msg_recv.png')
 					path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-					notify.notify(_('New Private Message'), fjid, account, 'pm',
-						path_to_image = path, text = txt)
+					notify.notify(_('New Private Message'), full_jid_with_resource,
+						account, 'pm', path_to_image = path, text = txt)
 
-			chat_control.on_private_message(nick, array[1], array[2])
+			chat_control.on_private_message(nick, message, array[2])
 			return
 				
 		# THIS HAS TO BE AFTER PM handling so we can get PMs
@@ -539,7 +541,7 @@ class Interface:
 			account, jid)
 		# Look for a chat control that has the given resource, or default to one
 		# without resource
-		ctrl = self.msg_win_mgr.get_control(fjid, account)
+		ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
 		if ctrl:
 			chat_control = ctrl
 		elif not highest_contact or not highest_contact.resource:
@@ -548,12 +550,14 @@ class Interface:
 			jid_of_control = jid
 		elif resource != highest_contact.resource:
 			chat_control = None
-			jid_of_control = fjid
+			jid_of_control = full_jid_with_resource
 		
 		if first:
 			if gajim.config.get('notify_on_new_message'):
 				if helpers.allow_showing_notification(account):
-					txt = _('%s has sent you a new message.') % gajim.get_name_from_jid(account, jid)
+					txt = _('%(nickname)s says: %(message)s') % \
+						{'nickname': gajim.get_name_from_jid(account, jid),
+						'message': message}
 					if msg_type == 'normal': # single message
 						img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 							'single_msg_recv.png')
@@ -567,23 +571,23 @@ class Interface:
 						notify.notify(_('New Message'), jid_of_control, account,
 							msg_type, path_to_image = path, text = txt)
 
-		# array: (contact, msg, time, encrypted, msg_type, subject)
-		self.roster.on_message(jid, array[1], array[2], account, array[3],
+		# array: (jid, msg, time, encrypted, msg_type, subject)
+		self.roster.on_message(jid, message, array[2], account, array[3],
 			msg_type, array[5], resource)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
 
 	def handle_event_msgerror(self, account, array):
-		#('MSGERROR', account, (jid, error_code, error_msg, msg, time))
-		fjid = array[0]
-		jids = fjid.split('/', 1)
+		#'MSGERROR' (account, (jid, error_code, error_msg, msg, time))
+		full_jid_with_resource = array[0]
+		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
 		gcs = self.msg_win_mgr.get_controls(message_control.TYPE_GC)
 		for gc_control in gcs:
 			if jid == gc_control.contact.jid:
 				if len(jids) > 1: # it's a pm
 					nick = jids[1]
-					if not self.msg_win_mgr.get_control(fjid, account):
+					if not self.msg_win_mgr.get_control(full_jid_with_resource, account):
 						tv = gc_control.list_treeview
 						model = tv.get_model()
 						i = gc_control.get_contact_iter(nick)
@@ -595,7 +599,7 @@ class Interface:
 							name = nick, show = show)
 						c = gajim.contacts.contact_from_gc_contact(gc_c)
 						self.roster.new_chat(c, account, private_chat = True)
-					ctrl = self.msg_win_mgr.get_control(fjid, account)
+					ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
 					ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
 								'status')
 					return
@@ -806,7 +810,7 @@ class Interface:
 			self.remote_ctrl.raise_signal('OsInfo', (account, array))
 
 	def handle_event_gc_notify(self, account, array):
-		#('GC_NOTIFY', account, (room_jid, show, status, nick,
+		#'GC_NOTIFY' (account, (room_jid, show, status, nick,
 		# role, affiliation, jid, reason, actor, statusCode, newNick))
 		nick = array[3]
 		if not nick:
