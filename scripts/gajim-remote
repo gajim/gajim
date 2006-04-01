@@ -30,4 +30,4 @@ fi
 
 cd PREFIX/share/gajim/src
 export PYTHONPATH="$PYTHONPATH:PREFIXLIB/gajim"
-exec python -OOt gajim-remote.py "$@"
+exec python -OO gajim-remote.py "$@"
