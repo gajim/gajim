@@ -316,8 +316,8 @@ class Contacts:
 		score = priority*10000
 		if not common.gajim.jid_is_transport(jid):
 			score += contact.priority*10
-		score += ['error', 'offline', 'invisible', 'dnd', 'xa', 'away', 'chat',
-			'online'].index(contact.show)
+		score += ['not in roster', 'error', 'offline', 'invisible', 'dnd', 'xa',
+			'away', 'chat', 'online'].index(contact.show)
 		return score
 
 	def get_metacontacts_big_brother(self, family):
