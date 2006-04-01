@@ -495,6 +495,8 @@ class Interface:
 			# It's a Private message
 			pm = True
 
+		chat_control = None
+		jid_of_control = full_jid_with_resource
 		highest_contact = gajim.contacts.get_contact_with_highest_priority(
 			account, jid)
 		# Look for a chat control that has the given resource, or default to one
