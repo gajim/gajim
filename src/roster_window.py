@@ -2989,6 +2989,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		iter_dest = model.get_iter(path_dest)
 		type_dest = model[iter_dest][C_TYPE].decode('utf-8')
 		jid_dest = model[iter_dest][C_JID].decode('utf-8')
+		account = model[iter_dest][C_ACCOUNT].decode('utf-8')
+
+		# if account is not connected, do nothing
+		if gajim.connections[account].connected < 2:
+			return
 
 		if info == self.TARGET_TYPE_URI_LIST:
 			# User dropped a file on the roster
@@ -2996,7 +3001,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				return
 			if type_dest != 'contact':
 				return
-			account = model[iter_dest][C_ACCOUNT].decode('utf-8')
 			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
 				jid_dest)
 			uri = data.strip()
@@ -3018,11 +3022,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		if type_source != 'contact': # source is not a contact
 			return
-		account = model[iter_source][C_ACCOUNT].decode('utf-8')
-		if type_dest == 'contact':
-			dest_account = model[iter_dest][C_ACCOUNT].decode('utf-8')
-			if account != dest_account: # dropped on a contact from another account
-				return
+		source_account = model[iter_source][C_ACCOUNT].decode('utf-8')
+		if account != source_account: # dropped in another account
+			return
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':
 			it = model.iter_parent(it)
