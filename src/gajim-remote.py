@@ -49,7 +49,7 @@ except:
 def send_error(error_message):
 	'''Writes error message to stderr and exits'''
 	print >> sys.stderr, error_message.encode(PREFERRED_ENCODING)
-	sys.exit()
+	sys.exit(1)
 
 try:
 	import dbus
@@ -226,7 +226,7 @@ class GajimRemote:
 				print self.help_on_command(sys.argv[2]).encode(PREFERRED_ENCODING)
 			else:
 				print self.compose_help().encode(PREFERRED_ENCODING)
-			sys.exit()
+			sys.exit(0)
 		
 		self.init_connection()
 		self.check_arguments()
@@ -235,8 +235,13 @@ class GajimRemote:
 			if self.argv_len < 3:
 				send_error(_('Missing argument "contact_jid"'))
 		
-		res = self.call_remote_method()
-		self.print_result(res)
+		try:
+			res = self.call_remote_method()
+		except exceptions.ServiceNotAvailable:
+			# At this point an error message has already been displayed
+			sys.exit(1)
+		else:
+			self.print_result(res)
 		
 	def print_result(self, res):
 		''' Print retrieved result to the output '''
