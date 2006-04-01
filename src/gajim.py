@@ -488,6 +488,13 @@ class Interface:
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
 
+		groupchat_control = self.msg_win_mgr.get_control(jid, account)
+		pm = False
+		if groupchat_control and groupchat_control.type_id == \
+		message_control.TYPE_GC:
+			# It's a Private message
+			pm = True
+
 		highest_contact = gajim.contacts.get_contact_with_highest_priority(
 			account, jid)
 		# Look for a chat control that has the given resource, or default to one
@@ -496,18 +503,17 @@ class Interface:
 		if ctrl:
 			jid_of_control = full_jid_with_resource
 			chat_control = ctrl
-		elif not highest_contact or not highest_contact.resource:
+		elif not pm and (not highest_contact or not highest_contact.resource):
 			# unknow contact or offline message
 			jid_of_control = jid
 			chat_control = self.msg_win_mgr.get_control(jid, account)
-		elif resource != highest_contact.resource:
+		elif highest_contact and resource != highest_contact.resource:
 			jid_of_control = full_jid_with_resource
 			chat_control = None
-		else:
+		elif not pm:
 			jid_of_control = jid
 			chat_control = self.msg_win_mgr.get_control(jid, account)
 
-		groupchat_control = self.msg_win_mgr.get_control(jid, account)
 		# Handle chat states  
 		contact = gajim.contacts.get_contact(account, jid, resource)
 		if contact:
@@ -533,12 +539,6 @@ class Interface:
 		# AND BEFORE playsound (else we here sounding on chatstates!)
 		if not message: # empty message text
 			return
-
-		pm = False
-		if groupchat_control and groupchat_control.type_id == \
-		message_control.TYPE_GC:
-			# It's a Private message
-			pm = True
 
 		first = False
 		if not chat_control and not gajim.awaiting_events[account].has_key(
