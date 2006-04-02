@@ -2106,7 +2106,8 @@ class RemoveAccountWindow:
 
 	def on_remove_button_clicked(self, widget):
 		def remove(widget):
-			self.dialog.destroy()
+			if self.dialog:
+				self.dialog.destroy()
 			if gajim.connections[self.account].connected and \
 			not self.remove_and_unregister_radiobutton.get_active():
 				# change status to offline only if we will not remove this JID from
@@ -2127,11 +2128,15 @@ class RemoveAccountWindow:
 				gajim.connections[self.account].unregister_account(self._on_remove_success)
 			else:
 				self._on_remove_success(True)
+
+		self.dialog = None
 		if gajim.connections[self.account].connected:
 			self.dialog = dialogs.ConfirmationDialog(
 				_('Account "%s" is connected to the server' % self.account),
 				_('If you remove it, the connection will be lost.'),
 				on_response_ok = remove)
+		else:
+			remove(None)
 	
 	def _on_remove_success(self, res):
 		# action of unregistration has failed, we don't remove the account
@@ -2467,6 +2472,7 @@ class AccountCreationWizardWindow:
 
 		self.notebook.set_current_page(0)
 		self.advanced_button.set_no_show_all(True)
+		self.finish_button.set_no_show_all(True)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -2585,7 +2591,7 @@ class AccountCreationWizardWindow:
 					_('Account has been added successfully'),
 _('You can set advanced account options by pressing Advanced button, or later by clicking in Accounts menuitem under Edit menu from the main window.'))
 				self.finish_label.set_markup(finish_text)
-				self.finish_button.set_sensitive(True)
+				self.finish_button.show()
 				self.finish_button.set_property('has-default', True)
 				self.advanced_button.show()
 				self.go_online_checkbutton.show()
@@ -2605,7 +2611,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 	def acc_is_ok(self, config):
 		'''Account creation succeeded'''
 		self.create_vars(config)
-		self.finish_button.set_sensitive(True)
+		self.finish_button.show()
 		self.finish_button.set_property('has-default', True)
 		self.advanced_button.show()
 		self.go_online_checkbutton.show()
