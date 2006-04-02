@@ -417,7 +417,7 @@ class ServiceDiscoveryWindow:
 		# Check connection
 		if gajim.connections[account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
-_('Without a connection, you can not browse available services')).get_response()
+_('Without a connection, you can not browse available services'))
 			raise RuntimeError, 'You must be connected to browse services'
 
 		# Get a ServicesCache object.
@@ -635,12 +635,12 @@ _('Without a connection, you can not browse available services')).get_response()
 				# We can't travel anywhere else.
 				self.destroy()
 			dialogs.ErrorDialog(_('The service could not be found'),
-_('There is no service at the address you entered, or it is not responding. Check the address and try again.')).get_response()
+_('There is no service at the address you entered, or it is not responding. Check the address and try again.'))
 			return
 		klass = self.cache.get_browser(identities, features)
 		if not klass:
 			dialogs.ErrorDialog(_('The service is not browsable'),
-_('This type of service does not contain any items to browse.')).get_response()
+_('This type of service does not contain any items to browse.'))
 			return
 		elif klass is None:
 			klass = AgentBrowser
@@ -922,7 +922,7 @@ class AgentBrowser:
 				# We can't travel anywhere else.
 				self.window.destroy()
 			dialogs.ErrorDialog(_('The service is not browsable'),
-_('This service does not contain any items to browse.')).get_response()
+_('This service does not contain any items to browse.'))
 			return
 		# We got a list of items
 		for item in items:

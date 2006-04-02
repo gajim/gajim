@@ -192,11 +192,11 @@ class Interface:
 
 	def handle_event_warning(self, unused, data):
 		#('WARNING', account, (title_text, section_text))
-		dialogs.WarningDialog(data[0], data[1]).get_response()
+		dialogs.WarningDialog(data[0], data[1])
 
 	def handle_event_error(self, unused, data):
 		#('ERROR', account, (title_text, section_text))
-		dialogs.ErrorDialog(data[0], data[1]).get_response()
+		dialogs.ErrorDialog(data[0], data[1])
 
 	def handle_event_information(self, unused, data):
 		#('INFORMATION', account, (title_text, section_text))
@@ -214,13 +214,14 @@ class Interface:
 
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, transaction_id, iq_obj))
-		dialog = dialogs.ConfirmationDialog(_('HTTP (%s) Authorization for %s (id: %s)') \
-			% (data[0], data[1], data[2]), _('Do you accept this request?'))
-		if dialog.get_response() == gtk.RESPONSE_OK:
-			answer = 'yes'
-		else:
-			answer = 'no'
-		gajim.connections[account].build_http_auth_answer(data[3], answer)
+		def response(widget, account, iq_obj, answer):
+			self.dialog.destroy()
+			gajim.connections[account].build_http_auth_answer(iq_obj, answer)
+
+		self.dialog = dialogs.YesNoDialog(_('HTTP (%s) Authorization for %s (id: %s)') \
+			% (data[0], data[1], data[2]), _('Do you accept this request?'),
+			on_response_yes = (response, account, data[3], 'yes'),
+			on_response_no = (response, account, data[3], 'no'))
 
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
@@ -518,6 +519,8 @@ class Interface:
 
 		# Handle chat states  
 		contact = gajim.contacts.get_contact(account, jid, resource)
+		if isinstance(contact, list):
+			contact = contact[0]
 		if contact:
 			contact.composing_jep = composing_jep
 		if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
@@ -716,7 +719,7 @@ class Interface:
 				array[2])
 		else:
 			dialogs.ErrorDialog(_('Contact with "%s" cannot be established'\
-% array[0]), _('Check your connection or try again later.')).get_response()
+% array[0]), _('Check your connection or try again later.'))
 
 	def handle_event_agent_info_items(self, account, array):
 		#('AGENT_INFO_ITEMS', account, (agent, node, items))
@@ -943,7 +946,7 @@ class Interface:
 		keyID = gajim.config.get_per('accounts', account, 'keyid')
 		self.roster.forget_gpg_passphrase(keyID)
 		dialogs.WarningDialog(_('Your passphrase is incorrect'),
-			_('You are currently connected without your OpenPGP key.')).get_response()
+			_('You are currently connected without your OpenPGP key.'))
 
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
@@ -1560,7 +1563,7 @@ class Interface:
 			# it is good to notify the user
 			# in case he or she cannot see the output of the console
 			dialogs.ErrorDialog(_('Could not save your settings and preferences'),
-				err_str).get_response()
+				err_str)
 			sys.exit()
 
 	def handle_event(self, account, jid, typ):

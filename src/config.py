@@ -1118,22 +1118,20 @@ class AccountModificationWindow:
 				if gajim.connections[self.account].connected != 0:
 					dialogs.ErrorDialog(
 						_('You are currently connected to the server'),
-						_('To change the account name, you must be disconnected.')).\
-						get_response()
+						_('To change the account name, you must be disconnected.'))
 					return
 				if len(gajim.awaiting_events[self.account]):
 					dialogs.ErrorDialog(_('Unread events'),
 						_('To change the account name, you must read all pending '
-						'events.')).\
-						get_response()
+						'events.'))
 					return
 		if (name == ''):
 			dialogs.ErrorDialog(_('Invalid account name'),
-				_('Account name cannot be empty.')).get_response()
+				_('Account name cannot be empty.'))
 			return
 		if name.find(' ') != -1:
 			dialogs.ErrorDialog(_('Invalid account name'),
-				_('Account name cannot contain spaces.')).get_response()
+				_('Account name cannot contain spaces.'))
 			return
 		jid = self.xml.get_widget('jid_entry').get_text().decode('utf-8')
 
@@ -1142,14 +1140,14 @@ class AccountModificationWindow:
 			jid = helpers.parse_jid(jid)
 		except helpers.InvalidFormat, s:
 			pritext = _('Invalid Jabber ID')
-			dialogs.ErrorDialog(pritext, str(s)).get_response()
+			dialogs.ErrorDialog(pritext, str(s))
 			return
 
 		n, hn = jid.split('@', 1)
 		if not n:
 			pritext = _('Invalid Jabber ID')
 			sectext = _('A Jabber ID must be in the form "user@servername".')
-			dialogs.ErrorDialog(pritext, sectext).get_response()
+			dialogs.ErrorDialog(pritext, sectext)
 			return
 
 		resource = self.xml.get_widget('resource_entry').get_text().decode('utf-8')
@@ -1157,7 +1155,7 @@ class AccountModificationWindow:
 			resource = helpers.parse_resource(resource)
 		except helpers.InvalidFormat, s:
 			pritext = _('Invalid Jabber ID')
-			dialogs.ErrorDialog(pritext, (s)).get_response()
+			dialogs.ErrorDialog(pritext, (s))
 			return
 
 		config['savepass'] = self.xml.get_widget(
@@ -1205,7 +1203,7 @@ class AccountModificationWindow:
 			custom_port = int(custom_port)
 		except:
 			dialogs.ErrorDialog(_('Invalid entry'),
-				_('Custom port must be a port number.')).get_response()
+				_('Custom port must be a port number.'))
 			return
 		config['custom_port'] = custom_port
 		config['custom_host'] = self.xml.get_widget(
@@ -1289,15 +1287,6 @@ class AccountModificationWindow:
 			config['use_ft_proxies']:
 				gajim.connections[self.account].discover_ft_proxies()
 
-		if relogin_needed:
-			dialog = dialogs.YesNoDialog(_('Relogin now?'),
-				_('If you want all the changes to apply instantly, '
-				'you must relogin.'))
-			if dialog.get_response() == gtk.RESPONSE_YES:
-				do_relogin = True
-			else:
-				do_relogin = False
-
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 		if config['savepass']:
@@ -1312,13 +1301,19 @@ class AccountModificationWindow:
 		gajim.interface.save_config()
 		self.window.destroy()
 
-		if relogin_needed and do_relogin:
-			show_before = gajim.SHOW_LIST[gajim.connections[name].connected]
-			status_before = gajim.connections[name].status
-			gajim.interface.roster.send_status(name, 'offline',
-				_('Be right back.'))
-			gobject.timeout_add(500, gajim.interface.roster.send_status, name,
-				show_before, status_before)
+		if relogin_needed:
+			def relog(widget):
+				self.dialog.destroy()
+				show_before = gajim.SHOW_LIST[gajim.connections[self.account].\
+					connected]
+				status_before = gajim.connections[self.account].status
+				gajim.interface.roster.send_status(self.account, 'offline',
+					_('Be right back.'))
+				gobject.timeout_add(500, gajim.interface.roster.send_status,
+					self.account, show_before, status_before)
+			self.dialog = dialogs.YesNoDialog(_('Relogin now?'),
+				_('If you want all the changes to apply instantly, '
+				'you must relogin.'), on_response_yes = relog)
 
 	def on_change_password_button_clicked(self, widget):
 		try:
@@ -1336,7 +1331,7 @@ class AccountModificationWindow:
 	def on_edit_details_button_clicked(self, widget):
 		if not gajim.interface.instances.has_key(self.account):
 			dialogs.ErrorDialog(_('No such account available'),
-				_('You must create your account before editing your personal information.')).get_response()
+				_('You must create your account before editing your personal information.'))
 			return
 		jid = self.xml.get_widget('jid_entry').get_text().decode('utf-8')
 
@@ -1344,8 +1339,7 @@ class AccountModificationWindow:
 		if not gajim.connections.has_key(self.account) or \
 			gajim.connections[self.account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
-_('Without a connection, you can not edit your personal information.')
-).get_response()
+			_('Without a connection, you can not edit your personal information.'))
 			return
 
 		# in infos the key jid is OUR jid so we save the vcardwindow instance there
@@ -1376,7 +1370,7 @@ _('Without a connection, you can not edit your personal information.')
 				secret_keys = []
 		if not secret_keys:
 			dialogs.ErrorDialog(_('Failed to get secret keys'),
-_('There was a problem retrieving your OpenPGP secret keys.')).get_response()
+				_('There was a problem retrieving your OpenPGP secret keys.'))
 			return
 		secret_keys['None'] = 'None'
 		instance = dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
@@ -1656,8 +1650,7 @@ class AccountsWindow:
 		account = model.get_value(iter, 0).decode('utf-8')
 		if len(gajim.awaiting_events[account]):
 			dialogs.ErrorDialog(_('Unread events'),
-				_('Read all pending events before removing this account.')).\
-				get_response()
+				_('Read all pending events before removing this account.'))
 			return
 		if gajim.interface.instances[account].has_key('remove_account'):
 			gajim.interface.instances[account]['remove_account'].window.present()
@@ -2112,31 +2105,33 @@ class RemoveAccountWindow:
 		self.window.show_all()
 
 	def on_remove_button_clicked(self, widget):
-		if gajim.connections[self.account].connected:
-			dialog = dialogs.ConfirmationDialog(
-				_('Account "%s" is connected to the server' % self.account),
-				_('If you remove it, the connection will be lost.'))
-			if dialog.get_response() != gtk.RESPONSE_OK:
-				return
-			# change status to offline only if we will not remove this JID from server
-			if not self.remove_and_unregister_radiobutton.get_active():
+		def remove(widget):
+			self.dialog.destroy()
+			if gajim.connections[self.account].connected and \
+			not self.remove_and_unregister_radiobutton.get_active():
+				# change status to offline only if we will not remove this JID from
+				# server
 				gajim.connections[self.account].change_status('offline', 'offline')
-
-		if self.remove_and_unregister_radiobutton.get_active():
-			if not gajim.connections[self.account].password:
-				passphrase = ''
-				w = dialogs.PassphraseDialog(
-					_('Password Required'),
-					_('Enter your password for account %s') % self.account,
-					_('Save password'))
-				passphrase, save = w.run()
-				if passphrase == -1:
-					# We don't remove account cause we canceled pw window
-					return
-				gajim.connections[self.account].password = passphrase
-			gajim.connections[self.account].unregister_account(self._on_remove_success)
-		else:
-			self._on_remove_success(True)
+			if self.remove_and_unregister_radiobutton.get_active():
+				if not gajim.connections[self.account].password:
+					passphrase = ''
+					w = dialogs.PassphraseDialog(
+						_('Password Required'),
+						_('Enter your password for account %s') % self.account,
+						_('Save password'))
+					passphrase, save = w.run()
+					if passphrase == -1:
+						# We don't remove account cause we canceled pw window
+						return
+					gajim.connections[self.account].password = passphrase
+				gajim.connections[self.account].unregister_account(self._on_remove_success)
+			else:
+				self._on_remove_success(True)
+		if gajim.connections[self.account].connected:
+			self.dialog = dialogs.ConfirmationDialog(
+				_('Account "%s" is connected to the server' % self.account),
+				_('If you remove it, the connection will be lost.'),
+				on_response_ok = remove)
 	
 	def _on_remove_success(self, res):
 		# action of unregistration has failed, we don't remove the account
@@ -2298,7 +2293,7 @@ class ManageBookmarksWindow:
 
 		if self.server_entry.get_text().decode('utf-8') == '' or self.room_entry.get_text().decode('utf-8') == '':
 			dialogs.ErrorDialog(_('This bookmark has invalid data'),
-_('Please be sure to fill out server and room fields or remove this bookmark.')).get_response()
+_('Please be sure to fill out server and room fields or remove this bookmark.'))
 			return False
 
 		return True
@@ -2536,7 +2531,7 @@ class AccountCreationWizardWindow:
 			if not username:
 				pritext = _('Invalid username')
 				sectext = _('You must provide a username to configure this account.')
-				dialogs.ErrorDialog(pritext, sectext).get_response()
+				dialogs.ErrorDialog(pritext, sectext)
 				return
 			server = widgets['server_comboboxentry'].child.get_text()
 			savepass = widgets['save_password_checkbutton'].get_active()
@@ -2545,12 +2540,12 @@ class AccountCreationWizardWindow:
 			if not self.modify:
 				if password == '':
 					dialogs.ErrorDialog(_('Invalid password'),
-						_('You must enter a password for the new account.')).get_response()
+						_('You must enter a password for the new account.'))
 					return
 
 				if widgets['pass2_entry'].get_text() != password:
 					dialogs.ErrorDialog(_('Passwords do not match'),
-						_('The passwords typed in both fields must be identical.')).get_response()
+						_('The passwords typed in both fields must be identical.'))
 					return
 
 			jid = username + '@' + server
@@ -2559,7 +2554,7 @@ class AccountCreationWizardWindow:
 				jid = helpers.parse_jid(jid)
 			except helpers.InvalidFormat, s:
 				pritext = _('Invalid Jabber ID')
-				dialogs.ErrorDialog(pritext, str(s)).get_response()
+				dialogs.ErrorDialog(pritext, str(s))
 				return
 
 			already_in_jids = []
@@ -2571,7 +2566,7 @@ class AccountCreationWizardWindow:
 			if jid in already_in_jids:
 				pritext = _('Duplicate Jabber ID')
 				sectext = _('This account is already configured in Gajim.')
-				dialogs.ErrorDialog(pritext, sectext).get_response()
+				dialogs.ErrorDialog(pritext, sectext)
 				return
 
 			self.account = server
@@ -2694,7 +2689,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 	def save_account(self, login, server, savepass, password):
 		if self.account in gajim.connections:
 			dialogs.ErrorDialog(_('Account name is in use'),
-				_('You already have an account using this name.')).get_response()
+				_('You already have an account using this name.'))
 			return
 		con = connection.Connection(self.account)
 		con.password = password

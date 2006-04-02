@@ -513,13 +513,12 @@ class RosterWindow:
 			win = gajim.interface.msg_win_mgr.get_window(room_jid,  account)
 			win.window.present()
 			win.set_active_tab(room_jid,  account)
-			dialogs.ErrorDialog(_('You are already in room %s') % room_jid
-				).get_response()
+			dialogs.ErrorDialog(_('You are already in room %s') % room_jid)
 			return
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
 			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
-				).get_response()
+				)
 			return
 		room, server = room_jid.split('@')
 		if not gajim.interface.msg_win_mgr.has_window(room_jid, account):
@@ -1065,8 +1064,8 @@ class RosterWindow:
 			gajim.contacts.remove_contact(account, contact)
 			return
 
-		window = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % contact.jid, _('You will no longer be able to send and receive messages to contacts from this transport.'))
-		if window.get_response() == gtk.RESPONSE_OK:
+		def remove(widget, contact, account):
+			self.dialog.destroy()
 			gajim.connections[account].unsubscribe_agent(contact.jid + '/' \
 																		+ contact.resource)
 			# remove transport from treeview
@@ -1085,6 +1084,8 @@ class RosterWindow:
 					self.remove_contact(c, account)
 			gajim.contacts.remove_jid(account, contact.jid)
 			gajim.contacts.remove_contact(account, contact)
+
+		self.dialog = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % contact.jid, _('You will no longer be able to send and receive messages to contacts from this transport.'), on_response_ok = (remove, contact, account))
 
 	def on_rename(self, widget, iter, path):
 		# this function is called either by F2 or by Rename menuitem
@@ -1732,22 +1733,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def on_req_usub(self, widget, contact, account):
 		'''Remove a contact'''
-		check_string = _('I want this contact to know my status after removal')
-		if contact.sub == 'to':
-			check_string = ''
-		window = dialogs.ConfirmationDialogCheck(
-			_('Contact "%s" will be removed from your roster') % (
-			contact.get_shown_name()),
-			_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'), check_string)
-		# maybe use 2 optionboxes from which the contact can select? (better)
-		if window.get_response() == gtk.RESPONSE_OK:
+		def on_ok(widget, contact, account):
+			self.dialog.destroy()
 			remove_auth = True
-			if window.is_checked():
+			if contact.sub != 'to' and self.dialog.is_checked():
 				remove_auth = False
 			gajim.connections[account].unsubscribe(contact.jid, remove_auth)
-			for u in gajim.contacts.get_contact(account, contact.jid):
-				self.remove_contact(u, account)
-			gajim.contacts.remove_jid(account, u.jid)
+			for c in gajim.contacts.get_contact(account, contact.jid):
+				self.remove_contact(c, account)
+			gajim.contacts.remove_jid(account, c.jid)
 			if not remove_auth and contact.sub == 'both':
 				contact.name = ''
 				contact.groups = []
@@ -1761,6 +1755,18 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					keyID = contact.keyID)
 				gajim.contacts.add_contact(account, c)
 				self.add_contact_to_roster(contact.jid, account)
+		pritext = _('Contact "%s" will be removed from your roster') % \
+			contact.get_shown_name()
+		if contact.sub == 'to':
+			self.dialog = dialogs.ConfirmationDialog(pritext,
+				_('By removing this contact you also remove authorization resulting in him or her always seeing you as offline.'),
+				on_response_ok = (on_ok, contact, account))
+		else:
+			self.dialog = dialogs.ConfirmationDialogCheck(pritext,
+				_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'),
+				_('I want this contact to know my status after removal'),
+				on_response_ok = (on_ok, contact, account))
+		# maybe use 2 optionboxes from which the contact can select? (better)
 
 	def forget_gpg_passphrase(self, keyid):
 		if self.gpg_passphrase.has_key(keyid):
@@ -1878,17 +1884,23 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		return False
 
 	def change_status(self, widget, account, status):
-		if status == 'invisible':
-			if self.connected_rooms(account):
-				dialog = dialogs.ConfirmationDialog(
-		_('You are participating in one or more group chats'),
-		_('Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?'))
-				if dialog.get_response() != gtk.RESPONSE_OK:
-					return
-		message = self.get_status_message(status)
-		if message is None: # user pressed Cancel to change status message dialog
-			return
-		self.send_status(account, status, message)
+		def change(widget, account, status):
+			if self.dialog:
+				self.dialog.destroy()
+			message = self.get_status_message(status)
+			if message is None:
+				# user pressed Cancel to change status message dialog
+				return
+			self.send_status(account, status, message)
+
+		self.dialog = None
+		if status == 'invisible' and self.connected_rooms(account):
+			self.dialog = dialogs.ConfirmationDialog(
+				_('You are participating in one or more group chats'),
+				_('Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?'),
+				on_response_ok = (change, account, status))
+		else:
+			change(None, account, status)
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''
@@ -1902,8 +1914,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		accounts = gajim.connections.keys()
 		if len(accounts) == 0:
 			dialogs.ErrorDialog(_('No account available'),
-		_('You must create an account before you can chat with other contacts.')
-		).get_response()
+		_('You must create an account before you can chat with other contacts.'))
 			self.update_status_combobox()
 			return
 		status = model[active][2].decode('utf-8')
@@ -2177,7 +2188,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
 			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
-				).get_response()
+				)
 			return
 		if gajim.interface.instances[account].has_key('join_gc'):
 			gajim.interface.instances[account]['join_gc'].window.present()

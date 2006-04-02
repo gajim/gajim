@@ -229,8 +229,7 @@ class VcardWindow:
 						scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
 							'notification')
 					except gobject.GError, msg: # unknown format
-						dialogs.ErrorDialog(_('Could not load image'),
-							msg).get_response()
+						dialogs.ErrorDialog(_('Could not load image'), msg)
 						continue
 					else:
 						path_to_file = os.path.join(gajim.TMP, 'avatar_scaled.png')
@@ -481,7 +480,7 @@ class VcardWindow:
 		if gajim.connections[self.account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
         		_('Without a connection you can not publish your contact '
-        			'information.')).get_response()
+        		'information.'))
 			return
 		vcard = self.make_vcard()
 		nick = ''
@@ -509,7 +508,7 @@ class VcardWindow:
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
-    		    	_('Without a connection, you can not get your contact information.')).get_response()
+  		    	_('Without a connection, you can not get your contact information.'))
 
 	def change_to_vcard(self):
 		self.xml.get_widget('information_notebook').remove_page(0)

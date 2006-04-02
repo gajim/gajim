@@ -26,7 +26,6 @@ import gtkgui_helpers
 import message_control
 import dialogs
 import history_window
-import locale
 
 from common import gajim
 from common import helpers
@@ -161,7 +160,7 @@ class ChatControlBase(MessageControl):
 					'set your $LANG as appropriate. Eg. for French do export '
 					'LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to '
 					'make it global in /etc/profile.\n\nHighlighting misspelled '
-					'words feature will not be used')).get_response()
+					'words feature will not be used'))
 				gajim.config.set('use_speller', False)
 
 		self.style_event_id = 0
@@ -171,7 +170,6 @@ class ChatControlBase(MessageControl):
 		if gajim.connections[self.account].connected < 2: # we are not connected
 			dialog = dialogs.ErrorDialog(_('A connection is not available'),
 				_('Your message can not be sent until you are connected.'))
-			dialog.get_response()
 			return
 		message_buffer = self.msg_textview.get_buffer()
 		start_iter = message_buffer.get_start_iter()
@@ -373,7 +371,6 @@ class ChatControlBase(MessageControl):
 			if gajim.connections[self.account].connected < 2: # we are not connected
 				dialog = dialogs.ErrorDialog(_('A connection is not available'),
 					_('Your message can not be sent until you are connected.'))
-				dialog.get_response()
 				send_message = False
 
 			if send_message:
@@ -1571,8 +1568,8 @@ class ChatControl(ChatControlBase):
 	def _on_toggle_gpg_menuitem_activate(self, widget):
 		# update the button
 		# this is reverse logic, as we are on 'activate' (before change happens)
-		is_active = self.xml.get_widget('gpg_togglebutton').get_active()
-		tb.set_active(not is_active)
+		tb = self.xml.get_widget('gpg_togglebutton')
+		tb.set_active(not tb.get_active())
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)

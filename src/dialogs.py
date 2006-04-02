@@ -450,13 +450,13 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			jid = helpers.parse_jid(jid)
 		except helpers.InvalidFormat, s:
 			pritext = _('Invalid User ID')
-			ErrorDialog(pritext, str(s)).get_response()
+			ErrorDialog(pritext, str(s))
 			return
 
 		# No resource in jid
 		if jid.find('/') >= 0:
 			pritext = _('Invalid User ID')
-			ErrorDialog(pritext, _('The user ID must not contain a resource.')).get_response()
+			ErrorDialog(pritext, _('The user ID must not contain a resource.'))
 			return
 
 		# Check if jid is already in roster
@@ -464,7 +464,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			c = gajim.contacts.get_first_contact_from_jid(self.account, jid)
 			if _('Not in Roster') not in c.groups and c.sub in ('both', 'to'):
 				ErrorDialog(_('Contact already in roster'),
-				_('This contact is already listed in your roster.')).get_response()
+				_('This contact is already listed in your roster.'))
 				return
 
 		message_buffer = self.xml.get_widget('message_textview').get_buffer()
@@ -589,14 +589,45 @@ class Dialog(gtk.Dialog):
 		return index < len(buttons) and buttons[index] or None
 
 class HigDialog(gtk.MessageDialog):
-	def __init__(self, parent, type, buttons, pritext, sectext):
+	def __init__(self, parent, type, buttons, pritext, sectext,
+	on_response_ok = None, on_response_cancel = None, on_response_yes = None,
+	on_response_no = None):
 		gtk.MessageDialog.__init__(self, parent, 
 				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
 				type, buttons, message_format = pritext)
 
 		self.format_secondary_text(sectext)
 
+		buttons = self.action_area.get_children()
+		possible_response = {gtk.STOCK_OK: on_response_ok,
+			gtk.STOCK_CANCEL: on_response_cancel, gtk.STOCK_YES: on_response_yes,
+			gtk.STOCK_NO: on_response_no}
+		for b in buttons:
+			for response in possible_response:
+				if b.get_label() == response:
+					if not possible_response[response]:
+						b.connect('clicked', self.just_destroy)
+					elif isinstance(possible_response[response], tuple):
+						if len(possible_response[response]) == 1:
+							b.connect('clicked', possible_response[response][0])
+						else:
+							b.connect('clicked', *possible_response[response])
+					else:
+						b.connect('clicked', possible_response[response])
+					break
+	
+	def just_destroy(self, widget):
+		self.destroy()
+
+	def popup(self):
+		# Give focus to top vbox
+		vb = self.get_children()[0].get_children()[0]
+		vb.set_flags(gtk.CAN_FOCUS)
+		vb.grab_focus()
+		self.show_all()
+
 	def get_response(self):
+		'''Be carefull: this function uses dialog.run() function so GUI is not updated'''
 		# Give focus to top vbox
 		vb = self.get_children()[0].get_children()[0]
 		vb.set_flags(gtk.CAN_FOCUS)
@@ -608,45 +639,49 @@ class HigDialog(gtk.MessageDialog):
 
 class ConfirmationDialog(HigDialog):
 	'''HIG compliant confirmation dialog.'''
-	def __init__(self, pritext, sectext=''):
+	def __init__(self, pritext, sectext='', on_response_ok = None,
+	on_response_cancel = None):
 		HigDialog.__init__(self, None, 
-			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext)
+			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
+			on_response_ok, on_response_cancel)
+		self.popup()
 
 class WarningDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		'''HIG compliant warning dialog.'''
 		HigDialog.__init__( self, None, 
-				gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, pritext, sectext)
+			gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, pritext, sectext)
+		self.popup()
 
 class InformationDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		'''HIG compliant info dialog.'''
 		HigDialog.__init__( self, None, 
-				gtk.MESSAGE_INFO, gtk.BUTTONS_OK, pritext, sectext)
-		ok_button = self.action_area.get_children()[0]
-		ok_button.connect('clicked', self.on_ok_button_clicked)
-		self.show_all()
-
-	def on_ok_button_clicked(self, widget):
-		self.destroy()
+			gtk.MESSAGE_INFO, gtk.BUTTONS_OK, pritext, sectext)
+		self.popup()
 
 class ErrorDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		'''HIG compliant error dialog.'''
 		HigDialog.__init__( self, None, 
-				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, pritext, sectext)
+			gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, pritext, sectext)
+		self.popup()
 
 class YesNoDialog(HigDialog):
-	def __init__(self, pritext, sectext=''):
+	def __init__(self, pritext, sectext='', on_response_yes = None,
+	on_response_no = None):
 		'''HIG compliant YesNo dialog.'''
 		HigDialog.__init__( self, None, 
-				gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, pritext, sectext)
+			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, pritext, sectext,
+				on_response_yes = on_response_yes, on_response_no = on_response_no)
 
 class ConfirmationDialogCheck(ConfirmationDialog):
 	'''HIG compliant confirmation dialog with checkbutton.'''
-	def __init__(self, pritext, sectext='', checktext = ''):
-		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL,
-			pritext, sectext)
+	def __init__(self, pritext, sectext='', checktext = '',
+	on_response_ok = None, on_response_cancel = None):
+		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
+			gtk.BUTTONS_OK_CANCEL, pritext, sectext, on_response_ok,
+			on_response_cancel)
 
 		self.set_default_response(gtk.RESPONSE_OK)
 
@@ -775,7 +810,7 @@ class JoinGroupchatWindow:
 			nick = gajim.nicks[self.account]
 		if gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
-_('You can not join a group chat unless you are connected.')).get_response()
+_('You can not join a group chat unless you are connected.'))
 			raise RuntimeError, 'You must be connected to join a groupchat'
 
 		self._empty_required_widgets = []
@@ -911,8 +946,7 @@ class NewMessageDialog:
 		if gajim.connections[self.account].connected <= 1:
 			#if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".' % self.account)
-			).get_response()
+		_('Please make sure you are connected with "%s".' % self.account))
 			return
 
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
@@ -922,7 +956,7 @@ class ChangePasswordDialog:
 		# 'account' can be None if we are about to create our first one
 		if not account or gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
-_('Without a connection, you can not change your password.')).get_response()
+				_('Without a connection, you can not change your password.'))
 			raise RuntimeError, 'You are not connected to the server'
 		self.account = account
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_password_dialog', APP)
@@ -941,12 +975,12 @@ _('Without a connection, you can not change your password.')).get_response()
 				password1 = self.password1_entry.get_text().decode('utf-8')
 				if not password1:
 					ErrorDialog(_('Invalid password'),
-							_('You must enter a password.')).get_response()
+							_('You must enter a password.'))
 					continue
 				password2 = self.password2_entry.get_text().decode('utf-8')
 				if password1 != password2:
 					ErrorDialog(_('Passwords do not match'),
-							_('The passwords typed in both fields must be identical.')).get_response()
+							_('The passwords typed in both fields must be identical.'))
 					continue
 				message = password1
 			else:
@@ -1164,7 +1198,7 @@ class SingleMessageWindow:
 				gtkspell.Spell(self.message_textview)
 			except gobject.GError, msg:
 				#FIXME: add a ui for this use spell.set_language()
-				ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used')).get_response()
+				ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used'))
 				gajim.config.set('use_speller', False)
 		
 		self.send_button.set_no_show_all(True)
@@ -1288,8 +1322,7 @@ class SingleMessageWindow:
 		if gajim.connections[self.account].connected <= 1:
 			# if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".' % self.account)
-			).get_response()
+		_('Please make sure you are connected with "%s".' % self.account))
 			return
 		to_whom_jid = self.to_entry.get_text().decode('utf-8')
 		subject = self.subject_entry.get_text().decode('utf-8')
@@ -1408,8 +1441,7 @@ class XMLConsoleWindow:
 		if gajim.connections[self.account].connected <= 1:
 			#if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".' % self.account)
-			).get_response()
+		_('Please make sure you are connected with "%s".' % self.account))
 			return
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()
 		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter).decode('utf-8')
@@ -1439,9 +1471,11 @@ class XMLConsoleWindow:
 
 class InvitationReceivedDialog:
 	def __init__(self, account, room_jid, contact_jid, password = None, comment = None):
-		
+
+		self.room_jid = room_jid
+		self.account = account
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'invitation_received_dialog', APP)
-		dialog = xml.get_widget('invitation_received_dialog')
+		self.dialog = xml.get_widget('invitation_received_dialog')
 		
 		#FIXME: use nickname instead of contact_jid
 		pritext = _('%(contact_jid)s has invited you to %(room_jid)s room') % {
@@ -1454,12 +1488,20 @@ class InvitationReceivedDialog:
 			label_text += '\n\n%s' % sectext
 
 		xml.get_widget('label').set_markup(label_text)
-		
-		response = dialog.run()
-		dialog.destroy()
-		if response == gtk.RESPONSE_YES:
-			room, server = gajim.get_room_name_and_server_from_room_jid(room_jid)
-			JoinGroupchatWindow(account, server = server, room = room)
+
+		xml.get_widget('deny_button').connect('clicked',
+			self.on_deny_button_clicked)
+		xml.get_widget('accept_button').connect('clicked',
+			self.on_accept_button_clicked)
+		self.dialog.show_all()
+	
+	def on_deny_button_clicked(self, widget):
+		self.dialog.destroy()
+	
+	def on_accept_button_clicked(self, widget):
+		self.dialog.destroy()
+		room, server = gajim.get_room_name_and_server_from_room_jid(self.room_jid)
+		JoinGroupchatWindow(self.account, server = server, room = room)
 			
 class ProgressDialog:
 	def __init__(self, title_text, during_text, messages_queue):

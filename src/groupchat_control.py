@@ -84,7 +84,7 @@ class PrivateChatControl(ChatControl):
 					_('Sending private message failed'),
 					#in second %s code replaces with nickname
 					_('You are no longer in room "%s" or "%s" has left.') % \
-					(room, nick)).get_response()
+					(room, nick))
 				return
 
 		ChatControl.send_message(self, message)
@@ -1171,8 +1171,7 @@ class GroupchatControl(ChatControlBase):
 			if bookmark['jid'] == bm['jid']:
 				dialogs.ErrorDialog(
 					_('Bookmark already set'),
-					_('Room "%s" is already in your bookmarks.') % bm['jid']).\
-						get_response()
+					_('Room "%s" is already in your bookmarks.') % bm['jid'])
 				return
 
 		gajim.connections[self.account].bookmarks.append(bm)

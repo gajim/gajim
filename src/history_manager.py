@@ -53,7 +53,7 @@ class HistoryManager:
 	def __init__(self):
 		if not os.path.exists(LOG_DB_PATH):
 			dialogs.ErrorDialog(_('Cannot find history logs database'),
-				'%s does not exist.' % LOG_DB_PATH).get_response()
+				'%s does not exist.' % LOG_DB_PATH)
 			sys.exit()
 		
 		xml = gtk.glade.XML('history_manager.glade',
@@ -412,76 +412,78 @@ class HistoryManager:
 		paths_len = len(list_of_paths)
 		if paths_len == 0: # nothing is selected
 			return
+
+		def on_ok(widget, liststore, list_of_paths):
+			# delete all rows from db that match jid_id
+			list_of_rowrefs = []
+			for path in list_of_paths: # make them treerowrefs (it's needed)
+				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+
+			for rowref in list_of_rowrefs:
+				path = rowref.get_path()
+				if path is None:
+					continue
+				jid_id = liststore[path][1]
+				del liststore[path] # remove from UI
+				# remove from db
+				self.cur.execute('''
+					DELETE FROM logs
+					WHERE jid_id = ?
+					''', (jid_id,))
+
+				# now delete "jid, jid_id" row from jids table
+				self.cur.execute('''
+						DELETE FROM jids
+						WHERE jid_id = ?
+						''', (jid_id,))
+
+			self.con.commit()
+
+			self.AT_LEAST_ONE_DELETION_DONE = True
+
 		pri_text = i18n.ngettext(
 			'Do you really want to delete logs of the selected contact?',
 			'Do you really want to delete logs of the selected contacts?',
 			paths_len)
-		dialog = dialogs.ConfirmationDialog(pri_text,
-			_('This is an irreversible operation.'))
-		if dialog.get_response() != gtk.RESPONSE_OK:
-			return
+		self.dialog = dialogs.ConfirmationDialog(pri_text,
+			_('This is an irreversible operation.'), on_response_ok = (on_ok,
+			liststore, list_of_paths))
 
-		# delete all rows from db that match jid_id
-		list_of_rowrefs = []
-		for path in list_of_paths: # make them treerowrefs (it's needed)
-			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
-		
-		for rowref in list_of_rowrefs:
-			path = rowref.get_path()
-			if path is None:
-				continue
-			jid_id = liststore[path][1]
-			del liststore[path] # remove from UI
-			# remove from db
-			self.cur.execute('''
-				DELETE FROM logs
-				WHERE jid_id = ?
-				''', (jid_id,))
-		
-			# now delete "jid, jid_id" row from jids table
-			self.cur.execute('''
-					DELETE FROM jids
-					WHERE jid_id = ?
-					''', (jid_id,))
-	
-		self.con.commit()
-		
-		self.AT_LEAST_ONE_DELETION_DONE = True
-		
 	def _delete_logs(self, liststore, list_of_paths):
 		paths_len = len(list_of_paths)
 		if paths_len == 0: # nothing is selected
 			return
+
+		def on_ok(widget, liststore, list_of_paths):
+			self.dialog.destroy()
+			# delete rows from db that match log_line_id
+			list_of_rowrefs = []
+			for path in list_of_paths: # make them treerowrefs (it's needed)
+				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+
+			for rowref in list_of_rowrefs:
+				path = rowref.get_path()
+				if path is None:
+					continue
+				log_line_id = liststore[path][0]
+				del liststore[path] # remove from UI
+				# remove from db
+				self.cur.execute('''
+					DELETE FROM logs
+					WHERE log_line_id = ?
+					''', (log_line_id,))
+
+			self.con.commit()
+
+			self.AT_LEAST_ONE_DELETION_DONE = True
+
 			
 		pri_text = i18n.ngettext(
 			'Do you really want to delete the selected message?',
 			'Do you really want to delete the selected messages?', paths_len)
-		dialog = dialogs.ConfirmationDialog(pri_text,
-			_('This is an irreversible operation.'))
-		if dialog.get_response() != gtk.RESPONSE_OK:
-			return
-		
-		# delete rows from db that match log_line_id
-		list_of_rowrefs = []
-		for path in list_of_paths: # make them treerowrefs (it's needed)
-			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
-		
-		for rowref in list_of_rowrefs:
-			path = rowref.get_path()
-			if path is None:
-				continue
-			log_line_id = liststore[path][0]
-			del liststore[path] # remove from UI
-			# remove from db
-			self.cur.execute('''
-				DELETE FROM logs
-				WHERE log_line_id = ?
-				''', (log_line_id,))
-	
-		self.con.commit()
-		
-		self.AT_LEAST_ONE_DELETION_DONE = True
-
+		self.dialog = dialogs.ConfirmationDialog(pri_text,
+			_('This is an irreversible operation.'), on_response_ok = (on_ok,
+			liststore, list_of_paths))
 
 	def on_search_db_button_clicked(self, widget):
 		text = self.search_entry.get_text()

@@ -159,6 +159,16 @@ class FileTransfersWindow:
 		''' show a dialog saying that file (file_props) has been transferred'''
 		self.window.present()
 		self.window.window.focus()
+
+		def on_open(widget, file_props):
+			self.dialog.destroy()
+			if not file_props.has_key('file-name'):
+				return
+			(path, file) = os.path.split(file_props['file-name'])
+			if os.path.exists(path) and os.path.isdir(path):
+				helpers.launch_file_manager(path)
+			self.tree.get_selection().unselect_all()
+
 		if file_props['type'] == 'r':
 			# file path is used below in 'Save in'
 			(file_path, file_name) = os.path.split(file_props['file-name'])
@@ -190,22 +200,18 @@ class FileTransfersWindow:
 		if file_props['type'] == 'r':
 			sectext += '\n\t' +_('Saved in: %s') % \
 				gtkgui_helpers.escape_for_pango_markup(file_path)
-		dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, 
+		self.dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, 
 				_('File transfer completed'), sectext)
 		if file_props['type'] == 'r':
-			dialog.add_buttons(_('_Open Containing Folder'), gtk.RESPONSE_ACCEPT)
-		dialog.add_buttons(gtk.STOCK_OK, gtk.RESPONSE_OK)
-		dialog.show_all()
-		response = dialog.run()
-		dialog.destroy()
-		if response == gtk.RESPONSE_ACCEPT:
-			if not file_props.has_key('file-name'):
-				return
-			(path, file) = os.path.split(file_props['file-name'])
-			if os.path.exists(path) and os.path.isdir(path):
-				helpers.launch_file_manager(path)
-			self.tree.get_selection().unselect_all()
-		
+			button = gtk.Button(_('_Open Containing Folder'))
+			button.connect('clicked', on_open, file_props)
+			self.dialog.action_area.pack_start(button)
+		ok_button = self.dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
+		def on_ok(widget):
+			self.dialog.destroy()
+		ok_button.connect('clicked', on_ok)
+		self.dialog.show_all()
+
 	def show_request_error(self, file_props):
 		''' show error dialog to the recipient saying that transfer 
 		has been canceled'''
@@ -213,7 +219,7 @@ class FileTransfersWindow:
 		self.window.window.focus()
 		dialogs.InformationDialog(_('File transfer canceled'), _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
-		
+
 	def show_send_error(self, file_props):
 		''' show error dialog to the sender saying that transfer 
 		has been canceled'''
@@ -222,7 +228,7 @@ class FileTransfersWindow:
 		dialogs.InformationDialog(_('File transfer canceled'),
 _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
-	
+
 	def show_stopped(self, jid, file_props):
 		self.window.present()
 		self.window.window.focus()
@@ -235,9 +241,9 @@ _('Connection with peer cannot be established.'))
 		sectext += '\n\t' + _('Sender: %s') % \
 			gtkgui_helpers.escape_for_pango_markup(jid)
 		dialogs.ErrorDialog(_('File transfer stopped by the contact of the other side'), \
-			sectext).get_response()
+			sectext)
 		self.tree.get_selection().unselect_all()
-		
+
 	def show_file_send_request(self, account, contact):
 		last_send_dir = gajim.config.get('last_send_dir')
 		dialog = gtk.FileChooserDialog(title=_('Choose File to Send...'), 
@@ -269,15 +275,15 @@ _('Connection with peer cannot be established.'))
 			else:
 				dialog.destroy()
 				break
-		
+
 	def send_file(self, account, contact, file_path):
 		''' start the real transfer(upload) of the file '''
 		if gtkgui_helpers.file_is_locked(file_path):
 			pritext = _('Gajim cannot access this file')
 			sextext = _('This file is being used by another process.')
-			dialogs.ErrorDialog(pritext, sextext).get_response()
+			dialogs.ErrorDialog(pritext, sextext)
 			return
-		
+
 		if isinstance(contact, str):
 			if contact.find('/') == -1:
 				return
@@ -292,7 +298,7 @@ _('Connection with peer cannot be established.'))
 		self.add_transfer(account, contact, file_props)
 		gajim.connections[account].send_file_request(file_props)
 		return True
-	
+
 	def confirm_overwrite_cb(self, dialog, file_props):
 		file_path = dialog.get_filename()
 		file_path = gtkgui_helpers.decode_filechooser_file_paths((file_path,))[0]
@@ -316,7 +322,6 @@ _('Connection with peer cannot be established.'))
 		file requested by a contact'''
 		if file_props is None or not file_props.has_key('name'):
 			return
-		last_save_dir = gajim.config.get('last_save_dir')
 		sec_text = '\t' + _('File: %s') % file_props['name']
 		if file_props.has_key('size'):
 			sec_text += '\n\t' + _('Size: %s') % \
@@ -326,8 +331,8 @@ _('Connection with peer cannot be established.'))
 		if file_props.has_key('desc'):
 			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
 		prim_text = _('%s wants to send you a file:') % contact.jid
-		dialog = dialogs.ConfirmationDialog(prim_text, sec_text)
-		if dialog.get_response() == gtk.RESPONSE_OK:
+		def on_response_ok(widet, account, contact, file_props):
+			self.dialog.destroy()
 			dialog = gtk.FileChooserDialog(title=_('Save File as...'), 
 				action=gtk.FILE_CHOOSER_ACTION_SAVE, 
 				buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
@@ -340,6 +345,7 @@ _('Connection with peer cannot be established.'))
 				dialog.connect('confirm-overwrite', self.confirm_overwrite_cb,
 					file_props)
 				gtk28 = True
+			last_save_dir = gajim.config.get('last_save_dir')
 			if last_save_dir and os.path.isdir(last_save_dir):
 				dialog.set_current_folder(last_save_dir)
 			else:
@@ -366,9 +372,16 @@ _('Connection with peer cannot be established.'))
 					gajim.connections[account].send_file_rejection(file_props)
 				dialog.destroy()
 				break
-		else:
+
+		def on_response_cancel(widget, account, file_props):
+			self.dialog.destroy()
 			gajim.connections[account].send_file_rejection(file_props)
-	
+
+		self.dialog = dialogs.ConfirmationDialog(prim_text, sec_text,
+			on_response_ok = (on_response_ok, account, contact, file_props),
+			on_response_cancel = (on_response_cancel, account, file_props))
+		self.dialog.run()
+
 	def set_images(self):
 		''' create pixbufs for status images in transfer rows'''
 		self.images = {}
@@ -533,11 +546,11 @@ _('Connection with peer cannot be established.'))
 			
 			stat = os.stat(file_path)
 		else:
-			dialogs.ErrorDialog(_('Invalid File'), _('File: ')  + file_path).get_response()
+			dialogs.ErrorDialog(_('Invalid File'), _('File: ')  + file_path)
 			return None
 		if stat[6] == 0:
 			dialogs.ErrorDialog(_('Invalid File'), 
-			_('It is not possible to send empty files')).get_response()
+			_('It is not possible to send empty files'))
 			return None
 		file_props['elapsed-time'] = 0
 		file_props['size'] = unicode(stat[6])
