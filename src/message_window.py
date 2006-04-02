@@ -23,7 +23,6 @@
 
 import gtk
 import gtk.glade
-import gobject
 
 import common
 import gtkgui_helpers

@@ -13,7 +13,6 @@
 ##
 import gtk
 import gtk.glade
-import gobject
 
 from common import gajim
 
