@@ -440,7 +440,7 @@ class ChatControlBase(MessageControl):
 
 		if not count_as_new:
 			return
-		if kind == 'incoming_queue':
+		if kind != 'incoming_queue':
 			gajim.last_message_time[self.account][self.get_full_jid()] = \
 				time.time()
 		urgent = True
