@@ -1315,7 +1315,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				# JEP-0091
 				tim = prs.getTimestamp()
 				tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
-				timstamp = time.localtime(timegm(tim))
+				timestamp = time.localtime(timegm(tim))
 
 		who = helpers.get_full_jid_from_iq(prs)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
