@@ -20,7 +20,6 @@
 import os
 import time
 import dialogs
-import gobject
 
 from common import gajim
 from common import i18n
