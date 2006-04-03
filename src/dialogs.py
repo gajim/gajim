@@ -1005,13 +1005,13 @@ class PopupNotificationWindow:
 		eventbox = xml.get_widget('eventbox')
 		image = xml.get_widget('notification_image')
 		
-		event_type_label.set_markup(
-			'<span foreground="black" weight="bold">%s</span>' % title)
-
 		if not text:
 			text = gajim.get_name_from_jid(account, jid) # default value of text
 		if not title:
 			title = event_type
+
+		event_type_label.set_markup(
+			'<span foreground="black" weight="bold">%s</span>' % title)
 
 		# set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
