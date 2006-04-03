@@ -419,15 +419,13 @@ class Interface:
 									iconset, '48x48', 'online.png')
 						path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
 							jid = jid, suffix = '_notif_size_colored.png')
+						title = _('%(nickname)s Signed In') % \
+							{'nickname': gajim.get_name_from_jid(account, jid)}
+						text = ''
 						if status_message:
-							text = _('%(nickname)s with status message: %(msg)s') %\
-								{'nickname': gajim.get_name_from_jid(account, jid),
-								'msg': status_message}
-						else:
-							# just the nickname
-							text = gajim.get_name_from_jid(account, jid)
+							text = status_message
 						notify.notify(_('Contact Signed In'), jid, account,
-							path_to_image = path, text = text)
+							path_to_image = path, title = title, text = text)
 
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactPresence',
@@ -452,15 +450,13 @@ class Interface:
 									iconset, '48x48', 'offline.png')
 						path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
 							jid = jid, suffix = '_notif_size_bw.png')
+						title = _('%(nickname)s Signed Out') % \
+							{'nickname': gajim.get_name_from_jid(account, jid)}
+						text = ''
 						if status_message:
-							text = _('%(nickname)s with status message: %(msg)s') %\
-								{'nickname': gajim.get_name_from_jid(account, jid),
-								'msg': status_message}
-						else:
-							# just the nickname
-							text = gajim.get_name_from_jid(account, jid)
+							text = status_message
 						notify.notify(_('Contact Signed Out'), jid, account,
-							path_to_image = path, text = text)
+							path_to_image = path, title = title, text = text)
 
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactAbsence', (account, array))
@@ -566,14 +562,15 @@ class Interface:
 				helpers.allow_showing_notification(account):
 					room_name, t = gajim.get_room_name_and_server_from_room_jid(
 						room_jid)
-					txt = _('%(nickname)s in room %(room_name)s says: %(message)s') \
-						% {'nickname': nick, 'room_name': room_name,
-						'message': message}
 					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 						'priv_msg_recv.png')
 					path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+					title = _('New Private Message from room %s') % room_name
+					text = _('%(nickname)s: %(message)s') % {'nickname': nick,
+						'message': message}
 					notify.notify(_('New Private Message'), full_jid_with_resource,
-						account, 'pm', path_to_image = path, text = txt)
+						account, 'pm', path_to_image = path, title = title,
+						text = text)
 
 			groupchat_control.on_private_message(nick, message, array[2])
 			return
@@ -584,23 +581,24 @@ class Interface:
 			return
 
 		if first:
-			if gajim.config.get('notify_on_new_message'):
-				if helpers.allow_showing_notification(account):
-					txt = _('%(nickname)s says: %(message)s') % \
-						{'nickname': gajim.get_name_from_jid(account, jid),
-						'message': message}
-					if msg_type == 'normal': # single message
-						img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-							'single_msg_recv.png')
-						path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-						notify.notify(_('New Single Message'), jid_of_control,
-							account, msg_type, path_to_image = path, text = txt)
-					else: # chat message
-						img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-							'chat_msg_recv.png')
-						path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-						notify.notify(_('New Message'), jid_of_control, account,
-							msg_type, path_to_image = path, text = txt)
+			if gajim.config.get('notify_on_new_message') and \
+			helpers.allow_showing_notification(account):
+				text = message
+				if msg_type == 'normal': # single message
+					event_type = _('New Single Message')
+					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+						'single_msg_recv.png')
+					title = _('New Single Message from %(nickname)s') % \
+						{'nickname': gajim.get_name_from_jid(account, jid)}
+				else: # chat message
+					event_type = _('New Message')
+					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+						'chat_msg_recv.png')
+					title = _('New Message from %(nickname)s') % \
+						{'nickname': gajim.get_name_from_jid(account, jid)}
+				path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+				notify.notify(event_type, jid_of_control, account, msg_type,
+					path_to_image = path, title = title, text = text)
 
 		# array: (jid, msg, time, encrypted, msg_type, subject)
 		self.roster.on_message(jid, message, array[2], account, array[3],
@@ -932,12 +930,14 @@ class Interface:
 		self.add_event(account, jid, 'gc-invitation', (room_jid, array[2],
 			array[3]))
 
-		if helpers.allow_showing_notification(account):
+		if gajim.config.get('notify_on_new_message') and \
+		helpers.allow_showing_notification(account):
 			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'gc_invitation.png')
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
-			notify.notify(_('Groupchat Invitation'),
-				jid, account, 'gc-invitation', path, room_jid)
+			event_type = _('Groupchat Invitation')
+			notify.notify(event_type, jid, account, 'gc-invitation', path,
+				event_type, room_jid)
 
 	def handle_event_bad_passphrase(self, account, array):
 		use_gpg_agent = gajim.config.get('use_gpg_agent')
@@ -1015,8 +1015,9 @@ class Interface:
 		if helpers.allow_showing_notification(account):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'ft_error.png')
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-			notify.notify(_('File Transfer Error'),
-				jid, account, 'file-send-error', path, file_props['name'])
+			event_type = _('File Transfer Error')
+			notify.notify(event_type, jid, account, 'file-send-error', path,
+				event_type, file_props['name'])
 
 	def handle_event_gmail_notify(self, account, array):
 		jid = array[0]
@@ -1024,10 +1025,12 @@ class Interface:
 		if gajim.config.get('notify_on_new_gmail_email'):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'single_msg_recv.png') #FIXME: find a better image
-			txt = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
-			txt = _('%(new_mail_gajim_ui_msg)s on %(gmail_mail_address)s') % {'new_mail_gajim_ui_msg': txt, 'gmail_mail_address': jid}
+			title = _('New E-mail on %(gmail_mail_address)s') % \
+				{'gmail_mail_address': jid}
+			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-			notify.notify(_('New E-mail'), jid, account, 'gmail', path_to_image = path, text = txt)
+			notify.notify(_('New E-mail'), jid, account, 'gmail',
+				path_to_image = path, title = title, text = text)
 
 	def save_avatar_files(self, jid, photo_decoded, puny_nick = None):
 		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
@@ -1131,8 +1134,9 @@ class Interface:
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'ft_error.png')
 			
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-			notify.notify(_('File Transfer Error'),
-				jid, account, msg_type, path, file_props['name'])
+			event_type = _('File Transfer Error')
+			notify.notify(event_type, jid, account, msg_type, path,
+				title = event_type, text = file_props['name'])
 
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
@@ -1153,7 +1157,9 @@ class Interface:
 				'ft_request.png')
 			txt = _('%s wants to send you a file.') % gajim.get_name_from_jid(account, jid)
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-			notify.notify(_('File Transfer Request'), jid, account, 'file-request', path_to_image = path, text = txt)
+			event_type = _('File Transfer Request')
+			notify.notify(event_type, jid, account, 'file-request',
+				path_to_image = path, title = event_type, text = txt)
 
 	def handle_event_file_progress(self, account, file_props):
 		self.instances['file_transfers'].set_progress(file_props['type'], 
@@ -1243,7 +1249,8 @@ class Interface:
 			gajim.connections[account].connected in (2, 3)):
 			# we want to be notified and we are online/chat or we don't mind
 			# bugged when away/na/busy
-			notify.notify(event_type, jid, account, msg_type, path_to_image = path, text = txt)
+			notify.notify(event_type, jid, account, msg_type, path_to_image = path,
+				title = event_type, text = txt)
 
 	def handle_event_stanza_arrived(self, account, stanza):
 		if not self.instances.has_key(account):

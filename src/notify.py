@@ -34,14 +34,14 @@ if dbus_support.supported:
 		import dbus.service
 
 def notify(event_type, jid, account, msg_type = '', path_to_image = None,
-	text = None):
+	title = None, text = None):
 	'''Notifies a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
 	the older style PopupNotificationWindow method.'''
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
 			DesktopNotification(event_type, jid, account, msg_type, path_to_image,
-				text)
+				title, text)
 			return
 		except dbus.dbus_bindings.DBusException, e:
 			# Connection to D-Bus failed, try popup
@@ -49,7 +49,7 @@ def notify(event_type, jid, account, msg_type = '', path_to_image = None,
 		except TypeError, e:
 			# This means that we sent the message incorrectly
 			gajim.log.debug(str(e))
-	instance = dialogs.PopupNotificationWindow(event_type, jid, account, msg_type, path_to_image, text)
+	instance = dialogs.PopupNotificationWindow(event_type, jid, account, msg_type, path_to_image, title, text)
 	gajim.interface.roster.popup_notification_windows.append(instance)
 
 class NotificationResponseManager:
@@ -106,9 +106,10 @@ class DesktopNotification:
 	'''A DesktopNotification that interfaces with DBus via the Desktop
 	Notification specification'''
 	def __init__(self, event_type, jid, account, msg_type = '',
-		path_to_image = None, text = None):
+		path_to_image = None, title = None, text = None):
 		self.path_to_image = path_to_image
 		self.event_type = event_type
+		self.title = title
 		self.text = text
 		self.default_version = '0.3.1'
 		self.account = account
@@ -116,8 +117,12 @@ class DesktopNotification:
 		self.msg_type = msg_type
 
 		if not text:
-			self.text = gajim.get_name_from_jid(account, jid) # default value of text
-			
+			# default value of text
+			self.text = gajim.get_name_from_jid(account, jid)
+
+		if not title:
+			self.title = event_type # default value
+
 		if event_type == _('Contact Signed In'):
 			ntype = 'presence.online'
 		elif event_type == _('Contact Signed Out'):
@@ -161,7 +166,7 @@ class DesktopNotification:
 					dbus.UInt32(0), 
 					ntype, 
 					dbus.Byte(0),
-					dbus.String(self.event_type), 
+					dbus.String(self.title),
 					dbus.String(self.text),
 					[dbus.String(self.path_to_image)],
 					{'default': 0}, 
@@ -181,7 +186,7 @@ class DesktopNotification:
 					dbus.String(_('Gajim')),
 					dbus.UInt32(0), 
 					dbus.String(self.path_to_image), 
-					dbus.String(self.event_type),
+					dbus.String(self.title),
 					dbus.String(self.text), 
 					( dbus.String('default'), dbus.String(self.event_type) ),
 					hints, 
@@ -193,7 +198,7 @@ class DesktopNotification:
 					dbus.String(_('Gajim')),
 					dbus.String(self.path_to_image), 
 					dbus.UInt32(0),
-					dbus.String(self.event_type),
+					dbus.String(self.title),
 					dbus.String(self.text),
 					dbus.String(''),
 					{},

@@ -991,7 +991,8 @@ class ChangePasswordDialog:
 
 
 class PopupNotificationWindow:
-	def __init__(self, event_type, jid, account, msg_type = '', path_to_image = None, text = None):
+	def __init__(self, event_type, jid, account, msg_type = '',
+	path_to_image = None, title = None, text = None):
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
@@ -1005,10 +1006,12 @@ class PopupNotificationWindow:
 		image = xml.get_widget('notification_image')
 		
 		event_type_label.set_markup(
-			'<span foreground="black" weight="bold">%s</span>' % event_type)
+			'<span foreground="black" weight="bold">%s</span>' % title)
 
 		if not text:
 			text = gajim.get_name_from_jid(account, jid) # default value of text
+		if not title:
+			title = event_type
 
 		# set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
