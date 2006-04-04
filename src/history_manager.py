@@ -290,7 +290,7 @@ class HistoryManager:
 					message = '<span foreground="%s">%s</span>' % (color,
 						gtkgui_helpers.escape_for_pango_markup(row[4]))
 				else:
-					message = row[4]
+					message = gtkgui_helpers.escape_for_pango_markup(row[4])
 				self.logs_liststore.append((row[0], row[1], time_, message, row[5]))
 
 	def _fill_search_results_listview(self, text):
