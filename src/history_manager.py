@@ -27,6 +27,7 @@ import locale
 
 import exceptions
 import dialogs
+import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants
 
 from common import gajim
@@ -282,7 +283,8 @@ class HistoryManager:
 				constants.KIND_GCSTATUS): # is is statuses
 					color = gajim.config.get('statusmsgcolor') # so status color
 
-				message = '<span foreground="%s">%s</span>' % (color, row[4])
+				message = '<span foreground="%s">%s</span>' % (color,
+					gtkgui_helpers.escape_for_pango_markup(row[4]))
 				self.logs_liststore.append((row[0], row[1], time_, message, row[5]))
 
 	def _fill_search_results_listview(self, text):
