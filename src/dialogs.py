@@ -690,6 +690,7 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 
 		self.checkbutton = gtk.CheckButton(checktext)
 		self.vbox.pack_start(self.checkbutton, expand = False, fill = True)
+		self.popup()
 
 	def is_checked(self):
 		''' Get active state of the checkbutton '''
