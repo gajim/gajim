@@ -997,7 +997,7 @@ class PopupNotificationWindow:
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
-		
+
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_notification_window', APP)
 		self.window = xml.get_widget('popup_notification_window')
 		close_button = xml.get_widget('close_button')
@@ -1005,7 +1005,7 @@ class PopupNotificationWindow:
 		event_description_label = xml.get_widget('event_description_label')
 		eventbox = xml.get_widget('eventbox')
 		image = xml.get_widget('notification_image')
-		
+
 		if not text:
 			text = gajim.get_name_from_jid(account, jid) # default value of text
 		if not title:
@@ -1016,7 +1016,7 @@ class PopupNotificationWindow:
 
 		# set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
-		
+
 		# default image
 		if not path_to_image:
 			path_to_image = os.path.abspath(
