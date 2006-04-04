@@ -273,6 +273,7 @@ class HistoryManager:
 			except ValueError:
 				pass
 			else:
+				set_color = True
 				if kind in (constants.KIND_SINGLE_MSG_RECV,
 				constants.KIND_CHAT_MSG_RECV): # it is the other side
 					color = gajim.config.get('inmsgcolor') # so incoming color
@@ -282,9 +283,14 @@ class HistoryManager:
 				elif kind in (constants.KIND_STATUS,
 				constants.KIND_GCSTATUS): # is is statuses
 					color = gajim.config.get('statusmsgcolor') # so status color
-
-				message = '<span foreground="%s">%s</span>' % (color,
-					gtkgui_helpers.escape_for_pango_markup(row[4]))
+				else: # GC_MSG (message in room)	
+					set_color = False
+				
+				if set_color:
+					message = '<span foreground="%s">%s</span>' % (color,
+						gtkgui_helpers.escape_for_pango_markup(row[4]))
+				else:
+					message = row[4]
 				self.logs_liststore.append((row[0], row[1], time_, message, row[5]))
 
 	def _fill_search_results_listview(self, text):
