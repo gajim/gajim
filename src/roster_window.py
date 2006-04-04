@@ -796,14 +796,12 @@ class RosterWindow:
 			join_gc_menuitem.set_sensitive(True)
 			add_new_contact_menuitem.set_sensitive(True)
 			service_disco_menuitem.set_sensitive(True)
-			show_offline_contacts_menuitem.set_sensitive(True)
 		else:
 			# make the menuitems insensitive
 			new_message_menuitem.set_sensitive(False)
 			join_gc_menuitem.set_sensitive(False)
 			add_new_contact_menuitem.set_sensitive(False)
 			service_disco_menuitem.set_sensitive(False)
-			show_offline_contacts_menuitem.set_sensitive(False)
 
 		self.actions_menu_needs_rebuild = False
 
