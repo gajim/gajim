@@ -144,7 +144,9 @@ class Contacts:
 		contacts = self._contacts[account][contact.jid]
 		# We had only one that was offline, remove it
 		if len(contacts) == 1 and contacts[0].show == 'offline':
-			self.remove_contact(account, contacts[0])
+			# Do not use self.remove_contact: it deteles
+			# self._contacts[account][contact.jid]
+			contacts.remove(contacts[0])
 		# If same JID with same resource already exists, use the new one
 		for c in contacts:
 			if c.resource == contact.resource:
