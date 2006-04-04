@@ -1766,7 +1766,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'),
 				_('I want this contact to know my status after removal'),
 				on_response_ok = (on_ok, contact, account))
-		# maybe use 2 optionboxes from which the contact can select? (better)
 
 	def forget_gpg_passphrase(self, keyid):
 		if self.gpg_passphrase.has_key(keyid):
