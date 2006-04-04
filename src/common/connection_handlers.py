@@ -223,8 +223,6 @@ class ConnectionBytestream:
 		iq.setAttr('id', file_props['request-id'])
 		si = iq.setTag('si')
 		si.setNamespace(common.xmpp.NS_SI)
-		file_tag = si.setTag('file')
-		file_tag.setNamespace(common.xmpp.NS_FILE)
 		if file_props.has_key('offset') and file_props['offset']:
 			range_tag = file_tag.setTag('range')
 			range_tag.setAttr('offset', file_props['offset'])
