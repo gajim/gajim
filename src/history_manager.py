@@ -278,6 +278,10 @@ class HistoryManager:
 				elif kind in (constants.KIND_SINGLE_MSG_SENT,
 				constants.KIND_CHAT_MSG_SENT): # it is us
 					color = gajim.config.get('outmsgcolor') # so outgoing color
+				elif kind in (constants.KIND_STATUS,
+				constants.KIND_GCSTATUS): # is is statuses
+					color = gajim.config.get('statusmsgcolor') # so status color
+
 				message = '<span foreground="%s">%s</span>' % (color, row[4])
 				self.logs_liststore.append((row[0], row[1], time_, message, row[5]))
 
