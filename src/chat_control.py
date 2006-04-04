@@ -431,6 +431,7 @@ class ChatControlBase(MessageControl):
 		other_tags_for_text = [], count_as_new = True, subject = None):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
+		fjid = self.get_full_jid()
 		textview = self.conv_textview
 		end = False
 		if textview.at_the_end() or kind == 'outgoing':
@@ -441,19 +442,18 @@ class ChatControlBase(MessageControl):
 		if not count_as_new:
 			return
 		if kind == 'incoming':
-			gajim.last_message_time[self.account][self.get_full_jid()] = \
-				time.time()
+			gajim.last_message_time[self.account][fjid] = time.time()
 		urgent = True
 		if (not self.parent_win.get_active_jid() or \
-				jid != self.parent_win.get_active_jid() or \
+				fjid != self.parent_win.get_active_jid() or \
 				not self.parent_win.is_active() or not end) and \
 				kind in ('incoming', 'incoming_queue'):
 			self.nb_unread += 1
 			if gajim.interface.systray_enabled and self.notify_on_new_messages():
-				gajim.interface.systray.add_jid(jid, self.account, self.type_id)
+				gajim.interface.systray.add_jid(fjid, self.account, self.type_id)
 			self.parent_win.redraw_tab(self)
 			if not self.parent_win.is_active():
-				ctrl = gajim.interface.msg_win_mgr.get_control(jid,
+				ctrl = gajim.interface.msg_win_mgr.get_control(fjid,
 					self.account)
 				self.parent_win.show_title(urgent, ctrl)
 
