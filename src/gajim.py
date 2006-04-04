@@ -500,7 +500,6 @@ class Interface:
 		# without resource
 		ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
 		if ctrl:
-			jid_of_control = full_jid_with_resource
 			chat_control = ctrl
 		elif not pm and (not highest_contact or not highest_contact.resource):
 			# unknow contact or offline message
