@@ -115,7 +115,7 @@ class HistoryManager:
 		self.logs_listview.append_column(col)
 
 		renderer_text = gtk.CellRendererText() # holds message
-		col = gtk.TreeViewColumn('Message', renderer_text, text = C_MESSAGE)
+		col = gtk.TreeViewColumn('Message', renderer_text, markup = C_MESSAGE)
 		col.set_sort_column_id(C_MESSAGE) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
@@ -265,17 +265,24 @@ class HistoryManager:
 			# exposed in UI (TreeViewColumns) are only time, message and subject
 			# but store in liststore log_line_id, jid_id, time, message and subject
 			time_ = row[2]
+			kind = row[3]
 			try:
 				time_ = time.strftime('%x', time.localtime(float(time_))).decode(
 					locale.getpreferredencoding())
 			except ValueError:
 				pass
 			else:
-				self.logs_liststore.append((row[0], row[1], time_, row[4], row[5]))
+				if kind in (constants.KIND_SINGLE_MSG_RECV,
+				constants.KIND_CHAT_MSG_RECV): # it is the other side
+					color = gajim.config.get('inmsgcolor') # so incoming color
+				elif kind in (constants.KIND_SINGLE_MSG_SENT,
+				constants.KIND_CHAT_MSG_SENT): # it is us
+					color = gajim.config.get('outmsgcolor') # so outgoing color
+				message = '<span foreground="%s">%s</span>' % (color, row[4])
+				self.logs_liststore.append((row[0], row[1], time_, message, row[5]))
 
 	def _fill_search_results_listview(self, text):
 		'''ask db and fill listview with results that match text'''
-		# FIXME: check kind and set color accordingly
 		# exposed in UI (TreeViewColumns) are only JID, time, message and subject
 		# but store in liststore jid, time, message and subject
 		self.search_results_liststore.clear()
@@ -384,7 +391,6 @@ class HistoryManager:
 		results = self.cur.fetchall()
 		file_ = open(path_to_file, 'w')
 		for row in results:
-			# FIXME: check kind and say You or JID
 			# in store: time, kind, message FROM logs
 			# in text: JID or You, time, message
 			time_ = row[0]

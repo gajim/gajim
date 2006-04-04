@@ -73,13 +73,12 @@
 	      <child>
 		<widget class="GtkLabel" id="welcome_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">&lt;big&gt;Welcome to Gajim History Logs Manager&lt;/big&gt;
+		  <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Welcome to Gajim History Logs Manager&lt;/b&gt;&lt;/big&gt;
 
 You can select logs from the left and/or search database from below.
 
-&lt;span background=&quot;lightyellow&quot;&gt;&lt;b&gt;WARNING:&lt;/b&gt;
-If you plan to do massive deletions, please make sure Gajim is not running.
-Generally avoid deletions with contacts you currently chat with.&lt;/span&gt;</property>
+&lt;b&gt;WARNING:&lt;/b&gt;
+If you plan to do massive deletions, please make sure Gajim is not running. Generally avoid deletions with contacts you currently chat with.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -96,8 +95,8 @@ Generally avoid deletions with contacts you currently chat with.&lt;/span&gt;</p
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
 		</packing>
 	      </child>
 
