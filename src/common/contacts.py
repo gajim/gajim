@@ -205,7 +205,7 @@ class Contacts:
 	def get_contact_with_highest_priority(self, account, jid):
 		contacts = self.get_contacts_from_jid(account, jid)
 		if not contacts and '/' in jid:
-			# jid may be a nick jid, try it
+			# jid may be a fake jid, try it
 			room, nick = jid.split('/')
 			contact = self.get_gc_contact(account, room, nick)
 			return contact or []
