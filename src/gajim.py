@@ -1799,10 +1799,6 @@ class Interface:
 		
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.instances['file_transfers'] = dialogs.FileTransfersWindow()
-		
-		for account in gajim.connections:
-			self.instances[account]['xml_console'] = dialogs.XMLConsoleWindow(
-				account)
 
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(200, self.process_connections)

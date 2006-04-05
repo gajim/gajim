@@ -1400,6 +1400,7 @@ class XMLConsoleWindow:
 			title = _('XML Console')
 		
 		self.window.set_title(title)
+		self.window.show_all()
 		
 		self.xml.signal_autoconnect(self)
 

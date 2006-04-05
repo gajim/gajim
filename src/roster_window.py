@@ -549,7 +549,8 @@ class RosterWindow:
 		if gajim.interface.instances[account].has_key('xml_console'):
 			gajim.interface.instances[account]['xml_console'].window.present()
 		else:
-			gajim.interface.instances[account]['xml_console'].window.show_all()
+			gajim.interface.instances[account]['xml_console'] = \
+				dialogs.XMLConsoleWindow(account)
 
 	def on_set_motd_menuitem_activate(self, widget, account):
 		server = gajim.config.get_per('accounts', account, 'hostname')
