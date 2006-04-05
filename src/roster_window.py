@@ -1747,7 +1747,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				contact.sub = 'from'
 				gajim.contacts.add_contact(account, contact)
 				self.add_contact_to_roster(contact.jid, account)
-			elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+			elif gajim.interface.msg_win_mgr.has_window(contact.jid, account) or \
+			gajim.awaiting_events[account].has_key(contact.jid):
 				c = gajim.contacts.create_contact(jid = contact.jid,
 					name = '', groups = [_('Not in Roster')],
 					show = 'not in roster', status = '', ask = 'none',
