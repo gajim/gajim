@@ -2,18 +2,21 @@ Gajim 0.10 (XX May 2006)
 
   * One Messages Window ability (default to it)
   * Non blocking socket connections. Gajim no longer remains unresponsive.
-  * File Transfer improvements
-  * Meta Contacts (contact parent-child relationships) ability
-  * Support for legacy composing event (JEP-0022). Now 'Contact is composing a message' will always work
   * Gajim now uses less memory
-  * Roster Management Improvements (f.e. editablity of transport names)
+  * File Transfer improvements (now FT should work out of the box for all)
+  * Meta Contacts ability (relationships between contacts)
+  * Support for legacy composing event (JEP-0022). Now 'Contact is composing a message' will always work
+  * Gajim now defaults to theme that uses GTK colors
+  * Roster Management Improvements (f.e. editablity of transport names, extended Drag and Drop Functionality)
   * History (chat logs) Manager (search globally, delete, etc)
-  * Administrator using Gajim can modify room ban list
   * Animated Emoticons ability
   * Support for GTalk email notifications for GMail
+  * Room administrators can modify room ban list
   * Gajim no longer optionally depends on pydns or dnspython. Requires dnsutils
+  * gajim-remote has extended functionality
+  * Improved Preset Status Messages Experience
+  * Detection for CRUX as user's operating system
   * New art included, appropriate sizes of icons used where available
-  * Gajim now defaults to theme that uses GTK colors.
   * Translations under Windows now work okay
   * Tons of fixes for bugs and annoyances: http://trac.gajim.org/query?status=closed&milestone=0.10
 
