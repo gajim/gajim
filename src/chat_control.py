@@ -16,7 +16,6 @@
 ##
 
 import os
-import math
 import time
 import gtk
 import gtk.glade
@@ -272,7 +271,8 @@ class ChatControlBase(MessageControl):
 						cursor.x, cursor.y)
 					x = origin[0] + cursor[0]
 					y = origin[1] + size[1]
-					menu_width, menu_height = self.emoticons_menu.size_request()
+					menu_width, menu_height = \
+						gajim.interface.emoticons_menu.size_request()
 					#FIXME: get_line_count is not so good
 					#get the iter of cursor, then tv.get_line_yrange
 					# so we know in which y we are typing (not how many lines we have
@@ -286,8 +286,9 @@ class ChatControlBase(MessageControl):
 					#else: # move menu just below cursor
 					#	y -= (msg_tv.allocation.height / buf.get_line_count())
 					return (x, y, True) # push_in True
-				self.emoticons_menu.popup(None, None, set_emoticons_menu_position,
-					1, 0)
+				gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
+				gajim.interface.emoticons_menu.popup(None, None,
+					set_emoticons_menu_position, 1, 0)
 		return False
 
 	def _on_message_textview_key_press_event(self, widget, event):
@@ -462,50 +463,26 @@ class ChatControlBase(MessageControl):
 		when needed'''
 		emoticons_button = self.xml.get_widget('emoticons_button')
 		if gajim.config.get('emoticons_theme'):
-			self.emoticons_menu = self.prepare_emoticons_menu()
 			emoticons_button.show()
 			emoticons_button.set_no_show_all(False)
 		else:
-			self.emoticons_menu = None
 			emoticons_button.hide()
 			emoticons_button.set_no_show_all(True)
 
-	def prepare_emoticons_menu(self):
-		menu = gtk.Menu()
-	
-		def append_emoticon(w, d):
-			buffer = self.msg_textview.get_buffer()
-			if buffer.get_char_count():
-				buffer.insert_at_cursor(' %s ' % d)
-			else: # we are the beginning of buffer
-				buffer.insert_at_cursor('%s ' % d)
-			self.msg_textview.grab_focus()
-	
-		counter = 0
-		# Calculate the side lenght of the popup to make it a square
-		size = int(round(math.sqrt(len(gajim.interface.emoticons_images))))
-		for image in gajim.interface.emoticons_images:
-			item = gtk.MenuItem()
-			img = gtk.Image()
-			if type(image[1]) == gtk.gdk.PixbufAnimation:
-				img.set_from_animation(image[1])
-			else:
-				img.set_from_pixbuf(image[1])
-			item.add(img)
-			item.connect('activate', append_emoticon, image[0])
-			#FIXME: add tooltip with ascii
-			menu.attach(item, counter % size, counter % size + 1,
-					counter / size, counter / size + 1)
-			counter += 1
-		menu.show_all()
-		return menu
-
+	def append_emoticon(self, str_):
+		buffer = self.msg_textview.get_buffer()
+		if buffer.get_char_count():
+			buffer.insert_at_cursor(' %s ' % str_)
+		else: # we are the beginning of buffer
+			buffer.insert_at_cursor('%s ' % str_)
+		self.msg_textview.grab_focus()
 	def on_emoticons_button_clicked(self, widget):
 		'''popup emoticons menu'''
 		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
 		self.button_clicked = widget
-		self.emoticons_menu.popup(None, None, self.position_menu_under_button, 1,
-			0)
+		gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
+		gajim.interface.emoticons_menu.popup(None, None,
+			self.position_menu_under_button, 1, 0)
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''

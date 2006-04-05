@@ -95,6 +95,7 @@ import signal
 import getopt
 import time
 import threading
+import math
 
 import gtkgui_helpers
 import notify
@@ -1470,6 +1471,32 @@ class Interface:
 	def on_launch_browser_mailer(self, widget, url, kind):
 		helpers.launch_browser_mailer(kind, url)
 
+	def prepare_emoticons_menu(self):
+		menu = gtk.Menu()
+
+		def emoticon_clicked(w, str_):
+			if self.emoticon_menuitem_clicked:
+				self.emoticon_menuitem_clicked(str_)
+
+		counter = 0
+		# Calculate the side lenght of the popup to make it a square
+		size = int(round(math.sqrt(len(gajim.interface.emoticons_images))))
+		for image in gajim.interface.emoticons_images:
+			item = gtk.MenuItem()
+			img = gtk.Image()
+			if type(image[1]) == gtk.gdk.PixbufAnimation:
+				img.set_from_animation(image[1])
+			else:
+				img.set_from_pixbuf(image[1])
+			item.add(img)
+			item.connect('activate', emoticon_clicked, image[0])
+			#FIXME: add tooltip with ascii
+			menu.attach(item, counter % size, counter % size + 1,
+				counter / size, counter / size + 1)
+			counter += 1
+		menu.show_all()
+		return menu
+
 	def init_emoticons(self):
 		if not gajim.config.get('emoticons_theme'):
 			return
@@ -1503,6 +1530,9 @@ class Interface:
 			self.emoticons[emot.upper()] = emot_file
 		sys.path.remove(path)
 		del emots
+		if self.emoticons_menu:
+			gtkgui_helpers.destroy_widget(self.emoticons_menu)
+		self.emoticons_menu = self.prepare_emoticons_menu()
 	
 	def register_handlers(self):
 		self.handlers = {
@@ -1638,6 +1668,9 @@ class Interface:
 		gajim.interface = self
 		# This is the manager and factory of message windows set by the module
 		self.msg_win_mgr = None
+		self.emoticons_menu = None
+		# handler when an emoticon is clicked in emoticons_menu
+		self.emoticon_menuitem_clicked = None
 		self.default_values = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
