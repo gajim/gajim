@@ -1023,58 +1023,28 @@ class PopupNotificationWindow:
 				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'chat_msg_recv.png')) # img to display
 
 		if event_type == _('Contact Signed In'):
-			limegreen = gtk.gdk.color_parse('limegreen')
-			close_button.modify_bg(gtk.STATE_NORMAL, limegreen)
-			eventbox.modify_bg(gtk.STATE_NORMAL, limegreen)
-			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % text)
+			bg_color = 'limegreen'
 		elif event_type == _('Contact Signed Out'):
-			red = gtk.gdk.color_parse('red')
-			close_button.modify_bg(gtk.STATE_NORMAL, red)
-			eventbox.modify_bg(gtk.STATE_NORMAL, red)
-			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % text)
+			bg_color = 'red'
 		elif event_type in (_('New Message'), _('New Single Message'),
-			_('New Private Message')):
-			dodgerblue = gtk.gdk.color_parse('dodgerblue')
-			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
-			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
-			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % text)
+			_('New Private Message'), _('New E-mail')):
+			bg_color = 'dodgerblue'
 		elif event_type == _('File Transfer Request'):
-			bg_color = gtk.gdk.color_parse('khaki')
-			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
-			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
-			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % text)
+			bg_color = 'khaki'
 		elif event_type == _('File Transfer Error'):
-			bg_color = gtk.gdk.color_parse('firebrick')
-			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
-			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
-			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % text)
+			bg_color = 'firebrick'
 		elif event_type in (_('File Transfer Completed'),
 			_('File Transfer Stopped')):
-			bg_color = gtk.gdk.color_parse('yellowgreen')
-			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
-			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
-			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % text)
-		elif event_type == _('New E-mail'):
-			dodgerblue = gtk.gdk.color_parse('dodgerblue')
-			close_button.modify_bg(gtk.STATE_NORMAL, dodgerblue)
-			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
-			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % text)
+			bg_color = 'yellowgreen'
 		elif event_type == _('Groupchat Invitation'):
-			bg_color = gtk.gdk.color_parse('tan1')
-			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
-			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
-			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % text)
+			bg_color = 'tan1'
 		else: # Unknown event ! Shouldn't happen but deal with it
-			event_description_label.set_markup(
-				'<span foreground="black">%s</span>' % text)
+			bg_color = 'white'
+		popup_bg_color = gtk.gdk.color_parse(bg_color)
+		close_button.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
+		eventbox.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
+		event_description_label.set_markup(
+			'<span foreground="black">%s</span>' % text)	
 			
 		# set the image
 		image.set_from_file(path_to_image)
