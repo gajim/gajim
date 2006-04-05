@@ -113,6 +113,7 @@ class DesktopNotification:
 		self.event_type = event_type
 		self.title = title
 		self.text = text
+		'''0.3.1 is the only version of notification daemon that has no way to determine which version it is. If no method exists, it means they're using that one.'''
 		self.default_version = '0.3.1'
 		self.account = account
 		self.jid = jid
@@ -182,12 +183,12 @@ class DesktopNotification:
 		if version.startswith('0.3'):
 			if version >= ( 0, 3, 2):
 				hints = {}
-				hints['urgency'] = dbus.Byte(0)
+				hints['urgency'] = dbus.Byte(0) # Low Urgency
 				hints['category'] = dbus.String(ntype)
 				self.notif.Notify(
 					dbus.String(_('Gajim')),
-					dbus.UInt32(0), 
-					dbus.String(self.path_to_image), 
+					dbus.UInt32(0), # this notification does not replace other
+					dbus.String(self.path_to_image),
 					dbus.String(self.title),
 					dbus.String(self.text), 
 					( dbus.String('default'), dbus.String(self.event_type) ),
@@ -236,7 +237,8 @@ class DesktopNotification:
 			error_handler=self.version_error_handler_2_x_try)
 
 	def version_error_handler_2_x_try(self, e):
-		self.notif.GetServerInformation(reply_handler=self.version_reply_handler, error_handler=self.version_error_handler_3_x_try)
+		self.notif.GetServerInformation(reply_handler=self.version_reply_handler,
+			error_handler=self.version_error_handler_3_x_try)
 
 	def version_error_handler_3_x_try(self, e):
 		self.version = self.default_version
