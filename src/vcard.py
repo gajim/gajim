@@ -16,7 +16,6 @@
 import gtk
 import gtk.glade
 import gobject
-import urllib
 import base64
 import mimetypes
 import os
@@ -51,13 +50,6 @@ def get_avatar_pixbuf_encoded_mime(photo):
 		avatar_mime_type = photo['TYPE']
 		try:
 			img_decoded = base64.decodestring(img_encoded)
-		except:
-			pass
-	elif photo.has_key('EXTVAL'):
-		url = photo['EXTVAL']
-		try:
-			fd = urllib.urlopen(url)
-			img_decoded = fd.read()
 		except:
 			pass
 	if img_decoded:
