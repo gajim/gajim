@@ -211,7 +211,7 @@ class OptionsParser:
 			gajim.config.set('emoticons_theme', '')
 		for account in gajim.config.get_per('accounts'):
 			proxies_str = gajim.config.get_per('accounts', account,
-											'file_transfer_proxies')
+				'file_transfer_proxies')
 			proxies = proxies_str.split(',')
 			for i in range(0, len(proxies)):
 				proxies[i] = proxies[i].strip()
@@ -223,6 +223,6 @@ class OptionsParser:
 				proxies.append('transfer.jabber.freenet.de')
 			proxies_str = ', '.join(proxies)
 			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
-																proxies_str)
+				proxies_str)
 																										
 		gajim.config.set('version', '0.10')
