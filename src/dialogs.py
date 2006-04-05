@@ -1066,6 +1066,15 @@ class PopupNotificationWindow:
 			eventbox.modify_bg(gtk.STATE_NORMAL, dodgerblue)
 			event_description_label.set_markup(
 				'<span foreground="black">%s</span>' % text)
+		elif event_type == _('Groupchat Invitation'):
+			bg_color = gtk.gdk.color_parse('tan1')
+			close_button.modify_bg(gtk.STATE_NORMAL, bg_color)
+			eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
+			event_description_label.set_markup(
+				'<span foreground="black">%s</span>' % text)
+		else: # Unknown event ! Shouldn't happen but deal with it
+			event_description_label.set_markup(
+				'<span foreground="black">%s</span>' % text)
 			
 		# set the image
 		image.set_from_file(path_to_image)
