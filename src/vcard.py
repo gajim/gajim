@@ -1,4 +1,4 @@
-##	vcard.py (has VcardWindow class)
+##	vcard.py (has VcardWindow class and a func get_avatar_pixbuf_encoded_mime)
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
