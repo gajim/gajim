@@ -369,9 +369,8 @@ class Interface:
 					if contact1.jid in gajim.newly_added[account]:
 						gajim.newly_added[account].remove(contact1.jid)
 					self.roster.draw_contact(contact1.jid, account)
-					if not gajim.awaiting_events[account].has_key(jid):
-						gobject.timeout_add(5000, self.roster.really_remove_contact,
-							contact1, account)
+					gobject.timeout_add(5000, self.roster.really_remove_contact,
+						contact1, account)
 			contact1.show = array[1]
 			contact1.status = status_message
 			contact1.priority = priority
@@ -395,7 +394,8 @@ class Interface:
 			# reset chatstate if needed:
 			# (when contact signs out or has errors)
 			if array[1] in ('offline', 'error'):
-				contact1.our_chatstate = contact1.chatstate = contact1.composing_jep = None
+				contact1.our_chatstate = contact1.chatstate = \
+					contact1.composing_jep = None
 				gajim.connections[account].remove_transfers_for_contact(contact1)
 			self.roster.chg_contact_status(contact1, array[1], status_message,
 				account)
