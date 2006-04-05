@@ -20,6 +20,7 @@
 import os
 import time
 import dialogs
+import gtkgui_helpers
 
 from common import gajim
 from common import i18n
@@ -38,6 +39,7 @@ def notify(event_type, jid, account, msg_type = '', path_to_image = None,
 	'''Notifies a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
 	the older style PopupNotificationWindow method.'''
+	text = gtkgui_helpers.escape_for_pango_markup(text)
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
 			DesktopNotification(event_type, jid, account, msg_type, path_to_image,
