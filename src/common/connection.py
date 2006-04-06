@@ -713,11 +713,6 @@ class Connection(ConnectionHandlers):
 			self.connection.getRoster().Unsubscribe(jid)
 			self.update_contact(jid, '', [])
 
-	def _continue_unsubscribe(self, con, iq_obj, agent):
-		if iq_obj.getTag('error'):
-			# error, probably not a real agent
-			return
-
 	def unsubscribe_agent(self, agent):
 		if not self.connection:
 			return
