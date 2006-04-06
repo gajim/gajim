@@ -717,16 +717,14 @@ class Connection(ConnectionHandlers):
 		if iq_obj.getTag('error'):
 			# error, probably not a real agent
 			return
-		self.connection.getRoster().delItem(agent)
 
 	def unsubscribe_agent(self, agent):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
 		iq.getTag('query').setTag('remove')
-		self.connection.SendAndCallForResponse(iq, self._continue_unsubscribe,
-			{'agent': agent})
-		return
+		self.connection.send(iq)
+		self.connection.getRoster().delItem(agent)
 
 	def update_contact(self, jid, name, groups):
 		'''update roster item on jabber server'''

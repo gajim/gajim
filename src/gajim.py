@@ -965,6 +965,8 @@ class Interface:
 				#FIXME if it was the only one in its group, remove the group
 				return
 		elif not contacts:
+			if sub == 'remove':
+				return
 			# Add it to roster
 			contact = gajim.contacts.create_contact(jid = jid, name = name,
 			groups = groups, show = 'offline', sub = sub, ask = ask)
