@@ -210,7 +210,6 @@ class SocksQueue:
 	def get_file_from_sender(self, file_props, account):
 		if file_props is None:
 			return
-			file_props['hash']
 		if file_props.has_key('hash') and \
 			self.senders.has_key(file_props['hash']):
 			
