@@ -150,7 +150,8 @@ class Systray:
 		item.set_image(img)
 		sub_menu.append(item)
 		item.connect('activate', self.on_change_status_message_activate)
-		if not helpers.one_account_connected():
+		connected_accounts = helpers.connected_accounts()
+		if connected_accounts < 1:
 			item.set_sensitive(False)
 
 		item = gtk.SeparatorMenuItem()
@@ -166,36 +167,40 @@ class Systray:
 		chat_with_menuitem.set_sensitive(iskey)
 		single_message_menuitem.set_sensitive(iskey)
 		
-		if len(gajim.connections) >= 2: # 2 or more connections? make submenus
+		if connected_accounts >= 2: # 2 or more connections? make submenus
 			account_menu_for_chat_with = gtk.Menu()
 			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
 
 			account_menu_for_single_message = gtk.Menu()
 			single_message_menuitem.set_submenu(account_menu_for_single_message)
-
-			for account in gajim.connections:
-				#for chat_with
-				item = gtk.MenuItem(_('using account %s') % account)
-				account_menu_for_chat_with.append(item)
-				group_menu = self.make_groups_submenus_for_chat_with(account)
-				item.set_submenu(group_menu)
-				#for single message
-				item = gtk.MenuItem(_('using account %s') % account)
-				item.connect('activate',
-					self.on_single_message_menuitem_activate, account)
-				account_menu_for_single_message.append(item)
-				
-		elif len(gajim.connections) == 1: # one account
-			# one account, no need to show 'as jid'
-			# for chat_with
-			account = gajim.connections.keys()[0]
 			
-			group_menu = self.make_groups_submenus_for_chat_with(account)
-			chat_with_menuitem.set_submenu(group_menu)
-					
-			# for single message
-			self.single_message_handler_id = single_message_menuitem.connect(
-				'activate', self.on_single_message_menuitem_activate, account)
+			accounts_list = gajim.contacts.get_accounts()
+			accounts_list.sort()
+			for account in accounts_list:
+				if gajim.connections[account].connected:
+					#for chat_with
+					item = gtk.MenuItem(_('using account %s') % account)
+					account_menu_for_chat_with.append(item)
+					group_menu = self.make_groups_submenus_for_chat_with(account)
+					item.set_submenu(group_menu)
+					#for single message
+					item = gtk.MenuItem(_('using account %s') % account)
+					item.connect('activate',
+						self.on_single_message_menuitem_activate, account)
+					account_menu_for_single_message.append(item)
+				
+		elif connected_accounts == 1: # one account
+			# one account connected, no need to show 'as jid'
+			for account in gajim.connections:
+				if gajim.connections[account].connected:
+					# for chat_with
+					group_menu = self.make_groups_submenus_for_chat_with(account)
+					chat_with_menuitem.set_submenu(group_menu)
+							
+					# for single message
+					single_message_menuitem.remove_submenu()
+					self.single_message_handler_id = single_message_menuitem.connect(
+						'activate', self.on_single_message_menuitem_activate, account)
 
 		if event is None:
 			# None means windows (we explicitly popup in systraywin32.py)
@@ -235,13 +240,15 @@ class Systray:
 		
 		groups_menu = gtk.Menu()
 		
-		for group in gajim.groups[account].keys():
+		# FIXME : also print contacts that are not in a group
+		groups_list = gajim.groups[account].keys()
+		groups_list.sort()
+		for group in groups_list:
 			if group == _('Transports'):
 				continue
 			# at least one 'not offline' or 'without errors' in this group
 			at_least_one = False
 			item = gtk.MenuItem(group)
-			groups_menu.append(item)
 			contacts_menu = gtk.Menu()
 			item.set_submenu(contacts_menu)
 			for jid in gajim.contacts.get_jid_list(account):
@@ -251,23 +258,19 @@ class Systray:
 						contact.show != 'error':
 					at_least_one = True
 					s = gtkgui_helpers.escape_underscore(contact.get_shown_name())
-					item = gtk.ImageMenuItem(s)
+					item_contact = gtk.ImageMenuItem(s)
 					# any given gtk widget can only be used in one place
 					# (here we use it in status menu too)
 					# gtk.Image is a widget, it's better we refactor to use gdk.gdk.Pixbuf allover
 					img = state_images[contact.show]
 					img_copy = gobject.new(gtk.Image, pixbuf=img.get_pixbuf())
-					item.set_image(img_copy)
-					item.connect('activate', self.start_chat, account,
+					item_contact.set_image(img_copy)
+					item_contact.connect('activate', self.start_chat, account,
 							contact.jid)
-					contacts_menu.append(item)
+					contacts_menu.append(item_contact)
 			
-			if not at_least_one:
-				message = _('All contacts in this group are offline or have errors')
-				item = gtk.MenuItem(message)
-				item.set_sensitive(False)
-				contacts_menu.append(item)
-
+			if at_least_one:
+				groups_menu.append(item)
 		return groups_menu
 
 	def on_left_click(self):

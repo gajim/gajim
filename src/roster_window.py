@@ -664,14 +664,11 @@ class RosterWindow:
 		# join gc
 		sub_menu = gtk.Menu()
 		join_gc_menuitem.set_submenu(sub_menu)
-		at_least_one_account_connected = False
-		multiple_accounts = len(gajim.connections) >= 2 #FIXME: stop using bool var here
+		connected_accounts = helpers.connected_accounts()
 		for account in gajim.connections:
 			if gajim.connections[account].connected <= 1: # if offline or connecting
 				continue
-			if not at_least_one_account_connected:
-				at_least_one_account_connected = True
-			if multiple_accounts:
+			if connected_accounts > 1:
 				label = gtk.Label()
 				label.set_markup('<u>' + account.upper() +'</u>')
 				label.set_use_underline(False)
@@ -690,7 +687,7 @@ class RosterWindow:
 					account, bookmark)
 				sub_menu.append(item)
 
-		if at_least_one_account_connected: #FIXME: move this below where we do this check
+		if connected_accounts > 0: #FIXME: move this below where we do this check
 			#and make sure it works
 			newitem = gtk.SeparatorMenuItem() # separator
 			sub_menu.append(newitem)
@@ -703,7 +700,7 @@ class RosterWindow:
 			sub_menu.append(newitem)
 			sub_menu.show_all()
 
-		if multiple_accounts: # 2 or more accounts? make submenus
+		if connected_accounts > 1: # 2 or more accounts? make submenus
 			#add
 			sub_menu = gtk.Menu()
 			for account in gajim.connections:
@@ -744,7 +741,42 @@ class RosterWindow:
 			new_message_menuitem.set_submenu(sub_menu)
 			sub_menu.show_all()
 
-			#Advanced Actions
+		else:
+			if connected_accounts == 1: # user has only one account
+				for account in gajim.connections:
+					if gajim.connections[account].connected > 1: # THE connected account
+						#add
+						if not self.add_new_contact_handler_id:
+							self.add_new_contact_handler_id = add_new_contact_menuitem.connect(
+								'activate', self.on_add_new_contact, account)
+						#disco
+						if not self.service_disco_handler_id:
+							self.service_disco_handler_id = service_disco_menuitem.connect(
+								'activate', self.on_service_disco_menuitem_activate, account)
+						#new msg
+						if not self.new_message_menuitem_handler_id:
+							self.new_message_menuitem_handler_id = new_message_menuitem.\
+								connect('activate', self.on_new_message_menuitem_activate, account)
+						#new msg accel
+						if not self.have_new_message_accel:
+							ag = gtk.accel_groups_from_object(self.window)[0]
+							new_message_menuitem.add_accelerator('activate', ag,
+								gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+							self.have_new_message_accel = True
+	
+						break # No other account connected
+
+		#Advanced Actions
+		if len(gajim.connections) == 0: # user has no accounts
+			advanced_menuitem.set_sensitive(False)
+		elif len(gajim.connections) == 1:
+			advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(account)
+		
+			self._add_history_manager_menuitem(advanced_menuitem_menu)
+
+			advanced_menuitem.set_submenu(advanced_menuitem_menu)
+			advanced_menuitem_menu.show_all()
+		else: # user has *more* than one account
 			sub_menu = gtk.Menu()
 			for account in gajim.connections:
 				item = gtk.MenuItem(_('for account %s') % account, False)
@@ -758,41 +790,7 @@ class RosterWindow:
 			advanced_menuitem.set_submenu(sub_menu)
 			sub_menu.show_all()
 
-		else:
-			if len(gajim.connections) == 1: # user has only one account
-				#add
-				if not self.add_new_contact_handler_id:
-					self.add_new_contact_handler_id = add_new_contact_menuitem.connect(
-						'activate', self.on_add_new_contact, gajim.connections.keys()[0])
-				#disco
-				if not self.service_disco_handler_id:
-					self.service_disco_handler_id = service_disco_menuitem.connect(
-						'activate', self.on_service_disco_menuitem_activate,
-						gajim.connections.keys()[0])
-				#new msg
-				if not self.new_message_menuitem_handler_id:
-					self.new_message_menuitem_handler_id = new_message_menuitem.\
-						connect('activate', self.on_new_message_menuitem_activate,
-						gajim.connections.keys()[0])
-				#new msg accel
-				if not self.have_new_message_accel:
-					ag = gtk.accel_groups_from_object(self.window)[0]
-					new_message_menuitem.add_accelerator('activate', ag,
-						gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
-					self.have_new_message_accel = True
-
-				account = gajim.connections.keys()[0]
-				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
-					account)
-
-				self._add_history_manager_menuitem(advanced_menuitem_menu)
-
-				advanced_menuitem.set_submenu(advanced_menuitem_menu)
-				advanced_menuitem_menu.show_all()
-			elif len(gajim.connections) == 0: # user has no accounts
-				advanced_menuitem.set_sensitive(False)
-
-		if at_least_one_account_connected:
+		if connected_accounts > 0:
 			new_message_menuitem.set_sensitive(True)
 			join_gc_menuitem.set_sensitive(True)
 			add_new_contact_menuitem.set_sensitive(True)
@@ -1917,6 +1915,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.update_status_combobox()
 			return
 		status = model[active][2].decode('utf-8')
+
 		if active == 7: # We choose change status message (7 is that)
 			# do not change show, just show change status dialog
 			status = model[self.previous_status_combobox_active][2].decode('utf-8')
@@ -1937,11 +1936,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# after user chooses "Change status message" menuitem
 		# we can return to this show
 		self.previous_status_combobox_active = active
-		one_connected = helpers.one_account_connected()
 		if status == 'invisible':
 			bug_user = False
 			for acct in accounts:
-				if not one_connected or gajim.connections[acct].connected > 1:
+				if connected_accounts < 1 or gajim.connections[acct].connected > 1:
 					if not gajim.config.get_per('accounts', acct,
 							'sync_with_global_status'):
 						continue
@@ -1964,14 +1962,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		for acct in accounts:
 			if gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
 				global_sync_accounts.append(acct)
-		one_with_global_sync_connected = helpers.one_account_connected(
+		global_sync_connected_accounts = helpers.connected_accounts(
 			global_sync_accounts)
 		for acct in accounts:
 			if not gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
 				continue
 			# we are connected (so we wanna change show and status)
 			# or no account is connected and we want to connect with new show and status
-			if not one_with_global_sync_connected or \
+
+			if not global_sync_connected_accounts > 0 or \
 			gajim.connections[acct].connected > 1:
 				self.send_status(acct, status, message)
 		self.update_status_combobox()

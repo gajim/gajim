@@ -460,18 +460,17 @@ def get_xmpp_show(show):
 		return None
 	return show
 
-def one_account_connected(account_list = None):
-	'''returns True if at least one account is connected, else False'''
+def connected_accounts(account_list = None):
+	'''returns the number of connected accounts'''
+	connected_accounts = 0
 	if account_list is None:
 		accounts = gajim.connections.keys()
 	else:
 		accounts = account_list
-	one_connected = False
 	for acct in accounts:
 		if gajim.connections[acct].connected > 1:
-			one_connected = True
-			break
-	return one_connected
+			connected_accounts = connected_accounts + 1
+	return connected_accounts
 
 def get_output_of_command(command):
 	try:
