@@ -240,7 +240,6 @@ class Systray:
 		
 		groups_menu = gtk.Menu()
 		
-		# FIXME : also print contacts that are not in a group
 		groups_list = gajim.groups[account].keys()
 		groups_list.sort()
 		for group in groups_list:
@@ -254,7 +253,11 @@ class Systray:
 			for jid in gajim.contacts.get_jid_list(account):
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
-				if group in contact.groups and contact.show != 'offline' and \
+				if contact.groups == []: #user has no group, print him in General
+					contact_groups = _('General')
+				else:
+					contact_groups = contact.groups
+				if group in contact_groups and contact.show != 'offline' and \
 						contact.show != 'error':
 					at_least_one = True
 					s = gtkgui_helpers.escape_underscore(contact.get_shown_name())
