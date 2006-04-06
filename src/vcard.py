@@ -224,8 +224,10 @@ class VcardWindow:
 						dialogs.ErrorDialog(_('Could not load image'), msg)
 						continue
 					else:
-						path_to_file = os.path.join(gajim.TMP, 'avatar_scaled.png')
-						scaled_pixbuf.save(path_to_file, 'png')
+						if scaled_pixbuf:
+							path_to_file = os.path.join(gajim.TMP,
+								'avatar_scaled.png')
+							scaled_pixbuf.save(path_to_file, 'png')
 						done = True
 				else:
 					done = True
