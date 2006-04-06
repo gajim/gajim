@@ -2737,8 +2737,6 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		# update variables
 		gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
 			'chats': {}, 'gc': {}, 'gc_config': {}}
-		gajim.interface.instances[self.account]['xml_console'] = \
-			dialogs.XMLConsoleWindow(self.account)
 		gajim.awaiting_events[self.account] = {}
 		gajim.connections[self.account].connected = 0
 		gajim.groups[self.account] = {}
