@@ -1065,8 +1065,8 @@ class RosterWindow:
 
 		def remove(widget, contact, account):
 			self.dialog.destroy()
-			gajim.connections[account].unsubscribe_agent(contact.jid + '/' \
-																		+ contact.resource)
+			full_jid = contact.get_full_jid()
+			gajim.connections[account].unsubscribe_agent(full_jid)
 			# remove transport from treeview
 			self.remove_contact(contact, account)
 			# remove transport's contacts from treeview
