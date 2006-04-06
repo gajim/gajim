@@ -1093,43 +1093,8 @@ class PopupNotificationWindow:
 		if event.button != 1:
 			self.window.destroy()
 			return
-		# use Contact class, new_chat expects it that way
-		# is it in the roster?
-		if self.jid in gajim.contacts.get_jid_list(self.account):
-			contact = gajim.contacts.get_contact_with_highest_priority(
-				self.account, self.jid)
-		else:
-			keyID = ''
-			attached_keys = gajim.config.get_per('accounts', self.account,
-				'attached_gpg_keys').split()
-			if self.jid in attached_keys:
-				keyID = attached_keys[attached_keys.index(self.jid) + 1]
-			if self.msg_type.find('file') != 0:
-				if self.msg_type == 'pm':
-					room_jid, nick = self.jid.split('/', 1)
-					gc_contact = gajim.contacts.get_gc_contact(self.account,
-						room_jid, nick)
-					contact = gajim.contacts.contact_from_gc_contact(gc_contact)
-				else:
-					contact = gajim.contacts.create_contact(jid = self.jid,
-						name = self.jid.split('@')[0],
-						groups = [_('Not in Roster')], show = 'not in roster',
-						status = '', sub = 'none', keyID = keyID)
-					gajim.contacts.add_contact(self.account, contact)
-					gajim.interface.roster.add_contact_to_roster(contact.jid,
-						self.account)
-
-		if self.msg_type in ('normal', 'file-request', 'file-request-error',
-			'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
-			# Get the first single message event
-			ev = gajim.get_first_event(self.account, self.jid, self.msg_type)
-			if ev:
-				gajim.interface.roster.open_event(self.account, self.jid, ev)
-		else: # chat or pm
-			gajim.interface.handle_event(self.account, contact.jid, self.msg_type)
-
+		gajim.interface.handle_event(self.account, self.jid, self.msg_type)
 		self.adjust_height_and_move_popup_notification_windows()
-
 
 class SingleMessageWindow:
 	'''SingleMessageWindow can send or show a received
