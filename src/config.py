@@ -2264,7 +2264,7 @@ class ManageBookmarksWindow:
 			# No parent, so we got an account -> add to this.
 			add_to = iter
 
-		account = model.get_value(add_to, 1)
+		account = model[add_to][1].decode('utf-8')
 		nick = gajim.nicks[account]
 		self.treestore.append(add_to, [account, _('New Room'), '', False, '',
 			nick])
