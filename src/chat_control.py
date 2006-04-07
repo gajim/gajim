@@ -1251,6 +1251,8 @@ class ChatControl(ChatControlBase):
 			self.reset_kbd_mouse_timeout_vars()
 
 	def shutdown(self):
+		# destroy banner tooltip - bug #pygtk for that!
+		self.status_tooltip.destroy()
 		# Send 'gone' chatstate
 		self.send_chatstate('gone', self.contact)
 		self.contact.chatstate = None
