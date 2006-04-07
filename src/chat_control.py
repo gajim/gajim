@@ -531,7 +531,7 @@ class ChatControlBase(MessageControl):
 					self.parent_win.redraw_tab(self)
 					self.parent_win.show_title()
 					if gajim.interface.systray_enabled:
-						gajim.interface.systray.remove_jid(jid,
+						gajim.interface.systray.remove_jid(self.get_full_jid(),
 										self.account,
 										self.type_id)
 			self.msg_textview.grab_focus()

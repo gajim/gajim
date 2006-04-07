@@ -260,7 +260,7 @@ class MessageWindow:
 
 		# Update external state
 		if gajim.interface.systray_enabled:
-			gajim.interface.systray.remove_jid(ctrl.contact.jid, ctrl.account,
+			gajim.interface.systray.remove_jid(ctrl.get_full_jid(), ctrl.account,
 				ctrl.type_id)
 		del gajim.last_message_time[ctrl.account][ctrl.get_full_jid()]
 
