@@ -401,13 +401,15 @@ def _get_fade_color(treeview, selected, focused):
 			      int(bg.blue*p + fg.blue*q))
 
 def get_scaled_pixbuf(pixbuf, kind):
-	'''returns scaled pixbuf, keeping ratio etc
+	'''returns scaled pixbuf, keeping ratio etc or None
 	kind is either "chat" or "roster" or "notification" or "tooltip"'''
 	
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)
 	width = gajim.config.get(kind + '_avatar_width')
 	height = gajim.config.get(kind + '_avatar_height')
+	if width < 1 or height < 1:
+		return None
 
 	# Pixbuf size
 	pix_width = pixbuf.get_width()
