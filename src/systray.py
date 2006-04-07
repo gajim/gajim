@@ -63,6 +63,7 @@ class Systray:
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
 		self.xml.signal_autoconnect(self)
+		self.popup_menus = []
 
 	def set_img(self):
 		if len(self.jids) > 0:
@@ -113,7 +114,10 @@ class Systray:
 		'''create chat with and new message (sub) menus/menuitems
 		event is None when we're in Windows
 		'''
-		
+
+		for m in self.popup_menus:
+			m.destroy()
+
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
 		single_message_menuitem = self.xml.get_widget('single_message_menuitem')
 		status_menuitem = self.xml.get_widget('status_menu')
@@ -124,6 +128,7 @@ class Systray:
 			self.single_message_handler_id = None
 
 		sub_menu = gtk.Menu()
+		self.popup_menus.append(sub_menu)
 		status_menuitem.set_submenu(sub_menu)
 
 		# We need our own set of status icons, let's make 'em!
@@ -170,9 +175,11 @@ class Systray:
 		if connected_accounts >= 2: # 2 or more connections? make submenus
 			account_menu_for_chat_with = gtk.Menu()
 			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
+			self.popup_menus.append(account_menu_for_chat_with)
 
 			account_menu_for_single_message = gtk.Menu()
 			single_message_menuitem.set_submenu(account_menu_for_single_message)
+			self.popup_menus.append(account_menu_for_single_message)
 			
 			accounts_list = gajim.contacts.get_accounts()
 			accounts_list.sort()
@@ -182,6 +189,7 @@ class Systray:
 					item = gtk.MenuItem(_('using account %s') % account)
 					account_menu_for_chat_with.append(item)
 					group_menu = self.make_groups_submenus_for_chat_with(account)
+					self.popup_menus.append(group_menu)
 					item.set_submenu(group_menu)
 					#for single message
 					item = gtk.MenuItem(_('using account %s') % account)
@@ -195,6 +203,7 @@ class Systray:
 				if gajim.connections[account].connected:
 					# for chat_with
 					group_menu = self.make_groups_submenus_for_chat_with(account)
+					self.popup_menus.append(group_menu)
 					chat_with_menuitem.set_submenu(group_menu)
 							
 					# for single message
@@ -249,6 +258,7 @@ class Systray:
 			at_least_one = False
 			item = gtk.MenuItem(group)
 			contacts_menu = gtk.Menu()
+			self.popup_menus.append(contacts_menu)
 			item.set_submenu(contacts_menu)
 			for jid in gajim.contacts.get_jid_list(account):
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
