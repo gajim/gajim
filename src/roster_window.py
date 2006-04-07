@@ -660,111 +660,103 @@ class RosterWindow:
 				gtk.gdk.CONTROL_MASK)
 			self.have_new_message_accel = False
 
-		# join gc
-		sub_menu = gtk.Menu()
-		join_gc_menuitem.set_submenu(sub_menu)
+		gc_sub_menu = gtk.Menu() # gc is always a submenu
+		join_gc_menuitem.set_submenu(gc_sub_menu)
+		
 		connected_accounts = helpers.connected_accounts()
-		for account in gajim.connections:
-			if gajim.connections[account].connected <= 1: # if offline or connecting
-				continue
-			if connected_accounts > 1:
+		if connected_accounts > 1: # 2 or more accounts? make submenus
+			add_sub_menu = gtk.Menu()
+			disco_sub_menu = gtk.Menu()
+			new_message_sub_menu = gtk.Menu()
+
+			for account in gajim.connections:
+				if gajim.connections[account].connected <= 1: # if offline or connecting
+					continue
+				
+				# join gc
 				label = gtk.Label()
 				label.set_markup('<u>' + account.upper() +'</u>')
 				label.set_use_underline(False)
-				item = gtk.MenuItem()
-				item.add(label)
-				item.connect('state-changed', self.on_bm_header_changed_state)
-				sub_menu.append(item)
+				gc_item = gtk.MenuItem()
+				gc_item.add(label)
+				gc_item.connect('state-changed', self.on_bm_header_changed_state)
+				gc_sub_menu.append(gc_item)
+				
+				self._add_bookmarks_list(gc_sub_menu, account)
 
-			item = gtk.MenuItem(_('_Join New Room'))
-			item.connect('activate', self.on_join_gc_activate, account)
-			sub_menu.append(item)
+				# the 'manage gc bookmarks' item is printed below to avoid duplicate code
 
-			for bookmark in gajim.connections[account].bookmarks:
-				item = gtk.MenuItem(bookmark['name'], False) # Do not use underline
-				item.connect('activate', self.on_bookmark_menuitem_activate,
-					account, bookmark)
-				sub_menu.append(item)
+				# add
+				add_item = gtk.MenuItem(_('to %s account') % account, False)
+				add_sub_menu.append(add_item)
+				add_item.connect('activate', self.on_add_new_contact, account)
+				add_new_contact_menuitem.set_submenu(add_sub_menu)
+				add_sub_menu.show_all()
 
-		if connected_accounts > 0: #FIXME: move this below where we do this check
-			#and make sure it works
+				# disco
+				disco_item = gtk.MenuItem(_('using %s account') % account, False)
+				disco_sub_menu.append(disco_item)
+				disco_item.connect('activate', self.on_service_disco_menuitem_activate,	account)
+				service_disco_menuitem.set_submenu(disco_sub_menu)
+				disco_sub_menu.show_all()
+
+				# new message
+				new_message_item = gtk.MenuItem(_('using account %s') % account, False)
+				new_message_sub_menu.append(new_message_item)
+				new_message_item.connect('activate', self.on_new_message_menuitem_activate,
+									account)
+				new_message_menuitem.set_submenu(new_message_sub_menu)
+				new_message_sub_menu.show_all()
+
+		elif connected_accounts == 1: # user has only one account
+			for account in gajim.connections:
+				if gajim.connections[account].connected > 1: # THE connected account
+					# gc
+					self._add_bookmarks_list(gc_sub_menu, account)
+					# add
+					if not self.add_new_contact_handler_id:
+						self.add_new_contact_handler_id = add_new_contact_menuitem.connect(
+							'activate', self.on_add_new_contact, account)
+					# disco
+					if not self.service_disco_handler_id:
+						self.service_disco_handler_id = service_disco_menuitem.connect(
+							'activate', self.on_service_disco_menuitem_activate, account)
+					# new msg
+					if not self.new_message_menuitem_handler_id:
+						self.new_message_menuitem_handler_id = new_message_menuitem.\
+							connect('activate', self.on_new_message_menuitem_activate, account)
+					# new msg accel
+					if not self.have_new_message_accel:
+						ag = gtk.accel_groups_from_object(self.window)[0]
+						new_message_menuitem.add_accelerator('activate', ag,
+							gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+						self.have_new_message_accel = True
+
+					break # No other account connected
+		
+		if connected_accounts == 0: # no connected accounts, make the menuitems insensitive
+			new_message_menuitem.set_sensitive(False)
+			join_gc_menuitem.set_sensitive(False)
+			add_new_contact_menuitem.set_sensitive(False)
+			service_disco_menuitem.set_sensitive(False)
+		else: # we have one or more connected accounts
+			new_message_menuitem.set_sensitive(True)
+			join_gc_menuitem.set_sensitive(True)
+			add_new_contact_menuitem.set_sensitive(True)
+			service_disco_menuitem.set_sensitive(True)
+			
+			# print the 'manage gc bookmarks' item
 			newitem = gtk.SeparatorMenuItem() # separator
-			sub_menu.append(newitem)
+			gc_sub_menu.append(newitem)
 
 			newitem = gtk.ImageMenuItem(_('Manage Bookmarks...'))
 			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
 				gtk.ICON_SIZE_MENU)
 			newitem.set_image(img)
 			newitem.connect('activate', self.on_manage_bookmarks_menuitem_activate)
-			sub_menu.append(newitem)
-			sub_menu.show_all()
-
-		if connected_accounts > 1: # 2 or more accounts? make submenus
-			#add
-			sub_menu = gtk.Menu()
-			for account in gajim.connections:
-				if gajim.connections[account].connected <= 1:
-					#if offline or connecting
-					continue
-				item = gtk.MenuItem(_('to %s account') % account, False)
-				sub_menu.append(item)
-				item.connect('activate', self.on_add_new_contact, account)
-			add_new_contact_menuitem.set_submenu(sub_menu)
-			sub_menu.show_all()
-
-			#disco
-			sub_menu = gtk.Menu()
-			for account in gajim.connections:
-				if gajim.connections[account].connected <= 1:
-					#if offline or connecting
-					continue
-				item = gtk.MenuItem(_('using %s account') % account, False)
-				sub_menu.append(item)
-				item.connect('activate', self.on_service_disco_menuitem_activate,
-					account)
-
-			service_disco_menuitem.set_submenu(sub_menu)
-			sub_menu.show_all()
-
-			#new message
-			sub_menu = gtk.Menu()
-			for account in gajim.connections:
-				if gajim.connections[account].connected <= 1:
-					#if offline or connecting
-					continue
-				item = gtk.MenuItem(_('using account %s') % account, False)
-				sub_menu.append(item)
-				item.connect('activate', self.on_new_message_menuitem_activate,
-									account)
-
-			new_message_menuitem.set_submenu(sub_menu)
-			sub_menu.show_all()
-
-		else:
-			if connected_accounts == 1: # user has only one account
-				for account in gajim.connections:
-					if gajim.connections[account].connected > 1: # THE connected account
-						#add
-						if not self.add_new_contact_handler_id:
-							self.add_new_contact_handler_id = add_new_contact_menuitem.connect(
-								'activate', self.on_add_new_contact, account)
-						#disco
-						if not self.service_disco_handler_id:
-							self.service_disco_handler_id = service_disco_menuitem.connect(
-								'activate', self.on_service_disco_menuitem_activate, account)
-						#new msg
-						if not self.new_message_menuitem_handler_id:
-							self.new_message_menuitem_handler_id = new_message_menuitem.\
-								connect('activate', self.on_new_message_menuitem_activate, account)
-						#new msg accel
-						if not self.have_new_message_accel:
-							ag = gtk.accel_groups_from_object(self.window)[0]
-							new_message_menuitem.add_accelerator('activate', ag,
-								gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
-							self.have_new_message_accel = True
-	
-						break # No other account connected
-
+			gc_sub_menu.append(newitem)
+			gc_sub_menu.show_all()
+			
 		#Advanced Actions
 		if len(gajim.connections) == 0: # user has no accounts
 			advanced_menuitem.set_sensitive(False)
@@ -775,31 +767,19 @@ class RosterWindow:
 
 			advanced_menuitem.set_submenu(advanced_menuitem_menu)
 			advanced_menuitem_menu.show_all()
-		else: # user has *more* than one account
-			sub_menu = gtk.Menu()
+		else: # user has *more* than one account : build advanced submenus
+			advanced_sub_menu = gtk.Menu()
 			for account in gajim.connections:
-				item = gtk.MenuItem(_('for account %s') % account, False)
-				sub_menu.append(item)
+				advanced_item = gtk.MenuItem(_('for account %s') % account, False)
+				advanced_sub_menu.append(advanced_item)
 				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
 					account)
-				item.set_submenu(advanced_menuitem_menu)
+				advanced_item.set_submenu(advanced_menuitem_menu)
 			
-			self._add_history_manager_menuitem(sub_menu)
+			self._add_history_manager_menuitem(advanced_sub_menu)
 			
-			advanced_menuitem.set_submenu(sub_menu)
-			sub_menu.show_all()
-
-		if connected_accounts > 0:
-			new_message_menuitem.set_sensitive(True)
-			join_gc_menuitem.set_sensitive(True)
-			add_new_contact_menuitem.set_sensitive(True)
-			service_disco_menuitem.set_sensitive(True)
-		else:
-			# make the menuitems insensitive
-			new_message_menuitem.set_sensitive(False)
-			join_gc_menuitem.set_sensitive(False)
-			add_new_contact_menuitem.set_sensitive(False)
-			service_disco_menuitem.set_sensitive(False)
+			advanced_menuitem.set_submenu(advanced_sub_menu)
+			advanced_sub_menu.show_all()
 
 		self.actions_menu_needs_rebuild = False
 
@@ -816,6 +796,19 @@ class RosterWindow:
 		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_history_manager_menuitem_activate)
+		
+	def _add_bookmarks_list(self, gc_sub_menu, account):
+		'''Print join new room item and bookmarks list for an account'''
+		item = gtk.MenuItem(_('_Join New Room'))
+		item.connect('activate', self.on_join_gc_activate, account)
+		gc_sub_menu.append(item)
+
+		for bookmark in gajim.connections[account].bookmarks:
+			item = gtk.MenuItem(bookmark['name'], False) # Do not use underline
+			item.connect('activate', self.on_bookmark_menuitem_activate,
+				account, bookmark)
+			gc_sub_menu.append(item)
+	
 
 	def _change_style(self, model, path, iter, option):
 		if option is None:
