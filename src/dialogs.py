@@ -588,6 +588,7 @@ class Dialog(gtk.Dialog):
 		buttons = self.action_area.get_children()
 		return index < len(buttons) and buttons[index] or None
 
+
 class HigDialog(gtk.MessageDialog):
 	def __init__(self, parent, type, buttons, pritext, sectext,
 	on_response_ok = None, on_response_cancel = None, on_response_yes = None,
@@ -599,29 +600,29 @@ class HigDialog(gtk.MessageDialog):
 		self.format_secondary_text(sectext)
 
 		buttons = self.action_area.get_children()
-		possible_response = {gtk.STOCK_OK: on_response_ok,
+		possible_responses = {gtk.STOCK_OK: on_response_ok,
 			gtk.STOCK_CANCEL: on_response_cancel, gtk.STOCK_YES: on_response_yes,
 			gtk.STOCK_NO: on_response_no}
 		for b in buttons:
-			for response in possible_response:
+			for response in possible_responses:
 				if b.get_label() == response:
-					if not possible_response[response]:
+					if not possible_responses[response]:
 						b.connect('clicked', self.just_destroy)
-					elif isinstance(possible_response[response], tuple):
+					elif isinstance(possible_responses[response], tuple):
 						if len(possible_response[response]) == 1:
-							b.connect('clicked', possible_response[response][0])
+							b.connect('clicked', possible_responses[response][0])
 						else:
-							b.connect('clicked', *possible_response[response])
+							b.connect('clicked', *possible_responses[response])
 					else:
-						b.connect('clicked', possible_response[response])
+						b.connect('clicked', possible_responses[response])
 					break
 	
 	def just_destroy(self, widget):
 		self.destroy()
 
 	def popup(self):
-		# Give focus to top vbox
-		vb = self.get_children()[0].get_children()[0]
+		'''show dialog'''
+		vb = self.get_children()[0].get_children()[0] # Give focus to top vbox
 		vb.set_flags(gtk.CAN_FOCUS)
 		vb.grab_focus()
 		self.show_all()
@@ -636,6 +637,26 @@ class HigDialog(gtk.MessageDialog):
 		response = self.run()
 		self.destroy()
 		return response
+
+
+class FileChooserDialog(gtk.FileChooserDialog):
+	'''Non-blocking FileChooser Dialog around gtk.FileChooserDialog'''
+	def __init__(self, title_text, action, buttons, default_response,
+	select_multiple, current_folder, on_response_ok = None,
+	on_response_cancel = None):
+
+		gtk.FileChooserDialog.__init__(self, title=title_text, 
+			action=action, buttons=buttons)
+		
+		self.set_default_response(default_response)
+		self.set_select_multiple(select_multiple)
+		if current_folder and os.path.isdir(current_folder):
+			self.set_current_folder(current_folder)
+		else:
+			self.set_current_folder(helpers.get_documents_path())
+		
+		self.show_all()
+	
 
 class ConfirmationDialog(HigDialog):
 	'''HIG compliant confirmation dialog.'''

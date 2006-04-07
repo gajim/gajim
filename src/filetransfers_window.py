@@ -5,7 +5,6 @@
 ## Copyright (C) 2005
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab@snarc.org>
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -245,18 +244,16 @@ _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
 	def show_file_send_request(self, account, contact):
-		last_send_dir = gajim.config.get('last_send_dir')
-		dialog = gtk.FileChooserDialog(title=_('Choose File to Send...'), 
-			action=gtk.FILE_CHOOSER_ACTION_OPEN, 
-			buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
-		butt = dialog.add_button(_('Send'), gtk.RESPONSE_OK)
-		butt.set_use_stock(True)
-		dialog.set_default_response(gtk.RESPONSE_OK)
-		dialog.set_select_multiple(True) # we can select many files to send
-		if last_send_dir and os.path.isdir(last_send_dir):
-			dialog.set_current_folder(last_send_dir)
-		else:
-			dialog.set_current_folder(helpers.get_documents_path())
+		dialog = dialogs.FileChooserDialog(_('Choose File to Send...'), 
+			gtk.FILE_CHOOSER_ACTION_OPEN, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL),
+			gtk.RESPONSE_OK,
+			True, # select multiple true as we can select many files to send
+			gajim.config.get('last_send_dir'),
+			)
+		
+		btn = dialog.add_button(_('_Send'), gtk.RESPONSE_OK)
+		btn.set_use_stock(True) # FIXME: add send icon to this button (JUMP_TO)
+
 		file_props = {}
 		while True:
 			response = dialog.run()
