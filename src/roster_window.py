@@ -1426,8 +1426,6 @@ class RosterWindow:
 			self.send_status(account, show, message)
 
 	def build_account_menu(self, account):
-		#FIXME: make most menuitems of this menu insensitive if account is offline
-
 		# we have to create our own set of icons for the menu
 		# using self.jabber_status_images is poopoo
 		iconset = gajim.config.get('iconset')
@@ -1504,12 +1502,13 @@ class RosterWindow:
 		new_message_menuitem.connect('activate',
 			self.on_new_message_menuitem_activate, account)
 
-		# Unsensitive some item if account is offline
+		# make some items insensitive if account is offline
 		if gajim.connections[account].connected < 2:
 			for widget in [set_motd_menuitem, update_motd_menuitem,
 			delete_motd_menuitem, service_discovery_menuitem, add_contact_menuitem,
 			join_group_chat_menuitem, new_message_menuitem]:
 				widget.set_sensitive(False)
+		
 		return account_context_menu
 
 	def make_account_menu(self, event, iter):
