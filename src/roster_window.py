@@ -628,6 +628,10 @@ class RosterWindow:
 		show_offline_contacts_menuitem = self.xml.get_widget(
 			'show_offline_contacts_menuitem')
 
+		# destroy old advanced menus
+		for m in self.advanced_menus:
+			m.destroy()
+
 		# make it sensitive. it is insensitive only if no accounts are *available*
 		advanced_menuitem.set_sensitive(True)
 
@@ -762,6 +766,7 @@ class RosterWindow:
 			advanced_menuitem.set_sensitive(False)
 		elif len(gajim.connections) == 1:
 			advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(account)
+			self.advanced_menus.append(advanced_menuitem_menu)
 		
 			self._add_history_manager_menuitem(advanced_menuitem_menu)
 
@@ -774,6 +779,7 @@ class RosterWindow:
 				advanced_sub_menu.append(advanced_item)
 				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
 					account)
+				self.advanced_menus.append(advanced_menuitem_menu)
 				advanced_item.set_submenu(advanced_menuitem_menu)
 			
 			self._add_history_manager_menuitem(advanced_sub_menu)
@@ -3174,6 +3180,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
 		self.window = self.xml.get_widget('roster_window')
 		gajim.interface.msg_win_mgr = MessageWindowMgr()
+		self.advanced_menus = [] # We keep them to destroy them
 		if gajim.config.get('roster_window_skip_taskbar'):
 			self.window.set_property('skip-taskbar-hint', True)
 		self.tree = self.xml.get_widget('roster_treeview')
