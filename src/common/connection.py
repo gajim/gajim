@@ -330,7 +330,7 @@ class Connection(ConnectionHandlers):
 				self.time_to_reconnect = None
 				self.on_connect_failure()
 			else:
-				# try to reconnect ( #1629 )
+				# try reconnect if connection has failed before auth to server
 				self._disconnectedReconnCB()
 
 	def _connect_failure(self, con_type = None):
