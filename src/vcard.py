@@ -217,7 +217,7 @@ class VcardWindow:
 					try:
 						pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 						# get the image at 'notification size'
-						# and use that hoping size is okay
+						# and use that user did not specify in ACE crazy size
 						scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
 							'notification')
 					except gobject.GError, msg: # unknown format

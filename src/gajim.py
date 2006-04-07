@@ -1543,7 +1543,7 @@ class Interface:
 		sys.path.remove(path)
 		del emots
 		if self.emoticons_menu:
-			gtkgui_helpers.destroy_widget(self.emoticons_menu)
+			self.emoticons_menu.destroy()
 		self.emoticons_menu = self.prepare_emoticons_menu()
 	
 	def register_handlers(self):

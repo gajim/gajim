@@ -602,19 +602,3 @@ def get_possible_button_event(event):
 		event_button = event.button
 
 	return event_button
-
-def destroy_widget(widget):
-	if not widget:
-		return
-	children = []
-	try:
-		children = widget.get_children()
-	except:
-		sys.exc_clear()
-	try:
-		widget.destroy()
-	except:
-		sys.exc_clear()
-	while children:
-		child = children.pop(0)
-		destroy_widget(child)
