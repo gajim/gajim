@@ -602,3 +602,6 @@ def get_possible_button_event(event):
 		event_button = event.button
 
 	return event_button
+
+def destroy_widget(widget):
+	widget.destroy()

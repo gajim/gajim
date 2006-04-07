@@ -631,7 +631,6 @@ class RosterWindow:
 		# make it sensitive. it is insensitive only if no accounts are *available*
 		advanced_menuitem.set_sensitive(True)
 
-
 		if self.add_new_contact_handler_id:
 			add_new_contact_menuitem.handler_disconnect(
 				self.add_new_contact_handler_id)
@@ -1312,6 +1311,9 @@ class RosterWindow:
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
+		roster_contact_context_menu.attach_to_widget(self.tree, None)
+		roster_contact_context_menu.connect('selection-done',
+			gtkgui_helpers.destroy_widget)
 		roster_contact_context_menu.popup(None, None, None, event_button,
 			event.time)
 		roster_contact_context_menu.show_all()
@@ -1343,6 +1345,8 @@ class RosterWindow:
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
+		menu.attach_to_widget(self.tree, None)
+		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
 		menu.popup(None, None, None, event_button, event.time)
 		menu.show_all()
 
@@ -1407,6 +1411,8 @@ class RosterWindow:
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
+		menu.attach_to_widget(self.tree, None)
+		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
 		menu.popup(None, None, None, event_button, event.time)
 		menu.show_all()
 
@@ -1536,6 +1542,8 @@ class RosterWindow:
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
+		menu.attach_to_widget(self.tree, None)
+		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
 		menu.popup(None, self.tree, None, event_button, event.time)
 		menu.show_all()
 
@@ -3110,6 +3118,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				c_dest, is_big_brother, context, etime)
 			menu.append(item)
 
+			menu.attach_to_widget(self.tree, None)
+			menu.connect('selection-done', gtkgui_helpers.destroy_widget)
 			menu.popup(None, None, None, 1, etime)
 			menu.show_all()
 
