@@ -104,26 +104,12 @@ class Connection(ConnectionHandlers):
 	def _reconnect(self):
 		# Do not try to reco while we are already trying
 		self.time_to_reconnect = None
-		gajim.log.debug('reconnect')
-		self.retrycount += 1
-		signed = self.get_signed_msg(self.status)
-		self.on_connect_auth = self._init_roster
-		self.connect_and_init(self.old_show, self.status, signed)
-
 		if self.connected < 2: #connection failed
-			if self.retrycount > 10:
-				self.connected = 0
-				self.dispatch('STATUS', 'offline')
-				self.dispatch('ERROR',
-				(_('Connection with account "%s" has been lost') % self.name,
-				_('To continue sending and receiving messages, you will need to reconnect.')))
-				self.retrycount = 0
-				return
-			if self.retrycount > 5:
-				self.time_to_reconnect = 20
-			else:
-				self.time_to_reconnect = 10
-			gajim.idlequeue.set_alarm(self._reconnect_alarm, self.time_to_reconnect)
+			gajim.log.debug('reconnect')
+			self.retrycount += 1
+			signed = self.get_signed_msg(self.status)
+			self.on_connect_auth = self._init_roster
+			self.connect_and_init(self.old_show, self.status, signed)
 		else:
 			# reconnect succeeded
 			self.time_to_reconnect = None
@@ -132,19 +118,31 @@ class Connection(ConnectionHandlers):
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
 		gajim.log.debug('disconnectedReconnCB')
-		if not self.connection:
-			return
-		self.old_show = STATUS_LIST[self.connected]
+		if self.connected > 1:
+			# we cannot change our status to offline or connectiong
+			# after we auth to server
+			self.old_show = STATUS_LIST[self.connected]
 		self.connected = 0
 		self.dispatch('STATUS', 'offline')
-		gajim.proxy65_manager.disconnect(self.connection)
-		self.connection = None
+		if self.connection:
+			# make sure previous connection is completely closed
+			gajim.proxy65_manager.disconnect(self.connection)
+			self.connection.disconnect()
+			self.connection = None
 		if not self.on_purpose:
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
 				self.connected = 1
 				self.dispatch('STATUS', 'connecting')
 				self.time_to_reconnect = 10
-				gajim.idlequeue.set_alarm(self._reconnect_alarm, 10)
+				# this check has moved from _reconnect method
+				if self.retrycount > 5:
+					self.time_to_reconnect = 20
+				else:
+					self.time_to_reconnect = 10
+				gajim.idlequeue.set_alarm(self._reconnect_alarm, 
+										self.time_to_reconnect)
+			elif self.on_connect_failure:
+				self.on_connect_failure()
 			else:
 				self.dispatch('ERROR',
 				(_('Connection with account "%s" has been lost') % self.name,
@@ -327,7 +325,13 @@ class Connection(ConnectionHandlers):
 				secure = self._secure)
 			return
 		else:
-			self.on_connect_failure()
+			if self.retrycount > 10:
+				self.retrycount = 0
+				self.time_to_reconnect = None
+				self.on_connect_failure()
+			else:
+				# try to reconnect ( #1663 )
+				self._disconnectedReconnCB()
 
 	def _connect_failure(self, con_type = None):
 		if not con_type:
@@ -340,12 +344,14 @@ class Connection(ConnectionHandlers):
 
 	def _connect_success(self, con, con_type):
 		if not self.connected: # We went offline during connecting process
-			return None, ''
+			# FIXME - not possible, maybe it was when we used threads
+			return
 		self.hosts = []
 		if not con_type:
 			gajim.log.debug('Could not connect to %s:%s' % (self._current_host['host'],
 				self._current_host['port']))
 		self.connected_hostname = self._current_host['host']
+		self.on_connect_failure = None
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 		gajim.log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
 			self._current_host['port'], con_type))
@@ -406,6 +412,7 @@ class Connection(ConnectionHandlers):
 		if kill_core:
 			if self.connected > 1:
 				self.connected = 0
+				gajim.proxy65_manager.disconnect(self.connection)
 				self.connection.disconnect()
 				self.time_to_reconnect = None
 			return
@@ -523,6 +530,9 @@ class Connection(ConnectionHandlers):
 			signed = self.get_signed_msg(msg)
 		self.status = msg
 		if show != 'offline' and not self.connected:
+			# set old_show to requested 'show' in case we need to
+			# recconect before we auth to server
+			self.old_show = show
 			self.connect_and_init(show, msg, signed)
 
 		elif show == 'offline' and self.connected:
@@ -743,6 +753,7 @@ class Connection(ConnectionHandlers):
 			self.dispatch('ACC_NOT_OK',
 				(_('Could not connect to "%s"') % self._hostname))
 			return
+		self.on_connect_failure = None
 		self.connection = con
 		common.xmpp.features_nb.getRegInfo(con, self._hostname)
 
