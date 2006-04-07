@@ -149,6 +149,19 @@ import config
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
+class MigrateCommand(nslookup.IdleCommand):
+	def __init__(self, on_result):
+		nslookup.IdleCommand.__init__(self, on_result)
+		self.commandtimeout = 10 
+	
+	def _compose_command_args(self):
+		return ['python', 'migrate_logs_to_dot9_db.py', 'dont_wait']
+	
+	def _return_result(self):
+		print self.result
+		if self.result_handler:
+			self.result_handler(self.result)
+		self.result_handler = None
 
 class GlibIdleQueue(idlequeue.IdleQueue):
 	''' 
@@ -1868,39 +1881,30 @@ if __name__ == '__main__':
 		
 		gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
 	
+	
 	# Migrate old logs if we have such olds logs
 	from common import logger
 	LOG_DB_PATH = logger.LOG_DB_PATH
 	if not os.path.exists(LOG_DB_PATH):
-		from common import migrate_logs_to_dot9_db
+		import migrate_logs_to_dot9_db
 		if os.path.isdir(migrate_logs_to_dot9_db.PATH_TO_LOGS_BASE_DIR):
 			import Queue
 			q = Queue.Queue(100)
-			m = migrate_logs_to_dot9_db.Migration()
 			dialog = dialogs.ProgressDialog(_('Migrating Logs...'),
 					_('Please wait while logs are being migrated...'), q)
-			t = threading.Thread(target = m.migrate, args = (q,))
-			t.start()
-			id = gobject.timeout_add(500, wait_migration, m)
-			# In 1 seconds, we test if migration began
-			gobject.timeout_add(1000, test_migration, m)
-			gtk.main()
-			if not m.DONE:
-				# stop test_migration handler
-				gobject.source_remove(id)
-				# destroy the migration window
+			def on_result(*arg):
 				dialog.dialog.destroy()
-				# Force GTK to really destroy the window
-				while gtk.events_pending():
-					gtk.main_iteration(False)
-				# We can't use a SQLite object in another thread than the one in
-				# which it was created, so create a new Migration instance
-				del m
-				m = migrate_logs_to_dot9_db.Migration()
-				m.migrate()
-			# Init logger values (self.con/cur, jid_already_in)
-			gajim.logger.init_vars()
-	check_paths.check_and_possibly_create_paths()
-
-	Interface()
-	gtk.main()
+				dialog.dialog = None
+				gobject.source_remove(dialog.update_progressbar_timeout_id)
+				gajim.logger.init_vars()
+				check_paths.check_and_possibly_create_paths()
+				Interface()
+			m = MigrateCommand(on_result)
+			m.set_idlequeue(GlibIdleQueue())
+			m.start()
+			gtk.main()
+	else:
+		check_paths.check_and_possibly_create_paths()
+		Interface()
+		gtk.main()
+	

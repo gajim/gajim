@@ -1481,52 +1481,26 @@ class ProgressDialog:
 		in the textview'''
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'progress_dialog', APP)
 		self.dialog = self.xml.get_widget('progress_dialog')
-		self.messages_queue = messages_queue
 		self.label = self.xml.get_widget('label')
 		self.label.set_markup('<big>' + during_text + '</big>')
 		self.progressbar = self.xml.get_widget('progressbar')
-		self.textview = self.xml.get_widget('textview')
-		self.textview_buffer = self.textview.get_buffer()
-		end_iter = self.textview_buffer.get_end_iter()
-		self.textview_buffer.create_mark('end', end_iter, False)
-		
 		self.dialog.set_title(title_text)
-		self.dialog.set_default_size(450, 500)
+		self.dialog.set_default_size(450, 250)
 		self.dialog.show_all()
 		self.xml.signal_autoconnect(self)
 		
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 					self.update_progressbar)
-		
-		self.read_from_queue_id = gobject.timeout_add(200,
-			self.read_from_queue_and_update_textview)
-	
-	def update_progressbar(self):
-		self.progressbar.pulse()
-		return True # loop forever
-	
-	def read_from_queue_and_update_textview(self):
-		while not self.messages_queue.empty():
-			message = self.messages_queue.get()
-			end_iter = self.textview_buffer.get_end_iter()
-			self.textview_buffer.insert(end_iter, message + '\n')
-			self.textview.scroll_to_mark(self.textview_buffer.get_mark('end'), 0,
-				True, 0, 1)
 
-		return True # loop for ever
-	
+	def update_progressbar(self):
+		if self.dialog:
+			self.progressbar.pulse()
+			return True # loop forever
+		return False
+
 	def on_progress_dialog_delete_event(self, widget, event):
 		return True # WM's X button or Escape key should not destroy the window
 
-	def done(self, done_text):
-		'''whatever we were doing is done (either we problems or not),
-		make close button sensitive and show the done_text in label'''
-		self.xml.get_widget('close_button').set_sensitive(True)
-		self.label.set_markup('<big>' + done_text + '</big>')
-		gobject.source_remove(self.update_progressbar_timeout_id)
-		gobject.source_remove(self.read_from_queue_id)
-		self.read_from_queue_and_update_textview()
-		self.progressbar.set_fraction(1)
 
 class SoundChooserDialog:
 	def __init__(self, path_to_snd_file = ''):

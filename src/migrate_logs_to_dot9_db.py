@@ -27,10 +27,15 @@ import sre
 import sys
 import time
 import signal
-import logger
-import i18n
+from common import logger
+from common import i18n
+
 _ = i18n._
-from helpers import from_one_line, decode_string
+try:
+	PREFERRED_ENCODING = sys.getpreferredencoding()
+except:
+	PREFERRED_ENCODING = 'utf-8'
+from common.helpers import from_one_line, decode_string
 
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
@@ -47,6 +52,8 @@ if os.name == 'nt':
 else:
 	PATH_TO_LOGS_BASE_DIR = os.path.expanduser('~/.gajim/logs')
 	PATH_TO_DB = os.path.expanduser('~/.gajim/logs.db') # database is called logs.db
+
+
 
 class Migration:
 	def __init__(self):
@@ -115,11 +122,11 @@ class Migration:
 				jid_type = self.constants.JID_NORMAL_TYPE
 				#Type of log
 				typ = _('normal')
-			s = _('Processing %s of type %s') % (jid.encode('utf-8'), typ)
+			s = _('Processing %s of type %s') % (jid, typ)
 			if self.queue:
-				self.queue.put(s)
+				self.queue.put(s.encode(PREFERRED_ENCODING))
 			else:
-				print s
+				print s.encode(PREFERRED_ENCODING)
 
 			JID_ID = None
 			f = open(path_to_text_file, 'r')
@@ -243,12 +250,14 @@ Thank you''' % (os.path.dirname(PATH_TO_LOGS_BASE_DIR), PATH_TO_LOGS_BASE_DIR)
 		self.DONE = True
 
 if __name__ == '__main__':
-	print 'IMPORTNANT: PLEASE READ http://trac.gajim.org/wiki/MigrateLogToDot9DB'
-	print 'Migration will start in 40 seconds unless you press Ctrl+C'
-	time.sleep(40) # give the user time to act
-	print
-	print 'Starting Logs Migration'
-	print '======================='
-	print 'Please do NOT run Gajim until this script is over'
+	# magic argumen 'dont_wait' tells us that script is run from Gajim
+	if len(sys.argv) < 2 or sys.argv[1] != 'dont_wait':
+		print 'IMPORTNANT: PLEASE READ http://trac.gajim.org/wiki/MigrateLogToDot9DB'
+		print 'Migration will start in 40 seconds unless you press Ctrl+C'
+		time.sleep(40) # give the user time to act
+		print
+		print 'Starting Logs Migration'
+		print '======================='
+		print 'Please do NOT run Gajim until this script is over'
 	m = Migration()
 	m.migrate()
