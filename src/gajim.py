@@ -1892,6 +1892,10 @@ if __name__ == '__main__':
 			q = Queue.Queue(100)
 			dialog = dialogs.ProgressDialog(_('Migrating Logs...'),
 					_('Please wait while logs are being migrated...'), q)
+			if os.name == 'nt' and gtk.pygtk_version > (2, 8, 0):
+				idlequeue = idlequeue.SelectIdleQueue()
+			else:
+				idlequeue = GlibIdleQueue()
 			def on_result(*arg):
 				dialog.dialog.destroy()
 				dialog.dialog = None
@@ -1900,7 +1904,7 @@ if __name__ == '__main__':
 				check_paths.check_and_possibly_create_paths()
 				Interface()
 			m = MigrateCommand(on_result)
-			m.set_idlequeue(GlibIdleQueue())
+			m.set_idlequeue(idlequeue)
 			m.start()
 			gtk.main()
 	else:
