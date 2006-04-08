@@ -203,7 +203,7 @@ def get_number_of_connected_accounts(accounts_list = None):
 	else:
 		accounts = accounts_list
 	for acct in accounts:
-		if gajim.connections[acct].connected > 1:
+		if connections[acct].connected > 1:
 			connected_accounts = connected_accounts + 1
 	return connected_accounts
 
