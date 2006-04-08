@@ -3,7 +3,7 @@ Gajim 0.10 (XX May 2006)
   * One Messages Window ability (default to it)
   * Non blocking socket connections. Gajim no longer remains unresponsive.
   * Gajim now uses less memory
-  * File Transfer improvements (now FT should work out of the box for all)
+  * File Transfer improvements (now should work out of the box for all)
   * Meta Contacts ability (relationships between contacts)
   * Support for legacy composing event (JEP-0022). Now 'Contact is composing a message' will always work
   * Gajim now defaults to theme that uses GTK colors
