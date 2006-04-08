@@ -13,7 +13,7 @@ Gajim 0.10 (XX May 2006)
   * Support for GTalk email notifications for GMail
   * Room administrators can modify room ban list
   * Gajim no longer optionally depends on pydns or dnspython. Requires
-  dnsutils (or whatever to have nslookup binary)
+  dnsutils (or whatever package provides the nslookup binary)
   * gajim-remote has extended functionality
   * Improved Preset Status Messages Experience
   * Detection for CRUX as user's operating system
