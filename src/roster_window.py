@@ -765,7 +765,8 @@ class RosterWindow:
 		if len(gajim.connections) == 0: # user has no accounts
 			advanced_menuitem.set_sensitive(False)
 		elif len(gajim.connections) == 1:
-			advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(account)
+			advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
+							gajim.connections.keys()[0])
 			self.advanced_menus.append(advanced_menuitem_menu)
 		
 			self._add_history_manager_menuitem(advanced_menuitem_menu)
