@@ -248,42 +248,59 @@ class Systray:
 		state_images = gajim.interface.roster.load_iconset(path)
 		
 		groups_menu = gtk.Menu()
-		
-		groups_list = gajim.groups[account].keys()
-		groups_list.sort()
-		for group in groups_list:
-			if group == _('Transports'):
-				continue
-			# at least one 'not offline' or 'without errors' in this group
-			at_least_one = False
-			item = gtk.MenuItem(group)
-			contacts_menu = gtk.Menu()
-			self.popup_menus.append(contacts_menu)
-			item.set_submenu(contacts_menu)
-			for jid in gajim.contacts.get_jid_list(account):
-				contact = gajim.contacts.get_contact_with_highest_priority(account,
-					jid)
+		sort_by_show = gajim.config.get('sort_by_show')
+		# store contact infos in a table so we can easily sort by group, status and name
+		# if we sort_by_show : contacts_table = [group, status, name]
+		# else : contacts_table = [group,  name, status]
+		contacts_table = []
+		for jid in gajim.contacts.get_jid_list(account):
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+			if contact.show != 'offline' and contact.show != 'error':
 				if contact.groups == []: #user has no group, print him in General
-					contact_groups = _('General')
+					contact_groups = [_('General')]
 				else:
 					contact_groups = contact.groups
-				if group in contact_groups and contact.show != 'offline' and \
-						contact.show != 'error':
-					at_least_one = True
-					s = gtkgui_helpers.escape_underscore(contact.get_shown_name())
-					item_contact = gtk.ImageMenuItem(s)
-					# any given gtk widget can only be used in one place
-					# (here we use it in status menu too)
-					# gtk.Image is a widget, it's better we refactor to use gdk.gdk.Pixbuf allover
-					img = state_images[contact.show]
-					img_copy = gobject.new(gtk.Image, pixbuf=img.get_pixbuf())
-					item_contact.set_image(img_copy)
-					item_contact.connect('activate', self.start_chat, account,
-							contact.jid)
-					contacts_menu.append(item_contact)
-			
-			if at_least_one:
+				for group in contact_groups: # the user can be in mutiple groups, see in all of them	
+					if group == _('Transports'):
+						continue
+					if sort_by_show: # see comment about contacts_table above
+						contacts_table.append ([group, gajim.SHOW_LIST.index(contact.show),
+							contact.get_shown_name()])
+					else:
+						contacts_table.append ([group, contact.get_shown_name(), 
+							gajim.SHOW_LIST.index(contact.show)])
+		
+		contacts_table.sort() # Sort : first column before, last column in the end
+		
+		previous_group = ''
+		for contact_item in contacts_table:
+			if sort_by_show: # see comment about contacts_table above
+				contact_name = contact_item[2]
+				contact_show = gajim.SHOW_LIST[contact_item[1]]
+			else:
+				contact_name = contact_item[1]
+				contact_show = gajim.SHOW_LIST[contact_item[2]]
+			if contact_item[0] != previous_group: #It's a new group, add the submenu
+				item = gtk.MenuItem(contact_item[0])
+				contacts_menu = gtk.Menu()
+				self.popup_menus.append(contacts_menu) 
+				item.set_submenu(contacts_menu)
 				groups_menu.append(item)
+				previous_group = contact_item[0]
+			# add contact in group submenu
+			s = gtkgui_helpers.escape_underscore(contact_name)
+			item_contact = gtk.ImageMenuItem(s)
+			# any given gtk widget can only be used in one place
+			# (here we use it in status menu too)
+			# gtk.Image is a widget, it's better we refactor to use gdk.gdk.Pixbuf allover
+			img = state_images[contact_show]
+			img_copy = gobject.new(gtk.Image, pixbuf=img.get_pixbuf())
+			item_contact.set_image(img_copy)
+			item_contact.connect('activate', self.start_chat, account,
+					contact.jid)
+			contacts_menu.append(item_contact)
+			
 		return groups_menu
 
 	def on_left_click(self):
