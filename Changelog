@@ -12,7 +12,8 @@ Gajim 0.10 (XX May 2006)
   * Animated Emoticons ability
   * Support for GTalk email notifications for GMail
   * Room administrators can modify room ban list
-  * Gajim no longer optionally depends on pydns or dnspython. Requires dnsutils
+  * Gajim no longer optionally depends on pydns or dnspython. Requires
+  dnsutils (or whatever to have nslookup binary)
   * gajim-remote has extended functionality
   * Improved Preset Status Messages Experience
   * Detection for CRUX as user's operating system
