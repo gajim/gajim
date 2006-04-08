@@ -1829,28 +1829,6 @@ class Interface:
 		gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add(500, self.read_sleepy)
 
-def test_migration(migration):
-	if not migration.PROCESSING:
-		dialog = gtk.Dialog()
-		dialog = gtk.MessageDialog(None,
-			gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-			gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
-				message_format = _('GUI Migration failed'))
-
-		dialog.format_secondary_text(
-		_('Logs migration through graphical interface failed. The migration process will start in the background. Please wait a few minutes for Gajim to start.'))
-		dialog.run()
-		dialog.destroy()
-		gtk.main_quit()
-
-def wait_migration(migration):
-	if not migration.DONE:
-		return True # loop for ever
-	dialog.done(_('Logs have been successfully migrated to the database.'))
-	dialog.dialog.run()
-	dialog.dialog.destroy()
-	gtk.main_quit()
-
 if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
