@@ -30,7 +30,7 @@ class SASL(PlugIn):
 		self.username=username
 		self.password=password
 		self.on_sasl = on_sasl
-
+		self.realm = None
 	def plugin(self,owner):
 		if not self._owner.Dispatcher.Stream._document_attrs.has_key('version'): 
 			self.startsasl='not-supported'
@@ -121,25 +121,32 @@ class SASL(PlugIn):
 		for pair in data.split(','):
 			key, value = pair.split('=', 1)
 			if value[:1] == '"' and value[-1:] == '"': 
-				value=value[1:-1]
-			chal[key]=value
+				value = value[1:-1]
+			chal[key] = value
+		if not self.realm and chal.has_key('realm'):
+			self.realm = chal['realm']
 		if chal.has_key('qop') and chal['qop']=='auth':
 			resp={}
-			resp['username']=self.username
-			resp['realm']=self._owner.Server
+			resp['username'] = self.username
+			if self.realm:
+				resp['realm'] = self.realm
+			else:
+				resp['realm'] = self._owner.Server
 			resp['nonce']=chal['nonce']
 			cnonce=''
 			for i in range(7):
-				cnonce+=hex(int(random.random()*65536*4096))[2:]
-			resp['cnonce']=cnonce
-			resp['nc']=('00000001')
-			resp['qop']='auth'
-			resp['digest-uri']='xmpp/'+self._owner.Server
-			A1=C([H(C([resp['username'], resp['realm'], self.password])), resp['nonce'], resp['cnonce']])
+				cnonce += hex(int(random.random() * 65536 * 4096))[2:]
+			resp['cnonce'] = cnonce
+			resp['nc'] = ('00000001')
+			resp['qop'] = 'auth'
+			resp['digest-uri'] = 'xmpp/'+self._owner.Server
+			A1=C([H(C([resp['username'], resp['realm'], self.password])), 
+						resp['nonce'], resp['cnonce']])
 			A2=C(['AUTHENTICATE',resp['digest-uri']])
-			response= HH(C([HH(A1),resp['nonce'],resp['nc'],resp['cnonce'],resp['qop'],HH(A2)]))
-			resp['response']=response
-			resp['charset']='utf-8'
+			response= HH(C([HH(A1), resp['nonce'], resp['nc'], resp['cnonce'],
+						resp['qop'], HH(A2)]))
+			resp['response'] = response
+			resp['charset'] = 'utf-8'
 			sasl_data=''
 			for key in ['charset', 'username', 'realm', 'nonce', 'nc', 'cnonce', 'digest-uri', 'response', 'qop']:
 				if key in ['nc','qop','response','charset']: 
