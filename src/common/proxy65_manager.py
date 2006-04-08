@@ -210,9 +210,6 @@ class HostTester(Socks5, IdleObject):
 		elif self.state == 1: # send initially: version and auth types
 			data = self._get_auth_buff()
 			self.send_raw(data)
-		elif self.state == 3: # send 'connect' request
-			data = self._get_request_buff(self._get_sha1_auth())
-			self.send_raw(data)
 		else:
 			return
 		self.state += 1
@@ -222,49 +219,24 @@ class HostTester(Socks5, IdleObject):
 	
 	def pollin(self):
 		self.idlequeue.remove_timeout(self.fd)
-		if self.state > 1:
+		if self.state == 2:
 			self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
-			result = self.main(0)
-		else:
-			self.disconnect()
-	
-	def main(self, timeout = 0):
-		''' begin negotiation. on success 'address' != 0 '''
-		result = 1
-		buff = self.receive()
-		if buff == '':
-			# end connection
-			self.pollend()
-			return
-		
-		if self.state == 2: # read auth response
+			# begin negotiation. on success 'address' != 0 
+			buff = self.receive()
+			if buff == '':
+				# end connection
+				self.pollend()
+				return
+			# read auth response
 			if buff is None or len(buff) != 2:
 				return None
 			version, method = struct.unpack('!BB', buff[:2])
 			if version != 0x05 or method == 0xff:
 				self.pollend()
-			self.state = 3
-			gajim.idlequeue.plug_idle(self, True, False)
-		
-		elif self.state == 4: # get approve of our request
-			if buff == None:
-				return None
-			sub_buff = buff[:4]
-			if len(sub_buff) < 4:
-				return None
-			version, command, rsvd, address_type = struct.unpack('!BBBB', buff[:4])
-			addrlen, address, port = 0, 0, 0
-			if address_type == 0x03:
-				addrlen = ord(buff[4])
-				address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5])
-				portlen = len(buff[addrlen + 5:])
-				if portlen == 1: 
-					port, = struct.unpack('!B', buff[addrlen + 5])
-				elif portlen > 2:
-					port, = struct.unpack('!H', buff[addrlen + 5:])
 			self.disconnect()
 			self.on_success()
-		
+		else:
+			self.disconnect()
 	
 	def do_connect(self):
 		try:
