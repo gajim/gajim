@@ -609,7 +609,7 @@ class HigDialog(gtk.MessageDialog):
 					if not possible_responses[response]:
 						b.connect('clicked', self.just_destroy)
 					elif isinstance(possible_responses[response], tuple):
-						if len(possible_response[response]) == 1:
+						if len(possible_responses[response]) == 1:
 							b.connect('clicked', possible_responses[response][0])
 						else:
 							b.connect('clicked', *possible_responses[response])
