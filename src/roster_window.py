@@ -674,7 +674,8 @@ class RosterWindow:
 			new_message_sub_menu = gtk.Menu()
 
 			for account in gajim.connections:
-				if gajim.connections[account].connected <= 1: # if offline or connecting
+				if gajim.connections[account].connected <= 1:
+					# if offline or connecting
 					continue
 				
 				# join gc
@@ -688,7 +689,8 @@ class RosterWindow:
 				
 				self._add_bookmarks_list(gc_sub_menu, account)
 
-				# the 'manage gc bookmarks' item is printed below to avoid duplicate code
+				# the 'manage gc bookmarks' item is showed
+				# below to avoid duplicate code
 
 				# add
 				add_item = gtk.MenuItem(_('to %s account') % account, False)
@@ -700,15 +702,17 @@ class RosterWindow:
 				# disco
 				disco_item = gtk.MenuItem(_('using %s account') % account, False)
 				disco_sub_menu.append(disco_item)
-				disco_item.connect('activate', self.on_service_disco_menuitem_activate,	account)
+				disco_item.connect('activate',
+					self.on_service_disco_menuitem_activate, account)
 				service_disco_menuitem.set_submenu(disco_sub_menu)
 				disco_sub_menu.show_all()
 
 				# new message
-				new_message_item = gtk.MenuItem(_('using account %s') % account, False)
+				new_message_item = gtk.MenuItem(_('using account %s') % account,
+					False)
 				new_message_sub_menu.append(new_message_item)
-				new_message_item.connect('activate', self.on_new_message_menuitem_activate,
-									account)
+				new_message_item.connect('activate',
+					self.on_new_message_menuitem_activate,	account)
 				new_message_menuitem.set_submenu(new_message_sub_menu)
 				new_message_sub_menu.show_all()
 
@@ -719,7 +723,8 @@ class RosterWindow:
 					self._add_bookmarks_list(gc_sub_menu, account)
 					# add
 					if not self.add_new_contact_handler_id:
-						self.add_new_contact_handler_id = add_new_contact_menuitem.connect(
+						self.add_new_contact_handler_id =\
+							add_new_contact_menuitem.connect(
 							'activate', self.on_add_new_contact, account)
 					# disco
 					if not self.service_disco_handler_id:
@@ -728,7 +733,8 @@ class RosterWindow:
 					# new msg
 					if not self.new_message_menuitem_handler_id:
 						self.new_message_menuitem_handler_id = new_message_menuitem.\
-							connect('activate', self.on_new_message_menuitem_activate, account)
+							connect('activate', self.on_new_message_menuitem_activate,
+							account)
 					# new msg accel
 					if not self.have_new_message_accel:
 						ag = gtk.accel_groups_from_object(self.window)[0]
@@ -738,7 +744,8 @@ class RosterWindow:
 
 					break # No other account connected
 		
-		if connected_accounts == 0: # no connected accounts, make the menuitems insensitive
+		if connected_accounts == 0:
+			# no connected accounts, make the menuitems insensitive
 			new_message_menuitem.set_sensitive(False)
 			join_gc_menuitem.set_sensitive(False)
 			add_new_contact_menuitem.set_sensitive(False)
@@ -749,7 +756,7 @@ class RosterWindow:
 			add_new_contact_menuitem.set_sensitive(True)
 			service_disco_menuitem.set_sensitive(True)
 			
-			# print the 'manage gc bookmarks' item
+			# show the 'manage gc bookmarks' item
 			newitem = gtk.SeparatorMenuItem() # separator
 			gc_sub_menu.append(newitem)
 
@@ -761,12 +768,13 @@ class RosterWindow:
 			gc_sub_menu.append(newitem)
 			gc_sub_menu.show_all()
 			
-		#Advanced Actions
+		# Advanced Actions
 		if len(gajim.connections) == 0: # user has no accounts
 			advanced_menuitem.set_sensitive(False)
-		elif len(gajim.connections) == 1:
+		elif len(gajim.connections) == 1: # we have one acccount
+			account = gajim.connections.keys()[0]
 			advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
-							gajim.connections.keys()[0])
+				account)
 			self.advanced_menus.append(advanced_menuitem_menu)
 		
 			self._add_history_manager_menuitem(advanced_menuitem_menu)
