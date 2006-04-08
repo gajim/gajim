@@ -532,7 +532,11 @@ class RosterWindow:
 
 	def on_actions_menuitem_activate(self, widget):
 		self.make_menu()
-
+	
+	def on_edit_menuitem_activate(self, widget):
+		'''need 'Profile, Avatar' menuitem/submenu'''
+		self.make_menu()
+		
 	def on_bookmark_menuitem_activate(self, widget, account, bookmark):
 		self.join_gc_room(account, bookmark['jid'], bookmark['nick'],
 			bookmark['password'])
@@ -627,6 +631,7 @@ class RosterWindow:
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
 		show_offline_contacts_menuitem = self.xml.get_widget(
 			'show_offline_contacts_menuitem')
+		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')	
 
 		# destroy old advanced menus
 		for m in self.advanced_menus:
@@ -650,12 +655,19 @@ class RosterWindow:
 				self.new_message_menuitem_handler_id)
 			self.new_message_menuitem_handler_id = None
 
+		if self.profile_avatar_menuitem_handler_id:
+			profile_avatar_menuitem.handler_disconnect(
+				self.profile_avatar_menuitem_handler_id)
+			self.profile_avatar_menuitem_handler_id = None
+
+
 		# remove the existing submenus
 		add_new_contact_menuitem.remove_submenu()
 		service_disco_menuitem.remove_submenu()
 		join_gc_menuitem.remove_submenu()
 		new_message_menuitem.remove_submenu()
 		advanced_menuitem.remove_submenu()
+		profile_avatar_menuitem.remove_submenu()
 
 		# remove the existing accelerator
 		if self.have_new_message_accel:
@@ -672,7 +684,8 @@ class RosterWindow:
 			add_sub_menu = gtk.Menu()
 			disco_sub_menu = gtk.Menu()
 			new_message_sub_menu = gtk.Menu()
-
+			profile_avatar_sub_menu = gtk.Menu()
+			
 			for account in gajim.connections:
 				if gajim.connections[account].connected <= 1:
 					# if offline or connecting
@@ -715,6 +728,15 @@ class RosterWindow:
 					self.on_new_message_menuitem_activate,	account)
 				new_message_menuitem.set_submenu(new_message_sub_menu)
 				new_message_sub_menu.show_all()
+				
+				# profile, avatar
+				profile_avatar_item = gtk.MenuItem(_('of account %s') % account, 
+					 False)
+				profile_avatar_sub_menu.append(profile_avatar_item)
+				profile_avatar_item.connect('activate', 
+					self.on_profile_avatar_menuitem_activate, account)
+				profile_avatar_menuitem.set_submenu(profile_avatar_sub_menu)
+				profile_avatar_sub_menu.show_all()
 
 		elif connected_accounts == 1: # user has only one account
 			for account in gajim.connections:
@@ -741,6 +763,12 @@ class RosterWindow:
 						new_message_menuitem.add_accelerator('activate', ag,
 							gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 						self.have_new_message_accel = True
+					
+					# profile, avatar
+					if not self.profile_avatar_menuitem_handler_id:
+						self.profile_avatar_menuitem_handler_id = \
+						profile_avatar_menuitem.connect('activate', self.\
+						on_profile_avatar_menuitem_activate, account)
 
 					break # No other account connected
 		
@@ -750,12 +778,13 @@ class RosterWindow:
 			join_gc_menuitem.set_sensitive(False)
 			add_new_contact_menuitem.set_sensitive(False)
 			service_disco_menuitem.set_sensitive(False)
+			profile_avatar_menuitem.set_sensitive(False)
 		else: # we have one or more connected accounts
 			new_message_menuitem.set_sensitive(True)
 			join_gc_menuitem.set_sensitive(True)
 			add_new_contact_menuitem.set_sensitive(True)
 			service_disco_menuitem.set_sensitive(True)
-			
+			profile_avatar_menuitem.set_sensitive(True)
 			# show the 'manage gc bookmarks' item
 			newitem = gtk.SeparatorMenuItem() # separator
 			gc_sub_menu.append(newitem)
@@ -2239,6 +2268,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def on_manage_bookmarks_menuitem_activate(self, widget):
 		config.ManageBookmarksWindow()
+		
+	def on_profile_avatar_menuitem_activate(self, widget, account):
+		gajim.interface.edit_own_details(account)
 
 	def close_all(self, dic):
 		'''close all the windows in the given dictionary'''
@@ -3208,6 +3240,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.add_new_contact_handler_id = False
 		self.service_disco_handler_id = False
 		self.new_message_menuitem_handler_id = False
+		self.profile_avatar_menuitem_handler_id = False
 		self.actions_menu_needs_rebuild = True
 		self.regroup = gajim.config.get('mergeaccounts')
 		if len(gajim.connections) < 2: # Do not merge accounts if only one exists

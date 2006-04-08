@@ -307,14 +307,17 @@ class Interface:
 
 		self.roster.on_status_changed(account, status)
 		if account in self.show_vcard_when_connect:
-			jid = gajim.get_jid_from_account(account)
-			if not self.instances[account]['infos'].has_key(jid):
-				self.instances[account]['infos'][jid] = \
-					vcard.VcardWindow(jid, account, True)
-				gajim.connections[account].request_vcard(jid)
+			self.edit_own_details(account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('AccountPresence', (status, account))
 	
+	def edit_own_details(self, account):
+		jid = gajim.get_jid_from_account(account)
+		if not self.instances[account]['infos'].has_key(jid):
+			self.instances[account]['infos'][jid] = \
+				vcard.VcardWindow(jid, account, True)
+			gajim.connections[account].request_vcard(jid)
+
 	def handle_event_notify(self, account, array):
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
 		# keyID, timestamp))
