@@ -155,7 +155,7 @@ class Systray:
 		item.set_image(img)
 		sub_menu.append(item)
 		item.connect('activate', self.on_change_status_message_activate)
-		connected_accounts = helpers.connected_accounts()
+		connected_accounts = gajim.get_number_of_connected_accounts()
 		if connected_accounts < 1:
 			item.set_sensitive(False)
 

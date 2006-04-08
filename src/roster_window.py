@@ -667,7 +667,7 @@ class RosterWindow:
 		gc_sub_menu = gtk.Menu() # gc is always a submenu
 		join_gc_menuitem.set_submenu(gc_sub_menu)
 		
-		connected_accounts = helpers.connected_accounts()
+		connected_accounts = gajim.get_number_of_connected_accounts()
 		if connected_accounts > 1: # 2 or more accounts? make submenus
 			add_sub_menu = gtk.Menu()
 			disco_sub_menu = gtk.Menu()
@@ -1969,7 +1969,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		for acct in accounts:
 			if gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
 				global_sync_accounts.append(acct)
-		global_sync_connected_accounts = helpers.connected_accounts(
+		global_sync_connected_accounts = gajim.get_number_of_connected_accounts(
 			global_sync_accounts)
 		for acct in accounts:
 			if not gajim.config.get_per('accounts', acct, 'sync_with_global_status'):

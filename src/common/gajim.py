@@ -190,7 +190,22 @@ def get_resource_from_jid(jid):
 '''
 
 def get_number_of_accounts():
+	'''returns the number of ALL accounts'''
 	return len(connections.keys())
+
+def get_number_of_connected_accounts(accounts_list = None):
+	'''returns the number of CONNECTED accounts
+	you can optionally pass an accounts_list
+	and if you do those will be checked, else all will be checked'''
+	connected_accounts = 0
+	if accounts_list is None:
+		accounts = connections.keys()
+	else:
+		accounts = accounts_list
+	for acct in accounts:
+		if gajim.connections[acct].connected > 1:
+			connected_accounts = connected_accounts + 1
+	return connected_accounts
 
 def get_transport_name_from_jid(jid, use_config_setting = True):
 	'''returns 'aim', 'gg', 'irc' etc
