@@ -20,6 +20,7 @@ emoticons = {
 	':(': 'unhappy.png',
 	':)': 'smile.png',
 	':/': 'frowning.png',
+	':-/': 'frowning.png',
 	'(})': 'hugleft.png',
 	':$': 'blush.png',
 	'(Y)': 'yes.png',
