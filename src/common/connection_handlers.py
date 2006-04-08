@@ -208,6 +208,9 @@ class ConnectionBytestream:
 
 	def send_file_rejection(self, file_props):
 		''' informs sender that we refuse to download the file '''
+		# user response to ConfirmationDialog may come after we've disconneted
+		if not self.connection or self.connected < 2:
+			return
 		iq = common.xmpp.Protocol(name = 'iq',
 			to = unicode(file_props['sender']), typ = 'error')
 		iq.setAttr('id', file_props['request-id'])
@@ -218,6 +221,9 @@ class ConnectionBytestream:
 
 	def send_file_approval(self, file_props):
 		''' send iq, confirming that we want to download the file '''
+		# user response to ConfirmationDialog may come after we've disconneted
+		if not self.connection or self.connected < 2:
+			return
 		iq = common.xmpp.Protocol(name = 'iq',
 			to = unicode(file_props['sender']), typ = 'result')
 		iq.setAttr('id', file_props['request-id'])
