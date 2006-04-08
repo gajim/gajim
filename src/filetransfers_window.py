@@ -374,10 +374,10 @@ _('Connection with peer cannot be established.'))
 			self.dialog.destroy()
 			gajim.connections[account].send_file_rejection(file_props)
 
-		self.dialog = dialogs.ConfirmationDialog(prim_text, sec_text,
+		self.dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
 			on_response_ok = (on_response_ok, account, contact, file_props),
 			on_response_cancel = (on_response_cancel, account, file_props))
-		self.dialog.run()
+		self.dialog.popup()
 
 	def set_images(self):
 		''' create pixbufs for status images in transfer rows'''
