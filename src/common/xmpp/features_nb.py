@@ -33,7 +33,7 @@ def _discover(disp, ns, jid, node = None, fb2b=0, fb2a=1, cb=None):
 		(if gb2a is true). Returns obtained info. Used internally. """
 	iq=Iq(to=jid, typ='get', queryNS=ns)
 	if node: 
-		iq.setAttr('node',node)
+		iq.setQuerynode(node)
 	def _on_resp1(resp):
 		if fb2b and not isResultNode(resp): 
 			# Fallback to browse
