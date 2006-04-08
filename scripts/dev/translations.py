@@ -37,6 +37,8 @@ def show_help():
 def update_pot():
 	# create header for glade strings
 	os.system('intltool-extract --type=gettext/glade ../../src/gtkgui.glade')
+	os.system('intltool-extract --type=gettext/glade ../../src/'
+		'history_manager.glade')
 	# update the pot
 	os.system('make -C ../../po/ all gajim.pot')
 	print 'gajim.pot was updated successfully'
