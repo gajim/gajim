@@ -224,9 +224,10 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			if errnum != socket.SSL_ERROR_EOF: 
 				# 8 EOF occurred in violation of protocol
 				self.DEBUG('Socket error while receiving data', 'error')
-				# TODO: change with on_connect_failure,  needs some 
-				# changes in connection.py in order to work properly
-				self.pollend()
+				self.disconnect()
+				if self.on_connect_failure:
+					self.on_connect_failure(True)
+				self.on_connect_failure = None
 			if self.state >= 0:
 				self.disconnect()
 			return

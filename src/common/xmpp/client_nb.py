@@ -118,11 +118,11 @@ class NBCommonClient(CommonClient):
 		self.on_stream_start = on_stream_start
 		self.onreceive(self._on_receive_document_attrs)
 
-	def _on_connected_failure(self): 
+	def _on_connected_failure(self, retry = None): 
 		if self.socket:
 			self.socket.disconnect()
 		if self.on_connect_failure:
-			self.on_connect_failure()
+			self.on_connect_failure(retry)
 
 	def _on_connected(self):
 		self.connected = 'tcp'

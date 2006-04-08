@@ -300,7 +300,7 @@ class Connection(ConnectionHandlers):
 			self._hosts = [i for i in result_array]
 		self.connect_to_next_host()
 
-	def connect_to_next_host(self):
+	def connect_to_next_host(self, retry = False):
 		if len(self._hosts):
 			if self.last_connection:
 				self.last_connection.socket.disconnect()
@@ -325,7 +325,7 @@ class Connection(ConnectionHandlers):
 				secure = self._secure)
 			return
 		else:
-			if self.retrycount > 10:
+			if not retry or self.retrycount > 10:
 				self.retrycount = 0
 				self.time_to_reconnect = None
 				self.on_connect_failure()
