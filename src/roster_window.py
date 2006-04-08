@@ -534,7 +534,7 @@ class RosterWindow:
 		self.make_menu()
 	
 	def on_edit_menuitem_activate(self, widget):
-		'''need 'Profile, Avatar' menuitem/submenu'''
+		'''need to call make_menu to build profile, avatar item'''
 		self.make_menu()
 		
 	def on_bookmark_menuitem_activate(self, widget, account, bookmark):
