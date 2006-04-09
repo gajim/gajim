@@ -267,25 +267,27 @@ class Systray:
 		
 		groups_menu = gtk.Menu()
 		sort_by_show = gajim.config.get('sort_by_show')
-		# store contact infos in a table so we can easily sort by group, status and name
+		# store contact infos in a table so we can easily sort by group,
+		# status and name
 		# if we sort_by_show : contacts_table = [group, status, name]
 		# else : contacts_table = [group,  name, status]
 		contacts_table = []
-		show_list = []
-		for show in gajim.SHOW_LIST: # copy gajim.SHOW_LIST in show_list
-	   		show_list.append(show)
-		show_list.append('not in roster') # not in roster is not in this list but we need it
+		show_list = list(gajim.SHOW_LIST) # copy gajim.SHOW_LIST in show_list
+		# not in roster is not in this list but we need it
+		show_list.append('not in roster')
 		for jid in gajim.contacts.get_jid_list(account):
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
 			if contact.show not in ('offline', 'error'):
-				if contact.show == 'not in roster': # print user in not in roster group
+				if contact.show == 'not in roster':
+					# show user in not in roster group
 					contact_groups = [_('Not in Roster')]
 				elif contact.groups == []: # user has no group, print him in General
 					contact_groups = [_('General')]
 				else:
 					contact_groups = contact.groups
-				for group in contact_groups: # the user can be in mutiple groups, see in all of them	
+				for group in contact_groups:
+					# the user can be in mutiple groups, see in all of them	
 					if group == _('Transports'):
 						continue
 					if sort_by_show: # see comment about contacts_table above
@@ -305,7 +307,8 @@ class Systray:
 			else:
 				contact_name = contact_item[1]
 				contact_show = show_list[contact_item[2]]
-			if contact_item[0] != previous_group: #It's a new group, add the submenu
+			if contact_item[0] != previous_group:
+				# It's a new group, add the submenu
 				item = gtk.MenuItem(contact_item[0])
 				contacts_menu = gtk.Menu()
 				self.popup_menus.append(contacts_menu) 
@@ -317,7 +320,8 @@ class Systray:
 			item_contact = gtk.ImageMenuItem(s)
 			# any given gtk widget can only be used in one place
 			# (here we use it in status menu too)
-			# gtk.Image is a widget, it's better we refactor to use gdk.gdk.Pixbuf allover
+			# gtk.Image is a widget, it's better we refactor to use
+			# gdk.gdk.Pixbuf allover
 			img = state_images[contact_show]
 			img_copy = gobject.new(gtk.Image, pixbuf=img.get_pixbuf())
 			item_contact.set_image(img_copy)
