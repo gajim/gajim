@@ -121,6 +121,7 @@ class Systray:
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
 		single_message_menuitem = self.xml.get_widget('single_message_menuitem')
 		status_menuitem = self.xml.get_widget('status_menu')
+		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		
 		if self.single_message_handler_id:
 			single_message_menuitem.handler_disconnect(
@@ -130,6 +131,9 @@ class Systray:
 		sub_menu = gtk.Menu()
 		self.popup_menus.append(sub_menu)
 		status_menuitem.set_submenu(sub_menu)
+		
+		gc_sub_menu = gtk.Menu() # gc is always a submenu
+		join_gc_menuitem.set_submenu(gc_sub_menu)
 
 		# We need our own set of status icons, let's make 'em!
 		iconset = gajim.config.get('iconset')
@@ -168,9 +172,10 @@ class Systray:
 		sub_menu.append(item)
 		item.connect('activate', self.on_show_menuitem_activate, 'offline')
 
-		iskey = len(gajim.connections) > 0
+		iskey = connected_accounts > 0
 		chat_with_menuitem.set_sensitive(iskey)
 		single_message_menuitem.set_sensitive(iskey)
+		join_gc_menuitem.set_sensitive(iskey)
 		
 		if connected_accounts >= 2: # 2 or more connections? make submenus
 			account_menu_for_chat_with = gtk.Menu()
@@ -191,11 +196,21 @@ class Systray:
 					group_menu = self.make_groups_submenus_for_chat_with(account)
 					self.popup_menus.append(group_menu)
 					item.set_submenu(group_menu)
+
 					#for single message
 					item = gtk.MenuItem(_('using account %s') % account)
 					item.connect('activate',
 						self.on_single_message_menuitem_activate, account)
 					account_menu_for_single_message.append(item)
+
+					# join gc 
+					label = gtk.Label()
+					label.set_markup('<u>' + account.upper() +'</u>')
+					label.set_use_underline(False)
+					gc_item = gtk.MenuItem()
+					gc_item.add(label)
+					gc_sub_menu.append(gc_item)
+					gajim.interface.roster.add_bookmarks_list(gc_sub_menu, account)
 				
 		elif connected_accounts == 1: # one account
 			# one account connected, no need to show 'as jid'
@@ -211,6 +226,9 @@ class Systray:
 					self.single_message_handler_id = single_message_menuitem.connect(
 						'activate', self.on_single_message_menuitem_activate, account)
 
+					# join gc
+					gajim.interface.roster.add_bookmarks_list(gc_sub_menu, account)
+			
 		if event is None:
 			# None means windows (we explicitly popup in systraywin32.py)
 			if self.added_hide_menuitem is False:

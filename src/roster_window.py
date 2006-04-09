@@ -700,7 +700,7 @@ class RosterWindow:
 				gc_item.connect('state-changed', self.on_bm_header_changed_state)
 				gc_sub_menu.append(gc_item)
 				
-				self._add_bookmarks_list(gc_sub_menu, account)
+				self.add_bookmarks_list(gc_sub_menu, account)
 
 				# the 'manage gc bookmarks' item is showed
 				# below to avoid duplicate code
@@ -742,7 +742,7 @@ class RosterWindow:
 			for account in gajim.connections:
 				if gajim.connections[account].connected > 1: # THE connected account
 					# gc
-					self._add_bookmarks_list(gc_sub_menu, account)
+					self.add_bookmarks_list(gc_sub_menu, account)
 					# add
 					if not self.add_new_contact_handler_id:
 						self.add_new_contact_handler_id =\
@@ -841,7 +841,7 @@ class RosterWindow:
 		menu.append(item)
 		item.connect('activate', self.on_history_manager_menuitem_activate)
 		
-	def _add_bookmarks_list(self, gc_sub_menu, account):
+	def add_bookmarks_list(self, gc_sub_menu, account):
 		'''Print join new room item and bookmarks list for an account'''
 		item = gtk.MenuItem(_('_Join New Room'))
 		item.connect('activate', self.on_join_gc_activate, account)
@@ -1547,7 +1547,7 @@ class RosterWindow:
 		
 		gc_sub_menu = gtk.Menu() # gc is always a submenu
 		join_group_chat_menuitem.set_submenu(gc_sub_menu)
-		self._add_bookmarks_list(gc_sub_menu, account)
+		self.add_bookmarks_list(gc_sub_menu, account)
 		new_message_menuitem.connect('activate',
 			self.on_new_message_menuitem_activate, account)
 

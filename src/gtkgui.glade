@@ -10837,6 +10837,26 @@ Custom</property>
       </child>
     </widget>
   </child>
+  
+  <child>
+	 <widget class="GtkImageMenuItem" id="join_gc_menuitem">
+		<property name="visible">True</property>
+		<property name="label" translatable="yes">_Group Chat</property>
+		<property name="use_underline">True</property>
+
+		<child internal-child="image">
+	<widget class="GtkImage" id="image1445">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-connect</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+		</child>
+	 </widget>
+  </child>
 
   <child>
     <widget class="GtkImageMenuItem" id="chat_with_menuitem">
