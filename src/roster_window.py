@@ -1334,6 +1334,8 @@ class RosterWindow:
 			above_send_file_separator.set_no_show_all(True)
 			assign_openpgp_key_menuitem.hide()
 			assign_openpgp_key_menuitem.set_no_show_all(True)
+			subscription_menuitem.hide()
+			subscription_menuitem.set_no_show_all(True)
 
 			add_to_roster_menuitem.connect('activate',
 				self.on_add_to_roster, contact, account)
