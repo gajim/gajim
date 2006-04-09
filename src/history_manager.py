@@ -111,7 +111,7 @@ class HistoryManager:
 		self.logs_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
 		renderer_text = gtk.CellRendererText() # holds time
-		col = gtk.TreeViewColumn(_('Time'), renderer_text, text = C_UNIXTIME)
+		col = gtk.TreeViewColumn(_('Date'), renderer_text, text = C_UNIXTIME)
 		col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
@@ -146,7 +146,7 @@ class HistoryManager:
 		self.search_results_listview.append_column(col)
 		
 		renderer_text = gtk.CellRendererText() # holds time
-		col = gtk.TreeViewColumn(_('Time'), renderer_text, text = C_UNIXTIME)
+		col = gtk.TreeViewColumn(_('Date'), renderer_text, text = C_UNIXTIME)
 		col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
 		col.set_resizable(True)
 		self.search_results_listview.append_column(col)
@@ -392,7 +392,6 @@ class HistoryManager:
 		if paths_len == 0: # nothing is selected
 			return
 			
-		# FIXME: it's possible to have more than one selected and right click
 		list_of_rowrefs = []
 		for path in list_of_paths: # make them treerowrefs (it's needed)
 			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
@@ -403,7 +402,7 @@ class HistoryManager:
 				continue
 			jid_id = liststore[path][1]
 			self.cur.execute('''
-				SELECT time, kind, message FROM logs
+				SELECT time, kind, message, contact_name FROM logs
 				WHERE jid_id = ?
 				ORDER BY time
 				''', (jid_id,))
@@ -411,20 +410,20 @@ class HistoryManager:
 		results = self.cur.fetchall()
 		file_ = open(path_to_file, 'w')
 		for row in results:
-			# in store: time, kind, message FROM logs
-			# in text: JID or You, time, message
-			time_ = row[0]
-			kind = row[1]
+			# in store: time, kind, message, contact_name FROM logs
+			# in text: JID or You or nickname (if it's gc_msg), time, message
+			time_, kind, message, nickname = row
 			if kind in (constants.KIND_SINGLE_MSG_RECV,
 				constants.KIND_CHAT_MSG_RECV):
 				who = self._get_jid_from_jid_id(jid_id)
 			elif kind in (constants.KIND_SINGLE_MSG_SENT,
 				constants.KIND_CHAT_MSG_SENT):
 				who = _('You')
-			else:
+			elif kind == constants.KIND_GC_MSG:
+				who = nickname
+			else: # status or gc_status. do not save
 				continue
 
-			message = row[2]
 			try:
 				time_ = time.strftime('%x', time.localtime(float(time_))).decode(
 					locale.getpreferredencoding())
