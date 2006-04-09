@@ -1485,17 +1485,19 @@ class RosterWindow:
 		childs = account_context_menu.get_children()
 
 		status_menuitem = childs[0]
-		# we skip the separator
-		# skip advanced_actions_menuitem, childs[2]
+		edit_account_menuitem = childs[1]
+		# we skip the separator childs[2]
+		#FIXME : new_message open a new chat. So what do we want ?
+		new_message_menuitem = childs[3]
+		join_group_chat_menuitem = childs[4]
+		# we skip the separator childs[5]
+		add_contact_menuitem = childs[6]
+		service_discovery_menuitem = childs[7]
+		# skip advanced_actions_menuitem, childs[8]
 		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
 		set_motd_menuitem = xml.get_widget('set_motd_menuitem')
 		update_motd_menuitem = xml.get_widget('update_motd_menuitem')
 		delete_motd_menuitem = xml.get_widget('delete_motd_menuitem')
-		edit_account_menuitem = childs[3]
-		service_discovery_menuitem = childs[4]
-		add_contact_menuitem = childs[5]
-		join_group_chat_menuitem = childs[6]
-		new_message_menuitem = childs[7]
 
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
