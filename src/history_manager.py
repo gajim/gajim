@@ -440,6 +440,7 @@ class HistoryManager:
 
 		def on_ok(widget, liststore, list_of_paths):
 			# delete all rows from db that match jid_id
+			self.dialog.destroy()
 			list_of_rowrefs = []
 			for path in list_of_paths: # make them treerowrefs (it's needed)
 				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
