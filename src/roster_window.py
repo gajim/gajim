@@ -2085,6 +2085,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			chat_control.read_queue()
 
 	def new_chat_from_jid(self, account, jid):
+		jid = gajim.get_jid_without_resource(jid)
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			keyID = ''
@@ -2093,7 +2094,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			contact = gajim.contacts.create_contact(jid = jid,
-				name = jid.split('@')[0], groups = [_('Not in Roster')],
+				name = '', groups = [_('Not in Roster')],
 				show = 'not in roster', status = '', sub = 'none',
 				keyID = keyID)
 			gajim.contacts.add_contact(account, contact)
