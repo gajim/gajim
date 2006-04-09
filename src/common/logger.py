@@ -200,7 +200,8 @@ class Logger:
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
 	
-	def write(self, kind, jid, message = None, show = None, tim = None, subject = None):
+	def write(self, kind, jid, message = None, show = None, tim = None,
+	subject = None):
 		'''write a row (status, gcstatus, message etc) to logs database
 		kind can be status, gcstatus, gc_msg, (we only recv for those 3),
 		single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent

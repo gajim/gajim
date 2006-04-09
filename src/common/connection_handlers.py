@@ -1274,19 +1274,21 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
 				if self.name not in no_log_for and jid in self.last_history_line \
 					and not int(float(time.mktime(tim))) <= \
-					self.last_history_line[jid]:
+					self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 		elif mtype == 'chat': # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
 			if msg.getTag('body') and self.name not in no_log_for and jid not in\
-				no_log_for:
-				gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim, subject = subject)
+				no_log_for and msgtxt:
+				gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
+					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
 				chatstate, msg_id, composing_jep))
 		else: # it's single message
-			if self.name not in no_log_for and jid not in no_log_for:
-				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim, subject = subject)
+			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
+				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
+					subject = subject)
 			if invite is not None:
 				item = invite.getTag('invite')
 				jid_from = item.getAttr('from')
