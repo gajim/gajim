@@ -16754,7 +16754,7 @@ Maybe I'll refactor later</property>
   <child>
     <widget class="GtkImageMenuItem" id="new_message_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Send _New Message...</property>
+      <property name="label" translatable="yes">Send Single _Message...</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
