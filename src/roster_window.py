@@ -1542,8 +1542,10 @@ class RosterWindow:
 		service_discovery_menuitem.connect('activate',
 			self.on_service_disco_menuitem_activate, account)
 		add_contact_menuitem.connect('activate', self.on_add_new_contact, account)
-		join_group_chat_menuitem.connect('activate',
-			self.on_join_gc_activate, account)
+		
+		gc_sub_menu = gtk.Menu() # gc is always a submenu
+		join_group_chat_menuitem.set_submenu(gc_sub_menu)
+		self._add_bookmarks_list(gc_sub_menu, account)
 		new_message_menuitem.connect('activate',
 			self.on_new_message_menuitem_activate, account)
 
