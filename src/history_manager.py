@@ -197,10 +197,8 @@ class HistoryManager:
 		paths_len = len(list_of_paths)
 		if paths_len == 0: # nothing is selected
 			return
-		elif paths_len == 1:
-			do_clear = True
-		else:
-			do_clear = False
+
+		self.logs_liststore.clear() # clear the store
 		
 		self.welcome_label.hide()
 		self.search_results_scrolledwindow.hide()
@@ -210,12 +208,12 @@ class HistoryManager:
 		for path in list_of_paths: # make them treerowrefs (it's needed)
 			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
 		
-		for rowref in list_of_rowrefs:
+		for rowref in list_of_rowrefs: # FILL THE STORE, for all rows selected
 			path = rowref.get_path()
 			if path is None:
 				continue
 			jid = liststore[path][0] # jid
-			self._fill_logs_listview(jid, do_clear)
+			self._fill_logs_listview(jid)
 	
 	def _get_jid_id(self, jid):
 		'''jids table has jid and jid_id
@@ -258,11 +256,9 @@ class HistoryManager:
 		else:
 			return False
 	
-	def _fill_logs_listview(self, jid, do_clear = True):
+	def _fill_logs_listview(self, jid):
 		'''fill the listview with all messages that user sent to or
 		received from JID'''
-		if do_clear:
-			self.logs_liststore.clear() # clear the store
 		# no need to lower jid in this context as jid is already lowered
 		# as we use those jids from db
 		jid_id = self._get_jid_id(jid)
@@ -391,7 +387,7 @@ class HistoryManager:
 		paths_len = len(list_of_paths)
 		if paths_len == 0: # nothing is selected
 			return
-			
+
 		list_of_rowrefs = []
 		for path in list_of_paths: # make them treerowrefs (it's needed)
 			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
@@ -406,8 +402,11 @@ class HistoryManager:
 				WHERE jid_id = ?
 				ORDER BY time
 				''', (jid_id,))
-	
+
+		# FIXME: we may have two contacts selected to export. fix that
+		# AT THIS TIME FIRST EXECUTE IS LOST! WTH!!!!!
 		results = self.cur.fetchall()
+		#print results[0]
 		file_ = open(path_to_file, 'w')
 		for row in results:
 			# in store: time, kind, message, contact_name FROM logs
@@ -422,6 +421,7 @@ class HistoryManager:
 			elif kind == constants.KIND_GC_MSG:
 				who = nickname
 			else: # status or gc_status. do not save
+				#print kind
 				continue
 
 			try:
