@@ -125,7 +125,7 @@ class ChatControlBase(MessageControl):
 		self.msg_scrolledwindow.add(self.msg_textview)
 		self.msg_textview.connect('key_press_event',
 					self._on_message_textview_key_press_event)
-		self.msg_textview.connect('size-request', self.size_request, self.xml)
+		self.msg_textview.connect('size-request', self.size_request)
 		self.update_font()
 
 		# Hook up send button
@@ -554,7 +554,7 @@ class ChatControlBase(MessageControl):
 		textview.scroll_to_iter(end_iter, 0, False, 1, 1)
 		return False
 
-	def size_request(self, msg_textview , requisition, xml_top):
+	def size_request(self, msg_textview , requisition):
 		''' When message_textview changes its size. If the new height
 		will enlarge the window, enable the scrollbar automatic policy
 		Also enable scrollbar automatic policy for horizontal scrollbar
