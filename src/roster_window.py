@@ -1485,19 +1485,10 @@ class RosterWindow:
 		childs = account_context_menu.get_children()
 
 		status_menuitem = childs[0]
-		edit_account_menuitem = childs[1]
-		# we skip the separator childs[2]
-		#FIXME : new_message open a new chat. So what do we want ?
-		new_message_menuitem = childs[3]
-		join_group_chat_menuitem = childs[4]
-		# we skip the separator childs[5]
-		add_contact_menuitem = childs[6]
-		service_discovery_menuitem = childs[7]
-		# skip advanced_actions_menuitem, childs[8]
-		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
-		set_motd_menuitem = xml.get_widget('set_motd_menuitem')
-		update_motd_menuitem = xml.get_widget('update_motd_menuitem')
-		delete_motd_menuitem = xml.get_widget('delete_motd_menuitem')
+		new_message_menuitem = childs[1]
+		join_group_chat_menuitem = childs[2]
+		add_contact_menuitem = childs[3]
+		edit_account_menuitem = childs[4]
 
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
@@ -1523,9 +1514,6 @@ class RosterWindow:
 		if gajim.connections[account].connected < 2:
 			item.set_sensitive(False)
 
-		item = gtk.SeparatorMenuItem()
-		sub_menu.append(item)
-
 		uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
 		item = gtk.ImageMenuItem(uf_show)
 		icon = state_images['offline']
@@ -1533,17 +1521,7 @@ class RosterWindow:
 		sub_menu.append(item)
 		item.connect('activate', self.change_status, account, 'offline')
 
-		xml_console_menuitem.connect('activate',
-			self.on_xml_console_menuitem_activate, account)
-		set_motd_menuitem.connect('activate', self.on_set_motd_menuitem_activate,
-			account)
-		update_motd_menuitem.connect('activate',
-			self.on_update_motd_menuitem_activate, account)
-		delete_motd_menuitem.connect('activate',
-			self.on_delete_motd_menuitem_activate, account)
 		edit_account_menuitem.connect('activate', self.on_edit_account, account)
-		service_discovery_menuitem.connect('activate',
-			self.on_service_disco_menuitem_activate, account)
 		add_contact_menuitem.connect('activate', self.on_add_new_contact, account)
 		
 		gc_sub_menu = gtk.Menu() # gc is always a submenu
@@ -1554,8 +1532,7 @@ class RosterWindow:
 
 		# make some items insensitive if account is offline
 		if gajim.connections[account].connected < 2:
-			for widget in [set_motd_menuitem, update_motd_menuitem,
-			delete_motd_menuitem, service_discovery_menuitem, add_contact_menuitem,
+			for widget in [add_contact_menuitem,
 			join_group_chat_menuitem, new_message_menuitem]:
 				widget.set_sensitive(False)
 		
@@ -1987,6 +1964,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# after user chooses "Change status message" menuitem
 		# we can return to this show
 		self.previous_status_combobox_active = active
+		connected_accounts = gajim.get_number_of_connected_accounts()
 		if status == 'invisible':
 			bug_user = False
 			for acct in accounts:
@@ -2251,7 +2229,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				pass
 
 	def on_new_message_menuitem_activate(self, widget, account):
-		dialogs.NewMessageDialog(account)
+		dialogs.SingleMessageWindow(account, action = 'send')
 
 	def on_contents_menuitem_activate(self, widget):
 		helpers.launch_browser_mailer('url', 'http://trac.gajim.org/wiki')
