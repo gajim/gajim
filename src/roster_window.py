@@ -1213,6 +1213,8 @@ class RosterWindow:
 		path = model.get_path(iter)
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		if not contact:
+			return
 
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_contact_context_menu',
 			APP)
@@ -1242,13 +1244,13 @@ class RosterWindow:
 		img.set_from_file(path_to_kbd_input_img)
 		rename_menuitem.set_image(img)
 
-		#skip a separator
+		# skip a separator
 		subscription_menuitem = xml.get_widget('subscription_menuitem')
 		send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem =\
 			subscription_menuitem.get_submenu().get_children()
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		remove_from_roster_menuitem = xml.get_widget('remove_from_roster_menuitem')
-		#skip a separator
+		# skip a separator
 		information_menuitem = xml.get_widget('information_menuitem')
 		history_menuitem = xml.get_widget('history_menuitem')
 
