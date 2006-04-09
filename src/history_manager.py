@@ -40,8 +40,9 @@ gtk.glade.textdomain(i18n.APP)
 (
 C_UNIXTIME,
 C_MESSAGE,
-C_SUBJECT
-) = range(2, 5)
+C_SUBJECT,
+C_NICKNAME
+) = range(2, 6)
 
 try:
 	from pysqlite2 import dbapi2 as sqlite
@@ -104,55 +105,67 @@ class HistoryManager:
 			self.on_jids_listview_selection_changed)
 
 	def _init_logs_listview(self):
-		# log_line_id (HIDDEN), jid_id (HIDDEN), time, message, subject
-		self.logs_liststore = gtk.ListStore(str, str, str, str, str)
+		# log_line_id (HIDDEN), jid_id (HIDDEN), time, message, subject, nickname
+		self.logs_liststore = gtk.ListStore(str, str, str, str, str, str)
 		self.logs_listview.set_model(self.logs_liststore)
 		self.logs_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
 		renderer_text = gtk.CellRendererText() # holds time
-		col = gtk.TreeViewColumn('Time', renderer_text, text = C_UNIXTIME)
+		col = gtk.TreeViewColumn(_('Time'), renderer_text, text = C_UNIXTIME)
 		col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
 
 		renderer_text = gtk.CellRendererText() # holds message
-		col = gtk.TreeViewColumn('Message', renderer_text, markup = C_MESSAGE)
+		col = gtk.TreeViewColumn(_('Message'), renderer_text, markup = C_MESSAGE)
 		col.set_sort_column_id(C_MESSAGE) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
 
 		renderer_text = gtk.CellRendererText() # holds subject
-		col = gtk.TreeViewColumn('Subject', renderer_text, text = C_SUBJECT)
+		col = gtk.TreeViewColumn(_('Subject'), renderer_text, text = C_SUBJECT)
 		col.set_sort_column_id(C_SUBJECT) # user can click this header and sort
+		col.set_resizable(True)
+		self.logs_listview.append_column(col)
+		
+		renderer_text = gtk.CellRendererText() # holds nickname
+		col = gtk.TreeViewColumn(_('Nickname'), renderer_text, text = C_NICKNAME)
+		col.set_sort_column_id(C_NICKNAME) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
 
 	def _init_search_results_listview(self):
-		# log_line_id (HIDDEN), jid, time, message, subject
-		self.search_results_liststore = gtk.ListStore(str, str, str, str, str)
+		# log_line_id (HIDDEN), jid, time, message, subject, nickname
+		self.search_results_liststore = gtk.ListStore(str, str, str, str, str, str)
 		self.search_results_listview.set_model(self.search_results_liststore)
 		
 		renderer_text = gtk.CellRendererText() # holds JID (who said this)
-		col = gtk.TreeViewColumn('JID', renderer_text, text = 1)
+		col = gtk.TreeViewColumn(_('JID'), renderer_text, text = 1)
 		col.set_sort_column_id(1) # user can click this header and sort
 		col.set_resizable(True)
 		self.search_results_listview.append_column(col)
 		
 		renderer_text = gtk.CellRendererText() # holds time
-		col = gtk.TreeViewColumn('Time', renderer_text, text = C_UNIXTIME)
+		col = gtk.TreeViewColumn(_('Time'), renderer_text, text = C_UNIXTIME)
 		col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
 		col.set_resizable(True)
 		self.search_results_listview.append_column(col)
 
 		renderer_text = gtk.CellRendererText() # holds message
-		col = gtk.TreeViewColumn('Message', renderer_text, text = C_MESSAGE)
+		col = gtk.TreeViewColumn(_('Message'), renderer_text, text = C_MESSAGE)
 		col.set_sort_column_id(C_MESSAGE) # user can click this header and sort
 		col.set_resizable(True)
 		self.search_results_listview.append_column(col)
 
 		renderer_text = gtk.CellRendererText() # holds subject
-		col = gtk.TreeViewColumn('Subject', renderer_text, text = C_SUBJECT)
+		col = gtk.TreeViewColumn(_('Subject'), renderer_text, text = C_SUBJECT)
 		col.set_sort_column_id(C_SUBJECT) # user can click this header and sort
+		col.set_resizable(True)
+		self.search_results_listview.append_column(col)
+		
+		renderer_text = gtk.CellRendererText() # holds nickname
+		col = gtk.TreeViewColumn(_('Nickname'), renderer_text, text = C_NICKNAME)
+		col.set_sort_column_id(C_NICKNAME) # user can click this header and sort
 		col.set_resizable(True)
 		self.search_results_listview.append_column(col)
 	
@@ -254,28 +267,28 @@ class HistoryManager:
 		# as we use those jids from db
 		jid_id = self._get_jid_id(jid)
 		self.cur.execute('''
-			SELECT log_line_id, jid_id, time, kind, message, subject FROM logs
+			SELECT log_line_id, jid_id, time, kind, message, subject, contact_name
+			FROM logs
 			WHERE jid_id = ?
 			ORDER BY time
 			''', (jid_id,))
 		
 		results = self.cur.fetchall()
 		for row in results:
-			# FIXME: check kind and set color accordingly
-			
-			# exposed in UI (TreeViewColumns) are only time, message and subject
-			# but store in liststore log_line_id, jid_id, time, message and subject
-			time_ = row[2]
-			kind = row[3]
+			# exposed in UI (TreeViewColumns) are only
+			# time, message, subject, nickname
+			# but store in liststore
+			# log_line_id, jid_id, time, message, subject, nickname
+			log_line_id, jid_id, time_, kind, message, subject, nickname = row
 			try:
 				time_ = time.strftime('%x', time.localtime(float(time_))).decode(
 					locale.getpreferredencoding())
 			except ValueError:
 				pass
 			else:
-				set_color = True
 				if kind in (constants.KIND_SINGLE_MSG_RECV,
-				constants.KIND_CHAT_MSG_RECV): # it is the other side
+				constants.KIND_CHAT_MSG_RECV, constants.KIND_GC_MSG):
+					# it is the other side
 					color = gajim.config.get('inmsgcolor') # so incoming color
 				elif kind in (constants.KIND_SINGLE_MSG_SENT,
 				constants.KIND_CHAT_MSG_SENT): # it is us
@@ -283,44 +296,40 @@ class HistoryManager:
 				elif kind in (constants.KIND_STATUS,
 				constants.KIND_GCSTATUS): # is is statuses
 					color = gajim.config.get('statusmsgcolor') # so status color
-				else: # GC_MSG (message in room)	
-					set_color = False
 				
-				if set_color:
-					message = '<span foreground="%s">%s</span>' % (color,
-						gtkgui_helpers.escape_for_pango_markup(row[4]))
-				else:
-					message = gtkgui_helpers.escape_for_pango_markup(row[4])
-				self.logs_liststore.append((row[0], row[1], time_, message, row[5]))
+				message = '<span foreground="%s">%s</span>' % (color,
+					gtkgui_helpers.escape_for_pango_markup(message))
+				self.logs_liststore.append((log_line_id, jid_id, time_, message,
+					subject, nickname))
 
 	def _fill_search_results_listview(self, text):
 		'''ask db and fill listview with results that match text'''
-		# exposed in UI (TreeViewColumns) are only JID, time, message and subject
-		# but store in liststore jid, time, message and subject
 		self.search_results_liststore.clear()
 		like_sql = '%' + text + '%'
 		self.cur.execute('''
-			SELECT log_line_id, jid_id, time, kind, message, subject FROM logs
+			SELECT log_line_id, jid_id, time, message, subject, contact_name
+			FROM logs
 			WHERE message LIKE ? OR subject LIKE ?
 			ORDER BY time
 			''', (like_sql, like_sql))
 		
 		results = self.cur.fetchall()
 		for row in results:
-			# exposed in UI (TreeViewColumns) are only JID, time, message and subject
-			# but store in liststore log_line_id, jid_id, time, message and subject
-			time_ = row[2]
+			# exposed in UI (TreeViewColumns) are only
+			# JID, time, message, subject, nickname
+			# but store in liststore
+			# log_line_id, jid (from jid_id), time, message, subject, nickname
+			log_line_id, jid_id, time_, message, subject, nickname = row
 			try:
 				time_ = time.strftime('%x', time.localtime(float(time_))).decode(
 					locale.getpreferredencoding())
 			except ValueError:
 				pass
 			else:
-				jid_id = row[1]
 				jid = self._get_jid_from_jid_id(jid_id)
 				
-				self.search_results_liststore.append((row[0], jid, time_,
-					row[4], row[5]))
+				self.search_results_liststore.append((log_line_id, jid, time_,
+					message, subject, nickname))
 
 	def on_logs_listview_key_press_event(self, widget, event):
 		liststore, list_of_paths = self.logs_listview.get_selection()\
@@ -383,8 +392,7 @@ class HistoryManager:
 		if paths_len == 0: # nothing is selected
 			return
 			
-		# NOTE: it's impossible to have more than one selected and right click
-		# on a row and still have all those selected. Thank GTK God for that ;)
+		# FIXME: it's possible to have more than one selected and right click
 		list_of_rowrefs = []
 		for path in list_of_paths: # make them treerowrefs (it's needed)
 			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
