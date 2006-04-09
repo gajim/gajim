@@ -120,10 +120,10 @@ class Logger:
 		self.cur.execute('SELECT jid_id FROM jids WHERE jid="%s" AND type=%d' %\
 			(possible_room_jid, constants.JID_ROOM_TYPE))
 		row = self.cur.fetchone()
-		if row is not None:
-			return True
-		else:
+		if row is None:
 			return False
+		else:
+			return True
 	
 	def get_jid_id(self, jid, typestr = None):
 		'''jids table has jid and jid_id

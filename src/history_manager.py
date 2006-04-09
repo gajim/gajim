@@ -98,7 +98,7 @@ class HistoryManager:
 		self.jids_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
 		renderer_text = gtk.CellRendererText() # holds jid
-		col = gtk.TreeViewColumn('Contacts', renderer_text, text = 0)
+		col = gtk.TreeViewColumn(_('Contacts'), renderer_text, text = 0)
 		self.jids_listview.append_column(col)
 		
 		self.jids_listview.get_selection().connect('changed',
@@ -115,23 +115,28 @@ class HistoryManager:
 		col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
 		col.set_resizable(True)
 		self.logs_listview.append_column(col)
+		
+		renderer_text = gtk.CellRendererText() # holds nickname
+		col = gtk.TreeViewColumn(_('Nickname'), renderer_text, text = C_NICKNAME)
+		col.set_sort_column_id(C_NICKNAME) # user can click this header and sort
+		col.set_resizable(True)
+		col.set_visible(False)
+		self.nickname_col_for_logs = col
+		self.logs_listview.append_column(col)
 
 		renderer_text = gtk.CellRendererText() # holds message
 		col = gtk.TreeViewColumn(_('Message'), renderer_text, markup = C_MESSAGE)
 		col.set_sort_column_id(C_MESSAGE) # user can click this header and sort
 		col.set_resizable(True)
+		self.message_col_for_logs = col
 		self.logs_listview.append_column(col)
 
 		renderer_text = gtk.CellRendererText() # holds subject
 		col = gtk.TreeViewColumn(_('Subject'), renderer_text, text = C_SUBJECT)
 		col.set_sort_column_id(C_SUBJECT) # user can click this header and sort
 		col.set_resizable(True)
-		self.logs_listview.append_column(col)
-		
-		renderer_text = gtk.CellRendererText() # holds nickname
-		col = gtk.TreeViewColumn(_('Nickname'), renderer_text, text = C_NICKNAME)
-		col.set_sort_column_id(C_NICKNAME) # user can click this header and sort
-		col.set_resizable(True)
+		col.set_visible(False)
+		self.subject_col_for_logs = col
 		self.logs_listview.append_column(col)
 
 	def _init_search_results_listview(self):
@@ -227,7 +232,7 @@ class HistoryManager:
 				jid = jid.split('/', 1)[0] # remove the resource
 		self.cur.execute('SELECT jid_id FROM jids WHERE jid = ?', (jid,))
 		jid_id = self.cur.fetchone()[0]
-		return jid_id
+		return str(jid_id)
 
 	def _get_jid_from_jid_id(self, jid_id):
 		'''jids table has jid and jid_id
@@ -251,9 +256,21 @@ class HistoryManager:
 		self.cur.execute('SELECT jid_id FROM jids WHERE jid = ? AND type = ?',
 			(possible_room_jid, constants.JID_ROOM_TYPE))
 		row = self.cur.fetchone()
-		if row is not None:
-			return True
+		if row is None:
+			return False
 		else:
+			return True
+
+	def _jid_is_room_type(self, jid):
+		'''returns True/False if given id is room type or not
+		eg. if it is room'''
+		self.cur.execute('SELECT type FROM jids WHERE jid = ?', (jid,))
+		row = self.cur.fetchone()
+		if row is None:
+			raise
+		elif row[0] == constants.JID_ROOM_TYPE:
+			return True
+		else: # normal type
 			return False
 	
 	def _fill_logs_listview(self, jid):
@@ -268,8 +285,16 @@ class HistoryManager:
 			WHERE jid_id = ?
 			ORDER BY time
 			''', (jid_id,))
-		
+
 		results = self.cur.fetchall()
+		
+		if self._jid_is_room_type(jid): # is it room?
+			self.nickname_col_for_logs.set_visible(True)
+			self.subject_col_for_logs.set_visible(False)
+		else:
+			self.nickname_col_for_logs.set_visible(False)
+			self.subject_col_for_logs.set_visible(True)
+
 		for row in results:
 			# exposed in UI (TreeViewColumns) are only
 			# time, message, subject, nickname
@@ -528,7 +553,7 @@ class HistoryManager:
 		jid = self.search_results_liststore[path][1]
 		# make it string as in gtk liststores I have them all as strings
 		# as this is what db returns so I don't have to fight with types
-		jid_id = str(self._get_jid_id(jid))
+		jid_id = self._get_jid_id(jid)
 		
 		
 		iter_ = self.jids_liststore.get_iter_root()
