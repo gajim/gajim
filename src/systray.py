@@ -256,7 +256,7 @@ class Systray:
 		for jid in gajim.contacts.get_jid_list(account):
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
-			if contact.show != 'offline' and contact.show != 'error':
+			if contact.show not in ('offline', 'error', 'not in roster'):
 				if contact.groups == []: #user has no group, print him in General
 					contact_groups = [_('General')]
 				else:
