@@ -294,7 +294,7 @@ class Systray:
 						contacts_table.append ([group, show_list.index(contact.show),
 							contact.get_shown_name()])
 					else:
-						contacts_table.appenwd ([group, contact.get_shown_name(), 
+						contacts_table.append ([group, contact.get_shown_name(), 
 							show_list.index(contact.show)])
 		
 		contacts_table.sort() # Sort : first column before, last column in the end
