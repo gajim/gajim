@@ -186,7 +186,9 @@ class Contacts:
 			for c in contacts:
 				if c.resource == resource:
 					return c
-		return None
+		if resource:
+			return None
+		return []
 
 	def get_contacts_from_jid(self, account, jid):
 		'''we may have two or more resources on that jid'''
