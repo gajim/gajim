@@ -271,11 +271,15 @@ class Systray:
 		# if we sort_by_show : contacts_table = [group, status, name]
 		# else : contacts_table = [group,  name, status]
 		contacts_table = []
+		show_list = gajim.SHOW_LIST
+		show_list.append('not in roster') # not in roster is not in this list but we need it
 		for jid in gajim.contacts.get_jid_list(account):
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
-			if contact.show not in ('offline', 'error', 'not in roster'):
-				if contact.groups == []: #user has no group, print him in General
+			if contact.show not in ('offline', 'error'):
+				if contact.show == 'not in roster': # print user in not in roster group
+					contact_groups = [_('Not in Roster')]
+				elif contact.groups == []: # user has no group, print him in General
 					contact_groups = [_('General')]
 				else:
 					contact_groups = contact.groups
@@ -283,11 +287,11 @@ class Systray:
 					if group == _('Transports'):
 						continue
 					if sort_by_show: # see comment about contacts_table above
-						contacts_table.append ([group, gajim.SHOW_LIST.index(contact.show),
+						contacts_table.append ([group, show_list.index(contact.show),
 							contact.get_shown_name()])
 					else:
-						contacts_table.append ([group, contact.get_shown_name(), 
-							gajim.SHOW_LIST.index(contact.show)])
+						contacts_table.appenwd ([group, contact.get_shown_name(), 
+							show_list.index(contact.show)])
 		
 		contacts_table.sort() # Sort : first column before, last column in the end
 		
@@ -295,10 +299,10 @@ class Systray:
 		for contact_item in contacts_table:
 			if sort_by_show: # see comment about contacts_table above
 				contact_name = contact_item[2]
-				contact_show = gajim.SHOW_LIST[contact_item[1]]
+				contact_show = show_list[contact_item[1]]
 			else:
 				contact_name = contact_item[1]
-				contact_show = gajim.SHOW_LIST[contact_item[2]]
+				contact_show = show_list[contact_item[2]]
 			if contact_item[0] != previous_group: #It's a new group, add the submenu
 				item = gtk.MenuItem(contact_item[0])
 				contacts_menu = gtk.Menu()
