@@ -271,7 +271,9 @@ class Systray:
 		# if we sort_by_show : contacts_table = [group, status, name]
 		# else : contacts_table = [group,  name, status]
 		contacts_table = []
-		show_list = gajim.SHOW_LIST
+		show_list = []
+		for show in gajim.SHOW_LIST: # copy gajim.SHOW_LIST in show_list
+	   		show_list.append(show)
 		show_list.append('not in roster') # not in roster is not in this list but we need it
 		for jid in gajim.contacts.get_jid_list(account):
 			contact = gajim.contacts.get_contact_with_highest_priority(account,

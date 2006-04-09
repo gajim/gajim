@@ -852,7 +852,6 @@ class RosterWindow:
 			item.connect('activate', self.on_bookmark_menuitem_activate,
 				account, bookmark)
 			gc_sub_menu.append(item)
-	
 
 	def _change_style(self, model, path, iter, option):
 		if option is None:
