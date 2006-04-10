@@ -157,19 +157,6 @@ class VcardWindow:
 		self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
 		self.avatar_encoded = None
 
-	def update_preview(self, widget):
-		path_to_file = widget.get_preview_filename()
-		if path_to_file is None or os.path.isdir(path_to_file):
-			# nothing to preview or directory
-			# make sure you clean image do show nothing
-			widget.get_preview_widget().set_from_file(None)
-			return
-		try:
-			pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(path_to_file, 100, 100)
-		except gobject.GError:
-			return
-		widget.get_preview_widget().set_from_pixbuf(pixbuf)
-
 	def on_set_avatar_button_clicked(self, widget):
 		f = None
 		def on_ok(widget, path_to_file):
