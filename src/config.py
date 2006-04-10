@@ -2171,6 +2171,7 @@ class RemoveAccountWindow:
 		else: 
 			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.actions_menu_needs_rebuild = True
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
 		self.window.destroy()
