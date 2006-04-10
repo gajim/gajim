@@ -228,6 +228,21 @@ class Logger:
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
 	
+	def get_um_for_contact(self, jid):
+		''' get unread messages for jid '''
+		if not jid:
+			return
+		jid = jid.lower()
+		jid_id = self.get_jid_id(jid)
+		self.cur.execute('''
+			SELECT message_id, message, time, subject FROM logs , unread_messages 
+			WHERE jid_id = %d AND log_line_id = message_id ORDER BY time ASC 
+			''' % (jid_id)
+			)
+
+		results = self.cur.fetchall()
+		return results
+		
 	def write(self, kind, jid, message = None, show = None, tim = None,
 	subject = None):
 		'''write a row (status, gcstatus, message etc) to logs database
@@ -320,6 +335,7 @@ class Logger:
 			)
 
 		results = self.cur.fetchall()
+		#FIXME: why do we reverse, instead of selecting by ASC order?
 		results.reverse()
 		return results
 	

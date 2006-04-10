@@ -888,7 +888,11 @@ class RosterWindow:
 	def add_account_contacts(self, account):
 		for jid in gajim.contacts.get_jid_list(account):
 			self.add_contact_to_roster(jid, account)
-
+			results = gajim.logger.get_um_for_contact(jid)
+			for result in results:
+				tim = time.localtime(float(result[2]))
+				self.on_message(jid, result[1], tim, account, msg_type= 'chat', msg_id=result[0])
+	
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
 		if account not in gajim.contacts.get_accounts():
