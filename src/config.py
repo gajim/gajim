@@ -920,19 +920,31 @@ class PreferencesWindow:
 		(model, iter) = self.sound_tree.get_selection().get_selected()
 		if not iter:
 			return
-		path_to_snd_file = model[iter][2].decode('utf-8')
-		path_to_snd_file = os.path.join(os.getcwd(), path_to_snd_file)
-		dlg_instance = dialogs.SoundChooserDialog(path_to_snd_file)
-		path_to_snd_file = dlg_instance.path_to_snd_file
-		dlg_instance.dialog.destroy()
-		
-		if path_to_snd_file:
+		def on_ok(widget, path_to_snd_file):
+			self.dialog.destroy()
+			model, iter = self.sound_tree.get_selection().get_selected()
+			if not path_to_snd_file:
+				model[iter][2] = ''
+				self.xml.get_widget('sounds_entry').set_text('')
+				model[iter][0] = False
+				return
 			directory = os.path.dirname(path_to_snd_file)
 			gajim.config.set('last_sounds_dir', directory)
 			self.xml.get_widget('sounds_entry').set_text(path_to_snd_file)
-			
+
 			model[iter][2] = path_to_snd_file # set new path to sounds_model
 			model[iter][0] = True # set the sound to enabled
+
+		def on_cancel(widget):
+			self.dialog.destroy()
+			model, iter = self.sound_tree.get_selection().get_selected()
+			model[iter][2] = ''
+			model[iter][0] = False
+
+		path_to_snd_file = model[iter][2].decode('utf-8')
+		path_to_snd_file = os.path.join(os.getcwd(), path_to_snd_file)
+		self.dialog = dialogs.SoundChooserDialog(path_to_snd_file, on_ok,
+			on_cancel)
 
 	def on_sounds_entry_changed(self, widget):
 		path_to_snd_file = widget.get_text()

@@ -1529,48 +1529,43 @@ class ProgressDialog:
 		return True # WM's X button or Escape key should not destroy the window
 
 
-class SoundChooserDialog:
-	def __init__(self, path_to_snd_file = ''):
+class SoundChooserDialog(FileChooserDialog):
+	def __init__(self, path_to_snd_file = '', on_response_ok = None,
+	on_response_cancel = None):
 		'''optionally accepts path_to_snd_file so it has that as selected'''
-		self.dialog = gtk.FileChooserDialog(_('Choose Sound'), None,
-					gtk.FILE_CHOOSER_ACTION_OPEN,
-					(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-					gtk.STOCK_OPEN, gtk.RESPONSE_OK))
-		self.dialog.set_default_response(gtk.RESPONSE_OK)
-		last_sounds_dir = gajim.config.get('last_sounds_dir')
-		if last_sounds_dir and os.path.isdir('last_sounds_dir'):
-			self.dialog.set_current_folder(last_sounds_dir)
-		else:
-			self.dialog.set_current_folder(gajim.HOME_DIR)
+		def on_ok(widget, callback):
+			'''check if file exists and call callback'''
+			path_to_snd_file = self.get_filename()
+			try:
+				path_to_snd_file = path_to_snd_file.decode(
+					sys.getfilesystemencoding())
+			except:
+				pass
+			if os.path.exists(path_to_snd_file):
+				callback(widget, path_to_snd_file)
+
+		FileChooserDialog.__init__(self,
+			title_text = _('Choose Sound'),
+			action = gtk.FILE_CHOOSER_ACTION_OPEN,
+			buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				gtk.STOCK_OPEN, gtk.RESPONSE_OK),
+			default_response = gtk.RESPONSE_OK,
+			current_folder = gajim.config.get('last_sounds_dir'),
+			on_response_ok = (on_ok, on_response_ok),
+			on_response_cancel = on_response_cancel)
 
 		filter = gtk.FileFilter()
 		filter.set_name(_('All files'))
 		filter.add_pattern('*')
-		self.dialog.add_filter(filter)
+		self.add_filter(filter)
 
 		filter = gtk.FileFilter()
 		filter.set_name(_('Wav Sounds'))
 		filter.add_pattern('*.wav')
-		self.dialog.add_filter(filter)
-		self.dialog.set_filter(filter)
-		
-		self.path_to_snd_file = path_to_snd_file
-		self.dialog.set_filename(self.path_to_snd_file)
-		
-		self.path_to_snd_file = ''
-		while True:
-			response = self.dialog.run()
-			if response != gtk.RESPONSE_OK:
-				break
-			self.path_to_snd_file = self.dialog.get_filename()
-			try:
-				self.path_to_snd_file = path_to_snd_file.decode(
-					sys.getfilesystemencoding())
-			except:
-				pass
-			if os.path.exists(self.path_to_snd_file):
-				break
-		
+		self.add_filter(filter)
+		self.set_filter(filter)
+
+		self.set_filename(path_to_snd_file)
 
 class AddSpecialNotificationDialog:
 	def __init__(self, jid):
@@ -1586,20 +1581,18 @@ class AddSpecialNotificationDialog:
 		self.notification_popup_yes_no_combobox.set_active(0)
 		self.listen_sound_combobox = self.xml.get_widget('listen_sound_combobox')
 		self.listen_sound_combobox.set_active(0)
-		
-		
+
 		self.jid = jid
 		self.xml.get_widget('when_foo_becomes_label').set_text(
 			_('When %s becomes:') % self.jid)
-		
-		
+
 		self.window.set_title(_('Adding Special Notification for %s') % jid)
 		self.window.show_all()
 		self.xml.signal_autoconnect(self)
-	
+
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
-	
+
 	def on_add_special_notification_window_delete_event(self, widget, event):
 		self.window.destroy()
 
@@ -1607,22 +1600,21 @@ class AddSpecialNotificationDialog:
 		model = widget.get_model()
 		active = widget.get_active()
 		if active == 1: # user selected 'choose sound'
-			dlg_instance = SoundChooserDialog()
-			path_to_snd_file = dlg_instance.path_to_snd_file
-			dlg_instance.dialog.destroy()
-			
-			if path_to_snd_file:
+			def on_ok(widget, path_to_snd_file):
 				print path_to_snd_file
-			else: # user selected nothing (X button or Cancel)
+
+			def on_cancel(widget):
 				widget.set_active(0) # go back to No Sound
-		#model[iter][0] = 
-	
+
+			self.dialog = SoundChooserDialog(on_response_ok = on_ok,
+				on_response_cancel = on_cancel)
+
 	def on_ok_button_clicked(self, widget):
 		conditions = ('online', 'chat', 'online_and_chat',
 			'away', 'xa', 'away_and_xa', 'dnd', 'xa_and_dnd', 'offline')
 		active = self.condition_combobox.get_active()
 		print conditions[active]
-	
+
 		active_iter = self.listen_sound_combobox.get_active_iter()
 		listen_sound_model = self.listen_sound_combobox.get_model()
 		print listen_sound_model[active_iter][0]
