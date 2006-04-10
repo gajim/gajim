@@ -777,8 +777,6 @@ class Interface:
 			win = self.instances[account]['infos'][array['jid']]
 			win.set_values(array)
 			if account in self.show_vcard_when_connect:
-				win.xml.get_widget('information_notebook').set_current_page(-1)
-				win.xml.get_widget('set_avatar_button').clicked()
 				self.show_vcard_when_connect.remove(account)
 
 	def handle_event_vcard(self, account, vcard):
