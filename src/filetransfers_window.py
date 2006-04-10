@@ -332,6 +332,7 @@ _('Connection with peer cannot be established.'))
 		if file_props.has_key('desc'):
 			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
 		prim_text = _('%s wants to send you a file:') % contact.jid
+
 		def on_response_ok(widget, account, contact, file_props):
 			self.dialog.destroy()
 
@@ -339,8 +340,8 @@ _('Connection with peer cannot be established.'))
 				file_path = self.dialog2.get_filename()
 				file_path = gtkgui_helpers.decode_filechooser_file_paths(
 					(file_path,))[0]
-				if gtk.gtk_version < (2, 8, 0) or gtk.pygtk_version < (2, 8, 0) and\
-				os.path.exists(file_path):
+				if (gtk.gtk_version < (2, 8, 0) or gtk.pygtk_version < (2, 8, 0)) \
+				and os.path.exists(file_path):
 					primtext = _('This file already exists')
 					sectext = _('Would you like to overwrite it?')
 					dialog3 = dialogs.ConfirmationDialog(primtext, sectext)
@@ -362,6 +363,7 @@ _('Connection with peer cannot be established.'))
 				current_folder = gajim.config.get('last_save_dir'),
 				on_response_ok = (on_ok, account, contact, file_props),
 				on_response_cancel = (on_cancel, account, contact, file_props))
+
 			self.dialog2.set_current_name(file_props['name'])
 			if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
 				self.dialog2.props.do_overwrite_confirmation = True
