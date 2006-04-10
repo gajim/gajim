@@ -335,7 +335,6 @@ class Logger:
 			)
 
 		results = self.cur.fetchall()
-		#FIXME: why do we reverse, instead of selecting by ASC order?
 		results.reverse()
 		return results
 	
