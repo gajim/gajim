@@ -176,7 +176,7 @@ class Contacts:
 
 	def get_contact(self, account, jid, resource = None):
 		'''Returns the list of contact instances for this jid (one per resource)
-		if no resource is given
+		or [] if no resource is given
 		returns the contact instance for the given resource if it's given
 		or None if there is not'''
 		if jid in self._contacts[account]:
