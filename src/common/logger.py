@@ -66,8 +66,9 @@ class Constants:
 			self.KIND_SINGLE_MSG_RECV,
 			self.KIND_CHAT_MSG_RECV,
 			self.KIND_SINGLE_MSG_SENT,
-			self.KIND_CHAT_MSG_SENT
-		) = range(7)
+			self.KIND_CHAT_MSG_SENT,
+			self.KIND_ERROR
+		) = range(8)
 		
 		(
 			self.SHOW_ONLINE,
@@ -170,6 +171,8 @@ class Logger:
 			kind_col = constants.KIND_CHAT_MSG_RECV
 		elif kind == 'chat_msg_sent':
 			kind_col = constants.KIND_CHAT_MSG_SENT
+		elif kind == 'error':
+			kind_col = constants.KIND_ERROR
 
 		if show == 'online':
 			show_col = constants.SHOW_ONLINE

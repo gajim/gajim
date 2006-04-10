@@ -1260,8 +1260,15 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			msgtxt = decmsg
 			encrypted = True
 		if mtype == 'error':
-			self.dispatch('MSGERROR', (frm, msg.getErrorCode(), msg.getError(),
-				msgtxt, tim))
+			error_msg = msg.getError()
+			if not error_msg:
+				error_msg = msgtxt
+				msgtxt = None
+			if self.name not in no_log_for:
+				gajim.logger.write('error', frm, error_msg, tim = tim,
+					subject = subject)
+			self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
+				tim))
 		elif mtype == 'groupchat':
 			if subject:
 				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt))

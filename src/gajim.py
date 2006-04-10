@@ -648,7 +648,7 @@ class Interface:
 					ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
 								'status')
 					return
-	
+
 				gc_control.print_conversation('Error %s: %s' % (array[1], array[2]))
 				if gc_control.parent_win.get_active_jid() == jid:
 					gc_control.set_subject(gc_control.subject)
@@ -656,8 +656,10 @@ class Interface:
 
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
-		self.roster.on_message(jid, _('error while sending') + \
-			' \"%s\" ( %s )' % (array[3], array[2]), array[4], account, \
+		msg = array[2]
+		if array[3]:
+			msg = _('error while sending %s ( %s )') % (array[3], msg)
+		self.roster.on_message(jid, msg, array[4], account, \
 			msg_type='error')
 		
 	def handle_event_msgsent(self, account, array):
