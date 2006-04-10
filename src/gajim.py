@@ -531,7 +531,7 @@ class Interface:
 
 		# Handle chat states  
 		contact = gajim.contacts.get_contact(account, jid, resource)
-		if isinstance(contact, list):
+		if contact and isinstance(contact, list):
 			contact = contact[0]
 		if contact:
 			contact.composing_jep = composing_jep
