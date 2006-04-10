@@ -1307,6 +1307,13 @@ class AccountModificationWindow:
 		self.window.destroy()
 
 		if relogin_needed:
+			def login(account, show_before, status_before):
+				''' login with previous status'''
+				# first make sure connection is really closed, 
+				# 0.5 may not be enough
+				gajim.connections[account].disconnect(True)
+				gajim.interface.roster.send_status(account, show_before, 
+					status_before)
 			def relog(widget):
 				self.dialog.destroy()
 				show_before = gajim.SHOW_LIST[gajim.connections[self.account].\
@@ -1314,8 +1321,8 @@ class AccountModificationWindow:
 				status_before = gajim.connections[self.account].status
 				gajim.interface.roster.send_status(self.account, 'offline',
 					_('Be right back.'))
-				gobject.timeout_add(500, gajim.interface.roster.send_status,
-					self.account, show_before, status_before)
+				gobject.timeout_add(500, login, self.account, show_before, 
+					status_before)
 			self.dialog = dialogs.YesNoDialog(_('Relogin now?'),
 				_('If you want all the changes to apply instantly, '
 				'you must relogin.'), on_response_yes = relog)
