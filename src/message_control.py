@@ -42,8 +42,8 @@ class MessageControl:
 		self.display_names = display_names
 		self.contact = contact
 		self.account = account
-		self.compact_view_always = False
-		self.compact_view_current = False
+		self.hide_chat_buttons_always = False
+		self.hide_chat_buttons_current = False
 		self.nb_unread = 0
 		self.resource = resource
 
@@ -113,9 +113,9 @@ class MessageControl:
 		# NOTE: Derived classes SHOULD implement this
 		return None
 
-	def set_compact_view(self, state):
+	def chat_buttons_set_visible(self, state):
 		# NOTE: Derived classes MAY implement this
-		self.compact_view_current = state
+		self.hide_chat_buttons_current = state
 
 	def got_connected(self):
 		pass

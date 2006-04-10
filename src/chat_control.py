@@ -389,7 +389,7 @@ class ChatControlBase(MessageControl):
 			self.clear(self.msg_textview) # clear message textview too
 			return True
 		elif message == '/compact':
-			self.set_compact_view(not self.compact_view_current)
+			self.chat_buttons_set_visible(not self.hide_chat_buttons_current)
 			self.clear(self.msg_textview)
 			return True
 		return False
@@ -519,7 +519,7 @@ class ChatControlBase(MessageControl):
 
 	def _on_compact_view_menuitem_activate(self, widget):
 		isactive = widget.get_active()
-		self.set_compact_view(isactive)
+		self.chat_buttons_set_visible(isactive)
 
 	def set_control_active(self, state):
 		if state:
@@ -652,32 +652,22 @@ class ChatControlBase(MessageControl):
 		color.blue = int((color.blue * p) + (mask * (1 - p)))
 		return color
 
-	def set_compact_view(self, state):
-		'''Toggle compact view. state is bool'''
-		MessageControl.set_compact_view(self, state)
+	def widget_set_visible(self, widget, state):
+		'''Show or hide a widget. state is bool'''
 		# make the last message visible, when changing to "full view"
 		if not state:
 			gobject.idle_add(self.conv_textview.scroll_to_end_iter)
-		
-		if self.type_id == message_control.TYPE_GC:
-			widgets = [
-				self.xml.get_widget('banner_eventbox'),
-				self.xml.get_widget('actions_hbox'),
-				self.xml.get_widget('list_scrolledwindow'),
-				]
-		else:
-			widgets = [
-				self.xml.get_widget('banner_eventbox'),
-				self.xml.get_widget('actions_hbox'),
-				]
 
-		for widget in widgets:
-			if state:
-				widget.set_no_show_all(True)
-				widget.hide()
-			else:
-				widget.set_no_show_all(False)
-				widget.show_all()
+		widget.set_no_show_all(state)
+		if state:
+			widget.hide()
+		else:
+			widget.show_all()
+
+	def chat_buttons_set_visible(self, state):
+		'''Toggle chat buttons. state is bool'''
+		MessageControl.chat_buttons_set_visible(self, state)
+		self.widget_set_visible(self.xml.get_widget('actions_hbox'), state)
 
 	def got_connected(self):
 		self.msg_textview.set_sensitive(True)
@@ -697,9 +687,9 @@ class ChatControl(ChatControlBase):
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
 			(_('Chat'), _('Chats')), contact, acct, resource)
-		self.compact_view_always = gajim.config.get('always_compact_view_chat')
-		self.set_compact_view(self.compact_view_always)
-
+		self.hide_chat_buttons_always = gajim.config.get('always_hide_chat_buttons')
+		self.chat_buttons_set_visible(self.hide_chat_buttons_always)
+		self.widget_set_visible(self.xml.get_widget('banner_eventbox'), gajim.config.get('hide_chat_banner'))
 		# Initialize drag-n-drop
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
@@ -1153,7 +1143,7 @@ class ChatControl(ChatControlBase):
 			send_file_menuitem.set_sensitive(False)
 		
 		# compact_view_menuitem
-		compact_view_menuitem.set_active(self.compact_view_current)
+		compact_view_menuitem.set_active(self.hide_chat_buttons_current)
 		
 		# add_to_roster_menuitem
 		if _('Not in Roster') in contact.groups:

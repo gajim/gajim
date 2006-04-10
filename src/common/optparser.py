@@ -195,14 +195,21 @@ class OptionsParser:
 
 	def update_config_09_to_010(self):
 		if self.old_values.has_key('usetabbedchat') and not \
-			self.old_values['usetabbedchat']:
+		self.old_values['usetabbedchat']:
 			gajim.config.set('one_message_window', 'never')
 		if self.old_values.has_key('autodetect_browser_mailer') and \
-			self.old_values['autodetect_browser_mailer'] is True:
+		self.old_values['autodetect_browser_mailer'] is True:
 			gajim.config.set('autodetect_browser_mailer', False)
 		if self.old_values.has_key('useemoticons') and \
-			not self.old_values['useemoticons']:
+		not self.old_values['useemoticons']:
 			gajim.config.set('emoticons_theme', '')
+		if self.old_values.has_key('always_compact_view_chat') and \
+		self.old_values['always_compact_view_chat']:
+			gajim.config.set('always_hide_chat_buttons', True)
+		if self.old_values.has_key('always_compact_view_gc') and \
+		self.old_values['always_compact_view_gc']:
+			gajim.config.set('always_hide_groupchat_buttons', True)
+		
 		for account in gajim.config.get_per('accounts'):
 			proxies_str = gajim.config.get_per('accounts', account,
 				'file_transfer_proxies')

@@ -102,8 +102,10 @@ class GroupchatControl(ChatControlBase):
 		self.nick = contact.name
 		self.name = self.room_jid.split('@')[0]
 
-		self.compact_view_always = gajim.config.get('always_compact_view_gc')
-		self.set_compact_view(self.compact_view_always)
+		self.hide_chat_buttons_always = gajim.config.get('always_hide_groupchat_buttons')
+		self.chat_buttons_set_visible(self.hide_chat_buttons_always)
+		self.widget_set_visible(self.xml.get_widget('banner_eventbox'), gajim.config.get('hide_groupchat_banner'))
+		self.widget_set_visible(self.xml.get_widget('list_scrolledwindow'), gajim.config.get('hide_groupchat_occupants_list'))
 		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 
 		self._last_selected_contact = None # None or holds jid, account tuple
@@ -312,8 +314,8 @@ class GroupchatControl(ChatControlBase):
 		sets sensitivity state for configure_room'''
 		menu = self.gc_popup_menu
 		childs = menu.get_children()
-		# compact_view_menuitem
-		childs[5].set_active(self.compact_view_current)
+		# hide chat buttons
+		childs[5].set_active(self.hide_chat_buttons_current)
 		if gajim.gc_connected[self.account][self.room_jid]:
 			c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				self.nick)
@@ -1025,8 +1027,7 @@ class GroupchatControl(ChatControlBase):
 			self.print_conversation(_('Usage: /%s [reason], closes the current '
 				'window or tab, displaying reason if specified.') % command, 'info')
 		elif command == 'compact':
-			self.print_conversation(_('Usage: /%s, sets the groupchat window to '
-				'compact mode.') % command, 'info')
+			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % command, 'info')
 		elif command == 'invite':
 			self.print_conversation(_('Usage: /%s <JID> [reason], invites JID to '
 				'the current room, optionally providing a reason.') % command,
