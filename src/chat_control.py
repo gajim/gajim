@@ -1016,6 +1016,9 @@ class ChatControl(ChatControlBase):
 		if frm == 'status':
 			kind = 'status'
 			name = ''
+		elif frm == 'info':
+			kind = 'info'
+			name = ''
 		else:
 			ec = gajim.encrypted_chats[self.account]
 			if encrypted and jid not in ec:
@@ -1408,7 +1411,7 @@ class ChatControl(ChatControlBase):
 			data = event[1]
 			kind = data[2]
 			if kind == 'error':
-				kind = 'status'
+				kind = 'info'
 			else:
 				kind = 'print_queue'
 			self.print_conversation(data[0], kind, tim = data[3],
