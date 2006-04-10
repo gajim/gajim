@@ -891,7 +891,8 @@ class RosterWindow:
 			results = gajim.logger.get_unread_msgs_for_jid(jid)
 			for result in results:
 				tim = time.localtime(float(result[2]))
-				self.on_message(jid, result[1], tim, account, msg_type= 'chat', msg_id=result[0])
+				self.on_message(jid, result[1], tim, account, msg_type= 'chat',
+					msg_id=result[0])
 	
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
