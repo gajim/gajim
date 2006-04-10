@@ -244,34 +244,28 @@ _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
 	def show_file_send_request(self, account, contact):
-		dialog = dialogs.FileChooserDialog(_('Choose File to Send...'), 
+		def on_ok(widget):
+			file_dir = None
+			files_path_list = self.dialog.get_filenames()
+			files_path_list = gtkgui_helpers.decode_filechooser_file_paths(
+				files_path_list)
+			for file_path in files_path_list:
+				if self.send_file(account, contact, file_path) and file_dir is None:
+					file_dir = os.path.dirname(file_path)
+			if file_dir:
+				gajim.config.set('last_send_dir', file_dir)
+				self.dialog.destroy()
+
+		self.dialog = dialogs.FileChooserDialog(_('Choose File to Send...'), 
 			gtk.FILE_CHOOSER_ACTION_OPEN, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL),
 			gtk.RESPONSE_OK,
 			True, # select multiple true as we can select many files to send
 			gajim.config.get('last_send_dir'),
 			)
-		
-		btn = dialog.add_button(_('_Send'), gtk.RESPONSE_OK)
-		btn.set_use_stock(True) # FIXME: add send icon to this button (JUMP_TO)
 
-		file_props = {}
-		while True:
-			response = dialog.run()
-			if response == gtk.RESPONSE_OK:
-				file_dir = None
-				files_path_list = dialog.get_filenames()
-				files_path_list = gtkgui_helpers.decode_filechooser_file_paths(
-					files_path_list)
-				for file_path in files_path_list:
-					if self.send_file(account, contact, file_path) and file_dir is None:
-						file_dir = os.path.dirname(file_path)
-				if file_dir:
-					gajim.config.set('last_send_dir', file_dir)
-					dialog.destroy()
-					break
-			else:
-				dialog.destroy()
-				break
+		btn = self.dialog.add_button(_('_Send'), gtk.RESPONSE_OK)
+		btn.set_use_stock(True) # FIXME: add send icon to this button (JUMP_TO)
+		btn.connect('clicked', on_ok)
 
 	def send_file(self, account, contact, file_path):
 		''' start the real transfer(upload) of the file '''

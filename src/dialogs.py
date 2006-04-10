@@ -616,7 +616,7 @@ class HigDialog(gtk.MessageDialog):
 					else:
 						b.connect('clicked', possible_responses[response])
 					break
-	
+
 	def just_destroy(self, widget):
 		self.destroy()
 
@@ -638,25 +638,43 @@ class HigDialog(gtk.MessageDialog):
 		self.destroy()
 		return response
 
-
 class FileChooserDialog(gtk.FileChooserDialog):
 	'''Non-blocking FileChooser Dialog around gtk.FileChooserDialog'''
 	def __init__(self, title_text, action, buttons, default_response,
-	select_multiple, current_folder, on_response_ok = None,
+	select_multiple, current_folder = None, on_response_ok = None,
 	on_response_cancel = None):
 
-		gtk.FileChooserDialog.__init__(self, title=title_text, 
-			action=action, buttons=buttons)
-		
+		gtk.FileChooserDialog.__init__(self, title = title_text, 
+			action = action, buttons = buttons)
+
 		self.set_default_response(default_response)
 		self.set_select_multiple(select_multiple)
 		if current_folder and os.path.isdir(current_folder):
 			self.set_current_folder(current_folder)
 		else:
 			self.set_current_folder(helpers.get_documents_path())
-		
+
+		buttons = self.action_area.get_children()
+		possible_responses = {gtk.STOCK_OK: on_response_ok,
+			gtk.STOCK_CANCEL: on_response_cancel}
+		for b in buttons:
+			for response in possible_responses:
+				if b.get_label() == response:
+					if not possible_responses[response]:
+						b.connect('clicked', self.just_destroy)
+					elif isinstance(possible_responses[response], tuple):
+						if len(possible_responses[response]) == 1:
+							b.connect('clicked', possible_responses[response][0])
+						else:
+							b.connect('clicked', *possible_responses[response])
+					else:
+						b.connect('clicked', possible_responses[response])
+					break
+
 		self.show_all()
-	
+
+	def just_destroy(self, widget):
+		self.destroy()
 
 class ConfirmationDialog(HigDialog):
 	'''HIG compliant confirmation dialog.'''
@@ -666,7 +684,7 @@ class ConfirmationDialog(HigDialog):
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
 			on_response_ok, on_response_cancel)
 		self.popup()
-	
+
 class NonModalConfirmationDialog(HigDialog):
 	'''HIG compliant non modal confirmation dialog.'''
 	def __init__(self, pritext, sectext='', on_response_ok = None,
