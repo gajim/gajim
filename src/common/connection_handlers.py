@@ -1564,18 +1564,21 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 	def _on_roster_set(self, roster):
 		raw_roster = roster.getRaw()
 		roster = {}
+		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
 		for jid in raw_roster:
 			try:
 				j = helpers.parse_jid(jid)
 			except:
 				print >> sys.stderr, _('JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it') % jid
 			else:
-				roster[j] = raw_roster[jid]
-
-		# Remove or jid
-		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
-		if roster.has_key(our_jid):
-			del roster[our_jid]
+				infos = raw_roster[jid]
+				if jid != our_jid and (not infos['subscription'] or infos['subscription'] == \
+				'none') and (not infos['ask'] or infos['ask'] == 'none') and not infos['name'] \
+				and not infos['groups']:
+					# remove this useless item, it won't be shown in roster anyway
+					self.connection.getRoster().delItem(jid)
+				elif jid != our_jid: # don't add our jid
+					roster[j] = raw_roster[jid]
 
 		self.dispatch('ROSTER', roster)
 
