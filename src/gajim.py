@@ -1076,12 +1076,12 @@ class Interface:
 		if pixbuf:
 			path_to_normal_file = path_to_file + '_notif_size_colored.png'
 			pixbuf.save(path_to_normal_file, 'png')
-		# Generate and save the resized, black and white avatar
-		bwbuf = gtkgui_helpers.get_scaled_pixbuf(
-			gtkgui_helpers.make_pixbuf_grayscale(pixbuf), 'notification')
-		if bwbuf:
-			path_to_bw_file = path_to_file + '_notif_size_bw.png'
-			bwbuf.save(path_to_bw_file, 'png')
+			# Generate and save the resized, black and white avatar
+			bwbuf = gtkgui_helpers.get_scaled_pixbuf(
+				gtkgui_helpers.make_pixbuf_grayscale(pixbuf), 'notification')
+			if bwbuf:
+				path_to_bw_file = path_to_file + '_notif_size_bw.png'
+				bwbuf.save(path_to_bw_file, 'png')
 
 	def add_event(self, account, jid, typ, args):
 		'''add an event to the awaiting_events var'''
