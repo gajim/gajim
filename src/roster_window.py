@@ -1092,6 +1092,7 @@ class RosterWindow:
 		if gajim.config.get_per('accounts', account, 'hostname') == contact.jid:
 			# We remove the server contact
 			# remove it from treeview
+			gajim.connections[account].unsubscribe(contact.jid)
 			self.remove_contact(contact, account)
 			gajim.contacts.remove_contact(account, contact)
 			return
