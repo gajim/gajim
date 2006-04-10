@@ -2765,4 +2765,5 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		else: 
 			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.actions_menu_needs_rebuild = True
 		gajim.interface.save_config()
