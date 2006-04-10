@@ -336,7 +336,6 @@ _('Connection with peer cannot be established.'))
 			self.dialog.destroy()
 
 			def on_ok(widget, account, contact, file_props):
-				print 'ok'
 				file_path = self.dialog2.get_filename()
 				file_path = gtkgui_helpers.decode_filechooser_file_paths(
 					(file_path,))[0]
