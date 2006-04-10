@@ -37,17 +37,7 @@ from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
 
 def assert_um_exists():
 	''' create table unread_messages if there is no such table '''
-	con = sqlite.connect(logger.LOG_DB_PATH) 
-	os.chmod(logger.LOG_DB_PATH, 0600) # rw only for us
-	cur = con.cursor()
-	cur.executescript(
-		'''
-		CREATE TABLE IF NOT EXISTS unread_messages (
-			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
-		);
-		'''
-		)
-	con.commit()
+	pass
 	
 def create_log_db():
 	print _('creating logs database')
