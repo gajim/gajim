@@ -235,7 +235,7 @@ class Logger:
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		self.cur.execute('''
-			SELECT message_id, message, time, subject FROM logs , unread_messages 
+			SELECT message_id, message, time, subject FROM logs, unread_messages 
 			WHERE jid_id = %d AND log_line_id = message_id ORDER BY time ASC 
 			''' % (jid_id)
 			)

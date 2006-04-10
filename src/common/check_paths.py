@@ -35,17 +35,17 @@ Q_ = i18n.Q_
 
 from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
 
-def assert_um_exists():
+def assert_unread_msgs_table_exists():
 	''' create table unread_messages if there is no such table '''
 	con = sqlite.connect(logger.LOG_DB_PATH) 
 	cur = con.cursor()
 	cur.executescript(
-			'''
-			CREATE TABLE unread_messages (
-				message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
-			);
-			'''
-			)
+		'''
+		CREATE TABLE unread_messages (
+			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
+		);
+		'''
+	)
 	try:
 		con.commit()
 		gajim.logger.init_vars()
@@ -128,7 +128,7 @@ def check_and_possibly_create_paths():
 			print _('Gajim will now exit')
 			sys.exit()
 		else:
-			assert_um_exists()
+			assert_unread_msgs_table_exists()
 			
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that
