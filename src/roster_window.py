@@ -888,7 +888,7 @@ class RosterWindow:
 	def add_account_contacts(self, account):
 		for jid in gajim.contacts.get_jid_list(account):
 			self.add_contact_to_roster(jid, account)
-			results = gajim.logger.get_um_for_contact(jid)
+			results = gajim.logger.get_unread_msgs_for_jid(jid)
 			for result in results:
 				tim = time.localtime(float(result[2]))
 				self.on_message(jid, result[1], tim, account, msg_type= 'chat', msg_id=result[0])

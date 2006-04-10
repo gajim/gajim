@@ -228,7 +228,7 @@ class Logger:
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
 	
-	def get_um_for_contact(self, jid):
+	def get_unread_msgs_for_jid(self, jid):
 		''' get unread messages for jid '''
 		if not jid:
 			return
