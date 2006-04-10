@@ -877,17 +877,24 @@ class RosterWindow:
 				ctrl.update_ui()
 			
 	def draw_roster(self):
-		'''Clear and draw roster'''
+		'''clear and draw roster'''
 		# clear the model, only if it is not empty
-		if self.tree.get_model():
-			self.tree.get_model().clear()
+		model = self.tree.get_model()
+		if model:
+			model.clear()
 		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
 			self.add_account_contacts(acct)
+			self.fire_up_unread_messages_events(acct)
 	
 	def add_account_contacts(self, account):
+		'''adds contacts of group to roster treeview'''
 		for jid in gajim.contacts.get_jid_list(account):
 			self.add_contact_to_roster(jid, account)
+			
+	def fire_up_unread_messages_events(self, account):
+		'''reads from db the unread messages, and fire them up'''
+		for jid in gajim.contacts.get_jid_list(account):
 			results = gajim.logger.get_unread_msgs_for_jid(jid)
 			for result in results:
 				tim = time.localtime(float(result[2]))
