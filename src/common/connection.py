@@ -114,7 +114,18 @@ class Connection(ConnectionHandlers):
 			# reconnect succeeded
 			self.time_to_reconnect = None
 			self.retrycount = 0
-
+	
+	# We are doing disconnect at so many places, better use one function in all
+	def disconnect(self, on_purpose = False):
+		self.on_purpose = on_purpose
+		self.connected = 0
+		self.time_to_reconnect = None
+		if self.connection:
+			# make sure previous connection is completely closed
+			gajim.proxy65_manager.disconnect(self.connection)
+			self.connection.disconnect()
+			self.connection = None
+	
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
 		gajim.log.debug('disconnectedReconnCB')
@@ -124,12 +135,8 @@ class Connection(ConnectionHandlers):
 			self.old_show = STATUS_LIST[self.connected]
 		self.connected = 0
 		self.dispatch('STATUS', 'offline')
-		if self.connection:
-			# make sure previous connection is completely closed
-			gajim.proxy65_manager.disconnect(self.connection)
-			self.connection.disconnect()
-			self.connection = None
 		if not self.on_purpose:
+			self.disconnect()
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
 				self.connected = 1
 				self.dispatch('STATUS', 'connecting')
@@ -147,6 +154,8 @@ class Connection(ConnectionHandlers):
 				self.dispatch('ERROR',
 				(_('Connection with account "%s" has been lost') % self.name,
 				_('To continue sending and receiving messages, you will need to reconnect.')))
+		else:
+			self.disconnect()
 		self.on_purpose = False
 	# END disconenctedReconnCB
 	
@@ -409,14 +418,9 @@ class Connection(ConnectionHandlers):
 	# END connect
 
 	def quit(self, kill_core):
-		if kill_core:
-			if self.connected > 1:
-				self.connected = 0
-				gajim.proxy65_manager.disconnect(self.connection)
-				self.connection.disconnect()
-				self.time_to_reconnect = None
-			return
-
+		if kill_core and self.connected > 1:
+			self.disconnect()
+	
 	def build_privacy_rule(self, name, action):
 		'''Build a Privacy rule stanza for invisibility'''
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
@@ -578,8 +582,7 @@ class Connection(ConnectionHandlers):
 	def _on_disconnected(self):
 		''' called when a disconnect request has completed successfully'''
 		self.dispatch('STATUS', 'offline')
-		gajim.proxy65_manager.disconnect(self.connection)
-		self.connection = None
+		self.disconnect()
 
 	def get_status(self):
 		return STATUS_LIST[self.connected]
