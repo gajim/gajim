@@ -1125,6 +1125,11 @@ class AccountModificationWindow:
 						_('To change the account name, you must read all pending '
 						'events.'))
 					return
+				if name in gajim.connections:
+					dialogs.ErrorDialog(_('Account Name Already Used'),
+						_('This name is already used by another of your accounts. Please choose '
+						'another name.'))
+					return
 		if (name == ''):
 			dialogs.ErrorDialog(_('Invalid account name'),
 				_('Account name cannot be empty.'))
