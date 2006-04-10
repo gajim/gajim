@@ -290,7 +290,15 @@ _('Connection with peer cannot be established.'))
 		gajim.connections[account].send_file_request(file_props)
 		return True
 
-	def confirm_overwrite_cb(self, dialog, file_props):
+	def _start_receive(self, file_path, account, contact, file_props):
+		file_dir = os.path.dirname(file_path)
+		if file_dir:
+			gajim.config.set('last_save_dir', file_dir)
+		file_props['file-name'] = file_path
+		self.add_transfer(account, contact, file_props)
+		gajim.connections[account].send_file_approval(file_props)
+
+	def confirm_overwrite_cb(self, dialog, account, contact, file_props):
 		file_path = dialog.get_filename()
 		file_path = gtkgui_helpers.decode_filechooser_file_paths((file_path,))[0]
 		if os.path.exists(file_path):
@@ -306,6 +314,8 @@ _('Connection with peer cannot be established.'))
 				return gtk.FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN
 			elif response == 100:
 				file_props['offset'] = dl_size
+		self.dialog2.destroy()
+		self._start_receive(file_path, account, contact, file_props)
 		return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
 
 	def show_file_request(self, account, contact, file_props):
@@ -322,47 +332,42 @@ _('Connection with peer cannot be established.'))
 		if file_props.has_key('desc'):
 			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
 		prim_text = _('%s wants to send you a file:') % contact.jid
-		def on_response_ok(widet, account, contact, file_props):
+		def on_response_ok(widget, account, contact, file_props):
 			self.dialog.destroy()
-			dialog = gtk.FileChooserDialog(title=_('Save File as...'), 
-				action=gtk.FILE_CHOOSER_ACTION_SAVE, 
-				buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
-				gtk.STOCK_SAVE, gtk.RESPONSE_OK))
-			dialog.set_current_name(file_props['name'])
-			dialog.set_default_response(gtk.RESPONSE_OK)
-			gtk28 = False
+
+			def on_ok(widget, account, contact, file_props):
+				print 'ok'
+				file_path = self.dialog2.get_filename()
+				file_path = gtkgui_helpers.decode_filechooser_file_paths(
+					(file_path,))[0]
+				if gtk.gtk_version < (2, 8, 0) or gtk.pygtk_version < (2, 8, 0) and\
+				os.path.exists(file_path):
+					primtext = _('This file already exists')
+					sectext = _('Would you like to overwrite it?')
+					dialog3 = dialogs.ConfirmationDialog(primtext, sectext)
+					if dialog3.get_response() != gtk.RESPONSE_OK:
+						return
+				self.dialog2.destroy()
+				self._start_receive(file_path, account, contact, file_props)
+
+			def on_cancel(widget, account, contact, file_props):
+				self.dialog2.destroy()
+				gajim.connections[account].send_file_rejection(file_props)
+
+			self.dialog2 = dialogs.FileChooserDialog(
+				title_text = _('Save File as...'), 
+				action = gtk.FILE_CHOOSER_ACTION_SAVE, 
+				buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
+				gtk.STOCK_SAVE, gtk.RESPONSE_OK),
+				default_response = gtk.RESPONSE_OK,
+				current_folder = gajim.config.get('last_save_dir'),
+				on_response_ok = (on_ok, account, contact, file_props),
+				on_response_cancel = (on_cancel, account, contact, file_props))
+			self.dialog2.set_current_name(file_props['name'])
 			if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
-				dialog.props.do_overwrite_confirmation = True
-				dialog.connect('confirm-overwrite', self.confirm_overwrite_cb,
-					file_props)
-				gtk28 = True
-			last_save_dir = gajim.config.get('last_save_dir')
-			if last_save_dir and os.path.isdir(last_save_dir):
-				dialog.set_current_folder(last_save_dir)
-			else:
-				dialog.set_current_folder(helpers.get_desktop_path())
-			while True:
-				response = dialog.run()
-				if response == gtk.RESPONSE_OK:
-					file_path = dialog.get_filename()
-					file_path = gtkgui_helpers.decode_filechooser_file_paths(
-						(file_path,))[0]
-					if not gtk28 and os.path.exists(file_path):
-						primtext = _('This file already exists')
-						sectext = _('Would you like to overwrite it?')
-						dialog2 = dialogs.ConfirmationDialog(primtext, sectext)
-						if dialog2.get_response() != gtk.RESPONSE_OK:
-							continue
-					file_dir = os.path.dirname(file_path)
-					if file_dir:
-						gajim.config.set('last_save_dir', file_dir)
-					file_props['file-name'] = file_path
-					self.add_transfer(account, contact, file_props)
-					gajim.connections[account].send_file_approval(file_props)
-				else:
-					gajim.connections[account].send_file_rejection(file_props)
-				dialog.destroy()
-				break
+				self.dialog2.props.do_overwrite_confirmation = True
+				self.dialog2.connect('confirm-overwrite', self.confirm_overwrite_cb,
+					account, contact, file_props)
 
 		def on_response_cancel(widget, account, file_props):
 			self.dialog.destroy()

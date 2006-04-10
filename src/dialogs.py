@@ -641,7 +641,7 @@ class HigDialog(gtk.MessageDialog):
 class FileChooserDialog(gtk.FileChooserDialog):
 	'''Non-blocking FileChooser Dialog around gtk.FileChooserDialog'''
 	def __init__(self, title_text, action, buttons, default_response,
-	select_multiple, current_folder = None, on_response_ok = None,
+	select_multiple = False, current_folder = None, on_response_ok = None,
 	on_response_cancel = None):
 
 		gtk.FileChooserDialog.__init__(self, title = title_text, 
@@ -655,7 +655,7 @@ class FileChooserDialog(gtk.FileChooserDialog):
 			self.set_current_folder(helpers.get_documents_path())
 
 		buttons = self.action_area.get_children()
-		possible_responses = {gtk.STOCK_OK: on_response_ok,
+		possible_responses = {gtk.STOCK_OPEN: on_response_ok,
 			gtk.STOCK_CANCEL: on_response_cancel}
 		for b in buttons:
 			for response in possible_responses:
