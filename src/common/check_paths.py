@@ -36,22 +36,18 @@ Q_ = i18n.Q_
 from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
 
 def assert_unread_msgs_table_exists():
-	''' create table unread_messages if there is no such table '''
+	'''create table unread_messages if there is no such table'''
 	con = sqlite.connect(logger.LOG_DB_PATH) 
 	cur = con.cursor()
 	cur.executescript(
 		'''
-		CREATE TABLE unread_messages (
+		CREATE TABLE IF NOT EXISTS unread_messages (
 			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
 		);
 		'''
 	)
-	try:
-		con.commit()
-		gajim.logger.init_vars()
-	except sqlite.OperationalError, e:
-		pass
-	con.close()
+	con.commit()
+	gajim.logger.init_vars() # FIXME: is this needed?
 	
 def create_log_db():
 	print _('creating logs database')
