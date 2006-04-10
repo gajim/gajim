@@ -1565,7 +1565,75 @@ class SoundChooserDialog(FileChooserDialog):
 		self.add_filter(filter)
 		self.set_filter(filter)
 
-		self.set_filename(path_to_snd_file)
+		if path_to_snd_file:
+			self.set_filename(path_to_snd_file)
+
+class ImageChooserDialog(FileChooserDialog):
+	def __init__(self, path_to_file = '', on_response_ok = None,
+	on_response_cancel = None):
+		'''optionally accepts path_to_snd_file so it has that as selected'''
+		def on_ok(widget, callback):
+			'''check if file exists and call callback'''
+			path_to_file = self.get_filename()
+			try:
+				path_to_file = path_to_file.decode(
+					sys.getfilesystemencoding())
+			except:
+				pass
+			if os.path.exists(path_to_file):
+				callback(widget, path_to_file)
+
+		try:
+			if os.name == 'nt':
+				path = helpers.get_my_pictures_path()
+			else:
+				path = os.environ['HOME']
+		except:
+			path = ''
+		FileChooserDialog.__init__(self,
+			title_text = _('Choose Image'),
+			action = gtk.FILE_CHOOSER_ACTION_OPEN,
+			buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				gtk.STOCK_OPEN, gtk.RESPONSE_OK),
+			default_response = gtk.RESPONSE_OK,
+			current_folder = path,
+			on_response_ok = (on_ok, on_response_ok),
+			on_response_cancel = on_response_cancel)
+
+		filter = gtk.FileFilter()
+		filter.set_name(_('All files'))
+		filter.add_pattern('*')
+		self.add_filter(filter)
+
+		filter = gtk.FileFilter()
+		filter.set_name(_('Images'))
+		filter.add_mime_type('image/png')
+		filter.add_mime_type('image/jpeg')
+		filter.add_mime_type('image/gif')
+		filter.add_mime_type('image/tiff')
+		filter.add_mime_type('image/x-xpixmap') # xpm
+		self.add_filter(filter)
+		self.set_filter(filter)
+
+		if path_to_file:
+			self.set_filename(path_to_file)
+
+		self.set_use_preview_label(False)
+		self.set_preview_widget(gtk.Image())
+		self.connect('selection-changed', self.update_preview)
+
+	def update_preview(self, widget):
+		path_to_file = widget.get_preview_filename()
+		if path_to_file is None or os.path.isdir(path_to_file):
+			# nothing to preview or directory
+			# make sure you clean image do show nothing
+			widget.get_preview_widget().set_from_file(None)
+			return
+		try:
+			pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(path_to_file, 100, 100)
+		except gobject.GError:
+			return
+		widget.get_preview_widget().set_from_pixbuf(pixbuf)
 
 class AddSpecialNotificationDialog:
 	def __init__(self, jid):

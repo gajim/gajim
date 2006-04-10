@@ -172,70 +172,27 @@ class VcardWindow:
 
 	def on_set_avatar_button_clicked(self, widget):
 		f = None
-		dialog = gtk.FileChooserDialog(_('Choose Avatar'), None,
-			gtk.FILE_CHOOSER_ACTION_OPEN,
-			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-			gtk.STOCK_OPEN, gtk.RESPONSE_OK))
-		try:
-			if os.name == 'nt':
-				path = helpers.get_my_pictures_path()
-			else:
-				path = os.environ['HOME']
-		except:
-			path = ''
-		if path:
-			dialog.set_current_folder(path)
-		dialog.set_default_response(gtk.RESPONSE_OK)
-		filtr = gtk.FileFilter()
-		filtr.set_name(_('All files'))
-		filtr.add_pattern('*')
-		dialog.add_filter(filtr)
-
-		filtr = gtk.FileFilter()
-		filtr.set_name(_('Images'))
-		filtr.add_mime_type('image/png')
-		filtr.add_mime_type('image/jpeg')
-		filtr.add_mime_type('image/gif')
-		filtr.add_mime_type('image/tiff')
-		filtr.add_mime_type('image/x-xpixmap') # xpm
-		dialog.add_filter(filtr)
-		dialog.set_filter(filtr)
-		dialog.set_use_preview_label(False)
-		dialog.set_preview_widget(gtk.Image())
-		dialog.connect('selection-changed', self.update_preview)
-
-		done = False
-		while not done:
-			response = dialog.run()
-
-			if response == gtk.RESPONSE_OK:
-				path_to_file = dialog.get_filename()
-				path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
-					(path_to_file,))[0]
-				filesize = os.path.getsize(path_to_file) # in bytes
-				if filesize > 16384: # 16 kb
-					try:
-						pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
-						# get the image at 'notification size'
-						# and use that user did not specify in ACE crazy size
-						scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
-							'notification')
-					except gobject.GError, msg: # unknown format
-						dialogs.ErrorDialog(_('Could not load image'), msg)
-						continue
-					else:
-						if scaled_pixbuf:
-							path_to_file = os.path.join(gajim.TMP,
-								'avatar_scaled.png')
-							scaled_pixbuf.save(path_to_file, 'png')
-						done = True
+		def on_ok(widget, path_to_file):
+			path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
+				(path_to_file,))[0]
+			filesize = os.path.getsize(path_to_file) # in bytes
+			if filesize > 16384: # 16 kb
+				try:
+					pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
+					# get the image at 'notification size'
+					# and use that user did not specify in ACE crazy size
+					scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
+						'notification')
+				except gobject.GError, msg: # unknown format
+					dialogs.ErrorDialog(_('Could not load image'), msg)
+					return
 				else:
-					done = True
-			else: # Cancel or WM X button
-				done = True
-				
-		dialog.destroy()
-		if response == gtk.RESPONSE_OK:
+					if scaled_pixbuf:
+						path_to_file = os.path.join(gajim.TMP,
+							'avatar_scaled.png')
+						scaled_pixbuf.save(path_to_file, 'png')
+			self.dialog.destroy()
+
 			fd = open(path_to_file, 'rb')
 			data = fd.read()
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
@@ -246,6 +203,8 @@ class VcardWindow:
 			self.avatar_encoded = base64.encodestring(data)
 			# returns None if unknown type
 			self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
+
+		self.dialog = dialogs.ImageChooserDialog(on_response_ok = on_ok)
 
 	def set_value(self, entry_name, value):
 		try:
