@@ -656,6 +656,7 @@ class FileChooserDialog(gtk.FileChooserDialog):
 
 		buttons = self.action_area.get_children()
 		possible_responses = {gtk.STOCK_OPEN: on_response_ok,
+			gtk.STOCK_SAVE: on_response_ok,
 			gtk.STOCK_CANCEL: on_response_cancel}
 		for b in buttons:
 			for response in possible_responses:
