@@ -164,7 +164,7 @@ class OptionsParser:
 			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
 			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont', 
 			'bannerfontattrs']
-		for theme_name in (_('grocery'), _('plain')):
+		for theme_name in (_('grocery'), _('gtk+')):
 			if theme_name not in gajim.config.get_per('themes'):
 				gajim.config.add_per('themes', theme_name)
 				theme = gajim.config.themes_default[theme_name]
@@ -190,13 +190,7 @@ class OptionsParser:
 				proxies += ', ' + 'proxy.netlab.cz'
 			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
 				proxies)
-		# Add some emots :-* :* >:) >:-) <3
-		for emot in [':-*', ':*', '>:)', '>:-)', '<3']:
-			if emot not in gajim.config.get_per('emoticons'):
-				gajim.config.add_per('emoticons', emot)
-				gajim.config.set_per('emoticons', emot, 'path',
-					gajim.config.emoticons_default[emot])
-		
+
 		gajim.config.set('version', '0.9')
 
 	def update_config_09_to_010(self):
@@ -224,5 +218,5 @@ class OptionsParser:
 			proxies_str = ', '.join(proxies)
 			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
 				proxies_str)
-																										
+
 		gajim.config.set('version', '0.10')
