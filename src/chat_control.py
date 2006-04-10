@@ -1403,6 +1403,8 @@ class ChatControl(ChatControlBase):
 		if control and control.type_id == message_control.TYPE_GC:
 			is_pm = True
 		events_to_keep = []
+		# list of message ids which should be marked as read
+		message_ids = []
 		for event in l:
 			typ = event[0]
 			if typ != 'chat':
@@ -1416,13 +1418,15 @@ class ChatControl(ChatControlBase):
 				kind = 'print_queue'
 			self.print_conversation(data[0], kind, tim = data[3],
 						encrypted = data[4], subject = data[1])
-
+			if len(data) > 6 and isinstance(data[6], int):
+				message_ids.append(data[6])
 			# remove from gc nb_unread if it's pm or from roster
 			if is_pm:
 				control.nb_unread -= 1
 			else:
 				gajim.interface.roster.nb_unread -= 1
-
+		if message_ids:
+			gajim.logger.set_read_messages(message_ids)
 		if is_pm:
 			control.parent_win.show_title()
 		else:

@@ -35,6 +35,20 @@ Q_ = i18n.Q_
 
 from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
 
+def assert_um_exists():
+	''' create table unread_messages if there is no such table '''
+	con = sqlite.connect(logger.LOG_DB_PATH) 
+	os.chmod(logger.LOG_DB_PATH, 0600) # rw only for us
+	cur = con.cursor()
+	cur.executescript(
+		'''
+		CREATE TABLE IF NOT EXISTS unread_messages (
+			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
+		);
+		'''
+		)
+	con.commit()
+	
 def create_log_db():
 	print _('creating logs database')
 	con = sqlite.connect(logger.LOG_DB_PATH) 
@@ -54,6 +68,10 @@ def create_log_db():
 			jid_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid TEXT UNIQUE,
 			type INTEGER
+		);
+		
+		CREATE TABLE unread_messages(
+			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
 		);
 		
 		CREATE TABLE logs(
@@ -105,6 +123,8 @@ def check_and_possibly_create_paths():
 			print _('%s is directory but should be file') % LOG_DB_PATH
 			print _('Gajim will now exit')
 			sys.exit()
+		else:
+			assert_um_exists()
 			
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that

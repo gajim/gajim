@@ -618,7 +618,7 @@ class Interface:
 
 		# array: (jid, msg, time, encrypted, msg_type, subject)
 		self.roster.on_message(jid, message, array[2], account, array[3],
-			msg_type, array[5], resource)
+			msg_type, array[5], resource, msg_id)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
 

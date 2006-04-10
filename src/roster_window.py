@@ -2097,7 +2097,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		mw.new_tab(gc_control)
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,
-			msg_type = '', subject = None, resource = ''):
+			msg_type = '', subject = None, resource = '', msg_id = None):
 		'''when we receive a message'''
 		contact = None
 		# if chat window will be for specific resource
@@ -2167,6 +2167,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				typ = 'status'
 			ctrl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
 						subject = subject)
+			if msg_id:
+				gajim.logger.set_read_messages([msg_id])
 			return
 
 		# We save it in a queue
@@ -2176,7 +2178,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if msg_type == 'normal':
 			kind = 'normal'
 		qs[fjid].append((kind, (msg, subject, msg_type, tim, encrypted,
-			resource)))
+			resource, msg_id)))
 		self.nb_unread += 1
 		if popup:
 			if not ctrl:

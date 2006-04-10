@@ -194,10 +194,35 @@ class Logger:
 		
 		return kind_col, show_col
 	
-	def commit_to_db(self, values):
+	def commit_to_db(self, values, write_unread = False):
 		#print 'saving', values
 		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
 		self.cur.execute(sql, values)
+		message_id = None
+		try:
+			self.con.commit()
+			if write_unread:
+				message_id = self.cur.lastrowid
+		except sqlite.OperationalError, e:
+			print >> sys.stderr, str(e)
+		if message_id:
+			self.insert_unread_events(message_id)
+		return message_id
+	
+	def insert_unread_events(self, message_id):
+		''' add unread message with id: message_id'''
+		sql = 'INSERT INTO unread_messages VALUES (%d)' % message_id
+		self.cur.execute(sql)
+		try:
+			self.con.commit()
+		except sqlite.OperationalError, e:
+			print >> sys.stderr, str(e)
+	
+	def set_read_messages(self, message_ids):
+		''' mark all messages with ids in message_ids as read'''
+		ids = ','.join([str(i) for i in message_ids])
+		sql = 'DELETE FROM unread_messages WHERE message_id IN (%s)' % ids
+		self.cur.execute(sql)
 		try:
 			self.con.commit()
 		except sqlite.OperationalError, e:
@@ -233,7 +258,9 @@ class Logger:
 		
 		kind_col, show_col = self.convert_human_values_to_db_api_values(kind,
 			show)
-
+		
+		write_unread = False
+		
 		# now we may have need to do extra care for some values in columns
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
@@ -260,14 +287,16 @@ class Logger:
 			contact_name_col = nick
 		else:
 			jid_id = self.get_jid_id(jid)
+			if kind == 'chat_msg_recv':
+				write_unread = True
 		
 		if show_col == 'UNKNOWN': # unknown show, do not log
 			return
 			
 		values = (jid_id, contact_name_col, time_col, kind_col, show_col,
 			message_col, subject_col)
-		self.commit_to_db(values)
-
+		return self.commit_to_db(values, write_unread)
+		
 	def get_last_conversation_lines(self, jid, restore_how_many_rows,
 		pending_how_many, timeout):
 		'''accepts how many rows to restore and when to time them out (in minutes)
