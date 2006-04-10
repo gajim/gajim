@@ -32,6 +32,7 @@ from common.logger import LOG_DB_PATH, constants
 
 from common import gajim
 from common import i18n
+from common import helpers
 _ = i18n._
 gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
 gtk.glade.textdomain(i18n.APP)
@@ -280,7 +281,7 @@ class HistoryManager:
 		# as we use those jids from db
 		jid_id = self._get_jid_id(jid)
 		self.cur.execute('''
-			SELECT log_line_id, jid_id, time, kind, message, subject, contact_name
+			SELECT log_line_id, jid_id, time, kind, message, subject, contact_name, show
 			FROM logs
 			WHERE jid_id = ?
 			ORDER BY time
@@ -300,7 +301,7 @@ class HistoryManager:
 			# time, message, subject, nickname
 			# but store in liststore
 			# log_line_id, jid_id, time, message, subject, nickname
-			log_line_id, jid_id, time_, kind, message, subject, nickname = row
+			log_line_id, jid_id, time_, kind, message, subject, nickname, show = row
 			try:
 				time_ = time.strftime('%x', time.localtime(float(time_))).decode(
 					locale.getpreferredencoding())
@@ -317,7 +318,13 @@ class HistoryManager:
 				elif kind in (constants.KIND_STATUS,
 				constants.KIND_GCSTATUS): # is is statuses
 					color = gajim.config.get('statusmsgcolor') # so status color
-				
+					# include status into (status) message
+					if message is None:
+						message = ''
+					else:
+						message = ' : ' + message 
+					message = helpers.get_uf_show(gajim.SHOW_LIST[show]) + message
+					
 				message = '<span foreground="%s">%s</span>' % (color,
 					gtkgui_helpers.escape_for_pango_markup(message))
 				self.logs_liststore.append((log_line_id, jid_id, time_, message,
