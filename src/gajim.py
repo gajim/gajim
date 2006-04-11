@@ -295,8 +295,7 @@ class Interface:
 			model[self.roster.status_message_menuitem_iter][3] = True
 
 		# Inform all controls for this account of the connection state change
-		for ctrl in self.msg_win_mgr.get_controls(
-			type = message_control.TYPE_GC):
+		for ctrl in self.msg_win_mgr.get_controls():
 			if ctrl.account == account:
 				if status == 'offline':
 					ctrl.got_disconnected()
