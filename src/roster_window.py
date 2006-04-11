@@ -2758,10 +2758,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def set_renderer_color(self, renderer, set_background = True):
 		'''set style for treeview cell, using PRELIGHT system color'''
 		if set_background:
-			bgcolor = self.tree.style.bg[gtk.STATE_PRELIGHT]
+			bgcolor = self.tree.style.bg[gtk.STATE_ACTIVE]
 			renderer.set_property('cell-background-gdk', bgcolor)
 		else:
-			fgcolor = self.tree.style.fg[gtk.STATE_PRELIGHT]
+			fgcolor = self.tree.style.fg[gtk.STATE_ACTIVE]
 			renderer.set_property('foreground-gdk', fgcolor)
 	
 	def iconCellDataFunc(self, column, renderer, model, iter, data = None):
