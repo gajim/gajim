@@ -383,6 +383,23 @@ class ConnectionBytestream:
 				self.send_success_connect_reply, self._connect_error)
 		raise common.xmpp.NodeProcessed
 
+	def _ResultCB(self, con, iq_obj):
+		gajim.log.debug('_ResultCB')
+		# if we want to respect jep-0065 we have to check for proxy
+		# activation result in any result iq
+		real_id = unicode(iq_obj.getAttr('id'))
+		if real_id[:3] != 'au_':
+			return
+		frm = helpers.get_full_jid_from_iq(iq_obj)
+		id = real_id[3:]
+		if self.files_props.has_key(id):
+			file_props = self.files_props[id]
+			if file_props['streamhost-used']:
+				for host in file_props['proxyhosts']:
+					if host['initiator'] == frm:
+						gajim.socks5queue.activate_proxy(host['idx'])
+						raise common.xmpp.NodeProcessed
+	
 	def _bytestreamResultCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamResultCB')
 		frm = helpers.get_full_jid_from_iq(iq_obj)
@@ -1707,5 +1724,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)
+		con.RegisterHandler('iq', self._ResultCB, 'result')
 		con.RegisterHandler('presence', self._StanzaArrivedCB)
 		con.RegisterHandler('message', self._StanzaArrivedCB)
