@@ -641,7 +641,7 @@ class ConversationTextview(gtk.TextView):
 		'''this adds normal and special text. call this to add text'''
 		buffer = self.get_buffer()
 		# /me is replaced by name if name is given
-		if name and text.startswith('/me ') or text.startswith('/me\n'):
+		if name and (text.startswith('/me ') or text.startswith('/me\n')):
 			text = '* ' + name + text[3:]
 		# detect urls formatting and if the user has it on emoticons
 		index = self.detect_and_print_special_text(text, text_tags)
