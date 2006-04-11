@@ -323,7 +323,7 @@ class HistoryManager:
 						message = ''
 					else:
 						message = ' : ' + message 
-					message = helpers.get_uf_show(gajim.SHOW_LIST[show]) + message
+					message = helpers.get_uf_show(show) + message
 					
 				message = '<span foreground="%s">%s</span>' % (color,
 					gtkgui_helpers.escape_for_pango_markup(message))
