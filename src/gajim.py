@@ -201,6 +201,7 @@ class Interface:
 		#('ROSTER', account, array)
 		self.roster.fill_contacts_and_groups_dicts(data, account)
 		self.roster.add_account_contacts(account)
+		self.roster.fire_up_unread_messages_events(account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Roster', (account, data))
 
