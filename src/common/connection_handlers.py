@@ -22,6 +22,7 @@ import time
 import base64
 import sha
 import socket
+import sys
 
 from calendar import timegm
 

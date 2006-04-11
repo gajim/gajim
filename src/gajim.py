@@ -94,7 +94,6 @@ import sre
 import signal
 import getopt
 import time
-import threading
 import math
 
 import gtkgui_helpers

@@ -20,14 +20,12 @@ import sre
 import os
 import urllib
 import errno
+import select
 import sys
-import stat
 import sha
-from pysqlite2 import dbapi2 as sqlite
 from encodings.punycode import punycode_encode
 
 import gajim
-import logger
 import i18n
 from xmpp_stringprep import nodeprep, resourceprep, nameprep
 
