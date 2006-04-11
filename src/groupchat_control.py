@@ -207,17 +207,31 @@ class GroupchatControl(ChatControlBase):
 		'''When window gets focus'''
 		if self.parent_win.get_active_jid() == self.room_jid:
 			self.allow_focus_out_line = True
+	
+	def set_renderer_color(self, renderer, set_background = True):
+		'''set style for group row, using PRELIGHT system color'''
+		if set_background:
+			bgcolor = self.list_treeview.style.bg[gtk.STATE_PRELIGHT]
+			renderer.set_property('cell-background-gdk', bgcolor)
+		else:
+			fgcolor = self.list_treeview.style.fg[gtk.STATE_PRELIGHT]
+			renderer.set_property('foreground-gdk', fgcolor)
 
 	def tree_cell_data_func(self, column, renderer, model, iter, data=None):
 		theme = gajim.config.get('roster_theme')
 		if model.iter_parent(iter):
 			bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
+			if bgcolor:
+				renderer.set_property('cell-background', bgcolor)
+			else:
+				renderer.set_property('cell-background', None)
 		else: # it is root (eg. group)
 			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
-		if bgcolor:
-			renderer.set_property('cell-background', bgcolor)
-		else:
-			renderer.set_property('cell-background', None)
+			if bgcolor:
+				renderer.set_property('cell-background', bgcolor)
+			else:
+				self.set_renderer_color(renderer)
+		#FIXME, we don't drow theme text color
 
 	def avatar_cell_data_func(self, column, renderer, model, iter, data=None):
 		self.tree_cell_data_func(column, renderer, model, iter, data)
