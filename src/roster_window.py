@@ -2039,7 +2039,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			model[accountIter][0] = self.jabber_state_images['16'][status]
 		if status == 'offline':
 			if accountIter:
-				model[accountIter][6] = None
+				model[accountIter][C_SECPIXBUF] = None
+			if gajim.con_types.has_key(account):
+				gajim.con_types[account] = None
 			for jid in gajim.contacts.get_jid_list(account):
 				lcontact = gajim.contacts.get_contact(account, jid)
 				lcontact_copy = []
