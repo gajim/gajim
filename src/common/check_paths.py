@@ -41,13 +41,17 @@ def assert_unread_msgs_table_exists():
 	cur = con.cursor()
 	cur.executescript(
 		'''
-		CREATE TABLE IF NOT EXISTS unread_messages (
+		CREATE TABLE unread_messages (
 			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
 		);
 		'''
 	)
-	con.commit()
-	gajim.logger.init_vars() # FIXME: is this needed?
+	try:
+		con.commit()
+		gajim.logger.init_vars() # FIXME: is this needed?
+	except sqlite.OperationalError, e:
+		pass
+	con.close()
 	
 def create_log_db():
 	print _('creating logs database')
