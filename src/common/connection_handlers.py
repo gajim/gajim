@@ -1079,9 +1079,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					jid = meta.getAttr('jid')
 					tag = meta.getAttr('tag')
 					data = {'jid': jid}
-					prio = meta.getAttr('priority')
-					if prio != None:
-						data['priority'] = prio
+					order = meta.getAttr('order')
+					if order != None:
+						data['order'] = order
 					if meta_list.has_key(tag):
 						meta_list[tag].append(data)
 					else:

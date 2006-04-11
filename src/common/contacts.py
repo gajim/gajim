@@ -293,8 +293,8 @@ class Contacts:
 
 	def get_metacontacts_family(self, account, jid):
 		'''return the family of the given jid, including jid in the form:
-		[{'account': acct, 'jid': jid, 'priority': prio}, ]
-		'priority' is optional'''
+		[{'account': acct, 'jid': jid, 'order': order}, ]
+		'order' is optional'''
 		tag = self.get_metacontacts_tag(account, jid)
 		if not tag:
 			return []
@@ -308,16 +308,22 @@ class Contacts:
 
 	def _get_data_score(self, data):
 		'''compute thescore of a gived data
-		data is {'jid': jid, 'account': account, 'priority': priority}
-		priority is optional
-		score = meta_priority*10000 + is_jabber*priority*10 + status'''
+		data is {'jid': jid, 'account': account, 'order': order}
+		order is optional
+		score = (max_order - order)*10000 + is_jabber*priority*10 + status'''
 		jid = data['jid']
 		account = data['account']
-		priority = 0
-		if data.has_key('priority'):
-			priority = data['priority']
+		max_order = 0
+		order = 0
+		if data.has_key('order'):
+			order = data['order']
+		if order:
+			family = self.get_metacontacts_family(account, jid)
+			for data_ in family:
+				if data_.has_key('order') and data_['order'] > max_order:
+					max_order = data_['order']
 		contact = self.get_contact_with_highest_priority(account, jid)
-		score = priority*10000
+		score = (max_order - order)*10000
 		if not common.gajim.jid_is_transport(jid):
 			score += contact.priority*10
 		score += ['not in roster', 'error', 'offline', 'invisible', 'dnd', 'xa',
