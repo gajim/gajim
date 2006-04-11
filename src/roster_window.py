@@ -1147,7 +1147,7 @@ class RosterWindow:
 		# account is offline, don't allow to rename
 		if gajim.connections[account].connected < 2:
 			return
-		if row_type == 'contact':
+		if row_type in ('contact', 'agent'):
 			# it's jid
 			# Remove possible resource indicator (Name (2))
 			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
@@ -2573,7 +2573,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		type = model[iter][C_TYPE]
 		# restore the number of resources string at the end of contact name
 		contacts = gajim.contacts.get_contact(account, jid)
-		if type == 'contact' and len(contacts) > 1:
+		if type in ('contact', 'agent'):
 			self.draw_contact(jid, account)
 		# reset editable to False
 		model[iter][C_EDITABLE] = False
