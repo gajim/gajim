@@ -206,12 +206,12 @@ class Logger:
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
 		if message_id:
-			self.insert_unread_events(message_id)
+			self.insert_unread_events(message_id, values[0])
 		return message_id
 	
-	def insert_unread_events(self, message_id):
+	def insert_unread_events(self, message_id, jid_id):
 		''' add unread message with id: message_id'''
-		sql = 'INSERT INTO unread_messages VALUES (%d)' % message_id
+		sql = 'INSERT INTO unread_messages VALUES (%d, %d)' % (message_id, jid_id)
 		self.cur.execute(sql)
 		try:
 			self.con.commit()
@@ -234,14 +234,20 @@ class Logger:
 			return
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
-		self.cur.execute('''
-			SELECT message_id, message, time, subject FROM logs, unread_messages 
-			WHERE jid_id = %d AND log_line_id = message_id ORDER BY time ASC 
-			''' % (jid_id)
-			)
-
+		all_messages = []
+		self.cur.execute(
+			'SELECT message_id from unread_messages WHERE jid_id = %d' % jid_id)
 		results = self.cur.fetchall()
-		return results
+		for message in results:
+			msg_id = message[0]
+			self.cur.execute('''
+				SELECT log_line_id, message, time, subject FROM logs
+				WHERE jid_id = %d AND log_line_id = %d
+				''' % (jid_id, msg_id)
+				)
+			results = self.cur.fetchall()
+			all_messages.append(results[0])
+		return all_messages
 		
 	def write(self, kind, jid, message = None, show = None, tim = None,
 	subject = None):

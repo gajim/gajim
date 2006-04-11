@@ -43,7 +43,8 @@ def assert_unread_msgs_table_exists():
 		cur.executescript(
 			'''
 			CREATE TABLE unread_messages (
-				message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
+				message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+				jid_id INTEGER
 			);
 			'''
 		)
