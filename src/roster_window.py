@@ -875,7 +875,7 @@ class RosterWindow:
 		for ctrl in gajim.interface.msg_win_mgr.controls():
 			if ctrl.type_id == message_control.TYPE_GC:
 				ctrl.update_ui()
-			
+
 	def draw_roster(self):
 		'''clear and draw roster'''
 		# clear the model, only if it is not empty
@@ -885,22 +885,21 @@ class RosterWindow:
 		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
 			self.add_account_contacts(acct)
-			self.fire_up_unread_messages_events(acct)
-	
+
 	def add_account_contacts(self, account):
 		'''adds contacts of group to roster treeview'''
 		for jid in gajim.contacts.get_jid_list(account):
 			self.add_contact_to_roster(jid, account)
-			
+
 	def fire_up_unread_messages_events(self, account):
 		'''reads from db the unread messages, and fire them up'''
 		for jid in gajim.contacts.get_jid_list(account):
 			results = gajim.logger.get_unread_msgs_for_jid(jid)
 			for result in results:
 				tim = time.localtime(float(result[2]))
-				self.on_message(jid, result[1], tim, account, msg_type= 'chat',
-					msg_id=result[0])
-	
+				self.on_message(jid, result[1], tim, account, msg_type = 'chat',
+					msg_id = result[0])
+
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
 		if account not in gajim.contacts.get_accounts():
