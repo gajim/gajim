@@ -2754,7 +2754,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		redraw the treeview'''
 		gajim.config.set('showoffline', not gajim.config.get('showoffline'))
 		self.draw_roster()
-
+	
+	def set_renderer_color(self, renderer, set_background = True):
+		'''set style for treeview cell, using PRELIGHT system color'''
+		if set_background:
+			bgcolor = self.tree.style.bg[gtk.STATE_PRELIGHT]
+			renderer.set_property('cell-background-gdk', bgcolor)
+		else:
+			fgcolor = self.tree.style.fg[gtk.STATE_PRELIGHT]
+			renderer.set_property('foreground-gdk', fgcolor)
+	
 	def iconCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for icon renderer'''
 		theme = gajim.config.get('roster_theme')
@@ -2763,14 +2772,14 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
-				renderer.set_property('cell-background', None)
+				self.set_renderer_color(renderer)
 			renderer.set_property('xalign', 0)
 		elif model[iter][C_TYPE] == 'group':
 			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
-				renderer.set_property('cell-background', None)
+				self.set_renderer_color(renderer)
 			renderer.set_property('xalign', 0.2)
 		else:
 			jid = model[iter][C_JID].decode('utf-8')
@@ -2800,12 +2809,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if color:
 				renderer.set_property('foreground', color)
 			else:
-				renderer.set_property('foreground', None)
+				self.set_renderer_color(renderer, False)
 			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
-				renderer.set_property('cell-background', None)
+				self.set_renderer_color(renderer)
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
@@ -2815,12 +2824,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if color:
 				renderer.set_property('foreground', color)
 			else:
-				renderer.set_property('foreground', None)
+				self.set_renderer_color(renderer, False)
 			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
-				renderer.set_property('cell-background', None)
+				self.set_renderer_color(renderer)
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
@@ -2858,13 +2867,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
-				renderer.set_property('cell-background', None)
+				self.set_renderer_color(renderer)
 		elif model[iter][C_TYPE] == 'group':
 			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
-				renderer.set_property('cell-background', None)
+				self.set_renderer_color(renderer)
 		else: # contact
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
