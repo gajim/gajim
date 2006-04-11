@@ -854,6 +854,8 @@ class ConnectionVcard:
 		vcard['PHOTO'].has_key('BINVAL'):
 			photo = vcard['PHOTO']['BINVAL']
 			photo_decoded = base64.decodestring(photo)
+			our_jid = gajim.get_jid_from_account(self.name)
+			gajim.interface.save_avatar_files(our_jid, photo_decoded)
 			avatar_sha = sha.sha(photo_decoded).hexdigest()
 			iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
 
