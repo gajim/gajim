@@ -531,11 +531,11 @@ class AboutDialog:
 		authors = [
 			'Current Developers:',
 			'Yann Le Boulanger <asterix@lagaule.org>',
-			'Nikos Kouremenos <kourem@gmail.com>',
 			'Dimitur Kirov <dkirov@gmail.com>',
 			'Travis Shirk <travis@pobox.com>',
 			'',
 			_('Past Developers:'),
+			'Nikos Kouremenos <kourem@gmail.com>',
 			'Vincent Hanquez <tab@snarc.org>',
 			'',
 			_('THANKS:'),
