@@ -39,6 +39,7 @@ def assert_unread_msgs_table_exists():
 	'''create table unread_messages if there is no such table'''
 	con = sqlite.connect(logger.LOG_DB_PATH) 
 	cur = con.cursor()
+	needs_init_vars = False
 	try:
 		cur.executescript(
 			'''
@@ -49,12 +50,20 @@ def assert_unread_msgs_table_exists():
 			'''
 		)
 		con.commit()
-		#FIXME: remove before release 0.10, it's temporary
-		cur.executescript('ALTER TABLE unread_messages ADD jid_id;')
-		con.commit()
-		gajim.logger.init_vars() 
+		needs_init_vars = True
 	except sqlite.OperationalError, e:
 		pass
+	# add column jid_id. if there is such column do nothing 
+	try:
+		#FIXME: remove before release 0.10, it's temporary
+		cur.executescript('ALTER TABLE unread_messages ADD jid_id INTEGER;')
+		con.commit()
+		needs_init_vars = True
+	except sqlite.OperationalError, e:
+		pass
+
+	if needs_init_vars:	
+		gajim.logger.init_vars() 
 	con.close()
 	
 def create_log_db():
