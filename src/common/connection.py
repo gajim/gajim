@@ -829,12 +829,6 @@ class Connection(ConnectionHandlers):
 		iq2.addChild(name='storage', namespace='storage:metacontacts')
 		self.connection.send(iq)
 
-		#FIXME: remove the old infos, remove that before 0.10
-		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
-		iq2.addChild(name='gajim', namespace='gajim:metacontacts')
-		self.connection.send(iq)
-
 	def store_metacontacts(self, tags_list):
 		''' Send meta contacts to the storage namespace '''
 		if not self.connection:
@@ -846,8 +840,8 @@ class Connection(ConnectionHandlers):
 			for data in tags_list[tag]:
 				jid = data['jid']
 				dict_ = {'jid': jid, 'tag': tag}
-				if data.has_key('priority'):
-					dict_['priority'] = data['priority']
+				if data.has_key('order'):
+					dict_['order'] = data['order']
 				iq3.addChild(name = 'meta', attrs = dict_)
 		self.connection.send(iq)
 
