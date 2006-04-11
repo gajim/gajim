@@ -225,14 +225,28 @@ class GroupchatControl(ChatControlBase):
 				renderer.set_property('cell-background', bgcolor)
 			else:
 				renderer.set_property('cell-background', None)
+			if isinstance(renderer, gtk.CellRendererText):
+				# foreground property is only with CellRendererText
+				color = gajim.config.get_per('themes', theme, 
+					'contacttextcolor')
+				if color:
+					renderer.set_property('foreground', color)
+				else:
+					renderer.set_property('foreground', None)
 		else: # it is root (eg. group)
 			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
 			if bgcolor:
 				renderer.set_property('cell-background', bgcolor)
 			else:
 				self.set_renderer_color(renderer)
-		#FIXME, we don't drow theme text color
-
+			if isinstance(renderer, gtk.CellRendererText):
+				# foreground property is only with CellRendererText
+				color = gajim.config.get_per('themes', theme, 'grouptextcolor')
+				if color:
+					renderer.set_property('foreground', color)
+				else:
+					self.set_renderer_color(renderer, False)
+	
 	def avatar_cell_data_func(self, column, renderer, model, iter, data=None):
 		self.tree_cell_data_func(column, renderer, model, iter, data)
 		renderer.set_property('xalign', 1) # align pixbuf to the right
