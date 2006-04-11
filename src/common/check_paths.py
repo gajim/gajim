@@ -49,6 +49,9 @@ def assert_unread_msgs_table_exists():
 			'''
 		)
 		con.commit()
+		#FIXME: remove before release 0.10, it's temporary
+		cur.executescript('ALTER TABLE unread_messages ADD jid_id;')
+		con.commit()
 		gajim.logger.init_vars() 
 	except sqlite.OperationalError, e:
 		pass
