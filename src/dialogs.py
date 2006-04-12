@@ -525,7 +525,9 @@ class AboutDialog:
 		text = open('../COPYING').read()
 		dlg.set_license(text)
 
-		dlg.set_comments(_('A GTK+ jabber client'))
+		dlg.set_comments(_('A GTK+ jabber client') + '\nGTK+ Version: ' + \
+			self.tuple2str(gtk.gtk_version) + '\nPyGTK Version: ' + \
+			self.tuple2str(gtk.pygtk_version))
 		dlg.set_website('http://www.gajim.org')
 
 		authors = [
@@ -567,6 +569,12 @@ class AboutDialog:
 
 		rep = dlg.run()
 		dlg.destroy()
+	
+	def tuple2str(self, tuple):
+		str_ = ''
+		for num in tuple:
+			str_ += str(num) + '.'
+		return str_[0:-1] # remove latest .
 
 class Dialog(gtk.Dialog):
 	def __init__(self, parent, title, buttons, default = None):
