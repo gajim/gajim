@@ -343,7 +343,7 @@ class Connection(ConnectionHandlers):
 		if not con_type:
 			# we are not retrying, and not conecting
 			if not self.retrycount and self.connected != 0:
-				self.connected = 0
+				self.disconnect(on_purpose = True)
 				self.dispatch('STATUS', 'offline')
 				self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
 					_('Check your connection or try again later.')))
@@ -379,7 +379,7 @@ class Connection(ConnectionHandlers):
 
 	def __on_auth(self, con, auth):
 		if not con:
-			self.connected = 0
+			self.disconnect(on_purpose = True)
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
 				_('Check your connection or try again later')))
@@ -405,7 +405,7 @@ class Connection(ConnectionHandlers):
 			if not gajim.config.get_per('accounts', self.name, 'savepass'):
 				self.password = None
 			gajim.log.debug("Couldn't authenticate to %s" % self._hostname)
-			self.connected = 0
+			self.disconnect(on_purpose = True)
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('ERROR', (_('Authentication failed with "%s"') % self._hostname,
 				_('Please check your login and password for correctness.')))
@@ -416,7 +416,7 @@ class Connection(ConnectionHandlers):
 
 	def quit(self, kill_core):
 		if kill_core and self.connected > 1:
-			self.disconnect()
+			self.disconnect(on_purpose = True)
 	
 	def build_privacy_rule(self, name, action):
 		'''Build a Privacy rule stanza for invisibility'''
