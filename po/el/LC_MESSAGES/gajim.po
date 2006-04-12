@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-11 21:39+0200\n"
+"POT-Creation-Date: 2006-04-12 12:10+0200\n"
 "PO-Revision-Date: 2005-12-17 23:13+0200\n"
 "Last-Translator: Stavros Giannouris <stavrosg2002@freemail.gr>\n"
 "Language-Team: Hellenic-Ελληνικά-Greek\n"
@@ -117,8 +117,8 @@ msgstr "Απενεργοποιήθηκε η κρυπτογράφηση"
 #: ../src/dialogs.py:465 ../src/gajim.py:684 ../src/gajim.py:685
 #: ../src/roster_window.py:1309 ../src/roster_window.py:1613
 #: ../src/roster_window.py:1791 ../src/roster_window.py:2090
-#: ../src/roster_window.py:2136 ../src/roster_window.py:2907
-#: ../src/roster_window.py:2909 ../src/systray.py:284
+#: ../src/roster_window.py:2136 ../src/roster_window.py:2916
+#: ../src/roster_window.py:2918 ../src/systray.py:284
 #: ../src/common/helpers.py:42 ../src/common/helpers.py:225
 msgid "Not in Roster"
 msgstr "εκτός λίστας επαφών"
@@ -661,7 +661,7 @@ msgstr "Παρακαλώ συμπληρώστε τα στοιχεία της ε�
 #: ../src/disco.py:1258 ../src/roster_window.py:188
 #: ../src/roster_window.py:249 ../src/roster_window.py:284
 #: ../src/roster_window.py:304 ../src/roster_window.py:328
-#: ../src/roster_window.py:2903 ../src/roster_window.py:2905
+#: ../src/roster_window.py:2912 ../src/roster_window.py:2914
 #: ../src/systray.py:291 ../src/common/helpers.py:42
 msgid "Transports"
 msgstr "Μεταφορές"
@@ -687,7 +687,7 @@ msgstr "Αυτή η επαφή υπάρχει ήδη στην λίστα επα�
 msgid "A GTK+ jabber client"
 msgstr "Ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
 
-#: ../src/dialogs.py:538
+#: ../src/dialogs.py:537
 msgid "Past Developers:"
 msgstr ""
 
@@ -1021,7 +1021,7 @@ msgstr "Mέγεθος: %s"
 #. You is a reply of who sent a file
 #. You is a reply of who received a file
 #: ../src/filetransfers_window.py:187 ../src/filetransfers_window.py:197
-#: ../src/history_manager.py:453
+#: ../src/history_manager.py:452
 msgid "You"
 msgstr "You"
 
@@ -1700,82 +1700,82 @@ msgstr "Ομαδική Συζήτηση"
 msgid "Group Chats"
 msgstr "Ομαδική Συζήτηση"
 
-#: ../src/groupchat_control.py:567
+#: ../src/groupchat_control.py:595
 msgid "This room has no subject"
 msgstr "Αυτό το δωμάτιο δεν έχει θέμα"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:665
+#: ../src/groupchat_control.py:693
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "Ο %(nick)s πετάχτηκε έξω: %(reason)s"
 
-#: ../src/groupchat_control.py:669
+#: ../src/groupchat_control.py:697
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:676
+#: ../src/groupchat_control.py:704
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "Ο %(nick)s έχει απαγορευτεί: %(reason)s"
 
-#: ../src/groupchat_control.py:680
+#: ../src/groupchat_control.py:708
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "Ο %(nick)s έχει απαγορευτεί από τον %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:688
+#: ../src/groupchat_control.py:716
 #, python-format
 msgid "You are now known as %s"
 msgstr "Είστε τώρα γνωστός ως %s"
 
-#: ../src/groupchat_control.py:690
+#: ../src/groupchat_control.py:718
 #, python-format
 msgid "%s is now known as %s"
 msgstr "Ο %s είναι τώρα γνωστός ως %s"
 
-#: ../src/groupchat_control.py:729
+#: ../src/groupchat_control.py:757
 #, python-format
 msgid "%s has left"
 msgstr "Ο %s έφυγε"
 
 #. No status message
-#: ../src/groupchat_control.py:731 ../src/roster_window.py:989
+#: ../src/groupchat_control.py:759 ../src/roster_window.py:989
 #, python-format
 msgid "%s is now %s"
 msgstr "Ο %s είναι τώρα %s"
 
-#: ../src/groupchat_control.py:843 ../src/groupchat_control.py:860
-#: ../src/groupchat_control.py:953 ../src/groupchat_control.py:969
+#: ../src/groupchat_control.py:871 ../src/groupchat_control.py:888
+#: ../src/groupchat_control.py:981 ../src/groupchat_control.py:997
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "Δεν βρέθηκε το ψευρώνυμο: %s"
 
-#: ../src/groupchat_control.py:887
+#: ../src/groupchat_control.py:915
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "Προσκαλέσατε τον/την %(contact_jid)s στο %(room_jid)s."
 
 #. %s is something the user wrote but it is not a jid so we inform
-#: ../src/groupchat_control.py:894 ../src/groupchat_control.py:924
+#: ../src/groupchat_control.py:922 ../src/groupchat_control.py:952
 #, python-format
 msgid "%s does not appear to be a valid JID"
 msgstr "Το %s δεν φαίνεται να είναι έγκυρο JID"
 
-#: ../src/groupchat_control.py:991
+#: ../src/groupchat_control.py:1019
 #, fuzzy, python-format
 msgid "No such command: /%s (if you want to send this, prefix it with /say)"
 msgstr ""
 "Δεν βρέθηκε η εντολή: /%s (εάν θέλετε να το πείτε αυτό βάλτε το /say μπροστά)"
 
-#: ../src/groupchat_control.py:1013
+#: ../src/groupchat_control.py:1041
 #, python-format
 msgid "Commands: %s"
 msgstr "Εντολές: %s"
 
-#: ../src/groupchat_control.py:1015
+#: ../src/groupchat_control.py:1043
 #, python-format
 msgid ""
 "Usage: /%s <nickname|JID> [reason], bans the JID from the room. The nickname "
@@ -1788,7 +1788,7 @@ msgstr ""
 "Εάν το JID είναι στο δωμάτιο, ο χρήστης θα πεταχτεί έξω επίσης. ΔΕΝ "
 "υποστηρίζει κενά στο ψευδώνυμο."
 
-#: ../src/groupchat_control.py:1021
+#: ../src/groupchat_control.py:1049
 #, python-format
 msgid ""
 "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
@@ -1796,12 +1796,12 @@ msgstr ""
 "Χρήση: /%s <ψευδώνυμο>, ανοίγει ένα παράθυρο προσωπικής κουβέντας με το "
 "συγκεκριμένο χρήστη."
 
-#: ../src/groupchat_control.py:1025
+#: ../src/groupchat_control.py:1053
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Χρήση: /%s, καθαρίζει το παράθυρο από το κείμενο."
 
-#: ../src/groupchat_control.py:1027
+#: ../src/groupchat_control.py:1055
 #, python-format
 msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
@@ -1810,12 +1810,12 @@ msgstr ""
 "Χρήση: /%s [λόγος], κλείνει το τρέχον παράθυρο ή καρτέλα, ανακοινώνοντας το "
 "λόγο εάν έχει προσδιοριστεί."
 
-#: ../src/groupchat_control.py:1030
+#: ../src/groupchat_control.py:1058
 #, fuzzy, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "Χρήση: /%s, καθαρίζει το παράθυρο από το κείμενο."
 
-#: ../src/groupchat_control.py:1032
+#: ../src/groupchat_control.py:1060
 #, python-format
 msgid ""
 "Usage: /%s <JID> [reason], invites JID to the current room, optionally "
@@ -1824,7 +1824,7 @@ msgstr ""
 "Χρήση: /%s <JID> [λόγος], προσκαλεί το JID στο τρέχον δωμάτιο, παρέχοντας "
 "προαιρετικά και λόγο."
 
-#: ../src/groupchat_control.py:1036
+#: ../src/groupchat_control.py:1064
 #, python-format
 msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
@@ -1833,7 +1833,7 @@ msgstr ""
 "Χρήση: /%s <δωμάτιο>@<διακομιστής>[/ψευδώνυμο], επιδιώκει την είσοδο στο "
 "δωμάτιο@διακομιστή, προαιρετικά χρησιμοποιώντας το ψευδώνυμο."
 
-#: ../src/groupchat_control.py:1040
+#: ../src/groupchat_control.py:1068
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
@@ -1843,7 +1843,7 @@ msgstr ""
 "Χρήση: /%s <ψευδώνυμο> [αιτία], βγάζει τον χρήστη που προσδιορίστηκε από το "
 "δωμάτιο, προσδιορίζοντας την αιτία. ΔΕΝ υποστηρίζει κενά στο ψευδώνυμο."
 
-#: ../src/groupchat_control.py:1045
+#: ../src/groupchat_control.py:1073
 #, python-format
 msgid ""
 "Usage: /%s <action>, sends action to the current room. Use third person. (e."
@@ -1852,7 +1852,7 @@ msgstr ""
 "Χρήση: /%s <δράση>, στέλνει τη δράση στο τρέχον δωμάτιο, με χρήση τρίτου "
 "προσώπου (π.χ. /%s χοροπηδάει)."
 
-#: ../src/groupchat_control.py:1049
+#: ../src/groupchat_control.py:1077
 #, fuzzy, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message windowand sends "
@@ -1861,17 +1861,17 @@ msgstr ""
 "Χρήση: /%s <ψευδώνυμο> [μήνυμα], ανοίγει ένα παράθυρο προσωπικού διαλόγου "
 "και στέλνει το μήνυμα στο χρήστη που προσδιορίστηκε."
 
-#: ../src/groupchat_control.py:1054
+#: ../src/groupchat_control.py:1082
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current room."
 msgstr "Χρήση: /%s <ψευδώνυμο>, αλλάζει το ψευδώνυμο σας στο τρέχον δωμάτιο."
 
-#: ../src/groupchat_control.py:1058
+#: ../src/groupchat_control.py:1086
 #, python-format
 msgid "Usage: /%s [topic], displays or updates the current room topic."
 msgstr "Χρήση: /%s [θέμα], εμφανίζει ή αλλάζει το θέμα στο τρέχον δωμάτιο."
 
-#: ../src/groupchat_control.py:1061
+#: ../src/groupchat_control.py:1089
 #, python-format
 msgid ""
 "Usage: /%s <message>, sends a message without looking for other commands."
@@ -1879,72 +1879,72 @@ msgstr ""
 "Χρήση: /%s <μήνυμα>, στέλνει ένα μήνυμα χωρίς να γίνει έλεγχος για άλλες "
 "εντολές."
 
-#: ../src/groupchat_control.py:1064
+#: ../src/groupchat_control.py:1092
 #, python-format
 msgid "No help info for /%s"
 msgstr "Δεν υπάρχουν πληροφορίες για το /%s"
 
-#: ../src/groupchat_control.py:1100
+#: ../src/groupchat_control.py:1128
 #, python-format
 msgid "Are you sure you want to leave room \"%s\"?"
 msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από το δωμάτιο \"%s\";"
 
-#: ../src/groupchat_control.py:1101
+#: ../src/groupchat_control.py:1129
 msgid "If you close this window, you will be disconnected from this room."
 msgstr "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτό το δωμάτιο."
 
-#: ../src/groupchat_control.py:1105
+#: ../src/groupchat_control.py:1133
 #, fuzzy
 msgid "Do _not ask me again"
 msgstr "Μη_ν με ξαναρωτήσεις"
 
-#: ../src/groupchat_control.py:1139
+#: ../src/groupchat_control.py:1167
 msgid "Changing Subject"
 msgstr "Αλλαγή Θέματος"
 
-#: ../src/groupchat_control.py:1140
+#: ../src/groupchat_control.py:1168
 msgid "Please specify the new subject:"
 msgstr "Παρακαλώ καθορίστε το νέο θέμα:"
 
-#: ../src/groupchat_control.py:1148
+#: ../src/groupchat_control.py:1176
 msgid "Changing Nickname"
 msgstr "Αλλαγή Ψευδωνύμου"
 
-#: ../src/groupchat_control.py:1149
+#: ../src/groupchat_control.py:1177
 msgid "Please specify the new nickname you want to use:"
 msgstr "Παρακαλώ καθορίστε το νέο ψευδώνυμο που θέλετε να χρησιμοποιείτε:"
 
-#: ../src/groupchat_control.py:1174
+#: ../src/groupchat_control.py:1202
 msgid "Bookmark already set"
 msgstr "Ο σελιδοδείκτης έχει οριστεί ήδη"
 
-#: ../src/groupchat_control.py:1175
+#: ../src/groupchat_control.py:1203
 #, python-format
 msgid "Room \"%s\" is already in your bookmarks."
 msgstr "Το δωμάτιο \"%s\" υπάρχει ήδη στους σελιδοδείκτες σας."
 
-#: ../src/groupchat_control.py:1184
+#: ../src/groupchat_control.py:1212
 msgid "Bookmark has been added successfully"
 msgstr "Ο σελιδοδείκτης προστέθηκε με επιτυχία"
 
-#: ../src/groupchat_control.py:1185
+#: ../src/groupchat_control.py:1213
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "Μπορείτε να διαχειριστείτε τους σελιδοδείκτες από το μενού Ενέργειας στο "
 "κεντρικό παράθυρο."
 
 #. ask for reason
-#: ../src/groupchat_control.py:1294
+#: ../src/groupchat_control.py:1322
 #, python-format
 msgid "Kicking %s"
 msgstr "Διώχνοντας τον %s"
 
-#: ../src/groupchat_control.py:1295 ../src/groupchat_control.py:1540
+#: ../src/groupchat_control.py:1323 ../src/groupchat_control.py:1568
 msgid "You may specify a reason below:"
 msgstr "Μπορείτε να προσδιορίσετε ένα λόγο παρακάτω:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:1539
+#: ../src/groupchat_control.py:1567
 #, python-format
 msgid "Banning %s"
 msgstr "Απαγορεύοντας την πρόσβαση στον %s"
@@ -3766,31 +3766,31 @@ msgid ""
 "In case you click YES, please wait..."
 msgstr ""
 
-#: ../src/history_manager.py:390
+#: ../src/history_manager.py:389
 #, fuzzy
 msgid "Exporting History Logs..."
 msgstr "Μεταφορά Ιστορικού..."
 
-#: ../src/history_manager.py:466
+#: ../src/history_manager.py:465
 #, python-format
 msgid "%(who)s on %(time)s said: %(message)s\n"
 msgstr ""
 
-#: ../src/history_manager.py:466
+#: ../src/history_manager.py:465
 msgid "who"
 msgstr ""
 
-#: ../src/history_manager.py:504
+#: ../src/history_manager.py:503
 msgid "Do you really want to delete logs of the selected contact?"
 msgid_plural "Do you really want to delete logs of the selected contacts?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/history_manager.py:508 ../src/history_manager.py:544
+#: ../src/history_manager.py:507 ../src/history_manager.py:543
 msgid "This is an irreversible operation."
 msgstr ""
 
-#: ../src/history_manager.py:541
+#: ../src/history_manager.py:540
 msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] ""
@@ -4047,17 +4047,17 @@ msgstr ""
 "Τα μηνύματα θα είναι διαθέσιμα για ανάγνωση αργότερα μόνο αν έχετε "
 "ενεργοποιημένο το ιστορικό."
 
-#: ../src/roster_window.py:3147
+#: ../src/roster_window.py:3156
 #, fuzzy, python-format
 msgid "Drop %s in group %s"
 msgstr "Από %s στο δωμάτιο %s"
 
-#: ../src/roster_window.py:3154
+#: ../src/roster_window.py:3163
 #, fuzzy, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "Αποστολή αρχείου σε μία επαφή"
 
-#: ../src/roster_window.py:3320
+#: ../src/roster_window.py:3329
 msgid "Change Status Message..."
 msgstr "Αλλαγή Μηνύματος Κατάστασης..."
 
@@ -4258,27 +4258,27 @@ msgstr ""
 msgid "Personal details"
 msgstr "Προσωπικές Πληροφορίες"
 
-#: ../src/common/check_paths.py:61
+#: ../src/common/check_paths.py:39
 msgid "creating logs database"
 msgstr "δημιουργία βάσης δεδομένων ιστορικού"
 
-#: ../src/common/check_paths.py:106 ../src/common/check_paths.py:117
-#: ../src/common/check_paths.py:124
+#: ../src/common/check_paths.py:84 ../src/common/check_paths.py:95
+#: ../src/common/check_paths.py:102
 #, python-format
 msgid "%s is file but it should be a directory"
 msgstr "Το %s είναι αρχείο αλλά πρέπει να είναι φάκελος"
 
-#: ../src/common/check_paths.py:107 ../src/common/check_paths.py:118
-#: ../src/common/check_paths.py:125 ../src/common/check_paths.py:132
+#: ../src/common/check_paths.py:85 ../src/common/check_paths.py:96
+#: ../src/common/check_paths.py:103 ../src/common/check_paths.py:110
 msgid "Gajim will now exit"
 msgstr "Το Gajim τώρα θα κλείσει"
 
-#: ../src/common/check_paths.py:131
+#: ../src/common/check_paths.py:109
 #, python-format
 msgid "%s is directory but should be file"
 msgstr "Το %s είναι κατάλογος αλλά θα έπρεπε να είναι αρχείο"
 
-#: ../src/common/check_paths.py:149
+#: ../src/common/check_paths.py:125
 #, python-format
 msgid "creating %s directory"
 msgstr "δημιουργία φακέλου %s"
