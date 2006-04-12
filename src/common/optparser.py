@@ -193,6 +193,32 @@ class OptionsParser:
 
 		gajim.config.set('version', '0.9')
 
+	def assert_unread_msgs_table_exists(self):
+		'''create table unread_messages if there is no such table'''
+		import exceptions
+		try:
+			from pysqlite2 import dbapi2 as sqlite
+		except ImportError:
+			raise exceptions.PysqliteNotAvailable
+		import logger
+
+		con = sqlite.connect(logger.LOG_DB_PATH) 
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE unread_messages (
+					message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+					jid_id INTEGER
+				);
+				'''
+			)
+			con.commit()
+			logger.init_vars()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+
 	def update_config_09_to_010(self):
 		if self.old_values.has_key('usetabbedchat') and not \
 		self.old_values['usetabbedchat']:
@@ -225,5 +251,7 @@ class OptionsParser:
 			proxies_str = ', '.join(proxies)
 			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
 				proxies_str)
+		# create unread_messages table if needed
+		self.assert_unread_msgs_table_exists()
 
 		gajim.config.set('version', '0.10')

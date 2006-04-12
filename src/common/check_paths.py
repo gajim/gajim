@@ -35,37 +35,6 @@ Q_ = i18n.Q_
 
 from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
 
-def assert_unread_msgs_table_exists():
-	'''create table unread_messages if there is no such table'''
-	con = sqlite.connect(logger.LOG_DB_PATH) 
-	cur = con.cursor()
-	needs_init_vars = False
-	try:
-		cur.executescript(
-			'''
-			CREATE TABLE unread_messages (
-				message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-				jid_id INTEGER
-			);
-			'''
-		)
-		con.commit()
-		needs_init_vars = True
-	except sqlite.OperationalError, e:
-		pass
-	# add column jid_id. if there is such column do nothing 
-	try:
-		#FIXME: remove before release 0.10, it's temporary
-		cur.executescript('ALTER TABLE unread_messages ADD jid_id INTEGER;')
-		con.commit()
-		needs_init_vars = True
-	except sqlite.OperationalError, e:
-		pass
-
-	if needs_init_vars:	
-		gajim.logger.init_vars() 
-	con.close()
-	
 def create_log_db():
 	print _('creating logs database')
 	con = sqlite.connect(logger.LOG_DB_PATH) 
@@ -126,23 +95,21 @@ def check_and_possibly_create_paths():
 			print _('%s is file but it should be a directory') % VCARD_PATH
 			print _('Gajim will now exit')
 			sys.exit()
-			
+
 		if not os.path.exists(AVATAR_PATH):
 			create_path(AVATAR_PATH)
 		elif os.path.isfile(AVATAR_PATH):
 			print _('%s is file but it should be a directory') % AVATAR_PATH
 			print _('Gajim will now exit')
 			sys.exit()
-		
+
 		if not os.path.exists(LOG_DB_PATH):
 			create_log_db()
 		elif os.path.isdir(LOG_DB_PATH):
 			print _('%s is directory but should be file') % LOG_DB_PATH
 			print _('Gajim will now exit')
 			sys.exit()
-		else:
-			assert_unread_msgs_table_exists()
-			
+
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that
 			create_path(dot_gajim)
