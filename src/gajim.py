@@ -1293,6 +1293,12 @@ class Interface:
 
 	def handle_event_vcard_published(self, account, array):
 		dialogs.InformationDialog(_('vCard publication succeeded'), _('Your personal information has been published successfully.'))
+		for gc_control in self.msg_win_mgr.get_controls(message_control.TYPE_GC):
+			if gc_control.account == account:
+				show = gajim.SHOW_LIST[gajim.connections[account].connected]
+				status = gajim.connections[account].status
+				gajim.connections[account].send_gc_status(gc_control.nick,
+					gc_control.room_jid, show, status)
 
 	def handle_event_vcard_not_published(self, account, array):
 		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))

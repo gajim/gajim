@@ -895,7 +895,6 @@ class ConnectionVcard:
 			return
 		if self.awaiting_answers[id][0] == VCARD_PUBLISHED:
 			if iq_obj.getType() == 'result':
-				self.dispatch('VCARD_PUBLISHED', ())
 				vcard_iq = self.awaiting_answers[id][1]
 				# Save vcard to HD
 				if vcard_iq.getTag('PHOTO') and vcard_iq.getTag('PHOTO').getTag('SHA'):
@@ -918,6 +917,7 @@ class ConnectionVcard:
 						show = sshow, status = self.status)
 					p = self.add_sha(p)
 					self.connection.send(p)
+				self.dispatch('VCARD_PUBLISHED', ())
 			elif iq_obj.getType() == 'error':
 				self.dispatch('VCARD_NOT_PUBLISHED', ())
 		elif self.awaiting_answers[id][0] == VCARD_ARRIVED:
@@ -1415,6 +1415,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				if gajim.config.get('log_contact_status_changes') and self.name\
 					not in no_log_for and jid_stripped not in no_log_for:
 					gajim.logger.write('gcstatus', who, status, show)
+				if avatar_sha:
+					if self.vcard_shas.has_key(who):
+						if avatar_sha != self.vcard_shas[who]:
+							# avatar has been updated
+							self.request_vcard(who, True)
+					else:
+						self.vcard_shas[who] = avatar_sha
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
