@@ -13,4 +13,4 @@ Suggests: python-gnupginterface, python-gnome2
 Description: Jabber client written in PyGTK
  Gajim is a Jabber client written in PyGTK. It has a tabbed user interface
  with normal chats, group chats, and has many features such as, TLS, GPG,
- SSL, multiple accounts, avatars, file transfer, D-Bus, Metacontacts.
+ SSL, multiple accounts, avatars, file transfers, D-Bus and Metacontacts.
