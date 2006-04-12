@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-12 12:10+0200\n"
+"POT-Creation-Date: 2006-04-12 16:52+0200\n"
 "PO-Revision-Date: 2006-03-02 15:11+0100\n"
 "Last-Translator: Matteo Dell'Amico <della@linux.it>\n"
 "Language-Team: Italian\n"
@@ -111,10 +111,10 @@ msgstr "Cifratura disattivata"
 #. show user in not in roster group
 #: ../src/chat_control.py:1152 ../src/conversation_textview.py:373
 #: ../src/dialogs.py:465 ../src/gajim.py:684 ../src/gajim.py:685
-#: ../src/roster_window.py:1309 ../src/roster_window.py:1613
-#: ../src/roster_window.py:1791 ../src/roster_window.py:2090
-#: ../src/roster_window.py:2136 ../src/roster_window.py:2916
-#: ../src/roster_window.py:2918 ../src/systray.py:284
+#: ../src/roster_window.py:1309 ../src/roster_window.py:1615
+#: ../src/roster_window.py:1793 ../src/roster_window.py:2092
+#: ../src/roster_window.py:2138 ../src/roster_window.py:2918
+#: ../src/roster_window.py:2920 ../src/systray.py:284
 #: ../src/common/helpers.py:42 ../src/common/helpers.py:225
 msgid "Not in Roster"
 msgstr "Non nei contatti"
@@ -274,7 +274,7 @@ msgstr ""
 "informazioni personali."
 
 #: ../src/config.py:1365 ../src/dialogs.py:863 ../src/dialogs.py:1009
-#: ../src/disco.py:419 ../src/vcard.py:421 ../src/vcard.py:450
+#: ../src/disco.py:419 ../src/vcard.py:433 ../src/vcard.py:462
 msgid "You are not connected to the server"
 msgstr "Non si è connessi al server"
 
@@ -433,16 +433,16 @@ msgstr ""
 msgid "Removing %s account"
 msgstr "Eliminazione account %s"
 
-#: ../src/config.py:2144 ../src/roster_window.py:1831
+#: ../src/config.py:2144 ../src/roster_window.py:1833
 msgid "Password Required"
 msgstr "Password richiesta"
 
-#: ../src/config.py:2145 ../src/roster_window.py:1832
+#: ../src/config.py:2145 ../src/roster_window.py:1834
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Inserire la password per l'account %s"
 
-#: ../src/config.py:2146 ../src/roster_window.py:1833
+#: ../src/config.py:2146 ../src/roster_window.py:1835
 msgid "Save password"
 msgstr "Memorizza password"
 
@@ -655,7 +655,7 @@ msgstr "Inserire i dati del contatto che si vuole aggiungere"
 #: ../src/disco.py:1258 ../src/roster_window.py:188
 #: ../src/roster_window.py:249 ../src/roster_window.py:284
 #: ../src/roster_window.py:304 ../src/roster_window.py:328
-#: ../src/roster_window.py:2912 ../src/roster_window.py:2914
+#: ../src/roster_window.py:2914 ../src/roster_window.py:2916
 #: ../src/systray.py:291 ../src/common/helpers.py:42
 msgid "Transports"
 msgstr "Trasporti"
@@ -875,32 +875,32 @@ msgstr "Si è invitato %(contact_jid)s a %(room_jid)s."
 msgid "Comment: %s"
 msgstr "Commento: %s"
 
-#: ../src/dialogs.py:1549
+#: ../src/dialogs.py:1546
 msgid "Choose Sound"
 msgstr "Scegliere il suono"
 
-#: ../src/dialogs.py:1559 ../src/dialogs.py:1605
+#: ../src/dialogs.py:1556 ../src/dialogs.py:1599
 msgid "All files"
 msgstr "Tutti i file"
 
-#: ../src/dialogs.py:1564
+#: ../src/dialogs.py:1561
 msgid "Wav Sounds"
 msgstr "Suoni Wav"
 
-#: ../src/dialogs.py:1595
+#: ../src/dialogs.py:1589
 msgid "Choose Image"
 msgstr "Scegli immagine"
 
-#: ../src/dialogs.py:1610
+#: ../src/dialogs.py:1604
 msgid "Images"
 msgstr "Immagini"
 
-#: ../src/dialogs.py:1656
+#: ../src/dialogs.py:1650
 #, python-format
 msgid "When %s becomes:"
 msgstr ""
 
-#: ../src/dialogs.py:1658
+#: ../src/dialogs.py:1652
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr ""
@@ -965,11 +965,11 @@ msgstr "Questo servizio non contiene oggetti da consultare."
 msgid "Re_gister"
 msgstr "_Registra"
 
-#: ../src/disco.py:1154 ../src/disco.py:1516 ../src/gtkgui.glade.h:349
+#: ../src/disco.py:1154 ../src/disco.py:1516 ../src/gtkgui.glade.h:350
 msgid "_Join"
 msgstr "_Entra"
 
-#: ../src/disco.py:1261 ../src/gtkgui.glade.h:333 ../src/roster_window.py:1436
+#: ../src/disco.py:1261 ../src/gtkgui.glade.h:334 ../src/roster_window.py:1436
 msgid "_Edit"
 msgstr "_Modifica"
 
@@ -1598,11 +1598,11 @@ msgstr "La vCard è stata pubblicata correttamente"
 msgid "Your personal information has been published successfully."
 msgstr "Le informazioni personali sono state pubblicate con successo."
 
-#: ../src/gajim.py:1298
+#: ../src/gajim.py:1304
 msgid "vCard publication failed"
 msgstr "Pubblicazione della vCard fallita"
 
-#: ../src/gajim.py:1298
+#: ../src/gajim.py:1304
 msgid ""
 "There was an error while publishing your personal information, try again "
 "later."
@@ -1612,19 +1612,19 @@ msgstr ""
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:1628
+#: ../src/gajim.py:1634
 msgid "Could not save your settings and preferences"
 msgstr "Impossibile salvare impostazioni e preferenze"
 
-#: ../src/gajim.py:1842
+#: ../src/gajim.py:1848
 msgid "Session Management support not available (missing gnome.ui module)"
 msgstr "Supporto gestione sessioni non disponibile (modulo gnome.ui mancante)"
 
-#: ../src/gajim.py:1872
+#: ../src/gajim.py:1878
 msgid "Migrating Logs..."
 msgstr "Migrazione log..."
 
-#: ../src/gajim.py:1873
+#: ../src/gajim.py:1879
 msgid "Please wait while logs are being migrated..."
 msgstr "Attendere durante la migrazione dei log..."
 
@@ -3343,69 +3343,69 @@ msgstr "_Nega"
 msgid "_Discover Services"
 msgstr "_Ricerca servizi"
 
-#: ../src/gtkgui.glade.h:334
+#: ../src/gtkgui.glade.h:333
+msgid "_Discover Services..."
+msgstr "_Ricerca servizi..."
+
+#: ../src/gtkgui.glade.h:335
 msgid "_FAQ"
 msgstr "_FAQ"
 
-#: ../src/gtkgui.glade.h:335
+#: ../src/gtkgui.glade.h:336
 #, fuzzy
 msgid "_File manager:"
 msgstr "File manager:"
 
-#: ../src/gtkgui.glade.h:336
+#: ../src/gtkgui.glade.h:337
 msgid "_Filter:"
 msgstr "_Filtro:"
 
-#: ../src/gtkgui.glade.h:337
+#: ../src/gtkgui.glade.h:338
 msgid "_Finish"
 msgstr "_Fine"
 
-#: ../src/gtkgui.glade.h:338
+#: ../src/gtkgui.glade.h:339
 #, fuzzy
 msgid "_Font:"
 msgstr "Carattere:"
 
-#: ../src/gtkgui.glade.h:339
+#: ../src/gtkgui.glade.h:340
 msgid "_Group Chat"
 msgstr "Chat di _gruppo"
 
-#: ../src/gtkgui.glade.h:340
+#: ../src/gtkgui.glade.h:341
 msgid "_Help"
 msgstr "_Aiuto"
 
-#: ../src/gtkgui.glade.h:341
+#: ../src/gtkgui.glade.h:342
 msgid "_Highlight misspelled words"
 msgstr "Evidenzia _parole scorrette"
 
-#: ../src/gtkgui.glade.h:342
+#: ../src/gtkgui.glade.h:343
 msgid "_History"
 msgstr "_Cronologia"
 
-#: ../src/gtkgui.glade.h:343
+#: ../src/gtkgui.glade.h:344
 msgid "_Host:"
 msgstr "_Host:"
 
 #. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
-#: ../src/gtkgui.glade.h:345
+#: ../src/gtkgui.glade.h:346
 msgid "_IQ"
 msgstr "I_Q"
 
-#: ../src/gtkgui.glade.h:346
+#: ../src/gtkgui.glade.h:347
 msgid "_Ignore events from contacts not in the roster"
 msgstr "_Ignora gli eventi da contatti non appartenenti alla lista"
 
-#: ../src/gtkgui.glade.h:347
+#: ../src/gtkgui.glade.h:348
 #, fuzzy
 msgid "_Incoming message:"
 msgstr "Messaggio in arrivo:"
 
-#: ../src/gtkgui.glade.h:348
+#: ../src/gtkgui.glade.h:349
 msgid "_Jabber ID:"
 msgstr "ID _Jabber:"
-
-#: ../src/gtkgui.glade.h:350
-msgid "_Join New Room..."
-msgstr "_Entra in nuova stanza..."
 
 #: ../src/gtkgui.glade.h:351
 msgid "_Kick"
@@ -3810,7 +3810,7 @@ msgstr "Osservatori"
 msgid "You are already in room %s"
 msgstr "Sei già nella stanza %s"
 
-#: ../src/roster_window.py:520 ../src/roster_window.py:2234
+#: ../src/roster_window.py:520 ../src/roster_window.py:2236
 msgid "You cannot join a room while you are invisible"
 msgstr "Non è possibile unirsi ad una stanza quando si è invisibile"
 
@@ -3902,39 +3902,39 @@ msgstr "_Disconnetti"
 msgid "_Change Status Message"
 msgstr "_Cambia messaggio di stato"
 
-#: ../src/roster_window.py:1589
+#: ../src/roster_window.py:1591
 msgid "Authorization has been sent"
 msgstr "L'autorizzazione è stata inviata"
 
-#: ../src/roster_window.py:1590
+#: ../src/roster_window.py:1592
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "Ora \"%s\" conoscerà il tuo stato."
 
-#: ../src/roster_window.py:1614
+#: ../src/roster_window.py:1616
 msgid "Subscription request has been sent"
 msgstr "La richiesta di abbonamento è stata inviata"
 
-#: ../src/roster_window.py:1615
+#: ../src/roster_window.py:1617
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Se \"%s\" accetta questa richiesta conoscerai il suo stato."
 
-#: ../src/roster_window.py:1626
+#: ../src/roster_window.py:1628
 msgid "Authorization has been removed"
 msgstr "L'autorizzazione è stata rimossa"
 
-#: ../src/roster_window.py:1627
+#: ../src/roster_window.py:1629
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "Ora \"%s\" ti vedrà sempre come offline."
 
-#: ../src/roster_window.py:1796
+#: ../src/roster_window.py:1798
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Il contatto \"%s\" sarà rimosso dalla tua lista"
 
-#: ../src/roster_window.py:1800
+#: ../src/roster_window.py:1802
 #, fuzzy
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
@@ -3943,7 +3943,7 @@ msgstr ""
 "Eliminando questo contatto ne rimuoverai anche l'autorizzazione. Questi ti "
 "vedrà sempre offline."
 
-#: ../src/roster_window.py:1804
+#: ../src/roster_window.py:1806
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -3951,37 +3951,37 @@ msgstr ""
 "Eliminando questo contatto ne rimuoverai anche l'autorizzazione. Questi ti "
 "vedrà sempre offline."
 
-#: ../src/roster_window.py:1805
+#: ../src/roster_window.py:1807
 msgid "I want this contact to know my status after removal"
 msgstr "Voglio che questo contatto conosca il mio stato dopo la rimozione"
 
-#: ../src/roster_window.py:1873
+#: ../src/roster_window.py:1875
 msgid "Passphrase Required"
 msgstr "Passphrase richiesta"
 
-#: ../src/roster_window.py:1874
+#: ../src/roster_window.py:1876
 #, fuzzy, python-format
 msgid "Enter GPG key passphrase for account %s."
 msgstr "Inserire la passphrase della chiave GPG per l'account %s"
 
-#: ../src/roster_window.py:1879
+#: ../src/roster_window.py:1881
 msgid "Save passphrase"
 msgstr "Memorizza passphrase"
 
-#: ../src/roster_window.py:1887
+#: ../src/roster_window.py:1889
 #, fuzzy
 msgid "Wrong Passphrase"
 msgstr "Passphrase"
 
-#: ../src/roster_window.py:1888
+#: ../src/roster_window.py:1890
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr ""
 
-#: ../src/roster_window.py:1936 ../src/roster_window.py:1993
+#: ../src/roster_window.py:1938 ../src/roster_window.py:1995
 msgid "You are participating in one or more group chats"
 msgstr "Stai partecipando ad una o più chat di gruppo"
 
-#: ../src/roster_window.py:1937 ../src/roster_window.py:1994
+#: ../src/roster_window.py:1939 ../src/roster_window.py:1996
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -3989,20 +3989,20 @@ msgstr ""
 "Impostare lo stato invisibile ti farà disconnettere da queste chat di "
 "gruppo. Diventare veramente invisibile?"
 
-#: ../src/roster_window.py:1953
+#: ../src/roster_window.py:1955
 msgid "No account available"
 msgstr "Nessun account disponibile"
 
-#: ../src/roster_window.py:1954
+#: ../src/roster_window.py:1956
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "È necessario creare un account prima di poter chattare con altri contatti."
 
-#: ../src/roster_window.py:2399 ../src/roster_window.py:2405
+#: ../src/roster_window.py:2401 ../src/roster_window.py:2407
 msgid "You have unread messages"
 msgstr "Ci sono messaggi non letti"
 
-#: ../src/roster_window.py:2400 ../src/roster_window.py:2406
+#: ../src/roster_window.py:2402 ../src/roster_window.py:2408
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
@@ -4010,17 +4010,17 @@ msgstr ""
 "I messaggi saranno disponibili per una lettura successiva solo se la "
 "cronologia è abilitata"
 
-#: ../src/roster_window.py:3156
+#: ../src/roster_window.py:3158
 #, fuzzy, python-format
 msgid "Drop %s in group %s"
 msgstr "Da %s nella stanza %s"
 
-#: ../src/roster_window.py:3163
+#: ../src/roster_window.py:3165
 #, fuzzy, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "Invia file ad un contatto"
 
-#: ../src/roster_window.py:3329
+#: ../src/roster_window.py:3332
 msgid "Change Status Message..."
 msgstr "Cambia messaggio di stato..."
 
@@ -4150,25 +4150,25 @@ msgstr ""
 "Questo servizio non ha inviato informazioni dettagliate.\n"
 "È probabilmente vecchio o malfunzionante"
 
-#. unknown format
-#: ../src/vcard.py:174
+#. keep identation
+#: ../src/vcard.py:186
 msgid "Could not load image"
 msgstr ""
 
-#: ../src/vcard.py:250
+#: ../src/vcard.py:262
 msgid "?Client:Unknown"
 msgstr "?Client:Sconosciuto"
 
-#: ../src/vcard.py:252
+#: ../src/vcard.py:264
 msgid "?OS:Unknown"
 msgstr "Sconosciuto"
 
-#: ../src/vcard.py:269
+#: ../src/vcard.py:281
 #, fuzzy, python-format
 msgid "since %s"
 msgstr "Versione %s"
 
-#: ../src/vcard.py:293
+#: ../src/vcard.py:305
 msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in his/her presence"
@@ -4176,7 +4176,7 @@ msgstr ""
 "Questo contatto è interessato alle informazioni sulla tua presenza, ma tu "
 "non sei interessato alla sua"
 
-#: ../src/vcard.py:295
+#: ../src/vcard.py:307
 msgid ""
 "You are interested in the contact's presence information, but he/she is not "
 "interested in yours"
@@ -4184,14 +4184,14 @@ msgstr ""
 "Sei interessato alle informazioni sulla presenza di questo contatto, ma lui/"
 "lei non è interessato/a alla tua"
 
-#: ../src/vcard.py:297
+#: ../src/vcard.py:309
 msgid "You and the contact are interested in each other's presence information"
 msgstr ""
 "Tu ed il contatto siete reciprocamente interessati alle informazioni sulla "
 "presenza dell'altro"
 
 #. None
-#: ../src/vcard.py:299
+#: ../src/vcard.py:311
 msgid ""
 "You are not interested in the contact's presence, and neither he/she is "
 "interested in yours"
@@ -4199,24 +4199,24 @@ msgstr ""
 "Non sei interessato alla presenza del contatto, e lui/lei non è interessato "
 "alla tua"
 
-#: ../src/vcard.py:308
+#: ../src/vcard.py:320
 msgid "You are waiting contact's answer about your subscription request"
 msgstr ""
 "Sei in attesa della risposta del contatto alla tua richiesta di abbonamento"
 
-#: ../src/vcard.py:320 ../src/vcard.py:343
+#: ../src/vcard.py:332 ../src/vcard.py:355
 msgid " resource with priority "
 msgstr " risorsa con priorità "
 
-#: ../src/vcard.py:422
+#: ../src/vcard.py:434
 msgid "Without a connection you can not publish your contact information."
 msgstr "Senza una connessione non è possibile pubblicare i dati personali."
 
-#: ../src/vcard.py:451
+#: ../src/vcard.py:463
 msgid "Without a connection, you can not get your contact information."
 msgstr "Senza una connessione, non è possibile ottenere i dati personali."
 
-#: ../src/vcard.py:455
+#: ../src/vcard.py:467
 msgid "Personal details"
 msgstr "Informazioni personali"
 
@@ -4901,6 +4901,9 @@ msgstr ""
 msgid "cyan"
 msgstr "cyan"
 
+#~ msgid "_Join New Room..."
+#~ msgstr "_Entra in nuova stanza..."
+
 #~ msgid "Usage: /%s, sets the groupchat window to compact mode."
 #~ msgstr ""
 #~ "Uso: /%s, imposta la modalità compatta nella finestra chat di gruppo"
@@ -4931,9 +4934,6 @@ msgstr "cyan"
 
 #~ msgid "Update Message of the Day"
 #~ msgstr "Aggiorna messaggio del giorno"
-
-#~ msgid "_Discover Services..."
-#~ msgstr "_Ricerca servizi..."
 
 #~ msgid "_XML Console..."
 #~ msgstr "Console _XML..."
