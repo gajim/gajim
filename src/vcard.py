@@ -160,8 +160,6 @@ class VcardWindow:
 	def on_set_avatar_button_clicked(self, widget):
 		f = None
 		def on_ok(widget, path_to_file):
-			path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
-				(path_to_file,))[0]
 			filesize = os.path.getsize(path_to_file) # in bytes
 			if filesize > 16384: # 16 kb
 				try:
