@@ -101,7 +101,7 @@ class Systray:
 		if gajim.interface.msg_win_mgr.has_window(jid, account):
 			gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
 				jid, account)
-			gajim.interface.msg_win_mgr.get_window(jid, account).present()
+			gajim.interface.msg_win_mgr.get_window(jid, account).window.present()
 		elif contact:
 			gajim.interface.roster.new_chat(contact, account)
 			gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
@@ -268,9 +268,9 @@ class Systray:
 		groups_menu = gtk.Menu()
 		sort_by_show = gajim.config.get('sort_by_show')
 		# store contact infos in a table so we can easily sort by group,
-		# status and name
-		# if we sort_by_show : contacts_table = [group, status, name]
-		# else : contacts_table = [group,  name, status]
+		# status and lower.name
+		# if we sort_by_show : contacts_table = [group, status, lowered name, jid, (real) name]
+		# else : contacts_table = [group,  lowered name, status, jid, (real) name]
 		contacts_table = []
 		show_list = list(gajim.SHOW_LIST) # copy gajim.SHOW_LIST in show_list
 		# not in roster is not in this list but we need it
@@ -290,23 +290,31 @@ class Systray:
 					# the user can be in mutiple groups, see in all of them	
 					if group == _('Transports'):
 						continue
+					contact_name =	contact.get_shown_name()
 					if sort_by_show: # see comment about contacts_table above
 						contacts_table.append ([group, show_list.index(contact.show),
-							contact.get_shown_name()])
+							contact_name.lower(),
+							contact.jid, contact_name])
 					else:
-						contacts_table.append ([group, contact.get_shown_name(), 
-							show_list.index(contact.show)])
+						contacts_table.append ([group, contact_name.lower(),
+						 	show_list.index(contact.show),
+							contact.jid, contact_name])
 		
-		contacts_table.sort() # Sort : first column before, last column in the end
-		
+		# Sort : first column before, last column in the end
+		# In theory we sort full table, including columns that don't need sorting,
+		# but as python sort() seems intelligent the table will be ordered before we
+		# sort lasts columns in most case.
+		contacts_table.sort() 
+				
 		previous_group = ''
 		for contact_item in contacts_table:
 			if sort_by_show: # see comment about contacts_table above
-				contact_name = contact_item[2]
 				contact_show = show_list[contact_item[1]]
 			else:
-				contact_name = contact_item[1]
 				contact_show = show_list[contact_item[2]]
+			contact_jid = contact_item[3]
+			contact_name = contact_item[4]
+			#we don't care about lowered name now
 			if contact_item[0] != previous_group:
 				# It's a new group, add the submenu
 				item = gtk.MenuItem(contact_item[0])
@@ -326,7 +334,7 @@ class Systray:
 			img_copy = gobject.new(gtk.Image, pixbuf=img.get_pixbuf())
 			item_contact.set_image(img_copy)
 			item_contact.connect('activate', self.start_chat, account,
-					contact.jid)
+					contact_jid)
 			contacts_menu.append(item_contact)
 			
 		return groups_menu
