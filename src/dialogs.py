@@ -1537,11 +1537,8 @@ class SoundChooserDialog(FileChooserDialog):
 		def on_ok(widget, callback):
 			'''check if file exists and call callback'''
 			path_to_snd_file = self.get_filename()
-			try:
-				path_to_snd_file = path_to_snd_file.decode(
-					sys.getfilesystemencoding())
-			except:
-				pass
+			path_to_snd_file = gtkgui_helpers.decode_filechooser_file_paths(
+				(path_to_snd_file,))[0]
 			if os.path.exists(path_to_snd_file):
 				callback(widget, path_to_snd_file)
 
@@ -1576,11 +1573,8 @@ class ImageChooserDialog(FileChooserDialog):
 		def on_ok(widget, callback):
 			'''check if file exists and call callback'''
 			path_to_file = self.get_filename()
-			try:
-				path_to_file = path_to_file.decode(
-					sys.getfilesystemencoding())
-			except:
-				pass
+			path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
+				(path_to_file,))[0]
 			if os.path.exists(path_to_file):
 				callback(widget, path_to_file)
 

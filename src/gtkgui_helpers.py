@@ -506,7 +506,13 @@ def decode_filechooser_file_paths(file_paths):
 			file_paths_list.append(file_path)
 	else:
 		for file_path in file_paths:
-			file_path = file_path.decode(sys.getfilesystemencoding())
+			try:
+				file_path = file_path.decode(sys.getfilesystemencoding())
+			except:
+				try:
+					file_path = file_path.decode('utf-8')
+				except:
+					pass
 			file_paths_list.append(file_path)
 	
 	return file_paths_list
