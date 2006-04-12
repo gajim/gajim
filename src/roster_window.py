@@ -3222,6 +3222,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		contact_row = model[selected_iter]
 		if contact_row[C_TYPE] != 'contact':
+			self._last_selected_contact = None
 			return
 		jid = contact_row[C_JID].decode('utf-8')
 		account = contact_row[C_ACCOUNT].decode('utf-8')
