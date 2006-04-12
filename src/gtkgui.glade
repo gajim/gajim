@@ -10859,15 +10859,15 @@ Custom</property>
   </child>
 
   <child>
-    <widget class="GtkImageMenuItem" id="single_message_menuitem">
+    <widget class="GtkImageMenuItem" id="join_gc_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Send Single _Message</property>
+      <property name="label" translatable="yes">_Group Chat</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1373">
+	<widget class="GtkImage" id="image1445">
 	  <property name="visible">True</property>
-	  <property name="stock">gtk-new</property>
+	  <property name="stock">gtk-connect</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>
@@ -10879,15 +10879,15 @@ Custom</property>
   </child>
 
   <child>
-    <widget class="GtkImageMenuItem" id="join_gc_menuitem">
+    <widget class="GtkImageMenuItem" id="single_message_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Group Chat</property>
+      <property name="label" translatable="yes">Send Single _Message</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1445">
+	<widget class="GtkImage" id="image1373">
 	  <property name="visible">True</property>
-	  <property name="stock">gtk-connect</property>
+	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>
@@ -16752,15 +16752,15 @@ Maybe I'll refactor later</property>
   </child>
 
   <child>
-    <widget class="GtkImageMenuItem" id="new_message_menuitem">
+    <widget class="GtkImageMenuItem" id="join_group_chat_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Send Single _Message...</property>
+      <property name="label" translatable="yes">_Group Chat</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1235">
+	<widget class="GtkImage" id="image1234">
 	  <property name="visible">True</property>
-	  <property name="stock">gtk-new</property>
+	  <property name="stock">gtk-connect</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>
@@ -16770,17 +16770,17 @@ Maybe I'll refactor later</property>
       </child>
     </widget>
   </child>
-
+  
   <child>
-    <widget class="GtkImageMenuItem" id="join_group_chat_menuitem">
+    <widget class="GtkImageMenuItem" id="new_message_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Join New Room...</property>
+      <property name="label" translatable="yes">Send Single _Message...</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1234">
+	<widget class="GtkImage" id="image1235">
 	  <property name="visible">True</property>
-	  <property name="stock">gtk-connect</property>
+	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
 	  <property name="xalign">0.5</property>
 	  <property name="yalign">0.5</property>
@@ -16806,6 +16806,26 @@ Maybe I'll refactor later</property>
 	  <property name="yalign">0.5</property>
 	  <property name="xpad">0</property>
 	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+   <child>
+    <widget class="GtkImageMenuItem" id="service_discovery_menuitem">
+       <property name="visible">True</property>
+      <property name="label" translatable="yes">_Discover Services...</property>
+       <property name="use_underline">True</property>
+ 
+       <child internal-child="image">
+	<widget class="GtkImage" id="image1232">
+ 	  <property name="visible">True</property>
+	  <property name="stock">gtk-find</property>
+ 	  <property name="icon_size">1</property>
+ 	  <property name="xalign">0.5</property>
+ 	  <property name="yalign">0.5</property>
+ 	  <property name="xpad">0</property>
+ 	  <property name="ypad">0</property>
 	</widget>
       </child>
     </widget>
