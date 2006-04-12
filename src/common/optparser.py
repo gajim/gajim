@@ -214,7 +214,7 @@ class OptionsParser:
 				'''
 			)
 			con.commit()
-			logger.init_vars()
+			gajim.logger.init_vars()
 		except sqlite.OperationalError, e:
 			pass
 		con.close()
