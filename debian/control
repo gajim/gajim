@@ -7,7 +7,7 @@ Standards-Version: 3.6.2
 
 Package: gajim
 Architecture: any
-Depends: ${shlibs:Depends}, python (>= 2.4), python-glade2 (>= 2.6.0), python-gtk2 (>= 2.6.0), python-pysqlite2
+Depends: ${shlibs:Depends}, python2.4 (>= 2.4), python-glade2 (>= 2.6.0), python-gtk2 (>= 2.6.0), python-pysqlite2
 Recommends: dnsutils, python2.4-dbus, notification-daemon
 Suggests: python-gnupginterface, python-gnome2
 Description: Jabber client written in PyGTK
