@@ -312,12 +312,13 @@ _('Connection with peer cannot be established.'))
 		if file_props.has_key('desc'):
 			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
 		prim_text = _('%s wants to send you a file:') % contact.jid
+		dialog, dialog2 = None, None
 
 		def on_response_ok(widget, account, contact, file_props):
-			self.dialog.destroy()
+			dialog.destroy()
 
 			def on_ok(widget, account, contact, file_props):
-				file_path = self.dialog2.get_filename()
+				file_path = dialog2.get_filename()
 				file_path = gtkgui_helpers.decode_filechooser_file_paths(
 					(file_path,))[0]
 				if os.path.exists(file_path):
@@ -329,18 +330,18 @@ _('Connection with peer cannot be established.'))
 						_('This file already exists'), _('What do you want to do?'),
 						not dl_finished)
 					response = dialog.get_response()
-					if response == gtk.RESPONSE_CANCEL:
+					if response < 0:
 						return
 					elif response == 100:
 						file_props['offset'] = dl_size
-				self.dialog2.destroy()
+				dialog2.destroy()
 				self._start_receive(file_path, account, contact, file_props)
 
 			def on_cancel(widget, account, contact, file_props):
-				self.dialog2.destroy()
+				dialog2.destroy()
 				gajim.connections[account].send_file_rejection(file_props)
 
-			self.dialog2 = dialogs.FileChooserDialog(
+			dialog2 = dialogs.FileChooserDialog(
 				title_text = _('Save File as...'), 
 				action = gtk.FILE_CHOOSER_ACTION_SAVE, 
 				buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
@@ -350,16 +351,20 @@ _('Connection with peer cannot be established.'))
 				on_response_ok = (on_ok, account, contact, file_props),
 				on_response_cancel = (on_cancel, account, contact, file_props))
 
-			self.dialog2.set_current_name(file_props['name'])
+			dialog2.set_current_name(file_props['name'])
+			dialog2.connect('delete-event', lambda widget, event:
+				on_cancel(widget, account, contact, file_props))
 
 		def on_response_cancel(widget, account, file_props):
-			self.dialog.destroy()
+			dialog.destroy()
 			gajim.connections[account].send_file_rejection(file_props)
 
-		self.dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
+		dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
 			on_response_ok = (on_response_ok, account, contact, file_props),
 			on_response_cancel = (on_response_cancel, account, file_props))
-		self.dialog.popup()
+		dialog.connect('delete-event', lambda widget, event: 
+			on_response_cancel(widget, account, file_props))
+		dialog.popup()
 
 	def set_images(self):
 		''' create pixbufs for status images in transfer rows'''

@@ -246,6 +246,8 @@ class ConnectionBytestream:
 
 	def send_file_request(self, file_props):
 		''' send iq for new FT request '''
+		if not self.connection or self.connected < 2:
+			return
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = self.server_resource
 		frm = our_jid + '/' + resource
@@ -396,7 +398,7 @@ class ConnectionBytestream:
 			file_props = self.files_props[id]
 			if file_props['streamhost-used']:
 				for host in file_props['proxyhosts']:
-					if host['initiator'] == frm:
+					if host['initiator'] == frm and host.has_key('idx'):
 						gajim.socks5queue.activate_proxy(host['idx'])
 						raise common.xmpp.NodeProcessed
 	
@@ -477,6 +479,9 @@ class ConnectionBytestream:
 		file_props = self.files_props[id]
 		if file_props is None:
 			# file properties for jid is none
+			return
+		if file_props.has_key('request-id'):
+			# we have already sent streamhosts info
 			return
 		file_props['receiver'] = helpers.get_full_jid_from_iq(iq_obj)
 		si = iq_obj.getTag('si')

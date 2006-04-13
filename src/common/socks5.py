@@ -740,6 +740,8 @@ class Socks5Sender(Socks5, IdleObject):
 	
 	def send_file(self):
 		''' start sending the file over verified connection ''' 
+		if self.file_props['started']:
+			return
 		self.file_props['error'] = 0
 		self.file_props['disconnect_cb'] = self.disconnect
 		self.file_props['started'] = True
