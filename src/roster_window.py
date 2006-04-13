@@ -138,6 +138,7 @@ class RosterWindow:
 			show = helpers.get_global_show()
 			model.append(None, [self.jabber_state_images['16'][show],
 				_('Merged accounts'), 'account', '', 'all', False, None])
+			self.draw_account(account)
 			return
 
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
@@ -157,10 +158,35 @@ class RosterWindow:
 	def draw_account(self, account):
 		model = self.tree.get_model()
 		iter = self.get_account_iter(account)
-		if gajim.con_types.has_key(account) and \
-		gajim.con_types[account] in ('tls', 'ssl'):
+		if self.regroup:
+			accounts = gajim.connections.keys()
+		else:
+			accounts = [account]
+		num_of_accounts = len(accounts)
+		num_of_secured = 0
+		for acct in accounts:
+			if gajim.con_types.has_key(acct) and \
+			gajim.con_types[acct] in ('tls', 'ssl'):
+				num_of_secured += 1
+		if num_of_secured:
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
+			if num_of_secured < num_of_accounts:
+				# Make it transparent
+				colorspace = tls_pixbuf.get_colorspace()
+				bps = tls_pixbuf.get_bits_per_sample()
+				rowstride = tls_pixbuf.get_rowstride()
+				pixels = tls_pixbuf.get_pixels()
+				new_pixels = ''
+				for i in range(0, 16*16):
+					rgb = pixels[4*i:4*i+3]
+					new_pixels += rgb
+					if rgb == chr(0)*3:
+						new_pixels += chr(0)
+					else:
+						new_pixels += chr(128)
+				tls_pixbuf = gtk.gdk.pixbuf_new_from_data(new_pixels, colorspace,
+					True, bps, 16, 16, rowstride)
 			model[iter][C_SECPIXBUF] = tls_pixbuf
 		else:
 			model[iter][C_SECPIXBUF] = None
