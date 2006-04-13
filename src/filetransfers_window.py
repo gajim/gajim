@@ -298,26 +298,6 @@ _('Connection with peer cannot be established.'))
 		self.add_transfer(account, contact, file_props)
 		gajim.connections[account].send_file_approval(file_props)
 
-	def confirm_overwrite_cb(self, dialog, account, contact, file_props):
-		file_path = dialog.get_filename()
-		file_path = gtkgui_helpers.decode_filechooser_file_paths((file_path,))[0]
-		if os.path.exists(file_path):
-			stat = os.stat(file_path)
-			dl_size = stat.st_size
-			file_size = file_props['size']
-			dl_finished = dl_size >= file_size
-			dialog = dialogs.FTOverwriteConfirmationDialog(
-				_('This file already exists'), _('What do you want to do?'),
-				not dl_finished)
-			response = dialog.get_response()
-			if response == gtk.RESPONSE_CANCEL:
-				return gtk.FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN
-			elif response == 100:
-				file_props['offset'] = dl_size
-		self.dialog2.destroy()
-		self._start_receive(file_path, account, contact, file_props)
-		return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
-
 	def show_file_request(self, account, contact, file_props):
 		''' show dialog asking for comfirmation and store location of new
 		file requested by a contact'''
@@ -340,13 +320,19 @@ _('Connection with peer cannot be established.'))
 				file_path = self.dialog2.get_filename()
 				file_path = gtkgui_helpers.decode_filechooser_file_paths(
 					(file_path,))[0]
-				if (gtk.gtk_version < (2, 8, 0) or gtk.pygtk_version < (2, 8, 0)) \
-				and os.path.exists(file_path):
-					primtext = _('This file already exists')
-					sectext = _('Would you like to overwrite it?')
-					dialog3 = dialogs.ConfirmationDialog(primtext, sectext)
-					if dialog3.get_response() != gtk.RESPONSE_OK:
+				if os.path.exists(file_path):
+					stat = os.stat(file_path)
+					dl_size = stat.st_size
+					file_size = file_props['size']
+					dl_finished = dl_size >= file_size
+					dialog = dialogs.FTOverwriteConfirmationDialog(
+						_('This file already exists'), _('What do you want to do?'),
+						not dl_finished)
+					response = dialog.get_response()
+					if response == gtk.RESPONSE_CANCEL:
 						return
+					elif response == 100:
+						file_props['offset'] = dl_size
 				self.dialog2.destroy()
 				self._start_receive(file_path, account, contact, file_props)
 
@@ -365,10 +351,6 @@ _('Connection with peer cannot be established.'))
 				on_response_cancel = (on_cancel, account, contact, file_props))
 
 			self.dialog2.set_current_name(file_props['name'])
-			if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
-				self.dialog2.props.do_overwrite_confirmation = True
-				self.dialog2.connect('confirm-overwrite', self.confirm_overwrite_cb,
-					account, contact, file_props)
 
 		def on_response_cancel(widget, account, file_props):
 			self.dialog.destroy()
@@ -540,7 +522,6 @@ _('Connection with peer cannot be established.'))
 		file_props = {'file-name' : file_path, 'name' : file_name, 
 			'type' : 's'}
 		if os.path.isfile(file_path):
-			
 			stat = os.stat(file_path)
 		else:
 			dialogs.ErrorDialog(_('Invalid File'), _('File: ')  + file_path)
