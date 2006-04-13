@@ -4,6 +4,7 @@ GAJIM_AP	= 0 # do we build Autopackage?
 
 MODULES		= src src/common po
 PREFIX		= /usr/local
+PYTHON		= python
 DESTDIR		= 
 OPTFLAGS	= 
 export OPTFLAGS
@@ -111,9 +112,9 @@ install:
 	for s in $(SCRIPTS) ; do \
 		BASE=`basename "$$s"`; \
 		if [ $(GAJIM_AP) -ne 0 ] ; then \
-			F=`cat "$$s" | sed -e 's!LIB!$(LIBDIR)!g'`; \
+			F=`cat "$$s" | sed -e 's!LIB!$(LIBDIR)!g' -e 's!PYTHON_EXEC!$(PYTHON)!g'`; \
 		else \
-			F=`cat "$$s" | sed -e 's!PREFIX!$(PREFIX)!g' -e 's!LIB!$(LIBDIR)!g'`; \
+			F=`cat "$$s" | sed -e 's!PREFIX!$(PREFIX)!g' -e 's!LIB!$(LIBDIR)!g' -e 's!PYTHON_EXEC!$(PYTHON)!g'`; \
 		fi; \
 		echo "$$F" > "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
 		chmod +x "$(DESTDIR)$(PREFIX)/bin/$$BASE"; \
