@@ -4,6 +4,8 @@ gajim (0.10-1) unstable; urgency=low
   * fix description typo Closes: #349249
   * Gajim now recommends dnsutils instead of python-dns
   * Gajim now depends on python2.4 Closes: #357777
+  * Use Gajim's GnuPGInterface file as there is no python2.4-gnupginterface
+	 package
 
  -- Yann Le Boulanger <asterix@lagaule.org>  Wed, 12 Apr 2006 10:55:16 +0100
 

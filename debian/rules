@@ -8,8 +8,7 @@ CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -fPIC -I/usr/include/python$(P
 LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0`
 
 DEB_MAKE_BUILD_TARGET    := all
-DEB_MAKE_INSTALL_TARGET =  install PREFIX=/usr DESTDIR=$(DEB_DESTDIR)
+DEB_MAKE_INSTALL_TARGET = install PYTHON=python2.4 PREFIX=/usr DESTDIR=$(DEB_DESTDIR)
 
 binary-install/gajim::
-	rm $(DEB_DESTDIR)/usr/share/gajim/src/common/GnuPGInterface.py
 	dh_python -pgajim /usr/share/gajim/src
