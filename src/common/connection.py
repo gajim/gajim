@@ -334,7 +334,11 @@ class Connection(ConnectionHandlers):
 			if not retry or self.retrycount > 10:
 				self.retrycount = 0
 				self.time_to_reconnect = None
-				self.on_connect_failure()
+				if self.on_connect_failure:
+					self.on_connect_failure()
+				else:
+					#FIXME show error dialog that connection is lost (line 151)
+					pass
 			else:
 				# try reconnect if connection has failed before auth to server
 				self._disconnectedReconnCB()
