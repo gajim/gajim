@@ -1749,7 +1749,8 @@ class Interface:
 			gajim.log.setLevel(None)
 		
 		# pygtk2.8 on win, breaks io_add_watch. We use good old select.select()
-		if os.name == 'nt' and gtk.pygtk_version > (2, 8, 0):
+		if os.name == 'nt' and (gtk.pygtk_version > (2, 8, 0) or 
+			gtk.gtk_version > (2, 8, 0)):
 			gajim.idlequeue = idlequeue.SelectIdleQueue()
 		else:
 			# in a nongui implementation, just call:
