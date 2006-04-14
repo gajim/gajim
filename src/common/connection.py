@@ -148,14 +148,18 @@ class Connection(ConnectionHandlers):
 			elif self.on_connect_failure:
 				self.on_connect_failure()
 			else:
-				self.dispatch('ERROR',
-				(_('Connection with account "%s" has been lost') % self.name,
-				_('To continue sending and receiving messages, you will need to reconnect.')))
+					# show error dialog
+				self._connection_lost()
 		else:
 			self.disconnect()
 		self.on_purpose = False
 	# END disconenctedReconnCB
 	
+	def _connection_lost(self):
+		self.dispatch('ERROR',
+		(_('Connection with account "%s" has been lost') % self.name,
+		_('To continue sending and receiving messages, you will need to reconnect.')))
+
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
 			if event == common.xmpp.features_nb.REGISTER_DATA_RECEIVED:
@@ -337,8 +341,8 @@ class Connection(ConnectionHandlers):
 				if self.on_connect_failure:
 					self.on_connect_failure()
 				else:
-					#FIXME show error dialog that connection is lost (line 151)
-					pass
+					# shown error dialog
+					self._connection_lost()
 			else:
 				# try reconnect if connection has failed before auth to server
 				self._disconnectedReconnCB()
