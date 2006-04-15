@@ -85,7 +85,6 @@ class BaseTooltip:
 			return contact.show
 		return 'not in roster'
 
-
 	def motion_notify_event(self, widget, event):
 		self.hide_tooltip()
 
@@ -186,7 +185,7 @@ class StatusTable:
 				str_status += ' - ' + status
 		return gtkgui_helpers.escape_for_pango_markup(str_status)
 	
-	def add_status_row(self, file_path, show, str_status, status_time = None):
+	def add_status_row(self, file_path, show, str_status, status_time = None, show_lock = False):
 		''' appends a new row with status icon to the table '''
 		self.current_row += 1
 		state_file = show.replace(' ', '_')
@@ -211,6 +210,12 @@ class StatusTable:
 		status_label.set_line_wrap(True)
 		self.table.attach(status_label, 3, 4, self.current_row,
 			self.current_row + 1, gtk.FILL | gtk.EXPAND, 0, 0, 0)
+		if show_lock:
+			lock_image = gtk.Image()
+			lock_image.set_from_stock(gtk.STOCK_DIALOG_AUTHENTICATION, 
+				gtk.ICON_SIZE_MENU)
+			self.table.attach(lock_image, 4, 5, self.current_row,
+				self.current_row + 1, 0, 0, 0, 0)
 		if status_time:
 			self.current_row += 1
 			# decode locale encoded string, the same way as below (10x nk)
@@ -218,8 +223,6 @@ class StatusTable:
 			local_time = local_time.decode(locale.getpreferredencoding()) 
 			status_time_label = gtk.Label(local_time)
 			status_time_label.set_alignment(0, 0)
-			#~ self.table.attach(status_time_label, 3, 5, self.current_row,
-			#~ self.current_row + 1, gtk.EXPAND | gtk.FILL, 0, 0, 0)
 	
 class NotificationAreaTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the notification area '''
@@ -264,14 +267,19 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				message = unicode(message, encoding = 'utf-8')
 			message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
 			message = gtkgui_helpers.escape_for_pango_markup(message)
+			if gajim.con_types.has_key(acct['name']) and \
+				gajim.con_types[acct['name']] in ('tls', 'ssl'):
+				show_lock = True
+			else:
+				show_lock = False
 			if message:
 				self.add_status_row(file_path, acct['show'], '<span weight="bold">'\
 					+ gtkgui_helpers.escape_for_pango_markup(acct['name']) + \
-					'</span>' + ' - ' + message)
+					'</span>' + ' - ' + message, show_lock=show_lock)
 			else:
 				self.add_status_row(file_path, acct['show'], '<span weight="bold">'\
 					+ gtkgui_helpers.escape_for_pango_markup(acct['name']) + \
-					'</span>')
+					'</span>', show_lock=show_lock)
 
 	def populate(self, data):
 		self.create_window()
