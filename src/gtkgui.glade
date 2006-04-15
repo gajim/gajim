@@ -18268,6 +18268,7 @@ Status message</property>
 			      <property name="focus_on_click">False</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
+                  <signal name="clicked" handler="on_toggle_gpg_togglebutton" last_modification_time="Fri, 14 Apr 2006 22:50:46 GMT"/>
 
 			      <child>
 				<widget class="GtkImage" id="image1333">

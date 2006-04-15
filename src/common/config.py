@@ -284,6 +284,9 @@ class Config:
 			'state_muc_msg_color': [ opt_color, 'mediumblue' ],
 			'state_muc_directed_msg_color': [ opt_color, 'red2' ],
 		}, {}),
+		'contacts': ({
+			'gpg_enabled': [ opt_bool, False ],
+		}, {}),
 	}
 
 	statusmsg_default = {

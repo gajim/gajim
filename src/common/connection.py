@@ -727,6 +727,10 @@ class Connection(ConnectionHandlers):
 			return
 		if remove_auth:
 			self.connection.getRoster().delItem(jid)
+			jid_list = gajim.config.del_per('contacts')
+			for j in jid_list:
+				if j.startswith(jid):
+					gajim.config.del_per('contacts', j)
 		else:
 			self.connection.getRoster().Unsubscribe(jid)
 			self.update_contact(jid, '', [])

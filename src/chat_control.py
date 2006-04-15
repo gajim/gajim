@@ -889,12 +889,26 @@ class ChatControl(ChatControlBase):
 			self.status_tooltip.disable()
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
+	
+	def on_toggle_gpg_togglebutton(self, widget):
+		gajim.config.set_per('contacts', self.contact.get_full_jid(),
+			'gpg_enabled', widget.get_active())
 
 	def _update_gpg(self):
 		tb = self.xml.get_widget('gpg_togglebutton')
 		if self.contact.keyID: # we can do gpg
 			tb.set_sensitive(True)
 			tt = _('OpenPGP Encryption')
+
+			# restore gpg pref
+			gpg_pref = gajim.config.get_per('contacts',
+				self.contact.get_full_jid(), 'gpg_enabled')
+			if gpg_pref == None:
+				gajim.config.add_per('contacts', self.contact.get_full_jid())
+				gpg_pref = gajim.config.get_per('contacts',
+					self.contact.get_full_jid(), 'gpg_enabled')
+			tb.set_active(gpg_pref)
+
 		else:
 			tb.set_sensitive(False)
 			#we talk about a contact here
