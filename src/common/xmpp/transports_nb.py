@@ -247,6 +247,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			# This should never happed, so we need the debug
 			self.DEBUG('Unhandled data received: %s' % received,'got')
 			self.disconnect()
+			if self.on_connect_failure:
+				self.on_connect_failure()
 		return True
 	
 	def _do_send(self):
@@ -415,7 +417,7 @@ class NonBlockingTLS(PlugIn):
 		''' Immidiatedly switch socket to TLS mode. Used internally.'''
 		tcpsock=self._owner.Connection
 		tcpsock._sock.setblocking(True)
-		tcpsock._sslObj    = socket.ssl(tcpsock._sock, None, None)
+		tcpsock._sslObj = socket.ssl(tcpsock._sock, None, None)
 		tcpsock._sock.setblocking(False)
 		tcpsock._sslIssuer = tcpsock._sslObj.issuer()
 		tcpsock._sslServer = tcpsock._sslObj.server()
