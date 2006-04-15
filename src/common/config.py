@@ -285,7 +285,7 @@ class Config:
 			'state_muc_directed_msg_color': [ opt_color, 'red2' ],
 		}, {}),
 		'contacts': ({
-			'gpg_enabled': [ opt_bool, False ],
+			'gpg_enabled': [ opt_bool, True ],
 		}, {}),
 	}
 
