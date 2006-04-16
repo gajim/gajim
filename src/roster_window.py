@@ -178,7 +178,9 @@ class RosterWindow:
 				rowstride = tls_pixbuf.get_rowstride()
 				pixels = tls_pixbuf.get_pixels()
 				new_pixels = ''
-				for i in range(0, 16*16):
+				width = tls_pixbuf.get_width()
+				height = tls_pixbuf.get_height()
+				for i in range(0, width*height):
 					rgb = pixels[4*i:4*i+3]
 					new_pixels += rgb
 					if rgb == chr(0)*3:
@@ -186,7 +188,7 @@ class RosterWindow:
 					else:
 						new_pixels += chr(128)
 				tls_pixbuf = gtk.gdk.pixbuf_new_from_data(new_pixels, colorspace,
-					True, bps, 16, 16, rowstride)
+					True, bps, width, height, rowstride)
 			model[iter][C_SECPIXBUF] = tls_pixbuf
 		else:
 			model[iter][C_SECPIXBUF] = None
