@@ -189,7 +189,7 @@ class Systray:
 			accounts_list = gajim.contacts.get_accounts()
 			accounts_list.sort()
 			for account in accounts_list:
-				if gajim.connections[account].connected:
+				if gajim.connections[account].connected > 1:
 					#for chat_with
 					item = gtk.MenuItem(_('using account %s') % account)
 					account_menu_for_chat_with.append(item)
@@ -215,7 +215,7 @@ class Systray:
 		elif connected_accounts == 1: # one account
 			# one account connected, no need to show 'as jid'
 			for account in gajim.connections:
-				if gajim.connections[account].connected:
+				if gajim.connections[account].connected > 1:
 					# for chat_with
 					group_menu = self.make_groups_submenus_for_chat_with(account)
 					self.popup_menus.append(group_menu)
@@ -228,6 +228,7 @@ class Systray:
 
 					# join gc
 					gajim.interface.roster.add_bookmarks_list(gc_sub_menu, account)
+					break # No other connected account
 			
 		if event is None:
 			# None means windows (we explicitly popup in systraywin32.py)
