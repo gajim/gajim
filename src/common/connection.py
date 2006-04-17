@@ -683,7 +683,7 @@ class Connection(ConnectionHandlers):
 		p = common.xmpp.Presence(jid, 'unsubscribe')
 		self.connection.send(p)
 
-	def request_subscription(self, jid, msg, name = '', groups = [],
+	def request_subscription(self, jid, msg = '', name = '', groups = [],
 	auto_auth = False):
 		if not self.connection:
 			return
