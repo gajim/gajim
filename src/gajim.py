@@ -1504,13 +1504,23 @@ class Interface:
 	def on_launch_browser_mailer(self, widget, url, kind):
 		helpers.launch_browser_mailer(kind, url)
 
+	def popup_emoticons_under_button(self, button, parent_win):
+		''' pops emoticons menu under button, located in parent_win'''
+		gtkgui_helpers.popup_emoticons_under_button(self.emoticons_menu, 
+			button, parent_win)
+	
 	def prepare_emoticons_menu(self):
 		menu = gtk.Menu()
-
 		def emoticon_clicked(w, str_):
 			if self.emoticon_menuitem_clicked:
 				self.emoticon_menuitem_clicked(str_)
-
+				# don't keep reference to CB of object
+				# this will prevent making it uncollectable
+				self.emoticon_menuitem_clicked = None
+		def selection_done(widget):
+			# remove reference to CB of object, which will
+			# make it uncollectable
+			self.emoticon_menuitem_clicked = None
 		counter = 0
 		# Calculate the side lenght of the popup to make it a square
 		size = int(round(math.sqrt(len(gajim.interface.emoticons_images))))
@@ -1527,6 +1537,7 @@ class Interface:
 			menu.attach(item, counter % size, counter % size + 1,
 				counter / size, counter / size + 1)
 			counter += 1
+		menu.connect('selection-done', selection_done)
 		menu.show_all()
 		return menu
 

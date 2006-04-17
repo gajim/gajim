@@ -36,6 +36,9 @@ class MessageControl:
 	def __init__(self, type_id, parent_win, widget_name, display_names, contact, account, resource = None):
 		'''The display_names argument is a two element tuple containing the desired
 		display name (pretty string) for the control in both singular and plural form'''
+		# dict { cb id : widget} 
+		# keep all registered callbacks of widgets, created by self.xml
+		self.handlers = {} 
 		self.type_id = type_id
 		self.parent_win = parent_win
 		self.widget_name = widget_name
@@ -51,8 +54,6 @@ class MessageControl:
 
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
 		self.widget = self.xml.get_widget(widget_name)
-		# Autoconnect glade signals
-		self.xml.signal_autoconnect(self)
 
 	def get_full_jid(self):
 		fjid = self.contact.jid
@@ -137,33 +138,3 @@ class MessageControl:
 		gajim.connections[self.account].send_message(jid, message, keyID,
 						type = type, chatstate = chatstate, msg_id = msg_id,
 						composing_jep = composing_jep, resource = self.resource)
-
-	def position_menu_under_button(self, menu):
-		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
-		# pass btn instance when this bug is over
-		button = self.button_clicked
-		# here I get the coordinates of the button relative to
-		# window (self.window)
-		button_x, button_y = button.allocation.x, button.allocation.y
-		
-		# now convert them to X11-relative
-		window_x, window_y = self.parent_win.get_origin()
-		x = window_x + button_x
-		y = window_y + button_y
-
-		menu_width, menu_height = menu.size_request()
-
-		## should we pop down or up?
-		if (y + button.allocation.height + menu_height
-		    < gtk.gdk.screen_height()):
-			# now move the menu below the button
-			y += button.allocation.height
-		else:
-			# now move the menu above the button
-			y -= menu_height
-
-
-		# push_in is True so all the menuitems are always inside screen
-		push_in = True
-		return (x, y, push_in)
-

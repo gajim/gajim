@@ -58,6 +58,47 @@ C_NICK, # contact nickame or group name
 C_TEXT, # text shown in the cellrenderer
 C_AVATAR, # avatar of the contact
 ) = range(5)
+	
+def set_renderer_color(treeview, renderer, set_background = True):
+	'''set style for group row, using PRELIGHT system color'''
+	if set_background:
+		bgcolor = treeview.style.bg[gtk.STATE_PRELIGHT]
+		renderer.set_property('cell-background-gdk', bgcolor)
+	else:
+		fgcolor = treeview.style.fg[gtk.STATE_PRELIGHT]
+		renderer.set_property('foreground-gdk', fgcolor)
+
+def tree_cell_data_func(column, renderer, model, iter, tv=None):
+	# cell data func is global, because we don't want it to keep
+	# reference to GroupchatControl instance (self)
+	theme = gajim.config.get('roster_theme')
+	if model.iter_parent(iter):
+		bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
+		if bgcolor:
+			renderer.set_property('cell-background', bgcolor)
+		else:
+			renderer.set_property('cell-background', None)
+		if isinstance(renderer, gtk.CellRendererText):
+			# foreground property is only with CellRendererText
+			color = gajim.config.get_per('themes', theme, 
+				'contacttextcolor')
+			if color:
+				renderer.set_property('foreground', color)
+			else:
+				renderer.set_property('foreground', None)
+	else: # it is root (eg. group)
+		bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
+		if bgcolor:
+			renderer.set_property('cell-background', bgcolor)
+		else:
+			set_renderer_color(tv, renderer)
+		if isinstance(renderer, gtk.CellRendererText):
+			# foreground property is only with CellRendererText
+			color = gajim.config.get_per('themes', theme, 'grouptextcolor')
+			if color:
+				renderer.set_property('foreground', color)
+			else:
+				set_renderer_color(tv, renderer, False)
 
 class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
@@ -98,6 +139,38 @@ class GroupchatControl(ChatControlBase):
 					'muc_child_vbox', (_('Group Chat'), _('Group Chats')),
 					contact, acct);
 
+		widget = self.xml.get_widget('muc_window_actions_button')
+		id = widget.connect('clicked', self.on_actions_button_clicked)
+		self.handlers[id] = widget
+		
+		widget = self.xml.get_widget('list_treeview')
+		id = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
+		self.handlers[id] = widget
+		
+		id = widget.connect('row_collapsed', 
+			self.on_list_treeview_row_collapsed)
+		self.handlers[id] = widget
+		
+		id = widget.connect('row_activated', 
+			self.on_list_treeview_row_activated)
+		self.handlers[id] = widget
+		
+		id = widget.connect('button_press_event', 
+			self.on_list_treeview_button_press_event)
+		self.handlers[id] = widget
+		
+		id = widget.connect('key_press_event', 
+			self.on_list_treeview_key_press_event)
+		self.handlers[id] = widget
+		
+		id = widget.connect('motion_notify_event', 
+			self.on_list_treeview_motion_notify_event)
+		self.handlers[id] = widget
+		
+		id = widget.connect('leave_notify_event', 
+			self.on_list_treeview_leave_notify_event)
+		self.handlers[id] = widget
+	
 		self.room_jid = self.contact.jid
 		self.nick = contact.name
 		self.name = self.room_jid.split('@')[0]
@@ -132,12 +205,37 @@ class GroupchatControl(ChatControlBase):
 
 		# connect the menuitems to their respective functions
 		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_control_popup_menu', APP)
-		xm.signal_autoconnect(self)
+
+		widget = xm.get_widget('bookmark_room_menuitem')
+		id = widget.connect('activate', self._on_bookmark_room_menuitem_activate)
+		self.handlers[id] = widget
+
+		widget = xm.get_widget('change_nick_menuitem')
+		id = widget.connect('activate', self._on_change_nick_menuitem_activate)
+		self.handlers[id] = widget
+
+		widget = xm.get_widget('configure_room_menuitem')
+		id = widget.connect('activate', self._on_configure_room_menuitem_activate)
+		self.handlers[id] = widget
+
+		widget = xm.get_widget('change_subject_menuitem')
+		id = widget.connect('activate', self._on_change_subject_menuitem_activate)
+		self.handlers[id] = widget
+
+		widget = xm.get_widget('compact_view_menuitem')
+		id = widget.connect('activate', self._on_compact_view_menuitem_activate)
+		self.handlers[id] = widget
+		
+		widget = xm.get_widget('history_menuitem')
+		id = widget.connect('activate', self._on_history_menuitem_activate)
+		self.handlers[id] = widget
+		
 		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
-		self.parent_win.window.connect('focus-in-event',
+		id = self.parent_win.window.connect('focus-in-event',
 						self._on_window_focus_in_event)
+		self.handlers[id] = self.parent_win.window
 
 		# set the position of the current hpaned
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
@@ -145,15 +243,18 @@ class GroupchatControl(ChatControlBase):
 		self.hpaned.set_position(self.hpaned_position)
 
 		list_treeview = self.list_treeview = self.xml.get_widget('list_treeview')
-		list_treeview.get_selection().connect('changed',
-			self.on_list_treeview_selection_changed)
-		list_treeview.connect('style-set', self.on_list_treeview_style_set)
+		selection = list_treeview.get_selection()
+		id = selection.connect('changed', 
+				self.on_list_treeview_selection_changed)
+		self.handlers[id] = selection
+		id = list_treeview.connect('style-set', self.on_list_treeview_style_set)
+		self.handlers[id] = list_treeview
 		# we want to know when the the widget resizes, because that is
 		# an indication that the hpaned has moved...
 		# FIXME: Find a better indicator that the hpaned has moved.
-		self.list_treeview.connect('size-allocate',
+		id = self.list_treeview.connect('size-allocate',
 			self.on_treeview_size_allocate)
-
+		self.handlers[id] = self.list_treeview
 		#status_image, type, nickname, shown_nick
 		store = gtk.TreeStore(gtk.Image, str, str, str, gtk.gdk.Pixbuf)
 		store.set_sort_column_id(C_TEXT, gtk.SORT_ASCENDING)
@@ -168,18 +269,20 @@ class GroupchatControl(ChatControlBase):
 		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
 		column.pack_start(renderer_pixbuf, expand = False)
 		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
-		column.set_cell_data_func(renderer_pixbuf, self.avatar_cell_data_func,
-			None)
+		column.set_cell_data_func(renderer_pixbuf, tree_cell_data_func,
+			self.list_treeview)
+		renderer_pixbuf.set_property('xalign', 1) # align pixbuf to the right
 
 		renderer_image = cell_renderer_image.CellRendererImage(0, 0) # status img
 		column.pack_start(renderer_image, expand = False)
 		column.add_attribute(renderer_image, 'image', C_IMG)
-		column.set_cell_data_func(renderer_image, self.tree_cell_data_func, None)
+		column.set_cell_data_func(renderer_image, tree_cell_data_func, 
+			self.list_treeview)
 
 		renderer_text = gtk.CellRendererText() # nickname
 		column.pack_start(renderer_text, expand = True)
 		column.add_attribute(renderer_text, 'markup', C_TEXT)
-		column.set_cell_data_func(renderer_text, self.tree_cell_data_func, None)
+		column.set_cell_data_func(renderer_text, tree_cell_data_func, self.list_treeview)
 
 		self.list_treeview.append_column(column)
 
@@ -208,49 +311,6 @@ class GroupchatControl(ChatControlBase):
 		if self.parent_win.get_active_jid() == self.room_jid:
 			self.allow_focus_out_line = True
 	
-	def set_renderer_color(self, renderer, set_background = True):
-		'''set style for group row, using PRELIGHT system color'''
-		if set_background:
-			bgcolor = self.list_treeview.style.bg[gtk.STATE_PRELIGHT]
-			renderer.set_property('cell-background-gdk', bgcolor)
-		else:
-			fgcolor = self.list_treeview.style.fg[gtk.STATE_PRELIGHT]
-			renderer.set_property('foreground-gdk', fgcolor)
-
-	def tree_cell_data_func(self, column, renderer, model, iter, data=None):
-		theme = gajim.config.get('roster_theme')
-		if model.iter_parent(iter):
-			bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
-			if bgcolor:
-				renderer.set_property('cell-background', bgcolor)
-			else:
-				renderer.set_property('cell-background', None)
-			if isinstance(renderer, gtk.CellRendererText):
-				# foreground property is only with CellRendererText
-				color = gajim.config.get_per('themes', theme, 
-					'contacttextcolor')
-				if color:
-					renderer.set_property('foreground', color)
-				else:
-					renderer.set_property('foreground', None)
-		else: # it is root (eg. group)
-			bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
-			if bgcolor:
-				renderer.set_property('cell-background', bgcolor)
-			else:
-				self.set_renderer_color(renderer)
-			if isinstance(renderer, gtk.CellRendererText):
-				# foreground property is only with CellRendererText
-				color = gajim.config.get_per('themes', theme, 'grouptextcolor')
-				if color:
-					renderer.set_property('foreground', color)
-				else:
-					self.set_renderer_color(renderer, False)
-	
-	def avatar_cell_data_func(self, column, renderer, model, iter, data=None):
-		self.tree_cell_data_func(column, renderer, model, iter, data)
-		renderer.set_property('xalign', 1) # align pixbuf to the right
-
 	def on_treeview_size_allocate(self, widget, allocation):
 		'''The MUC treeview has resized. Move the hpaned in all tabs to match'''
 		self.hpaned_position = self.hpaned.get_position()
@@ -1116,6 +1176,11 @@ class GroupchatControl(ChatControlBase):
 			del gajim.gc_connected[self.account][self.room_jid]
 		# Save hpaned position
 		gajim.config.set('gc-hpaned-position', self.hpaned_position)
+		# remove all register handlers on wigets, created by self.xml
+		# to prevent circular references among objects
+		for i in self.handlers.keys():
+			self.handlers[i].disconnect(i)
+			del self.handlers[i]
 
 	def allow_shutdown(self):
 		retval = True
@@ -1354,7 +1419,8 @@ class GroupchatControl(ChatControlBase):
 			(user_affiliation == 'member' and target_affiliation in ('admin', 'owner')) or \
 			(user_affiliation == 'none' and target_affiliation != 'none'):
 			item.set_sensitive(False)
-		item.connect('activate', self.kick, nick)
+		id = item.connect('activate', self.kick, nick)
+		self.handlers[id] = item
 
 		item = xml.get_widget('voice_checkmenuitem')
 		item.set_active(target_role != 'visitor')
@@ -1363,54 +1429,67 @@ class GroupchatControl(ChatControlBase):
 			(user_affiliation=='member' and target_affiliation!='none') or \
 			target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
-		item.connect('activate', self.on_voice_checkmenuitem_activate, nick)
+		id = item.connect('activate', self.on_voice_checkmenuitem_activate, 
+					nick)
+		self.handlers[id] = item
 
 		item = xml.get_widget('moderator_checkmenuitem')
 		item.set_active(target_role == 'moderator')
 		if not user_affiliation in ('admin', 'owner') or \
 			target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
-		item.connect('activate', self.on_moderator_checkmenuitem_activate, nick)
-
+		id = item.connect('activate', self.on_moderator_checkmenuitem_activate,
+					nick)
+		self.handlers[id] = item
+	
 		item = xml.get_widget('ban_menuitem')
 		if not user_affiliation in ('admin', 'owner') or \
 			(target_affiliation in ('admin', 'owner') and\
 			user_affiliation != 'owner'):
 			item.set_sensitive(False)
-		item.connect('activate', self.ban, jid)
+		id = item.connect('activate', self.ban, jid)
+		self.handlers[id] = item
 
 		item = xml.get_widget('member_checkmenuitem')
 		item.set_active(target_affiliation != 'none')
 		if not user_affiliation in ('admin', 'owner') or \
 			(user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
 			item.set_sensitive(False)
-		item.connect('activate', self.on_member_checkmenuitem_activate, jid)
-
+		id = item.connect('activate', self.on_member_checkmenuitem_activate, 
+					jid)
+		self.handlers[id] = item
+	
 		item = xml.get_widget('admin_checkmenuitem')
 		item.set_active(target_affiliation in ('admin', 'owner'))
 		if not user_affiliation == 'owner':
 			item.set_sensitive(False)
-		item.connect('activate', self.on_admin_checkmenuitem_activate, jid)
+		id = item.connect('activate', self.on_admin_checkmenuitem_activate, jid)
+		self.handlers[id] = item
 
 		item = xml.get_widget('owner_checkmenuitem')
 		item.set_active(target_affiliation == 'owner')
 		if not user_affiliation == 'owner':
 			item.set_sensitive(False)
-		item.connect('activate', self.on_owner_checkmenuitem_activate, jid)
+		id = item.connect('activate', self.on_owner_checkmenuitem_activate, jid)
+		self.handlers[id] = item
 
 		item = xml.get_widget('information_menuitem')
-		item.connect('activate', self.on_info, nick)
+		id = item.connect('activate', self.on_info, nick)
+		self.handlers[id] = item
 
 		item = xml.get_widget('history_menuitem')
-		item.connect('activate', self.on_history, nick)
+		id = item.connect('activate', self.on_history, nick)
+		self.handlers[id] = item
 
 		item = xml.get_widget('add_to_roster_menuitem')
 		if not jid:
 			item.set_sensitive(False)
-		item.connect('activate', self.on_add_to_roster, jid)
+		id = item.connect('activate', self.on_add_to_roster, jid)
+		self.handlers[id] = item
 
 		item = xml.get_widget('send_private_message_menuitem')
-		item.connect('activate', self.on_send_pm, model, iter)
+		id = item.connect('activate', self.on_send_pm, model, iter)
+		self.handlers[id] = item
 
 		# show the popup now!
 		menu = xml.get_widget('gc_occupants_menu')

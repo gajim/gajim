@@ -3817,7 +3817,6 @@ Per type</property>
 		      <property name="visible">True</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="focus_on_click">True</property>
-		      <signal name="changed" handler="on_emoticons_combobox_changed" last_modification_time="Sun, 05 Feb 2006 14:06:24 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -15233,7 +15232,6 @@ Messages</property>
       <property name="tooltip" translatable="yes">Click to see past conversation in this room</property>
       <property name="label" translatable="yes">_History</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="_on_history_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image1359">
@@ -15253,7 +15251,6 @@ Messages</property>
     <widget class="GtkImageMenuItem" id="configure_room_menuitem">
       <property name="label" translatable="yes">Configure _Room</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="_on_configure_room_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image1360">
@@ -15273,7 +15270,6 @@ Messages</property>
     <widget class="GtkImageMenuItem" id="change_subject_menuitem">
       <property name="label" translatable="yes">Change _Subject</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="_on_change_subject_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image1361">
@@ -15293,7 +15289,6 @@ Messages</property>
     <widget class="GtkImageMenuItem" id="change_nick_menuitem">
       <property name="label" translatable="yes">Change _Nickname</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="_on_change_nick_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image1362">
@@ -15313,7 +15308,6 @@ Messages</property>
     <widget class="GtkImageMenuItem" id="bookmark_room_menuitem">
       <property name="label" translatable="yes">_Bookmark This Room</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="_on_bookmark_room_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image1363">
@@ -15334,7 +15328,6 @@ Messages</property>
       <property name="label" translatable="yes">_Compact View    Alt+C</property>
       <property name="use_underline">True</property>
       <property name="active">False</property>
-      <signal name="activate" handler="_on_compact_view_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:41:11 GMT"/>
     </widget>
   </child>
 </widget>
@@ -15347,7 +15340,6 @@ Messages</property>
       <property name="tooltip" translatable="yes">Click to see past conversations with this contact</property>
       <property name="label" translatable="yes">_History</property>
       <property name="use_underline">True</property>
-      <signal name="activate" handler="_on_history_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:40:18 GMT"/>
 
       <child internal-child="image">
 	<widget class="GtkImage" id="image1366">
@@ -15368,7 +15360,6 @@ Messages</property>
       <property name="visible">True</property>
       <property name="label">gtk-dialog-info</property>
       <property name="use_stock">True</property>
-      <signal name="activate" handler="_on_contact_information_menuitem_activate" last_modification_time="Thu, 12 Jan 2006 02:40:18 GMT"/>
     </widget>
   </child>
 
@@ -16770,7 +16761,7 @@ Maybe I'll refactor later</property>
       </child>
     </widget>
   </child>
-  
+
   <child>
     <widget class="GtkImageMenuItem" id="new_message_menuitem">
       <property name="visible">True</property>
@@ -16811,21 +16802,21 @@ Maybe I'll refactor later</property>
     </widget>
   </child>
 
-   <child>
+  <child>
     <widget class="GtkImageMenuItem" id="service_discovery_menuitem">
-       <property name="visible">True</property>
+      <property name="visible">True</property>
       <property name="label" translatable="yes">_Discover Services...</property>
-       <property name="use_underline">True</property>
- 
-       <child internal-child="image">
+      <property name="use_underline">True</property>
+
+      <child internal-child="image">
 	<widget class="GtkImage" id="image1232">
- 	  <property name="visible">True</property>
+	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
- 	  <property name="icon_size">1</property>
- 	  <property name="xalign">0.5</property>
- 	  <property name="yalign">0.5</property>
- 	  <property name="xpad">0</property>
- 	  <property name="ypad">0</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
 	</widget>
       </child>
     </widget>
@@ -18155,8 +18146,6 @@ Status message</property>
 			      <property name="visible">True</property>
 			      <property name="visible_window">False</property>
 			      <property name="above_child">False</property>
-			      <signal name="enter_notify_event" handler="on_avatar_eventbox_enter_notify_event" last_modification_time="Thu, 05 Jan 2006 03:19:02 GMT"/>
-			      <signal name="leave_notify_event" handler="on_avatar_eventbox_leave_notify_event" last_modification_time="Thu, 05 Jan 2006 03:19:08 GMT"/>
 
 			      <child>
 				<widget class="GtkImage" id="avatar_image">
@@ -18268,7 +18257,6 @@ Status message</property>
 			      <property name="focus_on_click">False</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
-                  <signal name="clicked" handler="on_toggle_gpg_togglebutton" last_modification_time="Fri, 14 Apr 2006 22:50:46 GMT"/>
 
 			      <child>
 				<widget class="GtkImage" id="image1333">
@@ -18301,90 +18289,6 @@ Status message</property>
 			  <property name="fill">True</property>
 			</packing>
 		      </child>
-
-		      <child>
-			<widget class="GtkToggleButton" id="bold_togglebutton">
-			  <property name="tooltip" translatable="yes">Bold</property>
-			  <property name="can_focus">True</property>
-			  <property name="relief">GTK_RELIEF_NONE</property>
-			  <property name="focus_on_click">False</property>
-			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
-
-			  <child>
-			    <widget class="GtkImage" id="image1334">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-bold</property>
-			      <property name="icon_size">3</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkToggleButton" id="italic_togglebutton">
-			  <property name="tooltip" translatable="yes">Italic</property>
-			  <property name="can_focus">True</property>
-			  <property name="relief">GTK_RELIEF_NONE</property>
-			  <property name="focus_on_click">False</property>
-			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
-
-			  <child>
-			    <widget class="GtkImage" id="image1335">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-italic</property>
-			      <property name="icon_size">3</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkToggleButton" id="underline_togglebutton">
-			  <property name="tooltip" translatable="yes">Underline</property>
-			  <property name="can_focus">True</property>
-			  <property name="relief">GTK_RELIEF_NONE</property>
-			  <property name="focus_on_click">False</property>
-			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
-
-			  <child>
-			    <widget class="GtkImage" id="image1336">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-underline</property>
-			      <property name="icon_size">3</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -18407,7 +18311,6 @@ Status message</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="on_emoticons_button_clicked" last_modification_time="Thu, 17 Nov 2005 18:04:40 GMT"/>
 
 			  <child>
 			    <widget class="GtkHBox" id="hbox3008">
@@ -18457,12 +18360,11 @@ Status message</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkButton" id="button29">
+			<widget class="GtkButton" id="message_window_actions_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="on_actions_button_clicked" last_modification_time="Wed, 03 Aug 2005 15:06:36 GMT"/>
 
 			  <child>
 			    <widget class="GtkAlignment" id="alignment101">
@@ -18666,7 +18568,6 @@ Status message</property>
 	      <property name="visible">True</property>
 	      <property name="visible_window">False</property>
 	      <property name="above_child">False</property>
-	      <signal name="button_press_event" handler="on_tab_eventbox_button_press_event" last_modification_time="Thu, 04 Aug 2005 09:38:11 GMT"/>
 
 	      <child>
 		<widget class="GtkHBox" id="tab_hbox">
@@ -18902,13 +18803,6 @@ topic</property>
 			  <property name="fixed_height_mode">False</property>
 			  <property name="hover_selection">False</property>
 			  <property name="hover_expand">False</property>
-			  <signal name="row_activated" handler="on_list_treeview_row_activated" last_modification_time="Sat, 05 Mar 2005 00:31:45 GMT"/>
-			  <signal name="row_collapsed" handler="on_list_treeview_row_collapsed" last_modification_time="Sat, 05 Mar 2005 00:31:52 GMT"/>
-			  <signal name="row_expanded" handler="on_list_treeview_row_expanded" last_modification_time="Sat, 05 Mar 2005 00:31:57 GMT"/>
-			  <signal name="button_press_event" handler="on_list_treeview_button_press_event" last_modification_time="Sat, 05 Mar 2005 00:32:05 GMT"/>
-			  <signal name="key_press_event" handler="on_list_treeview_key_press_event" last_modification_time="Sat, 26 Mar 2005 20:42:24 GMT"/>
-			  <signal name="motion_notify_event" handler="on_list_treeview_motion_notify_event" last_modification_time="Thu, 18 Aug 2005 23:11:24 GMT"/>
-			  <signal name="leave_notify_event" handler="on_list_treeview_leave_notify_event" last_modification_time="Thu, 18 Aug 2005 23:11:51 GMT"/>
 			</widget>
 		      </child>
 		    </widget>
@@ -18933,103 +18827,7 @@ topic</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkHBox" id="hbox3012">
-		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
-
-		      <child>
-			<placeholder/>
-		      </child>
-
-		      <child>
-			<widget class="GtkToggleButton" id="bold_togglebutton">
-			  <property name="tooltip" translatable="yes">Bold</property>
-			  <property name="can_focus">True</property>
-			  <property name="relief">GTK_RELIEF_NONE</property>
-			  <property name="focus_on_click">False</property>
-			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
-
-			  <child>
-			    <widget class="GtkImage" id="image1340">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-bold</property>
-			      <property name="icon_size">3</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkToggleButton" id="italic_togglebutton">
-			  <property name="tooltip" translatable="yes">Italic</property>
-			  <property name="can_focus">True</property>
-			  <property name="relief">GTK_RELIEF_NONE</property>
-			  <property name="focus_on_click">False</property>
-			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
-
-			  <child>
-			    <widget class="GtkImage" id="image1341">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-italic</property>
-			      <property name="icon_size">3</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkToggleButton" id="underline_togglebutton">
-			  <property name="tooltip" translatable="yes">Underline</property>
-			  <property name="can_focus">True</property>
-			  <property name="relief">GTK_RELIEF_NONE</property>
-			  <property name="focus_on_click">False</property>
-			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
-
-			  <child>
-			    <widget class="GtkImage" id="image1342">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-underline</property>
-			      <property name="icon_size">3</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
+		    <placeholder/>
 		  </child>
 
 		  <child>
@@ -19095,12 +18893,11 @@ topic</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkButton" id="button32">
+			<widget class="GtkButton" id="muc_window_actions_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="on_actions_button_clicked" last_modification_time="Mon, 13 Jun 2005 11:03:39 GMT"/>
 
 			  <child>
 			    <widget class="GtkAlignment" id="alignment104">

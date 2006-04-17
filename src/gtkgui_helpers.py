@@ -45,6 +45,34 @@ from common import helpers
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
 
+def popup_emoticons_under_button(menu, button, parent_win):
+	''' pops emoticons menu under button, which is in parent_win'''
+	def position_menu_under_button(menu):
+		# inline function, which will not keep refs, when used as CB
+		button_x, button_y = button.allocation.x, button.allocation.y
+		
+		# now convert them to X11-relative
+		window_x, window_y = parent_win.get_origin()
+		x = window_x + button_x
+		y = window_y + button_y
+
+		menu_width, menu_height = menu.size_request()
+
+		## should we pop down or up?
+		if (y + button.allocation.height + menu_height
+			< gtk.gdk.screen_height()):
+			# now move the menu below the button
+			y += button.allocation.height
+		else:
+			# now move the menu above the button
+			y -= menu_height
+
+		# push_in is True so all the menuitems are always inside screen
+		push_in = True
+		return (x, y, push_in)
+	
+	menu.popup(None, None, position_menu_under_button, 1, 0)
+	
 def get_theme_font_for_option(theme, option):
 	'''return string description of the font, stored in
 	theme preferences'''

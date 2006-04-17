@@ -147,10 +147,12 @@ class MessageWindow:
 		# Add notebook page and connect up to the tab's close button
 		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_ebox', APP)
 		tab_label_box = xml.get_widget('chat_tab_ebox')
-		xml.signal_connect('on_close_button_clicked',
-			self._on_close_button_clicked, control)
-		xml.signal_connect('on_tab_eventbox_button_press_event',
-				self.on_tab_eventbox_button_press_event, control.widget)
+		widget =  xml.get_widget('tab_close_button')
+		id = widget.connect('clicked', self._on_close_button_clicked, control)
+		control.handlers[id] = widget
+		
+		id = tab_label_box.connect('button-press-event', self.on_tab_eventbox_button_press_event, control.widget)
+		control.handlers[id] = tab_label_box
 		self.notebook.append_page(control.widget, tab_label_box)
 
 		self.setup_tab_dnd(control.widget)

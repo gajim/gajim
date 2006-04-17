@@ -101,36 +101,43 @@ class ChatControlBase(MessageControl):
 	def __init__(self, type_id, parent_win, widget_name, display_names, contact, acct, resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
 			display_names,	contact, acct, resource = resource);
-
-		# FIXME: XHTML-IM
-		for w in ('bold_togglebutton', 'italic_togglebutton',
-			'underline_togglebutton'):
-			self.xml.get_widget(w).set_no_show_all(True)
-
-		self.widget.connect('key_press_event', self._on_keypress_event)
-
+		# when/if we do XHTML we will but formatting buttons back
+		widget = self.xml.get_widget('emoticons_button')
+		id = widget.connect('clicked', self.on_emoticons_button_clicked)
+		self.handlers[id] = widget
+		
+		id = self.widget.connect('key_press_event', self._on_keypress_event)
+		self.handlers[id] = self.widget
+		
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
 		self.conv_textview.show_all()
 		self.conv_scrolledwindow = self.xml.get_widget(
 			'conversation_scrolledwindow')
 		self.conv_scrolledwindow.add(self.conv_textview)
-		self.conv_scrolledwindow.get_vadjustment().connect('value-changed',
+		widget = self.conv_scrolledwindow.get_vadjustment()
+		id = widget.connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
+		self.handlers[id] = widget
 		# add MessageTextView to UI and connect signals
 		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
-		self.msg_textview.connect('mykeypress',
+		id = self.msg_textview.connect('mykeypress',
 					self._on_message_textview_mykeypress_event)
+		self.handlers[id] = self.msg_textview
 		self.msg_scrolledwindow.add(self.msg_textview)
-		self.msg_textview.connect('key_press_event',
+		id = self.msg_textview.connect('key_press_event',
 					self._on_message_textview_key_press_event)
-		self.msg_textview.connect('size-request', self.size_request)
+		self.handlers[id] = self.msg_textview
+		id = self.msg_textview.connect('size-request', self.size_request)
+		self.handlers[id] = self.msg_textview
 		self.update_font()
 
 		# Hook up send button
-		self.xml.get_widget('send_button').connect('clicked',
+		widget = self.xml.get_widget('send_button')
+		id = widget.connect('clicked',
 							self._on_send_button_clicked)
+		self.handlers[id] = widget
 
 		# the following vars are used to keep history of user's messages
 		self.sent_history = []
@@ -207,12 +214,14 @@ class ChatControlBase(MessageControl):
 	def disconnect_style_event(self, widget):
 		if self.style_event_id:
 			widget.disconnect(self.style_event_id)
-			self.style_event_id = 0
+			del self.handlers[self.style_event_id]
+			self.style_event_id = 0	
 	
 	def connect_style_event(self, widget, set_fg = False, set_bg = False):
 		self.disconnect_style_event(widget)
 		self.style_event_id = widget.connect('style-set',
 			self._on_style_set_event, set_fg, set_bg)
+		self.handlers[self.style_event_id] = widget
 	
 	def _on_style_set_event(self, widget, style, *opts):
 		'''set style of widget from style class *.Frame.Eventbox 
@@ -478,11 +487,8 @@ class ChatControlBase(MessageControl):
 		self.msg_textview.grab_focus()
 	def on_emoticons_button_clicked(self, widget):
 		'''popup emoticons menu'''
-		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
-		self.button_clicked = widget
 		gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
-		gajim.interface.emoticons_menu.popup(None, None,
-			self.position_menu_under_button, 1, 0)
+		gajim.interface.popup_emoticons_under_button(widget, self.parent_win)
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
@@ -491,7 +497,7 @@ class ChatControlBase(MessageControl):
 		
 		menu = self.prepare_context_menu()
 		menu.show_all()
-		menu.popup(None, None, self.position_menu_under_button, 1, 0)
+		gtkgui_helpers.popup_emoticons_under_button(menu, widget, self.parent_win)
 
 	def update_font(self):
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
@@ -687,13 +693,21 @@ class ChatControl(ChatControlBase):
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
 			(_('Chat'), _('Chats')), contact, acct, resource)
+			
+		# for muc use:
+		# widget = self.xml.get_widget('muc_window_actions_button')
+		widget = self.xml.get_widget('message_window_actions_button')
+		id = widget.connect('clicked', self.on_actions_button_clicked)
+		self.handlers[id] = widget
+
 		self.hide_chat_buttons_always = gajim.config.get('always_hide_chat_buttons')
 		self.chat_buttons_set_visible(self.hide_chat_buttons_always)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'), gajim.config.get('hide_chat_banner'))
 		# Initialize drag-n-drop
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
-		self.widget.connect('drag_data_received', self._on_drag_data_received)
+		id = self.widget.connect('drag_data_received', self._on_drag_data_received)
+		self.handlers[id] = self.widget
 		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
 			gtk.DEST_DEFAULT_HIGHLIGHT |
 			gtk.DEST_DEFAULT_DROP,
@@ -710,18 +724,29 @@ class ChatControl(ChatControlBase):
 		self._schedule_activity_timers()
 
 		# Hook up signals
-		self.parent_win.window.connect('motion-notify-event',
+		id = self.parent_win.window.connect('motion-notify-event',
 			self._on_window_motion_notify)
+		self.handlers[id] = self.parent_win.window
 		message_tv_buffer = self.msg_textview.get_buffer()
-		message_tv_buffer.connect('changed', self._on_message_tv_buffer_changed)
-
-		self.xml.get_widget('banner_eventbox').connect('button-press-event',
+		id = message_tv_buffer.connect('changed', self._on_message_tv_buffer_changed)
+		self.handlers[id] = message_tv_buffer
+		
+		widget = self.xml.get_widget('banner_eventbox')
+		id = widget.connect('button-press-event', 
 			self._on_banner_eventbox_button_press_event)
+		self.handlers[id] = widget
 
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'avatar_eventbox', APP)
-		xm.signal_autoconnect(self)
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'gpg_togglebutton', APP)
-		xm.signal_autoconnect(self)
+		widget = self.xml.get_widget('avatar_eventbox')
+		id = widget.connect('enter-notify-event', self.on_avatar_eventbox_enter_notify_event)
+		self.handlers[id] = widget
+
+		widget = self.xml.get_widget('avatar_eventbox')
+		id = widget.connect('leave-notify-event', self.on_avatar_eventbox_leave_notify_event)
+		self.handlers[id] = widget
+
+		widget = self.xml.get_widget('gpg_togglebutton')
+		id = widget.connect('clicked', self.on_toggle_gpg_togglebutton)
+		self.handlers[id] = widget
 
 		if self.contact.jid in gajim.encrypted_chats[self.account]:
 			self.xml.get_widget('gpg_togglebutton').set_active(True)
@@ -1138,6 +1163,7 @@ class ChatControl(ChatControlBase):
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		compact_view_menuitem = xml.get_widget('compact_view_menuitem')
+		information_menuitem = xml.get_widget('information_menuitem')
 		
 		contact = self.parent_win.get_active_contact()
 		jid = contact.jid
@@ -1172,8 +1198,19 @@ class ChatControl(ChatControlBase):
 		
 		
 		# connect signals
-		xml.signal_autoconnect(self)
-		
+		history_menuitem.connect('activate', 
+			self._on_history_menuitem_activate)
+		send_file_menuitem.connect('activate', 
+			self._on_send_file_menuitem_activate)
+		compact_view_menuitem.connect('activate', 
+			self._on_compact_view_menuitem_activate)
+		add_to_roster_menuitem.connect('activate', 
+			self._on_add_to_roster_menuitem_activate)
+		toggle_gpg_menuitem.connect('activate', 
+			self._on_toggle_gpg_menuitem_activate)
+		information_menuitem.connect('activate', 
+			self._on_contact_information_menuitem_activate)
+		menu.connect('selection-done', gtkgui_helpers.destroy_widget)	
 		return menu
 
 	def send_chatstate(self, state, contact = None):
@@ -1233,8 +1270,8 @@ class ChatControl(ChatControlBase):
 		# in JEP22, when we already sent stop composing
 		# notification on paused, don't resend it
 		if contact.composing_jep == 'JEP-0022' and \
-		   contact.our_chatstate in ('paused', 'active', 'inactive') and \
-		   state is not 'composing': # not composing == in (active, inactive, gone)
+		contact.our_chatstate in ('paused', 'active', 'inactive') and \
+		state is not 'composing': # not composing == in (active, inactive, gone)
 			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()
 			return
@@ -1271,6 +1308,12 @@ class ChatControl(ChatControlBase):
 		if gajim.interface.systray_enabled and self.nb_unread > 0:
 			gajim.interface.systray.remove_jid(self.contact.jid, self.account,
 								self.type_id)
+		# remove all register handlers on wigets, created by self.xml
+		# to prevent circular references among objects
+		for i in self.handlers.keys():
+			self.handlers[i].disconnect(i)
+			del self.handlers[i]
+		
 
 	def allow_shutdown(self):
 		if time.time() - gajim.last_message_time[self.account]\
