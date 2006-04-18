@@ -1185,10 +1185,10 @@ class SingleMessageWindow:
 			'conversation_scrolledwindow')
 		self.conversation_textview = conversation_textview.ConversationTextview(
 			account)
-		self.conversation_textview.show()
-		self.conversation_tv_buffer = self.conversation_textview.get_buffer()
+		self.conversation_textview.tv.show()
+		self.conversation_tv_buffer = self.conversation_textview.tv.get_buffer()
 		self.xml.get_widget('conversation_scrolledwindow').add(
-			self.conversation_textview)
+			self.conversation_textview.tv)
 		self.send_button = self.xml.get_widget('send_button')
 		self.reply_button = self.xml.get_widget('reply_button')
 		self.send_and_close_button = self.xml.get_widget('send_and_close_button')
@@ -1200,7 +1200,7 @@ class SingleMessageWindow:
 		
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			try:
-				gtkspell.Spell(self.conversation_textview)
+				gtkspell.Spell(self.conversation_textview.tv)
 				gtkspell.Spell(self.message_textview)
 			except gobject.GError, msg:
 				#FIXME: add a ui for this use spell.set_language()
