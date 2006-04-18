@@ -988,7 +988,7 @@ _('You can not join a group chat unless you are connected.'))
 
 		self.window.destroy()
 
-class NewMessageDialog:
+class NewChatDialog:
 	def __init__(self, account):
 		self.account = account
 		
@@ -998,9 +998,9 @@ class NewMessageDialog:
 			title = _('Start Chat')
 		prompt_text = _('Fill in the contact ID of the contact you would like\nto send a chat message to:')
 
-		InputDialog(title, prompt_text, is_modal = False, ok_handler = self.new_message_response)
+		InputDialog(title, prompt_text, is_modal = False, ok_handler = self.new_chat_response)
 			
-	def new_message_response(self, jid):
+	def new_chat_response(self, jid):
 		''' called when ok button is clicked '''
 		if gajim.connections[self.account].connected <= 1:
 			#if offline or connecting
