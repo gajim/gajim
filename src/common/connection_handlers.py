@@ -1034,6 +1034,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		# List of IDs that will produce a timeout is answer doesn't arrive
 		# {time_of_the_timeout: (id, message to send to gui), }
 		self.awaiting_timeouts = {}
+		# keep the jids we auto added (transports contacts) to not send the
+		# SUBSCRIBED event to gui
+		self.automatically_added = []
 		try:
 			idle.init()
 		except:
@@ -1339,10 +1342,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		if ptype == 'available':
 			ptype = None
 		gajim.log.debug('PresenceCB: %s' % ptype)
+		who = helpers.get_full_jid_from_iq(prs)
+		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
 		is_gc = False # is it a GC presence ?
 		sigTag = None
 		avatar_sha = None
+		transport_auto_auth = False
 		xtags = prs.getTags('x')
 		for x in xtags:
 			if x.getNamespace().startswith(common.xmpp.NS_MUC):
@@ -1356,9 +1362,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				tim = prs.getTimestamp()
 				tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 				timestamp = time.localtime(timegm(tim))
+			if x.getNamespace() == 'http://delx.cjb.net/protocol/roster-subsync':
+				# see http://trac.gajim.org/ticket/326
+				agent = gajim.get_server_from_jid(jid_stripped)
+				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
+					transport_auto_auth = True
 
-		who = helpers.get_full_jid_from_iq(prs)
-		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		status = prs.getStatus()
 		show = prs.getShow()
@@ -1436,20 +1445,26 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		if ptype == 'subscribe':
 			gajim.log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0 or \
-			jid_stripped in self.jids_for_auto_auth:
+			jid_stripped in self.jids_for_auto_auth or transport_auto_auth:
 				if self.connection:
 					p = common.xmpp.Presence(who, 'subscribed')
 					p = self.add_sha(p)
 					self.connection.send(p)
-				if who.find("@") <= 0:
+				if who.find("@") <= 0 or transport_auto_auth:
 					self.dispatch('NOTIFY', (jid_stripped, 'offline', 'offline',
 						resource, prio, keyID, timestamp))
+				if transport_auto_auth:
+					self.automatically_added.append(jid_stripped)
+					self.request_subscription(jid_stripped)
 			else:
 				if not status:
 					status = _('I would like to add you to my roster.')
 				self.dispatch('SUBSCRIBE', (who, status))
 		elif ptype == 'subscribed':
-			self.dispatch('SUBSCRIBED', (jid_stripped, resource))
+			if jid_stripped in self.automatically_added:
+				self.automatically_added.remove(jid_stripped)
+			else:
+				self.dispatch('SUBSCRIBED', (jid_stripped, resource))
 			# BE CAREFUL: no con.updateRosterItem() in a callback
 			gajim.log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
