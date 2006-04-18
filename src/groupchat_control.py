@@ -299,7 +299,7 @@ class GroupchatControl(ChatControlBase):
 		self.got_disconnected() #init some variables
 
 		self.update_ui()
-		self.conv_textview.grab_focus()
+		self.conv_textview.tv.grab_focus()
 		self.widget.show_all()
 
 	def notify_on_new_messages(self):
@@ -568,7 +568,7 @@ class GroupchatControl(ChatControlBase):
 			return
 
 		print_focus_out_line = False
-		buffer = self.conv_textview.get_buffer()
+		buffer = self.conv_textview.tv.get_buffer()
 
 		if self.focus_out_end_iter_offset is None:
 			# this happens only first time we focus out on this room
@@ -1179,7 +1179,8 @@ class GroupchatControl(ChatControlBase):
 		# remove all register handlers on wigets, created by self.xml
 		# to prevent circular references among objects
 		for i in self.handlers.keys():
-			self.handlers[i].disconnect(i)
+			if self.handlers[i].handler_is_connected(i):
+				self.handlers[i].disconnect(i)
 			del self.handlers[i]
 
 	def allow_shutdown(self):

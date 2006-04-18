@@ -108,13 +108,18 @@ class ChatControlBase(MessageControl):
 		
 		id = self.widget.connect('key_press_event', self._on_keypress_event)
 		self.handlers[id] = self.widget
-		
+
+		widget = self.xml.get_widget('banner_eventbox')
+		id = widget.connect('button-press-event',
+			self._on_banner_eventbox_button_press_event)
+		self.handlers[id] = widget
+	
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
-		self.conv_textview.show_all()
+		
 		self.conv_scrolledwindow = self.xml.get_widget(
 			'conversation_scrolledwindow')
-		self.conv_scrolledwindow.add(self.conv_textview)
+		self.conv_scrolledwindow.add(self.conv_textview.tv)
 		widget = self.conv_scrolledwindow.get_vadjustment()
 		id = widget.connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
@@ -170,6 +175,12 @@ class ChatControlBase(MessageControl):
 				gajim.config.set('use_speller', False)
 
 		self.style_event_id = 0
+		self.conv_textview.tv.show()
+	# moved from ChatControl 
+	def _on_banner_eventbox_button_press_event(self, widget, event):
+		'''If right-clicked, show popup'''
+		if event.button == 3: # right click
+			self.parent_win.popup_menu(event)
 
 	def _on_send_button_clicked(self, widget):
 		'''When send button is pressed: send the current message'''
@@ -241,7 +252,7 @@ class ChatControlBase(MessageControl):
 		if event.state & gtk.gdk.CONTROL_MASK:
 			# CTRL + l|L: clear conv_textview
 			if event.keyval == gtk.keysyms.l or event.keyval == gtk.keysyms.L:
-				self.conv_textview.get_buffer().set_text('')
+				self.conv_textview.tv.get_buffer().set_text('')
 				return True
 			# CTRL + v: Paste into msg_textview
 			elif event.keyval == gtk.keysyms.v:
@@ -313,7 +324,7 @@ class ChatControlBase(MessageControl):
 			# SHIFT + PAGE_[UP|DOWN]: send to conv_textview
 			elif event.keyval == gtk.keysyms.Page_Down or \
 					event.keyval == gtk.keysyms.Page_Up:
-				self.conv_textview.emit('key_press_event', event)
+				self.conv_textview.tv.emit('key_press_event', event)
 				return True
 		elif event.state & gtk.gdk.CONTROL_MASK:
 			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
@@ -327,7 +338,7 @@ class ChatControlBase(MessageControl):
 			# we pressed a control key or ctrl+sth: we don't block
 			# the event in order to let ctrl+c (copy text) and
 			# others do their default work
-			self.conv_textview.emit('key_press_event', event)
+			self.conv_textview.tv.emit('key_press_event', event)
 		return False
 
 	def _on_message_textview_mykeypress_event(self, widget, event_keyval,
@@ -394,7 +405,7 @@ class ChatControlBase(MessageControl):
 			return False
 
 		if message == '/clear':
-			self.conv_textview.clear() # clear conversation
+			self.conv_textview.tv.clear() # clear conversation
 			self.clear(self.msg_textview) # clear message textview too
 			return True
 		elif message == '/compact':
@@ -501,7 +512,7 @@ class ChatControlBase(MessageControl):
 
 	def update_font(self):
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
-		self.conv_textview.modify_font(font)
+		self.conv_textview.tv.modify_font(font)
 		self.msg_textview.modify_font(font)
 
 	def update_tags(self):
@@ -516,7 +527,7 @@ class ChatControlBase(MessageControl):
 		'''When history menuitem is pressed: call history window'''
 		if not jid:
 			jid = self.contact.jid
-		
+
 		if gajim.interface.instances['logs'].has_key(jid):
 			gajim.interface.instances['logs'][jid].window.present()
 		else:
@@ -569,7 +580,7 @@ class ChatControlBase(MessageControl):
 			return
 
 		min_height = self.conv_scrolledwindow.get_property('height-request')
-		conversation_height = self.conv_textview.window.get_size()[1]
+		conversation_height = self.conv_textview.tv.window.get_size()[1]
 		message_height = msg_textview.window.get_size()[1]
 		message_width = msg_textview.window.get_size()[0]
 		# new tab is not exposed yet
@@ -731,11 +742,6 @@ class ChatControl(ChatControlBase):
 		id = message_tv_buffer.connect('changed', self._on_message_tv_buffer_changed)
 		self.handlers[id] = message_tv_buffer
 		
-		widget = self.xml.get_widget('banner_eventbox')
-		id = widget.connect('button-press-event', 
-			self._on_banner_eventbox_button_press_event)
-		self.handlers[id] = widget
-
 		widget = self.xml.get_widget('avatar_eventbox')
 		id = widget.connect('enter-notify-event', self.on_avatar_eventbox_enter_notify_event)
 		self.handlers[id] = widget
@@ -1198,19 +1204,25 @@ class ChatControl(ChatControlBase):
 		
 		
 		# connect signals
-		history_menuitem.connect('activate', 
+		id = history_menuitem.connect('activate', 
 			self._on_history_menuitem_activate)
-		send_file_menuitem.connect('activate', 
+		self.handlers[id] = history_menuitem
+		id = send_file_menuitem.connect('activate', 
 			self._on_send_file_menuitem_activate)
-		compact_view_menuitem.connect('activate', 
+		self.handlers[id] = send_file_menuitem 
+		id = compact_view_menuitem.connect('activate', 
 			self._on_compact_view_menuitem_activate)
-		add_to_roster_menuitem.connect('activate', 
+		self.handlers[id] = compact_view_menuitem 
+		id = add_to_roster_menuitem.connect('activate', 
 			self._on_add_to_roster_menuitem_activate)
-		toggle_gpg_menuitem.connect('activate', 
+		self.handlers[id] = add_to_roster_menuitem 
+		id = toggle_gpg_menuitem.connect('activate', 
 			self._on_toggle_gpg_menuitem_activate)
-		information_menuitem.connect('activate', 
+		self.handlers[id] = toggle_gpg_menuitem 
+		id = information_menuitem.connect('activate', 
 			self._on_contact_information_menuitem_activate)
-		menu.connect('selection-done', gtkgui_helpers.destroy_widget)	
+		self.handlers[id] = information_menuitem
+		menu.connect('selection-done', lambda w:w.destroy())	
 		return menu
 
 	def send_chatstate(self, state, contact = None):
@@ -1311,8 +1323,11 @@ class ChatControl(ChatControlBase):
 		# remove all register handlers on wigets, created by self.xml
 		# to prevent circular references among objects
 		for i in self.handlers.keys():
-			self.handlers[i].disconnect(i)
+			if self.handlers[i].handler_is_connected(i):
+				self.handlers[i].disconnect(i)
 			del self.handlers[i]
+		self.conv_textview.del_handlers()
+		self.msg_textview.destroy()
 		
 
 	def allow_shutdown(self):
@@ -1333,11 +1348,6 @@ class ChatControl(ChatControlBase):
 		self.draw_banner()
 		# update chatstate in tab for this chat
 		self.parent_win.redraw_tab(self, self.contact.chatstate)
-
-	def _on_banner_eventbox_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
-		if event.button == 3: # right click
-			self.parent_win.popup_menu(event)
 
 	def set_control_active(self, state):
 		ChatControlBase.set_control_active(self, state)

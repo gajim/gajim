@@ -50,6 +50,9 @@ class MessageTextView(gtk.TextView):
 		self.set_pixels_above_lines(2)
 		self.set_pixels_below_lines(2)
 
+	def destroy(self):
+		import gc
+		gobject.idle_add(lambda:gc.collect())
 if gobject.pygtk_version < (2, 8, 0):
 	gobject.type_register(MessageTextView)
 

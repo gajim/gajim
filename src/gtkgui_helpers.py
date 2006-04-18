@@ -47,12 +47,13 @@ screen_h = gtk.gdk.screen_height()
 
 def popup_emoticons_under_button(menu, button, parent_win):
 	''' pops emoticons menu under button, which is in parent_win'''
+	window_x1, window_y1 = parent_win.get_origin()
 	def position_menu_under_button(menu):
 		# inline function, which will not keep refs, when used as CB
 		button_x, button_y = button.allocation.x, button.allocation.y
 		
 		# now convert them to X11-relative
-		window_x, window_y = parent_win.get_origin()
+		window_x, window_y = window_x1, window_y1
 		x = window_x + button_x
 		y = window_y + button_y
 
@@ -70,7 +71,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
 		# push_in is True so all the menuitems are always inside screen
 		push_in = True
 		return (x, y, push_in)
-	
+
 	menu.popup(None, None, position_menu_under_button, 1, 0)
 	
 def get_theme_font_for_option(theme, option):

@@ -55,11 +55,19 @@ class MessageWindow:
 		self.account = acct
 		# If None, the window is not tied to any specific type
 		self.type = type
+		# dict { handler id: widget}. Keeps callbacks, which
+		# lead to cylcular references
+		self.handlers = {}
 
 		self.widget_name = 'message_window'
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, self.widget_name, APP)
-		self.xml.signal_autoconnect(self)
 		self.window = self.xml.get_widget(self.widget_name)
+		id = self.window.connect('delete-event', self._on_window_delete)
+		self.handlers[id] = self.window
+		id = self.window.connect('destroy', self._on_window_destroy)
+		self.handlers[id] = self.window
+		id = self.window.connect('focus-in-event', self._on_window_focus)
+		self.handlers[id] = self.window
 
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
@@ -67,10 +75,12 @@ class MessageWindow:
 		self.alignment = self.xml.get_widget('alignment')
 
 		self.notebook = self.xml.get_widget('notebook')
-		self.notebook.connect('switch-page',
+		id = self.notebook.connect('switch-page',
 			self._on_notebook_switch_page)
-		self.notebook.connect('key-press-event',
+		self.handlers[id] = self.notebook
+		id = self.notebook.connect('key-press-event',
 			self._on_notebook_key_press)
+		self.handlers[id] = self.notebook
 
 		# Remove the glade pages
 		while self.notebook.get_n_pages():
@@ -96,6 +106,8 @@ class MessageWindow:
 		# set up DnD
 		self.hid = self.notebook.connect('drag_data_received',
 			self.on_tab_label_drag_data_received_cb)
+		self.handlers[self.hid] = self.notebook
+		
 		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
 			gtk.gdk.ACTION_MOVE)
 
@@ -133,6 +145,11 @@ class MessageWindow:
 		for ctrl in self.controls():
 			ctrl.shutdown()
 		self._controls.clear()
+		for i in self.handlers.keys():
+			if self.handlers[i].handler_is_connected(i):
+				self.handlers[i].disconnect(i)
+			del self.handlers[i]
+		del self.handlers
 
 	def new_tab(self, control):
 		if not self._controls.has_key(control.account):
@@ -499,6 +516,7 @@ class MessageWindow:
 		tab_label = self.notebook.get_tab_label(child)
 		tab_label.dnd_handler = tab_label.connect('drag_data_get', 
 							  self.on_tab_label_drag_data_get_cb)
+		self.handlers[tab_label.dnd_handler] = tab_label
 		tab_label.drag_source_set(gtk.gdk.BUTTON1_MASK, self.DND_TARGETS,
 					 gtk.gdk.ACTION_MOVE)
 		tab_label.page_num = self.notebook.page_num(child)

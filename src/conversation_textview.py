@@ -44,33 +44,38 @@ gtk.glade.textdomain(APP)
 
 GTKGUI_GLADE = 'gtkgui.glade'
 
-class ConversationTextview(gtk.TextView):
+class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
 	def __init__(self, account):
-		gtk.TextView.__init__(self)
+		# no need to inherit TextView, use it as property is safer
+		self.tv = gtk.TextView()
 
 		# set properties
-		self.set_border_width(1)
-		self.set_accepts_tab(True)
-		self.set_editable(False)
-		self.set_cursor_visible(False)
-		self.set_wrap_mode(gtk.WRAP_WORD)
-		self.set_left_margin(2)
-		self.set_right_margin(2)
+		self.tv.set_border_width(1)
+		self.tv.set_accepts_tab(True)
+		self.tv.set_editable(False)
+		self.tv.set_cursor_visible(False)
+		self.tv.set_wrap_mode(gtk.WRAP_WORD)
+		self.tv.set_left_margin(2)
+		self.tv.set_right_margin(2)
+		self.handlers = {}
 
 		# connect signals
-		self.connect('motion_notify_event', self.on_textview_motion_notify_event)
-		self.connect('populate_popup', self.on_textview_populate_popup)
-		self.connect('button_press_event', self.on_textview_button_press_event)
+		id = self.tv.connect('motion_notify_event', self.on_textview_motion_notify_event)
+		self.handlers[id] = self.tv
+		id = self.tv.connect('populate_popup', self.on_textview_populate_popup)
+		self.handlers[id] = self.tv
+		id = self.tv.connect('button_press_event', self.on_textview_button_press_event)
+		self.handlers[id] = self.tv
 
 		self.account = account
 		self.change_cursor = None
 		self.last_time_printout = 0
 
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
-		self.modify_font(font)
-		buffer = self.get_buffer()
+		self.tv.modify_font(font)
+		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
 		buffer.create_mark('end', end_iter, False)
 
@@ -105,12 +110,14 @@ class ConversationTextview(gtk.TextView):
 		color = gajim.config.get('urlmsgcolor')
 		tag.set_property('foreground', color)
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
-		tag.connect('event', self.hyperlink_handler, 'url')
+		id = tag.connect('event', self.hyperlink_handler, 'url')
+		self.handlers[id] = tag
 
 		tag = buffer.create_tag('mail')
 		tag.set_property('foreground', color)
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
-		tag.connect('event', self.hyperlink_handler, 'mail')
+		id = tag.connect('event', self.hyperlink_handler, 'mail')
+		self.handlers[id] = tag
 
 		tag = buffer.create_tag('bold')
 		tag.set_property('weight', pango.WEIGHT_BOLD)
@@ -125,6 +132,14 @@ class ConversationTextview(gtk.TextView):
 
 		self.line_tooltip = tooltips.BaseTooltip()
 
+	def del_handlers(self):
+		for i in self.handlers.keys():
+			self.handlers[i].disconnect(i)
+		del self.handlers
+		self.tv.destroy()
+		#TODO
+		# self.line_tooltip.destroy()
+	
 	def update_tags(self):
 		self.tagIn.set_property('foreground', gajim.config.get('inmsgcolor'))
 		self.tagOut.set_property('foreground', gajim.config.get('outmsgcolor'))
@@ -132,44 +147,44 @@ class ConversationTextview(gtk.TextView):
 			gajim.config.get('statusmsgcolor'))
 
 	def at_the_end(self):
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
-		end_rect = self.get_iter_location(end_iter)
-		visible_rect = self.get_visible_rect()
+		end_rect = self.tv.get_iter_location(end_iter)
+		visible_rect = self.tv.get_visible_rect()
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			return True
 		return False
 
 	def scroll_to_end(self):
-		parent = self.get_parent()
-		buffer = self.get_buffer()
-		self.scroll_to_mark(buffer.get_mark('end'), 0, True, 0, 1)
+		parent = self.tv.get_parent()
+		buffer = self.tv.get_buffer()
+		self.tv.scroll_to_mark(buffer.get_mark('end'), 0, True, 0, 1)
 		adjustment = parent.get_hadjustment()
 		adjustment.set_value(0)
 		return False # when called in an idle_add, just do it once
 
 	def bring_scroll_to_end(self, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
-		end_rect = self.get_iter_location(end_iter)
-		visible_rect = self.get_visible_rect()
+		end_rect = self.tv.get_iter_location(end_iter)
+		visible_rect = self.tv.get_visible_rect()
 		# scroll only if expected end is not visible
 		if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
 			gobject.idle_add(self.scroll_to_end_iter)
 
 	def scroll_to_end_iter(self):
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
-		self.scroll_to_iter(end_iter, 0, False, 1, 1)
+		self.tv.scroll_to_iter(end_iter, 0, False, 1, 1)
 		return False # when called in an idle_add, just do it once
 
 	def show_line_tooltip(self):
-		pointer = self.get_pointer()
-		x, y = self.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer[0],
+		pointer = self.tv.get_pointer()
+		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer[0],
 			pointer[1])
-		tags = self.get_iter_at_location(x, y).get_tags()
-		tag_table = self.get_buffer().get_tag_table()
+		tags = self.tv.get_iter_at_location(x, y).get_tags()
+		tag_table = self.tv.get_buffer().get_tag_table()
 		over_line = False
 		for tag in tags:
 			if tag == tag_table.lookup('focus-out-line'):
@@ -177,26 +192,26 @@ class ConversationTextview(gtk.TextView):
 				break
 		if over_line and not self.line_tooltip.win:
 			# check if the current pointer is still over the line
-			position = self.window.get_origin()
-			win = self.get_toplevel()
+			position = self.tv.window.get_origin()
+			win = self.tv.get_toplevel()
 			self.line_tooltip.show_tooltip(_('Text below this line is what has '
 			'been said since the last time you paid attention to this group chat'),	8, position[1] + pointer[1])
 
 	def on_textview_motion_notify_event(self, widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
-		pointer_x, pointer_y, spam = self.window.get_pointer()
-		x, y = self.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
+		pointer_x, pointer_y, spam = self.tv.window.get_pointer()
+		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
 			pointer_y)
-		tags = self.get_iter_at_location(x, y).get_tags()
+		tags = self.tv.get_iter_at_location(x, y).get_tags()
 		if self.change_cursor:
-			self.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
+			self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 				gtk.gdk.Cursor(gtk.gdk.XTERM))
 			self.change_cursor = None
-		tag_table = self.get_buffer().get_tag_table()
+		tag_table = self.tv.get_buffer().get_tag_table()
 		over_line = False
 		for tag in tags:
 			if tag in (tag_table.lookup('url'), tag_table.lookup('mail')):
-				self.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
+				self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 					gtk.gdk.Cursor(gtk.gdk.HAND2))
 				self.change_cursor = tag
 			elif tag == tag_table.lookup('focus-out-line'):
@@ -209,13 +224,13 @@ class ConversationTextview(gtk.TextView):
 		if over_line and not self.line_tooltip.win:
 			self.line_tooltip.timeout = gobject.timeout_add(500,
 				self.show_line_tooltip)
-			self.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
+			self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 				gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
 			self.change_cursor = tag
 
 	def clear(self, tv = None):
 		'''clear text in the textview'''
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
 
@@ -231,7 +246,8 @@ class ConversationTextview(gtk.TextView):
 		menu.prepend(item)
 		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
 		menu.prepend(item)
-		item.connect('activate', self.clear)
+		id = item.connect('activate', self.clear)
+		self.handlers[id] = item
 		if self.selected_phrase:
 			s = self.selected_phrase
 			if len(s) > 25:
@@ -249,7 +265,8 @@ class ConversationTextview(gtk.TextView):
 				link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
 					% (gajim.LANG, self.selected_phrase)
 			item = gtk.MenuItem(_('Read _Wikipedia Article'))
-			item.connect('activate', self.visit_url_from_menuitem, link)
+			id = item.connect('activate', self.visit_url_from_menuitem, link)
+			self.handlers[id] = item
 			submenu.append(item)
 
 			item = gtk.MenuItem(_('Look it up in _Dictionary'))
@@ -263,7 +280,8 @@ class ConversationTextview(gtk.TextView):
 				else:
 					link = 'http://%s.wiktionary.org/wiki/Special:Search?search=%s'\
 						% (gajim.LANG, self.selected_phrase)
-				item.connect('activate', self.visit_url_from_menuitem, link)
+				id = item.connect('activate', self.visit_url_from_menuitem, link)
+				self.handlers[id] = item
 			else:
 				if dict_link.find('%s') == -1:
 					#we must have %s in the url if not WIKTIONARY
@@ -271,7 +289,8 @@ class ConversationTextview(gtk.TextView):
 					item.set_property('sensitive', False)
 				else:
 					link = dict_link % self.selected_phrase
-					item.connect('activate', self.visit_url_from_menuitem, link)
+					id = item.connect('activate', self.visit_url_from_menuitem, link)
+					self.handlers[id] = item
 			submenu.append(item)
 
 
@@ -283,7 +302,8 @@ class ConversationTextview(gtk.TextView):
 			else:
 				item = gtk.MenuItem(_('Web _Search for it'))
 				link =  search_link % self.selected_phrase
-				item.connect('activate', self.visit_url_from_menuitem, link)
+				id = item.connect('activate', self.visit_url_from_menuitem, link)
+				self.handlers[id] = item
 			submenu.append(item)
 
 		menu.show_all()
@@ -297,10 +317,10 @@ class ConversationTextview(gtk.TextView):
 		if event.button != 3: # if not right click
 			return False
 
-		win = self.get_window(gtk.TEXT_WINDOW_TEXT)
-		x, y = self.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
+		win = self.tv.get_window(gtk.TEXT_WINDOW_TEXT)
+		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
 			int(event.x), int(event.y))
-		iter = self.get_iter_at_location(x, y)
+		iter = self.tv.get_iter_at_location(x, y)
 		tags = iter.get_tags()
 
 
@@ -313,7 +333,7 @@ class ConversationTextview(gtk.TextView):
 		# we check if sth was selected and if it was we assign
 		# selected_phrase variable
 		# so on_conversation_textview_populate_popup can use it
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 		return_val = buffer.get_selection_bounds()
 		if return_val: # if sth was selected when we right-clicked
 			# get the selected text
@@ -352,8 +372,10 @@ class ConversationTextview(gtk.TextView):
 		menu = xml.get_widget('chat_context_menu')
 		childs = menu.get_children()
 		if kind == 'url':
-			childs[0].connect('activate', self.on_copy_link_activate, text)
-			childs[1].connect('activate', self.on_open_link_activate, kind, text)
+			id = childs[0].connect('activate', self.on_copy_link_activate, text)
+			self.handlers[id] = childs[0]
+			id = childs[1].connect('activate', self.on_open_link_activate, kind, text)
+			self.handlers[id] = childs[1]
 			childs[2].hide() # copy mail address
 			childs[3].hide() # open mail composer
 			childs[4].hide() # jid section separator
@@ -361,11 +383,15 @@ class ConversationTextview(gtk.TextView):
 			childs[6].hide() # join group chat
 			childs[7].hide() # add to roster
 		else: # It's a mail or a JID
-			childs[2].connect('activate', self.on_copy_link_activate, text)
-			childs[3].connect('activate', self.on_open_link_activate, kind, text)
-			childs[5].connect('activate', self.on_start_chat_activate, text)
-			childs[6].connect('activate',
+			id = childs[2].connect('activate', self.on_copy_link_activate, text)
+			self.handlers[id] = childs[2]
+			id = childs[3].connect('activate', self.on_open_link_activate, kind, text)
+			self.handlers[id] = childs[3]
+			id = childs[5].connect('activate', self.on_start_chat_activate, text)
+			self.handlers[id] = childs[5]
+			id = childs[6].connect('activate',
 				self.on_join_group_chat_menuitem_activate, text)
+			self.handlers[id] = childs[6]
 
 			allow_add = False
 			c = gajim.contacts.get_first_contact_from_jid(self.account, text)
@@ -376,7 +402,8 @@ class ConversationTextview(gtk.TextView):
 				allow_add = True
 
 			if allow_add:
-				childs[7].connect('activate', self.on_add_to_roster_activate, text)
+				id = childs[7].connect('activate', self.on_add_to_roster_activate, text)
+				self.handlers[id] = childs[7]
 				childs[7].show() # show add to roster menuitem
 			else:
 				childs[7].hide() # hide add to roster menuitem
@@ -396,7 +423,7 @@ class ConversationTextview(gtk.TextView):
 			# we get the end of the tag
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_char()
-			word = self.get_buffer().get_text(begin_iter, end_iter).decode('utf-8')
+			word = self.tv.get_buffer().get_text(begin_iter, end_iter).decode('utf-8')
 			if event.button == 3: # right click
 				self.make_link_menu(event, kind, word)
 			else:
@@ -411,7 +438,7 @@ class ConversationTextview(gtk.TextView):
 		after *last* special text, so we can print it in
 		print_conversation_line()'''
 
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 
 		start = 0
 		end = 0
@@ -445,7 +472,7 @@ class ConversationTextview(gtk.TextView):
 		use_other_tags = True
 		show_ascii_formatting_chars = \
 			gajim.config.get('show_ascii_formatting_chars')
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 
 		possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
 		if gajim.config.get('emoticons_theme') and \
@@ -458,7 +485,7 @@ class ConversationTextview(gtk.TextView):
 			img.set_from_file(gajim.interface.emoticons[emot_ascii])
 			img.show()
 			#add with possible animation
-			self.add_child_at_anchor(img, anchor)
+			self.tv.add_child_at_anchor(img, anchor)
 		elif special_text.startswith('http://') or \
 			special_text.startswith('www.') or \
 			special_text.startswith('ftp://') or \
@@ -533,7 +560,7 @@ class ConversationTextview(gtk.TextView):
 			buffer.insert_with_tags_by_name(end_iter, special_text, *all_tags)
 
 	def print_empty_line(self):
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
 		buffer.insert(end_iter, '\n')
 
@@ -546,7 +573,7 @@ class ConversationTextview(gtk.TextView):
 		# kind = info, we print things as if it was a status: same color, ...
 		if kind == 'info':
 			kind = 'status'
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
 		end_iter = buffer.get_end_iter()
 		at_the_end = False
@@ -620,7 +647,7 @@ class ConversationTextview(gtk.TextView):
 
 	def print_name(self, name, kind, other_tags_for_name):
 		if name:
-			buffer = self.get_buffer()
+			buffer = self.tv.get_buffer()
 			end_iter = buffer.get_end_iter()
 			name_tags = other_tags_for_name[:] # create a new list
 			name_tags.append(kind)
@@ -632,14 +659,14 @@ class ConversationTextview(gtk.TextView):
 	def print_subject(self, subject):
 		if subject: # if we have subject, show it too!
 			subject = _('Subject: %s\n') % subject
-			buffer = self.get_buffer()
+			buffer = self.tv.get_buffer()
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, subject)
 			self.print_empty_line()
 
 	def print_real_text(self, text, text_tags = [], name = None):
 		'''this adds normal and special text. call this to add text'''
-		buffer = self.get_buffer()
+		buffer = self.tv.get_buffer()
 		# /me is replaced by name if name is given
 		if name and (text.startswith('/me ') or text.startswith('/me\n')):
 			text = '* ' + name + text[3:]

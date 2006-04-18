@@ -69,8 +69,8 @@ class HistoryWindow:
 		self.calendar = xml.get_widget('calendar')
 		scrolledwindow = xml.get_widget('scrolledwindow')
 		self.history_textview = conversation_textview.ConversationTextview(account)
-		scrolledwindow.add(self.history_textview)
-		self.history_buffer = self.history_textview.get_buffer()
+		scrolledwindow.add(self.history_textview.tv)
+		self.history_buffer = self.history_textview.tv.get_buffer()
 		self.history_buffer.create_tag('highlight', background = 'yellow')
 		self.query_entry = xml.get_widget('query_entry')
 		self.search_button = xml.get_widget('search_button')
@@ -142,6 +142,7 @@ class HistoryWindow:
 			# if user destroys the window, and we have a generator filling mark days
 			# stop him!
 			gobject.source_remove(self.mark_days_idle_call_id)
+		self.history_textview.del_handlers()
 		del gajim.interface.instances['logs'][self.jid]
 
 	def on_close_button_clicked(self, widget):
@@ -391,4 +392,4 @@ class HistoryWindow:
 				
 			match_start_mark = self.history_buffer.create_mark('match_start',
 				match_start_iter, True)
-			self.history_textview.scroll_to_mark(match_start_mark, 0, True)
+			self.history_textview.tv.scroll_to_mark(match_start_mark, 0, True)
