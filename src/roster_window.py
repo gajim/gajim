@@ -2447,6 +2447,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def open_event(self, account, jid, event):
 		'''If an event was handled, return True, else return False'''
+		if not event:
+			return False 
 		typ = event[0]
 		data = event[1]
 		ft = gajim.interface.instances['file_transfers']
