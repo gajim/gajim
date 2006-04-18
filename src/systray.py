@@ -292,14 +292,16 @@ class Systray:
 					if group == _('Transports'):
 						continue
 					contact_name =	contact.get_shown_name()
+					try:
+						show = show_list.index(contact.show)
+					except ValueError: # unknown show
+						show = 0 # offline
 					if sort_by_show: # see comment about contacts_table above
-						contacts_table.append ([group, show_list.index(contact.show),
-							contact_name.lower(),
+						contacts_table.append ([group, show, contact_name.lower(),
 							contact.jid, contact_name])
 					else:
 						contacts_table.append ([group, contact_name.lower(),
-						 	show_list.index(contact.show),
-							contact.jid, contact_name])
+						 	show, contact.jid, contact_name])
 		
 		# Sort : first column before, last column in the end
 		# In theory we sort full table, including columns that don't need sorting,
