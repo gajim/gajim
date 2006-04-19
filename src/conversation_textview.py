@@ -135,7 +135,8 @@ class ConversationTextview:
 
 	def del_handlers(self):
 		for i in self.handlers.keys():
-			self.handlers[i].disconnect(i)
+			if self.handlers[i].handler_is_connected(i):
+				self.handlers[i].disconnect(i)
 		del self.handlers
 		self.tv.destroy()
 		#TODO
