@@ -235,9 +235,24 @@ class Logger:
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		all_messages = []
-		self.cur.execute(
-			'SELECT message_id from unread_messages WHERE jid_id = %d' % jid_id)
-		results = self.cur.fetchall()
+		try:
+			self.cur.execute(
+				'SELECT message_id from unread_messages WHERE jid_id = %d' % jid_id)
+			results = self.cur.fetchall()
+		# Remove before 0.10
+		except:
+			self.cur.executescript('DROP TABLE unread_messages;')
+			self.con.commit()
+			self.cur.executescript('''CREATE TABLE unread_messages(
+				message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+				jid_id INTEGER
+				);''')
+			self.con.commit()
+			self.con.close()
+			self.jids_already_in = []
+			self.init_vars()
+			return []
+
 		for message in results:
 			msg_id = message[0]
 			self.cur.execute('''
