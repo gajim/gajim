@@ -988,6 +988,11 @@ class Interface:
 			gajim.contacts.add_contact(account, contact)
 			self.roster.add_contact_to_roster(jid, account)
 		else:
+			re_add = False
+			# if sub changed: remove and re-add, maybe observer status changed
+			if contacts[0].sub != sub:
+				self.roster.remove_contact(contacts[0], account)
+				re_add = True
 			for contact in contacts:
 				if not name:
 					name = ''
@@ -996,6 +1001,8 @@ class Interface:
 				contact.ask = ask
 				if groups:
 					contact.groups = groups
+			if re_add:
+				self.roster.add_contact_to_roster(jid, account)
 		self.roster.draw_contact(jid, account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('RosterInfo', (account, array))
