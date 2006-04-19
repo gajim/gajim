@@ -1483,12 +1483,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					errmsg, errcode))
 
 		if avatar_sha and ptype != 'error':
-			if self.vcard_shas.has_key(jid_stripped):
-				if avatar_sha != self.vcard_shas[jid_stripped]:
-					# avatar has been updated
-					self.request_vcard(jid_stripped)
-			else:
-				self.vcard_shas[jid_stripped] = avatar_sha
+			if not self.vcard_shas.has_key(jid_stripped):
+				cached_vcard = self.get_cached_vcard(jid_stripped)
+				if cached_vcard and cached_vcard.has_key('PHOTO') and \
+				cached_vcard['PHOTO'].has_key('SHA'):
+					self.vcard_shas[jid_stripped] = cached_vcard['PHOTO']['SHA']
+				else:
+					self.vcard_shas[jid_stripped] = ''
+			if avatar_sha != self.vcard_shas[jid_stripped]:
+				# avatar has been updated
+				self.request_vcard(jid_stripped)
 		if not ptype or ptype == 'unavailable':
 			if gajim.config.get('log_contact_status_changes') and self.name\
 				not in no_log_for and jid_stripped not in no_log_for:
