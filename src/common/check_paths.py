@@ -57,7 +57,8 @@ def create_log_db():
 		);
 		
 		CREATE TABLE unread_messages(
-			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
+			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+			jid_id INTEGER
 		);
 		
 		CREATE TABLE logs(
@@ -74,6 +75,7 @@ def create_log_db():
 		)
 
 	con.commit()
+	con.close()
 
 def check_and_possibly_create_paths():
 	LOG_DB_PATH = logger.LOG_DB_PATH
@@ -105,6 +107,7 @@ def check_and_possibly_create_paths():
 
 		if not os.path.exists(LOG_DB_PATH):
 			create_log_db()
+			gajim.logger.init_vars()
 		elif os.path.isdir(LOG_DB_PATH):
 			print _('%s is directory but should be file') % LOG_DB_PATH
 			print _('Gajim will now exit')

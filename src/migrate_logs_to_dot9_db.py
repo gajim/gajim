@@ -217,7 +217,12 @@ class Migration:
 				jid TEXT UNIQUE,
 				type INTEGER
 			);
-	
+
+			CREATE TABLE unread_messages(
+				message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+				jid_id INTEGER
+			);
+			
 			CREATE TABLE logs(
 				log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 				jid_id INTEGER,
