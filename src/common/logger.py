@@ -118,7 +118,7 @@ class Logger:
 		
 		possible_room_jid, possible_nick = jid.split('/', 1)
 
-		self.cur.execute('SELECT jid_id FROM jids WHERE jid="%s" AND type=%d' %\
+		self.cur.execute('SELECT jid_id FROM jids WHERE jid=?  AND type=?', 
 			(possible_room_jid, constants.JID_ROOM_TYPE))
 		row = self.cur.fetchone()
 		if row is None:
@@ -139,7 +139,7 @@ class Logger:
 			if not jid_is_from_pm: # it's normal jid with resource
 				jid = jid.split('/', 1)[0] # remove the resource
 		if jid in self.jids_already_in: # we already have jids in DB
-			self.cur.execute('SELECT jid_id FROM jids WHERE jid="%s"' % jid)
+			self.cur.execute('SELECT jid_id FROM jids WHERE jid=?', [jid])
 			jid_id = self.cur.fetchone()[0]
 		else: # oh! a new jid :), we add it now
 			if typestr == 'ROOM':
