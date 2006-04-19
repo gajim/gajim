@@ -610,7 +610,7 @@ class ConversationTextview:
 			format += '%X' + after_str
 			# format comes as unicode, because of day_str.
 			# we convert it to the encoding that we want
-			tim_format = time.strftime(format.encode('utf-8'), tim)
+			tim_format = time.strftime(format, tim).encode('utf-8')
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
 		elif gajim.config.get('print_time') == 'sometimes':
