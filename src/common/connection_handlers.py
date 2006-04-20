@@ -1236,7 +1236,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		tim = time.localtime(timegm(tim))
 		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
-		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
+		no_log_for = gajim.config.get_per('accounts', self.name,
+			'no_log_for').split()
 		encrypted = False
 		chatstate = None
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
@@ -1368,7 +1369,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
 					transport_auto_auth = True
 
-		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
+		no_log_for = gajim.config.get_per('accounts', self.name,
+			'no_log_for').split()
 		status = prs.getStatus()
 		show = prs.getShow()
 		if not show in STATUS_LIST:
