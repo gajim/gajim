@@ -1315,8 +1315,8 @@ class Interface:
 		self.roster.actions_menu_needs_rebuild = True
 		if gajim.interface.sleeper.getState() != common.sleepy.STATE_UNKNOWN:
 			gajim.sleeper_state[account] = 'online'
-      else:
-         gajim.sleeper_state[account] = 0
+		else:
+			gajim.sleeper_state[account] = 0
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		# We cannot join rooms if we are invisible
 		if gajim.connections[account].connected == invisible_show:
