@@ -1930,11 +1930,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				gajim.connections[account].send_gc_status(gc_control.nick,
 					gc_control.room_jid, status, txt)
 		gajim.connections[account].change_status(status, txt, sync, auto)
-		if status == 'online' and gajim.interface.sleeper.getState() != \
-			common.sleepy.STATE_UNKNOWN:
-			gajim.sleeper_state[account] = 'online'
-		else:
-			gajim.sleeper_state[account] = 'off'
 
 	def get_status_message(self, show):
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
