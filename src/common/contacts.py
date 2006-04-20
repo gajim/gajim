@@ -212,7 +212,7 @@ class Contacts:
 			# jid may be a fake jid, try it
 			room, nick = jid.split('/')
 			contact = self.get_gc_contact(account, room, nick)
-			return contact or []
+			return contact
 		return self.get_highest_prio_contact_from_contacts(contacts)
 
 	def get_first_contact_from_jid(self, account, jid):

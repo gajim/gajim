@@ -1618,8 +1618,10 @@ class ChatControl(ChatControlBase):
 	def got_connected(self):
 		ChatControlBase.got_connected(self)
 		# Refreshing contact
-		self.contact = gajim.contacts.get_contact_with_highest_priority(
+		contact = gajim.contacts.get_contact_with_highest_priority(
 			self.account, self.contact.jid)
-		if isinstance(self.contact, GC_Contact):
-			self.contact = gajim.contacts.contact_from_gc_contact(self.contact)
+		if isinstance(contact, GC_Contact):
+			contact = gajim.contacts.contact_from_gc_contact(contact)
+		if contact:
+			self.contact = contact
 		self.draw_banner()
