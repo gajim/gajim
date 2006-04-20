@@ -31,6 +31,7 @@ from common import helpers
 from message_control import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
+from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
 
@@ -1619,4 +1620,6 @@ class ChatControl(ChatControlBase):
 		# Refreshing contact
 		self.contact = gajim.contacts.get_contact_with_highest_priority(
 			self.account, self.contact.jid)
+		if isinstance(self.contact, GC_Contact):
+			self.contact = gajim.contacts.contact_from_gc_contact(self.contact)
 		self.draw_banner()
