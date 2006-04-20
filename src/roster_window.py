@@ -2735,17 +2735,19 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		pixc = gtk.gdk.pixbuf_new_from_file(os.path.join(path, 'closed.png'))
 		self.jabber_state_images['closed'] = self.load_iconset(path, pixc)
 
-		# update opened and closed transport iconsets
-		t_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
-		folders = os.listdir(t_path)
-		for transport in folders:
-			if transport == '.svn':
-				continue
-			folder = os.path.join(t_path, transport, '16x16')
-			self.transports_state_images['opened'][transport] = self.load_iconset(
-				folder, pixo, transport = True)
-			self.transports_state_images['closed'][transport] = self.load_iconset(
-				folder, pixc, transport = True)
+		if gajim.config.get('use_transports_iconsets'):
+			# update opened and closed transport iconsets
+			# standard transport iconsets are loaded one time in init()
+			t_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
+			folders = os.listdir(t_path)
+			for transport in folders:
+				if transport == '.svn':
+					continue
+				folder = os.path.join(t_path, transport, '16x16')
+				self.transports_state_images['opened'][transport] = \
+					self.load_iconset(folder, pixo, transport = True)
+				self.transports_state_images['closed'][transport] = \
+					self.load_iconset(folder, pixc, transport = True)
 
 	def reload_jabber_state_images(self):
 		self.make_jabber_state_images()
