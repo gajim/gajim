@@ -342,7 +342,7 @@ msgstr "Liste des Membres"
 
 #: ../src/config.py:1947
 msgid "Owner List"
-msgstr "Liste des Possesseurs"
+msgstr "Liste des Propriétaires"
 
 #: ../src/config.py:1948
 msgid "Administrator List"
@@ -395,14 +395,14 @@ msgstr ""
 
 #: ../src/config.py:2026
 msgid "Adding Owner..."
-msgstr "Ajout d'un Possesseur ..."
+msgstr "Ajout d'un Propriétaire ..."
 
 #: ../src/config.py:2027
 msgid ""
 "<b>Whom do you want to make a owner?</b>\n"
 "\n"
 msgstr ""
-"<b>De qui voulez-vous faire un possesseur ?</b>\n"
+"<b>De qui voulez-vous faire un propriétaire ?</b>\n"
 "\n"
 
 #: ../src/config.py:2029
@@ -632,7 +632,7 @@ msgstr "Message d'état"
 
 #: ../src/dialogs.py:340
 msgid "Save as Preset Status Message"
-msgstr "Enregistrer comme Messages d'État Prédéfinis"
+msgstr "Enregistrer comme messages d'état prédéfini"
 
 #: ../src/dialogs.py:341
 msgid "Please type a name for this status message"
@@ -2105,7 +2105,7 @@ msgstr "L'autoriser à voir mon état"
 
 #: ../src/gtkgui.glade.h:53
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-msgstr "Autoriser les notifications lorsque je suis _absent/indisponible/occupé/invisible"
+msgstr "Autoriser les _notifications lorsque je suis absent/indisponible/occupé/invisible"
 
 #: ../src/gtkgui.glade.h:54
 msgid "Also known as iChat style"
@@ -2269,7 +2269,7 @@ msgstr "En train d'écrire"
 
 #: ../src/gtkgui.glade.h:96
 msgid "Configure _Room"
-msgstr "Configurer le _Salon"
+msgstr "Confi_gurer le Salon"
 
 #: ../src/gtkgui.glade.h:97
 msgid "Connect when I press Finish"
@@ -2349,7 +2349,7 @@ msgstr "Éditer les _groupes"
 
 #: ../src/gtkgui.glade.h:116
 msgid "Emoticons:"
-msgstr "émoticônes :"
+msgstr "Émoticônes :"
 
 #. XML Console enable checkbutton
 #: ../src/gtkgui.glade.h:118
@@ -2627,7 +2627,7 @@ msgstr "Gérer les Marque-pages"
 
 #: ../src/gtkgui.glade.h:187
 msgid "Manage Proxy Profiles"
-msgstr "Gérer les profils de proxys"
+msgstr "Gérer les profils de proxies"
 
 #: ../src/gtkgui.glade.h:188
 msgid "Manage..."
@@ -2640,7 +2640,7 @@ msgstr "Second prénom :"
 
 #: ../src/gtkgui.glade.h:191
 msgid "Mo_derator"
-msgstr "Mo_dérateur"
+msgstr "Mo_dérer"
 
 #: ../src/gtkgui.glade.h:192
 msgid "More"
@@ -2685,7 +2685,7 @@ msgstr "Syst. d'exploit. :"
 
 #: ../src/gtkgui.glade.h:205
 msgid "On every _message"
-msgstr "À chaque _message"
+msgstr "À _chaque message"
 
 #: ../src/gtkgui.glade.h:206
 msgid "One message _window:"
@@ -2718,7 +2718,7 @@ msgstr "Téléphone :"
 
 #: ../src/gtkgui.glade.h:214
 msgid "Play _sounds"
-msgstr "Jouer les _sons"
+msgstr "_Jouer les sons"
 
 #: ../src/gtkgui.glade.h:215
 msgid "Port: "
@@ -2759,7 +2759,7 @@ msgstr "La priorité est utilisé par Jabber pour déterminer qui reçoit les é
 
 #: ../src/gtkgui.glade.h:225
 msgid "Profile, Avatar"
-msgstr "Profil, Avatar"
+msgstr "Profil, _Avatar"
 
 #: ../src/gtkgui.glade.h:226
 msgid "Protocol:"
@@ -2903,7 +2903,7 @@ msgstr "Choisir un _avatar"
 
 #: ../src/gtkgui.glade.h:261
 msgid "Set my profile when I connect"
-msgstr "Définir mon profile quand je me connecte"
+msgstr "Définir mon profil quand je me connecte"
 
 #: ../src/gtkgui.glade.h:262
 msgid "Sets Message of the Day"
@@ -2927,7 +2927,7 @@ msgstr "Montrer la console _XML"
 
 #: ../src/gtkgui.glade.h:267
 msgid "Show only in _roster"
-msgstr "Ne montrer que dans la _liste"
+msgstr "Ne montrer le que dans la _liste"
 
 #: ../src/gtkgui.glade.h:268
 msgid "Shows a list of file transfers between you and other"
@@ -3044,7 +3044,7 @@ msgstr "Utiliser _SSL"
 
 #: ../src/gtkgui.glade.h:297
 msgid "Use _transports iconsets"
-msgstr "Utiliser les icônes des pa_sserelles"
+msgstr "Utiliser les icônes des passere_lles"
 
 #: ../src/gtkgui.glade.h:298
 msgid "Use authentication"
@@ -3056,7 +3056,7 @@ msgstr "Utiliser un nom d'hôte/port personnalisé"
 
 #: ../src/gtkgui.glade.h:300
 msgid "Use file transfer proxies"
-msgstr "Utiliser les proxies pour les transfert de fichiers"
+msgstr "Utiliser les proxies pour les transferts de fichiers"
 
 #: ../src/gtkgui.glade.h:301
 msgid "Use t_rayicon (aka. notification area icon)"
@@ -3097,11 +3097,11 @@ msgstr "Votre Identifiant Jabber :"
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../src/gtkgui.glade.h:311
 msgid "_Actions"
-msgstr "_Actions"
+msgstr "A_ctions"
 
 #: ../src/gtkgui.glade.h:312
 msgid "_Add Contact..."
-msgstr "_Ajouter un Contact..."
+msgstr "Ajouter un _Contact..."
 
 #: ../src/gtkgui.glade.h:313
 msgid "_Add to Roster"
@@ -3113,7 +3113,7 @@ msgstr "_Adresse :"
 
 #: ../src/gtkgui.glade.h:315
 msgid "_Admin"
-msgstr "_Admin"
+msgstr "_Administrateur"
 
 #: ../src/gtkgui.glade.h:316
 msgid "_Administrator"
@@ -3318,7 +3318,7 @@ msgstr "Message s_ortant :"
 
 #: ../src/gtkgui.glade.h:371
 msgid "_Owner"
-msgstr "P_ossesseur"
+msgstr "Pr_opriétaire"
 
 #: ../src/gtkgui.glade.h:372
 msgid "_Password:"
@@ -3416,7 +3416,7 @@ msgstr "Trier les contacts par _statut"
 
 #: ../src/gtkgui.glade.h:397
 msgid "_Start Chat"
-msgstr "_Commencer une discussion"
+msgstr "Commencer une _discussion"
 
 #: ../src/gtkgui.glade.h:398
 msgid "_Status"
@@ -3448,7 +3448,7 @@ msgstr "_Nom :"
 
 #: ../src/gtkgui.glade.h:405
 msgid "_Voice"
-msgstr "_Voix"
+msgstr "_S'exprimer"
 
 #: ../src/gtkgui.glade.h:406
 msgid "file transfers list"
@@ -3559,7 +3559,7 @@ msgid ""
 msgstr ""
 "Normalement la taille allouée a la base de donnée ne sera pas libérée, elle sera simplement ré-utilisable. Si vous voulez vraiment réduire la taille du fichier, choisir OUI, sinon choisir NON.\n"
 "\n"
-"Si vous choisissez OUI, patienter..."
+"Si vous choisissez OUI, patientez..."
 
 #: ../src/history_manager.py:389
 msgid "Exporting History Logs..."
