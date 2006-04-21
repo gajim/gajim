@@ -3097,7 +3097,7 @@ msgstr "Votre Identifiant Jabber :"
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../src/gtkgui.glade.h:311
 msgid "_Actions"
-msgstr "A_ctions"
+msgstr "_Actions"
 
 #: ../src/gtkgui.glade.h:312
 msgid "_Add Contact..."
