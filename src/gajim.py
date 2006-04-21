@@ -1314,7 +1314,8 @@ class Interface:
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
 		self.roster.actions_menu_needs_rebuild = True
 		if gajim.interface.sleeper.getState() != common.sleepy.STATE_UNKNOWN and \
-		gajim.connections[account].connected == 2: # we go online, not away
+		gajim.connections[account].connected in (2, 3):
+			# we go online or free for chat, so we activate auto status
 			gajim.sleeper_state[account] = 'online'
 		else:
 			gajim.sleeper_state[account] = 'off'
