@@ -406,7 +406,7 @@ class ChatControlBase(MessageControl):
 			return False
 
 		if message == '/clear':
-			self.conv_textview.tv.clear() # clear conversation
+			self.conv_textview.clear() # clear conversation
 			self.clear(self.msg_textview) # clear message textview too
 			return True
 		elif message == '/compact':
