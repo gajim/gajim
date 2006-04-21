@@ -1313,7 +1313,8 @@ class Interface:
 	def handle_event_signed_in(self, account, empty):
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
 		self.roster.actions_menu_needs_rebuild = True
-		if gajim.interface.sleeper.getState() != common.sleepy.STATE_UNKNOWN:
+		if gajim.interface.sleeper.getState() != common.sleepy.STATE_UNKNOWN and \
+		gajim.connections[account].connected == 2: # we go online, not away
 			gajim.sleeper_state[account] = 'online'
 		else:
 			gajim.sleeper_state[account] = 'off'
