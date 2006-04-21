@@ -273,13 +273,13 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			else:
 				show_lock = False
 			if message:
-				self.add_status_row(file_path, acct['show'], '<span weight="bold">'\
-					+ gtkgui_helpers.escape_for_pango_markup(acct['name']) + \
-					'</span>' + ' - ' + message, show_lock=show_lock)
+				self.add_status_row(file_path, acct['show'], 
+					gtkgui_helpers.escape_for_pango_markup(acct['name']) + \
+					' - ' + message, show_lock=show_lock)
 			else:
-				self.add_status_row(file_path, acct['show'], '<span weight="bold">'\
-					+ gtkgui_helpers.escape_for_pango_markup(acct['name']) + \
-					'</span>', show_lock=show_lock)
+				self.add_status_row(file_path, acct['show'], 
+					gtkgui_helpers.escape_for_pango_markup(acct['name']) 
+					, show_lock=show_lock)
 
 	def populate(self, data):
 		self.create_window()
@@ -383,10 +383,10 @@ class GCTooltip(BaseTooltip):
 		properties = []
 		
 		if contact.jid.strip() != '':
-			jid_markup = '<span size="large" weight="bold">' + contact.jid + '</span>'
+			jid_markup = '<span weight="bold">' + contact.jid + '</span>' 
 		else:
-			jid_markup = '<span size="large" weight="bold">' + contact.get_shown_name() \
-				+ '</span>'
+			jid_markup = '<span weight="bold">' + contact.get_shown_name() + \
+				'</span>'
 		properties.append((jid_markup, None))	
 		properties.append((_('Role: '), helpers.get_uf_role(contact.role)))
 		properties.append((_('Affiliation: '), contact.affiliation.capitalize()))
@@ -424,7 +424,7 @@ class GCTooltip(BaseTooltip):
 			label = gtk.Label()
 			label.set_alignment(0, 0)
 			if property[1]:
-				label.set_markup('<span weight="bold">%s</span>' % property[0])
+				label.set_markup(property[0])
 				vcard_table.attach(label, 1, 2, vcard_current_row, vcard_current_row + 1, 
 														gtk.FILL,  vertical_fill, 0, 0)
 				label = gtk.Label()
@@ -501,7 +501,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		vcard_table.set_homogeneous(False)
 		vcard_current_row = 1
 		properties = []
-		jid_markup = '<span size="large" weight="bold">' + prim_contact.jid + '</span>'
+		jid_markup = '<span weight="bold">' + prim_contact.jid + '</span>'
 		properties.append((jid_markup, None))
 		properties.append((_('Name: '), gtkgui_helpers.escape_for_pango_markup(
 												prim_contact.get_shown_name())))
@@ -571,7 +571,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			label = gtk.Label()
 			label.set_alignment(0, 0)
 			if property[1]:
-				label.set_markup('<span weight="bold">%s</span>' % property[0])
+				label.set_markup(property[0])
 				vcard_table.attach(label, 1, 2, vcard_current_row, vcard_current_row + 1, 
 														gtk.FILL,  vertical_fill, 0, 0)
 				label = gtk.Label()
@@ -665,7 +665,7 @@ class FileTransfersTooltip(BaseTooltip):
 			current_row += 1
 			label = gtk.Label()
 			label.set_alignment(0, 0)
-			label.set_markup('<span weight="bold">%s</span>' % property[0])
+			label.set_markup(property[0])
 			ft_table.attach(label, 1, 2, current_row, current_row + 1, 
 																gtk.FILL,  gtk.FILL, 0, 0)
 			label = gtk.Label()
