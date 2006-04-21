@@ -697,7 +697,7 @@ msgstr "MERCI :"
 #. and add it manually as translatable
 #: ../src/dialogs.py:550
 msgid "Last but not least, we would like to thank all the package maintainers."
-msgstr "Finalement, nous voulons remercier tous les mainteneurs de paquet."
+msgstr "Pour finir, nous voulons remercier tous les mainteneurs de paquet."
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:564
