@@ -3287,9 +3287,8 @@ msgstr "_Prohlížet služby"
 
 # FIXME: chtelo by to cesky vyraz pro service discovery
 #: ../src/gtkgui.glade.h:333
-#, fuzzy
 msgid "_Discover Services..."
-msgstr "_Prohlížet služby"
+msgstr "_Prohlížet služby..."
 
 #: ../src/gtkgui.glade.h:335
 msgid "_FAQ"
