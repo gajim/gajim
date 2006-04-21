@@ -405,11 +405,17 @@ class ChatControlBase(MessageControl):
 		if not message:
 			return False
 
-		if message == '/clear':
+		message = message[1:]
+		message_array = message.split(' ', 1)
+		command = message_array.pop(0).lower()
+		if message_array == ['']:
+			message_array = []
+
+		if command == 'clear' and not len(message_array):
 			self.conv_textview.clear() # clear conversation
 			self.clear(self.msg_textview) # clear message textview too
 			return True
-		elif message == '/compact':
+		elif message == 'compact' and not len(message_array):
 			self.chat_buttons_set_visible(not self.hide_chat_buttons_current)
 			self.clear(self.msg_textview)
 			return True
