@@ -71,8 +71,11 @@ try:
 	MY_EMOTS_PATH = MY_EMOTS_PATH.decode(sys.getfilesystemencoding())
 except:
 	pass
-
-LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
+try:
+	LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
+except (ValueError, locale.Error):
+	# unknown locale, use en is better than fail
+	LANG = None
 if LANG is None:
 	LANG = 'en'
 else:
