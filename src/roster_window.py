@@ -1712,6 +1712,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		except TypeError:
 			self.tree.get_selection().unselect_all()
 			return
+		if not iter:
+			# no row is selected
+			return
 		model = self.tree.get_model()
 		path = model.get_path(iter)
 		self.tree.get_selection().select_path(path)
