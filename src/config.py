@@ -479,6 +479,8 @@ class PreferencesWindow:
 		if widget.get_active():
 			gajim.config.set('trayicon', True)
 			gajim.interface.show_systray()
+			show = helpers.get_global_show()
+			gajim.interface.systray.change_status(show)
 		else:
 			gajim.config.set('trayicon', False)
 			gajim.interface.hide_systray()
