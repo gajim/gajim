@@ -282,7 +282,8 @@ class Interface:
 		model = self.roster.status_combobox.get_model()
 		if status == 'offline':
 			# sensitivity for this menuitem
-			model[self.roster.status_message_menuitem_iter][3] = False
+			if gajim.get_number_of_connected_accounts() == 0:
+				model[self.roster.status_message_menuitem_iter][3] = False
 			gajim.block_signed_in_notifications[account] = True
 		else:
 			# 30 seconds after we change our status to sth else than offline
