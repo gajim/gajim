@@ -1290,12 +1290,13 @@ class AccountModificationWindow:
 			gajim.config.add_per('accounts', name)
 			self.account = name
 
+		resend_presence = False
 		if gajim.connections[self.account].connected == 0: # we're disconnected
 			relogin_needed = False
 		else: # we're connected to the account we want to apply changes
 			# check if relogin is needed
 			relogin_needed = self.options_changed_need_relogin(config,
-				('priority', 'proxy', 'usessl', 'keyname',
+				('resource', 'proxy', 'usessl', 'keyname',
 				'use_custom_host', 'custom_host'))
 
 			if config['use_custom_host'] and (self.option_changed(config,
@@ -1305,6 +1306,9 @@ class AccountModificationWindow:
 			if self.option_changed(config, 'use_ft_proxies') and \
 			config['use_ft_proxies']:
 				gajim.connections[self.account].discover_ft_proxies()
+
+			if self.option_changed(config, 'priority'):
+				resend_presence = True
 
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
@@ -1328,6 +1332,7 @@ class AccountModificationWindow:
 				gajim.connections[account].disconnect(True)
 				gajim.interface.roster.send_status(account, show_before, 
 					status_before)
+
 			def relog(widget):
 				self.dialog.destroy()
 				show_before = gajim.SHOW_LIST[gajim.connections[self.account].\
@@ -1337,9 +1342,24 @@ class AccountModificationWindow:
 					_('Be right back.'))
 				gobject.timeout_add(500, login, self.account, show_before, 
 					status_before)
+
+			def resend(widget):
+				self.resend_presence()
+
+			on_no = None
+			if resend_presence:
+				on_no = resend
 			self.dialog = dialogs.YesNoDialog(_('Relogin now?'),
 				_('If you want all the changes to apply instantly, '
-				'you must relogin.'), on_response_yes = relog)
+				'you must relogin.'), on_response_yes = relog,
+					on_response_no = on_no)
+		elif resend_presence:
+			self.resend_presence()
+
+	def resend_presence(self):
+		show = gajim.SHOW_LIST[gajim.connections[self.account].connected]
+		status = gajim.connections[self.account].status
+		gajim.connections[self.account].change_status(show, status)
 
 	def on_change_password_button_clicked(self, widget):
 		try:
