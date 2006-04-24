@@ -247,9 +247,6 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				message = message.strip()
 			if message != '':
 				single_line += ': ' + message
-			# the other solution is to hide offline accounts
-			elif status == 'offline':
-				message = helpers.get_uf_show(status)
 			accounts.append({'name': account, 'status_line': single_line, 
 					'show': status, 'message': message})
 		return accounts
