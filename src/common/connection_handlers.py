@@ -23,7 +23,6 @@ import base64
 import sha
 import socket
 import sys
-import locale
 
 from calendar import timegm
 
@@ -1233,9 +1232,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
 		tim = msg.getTimestamp()
-		locale.setlocale(locale.LC_TIME, 'C')
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
-		locale.setlocale(locale.LC_TIME, '')
 		tim = time.localtime(timegm(tim))
 		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
@@ -1364,9 +1361,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			if x.getNamespace() == common.xmpp.NS_DELAY:
 				# JEP-0091
 				tim = prs.getTimestamp()
-				locale.setlocale(locale.LC_TIME, 'C')
 				tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
-				locale.setlocale(locale.LC_TIME, '')
 				timestamp = time.localtime(timegm(tim))
 			if x.getNamespace() == 'http://delx.cjb.net/protocol/roster-subsync':
 				# see http://trac.gajim.org/ticket/326
