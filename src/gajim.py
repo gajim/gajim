@@ -31,6 +31,7 @@ exec python -OOt "$0" ${1+"$@"}
 
 import sys
 import os
+import urllib
 
 import message_control
 
@@ -1702,7 +1703,9 @@ class Interface:
 			self.roster.open_event(account, jid, ev)
 		elif typ == 'gmail':
 			if gajim.config.get_per('accounts', account, 'savepass'):
-				url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') % (gajim.config.get_per('accounts', account, 'name'),gajim.config.get_per('accounts', account, 'password'))
+				url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') %\
+				(urllib.quote(gajim.config.get_per('accounts', account, 'name')),
+				urllib.quote(gajim.config.get_per('accounts', account, 'password')))
 			else:
 				url = ('http://mail.google.com/')
 			helpers.launch_browser_mailer('url', url)
