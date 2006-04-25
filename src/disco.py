@@ -398,8 +398,8 @@ class ServicesCache:
 			if self._cbs.has_key(cbkey):
 				del self._cbs[cbkey]
 
-
-class ServiceDiscoveryWindow:
+# object is needed so that property() works
+class ServiceDiscoveryWindow(object):
 	'''Class that represents the Services Discovery window.'''
 	def __init__(self, account, jid = '', node = '',
 			address_entry = False, parent = None):
