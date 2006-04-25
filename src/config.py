@@ -1271,6 +1271,9 @@ class AccountModificationWindow:
 					if list[0] == self.account:
 						list[0] = name
 
+			# ServiceCache object keep old property account
+			if hasattr(gajim.connections[self.account], 'services_cache'):
+				gajim.connections[self.account].services_cache.account = name
 			del gajim.interface.instances[self.account]
 			del gajim.awaiting_events[self.account]
 			del gajim.nicks[self.account]
