@@ -524,12 +524,15 @@ class AboutDialog:
 		dlg.set_copyright(s)
 		text = open('../COPYING').read()
 		dlg.set_license(text)
-
+		
+		#FIXME: do versions strings translatable after .10
+		#FIXME: use %s then
 		dlg.set_comments(_('A GTK+ jabber client') + '\nGTK+ Version: ' + \
 			self.tuple2str(gtk.gtk_version) + '\nPyGTK Version: ' + \
 			self.tuple2str(gtk.pygtk_version))
 		dlg.set_website('http://www.gajim.org')
 
+		#FIXME: do current devs a translatable string
 		authors = [
 			'Current Developers:',
 			'Yann Le Boulanger <asterix@lagaule.org>',
@@ -570,9 +573,9 @@ class AboutDialog:
 		rep = dlg.run()
 		dlg.destroy()
 	
-	def tuple2str(self, tuple):
+	def tuple2str(self, tuple_):
 		str_ = ''
-		for num in tuple:
+		for num in tuple_:
 			str_ += str(num) + '.'
 		return str_[0:-1] # remove latest .
 
