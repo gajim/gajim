@@ -303,8 +303,7 @@ _('Connection with peer cannot be established.'))
 		file requested by a contact'''
 		if file_props is None or not file_props.has_key('name'):
 			return
-		file_name = gtkgui_helpers.escape_for_pango_markup(file_props['name'])
-		sec_text = '\t' + _('File: %s') % file_name
+		sec_text = '\t' + _('File: %s') % file_props['name']
 		if file_props.has_key('size'):
 			sec_text += '\n\t' + _('Size: %s') % \
 				helpers.convert_bytes(file_props['size'])
