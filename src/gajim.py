@@ -977,8 +977,21 @@ class Interface:
 		if (not sub or sub == 'none') and (not ask or ask == 'none') and \
 		not name and not groups:
 			if contacts:
-				self.roster.remove_contact(contacts[0], account)
+				c = contacts[0]
+				self.roster.remove_contact(c, account)
 				gajim.contacts.remove_jid(account, jid)
+				if gajim.awaiting_events[account].has_key(c.jid):
+					keyID = ''
+					attached_keys = gajim.config.get_per('accounts', account,
+						'attached_gpg_keys').split()
+					if jid in attached_keys:
+						keyID = attached_keys[attached_keys.index(jid) + 1]
+					contact = gajim.contacts.create_contact(jid = c.jid,
+						name = '', groups = [_('Not in Roster')],
+						show = 'not in roster', status = '', sub = 'none',
+						keyID = keyID)
+					gajim.contacts.add_contact(account, contact)
+					self.roster.add_contact_to_roster(contact.jid, account)
 				#FIXME if it was the only one in its group, remove the group
 				return
 		elif not contacts:
