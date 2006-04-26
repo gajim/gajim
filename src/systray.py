@@ -309,7 +309,7 @@ class Systray:
 		# sort lasts columns in most case.
 		contacts_table.sort() 
 				
-		previous_group = ''
+		previous_group = None
 		for contact_item in contacts_table:
 			if sort_by_show: # see comment about contacts_table above
 				contact_show = show_list[contact_item[1]]
