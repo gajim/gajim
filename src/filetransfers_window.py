@@ -173,15 +173,14 @@ class FileTransfersWindow:
 			(file_path, file_name) = os.path.split(file_props['file-name'])
 		else:
 			file_name = file_props['name']
-		sectext = '\t' + _('Filename: %s') % \
-			gtkgui_helpers.escape_for_pango_markup(file_name)
+		sectext = '\t' + _('Filename: %s') % file_name
 		sectext += '\n\t' + _('Size: %s') % \
 		helpers.convert_bytes(file_props['size'])
 		if file_props['type'] == 'r':
 			jid = unicode(file_props['sender']).split('/')[0]
 			sender_name = gajim.contacts.get_first_contact_from_jid( 
 				file_props['tt_account'], jid).get_shown_name()
-			sender = gtkgui_helpers.escape_for_pango_markup(sender_name)
+			sender = sender_name
 		else:
 			#You is a reply of who sent a file
 			sender = _('You')
@@ -191,14 +190,13 @@ class FileTransfersWindow:
 			jid = unicode(file_props['receiver']).split('/')[0]
 			receiver_name = gajim.contacts.get_first_contact_from_jid( 
 				file_props['tt_account'], jid).get_shown_name()
-			recipient = gtkgui_helpers.escape_for_pango_markup(receiver_name)
+			recipient = receiver_name
 		else:
 			#You is a reply of who received a file
 			recipient = _('You')
 		sectext += recipient
 		if file_props['type'] == 'r':
-			sectext += '\n\t' +_('Saved in: %s') % \
-				gtkgui_helpers.escape_for_pango_markup(file_path)
+			sectext += '\n\t' +_('Saved in: %s') % file_path
 		self.dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, 
 				_('File transfer completed'), sectext)
 		if file_props['type'] == 'r':
@@ -235,10 +233,8 @@ _('Connection with peer cannot be established.'))
 			file_name = os.path.basename(file_props['file-name'])
 		else:
 			file_name = file_props['name']
-		sectext = '\t' + _('Filename: %s') % \
-			gtkgui_helpers.escape_for_pango_markup(file_name)
-		sectext += '\n\t' + _('Sender: %s') % \
-			gtkgui_helpers.escape_for_pango_markup(jid)
+		sectext = '\t' + _('Filename: %s') % file_name
+		sectext += '\n\t' + _('Sender: %s') % jid
 		dialogs.ErrorDialog(_('File transfer stopped by the contact of the other side'), \
 			sectext)
 		self.tree.get_selection().unselect_all()
@@ -563,9 +559,8 @@ _('Connection with peer cannot be established.'))
 			(file_path, file_name) = os.path.split(file_props['file-name'])
 		else:
 			file_name = file_props['name']
-		text_props = gtkgui_helpers.escape_for_pango_markup(file_name) + '\n'
-		text_props += gtkgui_helpers.escape_for_pango_markup(
-			contact.get_shown_name())
+		text_props = file_name + '\n'
+		text_props += contact.get_shown_name()
 		self.model.set(iter, 1, text_labels, 2, text_props, C_SID,
 			file_props['type'] + file_props['sid'])
 		self.set_progress(file_props['type'], file_props['sid'], 0, iter)
