@@ -134,7 +134,8 @@ class Connection(ConnectionHandlers):
 		self.dispatch('STATUS', 'offline')
 		if not self.on_purpose:
 			self.disconnect()
-			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
+			if gajim.config.get_per('accounts', self.name, 'autoreconnect') \
+				and self.retrycount <= 10:
 				self.connected = 1
 				self.dispatch('STATUS', 'connecting')
 				self.time_to_reconnect = 10
@@ -147,6 +148,7 @@ class Connection(ConnectionHandlers):
 										self.time_to_reconnect)
 			elif self.on_connect_failure:
 				self.on_connect_failure()
+				self.on_connect_failure = None
 			else:
 					# show error dialog
 				self._connection_lost()
@@ -340,6 +342,7 @@ class Connection(ConnectionHandlers):
 				self.time_to_reconnect = None
 				if self.on_connect_failure:
 					self.on_connect_failure()
+					self.on_connect_failure = None
 				else:
 					# shown error dialog
 					self._connection_lost()
