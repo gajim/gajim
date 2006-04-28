@@ -858,7 +858,6 @@ class SubscriptionRequestWindow:
 			# Remove jabber page
 			gajim.interface.instances[self.account]['infos'][self.jid].xml.\
 				get_widget('information_notebook').remove_page(0)
-			gajim.connections[self.account].request_vcard(self.jid)
 	
 	def on_deny_button_clicked(self, widget):
 		'''refuse the request'''
