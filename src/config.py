@@ -1397,7 +1397,6 @@ class AccountModificationWindow:
 		else:
 			gajim.interface.instances[self.account]['infos'][jid] = \
 				vcard.VcardWindow(jid, self.account, True)
-			gajim.connections[self.account].request_vcard(jid)
 
 	def on_manage_proxies_button_clicked(self, widget):
 		if gajim.interface.instances.has_key('manage_proxies'):
