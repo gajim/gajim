@@ -61,7 +61,7 @@ def get_avatar_pixbuf_encoded_mime(photo):
 class VcardWindow:
 	'''Class for contact's information window'''
 
-	def __init__(self, contact, account, vcard = False):
+	def __init__(self, contact, account, vcard = False, is_fake = False):
 		# the contact variable is the jid if vcard is true
 		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
 		self.window = self.xml.get_widget('vcard_information_window')
@@ -79,6 +79,7 @@ class VcardWindow:
 		self.contact = contact # don't use it if vcard is true
 		self.account = account
 		self.vcard = vcard
+		self.is_fake = is_fake
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
 
@@ -368,10 +369,7 @@ class VcardWindow:
 
 		self.fill_status_label()
 
-		is_fake = False
-		if gajim.contacts.is_pm_from_jid(self.account, self.contact.jid):
-			is_fake = True
-		gajim.connections[self.account].request_vcard(self.contact.jid, is_fake)
+		gajim.connections[self.account].request_vcard(self.contact.jid, self.is_fake)
 
 	def add_to_vcard(self, vcard, entry, txt):
 		'''Add an information to the vCard dictionary'''

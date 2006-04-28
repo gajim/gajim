@@ -1689,7 +1689,7 @@ class GroupchatControl(ChatControlBase):
 			gajim.interface.instances[self.account]['infos'][c2.jid].window.present()
 		else:
 			gajim.interface.instances[self.account]['infos'][c2.jid] = \
-				vcard.VcardWindow(c2, self.account)
+				vcard.VcardWindow(c2, self.account, is_fake = True)
 
 	def on_history(self, widget, nick):
 		jid = gajim.construct_fjid(self.room_jid, nick)
