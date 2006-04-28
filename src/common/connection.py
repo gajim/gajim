@@ -545,6 +545,7 @@ class Connection(ConnectionHandlers):
 			# set old_show to requested 'show' in case we need to
 			# recconect before we auth to server
 			self.old_show = show
+			self.on_purpose = False 
 			self.connect_and_init(show, msg, signed)
 
 		elif show == 'offline' and self.connected:
