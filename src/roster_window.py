@@ -3131,8 +3131,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if type_source != 'contact': # source is not a contact
 			return
 		source_account = model[iter_source][C_ACCOUNT].decode('utf-8')
-		if account != source_account: # dropped in another account
-			return
+		if account != source_account:	# dropped in another account
+			if self.regroup and type_dest == 'group':
+				# on a group in merge mode is ok
+				account = source_account
+			else:
+				return
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':
 			it = model.iter_parent(it)
