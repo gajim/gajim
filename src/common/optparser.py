@@ -230,10 +230,10 @@ class OptionsParser:
 		not self.old_values['useemoticons']:
 			gajim.config.set('emoticons_theme', '')
 		if self.old_values.has_key('always_compact_view_chat') and \
-		self.old_values['always_compact_view_chat']:
+		self.old_values['always_compact_view_chat'] != 'False':
 			gajim.config.set('always_hide_chat_buttons', True)
 		if self.old_values.has_key('always_compact_view_gc') and \
-		self.old_values['always_compact_view_gc']:
+		self.old_values['always_compact_view_gc'] != 'False':
 			gajim.config.set('always_hide_groupchat_buttons', True)
 		
 		for account in gajim.config.get_per('accounts'):
