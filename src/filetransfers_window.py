@@ -325,6 +325,8 @@ _('Connection with peer cannot be established.'))
 					dialog = dialogs.FTOverwriteConfirmationDialog(
 						_('This file already exists'), _('What do you want to do?'),
 						not dl_finished)
+					dialog.set_transient_for(dialog2)
+					dialog.set_destroy_with_parent(True)
 					response = dialog.get_response()
 					if response < 0:
 						return
@@ -505,7 +507,7 @@ _('Connection with peer cannot be established.'))
 			if file_props.has_key('connected') and file_props['connected'] == False:
 				status = 'stop'
 			self.model.set(iter, 0, self.images[status])
-			if percent == 100:
+			if transfered_size == full_size:
 				self.set_status(typ, sid, 'ok')
 	
 	def get_iter_by_sid(self, typ, sid):
