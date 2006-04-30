@@ -23,6 +23,65 @@ from auth import *
 from client import PlugIn
 import sha,base64,random,dispatcher_nb
 
+def challenge_splitter(data):
+	''' Helper function that creates a dict from challenge string.
+	Sample chalenge string:
+		username="example.org",realm="somerealm",\
+		nonce="OA6MG9tEQGm2hh",cnonce="OA6MHXh6VqTrRk",\
+		nc=00000001,qop="auth,auth-int,auth-conf",charset=utf-8
+	in the above example:
+		dict['qop'] = ('auth','auth-int','auth-conf')
+		dict['realm'] = 'somerealm'
+	'''
+	X_KEYWORD, X_VALUE, X_END = 0, 1, 2
+	quotes_open = False
+	keyword, value = '', ''
+	dict, arr = {}, None
+	
+	expecting = X_KEYWORD
+	for iter in range(len(data) + 1):
+		end = False
+		if iter == len(data):
+			expecting = X_END
+			end = True
+		else:
+			char = data[iter]
+		if expecting == X_KEYWORD:
+			if char == '=':
+				expecting  = X_VALUE
+			elif char == ',':
+				pass
+			else:
+				keyword = '%s%c' % (keyword, char)
+		elif expecting == X_VALUE:
+			if char == '"':
+				if quotes_open:
+					end = True
+				else:
+					quotes_open = True
+			elif char == ",":
+				if quotes_open:
+					if not arr:
+						arr = [value]
+					else:
+						arr.append(value)
+					value = ""
+				else:
+					end = True
+			else:
+				value = '%s%c' % (value, char)
+		if end:
+			if arr:
+				arr.append(value)
+				dict[keyword] = arr
+				arr = None
+			else:
+				dict[keyword] = value
+			value, keyword = '', ''
+			expecting = X_KEYWORD
+			quotes_open = False
+	return dict
+
 class SASL(PlugIn):
 	''' Implements SASL authentication. '''
 	def __init__(self,username,password, on_sasl):
@@ -115,17 +174,14 @@ class SASL(PlugIn):
 			raise NodeProcessed
 ########################################3333
 		incoming_data = challenge.getData()
-		chal={}
 		data=base64.decodestring(incoming_data)
 		self.DEBUG('Got challenge:'+data,'ok')
-		for pair in data.split(','):
-			key, value = pair.split('=', 1)
-			if value[:1] == '"' and value[-1:] == '"': 
-				value = value[1:-1]
-			chal[key] = value
+		chal = challenge_splitter(data)
 		if not self.realm and chal.has_key('realm'):
 			self.realm = chal['realm']
-		if chal.has_key('qop') and chal['qop']=='auth':
+		if chal.has_key('qop') and ((type(chal['qop']) == str and \
+		chal['qop'] =='auth') or (type(chal['qop']) == list and 'auth' in \
+		chal['qop'])):
 			resp={}
 			resp['username'] = self.username
 			if self.realm:
