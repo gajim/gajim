@@ -934,7 +934,10 @@ class ChatControl(ChatControlBase):
 
 	def _update_gpg(self):
 		tb = self.xml.get_widget('gpg_togglebutton')
-		if self.contact.keyID: # we can do gpg
+		# we can do gpg
+		# if self.contact is our own contact info (transports), 
+		# don't enable pgp
+		if self.contact.keyID and self.contact.jid.find('@') != -1: 
 			tb.set_sensitive(True)
 			tt = _('OpenPGP Encryption')
 
@@ -1193,7 +1196,8 @@ class ChatControl(ChatControlBase):
 		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
 		
 		# If we don't have resource, we can't do file transfer
-		if contact.resource:
+		# in transports, contact holds our info we need to disable it too
+		if contact.resource and contact.jid.find('@') != -1:
 			send_file_menuitem.set_sensitive(True)
 		else:
 			send_file_menuitem.set_sensitive(False)
