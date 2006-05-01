@@ -463,7 +463,7 @@ class Connection(ConnectionHandlers):
 			self.activate_privacy_rule('invisible')
 		prio = unicode(gajim.config.get_per('accounts', self.name, 'priority'))
 		p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
-		p = self.add_sha(p)
+		p = self.add_sha(p, ptype != 'unavailable')
 		if msg:
 			p.setStatus(msg)
 		if signed:
@@ -553,7 +553,7 @@ class Connection(ConnectionHandlers):
 			if self.connection:
 				self.on_purpose = True
 				p = common.xmpp.Presence(typ = 'unavailable')
-				p = self.add_sha(p)
+				p = self.add_sha(p, False)
 				if msg:
 					p.setStatus(msg)
 				self.remove_all_transfers()
@@ -865,7 +865,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		p = common.xmpp.Presence(to = agent, typ = ptype)
-		p = self.add_sha(p)
+		p = self.add_sha(p, ptype != 'unavailable')
 		self.connection.send(p)
 
 	def join_gc(self, nick, room, server, password):
@@ -928,7 +928,7 @@ class Connection(ConnectionHandlers):
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = show, status = status)
 		if gajim.config.get('send_sha_in_gc_presence'):
-			p = self.add_sha(p)
+			p = self.add_sha(p, ptype != 'unavailable')
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server
 		self.connection.send(p)

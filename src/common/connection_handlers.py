@@ -752,10 +752,20 @@ class ConnectionVcard:
 		self.vcard_shas = {} # sha of contacts
 		self.room_jids = [] # list of gc jids so that vcard are saved in a folder
 		
-	def add_sha(self, p):
+	def add_sha(self, p, send_caps = True):
 		c = p.setTag('x', namespace = common.xmpp.NS_VCARD_UPDATE)
 		if self.vcard_sha is not None:
 			c.setTagData('photo', self.vcard_sha)
+		if send_caps:
+			return self.add_caps(p)
+		return p
+	
+	def add_caps(self, p):
+		''' advertise our capabilities in presence stanza (jep-0115)'''
+		c = p.setTag('c', namespace = common.xmpp.NS_CAPS)
+		c.setAttr('node', 'http://gajim.org/caps')
+		c.setAttr('ext', 'ftrans')
+		c.setAttr('ver', gajim.version)
 		return p
 	
 	def node_to_dict(self, node):
