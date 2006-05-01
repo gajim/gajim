@@ -253,8 +253,7 @@ def jid_is_transport(jid):
 	# if not '@' or '@' starts the jid then it is transport
 	if jid.find('@') <= 0:
 		return True
-	else:
-		return False
+	return False
 
 def get_jid_from_account(account_name):
 	'''return the jid we use in the given account'''
