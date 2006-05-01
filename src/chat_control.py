@@ -937,7 +937,7 @@ class ChatControl(ChatControlBase):
 		# we can do gpg
 		# if self.contact is our own contact info (transports), 
 		# don't enable pgp
-		if self.contact.keyID and self.contact.jid.find('@') != -1: 
+		if self.contact.keyID and not gajim.jid_is_transport(self.contact.jid): 
 			tb.set_sensitive(True)
 			tt = _('OpenPGP Encryption')
 
