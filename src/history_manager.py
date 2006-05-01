@@ -1,6 +1,6 @@
 #!/bin/sh
 ''':'
-exec python -OOt "$0"
+exec python -OOt "$0" ${1+"$@"}
 ' '''
 ## history_manager.py
 ##

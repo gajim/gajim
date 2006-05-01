@@ -1,6 +1,6 @@
 #!/bin/sh
 ''':'
-exec python -OOt "$0"
+exec python -OOt "$0" ${1+"$@"}
 ' '''
 ## Contributors for this file:
 ## - Yann Le Boulanger <asterix@lagaule.org>
