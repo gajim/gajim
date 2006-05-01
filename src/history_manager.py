@@ -1,4 +1,7 @@
-#! /usr/bin/env python
+#!/bin/sh
+''':'
+exec python -OOt "$0"
+' '''
 ## history_manager.py
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>

@@ -1,4 +1,7 @@
-#!/usr/bin/env python
+#!/bin/sh
+''':'
+exec python -OOt "$0"
+' '''
 ## Contributors for this file:
 ## - Yann Le Boulanger <asterix@lagaule.org>
 ## - Nikos Kouremenos <kourem@gmail.com>
