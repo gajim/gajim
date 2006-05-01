@@ -729,6 +729,23 @@ class Interface:
 		except AttributeError:
 			return
 
+	def handle_event_agent_removed(self, account, agent):
+		# remove transport's contacts from treeview
+		jid_list = gajim.contacts.get_jid_list(account)
+		for jid in jid_list:
+			if jid.endswith('@' + agent):
+				c = gajim.contacts.get_first_contact_from_jid(account, jid)
+				gajim.log.debug(
+					'Removing contact %s due to unregistered transport %s'\
+					% (jid, agent))
+				gajim.connections[account].unsubscribe(c.jid)
+				# Transport contacts can't have 2 resources
+				if c.jid in gajim.to_be_removed[account]:
+					# This way we'll really remove it
+					gajim.to_be_removed[account].remove(c.jid)
+				gajim.contacts.remove_jid(account, c.jid)
+				self.roster.remove_contact(c, account)
+
 	def handle_event_register_agent_info(self, account, array):
 		#('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
 		if array[1].has_key('instructions'):
@@ -1623,6 +1640,7 @@ class Interface:
 			'SUBSCRIBE': self.handle_event_subscribe,
 			'AGENT_ERROR_INFO': self.handle_event_agent_info_error,
 			'AGENT_ERROR_ITEMS': self.handle_event_agent_items_error,
+			'AGENT_REMOVED': self.handle_event_agent_removed,
 			'REGISTER_AGENT_INFO': self.handle_event_register_agent_info,
 			'AGENT_INFO_ITEMS': self.handle_event_agent_info_items,
 			'AGENT_INFO_INFO': self.handle_event_agent_info_info,

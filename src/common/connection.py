@@ -744,6 +744,9 @@ class Connection(ConnectionHandlers):
 			return
 		iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
 		iq.getTag('query').setTag('remove')
+		id = self.connection.getAnID()
+		iq.setID(id)
+		self.awaiting_answers[id] = (AGENT_REMOVED, agent)
 		self.connection.send(iq)
 		self.connection.getRoster().delItem(agent)
 

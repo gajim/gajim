@@ -40,6 +40,7 @@ STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 # kind of events we can wait for an answer
 VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
+AGENT_REMOVED = 'agent_removed'
 HAS_IDLE = True
 try:
 	import common.idle as idle # when we launch gajim from sources
@@ -947,6 +948,9 @@ class ConnectionVcard:
 					self.dispatch('VCARD', {'jid': jid})
 				elif jid == our_jid:
 					self.dispatch('MYVCARD', {'jid': jid})
+		elif self.awaiting_answers[id][0] == AGENT_REMOVED:
+			jid = self.awaiting_answers[id][1]
+			self.dispatch('AGENT_REMOVED', jid)
 		del self.awaiting_answers[id]
 	
 	def _vCardCB(self, con, vc):

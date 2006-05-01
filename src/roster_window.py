@@ -1142,18 +1142,6 @@ class RosterWindow:
 			gajim.connections[account].unsubscribe_agent(full_jid)
 			# remove transport from treeview
 			self.remove_contact(contact, account)
-			# remove transport's contacts from treeview
-			jid_list = gajim.contacts.get_jid_list(account)
-			for jid in jid_list:
-				if jid.endswith('@' + contact.jid):
-					c = gajim.contacts.get_first_contact_from_jid(account, jid)
-					gajim.log.debug(
-						'Removing contact %s due to unregistered transport %s'\
-						% (jid, contact.jid))
-					gajim.connections[account].unsubscribe(c.jid)
-					# Transport contacts can't have 2 resources
-					gajim.contacts.remove_jid(account, c.jid)
-					self.remove_contact(c, account)
 			gajim.contacts.remove_jid(account, contact.jid)
 			gajim.contacts.remove_contact(account, contact)
 
