@@ -395,6 +395,7 @@ class GCTooltip(BaseTooltip):
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities
+				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 5)
 				show += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 		properties.append((_('Status: '), show))
 		
