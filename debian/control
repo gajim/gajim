@@ -11,6 +11,6 @@ Depends: ${shlibs:Depends}, python2.4 (>= 2.4), python2.4-glade2 (>= 2.6.0), pyt
 Recommends: dnsutils, python2.4-dbus, notification-daemon
 Suggests: python2.4-gnome2
 Description: Jabber client written in PyGTK
- Gajim is a Jabber client written in PyGTK. It has a tabbed user interface
- with normal chats, group chats, and has many features such as, TLS, GPG,
- SSL, multiple accounts, avatars, file transfers, D-Bus and Metacontacts.
+ Gajim is a Jabber client. It has a tabbed user interface with normal chats,
+ group chats, and has many features such as, TLS, GPG, SSL, multiple accounts,
+ avatars, file transfers, D-Bus and Metacontacts.
