@@ -4021,8 +4021,8 @@ msgstr "Oculta este menú"
 #, python-format
 msgid "Gajim - %d unread message"
 msgid_plural "Gajim - %d unread messages"
-msgstr[0] "Gajim - %s mensaje sin leer"
-msgstr[1] "Gajim - %s mensajes sin leer"
+msgstr[0] "Gajim - %d mensaje sin leer"
+msgstr[1] "Gajim - %d mensajes sin leer"
 
 #: ../src/tooltips.py:321
 #, python-format
@@ -4035,15 +4035,15 @@ msgstr[1] "Gajim - %d mensajes únicos sin leer"
 #, python-format
 msgid "Gajim - %d unread group chat message"
 msgid_plural "Gajim - %d unread group chat messages"
-msgstr[0] "Gajim - %s mensajes sin leer"
-msgstr[1] "Gajim - %s mensajes sin leer"
+msgstr[0] "Gajim - %d mensajes sin leer"
+msgstr[1] "Gajim - %d mensajes sin leer"
 
 #: ../src/tooltips.py:333
 #, python-format
 msgid "Gajim - %d unread private message"
 msgid_plural "Gajim - %d unread private messages"
-msgstr[0] "Gajim - %s mensaje privado sin leer"
-msgstr[1] "Gajim - %s mensajes privados sin leer"
+msgstr[0] "Gajim - %d mensaje privado sin leer"
+msgstr[1] "Gajim - %d mensajes privados sin leer"
 
 #: ../src/tooltips.py:348 ../src/tooltips.py:350
 #, python-format
