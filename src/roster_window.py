@@ -56,8 +56,6 @@ C_SECPIXBUF, # secondary_pixbuf (holds avatar or padlock)
 ) = range(7)
 
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 DEFAULT_ICONSET = 'dcraven'
 
 class RosterWindow:
@@ -613,7 +611,7 @@ class RosterWindow:
 
 	def get_and_connect_advanced_menuitem_menu(self, account):
 		'''adds FOR ACCOUNT options'''
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_menuitem_menu', APP)
+		xml = gtkgui_helpers.get_glade('advanced_menuitem_menu.glade')
 		advanced_menuitem_menu = xml.get_widget('advanced_menuitem_menu')
 
 		send_single_message_menuitem = xml.get_widget(
@@ -1243,8 +1241,7 @@ class RosterWindow:
 		if not contact:
 			return
 
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_contact_context_menu',
-			APP)
+		xml = gtkgui_helpers.get_glade('roster_contact_context_menu.glade')
 		roster_contact_context_menu = xml.get_widget(
 			'roster_contact_context_menu')
 
@@ -1508,7 +1505,7 @@ class RosterWindow:
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = self.load_iconset(path)
 
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'account_context_menu', APP)
+		xml = gtkgui_helpers.get_glade('account_context_menu.glade')
 		account_context_menu = xml.get_widget('account_context_menu')
 		childs = account_context_menu.get_children()
 
@@ -3263,7 +3260,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.draw_contact(jid, account, selected = True)
 
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'roster_window', APP)
+		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
 		self.window = self.xml.get_widget('roster_window')
 		gajim.interface.msg_win_mgr = MessageWindowMgr()
 		self.advanced_menus = [] # We keep them to destroy them

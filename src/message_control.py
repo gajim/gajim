@@ -13,6 +13,7 @@
 ##
 import gtk
 import gtk.glade
+import gtkgui_helpers
 
 from common import gajim
 
@@ -27,7 +28,6 @@ from common import i18n
 _ = i18n._
 APP = i18n.APP
 
-GTKGUI_GLADE = 'gtkgui.glade'
 ####################
 
 class MessageControl:
@@ -52,7 +52,7 @@ class MessageControl:
 
 		gajim.last_message_time[self.account][self.get_full_jid()] = 0
 
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, widget_name, APP)
+		self.xml = gtkgui_helpers.get_glade('message_window.glade', widget_name)
 		self.widget = self.xml.get_widget(widget_name)
 
 	def get_full_jid(self):

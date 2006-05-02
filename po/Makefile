@@ -8,8 +8,48 @@ all: $(LANGDIR)
 %.mo: %.po
 	msgfmt $< -o $@
 
-gajim.pot: ../src/*py ../src/common/*py ../src/gtkgui.glade.h \
-			../src/history_manager.glade.h
+gajim.pot: ../src/*py ../src/common/*py \
+			../data/glade/account_context_menu.glade.h \
+			../data/glade/account_creation_wizard_window.glade.h \
+			../data/glade/account_modification_window.glade.h \
+			../data/glade/accounts_window.glade.h \
+			../data/glade/add_new_contact_window.glade.h \
+			../data/glade/advanced_configuration_window.glade.h \
+			../data/glade/advanced_menuitem_menu.glade.h \
+			../data/glade/change_password_dialog.glade.h \
+			../data/glade/change_status_message_dialog.glade.h \
+			../data/glade/chat_context_menu.glade.h \
+			../data/glade/chat_control_popup_menu.glade.h \
+			../data/glade/choose_gpg_key_dialog.glade.h \
+			../data/glade/data_form_window.glade.h \
+			../data/glade/edit_groups_dialog.glade.h \
+			../data/glade/filetransfers.glade.h \
+			../data/glade/gajim_themes_window.glade.h \
+			../data/glade/gc_control_popup_menu.glade.h \
+			../data/glade/gc_occupants_menu.glade.h \
+			../data/glade/gtkgui.glade.h \
+			../data/glade/history_manager.glade.h \
+			../data/glade/history_window.glade.h \
+			../data/glade/input_dialog.glade.h \
+			../data/glade/invitation_received_dialog.glade.h \
+			../data/glade/join_groupchat_window.glade.h \
+			../data/glade/manage_bookmarks_window.glade.h \
+			../data/glade/manage_proxies_window.glade.h \
+			../data/glade/message_window.glade.h \
+			../data/glade/passphrase_dialog.glade.h \
+			../data/glade/popup_notification_window.glade.h \
+			../data/glade/preferences_window.glade.h \
+			../data/glade/progress_dialog.glade.h \
+			../data/glade/remove_account_window.glade.h \
+			../data/glade/roster_contact_context_menu.glade.h \
+			../data/glade/roster_window.glade.h \
+			../data/glade/service_discovery_window.glade.h \
+			../data/glade/service_registration_window.glade.h \
+			../data/glade/single_message_window.glade.h \
+			../data/glade/subscription_request_window.glade.h \
+			../data/glade/systray_context_menu.glade.h \
+			../data/glade/vcard_information_window.glade.h \
+			../data/glade/xml_console_window.glade.h
 	intltool-update --pot --gettext-package=$(NAME)
 
 clean:

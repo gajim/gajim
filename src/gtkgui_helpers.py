@@ -45,6 +45,11 @@ from common import helpers
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
 
+GLADE_DIR = os.path.join('..', 'data', 'glade')
+def get_glade(file_name, root = None):
+	file_path = os.path.join(GLADE_DIR, file_name)
+	return gtk.glade.XML(file_path, root=root, domain=i18n.APP)
+
 def popup_emoticons_under_button(menu, button, parent_win):
 	''' pops emoticons menu under button, which is in parent_win'''
 	window_x1, window_y1 = parent_win.get_origin()

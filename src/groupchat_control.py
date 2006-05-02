@@ -48,8 +48,6 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 #(status_image, type, nick, shown_nick)
 (
 C_IMG, # image to show state (online, new message etc)
@@ -204,7 +202,7 @@ class GroupchatControl(ChatControlBase):
 		self.focus_out_end_iter_offset = None
 
 		# connect the menuitems to their respective functions
-		xm = gtk.glade.XML(GTKGUI_GLADE, 'gc_control_popup_menu', APP)
+		xm = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
 
 		widget = xm.get_widget('bookmark_room_menuitem')
 		id = widget.connect('activate', self._on_bookmark_room_menuitem_activate)
@@ -1411,7 +1409,7 @@ class GroupchatControl(ChatControlBase):
 		user_role = self.get_role(user_nick)
 
 		# making menu from glade
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'gc_occupants_menu', APP)
+		xml = gtkgui_helpers.get_glade('gc_occupants_menu.glade')
 
 		# these conditions were taken from JEP 0045
 		item = xml.get_widget('kick_menuitem')

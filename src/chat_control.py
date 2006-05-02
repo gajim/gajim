@@ -47,8 +47,6 @@ from common import i18n
 _ = i18n._
 APP = i18n.APP
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 ################################################################################
 class ChatControlBase(MessageControl):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
@@ -1171,7 +1169,7 @@ class ChatControl(ChatControlBase):
 		and file_transfer_menuitem
 		and hide()/show() for add_to_roster_menuitem
 		'''
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_control_popup_menu', APP)
+		xml = gtkgui_helpers.get_glade('chat_control_popup_menu.glade')
 		menu = xml.get_widget('chat_control_popup_menu')
 		
 		history_menuitem = xml.get_widget('history_menuitem')

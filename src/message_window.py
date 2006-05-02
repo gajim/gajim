@@ -37,7 +37,6 @@ from common import i18n
 _ = i18n._
 APP = i18n.APP
 
-GTKGUI_GLADE = 'gtkgui.glade'
 ####################
 
 class MessageWindow:
@@ -60,7 +59,7 @@ class MessageWindow:
 		self.handlers = {}
 
 		self.widget_name = 'message_window'
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, self.widget_name, APP)
+		self.xml = gtkgui_helpers.get_glade('%s.glade' % self.widget_name)
 		self.window = self.xml.get_widget(self.widget_name)
 		id = self.window.connect('delete-event', self._on_window_delete)
 		self.handlers[id] = self.window
@@ -162,7 +161,7 @@ class MessageWindow:
 			self.alignment.set_property('top-padding', 2)
 
 		# Add notebook page and connect up to the tab's close button
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_tab_ebox', APP)
+		xml = gtkgui_helpers.get_glade('message_window.glade', 'chat_tab_ebox')
 		tab_label_box = xml.get_widget('chat_tab_ebox')
 		widget =  xml.get_widget('tab_close_button')
 		id = widget.connect('clicked', self._on_close_button_clicked, control)

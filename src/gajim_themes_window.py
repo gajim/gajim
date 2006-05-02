@@ -37,12 +37,10 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 class GajimThemesWindow:
 
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'gajim_themes_window', APP)
+		self.xml = gtkgui_helpers.get_glade('gajim_themes_window.glade')
 		self.window = self.xml.get_widget('gajim_themes_window')
 		
 		self.options = ['account', 'group', 'contact', 'banner']

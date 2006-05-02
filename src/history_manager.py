@@ -62,8 +62,7 @@ class HistoryManager:
 				'%s does not exist.' % LOG_DB_PATH)
 			sys.exit()
 		
-		xml = gtk.glade.XML('history_manager.glade',
-			'history_manager_window', i18n.APP)
+		xml = gtkgui_helpers.get_glade('history_manager.glade')
 		self.window = xml.get_widget('history_manager_window')
 		self.jids_listview = xml.get_widget('jids_listview')
 		self.logs_listview = xml.get_widget('logs_listview')

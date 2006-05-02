@@ -45,8 +45,6 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
 	'''Class for Preferences window'''
@@ -60,7 +58,7 @@ class PreferencesWindow:
 
 	def __init__(self):
 		'''Initialize Preferences window'''
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'preferences_window', APP)
+		self.xml = gtkgui_helpers.get_glade('preferences_window.glade')
 		self.window = self.xml.get_widget('preferences_window')
 		self.iconset_combobox = self.xml.get_widget('iconset_combobox')
 		self.notify_on_new_message_radiobutton = self.xml.get_widget(
@@ -984,7 +982,7 @@ class AccountModificationWindow:
 		self.window.destroy()
 
 	def __init__(self, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_modification_window', APP)
+		self.xml = gtkgui_helpers.get_glade('account_modification_window.glade')
 		self.window = self.xml.get_widget('account_modification_window')
 		self.account = account
 
@@ -1475,7 +1473,7 @@ class AccountModificationWindow:
 #---------- ManageProxiesWindow class -------------#
 class ManageProxiesWindow:
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'manage_proxies_window', APP)
+		self.xml = gtkgui_helpers.get_glade('manage_proxies_window.glade')
 		self.window = self.xml.get_widget('manage_proxies_window')
 		self.proxies_treeview = self.xml.get_widget('proxies_treeview')
 		self.proxyname_entry = self.xml.get_widget('proxyname_entry')
@@ -1639,7 +1637,7 @@ class AccountsWindow:
 		self.window.destroy()
 
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'accounts_window', APP)
+		self.xml = gtkgui_helpers.get_glade('accounts_window.glade')
 		self.window = self.xml.get_widget('accounts_window')
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		self.modify_button = self.xml.get_widget('modify_button')
@@ -1741,7 +1739,7 @@ class DataFormWindow:
 	def __init__(self, account, config):
 		self.account = account
 		self.config = config
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'data_form_window', APP)
+		self.xml = gtkgui_helpers.get_glade('data_form_window.glade')
 		self.window = self.xml.get_widget('data_form_window')
 		self.config_vbox = self.xml.get_widget('config_vbox')
 		if config:
@@ -1890,7 +1888,7 @@ class ServiceRegistrationWindow(DataFormWindow):
 		if self.is_form:
 			DataFormWindow.__init__(self, account, infos)
 		else:
-			self.xml = gtk.glade.XML(GTKGUI_GLADE,	'service_registration_window', APP)
+			self.xml = gtkgui_helpers.get_glade('service_registration_window.glade')
 			self.window = self.xml.get_widget('service_registration_window')
 			if infos.has_key('registered'):
 				self.window.set_title(_('Edit %s' % service))
@@ -2144,7 +2142,7 @@ class RemoveAccountWindow:
 
 	def __init__(self, account):
 		self.account = account
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'remove_account_window', APP)
+		xml = gtkgui_helpers.get_glade('remove_account_window.glade')
 		self.window = xml.get_widget('remove_account_window')
 		self.remove_and_unregister_radiobutton = xml.get_widget(
 														'remove_and_unregister_radiobutton')
@@ -2223,7 +2221,7 @@ class RemoveAccountWindow:
 #---------- ManageBookmarksWindow class -------------#
 class ManageBookmarksWindow:
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'manage_bookmarks_window', APP)
+		self.xml = gtkgui_helpers.get_glade('manage_bookmarks_window.glade')
 		self.window = self.xml.get_widget('manage_bookmarks_window')
 
 		#Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick
@@ -2484,8 +2482,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 
 class AccountCreationWizardWindow:
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'account_creation_wizard_window',
-			APP)
+		self.xml = gtkgui_helpers.get_glade('account_creation_wizard_window.glade')
 		self.window = self.xml.get_widget('account_creation_wizard_window')
 
 		# Connect events from comboboxentry.child

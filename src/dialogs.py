@@ -49,12 +49,10 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 class EditGroupsDialog:
 	'''Class for the edit group dialog window'''
 	def __init__(self, user, account):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'edit_groups_dialog', APP)
+		self.xml = gtkgui_helpers.get_glade('edit_groups_dialog.glade')
 		self.dialog = self.xml.get_widget('edit_groups_dialog')
 		self.account = account
 		self.user = user
@@ -197,7 +195,7 @@ class PassphraseDialog:
 		return passphrase, save_passphrase_checkbutton.get_active()
 
 	def __init__(self, titletext, labeltext, checkbuttontext):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'passphrase_dialog', APP)
+		self.xml = gtkgui_helpers.get_glade('passphrase_dialog.glade')
 		self.window = self.xml.get_widget('passphrase_dialog')
 		self.passphrase_entry = self.xml.get_widget('passphrase_entry')
 		self.passphrase = -1
@@ -212,7 +210,7 @@ class ChooseGPGKeyDialog:
 	'''Class for GPG key dialog'''
 	def __init__(self, title_text, prompt_text, secret_keys, selected = None):
 		#list : {keyID: userName, ...}
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'choose_gpg_key_dialog', APP)
+		xml = gtkgui_helpers.get_glade('choose_gpg_key_dialog.glade')
 		self.window = xml.get_widget('choose_gpg_key_dialog')
 		self.window.set_title(title_text)
 		self.keys_treeview = xml.get_widget('keys_treeview')
@@ -255,8 +253,7 @@ class ChooseGPGKeyDialog:
 class ChangeStatusMessageDialog:
 	def __init__(self, show = None):
 		self.show = show
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_status_message_dialog',
-			APP)
+		self.xml = gtkgui_helpers.get_glade('change_status_message_dialog.glade')
 		self.window = self.xml.get_widget('change_status_message_dialog')
 		if show:
 			uf_show = helpers.get_uf_show(show)
@@ -358,7 +355,7 @@ class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
 	def __init__(self, account, jid = None):
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_new_contact_window', APP)
+		self.xml = gtkgui_helpers.get_glade('add_new_contact_window.glade')
 		self.window = self.xml.get_widget('add_new_contact_window')
 		self.uid_entry = self.xml.get_widget('uid_entry')
 		self.protocol_combobox = self.xml.get_widget('protocol_combobox')
@@ -786,7 +783,7 @@ class InputDialog:
 ok_handler = None):
 		# if modal is True you also need to call get_response()
 		# and ok_handler won't be used
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'input_dialog', APP)
+		xml = gtkgui_helpers.get_glade('input_dialog.glade')
 		self.dialog = xml.get_widget('input_dialog')
 		label = xml.get_widget('label')
 		self.input_entry = xml.get_widget('input_entry')
@@ -821,7 +818,7 @@ ok_handler = None):
 
 class SubscriptionRequestWindow:
 	def __init__(self, jid, text, account):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'subscription_request_window', APP)
+		xml = gtkgui_helpers.get_glade('subscription_request_window.glade')
 		self.window = xml.get_widget('subscription_request_window')
 		self.jid = jid
 		self.account = account
@@ -876,7 +873,7 @@ _('You can not join a group chat unless you are connected.'))
 
 		self._empty_required_widgets = []
 
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'join_groupchat_window', APP)
+		self.xml = gtkgui_helpers.get_glade('join_groupchat_window.glade')
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self.xml.get_widget('server_entry').set_text(server)
 		self.xml.get_widget('room_entry').set_text(room)
@@ -1020,7 +1017,7 @@ class ChangePasswordDialog:
 				_('Without a connection, you can not change your password.'))
 			raise RuntimeError, 'You are not connected to the server'
 		self.account = account
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'change_password_dialog', APP)
+		self.xml = gtkgui_helpers.get_glade('change_password_dialog.glade')
 		self.dialog = self.xml.get_widget('change_password_dialog')
 		self.password1_entry = self.xml.get_widget('password1_entry')
 		self.password2_entry = self.xml.get_widget('password2_entry')
@@ -1058,7 +1055,7 @@ class PopupNotificationWindow:
 		self.jid = jid
 		self.msg_type = msg_type
 
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'popup_notification_window', APP)
+		xml = gtkgui_helpers.get_glade('popup_notification_window.glade')
 		self.window = xml.get_widget('popup_notification_window')
 		close_button = xml.get_widget('close_button')
 		event_type_label = xml.get_widget('event_type_label')
@@ -1171,7 +1168,7 @@ class SingleMessageWindow:
 		self.from_whom = from_whom
 		self.resource = resource
 		
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'single_message_window', APP)
+		self.xml = gtkgui_helpers.get_glade('single_message_window.glade')
 		self.window = self.xml.get_widget('single_message_window')
 		self.count_chars_label = self.xml.get_widget('count_chars_label')
 		self.from_label = self.xml.get_widget('from_label')
@@ -1377,7 +1374,7 @@ class XMLConsoleWindow:
 	def __init__(self, account):
 		self.account = account
 		
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'xml_console_window', APP)
+		self.xml = gtkgui_helpers.get_glade('xml_console_window.glade')
 		self.window = self.xml.get_widget('xml_console_window')
 		self.input_textview = self.xml.get_widget('input_textview')
 		self.stanzas_log_textview = self.xml.get_widget('stanzas_log_textview')
@@ -1483,7 +1480,7 @@ class InvitationReceivedDialog:
 
 		self.room_jid = room_jid
 		self.account = account
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'invitation_received_dialog', APP)
+		xml = gtkgui_helpers.get_glade('invitation_received_dialog.glade')
 		self.dialog = xml.get_widget('invitation_received_dialog')
 		
 		#FIXME: use nickname instead of contact_jid
@@ -1517,7 +1514,7 @@ class ProgressDialog:
 		'''during text is what to show during the procedure,
 		messages_queue has the message to show
 		in the textview'''
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'progress_dialog', APP)
+		self.xml = gtkgui_helpers.get_glade('progress_dialog.glade')
 		self.dialog = self.xml.get_widget('progress_dialog')
 		self.label = self.xml.get_widget('label')
 		self.label.set_markup('<big>' + during_text + '</big>')
@@ -1644,8 +1641,7 @@ class AddSpecialNotificationDialog:
 	def __init__(self, jid):
 		'''jid is the jid for which we want to add special notification
 		(sound and notification popups)'''
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'add_special_notification_window',
-			APP)
+		self.xml = gtkgui_helpers.get_glade('add_special_notification_window.glade')
 		self.window = self.xml.get_widget('add_special_notification_window')
 		self.condition_combobox = self.xml.get_widget('condition_combobox')
 		self.condition_combobox.set_active(0)
