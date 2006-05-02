@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-13 12:52+0200\n"
-"PO-Revision-Date: 2006-04-27 11:49+0100\n"
+"PO-Revision-Date: 2006-05-02 20:41+0100\n"
 "Last-Translator: Maciej Chojnacki <byte@byte.livenet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Jeśli podświetlanie błędów w pisowni działa dla niewłaściwego języka, to ustaw odpowiednio zmienną środowiskową $LANG. Np. dla języka polskiego wpisz export LANG=pl_PL do pliku ~/.bash_profile lub globalnie do pliku in /etc/profile.\n"
 "\n"
-"Podświedlanie błędów w pisowni nie będzie używane"
+"Podświedlanie błędów w pisowni nie będzie używane."
 
 #. we are not connected
 #: ../src/chat_control.py:170
@@ -93,7 +93,7 @@ msgstr "Szyfrowanie OpenPGP"
 #: ../src/chat_control.py:901
 #, python-format
 msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
-msgstr "Ani %s nie przesyła swojego klucza OpenPGP ani Ty nie przypisałeś mu żadnego klucza."
+msgstr "Ani %s nie przesyła swojego klucza OpenPGP, ani Ty nie przypisałeś mu żadnego klucza."
 
 #: ../src/chat_control.py:1025
 msgid "Encryption enabled"
@@ -136,7 +136,7 @@ msgstr "Jeśli zamkniesz tę kartę, a nie masz uaktywnionej opcji historii, to 
 #: ../src/config.py:208
 #, python-format
 msgid "Every %s _minutes"
-msgstr "Co %s _minut(y)"
+msgstr "Co %s _minut"
 
 #: ../src/config.py:333
 #: ../src/gtkgui.glade.h:41
@@ -623,7 +623,7 @@ msgstr "Informacja o statusie %s"
 
 #: ../src/dialogs.py:265
 msgid "Status Message"
-msgstr "Opis Statusu"
+msgstr "Opis statusu"
 
 #: ../src/dialogs.py:340
 msgid "Save as Preset Status Message"
@@ -1096,7 +1096,7 @@ msgstr "_Wyślij"
 
 #: ../src/filetransfers_window.py:273
 msgid "Gajim cannot access this file"
-msgstr "Gajim nie ma dostępu do tego pliku"
+msgstr "Gajim nie może uzyskać dostępu do tego pliku"
 
 #: ../src/filetransfers_window.py:274
 msgid "This file is being used by another process."
@@ -1247,7 +1247,7 @@ msgstr "wiadomość"
 
 #: ../src/gajim-remote.py:114
 msgid "status message"
-msgstr "nformacja o statusie"
+msgstr "informacja o statusie"
 
 #: ../src/gajim-remote.py:115
 msgid "change status of account \"account\". If not specified, try to change status of all accounts that have \"sync with global status\" option set"
@@ -1264,7 +1264,7 @@ msgstr "JID osoby, z którą chcesz porozmawiać"
 #: ../src/gajim-remote.py:125
 #: ../src/gajim-remote.py:189
 msgid "if specified, contact is taken from the contact list of this account"
-msgstr "jeśli jest podany, to kontakt jest pobierany z listy kontaktów tego konta"
+msgstr "jeśli jest podany, to kontakt jest pobierany z listy kontaktów tego konta."
 
 #: ../src/gajim-remote.py:130
 msgid "Sends new message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''."
@@ -1284,11 +1284,11 @@ msgstr "klucz pgp"
 
 #: ../src/gajim-remote.py:136
 msgid "if specified, the message will be encrypted using this public key"
-msgstr "jeśli jest podany, to wiadomość zostanie zaszyfrowana tym kluczem publicznym"
+msgstr "jeśli jest podany, to wiadomość zostanie zaszyfrowana tym kluczem publicznym."
 
 #: ../src/gajim-remote.py:138
 msgid "if specified, the message will be sent using this account"
-msgstr "jeśli jest podane, to wiadomość zostanie wysłana z tego konta"
+msgstr "jeśli jest podane, to wiadomość zostanie wysłana z tego konta."
 
 #: ../src/gajim-remote.py:143
 msgid "Gets detailed info on a contact"
@@ -1322,7 +1322,7 @@ msgstr "Ścieżka do pliku"
 
 #: ../src/gajim-remote.py:159
 msgid "if specified, file will be sent using this account"
-msgstr "plik zostanie wysłany z tego konta, jeśli jest ono podane"
+msgstr "plik zostanie wysłany z tego konta, jeśli jest ono podane."
 
 #: ../src/gajim-remote.py:164
 msgid "Lists all preferences and their values"
@@ -1338,7 +1338,7 @@ msgstr "klucz=wartość"
 
 #: ../src/gajim-remote.py:170
 msgid "'key' is the name of the preference, 'value' is the value to set it to"
-msgstr "'klucz' jest nazwą opcji, 'wartość' zaś jest jej ustawianą wartością"
+msgstr "'klucz' jest nazwą opcji, 'wartość' zaś jest jej ustawianą wartością."
 
 #: ../src/gajim-remote.py:175
 msgid "Deletes a preference item"
@@ -1370,15 +1370,15 @@ msgstr "Dodaje nowy kontakt do tego konta."
 
 #: ../src/gajim-remote.py:202
 msgid "Returns current status (the global one unless account is specified)"
-msgstr "Zwraca obecny status (globalny, chyba, że zostało wskazane konto)"
+msgstr "Zwraca obecny status (globalny, chyba, że zostało wskazane konto)."
 
 #: ../src/gajim-remote.py:209
 msgid "Returns current status message(the global one unless account is specified)"
-msgstr "Zwraca obecny status (globalny, chyba że zostało wskazane konto)"
+msgstr "Zwraca obecny status (globalny, chyba że zostało wskazane konto)."
 
 #: ../src/gajim-remote.py:216
 msgid "Returns number of unreaded messages"
-msgstr "Zwraca liczbę nieprzeczytanych wiadomości"
+msgstr "Zwraca liczbę nieprzeczytanych wiadomości."
 
 #: ../src/gajim-remote.py:236
 msgid "Missing argument \"contact_jid\""
@@ -1487,12 +1487,12 @@ msgstr "Czy akceptujesz tę prośbę?"
 #: ../src/gajim.py:438
 #, python-format
 msgid "%(nickname)s Signed In"
-msgstr "%(nickname)s połączył się"
+msgstr "%(nickname)s połączył(a) się"
 
 #: ../src/gajim.py:469
 #, python-format
 msgid "%(nickname)s Signed Out"
-msgstr "%(nickname)s rozłączył się"
+msgstr "%(nickname)s rozłączył(a) się"
 
 #: ../src/gajim.py:583
 #, python-format
@@ -1630,7 +1630,7 @@ msgstr "Wsparcie dla Menadżera Sesji jest niedostępne (brak modułu gnome.ui"
 
 #: ../src/gajim.py:1878
 msgid "Migrating Logs..."
-msgstr "Przenoszenie Logów..."
+msgstr "Przenoszenie logów..."
 
 #: ../src/gajim.py:1879
 msgid "Please wait while logs are being migrated..."
@@ -1805,7 +1805,7 @@ msgstr "Użycie: /%s <działanie> wysyła działanie do aktualnego pokoju. Używ
 #: ../src/groupchat_control.py:1077
 #, python-format
 msgid "Usage: /%s <nickname> [message], opens a private message windowand sends message to the occupant specified by nickname."
-msgstr "Użycie: /%s <pseudonim> [wiadomość] otwiera okno prywatnej wiadomości i wysyła ją do osoby o takim pseudonimie"
+msgstr "Użycie: /%s <pseudonim> [wiadomość] otwiera okno prywatnej wiadomości i wysyła ją do osoby o takim pseudonimie."
 
 #: ../src/groupchat_control.py:1082
 #, python-format
@@ -1931,7 +1931,7 @@ msgstr "<b>Aplikacje</b>"
 
 #: ../src/gtkgui.glade.h:7
 msgid "<b>Chatstate Tab Colors</b>"
-msgstr "<b>Kolory kart w oknie czata</b>"
+msgstr "<b>Kolory kart w oknie czatu</b>"
 
 #. a header for custom browser/client/file manager. so translate sth like: Custom Settings
 #: ../src/gtkgui.glade.h:9
@@ -2099,7 +2099,7 @@ msgstr "Pozwól mu/jej widzieć swój status"
 
 #: ../src/gtkgui.glade.h:53
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-msgstr "Pokazuj powiadomienia gdy mam status _zaraz wracam/nieobecny/zajęty/niewidoczny"
+msgstr "Pokazuj powiadomienia gdy mam status _zaraz wracam/nieobecny/zajęty/niewidoczny."
 
 #: ../src/gtkgui.glade.h:54
 msgid "Also known as iChat style"
@@ -2191,7 +2191,7 @@ msgstr "Usuwa wybrany transfer pliku i usuwa niedokończony plik"
 
 #: ../src/gtkgui.glade.h:77
 msgid "Chan_ge Password"
-msgstr "Z_mień Hasło"
+msgstr "Z_mień hasło"
 
 #: ../src/gtkgui.glade.h:78
 msgid "Change Password"
@@ -2507,7 +2507,7 @@ msgstr "Jeżeli opcja jest aktywna, Gajim roześle kilka dodatkowych adresów IP
 
 #: ../src/gtkgui.glade.h:157
 msgid "If checked, Gajim will display avatars of contacts in roster window and in group chats"
-msgstr "Zaznaczenie tej opcji spowoduje wyświetlanie awatarów w oknie listy kontaktów (roster oraz okno czata)"
+msgstr "Zaznaczenie tej opcji spowoduje wyświetlanie awatarów w oknie listy kontaktów (roster oraz okno czatu)."
 
 #: ../src/gtkgui.glade.h:158
 msgid "If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats"
@@ -2515,7 +2515,7 @@ msgstr "Jeśli jest zaznaczone, Gajim będzie wyświetlał opis statusu kontaktu
 
 #: ../src/gtkgui.glade.h:159
 msgid "If checked, Gajim will join this group chat on startup"
-msgstr "Zaznaczenie spowoduje łączenie z tym pokojem przy starcie programu"
+msgstr "Zaznaczenie spowoduje łączenie z tym pokojem przy starcie programu."
 
 #: ../src/gtkgui.glade.h:160
 msgid "If checked, Gajim will remember the password for this account"
@@ -2531,7 +2531,7 @@ msgstr "Zaznaczenie tej opcji spowoduje wysyłanie pakietów podtrzymujących po
 
 #: ../src/gtkgui.glade.h:163
 msgid "If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you"
-msgstr "Zaznaczanie tej opcji spowoduje przechowywanie hasła w pliku ~/.gajim/config z prawem do odczytu tylko dla ciebie"
+msgstr "Zaznaczanie tej opcji spowoduje przechowywanie hasła w pliku ~/.gajim/config z prawem do odczytu tylko dla ciebie."
 
 #: ../src/gtkgui.glade.h:164
 msgid "If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)"
@@ -2800,7 +2800,7 @@ msgstr "Za_soby: "
 
 #: ../src/gtkgui.glade.h:237
 msgid "Resource is sent to the Jabber server in order to separate the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)"
-msgstr "Informację wysłano do serwera w celu rozdzielenia tego samego JID na dwie lub więcej części, w zależoności od liczby klientów połączonych z serwerem z tego samego konta. Możesz być połączony z z tym samym kontem z informacjami 'Dom' i 'Praca' w tym samym czasie. Klient o najwyższym będzie odbierał wiadomości. (patrz niżej)."
+msgstr "Informację wysłano do serwera w celu rozdzielenia tego samego JID na dwie lub więcej części, w zależności od liczby klientów połączonych z serwerem z tego samego konta. Możesz być połączony z z tym samym kontem z informacjami 'Dom' i 'Praca' w tym samym czasie. Klient o najwyższym będzie odbierał wiadomości (patrz niżej)."
 
 #: ../src/gtkgui.glade.h:238
 msgid "Resource:"
@@ -3170,11 +3170,11 @@ msgstr "O_dmów"
 
 #: ../src/gtkgui.glade.h:332
 msgid "_Discover Services"
-msgstr "_Wyszukuj Usługi"
+msgstr "_Wyszukuj usługi"
 
 #: ../src/gtkgui.glade.h:333
 msgid "_Discover Services..."
-msgstr "_Wyszukuj Usługi..."
+msgstr "_Wyszukuj usługi..."
 
 #: ../src/gtkgui.glade.h:335
 msgid "_FAQ"
@@ -3385,7 +3385,7 @@ msgstr "_Szukaj"
 
 #: ../src/gtkgui.glade.h:391
 msgid "_Send & Close"
-msgstr "_Wyślij i Zamknij"
+msgstr "_Wyślij i zzamknij"
 
 #: ../src/gtkgui.glade.h:392
 msgid "_Send Private Message"
@@ -3471,7 +3471,7 @@ msgstr "Błąd przetwarzania pliku:"
 #: ../src/gtkgui_helpers.py:283
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
-msgstr "Nie można zapisywać do %s. Wsparcie dla Menadżera Sesji nie będzie działać"
+msgstr "Nie można zapisywać do %s. Wsparcie dla Menadżera Sesji nie będzie działać."
 
 #: ../src/history_manager.glade.h:1
 msgid ""
@@ -3686,7 +3686,7 @@ msgstr "Menedżer historii rozmów"
 
 #: ../src/roster_window.py:872
 msgid "_Join New Room"
-msgstr "_Dołącz do Nowego Pokoju"
+msgstr "_Dołącz do nowego pokoju"
 
 #: ../src/roster_window.py:1158
 #, python-format
@@ -3750,7 +3750,7 @@ msgstr "Autoryzacja została cofnięta"
 #: ../src/roster_window.py:1655
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
-msgstr "Teraz \"%s\" zawsze będzie cię widział jako Rozłączonego."
+msgstr "Teraz \"%s\" zawsze będzie cię widział jako rozłączonego."
 
 #: ../src/roster_window.py:1824
 #, python-format
@@ -3763,7 +3763,7 @@ msgstr "Usuwając kontakt cofniesz mu również autoryzację, co spowoduje, że 
 
 #: ../src/roster_window.py:1832
 msgid "By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline."
-msgstr "Usuwając kontakt usuniesz również autoryzację, co spowoduje, że kontakt będzie zawsze widział Cię jako Rozłączonego."
+msgstr "Usuwając kontakt usuniesz również autoryzację, co spowoduje, że kontakt będzie zawsze widział Cię jako rozłączonego."
 
 #: ../src/roster_window.py:1833
 msgid "I want this contact to know my status after removal"
