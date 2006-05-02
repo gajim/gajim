@@ -314,32 +314,41 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				unread_pm += pm_msgs
 
 		if unread_chat or unread_single_chat or unread_gc or unread_pm:
-			text = ''
+			text = 'Gajim '
+			awaiting_events = unread_chat + unread_single_chat + unread_gc + unread_pm
+			if awaiting_events == unread_chat or awaiting_events == unread_single_chat \
+				or awaiting_events == unread_gc or awaiting_events == unread_pm:
+				# This condition is like previous if but with xor... 
+				# Print in one line
+				text += '-'
+			else:
+				# Print in multiple lines
+				text += '\n   '
 			if unread_chat:
 				text += i18n.ngettext(
-					'Gajim - %d unread message',
-					'Gajim - %d unread messages',
+					' %d unread message',
+					' %d unread messages',
 					unread_chat, unread_chat, unread_chat)
-				text += '\n'
+				text += '\n   '
 			if unread_single_chat:
 				text += i18n.ngettext(
-					'Gajim - %d unread single message',
-					'Gajim - %d unread single messages',
+					' %d unread single message',
+					' %d unread single messages',
 					unread_single_chat, unread_single_chat, unread_single_chat)
-				text += '\n'
+				text += '\n   '
 			if unread_gc:
 				text += i18n.ngettext(
-					'Gajim - %d unread group chat message',
-					'Gajim - %d unread group chat messages',
+					' %d unread group chat message',
+					' %d unread group chat messages',
 					unread_gc, unread_gc, unread_gc)
-				text += '\n'
+				text += '\n   '
 			if unread_pm:
 				text += i18n.ngettext(
-					'Gajim - %d unread private message',
-					'Gajim - %d unread private messages',
+					' %d unread private message',
+					' %d unread private messages',
 					unread_pm, unread_pm, unread_pm)
-				text += '\n'
-			text = text[:-1] # remove latest \n
+				text += '\n   '
+			text = text[:-4] # remove latest '\n   '
 		elif len(accounts) > 1:
 			text = _('Gajim')
 			self.current_current_row = 1
