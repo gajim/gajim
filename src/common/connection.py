@@ -121,6 +121,7 @@ class Connection(ConnectionHandlers):
 			# make sure previous connection is completely closed
 			gajim.proxy65_manager.disconnect(self.connection)
 			self.connection.disconnect()
+			self.last_connection = None
 			self.connection = None
 	
 	def _disconnectedReconnCB(self):

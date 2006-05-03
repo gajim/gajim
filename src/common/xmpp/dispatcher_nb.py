@@ -92,6 +92,8 @@ class Dispatcher(PlugIn):
 		self.Stream.DEBUG = None
 		self.Stream.features = None
 		self.Stream.destroy()
+		self._owner = None
+		self.Stream = None
 
 	def StreamInit(self):
 		''' Send an initial stream header. '''
@@ -127,7 +129,7 @@ class Dispatcher(PlugIn):
 		try:
 			self.Stream.Parse(data)
 			# end stream:stream tag received
-			if self.Stream._NodeBuilder__depth == 0:
+			if self.Stream and self.Stream._NodeBuilder__depth == 0:
 				self._owner.Connection.disconnect()
 				return 0
 		except ExpatError:

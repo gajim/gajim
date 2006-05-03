@@ -138,15 +138,16 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			the owner's dispatcher. '''
 		self.disconnect()
 		self._owner.Connection = None
+		self._owner = None
 	
 	def pollin(self):
 		self._do_receive() 
 	
 	def pollend(self):
+		conn_failure_cb = self.on_connect_failure
 		self.disconnect()
-		if self.on_connect_failure:
-			self.on_connect_failure()
-		self.on_connect_failure = None
+		if conn_failure_cb:
+			conn_failure_cb()
 		
 	def disconnect(self):
 		if self.state == -2: # already disconnected
@@ -166,6 +167,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.fd = -1
 		if self.on_disconnect:
 			self.on_disconnect()
+		self.on_connect_failure = None
 	
 	def end_disconnect(self):
 		''' force disconnect only if we are still trying to disconnect '''
@@ -215,19 +217,14 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		if errnum == socket.SSL_ERROR_WANT_READ:
 			pass
 		elif errnum in [errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN]:
-			self.disconnect()
-			if self.on_connect_failure:
-				self.on_connect_failure()
+			self.pollend()
 			# don't proccess result, cas it will raise error
 			return
 		elif not received :
 			if errnum != socket.SSL_ERROR_EOF: 
 				# 8 EOF occurred in violation of protocol
 				self.DEBUG('Socket error while receiving data', 'error')
-				self.disconnect()
-				if self.on_connect_failure:
-					self.on_connect_failure(True)
-				self.on_connect_failure = None
+				self.pollend()
 			if self.state >= 0:
 				self.disconnect()
 			return
@@ -393,6 +390,8 @@ class NonBlockingTLS(PlugIn):
 		# if dispatcher is not plugged we cannot (un)register handlers
 		if self._owner.__dict__.has_key('Dispatcher'):
 			self._owner.UnregisterHandler('features', self.FeaturesHandler,xmlns=NS_STREAMS)
+			self._owner.Dispatcher.PlugOut()
+		self._owner = None
 
 	def tls_start(self):
 		if self.on_tls_start:
