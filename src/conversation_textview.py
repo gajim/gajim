@@ -569,8 +569,6 @@ class ConversationTextview:
 			other_tags_for_name = [], other_tags_for_time = [],
 			other_tags_for_text = [], subject = None):
 		'''prints 'chat' type messages'''
-		if kind == 'status' and not gajim.config.get('print_status_in_chats'):
-				return
 		# kind = info, we print things as if it was a status: same color, ...
 		if kind == 'info':
 			kind = 'status'

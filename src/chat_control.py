@@ -1067,6 +1067,8 @@ class ChatControl(ChatControlBase):
 		jid = contact.jid
 
 		if frm == 'status':
+			if not gajim.config.get('print_status_in_chats'):
+				return
 			kind = 'status'
 			name = ''
 		elif frm == 'info':

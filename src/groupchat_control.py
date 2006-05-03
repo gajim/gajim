@@ -505,6 +505,8 @@ class GroupchatControl(ChatControlBase):
 				# muc-specific chatstate
 				self.parent_win.redraw_tab(self, 'newmsg')
 		else:
+			if not gajim.config.get('print_status_in_muc'):
+				return
 			kind = 'status'
 
 		if kind == 'incoming': # it's a message NOT from us
