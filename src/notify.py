@@ -40,6 +40,7 @@ def notify(event_type, jid, account, msg_type = '', path_to_image = None,
 	the Desktop Notification Specification. If that fails, then we fall back to
 	the older style PopupNotificationWindow method.'''
 	text = gtkgui_helpers.escape_for_pango_markup(text)
+	title = gtkgui_helpers.escape_for_pango_markup(title)
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
 			DesktopNotification(event_type, jid, account, msg_type, path_to_image,
