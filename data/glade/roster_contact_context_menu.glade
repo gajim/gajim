@@ -79,7 +79,7 @@
   <child>
     <widget class="GtkImageMenuItem" id="send_file_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Send File</property>
+      <property name="label" translatable="yes">Send _File</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
@@ -165,7 +165,7 @@
 	  <child>
 	    <widget class="GtkImageMenuItem" id="resend_authorization_to_menuitem">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Allow him/her to see my status</property>
+	      <property name="label" translatable="yes">_Allow him/her to see my status</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
@@ -185,7 +185,7 @@
 	  <child>
 	    <widget class="GtkImageMenuItem" id="rerequest_authorization_from_menuitem">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Ask to see his/her status</property>
+	      <property name="label" translatable="yes">A_sk to see his/her status</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
@@ -205,7 +205,7 @@
 	  <child>
 	    <widget class="GtkImageMenuItem" id="forbid_him/her_to_see_my_status1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Forbid him/her to see my status</property>
+	      <property name="label" translatable="yes">_Forbid him/her to see my status</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
