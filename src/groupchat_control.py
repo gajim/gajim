@@ -1296,10 +1296,6 @@ class GroupchatControl(ChatControlBase):
 			cursor_position = message_buffer.get_insert()
 			end_iter = message_buffer.get_iter_at_mark(cursor_position)
 			text = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
-			if not text or text.endswith(' '):
-				# if we are nick cycling, last char will always be space
-				if not self.last_key_tabs:
-					return False
 
 			splitted_text = text.split()
 			# command completion
@@ -1328,42 +1324,44 @@ class GroupchatControl(ChatControlBase):
 			# check if tab is pressed with empty message
 			if len(splitted_text): # if there are any words
 				begin = splitted_text[-1] # last word we typed
+			else:
+				begin = ''
 
-				if len(self.nick_hits) and \
-						self.nick_hits[0].startswith(begin.replace(
-						self.gc_refer_to_nick_char, '')) and \
-						self.last_key_tabs: # we should cycle
-					self.nick_hits.append(self.nick_hits[0])
-					self.nick_hits.pop(0)
+			if len(self.nick_hits) and \
+					self.nick_hits[0].startswith(begin.replace(
+					self.gc_refer_to_nick_char, '')) and \
+					self.last_key_tabs: # we should cycle
+				self.nick_hits.append(self.nick_hits[0])
+				self.nick_hits.pop(0)
+			else:
+				self.nick_hits = [] # clear the hit list
+				list_nick = gajim.contacts.get_nick_list(self.account,
+									self.room_jid)
+				for nick in list_nick:
+					if nick.lower().startswith(begin.lower()):
+						# the word is the begining of a nick
+						self.nick_hits.append(nick)
+			if len(self.nick_hits):
+				if len(splitted_text) == 1: # This is the 1st word of the line
+					add = self.gc_refer_to_nick_char + ' '
 				else:
-					self.nick_hits = [] # clear the hit list
-					list_nick = gajim.contacts.get_nick_list(self.account,
-										self.room_jid)
-					for nick in list_nick:
-						if nick.lower().startswith(begin.lower()):
-							# the word is the begining of a nick
-							self.nick_hits.append(nick)
-				if len(self.nick_hits):
-					if len(splitted_text) == 1: # This is the 1st word of the line
-						add = self.gc_refer_to_nick_char + ' '
-					else:
-						add = ' '
-					start_iter = end_iter.copy()
-					if self.last_key_tabs and begin.endswith(', '):
-						# have to accomodate for the added space from last
-						# completion
-						start_iter.backward_chars(len(begin) + 2)
-					elif self.last_key_tabs:
-						# have to accomodate for the added space from last
-						# completion
-						start_iter.backward_chars(len(begin) + 1)
-					else:
-						start_iter.backward_chars(len(begin))
+					add = ' '
+				start_iter = end_iter.copy()
+				if self.last_key_tabs and begin.endswith(', '):
+					# have to accomodate for the added space from last
+					# completion
+					start_iter.backward_chars(len(begin) + 2)
+				elif self.last_key_tabs:
+					# have to accomodate for the added space from last
+					# completion
+					start_iter.backward_chars(len(begin) + 1)
+				else:
+					start_iter.backward_chars(len(begin))
 
-					message_buffer.delete(start_iter, end_iter)
-					message_buffer.insert_at_cursor(self.nick_hits[0] + add)
-					self.last_key_tabs = True
-					return True
+				message_buffer.delete(start_iter, end_iter)
+				message_buffer.insert_at_cursor(self.nick_hits[0] + add)
+				self.last_key_tabs = True
+				return True
 			self.last_key_tabs = False
 
 	def on_list_treeview_key_press_event(self, widget, event):
