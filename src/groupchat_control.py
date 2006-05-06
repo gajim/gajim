@@ -1303,6 +1303,9 @@ class GroupchatControl(ChatControlBase):
 			cursor_position = message_buffer.get_insert()
 			end_iter = message_buffer.get_iter_at_mark(cursor_position)
 			text = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+			if text.endswith(' '):
+				if not self.last_key_tabs:
+					return False
 
 			splitted_text = text.split()
 			# command completion
