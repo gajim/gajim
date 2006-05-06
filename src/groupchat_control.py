@@ -1349,7 +1349,7 @@ class GroupchatControl(ChatControlBase):
 						# the word is the begining of a nick
 						self.nick_hits.append(nick)
 			if len(self.nick_hits):
-				if len(splitted_text) == 1: # This is the 1st word of the line
+				if len(splitted_text)  < 2: # This is the 1st word of the line or no word
 					add = self.gc_refer_to_nick_char + ' '
 				else:
 					add = ' '
