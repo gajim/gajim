@@ -747,6 +747,7 @@ class GroupchatControl(ChatControlBase):
 		if not affiliation:
 			affiliation = 'none'
 
+		newly_created = False
 		if show in ('offline', 'error'):
 			if statusCode == '307':
 				if actor is None: # do not print 'kicked by None'
@@ -790,8 +791,9 @@ class GroupchatControl(ChatControlBase):
 		else:
 			iter = self.get_contact_iter(nick)
 			if not iter:
-				iter = self.add_contact_to_roster(nick, show, role,
-								affiliation, status, jid)
+				iter = self.add_contact_to_roster(nick, show, role, affiliation,
+					status, jid)
+				newly_created = True
 				if statusCode == '201': # We just created the room
 					gajim.connections[self.account].request_gc_config(self.room_jid)
 			else:
@@ -815,8 +817,13 @@ class GroupchatControl(ChatControlBase):
 				nick != self.nick and statusCode != '303':
 			if show == 'offline':
 				st = _('%s has left') % nick
+				if reason:
+					st += ' [%s]' % reason
 			else:
-				st = _('%s is now %s') % (nick, helpers.get_uf_show(show))
+				if newly_created:
+					st = _('%s has joined the room') % nick
+				else:
+					st = _('%s is now %s') % (nick, helpers.get_uf_show(show))
 			if status:
 				st += ' (' + status + ')'
 			self.print_conversation(st)
