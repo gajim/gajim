@@ -175,7 +175,7 @@ class VcardWindow:
 					# get the image at 'notification size'
 					# and use that user did not specify in ACE crazy size
 					scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
-						'notification')
+						'tooltip')
 				except gobject.GError, msg: # unknown format
 					# msg should be string, not object instance
 					msg = str(msg)
