@@ -78,6 +78,7 @@ src/common/GnuPG.py
 src/common/GnuPGInterface.py
 src/common/config.py
 src/common/connection.py
+src/common/connection_handlers.py
 src/common/gajim.py
 src/common/helpers.py
 src/common/i18n.py
