@@ -1104,7 +1104,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 							'jid': conf.getAttr('jid'),
 							'autojoin': autojoin_val,
 							'password': conf.getTagData('password'),
-							'nick': conf.getTagData('nick') }
+							'nick': conf.getTagData('nick'),
+							'show_status': conf.getTagData('show_status')}
 					
 					self.bookmarks.append(bm)
 				self.dispatch('BOOKMARKS', self.bookmarks)

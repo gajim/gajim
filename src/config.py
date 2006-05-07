@@ -181,7 +181,7 @@ class PreferencesWindow:
 		theme_combobox.add_attribute(cell, 'text', 0)
 		model = gtk.ListStore(str)
 		theme_combobox.set_model(model)
-		
+
 		i = 0
 		for config_theme in gajim.config.get_per('themes'):
 			theme = config_theme.replace('_', ' ')
@@ -2224,15 +2224,15 @@ class ManageBookmarksWindow:
 		self.xml = gtkgui_helpers.get_glade('manage_bookmarks_window.glade')
 		self.window = self.xml.get_widget('manage_bookmarks_window')
 
-		#Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick
-		self.treestore = gtk.TreeStore(str, str, str, bool, str, str)
+		#Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick, Show_Status
+		self.treestore = gtk.TreeStore(str, str, str, bool, str, str, str)
 
 		#Store bookmarks in treeview.
 		for account in gajim.connections:
 			if gajim.connections[account].connected <= 1:
 				continue
 			iter = self.treestore.append(None, [None, account,None,
-							    None, None, None])
+							    None, None, None, None])
 
 			for bookmark in gajim.connections[account].bookmarks:
 				if bookmark['name'] == '':
@@ -2251,7 +2251,21 @@ class ManageBookmarksWindow:
 						bookmark['jid'],
 						autojoin,
 						bookmark['password'],
-						bookmark['nick'] ])
+						bookmark['nick'],
+						bookmark['show_status'] ])
+
+		self.show_status_combobox = self.xml.get_widget('show_status_combobox')
+		model = gtk.ListStore(str, str)
+
+		self.option_list = {'': '', 'all': _('All'),
+			'in_and_out': _('Enter and leave only'), 'none': _('None')}
+		opts = self.option_list.keys()
+		opts.sort()
+		for opt in opts:
+			model.append([self.option_list[opt], opt])
+
+		self.show_status_combobox.set_model(model)
+		self.show_status_combobox.set_active(0)
 
 		self.view = self.xml.get_widget('bookmarks_treeview')
 		self.view.set_model(self.treestore)
@@ -2315,7 +2329,7 @@ class ManageBookmarksWindow:
 		account = model[add_to][1].decode('utf-8')
 		nick = gajim.nicks[account]
 		self.treestore.append(add_to, [account, _('New Room'), '', False, '',
-			nick])
+			nick, 'all'])
 
 		self.view.expand_row(model.get_path(add_to), True)
 
@@ -2372,7 +2386,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 
 				#create the bookmark-dict
 				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
-					'password': bm[4], 'nick': bm[5] }
+					'password': bm[4], 'nick': bm[5], 'show_status': bm[6]}
 
 				gajim.connections[account_unicode].bookmarks.append(bmdict)
 
@@ -2395,7 +2409,8 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 			return
 
 		widgets = [ self.title_entry, self.nick_entry, self.room_entry,
-			self.server_entry, self.pass_entry, self.autojoin_checkbutton ]
+			self.server_entry, self.pass_entry, self.autojoin_checkbutton,
+			self.show_status_combobox]
 
 		if model.iter_parent(iter):
 			# make the fields sensitive
@@ -2437,6 +2452,14 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		else:
 			self.nick_entry.set_text('')
 
+		show_status = model[iter][6]
+		opts = self.option_list.keys()
+		opts.sort()
+		if show_status:
+			self.show_status_combobox.set_active(opts.index(show_status))
+		else:
+			self.show_status_combobox.set_active(0)
+
 	def on_title_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter: # After removing a bookmark, we got nothing selected
@@ -2473,12 +2496,21 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		if iter:
 			model[iter][3] = self.autojoin_checkbutton.get_active()
 
+	def on_show_status_combobox_changed(self, widget):
+		active = widget.get_active()
+		model = widget.get_model()
+		show_status = model[active][1]
+		(model2, iter) = self.selection.get_selected()
+		if iter:
+			model2[iter][6] = show_status
+
 	def clear_fields(self):
 		widgets = [ self.title_entry, self.nick_entry, self.room_entry,
 			self.server_entry, self.pass_entry ]
 		for field in widgets:
 			field.set_text('')
 		self.autojoin_checkbutton.set_active(False)
+		self.show_status_combobox.set_active(0)
 
 class AccountCreationWizardWindow:
 	def __init__(self):

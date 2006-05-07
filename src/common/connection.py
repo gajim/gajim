@@ -838,6 +838,8 @@ class Connection(ConnectionHandlers):
 				iq5 = iq4.setTagData('nick', bm['nick'])
 			if bm['password']:
 				iq5 = iq4.setTagData('password', bm['password'])
+			if bm['show_status']:
+				iq5 = iq4.setTagData('show_status', bm['show_status'])
 		self.connection.send(iq)
 
 	def get_metacontacts(self):

@@ -531,8 +531,6 @@ class GroupchatControl(ChatControlBase):
 				# muc-specific chatstate
 				self.parent_win.redraw_tab(self, 'newmsg')
 		else:
-			if not gajim.config.get('print_status_in_muc'):
-				return
 			kind = 'status'
 
 		if kind == 'incoming': # it's a message NOT from us
@@ -841,18 +839,33 @@ class GroupchatControl(ChatControlBase):
 		self.parent_win.redraw_tab(self)
 		if (time.time() - self.room_creation) > 30 and \
 				nick != self.nick and statusCode != '303':
-			if show == 'offline':
+			st = ''
+			found = False
+			for bookmark in gajim.connections[self.account].bookmarks:
+				if bookmark['jid'] == self.room_jid:
+					found = True
+					break
+			show_status = None
+			if found:
+				show_status = bookmark['show_status']
+			if not show_status:
+				if gajim.config.get('print_status_in_muc'):
+					show_status = 'all'
+				else:
+					show_status = 'none'
+			if show == 'offline' and show_status in ('all', 'in_and_out'):
 				st = _('%s has left') % nick
 				if reason:
 					st += ' [%s]' % reason
 			else:
-				if newly_created:
+				if newly_created and show_status in ('all', 'in_and_out'):
 					st = _('%s has joined the room') % nick
-				else:
+				elif show_status == 'all':
 					st = _('%s is now %s') % (nick, helpers.get_uf_show(show))
-			if status:
-				st += ' (' + status + ')'
-			self.print_conversation(st)
+			if st:
+				if status:
+					st += ' (' + status + ')'
+				self.print_conversation(st)
 
 	def add_contact_to_roster(self, nick, show, role, affiliation, status,
 	jid = ''):
