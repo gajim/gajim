@@ -140,35 +140,35 @@ class GroupchatControl(ChatControlBase):
 		widget = self.xml.get_widget('muc_window_actions_button')
 		id = widget.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = widget
-		
+
 		widget = self.xml.get_widget('list_treeview')
 		id = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
 		self.handlers[id] = widget
-		
+
 		id = widget.connect('row_collapsed', 
 			self.on_list_treeview_row_collapsed)
 		self.handlers[id] = widget
-		
+
 		id = widget.connect('row_activated', 
 			self.on_list_treeview_row_activated)
 		self.handlers[id] = widget
-		
+
 		id = widget.connect('button_press_event', 
 			self.on_list_treeview_button_press_event)
 		self.handlers[id] = widget
-		
+
 		id = widget.connect('key_press_event', 
 			self.on_list_treeview_key_press_event)
 		self.handlers[id] = widget
-		
+
 		id = widget.connect('motion_notify_event', 
 			self.on_list_treeview_motion_notify_event)
 		self.handlers[id] = widget
-		
+
 		id = widget.connect('leave_notify_event', 
 			self.on_list_treeview_leave_notify_event)
 		self.handlers[id] = widget
-	
+
 		self.room_jid = self.contact.jid
 		self.nick = contact.name
 		self.name = self.room_jid.split('@')[0]
@@ -223,11 +223,11 @@ class GroupchatControl(ChatControlBase):
 		widget = xm.get_widget('compact_view_menuitem')
 		id = widget.connect('activate', self._on_compact_view_menuitem_activate)
 		self.handlers[id] = widget
-		
+
 		widget = xm.get_widget('history_menuitem')
 		id = widget.connect('activate', self._on_history_menuitem_activate)
 		self.handlers[id] = widget
-		
+
 		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
@@ -1584,6 +1584,22 @@ class GroupchatControl(ChatControlBase):
 						widget.collapse_row(path)
 					else:
 						widget.expand_row(path, False)
+			elif event.state & gtk.gdk.SHIFT_MASK:
+				message_buffer = self.msg_textview.get_buffer()
+				start_iter, end_iter = message_buffer.get_bounds()
+				cursor_position = message_buffer.get_insert()
+				end_iter = message_buffer.get_iter_at_mark(cursor_position)
+				text = message_buffer.get_text(start_iter, end_iter, False)
+				start = ''
+				if text: # Cursor is not at first position
+					if not text[-1] in (' ', '\n', '\t'):
+						start = ' '
+					add = ' '
+				else:
+					add = self.gc_refer_to_nick_char + ' '
+				message_buffer.insert_at_cursor(start + nick + add)
+				self.msg_textview.grab_focus()
+				return True
 
 	def on_list_treeview_motion_notify_event(self, widget, event):
 		model = widget.get_model()
