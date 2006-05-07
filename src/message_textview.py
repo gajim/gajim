@@ -53,6 +53,13 @@ class MessageTextView(gtk.TextView):
 	def destroy(self):
 		import gc
 		gobject.idle_add(lambda:gc.collect())
+
+	def clear(self, widget = None):
+		'''clear text in the textview'''
+		buffer = self.get_buffer()
+		start, end = buffer.get_bounds()
+		buffer.delete(start, end)
+
 if gobject.pygtk_version < (2, 8, 0):
 	gobject.type_register(MessageTextView)
 

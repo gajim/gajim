@@ -292,6 +292,9 @@ class GroupchatControl(ChatControlBase):
 		column.set_visible(False)
 		self.list_treeview.set_expander_column(column)
 
+		id = self.msg_textview.connect('populate_popup',
+			self.on_msg_textview_populate_popup)
+		self.handlers[id] = self.msg_textview
 		# set an empty subject to show the room_jid
 		self.set_subject('')
 		self.got_disconnected() #init some variables
@@ -299,6 +302,29 @@ class GroupchatControl(ChatControlBase):
 		self.update_ui()
 		self.conv_textview.tv.grab_focus()
 		self.widget.show_all()
+
+	def on_msg_textview_populate_popup(self, textview, menu):
+		'''we override the default context menu and we prepend Clear
+		and the ability to insert a nick'''
+		item = gtk.SeparatorMenuItem()
+		menu.prepend(item)
+		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+		menu.prepend(item)
+		id = item.connect('activate', self.msg_textview.clear)
+		self.handlers[id] = item
+
+		item = gtk.MenuItem(_('Insert Nickname'))
+		menu.prepend(item)
+		submenu = gtk.Menu()
+		item.set_submenu(submenu)
+
+		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+			item = gtk.MenuItem(nick)
+			submenu.append(item)
+			id = item.connect('activate', self.append_nick_in_msg_textview, nick)
+			self.handlers[id] = item
+
+		menu.show_all()
 
 	def notify_on_new_messages(self):
 		return gajim.config.get('notify_on_all_muc_messages') or \
@@ -1585,21 +1611,24 @@ class GroupchatControl(ChatControlBase):
 					else:
 						widget.expand_row(path, False)
 			elif event.state & gtk.gdk.SHIFT_MASK:
-				message_buffer = self.msg_textview.get_buffer()
-				start_iter, end_iter = message_buffer.get_bounds()
-				cursor_position = message_buffer.get_insert()
-				end_iter = message_buffer.get_iter_at_mark(cursor_position)
-				text = message_buffer.get_text(start_iter, end_iter, False)
-				start = ''
-				if text: # Cursor is not at first position
-					if not text[-1] in (' ', '\n', '\t'):
-						start = ' '
-					add = ' '
-				else:
-					add = self.gc_refer_to_nick_char + ' '
-				message_buffer.insert_at_cursor(start + nick + add)
+				self.append_nick_in_msg_textview(self.msg_textview, nick)
 				self.msg_textview.grab_focus()
 				return True
+
+	def append_nick_in_msg_textview(self, widget, nick):
+		message_buffer = self.msg_textview.get_buffer()
+		start_iter, end_iter = message_buffer.get_bounds()
+		cursor_position = message_buffer.get_insert()
+		end_iter = message_buffer.get_iter_at_mark(cursor_position)
+		text = message_buffer.get_text(start_iter, end_iter, False)
+		start = ''
+		if text: # Cursor is not at first position
+			if not text[-1] in (' ', '\n', '\t'):
+				start = ' '
+			add = ' '
+		else:
+			add = self.gc_refer_to_nick_char + ' '
+		message_buffer.insert_at_cursor(start + nick + add)
 
 	def on_list_treeview_motion_notify_event(self, widget, event):
 		model = widget.get_model()
