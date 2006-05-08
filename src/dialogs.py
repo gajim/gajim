@@ -783,10 +783,10 @@ class InputDialog:
 ok_handler = None):
 		# if modal is True you also need to call get_response()
 		# and ok_handler won't be used
-		xml = gtkgui_helpers.get_glade('input_dialog.glade')
-		self.dialog = xml.get_widget('input_dialog')
-		label = xml.get_widget('label')
-		self.input_entry = xml.get_widget('input_entry')
+		self.xml = gtkgui_helpers.get_glade('input_dialog.glade')
+		self.dialog = self.xml.get_widget('input_dialog')
+		label = self.xml.get_widget('label')
+		self.input_entry = self.xml.get_widget('input_entry')
 		self.dialog.set_title(title)
 		label.set_markup(label_str)
 		if input_str:
@@ -796,9 +796,9 @@ ok_handler = None):
 		self.is_modal = is_modal
 		if not is_modal and ok_handler is not None:
 			self.ok_handler = ok_handler
-			okbutton = xml.get_widget('okbutton')
+			okbutton = self.xml.get_widget('okbutton')
 			okbutton.connect('clicked', self.on_okbutton_clicked)
-			cancelbutton = xml.get_widget('cancelbutton')
+			cancelbutton = self.xml.get_widget('cancelbutton')
 			cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
 			self.dialog.show_all()
 
@@ -987,7 +987,7 @@ _('You can not join a group chat unless you are connected.'))
 
 		self.window.destroy()
 
-class NewChatDialog:
+class NewChatDialog(InputDialog):
 	def __init__(self, account):
 		self.account = account
 		
@@ -996,8 +996,46 @@ class NewChatDialog:
 		else:
 			title = _('Start Chat')
 		prompt_text = _('Fill in the contact ID of the contact you would like\nto send a chat message to:')
+		InputDialog.__init__(self, title, prompt_text, is_modal = False)
+		# create the completion model for input_entry
+		completion = gtk.EntryCompletion()
+		liststore = gtk.ListStore(gtk.gdk.Pixbuf, str)
+		
+		render_pixbuf = gtk.CellRendererPixbuf()
+		completion.pack_start(render_pixbuf, expand = False)
+		completion.add_attribute(render_pixbuf, 'pixbuf', 0)
+		
+		render_text = gtk.CellRendererText()
+		completion.pack_start(render_text, expand = True)
+		completion.add_attribute(render_text, 'text', 1)
+		completion.set_property('text_column', 1)
+		# add all contacts to the model
+		self.completion_dict = {}
+		for jid in gajim.contacts.get_jid_list(account):
+			contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+			self.completion_dict[jid] = contact
+			name = contact.name
+			if self.completion_dict.has_key(name):
+				contact1 = self.completion_dict[name]
+				del self.completion_dict[name]
+				self.completion_dict['%s (%s)' % (name, contact1.jid)] = contact1
+				self.completion_dict['%s (%s)' % (name, jid)] = contact
+			else:
+				self.completion_dict[name] = contact
+		for jid in self.completion_dict.keys():
+			contact = self.completion_dict[jid]
+			img =  gajim.interface.roster.jabber_state_images['16'][contact.show]
+			liststore.append((img.get_pixbuf(), jid))
 
-		InputDialog(title, prompt_text, is_modal = False, ok_handler = self.new_chat_response)
+		completion.set_model(liststore)
+		self.input_entry.set_completion(completion)
+
+		self.ok_handler = self.new_chat_response
+		okbutton = self.xml.get_widget('okbutton')
+		okbutton.connect('clicked', self.on_okbutton_clicked)
+		cancelbutton = self.xml.get_widget('cancelbutton')
+		cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
+		self.dialog.show_all()
 			
 	def new_chat_response(self, jid):
 		''' called when ok button is clicked '''
@@ -1007,6 +1045,8 @@ class NewChatDialog:
 		_('Please make sure you are connected with "%s".' % self.account))
 			return
 
+		if self.completion_dict.has_key(jid):
+			jid = self.completion_dict[jid].jid
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
 class ChangePasswordDialog:
