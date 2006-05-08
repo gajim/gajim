@@ -1028,12 +1028,12 @@ class AccountModificationWindow:
 		else:
 			our_proxy = ''
 		if not our_proxy:
-			our_proxy = 'None'
+			our_proxy = _('None')
 		self.proxy_combobox = self.xml.get_widget('proxies_combobox')
 		model = gtk.ListStore(str)
 		self.proxy_combobox.set_model(model)
 		l = gajim.config.get_per('proxies')
-		l.insert(0, 'None')
+		l.insert(0, _('None'))
 		for i in xrange(len(l)):
 			model.append([l[i]])
 			if our_proxy == l[i]:
@@ -1205,7 +1205,7 @@ class AccountModificationWindow:
 
 		active = self.proxy_combobox.get_active()
 		proxy = self.proxy_combobox.get_model()[active][0].decode('utf-8')
-		if proxy == 'None':
+		if proxy == _('None'):
 			proxy = ''
 		config['proxy'] = proxy
 
@@ -1485,7 +1485,7 @@ class ManageProxiesWindow:
 		model = self.proxies_treeview.get_model()
 		model.clear()
 		iter = model.append()
-		model.set(iter, 0, 'None')
+		model.set(iter, 0, _('None'))
 		for p in gajim.config.get_per('proxies'):
 			iter = model.append()
 			model.set(iter, 0, p)
@@ -1558,7 +1558,7 @@ class ManageProxiesWindow:
 		proxypass_entry.set_text('')
 		useauth_checkbutton.set_active(False)
 		self.on_useauth_checkbutton_toggled(useauth_checkbutton)
-		if proxy == 'None': # special proxy None
+		if proxy == _('None'): # special proxy None
 			self.proxyname_entry.set_editable(False)
 			self.xml.get_widget('remove_proxy_button').set_sensitive(False)
 			self.xml.get_widget('proxytype_combobox').set_sensitive(False)
