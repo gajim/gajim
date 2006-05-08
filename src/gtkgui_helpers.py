@@ -50,6 +50,25 @@ def get_glade(file_name, root = None):
 	file_path = os.path.join(GLADE_DIR, file_name)
 	return gtk.glade.XML(file_path, root=root, domain=i18n.APP)
 
+def get_completion_liststore(entry):
+	''' create a completion model for entry widget
+	completion list consists of (Pixbuf, Text) rows'''
+	completion = gtk.EntryCompletion()
+	liststore = gtk.ListStore(gtk.gdk.Pixbuf, str)
+	
+	render_pixbuf = gtk.CellRendererPixbuf()
+	completion.pack_start(render_pixbuf, expand = False)
+	completion.add_attribute(render_pixbuf, 'pixbuf', 0)
+	
+	render_text = gtk.CellRendererText()
+	completion.pack_start(render_text, expand = True)
+	completion.add_attribute(render_text, 'text', 1)
+	completion.set_property('text_column', 1)
+	completion.set_model(liststore)
+	entry.set_completion(completion)
+	return liststore
+	
+	
 def popup_emoticons_under_button(menu, button, parent_win):
 	''' pops emoticons menu under button, which is in parent_win'''
 	window_x1, window_y1 = parent_win.get_origin()

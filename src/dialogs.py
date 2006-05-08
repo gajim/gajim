@@ -997,20 +997,10 @@ class NewChatDialog(InputDialog):
 			title = _('Start Chat')
 		prompt_text = _('Fill in the jid, or nick of the contact you would like\nto send a chat message to:')
 		InputDialog.__init__(self, title, prompt_text, is_modal = False)
-		# create the completion model for input_entry
-		completion = gtk.EntryCompletion()
-		liststore = gtk.ListStore(gtk.gdk.Pixbuf, str)
 		
-		render_pixbuf = gtk.CellRendererPixbuf()
-		completion.pack_start(render_pixbuf, expand = False)
-		completion.add_attribute(render_pixbuf, 'pixbuf', 0)
-		
-		render_text = gtk.CellRendererText()
-		completion.pack_start(render_text, expand = True)
-		completion.add_attribute(render_text, 'text', 1)
-		completion.set_property('text_column', 1)
-		# add all contacts to the model
 		self.completion_dict = {}
+		liststore = gtkgui_helpers.get_completion_liststore(self.input_entry)
+		# add all contacts to the model
 		for jid in gajim.contacts.get_jid_list(account):
 			contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 			self.completion_dict[jid] = contact
@@ -1026,9 +1016,6 @@ class NewChatDialog(InputDialog):
 			contact = self.completion_dict[jid]
 			img =  gajim.interface.roster.jabber_state_images['16'][contact.show]
 			liststore.append((img.get_pixbuf(), jid))
-
-		completion.set_model(liststore)
-		self.input_entry.set_completion(completion)
 
 		self.ok_handler = self.new_chat_response
 		okbutton = self.xml.get_widget('okbutton')
