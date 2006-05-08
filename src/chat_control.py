@@ -454,7 +454,8 @@ class ChatControlBase(MessageControl):
 
 	def print_conversation_line(self, text, kind, name, tim,
 		other_tags_for_name = [], other_tags_for_time = [], 
-		other_tags_for_text = [], count_as_new = True, subject = None):
+		other_tags_for_text = [], count_as_new = True,
+		subject = None, old_kind = None):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
 		full_jid = self.get_full_jid()
@@ -463,7 +464,8 @@ class ChatControlBase(MessageControl):
 		if textview.at_the_end() or kind == 'outgoing':
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
-			other_tags_for_name, other_tags_for_time, other_tags_for_text, subject)
+			other_tags_for_name, other_tags_for_time, other_tags_for_text,
+			subject, old_kind)
 
 		if not count_as_new:
 			return
@@ -705,7 +707,8 @@ class ChatControlBase(MessageControl):
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
-
+	old_msg_kind = None # last kind of the printed message
+	
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
 			(_('Chat'), _('Chats')), contact, acct, resource)
@@ -1095,9 +1098,13 @@ class ChatControl(ChatControlBase):
 				name = contact.get_shown_name()
 			else:
 				kind = 'outgoing'
-				name = gajim.nicks[self.account] 
+				name = gajim.nicks[self.account]
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
-			subject = subject)
+			subject = subject, old_kind = self.old_msg_kind)
+		if text.startswith('/me ') or text.startswith('/me\n'):
+			self.old_msg_kind = None
+		else:
+			self.old_msg_kind = kind
 
 	def get_tab_label(self, chatstate):
 		unread = ''
@@ -1443,7 +1450,7 @@ class ChatControl(ChatControlBase):
 
 		rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
 			pending_how_many, timeout)
-		
+		local_old_kind = None
 		for row in rows: # row[0] time, row[1] has kind, row[2] the message
 			if not row[2]: # message is empty, we don't print it
 				continue
@@ -1462,7 +1469,11 @@ class ChatControl(ChatControlBase):
 								['small'],
 								['small', 'restored_message'],
 								['small', 'restored_message'],
-								False)
+								False, old_kind = local_old_kind)
+			if row[2].startswith('/me ') or row[2].startswith('/me\n'):
+				local_old_kind = None
+			else:
+				local_old_kind = kind
 		if len(rows):
 			self.conv_textview.print_empty_line()
 

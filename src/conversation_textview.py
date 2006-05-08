@@ -567,7 +567,7 @@ class ConversationTextview:
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
 			other_tags_for_name = [], other_tags_for_time = [],
-			other_tags_for_text = [], subject = None):
+			other_tags_for_text = [], subject = None, old_kind = None):
 		'''prints 'chat' type messages'''
 		# kind = info, we print things as if it was a status: same color, ...
 		if kind == 'info':
@@ -583,11 +583,14 @@ class ConversationTextview:
 			buffer.insert(end_iter, '\n')
 		if kind == 'incoming_queue':
 			kind = 'incoming'
+		if old_kind == 'incoming_queue':
+			old_kind = 'incoming'
 		# print the time stamp
 		if not tim:
 			# We don't have tim for outgoing messages...
 			tim = time.localtime()
-		if gajim.config.get('print_time') == 'always':
+		current_print_time = gajim.config.get('print_time')
+		if current_print_time == 'always':
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
 			# get difference in days since epoch (86400 = 24*3600)
@@ -611,7 +614,7 @@ class ConversationTextview:
 			tim_format = time.strftime(format, tim).encode('utf-8')
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
-		elif gajim.config.get('print_time') == 'sometimes':
+		elif current_print_time == 'sometimes':
 			every_foo_seconds = 60 * gajim.config.get(
 				'print_ichat_every_foo_minutes')
 			seconds_passed = time.mktime(tim) - self.last_time_printout
@@ -627,7 +630,15 @@ class ConversationTextview:
 		if other_text_tag:
 			text_tags.append(other_text_tag)
 		else: # not status nor /me
-			self.print_name(name, kind, other_tags_for_name)
+			if gajim.config.get(
+				'chat_merge_consecutive_nickname'):
+				if kind != old_kind:
+					self.print_name(name, kind, other_tags_for_name)
+				else:
+					self.print_real_text(gajim.config.get(
+						'chat_merge_consecutive_nickname_indent'))
+			else:
+				self.print_name(name, kind, other_tags_for_name)
 		self.print_subject(subject)
 		self.print_real_text(text, text_tags, name)
 

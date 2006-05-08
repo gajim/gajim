@@ -198,6 +198,8 @@ class Config:
 		'hide_groupchat_banner': [opt_bool, False, _('Hides the banner in a group chat window')],
 		'hide_chat_banner': [opt_bool, False, _('Hides the banner in two persons chat window')],
 		'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the room occupants list in groupchat window')],
+		'chat_merge_consecutive_nickname': [opt_bool, False, _('Merge consecutive nickname in chat window')],
+		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickame')],
 	}
 
 	__options_per_key = {
