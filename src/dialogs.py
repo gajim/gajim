@@ -995,7 +995,7 @@ class NewChatDialog(InputDialog):
 			title = _('Start Chat with account %s') % account
 		else:
 			title = _('Start Chat')
-		prompt_text = _('Fill in the contact ID of the contact you would like\nto send a chat message to:')
+		prompt_text = _('Fill in the jid, or nick of the contact you would like\nto send a chat message to:')
 		InputDialog.__init__(self, title, prompt_text, is_modal = False)
 		# create the completion model for input_entry
 		completion = gtk.EntryCompletion()
