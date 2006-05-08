@@ -56,6 +56,7 @@ class Systray:
 	def __init__(self):
 		self.jids = [] # Contain things like [account, jid, type_of_msg]
 		self.single_message_handler_id = None
+		self.new_chat_handler_id = None
 		self.t = None
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
@@ -109,6 +110,9 @@ class Systray:
 	def on_single_message_menuitem_activate(self, widget, account):
 		dialogs.SingleMessageWindow(account, action = 'send')
 
+	def on_new_chat(self, widget, account):
+		dialogs.NewChatDialog(account)
+	
 	def make_menu(self, event = None):
 		'''create chat with and new message (sub) menus/menuitems
 		event is None when we're in Windows
@@ -126,6 +130,9 @@ class Systray:
 			single_message_menuitem.handler_disconnect(
 				self.single_message_handler_id)
 			self.single_message_handler_id = None
+		if self.new_chat_handler_id:
+			chat_with_menuitem.disconnect(self.new_chat_handler_id)
+			self.new_chat_handler_id = None
 
 		sub_menu = gtk.Menu()
 		self.popup_menus.append(sub_menu)
@@ -192,9 +199,7 @@ class Systray:
 					#for chat_with
 					item = gtk.MenuItem(_('using account %s') % account)
 					account_menu_for_chat_with.append(item)
-					group_menu = self.make_groups_submenus_for_chat_with(account)
-					self.popup_menus.append(group_menu)
-					item.set_submenu(group_menu)
+					item.connect('activate', self.on_new_chat, account)
 
 					#for single message
 					item = gtk.MenuItem(_('using account %s') % account)
@@ -215,11 +220,8 @@ class Systray:
 			# one account connected, no need to show 'as jid'
 			for account in gajim.connections:
 				if gajim.connections[account].connected > 1:
-					# for chat_with
-					group_menu = self.make_groups_submenus_for_chat_with(account)
-					self.popup_menus.append(group_menu)
-					chat_with_menuitem.set_submenu(group_menu)
-							
+					self.new_chat_handler_id = chat_with_menuitem.connect(
+							'activate', self.on_new_chat, account)
 					# for single message
 					single_message_menuitem.remove_submenu()
 					self.single_message_handler_id = single_message_menuitem.connect(
@@ -258,6 +260,7 @@ class Systray:
 	def on_quit_menuitem_activate(self, widget):	
 		gajim.interface.roster.on_quit_menuitem_activate(widget)
 
+	# XXX delete this function (no longer used)
 	def make_groups_submenus_for_chat_with(self, account):
 		iconset = gajim.config.get('iconset')
 		if not iconset:
