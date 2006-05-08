@@ -179,6 +179,25 @@ def convert_bytes(string):
 		suffix = _('%s B')
 	return suffix % unicode(bytes)
 
+
+def get_contact_dict_for_account(account):
+	''' create a dict of jid, nick -> contact with all contacts of account.
+	Can be used for completion lists'''
+	contacts_dict = {}
+	for jid in gajim.contacts.get_jid_list(account):
+		contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+		contacts_dict[jid] = contact
+		name = contact.name
+		if contacts_dict.has_key(name):
+			contact1 = contacts_dict[name]
+			del contacts_dict[name]
+			contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
+			contacts_dict['%s (%s)' % (name, jid)] = contact
+		else:
+			contacts_dict[name] = contact
+	return contacts_dict
+
 def get_uf_show(show, use_mnemonic = False):
 	'''returns a userfriendly string for dnd/xa/chat
 	and makes all strings translatable

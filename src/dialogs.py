@@ -1000,18 +1000,8 @@ class NewChatDialog(InputDialog):
 		
 		self.completion_dict = {}
 		liststore = gtkgui_helpers.get_completion_liststore(self.input_entry)
+		self.completion_dict = helpers.get_contact_dict_for_account(account)
 		# add all contacts to the model
-		for jid in gajim.contacts.get_jid_list(account):
-			contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-			self.completion_dict[jid] = contact
-			name = contact.name
-			if self.completion_dict.has_key(name):
-				contact1 = self.completion_dict[name]
-				del self.completion_dict[name]
-				self.completion_dict['%s (%s)' % (name, contact1.jid)] = contact1
-				self.completion_dict['%s (%s)' % (name, jid)] = contact
-			else:
-				self.completion_dict[name] = contact
 		for jid in self.completion_dict.keys():
 			contact = self.completion_dict[jid]
 			img =  gajim.interface.roster.jabber_state_images['16'][contact.show]
@@ -1252,29 +1242,17 @@ class SingleMessageWindow:
 			self.subject = ''
 		self.subject_entry.set_text(self.subject)
 
-		self.completion_dict = {}
+
 		if to == '':
 			liststore = gtkgui_helpers.get_completion_liststore(self.to_entry)
-			# add all contacts to the model
-			for jid in gajim.contacts.get_jid_list(account):
-				contact = gajim.contacts.get_contact_with_highest_priority(
-							account, jid)
-				self.completion_dict[jid] = contact
-				name = contact.name
-				if self.completion_dict.has_key(name):
-					contact1 = self.completion_dict[name]
-					del self.completion_dict[name]
-					self.completion_dict['%s (%s)' % (name, contact1.jid)] = \
-						contact1
-					self.completion_dict['%s (%s)' % (name, jid)] = contact
-				else:
-					self.completion_dict[name] = contact
+			self.completion_dict = helpers.get_contact_dict_for_account(account)
 			for jid in self.completion_dict.keys():
 				contact = self.completion_dict[jid]
 				img = gajim.interface.roster.jabber_state_images['16'][
 						contact.show]
 				liststore.append((img.get_pixbuf(), jid))
-
+		else:
+			self.completion_dict = {}
 		self.xml.signal_autoconnect(self)
 
 		if gajim.config.get('saveposition'):
