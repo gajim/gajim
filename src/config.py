@@ -2446,8 +2446,9 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 			self.pass_entry.set_text(password)
 		else:
 			self.pass_entry.set_text('')
-		nick = model[iter][5].decode('utf-8')
+		nick = model[iter][5]
 		if nick:
+			nick = nick.decode('utf-8')
 			self.nick_entry.set_text(nick)
 		else:
 			self.nick_entry.set_text('')
