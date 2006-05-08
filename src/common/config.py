@@ -82,7 +82,7 @@ class Config:
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
 		'use_speller': [ opt_bool, False, ],
-		'print_time': [ opt_str, 'always' ],
+		'print_time': [ opt_str, 'always',  _('\'always\' - print time for every message.\n\'sometimes\' - print time every print_ichat_every_foo_minutes minute.\n\'never\' - never print time.')],
 		'emoticons_theme': [opt_str, 'static', '', True ],
 		'ascii_formatting': [ opt_bool, True,
 			_('Treat * / _ pairs as possible formatting characters.'), True],
@@ -96,8 +96,8 @@ class Config:
 		'custommailapp': [ opt_str, 'mozilla-thunderbird -compose' ],
 		'custom_file_manager': [ opt_str, 'xffm' ],
 		'gc-hpaned-position': [opt_int, 540],
-		'gc_refer_to_nick_char': [opt_str, ','],
-		'gc_proposed_nick_char': [opt_str, '_'],
+		'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nick completion (tab) in group chat')],
+		'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when desired nickname is used by someone else in group chat')],
 		'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-width': [opt_int, 480],
@@ -142,7 +142,7 @@ class Config:
 		'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
 		'autodetect_browser_mailer': [opt_bool, False, '', True],
-		'print_ichat_every_foo_minutes': [opt_int, 5],
+		'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes')],
 		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
 		'confirm_close_muc_rooms': [opt_str, '', _('Always ask before closing group chat tab/window in this space separated list of room jids.')],
 		'noconfirm_close_muc_rooms': [opt_str, '', _('Never ask before closing group chat tab/window in this space separated list of room jids.')],
@@ -184,7 +184,7 @@ class Config:
 		'print_status_in_muc': [opt_bool, True, _('If False, Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message.')],
 		'log_contact_status_changes': [opt_bool, False],
 		'restored_messages_color': [opt_str, 'grey'],
-		'hide_avatar_of_transport': [opt_bool, False],
+		'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
 		'roster_window_skip_taskbar': [opt_bool, False],
 		'use_urgency_hint': [opt_bool, True, _('If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],
 		'notification_timeout': [opt_int, 5],
