@@ -216,6 +216,12 @@ class GajimRemote:
 				_('Returns number of unreaded messages'),
 					[ ]
 				],
+			'start_chat': [
+				_('Open \'Start Chat\' dialog'),
+					[
+						(_('account'), _('Starts chat, using this account'), True)
+					]
+				],
 			}
 		if self.argv_len  < 2 or \
 			sys.argv[1] not in self.commands.keys(): # no args or bad args
@@ -246,7 +252,7 @@ class GajimRemote:
 	def print_result(self, res):
 		''' Print retrieved result to the output '''
 		if res is not None:
-			if self.command in ('open_chat', 'send_message'):
+			if self.command in ('open_chat', 'send_message', 'start_chat'):
 				if self.command == 'send_message':
 					self.argv_len -= 2
 				

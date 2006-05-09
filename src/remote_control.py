@@ -32,7 +32,7 @@ from common import gajim
 from common import helpers
 from time import time
 from common import i18n
-from dialogs import AddNewContactWindow
+from dialogs import AddNewContactWindow, NewChatDialog
 _ = i18n._
 
 import dbus_support
@@ -171,6 +171,7 @@ class SignalObject(DbusPrototype):
 				self.remove_contact,
 				self.get_status,
 				self.get_status_message,
+				self.start_chat,
 			])
 
 	def raise_signal(self, signal, arg):
@@ -546,6 +547,14 @@ class SignalObject(DbusPrototype):
 	def get_unread_msgs_number(self, *args):
 		return str(gajim.interface.roster.nb_unread)
 
+	def start_chat(self, *args):
+		[account] = self._get_real_arguments(args, 1)
+		if not account:
+			# error is shown in gajim-remote check_arguments(..)
+			return None
+		NewChatDialog(account)
+		return True
+
 	if dbus_support.version[1] >= 30 and dbus_support.version[1] <= 40:
 		method = dbus.method
 		signal = dbus.signal
@@ -575,3 +584,4 @@ class SignalObject(DbusPrototype):
 	get_status_message = method(INTERFACE)(get_status_message)
 	account_info = method(INTERFACE)(account_info)
 	get_unread_msgs_number = method(INTERFACE)(get_unread_msgs_number)
+	start_chat = method(INTERFACE)(start_chat)
