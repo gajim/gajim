@@ -11,6 +11,7 @@ data/glade/accounts_window.glade
 data/glade/add_new_contact_window.glade
 data/glade/advanced_configuration_window.glade
 data/glade/advanced_menuitem_menu.glade
+data/glade/advanced_notifications_window.glade
 data/glade/change_password_dialog.glade
 data/glade/change_status_message_dialog.glade
 data/glade/chat_context_menu.glade

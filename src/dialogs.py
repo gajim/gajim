@@ -1752,6 +1752,11 @@ class AdvancedNotificationsWindow:
 		self.disable_auto_open_cb = self.xml.get_widget('disable_auto_open_cb')
 		self.use_systray_cb = self.xml.get_widget('use_systray_cb')
 		self.disable_systray_cb = self.xml.get_widget('disable_systray_cb')
+		self.use_roster_cb = self.xml.get_widget('use_roster_cb')
+		self.disable_roster_cb = self.xml.get_widget('disable_roster_cb')
+		
+		self.tab_opened_cb = self.xml.get_widget('tab_opened_cb')
+		self.not_tab_opened_cb = self.xml.get_widget('not_tab_opened_cb')
 		
 		model = gtk.ListStore(str)
 		model.clear()
@@ -1782,7 +1787,10 @@ class AdvancedNotificationsWindow:
 		# Deal with status line
 		self.all_status_rb.set_active(True)
 		self.on_status_radiobutton_toggled(self.all_status_rb)
-		self.recipient_type_combobox.set_active(0)
+		
+		self.recipient_type_combobox.set_active(0) # 'Contact(s)'
+		self.not_tab_opened_cb.set_active(True)
+		self.tab_opened_cb.set_active(True)
 
 	def on_status_radiobutton_toggled(self, widget):
 		if self.all_status_rb.get_active():
@@ -1814,8 +1822,16 @@ class AdvancedNotificationsWindow:
 			self.recipient_list.hide()
 		else:
 			self.recipient_list.show()
+
+	# tab_opened OR (not xor) not_tab_opened must be active
+	def on_tab_opened_cb_toggled(self, widget):
+		if not self.tab_opened_cb.get_active() and not self.not_tab_opened_cb.get_active():
+			self.not_tab_opened_cb.set_active(True)
+	def on_not_tab_opened_cb_toggled(self, widget):
+		if not self.tab_opened_cb.get_active() and not self.not_tab_opened_cb.get_active():
+			self.tab_opened_cb.set_active(True)
 	
-	# 8 next functions : Forbid two incompatible actions to be checked together
+	# 10 next functions : Forbid two incompatible actions to be checked together
 	def on_use_sound_cb_toggled(self, widget):
 		if self.use_sound_cb.get_active() and self.disable_sound_cb.get_active():
 			self.disable_sound_cb.set_active(False)
@@ -1842,6 +1858,12 @@ class AdvancedNotificationsWindow:
 	def on_disable_systray_cb_toggled(self, widget):
 		if self.use_systray_cb.get_active() and self.disable_systray_cb.get_active():
 			self.use_systray_cb.set_active(False)
+	def on_use_roster_cb_toggled(self, widget):
+		if self.use_roster_cb.get_active() and self.disable_roster_cb.get_active():
+			self.disable_roster_cb.set_active(False)
+	def on_disable_roster_cb_toggled(self, widget):
+		if self.use_roster_cb.get_active() and self.disable_roster_cb.get_active():
+			self.use_roster_cb.set_active(False)
 	
 	def on_close_window(self, widget):
 		self.window.destroy()
