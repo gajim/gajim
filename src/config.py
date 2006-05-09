@@ -552,6 +552,9 @@ class PreferencesWindow:
 		gajim.interface.roster.change_roster_style(None)
 		gajim.interface.save_config()
 
+	def on_open_advanced_notifications_button_clicked(self, widget):
+		dialogs.AdvancedNotificationsWindow()
+
 	def on_one_window_type_combo_changed(self, widget):
 		active = widget.get_active()
 		config_type = common.config.opt_one_window_types[active]

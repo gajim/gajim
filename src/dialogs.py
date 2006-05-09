@@ -1717,3 +1717,127 @@ class AddSpecialNotificationDialog:
 		active_iter = self.listen_sound_combobox.get_active_iter()
 		listen_sound_model = self.listen_sound_combobox.get_model()
 		print listen_sound_model[active_iter][0]
+
+class AdvancedNotificationsWindow:
+	def __init__(self):
+		self.xml = gtkgui_helpers.get_glade('advanced_notifications_window.glade')
+		self.window = self.xml.get_widget('advanced_notifications_window')
+		self.xml.signal_autoconnect(self)
+		self.conditions_treeview = self.xml.get_widget('conditions_treeview')
+		self.recipient_type_combobox = self.xml.get_widget('recipient_type_combobox')
+		self.recipient_list = self.xml.get_widget('recipient_list')
+		self.list_expander = self.xml.get_widget('list_expander')
+		
+		self.status_hbox = self.xml.get_widget('status_hbox') 
+		# Contains status checkboxes
+		childs = self.status_hbox.get_children()
+
+		self.all_status_rb = childs[0]
+		self.special_status_rb = childs[1]
+		self.online_cb = childs[2]
+		self.away_cb = childs[3]
+		self.not_available_cb = childs[4]
+		self.busy_cb = childs[5]
+		self.invisible_cb = childs[6]
+		
+		self.use_sound_cb = self.xml.get_widget('use_sound_cb')
+		self.disable_sound_cb = self.xml.get_widget('disable_sound_cb')
+		self.use_popup_cb = self.xml.get_widget('use_popup_cb')
+		self.disable_popup_cb = self.xml.get_widget('disable_popup_cb')
+		self.use_auto_open_cb = self.xml.get_widget('use_auto_open_cb')
+		self.disable_auto_open_cb = self.xml.get_widget('disable_auto_open_cb')
+		self.use_systray_cb = self.xml.get_widget('use_systray_cb')
+		self.disable_systray_cb = self.xml.get_widget('disable_systray_cb')
+		
+		model = gtk.ListStore(str)
+		model.clear()
+		self.conditions_treeview.set_model(model)
+
+		col = gtk.TreeViewColumn(_('Condition'))
+		self.conditions_treeview.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, expand = True)
+		col.set_attributes(renderer, text = 0)
+		
+		if (0==0): # No rule set yet
+			self.list_expander.set_expanded(False)
+				
+		if (0==1): # We have existing rule(s)
+			#temporary example
+			model.append(("When Contact Connected for contact Asterix when I am Available",))
+
+		# TODO : add a "New rule" line
+		
+		self.window.show_all()
+		
+		# No rule selected at init time
+		self.initiate_new_rule_state()
+		
+	def initiate_new_rule_state(self):	
+		'''Set default value to all widgets''' 
+		# Deal with status line
+		self.all_status_rb.set_active(True)
+		self.on_status_radiobutton_toggled(self.all_status_rb)
+		self.recipient_type_combobox.set_active(0)
+
+	def on_status_radiobutton_toggled(self, widget):
+		if self.all_status_rb.get_active():
+			# 'All status' clicked
+			self.online_cb.hide()
+			self.away_cb.hide()
+			self.not_available_cb.hide()
+			self.busy_cb.hide()
+			self.invisible_cb.hide()		
+		
+			self.online_cb.set_active(False)
+			self.away_cb.set_active(False)
+			self.not_available_cb.set_active(False)
+			self.busy_cb.set_active(False)
+			self.invisible_cb.set_active(False)
+		
+			self.special_status_rb.show()			
+		else:
+			# 'special status' clicked
+			self.online_cb.show()
+			self.away_cb.show()
+			self.not_available_cb.show()
+			self.busy_cb.show()
+			self.invisible_cb.show()
+		
+			self.special_status_rb.hide()
+	def on_recipient_type_combobox_changed(self, widget):
+		if (self.recipient_type_combobox.get_active()==2 ):
+			self.recipient_list.hide()
+		else:
+			self.recipient_list.show()
+	
+	# 8 next functions : Forbid two incompatible actions to be checked together
+	def on_use_sound_cb_toggled(self, widget):
+		if self.use_sound_cb.get_active() and self.disable_sound_cb.get_active():
+			self.disable_sound_cb.set_active(False)
+	def on_disable_sound_cb_toggled(self, widget):
+		if self.use_sound_cb.get_active() and self.disable_sound_cb.get_active():
+			self.use_sound_cb.set_active(False)
+	def on_use_popup_cb_toggled(self, widget):
+		if self.use_popup_cb.get_active() and self.disable_popup_cb.get_active():
+			self.disable_popup_cb.set_active(False)
+	def on_disable_popup_cb_toggled(self, widget):
+		if self.use_popup_cb.get_active() and self.disable_popup_cb.get_active():
+			self.use_popup_cb.set_active(False)	
+	def on_use_auto_open_cb_toggled(self, widget):
+		if self.use_auto_open_cb.get_active() and\
+			self.disable_auto_open_cb.get_active():
+			self.disable_auto_open_cb.set_active(False)
+	def on_disable_auto_open_cb_toggled(self, widget):
+		if self.use_auto_open_cb.get_active() and\
+			self.disable_auto_open_cb.get_active():
+			self.use_auto_open_cb.set_active(False)
+	def on_use_systray_cb_toggled(self, widget):
+		if self.use_systray_cb.get_active() and self.disable_systray_cb.get_active():
+			self.disable_systray_cb.set_active(False)
+	def on_disable_systray_cb_toggled(self, widget):
+		if self.use_systray_cb.get_active() and self.disable_systray_cb.get_active():
+			self.use_systray_cb.set_active(False)
+	
+	def on_close_window(self, widget):
+		self.window.destroy()
