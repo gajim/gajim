@@ -1002,7 +1002,9 @@ class NewChatDialog(InputDialog):
 		liststore = gtkgui_helpers.get_completion_liststore(self.input_entry)
 		self.completion_dict = helpers.get_contact_dict_for_account(account)
 		# add all contacts to the model
-		for jid in self.completion_dict.keys():
+		keys = self.completion_dict.keys()
+		keys.sort()
+		for jid in keys:
 			contact = self.completion_dict[jid]
 			img =  gajim.interface.roster.jabber_state_images['16'][contact.show]
 			liststore.append((img.get_pixbuf(), jid))
@@ -1246,7 +1248,9 @@ class SingleMessageWindow:
 		if to == '':
 			liststore = gtkgui_helpers.get_completion_liststore(self.to_entry)
 			self.completion_dict = helpers.get_contact_dict_for_account(account)
-			for jid in self.completion_dict.keys():
+			keys = self.completion_dict.keys()
+			keys.sort()
+			for jid in keys:
 				contact = self.completion_dict[jid]
 				img = gajim.interface.roster.jabber_state_images['16'][
 						contact.show]
