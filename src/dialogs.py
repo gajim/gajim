@@ -1114,7 +1114,7 @@ class PopupNotificationWindow:
 			bg_color = 'yellowgreen'
 		elif event_type == _('Groupchat Invitation'):
 			bg_color = 'tan1'
-		elif event_type == _('Contact Changed status'):			
+		elif event_type == _('Contact Changed Status'):			
 			bg_color = 'thistle2'
 		else: # Unknown event ! Shouldn't happen but deal with it
 			bg_color = 'white'

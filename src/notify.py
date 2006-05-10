@@ -94,7 +94,7 @@ def notify(event, jid, account, parameters):
 					'status': helpers.get_uf_show(gajim.SHOW_LIST[new_show])}
 				if status_message:
 					text =  text + " : " + status_message
-				popup(_('Contact Changed status'), jid, account,
+				popup(_('Contact Changed Status'), jid, account,
 					path_to_image = path, title = title, text = text)
 			elif (event == 'contact_connected'):
 				title = _('%(nickname)s Signed In') % \
@@ -229,7 +229,7 @@ class DesktopNotification:
 			ntype = 'email.arrived'
 		elif event_type == _('Groupchat Invitation'):
 			ntype = 'im.invitation'
-		elif event_type == _('Contact Changed status'):
+		elif event_type == _('Contact Changed Status'):
 			ntype = 'presence.status'
 		else:
 			# default failsafe values
