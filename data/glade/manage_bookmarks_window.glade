@@ -423,12 +423,12 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkComboBox" id="show_status_combobox">
+		<widget class="GtkComboBox" id="print_status_combobox">
 		  <property name="visible">True</property>
 		  <property name="items" translatable="yes"></property>
 		  <property name="add_tearoffs">False</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="changed" handler="on_show_status_combobox_changed" last_modification_time="Sun, 07 May 2006 20:44:46 GMT"/>
+		  <signal name="changed" handler="on_print_status_combobox_changed" last_modification_time="Sun, 07 May 2006 20:44:46 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">1</property>
