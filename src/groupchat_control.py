@@ -845,22 +845,19 @@ class GroupchatControl(ChatControlBase):
 				if bookmark['jid'] == self.room_jid:
 					found = True
 					break
-			show_status = None
+			print_status = None
 			if found:
-				show_status = bookmark['show_status']
-			if not show_status:
-				if gajim.config.get('print_status_in_muc'):
-					show_status = 'all'
-				else:
-					show_status = 'none'
-			if show == 'offline' and show_status in ('all', 'in_and_out'):
+				print_status = bookmark['print_status']
+			else:
+				print_status = gajim.config.get('print_status_in_muc')
+			if show == 'offline' and print_status in ('all', 'in_and_out'):
 				st = _('%s has left') % nick
 				if reason:
 					st += ' [%s]' % reason
 			else:
-				if newly_created and show_status in ('all', 'in_and_out'):
+				if newly_created and print_status in ('all', 'in_and_out'):
 					st = _('%s has joined the room') % nick
-				elif show_status == 'all':
+				elif print_status == 'all':
 					st = _('%s is now %s') % (nick, helpers.get_uf_show(show))
 			if st:
 				if status:

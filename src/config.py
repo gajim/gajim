@@ -1,4 +1,4 @@
-##	config.py
+#i#	config.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
@@ -2248,6 +2248,9 @@ class ManageBookmarksWindow:
 				autojoin = helpers.from_xs_boolean_to_python_boolean(
 					bookmark['autojoin'])
 
+				print_status = bookmark['print_status']
+				if not print_status:
+					print_status = gajim.config.get('print_status_in_muc')
 				self.treestore.append( iter, [
 						account,
 						bookmark['name'],
@@ -2255,20 +2258,20 @@ class ManageBookmarksWindow:
 						autojoin,
 						bookmark['password'],
 						bookmark['nick'],
-						bookmark['show_status'] ])
+						print_status ])
 
-		self.show_status_combobox = self.xml.get_widget('show_status_combobox')
+		self.print_status_combobox = self.xml.get_widget('print_status_combobox')
 		model = gtk.ListStore(str, str)
 
-		self.option_list = {'': '', 'all': _('All'),
+		self.option_list = {'all': _('All'),
 			'in_and_out': _('Enter and leave only'), 'none': _('None')}
 		opts = self.option_list.keys()
 		opts.sort()
 		for opt in opts:
 			model.append([self.option_list[opt], opt])
 
-		self.show_status_combobox.set_model(model)
-		self.show_status_combobox.set_active(0)
+		self.print_status_combobox.set_model(model)
+		self.print_status_combobox.set_active(1)
 
 		self.view = self.xml.get_widget('bookmarks_treeview')
 		self.view.set_model(self.treestore)
@@ -2332,7 +2335,7 @@ class ManageBookmarksWindow:
 		account = model[add_to][1].decode('utf-8')
 		nick = gajim.nicks[account]
 		self.treestore.append(add_to, [account, _('New Room'), '', False, '',
-			nick, 'all'])
+			nick, 'in_and_out'])
 
 		self.view.expand_row(model.get_path(add_to), True)
 
@@ -2389,7 +2392,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 
 				#create the bookmark-dict
 				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
-					'password': bm[4], 'nick': bm[5], 'show_status': bm[6]}
+					'password': bm[4], 'nick': bm[5], 'print_status': bm[6]}
 
 				gajim.connections[account_unicode].bookmarks.append(bmdict)
 
@@ -2413,7 +2416,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 
 		widgets = [ self.title_entry, self.nick_entry, self.room_entry,
 			self.server_entry, self.pass_entry, self.autojoin_checkbutton,
-			self.show_status_combobox]
+			self.print_status_combobox]
 
 		if model.iter_parent(iter):
 			# make the fields sensitive
@@ -2456,13 +2459,10 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		else:
 			self.nick_entry.set_text('')
 
-		show_status = model[iter][6]
+		print_status = model[iter][6]
 		opts = self.option_list.keys()
 		opts.sort()
-		if show_status:
-			self.show_status_combobox.set_active(opts.index(show_status))
-		else:
-			self.show_status_combobox.set_active(0)
+		self.print_status_combobox.set_active(opts.index(print_status))
 
 	def on_title_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
@@ -2500,13 +2500,13 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		if iter:
 			model[iter][3] = self.autojoin_checkbutton.get_active()
 
-	def on_show_status_combobox_changed(self, widget):
+	def on_print_status_combobox_changed(self, widget):
 		active = widget.get_active()
 		model = widget.get_model()
-		show_status = model[active][1]
+		print_status = model[active][1]
 		(model2, iter) = self.selection.get_selected()
 		if iter:
-			model2[iter][6] = show_status
+			model2[iter][6] = print_status
 
 	def clear_fields(self):
 		widgets = [ self.title_entry, self.nick_entry, self.room_entry,
@@ -2514,7 +2514,7 @@ _('Please be sure to fill out server and room fields or remove this bookmark.'))
 		for field in widgets:
 			field.set_text('')
 		self.autojoin_checkbutton.set_active(False)
-		self.show_status_combobox.set_active(0)
+		self.print_status_combobox.set_active(1)
 
 class AccountCreationWizardWindow:
 	def __init__(self):

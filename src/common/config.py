@@ -134,7 +134,7 @@ class Config:
 		'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
-		'version': [ opt_str, '0.10' ], # which version created the config
+		'version': [ opt_str, '0.10.0.1' ], # which version created the config
 		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
 		'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
 		'always_english_wikipedia': [opt_bool, False],
@@ -181,7 +181,7 @@ class Config:
 		'show_avatars_in_roster': [opt_bool, True, '', True],
 		'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old.')],
 		'print_status_in_chats': [opt_bool, True, _('If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message.')],
-		'print_status_in_muc': [opt_bool, True, _('If False, Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message.')],
+		'print_status_in_muc': [opt_str, 'in_and_out', _('can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", gajim will only print FOO enters/leaves room')],
 		'log_contact_status_changes': [opt_bool, False],
 		'restored_messages_color': [opt_str, 'grey'],
 		'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
