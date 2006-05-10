@@ -24,6 +24,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import i18n
+from common import helpers
 i18n.init()
 _ = i18n._
 
@@ -34,7 +35,90 @@ if dbus_support.supported:
 		import dbus.glib
 		import dbus.service
 
-def notify(event_type, jid, account, msg_type = '', path_to_image = None,
+def notify(event, jid, account, parameters):
+	'''Check what type of notifications we want, depending on basic configuration
+	of notifications and advanced one and do these notifications'''
+	# First, find what notifications we want
+	do_popup = False
+	do_sound = False
+	if (event == 'status_change'):
+		new_show = parameters[0]
+		status_message = parameters[1]
+		# Default : No popup for status change
+	elif  (event == 'contact_connected'):
+		status_message = parameters
+		if gajim.config.get('notify_on_signin') and \
+			not gajim.block_signed_in_notifications[account]\
+			and helpers.allow_showing_notification(account):
+			do_popup = True
+		if gajim.config.get_per('soundevents', 'contact_connected',
+			'enabled') and not gajim.block_signed_in_notifications[account]:
+			do_sound = True
+	elif (event == 'contact_disconnected'):
+		status_message = parameters
+		if gajim.config.get('notify_on_signout') \
+			and helpers.allow_showing_notification(account):
+			do_popup = True
+		if gajim.config.get_per('soundevents', 'contact_disconnected',
+			'enabled'):
+			do_sound = True
+	
+	# Do the wanted notifications	
+	if (do_popup):
+		if (event == 'contact_connected' or event == 'contact_disconnected' or \
+			event == 'status_change'): # Common code for popup for these 3 events
+			if (event == 'contact_disconnected'):
+				show_image = 'offline.png'
+				suffix = '_notif_size_bw.png'
+			else: #Status Change or Connected
+				# TODO : for status change, we don't always 'online.png', but we 
+				# first need 48x48 for all status
+				show_image = 'online.png'
+				suffix = '_notif_size_colored.png'	
+			transport_name = gajim.get_transport_name_from_jid(jid)
+			img = None
+			if transport_name:
+				img = os.path.join(gajim.DATA_DIR, 'iconsets',
+					'transports', transport_name, '48x48', show_image) 
+			if not img or not os.path.isfile(img):
+				iconset = gajim.config.get('iconset')
+				img = os.path.join(gajim.DATA_DIR, 'iconsets',
+						iconset, '48x48', show_image)
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
+				jid = jid, suffix = suffix)
+			if (event == 'status_change'):
+				title = _('%(nick)s Changed Status') % \
+					{'nick': gajim.get_name_from_jid(account, jid)}
+				text = _('%(nick)s is now %(status)s') % \
+					{'nick': gajim.get_name_from_jid(account, jid),\
+					'status': helpers.get_uf_show(gajim.SHOW_LIST[new_show])}
+				if status_message:
+					text =  text + " : " + status_message
+				popup(_('Contact Changed status'), jid, account,
+					path_to_image = path, title = title, text = text)
+			elif (event == 'contact_connected'):
+				title = _('%(nickname)s Signed In') % \
+					{'nickname': gajim.get_name_from_jid(account, jid)}
+				text = ''
+				if status_message:
+					text = status_message
+				popup(_('Contact Signed In'), jid, account,
+					path_to_image = path, title = title, text = text)
+			elif (event == 'contact_disconnected'):
+				title = _('%(nickname)s Signed Out') % \
+					{'nickname': gajim.get_name_from_jid(account, jid)}
+				text = ''
+				if status_message:
+					text = status_message
+				popup(_('Contact Signed Out'), jid, account,
+					path_to_image = path, title = title, text = text)
+			else:
+				print 'Event not implemeted yet'
+	if (do_sound):
+		helpers.play_sound(event)	
+	 
+
+def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 	title = None, text = None):
 	'''Notifies a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
@@ -52,7 +136,8 @@ def notify(event_type, jid, account, msg_type = '', path_to_image = None,
 		except TypeError, e:
 			# This means that we sent the message incorrectly
 			gajim.log.debug(str(e))
-	instance = dialogs.PopupNotificationWindow(event_type, jid, account, msg_type, path_to_image, title, text)
+	instance = dialogs.PopupNotificationWindow(event_type, jid, account, msg_type, \
+		path_to_image, title, text)
 	gajim.interface.roster.popup_notification_windows.append(instance)
 
 class NotificationResponseManager:
@@ -144,6 +229,8 @@ class DesktopNotification:
 			ntype = 'email.arrived'
 		elif event_type == _('Groupchat Invitation'):
 			ntype = 'im.invitation'
+		elif event_type == _('Contact Changed status'):
+			ntype = 'presence.status'
 		else:
 			# default failsafe values
 			self.path_to_image = os.path.abspath(
