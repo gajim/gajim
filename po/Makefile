@@ -1,9 +1,10 @@
-top_srcdir = ../src/
 NAME = gajim
 LANGS   := fr pt el pl es ru bg de nb cs nl pt_BR sv it eu sk no zh_CN
-LANGDIR := $(foreach LANG, $(LANGS),$(LANG)/LC_MESSAGES/gajim.mo)
+LANGS_PO:=$(foreach LANG, ${LANGS}, ${LANG}.po)
+LANGS_MO:=$(foreach LANG, ${LANGS}, ${LANG}.mo)
+DATADIR:=$(subst //,/,${DESTDIR}/${PREFIX}/share)
 
-all: $(LANGDIR)
+all: $(LANGS_MO)
 
 %.mo: %.po
 	msgfmt $< -o $@
@@ -52,5 +53,14 @@ gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/xml_console_window.glade.h
 	intltool-update --pot --gettext-package=$(NAME)
 
+install:
+	for l in ${LANGS}; do\
+		dir=${DATADIR}/locale/$${l}/LC_MESSAGES;\
+		if test ! -d $${dir}; then\
+			install -m 755 -d $${dir};\
+		fi;\
+		install -m 644 $${l}.mo $${dir}/${NAME}.mo;\
+	done
+
 clean:
-	find . -name '*.mo' -exec rm {} \;
+	rm *.mo
