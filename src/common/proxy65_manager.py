@@ -15,6 +15,7 @@
 ##
 import socket 
 import struct
+import errno
 
 import common.xmpp
 from common import gajim
@@ -246,16 +247,18 @@ class HostTester(Socks5, IdleObject):
 			self._recv=self._sock.recv
 		except Exception, ee:
 			(errnum, errstr) = ee
-			if errnum == 111:
-				self.on_failure()
-				return None
+			if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK): 
+				# still trying to connect
+				return
 			# win32 needs this
-			elif errnum != 10056 or self.state != 0:
-				return None
-			else: # socket is already connected
-				self._sock.setblocking(False)
-				self._send=self._sock.send
-				self._recv=self._sock.recv
+			if errnum not in (0, 10056, errno.EISCONN):
+				# connection failed
+				self.on_failure()
+				return
+			# socket is already connected
+			self._sock.setblocking(False)
+			self._send=self._sock.send
+			self._recv=self._sock.recv
 		self.buff = ''
 		self.state = 1 # connected
 		self.idlequeue.plug_idle(self, True, False)
