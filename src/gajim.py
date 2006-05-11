@@ -831,17 +831,6 @@ class Interface:
 		fjid = room_jid + '/' + nick
 		show = array[1]
 		status = array[2]
-		# print status in chat window and update status/GPG image
-		if self.msg_win_mgr.has_window(fjid, account):
-			ctrl = self.msg_win_mgr.get_control(fjid, account)
-			contact = ctrl.contact
-			contact.show = show
-			contact.status = status
-			ctrl.update_ui()
-			uf_show = helpers.get_uf_show(show)
-			ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
-						'status')
-			ctrl.draw_banner()
 
 		# Get the window and control for the updated status, this may be a PrivateChatControl
 		control = self.msg_win_mgr.get_control(room_jid, account)
@@ -854,6 +843,19 @@ class Interface:
 				pm_control.parent_win.redraw_tab(pm_control)
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
+
+		# print status in chat window and update status/GPG image
+		if self.msg_win_mgr.has_window(fjid, account):
+			ctrl = self.msg_win_mgr.get_control(fjid, account)
+			contact = ctrl.contact
+			contact.show = show
+			contact.status = status
+			ctrl.update_ui()
+			uf_show = helpers.get_uf_show(show)
+			ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
+						'status')
+			ctrl.draw_banner()
+
 
 	def handle_event_gc_msg(self, account, array):
 		# ('GC_MSG', account, (jid, msg, time))
