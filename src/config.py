@@ -254,12 +254,17 @@ class PreferencesWindow:
 		#Font for messages
 		font = gajim.config.get('conversation_font')
 		# try to set default font for the current desktop env
+		fontbutton = self.xml.get_widget('conversation_fontbutton')
 		if font == '':
 			font = gtkgui_helpers.get_default_font()
-			if font is None:
+			if font is not None:
 				font = 'Sans 10'
-			gajim.config.set('conversation_font', font)
-		self.xml.get_widget('conversation_fontbutton').set_font_name(font)
+				gajim.config.set('conversation_font', font)
+				fontbutton.set_font_name(font)
+			fontbutton.set_sensitive(False)
+			self.xml.get_widget('default_chat_font').set_active(True)
+		else:
+			fontbutton.set_font_name(font)
 
 		# on new message
 		only_in_roster = True
@@ -647,7 +652,10 @@ class PreferencesWindow:
 		gajim.interface.save_config()
 
 	def on_preference_widget_font_set(self, widget, text):
-		font = widget.get_font_name()
+		if widget:
+			font = widget.get_font_name()
+		else:
+			font = ''
 		gajim.config.set(text, font)
 		self.update_text_font()
 		gajim.interface.save_config()
@@ -671,6 +679,15 @@ class PreferencesWindow:
 
 	def on_conversation_fontbutton_font_set(self, widget):
 		self.on_preference_widget_font_set(widget, 'conversation_font')
+	
+	def on_default_chat_font_toggled(self, widget):
+		font_widget = self.xml.get_widget('conversation_fontbutton')
+		if widget.get_active():
+			font_widget.set_sensitive(False)
+			font_widget = None
+		else:
+			font_widget.set_sensitive(True)
+		self.on_preference_widget_font_set(font_widget, 'conversation_font')
 
 	def on_reset_colors_button_clicked(self, widget):
 		for i in ('inmsgcolor', 'outmsgcolor', 'statusmsgcolor', 'urlmsgcolor'):
