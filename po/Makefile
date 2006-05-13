@@ -63,4 +63,4 @@ install:
 	done
 
 clean:
-	rm *.mo
+	rm -f *.mo 
