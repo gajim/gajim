@@ -140,6 +140,7 @@ class EditGroupsDialog:
 		model.append((group, True))
 		self.add_group(group)
 		self.update_contact()
+		self.init_list() # Re-draw list to sort new item
 
 	def group_toggled_cb(self, cell, path):
 		self.changes_made = True
@@ -155,15 +156,21 @@ class EditGroupsDialog:
 	def init_list(self):
 		store = gtk.ListStore(str, bool)
 		self.list.set_model(store)
+		for column in self.list.get_columns(): # Clear treeview when re-drawing
+			self.list.remove_column(column)
+		groups = [] # Store accounts in a list so we can sort them
 		for g in gajim.groups[self.account].keys():
 			if g in helpers.special_groups:
 				continue
-			iter = store.append()
-			store.set(iter, 0, g)
+			in_group = False
 			if g in self.user.groups:
-				store.set(iter, 1, True)
-			else:
-				store.set(iter, 1, False)
+				in_group = True
+			groups.append([g, in_group])
+		groups.sort()			
+		for group in groups:
+			iter = store.append()
+			store.set(iter, 0, group[0]) # Group name
+			store.set(iter, 1, group[1]) # In group boolean
 		column = gtk.TreeViewColumn(_('Group'))
 		column.set_expand(True)
 		self.list.append_column(column)
