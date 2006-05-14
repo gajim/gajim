@@ -3116,10 +3116,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if type_source != 'contact': # source is not a contact
 			return
 		source_account = model[iter_source][C_ACCOUNT].decode('utf-8')
+		disable_meta = False 
 		if account != source_account:	# dropped in another account
-			if self.regroup and type_dest == 'group':
-				# on a group in merge mode is ok
+			if self.regroup:
+				# in merge mode it is ok to change group, but disable meta
 				account = source_account
+				disable_meta = True 
 			else:
 				return
 		it = iter_source
@@ -3188,15 +3190,21 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			item.connect('activate', self.on_drop_in_group, account, c_source,
 				grp_dest, context, etime, grp_source)
 			menu.append(item)
-			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
-				jid_dest)
-			item = gtk.MenuItem(_('Make %s and %s metacontacts') % (c_source.name,
-				c_dest.name))
-			is_big_brother = False
-			if model.iter_has_child(iter_source):
-				is_big_brother = True
-			item.connect('activate', self.on_drop_in_contact, account, c_source,
-				c_dest, is_big_brother, context, etime)
+			if not disable_meta: 
+				# source and dest account are the same, enable metacontacts
+				c_dest = gajim.contacts.get_contact_with_highest_priority(account,
+					jid_dest)
+				item = gtk.MenuItem(_('Make %s and %s metacontacts') % (c_source.name,
+					c_dest.name))
+				is_big_brother = False
+				if model.iter_has_child(iter_source):
+					is_big_brother = True
+				item.connect('activate', self.on_drop_in_contact, account, c_source,
+					c_dest, is_big_brother, context, etime)
+			else: #source and dest account are not the same, disable meta
+				item = gtk.MenuItem(_('Can\'t create a metacontact with contacts from two different accounts'))
+				item.set_sensitive(False)
+			
 			menu.append(item)
 
 			menu.attach_to_widget(self.tree, None)
