@@ -2265,7 +2265,8 @@ class ManageBookmarksWindow:
 				autojoin = helpers.from_xs_boolean_to_python_boolean(
 					bookmark['autojoin'])
 
-				print_status = bookmark['print_status']
+				if bookmark.has_key('print_status'):
+					print_status = bookmark['print_status']
 				if not print_status:
 					print_status = gajim.config.get('print_status_in_muc')
 				self.treestore.append( iter, [
