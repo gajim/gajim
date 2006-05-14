@@ -1578,7 +1578,11 @@ class RosterWindow:
 			if not iconset:
 				iconset = DEFAULT_ICONSET
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+			accounts = [] # Put accounts in a list to sort them
 			for account in gajim.connections:
+				accounts.append(account)
+			accounts.sort()
+			for account in accounts:
 				state_images = self.load_iconset(path)
 				item = gtk.ImageMenuItem(account)
 				show = gajim.SHOW_LIST[gajim.connections[account].connected]
