@@ -1039,6 +1039,9 @@ class Interface:
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
 				path_to_image = path, title = title, text = text)
 
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('NewGmail', (account, array))
+
 	def save_avatar_files(self, jid, photo_decoded, puny_nick = None):
 		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
 		puny_jid = helpers.sanitize_filename(jid)
