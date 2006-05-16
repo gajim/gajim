@@ -843,12 +843,9 @@ class GroupchatControl(ChatControlBase):
 			found = False
 			for bookmark in gajim.connections[self.account].bookmarks:
 				if bookmark['jid'] == self.room_jid:
-					found = True
+					print_status=bookmark['print_status']
 					break
-			print_status = None
-			if found:
-				print_status = bookmark['print_status']
-			else:
+			if print_status is None:
 				print_status = gajim.config.get('print_status_in_muc')
 			if show == 'offline' and print_status in ('all', 'in_and_out'):
 				st = _('%s has left') % nick
