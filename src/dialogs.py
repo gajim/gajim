@@ -349,6 +349,8 @@ class ChangeStatusMessageDialog:
 			msg_text = helpers.to_one_line(status_message_to_save_as_preset)
 			if not msg_name: # msg_name was ''
 				msg_name = msg_text
+			msg_name = msg_name.decode('utf-8')
+			msg_text = msg_text.decode('utf-8')
 			iter_ = self.message_liststore.append((msg_name,))
 			
 			gajim.config.add_per('statusmsg', msg_name)
