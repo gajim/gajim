@@ -801,6 +801,12 @@ class GroupchatControl(ChatControlBase):
 					s = _('You are now known as %s') % new_nick
 				else:
 					s = _('%s is now known as %s') % (nick, new_nick)
+					# We add new nick to muc roster here, so we don't see 
+					# that "new_nick has joined the room" when he just changed nick.
+					# add_contact_to_roster will be called a second time 
+					# after that, but that doesn't hurt
+					self.add_contact_to_roster(new_nick, show, role, affiliation,
+						status, jid)
 				self.print_conversation(s, 'info')
 
 			if not gajim.awaiting_events[self.account].has_key(self.room_jid + '/' + nick):
