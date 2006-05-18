@@ -1,4 +1,4 @@
-#i#	config.py
+##	config.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>

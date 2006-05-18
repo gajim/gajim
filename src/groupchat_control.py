@@ -847,9 +847,10 @@ class GroupchatControl(ChatControlBase):
 				nick != self.nick and statusCode != '303':
 			st = ''
 			found = False
+			print_status = None
 			for bookmark in gajim.connections[self.account].bookmarks:
 				if bookmark['jid'] == self.room_jid:
-					print_status=bookmark['print_status']
+					print_status = bookmark['print_status']
 					break
 			if print_status is None:
 				print_status = gajim.config.get('print_status_in_muc')

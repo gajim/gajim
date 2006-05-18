@@ -837,12 +837,6 @@ class Interface:
 		if control:
 			control.chg_contact_status(nick, show, status, array[4], array[5], array[6],
 						array[7], array[8], array[9], array[10])
-			# Find any PM chat through this room, and tell it to update.
-			pm_control = self.msg_win_mgr.get_control(fjid, account)
-			if pm_control:
-				pm_control.parent_win.redraw_tab(pm_control)
-			if self.remote_ctrl:
-				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
 		# print status in chat window and update status/GPG image
 		if self.msg_win_mgr.has_window(fjid, account):
@@ -855,6 +849,9 @@ class Interface:
 			ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
 						'status')
 			ctrl.draw_banner()
+			ctrl.parent_win.redraw_tab(ctrl)
+			if self.remote_ctrl:
+				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
 
 	def handle_event_gc_msg(self, account, array):
