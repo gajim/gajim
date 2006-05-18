@@ -581,7 +581,8 @@ class GroupchatControl(ChatControlBase):
 
 		win = gajim.interface.msg_win_mgr.get_window(self.room_jid, self.account)
 		if self.room_jid == win.get_active_jid() and\
-		win.window.get_property('has-toplevel-focus'):
+		win.window.get_property('has-toplevel-focus') and\
+		self.parent_win.get_active_control() == self:
 			# it's the current room and it's the focused window.
 			# we have full focus (we are reading it!)
 			return
