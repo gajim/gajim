@@ -378,10 +378,12 @@ class AddNewContactWindow:
 			accounts = [self.account]
 		self.xml = gtkgui_helpers.get_glade('add_new_contact_window.glade')
 		self.account_combobox = self.xml.get_widget('account_combobox')
+		self.account_hbox = self.xml.get_widget('account_hbox')
 		self.account_label = self.xml.get_widget('account_label')
 		self.window = self.xml.get_widget('add_new_contact_window')
 		self.uid_entry = self.xml.get_widget('uid_entry')
 		self.protocol_combobox = self.xml.get_widget('protocol_combobox')
+		self.protocol_hbox = self.xml.get_widget('protocol_hbox')
 		self.jid_entry = self.xml.get_widget('jid_entry')
 		self.nickname_entry = self.xml.get_widget('nickname_entry')
 		if account and len(gajim.connections) >= 2:
@@ -443,16 +445,16 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 
 		if not jid_agents:
 			# There are no transports, so hide the protocol combobox and label
-			self.protocol_combobox.hide()
-			self.protocol_combobox.set_no_show_all(True)
+			self.protocol_hbox.hide()
+			self.protocol_hbox.set_no_show_all(True)
 			protocol_label = self.xml.get_widget('protocol_label')
 			protocol_label.hide()
 			protocol_label.set_no_show_all(True)
 		if self.account:
 			self.account_label.hide()
-			self.account_combobox.hide()
+			self.account_hbox.hide()
 			self.account_label.set_no_show_all(True)
-			self.account_combobox.set_no_show_all(True)
+			self.account_hbox.set_no_show_all(True)
 		else:
 			liststore = gtk.ListStore(str, str)
 			for acct in accounts:
