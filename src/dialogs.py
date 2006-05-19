@@ -362,15 +362,29 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
-	def __init__(self, account, jid = None):
+	def __init__(self, account = None, jid = None):
 		self.account = account
+		if account == None:
+			# fill accounts with active accounts
+			accounts = []
+			for account in gajim.connections.keys():
+				if gajim.connections[account].connected > 1:
+					accounts.append(account)
+			if not accounts:
+				return
+			if len(accounts) == 1:
+				self.account = account
+		else:
+			accounts = [self.account]
 		self.xml = gtkgui_helpers.get_glade('add_new_contact_window.glade')
+		self.account_combobox = self.xml.get_widget('account_combobox')
+		self.account_label = self.xml.get_widget('account_label')
 		self.window = self.xml.get_widget('add_new_contact_window')
 		self.uid_entry = self.xml.get_widget('uid_entry')
 		self.protocol_combobox = self.xml.get_widget('protocol_combobox')
 		self.jid_entry = self.xml.get_widget('jid_entry')
 		self.nickname_entry = self.xml.get_widget('nickname_entry')
-		if len(gajim.connections) >= 2:
+		if account and len(gajim.connections) >= 2:
 			prompt_text =\
 _('Please fill in the data of the contact you want to add in account %s') %account
 		else:
@@ -381,11 +395,12 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		liststore.append(['Jabber', ''])
 		self.agents = ['Jabber']
 		jid_agents = []
-		for j in gajim.contacts.get_jid_list(account):
-			contact = gajim.contacts.get_first_contact_from_jid(account, j)
-			if _('Transports') in contact.groups and contact.show != 'offline' and\
-					contact.show != 'error':
-				jid_agents.append(j)
+		for acct in accounts:
+			for j in gajim.contacts.get_jid_list(acct):
+				contact = gajim.contacts.get_first_contact_from_jid(acct, j)
+				if _('Transports') in contact.groups and contact.show != 'offline' and\
+						contact.show != 'error':
+					jid_agents.append(j)
 		for a in jid_agents:
 			if a.find('aim') > -1:
 				name = 'AIM'
@@ -397,9 +412,8 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				name = 'Yahoo!'
 			else:
 				name = a
-			iter = liststore.append([name, a])
+			liststore.append([name, a])
 			self.agents.append(name)
-		
 		self.protocol_combobox.set_model(liststore)
 		self.protocol_combobox.set_active(0)
 		self.fill_jid()
@@ -417,13 +431,15 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				self.protocol_combobox.set_active(0)
 			self.set_nickname()
 			self.nickname_entry.grab_focus()
-
 		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
-		for g in gajim.groups[account].keys():
-			if g not in helpers.special_groups:
-				self.group_comboboxentry.append_text(g)
+		group_names = []
+		for acct in accounts:
+			for g in gajim.groups[acct].keys():
+				if g not in helpers.special_groups and g not in group_names:
+					group_names.append(g)
+					self.group_comboboxentry.append_text(g)
 
 		if not jid_agents:
 			# There are no transports, so hide the protocol combobox and label
@@ -432,7 +448,17 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			protocol_label = self.xml.get_widget('protocol_label')
 			protocol_label.hide()
 			protocol_label.set_no_show_all(True)
-
+		if self.account:
+			self.account_label.hide()
+			self.account_combobox.hide()
+			self.account_label.set_no_show_all(True)
+			self.account_combobox.set_no_show_all(True)
+		else:
+			liststore = gtk.ListStore(str, str)
+			for acct in accounts:
+				liststore.append([acct, acct])
+			self.account_combobox.set_model(liststore)
+			self.account_combobox.set_active(0)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -464,6 +490,12 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			pritext = _('Invalid User ID')
 			ErrorDialog(pritext, _('The user ID must not contain a resource.'))
 			return
+
+		# get value of account combobox, if account was not specified
+		if not self.account:
+			model = self.account_combobox.get_model()
+			index = self.account_combobox.get_active()
+			self.account = model[index][1]
 
 		# Check if jid is already in roster
 		if jid in gajim.contacts.get_jid_list(self.account):

@@ -194,7 +194,8 @@ class GajimRemote:
 			'add_contact': [
 					_('Adds contact to roster'),
 					[ 
-						(_('account'), _('Adds new contact to this account.'), True)
+						(_('jid'), _('JID of the contact'), True),
+						(_('account'), _('Adds new contact to this account'), False)
 					]
 				],
 			

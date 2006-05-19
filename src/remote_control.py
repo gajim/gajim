@@ -472,12 +472,19 @@ class SignalObject(DbusPrototype):
 		return True
 	
 	def add_contact(self, *args):
-		[account] = self._get_real_arguments(args, 1)
-		accounts = gajim.contacts.get_accounts()
-		if account in accounts:
-			AddNewContactWindow(account)
-			return True
-		return False
+		[jid, account] = self._get_real_arguments(args, 2)
+		if account:
+			if account in gajim.connections and \
+				gajim.connections[account].connected > 1:
+				# if given account is active, use it 
+				AddNewContactWindow(account = account, jid = jid)
+			else:
+				# wrong account
+				return False
+		else:
+			# if account is not given, show account combobox
+			AddNewContactWindow(account = None, jid = jid)
+		return True
 	
 	def remove_contact(self, *args):
 		[jid, account] = self._get_real_arguments(args, 2)
