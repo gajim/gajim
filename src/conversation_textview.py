@@ -159,7 +159,10 @@ class ConversationTextview:
 	def scroll_to_end(self):
 		parent = self.tv.get_parent()
 		buffer = self.tv.get_buffer()
-		self.tv.scroll_to_mark(buffer.get_mark('end'), 0, True, 0, 1)
+		end_mark = buffer.get_mark('end')
+		if not end_mark:
+			return False
+		self.tv.scroll_to_mark(end_mark, 0, True, 0, 1)
 		adjustment = parent.get_hadjustment()
 		adjustment.set_value(0)
 		return False # when called in an idle_add, just do it once
