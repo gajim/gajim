@@ -507,6 +507,10 @@ class Interface:
 		if not message: # empty message text
 			return
 
+		if gajim.config.get('ignore_unknown_contacts') and \
+			not gajim.contacts.get_contact(account, jid) and not pm:
+			return
+
 		first = False
 		if not chat_control and not gajim.awaiting_events[account].has_key(
 		jid_of_control):
@@ -541,11 +545,6 @@ class Interface:
 			groupchat_control.on_private_message(nick, message, array[2])
 			return
 				
-		# THIS HAS TO BE AFTER PM handling so we can get PMs
-		if gajim.config.get('ignore_unknown_contacts') and \
-			not gajim.contacts.get_contact(account, jid):
-			return
-
 		if first:
 			if gajim.config.get('notify_on_new_message') and \
 			helpers.allow_showing_notification(account):
