@@ -1715,13 +1715,14 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_roster_treeview_button_press_event(self, widget, event):
 		# hide tooltip, no matter the button is pressed
 		self.tooltip.hide_tooltip()
+		try:
+			path, column, x, y = self.tree.get_path_at_pos(int(event.x),
+				int(event.y))
+		except TypeError:
+			self.tree.get_selection().unselect_all()
+			return False
+
 		if event.button == 3: # Right click
-			try:
-				path, column, x, y = self.tree.get_path_at_pos(int(event.x),
-					int(event.y))
-			except TypeError:
-				self.tree.get_selection().unselect_all()
-				return
 			self.tree.get_selection().select_path(path)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
@@ -1729,28 +1730,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return True
 
 		elif event.button == 2: # Middle click
-			try:
-				path, column, x, y = self.tree.get_path_at_pos(int(event.x),
-					int(event.y))
-			except TypeError:
-				self.tree.get_selection().unselect_all()
-				return
 			self.tree.get_selection().select_path(path)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model[iter][C_TYPE]
 			if type in ('agent', 'contact'):
-				account = model[iter][C_ACCOUNT].decode('utf-8')
-				jid = model[iter][C_JID].decode('utf-8')
-				win = None
-				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
-				if gajim.interface.msg_win_mgr.has_window(c.jid, account):
-					win = gajim.interface.msg_win_mgr.get_window(c.jid, account)
-				elif c:
-					self.new_chat(c, account)
-					win = gajim.interface.msg_win_mgr.get_window(jid, account)
-				win.set_active_tab(jid, account)
-				win.window.present()
+				self.on_roster_treeview_row_activated(widget, path)
 			elif type == 'account':
 				account = model[iter][C_ACCOUNT].decode('utf-8')
 				if account != 'all':
@@ -1774,12 +1759,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return True
 
 		elif event.button == 1: # Left click
-			try:
-				path, column, x, y = self.tree.get_path_at_pos(int(event.x),
-					int(event.y))
-			except TypeError:
-				self.tree.get_selection().unselect_all()
-				return False
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model[iter][C_TYPE]
