@@ -47,7 +47,7 @@ C_VALUE,
 C_TYPE
 ) = range(3)
 
-GTKGUI_GLADE = 'gtkgui.glade'
+GTKGUI_GLADE = 'manage_accounts_window.glade'
 
 class AdvancedConfigurationWindow:
 	def __init__(self):
