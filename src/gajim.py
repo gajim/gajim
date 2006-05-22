@@ -511,63 +511,25 @@ class Interface:
 			not gajim.contacts.get_contact(account, jid) and not pm:
 			return
 
+		# Is it a first or next message received ?
 		first = False
 		if not chat_control and not gajim.awaiting_events[account].has_key(
 		jid_of_control):
 			# It's a first message and not a Private Message
 			first = True
 
-		if gajim.config.get_per('soundevents', 'first_message_received',
-			'enabled') and first:
-			helpers.play_sound('first_message_received')
-		elif gajim.config.get_per('soundevents', 'next_message_received',
-			'enabled'):
-			helpers.play_sound('next_message_received')
-
 		if pm:
-			room_jid = jid
-			nick = resource
-			if first:
-				if gajim.config.get('notify_on_new_message') and \
-				helpers.allow_showing_notification(account):
-					room_name, t = gajim.get_room_name_and_server_from_room_jid(
-						room_jid)
-					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-						'priv_msg_recv.png')
-					path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-					title = _('New Private Message from room %s') % room_name
-					text = _('%(nickname)s: %(message)s') % {'nickname': nick,
-						'message': message}
-					notify.popup(_('New Private Message'), full_jid_with_resource,
-						account, 'pm', path_to_image = path, title = title,
-						text = text)
+			nickname = resource
+			msg_type = 'pm'
+			groupchat_control.on_private_message(nickname, message, array[2])
+		else:
+			# array: (jid, msg, time, encrypted, msg_type, subject)
+			self.roster.on_message(jid, message, array[2], account, array[3],
+				msg_type, array[5], resource, msg_id)
+			nickname = gajim.get_name_from_jid(account, jid)
+		# Check and do wanted notifications	
+		notify.notify('new_message', jid, account, [msg_type, first, nickname, message])
 
-			groupchat_control.on_private_message(nick, message, array[2])
-			return
-				
-		if first:
-			if gajim.config.get('notify_on_new_message') and \
-			helpers.allow_showing_notification(account):
-				text = message
-				if msg_type == 'normal': # single message
-					event_type = _('New Single Message')
-					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-						'single_msg_recv.png')
-					title = _('New Single Message from %(nickname)s') % \
-						{'nickname': gajim.get_name_from_jid(account, jid)}
-				else: # chat message
-					event_type = _('New Message')
-					img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-						'chat_msg_recv.png')
-					title = _('New Message from %(nickname)s') % \
-						{'nickname': gajim.get_name_from_jid(account, jid)}
-				path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-				notify.popup(event_type, jid_of_control, account, msg_type,
-					path_to_image = path, title = title, text = text)
-
-		# array: (jid, msg, time, encrypted, msg_type, subject)
-		self.roster.on_message(jid, message, array[2], account, array[3],
-			msg_type, array[5], resource, msg_id)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
 
