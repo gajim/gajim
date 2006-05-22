@@ -1307,7 +1307,8 @@ class GroupchatControl(ChatControlBase):
 			'jid': self.room_jid,
 			'autojoin': '0',
 			'password': '',
-			'nick': self.nick
+			'nick': self.nick,
+			'print_status' : gajim.config.get('print_status_in_muc')
 		}
 
 		for bookmark in gajim.connections[self.account].bookmarks:
