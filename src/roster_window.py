@@ -241,11 +241,15 @@ class RosterWindow:
 		# 'priority' is optional
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 
-		shown_family = [] # family members that are in roster.
+		# family members that are in roster and belong to the same account.
+		shown_family = [] 
 		if family:
 			for data in family:
-				_jid = data['jid']
 				_account = data['account']
+				if _account != account:
+					continue
+				_jid = data['jid']
+				
 				if self.get_contact_iter(_jid, _account):
 					shown_family.append(data)
 				if _jid == jid:
