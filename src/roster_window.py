@@ -239,11 +239,17 @@ class RosterWindow:
 		# 'priority' is optional
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 
-		shown_family = [] # family members that are in roster.
+		# family members that are in roster and belong to the same account.
+		shown_family = [] 
 		if family:
 			for data in family:
-				_jid = data['jid']
 				_account = data['account']
+				#XXX When we support metacontacts from different servers, make 
+				# sure that loop from #1953 is fixed and remove next 2 lines!
+				if _account != account:
+					continue
+				_jid = data['jid']
+				
 				if self.get_contact_iter(_jid, _account):
 					shown_family.append(data)
 				if _jid == jid:
@@ -2250,7 +2256,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		dialogs.SingleMessageWindow(account, action = 'send')
 	
 	def on_new_chat_menuitem_activate(self, widget, account):
-		dialogs.NewChatDialog(account)	
+		dialogs.NewChatDialog(account)
 
 	def on_contents_menuitem_activate(self, widget):
 		helpers.launch_browser_mailer('url', 'http://trac.gajim.org/wiki')
