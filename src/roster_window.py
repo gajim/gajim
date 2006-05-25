@@ -2127,10 +2127,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if resource:
 			fjid = jid + '/' + resource
 			contact = gajim.contacts.get_contact(account, jid, resource)
+		highest_contact = gajim.contacts.get_contact_with_highest_priority(
+			account, jid)
 		if not contact:
 			# Default to highest prio
-			highest_contact = gajim.contacts.get_contact_with_highest_priority(
-				account, jid)
 			fjid = jid
 			resource_for_chat = None
 			contact = highest_contact
