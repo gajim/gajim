@@ -2127,14 +2127,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if resource:
 			fjid = jid + '/' + resource
 			contact = gajim.contacts.get_contact(account, jid, resource)
-		# Default to highest prio
-		highest_contact = gajim.contacts.get_contact_with_highest_priority(
-			account, jid)
 		if not contact:
+			# Default to highest prio
+			highest_contact = gajim.contacts.get_contact_with_highest_priority(
+				account, jid)
 			fjid = jid
 			resource_for_chat = None
 			contact = highest_contact
 		if not contact:
+			# contact is not in roster
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
 				'attached_gpg_keys').split()
@@ -2152,8 +2153,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			path = self.tree.get_model().get_path(iters[0])
 		else:
 			path = None
-		autopopup = gajim.config.get('autopopup')
-		autopopupaway = gajim.config.get('autopopupaway')
 
 		# Look for a chat control that has the given resource
 		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
@@ -2170,10 +2169,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		no_queue = True
 		if qs.has_key(fjid):
 			no_queue = False
-		popup = False
-		if autopopup and (autopopupaway or gajim.connections[account].connected \
-			in (1, 2)):
-			popup = True
+		
+		popup = helpers.allow_popup_window(account)
 
 		if msg_type == 'normal' and popup: # it's single message to be autopopuped
 			dialogs.SingleMessageWindow(account, contact.jid,
@@ -2205,6 +2202,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if not ctrl:
 				self.new_chat(contact, account, resource = resource_for_chat)
 				if path:
+					# we curently see contact in our roster OR he
+					# is not in the roster at all. 
+					# show and select his line in roster 
 					self.tree.expand_row(path[0:1], False)
 					self.tree.expand_row(path[0:2], False)
 					self.tree.scroll_to_cell(path)
@@ -2216,9 +2216,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self.draw_parent_contact(jid, account)
 			self.show_title() # we show the * or [n]
 			if not path:
+				# contact is in roster but we curently don't see him online
+				# show him
 				self.add_contact_to_roster(jid, account)
 				iters = self.get_contact_iter(jid, account)
 				path = self.tree.get_model().get_path(iters[0])
+			# popup == False so we show awaiting event in roster
+			# show and select contact line in roster (even if he is not in roster) 
 			self.tree.expand_row(path[0:1], False)
 			self.tree.expand_row(path[0:2], False)
 			self.tree.scroll_to_cell(path)
