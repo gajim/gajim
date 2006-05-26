@@ -80,6 +80,7 @@ class VcardWindow:
 		self.is_fake = is_fake
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
+		self.avatar_save_as_id = None
 
 		if vcard: # we view/edit our own vcard
 			self.jid = contact
@@ -155,6 +156,8 @@ class VcardWindow:
 		# empty the image
 		self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
 		self.avatar_encoded = None
+		self.xml.get_widget('PHOTO_eventbox').disconnect(self.avatar_save_as_id)
+		self.avatar_save_as_id = None
 
 	def on_set_avatar_button_clicked(self, widget):
 		f = None
@@ -204,6 +207,21 @@ class VcardWindow:
 
 		self.dialog = dialogs.ImageChooserDialog(on_response_ok = on_ok)
 
+	def on_PHOTO_eventbox_button_press_event(self, widget, event):
+		'''If right-clicked, show popup'''
+		if event.button == 3: # right click
+			menu = gtk.Menu()
+			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+			menuitem.connect('activate',
+				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+				self.contact.jid, self.account, self.contact.name + '.jpeg')
+			menu.append(menuitem)
+			menu.show_all()
+			menu.connect('selection-done', lambda w:w.destroy())	
+			# show the menu
+			menu.show_all()
+			menu.popup(None, None, None, event.button, event.time)
+
 	def set_value(self, entry_name, value):
 		try:
 			self.xml.get_widget(entry_name).set_text(value)
@@ -220,6 +238,9 @@ class VcardWindow:
 				image = self.xml.get_widget('PHOTO_image')
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 				image.set_from_pixbuf(pixbuf)
+				eventbox = self.xml.get_widget('PHOTO_eventbox')
+				self.avatar_save_as_id = eventbox.connect('button-press-event',
+					self.on_PHOTO_eventbox_button_press_event)
 				continue
 			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
 				for entry in vcard[i]:
@@ -453,6 +474,9 @@ class VcardWindow:
 				self.xml.get_widget(e + '_entry').set_text('')
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
 			self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
+			self.xml.get_widget('PHOTO_eventbox').disconnect(
+				self.avatar_save_as_id)
+			self.avatar_save_as_id = None
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
 			dialogs.ErrorDialog(_('You are not connected to the server'),

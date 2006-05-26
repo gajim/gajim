@@ -25,6 +25,7 @@ import os
 import sys
 
 import vcard
+import dialogs
 
 
 HAS_PYWIN32 = True
@@ -666,3 +667,70 @@ def get_possible_button_event(event):
 
 def destroy_widget(widget):
 	widget.destroy()
+
+def on_avatar_save_as_menuitem_activate(widget, jid, account,
+default_name = ''):
+	def on_ok(widget):
+		def on_ok2(widget, file_path, pixbuf):
+			pixbuf.save(file_path, 'jpeg')
+			dialog2.destroy()
+			dialog.destroy()
+
+		file_path = dialog.get_filename()
+		file_path = decode_filechooser_file_paths((file_path,))[0]
+		if os.path.exists(file_path):
+			dialog2 = dialogs.FTOverwriteConfirmationDialog(
+				_('This file already exists'), _('What do you want to do?'),
+				False)
+			dialog2.set_transient_for(dialog)
+			dialog2.set_destroy_with_parent(True)
+			response = dialog2.get_response()
+			if response < 0:
+				return
+
+		# Get pixbuf
+		pixbuf = None
+		is_fake = False
+		if gajim.contacts.is_pm_from_jid(account, jid):
+			is_fake = True
+		pixbuf = get_avatar_pixbuf_from_cache(jid, is_fake)
+
+		ext = file_path.split('.')[-1]
+		type_ = ''
+		if not ext:
+			# Silently save as Jpeg image
+			file_path += '.jpeg'
+			type_ = 'jpeg'
+		elif ext == 'jpg':
+			type_ = 'jpeg'
+		else:
+			type_ = ext
+
+		# Save image
+		try:
+			pixbuf.save(file_path, type_)
+		except:
+			os.remove(file_path)
+			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
+			dialog2 = dialogs.ConfirmationDialog(_('Extension not supported'),
+				_('Image cannot be saved in %(type)s format. Save as %(new_filename)s?') % {'type': type_, 'new_filename': new_file_path},
+				on_response_ok = (on_ok2, new_file_path, pixbuf))
+		else:
+			dialog.destroy()
+
+	def on_cancel(widget):
+		dialog.destroy()
+
+	dialog = dialogs.FileChooserDialog(
+		title_text = _('Save Image as...'), 
+		action = gtk.FILE_CHOOSER_ACTION_SAVE, 
+		buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
+		gtk.STOCK_SAVE, gtk.RESPONSE_OK),
+		default_response = gtk.RESPONSE_OK,
+		current_folder = gajim.config.get('last_save_dir'),
+		on_response_ok = on_ok,
+		on_response_cancel = on_cancel)
+
+	dialog.set_current_name(default_name)
+	dialog.connect('delete-event', lambda widget, event:
+		on_cancel(widget))

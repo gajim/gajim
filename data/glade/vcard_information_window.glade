@@ -17,6 +17,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="destroy" handler="on_vcard_information_window_destroy" last_modification_time="Sun, 24 Jul 2005 19:35:15 GMT"/>
   <signal name="key_press_event" handler="on_vcard_information_window_key_press_event" last_modification_time="Thu, 07 Apr 2005 10:06:13 GMT"/>
 
@@ -2321,12 +2322,20 @@
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkImage" id="PHOTO_image">
+		    <widget class="GtkEventBox" id="PHOTO_eventbox">
 		      <property name="visible">True</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
+		      <property name="visible_window">True</property>
+		      <property name="above_child">False</property>
+
+		      <child>
+			<widget class="GtkImage" id="PHOTO_image">
+			  <property name="visible">True</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>

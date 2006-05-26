@@ -754,8 +754,10 @@ class ChatControl(ChatControlBase):
 		id = widget.connect('enter-notify-event', self.on_avatar_eventbox_enter_notify_event)
 		self.handlers[id] = widget
 
-		widget = self.xml.get_widget('avatar_eventbox')
 		id = widget.connect('leave-notify-event', self.on_avatar_eventbox_leave_notify_event)
+		self.handlers[id] = widget
+
+		id = widget.connect('button-press-event', self.on_avatar_eventbox_button_press_event)
 		self.handlers[id] = widget
 
 		widget = self.xml.get_widget('gpg_togglebutton')
@@ -802,6 +804,23 @@ class ChatControl(ChatControlBase):
 		# did we add a timeout? if yes remove it
 		if self.show_bigger_avatar_timeout_id is not None:
 			gobject.source_remove(self.show_bigger_avatar_timeout_id)
+
+	def on_avatar_eventbox_button_press_event(self, widget, event):
+		'''If right-clicked, show popup'''
+		if event.button == 3: # right click
+			menu = gtk.Menu()
+			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+			id = menuitem.connect('activate', 
+				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+				self.contact.jid, self.account, self.contact.name + '.jpeg')
+			self.handlers[id] = menuitem
+			menu.append(menuitem)
+			menu.show_all()
+			menu.connect('selection-done', lambda w:w.destroy())	
+			# show the menu
+			menu.show_all()
+			menu.popup(None, None, None, event.button, event.time)
+		return True
 
 	def _on_window_motion_notify(self, widget, event):
 		'''it gets called no matter if it is the active window or not'''
