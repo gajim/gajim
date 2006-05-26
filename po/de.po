@@ -1454,7 +1454,7 @@ msgstr "Akzeptieren Sie diese Anfrage?"
 #: ../src/gajim.py:438
 #, python-format
 msgid "%(nickname)s Signed In"
-msgstr "%(nickname)s·angemeldet"
+msgstr "%(nickname)s angemeldet"
 
 #: ../src/gajim.py:469
 #, python-format
