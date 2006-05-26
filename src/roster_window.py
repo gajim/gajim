@@ -1385,9 +1385,9 @@ class RosterWindow:
 		roster_contact_context_menu.attach_to_widget(self.tree, None)
 		roster_contact_context_menu.connect('selection-done',
 			gtkgui_helpers.destroy_widget)
+		roster_contact_context_menu.show_all()
 		roster_contact_context_menu.popup(None, None, None, event_button,
 			event.time)
-		roster_contact_context_menu.show_all()
 
 	def make_group_menu(self, event, iter):
 		'''Make group's popup menu'''
@@ -1418,8 +1418,8 @@ class RosterWindow:
 
 		menu.attach_to_widget(self.tree, None)
 		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
-		menu.popup(None, None, None, event_button, event.time)
 		menu.show_all()
+		menu.popup(None, None, None, event_button, event.time)
 
 	def make_transport_menu(self, event, iter):
 		'''Make transport's popup menu'''
@@ -1484,8 +1484,8 @@ class RosterWindow:
 
 		menu.attach_to_widget(self.tree, None)
 		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
-		menu.popup(None, None, None, event_button, event.time)
 		menu.show_all()
+		menu.popup(None, None, None, event_button, event.time)
 
 	def on_edit_account(self, widget, account):
 		if gajim.interface.instances[account].has_key('account_modification'):
@@ -1602,8 +1602,8 @@ class RosterWindow:
 
 		menu.attach_to_widget(self.tree, None)
 		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
-		menu.popup(None, self.tree, None, event_button, event.time)
 		menu.show_all()
+		menu.popup(None, self.tree, None, event_button, event.time)
 
 	def on_add_to_roster(self, widget, contact, account):
 		dialogs.AddNewContactWindow(account, contact.jid)
@@ -3202,8 +3202,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 			menu.attach_to_widget(self.tree, None)
 			menu.connect('selection-done', gtkgui_helpers.destroy_widget)
-			menu.popup(None, None, None, 1, etime)
 			menu.show_all()
+			menu.popup(None, None, None, 1, etime)
 
 	def show_title(self):
 		change_title_allowed = gajim.config.get('change_roster_title')

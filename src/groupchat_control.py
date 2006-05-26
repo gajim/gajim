@@ -1559,8 +1559,8 @@ class GroupchatControl(ChatControlBase):
 
 		# show the popup now!
 		menu = xml.get_widget('gc_occupants_menu')
-		menu.popup(None, None, None, event.button, event.time)
 		menu.show_all()
+		menu.popup(None, None, None, event.button, event.time)
 
 	def _start_private_message(self, nick):
 		gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
