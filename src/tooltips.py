@@ -525,17 +525,25 @@ class RosterTooltip(NotificationAreaTooltip):
 				properties.append((_('OpenPGP: '),
 					gtkgui_helpers.escape_for_pango_markup(keyID)))
 		num_resources = 0
+		# put contacts in dict, where key is priority
+		contacts_dict = {}
 		for contact in contacts:
 			if contact.resource:
 				num_resources += 1
+				if contact.priority in contacts_dict:
+					contacts_dict[contact.priority].append(contact)
+				else:
+					contacts_dict[contact.priority] = [contact]
 		
 		if num_resources== 1 and contact.resource:
 			properties.append((_('Resource: '),	gtkgui_helpers.escape_for_pango_markup(
 							contact.resource) + ' (' + unicode(contact.priority) + ')'))
 		if num_resources > 1:
 			properties.append((_('Status: '),	' '))
-			for contact in contacts:
-				if contact.resource:
+			contact_keys = contacts_dict.keys()
+			contact_keys.sort(reverse = True)
+			for priority in contact_keys:
+				for contact in contacts_dict[priority]:
 					status_line = self.get_status_info(contact.resource,
 						contact.priority, contact.show, contact.status)
 					
