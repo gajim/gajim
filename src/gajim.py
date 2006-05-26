@@ -127,17 +127,47 @@ for o, a in opts:
 	elif o in ('-p', '--profile'): # gajim --profile name
 		profile = a
 
+pid_filename = os.path.expanduser('~/.gajim/gajim')
 config_filename = os.path.expanduser('~/.gajim/config')
 if os.name == 'nt':
 	try:
 		# Documents and Settings\[User Name]\Application Data\Gajim\logs
 		config_filename = os.environ['appdata'] + '/Gajim/config'
+		pid_filename = os.environ['appdata'] + '/Gajim/gajim'
 	except KeyError:
 		# win9x so ./config
 		config_filename = 'config'
+		pid_filename = 'gajim'
 
 if profile:
 	config_filename += '.%s' % profile
+	pid_filename += '.%s' % profile
+
+pid_filename += '.pid'
+
+if os.path.exists(pid_filename):
+	pritext = _('Gajim is already running')
+	sectext = _('Exit the already running Gajim. Quiting...')
+	dlg = gtk.MessageDialog(None, 
+				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
+				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = pritext)
+
+	dlg.format_secondary_text(sectext)
+	dlg.run()
+	dlg.destroy()
+	sys.exit(3)
+
+# Create pif file
+f = open(pid_filename, 'a')
+f.close()
+
+def on_exit():
+	# delete pid file on normal exit
+	if os.path.exists(pid_filename):
+		os.remove(pid_filename)
+
+import atexit
+atexit.register(on_exit)
 
 parser = optparser.OptionsParser(config_filename)
 
@@ -1812,7 +1842,10 @@ class Interface:
 		gobject.timeout_add(500, self.read_sleepy)
 
 if __name__ == '__main__':
-	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
+	def sigint_cb(num, stack):
+		sys.exit(5)
+	# ^C exits the application normally to delete pid file
+	signal.signal(signal.SIGINT, sigint_cb)
 
 	if os.name != 'nt':
 		# Session Management support
@@ -1840,8 +1873,7 @@ if __name__ == '__main__':
 					cli.set_restart_command(len(argv), argv)
 		
 		gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
-	
-	
+
 	# Migrate old logs if we have such olds logs
 	from common import logger
 	from migrate_logs_to_dot9_db import PATH_TO_LOGS_BASE_DIR
@@ -1869,4 +1901,3 @@ if __name__ == '__main__':
 		check_paths.check_and_possibly_create_paths()
 		Interface()
 	gtk.main()
-	
