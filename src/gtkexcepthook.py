@@ -27,6 +27,7 @@
 ##
 
 import sys
+import os
 import traceback
 import threading
 
@@ -102,7 +103,8 @@ def _info(type, value, tb):
 
 	_exception_in_progress.release()
 	
-if not sys.stderr.isatty(): # gdb/kdm etc if we use startx this is not True
+# gdb/kdm etc if we use startx this is not True
+if os.name == 'nt' or not sys.stderr.isatty():
 	#FIXME: maybe always show dialog?
 	_excepthook_save = sys.excepthook
 	sys.excepthook = _info
