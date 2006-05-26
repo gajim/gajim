@@ -28,12 +28,12 @@ gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/gajim_themes_window.glade.h \
 			../data/glade/gc_control_popup_menu.glade.h \
 			../data/glade/gc_occupants_menu.glade.h \
-			../data/glade/gtkgui.glade.h \
 			../data/glade/history_manager.glade.h \
 			../data/glade/history_window.glade.h \
 			../data/glade/input_dialog.glade.h \
 			../data/glade/invitation_received_dialog.glade.h \
 			../data/glade/join_groupchat_window.glade.h \
+			../data/glade/manage_accounts_window.glade.h \
 			../data/glade/manage_bookmarks_window.glade.h \
 			../data/glade/manage_proxies_window.glade.h \
 			../data/glade/message_window.glade.h \

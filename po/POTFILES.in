@@ -23,12 +23,12 @@ data/glade/filetransfers.glade
 data/glade/gajim_themes_window.glade
 data/glade/gc_control_popup_menu.glade
 data/glade/gc_occupants_menu.glade
-data/glade/gtkgui.glade
 data/glade/history_manager.glade
 data/glade/history_window.glade
 data/glade/input_dialog.glade
 data/glade/invitation_received_dialog.glade
 data/glade/join_groupchat_window.glade
+data/glade/manage_accounts_window.glade
 data/glade/manage_bookmarks_window.glade
 data/glade/manage_proxies_window.glade
 data/glade/message_window.glade
