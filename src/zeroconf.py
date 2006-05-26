@@ -1,6 +1,5 @@
-#!/usr/bin/python
-
-import os, sys
+import os
+import sys
 
 try:
 	import avahi, gobject, dbus
@@ -12,8 +11,6 @@ try:
 except ImportError, e:
 	pass
 
-service_browsers = {}
-
 class Zeroconf:
 	def __init__(self, name):
 		self.domain = None   # specific domain to browse
@@ -22,6 +19,7 @@ class Zeroconf:
 		self.name = name  # service name / username
 		self.txt = {}
 
+		self.service_browsers = {}
 		self.contacts = {}    # all current local contacts with data
 		self.entrygroup = ''
 		
@@ -42,10 +40,8 @@ class Zeroconf:
 		del self.contacts[(interface, name, domain)]
 
 	def new_service_type(self, interface, protocol, stype, domain, flags):
-		global service_browsers
-
 		# Are we already browsing this domain for this type? 
-		if service_browsers.has_key((interface, protocol, stype, domain)):
+		if self.service_browsers.has_key((interface, protocol, stype, domain)):
 			return
 
 		print "Browsing for services of type '%s' in domain '%s' on %i.%i ..." % (stype, domain, interface, protocol)
@@ -56,7 +52,7 @@ class Zeroconf:
 		b.connect_to_signal('ItemNew', self.new_service_callback)
 		b.connect_to_signal('ItemRemove', self.remove_service_callback)
 
-		service_browsers[(interface, protocol, stype, domain)] = b
+		self.service_browsers[(interface, protocol, stype, domain)] = b
 
 	def new_domain_callback(self,interface, protocol, domain, flags):
 		if domain != "local":
@@ -164,13 +160,16 @@ class Zeroconf:
 		self.resolve_all
 		return self.contacts
 
-	def	set_status(self, status):
+	def set_status(self, status):
 		self.txt[('status')] = status
 		txt = avahi.dict_to_txt_array(self.txt)
 
 		self.entrygroup.UpdateServiceTxt(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype,'', txt, reply_handler=self.service_updated_callback, error_handler=self.print_error_callback)
 #		self.entrygroup.Commit()         # TODO: necessary?
 
+# END Zeroconf
+
+'''
 def main():
 
 	zeroconf = Zeroconf('foo')
@@ -186,3 +185,4 @@ def main():
 
 if __name__ == "__main__":
 	main()                                         
+'''
