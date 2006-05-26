@@ -313,6 +313,12 @@ _('Connection with peer cannot be established.'))
 				file_path = gtkgui_helpers.decode_filechooser_file_paths(
 					(file_path,))[0]
 				if os.path.exists(file_path):
+					# check if we have write permissions
+					if not os.access(file_path, os.W_OK):
+						file_name = os.path.basename(file_path)
+						dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' % file_name),
+						_('A file with this name already exists and you do not have permission to overwrite it.'))
+						return
 					stat = os.stat(file_path)
 					dl_size = stat.st_size
 					file_size = file_props['size']
@@ -327,6 +333,11 @@ _('Connection with peer cannot be established.'))
 						return
 					elif response == 100:
 						file_props['offset'] = dl_size
+				else:
+					dirname = os.path.dirname(file_path)
+					if not os.access(dirname, os.W_OK):
+						dialogs.ErrorDialog(_('Directory "%s" is not writable' % dirname), _('You do not have permission to create files in this directory.'))
+						return
 				dialog2.destroy()
 				self._start_receive(file_path, account, contact, file_props)
 
