@@ -1,5 +1,6 @@
 import os
 import sys
+import getpass
 
 try:
 	import avahi, gobject, dbus
@@ -12,12 +13,12 @@ except ImportError, e:
 	pass
 
 class Zeroconf:
-	def __init__(self, name):
+	def __init__(self):
 		self.domain = None   # specific domain to browse
-		self.stype = '_presence._tcp'
+		self.stype = '_presence._tcp'	
 		self.port = 5298  # listening port that gets announced
-		self.name = name  # service name / username
-		self.txt = {}
+		self.name = getpass.getuser()  # service name / username
+		self.txt = {}		# service data
 
 		self.service_browsers = {}
 		self.contacts = {}    # all current local contacts with data
@@ -66,21 +67,21 @@ class Zeroconf:
 
 
 	def service_added_callback(self):
-		print "Service successfully added"
+		print 'Service successfully added'
 	
 	def service_committed_callback(self):
-		print "Service successfully committed"
+		print 'Service successfully committed'
 		
 	def service_updated_callback(self):
-		print "Service successfully updated"
+		print 'Service successfully updated'
 
 	def service_add_fail_callback(self, err):
-		print "Error while adding service:", str(err)
+		print 'Error while adding service:', str(err)
 		self.name = self.server.GetAlternativeServiceName(self.name)
 		self.create_service()
 	
 	def server_state_changed_callback(self, state, error):
-		print "server.state %s" % state
+		print 'server.state %s' % state
 		if state == avahi.SERVER_RUNNING:
 			self.create_service()
 		elif state == avahi.SERVER_COLLISION:
@@ -88,12 +89,10 @@ class Zeroconf:
 #		elif state == avahi.CLIENT_FAILURE:           # TODO: add error handling (avahi daemon dies...?)
 		
 	def entrygroup_state_changed_callback(self, state, error):
-		# the name is already present, so ...
+		# the name is already present, so recreate
 		if state == avahi.ENTRY_GROUP_COLLISION:
-			print "Collision with existing service of name %s" % self.name
-			# ... get a new one and recreate the service
-			self.name = self.server.GetAlternativeServiceName(self.name)
-			self.create_service()
+			self.service_add_fail_callback('Local name collision, recreating.')
+			
 #		elif state == avahi.ENTRY_GROUP_FAILURE:
 
 	def create_service(self):
@@ -110,7 +109,7 @@ class Zeroconf:
 		self.entrygroup.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
 		self.entrygroup.Commit(reply_handler=self.service_committed_callback, error_handler=self.print_error_callback)
 		
-	def publish(self):
+	def announce(self):
 		state = self.server.GetState()
 
 		if state == avahi.SERVER_RUNNING:
@@ -146,8 +145,8 @@ class Zeroconf:
 			# Just browse the domain the user wants us to browse
 			self.browse_domain(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, domain)
 
-#   def disconnect:
-#       necessary ?
+	def disconnect(self):
+		self.remove_announce()
 
 	# refresh data manually - really ok or too much traffic?
 	def resolve_all(self):
@@ -160,8 +159,11 @@ class Zeroconf:
 		self.resolve_all
 		return self.contacts
 
-	def set_status(self, status):
-		self.txt[('status')] = status
+	def update_txt(self, txt):
+		# update only given keys
+		for key in txt.keys():
+			self.txt[key]=txt[key]
+			
 		txt = avahi.dict_to_txt_array(self.txt)
 
 		self.entrygroup.UpdateServiceTxt(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype,'', txt, reply_handler=self.service_updated_callback, error_handler=self.print_error_callback)
@@ -172,11 +174,17 @@ class Zeroconf:
 '''
 def main():
 
-	zeroconf = Zeroconf('foo')
-	zeroconf.connect()
-	zeroconf.txt[('last')] = 'foo'
-	zeroconf.publish()
-	zeroconf.set_status('avail')
+	zeroconf = Zeroconf()
+	zeroconf.connect()				
+	zeroconf.txt[('1st')] = 'foo'
+	zeroconf.txt[('last')] = 'bar'
+	zeroconf.announce()
+
+	# updating after announcing
+	txt = {}
+	txt['status'] = 'avail'			# out of avail/away/dnd
+	txt['msg'] = 'Here I am'
+	zeroconf.update_txt(txt)
 	
 	try:
 		gobject.MainLoop().run()
