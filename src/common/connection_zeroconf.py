@@ -1,4 +1,4 @@
-##	common/connection.py
+##	common/connection_zeroconf.py
 ##
 ## Contributors for this file:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
@@ -34,10 +34,11 @@ import signal
 if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
-import common.xmpp
+# import common.xmpp
 from common import helpers
 from common import gajim
 from common import GnuPG
+from common import zeroconf
 
 from connection_handlers_zeroconf import *
 USE_GPG = GnuPG.USE_GPG
@@ -50,17 +51,18 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def __init__(self, name):
 		ConnectionHandlersZeroconf.__init__(self)
 		self.name = name
+		self.zeroconf = Zeroconf()
 		self.connected = 0 # offline
-		self.connection = None # xmpppy ClientCommon instance
+#		self.connection = None # xmpppy ClientCommon instance
 		# this property is used to prevent double connections
-		self.last_connection = None # last ClientCommon instance
+#		self.last_connection = None # last ClientCommon instance
 		self.gpg = None
 		self.status = ''
 		self.old_show = ''
 		# increase/decrease default timeout for server responses
 		self.try_connecting_for_foo_secs = 45
 		# holds the actual hostname to which we are connected
-		self.connected_hostname = None
+#		self.connected_hostname = None
 		self.time_to_reconnect = None
 		self.new_account_info = None
 		self.bookmarks = []
@@ -68,12 +70,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.last_io = gajim.idlequeue.current_time()
 		self.last_sent = []
 		self.last_history_line = {}
-		self.password = gajim.config.get_per('accounts', name, 'password')
-		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
-		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
-			self.keepalives = gajim.config.get_per('accounts', self.name,'keep_alive_every_foo_secs')
-		else:
-			self.keepalives = 0
+#		self.password = gajim.config.get_per('accounts', name, 'password')
+#		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
+#		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
+#			self.keepalives = gajim.config.get_per('accounts', self.name,'keep_alive_every_foo_secs')
+#		else:
+#			self.keepalives = 0
 		self.privacy_rules_supported = False
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
@@ -99,8 +101,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 
 	def _reconnect(self):
-		# Do not try to reco while we are already trying
-'''		self.time_to_reconnect = None
+		'''# Do not try to reco while we are already trying
+		self.time_to_reconnect = None
 		if self.connected < 2: #connection failed
 			gajim.log.debug('reconnect')
 			self.retrycount += 1
@@ -110,12 +112,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		else:
 			# reconnect succeeded
 			self.time_to_reconnect = None
-			self.retrycount = 0 '''
+			self.retrycount = 0
+		'''
 		
-		self.time_to_reconnect = None
-		self.retrycount = 0
 		gajim.log.debug('reconnect')
-		signed = self.get_signed_msg(self.status)
+
+		# TODO: no gpg for now, add some day
+		# signed = self.get_signed_msg(self.status)
 			
 	
 	# We are doing disconnect at so many places, better use one function in all
@@ -125,13 +128,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.time_to_reconnect = None
 		if self.connection:
 			# make sure previous connection is completely closed
-			gajim.proxy65_manager.disconnect(self.connection)
-			self.connection.disconnect()
 			self.last_connection = None
 			self.connection = None
-	
+			self.zeroconf.disconnect()
+			
+	'''
 	def _disconnectedReconnCB(self):
-		'''Called when we are disconnected'''
+		# Called when we are disconnected
 		gajim.log.debug('disconnectedReconnCB')
 		if self.connected > 1:
 			# we cannot change our status to offline or connectiong
@@ -163,14 +166,17 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.disconnect()
 		self.on_purpose = False
 	# END disconenctedReconnCB
-	
+	'''
+
+	'''
 	def _connection_lost(self):
 		self.disconnect(on_purpose = False)
 		self.dispatch('STATUS', 'offline')
 		self.dispatch('ERROR',
 		(_('Connection with account "%s" has been lost') % self.name,
 		_('To continue sending and receiving messages, you will need to reconnect.')))
-
+	'''
+	'''
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
 			if event == common.xmpp.features_nb.REGISTER_DATA_RECEIVED:
@@ -221,7 +227,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
 			elif event == common.xmpp.transports.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
-
+	'''
+	
 	def select_next_host(self, hosts):
 		hosts_best_prio = []
 		best_prio = 65535
@@ -244,16 +251,20 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				if h['weight'] <= min_w:
 					min_w = h['weight']
 		return h
+	
 
 	def connect(self, data = None):
-		# TODO: remove any server connection and get zeroconf instance instead
-		#	get presence information from there
-	
+
+		zeroconf.connect()
+		
+		
 		''' Start a connection to the Jabber server.
 		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')
 		data MUST contain name, hostname, resource, usessl, proxy,
 		use_custom_host, custom_host (if use_custom_host), custom_port (if
 		use_custom_host), '''
+		
+		'''
 		if self.connection:
 			return self.connection, ''
 
@@ -317,14 +328,17 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			gajim.resolver.resolve('_xmpp-client._tcp.' + h.encode('utf-8'), self._on_resolve)
 		else:
 			self._on_resolve('', [])
-
+	'''
+	'''
 	def _on_resolve(self, host, result_array):
 		# SRV query returned at least one valid result, we put it in hosts dict
 		if len(result_array) != 0:
 			self._hosts = [i for i in result_array]
 		self.connect_to_next_host()
-
+	'''
+	'''
 	def connect_to_next_host(self, retry = False):
+		
 		if len(self._hosts):
 			if self.last_connection:
 				self.last_connection.socket.disconnect()
@@ -361,7 +375,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			else:
 				# try reconnect if connection has failed before auth to server
 				self._disconnectedReconnCB()
-
+	'''
+	'''
 	def _connect_failure(self, con_type = None):
 		if not con_type:
 			# we are not retrying, and not conecting
@@ -370,7 +385,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.dispatch('STATUS', 'offline')
 				self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
 					_('Check your connection or try again later.')))
-
+	'''
+	'''
 	def _connect_success(self, con, con_type):
 		if not self.connected: # We went offline during connecting process
 			# FIXME - not possible, maybe it was when we used threads
@@ -388,7 +404,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.get_metacontacts()
 		self._register_handlers(con, con_type)
 		return True
-
+	'''
+	'''
 	def _register_handlers(self, con, con_type):
 		self.peerhost = con.get_peerhost()
 		# notify the gui about con_type
@@ -399,7 +416,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		self.connection = con
 		con.auth(name, self.password, resource, 1, self.__on_auth)
-
+	'''
+	'''
 	def __on_auth(self, con, auth):
 		if not con:
 			self.disconnect(on_purpose = True)
@@ -436,31 +454,40 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.on_connect_auth(None)
 				self.on_connect_auth = None
 	# END connect
+	'''
+	
 
 	def quit(self, kill_core):
+	
 		if kill_core and self.connected > 1:
 			self.disconnect(on_purpose = True)
 	
+	'''	
+	#invisible == no service announced( privacy rule? )
 	def build_privacy_rule(self, name, action):
-		'''Build a Privacy rule stanza for invisibility'''
+		#Build a Privacy rule stanza for invisibility
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
 		l = iq.getTag('query').setTag('list', {'name': name})
 		i = l.setTag('item', {'action': action, 'order': '1'})
 		i.setTag('presence-out')
 		return iq
-
+	'''
+	
+	'''
 	def activate_privacy_rule(self, name):
-		'''activate a privacy rule'''
+		activate a privacy rule
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
 		iq.getTag('query').setTag('active', {'name': name})
 		self.connection.send(iq)
-
+	'''
+	'''
 	def send_invisible_presence(self, msg, signed, initial = False):
 		# try to set the privacy rule
 		iq = self.build_privacy_rule('invisible', 'deny')
 		self.connection.SendAndCallForResponse(iq, self._continue_invisible,
 			{'msg': msg, 'signed': signed, 'initial': initial})
-
+	'''
+	'''
 	def _continue_invisible(self, con, iq_obj, msg, signed, initial):
 		ptype = ''
 		show = ''
@@ -491,7 +518,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 			#Inform GUI we just signed in
 			self.dispatch('SIGNED_IN', ())
-
+	'''
+	
+	
 	def test_gpg_passphrase(self, password):
 		self.gpg.passphrase = password
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
@@ -517,91 +546,78 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					if self.connected < 2:
 						self.dispatch('BAD_PASSPHRASE', ())
 		return signed
-
+	
+	
 	def connect_and_auth(self):
+		'''
 		self.on_connect_success = self._connect_success
 		self.on_connect_failure = self._connect_failure
 		self.connect()
+		'''
+
+		pass
 
 	def connect_and_init(self, show, msg, signed):
+		'''
 		self.continue_connect_info = [show, msg, signed]
 		self.on_connect_auth = self._init_roster
 		self.connect_and_auth()
+		'''
+	
+		if show == 'online':
+			show = 'avail'
+
+		self.zeroconf.txt['status'] = show
+		self.zeroconf.txt['msg'] = msg
+		self.connect()
 
 	def _init_roster(self, con):
+		'''	
 		self.connection = con
 		if self.connection:
 			con.set_send_timeout(self.keepalives, self.send_keepalive)
 			self.connection.onreceive(None)
 			# Ask metacontacts before roster
 			self.get_metacontacts()
+		'''
+
+		pass
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		if not show in STATUS_LIST:
 			return -1
-		sshow = helpers.get_xmpp_show(show)
-		if not msg:
-			msg = ''
-		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		if keyID and USE_GPG and not msg:
-			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
-			# do not show I'm invisible!
-			if lowered_uf_status_msg == _('invisible'):
-				lowered_uf_status_msg = _('offline')
-			msg = _("I'm %s") % lowered_uf_status_msg
-		signed = ''
-		if not auto and not show == 'offline':
-			signed = self.get_signed_msg(msg)
-		self.status = msg
-		if show != 'offline' and not self.connected:
-			# set old_show to requested 'show' in case we need to
-			# recconect before we auth to server
-			self.old_show = show
-			self.on_purpose = False 
-			self.connect_and_init(show, msg, signed)
+		
+		if show == 'chat':
+			show = 'online'
+		elif show == 'xa':
+			show = 'away'
 
+		# connect
+		if show != 'offline' and not self.connected:
+			self.on_purpose = False
+			self.connect_and_init(show, msg, '')
+
+		# disconnect
 		elif show == 'offline' and self.connected:
 			self.connected = 0
-			if self.connection:
-				self.on_purpose = True
-				p = common.xmpp.Presence(typ = 'unavailable')
-				p = self.add_sha(p, False)
-				if msg:
-					p.setStatus(msg)
-				self.remove_all_transfers()
-				self.time_to_reconnect = None
-				self.connection.start_disconnect(p, self._on_disconnected)
-			else:
-				self.time_to_reconnect = None
-				self._on_disconnected()
+			self._on_disconnected()
 
+		# update status
 		elif show != 'offline' and self.connected:
-			# dont'try to connect, when we are in state 'connecting'
-			if self.connected == 1:
-				return
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
-				self.send_invisible_presence(msg, signed)
+				self.zeroconf.remove_announce()
 				return
-			if was_invisible and self.privacy_rules_supported:
-				iq = self.build_privacy_rule('visible', 'allow')
-				self.connection.send(iq)
-				self.activate_privacy_rule('visible')
-			prio = unicode(gajim.config.get_per('accounts', self.name,
-				'priority'))
-			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
-			p = self.add_sha(p)
-			if msg:
-				p.setStatus(msg)
-			if signed:
-				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+			if was_invisible:
+				self.zeroconf.announce()
 			if self.connection:
-				self.connection.send(p)
+				txt = {}
+				txt['status'] = show
+				self.zeroconf.update_txt(txt)
 			self.dispatch('STATUS', show)
 
 	def _on_disconnected(self):
-		''' called when a disconnect request has completed successfully'''
 		self.dispatch('STATUS', 'offline')
 		self.disconnect()
 
@@ -609,13 +625,18 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		return STATUS_LIST[self.connected]
 
 	def send_motd(self, jid, subject = '', msg = ''):
+		'''		
 		if not self.connection:
 			return
 		msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject)
 		self.connection.send(msg_iq)
+		'''
+
+		pass
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None):
+		'''
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
@@ -678,31 +699,47 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					kind = 'single_msg_sent'
 				gajim.logger.write(kind, jid, log_msg)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
+		'''
 	
 	def send_stanza(self, stanza):
-		''' send a stanza untouched '''
+		# send a stanza untouched
+		'''
 		if not self.connection:
 			return
 		self.connection.send(stanza)
+		'''
+		
+		pass
 	
 	def ack_subscribed(self, jid):
 		if not self.connection:
 			return
+		pass
+
+		'''
 		gajim.log.debug('ack\'ing subscription complete for %s' % jid)
 		p = common.xmpp.Presence(jid, 'subscribe')
 		self.connection.send(p)
+		'''
 
 	def ack_unsubscribed(self, jid):
 		if not self.connection:
 			return
+		pass
+		
+		'''		
 		gajim.log.debug('ack\'ing unsubscription complete for %s' % jid)
 		p = common.xmpp.Presence(jid, 'unsubscribe')
 		self.connection.send(p)
+		'''
 
 	def request_subscription(self, jid, msg = '', name = '', groups = [],
 	auto_auth = False):
 		if not self.connection:
 			return
+		pass
+		
+		'''		
 		gajim.log.debug('subscription request for %s' % jid)
 		if auto_auth:
 			self.jids_for_auto_auth.append(jid)
@@ -723,24 +760,36 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			msg = _('I would like to add you to my roster.')
 		p.setStatus(msg)
 		self.connection.send(p)
+		'''
 
 	def send_authorization(self, jid):
 		if not self.connection:
 			return
+		pass
+		
+		'''		
 		p = common.xmpp.Presence(jid, 'subscribed')
 		p = self.add_sha(p)
 		self.connection.send(p)
+		'''
 
 	def refuse_authorization(self, jid):
 		if not self.connection:
 			return
+		pass
+		
+		'''		
 		p = common.xmpp.Presence(jid, 'unsubscribed')
 		p = self.add_sha(p)
 		self.connection.send(p)
+		'''
 
 	def unsubscribe(self, jid, remove_auth = True):
 		if not self.connection:
 			return
+		pass
+		
+		'''		
 		if remove_auth:
 			self.connection.getRoster().delItem(jid)
 			jid_list = gajim.config.get_per('contacts')
@@ -750,10 +799,14 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		else:
 			self.connection.getRoster().Unsubscribe(jid)
 			self.update_contact(jid, '', [])
+		'''
 
 	def unsubscribe_agent(self, agent):
 		if not self.connection:
 			return
+		pass
+		
+		'''		
 		iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
 		iq.getTag('query').setTag('remove')
 		id = self.connection.getAnID()
@@ -761,16 +814,20 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.awaiting_answers[id] = (AGENT_REMOVED, agent)
 		self.connection.send(iq)
 		self.connection.getRoster().delItem(agent)
+		'''
 
 	def update_contact(self, jid, name, groups):
-		'''update roster item on jabber server'''
+		'''
+		# update roster item on jabber server
 		if self.connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
+		'''				
 	
 	def new_account(self, name, config, sync = False):
+		'''
 		# If a connection already exist we cannot create a new account
-		if self.connection:
+		if self.connection :
 			return
 		self._hostname = config['hostname']
 		self.new_account_info = config
@@ -778,8 +835,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.on_connect_success = self._on_new_account
 		self.on_connect_failure = self._on_new_account
 		self.connect(config)
+		'''		
 
 	def _on_new_account(self, con = None, con_type = None):
+		'''
 		if not con_type:
 			self.dispatch('ACC_NOT_OK',
 				(_('Could not connect to "%s"') % self._hostname))
@@ -787,11 +846,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.on_connect_failure = None
 		self.connection = con
 		common.xmpp.features_nb.getRegInfo(con, self._hostname)
+		'''
 
 	def account_changed(self, new_name):
 		self.name = new_name
 
 	def request_last_status_time(self, jid, resource):
+		'''
 		if not self.connection:
 			return
 		to_whom_jid = jid
@@ -800,8 +861,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_LAST)
 		self.connection.send(iq)
+		'''
+		pass
 
 	def request_os_info(self, jid, resource):
+		'''
 		if not self.connection:
 			return
 		to_whom_jid = jid
@@ -810,18 +874,24 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_VERSION)
 		self.connection.send(iq)
+		'''
+		pass
 
 	def get_settings(self):
-		''' Get Gajim settings as described in JEP 0049 '''
+		'''
+		# Get Gajim settings as described in JEP 0049
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq3 = iq2.addChild(name='gajim', namespace='gajim:prefs')
 		self.connection.send(iq)
+		'''
+		pass
 
 	def get_bookmarks(self):
-		'''Get Bookmarks from storage as described in JEP 0048'''
+		'''
+		# Get Bookmarks from storage as described in JEP 0048
 		self.bookmarks = [] #avoid multiple bookmarks when re-connecting
 		if not self.connection:
 			return
@@ -829,9 +899,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq2.addChild(name='storage', namespace='storage:bookmarks')
 		self.connection.send(iq)
-
+		'''
+		pass
+		
 	def store_bookmarks(self):
-		''' Send bookmarks to the storage namespace '''
+		'''
+		# Send bookmarks to the storage namespace
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
@@ -852,18 +925,23 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			if bm['print_status']:
 				iq5 = iq4.setTagData('print_status', bm['print_status'])
 		self.connection.send(iq)
+		'''		
+		pass
 
+	'''
 	def get_metacontacts(self):
-		'''Get metacontacts list from storage as described in JEP 0049'''
+		
+		# Get metacontacts list from storage as described in JEP 0049
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq2.addChild(name='storage', namespace='storage:metacontacts')
 		self.connection.send(iq)
-
+	'''
+	'''
 	def store_metacontacts(self, tags_list):
-		''' Send meta contacts to the storage namespace '''
+		# Send meta contacts to the storage namespace
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
@@ -877,15 +955,21 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					dict_['order'] = data['order']
 				iq3.addChild(name = 'meta', attrs = dict_)
 		self.connection.send(iq)
+	'''
 
 	def send_agent_status(self, agent, ptype):
+		'''
 		if not self.connection:
 			return
 		p = common.xmpp.Presence(to = agent, typ = ptype)
 		p = self.add_sha(p, ptype != 'unavailable')
 		self.connection.send(p)
+		'''
+		pass
+
 
 	def join_gc(self, nick, room, server, password):
+		'''
 		if not self.connection:
 			return
 		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
@@ -907,33 +991,48 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if last_log is None:
 			last_log = 0
 		self.last_history_line[jid]= last_log
-
+		'''
+		pass
+		
 	def send_gc_message(self, jid, msg):
+		'''
 		if not self.connection:
 			return
 		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat')
 		self.connection.send(msg_iq)
 		self.dispatch('MSGSENT', (jid, msg))
-
+		'''
+		pass
+		
 	def send_gc_subject(self, jid, subject):
+		'''
 		if not self.connection:
 			return
 		msg_iq = common.xmpp.Message(jid,typ = 'groupchat', subject = subject)
 		self.connection.send(msg_iq)
-
+		'''
+		pass
+		
 	def request_gc_config(self, room_jid):
+		'''
 		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
 			to = room_jid)
 		self.connection.send(iq)
+		'''
+		pass
 
 	def change_gc_nick(self, room_jid, nick):
+		'''
 		if not self.connection:
 			return
 		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick))
 		p = self.add_sha(p)
 		self.connection.send(p)
-
+		'''
+		pass
+		
 	def send_gc_status(self, nick, jid, show, status):
+		'''
 		if not self.connection:
 			return
 		if show == 'invisible':
@@ -949,9 +1048,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server
 		self.connection.send(p)
-
+		'''
+		pass
+		
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
-		'''role is for all the life of the room so it's based on nick'''
+		'''
+		# role is for all the life of the room so it's based on nick
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
@@ -962,9 +1064,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if reason:
 			item.addChild(name = 'reason', payload = reason)
 		self.connection.send(iq)
-
+		'''
+		pass
+		
 	def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
-		'''affiliation is for all the life of the room so it's based on jid'''
+		'''
+		# affiliation is for all the life of the room so it's based on jid
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
@@ -975,8 +1080,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if reason:
 			item.addChild(name = 'reason', payload = reason)
 		self.connection.send(iq)
-
+		'''
+		pass
+		
 	def send_gc_affiliation_list(self, room_jid, list):
+		'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS = \
@@ -988,8 +1096,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			if list[jid].has_key('reason') and list[jid]['reason']:
 				item_tag.setTagData('reason', list[jid]['reason'])
 		self.connection.send(iq)
-
+		'''
+		pass
+		
 	def get_affiliation_list(self, room_jid, affiliation):
+		'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'get', to = room_jid, queryNS = \
@@ -997,14 +1108,19 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		item = iq.getTag('query').setTag('item')
 		item.setAttr('affiliation', affiliation)
 		self.connection.send(iq)
-
+		'''
+		pass
+		
 	def send_gc_config(self, room_jid, config):
+		'''
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
 			common.xmpp.NS_MUC_OWNER)
 		query = iq.getTag('query')
 		self.build_data_from_dict(query, config)
 		self.connection.send(iq)
-
+		'''
+		pass
+		
 	def gpg_passphrase(self, passphrase):
 		if USE_GPG:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
@@ -1028,6 +1144,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def change_password(self, password):
 		if not self.connection:
 			return
+		'''
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		username = gajim.config.get_per('accounts', self.name, 'name')
 		iq = common.xmpp.Iq(typ = 'set', to = hostname)
@@ -1035,8 +1152,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		q.setTagData('username',username)
 		q.setTagData('password',password)
 		self.connection.send(iq)
-
+		'''
+		pass
+		
 	def unregister_account(self, on_remove_success):
+		'''
 		# no need to write this as a class method and keep the value of on_remove_success
 		# as a class property as pass it as an argument
 		def _on_unregister_account_connect(con):
@@ -1054,26 +1174,37 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.connect_and_auth()
 		else:
 			_on_unregister_account_connect(self.connection)
-
+		'''
+		pass
+		
 	def send_invite(self, room, to, reason=''):
-		'''sends invitation'''
+		'''
+		# sends invitation
 		message=common.xmpp.Message(to = room)
 		c = message.addChild(name = 'x', namespace = common.xmpp.NS_MUC_USER)
 		c = c.addChild(name = 'invite', attrs={'to' : to})
 		if reason != '':
 			c.setTagData('reason', reason)
 		self.connection.send(message)
-
+		'''
+		pass
+		
 	def send_keepalive(self):
+		'''
 		# nothing received for the last foo seconds (60 secs by default)
 		if self.connection:
 			self.connection.send(' ')
-
+		'''
+		pass
+		
 	def _reconnect_alarm(self):
+		'''
 		if self.time_to_reconnect:
 			if self.connected < 2:
 				self._reconnect()
 			else:
 				self.time_to_reconnect = None
-
+		'''
+		pass
+		
 # END Connection
