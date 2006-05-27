@@ -147,7 +147,7 @@ pid_filename += '.pid'
 
 if os.path.exists(pid_filename):
 	pritext = _('Gajim is already running')
-	sectext = _('Exit the already running Gajim. Quiting...')
+	sectext = _('Exit the already running Gajim, or delete pid file:\n "%s".\n Quiting...' % pid_filename)
 	dlg = gtk.MessageDialog(None, 
 				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
 				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = pritext)
