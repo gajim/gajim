@@ -56,7 +56,7 @@ class ConversationTextview:
 		self.tv.set_accepts_tab(True)
 		self.tv.set_editable(False)
 		self.tv.set_cursor_visible(False)
-		self.tv.set_wrap_mode(gtk.WRAP_WORD)
+		self.tv.set_wrap_mode(gtk.WRAP_WORD_CHAR)
 		self.tv.set_left_margin(2)
 		self.tv.set_right_margin(2)
 		self.handlers = {}
