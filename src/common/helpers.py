@@ -692,8 +692,11 @@ def get_os_info():
 					text = fd.readline().strip() # get only first line
 					fd.close()
 					if path_to_file.endswith('version'):
-						# sourcemage_version has all the info we need
-						if not os.path.basename(path_to_file).startswith('sourcemage'):
+						# sourcemage_version and slackware-version files
+						# have all the info we need (name and version of distro)
+						if not os.path.basename(path_to_file).startswith(
+						'sourcemage') or not\
+						os.path.basename(path_to_file).startswith('slackware'):
 							text = distro_name + ' ' + text
 					elif path_to_file.endswith('aurox-release'):
 						# file doesn't have version
