@@ -34,12 +34,12 @@ import signal
 if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
-# import common.xmpp
 from common import helpers
 from common import gajim
 from common import GnuPG
 from common import zeroconf
 from common import connection_handlers_zeroconf
+from common import client_zeroconf
 from connection_handlers_zeroconf import *
 
 USE_GPG = GnuPG.USE_GPG
@@ -55,10 +55,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.zeroconf = zeroconf.Zeroconf()
 		self.connected = 0 # offline
 		self.connection = None # dummy connection variable
-
 		# this property is used to prevent double connections
 #		self.last_connection = None # last ClientCommon instance
 		self.gpg = None
+		self.is_zeroconf = True
 		self.status = ''
 		self.old_show = ''
 		# increase/decrease default timeout for server responses
@@ -119,8 +119,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		
 		gajim.log.debug('reconnect')
 
-		# TODO: no gpg for now, add some day
-		# signed = self.get_signed_msg(self.status)
+		signed = self.get_signed_msg(self.status)
 			
 	
 	# We are doing disconnect at so many places, better use one function in all
@@ -133,103 +132,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.last_connection = None
 			self.connection = None
 			self.zeroconf.disconnect()
-			
-	'''
-	def _disconnectedReconnCB(self):
-		# Called when we are disconnected
-		gajim.log.debug('disconnectedReconnCB')
-		if self.connected > 1:
-			# we cannot change our status to offline or connectiong
-			# after we auth to server
-			self.old_show = STATUS_LIST[self.connected]
-		self.connected = 0
-		self.dispatch('STATUS', 'offline')
-		if not self.on_purpose:
-			self.disconnect()
-			if gajim.config.get_per('accounts', self.name, 'autoreconnect') \
-				and self.retrycount <= 10:
-				self.connected = 1
-				self.dispatch('STATUS', 'connecting')
-				self.time_to_reconnect = 10
-				# this check has moved from _reconnect method
-				if self.retrycount > 5:
-					self.time_to_reconnect = 20
-				else:
-					self.time_to_reconnect = 10
-				gajim.idlequeue.set_alarm(self._reconnect_alarm, 
-										self.time_to_reconnect)
-			elif self.on_connect_failure:
-				self.on_connect_failure()
-				self.on_connect_failure = None
-			else:
-					# show error dialog
-				self._connection_lost()
-		else:
-			self.disconnect()
-		self.on_purpose = False
-	# END disconenctedReconnCB
-	'''
-
-	'''
-	def _connection_lost(self):
-		self.disconnect(on_purpose = False)
-		self.dispatch('STATUS', 'offline')
-		self.dispatch('ERROR',
-		(_('Connection with account "%s" has been lost') % self.name,
-		_('To continue sending and receiving messages, you will need to reconnect.')))
-	'''
-	'''
-	def _event_dispatcher(self, realm, event, data):
-		if realm == common.xmpp.NS_REGISTER:
-			if event == common.xmpp.features_nb.REGISTER_DATA_RECEIVED:
-				# data is (agent, DataFrom, is_form)
-				if self.new_account_info and\
-				self.new_account_info['hostname'] == data[0]:
-					#it's a new account
-					if not data[1]: # wrong answer
-						print self.connection.lastErr
-						self.dispatch('ACC_NOT_OK', (
-							_('Transport %s answered wrongly to register request.') % \
-							data[0]))
-						return
-					req = data[1].asDict()
-					req['username'] = self.new_account_info['name']
-					req['password'] = self.new_account_info['password']
-					def _on_register_result(result):
-						if not common.xmpp.isResultNode(result):
-							self.dispatch('ACC_NOT_OK', (result.getError()))
-							return
-						self.connected = 0
-						self.password = self.new_account_info['password']
-						if USE_GPG:
-							self.gpg = GnuPG.GnuPG()
-							gajim.config.set('usegpg', True)
-						else:
-							gajim.config.set('usegpg', False)
-						gajim.connections[self.name] = self
-						self.dispatch('ACC_OK', (self.new_account_info))
-						self.new_account_info = None
-						self.connection = None
-					common.xmpp.features_nb.register(self.connection, data[0],
-						req, _on_register_result)
-					return
-				if not data[1]: # wrong answer
-					self.dispatch('ERROR', (_('Invalid answer'),
-						_('Transport %s answered wrongly to register request.') % \
-						data[0]))
-					return
-				is_form = data[2]
-				if is_form:
-					conf = self.parse_data_form(data[1])
-				else:
-					conf = data[1].asDict()
-				self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))
-		elif realm == '':
-			if event == common.xmpp.transports.DATA_RECEIVED:
-				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
-			elif event == common.xmpp.transports.DATA_SENT:
-				self.dispatch('STANZA_SENT', unicode(data))
-	'''
 	
 	def select_next_host(self, hosts):
 		hosts_best_prio = []
@@ -254,278 +156,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					min_w = h['weight']
 		return h
 	
-
-	def connect(self, data = None, show = 'online'):
-		
-		if self.connection:
-			return self.connection, ''
-
-		self.zeroconf.connect()
-		self.connection = 1
-		self.connected = STATUS_LIST.index(show)
-
-		''' Start a connection to the Jabber server.
-		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')
-		data MUST contain name, hostname, resource, usessl, proxy,
-		use_custom_host, custom_host (if use_custom_host), custom_port (if
-		use_custom_host), '''
-		
-		'''
-		if self.connection:
-			return self.connection, ''
-
-		if data:
-			name = data['name']
-			hostname = data['hostname']
-			resource = data['resource']
-			usessl = data['usessl']
-			self.try_connecting_for_foo_secs = 45
-			p = data['proxy']
-			use_srv = True
-			use_custom = data['use_custom_host']
-			if use_custom:
-				custom_h = data['custom_host']
-				custom_p = data['custom_port']
-		else:
-			name = gajim.config.get_per('accounts', self.name, 'name')
-			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-			resource = gajim.config.get_per('accounts', self.name, 'resource')
-			usessl = gajim.config.get_per('accounts', self.name, 'usessl')
-			self.try_connecting_for_foo_secs = gajim.config.get_per('accounts',
-				self.name, 'try_connecting_for_foo_secs')
-			p = gajim.config.get_per('accounts', self.name, 'proxy')
-			use_srv = gajim.config.get_per('accounts', self.name, 'use_srv')
-			use_custom = gajim.config.get_per('accounts', self.name,
-				'use_custom_host')
-			custom_h = gajim.config.get_per('accounts', self.name, 'custom_host')
-			custom_p = gajim.config.get_per('accounts', self.name, 'custom_port')
-
-		#create connection if it doesn't already exist
-		self.connected = 1
-		if p and p in gajim.config.get_per('proxies'):
-			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
-			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
-			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
-			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
-		else:
-			proxy = None
-
-		h = hostname
-		p = 5222
-		# autodetect [for SSL in 5223/443 and for TLS if broadcasted]
-		secur = None
-		if usessl:
-			p = 5223
-			secur = 1 # 1 means force SSL no matter what the port will be
-			use_srv = False # wants ssl? disable srv lookup
-		if use_custom:
-			h = custom_h
-			p = custom_p
-			use_srv = False
-
-		hosts = []
-		# SRV resolver
-		self._proxy = proxy
-		self._secure = secur
-		self._hosts = [ {'host': h, 'port': p, 'prio': 10, 'weight': 10} ]
-		self._hostname = hostname
-		if use_srv:
-			# add request for srv query to the resolve, on result '_on_resolve' will be called
-			gajim.resolver.resolve('_xmpp-client._tcp.' + h.encode('utf-8'), self._on_resolve)
-		else:
-			self._on_resolve('', [])
-	'''
-	'''
-	def _on_resolve(self, host, result_array):
-		# SRV query returned at least one valid result, we put it in hosts dict
-		if len(result_array) != 0:
-			self._hosts = [i for i in result_array]
-		self.connect_to_next_host()
-	'''
-	'''
-	def connect_to_next_host(self, retry = False):
-		
-		if len(self._hosts):
-			if self.last_connection:
-				self.last_connection.socket.disconnect()
-				self.last_connection = None
-				self.connection = None
-			if gajim.verbose:
-				con = common.xmpp.NonBlockingClient(self._hostname, caller = self,
-					on_connect = self.on_connect_success,
-					on_connect_failure = self.connect_to_next_host)
-			else:
-				con = common.xmpp.NonBlockingClient(self._hostname, debug = [], caller = self,
-					on_connect = self.on_connect_success,
-					on_connect_failure = self.connect_to_next_host)
-			self.last_connection = con
-			# increase default timeout for server responses
-			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
-			con.set_idlequeue(gajim.idlequeue)
-			host = self.select_next_host(self._hosts)
-			self._current_host = host
-			self._hosts.remove(host)
-			con.connect((host['host'], host['port']), proxy = self._proxy,
-				secure = self._secure)
-			return
-		else:
-			if not retry or self.retrycount > 10:
-				self.retrycount = 0
-				self.time_to_reconnect = None
-				if self.on_connect_failure:
-					self.on_connect_failure()
-					self.on_connect_failure = None
-				else:
-					# shown error dialog
-					self._connection_lost()
-			else:
-				# try reconnect if connection has failed before auth to server
-				self._disconnectedReconnCB()
-	'''
-	'''
-	def _connect_failure(self, con_type = None):
-		if not con_type:
-			# we are not retrying, and not conecting
-			if not self.retrycount and self.connected != 0:
-				self.disconnect(on_purpose = True)
-				self.dispatch('STATUS', 'offline')
-				self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
-					_('Check your connection or try again later.')))
-	'''
-	'''
-	def _connect_success(self, con, con_type):
-		if not self.connected: # We went offline during connecting process
-			# FIXME - not possible, maybe it was when we used threads
-			return
-		self.hosts = []
-		if not con_type:
-			gajim.log.debug('Could not connect to %s:%s' % (self._current_host['host'],
-				self._current_host['port']))
-		self.connected_hostname = self._current_host['host']
-		self.on_connect_failure = None
-		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
-		gajim.log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
-			self._current_host['port'], con_type))
-		# Ask metacontacts before roster
-		self.get_metacontacts()
-		self._register_handlers(con, con_type)
-		return True
-	'''
-	'''
-	def _register_handlers(self, con, con_type):
-		self.peerhost = con.get_peerhost()
-		# notify the gui about con_type
-		self.dispatch('CON_TYPE', con_type)
-		ConnectionHandlers._register_handlers(self, con, con_type)
-		name = gajim.config.get_per('accounts', self.name, 'name')
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		resource = gajim.config.get_per('accounts', self.name, 'resource')
-		self.connection = con
-		con.auth(name, self.password, resource, 1, self.__on_auth)
-	'''
-	'''
-	def __on_auth(self, con, auth):
-		if not con:
-			self.disconnect(on_purpose = True)
-			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
-				_('Check your connection or try again later')))
-			if self.on_connect_auth:
-				self.on_connect_auth(None)
-				self.on_connect_auth = None
-				return
-		if not self.connected: # We went offline during connecting process
-			if self.on_connect_auth:
-				self.on_connect_auth(None)
-				self.on_connect_auth = None
-				return
-		if hasattr(con, 'Resource'):
-			self.server_resource = con.Resource
-		if auth:
-			self.last_io = gajim.idlequeue.current_time()
-			self.connected = 2
-			if self.on_connect_auth:
-				self.on_connect_auth(con)
-				self.on_connect_auth = None
-		else:
-			# Forget password if needed
-			if not gajim.config.get_per('accounts', self.name, 'savepass'):
-				self.password = None
-			gajim.log.debug("Couldn't authenticate to %s" % self._hostname)
-			self.disconnect(on_purpose = True)
-			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Authentication failed with "%s"') % self._hostname,
-				_('Please check your login and password for correctness.')))
-			if self.on_connect_auth:
-				self.on_connect_auth(None)
-				self.on_connect_auth = None
-	# END connect
-	'''
 	
-
 	def quit(self, kill_core):
 	
 		if kill_core and self.connected > 1:
 			self.disconnect(on_purpose = True)
-	
-	'''	
-	#invisible == no service announced( privacy rule? )
-	def build_privacy_rule(self, name, action):
-		#Build a Privacy rule stanza for invisibility
-		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
-		l = iq.getTag('query').setTag('list', {'name': name})
-		i = l.setTag('item', {'action': action, 'order': '1'})
-		i.setTag('presence-out')
-		return iq
-	'''
-	
-	'''
-	def activate_privacy_rule(self, name):
-		activate a privacy rule
-		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
-		iq.getTag('query').setTag('active', {'name': name})
-		self.connection.send(iq)
-	'''
-	'''
-	def send_invisible_presence(self, msg, signed, initial = False):
-		# try to set the privacy rule
-		iq = self.build_privacy_rule('invisible', 'deny')
-		self.connection.SendAndCallForResponse(iq, self._continue_invisible,
-			{'msg': msg, 'signed': signed, 'initial': initial})
-	'''
-	'''
-	def _continue_invisible(self, con, iq_obj, msg, signed, initial):
-		ptype = ''
-		show = ''
-		# FIXME: JEP 126 need some modifications (see http://lists.jabber.ru/pipermail/ejabberd/2005-July/001252.html). So I disable it for the moment
-		if 1 or iq_obj.getType() == 'error': #server doesn't support privacy lists
-			# We use the old way which is not xmpp complient
-			ptype = 'invisible'
-			show = 'invisible'
-		else:
-			# active the privacy rule
-			self.privacy_rules_supported = True
-			self.activate_privacy_rule('invisible')
-		prio = unicode(gajim.config.get_per('accounts', self.name, 'priority'))
-		p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
-		p = self.add_sha(p, ptype != 'unavailable')
-		if msg:
-			p.setStatus(msg)
-		if signed:
-			p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
-		self.connection.send(p)
-		self.dispatch('STATUS', 'invisible')
-		if initial:
-			#ask our VCard
-			self.request_vcard(None)
-
-			#Get bookmarks from private namespace
-			self.get_bookmarks()
-
-			#Inform GUI we just signed in
-			self.dispatch('SIGNED_IN', ())
-	'''
-	
 	
 	def test_gpg_passphrase(self, password):
 		self.gpg.passphrase = password
@@ -553,45 +188,27 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 						self.dispatch('BAD_PASSPHRASE', ())
 		return signed
 	
-	
-	def connect_and_auth(self):
-		'''
-		self.on_connect_success = self._connect_success
-		self.on_connect_failure = self._connect_failure
-		self.connect()
-		'''
+	def connect(self, data = None, show = 'online'):
+		if self.connection:
+			return self.connection, ''
 
-		pass
-
+		self.zeroconf.connect()
+		self.connection = client_zeroconf.ClientZeroconf(self.zeroconf)
+		self.connected = STATUS_LIST.index(show)
+		
 	def connect_and_init(self, show, msg, signed):
-		'''
 		self.continue_connect_info = [show, msg, signed]
-		self.on_connect_auth = self._init_roster
-		self.connect_and_auth()
-		'''
-	
+		
 		self.zeroconf.txt['status'] = show
 		self.zeroconf.txt['msg'] = msg
 		self.connect('',show)
-
-	def _init_roster(self, con):
-		'''	
-		self.connection = con
-		if self.connection:
-			con.set_send_timeout(self.keepalives, self.send_keepalive)
-			self.connection.onreceive(None)
-			# Ask metacontacts before roster
-			self.get_metacontacts()
-		'''
-
-		pass
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		print "change_status: show: %s msg: %s" % (show, msg)
 		if not show in STATUS_LIST:
 			return -1
 		
-		# connect
+		# 'connect'
 		if show != 'offline' and not self.connected:
 			print "connect in change_status"
 			self.on_purpose = False
@@ -601,11 +218,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			else:
 					self.connected = STATUS_LIST.index(show)
 
-		# disconnect
+		# 'disconnect'
 		elif show == 'offline' and self.connected:
 			print "disconnect in change_status"
 			self.connected = 0
-			self._on_disconnected()
+			self.dispatch('STATUS', 'offline')
+			self.disconnect()
+			#self._on_disconnected()
 
 		# update status
 		elif show != 'offline' and self.connected:
@@ -625,10 +244,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.zeroconf.update_txt(txt)
 		self.dispatch('STATUS', show)
 
+	'''
 	def _on_disconnected(self):
 		self.dispatch('STATUS', 'offline')
 		self.disconnect()
-
+	'''
+	
 	def get_status(self):
 		return STATUS_LIST[self.connected]
 
@@ -1198,21 +819,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		pass
 		
 	def send_keepalive(self):
-		'''
 		# nothing received for the last foo seconds (60 secs by default)
 		if self.connection:
 			self.connection.send(' ')
-		'''
-		pass
 		
-	def _reconnect_alarm(self):
-		'''
-		if self.time_to_reconnect:
-			if self.connected < 2:
-				self._reconnect()
-			else:
-				self.time_to_reconnect = None
-		'''
-		pass
-		
-# END Connection
+# END ConnectionZeroconf

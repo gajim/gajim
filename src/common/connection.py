@@ -54,6 +54,7 @@ class Connection(ConnectionHandlers):
 		self.connection = None # xmpppy ClientCommon instance
 		# this property is used to prevent double connections
 		self.last_connection = None # last ClientCommon instance
+		self.is_zeroconf = False
 		self.gpg = None
 		self.status = ''
 		self.old_show = ''

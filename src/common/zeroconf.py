@@ -34,11 +34,13 @@ class Zeroconf:
 		print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
 
 		#synchronous resolving
-		self.server.ResolveService( int(interface), int(protocol), name, stype, domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
+		self.server.ResolveService( int(interface), int(protocol), name, stype, \
+						domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), \
+						reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
-		del self.contacts[(interface, name, domain)]
+		del self.contacts[(name, stype, domain, interface)]
 
 	def new_service_type(self, interface, protocol, stype, domain, flags):
 		# Are we already browsing this domain for this type? 
@@ -59,11 +61,26 @@ class Zeroconf:
 		if domain != "local":
 			self.browse_domain(interface, protocol, domain)
 
+	def txt_array_to_dict(self,t):
+ 	    l = {}
+ 	
+ 	    for s in t:
+			str = avahi.byte_array_to_string(s)
+			poseq = str.find('=')
+			l[str[:poseq]] = str[poseq+1:]
+ 	    return l
+	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
 			print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
 			print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
-
-			self.contacts[(interface, name, domain)] = (interface, name, protocol, domain, host, address, port, txt)
+		
+			# add domain to stay unique
+			if domain != 'local':
+				add_domain = '%'+domain
+			else:
+				add_domain = ''
+					
+			self.contacts[name+add_domain+'@'+host] = (name, stype, domain, interface, protocol, host, address, port, txt)
 
 
 	def service_added_callback(self):
@@ -191,8 +208,8 @@ class Zeroconf:
 # END Zeroconf
 
 '''
-def main():
-
+# how to use...
+		
 	zeroconf = Zeroconf()
 	zeroconf.connect()				
 	zeroconf.txt[('1st')] = 'foo'
@@ -201,15 +218,7 @@ def main():
 
 	# updating after announcing
 	txt = {}
-	txt['status'] = 'avail'			# out of avail/away/dnd
+	txt['status'] = 'avail'
 	txt['msg'] = 'Here I am'
 	zeroconf.update_txt(txt)
-	
-	try:
-		gobject.MainLoop().run()
-	except KeyboardInterrupt, k:
-		pass
-
-if __name__ == "__main__":
-	main()                                         
 '''
