@@ -29,7 +29,6 @@ class Roster:
 		
 	'''	
 	delItem(jid)
-	getItem(jid)
 	getStatus(jid)
 	getPriority(jid)
 	getShow(jid)

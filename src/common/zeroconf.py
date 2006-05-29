@@ -1,6 +1,7 @@
 import os
 import sys
 import getpass
+import socket
 
 try:
 	import avahi, gobject, dbus
@@ -17,9 +18,11 @@ class Zeroconf:
 		self.domain = None   # specific domain to browse
 		self.stype = '_presence._tcp'	
 		self.port = 5298  # listening port that gets announced
-		self.name = getpass.getuser()  # service name / username
+		
+		self.name = getpass.getuser()+'@'+socket.gethostname()  # service name / username
+		
 		self.txt = {}		# service data
-
+		
 		self.service_browsers = {}
 		self.contacts = {}    # all current local contacts with data
 		self.entrygroup = ''
@@ -40,7 +43,7 @@ class Zeroconf:
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
-		del self.contacts[(name, stype, domain, interface)]
+		del self.contacts[name]
 
 	def new_service_type(self, interface, protocol, stype, domain, flags):
 		# Are we already browsing this domain for this type? 
@@ -62,33 +65,36 @@ class Zeroconf:
 			self.browse_domain(interface, protocol, domain)
 
 	def txt_array_to_dict(self,t):
- 	    l = {}
+		l = {}
 
- 	    for s in t:
+		for s in t:
 			str = avahi.byte_array_to_string(s)
 			poseq = str.find('=')
 			l[str[:poseq]] = str[poseq+1:]
- 	    return l
+		return l
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
 			print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
 			print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
 		
+			'''
 			# add domain to stay unique
 			if domain != 'local':
-				add_domain = '%'+domain
+				add_domain = '.'+domain
 			else:
 				add_domain = ''
 					
-			self.contacts[name+add_domain+'@'+host] = (name, stype, domain, interface, protocol, host, address, port, txt)
+			self.contacts[name'@'+host+add_domain] = (name, stype, domain, interface, protocol, host, address, port, txt)
+			'''
 
+			self.contacts[name] = (name, stype, domain, interface, protocol, host, address, port, txt)
 
 	def service_added_callback(self):
 		print 'Service successfully added'
-	
+
 	def service_committed_callback(self):
 		print 'Service successfully committed'
-		
+
 	def service_updated_callback(self):
 		print 'Service successfully updated'
 
@@ -96,7 +102,7 @@ class Zeroconf:
 		print 'Error while adding service:', str(err)
 		self.name = self.server.GetAlternativeServiceName(self.name)
 		self.create_service()
-	
+
 	def server_state_changed_callback(self, state, error):
 		print 'server.state %s' % state
 		if state == avahi.SERVER_RUNNING:
@@ -104,14 +110,14 @@ class Zeroconf:
 		elif state == avahi.SERVER_COLLISION:
 			self.entrygroup.Reset()
 #		elif state == avahi.CLIENT_FAILURE:           # TODO: add error handling (avahi daemon dies...?)
-		
+
 	def entrygroup_state_changed_callback(self, state, error):
 		# the name is already present, so recreate
 		if state == avahi.ENTRY_GROUP_COLLISION:
 			self.service_add_fail_callback('Local name collision, recreating.')
-			
+
 #		elif state == avahi.ENTRY_GROUP_FAILURE:
-	
+
 	# make zeroconf-valid names
 	def replace_show(self, show):
 		if show == 'chat' or show == '':
@@ -127,7 +133,7 @@ class Zeroconf:
 			# create an EntryGroup for publishing
 			self.entrygroup = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, self.server.EntryGroupNew()), avahi.DBUS_INTERFACE_ENTRY_GROUP)
 			self.entrygroup.connect_to_signal('StateChanged', self.entrygroup_state_changed_callback)
-				
+
 		self.txt['port.p2pj'] = self.port
 		self.txt['version'] = 1
 		self.txt['textvers'] = 1
@@ -139,13 +145,13 @@ class Zeroconf:
 		print "Publishing service '%s' of type %s" % (self.name, self.stype)
 		self.entrygroup.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
 		self.entrygroup.Commit(reply_handler=self.service_committed_callback, error_handler=self.print_error_callback)
-		
+
 	def announce(self):
 		state = self.server.GetState()
 
 		if state == avahi.SERVER_RUNNING:
 			self.create_service()
-		
+
 	def remove_announce(self):
 		self.entrygroup.Reset()
 		self.entrygroup.Free()
@@ -153,7 +159,7 @@ class Zeroconf:
 
 	def browse_domain(self, interface, protocol, domain):
 		self.new_service_type(interface, protocol, self.stype, domain, '')
-	
+
 	# connect to dbus
 	def connect(self):
 		self.bus = dbus.SystemBus()
@@ -161,7 +167,7 @@ class Zeroconf:
 			avahi.DBUS_PATH_SERVER), avahi.DBUS_INTERFACE_SERVER)
 
 		self.server.connect_to_signal('StateChanged', self.server_state_changed_callback)
-		
+
 		# start browsing
 		if self.domain is None:
 			# Explicitly browse .local
@@ -181,7 +187,6 @@ class Zeroconf:
 		self.remove_announce()
 
 
-
 	# refresh data manually - really ok or too much traffic?
 	def resolve_all(self):
 		for val in self.contacts.values():
@@ -194,15 +199,14 @@ class Zeroconf:
 		self.resolve_all()
 		return self.contacts
 
-
 	def update_txt(self, txt):
 		# update only given keys
 		for key in txt.keys():
 			self.txt[key]=txt[key]
-		
+
 		if txt.has_key('status'):
 			self.txt['status'] = self.replace_show(txt['status'])
-		
+
 		txt = avahi.dict_to_txt_array(self.txt)
 
 		self.entrygroup.UpdateServiceTxt(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype,'', txt, reply_handler=self.service_updated_callback, error_handler=self.print_error_callback)
@@ -215,8 +219,9 @@ class Zeroconf:
 		
 	zeroconf = Zeroconf()
 	zeroconf.connect()				
-	zeroconf.txt[('1st')] = 'foo'
-	zeroconf.txt[('last')] = 'bar'
+	zeroconf.txt['1st'] = 'foo'
+	zeroconf.txt['last'] = 'bar'
+	zeroconfptxt['email'] = foo@bar.org
 	zeroconf.announce()
 
 	# updating after announcing
