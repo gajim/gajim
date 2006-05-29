@@ -63,7 +63,7 @@ class Zeroconf:
 
 	def txt_array_to_dict(self,t):
  	    l = {}
- 	
+
  	    for s in t:
 			str = avahi.byte_array_to_string(s)
 			poseq = str.find('=')
@@ -180,15 +180,18 @@ class Zeroconf:
 	def disconnect(self):
 		self.remove_announce()
 
+
+
 	# refresh data manually - really ok or too much traffic?
 	def resolve_all(self):
-		for key in contacts.keys():
-			self.server.ResolveService( int(key.interface), int(key.protocol), key.name, \
-				self.stype, key.domain, avahi.PROTO_UNSPEC, dbus.UInt32(0),\
+		for val in self.contacts.values():
+			#val:(name, stype, domain, interface, protocol, host, address, port, txt)
+			self.server.ResolveService( int(val[3]), int(val[4]), val[0], \
+				self.stype, val[2], avahi.PROTO_UNSPEC, dbus.UInt32(0),\
 				reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
 
 	def get_contacts(self):
-		self.resolve_all
+		self.resolve_all()
 		return self.contacts
 
 

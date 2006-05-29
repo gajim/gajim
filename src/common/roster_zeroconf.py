@@ -20,6 +20,7 @@ class Roster:
 		return self._data[item]
 			
 	def getRaw(self):
+		print 'getRaw in Roster'
 		return self._data
 
 	def getResources(self, jid):
@@ -27,10 +28,8 @@ class Roster:
 #		return self
 		
 	'''	
-	getRaw()
 	delItem(jid)
 	getItem(jid)
-	getResources(jid)
 	getStatus(jid)
 	getPriority(jid)
 	getShow(jid)
