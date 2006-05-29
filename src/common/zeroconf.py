@@ -94,6 +94,16 @@ class Zeroconf:
 			self.service_add_fail_callback('Local name collision, recreating.')
 			
 #		elif state == avahi.ENTRY_GROUP_FAILURE:
+	
+	# make zeroconf-valid names
+	def replace_show(self, show):
+		if show == 'chat' or show == '':
+			show = 'online'
+		elif show == 'xa':
+			show = 'away'
+		elif show == 'online':
+			show = 'avail'
+		return show
 
 	def create_service(self):
 		if self.entrygroup == '':
@@ -101,9 +111,13 @@ class Zeroconf:
 			self.entrygroup = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, self.server.EntryGroupNew()), avahi.DBUS_INTERFACE_ENTRY_GROUP)
 			self.entrygroup.connect_to_signal('StateChanged', self.entrygroup_state_changed_callback)
 				
-		self.txt[('port.p2pj')] = self.port
-		self.txt[('version')] = 1
-		self.txt[('textvers')] = 1
+		self.txt['port.p2pj'] = self.port
+		self.txt['version'] = 1
+		self.txt['textvers'] = 1
+		
+		# replace gajim's status messages with proper ones
+		if self.txt.has_key('status'):
+				self.txt['status'] = self.replace_show(self.txt['status'])
 
 		print "Publishing service '%s' of type %s" % (self.name, self.stype)
 		self.entrygroup.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
@@ -118,6 +132,7 @@ class Zeroconf:
 	def remove_announce(self):
 		self.entrygroup.Reset()
 		self.entrygroup.Free()
+		self.entrygroup = ''
 
 	def browse_domain(self, interface, protocol, domain):
 		self.new_service_type(interface, protocol, self.stype, domain, '')
@@ -159,11 +174,15 @@ class Zeroconf:
 		self.resolve_all
 		return self.contacts
 
+
 	def update_txt(self, txt):
 		# update only given keys
 		for key in txt.keys():
 			self.txt[key]=txt[key]
-			
+		
+		if txt.has_key('status'):
+			self.txt['status'] = self.replace_show(txt['status'])
+		
 		txt = avahi.dict_to_txt_array(self.txt)
 
 		self.entrygroup.UpdateServiceTxt(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype,'', txt, reply_handler=self.service_updated_callback, error_handler=self.print_error_callback)

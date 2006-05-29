@@ -39,8 +39,9 @@ from common import helpers
 from common import gajim
 from common import GnuPG
 from common import zeroconf
-
+from common import connection_handlers_zeroconf
 from connection_handlers_zeroconf import *
+
 USE_GPG = GnuPG.USE_GPG
 
 from common import i18n
@@ -51,9 +52,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def __init__(self, name):
 		ConnectionHandlersZeroconf.__init__(self)
 		self.name = name
-		self.zeroconf = Zeroconf()
+		self.zeroconf = zeroconf.Zeroconf()
 		self.connected = 0 # offline
-#		self.connection = None # xmpppy ClientCommon instance
+		self.connection = None # dummy connection variable
+
 		# this property is used to prevent double connections
 #		self.last_connection = None # last ClientCommon instance
 		self.gpg = None
@@ -70,7 +72,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.last_io = gajim.idlequeue.current_time()
 		self.last_sent = []
 		self.last_history_line = {}
-#		self.password = gajim.config.get_per('accounts', name, 'password')
+		self.password = gajim.config.get_per('accounts', name, 'password')
 #		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
 #		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
 #			self.keepalives = gajim.config.get_per('accounts', self.name,'keep_alive_every_foo_secs')
@@ -253,11 +255,15 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		return h
 	
 
-	def connect(self, data = None):
+	def connect(self, data = None, show = 'online'):
+		
+		if self.connection:
+			return self.connection, ''
 
-		zeroconf.connect()
-		
-		
+		self.zeroconf.connect()
+		self.connection = 1
+		self.connected = STATUS_LIST.index(show)
+
 		''' Start a connection to the Jabber server.
 		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')
 		data MUST contain name, hostname, resource, usessl, proxy,
@@ -564,12 +570,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connect_and_auth()
 		'''
 	
-		if show == 'online':
-			show = 'avail'
-
 		self.zeroconf.txt['status'] = show
 		self.zeroconf.txt['msg'] = msg
-		self.connect()
+		self.connect('',show)
 
 	def _init_roster(self, con):
 		'''	
@@ -584,38 +587,43 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		pass
 
 	def change_status(self, show, msg, sync = False, auto = False):
+		print "change_status: show: %s msg: %s" % (show, msg)
 		if not show in STATUS_LIST:
 			return -1
 		
-		if show == 'chat':
-			show = 'online'
-		elif show == 'xa':
-			show = 'away'
-
 		# connect
 		if show != 'offline' and not self.connected:
+			print "connect in change_status"
 			self.on_purpose = False
 			self.connect_and_init(show, msg, '')
+			if show != 'invisible':
+					self.zeroconf.announce()
+			else:
+					self.connected = STATUS_LIST.index(show)
 
 		# disconnect
 		elif show == 'offline' and self.connected:
+			print "disconnect in change_status"
 			self.connected = 0
 			self._on_disconnected()
 
 		# update status
 		elif show != 'offline' and self.connected:
+			print "update in change_status"
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
 				self.zeroconf.remove_announce()
 				return
 			if was_invisible:
+				print "announce after invisible in change_status"
 				self.zeroconf.announce()
 			if self.connection:
 				txt = {}
 				txt['status'] = show
+				txt['msg'] = msg
 				self.zeroconf.update_txt(txt)
-			self.dispatch('STATUS', show)
+		self.dispatch('STATUS', show)
 
 	def _on_disconnected(self):
 		self.dispatch('STATUS', 'offline')

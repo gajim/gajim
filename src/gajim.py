@@ -39,6 +39,8 @@ from chat_control import ChatControlBase
 
 from common import exceptions
 from common import i18n
+from common import connection_zeroconf
+
 i18n.init()
 _ = i18n._
 
@@ -1738,8 +1740,14 @@ class Interface:
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
 		self.register_handlers()
 		for account in gajim.config.get_per('accounts'):
-			gajim.connections[account] = common.connection.Connection(account)
-															
+			if account == 'zeroconf':
+				print 'Added zeroconf account to list'
+				gajim.connections[account] = common.connection_zeroconf.ConnectionZeroconf(account)
+			else:
+				gajim.connections[account] = common.connection.Connection(account)
+		
+
+		
 		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		
