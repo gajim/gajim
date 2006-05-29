@@ -1498,8 +1498,10 @@ class XMLConsoleWindow:
 	def scroll_to_end(self, ):
 		parent = self.stanzas_log_textview.get_parent()
 		buffer = self.stanzas_log_textview.get_buffer()
-		self.stanzas_log_textview.scroll_to_mark(buffer.get_mark('end'), 0, True,
-			0, 1)
+		end_mark = buffer.get_mark('end')
+		if not end_mark:
+			return False
+		self.stanzas_log_textview.scroll_to_mark(end_mark, 0, True,	0, 1)
 		adjustment = parent.get_hadjustment()
 		adjustment.set_value(0)
 		return False
