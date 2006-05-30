@@ -15,6 +15,12 @@ class Roster:
 		if self._data.has_key(jid):
 			return self._data[jid]
 
+	def setItem(self, item):
+		print 'setItem in Roster: jid: %s' % item
+		# data is maybe not already resolved
+		# what data is expected here?
+		self._data[item] = self.zeroconf.get_contact(item)
+		
 	def __getitem__(self,item):
 		print '__getitem__ in Roster'
 		return self._data[item]

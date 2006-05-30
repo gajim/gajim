@@ -14,18 +14,19 @@ except ImportError, e:
 	pass
 
 class Zeroconf:
-	def __init__(self):
+	def __init__(self, new_serviceCB, remove_serviceCB):
 		self.domain = None   # specific domain to browse
 		self.stype = '_presence._tcp'	
-		self.port = 5298  # listening port that gets announced
-		
-		self.name = getpass.getuser()+'@'+socket.gethostname()  # service name / username
-		
+		self.port = 5298  # listening port that gets announced	
+		self.name = getpass.getuser()+'@'+socket.gethostname()  # service name
 		self.txt = {}		# service data
+		
+		self.new_serviceCB = new_serviceCB
+		self.remove_serviceCB = remove_serviceCB
 		
 		self.service_browsers = {}
 		self.contacts = {}    # all current local contacts with data
-		self.entrygroup = ''
+		self.entrygroup = None
 		
 	## handlers for dbus callbacks
 
@@ -40,10 +41,12 @@ class Zeroconf:
 		self.server.ResolveService( int(interface), int(protocol), name, stype, \
 						domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), \
 						reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
+		self.new_serviceCB(name)
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
 		del self.contacts[name]
+		self.remove_serviceCB(name)
 
 	def new_service_type(self, interface, protocol, stype, domain, flags):
 		# Are we already browsing this domain for this type? 
@@ -129,7 +132,7 @@ class Zeroconf:
 		return show
 
 	def create_service(self):
-		if self.entrygroup == '':
+		if not self.entrygroup:
 			# create an EntryGroup for publishing
 			self.entrygroup = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, self.server.EntryGroupNew()), avahi.DBUS_INTERFACE_ENTRY_GROUP)
 			self.entrygroup.connect_to_signal('StateChanged', self.entrygroup_state_changed_callback)
@@ -155,7 +158,7 @@ class Zeroconf:
 	def remove_announce(self):
 		self.entrygroup.Reset()
 		self.entrygroup.Free()
-		self.entrygroup = ''
+		self.entrygroup = None
 
 	def browse_domain(self, interface, protocol, domain):
 		self.new_service_type(interface, protocol, self.stype, domain, '')
@@ -199,6 +202,9 @@ class Zeroconf:
 		self.resolve_all()
 		return self.contacts
 
+	def get_contact(self, jid):
+		return self.contacts[jid]
+		
 	def update_txt(self, txt):
 		# update only given keys
 		for key in txt.keys():

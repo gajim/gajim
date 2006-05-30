@@ -52,7 +52,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def __init__(self, name):
 		ConnectionHandlersZeroconf.__init__(self)
 		self.name = name
-		self.zeroconf = zeroconf.Zeroconf()
+		self.zeroconf = zeroconf.Zeroconf(self._on_new_service, self._on_remove_service)
 		self.connected = 0 # offline
 		self.connection = None # dummy connection variable
 		# this property is used to prevent double connections
@@ -187,13 +187,23 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					if self.connected < 2:
 						self.dispatch('BAD_PASSPHRASE', ())
 		return signed
-	
+
+	def _on_new_service(self,jid):
+		self.roster.setItem(jid)
+		self.dispatch('ROSTER', self.roster)
+
+	def _on_remove_service(self,jid):
+		# roster.delItem(jid)	
+		# self.dispatch('ROSTER', roster)
+		pass
+
 	def connect(self, data = None, show = 'online'):
 		if self.connection:
 			return self.connection, ''
 
 		self.zeroconf.connect()
 		self.connection = client_zeroconf.ClientZeroconf(self.zeroconf)
+		self.roster = self.connection.getRoster()
 		self.connected = STATUS_LIST.index(show)
 		
 	def connect_and_init(self, show, msg, signed):
