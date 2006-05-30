@@ -823,6 +823,22 @@ class GroupchatControl(ChatControlBase):
 					# after that, but that doesn't hurt
 					self.add_contact_to_roster(new_nick, show, role, affiliation,
 						status, jid)
+				# rename vcard / avatar
+				puny_jid = helpers.sanitize_filename(self.room_jid)
+				puny_nick = helpers.sanitize_filename(nick)
+				puny_new_nick = helpers.sanitize_filename(new_nick)
+				old_path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
+				new_path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_new_nick)
+				files = {old_path: new_path}
+				path = os.path.join(gajim.AVATAR_PATH, puny_jid)
+				# possible extensions
+				for ext in ('.png', '.jpeg', '_notif_size_bw.png',
+				'_notif_size_colored.png'):
+					files[os.path.join(path, puny_nick + ext)] = \
+						os.path.join(path, puny_new_nick + ext)
+				for old_file in files:
+					if os.path.exists(old_file):
+						os.rename(old_file, files[old_file])
 				self.print_conversation(s, 'info')
 
 			if not gajim.awaiting_events[self.account].has_key(self.room_jid + '/' + nick):
