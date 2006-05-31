@@ -2768,7 +2768,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.interface.systray.set_img()
 
 		for win in gajim.interface.msg_win_mgr.windows():
-			for ctrl in gajim.interface.msg_win_mgr.controls():
+			for ctrl in win.controls():
 				ctrl.update_ui()
 				win.redraw_tab(ctrl)
 
