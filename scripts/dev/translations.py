@@ -10,25 +10,19 @@ import sys
 stats = False
 update = False
 check = False
+path_to_dir = '../../po'
 
-def visit(arg, dirname, names):
-	if dirname.find('.svn') != -1:
-		return
-	if dirname.endswith('LC_MESSAGES'):
-		if 'gajim.po' in names:
-			path_to_po = os.path.join(dirname, 'gajim.po')
-			pos = path_to_po.find('po/') + 3 #3 = len('po/')
-			endpos = path_to_po.find('/', pos)
-			name = path_to_po[pos:endpos]
+def visit(files):
+	for file in files:
+		if file.endswith('.po'):
+			path_to_po = os.path.join(path_to_dir, file)
 			if update: # update an existing po file)
-				os.system('msgmerge -q -U ../../po/'+name+'/LC_MESSAGES/gajim.po ../../po/gajim.pot')
+				os.system('msgmerge -q -U %s %s' % (path_to_po, os.path.join(path_to_dir, 'gajim.pot')))
 			if stats:
-				print name, 'has now:'
+				print file[:-3], 'has now:'
 				os.system('msgfmt --statistics ' + path_to_po)
 			if check:
 				os.system('msgfmt -c ' + path_to_po)
-		else:
-			print 'PROBLEM: cannot find gajim.po in', dirname
 
 def show_help():
 	print sys.argv[0], '[help] [stats] [update] [check]'
@@ -52,6 +46,7 @@ if __name__ == '__main__':
 
 	path_to_dir = '../../po'
 
+	files = os.listdir(path_to_dir)
 	if len(sys.argv) == 2:
 		if sys.argv[1].startswith('h'):
 			show_help()
@@ -59,21 +54,21 @@ if __name__ == '__main__':
 		param = sys.argv[1]
 		if param == 'stats': # stats only
 			stats = True
-			os.path.walk(path_to_dir, visit, None)
+			visit(files)
 		elif param == 'update': # update only
 			update_pot()
 			update = True
-			os.path.walk(path_to_dir, visit, None) # update each po & no stats
+			visit(files)
 			print 'Done'
 		elif param == 'check':
 			check = True
-			os.path.walk(path_to_dir, visit, None)
+			visit(files)
 
 	elif len(sys.argv) == 1: # update & stats & no check
 		update_pot()
 		update = True
 		stats = True
-		os.path.walk(path_to_dir, visit, None)
+		visit(files)
 		print 'Done'
 
 	else:

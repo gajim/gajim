@@ -46,10 +46,9 @@ distclean: clean
 clean:
 	find . -name '*.pyc' -exec rm {} \;
 	find . -name '*.pyo' -exec rm {} \;
-	find . -name '*.mo' -exec rm {} \;
-	rm -f gajim.desktop \;
+	${MAKE} -C po clean
+	rm -f gajim.desktop
 	$(foreach sdir, $(MODULES), ${MAKE} -C $(sdir) clean;)
-
 dist:
 	rm -rf gajim-$(VERSION)
 	mkdir gajim-$(VERSION)
@@ -88,10 +87,7 @@ install:
 			mkdir -p "$(DESTDIR)$(PREFIX)/share/locale/$$d"; \
 		fi; \
 	done
-	for f in $(FILES_PO) ; do \
-		DST=`dirname "$$f"`; \
-		cp "./po/$$f" "$(DESTDIR)$(PREFIX)/share/locale/$$DST/"; \
-	done
+	${MAKE} -C po install PREFIX=$(PREFIX)
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
 	cp THANKS "$(DESTDIR)$(PREFIX)/share/gajim/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
