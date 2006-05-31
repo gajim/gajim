@@ -2232,8 +2232,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self.draw_contact(jid, account)
 				# Redraw parent too
 				self.draw_parent_contact(jid, account)
-			if gajim.interface.systray_enabled:
-				gajim.interface.systray.add_jid(fjid, account, kind)
 			self.show_title() # we show the * or [n]
 			if not path:
 				self.add_contact_to_roster(jid, account)
@@ -2243,6 +2241,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.tree.expand_row(path[0:2], False)
 			self.tree.scroll_to_cell(path)
 			self.tree.set_cursor(path)
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.add_jid(fjid, account, kind)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if gajim.interface.instances.has_key('preferences'):
