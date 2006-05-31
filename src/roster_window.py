@@ -3168,6 +3168,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			is_big_brother = False
 			if model.iter_has_child(iter_source):
 				is_big_brother = True
+			if not c_dest:
+				# c_dest is None if jid_dest doesn't belong to account
+				return
 			self.on_drop_in_contact(treeview, account, c_source, c_dest,
 				is_big_brother, context, etime)
 			return
