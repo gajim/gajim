@@ -837,9 +837,9 @@ _('Connection with peer cannot be established.'))
 		self.set_buttons_sensitive(path, True)
 		
 		event_button = gtkgui_helpers.get_possible_button_event(event)
+		self.file_transfers_menu.show_all()
 		self.file_transfers_menu.popup(None, self.tree, None, 
 			event_button, event.time)
-		self.file_transfers_menu.show_all()
 	
 	def on_transfers_list_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''
