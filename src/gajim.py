@@ -1157,7 +1157,8 @@ class Interface:
 			if not gajim.config.get('showoffline'):
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
-				self.roster.really_remove_contact(contact, account)
+				if contact:	
+					self.roster.really_remove_contact(contact, account)
 		self.redraw_roster_systray(account, jid, typ)
 
 	def remove_event(self, account, jid, event):
@@ -1171,7 +1172,8 @@ class Interface:
 			if not gajim.config.get('showoffline'):
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
-				self.roster.really_remove_contact(contact, account)
+				if contact:		
+					self.roster.really_remove_contact(contact, account)
 		self.redraw_roster_systray(account, jid, event[0])
 
 	def handle_event_file_request_error(self, account, array):
