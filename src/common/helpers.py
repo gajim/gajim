@@ -695,8 +695,9 @@ def sanitize_filename(filename):
 	filename = punycode_encode(filename) # make it latin chars only
 	filename = filename.replace('/', '_')
 	if os.name == 'nt':
-		filename = filename.replace('?', '').replace(':', '').replace('!', '')\
-			.replace('"', "'")
+		filename = filename.replace('?', '_').replace(':', '_')\
+			.replace('\\', '_').replace('"', "'").replace('|', '_')\
+			.replace('*', '_').replace('<', '_').replace('>', '_')
 	   # 48 is the limit
 		if len(filename) > 48:
 			extension = filename.split('.')[-1]
