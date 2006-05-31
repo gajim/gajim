@@ -872,7 +872,8 @@ class Connection(ConnectionHandlers):
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:
 			return
-		p = common.xmpp.Presence(to = agent, typ = ptype)
+		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+		p = common.xmpp.Presence(to = agent, typ = ptype, show = show)
 		p = self.add_sha(p, ptype != 'unavailable')
 		self.connection.send(p)
 
