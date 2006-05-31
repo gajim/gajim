@@ -4137,11 +4137,11 @@ msgstr "Demander avant de fermer un onglet ou une fenêtre de discussion de salo
 
 #: ../src/common/config.py:147
 msgid "Always ask before closing group chat tab/window in this space separated list of room jids."
-msgstr "Toujours demander avant de fermer les salons de cette liste séparée par des espaces."
+msgstr "Toujours demander avant de fermer les salons de cette liste séparés par des espaces."
 
 #: ../src/common/config.py:148
 msgid "Never ask before closing group chat tab/window in this space separated list of room jids."
-msgstr "Ne jamais demander avant de fermer les salons de cette liste séparée par des espaces."
+msgstr "Ne jamais demander avant de fermer les salons de cette liste séparés par des espaces."
 
 #: ../src/common/config.py:151
 msgid "Overrides the host we send for File Transfer in case of address translation/port forwarding."
