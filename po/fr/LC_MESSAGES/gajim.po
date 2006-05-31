@@ -4133,7 +4133,7 @@ msgstr "Si cette case est cochée, Gajim pourra être contrôlé à distance via
 
 #: ../src/common/config.py:146
 msgid "Ask before closing a group chat tab/window."
-msgstr "Demander avant de fermer un onglet ou une fenêtre de discussion."
+msgstr "Demander avant de fermer un onglet ou une fenêtre de discussion de salon."
 
 #: ../src/common/config.py:147
 msgid "Always ask before closing group chat tab/window in this space separated list of room jids."
