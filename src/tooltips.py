@@ -541,7 +541,8 @@ class RosterTooltip(NotificationAreaTooltip):
 		if num_resources > 1:
 			properties.append((_('Status: '),	' '))
 			contact_keys = contacts_dict.keys()
-			contact_keys.sort(reverse = True)
+			contact_keys.sort()
+			contact_keys.reverse()
 			for priority in contact_keys:
 				for contact in contacts_dict[priority]:
 					status_line = self.get_status_info(contact.resource,
