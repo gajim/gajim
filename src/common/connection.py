@@ -158,6 +158,8 @@ class Connection(ConnectionHandlers):
 	# END disconenctedReconnCB
 	
 	def _connection_lost(self):
+		self.disconnect(on_purpose = False)
+		self.dispatch('STATUS', 'offline')
 		self.dispatch('ERROR',
 		(_('Connection with account "%s" has been lost') % self.name,
 		_('To continue sending and receiving messages, you will need to reconnect.')))
