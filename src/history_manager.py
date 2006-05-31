@@ -57,6 +57,10 @@ except ImportError:
 class HistoryManager:
 
 	def __init__(self):
+		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
+		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+		gtk.window_set_default_icon(pix) # set the icon to all newly opened windows
+		
 		if not os.path.exists(LOG_DB_PATH):
 			dialogs.ErrorDialog(_('Cannot find history logs database'),
 				'%s does not exist.' % LOG_DB_PATH)
