@@ -34,8 +34,6 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 def get_avatar_pixbuf_encoded_mime(photo):
 	'''return the pixbuf of the image
 	photo is a dictionary containing PHOTO information'''
@@ -63,7 +61,7 @@ class VcardWindow:
 
 	def __init__(self, contact, account, vcard = False, is_fake = False):
 		# the contact variable is the jid if vcard is true
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'vcard_information_window', APP)
+		self.xml = gtkgui_helpers.get_glade('vcard_information_window.glade')
 		self.window = self.xml.get_widget('vcard_information_window')
 
 		self.publish_button = self.xml.get_widget('publish_button')

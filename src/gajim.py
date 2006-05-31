@@ -147,8 +147,6 @@ import dialogs
 import vcard
 import config
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 class MigrateCommand(nslookup.IdleCommand):
 	def __init__(self, on_result):
 		nslookup.IdleCommand.__init__(self, on_result)

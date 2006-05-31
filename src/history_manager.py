@@ -66,8 +66,7 @@ class HistoryManager:
 				'%s does not exist.' % LOG_DB_PATH)
 			sys.exit()
 		
-		xml = gtk.glade.XML('history_manager.glade',
-			'history_manager_window', i18n.APP)
+		xml = gtkgui_helpers.get_glade('history_manager.glade')
 		self.window = xml.get_widget('history_manager_window')
 		self.jids_listview = xml.get_widget('jids_listview')
 		self.logs_listview = xml.get_widget('logs_listview')
@@ -374,7 +373,7 @@ class HistoryManager:
 			
 	def on_listview_button_press_event(self, widget, event):
 		if event.button == 3: # right click
-			xml = gtk.glade.XML('history_manager.glade', 'context_menu', i18n.APP)
+			xml = gtkgui_helpers.get_glade('history_manager.glade', 'context_menu')
 			if widget.name != 'jids_listview':
 				xml.get_widget('export_menuitem').hide()
 			xml.get_widget('delete_menuitem').connect('activate',
@@ -389,7 +388,7 @@ class HistoryManager:
 			return True
 
 	def on_export_menuitem_activate(self, widget):
-		xml = gtk.glade.XML('history_manager.glade', 'filechooserdialog', i18n.APP)
+		xml = gtkgui_helpers.get_glade('history_manager.glade', 'filechooserdialog')
 		xml.signal_autoconnect(self)
 		
 		dlg = xml.get_widget('filechooserdialog')

@@ -26,6 +26,7 @@
 
 import gtk
 import gtk.glade
+import gtkgui_helpers
 
 from common import gajim
 from common import i18n
@@ -46,11 +47,11 @@ C_VALUE,
 C_TYPE
 ) = range(3)
 
-GTKGUI_GLADE = 'gtkgui.glade'
+GTKGUI_GLADE = 'manage_accounts_window.glade'
 
 class AdvancedConfigurationWindow:
 	def __init__(self):
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'advanced_configuration_window', APP)
+		self.xml = gtkgui_helpers.get_glade('advanced_configuration_window.glade')
 		self.window = self.xml.get_widget('advanced_configuration_window')
 		self.entry = self.xml.get_widget('advanced_entry')
 		self.desc_label = self.xml.get_widget('advanced_desc_label')

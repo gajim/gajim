@@ -33,6 +33,7 @@ import tooltips
 import dialogs
 import locale
 
+import gtkgui_helpers
 from common import gajim
 from common import helpers
 from common import i18n
@@ -42,8 +43,6 @@ _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
-
-GTKGUI_GLADE = 'gtkgui.glade'
 
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
@@ -373,7 +372,7 @@ class ConversationTextview:
 		dialogs.AddNewContactWindow(self.account, jid)
 
 	def make_link_menu(self, event, kind, text):
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'chat_context_menu', APP)
+		xml = gtkgui_helpers.get_glade('chat_context_menu.glade')
 		menu = xml.get_widget('chat_context_menu')
 		childs = menu.get_children()
 		if kind == 'url':

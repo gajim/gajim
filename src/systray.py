@@ -47,7 +47,6 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE = 'gtkgui.glade'
 
 class Systray:
 	'''Class for icon in the notification area
@@ -60,7 +59,7 @@ class Systray:
 		self.t = None
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
+		self.xml = gtkgui_helpers.get_glade('systray_context_menu.glade')
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
 		self.xml.signal_autoconnect(self)
 		self.popup_menus = []

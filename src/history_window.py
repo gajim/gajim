@@ -45,8 +45,6 @@ APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 # contact_name, date, message, time
 (
 C_CONTACT_NAME,
@@ -63,7 +61,7 @@ class HistoryWindow:
 		self.account = account
 		self.mark_days_idle_call_id = None
 		
-		xml = gtk.glade.XML(GTKGUI_GLADE, 'history_window', APP)
+		xml = gtkgui_helpers.get_glade('history_window.glade')
 		self.window = xml.get_widget('history_window')
 		
 		self.calendar = xml.get_widget('calendar')

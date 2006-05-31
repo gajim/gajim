@@ -39,14 +39,13 @@ import os
 WM_TASKBARCREATED = win32gui.RegisterWindowMessage('TaskbarCreated')
 WM_TRAYMESSAGE = win32con.WM_USER + 20
 
+import gtkgui_helpers
 from common import gajim
 from common import i18n
 _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain(APP, i18n.DIR)
 gtk.glade.textdomain(APP)
-
-GTKGUI_GLADE = 'gtkgui.glade'
 
 class SystrayWINAPI:
 	def __init__(self, gtk_window):
@@ -213,7 +212,7 @@ class SystrayWin32(systray.Systray):
 		systray.Systray.__init__(self)
 		self.jids = []
 		self.status = 'offline'
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'systray_context_menu', APP)
+		self.xml = gtkgui_helpers.get_glade('systray_context_menu.glade')
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
 		self.added_hide_menuitem = False
 		

@@ -37,8 +37,6 @@ APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
 
-GTKGUI_GLADE = 'gtkgui.glade'
-
 C_IMAGE = 0
 C_LABELS = 1
 C_FILE = 2
@@ -52,7 +50,7 @@ class FileTransfersWindow:
 	def __init__(self):
 		self.files_props = {'r' : {}, 's': {}}
 		self.height_diff = 0
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_window', APP)
+		self.xml = gtkgui_helpers.get_glade('filetransfers.glade')
 		self.window = self.xml.get_widget('file_transfers_window')
 		self.tree = self.xml.get_widget('transfers_list')
 		self.cancel_button = self.xml.get_widget('cancel_button')
@@ -120,18 +118,15 @@ class FileTransfersWindow:
 		self.tree.get_selection().set_mode(gtk.SELECTION_SINGLE)
 		self.tree.get_selection().connect('changed', self.selection_changed)
 		self.tooltip = tooltips.FileTransfersTooltip()
-		self.xml.signal_autoconnect(self)
-		popup_xml = gtk.glade.XML(GTKGUI_GLADE, 'file_transfers_menu',
-			APP)
-		self.file_transfers_menu = popup_xml.get_widget('file_transfers_menu')
-		self.open_folder_menuitem = popup_xml.get_widget('open_folder_menuitem')
-		self.cancel_menuitem = popup_xml.get_widget('cancel_menuitem')
-		self.pause_menuitem = popup_xml.get_widget('pause_menuitem')
-		self.continue_menuitem = popup_xml.get_widget('continue_menuitem')
+		self.file_transfers_menu = self.xml.get_widget('file_transfers_menu')
+		self.open_folder_menuitem = self.xml.get_widget('open_folder_menuitem')
+		self.cancel_menuitem = self.xml.get_widget('cancel_menuitem')
+		self.pause_menuitem = self.xml.get_widget('pause_menuitem')
+		self.continue_menuitem = self.xml.get_widget('continue_menuitem')
 		self.continue_menuitem.hide()
 		self.continue_menuitem.set_no_show_all(True)
-		self.remove_menuitem = popup_xml.get_widget('remove_menuitem')
-		popup_xml.signal_autoconnect(self)
+		self.remove_menuitem = self.xml.get_widget('remove_menuitem')
+		self.xml.signal_autoconnect(self)
 		
 	def find_transfer_by_jid(self, account, jid):
 		''' find all transfers with peer 'jid' that belong to 'account' '''

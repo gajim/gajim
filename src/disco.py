@@ -56,6 +56,7 @@ import pango
 
 import dialogs
 import tooltips
+import gtkgui_helpers
 
 from common import gajim
 from common import xmpp
@@ -65,9 +66,6 @@ _ = i18n._
 APP = i18n.APP
 gtk.glade.bindtextdomain (APP, i18n.DIR)
 gtk.glade.textdomain (APP)
-
-GTKGUI_GLADE = 'gtkgui.glade'
-
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -427,7 +425,7 @@ _('Without a connection, you can not browse available services'))
 			self.cache = ServicesCache(account)
 			gajim.connections[account].services_cache = self.cache
 
-		self.xml = gtk.glade.XML(GTKGUI_GLADE, 'service_discovery_window', APP)
+		self.xml = gtkgui_helpers.get_glade('service_discovery_window.glade')
 		self.window = self.xml.get_widget('service_discovery_window')
 		self.services_treeview = self.xml.get_widget('services_treeview')
 		# This is more reliable than the cursor-changed signal.
