@@ -132,11 +132,11 @@ class ProxyResolver:
 			self.connections.remove(connection)
 		except ValueError:
 			pass
-		if self.state != S_FINISHED and connection == \
-								self.active_connection:
+		if connection == self.active_connection:
 			self.active_connection = None
-			self.state = S_INITIAL
-			self.try_next_connection()
+			if self.state != S_FINISHED:
+				self.state = S_INITIAL
+				self.try_next_connection()
 	
 	def try_next_connection(self):
 		''' try to resolve proxy with the next possible connection '''
