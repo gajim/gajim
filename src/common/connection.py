@@ -87,8 +87,18 @@ class Connection(ConnectionHandlers):
 		self.on_connect_failure = None
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
-		
 	# END __init__
+
+	def build_user_nick(self, user_nick):
+		df = common.xmpp.DataForm(typ = 'result')
+		field = df.setField('FORM_TYPE')
+		field.setType('hidden')
+		field.setValue(common.xmpp.NS_PROFILE)
+		field = df.setField('nickname')
+		field.delAttr('type')
+		field.setValue(user_nick)
+		return df
+
 	def put_event(self, ev):
 		if gajim.handlers.has_key(ev[0]):
 			gajim.handlers[ev[0]](self.name, ev[1])
@@ -606,7 +616,8 @@ class Connection(ConnectionHandlers):
 		self.connection.send(msg_iq)
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
-	chatstate = None, msg_id = None, composing_jep = None, resource = None):
+	chatstate = None, msg_id = None, composing_jep = None, resource = None,
+	user_nick = None):
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
@@ -636,6 +647,11 @@ class Connection(ConnectionHandlers):
 					typ = 'normal')
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
+
+		# JEP-0172: user_nickname
+		if user_nick:
+			df = self.build_user_nick(user_nick)
+			msg_iq.addChild(node = df)
 
 		# chatstates - if peer supports jep85 or jep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
@@ -691,7 +707,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 
 	def request_subscription(self, jid, msg = '', name = '', groups = [],
-	auto_auth = False):
+	auto_auth = False, user_nick = ''):
 		if not self.connection:
 			return
 		gajim.log.debug('subscription request for %s' % jid)
@@ -709,6 +725,9 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 		p = common.xmpp.Presence(jid, 'subscribe')
+		if user_nick:
+			df = self.build_user_nick(user_nick)
+			p.addChild(node = df)
 		p = self.add_sha(p)
 		if not msg:
 			msg = _('I would like to add you to my roster.')

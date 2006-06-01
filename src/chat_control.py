@@ -97,7 +97,8 @@ class ChatControlBase(MessageControl):
 	event_keymod):
 		pass # Derived should implement this rather than connecting to the event itself.
 
-	def __init__(self, type_id, parent_win, widget_name, display_names, contact, acct, resource = None):
+	def __init__(self, type_id, parent_win, widget_name, display_names, contact,
+	acct, resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
 			display_names,	contact, acct, resource = resource);
 		# when/if we do XHTML we will but formatting buttons back
@@ -175,6 +176,10 @@ class ChatControlBase(MessageControl):
 
 		self.style_event_id = 0
 		self.conv_textview.tv.show()
+
+		# For JEP-0172
+		self.user_nick = None
+
 	# moved from ChatControl 
 	def _on_banner_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
@@ -425,12 +430,17 @@ class ChatControlBase(MessageControl):
 		if not message or message == '\n':
 			return
 
+
 		if not self._process_command(message):
 			MessageControl.send_message(self, message, keyID, type = type,
 				chatstate = chatstate, msg_id = msg_id,
-				composing_jep = composing_jep, resource = resource)
+				composing_jep = composing_jep, resource = resource,
+				user_nick = self.user_nick)
 			# Record message history
 			self.save_sent_message(message)
+
+			# Be sure to send user nickname only once according to JEP-0172
+			self.user_nick = None
 
 		# Clear msg input
 		message_buffer = self.msg_textview.get_buffer()

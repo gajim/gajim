@@ -468,7 +468,7 @@ class Interface:
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
-		# chatstate))
+		# chatstate, msg_id, composing_jep, user_nick)) user_nick is JEP-0172
 
 		full_jid_with_resource = array[0]
 		jid = gajim.get_jid_without_resource(full_jid_with_resource)
@@ -555,7 +555,7 @@ class Interface:
 		else:
 			# array: (jid, msg, time, encrypted, msg_type, subject)
 			self.roster.on_message(jid, message, array[2], account, array[3],
-				msg_type, array[5], resource, msg_id)
+				msg_type, array[5], resource, msg_id, array[9])
 			nickname = gajim.get_name_from_jid(account, jid)
 		# Check and do wanted notifications	
 		notify.notify('new_message', jid, account, [msg_type, first, nickname, message])
@@ -611,8 +611,8 @@ class Interface:
 			helpers.play_sound('message_sent')
 		
 	def handle_event_subscribe(self, account, array):
-		#('SUBSCRIBE', account, (jid, text))
-		dialogs.SubscriptionRequestWindow(array[0], array[1], account)
+		#('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is JEP-0172
+		dialogs.SubscriptionRequestWindow(array[0], array[1], account, array[2])
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Subscribe', (account, array))
 

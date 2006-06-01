@@ -1606,7 +1606,7 @@ class RosterWindow:
 		menu.popup(None, self.tree, None, event_button, event.time)
 
 	def on_add_to_roster(self, widget, contact, account):
-		dialogs.AddNewContactWindow(account, contact.jid)
+		dialogs.AddNewContactWindow(account, contact.jid, contact.name)
 
 	def authorize(self, widget, jid, account):
 		'''Authorize a contact (by re-sending auth menuitem)'''
@@ -1622,7 +1622,7 @@ class RosterWindow:
 		else:
 			group = []
 		gajim.connections[account].request_subscription(jid, txt, pseudo, group,
-			auto_auth)
+			auto_auth, gajim.nicks[account])
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			keyID = ''
@@ -2118,7 +2118,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		mw.new_tab(gc_control)
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,
-			msg_type = '', subject = None, resource = '', msg_id = None):
+			msg_type = '', subject = None, resource = '', msg_id = None,
+			user_nick = ''):
 		'''when we receive a message'''
 		contact = None
 		# if chat window will be for specific resource
@@ -2141,8 +2142,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
+			if user_nick:
+				nick = user_nick
+			else:
+				nick = jid.split('@')[0]
 			contact = gajim.contacts.create_contact(jid = jid,
-				name = jid.split('@')[0], groups = [_('Not in Roster')],
+				name = nick, groups = [_('Not in Roster')],
 				show = 'not in roster', status = '', ask = 'none',
 				keyID = keyID, resource = resource)
 			gajim.contacts.add_contact(account, contact)

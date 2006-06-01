@@ -362,7 +362,7 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
-	def __init__(self, account = None, jid = None):
+	def __init__(self, account = None, jid = None, user_nick = None):
 		self.account = account
 		if account == None:
 			# fill accounts with active accounts
@@ -431,7 +431,10 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			else:
 				self.uid_entry.set_text(jid)
 				self.protocol_combobox.set_active(0)
-			self.set_nickname()
+			if user_nick:
+				self.nickname_entry.set_text(user_nick)
+			else:
+				self.set_nickname()
 			self.nickname_entry.grab_focus()
 		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
 		liststore = gtk.ListStore(str)
@@ -860,11 +863,12 @@ ok_handler = None):
 		return response
 
 class SubscriptionRequestWindow:
-	def __init__(self, jid, text, account):
+	def __init__(self, jid, text, account, user_nick = None):
 		xml = gtkgui_helpers.get_glade('subscription_request_window.glade')
 		self.window = xml.get_widget('subscription_request_window')
 		self.jid = jid
 		self.account = account
+		self.user_nick = user_nick
 		if len(gajim.connections) >= 2:
 			prompt_text = _('Subscription request for account %s from %s')\
 				% (account, self.jid)
@@ -883,7 +887,7 @@ class SubscriptionRequestWindow:
 		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
 		if self.jid not in gajim.contacts.get_jid_list(self.account):
-			AddNewContactWindow(self.account, self.jid)
+			AddNewContactWindow(self.account, self.jid, self.user_nick)
 
 	def on_contact_info_button_clicked(self, widget):
 		'''ask vcard'''

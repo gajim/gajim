@@ -67,6 +67,7 @@ NS_PHYSLOC      ='http://jabber.org/protocol/physloc'                   # JEP-01
 NS_PRESENCE     ='presence'                                             # Jabberd2
 NS_PRIVACY      ='jabber:iq:privacy'
 NS_PRIVATE      ='jabber:iq:private'
+NS_PROFILE      ='http://jabber.org/protocol/profile'                   # JEP-0154
 NS_PUBSUB       ='http://jabber.org/protocol/pubsub'                    # JEP-0060
 NS_REGISTER     ='jabber:iq:register'
 NS_ROSTER       ='jabber:iq:roster'

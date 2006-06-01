@@ -131,10 +131,12 @@ class MessageControl:
 		return n
 
 	def send_message(self, message, keyID = '', type = 'chat',
-	chatstate = None, msg_id = None, composing_jep = None, resource = None):
+	chatstate = None, msg_id = None, composing_jep = None, resource = None,
+	user_nick = None):
 		'''Send the given message to the active tab'''
 		jid = self.contact.jid
 		# Send and update history
 		gajim.connections[self.account].send_message(jid, message, keyID,
-						type = type, chatstate = chatstate, msg_id = msg_id,
-						composing_jep = composing_jep, resource = self.resource)
+			type = type, chatstate = chatstate, msg_id = msg_id,
+			composing_jep = composing_jep, resource = self.resource,
+			user_nick = user_nick)

@@ -1295,6 +1295,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					composing_jep = 'JEP-0022'
 					if not msgtxt and chatstate_child.getTag('composing'):
 						chatstate = 'composing'
+		# JEP-0172 User Nickname
+		user_nick = ''
+		xtags = msg.getTags('x', attrs = {'type': 'result'},
+			namespace = common.xmpp.NS_DATA)
+		for xtag in xtags:
+			df = common.xmpp.DataForm(node = xtag)
+			field = df.getField('FORM_TYPE')
+			if not field or field.getValue() != common.xmpp.NS_PROFILE:
+				continue
+			user_nick = df.getField('nickname').getValue()
 		
 		if encTag and GnuPG.USE_GPG:
 			#decrypt
@@ -1338,7 +1348,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id, composing_jep))
+				chatstate, msg_id, composing_jep, user_nick))
 		else: # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
@@ -1352,7 +1362,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 			else:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, chatstate, msg_id, composing_jep))
+					subject, chatstate, msg_id, composing_jep, user_nick))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
@@ -1367,25 +1377,36 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		is_gc = False # is it a GC presence ?
 		sigTag = None
 		avatar_sha = None
+		user_nick = '' # for JEP-0172
 		transport_auto_auth = False
 		xtags = prs.getTags('x')
 		for x in xtags:
-			if x.getNamespace().startswith(common.xmpp.NS_MUC):
+			namespace = x.getNamespace()
+			if namespace.startswith(common.xmpp.NS_MUC):
 				is_gc = True
-			if x.getNamespace() == common.xmpp.NS_SIGNED:
+			if namespace == common.xmpp.NS_SIGNED:
 				sigTag = x
-			if x.getNamespace() == common.xmpp.NS_VCARD_UPDATE:
+			if namespace == common.xmpp.NS_VCARD_UPDATE:
 				avatar_sha = x.getTagData('photo')
-			if x.getNamespace() == common.xmpp.NS_DELAY:
+			if namespace == common.xmpp.NS_DELAY:
 				# JEP-0091
 				tim = prs.getTimestamp()
 				tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 				timestamp = time.localtime(timegm(tim))
-			if x.getNamespace() == 'http://delx.cjb.net/protocol/roster-subsync':
+			if namespace == 'http://delx.cjb.net/protocol/roster-subsync':
 				# see http://trac.gajim.org/ticket/326
 				agent = gajim.get_server_from_jid(jid_stripped)
 				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
 					transport_auto_auth = True
+			if namespace == common.xmpp.NS_DATA:
+				# JEP-0172
+				df = common.xmpp.DataForm(node = x)
+				if df.getType() != 'result':
+					continue
+				field = df.getField('FORM_TYPE')
+				if not field or field.getValue() != common.xmpp.NS_PROFILE:
+					continue
+				user_nick = df.getField('nickname').getValue()
 
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for').split()
@@ -1475,11 +1496,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 						resource, prio, keyID, timestamp))
 				if transport_auto_auth:
 					self.automatically_added.append(jid_stripped)
-					self.request_subscription(jid_stripped)
+					self.request_subscription(jid_stripped, name = user_nick)
 			else:
 				if not status:
 					status = _('I would like to add you to my roster.')
-				self.dispatch('SUBSCRIBE', (who, status))
+				self.dispatch('SUBSCRIBE', (who, status, user_nick))
 		elif ptype == 'subscribed':
 			if jid_stripped in self.automatically_added:
 				self.automatically_added.remove(jid_stripped)
