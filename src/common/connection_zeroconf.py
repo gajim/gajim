@@ -190,12 +190,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def _on_new_service(self,jid):
 		self.roster.setItem(jid)
-		self.dispatch('ROSTER', self.roster)
-
+		#self.dispatch('ROSTER', self.roster)
+		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), '', 'Gajim', 0, None, 0))
+	
 	def _on_remove_service(self,jid):
-		# roster.delItem(jid)	
-		# self.dispatch('ROSTER', roster)
-		pass
+		self.roster.delItem(jid)
+		#self.dispatch('NOTIFY', self, )
 
 	def connect(self, data = None, show = 'online'):
 		if self.connection:
@@ -204,6 +204,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.zeroconf.connect()
 		self.connection = client_zeroconf.ClientZeroconf(self.zeroconf)
 		self.roster = self.connection.getRoster()
+		self.dispatch('ROSTER', self.roster)
 		self.connected = STATUS_LIST.index(show)
 		
 	def connect_and_init(self, show, msg, signed):
@@ -254,24 +255,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.zeroconf.update_txt(txt)
 		self.dispatch('STATUS', show)
 
-	'''
-	def _on_disconnected(self):
-		self.dispatch('STATUS', 'offline')
-		self.disconnect()
-	'''
-	
 	def get_status(self):
 		return STATUS_LIST[self.connected]
-
-	def send_motd(self, jid, subject = '', msg = ''):
-		'''		
-		if not self.connection:
-			return
-		msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject)
-		self.connection.send(msg_iq)
-		'''
-
-		pass
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None):
@@ -455,13 +440,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connection.getRoster().delItem(agent)
 		'''
 
-	def update_contact(self, jid, name, groups):
-		'''
-		# update roster item on jabber server
+	def update_contact(self, jid, name, groups):	
 		if self.connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
-		'''				
 	
 	def new_account(self, name, config, sync = False):
 		'''
@@ -567,9 +549,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		'''		
 		pass
 
-	'''
 	def get_metacontacts(self):
-		
+		'''		
 		# Get metacontacts list from storage as described in JEP 0049
 		if not self.connection:
 			return
@@ -577,7 +558,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq2.addChild(name='storage', namespace='storage:metacontacts')
 		self.connection.send(iq)
-	'''
+		'''
+		pass
+
 	'''
 	def store_metacontacts(self, tags_list):
 		# Send meta contacts to the storage namespace

@@ -41,7 +41,6 @@ class Zeroconf:
 		self.server.ResolveService( int(interface), int(protocol), name, stype, \
 						domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), \
 						reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
-		self.new_serviceCB(name)
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
@@ -76,21 +75,16 @@ class Zeroconf:
 			l[str[:poseq]] = str[poseq+1:]
 		return l
 	
-	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
-			print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
-			print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
-		
-			'''
-			# add domain to stay unique
-			if domain != 'local':
-				add_domain = '.'+domain
-			else:
-				add_domain = ''
-					
-			self.contacts[name'@'+host+add_domain] = (name, stype, domain, interface, protocol, host, address, port, txt)
-			'''
+	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
+		self.contacts[name] = (name, domain, interface, protocol, host, address, port, txt)
+		self.new_serviceCB(name)
 
-			self.contacts[name] = (name, stype, domain, interface, protocol, host, address, port, txt)
+	# different handler when resolving all contacts
+	def service_resolved_all_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
+		print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
+		print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
+		
+		self.contacts[name] = (name, domain, interface, protocol, host, address, port, txt)
 
 	def service_added_callback(self):
 		print 'Service successfully added'
@@ -150,6 +144,9 @@ class Zeroconf:
 		self.entrygroup.Commit(reply_handler=self.service_committed_callback, error_handler=self.print_error_callback)
 
 	def announce(self):
+		#for testing
+		#self.contacts['stefan@munin'] = ('stefan@munin', 'local', '8', '0', 'munin', '192.168.1.29', '5121',avahi.string_array_to_txt_array(['status','avail']))
+		#self.new_serviceCB('stefan@munin')
 		state = self.server.GetState()
 
 		if state == avahi.SERVER_RUNNING:
@@ -193,10 +190,10 @@ class Zeroconf:
 	# refresh data manually - really ok or too much traffic?
 	def resolve_all(self):
 		for val in self.contacts.values():
-			#val:(name, stype, domain, interface, protocol, host, address, port, txt)
-			self.server.ResolveService( int(val[3]), int(val[4]), val[0], \
-				self.stype, val[2], avahi.PROTO_UNSPEC, dbus.UInt32(0),\
-				reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
+			#val:(name, domain, interface, protocol, host, address, port, txt)
+			self.server.ResolveService( int(val[2]), int(val[3]), val[0], \
+				self.stype, val[1], avahi.PROTO_UNSPEC, dbus.UInt32(0),\
+				reply_handler=self.service_resolved_all_callback, error_handler=self.print_error_callback)
 
 	def get_contacts(self):
 		self.resolve_all()
