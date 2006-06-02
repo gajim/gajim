@@ -1,4 +1,17 @@
-Gajim 0.10 (XX May 2006)
+Gajim 0.10.1 (06 June 2006)
+
+  * freeze and lost contacts in roster (#1953)
+  * popup menus are correctly placed
+  * high CPU usage on FreeBSD (#1963)
+  * nickname can contain '|' (#1913)
+  * update pl, cs, fr translations
+  * don't play sound, when no event is shown (#1970)
+  * set gajim icon for history manager
+  * gajim.desktop is generated with translation (#834)
+  * preventing several TBs and annoyances (r6273, r6275, r6279, r6301,
+  r6308, r6311, r6323, r6326, r6327, r6335, r6342, r6346, r6348)
+
+Gajim 0.10 (01 May 2006)
 
   * One Messages Window ability (default to it) with tab reordering ability
   * Non blocking socket connections. Gajim no longer remains unresponsive.
