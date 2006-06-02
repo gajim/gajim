@@ -641,13 +641,13 @@ class MessageWindowMgr:
 		if not gajim.config.get('saveposition'):
 			return
 			
-		if self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_ALWAYS):
+		if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
 			size = (gajim.config.get('msgwin-width'),
 				gajim.config.get('msgwin-height'))
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
 				gajim.config.get_per('accounts', acct, 'msgwin-height'))
-		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
+		elif self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_PERTYPE):
 			if type == message_control.TYPE_PM:
 				type = message_control.TYPE_CHAT
 			opt_width = type + '-msgwin-width'
@@ -705,6 +705,7 @@ class MessageWindowMgr:
 			win_type = type
 			win_role = type
 		elif self.mode == self.ONE_MSG_WINDOW_NEVER:
+			win_type = type
 			win_role = contact.jid
 
 		win = None
@@ -790,6 +791,10 @@ class MessageWindowMgr:
 			type = msg_win.type
 			pos_x_key = type + '-msgwin-x-position'
 			pos_y_key = type + '-msgwin-y-position'
+			size_width_key = type + '-msgwin-width'
+			size_height_key = type + '-msgwin-height'
+		elif self.mode == self.ONE_MSG_WINDOW_NEVER:
+			type = msg_win.type
 			size_width_key = type + '-msgwin-width'
 			size_height_key = type + '-msgwin-height'
 
