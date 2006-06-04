@@ -416,6 +416,8 @@ class MessageWindow:
 		ind = self.notebook.get_current_page()
 		current = ind
 		found = False
+		first_composing_ind = -1 # id of first composing ctrl to switch to
+										# if no others controls have awaiting events
 		# loop until finding an unread tab or having done a complete cycle
 		while True: 
 			if forward == True: # look for the first unread tab on the right
@@ -426,15 +428,22 @@ class MessageWindow:
 				ind = ind - 1
 				if ind < 0:
 					ind = self.notebook.get_n_pages() - 1
-			if ind == current:
-				break # a complete cycle without finding an unread tab 
 			ctrl = self.get_control(ind, None)
 			if ctrl.nb_unread > 0:
 				found = True
 				break # found
+			else: # Search for a composing contact
+				contact = ctrl.contact
+				if first_composing_ind == -1 and contact.chatstate == 'composing':
+				# If no composing contact found yet, check if this one is composing
+					first_composing_ind = ind
+			if ind == current:
+				break # a complete cycle without finding an unread tab 
 		if found:
 			self.notebook.set_current_page(ind)
-		else: # not found
+		elif first_composing_ind != -1:
+			self.notebook.set_current_page(first_composing_ind)
+		else: # not found and nobody composing
 			if forward: # CTRL + TAB
 				if current < (self.notebook.get_n_pages() - 1):
 					self.notebook.next_page()
