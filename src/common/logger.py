@@ -30,6 +30,8 @@ import datetime
 
 import exceptions
 import i18n
+import gajim
+
 _ = i18n._
 
 try:
@@ -374,35 +376,36 @@ class Logger:
 		start_of_day = int(time.mktime(local_time)) # we have time since epoch baby :)
 		return start_of_day
 	
-	def get_conversation_for_date(self, jid, year, month, day):
+	def get_conversation_for_date(self, jid, year, month, day, account):
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
-		
+		where_sql = self._build_contact_where(account, jid)
+
 		start_of_day = self.get_unix_time_from_date(year, month, day)
-		
 		seconds_in_a_day = 86400 # 60 * 60 * 24
 		last_second_of_day = start_of_day + seconds_in_a_day - 1
 		
 		self.cur.execute('''
 			SELECT contact_name, time, kind, show, message FROM logs
-			WHERE jid_id = %d
+			WHERE (%s)
 			AND time BETWEEN %d AND %d
 			ORDER BY time
-			''' % (jid_id, start_of_day, last_second_of_day))
+			''' % (where_sql, start_of_day, last_second_of_day))
 		
 		results = self.cur.fetchall()
 		return results
 
-	def get_search_results_for_query(self, jid, query):
+	def get_search_results_for_query(self, jid, query, account):
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
-		if False: #query.startswith('SELECT '): # it's SQL query
+
+		if False: #query.startswith('SELECT '): # it's SQL query (FIXME)
 			try:
 				self.cur.execute(query)
 			except sqlite.OperationalError, e:
@@ -410,22 +413,24 @@ class Logger:
 				return results
 			
 		else: # user just typed something, we search in message column
+			where_sql = self._build_contact_where(account, jid)
 			like_sql = '%' + query + '%'
 			self.cur.execute('''
 				SELECT contact_name, time, kind, show, message, subject FROM logs
-				WHERE jid_id = ? AND message LIKE ?
+				WHERE (%s) AND message LIKE '%s'
 				ORDER BY time
-				''', (jid_id, like_sql))
+				''' % (where_sql, like_sql))
 
 		results = self.cur.fetchall()
 		return results
 
-	def get_days_with_logs(self, jid, year, month, max_day):
+	def get_days_with_logs(self, jid, year, month, max_day, account):
 		'''returns the list of days that have logs (not status messages)'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		days_with_logs = []
-
+		where_sql = self._build_contact_where(account, jid)
+		
 		# First select all date of month whith logs we want
 		start_of_month = self.get_unix_time_from_date(year, month, 1)
 		seconds_in_a_day = 86400 # 60 * 60 * 24
@@ -433,11 +438,11 @@ class Logger:
 
 		self.cur.execute('''
 			SELECT time FROM logs
-			WHERE jid_id = %d
+			WHERE (%s)
 			AND time BETWEEN %d AND %d
 			AND kind NOT IN (%d, %d)
 			ORDER BY time
-			''' % (jid_id, start_of_month, last_second_of_month,
+			''' % (where_sql, start_of_month, last_second_of_month,
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
 		result = self.cur.fetchall()
 
@@ -468,17 +473,23 @@ class Logger:
 		result = self.cur.fetchone()
 		return days_with_logs
 
-	def get_last_date_that_has_logs(self, jid, is_room = False):
+	def get_last_date_that_has_logs(self, jid, account = None, is_room = False):
 		'''returns last time (in seconds since EPOCH) for which
 		we had logs (excluding statuses)'''
 		jid = jid.lower()
-		jid_id = self.get_jid_id(jid, 'ROOM')
+	
+		where_sql = ''
+		if not is_room:
+			where_sql = self._build_contact_where(account, jid)
+		else:
+			jid_id = self.get_jid_id(jid, 'ROOM')
+			where_sql = 'jid_id = %s' % jid_id	
 		self.cur.execute('''
 			SELECT time FROM logs
-			WHERE jid_id = ?
-			AND kind NOT IN (?, ?)
+			WHERE (%s) 
+			AND kind NOT IN (%d, %d)
 			ORDER BY time DESC LIMIT 1
-			''', (jid_id, constants.KIND_STATUS, constants.KIND_GCSTATUS))
+			''' % (where_sql, constants.KIND_STATUS, constants.KIND_GCSTATUS))
 
 		results = self.cur.fetchone()
 		if results is not None:
@@ -487,3 +498,21 @@ class Logger:
 			result = None
 
 		return result
+
+	def _build_contact_where(self, account, jid):
+		'''build the where clause for a jid, including metacontacts
+		jid(s) if any'''
+		where_sql = ''   
+		# will return empty list if jid is not associated with 
+		# any metacontacts 
+		family = gajim.contacts.get_metacontacts_family(account, jid)
+		if family:
+			for user in family:
+				jid_id = self.get_jid_id(user['jid'])
+				where_sql += 'jid_id = %s' % jid_id 
+				if user != family[-1]:
+					where_sql += ' OR '
+		else: # if jid was not associated with metacontacts 
+			jid_id = self.get_jid_id(jid)
+			where_sql = 'jid_id = %s' % jid_id
+		return where_sql

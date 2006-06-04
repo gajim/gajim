@@ -120,7 +120,7 @@ class HistoryWindow:
 
 		# select and show logs for last date we have logs with contact
 		# and if we don't have logs at all, default to today
-		result = gajim.logger.get_last_date_that_has_logs(self.jid)
+		result = gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
 		if result is None:
 			date = time.localtime()
 		else:
@@ -157,7 +157,7 @@ class HistoryWindow:
 		asks for days in this month if they have logs it bolds them (marks them)'''
 		weekday, days_in_this_month = calendar.monthrange(year, month)
 		log_days = gajim.logger.get_days_with_logs(self.jid, year,
-			month, days_in_this_month)
+			month, days_in_this_month, self.account)
 		for day in log_days:
 			widget.mark_day(day)
 			yield True
@@ -197,7 +197,8 @@ class HistoryWindow:
 		'''adds all the lines for given date in textbuffer'''
 		self.history_buffer.set_text('') # clear the buffer first
 		self.last_time_printout = 0
-		lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day)
+
+		lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day, self.account)
 		# lines holds list with tupples that have:
 		# contact_name, time, kind, show, message
 		for line in lines:
@@ -325,7 +326,8 @@ class HistoryWindow:
 		if text == '':
 			return
 		# contact_name, time, kind, show, message, subject
-		results = gajim.logger.get_search_results_for_query(self.jid, text)
+		results = gajim.logger.get_search_results_for_query(
+						self.jid, text, self.account)
 		#FIXME:
 		# add "subject:  | message: " in message column if kind is single
 		# also do we need show at all? (we do not search on subject)
