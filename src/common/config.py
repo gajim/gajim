@@ -95,12 +95,12 @@ class Config:
 		'custombrowser': [ opt_str, 'firefox' ],
 		'custommailapp': [ opt_str, 'mozilla-thunderbird -compose' ],
 		'custom_file_manager': [ opt_str, 'xffm' ],
-		'gc-hpaned-position': [opt_int, 540],
+		'gc-hpaned-position': [opt_int, 430],
 		'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nick completion (tab) in group chat')],
 		'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when desired nickname is used by someone else in group chat')],
 		'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-		'msgwin-width': [opt_int, 480],
+		'msgwin-width': [opt_int, 500],
 		'msgwin-height': [opt_int, 440],
 		'chat-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'chat-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
@@ -108,7 +108,7 @@ class Config:
 		'chat-msgwin-height': [opt_int, 440],
 		'gc-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'gc-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-		'gc-msgwin-width': [opt_int, 480],
+		'gc-msgwin-width': [opt_int, 600],
 		'gc-msgwin-height': [opt_int, 440],
 		'single-msg-x-position': [opt_int, 0],
 		'single-msg-y-position': [opt_int, 0],
