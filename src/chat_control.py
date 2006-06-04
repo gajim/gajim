@@ -1478,7 +1478,7 @@ class ChatControl(ChatControlBase):
 					pending_how_many += 1
 
 		rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
-			pending_how_many, timeout)
+			pending_how_many, timeout, self.account)
 		local_old_kind = None
 		for row in rows: # row[0] time, row[1] has kind, row[2] the message
 			if not row[2]: # message is empty, we don't print it

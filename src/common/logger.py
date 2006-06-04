@@ -342,7 +342,7 @@ class Logger:
 		return self.commit_to_db(values, write_unread)
 		
 	def get_last_conversation_lines(self, jid, restore_how_many_rows,
-		pending_how_many, timeout):
+		pending_how_many, timeout, account):
 		'''accepts how many rows to restore and when to time them out (in minutes)
 		(mark them as too old) and number of messages that are in queue
 		and are already logged but pending to be viewed,
@@ -350,15 +350,17 @@ class Logger:
 		list with empty tupple if nothing found to meet our demands'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
+		where_sql = self._build_contact_where(account, jid)
+		
 		now = int(float(time.time()))
 		timed_out = now - (timeout * 60) # before that they are too old
 		# so if we ask last 5 lines and we have 2 pending we get
 		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
 		self.cur.execute('''
 			SELECT time, kind, message FROM logs
-			WHERE jid_id = %d AND kind IN	(%d, %d, %d, %d) AND time > %d
+			WHERE %s AND kind IN	(%d, %d, %d, %d) AND time > %d
 			ORDER BY time DESC LIMIT %d OFFSET %d
-			''' % (jid_id, constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
+			''' % (where_sql, constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
 				constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT,
 				timed_out, restore_how_many_rows, pending_how_many)
 			)
