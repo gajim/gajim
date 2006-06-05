@@ -990,7 +990,7 @@ class GroupchatControl(ChatControlBase):
 
 		if command == 'nick':
 			# example: /nick foo
-			if len(message_array):
+			if len(message_array) and message_array[0] != self.nick:
 				nick = message_array[0]
 				gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
 				self.clear(self.msg_textview)
