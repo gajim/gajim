@@ -1,6 +1,6 @@
 [Setup]
 AppName=Gajim
-AppVerName=Gajim version 0.10-alpha
+AppVerName=Gajim version 0.10.1-1
 DefaultDirName={pf}\Gajim
 DefaultGroupName=Gajim
 UninstallDisplayIcon={app}\src\Gajim.exe
@@ -23,7 +23,6 @@ Source: "COPYING"; DestDir: "{app}"
 Source: "THANKS"; DestDir: "{app}"
 Source: "dist\gajim.exe"; DestDir: "{app}\src"; components: main
 Source: "dist\history_manager.exe"; DestDir: "{app}\src"; components: main
-Source: "dist\*.glade"; DestDir: "{app}\src"
 Source: "data\*"; DestDir: "{app}\data"; Flags: recursesubdirs
 Source: "po\*.mo"; DestDir: "{app}\po"; Flags: recursesubdirs
 
