@@ -180,6 +180,8 @@ class ConversationTextview:
 	def scroll_to_end_iter(self):
 		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
+		if not end_iter:
+			return False
 		self.tv.scroll_to_iter(end_iter, 0, False, 1, 1)
 		return False # when called in an idle_add, just do it once
 
