@@ -2088,7 +2088,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def new_chat_from_jid(self, account, jid):
 		jid = gajim.get_jid_without_resource(jid)
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		no_contact = False
 		if not contact:
+			no_contact = True
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
 				'attached_gpg_keys').split()
@@ -2106,6 +2108,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		mw = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
 		mw.set_active_tab(jid, account)
 		mw.window.present()
+		# For JEP-0172
+		if no_contact:
+			mc = mw.get_control(jid, account)
+			mc.user_nick = gajim.nicks[self.account]
 
 	def new_room(self, room_jid, nick, account):
 		# Get target window, create a control, and associate it with the window
