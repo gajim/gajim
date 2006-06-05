@@ -156,8 +156,10 @@ class VcardWindow:
 		# empty the image
 		self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
 		self.avatar_encoded = None
-		self.xml.get_widget('PHOTO_eventbox').disconnect(self.avatar_save_as_id)
-		self.avatar_save_as_id = None
+		if self.avatar_save_as_id:
+			self.xml.get_widget('PHOTO_eventbox').disconnect(
+						self.avatar_save_as_id)
+			self.avatar_save_as_id = None
 
 	def on_set_avatar_button_clicked(self, widget):
 		f = None
@@ -474,9 +476,10 @@ class VcardWindow:
 				self.xml.get_widget(e + '_entry').set_text('')
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
 			self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
-			self.xml.get_widget('PHOTO_eventbox').disconnect(
-				self.avatar_save_as_id)
-			self.avatar_save_as_id = None
+			if self.avatar_save_as_id:
+				self.xml.get_widget('PHOTO_eventbox').disconnect(
+					self.avatar_save_as_id)
+				self.avatar_save_as_id = None
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
