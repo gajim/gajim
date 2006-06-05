@@ -1,9 +1,8 @@
 Index: Makefile
 ===================================================================
---- Makefile	(revision 4702)
+--- Makefile	(revision 6412)
 +++ Makefile	(working copy)
-@@ -87,7 +87,6 @@
- 			mkdir -p "$(DESTDIR)$(PREFIX)/share/locale/$$d"; \
+@@ -88,7 +88,6 @@
  		fi; \
  	done
  	${MAKE} -C po install PREFIX=$(PREFIX)
@@ -13,9 +12,9 @@ Index: Makefile
  	cp data/pixmaps/gajim.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 Index: src/dialogs.py
 ===================================================================
---- src/dialogs.py	(revision 4702)
+--- src/dialogs.py	(revision 6412)
 +++ src/dialogs.py	(working copy)
-@@ -443,7 +443,7 @@
+@@ -521,7 +521,7 @@
  		dlg.set_version(gajim.version)
  		s = u'Copyright \xa9 2003-2005 Gajim Team'
  		dlg.set_copyright(s)
