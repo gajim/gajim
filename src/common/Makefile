@@ -1,5 +1,6 @@
 # Set the C flags to include the GTK+ and Python libraries
-PYTHONVER = `python -c 'import sys; print sys.version[:3]'`
+PYTHON ?= python
+PYTHONVER = `$(PYTHON) -c 'import sys; print sys.version[:3]'`
 
 HAVE_XSCRNSAVER = $(shell pkg-config --exists xscrnsaver && echo 'YES')
 

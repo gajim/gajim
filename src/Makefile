@@ -1,5 +1,6 @@
 # Set the C flags to include the GTK+ and Python libraries
-PYTHONVER = `python -c 'import sys; print sys.version[:3]'`
+PYTHON ?= python
+PYTHONVER = `$(PYTHON) -c 'import sys; print sys.version[:3]'`
 CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -fPIC -I/usr/include/python$(PYTHONVER) -I.
 LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0` -lpython$(PYTHONVER)
 
