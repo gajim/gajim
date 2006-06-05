@@ -1400,7 +1400,6 @@ class AccountModificationWindow:
 			dialogs.ErrorDialog(_('No such account available'),
 				_('You must create your account before editing your personal information.'))
 			return
-		jid = self.xml.get_widget('jid_entry').get_text().decode('utf-8')
 
 		# show error dialog if account is newly created (not in gajim.connections)
 		if not gajim.connections.has_key(self.account) or \
@@ -1409,12 +1408,7 @@ class AccountModificationWindow:
 			_('Without a connection, you can not edit your personal information.'))
 			return
 
-		# in infos the key jid is OUR jid so we save the vcardwindow instance there
-		if gajim.interface.instances[self.account]['infos'].has_key(jid):
-			gajim.interface.instances[self.account]['infos'][jid].window.present()
-		else:
-			gajim.interface.instances[self.account]['infos'][jid] = \
-				vcard.VcardWindow(jid, self.account, True)
+		gajim.interface.edit_own_details(self.account)
 
 	def on_manage_proxies_button_clicked(self, widget):
 		if gajim.interface.instances.has_key('manage_proxies'):
