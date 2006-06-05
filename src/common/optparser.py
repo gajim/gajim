@@ -129,14 +129,14 @@ class OptionsParser:
 
 	def update_config(self, old_version, new_version):
 		# Convert '0.x.y' to (0, x, y)
-		old_version = old_version.split('.')
+		old_version_list = old_version.split('.')
 		old = []
-		while len(old_version):
-			old.append(int(old_version.pop(0)))
-		new_version = new_version.split('.')
+		while len(old_version_list):
+			old.append(int(old_version_list.pop(0)))
+		new_version_list = new_version.split('.')
 		new = []
-		while len(new_version):
-			new.append(int(new_version.pop(0)))
+		while len(new_version_list):
+			new.append(int(new_version_list.pop(0)))
 
 		if old < [0, 9] and new >= [0, 9]:
 			self.update_config_x_to_09()
@@ -144,6 +144,7 @@ class OptionsParser:
 			self.update_config_09_to_010()
 		if old < [0, 10, 1, 1] and new >= [0, 10, 1, 1]:
 			self.update_config_to_01011()
+		gajim.config.set('version', new_version)
 	
 	def update_config_x_to_09(self):
 		# Var name that changed:
