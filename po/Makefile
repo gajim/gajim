@@ -1,5 +1,5 @@
 NAME = gajim
-LANGS   := fr pt el pl es ru bg de nb cs nl pt_BR sv it eu sk no zh_CN
+LANGS   := fr pt el pl es ru bg de nb cs nl pt_BR sv it eu sk no zh_CN br
 LANGS_PO:=$(foreach LANG, ${LANGS}, ${LANG}.po)
 LANGS_MO:=$(foreach LANG, ${LANGS}, ${LANG}.mo)
 DATADIR:=$(subst //,/,${DESTDIR}/${PREFIX}/share)
