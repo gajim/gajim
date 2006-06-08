@@ -183,7 +183,7 @@ class GroupchatControl(ChatControlBase):
 		# alphanum sorted
 		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact',
 			'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part',
-			'say', 'topic']
+			'names', 'say', 'topic']
 		# muc attention flag (when we are mentioned in a muc)
 		# if True, the room has mentioned us
 		self.attention_flag = False
@@ -1001,14 +1001,19 @@ class GroupchatControl(ChatControlBase):
 			# Open a chat window to the specified nick
 			# example: /query foo
 			if len(message_array):
-				nick = message_array.pop(0)
-				nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
-				if nick in nicks:
-					self.on_send_pm(nick = nick)
-					self.clear(self.msg_textview)
+				nick0 = message_array.pop(0)
+				if nick0[-1] == ' ':
+					nick1 = nick0[:-1]
 				else:
-					self.print_conversation(_('Nickname not found: %s') % nick,
-						'info')
+					nick1 = nick0
+				nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+				for nick in [nick0, nick1]:
+					if nick in nicks:
+						self.on_send_pm(nick = nick)
+						self.clear(self.msg_textview)
+						return True
+				self.print_conversation(_('Nickname not found: %s') % \
+					nick0, 'info')
 			else:
 				self.get_command_help(command)
 			return True
@@ -1138,6 +1143,19 @@ class GroupchatControl(ChatControlBase):
 			else:
 				self.get_command_help(command)
 			return True
+		elif command == 'names':
+			# print the list of participants
+			nicklist=""
+			i=0
+			for contact in self.iter_contact_rows():
+				nicklist += '[ %-12.12s ] ' % (contact[C_NICK].decode('utf-8'))
+				i=i+1
+				if i == 3:
+					i=0
+					self.print_conversation(nicklist, 'info')
+					nicklist=""
+			self.clear(self.msg_textview)
+			return True
 		elif command == 'help':
 			if len(message_array):
 				subcommand = message_array.pop(0)
@@ -1219,6 +1237,10 @@ class GroupchatControl(ChatControlBase):
 			self.print_conversation(s, 'info')
 		elif command == 'nick':
 			s = _('Usage: /%s <nickname>, changes your nickname in current room.')\
+				% command
+			self.print_conversation(s, 'info')
+		elif command == 'names':
+			s = _('Usage: /%s , display the names of room occupants.')\
 				% command
 			self.print_conversation(s, 'info')
 		elif command == 'topic':
