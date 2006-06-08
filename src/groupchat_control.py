@@ -1145,7 +1145,7 @@ class GroupchatControl(ChatControlBase):
 			return True
 		elif command == 'names':
 			# print the list of participants
-			nicklist=""
+			nicklist=''
 			i=0
 			for contact in self.iter_contact_rows():
 				nicklist += '[ %-12.12s ] ' % (contact[C_NICK].decode('utf-8'))
@@ -1153,7 +1153,9 @@ class GroupchatControl(ChatControlBase):
 				if i == 3:
 					i=0
 					self.print_conversation(nicklist, 'info')
-					nicklist=""
+					nicklist=''
+			if nicklist:
+				self.print_conversation(nicklist, 'info')
 			self.clear(self.msg_textview)
 			return True
 		elif command == 'help':
