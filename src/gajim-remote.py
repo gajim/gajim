@@ -110,6 +110,7 @@ class GajimRemote:
 			'change_status': [
 					_('Changes the status of account or accounts'),
 					[
+#offline, online, chat, away, xa, dnd, invisible should not be translated
 						(_('status'), _('one of: offline, online, chat, away, xa, dnd, invisible '), True), 
 						(_('message'), _('status message'), False), 
 						(_('account'), _('change status of account "account". '
