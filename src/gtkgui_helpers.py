@@ -691,10 +691,9 @@ default_name = ''):
 		# Get pixbuf
 		pixbuf = None
 		is_fake = False
-		if gajim.contacts.is_pm_from_jid(account, jid):
+		if account and gajim.contacts.is_pm_from_jid(account, jid):
 			is_fake = True
 		pixbuf = get_avatar_pixbuf_from_cache(jid, is_fake)
-
 		ext = file_path.split('.')[-1]
 		type_ = ''
 		if not ext:
@@ -710,6 +709,7 @@ default_name = ''):
 		try:
 			pixbuf.save(file_path, type_)
 		except:
+			#XXX Check for permissions
 			os.remove(file_path)
 			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
 			dialog2 = dialogs.ConfirmationDialog(_('Extension not supported'),

@@ -216,11 +216,18 @@ class VcardWindow:
 	def on_PHOTO_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
+			if self.vcard:
+				# our own avatar
+				account = None
+				nick = gajim.config.get_per('accounts', self.account, 'name')
+			else:
+				account = self.account
+				nick = self.contact.name
 			menu = gtk.Menu()
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			menuitem.connect('activate',
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.contact.jid, self.account, self.contact.name + '.jpeg')
+				self.jid, account, nick + '.jpeg')
 			menu.append(menuitem)
 			menu.show_all()
 			menu.connect('selection-done', lambda w:w.destroy())	
