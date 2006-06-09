@@ -42,16 +42,20 @@ def get_avatar_pixbuf_encoded_mime(photo):
 	img_decoded = None
 	avatar_encoded = None
 	avatar_mime_type = None
-	if photo.has_key('BINVAL') and photo.has_key('TYPE'):
+	if photo.has_key('BINVAL'):
 		img_encoded = photo['BINVAL']
 		avatar_encoded = img_encoded
-		avatar_mime_type = photo['TYPE']
 		try:
 			img_decoded = base64.decodestring(img_encoded)
 		except:
 			pass
 	if img_decoded:
-		pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
+		if photo.has_key('TYPE'):
+			avatar_mime_type = photo['TYPE']
+			pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
+		else:
+			pixbuf, avatar_mime_type = gtkgui_helpers.get_pixbuf_from_data(
+							img_decoded, want_type=True)
 	else:
 		pixbuf = None
 	return pixbuf, avatar_encoded, avatar_mime_type
