@@ -358,7 +358,7 @@ class Logger:
 		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
 		self.cur.execute('''
 			SELECT time, kind, message FROM logs
-			WHERE (%s) AND kind IN	(%d, %d, %d, %d) AND time > %d
+			WHERE (%s) AND kind IN (%d, %d, %d, %d) AND time > %d
 			ORDER BY time DESC LIMIT %d OFFSET %d
 			''' % (where_sql, constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
 				constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT,

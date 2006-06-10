@@ -568,30 +568,28 @@ class AboutDialog:
 		text = open('../COPYING').read()
 		dlg.set_license(text)
 		
-		#FIXME: do versions strings translatable after .10
-		#FIXME: use %s then
-		dlg.set_comments(_('A GTK+ jabber client') + '\nGTK+ Version: ' + \
-			self.tuple2str(gtk.gtk_version) + '\nPyGTK Version: ' + \
-			self.tuple2str(gtk.pygtk_version))
+		dlg.set_comments('%s\n%s : %s\n%s : %s' 
+			% (_('A GTK+ jabber client'), \
+			_('GTK+ Version'), self.tuple2str(gtk.gtk_version), \
+			_('PyGTK Version'), self.tuple2str(gtk.pygtk_version)))
 		dlg.set_website('http://www.gajim.org')
 
-		#FIXME: do current devs a translatable string
-		authors = [
-			'Current Developers:',
-			'Yann Le Boulanger <asterix@lagaule.org>',
-			'Dimitur Kirov <dkirov@gmail.com>',
-			'Travis Shirk <travis@pobox.com>',
-			'',
-			_('Past Developers:'),
-			'Nikos Kouremenos <kourem@gmail.com>',
-			'Vincent Hanquez <tab@snarc.org>',
-			'',
-			_('THANKS:'),
-		]
-
+		authors = []
+		authors_file = open('../AUTHORS').read()
+		authors_file = authors_file.split('\n')
+		for author in authors_file:
+			if author == 'CURRENT DEVELOPERS:':
+				authors.append(_('Current Developers:'))
+			elif author == 'PAST DEVELOPERS:':
+				authors.append('\n' +_('Past Developers:'))
+			elif author != '': # Real author line
+				authors.append(author)
+				
+		authors.append('\n' + _('THANKS:'))
+				
 		text = open('../THANKS').read()
 		text_splitted = text.split('\n')
-		text = '\n'.join(text_splitted[:-2]) # remove one english setence
+		text = '\n'.join(text_splitted[:-2]) # remove one english sentence
 		# and add it manually as translatable
 		text += '\n%s\n' % _('Last but not least, we would like to thank all '
 			'the package maintainers.')
