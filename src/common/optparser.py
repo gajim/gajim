@@ -268,6 +268,7 @@ class OptionsParser:
 		gajim.config.set('version', '0.10.1.1')
 
 	def update_config_to_01012(self):
+		# See [6456]
 		if self.old_values['emoticons_theme'] == 'Disabled':
 			gajim.config.set('emoticons_theme', '')
 		gajim.config.set('version', '0.10.1.2')
