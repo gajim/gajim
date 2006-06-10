@@ -853,11 +853,15 @@ class PreferencesWindow:
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
 		model = self.msg_tree.get_model()
 		model.clear()
-		for msg in gajim.config.get_per('statusmsg'):
+		preset_status = []
+		for msg_name in gajim.config.get_per('statusmsg'):
+			preset_status.append(msg_name)
+		preset_status.sort()
+		for msg_name in preset_status:
+			msg_text = gajim.config.get_per('statusmsg', msg_name, 'message')
+			msg_text = helpers.from_one_line(msg_text)
 			iter = model.append()
-			val = gajim.config.get_per('statusmsg', msg, 'message')
-			val = helpers.from_one_line(val)
-			model.set(iter, 0, msg, 1, val)
+			model.set(iter, 0, msg_name, 1, msg_text)
 
 	def on_msg_cell_edited(self, cell, row, new_text):
 		model = self.msg_tree.get_model()
