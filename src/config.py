@@ -124,7 +124,7 @@ class PreferencesWindow:
 		for dir in emoticons_list:
 			if dir != '.svn':
 				l.append(dir)
-		l.append('Disabled')
+		l.append(_('Disabled'))
 		for i in xrange(len(l)):
 			model.append([l[i]])
 			if gajim.config.get('emoticons_theme') == l[i]:

@@ -144,6 +144,9 @@ class OptionsParser:
 			self.update_config_09_to_010()
 		if old < [0, 10, 1, 1] and new >= [0, 10, 1, 1]:
 			self.update_config_to_01011()
+		if old < [0, 10, 1, 2] and new >= [0, 10, 1, 2]:
+			self.update_config_to_01012()
+	
 		gajim.config.set('version', new_version)
 	
 	def update_config_x_to_09(self):
@@ -263,3 +266,8 @@ class OptionsParser:
 		if self.old_values['print_status_in_muc'] in (True, False):
 			gajim.config.set('print_status_in_muc', 'in_and_out')
 		gajim.config.set('version', '0.10.1.1')
+
+	def update_config_to_01012(self):
+		if self.old_values['emoticons_theme'] == 'Disabled':
+			gajim.config.set('emoticons_theme', '')
+		gajim.config.set('version', '0.10.1.2')
