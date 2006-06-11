@@ -2927,7 +2927,7 @@ msgstr "Montrer la console _XML"
 
 #: ../src/gtkgui.glade.h:267
 msgid "Show only in _roster"
-msgstr "Ne montrer le que dans la _liste"
+msgstr "Ne le montrer que dans la _liste"
 
 #: ../src/gtkgui.glade.h:268
 msgid "Shows a list of file transfers between you and other"
