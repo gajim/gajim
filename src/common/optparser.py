@@ -263,7 +263,8 @@ class OptionsParser:
 		gajim.config.set('version', '0.10')
 
 	def update_config_to_01011(self):
-		if self.old_values['print_status_in_muc'] in (True, False):
+		if self.old_values.has_key('print_status_in_muc') and \
+			self.old_values['print_status_in_muc'] in (True, False):
 			gajim.config.set('print_status_in_muc', 'in_and_out')
 		gajim.config.set('version', '0.10.1.1')
 
