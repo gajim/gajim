@@ -537,7 +537,7 @@ class Connection(ConnectionHandlers):
 			# Ask metacontacts before roster
 			self.get_metacontacts()
 
-	def change_status(self, show, msg, sync = False, auto = False):
+	def change_status(self, show, msg, auto = False):
 		if not show in STATUS_LIST:
 			return -1
 		sshow = helpers.get_xmpp_show(show)

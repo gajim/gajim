@@ -1825,7 +1825,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status('connecting')
 
-	def send_status(self, account, status, txt, sync = False, auto = False):
+	def send_status(self, account, status, txt, auto = False):
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if status != 'offline':
@@ -1912,7 +1912,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				gajim.sleeper_state[account] = 'online'
 			else:
 				gajim.sleeper_state[account] = 'off'
-		gajim.connections[account].change_status(status, txt, sync, auto)
+		gajim.connections[account].change_status(status, txt, auto)
 
 	def get_status_message(self, show):
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
@@ -2333,7 +2333,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				for acct in accounts:
 					if gajim.connections[acct].connected:
 						self.quit_on_next_offline += 1
-						self.send_status(acct, 'offline', message, True)
+						self.send_status(acct, 'offline', message)
 			if not self.quit_on_next_offline:
 				self.quit_gtkgui_interface()
 		return True # do NOT destory the window
@@ -2443,9 +2443,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.quit_on_next_offline = 0
 			for acct in accounts:
 				if gajim.connections[acct].connected:
-					# send status asynchronously
 					self.quit_on_next_offline += 1
-					self.send_status(acct, 'offline', message, True)
+					self.send_status(acct, 'offline', message)
 		else:
 			self.quit_on_next_offline = 0
 		if not self.quit_on_next_offline:
