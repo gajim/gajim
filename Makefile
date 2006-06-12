@@ -87,7 +87,9 @@ install:
 			mkdir -p "$(DESTDIR)$(PREFIX)/share/locale/$$d"; \
 		fi; \
 	done
-	${MAKE} -C po install PREFIX=$(PREFIX)
+	if [ ! -z $$(find po -name *.mo) ]; then \
+		${MAKE} -C po install PREFIX=$(PREFIX) ; \
+	fi
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
 	cp THANKS "$(DESTDIR)$(PREFIX)/share/gajim/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
