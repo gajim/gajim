@@ -2046,6 +2046,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if accountIter:
 			model[accountIter][0] = self.jabber_state_images['16'][status]
 		if status == 'offline':
+			if self.quit_on_next_offline > -1:
+				self.quit_on_next_offline -= 1
+				if self.quit_on_next_offline < 1:
+					self.quit_gtkgui_interface()
 			if accountIter:
 				model[accountIter][C_SECPIXBUF] = None
 			if gajim.con_types.has_key(account):
@@ -2316,6 +2320,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		else:
 			accounts = gajim.connections.keys()
 			get_msg = False
+			self.quit_on_next_offline = 0
 			for acct in accounts:
 				if gajim.connections[acct].connected:
 					get_msg = True
@@ -2324,10 +2329,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				message = self.get_status_message('offline')
 				if message is None: # user pressed Cancel to change status message dialog
 					message = ''
+				
 				for acct in accounts:
 					if gajim.connections[acct].connected:
+						self.quit_on_next_offline += 1
 						self.send_status(acct, 'offline', message, True)
-			self.quit_gtkgui_interface()
+			if not self.quit_on_next_offline:
+				self.quit_gtkgui_interface()
 		return True # do NOT destory the window
 
 	def on_roster_window_focus_in_event(self, widget, event):
@@ -2432,11 +2440,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					_('Messages will only be available for reading them later if you have history enabled.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
+			self.quit_on_next_offline = 0
 			for acct in accounts:
 				if gajim.connections[acct].connected:
 					# send status asynchronously
+					self.quit_on_next_offline += 1
 					self.send_status(acct, 'offline', message, True)
-		self.quit_gtkgui_interface()
+		else:
+			self.quit_on_next_offline = 0
+		if not self.quit_on_next_offline:
+			self.quit_gtkgui_interface()
 
 	def open_event(self, account, jid, event):
 		'''If an event was handled, return True, else return False'''
@@ -3323,6 +3336,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
+		# when this value become 0 we quit main application
+		self.quit_on_next_offline = -1
 		self.make_jabber_state_images()
 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
