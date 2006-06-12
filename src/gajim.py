@@ -431,6 +431,12 @@ class Interface:
 			if ji in jid_list:
 				# Update existing iter
 				self.roster.draw_contact(ji, account)
+				# transport just signed in/out, don't show popup notifications
+				# for 30s
+				account_ji = account + '/' + ji
+				gajim.block_signed_in_notifications[account_ji] = True
+				gobject.timeout_add(30000, self.unblock_signed_in_notifications,
+					account_ji)
 		elif jid == gajim.get_jid_from_account(account):
 			# It's another of our resources.  We don't need to see that!
 			return
@@ -1288,6 +1294,8 @@ class Interface:
 
 	def handle_event_signed_in(self, account, empty):
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
+		# block signed in notifications for 30 seconds
+		gajim.block_signed_in_notifications[a] = True
 		self.roster.actions_menu_needs_rebuild = True
 		if gajim.interface.sleeper.getState() != common.sleepy.STATE_UNKNOWN and \
 		gajim.connections[account].connected in (2, 3):

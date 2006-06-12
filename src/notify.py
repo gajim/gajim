@@ -47,12 +47,20 @@ def notify(event, jid, account, parameters):
 		# Default : No popup for status change
 	elif  (event == 'contact_connected'):
 		status_message = parameters
+		j = gajim.get_jid_without_resource(jid)
+		server = gajim.get_server_from_jid(j)
+		account_server = account + '/' + server
+		block_transport = False
+		if account_server in gajim.block_signed_in_notifications and \
+		gajim.block_signed_in_notifications[account_server]:
+			block_transport = True
 		if gajim.config.get('notify_on_signin') and \
-			not gajim.block_signed_in_notifications[account]\
-			and helpers.allow_showing_notification(account):
+		not gajim.block_signed_in_notifications[account] and not block_transport \
+		and helpers.allow_showing_notification(account):
 			do_popup = True
 		if gajim.config.get_per('soundevents', 'contact_connected',
-			'enabled') and not gajim.block_signed_in_notifications[account]:
+		'enabled') and not gajim.block_signed_in_notifications[account] and \
+		not block_transport:
 			do_sound = True
 	elif (event == 'contact_disconnected'):
 		status_message = parameters
