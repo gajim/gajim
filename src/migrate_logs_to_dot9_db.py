@@ -29,7 +29,6 @@ import os
 import sre
 import sys
 import time
-import signal
 from common import logger
 from common import i18n
 
@@ -39,8 +38,6 @@ try:
 except:
 	PREFERRED_ENCODING = 'utf-8'
 from common.helpers import from_one_line, decode_string
-
-signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
 from pysqlite2 import dbapi2 as sqlite
 
