@@ -1,5 +1,5 @@
 NAME = gajim
-LANGS   := fr pt el pl es ru bg de nb cs nl pt_BR sv it eu sk no zh_CN br
+LANGS   := fr pt el pl es ru bg de nb cs nl pt_BR sv it eu sk no zh_CN br eo
 LANGS_PO:=$(foreach LANG, ${LANGS}, ${LANG}.po)
 LANGS_MO:=$(foreach LANG, ${LANGS}, ${LANG}.mo)
 DATADIR:=$(subst //,/,${DESTDIR}/${PREFIX}/share)
@@ -59,7 +59,7 @@ install:
 		if test ! -d $${dir}; then\
 			install -m 755 -d $${dir};\
 		fi;\
-		install -m 644 $${l}.mo $${dir}/${NAME}.mo;\
+		echo install -m 644 $${l}.mo $${dir}/${NAME}.mo;\
 	done
 
 clean:
