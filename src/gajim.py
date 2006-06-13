@@ -1295,7 +1295,7 @@ class Interface:
 	def handle_event_signed_in(self, account, empty):
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
 		# block signed in notifications for 30 seconds
-		gajim.block_signed_in_notifications[a] = True
+		gajim.block_signed_in_notifications[account] = True
 		self.roster.actions_menu_needs_rebuild = True
 		if gajim.interface.sleeper.getState() != common.sleepy.STATE_UNKNOWN and \
 		gajim.connections[account].connected in (2, 3):
