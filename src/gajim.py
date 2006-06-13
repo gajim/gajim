@@ -1741,7 +1741,6 @@ class Interface:
 		self.register_handlers()
 		for account in gajim.config.get_per('accounts'):
 			if account == 'zeroconf':
-				print 'Added zeroconf account to list'
 				gajim.connections[account] = common.connection_zeroconf.ConnectionZeroconf(account)
 			else:
 				gajim.connections[account] = common.connection.Connection(account)
