@@ -155,11 +155,16 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def _on_resolve_timeout(self):
 		if self.connected:
 			self.zeroconf.resolve_all()
+			diffs = self.roster.getDiffs()
+			for key in diffs:
+				# display_key = self.zeroconf.check_jid(key)
+				self.dispatch('NOTIFY', (key, diffs[key], '', 'Gajim', 0, None, 0))
 		return self.call_resolve_timeout
 
 	# callbacks called from zeroconf	
 	def _on_new_service(self,jid):
-		self.roster.setItem(jid)
+		self.roster.setItem(jid)	
+		# display_jid = self.zeroconf.check_jid(jid)
 		self.dispatch('ROSTER_INFO', (jid, jid, 'both', 'no', self.roster.getGroups(jid)))
 		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), '', 'Gajim', 0, None, 0))
 		
@@ -168,8 +173,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.roster.delItem(jid)
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
 		# keyID, timestamp))
-		self.dispatch('NOTIFY', (jid, 'offline', '', 'Gajim', 0
-, None, 0))
+		# jid = self.zeroconf.check_jid(jid)
+		self.dispatch('NOTIFY', (jid, 'offline', '', 'Gajim', 0, None, 0))
 
 
 	def connect(self, data = None, show = 'online'):
@@ -183,7 +188,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connected = STATUS_LIST.index(show)
 
 		# refresh all contacts data all 10 seconds
-		self.call_timeout = True
+		self.call_resolve_timeout = True
 		gobject.timeout_add(10000, self._on_resolve_timeout)
 		
 	def connect_and_init(self, show, msg, signed):

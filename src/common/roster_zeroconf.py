@@ -5,13 +5,32 @@ class Roster:
 		self._data = {}
 		self.zeroconf = zeroconf 	  	 # our zeroconf instance
 
+	def update_roster(self):
+		for (jid, dom, interf, proto, host, addr, port, txt) in self.zeroconf.get_contacts().values():
+			self.setItem(jid)
+
 	def getRoster(self):
 		print 'roster_zeroconf.py: getRoster'
-		self._data = self.zeroconf.get_contacts().copy()
+		self.update_roster()
 		return self
 
+	def getDiffs(self):
+		'''	update the roster with new data and return dict with
+		jid -> new status pairs to do notifications and stuff '''
+
+		diffs = {}
+		old_data = self._data.copy()
+		self.update_roster()
+		for key in old_data.keys():
+			if self._data.has_key(key):
+				if old_data[key] != self._data[key]:
+					diffs[key] = self._data[key]['status']
+		print 'roster_zeroconf.py: diffs:',
+		print diffs
+		return diffs
+		
 	def setItem(self, jid, name = '', groups = ''):
-		print 'roster_zeroconf.py: setItem %s' % jid
+		#print 'roster_zeroconf.py: setItem %s' % jid
 		(service_jid, domain, interface, protocol, host, address, port, txt)  \
 			= self.zeroconf.get_contact(jid)
 
@@ -68,11 +87,9 @@ class Roster:
 		return {}
 		
 	def getGroups(self, jid):
-		print 'roster_zeroconf.py: getGroups(%s)' % jid
 		return self._data[jid]['groups']
 	
 	def getStatus(self, jid):
-		print 'roster_zeroconf.py: getStatus %s' % jid
 		return self._data[jid]['status']
 
 	def getShow(self, jid):

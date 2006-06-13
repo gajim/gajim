@@ -38,7 +38,7 @@ class Zeroconf:
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
 		if name != self.name:
-			print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
+			# print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
 		
 			#synchronous resolving
 			self.server.ResolveService( int(interface), int(protocol), name, stype, \
@@ -46,7 +46,7 @@ class Zeroconf:
 						reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
-		print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
+		# print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
 		del self.contacts[name]
 		self.remove_serviceCB(name)
 
@@ -55,7 +55,7 @@ class Zeroconf:
 		if self.service_browsers.has_key((interface, protocol, stype, domain)):
 			return
 
-		print "Browsing for services of type '%s' in domain '%s' on %i.%i ..." % (stype, domain, interface, protocol)
+		# print "Browsing for services of type '%s' in domain '%s' on %i.%i ..." % (stype, domain, interface, protocol)
 
 		b = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
 				self.server.ServiceBrowserNew(interface, protocol, \
@@ -68,6 +68,13 @@ class Zeroconf:
 	def new_domain_callback(self,interface, protocol, domain, flags):
 		if domain != "local":
 			self.browse_domain(interface, protocol, domain)
+
+	def check_jid(self, jid):
+		# miranda uses bad service names, so change them...
+		if jid.find('@') == -1:
+			return 'miranda@' + jid
+		else:
+			return jid
 
 	def txt_array_to_dict(self,t):
 		l = {}
@@ -90,13 +97,16 @@ class Zeroconf:
 		self.contacts[name] = (name, domain, interface, protocol, host, address, port, txt)
 
 	def service_added_callback(self):
-		print 'Service successfully added'
+		# print 'Service successfully added'
+		pass
 
 	def service_committed_callback(self):
-		print 'Service successfully committed'
+		# print 'Service successfully committed'
+		pass
 
 	def service_updated_callback(self):
-		print 'Service successfully updated'
+		# print 'Service successfully updated'
+		pass
 
 	def service_add_fail_callback(self, err):
 		print 'Error while adding service:', str(err)
@@ -142,14 +152,11 @@ class Zeroconf:
 		if self.txt.has_key('status'):
 				self.txt['status'] = self.replace_show(self.txt['status'])
 
-		print "Publishing service '%s' of type %s" % (self.name, self.stype)
+		# print "Publishing service '%s' of type %s" % (self.name, self.stype)
 		self.entrygroup.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
 		self.entrygroup.Commit(reply_handler=self.service_committed_callback, error_handler=self.print_error_callback)
 
 	def announce(self):
-		#for testing
-		#self.contacts['stefan@munin'] = ('stefan@munin', 'local', '8', '0', 'munin', '192.168.1.29', '5121',avahi.string_array_to_txt_array(['status','avail']))
-		#self.new_serviceCB('stefan@munin')
 		state = self.server.GetState()
 
 		if state == avahi.SERVER_RUNNING:
@@ -196,7 +203,6 @@ class Zeroconf:
 			self.server.ResolveService(int(val[2]), int(val[3]), val[0], \
 				self.stype, val[1], avahi.PROTO_UNSPEC, dbus.UInt32(0),\
 				reply_handler=self.service_resolved_all_callback, error_handler=self.print_error_callback)
-			print "zeroconf.py: resolve_all"
 		
 	def get_contacts(self):
 		return self.contacts
