@@ -18,7 +18,9 @@ class Zeroconf:
 		self.domain = None   # specific domain to browse
 		self.stype = '_presence._tcp'	
 		self.port = 5298  # listening port that gets announced	
-		self.name = getpass.getuser()+'@'+socket.gethostname()  # service name
+		self.username = getpass.getuser()
+		self.host = socket.gethostname()
+		self.name = self.username+'@'+ self.host # service name
 		self.txt = {}		# service data
 		
 		self.new_serviceCB = new_serviceCB
@@ -35,10 +37,11 @@ class Zeroconf:
 		print "Error:", str(err)
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
-		print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
-
-		#synchronous resolving
-		self.server.ResolveService( int(interface), int(protocol), name, stype, \
+		if name != self.name:
+			print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
+		
+			#synchronous resolving
+			self.server.ResolveService( int(interface), int(protocol), name, stype, \
 						domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), \
 						reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
 
@@ -186,21 +189,21 @@ class Zeroconf:
 	def disconnect(self):
 		self.remove_announce()
 
-
 	# refresh data manually - really ok or too much traffic?
 	def resolve_all(self):
 		for val in self.contacts.values():
 			#val:(name, domain, interface, protocol, host, address, port, txt)
-			self.server.ResolveService( int(val[2]), int(val[3]), val[0], \
+			self.server.ResolveService(int(val[2]), int(val[3]), val[0], \
 				self.stype, val[1], avahi.PROTO_UNSPEC, dbus.UInt32(0),\
 				reply_handler=self.service_resolved_all_callback, error_handler=self.print_error_callback)
-
+			print "zeroconf.py: resolve_all"
+		
 	def get_contacts(self):
-		self.resolve_all()
 		return self.contacts
 
 	def get_contact(self, jid):
-		return self.contacts[jid]
+		if self.contacts.has_key(jid):
+			return self.contacts[jid]
 		
 	def update_txt(self, txt):
 		# update only given keys

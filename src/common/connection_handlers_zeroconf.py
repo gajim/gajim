@@ -295,4 +295,45 @@ class ConnectionHandlersZeroconf(ConnectionVcard):
 					dic[i]['values'] = [dic[i]['options'][0]['values'][0]]
 			i += 1
 		return dic
+		
+	def remove_transfers_for_contact(self, contact):
+		''' stop all active transfer for contact '''
+		'''for file_props in self.files_props.values():
+			if self.is_transfer_stoped(file_props):
+				continue
+			receiver_jid = unicode(file_props['receiver']).split('/')[0]
+			if contact.jid == receiver_jid:
+				file_props['error'] = -5
+				self.remove_transfer(file_props)
+				self.dispatch('FILE_REQUEST_ERROR', (contact.jid, file_props))
+			sender_jid = unicode(file_props['sender']).split('/')[0]
+			if contact.jid == sender_jid:
+				file_props['error'] = -3
+				self.remove_transfer(file_props)
+		'''
+		pass
 	
+	def remove_all_transfers(self):
+		''' stops and removes all active connections from the socks5 pool '''
+		'''
+		for file_props in self.files_props.values():
+			self.remove_transfer(file_props, remove_from_list = False)
+		del(self.files_props)
+		self.files_props = {}
+		'''
+		pass
+	
+	def remove_transfer(self, file_props, remove_from_list = True):
+		'''
+		if file_props is None:
+			return
+		self.disconnect_transfer(file_props)
+		sid = file_props['sid']
+		gajim.socks5queue.remove_file_props(self.name, sid)
+
+		if remove_from_list:
+			if self.files_props.has_key('sid'):
+				del(self.files_props['sid'])
+		'''
+		pass
+			

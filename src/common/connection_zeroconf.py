@@ -34,6 +34,8 @@ import signal
 if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
+import gobject
+
 from common import helpers
 from common import gajim
 from common import GnuPG
@@ -54,30 +56,26 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.name = name
 		self.zeroconf = zeroconf.Zeroconf(self._on_new_service, self._on_remove_service)
 		self.connected = 0 # offline
-		self.connection = None # dummy connection variable
-		# this property is used to prevent double connections
-#		self.last_connection = None # last ClientCommon instance
+		self.connection = None
 		self.gpg = None
 		self.is_zeroconf = True
 		self.status = ''
 		self.old_show = ''
-		# increase/decrease default timeout for server responses
-		self.try_connecting_for_foo_secs = 45
-		# holds the actual hostname to which we are connected
-#		self.connected_hostname = None
-		self.time_to_reconnect = None
-		self.new_account_info = None
-		self.bookmarks = []
+	
+		self.call_resolve_timeout = False
+		
+		#self.time_to_reconnect = None
+		#self.new_account_info = None
+		#self.bookmarks = []
+
 		self.on_purpose = False
-		self.last_io = gajim.idlequeue.current_time()
-		self.last_sent = []
-		self.last_history_line = {}
-		self.password = gajim.config.get_per('accounts', name, 'password')
-#		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
-#		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
-#			self.keepalives = gajim.config.get_per('accounts', self.name,'keep_alive_every_foo_secs')
-#		else:
-#			self.keepalives = 0
+		#self.last_io = gajim.idlequeue.current_time()
+		#self.last_sent = []
+		#self.last_history_line = {}
+
+		#we don't need a password
+		self.password = 'dummy' # gajim.config.get_per('accounts', name, 'password')
+		
 		self.privacy_rules_supported = False
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
@@ -91,7 +89,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.on_connect_failure = None
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
-		
+
+		gajim.config.set_per('accounts', name, 'name', self.zeroconf.username)
+		gajim.config.set_per('accounts', name, 'hostname', self.zeroconf.host)
+
 	# END __init__
 	def put_event(self, ev):
 		if gajim.handlers.has_key(ev[0]):
@@ -103,20 +104,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 
 	def _reconnect(self):
-		'''# Do not try to reco while we are already trying
-		self.time_to_reconnect = None
-		if self.connected < 2: #connection failed
-			gajim.log.debug('reconnect')
-			self.retrycount += 1
-			signed = self.get_signed_msg(self.status)
-			self.on_connect_auth = self._init_roster
-			self.connect_and_init(self.old_show, self.status, signed)
-		else:
-			# reconnect succeeded
-			self.time_to_reconnect = None
-			self.retrycount = 0
-		'''
-		
 		gajim.log.debug('reconnect')
 
 		signed = self.get_signed_msg(self.status)
@@ -131,31 +118,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			# make sure previous connection is completely closed
 			self.last_connection = None
 			self.connection = None
+			self.call_resolve_timeout = False
 			self.zeroconf.disconnect()
-	
-	def select_next_host(self, hosts):
-		hosts_best_prio = []
-		best_prio = 65535
-		sum_weight = 0
-		for h in hosts:
-			if h['prio'] < best_prio:
-				hosts_best_prio = [h]
-				best_prio = h['prio']
-				sum_weight = h['weight']
-			elif h['prio'] == best_prio:
-				hosts_best_prio.append(h)
-				sum_weight += h['weight']
-		if len(hosts_best_prio) == 1:
-			return hosts_best_prio[0]
-		r = random.randint(0, sum_weight)
-		min_w = sum_weight
-		# We return the one for which has the minimum weight and weight >= r
-		for h in hosts_best_prio:
-			if h['weight'] >= r:
-				if h['weight'] <= min_w:
-					min_w = h['weight']
-		return h
-	
 	
 	def quit(self, kill_core):
 	
@@ -188,24 +152,39 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 						self.dispatch('BAD_PASSPHRASE', ())
 		return signed
 
+	def _on_resolve_timeout(self):
+		if self.connected:
+			self.zeroconf.resolve_all()
+		return self.call_resolve_timeout
+
+	# callbacks called from zeroconf	
 	def _on_new_service(self,jid):
 		self.roster.setItem(jid)
-		#self.dispatch('ROSTER', self.roster)
+		self.dispatch('ROSTER_INFO', (jid, jid, 'both', 'no', self.roster.getGroups(jid)))
 		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), '', 'Gajim', 0, None, 0))
+		
 	
 	def _on_remove_service(self,jid):
 		self.roster.delItem(jid)
-		#self.dispatch('NOTIFY', self, )
+		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
+		# keyID, timestamp))
+		self.dispatch('NOTIFY', (jid, 'offline', '', 'Gajim', 0
+, None, 0))
+
 
 	def connect(self, data = None, show = 'online'):
 		if self.connection:
 			return self.connection, ''
-
+		
 		self.zeroconf.connect()
 		self.connection = client_zeroconf.ClientZeroconf(self.zeroconf)
 		self.roster = self.connection.getRoster()
 		self.dispatch('ROSTER', self.roster)
 		self.connected = STATUS_LIST.index(show)
+
+		# refresh all contacts data all 10 seconds
+		self.call_timeout = True
+		gobject.timeout_add(10000, self._on_resolve_timeout)
 		
 	def connect_and_init(self, show, msg, signed):
 		self.continue_connect_info = [show, msg, signed]
@@ -215,13 +194,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connect('',show)
 
 	def change_status(self, show, msg, sync = False, auto = False):
-		print "change_status: show: %s msg: %s" % (show, msg)
+		print "connection_zeroconf.py: show: %s msg: %s in change_status" % (show, msg)
 		if not show in STATUS_LIST:
 			return -1
 		
 		# 'connect'
 		if show != 'offline' and not self.connected:
-			print "connect in change_status"
+			print "connection_zeroconf.py: connect in change_status"
 			self.on_purpose = False
 			self.connect_and_init(show, msg, '')
 			if show != 'invisible':
@@ -231,22 +210,21 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		# 'disconnect'
 		elif show == 'offline' and self.connected:
-			print "disconnect in change_status"
+			print "connection_zeroconf.py: disconnect in change_status"
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.disconnect()
-			#self._on_disconnected()
 
 		# update status
 		elif show != 'offline' and self.connected:
-			print "update in change_status"
+			print "connection_zeroconf.py: update in change_status"
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
 				self.zeroconf.remove_announce()
 				return
 			if was_invisible:
-				print "announce after invisible in change_status"
+				print "connection_zeroconf.py: reannounce after invisible in change_status"
 				self.zeroconf.announce()
 			if self.connection:
 				txt = {}
