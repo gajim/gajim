@@ -144,18 +144,15 @@ if profile:
 	pid_filename += '.%s' % profile
 
 pid_filename += '.pid'
-
+import dialogs
 if os.path.exists(pid_filename):
 	pritext = _('Gajim is already running')
-	sectext = _('Exit the already running Gajim, or delete pid file:\n "%s".\n Quiting...' % pid_filename)
-	dlg = gtk.MessageDialog(None, 
-				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = pritext)
-
-	dlg.format_secondary_text(sectext)
-	dlg.run()
-	dlg.destroy()
-	sys.exit(3)
+	sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
+	dialog = dialogs.YesNoDialog(pritext, sectext)
+	if dialog.get_response() != gtk.RESPONSE_YES:
+		sys.exit(3)
+	os.remove(pid_filename)
+	dialog.destroy()
 
 # Create pif file
 f = open(pid_filename, 'a')
