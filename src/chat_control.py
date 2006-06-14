@@ -1363,6 +1363,9 @@ class ChatControl(ChatControlBase):
 		# Disconnect timer callbacks
 		gobject.source_remove(self.possible_paused_timeout_id)
 		gobject.source_remove(self.possible_inactive_timeout_id)
+		# Remove bigger avatar window
+		if self.bigger_avatar_window:
+			self.bigger_avatar_window.destroy()
 		# Clean up systray
 		if gajim.interface.systray_enabled and self.nb_unread > 0:
 			gajim.interface.systray.remove_jid(self.contact.jid, self.account,
@@ -1641,6 +1644,7 @@ class ChatControl(ChatControlBase):
 	def _on_window_avatar_leave_notify_event(self, widget, event):
 		'''we just left the popup window that holds avatar'''
 		self.bigger_avatar_window.destroy()
+		self.bigger_avatar_window = None
 		# Re-show the small avatar
 		self.show_avatar()
 
