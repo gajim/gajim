@@ -92,6 +92,7 @@ install:
 	fi
 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
 	cp THANKS "$(DESTDIR)$(PREFIX)/share/gajim/";
+	cp AUTHORS "$(DESTDIR)$(PREFIX)/share/gajim/";
 	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
 	cp data/pixmaps/gajim.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 	cp data/pixmaps/gajim_about.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
