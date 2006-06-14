@@ -86,7 +86,7 @@ class Config:
 		'emoticons_theme': [opt_str, 'static', '', True ],
 		'ascii_formatting': [ opt_bool, True,
 			_('Treat * / _ pairs as possible formatting characters.'), True],
-		'show_ascii_formatting_chars': [ opt_bool, False , _('If True, do not '
+		'show_ascii_formatting_chars': [ opt_bool, True , _('If True, do not '
 			'remove */_ . So *abc* will be bold but with * * not removed.')],
 		'sounds_on': [ opt_bool, True ],
 		# 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
