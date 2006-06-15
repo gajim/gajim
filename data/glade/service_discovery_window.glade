@@ -92,7 +92,7 @@ Agent JID - node</property>
       </child>
 
       <child>
-	<widget class="GtkTable" id="table1">
+	<widget class="GtkTable" id="address_table">
 	  <property name="visible">True</property>
 	  <property name="n_rows">3</property>
 	  <property name="n_columns">3</property>

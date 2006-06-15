@@ -442,7 +442,7 @@ _('Without a connection, you can not browse available services'))
 
 		# Address combobox
 		self.address_comboboxentry = None
-		address_hbox = self.xml.get_widget('address_hbox')
+		address_table = self.xml.get_widget('address_table')
 		if address_entry:
 			self.address_comboboxentry = self.xml.get_widget(
 				'address_comboboxentry')
@@ -465,8 +465,8 @@ _('Without a connection, you can not browse available services'))
 			self.address_comboboxentry.child.set_text(jid)
 		else:
 			# Don't show it at all if we didn't ask for it
-			address_hbox.set_no_show_all(True)
-			address_hbox.hide()
+			address_table.set_no_show_all(True)
+			address_table.hide()
 
 		self._initial_state()
 		self.xml.signal_autoconnect(self)
