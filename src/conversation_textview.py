@@ -36,6 +36,7 @@ import gtkgui_helpers
 from common import gajim
 from common import helpers
 from calendar import timegm
+from common.fuzzyclock import FuzzyClock
 
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
@@ -619,8 +620,15 @@ class ConversationTextview:
 			if seconds_passed > every_foo_seconds:
 				self.last_time_printout = time.mktime(tim)
 				end_iter = buffer.get_end_iter()
-				tim_format = time.strftime('%H:%M', tim).decode(
-					locale.getpreferredencoding())
+				if gajim.config.get('print_time_fuzzy') > 0:
+					fc = FuzzyClock()
+					fc.setTime(time.strftime('%H:%M'))
+					ft = fc.getFuzzyTime(gajim.config.get('print_time_fuzzy'))
+					tim_format = ft.decode(locale.getpreferredencoding())
+				else:
+					tim_format = time.strftime('%H:%M', tim).decode(
+						locale.getpreferredencoding())
+
 				buffer.insert_with_tags_by_name(end_iter, tim_format + '\n',
 					'time_sometimes')
 		other_text_tag = self.detect_other_text_tag(text, kind)
