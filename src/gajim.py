@@ -145,12 +145,16 @@ if profile:
 pid_filename += '.pid'
 import dialogs
 if os.path.exists(pid_filename):
+	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
+	pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+	gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
 	pritext = _('Gajim is already running')
 	sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
 	dialog = dialogs.YesNoDialog(pritext, sectext)
 	if dialog.get_response() != gtk.RESPONSE_YES:
 		sys.exit(3)
-	os.remove(pid_filename)
+	if os.path.exists(pid_filename):
+		os.remove(pid_filename)
 	dialog.destroy()
 
 # Create pif file
@@ -169,7 +173,6 @@ parser = optparser.OptionsParser(config_filename)
 
 import roster_window
 import systray
-import dialogs
 import vcard
 import config
 
