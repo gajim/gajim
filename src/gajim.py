@@ -157,7 +157,11 @@ if os.path.exists(pid_filename):
 		os.remove(pid_filename)
 	dialog.destroy()
 
-# Create pif file
+# Create .gajim dir
+pid_dir =  os.path.dirname(pid_filename)
+if not os.path.exists(pid_dir):
+	check_paths.create_path(pid_dir)
+# Create pid file
 f = open(pid_filename, 'a')
 f.close()
 
