@@ -51,7 +51,6 @@ import inspect
 import weakref
 import gobject
 import gtk
-import gtk.glade
 import pango
 
 import dialogs
@@ -60,12 +59,6 @@ import gtkgui_helpers
 
 from common import gajim
 from common import xmpp
-from common import i18n
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.

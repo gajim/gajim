@@ -25,17 +25,11 @@
 ##
 
 import gtk
-import gtk.glade
 import pango
 import dialogs
 import gtkgui_helpers
 
 from common import gajim
-from common import i18n
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
 
 class GajimThemesWindow:
 

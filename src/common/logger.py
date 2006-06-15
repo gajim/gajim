@@ -29,10 +29,7 @@ import time
 import datetime
 
 import exceptions
-import i18n
 import gajim
-
-_ = i18n._
 
 try:
 	from pysqlite2 import dbapi2 as sqlite

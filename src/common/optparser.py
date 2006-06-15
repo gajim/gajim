@@ -26,8 +26,6 @@ import os
 import sys
 import locale
 from common import gajim
-from common import i18n
-_ = i18n._
 
 class OptionsParser:
 	def __init__(self, filename):

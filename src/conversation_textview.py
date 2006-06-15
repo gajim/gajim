@@ -24,7 +24,6 @@
 ##
 
 import gtk
-import gtk.glade
 import pango
 import gobject
 import time
@@ -36,13 +35,7 @@ import locale
 import gtkgui_helpers
 from common import gajim
 from common import helpers
-from common import i18n
 from calendar import timegm
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)

@@ -16,7 +16,6 @@
 ##
 
 import gtk
-import gtk.glade
 import gobject
 import os
 import common.config
@@ -38,12 +37,6 @@ except:
 from common import helpers
 from common import gajim
 from common import connection
-from common import i18n
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:

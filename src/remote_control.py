@@ -31,9 +31,7 @@ import os
 from common import gajim
 from common import helpers
 from time import time
-from common import i18n
 from dialogs import AddNewContactWindow, NewChatDialog
-_ = i18n._
 
 import dbus_support
 if dbus_support.supported:

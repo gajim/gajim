@@ -26,7 +26,7 @@ import sha
 from encodings.punycode import punycode_encode
 
 import gajim
-import i18n
+from i18n import Q_
 from xmpp_stringprep import nodeprep, resourceprep, nameprep
 
 try:
@@ -35,9 +35,6 @@ try:
 	import win32con
 except:
 	pass
-
-_ = i18n._
-Q_ = i18n.Q_
 
 special_groups = (_('Transports'), _('Not in Roster'), _('Observers'))
 

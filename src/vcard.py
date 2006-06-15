@@ -14,7 +14,6 @@
 ##
 
 import gtk
-import gtk.glade
 import gobject
 import base64
 import mimetypes
@@ -27,12 +26,7 @@ import dialogs
 
 from common import helpers
 from common import gajim
-from common import i18n
-_ = i18n._
-Q_ = i18n.Q_
-APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
+from common.i18n import Q_
 
 def get_avatar_pixbuf_encoded_mime(photo):
 	'''return the pixbuf of the image

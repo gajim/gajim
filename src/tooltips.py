@@ -27,9 +27,6 @@ from common import gajim
 from common import helpers
 from common import i18n
 
-_ = i18n._
-APP = i18n.APP
-
 class BaseTooltip:
 	''' Base Tooltip class;
 		Usage:

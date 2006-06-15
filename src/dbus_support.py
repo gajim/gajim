@@ -20,8 +20,6 @@ import sys
 
 from common import gajim
 from common import exceptions
-from common import i18n
-_ = i18n._
 
 try:
 	import dbus

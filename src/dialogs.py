@@ -19,7 +19,6 @@
 ##
 
 import gtk
-import gtk.glade
 import gobject
 import os
 import sys
@@ -42,12 +41,6 @@ from advanced import AdvancedConfigurationWindow
 
 from common import gajim
 from common import helpers
-from common import i18n
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
 
 class EditGroupsDialog:
 	'''Class for the edit group dialog window'''

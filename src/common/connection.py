@@ -42,9 +42,6 @@ from common import GnuPG
 from connection_handlers import *
 USE_GPG = GnuPG.USE_GPG
 
-from common import i18n
-_ = i18n._
-
 class Connection(ConnectionHandlers):
 	'''Connection class'''
 	def __init__(self, name):

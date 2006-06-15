@@ -23,10 +23,7 @@ import dialogs
 import gtkgui_helpers
 
 from common import gajim
-from common import i18n
 from common import helpers
-i18n.init()
-_ = i18n._
 
 import dbus_support
 if dbus_support.supported:

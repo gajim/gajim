@@ -20,8 +20,6 @@
 
 import sre
 import copy
-import i18n
-_ = i18n._
 
 
 (

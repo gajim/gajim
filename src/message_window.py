@@ -22,7 +22,6 @@
 ##
 
 import gtk
-import gtk.glade
 
 import common
 import gtkgui_helpers
@@ -30,12 +29,6 @@ import message_control
 from chat_control import ChatControlBase
 
 from common import gajim
-
-####################
-# FIXME: Can't this stuff happen once?
-from common import i18n
-_ = i18n._
-APP = i18n.APP
 
 ####################
 

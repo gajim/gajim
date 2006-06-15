@@ -15,7 +15,6 @@
 ##
 
 import gtk
-import gtk.glade
 import gobject
 import os
 import time
@@ -33,16 +32,10 @@ import message_control
 
 from common import gajim
 from common import helpers
-from common import i18n
 from message_window import MessageWindowMgr
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 
 #(icon, name, type, jid, account, editable, second pixbuf)
 (

@@ -28,10 +28,6 @@ import stat
 
 from common import gajim
 import logger
-import i18n
-
-_ = i18n._
-Q_ = i18n.Q_
 
 from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
 

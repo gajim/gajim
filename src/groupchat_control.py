@@ -23,7 +23,6 @@
 import os
 import time
 import gtk
-import gtk.glade
 import pango
 import gobject
 import gtkgui_helpers
@@ -40,13 +39,6 @@ from common import helpers
 from chat_control import ChatControl
 from chat_control import ChatControlBase
 from conversation_textview import ConversationTextview
-from common import i18n
-
-_ = i18n._
-Q_ = i18n.Q_
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 
 #(status_image, type, nick, shown_nick)
 (

@@ -33,14 +33,13 @@ import sys
 import os
 import urllib
 
+from common import i18n
+
 import message_control
 
 from chat_control import ChatControlBase
 
 from common import exceptions
-from common import i18n
-i18n.init()
-_ = i18n._
 
 try:
 	import gtk

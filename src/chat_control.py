@@ -18,7 +18,6 @@
 import os
 import time
 import gtk
-import gtk.glade
 import pango
 import gobject
 import gtkgui_helpers
@@ -41,11 +40,6 @@ try:
 except:
 	HAS_GTK_SPELL = False
 
-####################
-# FIXME: Can't this stuff happen once?
-from common import i18n
-_ = i18n._
-APP = i18n.APP
 
 ################################################################################
 class ChatControlBase(MessageControl):

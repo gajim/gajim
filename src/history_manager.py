@@ -24,7 +24,6 @@ import sys
 import os
 import signal
 import gtk
-import gtk.glade
 import time
 import locale
 
@@ -36,9 +35,6 @@ from common.logger import LOG_DB_PATH, constants
 from common import gajim
 from common import i18n
 from common import helpers
-_ = i18n._
-gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
-gtk.glade.textdomain(i18n.APP)
 
 # time, message, subject
 (

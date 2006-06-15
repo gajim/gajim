@@ -32,7 +32,6 @@ import time
 from common import logger
 from common import i18n
 
-_ = i18n._
 try:
 	PREFERRED_ENCODING = sys.getpreferredencoding()
 except:

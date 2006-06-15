@@ -32,8 +32,6 @@ import common.xmpp
 from common import GnuPG
 from common import helpers
 from common import gajim
-from common import i18n
-_ = i18n._
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']

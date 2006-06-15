@@ -38,8 +38,6 @@ if os.name == 'nt':
 		HAS_PYWIN32 = False
 
 from common import i18n
-i18n.init()
-_ = i18n._
 from common import gajim
 from common import helpers
 

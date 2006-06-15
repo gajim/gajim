@@ -11,8 +11,6 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
-import gtk
-import gtk.glade
 import gtkgui_helpers
 
 from common import gajim
@@ -21,12 +19,6 @@ from common import gajim
 TYPE_CHAT = 'chat'
 TYPE_GC = 'gc'
 TYPE_PM = 'pm'
-
-####################
-# FIXME: Can't this stuff happen once?
-from common import i18n
-_ = i18n._
-APP = i18n.APP
 
 ####################
 

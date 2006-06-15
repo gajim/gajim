@@ -18,7 +18,6 @@
 ##
 
 import gtk
-import gtk.glade
 import gobject
 import os
 
@@ -29,7 +28,6 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
-from common import i18n
 
 HAS_SYSTRAY_CAPABILITIES = True
 
@@ -41,11 +39,6 @@ except:
 	except:
 		gajim.log.debug('No trayicon module available')
 		HAS_SYSTRAY_CAPABILITIES = False
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 
 
 class Systray:

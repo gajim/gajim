@@ -24,7 +24,6 @@
 ##
 
 import gtk
-import gtk.glade
 import gobject
 import time
 import calendar
@@ -34,16 +33,10 @@ import conversation_textview
 
 from common import gajim
 from common import helpers
-from common import i18n
 
 from common.logger import Constants
 
 constants = Constants()
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 
 # contact_name, date, message, time
 (

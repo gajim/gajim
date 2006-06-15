@@ -23,9 +23,6 @@
 ## GNU General Public License for more details.
 ##
 
-from common import i18n
-_ = i18n._
-
 class PysqliteNotAvailable(Exception):
 	'''sqlite2 is not installed or python bindings are missing'''
 	def __init__(self):
