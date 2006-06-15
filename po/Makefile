@@ -59,7 +59,7 @@ install:
 		if test ! -d $${dir}; then\
 			install -m 755 -d $${dir};\
 		fi;\
-		echo install -m 644 $${l}.mo $${dir}/${NAME}.mo;\
+		install -m 644 $${l}.mo $${dir}/${NAME}.mo;\
 	done
 
 clean:
