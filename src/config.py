@@ -2533,7 +2533,7 @@ class AccountCreationWizardWindow:
 		# Connect events from comboboxentry.child
 		server_comboboxentry = self.xml.get_widget('server_comboboxentry')
 		server_comboboxentry.child.connect('key_press_event',
-				self.on_server_comboboxentry_key_press_event)
+			self.on_server_comboboxentry_key_press_event)
 
 		# parse servers.xml
 		servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
@@ -2554,7 +2554,8 @@ class AccountCreationWizardWindow:
 		self.finish_button = self.xml.get_widget('finish_button')
 		self.advanced_button = self.xml.get_widget('advanced_button')
 		self.finish_label = self.xml.get_widget('finish_label')
-		self.go_online_checkbutton = self.xml.get_widget('go_online_checkbutton')
+		self.go_online_checkbutton = self.xml.get_widget(
+			'go_online_checkbutton')
 		self.show_vcard_checkbutton = self.xml.get_widget(
 			'show_vcard_checkbutton')
 		self.progressbar = self.xml.get_widget('progressbar')
@@ -2572,7 +2573,8 @@ class AccountCreationWizardWindow:
 		del gajim.interface.instances['account_creation_wizard']
 
 	def on_register_server_features_button_clicked(self, widget):
-		helpers.launch_browser_mailer('url', 'http://www.jabber.org/network/oldnetwork.shtml')
+		helpers.launch_browser_mailer('url',
+			'http://www.jabber.org/network/oldnetwork.shtml')
 
 	def on_save_password_checkbutton_toggled(self, widget):
 		self.xml.get_widget('pass1_entry').grab_focus()
