@@ -249,12 +249,10 @@ class SignalObject(DbusPrototype):
 					connected_account, contact, file_path)
 				return True
 		return False
-
-	def send_message(self, *args):
-		''' send_message(jid, message, keyID=None, account=None)
-		send chat 'message' to 'jid', using account (optional) 'account'.
-		if keyID is specified, encrypt the message with the pgp key '''
-		jid, message, keyID, account = self._get_real_arguments(args, 4)
+	
+	def _send_message(self, jid, message, keyID, account, type = 'chat', subject = None):
+		''' can be called from send_chat_message (default when send_message)
+		or send_single_message'''
 		if not jid or not message:
 			return None # or raise error
 		if not keyID:
@@ -264,29 +262,23 @@ class SignalObject(DbusPrototype):
 		
 		if connected_account:
 			connection = gajim.connections[connected_account]
-			res = connection.send_message(jid, message, keyID)
+			res = connection.send_message(jid, message, keyID, type, subject)
 			return True
 		return False
+	
+	def send_chat_message(self, *args):
+		''' send_message(jid, message, keyID=None, account=None)
+		send chat 'message' to 'jid', using account (optional) 'account'.
+		if keyID is specified, encrypt the message with the pgp key '''
+		jid, message, keyID, account = self._get_real_arguments(args, 4)
+		return self._send_message(jid, message, keyID, account)
 
 	def send_single_message(self, *args):
 		''' send_single_message(jid, subject, message, keyID=None, account=None)
 		send single 'message' to 'jid', using account (optional) 'account'.
 		if keyID is specified, encrypt the message with the pgp key '''
 		jid, subject, message, keyID, account = self._get_real_arguments(args, 5)
-		if not jid or not message:
-			return None # or raise error
-		if not keyID:
-			keyID = ''
-		
-		connected_account, contact = self.get_account_and_contact(account, jid)
-		
-		if connected_account:
-			connection = gajim.connections[connected_account]
-			res = connection.send_message(jid, message, keyID,
-                                                      type='normal',
-                                                      subject=subject)
-			return True
-		return False
+		return self._send_message(jid, message, keyID, account, type, subject)
 
 	def open_chat(self, *args):
 		''' start_chat(jid, account=None) -> shows the tabbed window for new 
@@ -598,7 +590,7 @@ class SignalObject(DbusPrototype):
 	change_status = method(INTERFACE)(change_status)
 	open_chat = method(INTERFACE)(open_chat)
 	contact_info = method(INTERFACE)(contact_info)
-	send_message = method(INTERFACE)(send_message)
+	send_message = method(INTERFACE)(send_chat_message)
 	send_single_message = method(INTERFACE)(send_single_message)
 	send_file = method(INTERFACE)(send_file)
 	prefs_list = method(INTERFACE)(prefs_list)
