@@ -126,11 +126,25 @@ class GajimRemote:
 					]
 				],
 			'send_message':[
-					_('Sends new message to a contact in the roster. Both OpenPGP key '
+					_('Sends new chat message to a contact in the roster. Both OpenPGP key '
 					'and account are optional. If you want to set only \'account\', '
 					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'), 
 					[
 						('jid', _('JID of the contact that will receive the message'), True),
+						(_('message'), _('message contents'), True),
+						(_('pgp key'), _('if specified, the message will be encrypted '
+							'using this public key'), False),
+						(_('account'), _('if specified, the message will be sent '
+							'using this account'), False),
+					]
+				],
+			'send_single_message':[
+					_('Sends new single message to a contact in the roster. Both OpenPGP key '
+					'and account are optional. If you want to set only \'account\', '
+					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'), 
+					[
+						('jid', _('JID of the contact that will receive the message'), True),
+						(_('subject'), _('message subject'), True),
 						(_('message'), _('message contents'), True),
 						(_('pgp key'), _('if specified, the message will be encrypted '
 							'using this public key'), False),
@@ -252,8 +266,8 @@ class GajimRemote:
 	def print_result(self, res):
 		''' Print retrieved result to the output '''
 		if res is not None:
-			if self.command in ('open_chat', 'send_message', 'start_chat'):
-				if self.command == 'send_message':
+			if self.command in ('open_chat', 'send_message', 'send_single_message', 'start_chat'):
+				if self.command in ('send_message', 'send_single_message'):
 					self.argv_len -= 2
 				
 				if res is False:

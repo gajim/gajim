@@ -159,6 +159,7 @@ class SignalObject(DbusPrototype):
 				self.change_status,
 				self.open_chat,
 				self.send_message,
+                                self.send_single_message,
 				self.contact_info,
 				self.send_file,
 				self.prefs_list,
@@ -251,7 +252,7 @@ class SignalObject(DbusPrototype):
 
 	def send_message(self, *args):
 		''' send_message(jid, message, keyID=None, account=None)
-		send 'message' to 'jid', using account (optional) 'account'.
+		send chat 'message' to 'jid', using account (optional) 'account'.
 		if keyID is specified, encrypt the message with the pgp key '''
 		jid, message, keyID, account = self._get_real_arguments(args, 4)
 		if not jid or not message:
@@ -264,6 +265,26 @@ class SignalObject(DbusPrototype):
 		if connected_account:
 			connection = gajim.connections[connected_account]
 			res = connection.send_message(jid, message, keyID)
+			return True
+		return False
+
+	def send_single_message(self, *args):
+		''' send_single_message(jid, subject, message, keyID=None, account=None)
+		send single 'message' to 'jid', using account (optional) 'account'.
+		if keyID is specified, encrypt the message with the pgp key '''
+		jid, subject, message, keyID, account = self._get_real_arguments(args, 5)
+		if not jid or not message:
+			return None # or raise error
+		if not keyID:
+			keyID = ''
+		
+		connected_account, contact = self.get_account_and_contact(account, jid)
+		
+		if connected_account:
+			connection = gajim.connections[connected_account]
+			res = connection.send_message(jid, message, keyID,
+                                                      type='normal',
+                                                      subject=subject)
 			return True
 		return False
 
@@ -578,6 +599,7 @@ class SignalObject(DbusPrototype):
 	open_chat = method(INTERFACE)(open_chat)
 	contact_info = method(INTERFACE)(contact_info)
 	send_message = method(INTERFACE)(send_message)
+	send_single_message = method(INTERFACE)(send_single_message)
 	send_file = method(INTERFACE)(send_file)
 	prefs_list = method(INTERFACE)(prefs_list)
 	prefs_put = method(INTERFACE)(prefs_put)
