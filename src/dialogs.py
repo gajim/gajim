@@ -1262,7 +1262,7 @@ class SingleMessageWindow:
 		
 		self.to_entry.set_text(to)
 		
-		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+		if gajim.config.get('use_speller') and HAS_GTK_SPELL and action == 'send':
 			try:
 				gtkspell.Spell(self.conversation_textview.tv)
 				gtkspell.Spell(self.message_textview)
