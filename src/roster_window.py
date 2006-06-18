@@ -2108,7 +2108,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# For JEP-0172
 		if no_contact:
 			mc = mw.get_control(jid, account)
-			mc.user_nick = gajim.nicks[self.account]
+			mc.user_nick = gajim.nicks[account]
 
 	def new_room(self, room_jid, nick, account):
 		# Get target window, create a control, and associate it with the window
