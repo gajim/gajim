@@ -511,7 +511,7 @@ class RosterTooltip(NotificationAreaTooltip):
 												prim_contact.get_shown_name())))
 		if prim_contact.sub:
 			properties.append(( _('Subscription: '), 
-				gtkgui_helpers.escape_for_pango_markup(prim_contact.sub)))
+				gtkgui_helpers.escape_for_pango_markup(helpers.get_uf_sub(prim_contact.sub))))
 		if prim_contact.keyID:
 			keyID = None
 			if len(prim_contact.keyID) == 8:
