@@ -1256,6 +1256,8 @@ class RosterWindow:
 			'assign_openpgp_key_menuitem')
 		add_special_notification_menuitem = xml.get_widget(
 			'add_special_notification_menuitem')
+		execute_command_menuitem = xml.get_widget(
+			'execute_command_menuitem')
 		
 		add_special_notification_menuitem.hide()
 		add_special_notification_menuitem.set_no_show_all(True)
@@ -1279,27 +1281,39 @@ class RosterWindow:
 
 		contacts = gajim.contacts.get_contact(account, jid)
 		if len(contacts) > 1: # sevral resources
-			sub_menu = gtk.Menu()
-			start_chat_menuitem.set_submenu(sub_menu)
+			def resources_submenu(action):
+				""" Build a submenu with contact's resources. """
+				sub_menu = gtk.Menu()
 
-			iconset = gajim.config.get('iconset')
-			if not iconset:
-				iconset = DEFAULT_ICONSET
-			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
-			for c in contacts:
-				# icon MUST be different instance for every item
-				state_images = self.load_iconset(path)
-				item = gtk.ImageMenuItem(c.resource + ' (' + str(c.priority) + ')')
-				icon_name = helpers.get_icon_name_to_show(c, account)
-				icon = state_images[icon_name]
-				item.set_image(icon)
-				sub_menu.append(item)
-				item.connect('activate', self.on_open_chat_window, c, account,
-					c.resource)
+				iconset = gajim.config.get('iconset')
+				if not iconset:
+					iconset = DEFAULT_ICONSET
+				path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+				for c in contacts:
+					# icon MUST be different instance for every item
+					state_images = self.load_iconset(path)
+					item = gtk.ImageMenuItem(c.resource + ' (' + str(c.priority) + ')')
+					icon_name = helpers.get_icon_name_to_show(c, account)
+					icon = state_images[icon_name]
+					item.set_image(icon)
+					sub_menu.append(item)
+					item.connect('activate', action, c, account,
+						c.resource)
+				return sub_menu
+
+			start_chat_menuitem.set_submenu(resources_submenu(self.on_open_chat_window))
+			execute_command_menuitem.set_submenu(resources_submenu(self.on_open_chat_window))
 
 		else: # one resource
 			start_chat_menuitem.connect('activate',
-				self.on_roster_treeview_row_activated, path)
+				self.on_open_chat_window, contact, account)
+			# we cannot execute commands when the resource is unknown
+			if contact.resource:
+				execute_command_menuitem.connect('activate',
+					self.on_roster_treeview_row_activated, path)
+			else:
+				execute_command_menuitem.hide()
+				execute_command_menuitem.set_no_show_all(True)
 
 		if contact.resource:
 			send_file_menuitem.connect('activate',
@@ -1368,7 +1382,7 @@ class RosterWindow:
 			for widget in [start_chat_menuitem, send_single_message_menuitem,
 			rename_menuitem, edit_groups_menuitem, send_file_menuitem,
 			subscription_menuitem, add_to_roster_menuitem,
-			remove_from_roster_menuitem]:
+			remove_from_roster_menuitem, execute_commands_menuitem]:
 				widget.set_sensitive(False)
 
 		#FIXME: create menu for sub contacts
