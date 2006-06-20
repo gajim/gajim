@@ -273,7 +273,8 @@ class RosterWindow:
 		if (contact.show in ('offline', 'error') or hide) and \
 			not showOffline and (not _('Transports') in contact.groups or \
 			gajim.connections[account].connected < 2) and \
-			not gajim.awaiting_events[account].has_key(jid):
+			not gajim.awaiting_events[account].has_key(jid) and \
+			not _('Not in Roster') in contact.groups:
 			return
 
 		# Remove brother contacts that are already in roster to add them
@@ -1779,14 +1780,26 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			for c in gajim.contacts.get_contact(account, contact.jid):
 				self.remove_contact(c, account)
 			gajim.contacts.remove_jid(account, c.jid)
+			need_readd = False
 			if not remove_auth and contact.sub == 'both':
 				contact.name = ''
 				contact.groups = []
 				contact.sub = 'from'
 				gajim.contacts.add_contact(account, contact)
 				self.add_contact_to_roster(contact.jid, account)
-			elif gajim.interface.msg_win_mgr.has_window(contact.jid, account) or \
-			gajim.awaiting_events[account].has_key(contact.jid):
+			elif gajim.awaiting_events[account].has_key(contact.jid):
+				need_readd = True
+			elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+				if _('Not in Roster') in contact.groups:
+					# Close chat window
+					msg_win = gajim.interface.msg_win_mgr.get_window(contact.jid,
+						account)
+					ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid,
+						account)
+					msg_win.remove_tab(ctrl)
+				else:
+					need_readd = True
+			if need_readd:
 				c = gajim.contacts.create_contact(jid = contact.jid,
 					name = '', groups = [_('Not in Roster')],
 					show = 'not in roster', status = '', ask = 'none',
