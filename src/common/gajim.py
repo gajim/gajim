@@ -25,8 +25,8 @@ import config
 from contacts import Contacts
 
 interface = None # The actual interface (the gtk one for the moment)
-version = '0.10'
 config = config.Config()
+version = config.get('version')
 connections = {}
 verbose = False
 
