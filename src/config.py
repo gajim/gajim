@@ -1313,11 +1313,12 @@ class AccountModificationWindow:
 			relogin_needed = False
 		else: # we're connected to the account we want to apply changes
 			# check if relogin is needed
-			relogin_needed = self.options_changed_need_relogin(config,
+			if = self.options_changed_need_relogin(config,
 				('resource', 'proxy', 'usessl', 'keyname',
-				'use_custom_host', 'custom_host'))
+				'use_custom_host', 'custom_host')):
+				relogin_needed = True
 
-			if config['use_custom_host'] and (self.option_changed(config,
+			elif config['use_custom_host'] and (self.option_changed(config,
 				'custom_host') or self.option_changed(config, 'custom_port')):
 				relogin_needed = True
 
