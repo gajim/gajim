@@ -19,6 +19,7 @@
 
 import xml.sax.saxutils
 import gtk
+import gtk.glade
 import gobject
 import pango
 import os

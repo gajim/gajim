@@ -27,13 +27,13 @@ import gtk
 import time
 import locale
 
+from common import i18n
 import exceptions
 import dialogs
 import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants
 
 from common import gajim
-from common import i18n
 from common import helpers
 
 # time, message, subject
