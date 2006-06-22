@@ -29,6 +29,7 @@ import gtkgui_helpers
 import cell_renderer_image
 import tooltips
 import message_control
+import adhoc_commands
 
 from common import gajim
 from common import helpers
@@ -1302,15 +1303,17 @@ class RosterWindow:
 				return sub_menu
 
 			start_chat_menuitem.set_submenu(resources_submenu(self.on_open_chat_window))
-			execute_command_menuitem.set_submenu(resources_submenu(self.on_open_chat_window))
+			execute_command_menuitem.set_submenu(resources_submenu(self.on_execute_command))
 
 		else: # one resource
 			start_chat_menuitem.connect('activate',
 				self.on_open_chat_window, contact, account)
 			# we cannot execute commands when the resource is unknown
+			# TODO: that's true only if the entity is a contact,
+			# TODO: we need to show this also for transports
 			if contact.resource:
 				execute_command_menuitem.connect('activate',
-					self.on_roster_treeview_row_activated, path)
+					self.on_execute_command, contact, account, contact.resource)
 			else:
 				execute_command_menuitem.hide()
 				execute_command_menuitem.set_no_show_all(True)
@@ -2489,6 +2492,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			ft.show_completed(jid, data)
 			return True
 		return False
+
+	def on_execute_command(self, widget, contact, account, resource=None):
+		'''Execute command. Full JID needed; if it is other contact,
+		resource is necessary. Widget is unnecessary, only to be
+		able to make this a callback.'''
+		jid = contact.jid
+		if resource is not None:
+			jid = jid+u'/'+resource
+		adhoc_commands.CommandWindow(account, jid)
 
 	def on_open_chat_window(self, widget, contact, account, resource = None):
 		# Get the window containing the chat
