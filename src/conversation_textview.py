@@ -83,6 +83,14 @@ class ConversationTextview:
 		color = gajim.config.get('statusmsgcolor')
 		self.tagStatus.set_property('foreground', color)
 
+		colors = gajim.config.get('gc_nicknames_colors')
+		colors = colors.split(':')
+		for color in xrange(len(colors)):
+			tagname = 'gc_nickname_color_' + str(color)
+			tag = buffer.create_tag(tagname)
+			color = colors[color]
+			tag.set_property('foreground', color)
+
 		tag = buffer.create_tag('marked')
 		color = gajim.config.get('markedmsgcolor')
 		tag.set_property('foreground', color)
