@@ -56,7 +56,8 @@ class CommandWindow:
 			'execute_button','stages_notebook',
 			'retrieving_commands_stage_vbox',
 			'command_list_stage_vbox','command_list_vbox',
-			'sending_form_stage_vbox'):
+			'sending_form_stage_vbox','no_commands_stage_vbox',
+			'error_stage_vbox', 'error_description_label'):
 			self.__dict__[name] = self.xml.get_widget(name)
 		
 		# setting initial stage
@@ -78,6 +79,7 @@ class CommandWindow:
 	def on_forward_button_clicked(self, *anything): pass
 	def on_execute_button_clicked(self, *anything): pass
 	def on_adhoc_commands_window_destroy(self, *anything): pass
+	def do_nothing(self, *anything): pass
 
 # stage 1: waiting for command list
 	def stage1(self):
@@ -142,9 +144,15 @@ class CommandWindow:
 			self.command_list_vbox.pack_end(radio, expand=False)
 		self.command_list_vbox.show_all()
 
-		self.stage_finish = self.stage_finish
+		self.stage_finish = self.stage2_finish
 		self.on_cancel_button_clicked = self.stage2_on_cancel_button_clicked
 		self.on_forward_button_clicked = self.stage2_on_forward_button_clicked
+
+	def stage2_finish(self):
+		'''Remove widgets we created.'''
+		def remove_widget(widget):
+			self.command_list_vbox.remove(widget)
+		self.command_list_vbox.foreach(remove_widget)
 
 	def stage2_on_cancel_button_clicked(self):
 		self.stage_finish()
@@ -152,6 +160,58 @@ class CommandWindow:
 
 	def stage2_on_forward_button_clicked(self):
 		pass
+
+	def on_check_commands_1_button_clicked(self, widget):
+		self.stage1()
+
+# stage 4: no commands are exposed
+	def stage4(self):
+		'''Display the message. Wait for user to close the window'''
+		# close old stage
+		self.stage_finish()
+
+		self.stages_notebook.set_current_page(
+			self.stages_notebook.page_num(
+				self.no_commands_stage_vbox))
+
+		self.cancel_button.set_sensitive(True)
+		self.back_button.set_sensitive(False)
+		self.forward_button.set_sensitive(False)
+		self.execute_button.set_sensitive(False)
+
+		self.stage_finish = self.do_nothing
+		self.on_cancel_button_clicked = self.stage4_on_cancel_button_clicked
+
+	def stage4_on_cancel_button_clicked(self):
+		self.window.destroy()
+
+	def on_check_commands_2_button_clicked(self, widget):
+		self.stage1()
+
+# stage 5: an error has occured
+	def stage5(self, error):
+		'''Display the error message. Wait for user to close the window'''
+		# close old stage
+		self.stage_finish()
+
+		assert isinstance(error, unicode)
+
+		self.stages_notebook.set_current_page(
+			self.stages_notebook.page_num(
+				self.error_stage_vbox))
+
+		self.cancel_button.set_sensitive(True)
+		self.back_button.set_sensitive(False)
+		self.forward_button.set_sensitive(False)
+		self.execute_button.set_sensitive(False)
+
+		self.error_description_label.set_text(error)
+
+		self.stage_finish = self.do_nothing
+		self.on_cancel_button_clicked = self.stage5_on_cancel_button_clicked
+
+	def stage5_on_cancel_button_clicked(self):
+		self.window.destroy()
 
 # helpers to handle pulsing in progressbar
 	def setup_pulsing(self, progressbar):
@@ -184,14 +244,18 @@ class CommandWindow:
 			# is error => error stage
 			error = response.getError()
 			if error is not None:
-				pass
+				# extracting error description from xmpp/protocol.py
+				errorname=xmpp.NS_STANZAS + ' ' + str(error)
+				errordesc=xmpp.ERRORS[errorname][2]
+				self.stage5(errordesc.decode('utf-8'))
+				return
 
 			# no commands => no commands stage
 			# commands => command selection stage
 			items = response.getTag('query').getTags('item')
 			if len(items)==0:
 				self.commandlist = []
-				self.stage2() # stageX, where X is the number for error page
+				self.stage4()
 			else:
 				self.commandlist = [(t.getAttr('node'), t.getAttr('name')) for t in items]
 				self.stage2()
