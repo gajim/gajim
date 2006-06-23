@@ -17,6 +17,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <signal name="destroy" handler="on_adhoc_commands_window_destroy" last_modification_time="Thu, 22 Jun 2006 22:50:45 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox1">
@@ -26,7 +27,7 @@
       <property name="spacing">0</property>
 
       <child>
-	<widget class="GtkNotebook" id="mode_notebook">
+	<widget class="GtkNotebook" id="stages_notebook">
 	  <property name="visible">True</property>
 	  <property name="show_tabs">False</property>
 	  <property name="show_border">False</property>
@@ -35,7 +36,7 @@
 	  <property name="enable_popup">False</property>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox2">
+	    <widget class="GtkVBox" id="retrieving_commands_stage_vbox">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -114,7 +115,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox5">
+	    <widget class="GtkVBox" id="command_list_stage_vbox">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -187,7 +188,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox3">
+	    <widget class="GtkVBox" id="sending_form_stage_vbox">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -314,7 +315,27 @@
 	  </child>
 
 	  <child>
-	    <placeholder/>
+	    <widget class="GtkLabel" id="label257">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">An error has occured.</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	      <property name="width_chars">-1</property>
+	      <property name="single_line_mode">False</property>
+	      <property name="angle">0</property>
+	    </widget>
+	    <packing>
+	      <property name="tab_expand">False</property>
+	      <property name="tab_fill">True</property>
+	    </packing>
 	  </child>
 
 	  <child>
