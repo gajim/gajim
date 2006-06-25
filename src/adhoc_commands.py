@@ -30,6 +30,7 @@ import common.xmpp as xmpp
 import common.gajim as gajim
 
 import gtkgui_helpers
+import dataforms
 
 class CommandWindow:
 	'''Class for a window for single ad-hoc commands session. Note, that
@@ -49,6 +50,11 @@ class CommandWindow:
 		self.pulse_id=None	# to satisfy self.setup_pulsing()
 		self.commandlist=None	# a list of (commandname, commanddescription)
 
+		# command's data
+		self.commandnode = None
+		self.sessionid = None
+		self.dataform = None
+
 		# retrieving widgets from xml
 		self.xml = gtkgui_helpers.get_glade('adhoc_commands_window.glade')
 		self.window = self.xml.get_widget('adhoc_commands_window')
@@ -56,10 +62,15 @@ class CommandWindow:
 			'execute_button','stages_notebook',
 			'retrieving_commands_stage_vbox',
 			'command_list_stage_vbox','command_list_vbox',
-			'sending_form_stage_vbox','no_commands_stage_vbox',
-			'error_stage_vbox', 'error_description_label'):
+			'sending_form_stage_vbox','sending_form_progressbar',
+			'no_commands_stage_vbox','error_stage_vbox',
+			'error_description_label'):
 			self.__dict__[name] = self.xml.get_widget(name)
-		
+
+		# creating data forms widget
+		self.data_form_widget = dataforms.DataFormWidget()
+		self.sending_form_stage_vbox.pack_start(self.data_form_widget)
+
 		# setting initial stage
 		self.stage1()
 
@@ -74,12 +85,32 @@ class CommandWindow:
 
 # these functions are set up by appropriate stageX methods
 	def stage_finish(self, *anything): pass
-	def on_cancel_button_clicked(self, *anything): pass
-	def on_back_button_clicked(self, *anything): pass
-	def on_forward_button_clicked(self, *anything): pass
-	def on_execute_button_clicked(self, *anything): pass
-	def on_adhoc_commands_window_destroy(self, *anything): pass
-	def do_nothing(self, *anything): pass
+	def stage_cancel_button_clicked(self, *anything): assert False
+	def stage_back_button_clicked(self, *anything): assert False
+	def stage_forward_button_clicked(self, *anything): assert False
+	def stage_execute_button_clicked(self, *anything): assert False
+	def stage_adhoc_commands_window_destroy(self, *anything): assert False
+	def stage_adhoc_commands_window_delete_event(self, *anything): assert False
+	def do_nothing(self, *anything): return False
+
+# widget callbacks
+	def on_cancel_button_clicked(self, *anything):
+		return self.stage_cancel_button_clicked(*anything)
+
+	def on_back_button_clicked(self, *anything):
+		return self.stage_back_button_clicked(*anything)
+
+	def on_forward_button_clicked(self, *anything):
+		return self.stage_forward_button_clicked(*anything)
+
+	def on_execute_button_clicked(self, *anything):
+		return self.stage_execute_button_clicked(*anything)
+
+	def on_adhoc_commands_window_destroy(self, *anything):
+		return self.stage_adhoc_commands_window_destroy(*anything)
+
+	def on_adhoc_commands_window_delete_event(self, *anything):
+		return self.stage_adhoc_commands_window_delete_event(self, *anything)
 
 # stage 1: waiting for command list
 	def stage1(self):
@@ -106,16 +137,22 @@ class CommandWindow:
 
 		# setup the callbacks
 		self.stage_finish = self.stage1_finish
-		self.on_cancel_button_clicked = self.stage1_on_cancel_button_clicked
+		self.stage_cancel_button_clicked = self.stage1_cancel_button_clicked
+		self.stage_adhoc_commands_window_delete_event = self.stage1_adhoc_commands_window_delete_event
+		self.stage_adhoc_commands_window_destroy = self.do_nothing
 
 	def stage1_finish(self):
 		self.remove_pulsing()
 
-	def stage1_on_cancel_button_clicked(self, widget):
+	def stage1_cancel_button_clicked(self, widget):
 		# cancelling in this stage is not critical, so we don't
 		# show any popups to user
 		self.stage1_finish()
 		self.window.destroy()
+
+	def stage1_adhoc_commands_window_delete_event(self, widget):
+		self.stage1_finish()
+		return True
 
 # stage 2: choosing the command to execute
 	def stage2(self):
@@ -140,29 +177,114 @@ class CommandWindow:
 		first_radio = None
 		for (commandnode, commandname) in self.commandlist:
 			radio = gtk.RadioButton(first_radio, label=commandname)
-			if first_radio is None: first_radio = radio
+			radio.connect("toggled", self.on_command_radiobutton_toggled, commandnode)
+			if first_radio is None:
+				first_radio = radio
+				self.commandnode = commandnode
 			self.command_list_vbox.pack_end(radio, expand=False)
 		self.command_list_vbox.show_all()
 
 		self.stage_finish = self.stage2_finish
-		self.on_cancel_button_clicked = self.stage2_on_cancel_button_clicked
-		self.on_forward_button_clicked = self.stage2_on_forward_button_clicked
+		self.stage_cancel_button_clicked = self.stage2_cancel_button_clicked
+		self.stage_forward_button_clicked = self.stage2_forward_button_clicked
+		self.stage_adhoc_commands_window_destroy = self.do_nothing
+		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
 	def stage2_finish(self):
-		'''Remove widgets we created.'''
+		'''Remove widgets we created. Not needed when the window is destroyed.'''
 		def remove_widget(widget):
 			self.command_list_vbox.remove(widget)
 		self.command_list_vbox.foreach(remove_widget)
 
-	def stage2_on_cancel_button_clicked(self):
+	def stage2_cancel_button_clicked(self, widget):
 		self.stage_finish()
 		self.window.destroy()
 
-	def stage2_on_forward_button_clicked(self):
-		pass
+	def stage2_forward_button_clicked(self, widget):
+		self.stage3()
+
+	def on_command_radiobutton_toggled(self, widget, commandnode):
+		self.commandnode = commandnode
 
 	def on_check_commands_1_button_clicked(self, widget):
 		self.stage1()
+
+# stage 3: command invocation
+	def stage3(self):
+		# close old stage
+		self.stage_finish()
+
+		assert isinstance(self.commandnode, unicode)
+
+		self.stages_notebook.set_current_page(
+			self.stages_notebook.page_num(
+				self.sending_form_stage_vbox))
+
+		self.cancel_button.set_sensitive(True)
+		self.back_button.set_sensitive(False)
+		self.forward_button.set_sensitive(False)
+		self.execute_button.set_sensitive(False)
+
+		self.stage3_submit_form()
+
+		self.stage_finish = self.stage3_finish
+		self.stage_cancel_button_clicked = self.stage3_cancel_button_clicked
+		self.stage_back_button_clicked = self.stage3_back_button_clicked
+		self.stage_forward_button_clicked = self.stage3_forward_button_clicked
+		self.stage_execute_button_clicked = self.stage3_execute_button_clicked
+		self.stage_adhoc_commands_window_destroy = self.do_nothing
+		self.stage_adhoc_commands_window_delete_event = self.do_nothing
+
+	def stage3_finish(self):
+		pass
+
+	def stage3_cancel_button_clicked(self, widget):
+		pass
+
+	def stage3_back_button_clicked(self, widget):
+		self.stage3_submit_form('prev')
+
+	def stage3_forward_button_clicked(self, widget):
+		self.stage3_submit_form('next')
+
+	def stage3_execute_button_clicked(self, widget):
+		self.stage3_submit_form('execute')
+
+	def stage3_submit_form(self, action='execute'):
+		self.data_form_widget.set_sensitive(False)
+		if self.data_form_widget.get_data_form() is None:
+			self.data_form_widget.hide()
+		self.sending_form_progressbar.show()
+		self.setup_pulsing(self.sending_form_progressbar)
+		self.send_command(action)
+
+	def stage3_next_form(self, command):
+		assert isinstance(command, xmpp.Node)
+
+		self.remove_pulsing()
+		self.sending_form_progressbar.hide()
+
+		self.sessionid = command.getAttr('sessionid')
+
+		self.dataform = xmpp.DataForm(node=command.getTag('x'))
+
+		self.data_form_widget.show()
+		self.data_form_widget.set_sensitive(True)
+		self.data_form_widget.set_data_form(self.dataform)
+
+		action = command.getTag('action')
+		if action is None:
+			# no action tag? that's last stage...
+			self.cancel_button.set_sensitive(False)
+			self.back_button.set_sensitive(False)
+			self.forward_button.set_sensitive(False)
+			self.execute_button.set_sensitive(True)
+		else:
+			# actions, actions, actions...
+			self.cancel_button.set_sensitive(False)
+			self.back_button.set_sensitive(action.getTag('prev') is not None)
+			self.forward_button.set_sensitive(action.getTag('next') is not None)
+			self.execute_button.set_sensitive(True)
 
 # stage 4: no commands are exposed
 	def stage4(self):
@@ -180,9 +302,11 @@ class CommandWindow:
 		self.execute_button.set_sensitive(False)
 
 		self.stage_finish = self.do_nothing
-		self.on_cancel_button_clicked = self.stage4_on_cancel_button_clicked
+		self.stage_cancel_button_clicked = self.stage4_cancel_button_clicked
+		self.stage_adhoc_commands_window_destroy = self.do_nothing
+		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
-	def stage4_on_cancel_button_clicked(self):
+	def stage4_cancel_button_clicked(self, widget):
 		self.window.destroy()
 
 	def on_check_commands_2_button_clicked(self, widget):
@@ -208,9 +332,11 @@ class CommandWindow:
 		self.error_description_label.set_text(error)
 
 		self.stage_finish = self.do_nothing
-		self.on_cancel_button_clicked = self.stage5_on_cancel_button_clicked
+		self.stage_cancel_button_clicked = self.stage5_cancel_button_clicked
+		self.stage_adhoc_commands_window_destroy = self.do_nothing
+		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
-	def stage5_on_cancel_button_clicked(self):
+	def stage5_cancel_button_clicked(self, widget):
 		self.window.destroy()
 
 # helpers to handle pulsing in progressbar
@@ -261,3 +387,30 @@ class CommandWindow:
 				self.stage2()
 
 		self.account.connection.SendAndCallForResponse(query, callback)
+
+	def send_command(self, action='execute'):
+		'''Send the command with data form. Wait for reply.'''
+		# create the stanza
+		assert isinstance(self.commandnode, unicode)
+		assert action in ('execute', 'prev', 'next', 'complete')
+
+		stanza = xmpp.Iq(typ='set', to=self.jid)
+		cmdnode = stanza.addChild('command', attrs={
+				'xmlns':xmpp.NS_COMMANDS,
+				'node':self.commandnode,
+				'action':action
+			})
+
+		if self.sessionid is not None:
+			cmdnode.setAttr('sessionid', self.sessionid)
+
+		if self.data_form_widget.data_form is not None:
+			cmdnode.addChild(node=self.data_form_widget.filled_data_form())
+
+		def callback(response):
+			# TODO: error handling
+			self.stage3_next_form(response.getTag('command'))
+
+		print stanza
+
+		self.account.connection.SendAndCallForResponse(stanza, callback)

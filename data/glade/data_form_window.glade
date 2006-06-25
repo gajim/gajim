@@ -251,14 +251,13 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkVBox" id="form_vbox">
+	    <widget class="GtkTable" id="form_table">
 	      <property name="visible">True</property>
+	      <property name="n_rows">1</property>
+	      <property name="n_columns">3</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">0</property>
-
-	      <child>
-		<placeholder/>
-	      </child>
+	      <property name="row_spacing">0</property>
+	      <property name="column_spacing">0</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
