@@ -73,9 +73,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		#self.last_sent = []
 		#self.last_history_line = {}
 
-		#we don't need a password
-		self.password = 'dummy' # gajim.config.get_per('accounts', name, 'password')
-		
+		#we don't need a password, but must be non-empty
+		self.password = 'dummy'
+
 		self.privacy_rules_supported = False
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
@@ -92,7 +92,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		gajim.config.set_per('accounts', name, 'name', self.zeroconf.username)
 		gajim.config.set_per('accounts', name, 'hostname', self.zeroconf.host)
-
+		
 	# END __init__
 	def put_event(self, ev):
 		if gajim.handlers.has_key(ev[0]):
@@ -109,17 +109,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		signed = self.get_signed_msg(self.status)
 			
 	
-	# We are doing disconnect at so many places, better use one function in all
-	def disconnect(self, on_purpose = False):
-		self.on_purpose = on_purpose
-		self.connected = 0
-		self.time_to_reconnect = None
-		if self.connection:
-			# make sure previous connection is completely closed
-			self.last_connection = None
-			self.connection = None
-			self.call_resolve_timeout = False
-			self.zeroconf.disconnect()
 	
 	def quit(self, kill_core):
 	
@@ -157,24 +146,25 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.zeroconf.resolve_all()
 			diffs = self.roster.getDiffs()
 			for key in diffs:
-				# display_key = self.zeroconf.check_jid(key)
-				self.dispatch('NOTIFY', (key, diffs[key], '', 'Gajim', 0, None, 0))
+				self.roster.setItem(key)
+				display_key = self.zeroconf.check_jid(key)
+				self.dispatch('NOTIFY', (display_key, self.roster.getStatus(key), self.roster.getMessage(key), 'local', 0, None, 0))
 		return self.call_resolve_timeout
 
 	# callbacks called from zeroconf	
 	def _on_new_service(self,jid):
 		self.roster.setItem(jid)	
-		# display_jid = self.zeroconf.check_jid(jid)
-		self.dispatch('ROSTER_INFO', (jid, jid, 'both', 'no', self.roster.getGroups(jid)))
-		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), '', 'Gajim', 0, None, 0))
+		display_jid = self.zeroconf.check_jid(jid)
+		self.dispatch('ROSTER_INFO', (display_jid, display_jid, 'both', 'no', self.roster.getGroups(jid)))
+		self.dispatch('NOTIFY', (display_jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
 		
 	
 	def _on_remove_service(self,jid):
 		self.roster.delItem(jid)
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
 		# keyID, timestamp))
-		# jid = self.zeroconf.check_jid(jid)
-		self.dispatch('NOTIFY', (jid, 'offline', '', 'Gajim', 0, None, 0))
+		jid = self.zeroconf.check_jid(jid)
+		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0))
 
 
 	def connect(self, data = None, show = 'online'):
@@ -185,6 +175,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connection = client_zeroconf.ClientZeroconf(self.zeroconf)
 		self.roster = self.connection.getRoster()
 		self.dispatch('ROSTER', self.roster)
+
+		#display contacts already detected and resolved
+		for jid in self.roster.keys():
+			display_jid = self.zeroconf.check_jid(jid)
+			self.dispatch('ROSTER_INFO', (display_jid, display_jid, 'both', 'no', self.roster.getGroups(jid)))
+			self.dispatch('NOTIFY', (display_jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
+
 		self.connected = STATUS_LIST.index(show)
 
 		# refresh all contacts data all 10 seconds
@@ -198,14 +195,25 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.zeroconf.txt['msg'] = msg
 		self.connect('',show)
 
+
+	def disconnect(self, on_purpose = False):
+		self.on_purpose = on_purpose
+		self.connected = 0
+		self.time_to_reconnect = None
+		if self.connection:
+			# make sure previous connection is completely closed
+			self.last_connection = None
+			self.connection = None
+			# stop calling the timeout
+			self.call_resolve_timeout = False
+			self.zeroconf.disconnect()
+
 	def change_status(self, show, msg, sync = False, auto = False):
-		print "connection_zeroconf.py: show: %s msg: %s in change_status" % (show, msg)
 		if not show in STATUS_LIST:
 			return -1
 		
 		# 'connect'
 		if show != 'offline' and not self.connected:
-			print "connection_zeroconf.py: connect in change_status"
 			self.on_purpose = False
 			self.connect_and_init(show, msg, '')
 			if show != 'invisible':
@@ -215,21 +223,18 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		# 'disconnect'
 		elif show == 'offline' and self.connected:
-			print "connection_zeroconf.py: disconnect in change_status"
 			self.connected = 0
 			self.dispatch('STATUS', 'offline')
 			self.disconnect()
 
 		# update status
 		elif show != 'offline' and self.connected:
-			print "connection_zeroconf.py: update in change_status"
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
 				self.zeroconf.remove_announce()
 				return
 			if was_invisible:
-				print "connection_zeroconf.py: reannounce after invisible in change_status"
 				self.zeroconf.announce()
 			if self.connection:
 				txt = {}
@@ -243,14 +248,15 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None):
-		'''
+		print 'connection_zeroconf.py: send_message'
+
+		fjid = jid
+
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
 			return
-		fjid = jid
-		if resource:
-			fjid += '/' + resource
+		
 		msgtxt = msg
 		msgenc = ''
 		if keyID and USE_GPG:
@@ -262,8 +268,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				if lang is not None or lang != 'en': # we're not english
 					msgtxt = _('[This message is encrypted]') +\
 						' ([This message is encrypted])' # one  in locale and one en
+
+		
 		if type == 'chat':
 			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type)
+			
 		else:
 			if subject:
 				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
@@ -271,9 +280,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			else:
 				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
 					typ = 'normal')
+
+		
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
-
+		
 		# chatstates - if peer supports jep85 or jep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
@@ -292,7 +303,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				if chatstate is 'composing' or msgtxt: 
 					chatstate_node.addChild(name = 'composing') 
 
-		self.connection.send(msg_iq)
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		ji = gajim.get_jid_without_resource(jid)
 		if self.name not in no_log_for and ji not in no_log_for:
@@ -305,17 +315,17 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				else:
 					kind = 'single_msg_sent'
 				gajim.logger.write(kind, jid, log_msg)
+		
+		self.zeroconf.send_message(jid, msgtxt)
+		
 		self.dispatch('MSGSENT', (jid, msg, keyID))
-		'''
-	
+		
 	def send_stanza(self, stanza):
 		# send a stanza untouched
-		'''
+		print 'connection_zeroconf.py: send_stanza'
 		if not self.connection:
 			return
-		self.connection.send(stanza)
-		'''
-		
+		#self.connection.send(stanza)
 		pass
 	
 	def ack_subscribed(self, jid):

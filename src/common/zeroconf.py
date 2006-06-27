@@ -70,12 +70,19 @@ class Zeroconf:
 			self.browse_domain(interface, protocol, domain)
 
 	def check_jid(self, jid):
-		# miranda uses bad service names, so change them...
+		# TODO: at least miranda uses bad service names(only host name), so change them - probabaly not so nice... need to find a better solution
 		if jid.find('@') == -1:
-			return 'miranda@' + jid
+			return 'bad-client@' + jid
 		else:
 			return jid
-
+		
+	def recreate_bad_jid(self,jid):
+		at = jid.find('@')
+		if  jid[:at] == 'bad-client':
+			return jid[at+1:]
+		else:
+			return jid
+		
 	def txt_array_to_dict(self,t):
 		l = {}
 
@@ -91,8 +98,8 @@ class Zeroconf:
 
 	# different handler when resolving all contacts
 	def service_resolved_all_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
-		print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
-		print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
+		#print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
+		#print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
 		
 		self.contacts[name] = (name, domain, interface, protocol, host, address, port, txt)
 
@@ -163,9 +170,10 @@ class Zeroconf:
 			self.create_service()
 
 	def remove_announce(self):
-		self.entrygroup.Reset()
-		self.entrygroup.Free()
-		self.entrygroup = None
+		if self.entrygroup:
+			self.entrygroup.Reset()
+			self.entrygroup.Free()
+			self.entrygroup = None
 
 	def browse_domain(self, interface, protocol, domain):
 		self.new_service_type(interface, protocol, self.stype, domain, '')
@@ -190,7 +198,6 @@ class Zeroconf:
 					dbus.UInt32(0))), avahi.DBUS_INTERFACE_DOMAIN_BROWSER)
 			db.connect_to_signal('ItemNew', self.new_domain_callback)
 		else:
-			# Just browse the domain the user wants us to browse
 			self.browse_domain(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, domain)
 
 	def disconnect(self):
@@ -224,10 +231,44 @@ class Zeroconf:
 		self.entrygroup.UpdateServiceTxt(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype,'', txt, reply_handler=self.service_updated_callback, error_handler=self.print_error_callback)
 #		self.entrygroup.Commit()         # TODO: necessary?
 
+	
+	def send (self, msg, sock):
+		print 'send:'+msg
+		totalsent = 0
+		while totalsent < len(msg):
+			sent = sock.send(msg[totalsent:])
+			if sent == 0:
+				raise RuntimeError, "socket connection broken"
+			totalsent = totalsent + sent
+
+	def send_message(self, jid, msg):
+		print 'zeroconf.py: send_message:'+ msg
+		jid = self.recreate_bad_jid(jid)
+			
+		sock = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
+ 		#sock.setblocking(False)
+		sock.connect ( ( self.contacts[jid][4], self.contacts[jid][6] ) )
+		
+		try : recvd = sock.recv(16384)
+		except: recvd = ''
+	
+		print 'receive:' + recvd
+		
+		self.send("<?xml version='1.0' encoding='UTF-8'?><stream:stream to="+ self.contacts[jid][5] +" xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>", sock)
+
+		self.send("<message to=" + jid + " type='chat'><body>" + msg + "</body><html xmlns='html://www.w3.org/1999/xhtml'><body ichatballoncolor='#111111' ichattextcolor='#000000'><font face='Courier' ABSZ='3'>" + msg +"</font></body></html><x xmlns='jabber:x:event'><delivered /></x></message>", sock)
+		
+		try: recvd = sock.recv(16384)
+		except: recvd = ''
+		print 'receive:' + recvd
+
+		self.send('</stream>', sock)
+		sock.close()
+
 # END Zeroconf
 
 '''
-# how to use...
+# how to use
 		
 	zeroconf = Zeroconf()
 	zeroconf.connect()				

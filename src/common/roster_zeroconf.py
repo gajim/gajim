@@ -10,7 +10,7 @@ class Roster:
 			self.setItem(jid)
 
 	def getRoster(self):
-		print 'roster_zeroconf.py: getRoster'
+		#print 'roster_zeroconf.py: getRoster'
 		self.update_roster()
 		return self
 
@@ -25,8 +25,7 @@ class Roster:
 			if self._data.has_key(key):
 				if old_data[key] != self._data[key]:
 					diffs[key] = self._data[key]['status']
-		print 'roster_zeroconf.py: diffs:',
-		print diffs
+		#print 'roster_zeroconf.py: diffs:' + diffs
 		return diffs
 		
 	def setItem(self, jid, name = '', groups = ''):
@@ -50,57 +49,64 @@ class Roster:
 			status = ''
 		if status == 'avail': status = 'online'
 		self._data[jid]['txt_dict'] = txt_dict
+		if not self._data[jid]['txt_dict'].has_key('msg'):
+			self._data[jid]['txt_dict']['msg'] = ''
 		self._data[jid]['status'] = status
 		self._data[jid]['show'] = status
 
 		# print self._data[jid]
 
 	def delItem(self, jid):
-		print 'roster_zeroconf.py: delItem %s' % jid
+		#print 'roster_zeroconf.py: delItem %s' % jid
 		if self._data.has_key(jid):
 			del self._data[jid]
 		
 	def getItem(self, jid):
-		print 'roster_zeroconf.py: getItem: %s' % jid
+		#print 'roster_zeroconf.py: getItem: %s' % jid
 		if self._data.has_key(jid):
 			return self._data[jid]
 
 	def __getitem__(self,jid):
-		print 'roster_zeroconf.py: __getitem__'
+		#print 'roster_zeroconf.py: __getitem__'
 		return self._data[jid]
 	
 	def getItems(self):
-		print 'roster_zeroconf.py: getItems'
+		#print 'roster_zeroconf.py: getItems'
 		# Return list of all [bare] JIDs that the roster currently tracks.
 		return self._data.keys()
 	
 	def keys(self):
-		print 'roster_zeroconf.py: keys'
+		#print 'roster_zeroconf.py: keys'
 		return self._data.keys()
 	
 	def getRaw(self):
-		print 'roster_zeroconf.py: getRaw'
+		#print 'roster_zeroconf.py: getRaw'
 		return self._data
 
 	def getResources(self, jid):
-		print 'roster_zeroconf.py: getResources(%s)' % jid
+		#print 'roster_zeroconf.py: getResources(%s)' % jid
 		return {}
 		
 	def getGroups(self, jid):
 		return self._data[jid]['groups']
 	
 	def getStatus(self, jid):
-		return self._data[jid]['status']
+		if self._data.has_key(jid):
+			return self._data[jid]['status']
+
+	def getMessage(self, jid):
+		if self._data.has_key(jid):
+			return self._data[jid]['txt_dict']['msg']
 
 	def getShow(self, jid):
-		print 'roster_zeroconf.py: getShow'
+		#print 'roster_zeroconf.py: getShow'
 		return getStatus(jid)
 
 	def getPriority(jid):
 		return 5
 
 	def getSubscription(self,jid):
-		print 'roster_zeroconf.py: getSubscription'
+		#print 'roster_zeroconf.py: getSubscription'
 		return 'both'
 
 	def Subscribe(self,jid):
