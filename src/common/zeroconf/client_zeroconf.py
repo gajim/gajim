@@ -1,5 +1,5 @@
 
-from common import roster_zeroconf
+from common.zeroconf import roster_zeroconf
 
 class ClientZeroconf:
 	def __init__(self, zeroconf):

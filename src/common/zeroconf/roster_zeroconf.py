@@ -1,4 +1,4 @@
-from common import zeroconf
+from common.zeroconf import zeroconf
 
 class Roster:
 	def __init__(self, zeroconf):

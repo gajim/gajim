@@ -39,9 +39,9 @@ import gobject
 from common import helpers
 from common import gajim
 from common import GnuPG
-from common import zeroconf
-from common import connection_handlers_zeroconf
-from common import client_zeroconf
+from common.zeroconf import zeroconf
+from common.zeroconf import connection_handlers_zeroconf
+from common.zeroconf import client_zeroconf
 from connection_handlers_zeroconf import *
 
 USE_GPG = GnuPG.USE_GPG

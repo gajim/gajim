@@ -26,7 +26,7 @@ import sys
 
 from calendar import timegm
 
-import socks5
+#import socks5
 import common.xmpp
 
 from common import GnuPG

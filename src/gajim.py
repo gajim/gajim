@@ -39,7 +39,7 @@ from chat_control import ChatControlBase
 
 from common import exceptions
 from common import i18n
-from common import connection_zeroconf
+from common.zeroconf import connection_zeroconf
 
 i18n.init()
 _ = i18n._
@@ -1741,7 +1741,7 @@ class Interface:
 		self.register_handlers()
 		for account in gajim.config.get_per('accounts'):
 			if account == 'zeroconf':
-				gajim.connections[account] = common.connection_zeroconf.ConnectionZeroconf(account)
+				gajim.connections[account] = common.zeroconf.connection_zeroconf.ConnectionZeroconf(account)
 			else:
 				gajim.connections[account] = common.connection.Connection(account)
 		
