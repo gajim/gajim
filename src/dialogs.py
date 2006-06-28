@@ -80,6 +80,8 @@ class EditGroupsDialog:
 			return
 		all_jid = gajim.contacts.get_metacontacts_jids(tag)
 		for _account in all_jid:
+			if not gajim.interface.roster.regroup and _account != self.account:
+				continue
 			for _jid in all_jid[_account]:
 				c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
 				if not c:
@@ -97,6 +99,8 @@ class EditGroupsDialog:
 			return
 		all_jid = gajim.contacts.get_metacontacts_jids(tag)
 		for _account in all_jid:
+			if not gajim.interface.roster.regroup and _account != self.account:
+				continue
 			for _jid in all_jid[_account]:
 				contacts = gajim.contacts.get_contact(_account, _jid)
 				for contact in contacts:
@@ -112,6 +116,8 @@ class EditGroupsDialog:
 			return
 		all_jid = gajim.contacts.get_metacontacts_jids(tag)
 		for _account in all_jid:
+			if not gajim.interface.roster.regroup and _account != self.account:
+				continue
 			for _jid in all_jid[_account]:
 				contacts = gajim.contacts.get_contact(_account, _jid)
 				for contact in contacts:
@@ -355,7 +361,8 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
-	def __init__(self, account = None, jid = None, user_nick = None):
+	def __init__(self, account = None, jid = None, user_nick = None,
+	group = None):
 		self.account = account
 		if account == None:
 			# fill accounts with active accounts
@@ -433,11 +440,15 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
 		group_names = []
+		i = 0
 		for acct in accounts:
 			for g in gajim.groups[acct].keys():
 				if g not in helpers.special_groups and g not in group_names:
 					group_names.append(g)
 					self.group_comboboxentry.append_text(g)
+					if group == g:
+						self.group_comboboxentry.set_active(i)
+					i += 1
 
 		if not jid_agents:
 			# There are no transports, so hide the protocol combobox and label
