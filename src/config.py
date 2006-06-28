@@ -315,6 +315,8 @@ class PreferencesWindow:
 			commands = ('aplay', 'play', 'esdplay', 'artsplay')
 			for command in commands:
 				if helpers.is_in_path(command):
+					if command == 'aplay':
+						command += ' -q'
 					self.xml.get_widget('soundplayer_entry').set_text(command)
 					gajim.config.set('soundplayer', command)
 					break
