@@ -1026,12 +1026,20 @@ class Interface:
 	def handle_event_gmail_notify(self, account, array):
 		jid = array[0]
 		gmail_new_messages = int(array[1])
+		gmail_messages_list = array[2]
 		if gajim.config.get('notify_on_new_gmail_email'):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'single_msg_recv.png') #FIXME: find a better image
 			title = _('New E-mail on %(gmail_mail_address)s') % \
 				{'gmail_mail_address': jid}
 			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
+			
+			if gajim.config.get('notify_on_new_gmail_email_extra'):
+				for gmessage in gmail_messages_list:
+					# each message has a 'From', 'Subject' and 'Snippet' field
+					text += _('\nFrom: %(from_address)s') % \
+						{'from_address': gmessage['From']}
+					
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
 				path_to_image = path, title = title, text = text)

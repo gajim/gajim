@@ -435,17 +435,28 @@ class PreferencesWindow:
 		
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
+		gmail_options_label = self.xml.get_widget('gmail_options_label')
 		notify_gmail_checkbutton = self.xml.get_widget('notify_gmail_checkbutton')
+		notify_gmail_extra_checkbutton = self.xml.get_widget('notify_gmail_extra_checkbutton')
+		gmail_options_label.set_no_show_all(True)
 		notify_gmail_checkbutton.set_no_show_all(True)
+		notify_gmail_extra_checkbutton.set_no_show_all(True)
+		
 		for account in gajim.config.get_per('accounts'):
 			jid = gajim.get_jid_from_account(account)
-			if gajim.get_server_from_jid(jid) == 'gmail.com':
+			if gajim.get_server_from_jid(jid) in gajim.gmail_domains:
+				gmail_options_label.show()
 				st = gajim.config.get('notify_on_new_gmail_email')
 				notify_gmail_checkbutton.set_active(st)
 				notify_gmail_checkbutton.show()
+				st = gajim.config.get('notify_on_new_gmail_email_extra')
+				notify_gmail_extra_checkbutton.set_active(st)
+				notify_gmail_extra_checkbutton.show()
 				break
 		else:
+			gmail_options_label.hide()
 			notify_gmail_checkbutton.hide()
+			notify_gmail_extra_checkbutton.hide()
 		
 		self.xml.signal_autoconnect(self)
 
@@ -841,8 +852,11 @@ class PreferencesWindow:
 	def on_send_os_info_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'send_os_info')
 		
-	def on_notify_gmail_checkbutton_toggled(self, widget): 
+	def on_notify_gmail_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email')
+
+	def on_notify_gmail_extra_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email_extra')
 		
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)

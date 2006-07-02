@@ -1237,9 +1237,20 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			newmsgs = gm.getTag('mailbox').getAttr('total-matched')
 			if newmsgs != '0':
 				# there are new messages
+				gmail_messages_list = []
+				if gm.getTag('mailbox').getTag('mail-thread-info'):
+					gmail_messages = gm.getTag('mailbox').getTags('mail-thread-info')
+					for gmessage in gmail_messages:
+						gmail_from = gmessage.getTag('senders').getTag('sender').getAttr('address')
+						gmail_subject = gmessage.getTag('subject').getData()
+						gmail_snippet = gmessage.getTag('snippet').getData()
+						gmail_messages_list.append({ \
+							'From': gmail_from, \
+							'Subject': gmail_subject, \
+							'Snippet': gmail_snippet})
 				jid = gajim.get_jid_from_account(self.name)
 				gajim.log.debug(('You have %s new gmail e-mails on %s.') % (newmsgs, jid))
-				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs))
+				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
 			raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
@@ -1713,7 +1724,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 
 			# If it's a gmail account,
 			# inform the server that we want e-mail notifications
-			if gajim.get_server_from_jid(our_jid) == 'gmail.com':
+			if gajim.get_server_from_jid(our_jid) in gajim.gmail_domains:
 				gajim.log.debug(('%s is a gmail account. Setting option '
 					'to get e-mail notifications on the server.') % (our_jid))
 				iq = common.xmpp.Iq(typ = 'set', to = our_jid)
