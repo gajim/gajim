@@ -435,28 +435,22 @@ class PreferencesWindow:
 		
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
-		gmail_options_label = self.xml.get_widget('gmail_options_label')
+		frame_gmail = self.xml.get_widget('frame_gmail')
 		notify_gmail_checkbutton = self.xml.get_widget('notify_gmail_checkbutton')
 		notify_gmail_extra_checkbutton = self.xml.get_widget('notify_gmail_extra_checkbutton')
-		gmail_options_label.set_no_show_all(True)
-		notify_gmail_checkbutton.set_no_show_all(True)
-		notify_gmail_extra_checkbutton.set_no_show_all(True)
+		frame_gmail.set_no_show_all(True)
 		
 		for account in gajim.config.get_per('accounts'):
 			jid = gajim.get_jid_from_account(account)
 			if gajim.get_server_from_jid(jid) in gajim.gmail_domains:
-				gmail_options_label.show()
+				frame_gmail.show_all()
 				st = gajim.config.get('notify_on_new_gmail_email')
 				notify_gmail_checkbutton.set_active(st)
-				notify_gmail_checkbutton.show()
 				st = gajim.config.get('notify_on_new_gmail_email_extra')
 				notify_gmail_extra_checkbutton.set_active(st)
-				notify_gmail_extra_checkbutton.show()
 				break
 		else:
-			gmail_options_label.hide()
-			notify_gmail_checkbutton.hide()
-			notify_gmail_extra_checkbutton.hide()
+			frame_gmail.hide()
 		
 		self.xml.signal_autoconnect(self)
 
