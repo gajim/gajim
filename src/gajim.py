@@ -1336,6 +1336,31 @@ class Interface:
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
 
+	def handle_event_privacy_lists_received(self, account, data):
+		# ('PRIVACY_LISTS_RECEIVED', account, list)
+		if not self.instances.has_key(account):
+			return
+		if self.instances[account].has_key('privacy_lists'):
+			self.instances[account]['privacy_lists'].privacy_lists_received(data)
+
+	def handle_event_privacy_list_received(self, account, data):
+		# ('PRIVACY_LISTS_RECEIVED', account, (name, rules))
+		if not self.instances.has_key(account):
+			return
+		name = data[0]
+		rules = data[1]
+		if self.instances[account].has_key('privacy_list_%s' % name):
+			self.instances[account]['privacy_list_%s' % name].\
+				privacy_list_received(rules)
+
+	def handle_event_privacy_lists_active_default(self, account, data):
+		if not data:
+			return
+		# Send to all privacy_list_* windows as we can't know which one asked
+		for win in self.instances[account]:
+			if win.startswith('privacy_list_'):
+				self.instances[account][win].check_active_default(data)
+
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -1636,6 +1661,10 @@ class Interface:
 			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
 			'SIGNED_IN': self.handle_event_signed_in,
 			'METACONTACTS': self.handle_event_metacontacts,
+			'PRIVACY_LISTS_RECEIVED': self.handle_event_privacy_lists_received,
+			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
+			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
+				self.handle_event_privacy_lists_active_default,
 		}
 		gajim.handlers = self.handlers
 

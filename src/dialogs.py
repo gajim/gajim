@@ -1577,6 +1577,397 @@ class XMLConsoleWindow:
 			# it's expanded!!
 			self.input_textview.grab_focus()
 
+class PrivacyListWindow:
+	def __init__(self, account, privacy_list, list_type):
+		'''list_type can be 0 if list is created or 1 if it id edited'''
+		self.account = account
+		self.privacy_list = privacy_list
+
+		# Dicts and Default Values
+		self.active_rule = ''
+		self.global_rules = {}
+		self.list_of_groups = {}
+
+		# Default Edit Values
+		self.edit_rule_type = 'jid'
+		self.allow_deny = 'allow'
+
+		# Connect to glade
+		self.xml = gtkgui_helpers.get_glade('privacy_list_edit_window.glade')
+		self.window = self.xml.get_widget('privacy_list_edit_window')
+
+		# Add Widgets
+
+		for widget_to_add in ['title_hbox', 'privacy_lists_title_label',
+		'list_of_rules_label', 'add_edit_rule_label', 'delete_open_buttons_hbox',
+		'privacy_list_active_checkbutton', 'privacy_list_default_checkbutton',
+		'list_of_rules_combobox', 'delete_open_buttons_hbox',
+		'delete_rule_button', 'open_rule_button', 'edit_allow_radiobutton',
+		'edit_deny_radiobutton', 'edit_type_jabberid_radiobutton',
+		'edit_type_jabberid_entry', 'edit_type_group_radiobutton',
+		'edit_type_group_combobox', 'edit_type_subscription_radiobutton',
+		'edit_type_subscription_combobox', 'edit_type_select_all_radiobutton',
+		'edit_queries_send_checkbutton', 'edit_send_messages_checkbutton',
+		'edit_view_status_checkbutton', 'edit_order_spinbutton',
+		'new_rule_button', 'save_rule_button', 'privacy_list_refresh_button',
+		'privacy_list_close_button', 'edit_send_status_checkbutton',
+		'add_edit_vbox']:
+			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
+
+		# Send translations
+		self.privacy_lists_title_label.set_label(
+			_('Privacy List <b><i>%s</i></b>') % \
+			gtkgui_helpers.escape_for_pango_markup(self.privacy_list))
+
+		if len(gajim.connections) > 1:
+			title = _('Privacy List for %s') % self.account
+		else:
+			title = _('Privacy List')
+
+		self.delete_rule_button.set_sensitive(False)
+		self.open_rule_button.set_sensitive(False)
+
+		# Check if list is created (0) or edited (1)
+		if list_type == 1:
+			self.refresh_rules()
+
+		count = 0
+		for group in gajim.groups[self.account]:
+			self.list_of_groups[group] = count
+			count += 1
+			self.edit_type_group_combobox.append_text(group)
+		self.edit_type_group_combobox.set_active(0)		
+
+		self.window.set_title(title)
+
+		self.add_edit_vbox.set_no_show_all(True)
+		self.window.show_all()
+		self.add_edit_vbox.hide()
+		
+		self.xml.signal_autoconnect(self)
+
+	def on_privacy_list_edit_window_destroy(self, widget):
+		'''close window'''
+		if gajim.interface.instances[self.account].has_key('privacy_list_%s' % \
+		self.privacy_list):
+			del gajim.interface.instances[self.account]['privacy_list_%s' % \
+				self.privacy_list]
+
+	def check_active_default(self, a_d_dict):
+		if a_d_dict['active'] == self.privacy_list:
+			self.privacy_list_active_checkbutton.set_active(True)
+		else:
+			self.privacy_list_active_checkbutton.set_active(False)
+		if a_d_dict['default'] == self.privacy_list:
+			self.privacy_list_default_checkbutton.set_active(True)
+		else:
+			self.privacy_list_default_checkbutton.set_active(False)		
+
+	def privacy_list_received(self, rules):
+		self.list_of_rules_combobox.get_model().clear()
+		self.global_rules = {}
+		for rule in rules:
+			if rule.has_key('type'):
+				text_item = 'Order: %s, action: %s, type: %s, value: %s' % \
+					(rule['order'], rule['action'], rule['type'],
+					rule['value'])
+			else:
+				text_item = 'Order: %s, action: %s' % (rule['order'],
+					rule['action'])
+			self.global_rules[text_item] = rule
+			self.list_of_rules_combobox.append_text(text_item)
+		if len(rules) == 0:
+			self.title_hbox.set_sensitive(False)
+			self.list_of_rules_combobox.set_sensitive(False)
+			self.delete_rule_button.set_sensitive(False)
+			self.open_rule_button.set_sensitive(False)
+		else:
+			self.list_of_rules_combobox.set_active(0)
+			self.title_hbox.set_sensitive(True)
+			self.list_of_rules_combobox.set_sensitive(True)
+			self.delete_rule_button.set_sensitive(True)
+			self.open_rule_button.set_sensitive(True)
+		self.reset_fields()
+		gajim.connections[self.account].get_active_default_lists()
+
+	def refresh_rules(self):
+		gajim.connections[self.account].get_privacy_list(self.privacy_list)
+
+	def on_delete_rule_button_clicked(self, widget):
+		tags = []
+		for rule in self.global_rules:
+			if rule != \
+				self.list_of_rules_combobox.get_active_text().decode('utf-8'):
+				tags.append(self.global_rules[rule])
+		gajim.connections[self.account].set_privacy_list(
+			self.privacy_list, tags)
+		self.privacy_list_received(tags)
+		self.add_edit_vbox.hide()
+
+	def on_open_rule_button_clicked(self, widget):
+		self.add_edit_rule_label.set_label(
+		_('<b>Edit a rule</b>'))
+		active_num = self.list_of_rules_combobox.get_active()
+		if active_num == -1:
+			self.active_rule = ''
+		else:
+			self.active_rule = \
+				self.list_of_rules_combobox.get_active_text().decode('utf-8')
+		if self.active_rule != '':
+			rule_info = self.global_rules[self.active_rule]
+			self.edit_order_spinbutton.set_value(int(rule_info['order']))
+			if rule_info.has_key('type'):
+				if rule_info['type'] == 'jid':
+					self.edit_type_jabberid_radiobutton.set_active(True)
+					self.edit_type_jabberid_entry.set_text(rule_info['value'])
+				elif rule_info['type'] == 'group':
+					self.edit_type_group_radiobutton.set_active(True)
+					if self.list_of_groups.has_key(rule_info['value']):
+						self.edit_type_group_combobox.set_active(
+							self.list_of_groups[rule_info['value']])
+					else:
+						self.edit_type_group_combobox.set_active(0)
+				elif rule_info['type'] == 'subscription':
+					self.edit_type_subscription_radiobutton.set_active(True)
+					sub_value = rule_info['value']
+					if sub_value == 'none':
+						self.edit_type_subscription_combobox.set_active(0)
+					elif sub_value == 'both':
+						self.edit_type_subscription_combobox.set_active(1)
+					elif sub_value == 'from':
+						self.edit_type_subscription_combobox.set_active(2)
+					elif sub_value == 'to':
+						self.edit_type_subscription_combobox.set_active(3)
+				else:
+					self.edit_type_select_all_radiobutton.set_active(True)
+			else:
+				self.edit_type_select_all_radiobutton.set_active(True)
+			self.edit_send_messages_checkbutton.set_active(False)
+			self.edit_queries_send_checkbutton.set_active(False)
+			self.edit_view_status_checkbutton.set_active(False)
+			self.edit_send_status_checkbutton.set_active(False)
+			for child in rule_info['child']:
+				if child == 'presence-out':
+					self.edit_send_status_checkbutton.set_active(True)
+				elif child == 'presence-in':
+					self.edit_view_status_checkbutton.set_active(True)
+				elif child == 'iq':
+					self.edit_queries_send_checkbutton.set_active(True)
+				elif child == 'message':
+					self.edit_send_messages_checkbutton.set_active(True)
+		
+			if rule_info['action'] == 'allow':
+					self.edit_allow_radiobutton.set_active(True)
+			else:
+					self.edit_deny_radiobutton.set_active(True)
+		self.add_edit_vbox.show()
+	
+	def on_privacy_list_active_checkbutton_toggled(self, widget):
+		if widget.get_active():
+			gajim.connections[self.account].set_active_list(self.privacy_list)
+		else:
+			gajim.connections[self.account].set_active_list(None)
+
+	def on_privacy_list_default_checkbutton_toggled(self, widget):
+		if widget.get_active():
+			gajim.connections[self.account].set_default_list(self.privacy_list)
+		else:
+			gajim.connections[self.account].set_default_list(None)
+
+	def on_new_rule_button_clicked(self, widget):
+		self.reset_fields()
+		self.add_edit_vbox.show()
+	
+	def reset_fields(self):
+		self.edit_type_jabberid_entry.set_text('')
+		self.edit_allow_radiobutton.set_active(True)
+		self.edit_type_jabberid_radiobutton.set_active(True)
+		self.active_rule = ''
+		self.edit_send_messages_checkbutton.set_active(False)
+		self.edit_queries_send_checkbutton.set_active(False)
+		self.edit_view_status_checkbutton.set_active(False)
+		self.edit_send_status_checkbutton.set_active(False)
+		self.edit_order_spinbutton.set_value(1)	
+		self.edit_type_group_combobox.set_active(0)
+		self.edit_type_subscription_combobox.set_active(0)
+		self.add_edit_rule_label.set_label(
+			_('<b>Add a rule</b>'))
+
+	def get_current_tags(self):
+		if self.edit_type_jabberid_radiobutton.get_active():
+			edit_type = 'jid'
+			edit_value = \
+				self.edit_type_jabberid_entry.get_text().decode('utf-8')
+		elif self.edit_type_group_radiobutton.get_active():
+			edit_type = 'group'
+			edit_value = \
+				self.edit_type_group_combobox.get_active_text().decode('utf-8')
+		elif self.edit_type_subscription_radiobutton.get_active():
+			edit_type = 'subscription'
+			edit_value = self.edit_type_subscription_combobox.get_active_text()
+		elif self.edit_type_select_all_radiobutton.get_active():
+			edit_type = ''
+			edit_value = ''
+		edit_order = str(self.edit_order_spinbutton.get_value_as_int())
+		if self.edit_allow_radiobutton.get_active():
+			edit_deny = 'allow'
+		else:
+			edit_deny = 'deny'
+		child = []
+		if self.edit_send_messages_checkbutton.get_active():
+			child.append('message')
+		if self.edit_queries_send_checkbutton.get_active():
+			child.append('iq')
+		if self.edit_send_status_checkbutton.get_active():
+			child.append('presence-out')
+		if self.edit_view_status_checkbutton.get_active():
+			child.append('presence-in')
+		if edit_type != '':
+			return {'order': edit_order, 'action': edit_deny,
+				'type': edit_type, 'value': edit_value, 'child': child}
+		return {'order': edit_order, 'action': edit_deny, 'child': child}
+
+	def on_save_rule_button_clicked(self, widget):
+		tags=[]
+		current_tags = self.get_current_tags()
+		if self.active_rule == '':
+			tags.append(current_tags)
+
+		for rule in self.global_rules:
+			if rule != self.active_rule:
+				tags.append(self.global_rules[rule])
+			else:
+				tags.append(current_tags)
+
+		gajim.connections[self.account].set_privacy_list(self.privacy_list, tags)
+		self.privacy_list_received(tags)
+		self.add_edit_vbox.hide()
+
+	def on_list_of_rules_combobox_changed(self, widget):
+		self.add_edit_vbox.hide()
+
+	def on_edit_type_radiobutton_changed(self, widget, radiobutton):
+		active_bool = widget.get_active()
+		if active_bool:
+			self.edit_rule_type = radiobutton
+
+	def on_edit_allow_radiobutton_changed(self, widget, radiobutton):
+		active_bool = widget.get_active()
+		if active_bool:
+			self.allow_deny = radiobutton
+
+	def on_privacy_list_close_button_clicked(self, widget):
+		self.window.destroy()
+	
+	def on_privacy_list_refresh_button_clicked(self, widget):
+		self.refresh_rules()
+		self.add_edit_vbox.hide()
+
+class PrivacyListsWindow:
+# To do: UTF-8 ???????
+	def __init__(self, account):
+		self.account = account
+
+		self.privacy_lists = []
+
+		self.privacy_lists_save = []		
+
+		self.xml = gtkgui_helpers.get_glade('privacy_lists_first_window.glade')
+
+		self.window = self.xml.get_widget('privacy_lists_first_window')
+		for widget_to_add in ['list_of_privacy_lists_combobox',
+			'delete_privacy_list_button', 'open_privacy_list_button',
+			'new_privacy_list_button', 'new_privacy_list_entry', 'buttons_hbox',
+			'privacy_lists_refresh_button', 'close_privacy_lists_window_button']:
+			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)		
+
+		self.privacy_lists_refresh()
+
+		self.enabled = True
+
+		if len(gajim.connections) > 1:
+			title = _('Privacy Lists for %s') % self.account
+		else:
+			title = _('Privacy Lists')
+
+		self.window.set_title(title)
+
+		self.window.show_all()
+
+		self.xml.signal_autoconnect(self)
+
+	def on_privacy_lists_first_window_destroy(self, widget):
+		'''close window'''
+		if gajim.interface.instances[self.account].has_key('privacy_lists'):
+			del gajim.interface.instances[self.account]['privacy_lists']
+
+	def draw_privacy_lists_in_combobox(self):
+		self.list_of_privacy_lists_combobox.set_active(-1)
+		self.list_of_privacy_lists_combobox.get_model().clear()
+		self.privacy_lists_save = self.privacy_lists
+		for add_item in self.privacy_lists:
+			self.list_of_privacy_lists_combobox.append_text(add_item)
+		if len(self.privacy_lists) == 0:
+			self.list_of_privacy_lists_combobox.set_sensitive(False)
+			self.buttons_hbox.set_sensitive(False)
+		elif len(self.privacy_lists) == 1:
+			self.list_of_privacy_lists_combobox.set_active(0)
+			self.list_of_privacy_lists_combobox.set_sensitive(False)
+			self.buttons_hbox.set_sensitive(True)	
+		else:
+			self.list_of_privacy_lists_combobox.set_sensitive(True)
+			self.buttons_hbox.set_sensitive(True)
+			self.list_of_privacy_lists_combobox.set_active(0)
+		self.privacy_lists = []
+
+	def on_privacy_lists_refresh_button_clicked(self, widget):
+		self.privacy_lists_refresh()
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()
+
+	def on_delete_privacy_list_button_clicked(self, widget):
+		active_list = self.privacy_lists_save[
+			self.list_of_privacy_lists_combobox.get_active()]
+		gajim.connections[self.account].del_privacy_list(active_list)
+		self.privacy_lists_save.remove(active_list)
+		self.privacy_lists_received({'lists':self.privacy_lists_save})
+
+	def privacy_lists_received(self, lists):
+		if not lists:
+			return
+		for privacy_list in lists['lists']:
+			self.privacy_lists += [privacy_list]
+		self.draw_privacy_lists_in_combobox()
+
+	def privacy_lists_refresh(self):
+		gajim.connections[self.account].get_privacy_lists()
+
+	def on_new_privacy_list_button_clicked(self, widget):
+		name = self.new_privacy_list_entry.get_text().decode('utf-8')
+		if gajim.interface.instances[self.account].has_key(
+		'privacy_list_%s' % name):
+			gajim.interface.instances[self.account]['privacy_list_%s' % name].\
+				window.present()
+		else:
+			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
+				PrivacyListWindow(self.account, name, 0)
+		self.new_privacy_list_entry.set_text('')
+
+	def on_privacy_lists_refresh_button_clicked(self, widget):
+		self.privacy_lists_refresh()
+
+	def on_open_privacy_list_button_clicked(self, widget):
+		name = self.privacy_lists_save[
+			self.list_of_privacy_lists_combobox.get_active()]
+		if gajim.interface.instances[self.account].has_key(
+		'privacy_list_%s' % name):
+			gajim.interface.instances[self.account]['privacy_list_%s' % name].\
+				window.present()
+		else:
+			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
+				PrivacyListWindow(self.account, name, 1)
+
 class InvitationReceivedDialog:
 	def __init__(self, account, room_jid, contact_jid, password = None, comment = None):
 
@@ -1584,7 +1975,7 @@ class InvitationReceivedDialog:
 		self.account = account
 		xml = gtkgui_helpers.get_glade('invitation_received_dialog.glade')
 		self.dialog = xml.get_widget('invitation_received_dialog')
-		
+
 		#FIXME: use nickname instead of contact_jid
 		pritext = _('%(contact_jid)s has invited you to %(room_jid)s room') % {
 			'room_jid': room_jid, 'contact_jid': contact_jid }

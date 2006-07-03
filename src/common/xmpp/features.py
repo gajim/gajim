@@ -27,6 +27,9 @@ All these methods takes 'disp' first argument that should be already connected
 from protocol import *
 
 REGISTER_DATA_RECEIVED='REGISTER DATA RECEIVED'
+PRIVACY_LISTS_RECEIVED='PRIVACY LISTS RECEIVED'
+PRIVACY_LIST_RECEIVED='PRIVACY LIST RECEIVED'
+PRIVACY_LISTS_ACTIVE_DEFAULT='PRIVACY LISTS ACTIVE DEFAULT'
 
 ### DISCO ### http://jabber.org/protocol/disco ### JEP-0030 ####################
 ### Browse ### jabber:iq:browse ### JEP-0030 ###################################
