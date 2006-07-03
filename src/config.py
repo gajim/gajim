@@ -249,11 +249,6 @@ class PreferencesWindow:
 		# try to set default font for the current desktop env
 		fontbutton = self.xml.get_widget('conversation_fontbutton')
 		if font == '':
-			font = gtkgui_helpers.get_default_font()
-			if font is not None:
-				font = 'Sans 10'
-				gajim.config.set('conversation_font', font)
-				fontbutton.set_font_name(font)
 			fontbutton.set_sensitive(False)
 			self.xml.get_widget('default_chat_font').set_active(True)
 		else:
