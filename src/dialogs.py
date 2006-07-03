@@ -1081,6 +1081,15 @@ class NewChatDialog(InputDialog):
 
 		if self.completion_dict.has_key(jid):
 			jid = self.completion_dict[jid].jid
+		else:
+			try:
+				jid = helpers.parse_jid(jid)
+			except helpers.InvalidFormat, e:
+				ErrorDialog(_('Invalid JID'), e[0])
+				return
+			except:
+				ErrorDialog(_('Invalid JID'), _('Unable to parse "%s".' % jid))
+				return
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
 class ChangePasswordDialog:
