@@ -4,6 +4,7 @@
 # Segrio Ĥliutĉin <Sergey.Khlutchin@gmail.com>, 2006.
 # 
 # 
+#: ../src/gajim-remote.py:205 ../src/gajim-remote.py:212
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.10.1\n"
@@ -15,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gajim.desktop.in.h:1
 msgid "A GTK+ Jabber client"
@@ -75,7 +76,8 @@ msgstr "<b>Bonvolu plenigi datumon por via nova konto</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:6
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr "Klaku por vidi trajtoj (kiel MSN, ICQ transportiloj) de jabber-serviloj"
+msgstr ""
+"Klaku por vidi trajtoj (kiel MSN, ICQ transportiloj) de jabber-serviloj"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:7
 msgid "Connect when I press Finish"
@@ -210,8 +212,8 @@ msgid ""
 "be disabled"
 msgstr ""
 "Marku tion por ke Gajim konektos al pordo 5223 kie malnovaj serviloj atendas "
-"SSL-kapablajn konektojn. Rimarku ke Gajim defaŭte uzas TLS-ĉifradon se la servilo "
-"subtenas ĝin, kaj tiu opcio malŝaltas TLS"
+"SSL-kapablajn konektojn. Rimarku ke Gajim defaŭte uzas TLS-ĉifradon se la "
+"servilo subtenas ĝin, kaj tiu opcio malŝaltas TLS"
 
 #: ../data/glade/account_modification_window.glade.h:10
 msgid "Choose _Key..."
@@ -252,16 +254,16 @@ msgid ""
 "If checked, Gajim will also broadcast some more IPs except from just your "
 "IP, so file transfer has higher chances of working."
 msgstr ""
-"Se markitas, Gajim anoncos krom vian IP ankoraŭ kelkajn IP, do dosiertranmeto "
-"havos pli ŝancojn funkcii."
+"Se markitas, Gajim anoncos krom vian IP ankoraŭ kelkajn IP, do "
+"dosiertranmeto havos pli ŝancojn funkcii."
 
 #: ../data/glade/account_modification_window.glade.h:19
 msgid ""
 "If checked, Gajim will send keep-alive packets so it prevents connection "
 "timeout which results in disconnection"
 msgstr ""
-"Se markitas, Gajim sendados vivkontrolajn (keep-alive) pakaĵojn, "
-"tio preventas diskonekton pro longa neaktiva tempo."
+"Se markitas, Gajim sendados vivkontrolajn (keep-alive) pakaĵojn, tio "
+"preventas diskonekton pro longa neaktiva tempo."
 
 #: ../data/glade/account_modification_window.glade.h:20
 msgid ""
@@ -624,7 +626,9 @@ msgstr "Kiam "
 
 #: ../data/glade/advanced_notifications_window.glade.h:33
 msgid "_Activate Windows manager UrgencyHint to make chat taskbar to flash"
-msgstr "_Aktivigi fenestragordilan urgkonsileton \"UrgencyHint\" por briligi taskostrion"
+msgstr ""
+"_Aktivigi fenestragordilan urgkonsileton \"UrgencyHint\" por briligi "
+"taskostrion"
 
 #: ../data/glade/advanced_notifications_window.glade.h:34
 msgid "_Disable auto opening chat window"
@@ -817,8 +821,8 @@ msgid ""
 "This action removes single file transfer from the list. If the transfer is "
 "active, it is first stopped and then removed"
 msgstr ""
-"Tiu ĉi ago forigas unu dosiertransmeton de la listo. Se la transmeto "
-"estas aktiva, ĝin unue haltitas kaj poste forigitos."
+"Tiu ĉi ago forigas unu dosiertransmeton de la listo. Se la transmeto estas "
+"aktiva, ĝin unue haltitas kaj poste forigitos."
 
 #: ../data/glade/filetransfers.glade.h:12
 msgid "When a file transfer is complete show a popup notification"
@@ -907,7 +911,6 @@ msgid ""
 msgstr ""
 "Babilejaj\n"
 "mesaĝoj al vi"
-""
 
 #: ../data/glade/gajim_themes_window.glade.h:18 ../src/tooltips.py:669
 msgid "Paused"
@@ -997,7 +1000,8 @@ msgstr ""
 "\n"
 "<b>AVERTO:</b>\n"
 "Se vi planas fari multajn forigojn, bonvolu certiĝi ke Gajim ne aktivas. "
-"Ĝenerale evitu forigojn rilatajn al kontaktoj kun kiu vi interparolas nuntempe."
+"Ĝenerale evitu forigojn rilatajn al kontaktoj kun kiu vi interparolas "
+"nuntempe."
 
 #: ../data/glade/history_manager.glade.h:7
 msgid "Delete"
@@ -1295,7 +1299,8 @@ msgid ""
 "send to the other party."
 msgstr ""
 "Gajim povas sendi kaj ricevi informon rilatan al interparolado kun kontakto. "
-"Tie ĉi vi povas spcifi pri kiuj babilstatoj vi volas mesaĝi al interparolanto."
+"Tie ĉi vi povas spcifi pri kiuj babilstatoj vi volas mesaĝi al "
+"interparolanto."
 
 #: ../data/glade/preferences_window.glade.h:37
 msgid ""
@@ -1316,8 +1321,8 @@ msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed in"
 msgstr ""
-"Gajim avisos vin per ŝprucfenestro en la malsupra dekstra angulo de la ekrano "
-"pri kontaktoj kiu ĵus ensalutis"
+"Gajim avisos vin per ŝprucfenestro en la malsupra dekstra angulo de la "
+"ekrano pri kontaktoj kiu ĵus ensalutis"
 
 #: ../data/glade/preferences_window.glade.h:40
 msgid ""
@@ -1346,8 +1351,8 @@ msgid ""
 "If checked, Gajim will display status messages of contacts under the contact "
 "name in roster window and in group chats"
 msgstr ""
-"Se markitas, Gajim montros statmesaĝojn de kontaktoj sub la kontaktnomo en la "
-"kontaktlisto kaj en babilejoj"
+"Se markitas, Gajim montros statmesaĝojn de kontaktoj sub la kontaktnomo en "
+"la kontaktlisto kaj en babilejoj"
 
 #: ../data/glade/preferences_window.glade.h:45
 msgid ""
@@ -1364,8 +1369,8 @@ msgid ""
 "etc...)"
 msgstr ""
 "Se markitas, Gajim uzos protokolo-specifajn statpiktogramojn. (ekzemple "
-"kontakto el MSN havos ekvivalentajn piktogramojn de msn por statoj "
-"konekta, fora, okupata ktp...)"
+"kontakto el MSN havos ekvivalentajn piktogramojn de msn por statoj konekta, "
+"fora, okupata ktp...)"
 
 #: ../data/glade/preferences_window.glade.h:47
 msgid ""
@@ -2999,7 +3004,8 @@ msgstr "Ne povas reskribi ekzistan dosieron \"%s\""
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
-msgstr "Dosiero kun tiu namo jam ekzistas kaj vi ne havas permeson reskribi ĝin"
+msgstr ""
+"Dosiero kun tiu namo jam ekzistas kaj vi ne havas permeson reskribi ĝin"
 
 #: ../src/filetransfers_window.py:327 ../src/gtkgui_helpers.py:683
 msgid "This file already exists"
@@ -3869,7 +3875,8 @@ msgstr "Kromaĵo ne subtenatas"
 #: ../src/gtkgui_helpers.py:716
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
-msgstr "Bildo nekonserveblas en %(type)s formato. Ĉu konservi kiel %(new_filename)s?"
+msgstr ""
+"Bildo nekonserveblas en %(type)s formato. Ĉu konservi kiel %(new_filename)s?"
 
 #: ../src/gtkgui_helpers.py:725
 msgid "Save Image as..."
@@ -3910,7 +3917,8 @@ msgstr "Temo"
 msgid ""
 "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
 "RUNNING)"
-msgstr "Ĉu vi volas malplenigi la datumbazon? (EGE MALREKOMENDITA SE GAJIM AKTIVAS)"
+msgstr ""
+"Ĉu vi volas malplenigi la datumbazon? (EGE MALREKOMENDITA SE GAJIM AKTIVAS)"
 
 #: ../src/history_manager.py:189
 msgid ""
@@ -3920,9 +3928,9 @@ msgid ""
 "\n"
 "In case you click YES, please wait..."
 msgstr ""
-"Kutime dosierspaco de datumbazo ne liberigatas, ĝi nur iĝas reuzebla. "
-"Se vi vere volas malgrandigi datumbazan dosierspacon, alklaku JES, alie "
-"alklaku NE.\n"
+"Kutime dosierspaco de datumbazo ne liberigatas, ĝi nur iĝas reuzebla. Se vi "
+"vere volas malgrandigi datumbazan dosierspacon, alklaku JES, alie alklaku "
+"NE.\n"
 "\n"
 "Se vi alklakos JES, bonbolu atendi..."
 
@@ -3940,8 +3948,11 @@ msgid "who"
 msgstr "kiu"
 
 #: ../src/history_manager.py:509
+#, fuzzy
 msgid "Do you really want to delete logs of the selected contact?"
-msgstr "Ĉu vi vere volas forigi protokolojn de elektita kontakto?"
+msgid_plural "Do you really want to delete logs of the selected contacts?"
+msgstr[0] "Ĉu vi vere volas forigi protokolojn de elektita kontakto?"
+msgstr[1] "Ĉu vi vere volas forigi protokolojn de elektita kontakto?"
 
 #: ../src/history_manager.py:513 ../src/history_manager.py:549
 msgid "This is an irreversible operation."
@@ -4208,8 +4219,8 @@ msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
 msgstr ""
-"Ŝanĝo de via stato per nevidebla okazigos diskonektadon de tiuj babilejoj. Ĉu "
-"vi certas ke vi volas iĝi nevidebla?"
+"Ŝanĝo de via stato per nevidebla okazigos diskonektadon de tiuj babilejoj. "
+"Ĉu vi certas ke vi volas iĝi nevidebla?"
 
 #: ../src/roster_window.py:1961
 msgid "No account available"
@@ -4475,7 +4486,8 @@ msgstr "pysqlite2 (ankaŭ konata kiel python-pysqlite2) mankas. Finas..."
 
 #: ../src/common/exceptions.py:43
 msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr "Servo nedisponeblas: Gajim ne aktivas, aŭ opcio remote_control estas False"
+msgstr ""
+"Servo nedisponeblas: Gajim ne aktivas, aŭ opcio remote_control estas False"
 
 #: ../src/common/exceptions.py:51
 msgid "D-Bus is not present on this machine or python module is missing"
@@ -4538,7 +4550,8 @@ msgstr ""
 msgid ""
 "Character to add after nickname when using nick completion (tab) in group "
 "chat"
-msgstr "Signo kiu aligatas post kaŝnomo dum uzado de plenumigoklavo (Tab) en babilejo"
+msgstr ""
+"Signo kiu aligatas post kaŝnomo dum uzado de plenumigoklavo (Tab) en babilejo"
 
 #: ../src/common/config.py:100
 msgid ""
@@ -4594,8 +4607,8 @@ msgid ""
 "When not printing time for every message (print_time==sometimes), print it "
 "every x minutes"
 msgstr ""
-"Kiam ne eligas tempon por ĉiu mesaĝo (print_time==sometimes), "
-"eligi ĝin ĉiujn x minutojn"
+"Kiam ne eligas tempon por ĉiu mesaĝo (print_time==sometimes), eligi ĝin "
+"ĉiujn x minutojn"
 
 #: ../src/common/config.py:146
 msgid "Ask before closing a group chat tab/window."
@@ -4700,10 +4713,10 @@ msgid ""
 "status messages. If \"in_and_out\", gajim will only print FOO enters/leaves "
 "room"
 msgstr ""
-"povas esti \"none\", \"all\" or \"in_and_out\". Se \"none\", Gajim ne plu eligos "
-"statlineon en babilejoj kiam membro ŝanĝes lian aŭ ŝian statmesaĝon. "
-"Se \"all\", Gajim eligos ĉiuj statmesaĝoj. Se \"in_and_out\", Gajim eligos nur "
-"pri eniroj/eliroj."
+"povas esti \"none\", \"all\" or \"in_and_out\". Se \"none\", Gajim ne plu "
+"eligos statlineon en babilejoj kiam membro ŝanĝes lian aŭ ŝian statmesaĝon. "
+"Se \"all\", Gajim eligos ĉiuj statmesaĝoj. Se \"in_and_out\", Gajim eligos "
+"nur pri eniroj/eliroj."
 
 #: ../src/common/config.py:187
 msgid "Don't show avatar for the transport itself."
@@ -4715,17 +4728,18 @@ msgid ""
 "window flash (the default behaviour in most Window Managers) when holding "
 "pending events."
 msgstr ""
-"Se \"True\" kaj instalitas GTK+ kaj PyGTK versioj almenaŭ 2.8, fari la fenestran "
-"briladon (la defaŭlta konduto de plimulto da fenestragordiloj) kiam estas "
-"atendantaj eventoj."
+"Se \"True\" kaj instalitas GTK+ kaj PyGTK versioj almenaŭ 2.8, fari la "
+"fenestran briladon (la defaŭlta konduto de plimulto da fenestragordiloj) "
+"kiam estas atendantaj eventoj."
 
 #: ../src/common/config.py:191
 msgid ""
 "Jabberd1.4 does not like sha info when one join a password protected room. "
 "Turn this option to False to stop sending sha info in groupchat presences"
 msgstr ""
-"Jabberd1.4 ne ŝatas SHA informon kiam iu konektas al pasvortprotekta babilejo. "
-"Valorigu tiun opcion per \"False\" por hati sendadon de SHA informon en babilejo"
+"Jabberd1.4 ne ŝatas SHA informon kiam iu konektas al pasvortprotekta "
+"babilejo. Valorigu tiun opcion per \"False\" por hati sendadon de SHA "
+"informon en babilejo"
 
 #. always, never, peracct, pertype should not be translated
 #: ../src/common/config.py:194
@@ -4792,8 +4806,8 @@ msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
 msgstr ""
-"Se markitas, Gajim uzos vian IP kaj prokurservilojn difinitajn "
-"en la opcio file_transfer_proxies por dosiertransmeto."
+"Se markitas, Gajim uzos vian IP kaj prokurservilojn difinitajn en la opcio "
+"file_transfer_proxies por dosiertransmeto."
 
 #: ../src/common/config.py:296
 msgid "Sleeping"
@@ -4860,8 +4874,8 @@ msgid ""
 "Sound to play when any MUC message arrives. (This setting is taken into "
 "account only if notify_on_all_muc_messages is True)"
 msgstr ""
-"Sono por ludi kiam ĉiu mesaĝo en babilejo venas. (Tiun ĉi parametron "
-"mi konsideras nur se parametro \"notify_on_all_muc_messages\" estas \"True\")"
+"Sono por ludi kiam ĉiu mesaĝo en babilejo venas. (Tiun ĉi parametron mi "
+"konsideras nur se parametro \"notify_on_all_muc_messages\" estas \"True\")"
 
 #: ../src/common/config.py:320 ../src/common/optparser.py:183
 msgid "green"

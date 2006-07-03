@@ -40,6 +40,8 @@ gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/passphrase_dialog.glade.h \
 			../data/glade/popup_notification_window.glade.h \
 			../data/glade/preferences_window.glade.h \
+			../data/glade/privacy_list_edit_window.glade.h \
+			../data/glade/privacy_lists_first_window.glade.h \
 			../data/glade/progress_dialog.glade.h \
 			../data/glade/remove_account_window.glade.h \
 			../data/glade/roster_contact_context_menu.glade.h \
