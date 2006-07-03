@@ -1811,7 +1811,8 @@ class PrivacyListWindow:
 				self.edit_type_group_combobox.get_active_text().decode('utf-8')
 		elif self.edit_type_subscription_radiobutton.get_active():
 			edit_type = 'subscription'
-			edit_value = self.edit_type_subscription_combobox.get_active_text()
+			subs = ['none', 'both', 'from', 'to']
+			edit_value = subs[self.edit_type_subscription_combobox.get_active()]
 		elif self.edit_type_select_all_radiobutton.get_active():
 			edit_type = ''
 			edit_value = ''
