@@ -63,7 +63,7 @@
 	    <widget class="GtkCheckButton" id="privacy_list_active_checkbutton">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">Active</property>
+	      <property name="label" translatable="yes">Active for this session</property>
 	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
@@ -83,7 +83,7 @@
 	    <widget class="GtkCheckButton" id="privacy_list_default_checkbutton">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">Default</property>
+	      <property name="label" translatable="yes">Active on each startup</property>
 	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
