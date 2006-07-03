@@ -1611,7 +1611,8 @@ class PrivacyListWindow:
 		'edit_view_status_checkbutton', 'edit_order_spinbutton',
 		'new_rule_button', 'save_rule_button', 'privacy_list_refresh_button',
 		'privacy_list_close_button', 'edit_send_status_checkbutton',
-		'add_edit_vbox']:
+		'add_edit_vbox', 'privacy_list_active_checkbutton',
+		'privacy_list_default_checkbutton']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
 		# Send translations
@@ -1626,6 +1627,8 @@ class PrivacyListWindow:
 
 		self.delete_rule_button.set_sensitive(False)
 		self.open_rule_button.set_sensitive(False)
+		self.privacy_list_active_checkbutton.set_sensitive(False)
+		self.privacy_list_default_checkbutton.set_sensitive(False)
 
 		# Check if list is created (0) or edited (1)
 		if list_type == 1:
@@ -1681,12 +1684,16 @@ class PrivacyListWindow:
 			self.list_of_rules_combobox.set_sensitive(False)
 			self.delete_rule_button.set_sensitive(False)
 			self.open_rule_button.set_sensitive(False)
+			self.privacy_list_active_checkbutton.set_sensitive(False)
+			self.privacy_list_default_checkbutton.set_sensitive(False)
 		else:
 			self.list_of_rules_combobox.set_active(0)
 			self.title_hbox.set_sensitive(True)
 			self.list_of_rules_combobox.set_sensitive(True)
 			self.delete_rule_button.set_sensitive(True)
 			self.open_rule_button.set_sensitive(True)
+			self.privacy_list_active_checkbutton.set_sensitive(True)
+			self.privacy_list_default_checkbutton.set_sensitive(True)
 		self.reset_fields()
 		gajim.connections[self.account].get_active_default_lists()
 
