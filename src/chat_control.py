@@ -636,7 +636,10 @@ class ChatControlBase(MessageControl):
 	def on_conversation_vadjustment_value_changed(self, widget):
 		if not self.nb_unread:
 			return
-		jid = self.contact.jid
+		if self.resource:
+			jid = self.contact.get_full_jid()
+		else:
+			jid = self.contact.jid
 		if self.conv_textview.at_the_end() and \
 				self.parent_win.get_active_control() == self and \
 				self.parent_win.window.is_active():
