@@ -2,7 +2,7 @@ from common.zeroconf import zeroconf
 
 class Roster:
 	def __init__(self, zeroconf):
-		self._data = {}
+		self._data = None
 		self.zeroconf = zeroconf 	  	 # our zeroconf instance
 
 	def update_roster(self):
@@ -11,7 +11,9 @@ class Roster:
 
 	def getRoster(self):
 		#print 'roster_zeroconf.py: getRoster'
-		self.update_roster()
+		if self._data is None:
+			self._data = {}
+			self.update_roster()
 		return self
 
 	def getDiffs(self):
@@ -25,7 +27,7 @@ class Roster:
 			if self._data.has_key(key):
 				if old_data[key] != self._data[key]:
 					diffs[key] = self._data[key]['status']
-		#print 'roster_zeroconf.py: diffs:' + diffs
+		#print 'roster_zeroconf.py: diffs:' + str(diffs)
 		return diffs
 		
 	def setItem(self, jid, name = '', groups = ''):
