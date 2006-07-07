@@ -26,11 +26,10 @@
 import gobject
 import gtk
 
-import common.xmpp as xmpp
-import common.gajim as gajim
+from common import xmpp, gajim, dataforms
 
 import gtkgui_helpers
-import dataforms
+import dataforms as dataformwidget
 
 class CommandWindow:
 	'''Class for a window for single ad-hoc commands session. Note, that
@@ -38,7 +37,9 @@ class CommandWindow:
 
 	TODO: maybe put this window into MessageWindow? consider this when
 	TODO: it will be possible to manage more than one window of one
-	TODO: account/jid pair in MessageWindowMgr.'''
+	TODO: account/jid pair in MessageWindowMgr.
+
+	TODO: gtk 2.10 has a special wizard-widget, consider using it...'''
 
 	def __init__(self, account, jid):
 		'''Create new window.'''
@@ -68,7 +69,8 @@ class CommandWindow:
 			self.__dict__[name] = self.xml.get_widget(name)
 
 		# creating data forms widget
-		self.data_form_widget = dataforms.DataFormWidget()
+		self.data_form_widget = dataformwidget.DataFormWidget()
+		self.data_form_widget.show()
 		self.sending_form_stage_vbox.pack_start(self.data_form_widget)
 
 		# setting initial stage
@@ -264,13 +266,14 @@ class CommandWindow:
 		self.remove_pulsing()
 		self.sending_form_progressbar.hide()
 
-		self.sessionid = command.getAttr('sessionid')
+		if self.sessionid is None:
+			self.sessionid = command.getAttr('sessionid')
 
-		self.dataform = xmpp.DataForm(node=command.getTag('x'))
+		self.dataform = dataforms.DataForm(node=command.getTag('x'))
 
-		self.data_form_widget.show()
 		self.data_form_widget.set_sensitive(True)
 		self.data_form_widget.set_data_form(self.dataform)
+		self.data_form_widget.show()
 
 		action = command.getTag('action')
 		if action is None:
@@ -367,6 +370,7 @@ class CommandWindow:
 
 		def callback(response):
 			'''Called on response to query.'''
+			# TODO: move to connection_handlers.py
 			# is error => error stage
 			error = response.getError()
 			if error is not None:
@@ -405,10 +409,11 @@ class CommandWindow:
 			cmdnode.setAttr('sessionid', self.sessionid)
 
 		if self.data_form_widget.data_form is not None:
-			cmdnode.addChild(node=self.data_form_widget.filled_data_form())
+			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
 
 		def callback(response):
 			# TODO: error handling
+			# TODO: move to connection_handlers.py
 			self.stage3_next_form(response.getTag('command'))
 
 		print stanza

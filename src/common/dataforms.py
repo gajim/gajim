@@ -37,7 +37,10 @@ def del_multiple_tag_value(node, childname):
 	childname in node.
 	"""
 
-	while node.delChild(childname):
+	try:
+		while node.delChild(childname):
+			pass
+	except ValueError:
 		pass
 
 def iter_elements(node, childname):
@@ -65,7 +68,7 @@ class DataForm(xmpp.Node, object):
 		assert (isinstance(tofill, DataForm) or tofill is None)
 		assert not (node is not None and tofill is not None)
 
-		assert typ in (None, 'form', 'submit', 'cancel', 'return')
+		assert typ in (None, 'form', 'submit', 'cancel', 'result')
 		assert isinstance(title, basestring) or title is None
 		assert isinstance(instructions, basestring) or instructions is None
 		assert (fields is None or fields.__iter__)
@@ -94,11 +97,16 @@ class DataForm(xmpp.Node, object):
 				self._mode = DATAFORM_SINGLE
 
 				# change every <field/> to DataField object
+				toadd=[]
 				for field in self.getChildren():
 					if not isinstance(field, xmpp.Node): continue
 					if not field.getName()=='field': continue
-					self.delChild(field)
-					self.addChild(node=DataField(node=field)
+					toadd.append(DataField(node=field))
+
+				del_multiple_tag_value(self, 'field')
+
+				for field in toadd:
+					self.addChild(node=field)
 		else: # neither tofill nor node has a Node
 			if typ is None: typ='result'
 			if records is not None and len(records)>1:
@@ -133,7 +141,10 @@ class DataForm(xmpp.Node, object):
 		self.setTagData('title')
 
 	def del_title(self):
-		self.delChild('title')
+		try:
+			self.delChild('title')
+		except ValueError:
+			pass
 
 	title = property(get_title, set_title, del_title,
 		"Form title, in unicode, from <title/> element.")
@@ -168,22 +179,22 @@ class DataForm(xmpp.Node, object):
 
 	def iter_records(self):
 		if self.mode is DATAFORM_SINGLE:
-			yield DataRecord(self)
+			yield DataRecord(node=self)
 		else:
 			for item in self.getChildren():
 				if not isinstance(item, xmpp.Node): continue
 				if not item.getName()=='item': continue
-				yield DataRecord(item)
+				yield DataRecord(node=item)
 
 	def get_records(self):
 		if self.mode is DATAFORM_SINGLE:
-			return [DataRecord(self),]
+			return [DataRecord(node=self),]
 		else:
 			items = []
 			for node in self.getChildren():
 				if not isinstance(node, xmpp.Node): continue
 				if not node.getName()=='item': continue
-				items.append(DataRecord(node))
+				items.append(DataRecord(node=node))
 			return items
 
 	def set_records(self, records):
@@ -191,9 +202,9 @@ class DataForm(xmpp.Node, object):
 			assert len(records)==1
 
 			record = records[0]
-			assert isinstance(record, dict)
-			for name, value in record.iteritems():
-				self[name]=value
+			assert isinstance(record, DataRecord)
+			for field in record.iter_fields():
+				self[field.var]=field.value
 		else:
 			self.del_records(self)
 			for record in records:
@@ -229,18 +240,47 @@ class DataForm(xmpp.Node, object):
 				self.addChild(node=field)
 		else:
 			assert len(self.records)==0
-			self.delChild('recorded')
+			try:
+				self.delChild('recorded')
+			except ValueError:
+				pass
 			self.addChild('recorded', None, fields)
 
 	def del_fields(self):
 		if self.mode is DATAFORM_SINGLE:
 			del_multiple_tag_value(self, "field")
 		else:
-			self.delChild('recorded')
-	
+			try:
+				self.delChild('recorded')
+			except ValueError:
+				pass
+
+	def iter_fields(self):
+		if self.mode is DATAFORM_SINGLE:
+			container = self
+		else:
+			container = self.getTag("recorded")
+
+		for child in container.getChildren():
+			if isinstance(child, DataField):
+				yield child
+
 	fields = property(get_fields, set_fields, del_fields,
 		"""Fields in this form; a list; if in DATAFORM_SINGLE mode, you should not
 		set their values directly.""")
+
+	def __getitem__(self, var):
+		for field in self.iter_fields():
+			if field.var==var:
+				return field.value
+		raise KeyError, "This form does not contain %r field." % var
+
+	def __setitem__(self, var, value):
+		for field in self.iter_fields():
+			if field.var==var:
+				field.value=value
+				return
+		raise KeyError, "This form does not contain %r field." % var
 
 class DataField(xmpp.Node, object):
 	def __init__(self, typ='text-single', desc=None, required=None, value=None, options=None, node=None):
@@ -306,7 +346,10 @@ class DataField(xmpp.Node, object):
 		self.setTagData('desc', desc)
 
 	def del_description(self):
-		self.delChild('desc')
+		try:
+			self.delChild('desc')
+		except ValueError:
+			pass
 
 	description = property(get_description, set_description, del_description,
 		""" A natural-language description of the field. It should not contain
@@ -369,16 +412,30 @@ class DataField(xmpp.Node, object):
 		""" The value of field. Depending on the type, it is a boolean, a unicode string or a list
 		of stings. """)
 
+	def iter_options(self):
+		""" Yields a pair: label, value """
+		for element in self.getChildren():
+			if not isinstance(element, xmpp.Node): continue
+			if not element.getName()=='option': continue
+			yield element.getAttr('label'), element.getTag('value').getData()
+
 	def get_options(self):
-		return [tag.getData() for tag in self.getTags('option')]
+		""" Returns a list of tuples: (label, value). """
+		return [(tag.getAttr('label'), tag.getTag('value').getData()) for tag in self.getTags('option')]
 
 	def set_options(self, options):
+		""" Options need to be a list of tuples (label, value), both unicode. """
 		assert options.__iter__
 
 		del_multiple_tag_value(self, 'option')
 		for option in options:
-			assert isinstance(option, basestring)
-			self.addChild('option', None, (option,))
+			assert option[0] is None or isinstance(option[0], unicode)
+			assert isinstance(option[1], unicode)
+			if option[0] is None:
+				attr=None
+			else:
+				attr={'label': option[0].encode('utf-8')}
+			self.addChild('option', attr, (option[1].encode('utf-8'),))
 
 	def del_options(self):
 		del_multiple_tag_value(self, 'option')
@@ -386,22 +443,30 @@ class DataField(xmpp.Node, object):
 	options = property(get_options, set_options, del_options,
 		""" Options to choose between in list-* fields. """)
 
-class DataRecord(xmpp.Node, dict):
+class DataRecord(xmpp.Node):
 	""" Class to store fields. May be used as temporary storage (for example when reading a list of
 	fields from DataForm in DATAFORM_SINGLE mode), may be used as permanent storage place (for example
-	for DataForms in DATAFORM_MULTIPLE mode)."""
+	for DataForms in DATAFORM_MULTIPLE mode). It expects that every <field/> element is actually
+	a DataField instance."""
 	def __init__(self, fields=None, node=None):
 		assert (fields is None) or (node is None)
 		assert (fields is None) or (fields.__iter__)
 		assert (node is None) or (isinstance(node, xmpp.Node))
 
-		dict.__init__(self)
+		self.vars = {}
+
 		xmpp.Node.__init__(self, node=node)
+
+		if node is not None:
+			for field in node.getTags('field'):
+				assert isinstance(field, DataField)
+				self.vars[field.var] = field
+
 		if fields is not None:
 			for field in fields:
 				assert isinstance(field, DataField)
 				self.addChild(node=field)
-				self[field.name] = field
+				self.vars[field.var] = field
 
 	# if there will be ever needed access to all fields as a list, write it here, in form of property
 
@@ -409,3 +474,6 @@ class DataRecord(xmpp.Node, dict):
 		for field in self.getChildren():
 			if not isinstance(field, xmpp.DataField): continue
 			yield field
+
+	def __getitem__(self, item):
+		return self.vars[item]

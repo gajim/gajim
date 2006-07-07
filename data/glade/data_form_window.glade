@@ -208,7 +208,7 @@
       <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
       <child>
-	<widget class="GtkVBox" id="vbox111">
+	<widget class="GtkVBox" id="container_vbox">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
@@ -251,19 +251,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkTable" id="form_table">
-	      <property name="visible">True</property>
-	      <property name="n_rows">1</property>
-	      <property name="n_columns">3</property>
-	      <property name="homogeneous">False</property>
-	      <property name="row_spacing">0</property>
-	      <property name="column_spacing">0</property>
-	    </widget>
-	    <packing>
-	      <property name="padding">0</property>
-	      <property name="expand">True</property>
-	      <property name="fill">True</property>
-	    </packing>
+	    <placeholder/>
 	  </child>
 	</widget>
       </child>

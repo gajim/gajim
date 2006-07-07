@@ -58,9 +58,9 @@ class Node:
 			"node" and other arguments is provided then the node initially created as replica of "node"
 			provided and then modified to be compliant with other arguments."""
 		if node:
-			if self.FORCE_NODE_RECREATION and type(node)==type(self): 
+			if self.FORCE_NODE_RECREATION and isinstance(node, Node): 
 				node=str(node)
-			if type(node)<>type(self): 
+			if not isinstance(node, Node): 
 				node=NodeBuilder(node,self)
 			else:
 				self.name,self.namespace,self.attrs,self.data,self.kids,self.parent = node.name,node.namespace,{},[],[],node.parent

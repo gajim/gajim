@@ -20,8 +20,9 @@ import gtk
 import gtkgui_helpers
 
 import common.xmpp as xmpp
+import common.dataforms as dataforms
 
-class DataFormWidget(gtk.Alignment):
+class DataFormWidget(gtk.Alignment, object):
 # "public" interface
 	""" Data Form widget. Use like any other widget. """
 	def __init__(self, dataformnode=None):
@@ -32,24 +33,39 @@ class DataFormWidget(gtk.Alignment):
 
 		self.xml=gtkgui_helpers.get_glade('data_form_window.glade', 'data_form_scrolledwindow')
 		self.instructions = self.xml.get_widget('form_instructions_label')
-		self.form = self.xml.get_widget('form_table')
+		self.container = self.xml.get_widget('container_vbox')
 
 		self.add(self.xml.get_widget('data_form_scrolledwindow'))
 
-		self.set_data_form(dataformnode)
+		if dataformnode is not None:
+			self.set_data_form(dataformnode)
 
 	def set_data_form(self, dataform=None):
 		""" Set the data form (xmpp.DataForm) displayed in widget.
 		Set to None to erase the form. """
-		assert (isinstance(dataform, xmpp.Node) or (dataform is None))
+		assert isinstance(dataform, dataforms.DataForm)
 
-		if self._data_form is not None: self._cleanWidgets()
+		self.del_data_form()
 		self._data_form = dataform
-		if self._data_form is not None: self._buildWidgets()
+		if dataform.mode==dataforms.DATAFORM_SINGLE:
+			self.form = self.__class__.SingleForm(dataform)
+		else:
+			self.form = self.__class__.MultipleForm(dataform)
+		self.form.show()
+		self.container.pack_end(self.form)
 
 	def get_data_form(self):
 		""" Data form displayed in the widget or None if no form. """
 		return self._data_form
+
+	def del_data_form(self):
+		if self._data_form is not None:
+			self.container.remove(self.form)
+		self.form = None
+		self._data_form = None
+
+	data_form = property(get_data_form, set_data_form, del_data_form,
+		"Data form presented in a widget")
 
 	def get_title(self):
 		""" Get the title of data form, as a unicode object. If no
@@ -59,17 +75,19 @@ class DataFormWidget(gtk.Alignment):
 				return self._data_form['title'].encode('utf-8')
 		return u''
 
+	title = property(get_title, None, None, "Data form title")
+
 	def show(self):
 		""" Treat 'us' as one widget. """
 		self.show_all()
 
 	def filled_data_form(self):
-		""" Generates form that contains values filled by user. This
-		won't be DataForm object, as the DataFields seem to be uncapable
-		of some things. """
-		assert isinstance(self._data_form, xmpp.DataForm)
+		""" Generates form that contains values filled by user. """
+		assert isinstance(self._data_form, dataforms.DataForm)
 
 		form = xmpp.Node('x', {'xmlns':xmpp.NS_DATA, 'type':'submit'})
+
+
 		for field in self._data_form.kids:
 			if not isinstance(field, xmpp.DataField): continue
 			
@@ -96,158 +114,122 @@ class DataFormWidget(gtk.Alignment):
 
 		return form
 
-	data_form = property(get_data_form, set_data_form, None, "Data form presented in a widget")
-	title = property(get_title, None, None, "Data form title")
-
 # "private" methods
-	def _buildWidgets(self):
-		""" Create all sub-widgets according to self._data_form and
-		JEP-0004. """
-		assert self._data_form is not None
-		assert len(self.form.get_children())==0
 
-		# it is *very* often used here
-		df = self._data_form
+# we have actually two different kinds of data forms: one is a simple form to fill,
+# second is a table with several records; we will treat second as read-only, but still
+# we should have a way to show it
 
-		instructions = df.getInstructions()
-		if instructions is not None:
-			self.instructions.set_text(instructions)
+# we will place both types in two different private classes, so the code will be clean;
+# both will have the same interface
 
-		linecounter = 0
+	class SingleForm(gtk.Table, object):
+		""" Widget that represent DATAFORM_SINGLE mode form. """
+		def __init__(self, dataform):
+			assert dataform.mode==dataforms.DATAFORM_SINGLE
 
-		for field in df.kids:
-			if not isinstance(field, xmpp.DataField): continue
+			gtk.Table.__init__(self)
 
-			# TODO: rewrite that when xmpp.DataField will be rewritten
-			ftype = field.getType()
-			if ftype not in ('boolean', 'fixed', 'hidden', 'jid-multi',
-				'jid-single', 'list-multi', 'list-single',
-				'text-multi', 'text-private', 'text-single'):
-				ftype = 'text-single'
+			self._data_form = dataform
 
-			if ftype == 'hidden': continue
+			# building widget
+			linecounter = 0
 
-			# field label
-			flabel = field.getAttr('label')
-			if flabel is None:
-				flabel = field.getVar()
+			# for each field...
+			for field in self._data_form.iter_fields():
+				if field.type=='hidden': continue
 
-			# field description
-			fdesc = field.getDesc()
+				commonlabel = True
+				commondesc = True
+				commonwidget = True
+				widget = None
 
-			# field value (if one)
-			fvalue = field.getValue()
+				if field.type=='boolean':
+					widget = gtk.CheckButton()
+					widget.connect('toggled', self.on_boolean_checkbutton_toggled, field)
+					widget.set_active(field.value)
 
-			# field values (if one or more)
-			fvalues = field.getValues()
+				elif field.type=='fixed':
+					leftattach = 1
+					rightattach = 2
+					if field.label is None:
+						commonlabel = False
+						leftattach = 0
+					if field.description is None:
+						commondesc = False
+						rightattach = 3
+					
+					commonwidget=False
+					widget = gtk.Label(field.value)
+					widget.set_line_wrap(True)
+					self.attach(widget, leftattach, rightattach, linecounter, linecounter+1)
 
-			# field options
-			foptions = field.getOptions()
+				elif field.type in ('jid-multi', 'jid-single', 'list-multi', 'text-multi',
+					'text-private'):
+					widget = gtk.Label(field.type)
 
-			commonlabel = True
-			commondesc = True
-			commonwidget = True
+				elif field.type == 'list-single':
+					# TODO: When more than few choices, make a list
+					# TODO: Think of moving that to another function (it could be used
+					# TODO: in stage2 of adhoc commands too).
+					# TODO: What if we have radio buttons and non-required field?
+					# TODO: We cannot deactivate them all...
+					widget = gtk.VBox()
+					first_radio = None
+					for label, value in field.iter_options():
+						radio = gtk.RadioButton(first_radio, label=label)
+						radio.connect('toggled', self.on_list_single_radiobutton_toggled,
+							field, value)
+						if first_radio is None:
+							first_radio = radio
+							if field.value is None:
+								field.value = value
+						if value == field.value:
+							radio.set_active(True)
+						widget.pack_start(radio, expand=False)
 
-			if ftype == 'boolean':
-				widget = gtk.CheckButton()
-				widget.connect('toggled', self.on_boolean_checkbutton_toggled, field)
-				if fvalue in ('1', 'true'):
-					widget.set_active(True)
-				else:
-					field.setValue('0')
+				else:# field.type == 'text-single' or field.type is nonstandard:
+					# JEP says that if we don't understand some type, we
+					# should handle it as text-single
+					widget = gtk.Entry()
+					widget.connect('changed', self.on_text_single_entry_changed, field)
+					if field.value is None:
+						field.value = u''
+					widget.set_text(field.value)
 
-			elif ftype == 'fixed':
-				leftattach = 1
-				rightattach = 2
-				if flabel is None:
-					commonlabel = False
-					leftattach = 0
-				if fdesc is None:
-					commondesc = False
-					rightattach = 3
-				commonwidget = False
-				widget = gtk.Label(fvalue)
-				widget.set_line_wrap(True)
-				self.form.attach(widget, leftattach, rightattach, linecounter, linecounter+1)
+				if commonlabel and field.label is not None:
+					label = gtk.Label(field.label)
+					label.set_justify(gtk.JUSTIFY_RIGHT)
+					self.attach(label, 0, 1, linecounter, linecounter+1)
 
-			elif ftype == 'jid-multi':
-				widget = gtk.Label('jid-multi field')
+				if commonwidget:
+					assert widget is not None
+					self.attach(widget, 1, 2, linecounter, linecounter+1)
+				widget.show_all()
 
-			elif ftype == 'jid-single':
-				widget = gtk.Label('jid-single field')
+				if commondesc and field.description is not None:
+					# TODO: with smaller font
+					label = gtk.Label(field.description)
+					label.set_line_wrap(True)
+					self.attach(label, 2, 3, linecounter, linecounter+1)
 
-			elif ftype == 'list-multi':
-				widget = gtk.Label('list-multi field')
+				linecounter+=1
+			if self.get_property('visible'):
+				self.show_all()
 
-			elif ftype == 'list-single':
-				# TODO: When more than few choices, make a list
-				widget = gtk.VBox()
-				first_radio = None
-				right_value = False
-				for label, value in foptions:
-					radio = gtk.RadioButton(first_radio, label=label)
-					radio.connect('toggled', self.on_list_single_radiobutton_toggled,
-						field, value)
-					if first_radio is None:
-						first_radio = radio
-						first_value = value
-					if value == fvalue:
-						right_value = True
-					widget.pack_end(radio, expand=False)
-				if not right_value:
-					field.setValue(first_value)
+		def show(self):
+			# simulate that we are one widget
+			self.show_all()
 
-			elif ftype == 'text-multi':
-				widget = gtk.Label('text-multi field')
+		def on_boolean_checkbutton_toggled(self, widget, field):
+			field.value = widget.get_active()
 
-			elif ftype == 'text-private':
-				widget = gtk.Label('text-private field')
+		def on_list_single_radiobutton_toggled(self, widget, field, value):
+			field.value = value
 
-			elif ftype == 'text-single':
-				widget = gtk.Entry()
-				widget.connect('changed', self.on_text_single_entry_changed, field)
-				if fvalue is None:
-					field.setValue('')
-					fvalue = ''
-				widget.set_text(fvalue)
-			
-			else:
-				widget = gtk.Label('Unhandled widget type!')
+		def on_text_single_entry_changed(self, widget, field):
+			field.value = widget.get_text()
 
-			if commonlabel and flabel is not None:
-				label = gtk.Label(flabel)
-				label.set_justify(gtk.JUSTIFY_RIGHT)
-				self.form.attach(label, 0, 1, linecounter, linecounter+1)
-
-			if commonwidget:
-				self.form.attach(widget, 1, 2, linecounter, linecounter+1)
-
-			if commondesc and fdesc is not None:
-				label = gtk.Label(fdesc)
-				label.set_line_wrap(True)
-				self.form.attach(label, 2, 3, linecounter, linecounter+1)
-
-			linecounter += 1
-
-		self.form.show_all()
-
-	def _cleanWidgets(self):
-		""" Destroy all sub-widgets used to build current data form. """
-		def remove(widget):
-			self.form.remove(widget)
-
-		self.form.foreach(remove)
-		self.instructions.set_text(u"")
-
-	def on_boolean_checkbutton_toggled(self, widget, field):
-		if widget.get_active():
-			field.setValue('true')
-		else:
-			field.setValue('false')
-
-	def on_list_single_radiobutton_toggled(self, widget, field, value):
-		field.setValue(value)
-
-	def on_text_single_entry_changed(self, widget, field):
-		# TODO: check for encoding?
-		field.setValue(widget.get_text())
+	class MultipleForm(gtk.Alignment, object):
+		def __init__(self, dataform):
+			assert dataform.mode==dataforms.DATAFORM_MULTIPLE
