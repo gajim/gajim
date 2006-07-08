@@ -332,6 +332,9 @@ class RosterWindow:
 		gajim.interface.roster.add_contact_to_roster(transport, account)
 
 	def really_remove_contact(self, contact, account):
+		if not gajim.interface.instances.has_key(account):
+			# Account has been deleted during the timeout that called us
+			return
 		if contact.jid in gajim.newly_added[account]:
 			return
 		if contact.jid.find('@') < 1 and gajim.connections[account].connected > 1:
