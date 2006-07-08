@@ -972,7 +972,6 @@ class PreferencesWindow:
 		path_to_snd_file = widget.get_text()
 		model, iter = self.sound_tree.get_selection().get_selected()
 		model[iter][2] = path_to_snd_file # set new path to sounds_model
-		model[iter][0] = True # set the sound to enabled
 
 	def on_play_button_clicked(self, widget):
 		model, iter = self.sound_tree.get_selection().get_selected()
