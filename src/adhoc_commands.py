@@ -29,6 +29,7 @@ import gtk
 from common import xmpp, gajim, dataforms
 
 import gtkgui_helpers
+import dialogs
 import dataforms as dataformwidget
 
 class CommandWindow:
@@ -80,18 +81,12 @@ class CommandWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	def on_adhoc_commands_window_destroy(self, window):
-		''' The window dissappeared somehow... clean the environment,
-		Stop pulsing.'''
-		self.remove_pulsing()
-
 # these functions are set up by appropriate stageX methods
 	def stage_finish(self, *anything): pass
 	def stage_cancel_button_clicked(self, *anything): assert False
 	def stage_back_button_clicked(self, *anything): assert False
 	def stage_forward_button_clicked(self, *anything): assert False
 	def stage_execute_button_clicked(self, *anything): assert False
-	def stage_adhoc_commands_window_destroy(self, *anything): assert False
 	def stage_adhoc_commands_window_delete_event(self, *anything): assert False
 	def do_nothing(self, *anything): return False
 
@@ -109,10 +104,14 @@ class CommandWindow:
 		return self.stage_execute_button_clicked(*anything)
 
 	def on_adhoc_commands_window_destroy(self, *anything):
-		return self.stage_adhoc_commands_window_destroy(*anything)
+		# do all actions that are needed to remove this object from memory...
+		self.remove_pulsing()
 
 	def on_adhoc_commands_window_delete_event(self, *anything):
 		return self.stage_adhoc_commands_window_delete_event(self, *anything)
+
+	def __del__(self):
+		print "Object has been deleted."
 
 # stage 1: waiting for command list
 	def stage1(self):
@@ -141,7 +140,6 @@ class CommandWindow:
 		self.stage_finish = self.stage1_finish
 		self.stage_cancel_button_clicked = self.stage1_cancel_button_clicked
 		self.stage_adhoc_commands_window_delete_event = self.stage1_adhoc_commands_window_delete_event
-		self.stage_adhoc_commands_window_destroy = self.do_nothing
 
 	def stage1_finish(self):
 		self.remove_pulsing()
@@ -183,13 +181,12 @@ class CommandWindow:
 			if first_radio is None:
 				first_radio = radio
 				self.commandnode = commandnode
-			self.command_list_vbox.pack_end(radio, expand=False)
+			self.command_list_vbox.pack_start(radio, expand=False)
 		self.command_list_vbox.show_all()
 
 		self.stage_finish = self.stage2_finish
 		self.stage_cancel_button_clicked = self.stage2_cancel_button_clicked
 		self.stage_forward_button_clicked = self.stage2_forward_button_clicked
-		self.stage_adhoc_commands_window_destroy = self.do_nothing
 		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
 	def stage2_finish(self):
@@ -234,14 +231,29 @@ class CommandWindow:
 		self.stage_back_button_clicked = self.stage3_back_button_clicked
 		self.stage_forward_button_clicked = self.stage3_forward_button_clicked
 		self.stage_execute_button_clicked = self.stage3_execute_button_clicked
-		self.stage_adhoc_commands_window_destroy = self.do_nothing
-		self.stage_adhoc_commands_window_delete_event = self.do_nothing
+		self.stage_adhoc_commands_window_delete_event = self.stage3_cancel_button_clicked
 
 	def stage3_finish(self):
 		pass
 
-	def stage3_cancel_button_clicked(self, widget):
-		pass
+	def stage3_cancel_button_clicked(self, widget, *anything):
+		''' We are in the middle of executing command. Ask user if he really want to cancel
+		the process, then... cancel it. '''
+		# this works also as a handler for window_delete_event, so we have to return appropriate
+		# values
+		# TODO: translate it
+		dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
+			gtk.BUTTONS_YES_NO, 'Cancel confirmation',
+			'You are in process of executing command. Do you really want to cancel it?')
+		dialog.popup()
+		if dialog.get_response()==gtk.RESPONSE_YES:
+			self.send_cancel()
+			if widget==self.window:
+				return False
+			else:
+				self.window.destroy()
+			return False
+		return True
 
 	def stage3_back_button_clicked(self, widget):
 		self.stage3_submit_form('prev')
@@ -256,6 +268,12 @@ class CommandWindow:
 		self.data_form_widget.set_sensitive(False)
 		if self.data_form_widget.get_data_form() is None:
 			self.data_form_widget.hide()
+
+		self.cancel_button.set_sensitive(True)
+		self.back_button.set_sensitive(False)
+		self.forward_button.set_sensitive(False)
+		self.execute_button.set_sensitive(False)
+
 		self.sending_form_progressbar.show()
 		self.setup_pulsing(self.sending_form_progressbar)
 		self.send_command(action)
@@ -272,19 +290,26 @@ class CommandWindow:
 		self.dataform = dataforms.DataForm(node=command.getTag('x'))
 
 		self.data_form_widget.set_sensitive(True)
-		self.data_form_widget.set_data_form(self.dataform)
+		try:
+			self.data_form_widget.data_form=self.dataform
+		except dataforms.BadDataFormNode:
+			# TODO: translate
+			self.stage5('Service sent malformed data', senderror=True)
 		self.data_form_widget.show()
 
 		action = command.getTag('action')
 		if action is None:
-			# no action tag? that's last stage...
-			self.cancel_button.set_sensitive(False)
+			# no action tag? check if that's last stage...
+			if command.getAttr('status')=='completed':
+				self.cancel_button.set_sensitive(False)
+			else:
+				self.cancel_button.set_sensitive(True)
 			self.back_button.set_sensitive(False)
 			self.forward_button.set_sensitive(False)
 			self.execute_button.set_sensitive(True)
 		else:
 			# actions, actions, actions...
-			self.cancel_button.set_sensitive(False)
+			self.cancel_button.set_sensitive(True)
 			self.back_button.set_sensitive(action.getTag('prev') is not None)
 			self.forward_button.set_sensitive(action.getTag('next') is not None)
 			self.execute_button.set_sensitive(True)
@@ -306,7 +331,6 @@ class CommandWindow:
 
 		self.stage_finish = self.do_nothing
 		self.stage_cancel_button_clicked = self.stage4_cancel_button_clicked
-		self.stage_adhoc_commands_window_destroy = self.do_nothing
 		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
 	def stage4_cancel_button_clicked(self, widget):
@@ -316,12 +340,13 @@ class CommandWindow:
 		self.stage1()
 
 # stage 5: an error has occured
-	def stage5(self, error):
+	def stage5(self, error, senderror=False):
 		'''Display the error message. Wait for user to close the window'''
+		# TODO: sending error to responder
 		# close old stage
 		self.stage_finish()
 
-		assert isinstance(error, unicode)
+		assert isinstance(error, basestring)
 
 		self.stages_notebook.set_current_page(
 			self.stages_notebook.page_num(
@@ -336,7 +361,6 @@ class CommandWindow:
 
 		self.stage_finish = self.do_nothing
 		self.stage_cancel_button_clicked = self.stage5_cancel_button_clicked
-		self.stage_adhoc_commands_window_destroy = self.do_nothing
 		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
 	def stage5_cancel_button_clicked(self, widget):
@@ -419,3 +443,18 @@ class CommandWindow:
 		print stanza
 
 		self.account.connection.SendAndCallForResponse(stanza, callback)
+
+	def send_cancel(self):
+		'''Send the command with action='cancel'. '''
+		assert self.commandnode is not None
+		assert self.sessionid is not None
+
+		stanza = xmpp.Iq(typ='set', to=self.jid)
+		stanza.addChild('command', attrs={
+				'xmlns':xmpp.NS_COMMANDS,
+				'node':self.commandnode,
+				'sessionid':self.sessionid,
+				'action':'cancel'
+			})
+
+		self.account.connection.send(stanza)

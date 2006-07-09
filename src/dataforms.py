@@ -52,7 +52,7 @@ class DataFormWidget(gtk.Alignment, object):
 		else:
 			self.form = self.__class__.MultipleForm(dataform)
 		self.form.show()
-		self.container.pack_end(self.form)
+		self.container.pack_end(self.form, expand=True, fill=True)
 
 	def get_data_form(self):
 		""" Data form displayed in the widget or None if no form. """
@@ -81,38 +81,38 @@ class DataFormWidget(gtk.Alignment, object):
 		""" Treat 'us' as one widget. """
 		self.show_all()
 
-	def filled_data_form(self):
-		""" Generates form that contains values filled by user. """
-		assert isinstance(self._data_form, dataforms.DataForm)
-
-		form = xmpp.Node('x', {'xmlns':xmpp.NS_DATA, 'type':'submit'})
-
-
-		for field in self._data_form.kids:
-			if not isinstance(field, xmpp.DataField): continue
-			
-			ftype = field.getType()
-			if ftype not in ('boolean', 'fixed', 'hidden', 'jid-multi',
-				'jid-single', 'list-multi', 'list-single',
-				'text-multi', 'text-private', 'text-single'):
-				ftype = 'text-single'
-
-			if ftype in ('fixed',):
-				continue
-
-			newfield = xmpp.Node('field', {'var': field.getVar()})
-
-			if ftype in ('jid-multi', 'list-multi', 'text-multi'):
-				for value in field.getValues():
-					newvalue = xmpp.Node('value', {}, [value])
-					newfield.addChild(node=newvalue)
-			else:
-				newvalue = xmpp.Node('value', {}, [field.getValue()])
-				newfield.addChild(node=newvalue)
-
-			form.addChild(node=newfield)
-
-		return form
+#?	def filled_data_form(self):
+#?		""" Generates form that contains values filled by user. """
+#?		assert isinstance(self._data_form, dataforms.DataForm)
+#?
+#?		form = xmpp.Node('x', {'xmlns':xmpp.NS_DATA, 'type':'submit'})
+#?
+#?
+#?		for field in self._data_form.kids:
+#?			if not isinstance(field, xmpp.DataField): continue
+#?			
+#?			ftype = field.getType()
+#?			if ftype not in ('boolean', 'fixed', 'hidden', 'jid-multi',
+#?				'jid-single', 'list-multi', 'list-single',
+#?				'text-multi', 'text-private', 'text-single'):
+#?				ftype = 'text-single'
+#?
+#?			if ftype in ('fixed',):
+#?				continue
+#?
+#?			newfield = xmpp.Node('field', {'var': field.getVar()})
+#?
+#?			if ftype in ('jid-multi', 'list-multi', 'text-multi'):
+#?				for value in field.getValues():
+#?					newvalue = xmpp.Node('value', {}, [value])
+#?					newfield.addChild(node=newvalue)
+#?			else:
+#?				newvalue = xmpp.Node('value', {}, [field.getValue()])
+#?				newfield.addChild(node=newvalue)
+#?
+#?			form.addChild(node=newfield)
+#?
+#?		return form
 
 # "private" methods
 
@@ -164,8 +164,7 @@ class DataFormWidget(gtk.Alignment, object):
 					widget.set_line_wrap(True)
 					self.attach(widget, leftattach, rightattach, linecounter, linecounter+1)
 
-				elif field.type in ('jid-multi', 'jid-single', 'list-multi', 'text-multi',
-					'text-private'):
+				elif field.type in ('jid-multi'):
 					widget = gtk.Label(field.type)
 
 				elif field.type == 'list-single':
@@ -176,7 +175,7 @@ class DataFormWidget(gtk.Alignment, object):
 					# TODO: We cannot deactivate them all...
 					widget = gtk.VBox()
 					first_radio = None
-					for label, value in field.iter_options():
+					for value, label in field.iter_options():
 						radio = gtk.RadioButton(first_radio, label=label)
 						radio.connect('toggled', self.on_list_single_radiobutton_toggled,
 							field, value)
@@ -187,6 +186,41 @@ class DataFormWidget(gtk.Alignment, object):
 						if value == field.value:
 							radio.set_active(True)
 						widget.pack_start(radio, expand=False)
+
+				elif field.type == 'list-multi':
+					# TODO: When more than few choices, make a list
+					widget = gtk.VBox()
+					for value, label in field.iter_options():
+						check = gtk.CheckButton(label, use_underline=False)
+						check.set_active(value in field.value)
+						check.connect('toggled', self.on_list_multi_checkbutton_toggled,
+							field, value)
+						widget.pack_start(check, expand=False)
+
+				elif field.type == 'jid-single':
+					widget = gtk.Entry()
+					widget.connect('changed', self.on_text_single_entry_changed, field)
+					if field.value is None:
+						field.value = u''
+					widget.set_text(field.value)
+
+				elif field.type == 'text-private':
+					widget = gtk.Entry()
+					widget.connect('changed', self.on_text_single_entry_changed, field)
+					widget.set_visibility(False)
+					if field.value is None:
+						field.value = u''
+					widget.set_text(field.value)
+
+				elif field.type == 'text-multi':
+					# TODO: bigger text view
+					widget = gtk.TextView()
+					widget.set_wrap_mode(gtk.WRAP_WORD)
+					widget.get_buffer().connect('changed', self.on_text_multi_textbuffer_changed,
+						field)
+					if field.value is None:
+						field.value = u''
+					widget.get_buffer().set_text(field.value)
 
 				else:# field.type == 'text-single' or field.type is nonstandard:
 					# JEP says that if we don't understand some type, we
@@ -199,7 +233,7 @@ class DataFormWidget(gtk.Alignment, object):
 
 				if commonlabel and field.label is not None:
 					label = gtk.Label(field.label)
-					label.set_justify(gtk.JUSTIFY_RIGHT)
+					label.set_alignment(1.0, 0.5)
 					self.attach(label, 0, 1, linecounter, linecounter+1)
 
 				if commonwidget:
@@ -208,8 +242,10 @@ class DataFormWidget(gtk.Alignment, object):
 				widget.show_all()
 
 				if commondesc and field.description is not None:
-					# TODO: with smaller font
-					label = gtk.Label(field.description)
+					label = gtk.Label()
+					label.set_markup('<small>'+\
+						gtkgui_helpers.escape_for_pango_markup(field.description)+\
+						'</small>')
 					label.set_line_wrap(True)
 					self.attach(label, 2, 3, linecounter, linecounter+1)
 
@@ -227,8 +263,19 @@ class DataFormWidget(gtk.Alignment, object):
 		def on_list_single_radiobutton_toggled(self, widget, field, value):
 			field.value = value
 
+		def on_list_multi_checkbutton_toggled(self, widget, field, value):
+			if widget.get_active() and value not in field.value:
+				field.value.append(value)
+			elif not widget.get_active() and value in field.value:
+				field.value.remove(value)
+
 		def on_text_single_entry_changed(self, widget, field):
 			field.value = widget.get_text()
+
+		def on_text_multi_textbuffer_changed(self, widget, field):
+			field.value = widget.get_text(
+				widget.get_start_iter(),
+				widget.get_end_iter())
 
 	class MultipleForm(gtk.Alignment, object):
 		def __init__(self, dataform):

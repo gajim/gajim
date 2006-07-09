@@ -78,9 +78,14 @@ class DataForm(xmpp.Node, object):
 
 		if tofill is not None:
 			self._mode = tofill.mode
-			self.fields = tofill.fields
+			self.fields = (field for field in tofill.fields if field.type!='fixed')
 			self.records = tofill.records
 			self.type = 'submit'
+			for field in self.iter_fields():
+				field.required=False
+				del field.label
+				del field.options
+				del field.description
 		elif node is not None:
 			# if there is <reported/> element, the form contains multiple records
 			if self.getTag('reported') is not None:
@@ -138,7 +143,7 @@ class DataForm(xmpp.Node, object):
 		return self.getTagData('title')
 
 	def set_title(self, title):
-		self.setTagData('title')
+		self.setTagData('title', title)
 
 	def del_title(self):
 		try:
@@ -283,11 +288,16 @@ class DataForm(xmpp.Node, object):
 		raise KeyError, "This form does not contain %r field." % var
 
 class DataField(xmpp.Node, object):
-	def __init__(self, typ='text-single', desc=None, required=None, value=None, options=None, node=None):
+	def __init__(self, typ=None,var=None, value=None, label=None, desc=None,
+		required=None, options=None, node=None):
+
 		assert typ in ('boolean', 'fixed', 'hidden', 'jid-multi', 'jid-single', 'list-multi',
-			'list-single', 'text-multi', 'text-private', 'text-single', None)
+			'list-single', 'text-multi', 'text-private', 'text-single',None)
 		
 		xmpp.Node.__init__(self, 'field', node=node)
+		if typ is not None: self.type = typ
+		if var is not None: self.var = var
+		if label is not None: self.label = label
 		if desc is not None: self.description = desc
 		if required is not None: self.required = required
 		if value is not None: self.value = value
@@ -309,7 +319,10 @@ class DataField(xmpp.Node, object):
 		if typ!='text-single':
 			self.setAttr('type', typ)
 		else:
-			self.delAttr('type')
+			try:
+				self.delAttr('type')
+			except KeyError:
+				pass
 
 	type = property(get_type, set_type, None,
 		""" Field type. One of: 'boolean', 'fixed', 'hidden', 'jid-multi', 'jid-single',
@@ -383,8 +396,8 @@ class DataField(xmpp.Node, object):
 
 		elif self.type in ('jid-multi', 'list-multi'):
 			return [value.getData() for value in self.getTags('value')]
-		
-		elif self.type in ('hidden', 'jid-single', 'list-single', 'text-single', 'text-private'):
+
+		elif self.type in ('hidden', 'jid-single', 'list-single', 'text-single', 'text-private') or True:
 			return self.getTagData('value')
 
 	def set_value(self, value):
@@ -399,8 +412,8 @@ class DataField(xmpp.Node, object):
 
 		elif self.type in ('jid-multi', 'list-multi'):
 			del_multiple_tag_value(self, 'value')
-			for item in self.value:
-				self.addChild('value', None, (item,))
+			for item in value:
+				self.addChild('value', {}, (item,))
 
 		elif self.type in ('hidden', 'jid-single', 'list-single', 'text-single', 'text-private'):
 			self.setTagData('value', value)
@@ -417,6 +430,7 @@ class DataField(xmpp.Node, object):
 		for element in self.getChildren():
 			if not isinstance(element, xmpp.Node): continue
 			if not element.getName()=='option': continue
+			if element.getTag('value') is None: raise BadDataFormNode
 			yield element.getAttr('label'), element.getTag('value').getData()
 
 	def get_options(self):
@@ -432,10 +446,10 @@ class DataField(xmpp.Node, object):
 			assert option[0] is None or isinstance(option[0], unicode)
 			assert isinstance(option[1], unicode)
 			if option[0] is None:
-				attr=None
+				attr={}
 			else:
 				attr={'label': option[0].encode('utf-8')}
-			self.addChild('option', attr, (option[1].encode('utf-8'),))
+			self.addChild('option', attr, (xmpp.Node('value', {}, (option[1].encode('utf-8'),)),))
 
 	def del_options(self):
 		del_multiple_tag_value(self, 'option')
