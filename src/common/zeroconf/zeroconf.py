@@ -71,6 +71,7 @@ class Zeroconf:
 
 	def check_jid(self, jid):
 		# TODO: at least miranda uses bad service names(only host name), so change them - probabaly not so nice... need to find a better solution
+		# [dkirov] maybe turn it into host+'@'+host, instead ?
 		if jid.find('@') == -1:
 			return 'bad-client@' + jid
 		else:
@@ -83,14 +84,15 @@ class Zeroconf:
 		else:
 			return jid
 		
-	def txt_array_to_dict(self,t):
-		l = {}
+	def txt_array_to_dict(self,txt_array):
+		items = {}
 
-		for s in t:
-			str = avahi.byte_array_to_string(s)
-			poseq = str.find('=')
-			l[str[:poseq]] = str[poseq+1:]
-		return l
+		for byte_array in txt_array:
+			# 'str' is used for string type in python
+			value = avahi.byte_array_to_string(byte_array)
+			poseq = value.find('=')
+			items[value[:poseq]] = value[poseq+1:]
+		return items
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
 		self.contacts[name] = (name, domain, interface, protocol, host, address, port, txt)
