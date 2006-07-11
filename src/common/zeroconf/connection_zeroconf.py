@@ -205,7 +205,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		# refresh all contacts data all 10 seconds
 		self.call_resolve_timeout = True
-		gobject.timeout_add(10000, self._on_resolve_timeout)
+		gobject.timeout_add(1000, self._on_resolve_timeout)
 		
 	def connect_and_init(self, show, msg, signed):
 		self.continue_connect_info = [show, msg, signed]
@@ -348,109 +348,26 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		pass
 	
 	def ack_subscribed(self, jid):
-		if not self.connection:
-			return
-		pass
-
-		'''
-		gajim.log.debug('ack\'ing subscription complete for %s' % jid)
-		p = common.xmpp.Presence(jid, 'subscribe')
-		self.connection.send(p)
-		'''
+		gajim.debug.log('This should not happen (ack_subscribed)')
 
 	def ack_unsubscribed(self, jid):
-		if not self.connection:
-			return
-		pass
-		
-		'''		
-		gajim.log.debug('ack\'ing unsubscription complete for %s' % jid)
-		p = common.xmpp.Presence(jid, 'unsubscribe')
-		self.connection.send(p)
-		'''
+		gajim.debug.log('This should not happen (ack_unsubscribed)')
 
 	def request_subscription(self, jid, msg = '', name = '', groups = [],
 	auto_auth = False):
-		if not self.connection:
-			return
-		pass
-		
-		'''		
-		gajim.log.debug('subscription request for %s' % jid)
-		if auto_auth:
-			self.jids_for_auto_auth.append(jid)
-		# RFC 3921 section 8.2
-		infos = {'jid': jid}
-		if name:
-			infos['name'] = name
-		iq = common.xmpp.Iq('set', common.xmpp.NS_ROSTER)
-		q = iq.getTag('query')
-		item = q.addChild('item', attrs = infos)
-		for g in groups:
-			item.addChild('group').setData(g)
-		self.connection.send(iq)
-
-		p = common.xmpp.Presence(jid, 'subscribe')
-		p = self.add_sha(p)
-		if not msg:
-			msg = _('I would like to add you to my roster.')
-		p.setStatus(msg)
-		self.connection.send(p)
-		'''
+		gajim.debug.log('This should not happen (request_subscription)')
 
 	def send_authorization(self, jid):
-		if not self.connection:
-			return
-		pass
-		
-		'''		
-		p = common.xmpp.Presence(jid, 'subscribed')
-		p = self.add_sha(p)
-		self.connection.send(p)
-		'''
+		gajim.debug.log('This should not happen (send_authorization)')
 
 	def refuse_authorization(self, jid):
-		if not self.connection:
-			return
-		pass
-		
-		'''		
-		p = common.xmpp.Presence(jid, 'unsubscribed')
-		p = self.add_sha(p)
-		self.connection.send(p)
-		'''
+		gajim.debug.log('This should not happen (refuse_authorization)')
 
 	def unsubscribe(self, jid, remove_auth = True):
-		if not self.connection:
-			return
-		pass
-		
-		'''		
-		if remove_auth:
-			self.connection.getRoster().delItem(jid)
-			jid_list = gajim.config.get_per('contacts')
-			for j in jid_list:
-				if j.startswith(jid):
-					gajim.config.del_per('contacts', j)
-		else:
-			self.connection.getRoster().Unsubscribe(jid)
-			self.update_contact(jid, '', [])
-		'''
+		gajim.debug.log('This should not happen (unsubscribe)')
 
 	def unsubscribe_agent(self, agent):
-		if not self.connection:
-			return
-		pass
-		
-		'''		
-		iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
-		iq.getTag('query').setTag('remove')
-		id = self.connection.getAnID()
-		iq.setID(id)
-		self.awaiting_answers[id] = (AGENT_REMOVED, agent)
-		self.connection.send(iq)
-		self.connection.getRoster().delItem(agent)
-		'''
+		gajim.debug.log('This should not happen (unsubscribe_agent)')
 
 	def update_contact(self, jid, name, groups):	
 		if self.connection:
@@ -458,44 +375,16 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				groups = groups)
 	
 	def new_account(self, name, config, sync = False):
-		'''
-		# If a connection already exist we cannot create a new account
-		if self.connection :
-			return
-		self._hostname = config['hostname']
-		self.new_account_info = config
-		self.name = name
-		self.on_connect_success = self._on_new_account
-		self.on_connect_failure = self._on_new_account
-		self.connect(config)
-		'''		
+		gajim.debug.log('This should not happen (new_account)')
 
 	def _on_new_account(self, con = None, con_type = None):
-		'''
-		if not con_type:
-			self.dispatch('ACC_NOT_OK',
-				(_('Could not connect to "%s"') % self._hostname))
-			return
-		self.on_connect_failure = None
-		self.connection = con
-		common.xmpp.features_nb.getRegInfo(con, self._hostname)
-		'''
+		gajim.debug.log('This should not happen (_on_new_account)')
 
 	def account_changed(self, new_name):
 		self.name = new_name
 
 	def request_last_status_time(self, jid, resource):
-		'''
-		if not self.connection:
-			return
-		to_whom_jid = jid
-		if resource:
-			to_whom_jid += '/' + resource
-		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
-			common.xmpp.NS_LAST)
-		self.connection.send(iq)
-		'''
-		pass
+		gajim.debug.log('This should not happen (request_last_status_time)')
 
 	def request_os_info(self, jid, resource):
 		'''
@@ -511,249 +400,52 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		pass
 
 	def get_settings(self):
-		'''
-		# Get Gajim settings as described in JEP 0049
-		if not self.connection:
-			return
-		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
-		iq3 = iq2.addChild(name='gajim', namespace='gajim:prefs')
-		self.connection.send(iq)
-		'''
-		pass
+		gajim.debug.log('This should not happen (get_settings)')
 
 	def get_bookmarks(self):
-		'''
-		# Get Bookmarks from storage as described in JEP 0048
-		self.bookmarks = [] #avoid multiple bookmarks when re-connecting
-		if not self.connection:
-			return
-		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
-		iq2.addChild(name='storage', namespace='storage:bookmarks')
-		self.connection.send(iq)
-		'''
-		pass
+		gajim.debug.log('This should not happen (get_bookmarks)')
 		
 	def store_bookmarks(self):
-		'''
-		# Send bookmarks to the storage namespace
-		if not self.connection:
-			return
-		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
-		iq3 = iq2.addChild(name='storage', namespace='storage:bookmarks')
-		for bm in self.bookmarks:
-			iq4 = iq3.addChild(name = "conference")
-			iq4.setAttr('jid', bm['jid'])
-			iq4.setAttr('autojoin', bm['autojoin'])
-			iq4.setAttr('name', bm['name'])
-			# Only add optional elements if not empty
-			# Note: need to handle both None and '' as empty
-			#   thus shouldn't use "is not None"
-			if bm['nick']:
-				iq5 = iq4.setTagData('nick', bm['nick'])
-			if bm['password']:
-				iq5 = iq4.setTagData('password', bm['password'])
-			if bm['print_status']:
-				iq5 = iq4.setTagData('print_status', bm['print_status'])
-		self.connection.send(iq)
-		'''		
-		pass
-
+		gajim.debug.log('This should not happen (store_bookmarks)')
+		
 	def get_metacontacts(self):
-		'''		
-		# Get metacontacts list from storage as described in JEP 0049
-		if not self.connection:
-			return
-		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
-		iq2.addChild(name='storage', namespace='storage:metacontacts')
-		self.connection.send(iq)
-		'''
-		pass
-
-	'''
-	def store_metacontacts(self, tags_list):
-		# Send meta contacts to the storage namespace
-		if not self.connection:
-			return
-		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
-		iq3 = iq2.addChild(name='storage', namespace='storage:metacontacts')
-		for tag in tags_list:
-			for data in tags_list[tag]:
-				jid = data['jid']
-				dict_ = {'jid': jid, 'tag': tag}
-				if data.has_key('order'):
-					dict_['order'] = data['order']
-				iq3.addChild(name = 'meta', attrs = dict_)
-		self.connection.send(iq)
-	'''
-
+		gajim.debug.log('This should not happen (get_metacontacts)')
+		
 	def send_agent_status(self, agent, ptype):
-		'''
-		if not self.connection:
-			return
-		p = common.xmpp.Presence(to = agent, typ = ptype)
-		p = self.add_sha(p, ptype != 'unavailable')
-		self.connection.send(p)
-		'''
-		pass
-
+		gajim.debug.log('This should not happen (send_agent_status)')
 
 	def join_gc(self, nick, room, server, password):
-		'''
-		if not self.connection:
-			return
-		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
-		if show == 'invisible':
-			# Never join a room when invisible
-			return
-		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
-			show = show, status = self.status)
-		if gajim.config.get('send_sha_in_gc_presence'):
-			p = self.add_sha(p)
-		t = p.setTag(common.xmpp.NS_MUC + ' x')
-		if password:
-			t.setTagData('password', password)
-		self.connection.send(p)
-		#last date/time in history to avoid duplicate
-		# FIXME: This JID needs to be normalized; see #1364
-		jid='%s@%s' % (room, server)
-		last_log = gajim.logger.get_last_date_that_has_logs(jid, is_room = True)
-		if last_log is None:
-			last_log = 0
-		self.last_history_line[jid]= last_log
-		'''
-		pass
+		gajim.debug.log('This should not happen (join_gc)')
 		
 	def send_gc_message(self, jid, msg):
-		'''
-		if not self.connection:
-			return
-		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat')
-		self.connection.send(msg_iq)
-		self.dispatch('MSGSENT', (jid, msg))
-		'''
-		pass
+		gajim.debug.log('This should not happen (send_gc_message)')
 		
 	def send_gc_subject(self, jid, subject):
-		'''
-		if not self.connection:
-			return
-		msg_iq = common.xmpp.Message(jid,typ = 'groupchat', subject = subject)
-		self.connection.send(msg_iq)
-		'''
-		pass
+		gajim.debug.log('This should not happen (send_gc_subject)')
 		
 	def request_gc_config(self, room_jid):
-		'''
-		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
-			to = room_jid)
-		self.connection.send(iq)
-		'''
-		pass
-
+		gajim.debug.log('This should not happen (request_gc_config)')
+		
 	def change_gc_nick(self, room_jid, nick):
-		'''
-		if not self.connection:
-			return
-		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick))
-		p = self.add_sha(p)
-		self.connection.send(p)
-		'''
-		pass
+		gajim.debug.log('This should not happen (change_gc_nick)')
 		
 	def send_gc_status(self, nick, jid, show, status):
-		'''
-		if not self.connection:
-			return
-		if show == 'invisible':
-			show = 'offline'
-		ptype = None
-		if show == 'offline':
-			ptype = 'unavailable'
-		show = helpers.get_xmpp_show(show)
-		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
-			show = show, status = status)
-		if gajim.config.get('send_sha_in_gc_presence'):
-			p = self.add_sha(p, ptype != 'unavailable')
-		# send instantly so when we go offline, status is sent to gc before we
-		# disconnect from jabber server
-		self.connection.send(p)
-		'''
-		pass
+		gajim.debug.log('This should not happen (send_gc_status)')
 		
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
-		'''
-		# role is for all the life of the room so it's based on nick
-		if not self.connection:
-			return
-		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
-			common.xmpp.NS_MUC_ADMIN)
-		item = iq.getTag('query').setTag('item')
-		item.setAttr('nick', nick)
-		item.setAttr('role', role)
-		if reason:
-			item.addChild(name = 'reason', payload = reason)
-		self.connection.send(iq)
-		'''
-		pass
+		gajim.debug.log('This should not happen (gc_set_role)')
 		
 	def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
-		'''
-		# affiliation is for all the life of the room so it's based on jid
-		if not self.connection:
-			return
-		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
-			common.xmpp.NS_MUC_ADMIN)
-		item = iq.getTag('query').setTag('item')
-		item.setAttr('jid', jid)
-		item.setAttr('affiliation', affiliation)
-		if reason:
-			item.addChild(name = 'reason', payload = reason)
-		self.connection.send(iq)
-		'''
-		pass
+		gajim.debug.log('This should not happen (gc_set_affiliation)')
 		
 	def send_gc_affiliation_list(self, room_jid, list):
-		'''
-		if not self.connection:
-			return
-		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS = \
-			common.xmpp.NS_MUC_ADMIN)
-		item = iq.getTag('query')
-		for jid in list:
-			item_tag = item.addChild('item', {'jid': jid,
-				'affiliation': list[jid]['affiliation']})
-			if list[jid].has_key('reason') and list[jid]['reason']:
-				item_tag.setTagData('reason', list[jid]['reason'])
-		self.connection.send(iq)
-		'''
-		pass
+		gajim.debug.log('This should not happen (send_gc_affiliation_list)')
 		
 	def get_affiliation_list(self, room_jid, affiliation):
-		'''
-		if not self.connection:
-			return
-		iq = common.xmpp.Iq(typ = 'get', to = room_jid, queryNS = \
-			common.xmpp.NS_MUC_ADMIN)
-		item = iq.getTag('query').setTag('item')
-		item.setAttr('affiliation', affiliation)
-		self.connection.send(iq)
-		'''
-		pass
+		gajim.debug.log('This should not happen (get_affiliation_list)')
 		
 	def send_gc_config(self, room_jid, config):
-		'''
-		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
-			common.xmpp.NS_MUC_OWNER)
-		query = iq.getTag('query')
-		self.build_data_from_dict(query, config)
-		self.connection.send(iq)
-		'''
-		pass
+		gajim.debug.log('This should not happen (send_gc_config)')
 		
 	def gpg_passphrase(self, passphrase):
 		if USE_GPG:
@@ -790,38 +482,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		pass
 		
 	def unregister_account(self, on_remove_success):
-		'''
-		# no need to write this as a class method and keep the value of on_remove_success
-		# as a class property as pass it as an argument
-		def _on_unregister_account_connect(con):
-			self.on_connect_auth = None
-			if self.connected > 1:
-				hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-				iq = common.xmpp.Iq(typ = 'set', to = hostname)
-				q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
-				con.send(iq)
-				on_remove_success(True)
-				return
-			on_remove_success(False)
-		if self.connected == 0:
-			self.on_connect_auth = _on_unregister_account_connect
-			self.connect_and_auth()
-		else:
-			_on_unregister_account_connect(self.connection)
-		'''
-		pass
+		gajim.debug.log('This should not happen (unregister_account)')
 		
 	def send_invite(self, room, to, reason=''):
-		'''
-		# sends invitation
-		message=common.xmpp.Message(to = room)
-		c = message.addChild(name = 'x', namespace = common.xmpp.NS_MUC_USER)
-		c = c.addChild(name = 'invite', attrs={'to' : to})
-		if reason != '':
-			c.setTagData('reason', reason)
-		self.connection.send(message)
-		'''
-		pass
+		gajim.debug.log('This should not happen (send_invite)')
 		
 	def send_keepalive(self):
 		# nothing received for the last foo seconds (60 secs by default)
