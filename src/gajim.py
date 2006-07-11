@@ -1739,10 +1739,10 @@ class Interface:
 			self.handle_event_file_progress)
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
 		self.register_handlers()
+		if gajim.config.get('zeroconf_enabled'):
+			gajim.connections['zeroconf'] = common.zeroconf.connection_zeroconf.ConnectionZeroconf('zeroconf')
 		for account in gajim.config.get_per('accounts'):
-			if account == 'zeroconf':
-				gajim.connections[account] = common.zeroconf.connection_zeroconf.ConnectionZeroconf(account)
-			else:
+			if account != 'zeroconf':
 				gajim.connections[account] = common.connection.Connection(account)
 		
 

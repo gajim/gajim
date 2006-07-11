@@ -1,8 +1,7 @@
 import os
 import sys
-import getpass
 import socket
-
+from common import gajim
 try:
 	import avahi, gobject, dbus
 except ImportError:
@@ -14,12 +13,12 @@ except ImportError, e:
 	pass
 
 class Zeroconf:
-	def __init__(self, new_serviceCB, remove_serviceCB):
+	def __init__(self, new_serviceCB, remove_serviceCB, name, host, port):
 		self.domain = None   # specific domain to browse
 		self.stype = '_presence._tcp'	
-		self.port = 5298  # listening port that gets announced	
-		self.username = getpass.getuser()
-		self.host = socket.gethostname()
+		self.port = port  # listening port that gets announced	
+		self.username = name
+		self.host = host
 		self.name = self.username+'@'+ self.host # service name
 		self.txt = {}		# service data
 		
@@ -37,7 +36,8 @@ class Zeroconf:
 		print "Error:", str(err)
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
-		if name != self.name:
+		if True:
+		#XXX name != self.name
 			# print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
 		
 			#synchronous resolving
@@ -183,9 +183,13 @@ class Zeroconf:
 		self.bus = dbus.SystemBus()
 		self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
 			avahi.DBUS_PATH_SERVER), avahi.DBUS_INTERFACE_SERVER)
-
-		self.server.connect_to_signal('StateChanged', self.server_state_changed_callback)
-
+		try:
+			self.server.connect_to_signal('StateChanged', self.server_state_changed_callback)
+		except dbus.dbus_bindings.DBusException, e:
+			# Avahi service is not present
+			gajim.log.debug(str(e))
+			self.remove_announce()
+			return
 		# start browsing
 		if self.domain is None:
 			# Explicitly browse .local

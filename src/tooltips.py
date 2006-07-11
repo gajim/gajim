@@ -508,7 +508,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		vcard_table.set_homogeneous(False)
 		vcard_current_row = 1
 		properties = []
-		jid_markup = '<span weight="bold">' + unicode(prim_contact.jid) + '</span>'
+		jid_markup = '<span weight="bold">' + prim_contact.jid + '</span>'
 		properties.append((jid_markup, None))
 		properties.append((_('Name: '), gtkgui_helpers.escape_for_pango_markup(
 												prim_contact.get_shown_name())))

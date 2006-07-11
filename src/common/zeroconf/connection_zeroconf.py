@@ -33,7 +33,7 @@ random.seed()
 import signal
 if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-
+import getpass
 import gobject
 
 from common import helpers
@@ -54,7 +54,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def __init__(self, name):
 		ConnectionHandlersZeroconf.__init__(self)
 		self.name = name
-		self.zeroconf = zeroconf.Zeroconf(self._on_new_service, self._on_remove_service)
 		self.connected = 0 # offline
 		self.connection = None
 		self.gpg = None
@@ -74,7 +73,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		#self.last_history_line = {}
 
 		#we don't need a password, but must be non-empty
-		self.password = 'dummy'
+		self.password = 'zeroconf'
 
 		self.privacy_rules_supported = False
 		# Do we continue connection when we get roster (send presence,get vcard...)
@@ -89,10 +88,30 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.on_connect_failure = None
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
+		self.get_config_values_or_default()
 
-		gajim.config.set_per('accounts', name, 'name', self.zeroconf.username)
-		gajim.config.set_per('accounts', name, 'hostname', self.zeroconf.host)
-		
+	def get_config_values_or_default(self):
+		''' get name, host, port from config, or 
+		create zeroconf account with default values'''
+		if not gajim.config.get_per('accounts', 'zeroconf', 'name'):
+			print 'Creating zeroconf account'
+			gajim.config.add_per('accounts', 'zeroconf')
+			gajim.config.set_per('accounts', 'zeroconf', 'autoconnect', True)
+			gajim.config.set_per('accounts', 'zeroconf', 'password', 'zeroconf')
+			gajim.config.set_per('accounts', 'zeroconf', 'sync_with_global_status', True)
+			username = unicode(getpass.getuser())
+			gajim.config.set_per('accounts', 'zeroconf', 'name', username)
+			#XXX make sure host is US-ASCII
+			host = unicode(socket.gethostname())
+			gajim.config.set_per('accounts', 'zeroconf', 'hostname', host)
+			port = 5298
+			gajim.config.set_per('accounts', 'zeroconf', 'custom_port', 5298)
+		else:
+			username = gajim.config.get_per('accounts', 'zeroconf', 'name')
+			host = gajim.config.get_per('accounts', 'zeroconf', 'hostname')
+			port = gajim.config.get_per('accounts', 'zeroconf', 'custom_port')
+		self.zeroconf = zeroconf.Zeroconf(self._on_new_service, self._on_remove_service, username, host, port)
+
 	# END __init__
 	def put_event(self, ev):
 		if gajim.handlers.has_key(ev[0]):

@@ -200,6 +200,7 @@ class Config:
 		'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the room occupants list in groupchat window')],
 		'chat_merge_consecutive_nickname': [opt_bool, False, _('Merge consecutive nickname in chat window')],
 		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickame')],
+		'zeroconf_enabled': [opt_bool, True, _('Enable zeroconf network')],
 	}
 
 	__options_per_key = {
