@@ -193,28 +193,27 @@ class DataFormWidget(gtk.Alignment, object):
 					widget = xml.get_widget('item_list_table')
 					treeview = xml.get_widget('item_treeview')
 
-					listmodel = gtk.ListStore(str, bool)
+					listmodel = gtk.ListStore(str)
 					for value in field.iter_values():
 						# nobody will create several megabytes long stanza
-						listmodel.insert(999999, (value,False))
+						listmodel.insert(999999, (value,))
 
 					treeview.set_model(listmodel)
 
 					renderer = gtk.CellRendererText()
-					renderer.set_property('ellipsize', pango.ELLIPSIZE_START)
 					renderer.set_property('editable', True)
 					renderer.connect('edited',
 						self.on_jid_multi_cellrenderertext_edited, listmodel, field)
 
 					treeview.append_column(gtk.TreeViewColumn(None, renderer,
-						text=0, editable=1))
+						text=0))
 
 					xml.get_widget('add_button').connect('clicked',
-						self.on_jid_multi_add_button_clicked, listmodel, field)
+						self.on_jid_multi_add_button_clicked, treeview, listmodel, field)
 					xml.get_widget('edit_button').connect('clicked',
 						self.on_jid_multi_edit_button_clicked, treeview)
 					xml.get_widget('remove_button').connect('clicked',
-						self.on_jid_multi_remove_button_clicked, treeview)
+						self.on_jid_multi_remove_button_clicked, treeview, field)
 					xml.get_widget('clear_button').connect('clicked',
 						self.on_jid_multi_clean_button_clicked, listmodel, field)
 
@@ -310,22 +309,35 @@ class DataFormWidget(gtk.Alignment, object):
 			old=model[path][0]
 			model[path][0]=newtext
 
-			values = field.values
+			values = field.value
+			print values
 			values[values.index(old)]=newtext
-			field.values = values
+			field.value = values
+			print values
+			print field.value
 
-		def on_jid_multi_add_button_clicked(self, widget, model, field):
-			iter = model.insert(999999, ("new@jid",))
-			field.value += ["new@jid"]
+		def on_jid_multi_add_button_clicked(self, widget, treeview, model, field):
+			iter = model.insert(999999, ("new@jabber.id",))
+			treeview.set_cursor(model.get_path(iter), treeview.get_column(0), True)
+			field.value = field.value + ["new@jabber.id"]
 
 		def on_jid_multi_edit_button_clicked(self, widget, treeview):
 			model, iter = treeview.get_selection().get_selected()
 			assert iter is not None
 
-			model[iter][1]=True
+			treeview.set_cursor(model.get_path(iter), treeview.get_column(0), True)
 
-		def on_jid_multi_remove_button_clicked(self, widget, model, field):
-			pass
+		def on_jid_multi_remove_button_clicked(self, widget, treeview, field):
+			selection = treeview.get_selection()
+			model = treeview.get_model()
+			deleted = []
+
+			def remove(model, path, iter, deleted):
+				deleted+=model[iter]
+				model.remove(iter)
+
+			selection.selected_foreach(remove, deleted)
+			field.value = (v for v in field.value if v not in deleted)	# python2.4 iterator
 
 		def on_jid_multi_clean_button_clicked(self, widget, model, field):
 			model.clear()
