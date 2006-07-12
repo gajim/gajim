@@ -61,11 +61,11 @@ class CommandWindow:
 		self.xml = gtkgui_helpers.get_glade('adhoc_commands_window.glade')
 		self.window = self.xml.get_widget('adhoc_commands_window')
 		for name in ('cancel_button', 'back_button', 'forward_button',
-			'execute_button','stages_notebook',
+			'execute_button','close_button','stages_notebook',
 			'retrieving_commands_stage_vbox',
 			'command_list_stage_vbox','command_list_vbox',
 			'sending_form_stage_vbox','sending_form_progressbar',
-			'no_commands_stage_vbox','error_stage_vbox',
+			'notes_label','no_commands_stage_vbox','error_stage_vbox',
 			'error_description_label'):
 			self.__dict__[name] = self.xml.get_widget(name)
 
@@ -75,6 +75,7 @@ class CommandWindow:
 		self.sending_form_stage_vbox.pack_start(self.data_form_widget)
 
 		# setting initial stage
+		self.close_button.set_no_show_all(True)
 		self.stage1()
 
 		# displaying the window
@@ -87,6 +88,7 @@ class CommandWindow:
 	def stage_back_button_clicked(self, *anything): assert False
 	def stage_forward_button_clicked(self, *anything): assert False
 	def stage_execute_button_clicked(self, *anything): assert False
+	def stage_close_button_clicked(self, *anything): assert False
 	def stage_adhoc_commands_window_delete_event(self, *anything): assert False
 	def do_nothing(self, *anything): return False
 
@@ -103,8 +105,11 @@ class CommandWindow:
 	def on_execute_button_clicked(self, *anything):
 		return self.stage_execute_button_clicked(*anything)
 
+	def on_close_button_clicked(self, *anything):
+		return self.stage_close_button_clicked(*anything)
+
 	def on_adhoc_commands_window_destroy(self, *anything):
-		# do all actions that are needed to remove this object from memory...
+		# TODO: do all actions that are needed to remove this object from memory...
 		self.remove_pulsing()
 
 	def on_adhoc_commands_window_delete_event(self, *anything):
@@ -215,6 +220,8 @@ class CommandWindow:
 
 		assert isinstance(self.commandnode, unicode)
 
+		self.form_status = None
+
 		self.stages_notebook.set_current_page(
 			self.stages_notebook.page_num(
 				self.sending_form_stage_vbox))
@@ -231,6 +238,7 @@ class CommandWindow:
 		self.stage_back_button_clicked = self.stage3_back_button_clicked
 		self.stage_forward_button_clicked = self.stage3_forward_button_clicked
 		self.stage_execute_button_clicked = self.stage3_execute_button_clicked
+		self.stage_close_button_clicked = self.stage3_close_button_clicked
 		self.stage_adhoc_commands_window_delete_event = self.stage3_cancel_button_clicked
 
 	def stage3_finish(self):
@@ -254,6 +262,14 @@ class CommandWindow:
 				self.window.destroy()
 			return False
 		return True
+
+	def stage3_close_button_clicked(self, widget):
+		# this works also as a handler for window_delete_event, so we have to return appropriate
+		# values
+		if widget==self.window:
+			return False
+		else:
+			self.window.destroy()
 
 	def stage3_back_button_clicked(self, widget):
 		self.stage3_submit_form('prev')
@@ -287,23 +303,24 @@ class CommandWindow:
 		if self.sessionid is None:
 			self.sessionid = command.getAttr('sessionid')
 
-		self.dataform = dataforms.DataForm(node=command.getTag('x'))
+		self.form_status = command.getAttr('status')
 
-		self.data_form_widget.set_sensitive(True)
-		try:
-			self.data_form_widget.data_form=self.dataform
-		except dataforms.BadDataFormNode:
-			# TODO: translate
-			self.stage5('Service sent malformed data', senderror=True)
-		self.data_form_widget.show()
+		if command.getTag('x') is not None:
+			self.dataform = dataforms.DataForm(node=command.getTag('x'))
+
+			self.data_form_widget.set_sensitive(True)
+			try:
+				self.data_form_widget.data_form=self.dataform
+			except dataforms.BadDataFormNode:
+				# TODO: translate
+				self.stage5('Service sent malformed data', senderror=True)
+			self.data_form_widget.show()
+		else:
+			self.data_form_widget.hide()
 
 		action = command.getTag('action')
 		if action is None:
-			# no action tag? check if that's last stage...
-			if command.getAttr('status')=='completed':
-				self.cancel_button.set_sensitive(False)
-			else:
-				self.cancel_button.set_sensitive(True)
+			self.cancel_button.set_sensitive(True)
 			self.back_button.set_sensitive(False)
 			self.forward_button.set_sensitive(False)
 			self.execute_button.set_sensitive(True)
@@ -313,6 +330,25 @@ class CommandWindow:
 			self.back_button.set_sensitive(action.getTag('prev') is not None)
 			self.forward_button.set_sensitive(action.getTag('next') is not None)
 			self.execute_button.set_sensitive(True)
+
+		if self.form_status == 'completed':
+			self.cancel_button.set_sensitive(False)
+			self.back_button.set_sensitive(False)
+			self.forward_button.set_sensitive(False)
+			self.execute_button.set_no_show_all(True)
+			self.execute_button.hide()
+			self.close_button.set_no_show_all(False)
+			self.close_button.show()
+			self.stage_adhoc_commands_window_delete_event = self.stage3_close_button_clicked
+
+		note = command.getTag('note')
+		if note is not None:
+			self.notes_label.set_text(note.getData().decode('utf-8'))
+			self.notes_label.set_no_show_all(False)
+			self.notes_label.show()
+		else:
+			self.notes_label.set_no_show_all(True)
+			self.notes_label.hide()
 
 # stage 4: no commands are exposed
 	def stage4(self):

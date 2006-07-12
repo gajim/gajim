@@ -249,7 +249,7 @@ class DataForm(xmpp.Node, object):
 				self.delChild('recorded')
 			except ValueError:
 				pass
-			self.addChild('recorded', None, fields)
+			self.addChild('recorded', {}, fields)
 
 	def del_fields(self):
 		if self.mode is DATAFORM_SINGLE:
@@ -335,7 +335,10 @@ class DataField(xmpp.Node, object):
 		self.setAttr('var', var)
 
 	def del_var(self):
-		self.delAttr('var')
+		try:
+			self.delAttr('var')
+		except KeyError:
+			pass
 
 	var = property(get_var, set_var, del_var,
 		""" Field name. """)
@@ -347,7 +350,10 @@ class DataField(xmpp.Node, object):
 		self.setAttr('label', label)
 
 	def del_label(self):
-		self.delAttr('label')
+		try:
+			self.delAttr('label')
+		except KeyError:
+			pass
 
 	label = property(get_label, set_label, del_label,
 		""" Human-readable name for field. """)
@@ -383,6 +389,14 @@ class DataField(xmpp.Node, object):
 
 	required = property(get_required, set_required, None,
 		""" If this is set to True, the field is required for form to be valid. """)
+
+	def iter_values(self):
+		assert self.type in ('list-single', 'list-multi', 'jid-multi')
+
+		for element in self.getChildren():
+			if not isinstance(element, xmpp.Node): continue
+			if not element.getName()=='value': continue
+			yield element.getData().decode('utf-8')
 
 	def get_value(self):
 		if self.type in ('boolean',):
@@ -430,8 +444,10 @@ class DataField(xmpp.Node, object):
 		for element in self.getChildren():
 			if not isinstance(element, xmpp.Node): continue
 			if not element.getName()=='option': continue
-			if element.getTag('value') is None: raise BadDataFormNode
-			yield element.getAttr('label'), element.getTag('value').getData()
+			try:
+				yield element.getAttr('label'), element.getTag('value').getData()
+			except TypeError:
+				raise BadDataFormNode
 
 	def get_options(self):
 		""" Returns a list of tuples: (label, value). """

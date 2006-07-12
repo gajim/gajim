@@ -17,6 +17,8 @@
 """ This module contains widget that can display data form (JEP-0004). """
 
 import gtk
+import pango
+
 import gtkgui_helpers
 
 import common.xmpp as xmpp
@@ -27,12 +29,13 @@ class DataFormWidget(gtk.Alignment, object):
 	""" Data Form widget. Use like any other widget. """
 	def __init__(self, dataformnode=None):
 		""" Create a widget. """
-		gtk.Alignment.__init__(self)
+		gtk.Alignment.__init__(self, xscale=1.0, yscale=1.0)
 
 		self._data_form = None
 
 		self.xml=gtkgui_helpers.get_glade('data_form_window.glade', 'data_form_scrolledwindow')
 		self.instructions = self.xml.get_widget('form_instructions_label')
+		self.separator = self.xml.get_widget('form_instructions_hseparator')
 		self.container = self.xml.get_widget('container_vbox')
 
 		self.add(self.xml.get_widget('data_form_scrolledwindow'))
@@ -53,6 +56,18 @@ class DataFormWidget(gtk.Alignment, object):
 			self.form = self.__class__.MultipleForm(dataform)
 		self.form.show()
 		self.container.pack_end(self.form, expand=True, fill=True)
+
+		if dataform.instructions is None:
+			self.instructions.set_no_show_all(True)
+			self.instructions.hide()
+			self.separator.set_no_show_all(True)
+			self.separator.hide()
+		else:
+			self.instructions.set_text(dataform.instructions)
+			self.instructions.set_no_show_all(False)
+			self.instructions.show()
+			self.separator.set_no_show_all(False)
+			self.separator.show()
 
 	def get_data_form(self):
 		""" Data form displayed in the widget or None if no form. """
@@ -81,39 +96,6 @@ class DataFormWidget(gtk.Alignment, object):
 		""" Treat 'us' as one widget. """
 		self.show_all()
 
-#?	def filled_data_form(self):
-#?		""" Generates form that contains values filled by user. """
-#?		assert isinstance(self._data_form, dataforms.DataForm)
-#?
-#?		form = xmpp.Node('x', {'xmlns':xmpp.NS_DATA, 'type':'submit'})
-#?
-#?
-#?		for field in self._data_form.kids:
-#?			if not isinstance(field, xmpp.DataField): continue
-#?			
-#?			ftype = field.getType()
-#?			if ftype not in ('boolean', 'fixed', 'hidden', 'jid-multi',
-#?				'jid-single', 'list-multi', 'list-single',
-#?				'text-multi', 'text-private', 'text-single'):
-#?				ftype = 'text-single'
-#?
-#?			if ftype in ('fixed',):
-#?				continue
-#?
-#?			newfield = xmpp.Node('field', {'var': field.getVar()})
-#?
-#?			if ftype in ('jid-multi', 'list-multi', 'text-multi'):
-#?				for value in field.getValues():
-#?					newvalue = xmpp.Node('value', {}, [value])
-#?					newfield.addChild(node=newvalue)
-#?			else:
-#?				newvalue = xmpp.Node('value', {}, [field.getValue()])
-#?				newfield.addChild(node=newvalue)
-#?
-#?			form.addChild(node=newfield)
-#?
-#?		return form
-
 # "private" methods
 
 # we have actually two different kinds of data forms: one is a simple form to fill,
@@ -129,6 +111,8 @@ class DataFormWidget(gtk.Alignment, object):
 			assert dataform.mode==dataforms.DATAFORM_SINGLE
 
 			gtk.Table.__init__(self)
+			self.set_col_spacings(6)
+			self.set_row_spacings(6)
 
 			self._data_form = dataform
 
@@ -162,10 +146,8 @@ class DataFormWidget(gtk.Alignment, object):
 					commonwidget=False
 					widget = gtk.Label(field.value)
 					widget.set_line_wrap(True)
-					self.attach(widget, leftattach, rightattach, linecounter, linecounter+1)
-
-				elif field.type in ('jid-multi'):
-					widget = gtk.Label(field.type)
+					self.attach(widget, leftattach, rightattach, linecounter, linecounter+1,
+						xoptions=gtk.FILL, yoptions=gtk.FILL)
 
 				elif field.type == 'list-single':
 					# TODO: When more than few choices, make a list
@@ -204,6 +186,42 @@ class DataFormWidget(gtk.Alignment, object):
 						field.value = u''
 					widget.set_text(field.value)
 
+				elif field.type == 'jid-multi':
+					commonwidget = False
+
+					xml = gtkgui_helpers.get_glade('data_form_window.glade', 'item_list_table')
+					widget = xml.get_widget('item_list_table')
+					treeview = xml.get_widget('item_treeview')
+
+					listmodel = gtk.ListStore(str, bool)
+					for value in field.iter_values():
+						# nobody will create several megabytes long stanza
+						listmodel.insert(999999, (value,False))
+
+					treeview.set_model(listmodel)
+
+					renderer = gtk.CellRendererText()
+					renderer.set_property('ellipsize', pango.ELLIPSIZE_START)
+					renderer.set_property('editable', True)
+					renderer.connect('edited',
+						self.on_jid_multi_cellrenderertext_edited, listmodel, field)
+
+					treeview.append_column(gtk.TreeViewColumn(None, renderer,
+						text=0, editable=1))
+
+					xml.get_widget('add_button').connect('clicked',
+						self.on_jid_multi_add_button_clicked, listmodel, field)
+					xml.get_widget('edit_button').connect('clicked',
+						self.on_jid_multi_edit_button_clicked, treeview)
+					xml.get_widget('remove_button').connect('clicked',
+						self.on_jid_multi_remove_button_clicked, treeview)
+					xml.get_widget('clear_button').connect('clicked',
+						self.on_jid_multi_clean_button_clicked, listmodel, field)
+
+					self.attach(widget, 1, 2, linecounter, linecounter+1)
+
+					del xml
+
 				elif field.type == 'text-private':
 					widget = gtk.Entry()
 					widget.connect('changed', self.on_text_single_entry_changed, field)
@@ -214,13 +232,20 @@ class DataFormWidget(gtk.Alignment, object):
 
 				elif field.type == 'text-multi':
 					# TODO: bigger text view
-					widget = gtk.TextView()
-					widget.set_wrap_mode(gtk.WRAP_WORD)
-					widget.get_buffer().connect('changed', self.on_text_multi_textbuffer_changed,
+					commonwidget = False
+
+					textwidget = gtk.TextView()
+					textwidget.set_wrap_mode(gtk.WRAP_WORD)
+					textwidget.get_buffer().connect('changed', self.on_text_multi_textbuffer_changed,
 						field)
 					if field.value is None:
 						field.value = u''
-					widget.get_buffer().set_text(field.value)
+					textwidget.get_buffer().set_text(field.value)
+					
+					widget = gtk.ScrolledWindow()
+					widget.add(textwidget)
+
+					self.attach(widget, 1, 2, linecounter, linecounter+1)
 
 				else:# field.type == 'text-single' or field.type is nonstandard:
 					# JEP says that if we don't understand some type, we
@@ -234,11 +259,13 @@ class DataFormWidget(gtk.Alignment, object):
 				if commonlabel and field.label is not None:
 					label = gtk.Label(field.label)
 					label.set_alignment(1.0, 0.5)
-					self.attach(label, 0, 1, linecounter, linecounter+1)
+					self.attach(label, 0, 1, linecounter, linecounter+1,
+						xoptions=gtk.FILL, yoptions=gtk.FILL)
 
 				if commonwidget:
 					assert widget is not None
-					self.attach(widget, 1, 2, linecounter, linecounter+1)
+					self.attach(widget, 1, 2, linecounter, linecounter+1,
+						yoptions=gtk.FILL)
 				widget.show_all()
 
 				if commondesc and field.description is not None:
@@ -247,7 +274,8 @@ class DataFormWidget(gtk.Alignment, object):
 						gtkgui_helpers.escape_for_pango_markup(field.description)+\
 						'</small>')
 					label.set_line_wrap(True)
-					self.attach(label, 2, 3, linecounter, linecounter+1)
+					self.attach(label, 2, 3, linecounter, linecounter+1,
+						xoptions=gtk.FILL|gtk.SHRINK, yoptions=gtk.FILL|gtk.SHRINK)
 
 				linecounter+=1
 			if self.get_property('visible'):
@@ -264,10 +292,11 @@ class DataFormWidget(gtk.Alignment, object):
 			field.value = value
 
 		def on_list_multi_checkbutton_toggled(self, widget, field, value):
+			# TODO: make some methods like add_value and remove_value
 			if widget.get_active() and value not in field.value:
-				field.value.append(value)
+				field.value += [value]
 			elif not widget.get_active() and value in field.value:
-				field.value.remove(value)
+				field.value = [v for v in field.value if v!=value]
 
 		def on_text_single_entry_changed(self, widget, field):
 			field.value = widget.get_text()
@@ -276,6 +305,31 @@ class DataFormWidget(gtk.Alignment, object):
 			field.value = widget.get_text(
 				widget.get_start_iter(),
 				widget.get_end_iter())
+
+		def on_jid_multi_cellrenderertext_edited(self, cell, path, newtext, model, field):
+			old=model[path][0]
+			model[path][0]=newtext
+
+			values = field.values
+			values[values.index(old)]=newtext
+			field.values = values
+
+		def on_jid_multi_add_button_clicked(self, widget, model, field):
+			iter = model.insert(999999, ("new@jid",))
+			field.value += ["new@jid"]
+
+		def on_jid_multi_edit_button_clicked(self, widget, treeview):
+			model, iter = treeview.get_selection().get_selected()
+			assert iter is not None
+
+			model[iter][1]=True
+
+		def on_jid_multi_remove_button_clicked(self, widget, model, field):
+			pass
+
+		def on_jid_multi_clean_button_clicked(self, widget, model, field):
+			model.clear()
+			del field.value
 
 	class MultipleForm(gtk.Alignment, object):
 		def __init__(self, dataform):
