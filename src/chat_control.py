@@ -514,12 +514,10 @@ class ChatControlBase(MessageControl):
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
-		#FIXME: BUG http://bugs.gnome.org/show_bug.cgi?id=316786
-		self.button_clicked = widget
-		
 		menu = self.prepare_context_menu()
 		menu.show_all()
-		gtkgui_helpers.popup_emoticons_under_button(menu, widget, self.parent_win)
+		gtkgui_helpers.popup_emoticons_under_button(menu, widget,
+			self.parent_win)
 
 	def update_font(self):
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
