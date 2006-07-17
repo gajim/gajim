@@ -143,8 +143,7 @@ def notify(event, jid, account, parameters):
 				text = message
 			elif message_type == 'pm': # private message
 				event_type = _('New Private Message')
-				room_name, t = gajim.get_room_name_and_server_from_room_jid(
-					jid)
+				room_name, t = gajim.get_room_name_and_server_from_room_jid(jid)
 				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 					'priv_msg_recv.png')
 				title = _('New Private Message from room %s') % room_name
@@ -156,7 +155,7 @@ def notify(event, jid, account, parameters):
 					'chat_msg_recv.png')
 				title = _('New Message from %(nickname)s') % \
 					{'nickname': nickname}
-				text = message	
+				text = message
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			popup(event_type, jid, account, message_type,
 				path_to_image = path, title = title, text = text)
@@ -167,8 +166,8 @@ def notify(event, jid, account, parameters):
 				 helpers.play_sound('first_message_received')
 			else:
 				 helpers.play_sound('next_message_received')
-		elif (event == 'contact_connected' or event == 'contact_disconnected'):
-			helpers.play_sound(event)	
+		elif event in ('contact_connected', 'contact_disconnected'):
+			helpers.play_sound(event)
 	 
 
 def popup(event_type, jid, account, msg_type = '', path_to_image = None,

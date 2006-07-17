@@ -453,20 +453,21 @@ class Interface:
 				gajim.connections[account].remove_transfers_for_contact(contact1)
 			self.roster.chg_contact_status(contact1, array[1], status_message,
 				account)
-			# play sound
+			# Notifications
 			if old_show < 2 and new_show > 1:
 				notify.notify('contact_connected', jid, account, status_message)
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactPresence',
 						(account, array))
-				
+
 			elif old_show > 1 and new_show < 2:
 				notify.notify('contact_disconnected', jid, account, status_message)
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactAbsence', (account, array))
 				# FIXME: stop non active file transfers
 			elif new_show > 1: # Status change (not connected/disconnected or error (<1))
-				notify.notify('status_change', jid, account, [new_show, status_message])
+				notify.notify('status_change', jid, account, [new_show,
+					status_message])
 		else:
 			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) doesn't follow the JEP
 			# remove in 2007
@@ -567,7 +568,8 @@ class Interface:
 				msg_type, array[5], resource, msg_id, array[9])
 			nickname = gajim.get_name_from_jid(account, jid)
 		# Check and do wanted notifications	
-		notify.notify('new_message', jid, account, [msg_type, first, nickname, message])
+		notify.notify('new_message', jid, account, [msg_type, first, nickname,
+			message])
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
