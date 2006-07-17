@@ -270,6 +270,8 @@ class VcardWindow:
 		self.fill_status_label()
 
 	def set_os_info(self, resource, client_info, os_info):
+		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
+			return
 		i = 0
 		client = ''
 		os = ''
@@ -293,6 +295,8 @@ class VcardWindow:
 		self.xml.get_widget('os_label').set_text(os)
 
 	def fill_status_label(self):
+		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
+			return
 		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
 		# stats holds show and status message
 		stats = ''

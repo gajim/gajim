@@ -802,7 +802,7 @@ class Interface:
 			c = gajim.contacts.get_contact(account, array[0], array[1])
 			# c is a list when no resource is given. it probably means that contact
 			# is offline, so only on Contact instance
-			if isinstance(c, list):
+			if isinstance(c, list) and len(c):
 				c = c[0]
 			if c: # c can be none if it's a gc contact
 				c.last_status_time = time.localtime(time.time() - array[2])
