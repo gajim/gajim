@@ -36,6 +36,7 @@ class GajimThemesWindow:
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('gajim_themes_window.glade')
 		self.window = self.xml.get_widget('gajim_themes_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		
 		self.options = ['account', 'group', 'contact', 'banner']
 		self.options_combobox = self.xml.get_widget('options_combobox')

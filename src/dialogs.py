@@ -47,6 +47,7 @@ class EditGroupsDialog:
 	def __init__(self, user, account):
 		self.xml = gtkgui_helpers.get_glade('edit_groups_dialog.glade')
 		self.dialog = self.xml.get_widget('edit_groups_dialog')
+		self.dialog.set_transient_for(gajim.interface.roster.window)
 		self.account = account
 		self.user = user
 		self.changes_made = False
@@ -218,6 +219,7 @@ class ChooseGPGKeyDialog:
 		#list : {keyID: userName, ...}
 		xml = gtkgui_helpers.get_glade('choose_gpg_key_dialog.glade')
 		self.window = xml.get_widget('choose_gpg_key_dialog')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.window.set_title(title_text)
 		self.keys_treeview = xml.get_widget('keys_treeview')
 		prompt_label = xml.get_widget('prompt_label')
@@ -261,6 +263,7 @@ class ChangeStatusMessageDialog:
 		self.show = show
 		self.xml = gtkgui_helpers.get_glade('change_status_message_dialog.glade')
 		self.window = self.xml.get_widget('change_status_message_dialog')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		if show:
 			uf_show = helpers.get_uf_show(show)
 			title_text = _('%s Status Message') % uf_show
@@ -381,6 +384,7 @@ class AddNewContactWindow:
 		self.account_hbox = self.xml.get_widget('account_hbox')
 		self.account_label = self.xml.get_widget('account_label')
 		self.window = self.xml.get_widget('add_new_contact_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.uid_entry = self.xml.get_widget('uid_entry')
 		self.protocol_combobox = self.xml.get_widget('protocol_combobox')
 		self.protocol_hbox = self.xml.get_widget('protocol_hbox')
@@ -565,6 +569,7 @@ class AboutDialog:
 	'''Class for about dialog'''
 	def __init__(self):
 		dlg = gtk.AboutDialog()
+		dlg.set_transient_for(gajim.interface.roster.window)
 		dlg.set_name('Gajim')
 		dlg.set_version(gajim.version)
 		s = u'Copyright © 2003-2006 Gajim Team'
@@ -874,6 +879,7 @@ class SubscriptionRequestWindow:
 	def __init__(self, jid, text, account, user_nick = None):
 		xml = gtkgui_helpers.get_glade('subscription_request_window.glade')
 		self.window = xml.get_widget('subscription_request_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.jid = jid
 		self.account = account
 		self.user_nick = user_nick
@@ -930,6 +936,7 @@ _('You can not join a group chat unless you are connected.'))
 
 		self.xml = gtkgui_helpers.get_glade('join_groupchat_window.glade')
 		self.window = self.xml.get_widget('join_groupchat_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.xml.get_widget('server_entry').set_text(server)
 		self.xml.get_widget('room_entry').set_text(room)
 		self.xml.get_widget('nickname_entry').set_text(nick)

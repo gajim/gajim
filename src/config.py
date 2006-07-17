@@ -53,6 +53,7 @@ class PreferencesWindow:
 		'''Initialize Preferences window'''
 		self.xml = gtkgui_helpers.get_glade('preferences_window.glade')
 		self.window = self.xml.get_widget('preferences_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.iconset_combobox = self.xml.get_widget('iconset_combobox')
 		self.notify_on_new_message_radiobutton = self.xml.get_widget(
 			'notify_on_new_message_radiobutton')
@@ -1005,6 +1006,7 @@ class AccountModificationWindow:
 	def __init__(self, account):
 		self.xml = gtkgui_helpers.get_glade('account_modification_window.glade')
 		self.window = self.xml.get_widget('account_modification_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.account = account
 
 		# init proxy list
@@ -1492,6 +1494,7 @@ class ManageProxiesWindow:
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('manage_proxies_window.glade')
 		self.window = self.xml.get_widget('manage_proxies_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.proxies_treeview = self.xml.get_widget('proxies_treeview')
 		self.proxyname_entry = self.xml.get_widget('proxyname_entry')
 		self.init_list()
@@ -1656,6 +1659,7 @@ class AccountsWindow:
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('accounts_window.glade')
 		self.window = self.xml.get_widget('accounts_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		self.modify_button = self.xml.get_widget('modify_button')
 		self.remove_button = self.xml.get_widget('remove_button')
@@ -1758,6 +1762,7 @@ class DataFormWindow:
 		self.config = config
 		self.xml = gtkgui_helpers.get_glade('data_form_window.glade')
 		self.window = self.xml.get_widget('data_form_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.config_vbox = self.xml.get_widget('config_vbox')
 		if config:
 			self.fill_vbox()
@@ -1907,6 +1912,7 @@ class ServiceRegistrationWindow(DataFormWindow):
 		else:
 			self.xml = gtkgui_helpers.get_glade('service_registration_window.glade')
 			self.window = self.xml.get_widget('service_registration_window')
+			self.window.set_transient_for(gajim.interface.roster.window)
 			if infos.has_key('registered'):
 				self.window.set_title(_('Edit %s' % service))
 			else:
@@ -2161,6 +2167,7 @@ class RemoveAccountWindow:
 		self.account = account
 		xml = gtkgui_helpers.get_glade('remove_account_window.glade')
 		self.window = xml.get_widget('remove_account_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		self.remove_and_unregister_radiobutton = xml.get_widget(
 														'remove_and_unregister_radiobutton')
 		self.window.set_title(_('Removing %s account') % self.account)
@@ -2240,6 +2247,7 @@ class ManageBookmarksWindow:
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('manage_bookmarks_window.glade')
 		self.window = self.xml.get_widget('manage_bookmarks_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 
 		#Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick, Show_Status
 		self.treestore = gtk.TreeStore(str, str, str, bool, str, str, str)
@@ -2535,6 +2543,7 @@ class AccountCreationWizardWindow:
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('account_creation_wizard_window.glade')
 		self.window = self.xml.get_widget('account_creation_wizard_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 
 		# Connect events from comboboxentry.child
 		server_comboboxentry = self.xml.get_widget('server_comboboxentry')
