@@ -481,7 +481,7 @@ class ChatControlBase(MessageControl):
 				not self.parent_win.is_active() or not end) and \
 				kind in ('incoming', 'incoming_queue'):
 			self.nb_unread += 1
-			if gajim.interface.systray_enabled and self.notify_on_new_messages():
+			if gajim.interface.systray_capabilities and self.notify_on_new_messages():
 				gajim.interface.systray.add_jid(full_jid, self.account, self.type_id)
 			self.parent_win.redraw_tab(self)
 			if not self.parent_win.is_active():
@@ -556,7 +556,7 @@ class ChatControlBase(MessageControl):
 					self.nb_unread = self.get_specific_unread()
 					self.parent_win.redraw_tab(self)
 					self.parent_win.show_title()
-					if gajim.interface.systray_enabled:
+					if gajim.interface.systray_capabilities:
 						gajim.interface.systray.remove_jid(self.get_full_jid(),
 										self.account,
 										self.type_id)
@@ -645,7 +645,7 @@ class ChatControlBase(MessageControl):
 			self.nb_unread = self.get_specific_unread()
 			self.parent_win.redraw_tab(self)
 			self.parent_win.show_title()
-			if gajim.interface.systray_enabled:
+			if gajim.interface.systray_capabilities:
 				gajim.interface.systray.remove_jid(jid, self.account,
 					self.type_id)
 
@@ -1362,7 +1362,7 @@ class ChatControl(ChatControlBase):
 		if self.bigger_avatar_window:
 			self.bigger_avatar_window.destroy()
 		# Clean up systray
-		if gajim.interface.systray_enabled and self.nb_unread > 0:
+		if gajim.interface.systray_capabilities and self.nb_unread > 0:
 			gajim.interface.systray.remove_jid(self.contact.jid, self.account,
 								self.type_id)
 		# remove all register handlers on wigets, created by self.xml
@@ -1561,7 +1561,7 @@ class ChatControl(ChatControlBase):
 		gajim.interface.roster.draw_contact(jid, self.account)
 		# Redraw parent too
 		gajim.interface.roster.draw_parent_contact(jid, self.account)
-		if gajim.interface.systray_enabled:
+		if gajim.interface.systray_capabilities:
 			gajim.interface.systray.remove_jid(jid_with_resource, self.account, typ)
 		if (self.contact.show == 'offline' or self.contact.show == 'error'):
 			showOffline = gajim.config.get('showoffline')

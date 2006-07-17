@@ -471,7 +471,7 @@ class GroupchatControl(ChatControlBase):
 						self.room_jid, icon_name = 'message')
 				image = state_images['message']
 				model[iter][C_IMG] = image
-				if gajim.interface.systray_enabled:
+				if gajim.interface.systray_capabilities:
 					gajim.interface.systray.add_jid(fjid, self.account, 'pm')
 			self.parent_win.show_title()
 		else:

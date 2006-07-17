@@ -1287,7 +1287,7 @@ class AccountModificationWindow:
 					gajim.interface.instances[name][kind][j].account = name
 
 			#upgrade account in systray
-			if gajim.interface.systray_enabled:
+			if gajim.interface.systray_capabilities:
 				for list in gajim.interface.systray.jids:
 					if list[0] == self.account:
 						list[0] = name

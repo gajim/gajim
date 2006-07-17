@@ -59,6 +59,8 @@ class Systray:
 		self.popup_menus = []
 
 	def set_img(self):
+		if not gajim.interface.systray_enabled:
+			return
 		if len(self.jids) > 0:
 			state = 'message'
 		else:

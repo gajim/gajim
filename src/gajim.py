@@ -1098,14 +1098,14 @@ class Interface:
 		self.roster.show_title()
 		if no_queue: # We didn't have a queue: we change icons
 			self.roster.draw_contact(jid, account)
-		if self.systray_enabled:
+		if self.systray_capanilities:
 			self.systray.add_jid(jid, account, typ)
 
 	def redraw_roster_systray(self, account, jid, typ = None):
 		self.roster.nb_unread -= 1
 		self.roster.show_title()
 		self.roster.draw_contact(jid, account)
-		if self.systray_enabled:
+		if self.systray_capabilities:
 			self.systray.remove_jid(jid, account, typ)
 
 	def remove_first_event(self, account, jid, typ = None):

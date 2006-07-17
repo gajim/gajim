@@ -2264,7 +2264,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.tree.expand_row(path[0:2], False)
 			self.tree.scroll_to_cell(path)
 			self.tree.set_cursor(path)
-		if gajim.interface.systray_enabled:
+		if gajim.interface.systray_capabilities:
 			gajim.interface.systray.add_jid(fjid, account, kind)
 
 	def on_preferences_menuitem_activate(self, widget):
