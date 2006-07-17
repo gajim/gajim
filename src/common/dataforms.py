@@ -287,6 +287,13 @@ class DataForm(xmpp.Node, object):
 				return
 		raise KeyError, "This form does not contain %r field." % var
 
+	def __contains__(self, name):
+		for field in self.iter_fields():
+			if field.var==name:
+				return True
+		else:
+			return False
+
 class DataField(xmpp.Node, object):
 	def __init__(self, typ=None,var=None, value=None, label=None, desc=None,
 		required=None, options=None, node=None):
