@@ -2190,16 +2190,26 @@ class AddSpecialNotificationDialog:
 		print listen_sound_model[active_iter][0]
 
 class AdvancedNotificationsWindow:
+	events_list = ['message_received', 'contact_connected',
+		'contact_disconnected', 'contact_change_status', 'gc_msg_highlight',
+		'gc_msg', 'ft_request', 'ft_started', 'ft_finished']
+	recipient_types_list = ['contact', 'group', 'all']
+	config_options = ['event', 'recipient_type', 'recipients', 'status',
+		'tab_opened', 'sound', 'sound_file', 'popup', 'auto_open',
+		'run_command', 'command', 'systray', 'roster', 'urgency_hint']
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('advanced_notifications_window.glade')
 		self.window = self.xml.get_widget('advanced_notifications_window')
-		self.xml.signal_autoconnect(self)
-		self.conditions_treeview = self.xml.get_widget('conditions_treeview')
-		self.recipient_type_combobox = self.xml.get_widget('recipient_type_combobox')
-		self.recipient_list = self.xml.get_widget('recipient_list')
-		self.list_expander = self.xml.get_widget('list_expander')
-		
-		self.status_hbox = self.xml.get_widget('status_hbox') 
+		for w in ('conditions_treeview', 'config_vbox', 'event_combobox',
+		'recipient_type_combobox', 'recipient_list_entry', 'delete_button',
+		'status_hbox', 'use_sound_cb', 'disable_sound_cb', 'use_popup_cb',
+		'disable_popup_cb', 'use_auto_open_cb', 'disable_auto_open_cb',
+		'use_systray_cb', 'disable_systray_cb', 'use_roster_cb',
+		'disable_roster_cb', 'tab_opened_cb', 'not_tab_opened_cb',
+		'sound_entry', 'sound_file_hbox', 'up_button', 'down_button',
+		'run_command_cb', 'command_entry', 'urgency_hint_cb'):
+			self.__dict__[w] = self.xml.get_widget(w)
+
 		# Contains status checkboxes
 		childs = self.status_hbox.get_children()
 
@@ -2207,130 +2217,438 @@ class AdvancedNotificationsWindow:
 		self.special_status_rb = childs[1]
 		self.online_cb = childs[2]
 		self.away_cb = childs[3]
-		self.not_available_cb = childs[4]
-		self.busy_cb = childs[5]
+		self.xa_cb = childs[4]
+		self.dnd_cb = childs[5]
 		self.invisible_cb = childs[6]
-		
-		self.use_sound_cb = self.xml.get_widget('use_sound_cb')
-		self.disable_sound_cb = self.xml.get_widget('disable_sound_cb')
-		self.use_popup_cb = self.xml.get_widget('use_popup_cb')
-		self.disable_popup_cb = self.xml.get_widget('disable_popup_cb')
-		self.use_auto_open_cb = self.xml.get_widget('use_auto_open_cb')
-		self.disable_auto_open_cb = self.xml.get_widget('disable_auto_open_cb')
-		self.use_systray_cb = self.xml.get_widget('use_systray_cb')
-		self.disable_systray_cb = self.xml.get_widget('disable_systray_cb')
-		self.use_roster_cb = self.xml.get_widget('use_roster_cb')
-		self.disable_roster_cb = self.xml.get_widget('disable_roster_cb')
-		
-		self.tab_opened_cb = self.xml.get_widget('tab_opened_cb')
-		self.not_tab_opened_cb = self.xml.get_widget('not_tab_opened_cb')
-		
-		model = gtk.ListStore(str)
+
+		model = gtk.ListStore(int, str)
+		model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 		model.clear()
 		self.conditions_treeview.set_model(model)
+
+		## means number
+		col = gtk.TreeViewColumn(_('#'))
+		self.conditions_treeview.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, expand = False)
+		col.set_attributes(renderer, text = 0)
 
 		col = gtk.TreeViewColumn(_('Condition'))
 		self.conditions_treeview.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer, expand = True)
-		col.set_attributes(renderer, text = 0)
-		
-		if (0==0): # No rule set yet
-			self.list_expander.set_expanded(False)
-				
-		if (0==1): # We have existing rule(s)
-			#temporary example
-			model.append(("When Contact Connected for contact Asterix when I am Available",))
+		col.set_attributes(renderer, text = 1)
 
-		# TODO : add a "New rule" line
-		
-		self.window.show_all()
-		
+		self.xml.signal_autoconnect(self)
+
+		# Fill conditions_treeview
+		num = 0
+		while gajim.config.get_per('notifications', str(num)):
+			iter = model.append((num, ''))
+			path = model.get_path(iter)
+			self.conditions_treeview.set_cursor(path)
+			self.active_num = num
+			self.initiate_rule_state()
+			self.set_treeview_string()
+			num += 1
+
 		# No rule selected at init time
-		self.initiate_new_rule_state()
-		
-	def initiate_new_rule_state(self):	
-		'''Set default value to all widgets''' 
-		# Deal with status line
-		self.all_status_rb.set_active(True)
+		self.conditions_treeview.get_selection().unselect_all()
+		#TODO
+#		self.conditions_treeview.set_cursor(None)
+		self.active_num = -1
+		self.config_vbox.set_sensitive(False)
+		self.delete_button.set_sensitive(False)
+		self.down_button.set_sensitive(False)
+		self.up_button.set_sensitive(False)
+		self.recipient_list_entry.set_no_show_all(True)
+		for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
+			self.__dict__[st + '_cb'].set_no_show_all(True)
+
+		self.window.show_all()
+
+	def initiate_rule_state(self):	
+		'''Set values for all widgets''' 
+		if self.active_num < 0:
+			return
+		# event
+		value = gajim.config.get_per('notifications', str(self.active_num),
+			'event')
+		if value:
+			self.event_combobox.set_active(self.events_list.index(value))
+		else:
+			#TODO: unselect all
+			pass
+		# recipient_type
+		value = gajim.config.get_per('notifications', str(self.active_num),
+			'recipient_type')
+		if value:
+			self.recipient_type_combobox.set_active(
+				self.recipient_types_list.index(value))
+		else:
+			#TODO: unselect all
+			pass
+		# recipient
+		value = gajim.config.get_per('notifications', str(self.active_num),
+			'recipients')
+		if not value:
+			value = ''
+		self.recipient_list_entry.set_text(value)
+		# status
+		value = gajim.config.get_per('notifications', str(self.active_num),
+			'status')
+		if value == 'all':
+			self.all_status_rb.set_active(True)
+		else:
+			self.special_status_rb.set_active(True)
+			values = value.split()
+			for v in ['online', 'away', 'xa', 'dnd', 'invisible']:
+				if v in values:
+					self.__dict__[v + '_cb'].set_active(True)
+				else:
+					self.__dict__[v + '_cb'].set_active(False)
 		self.on_status_radiobutton_toggled(self.all_status_rb)
-		
-		self.recipient_type_combobox.set_active(0) # 'Contact(s)'
-		self.not_tab_opened_cb.set_active(True)
+		# tab_opened
+		value = gajim.config.get_per('notifications', str(self.active_num),
+			'tab_opened')
 		self.tab_opened_cb.set_active(True)
+		self.not_tab_opened_cb.set_active(True)
+		if value == 'no':
+			self.tab_opened_cb.set_active(False)
+		elif value == 'yes':
+			self.not_tab_opened_cb.set_active(False)
+		# sound_file
+		value = gajim.config.get_per('notifications', str(self.active_num),
+			'sound_file')
+		self.sound_entry.set_text(value)
+		# sound, popup, auto_open, systray, roster
+		for option in ['sound', 'popup', 'auto_open', 'systray', 'roster']:
+			value = gajim.config.get_per('notifications', str(self.active_num),
+				option)
+			if value == 'yes':
+				self.__dict__['use_' + option + '_cb'].set_active(True)
+			else:
+				self.__dict__['use_' + option + '_cb'].set_active(False)
+			if value == 'no':
+				self.__dict__['disable_' + option + '_cb'].set_active(True)
+			else:
+				self.__dict__['disable_' + option + '_cb'].set_active(False)
+		# run_command
+		value = gajim.config.get_per('notifications', str(self.active_num),
+			'run_command')
+		self.run_command_cb.set_active(value)
+		# command
+		value = gajim.config.get_per('notifications', str(self.active_num),
+			'command')
+		self.command_entry.set_text(value)
+		# urgency_hint
+		value = gajim.config.get_per('notifications', str(self.active_num),
+			'urgency_hint')
+		self.urgency_hint_cb.set_active(value)
+
+	def set_treeview_string(self):
+		(model, iter) = self.conditions_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		event = self.event_combobox.get_active_text()
+		recipient_type = self.recipient_type_combobox.get_active_text()
+		recipient = ''
+		if recipient_type != 'everybody':
+			recipient = self.recipient_list_entry.get_text()
+		if self.all_status_rb.get_active():
+			status = ''
+		else:
+			status = _('when I am ')
+			for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
+				if self.__dict__[st + '_cb'].get_active():
+					status += helpers.get_uf_show(st) + ' '
+		model[iter][1] = "When %s for %s %s %s" % (event, recipient_type,
+			recipient, status)
+
+	def on_conditions_treeview_cursor_changed(self, widget):
+		(model, iter) = widget.get_selection().get_selected()
+		if not iter:
+			self.active_num = -1
+			return
+		self.active_num = model[iter][0]
+		if self.active_num == 0:
+			self.up_button.set_sensitive(False)
+		else:
+			self.up_button.set_sensitive(True)
+		max = self.conditions_treeview.get_model().iter_n_children(None)
+		if self.active_num == max - 1:
+			self.down_button.set_sensitive(False)
+		else:
+			self.down_button.set_sensitive(True)
+		self.initiate_rule_state()
+		self.config_vbox.set_sensitive(True)
+		self.delete_button.set_sensitive(True)
+
+	def on_new_button_clicked(self, widget):
+		model = self.conditions_treeview.get_model()
+		num = self.conditions_treeview.get_model().iter_n_children(None)
+		gajim.config.add_per('notifications', str(num))
+		iter = model.append((num, ''))
+		path = model.get_path(iter)
+		self.conditions_treeview.set_cursor(path)
+		self.active_num = num
+		self.set_treeview_string()
+		self.config_vbox.set_sensitive(True)
+
+	def on_delete_button_clicked(self, widget):
+		(model, iter) = self.conditions_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		# up all others
+		iter2 = model.iter_next(iter)
+		num = self.active_num
+		while iter2:
+			num = model[iter2][0]
+			model[iter2][0] = num - 1
+			for opt in self.config_options:
+				val = gajim.config.get_per('notifications', str(num), opt)
+				gajim.config.set_per('notifications', str(num - 1), opt, val)
+			iter2 = model.iter_next(iter2)
+		model.remove(iter)
+		gajim.config.del_per('notifications', str(num)) # delete latest
+		self.active_num = -1
+		self.config_vbox.set_sensitive(False)
+		self.delete_button.set_sensitive(False)
+		self.up_button.set_sensitive(False)
+		self.down_button.set_sensitive(False)
+
+	def on_up_button_clicked(self, widget):
+		(model, iter) = self.conditions_treeview.get_selection().\
+			get_selected()
+		if not iter:
+			return
+		for opt in self.config_options:
+			val = gajim.config.get_per('notifications', str(self.active_num), opt)
+			val2 = gajim.config.get_per('notifications', str(self.active_num - 1),
+				opt)
+			gajim.config.set_per('notifications', str(self.active_num), opt, val2)
+			gajim.config.set_per('notifications', str(self.active_num - 1), opt,
+				val)
+
+		model[iter][0] = self.active_num - 1
+		# get previous iter
+		path = model.get_path(iter)
+		iter = model.get_iter((path[0] - 1,))
+		model[iter][0] = self.active_num
+		self.on_conditions_treeview_cursor_changed(self.conditions_treeview)
+
+	def on_down_button_clicked(self, widget):
+		(model, iter) = self.conditions_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		for opt in self.config_options:
+			val = gajim.config.get_per('notifications', str(self.active_num), opt)
+			val2 = gajim.config.get_per('notifications', str(self.active_num + 1),
+				opt)
+			gajim.config.set_per('notifications', str(self.active_num), opt, val2)
+			gajim.config.set_per('notifications', str(self.active_num + 1), opt,
+				val)
+
+		model[iter][0] = self.active_num + 1
+		iter = model.iter_next(iter)
+		model[iter][0] = self.active_num
+		self.on_conditions_treeview_cursor_changed(self.conditions_treeview)
+
+	def on_event_combobox_changed(self, widget):
+		if self.active_num < 0:
+			return
+		event = self.events_list[self.event_combobox.get_active()]
+		gajim.config.set_per('notifications', str(self.active_num), 'event',
+			event)
+		self.set_treeview_string()
+
+	def on_recipient_type_combobox_changed(self, widget):
+		if self.active_num < 0:
+			return
+		recipient_type = self.recipient_types_list[self.recipient_type_combobox.\
+			get_active()]
+		gajim.config.set_per('notifications', str(self.active_num),
+			'recipient_type', recipient_type)
+		if recipient_type == 'all':
+			self.recipient_list_entry.hide()
+		else:
+			self.recipient_list_entry.show()
+		self.set_treeview_string()
+
+	def on_recipient_list_entry_changed(self, widget):
+		if self.active_num < 0:
+			return
+		recipients = widget.get_text().decode('utf-8')
+		#TODO: do some check
+		gajim.config.set_per('notifications', str(self.active_num),
+			'recipients', recipients)
+		self.set_treeview_string()
+
+	def set_status_config(self):
+		if self.active_num < 0:
+			return
+		status = ''
+		for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
+			if self.__dict__[st + '_cb'].get_active():
+				status += st + ' '
+		if status:
+			status = status[:-1]
+		gajim.config.set_per('notifications', str(self.active_num), 'status',
+			status)
+		self.set_treeview_string()
 
 	def on_status_radiobutton_toggled(self, widget):
+		if self.active_num < 0:
+			return
 		if self.all_status_rb.get_active():
+			gajim.config.set_per('notifications', str(self.active_num), 'status',
+				'all')
 			# 'All status' clicked
-			self.online_cb.hide()
-			self.away_cb.hide()
-			self.not_available_cb.hide()
-			self.busy_cb.hide()
-			self.invisible_cb.hide()		
-		
-			self.online_cb.set_active(False)
-			self.away_cb.set_active(False)
-			self.not_available_cb.set_active(False)
-			self.busy_cb.set_active(False)
-			self.invisible_cb.set_active(False)
-		
+			for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
+				self.__dict__[st + '_cb'].hide()
+
 			self.special_status_rb.show()			
 		else:
+			self.set_status_config()
 			# 'special status' clicked
-			self.online_cb.show()
-			self.away_cb.show()
-			self.not_available_cb.show()
-			self.busy_cb.show()
-			self.invisible_cb.show()
-		
+			for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
+				self.__dict__[st + '_cb'].show()
+
 			self.special_status_rb.hide()
-	def on_recipient_type_combobox_changed(self, widget):
-		if (self.recipient_type_combobox.get_active()==2 ):
-			self.recipient_list.hide()
-		else:
-			self.recipient_list.show()
+		self.set_treeview_string()
+
+	def on_status_cb_toggled(self, widget):
+		if self.active_num < 0:
+			return
+		self.set_status_config()
 
 	# tab_opened OR (not xor) not_tab_opened must be active
 	def on_tab_opened_cb_toggled(self, widget):
-		if not self.tab_opened_cb.get_active() and not self.not_tab_opened_cb.get_active():
+		if self.active_num < 0:
+			return
+		if self.tab_opened_cb.get_active():
+			if self.not_tab_opened_cb.get_active():
+				gajim.config.set_per('notifications', str(self.active_num),
+					'tab_opened', 'both')
+			else:
+				gajim.config.set_per('notifications', str(self.active_num),
+					'tab_opened', 'yes')
+		elif not self.not_tab_opened_cb.get_active():
 			self.not_tab_opened_cb.set_active(True)
+			gajim.config.set_per('notifications', str(self.active_num),
+				'tab_opened', 'no')
+
 	def on_not_tab_opened_cb_toggled(self, widget):
-		if not self.tab_opened_cb.get_active() and not self.not_tab_opened_cb.get_active():
+		if self.active_num < 0:
+			return
+		if self.not_tab_opened_cb.get_active():
+			if self.tab_opened_cb.get_active():
+				gajim.config.set_per('notifications', str(self.active_num),
+					'tab_opened', 'both')
+			else:
+				gajim.config.set_per('notifications', str(self.active_num),
+					'tab_opened', 'no')
+		elif not self.tab_opened_cb.get_active():
 			self.tab_opened_cb.set_active(True)
-	
-	# 10 next functions : Forbid two incompatible actions to be checked together
+			gajim.config.set_per('notifications', str(self.active_num),
+				'tab_opened', 'yes')
+
+	def on_use_it_toggled(self, widget, oposite_widget, option):
+		if widget.get_active():
+			if oposite_widget.get_active():
+				oposite_widget.set_active(False)
+			gajim.config.set_per('notifications', str(self.active_num), option,
+				'yes')
+		elif oposite_widget.get_active():
+			gajim.config.set_per('notifications', str(self.active_num), option,
+				'no')
+		else:
+			gajim.config.set_per('notifications', str(self.active_num), option, '')
+
+	def on_disable_it_toggled(self, widget, oposite_widget, option):
+		if widget.get_active():
+			if oposite_widget.get_active():
+				oposite_widget.set_active(False)
+			gajim.config.set_per('notifications', str(self.active_num), option,
+				'no')
+		elif oposite_widget.get_active():
+			gajim.config.set_per('notifications', str(self.active_num), option,
+				'yes')
+		else:
+			gajim.config.set_per('notifications', str(self.active_num), option, '')
+
 	def on_use_sound_cb_toggled(self, widget):
-		if self.use_sound_cb.get_active() and self.disable_sound_cb.get_active():
-			self.disable_sound_cb.set_active(False)
+		self.on_use_it_toggled(widget, self.disable_sound_cb, 'sound')
+		if widget.get_active():
+			self.sound_file_hbox.set_sensitive(True)
+		else:
+			self.sound_file_hbox.set_sensitive(False)
+
+	def on_browse_for_sounds_button_clicked(self, widget, data = None):
+		if self.active_num < 0:
+			return
+
+		def on_ok(widget, path_to_snd_file):
+			dialog.destroy()
+			if not path_to_snd_file:
+				path_to_snd_file = ''
+			gajim.config.set_per('notifications', str(self.active_num),
+				'sound_file', path_to_snd_file)
+			self.sound_entry.set_text(path_to_snd_file)
+
+		path_to_snd_file = self.sound_entry.get_text().decode('utf-8')
+		path_to_snd_file = os.path.join(os.getcwd(), path_to_snd_file)
+		dialog = SoundChooserDialog(path_to_snd_file, on_ok)
+
+	def on_play_button_clicked(self, widget):
+		helpers.play_sound_file(self.sound_entry.get_text().decode('utf-8'))
+
 	def on_disable_sound_cb_toggled(self, widget):
-		if self.use_sound_cb.get_active() and self.disable_sound_cb.get_active():
-			self.use_sound_cb.set_active(False)
+		self.on_disable_it_toggled(widget, self.use_sound_cb, 'sound')
+
+	def on_sound_entry_changed(self, widget):
+		gajim.config.set_per('notifications', str(self.active_num),
+			'sound_file', widget.get_text().decode('utf-8'))
+
 	def on_use_popup_cb_toggled(self, widget):
-		if self.use_popup_cb.get_active() and self.disable_popup_cb.get_active():
-			self.disable_popup_cb.set_active(False)
+		self.on_use_it_toggled(widget, self.disable_popup_cb, 'popup')
+
 	def on_disable_popup_cb_toggled(self, widget):
-		if self.use_popup_cb.get_active() and self.disable_popup_cb.get_active():
-			self.use_popup_cb.set_active(False)	
+		self.on_disable_it_toggled(widget, self.use_popup_cb, 'popup')
+
 	def on_use_auto_open_cb_toggled(self, widget):
-		if self.use_auto_open_cb.get_active() and\
-			self.disable_auto_open_cb.get_active():
-			self.disable_auto_open_cb.set_active(False)
+		self.on_use_it_toggled(widget, self.disable_auto_open_cb, 'auto_open')
+
 	def on_disable_auto_open_cb_toggled(self, widget):
-		if self.use_auto_open_cb.get_active() and\
-			self.disable_auto_open_cb.get_active():
-			self.use_auto_open_cb.set_active(False)
+		self.on_disable_it_toggled(widget, self.use_auto_open_cb, 'auto_open')
+
+	def on_run_command_cb_toggled(self, widget):
+		gajim.config.set_per('notifications', str(self.active_num), 'run_command',
+			widget.get_active())
+		if widget.get_active():
+			self.command_entry.set_sensitive(True)
+		else:
+			self.command_entry.set_sensitive(False)
+
+	def on_command_entry_changed(self, widget):
+		gajim.config.set_per('notifications', str(self.active_num), 'command',
+			widget.get_text().decode('utf-8'))
+
 	def on_use_systray_cb_toggled(self, widget):
-		if self.use_systray_cb.get_active() and self.disable_systray_cb.get_active():
-			self.disable_systray_cb.set_active(False)
+		self.on_use_it_toggled(widget, self.disable_systray_cb, 'systray')
+
 	def on_disable_systray_cb_toggled(self, widget):
-		if self.use_systray_cb.get_active() and self.disable_systray_cb.get_active():
-			self.use_systray_cb.set_active(False)
+		self.on_disable_it_toggled(widget, self.use_systray_cb, 'systray')
+
 	def on_use_roster_cb_toggled(self, widget):
-		if self.use_roster_cb.get_active() and self.disable_roster_cb.get_active():
-			self.disable_roster_cb.set_active(False)
+		self.on_use_it_toggled(widget, self.disable_roster_cb, 'roster')
+
 	def on_disable_roster_cb_toggled(self, widget):
-		if self.use_roster_cb.get_active() and self.disable_roster_cb.get_active():
-			self.use_roster_cb.set_active(False)
-	
+		self.on_disable_it_toggled(widget, self.use_roster_cb, 'roster')
+
+	def on_urgency_hint_cb_toggled(self, widget):
+		gajim.config.set_per('notifications', str(self.active_num),
+			'uregency_hint', widget.get_active())
+
 	def on_close_window(self, widget):
 		self.window.destroy()
