@@ -418,6 +418,9 @@ def play_sound(event):
 	if not gajim.config.get('sounds_on'):
 		return
 	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
+	play_sound_file(path_to_soundfile)
+
+def play_sound_file(path_to_soundfile):
 	if path_to_soundfile == 'beep':
 		print '\a' # make a speaker beep
 		return
