@@ -22,7 +22,12 @@ class AdHocCommand:
 	commandfeatures = (xmpp.NS_DATA,)
 
 	@staticmethod
-	def isVisibleFor(jid): return True
+	def isVisibleFor(samejid):
+		''' This returns True if that command should be visible and invokable
+		for others.
+		samejid - True when command is invoked by an entity with the same bare jid.
+		'''
+		return True
 
 	def __init__(self, conn, jid, sessionid):
 		self.connection = conn
@@ -48,14 +53,22 @@ class AdHocCommand:
 			cmd.addChild('actions', attrs, actions)
 		return response, cmd
 
+	def badRequest(self):
+		self.connection.connection.send(xmpp.Error(xmpp.NS_STANZAS+' bad-request'))
+
 	def cancel(self, request):
 		response, cmd = self.buildResponse(request, status='canceled')
-		self.connection.send(response)
+		self.connection.connection.send(response)
 		return False	# finish the session
 
 class ChangeStatusCommand(AdHocCommand):
 	commandnode = 'change-status'
 	commandname = 'Change status information'
+
+	@staticmethod
+	def isVisibleFor(samejid):
+		''' Change status is visible only if the entity has the same bare jid. '''
+		return samejid
 
 	def execute(self, request):
 		# first query...
@@ -79,7 +92,7 @@ class ChangeStatusCommand(AdHocCommand):
 				dataforms.DataField('text-multi', 'presence-desc',
 					label='Presence description:')]))
 
-		self.connection.send(response)
+		self.connection.connection.send(response)
 
 		# for next invocation
 		self.execute = self.changestatus
@@ -91,16 +104,17 @@ class ChangeStatusCommand(AdHocCommand):
 		try:
 			form=dataforms.DataForm(node=request.getTag('command').getTag('x'))
 		except TypeError:
+			self.badRequest()
 			return False
 		
 		try:
 			presencetype = form['presence-type']
 			if not presencetype in ('free-for-chat', 'online', 'away', 'xa', 'dnd', 'offline'):
-				#raise BadSomething
-				return
+				self.badRequest()
+				return False
 		except KeyError:
-#			raise BadSomething
-			return
+			self.badRequest()
+			return False
 
 		try:
 			presencedesc = form['presence-desc']
@@ -110,16 +124,10 @@ class ChangeStatusCommand(AdHocCommand):
 		response, cmd = self.buildResponse(request, status='completed')
 		cmd.addChild('note', {}, 'The status has been changed.')
 
-		self.connection.send(response)
+		self.connection.connection.send(response)
 
-		# looking for account name...
-		accname = None
-		for acc in gajim.connections.iterkeys():
-			if self.connection is gajim.connections[acc]:
-				accname=acc
-		assert accname is not None
-
-		gajim.interface.roster.send_status(accname, presencetype, presencedesc)
+		# send new status
+		gajim.interface.roster.send_status(self.connection.name, presencetype, presencedesc)
 
 		return False	# finish the session
 
@@ -134,16 +142,23 @@ class ConnectionCommands:
 		# a list of sessions; keys are tuples (jid, sessionid, node)
 		self.__sessions = {}
 
+	def getOurBareJID(self):
+		return gajim.get_jid_from_account(self.name)
+
+	def isSameJID(self, jid):
+		''' Tests if the bare jid given is the same as our bare jid. '''
+		return xmpp.JID(jid).getStripped() == self.getOurBareJID()
+
 	def commandListQuery(self, con, iq_obj):
 		iq = iq_obj.buildReply('result')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		q = iq.getTag('query')
 
 		for node, cmd in self.__commands.iteritems():
-			if cmd.isVisibleFor(jid):
+			if cmd.isVisibleFor(self.isSameJID(jid)):
 				q.addChild('item', {
 					# TODO: find the jid
-					'jid': 'our-jid',
+					'jid': self.getOurBareJID()+u'/'+self.server_resource,
 					'node': node,
 					'name': cmd.commandname})
 
@@ -158,7 +173,7 @@ class ConnectionCommands:
 		if node not in self.__commands: return False
 
 		cmd = self.__commands[node]
-		if cmd.isVisibleFor(jid):
+		if cmd.isVisibleFor(self.isSameJID(jid)):
 			iq = iq_obj.buildReply('result')
 			q = iq.getTag('query')
 			q.addChild('identity', attrs = {'type': 'command-node',
@@ -186,18 +201,18 @@ class ConnectionCommands:
 		if sessionid is None:
 			# we start a new command session... only if we are visible for the jid
 			newcmd = self.__commands[node]
-			if not newcmd.isVisibleFor(jid):
+			if not newcmd.isVisibleFor(self.isSameJID(jid)):
 				return
 
 			# generate new sessionid
 			sessionid = self.connection.getAnID()
 
 			# create new instance and run it
-			obj = newcmd(conn=self.connection, jid=jid, sessionid=sessionid)
+			obj = newcmd(conn=self, jid=jid, sessionid=sessionid)
 			rc = obj.execute(iq_obj)
 			if rc:
 				self.__sessions[(jid, sessionid, node)] = obj
-			raise NodeProcessed
+			raise xmpp.NodeProcessed
 		else:
 			# the command is already running, check for it
 			magictuple = (jid, sessionid, node)
@@ -216,8 +231,7 @@ class ConnectionCommands:
 				elif action == 'complete': rc = obj.complete(iq_obj)
 				else:
 					# action is wrong. stop the session, send error
-					del self.__sessions[magictuple]
-					return
+					raise AttributeError
 			except AttributeError:
 				# the command probably doesn't handle invoked action...
 				# stop the session, return error

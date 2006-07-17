@@ -310,11 +310,8 @@ class DataFormWidget(gtk.Alignment, object):
 			model[path][0]=newtext
 
 			values = field.value
-			print values
 			values[values.index(old)]=newtext
 			field.value = values
-			print values
-			print field.value
 
 		def on_jid_multi_add_button_clicked(self, widget, treeview, model, field):
 			iter = model.insert(999999, ("new@jabber.id",))
