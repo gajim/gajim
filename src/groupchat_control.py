@@ -503,6 +503,9 @@ class GroupchatControl(ChatControlBase):
 				fin = True
 		return None
 
+	gc_count_nicknames_colors = 0
+	gc_custom_colors = {}  
+
 	def print_conversation(self, text, contact = '', tim = None):
 		'''Print a line in the conversation:
 		if contact is set: it's a message from someone or an info message (contact
@@ -528,6 +531,18 @@ class GroupchatControl(ChatControlBase):
 		if kind == 'incoming': # it's a message NOT from us
 			# highlighting and sounds
 			(highlight, sound) = self.highlighting_for_message(text, tim)
+			gc_class=self.__class__
+			if gc_class.gc_custom_colors.has_key(contact):
+				other_tags_for_name.append('gc_nickname_color_' + \
+					str(gc_class.gc_custom_colors[contact]))
+			else:
+				gc_class.gc_count_nicknames_colors += 1
+				gc_class.gc_custom_colors[contact] = gc_class.gc_count_nicknames_colors
+				other_tags_for_name.append('gc_nickname_color_' + \
+					str(gc_class.gc_count_nicknames_colors))
+				number_of_colors = len(gajim.config.get('gc_nicknames_colors').split(':'))
+				if gc_class.gc_count_nicknames_colors == number_of_colors:
+					gc_class.gc_count_nicknames_colors = 0				
 			if highlight:
 				# muc-specific chatstate
 				self.parent_win.redraw_tab(self, 'attention')

@@ -125,6 +125,7 @@ class Config:
 		'after_nickname': [ opt_str, ':' ],
 		'send_os_info': [ opt_bool, True ],
 		'notify_on_new_gmail_email': [ opt_bool, True ],
+		'notify_on_new_gmail_email_extra': [ opt_bool, False ],
 		'usegpg': [ opt_bool, False, '', True ],
 		'use_gpg_agent': [ opt_bool, False ],
 		'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
@@ -200,6 +201,7 @@ class Config:
 		'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the room occupants list in groupchat window')],
 		'chat_merge_consecutive_nickname': [opt_bool, False, _('Merge consecutive nickname in chat window')],
 		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickame')],
+		'gc_nicknames_colors': [ opt_str, '#a34526:#c000ff:#0012ff:#388a99:#38995d:#519938:#ff8a00:#94452d:#244b5a:#32645a', _('List of colors that will be used to color nicknames in groupchats'), True ],
 	}
 
 	__options_per_key = {
@@ -288,6 +290,22 @@ class Config:
 		}, {}),
 		'contacts': ({
 			'gpg_enabled': [ opt_bool, True ],
+		}, {}),
+		'notifications': ({
+			'event': [opt_str, ''],
+			'recipient_type': [opt_str, 'all'],
+			'recipients': [opt_str, ''],
+			'status': [opt_str, 'all', _('all or space separated status')],
+			'tab_opened': [opt_str, 'both', _("'yes', 'no', or 'both'")],
+			'sound': [opt_str, '', _("'yes', 'no' or ''")],
+			'sound_file': [opt_str, ''],
+			'popup': [opt_str, '', _("'yes', 'no' or ''")],
+			'auto_open': [opt_str, '', _("'yes', 'no' or ''")],
+			'run_command': [opt_bool, False],
+			'command': [opt_str, ''],
+			'systray': [opt_str, '', _("'yes', 'no' or ''")],
+			'roster': [opt_str, '', _("'yes', 'no' or ''")],
+			'urgency_hint': [opt_bool, False],
 		}, {}),
 	}
 

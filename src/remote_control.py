@@ -240,10 +240,11 @@ class SignalObject(DbusPrototype):
 		send file, located at 'file_path' to 'jid', using account 
 		(optional) 'account' '''
 		file_path, jid, account = self._get_real_arguments(args, 3)
-
 		connected_account, contact = self.get_account_and_contact(account, jid)
 
 		if connected_account:
+			if file_path[:7] == 'file://':
+				file_path=file_path[7:]
 			if os.path.isfile(file_path): # is it file?
 				gajim.interface.instances['file_transfers'].send_file(
 					connected_account, contact, file_path)

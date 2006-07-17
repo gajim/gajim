@@ -238,9 +238,8 @@ class RosterWindow:
 		if family:
 			for data in family:
 				_account = data['account']
-				#XXX When we support metacontacts from different servers, make 
-				# sure that loop from #1953 is fixed and remove next 2 lines!
-				if _account != account:
+				# Metacontacts over different accounts only in merged mode
+				if _account != account and not self.regroup:
 					continue
 				_jid = data['jid']
 				
@@ -274,7 +273,8 @@ class RosterWindow:
 		if (contact.show in ('offline', 'error') or hide) and \
 			not showOffline and (not _('Transports') in contact.groups or \
 			gajim.connections[account].connected < 2) and \
-			not gajim.awaiting_events[account].has_key(jid):
+			not gajim.awaiting_events[account].has_key(jid) and \
+			not _('Not in Roster') in contact.groups:
 			return
 
 		# Remove brother contacts that are already in roster to add them
@@ -333,6 +333,9 @@ class RosterWindow:
 		gajim.interface.roster.add_contact_to_roster(transport, account)
 
 	def really_remove_contact(self, contact, account):
+		if not gajim.interface.instances.has_key(account):
+			# Account has been deleted during the timeout that called us
+			return
 		if contact.jid in gajim.newly_added[account]:
 			return
 		if contact.jid.find('@') < 1 and gajim.connections[account].connected > 1:
@@ -475,15 +478,18 @@ class RosterWindow:
 				if icon_name in ('error', 'offline'):
 					# get the icon from the first child as they are sorted by show
 					child_jid = model[child_iter][C_JID].decode('utf-8')
+					child_account = model[child_iter][C_ACCOUNT].decode('utf-8')
 					child_contact = gajim.contacts.get_contact_with_highest_priority(
-						account, child_jid)
-					child_icon_name = helpers.get_icon_name_to_show(child_contact, account)
+						child_account, child_jid)
+					child_icon_name = helpers.get_icon_name_to_show(child_contact,
+						child_account)
 					if child_icon_name not in ('error', 'not in roster'):
 						icon_name = child_icon_name
 				while child_iter:
 					# a child has awaiting messages ?
 					child_jid = model[child_iter][C_JID].decode('utf-8')
-					if gajim.awaiting_events[account].has_key(child_jid):
+					child_account = model[child_iter][C_ACCOUNT].decode('utf-8')
+					if gajim.awaiting_events[child_account].has_key(child_jid):
 						icon_name = 'message'
 						break
 					child_iter = model.iter_next(child_iter)
@@ -582,6 +588,13 @@ class RosterWindow:
 			gajim.interface.instances[account]['xml_console'] = \
 				dialogs.XMLConsoleWindow(account)
 
+	def on_privacy_lists_menuitem_activate(self, widget, account):
+		if gajim.interface.instances[account].has_key('privacy_lists'):
+			gajim.interface.instances[account]['privacy_lists'].window.present()
+		else:
+			gajim.interface.instances[account]['privacy_lists'] = \
+				dialogs.PrivacyListsWindow(account)
+
 	def on_set_motd_menuitem_activate(self, widget, account):
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		server += '/announce/motd'
@@ -617,6 +630,7 @@ class RosterWindow:
 		send_single_message_menuitem = xml.get_widget(
 			'send_single_message_menuitem')
 		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
+		privacy_lists_menuitem = xml.get_widget('privacy_lists_menuitem')
 		administrator_menuitem = xml.get_widget('administrator_menuitem')
 		send_server_message_menuitem = xml.get_widget(
 			'send_server_message_menuitem')
@@ -629,6 +643,9 @@ class RosterWindow:
 
 		xml_console_menuitem.connect('activate',
 			self.on_xml_console_menuitem_activate, account)
+
+		privacy_lists_menuitem.connect('activate',
+			self.on_privacy_lists_menuitem_activate, account)
 
 		send_server_message_menuitem.connect('activate',
 			self.on_send_server_message_menuitem_activate, account)
@@ -1796,14 +1813,26 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			for c in gajim.contacts.get_contact(account, contact.jid):
 				self.remove_contact(c, account)
 			gajim.contacts.remove_jid(account, c.jid)
+			need_readd = False
 			if not remove_auth and contact.sub == 'both':
 				contact.name = ''
 				contact.groups = []
 				contact.sub = 'from'
 				gajim.contacts.add_contact(account, contact)
 				self.add_contact_to_roster(contact.jid, account)
-			elif gajim.interface.msg_win_mgr.has_window(contact.jid, account) or \
-			gajim.awaiting_events[account].has_key(contact.jid):
+			elif gajim.awaiting_events[account].has_key(contact.jid):
+				need_readd = True
+			elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+				if _('Not in Roster') in contact.groups:
+					# Close chat window
+					msg_win = gajim.interface.msg_win_mgr.get_window(contact.jid,
+						account)
+					ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid,
+						account)
+					msg_win.remove_tab(ctrl)
+				else:
+					need_readd = True
+			if need_readd:
 				c = gajim.contacts.create_contact(jid = contact.jid,
 					name = '', groups = [_('Not in Roster')],
 					show = 'not in roster', status = '', ask = 'none',
@@ -3045,30 +3074,32 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			data = model[iter][C_JID]
 		selection.set(selection.target, 8, data)
 
-	def on_drop_in_contact(self, widget, account, c_source, c_dest,
-		was_big_brother, context, etime):
+	def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
+		c_dest, was_big_brother, context, etime):
 		# children must take the new tag too, so remember old tag
-		old_tag = gajim.contacts.get_metacontacts_tag(account, c_source.jid)
+		old_tag = gajim.contacts.get_metacontacts_tag(account_source,
+			c_source.jid)
 		# remove the source row
-		self.remove_contact(c_source, account)
+		self.remove_contact(c_source, account_source)
 		# brother inherite big brother groups
 		c_source.groups = []
 		for g in c_dest.groups:
 			c_source.groups.append(g)
-		gajim.contacts.add_metacontact(account, c_dest.jid, account, c_source.jid)
+		gajim.contacts.add_metacontact(account_dest, c_dest.jid, account_source,
+			c_source.jid)
 		if was_big_brother:
 			# add brothers too
 			all_jid = gajim.contacts.get_metacontacts_jids(old_tag)
 			for _account in all_jid:
 				for _jid in all_jid[_account]:
-					gajim.contacts.add_metacontact(account, c_dest.jid, _account,
-						_jid)
+					gajim.contacts.add_metacontact(account_dest, c_dest.jid,
+						_account, _jid)
 					_c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
 					self.remove_contact(_c, _account)
 					self.add_contact_to_roster(_jid, _account)
 					self.draw_contact(_jid, _account)
-		self.add_contact_to_roster(c_source.jid, account)
-		self.draw_contact(c_dest.jid, account)
+		self.add_contact_to_roster(c_source.jid, account_source)
+		self.draw_contact(c_dest.jid, account_dest)
 
 		context.finish(True, True, etime)
 
@@ -3117,10 +3148,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		iter_dest = model.get_iter(path_dest)
 		type_dest = model[iter_dest][C_TYPE].decode('utf-8')
 		jid_dest = model[iter_dest][C_JID].decode('utf-8')
-		account = model[iter_dest][C_ACCOUNT].decode('utf-8')
+		account_dest = model[iter_dest][C_ACCOUNT].decode('utf-8')
 
 		# if account is not connected, do nothing
-		if gajim.connections[account].connected < 2:
+		if gajim.connections[account_dest].connected < 2:
 			return
 
 		if info == self.TARGET_TYPE_URI_LIST:
@@ -3129,15 +3160,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				return
 			if type_dest != 'contact':
 				return
-			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
+			c_dest = gajim.contacts.get_contact_with_highest_priority(account_dest,
 				jid_dest)
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				if os.path.isfile(path): # is it file?
-					gajim.interface.instances['file_transfers'].send_file(account,
-						c_dest, path)
+					gajim.interface.instances['file_transfers'].send_file(
+						account_dest, c_dest, path)
 			return
 
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
@@ -3146,19 +3177,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		iter_source = treeview.get_selection().get_selected()[1]
 		path_source = model.get_path(iter_source)
 		type_source = model[iter_source][C_TYPE]
-		if type_dest == 'account': # dropped on an account
-			return
+		account_source = model[iter_source][C_ACCOUNT].decode('utf-8')
 		if type_source != 'contact': # source is not a contact
 			return
-		source_account = model[iter_source][C_ACCOUNT].decode('utf-8')
-		disable_meta = False 
-		if account != source_account:	# dropped in another account
-			if self.regroup:
-				# in merge mode it is ok to change group, but disable meta
-				account = source_account
-				disable_meta = True 
-			else:
-				return
+		if type_dest == 'account' and account_source == account_dest:
+			return
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':
 			it = model.iter_parent(it)
@@ -3167,36 +3190,47 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if grp_source in helpers.special_groups:
 			return
 		jid_source = data.decode('utf-8')
-		c_source = gajim.contacts.get_contact_with_highest_priority(account,
-			jid_source)
-		# Get destination group
+		c_source = gajim.contacts.get_contact_with_highest_priority(
+			account_source, jid_source)
+
+		grp_dest = None
 		if type_dest == 'group':
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
-			if grp_dest in helpers.special_groups:
-				return
-			if context.action == gtk.gdk.ACTION_COPY:
-				self.on_drop_in_group(None, account, c_source, grp_dest, context,
-					etime)
-				return
-			self.on_drop_in_group(None, account, c_source, grp_dest, context,
-				etime, grp_source)
-			return
-		else:
+		elif type_dest in ('contact', 'agent'):
 			it = iter_dest
 			while model[it][C_TYPE] != 'group':
 				it = model.iter_parent(it)
 			grp_dest = model[it][C_JID].decode('utf-8')
+
+		if (type_dest == 'account' or not self.regroup) and \
+		account_source != account_dest:
+			# add contact to this account in that group
+			dialogs.AddNewContactWindow(account = account_dest, jid = jid_source,
+				user_nick = c_source.name, group = grp_dest)
+			return
+
+		# Get destination group
+		if type_dest == 'group':
+			if grp_dest in helpers.special_groups:
+				return
+			if context.action == gtk.gdk.ACTION_COPY:
+				self.on_drop_in_group(None, account_source, c_source, grp_dest,
+					context, etime)
+				return
+			self.on_drop_in_group(None, account_source, c_source, grp_dest,
+				context, etime, grp_source)
+			return
 		if grp_dest in helpers.special_groups:
 			return
 		if jid_source == jid_dest:
-			if grp_source == grp_dest:
+			if grp_source == grp_dest and account_source == account_dest:
 				return
 			if context.action == gtk.gdk.ACTION_COPY:
-				self.on_drop_in_group(None, account, c_source, grp_dest, context,
-					etime)
+				self.on_drop_in_group(None, account_source, c_source, grp_dest,
+					context, etime)
 				return
-			self.on_drop_in_group(None, account, c_source, grp_dest, context,
-				etime, grp_source)
+			self.on_drop_in_group(None, account_source, c_source, grp_dest,
+				context, etime, grp_source)
 			return
 		if grp_source == grp_dest:
 			# Add meta contact
@@ -3205,7 +3239,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 #			if context.action == gtk.gdk.ACTION_COPY:
 #				# Keep only MOVE
 #				return
-			c_dest = gajim.contacts.get_contact_with_highest_priority(account,
+			c_dest = gajim.contacts.get_contact_with_highest_priority(account_dest,
 				jid_dest)
 			is_big_brother = False
 			if model.iter_has_child(iter_source):
@@ -3213,35 +3247,30 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if not c_dest:
 				# c_dest is None if jid_dest doesn't belong to account
 				return
-			self.on_drop_in_contact(treeview, account, c_source, c_dest,
-				is_big_brother, context, etime)
+			self.on_drop_in_contact(treeview, account_source, c_source,
+				account_dest, c_dest, is_big_brother, context, etime)
 			return
 		# We upgrade only the first user because user2.groups is a pointer to
 		# user1.groups
 		if context.action == gtk.gdk.ACTION_COPY:
-			self.on_drop_in_group(None, account, c_source, grp_dest, context,
-				etime)
+			self.on_drop_in_group(None, account_source, c_source, grp_dest,
+				context, etime)
 		else:
 			menu = gtk.Menu()
 			item = gtk.MenuItem(_('Drop %s in group %s') % (c_source.name,
 				grp_dest))
-			item.connect('activate', self.on_drop_in_group, account, c_source,
+			item.connect('activate', self.on_drop_in_group, account_dest, c_source,
 				grp_dest, context, etime, grp_source)
 			menu.append(item)
-			if not disable_meta: 
-				# source and dest account are the same, enable metacontacts
-				c_dest = gajim.contacts.get_contact_with_highest_priority(account,
-					jid_dest)
-				item = gtk.MenuItem(_('Make %s and %s metacontacts') % (c_source.name,
-					c_dest.name))
-				is_big_brother = False
-				if model.iter_has_child(iter_source):
-					is_big_brother = True
-				item.connect('activate', self.on_drop_in_contact, account, c_source,
-					c_dest, is_big_brother, context, etime)
-			else: #source and dest account are not the same, disable meta
-				item = gtk.MenuItem(_('Can\'t create a metacontact with contacts from two different accounts'))
-				item.set_sensitive(False)
+			c_dest = gajim.contacts.get_contact_with_highest_priority(
+				account_dest, jid_dest)
+			item = gtk.MenuItem(_('Make %s and %s metacontacts') % (c_source.name,
+				c_dest.name))
+			is_big_brother = False
+			if model.iter_has_child(iter_source):
+				is_big_brother = True
+			item.connect('activate', self.on_drop_in_contact, account_source,
+				c_source, account_dest, c_dest, is_big_brother, context, etime)
 			
 			menu.append(item)
 

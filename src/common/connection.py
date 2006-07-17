@@ -217,6 +217,34 @@ class Connection(ConnectionHandlers):
 				else:
 					conf = data[1].asDict()
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))
+		elif realm == common.xmpp.NS_PRIVACY:
+			if event == common.xmpp.features_nb.PRIVACY_LISTS_RECEIVED:
+				# data is (list)
+				self.dispatch('PRIVACY_LISTS_RECEIVED', (data))
+			elif event == common.xmpp.features_nb.PRIVACY_LIST_RECEIVED:
+				# data is (resp)
+				if not data:
+					return
+				rules = []
+				name = data.getTag('query').getTag('list').getAttr('name')
+				for child in data.getTag('query').getTag('list').getChildren():
+					dict_item = child.getAttrs()
+					childs = []
+					if dict_item.has_key('type'):
+						for scnd_child in child.getChildren():
+							childs += [scnd_child.getName()]
+						rules.append({'action':dict_item['action'],
+							'type':dict_item['type'], 'order':dict_item['order'],
+							'value':dict_item['value'], 'child':childs})
+					else:
+						for scnd_child in child.getChildren():
+							childs.append(scnd_child.getName())
+						rules.append({'action':dict_item['action'],
+							'order':dict_item['order'], 'child':childs})
+				self.dispatch('PRIVACY_LIST_RECEIVED', (name, rules))
+			elif event == common.xmpp.features_nb.PRIVACY_LISTS_ACTIVE_DEFAULT:
+				# data is (dict)
+				self.dispatch('PRIVACY_LISTS_ACTIVE_DEFAULT', (data))
 		elif realm == '':
 			if event == common.xmpp.transports.DATA_RECEIVED:
 				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
@@ -439,6 +467,41 @@ class Connection(ConnectionHandlers):
 		if kill_core and self.connected > 1:
 			self.disconnect(on_purpose = True)
 	
+	def get_privacy_lists(self):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.getPrivacyLists(self.connection)
+
+	def get_active_default_lists(self):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.getActiveAndDefaultPrivacyLists(self.connection)
+	
+	def del_privacy_list(self, privacy_list):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list)
+	
+	def get_privacy_list(self, title):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.getPrivacyList(self.connection, title)
+	
+	def set_privacy_list(self, listname, tags):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.setPrivacyList(self.connection, listname, tags)
+	
+	def set_active_list(self, listname):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.setActivePrivacyList(self.connection, listname, 'active')
+
+	def set_default_list(self, listname):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
+	
 	def build_privacy_rule(self, name, action):
 		'''Build a Privacy rule stanza for invisibility'''
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
@@ -448,6 +511,8 @@ class Connection(ConnectionHandlers):
 		return iq
 
 	def activate_privacy_rule(self, name):
+		if not self.connection:
+			return
 		'''activate a privacy rule'''
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
 		iq.getTag('query').setTag('active', {'name': name})

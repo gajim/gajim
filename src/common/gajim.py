@@ -25,8 +25,8 @@ import config
 from contacts import Contacts
 
 interface = None # The actual interface (the gtk one for the moment)
-version = '0.10'
 config = config.Config()
+version = config.get('version')
 connections = {}
 verbose = False
 
@@ -80,6 +80,8 @@ if LANG is None:
 	LANG = 'en'
 else:
 	LANG = LANG[:2] # en, fr, el etc..
+
+gmail_domains = ['gmail.com', 'googlemail.com']
 
 last_message_time = {} # list of time of the latest incomming message
 							# {acct1: {jid1: time1, jid2: time2}, }

@@ -388,8 +388,9 @@ class GCTooltip(BaseTooltip):
 		if contact.jid.strip() != '':
 			jid_markup = '<span weight="bold">' + contact.jid + '</span>' 
 		else:
-			jid_markup = '<span weight="bold">' + contact.get_shown_name() + \
-				'</span>'
+			jid_markup = '<span weight="bold">' + \
+			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
+			+ '</span>'
 		properties.append((jid_markup, None))	
 		properties.append((_('Role: '), helpers.get_uf_role(contact.role)))
 		properties.append((_('Affiliation: '), contact.affiliation.capitalize()))

@@ -453,20 +453,21 @@ class Interface:
 				gajim.connections[account].remove_transfers_for_contact(contact1)
 			self.roster.chg_contact_status(contact1, array[1], status_message,
 				account)
-			# play sound
+			# Notifications
 			if old_show < 2 and new_show > 1:
 				notify.notify('contact_connected', jid, account, status_message)
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactPresence',
 						(account, array))
-				
+
 			elif old_show > 1 and new_show < 2:
 				notify.notify('contact_disconnected', jid, account, status_message)
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactAbsence', (account, array))
 				# FIXME: stop non active file transfers
 			elif new_show > 1: # Status change (not connected/disconnected or error (<1))
-				notify.notify('status_change', jid, account, [new_show, status_message])
+				notify.notify('status_change', jid, account, [new_show,
+					status_message])
 		else:
 			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) doesn't follow the JEP
 			# remove in 2007
@@ -567,7 +568,8 @@ class Interface:
 				msg_type, array[5], resource, msg_id, array[9])
 			nickname = gajim.get_name_from_jid(account, jid)
 		# Check and do wanted notifications	
-		notify.notify('new_message', jid, account, [msg_type, first, nickname, message])
+		notify.notify('new_message', jid, account, [msg_type, first, nickname,
+			message])
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
@@ -800,7 +802,7 @@ class Interface:
 			c = gajim.contacts.get_contact(account, array[0], array[1])
 			# c is a list when no resource is given. it probably means that contact
 			# is offline, so only on Contact instance
-			if isinstance(c, list):
+			if isinstance(c, list) and len(c):
 				c = c[0]
 			if c: # c can be none if it's a gc contact
 				c.last_status_time = time.localtime(time.time() - array[2])
@@ -1026,12 +1028,20 @@ class Interface:
 	def handle_event_gmail_notify(self, account, array):
 		jid = array[0]
 		gmail_new_messages = int(array[1])
+		gmail_messages_list = array[2]
 		if gajim.config.get('notify_on_new_gmail_email'):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'single_msg_recv.png') #FIXME: find a better image
 			title = _('New E-mail on %(gmail_mail_address)s') % \
 				{'gmail_mail_address': jid}
 			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
+			
+			if gajim.config.get('notify_on_new_gmail_email_extra'):
+				for gmessage in gmail_messages_list:
+					# each message has a 'From', 'Subject' and 'Snippet' field
+					text += _('\nFrom: %(from_address)s') % \
+						{'from_address': gmessage['From']}
+					
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
 				path_to_image = path, title = title, text = text)
@@ -1327,6 +1337,31 @@ class Interface:
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
+
+	def handle_event_privacy_lists_received(self, account, data):
+		# ('PRIVACY_LISTS_RECEIVED', account, list)
+		if not self.instances.has_key(account):
+			return
+		if self.instances[account].has_key('privacy_lists'):
+			self.instances[account]['privacy_lists'].privacy_lists_received(data)
+
+	def handle_event_privacy_list_received(self, account, data):
+		# ('PRIVACY_LISTS_RECEIVED', account, (name, rules))
+		if not self.instances.has_key(account):
+			return
+		name = data[0]
+		rules = data[1]
+		if self.instances[account].has_key('privacy_list_%s' % name):
+			self.instances[account]['privacy_list_%s' % name].\
+				privacy_list_received(rules)
+
+	def handle_event_privacy_lists_active_default(self, account, data):
+		if not data:
+			return
+		# Send to all privacy_list_* windows as we can't know which one asked
+		for win in self.instances[account]:
+			if win.startswith('privacy_list_'):
+				self.instances[account][win].check_active_default(data)
 
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
@@ -1628,6 +1663,10 @@ class Interface:
 			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
 			'SIGNED_IN': self.handle_event_signed_in,
 			'METACONTACTS': self.handle_event_metacontacts,
+			'PRIVACY_LISTS_RECEIVED': self.handle_event_privacy_lists_received,
+			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
+			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
+				self.handle_event_privacy_lists_active_default,
 		}
 		gajim.handlers = self.handlers
 

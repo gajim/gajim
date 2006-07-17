@@ -19,6 +19,7 @@
 
 import xml.sax.saxutils
 import gtk
+import gtk.glade
 import gobject
 import pango
 import os
@@ -40,6 +41,9 @@ if os.name == 'nt':
 from common import i18n
 from common import gajim
 from common import helpers
+
+gtk.glade.bindtextdomain(i18n.APP, i18n.DIR) 
+gtk.glade.textdomain(i18n.APP)
 
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()

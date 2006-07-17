@@ -418,8 +418,10 @@ def play_sound(event):
 	if not gajim.config.get('sounds_on'):
 		return
 	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
-	player = gajim.config.get('soundplayer')
-	if player == 'beep':
+	play_sound_file(path_to_soundfile)
+
+def play_sound_file(path_to_soundfile):
+	if path_to_soundfile == 'beep':
 		print '\a' # make a speaker beep
 		return
 	if path_to_soundfile is None or not os.path.exists(path_to_soundfile):
@@ -431,8 +433,9 @@ def play_sound(event):
 		except:
 			pass
 	elif os.name == 'posix':
-		if player == '':
+		if gajim.config.get('soundplayer') == '':
 			return
+		player = gajim.config.get('soundplayer')
 		# we add the path in "" so we have good parsing from shell
 		path_to_soundfile = path_to_soundfile.replace('"', '\\"') # escape "
 		command = player + ' "' + path_to_soundfile + '" &'

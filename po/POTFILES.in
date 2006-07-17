@@ -35,6 +35,8 @@ data/glade/message_window.glade
 data/glade/passphrase_dialog.glade
 data/glade/popup_notification_window.glade
 data/glade/preferences_window.glade
+data/glade/privacy_list_edit_window.glade
+data/glade/privacy_lists_first_window.glade
 data/glade/progress_dialog.glade
 data/glade/remove_account_window.glade
 data/glade/roster_contact_context_menu.glade

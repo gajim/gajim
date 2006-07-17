@@ -249,11 +249,6 @@ class PreferencesWindow:
 		# try to set default font for the current desktop env
 		fontbutton = self.xml.get_widget('conversation_fontbutton')
 		if font == '':
-			font = gtkgui_helpers.get_default_font()
-			if font is not None:
-				font = 'Sans 10'
-				gajim.config.set('conversation_font', font)
-				fontbutton.set_font_name(font)
 			fontbutton.set_sensitive(False)
 			self.xml.get_widget('default_chat_font').set_active(True)
 		else:
@@ -315,6 +310,8 @@ class PreferencesWindow:
 			commands = ('aplay', 'play', 'esdplay', 'artsplay')
 			for command in commands:
 				if helpers.is_in_path(command):
+					if command == 'aplay':
+						command += ' -q'
 					self.xml.get_widget('soundplayer_entry').set_text(command)
 					gajim.config.set('soundplayer', command)
 					break
@@ -433,17 +430,22 @@ class PreferencesWindow:
 		
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
+		frame_gmail = self.xml.get_widget('frame_gmail')
 		notify_gmail_checkbutton = self.xml.get_widget('notify_gmail_checkbutton')
-		notify_gmail_checkbutton.set_no_show_all(True)
+		notify_gmail_extra_checkbutton = self.xml.get_widget('notify_gmail_extra_checkbutton')
+		frame_gmail.set_no_show_all(True)
+		
 		for account in gajim.config.get_per('accounts'):
 			jid = gajim.get_jid_from_account(account)
-			if gajim.get_server_from_jid(jid) == 'gmail.com':
+			if gajim.get_server_from_jid(jid) in gajim.gmail_domains:
+				frame_gmail.show_all()
 				st = gajim.config.get('notify_on_new_gmail_email')
 				notify_gmail_checkbutton.set_active(st)
-				notify_gmail_checkbutton.show()
+				st = gajim.config.get('notify_on_new_gmail_email_extra')
+				notify_gmail_extra_checkbutton.set_active(st)
 				break
 		else:
-			notify_gmail_checkbutton.hide()
+			frame_gmail.hide()
 		
 		self.xml.signal_autoconnect(self)
 
@@ -839,8 +841,11 @@ class PreferencesWindow:
 	def on_send_os_info_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'send_os_info')
 		
-	def on_notify_gmail_checkbutton_toggled(self, widget): 
+	def on_notify_gmail_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email')
+
+	def on_notify_gmail_extra_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email_extra')
 		
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
@@ -967,7 +972,6 @@ class PreferencesWindow:
 		path_to_snd_file = widget.get_text()
 		model, iter = self.sound_tree.get_selection().get_selected()
 		model[iter][2] = path_to_snd_file # set new path to sounds_model
-		model[iter][0] = True # set the sound to enabled
 
 	def on_play_button_clicked(self, widget):
 		model, iter = self.sound_tree.get_selection().get_selected()
@@ -1313,11 +1317,13 @@ class AccountModificationWindow:
 			relogin_needed = False
 		else: # we're connected to the account we want to apply changes
 			# check if relogin is needed
-			relogin_needed = self.options_changed_need_relogin(config,
+			relogin_needed = False
+			if self.options_changed_need_relogin(config,
 				('resource', 'proxy', 'usessl', 'keyname',
-				'use_custom_host', 'custom_host'))
+				'use_custom_host', 'custom_host')):
+				relogin_needed = True
 
-			if config['use_custom_host'] and (self.option_changed(config,
+			elif config['use_custom_host'] and (self.option_changed(config,
 				'custom_host') or self.option_changed(config, 'custom_port')):
 				relogin_needed = True
 

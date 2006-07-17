@@ -31,6 +31,13 @@
   </child>
 
   <child>
+    <widget class="GtkMenuItem" id="privacy_lists_menuitem">
+      <property name="label" translatable="yes">_Privacy Lists</property>
+      <property name="use_underline">True</property>
+    </widget>
+  </child>
+
+  <child>
     <widget class="GtkSeparatorMenuItem" id="separator8">
     </widget>
   </child>

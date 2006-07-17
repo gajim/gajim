@@ -83,6 +83,14 @@ class ConversationTextview:
 		color = gajim.config.get('statusmsgcolor')
 		self.tagStatus.set_property('foreground', color)
 
+		colors = gajim.config.get('gc_nicknames_colors')
+		colors = colors.split(':')
+		for color in xrange(len(colors)):
+			tagname = 'gc_nickname_color_' + str(color)
+			tag = buffer.create_tag(tagname)
+			color = colors[color]
+			tag.set_property('foreground', color)
+
 		tag = buffer.create_tag('marked')
 		color = gajim.config.get('markedmsgcolor')
 		tag.set_property('foreground', color)
@@ -568,9 +576,6 @@ class ConversationTextview:
 			other_tags_for_name = [], other_tags_for_time = [],
 			other_tags_for_text = [], subject = None, old_kind = None):
 		'''prints 'chat' type messages'''
-		# kind = info, we print things as if it was a status: same color, ...
-		if kind == 'info':
-			kind = 'status'
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
 		end_iter = buffer.get_end_iter()
@@ -589,7 +594,7 @@ class ConversationTextview:
 			# We don't have tim for outgoing messages...
 			tim = time.localtime()
 		current_print_time = gajim.config.get('print_time')
-		if current_print_time == 'always':
+		if current_print_time == 'always' and kind != 'info':
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
 			# get difference in days since epoch (86400 = 24*3600)
@@ -613,7 +618,7 @@ class ConversationTextview:
 			tim_format = time.strftime(format, tim).encode('utf-8')
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
-		elif current_print_time == 'sometimes':
+		elif current_print_time == 'sometimes' and kind != 'info':
 			every_foo_seconds = 60 * gajim.config.get(
 				'print_ichat_every_foo_minutes')
 			seconds_passed = time.mktime(tim) - self.last_time_printout
@@ -631,6 +636,9 @@ class ConversationTextview:
 
 				buffer.insert_with_tags_by_name(end_iter, tim_format + '\n',
 					'time_sometimes')
+		# kind = info, we print things as if it was a status: same color, ...
+		if kind == 'info':
+			kind = 'status'
 		other_text_tag = self.detect_other_text_tag(text, kind)
 		text_tags = other_tags_for_text[:] # create a new list
 		if other_text_tag:
