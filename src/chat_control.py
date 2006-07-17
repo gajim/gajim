@@ -1575,6 +1575,9 @@ class ChatControl(ChatControlBase):
 	def show_bigger_avatar(self, small_avatar):
 		'''resizes the avatar, if needed, so it has at max half the screen size
 		and shows it'''
+		if not small_avatar.window:
+			# Tab has been closed since we hovered the avatar
+			return
 		is_fake = False
 		if self.type_id == message_control.TYPE_PM:
 			is_fake = True
