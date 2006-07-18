@@ -2622,7 +2622,7 @@ msgstr "Fine ne malpli ol aliajn ni dankas ĉiujn pakaĵvartistojn."
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:610
 msgid "translator-credits"
-msgstr "tradukistoj"
+msgstr "Segrio Ĥliutĉin <Sergey.Khlutchin@gmail.com>"
 
 #: ../src/dialogs.py:873
 #, python-format

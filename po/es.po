@@ -2790,7 +2790,7 @@ msgstr ""
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:612
 msgid "translator-credits"
-msgstr "créditos de traducción"
+msgstr "Membris Khan <membriskhan@gmail.com>"
 
 #: ../src/dialogs.py:738
 #, fuzzy, python-format
