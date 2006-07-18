@@ -850,7 +850,6 @@ class Interface:
 			uf_show = helpers.get_uf_show(show)
 			ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
 						'status')
-			ctrl.draw_banner()
 			ctrl.parent_win.redraw_tab(ctrl)
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
