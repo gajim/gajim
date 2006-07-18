@@ -119,6 +119,13 @@ class PrivateChatControl(ChatControl):
 				return
 
 		ChatControl.send_message(self, message)
+	
+	def update_ui(self):
+		if self.contact.show == 'offline':
+			self.got_disconnected()
+		else:
+			self.got_connected()
+		ChatControl.update_ui(self)
 
 
 class GroupchatControl(ChatControlBase):
@@ -289,7 +296,7 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = self.msg_textview
 		# set an empty subject to show the room_jid
 		self.set_subject('')
-		self.got_disconnected() #init some variables
+		self.got_disconnected() # init some variables
 
 		self.update_ui()
 		self.conv_textview.tv.grab_focus()
@@ -1030,7 +1037,8 @@ class GroupchatControl(ChatControlBase):
 			if len(message_array):
 				message_array = message_array[0].split()
 				nick = message_array.pop(0)
-				room_nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+				room_nicks = gajim.contacts.get_nick_list(self.account,
+					self.room_jid)
 				if nick in room_nicks:
 					privmsg = ' '.join(message_array)
 					self.on_send_pm(nick=nick, msg=privmsg)
