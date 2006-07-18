@@ -1592,7 +1592,7 @@ class ChatControl(ChatControlBase):
 		# It's why I set it transparent.
 		image = self.xml.get_widget('avatar_image')
 		pixbuf = image.get_pixbuf()
-		pixbuf.fill(0xffffff00) # RGBA
+		pixbuf.fill(0xffffff00L) # RGBA
 		image.queue_draw()
 
 		screen_w = gtk.gdk.screen_width()
