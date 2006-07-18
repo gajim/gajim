@@ -1098,7 +1098,7 @@ class Interface:
 		self.roster.show_title()
 		if no_queue: # We didn't have a queue: we change icons
 			self.roster.draw_contact(jid, account)
-		if self.systray_capanilities:
+		if self.systray_capabilities:
 			self.systray.add_jid(jid, account, typ)
 
 	def redraw_roster_systray(self, account, jid, typ = None):
