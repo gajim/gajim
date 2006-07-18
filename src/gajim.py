@@ -1416,8 +1416,8 @@ class Interface:
 		return False
 
 	def show_systray(self):
-		self.systray.show_icon()
 		self.systray_enabled = True
+		self.systray.show_icon()
 
 	def hide_systray(self):
 		self.systray.hide_icon()
