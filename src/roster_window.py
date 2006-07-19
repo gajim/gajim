@@ -349,6 +349,15 @@ class RosterWindow:
 			self.draw_contact(jid, account)
 			self.draw_avatar(jid, account)
 			return
+
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		if not contact:
+			return
+		showOffline = gajim.config.get('showoffline')
+		if (contact.show in ('offline', 'error')) and not showOffline and \
+			not gajim.awaiting_events[account].has_key(jid):
+			return
+
 		model = self.tree.get_model()
 		iterAcct = self.get_account_iter(account)
 		model.append(iterAcct, (None, gajim.nicks[account], 'self_contact', jid,
