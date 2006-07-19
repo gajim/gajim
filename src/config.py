@@ -2543,7 +2543,6 @@ class AccountCreationWizardWindow:
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('account_creation_wizard_window.glade')
 		self.window = self.xml.get_widget('account_creation_wizard_window')
-		self.window.set_transient_for(gajim.interface.roster.window)
 
 		# Connect events from comboboxentry.child
 		server_comboboxentry = self.xml.get_widget('server_comboboxentry')
