@@ -544,12 +544,14 @@ class GroupchatControl(ChatControlBase):
 					str(gc_class.gc_custom_colors[contact]))
 			else:
 				gc_class.gc_count_nicknames_colors += 1
-				gc_class.gc_custom_colors[contact] = gc_class.gc_count_nicknames_colors
-				other_tags_for_name.append('gc_nickname_color_' + \
-					str(gc_class.gc_count_nicknames_colors))
-				number_of_colors = len(gajim.config.get('gc_nicknames_colors').split(':'))
+				number_of_colors = len(gajim.config.get('gc_nicknames_colors').\
+					split(':'))
 				if gc_class.gc_count_nicknames_colors == number_of_colors:
 					gc_class.gc_count_nicknames_colors = 0				
+				gc_class.gc_custom_colors[contact] = \
+					gc_class.gc_count_nicknames_colors
+				other_tags_for_name.append('gc_nickname_color_' + \
+					str(gc_class.gc_count_nicknames_colors))
 			if highlight:
 				# muc-specific chatstate
 				self.parent_win.redraw_tab(self, 'attention')
