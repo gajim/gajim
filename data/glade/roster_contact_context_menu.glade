@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+
 <widget class="GtkMenu" id="roster_contact_context_menu">
 
   <child>
@@ -11,7 +12,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1423">
+	<widget class="GtkImage" id="image1447">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -31,7 +32,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1424">
+	<widget class="GtkImage" id="image1448">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -50,7 +51,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1425">
+	<widget class="GtkImage" id="image1449">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-refresh</property>
 	  <property name="icon_size">1</property>
@@ -83,7 +84,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1426">
+	<widget class="GtkImage" id="image1450">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-file</property>
 	  <property name="icon_size">1</property>
@@ -103,7 +104,7 @@
       <signal name="activate" handler="on_assign_openpgp_key_menuitem_activate" last_modification_time="Thu, 30 Jun 2005 22:57:59 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1427">
+	<widget class="GtkImage" id="image1451">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-dialog-authentication</property>
 	  <property name="icon_size">1</property>
@@ -123,7 +124,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1428">
+	<widget class="GtkImage" id="image1452">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-info</property>
 	  <property name="icon_size">1</property>
@@ -137,7 +138,7 @@
   </child>
 
   <child>
-    <widget class="GtkSeparatorMenuItem" id="separator5">
+    <widget class="GtkSeparatorMenuItem" id="above_subscription_separator">
       <property name="visible">True</property>
     </widget>
   </child>
@@ -148,7 +149,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1429">
+	<widget class="GtkImage" id="image1453">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-dialog-question</property>
 	  <property name="icon_size">1</property>
@@ -169,7 +170,7 @@
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1430">
+		<widget class="GtkImage" id="image1454">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-go-up</property>
 		  <property name="icon_size">1</property>
@@ -189,7 +190,7 @@
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1431">
+		<widget class="GtkImage" id="image1455">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-go-down</property>
 		  <property name="icon_size">1</property>
@@ -209,7 +210,7 @@
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1432">
+		<widget class="GtkImage" id="image1456">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-stop</property>
 		  <property name="icon_size">1</property>
@@ -232,7 +233,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1433">
+	<widget class="GtkImage" id="image1457">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -251,7 +252,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1434">
+	<widget class="GtkImage" id="image1458">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-remove</property>
 	  <property name="icon_size">1</property>
@@ -283,7 +284,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1435">
+	<widget class="GtkImage" id="image1459">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -296,4 +297,5 @@
     </widget>
   </child>
 </widget>
+
 </glade-interface>

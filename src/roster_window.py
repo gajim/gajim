@@ -82,6 +82,12 @@ class RosterWindow:
 		return group_iter
 
 	def get_contact_iter(self, jid, account):
+		if jid == gajim.get_jid_from_account(account):
+			iter = self.get_self_contact_iter(account)
+			if iter:
+				return [iter]
+			else:
+				return []
 		model = self.tree.get_model()
 		acct = self.get_account_iter(account)
 		found = []
@@ -203,6 +209,9 @@ class RosterWindow:
 		# If contact already in roster, do not add it
 		if len(self.get_contact_iter(jid, account)):
 			return
+		if jid == gajim.get_jid_from_account(account):
+			self.add_self_contact(account)
+			return
 		if gajim.jid_is_transport(contact.jid):
 			contact.groups = [_('Transports')]
 
@@ -323,6 +332,29 @@ class RosterWindow:
 			contacts = gajim.contacts.get_contact(data['account'],
 				data['jid'])
 			self.add_contact_to_roster(data['jid'], data['account'])
+
+	def get_self_contact_iter(self, account):
+		model = self.tree.get_model()
+		iterAcct = self.get_account_iter(account)
+		iter = model.iter_children(iterAcct)
+		if not iter:
+			return None
+		if model[iter][C_TYPE] == 'self_contact':
+			return iter
+		return None
+
+	def add_self_contact(self, account):
+		jid = gajim.get_jid_from_account(account)
+		if self.get_self_contact_iter(account):
+			self.draw_contact(jid, account)
+			self.draw_avatar(jid, account)
+			return
+		model = self.tree.get_model()
+		iterAcct = self.get_account_iter(account)
+		model.append(iterAcct, (None, gajim.nicks[account], 'self_contact', jid,
+			account, False, None))
+		self.draw_contact(jid, account)
+		self.draw_avatar(jid, account)
 
 	def add_transport_to_roster(self, account, transport):
 		c = gajim.contacts.create_contact(jid = transport, name = transport,
@@ -1078,7 +1110,7 @@ class RosterWindow:
 			except:
 				self.tooltip.hide_tooltip()
 				return
-			if model[iter][C_TYPE] == 'contact':
+			if model[iter][C_TYPE] in ('contact', 'self_contact'):
 				# we're on a contact entry in the roster
 				account = model[iter][C_ACCOUNT].decode('utf-8')
 				jid = model[iter][C_JID].decode('utf-8')
@@ -1238,7 +1270,10 @@ class RosterWindow:
 		if contact is None:
 			dialogs.SingleMessageWindow(account, action = 'send')
 		else:
-			dialogs.SingleMessageWindow(account, contact.jid, 'send')
+			jid = contact.jid
+			if contact.jid == gajim.get_jid_from_account(account):
+				jid += '/' + contact.resource
+			dialogs.SingleMessageWindow(account, jid, 'send')
 
 	def on_send_file_menuitem_activate(self, widget, account, contact):
 		gajim.interface.instances['file_transfers'].show_file_send_request(
@@ -1253,6 +1288,7 @@ class RosterWindow:
 		jid = model[iter][C_JID].decode('utf-8')
 		path = model.get_path(iter)
 		account = model[iter][C_ACCOUNT].decode('utf-8')
+		our_jid = jid == gajim.get_jid_from_account(account)
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			return
@@ -1276,20 +1312,30 @@ class RosterWindow:
 		
 		add_special_notification_menuitem.hide()
 		add_special_notification_menuitem.set_no_show_all(True)
-		
-		# add a special img for rename menuitem
-		path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-			'kbd_input.png')
-		img = gtk.Image()
-		img.set_from_file(path_to_kbd_input_img)
-		rename_menuitem.set_image(img)
 
-		# skip a separator
+		if not our_jid:
+			# add a special img for rename menuitem
+			path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'kbd_input.png')
+			img = gtk.Image()
+			img.set_from_file(path_to_kbd_input_img)
+			rename_menuitem.set_image(img)
+
+		above_subscription_separator = xml.get_widget(
+			'above_subscription_separator')
 		subscription_menuitem = xml.get_widget('subscription_menuitem')
 		send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem =\
 			subscription_menuitem.get_submenu().get_children()
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
-		remove_from_roster_menuitem = xml.get_widget('remove_from_roster_menuitem')
+		remove_from_roster_menuitem = xml.get_widget(
+			'remove_from_roster_menuitem')
+
+		if our_jid:
+			for menuitem in (rename_menuitem, edit_groups_menuitem,
+			above_subscription_separator, subscription_menuitem,
+			remove_from_roster_menuitem):
+				menuitem.set_no_show_all(True)
+				menuitem.hide()
 		# skip a separator
 		information_menuitem = xml.get_widget('information_menuitem')
 		history_menuitem = xml.get_widget('history_menuitem')
@@ -1706,7 +1752,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.make_group_menu(event, iter)
 		elif type == 'agent':
 			self.make_transport_menu(event, iter)
-		elif type == 'contact':
+		elif type in ('contact', 'self_contact'):
 			self.make_contact_menu(event, iter)
 		elif type == 'account':
 			self.make_account_menu(event, iter)
@@ -2559,6 +2605,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				if self.open_event(account, fjid, first_ev):
 					return
 			c = gajim.contacts.get_contact_with_highest_priority(account, jid)
+			if jid == gajim.get_jid_from_account(account):
+				resource = c.resource
 			self.on_open_chat_window(widget, c, account, resource = resource)
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
@@ -2972,6 +3020,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		name2 = name2.decode('utf-8')
 		type1 = model[iter1][C_TYPE]
 		type2 = model[iter2][C_TYPE]
+		if type1 == 'self_contact':
+			return -1
+		if type2 == 'self_contact':
+			return 1
 		if type1 == 'group':
 			if name1 == _('Transports'):
 				return 1
