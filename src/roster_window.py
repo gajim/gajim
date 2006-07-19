@@ -1796,7 +1796,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model[iter][C_TYPE]
-			if type in ('agent', 'contact'):
+			if type in ('agent', 'contact', 'self_contact'):
 				self.on_roster_treeview_row_activated(widget, path)
 			elif type == 'account':
 				account = model[iter][C_ACCOUNT].decode('utf-8')
