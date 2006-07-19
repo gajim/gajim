@@ -1982,7 +1982,7 @@ msgstr "Extra adresa:"
 #. Family Name
 #: ../data/glade/vcard_information_window.glade.h:15
 msgid "Family:"
-msgstr "Priezvysko:"
+msgstr "Priezvisko:"
 
 #: ../data/glade/vcard_information_window.glade.h:16
 msgid "Format: YYYY-MM-DD"
