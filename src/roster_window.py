@@ -3113,6 +3113,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		c_source.groups = []
 		for g in c_dest.groups:
 			c_source.groups.append(g)
+		gajim.connections[account_source].update_contact(c_source.jid,
+			c_source.name, c_source.groups)
 		gajim.contacts.add_metacontact(account_dest, c_dest.jid, account_source,
 			c_source.jid)
 		if was_big_brother:
