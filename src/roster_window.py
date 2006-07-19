@@ -1330,12 +1330,6 @@ class RosterWindow:
 		remove_from_roster_menuitem = xml.get_widget(
 			'remove_from_roster_menuitem')
 
-		if our_jid:
-			for menuitem in (rename_menuitem, edit_groups_menuitem,
-			above_subscription_separator, subscription_menuitem,
-			remove_from_roster_menuitem):
-				menuitem.set_no_show_all(True)
-				menuitem.hide()
 		# skip a separator
 		information_menuitem = xml.get_widget('information_menuitem')
 		history_menuitem = xml.get_widget('history_menuitem')
@@ -1425,6 +1419,14 @@ class RosterWindow:
 
 			add_to_roster_menuitem.connect('activate',
 				self.on_add_to_roster, contact, account)
+
+		# Remove many items when it's self contact row
+		if our_jid:
+			for menuitem in (rename_menuitem, edit_groups_menuitem,
+			above_subscription_separator, subscription_menuitem,
+			remove_from_roster_menuitem):
+				menuitem.set_no_show_all(True)
+				menuitem.hide()
 
 		# Unsensitive many items when account is offline
 		if gajim.connections[account].connected < 2:
