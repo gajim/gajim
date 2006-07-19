@@ -396,6 +396,8 @@ class Interface:
 				contact1 = gajim.contacts.get_first_contact_from_jid(account, ji)
 				if not contact1:
 					# presence of another resource of out jid
+					if resource == gajim.connections[account].server_resource:
+						resource = gajim.config.get_per('accounts', account, 'resource')
 					contact1 = gajim.contacts.create_contact(jid = ji,
 						name = gajim.nicks[account], groups = [],
 						show = array[1], status = status_message, sub = 'both',
