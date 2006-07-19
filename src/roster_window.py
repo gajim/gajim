@@ -3180,6 +3180,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if gajim.connections[account_dest].connected < 2:
 			return
 
+		# drop on self contact row
+		if type_dest == 'self_contact':
+			return
+
 		if info == self.TARGET_TYPE_URI_LIST:
 			# User dropped a file on the roster
 			if len(path_dest) < 3:
