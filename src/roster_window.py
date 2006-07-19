@@ -1835,8 +1835,20 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			model = self.tree.get_model()
 			iter = model.get_iter(path)
 			type = model[iter][C_TYPE]
-			if type in ('group', 'contact'):
-				if x < 27: # first cell in 1st column (the arrow SINGLE clicked)
+			if type == 'group' and x < 27:
+				# first cell in 1st column (the arrow SINGLE clicked)
+				if (self.tree.row_expanded(path)):
+					self.tree.collapse_row(path)
+				else:
+					self.tree.expand_row(path, False)
+
+			elif type == 'contact' and x < 27:
+				account = model[iter][C_ACCOUNT].decode('utf-8')
+				jid = model[iter][C_JID].decode('utf-8')
+				# first cell in 1st column (the arrow SINGLE clicked)
+				iters = self.get_contact_iter(jid, account)
+				for iter in iters:
+					path = model.get_path(iter)
 					if (self.tree.row_expanded(path)):
 						self.tree.collapse_row(path)
 					else:
