@@ -398,15 +398,16 @@ class Interface:
 					# presence of another resource of out jid
 					if resource == gajim.connections[account].server_resource:
 						resource = gajim.config.get_per('accounts', account, 'resource')
-					contact1 = gajim.contacts.create_contact(jid = ji,
-						name = gajim.nicks[account], groups = [],
-						show = array[1], status = status_message, sub = 'both',
-						ask = 'none', priority = priority, keyID = keyID,
-						resource = resource)
-					old_show = 0
-					gajim.contacts.add_contact(account, contact1)
-					lcontact.append(contact1)
-					self.roster.add_self_contact(account)
+					else:
+						contact1 = gajim.contacts.create_contact(jid = ji,
+							name = gajim.nicks[account], groups = [],
+							show = array[1], status = status_message, sub = 'both',
+							ask = 'none', priority = priority, keyID = keyID,
+							resource = resource)
+						old_show = 0
+						gajim.contacts.add_contact(account, contact1)
+						lcontact.append(contact1)
+						self.roster.add_self_contact(account)
 				elif contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
 				if (resources != [''] and (len(lcontact) != 1 or 
