@@ -3202,6 +3202,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		jid_dest = model[iter_dest][C_JID].decode('utf-8')
 		account_dest = model[iter_dest][C_ACCOUNT].decode('utf-8')
 
+		if account_dest == 'all':
+			# drop on account row in merged mode: we can't know which account it is
+			return
+
 		# if account is not connected, do nothing
 		if gajim.connections[account_dest].connected < 2:
 			return
