@@ -221,7 +221,7 @@ _('Connection with peer cannot be established.'))
 		else:
 			file_name = file_props['name']
 		sectext = '\t' + _('Filename: %s') % file_name
-		sectext += '\n\t' + _('Sender: %s') % jid
+		sectext += '\n\t' + _('Recipient: %s') % jid
 		dialogs.ErrorDialog(_('File transfer stopped by the contact of the other side'), \
 			sectext)
 		self.tree.get_selection().unselect_all()
