@@ -133,7 +133,8 @@ class CacheDictionary:
 
 	def _expire_timeout(self, key):
 		'''The timeout has expired, remove the object.'''
-		del self.cache[key]
+		if key in self.cache:
+			del self.cache[key]
 		return False
 
 	def _refresh_timeout(self, key):
