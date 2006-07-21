@@ -33,6 +33,7 @@ from common import GnuPG
 from common import helpers
 from common import gajim
 from common import dataforms
+from common import atom
 from common.commands import ConnectionCommands
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
@@ -1275,6 +1276,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
+		# check if the message is pubsub#event
+		if msg.getTag('event') is not None:
+			self._pubsubEventCB(con, msg)
+			return
 		msgtxt = msg.getBody()
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
@@ -1393,6 +1398,32 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
 					subject, chatstate, msg_id, composing_jep, user_nick))
 	# END messageCB
+
+	def _pubsubEventCB(self, con, msg):
+		''' Called when we receive <message/> with pubsub event. '''
+		# TODO: Logging? (actually services where logging would be useful, should
+		# TODO: allow to access archives remotely...)
+		event = msg.getTag('event')
+
+		items = event.getTag('items')
+		if items is None: return
+
+		for item in items.getTags('item'):
+			# check for event type (for now only one type supported: pubsub.com events)
+			child = item.getTag('pubsub-message')
+			if child is not None:
+				# we have pubsub.com notification
+				child = child.getTag('feed')
+				if child is None: continue
+
+				for entry in child.getTags('entry'):
+					# for each entry in feed (there shouldn't be more than one,
+					# but to be sure...
+					self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
+				continue
+			# unknown type... probably user has another client who understands that event
+		
+		raise common.xmpp.NodeProcessed
 
 	def _presenceCB(self, con, prs):
 		'''Called when we receive a presence'''

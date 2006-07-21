@@ -38,6 +38,7 @@ from common import i18n
 import message_control
 
 from chat_control import ChatControlBase
+from atom_window import AtomWindow
 
 from common import exceptions
 
@@ -1346,6 +1347,10 @@ class Interface:
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
 
+	def handle_atom_entry(self, account, data):
+		atom_entry, = data
+		AtomWindow.newAtomEntry(atom_entry)
+
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
 		if not self.instances.has_key(account):
@@ -1671,6 +1676,7 @@ class Interface:
 			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
 			'SIGNED_IN': self.handle_event_signed_in,
 			'METACONTACTS': self.handle_event_metacontacts,
+			'ATOM_ENTRY': self.handle_atom_entry,
 			'PRIVACY_LISTS_RECEIVED': self.handle_event_privacy_lists_received,
 			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
 			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
