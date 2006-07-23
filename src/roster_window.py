@@ -1209,7 +1209,7 @@ class RosterWindow:
 		# focus-in callback checks on this var and if is NOT None
 		# it redraws the selected contact resulting in stopping our rename
 		# procedure. So set this to None to stop that
-		self._last_selected_contact = None
+		self._last_selected_contact = []
 		model = self.tree.get_model()
 
 		row_type = model[iter][C_TYPE]
@@ -1455,6 +1455,33 @@ class RosterWindow:
 		roster_contact_context_menu.show_all()
 		roster_contact_context_menu.popup(None, None, None, event_button,
 			event.time)
+
+	def make_multiple_contact_menu(self, event, iters):
+		'''Make group's popup menu'''
+		model = self.tree.get_model()
+#		path = model.get_path(iter)
+#		group = model[iter][C_JID].decode('utf-8')
+#		account = model[iter][C_ACCOUNT].decode('utf-8')
+
+		menu = gtk.Menu()
+
+		remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
+		remove_item.set_image(icon)
+		menu.append(remove_item)
+		#TODO
+#		remove_item.connect('activate', self.on_rename, iter, path)
+
+#		# unsensitive if account is not connected
+#		if gajim.connections[account].connected < 2:
+#			rename_item.set_sensitive(False)
+
+		event_button = gtkgui_helpers.get_possible_button_event(event)
+
+		menu.attach_to_widget(self.tree, None)
+		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
+		menu.show_all()
+		menu.popup(None, None, None, event_button, event.time)
 
 	def make_group_menu(self, event, iter):
 		'''Make group's popup menu'''
@@ -1731,19 +1758,21 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.tree.get_selection().unselect_all()
 		elif event.keyval == gtk.keysyms.F2:
 			treeselection = self.tree.get_selection()
-			model, iter = treeselection.get_selected()
-			if not iter:
+			model, list_of_paths = treeselection.get_selected_rows()
+			if len(list_of_paths) != 1:
 				return
-			type = model[iter][C_TYPE]
+			path = list_of_paths[0]
+			type = model[path][C_TYPE]
 			if type in ('contact', 'group', 'agent'):
-				path = model.get_path(iter)
+				iter = model.get_iter(path)
 				self.on_rename(widget, iter, path)
 
 		elif event.keyval == gtk.keysyms.Delete:
 			treeselection = self.tree.get_selection()
-			model, iter = treeselection.get_selected()
-			if not iter:
+			model, list_of_paths = treeselection.get_selected_rows()
+			if not len(list_of_paths):
 				return
+			#TODO:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			type = model[iter][C_TYPE]
@@ -1756,32 +1785,41 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			elif type == 'agent':
 				self.on_remove_agent(widget, contact, account)
 
-	def show_appropriate_context_menu(self, event, iter):
+	def show_appropriate_context_menu(self, event, iters):
+		# iters must be all of the same type
 		model = self.tree.get_model()
-		type = model[iter][C_TYPE]
-		if type == 'group':
-			self.make_group_menu(event, iter)
-		elif type == 'agent':
-			self.make_transport_menu(event, iter)
-		elif type in ('contact', 'self_contact'):
-			self.make_contact_menu(event, iter)
-		elif type == 'account':
-			self.make_account_menu(event, iter)
+		type = model[iters[0]][C_TYPE]
+		for iter in iters[1:]:
+			if model[iter][C_TYPE] != type:
+				return
+		if type == 'group' and len(iters) == 1:
+			self.make_group_menu(event, iters[0])
+		elif type == 'agent' and len(iters) == 1:
+			self.make_transport_menu(event, iters[0])
+		elif type in ('contact', 'self_contact') and len(iters) == 1:
+			self.make_contact_menu(event, iters[0])
+		elif type  == 'contact':
+			self.make_multiple_contact_menu(event, iters)
+		elif type == 'account' and len(iters) == 1:
+			self.make_account_menu(event, iters[0])
 
 	def show_treeview_menu(self, event):
 		try:
-			store, iter = self.tree.get_selection().get_selected()
+			model, list_of_paths = self.tree.get_selection().get_selected_rows()
 		except TypeError:
 			self.tree.get_selection().unselect_all()
 			return
-		if not iter:
+		if not len(list_of_paths):
 			# no row is selected
 			return
-		model = self.tree.get_model()
-		path = model.get_path(iter)
-		self.tree.get_selection().select_path(path)
-
-		self.show_appropriate_context_menu(event, iter)
+		if len(list_of_paths) > 1:
+			iters = []
+			for path in list_of_paths:
+				iters.append(model.get_iter(path))
+		else:
+			path = list_of_paths[0]
+			iters = [model.get_iter(path)]
+		self.show_appropriate_context_menu(event, iters)
 
 		return True
 
@@ -1796,21 +1834,30 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return False
 
 		if event.button == 3: # Right click
-			self.tree.get_selection().select_path(path)
-			model = self.tree.get_model()
-			iter = model.get_iter(path)
-			self.show_appropriate_context_menu(event, iter)
-			return True
+			try:
+				model, list_of_paths = self.tree.get_selection().get_selected_rows()
+			except TypeError:
+				list_of_paths = []
+				pass
+			if path not in list_of_paths:
+				self.tree.get_selection().unselect_all()
+				self.tree.get_selection().select_path(path)
+			return self.show_treeview_menu(event)
 
 		elif event.button == 2: # Middle click
-			self.tree.get_selection().select_path(path)
-			model = self.tree.get_model()
-			iter = model.get_iter(path)
-			type = model[iter][C_TYPE]
+			try:
+				model, list_of_paths = self.tree.get_selection().get_selected_rows()
+			except TypeError:
+				list_of_paths = []
+				pass
+			if list_of_paths != [path]:
+				self.tree.get_selection().unselect_all()
+				self.tree.get_selection().select_path(path)
+			type = model[path][C_TYPE]
 			if type in ('agent', 'contact', 'self_contact'):
 				self.on_roster_treeview_row_activated(widget, path)
 			elif type == 'account':
-				account = model[iter][C_ACCOUNT].decode('utf-8')
+				account = model[path][C_ACCOUNT].decode('utf-8')
 				if account != 'all':
 					show = gajim.connections[account].connected
 					if show > 1: # We are connected
@@ -1833,8 +1880,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		elif event.button == 1: # Left click
 			model = self.tree.get_model()
-			iter = model.get_iter(path)
-			type = model[iter][C_TYPE]
+			type = model[path][C_TYPE]
 			if type == 'group' and x < 27:
 				# first cell in 1st column (the arrow SINGLE clicked)
 				if (self.tree.row_expanded(path)):
@@ -1843,8 +1889,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					self.tree.expand_row(path, False)
 
 			elif type == 'contact' and x < 27:
-				account = model[iter][C_ACCOUNT].decode('utf-8')
-				jid = model[iter][C_JID].decode('utf-8')
+				account = model[path][C_ACCOUNT].decode('utf-8')
+				jid = model[path][C_JID].decode('utf-8')
 				# first cell in 1st column (the arrow SINGLE clicked)
 				iters = self.get_contact_iter(jid, account)
 				for iter in iters:
@@ -2439,25 +2485,25 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# if a contact row is selected, update colors (eg. for status msg)
 		# because gtk engines may differ in bg when window is selected
 		# or not
-		if self._last_selected_contact is not None:
-			jid, account = self._last_selected_contact
-			self.draw_contact(jid, account, selected = True,
+		if len(self._last_selected_contact):
+			for (jid, account) in self._last_selected_contact:
+				self.draw_contact(jid, account, selected = True,
 					focus = True)
 
 	def on_roster_window_focus_out_event(self, widget, event):
 		# if a contact row is selected, update colors (eg. for status msg)
 		# because gtk engines may differ in bg when window is selected
 		# or not
-		if self._last_selected_contact is not None:
-			jid, account = self._last_selected_contact
-			self.draw_contact(jid, account, selected = True,
+		if len(self._last_selected_contact):
+			for (jid, account) in self._last_selected_contact:
+				self.draw_contact(jid, account, selected = True,
 					focus = False)
 
 	def on_roster_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
-			treeselection = self.tree.get_selection()
-			model, iter = treeselection.get_selected()
-			if not iter and gajim.interface.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
+			model, list_of_paths = self.tree.get_selection().get_selected_rows()
+			if not len(list_of_path) and gajim.interface.systray_enabled and \
+			not gajim.config.get('quit_on_roster_x_button'):
 				self.tooltip.hide_tooltip()
 				self.window.hide()
 
@@ -3116,12 +3162,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		return 0
 
 	def drag_data_get_data(self, treeview, context, selection, target_id, etime):
-		treeselection = treeview.get_selection()
-		model, iter = treeselection.get_selected()
-		path = model.get_path(iter)
+		model, list_of_paths = self.tree.get_selection().get_selected_rows()
+		if len(list_of_paths) != 1:
+			return
+		path = list_of_paths[0]
 		data = ''
 		if len(path) >= 3:
-			data = model[iter][C_JID]
+			data = model[path][C_JID]
 		selection.set(selection.target, 8, data)
 
 	def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
@@ -3234,8 +3281,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
 			# dropped before a group : we drop it in the previous group
 			path_dest = (path_dest[0], path_dest[1]-1)
-		iter_source = treeview.get_selection().get_selected()[1]
-		path_source = model.get_path(iter_source)
+		path_source = treeview.get_selection().get_selected_rows()[0][1]
+		iter_source = model.get_iter(path_source)
 		type_source = model[iter_source][C_TYPE]
 		account_source = model[iter_source][C_ACCOUNT].decode('utf-8')
 		if type_source != 'contact': # source is not a contact
@@ -3377,22 +3424,23 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				contact[C_ACCOUNT].decode('utf-8'))
 
 	def _on_treeview_selection_changed(self, selection):
-		model, selected_iter = selection.get_selected()
-		if self._last_selected_contact is not None:
-			# update unselected row
-			jid, account = self._last_selected_contact
-			self.draw_contact(jid, account)
-		if selected_iter is None:
-			self._last_selected_contact = None
+		model, list_of_paths = selection.get_selected_rows()
+		if len(self._last_selected_contact):
+			# update unselected rows
+			for (jid, account) in self._last_selected_contact:
+				self.draw_contact(jid, account)
+		self._last_selected_contact = []
+		if len(list_of_paths) == 0:
 			return
-		contact_row = model[selected_iter]
-		if contact_row[C_TYPE] != 'contact':
-			self._last_selected_contact = None
-			return
-		jid = contact_row[C_JID].decode('utf-8')
-		account = contact_row[C_ACCOUNT].decode('utf-8')
-		self._last_selected_contact = (jid, account)
-		self.draw_contact(jid, account, selected = True)
+		for path in list_of_paths:
+			row = model[path]
+			if row[C_TYPE] != 'contact':
+				self._last_selected_contact = []
+				return
+			jid = row[C_JID].decode('utf-8')
+			account = row[C_ACCOUNT].decode('utf-8')
+			self._last_selected_contact.append((jid, account))
+			self.draw_contact(jid, account, selected = True)
 
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
@@ -3402,10 +3450,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if gajim.config.get('roster_window_skip_taskbar'):
 			self.window.set_property('skip-taskbar-hint', True)
 		self.tree = self.xml.get_widget('roster_treeview')
-		self.tree.get_selection().connect('changed',
+		sel = self.tree.get_selection()
+		sel.set_mode(gtk.SELECTION_MULTIPLE)
+		sel.connect('changed',
 			self._on_treeview_selection_changed)
 
-		self._last_selected_contact = None # None or holds jid, account tupple
+		self._last_selected_contact = [] # holds a list of (jid, account) tupples
 		self.jabber_state_images = {'16': {}, '32': {}, 'opened': {},
 			'closed': {}}
 		self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
