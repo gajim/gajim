@@ -1471,7 +1471,7 @@ class RosterWindow:
 		roster_contact_context_menu.popup(None, None, None, event_button,
 			event.time)
 
-	def on_invite_to_room(self, widget, list_):
+	def on_invite_to_new_room(self, widget, list_):
 		print 'TODO: create a new room'
 		# Create room
 		# configure room
@@ -1507,7 +1507,7 @@ class RosterWindow:
 		menu.append(remove_item)
 		remove_item.connect('activate', self.on_req_usub, list_)
 
-		invite_item = gtk.ImageMenuItem(_('_Invite'))
+		invite_item = gtk.ImageMenuItem(_('_Invite to'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_GO_BACK, gtk.ICON_SIZE_MENU)
 		invite_item.set_image(icon)
 		
@@ -1518,10 +1518,13 @@ class RosterWindow:
 		menuitem.connect('activate', self.on_invite_to_new_room, list_)
 		sub_menu.append(menuitem)
 		rooms = [] # a list of (room_jid, account) tuple
-		for account in connected_accounts:
-			for room_jid in gajim.gc_connected[account]:
-				if gajim.gc_connected[account][room_jid]:
-					rooms.append((room_jid, account))
+		for gc_control in gajim.interface.msg_win_mgr.get_controls(
+		message_control.TYPE_GC):
+			account = gc_control.account
+			room_jid = gc_control.room_jid
+			if gajim.gc_connected[account].has_key(room_jid) and \
+			gajim.gc_connected[account][room_jid]:
+				rooms.append((room_jid, account))
 		if len(rooms):
 			item = gtk.SeparatorMenuItem() # separator
 			sub_menu.append(item)
