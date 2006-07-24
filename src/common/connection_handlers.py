@@ -1418,7 +1418,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for').split()
-		status = prs.getStatus()
+		status = prs.getStatus() or ''
 		show = prs.getShow()
 		if not show in STATUS_LIST:
 			show = '' # We ignore unknown show
