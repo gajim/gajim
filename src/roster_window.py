@@ -1471,16 +1471,30 @@ class RosterWindow:
 		roster_contact_context_menu.popup(None, None, None, event_button,
 			event.time)
 
+	def on_invite_to_room(self, widget, list_):
+		print 'TODO: create a new room'
+		# Create room
+		# configure room
+		# send invitations
+
+	def on_invite_to_room(self, widget, list_, room_jid, account):
+		for (contact, acct) in list_:
+			gajim.connections[account].send_invite(room_jid, contact.jid)
+		
+
 	def make_multiple_contact_menu(self, event, iters):
 		'''Make group's popup menu'''
 		model = self.tree.get_model()
 		list_ = [] # list of (jid, account) tuples
 		one_account_offline = False
+		connected_accounts = []
 		for iter in iters:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			if gajim.connections[account].connected < 2:
 				one_account_offline = True
+			elif not account in connected_accounts:
+				connected_accounts.append(account)
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
 			list_.append((contact, account))
@@ -1492,6 +1506,33 @@ class RosterWindow:
 		remove_item.set_image(icon)
 		menu.append(remove_item)
 		remove_item.connect('activate', self.on_req_usub, list_)
+
+		invite_item = gtk.ImageMenuItem(_('_Invite'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_GO_BACK, gtk.ICON_SIZE_MENU)
+		invite_item.set_image(icon)
+		
+		sub_menu = gtk.Menu()
+		menuitem = gtk.ImageMenuItem(_('_New room'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+		menuitem.set_image(icon)
+		menuitem.connect('activate', self.on_invite_to_new_room, list_)
+		sub_menu.append(menuitem)
+		rooms = [] # a list of (room_jid, account) tuple
+		for account in connected_accounts:
+			for room_jid in gajim.gc_connected[account]:
+				if gajim.gc_connected[account][room_jid]:
+					rooms.append((room_jid, account))
+		if len(rooms):
+			item = gtk.SeparatorMenuItem() # separator
+			sub_menu.append(item)
+			for (room_jid, account) in rooms:
+				menuitem = gtk.MenuItem(room_jid.split('@')[0])
+				menuitem.connect('activate', self.on_invite_to_room, list_,
+					room_jid, account)
+				sub_menu.append(menuitem)
+		
+		invite_item.set_submenu(sub_menu)
+		menu.append(invite_item)
 
 		# unsensitive if one account is not connected
 		if one_account_offline:
