@@ -1181,26 +1181,41 @@ class RosterWindow:
 		'''When we want to modify the agent registration'''
 		gajim.connections[account].request_register_agent_info(contact.jid)
 
-	def on_remove_agent(self, widget, contact, account):
-		'''When an agent is requested to log in or off'''
-		if gajim.config.get_per('accounts', account, 'hostname') == contact.jid:
-			# We remove the server contact
-			# remove it from treeview
-			gajim.connections[account].unsubscribe(contact.jid)
-			self.remove_contact(contact, account)
-			gajim.contacts.remove_contact(account, contact)
-			return
+	def on_remove_agent(self, widget, list_):
+		'''When an agent is requested to log in or off. list_ is a list of
+		(contact, account) tuple'''
+		for (contact, account) in list_:
+			if gajim.config.get_per('accounts', account, 'hostname') == \
+			contact.jid:
+				# We remove the server contact
+				# remove it from treeview
+				gajim.connections[account].unsubscribe(contact.jid)
+				self.remove_contact(contact, account)
+				gajim.contacts.remove_contact(account, contact)
+				return
 
-		def remove(widget, contact, account):
+		def remove(widget, list_):
 			self.dialog.destroy()
-			full_jid = contact.get_full_jid()
-			gajim.connections[account].unsubscribe_agent(full_jid)
-			# remove transport from treeview
-			self.remove_contact(contact, account)
-			gajim.contacts.remove_jid(account, contact.jid)
-			gajim.contacts.remove_contact(account, contact)
+			for (contact, account) in list_:
+				full_jid = contact.get_full_jid()
+				gajim.connections[account].unsubscribe_agent(full_jid)
+				# remove transport from treeview
+				self.remove_contact(contact, account)
+				gajim.contacts.remove_jid(account, contact.jid)
+				gajim.contacts.remove_contact(account, contact)
 
-		self.dialog = dialogs.ConfirmationDialog(_('Transport "%s" will be removed') % contact.jid, _('You will no longer be able to send and receive messages to contacts from this transport.'), on_response_ok = (remove, contact, account))
+		if len(list_) == 1:
+			pritext = _('Transport "%s" will be removed') % contact.jid
+			sectext = _('You will no longer be able to send and receive messages to contacts from this transport.')
+		else:
+			pritext = _('Transports will be removed')
+			jids = ''
+			for (contact, account) in list_:
+				jids += '\n  ' + contact.get_shown_name() + ','
+			jids = jids[:-1] + '.'
+			sectext = _('You will no longer be able to send and receive messages to contacts from these transports:%s') % jids
+		self.dialog = dialogs.ConfirmationDialog(pritext, sectext,
+			on_response_ok = (remove, list_))
 
 	def on_rename(self, widget, iter, path):
 		# this function is called either by F2 or by Rename menuitem
@@ -1460,9 +1475,12 @@ class RosterWindow:
 		'''Make group's popup menu'''
 		model = self.tree.get_model()
 		list_ = [] # list of (jid, account) tuples
+		one_account_offline = False
 		for iter in iters:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
+			if gajim.connections[account].connected < 2:
+				one_account_offline = True
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
 			list_.append((contact, account))
@@ -1475,10 +1493,9 @@ class RosterWindow:
 		menu.append(remove_item)
 		remove_item.connect('activate', self.on_req_usub, list_)
 
-		#TODO
-#		# unsensitive if account is not connected
-#		if gajim.connections[account].connected < 2:
-#			rename_item.set_sensitive(False)
+		# unsensitive if one account is not connected
+		if one_account_offline:
+			remove_item.set_sensitive(False)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
@@ -1574,7 +1591,7 @@ class RosterWindow:
 		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
-		item.connect('activate', self.on_remove_agent, contact, account)
+		item.connect('activate', self.on_remove_agent, [(contact, account)])
 		if not is_connected:
 			item.set_sensitive(False)
 
@@ -1776,18 +1793,22 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			model, list_of_paths = treeselection.get_selected_rows()
 			if not len(list_of_paths):
 				return
-			#TODO:
-			jid = model[iter][C_JID].decode('utf-8')
-			account = model[iter][C_ACCOUNT].decode('utf-8')
-			type = model[iter][C_TYPE]
-			if type in ('account', 'group'):
+			type = model[list_of_paths[0]][C_TYPE]
+			list_ = []
+			for path in list_of_paths:
+				if model[path][C_TYPE] != type:
+					return
+				jid = model[path][C_JID].decode('utf-8')
+				account = model[path][C_ACCOUNT].decode('utf-8')
+				contact = gajim.contacts.get_contact_with_highest_priority(account,
+					jid)
+				list_.append((contact, account))
+			if type in ('account', 'group', 'self_contact'):
 				return
-			contact = gajim.contacts.get_contact_with_highest_priority(account,
-				jid)
 			if type == 'contact':
-				self.on_req_usub(widget, [(contact, account)])
+				self.on_req_usub(widget, list_)
 			elif type == 'agent':
-				self.on_remove_agent(widget, contact, account)
+				self.on_remove_agent(widget, list_)
 
 	def show_appropriate_context_menu(self, event, iters):
 		# iters must be all of the same type
@@ -3301,7 +3322,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
 			# dropped before a group : we drop it in the previous group
 			path_dest = (path_dest[0], path_dest[1]-1)
-		path_source = treeview.get_selection().get_selected_rows()[0][1]
+		path_source = treeview.get_selection().get_selected_rows()[1][0]
 		iter_source = model.get_iter(path_source)
 		type_source = model[iter_source][C_TYPE]
 		account_source = model[iter_source][C_ACCOUNT].decode('utf-8')
