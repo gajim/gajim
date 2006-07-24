@@ -1324,6 +1324,7 @@ class RosterWindow:
 		start_chat_menuitem = xml.get_widget('start_chat_menuitem')
 		send_single_message_menuitem = xml.get_widget(
 			'send_single_message_menuitem')
+		invite_menuitem = xml.get_widget('invite_menuitem')
 		rename_menuitem = xml.get_widget('rename_menuitem')
 		edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
 		# separator has with send file, assign_openpgp_key_menuitem, etc..
@@ -1391,6 +1392,25 @@ class RosterWindow:
 
 		send_single_message_menuitem.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, contact)
+
+		rooms = [] # a list of (room_jid, account) tuple
+		for gc_control in gajim.interface.msg_win_mgr.get_controls(
+		message_control.TYPE_GC):
+			acct = gc_control.account
+			room_jid = gc_control.room_jid
+			if gajim.gc_connected[acct].has_key(room_jid) and \
+			gajim.gc_connected[acct][room_jid]:
+				rooms.append((room_jid, acct))
+		if len(rooms):
+			submenu = gtk.Menu()
+			invite_menuitem.set_submenu(submenu)
+			for (room_jid, acct) in rooms:
+				menuitem = gtk.MenuItem(room_jid.split('@')[0])
+				menuitem.connect('activate', self.on_invite_to_room,
+					[(contact, account)], room_jid, acct)
+				submenu.append(menuitem)
+		else:
+			invite_menuitem.set_sensitive(False)
 		rename_menuitem.connect('activate', self.on_rename, iter, path)
 		remove_from_roster_menuitem.connect('activate', self.on_req_usub,
 			[(contact, account)])
