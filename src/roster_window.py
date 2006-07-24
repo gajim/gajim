@@ -1378,7 +1378,7 @@ class RosterWindow:
 			self.on_send_single_message_menuitem_activate, account, contact)
 		rename_menuitem.connect('activate', self.on_rename, iter, path)
 		remove_from_roster_menuitem.connect('activate', self.on_req_usub,
-			contact, account)
+			[(contact, account)])
 		information_menuitem.connect('activate', self.on_info, contact,
 			account)
 		history_menuitem.connect('activate', self.on_history, contact,
@@ -1459,9 +1459,13 @@ class RosterWindow:
 	def make_multiple_contact_menu(self, event, iters):
 		'''Make group's popup menu'''
 		model = self.tree.get_model()
-#		path = model.get_path(iter)
-#		group = model[iter][C_JID].decode('utf-8')
-#		account = model[iter][C_ACCOUNT].decode('utf-8')
+		list_ = [] # list of (jid, account) tuples
+		for iter in iters:
+			jid = model[iter][C_JID].decode('utf-8')
+			account = model[iter][C_ACCOUNT].decode('utf-8')
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+			list_.append((contact, account))
 
 		menu = gtk.Menu()
 
@@ -1469,9 +1473,9 @@ class RosterWindow:
 		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		remove_item.set_image(icon)
 		menu.append(remove_item)
-		#TODO
-#		remove_item.connect('activate', self.on_rename, iter, path)
+		remove_item.connect('activate', self.on_req_usub, list_)
 
+		#TODO
 #		# unsensitive if account is not connected
 #		if gajim.connections[account].connected < 2:
 #			rename_item.set_sensitive(False)
@@ -1781,7 +1785,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
 			if type == 'contact':
-				self.on_req_usub(widget, contact, account)
+				self.on_req_usub(widget, [(contact, account)])
 			elif type == 'agent':
 				self.on_remove_agent(widget, contact, account)
 
@@ -1900,54 +1904,70 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					else:
 						self.tree.expand_row(path, False)
 
-	def on_req_usub(self, widget, contact, account):
-		'''Remove a contact'''
-		def on_ok(widget, contact, account):
+	def on_req_usub(self, widget, list_):
+		'''Remove a contact. list_ is a list of (contact, account) tuples'''
+		def on_ok(widget, list_):
 			self.dialog.destroy()
 			remove_auth = True
-			if contact.sub != 'to' and self.dialog.is_checked():
-				remove_auth = False
-			gajim.connections[account].unsubscribe(contact.jid, remove_auth)
-			for c in gajim.contacts.get_contact(account, contact.jid):
-				self.remove_contact(c, account)
-			gajim.contacts.remove_jid(account, c.jid)
-			need_readd = False
-			if not remove_auth and contact.sub == 'both':
-				contact.name = ''
-				contact.groups = []
-				contact.sub = 'from'
-				gajim.contacts.add_contact(account, contact)
-				self.add_contact_to_roster(contact.jid, account)
-			elif gajim.awaiting_events[account].has_key(contact.jid):
-				need_readd = True
-			elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-				if _('Not in Roster') in contact.groups:
-					# Close chat window
-					msg_win = gajim.interface.msg_win_mgr.get_window(contact.jid,
-						account)
-					ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid,
-						account)
-					msg_win.remove_tab(ctrl)
-				else:
+			if len(list_) == 1:
+				contact = list_[0][0]
+				if contact.sub != 'to' and self.dialog.is_checked():
+					remove_auth = False
+			for (contact, account) in list_:
+				gajim.connections[account].unsubscribe(contact.jid, remove_auth)
+				for c in gajim.contacts.get_contact(account, contact.jid):
+					self.remove_contact(c, account)
+				gajim.contacts.remove_jid(account, c.jid)
+				need_readd = False
+				if not remove_auth and contact.sub == 'both':
+					contact.name = ''
+					contact.groups = []
+					contact.sub = 'from'
+					gajim.contacts.add_contact(account, contact)
+					self.add_contact_to_roster(contact.jid, account)
+				elif gajim.awaiting_events[account].has_key(contact.jid):
 					need_readd = True
-			if need_readd:
-				c = gajim.contacts.create_contact(jid = contact.jid,
-					name = '', groups = [_('Not in Roster')],
-					show = 'not in roster', status = '', ask = 'none',
-					keyID = contact.keyID)
-				gajim.contacts.add_contact(account, c)
-				self.add_contact_to_roster(contact.jid, account)
-		pritext = _('Contact "%s" will be removed from your roster') % \
-			contact.get_shown_name()
-		if contact.sub == 'to':
-			self.dialog = dialogs.ConfirmationDialog(pritext,
-				_('By removing this contact you also remove authorization resulting in him or her always seeing you as offline.'),
-				on_response_ok = (on_ok, contact, account))
+				elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+					if _('Not in Roster') in contact.groups:
+						# Close chat window
+						msg_win = gajim.interface.msg_win_mgr.get_window(contact.jid,
+							account)
+						ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid,
+							account)
+						msg_win.remove_tab(ctrl)
+					else:
+						need_readd = True
+				if need_readd:
+					c = gajim.contacts.create_contact(jid = contact.jid,
+						name = '', groups = [_('Not in Roster')],
+						show = 'not in roster', status = '', ask = 'none',
+						keyID = contact.keyID)
+					gajim.contacts.add_contact(account, c)
+					self.add_contact_to_roster(contact.jid, account)
+		if len(list_) == 1:
+			contact = list_[0][0]
+			account = list_[0][1]
+			pritext = _('Contact "%s" will be removed from your roster') % \
+				contact.get_shown_name()
+			if contact.sub == 'to':
+				self.dialog = dialogs.ConfirmationDialog(pritext,
+					_('By removing this contact you also remove authorization resulting in him or her always seeing you as offline.'),
+					on_response_ok = (on_ok, list_))
+			else:
+				self.dialog = dialogs.ConfirmationDialogCheck(pritext,
+					_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'),
+					_('I want this contact to know my status after removal'),
+					on_response_ok = (on_ok, list_))
 		else:
-			self.dialog = dialogs.ConfirmationDialogCheck(pritext,
-				_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'),
-				_('I want this contact to know my status after removal'),
-				on_response_ok = (on_ok, contact, account))
+			# several contact to remove at the same time
+			pritext = _('Contacts will be removed from your roster')
+			jids = ''
+			for (contact, account) in list_:
+				jids += '\n  ' + contact.get_shown_name() + ','
+			sectext = _('By removing these contacts:%s\nyou also remove authorization resulting in them always seeing you as offline.') % jids
+			self.dialog = dialogs.ConfirmationDialog(pritext, sectext,
+				on_response_ok = (on_ok, list_))
+
 
 	def forget_gpg_passphrase(self, keyid):
 		if self.gpg_passphrase.has_key(keyid):
