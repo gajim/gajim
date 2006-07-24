@@ -138,7 +138,7 @@ else:
 		def verify(self, str, sign):
 			if not USE_GPG:
 				return str
-			if not str:
+			if str == None:
 				return ''
 			f = tmpfile()
 			fd = f.fileno()
