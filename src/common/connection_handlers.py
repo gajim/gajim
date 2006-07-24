@@ -1345,8 +1345,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				if not self.last_history_line.has_key(jid):
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim))
-				if self.name not in no_log_for and jid in self.last_history_line \
-					and not int(float(time.mktime(tim))) <= \
+				if self.name not in no_log_for and not int(float(time.mktime(tim))) <= \
 					self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 		elif mtype == 'chat': # it's type 'chat'
@@ -1478,7 +1477,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			if not ptype or ptype == 'unavailable':
 				if gajim.config.get('log_contact_status_changes') and self.name\
 					not in no_log_for and jid_stripped not in no_log_for:
-					gajim.logger.write('gcstatus', who, status, show)
+					gc_c = gajim.contacts.get_gc_contact(self.name, jid_stripped, resource)
+					st = status or ''
+					if gc_c:
+						jid = gc_c.jid
+					else:
+						jid = prs.getJid()
+					if jid:
+						# we know real jid, save it in db
+						st += ' (%s)' % jid
+					gajim.logger.write('gcstatus', who, st, show)
 				if avatar_sha:
 					if self.vcard_shas.has_key(who):
 						if avatar_sha != self.vcard_shas[who]:

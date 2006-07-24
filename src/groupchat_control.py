@@ -902,15 +902,18 @@ class GroupchatControl(ChatControlBase):
 					break
 			if print_status is None:
 				print_status = gajim.config.get('print_status_in_muc')
+			nick_jid = nick
+			if jid:
+				nick_jid += ' (%s)' % jid
 			if show == 'offline' and print_status in ('all', 'in_and_out'):
-				st = _('%s has left') % nick
+				st = _('%s has left') % nick_jid
 				if reason:
 					st += ' [%s]' % reason
 			else:
 				if newly_created and print_status in ('all', 'in_and_out'):
-					st = _('%s has joined the room') % nick
+					st = _('%s has joined the room') % nick_jid
 				elif print_status == 'all':
-					st = _('%s is now %s') % (nick, helpers.get_uf_show(show))
+					st = _('%s is now %s') % (nick_jid, helpers.get_uf_show(show))
 			if st:
 				if status:
 					st += ' (' + status + ')'
