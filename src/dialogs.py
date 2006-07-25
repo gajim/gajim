@@ -923,8 +923,13 @@ class SubscriptionRequestWindow:
 		self.window.destroy()
 
 class JoinGroupchatWindow:
-	def __init__(self, account, server = '', room = '', nick = ''):
+	def __init__(self, account, server = '', room = '', nick = '',
+	automatic = False):
+		'''automatic is a dict like {'invities': []}
+		If automatic is not empty, this means room must be automaticaly configured
+		and when done, invities must be automatically invited'''
 		self.account = account
+		self.automatic = automatic
 		if nick == '':
 			nick = gajim.nicks[self.account]
 		if gajim.connections[account].connected < 2:
@@ -1026,10 +1031,12 @@ _('You can not join a group chat unless you are connected.'))
 
 	def on_join_button_clicked(self, widget):
 		'''When Join button is clicked'''
-		nickname = self.xml.get_widget('nickname_entry').get_text().decode('utf-8')
+		nickname = self.xml.get_widget('nickname_entry').get_text().decode(
+			'utf-8')
 		room = self.xml.get_widget('room_entry').get_text().decode('utf-8')
 		server = self.xml.get_widget('server_entry').get_text().decode('utf-8')
-		password = self.xml.get_widget('password_entry').get_text().decode('utf-8')
+		password = self.xml.get_widget('password_entry').get_text().decode(
+			'utf-8')
 		jid = '%s@%s' % (room, server)
 		try:
 			jid = helpers.parse_jid(jid)
@@ -1044,7 +1051,9 @@ _('You can not join a group chat unless you are connected.'))
 		if len(self.recently_groupchat) > 10:
 			self.recently_groupchat = self.recently_groupchat[0:10]
 		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
-		
+
+		if self.automatic:
+			gajim.automatic_rooms[self.account][jid] = self.automatic
 		gajim.interface.roster.join_gc_room(self.account, jid, nickname, password)
 
 		self.window.destroy()

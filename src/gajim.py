@@ -899,10 +899,18 @@ class Interface:
 
 	def handle_event_gc_config(self, account, array):
 		#('GC_CONFIG', account, (jid, config))  config is a dict
-		jid = array[0].split('/')[0]
-		if not self.instances[account]['gc_config'].has_key(jid):
-			self.instances[account]['gc_config'][jid] = \
-			config.GroupchatConfigWindow(account, jid, array[1])
+		room_jid = array[0].split('/')[0]
+		if room_jid in gajim.automatic_rooms[account]:
+			# use default configuration
+			gajim.connections[account].send_gc_config(room_jid, array[1])
+			# invite contacts
+			if gajim.automatic_rooms[account][room_jid].has_key('invities'):
+				for jid in gajim.automatic_rooms[account][room_jid]['invities']:
+					gajim.connections[account].send_invite(room_jid, jid)
+			del gajim.automatic_rooms[account][room_jid]
+		elif not self.instances[account]['gc_config'].has_key(room_jid):
+			self.instances[account]['gc_config'][room_jid] = \
+			config.GroupchatConfigWindow(account, room_jid, array[1])
 
 	def handle_event_gc_affiliation(self, account, array):
 		#('GC_AFFILIATION', account, (room_jid, affiliation, list)) list is list
@@ -1840,6 +1848,7 @@ class Interface:
 			gajim.contacts.add_account(a)
 			gajim.groups[a] = {}
 			gajim.gc_connected[a] = {}
+			gajim.automatic_rooms[a] = {}
 			gajim.newly_added[a] = []
 			gajim.to_be_removed[a] = []
 			gajim.awaiting_events[a] = {}

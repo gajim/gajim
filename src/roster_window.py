@@ -1393,24 +1393,30 @@ class RosterWindow:
 		send_single_message_menuitem.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, contact)
 
+		submenu = gtk.Menu()
+		invite_menuitem.set_submenu(submenu)
+		menuitem = gtk.ImageMenuItem(_('_New room'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+		menuitem.set_image(icon)
+		menuitem.connect('activate', self.on_invite_to_new_room, [(contact,
+			account)])
+		submenu.append(menuitem)
 		rooms = [] # a list of (room_jid, account) tuple
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(
 		message_control.TYPE_GC):
-			acct = gc_control.account
+			account = gc_control.account
 			room_jid = gc_control.room_jid
-			if gajim.gc_connected[acct].has_key(room_jid) and \
-			gajim.gc_connected[acct][room_jid]:
-				rooms.append((room_jid, acct))
+			if gajim.gc_connected[account].has_key(room_jid) and \
+			gajim.gc_connected[account][room_jid]:
+				rooms.append((room_jid, account))
 		if len(rooms):
-			submenu = gtk.Menu()
-			invite_menuitem.set_submenu(submenu)
+			item = gtk.SeparatorMenuItem() # separator
+			submenu.append(item)
 			for (room_jid, acct) in rooms:
 				menuitem = gtk.MenuItem(room_jid.split('@')[0])
 				menuitem.connect('activate', self.on_invite_to_room,
 					[(contact, account)], room_jid, acct)
 				submenu.append(menuitem)
-		else:
-			invite_menuitem.set_sensitive(False)
 		rename_menuitem.connect('activate', self.on_rename, iter, path)
 		remove_from_roster_menuitem.connect('activate', self.on_req_usub,
 			[(contact, account)])
@@ -1480,8 +1486,6 @@ class RosterWindow:
 			remove_from_roster_menuitem]:
 				widget.set_sensitive(False)
 
-		#FIXME: create menu for sub contacts
-
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
 		roster_contact_context_menu.attach_to_widget(self.tree, None)
@@ -1492,10 +1496,28 @@ class RosterWindow:
 			event.time)
 
 	def on_invite_to_new_room(self, widget, list_):
-		print 'TODO: create a new room'
-		# Create room
-		# configure room
-		# send invitations
+		account_list = []
+		jid_list = []
+		for (contact, account) in list_:
+			if contact.jid not in jid_list:
+				jid_list.append(contact.jid)
+			if account not in account_list:
+				account_list.append(account)
+		for account in account_list:
+			if gajim.connections[account].muc_jid:
+				# create invities list
+
+				# create the room on this muc server
+				if gajim.interface.instances[account].has_key('join_gc'):
+					gajim.interface.instances[account]['join_gc'].window.destroy()
+				try:
+					gajim.interface.instances[account]['join_gc'] = \
+						dialogs.JoinGroupchatWindow(account,
+							server = gajim.connections[account].muc_jid,
+							automatic = {'invities': jid_list})
+				except RuntimeError:
+					continue
+				break
 
 	def on_invite_to_room(self, widget, list_, room_jid, account):
 		for (contact, acct) in list_:

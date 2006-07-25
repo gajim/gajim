@@ -724,11 +724,15 @@ class ConnectionDisco:
 		qc = iq_obj.getQueryChildren()
 		if not qc:
 			qc = []
+		is_muc = False
 		for i in qc:
 			if i.getName() == 'identity':
 				attr = {}
 				for key in i.getAttrs().keys():
 					attr[key] = i.getAttr(key)
+				if attr.has_key('category') and attr['category'] == 'conference' \
+				and attr.has_key('type') and attr['type'] == 'text':
+					is_muc = True
 				identities.append(attr)
 			elif i.getName() == 'feature':
 				features.append(i.getAttr('var'))
@@ -742,6 +746,8 @@ class ConnectionDisco:
 		if id[0] == 'p':
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
 				gajim.proxy65_manager.resolve(jid, self.connection, self.name)
+			if features.__contains__(common.xmpp.NS_MUC) and is_muc:
+				self.muc_jid = jid
 		self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
 			features, data))
 

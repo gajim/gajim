@@ -90,6 +90,7 @@ encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}
 contacts = Contacts()
 gc_connected = {} # tell if we are connected to the room or not {acct: {room_jid: True}}
 gc_passwords = {} # list of the pass required to enter a room {room_jid: password}
+automatic_rooms = {} # list of rooms that must be automaticaly configured and for which we have a list of invities {account: {room_jid: {'invities': []}}}
 
 groups = {} # list of groups
 newly_added = {} # list of contacts that has just signed in
