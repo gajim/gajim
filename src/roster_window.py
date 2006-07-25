@@ -1527,7 +1527,7 @@ class RosterWindow:
 		menu.append(remove_item)
 		remove_item.connect('activate', self.on_req_usub, list_)
 
-		invite_item = gtk.ImageMenuItem(_('_Invite to'))
+		invite_item = gtk.ImageMenuItem(_('In_vite to'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_GO_BACK, gtk.ICON_SIZE_MENU)
 		invite_item.set_image(icon)
 		
