@@ -855,7 +855,10 @@ class ConnectionVcard:
 
 		id = self.connection.getAnID()
 		iq.setID(id)
-		self.awaiting_answers[id] = (VCARD_ARRIVED, jid)
+		j = jid
+		if not j:
+			j = gajim.get_jid_from_account(self.name)
+		self.awaiting_answers[id] = (VCARD_ARRIVED, j)
 		if is_fake_jid:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			if not room_jid in self.room_jids:
@@ -943,9 +946,12 @@ class ConnectionVcard:
 		elif self.awaiting_answers[id][0] == VCARD_ARRIVED:
 			# If vcard is empty, we send to the interface an empty vcard so that
 			# it knows it arrived
-			if not iq_obj.getTag('vCard'):
-				jid = self.awaiting_answers[id][1]
-				our_jid = gajim.get_jid_from_account(self.name)
+			jid = self.awaiting_answers[id][1]
+			our_jid = gajim.get_jid_from_account(self.name)
+			if iq_obj.getType() == 'error' and jid == our_jid:
+				# our server doesn't support vcard
+				self.vcard_supported = False
+			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
 				if jid and jid != our_jid:
 					# Write an empty file
 					self.save_vcard_to_hd(jid, '')

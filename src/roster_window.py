@@ -767,8 +767,7 @@ class RosterWindow:
 			add_sub_menu = gtk.Menu()
 			disco_sub_menu = gtk.Menu()
 			new_chat_sub_menu = gtk.Menu()
-			profile_avatar_sub_menu = gtk.Menu()
-			
+
 			for account in gajim.connections:
 				if gajim.connections[account].connected <= 1:
 					# if offline or connecting
@@ -792,16 +791,12 @@ class RosterWindow:
 				add_item = gtk.MenuItem(_('to %s account') % account, False)
 				add_sub_menu.append(add_item)
 				add_item.connect('activate', self.on_add_new_contact, account)
-				add_new_contact_menuitem.set_submenu(add_sub_menu)
-				add_sub_menu.show_all()
 
 				# disco
 				disco_item = gtk.MenuItem(_('using %s account') % account, False)
 				disco_sub_menu.append(disco_item)
 				disco_item.connect('activate',
 					self.on_service_disco_menuitem_activate, account)
-				service_disco_menuitem.set_submenu(disco_sub_menu)
-				disco_sub_menu.show_all()
 
 				# new chat
 				new_chat_item = gtk.MenuItem(_('using account %s') % account,
@@ -809,17 +804,13 @@ class RosterWindow:
 				new_chat_sub_menu.append(new_chat_item)
 				new_chat_item.connect('activate',
 					self.on_new_chat_menuitem_activate,	account)
-				new_chat_menuitem.set_submenu(new_chat_sub_menu)
-				new_chat_sub_menu.show_all()
-				
-				# profile, avatar
-				profile_avatar_item = gtk.MenuItem(_('of account %s') % account, 
-					 False)
-				profile_avatar_sub_menu.append(profile_avatar_item)
-				profile_avatar_item.connect('activate', 
-					self.on_profile_avatar_menuitem_activate, account)
-				profile_avatar_menuitem.set_submenu(profile_avatar_sub_menu)
-				profile_avatar_sub_menu.show_all()
+
+			add_new_contact_menuitem.set_submenu(add_sub_menu)
+			add_sub_menu.show_all()
+			service_disco_menuitem.set_submenu(disco_sub_menu)
+			disco_sub_menu.show_all()
+			new_chat_menuitem.set_submenu(new_chat_sub_menu)
+			new_chat_sub_menu.show_all()
 
 		elif connected_accounts == 1: # user has only one account
 			for account in gajim.connections:
@@ -847,12 +838,6 @@ class RosterWindow:
 							gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 						self.have_new_chat_accel = True
 					
-					# profile, avatar
-					if not self.profile_avatar_menuitem_handler_id:
-						self.profile_avatar_menuitem_handler_id = \
-						profile_avatar_menuitem.connect('activate', self.\
-						on_profile_avatar_menuitem_activate, account)
-
 					break # No other account connected
 		
 		if connected_accounts == 0:
@@ -861,16 +846,44 @@ class RosterWindow:
 			join_gc_menuitem.set_sensitive(False)
 			add_new_contact_menuitem.set_sensitive(False)
 			service_disco_menuitem.set_sensitive(False)
-			profile_avatar_menuitem.set_sensitive(False)
 		else: # we have one or more connected accounts
 			new_chat_menuitem.set_sensitive(True)
 			join_gc_menuitem.set_sensitive(True)
 			add_new_contact_menuitem.set_sensitive(True)
 			service_disco_menuitem.set_sensitive(True)
-			profile_avatar_menuitem.set_sensitive(True)
 			# show the 'manage gc bookmarks' item
 			newitem = gtk.SeparatorMenuItem() # separator
 			gc_sub_menu.append(newitem)
+
+		connected_accounts_with_vcard = []
+		for account in gajim.connections:
+			if gajim.connections[account].connected > 1 and \
+			gajim.connections[account].vcard_supported:
+				connected_accounts_with_vcard.append(account)
+		if len(connected_accounts_with_vcard) > 1:
+			# 2 or more accounts? make submenus
+			profile_avatar_sub_menu = gtk.Menu()
+			for account in connected_accounts_with_vcard:
+				# profile, avatar
+				profile_avatar_item = gtk.MenuItem(_('of account %s') % account, 
+					 False)
+				profile_avatar_sub_menu.append(profile_avatar_item)
+				profile_avatar_item.connect('activate', 
+					self.on_profile_avatar_menuitem_activate, account)
+			profile_avatar_menuitem.set_submenu(profile_avatar_sub_menu)
+			profile_avatar_sub_menu.show_all()
+		elif len(connected_accounts_with_vcard) == 1: # user has only one account
+			account = connected_accounts_with_vcard[0]
+			# profile, avatar
+			if not self.profile_avatar_menuitem_handler_id:
+				self.profile_avatar_menuitem_handler_id = \
+				profile_avatar_menuitem.connect('activate', self.\
+				on_profile_avatar_menuitem_activate, account)
+
+		if len(connected_accounts_with_vcard) == 0:
+			profile_avatar_menuitem.set_sensitive(False)
+		else:
+			profile_avatar_menuitem.set_sensitive(True)
 
 			newitem = gtk.ImageMenuItem(_('Manage Bookmarks...'))
 			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,

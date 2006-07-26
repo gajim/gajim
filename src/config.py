@@ -1415,6 +1415,11 @@ class AccountModificationWindow:
 			_('Without a connection, you can not edit your personal information.'))
 			return
 
+		if not gajim.connections[self.account].vcard_supported:
+			dialogs.ErrorDialog(_("Your server doesn't support Vcard"),
+			_("Your server can't save your personal information."))
+			return
+
 		gajim.interface.edit_own_details(self.account)
 
 	def on_manage_proxies_button_clicked(self, widget):

@@ -85,6 +85,7 @@ class Connection(ConnectionHandlers):
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
 		self.muc_jid = None
+		self.vcard_supported = True
 	# END __init__
 
 	def build_user_nick(self, user_nick):
