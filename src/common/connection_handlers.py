@@ -1055,6 +1055,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		# keep the jids we auto added (transports contacts) to not send the
 		# SUBSCRIBED event to gui
 		self.automatically_added = []
+		# keep the latest subscribed event for each jid to prevent loop when we 
+		# acknoledge presences
+		self.subscribed_events = {}
 		try:
 			idle.init()
 		except:
@@ -1528,7 +1531,20 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			if jid_stripped in self.automatically_added:
 				self.automatically_added.remove(jid_stripped)
 			else:
-				self.dispatch('SUBSCRIBED', (jid_stripped, resource))
+				# detect a subscription loop
+				if not self.subscribed_events.has_key(jid_stripped):
+					self.subscribed_events[jid_stripped] = []
+				self.subscribed_events[jid_stripped].append(time.time())
+				block = False
+				if len(self.subscribed_events[jid_stripped]) > 5:
+					if time.time() - self.subscribed_events[jid_stripped][0] < 5:
+						block = True
+					self.subscribed_events[jid_stripped] = self.subscribed_events[jid_stripped][1:]
+				if block:
+					gajim.config.set_per('account', self.name,
+						'dont_ack_subscription', True)
+				else:
+					self.dispatch('SUBSCRIBED', (jid_stripped, resource))
 			# BE CAREFUL: no con.updateRosterItem() in a callback
 			gajim.log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
