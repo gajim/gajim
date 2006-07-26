@@ -2097,6 +2097,8 @@ class ImageChooserDialog(FileChooserDialog):
 		def on_ok(widget, callback):
 			'''check if file exists and call callback'''
 			path_to_file = self.get_filename()
+			if not path_to_file:
+				return
 			path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
 				(path_to_file,))[0]
 			if os.path.exists(path_to_file):
