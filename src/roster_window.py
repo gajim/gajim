@@ -2629,7 +2629,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_roster_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
 			model, list_of_paths = self.tree.get_selection().get_selected_rows()
-			if not len(list_of_path) and gajim.interface.systray_enabled and \
+			if not len(list_of_paths) and gajim.interface.systray_enabled and \
 			not gajim.config.get('quit_on_roster_x_button'):
 				self.tooltip.hide_tooltip()
 				self.window.hide()
