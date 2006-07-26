@@ -127,11 +127,10 @@ class NBCommonClient(CommonClient):
 	def _on_connected(self):
 		self.connected = 'tcp'
 		if (self._Ssl is None and self.Connection.getPort() in (5223, 443)) or self._Ssl:
-			try:
-				transports_nb.NonBlockingTLS().PlugIn(self, now=1)
-				self.connected = 'ssl'
-			except socket.sslerror:
+			transports_nb.NonBlockingTLS().PlugIn(self, now=1)
+			if not self.Connection: # ssl error, stream is closed
 				return
+			self.connected = 'ssl'
 		self.onreceive(self._on_receive_document_attrs)
 		dispatcher_nb.Dispatcher().PlugIn(self)
 		
@@ -194,6 +193,8 @@ class NonBlockingClient(NBCommonClient):
 		self.isplugged = True
 		self.onreceive(None)
 		transports_nb.NonBlockingTLS().PlugIn(self)
+		if not self.Connection: # ssl error, stream is closed
+			return True
 		if not self.Dispatcher.Stream._document_attrs.has_key('version') or \
 			not self.Dispatcher.Stream._document_attrs['version']=='1.0': 
 			self._is_connected()
