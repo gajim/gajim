@@ -250,7 +250,7 @@ class ChatControlBase(MessageControl):
 		if event.state & gtk.gdk.CONTROL_MASK:
 			# CTRL + l|L: clear conv_textview
 			if event.keyval == gtk.keysyms.l or event.keyval == gtk.keysyms.L:
-				self.conv_textview.tv.get_buffer().set_text('')
+				self.conv_textview.clear()
 				return True
 			# CTRL + v: Paste into msg_textview
 			elif event.keyval == gtk.keysyms.v:

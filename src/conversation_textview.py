@@ -28,6 +28,7 @@ import pango
 import gobject
 import time
 import sys
+import os
 import tooltips
 import dialogs
 import locale
@@ -132,6 +133,10 @@ class ConversationTextview:
 
 		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
 
+		self.allow_focus_out_line = True
+		# holds the iter's offset which points to the end of --- line
+		self.focus_out_end_iter_offset = None
+
 		self.line_tooltip = tooltips.BaseTooltip()
 
 	def del_handlers(self):
@@ -187,6 +192,68 @@ class ConversationTextview:
 		self.tv.scroll_to_iter(end_iter, 0, False, 1, 1)
 		return False # when called in an idle_add, just do it once
 
+	def show_focus_out_line(self):
+		if not self.allow_focus_out_line:
+			# if room did not receive focus-in from the last time we added
+			# --- line then do not readd
+			return
+
+		print_focus_out_line = False
+		buffer = self.tv.get_buffer()
+
+		if self.focus_out_end_iter_offset is None:
+			# this happens only first time we focus out on this room
+			print_focus_out_line = True
+
+		else:
+			if self.focus_out_end_iter_offset != buffer.get_end_iter().\
+			get_offset():
+				# this means after last-focus something was printed
+				# (else end_iter's offset is the same as before)
+				# only then print ---- line (eg. we avoid printing many following
+				# ---- lines)
+				print_focus_out_line = True
+
+		if print_focus_out_line and buffer.get_char_count() > 0:
+			buffer.begin_user_action()
+
+			# remove previous focus out line if such focus out line exists
+			if self.focus_out_end_iter_offset is not None:
+				end_iter_for_previous_line = buffer.get_iter_at_offset(
+					self.focus_out_end_iter_offset)
+				begin_iter_for_previous_line = end_iter_for_previous_line.copy()
+				# img_char+1 (the '\n')
+				begin_iter_for_previous_line.backward_chars(2)
+
+				# remove focus out line
+				buffer.delete(begin_iter_for_previous_line,
+					end_iter_for_previous_line)
+
+			# add the new focus out line
+			# FIXME: Why is this loaded from disk everytime
+			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+			focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
+			end_iter = buffer.get_end_iter()
+			buffer.insert(end_iter, '\n')
+			buffer.insert_pixbuf(end_iter, focus_out_line_pixbuf)
+
+			end_iter = buffer.get_end_iter()
+			before_img_iter = end_iter.copy()
+			before_img_iter.backward_char() # one char back (an image also takes one char)
+			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
+			#FIXME: remove this workaround when bug is fixed
+			# c http://bugzilla.gnome.org/show_bug.cgi?id=318569
+
+			self.allow_focus_out_line = False
+
+			# update the iter we hold to make comparison the next time
+			self.focus_out_end_iter_offset = buffer.get_end_iter().get_offset()
+
+			buffer.end_user_action()
+
+			# scroll to the end (via idle in case the scrollbar has appeared)
+			gobject.idle_add(self.scroll_to_end)
+
 	def show_line_tooltip(self):
 		pointer = self.tv.get_pointer()
 		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer[0],
@@ -241,6 +308,7 @@ class ConversationTextview:
 		buffer = self.tv.get_buffer()
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
+		self.focus_out_end_iter_offset = None
 
 	def visit_url_from_menuitem(self, widget, link):
 		'''basically it filters out the widget instance'''
