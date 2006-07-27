@@ -1,19 +1,21 @@
-##	common/connection_zeroconf.py
+##	common/zeroconf/connection_zeroconf.py
 ##
 ## Contributors for this file:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
+##  - Stefan Bethge <stefan@lanpartei.de>
 ##
 ## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Nikos Kouremenos <nkour@jabber.org>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
+##                    Stefan Bethge <stefan@lanpartei.de>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -121,14 +123,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		'''always passes account name as first param'''
 		self.put_event((event, data))
 
-
 	def _reconnect(self):
 		gajim.log.debug('reconnect')
 
 		signed = self.get_signed_msg(self.status)
 			
-	
-	
 	def quit(self, kill_core):
 	
 		if kill_core and self.connected > 1:
@@ -172,9 +171,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	# callbacks called from zeroconf	
 	def _on_new_service(self,jid):
-		self.roster.setItem(jid)	
+		self.roster.setItem(jid)
 		display_jid = self.zeroconf.check_jid(jid)
-		self.dispatch('ROSTER_INFO', (display_jid, display_jid, 'both', 'no', self.roster.getGroups(jid)))
+		self.dispatch('ROSTER_INFO', (display_jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
 		self.dispatch('NOTIFY', (display_jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
 		
 	
@@ -198,7 +197,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		#display contacts already detected and resolved
 		for jid in self.roster.keys():
 			display_jid = self.zeroconf.check_jid(jid)
-			self.dispatch('ROSTER_INFO', (display_jid, display_jid, 'both', 'no', self.roster.getGroups(jid)))
+			self.dispatch('ROSTER_INFO', (display_jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
 			self.dispatch('NOTIFY', (display_jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
 
 		self.connected = STATUS_LIST.index(show)

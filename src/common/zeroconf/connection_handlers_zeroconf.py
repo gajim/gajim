@@ -6,6 +6,7 @@
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
+##  - Stefan Bethge <stefan@lanpartei.de> 
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published

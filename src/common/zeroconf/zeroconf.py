@@ -1,3 +1,17 @@
+##      common/zeroconf/zeroconf.py
+##
+## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
+##
+## This program is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 2 only.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+
 import os
 import sys
 import socket
@@ -95,6 +109,8 @@ class Zeroconf:
 		return items
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
+		print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
+		print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
 		self.contacts[name] = (name, domain, interface, protocol, host, address, port, txt)
 		self.new_serviceCB(name)
 
@@ -155,7 +171,7 @@ class Zeroconf:
 
 		self.txt['port.p2pj'] = self.port
 		self.txt['version'] = 1
-		self.txt['textvers'] = 1
+		self.txt['txtvers'] = 1
 		
 		# replace gajim's status messages with proper ones
 		if self.txt.has_key('status'):

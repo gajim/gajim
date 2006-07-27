@@ -1,3 +1,18 @@
+##      common/zeroconf/roster_zeroconf.py
+##
+## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
+##
+## This program is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 2 only.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+
+
 from common.zeroconf import zeroconf
 
 class Roster:
@@ -36,7 +51,6 @@ class Roster:
 			= self.zeroconf.get_contact(jid)
 
 		self._data[jid]={}
-		self._data[jid]['name']=jid[:jid.find('@')]
 		self._data[jid]['ask'] = 'no'  #?
 		self._data[jid]['subscription'] = 'both'
 		self._data[jid]['groups'] = []
@@ -49,6 +63,10 @@ class Roster:
 			status = txt_dict['status']
 		else:
 			status = ''
+		if txt_dict.has_key('1st') and txt_dict.has_key('last'):
+			self._data[jid]['name']=txt_dict['1st']+' '+txt_dict['last']
+		else:
+			self._data[jid]['name']=jid
 		if status == 'avail': status = 'online'
 		self._data[jid]['txt_dict'] = txt_dict
 		if not self._data[jid]['txt_dict'].has_key('msg'):
@@ -91,7 +109,10 @@ class Roster:
 		
 	def getGroups(self, jid):
 		return self._data[jid]['groups']
-	
+	def getName(self, jid):
+		if self._data.has_key(jid):
+			return self._data[jid]['name']
+
 	def getStatus(self, jid):
 		if self._data.has_key(jid):
 			return self._data[jid]['status']
