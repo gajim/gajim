@@ -180,20 +180,6 @@ import systray
 import vcard
 import config
 
-class MigrateCommand(nslookup.IdleCommand):
-	def __init__(self, on_result):
-		nslookup.IdleCommand.__init__(self, on_result)
-		self.commandtimeout = 10 
-	
-	def _compose_command_args(self):
-		return ['python', 'migrate_logs_to_dot9_db.py', 'dont_wait']
-	
-	def _return_result(self):
-		print self.result
-		if self.result_handler:
-			self.result_handler(self.result)
-		self.result_handler = None
-
 class GlibIdleQueue(idlequeue.IdleQueue):
 	''' 
 	Extends IdleQueue to use glib io_add_wath, instead of select/poll
@@ -1942,30 +1928,6 @@ if __name__ == '__main__':
 		
 		gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
 
-	# Migrate old logs if we have such olds logs
-	from common import logger
-	from migrate_logs_to_dot9_db import PATH_TO_LOGS_BASE_DIR
-	LOG_DB_PATH = logger.LOG_DB_PATH
-	if not os.path.exists(LOG_DB_PATH) and os.path.isdir(PATH_TO_LOGS_BASE_DIR):
-		import Queue
-		q = Queue.Queue(100)
-		dialog = dialogs.ProgressDialog(_('Migrating Logs...'),
-				_('Please wait while logs are being migrated...'), q)
-		if os.name == 'nt' and gtk.pygtk_version > (2, 8, 0):
-			idlequeue = idlequeue.SelectIdleQueue()
-		else:
-			idlequeue = GlibIdleQueue()
-		def on_result(*arg):
-			dialog.dialog.destroy()
-			dialog.dialog = None
-			gobject.source_remove(dialog.update_progressbar_timeout_id)
-			gajim.logger.init_vars()
-			check_paths.check_and_possibly_create_paths()
-			Interface()
-		m = MigrateCommand(on_result)
-		m.set_idlequeue(idlequeue)
-		m.start()
-	else:
-		check_paths.check_and_possibly_create_paths()
-		Interface()
+	check_paths.check_and_possibly_create_paths()
+	Interface()
 	gtk.main()
