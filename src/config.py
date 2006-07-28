@@ -461,6 +461,7 @@ class PreferencesWindow:
 		
 		self.notebook.set_current_page(0)
 		self.window.show_all()
+		gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 
 	def on_preferences_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:

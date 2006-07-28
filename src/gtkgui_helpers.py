@@ -406,7 +406,7 @@ def possibly_move_window_in_current_desktop(window):
 		if current_virtual_desktop_no != window_virtual_desktop:
 			# we are in another VD that the window was
 			# so show it in current VD
-			window.show()
+			window.present()
 
 def file_is_locked(path_to_file):
 	'''returns True if file is locked (WINDOWS ONLY)'''
