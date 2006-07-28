@@ -148,7 +148,7 @@ class EditGroupsDialog:
 				return
 			iter = model.iter_next(iter)
 		self.changes_made = True
-		model.append((group, True))
+		model.append((group, True, False))
 		self.add_group(group)
 		self.update_contact()
 		self.init_list() # Re-draw list to sort new item
@@ -185,7 +185,7 @@ class EditGroupsDialog:
 						continue
 					if g in groups:
 						continue
-				groups[g] = 0
+					groups[g] = 0
 			for g in contact.groups:
 				groups[g] += 1
 		group_list = groups.keys()
