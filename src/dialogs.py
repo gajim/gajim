@@ -44,86 +44,97 @@ from common import helpers
 
 class EditGroupsDialog:
 	'''Class for the edit group dialog window'''
-	def __init__(self, user, account):
+	def __init__(self, list_):
+		'''list_ is a list of (contact, account) tuples'''
 		self.xml = gtkgui_helpers.get_glade('edit_groups_dialog.glade')
 		self.dialog = self.xml.get_widget('edit_groups_dialog')
 		self.dialog.set_transient_for(gajim.interface.roster.window)
-		self.account = account
-		self.user = user
+		self.list_ = list_
 		self.changes_made = False
 		self.list = self.xml.get_widget('groups_treeview')
-		self.xml.get_widget('nickname_label').set_markup(
-			_("Contact's name: <i>%s</i>") % user.get_shown_name())
-		self.xml.get_widget('jid_label').set_markup(
-			_('JID: <i>%s</i>') % user.jid)
-		
+		if len(list_) == 1:
+			contact = list_[0][0]
+			self.xml.get_widget('nickname_label').set_markup(
+				_("Contact's name: <i>%s</i>") % contact.get_shown_name())
+			self.xml.get_widget('jid_label').set_markup(
+				_('JID: <i>%s</i>') % contact.jid)
+		else:
+			self.xml.get_widget('nickname_label').set_no_show_all(True)
+			self.xml.get_widget('nickname_label').hide()
+			self.xml.get_widget('jid_label').set_no_show_all(True)
+			self.xml.get_widget('jid_label').hide()
+
 		self.xml.signal_autoconnect(self)
 		self.init_list()
 
 	def run(self):
 		self.dialog.show_all()
 		if self.changes_made:
-			gajim.connections[self.account].update_contact(self.user.jid,
-				self.user.name, self.user.groups)
+			for (contact, account) in self.list_:
+				gajim.connections[account].update_contact(contact.jid, contact.name,
+					contact.groups)
 
 	def on_edit_groups_dialog_response(self, widget, response_id):
 		if response_id == gtk.RESPONSE_CLOSE:
 			self.dialog.destroy()
 
 	def update_contact(self):
-		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
-		if not tag:
-			gajim.interface.roster.remove_contact(self.user, self.account)
-			gajim.interface.roster.add_contact_to_roster(self.user.jid,
-				self.account)
-			gajim.connections[self.account].update_contact(self.user.jid,
-				self.user.name, self.user.groups)
-			return
-		all_jid = gajim.contacts.get_metacontacts_jids(tag)
-		for _account in all_jid:
-			if not gajim.interface.roster.regroup and _account != self.account:
+		for (contact, account) in self.list_:
+			tag = gajim.contacts.get_metacontacts_tag(account, contact.jid)
+			if not tag:
+				gajim.interface.roster.remove_contact(contact, account)
+				gajim.interface.roster.add_contact_to_roster(contact.jid, account)
+				gajim.connections[account].update_contact(contact.jid, contact.name,
+					contact.groups)
 				continue
-			for _jid in all_jid[_account]:
-				c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
-				if not c:
+			all_jid = gajim.contacts.get_metacontacts_jids(tag)
+			for _account in all_jid:
+				if not gajim.interface.roster.regroup and _account != account:
 					continue
-				gajim.interface.roster.remove_contact(c, _account)
-				gajim.interface.roster.add_contact_to_roster(_jid, _account)
-				gajim.connections[_account].update_contact(_jid, c.name, c.groups)
+				for _jid in all_jid[_account]:
+					c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
+					if not c:
+						continue
+					gajim.interface.roster.remove_contact(c, _account)
+					gajim.interface.roster.add_contact_to_roster(_jid, _account)
+					gajim.connections[_account].update_contact(_jid, c.name,
+						c.groups)
 
 	def remove_group(self, group):
-		'''add group group to self.user and all his brothers'''
-		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
-		if not tag:
-			if group in self.user.groups:
-				self.user.groups.remove(group)
-			return
-		all_jid = gajim.contacts.get_metacontacts_jids(tag)
-		for _account in all_jid:
-			if not gajim.interface.roster.regroup and _account != self.account:
+		'''remove group group from all contacts and all their brothers'''
+		for (contact, account) in self.list_:
+			tag = gajim.contacts.get_metacontacts_tag(account, contact.jid)
+			if not tag:
+				if group in contact.groups:
+					contact.groups.remove(group)
 				continue
-			for _jid in all_jid[_account]:
-				contacts = gajim.contacts.get_contact(_account, _jid)
-				for contact in contacts:
-					if group in contact.groups:
-						contact.groups.remove(group)
+			all_jid = gajim.contacts.get_metacontacts_jids(tag)
+			for _account in all_jid:
+				if not gajim.interface.roster.regroup and _account != account:
+					continue
+				for _jid in all_jid[_account]:
+					contacts = gajim.contacts.get_contact(_account, _jid)
+					for c in contacts:
+						if group in c.groups:
+							c.groups.remove(group)
 
 	def add_group(self, group):
-		'''add group group to self.user and all his brothers'''
-		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
-		if not tag:
-			if group not in self.user.groups:
-				self.user.groups.append(group)
-			return
-		all_jid = gajim.contacts.get_metacontacts_jids(tag)
-		for _account in all_jid:
-			if not gajim.interface.roster.regroup and _account != self.account:
+		'''add group group to all contacts and all their brothers'''
+		for (contact, account) in self.list_:
+			tag = gajim.contacts.get_metacontacts_tag(account, contact.jid)
+			if not tag:
+				if group not in contact.groups:
+					contact.groups.append(group)
 				continue
-			for _jid in all_jid[_account]:
-				contacts = gajim.contacts.get_contact(_account, _jid)
-				for contact in contacts:
-					if not group in contact.groups:
-						contact.groups.append(group)
+			all_jid = gajim.contacts.get_metacontacts_jids(tag)
+			for _account in all_jid:
+				if not gajim.interface.roster.regroup and _account != account:
+					continue
+				for _jid in all_jid[_account]:
+					contacts = gajim.contacts.get_contact(_account, _jid)
+					for c in contacts:
+						if not group in c.groups:
+							c.groups.append(group)
 
 	def on_add_button_clicked(self, widget):
 		group = self.xml.get_widget('group_entry').get_text().decode('utf-8')
@@ -145,7 +156,11 @@ class EditGroupsDialog:
 	def group_toggled_cb(self, cell, path):
 		self.changes_made = True
 		model = self.list.get_model()
-		model[path][1] = not model[path][1]
+		if model[path][2]:
+			model[path][2] = False
+			model[path][1] = True
+		else:
+			model[path][1] = not model[path][1]
 		group = model[path][0].decode('utf-8')
 		if model[path][1]:
 			self.add_group(group)
@@ -154,23 +169,39 @@ class EditGroupsDialog:
 		self.update_contact()
 
 	def init_list(self):
-		store = gtk.ListStore(str, bool)
+		store = gtk.ListStore(str, bool, bool)
 		self.list.set_model(store)
 		for column in self.list.get_columns(): # Clear treeview when re-drawing
 			self.list.remove_column(column)
-		groups = [] # Store accounts in a list so we can sort them
-		for g in gajim.groups[self.account].keys():
-			if g in helpers.special_groups:
-				continue
-			in_group = False
-			if g in self.user.groups:
-				in_group = True
-			groups.append([g, in_group])
-		groups.sort()			
-		for group in groups:
+		accounts = []
+		# Store groups in a list so we can sort them and the number of contacts in
+		# it
+		groups = {}
+		for (contact, account) in self.list_:
+			if account not in accounts:
+				accounts.append(account)
+				for g in gajim.groups[account].keys():
+					if g in helpers.special_groups:
+						continue
+					if g in groups:
+						continue
+				groups[g] = 0
+			for g in contact.groups:
+				groups[g] += 1
+		group_list = groups.keys()
+		group_list.sort()			
+		for group in group_list:
 			iter = store.append()
-			store.set(iter, 0, group[0]) # Group name
-			store.set(iter, 1, group[1]) # In group boolean
+			store.set(iter, 0, group) # Group name
+			if groups[group] == 0:
+				store.set(iter, 1, False)
+			else:
+				store.set(iter, 1, True)
+				if groups[group] == len(self.list_):
+					# all contacts are in this group
+					store.set(iter, 2, False)
+				else:
+					store.set(iter, 2, True)
 		column = gtk.TreeViewColumn(_('Group'))
 		column.set_expand(True)
 		self.list.append_column(column)
@@ -185,7 +216,7 @@ class EditGroupsDialog:
 		column.pack_start(renderer)
 		renderer.set_property('activatable', True)
 		renderer.connect('toggled', self.group_toggled_cb)
-		column.set_attributes(renderer, active = 1)
+		column.set_attributes(renderer, active = 1, inconsistent = 2)
 
 class PassphraseDialog:
 	'''Class for Passphrase dialog'''

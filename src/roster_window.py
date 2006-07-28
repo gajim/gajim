@@ -1290,8 +1290,8 @@ class RosterWindow:
 			keys_str += jid + ' ' + keys[jid] + ' '
 		gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
 
-	def on_edit_groups(self, widget, contact, account):
-		dlg = dialogs.EditGroupsDialog(contact, account)
+	def on_edit_groups(self, widget, list_):
+		dlg = dialogs.EditGroupsDialog(list_)
 		dlg.run()
 
 	def on_history(self, widget, contact, account):
@@ -1444,8 +1444,8 @@ class RosterWindow:
 			assign_openpgp_key_menuitem.set_no_show_all(False)
 			add_to_roster_menuitem.hide()
 			add_to_roster_menuitem.set_no_show_all(True)
-			edit_groups_menuitem.connect('activate', self.on_edit_groups, contact,
-				account)
+			edit_groups_menuitem.connect('activate', self.on_edit_groups, [(
+				contact,account)])
 
 			if gajim.config.get('usegpg'):
 				assign_openpgp_key_menuitem.connect('activate',
@@ -1591,6 +1591,10 @@ class RosterWindow:
 		
 		invite_item.set_submenu(sub_menu)
 		menu.append(invite_item)
+
+		edit_groups_item = gtk.MenuItem(_('Edit _Groups'))
+		menu.append(edit_groups_item)
+		edit_groups_item.connect('activate', self.on_edit_groups, list_)
 
 		# unsensitive if one account is not connected
 		if one_account_offline:
