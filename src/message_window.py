@@ -22,6 +22,7 @@
 ##
 
 import gtk
+import gobject
 
 import common
 import gtkgui_helpers
@@ -149,8 +150,17 @@ class MessageWindow:
 		fjid = control.get_full_jid()
 		self._controls[control.account][fjid] = control
 
-		if self.get_num_controls() > 1:
+		if self.get_num_controls() == 2:
+			# is first conversation_textview scrolled down ?
+			scrolled = False
+			first_widget = self.notebook.get_nth_page(0)
+			ctrl = self._widget_to_control(first_widget)
+			conv_textview = ctrl.conv_textview
+			if conv_textview.at_the_end():
+				scrolled = True
 			self.notebook.set_show_tabs(True)
+			if scrolled:
+				gobject.idle_add(conv_textview.scroll_to_end_iter)
 			self.alignment.set_property('top-padding', 2)
 
 		# Add notebook page and connect up to the tab's close button
