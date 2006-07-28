@@ -238,25 +238,8 @@ class Logger:
 			self.cur.execute(
 				'SELECT message_id from unread_messages WHERE jid_id = %d' % jid_id)
 			results = self.cur.fetchall()
-		# Remove before 0.10
 		except:
-			try:
-				self.cur.executescript('DROP TABLE unread_messages;')
-				self.con.commit()
-			except:
-				pass
-			try:
-				self.cur.executescript('''CREATE TABLE unread_messages(
-					message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-					jid_id INTEGER
-					);''')
-				self.con.commit()
-			except:
-				pass
-			self.con.close()
-			self.jids_already_in = []
-			self.init_vars()
-			return []
+			pass
 
 		for message in results:
 			msg_id = message[0]
