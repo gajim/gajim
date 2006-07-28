@@ -1437,8 +1437,8 @@ class Interface:
 		self.systray.show_icon()
 
 	def hide_systray(self):
-		self.systray.hide_icon()
 		self.systray_enabled = False
+		self.systray.hide_icon()
 	
 	def image_is_ok(self, image):
 		if not os.path.exists(image):

@@ -345,7 +345,8 @@ class Systray:
 	def on_tray_destroyed(self, widget):
 		'''re-add trayicon when systray is destroyed'''
 		self.t = None
-		self.show_icon()
+		if gajim.interface.systray_enabled:
+			self.show_icon()
 
 	def show_icon(self):
 		if not self.t:
