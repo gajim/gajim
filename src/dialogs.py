@@ -1936,6 +1936,7 @@ class PrivacyListsWindow:
 			'privacy_lists_refresh_button', 'close_privacy_lists_window_button']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)		
 
+		self.draw_privacy_lists_in_combobox()
 		self.privacy_lists_refresh()
 
 		self.enabled = True
