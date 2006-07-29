@@ -959,6 +959,11 @@ class JoinGroupchatWindow:
 		'''automatic is a dict like {'invities': []}
 		If automatic is not empty, this means room must be automaticaly configured
 		and when done, invities must be automatically invited'''
+		if server and room:
+			jid = room + '@' + server
+			if jid in gajim.gc_connected[account] and gajim.gc_connected[account][jid]:
+				ErrorDialog(_('You are already in room %s') % jid)
+				raise RuntimeError, 'You are already in this room'
 		self.account = account
 		self.automatic = automatic
 		if nick == '':
