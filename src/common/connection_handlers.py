@@ -1394,7 +1394,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		if ptype == 'available':
 			ptype = None
 		gajim.log.debug('PresenceCB: %s' % ptype)
-		who = helpers.get_full_jid_from_iq(prs)
+		try:
+			who = helpers.get_full_jid_from_iq(prs)
+		except:
+			if prs.getTag('error').getTag('jid-malformed'):
+				# wrong jid, we probably tried to change our nick in a room to a non valid
+				# one
+				who = str(prs.getFrom())
+				jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+				self.dispatch('GC_MSG', (jid_stripped, _('Nickname not allowed: %s') % \
+					resource, None))
+			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
 		is_gc = False # is it a GC presence ?
