@@ -1891,6 +1891,9 @@ class Interface:
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.instances['file_transfers'] = dialogs.FileTransfersWindow()
 
+		# get transports type from DB
+		gajim.transport_type = gajim.logger.get_transports_type()
+
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add(500, self.read_sleepy)

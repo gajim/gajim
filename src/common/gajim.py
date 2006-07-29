@@ -83,6 +83,8 @@ else:
 
 gmail_domains = ['gmail.com', 'googlemail.com']
 
+transport_type = {} # list the type of transport
+
 last_message_time = {} # list of time of the latest incomming message
 							# {acct1: {jid1: time1, jid2: time2}, }
 encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}
@@ -223,8 +225,11 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 	# jid was None. Yann why?
 	if not jid or (use_config_setting and not config.get('use_transports_iconsets')):
 		return
-	
+
 	host = get_server_from_jid(jid)
+	if host in transport_type:
+		return transport_type[host]
+
 	# host is now f.e. icq.foo.org or just icq (sometimes on hacky transports)
 	host_splitted = host.split('.')
 	if len(host_splitted) != 0:
@@ -293,7 +298,7 @@ def get_first_event(account, jid, typ = None):
 		if ev[0] == typ:
 			return ev
 	return None
-	
+
 def get_notification_image_prefix(jid):
 	'''returns the prefix for the notification images'''
 	transport_name = get_transport_name_from_jid(jid)

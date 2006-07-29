@@ -725,11 +725,15 @@ class ConnectionDisco:
 		if not qc:
 			qc = []
 		is_muc = False
+		transport_type = ''
 		for i in qc:
 			if i.getName() == 'identity':
 				attr = {}
 				for key in i.getAttrs().keys():
 					attr[key] = i.getAttr(key)
+				if attr.has_key('category') and attr['category'] in ('gateway', 'headline')\
+				and attr.has_key('type'):
+					transport_type = attr['type']
 				if attr.has_key('category') and attr['category'] == 'conference' \
 				and attr.has_key('type') and attr['type'] == 'text':
 					is_muc = True
@@ -739,6 +743,9 @@ class ConnectionDisco:
 			elif i.getName() == 'x' and i.getAttr('xmlns') == common.xmpp.NS_DATA:
 				data.append(common.xmpp.DataForm(node=i))
 		jid = helpers.get_full_jid_from_iq(iq_obj)
+		if transport_type and jid not in gajim.transport_type:
+			gajim.transport_type[jid] = transport_type
+			gajim.logger.save_transport_type(jid, transport_type)
 		id = iq_obj.getID()
 		if not identities: # ejabberd doesn't send identities when we browse online users
 		#FIXME: see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
