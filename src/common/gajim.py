@@ -239,7 +239,7 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 	if host == 'aim':
 		return 'aim'
 	elif host == 'gg':
-		return 'gadugadu'
+		return 'gadu-gadu'
 	elif host == 'irc':
 		return 'irc'
 	elif host == 'icq':
