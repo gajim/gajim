@@ -1372,8 +1372,7 @@ class SingleMessageWindow:
 
 	def prepare_widgets_for(self, action):
 		if len(gajim.connections) > 1:
-			#FIXME: for Received with should become 'in'
-			title = _('Single Message with account %s') % self.account
+			title = _('Single Message in account %s') % self.account
 		else:
 			title = _('Single Message')
 
