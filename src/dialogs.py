@@ -2273,8 +2273,6 @@ class AdvancedNotificationsWindow:
 
 		# No rule selected at init time
 		self.conditions_treeview.get_selection().unselect_all()
-		#TODO
-#		self.conditions_treeview.set_cursor(None)
 		self.active_num = -1
 		self.config_vbox.set_sensitive(False)
 		self.delete_button.set_sensitive(False)
@@ -2293,11 +2291,11 @@ class AdvancedNotificationsWindow:
 		# event
 		value = gajim.config.get_per('notifications', str(self.active_num),
 			'event')
+		print value
 		if value:
 			self.event_combobox.set_active(self.events_list.index(value))
 		else:
-			#TODO: unselect all
-			pass
+			self.event_combobox.set_active(-1)
 		# recipient_type
 		value = gajim.config.get_per('notifications', str(self.active_num),
 			'recipient_type')
@@ -2305,8 +2303,7 @@ class AdvancedNotificationsWindow:
 			self.recipient_type_combobox.set_active(
 				self.recipient_types_list.index(value))
 		else:
-			#TODO: unselect all
-			pass
+			self.recipient_type_combobox.set_active(-1)
 		# recipient
 		value = gajim.config.get_per('notifications', str(self.active_num),
 			'recipients')
@@ -2476,7 +2473,11 @@ class AdvancedNotificationsWindow:
 	def on_event_combobox_changed(self, widget):
 		if self.active_num < 0:
 			return
-		event = self.events_list[self.event_combobox.get_active()]
+		active = self.event_combobox.get_active()
+		if active == -1:
+			event = ''
+		else:
+			event = self.events_list[active]
 		gajim.config.set_per('notifications', str(self.active_num), 'event',
 			event)
 		self.set_treeview_string()
