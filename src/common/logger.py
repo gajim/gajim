@@ -99,25 +99,29 @@ constants = Constants()
 class Logger:
 	def __init__(self):
 		self.jids_already_in = [] # holds jids that we already have in DB
-		
+		self.con = None
+
 		if not os.path.exists(LOG_DB_PATH):
 			# this can happen only the first time (the time we create the db)
 			# db is not created here but in src/common/checks_paths.py
 			return
 		self.init_vars()
-		
+
 	def init_vars(self):
 		# if locked, wait up to 20 sec to unlock
 		# before raise (hopefully should be enough)
+		if self.con:
+			self.con.close()
 		self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 			isolation_level = 'IMMEDIATE')
 		self.cur = self.con.cursor()
-		
+
 		self.get_jids_already_in_db()
 
 	def get_jids_already_in_db(self):
 		self.cur.execute('SELECT jid FROM jids')
 		rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+		self.jids_already_in = []
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
