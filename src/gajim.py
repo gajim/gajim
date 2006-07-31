@@ -439,6 +439,15 @@ class Interface:
 				gajim.block_signed_in_notifications[account_ji] = True
 				gobject.timeout_add(30000, self.unblock_signed_in_notifications,
 					account_ji)
+			locations = (self.instances, self.instances[account])
+			for location in locations:
+				if location.has_key('add_contact'):
+					if old_show == 0 and new_show > 1:
+						location['add_contact'].transport_signed_in(jid)
+						break
+					elif old_show > 1 and new_show == 0:
+						location['add_contact'].transport_signed_out(jid)
+						break
 		elif ji in jid_list:
 			# It isn't an agent
 			# reset chatstate if needed:

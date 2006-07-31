@@ -413,6 +413,15 @@ class AddNewContactWindow:
 				self.account = account
 		else:
 			accounts = [self.account]
+		if self.account:
+			location = gajim.interface.instances[self.account]
+		else:
+			location = gajim.interface.instances
+		if location.has_key('add_contact'):
+			location['add_contact'].window.present()
+			# An instance is already opened
+			return
+		location['add_contact'] = self
 		self.xml = gtkgui_helpers.get_glade('add_new_contact_window.glade')
 		self.account_combobox = self.xml.get_widget('account_combobox')
 		self.account_hbox = self.xml.get_widget('account_hbox')
@@ -450,7 +459,11 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			widget = self.xml.get_widget(type_ + '_register_form')
 			widget.set_no_show_all(True)
 			widget.hide()
-			#TODO: make button sensitive if we can register and add callback
+			if type_ in gajim.connections[self.account].available_transports:
+				widget = self.xml.get_widget(type_ + '_register_button')
+				widget.set_sensitive(True)
+				widget.connect('clicked', self.on_register_button_clicked,
+					gajim.connections[self.account].available_transports[type_])
 
 		if jid:
 			type_ = gajim.get_transport_name_from_jid(jid)
@@ -488,6 +501,16 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			self.account_combobox.set_active(0)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+
+	def on_add_new_contact_window_destroy(self, widget):
+		if self.account:
+			location = gajim.interface.instances[self.account]
+		else:
+			location = gajim.interface.instances
+		del location['add_contact']
+
+	def on_register_button_clicked(self, widget, jid):
+		gajim.connections[self.account].request_register_agent_info(jid)
 
 	def on_add_new_contact_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -557,6 +580,22 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname, auto_auth = auto_auth)
 		self.window.destroy()
+
+	def transport_signed_in(self, jid):
+		type_ = gajim.get_transport_name_from_jid(jid)
+		self.xml.get_widget(type_ + '_register_button').hide()
+		self.agents[type_] = jid
+		widget = self.xml.get_widget(type_ + '_register_form')
+		widget.set_no_show_all(False)
+		widget.show_all()
+
+	def transport_signed_out(self, jid):
+		type_ = gajim.get_transport_name_from_jid(jid)
+		widget = self.xml.get_widget(type_ + '_register_button')
+		widget.set_no_show_all(False)
+		widget.show_all()
+		del self.agents[type_]
+		self.xml.get_widget(type_ + '_register_form').hide()
 
 class AboutDialog:
 	'''Class for about dialog'''
