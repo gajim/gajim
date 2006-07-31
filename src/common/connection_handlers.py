@@ -39,6 +39,7 @@ STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
+METACONTACTS_ARRIVED = 'metacontacts_arrived'
 HAS_IDLE = True
 try:
 	import common.idle as idle # when we launch gajim from sources
@@ -970,6 +971,29 @@ class ConnectionVcard:
 		elif self.awaiting_answers[id][0] == AGENT_REMOVED:
 			jid = self.awaiting_answers[id][1]
 			self.dispatch('AGENT_REMOVED', jid)
+		elif self.awaiting_answers[id][0] == METACONTACTS_ARRIVED:
+			if iq_obj.getType() == 'result':
+				# Metacontact tags
+				# http://www.jabber.org/jeps/jep-XXXX.html
+				meta_list = {}
+				query = iq_obj.getTag('query')
+				storage = query.getTag('storage')
+				metas = storage.getTags('meta')
+				for meta in metas:
+					jid = meta.getAttr('jid')
+					tag = meta.getAttr('tag')
+					data = {'jid': jid}
+					order = meta.getAttr('order')
+					if order != None:
+						data['order'] = order
+					if meta_list.has_key(tag):
+						meta_list[tag].append(data)
+					else:
+						meta_list[tag] = [data]
+				self.dispatch('METACONTACTS', meta_list)
+			# We can now continue connection by requesting the roster
+			self.connection.initRoster()
+
 		del self.awaiting_answers[id]
 	
 	def _vCardCB(self, con, vc):
@@ -1134,26 +1158,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					
 					self.bookmarks.append(bm)
 				self.dispatch('BOOKMARKS', self.bookmarks)
-
-			elif ns == 'storage:metacontacts':
-				# Metacontact tags
-				# http://www.jabber.org/jeps/jep-XXXX.html
-				meta_list = {}
-				metas = storage.getTags('meta')
-				for meta in metas:
-					jid = meta.getAttr('jid')
-					tag = meta.getAttr('tag')
-					data = {'jid': jid}
-					order = meta.getAttr('order')
-					if order != None:
-						data['order'] = order
-					if meta_list.has_key(tag):
-						meta_list[tag].append(data)
-					else:
-						meta_list[tag] = [data]
-				self.dispatch('METACONTACTS', meta_list)
-				# We can now continue connection by requesting the roster
-				self.connection.initRoster()
 
 			elif ns == 'gajim:prefs':
 				# Preferences data
@@ -1846,8 +1850,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		con.RegisterHandler('iq', self._getRosterCB, 'result',
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._PrivateCB, 'result',
-			common.xmpp.NS_PRIVATE)
-		con.RegisterHandler('iq', self._PrivateErrorCB, 'error',
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',
 			common.xmpp.NS_HTTP_AUTH)

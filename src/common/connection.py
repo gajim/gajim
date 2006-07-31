@@ -936,6 +936,9 @@ class Connection(ConnectionHandlers):
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq2.addChild(name='storage', namespace='storage:metacontacts')
+		id = self.connection.getAnID()
+		iq.setID(id)
+		self.awaiting_answers[id] = (METACONTACTS_ARRIVED, )
 		self.connection.send(iq)
 
 	def store_metacontacts(self, tags_list):
