@@ -1417,11 +1417,11 @@ class RosterWindow:
 		rooms = [] # a list of (room_jid, account) tuple
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(
 		message_control.TYPE_GC):
-			account = gc_control.account
+			acct = gc_control.account
 			room_jid = gc_control.room_jid
-			if gajim.gc_connected[account].has_key(room_jid) and \
-			gajim.gc_connected[account][room_jid]:
-				rooms.append((room_jid, account))
+			if gajim.gc_connected[acct].has_key(room_jid) and \
+			gajim.gc_connected[acct][room_jid]:
+				rooms.append((room_jid, acct))
 		if len(rooms):
 			item = gtk.SeparatorMenuItem() # separator
 			submenu.append(item)
