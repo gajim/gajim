@@ -395,6 +395,9 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
+	tab_transport = {0: 'jabber', 1:'aim', 2:'gadu-gadu', 3:'icq', 4:'msn',
+		5:'yahoo'}
+	tab_num = {'jabber':0, 'aim':1, 'gadu-gadu':2, 'icq':3, 'msn':4, 'yahoo':5}
 	def __init__(self, account = None, jid = None, user_nick = None,
 	group = None):
 		self.account = account
@@ -416,60 +419,47 @@ class AddNewContactWindow:
 		self.account_label = self.xml.get_widget('account_label')
 		self.window = self.xml.get_widget('add_new_contact_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
-		self.uid_entry = self.xml.get_widget('uid_entry')
-		self.protocol_combobox = self.xml.get_widget('protocol_combobox')
-		self.protocol_hbox = self.xml.get_widget('protocol_hbox')
-		self.jid_entry = self.xml.get_widget('jid_entry')
 		self.nickname_entry = self.xml.get_widget('nickname_entry')
+		self.transports_notebook = self.xml.get_widget('transports_notebook')
 		if account and len(gajim.connections) >= 2:
 			prompt_text =\
 _('Please fill in the data of the contact you want to add in account %s') %account
 		else:
 			prompt_text = _('Please fill in the data of the contact you want to add')
 		self.xml.get_widget('prompt_label').set_text(prompt_text)
-		self.old_uid_value = ''
-		liststore = gtk.ListStore(str, str)
-		liststore.append(['Jabber', ''])
-		self.agents = ['Jabber']
-		jid_agents = []
+		self.agents = {'jabber': ''}
 		for acct in accounts:
 			for j in gajim.contacts.get_jid_list(acct):
 				contact = gajim.contacts.get_first_contact_from_jid(acct, j)
-				if _('Transports') in contact.groups and contact.show != 'offline' and\
-						contact.show != 'error':
-					jid_agents.append(j)
-		for a in jid_agents:
-			if a.find('aim') > -1:
-				name = 'AIM'
-			elif a.find('icq') > -1:
-				name = 'ICQ'
-			elif a.find('msn') > -1:
-				name = 'MSN'
-			elif a.find('yahoo') > -1:
-				name = 'Yahoo!'
-			else:
-				name = a
-			liststore.append([name, a])
-			self.agents.append(name)
-		self.protocol_combobox.set_model(liststore)
-		self.protocol_combobox.set_active(0)
-		self.fill_jid()
+				if _('Transports') in contact.groups and contact.show != 'offline' \
+				and contact.show != 'error':
+					type_ = gajim.get_transport_name_from_jid(contact.jid)
+					if not type_ in self.tab_num:
+						# unknown transport type
+						continue
+					if type_ in self.agents:
+						# we already have it
+						continue
+					widget = self.xml.get_widget(type_ + '_register_button')
+					widget.set_no_show_all(True)
+					widget.hide()
+					self.agents[type_] = contact.jid
+		for type_ in self.tab_num:
+			if type_ in self.agents:
+				continue
+			widget = self.xml.get_widget(type_ + '_register_form')
+			widget.set_no_show_all(True)
+			widget.hide()
+			#TODO: make button sensitive if we can register and add callback
+
 		if jid:
-			self.jid_entry.set_text(jid)
-			self.uid_entry.set_sensitive(False)
-			jid_splited = jid.split('@')
-			if jid_splited[1] in jid_agents:
-				uid = jid_splited[0].replace('%', '@')
-				self.uid_entry.set_text(uid)
-				self.protocol_combobox.set_active(jid_agents.index(jid_splited[1])\
-					+ 1)
-			else:
-				self.uid_entry.set_text(jid)
-				self.protocol_combobox.set_active(0)
+			type_ = gajim.get_transport_name_from_jid(jid)
+			if not type_:
+				type_ = 'jabber'
+			self.xml.get_widget(type_ + '_entry').set_text(jid)
+			self.transports_notebook.set_active_tab(self.tab_num[type_])
 			if user_nick:
 				self.nickname_entry.set_text(user_nick)
-			else:
-				self.set_nickname()
 			self.nickname_entry.grab_focus()
 		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
 		liststore = gtk.ListStore(str)
@@ -485,18 +475,11 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 						self.group_comboboxentry.set_active(i)
 					i += 1
 
-		if not jid_agents:
-			# There are no transports, so hide the protocol combobox and label
-			self.protocol_hbox.hide()
-			self.protocol_hbox.set_no_show_all(True)
-			protocol_label = self.xml.get_widget('protocol_label')
-			protocol_label.hide()
-			protocol_label.set_no_show_all(True)
 		if self.account:
-			self.account_label.hide()
 			self.account_hbox.hide()
-			self.account_label.set_no_show_all(True)
+			self.account_label.hide()
 			self.account_hbox.set_no_show_all(True)
+			self.account_label.set_no_show_all(True)
 		else:
 			liststore = gtk.ListStore(str, str)
 			for acct in accounts:
@@ -516,11 +499,19 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 
 	def on_subscribe_button_clicked(self, widget):
 		'''When Subscribe button is clicked'''
-		jid = self.jid_entry.get_text().decode('utf-8')
-		nickname = self.nickname_entry.get_text().decode('utf-8')
+		active_tab = self.transports_notebook.get_current_page()
+		type_ = self.tab_transport[active_tab]
+		if type_ not in self.agents:
+			pritext = _('Transport Not Registered')
+			ErrorDialog(pritext, _('You must register to a transport to be able to add a %s contact.') % type_)
+			return
+		
+		jid = self.xml.get_widget(type_ + '_entry').get_text().decode('utf-8')
 		if not jid:
 			return
-	
+		if type_ != 'jabber':
+			jid = jid.replace('@', '%') + '@' + self.agents[type_]
+
 		# check if jid is conform to RFC and stringprep it
 		try:
 			jid = helpers.parse_jid(jid)
@@ -534,6 +525,10 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			pritext = _('Invalid User ID')
 			ErrorDialog(pritext, _('The user ID must not contain a resource.'))
 			return
+
+		nickname = self.nickname_entry.get_text().decode('utf-8')
+		if not nickname:
+			nickname = ''
 
 		# get value of account combobox, if account was not specified
 		if not self.account:
@@ -549,52 +544,19 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				_('This contact is already listed in your roster.'))
 				return
 
-		message_buffer = self.xml.get_widget('message_textview').get_buffer()
-		start_iter = message_buffer.get_start_iter()
-		end_iter = message_buffer.get_end_iter()
-		message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
+		if type_ == 'jabber':
+			message_buffer = self.xml.get_widget('jabber_message_textview').\
+				get_buffer()
+			start_iter = message_buffer.get_start_iter()
+			end_iter = message_buffer.get_end_iter()
+			message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
+		else:
+			message = ''
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
 		auto_auth = self.xml.get_widget('auto_authorize_checkbutton').get_active()
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname, auto_auth = auto_auth)
 		self.window.destroy()
-		
-	def fill_jid(self):
-		model = self.protocol_combobox.get_model()
-		index = self.protocol_combobox.get_active()
-		jid = self.uid_entry.get_text().decode('utf-8').strip()
-		if index > 0: # it's not jabber but a transport
-			jid = jid.replace('@', '%')
-		agent = model[index][1].decode('utf-8')
-		if agent:
-			jid += '@' + agent
-		self.jid_entry.set_text(jid)
-
-	def on_protocol_combobox_changed(self, widget):
-		self.fill_jid()
-
-	def guess_agent(self):
-		uid = self.uid_entry.get_text().decode('utf-8')
-		model = self.protocol_combobox.get_model()
-		
-		#If login contains only numbers, it's probably an ICQ number
-		if uid.isdigit():
-			if 'ICQ' in self.agents:
-				self.protocol_combobox.set_active(self.agents.index('ICQ'))
-				return
-
-	def set_nickname(self):
-		uid = self.uid_entry.get_text().decode('utf-8')
-		nickname = self.nickname_entry.get_text().decode('utf-8')
-		if nickname == self.old_uid_value:
-			self.nickname_entry.set_text(uid.split('@')[0])
-			
-	def on_uid_entry_changed(self, widget):
-		uid = self.uid_entry.get_text().decode('utf-8')
-		self.guess_agent()
-		self.set_nickname()
-		self.fill_jid()
-		self.old_uid_value = uid.split('@')[0]
 
 class AboutDialog:
 	'''Class for about dialog'''
