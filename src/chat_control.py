@@ -901,6 +901,11 @@ class ChatControl(ChatControlBase):
 		if self.resource:
 			name += '/' + self.resource
 			avoid_showing_account_too = True
+		if self.TYPE_ID == message_control.TYPE_PM:
+			room_jid = self.contact.jid.split('/')[0]
+			room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid,
+				self.account)
+			name = _('%s from room %s') % (name, room_ctrl.name)
 		name = gtkgui_helpers.escape_for_pango_markup(name)
 
 		# We know our contacts nick, but if there are any other controls 
