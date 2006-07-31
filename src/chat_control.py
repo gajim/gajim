@@ -157,7 +157,10 @@ class ChatControlBase(MessageControl):
 		# Attach speller
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			try:
-				gtkspell.Spell(self.msg_textview)
+				spell = gtkspell.Spell(self.msg_textview)
+				lang = gajim.config.get('speller_language')
+				if lang:
+					spell.set_language(lang)
 			except gobject.GError, msg:
 				#FIXME: add a ui for this use spell.set_language()
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language '

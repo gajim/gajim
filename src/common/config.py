@@ -80,6 +80,7 @@ class Config:
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
 		'use_speller': [ opt_bool, False, ],
+		'speller_language': [ opt_str, '', _('Language used by speller')],
 		'print_time': [ opt_str, 'always',  _('\'always\' - print time for every message.\n\'sometimes\' - print time every print_ichat_every_foo_minutes minute.\n\'never\' - never print time.')],
 		'print_time_fuzzy': [ opt_int, 0, _('Value of fuzziness from 1 to 4 or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one.') ],
 		'emoticons_theme': [opt_str, 'static', '', True ],
