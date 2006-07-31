@@ -2291,7 +2291,6 @@ class AdvancedNotificationsWindow:
 		# event
 		value = gajim.config.get_per('notifications', str(self.active_num),
 			'event')
-		print value
 		if value:
 			self.event_combobox.set_active(self.events_list.index(value))
 		else:
