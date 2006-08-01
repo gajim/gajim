@@ -1414,7 +1414,7 @@ class RosterWindow:
 		menuitem.connect('activate', self.on_invite_to_new_room, [(contact,
 			account)])
 		contact_transport = gajim.get_transport_name_from_jid(contact.jid)
-		t = contact_transport or 'jabber'
+		t = contact_transport or 'jabber' # transform None in 'jabber'
 		if not gajim.connections[account].muc_jid.has_key(t):
 			menuitem.set_sensitive(False)
 		submenu.append(menuitem)
@@ -1521,6 +1521,7 @@ class RosterWindow:
 				jid_list.append(contact.jid)
 			if account not in account_list:
 				account_list.append(account)
+		# transform None in 'jabber'
 		type_ = gajim.get_transport_name_from_jid(jid_list[0]) or 'jabber'
 		for account in account_list:
 			if gajim.connections[account].muc_jid[type_]:
@@ -1586,6 +1587,13 @@ class RosterWindow:
 			icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
 			menuitem.set_image(icon)
 			menuitem.connect('activate', self.on_invite_to_new_room, list_)
+			muc_jid = {}
+			c_t = contacts_transport or 'jabber' # transform None in 'jabber'
+			for account in connected_accounts:
+				for t in gajim.connections[account].muc_jid:
+					muc_jid[t] = gajim.connections[account].muc_jid[t]
+			if not muc_jid.has_key(c_t):
+				menuitem.set_sensitive(False)
 			sub_menu.append(menuitem)
 			rooms = [] # a list of (room_jid, account) tuple
 			for gc_control in gajim.interface.msg_win_mgr.get_controls(
