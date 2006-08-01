@@ -755,7 +755,8 @@ class ConnectionDisco:
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
 				gajim.proxy65_manager.resolve(jid, self.connection, self.name)
 			if features.__contains__(common.xmpp.NS_MUC) and is_muc:
-				self.muc_jid = jid
+				type_ = transport_type or 'jabber'
+				self.muc_jid[type_] = jid
 			if transport_type:
 				self.available_transports[transport_type] = jid
 		self.dispatch('AGENT_INFO_INFO', (jid, node, identities,

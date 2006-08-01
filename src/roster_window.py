@@ -1413,6 +1413,10 @@ class RosterWindow:
 		menuitem.set_image(icon)
 		menuitem.connect('activate', self.on_invite_to_new_room, [(contact,
 			account)])
+		contact_transport = gajim.get_transport_name_from_jid(contact.jid)
+		t = contact_transport or 'jabber'
+		if not gajim.connections[account].muc_jid.has_key(t):
+			menuitem.set_sensitive(False)
 		submenu.append(menuitem)
 		rooms = [] # a list of (room_jid, account) tuple
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(
@@ -1420,7 +1424,8 @@ class RosterWindow:
 			acct = gc_control.account
 			room_jid = gc_control.room_jid
 			if gajim.gc_connected[acct].has_key(room_jid) and \
-			gajim.gc_connected[acct][room_jid]:
+			gajim.gc_connected[acct][room_jid] and \
+			contact_transport == gajim.get_transport_name_from_jid(room_jid):
 				rooms.append((room_jid, acct))
 		if len(rooms):
 			item = gtk.SeparatorMenuItem() # separator
@@ -1516,17 +1521,16 @@ class RosterWindow:
 				jid_list.append(contact.jid)
 			if account not in account_list:
 				account_list.append(account)
+		type_ = gajim.get_transport_name_from_jid(jid_list[0]) or 'jabber'
 		for account in account_list:
-			if gajim.connections[account].muc_jid:
-				# create invities list
-
+			if gajim.connections[account].muc_jid[type_]:
 				# create the room on this muc server
 				if gajim.interface.instances[account].has_key('join_gc'):
 					gajim.interface.instances[account]['join_gc'].window.destroy()
 				try:
 					gajim.interface.instances[account]['join_gc'] = \
 						dialogs.JoinGroupchatWindow(account,
-							server = gajim.connections[account].muc_jid,
+							server = gajim.connections[account].muc_jid[type_],
 							automatic = {'invities': jid_list})
 				except RuntimeError:
 					continue
@@ -1543,6 +1547,8 @@ class RosterWindow:
 		list_ = [] # list of (jid, account) tuples
 		one_account_offline = False
 		connected_accounts = []
+		contacts_transport = -1
+		# -1 is at start, False when not from the same, None when jabber
 		for iter in iters:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
@@ -1552,6 +1558,11 @@ class RosterWindow:
 				connected_accounts.append(account)
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
+			transport = gajim.get_transport_name_from_jid(contact.jid)
+			if contacts_transport == -1:
+				contacts_transport = transport
+			if contacts_transport != transport:
+				contacts_transport = False
 			list_.append((contact, account))
 
 		menu = gtk.Menu()
@@ -1565,31 +1576,36 @@ class RosterWindow:
 		invite_item = gtk.ImageMenuItem(_('In_vite to'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_GO_BACK, gtk.ICON_SIZE_MENU)
 		invite_item.set_image(icon)
+		if contacts_transport == False:
+			# they are not all from the same transport
+			invite_item.set_sensitive(False)
+		else:
+
+			sub_menu = gtk.Menu()
+			menuitem = gtk.ImageMenuItem(_('_New room'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+			menuitem.set_image(icon)
+			menuitem.connect('activate', self.on_invite_to_new_room, list_)
+			sub_menu.append(menuitem)
+			rooms = [] # a list of (room_jid, account) tuple
+			for gc_control in gajim.interface.msg_win_mgr.get_controls(
+			message_control.TYPE_GC):
+				account = gc_control.account
+				room_jid = gc_control.room_jid
+				if gajim.gc_connected[account].has_key(room_jid) and \
+				gajim.gc_connected[account][room_jid] and \
+				contacts_transport == gajim.get_transport_name_from_jid(room_jid):
+					rooms.append((room_jid, account))
+			if len(rooms):
+				item = gtk.SeparatorMenuItem() # separator
+				sub_menu.append(item)
+				for (room_jid, account) in rooms:
+					menuitem = gtk.MenuItem(room_jid.split('@')[0])
+					menuitem.connect('activate', self.on_invite_to_room, list_,
+						room_jid, account)
+					sub_menu.append(menuitem)
 		
-		sub_menu = gtk.Menu()
-		menuitem = gtk.ImageMenuItem(_('_New room'))
-		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
-		menuitem.set_image(icon)
-		menuitem.connect('activate', self.on_invite_to_new_room, list_)
-		sub_menu.append(menuitem)
-		rooms = [] # a list of (room_jid, account) tuple
-		for gc_control in gajim.interface.msg_win_mgr.get_controls(
-		message_control.TYPE_GC):
-			account = gc_control.account
-			room_jid = gc_control.room_jid
-			if gajim.gc_connected[account].has_key(room_jid) and \
-			gajim.gc_connected[account][room_jid]:
-				rooms.append((room_jid, account))
-		if len(rooms):
-			item = gtk.SeparatorMenuItem() # separator
-			sub_menu.append(item)
-			for (room_jid, account) in rooms:
-				menuitem = gtk.MenuItem(room_jid.split('@')[0])
-				menuitem.connect('activate', self.on_invite_to_room, list_,
-					room_jid, account)
-				sub_menu.append(menuitem)
-		
-		invite_item.set_submenu(sub_menu)
+			invite_item.set_submenu(sub_menu)
 		menu.append(invite_item)
 
 		edit_groups_item = gtk.MenuItem(_('Edit _Groups'))
