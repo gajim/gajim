@@ -3569,6 +3569,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def _on_treeview_selection_changed(self, selection):
 		model, list_of_paths = selection.get_selected_rows()
+		if len(list_of_paths) == 1 and model[list_of_paths[0]][C_EDITABLE]:
+			# We are editing this row, do not modify self._last_selected_contact
+			# Cause that cancel editing
+			return
 		if len(self._last_selected_contact):
 			# update unselected rows
 			for (jid, account) in self._last_selected_contact:
