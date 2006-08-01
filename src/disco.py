@@ -272,7 +272,7 @@ class ServicesCache:
 			except KeyError:
 				continue
 			browser = info[0]
-			if browser is not None:
+			if browser:
 				break
 		# Note: possible outcome here is browser=False
 		if browser is None:
