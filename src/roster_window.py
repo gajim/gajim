@@ -1534,6 +1534,15 @@ class RosterWindow:
 		item.connect('activate', self.on_edit_agent, contact, account)
 		if not is_connected:
 			item.set_sensitive(False)
+
+		item = gtk.ImageMenuItem(_('Execute Command...'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		menu.append(item)
+		item.connect('activate', self.on_execute_command, contact, account,
+			contact.resource)
+		if not is_connected:
+			item.set_sensitive(False)
 		
 		item = gtk.ImageMenuItem(_('_Rename'))
 		# add a special img for rename menuitem
