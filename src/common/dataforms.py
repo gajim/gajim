@@ -96,7 +96,7 @@ class DataForm(xmpp.Node, object):
 				# change every <field/> to DataField object
 				for item in iter_elements(self, 'item'):
 					for field in iter_elements(item, 'field'):
-						field.delChild(field)
+						item.delChild(field)
 						field.addChild(node=DataField(node=field))
 			else:
 				self._mode = DATAFORM_SINGLE
