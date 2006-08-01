@@ -313,7 +313,7 @@ class CommandWindow:
 				self.data_form_widget.data_form=self.dataform
 			except dataforms.BadDataFormNode:
 				# TODO: translate
-				self.stage5('Service sent malformed data', senderror=True)
+				self.stage5(error='Service sent malformed data', senderror=True)
 			self.data_form_widget.show()
 		else:
 			self.data_form_widget.hide()
@@ -376,13 +376,26 @@ class CommandWindow:
 		self.stage1()
 
 # stage 5: an error has occured
-	def stage5(self, error, senderror=False):
+	def stage5(self, error=None, errorid=None, senderror=False):
 		'''Display the error message. Wait for user to close the window'''
 		# TODO: sending error to responder
 		# close old stage
 		self.stage_finish()
 
-		assert isinstance(error, basestring)
+		assert errorid is not None or error is not None
+
+		if errorid is not None:
+			# we've got error code, display appropriate message
+			errorname = xmpp.NS_STANZAS + ' ' + str(errorid)
+			errordesc = xmpp.ERRORS[errorname][2]
+			error = errordesc.decode('utf-8')
+			del errorname, errordesc
+		elif error is not None:
+			# we've got error message
+			pass
+		else:
+			# we don't know what's that, bailing out
+			assert False
 
 		self.stages_notebook.set_current_page(
 			self.stages_notebook.page_num(
@@ -435,9 +448,7 @@ class CommandWindow:
 			error = response.getError()
 			if error is not None:
 				# extracting error description from xmpp/protocol.py
-				errorname=xmpp.NS_STANZAS + ' ' + str(error)
-				errordesc=xmpp.ERRORS[errorname][2]
-				self.stage5(errordesc.decode('utf-8'))
+				self.stage5(errorid = error)
 				return
 
 			# no commands => no commands stage
@@ -472,9 +483,12 @@ class CommandWindow:
 			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
 
 		def callback(response):
-			# TODO: error handling
 			# TODO: move to connection_handlers.py
-			self.stage3_next_form(response.getTag('command'))
+			err = response.getError()
+			if err is not None:
+				self.stage5(errorid = err)
+			else:
+				self.stage3_next_form(response.getTag('command'))
 
 		print stanza
 
