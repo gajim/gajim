@@ -55,7 +55,7 @@ class EditGroupsDialog:
 		if len(list_) == 1:
 			contact = list_[0][0]
 			self.xml.get_widget('nickname_label').set_markup(
-				_("Contact's name: <i>%s</i>") % contact.get_shown_name())
+				_("Contact name: <i>%s</i>") % contact.get_shown_name())
 			self.xml.get_widget('jid_label').set_markup(
 				_('JID: <i>%s</i>') % contact.jid)
 		else:
