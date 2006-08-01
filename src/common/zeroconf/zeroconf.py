@@ -42,7 +42,8 @@ class Zeroconf:
 		self.service_browsers = {}
 		self.contacts = {}    # all current local contacts with data
 		self.entrygroup = None
-		
+		self.connected = False
+
 	## handlers for dbus callbacks
 
 	# error handler - maybe replace with gui version/gajim facilities
@@ -85,7 +86,9 @@ class Zeroconf:
 
 	def check_jid(self, jid):
 		# TODO: at least miranda uses bad service names(only host name), so change them - probabaly not so nice... need to find a better solution
+		# this is necessary so they don't get displayed as a transport
 		# [dkirov] maybe turn it into host+'@'+host, instead ?
+		# [sb] that would mean we can't do recreate below
 		if jid.find('@') == -1:
 			return 'bad-client@' + jid
 		else:
@@ -150,8 +153,8 @@ class Zeroconf:
 		# the name is already present, so recreate
 		if state == avahi.ENTRY_GROUP_COLLISION:
 			self.service_add_fail_callback('Local name collision, recreating.')
-
-#		elif state == avahi.ENTRY_GROUP_FAILURE:
+		elif state == avahi.ENTRY_GROUP_FAILURE:
+			print 'zeroconf.py: ENTRY_GROUP_FAILURE reached(that should not happen)'
 
 	# make zeroconf-valid names
 	def replace_show(self, show):
@@ -164,34 +167,51 @@ class Zeroconf:
 		return show
 
 	def create_service(self):
-		if not self.entrygroup:
-			# create an EntryGroup for publishing
-			self.entrygroup = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, self.server.EntryGroupNew()), avahi.DBUS_INTERFACE_ENTRY_GROUP)
-			self.entrygroup.connect_to_signal('StateChanged', self.entrygroup_state_changed_callback)
+		try:
+			if not self.entrygroup:
+				# create an EntryGroup for publishing
+				self.entrygroup = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, self.server.EntryGroupNew()), avahi.DBUS_INTERFACE_ENTRY_GROUP)
+				self.entrygroup.connect_to_signal('StateChanged', self.entrygroup_state_changed_callback)
 
-		self.txt['port.p2pj'] = self.port
-		self.txt['version'] = 1
-		self.txt['txtvers'] = 1
+			self.txt['port.p2pj'] = self.port
+			self.txt['version'] = 1
+			self.txt['txtvers'] = 1
+			
+			# replace gajim's show messages with compatible ones
+			if self.txt.has_key('status'):
+					self.txt['status'] = self.replace_show(self.txt['status'])
+
+			# print "Publishing service '%s' of type %s" % (self.name, self.stype)
+			self.entrygroup.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
+			self.entrygroup.Commit(reply_handler=self.service_committed_callback, error_handler=self.print_error_callback)
+
+			return True
 		
-		# replace gajim's status messages with proper ones
-		if self.txt.has_key('status'):
-				self.txt['status'] = self.replace_show(self.txt['status'])
-
-		# print "Publishing service '%s' of type %s" % (self.name, self.stype)
-		self.entrygroup.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
-		self.entrygroup.Commit(reply_handler=self.service_committed_callback, error_handler=self.print_error_callback)
-
+		except dbus.dbus_bindings.DBusException, e:
+			gajim.log.debug(str(e))
+			return False
+			
 	def announce(self):
-		state = self.server.GetState()
+		if self.connected:
+			state = self.server.GetState()
 
-		if state == avahi.SERVER_RUNNING:
-			self.create_service()
+			if state == avahi.SERVER_RUNNING:
+				self.create_service()
+				return True
+		else:
+			return False
 
 	def remove_announce(self):
-		if self.entrygroup:
-			self.entrygroup.Reset()
-			self.entrygroup.Free()
-			self.entrygroup = None
+		try:
+			if self.entrygroup.GetState() != avahi.ENTRY_GROUP_FAILURE:
+				self.entrygroup.Reset()
+				self.entrygroup.Free()
+				self.entrygroup = None
+				return True
+			else:
+				return False
+		except dbus.dbus_bindings.DBusException, e:
+			print "zeroconf.py: Can't remove service, avahi daemon not running?"
 
 	def browse_domain(self, interface, protocol, domain):
 		self.new_service_type(interface, protocol, self.stype, domain, '')
@@ -199,15 +219,20 @@ class Zeroconf:
 	# connect to dbus
 	def connect(self):
 		self.bus = dbus.SystemBus()
-		self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
-			avahi.DBUS_PATH_SERVER), avahi.DBUS_INTERFACE_SERVER)
 		try:
+			# is there any way to check, if a dbus name exists?
+			# that might make the Introspect Error go away...
+			self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
+			avahi.DBUS_PATH_SERVER), avahi.DBUS_INTERFACE_SERVER)
+			
 			self.server.connect_to_signal('StateChanged', self.server_state_changed_callback)
 		except dbus.dbus_bindings.DBusException, e:
 			# Avahi service is not present
 			gajim.log.debug(str(e))
-			self.remove_announce()
-			return
+			return False
+
+		self.connected = True
+		
 		# start browsing
 		if self.domain is None:
 			# Explicitly browse .local
@@ -222,17 +247,20 @@ class Zeroconf:
 		else:
 			self.browse_domain(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, domain)
 
+		return True
+
 	def disconnect(self):
+		self.connected = False
 		self.remove_announce()
 
-	# refresh data manually - really ok or too much traffic?
+	# refresh txt data of all contacts manually (no callback available)
 	def resolve_all(self):
 		for val in self.contacts.values():
 			#val:(name, domain, interface, protocol, host, address, port, txt)
 			self.server.ResolveService(int(val[2]), int(val[3]), val[0], \
 				self.stype, val[1], avahi.PROTO_UNSPEC, dbus.UInt32(0),\
 				reply_handler=self.service_resolved_all_callback, error_handler=self.print_error_callback)
-		
+
 	def get_contacts(self):
 		return self.contacts
 
@@ -249,11 +277,12 @@ class Zeroconf:
 			self.txt['status'] = self.replace_show(txt['status'])
 
 		txt = avahi.dict_to_txt_array(self.txt)
+		if self.entrygroup:
+			self.entrygroup.UpdateServiceTxt(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype,'', txt, reply_handler=self.service_updated_callback, error_handler=self.print_error_callback)
+			return True
+		else:
+			return False
 
-		self.entrygroup.UpdateServiceTxt(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype,'', txt, reply_handler=self.service_updated_callback, error_handler=self.print_error_callback)
-#		self.entrygroup.Commit()         # TODO: necessary?
-
-	
 	def send (self, msg, sock):
 		print 'send:'+msg
 		totalsent = 0

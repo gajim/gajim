@@ -189,23 +189,26 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if self.connection:
 			return self.connection, ''
 		
-		self.zeroconf.connect()
-		self.connection = client_zeroconf.ClientZeroconf(self.zeroconf)
-		self.roster = self.connection.getRoster()
-		self.dispatch('ROSTER', self.roster)
+		if self.zeroconf.connect():
+			self.connection = client_zeroconf.ClientZeroconf(self.zeroconf)
+			self.roster = self.connection.getRoster()
+			self.dispatch('ROSTER', self.roster)
 
-		#display contacts already detected and resolved
-		for jid in self.roster.keys():
-			display_jid = self.zeroconf.check_jid(jid)
-			self.dispatch('ROSTER_INFO', (display_jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
-			self.dispatch('NOTIFY', (display_jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
+			#display contacts already detected and resolved
+			for jid in self.roster.keys():
+				display_jid = self.zeroconf.check_jid(jid)
+				self.dispatch('ROSTER_INFO', (display_jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
+				self.dispatch('NOTIFY', (display_jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
 
-		self.connected = STATUS_LIST.index(show)
+			self.connected = STATUS_LIST.index(show)
 
-		# refresh all contacts data all 10 seconds
-		self.call_resolve_timeout = True
-		gobject.timeout_add(1000, self._on_resolve_timeout)
-		
+			# refresh all contacts data every second
+			self.call_resolve_timeout = True
+			gobject.timeout_add(1000, self._on_resolve_timeout)
+		else:
+			pass
+			# display visual notification that we could not connect to avahi
+
 	def connect_and_init(self, show, msg, signed):
 		self.continue_connect_info = [show, msg, signed]
 		
@@ -230,36 +233,41 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if not show in STATUS_LIST:
 			return -1
 		
+		check = True		#to check for errors from zeroconf
+
 		# 'connect'
 		if show != 'offline' and not self.connected:
 			self.on_purpose = False
 			self.connect_and_init(show, msg, '')
 			if show != 'invisible':
-					self.zeroconf.announce()
+					check = self.zeroconf.announce()
 			else:
 					self.connected = STATUS_LIST.index(show)
 
 		# 'disconnect'
 		elif show == 'offline' and self.connected:
 			self.connected = 0
-			self.dispatch('STATUS', 'offline')
 			self.disconnect()
+			self.dispatch('STATUS', 'offline')
 
 		# update status
 		elif show != 'offline' and self.connected:
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
-				self.zeroconf.remove_announce()
-				return
-			if was_invisible:
-				self.zeroconf.announce()
-			if self.connection:
+				check = check and self.zeroconf.remove_announce()
+			elif was_invisible:
+				check = check and self.zeroconf.announce()
+			if self.connection and not show == 'invisible':
 				txt = {}
 				txt['status'] = show
 				txt['msg'] = msg
-				self.zeroconf.update_txt(txt)
-		self.dispatch('STATUS', show)
+				check = check and self.zeroconf.update_txt(txt)
+
+		if check:
+			self.dispatch('STATUS', show)
+		else:
+			self.dispatch('STATUS', 'offline')
 
 	def get_status(self):
 		return STATUS_LIST[self.connected]
