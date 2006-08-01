@@ -1411,7 +1411,10 @@ class SingleMessageWindow:
 
 	def prepare_widgets_for(self, action):
 		if len(gajim.connections) > 1:
-			title = _('Single Message in account %s') % self.account
+			if action == 'send':
+				title = _('Single Message using account %s') % self.account
+			else:
+				title = _('Single Message in account %s') % self.account
 		else:
 			title = _('Single Message')
 
