@@ -232,7 +232,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def change_status(self, show, msg, sync = False, auto = False):
 		if not show in STATUS_LIST:
 			return -1
-		
+
 		check = True		#to check for errors from zeroconf
 
 		# 'connect'
@@ -307,7 +307,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
 					typ = 'normal')
 
-		
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 		
@@ -342,7 +341,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					kind = 'single_msg_sent'
 				gajim.logger.write(kind, jid, log_msg)
 		
-		self.zeroconf.send_message(jid, msgtxt)
+		self.zeroconf.send_message(jid, msgtxt, type)
 		
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 		

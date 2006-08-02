@@ -43,6 +43,7 @@ class Zeroconf:
 		self.contacts = {}    # all current local contacts with data
 		self.entrygroup = None
 		self.connected = False
+		self.announced = False
 
 	## handlers for dbus callbacks
 
@@ -158,12 +159,10 @@ class Zeroconf:
 
 	# make zeroconf-valid names
 	def replace_show(self, show):
-		if show == 'chat' or show == '':
-			show = 'online'
+		if show == 'chat' or show == 'online' or show == '':
+			show = 'avail'
 		elif show == 'xa':
 			show = 'away'
-		elif show == 'online':
-			show = 'avail'
 		return show
 
 	def create_service(self):
@@ -197,16 +196,20 @@ class Zeroconf:
 
 			if state == avahi.SERVER_RUNNING:
 				self.create_service()
+				self.announced = True
 				return True
 		else:
 			return False
 
 	def remove_announce(self):
+		if self.announced == False:
+			return False
 		try:
 			if self.entrygroup.GetState() != avahi.ENTRY_GROUP_FAILURE:
 				self.entrygroup.Reset()
 				self.entrygroup.Free()
 				self.entrygroup = None
+				self.announced = False
 				return True
 			else:
 				return False
@@ -250,8 +253,9 @@ class Zeroconf:
 		return True
 
 	def disconnect(self):
-		self.connected = False
-		self.remove_announce()
+		if self.connected:
+			self.connected = False
+			self.remove_announce()
 
 	# refresh txt data of all contacts manually (no callback available)
 	def resolve_all(self):
@@ -292,26 +296,30 @@ class Zeroconf:
 				raise RuntimeError, "socket connection broken"
 			totalsent = totalsent + sent
 
-	def send_message(self, jid, msg):
+	def send_message(self, jid, msg, type = 'chat'):
 		print 'zeroconf.py: send_message:'+ msg
 		jid = self.recreate_bad_jid(jid)
 			
 		sock = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
  		#sock.setblocking(False)
-		sock.connect ( ( self.contacts[jid][4], self.contacts[jid][6] ) )
-		
-		try : recvd = sock.recv(16384)
-		except: recvd = ''
-	
-		print 'receive:' + recvd
-		
-		self.send("<?xml version='1.0' encoding='UTF-8'?><stream:stream to="+ self.contacts[jid][5] +" xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>", sock)
 
-		self.send("<message to=" + jid + " type='chat'><body>" + msg + "</body><html xmlns='html://www.w3.org/1999/xhtml'><body ichatballoncolor='#111111' ichattextcolor='#000000'><font face='Courier' ABSZ='3'>" + msg +"</font></body></html><x xmlns='jabber:x:event'><delivered /></x></message>", sock)
+		# jep-0174 wants clients to use the port from the srv record
+		# but at least adium uses the txt record (port.p2pj)
+		#sock.connect ( ( self.contacts[jid][4], self.contacts[jid][6] ) )
+
+		sock.connect ( ( self.contacts[jid][4], int((self.txt_array_to_dict(self.contacts[jid][7]))['port.p2pj']) ) )
 		
+		#TODO: better use an xml-class for this...
+		self.send("<?xml version='1.0' encoding='UTF-8'?><stream:stream xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>", sock)
+	
 		try: recvd = sock.recv(16384)
 		except: recvd = ''
 		print 'receive:' + recvd
+		
+		#adium requires the html parts
+		self.send("<message to='" + jid + "' from='" + self.name + "' type='" + type + "'><body>" + msg + "</body><html xmlns='html://www.w3.org/1999/xhtml'><body ichatballoncolor='#5598d7' ichattextcolor='#000000'><font face='Courier' ABSZ='3'>" + msg +"</font></body></html><x xmlns='jabber:x:event'><composing /></x></message>", sock)
+
+#		self.send("<message to='" + jid + "' from='" + self.name +"' type='" + type + "'><body>" + msg + "</body></message>", sock)
 
 		self.send('</stream>', sock)
 		sock.close()
