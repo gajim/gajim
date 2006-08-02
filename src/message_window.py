@@ -435,7 +435,7 @@ class MessageWindow:
 			if ctrl.nb_unread > 0:
 				found = True
 				break # found
-			else: # Search for a composing contact
+			elif gajim.config.get('ctrl_tab_go_to_next_composing') : # Search for a composing contact
 				contact = ctrl.contact
 				if first_composing_ind == -1 and contact.chatstate == 'composing':
 				# If no composing contact found yet, check if this one is composing

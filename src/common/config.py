@@ -203,6 +203,7 @@ class Config:
 		'chat_merge_consecutive_nickname': [opt_bool, False, _('Merge consecutive nickname in chat window')],
 		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickame')],
 		'gc_nicknames_colors': [ opt_str, '#a34526:#c000ff:#0012ff:#388a99:#38995d:#519938:#ff8a00:#94452d:#244b5a:#32645a', _('List of colors that will be used to color nicknames in groupchats'), True ],
+		'ctrl_tab_go_to_next_composing': [opt_bool, True, _('Ctrl-Tab go to next composing tab when none is unread')],
 	}
 
 	__options_per_key = {
