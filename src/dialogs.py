@@ -21,7 +21,6 @@
 import gtk
 import gobject
 import os
-import sys
 
 import gtkgui_helpers
 import vcard
@@ -395,9 +394,12 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
-	tab_transport = {0: 'jabber', 1:'aim', 2:'gadu-gadu', 3:'icq', 4:'msn',
-		5:'yahoo'}
-	tab_num = {'jabber':0, 'aim':1, 'gadu-gadu':2, 'icq':3, 'msn':4, 'yahoo':5}
+	uid_labels = {'jabber': _('Jabber ID'),
+		'aim': _('AIM Address'),
+		'gadu-gadu': _('GG Number'),
+		'icq': _('ICQ Number'),
+		'msn': _('MSN Address'),
+		'yahoo': _('Yahoo! Address')}
 	def __init__(self, account = None, jid = None, user_nick = None,
 	group = None):
 		self.account = account
@@ -423,60 +425,98 @@ class AddNewContactWindow:
 			return
 		location['add_contact'] = self
 		self.xml = gtkgui_helpers.get_glade('add_new_contact_window.glade')
-		self.account_combobox = self.xml.get_widget('account_combobox')
-		self.account_hbox = self.xml.get_widget('account_hbox')
-		self.account_label = self.xml.get_widget('account_label')
 		self.window = self.xml.get_widget('add_new_contact_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
-		self.nickname_entry = self.xml.get_widget('nickname_entry')
-		self.transports_notebook = self.xml.get_widget('transports_notebook')
+		for w in ('account_combobox', 'account_hbox', 'account_label',
+		'uid_label', 'uid_entry', 'protocol_combobox', 'protocol_jid_combobox',
+		'protocol_hbox', 'nickname_entry', 'message_scrolledwindow',
+		'register_hbox', 'subscription_table', 'add_button',
+		'message_textview', 'connected_label', 'group_comboboxentry'):
+			self.__dict__[w] = self.xml.get_widget(w)
 		if account and len(gajim.connections) >= 2:
 			prompt_text =\
 _('Please fill in the data of the contact you want to add in account %s') %account
 		else:
 			prompt_text = _('Please fill in the data of the contact you want to add')
 		self.xml.get_widget('prompt_label').set_text(prompt_text)
-		self.agents = {'jabber': ''}
+		self.agents = {'jabber': []}
+		# types to which we are not subscribed but account has an agent for it
+		self.available_types = []
 		for acct in accounts:
 			for j in gajim.contacts.get_jid_list(acct):
 				contact = gajim.contacts.get_first_contact_from_jid(acct, j)
-				if _('Transports') in contact.groups and contact.show != 'offline' \
-				and contact.show != 'error':
-					type_ = gajim.get_transport_name_from_jid(contact.jid)
-					if not type_ in self.tab_num:
-						# unknown transport type
-						continue
-					if type_ in self.agents:
-						# we already have it
-						continue
-					widget = self.xml.get_widget(type_ + '_register_button')
-					widget.set_no_show_all(True)
-					widget.hide()
-					self.agents[type_] = contact.jid
-		for type_ in self.tab_num:
-			if type_ in self.agents:
+				if _('Transports') in contact.groups:
+					type_ = gajim.get_transport_name_from_jid(j)
+					if self.agents.has_key(type_):
+						self.agents[type_].append(j)
+					else:
+						self.agents[type_] = [j]
+		# Now add the one to which we can register
+		for acct in accounts:
+			for type_ in gajim.connections[account].available_transports:
+				if type_ in self.agents:
+					continue
+				self.agents[type_] = []
+				for jid_ in gajim.connections[account].available_transports[type_]:
+					self.agents[type_].append(jid_)
+				self.available_types.append(type_)
+		liststore = gtk.ListStore(str)
+		self.group_comboboxentry.set_model(liststore)
+		liststore = gtk.ListStore(str, str)
+		uf_type = {'jabber': 'Jabber', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
+			'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
+		# Jabber as first
+		liststore.append(['Jabber', 'jabber'])
+		for type_ in self.agents:
+			if type_ == 'jabber':
 				continue
-			widget = self.xml.get_widget(type_ + '_register_form')
-			widget.set_no_show_all(True)
-			widget.hide()
-			if type_ in gajim.connections[self.account].available_transports:
-				widget = self.xml.get_widget(type_ + '_register_button')
-				widget.set_sensitive(True)
-				widget.connect('clicked', self.on_register_button_clicked,
-					gajim.connections[self.account].available_transports[type_])
-
+			liststore.append([uf_type[type_], type_])
+		self.protocol_combobox.set_model(liststore)
+		self.protocol_combobox.set_active(0)
+		self.protocol_jid_combobox.set_sensitive(False)
+		self.subscription_table.set_no_show_all(True)
+		self.message_scrolledwindow.set_no_show_all(True)
+		self.register_hbox.set_no_show_all(True)
+		self.register_hbox.hide()
+		self.connected_label.set_no_show_all(True)
+		self.connected_label.hide()
+		liststore = gtk.ListStore(str)
+		self.protocol_jid_combobox.set_model(liststore)
+		self.xml.signal_autoconnect(self)
 		if jid:
-			type_ = gajim.get_transport_name_from_jid(jid)
-			if not type_:
-				type_ = 'jabber'
-			self.xml.get_widget(type_ + '_entry').set_text(jid)
-			self.transports_notebook.set_active_tab(self.tab_num[type_])
+			type_ = gajim.get_transport_name_from_jid(jid) or 'jabber'
+			if type_ == 'jabber':
+				self.uid_entry.set_text(jid)
+			else:
+				uid, transport = gajim.get_room_name_and_server_from_room_jid(jid)
+				self.uid_entry.set_text(uid.replace('%', '@', 1))
+			#set protocol_combobox
+			model = self.protocol_combobox.get_model()
+			iter = model.get_iter_first()
+			i = 0
+			while iter:
+				if model[iter][1] == type_:
+					self.protocol_combobox.set_active(i)
+					break
+				iter = model.iter_next(iter)
+				i += 1
+
+			# set protocol_jid_combobox
+			self.protocol_combobox.set_active(o)
+			model = self.protocol_jid_combobox.get_model()
+			iter = model.get_iter_first()
+			i = 0
+			while iter:
+				if model[iter][0] == transport:
+					self.protocol_combobox.set_active(i)
+					break
+				iter = model.iter_next(iter)
+				i += 1
 			if user_nick:
 				self.nickname_entry.set_text(user_nick)
 			self.nickname_entry.grab_focus()
-		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
-		liststore = gtk.ListStore(str)
-		self.group_comboboxentry.set_model(liststore)
+		else:
+			self.uid_entry.grab_focus()
 		group_names = []
 		i = 0
 		for acct in accounts:
@@ -489,17 +529,16 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 					i += 1
 
 		if self.account:
-			self.account_hbox.hide()
 			self.account_label.hide()
-			self.account_hbox.set_no_show_all(True)
+			self.account_hbox.hide()
 			self.account_label.set_no_show_all(True)
+			self.account_hbox.set_no_show_all(True)
 		else:
 			liststore = gtk.ListStore(str, str)
 			for acct in accounts:
 				liststore.append([acct, acct])
 			self.account_combobox.set_model(liststore)
 			self.account_combobox.set_active(0)
-		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
 	def on_add_new_contact_window_destroy(self, widget):
@@ -509,7 +548,8 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			location = gajim.interface.instances
 		del location['add_contact']
 
-	def on_register_button_clicked(self, widget, jid):
+	def on_register_button_clicked(self, widget):
+		jid = self.protocol_jid_combobox.get_active_text().decode('utf-8')
 		gajim.connections[self.account].request_register_agent_info(jid)
 
 	def on_add_new_contact_window_key_press_event(self, widget, event):
@@ -520,21 +560,20 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		'''When Cancel button is clicked'''
 		self.window.destroy()
 
-	def on_subscribe_button_clicked(self, widget):
+	def on_add_button_clicked(self, widget):
 		'''When Subscribe button is clicked'''
-		active_tab = self.transports_notebook.get_current_page()
-		type_ = self.tab_transport[active_tab]
-		if type_ not in self.agents:
-			pritext = _('Transport Not Registered')
-			ErrorDialog(pritext, _('You must register to a transport to be able to add a %s contact.') % type_)
-			return
-		
-		jid = self.xml.get_widget(type_ + '_entry').get_text().decode('utf-8')
+		jid = self.uid_entry.get_text().decode('utf-8')
 		if not jid:
 			return
-		if type_ != 'jabber':
-			jid = jid.replace('@', '%') + '@' + self.agents[type_]
 
+		model = self.protocol_combobox.get_model()
+		iter = self.protocol_combobox.get_active_iter()
+		type_ = model[iter][1]
+		if type_ != 'jabber':
+			transport = self.protocol_jid_combobox.get_active_text().decode(
+				'utf-8')
+			jid = jid.replace('@', '%') + '@' + transport
+		
 		# check if jid is conform to RFC and stringprep it
 		try:
 			jid = helpers.parse_jid(jid)
@@ -549,10 +588,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			ErrorDialog(pritext, _('The user ID must not contain a resource.'))
 			return
 
-		nickname = self.nickname_entry.get_text().decode('utf-8')
-		if not nickname:
-			nickname = ''
-
+		nickname = self.nickname_entry.get_text().decode('utf-8') or ''
 		# get value of account combobox, if account was not specified
 		if not self.account:
 			model = self.account_combobox.get_model()
@@ -568,34 +604,72 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				return
 
 		if type_ == 'jabber':
-			message_buffer = self.xml.get_widget('jabber_message_textview').\
-				get_buffer()
+			message_buffer = self.message_textview.get_buffer()
 			start_iter = message_buffer.get_start_iter()
 			end_iter = message_buffer.get_end_iter()
 			message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
 		else:
-			message = ''
+			message= ''
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
 		auto_auth = self.xml.get_widget('auto_authorize_checkbutton').get_active()
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname, auto_auth = auto_auth)
 		self.window.destroy()
 
+	def on_protocol_combobox_changed(self, widget):
+		model = widget.get_model()
+		iter = widget.get_active_iter()
+		type_ = model[iter][1]
+		model = self.protocol_jid_combobox.get_model()
+		model.clear()
+		if len(self.agents[type_]):
+			for jid_ in self.agents[type_]:
+				model.append([jid_])
+			self.protocol_jid_combobox.set_active(0)
+			self.protocol_jid_combobox.set_sensitive(True)
+		else:
+			self.protocol_jid_combobox.set_sensitive(False)
+		if type_ in self.uid_labels:
+			self.uid_label.set_text(self.uid_labels[type_])
+		else:
+			self.uid_label.set_text(_('User ID'))
+		if type_ == 'jabber':
+			self.message_scrolledwindow.show()
+		else:
+			self.message_scrolledwindow.hide()
+		if type_ in self.available_types:
+			self.register_hbox.set_no_show_all(False)
+			self.register_hbox.show_all()
+			self.connected_label.hide()
+			self.subscription_table.hide()
+			self.add_button.set_sensitive(False)
+		else:
+			self.register_hbox.hide()
+			if type_ != 'jabber':
+				jid = self.protocol_jid_combobox.get_active_text()
+				contact = gajim.contacts.get_first_contact_from_jid(self.account,
+					jid)
+				if contact.show in ('offline', 'error'):
+					self.subscription_table.hide()
+					self.connected_label.show()
+					self.add_button.set_sensitive(False)
+					return
+			self.subscription_table.show_all()
+			self.connected_label.hide()
+			self.add_button.set_sensitive(True)
+
 	def transport_signed_in(self, jid):
-		type_ = gajim.get_transport_name_from_jid(jid)
-		self.xml.get_widget(type_ + '_register_button').hide()
-		self.agents[type_] = jid
-		widget = self.xml.get_widget(type_ + '_register_form')
-		widget.set_no_show_all(False)
-		widget.show_all()
+		if self.protocol_jid_combobox.get_active_text() == jid:
+			self.register_hbox.hide()
+			self.connected_label.hide()
+			self.subscription_table.show_all()
+			self.add_button.set_sensitive(True)
 
 	def transport_signed_out(self, jid):
-		type_ = gajim.get_transport_name_from_jid(jid)
-		widget = self.xml.get_widget(type_ + '_register_button')
-		widget.set_no_show_all(False)
-		widget.show_all()
-		del self.agents[type_]
-		self.xml.get_widget(type_ + '_register_form').hide()
+		if self.protocol_jid_combobox.get_active_text() == jid:
+			self.subscription_table.hide()
+			self.connected_label.show()
+			self.add_button.set_sensitive(False)
 
 class AboutDialog:
 	'''Class for about dialog'''

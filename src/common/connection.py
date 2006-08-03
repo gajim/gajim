@@ -86,7 +86,7 @@ class Connection(ConnectionHandlers):
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.available_transports = {} # list of available transports on this
-		# server {'icq': 'icq.server.com', }
+		# server {'icq': ['icq.server.com', 'icq2.server.com'], }
 		self.vcard_supported = True
 	# END __init__
 

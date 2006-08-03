@@ -758,7 +758,10 @@ class ConnectionDisco:
 				type_ = transport_type or 'jabber'
 				self.muc_jid[type_] = jid
 			if transport_type:
-				self.available_transports[transport_type] = jid
+				if self.available_transports.has_key(transport_type):
+					self.available_transports[transport_type].append(jid)
+				else:
+					self.available_transports[transport_type] = [jid]
 		self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
 			features, data))
 
