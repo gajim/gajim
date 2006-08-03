@@ -253,14 +253,14 @@ class RosterWindow:
 				
 				if self.get_contact_iter(_jid, _account):
 					shown_family.append(data)
-				if _jid == jid:
+				if _jid == jid and _account == account:
 					our_data = data
 			shown_family.append(our_data)
 			big_brother_data = gajim.contacts.get_metacontacts_big_brother(
 				shown_family)
 			big_brother_jid = big_brother_data['jid']
 			big_brother_account = big_brother_data['account']
-			if big_brother_jid != jid:
+			if big_brother_jid != jid or big_brother_account != account:
 				# We are adding a child contact
 				if contact.show in ('offline', 'error') and \
 				not showOffline and not gajim.awaiting_events[account].has_key(jid):
@@ -561,7 +561,8 @@ class RosterWindow:
 			# parent is not a contact
 			return
 		parent_jid = model[parent_iter][C_JID].decode('utf-8')
-		self.draw_contact(parent_jid, account)
+		parent_account = model[parent_iter][C_ACCOUNT].decode('utf-8')
+		self.draw_contact(parent_jid, parent_account)
 
 	def draw_avatar(self, jid, account):
 		'''draw the avatar'''
