@@ -502,7 +502,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				i += 1
 
 			# set protocol_jid_combobox
-			self.protocol_combobox.set_active(o)
+			self.protocol_combobox.set_active(0)
 			model = self.protocol_jid_combobox.get_model()
 			iter = model.get_iter_first()
 			i = 0
