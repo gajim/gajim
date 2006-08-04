@@ -82,6 +82,7 @@ def _gen_agent_type_info():
 		('gateway', 'sip'):			(False, 'sip.png'),
 		('directory', 'user'):		(None, 'jud.png'),
 		('pubsub', 'generic'):		(None, 'pubsub.png'),
+		('pubsub', 'service'):		(PubSubBrowser, 'pubsub.png'),
 		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
 
 		# Transports
@@ -1659,6 +1660,65 @@ class MucBrowser(AgentBrowser):
 		# switch to alternate query mode
 		self.cache.get_items(jid, node, self._channel_altinfo)
 
+def PubSubBrowser(account, jid, node):
+	''' Returns an AgentBrowser subclass that will display service discovery
+	for particular pubsub service. Different pubsub services may need to
+	present different data during browsing. '''
+	# for now, only discussion groups are supported...
+	# TODO: check if it has appropriate features to be such kind of service
+	return DiscussionGroupsBrowser(account, jid, node)
+
+class DiscussionGroupsBrowser(AgentBrowser):
+	''' For browsing pubsub-based discussion groups service. '''
+	def _create_treemodel(self):
+		''' Create treemodel for the window. '''
+		# JID, node, name (with description) - pango markup, subscribed?
+		model = gtk.ListStore(str, str, str, bool)
+		model.set_sort_column_id(3, gtk.SORT_ASCENDING)
+		self.window.services_treeview.set_model(model)
+
+		# Name column
+		# Pango markup for name and description, description printed with
+		# <small/> font
+		renderer = gtk.CellRendererText()
+		col = gtk.TreeViewColumn(_('Name'))
+		col.pack_start(renderer)
+		col.set_attributes(renderer, markup=2)
+		col.set_resizable(True)
+		self.window.services_treeview.insert_column(col, -1)
+
+		# Subscription state
+		renderer = gtk.CellRendererToggle()
+		col = gtk.TreeViewColumn(_('Subscribed'))
+		col.pack_start(renderer)
+		col.set_attributes(renderer, active=3)
+		col.set_resizable(False)
+		self.window.services_treeview.insert_column(col, -1)
+
+		self.window.services_treeview.set_headers_visible(True)
+
+	def _add_actions(self):
+		self.subscribe_button = gtk.Button(label=_('_Subscribe'), use_underline=True)
+		self.subscribe_button.connect('clicked', self.on_subscribe_button_clicked)
+		self.window.action_buttonbox.add(self.subscribe_button)
+		self.subscribe_button.show_all()
+
+		self.unsubscribe_button = gtk.Button(label=_('_Unsubscribe'), use_underline=True)
+		self.unsubscribe_button.connect('clicked', self.on_unsubscribe_button_clicked)
+		self.window.action_buttonbox.add(self.unsubscribe_button)
+		self.unsubscribe_button.show_all()
+
+	def _clean_actions(self):
+		if self.subscribe_button is not None:
+			self.subscribe_button.destroy()
+			self.subscribe_button = None
+
+		if self.unsubscribe_button is not None:
+			self.unsubscribe_button.destroy()
+			self.unsubscribe_button = None
+
+	def on_subscribe_button_clicked(*x): pass
+	def on_unsubscribe_button_clicked(*x): pass
 
 # Fill the global agent type info dictionary
 _agent_type_info = _gen_agent_type_info()
