@@ -741,7 +741,7 @@ class ConnectionDisco:
 				identities.append(attr)
 			elif i.getName() == 'feature':
 				features.append(i.getAttr('var'))
-			elif i.getName() == 'x' and i.getAttr('xmlns') == common.xmpp.NS_DATA:
+			elif i.getName() == 'x' and i.getNamespace() == common.xmpp.NS_DATA:
 				data.append(common.xmpp.DataForm(node=i))
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		if transport_type and jid not in gajim.transport_type:
