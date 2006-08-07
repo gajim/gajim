@@ -1450,7 +1450,7 @@ class RosterWindow:
 			for widget in [start_chat_menuitem, send_single_message_menuitem,
 			rename_menuitem, edit_groups_menuitem, send_file_menuitem,
 			subscription_menuitem, add_to_roster_menuitem,
-			remove_from_roster_menuitem, execute_commands_menuitem]:
+			remove_from_roster_menuitem, execute_command_menuitem]:
 				widget.set_sensitive(False)
 
 		#FIXME: create menu for sub contacts
@@ -1543,7 +1543,7 @@ class RosterWindow:
 			contact.resource)
 		if not is_connected:
 			item.set_sensitive(False)
-		
+
 		item = gtk.ImageMenuItem(_('_Rename'))
 		# add a special img for rename menuitem
 		path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
@@ -1604,7 +1604,8 @@ class RosterWindow:
 		new_message_menuitem = childs[2]
 		add_contact_menuitem = childs[3]
 		service_discovery_menuitem = childs[4]
-		edit_account_menuitem = childs[5]
+		execute_command_menuitem = childs[5]
+		edit_account_menuitem = childs[6]
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
 
@@ -1640,7 +1641,11 @@ class RosterWindow:
 		add_contact_menuitem.connect('activate', self.on_add_new_contact, account)
 		service_discovery_menuitem.connect('activate',
 			self.on_service_disco_menuitem_activate, account)
-		
+		hostname = gajim.config.get_per('accounts', account, 'hostname')
+		contact = gajim.contacts.create_contact(jid = hostname) # Fake contact
+		execute_command_menuitem.connect('activate',
+			self.on_execute_command, contact, account)
+
 		gc_sub_menu = gtk.Menu() # gc is always a submenu
 		join_group_chat_menuitem.set_submenu(gc_sub_menu)
 		self.add_bookmarks_list(gc_sub_menu, account)
@@ -1650,7 +1655,8 @@ class RosterWindow:
 		# make some items insensitive if account is offline
 		if gajim.connections[account].connected < 2:
 			for widget in [add_contact_menuitem, service_discovery_menuitem,
-			join_group_chat_menuitem, new_message_menuitem]:
+			join_group_chat_menuitem, new_message_menuitem,
+			execute_command_menuitem]:
 				widget.set_sensitive(False)
 		
 		return account_context_menu
@@ -2585,7 +2591,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		able to make this a callback.'''
 		jid = contact.jid
 		if resource is not None:
-			jid = jid+u'/'+resource
+			jid = jid + u'/' + resource
 		adhoc_commands.CommandWindow(account, jid)
 
 	def on_open_chat_window(self, widget, contact, account, resource = None):
