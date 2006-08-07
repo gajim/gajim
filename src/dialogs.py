@@ -470,7 +470,10 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		for type_ in self.agents:
 			if type_ == 'jabber':
 				continue
-			liststore.append([uf_type[type_], type_])
+			if type_ in uf_type:
+				liststore.append([uf_type[type_], type_])
+			else:
+				liststore.append([type_, type_])
 		self.protocol_combobox.set_model(liststore)
 		self.protocol_combobox.set_active(0)
 		self.protocol_jid_combobox.set_sensitive(False)
