@@ -657,6 +657,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 					self.connected_label.show()
 					self.add_button.set_sensitive(False)
 					return
+			self.subscription_table.set_no_show_all(False)
 			self.subscription_table.show_all()
 			self.connected_label.hide()
 			self.add_button.set_sensitive(True)
