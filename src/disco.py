@@ -56,6 +56,7 @@ import pango
 import dialogs
 import tooltips
 import gtkgui_helpers
+import groups
 
 from common import gajim
 from common import xmpp
@@ -217,6 +218,7 @@ class ServicesCache:
 		self.account = account
 		self._items = CacheDictionary(15, getrefresh = False)
 		self._info = CacheDictionary(15, getrefresh = False)
+		self._subscriptions = CacheDictionary(5, getrefresh=False)
 		self._cbs = {}
 
 	def _clean_closure(self, cb, type, addr):
@@ -573,7 +575,7 @@ _('Without a connection, you can not browse available services'))
 		self.connect_style_event(opts[0], opts[1])
 	
 	def destroy(self, chain = False):
-		'''Close the browser. This can optionally close it's children and
+		'''Close the browser. This can optionally close its children and
 		propagate to the parent. This should happen on actions like register,
 		or join to kill off the entire browser chain.'''
 		if self.dying:
@@ -596,7 +598,8 @@ _('Without a connection, you can not browse available services'))
 				child.destroy(chain = chain)
 				self.children.remove(child)
 		if self.parent:
-			self.parent.children.remove(self)
+			if self in self.parent.children:
+				self.parent.children.remove(self)
 			if chain and not self.parent.children:
 				self.parent.destroy(chain = chain)
 				self.parent = None
@@ -1670,10 +1673,24 @@ def PubSubBrowser(account, jid, node):
 
 class DiscussionGroupsBrowser(AgentBrowser):
 	''' For browsing pubsub-based discussion groups service. '''
+	def __init__(self, account, jid, node):
+		AgentBrowser.__init__(self, account, jid, node)
+
+		# this will become set object when we get subscriptions; None means
+		# we don't know yet which groups are subscribed
+		self.subscriptions = None
+
+		# this will become our action widgets when we create them; None means
+		# we don't have them yet (needed for check in callback)
+		self.subscribe_button = None
+		self.unsubscribe_button = None
+
+		gajim.connections[account].send_pb_subscription_query(jid, self._subscriptionsCB)
+
 	def _create_treemodel(self):
 		''' Create treemodel for the window. '''
-		# JID, node, name (with description) - pango markup, subscribed?
-		model = gtk.ListStore(str, str, str, bool)
+		# JID, node, name (with description) - pango markup, dont have info?, subscribed?
+		model = gtk.ListStore(str, str, str, bool, bool)
 		model.set_sort_column_id(3, gtk.SORT_ASCENDING)
 		self.window.services_treeview.set_model(model)
 
@@ -1691,24 +1708,53 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		renderer = gtk.CellRendererToggle()
 		col = gtk.TreeViewColumn(_('Subscribed'))
 		col.pack_start(renderer)
-		col.set_attributes(renderer, active=3)
+		col.set_attributes(renderer, inconsistent=3, active=4)
 		col.set_resizable(False)
 		self.window.services_treeview.insert_column(col, -1)
 
 		self.window.services_treeview.set_headers_visible(True)
 
+	def _add_item(self, model, jid, node, item, force):
+		''' Called when we got basic information about new node from query.
+		Show the item. '''
+		name = item.get('name', '')
+
+		if self.subscriptions is not None:
+			dunno = False
+			subscribed = name in self.subscriptions
+		else:
+			dunno = True
+			subscribed = False
+
+		name = gtkgui_helpers.escape_for_pango_markup(name)
+		name = '<b>%s</b>' % name
+
+		model.append((jid, node, name, dunno, subscribed))
+
 	def _add_actions(self):
+		self.post_button = gtk.Button(label=_('New post'), use_underline=True)
+		self.post_button.set_sensitive(False)
+		self.post_button.connect('clicked', self.on_post_button_clicked)
+		self.window.action_buttonbox.add(self.post_button)
+		self.post_button.show_all()
+
 		self.subscribe_button = gtk.Button(label=_('_Subscribe'), use_underline=True)
+		self.subscribe_button.set_sensitive(False)
 		self.subscribe_button.connect('clicked', self.on_subscribe_button_clicked)
 		self.window.action_buttonbox.add(self.subscribe_button)
 		self.subscribe_button.show_all()
 
 		self.unsubscribe_button = gtk.Button(label=_('_Unsubscribe'), use_underline=True)
+		self.unsubscribe_button.set_sensitive(False)
 		self.unsubscribe_button.connect('clicked', self.on_unsubscribe_button_clicked)
 		self.window.action_buttonbox.add(self.unsubscribe_button)
 		self.unsubscribe_button.show_all()
 
 	def _clean_actions(self):
+		if self.post_button is not None:
+			self.post_button.destroy()
+			self.post_button = None
+
 		if self.subscribe_button is not None:
 			self.subscribe_button.destroy()
 			self.subscribe_button = None
@@ -1717,8 +1763,114 @@ class DiscussionGroupsBrowser(AgentBrowser):
 			self.unsubscribe_button.destroy()
 			self.unsubscribe_button = None
 
-	def on_subscribe_button_clicked(*x): pass
-	def on_unsubscribe_button_clicked(*x): pass
+	def update_actions(self):
+		'''Called when user selected a row. Make subscribe/unsubscribe buttons
+		sensitive appropriatelly.'''
+		# we have nothing to do if we don't have buttons...
+		if self.subscribe_button is None: return
+
+		model, iter = self.window.services_treeview.get_selection().get_selected()
+		if not iter or self.subscriptions is None:
+			# no item selected or no subscriptions info, all buttons are insensitive
+			self.post_button.set_sensitive(False)
+			self.subscribe_button.set_sensitive(False)
+			self.unsubscribe_button.set_sensitive(False)
+		else:
+			subscribed = model.get_value(iter, 4) # 4 = subscribed?
+			self.post_button.set_sensitive(subscribed)
+			self.subscribe_button.set_sensitive(not subscribed)
+			self.unsubscribe_button.set_sensitive(subscribed)
+
+	def on_post_button_clicked(self, widget):
+		'''Called when 'post' button is pressed. Open window to create post'''
+		model, iter = self.window.services_treeview.get_selection().get_selected()
+		if iter is None: return
+
+		groupnode = model.get_value(iter, 1)	# 1 = groupnode
+
+		groups.GroupsPostWindow(self.account, self.jid, groupnode)
+
+	def on_subscribe_button_clicked(self, widget):
+		'''Called when 'subscribe' button is pressed. Send subscribtion request.'''
+		model, iter = self.window.services_treeview.get_selection().get_selected()
+		if iter is None: return
+
+		groupnode = model.get_value(iter, 1)	# 1 = groupnode
+
+		gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._subscribeCB, groupnode)
+		
+	def on_unsubscribe_button_clicked(self, widget):
+		'''Called when 'unsubscribe' button is pressed. Send unsubscription request.'''
+		model, iter = self.window.services_treeview.get_selection().get_selected()
+		if iter is None: return
+
+		groupnode = model.get_value(iter, 1)    # 1 = groupnode
+		
+		gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._unsubscribeCB, groupnode)
+
+	def _subscriptionsCB(self, conn, request):
+		''' We got the subscribed groups list stanza. Now, if we already
+		have items on the list, we should actualize them. '''
+		print 0
+		try:
+			subscriptions = request.getTag('pubsub').getTag('subscriptions')
+		except:
+			return 
+
+		print 1
+		groups = set()
+		for child in subscriptions.getTags('subscription'):
+			print 2, repr(child), str(child)
+			groups.add(child['node'])
+		print 3, groups
+
+		self.subscriptions = groups
+
+		# try to setup existing items in model
+		model = self.window.services_treeview.get_model()
+		print 4
+		for row in model:
+			print 5
+			# 1 = group node
+			# 3 = insensitive checkbox for subscribed
+			# 4 = subscribed?
+			groupnode = row[1]
+			row[3]=False
+			row[4]=groupnode in groups
+		print 6
+
+		# we now know subscriptions, update button states
+		self.update_actions()
+
+		raise xmpp.NodeProcessed
+
+	def _subscribeCB(self, conn, request, groupnode):
+		'''We have just subscribed to a node. Update UI'''
+		self.subscriptions.add(groupnode)
+
+		model = self.window.services_treeview.get_model()
+		for row in model:
+			if row[1] == groupnode: # 1 = groupnode
+				row[4]=True
+				break
+
+		self.update_actions()
+
+		raise xmpp.NodeProcessed
+
+	def _unsubscribeCB(self, conn, request, groupnode):
+		'''We have just unsubscribed from a node. Update UI'''
+		self.subscriptions.remove(groupnode)
+
+		model = self.window.services_treeview.get_model()
+		for row in model:
+			if row[1] == groupnode: # 1 = groupnode
+				row[4]=False
+				break
+
+		self.update_actions()
+
+		raise xmpp.NodeProcessed
 
 # Fill the global agent type info dictionary
 _agent_type_info = _gen_agent_type_info()

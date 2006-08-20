@@ -35,6 +35,7 @@ from common import gajim
 from common import dataforms
 from common import atom
 from common.commands import ConnectionCommands
+from common.pubsub import ConnectionPubSub
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
@@ -1057,11 +1058,12 @@ class ConnectionVcard:
 			else:
 				self.dispatch('VCARD', vcard)
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands):
+class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
+		ConnectionPubSub.__init__(self)
 		# List of IDs we are waiting answers for {id: (type_of_request, data), }
 		self.awaiting_answers = {}
 		# List of IDs that will produce a timeout is answer doesn't arrive
@@ -1857,6 +1859,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
 			common.xmpp.NS_DISCO_ITEMS)
+		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)
