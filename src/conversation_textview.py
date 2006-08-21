@@ -695,7 +695,7 @@ class ConversationTextview:
 				end_iter = buffer.get_end_iter()
 				if gajim.config.get('print_time_fuzzy') > 0:
 					fc = FuzzyClock()
-					fc.setTime(time.strftime('%H:%M'))
+					fc.setTime(time.strftime('%H:%M', tim))
 					ft = fc.getFuzzyTime(gajim.config.get('print_time_fuzzy'))
 					tim_format = ft.decode(locale.getpreferredencoding())
 				else:
