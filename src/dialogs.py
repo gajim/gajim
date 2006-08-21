@@ -666,6 +666,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if self.protocol_jid_combobox.get_active_text() == jid:
 			self.register_hbox.hide()
 			self.connected_label.hide()
+			self.subscription_table.set_no_show_all(False)
 			self.subscription_table.show_all()
 			self.add_button.set_sensitive(True)
 
