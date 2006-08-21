@@ -24,6 +24,7 @@ import sha
 import socket
 import sys
 
+from time import localtime, strftime, gmtime
 from calendar import timegm
 
 import socks5
@@ -1245,6 +1246,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
 
+	def _TimeCB(self, con, iq_obj):
+		gajim.log.debug('TimeCB')
+		iq_obj = iq_obj.buildReply('result')
+		qp = iq_obj.getTag('query')
+		qp.setTagData('utc', strftime("%Y%m%dT%T", gmtime()))
+		qp.setTagData('tz', strftime("%Z", gmtime()))
+		qp.setTagData('display', strftime("%c", localtime()))
+		self.connection.send(iq_obj)
+		raise common.xmpp.NodeProcessed
+
 	
 	def _gMailNewMailCB(self, con, gm):
 		'''Called when we get notified of new mail messages in gmail account'''
@@ -1841,6 +1852,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._VersionCB, 'get',
 			common.xmpp.NS_VERSION)
+		con.RegisterHandler('iq', self._TimeCB, 'get',
+			common.xmpp.NS_TIME)
 		con.RegisterHandler('iq', self._LastCB, 'get',
 			common.xmpp.NS_LAST)
 		con.RegisterHandler('iq', self._LastResultCB, 'result',
