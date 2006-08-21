@@ -16,6 +16,8 @@
 ##
 """ This module contains widget that can display data form (JEP-0004). """
 
+# TODO: forms of type='result' should be read-only
+
 import gtk
 import pango
 
@@ -334,7 +336,7 @@ class DataFormWidget(gtk.Alignment, object):
 				model.remove(iter)
 
 			selection.selected_foreach(remove, deleted)
-			field.value = (v for v in field.value if v not in deleted)	# python2.4 iterator
+			field.value = (v for v in field.value if v not in deleted)
 
 		def on_jid_multi_clean_button_clicked(self, widget, model, field):
 			model.clear()
