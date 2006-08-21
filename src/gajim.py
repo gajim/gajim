@@ -491,6 +491,7 @@ class Interface:
 
 		message = array[1]
 		msg_type = array[4]
+		subject = array[5]
 		chatstate = array[6]
 		msg_id = array[7]
 		composing_jep = array[8]
@@ -570,11 +571,14 @@ class Interface:
 		else:
 			# array: (jid, msg, time, encrypted, msg_type, subject)
 			self.roster.on_message(jid, message, array[2], account, array[3],
-				msg_type, array[5], resource, msg_id, array[9])
+				msg_type, subject, resource, msg_id, array[9])
 			nickname = gajim.get_name_from_jid(account, jid)
 		# Check and do wanted notifications	
+		msg = message
+		if subject:
+			msg = _('Subject: %s') % subject + '\n' + msg
 		notify.notify('new_message', jid, account, [msg_type, first, nickname,
-			message])
+			msg])
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
