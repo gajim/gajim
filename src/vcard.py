@@ -372,8 +372,8 @@ class VcardWindow:
 
 		# Request os info in contact is connected
 		if self.contact.show not in ('offline', 'error'):
-			gajim.connections[self.account].request_os_info(self.contact.jid,
-				self.contact.resource)
+			gobject.idle_add(gajim.connections[self.account].request_os_info,
+				self.contact.jid, self.contact.resource)
 		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
 			'os': ''}}
 		i = 1
@@ -386,7 +386,8 @@ class VcardWindow:
 					uf_resources += '\n' + c.resource + \
 						_(' resource with priority ') + unicode(c.priority)
 					if c.show not in ('offline', 'error'):
-						gajim.connections[self.account].request_os_info(c.jid,
+						gobject.idle_add(
+							gajim.connections[self.account].request_os_info, c.jid,
 							c.resource)
 					gajim.connections[self.account].request_last_status_time(c.jid,
 						c.resource)

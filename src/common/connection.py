@@ -880,6 +880,10 @@ class Connection(ConnectionHandlers):
 	def request_os_info(self, jid, resource):
 		if not self.connection:
 			return
+		# If we are invisible, do not request
+		if self.connected == gajim.SHOW_LIST.index('invisible'):
+			self.dispatch('OS_INFO', (jid, resource, _('Not fetched because of invisible status'), _('Not fetched because of invisible status')))
+			return
 		to_whom_jid = jid
 		if resource:
 			to_whom_jid += '/' + resource
