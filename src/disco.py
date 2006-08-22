@@ -85,7 +85,7 @@ def _gen_agent_type_info():
 		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
 
 		# Transports
-		('conference', 'irc'):		(False, 'irc.png'),
+		('conference', 'irc'):		(ToplevelAgentBrowser, 'irc.png'),
 		('_jid', 'irc'):				(False, 'irc.png'),
 		('gateway', 'aim'):			(False, 'aim.png'),
 		('_jid', 'aim'):				(False, 'aim.png'),
