@@ -126,7 +126,7 @@ class NBCommonClient(CommonClient):
 
 	def _on_connected(self):
 		self.connected = 'tcp'
-		if (self._Ssl is None and self.Connection.getPort() in (5223, 443)) or self._Ssl:
+		if self._Ssl:
 			transports_nb.NonBlockingTLS().PlugIn(self, now=1)
 			if not self.Connection: # ssl error, stream is closed
 				return
