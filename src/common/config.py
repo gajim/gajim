@@ -249,6 +249,10 @@ class Config:
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
 		}, {}),
+		'defaultstatusmsg': ({
+			'enabled': [ opt_bool, False ],
+			'message': [ opt_str, '' ],
+		}, {}),
 		'soundevents': ({
 			'enabled': [ opt_bool, True ],
 			'path': [ opt_str, '' ],
@@ -319,6 +323,16 @@ class Config:
 		_('Working'): _("I'm working."),
 		_('Phone'): _("I'm on the phone."),
 		_('Out'): _("I'm out enjoying life"),
+	}
+
+	defaultstatusmsg_default = {
+		'online': [ False, _("I'm avavilable") ],
+		'chat': [ False, _("I'm free for chat") ],
+		'away': [ False, _('Be right back') ],
+		'xa': [ False, _("I'm not available") ],
+		'dnd': [ False, _('Do not disturb') ],
+		'invisible': [ False, _('Bye !') ],
+		'offline': [ False, _('Bye !') ],
 	}
 
 	soundevents_default = {
@@ -534,3 +548,8 @@ class Config:
 			self.set_per('soundevents', event, 'enabled', default[0])
 			self.set_per('soundevents', event, 'path', default[1])
 
+		for status in self.defaultstatusmsg_default:
+			default = self.defaultstatusmsg_default[status]
+			self.add_per('defaultstatusmsg', status)
+			self.set_per('defaultstatusmsg', status, 'enabled', default[0])
+			self.set_per('defaultstatusmsg', status, 'message', default[1])

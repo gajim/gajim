@@ -376,6 +376,32 @@ class PreferencesWindow:
 		self.xml.get_widget('prompt_offline_status_message_checkbutton').\
 			set_active(st)
 
+		# Default Status messages
+		self.default_msg_tree = self.xml.get_widget('default_msg_treeview')
+		# (status, translated_status, message, enabled)
+		model = gtk.ListStore(str, str, str, bool)
+		self.default_msg_tree.set_model(model)
+		col = gtk.TreeViewColumn('Status')
+		self.default_msg_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, False)
+		col.set_attributes(renderer, text = 1)
+		col = gtk.TreeViewColumn('Message')
+		self.default_msg_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text = 2)
+		renderer.connect('edited', self.on_default_msg_cell_edited)
+		renderer.set_property('editable', True)
+		col = gtk.TreeViewColumn('Enabled')
+		self.default_msg_tree.append_column(col)
+		renderer = gtk.CellRendererToggle()
+		col.pack_start(renderer, False)
+		col.set_attributes(renderer, active = 3)
+		renderer.set_property('activatable', True)
+		renderer.connect('toggled', self.default_msg_toggled_cb)
+		self.fill_default_msg_treeview()
+
 		#Status messages
 		self.msg_tree = self.xml.get_widget('msg_treeview')
 		model = gtk.ListStore(str, str)
@@ -456,6 +482,8 @@ class PreferencesWindow:
 					self.on_msg_treemodel_row_changed)
 		self.msg_tree.get_model().connect('row-deleted',
 					self.on_msg_treemodel_row_deleted)
+		self.default_msg_tree.get_model().connect('row-changed',
+					self.on_default_msg_treemodel_row_changed)
 		
 		self.theme_preferences = None
 		
@@ -788,6 +816,35 @@ class PreferencesWindow:
 
 	def on_auto_xa_message_entry_changed(self, widget):
 		gajim.config.set('autoxa_message', widget.get_text().decode('utf-8'))
+
+	def fill_default_msg_treeview(self):
+		model = self.default_msg_tree.get_model()
+		model.clear()
+		status = []
+		for status_ in gajim.config.get_per('defaultstatusmsg'):
+			status.append(status_)
+		status.sort()
+		for status_ in status:
+			msg = gajim.config.get_per('defaultstatusmsg', status_, 'message')
+			enabled = gajim.config.get_per('defaultstatusmsg', status_, 'enabled')
+			iter = model.append()
+			model.set(iter, 0, status_, 1, _(status_), 2, msg, 3, enabled)
+
+	def on_default_msg_cell_edited(self, cell, row, new_text):
+		model = self.default_msg_tree.get_model()
+		iter = model.get_iter_from_string(row)
+		model.set_value(iter, 2, new_text)
+
+	def default_msg_toggled_cb(self, cell, path):
+		model = self.default_msg_tree.get_model()
+		model[path][3] = not model[path][3]
+
+	def on_default_msg_treemodel_row_changed(self, model, path, iter):
+		status = model[iter][0]
+		message = model[iter][2].decode('utf-8')
+		gajim.config.set_per('defaultstatusmsg', status, 'enabled',
+			model[iter][3])
+		gajim.config.set_per('defaultstatusmsg', status, 'message', message)
 
 	def save_status_messages(self, model):
 		for msg in gajim.config.get_per('statusmsg'):
