@@ -453,8 +453,9 @@ class RosterWindow:
 		transport: transport iconset doesn't contain all icons, so we fall back
 		to jabber one'''
 		transport = gajim.get_transport_name_from_jid(jid)
-		if transport and icon_name in \
-			self.transports_state_images[size][transport]:
+		if transport and self.transports_state_images.has_key(size) and \
+		self.transports_state_images[size].has_key(transport) and icon_name in \
+		self.transports_state_images[size][transport]:
 			return self.transports_state_images[size][transport]
 		return self.jabber_state_images[size]
 
@@ -2494,7 +2495,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		no_queue = True
 		if qs.has_key(fjid):
 			no_queue = False
-		
+
 		popup = helpers.allow_popup_window(account)
 
 		if msg_type == 'normal' and popup: # it's single message to be autopopuped
