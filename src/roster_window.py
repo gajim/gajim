@@ -2439,7 +2439,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,
 			msg_type = '', subject = None, resource = '', msg_id = None,
-			user_nick = ''):
+			user_nick = '', advanced_notif_num = None):
 		'''when we receive a message'''
 		contact = None
 		# if chat window will be for specific resource
@@ -2496,7 +2496,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if qs.has_key(fjid):
 			no_queue = False
 
-		popup = helpers.allow_popup_window(account)
+		popup = helpers.allow_popup_window(account, advanced_notif_num)
 
 		if msg_type == 'normal' and popup: # it's single message to be autopopuped
 			dialogs.SingleMessageWindow(account, contact.jid,
@@ -2554,7 +2554,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.tree.scroll_to_cell(path)
 			self.tree.set_cursor(path)
 		if gajim.interface.systray_capabilities:
-			gajim.interface.systray.add_jid(fjid, account, kind)
+			gajim.interface.systray.add_jid(fjid, account, kind, advanced_notif_num)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if gajim.interface.instances.has_key('preferences'):

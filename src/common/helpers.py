@@ -18,6 +18,7 @@
 
 import sre
 import os
+import subprocess
 import urllib
 import errno
 import select
@@ -360,6 +361,11 @@ def is_in_path(name_of_command, return_abs_path = False):
 	else:
 		return is_in_dir
 
+def exec_command(command):
+	'''command is a string that contain arguments'''
+#	os.system(command)
+	subprocess.Popen(command.split())
+
 def launch_browser_mailer(kind, uri):
 	#kind = 'url' or 'mail'
 	if os.name == 'nt':
@@ -383,11 +389,9 @@ def launch_browser_mailer(kind, uri):
 				command = gajim.config.get('custommailapp')
 			if command == '': # if no app is configured
 				return
-		# we add the uri in "" so we have good parsing from shell
-		uri = uri.replace('"', '\\"') # escape "
-		command = command + ' "' + uri + '" &'
-		try: #FIXME: when we require python2.4+ use subprocess module
-			os.system(command)
+		command = command + ' ' + uri
+		try:
+			exec_command(command)
 		except:
 			pass
 
@@ -406,11 +410,9 @@ def launch_file_manager(path_to_open):
 			command = gajim.config.get('custom_file_manager')
 		if command == '': # if no app is configured
 			return
-		# we add the path in "" so we have good parsing from shell
-		path_to_open = path_to_open.replace('"', '\\"') # escape "
-		command = command + ' "' + path_to_open + '" &'
-		try: #FIXME: when we require python2.4+ use subprocess module
-			os.system(command)
+		command = command + ' ' + path_to_open
+		try:
+			exec_command(command)
 		except:
 			pass
 
@@ -436,11 +438,8 @@ def play_sound_file(path_to_soundfile):
 		if gajim.config.get('soundplayer') == '':
 			return
 		player = gajim.config.get('soundplayer')
-		# we add the path in "" so we have good parsing from shell
-		path_to_soundfile = path_to_soundfile.replace('"', '\\"') # escape "
-		command = player + ' "' + path_to_soundfile + '" &'
-		#FIXME: when we require 2.4+ use subprocess module
-		os.system(command)
+		command = player + ' ' + path_to_soundfile
+		exec_command(command)
 
 def get_file_path_from_dnd_dropped_uri(uri):
 	path = urllib.url2pathname(uri) # escape special chars
@@ -727,20 +726,49 @@ def sanitize_filename(filename):
 	
 	return filename
 
-def allow_showing_notification(account):
+def allow_showing_notification(account, type = None, advanced_notif_num = None):
 	'''is it allowed to show nofication?
-	check OUR status and if we allow notifications for that status'''
+	check OUR status and if we allow notifications for that status
+	type is the option that need to be True ex: notify_on_signin'''
+	if advanced_notif_num != None:
+		popup = gajim.config.get_per('notifications', str(advanced_notif_num),
+			'popup')
+		if popup == 'yes':
+			return True
+		if popup == 'no':
+			return False
+	if type and not gajim.config.get(type):
+		return False
 	if gajim.config.get('autopopupaway'): # always show notification
 		return True
 	if gajim.connections[account].connected in (2, 3): # we're online or chat
 		return True
 	return False
 
-def allow_popup_window(account):
+def allow_popup_window(account, advanced_notif_num = None):
 	'''is it allowed to popup windows?'''
+	if advanced_notif_num != None:
+		popup = gajim.config.get_per('notifications', str(advanced_notif_num),
+			'auto_open')
+		if popup == 'yes':
+			return True
+		if popup == 'no':
+			return False
 	autopopup = gajim.config.get('autopopup')
 	autopopupaway = gajim.config.get('autopopupaway')
 	if autopopup and (autopopupaway or \
 	gajim.connections[account].connected in (2, 3)): # we're online or chat
+		return True
+	return False
+
+def allow_sound_notification(sound_event, advanced_notif_num = None):
+	if advanced_notif_num != None:
+		sound = gajim.config.get_per('notifications', str(advanced_notif_num),
+			'sound')
+		if sound == 'yes':
+			return True
+		if sound == 'no':
+			return False
+	if gajim.config.get_per('soundevents', sound_event, 'enabled'):
 		return True
 	return False

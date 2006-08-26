@@ -58,9 +58,13 @@ class Systray:
 		self.xml.signal_autoconnect(self)
 		self.popup_menus = []
 
-	def set_img(self):
+	def set_img(self, advanced_notif_num = None):
 		if not gajim.interface.systray_enabled:
 			return
+		if advanced_notif_num:
+			if gajim.config.get_per('notifications', str(advanced_notif_num),
+			'systray') == 'no':
+				return
 		if len(self.jids) > 0:
 			state = 'message'
 		else:
@@ -71,12 +75,12 @@ class Systray:
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			self.img_tray.set_from_pixbuf(image.get_pixbuf())
 
-	def add_jid(self, jid, account, typ):
+	def add_jid(self, jid, account, typ, advanced_notif_num = None):
 		l = [account, jid, typ]
 		# We can keep several single message 'cause we open them one by one
 		if not l in self.jids or typ == 'normal':
 			self.jids.append(l)
-			self.set_img()
+			self.set_img(advanced_notif_num)
 
 	def remove_jid(self, jid, account, typ):
 		l = [account, jid, typ]

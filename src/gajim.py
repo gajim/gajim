@@ -557,6 +557,9 @@ class Interface:
 			not gajim.contacts.get_contact(account, jid) and not pm:
 			return
 
+		advanced_notif_num = notify.get_advanced_notification('message_received',
+			account, contact)
+
 		# Is it a first or next message received ?
 		first = False
 		if not chat_control and not gajim.awaiting_events[account].has_key(
@@ -571,14 +574,14 @@ class Interface:
 		else:
 			# array: (jid, msg, time, encrypted, msg_type, subject)
 			self.roster.on_message(jid, message, array[2], account, array[3],
-				msg_type, subject, resource, msg_id, array[9])
+				msg_type, subject, resource, msg_id, array[9], advanced_notif_num)
 			nickname = gajim.get_name_from_jid(account, jid)
 		# Check and do wanted notifications	
 		msg = message
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
 		notify.notify('new_message', jid, account, [msg_type, first, nickname,
-			msg])
+			msg], advanced_notif_num)
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
@@ -930,8 +933,7 @@ class Interface:
 		self.add_event(account, jid, 'gc-invitation', (room_jid, array[2],
 			array[3]))
 
-		if gajim.config.get('notify_on_new_message') and \
-		helpers.allow_showing_notification(account):
+		if helpers.allow_showing_notification(account, 'notify_on_new_message'):
 			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'gc_invitation.png')
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
