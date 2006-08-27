@@ -1884,18 +1884,23 @@ class Interface:
 		self.systray_enabled = False
 		self.systray_capabilities = False
 		
-		if os.name == 'nt':
-			try:
-				import systraywin32
-			except: # user doesn't have trayicon capabilities
-				pass
+		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
+			import statusicon
+			self.systray = statusicon.StatusIcon()
+			self.systray_capabilities = True
+		else: #FIXME: remove the following (and the files) when we migrate to 2.10
+			if os.name == 'nt':
+				try:
+					import systraywin32
+				except: # user doesn't have trayicon capabilities
+					pass
+				else:
+					self.systray_capabilities = True
+					self.systray = systraywin32.SystrayWin32()
 			else:
-				self.systray_capabilities = True
-				self.systray = systraywin32.SystrayWin32()
-		else:
-			self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
-			if self.systray_capabilities:
-			    self.systray = systray.Systray()
+				self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
+				if self.systray_capabilities:
+				    self.systray = systray.Systray()
 
 		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()

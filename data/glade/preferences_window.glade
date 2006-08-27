@@ -2547,6 +2547,7 @@ Disabled</property>
 
 		  <child>
 		    <widget class="GtkScrolledWindow" id="scrolledwindow24">
+		      <property name="border_width">6</property>
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -2573,9 +2574,9 @@ Disabled</property>
 		  <child>
 		    <widget class="GtkLabel" id="label384">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">&lt;b&gt;Default Status Messages&lt;/b&gt;</property>
+		      <property name="label" translatable="yes">Default Status Messages</property>
 		      <property name="use_underline">False</property>
-		      <property name="use_markup">True</property>
+		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
