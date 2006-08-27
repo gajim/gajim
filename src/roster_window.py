@@ -655,11 +655,14 @@ class RosterWindow:
 	def on_history_manager_menuitem_activate(self, widget):
 		if os.name == 'nt':
 			if os.path.exists('history_manager.exe'): # user is running stable
-				helpers.exec_command('history_manager.exe')
+				os.startfile('history_manager.exe')
 			else: # user is running svn
-				helpers.exec_command('history_manager.py')
+				try:
+					os.startfile('history_manager.py')
+				except: # user doesn't have pywin32, too bad for him
+					pass
 		else: # Unix user
-			helpers.exec_command('python history_manager.py &')
+			os.system('python history_manager.py &')
 
 	def get_and_connect_advanced_menuitem_menu(self, account):
 		'''adds FOR ACCOUNT options'''
