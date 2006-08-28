@@ -1500,10 +1500,14 @@ class ChatControl(ChatControlBase):
 
 			tim = time.localtime(float(row[0]))
 
+			if gajim.config.get('restored_messages_small'):
+				small_attr = ['small']
+			else:
+				small_attr = []
 			ChatControlBase.print_conversation_line(self, row[2], kind, name, tim,
-								['small'],
-								['small', 'restored_message'],
-								['small', 'restored_message'],
+								small_attr,
+								small_attr + ['restored_message'],
+								small_attr + ['restored_message'],
 								False, old_kind = local_old_kind)
 			if row[2].startswith('/me ') or row[2].startswith('/me\n'):
 				local_old_kind = None
