@@ -1914,8 +1914,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			path = list_of_paths[0]
 			type = model[path][C_TYPE]
 			if type in ('contact', 'group', 'agent'):
-				iter = model.get_iter(path)
-				self.on_rename(widget, iter, path)
+				if not model[path][C_EDITABLE]:
+					# we are NOT already renaming it
+					iter = model.get_iter(path)
+					self.on_rename(widget, iter, path)
 
 		elif event.keyval == gtk.keysyms.Delete:
 			treeselection = self.tree.get_selection()
