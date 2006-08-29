@@ -1600,7 +1600,20 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			gajim.log.debug(_('unsubscribe request from %s') % who)
 		elif ptype == 'unsubscribed':
 			gajim.log.debug(_('we are now unsubscribed from %s') % who)
-			self.dispatch('UNSUBSCRIBED', jid_stripped)
+			# detect a unsubscription loop
+			if not self.subscribed_events.has_key(jid_stripped):
+				self.subscribed_events[jid_stripped] = []
+			self.subscribed_events[jid_stripped].append(time.time())
+			block = False
+			if len(self.subscribed_events[jid_stripped]) > 5:
+				if time.time() - self.subscribed_events[jid_stripped][0] < 5:
+					block = True
+				self.subscribed_events[jid_stripped] = self.subscribed_events[jid_stripped][1:]
+			if block:
+				gajim.config.set_per('account', self.name, 'dont_ack_subscription',
+					True)
+			else:
+				self.dispatch('UNSUBSCRIBED', jid_stripped)
 		elif ptype == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
