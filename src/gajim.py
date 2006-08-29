@@ -42,6 +42,13 @@ from chat_control import ChatControlBase
 from common import exceptions
 
 try:
+	import dl 
+	libc = dl.open('/lib/libc.so.6') 
+	libc.call('prctl',15,'gajim\0',0,0,0) 
+except: 
+	pass
+
+try:
 	import gtk
 except RuntimeError, msg:
 	if str(msg) == 'could not open display':
