@@ -185,6 +185,7 @@ class Config:
 		'print_status_in_muc': [opt_str, 'in_and_out', _('can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", gajim will only print FOO enters/leaves room')],
 		'log_contact_status_changes': [opt_bool, False],
 		'restored_messages_color': [opt_str, 'grey'],
+		'restored_messages_small': [opt_str, True, _('If True, restored messages will use a smaller font than the default one.')],
 		'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
 		'roster_window_skip_taskbar': [opt_bool, False],
 		'use_urgency_hint': [opt_bool, True, _('If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],
