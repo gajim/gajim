@@ -519,15 +519,17 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		else:
 			self.uid_entry.grab_focus()
 		group_names = []
-		i = 0
 		for acct in accounts:
 			for g in gajim.groups[acct].keys():
 				if g not in helpers.special_groups and g not in group_names:
 					group_names.append(g)
-					self.group_comboboxentry.append_text(g)
-					if group == g:
-						self.group_comboboxentry.set_active(i)
-					i += 1
+		group_names.sort()
+		i = 0
+		for g in group_names:
+			self.group_comboboxentry.append_text(g)
+			if group == g:
+				self.group_comboboxentry.set_active(i)
+			i += 1
 
 		if self.account:
 			self.account_label.hide()
