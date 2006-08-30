@@ -61,7 +61,6 @@ class VcardWindow:
 		# the contact variable is the jid if vcard is true
 		self.xml = gtkgui_helpers.get_glade('vcard_information_window.glade')
 		self.window = self.xml.get_widget('vcard_information_window')
-		self.window.set_transient_for(gajim.interface.roster.window)
 
 		self.publish_button = self.xml.get_widget('publish_button')
 		self.retrieve_button = self.xml.get_widget('retrieve_button')

@@ -249,7 +249,6 @@ class ChooseGPGKeyDialog:
 		#list : {keyID: userName, ...}
 		xml = gtkgui_helpers.get_glade('choose_gpg_key_dialog.glade')
 		self.window = xml.get_widget('choose_gpg_key_dialog')
-		self.window.set_transient_for(gajim.interface.roster.window)
 		self.window.set_title(title_text)
 		self.keys_treeview = xml.get_widget('keys_treeview')
 		prompt_label = xml.get_widget('prompt_label')
@@ -426,7 +425,6 @@ class AddNewContactWindow:
 		location['add_contact'] = self
 		self.xml = gtkgui_helpers.get_glade('add_new_contact_window.glade')
 		self.window = self.xml.get_widget('add_new_contact_window')
-		self.window.set_transient_for(gajim.interface.roster.window)
 		for w in ('account_combobox', 'account_hbox', 'account_label',
 		'uid_label', 'uid_entry', 'protocol_combobox', 'protocol_jid_combobox',
 		'protocol_hbox', 'nickname_entry', 'message_scrolledwindow',
@@ -692,7 +690,7 @@ class AboutDialog:
 			% (_('A GTK+ jabber client'), \
 			_('GTK+ Version:'), self.tuple2str(gtk.gtk_version), \
 			_('PyGTK Version:'), self.tuple2str(gtk.pygtk_version)))
-		dlg.set_website('http://www.gajim.org')
+		dlg.set_website('http://www.gajim.org/')
 
 		authors = []
 		authors_file = open('../AUTHORS').read()
@@ -701,7 +699,7 @@ class AboutDialog:
 			if author == 'CURRENT DEVELOPERS:':
 				authors.append(_('Current Developers:'))
 			elif author == 'PAST DEVELOPERS:':
-				authors.append('\n' +_('Past Developers:'))
+				authors.append('\n' + _('Past Developers:'))
 			elif author != '': # Real author line
 				authors.append(author)
 				
@@ -990,7 +988,6 @@ class SubscriptionRequestWindow:
 	def __init__(self, jid, text, account, user_nick = None):
 		xml = gtkgui_helpers.get_glade('subscription_request_window.glade')
 		self.window = xml.get_widget('subscription_request_window')
-		self.window.set_transient_for(gajim.interface.roster.window)
 		self.jid = jid
 		self.account = account
 		self.user_nick = user_nick
@@ -1057,7 +1054,6 @@ _('You can not join a group chat unless you are connected.'))
 
 		self.xml = gtkgui_helpers.get_glade('join_groupchat_window.glade')
 		self.window = self.xml.get_widget('join_groupchat_window')
-		self.window.set_transient_for(gajim.interface.roster.window)
 		self.xml.get_widget('server_entry').set_text(server)
 		self.xml.get_widget('room_entry').set_text(room)
 		self.xml.get_widget('nickname_entry').set_text(nick)
