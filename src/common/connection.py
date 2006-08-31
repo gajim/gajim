@@ -795,9 +795,8 @@ class Connection(ConnectionHandlers):
 			df = self.build_user_nick(user_nick)
 			p.addChild(node = df)
 		p = self.add_sha(p)
-		if not msg:
-			msg = _('I would like to add you to my roster.')
-		p.setStatus(msg)
+		if msg:
+			p.setStatus(msg)
 		self.connection.send(p)
 
 	def send_authorization(self, jid):
