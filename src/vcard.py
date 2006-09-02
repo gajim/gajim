@@ -70,7 +70,6 @@ class VcardWindow:
 
 		self.publish_button.set_no_show_all(True)
 		self.retrieve_button.set_no_show_all(True)
-		self.xml.get_widget('photo_vbuttonbox').set_no_show_all(True)
 
 		self.contact = contact # don't use it if vcard is true
 		self.account = account
@@ -96,6 +95,11 @@ class VcardWindow:
 			# here (when we see someone else's vcard)
 			self.nickname_entry.connect('focus-out-event',
 				self.on_nickname_entry_focus_out_event)
+			button = self.xml.get_widget('set_avatar_button')
+			button.set_no_show_all(True)
+			button.connect('clicked',
+				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+				self.jid, self.account, self.contact.name + '.jpeg')
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -152,10 +156,11 @@ class VcardWindow:
 
 	def on_clear_button_clicked(self, widget):
 		# empty the image
-		self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
+		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'person.png')
+		self.xml.get_widget('PHOTO_image').set_from_file(path)
 		self.avatar_encoded = None
 		if self.avatar_save_as_id:
-			self.xml.get_widget('PHOTO_eventbox').disconnect(
+			self.xml.get_widget('set_avatar_button').disconnect(
 						self.avatar_save_as_id)
 			self.avatar_save_as_id = None
 
@@ -207,7 +212,7 @@ class VcardWindow:
 
 		self.dialog = dialogs.ImageChooserDialog(on_response_ok = on_ok)
 
-	def on_PHOTO_eventbox_button_press_event(self, widget, event):
+	def on_PHOTO_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
 			if self.vcard:
@@ -223,6 +228,12 @@ class VcardWindow:
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
 				self.jid, account, nick + '.jpeg')
 			menu.append(menuitem)
+			# show clear for own avatar
+			if self.vcard:
+				menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+				menuitem.connect('activate',
+					self.on_clear_button_clicked)
+				menu.append(menuitem)
 			menu.show_all()
 			menu.connect('selection-done', lambda w:w.destroy())	
 			# show the menu
@@ -240,14 +251,17 @@ class VcardWindow:
 			if i == 'PHOTO':
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
 					get_avatar_pixbuf_encoded_mime(vcard[i])
-				if not pixbuf:
-					continue
 				image = self.xml.get_widget('PHOTO_image')
+				if not pixbuf:
+					image.set_from_icon_name('stock_person',
+						gtk.ICON_SIZE_DIALOG)
+					continue
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 				image.set_from_pixbuf(pixbuf)
-				eventbox = self.xml.get_widget('PHOTO_eventbox')
-				self.avatar_save_as_id = eventbox.connect('button-press-event',
-					self.on_PHOTO_eventbox_button_press_event)
+				button = self.xml.get_widget('set_avatar_button')
+				self.avatar_save_as_id = button.connect('button-press-event',
+					self.on_PHOTO_button_press_event)
+				button.show()
 				continue
 			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
 				for entry in vcard[i]:
@@ -270,7 +284,7 @@ class VcardWindow:
 		self.fill_status_label()
 
 	def set_os_info(self, resource, client_info, os_info):
-		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
+		if self.xml.get_widget('information_notebook').get_n_pages() < 4:
 			return
 		i = 0
 		client = ''
@@ -295,7 +309,7 @@ class VcardWindow:
 		self.xml.get_widget('os_label').set_text(os)
 
 	def fill_status_label(self):
-		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
+		if self.xml.get_widget('information_notebook').get_n_pages() < 4:
 			return
 		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
 		# stats holds show and status message
@@ -326,8 +340,10 @@ class VcardWindow:
 
 	def fill_jabber_page(self):
 		tooltips = gtk.Tooltips()
-		self.xml.get_widget('nickname_label').set_text(
-			self.contact.get_shown_name())
+		self.xml.get_widget('nickname_label').set_markup(
+			'<b><span size="x-large">' +
+			self.contact.get_shown_name() +
+			'</span></b>')
 		self.xml.get_widget('jid_label').set_text(self.contact.jid)
 		uf_sub = helpers.get_uf_sub(self.contact.sub)
 		self.xml.get_widget('subscription_label').set_text(uf_sub)
@@ -487,7 +503,7 @@ class VcardWindow:
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
 			self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
 			if self.avatar_save_as_id:
-				self.xml.get_widget('PHOTO_eventbox').disconnect(
+				self.xml.get_widget('set_avatar_button').disconnect(
 					self.avatar_save_as_id)
 				self.avatar_save_as_id = None
 			gajim.connections[self.account].request_vcard(self.jid)
@@ -497,13 +513,16 @@ class VcardWindow:
 
 	def change_to_vcard(self):
 		self.xml.get_widget('information_notebook').remove_page(0)
-		self.xml.get_widget('nickname_label').set_text(_('Personal details'))
-		
+		self.xml.get_widget('nickname_label').set_markup(
+			'<b><span size="x-large">' +
+			_('Personal details') +
+			'</span></b>')
+		self.xml.get_widget('set_avatar_button').connect('clicked',
+			self.on_set_avatar_button_clicked)
+
+		self.xml.get_widget('set_avatar_button').show()
 		self.publish_button.show()
 		self.retrieve_button.show()
-		
-		#photo_vbuttonbox visible
-		self.xml.get_widget('photo_vbuttonbox').show()
 		
 		#make all entries editable
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
