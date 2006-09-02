@@ -32,7 +32,37 @@ if dbus_support.supported:
 		import dbus.glib
 		import dbus.service
 
+def get_show_in_roster(event, account, contact):
+	'''Return True if this event must be shown in roster, else False'''
+	num = get_advanced_notification(event, account, contact)
+	if num != None:
+		if gajim.config.get_per('notifications', str(num), 'roster') == 'yes':
+			return True
+		if gajim.config.get_per('notifications', str(num), 'roster') == 'no':
+			return False
+	if event == 'message_received':
+		chat_control = helpers.get_chat_control(account, contact)
+		if not chat_control:
+			return True
+	elif event == 'ft_request':
+		return True
+	return False
+
+def get_show_in_systray(event, account, contact):
+	'''Return True if this event must be shown in roster, else False'''
+	num = get_advanced_notification(event, account, contact)
+	if num != None:
+		if gajim.config.get_per('notifications', str(num), 'systray') == 'yes':
+			return True
+		if gajim.config.get_per('notifications', str(num), 'systray') == 'no':
+			return False
+	if event in ('message_received', 'ft_request', 'gc_msg_highlight',
+	'ft_request'):
+		return True
+	return False
+
 def get_advanced_notification(event, account, contact):
+	'''Returns the number of the first advanced notification or None'''
 	num = 0
 	notif = gajim.config.get_per('notifications', str(num))
 	while notif:
@@ -68,26 +98,7 @@ def get_advanced_notification(event, account, contact):
 			if tab_opened == 'both':
 				tab_opened_ok = True
 			else:
-				chat_control = False
-				full_jid_with_resource = contact.jid
-				if contact.resource:
-					full_jid_with_resource += '/' + contact.resource
-				highest_contact = gajim.contacts.get_contact_with_highest_priority(
-					account, contact.jid)
-				# Look for a chat control that has the given resource, or default to
-				# one without resource
-				if gajim.interface.msg_win_mgr.get_control(full_jid_with_resource,
-				account):
-					chat_control = True
-				elif not highest_contact or not highest_contact.resource:
-					# unknow contact or offline message
-					if gajim.interface.msg_win_mgr.get_control(contact.jid, account):
-						chat_control = True
-				elif highest_contact and contact.resource != \
-				highest_contact.resource:
-					chat_control = False
-				elif gajim.interface.msg_win_mgr.get_control(contact.jid, account):
-					chat_control = True
+				chat_control = helper.get_chat_control(account, contact)
 				if (chat_control and tab_opened == 'yes') or (not chat_control and \
 				tab_opened == 'no'):
 					tab_opened_ok = True

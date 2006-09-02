@@ -47,7 +47,6 @@ class Systray:
 	for trayicon in GNU/Linux'''
 
 	def __init__(self):
-		self.jids = [] # Contain things like [account, jid, type_of_msg]
 		self.single_message_handler_id = None
 		self.new_chat_handler_id = None
 		self.t = None
@@ -58,14 +57,10 @@ class Systray:
 		self.xml.signal_autoconnect(self)
 		self.popup_menus = []
 
-	def set_img(self, advanced_notif_num = None):
+	def set_img(self):
 		if not gajim.interface.systray_enabled:
 			return
-		if advanced_notif_num:
-			if gajim.config.get_per('notifications', str(advanced_notif_num),
-			'systray') == 'no':
-				return
-		if len(self.jids) > 0:
+		if gajim.events.get_nb_systray_events():
 			state = 'message'
 		else:
 			state = self.status
@@ -74,19 +69,6 @@ class Systray:
 			self.img_tray.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			self.img_tray.set_from_pixbuf(image.get_pixbuf())
-
-	def add_jid(self, jid, account, typ, advanced_notif_num = None):
-		l = [account, jid, typ]
-		# We can keep several single message because we open them one by one
-		if not l in self.jids or typ == 'normal':
-			self.jids.append(l)
-			self.set_img(advanced_notif_num)
-
-	def remove_jid(self, jid, account, typ):
-		l = [account, jid, typ]
-		if l in self.jids:
-			self.jids.remove(l)
-			self.set_img()
 
 	def change_status(self, global_status):
 		''' set tray image to 'global_status' '''
@@ -244,8 +226,11 @@ class Systray:
 		self.systray_context_menu.show_all()
 
 	def on_show_all_events_menuitem_activate(self, widget):
-		for i in range(len(self.jids)):
-			self.handle_first_event()
+		events = gajim.events.get_systray_events()
+		for account in events:
+			for jid in events[account]:
+				for event in events[account][jid]:
+					gajim.interface.handle_event(account, jid, event.type_)
 
 	def on_show_roster_menuitem_activate(self, widget):
 		win = gajim.interface.roster.window
@@ -262,7 +247,7 @@ class Systray:
 
 	def on_left_click(self):
 		win = gajim.interface.roster.window
-		if len(self.jids) == 0:
+		if len(gajim.events.get_systray_events()) == 0:
 			# no pending events, so toggle visible/hidden for roster window
 			if win.get_property('visible'): # visible in ANY virtual desktop?
 				win.hide() # we hide it from VD that was visible in
@@ -276,10 +261,8 @@ class Systray:
 			self.handle_first_event()
 
 	def handle_first_event(self):
-		account = self.jids[0][0]
-		jid = self.jids[0][1]
-		typ = self.jids[0][2]
-		gajim.interface.handle_event(account, jid, typ)
+		account, jid, event = gajim.events.get_first_systray_event()
+		gajim.interface.handle_event(account, jid, event.type_)
 
 	def on_middle_click(self):
 		'''middle click raises window to have complete focus (fe. get kbd events)

@@ -1213,7 +1213,7 @@ class AccountModificationWindow:
 						_('You are currently connected to the server'),
 						_('To change the account name, you must be disconnected.'))
 					return
-				if len(gajim.awaiting_events[self.account]):
+				if len(gajim.events.get_events(self.account)):
 					dialogs.ErrorDialog(_('Unread events'),
 						_('To change the account name, you must read all pending '
 						'events.'))
@@ -1322,7 +1322,6 @@ class AccountModificationWindow:
 		if name != self.account:
 			#update variables
 			gajim.interface.instances[name] = gajim.interface.instances[self.account]
-			gajim.awaiting_events[name] = gajim.awaiting_events[self.account]
 			gajim.nicks[name] = gajim.nicks[self.account]
 			gajim.block_signed_in_notifications[name] = \
 				gajim.block_signed_in_notifications[self.account]
@@ -1339,23 +1338,17 @@ class AccountModificationWindow:
 				gajim.status_before_autoaway[self.account]
 
 			gajim.contacts.change_account_name(self.account, name)
+			gajim.events.change_account_name(self.account, name)
 
-			#upgrade account variable in opened windows
+			# upgrade account variable in opened windows
 			for kind in ('infos', 'disco', 'chats', 'gc', 'gc_config'):
 				for j in gajim.interface.instances[name][kind]:
 					gajim.interface.instances[name][kind][j].account = name
-
-			#upgrade account in systray
-			if gajim.interface.systray_capabilities:
-				for list in gajim.interface.systray.jids:
-					if list[0] == self.account:
-						list[0] = name
 
 			# ServiceCache object keep old property account
 			if hasattr(gajim.connections[self.account], 'services_cache'):
 				gajim.connections[self.account].services_cache.account = name
 			del gajim.interface.instances[self.account]
-			del gajim.awaiting_events[self.account]
 			del gajim.nicks[self.account]
 			del gajim.block_signed_in_notifications[self.account]
 			del gajim.groups[self.account]
@@ -1780,7 +1773,7 @@ class AccountsWindow:
 		if not iter:
 			return
 		account = model.get_value(iter, 0).decode('utf-8')
-		if len(gajim.awaiting_events[account]):
+		if len(gajim.events.get_events(account)):
 			dialogs.ErrorDialog(_('Unread events'),
 				_('Read all pending events before removing this account.'))
 			return
@@ -2285,7 +2278,6 @@ class RemoveAccountWindow:
 		gajim.config.del_per('accounts', self.account)
 		gajim.interface.save_config()
 		del gajim.interface.instances[self.account]
-		del gajim.awaiting_events[self.account]
 		del gajim.nicks[self.account]
 		del gajim.block_signed_in_notifications[self.account]
 		del gajim.groups[self.account]
@@ -2911,7 +2903,6 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		# update variables
 		gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
 			'chats': {}, 'gc': {}, 'gc_config': {}}
-		gajim.awaiting_events[self.account] = {}
 		gajim.connections[self.account].connected = 0
 		gajim.groups[self.account] = {}
 		gajim.contacts.add_account(self.account)

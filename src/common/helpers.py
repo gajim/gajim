@@ -513,9 +513,9 @@ def get_global_status():
 
 def get_icon_name_to_show(contact, account = None):
 	'''Get the icon name to show in online, away, requested, ...'''
-	if account and gajim.awaiting_events[account].has_key(contact.jid):
+	if account and gajim.events.get_nb_roster_events(account, contact.jid):
 		return 'message'
-	if account and gajim.awaiting_events[account].has_key(
+	if account and gajim.events.get_nb_roster_events(account,
 	contact.get_full_jid()):
 		return 'message'
 	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
@@ -772,3 +772,23 @@ def allow_sound_notification(sound_event, advanced_notif_num = None):
 	if gajim.config.get_per('soundevents', sound_event, 'enabled'):
 		return True
 	return False
+
+def get_chat_control(account, contact):
+	full_jid_with_resource = contact.jid
+	if contact.resource:
+		full_jid_with_resource += '/' + contact.resource
+	highest_contact = gajim.contacts.get_contact_with_highest_priority(
+		account, contact.jid)
+	# Look for a chat control that has the given resource, or default to
+	# one without resource
+	ctrl = gajim.interface.msg_win_mgr.get_control(full_jid_with_resource,
+		account)
+	if ctrl:
+		return ctrl
+	elif not highest_contact or not highest_contact.resource:
+		# unknow contact or offline message
+		return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+	elif highest_contact and contact.resource != \
+	highest_contact.resource:
+		return None
+	return gajim.interface.msg_win_mgr.get_control(contact.jid, account)

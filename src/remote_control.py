@@ -596,7 +596,7 @@ class SignalObject(DbusPrototype):
 		return contact_dict
 
 	def get_unread_msgs_number(self, *args):
-		return str(gajim.interface.roster.nb_unread)
+		return str(gajim.events.get_nb_events)
 
 	def start_chat(self, *args):
 		[account] = self._get_real_arguments(args, 1)

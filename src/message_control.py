@@ -39,7 +39,6 @@ class MessageControl:
 		self.account = account
 		self.hide_chat_buttons_always = False
 		self.hide_chat_buttons_current = False
-		self.nb_unread = 0
 		self.resource = resource
 
 		gajim.last_message_time[self.account][self.get_full_jid()] = 0
@@ -117,10 +116,7 @@ class MessageControl:
 		pass
 
 	def get_specific_unread(self):
-		n = 0
-		if gajim.awaiting_events[self.account].has_key(self.contact.jid):
-			n = len(gajim.awaiting_events[self.account][self.contact.jid])
-		return n
+		return len(gajim.events.get_events(self.account, self.contact.jid))
 
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None,

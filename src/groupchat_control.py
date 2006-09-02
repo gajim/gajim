@@ -446,10 +446,7 @@ class GroupchatControl(ChatControlBase):
 	def on_private_message(self, nick, msg, tim):
 		# Do we have a queue?
 		fjid = self.room_jid + '/' + nick
-		qs = gajim.awaiting_events[self.account]
-		no_queue = True
-		if qs.has_key(fjid):
-			no_queue = False
+		no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
 		# We print if window is opened
 		pm_control = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
@@ -457,9 +454,9 @@ class GroupchatControl(ChatControlBase):
 			pm_control.print_conversation(msg, tim = tim)
 			return
 
-		if no_queue:
-			qs[fjid] = []
-		qs[fjid].append(('chat', (msg, '', 'incoming', tim, False, '')))
+		event = gajim.events.create_event('chat', (msg, '', 'incoming', tim,
+			False, '', None))
+		gajim.events.add_event(self.account, fjid, event)
 
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
@@ -474,8 +471,6 @@ class GroupchatControl(ChatControlBase):
 						self.room_jid, icon_name = 'message')
 				image = state_images['message']
 				model[iter][C_IMG] = image
-				if gajim.interface.systray_capabilities:
-					gajim.interface.systray.add_jid(fjid, self.account, 'pm')
 			self.parent_win.show_title()
 		else:
 			self._start_private_message(nick)
@@ -697,7 +692,7 @@ class GroupchatControl(ChatControlBase):
 		model = self.list_treeview.get_model()
 		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		state_images = gajim.interface.roster.jabber_state_images['16']
-		if gajim.awaiting_events[self.account].has_key(self.room_jid + '/' + nick):
+		if len(gajim.events.get_events(self.account, self.room_jid + '/' + nick)):
 			image = state_images['message']
 		else:
 			image = state_images[gc_contact.show]
@@ -801,7 +796,8 @@ class GroupchatControl(ChatControlBase):
 						os.rename(old_file, files[old_file])
 				self.print_conversation(s, 'info')
 
-			if not gajim.awaiting_events[self.account].has_key(self.room_jid + '/' + nick):
+			if len(gajim.events.get_events(self.account,
+			self.room_jid + '/' + nick)) == 0:
 				self.remove_contact(nick)
 			else:
 				c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
@@ -1291,9 +1287,8 @@ class GroupchatControl(ChatControlBase):
 		nb = 0
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			fjid = self.room_jid + '/' + nick
-			if gajim.awaiting_events[self.account].has_key(fjid):
-				# gc can only have messages as event
-				nb += len(gajim.awaiting_events[self.account][fjid])
+			nb += len(gajim.events.get_events(self.account, fjid))
+			# gc can only have messages as event
 		return nb
 
 	def _on_change_subject_menuitem_activate(self, widget):

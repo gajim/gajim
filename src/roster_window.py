@@ -29,6 +29,7 @@ import gtkgui_helpers
 import cell_renderer_image
 import tooltips
 import message_control
+import notify
 
 from common import gajim
 from common import helpers
@@ -263,7 +264,7 @@ class RosterWindow:
 			if big_brother_jid != jid or big_brother_account != account:
 				# We are adding a child contact
 				if contact.show in ('offline', 'error') and \
-				not showOffline and not gajim.awaiting_events[account].has_key(jid):
+				not showOffline and len(gajim.events.get_events(account, jid)) == 0:
 					return
 				parent_iters = self.get_contact_iter(big_brother_jid,
 					big_brother_account)
@@ -281,7 +282,7 @@ class RosterWindow:
 		if (contact.show in ('offline', 'error') or hide) and \
 			not showOffline and (not _('Transports') in contact.groups or \
 			gajim.connections[account].connected < 2) and \
-			not gajim.awaiting_events[account].has_key(jid) and \
+			len(gajim.events.get_events(account, jid)) == 0 and \
 			not _('Not in Roster') in contact.groups:
 			return
 
@@ -355,7 +356,7 @@ class RosterWindow:
 			return
 		showOffline = gajim.config.get('showoffline')
 		if (contact.show in ('offline', 'error')) and not showOffline and \
-			not gajim.awaiting_events[account].has_key(jid):
+			len(gajim.events.get_events(account, jid)) == 0:
 			return
 
 		model = self.tree.get_model()
@@ -396,7 +397,7 @@ class RosterWindow:
 		if (contact.show in ('offline', 'error') or hide) and \
 			not showOffline and (not _('Transports') in contact.groups or \
 			gajim.connections[account].connected < 2) and \
-			not gajim.awaiting_events[account].has_key(contact.jid):
+			len(gajim.events.get_events(account, contact.jid)) == 0:
 			self.remove_contact(contact, account)
 		else:
 			self.draw_contact(contact.jid, account)
@@ -506,7 +507,7 @@ class RosterWindow:
 
 		iter = iters[0] # choose the icon with the first iter
 		icon_name = helpers.get_icon_name_to_show(contact, account)
-		# look if anotherresource has awaiting events
+		# look if another resource has awaiting events
 		for c in contact_instances:
 			c_icon_name = helpers.get_icon_name_to_show(c, account)
 			if c_icon_name == 'message':
@@ -530,7 +531,7 @@ class RosterWindow:
 					# a child has awaiting messages ?
 					child_jid = model[child_iter][C_JID].decode('utf-8')
 					child_account = model[child_iter][C_ACCOUNT].decode('utf-8')
-					if gajim.awaiting_events[child_account].has_key(child_jid):
+					if len(gajim.events.get_events(child_account, child_jid)):
 						icon_name = 'message'
 						break
 					child_iter = model.iter_next(child_iter)
@@ -1061,7 +1062,7 @@ class RosterWindow:
 		contact.show = show
 		contact.status = status
 		if show in ('offline', 'error') and \
-		not gajim.awaiting_events[account].has_key(contact.jid):
+		len(gajim.events.get_events(account, contact.jid)) == 0:
 			if len(contact_instances) > 1:
 				# if multiple resources
 				gajim.contacts.remove_contact(account, contact)
@@ -2077,7 +2078,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					contact.sub = 'from'
 					gajim.contacts.add_contact(account, contact)
 					self.add_contact_to_roster(contact.jid, account)
-				elif gajim.awaiting_events[account].has_key(contact.jid):
+				elif len(gajim.events.get_events(account, contact.jid)):
 					need_readd = True
 				elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 					if _('Not in Roster') in contact.groups:
@@ -2397,7 +2398,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		mw.new_tab(chat_control)
 
-		if gajim.awaiting_events[account].has_key(fjid):
+		if len(gajim.events.get_events(account, fjid)):
 			# We call this here to avoid race conditions with widget validation
 			chat_control.read_queue()
 
@@ -2493,10 +2494,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				resource_for_chat = None
 
 		# Do we have a queue?
-		qs = gajim.awaiting_events[account]
-		no_queue = True
-		if qs.has_key(fjid):
-			no_queue = False
+		no_queue = len(gajim.events.get_events(account, fjid)) == 0
 
 		popup = helpers.allow_popup_window(account, advanced_notif_num)
 
@@ -2518,14 +2516,17 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 
 		# We save it in a queue
-		if no_queue:
-			qs[fjid] = []
-		kind = 'chat'
+		type_ = 'chat'
 		if msg_type == 'normal':
-			kind = 'normal'
-		qs[fjid].append((kind, (msg, subject, msg_type, tim, encrypted,
-			resource, msg_id)))
-		self.nb_unread += 1
+			type_ = 'normal'
+		show_in_roster = notify.get_show_in_roster('message_received', account,
+			contact)
+		show_in_systray = notify.get_show_in_systray('message_received', account,
+			contact)
+		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
+			encrypted, resource, msg_id), show_in_roster = show_in_roster,
+			show_in_systray = show_in_systray)
+		gajim.events.add_event(account, fjid, event)
 		if popup:
 			if not ctrl:
 				self.new_chat(contact, account, resource = resource_for_chat)
@@ -2555,8 +2556,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			self.tree.expand_row(path[0:2], False)
 			self.tree.scroll_to_cell(path)
 			self.tree.set_cursor(path)
-		if gajim.interface.systray_capabilities:
-			gajim.interface.systray.add_jid(fjid, account, kind, advanced_notif_num)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if gajim.interface.instances.has_key('preferences'):
@@ -2721,14 +2720,14 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			# check if we have unread or recent mesages
 			unread = False
 			recent = False
-			if self.nb_unread > 0:
+			if gajim.events.get_nb_events() > 0:
 				unread = True
 			for win in gajim.interface.msg_win_mgr.windows():
 				unrd = 0
 				for ctrl in win.controls():
 					if ctrl.type_id == message_control.TYPE_GC:
 						if gajim.config.get('notify_on_all_muc_messages'):
-							unrd += ctrl.nb_unread
+							unrd += ctrl.get_nb_unread()
 						else:
 							if ctrl.attention_flag:
 								unrd += 1
@@ -2765,33 +2764,30 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def open_event(self, account, jid, event):
 		'''If an event was handled, return True, else return False'''
-		if not event:
-			return False 
-		typ = event[0]
-		data = event[1]
+		data = event.parameters
 		ft = gajim.interface.instances['file_transfers']
-		if typ == 'normal':
+		if event.type_ == 'normal':
 			dialogs.SingleMessageWindow(account, jid,
 				action = 'receive', from_whom = jid, subject = data[1],
 				message = data[0], resource = data[5])
-			gajim.interface.remove_first_event(account, jid, typ)
+			gajim.interface.remove_first_event(account, jid, event.type_)
 			return True
-		elif typ == 'file-request':
+		elif event.type_ == 'file-request':
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
-			gajim.interface.remove_first_event(account, jid, typ)
+			gajim.interface.remove_first_event(account, jid, event.type_)
 			ft.show_file_request(account, contact, data)
 			return True
-		elif typ in ('file-request-error', 'file-send-error'):
-			gajim.interface.remove_first_event(account, jid, typ)
+		elif event.type_ in ('file-request-error', 'file-send-error'):
+			gajim.interface.remove_first_event(account, jid, event.type_)
 			ft.show_send_error(data)
 			return True
-		elif typ in ('file-error', 'file-stopped'):
-			gajim.interface.remove_first_event(account, jid, typ)
+		elif event.type_ in ('file-error', 'file-stopped'):
+			gajim.interface.remove_first_event(account, jid, event.type_)
 			ft.show_stopped(jid, data)
 			return True
-		elif typ == 'file-completed':
-			gajim.interface.remove_first_event(account, jid, typ)
+		elif event.type_ == 'file-completed':
+			gajim.interface.remove_first_event(account, jid, event.type_)
 			ft.show_completed(jid, data)
 			return True
 		return False
@@ -2825,12 +2821,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			else:
 				self.tree.expand_row(path, False)
 		else:
-			first_ev = gajim.get_first_event(account, jid)
+			first_ev = gajim.events.get_first_event(account, jid)
 			if not first_ev:
 				# look in other resources
 				for c in gajim.contacts.get_contact(account, jid):
 					fjid = c.get_full_jid()
-					first_ev = gajim.get_first_event(account, fjid)
+					first_ev = gajim.events.get_first_event(account, fjid)
 					if first_ev:
 						resource = c.resource
 						break
@@ -2838,7 +2834,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				child_iter = model.iter_children(iter)
 				while not first_ev and child_iter:
 					child_jid = model[child_iter][C_JID].decode('utf-8')
-					first_ev = gajim.get_first_event(account, child_jid)
+					first_ev = gajim.events.get_first_event(account, child_jid)
 					if first_ev:
 						jid = child_jid
 					else:
@@ -3088,8 +3084,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				model[iter][1] = self.jabber_state_images['16'][model[iter][2]]
 			iter = model.iter_next(iter)
 		# Update the systray
-		if gajim.interface.systray_enabled:
-			gajim.interface.systray.set_img()
+		gajim.interface.systray.set_img()
 
 		for win in gajim.interface.msg_win_mgr.windows():
 			for ctrl in win.controls():
@@ -3565,13 +3560,14 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		change_title_allowed = gajim.config.get('change_roster_title')
 		if change_title_allowed:
 			start = ''
-			if self.nb_unread > 1:
-				start = '[' + str(self.nb_unread) + ']  '
-			elif self.nb_unread == 1:
+			nb_unread = gajim.events.get_nb_events()
+			if nb_unread > 1:
+				start = '[' + str(nb_unread) + ']  '
+			elif nb_unread == 1:
 				start = '*  '
 			self.window.set_title(start + 'Gajim')
 
-		gtkgui_helpers.set_unset_urgency_hint(self.window, self.nb_unread)
+		gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)
 
 	def iter_is_separator(self, model, iter):
 		if model[iter][0] == 'SEPARATOR':
@@ -3640,7 +3636,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
 			'closed': {}}
 		
-		self.nb_unread = 0 # number of unread messages
 		self.last_save_dir = None
 		self.editing_path = None  # path of row with cell in edit mode
 		self.add_new_contact_handler_id = False

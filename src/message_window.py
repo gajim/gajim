@@ -224,7 +224,7 @@ class MessageWindow:
 				gajim.config.get('notify_on_all_muc_messages') and not \
 				ctrl.attention_flag:
 				continue
-			unread += ctrl.nb_unread
+			unread += ctrl.get_nb_unread()
 
 		unread_str = ''
 		if unread > 1:
@@ -280,9 +280,8 @@ class MessageWindow:
 			ctrl.shutdown()
 
 		# Update external state
-		if gajim.interface.systray_capabilities:
-			gajim.interface.systray.remove_jid(ctrl.get_full_jid(), ctrl.account,
-				ctrl.type_id)
+		gajim.events.remove_events(ctrl.account, ctrl.get_full_jid,
+			types = ['printed_msg', 'chat', 'gc_msg'])
 		del gajim.last_message_time[ctrl.account][ctrl.get_full_jid()]
 
 		self.disconnect_tab_dnd(ctrl.widget)
@@ -432,7 +431,7 @@ class MessageWindow:
 				if ind < 0:
 					ind = self.notebook.get_n_pages() - 1
 			ctrl = self.get_control(ind, None)
-			if ctrl.nb_unread > 0:
+			if ctrl.get_nb_unread() > 0:
 				found = True
 				break # found
 			elif gajim.config.get('ctrl_tab_go_to_next_composing') : # Search for a composing contact

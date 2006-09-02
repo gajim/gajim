@@ -24,6 +24,7 @@ import gtkgui_helpers
 import message_control
 import dialogs
 import history_window
+import notify
 
 from common import gajim
 from common import helpers
@@ -50,7 +51,7 @@ class ChatControlBase(MessageControl):
 		theme = gajim.config.get('roster_theme')
 		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
 		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
-		
+
 		if bannerfont:
 			font = pango.FontDescription(bannerfont)
 		else:
@@ -61,16 +62,26 @@ class ChatControlBase(MessageControl):
 				font.set_weight(pango.WEIGHT_HEAVY)
 			if 'I' in bannerfontattrs:
 				font.set_style(pango.STYLE_ITALIC)
-		
+
 		font_attrs = 'font_desc="%s"' % font.to_string()
-		
+
 		# in case there is no font specified we use x-large font size
 		if font.get_size() == 0:
 			font_attrs = '%s size="x-large"' % font_attrs
 		font.set_weight(pango.WEIGHT_NORMAL)
 		font_attrs_small = 'font_desc="%s" size="small"' % font.to_string()
 		return (font_attrs, font_attrs_small)
-			
+
+	def get_nb_unread(self):
+		jid = self.contact.jid
+		if self.resource:
+			jid += '/' + self.resource
+		type_ = self.type_id
+		if type_ == message_control.TYPE_GC:
+			type_ = 'gc_msg'
+		return len(gajim.events.get_events(self.account, jid, ['printed_' + type_,
+			type_]))
+
 	def draw_banner(self):
 		self._paint_banner()
 		self._update_banner_state_image()
@@ -99,7 +110,7 @@ class ChatControlBase(MessageControl):
 		widget = self.xml.get_widget('emoticons_button')
 		id = widget.connect('clicked', self.on_emoticons_button_clicked)
 		self.handlers[id] = widget
-		
+
 		id = self.widget.connect('key_press_event', self._on_keypress_event)
 		self.handlers[id] = self.widget
 
@@ -107,10 +118,10 @@ class ChatControlBase(MessageControl):
 		id = widget.connect('button-press-event',
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id] = widget
-	
+
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
-		
+
 		self.conv_scrolledwindow = self.xml.get_widget(
 			'conversation_scrolledwindow')
 		self.conv_scrolledwindow.add(self.conv_textview.tv)
@@ -143,8 +154,6 @@ class ChatControlBase(MessageControl):
 		self.sent_history_pos = 0
 		self.typing_new = False
 		self.orig_msg = ''
-
-		self.nb_unread = 0
 
 		# Emoticons menu
 		# set image no matter if user wants at this time emoticons or not
@@ -480,12 +489,25 @@ class ChatControlBase(MessageControl):
 			gajim.last_message_time[self.account][full_jid] = time.time()
 		urgent = True
 		if (not self.parent_win.get_active_jid() or \
-				full_jid != self.parent_win.get_active_jid() or \
-				not self.parent_win.is_active() or not end) and \
-				kind in ('incoming', 'incoming_queue'):
-			self.nb_unread += 1
-			if gajim.interface.systray_capabilities and self.notify_on_new_messages():
-				gajim.interface.systray.add_jid(full_jid, self.account, self.type_id)
+		full_jid != self.parent_win.get_active_jid() or \
+		not self.parent_win.is_active() or not end) and \
+		kind in ('incoming', 'incoming_queue'):
+			if self.notify_on_new_messages():
+				type_ = 'printed_' + self.type_id
+				if self.type_id == message_control.TYPE_GC:
+					type_ = 'printed_gc_msg'
+				show_in_roster = notify.get_show_in_roster('message_received',
+					self.account, self.contact)
+				show_in_systray = notify.get_show_in_systray('message_received',
+					self.account, self.contact)
+				event = gajim.events.create_event(type_, None,
+					show_in_roster = show_in_roster,
+					show_in_systray = show_in_systray)
+				gajim.events.add_event(self.account, full_jid, event)
+				# We need to redraw contact if we show in roster
+				if show_in_roster:
+					gajim.interface.roster.draw_contact(self.contact.jid,
+						self.account)
 			self.parent_win.redraw_tab(self)
 			if not self.parent_win.is_active():
 				ctrl = gajim.interface.msg_win_mgr.get_control(full_jid,
@@ -510,6 +532,7 @@ class ChatControlBase(MessageControl):
 		else: # we are the beginning of buffer
 			buffer.insert_at_cursor('%s ' % str_)
 		self.msg_textview.grab_focus()
+
 	def on_emoticons_button_clicked(self, widget):
 		'''popup emoticons menu'''
 		gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
@@ -554,15 +577,18 @@ class ChatControlBase(MessageControl):
 		if state:
 			jid = self.contact.jid
 			if self.conv_textview.at_the_end():
-				#we are at the end
-				if self.nb_unread > 0:
-					self.nb_unread = self.get_specific_unread()
+				# we are at the end
+				type_ = 'printed_' + self.type_id
+				if self.type_id == message_control.TYPE_GC:
+					type_ = 'printed_gc_msg'
+				if not gajim.events.remove_events(self.account, self.get_full_jid(),
+				types = [type_]):
+					# There were events to remove
 					self.parent_win.redraw_tab(self)
 					self.parent_win.show_title()
-					if gajim.interface.systray_capabilities:
-						gajim.interface.systray.remove_jid(self.get_full_jid(),
-										self.account,
-										self.type_id)
+					# redraw roster
+					gajim.interface.roster.draw_contact(jid, self.account)
+					gajim.interface.roster.show_title()
 			self.msg_textview.grab_focus()
 			# Note, we send None chatstate to preserve current
 			self.parent_win.redraw_tab(self)
@@ -635,22 +661,28 @@ class ChatControlBase(MessageControl):
 		return True
 
 	def on_conversation_vadjustment_value_changed(self, widget):
-		if not self.nb_unread:
-			return
 		if self.resource:
 			jid = self.contact.get_full_jid()
 		else:
 			jid = self.contact.jid
+		type_ = self.type_id
+		if type_ == message_control.TYPE_GC:
+			type_ = 'gc_msg'
+		if not len(gajim.events.get_events(self.account, jid, ['printed_' + type_,
+		type_])):
+			return
 		if self.conv_textview.at_the_end() and \
 				self.parent_win.get_active_control() == self and \
 				self.parent_win.window.is_active():
-			#we are at the end
-			self.nb_unread = self.get_specific_unread()
-			self.parent_win.redraw_tab(self)
-			self.parent_win.show_title()
-			if gajim.interface.systray_capabilities:
-				gajim.interface.systray.remove_jid(jid, self.account,
-					self.type_id)
+			# we are at the end
+			type_ = self.type_id
+			if type_ == message_control.TYPE_GC:
+				type_ = 'gc_msg'
+			if not gajim.events.remove_events(self.account, self.get_full_jid(),
+			types = ['printed_' + type_, type_]):
+				# There were events to remove
+				self.parent_win.redraw_tab(self)
+				self.parent_win.show_title()
 
 	def sent_messages_scroll(self, direction, conv_buf):
 		size = len(self.sent_history) 
@@ -1140,7 +1172,12 @@ class ChatControl(ChatControlBase):
 
 	def get_tab_label(self, chatstate):
 		unread = ''
-		num_unread = self.nb_unread
+		if self.resource:
+			jid = self.contact.get_full_jid()
+		else:
+			jid = self.contact.jid
+		num_unread = len(gajim.events.get_events(self.account, jid,
+			['printed_' + self.type_id, self.type_id]))
 		if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
 			unread = '*'
 		elif num_unread > 1:
@@ -1183,7 +1220,12 @@ class ChatControl(ChatControlBase):
 		return (label_str, color)
 
 	def get_tab_image(self):
-		num_unread = self.nb_unread
+		if self.resource:
+			jid = self.contact.get_full_jid()
+		else:
+			jid = self.contact.jid
+		num_unread = len(gajim.events.get_events(self.account, jid,
+			['printed_' + self.type_id, self.type_id]))
 		# Set tab image (always 16x16); unread messages show the 'message' image
 		tab_img = None
 		
@@ -1192,8 +1234,8 @@ class ChatControl(ChatControlBase):
 				self.contact.jid, icon_name = 'message')
 			tab_img = img_16['message']
 		else:
-			contact = gajim.contacts.get_contact_with_highest_priority(self.account,
-				self.contact.jid)
+			contact = gajim.contacts.get_contact_with_highest_priority(
+				self.account, self.contact.jid)
 			if not contact or self.resource:
 				# For transient contacts
 				contact = self.contact
@@ -1369,10 +1411,9 @@ class ChatControl(ChatControlBase):
 		# Remove bigger avatar window
 		if self.bigger_avatar_window:
 			self.bigger_avatar_window.destroy()
-		# Clean up systray
-		if gajim.interface.systray_capabilities and self.nb_unread > 0:
-			gajim.interface.systray.remove_jid(self.contact.jid, self.account,
-								self.type_id)
+		# Clean events
+		gajim.events.remove_events(self.account, self.get_full_jid(),
+			types = ['printed_' + self.type_id, self.type_id])
 		# remove all register handlers on wigets, created by self.xml
 		# to prevent circular references among objects
 		for i in self.handlers.keys():
@@ -1474,14 +1515,11 @@ class ChatControl(ChatControlBase):
 		if restore_how_many <= 0:
 			return
 		timeout = gajim.config.get('restore_timeout') # in minutes
-		# number of messages that are in queue and are already logged
-		pending_how_many = 0 # we want to avoid duplication
 
-		if gajim.awaiting_events[self.account].has_key(jid):
-			events = gajim.awaiting_events[self.account][jid]
-			for event in events:
-				if event[0] == 'chat':
-					pending_how_many += 1
+		events = gajim.events.get_events(self.account, jid, ['chat'])
+		# number of messages that are in queue and are already logged, we want
+		# to avoid duplication
+		pending_how_many = len(events)
 
 		rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
 			pending_how_many, timeout, self.account)
@@ -1522,7 +1560,7 @@ class ChatControl(ChatControlBase):
 		jid_with_resource = jid
 		if self.resource:
 			jid_with_resource += '/' + self.resource
-		l = gajim.awaiting_events[self.account][jid_with_resource]
+		events = gajim.events.get_events(self.account, jid_with_resource)
 
 		# Is it a pm ?
 		is_pm = False
@@ -1530,15 +1568,12 @@ class ChatControl(ChatControlBase):
 		control = gajim.interface.msg_win_mgr.get_control(room_jid, self.account)
 		if control and control.type_id == message_control.TYPE_GC:
 			is_pm = True
-		events_to_keep = []
 		# list of message ids which should be marked as read
 		message_ids = []
-		for event in l:
-			typ = event[0]
-			if typ != 'chat':
-				events_to_keep.append(event)
+		for event in events:
+			if event.type_ != 'chat':
 				continue
-			data = event[1]
+			data = event.parameters
 			kind = data[2]
 			if kind == 'error':
 				kind = 'info'
@@ -1548,22 +1583,16 @@ class ChatControl(ChatControlBase):
 						encrypted = data[4], subject = data[1])
 			if len(data) > 6 and isinstance(data[6], int):
 				message_ids.append(data[6])
-			# remove from gc nb_unread if it's pm or from roster
-			if is_pm:
-				control.nb_unread -= 1
-			else:
-				gajim.interface.roster.nb_unread -= 1
 		if message_ids:
 			gajim.logger.set_read_messages(message_ids)
-		if is_pm:
-			control.parent_win.show_title()
-		else:
-			gajim.interface.roster.show_title()
-		# Keep only non-messages events
-		if len(events_to_keep):
-			gajim.awaiting_events[self.account][jid_with_resource] = events_to_keep
-		else:
-			del gajim.awaiting_events[self.account][jid_with_resource]
+		gajim.events.remove_events(self.account, jid_with_resource,
+			types = ['chat'])
+
+		self.parent_win.show_title()
+		self.parent_win.redraw_tab(self)
+		# redraw roster
+		gajim.interface.roster.show_title()
+
 		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
 		if is_pm:
@@ -1573,8 +1602,6 @@ class ChatControl(ChatControlBase):
 		gajim.interface.roster.draw_contact(jid, self.account)
 		# Redraw parent too
 		gajim.interface.roster.draw_parent_contact(jid, self.account)
-		if gajim.interface.systray_capabilities:
-			gajim.interface.systray.remove_jid(jid_with_resource, self.account, typ)
 		if (self.contact.show == 'offline' or self.contact.show == 'error'):
 			showOffline = gajim.config.get('showoffline')
 			if not showOffline and typ == 'chat' and \
