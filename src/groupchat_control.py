@@ -556,6 +556,9 @@ class GroupchatControl(ChatControlBase):
 				helpers.play_sound('muc_message_received')
 			elif sound == 'highlight':
 				helpers.play_sound('muc_message_highlight')
+			if text.startswith('/me ') or text.startswith('/me\n'):
+				other_tags_for_text.append('gc_nickname_color_' + \
+					str(self.gc_custom_colors[contact]))
 
 			self.check_and_possibly_add_focus_out_line()
 

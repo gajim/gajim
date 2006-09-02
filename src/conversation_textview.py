@@ -710,6 +710,7 @@ class ConversationTextview:
 		other_text_tag = self.detect_other_text_tag(text, kind)
 		text_tags = other_tags_for_text[:] # create a new list
 		if other_text_tag:
+			# note that color of /me may be overwritten in gc_control
 			text_tags.append(other_text_tag)
 		else: # not status nor /me
 			if gajim.config.get(
