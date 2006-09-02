@@ -1042,7 +1042,7 @@ class JoinGroupchatWindow:
 			jid = room + '@' + server
 			if jid in gajim.gc_connected[account] and gajim.gc_connected[account][jid]:
 				ErrorDialog(_('You are already in room %s') % jid)
-				return
+				raise RuntimeError, 'You are already in this room'
 		self.account = account
 		self.automatic = automatic
 		if nick == '':
@@ -2144,7 +2144,10 @@ class InvitationReceivedDialog:
 	def on_accept_button_clicked(self, widget):
 		self.dialog.destroy()
 		room, server = gajim.get_room_name_and_server_from_room_jid(self.room_jid)
-		JoinGroupchatWindow(self.account, server = server, room = room)
+		try:
+			JoinGroupchatWindow(self.account, server = server, room = room)
+		except RuntimeError:
+			pass
 			
 class ProgressDialog:
 	def __init__(self, title_text, during_text, messages_queue):

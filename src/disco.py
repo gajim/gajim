@@ -1198,7 +1198,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 		else:
 			room = ''
 		if not gajim.interface.instances[self.account].has_key('join_gc'):
-			dialogs.JoinGroupchatWindow(self.account, service, room)
+			try:
+				dialogs.JoinGroupchatWindow(self.account, service, room)
+			except RuntimeError:
+				pass
 		else:
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		self.window.destroy(chain = True)
@@ -1528,7 +1531,10 @@ class MucBrowser(AgentBrowser):
 		else:
 			room = model[iter][1].decode('utf-8')
 		if not gajim.interface.instances[self.account].has_key('join_gc'):
-			dialogs.JoinGroupchatWindow(self.account, service, room)
+			try:
+				dialogs.JoinGroupchatWindow(self.account, service, room)
+			except RuntimeError:
+				pass
 		else:
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		self.window.destroy(chain = True)
