@@ -1042,7 +1042,7 @@ class JoinGroupchatWindow:
 			jid = room + '@' + server
 			if jid in gajim.gc_connected[account] and gajim.gc_connected[account][jid]:
 				ErrorDialog(_('You are already in room %s') % jid)
-				raise RuntimeError, 'You are already in this room'
+				return
 		self.account = account
 		self.automatic = automatic
 		if nick == '':
