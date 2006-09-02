@@ -458,7 +458,7 @@ def _get_fade_color(treeview, selected, focused):
 
 def get_scaled_pixbuf(pixbuf, kind):
 	'''returns scaled pixbuf, keeping ratio etc or None
-	kind is either "chat" or "roster" or "notification" or "tooltip"'''
+	kind is either "chat", "roster", "notification", "tooltip", "vcard"'''
 	
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)
