@@ -1340,6 +1340,9 @@ class AccountModificationWindow:
 			gajim.contacts.change_account_name(self.account, name)
 			gajim.events.change_account_name(self.account, name)
 
+			# change account variable for chat / gc controls
+			for ctrl in gajim.interface.msg_win_mgr.get_controls():
+				ctrl.account = name
 			# upgrade account variable in opened windows
 			for kind in ('infos', 'disco', 'chats', 'gc', 'gc_config'):
 				for j in gajim.interface.instances[name][kind]:
