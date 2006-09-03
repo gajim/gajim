@@ -776,8 +776,8 @@ class GroupchatControl(ChatControlBase):
 					self.add_contact_to_roster(new_nick, show, role, affiliation,
 						status, jid)
 					# keep nickname color
-					self.gc_custom_colors[new_nick] =\
-						self.gc_custom_colors[nick]	
+					if nick in self.gc_custom_colors:
+						self.gc_custom_colors[new_nick] = self.gc_custom_colors[nick]
 				# rename vcard / avatar
 				puny_jid = helpers.sanitize_filename(self.room_jid)
 				puny_nick = helpers.sanitize_filename(nick)
