@@ -351,8 +351,7 @@ class SignalObject(DbusPrototype):
 
 	def show_next_unread(self, *args):
 		''' Show the window(s) with next waiting messages in tabbed/group chats. '''
-		#FIXME: when systray is disabled this method does nothing.
-		if len(gajim.interface.systray.jids) != 0:
+		if gajim.events.get_nb_events():
 			gajim.interface.systray.handle_first_event()
 
 	def contact_info(self, *args):
