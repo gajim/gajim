@@ -2613,13 +2613,19 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_profile_avatar_menuitem_activate(self, widget, account):
 		gajim.interface.edit_own_details(account)
 
-	def close_all(self, dic):
+	def close_all_from_dict(self, dic):
 		'''close all the windows in the given dictionary'''
 		for w in dic.values():
 			if type(w) == type({}):
-				self.close_all(w)
+				self.close_all_from_dict(w)
 			else:
 				w.window.destroy()
+	
+	def close_all(self, account):
+		'''close all the windows from an account'''
+		self.close_all_from_dict(gajim.interface.instances[account])
+		for ctrl in gajim.interface.msg_win_mgr.get_controls():
+			ctrl.parent_win.remove_tab(ctrl)
 
 	def on_roster_window_delete_event(self, widget, event):
 		'''When we want to close the window'''
@@ -2698,7 +2704,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		gajim.interface.save_config()
 		for account in gajim.connections:
 			gajim.connections[account].quit(True)
-		self.close_all(gajim.interface.instances)
+			self.close_all(account)
 		if gajim.interface.systray_enabled:
 			gajim.interface.hide_systray()
 		gtk.main_quit()
@@ -3600,7 +3606,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if len(self._last_selected_contact):
 			# update unselected rows
 			for (jid, account) in self._last_selected_contact:
-				self.draw_contact(jid, account)
+				try:
+					self.draw_contact(jid, account)
+				except:
+					# This can fail when last selected row was on an account we just
+					# removed. So we don't care if that fail
+					pass
 		self._last_selected_contact = []
 		if len(list_of_paths) == 0:
 			return

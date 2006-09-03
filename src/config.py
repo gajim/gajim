@@ -2275,7 +2275,7 @@ class RemoveAccountWindow:
 		if not res:
 			return
 		# Close all opened windows
-		gajim.interface.roster.close_all(gajim.interface.instances[self.account])
+		gajim.interface.roster.close_all(self.account)
 		gajim.connections[self.account].disconnect(on_purpose = True)
 		del gajim.connections[self.account]
 		gajim.config.del_per('accounts', self.account)
