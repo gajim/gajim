@@ -863,6 +863,8 @@ class ChatControl(ChatControlBase):
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
+		# is account displayed after nick in banner ?
+		self.account_displayed= False
 
 	def notify_on_new_messages(self):
 		return gajim.config.get('trayicon_notification_on_new_messages')
@@ -996,11 +998,16 @@ class ChatControl(ChatControlBase):
 		# with the same nick we need to also display the account
 		# except if we are talking to two different resources of the same contact
 		acct_info = ''
+		self.account_displayed = False
 		for ctrl in self.parent_win.controls():
 			if ctrl == self:
 				continue
 			if self.contact.get_shown_name() == ctrl.contact.get_shown_name()\
 			and not avoid_showing_account_too:
+				self.account_displayed = True
+				if not ctrl.account_displayed:
+					# do that after this instance exists
+					gobject.idle_add(ctrl.draw_banner)
 				acct_info = ' (%s)' % \
 						gtkgui_helpers.escape_for_pango_markup(self.account)
 				break
