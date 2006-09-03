@@ -397,7 +397,7 @@ class RosterWindow:
 		if (contact.show in ('offline', 'error') or hide) and \
 			not showOffline and (not _('Transports') in contact.groups or \
 			gajim.connections[account].connected < 2) and \
-			len(gajim.events.get_events(account, contact.jid)) == 0:
+			len(gajim.events.get_events(account, contact.jid, ['chat'])) == 0:
 			self.remove_contact(contact, account)
 		else:
 			self.draw_contact(contact.jid, account)
