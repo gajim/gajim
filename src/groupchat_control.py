@@ -287,9 +287,6 @@ class GroupchatControl(ChatControlBase):
 		column.set_visible(False)
 		self.list_treeview.set_expander_column(column)
 
-		id = self.msg_textview.connect('populate_popup',
-			self.on_msg_textview_populate_popup)
-		self.handlers[id] = self.msg_textview
 		# set an empty subject to show the room_jid
 		self.set_subject('')
 		self.got_disconnected() # init some variables
@@ -301,12 +298,9 @@ class GroupchatControl(ChatControlBase):
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
 		and the ability to insert a nick'''
+		ChatControlBase.on_msg_textview_populate_popup(self, textview, menu)
 		item = gtk.SeparatorMenuItem()
 		menu.prepend(item)
-		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
-		menu.prepend(item)
-		id = item.connect('activate', self.msg_textview.clear)
-		self.handlers[id] = item
 
 		item = gtk.MenuItem(_('Insert Nickname'))
 		menu.prepend(item)

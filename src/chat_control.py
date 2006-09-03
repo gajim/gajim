@@ -42,6 +42,14 @@ except:
 	HAS_GTK_SPELL = False
 
 
+# the next script, executed in the "po" directory,
+# generates the following list.
+##!/bin/sh
+#LANG=$(for i in *.po; do  j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
+#echo "{_('en'):'en'",$LANG"}"
+langs = {_('English'): 'en', _('Bulgarian'): 'bg', _('Briton'): 'br', _('Czech'): 'cs', _('German'): 'de', _('Greek'): 'el', _('Esperanto'): 'eo', _('Spanish'): 'es', _('Basc'): 'eu', _('French'): 'fr', _('Croatian'): 'hr', _('Italian'): 'it', _('Norvegian b'): 'nb', _('Dutch'): 'nl', _('Norvegian'): 'no', _('Polish'): 'pl', _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR', _('Russian'): 'ru', _('Slovak'): 'sk', _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
+
+
 ################################################################################
 class ChatControlBase(MessageControl):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
@@ -133,20 +141,23 @@ class ChatControlBase(MessageControl):
 		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
 		id = self.msg_textview.connect('mykeypress',
-					self._on_message_textview_mykeypress_event)
+			self._on_message_textview_mykeypress_event)
 		self.handlers[id] = self.msg_textview
 		self.msg_scrolledwindow.add(self.msg_textview)
 		id = self.msg_textview.connect('key_press_event',
-					self._on_message_textview_key_press_event)
+			self._on_message_textview_key_press_event)
 		self.handlers[id] = self.msg_textview
 		id = self.msg_textview.connect('size-request', self.size_request)
 		self.handlers[id] = self.msg_textview
+		id = self.msg_textview.connect('populate_popup',
+			self.on_msg_textview_populate_popup)
+		self.handlers[id] = self.msg_textview
+	
 		self.update_font()
 
 		# Hook up send button
 		widget = self.xml.get_widget('send_button')
-		id = widget.connect('clicked',
-							self._on_send_button_clicked)
+		id = widget.connect('clicked', self._on_send_button_clicked)
 		self.handlers[id] = widget
 
 		# the following vars are used to keep history of user's messages
@@ -167,6 +178,14 @@ class ChatControlBase(MessageControl):
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			try:
 				spell = gtkspell.Spell(self.msg_textview)
+				# loop removing non-existant dictionaries
+				# iterating on a copy
+				for lang in dict(langs):
+					try: 
+						spell.set_language(langs[lang])
+					except:
+						del langs[lang]
+				# now set the one the user selected
 				lang = gajim.config.get('speller_language')
 				if lang:
 					spell.set_language(lang)
@@ -185,6 +204,38 @@ class ChatControlBase(MessageControl):
 
 		# For JEP-0172
 		self.user_nick = None
+
+	def on_msg_textview_populate_popup(self, textview, menu):
+		'''we override the default context menu and we prepend an option to switch languages'''
+		def _on_select_dictionary(widget, lang):
+			gajim.config.set('speller_language', lang)
+			spell = gtkspell.get_from_text_view(self.msg_textview)
+			spell.set_language(lang)
+			widget.set_active(True)
+
+		item = gtk.SeparatorMenuItem()
+		menu.prepend(item)
+
+		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+			item = gtk.MenuItem(_('Spelling language'))
+			menu.prepend(item)
+			submenu = gtk.Menu()
+			item.set_submenu(submenu)
+			deflang = gajim.config.get('speller_language')
+			for lang in sorted(langs):
+				item = gtk.CheckMenuItem(lang)
+				if langs[lang] == deflang:
+					item.set_active(True)
+				submenu.append(item)
+				id = item.connect('activate', _on_select_dictionary, langs[lang])
+				self.handlers[id] = item
+
+		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+		menu.prepend(item)
+		id = item.connect('activate', self.msg_textview.clear)
+		self.handlers[id] = item
+
+		menu.show_all()
 
 	# moved from ChatControl 
 	def _on_banner_eventbox_button_press_event(self, widget, event):
