@@ -1842,8 +1842,7 @@ class Interface:
 		self.instances = {'logs': {}}
 		
 		for a in gajim.connections:
-			self.instances[a] = {'infos': {}, 'disco': {}, 'chats': {},
-				'gc': {}, 'gc_config': {}}
+			self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {}}
 			gajim.contacts.add_account(a)
 			gajim.groups[a] = {}
 			gajim.gc_connected[a] = {}

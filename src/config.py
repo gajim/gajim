@@ -1344,7 +1344,7 @@ class AccountModificationWindow:
 			for ctrl in gajim.interface.msg_win_mgr.get_controls():
 				ctrl.account = name
 			# upgrade account variable in opened windows
-			for kind in ('infos', 'disco', 'chats', 'gc', 'gc_config'):
+			for kind in ('infos', 'disco', 'gc_config'):
 				for j in gajim.interface.instances[name][kind]:
 					gajim.interface.instances[name][kind][j].account = name
 
@@ -2905,7 +2905,7 @@ _('You can set advanced account options by pressing Advanced button, or later by
 
 		# update variables
 		gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
-			'chats': {}, 'gc': {}, 'gc_config': {}}
+			'gc_config': {}}
 		gajim.connections[self.account].connected = 0
 		gajim.groups[self.account] = {}
 		gajim.contacts.add_account(self.account)
