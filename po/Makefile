@@ -9,6 +9,9 @@ all: $(LANGS_MO)
 %.mo: %.po
 	msgfmt $< -o $@
 
+%.glade.h: %.glade
+	intltool-extract --type=gettext/glade $<
+
 gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/account_context_menu.glade.h \
 			../data/glade/account_creation_wizard_window.glade.h \
@@ -16,6 +19,7 @@ gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/accounts_window.glade.h \
 			../data/glade/add_new_contact_window.glade.h \
 			../data/glade/advanced_configuration_window.glade.h \
+			../data/glade/advanced_notifications_window.glade.h \
 			../data/glade/advanced_menuitem_menu.glade.h \
 			../data/glade/change_password_dialog.glade.h \
 			../data/glade/change_status_message_dialog.glade.h \
