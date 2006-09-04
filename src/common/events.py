@@ -77,7 +77,7 @@ class Events:
 			self._events[account][jid] = [event]
 		else:
 			self._events[account][jid].append(event)
-		if event.show_in_systray:
+		if event.show_in_systray and gajim.interface.systray_capabilities:
 			gajim.interface.systray.set_img()
 
 	def remove_events(self, account, jid, event = None, types = []):
@@ -94,7 +94,8 @@ class Events:
 					del self._events[account][jid]
 				else:
 					self._events[account][jid].remove(event)
-				gajim.interface.systray.set_img()
+				if event.show_in_systray and gajim.interface.systray_capabilities:
+					gajim.interface.systray.set_img()
 				return
 			else:
 				return True
@@ -109,11 +110,13 @@ class Events:
 				self._events[account][jid] = new_list
 			else:
 				del self._events[account][jid]
-			gajim.interface.systray.set_img()
+			if gajim.interface.systray_capabilities:
+				gajim.interface.systray.set_img()
 			return
 		# no event nor type given, remove them all
 		del self._events[account][jid]
-		gajim.interface.systray.set_img()
+		if gajim.interface.systray_capabilities:
+			gajim.interface.systray.set_img()
 
 	def get_nb_events(self, types = []):
 		return self._get_nb_events(types = types)
