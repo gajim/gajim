@@ -275,7 +275,7 @@ class Systray:
 
 	def on_clicked(self, widget, event):
 		self.on_tray_leave_notify_event(widget, None)
-		if event.button == 1: # Left click
+		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1: # Left click
 			self.on_left_click()
 		elif event.button == 2: # middle click
 			self.on_middle_click()
