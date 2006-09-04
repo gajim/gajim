@@ -188,8 +188,9 @@ class ChatControlBase(MessageControl):
 				# now set the one the user selected
 				lang = gajim.config.get('speller_language')
 				if lang:
+					self.msg_textview.lang = lang
 					spell.set_language(lang)
-			except gobject.GError, msg:
+			except (gobject.GError, RuntimeError), msg:
 				#FIXME: add a ui for this use spell.set_language()
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language '
 					'for which you want to highlight misspelled words, then please '
@@ -210,6 +211,7 @@ class ChatControlBase(MessageControl):
 		def _on_select_dictionary(widget, lang):
 			gajim.config.set('speller_language', lang)
 			spell = gtkspell.get_from_text_view(self.msg_textview)
+			self.msg_textview.lang = lang
 			spell.set_language(lang)
 			widget.set_active(True)
 
@@ -221,10 +223,9 @@ class ChatControlBase(MessageControl):
 			menu.prepend(item)
 			submenu = gtk.Menu()
 			item.set_submenu(submenu)
-			deflang = gajim.config.get('speller_language')
 			for lang in sorted(langs):
 				item = gtk.CheckMenuItem(lang)
-				if langs[lang] == deflang:
+				if langs[lang] == self.msg_textview.lang:
 					item.set_active(True)
 				submenu.append(item)
 				id = item.connect('activate', _on_select_dictionary, langs[lang])
