@@ -148,7 +148,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		nickname = parameters[2]
 		message = parameters[3]
 		if helpers.allow_showing_notification(account, 'notify_on_new_message',
-		advanced_notif_num) and first:
+		advanced_notif_num, first):
 			do_popup = True
 		if first and helpers.allow_sound_notification('first_message_received',
 		advanced_notif_num):
