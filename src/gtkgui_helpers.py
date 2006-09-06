@@ -126,8 +126,8 @@ def get_default_font():
 		# in try because daemon may not be there
 		client = gconf.client_get_default()
 
-		return helpers.ensure_unicode_string(
-			client.get_string('/desktop/gnome/interface/font_name'))
+		return client.get_string('/desktop/gnome/interface/font_name'
+			).decode('utf-8')
 	except:
 		pass
 
@@ -147,8 +147,7 @@ def get_default_font():
 			for line in file(xfce_config_file):
 				if line.find('name="Gtk/FontName"') != -1:
 					start = line.find('value="') + 7
-					return helpers.ensure_unicode_string(
-						line[start:line.find('"', start)])
+					return line[start:line.find('"', start)].decode('utf-8')
 		except:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % xfce_config_file
@@ -163,7 +162,7 @@ def get_default_font():
 					font_name = values[0]
 					font_size = values[1]
 					font_string = '%s %s' % (font_name, font_size) # Verdana 9
-					return helpers.ensure_unicode_string(font_string)
+					return font_string.decode('utf-8')
 		except:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % kde_config_file
