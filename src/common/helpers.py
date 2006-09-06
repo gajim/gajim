@@ -739,8 +739,10 @@ first = True):
 			return True
 		if popup == 'no':
 			return False
-	if type and not gajim.config.get(type) and first:
+	if type and (not gajim.config.get(type) or not first):
 		return False
+	if type and gajim.config.get(type) and first:
+		return True
 	if gajim.config.get('autopopupaway'): # always show notification
 		return True
 	if gajim.connections[account].connected in (2, 3): # we're online or chat
