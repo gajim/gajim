@@ -449,7 +449,7 @@ class GroupchatControl(ChatControlBase):
 			pm_control.print_conversation(msg, tim = tim)
 			return
 
-		event = gajim.events.create_event('chat', (msg, '', 'incoming', tim,
+		event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
 			False, '', None))
 		gajim.events.add_event(self.account, fjid, event)
 
