@@ -534,6 +534,14 @@ def decode_string(string):
 
 	return string
 
+def ensure_utf8_string(string):
+	'''make sure string is in UTF-8'''
+	try:
+		string = decode_string(string).encode('utf-8')
+	except:
+		pass
+	return string
+
 def get_windows_reg_env(varname, default=''):
 	'''asks for paths commonly used but not exposed as ENVs
 	in english Windows 2003 those are:

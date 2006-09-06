@@ -681,9 +681,11 @@ class ConversationTextview:
 			if day_str:
 				format += day_str + ' '
 			format += '%X' + after_str
-			# format comes as unicode, because of day_str.
-			# we convert it to the encoding that we want
-			tim_format = time.strftime(format, tim).encode('utf-8')
+			tim_format = time.strftime(format, tim)
+			# if format comes as unicode because of day_str.
+			# we convert it to the encoding that we want (and that is utf-8)
+			tim_format = helpers.ensure_utf8_string(tim_format)
+			tim_format = tim_format.encode('utf-8')
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
 		elif current_print_time == 'sometimes' and kind != 'info':
