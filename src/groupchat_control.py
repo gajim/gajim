@@ -307,8 +307,9 @@ class GroupchatControl(ChatControlBase):
 		submenu = gtk.Menu()
 		item.set_submenu(submenu)
 
-		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
-			item = gtk.MenuItem(nick)
+		for nick in sorted(gajim.contacts.get_nick_list(self.account,
+		self.room_jid)):
+			item = gtk.MenuItem(nick, use_underline = False)
 			submenu.append(item)
 			id = item.connect('activate', self.append_nick_in_msg_textview, nick)
 			self.handlers[id] = item
