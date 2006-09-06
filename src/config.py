@@ -2047,7 +2047,7 @@ class GroupchatConfigWindow(DataFormWindow):
 		self.room_jid = room_jid
 		self.remove_button = {}
 		self.affiliation_treeview = {}
-		self.removed_jid = {}
+		self.list_init = {} # list at the begining
 		ui_list = {'outcast': _('Ban List'),
 			'member': _('Member List'),
 			'owner': _('Owner List'),
@@ -2057,7 +2057,7 @@ class GroupchatConfigWindow(DataFormWindow):
 		add_on_vbox = self.xml.get_widget('add_on_vbox')
 		
 		for affiliation in ('outcast', 'member', 'owner', 'admin'):
-			self.removed_jid[affiliation] = []
+			self.list_init[affiliation] = {}
 			hbox = gtk.HBox(spacing = 5)
 			add_on_vbox.pack_start(hbox, False)
 
@@ -2150,8 +2150,6 @@ class GroupchatConfigWindow(DataFormWindow):
 			return
 		model = self.affiliation_treeview[affiliation].get_model()
 		model.append((jid,'', '', ''))
-		if jid in self.removed_jid[affiliation]:
-			self.removed_jid[affiliation].remove(jid)
 
 	def on_remove_button_clicked(self, widget, affiliation):
 		selection = self.affiliation_treeview[affiliation].get_selection()
@@ -2164,7 +2162,6 @@ class GroupchatConfigWindow(DataFormWindow):
 			iter = model.get_iter(path)
 			jid = model[iter][0]
 			model.remove(iter)
-			self.removed_jid[affiliation].append(jid)
 		self.remove_button[affiliation].set_sensitive(False)
 
 	def on_affiliation_treeview_cursor_changed(self, widget, affiliation):
@@ -2172,6 +2169,7 @@ class GroupchatConfigWindow(DataFormWindow):
 
 	def affiliation_list_received(self, affiliation, list):
 		'''Fill the affiliation treeview'''
+		self.list_init[affiliation] = list
 		if not affiliation:
 			return
 		tv = self.affiliation_treeview[affiliation]
@@ -2198,18 +2196,28 @@ class GroupchatConfigWindow(DataFormWindow):
 				self.config)
 		for affiliation in ('outcast', 'member', 'owner', 'admin'):
 			list = {}
+			actual_jid_list = []
 			model = self.affiliation_treeview[affiliation].get_model()
 			iter = model.get_iter_first()
+			# add new jid
 			while iter:
 				jid = model[iter][0].decode('utf-8')
-				list[jid] = {'affiliation': affiliation}
-				if affiliation == 'outcast':
-					list[jid]['reason'] = model[iter][1].decode('utf-8')
+				actual_jid_list.append(jid)
+				if jid not in self.list_init[affiliation] or \
+				(affiliation == 'outcast' and self.list_init[affiliation]\
+				[jid].has_key('reason') and self.list_init[affiliation][jid]\
+				['reason'] != model[iter][1].decode('utf-8')):
+					list[jid] = {'affiliation': affiliation}
+					if affiliation == 'outcast':
+						list[jid]['reason'] = model[iter][1].decode('utf-8')
 				iter = model.iter_next(iter)
-			for jid in self.removed_jid[affiliation]:
-				list[jid] = {'affiliation': 'none'}
-			gajim.connections[self.account].send_gc_affiliation_list(self.room_jid,
-				list)
+			# remove removed one
+			for jid in self.list_init[affiliation]:
+				if jid not in actual_jid_list:
+					list[jid] = {'affiliation': 'none'}
+			if list:
+				gajim.connections[self.account].send_gc_affiliation_list(
+					self.room_jid, list)
 		self.window.destroy()
 
 #---------- RemoveAccountWindow class -------------#
