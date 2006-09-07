@@ -1772,13 +1772,18 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				print >> sys.stderr, _('JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it') % jid
 			else:
 				infos = raw_roster[jid]
-				if jid != our_jid and (not infos['subscription'] or infos['subscription'] == \
-				'none') and (not infos['ask'] or infos['ask'] == 'none') and not infos['name'] \
-				and not infos['groups']:
+				if jid != our_jid and (not infos['subscription'] or \
+				infos['subscription'] == 'none') and (not infos['ask'] or \
+				infos['ask'] == 'none') and not infos['name'] and \
+				not infos['groups']:
 					# remove this useless item, it won't be shown in roster anyway
 					self.connection.getRoster().delItem(jid)
 				elif jid != our_jid: # don't add our jid
 					roster[j] = raw_roster[jid]
+					if gajim.jid_is_transport(jid) and \
+					not gajim.get_transport_name_from_jid(jid):
+						# we can't determine which iconset to use
+						self.discoverInfo(jid)
 
 		self.dispatch('ROSTER', roster)
 
