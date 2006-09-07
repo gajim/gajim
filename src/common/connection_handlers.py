@@ -1353,15 +1353,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					if not msgtxt and chatstate_child.getTag('composing'):
 						chatstate = 'composing'
 		# JEP-0172 User Nickname
-		user_nick = ''
-		xtags = msg.getTags('x', attrs = {'type': 'result'},
-			namespace = common.xmpp.NS_DATA)
-		for xtag in xtags:
-			df = common.xmpp.DataForm(node = xtag)
-			field = df.getField('FORM_TYPE')
-			if not field or field.getValue() != common.xmpp.NS_PROFILE:
-				continue
-			user_nick = df.getField('nickname').getValue()
+		user_nick = msg.getTagData('nick')
+		if not user_nick:
+			user_nick = ''
 		
 		if encTag and GnuPG.USE_GPG:
 			#decrypt
@@ -1443,7 +1437,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		is_gc = False # is it a GC presence ?
 		sigTag = None
 		avatar_sha = None
-		user_nick = '' # for JEP-0172
+		# JEP-0172 User Nickname
+		user_nick = prs.getTagData('nick')
+		if not user_nick:
+			user_nick = ''
 		transport_auto_auth = False
 		xtags = prs.getTags('x')
 		for x in xtags:
@@ -1464,15 +1461,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				agent = gajim.get_server_from_jid(jid_stripped)
 				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
 					transport_auto_auth = True
-			if namespace == common.xmpp.NS_DATA:
-				# JEP-0172
-				df = common.xmpp.DataForm(node = x)
-				if df.getType() != 'result':
-					continue
-				field = df.getField('FORM_TYPE')
-				if not field or field.getValue() != common.xmpp.NS_PROFILE:
-					continue
-				user_nick = df.getField('nickname').getValue()
 
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for').split()

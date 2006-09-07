@@ -62,6 +62,7 @@ NS_MUC          ='http://jabber.org/protocol/muc'
 NS_MUC_USER     =NS_MUC+'#user'
 NS_MUC_ADMIN    =NS_MUC+'#admin'
 NS_MUC_OWNER    =NS_MUC+'#owner'
+NS_NICK         ='http://jabber.org/protocol/nick'                      # JEP-0172
 NS_OFFLINE      ='http://www.jabber.org/jeps/jep-0030.html'             # JEP-0013
 NS_PHYSLOC      ='http://jabber.org/protocol/physloc'                   # JEP-0112
 NS_PRESENCE     ='presence'                                             # Jabberd2

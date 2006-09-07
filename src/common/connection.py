@@ -90,16 +90,6 @@ class Connection(ConnectionHandlers):
 		self.vcard_supported = True
 	# END __init__
 
-	def build_user_nick(self, user_nick):
-		df = common.xmpp.DataForm(typ = 'result')
-		field = df.setField('FORM_TYPE')
-		field.setType('hidden')
-		field.setValue(common.xmpp.NS_PROFILE)
-		field = df.setField('nickname')
-		field.delAttr('type')
-		field.setValue(user_nick)
-		return df
-
 	def put_event(self, ev):
 		if gajim.handlers.has_key(ev[0]):
 			gajim.handlers[ev[0]](self.name, ev[1])
@@ -716,8 +706,8 @@ class Connection(ConnectionHandlers):
 
 		# JEP-0172: user_nickname
 		if user_nick:
-			df = self.build_user_nick(user_nick)
-			msg_iq.addChild(node = df)
+			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
+				user_nick)
 
 		# chatstates - if peer supports jep85 or jep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
@@ -792,8 +782,8 @@ class Connection(ConnectionHandlers):
 
 		p = common.xmpp.Presence(jid, 'subscribe')
 		if user_nick:
-			df = self.build_user_nick(user_nick)
-			p.addChild(node = df)
+			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
+				user_nick)
 		p = self.add_sha(p)
 		if msg:
 			p.setStatus(msg)
