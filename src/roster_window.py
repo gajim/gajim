@@ -3563,7 +3563,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		change_title_allowed = gajim.config.get('change_roster_title')
 		if change_title_allowed:
 			start = ''
-			nb_unread = gajim.events.get_nb_events()
+			nb_unread = gajim.events.get_nb_events(['chat', 'normal',
+				'file-request', 'file-error', 'file-completed',
+				'file-request-error', 'file-send-error', 'file-stopped', 'gc_msg',
+				'printed_chat', 'printed_gc_msg'])
 			if nb_unread > 1:
 				start = '[' + str(nb_unread) + ']  '
 			elif nb_unread == 1:

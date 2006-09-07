@@ -555,6 +555,14 @@ class GroupchatControl(ChatControlBase):
 		ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
 			other_tags_for_name, [], other_tags_for_text)
 
+	def get_nb_unread(self):
+		nb = len(gajim.events.get_events(self.account, self.room_jid,
+			['printed_gc_msg']))
+		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+			nb += len(gajim.events.get_events(self.account, self.room_jid + '/' + \
+				nick, ['pm']))
+		return nb
+
 	def highlighting_for_message(self, text, tim):
 		'''Returns a 2-Tuple. The first says whether or not to highlight the
 		text, the second, what sound to play.'''

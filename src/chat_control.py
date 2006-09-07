@@ -85,8 +85,6 @@ class ChatControlBase(MessageControl):
 		if self.resource:
 			jid += '/' + self.resource
 		type_ = self.type_id
-		if type_ == message_control.TYPE_GC:
-			type_ = 'gc_msg'
 		return len(gajim.events.get_events(self.account, jid, ['printed_' + type_,
 			type_]))
 
