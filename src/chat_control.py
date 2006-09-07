@@ -1637,7 +1637,6 @@ class ChatControl(ChatControlBase):
 		# list of message ids which should be marked as read
 		message_ids = []
 		for event in events:
-			print event.type_
 			if event.type_ != self.type_id:
 				continue
 			data = event.parameters
