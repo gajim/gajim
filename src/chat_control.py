@@ -639,8 +639,14 @@ class ChatControlBase(MessageControl):
 					self.parent_win.redraw_tab(self)
 					self.parent_win.show_title()
 					# redraw roster
-					gajim.interface.roster.draw_contact(jid, self.account)
-					gajim.interface.roster.show_title()
+					if self.type_id == message_control.TYPE_PM:
+						room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+						groupchat_control = gajim.interface.msg_win_mgr.get_control(
+							room_jid, self.account)
+						groupchat_control.draw_contact(nick)
+					else:
+						gajim.interface.roster.draw_contact(jid, self.account)
+						gajim.interface.roster.show_title()
 			self.msg_textview.grab_focus()
 			# Note, we send None chatstate to preserve current
 			self.parent_win.redraw_tab(self)
@@ -1631,7 +1637,8 @@ class ChatControl(ChatControlBase):
 		# list of message ids which should be marked as read
 		message_ids = []
 		for event in events:
-			if event.type_ != 'chat':
+			print event.type_
+			if event.type_ != self.type_id:
 				continue
 			data = event.parameters
 			kind = data[2]
@@ -1646,7 +1653,7 @@ class ChatControl(ChatControlBase):
 		if message_ids:
 			gajim.logger.set_read_messages(message_ids)
 		gajim.events.remove_events(self.account, jid_with_resource,
-			types = ['chat'])
+			types = [self.type_id])
 
 		self.parent_win.show_title()
 		self.parent_win.redraw_tab(self)
@@ -1659,7 +1666,13 @@ class ChatControl(ChatControlBase):
 			control.update_ui()
 			typ = 'pm'
 
-		gajim.interface.roster.draw_contact(jid, self.account)
+		if is_pm:
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+			groupchat_control = gajim.interface.msg_win_mgr.get_control(
+				room_jid, self.account)
+			groupchat_control.draw_contact(nick)
+		else:
+			gajim.interface.roster.draw_contact(jid, self.account)
 		# Redraw parent too
 		gajim.interface.roster.draw_parent_contact(jid, self.account)
 		if (self.contact.show == 'offline' or self.contact.show == 'error'):

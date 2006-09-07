@@ -2395,7 +2395,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		mw.new_tab(chat_control)
 
+		print gajim.events._events
+		print fjid
 		if len(gajim.events.get_events(account, fjid)):
+			print 'ici'
 			# We call this here to avoid race conditions with widget validation
 			chat_control.read_queue()
 
