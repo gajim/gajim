@@ -782,8 +782,7 @@ class Connection(ConnectionHandlers):
 
 		p = common.xmpp.Presence(jid, 'subscribe')
 		if user_nick:
-			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
-				user_nick)
+			p.setTag('nick', namespace = common.xmpp.NS_NICK).setData(user_nick)
 		p = self.add_sha(p)
 		if msg:
 			p.setStatus(msg)
