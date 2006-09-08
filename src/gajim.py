@@ -78,6 +78,15 @@ except exceptions.PysqliteNotAvailable, e:
 	pritext = _('Gajim needs PySQLite2 to run')
 	sectext = str(e)
 
+if os.name == 'nt':
+	try:
+		import winsound # windows-only built-in module for playing wav
+		import win32api
+		import win32con
+	except:
+		pritext = _('Gajim needs pywin32 to run')
+		sectext = _('Please make sure that Pywin32 is installed on your system. You can get it here %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
+
 if pritext:
 	dlg = gtk.MessageDialog(None, 
 				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
