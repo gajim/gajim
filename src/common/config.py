@@ -327,13 +327,13 @@ class Config:
 	}
 
 	defaultstatusmsg_default = {
-		'online': [ False, _("I'm avavilable") ],
+		'online': [ False, _("I'm available") ],
 		'chat': [ False, _("I'm free for chat") ],
 		'away': [ False, _('Be right back') ],
 		'xa': [ False, _("I'm not available") ],
 		'dnd': [ False, _('Do not disturb') ],
-		'invisible': [ False, _('Bye !') ],
-		'offline': [ False, _('Bye !') ],
+		'invisible': [ False, _('Bye!') ],
+		'offline': [ False, _('Bye!') ],
 	}
 
 	soundevents_default = {

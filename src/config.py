@@ -828,7 +828,8 @@ class PreferencesWindow:
 			msg = gajim.config.get_per('defaultstatusmsg', status_, 'message')
 			enabled = gajim.config.get_per('defaultstatusmsg', status_, 'enabled')
 			iter = model.append()
-			model.set(iter, 0, status_, 1, _(status_), 2, msg, 3, enabled)
+			uf_show = helpers.get_uf_show(status_)
+			model.set(iter, 0, status_, 1, uf_show, 2, msg, 3, enabled)
 
 	def on_default_msg_cell_edited(self, cell, row, new_text):
 		model = self.default_msg_tree.get_model()
