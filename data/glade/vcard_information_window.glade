@@ -587,26 +587,19 @@
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkButton" id="set_avatar_button">
-		      <property name="can_focus">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="focus_on_click">True</property>
+		    <widget class="GtkEventBox" id="PHOTO_eventbox">
+		      <property name="visible">True</property>
+		      <property name="visible_window">False</property>
+		      <property name="above_child">False</property>
+		      <signal name="button_press_event" handler="on_PHOTO_eventbox_button_press_event" last_modification_time="Fri, 08 Sep 2006 21:34:18 GMT"/>
 
 		      <child>
-			<widget class="GtkEventBox" id="PHOTO_eventbox3">
+			<widget class="GtkImage" id="PHOTO_image">
 			  <property name="visible">True</property>
-			  <property name="visible_window">False</property>
-			  <property name="above_child">False</property>
-
-			  <child>
-			    <widget class="GtkImage" id="PHOTO_image">
-			      <property name="visible">True</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
 			</widget>
 		      </child>
 		    </widget>

@@ -68,15 +68,8 @@ class VcardWindow:
 
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
-		self.avatar_save_as_id = None
 
 		self.fill_jabber_page()
-
-		button = self.xml.get_widget('set_avatar_button')
-		button.set_no_show_all(True)
-		button.connect('clicked',
-			gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-			self.contact.jid, self.account, self.contact.name + '.jpeg')
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -104,7 +97,7 @@ class VcardWindow:
 			gajim.config.set_per('accounts', self.account, 'no_log_for',
 				' '.join(no_log_for))
 
-	def on_PHOTO_button_press_event(self, widget, event):
+	def on_PHOTO_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
 			menu = gtk.Menu()
@@ -136,10 +129,6 @@ class VcardWindow:
 					continue
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 				image.set_from_pixbuf(pixbuf)
-				button = self.xml.get_widget('set_avatar_button')
-				self.avatar_save_as_id = button.connect('button-press-event',
-					self.on_PHOTO_button_press_event)
-				button.show()
 				continue
 			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
 				for entry in vcard[i]:
