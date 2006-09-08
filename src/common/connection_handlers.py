@@ -1356,7 +1356,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		user_nick = msg.getTagData('nick')
 		if not user_nick:
 			user_nick = ''
-		
+
 		if encTag and GnuPG.USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()

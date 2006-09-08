@@ -185,7 +185,7 @@ parser = optparser.OptionsParser(config_filename)
 
 import roster_window
 import systray
-import vcard
+import profile_window
 import config
 
 class GlibIdleQueue(idlequeue.IdleQueue):
@@ -339,9 +339,9 @@ class Interface:
 	
 	def edit_own_details(self, account):
 		jid = gajim.get_jid_from_account(account)
-		if not self.instances[account]['infos'].has_key(jid):
-			self.instances[account]['infos'][jid] = \
-				vcard.VcardWindow(jid, account, True)
+		if not self.instances[account].has_key('profile'):
+			self.instances[account]['profile'] = \
+				profile_window.ProfileWindow(account)
 			gajim.connections[account].request_vcard(jid)
 
 	def handle_event_notify(self, account, array):
@@ -764,8 +764,8 @@ class Interface:
 			nick = array['NICKNAME']
 			if nick:
 				gajim.nicks[account] = nick
-		if self.instances[account]['infos'].has_key(array['jid']):
-			win = self.instances[account]['infos'][array['jid']]
+		if self.instances[account].has_key('profile'):
+			win = self.instances[account]['profile']
 			win.set_values(array)
 			if account in self.show_vcard_when_connect:
 				self.show_vcard_when_connect.remove(account)
