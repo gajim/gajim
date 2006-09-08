@@ -204,7 +204,7 @@ class VcardWindow:
 					stats += '\n' + _('since %s') % time.strftime('%c',
 						c.last_status_time).decode(locale.getpreferredencoding())
 				one = False
-		elif not self.vcard: # Maybe gc_vcard ?
+		else: # Maybe gc_vcard ?
 			stats = helpers.get_uf_show(self.contact.show)
 			if self.contact.status:
 				stats += ': ' + self.contact.status
