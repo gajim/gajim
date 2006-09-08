@@ -851,7 +851,7 @@ class FileChooserDialog(gtk.FileChooserDialog):
 
 class BindPortError(HigDialog):
 	def __init__(self, port):
-		ErrorDialog(_('Unable to bind to port %s.' % port),
+		ErrorDialog(_('Unable to bind to port %s.') % port,
 			_('Maybe you have another running instance of Gajim. '
 			'File Transfer will be canceled.'))
 
@@ -1206,7 +1206,7 @@ class NewChatDialog(InputDialog):
 		if gajim.connections[self.account].connected <= 1:
 			#if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".' % self.account))
+		_('Please make sure you are connected with "%s".') % self.account)
 			return
 
 		if self.completion_dict.has_key(jid):
@@ -1218,7 +1218,7 @@ class NewChatDialog(InputDialog):
 				ErrorDialog(_('Invalid JID'), e[0])
 				return
 			except:
-				ErrorDialog(_('Invalid JID'), _('Unable to parse "%s".' % jid))
+				ErrorDialog(_('Invalid JID'), _('Unable to parse "%s".') % jid)
 				return
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
@@ -1560,7 +1560,7 @@ class SingleMessageWindow:
 		if gajim.connections[self.account].connected <= 1:
 			# if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".' % self.account))
+		_('Please make sure you are connected with "%s".') % self.account)
 			return
 		to_whom_jid = self.to_entry.get_text().decode('utf-8')
 		if self.completion_dict.has_key(to_whom_jid):
@@ -1587,7 +1587,7 @@ class SingleMessageWindow:
 	def on_reply_button_clicked(self, widget):
 		# we create a new blank window to send and we preset RE: and to jid
 		self.subject = _('RE: %s') % self.subject
-		self.message = _('%s wrote:\n' % self.from_whom) + self.message
+		self.message = _('%s wrote:\n') % self.from_whom + self.message
 		# add > at the begining of each line
 		self.message = self.message.replace('\n', '\n> ') + '\n\n'
 		self.window.destroy()
@@ -1684,7 +1684,7 @@ class XMLConsoleWindow:
 		if gajim.connections[self.account].connected <= 1:
 			#if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".' % self.account))
+		_('Please make sure you are connected with "%s".') % self.account)
 			return
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()
 		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter).decode('utf-8')

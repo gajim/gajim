@@ -723,8 +723,8 @@ class Interface:
 			config.ServiceRegistrationWindow(array[0], array[1], account,
 				array[2])
 		else:
-			dialogs.ErrorDialog(_('Contact with "%s" cannot be established'\
-% array[0]), _('Check your connection or try again later.'))
+			dialogs.ErrorDialog(_('Contact with "%s" cannot be established')\
+% array[0], _('Check your connection or try again later.'))
 
 	def handle_event_agent_info_items(self, account, array):
 		#('AGENT_INFO_ITEMS', account, (agent, node, items))

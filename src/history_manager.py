@@ -464,8 +464,8 @@ class HistoryManager:
 			except ValueError:
 				pass
 
-			file_.write(_('%(who)s on %(time)s said: %(message)s\n' % {'who': who,
-				'time': time_, 'message': message}))
+			file_.write(_('%(who)s on %(time)s said: %(message)s\n') % {'who': who,
+				'time': time_, 'message': message})
 	
 	def _delete_jid_logs(self, liststore, list_of_paths):
 		paths_len = len(list_of_paths)

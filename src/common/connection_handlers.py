@@ -585,8 +585,8 @@ class ConnectionDisco:
 		iq.setID(id)
 		# Wait the answer during 30 secondes
 		self.awaiting_timeouts[gajim.idlequeue.current_time() + 30] = (id,
-			_('Registration information for transport %s has not arrived in time' % \
-			agent))
+			_('Registration information for transport %s has not arrived in time') % \
+			agent)
 		self.connection.SendAndCallForResponse(iq, self._ReceivedRegInfo,
 			{'agent': agent})
 	

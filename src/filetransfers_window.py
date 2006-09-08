@@ -328,7 +328,7 @@ _('Connection with peer cannot be established.'))
 				else:
 					dirname = os.path.dirname(file_path)
 					if not os.access(dirname, os.W_OK):
-						dialogs.ErrorDialog(_('Directory "%s" is not writable' % dirname), _('You do not have permission to create files in this directory.'))
+						dialogs.ErrorDialog(_('Directory "%s" is not writable') % dirname, _('You do not have permission to create files in this directory.'))
 						return
 				dialog2.destroy()
 				self._start_receive(file_path, account, contact, file_props)

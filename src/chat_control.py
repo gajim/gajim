@@ -1494,7 +1494,7 @@ class ChatControl(ChatControlBase):
 			# 2 seconds
 			dialog = dialogs.ConfirmationDialog(
 				#%s is being replaced in the code with JID
-				_('You just received a new message from "%s"' % self.contact.jid),
+				_('You just received a new message from "%s"') % self.contact.jid,
 				_('If you close this tab and you have history disabled, '\
 				'this message will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:

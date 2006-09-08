@@ -1976,9 +1976,9 @@ class ServiceRegistrationWindow(DataFormWindow):
 			self.window = self.xml.get_widget('service_registration_window')
 			self.window.set_transient_for(gajim.interface.roster.window)
 			if infos.has_key('registered'):
-				self.window.set_title(_('Edit %s' % service))
+				self.window.set_title(_('Edit %s') % service)
 			else:
-				self.window.set_title(_('Register to %s' % service))
+				self.window.set_title(_('Register to %s') % service)
 			self.xml.get_widget('label').set_text(infos['instructions'])
 			self.entries = {}
 			self.draw_table()
@@ -2272,7 +2272,7 @@ class RemoveAccountWindow:
 		self.dialog = None
 		if gajim.connections[self.account].connected:
 			self.dialog = dialogs.ConfirmationDialog(
-				_('Account "%s" is connected to the server' % self.account),
+				_('Account "%s" is connected to the server') % self.account,
 				_('If you remove it, the connection will be lost.'),
 				on_response_ok = remove)
 		else:
