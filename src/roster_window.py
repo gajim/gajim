@@ -18,6 +18,7 @@ import gtk
 import gobject
 import os
 import time
+import urllib
 
 import common.sleepy
 import history_window
@@ -1737,6 +1738,15 @@ class RosterWindow:
 			gajim.interface.instances[account]['account_modification'] = \
 				config.AccountModificationWindow(account)
 
+	def on_open_gmail_inbox(self, widget, account):
+		if gajim.config.get_per('accounts', account, 'savepass'):
+			url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') %\
+			(urllib.quote(gajim.config.get_per('accounts', account, 'name')),
+			urllib.quote(gajim.config.get_per('accounts', account, 'password')))
+		else:
+			url = ('http://mail.google.com/')
+		helpers.launch_browser_mailer('url', url)
+
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
 		dlg = dialogs.ChangeStatusMessageDialog(show)
@@ -1758,11 +1768,12 @@ class RosterWindow:
 		childs = account_context_menu.get_children()
 
 		status_menuitem = childs[0]
-		join_group_chat_menuitem = childs[1]
-		new_message_menuitem = childs[2]
-		add_contact_menuitem = childs[3]
-		service_discovery_menuitem = childs[4]
-		edit_account_menuitem = childs[5]
+		open_gmail_inbox_menuitem = childs[1]
+		join_group_chat_menuitem = childs[2]
+		new_message_menuitem = childs[3]
+		add_contact_menuitem = childs[4]
+		service_discovery_menuitem = childs[5]
+		edit_account_menuitem = childs[6]
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
 
@@ -1793,6 +1804,13 @@ class RosterWindow:
 		item.set_image(icon)
 		sub_menu.append(item)
 		item.connect('activate', self.change_status, account, 'offline')
+
+		if gajim.config.get_per('accounts', account, 'hostname') not in gajim.gmail_domains:
+			open_gmail_inbox_menuitem.set_no_show_all(True)
+			open_gmail_inbox_menuitem.hide()
+		else:
+			open_gmail_inbox_menuitem.connect('activate', self.on_open_gmail_inbox,
+				account)
 
 		edit_account_menuitem.connect('activate', self.on_edit_account, account)
 		add_contact_menuitem.connect('activate', self.on_add_new_contact, account)
