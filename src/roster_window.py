@@ -64,7 +64,7 @@ class RosterWindow:
 		if self.regroup:
 			return account_iter
 		while account_iter:
-			account_name = model[account_iter][C_NAME].decode('utf-8')
+			account_name = model[account_iter][C_ACCOUNT].decode('utf-8')
 			if name == account_name:
 				break
 			account_iter = model.iter_next(account_iter)
@@ -191,6 +191,11 @@ class RosterWindow:
 			model[iter][C_SECPIXBUF] = tls_pixbuf
 		else:
 			model[iter][C_SECPIXBUF] = None
+		path = model.get_path(iter)
+		if self.tree.row_expanded(path):
+			model[iter][C_NAME] = account
+		else:
+			model[iter][C_NAME] = '[%s]' % account
 
 	def remove_newly_added(self, jid, account):
 		if jid in gajim.newly_added[account]:
@@ -2895,6 +2900,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				if groupIter and gajim.groups[account][g]['expand']:
 					pathG = model.get_path(groupIter)
 					self.tree.expand_row(pathG, False)
+			self.draw_account(account)
 		elif type == 'contact':
 			jid =  model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
@@ -2921,6 +2927,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			account = accounts[0] # There is only one cause we don't use merge
 			if not account in self.collapsed_rows:
 				self.collapsed_rows.append(account)
+			self.draw_account(account)
 		elif type == 'contact':
 			jid =  model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
@@ -3299,6 +3306,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return 0
 		account1 = account1.decode('utf-8')
 		account2 = account2.decode('utf-8')
+		if type1 == 'account':
+			if account1 < account2:
+				return -1
+			return 1
 		jid1 = model[iter1][C_JID].decode('utf-8')
 		jid2 = model[iter2][C_JID].decode('utf-8')
 		if type1 == 'contact':
