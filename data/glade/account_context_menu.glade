@@ -26,14 +26,6 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="open_gmail_inbox">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">_Open Gmail Inbox</property>
-      <property name="use_underline">True</property>
-    </widget>
-  </child>
-
-  <child>
     <widget class="GtkImageMenuItem" id="join_group_chat_menuitem">
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Group Chat</property>
@@ -50,6 +42,14 @@
 	  <property name="ypad">0</property>
 	</widget>
       </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="open_gmail_inbox_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Open Gmail Inbox</property>
+      <property name="use_underline">True</property>
     </widget>
   </child>
 

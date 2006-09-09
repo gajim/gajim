@@ -1765,15 +1765,14 @@ class RosterWindow:
 
 		xml = gtkgui_helpers.get_glade('account_context_menu.glade')
 		account_context_menu = xml.get_widget('account_context_menu')
-		childs = account_context_menu.get_children()
 
-		status_menuitem = childs[0]
-		open_gmail_inbox_menuitem = childs[1]
-		join_group_chat_menuitem = childs[2]
-		new_message_menuitem = childs[3]
-		add_contact_menuitem = childs[4]
-		service_discovery_menuitem = childs[5]
-		edit_account_menuitem = childs[6]
+		status_menuitem = xml.get_widget('status_menuitem')
+		join_group_chat_menuitem =xml.get_widget('join_group_chat_menuitem')
+		open_gmail_inbox_menuitem = xml.get_widget('open_gmail_inbox_menuitem')
+		new_message_menuitem = xml.get_widget('new_message_menuitem')
+		add_contact_menuitem = xml.get_widget('add_contact_menuitem')
+		service_discovery_menuitem = xml.get_widget('service_discovery_menuitem')
+		edit_account_menuitem = xml.get_widget('edit_account_menuitem')
 		sub_menu = gtk.Menu()
 		status_menuitem.set_submenu(sub_menu)
 
