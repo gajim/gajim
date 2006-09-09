@@ -2616,8 +2616,11 @@ class AccountCreationWizardWindow:
 
 		# Connect events from comboboxentry.child
 		server_comboboxentry = self.xml.get_widget('server_comboboxentry')
-		server_comboboxentry.child.connect('key_press_event',
+		entry = server_comboboxentry.child
+		entry.connect('key_press_event',
 			self.on_server_comboboxentry_key_press_event)
+		completion = gtk.EntryCompletion()
+		entry.set_completion(completion)
 
 		# parse servers.xml
 		servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
@@ -2625,6 +2628,9 @@ class AccountCreationWizardWindow:
 		servers_model = gtk.ListStore(str, int)
 		for server in servers:
 			servers_model.append((str(server[0]), int(server[1])))
+
+		completion.set_model(servers_model)
+		completion.set_text_column(0)
 
 		# Put servers into comboboxentries
 		server_comboboxentry.set_model(servers_model)
