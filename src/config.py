@@ -1499,7 +1499,7 @@ class AccountModificationWindow:
 			dialogs.ErrorDialog(_('Failed to get secret keys'),
 				_('There was a problem retrieving your OpenPGP secret keys.'))
 			return
-		secret_keys['None'] = 'None'
+		secret_keys[_('None')] = _('None')
 		instance = dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
 			_('Choose your OpenPGP key'), secret_keys)
 		keyID = instance.run()
@@ -1508,7 +1508,7 @@ class AccountModificationWindow:
 		checkbutton = self.xml.get_widget('gpg_save_password_checkbutton')
 		gpg_key_label = self.xml.get_widget('gpg_key_label')
 		gpg_name_label = self.xml.get_widget('gpg_name_label')
-		if keyID[0] == 'None':
+		if keyID[0] == _('None'):
 			gpg_key_label.set_text(_('No key selected'))
 			gpg_name_label.set_text('')
 			checkbutton.set_sensitive(False)

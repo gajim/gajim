@@ -254,6 +254,7 @@ class ChooseGPGKeyDialog:
 		prompt_label = xml.get_widget('prompt_label')
 		prompt_label.set_text(prompt_text)
 		model = gtk.ListStore(str, str)
+		model.set_sort_func(1, self.sort_keys)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.keys_treeview.set_model(model)
 		#columns
@@ -265,6 +266,17 @@ class ChooseGPGKeyDialog:
 			renderer, text = 1)
 		self.fill_tree(secret_keys, selected)
 		self.window.show_all()
+
+	def sort_keys(self, model, iter1, iter2):
+		value1 = model[iter1][1]
+		value2 = model[iter2][1]
+		if value1 == _('None'):
+			return -1
+		elif value2 == _('None'):
+			return 1
+		elif value1 < value2:
+			return -1
+		return 1
 
 	def run(self):
 		rep = self.window.run()
