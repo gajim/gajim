@@ -236,6 +236,13 @@ class GajimRemote:
 						(_('account'), _('Starts chat, using this account'), True)
 					]
 				],
+			'send_xml': [
+					_('Send custom XML'), 
+					[
+						('xml', _('XML to send'), True),
+						('account', _('Account, if not, xml\'ll be send to all your accounts'), False)
+					]
+				],
 			}
 		if self.argv_len  < 2 or \
 			sys.argv[1] not in self.commands.keys(): # no args or bad args

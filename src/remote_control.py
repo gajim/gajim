@@ -171,6 +171,7 @@ class SignalObject(DbusPrototype):
 				self.get_status,
 				self.get_status_message,
 				self.start_chat,
+				self.send_xml,
 			])
 
 	def raise_signal(self, signal, arg):
@@ -605,6 +606,14 @@ class SignalObject(DbusPrototype):
 		NewChatDialog(account)
 		return True
 
+	def send_xml(self, *args):
+		xml, account = self._get_real_arguments(args, 2)
+		if account:
+			gajim.connections[account[0]].send_stanza(xml)
+		else:
+			for acc in gajim.contacts.get_accounts():
+				gajim.connections[acc].send_stanza(xml)
+
 	if dbus_support.version[1] >= 30 and dbus_support.version[1] <= 40:
 		method = dbus.method
 		signal = dbus.signal
@@ -636,3 +645,4 @@ class SignalObject(DbusPrototype):
 	account_info = method(INTERFACE)(account_info)
 	get_unread_msgs_number = method(INTERFACE)(get_unread_msgs_number)
 	start_chat = method(INTERFACE)(start_chat)
+	send_xml = method(INTERFACE)(send_xml)
