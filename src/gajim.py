@@ -85,7 +85,7 @@ if os.name == 'nt':
 		import win32con
 	except:
 		pritext = _('Gajim needs pywin32 to run')
-		sectext = _('Please make sure that Pywin32 is installed on your system. You can get it here %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
+		sectext = _('Please make sure that Pywin32 is installed on your system. You can get it at %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
 
 if pritext:
 	dlg = gtk.MessageDialog(None, 
