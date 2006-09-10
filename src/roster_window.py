@@ -192,6 +192,8 @@ class RosterWindow:
 		else:
 			model[iter][C_SECPIXBUF] = None
 		path = model.get_path(iter)
+		if self.regroup:
+			account = _('Merged accounts')
 		if self.tree.row_expanded(path):
 			model[iter][C_NAME] = account
 		else:
