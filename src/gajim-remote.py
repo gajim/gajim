@@ -79,7 +79,7 @@ class GajimRemote:
 		#
 		self.commands = {
 			'help':[
-					_('shows a help on specific command'),
+					_('Shows a help on specific command'),
 					[
 						#User gets help for the command, specified by this parameter
 						(_('command'), 
@@ -231,16 +231,16 @@ class GajimRemote:
 					[ ]
 				],
 			'start_chat': [
-				_('Open \'Start Chat\' dialog'),
+				_('Opens \'Start Chat\' dialog'),
 					[
 						(_('account'), _('Starts chat, using this account'), True)
 					]
 				],
 			'send_xml': [
-					_('Send custom XML'), 
+					_('Sends custom XML'), 
 					[
 						('xml', _('XML to send'), True),
-						('account', _('Account, if not, xml\'ll be send to all your accounts'), False)
+						('account', _('Account, if not, xml will be sent to all accounts'), False)
 					]
 				],
 			}
