@@ -309,6 +309,14 @@ class Interface:
 		gajim.con_types[account] = con_type
 		self.roster.draw_account(account)
 
+	def handle_event_connection_lost(self, account, array):
+		# ('CONNECTION_LOST', account, [title, text])
+		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+			'connection_lost.png')
+		path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+		notify.popup(_('Connection Failed'), account, account,
+			'connection_failed', path, array[0], array[1])
+
 	def unblock_signed_in_notifications(self, account):
 		gajim.block_signed_in_notifications[account] = False
 
@@ -1676,6 +1684,7 @@ class Interface:
 			'ROSTER_INFO': self.handle_event_roster_info,
 			'BOOKMARKS': self.handle_event_bookmarks,
 			'CON_TYPE': self.handle_event_con_type,
+			'CONNECTION_LOST': self.handle_event_connection_lost,
 			'FILE_REQUEST': self.handle_event_file_request,
 			'GMAIL_NOTIFY': self.handle_event_gmail_notify,
 			'FILE_REQUEST_ERROR': self.handle_event_file_request_error,

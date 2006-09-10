@@ -137,22 +137,21 @@ class Connection(ConnectionHandlers):
 		if not self.on_purpose:
 			self.disconnect()
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect') \
-				and self.retrycount <= 10:
+			and self.retrycount <= 10:
 				self.connected = 1
 				self.dispatch('STATUS', 'connecting')
-				self.time_to_reconnect = 10
 				# this check has moved from _reconnect method
 				if self.retrycount > 5:
 					self.time_to_reconnect = 20
 				else:
 					self.time_to_reconnect = 10
-				gajim.idlequeue.set_alarm(self._reconnect_alarm, 
-										self.time_to_reconnect)
+				gajim.idlequeue.set_alarm(self._reconnect_alarm,
+					self.time_to_reconnect)
 			elif self.on_connect_failure:
 				self.on_connect_failure()
 				self.on_connect_failure = None
 			else:
-					# show error dialog
+				# show error dialog
 				self._connection_lost()
 		else:
 			self.disconnect()
@@ -162,9 +161,9 @@ class Connection(ConnectionHandlers):
 	def _connection_lost(self):
 		self.disconnect(on_purpose = False)
 		self.dispatch('STATUS', 'offline')
-		self.dispatch('ERROR',
-		(_('Connection with account "%s" has been lost') % self.name,
-		_('To continue sending and receiving messages, you will need to reconnect.')))
+		self.dispatch('CONNECTION_LOST',
+			(_('Connection with account "%s" has been lost') % self.name,
+			_('To continue sending and receiving messages, you will need to reconnect.')))
 
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
@@ -388,7 +387,8 @@ class Connection(ConnectionHandlers):
 			if not self.retrycount and self.connected != 0:
 				self.disconnect(on_purpose = True)
 				self.dispatch('STATUS', 'offline')
-				self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
+				self.dispatch('CONNECTION_LOST',
+					(_('Could not connect to "%s"') % self._hostname,
 					_('Check your connection or try again later.')))
 
 	def _connect_success(self, con, con_type):
@@ -424,7 +424,8 @@ class Connection(ConnectionHandlers):
 		if not con:
 			self.disconnect(on_purpose = True)
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
+			self.dispatch('CONNECTION_LOST',
+				(_('Could not connect to "%s"') % self._hostname,
 				_('Check your connection or try again later')))
 			if self.on_connect_auth:
 				self.on_connect_auth(None)

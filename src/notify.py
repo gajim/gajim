@@ -382,6 +382,8 @@ class DesktopNotification:
 			ntype = 'im.invitation'
 		elif event_type == _('Contact Changed Status'):
 			ntype = 'presence.status'
+		elif event_type == _('Connection Failed'):
+			ntype = 'connection.failed'
 		else:
 			# default failsafe values
 			self.path_to_image = os.path.abspath(
