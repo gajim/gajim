@@ -66,7 +66,6 @@ class ProfileWindow:
 
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
-		self.avatar_save_as_id = None
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -80,13 +79,10 @@ class ProfileWindow:
 
 	def on_clear_button_clicked(self, widget):
 		# empty the image
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'person.png')
-		self.xml.get_widget('PHOTO_image').set_from_file(path)
+		self.xml.get_widget('PHOTO_image').set_from_icon_name('stock_person',
+			gtk.ICON_SIZE_DIALOG)
 		self.avatar_encoded = None
-		if self.avatar_save_as_id:
-			self.xml.get_widget('set_avatar_button').disconnect(
-						self.avatar_save_as_id)
-			self.avatar_save_as_id = None
+		self.avatar_mime_type = None
 
 	def on_set_avatar_button_clicked(self, widget):
 		f = None
@@ -138,9 +134,9 @@ class ProfileWindow:
 
 	def on_PHOTO_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
-		if event.button == 3: # right click
-			nick = gajim.config.get_per('accounts', self.account, 'name')
+		if event.button == 3 and self.avatar_encoded: # right click
 			menu = gtk.Menu()
+			nick = gajim.config.get_per('accounts', self.account, 'name')
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			menuitem.connect('activate',
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
@@ -154,6 +150,8 @@ class ProfileWindow:
 			# show the menu
 			menu.show_all()
 			menu.popup(None, None, None, event.button, event.time)
+		elif event.button == 1: # left click
+			self.on_set_avatar_button_clicked(widget)
 
 	def set_value(self, entry_name, value):
 		try:
@@ -162,21 +160,20 @@ class ProfileWindow:
 			pass
 
 	def set_values(self, vcard):
+		if not 'PHOTO' in vcard:
+			# set default image
+			image = self.xml.get_widget('PHOTO_image')
+			image.set_from_icon_name('stock_person', gtk.ICON_SIZE_DIALOG)
 		for i in vcard.keys():
 			if i == 'PHOTO':
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
 					get_avatar_pixbuf_encoded_mime(vcard[i])
 				image = self.xml.get_widget('PHOTO_image')
 				if not pixbuf:
-					image.set_from_icon_name('stock_person',
-						gtk.ICON_SIZE_DIALOG)
+					image.set_from_icon_name('stock_person', gtk.ICON_SIZE_DIALOG)
 					continue
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 				image.set_from_pixbuf(pixbuf)
-				button = self.xml.get_widget('set_avatar_button')
-				self.avatar_save_as_id = button.connect('button-press-event',
-					self.on_PHOTO_button_press_event)
-				button.show()
 				continue
 			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
 				for entry in vcard[i]:
@@ -278,11 +275,8 @@ class ProfileWindow:
 			for e in entries:
 				self.xml.get_widget(e + '_entry').set_text('')
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
-			self.xml.get_widget('PHOTO_image').set_from_pixbuf(None)
-			if self.avatar_save_as_id:
-				self.xml.get_widget('set_avatar_button').disconnect(
-					self.avatar_save_as_id)
-				self.avatar_save_as_id = None
+			self.xml.get_widget('PHOTO_image').set_from_icon_name('stock_person',
+				gtk.ICON_SIZE_DIALOG)
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
