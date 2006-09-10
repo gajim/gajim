@@ -2648,7 +2648,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def close_all(self, account):
 		'''close all the windows from an account'''
 		self.close_all_from_dict(gajim.interface.instances[account])
-		for ctrl in gajim.interface.msg_win_mgr.get_controls():
+		for ctrl in gajim.interface.msg_win_mgr.get_controls(acct = account):
 			ctrl.parent_win.remove_tab(ctrl)
 
 	def on_roster_window_delete_event(self, widget, event):
