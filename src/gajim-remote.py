@@ -240,7 +240,9 @@ class GajimRemote:
 					_('Sends custom XML'), 
 					[
 						('xml', _('XML to send'), True),
-						('account', _('Account, if not, xml will be sent to all accounts'), False)
+						('account', _('Account in which the xml will be sent; '
+						'if not specified, xml will be sent to all accounts'),
+							False)
 					]
 				],
 			}
