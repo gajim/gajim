@@ -1923,6 +1923,21 @@ class Interface:
 		# get transports type from DB
 		gajim.transport_type = gajim.logger.get_transports_type()
 
+		# test is dictionnary is present for speller
+		if gajim.config.get('use_speller'):
+			lang = gajim.config.get('speller_language')
+			if not lang:
+				lang = gajim.LANG
+			tv = gtk.TextView()
+			try:
+				spell = gtkspell.Spell(tv, lang)
+			except:
+				dialogs.ErrorDialog(
+					_('Dictionary for lang %s not available') % lang,
+					_('You have to install %s dictionary to use spellchecking, or '
+					'choose another language by setting the speller_language option.'
+					) % lang)
+				gajim.config.set('use_speller', False)
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add(500, self.read_sleepy)

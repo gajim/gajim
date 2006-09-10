@@ -620,7 +620,23 @@ class PreferencesWindow:
 		gajim.config.set('use_speller', active)
 		gajim.interface.save_config()
 		if active:
-			self.apply_speller()
+			lang = gajim.config.get('speller_language')
+			if not lang:
+				lang = gajim.LANG
+			tv = gtk.TextView()
+			try:
+				spell = gtkspell.Spell(tv, lang)
+			except:
+				dialogs.ErrorDialog(
+					_('Dictionary for lang %s not available') % lang,
+					_('You have to install %s dictionary to use spellchecking, or '
+					'choose another language by setting the speller_language option.'
+					) % lang)
+				gajim.config.set('use_speller', False)
+				widget.set_active(False)
+			else:
+				gajim.config.set('speller_language', lang)
+				self.apply_speller()
 		else:
 			self.remove_speller()
 
@@ -2239,7 +2255,7 @@ class RemoveAccountWindow:
 		self.window = xml.get_widget('remove_account_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.remove_and_unregister_radiobutton = xml.get_widget(
-														'remove_and_unregister_radiobutton')
+			'remove_and_unregister_radiobutton')
 		self.window.set_title(_('Removing %s account') % self.account)
 		xml.signal_autoconnect(self)
 		self.window.show_all()
