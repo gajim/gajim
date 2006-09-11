@@ -194,10 +194,10 @@ class RosterWindow:
 		path = model.get_path(iter)
 		if self.regroup:
 			account = _('Merged accounts')
-		if self.tree.row_expanded(path):
-			model[iter][C_NAME] = account
-		else:
+		if not self.tree.row_expanded(path) and model.iter_has_child(iter):
 			model[iter][C_NAME] = '[%s]' % account
+		else:
+			model[iter][C_NAME] = account
 
 	def remove_newly_added(self, jid, account):
 		if jid in gajim.newly_added[account]:
@@ -994,6 +994,7 @@ class RosterWindow:
 		'''adds contacts of group to roster treeview'''
 		for jid in gajim.contacts.get_jid_list(account):
 			self.add_contact_to_roster(jid, account)
+		self.draw_account(account)
 
 	def fire_up_unread_messages_events(self, account):
 		'''reads from db the unread messages, and fire them up'''
