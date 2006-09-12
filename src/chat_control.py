@@ -184,7 +184,11 @@ class ChatControlBase(MessageControl):
 					except:
 						del langs[lang]
 				# now set the one the user selected
-				lang = gajim.config.get('speller_language')
+				lang = gajim.config.get_per('contacts', self.contact.jid,
+					'speller_language')
+				if not lang:
+					# use the default one
+					lang = gajim.config.get('speller_language')
 				if lang:
 					self.msg_textview.lang = lang
 					spell.set_language(lang)
@@ -207,7 +211,8 @@ class ChatControlBase(MessageControl):
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch languages'''
 		def _on_select_dictionary(widget, lang):
-			gajim.config.set('speller_language', lang)
+			gajim.config.set_per('contacts', self.contact.jid, 'speller_language',
+				lang)
 			spell = gtkspell.get_from_text_view(self.msg_textview)
 			self.msg_textview.lang = lang
 			spell.set_language(lang)
