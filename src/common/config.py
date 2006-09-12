@@ -296,11 +296,11 @@ class Config:
 			'state_muc_directed_msg_color': [ opt_color, 'red2' ],
 		}, {}),
 		'contacts': ({
-			'gpg_enabled': [ opt_bool, True, _('Do we have GPG enabled for this contact')],
-			'speller_language': [ opt_str, '', _('Language for which we want to check misspeller words')],
+			'gpg_enabled': [ opt_bool, True, _('Is OpenPGP enabled for this contact?')],
+			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
 		}, {}),
 		'rooms': ({
-			'speller_language': [ opt_str, '', _('Language for which we want to check misspeller words')],
+			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
 		}, {}),
 		'notifications': ({
 			'event': [opt_str, ''],
