@@ -1930,6 +1930,7 @@ class Interface:
 				lang = gajim.LANG
 			tv = gtk.TextView()
 			try:
+				import gtkspell
 				spell = gtkspell.Spell(tv, lang)
 			except:
 				dialogs.ErrorDialog(
