@@ -184,7 +184,10 @@ class ChatControlBase(MessageControl):
 					except:
 						del langs[lang]
 				# now set the one the user selected
-				lang = gajim.config.get_per('contacts', self.contact.jid,
+				per_type = 'contacts'
+				if self.type_id == message_control.TYPE_GC:
+					per_type = 'rooms'
+				lang = gajim.config.get_per(per_type, self.contact.jid,
 					'speller_language')
 				if not lang:
 					# use the default one
@@ -211,7 +214,12 @@ class ChatControlBase(MessageControl):
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch languages'''
 		def _on_select_dictionary(widget, lang):
-			gajim.config.set_per('contacts', self.contact.jid, 'speller_language',
+			per_type = 'contacts'
+			if self.type_id == message_control.TYPE_GC:
+				per_type = 'rooms'
+			if not gajim.config.get_per(per_type, self.contact.jid):
+				gajim.config.add_per(per_type, self.contact.jid)
+			gajim.config.set_per(per_type, self.contact.jid, 'speller_language',
 				lang)
 			spell = gtkspell.get_from_text_view(self.msg_textview)
 			self.msg_textview.lang = lang
@@ -1076,12 +1084,12 @@ class ChatControl(ChatControlBase):
 			tt = _('OpenPGP Encryption')
 
 			# restore gpg pref
-			gpg_pref = gajim.config.get_per('contacts',
-				self.contact.get_full_jid(), 'gpg_enabled')
+			gpg_pref = gajim.config.get_per('contacts', self.contact.jid,
+				'gpg_enabled')
 			if gpg_pref == None:
-				gajim.config.add_per('contacts', self.contact.get_full_jid())
-				gpg_pref = gajim.config.get_per('contacts',
-					self.contact.get_full_jid(), 'gpg_enabled')
+				gajim.config.add_per('contacts', self.contact.jid)
+				gpg_pref = gajim.config.get_per('contacts', self.contact.jid,
+					'gpg_enabled')
 			tb.set_active(gpg_pref)
 
 		else:

@@ -299,6 +299,9 @@ class Config:
 			'gpg_enabled': [ opt_bool, True, _('Do we have GPG enabled for this contact')],
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspeller words')],
 		}, {}),
+		'rooms': ({
+			'speller_language': [ opt_str, '', _('Language for which we want to check misspeller words')],
+		}, {}),
 		'notifications': ({
 			'event': [opt_str, ''],
 			'recipient_type': [opt_str, 'all'],
