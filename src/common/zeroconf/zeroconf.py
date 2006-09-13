@@ -16,6 +16,8 @@ import os
 import sys
 import socket
 from common import gajim
+from common import xmpp
+
 try:
 	import avahi, gobject, dbus
 except ImportError:
@@ -303,23 +305,30 @@ class Zeroconf:
 		sock = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
  		#sock.setblocking(False)
 
-		# jep-0174 wants clients to use the port from the srv record
-		# but at least adium uses the txt record (port.p2pj)
-		#sock.connect ( ( self.contacts[jid][4], self.contacts[jid][6] ) )
-
-		sock.connect ( ( self.contacts[jid][4], int((self.txt_array_to_dict(self.contacts[jid][7]))['port.p2pj']) ) )
+		sock.connect ( ( self.contacts[jid][4], self.contacts[jid][6] ) )
 		
-		#TODO: better use an xml-class for this...
+		print (self.txt_array_to_dict(self.contacts[jid][7]))['port.p2pj']
+
+		#was for adium which uses the txt record
+		#sock.connect ( ( self.contacts[jid][5], int((self.txt_array_to_dict(self.contacts[jid][7]))['port.p2pj']) ) )
+		
 		self.send("<?xml version='1.0' encoding='UTF-8'?><stream:stream xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>", sock)
 	
 		try: recvd = sock.recv(16384)
 		except: recvd = ''
 		print 'receive:' + recvd
 		
-		#adium requires the html parts
-		self.send("<message to='" + jid + "' from='" + self.name + "' type='" + type + "'><body>" + msg + "</body><html xmlns='html://www.w3.org/1999/xhtml'><body ichatballoncolor='#5598d7' ichattextcolor='#000000'><font face='Courier' ABSZ='3'>" + msg +"</font></body></html><x xmlns='jabber:x:event'><composing /></x></message>", sock)
+		message = xmpp.Message(typ=type, to=jid, frm=self.name)
+		message.setBody(msg)
+#		no html for now, necessary for anything else but adium?
+#		html = message.getTag('html', namespace = 'html://www.w3.org/1999/xhtml')
+#		html.addChild(...
+		message.addChild(name = 'x', namespace = xmpp.NS_EVENT).addChild(name = 'composing')
 
-#		self.send("<message to='" + jid + "' from='" + self.name +"' type='" + type + "'><body>" + msg + "</body></message>", sock)
+		self.send(str(message),sock)
+
+		#adium requires the html parts
+		#self.send("<message to='" + jid + "' from='" + self.name + "' type='" + type + "'><body>" + msg + "</body><html xmlns='html://www.w3.org/1999/xhtml'><body ichatballoncolor='#5598d7' ichattextcolor='#000000'><font face='Courier' ABSZ='3'>" + msg +"</font></body></html><x xmlns='jabber:x:event'><composing /></x></message>", sock)
 
 		self.send('</stream>', sock)
 		sock.close()
@@ -333,7 +342,7 @@ class Zeroconf:
 	zeroconf.connect()				
 	zeroconf.txt['1st'] = 'foo'
 	zeroconf.txt['last'] = 'bar'
-	zeroconfptxt['email'] = foo@bar.org
+	zeroconf.txt['email'] = foo@bar.org
 	zeroconf.announce()
 
 	# updating after announcing
