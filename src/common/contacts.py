@@ -210,7 +210,7 @@ class Contacts:
 		contacts = self.get_contacts_from_jid(account, jid)
 		if not contacts and '/' in jid:
 			# jid may be a fake jid, try it
-			room, nick = jid.split('/')
+			room, nick = jid.split('/', 1)
 			contact = self.get_gc_contact(account, room, nick)
 			return contact
 		return self.get_highest_prio_contact_from_contacts(contacts)
