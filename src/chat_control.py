@@ -1042,9 +1042,9 @@ class ChatControl(ChatControlBase):
 		if cs and st in ('composing_only', 'all'):
 			if contact.show == 'offline':
 				chatstate = ''
-			elif st == 'all' and contact.composing_jep == 'JEP-0085':
+			elif contact.composing_jep == 'JEP-0085':
 				chatstate = helpers.get_uf_chatstate(cs)
-			elif st == 'composing_only' or contact.composing_jep == 'JEP-0022':
+			elif contact.composing_jep == 'JEP-0022':
 				if cs in ('composing', 'paused'):
 					# only print composing, paused
 					chatstate = helpers.get_uf_chatstate(cs)
@@ -1052,16 +1052,16 @@ class ChatControl(ChatControlBase):
 					chatstate = ''
 			elif chatstate is None:
 				chatstate = helpers.get_uf_chatstate(cs)
-			
+
 			label_text = '<span %s>%s</span><span %s>%s %s</span>' % \
-							(font_attrs, name, font_attrs_small, acct_info, chatstate)
+				(font_attrs, name, font_attrs_small, acct_info, chatstate)
 		else:
 			# weight="heavy" size="x-large"
 			label_text = '<span %s>%s</span><span %s>%s</span>' % \
-										(font_attrs, name, font_attrs_small, acct_info)
+				(font_attrs, name, font_attrs_small, acct_info)
 		if status_escaped:
 			label_text += '\n<span %s>%s</span>' %\
-											(font_attrs_small, status_escaped)
+				(font_attrs_small, status_escaped)
 			banner_eventbox = self.xml.get_widget('banner_eventbox')
 			self.status_tooltip.set_tip(banner_eventbox, status)
 			self.status_tooltip.enable()
@@ -1069,7 +1069,7 @@ class ChatControl(ChatControlBase):
 			self.status_tooltip.disable()
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
-	
+
 	def on_toggle_gpg_togglebutton(self, widget):
 		gajim.config.set_per('contacts', self.contact.get_full_jid(),
 			'gpg_enabled', widget.get_active())
