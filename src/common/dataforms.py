@@ -64,13 +64,14 @@ class DataForm(xmpp.Node, object):
 		You can also set 'tofill' to DataForm to get a form of type 'submit' with the
 		same fields as in the form given, but without unnecessary data like
 		instructions or title. Also the type will be set to 'submit' by default."""
-		assert (isinstance(node, xmpp.Node) or node is None)
-		assert (isinstance(tofill, DataForm) or tofill is None)
-		assert not (node is not None and tofill is not None)
+		# assert that exactly one of fields 'node' and 'tofill' is filled
+		assert node is None or isinstance(node, xmpp.Node)
+		assert tofill is None or isinstance(tofill, xmpp.Node)
+		assert node is None or tofill is None
 
 		assert typ in (None, 'form', 'submit', 'cancel', 'result')
-		assert isinstance(title, basestring) or title is None
-		assert isinstance(instructions, basestring) or instructions is None
+		assert title is None or isinstance(title, basestring)
+		assert instructions is None or isinstance(instructions, basestring)
 		assert (fields is None or fields.__iter__)
 
 		xmpp.Node.__init__(self, 'x', node=node)
@@ -186,21 +187,14 @@ class DataForm(xmpp.Node, object):
 		if self.mode is DATAFORM_SINGLE:
 			yield DataRecord(node=self)
 		else:
-			for item in self.getChildren():
-				if not isinstance(item, xmpp.Node): continue
-				if not item.getName()=='item': continue
-				yield DataRecord(node=item)
+			for i in iter_elements(self, 'item'):
+				yield i
 
 	def get_records(self):
 		if self.mode is DATAFORM_SINGLE:
 			return [DataRecord(node=self),]
 		else:
-			items = []
-			for node in self.getChildren():
-				if not isinstance(node, xmpp.Node): continue
-				if not node.getName()=='item': continue
-				items.append(DataRecord(node=node))
-			return items
+			return list(iter_elements(self, 'item'))
 
 	def set_records(self, records):
 		if self.mode is DATAFORM_SINGLE:
@@ -211,10 +205,15 @@ class DataForm(xmpp.Node, object):
 			for field in record.iter_fields():
 				self[field.var]=field.value
 		else:
-			self.del_records(self)
+			self.del_records()
 			for record in records:
 				assert isinstance(record, dict)
-				newitem = self.addChild('item', node=record)
+				newitem = self.addChild('item')
+				for key, value in record.iteritems():
+					newitem.addChild(node=DataField(
+						var=key,
+						value=value,
+						typ=self.get_field(key).type))
 
 	def del_records(self):
 		if self.mode is DATAFORM_SINGLE:
@@ -228,6 +227,22 @@ class DataForm(xmpp.Node, object):
 	records = property(get_records, set_records, del_records,
 		"""Records kept in this form; if in DATAFORM_SINGLE mode, there will be exactly
 		one record, otherwise there might be more or less records.""")
+
+	def iter_fields(self):
+		if self.mode is DATAFORM_SINGLE:
+			container = self
+		else:
+			container = self.getTag("recorded")
+
+		for child in container.getChildren():
+			if isinstance(child, DataField):
+				yield child
+
+	def get_field(self, fieldvar):
+		''' Find DataField that has fieldvar as var. '''
+		for field in self.iter_fields():
+			if field.var == fieldvar: return field
+		raise KeyError, "This form does not contain %r field." % fieldvar
 
 	def get_fields(self):
 		if self.mode is DATAFORM_SINGLE:
@@ -259,16 +274,6 @@ class DataForm(xmpp.Node, object):
 				self.delChild('recorded')
 			except ValueError:
 				pass
-
-	def iter_fields(self):
-		if self.mode is DATAFORM_SINGLE:
-			container = self
-		else:
-			container = self.getTag("recorded")
-
-		for child in container.getChildren():
-			if isinstance(child, DataField):
-				yield child
 
 	fields = property(get_fields, set_fields, del_fields,
 		"""Fields in this form; a list; if in DATAFORM_SINGLE mode, you should not

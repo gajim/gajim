@@ -30,7 +30,7 @@ from common import xmpp, gajim, dataforms
 
 import gtkgui_helpers
 import dialogs
-import dataforms as dataformwidget
+import dataforms_widget
 
 class CommandWindow:
 	'''Class for a window for single ad-hoc commands session. Note, that
@@ -70,7 +70,7 @@ class CommandWindow:
 			self.__dict__[name] = self.xml.get_widget(name)
 
 		# creating data forms widget
-		self.data_form_widget = dataformwidget.DataFormWidget()
+		self.data_form_widget = dataforms_widget.DataFormWidget()
 		self.data_form_widget.show()
 		self.sending_form_stage_vbox.pack_start(self.data_form_widget)
 
@@ -497,14 +497,18 @@ class CommandWindow:
 	def send_cancel(self):
 		'''Send the command with action='cancel'. '''
 		assert self.commandnode is not None
-		assert self.sessionid is not None
-
-		stanza = xmpp.Iq(typ='set', to=self.jid)
-		stanza.addChild('command', attrs={
-				'xmlns':xmpp.NS_COMMANDS,
-				'node':self.commandnode,
-				'sessionid':self.sessionid,
-				'action':'cancel'
-			})
-
-		self.account.connection.send(stanza)
+		if self.sessionid is not None:
+			# we already have sessionid, so the service sent at least one reply.
+			stanza = xmpp.Iq(typ='set', to=self.jid)
+			stanza.addChild('command', attrs={
+					'xmlns':xmpp.NS_COMMANDS,
+					'node':self.commandnode,
+					'sessionid':self.sessionid,
+					'action':'cancel'
+				})
+	
+			self.account.connection.send(stanza)
+		else:
+			# we did not received any reply from service; TODO: we should wait and
+			# then send cancel; for now we do nothing
+			pass
