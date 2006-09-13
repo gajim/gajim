@@ -221,7 +221,7 @@ _('Connection with peer cannot be established.'))
 		else:
 			file_name = file_props['name']
 		sectext = '\t' + _('Filename: %s') % file_name
-		sectext += '\n\t' + _('Sender: %s') % jid
+		sectext += '\n\t' + _('Recipient: %s') % jid
 		dialogs.ErrorDialog(_('File transfer stopped by the contact of the other side'), \
 			sectext)
 		self.tree.get_selection().unselect_all()
@@ -328,7 +328,7 @@ _('Connection with peer cannot be established.'))
 				else:
 					dirname = os.path.dirname(file_path)
 					if not os.access(dirname, os.W_OK):
-						dialogs.ErrorDialog(_('Directory "%s" is not writable' % dirname), _('You do not have permission to create files in this directory.'))
+						dialogs.ErrorDialog(_('Directory "%s" is not writable') % dirname, _('You do not have permission to create files in this directory.'))
 						return
 				dialog2.destroy()
 				self._start_receive(file_path, account, contact, file_props)
@@ -445,12 +445,11 @@ _('Connection with peer cannot be established.'))
 				jid = gajim.get_jid_without_resource(other)
 			else: # It's a Contact instance
 				jid = other.jid
-			if gajim.awaiting_events[account].has_key(jid):
-				for event in gajim.awaiting_events[account][jid]:
-					if event[0] in ('file-error', 'file-completed',
-						'file-request-error', 'file-send-error', 'file-stopped') and \
-						event[1]['sid'] == file_props['sid']:
-						gajim.interface.remove_event(account, jid, event)
+			for ev_type in ('file-error', 'file-completed', 'file-request-error',
+			'file-send-error', 'file-stopped'):
+				for event in gajim.events.get_events(account, jid, [ev_type]):
+					if event.parameters[1]['sid'] == file_props['sid']:
+						gajim.events.remove_events(account, jid, event)
 		del(self.files_props[sid[0]][sid[1:]])
 		del(file_props)
 		

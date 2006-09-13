@@ -50,6 +50,8 @@ class MessageTextView(gtk.TextView):
 		self.set_pixels_above_lines(2)
 		self.set_pixels_below_lines(2)
 
+		self.lang = None # Lang used for spell checking
+
 	def destroy(self):
 		import gc
 		gobject.idle_add(lambda:gc.collect())

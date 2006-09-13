@@ -126,8 +126,8 @@ def get_default_font():
 		# in try because daemon may not be there
 		client = gconf.client_get_default()
 
-		return helpers.ensure_unicode_string(
-			client.get_string('/desktop/gnome/interface/font_name'))
+		return client.get_string('/desktop/gnome/interface/font_name'
+			).decode('utf-8')
 	except:
 		pass
 
@@ -147,8 +147,7 @@ def get_default_font():
 			for line in file(xfce_config_file):
 				if line.find('name="Gtk/FontName"') != -1:
 					start = line.find('value="') + 7
-					return helpers.ensure_unicode_string(
-						line[start:line.find('"', start)])
+					return line[start:line.find('"', start)].decode('utf-8')
 		except:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % xfce_config_file
@@ -163,7 +162,7 @@ def get_default_font():
 					font_name = values[0]
 					font_size = values[1]
 					font_string = '%s %s' % (font_name, font_size) # Verdana 9
-					return helpers.ensure_unicode_string(font_string)
+					return font_string.decode('utf-8')
 		except:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % kde_config_file
@@ -406,7 +405,7 @@ def possibly_move_window_in_current_desktop(window):
 		if current_virtual_desktop_no != window_virtual_desktop:
 			# we are in another VD that the window was
 			# so show it in current VD
-			window.show()
+			window.present()
 
 def file_is_locked(path_to_file):
 	'''returns True if file is locked (WINDOWS ONLY)'''
@@ -458,7 +457,7 @@ def _get_fade_color(treeview, selected, focused):
 
 def get_scaled_pixbuf(pixbuf, kind):
 	'''returns scaled pixbuf, keeping ratio etc or None
-	kind is either "chat" or "roster" or "notification" or "tooltip"'''
+	kind is either "chat", "roster", "notification", "tooltip", "vcard"'''
 	
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)

@@ -32,12 +32,89 @@ if dbus_support.supported:
 		import dbus.glib
 		import dbus.service
 
-def notify(event, jid, account, parameters):
+def get_show_in_roster(event, account, contact):
+	'''Return True if this event must be shown in roster, else False'''
+	num = get_advanced_notification(event, account, contact)
+	if num != None:
+		if gajim.config.get_per('notifications', str(num), 'roster') == 'yes':
+			return True
+		if gajim.config.get_per('notifications', str(num), 'roster') == 'no':
+			return False
+	if event == 'message_received':
+		chat_control = helpers.get_chat_control(account, contact)
+		if not chat_control:
+			return True
+	elif event == 'ft_request':
+		return True
+	return False
+
+def get_show_in_systray(event, account, contact):
+	'''Return True if this event must be shown in roster, else False'''
+	num = get_advanced_notification(event, account, contact)
+	if num != None:
+		if gajim.config.get_per('notifications', str(num), 'systray') == 'yes':
+			return True
+		if gajim.config.get_per('notifications', str(num), 'systray') == 'no':
+			return False
+	if event in ('message_received', 'ft_request', 'gc_msg_highlight',
+	'ft_request'):
+		return True
+	return False
+
+def get_advanced_notification(event, account, contact):
+	'''Returns the number of the first advanced notification or None'''
+	num = 0
+	notif = gajim.config.get_per('notifications', str(num))
+	while notif:
+		recipient_ok = False
+		status_ok = False
+		tab_opened_ok = False
+		# test event
+		if gajim.config.get_per('notifications', str(num), 'event') == event:
+			# test recipient
+			recipient_type = gajim.config.get_per('notifications', str(num),
+				'recipient_type')
+			recipients = gajim.config.get_per('notifications', str(num),
+				'recipients').split()
+			if recipient_type == 'all':
+				recipient_ok = True
+			elif recipient_type == 'contact' and contact.jid in recipients:
+				recipient_ok = True
+			elif recipient_type == 'group':
+				for group in contact.groups:
+					if group in contact.groups:
+						recipient_ok = True
+						break
+		if recipient_ok:
+			# test status
+			our_status = gajim.SHOW_LIST[gajim.connections[account].connected]
+			status = gajim.config.get_per('notifications', str(num), 'status')
+			if status == 'all' or our_status in status.split():
+				status_ok = True
+		if status_ok:
+			# test window_opened
+			tab_opened = gajim.config.get_per('notifications', str(num),
+				'tab_opened')
+			if tab_opened == 'both':
+				tab_opened_ok = True
+			else:
+				chat_control = helper.get_chat_control(account, contact)
+				if (chat_control and tab_opened == 'yes') or (not chat_control and \
+				tab_opened == 'no'):
+					tab_opened_ok = True
+		if tab_opened_ok:
+			return num
+
+		num += 1
+		notif = gajim.config.get_per('notifications', str(num))
+
+def notify(event, jid, account, parameters, advanced_notif_num = None):
 	'''Check what type of notifications we want, depending on basic configuration
 	of notifications and advanced one and do these notifications'''
 	# First, find what notifications we want
 	do_popup = False
 	do_sound = False
+	do_cmd = False
 	if (event == 'status_change'):
 		new_show = parameters[0]
 		status_message = parameters[1]
@@ -51,9 +128,8 @@ def notify(event, jid, account, parameters):
 		if account_server in gajim.block_signed_in_notifications and \
 		gajim.block_signed_in_notifications[account_server]:
 			block_transport = True
-		if gajim.config.get('notify_on_signin') and \
-		not gajim.block_signed_in_notifications[account] and not block_transport \
-		and helpers.allow_showing_notification(account):
+		if helpers.allow_showing_notification(account, 'notify_on_signin') and \
+		not gajim.block_signed_in_notifications[account] and not block_transport:
 			do_popup = True
 		if gajim.config.get_per('soundevents', 'contact_connected',
 		'enabled') and not gajim.block_signed_in_notifications[account] and \
@@ -61,8 +137,7 @@ def notify(event, jid, account, parameters):
 			do_sound = True
 	elif (event == 'contact_disconnected'):
 		status_message = parameters
-		if gajim.config.get('notify_on_signout') \
-			and helpers.allow_showing_notification(account):
+		if helpers.allow_showing_notification(account, 'notify_on_signout'):
 			do_popup = True
 		if gajim.config.get_per('soundevents', 'contact_disconnected',
 			'enabled'):
@@ -72,17 +147,21 @@ def notify(event, jid, account, parameters):
 		first = parameters[1]
 		nickname = parameters[2]
 		message = parameters[3]
-		if gajim.config.get('notify_on_new_message') and \
-			helpers.allow_showing_notification(account) and first:
+		if helpers.allow_showing_notification(account, 'notify_on_new_message',
+		advanced_notif_num, first):
 			do_popup = True
-		if first and gajim.config.get_per('soundevents', 'first_message_received',
-			'enabled'):
+		if first and helpers.allow_sound_notification('first_message_received',
+		advanced_notif_num):
 			do_sound = True
-		elif not first and gajim.config.get_per('soundevents', 'next_message_received',
-			'enabled'):
+		elif not first and helpers.allow_sound_notification(
+		'next_message_received', advanced_notif_num):
 			do_sound = True
 	else:
 		print '*Event not implemeted yet*'
+
+	if advanced_notif_num != None and gajim.config.get_per('notifications',
+	str(advanced_notif_num), 'run_command'):
+		do_cmd = True
 			
 	# Do the wanted notifications	
 	if (do_popup):
@@ -161,14 +240,34 @@ def notify(event, jid, account, parameters):
 				path_to_image = path, title = title, text = text)
 
 	if (do_sound):
+		snd_file = None
+		snd_event = None # If not snd_file, play the event
 		if (event == 'new_message'):
-			if first:
-				 helpers.play_sound('first_message_received')
+			if advanced_notif_num != None and gajim.config.get_per('notifications',
+			str(advanced_notif_num), 'sound') == 'yes':
+				snd_file = gajim.config.get_per('notifications',
+					str(advanced_notif_num), 'sound_file')
+			elif advanced_notif_num != None and gajim.config.get_per(
+			'notifications', str(advanced_notif_num), 'sound') == 'no':
+				pass # do not set snd_event
+			elif first:
+				snd_event = 'first_message_received'
 			else:
-				 helpers.play_sound('next_message_received')
+				snd_event = 'next_message_received'
 		elif event in ('contact_connected', 'contact_disconnected'):
-			helpers.play_sound(event)
-	 
+			snd_event = event
+		if snd_file:
+			helpers.play_sound_file(snd_file)
+		if snd_event:
+			helpers.play_sound(snd_event)
+
+	if do_cmd:
+		command = gajim.config.get_per('notifications', str(advanced_notif_num),
+			'command')
+		try:
+			helpers.exec_command(command)
+		except:
+			pass
 
 def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 	title = None, text = None):
@@ -283,6 +382,8 @@ class DesktopNotification:
 			ntype = 'im.invitation'
 		elif event_type == _('Contact Changed Status'):
 			ntype = 'presence.status'
+		elif event_type == _('Connection Failed'):
+			ntype = 'connection.failed'
 		else:
 			# default failsafe values
 			self.path_to_image = os.path.abspath(

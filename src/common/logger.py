@@ -78,30 +78,50 @@ class Constants:
 			self.SHOW_OFFLINE
 		) = range(6)
 
+		(
+			self.TYPE_AIM,
+			self.TYPE_GG,
+			self.TYPE_HTTP_WS,
+			self.TYPE_ICQ,
+			self.TYPE_MSN,
+			self.TYPE_QQ,
+			self.TYPE_SMS,
+			self.TYPE_SMTP,
+			self.TYPE_TLEN,
+			self.TYPE_YAHOO,
+			self.TYPE_NEWMAIL,
+			self.TYPE_RSS,
+			self.TYPE_WEATHER,
+		) = range(13)
+
 constants = Constants()
 
 class Logger:
 	def __init__(self):
 		self.jids_already_in = [] # holds jids that we already have in DB
-		
+		self.con = None
+
 		if not os.path.exists(LOG_DB_PATH):
 			# this can happen only the first time (the time we create the db)
 			# db is not created here but in src/common/checks_paths.py
 			return
 		self.init_vars()
-		
+
 	def init_vars(self):
 		# if locked, wait up to 20 sec to unlock
 		# before raise (hopefully should be enough)
+		if self.con:
+			self.con.close()
 		self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 			isolation_level = 'IMMEDIATE')
 		self.cur = self.con.cursor()
-		
+
 		self.get_jids_already_in_db()
 
 	def get_jids_already_in_db(self):
 		self.cur.execute('SELECT jid FROM jids')
 		rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+		self.jids_already_in = []
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
@@ -192,7 +212,66 @@ class Logger:
 			show_col = 'UNKNOWN'
 		
 		return kind_col, show_col
-	
+
+	def convert_human_transport_type_to_db_api_values(self, type_):
+		'''converts from string style to constant ints for db'''
+		if type_ == 'aim':
+			return constants.TYPE_AIM
+		if type_ == 'gadu-gadu':
+			return constants.TYPE_GG
+		if type_ == 'http-ws':
+			return constants.TYPE_HTTP_WS
+		if type_ == 'icq':
+			return constants.TYPE_ICQ
+		if type_ == 'msn':
+			return constants.TYPE_MSN
+		if type_ == 'qq':
+			return constants.TYPE_QQ
+		if type_ == 'sms':
+			return constants.TYPE_SMS
+		if type_ == 'smtp':
+			return constants.TYPE_SMTP
+		if type_ == 'tlen':
+			return constants.TYPE_TLEN
+		if type_ == 'yahoo':
+			return constants.TYPE_YAHOO
+		if type_ == 'newmail':
+			return constants.TYPE_NEWMAIL
+		if type_ == 'rss':
+			return constants.TYPE_RSS
+		if type_ == 'weather':
+			return constants.TYPE_WEATHER
+		return None
+
+	def convert_api_values_to_human_transport_type(self, type_id):
+		'''converts from constant ints for db to string style'''
+		if type_id == constants.TYPE_AIM:
+			return 'aim'
+		if type_id == constants.TYPE_GG:
+			return 'gadu-gadu'
+		if type_id == constants.TYPE_HTTP_WS:
+			return 'http-ws'
+		if type_id == constants.TYPE_ICQ:
+			return 'icq'
+		if type_id == constants.TYPE_MSN:
+			return 'msn'
+		if type_id == constants.TYPE_QQ:
+			return 'qq'
+		if type_id == constants.TYPE_SMS:
+			return 'sms'
+		if type_id == constants.TYPE_SMTP:
+			return 'smtp'
+		if type_id == constants.TYPE_TLEN:
+			return 'tlen'
+		if type_id == constants.TYPE_YAHOO:
+			return 'yahoo'
+		if type_id == constants.TYPE_NEWMAIL:
+			return 'newmail'
+		if type_id == constants.TYPE_RSS:
+			return 'rss'
+		if type_id == constants.TYPE_WEATHER:
+			return 'weather'
+
 	def commit_to_db(self, values, write_unread = False):
 		#print 'saving', values
 		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
@@ -238,25 +317,8 @@ class Logger:
 			self.cur.execute(
 				'SELECT message_id from unread_messages WHERE jid_id = %d' % jid_id)
 			results = self.cur.fetchall()
-		# Remove before 0.10
 		except:
-			try:
-				self.cur.executescript('DROP TABLE unread_messages;')
-				self.con.commit()
-			except:
-				pass
-			try:
-				self.cur.executescript('''CREATE TABLE unread_messages(
-					message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-					jid_id INTEGER
-					);''')
-				self.con.commit()
-			except:
-				pass
-			self.con.close()
-			self.jids_already_in = []
-			self.init_vars()
-			return []
+			pass
 
 		for message in results:
 			msg_id = message[0]
@@ -515,3 +577,43 @@ class Logger:
 			jid_id = self.get_jid_id(jid)
 			where_sql = 'jid_id = %s' % jid_id
 		return where_sql
+
+	def save_transport_type(self, jid, type_):
+		'''save the type of the transport in DB'''
+		type_id = self.convert_human_transport_type_to_db_api_values(type_)
+		if not type_id:
+			# unknown type
+			return
+		self.cur.execute(
+			'SELECT type from transports_cache WHERE transport = "%s"' % jid)
+		results = self.cur.fetchall()
+		if results:
+			result = results[0][0]
+			if result == type_id:
+				return
+			self.cur.execute(
+				'UPDATE transports_cache SET type = %d WHERE transport = "%s"' % (type_id,
+					jid))
+			try:
+				self.con.commit()
+			except sqlite.OperationalError, e:
+				print >> sys.stderr, str(e)
+			return
+		self.cur.execute(
+			'INSERT INTO transports_cache VALUES ("%s", %d)' % (jid, type_id))
+		try:
+			self.con.commit()
+		except sqlite.OperationalError, e:
+			print >> sys.stderr, str(e)
+
+	def get_transports_type(self):
+		'''return all the type of the transports in DB'''
+		self.cur.execute(
+			'SELECT * from transports_cache')
+		results = self.cur.fetchall()
+		if not results:
+			return {}
+		answer = {}
+		for result in results:
+			answer[result[0]] = self.convert_api_values_to_human_transport_type(result[1])
+		return answer

@@ -12,7 +12,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1241">
+	<widget class="GtkImage" id="image1235">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-network</property>
 	  <property name="icon_size">1</property>
@@ -32,7 +32,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1242">
+	<widget class="GtkImage" id="image1236">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-connect</property>
 	  <property name="icon_size">1</property>
@@ -46,13 +46,21 @@
   </child>
 
   <child>
+    <widget class="GtkMenuItem" id="open_gmail_inbox_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Open Gmail Inbox</property>
+      <property name="use_underline">True</property>
+    </widget>
+  </child>
+
+  <child>
     <widget class="GtkImageMenuItem" id="new_message_menuitem">
       <property name="visible">True</property>
       <property name="label" translatable="yes">Send Single _Message...</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1243">
+	<widget class="GtkImage" id="image1237">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -72,7 +80,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1244">
+	<widget class="GtkImage" id="image1238">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -92,7 +100,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1245">
+	<widget class="GtkImage" id="image1239">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -132,7 +140,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1247">
+	<widget class="GtkImage" id="image1240">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-preferences</property>
 	  <property name="icon_size">1</property>

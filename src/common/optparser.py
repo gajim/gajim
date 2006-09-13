@@ -144,7 +144,10 @@ class OptionsParser:
 			self.update_config_to_01011()
 		if old < [0, 10, 1, 2] and new >= [0, 10, 1, 2]:
 			self.update_config_to_01012()
+		if old < [0, 10, 1, 3] and new >= [0, 10, 1, 3]:
+			self.update_config_to_01013()
 	
+		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
 	
 	def update_config_x_to_09(self):
@@ -272,3 +275,29 @@ class OptionsParser:
 			self.old_values['emoticons_theme'] == 'Disabled':
 			gajim.config.set('emoticons_theme', '')
 		gajim.config.set('version', '0.10.1.2')
+
+	def update_config_to_01013(self):
+		'''create table transports_cache if there is no such table'''
+		import exceptions
+		try:
+			from pysqlite2 import dbapi2 as sqlite
+		except ImportError:
+			raise exceptions.PysqliteNotAvailable
+		import logger
+
+		con = sqlite.connect(logger.LOG_DB_PATH) 
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE transports_cache (
+					transport TEXT UNIQUE,
+					type INTEGER
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+		gajim.config.set('version', '0.10.1.3')

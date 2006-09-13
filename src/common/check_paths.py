@@ -57,6 +57,11 @@ def create_log_db():
 			jid_id INTEGER
 		);
 		
+		CREATE TABLE transports_cache (
+			transport TEXT UNIQUE,
+			type INTEGER
+		);
+																
 		CREATE TABLE logs(
 			log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid_id INTEGER,

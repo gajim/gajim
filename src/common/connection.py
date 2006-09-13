@@ -84,17 +84,11 @@ class Connection(ConnectionHandlers):
 		self.on_connect_failure = None
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
+		self.muc_jid = {} # jid of muc server for each transport type
+		self.available_transports = {} # list of available transports on this
+		# server {'icq': ['icq.server.com', 'icq2.server.com'], }
+		self.vcard_supported = True
 	# END __init__
-
-	def build_user_nick(self, user_nick):
-		df = common.xmpp.DataForm(typ = 'result')
-		field = df.setField('FORM_TYPE')
-		field.setType('hidden')
-		field.setValue(common.xmpp.NS_PROFILE)
-		field = df.setField('nickname')
-		field.delAttr('type')
-		field.setValue(user_nick)
-		return df
 
 	def put_event(self, ev):
 		if gajim.handlers.has_key(ev[0]):
@@ -143,22 +137,21 @@ class Connection(ConnectionHandlers):
 		if not self.on_purpose:
 			self.disconnect()
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect') \
-				and self.retrycount <= 10:
+			and self.retrycount <= 10:
 				self.connected = 1
 				self.dispatch('STATUS', 'connecting')
-				self.time_to_reconnect = 10
 				# this check has moved from _reconnect method
 				if self.retrycount > 5:
 					self.time_to_reconnect = 20
 				else:
 					self.time_to_reconnect = 10
-				gajim.idlequeue.set_alarm(self._reconnect_alarm, 
-										self.time_to_reconnect)
+				gajim.idlequeue.set_alarm(self._reconnect_alarm,
+					self.time_to_reconnect)
 			elif self.on_connect_failure:
 				self.on_connect_failure()
 				self.on_connect_failure = None
 			else:
-					# show error dialog
+				# show error dialog
 				self._connection_lost()
 		else:
 			self.disconnect()
@@ -168,9 +161,9 @@ class Connection(ConnectionHandlers):
 	def _connection_lost(self):
 		self.disconnect(on_purpose = False)
 		self.dispatch('STATUS', 'offline')
-		self.dispatch('ERROR',
-		(_('Connection with account "%s" has been lost') % self.name,
-		_('To continue sending and receiving messages, you will need to reconnect.')))
+		self.dispatch('CONNECTION_LOST',
+			(_('Connection with account "%s" has been lost') % self.name,
+			_('To continue sending and receiving messages, you will need to reconnect.')))
 
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
@@ -394,7 +387,8 @@ class Connection(ConnectionHandlers):
 			if not self.retrycount and self.connected != 0:
 				self.disconnect(on_purpose = True)
 				self.dispatch('STATUS', 'offline')
-				self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
+				self.dispatch('CONNECTION_LOST',
+					(_('Could not connect to "%s"') % self._hostname,
 					_('Check your connection or try again later.')))
 
 	def _connect_success(self, con, con_type):
@@ -430,7 +424,8 @@ class Connection(ConnectionHandlers):
 		if not con:
 			self.disconnect(on_purpose = True)
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
+			self.dispatch('CONNECTION_LOST',
+				(_('Could not connect to "%s"') % self._hostname,
 				_('Check your connection or try again later')))
 			if self.on_connect_auth:
 				self.on_connect_auth(None)
@@ -712,8 +707,8 @@ class Connection(ConnectionHandlers):
 
 		# JEP-0172: user_nickname
 		if user_nick:
-			df = self.build_user_nick(user_nick)
-			msg_iq.addChild(node = df)
+			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
+				user_nick)
 
 		# chatstates - if peer supports jep85 or jep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
@@ -788,12 +783,10 @@ class Connection(ConnectionHandlers):
 
 		p = common.xmpp.Presence(jid, 'subscribe')
 		if user_nick:
-			df = self.build_user_nick(user_nick)
-			p.addChild(node = df)
+			p.setTag('nick', namespace = common.xmpp.NS_NICK).setData(user_nick)
 		p = self.add_sha(p)
-		if not msg:
-			msg = _('I would like to add you to my roster.')
-		p.setStatus(msg)
+		if msg:
+			p.setStatus(msg)
 		self.connection.send(p)
 
 	def send_authorization(self, jid):
@@ -876,6 +869,10 @@ class Connection(ConnectionHandlers):
 	def request_os_info(self, jid, resource):
 		if not self.connection:
 			return
+		# If we are invisible, do not request
+		if self.connected == gajim.SHOW_LIST.index('invisible'):
+			self.dispatch('OS_INFO', (jid, resource, _('Not fetched because of invisible status'), _('Not fetched because of invisible status')))
+			return
 		to_whom_jid = jid
 		if resource:
 			to_whom_jid += '/' + resource
@@ -932,6 +929,9 @@ class Connection(ConnectionHandlers):
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq2.addChild(name='storage', namespace='storage:metacontacts')
+		id = self.connection.getAnID()
+		iq.setID(id)
+		self.awaiting_answers[id] = (METACONTACTS_ARRIVED, )
 		self.connection.send(iq)
 
 	def store_metacontacts(self, tags_list):

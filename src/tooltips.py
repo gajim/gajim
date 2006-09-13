@@ -282,33 +282,13 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		self.table.set_property('column-spacing', 1)
 		text, single_line = '', ''
 
-		unread_chat = gajim.interface.roster.nb_unread
-		unread_single_chat = 0
-		unread_gc = 0
-		unread_pm = 0
+		unread_chat = gajim.events.get_nb_events(types = ['printed_chat', 'chat'])
+		unread_single_chat = gajim.events.get_nb_events(types = ['normal'])
+		unread_gc = gajim.events.get_nb_events(types = ['printed_gc_msg',
+			'gc_msg'])
+		unread_pm = gajim.events.get_nb_events(types = ['printed_pm', 'pm'])
 
 		accounts = self.get_accounts_info()
-
-		for acct in gajim.connections:
-			# Count unread chat messages
-			chat_t = message_control.TYPE_CHAT
-			for ctrl in gajim.interface.msg_win_mgr.get_controls(chat_t, acct):
-				unread_chat += ctrl.nb_unread
-
-			# Count unread PM messages for which we have a control
-			chat_t = message_control.TYPE_PM
-			for ctrl in gajim.interface.msg_win_mgr.get_controls(chat_t, acct):
-				unread_pm += ctrl.nb_unread
-
-			# we count unread gc/pm messages
-			chat_t = message_control.TYPE_GC
-			for ctrl in gajim.interface.msg_win_mgr.get_controls(chat_t, acct):
-				# These are PMs for which the PrivateChatControl has not yet been
-				# created
-				pm_msgs = ctrl.get_specific_unread()
-				unread_gc += ctrl.nb_unread
-				unread_gc -= pm_msgs
-				unread_pm += pm_msgs
 
 		if unread_chat or unread_single_chat or unread_gc or unread_pm:
 			text = 'Gajim '
@@ -508,8 +488,9 @@ class RosterTooltip(NotificationAreaTooltip):
 		properties = []
 		jid_markup = '<span weight="bold">' + prim_contact.jid + '</span>'
 		properties.append((jid_markup, None))
+
 		properties.append((_('Name: '), gtkgui_helpers.escape_for_pango_markup(
-												prim_contact.get_shown_name())))
+			prim_contact.get_shown_name())))
 		if prim_contact.sub:
 			properties.append(( _('Subscription: '), 
 				gtkgui_helpers.escape_for_pango_markup(helpers.get_uf_sub(prim_contact.sub))))
@@ -532,10 +513,11 @@ class RosterTooltip(NotificationAreaTooltip):
 					contacts_dict[contact.priority].append(contact)
 				else:
 					contacts_dict[contact.priority] = [contact]
-		
-		if num_resources== 1 and contact.resource:
-			properties.append((_('Resource: '),	gtkgui_helpers.escape_for_pango_markup(
-							contact.resource) + ' (' + unicode(contact.priority) + ')'))
+
+		if num_resources == 1 and contact.resource:
+			properties.append((_('Resource: '),
+				gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + \
+				unicode(contact.priority) + ')'))
 		if num_resources > 1:
 			properties.append((_('Status: '),	' '))
 			contact_keys = contacts_dict.keys()

@@ -119,6 +119,13 @@ class PrivateChatControl(ChatControl):
 				return
 
 		ChatControl.send_message(self, message)
+	
+	def update_ui(self):
+		if self.contact.show == 'offline':
+			self.got_disconnected()
+		else:
+			self.got_connected()
+		ChatControl.update_ui(self)
 
 
 class GroupchatControl(ChatControlBase):
@@ -188,10 +195,6 @@ class GroupchatControl(ChatControlBase):
 		self.subject_tooltip = gtk.Tooltips()
 
 		self.tooltip = tooltips.GCTooltip()
-
-		self.allow_focus_out_line = True
-		# holds the iter's offset which points to the end of --- line
-		self.focus_out_end_iter_offset = None
 
 		# connect the menuitems to their respective functions
 		xm = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
@@ -284,12 +287,9 @@ class GroupchatControl(ChatControlBase):
 		column.set_visible(False)
 		self.list_treeview.set_expander_column(column)
 
-		id = self.msg_textview.connect('populate_popup',
-			self.on_msg_textview_populate_popup)
-		self.handlers[id] = self.msg_textview
 		# set an empty subject to show the room_jid
 		self.set_subject('')
-		self.got_disconnected() #init some variables
+		self.got_disconnected() # init some variables
 
 		self.update_ui()
 		self.conv_textview.tv.grab_focus()
@@ -298,20 +298,18 @@ class GroupchatControl(ChatControlBase):
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
 		and the ability to insert a nick'''
+		ChatControlBase.on_msg_textview_populate_popup(self, textview, menu)
 		item = gtk.SeparatorMenuItem()
 		menu.prepend(item)
-		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
-		menu.prepend(item)
-		id = item.connect('activate', self.msg_textview.clear)
-		self.handlers[id] = item
 
 		item = gtk.MenuItem(_('Insert Nickname'))
 		menu.prepend(item)
 		submenu = gtk.Menu()
 		item.set_submenu(submenu)
 
-		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
-			item = gtk.MenuItem(nick)
+		for nick in sorted(gajim.contacts.get_nick_list(self.account,
+		self.room_jid)):
+			item = gtk.MenuItem(nick, use_underline = False)
 			submenu.append(item)
 			id = item.connect('activate', self.append_nick_in_msg_textview, nick)
 			self.handlers[id] = item
@@ -325,7 +323,7 @@ class GroupchatControl(ChatControlBase):
 	def _on_window_focus_in_event(self, widget, event):
 		'''When window gets focus'''
 		if self.parent_win.get_active_jid() == self.room_jid:
-			self.allow_focus_out_line = True
+			self.conv_textview.allow_focus_out_line = True
 	
 	def on_treeview_size_allocate(self, widget, allocation):
 		'''The MUC treeview has resized. Move the hpaned in all tabs to match'''
@@ -443,10 +441,7 @@ class GroupchatControl(ChatControlBase):
 	def on_private_message(self, nick, msg, tim):
 		# Do we have a queue?
 		fjid = self.room_jid + '/' + nick
-		qs = gajim.awaiting_events[self.account]
-		no_queue = True
-		if qs.has_key(fjid):
-			no_queue = False
+		no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
 		# We print if window is opened
 		pm_control = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
@@ -454,9 +449,9 @@ class GroupchatControl(ChatControlBase):
 			pm_control.print_conversation(msg, tim = tim)
 			return
 
-		if no_queue:
-			qs[fjid] = []
-		qs[fjid].append(('chat', (msg, '', 'incoming', tim, False, '')))
+		event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
+			False, '', None))
+		gajim.events.add_event(self.account, fjid, event)
 
 		autopopup = gajim.config.get('autopopup')
 		autopopupaway = gajim.config.get('autopopupaway')
@@ -471,8 +466,6 @@ class GroupchatControl(ChatControlBase):
 						self.room_jid, icon_name = 'message')
 				image = state_images['message']
 				model[iter][C_IMG] = image
-				if gajim.interface.systray_enabled:
-					gajim.interface.systray.add_jid(fjid, self.account, 'pm')
 			self.parent_win.show_title()
 		else:
 			self._start_private_message(nick)
@@ -531,18 +524,19 @@ class GroupchatControl(ChatControlBase):
 		if kind == 'incoming': # it's a message NOT from us
 			# highlighting and sounds
 			(highlight, sound) = self.highlighting_for_message(text, tim)
-			gc_class=self.__class__
-			if gc_class.gc_custom_colors.has_key(contact):
+			if self.gc_custom_colors.has_key(contact):
 				other_tags_for_name.append('gc_nickname_color_' + \
-					str(gc_class.gc_custom_colors[contact]))
+					str(self.gc_custom_colors[contact]))
 			else:
-				gc_class.gc_count_nicknames_colors += 1
-				gc_class.gc_custom_colors[contact] = gc_class.gc_count_nicknames_colors
+				self.gc_count_nicknames_colors += 1
+				number_of_colors = len(gajim.config.get('gc_nicknames_colors').\
+					split(':'))
+				if self.gc_count_nicknames_colors == number_of_colors:
+					self.gc_count_nicknames_colors = 0				
+				self.gc_custom_colors[contact] = \
+					self.gc_count_nicknames_colors
 				other_tags_for_name.append('gc_nickname_color_' + \
-					str(gc_class.gc_count_nicknames_colors))
-				number_of_colors = len(gajim.config.get('gc_nicknames_colors').split(':'))
-				if gc_class.gc_count_nicknames_colors == number_of_colors:
-					gc_class.gc_count_nicknames_colors = 0				
+					str(self.gc_count_nicknames_colors))
 			if highlight:
 				# muc-specific chatstate
 				self.parent_win.redraw_tab(self, 'attention')
@@ -552,11 +546,22 @@ class GroupchatControl(ChatControlBase):
 				helpers.play_sound('muc_message_received')
 			elif sound == 'highlight':
 				helpers.play_sound('muc_message_highlight')
+			if text.startswith('/me ') or text.startswith('/me\n'):
+				other_tags_for_text.append('gc_nickname_color_' + \
+					str(self.gc_custom_colors[contact]))
 
 			self.check_and_possibly_add_focus_out_line()
 
 		ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
 			other_tags_for_name, [], other_tags_for_text)
+
+	def get_nb_unread(self):
+		nb = len(gajim.events.get_events(self.account, self.room_jid,
+			['printed_gc_msg']))
+		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+			nb += len(gajim.events.get_events(self.account, self.room_jid + '/' + \
+				nick, ['pm']))
+		return nb
 
 	def highlighting_for_message(self, text, tim):
 		'''Returns a 2-Tuple. The first says whether or not to highlight the
@@ -594,64 +599,7 @@ class GroupchatControl(ChatControlBase):
 			# we have full focus (we are reading it!)
 			return
 
-		if not self.allow_focus_out_line:
-			# if room did not receive focus-in from the last time we added
-			# --- line then do not readd
-			return
-
-		print_focus_out_line = False
-		buffer = self.conv_textview.tv.get_buffer()
-
-		if self.focus_out_end_iter_offset is None:
-			# this happens only first time we focus out on this room
-			print_focus_out_line = True
-
-		else:
-			if self.focus_out_end_iter_offset != buffer.get_end_iter().get_offset():
-				# this means after last-focus something was printed
-				# (else end_iter's offset is the same as before)
-				# only then print ---- line (eg. we avoid printing many following
-				# ---- lines)
-				print_focus_out_line = True
-
-		if print_focus_out_line and buffer.get_char_count() > 0:
-			buffer.begin_user_action()
-
-			# remove previous focus out line if such focus out line exists
-			if self.focus_out_end_iter_offset is not None:
-				end_iter_for_previous_line = buffer.get_iter_at_offset(
-					self.focus_out_end_iter_offset)
-				begin_iter_for_previous_line = end_iter_for_previous_line.copy()
-				begin_iter_for_previous_line.backward_chars(2) # img_char+1 (the '\n')
-
-				# remove focus out line
-				buffer.delete(begin_iter_for_previous_line,
-					end_iter_for_previous_line)
-
-			# add the new focus out line
-			# FIXME: Why is this loaded from disk everytime
-			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
-			focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
-			end_iter = buffer.get_end_iter()
-			buffer.insert(end_iter, '\n')
-			buffer.insert_pixbuf(end_iter, focus_out_line_pixbuf)
-
-			end_iter = buffer.get_end_iter()
-			before_img_iter = end_iter.copy()
-			before_img_iter.backward_char() # one char back (an image also takes one char)
-			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
-			#FIXME: remove this workaround when bug is fixed
-			# c http://bugzilla.gnome.org/show_bug.cgi?id=318569
-
-			self.allow_focus_out_line = False
-
-			# update the iter we hold to make comparison the next time
-			self.focus_out_end_iter_offset = buffer.get_end_iter().get_offset()
-
-			buffer.end_user_action()
-
-			# scroll to the end (via idle in case the scrollbar has appeared)
-			gobject.idle_add(self.conv_textview.scroll_to_end)
+		self.conv_textview.show_focus_out_line()
 
 	def needs_visual_notification(self, text):
 		'''checks text to see whether any of the words in (muc_highlight_words
@@ -747,7 +695,7 @@ class GroupchatControl(ChatControlBase):
 		model = self.list_treeview.get_model()
 		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		state_images = gajim.interface.roster.jabber_state_images['16']
-		if gajim.awaiting_events[self.account].has_key(self.room_jid + '/' + nick):
+		if len(gajim.events.get_events(self.account, self.room_jid + '/' + nick)):
 			image = state_images['message']
 		else:
 			image = state_images[gc_contact.show]
@@ -830,6 +778,9 @@ class GroupchatControl(ChatControlBase):
 					# after that, but that doesn't hurt
 					self.add_contact_to_roster(new_nick, show, role, affiliation,
 						status, jid)
+					# keep nickname color
+					if nick in self.gc_custom_colors:
+						self.gc_custom_colors[new_nick] = self.gc_custom_colors[nick]
 				# rename vcard / avatar
 				puny_jid = helpers.sanitize_filename(self.room_jid)
 				puny_nick = helpers.sanitize_filename(nick)
@@ -848,7 +799,8 @@ class GroupchatControl(ChatControlBase):
 						os.rename(old_file, files[old_file])
 				self.print_conversation(s, 'info')
 
-			if not gajim.awaiting_events[self.account].has_key(self.room_jid + '/' + nick):
+			if len(gajim.events.get_events(self.account,
+			self.room_jid + '/' + nick)) == 0:
 				self.remove_contact(nick)
 			else:
 				c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
@@ -893,15 +845,18 @@ class GroupchatControl(ChatControlBase):
 					break
 			if print_status is None:
 				print_status = gajim.config.get('print_status_in_muc')
+			nick_jid = nick
+			if jid:
+				nick_jid += ' (%s)' % jid
 			if show == 'offline' and print_status in ('all', 'in_and_out'):
-				st = _('%s has left') % nick
+				st = _('%s has left') % nick_jid
 				if reason:
 					st += ' [%s]' % reason
 			else:
 				if newly_created and print_status in ('all', 'in_and_out'):
-					st = _('%s has joined the room') % nick
+					st = _('%s has joined the room') % nick_jid
 				elif print_status == 'all':
-					st = _('%s is now %s') % (nick, helpers.get_uf_show(show))
+					st = _('%s is now %s') % (nick_jid, helpers.get_uf_show(show))
 			if st:
 				if status:
 					st += ' (' + status + ')'
@@ -1030,7 +985,8 @@ class GroupchatControl(ChatControlBase):
 			if len(message_array):
 				message_array = message_array[0].split()
 				nick = message_array.pop(0)
-				room_nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+				room_nicks = gajim.contacts.get_nick_list(self.account,
+					self.room_jid)
 				if nick in room_nicks:
 					privmsg = ' '.join(message_array)
 					self.on_send_pm(nick=nick, msg=privmsg)
@@ -1334,9 +1290,8 @@ class GroupchatControl(ChatControlBase):
 		nb = 0
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			fjid = self.room_jid + '/' + nick
-			if gajim.awaiting_events[self.account].has_key(fjid):
-				# gc can only have messages as event
-				nb += len(gajim.awaiting_events[self.account][fjid])
+			nb += len(gajim.events.get_events(self.account, fjid))
+			# gc can only have messages as event
 		return nb
 
 	def _on_change_subject_menuitem_activate(self, widget):

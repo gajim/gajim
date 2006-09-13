@@ -21,7 +21,6 @@
 import gtk
 import gobject
 import os
-import sys
 
 import gtkgui_helpers
 import vcard
@@ -44,85 +43,97 @@ from common import helpers
 
 class EditGroupsDialog:
 	'''Class for the edit group dialog window'''
-	def __init__(self, user, account):
+	def __init__(self, list_):
+		'''list_ is a list of (contact, account) tuples'''
 		self.xml = gtkgui_helpers.get_glade('edit_groups_dialog.glade')
 		self.dialog = self.xml.get_widget('edit_groups_dialog')
-		self.account = account
-		self.user = user
+		self.dialog.set_transient_for(gajim.interface.roster.window)
+		self.list_ = list_
 		self.changes_made = False
 		self.list = self.xml.get_widget('groups_treeview')
-		self.xml.get_widget('nickname_label').set_markup(
-			_("Contact's name: <i>%s</i>") % user.get_shown_name())
-		self.xml.get_widget('jid_label').set_markup(
-			_('JID: <i>%s</i>') % user.jid)
-		
+		if len(list_) == 1:
+			contact = list_[0][0]
+			self.xml.get_widget('nickname_label').set_markup(
+				_("Contact name: <i>%s</i>") % contact.get_shown_name())
+			self.xml.get_widget('jid_label').set_markup(
+				_('JID: <i>%s</i>') % contact.jid)
+		else:
+			self.xml.get_widget('nickname_label').set_no_show_all(True)
+			self.xml.get_widget('nickname_label').hide()
+			self.xml.get_widget('jid_label').set_no_show_all(True)
+			self.xml.get_widget('jid_label').hide()
+
 		self.xml.signal_autoconnect(self)
 		self.init_list()
 
 	def run(self):
 		self.dialog.show_all()
 		if self.changes_made:
-			gajim.connections[self.account].update_contact(self.user.jid,
-				self.user.name, self.user.groups)
+			for (contact, account) in self.list_:
+				gajim.connections[account].update_contact(contact.jid, contact.name,
+					contact.groups)
 
 	def on_edit_groups_dialog_response(self, widget, response_id):
 		if response_id == gtk.RESPONSE_CLOSE:
 			self.dialog.destroy()
 
 	def update_contact(self):
-		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
-		if not tag:
-			gajim.interface.roster.remove_contact(self.user, self.account)
-			gajim.interface.roster.add_contact_to_roster(self.user.jid,
-				self.account)
-			gajim.connections[self.account].update_contact(self.user.jid,
-				self.user.name, self.user.groups)
-			return
-		all_jid = gajim.contacts.get_metacontacts_jids(tag)
-		for _account in all_jid:
-			if not gajim.interface.roster.regroup and _account != self.account:
+		for (contact, account) in self.list_:
+			tag = gajim.contacts.get_metacontacts_tag(account, contact.jid)
+			if not tag:
+				gajim.interface.roster.remove_contact(contact, account)
+				gajim.interface.roster.add_contact_to_roster(contact.jid, account)
+				gajim.connections[account].update_contact(contact.jid, contact.name,
+					contact.groups)
 				continue
-			for _jid in all_jid[_account]:
-				c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
-				if not c:
+			all_jid = gajim.contacts.get_metacontacts_jids(tag)
+			for _account in all_jid:
+				if not gajim.interface.roster.regroup and _account != account:
 					continue
-				gajim.interface.roster.remove_contact(c, _account)
-				gajim.interface.roster.add_contact_to_roster(_jid, _account)
-				gajim.connections[_account].update_contact(_jid, c.name, c.groups)
+				for _jid in all_jid[_account]:
+					c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
+					if not c:
+						continue
+					gajim.interface.roster.remove_contact(c, _account)
+					gajim.interface.roster.add_contact_to_roster(_jid, _account)
+					gajim.connections[_account].update_contact(_jid, c.name,
+						c.groups)
 
 	def remove_group(self, group):
-		'''add group group to self.user and all his brothers'''
-		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
-		if not tag:
-			if group in self.user.groups:
-				self.user.groups.remove(group)
-			return
-		all_jid = gajim.contacts.get_metacontacts_jids(tag)
-		for _account in all_jid:
-			if not gajim.interface.roster.regroup and _account != self.account:
+		'''remove group group from all contacts and all their brothers'''
+		for (contact, account) in self.list_:
+			tag = gajim.contacts.get_metacontacts_tag(account, contact.jid)
+			if not tag:
+				if group in contact.groups:
+					contact.groups.remove(group)
 				continue
-			for _jid in all_jid[_account]:
-				contacts = gajim.contacts.get_contact(_account, _jid)
-				for contact in contacts:
-					if group in contact.groups:
-						contact.groups.remove(group)
+			all_jid = gajim.contacts.get_metacontacts_jids(tag)
+			for _account in all_jid:
+				if not gajim.interface.roster.regroup and _account != account:
+					continue
+				for _jid in all_jid[_account]:
+					contacts = gajim.contacts.get_contact(_account, _jid)
+					for c in contacts:
+						if group in c.groups:
+							c.groups.remove(group)
 
 	def add_group(self, group):
-		'''add group group to self.user and all his brothers'''
-		tag = gajim.contacts.get_metacontacts_tag(self.account, self.user.jid)
-		if not tag:
-			if group not in self.user.groups:
-				self.user.groups.append(group)
-			return
-		all_jid = gajim.contacts.get_metacontacts_jids(tag)
-		for _account in all_jid:
-			if not gajim.interface.roster.regroup and _account != self.account:
+		'''add group group to all contacts and all their brothers'''
+		for (contact, account) in self.list_:
+			tag = gajim.contacts.get_metacontacts_tag(account, contact.jid)
+			if not tag:
+				if group not in contact.groups:
+					contact.groups.append(group)
 				continue
-			for _jid in all_jid[_account]:
-				contacts = gajim.contacts.get_contact(_account, _jid)
-				for contact in contacts:
-					if not group in contact.groups:
-						contact.groups.append(group)
+			all_jid = gajim.contacts.get_metacontacts_jids(tag)
+			for _account in all_jid:
+				if not gajim.interface.roster.regroup and _account != account:
+					continue
+				for _jid in all_jid[_account]:
+					contacts = gajim.contacts.get_contact(_account, _jid)
+					for c in contacts:
+						if not group in c.groups:
+							c.groups.append(group)
 
 	def on_add_button_clicked(self, widget):
 		group = self.xml.get_widget('group_entry').get_text().decode('utf-8')
@@ -136,7 +147,7 @@ class EditGroupsDialog:
 				return
 			iter = model.iter_next(iter)
 		self.changes_made = True
-		model.append((group, True))
+		model.append((group, True, False))
 		self.add_group(group)
 		self.update_contact()
 		self.init_list() # Re-draw list to sort new item
@@ -144,7 +155,11 @@ class EditGroupsDialog:
 	def group_toggled_cb(self, cell, path):
 		self.changes_made = True
 		model = self.list.get_model()
-		model[path][1] = not model[path][1]
+		if model[path][2]:
+			model[path][2] = False
+			model[path][1] = True
+		else:
+			model[path][1] = not model[path][1]
 		group = model[path][0].decode('utf-8')
 		if model[path][1]:
 			self.add_group(group)
@@ -153,23 +168,39 @@ class EditGroupsDialog:
 		self.update_contact()
 
 	def init_list(self):
-		store = gtk.ListStore(str, bool)
+		store = gtk.ListStore(str, bool, bool)
 		self.list.set_model(store)
 		for column in self.list.get_columns(): # Clear treeview when re-drawing
 			self.list.remove_column(column)
-		groups = [] # Store accounts in a list so we can sort them
-		for g in gajim.groups[self.account].keys():
-			if g in helpers.special_groups:
-				continue
-			in_group = False
-			if g in self.user.groups:
-				in_group = True
-			groups.append([g, in_group])
-		groups.sort()			
-		for group in groups:
+		accounts = []
+		# Store groups in a list so we can sort them and the number of contacts in
+		# it
+		groups = {}
+		for (contact, account) in self.list_:
+			if account not in accounts:
+				accounts.append(account)
+				for g in gajim.groups[account].keys():
+					if g in helpers.special_groups:
+						continue
+					if g in groups:
+						continue
+					groups[g] = 0
+			for g in contact.groups:
+				groups[g] += 1
+		group_list = groups.keys()
+		group_list.sort()			
+		for group in group_list:
 			iter = store.append()
-			store.set(iter, 0, group[0]) # Group name
-			store.set(iter, 1, group[1]) # In group boolean
+			store.set(iter, 0, group) # Group name
+			if groups[group] == 0:
+				store.set(iter, 1, False)
+			else:
+				store.set(iter, 1, True)
+				if groups[group] == len(self.list_):
+					# all contacts are in this group
+					store.set(iter, 2, False)
+				else:
+					store.set(iter, 2, True)
 		column = gtk.TreeViewColumn(_('Group'))
 		column.set_expand(True)
 		self.list.append_column(column)
@@ -184,7 +215,7 @@ class EditGroupsDialog:
 		column.pack_start(renderer)
 		renderer.set_property('activatable', True)
 		renderer.connect('toggled', self.group_toggled_cb)
-		column.set_attributes(renderer, active = 1)
+		column.set_attributes(renderer, active = 1, inconsistent = 2)
 
 class PassphraseDialog:
 	'''Class for Passphrase dialog'''
@@ -223,6 +254,7 @@ class ChooseGPGKeyDialog:
 		prompt_label = xml.get_widget('prompt_label')
 		prompt_label.set_text(prompt_text)
 		model = gtk.ListStore(str, str)
+		model.set_sort_func(1, self.sort_keys)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.keys_treeview.set_model(model)
 		#columns
@@ -234,6 +266,17 @@ class ChooseGPGKeyDialog:
 			renderer, text = 1)
 		self.fill_tree(secret_keys, selected)
 		self.window.show_all()
+
+	def sort_keys(self, model, iter1, iter2):
+		value1 = model[iter1][1]
+		value2 = model[iter2][1]
+		if value1 == _('None'):
+			return -1
+		elif value2 == _('None'):
+			return 1
+		elif value1 < value2:
+			return -1
+		return 1
 
 	def run(self):
 		rep = self.window.run()
@@ -261,6 +304,7 @@ class ChangeStatusMessageDialog:
 		self.show = show
 		self.xml = gtkgui_helpers.get_glade('change_status_message_dialog.glade')
 		self.window = self.xml.get_widget('change_status_message_dialog')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		if show:
 			uf_show = helpers.get_uf_show(show)
 			title_text = _('%s Status Message') % uf_show
@@ -361,6 +405,12 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
+	uid_labels = {'jabber': _('Jabber ID'),
+		'aim': _('AIM Address'),
+		'gadu-gadu': _('GG Number'),
+		'icq': _('ICQ Number'),
+		'msn': _('MSN Address'),
+		'yahoo': _('Yahoo! Address')}
 	def __init__(self, account = None, jid = None, user_nick = None,
 	group = None):
 		self.account = account
@@ -376,87 +426,123 @@ class AddNewContactWindow:
 				self.account = account
 		else:
 			accounts = [self.account]
+		if self.account:
+			location = gajim.interface.instances[self.account]
+		else:
+			location = gajim.interface.instances
+		if location.has_key('add_contact'):
+			location['add_contact'].window.present()
+			# An instance is already opened
+			return
+		location['add_contact'] = self
 		self.xml = gtkgui_helpers.get_glade('add_new_contact_window.glade')
-		self.account_combobox = self.xml.get_widget('account_combobox')
-		self.account_hbox = self.xml.get_widget('account_hbox')
-		self.account_label = self.xml.get_widget('account_label')
 		self.window = self.xml.get_widget('add_new_contact_window')
-		self.uid_entry = self.xml.get_widget('uid_entry')
-		self.protocol_combobox = self.xml.get_widget('protocol_combobox')
-		self.protocol_hbox = self.xml.get_widget('protocol_hbox')
-		self.jid_entry = self.xml.get_widget('jid_entry')
-		self.nickname_entry = self.xml.get_widget('nickname_entry')
+		for w in ('account_combobox', 'account_hbox', 'account_label',
+		'uid_label', 'uid_entry', 'protocol_combobox', 'protocol_jid_combobox',
+		'protocol_hbox', 'nickname_entry', 'message_scrolledwindow',
+		'register_hbox', 'subscription_table', 'add_button',
+		'message_textview', 'connected_label', 'group_comboboxentry'):
+			self.__dict__[w] = self.xml.get_widget(w)
 		if account and len(gajim.connections) >= 2:
 			prompt_text =\
 _('Please fill in the data of the contact you want to add in account %s') %account
 		else:
 			prompt_text = _('Please fill in the data of the contact you want to add')
 		self.xml.get_widget('prompt_label').set_text(prompt_text)
-		self.old_uid_value = ''
-		liststore = gtk.ListStore(str, str)
-		liststore.append(['Jabber', ''])
-		self.agents = ['Jabber']
-		jid_agents = []
+		self.agents = {'jabber': []}
+		# types to which we are not subscribed but account has an agent for it
+		self.available_types = []
 		for acct in accounts:
 			for j in gajim.contacts.get_jid_list(acct):
 				contact = gajim.contacts.get_first_contact_from_jid(acct, j)
-				if _('Transports') in contact.groups and contact.show != 'offline' and\
-						contact.show != 'error':
-					jid_agents.append(j)
-		for a in jid_agents:
-			if a.find('aim') > -1:
-				name = 'AIM'
-			elif a.find('icq') > -1:
-				name = 'ICQ'
-			elif a.find('msn') > -1:
-				name = 'MSN'
-			elif a.find('yahoo') > -1:
-				name = 'Yahoo!'
-			else:
-				name = a
-			liststore.append([name, a])
-			self.agents.append(name)
-		self.protocol_combobox.set_model(liststore)
-		self.protocol_combobox.set_active(0)
-		self.fill_jid()
-		if jid:
-			self.jid_entry.set_text(jid)
-			self.uid_entry.set_sensitive(False)
-			jid_splited = jid.split('@')
-			if jid_splited[1] in jid_agents:
-				uid = jid_splited[0].replace('%', '@')
-				self.uid_entry.set_text(uid)
-				self.protocol_combobox.set_active(jid_agents.index(jid_splited[1])\
-					+ 1)
-			else:
-				self.uid_entry.set_text(jid)
-				self.protocol_combobox.set_active(0)
-			if user_nick:
-				self.nickname_entry.set_text(user_nick)
-			else:
-				self.set_nickname()
-			self.nickname_entry.grab_focus()
-		self.group_comboboxentry = self.xml.get_widget('group_comboboxentry')
+				if _('Transports') in contact.groups:
+					type_ = gajim.get_transport_name_from_jid(j)
+					if self.agents.has_key(type_):
+						self.agents[type_].append(j)
+					else:
+						self.agents[type_] = [j]
+		# Now add the one to which we can register
+		for acct in accounts:
+			for type_ in gajim.connections[account].available_transports:
+				if type_ in self.agents:
+					continue
+				self.agents[type_] = []
+				for jid_ in gajim.connections[account].available_transports[type_]:
+					self.agents[type_].append(jid_)
+				self.available_types.append(type_)
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
+		liststore = gtk.ListStore(str, str)
+		uf_type = {'jabber': 'Jabber', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
+			'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
+		# Jabber as first
+		liststore.append(['Jabber', 'jabber'])
+		for type_ in self.agents:
+			if type_ == 'jabber':
+				continue
+			if type_ in uf_type:
+				liststore.append([uf_type[type_], type_])
+			else:
+				liststore.append([type_, type_])
+		self.protocol_combobox.set_model(liststore)
+		self.protocol_combobox.set_active(0)
+		self.protocol_jid_combobox.set_sensitive(False)
+		self.subscription_table.set_no_show_all(True)
+		self.message_scrolledwindow.set_no_show_all(True)
+		self.register_hbox.set_no_show_all(True)
+		self.register_hbox.hide()
+		self.connected_label.set_no_show_all(True)
+		self.connected_label.hide()
+		liststore = gtk.ListStore(str)
+		self.protocol_jid_combobox.set_model(liststore)
+		self.xml.signal_autoconnect(self)
+		if jid:
+			type_ = gajim.get_transport_name_from_jid(jid) or 'jabber'
+			if type_ == 'jabber':
+				self.uid_entry.set_text(jid)
+			else:
+				uid, transport = gajim.get_room_name_and_server_from_room_jid(jid)
+				self.uid_entry.set_text(uid.replace('%', '@', 1))
+			#set protocol_combobox
+			model = self.protocol_combobox.get_model()
+			iter = model.get_iter_first()
+			i = 0
+			while iter:
+				if model[iter][1] == type_:
+					self.protocol_combobox.set_active(i)
+					break
+				iter = model.iter_next(iter)
+				i += 1
+
+			# set protocol_jid_combobox
+			self.protocol_combobox.set_active(0)
+			model = self.protocol_jid_combobox.get_model()
+			iter = model.get_iter_first()
+			i = 0
+			while iter:
+				if model[iter][0] == transport:
+					self.protocol_combobox.set_active(i)
+					break
+				iter = model.iter_next(iter)
+				i += 1
+			if user_nick:
+				self.nickname_entry.set_text(user_nick)
+			self.nickname_entry.grab_focus()
+		else:
+			self.uid_entry.grab_focus()
 		group_names = []
-		i = 0
 		for acct in accounts:
 			for g in gajim.groups[acct].keys():
 				if g not in helpers.special_groups and g not in group_names:
 					group_names.append(g)
-					self.group_comboboxentry.append_text(g)
-					if group == g:
-						self.group_comboboxentry.set_active(i)
-					i += 1
+		group_names.sort()
+		i = 0
+		for g in group_names:
+			self.group_comboboxentry.append_text(g)
+			if group == g:
+				self.group_comboboxentry.set_active(i)
+			i += 1
 
-		if not jid_agents:
-			# There are no transports, so hide the protocol combobox and label
-			self.protocol_hbox.hide()
-			self.protocol_hbox.set_no_show_all(True)
-			protocol_label = self.xml.get_widget('protocol_label')
-			protocol_label.hide()
-			protocol_label.set_no_show_all(True)
 		if self.account:
 			self.account_label.hide()
 			self.account_hbox.hide()
@@ -468,8 +554,18 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				liststore.append([acct, acct])
 			self.account_combobox.set_model(liststore)
 			self.account_combobox.set_active(0)
-		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+
+	def on_add_new_contact_window_destroy(self, widget):
+		if self.account:
+			location = gajim.interface.instances[self.account]
+		else:
+			location = gajim.interface.instances
+		del location['add_contact']
+
+	def on_register_button_clicked(self, widget):
+		jid = self.protocol_jid_combobox.get_active_text().decode('utf-8')
+		gajim.connections[self.account].request_register_agent_info(jid)
 
 	def on_add_new_contact_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -479,13 +575,20 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		'''When Cancel button is clicked'''
 		self.window.destroy()
 
-	def on_subscribe_button_clicked(self, widget):
+	def on_add_button_clicked(self, widget):
 		'''When Subscribe button is clicked'''
-		jid = self.jid_entry.get_text().decode('utf-8')
-		nickname = self.nickname_entry.get_text().decode('utf-8')
+		jid = self.uid_entry.get_text().decode('utf-8')
 		if not jid:
 			return
-	
+
+		model = self.protocol_combobox.get_model()
+		iter = self.protocol_combobox.get_active_iter()
+		type_ = model[iter][1]
+		if type_ != 'jabber':
+			transport = self.protocol_jid_combobox.get_active_text().decode(
+				'utf-8')
+			jid = jid.replace('@', '%') + '@' + transport
+		
 		# check if jid is conform to RFC and stringprep it
 		try:
 			jid = helpers.parse_jid(jid)
@@ -500,6 +603,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			ErrorDialog(pritext, _('The user ID must not contain a resource.'))
 			return
 
+		nickname = self.nickname_entry.get_text().decode('utf-8') or ''
 		# get value of account combobox, if account was not specified
 		if not self.account:
 			model = self.account_combobox.get_model()
@@ -514,57 +618,81 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				_('This contact is already listed in your roster.'))
 				return
 
-		message_buffer = self.xml.get_widget('message_textview').get_buffer()
-		start_iter = message_buffer.get_start_iter()
-		end_iter = message_buffer.get_end_iter()
-		message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
+		if type_ == 'jabber':
+			message_buffer = self.message_textview.get_buffer()
+			start_iter = message_buffer.get_start_iter()
+			end_iter = message_buffer.get_end_iter()
+			message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
+		else:
+			message= ''
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
 		auto_auth = self.xml.get_widget('auto_authorize_checkbutton').get_active()
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname, auto_auth = auto_auth)
 		self.window.destroy()
-		
-	def fill_jid(self):
-		model = self.protocol_combobox.get_model()
-		index = self.protocol_combobox.get_active()
-		jid = self.uid_entry.get_text().decode('utf-8').strip()
-		if index > 0: # it's not jabber but a transport
-			jid = jid.replace('@', '%')
-		agent = model[index][1].decode('utf-8')
-		if agent:
-			jid += '@' + agent
-		self.jid_entry.set_text(jid)
 
 	def on_protocol_combobox_changed(self, widget):
-		self.fill_jid()
+		model = widget.get_model()
+		iter = widget.get_active_iter()
+		type_ = model[iter][1]
+		model = self.protocol_jid_combobox.get_model()
+		model.clear()
+		if len(self.agents[type_]):
+			for jid_ in self.agents[type_]:
+				model.append([jid_])
+			self.protocol_jid_combobox.set_active(0)
+			self.protocol_jid_combobox.set_sensitive(True)
+		else:
+			self.protocol_jid_combobox.set_sensitive(False)
+		if type_ in self.uid_labels:
+			self.uid_label.set_text(self.uid_labels[type_])
+		else:
+			self.uid_label.set_text(_('User ID'))
+		if type_ == 'jabber':
+			self.message_scrolledwindow.show()
+		else:
+			self.message_scrolledwindow.hide()
+		if type_ in self.available_types:
+			self.register_hbox.set_no_show_all(False)
+			self.register_hbox.show_all()
+			self.connected_label.hide()
+			self.subscription_table.hide()
+			self.add_button.set_sensitive(False)
+		else:
+			self.register_hbox.hide()
+			if type_ != 'jabber':
+				jid = self.protocol_jid_combobox.get_active_text()
+				contact = gajim.contacts.get_first_contact_from_jid(self.account,
+					jid)
+				if contact.show in ('offline', 'error'):
+					self.subscription_table.hide()
+					self.connected_label.show()
+					self.add_button.set_sensitive(False)
+					return
+			self.subscription_table.set_no_show_all(False)
+			self.subscription_table.show_all()
+			self.connected_label.hide()
+			self.add_button.set_sensitive(True)
 
-	def guess_agent(self):
-		uid = self.uid_entry.get_text().decode('utf-8')
-		model = self.protocol_combobox.get_model()
-		
-		#If login contains only numbers, it's probably an ICQ number
-		if uid.isdigit():
-			if 'ICQ' in self.agents:
-				self.protocol_combobox.set_active(self.agents.index('ICQ'))
-				return
+	def transport_signed_in(self, jid):
+		if self.protocol_jid_combobox.get_active_text() == jid:
+			self.register_hbox.hide()
+			self.connected_label.hide()
+			self.subscription_table.set_no_show_all(False)
+			self.subscription_table.show_all()
+			self.add_button.set_sensitive(True)
 
-	def set_nickname(self):
-		uid = self.uid_entry.get_text().decode('utf-8')
-		nickname = self.nickname_entry.get_text().decode('utf-8')
-		if nickname == self.old_uid_value:
-			self.nickname_entry.set_text(uid.split('@')[0])
-			
-	def on_uid_entry_changed(self, widget):
-		uid = self.uid_entry.get_text().decode('utf-8')
-		self.guess_agent()
-		self.set_nickname()
-		self.fill_jid()
-		self.old_uid_value = uid.split('@')[0]
+	def transport_signed_out(self, jid):
+		if self.protocol_jid_combobox.get_active_text() == jid:
+			self.subscription_table.hide()
+			self.connected_label.show()
+			self.add_button.set_sensitive(False)
 
 class AboutDialog:
 	'''Class for about dialog'''
 	def __init__(self):
 		dlg = gtk.AboutDialog()
+		dlg.set_transient_for(gajim.interface.roster.window)
 		dlg.set_name('Gajim')
 		dlg.set_version(gajim.version)
 		s = u'Copyright © 2003-2006 Gajim Team'
@@ -576,7 +704,7 @@ class AboutDialog:
 			% (_('A GTK+ jabber client'), \
 			_('GTK+ Version:'), self.tuple2str(gtk.gtk_version), \
 			_('PyGTK Version:'), self.tuple2str(gtk.pygtk_version)))
-		dlg.set_website('http://www.gajim.org')
+		dlg.set_website('http://www.gajim.org/')
 
 		authors = []
 		authors_file = open('../AUTHORS').read()
@@ -585,7 +713,7 @@ class AboutDialog:
 			if author == 'CURRENT DEVELOPERS:':
 				authors.append(_('Current Developers:'))
 			elif author == 'PAST DEVELOPERS:':
-				authors.append('\n' +_('Past Developers:'))
+				authors.append('\n' + _('Past Developers:'))
 			elif author != '': # Real author line
 				authors.append(author)
 				
@@ -735,7 +863,7 @@ class FileChooserDialog(gtk.FileChooserDialog):
 
 class BindPortError(HigDialog):
 	def __init__(self, port):
-		ErrorDialog(_('Unable to bind to port %s.' % port),
+		ErrorDialog(_('Unable to bind to port %s.') % port,
 			_('Maybe you have another running instance of Gajim. '
 			'File Transfer will be canceled.'))
 
@@ -917,8 +1045,18 @@ class SubscriptionRequestWindow:
 		self.window.destroy()
 
 class JoinGroupchatWindow:
-	def __init__(self, account, server = '', room = '', nick = ''):
+	def __init__(self, account, server = '', room = '', nick = '',
+	automatic = False):
+		'''automatic is a dict like {'invities': []}
+		If automatic is not empty, this means room must be automaticaly configured
+		and when done, invities must be automatically invited'''
+		if server and room:
+			jid = room + '@' + server
+			if jid in gajim.gc_connected[account] and gajim.gc_connected[account][jid]:
+				ErrorDialog(_('You are already in room %s') % jid)
+				raise RuntimeError, 'You are already in this room'
 		self.account = account
+		self.automatic = automatic
 		if nick == '':
 			nick = gajim.nicks[self.account]
 		if gajim.connections[account].connected < 2:
@@ -1019,10 +1157,12 @@ _('You can not join a group chat unless you are connected.'))
 
 	def on_join_button_clicked(self, widget):
 		'''When Join button is clicked'''
-		nickname = self.xml.get_widget('nickname_entry').get_text().decode('utf-8')
+		nickname = self.xml.get_widget('nickname_entry').get_text().decode(
+			'utf-8')
 		room = self.xml.get_widget('room_entry').get_text().decode('utf-8')
 		server = self.xml.get_widget('server_entry').get_text().decode('utf-8')
-		password = self.xml.get_widget('password_entry').get_text().decode('utf-8')
+		password = self.xml.get_widget('password_entry').get_text().decode(
+			'utf-8')
 		jid = '%s@%s' % (room, server)
 		try:
 			jid = helpers.parse_jid(jid)
@@ -1037,7 +1177,9 @@ _('You can not join a group chat unless you are connected.'))
 		if len(self.recently_groupchat) > 10:
 			self.recently_groupchat = self.recently_groupchat[0:10]
 		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
-		
+
+		if self.automatic:
+			gajim.automatic_rooms[self.account][jid] = self.automatic
 		gajim.interface.roster.join_gc_room(self.account, jid, nickname, password)
 
 		self.window.destroy()
@@ -1076,7 +1218,7 @@ class NewChatDialog(InputDialog):
 		if gajim.connections[self.account].connected <= 1:
 			#if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".' % self.account))
+		_('Please make sure you are connected with "%s".') % self.account)
 			return
 
 		if self.completion_dict.has_key(jid):
@@ -1088,7 +1230,7 @@ class NewChatDialog(InputDialog):
 				ErrorDialog(_('Invalid JID'), e[0])
 				return
 			except:
-				ErrorDialog(_('Invalid JID'), _('Unable to parse "%s".' % jid))
+				ErrorDialog(_('Invalid JID'), _('Unable to parse "%s".') % jid)
 				return
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
@@ -1284,10 +1426,13 @@ class SingleMessageWindow:
 		
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL and action == 'send':
 			try:
-				gtkspell.Spell(self.conversation_textview.tv)
-				gtkspell.Spell(self.message_textview)
+				spell1 = gtkspell.Spell(self.conversation_textview.tv)
+				spell2 = gtkspell.Spell(self.message_textview)
+				lang = gajim.config.get('speller_language')
+				if lang:
+					spell1.set_language(lang)
+					spell2.set_language(lang)
 			except gobject.GError, msg:
-				#FIXME: add a ui for this use spell.set_language()
 				ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used'))
 				gajim.config.set('use_speller', False)
 		
@@ -1355,8 +1500,10 @@ class SingleMessageWindow:
 
 	def prepare_widgets_for(self, action):
 		if len(gajim.connections) > 1:
-			#FIXME: for Received with should become 'in'
-			title = _('Single Message with account %s') % self.account
+			if action == 'send':
+				title = _('Single Message using account %s') % self.account
+			else:
+				title = _('Single Message in account %s') % self.account
 		else:
 			title = _('Single Message')
 
@@ -1425,7 +1572,7 @@ class SingleMessageWindow:
 		if gajim.connections[self.account].connected <= 1:
 			# if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".' % self.account))
+		_('Please make sure you are connected with "%s".') % self.account)
 			return
 		to_whom_jid = self.to_entry.get_text().decode('utf-8')
 		if self.completion_dict.has_key(to_whom_jid):
@@ -1452,7 +1599,7 @@ class SingleMessageWindow:
 	def on_reply_button_clicked(self, widget):
 		# we create a new blank window to send and we preset RE: and to jid
 		self.subject = _('RE: %s') % self.subject
-		self.message = _('%s wrote:\n' % self.from_whom) + self.message
+		self.message = _('%s wrote:\n') % self.from_whom + self.message
 		# add > at the begining of each line
 		self.message = self.message.replace('\n', '\n> ') + '\n\n'
 		self.window.destroy()
@@ -1549,7 +1696,7 @@ class XMLConsoleWindow:
 		if gajim.connections[self.account].connected <= 1:
 			#if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".' % self.account))
+		_('Please make sure you are connected with "%s".') % self.account)
 			return
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()
 		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter).decode('utf-8')
@@ -1889,6 +2036,7 @@ class PrivacyListsWindow:
 			'privacy_lists_refresh_button', 'close_privacy_lists_window_button']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)		
 
+		self.draw_privacy_lists_in_combobox()
 		self.privacy_lists_refresh()
 
 		self.enabled = True
@@ -2008,7 +2156,10 @@ class InvitationReceivedDialog:
 	def on_accept_button_clicked(self, widget):
 		self.dialog.destroy()
 		room, server = gajim.get_room_name_and_server_from_room_jid(self.room_jid)
-		JoinGroupchatWindow(self.account, server = server, room = room)
+		try:
+			JoinGroupchatWindow(self.account, server = server, room = room)
+		except RuntimeError:
+			pass
 			
 class ProgressDialog:
 	def __init__(self, title_text, during_text, messages_queue):
@@ -2081,6 +2232,8 @@ class ImageChooserDialog(FileChooserDialog):
 		def on_ok(widget, callback):
 			'''check if file exists and call callback'''
 			path_to_file = self.get_filename()
+			if not path_to_file:
+				return
 			path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
 				(path_to_file,))[0]
 			if os.path.exists(path_to_file):
@@ -2254,8 +2407,6 @@ class AdvancedNotificationsWindow:
 
 		# No rule selected at init time
 		self.conditions_treeview.get_selection().unselect_all()
-		#TODO
-#		self.conditions_treeview.set_cursor(None)
 		self.active_num = -1
 		self.config_vbox.set_sensitive(False)
 		self.delete_button.set_sensitive(False)
@@ -2277,8 +2428,7 @@ class AdvancedNotificationsWindow:
 		if value:
 			self.event_combobox.set_active(self.events_list.index(value))
 		else:
-			#TODO: unselect all
-			pass
+			self.event_combobox.set_active(-1)
 		# recipient_type
 		value = gajim.config.get_per('notifications', str(self.active_num),
 			'recipient_type')
@@ -2286,8 +2436,7 @@ class AdvancedNotificationsWindow:
 			self.recipient_type_combobox.set_active(
 				self.recipient_types_list.index(value))
 		else:
-			#TODO: unselect all
-			pass
+			self.recipient_type_combobox.set_active(-1)
 		# recipient
 		value = gajim.config.get_per('notifications', str(self.active_num),
 			'recipients')
@@ -2457,7 +2606,11 @@ class AdvancedNotificationsWindow:
 	def on_event_combobox_changed(self, widget):
 		if self.active_num < 0:
 			return
-		event = self.events_list[self.event_combobox.get_active()]
+		active = self.event_combobox.get_active()
+		if active == -1:
+			event = ''
+		else:
+			event = self.events_list[active]
 		gajim.config.set_per('notifications', str(self.active_num), 'event',
 			event)
 		self.set_treeview_string()
