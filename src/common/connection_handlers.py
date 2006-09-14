@@ -90,7 +90,7 @@ class ConnectionBytestream:
 			if contact.jid == receiver_jid:
 				file_props['error'] = -5
 				self.remove_transfer(file_props)
-				self.dispatch('FILE_REQUEST_ERROR', (contact.jid, file_props))
+				self.dispatch('FILE_REQUEST_ERROR', (contact.jid, file_props, ''))
 			sender_jid = unicode(file_props['sender']).split('/')[0]
 			if contact.jid == sender_jid:
 				file_props['error'] = -3
@@ -179,7 +179,8 @@ class ConnectionBytestream:
 			sha_str, self._result_socks5_sid, file_props['sid'])
 		if listener == None:
 			file_props['error'] = -5
-			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props))
+			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props,
+				''))
 			self._connect_error(unicode(receiver), file_props['sid'],
 				file_props['sid'], code = 406)
 			return
@@ -221,8 +222,8 @@ class ConnectionBytestream:
 		iq = common.xmpp.Protocol(name = 'iq',
 			to = unicode(file_props['sender']), typ = 'error')
 		iq.setAttr('id', file_props['request-id'])
-		err = common.xmpp.ErrorNode(code = '406', typ = 'auth', name =
-			'not-acceptable')
+		err = common.xmpp.ErrorNode(code = '403', typ = 'cancel', name =
+			'forbidden', text = 'Offer Declined')
 		iq.addChild(node=err)
 		self.connection.send(iq)
 
@@ -314,8 +315,8 @@ class ConnectionBytestream:
 			if file_props is not None:
 				self.disconnect_transfer(file_props)
 				file_props['error'] = -3
-				self.dispatch('FILE_REQUEST_ERROR', (to, file_props))
-	
+				self.dispatch('FILE_REQUEST_ERROR', (to, file_props, msg))
+
 	def _proxy_auth_ok(self, proxy):
 		'''cb, called after authentication to proxy server '''
 		file_props = self.files_props[proxy['sid']]
@@ -344,7 +345,7 @@ class ConnectionBytestream:
 			return
 		file_props = self.files_props[id]
 		file_props['error'] = -4
-		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
+		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise common.xmpp.NodeProcessed
 	
 	def _bytestreamSetCB(self, con, iq_obj):
@@ -561,7 +562,7 @@ class ConnectionBytestream:
 			return
 		jid = helpers.get_jid_from_iq(iq_obj)
 		file_props['error'] = -3
-		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
+		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise common.xmpp.NodeProcessed
 
 class ConnectionDisco:
@@ -1133,7 +1134,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
-		errmsg = iq_obj.getError()
+		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
 		jid_from = helpers.get_full_jid_from_iq(iq_obj)
 		id = unicode(iq_obj.getID())

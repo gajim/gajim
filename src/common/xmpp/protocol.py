@@ -348,6 +348,13 @@ class Protocol(Node):
             for tag in errtag.getChildren():
                 if tag.getName()<>'text': return tag.getName()
             return errtag.getData()
+    def getErrorMsg(self):
+        """ Return the textual description of the error (if present) or the error condition """
+        errtag=self.getTag('error')
+        if errtag:
+            for tag in errtag.getChildren():
+                if tag.getName()=='text': return tag.getData()
+            return self.getError()
     def getErrorCode(self):
         """ Return the error code. Obsolette. """
         return self.getTagAttr('error','code')

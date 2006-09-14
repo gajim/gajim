@@ -213,7 +213,7 @@ class FileTransfersWindow:
 _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
-	def show_stopped(self, jid, file_props):
+	def show_stopped(self, jid, file_props, error_msg = ''):
 		self.window.present()
 		self.window.window.focus()
 		if file_props['type'] == 'r':
@@ -222,6 +222,8 @@ _('Connection with peer cannot be established.'))
 			file_name = file_props['name']
 		sectext = '\t' + _('Filename: %s') % file_name
 		sectext += '\n\t' + _('Recipient: %s') % jid
+		if error_msg:
+			sectext += '\n\t' + _('Error message: %s') % error_msg
 		dialogs.ErrorDialog(_('File transfer stopped by the contact of the other side'), \
 			sectext)
 		self.tree.get_selection().unselect_all()

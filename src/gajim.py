@@ -273,7 +273,7 @@ class Interface:
 			on_response_no = (response, account, data[3], 'no'))
 
 	def handle_event_error_answer(self, account, array):
-		#('ERROR_ANSWER', account, (id, jid_from. errmsg, errcode))
+		#('ERROR_ANSWER', account, (id, jid_from, errmsg, errcode))
 		id, jid_from, errmsg, errcode = array
 		if unicode(errcode) in ('403', '406') and id:
 			# show the error dialog
@@ -285,7 +285,7 @@ class Interface:
 				file_props = ft.files_props['s'][sid]
 				file_props['error'] = -4
 				self.handle_event_file_request_error(account, 
-					(jid_from, file_props))
+					(jid_from, file_props, errmsg))
 				conn = gajim.connections[account]
 				conn.disconnect_transfer(file_props)
 				return
@@ -1169,15 +1169,15 @@ class Interface:
 		self.roster.draw_contact(jid, account)
 
 	def handle_event_file_request_error(self, account, array):
-		jid = array[0]
-		file_props = array[1]
+		# ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
+		jid, file_props, errmsg = array
 		ft = self.instances['file_transfers']
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 		errno = file_props['error']
 
 		if helpers.allow_popup_window(account):
 			if errno in (-4, -5):
-				ft.show_stopped(jid, file_props)
+				ft.show_stopped(jid, file_props, errmsg)
 			else:
 				ft.show_request_error(file_props)
 			return
