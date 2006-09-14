@@ -350,7 +350,10 @@ class SocksQueue:
 class Socks5:
 	def __init__(self, idlequeue, host, port, initiator, target, sid):
 		if host is not None:
-			self.host = socket.gethostbyname(host)
+			try:
+				self.host = socket.gethostbyname(host)
+			except socket.gaierror:
+				self.host = None
 		self.idlequeue = idlequeue
 		self.fd = -1
 		self.port = port

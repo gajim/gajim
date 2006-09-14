@@ -186,6 +186,9 @@ class HostTester(Socks5, IdleObject):
 	
 	def connect(self):
 		''' create the socket and plug it to the idlequeue '''
+		if self.host is None:
+			self.on_failure()
+			return None
 		self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self._sock.setblocking(False)
 		self.fd = self._sock.fileno()
