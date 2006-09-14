@@ -371,8 +371,12 @@ class NonBlockingTLS(PlugIn):
 		PlugIn.PlugIn(self, owner)
 		DBG_LINE='NonBlockingTLS'
 		self.on_tls_start = on_tls_start
-		if now: 
-			res = self._startSSL()
+		if now:
+			try:
+				res = self._startSSL()
+			except Exception, e:
+				self._owner.socket.pollend()
+				return
 			self.tls_start()
 			return res
 		if self._owner.Dispatcher.Stream.features:
@@ -434,7 +438,11 @@ class NonBlockingTLS(PlugIn):
 			self.DEBUG('Got starttls response: ' + self.starttls,'error')
 			return
 		self.DEBUG('Got starttls proceed response. Switching to TLS/SSL...','ok')
-		self._startSSL()
+		try:
+			self._startSSL()
+		except Exception, e:
+			self._owner.socket.pollend()
+			return
 		self._owner.Dispatcher.PlugOut()
 		dispatcher_nb.Dispatcher().PlugIn(self._owner)
 

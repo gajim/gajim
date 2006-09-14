@@ -14,7 +14,7 @@
 
 # $Id: features.py,v 1.22 2005/09/30 20:13:04 mikealbon Exp $
 
-from features import REGISTER_DATA_RECEIVED
+from features import REGISTER_DATA_RECEIVED, PRIVACY_LISTS_RECEIVED, PRIVACY_LIST_RECEIVED, PRIVACY_LISTS_ACTIVE_DEFAULT
 from protocol import *
 
 def _on_default_response(disp, iq, cb):
@@ -146,9 +146,9 @@ def register(disp, host, info, cb):
 		attributes lastErrNode, lastErr and lastErrCode.
 	"""
 	iq=Iq('set', NS_REGISTER, to=host)
-	if not isinstance(info, dict): 
+	if not isinstance(info, dict):
 		info=info.asDict()
-	for i in info.keys(): 
+	for i in info.keys():
 		iq.setTag('query').setTagData(i,info[i])
 	disp.SendAndCallForResponse(iq, cb)
 
@@ -172,37 +172,46 @@ def changePasswordTo(disp, newpassword, host=None, cb = None):
 #type=[jid|group|subscription]
 #action=[allow|deny]
 
-def getPrivacyLists(disp, cb):
+def getPrivacyLists(disp):
 	""" Requests privacy lists from connected server.
 		Returns dictionary of existing lists on success."""
 	iq = Iq('get', NS_PRIVACY)
 	def _on_response(resp):
 		dict = {'lists': []}
-		try:
-			if not isResultNode(resp): 
-				cb(False)
-				return
-			for list in resp.getQueryPayload():
-				if list.getName()=='list': 
-					dict['lists'].append(list.getAttr('name'))
-				else: 
-					dict[list.getName()]=list.getAttr('name')
-			cb(dict)
-		except: 
-			pass
-		cb(False)
-	disp.SendAndCallForResponse(iq, _on_respons)
+		if not isResultNode(resp):
+			disp.Event(NS_PRIVACY, PRIVACY_LISTS_RECEIVED, (False))
+			return
+		for list in resp.getQueryPayload():
+			if list.getName()=='list':
+				dict['lists'].append(list.getAttr('name'))
+			else:
+				dict[list.getName()]=list.getAttr('name')
+		disp.Event(NS_PRIVACY, PRIVACY_LISTS_RECEIVED, (dict))
+	disp.SendAndCallForResponse(iq, _on_response)
 
-def getPrivacyList(disp, listname, cb):
+def getActiveAndDefaultPrivacyLists(disp):
+	iq = Iq('get', NS_PRIVACY)
+	def _on_response(resp):
+		dict = {'active': '', 'default': ''}
+		if not isResultNode(resp):
+			disp.Event(NS_PRIVACY, PRIVACY_LISTS_ACTIVE_DEFAULT, (False))
+			return
+		for list in resp.getQueryPayload():
+			if list.getName() == 'active':
+				dict['active'] = list.getAttr('name')
+			elif list.getName() == 'default':
+				dict['default'] = list.getAttr('name')
+		disp.Event(NS_PRIVACY, PRIVACY_LISTS_ACTIVE_DEFAULT, (dict))
+	disp.SendAndCallForResponse(iq, _on_response)
+
+def getPrivacyList(disp, listname):
 	""" Requests specific privacy list listname. Returns list of XML nodes (rules)
 		taken from the server responce."""
 	def _on_response(resp):
-		try:
-			if isResultNode(resp): 
-				return cb(resp.getQueryPayload()[0])
-		except: 
-			pass
-		cb(False)
+		if not isResultNode(resp): 
+			disp.Event(NS_PRIVACY, PRIVACY_LIST_RECEIVED, (False))
+			return
+		disp.Event(NS_PRIVACY, PRIVACY_LIST_RECEIVED, (resp))
 	iq = Iq('get', NS_PRIVACY, payload=[Node('list', {'name': listname})])
 	disp.SendAndCallForResponse(iq, _on_response)
 
@@ -220,14 +229,25 @@ def setDefaultPrivacyList(disp, listname=None):
 	""" Sets the default privacy list as 'listname'. Returns true on success."""
 	return setActivePrivacyList(disp, listname,'default')
 
-def setPrivacyList(disp, list, cb):
+def setPrivacyList(disp, listname, tags):
 	""" Set the ruleset. 'list' should be the simpleXML node formatted
 		according to RFC 3921 (XMPP-IM) (I.e. Node('list',{'name':listname},payload=[...]) )
 		Returns true on success."""
-	iq=Iq('set',NS_PRIVACY,payload=[list])
-	_on_default_response(disp, iq, cb)
+	iq = Iq('set', NS_PRIVACY, xmlns = '')
+	list_query = iq.getTag('query').setTag('list', {'name': listname})
+	for item in tags:
+		if item.has_key('type') and item.has_key('value'):
+			item_tag = list_query.setTag('item', {'action': item['action'],
+				'order': item['order'], 'type': item['type'], 'value': item['value']})
+		else:
+			item_tag = list_query.setTag('item', {'action': item['action'],
+				'order': item['order']})
+		if item.has_key('child'):
+			for child_tag in item['child']:
+				item_tag.setTag(child_tag)
+	_on_default_response(disp, iq, None)
 
-def delPrivacyList(disp,listname, cb):
+def delPrivacyList(disp,listname):
 	""" Deletes privacy list 'listname'. Returns true on success."""
 	iq = Iq('set',NS_PRIVACY,payload=[Node('list',{'name':listname})])
-	_on_default_response(disp, iq, cb)
+	_on_default_response(disp, iq, None)

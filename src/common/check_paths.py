@@ -28,10 +28,6 @@ import stat
 
 from common import gajim
 import logger
-import i18n
-
-_ = i18n._
-Q_ = i18n.Q_
 
 from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
 
@@ -61,6 +57,11 @@ def create_log_db():
 			jid_id INTEGER
 		);
 		
+		CREATE TABLE transports_cache (
+			transport TEXT UNIQUE,
+			type INTEGER
+		);
+																
 		CREATE TABLE logs(
 			log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid_id INTEGER,

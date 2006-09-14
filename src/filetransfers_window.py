@@ -18,7 +18,6 @@
 ##
 
 import gtk
-import gtk.glade
 import gobject
 import pango
 import os
@@ -30,12 +29,6 @@ import dialogs
 
 from common import gajim
 from common import helpers
-from common import i18n
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
 
 C_IMAGE = 0
 C_LABELS = 1
@@ -153,9 +146,8 @@ class FileTransfersWindow:
 		''' show a dialog saying that file (file_props) has been transferred'''
 		self.window.present()
 		self.window.window.focus()
-
 		def on_open(widget, file_props):
-			self.dialog.destroy()
+			dialog.destroy()
 			if not file_props.has_key('file-name'):
 				return
 			(path, file) = os.path.split(file_props['file-name'])
@@ -192,17 +184,17 @@ class FileTransfersWindow:
 		sectext += recipient
 		if file_props['type'] == 'r':
 			sectext += '\n\t' +_('Saved in: %s') % file_path
-		self.dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, 
+		dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE, 
 				_('File transfer completed'), sectext)
 		if file_props['type'] == 'r':
 			button = gtk.Button(_('_Open Containing Folder'))
 			button.connect('clicked', on_open, file_props)
-			self.dialog.action_area.pack_start(button)
-		ok_button = self.dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
+			dialog.action_area.pack_start(button)
+		ok_button = dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
 		def on_ok(widget):
-			self.dialog.destroy()
+			dialog.destroy()
 		ok_button.connect('clicked', on_ok)
-		self.dialog.show_all()
+		dialog.show_all()
 
 	def show_request_error(self, file_props):
 		''' show error dialog to the recipient saying that transfer 
@@ -221,7 +213,7 @@ class FileTransfersWindow:
 _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
-	def show_stopped(self, jid, file_props):
+	def show_stopped(self, jid, file_props, error_msg = ''):
 		self.window.present()
 		self.window.window.focus()
 		if file_props['type'] == 'r':
@@ -229,7 +221,9 @@ _('Connection with peer cannot be established.'))
 		else:
 			file_name = file_props['name']
 		sectext = '\t' + _('Filename: %s') % file_name
-		sectext += '\n\t' + _('Sender: %s') % jid
+		sectext += '\n\t' + _('Recipient: %s') % jid
+		if error_msg:
+			sectext += '\n\t' + _('Error message: %s') % error_msg
 		dialogs.ErrorDialog(_('File transfer stopped by the contact of the other side'), \
 			sectext)
 		self.tree.get_selection().unselect_all()
@@ -237,7 +231,7 @@ _('Connection with peer cannot be established.'))
 	def show_file_send_request(self, account, contact):
 		def on_ok(widget):
 			file_dir = None
-			files_path_list = self.dialog.get_filenames()
+			files_path_list = dialog.get_filenames()
 			files_path_list = gtkgui_helpers.decode_filechooser_file_paths(
 				files_path_list)
 			for file_path in files_path_list:
@@ -245,16 +239,16 @@ _('Connection with peer cannot be established.'))
 					file_dir = os.path.dirname(file_path)
 			if file_dir:
 				gajim.config.set('last_send_dir', file_dir)
-				self.dialog.destroy()
+				dialog.destroy()
 
-		self.dialog = dialogs.FileChooserDialog(_('Choose File to Send...'), 
+		dialog = dialogs.FileChooserDialog(_('Choose File to Send...'), 
 			gtk.FILE_CHOOSER_ACTION_OPEN, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL),
 			gtk.RESPONSE_OK,
 			True, # select multiple true as we can select many files to send
 			gajim.config.get('last_send_dir'),
 			)
 
-		btn = self.dialog.add_button(_('_Send'), gtk.RESPONSE_OK)
+		btn = dialog.add_button(_('_Send'), gtk.RESPONSE_OK)
 		btn.set_use_stock(True) # FIXME: add send icon to this button (JUMP_TO)
 		btn.connect('clicked', on_ok)
 
@@ -313,6 +307,12 @@ _('Connection with peer cannot be established.'))
 				file_path = gtkgui_helpers.decode_filechooser_file_paths(
 					(file_path,))[0]
 				if os.path.exists(file_path):
+					# check if we have write permissions
+					if not os.access(file_path, os.W_OK):
+						file_name = os.path.basename(file_path)
+						dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' % file_name),
+						_('A file with this name already exists and you do not have permission to overwrite it.'))
+						return
 					stat = os.stat(file_path)
 					dl_size = stat.st_size
 					file_size = file_props['size']
@@ -327,6 +327,11 @@ _('Connection with peer cannot be established.'))
 						return
 					elif response == 100:
 						file_props['offset'] = dl_size
+				else:
+					dirname = os.path.dirname(file_path)
+					if not os.access(dirname, os.W_OK):
+						dialogs.ErrorDialog(_('Directory "%s" is not writable') % dirname, _('You do not have permission to create files in this directory.'))
+						return
 				dialog2.destroy()
 				self._start_receive(file_path, account, contact, file_props)
 
@@ -442,12 +447,11 @@ _('Connection with peer cannot be established.'))
 				jid = gajim.get_jid_without_resource(other)
 			else: # It's a Contact instance
 				jid = other.jid
-			if gajim.awaiting_events[account].has_key(jid):
-				for event in gajim.awaiting_events[account][jid]:
-					if event[0] in ('file-error', 'file-completed',
-						'file-request-error', 'file-send-error', 'file-stopped') and \
-						event[1]['sid'] == file_props['sid']:
-						gajim.interface.remove_event(account, jid, event)
+			for ev_type in ('file-error', 'file-completed', 'file-request-error',
+			'file-send-error', 'file-stopped'):
+				for event in gajim.events.get_events(account, jid, [ev_type]):
+					if event.parameters[1]['sid'] == file_props['sid']:
+						gajim.events.remove_events(account, jid, event)
 		del(self.files_props[sid[0]][sid[1:]])
 		del(file_props)
 		
@@ -832,9 +836,9 @@ _('Connection with peer cannot be established.'))
 		self.set_buttons_sensitive(path, True)
 		
 		event_button = gtkgui_helpers.get_possible_button_event(event)
+		self.file_transfers_menu.show_all()
 		self.file_transfers_menu.popup(None, self.tree, None, 
 			event_button, event.time)
-		self.file_transfers_menu.show_all()
 	
 	def on_transfers_list_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''

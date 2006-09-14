@@ -31,9 +31,7 @@ import os
 from common import gajim
 from common import helpers
 from time import time
-from common import i18n
 from dialogs import AddNewContactWindow, NewChatDialog
-_ = i18n._
 
 import dbus_support
 if dbus_support.supported:
@@ -56,7 +54,7 @@ ident = lambda e: e
 if dbus_support.version[1] >= 43:
 	# in most cases it is a utf-8 string
 	DBUS_STRING = dbus.String
-	
+
 	# general type (for use in dicts, 
 	#   where all values should have the same type)
 	DBUS_VARIANT = dbus.Variant
@@ -69,7 +67,7 @@ if dbus_support.version[1] >= 43:
 	DBUS_DICT_SS = lambda : dbus.Dictionary({}, signature="ss")
 	# empty type
 	DBUS_NONE = lambda : dbus.Variant(0)
-	
+
 else: # 33, 35, 36
 	DBUS_DICT_SV = lambda : {}
 	DBUS_DICT_SS = lambda : {}
@@ -124,7 +122,7 @@ class Remote:
 	def __init__(self):
 		self.signal_object = None
 		session_bus = dbus_support.session_bus.SessionBus()
-		
+
 		if dbus_support.version[1] >= 41:
 			service = dbus.service.BusName(SERVICE, bus=session_bus)
 			self.signal_object = SignalObject(service)
@@ -141,7 +139,7 @@ class Remote:
 class SignalObject(DbusPrototype):
 	''' Local object definition for /org/gajim/dbus/RemoteObject. This doc must 
 	not be visible, because the clients can access only the remote object. '''
-	
+
 	def __init__(self, service):
 		self.first_show = True
 		self.vcard_account = None
@@ -161,6 +159,7 @@ class SignalObject(DbusPrototype):
 				self.change_status,
 				self.open_chat,
 				self.send_message,
+                                self.send_single_message,
 				self.contact_info,
 				self.send_file,
 				self.prefs_list,
@@ -172,6 +171,7 @@ class SignalObject(DbusPrototype):
 				self.get_status,
 				self.get_status_message,
 				self.start_chat,
+				self.send_xml,
 			])
 
 	def raise_signal(self, signal, arg):
@@ -181,7 +181,7 @@ class SignalObject(DbusPrototype):
 		i = message.get_iter(True)
 		i.append(arg)
 		self._connection.send(message)
-	
+
 	def get_status(self, *args):
 		'''get_status(account = None)
 		returns status (show to be exact) which is the global one
@@ -194,7 +194,7 @@ class SignalObject(DbusPrototype):
 		# return show for the given account
 		index = gajim.connections[account].connected
 		return DBUS_STRING(STATUS_LIST[index])
-	
+
 	def get_status_message(self, *args):
 		'''get_status(account = None)
 		returns status which is the global one
@@ -207,7 +207,7 @@ class SignalObject(DbusPrototype):
 		# return show for the given account
 		status = gajim.connections[account].status
 		return DBUS_STRING(status)
-		
+
 
 	def get_account_and_contact(self, account, jid):
 		''' get the account (if not given) and contact instance from jid'''
@@ -233,7 +233,7 @@ class SignalObject(DbusPrototype):
 					break
 		if not contact:
 			contact = jid
-		
+
 		return connected_account, contact
 
 	def send_file(self, *args):
@@ -241,33 +241,49 @@ class SignalObject(DbusPrototype):
 		send file, located at 'file_path' to 'jid', using account 
 		(optional) 'account' '''
 		file_path, jid, account = self._get_real_arguments(args, 3)
-
+		jid = self._get_real_jid(jid, account)
 		connected_account, contact = self.get_account_and_contact(account, jid)
 
 		if connected_account:
+			if file_path[:7] == 'file://':
+				file_path=file_path[7:]
 			if os.path.isfile(file_path): # is it file?
 				gajim.interface.instances['file_transfers'].send_file(
 					connected_account, contact, file_path)
 				return True
 		return False
 
-	def send_message(self, *args):
-		''' send_message(jid, message, keyID=None, account=None)
-		send 'message' to 'jid', using account (optional) 'account'.
-		if keyID is specified, encrypt the message with the pgp key '''
-		jid, message, keyID, account = self._get_real_arguments(args, 4)
+	def _send_message(self, jid, message, keyID, account, type = 'chat', subject = None):
+		''' can be called from send_chat_message (default when send_message)
+		or send_single_message'''
 		if not jid or not message:
 			return None # or raise error
 		if not keyID:
 			keyID = ''
-		
+
 		connected_account, contact = self.get_account_and_contact(account, jid)
-		
+
 		if connected_account:
 			connection = gajim.connections[connected_account]
-			res = connection.send_message(jid, message, keyID)
+			res = connection.send_message(jid, message, keyID, type, subject)
 			return True
 		return False
+
+	def send_chat_message(self, *args):
+		''' send_message(jid, message, keyID=None, account=None)
+		send chat 'message' to 'jid', using account (optional) 'account'.
+		if keyID is specified, encrypt the message with the pgp key '''
+		jid, message, keyID, account = self._get_real_arguments(args, 4)
+		jid = self._get_real_jid(jid, account)
+		return self._send_message(jid, message, keyID, account)
+
+	def send_single_message(self, *args):
+		''' send_single_message(jid, subject, message, keyID=None, account=None)
+		send single 'message' to 'jid', using account (optional) 'account'.
+		if keyID is specified, encrypt the message with the pgp key '''
+		jid, subject, message, keyID, account = self._get_real_arguments(args, 5)
+		jid = self._get_real_jid(jid, account)
+		return self._send_message(jid, message, keyID, account, type, subject)
 
 	def open_chat(self, *args):
 		''' start_chat(jid, account=None) -> shows the tabbed window for new 
@@ -276,9 +292,8 @@ class SignalObject(DbusPrototype):
 		if not jid:
 			# FIXME: raise exception for missing argument (dbus0.35+)
 			return None
-		if jid.startswith('xmpp:'):
-			jid = jid[5:] # len('xmpp:') = 5
-		
+		jid = self._get_real_jid(jid, account)
+
 		if account:
 			accounts = [account]
 		else:
@@ -303,11 +318,11 @@ class SignalObject(DbusPrototype):
 					connected_account = acct
 				elif first_connected_acct is None:
 					first_connected_acct = acct
-		
+
 		# if jid is not a conntact, open-chat with first connected account
 		if connected_account is None and first_connected_acct:
 			connected_account = first_connected_acct
-		
+
 		if connected_account:
 			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
@@ -316,7 +331,7 @@ class SignalObject(DbusPrototype):
 				win.window.focus()
 			return True
 		return False
-		
+
 	def change_status(self, *args, **keywords):
 		''' change_status(status, message, account). account is optional -
 		if not specified status is changed for all accounts. '''
@@ -331,16 +346,17 @@ class SignalObject(DbusPrototype):
 		else:
 			# account not specified, so change the status of all accounts
 			for acc in gajim.contacts.get_accounts():
+				if not gajim.config.get_per('accounts', acc, 'sync_with_global_status'):
+					continue
 				gobject.idle_add(gajim.interface.roster.send_status, acc, 
 					status, message)
 		return None
-	
+
 	def show_next_unread(self, *args):
 		''' Show the window(s) with next waiting messages in tabbed/group chats. '''
-		#FIXME: when systray is disabled this method does nothing.
-		if len(gajim.interface.systray.jids) != 0:
+		if gajim.events.get_nb_events():
 			gajim.interface.systray.handle_first_event()
-	
+
 	def contact_info(self, *args):
 		''' get vcard info for a contact. Return cached value of the vcard.
 		'''
@@ -350,14 +366,15 @@ class SignalObject(DbusPrototype):
 		if not jid:
 			# FIXME: raise exception for missing argument (0.3+)
 			return None
-	
+		jid = self._get_real_jid(jid, account)
+
 		cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
 		if cached_vcard:
 			return get_dbus_struct(cached_vcard)
-		
+
 		# return empty dict
 		return DBUS_DICT_SV()
-	
+
 	def list_accounts(self, *args):
 		''' list register accounts '''
 		result = gajim.contacts.get_accounts()
@@ -367,7 +384,7 @@ class SignalObject(DbusPrototype):
 				result_array.append(DBUS_STRING(account))
 			return result_array
 		return None
-	
+
 	def account_info(self, *args):
 		''' show info on account: resource, jid, nick, prio, message '''
 		[for_account] = self._get_real_arguments(args, 1)
@@ -386,7 +403,7 @@ class SignalObject(DbusPrototype):
 		result['resource'] = DBUS_STRING(unicode(gajim.config.get_per('accounts', 
 								account.name, 'resource')))
 		return result
-	
+
 	def list_contacts(self, *args):
 		''' list all contacts in the roster. If the first argument is specified,
 		then return the contacts for the specified account '''
@@ -410,7 +427,7 @@ class SignalObject(DbusPrototype):
 		if result == []:
 			return None
 		return result
-	
+
 	def toggle_roster_appearance(self, *args):
 		''' shows/hides the roster window '''
 		win = gajim.interface.roster.window
@@ -437,14 +454,14 @@ class SignalObject(DbusPrototype):
 			prefs_dict[DBUS_STRING(key)] = DBUS_STRING(value[1])
 		gajim.config.foreach(get_prefs)
 		return prefs_dict
-		
+
 	def prefs_store(self, *args):
 		try:
 			gajim.interface.save_config()
 		except Exception, e:
 			return False
 		return True
-	
+
 	def prefs_del(self, *args):
 		[key] = self._get_real_arguments(args, 1)
 		if not key:
@@ -457,7 +474,7 @@ class SignalObject(DbusPrototype):
 		else:
 			gajim.config.del_per(key_path[0], key_path[1], key_path[2])
 		return True
-	
+
 	def prefs_put(self, *args):
 		[key] = self._get_real_arguments(args, 1)
 		if not key:
@@ -470,7 +487,7 @@ class SignalObject(DbusPrototype):
 		subname, value = key_path[2].split('=', 1)
 		gajim.config.set_per(key_path[0], key_path[1], subname, value)
 		return True
-	
+
 	def add_contact(self, *args):
 		[jid, account] = self._get_real_arguments(args, 2)
 		if account:
@@ -485,11 +502,12 @@ class SignalObject(DbusPrototype):
 			# if account is not given, show account combobox
 			AddNewContactWindow(account = None, jid = jid)
 		return True
-	
+
 	def remove_contact(self, *args):
 		[jid, account] = self._get_real_arguments(args, 2)
+		jid = self._get_real_jid(jid, account)
 		accounts = gajim.contacts.get_accounts()
-		
+
 		# if there is only one account in roster, take it as default
 		if account:
 			accounts = [account]
@@ -503,7 +521,7 @@ class SignalObject(DbusPrototype):
 				gajim.contacts.remove_jid(account, jid)
 				contact_exists = True
 		return contact_exists
-	
+
 	def _is_first(self):
 		if self.first_show:
 			self.first_show = False
@@ -523,7 +541,35 @@ class SignalObject(DbusPrototype):
 			args.extend([None] * (desired_length - len(args)))
 			args = args[:desired_length]
 		return args
-	
+
+	def _get_real_jid(self, jid, account = None):
+		'''get the real jid from the given one: removes xmpp: or get jid from nick
+		if account is specified, search only in this account
+		'''
+		if account:
+			accounts = [account]
+		else:
+			accounts = gajim.connections.keys()
+		if jid.startswith('xmpp:'):
+			return jid[5:] # len('xmpp:') = 5
+		nick_in_roster = None # Is jid a nick ?
+		for account in accounts:
+			# Does jid exists in roster of one account ?
+			if gajim.contacts.get_contacts_from_jid(account, jid):
+				return jid
+			if not nick_in_roster:
+				# look in all contact if one has jid as nick
+				for jid_ in gajim.contacts.get_jid_list(account):
+					c = gajim.contacts.get_contacts_from_jid(account, jid_)
+					if c[0].name == jid:
+						nick_in_roster = jid_
+						break
+		if nick_in_roster:
+			# We have not found jid in roster, but we found is as a nick
+			return nick_in_roster
+		# We have not found it as jid nor as nick, probably a not in roster jid
+		return jid
+
 	def _contacts_as_dbus_structure(self, contacts):
 		''' get info from list of Contact objects and create dbus dict '''
 		if not contacts:
@@ -552,7 +598,7 @@ class SignalObject(DbusPrototype):
 		return contact_dict
 
 	def get_unread_msgs_number(self, *args):
-		return str(gajim.interface.roster.nb_unread)
+		return str(gajim.events.get_nb_events)
 
 	def start_chat(self, *args):
 		[account] = self._get_real_arguments(args, 1)
@@ -562,13 +608,21 @@ class SignalObject(DbusPrototype):
 		NewChatDialog(account)
 		return True
 
+	def send_xml(self, *args):
+		xml, account = self._get_real_arguments(args, 2)
+		if account:
+			gajim.connections[account[0]].send_stanza(xml)
+		else:
+			for acc in gajim.contacts.get_accounts():
+				gajim.connections[acc].send_stanza(xml)
+
 	if dbus_support.version[1] >= 30 and dbus_support.version[1] <= 40:
 		method = dbus.method
 		signal = dbus.signal
 	elif dbus_support.version[1] >= 41:
 		method = dbus.service.method
 		signal = dbus.service.signal
-	
+
 	# prevent using decorators, because they are not supported 
 	# on python < 2.4
 	# FIXME: use decorators when python2.3 (and dbus 0.23) is OOOOOOLD
@@ -579,7 +633,8 @@ class SignalObject(DbusPrototype):
 	change_status = method(INTERFACE)(change_status)
 	open_chat = method(INTERFACE)(open_chat)
 	contact_info = method(INTERFACE)(contact_info)
-	send_message = method(INTERFACE)(send_message)
+	send_message = method(INTERFACE)(send_chat_message)
+	send_single_message = method(INTERFACE)(send_single_message)
 	send_file = method(INTERFACE)(send_file)
 	prefs_list = method(INTERFACE)(prefs_list)
 	prefs_put = method(INTERFACE)(prefs_put)
@@ -592,3 +647,4 @@ class SignalObject(DbusPrototype):
 	account_info = method(INTERFACE)(account_info)
 	get_unread_msgs_number = method(INTERFACE)(get_unread_msgs_number)
 	start_chat = method(INTERFACE)(start_chat)
+	send_xml = method(INTERFACE)(send_xml)

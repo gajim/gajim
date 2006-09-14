@@ -51,7 +51,6 @@ import inspect
 import weakref
 import gobject
 import gtk
-import gtk.glade
 import pango
 
 import dialogs
@@ -60,12 +59,6 @@ import gtkgui_helpers
 
 from common import gajim
 from common import xmpp
-from common import i18n
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -92,7 +85,7 @@ def _gen_agent_type_info():
 		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
 
 		# Transports
-		('conference', 'irc'):		(False, 'irc.png'),
+		('conference', 'irc'):		(ToplevelAgentBrowser, 'irc.png'),
 		('_jid', 'irc'):				(False, 'irc.png'),
 		('gateway', 'aim'):			(False, 'aim.png'),
 		('_jid', 'aim'):				(False, 'aim.png'),
@@ -140,7 +133,8 @@ class CacheDictionary:
 
 	def _expire_timeout(self, key):
 		'''The timeout has expired, remove the object.'''
-		del self.cache[key]
+		if key in self.cache:
+			del self.cache[key]
 		return False
 
 	def _refresh_timeout(self, key):
@@ -278,7 +272,7 @@ class ServicesCache:
 			except KeyError:
 				continue
 			browser = info[0]
-			if browser is not None:
+			if browser:
 				break
 		# Note: possible outcome here is browser=False
 		if browser is None:
@@ -449,7 +443,7 @@ _('Without a connection, you can not browse available services'))
 
 		# Address combobox
 		self.address_comboboxentry = None
-		address_hbox = self.xml.get_widget('address_hbox')
+		address_table = self.xml.get_widget('address_table')
 		if address_entry:
 			self.address_comboboxentry = self.xml.get_widget(
 				'address_comboboxentry')
@@ -461,7 +455,6 @@ _('Without a connection, you can not browse available services'))
 			self.address_comboboxentry.set_text_column(0)
 			self.latest_addresses = gajim.config.get(
 				'latest_disco_addresses').split()
-			jid = gajim.get_hostname_from_account(self.account)
 			if jid in self.latest_addresses:
 				self.latest_addresses.remove(jid)
 			self.latest_addresses.insert(0, jid)
@@ -472,8 +465,8 @@ _('Without a connection, you can not browse available services'))
 			self.address_comboboxentry.child.set_text(jid)
 		else:
 			# Don't show it at all if we didn't ask for it
-			address_hbox.set_no_show_all(True)
-			address_hbox.hide()
+			address_table.set_no_show_all(True)
+			address_table.hide()
 
 		self._initial_state()
 		self.xml.signal_autoconnect(self)
@@ -1205,7 +1198,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 		else:
 			room = ''
 		if not gajim.interface.instances[self.account].has_key('join_gc'):
-			dialogs.JoinGroupchatWindow(self.account, service, room)
+			try:
+				dialogs.JoinGroupchatWindow(self.account, service, room)
+			except RuntimeError:
+				pass
 		else:
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		self.window.destroy(chain = True)
@@ -1535,7 +1531,10 @@ class MucBrowser(AgentBrowser):
 		else:
 			room = model[iter][1].decode('utf-8')
 		if not gajim.interface.instances[self.account].has_key('join_gc'):
-			dialogs.JoinGroupchatWindow(self.account, service, room)
+			try:
+				dialogs.JoinGroupchatWindow(self.account, service, room)
+			except RuntimeError:
+				pass
 		else:
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		self.window.destroy(chain = True)

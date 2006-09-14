@@ -19,12 +19,14 @@
 
 import xml.sax.saxutils
 import gtk
+import gtk.glade
 import gobject
 import pango
 import os
 import sys
 
 import vcard
+import dialogs
 
 
 HAS_PYWIN32 = True
@@ -37,10 +39,11 @@ if os.name == 'nt':
 		HAS_PYWIN32 = False
 
 from common import i18n
-i18n.init()
-_ = i18n._
 from common import gajim
 from common import helpers
+
+gtk.glade.bindtextdomain(i18n.APP, i18n.DIR) 
+gtk.glade.textdomain(i18n.APP)
 
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
@@ -123,8 +126,8 @@ def get_default_font():
 		# in try because daemon may not be there
 		client = gconf.client_get_default()
 
-		return helpers.ensure_unicode_string(
-			client.get_string('/desktop/gnome/interface/font_name'))
+		return client.get_string('/desktop/gnome/interface/font_name'
+			).decode('utf-8')
 	except:
 		pass
 
@@ -144,8 +147,7 @@ def get_default_font():
 			for line in file(xfce_config_file):
 				if line.find('name="Gtk/FontName"') != -1:
 					start = line.find('value="') + 7
-					return helpers.ensure_unicode_string(
-						line[start:line.find('"', start)])
+					return line[start:line.find('"', start)].decode('utf-8')
 		except:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % xfce_config_file
@@ -160,7 +162,7 @@ def get_default_font():
 					font_name = values[0]
 					font_size = values[1]
 					font_string = '%s %s' % (font_name, font_size) # Verdana 9
-					return helpers.ensure_unicode_string(font_string)
+					return font_string.decode('utf-8')
 		except:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % kde_config_file
@@ -403,7 +405,7 @@ def possibly_move_window_in_current_desktop(window):
 		if current_virtual_desktop_no != window_virtual_desktop:
 			# we are in another VD that the window was
 			# so show it in current VD
-			window.show()
+			window.present()
 
 def file_is_locked(path_to_file):
 	'''returns True if file is locked (WINDOWS ONLY)'''
@@ -455,7 +457,7 @@ def _get_fade_color(treeview, selected, focused):
 
 def get_scaled_pixbuf(pixbuf, kind):
 	'''returns scaled pixbuf, keeping ratio etc or None
-	kind is either "chat" or "roster" or "notification" or "tooltip"'''
+	kind is either "chat", "roster", "notification", "tooltip", "vcard"'''
 	
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)
@@ -666,3 +668,70 @@ def get_possible_button_event(event):
 
 def destroy_widget(widget):
 	widget.destroy()
+
+def on_avatar_save_as_menuitem_activate(widget, jid, account,
+default_name = ''):
+	def on_ok(widget):
+		def on_ok2(widget, file_path, pixbuf):
+			pixbuf.save(file_path, 'jpeg')
+			dialog2.destroy()
+			dialog.destroy()
+
+		file_path = dialog.get_filename()
+		file_path = decode_filechooser_file_paths((file_path,))[0]
+		if os.path.exists(file_path):
+			dialog2 = dialogs.FTOverwriteConfirmationDialog(
+				_('This file already exists'), _('What do you want to do?'),
+				False)
+			dialog2.set_transient_for(dialog)
+			dialog2.set_destroy_with_parent(True)
+			response = dialog2.get_response()
+			if response < 0:
+				return
+
+		# Get pixbuf
+		pixbuf = None
+		is_fake = False
+		if account and gajim.contacts.is_pm_from_jid(account, jid):
+			is_fake = True
+		pixbuf = get_avatar_pixbuf_from_cache(jid, is_fake)
+		ext = file_path.split('.')[-1]
+		type_ = ''
+		if not ext:
+			# Silently save as Jpeg image
+			file_path += '.jpeg'
+			type_ = 'jpeg'
+		elif ext == 'jpg':
+			type_ = 'jpeg'
+		else:
+			type_ = ext
+
+		# Save image
+		try:
+			pixbuf.save(file_path, type_)
+		except:
+			#XXX Check for permissions
+			os.remove(file_path)
+			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
+			dialog2 = dialogs.ConfirmationDialog(_('Extension not supported'),
+				_('Image cannot be saved in %(type)s format. Save as %(new_filename)s?') % {'type': type_, 'new_filename': new_file_path},
+				on_response_ok = (on_ok2, new_file_path, pixbuf))
+		else:
+			dialog.destroy()
+
+	def on_cancel(widget):
+		dialog.destroy()
+
+	dialog = dialogs.FileChooserDialog(
+		title_text = _('Save Image as...'), 
+		action = gtk.FILE_CHOOSER_ACTION_SAVE, 
+		buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
+		gtk.STOCK_SAVE, gtk.RESPONSE_OK),
+		default_response = gtk.RESPONSE_OK,
+		current_folder = gajim.config.get('last_save_dir'),
+		on_response_ok = on_ok,
+		on_response_cancel = on_cancel)
+
+	dialog.set_current_name(default_name)
+	dialog.connect('delete-event', lambda widget, event:
+		on_cancel(widget))

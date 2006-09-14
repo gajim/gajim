@@ -20,8 +20,6 @@
 
 import sre
 import copy
-import i18n
-_ = i18n._
 
 
 (
@@ -50,7 +48,7 @@ class Config:
 		'notify_on_signout': [ opt_bool, False ],
 		'notify_on_new_message': [ opt_bool, True ],
 		'autopopupaway': [ opt_bool, False ],
-		'use_notif_daemon': [ opt_bool, True , _('Use DBus and Notification-Daemon to show notifications') ],
+		'use_notif_daemon': [ opt_bool, True , _('Use D-Bus and Notification-Daemon to show notifications') ],
 		'ignore_unknown_contacts': [ opt_bool, False ],
 		'showoffline': [ opt_bool, False, '', True ],
 		'autoaway': [ opt_bool, True ],
@@ -76,17 +74,19 @@ class Config:
 		'statusmsgcolor': [ opt_color, '#1eaa1e', '', True ],
 		'markedmsgcolor': [ opt_color, '#ff8080', '', True ],
 		'urlmsgcolor': [ opt_color, '#0000ff', '', True ],
-		'collapsed_rows': [ opt_str, '', _('List (space separated) of rows (accounts and groups) that are collapsed'), True ],
+		'collapsed_rows': [ opt_str, '', _('List (space separated) of rows (accounts and groups) that are collapsed.'), True ],
 		'roster_theme': [ opt_str, 'gtk+', '', True ],
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
 		'use_speller': [ opt_bool, False, ],
+		'speller_language': [ opt_str, '', _('Language used by speller')],
 		'print_time': [ opt_str, 'always',  _('\'always\' - print time for every message.\n\'sometimes\' - print time every print_ichat_every_foo_minutes minute.\n\'never\' - never print time.')],
+		'print_time_fuzzy': [ opt_int, 0, _('Value of fuzziness from 1 to 4 or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one.') ],
 		'emoticons_theme': [opt_str, 'static', '', True ],
 		'ascii_formatting': [ opt_bool, True,
 			_('Treat * / _ pairs as possible formatting characters.'), True],
-		'show_ascii_formatting_chars': [ opt_bool, False , _('If True, do not '
+		'show_ascii_formatting_chars': [ opt_bool, True , _('If True, do not '
 			'remove */_ . So *abc* will be bold but with * * not removed.')],
 		'sounds_on': [ opt_bool, True ],
 		# 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
@@ -95,12 +95,12 @@ class Config:
 		'custombrowser': [ opt_str, 'firefox' ],
 		'custommailapp': [ opt_str, 'mozilla-thunderbird -compose' ],
 		'custom_file_manager': [ opt_str, 'xffm' ],
-		'gc-hpaned-position': [opt_int, 540],
-		'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nick completion (tab) in group chat')],
-		'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when desired nickname is used by someone else in group chat')],
+		'gc-hpaned-position': [opt_int, 430],
+		'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nick completion (tab) in group chat.')],
+		'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when desired nickname is used by someone else in group chat.')],
 		'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-		'msgwin-width': [opt_int, 480],
+		'msgwin-width': [opt_int, 500],
 		'msgwin-height': [opt_int, 440],
 		'chat-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'chat-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
@@ -108,7 +108,7 @@ class Config:
 		'chat-msgwin-height': [opt_int, 440],
 		'gc-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'gc-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
-		'gc-msgwin-width': [opt_int, 480],
+		'gc-msgwin-width': [opt_int, 600],
 		'gc-msgwin-height': [opt_int, 440],
 		'single-msg-x-position': [opt_int, 0],
 		'single-msg-y-position': [opt_int, 0],
@@ -126,6 +126,7 @@ class Config:
 		'after_nickname': [ opt_str, ':' ],
 		'send_os_info': [ opt_bool, True ],
 		'notify_on_new_gmail_email': [ opt_bool, True ],
+		'notify_on_new_gmail_email_extra': [ opt_bool, False ],
 		'usegpg': [ opt_bool, False, '', True ],
 		'use_gpg_agent': [ opt_bool, False ],
 		'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
@@ -134,7 +135,7 @@ class Config:
 		'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
-		'version': [ opt_str, '0.10.0.1' ], # which version created the config
+		'version': [ opt_str, '0.10.1.3' ], # which version created the config
 		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
 		'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
 		'always_english_wikipedia': [opt_bool, False],
@@ -142,7 +143,7 @@ class Config:
 		'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
 		'autodetect_browser_mailer': [opt_bool, False, '', True],
-		'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes')],
+		'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes.')],
 		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
 		'confirm_close_muc_rooms': [opt_str, '', _('Always ask before closing group chat tab/window in this space separated list of room jids.')],
 		'noconfirm_close_muc_rooms': [opt_str, '', _('Never ask before closing group chat tab/window in this space separated list of room jids.')],
@@ -177,29 +178,33 @@ class Config:
 		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used.')],
 		'set_xmpp://_handler_everytime': [opt_bool, False, _('If True, Gajim registers for xmpp:// on each startup.')],
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
-		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window'), True],
+		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window.'), True],
 		'show_avatars_in_roster': [opt_bool, True, '', True],
 		'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old.')],
 		'print_status_in_chats': [opt_bool, True, _('If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message.')],
-		'print_status_in_muc': [opt_str, 'in_and_out', _('can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", gajim will only print FOO enters/leaves room')],
+		'print_status_in_muc': [opt_str, 'in_and_out', _('can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", gajim will only print FOO enters/leaves room.')],
 		'log_contact_status_changes': [opt_bool, False],
 		'restored_messages_color': [opt_str, 'grey'],
+		'restored_messages_small': [opt_bool, True, _('If True, restored messages will use a smaller font than the default one.')],
 		'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
 		'roster_window_skip_taskbar': [opt_bool, False],
 		'use_urgency_hint': [opt_bool, True, _('If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],
 		'notification_timeout': [opt_int, 5],
-		'send_sha_in_gc_presence': [opt_bool, True, _('Jabberd1.4 does not like sha info when one join a password protected room. Turn this option to False to stop sending sha info in groupchat presences')],
+		'send_sha_in_gc_presence': [opt_bool, True, _('Jabberd1.4 does not like sha info when one join a password protected room. Turn this option to False to stop sending sha info in group chat presences.')],
 		'one_message_window': [opt_str, 'always',
-			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect')],
-		'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window')],
-		'escape_key_closes': [opt_bool, True, _('If True, pressing the escape key closes a tab/window')],
-		'always_hide_groupchat_buttons': [opt_bool, False, _('Hides the buttons in group chat window')],
-		'always_hide_chat_buttons': [opt_bool, False, _('Hides the buttons in two persons chat window')],
+#always, never, peracct, pertype should not be translated
+			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect.')],
+		'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window.')],
+		'escape_key_closes': [opt_bool, True, _('If True, pressing the escape key closes a tab/window.')],
+		'always_hide_groupchat_buttons': [opt_bool, False, _('Hides the buttons in group chat window.')],
+		'always_hide_chat_buttons': [opt_bool, False, _('Hides the buttons in two persons chat window.')],
 		'hide_groupchat_banner': [opt_bool, False, _('Hides the banner in a group chat window')],
 		'hide_chat_banner': [opt_bool, False, _('Hides the banner in two persons chat window')],
-		'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the room occupants list in groupchat window')],
-		'chat_merge_consecutive_nickname': [opt_bool, False, _('Merge consecutive nickname in chat window')],
-		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickame')],
+		'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the room occupants list in group chat window.')],
+		'chat_merge_consecutive_nickname': [opt_bool, False, _('Merge consecutive nickname in chat window.')],
+		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickame.')],
+		'gc_nicknames_colors': [ opt_str, '#a34526:#c000ff:#0012ff:#388a99:#38995d:#519938:#ff8a00:#94452d:#244b5a:#32645a', _('List of colors that will be used to color nicknames in group chats.'), True ],
+		'ctrl_tab_go_to_next_composing': [opt_bool, True, _('Ctrl-Tab go to next composing tab when none is unread.')],
 		'zeroconf_enabled': [opt_bool, True, _('Enable zeroconf network')],
 	}
 
@@ -246,6 +251,10 @@ class Config:
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
 		}, {}),
+		'defaultstatusmsg': ({
+			'enabled': [ opt_bool, False ],
+			'message': [ opt_str, '' ],
+		}, {}),
 		'soundevents': ({
 			'enabled': [ opt_bool, True ],
 			'path': [ opt_str, '' ],
@@ -288,7 +297,27 @@ class Config:
 			'state_muc_directed_msg_color': [ opt_color, 'red2' ],
 		}, {}),
 		'contacts': ({
-			'gpg_enabled': [ opt_bool, True ],
+			'gpg_enabled': [ opt_bool, True, _('Is OpenPGP enabled for this contact?')],
+			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
+		}, {}),
+		'rooms': ({
+			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
+		}, {}),
+		'notifications': ({
+			'event': [opt_str, ''],
+			'recipient_type': [opt_str, 'all'],
+			'recipients': [opt_str, ''],
+			'status': [opt_str, 'all', _('all or space separated status')],
+			'tab_opened': [opt_str, 'both', _("'yes', 'no', or 'both'")],
+			'sound': [opt_str, '', _("'yes', 'no' or ''")],
+			'sound_file': [opt_str, ''],
+			'popup': [opt_str, '', _("'yes', 'no' or ''")],
+			'auto_open': [opt_str, '', _("'yes', 'no' or ''")],
+			'run_command': [opt_bool, False],
+			'command': [opt_str, ''],
+			'systray': [opt_str, '', _("'yes', 'no' or ''")],
+			'roster': [opt_str, '', _("'yes', 'no' or ''")],
+			'urgency_hint': [opt_bool, False],
 		}, {}),
 	}
 
@@ -300,6 +329,16 @@ class Config:
 		_('Working'): _("I'm working."),
 		_('Phone'): _("I'm on the phone."),
 		_('Out'): _("I'm out enjoying life"),
+	}
+
+	defaultstatusmsg_default = {
+		'online': [ False, _("I'm available") ],
+		'chat': [ False, _("I'm free for chat") ],
+		'away': [ False, _('Be right back') ],
+		'xa': [ False, _("I'm not available") ],
+		'dnd': [ False, _('Do not disturb') ],
+		'invisible': [ False, _('Bye!') ],
+		'offline': [ False, _('Bye!') ],
 	}
 
 	soundevents_default = {
@@ -515,3 +554,8 @@ class Config:
 			self.set_per('soundevents', event, 'enabled', default[0])
 			self.set_per('soundevents', event, 'path', default[1])
 
+		for status in self.defaultstatusmsg_default:
+			default = self.defaultstatusmsg_default[status]
+			self.add_per('defaultstatusmsg', status)
+			self.set_per('defaultstatusmsg', status, 'enabled', default[0])
+			self.set_per('defaultstatusmsg', status, 'message', default[1])

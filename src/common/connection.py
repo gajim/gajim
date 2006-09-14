@@ -42,9 +42,6 @@ from common import GnuPG
 from connection_handlers import *
 USE_GPG = GnuPG.USE_GPG
 
-from common import i18n
-_ = i18n._
-
 class Connection(ConnectionHandlers):
 	'''Connection class'''
 	def __init__(self, name):
@@ -88,8 +85,12 @@ class Connection(ConnectionHandlers):
 		self.on_connect_failure = None
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
-		
+		self.muc_jid = {} # jid of muc server for each transport type
+		self.available_transports = {} # list of available transports on this
+		# server {'icq': ['icq.server.com', 'icq2.server.com'], }
+		self.vcard_supported = True
 	# END __init__
+
 	def put_event(self, ev):
 		if gajim.handlers.has_key(ev[0]):
 			gajim.handlers[ev[0]](self.name, ev[1])
@@ -137,22 +138,21 @@ class Connection(ConnectionHandlers):
 		if not self.on_purpose:
 			self.disconnect()
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect') \
-				and self.retrycount <= 10:
+			and self.retrycount <= 10:
 				self.connected = 1
 				self.dispatch('STATUS', 'connecting')
-				self.time_to_reconnect = 10
 				# this check has moved from _reconnect method
 				if self.retrycount > 5:
 					self.time_to_reconnect = 20
 				else:
 					self.time_to_reconnect = 10
-				gajim.idlequeue.set_alarm(self._reconnect_alarm, 
-										self.time_to_reconnect)
+				gajim.idlequeue.set_alarm(self._reconnect_alarm,
+					self.time_to_reconnect)
 			elif self.on_connect_failure:
 				self.on_connect_failure()
 				self.on_connect_failure = None
 			else:
-					# show error dialog
+				# show error dialog
 				self._connection_lost()
 		else:
 			self.disconnect()
@@ -162,9 +162,9 @@ class Connection(ConnectionHandlers):
 	def _connection_lost(self):
 		self.disconnect(on_purpose = False)
 		self.dispatch('STATUS', 'offline')
-		self.dispatch('ERROR',
-		(_('Connection with account "%s" has been lost') % self.name,
-		_('To continue sending and receiving messages, you will need to reconnect.')))
+		self.dispatch('CONNECTION_LOST',
+			(_('Connection with account "%s" has been lost') % self.name,
+			_('To continue sending and receiving messages, you will need to reconnect.')))
 
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
@@ -211,6 +211,34 @@ class Connection(ConnectionHandlers):
 				else:
 					conf = data[1].asDict()
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))
+		elif realm == common.xmpp.NS_PRIVACY:
+			if event == common.xmpp.features_nb.PRIVACY_LISTS_RECEIVED:
+				# data is (list)
+				self.dispatch('PRIVACY_LISTS_RECEIVED', (data))
+			elif event == common.xmpp.features_nb.PRIVACY_LIST_RECEIVED:
+				# data is (resp)
+				if not data:
+					return
+				rules = []
+				name = data.getTag('query').getTag('list').getAttr('name')
+				for child in data.getTag('query').getTag('list').getChildren():
+					dict_item = child.getAttrs()
+					childs = []
+					if dict_item.has_key('type'):
+						for scnd_child in child.getChildren():
+							childs += [scnd_child.getName()]
+						rules.append({'action':dict_item['action'],
+							'type':dict_item['type'], 'order':dict_item['order'],
+							'value':dict_item['value'], 'child':childs})
+					else:
+						for scnd_child in child.getChildren():
+							childs.append(scnd_child.getName())
+						rules.append({'action':dict_item['action'],
+							'order':dict_item['order'], 'child':childs})
+				self.dispatch('PRIVACY_LIST_RECEIVED', (name, rules))
+			elif event == common.xmpp.features_nb.PRIVACY_LISTS_ACTIVE_DEFAULT:
+				# data is (dict)
+				self.dispatch('PRIVACY_LISTS_ACTIVE_DEFAULT', (data))
 		elif realm == '':
 			if event == common.xmpp.transports.DATA_RECEIVED:
 				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
@@ -360,7 +388,8 @@ class Connection(ConnectionHandlers):
 			if not self.retrycount and self.connected != 0:
 				self.disconnect(on_purpose = True)
 				self.dispatch('STATUS', 'offline')
-				self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
+				self.dispatch('CONNECTION_LOST',
+					(_('Could not connect to "%s"') % self._hostname,
 					_('Check your connection or try again later.')))
 
 	def _connect_success(self, con, con_type):
@@ -396,7 +425,8 @@ class Connection(ConnectionHandlers):
 		if not con:
 			self.disconnect(on_purpose = True)
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Could not connect to "%s"') % self._hostname,
+			self.dispatch('CONNECTION_LOST',
+				(_('Could not connect to "%s"') % self._hostname,
 				_('Check your connection or try again later')))
 			if self.on_connect_auth:
 				self.on_connect_auth(None)
@@ -433,6 +463,41 @@ class Connection(ConnectionHandlers):
 		if kill_core and self.connected > 1:
 			self.disconnect(on_purpose = True)
 	
+	def get_privacy_lists(self):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.getPrivacyLists(self.connection)
+
+	def get_active_default_lists(self):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.getActiveAndDefaultPrivacyLists(self.connection)
+	
+	def del_privacy_list(self, privacy_list):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list)
+	
+	def get_privacy_list(self, title):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.getPrivacyList(self.connection, title)
+	
+	def set_privacy_list(self, listname, tags):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.setPrivacyList(self.connection, listname, tags)
+	
+	def set_active_list(self, listname):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.setActivePrivacyList(self.connection, listname, 'active')
+
+	def set_default_list(self, listname):
+		if not self.connection:
+			return
+		common.xmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
+	
 	def build_privacy_rule(self, name, action):
 		'''Build a Privacy rule stanza for invisibility'''
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
@@ -442,6 +507,8 @@ class Connection(ConnectionHandlers):
 		return iq
 
 	def activate_privacy_rule(self, name):
+		if not self.connection:
+			return
 		'''activate a privacy rule'''
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
 		iq.getTag('query').setTag('active', {'name': name})
@@ -528,7 +595,7 @@ class Connection(ConnectionHandlers):
 			# Ask metacontacts before roster
 			self.get_metacontacts()
 
-	def change_status(self, show, msg, sync = False, auto = False):
+	def change_status(self, show, msg, auto = False):
 		if not show in STATUS_LIST:
 			return -1
 		sshow = helpers.get_xmpp_show(show)
@@ -607,7 +674,8 @@ class Connection(ConnectionHandlers):
 		self.connection.send(msg_iq)
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
-	chatstate = None, msg_id = None, composing_jep = None, resource = None):
+	chatstate = None, msg_id = None, composing_jep = None, resource = None,
+	user_nick = None):
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
@@ -637,6 +705,11 @@ class Connection(ConnectionHandlers):
 					typ = 'normal')
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
+
+		# JEP-0172: user_nickname
+		if user_nick:
+			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
+				user_nick)
 
 		# chatstates - if peer supports jep85 or jep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
@@ -692,7 +765,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 
 	def request_subscription(self, jid, msg = '', name = '', groups = [],
-	auto_auth = False):
+	auto_auth = False, user_nick = ''):
 		if not self.connection:
 			return
 		gajim.log.debug('subscription request for %s' % jid)
@@ -710,10 +783,11 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 		p = common.xmpp.Presence(jid, 'subscribe')
+		if user_nick:
+			p.setTag('nick', namespace = common.xmpp.NS_NICK).setData(user_nick)
 		p = self.add_sha(p)
-		if not msg:
-			msg = _('I would like to add you to my roster.')
-		p.setStatus(msg)
+		if msg:
+			p.setStatus(msg)
 		self.connection.send(p)
 
 	def send_authorization(self, jid):
@@ -796,6 +870,10 @@ class Connection(ConnectionHandlers):
 	def request_os_info(self, jid, resource):
 		if not self.connection:
 			return
+		# If we are invisible, do not request
+		if self.connected == gajim.SHOW_LIST.index('invisible'):
+			self.dispatch('OS_INFO', (jid, resource, _('Not fetched because of invisible status'), _('Not fetched because of invisible status')))
+			return
 		to_whom_jid = jid
 		if resource:
 			to_whom_jid += '/' + resource
@@ -852,6 +930,9 @@ class Connection(ConnectionHandlers):
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
 		iq2.addChild(name='storage', namespace='storage:metacontacts')
+		id = self.connection.getAnID()
+		iq.setID(id)
+		self.awaiting_answers[id] = (METACONTACTS_ARRIVED, )
 		self.connection.send(iq)
 
 	def store_metacontacts(self, tags_list):
@@ -873,7 +954,8 @@ class Connection(ConnectionHandlers):
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:
 			return
-		p = common.xmpp.Presence(to = agent, typ = ptype)
+		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+		p = common.xmpp.Presence(to = agent, typ = ptype, show = show)
 		p = self.add_sha(p, ptype != 'unavailable')
 		self.connection.send(p)
 

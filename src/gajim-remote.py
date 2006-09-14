@@ -38,8 +38,6 @@ signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 from common import exceptions
 from common import i18n
 
-_ = i18n._
-i18n.init()
 try:
 	PREFERRED_ENCODING = locale.getpreferredencoding()
 except:
@@ -68,7 +66,7 @@ BASENAME = 'gajim-remote'
 
 
 class GajimRemote:
-	
+
 	def __init__(self):
 		self.argv_len = len(sys.argv) 
 		# define commands dict. Prototype :
@@ -81,7 +79,7 @@ class GajimRemote:
 		#
 		self.commands = {
 			'help':[
-					_('shows a help on specific command'),
+					_('Shows a help on specific command'),
 					[
 						#User gets help for the command, specified by this parameter
 						(_('command'), 
@@ -101,7 +99,7 @@ class GajimRemote:
 					[
 						(_('account'), _('show only contacts of the given account'), False)
 					]
-					
+
 				],	
 			'list_accounts': [
 					_('Prints a list of registered accounts'),
@@ -110,6 +108,7 @@ class GajimRemote:
 			'change_status': [
 					_('Changes the status of account or accounts'),
 					[
+#offline, online, chat, away, xa, dnd, invisible should not be translated
 						(_('status'), _('one of: offline, online, chat, away, xa, dnd, invisible '), True), 
 						(_('message'), _('status message'), False), 
 						(_('account'), _('change status of account "account". '
@@ -127,11 +126,25 @@ class GajimRemote:
 					]
 				],
 			'send_message':[
-					_('Sends new message to a contact in the roster. Both OpenPGP key '
+					_('Sends new chat message to a contact in the roster. Both OpenPGP key '
 					'and account are optional. If you want to set only \'account\', '
 					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'), 
 					[
 						('jid', _('JID of the contact that will receive the message'), True),
+						(_('message'), _('message contents'), True),
+						(_('pgp key'), _('if specified, the message will be encrypted '
+							'using this public key'), False),
+						(_('account'), _('if specified, the message will be sent '
+							'using this account'), False),
+					]
+				],
+			'send_single_message':[
+					_('Sends new single message to a contact in the roster. Both OpenPGP key '
+					'and account are optional. If you want to set only \'account\', '
+					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'), 
+					[
+						('jid', _('JID of the contact that will receive the message'), True),
+						(_('subject'), _('message subject'), True),
 						(_('message'), _('message contents'), True),
 						(_('pgp key'), _('if specified, the message will be encrypted '
 							'using this public key'), False),
@@ -188,7 +201,7 @@ class GajimRemote:
 						('jid', _('JID of the contact'), True),
 						(_('account'), _('if specified, contact is taken from the '
 							'contact list of this account'), False)
-						
+
 					]
 				],
 			'add_contact': [
@@ -198,14 +211,14 @@ class GajimRemote:
 						(_('account'), _('Adds new contact to this account'), False)
 					]
 				],
-			
+
 			'get_status': [
 				_('Returns current status (the global one unless account is specified)'),
 					[
 						(_('account'), _(''), False)
 					]
 				],
-			
+
 			'get_status_message': [
 				_('Returns current status message(the global one unless account is specified)'),
 					[
@@ -218,9 +231,18 @@ class GajimRemote:
 					[ ]
 				],
 			'start_chat': [
-				_('Open \'Start Chat\' dialog'),
+				_('Opens \'Start Chat\' dialog'),
 					[
 						(_('account'), _('Starts chat, using this account'), True)
+					]
+				],
+			'send_xml': [
+					_('Sends custom XML'), 
+					[
+						('xml', _('XML to send'), True),
+						('account', _('Account in which the xml will be sent; '
+						'if not specified, xml will be sent to all accounts'),
+							False)
 					]
 				],
 			}
@@ -234,14 +256,14 @@ class GajimRemote:
 			else:
 				print self.compose_help().encode(PREFERRED_ENCODING)
 			sys.exit(0)
-		
+
 		self.init_connection()
 		self.check_arguments()
-		
+
 		if self.command == 'contact_info':
 			if self.argv_len < 3:
 				send_error(_('Missing argument "contact_jid"'))
-		
+
 		try:
 			res = self.call_remote_method()
 		except exceptions.ServiceNotAvailable:
@@ -249,14 +271,14 @@ class GajimRemote:
 			sys.exit(1)
 		else:
 			self.print_result(res)
-		
+
 	def print_result(self, res):
 		''' Print retrieved result to the output '''
 		if res is not None:
-			if self.command in ('open_chat', 'send_message', 'start_chat'):
-				if self.command == 'send_message':
+			if self.command in ('open_chat', 'send_message', 'send_single_message', 'start_chat'):
+				if self.command in ('send_message', 'send_single_message'):
 					self.argv_len -= 2
-				
+
 				if res is False:
 					if self.argv_len < 4:
 						send_error(_('\'%s\' is not in your roster.\n'
@@ -289,7 +311,7 @@ class GajimRemote:
 				print self.print_info(0, res, True)
 			elif res:
 				print unicode(res).encode(PREFERRED_ENCODING)
-	
+
 	def init_connection(self):
 		''' create the onnection to the session dbus,
 		or exit if it is not possible '''
@@ -297,7 +319,7 @@ class GajimRemote:
 			self.sbus = dbus.SessionBus()
 		except:
 			raise exceptions.SessionBusNotPresent
-		
+
 		if _version[1] >= 30:
 			obj = self.sbus.get_object(SERVICE, OBJ_PATH)
 			interface = dbus.Interface(obj, INTERFACE)
@@ -306,10 +328,10 @@ class GajimRemote:
 			interface = self.service.get_object(OBJ_PATH, INTERFACE)
 		else:
 			send_error(_('Unknown D-Bus version: %s') % _version[1])
-			
+
 		# get the function asked
 		self.method = interface.__getattr__(self.command)
-		
+
 	def make_arguments_row(self, args):
 		''' return arguments list. Mandatory arguments are enclosed with:
 		'<', '>', optional arguments - with '[', ']' '''
@@ -326,7 +348,7 @@ class GajimRemote:
 			else:
 				str += ']'
 		return str
-		
+
 	def help_on_command(self, command):
 		''' return help message for a given command '''
 		if command in self.commands:
@@ -340,7 +362,7 @@ class GajimRemote:
 					str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
 			return str
 		send_error(_('%s not found') % command)
-			
+
 	def compose_help(self):
 		''' print usage, and list available commands '''
 		str = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
@@ -361,7 +383,7 @@ class GajimRemote:
 					str += ']'
 			str += '\n'
 		return str
-		
+
 	def print_info(self, level, prop_dict, encode_return = False):
 		''' return formated string from data structure '''
 		if prop_dict is None or not isinstance(prop_dict, (dict, list, tuple)):
@@ -410,7 +432,7 @@ class GajimRemote:
 			except:
 				pass
 		return ret_str
-	
+
 	def check_arguments(self):
 		''' Make check if all necessary arguments are given '''
 		argv_len = self.argv_len - 2
@@ -420,7 +442,7 @@ class GajimRemote:
 				send_error(_('Argument "%s" is not specified. \n'
 					'Type "%s help %s" for more info') % 
 					(args[argv_len][0], BASENAME, self.command))
-	
+
 	def call_remote_method(self):
 		''' calls self.method with arguments from sys.argv[2:] '''
 		args = sys.argv[2:]

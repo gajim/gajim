@@ -62,11 +62,13 @@ NS_MUC          ='http://jabber.org/protocol/muc'
 NS_MUC_USER     =NS_MUC+'#user'
 NS_MUC_ADMIN    =NS_MUC+'#admin'
 NS_MUC_OWNER    =NS_MUC+'#owner'
+NS_NICK         ='http://jabber.org/protocol/nick'                      # JEP-0172
 NS_OFFLINE      ='http://www.jabber.org/jeps/jep-0030.html'             # JEP-0013
 NS_PHYSLOC      ='http://jabber.org/protocol/physloc'                   # JEP-0112
 NS_PRESENCE     ='presence'                                             # Jabberd2
 NS_PRIVACY      ='jabber:iq:privacy'
 NS_PRIVATE      ='jabber:iq:private'
+NS_PROFILE      ='http://jabber.org/protocol/profile'                   # JEP-0154
 NS_PUBSUB       ='http://jabber.org/protocol/pubsub'                    # JEP-0060
 NS_REGISTER     ='jabber:iq:register'
 NS_ROSTER       ='jabber:iq:roster'
@@ -82,7 +84,7 @@ NS_SIGNED       ='jabber:x:signed'                                      # JEP-00
 NS_STANZAS      ='urn:ietf:params:xml:ns:xmpp-stanzas'
 NS_STREAM       ='http://affinix.com/jabber/stream'
 NS_STREAMS      ='http://etherx.jabber.org/streams'
-NS_TIME         ='jabber:iq:time'
+NS_TIME         ='jabber:iq:time'                                       # JEP-0900
 NS_TLS          ='urn:ietf:params:xml:ns:xmpp-tls'
 NS_VACATION     ='http://jabber.org/protocol/vacation'
 NS_VCARD        ='vcard-temp'
@@ -346,6 +348,13 @@ class Protocol(Node):
             for tag in errtag.getChildren():
                 if tag.getName()<>'text': return tag.getName()
             return errtag.getData()
+    def getErrorMsg(self):
+        """ Return the textual description of the error (if present) or the error condition """
+        errtag=self.getTag('error')
+        if errtag:
+            for tag in errtag.getChildren():
+                if tag.getName()=='text': return tag.getData()
+            return self.getError()
     def getErrorCode(self):
         """ Return the error code. Obsolette. """
         return self.getTagAttr('error','code')

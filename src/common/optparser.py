@@ -26,8 +26,6 @@ import os
 import sys
 import locale
 from common import gajim
-from common import i18n
-_ = i18n._
 
 class OptionsParser:
 	def __init__(self, filename):
@@ -129,21 +127,28 @@ class OptionsParser:
 
 	def update_config(self, old_version, new_version):
 		# Convert '0.x.y' to (0, x, y)
-		old_version = old_version.split('.')
+		old_version_list = old_version.split('.')
 		old = []
-		while len(old_version):
-			old.append(int(old_version.pop(0)))
-		new_version = new_version.split('.')
+		while len(old_version_list):
+			old.append(int(old_version_list.pop(0)))
+		new_version_list = new_version.split('.')
 		new = []
-		while len(new_version):
-			new.append(int(new_version.pop(0)))
+		while len(new_version_list):
+			new.append(int(new_version_list.pop(0)))
 
 		if old < [0, 9] and new >= [0, 9]:
 			self.update_config_x_to_09()
 		if old < [0, 10] and new >= [0, 10]:
 			self.update_config_09_to_010()
-		if old < [0, 10, 0, 1] and new >= [0, 10, 0, 1]:
-			self.update_config_to_01001()
+		if old < [0, 10, 1, 1] and new >= [0, 10, 1, 1]:
+			self.update_config_to_01011()
+		if old < [0, 10, 1, 2] and new >= [0, 10, 1, 2]:
+			self.update_config_to_01012()
+		if old < [0, 10, 1, 3] and new >= [0, 10, 1, 3]:
+			self.update_config_to_01013()
+	
+		gajim.logger.init_vars()
+		gajim.config.set('version', new_version)
 	
 	def update_config_x_to_09(self):
 		# Var name that changed:
@@ -258,6 +263,41 @@ class OptionsParser:
 
 		gajim.config.set('version', '0.10')
 
-	def update_config_to_01001(self):
-		gajim.config.set('print_status_in_muc', 'in_and_out')
-		gajim.config.set('version', '0.10.0.1')
+	def update_config_to_01011(self):
+		if self.old_values.has_key('print_status_in_muc') and \
+			self.old_values['print_status_in_muc'] in (True, False):
+			gajim.config.set('print_status_in_muc', 'in_and_out')
+		gajim.config.set('version', '0.10.1.1')
+
+	def update_config_to_01012(self):
+		# See [6456]
+		if self.old_values.has_key('emoticons_theme') and \
+			self.old_values['emoticons_theme'] == 'Disabled':
+			gajim.config.set('emoticons_theme', '')
+		gajim.config.set('version', '0.10.1.2')
+
+	def update_config_to_01013(self):
+		'''create table transports_cache if there is no such table'''
+		import exceptions
+		try:
+			from pysqlite2 import dbapi2 as sqlite
+		except ImportError:
+			raise exceptions.PysqliteNotAvailable
+		import logger
+
+		con = sqlite.connect(logger.LOG_DB_PATH) 
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE transports_cache (
+					transport TEXT UNIQUE,
+					type INTEGER
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+		gajim.config.set('version', '0.10.1.3')

@@ -42,10 +42,6 @@ WM_TRAYMESSAGE = win32con.WM_USER + 20
 import gtkgui_helpers
 from common import gajim
 from common import i18n
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 
 class SystrayWINAPI:
 	def __init__(self, gtk_window):
@@ -249,36 +245,25 @@ class SystrayWin32(systray.Systray):
 		elif lparam == win32con.WM_LBUTTONUP: # Left click
 			self.on_left_click()
 
-	def add_jid(self, jid, account, typ):
-		systray.Systray.add_jid(self, jid, account, typ)
+	def set_img(self):
+		self.tray_ico_imgs = self.load_icos() #FIXME: do not do this here
+		# see gajim.interface.roster.reload_jabber_state_images() to merge
 
-		nb = gajim.interface.roster.nb_unread
-		for acct in gajim.connections:
-			# in chat / groupchat windows
-			for kind in ('chats', 'gc'):
-				jids = gajim.interface.instances[acct][kind]
-				for jid in jids:
-					if jid != 'tabbed':
-						nb += jids[jid].nb_unread[jid]
-		
-		text = i18n.ngettext(
-					'Gajim - %d unread message',
-					'Gajim - %d unread messages',
-					nb, nb, nb)
+		if len(self.jids) > 0:
+			state = 'message'
+		else:
+			state = self.status
+		hicon = self.tray_ico_imgs[state]
+		if hicon is None:
+			return
 
-		self.systray_winapi.notify_icon.set_tooltip(text)
+		self.systray_winapi.remove_notify_icon()
+		self.systray_winapi.add_notify_icon(self.systray_context_menu, hicon,
+			'Gajim')
+		self.systray_winapi.notify_icon.menu = self.systray_context_menu
 
-	def remove_jid(self, jid, account, typ):
-		systray.Systray.remove_jid(self, jid, account, typ)
+		nb = gajim.events.get_nb_systray_events()
 
-		nb = gajim.interface.roster.nb_unread
-		for acct in gajim.connections:
-			# in chat / groupchat windows
-			for kind in ('chats', 'gc'):
-				for jid in gajim.interface.instances[acct][kind]:
-					if jid != 'tabbed':
-						nb += gajim.interface.instances[acct][kind][jid].nb_unread[jid]
-		
 		if nb > 0:
 			text = i18n.ngettext(
 					'Gajim - %d unread message',
@@ -287,23 +272,6 @@ class SystrayWin32(systray.Systray):
 		else:
 			text = 'Gajim'
 		self.systray_winapi.notify_icon.set_tooltip(text)
-
-	def set_img(self):
-		self.tray_ico_imgs = self.load_icos() #FIXME: do not do this here
-		# see gajim.interface.roster.reload_jabber_state_images() to merge
-		
-		if len(self.jids) > 0:
-			state = 'message'
-		else:
-			state = self.status
-		hicon = self.tray_ico_imgs[state]
-		if hicon is None:
-			return
-		
-		self.systray_winapi.remove_notify_icon()
-		self.systray_winapi.add_notify_icon(self.systray_context_menu, hicon,
-			'Gajim')
-		self.systray_winapi.notify_icon.menu = self.systray_context_menu
 
 	def load_icos(self):
 		'''load .ico files and return them to a dic of SHOW --> img_obj'''

@@ -24,11 +24,11 @@
 ##
 
 import gtk
-import gtk.glade
 import pango
 import gobject
 import time
 import sys
+import os
 import tooltips
 import dialogs
 import locale
@@ -36,13 +36,8 @@ import locale
 import gtkgui_helpers
 from common import gajim
 from common import helpers
-from common import i18n
 from calendar import timegm
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
+from common.fuzzyclock import FuzzyClock
 
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
@@ -56,7 +51,7 @@ class ConversationTextview:
 		self.tv.set_accepts_tab(True)
 		self.tv.set_editable(False)
 		self.tv.set_cursor_visible(False)
-		self.tv.set_wrap_mode(gtk.WRAP_WORD)
+		self.tv.set_wrap_mode(gtk.WRAP_WORD_CHAR)
 		self.tv.set_left_margin(2)
 		self.tv.set_right_margin(2)
 		self.handlers = {}
@@ -88,6 +83,14 @@ class ConversationTextview:
 		self.tagStatus = buffer.create_tag('status')
 		color = gajim.config.get('statusmsgcolor')
 		self.tagStatus.set_property('foreground', color)
+
+		colors = gajim.config.get('gc_nicknames_colors')
+		colors = colors.split(':')
+		for color in xrange(len(colors)):
+			tagname = 'gc_nickname_color_' + str(color)
+			tag = buffer.create_tag(tagname)
+			color = colors[color]
+			tag.set_property('foreground', color)
 
 		tag = buffer.create_tag('marked')
 		color = gajim.config.get('markedmsgcolor')
@@ -129,6 +132,10 @@ class ConversationTextview:
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 
 		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
+
+		self.allow_focus_out_line = True
+		# holds the iter's offset which points to the end of --- line
+		self.focus_out_end_iter_offset = None
 
 		self.line_tooltip = tooltips.BaseTooltip()
 
@@ -180,8 +187,72 @@ class ConversationTextview:
 	def scroll_to_end_iter(self):
 		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
+		if not end_iter:
+			return False
 		self.tv.scroll_to_iter(end_iter, 0, False, 1, 1)
 		return False # when called in an idle_add, just do it once
+
+	def show_focus_out_line(self):
+		if not self.allow_focus_out_line:
+			# if room did not receive focus-in from the last time we added
+			# --- line then do not readd
+			return
+
+		print_focus_out_line = False
+		buffer = self.tv.get_buffer()
+
+		if self.focus_out_end_iter_offset is None:
+			# this happens only first time we focus out on this room
+			print_focus_out_line = True
+
+		else:
+			if self.focus_out_end_iter_offset != buffer.get_end_iter().\
+			get_offset():
+				# this means after last-focus something was printed
+				# (else end_iter's offset is the same as before)
+				# only then print ---- line (eg. we avoid printing many following
+				# ---- lines)
+				print_focus_out_line = True
+
+		if print_focus_out_line and buffer.get_char_count() > 0:
+			buffer.begin_user_action()
+
+			# remove previous focus out line if such focus out line exists
+			if self.focus_out_end_iter_offset is not None:
+				end_iter_for_previous_line = buffer.get_iter_at_offset(
+					self.focus_out_end_iter_offset)
+				begin_iter_for_previous_line = end_iter_for_previous_line.copy()
+				# img_char+1 (the '\n')
+				begin_iter_for_previous_line.backward_chars(2)
+
+				# remove focus out line
+				buffer.delete(begin_iter_for_previous_line,
+					end_iter_for_previous_line)
+
+			# add the new focus out line
+			# FIXME: Why is this loaded from disk everytime
+			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+			focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
+			end_iter = buffer.get_end_iter()
+			buffer.insert(end_iter, '\n')
+			buffer.insert_pixbuf(end_iter, focus_out_line_pixbuf)
+
+			end_iter = buffer.get_end_iter()
+			before_img_iter = end_iter.copy()
+			before_img_iter.backward_char() # one char back (an image also takes one char)
+			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
+			#FIXME: remove this workaround when bug is fixed
+			# c http://bugzilla.gnome.org/show_bug.cgi?id=318569
+
+			self.allow_focus_out_line = False
+
+			# update the iter we hold to make comparison the next time
+			self.focus_out_end_iter_offset = buffer.get_end_iter().get_offset()
+
+			buffer.end_user_action()
+
+			# scroll to the end (via idle in case the scrollbar has appeared)
+			gobject.idle_add(self.scroll_to_end)
 
 	def show_line_tooltip(self):
 		pointer = self.tv.get_pointer()
@@ -237,6 +308,7 @@ class ConversationTextview:
 		buffer = self.tv.get_buffer()
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
+		self.focus_out_end_iter_offset = None
 
 	def visit_url_from_menuitem(self, widget, link):
 		'''basically it filters out the widget instance'''
@@ -572,9 +644,6 @@ class ConversationTextview:
 			other_tags_for_name = [], other_tags_for_time = [],
 			other_tags_for_text = [], subject = None, old_kind = None):
 		'''prints 'chat' type messages'''
-		# kind = info, we print things as if it was a status: same color, ...
-		if kind == 'info':
-			kind = 'status'
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
 		end_iter = buffer.get_end_iter()
@@ -593,7 +662,7 @@ class ConversationTextview:
 			# We don't have tim for outgoing messages...
 			tim = time.localtime()
 		current_print_time = gajim.config.get('print_time')
-		if current_print_time == 'always':
+		if current_print_time == 'always' and kind != 'info':
 			before_str = gajim.config.get('before_time')
 			after_str = gajim.config.get('after_time')
 			# get difference in days since epoch (86400 = 24*3600)
@@ -612,25 +681,38 @@ class ConversationTextview:
 			if day_str:
 				format += day_str + ' '
 			format += '%X' + after_str
-			# format comes as unicode, because of day_str.
-			# we convert it to the encoding that we want
-			tim_format = time.strftime(format, tim).encode('utf-8')
+			tim_format = time.strftime(format, tim)
+			# if tim_format comes as unicode because of day_str.
+			# we convert it to the encoding that we want (and that is utf-8)
+			tim_format = helpers.ensure_utf8_string(tim_format)
+			tim_format = tim_format.encode('utf-8')
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
-		elif current_print_time == 'sometimes':
+		elif current_print_time == 'sometimes' and kind != 'info':
 			every_foo_seconds = 60 * gajim.config.get(
 				'print_ichat_every_foo_minutes')
 			seconds_passed = time.mktime(tim) - self.last_time_printout
 			if seconds_passed > every_foo_seconds:
 				self.last_time_printout = time.mktime(tim)
 				end_iter = buffer.get_end_iter()
-				tim_format = time.strftime('%H:%M', tim).decode(
-					locale.getpreferredencoding())
+				if gajim.config.get('print_time_fuzzy') > 0:
+					fc = FuzzyClock()
+					fc.setTime(time.strftime('%H:%M', tim))
+					ft = fc.getFuzzyTime(gajim.config.get('print_time_fuzzy'))
+					tim_format = ft.decode(locale.getpreferredencoding())
+				else:
+					tim_format = time.strftime('%H:%M', tim).decode(
+						locale.getpreferredencoding())
+
 				buffer.insert_with_tags_by_name(end_iter, tim_format + '\n',
 					'time_sometimes')
+		# kind = info, we print things as if it was a status: same color, ...
+		if kind == 'info':
+			kind = 'status'
 		other_text_tag = self.detect_other_text_tag(text, kind)
 		text_tags = other_tags_for_text[:] # create a new list
 		if other_text_tag:
+			# note that color of /me may be overwritten in gc_control
 			text_tags.append(other_text_tag)
 		else: # not status nor /me
 			if gajim.config.get(

@@ -27,6 +27,7 @@
 ##
 
 import sys
+import os
 import traceback
 import threading
 
@@ -36,9 +37,7 @@ import dialogs
 
 from cStringIO import StringIO
 from common import helpers
-from common import i18n
 
-_ = i18n._
 _exception_in_progress = threading.Lock()
 
 def _info(type, value, tb):
@@ -102,7 +101,8 @@ def _info(type, value, tb):
 
 	_exception_in_progress.release()
 	
-if not sys.stderr.isatty(): # gdb/kdm etc if we use startx this is not True
+# gdb/kdm etc if we use startx this is not True
+if os.name == 'nt' or not sys.stderr.isatty():
 	#FIXME: maybe always show dialog?
 	_excepthook_save = sys.excepthook
 	sys.excepthook = _info

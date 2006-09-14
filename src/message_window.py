@@ -22,7 +22,7 @@
 ##
 
 import gtk
-import gtk.glade
+import gobject
 
 import common
 import gtkgui_helpers
@@ -30,12 +30,6 @@ import message_control
 from chat_control import ChatControlBase
 
 from common import gajim
-
-####################
-# FIXME: Can't this stuff happen once?
-from common import i18n
-_ = i18n._
-APP = i18n.APP
 
 ####################
 
@@ -156,8 +150,17 @@ class MessageWindow:
 		fjid = control.get_full_jid()
 		self._controls[control.account][fjid] = control
 
-		if self.get_num_controls() > 1:
+		if self.get_num_controls() == 2:
+			# is first conversation_textview scrolled down ?
+			scrolled = False
+			first_widget = self.notebook.get_nth_page(0)
+			ctrl = self._widget_to_control(first_widget)
+			conv_textview = ctrl.conv_textview
+			if conv_textview.at_the_end():
+				scrolled = True
 			self.notebook.set_show_tabs(True)
+			if scrolled:
+				gobject.idle_add(conv_textview.scroll_to_end_iter)
 			self.alignment.set_property('top-padding', 2)
 
 		# Add notebook page and connect up to the tab's close button
@@ -221,7 +224,7 @@ class MessageWindow:
 				gajim.config.get('notify_on_all_muc_messages') and not \
 				ctrl.attention_flag:
 				continue
-			unread += ctrl.nb_unread
+			unread += ctrl.get_nb_unread()
 
 		unread_str = ''
 		if unread > 1:
@@ -277,9 +280,8 @@ class MessageWindow:
 			ctrl.shutdown()
 
 		# Update external state
-		if gajim.interface.systray_enabled:
-			gajim.interface.systray.remove_jid(ctrl.get_full_jid(), ctrl.account,
-				ctrl.type_id)
+		gajim.events.remove_events(ctrl.account, ctrl.get_full_jid,
+			types = ['printed_msg', 'chat', 'gc_msg'])
 		del gajim.last_message_time[ctrl.account][ctrl.get_full_jid()]
 
 		self.disconnect_tab_dnd(ctrl.widget)
@@ -416,6 +418,8 @@ class MessageWindow:
 		ind = self.notebook.get_current_page()
 		current = ind
 		found = False
+		first_composing_ind = -1 # id of first composing ctrl to switch to
+										# if no others controls have awaiting events
 		# loop until finding an unread tab or having done a complete cycle
 		while True: 
 			if forward == True: # look for the first unread tab on the right
@@ -426,15 +430,22 @@ class MessageWindow:
 				ind = ind - 1
 				if ind < 0:
 					ind = self.notebook.get_n_pages() - 1
-			if ind == current:
-				break # a complete cycle without finding an unread tab 
 			ctrl = self.get_control(ind, None)
-			if ctrl.nb_unread > 0:
+			if ctrl.get_nb_unread() > 0:
 				found = True
 				break # found
+			elif gajim.config.get('ctrl_tab_go_to_next_composing') : # Search for a composing contact
+				contact = ctrl.contact
+				if first_composing_ind == -1 and contact.chatstate == 'composing':
+				# If no composing contact found yet, check if this one is composing
+					first_composing_ind = ind
+			if ind == current:
+				break # a complete cycle without finding an unread tab 
 		if found:
 			self.notebook.set_current_page(ind)
-		else: # not found
+		elif first_composing_ind != -1:
+			self.notebook.set_current_page(first_composing_ind)
+		else: # not found and nobody composing
 			if forward: # CTRL + TAB
 				if current < (self.notebook.get_n_pages() - 1):
 					self.notebook.next_page()
@@ -641,13 +652,13 @@ class MessageWindowMgr:
 		if not gajim.config.get('saveposition'):
 			return
 			
-		if self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_ALWAYS):
+		if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
 			size = (gajim.config.get('msgwin-width'),
 				gajim.config.get('msgwin-height'))
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
 				gajim.config.get_per('accounts', acct, 'msgwin-height'))
-		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
+		elif self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_PERTYPE):
 			if type == message_control.TYPE_PM:
 				type = message_control.TYPE_CHAT
 			opt_width = type + '-msgwin-width'
@@ -705,6 +716,7 @@ class MessageWindowMgr:
 			win_type = type
 			win_role = type
 		elif self.mode == self.ONE_MSG_WINDOW_NEVER:
+			win_type = type
 			win_role = contact.jid
 
 		win = None
@@ -790,6 +802,10 @@ class MessageWindowMgr:
 			type = msg_win.type
 			pos_x_key = type + '-msgwin-x-position'
 			pos_y_key = type + '-msgwin-y-position'
+			size_width_key = type + '-msgwin-width'
+			size_height_key = type + '-msgwin-height'
+		elif self.mode == self.ONE_MSG_WINDOW_NEVER:
+			type = msg_win.type
 			size_width_key = type + '-msgwin-width'
 			size_height_key = type + '-msgwin-height'
 

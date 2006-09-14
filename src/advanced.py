@@ -25,16 +25,9 @@
 ##
 
 import gtk
-import gtk.glade
 import gtkgui_helpers
 
 from common import gajim
-from common import i18n
-
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain(APP, i18n.DIR)
-gtk.glade.textdomain(APP)
 
 (
 OPT_TYPE,
@@ -53,6 +46,8 @@ class AdvancedConfigurationWindow:
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('advanced_configuration_window.glade')
 		self.window = self.xml.get_widget('advanced_configuration_window')
+		self.window.set_transient_for(
+			gajim.interface.instances['preferences'].window)
 		self.entry = self.xml.get_widget('advanced_entry')
 		self.desc_label = self.xml.get_widget('advanced_desc_label')
 		self.restart_label = self.xml.get_widget('restart_label')

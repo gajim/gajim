@@ -134,6 +134,7 @@ class Dispatcher(PlugIn):
 				return 0
 		except ExpatError:
 			sys.exc_clear()
+			self.DEBUG('Invalid XML received from server. Forcing disconnect.')
 			self._owner.Connection.pollend()
 			return 0
 		if len(self._pendingExceptions) > 0:

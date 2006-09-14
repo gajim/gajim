@@ -11,8 +11,6 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
-import gtk
-import gtk.glade
 import gtkgui_helpers
 
 from common import gajim
@@ -21,12 +19,6 @@ from common import gajim
 TYPE_CHAT = 'chat'
 TYPE_GC = 'gc'
 TYPE_PM = 'pm'
-
-####################
-# FIXME: Can't this stuff happen once?
-from common import i18n
-_ = i18n._
-APP = i18n.APP
 
 ####################
 
@@ -47,7 +39,6 @@ class MessageControl:
 		self.account = account
 		self.hide_chat_buttons_always = False
 		self.hide_chat_buttons_current = False
-		self.nb_unread = 0
 		self.resource = resource
 
 		gajim.last_message_time[self.account][self.get_full_jid()] = 0
@@ -125,16 +116,15 @@ class MessageControl:
 		pass
 
 	def get_specific_unread(self):
-		n = 0
-		if gajim.awaiting_events[self.account].has_key(self.contact.jid):
-			n = len(gajim.awaiting_events[self.account][self.contact.jid])
-		return n
+		return len(gajim.events.get_events(self.account, self.contact.jid))
 
 	def send_message(self, message, keyID = '', type = 'chat',
-	chatstate = None, msg_id = None, composing_jep = None, resource = None):
+	chatstate = None, msg_id = None, composing_jep = None, resource = None,
+	user_nick = None):
 		'''Send the given message to the active tab'''
 		jid = self.contact.jid
 		# Send and update history
 		gajim.connections[self.account].send_message(jid, message, keyID,
-						type = type, chatstate = chatstate, msg_id = msg_id,
-						composing_jep = composing_jep, resource = self.resource)
+			type = type, chatstate = chatstate, msg_id = msg_id,
+			composing_jep = composing_jep, resource = self.resource,
+			user_nick = user_nick)

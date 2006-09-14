@@ -24,21 +24,17 @@ import sys
 import os
 import signal
 import gtk
-import gtk.glade
 import time
 import locale
 
+from common import i18n
 import exceptions
 import dialogs
 import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants
 
 from common import gajim
-from common import i18n
 from common import helpers
-_ = i18n._
-gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
-gtk.glade.textdomain(i18n.APP)
 
 # time, message, subject
 (
@@ -468,8 +464,8 @@ class HistoryManager:
 			except ValueError:
 				pass
 
-			file_.write(_('%(who)s on %(time)s said: %(message)s\n' % {'who': who,
-				'time': time_, 'message': message}))
+			file_.write(_('%(who)s on %(time)s said: %(message)s\n') % {'who': who,
+				'time': time_, 'message': message})
 	
 	def _delete_jid_logs(self, liststore, list_of_paths):
 		paths_len = len(list_of_paths)

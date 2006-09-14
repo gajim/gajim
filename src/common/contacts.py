@@ -210,7 +210,7 @@ class Contacts:
 		contacts = self.get_contacts_from_jid(account, jid)
 		if not contacts and '/' in jid:
 			# jid may be a fake jid, try it
-			room, nick = jid.split('/')
+			room, nick = jid.split('/', 1)
 			contact = self.get_gc_contact(account, room, nick)
 			return contact
 		return self.get_highest_prio_contact_from_contacts(contacts)
@@ -324,8 +324,11 @@ class Contacts:
 					max_order = data_['order']
 		contact = self.get_contact_with_highest_priority(account, jid)
 		score = (max_order - order)*10000
-		if not common.gajim.jid_is_transport(jid):
-			score += contact.priority*10
+		
+		if common.gajim.get_transport_name_from_jid(jid) is None:
+			score += 10
+			if contact.priority > 0:
+				score += contact.priority * 10
 		score += ['not in roster', 'error', 'offline', 'invisible', 'dnd', 'xa',
 		'away', 'chat', 'online', 'requested', 'message'].index(contact.show)
 		return score

@@ -25,23 +25,18 @@
 ##
 
 import gtk
-import gtk.glade
 import pango
 import dialogs
 import gtkgui_helpers
 
 from common import gajim
-from common import i18n
-_ = i18n._
-APP = i18n.APP
-gtk.glade.bindtextdomain (APP, i18n.DIR)
-gtk.glade.textdomain (APP)
 
 class GajimThemesWindow:
 
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('gajim_themes_window.glade')
 		self.window = self.xml.get_widget('gajim_themes_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		
 		self.options = ['account', 'group', 'contact', 'banner']
 		self.options_combobox = self.xml.get_widget('options_combobox')

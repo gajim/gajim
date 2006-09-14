@@ -29,8 +29,7 @@ import time
 import datetime
 
 import exceptions
-import i18n
-_ = i18n._
+import gajim
 
 try:
 	from pysqlite2 import dbapi2 as sqlite
@@ -79,30 +78,50 @@ class Constants:
 			self.SHOW_OFFLINE
 		) = range(6)
 
+		(
+			self.TYPE_AIM,
+			self.TYPE_GG,
+			self.TYPE_HTTP_WS,
+			self.TYPE_ICQ,
+			self.TYPE_MSN,
+			self.TYPE_QQ,
+			self.TYPE_SMS,
+			self.TYPE_SMTP,
+			self.TYPE_TLEN,
+			self.TYPE_YAHOO,
+			self.TYPE_NEWMAIL,
+			self.TYPE_RSS,
+			self.TYPE_WEATHER,
+		) = range(13)
+
 constants = Constants()
 
 class Logger:
 	def __init__(self):
 		self.jids_already_in = [] # holds jids that we already have in DB
-		
+		self.con = None
+
 		if not os.path.exists(LOG_DB_PATH):
 			# this can happen only the first time (the time we create the db)
 			# db is not created here but in src/common/checks_paths.py
 			return
 		self.init_vars()
-		
+
 	def init_vars(self):
 		# if locked, wait up to 20 sec to unlock
 		# before raise (hopefully should be enough)
+		if self.con:
+			self.con.close()
 		self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 			isolation_level = 'IMMEDIATE')
 		self.cur = self.con.cursor()
-		
+
 		self.get_jids_already_in_db()
 
 	def get_jids_already_in_db(self):
 		self.cur.execute('SELECT jid FROM jids')
 		rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+		self.jids_already_in = []
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
@@ -193,7 +212,66 @@ class Logger:
 			show_col = 'UNKNOWN'
 		
 		return kind_col, show_col
-	
+
+	def convert_human_transport_type_to_db_api_values(self, type_):
+		'''converts from string style to constant ints for db'''
+		if type_ == 'aim':
+			return constants.TYPE_AIM
+		if type_ == 'gadu-gadu':
+			return constants.TYPE_GG
+		if type_ == 'http-ws':
+			return constants.TYPE_HTTP_WS
+		if type_ == 'icq':
+			return constants.TYPE_ICQ
+		if type_ == 'msn':
+			return constants.TYPE_MSN
+		if type_ == 'qq':
+			return constants.TYPE_QQ
+		if type_ == 'sms':
+			return constants.TYPE_SMS
+		if type_ == 'smtp':
+			return constants.TYPE_SMTP
+		if type_ == 'tlen':
+			return constants.TYPE_TLEN
+		if type_ == 'yahoo':
+			return constants.TYPE_YAHOO
+		if type_ == 'newmail':
+			return constants.TYPE_NEWMAIL
+		if type_ == 'rss':
+			return constants.TYPE_RSS
+		if type_ == 'weather':
+			return constants.TYPE_WEATHER
+		return None
+
+	def convert_api_values_to_human_transport_type(self, type_id):
+		'''converts from constant ints for db to string style'''
+		if type_id == constants.TYPE_AIM:
+			return 'aim'
+		if type_id == constants.TYPE_GG:
+			return 'gadu-gadu'
+		if type_id == constants.TYPE_HTTP_WS:
+			return 'http-ws'
+		if type_id == constants.TYPE_ICQ:
+			return 'icq'
+		if type_id == constants.TYPE_MSN:
+			return 'msn'
+		if type_id == constants.TYPE_QQ:
+			return 'qq'
+		if type_id == constants.TYPE_SMS:
+			return 'sms'
+		if type_id == constants.TYPE_SMTP:
+			return 'smtp'
+		if type_id == constants.TYPE_TLEN:
+			return 'tlen'
+		if type_id == constants.TYPE_YAHOO:
+			return 'yahoo'
+		if type_id == constants.TYPE_NEWMAIL:
+			return 'newmail'
+		if type_id == constants.TYPE_RSS:
+			return 'rss'
+		if type_id == constants.TYPE_WEATHER:
+			return 'weather'
+
 	def commit_to_db(self, values, write_unread = False):
 		#print 'saving', values
 		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
@@ -239,25 +317,8 @@ class Logger:
 			self.cur.execute(
 				'SELECT message_id from unread_messages WHERE jid_id = %d' % jid_id)
 			results = self.cur.fetchall()
-		# Remove before 0.10
 		except:
-			try:
-				self.cur.executescript('DROP TABLE unread_messages;')
-				self.con.commit()
-			except:
-				pass
-			try:
-				self.cur.executescript('''CREATE TABLE unread_messages(
-					message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-					jid_id INTEGER
-					);''')
-				self.con.commit()
-			except:
-				pass
-			self.con.close()
-			self.jids_already_in = []
-			self.init_vars()
-			return []
+			pass
 
 		for message in results:
 			msg_id = message[0]
@@ -340,7 +401,7 @@ class Logger:
 		return self.commit_to_db(values, write_unread)
 		
 	def get_last_conversation_lines(self, jid, restore_how_many_rows,
-		pending_how_many, timeout):
+		pending_how_many, timeout, account):
 		'''accepts how many rows to restore and when to time them out (in minutes)
 		(mark them as too old) and number of messages that are in queue
 		and are already logged but pending to be viewed,
@@ -348,15 +409,17 @@ class Logger:
 		list with empty tupple if nothing found to meet our demands'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
+		where_sql = self._build_contact_where(account, jid)
+		
 		now = int(float(time.time()))
 		timed_out = now - (timeout * 60) # before that they are too old
 		# so if we ask last 5 lines and we have 2 pending we get
 		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
 		self.cur.execute('''
 			SELECT time, kind, message FROM logs
-			WHERE jid_id = %d AND kind IN	(%d, %d, %d, %d) AND time > %d
+			WHERE (%s) AND kind IN (%d, %d, %d, %d) AND time > %d
 			ORDER BY time DESC LIMIT %d OFFSET %d
-			''' % (jid_id, constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
+			''' % (where_sql, constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
 				constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT,
 				timed_out, restore_how_many_rows, pending_how_many)
 			)
@@ -374,35 +437,36 @@ class Logger:
 		start_of_day = int(time.mktime(local_time)) # we have time since epoch baby :)
 		return start_of_day
 	
-	def get_conversation_for_date(self, jid, year, month, day):
+	def get_conversation_for_date(self, jid, year, month, day, account):
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
-		
+		where_sql = self._build_contact_where(account, jid)
+
 		start_of_day = self.get_unix_time_from_date(year, month, day)
-		
 		seconds_in_a_day = 86400 # 60 * 60 * 24
 		last_second_of_day = start_of_day + seconds_in_a_day - 1
 		
 		self.cur.execute('''
 			SELECT contact_name, time, kind, show, message FROM logs
-			WHERE jid_id = %d
+			WHERE (%s)
 			AND time BETWEEN %d AND %d
 			ORDER BY time
-			''' % (jid_id, start_of_day, last_second_of_day))
+			''' % (where_sql, start_of_day, last_second_of_day))
 		
 		results = self.cur.fetchall()
 		return results
 
-	def get_search_results_for_query(self, jid, query):
+	def get_search_results_for_query(self, jid, query, account):
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
-		if False: #query.startswith('SELECT '): # it's SQL query
+
+		if False: #query.startswith('SELECT '): # it's SQL query (FIXME)
 			try:
 				self.cur.execute(query)
 			except sqlite.OperationalError, e:
@@ -410,22 +474,24 @@ class Logger:
 				return results
 			
 		else: # user just typed something, we search in message column
+			where_sql = self._build_contact_where(account, jid)
 			like_sql = '%' + query + '%'
 			self.cur.execute('''
 				SELECT contact_name, time, kind, show, message, subject FROM logs
-				WHERE jid_id = ? AND message LIKE ?
+				WHERE (%s) AND message LIKE '%s'
 				ORDER BY time
-				''', (jid_id, like_sql))
+				''' % (where_sql, like_sql))
 
 		results = self.cur.fetchall()
 		return results
 
-	def get_days_with_logs(self, jid, year, month, max_day):
+	def get_days_with_logs(self, jid, year, month, max_day, account):
 		'''returns the list of days that have logs (not status messages)'''
 		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		days_with_logs = []
-
+		where_sql = self._build_contact_where(account, jid)
+		
 		# First select all date of month whith logs we want
 		start_of_month = self.get_unix_time_from_date(year, month, 1)
 		seconds_in_a_day = 86400 # 60 * 60 * 24
@@ -433,11 +499,11 @@ class Logger:
 
 		self.cur.execute('''
 			SELECT time FROM logs
-			WHERE jid_id = %d
+			WHERE (%s)
 			AND time BETWEEN %d AND %d
 			AND kind NOT IN (%d, %d)
 			ORDER BY time
-			''' % (jid_id, start_of_month, last_second_of_month,
+			''' % (where_sql, start_of_month, last_second_of_month,
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
 		result = self.cur.fetchall()
 
@@ -468,17 +534,23 @@ class Logger:
 		result = self.cur.fetchone()
 		return days_with_logs
 
-	def get_last_date_that_has_logs(self, jid, is_room = False):
+	def get_last_date_that_has_logs(self, jid, account = None, is_room = False):
 		'''returns last time (in seconds since EPOCH) for which
 		we had logs (excluding statuses)'''
 		jid = jid.lower()
-		jid_id = self.get_jid_id(jid, 'ROOM')
+	
+		where_sql = ''
+		if not is_room:
+			where_sql = self._build_contact_where(account, jid)
+		else:
+			jid_id = self.get_jid_id(jid, 'ROOM')
+			where_sql = 'jid_id = %s' % jid_id	
 		self.cur.execute('''
 			SELECT time FROM logs
-			WHERE jid_id = ?
-			AND kind NOT IN (?, ?)
+			WHERE (%s) 
+			AND kind NOT IN (%d, %d)
 			ORDER BY time DESC LIMIT 1
-			''', (jid_id, constants.KIND_STATUS, constants.KIND_GCSTATUS))
+			''' % (where_sql, constants.KIND_STATUS, constants.KIND_GCSTATUS))
 
 		results = self.cur.fetchone()
 		if results is not None:
@@ -487,3 +559,61 @@ class Logger:
 			result = None
 
 		return result
+
+	def _build_contact_where(self, account, jid):
+		'''build the where clause for a jid, including metacontacts
+		jid(s) if any'''
+		where_sql = ''   
+		# will return empty list if jid is not associated with 
+		# any metacontacts 
+		family = gajim.contacts.get_metacontacts_family(account, jid)
+		if family:
+			for user in family:
+				jid_id = self.get_jid_id(user['jid'])
+				where_sql += 'jid_id = %s' % jid_id 
+				if user != family[-1]:
+					where_sql += ' OR '
+		else: # if jid was not associated with metacontacts 
+			jid_id = self.get_jid_id(jid)
+			where_sql = 'jid_id = %s' % jid_id
+		return where_sql
+
+	def save_transport_type(self, jid, type_):
+		'''save the type of the transport in DB'''
+		type_id = self.convert_human_transport_type_to_db_api_values(type_)
+		if not type_id:
+			# unknown type
+			return
+		self.cur.execute(
+			'SELECT type from transports_cache WHERE transport = "%s"' % jid)
+		results = self.cur.fetchall()
+		if results:
+			result = results[0][0]
+			if result == type_id:
+				return
+			self.cur.execute(
+				'UPDATE transports_cache SET type = %d WHERE transport = "%s"' % (type_id,
+					jid))
+			try:
+				self.con.commit()
+			except sqlite.OperationalError, e:
+				print >> sys.stderr, str(e)
+			return
+		self.cur.execute(
+			'INSERT INTO transports_cache VALUES ("%s", %d)' % (jid, type_id))
+		try:
+			self.con.commit()
+		except sqlite.OperationalError, e:
+			print >> sys.stderr, str(e)
+
+	def get_transports_type(self):
+		'''return all the type of the transports in DB'''
+		self.cur.execute(
+			'SELECT * from transports_cache')
+		results = self.cur.fetchall()
+		if not results:
+			return {}
+		answer = {}
+		for result in results:
+			answer[result[0]] = self.convert_api_values_to_human_transport_type(result[1])
+		return answer

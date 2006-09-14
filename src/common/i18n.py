@@ -48,21 +48,11 @@ if os.name == 'nt':
 	if lang:
 		os.environ['LANG'] = lang
 
-_translation = None
-
-def init():
-	global _translation
-	try:
-		_translation = gettext.translation(APP, DIR)
-	except IOError:
-		_translation = gettext.NullTranslations()
-
-init()
-
-def _(s):
-	if s == '':
-		return s
-	return _translation.ugettext(s)
+gettext.install(APP, DIR, unicode = True)
+if gettext._translations:
+	_translation = gettext._translations.values()[0]
+else:
+	_translation = gettext.NullTranslations()
 
 def Q_(s):
 	# Qualified translatable strings

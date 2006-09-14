@@ -32,6 +32,7 @@ import os
 import struct
 import sha
 import time
+from dialogs import BindPortError
 
 from errno import EWOULDBLOCK
 from errno import ENOBUFS
@@ -84,12 +85,9 @@ class SocksQueue:
 			self.listener.bind()
 			if self.listener.started is False:
 				self.listener = None
-				import sys
-				print >> sys.stderr, '================================================='
-				print >> sys.stderr, 'Unable to bind to port %s.' % port
-				print >> sys.stderr, 'Maybe you have another running instance of Gajim.'
-				print >> sys.stderr, 'File Transfer will be canceled.'
-				print >> sys.stderr, '================================================='
+				# We cannot bind port, call error 
+				# dialog from dialogs.py and fail
+				BindPortError(port)
 				return None
 			self.connected += 1
 		return self.listener
@@ -352,7 +350,10 @@ class SocksQueue:
 class Socks5:
 	def __init__(self, idlequeue, host, port, initiator, target, sid):
 		if host is not None:
-			self.host = socket.gethostbyname(host)
+			try:
+				self.host = socket.gethostbyname(host)
+			except socket.gaierror:
+				self.host = None
 		self.idlequeue = idlequeue
 		self.fd = -1
 		self.port = port

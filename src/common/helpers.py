@@ -18,6 +18,7 @@
 
 import sre
 import os
+import subprocess
 import urllib
 import errno
 import select
@@ -26,7 +27,7 @@ import sha
 from encodings.punycode import punycode_encode
 
 import gajim
-import i18n
+from i18n import Q_
 from xmpp_stringprep import nodeprep, resourceprep, nameprep
 
 try:
@@ -35,9 +36,6 @@ try:
 	import win32con
 except:
 	pass
-
-_ = i18n._
-Q_ = i18n.Q_
 
 special_groups = (_('Transports'), _('Not in Roster'), _('Observers'))
 
@@ -363,6 +361,11 @@ def is_in_path(name_of_command, return_abs_path = False):
 	else:
 		return is_in_dir
 
+def exec_command(command):
+	'''command is a string that contain arguments'''
+#	os.system(command)
+	subprocess.Popen(command.split())
+
 def launch_browser_mailer(kind, uri):
 	#kind = 'url' or 'mail'
 	if os.name == 'nt':
@@ -386,11 +389,9 @@ def launch_browser_mailer(kind, uri):
 				command = gajim.config.get('custommailapp')
 			if command == '': # if no app is configured
 				return
-		# we add the uri in "" so we have good parsing from shell
-		uri = uri.replace('"', '\\"') # escape "
-		command = command + ' "' + uri + '" &'
-		try: #FIXME: when we require python2.4+ use subprocess module
-			os.system(command)
+		command = command + ' ' + uri
+		try:
+			exec_command(command)
 		except:
 			pass
 
@@ -409,11 +410,9 @@ def launch_file_manager(path_to_open):
 			command = gajim.config.get('custom_file_manager')
 		if command == '': # if no app is configured
 			return
-		# we add the path in "" so we have good parsing from shell
-		path_to_open = path_to_open.replace('"', '\\"') # escape "
-		command = command + ' "' + path_to_open + '" &'
-		try: #FIXME: when we require python2.4+ use subprocess module
-			os.system(command)
+		command = command + ' ' + path_to_open
+		try:
+			exec_command(command)
 		except:
 			pass
 
@@ -421,6 +420,9 @@ def play_sound(event):
 	if not gajim.config.get('sounds_on'):
 		return
 	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
+	play_sound_file(path_to_soundfile)
+
+def play_sound_file(path_to_soundfile):
 	if path_to_soundfile == 'beep':
 		print '\a' # make a speaker beep
 		return
@@ -436,11 +438,8 @@ def play_sound(event):
 		if gajim.config.get('soundplayer') == '':
 			return
 		player = gajim.config.get('soundplayer')
-		# we add the path in "" so we have good parsing from shell
-		path_to_soundfile = path_to_soundfile.replace('"', '\\"') # escape "
-		command = player + ' "' + path_to_soundfile + '" &'
-		#FIXME: when we require 2.4+ use subprocess module
-		os.system(command)
+		command = player + ' ' + path_to_soundfile
+		exec_command(command)
 
 def get_file_path_from_dnd_dropped_uri(uri):
 	path = urllib.url2pathname(uri) # escape special chars
@@ -463,14 +462,6 @@ def from_xs_boolean_to_python_boolean(value):
 		val = False
 
 	return val
-
-def ensure_unicode_string(s):
-	# py23 u'abc'.decode('utf-8') raises
-	# python24 does not. if python23 is ooold we can remove this func
-	# FIXME: remove this when we abandon py23
-	if isinstance(s, str):
-		s = s.decode('utf-8')
-	return s
 
 def get_xmpp_show(show):
 	if show in ('online', 'offline'):
@@ -514,9 +505,9 @@ def get_global_status():
 
 def get_icon_name_to_show(contact, account = None):
 	'''Get the icon name to show in online, away, requested, ...'''
-	if account and gajim.awaiting_events[account].has_key(contact.jid):
+	if account and gajim.events.get_nb_roster_events(account, contact.jid):
 		return 'message'
-	if account and gajim.awaiting_events[account].has_key(
+	if account and gajim.events.get_nb_roster_events(account,
 	contact.get_full_jid()):
 		return 'message'
 	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
@@ -541,6 +532,14 @@ def decode_string(string):
 			continue
 		break
 
+	return string
+
+def ensure_utf8_string(string):
+	'''make sure string is in UTF-8'''
+	try:
+		string = decode_string(string).encode('utf-8')
+	except:
+		pass
 	return string
 
 def get_windows_reg_env(varname, default=''):
@@ -692,8 +691,11 @@ def get_os_info():
 					text = fd.readline().strip() # get only first line
 					fd.close()
 					if path_to_file.endswith('version'):
-						# sourcemage_version has all the info we need
-						if not os.path.basename(path_to_file).startswith('sourcemage'):
+						# sourcemage_version and slackware-version files
+						# have all the info we need (name and version of distro)
+						if not os.path.basename(path_to_file).startswith(
+						'sourcemage') or not\
+						os.path.basename(path_to_file).startswith('slackware'):
 							text = distro_name + ' ' + text
 					elif path_to_file.endswith('aurox-release'):
 						# file doesn't have version
@@ -724,20 +726,73 @@ def sanitize_filename(filename):
 	
 	return filename
 
-def allow_showing_notification(account):
+def allow_showing_notification(account, type = None, advanced_notif_num = None,
+first = True):
 	'''is it allowed to show nofication?
-	check OUR status and if we allow notifications for that status'''
+	check OUR status and if we allow notifications for that status
+	type is the option that need to be True ex: notify_on_signing
+	first: set it to false when it's not the first message'''
+	if advanced_notif_num != None:
+		popup = gajim.config.get_per('notifications', str(advanced_notif_num),
+			'popup')
+		if popup == 'yes':
+			return True
+		if popup == 'no':
+			return False
+	if type and (not gajim.config.get(type) or not first):
+		return False
+	if type and gajim.config.get(type) and first:
+		return True
 	if gajim.config.get('autopopupaway'): # always show notification
 		return True
 	if gajim.connections[account].connected in (2, 3): # we're online or chat
 		return True
 	return False
 
-def allow_popup_window(account):
+def allow_popup_window(account, advanced_notif_num = None):
 	'''is it allowed to popup windows?'''
+	if advanced_notif_num != None:
+		popup = gajim.config.get_per('notifications', str(advanced_notif_num),
+			'auto_open')
+		if popup == 'yes':
+			return True
+		if popup == 'no':
+			return False
 	autopopup = gajim.config.get('autopopup')
 	autopopupaway = gajim.config.get('autopopupaway')
 	if autopopup and (autopopupaway or \
 	gajim.connections[account].connected in (2, 3)): # we're online or chat
 		return True
 	return False
+
+def allow_sound_notification(sound_event, advanced_notif_num = None):
+	if advanced_notif_num != None:
+		sound = gajim.config.get_per('notifications', str(advanced_notif_num),
+			'sound')
+		if sound == 'yes':
+			return True
+		if sound == 'no':
+			return False
+	if gajim.config.get_per('soundevents', sound_event, 'enabled'):
+		return True
+	return False
+
+def get_chat_control(account, contact):
+	full_jid_with_resource = contact.jid
+	if contact.resource:
+		full_jid_with_resource += '/' + contact.resource
+	highest_contact = gajim.contacts.get_contact_with_highest_priority(
+		account, contact.jid)
+	# Look for a chat control that has the given resource, or default to
+	# one without resource
+	ctrl = gajim.interface.msg_win_mgr.get_control(full_jid_with_resource,
+		account)
+	if ctrl:
+		return ctrl
+	elif not highest_contact or not highest_contact.resource:
+		# unknow contact or offline message
+		return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+	elif highest_contact and contact.resource != \
+	highest_contact.resource:
+		return None
+	return gajim.interface.msg_win_mgr.get_control(contact.jid, account)

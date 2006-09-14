@@ -24,6 +24,7 @@ import sha
 import socket
 import sys
 
+from time import localtime, strftime, gmtime
 from calendar import timegm
 
 import socks5
@@ -32,8 +33,6 @@ import common.xmpp
 from common import GnuPG
 from common import helpers
 from common import gajim
-from common import i18n
-_ = i18n._
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
@@ -41,6 +40,7 @@ STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
+METACONTACTS_ARRIVED = 'metacontacts_arrived'
 HAS_IDLE = True
 try:
 	import common.idle as idle # when we launch gajim from sources
@@ -90,7 +90,7 @@ class ConnectionBytestream:
 			if contact.jid == receiver_jid:
 				file_props['error'] = -5
 				self.remove_transfer(file_props)
-				self.dispatch('FILE_REQUEST_ERROR', (contact.jid, file_props))
+				self.dispatch('FILE_REQUEST_ERROR', (contact.jid, file_props, ''))
 			sender_jid = unicode(file_props['sender']).split('/')[0]
 			if contact.jid == sender_jid:
 				file_props['error'] = -3
@@ -169,12 +169,18 @@ class ConnectionBytestream:
 		file_props['sha_str'] = sha_str
 		if not ft_override_host_to_send:
 			ft_override_host_to_send = self.peerhost[0]
-		ft_override_host_to_send = socket.gethostbyname(ft_override_host_to_send)
+		try:
+			ft_override_host_to_send = socket.gethostbyname(
+				ft_override_host_to_send)
+		except socket.gaierror:
+			self.dispatch('ERROR', (_('Wrong host'), _('The host you configured as the ft_override_host_to_send advanced option is not valid, so ignored.')))
+			ft_override_host_to_send = self.peerhost[0]
 		listener = gajim.socks5queue.start_listener(self.peerhost[0], port,
 			sha_str, self._result_socks5_sid, file_props['sid'])
 		if listener == None:
 			file_props['error'] = -5
-			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props))
+			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props,
+				''))
 			self._connect_error(unicode(receiver), file_props['sid'],
 				file_props['sid'], code = 406)
 			return
@@ -216,8 +222,8 @@ class ConnectionBytestream:
 		iq = common.xmpp.Protocol(name = 'iq',
 			to = unicode(file_props['sender']), typ = 'error')
 		iq.setAttr('id', file_props['request-id'])
-		err = common.xmpp.ErrorNode(code = '406', typ = 'auth', name =
-			'not-acceptable')
+		err = common.xmpp.ErrorNode(code = '403', typ = 'cancel', name =
+			'forbidden', text = 'Offer Declined')
 		iq.addChild(node=err)
 		self.connection.send(iq)
 
@@ -309,8 +315,8 @@ class ConnectionBytestream:
 			if file_props is not None:
 				self.disconnect_transfer(file_props)
 				file_props['error'] = -3
-				self.dispatch('FILE_REQUEST_ERROR', (to, file_props))
-	
+				self.dispatch('FILE_REQUEST_ERROR', (to, file_props, msg))
+
 	def _proxy_auth_ok(self, proxy):
 		'''cb, called after authentication to proxy server '''
 		file_props = self.files_props[proxy['sid']]
@@ -339,7 +345,7 @@ class ConnectionBytestream:
 			return
 		file_props = self.files_props[id]
 		file_props['error'] = -4
-		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
+		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise common.xmpp.NodeProcessed
 	
 	def _bytestreamSetCB(self, con, iq_obj):
@@ -556,7 +562,7 @@ class ConnectionBytestream:
 			return
 		jid = helpers.get_jid_from_iq(iq_obj)
 		file_props['error'] = -3
-		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props))
+		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise common.xmpp.NodeProcessed
 
 class ConnectionDisco:
@@ -580,8 +586,8 @@ class ConnectionDisco:
 		iq.setID(id)
 		# Wait the answer during 30 secondes
 		self.awaiting_timeouts[gajim.idlequeue.current_time() + 30] = (id,
-			_('Registration information for transport %s has not arrived in time' % \
-			agent))
+			_('Registration information for transport %s has not arrived in time') % \
+			agent)
 		self.connection.SendAndCallForResponse(iq, self._ReceivedRegInfo,
 			{'agent': agent})
 	
@@ -726,17 +732,28 @@ class ConnectionDisco:
 		qc = iq_obj.getQueryChildren()
 		if not qc:
 			qc = []
+		is_muc = False
+		transport_type = ''
 		for i in qc:
 			if i.getName() == 'identity':
 				attr = {}
 				for key in i.getAttrs().keys():
 					attr[key] = i.getAttr(key)
+				if attr.has_key('category') and attr['category'] in ('gateway', 'headline')\
+				and attr.has_key('type'):
+					transport_type = attr['type']
+				if attr.has_key('category') and attr['category'] == 'conference' \
+				and attr.has_key('type') and attr['type'] == 'text':
+					is_muc = True
 				identities.append(attr)
 			elif i.getName() == 'feature':
 				features.append(i.getAttr('var'))
-			elif i.getName() == 'x' and i.getAttr('xmlns') == common.xmpp.NS_DATA:
+			elif i.getName() == 'x' and i.getNamespace() == common.xmpp.NS_DATA:
 				data.append(common.xmpp.DataForm(node=i))
 		jid = helpers.get_full_jid_from_iq(iq_obj)
+		if transport_type and jid not in gajim.transport_type:
+			gajim.transport_type[jid] = transport_type
+			gajim.logger.save_transport_type(jid, transport_type)
 		id = iq_obj.getID()
 		if not identities: # ejabberd doesn't send identities when we browse online users
 		#FIXME: see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
@@ -744,6 +761,14 @@ class ConnectionDisco:
 		if id[0] == 'p':
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
 				gajim.proxy65_manager.resolve(jid, self.connection, self.name)
+			if features.__contains__(common.xmpp.NS_MUC) and is_muc:
+				type_ = transport_type or 'jabber'
+				self.muc_jid[type_] = jid
+			if transport_type:
+				if self.available_transports.has_key(transport_type):
+					self.available_transports[transport_type].append(jid)
+				else:
+					self.available_transports[transport_type] = [jid]
 		self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
 			features, data))
 
@@ -851,7 +876,10 @@ class ConnectionVcard:
 
 		id = self.connection.getAnID()
 		iq.setID(id)
-		self.awaiting_answers[id] = (VCARD_ARRIVED, jid)
+		j = jid
+		if not j:
+			j = gajim.get_jid_from_account(self.name)
+		self.awaiting_answers[id] = (VCARD_ARRIVED, j)
 		if is_fake_jid:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			if not room_jid in self.room_jids:
@@ -939,9 +967,12 @@ class ConnectionVcard:
 		elif self.awaiting_answers[id][0] == VCARD_ARRIVED:
 			# If vcard is empty, we send to the interface an empty vcard so that
 			# it knows it arrived
-			if not iq_obj.getTag('vCard'):
-				jid = self.awaiting_answers[id][1]
-				our_jid = gajim.get_jid_from_account(self.name)
+			jid = self.awaiting_answers[id][1]
+			our_jid = gajim.get_jid_from_account(self.name)
+			if iq_obj.getType() == 'error' and jid == our_jid:
+				# our server doesn't support vcard
+				self.vcard_supported = False
+			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
 				if jid and jid != our_jid:
 					# Write an empty file
 					self.save_vcard_to_hd(jid, '')
@@ -951,6 +982,29 @@ class ConnectionVcard:
 		elif self.awaiting_answers[id][0] == AGENT_REMOVED:
 			jid = self.awaiting_answers[id][1]
 			self.dispatch('AGENT_REMOVED', jid)
+		elif self.awaiting_answers[id][0] == METACONTACTS_ARRIVED:
+			if iq_obj.getType() == 'result':
+				# Metacontact tags
+				# http://www.jabber.org/jeps/jep-XXXX.html
+				meta_list = {}
+				query = iq_obj.getTag('query')
+				storage = query.getTag('storage')
+				metas = storage.getTags('meta')
+				for meta in metas:
+					jid = meta.getAttr('jid')
+					tag = meta.getAttr('tag')
+					data = {'jid': jid}
+					order = meta.getAttr('order')
+					if order != None:
+						data['order'] = order
+					if meta_list.has_key(tag):
+						meta_list[tag].append(data)
+					else:
+						meta_list[tag] = [data]
+				self.dispatch('METACONTACTS', meta_list)
+			# We can now continue connection by requesting the roster
+			self.connection.initRoster()
+
 		del self.awaiting_answers[id]
 	
 	def _vCardCB(self, con, vc):
@@ -1051,6 +1105,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		# keep the jids we auto added (transports contacts) to not send the
 		# SUBSCRIBED event to gui
 		self.automatically_added = []
+		# keep the latest subscribed event for each jid to prevent loop when we 
+		# acknoledge presences
+		self.subscribed_events = {}
 		try:
 			idle.init()
 		except:
@@ -1077,7 +1134,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
-		errmsg = iq_obj.getError()
+		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
 		jid_from = helpers.get_full_jid_from_iq(iq_obj)
 		id = unicode(iq_obj.getID())
@@ -1112,26 +1169,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					
 					self.bookmarks.append(bm)
 				self.dispatch('BOOKMARKS', self.bookmarks)
-
-			elif ns == 'storage:metacontacts':
-				# Metacontact tags
-				# http://www.jabber.org/jeps/jep-XXXX.html
-				meta_list = {}
-				metas = storage.getTags('meta')
-				for meta in metas:
-					jid = meta.getAttr('jid')
-					tag = meta.getAttr('tag')
-					data = {'jid': jid}
-					order = meta.getAttr('order')
-					if order != None:
-						data['order'] = order
-					if meta_list.has_key(tag):
-						meta_list[tag].append(data)
-					else:
-						meta_list[tag] = [data]
-				self.dispatch('METACONTACTS', meta_list)
-				# We can now continue connection by requesting the roster
-				self.connection.initRoster()
 
 			elif ns == 'gajim:prefs':
 				# Preferences data
@@ -1215,6 +1252,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
 
+	def _TimeCB(self, con, iq_obj):
+		gajim.log.debug('TimeCB')
+		iq_obj = iq_obj.buildReply('result')
+		qp = iq_obj.getTag('query')
+		qp.setTagData('utc', strftime("%Y%m%dT%T", gmtime()))
+		qp.setTagData('tz', strftime("%Z", gmtime()))
+		qp.setTagData('display', strftime("%c", localtime()))
+		self.connection.send(iq_obj)
+		raise common.xmpp.NodeProcessed
+
 	
 	def _gMailNewMailCB(self, con, gm):
 		'''Called when we get notified of new mail messages in gmail account'''
@@ -1239,9 +1286,20 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			newmsgs = gm.getTag('mailbox').getAttr('total-matched')
 			if newmsgs != '0':
 				# there are new messages
+				gmail_messages_list = []
+				if gm.getTag('mailbox').getTag('mail-thread-info'):
+					gmail_messages = gm.getTag('mailbox').getTags('mail-thread-info')
+					for gmessage in gmail_messages:
+						gmail_from = gmessage.getTag('senders').getTag('sender').getAttr('address')
+						gmail_subject = gmessage.getTag('subject').getData()
+						gmail_snippet = gmessage.getTag('snippet').getData()
+						gmail_messages_list.append({ \
+							'From': gmail_from, \
+							'Subject': gmail_subject, \
+							'Snippet': gmail_snippet})
 				jid = gajim.get_jid_from_account(self.name)
 				gajim.log.debug(('You have %s new gmail e-mails on %s.') % (newmsgs, jid))
-				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs))
+				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
 			raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
@@ -1295,7 +1353,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					composing_jep = 'JEP-0022'
 					if not msgtxt and chatstate_child.getTag('composing'):
 						chatstate = 'composing'
-		
+		# JEP-0172 User Nickname
+		user_nick = msg.getTagData('nick')
+		if not user_nick:
+			user_nick = ''
+
 		if encTag and GnuPG.USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
@@ -1325,9 +1387,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				# Ignore message from room in which we are not
 				if not self.last_history_line.has_key(jid):
 					return
-				self.dispatch('GC_MSG', (frm, msgtxt, tim))
-				if self.name not in no_log_for and jid in self.last_history_line \
-					and not int(float(time.mktime(tim))) <= \
+				has_timestamp = False
+				if msg.timestamp:
+					has_timestamp = True
+				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp))
+				if self.name not in no_log_for and not int(float(time.mktime(tim))) <= \
 					self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 		elif mtype == 'chat': # it's type 'chat'
@@ -1338,7 +1402,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id, composing_jep))
+				chatstate, msg_id, composing_jep, user_nick))
 		else: # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
@@ -1352,7 +1416,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 			else:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, chatstate, msg_id, composing_jep))
+					subject, chatstate, msg_id, composing_jep, user_nick))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
@@ -1361,27 +1425,42 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		if ptype == 'available':
 			ptype = None
 		gajim.log.debug('PresenceCB: %s' % ptype)
-		who = helpers.get_full_jid_from_iq(prs)
+		try:
+			who = helpers.get_full_jid_from_iq(prs)
+		except:
+			if prs.getTag('error').getTag('jid-malformed'):
+				# wrong jid, we probably tried to change our nick in a room to a non valid
+				# one
+				who = str(prs.getFrom())
+				jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+				self.dispatch('GC_MSG', (jid_stripped, _('Nickname not allowed: %s') % \
+					resource, None, False))
+			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
 		is_gc = False # is it a GC presence ?
 		sigTag = None
 		avatar_sha = None
+		# JEP-0172 User Nickname
+		user_nick = prs.getTagData('nick')
+		if not user_nick:
+			user_nick = ''
 		transport_auto_auth = False
 		xtags = prs.getTags('x')
 		for x in xtags:
-			if x.getNamespace().startswith(common.xmpp.NS_MUC):
+			namespace = x.getNamespace()
+			if namespace.startswith(common.xmpp.NS_MUC):
 				is_gc = True
-			if x.getNamespace() == common.xmpp.NS_SIGNED:
+			if namespace == common.xmpp.NS_SIGNED:
 				sigTag = x
-			if x.getNamespace() == common.xmpp.NS_VCARD_UPDATE:
+			if namespace == common.xmpp.NS_VCARD_UPDATE:
 				avatar_sha = x.getTagData('photo')
-			if x.getNamespace() == common.xmpp.NS_DELAY:
+			if namespace == common.xmpp.NS_DELAY:
 				# JEP-0091
 				tim = prs.getTimestamp()
 				tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 				timestamp = time.localtime(timegm(tim))
-			if x.getNamespace() == 'http://delx.cjb.net/protocol/roster-subsync':
+			if namespace == 'http://delx.cjb.net/protocol/roster-subsync':
 				# see http://trac.gajim.org/ticket/326
 				agent = gajim.get_server_from_jid(jid_stripped)
 				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
@@ -1389,7 +1468,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for').split()
-		status = prs.getStatus()
+		status = prs.getStatus() or ''
 		show = prs.getShow()
 		if not show in STATUS_LIST:
 			show = '' # We ignore unknown show
@@ -1448,7 +1527,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			if not ptype or ptype == 'unavailable':
 				if gajim.config.get('log_contact_status_changes') and self.name\
 					not in no_log_for and jid_stripped not in no_log_for:
-					gajim.logger.write('gcstatus', who, status, show)
+					gc_c = gajim.contacts.get_gc_contact(self.name, jid_stripped, resource)
+					st = status or ''
+					if gc_c:
+						jid = gc_c.jid
+					else:
+						jid = prs.getJid()
+					if jid:
+						# we know real jid, save it in db
+						st += ' (%s)' % jid
+					gajim.logger.write('gcstatus', who, st, show)
 				if avatar_sha:
 					if self.vcard_shas.has_key(who):
 						if avatar_sha != self.vcard_shas[who]:
@@ -1475,23 +1563,49 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 						resource, prio, keyID, timestamp))
 				if transport_auto_auth:
 					self.automatically_added.append(jid_stripped)
-					self.request_subscription(jid_stripped)
+					self.request_subscription(jid_stripped, name = user_nick)
 			else:
 				if not status:
 					status = _('I would like to add you to my roster.')
-				self.dispatch('SUBSCRIBE', (who, status))
+				self.dispatch('SUBSCRIBE', (who, status, user_nick))
 		elif ptype == 'subscribed':
 			if jid_stripped in self.automatically_added:
 				self.automatically_added.remove(jid_stripped)
 			else:
-				self.dispatch('SUBSCRIBED', (jid_stripped, resource))
+				# detect a subscription loop
+				if not self.subscribed_events.has_key(jid_stripped):
+					self.subscribed_events[jid_stripped] = []
+				self.subscribed_events[jid_stripped].append(time.time())
+				block = False
+				if len(self.subscribed_events[jid_stripped]) > 5:
+					if time.time() - self.subscribed_events[jid_stripped][0] < 5:
+						block = True
+					self.subscribed_events[jid_stripped] = self.subscribed_events[jid_stripped][1:]
+				if block:
+					gajim.config.set_per('account', self.name,
+						'dont_ack_subscription', True)
+				else:
+					self.dispatch('SUBSCRIBED', (jid_stripped, resource))
 			# BE CAREFUL: no con.updateRosterItem() in a callback
 			gajim.log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
 			gajim.log.debug(_('unsubscribe request from %s') % who)
 		elif ptype == 'unsubscribed':
 			gajim.log.debug(_('we are now unsubscribed from %s') % who)
-			self.dispatch('UNSUBSCRIBED', jid_stripped)
+			# detect a unsubscription loop
+			if not self.subscribed_events.has_key(jid_stripped):
+				self.subscribed_events[jid_stripped] = []
+			self.subscribed_events[jid_stripped].append(time.time())
+			block = False
+			if len(self.subscribed_events[jid_stripped]) > 5:
+				if time.time() - self.subscribed_events[jid_stripped][0] < 5:
+					block = True
+				self.subscribed_events[jid_stripped] = self.subscribed_events[jid_stripped][1:]
+			if block:
+				gajim.config.set_per('account', self.name, 'dont_ack_subscription',
+					True)
+			else:
+				self.dispatch('UNSUBSCRIBED', jid_stripped)
 		elif ptype == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
@@ -1650,13 +1764,18 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				print >> sys.stderr, _('JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it') % jid
 			else:
 				infos = raw_roster[jid]
-				if jid != our_jid and (not infos['subscription'] or infos['subscription'] == \
-				'none') and (not infos['ask'] or infos['ask'] == 'none') and not infos['name'] \
-				and not infos['groups']:
+				if jid != our_jid and (not infos['subscription'] or \
+				infos['subscription'] == 'none') and (not infos['ask'] or \
+				infos['ask'] == 'none') and not infos['name'] and \
+				not infos['groups']:
 					# remove this useless item, it won't be shown in roster anyway
 					self.connection.getRoster().delItem(jid)
 				elif jid != our_jid: # don't add our jid
 					roster[j] = raw_roster[jid]
+					if gajim.jid_is_transport(jid) and \
+					not gajim.get_transport_name_from_jid(jid):
+						# we can't determine which iconset to use
+						self.discoverInfo(jid)
 
 		self.dispatch('ROSTER', roster)
 
@@ -1694,7 +1813,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 
 			# If it's a gmail account,
 			# inform the server that we want e-mail notifications
-			if gajim.get_server_from_jid(our_jid) == 'gmail.com':
+			if gajim.get_server_from_jid(our_jid) in gajim.gmail_domains:
 				gajim.log.debug(('%s is a gmail account. Setting option '
 					'to get e-mail notifications on the server.') % (our_jid))
 				iq = common.xmpp.Iq(typ = 'set', to = our_jid)
@@ -1748,6 +1867,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._VersionCB, 'get',
 			common.xmpp.NS_VERSION)
+		con.RegisterHandler('iq', self._TimeCB, 'get',
+			common.xmpp.NS_TIME)
 		con.RegisterHandler('iq', self._LastCB, 'get',
 			common.xmpp.NS_LAST)
 		con.RegisterHandler('iq', self._LastResultCB, 'result',
@@ -1761,8 +1882,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		con.RegisterHandler('iq', self._getRosterCB, 'result',
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._PrivateCB, 'result',
-			common.xmpp.NS_PRIVATE)
-		con.RegisterHandler('iq', self._PrivateErrorCB, 'error',
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',
 			common.xmpp.NS_HTTP_AUTH)
