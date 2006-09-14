@@ -223,8 +223,8 @@ class Zeroconf:
 
 	# connect to dbus
 	def connect(self):
-		self.bus = dbus.SystemBus()
 		try:
+			self.bus = dbus.SystemBus()
 			# is there any way to check, if a dbus name exists?
 			# that might make the Introspect Error go away...
 			self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
