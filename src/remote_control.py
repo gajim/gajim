@@ -346,6 +346,8 @@ class SignalObject(DbusPrototype):
 		else:
 			# account not specified, so change the status of all accounts
 			for acc in gajim.contacts.get_accounts():
+				if not gajim.config.get_per('accounts', acc, 'sync_with_global_status'):
+					continue
 				gobject.idle_add(gajim.interface.roster.send_status, acc, 
 					status, message)
 		return None
