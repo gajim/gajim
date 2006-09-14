@@ -54,8 +54,8 @@ class Zeroconf:
 		print "Error:", str(err)
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
-		if True:
-		#XXX name != self.name
+		# we don't want to see ourselves in the list
+		if name != self.name:
 			# print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
 		
 			#synchronous resolving
