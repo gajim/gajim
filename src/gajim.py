@@ -893,7 +893,7 @@ class Interface:
 
 
 	def handle_event_gc_msg(self, account, array):
-		# ('GC_MSG', account, (jid, msg, time))
+		# ('GC_MSG', account, (jid, msg, time, has_timestamp))
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
 		gc_control = self.msg_win_mgr.get_control(room_jid, account)
@@ -905,7 +905,7 @@ class Interface:
 		else:
 			# message from someone
 			nick = jids[1]
-		gc_control.on_message(nick, array[1], array[2])
+		gc_control.on_message(nick, array[1], array[2], array[3])
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 

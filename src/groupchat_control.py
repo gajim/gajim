@@ -430,13 +430,16 @@ class GroupchatControl(ChatControlBase):
 			childs[3].set_sensitive(False)
 		return menu
 
-	def on_message(self, nick, msg, tim):
+	def on_message(self, nick, msg, tim, has_timestamp = False):
 		if not nick:
 			# message from server
 			self.print_conversation(msg, tim = tim)
 		else:
 			# message from someone
-			self.print_conversation(msg, nick, tim)
+			if has_timestamp:
+				self.print_old_conversation(msg, nick, tim)
+			else:
+				self.print_conversation(msg, nick, tim)
 
 	def on_private_message(self, nick, msg, tim):
 		# Do we have a queue?
@@ -498,6 +501,21 @@ class GroupchatControl(ChatControlBase):
 
 	gc_count_nicknames_colors = 0
 	gc_custom_colors = {}  
+
+	def print_old_conversation(self, text, contact, tim = None):
+		if isinstance(text, str):
+			text = unicode(text, 'utf-8')
+		if contact == self.nick: # it's us
+			kind = 'outgoing'
+		else:
+			kind = 'incoming'
+		if gajim.config.get('restored_messages_small'):
+			small_attr = ['small']
+		else:
+			small_attr = []
+		ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
+			small_attr, small_attr + ['restored_message'],
+			small_attr + ['restored_message'])
 
 	def print_conversation(self, text, contact = '', tim = None):
 		'''Print a line in the conversation:

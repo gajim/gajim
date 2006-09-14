@@ -1387,7 +1387,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				# Ignore message from room in which we are not
 				if not self.last_history_line.has_key(jid):
 					return
-				self.dispatch('GC_MSG', (frm, msgtxt, tim))
+				has_timestamp = False
+				if msg.timestamp:
+					has_timestamp = True
+				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp))
 				if self.name not in no_log_for and not int(float(time.mktime(tim))) <= \
 					self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
@@ -1431,7 +1434,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				who = str(prs.getFrom())
 				jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 				self.dispatch('GC_MSG', (jid_stripped, _('Nickname not allowed: %s') % \
-					resource, None))
+					resource, None, False))
 			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
