@@ -1204,7 +1204,7 @@ class RosterWindow:
 		gajim.connections[account].request_register_agent_info(contact.jid)
 
 	def on_remove_agent(self, widget, list_):
-		'''When an agent is requested to log in or off. list_ is a list of
+		'''When an agent is requested to be removed. list_ is a list of
 		(contact, account) tuple'''
 		for (contact, account) in list_:
 			if gajim.config.get_per('accounts', account, 'hostname') == \
@@ -1226,6 +1226,17 @@ class RosterWindow:
 				gajim.contacts.remove_jid(account, contact.jid)
 				gajim.contacts.remove_contact(account, contact)
 
+		# Check if there are unread events from some contacts
+		has_unread_events = False
+		for (contact, account) in list_:
+			for jid in gajim.events.get_events(account):
+				if jid.endswith(contact.jid):
+					has_unread_events = True
+					break
+		if has_unread_events:
+			dialogs.ErrorDialog(_('You have unread messages'),
+				_('You must read them before removing this transport.'))
+			return
 		if len(list_) == 1:
 			pritext = _('Transport "%s" will be removed') % contact.jid
 			sectext = _('You will no longer be able to send and receive messages to contacts from this transport.')
