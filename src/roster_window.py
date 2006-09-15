@@ -3133,7 +3133,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				model[iter][1] = self.jabber_state_images['16'][model[iter][2]]
 			iter = model.iter_next(iter)
 		# Update the systray
-		gajim.interface.systray.set_img()
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.set_img()
 
 		for win in gajim.interface.msg_win_mgr.windows():
 			for ctrl in win.controls():
