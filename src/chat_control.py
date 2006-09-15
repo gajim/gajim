@@ -1018,7 +1018,7 @@ class ChatControl(ChatControlBase):
 		acct_info = ''
 		self.account_displayed = False
 		for ctrl in self.parent_win.controls():
-			if ctrl == self:
+			if ctrl == self or ctrl.type_id == 'gc':
 				continue
 			if self.contact.get_shown_name() == ctrl.contact.get_shown_name()\
 			and not avoid_showing_account_too:
