@@ -399,7 +399,7 @@ class Message(Protocol):
         return self.getTagData('body')
     def getXHTML(self):
         """ Returns serialized xhtml-im body text of the message. """
-        xhtml = self.getTag('xhtml')
+        xhtml = self.getTag('html')
         return str(xhtml.getTag('body'))
     def getSubject(self):
         """ Returns subject of the message. """
