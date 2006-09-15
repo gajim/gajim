@@ -65,8 +65,9 @@ class Zeroconf:
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		# print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
-		del self.contacts[name]
-		self.remove_serviceCB(name)
+		if name != self.name:
+			del self.contacts[name]
+			self.remove_serviceCB(name)
 
 	def new_service_type(self, interface, protocol, stype, domain, flags):
 		# Are we already browsing this domain for this type? 

@@ -88,6 +88,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
 		self.get_config_values_or_default()
+		self.muc_jid = {} # jid of muc server for each transport type
+		self.vcard_supported = False
 
 	def get_config_values_or_default(self):
 		''' get name, host, port from config, or 
@@ -180,6 +182,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# keyID, timestamp))
 		jid = self.zeroconf.check_jid(jid)
 		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0))
+		print 'connection_zeroconf:186'
 
 
 	def connect(self, data = None, show = 'online'):
@@ -243,10 +246,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		# 'disconnect'
 		elif show == 'offline' and self.connected:
-			self.connected = 0
 			self.disconnect()
 			self.dispatch('STATUS', 'offline')
-
+			
 		# update status
 		elif show != 'offline' and self.connected:
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
@@ -352,26 +354,26 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		pass
 	
 	def ack_subscribed(self, jid):
-		gajim.debug.log('This should not happen (ack_subscribed)')
+		gajim.log.debug('This should not happen (ack_subscribed)')
 
 	def ack_unsubscribed(self, jid):
-		gajim.debug.log('This should not happen (ack_unsubscribed)')
+		gajim.log.debug('This should not happen (ack_unsubscribed)')
 
 	def request_subscription(self, jid, msg = '', name = '', groups = [],
 	auto_auth = False):
-		gajim.debug.log('This should not happen (request_subscription)')
+		gajim.log.debug('This should not happen (request_subscription)')
 
 	def send_authorization(self, jid):
-		gajim.debug.log('This should not happen (send_authorization)')
+		gajim.log.debug('This should not happen (send_authorization)')
 
 	def refuse_authorization(self, jid):
-		gajim.debug.log('This should not happen (refuse_authorization)')
+		gajim.log.debug('This should not happen (refuse_authorization)')
 
 	def unsubscribe(self, jid, remove_auth = True):
-		gajim.debug.log('This should not happen (unsubscribe)')
+		gajim.log.debug('This should not happen (unsubscribe)')
 
 	def unsubscribe_agent(self, agent):
-		gajim.debug.log('This should not happen (unsubscribe_agent)')
+		gajim.log.debug('This should not happen (unsubscribe_agent)')
 
 	def update_contact(self, jid, name, groups):	
 		if self.connection:
@@ -379,17 +381,17 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				groups = groups)
 	
 	def new_account(self, name, config, sync = False):
-		gajim.debug.log('This should not happen (new_account)')
+		gajim.log.debug('This should not happen (new_account)')
 
 	def _on_new_account(self, con = None, con_type = None):
-		gajim.debug.log('This should not happen (_on_new_account)')
+		gajim.log.debug('This should not happen (_on_new_account)')
 
 	def account_changed(self, new_name):
 		self.name = new_name
 
 	def request_last_status_time(self, jid, resource):
-		gajim.debug.log('This should not happen (request_last_status_time)')
-
+		gajim.log.debug('This should not happen (request_last_status_time)')
+		
 	def request_os_info(self, jid, resource):
 		'''
 		if not self.connection:
@@ -404,52 +406,52 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		pass
 
 	def get_settings(self):
-		gajim.debug.log('This should not happen (get_settings)')
+		gajim.log.debug('This should not happen (get_settings)')
 
 	def get_bookmarks(self):
-		gajim.debug.log('This should not happen (get_bookmarks)')
+		gajim.log.debug('This should not happen (get_bookmarks)')
 		
 	def store_bookmarks(self):
-		gajim.debug.log('This should not happen (store_bookmarks)')
+		gajim.log.debug('This should not happen (store_bookmarks)')
 		
 	def get_metacontacts(self):
-		gajim.debug.log('This should not happen (get_metacontacts)')
+		gajim.log.debug('This should not happen (get_metacontacts)')
 		
 	def send_agent_status(self, agent, ptype):
-		gajim.debug.log('This should not happen (send_agent_status)')
+		gajim.log.debug('This should not happen (send_agent_status)')
 
 	def join_gc(self, nick, room, server, password):
-		gajim.debug.log('This should not happen (join_gc)')
+		gajim.log.debug('This should not happen (join_gc)')
 		
 	def send_gc_message(self, jid, msg):
-		gajim.debug.log('This should not happen (send_gc_message)')
+		gajim.log.debug('This should not happen (send_gc_message)')
 		
 	def send_gc_subject(self, jid, subject):
-		gajim.debug.log('This should not happen (send_gc_subject)')
+		gajim.log.debug('This should not happen (send_gc_subject)')
 		
 	def request_gc_config(self, room_jid):
-		gajim.debug.log('This should not happen (request_gc_config)')
+		gajim.log.debug('This should not happen (request_gc_config)')
 		
 	def change_gc_nick(self, room_jid, nick):
-		gajim.debug.log('This should not happen (change_gc_nick)')
+		gajim.log.debug('This should not happen (change_gc_nick)')
 		
 	def send_gc_status(self, nick, jid, show, status):
-		gajim.debug.log('This should not happen (send_gc_status)')
+		gajim.log.debug('This should not happen (send_gc_status)')
 		
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
-		gajim.debug.log('This should not happen (gc_set_role)')
+		gajim.log.debug('This should not happen (gc_set_role)')
 		
 	def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
-		gajim.debug.log('This should not happen (gc_set_affiliation)')
+		gajim.log.debug('This should not happen (gc_set_affiliation)')
 		
 	def send_gc_affiliation_list(self, room_jid, list):
-		gajim.debug.log('This should not happen (send_gc_affiliation_list)')
+		gajim.log.debug('This should not happen (send_gc_affiliation_list)')
 		
 	def get_affiliation_list(self, room_jid, affiliation):
-		gajim.debug.log('This should not happen (get_affiliation_list)')
+		gajim.log.debug('This should not happen (get_affiliation_list)')
 		
 	def send_gc_config(self, room_jid, config):
-		gajim.debug.log('This should not happen (send_gc_config)')
+		gajim.log.debug('This should not happen (send_gc_config)')
 		
 	def gpg_passphrase(self, passphrase):
 		if USE_GPG:
@@ -486,10 +488,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		pass
 		
 	def unregister_account(self, on_remove_success):
-		gajim.debug.log('This should not happen (unregister_account)')
+		gajim.log.debug('This should not happen (unregister_account)')
 		
 	def send_invite(self, room, to, reason=''):
-		gajim.debug.log('This should not happen (send_invite)')
+		gajim.log.debug('This should not happen (send_invite)')
 		
 	def send_keepalive(self):
 		# nothing received for the last foo seconds (60 secs by default)
