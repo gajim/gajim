@@ -187,7 +187,7 @@ class Config:
 		'restored_messages_color': [opt_str, 'grey'],
 		'restored_messages_small': [opt_bool, True, _('If True, restored messages will use a smaller font than the default one.')],
 		'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
-		'roster_window_skip_taskbar': [opt_bool, False],
+		'roster_window_skip_taskbar': [opt_bool, False, _('Don\'t show roster in the system taskbar.')],
 		'use_urgency_hint': [opt_bool, True, _('If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],
 		'notification_timeout': [opt_int, 5],
 		'send_sha_in_gc_presence': [opt_bool, True, _('Jabberd1.4 does not like sha info when one join a password protected room. Turn this option to False to stop sending sha info in group chat presences.')],
