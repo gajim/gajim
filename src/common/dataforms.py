@@ -56,6 +56,9 @@ class BadDataFormNode(Exception): pass
 
 class DataForm(xmpp.Node, object):
 	""" Data form as described in JEP-0004. """
+	# NOTES: single forms contain children nodes 'field' of type DataField,
+	# NOTES: multiple forms contain children do not contain 'item' elements of type DataRecord
+	# NOTES: - these are created only when needed
 
 	def __init__(self, typ=None, title=None, instructions=None, fields=None, records=None, node=None, tofill=None):
 		""" Create new node, based on the node given by 'node' parameter, or new.
@@ -64,7 +67,7 @@ class DataForm(xmpp.Node, object):
 		You can also set 'tofill' to DataForm to get a form of type 'submit' with the
 		same fields as in the form given, but without unnecessary data like
 		instructions or title. Also the type will be set to 'submit' by default."""
-		# assert that exactly one of fields 'node' and 'tofill' is filled
+		# assert that at most one of these fields (node and tofill) is filled
 		assert node is None or isinstance(node, xmpp.Node)
 		assert tofill is None or isinstance(tofill, xmpp.Node)
 		assert node is None or tofill is None
@@ -87,33 +90,37 @@ class DataForm(xmpp.Node, object):
 				del field.label
 				del field.options
 				del field.description
+
 		elif node is not None:
-			# if there is <reported/> element, the form contains multiple records
-			if self.getTag('reported') is not None:
+			# helper function - convert all <field/> elements to DataField
+			def convert_fields(node):
+				toadd=[]
+				for field in iter_elements(node, 'field'):
+					if not isinstance(field, DataField):
+						field=DataField(node=field)
+					toadd.append(field)
+				del_multiple_tag_value(node, 'field')
+				for field in toadd:
+					node.addChild(node=field)
+
+			# if there is <recorded/> element, the form contains multiple records
+			if self.getTag('recorded') is not None:
 				# in multiple-record forms there must not be any fields not in <items/>
 				if self.getTag('field') is not None: raise BadDataNodeForm
 				self._mode = DATAFORM_MULTIPLE
 
-				# change every <field/> to DataField object
+				# change every <field/> in every <item/> element to DataField object
 				for item in iter_elements(self, 'item'):
-					for field in iter_elements(item, 'field'):
-						item.delChild(field)
-						field.addChild(node=DataField(node=field))
+					convert_fields(item)
+
+				# the same in <recorded/> element
+				convert_fields(self.getTag('recorded'))
 			else:
 				self._mode = DATAFORM_SINGLE
 
-				# change every <field/> to DataField object
-				toadd=[]
-				for field in self.getChildren():
-					if not isinstance(field, xmpp.Node): continue
-					if not field.getName()=='field': continue
-					toadd.append(DataField(node=field))
+				convert_fields(self)
 
-				del_multiple_tag_value(self, 'field')
-
-				for field in toadd:
-					self.addChild(node=field)
-		else: # neither tofill nor node has a Node
+		else: # both tofill and node are None
 			if typ is None: typ='result'
 			if records is not None and len(records)>1:
 				self._mode = DATAFORM_MULTIPLE
@@ -185,35 +192,53 @@ class DataForm(xmpp.Node, object):
 
 	def iter_records(self):
 		if self.mode is DATAFORM_SINGLE:
-			yield DataRecord(node=self)
+			yield DataRecord(node=self, associated=self)
 		else:
 			for i in iter_elements(self, 'item'):
-				yield i
+				yield DataRecord(node=i, associated=self)
 
 	def get_records(self):
-		if self.mode is DATAFORM_SINGLE:
-			return [DataRecord(node=self),]
-		else:
-			return list(iter_elements(self, 'item'))
+		return list(self.iter_records())
 
 	def set_records(self, records):
-		if self.mode is DATAFORM_SINGLE:
-			assert len(records)==1
+		''' Set new records. For single dataform only the first element in
+		'records' iterable will be chosen.
 
-			record = records[0]
-			assert isinstance(record, DataRecord)
-			for field in record.iter_fields():
-				self[field.var]=field.value
+		Elements from the iterable must be a dictionary (with keys equal to
+		field names and values filled with field value) or any xmpp.Node
+		containing <field/> elements with appropriate format according to JEP-0004.
+		Therefore, you can pass an array of single forms, all of them with the
+		same fields, to create one big multiple form.'''
+		if self.mode is DATAFORM_SINGLE:
+			# get only first record...
+			record = records.__iter__().next()
+
+			if isinstance(record, dict):
+				for var, value in record:
+					self[var]=value
+			elif isinstance(record, xmpp.Node):
+				for field in iter_elements(record, 'field'):
+					self[field.getAttr('var')]=field.getAttr('value')
+			else:
+				assert 'This should not happen' and False
 		else:
 			self.del_records()
 			for record in records:
-				assert isinstance(record, dict)
 				newitem = self.addChild('item')
-				for key, value in record.iteritems():
-					newitem.addChild(node=DataField(
-						var=key,
-						value=value,
-						typ=self.get_field(key).type))
+				if isinstance(record, dict):
+					for key, value in record.iteritems():
+						newitem.addChild(node=DataField(
+							var=key,
+							value=value,
+							typ=self.get_field(key).type))
+				elif isinstance(record, xmpp.Node):
+					for field in iter_elements(record, 'field'):
+						newitem.addChild(node=DataField(
+							var=field.getAttr('var'),
+							value=field.getAttr('value'),
+							typ=field.getAttr('type')))
+				else:
+					assert 'This should not happen' and False
 
 	def del_records(self):
 		if self.mode is DATAFORM_SINGLE:
@@ -234,9 +259,7 @@ class DataForm(xmpp.Node, object):
 		else:
 			container = self.getTag("recorded")
 
-		for child in container.getChildren():
-			if isinstance(child, DataField):
-				yield child
+		return iter_elements(container, 'field')
 
 	def get_field(self, fieldvar):
 		''' Find DataField that has fieldvar as var. '''
@@ -245,12 +268,7 @@ class DataForm(xmpp.Node, object):
 		raise KeyError, "This form does not contain %r field." % fieldvar
 
 	def get_fields(self):
-		if self.mode is DATAFORM_SINGLE:
-			container = self
-		else:
-			container = self.getTag("recorded")
-
-		return container.getTags("field")
+		return list(self.iter_fields)
 
 	def set_fields(self, fields):
 		if self.mode is DATAFORM_SINGLE:
@@ -264,7 +282,11 @@ class DataForm(xmpp.Node, object):
 				self.delChild('recorded')
 			except ValueError:
 				pass
-			self.addChild('recorded', {}, fields)
+			recorded = self.addChild('recorded')
+			for field in fields:
+				if not isinstance(field, DataField):
+					field = DataField(field)
+				recorded.addChild(node=field)
 
 	def del_fields(self):
 		if self.mode is DATAFORM_SINGLE:
@@ -489,18 +511,24 @@ class DataRecord(xmpp.Node):
 	""" Class to store fields. May be used as temporary storage (for example when reading a list of
 	fields from DataForm in DATAFORM_SINGLE mode), may be used as permanent storage place (for example
 	for DataForms in DATAFORM_MULTIPLE mode). It expects that every <field/> element is actually
-	a DataField instance."""
-	def __init__(self, fields=None, node=None):
+	a DataField instance. Read-only."""
+	def __init__(self, fields=None, node=None, associated=None):
+		''' Create new instance of DataRecord. You can use 'associated' to provide form which
+		contains field descriptions. This way iterating over fields in this record will be
+		in the same order as fields in given DataForm, with None when field does not exist
+		in this record. '''
 		assert (fields is None) or (node is None)
 		assert (fields is None) or (fields.__iter__)
 		assert (node is None) or (isinstance(node, xmpp.Node))
+		assert (associated is None) or (isinstance(associated, DataForm))
 
 		self.vars = {}
+		self.associated = associated
 
 		xmpp.Node.__init__(self, node=node)
 
 		if node is not None:
-			for field in node.getTags('field'):
+			for field in iter_elements(node, 'field'):
 				assert isinstance(field, DataField)
 				self.vars[field.var] = field
 
@@ -513,9 +541,20 @@ class DataRecord(xmpp.Node):
 	# if there will be ever needed access to all fields as a list, write it here, in form of property
 
 	def iter_fields(self):
-		for field in self.getChildren():
-			if not isinstance(field, xmpp.DataField): continue
-			yield field
+		if self.associated is not None:
+			for field in self.associated.iter_fields():
+				if field.var in self.vars:
+					yield self.vars[field.var]
+				else:
+					yield None
+		else:
+			for field in self.vars.itervalues():
+				yield field
 
 	def __getitem__(self, item):
+		# if the field is in associated but not here - return None
+		# NOTE: last predicate is meant to raise KeyError if no such item in associated
+		if self.associated is not None and item not in self.vars and \
+		   self.associated[item] is not None:
+			return None
 		return self.vars[item]

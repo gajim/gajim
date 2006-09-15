@@ -490,8 +490,6 @@ class CommandWindow:
 			else:
 				self.stage3_next_form(response.getTag('command'))
 
-		print stanza
-
 		self.account.connection.SendAndCallForResponse(stanza, callback)
 
 	def send_cancel(self):

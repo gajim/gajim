@@ -17,7 +17,7 @@
 """ This module contains widget that can display data form (JEP-0004).
 Words single and multiple refers here to types of data forms:
 single means these with one record of data (without <recorded/> element),
-multiple - these that may contain more data (with <recorded/> element)."""
+multiple - these which may contain more data (with <recorded/> element)."""
 
 # TODO: forms of type='result' should be read-only
 # TODO: remove tabs from dialog
@@ -29,6 +29,8 @@ import gtkgui_helpers
 
 import common.xmpp as xmpp
 import common.dataforms as dataforms
+
+import itertools
 
 class DataFormWidget(gtk.Alignment, object):
 # "public" interface
@@ -51,9 +53,8 @@ class DataFormWidget(gtk.Alignment, object):
 		if dataformnode is not None:
 			self.set_data_form(dataformnode)
 
-	def set_data_form(self, dataform=None):
-		""" Set the data form (xmpp.DataForm) displayed in widget.
-		Set to None to erase the form. """
+	def set_data_form(self, dataform):
+		""" Set the data form (xmpp.DataForm) displayed in widget. """
 		assert isinstance(dataform, dataforms.DataForm)
 
 		self.del_data_form()
@@ -150,23 +151,24 @@ class DataFormWidget(gtk.Alignment, object):
 			# we just do not display them.
 			# TODO: boolean fields
 			#elif field.type=='boolean': fieldtypes.append(bool)
-			fieldtypes.append(unicode)
+			fieldtypes.append(str)
 
-		self.multiplemodel = gtk.ListModel(*fieldtypes)
+		self.multiplemodel = gtk.ListStore(*fieldtypes)
 
 		# moving all data to model
 		for item in self._data_form.iter_records():
-			self.multiplemodel.append(field.value for field in item.iter_fields())
+			
+			self.multiplemodel.append([field.value for field in item.iter_fields()])
 
-		# contructing columns...
-		for field in self._data_form.iter_fields():
-			self.records_treeview.append(
-				gtk.TreeViewColumn(
-					title=field.label,
-					cell_renderer=gtk.CellRendererText(),
-					text=field.value))
+		# constructing columns...
+		for field, counter in zip(self._data_form.iter_fields(), itertools.count()):
+			print repr(field), repr(counter)
+			self.records_treeview.append_column(
+				gtk.TreeViewColumn(field.label,	gtk.CellRendererText(),
+					text=counter))
 
-		self.records.show_all()
+		self.records_treeview.set_model(self.multiplemodel)
+		self.records_treeview.show_all()
 
 		self.data_form_types_notebook.set_current_page(
 			self.data_form_types_notebook.page_num(
@@ -174,10 +176,18 @@ class DataFormWidget(gtk.Alignment, object):
 
 		self.clean_data_form = self.clean_multiple_data_form
 
+		# refresh list look
+		self.refresh_multiple_buttons()
+
 	def clean_multiple_data_form(self):
 		'''(Called as clean_data_form, read the docs of clean_data_form()).
 		Remove form from widget.'''
-		pass
+		del self.multiplemodel
+
+	def refresh_multiple_buttons(self):
+		''' Checks for treeview state and makes control buttons sensitive.'''
+		selection = self.records_treeview.get_selection()
+		
 
 class SingleForm(gtk.Table, object):
 	""" Widget that represent DATAFORM_SINGLE mode form. Because this is used
