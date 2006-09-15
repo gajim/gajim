@@ -1486,6 +1486,13 @@ class MucBrowser(AgentBrowser):
 		col.set_attributes(renderer, text = 4)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
+		# Id column
+		col = gtk.TreeViewColumn(_('Id'))
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text = 0)
+		self.window.services_treeview.insert_column(col, -1)
+		col.set_resizable(True)
 		self.window.services_treeview.set_headers_visible(True)
 		# Source id for idle callback used to start disco#info queries.
 		self._fetch_source = None
