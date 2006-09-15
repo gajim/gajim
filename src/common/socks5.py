@@ -74,13 +74,13 @@ class SocksQueue:
 		self.on_success = None
 		self.on_failure = None
 	
-	def start_listener(self, host, port, sha_str, sha_handler, sid):
+	def start_listener(self, port, sha_str, sha_handler, sid):
 		''' start waiting for incomming connections on (host, port)
 		and do a socks5 authentication using sid for generated sha
 		'''
 		self.sha_handlers[sha_str] = (sha_handler, sid)
 		if self.listener == None:
-			self.listener = Socks5Listener(self.idlequeue, host, port)
+			self.listener = Socks5Listener(self.idlequeue, port)
 			self.listener.queue = self
 			self.listener.bind()
 			if self.listener.started is False:
@@ -790,12 +790,12 @@ class Socks5Sender(Socks5, IdleObject):
 			self.queue.remove_sender(self.queue_idx, False)
 
 class Socks5Listener(IdleObject):
-	def __init__(self, idlequeue, host, port):
-		''' handle all incomming connections on (host, port) 
+	def __init__(self, idlequeue, port):
+		''' handle all incomming connections on (0.0.0.0, port) 
 		This class implements IdleObject, but we will expect
 		only pollin events though
 		'''
-		self.host, self.port = host, port
+		self.port = port
 		self.queue_idx = -1	
 		self.idlequeue = idlequeue
 		self.queue = None

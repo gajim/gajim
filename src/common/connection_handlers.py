@@ -175,7 +175,7 @@ class ConnectionBytestream:
 		except socket.gaierror:
 			self.dispatch('ERROR', (_('Wrong host'), _('The host you configured as the ft_override_host_to_send advanced option is not valid, so ignored.')))
 			ft_override_host_to_send = self.peerhost[0]
-		listener = gajim.socks5queue.start_listener(self.peerhost[0], port,
+		listener = gajim.socks5queue.start_listener(port,
 			sha_str, self._result_socks5_sid, file_props['sid'])
 		if listener == None:
 			file_props['error'] = -5
