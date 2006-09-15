@@ -42,16 +42,22 @@ class DataFormWidget(gtk.Alignment, object):
 		self._data_form = None
 
 		self.xml=gtkgui_helpers.get_glade('data_form_window.glade', 'data_form_vbox')
+		self.xml.signal_autoconnect(self)
 		for name in ('instructions_label', 'instructions_hseparator',
 				'single_form_viewport', 'data_form_types_notebook',
 				'single_form_scrolledwindow', 'multiple_form_hbox',
-				'records_treeview', 'up_button', 'down_button', 'clear_button'):
+				'records_treeview', 'add_button', 'remove_button',
+				'edit_button', 'up_button', 'down_button', 'clear_button'):
 			self.__dict__[name] = self.xml.get_widget(name)
 
 		self.add(self.xml.get_widget('data_form_vbox'))
 
 		if dataformnode is not None:
 			self.set_data_form(dataformnode)
+
+		selection = self.records_treeview.get_selection()
+		selection.connect('changed', self.on_records_selection_changed)
+		selection.set_mode(gtk.SELECTION_MULTIPLE)
 
 	def set_data_form(self, dataform):
 		""" Set the data form (xmpp.DataForm) displayed in widget. """
@@ -187,7 +193,71 @@ class DataFormWidget(gtk.Alignment, object):
 	def refresh_multiple_buttons(self):
 		''' Checks for treeview state and makes control buttons sensitive.'''
 		selection = self.records_treeview.get_selection()
-		
+		model = self.records_treeview.get_model()
+		count = selection.count_selected_rows()
+		if count==0:
+			self.remove_button.set_sensitive(False)
+			self.edit_button.set_sensitive(False)
+			self.up_button.set_sensitive(False)
+			self.down_button.set_sensitive(False)
+		elif count==1:
+			self.remove_button.set_sensitive(True)
+			self.edit_button.set_sensitive(True)
+			_, (path,) = selection.get_selected_rows()
+			iter = model.get_iter(path)
+			if model.iter_next(iter) is None:
+				self.up_button.set_sensitive(True)
+				self.down_button.set_sensitive(False)
+			elif path==(0,):
+				self.up_button.set_sensitive(False)
+				self.down_button.set_sensitive(True)
+			else:
+				self.up_button.set_sensitive(True)
+				self.down_button.set_sensitive(True)
+		else:
+			self.remove_button.set_sensitive(True)
+			self.edit_button.set_sensitive(True)
+			self.up_button.set_sensitive(False)
+			self.down_button.set_sensitive(False)
+
+		if len(model)==0:
+			self.clear_button.set_sensitive(False)
+		else:
+			self.clear_button.set_sensitive(True)
+
+	def on_clear_button_clicked(self, widget):
+		self.records_treeview.get_model().clear()
+
+	def on_remove_button_clicked(self, widget):
+		selection = self.records_treeview.get_selection()
+		model, rowrefs = selection.get_selected_rows()	# rowref is a list of paths
+		for i in xrange(len(rowrefs)):
+			rowrefs[i] = gtk.TreeRowReference(model, rowrefs[i])
+		# rowref is a list of row references; need to convert because we will modify the model,
+		# paths would change
+		for rowref in rowrefs:
+			del model[rowref.get_path()]
+	
+	def on_up_button_clicked(self, widget):
+		selection = self.records_treeview.get_selection()
+		model, (path,) = selection.get_selected_rows()
+		iter = model.get_iter(path)
+		previter = model.get_iter((path[0]-1,))	# constructing path for previous iter
+		model.swap(iter, previter)
+
+		self.refresh_multiple_buttons()
+
+	def on_down_button_clicked(self, widget):
+		selection = self.records_treeview.get_selection()
+		model, (path,) = selection.get_selected_rows()
+		iter = model.get_iter(path)
+		nextiter = model.iter_next(iter)
+		model.swap(iter, nextiter)
+
+		self.refresh_multiple_buttons()
+
+	def on_records_selection_changed(self, widget):
+		self.refresh_multiple_buttons()
 
 class SingleForm(gtk.Table, object):
 	""" Widget that represent DATAFORM_SINGLE mode form. Because this is used
