@@ -1379,6 +1379,14 @@ class RosterWindow:
 			img.set_from_file(path_to_kbd_input_img)
 			rename_menuitem.set_image(img)
 
+		iconset = gajim.config.get('iconset')
+		if not iconset:
+			iconset = DEFAULT_ICONSET
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		state_images = self.load_iconset(path)
+		if state_images.has_key('muc_active'):
+			invite_menuitem.set_image(state_images['muc_active'])
+
 		above_subscription_separator = xml.get_widget(
 			'above_subscription_separator')
 		subscription_menuitem = xml.get_widget('subscription_menuitem')
