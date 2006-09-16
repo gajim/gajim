@@ -511,6 +511,8 @@ class PreferencesWindow:
 			gajim.interface.systray.change_status(show)
 		else:
 			gajim.config.set('trayicon', False)
+			if not gajim.interface.roster.window.get_property('visible'):
+				gajim.interface.roster.window.present()
 			gajim.interface.hide_systray()
 			gajim.config.set('show_roster_on_startup', True) # no tray, show roster!
 		gajim.interface.roster.draw_roster()
