@@ -837,27 +837,27 @@ class FileChooserDialog(gtk.FileChooserDialog):
 			self.set_current_folder(current_folder)
 		else:
 			self.set_current_folder(helpers.get_documents_path())
-
-		buttons = self.action_area.get_children()
-		possible_responses = {gtk.STOCK_OPEN: on_response_ok,
-			gtk.STOCK_SAVE: on_response_ok,
-			gtk.STOCK_CANCEL: on_response_cancel}
-		for b in buttons:
-			for response in possible_responses:
-				if b.get_label() == response:
-					if not possible_responses[response]:
-						b.connect('clicked', self.just_destroy)
-					elif isinstance(possible_responses[response], tuple):
-						if len(possible_responses[response]) == 1:
-							b.connect('clicked', possible_responses[response][0])
-						else:
-							b.connect('clicked', *possible_responses[response])
-					else:
-						b.connect('clicked', possible_responses[response])
-					break
-
+		self.response_ok, self.response_cancel = \
+			on_response_ok, on_response_cancel
+		# in gtk+-2.10 clicked signal on some of the buttons in a dialog
+		# is emitted twice, so we cannot rely on 'clicked' signal
+		self.connect('response', self.on_dialog_response)
 		self.show_all()
 
+	def on_dialog_response(self, dialog, response):
+		if response in (gtk.RESPONSE_CANCEL, gtk.RESPONSE_CLOSE):
+			if self.response_cancel:
+				if isinstance(self.response_cancel, tuple):
+					self.response_cancel[0](dialog, *self.response_cancel[1:])
+				else:
+					self.response_cancel(dialog)
+		elif response == gtk.RESPONSE_OK:
+			if self.response_ok:
+				if isinstance(self.response_ok, tuple):
+					self.response_ok[0](dialog, *self.response_ok[1:])
+				else:
+					self.response_ok(dialog)
+			
 	def just_destroy(self, widget):
 		self.destroy()
 
