@@ -851,12 +851,16 @@ class FileChooserDialog(gtk.FileChooserDialog):
 					self.response_cancel[0](dialog, *self.response_cancel[1:])
 				else:
 					self.response_cancel(dialog)
+			else:
+				self.just_destroy(dialog)
 		elif response == gtk.RESPONSE_OK:
 			if self.response_ok:
 				if isinstance(self.response_ok, tuple):
 					self.response_ok[0](dialog, *self.response_ok[1:])
 				else:
 					self.response_ok(dialog)
+			else:
+				self.just_destroy(dialog)
 			
 	def just_destroy(self, widget):
 		self.destroy()
