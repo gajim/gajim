@@ -71,12 +71,6 @@ class VcardWindow:
 
 		self.fill_jabber_page()
 
-		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-			self.url_label = gtk.LinkButton('')
-		else:
-			self.url_label = gtk.Label('')
-		table = self.xml.get_widget('personal_info_table')
-		table.attach(self.url_label, 1, 4, 3, 4, yoptions = 0)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -119,12 +113,13 @@ class VcardWindow:
 
 	def set_value(self, entry_name, value):
 		try:
-			if entry_name == 'URL_label':
-				if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10,
-				0):
-					self.url_label.set_uri(value)
+			if value and entry_name == 'URL_label':
+				if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
+					self.url_label = gtk.LinkButton(value)
 				else:
-					self.url_label.set_text(value)
+					self.url_label = gtk.Label(value)
+				table = self.xml.get_widget('personal_info_table')
+				table.attach(self.url_label, 1, 4, 3, 4, yoptions = 0)
 			else:
 				self.xml.get_widget(entry_name).set_text(value)
 		except AttributeError:
