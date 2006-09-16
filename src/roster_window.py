@@ -2558,12 +2558,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		# We save it in a queue
 		type_ = 'chat'
+		event_type = 'message_received'
 		if msg_type == 'normal':
 			type_ = 'normal'
-		show_in_roster = notify.get_show_in_roster('message_received', account,
-			contact)
-		show_in_systray = notify.get_show_in_systray('message_received', account,
-			contact)
+			event_type = 'single_message_received'
+		show_in_roster = notify.get_show_in_roster(event_type, account, contact)
+		show_in_systray = notify.get_show_in_systray(event_type, account, contact)
 		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
 			encrypted, resource, msg_id), show_in_roster = show_in_roster,
 			show_in_systray = show_in_systray)
