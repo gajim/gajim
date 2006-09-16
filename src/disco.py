@@ -215,8 +215,8 @@ class ServicesCache:
 	ServiceCache instance.'''
 	def __init__(self, account):
 		self.account = account
-		self._items = CacheDictionary(15, getrefresh = False)
-		self._info = CacheDictionary(15, getrefresh = False)
+		self._items = CacheDictionary(1, getrefresh = True)
+		self._info = CacheDictionary(1, getrefresh = True)
 		self._cbs = {}
 
 	def _clean_closure(self, cb, type, addr):
