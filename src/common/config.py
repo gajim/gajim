@@ -79,6 +79,7 @@ class Config:
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
+		'enable_zeroconf': [opt_bool, False, _('Enable link-local/zeroconf messaging')],
 		'use_speller': [ opt_bool, False, ],
 		'speller_language': [ opt_str, '', _('Language used by speller')],
 		'print_time': [ opt_str, 'always',  _('\'always\' - print time for every message.\n\'sometimes\' - print time every print_ichat_every_foo_minutes minute.\n\'never\' - never print time.')],
@@ -205,7 +206,6 @@ class Config:
 		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickame.')],
 		'gc_nicknames_colors': [ opt_str, '#a34526:#c000ff:#0012ff:#388a99:#38995d:#519938:#ff8a00:#94452d:#244b5a:#32645a', _('List of colors that will be used to color nicknames in group chats.'), True ],
 		'ctrl_tab_go_to_next_composing': [opt_bool, True, _('Ctrl-Tab go to next composing tab when none is unread.')],
-		'zeroconf_enabled': [opt_bool, True, _('Enable zeroconf network')],
 	}
 
 	__options_per_key = {

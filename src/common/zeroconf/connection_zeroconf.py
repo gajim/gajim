@@ -262,6 +262,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				txt['msg'] = msg
 				check = check and self.zeroconf.update_txt(txt)
 
+		#stay offline when zeroconf does something wrong
 		if check:
 			self.dispatch('STATUS', show)
 		else:

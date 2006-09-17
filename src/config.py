@@ -94,6 +94,10 @@ class PreferencesWindow:
 		st = gajim.config.get('sort_by_show')
 		self.xml.get_widget('sort_by_show_checkbutton').set_active(st)
 
+		# enable zeroconf
+		st = gajim.config.get('enable_zeroconf')
+		self.xml.get_widget('enable_zeroconf_checkbutton').set_active(st)
+
 		# Display avatars in roster
 		st = gajim.config.get('show_avatars_in_roster')
 		self.xml.get_widget('show_avatars_in_roster_checkbutton').set_active(st)
@@ -522,6 +526,10 @@ class PreferencesWindow:
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
 		gajim.interface.roster.draw_roster()
+		
+	def on_enable_zeroconf_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
+		#TODO: add calls to close/restart zeroconf things and temporarily hide/show the account
 
 	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
@@ -1096,7 +1104,7 @@ class AccountModificationWindow:
 		'''set or unset sensitivity of widgets when widget is toggled'''
 		for w in widgets:
 			w.set_sensitive(widget.get_active())
-
+	
 	def init_account_gpg(self):
 		keyid = gajim.config.get_per('accounts', self.account, 'keyid')
 		keyname = gajim.config.get_per('accounts', self.account, 'keyname')
