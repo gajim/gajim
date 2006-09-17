@@ -226,9 +226,6 @@ class GroupchatControl(ChatControlBase):
 		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
-		id = self.parent_win.window.connect('focus-in-event',
-						self._on_window_focus_in_event)
-		self.handlers[id] = self.parent_win.window
 
 		# set the position of the current hpaned
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
@@ -320,11 +317,6 @@ class GroupchatControl(ChatControlBase):
 		return gajim.config.get('notify_on_all_muc_messages') or \
 			self.attention_flag
 
-	def _on_window_focus_in_event(self, widget, event):
-		'''When window gets focus'''
-		if self.parent_win.get_active_jid() == self.room_jid:
-			self.conv_textview.allow_focus_out_line = True
-	
 	def on_treeview_size_allocate(self, widget, allocation):
 		'''The MUC treeview has resized. Move the hpaned in all tabs to match'''
 		self.hpaned_position = self.hpaned.get_position()
@@ -1293,6 +1285,7 @@ class GroupchatControl(ChatControlBase):
 		return retval
 
 	def set_control_active(self, state):
+		self.conv_textview.allow_focus_out_line = True
 		self.attention_flag = False
 		ChatControlBase.set_control_active(self, state)
 		if not state:
