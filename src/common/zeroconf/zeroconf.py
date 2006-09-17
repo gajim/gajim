@@ -50,6 +50,8 @@ class Zeroconf:
 		self.entrygroup = None
 		self.connected = False
 		self.announced = False
+		self.invalid_self_contact = {}
+
 
 	## handlers for dbus callbacks
 
@@ -58,14 +60,12 @@ class Zeroconf:
 		print "Error:", str(err)
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
-		# we don't want to see ourselves in the list
-		if name != self.name:
-			# print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
+		# print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
 		
-			#synchronous resolving
-			self.server.ResolveService( int(interface), int(protocol), name, stype, \
-						domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), \
-						reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
+		#synchronous resolving
+		self.server.ResolveService( int(interface), int(protocol), name, stype, \
+					domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), \
+					reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		# print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
@@ -112,9 +112,18 @@ class Zeroconf:
 		if name.find('@') == -1:
 			name = name + '@' + name
 		
-		self.contacts[name] = (name, domain, interface, protocol, host, address, port, 
+		# we don't want to see ourselves in the list
+		if name != self.name:
+			self.contacts[name] = (name, domain, interface, protocol, host, address, port, 
 					bare_name, txt)
-		self.new_serviceCB(name)
+			self.new_serviceCB(name)
+		else:
+			# remember data
+			# In case this is not our own record but of another
+			# gajim instance on the same machine,
+			# it will be used when we get a new name.
+			self.invalid_self_contact[name] = (name, domain, interface, protocol, host, address, port, bare_name, txt)
+
 
 	# different handler when resolving all contacts
 	def service_resolved_all_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
@@ -139,8 +148,13 @@ class Zeroconf:
 
 	def service_add_fail_callback(self, err):
 		print 'Error while adding service:', str(err)
+		old_name = self.name
 		self.name = self.server.GetAlternativeServiceName(self.name)
 		self.create_service()
+		if self.invalid_self_contact.has_key(old_name):
+			self.contacts[old_name] = self.invalid_self_contact[old_name]
+			self.new_serviceCB(old_name)
+			del self.invalid_self_contact[old_name]
 
 	def server_state_changed_callback(self, state, error):
 		print 'server.state %s' % state
@@ -249,7 +263,7 @@ class Zeroconf:
 			db.connect_to_signal('ItemNew', self.new_domain_callback)
 		else:
 			self.browse_domain(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, domain)
-
+		
 		return True
 
 	def disconnect(self):

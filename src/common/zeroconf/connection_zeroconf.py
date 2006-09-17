@@ -179,7 +179,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
 		# keyID, timestamp))
 		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0))
-		print 'connection_zeroconf:186'
 
 
 	def connect(self, data = None, show = 'online'):
@@ -203,7 +202,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			gobject.timeout_add(1000, self._on_resolve_timeout)
 		else:
 			pass
-			# display visual notification that we could not connect to avahi
+			#TODO: display visual notification that we could not connect to avahi
 
 	def connect_and_init(self, show, msg, signed):
 		self.continue_connect_info = [show, msg, signed]
