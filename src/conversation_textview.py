@@ -138,6 +138,9 @@ class ConversationTextview:
 		self.focus_out_end_iter_offset = None
 
 		self.line_tooltip = tooltips.BaseTooltip()
+		
+		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+		self.focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 
 	def del_handlers(self):
 		for i in self.handlers.keys():
@@ -230,12 +233,9 @@ class ConversationTextview:
 					end_iter_for_previous_line)
 
 			# add the new focus out line
-			# FIXME: Why is this loaded from disk everytime
-			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
-			focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, '\n')
-			buffer.insert_pixbuf(end_iter, focus_out_line_pixbuf)
+			buffer.insert_pixbuf(end_iter, self.focus_out_line_pixbuf)
 
 			end_iter = buffer.get_end_iter()
 			before_img_iter = end_iter.copy()
