@@ -68,7 +68,7 @@ class Roster:
 			nm = txt_dict['1st']
 		if txt_dict.has_key('last'):
 			if nm != '':
-				nm = +' '
+				nm += ' '
 			nm += txt_dict['last']
 		if nm:
 			self._data[jid]['name'] = nm
