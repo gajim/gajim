@@ -170,16 +170,14 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	# callbacks called from zeroconf	
 	def _on_new_service(self,jid):
 		self.roster.setItem(jid)
-		display_jid = self.zeroconf.check_jid(jid)
-		self.dispatch('ROSTER_INFO', (display_jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
-		self.dispatch('NOTIFY', (display_jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
+		self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
+		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
 		
 	
 	def _on_remove_service(self,jid):
 		self.roster.delItem(jid)
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
 		# keyID, timestamp))
-		jid = self.zeroconf.check_jid(jid)
 		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0))
 		print 'connection_zeroconf:186'
 
@@ -195,9 +193,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 			#display contacts already detected and resolved
 			for jid in self.roster.keys():
-				display_jid = self.zeroconf.check_jid(jid)
-				self.dispatch('ROSTER_INFO', (display_jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
-				self.dispatch('NOTIFY', (display_jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
+				self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
+				self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
 
 			self.connected = STATUS_LIST.index(show)
 

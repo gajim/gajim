@@ -252,9 +252,6 @@ class Zeroconf:
 
 		return True
 
-	def check_jid(self, jid):
-		return jid
-
 	def disconnect(self):
 		if self.connected:
 			self.connected = False
