@@ -400,7 +400,7 @@ class Dispatcher(PlugIn):
 		''' Serialise stanza and put it on the wire. Assign an unique ID to it before send.
 			Returns assigned ID.'''
 		if type(stanza) in [type(''), type(u'')]: 
-			return self._owner.Connection.send(stanza)
+			return self._owner.send_stanza(stanza)
 		if not isinstance(stanza, Protocol): 
 			_ID=None
 		elif not stanza.getID():
@@ -423,7 +423,7 @@ class Dispatcher(PlugIn):
 			stanza=route
 		stanza.setNamespace(self._owner.Namespace)
 		stanza.setParent(self._metastream)
-		self._owner.Connection.send(stanza)
+		self._owner.send_stanza(stanza)
 		return _ID
 	
 	def disconnect(self):

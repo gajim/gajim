@@ -33,7 +33,7 @@ import common.xmpp
 from common import GnuPG
 from common import helpers
 from common import gajim
-
+from common.zeroconf import zeroconf
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 # kind of events we can wait for an answer
@@ -227,6 +227,108 @@ class ConnectionHandlersZeroconf(ConnectionVcard):
 			idle.init()
 		except:
 			HAS_IDLE = False
+	def _messageCB(self, ip, con, msg):
+		'''Called when we receive a message'''
+		msgtxt = msg.getBody()
+		mtype = msg.getType()
+		subject = msg.getSubject() # if not there, it's None
+		tim = msg.getTimestamp()
+		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
+		tim = time.localtime(timegm(tim))
+		frm = helpers.get_full_jid_from_iq(msg)
+		if frm == 'none':
+			for key in self.zeroconf.contacts:
+				if ip == self.zeroconf.contacts[key][zeroconf.C_ADDRESS]:
+					frm = key
+		jid = helpers.get_jid_from_iq(msg)
+		print 'jid', jid
+		no_log_for = gajim.config.get_per('accounts', self.name,
+			'no_log_for').split()
+		encrypted = False
+		chatstate = None
+		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
+		decmsg = ''
+		# invitations
+		invite = None
+		if not encTag:
+			invite = msg.getTag('x', namespace = common.xmpp.NS_MUC_USER)
+			if invite and not invite.getTag('invite'):
+				invite = None
+		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) != None
+		msg_id = None
+		composing_jep = None
+		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
+		# invitation
+		# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
+		xtags = msg.getTags('x')
+		# chatstates - look for chatstate tags in a message if not delayed
+		if not delayed:
+			composing_jep = False
+			children = msg.getChildren()
+			for child in children:
+				if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
+					chatstate = child.getName()
+					composing_jep = 'JEP-0085'
+					break
+			# No JEP-0085 support, fallback to JEP-0022
+			if not chatstate:
+				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
+				if chatstate_child:
+					chatstate = 'active'
+					composing_jep = 'JEP-0022'
+					if not msgtxt and chatstate_child.getTag('composing'):
+						chatstate = 'composing'
+		# JEP-0172 User Nickname
+		user_nick = msg.getTagData('nick')
+		if not user_nick:
+			user_nick = ''
+
+		if encTag and GnuPG.USE_GPG:
+			#decrypt
+			encmsg = encTag.getData()
+			
+			keyID = gajim.config.get_per('accounts', self.name, 'keyid')
+			if keyID:
+				decmsg = self.gpg.decrypt(encmsg, keyID)
+		if decmsg:
+			msgtxt = decmsg
+			encrypted = True
+		if mtype == 'error':
+			error_msg = msg.getError()
+			if not error_msg:
+				error_msg = msgtxt
+				msgtxt = None
+			if self.name not in no_log_for:
+				gajim.logger.write('error', frm, error_msg, tim = tim,
+					subject = subject)
+			self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
+				tim))
+		elif mtype == 'chat': # it's type 'chat'
+			if not msg.getTag('body') and chatstate is None: #no <body>
+				return
+			if msg.getTag('body') and self.name not in no_log_for and jid not in\
+				no_log_for and msgtxt:
+				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
+					subject = subject)
+			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
+				chatstate, msg_id, composing_jep, user_nick))
+		else: # it's single message
+			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
+				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
+					subject = subject)
+			if invite is not None:
+				item = invite.getTag('invite')
+				jid_from = item.getAttr('from')
+				if jid_from == None:
+					jid_from = frm
+				reason = item.getTagData('reason')
+				item = invite.getTag('password')
+				password = invite.getTagData('password')
+				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
+			else:
+				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
+					subject, chatstate, msg_id, composing_jep, user_nick))
+	# END messageCB
 	'''
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':

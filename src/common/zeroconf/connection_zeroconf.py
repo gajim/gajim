@@ -184,7 +184,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			return self.connection, ''
 		
 		if self.zeroconf.connect():
-			self.connection = client_zeroconf.ClientZeroconf(self.zeroconf)
+			self.connection = client_zeroconf.ClientZeroconf(self.zeroconf, self)
 			self.roster = self.connection.getRoster()
 			self.dispatch('ROSTER', self.roster)
 
@@ -197,7 +197,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 			# refresh all contacts data every second
 			self.call_resolve_timeout = True
-			gobject.timeout_add(1000, self._on_resolve_timeout)
+			gobject.timeout_add(10000, self._on_resolve_timeout)
 		else:
 			pass
 			#TODO: display visual notification that we could not connect to avahi
@@ -487,7 +487,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		
 	def send_keepalive(self):
 		# nothing received for the last foo seconds (60 secs by default)
-		if self.connection:
-			self.connection.send(' ')
+		pass
 		
+	def _event_dispatcher(self, realm, event, data):
+		if realm == '':
+			if event == common.xmpp.transports.DATA_RECEIVED:
+				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
+			elif event == common.xmpp.transports.DATA_SENT:
+				self.dispatch('STANZA_SENT', unicode(data))
+
 # END ConnectionZeroconf

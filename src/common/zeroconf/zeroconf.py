@@ -300,7 +300,7 @@ class Zeroconf:
 			return False
 
 	def send (self, msg, sock):
-		print 'send:'+msg
+		print 'send:', msg
 		totalsent = 0
 		while totalsent < len(msg):
 			sent = sock.send(msg[totalsent:])
@@ -309,13 +309,14 @@ class Zeroconf:
 			totalsent = totalsent + sent
 
 	def send_message(self, jid, msg, type = 'chat'):
-		print 'zeroconf.py: send_message:'+ msg
-		
+		print 'zeroconf.py: send_message:', msg
+		if not msg :
+			return
 		sock = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
 		#sock.setblocking(False)
 		sock.connect ( ( self.contacts[jid][C_ADDRESS], self.contacts[jid][C_PORT] ) )
 		
-		#print (self.txt_array_to_dict(self.contacts[jid][C_TXT]))['port.p2pj']
+		print (self.txt_array_to_dict(self.contacts[jid][C_TXT]))['port.p2pj']
 
 		#was for adium which uses the txt record
 		#sock.connect ( ( self.contacts[jid][5], int((self.txt_array_to_dict(self.contacts[jid][7]))['port.p2pj']) ) )
