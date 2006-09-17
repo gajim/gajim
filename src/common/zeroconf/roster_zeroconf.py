@@ -21,8 +21,8 @@ class Roster:
 		self.zeroconf = zeroconf 	  	 # our zeroconf instance
 
 	def update_roster(self):
-		for (jid, dom, interf, proto, host, addr, port, txt) in self.zeroconf.get_contacts().values():
-			self.setItem(jid)
+		for val in self.zeroconf.contacts.values():
+			self.setItem(val[zeroconf.C_NAME])
 
 	def getRoster(self):
 		#print 'roster_zeroconf.py: getRoster'
@@ -47,7 +47,7 @@ class Roster:
 		
 	def setItem(self, jid, name = '', groups = ''):
 		#print 'roster_zeroconf.py: setItem %s' % jid
-		(service_jid, domain, interface, protocol, host, address, port, txt)  \
+		(service_jid, domain, interface, protocol, host, address, port, bare_jid, txt)  \
 			= self.zeroconf.get_contact(jid)
 
 		self._data[jid]={}
@@ -63,18 +63,24 @@ class Roster:
 			status = txt_dict['status']
 		else:
 			status = ''
-		if txt_dict.has_key('1st') and txt_dict.has_key('last'):
-			self._data[jid]['name']=txt_dict['1st']+' '+txt_dict['last']
+		nm = ''
+		if txt_dict.has_key('1st'):
+			nm = txt_dict['1st']
+		if txt_dict.has_key('last'):
+			if nm != '':
+				nm = +' '
+			nm += txt_dict['last']
+		if nm:
+			self._data[jid]['name'] = nm
 		else:
-			self._data[jid]['name']=jid
-		if status == 'avail': status = 'online'
+			self._data[jid]['name'] = jid
+		if status == 'avail': 
+			status = 'online'
 		self._data[jid]['txt_dict'] = txt_dict
 		if not self._data[jid]['txt_dict'].has_key('msg'):
 			self._data[jid]['txt_dict']['msg'] = ''
 		self._data[jid]['status'] = status
 		self._data[jid]['show'] = status
-
-		# print self._data[jid]
 
 	def delItem(self, jid):
 		#print 'roster_zeroconf.py: delItem %s' % jid

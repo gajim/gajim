@@ -21,12 +21,16 @@ from common import xmpp
 try:
 	import avahi, gobject, dbus
 except ImportError:
-	print "Error: python-avahi and python-dbus need to be installed. No zeroconf support."
+	gajim.log.debug("Error: python-avahi and python-dbus need to be installed. No zeroconf support.")
 
 try:
 	import dbus.glib
 except ImportError, e:
 	pass
+
+
+C_NAME, C_DOMAIN, C_INTERFACE, C_PROTOCOL, C_HOST, \
+C_ADDRESS, C_PORT, C_BARE_NAME, C_TXT = range(9)
 
 class Zeroconf:
 	def __init__(self, new_serviceCB, remove_serviceCB, name, host, port):
@@ -66,8 +70,11 @@ class Zeroconf:
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		# print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
 		if name != self.name:
-			del self.contacts[name]
-			self.remove_serviceCB(name)
+			for key in self.contacts.keys():
+				if self.contacts[key][C_BARE_NAME] == name:
+					del self.contacts[key]
+					self.remove_serviceCB(key)
+					return
 
 	def new_service_type(self, interface, protocol, stype, domain, flags):
 		# Are we already browsing this domain for this type? 
@@ -88,23 +95,6 @@ class Zeroconf:
 		if domain != "local":
 			self.browse_domain(interface, protocol, domain)
 
-	def check_jid(self, jid):
-		# TODO: at least miranda uses bad service names(only host name), so change them - probabaly not so nice... need to find a better solution
-		# this is necessary so they don't get displayed as a transport
-		# [dkirov] maybe turn it into host+'@'+host, instead ?
-		# [sb] that would mean we can't do recreate below
-		if jid.find('@') == -1:
-			return 'bad-client@' + jid
-		else:
-			return jid
-		
-	def recreate_bad_jid(self,jid):
-		at = jid.find('@')
-		if  jid[:at] == 'bad-client':
-			return jid[at+1:]
-		else:
-			return jid
-		
 	def txt_array_to_dict(self,txt_array):
 		items = {}
 
@@ -117,16 +107,23 @@ class Zeroconf:
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
 		print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
-		print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
-		self.contacts[name] = (name, domain, interface, protocol, host, address, port, txt)
+		print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, avahi.txt_array_to_string_array(txt))
+		bare_name = name
+		if name.find('@') == -1:
+			name = name + '@' + name
+		
+		self.contacts[name] = (name, domain, interface, protocol, host, address, port, 
+					bare_name, txt)
 		self.new_serviceCB(name)
 
 	# different handler when resolving all contacts
 	def service_resolved_all_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
 		#print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
 		#print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
-		
-		self.contacts[name] = (name, domain, interface, protocol, host, address, port, txt)
+		bare_name = name
+		if name.find('@') == -1:
+			name = name + '@' + name
+		self.contacts[name] = (name, domain, interface, protocol, host, address, port, bare_name, txt)
 
 	def service_added_callback(self):
 		# print 'Service successfully added'
@@ -255,6 +252,9 @@ class Zeroconf:
 
 		return True
 
+	def check_jid(self, jid):
+		return jid
+
 	def disconnect(self):
 		if self.connected:
 			self.connected = False
@@ -263,17 +263,15 @@ class Zeroconf:
 	# refresh txt data of all contacts manually (no callback available)
 	def resolve_all(self):
 		for val in self.contacts.values():
-			#val:(name, domain, interface, protocol, host, address, port, txt)
-			self.server.ResolveService(int(val[2]), int(val[3]), val[0], \
-				self.stype, val[1], avahi.PROTO_UNSPEC, dbus.UInt32(0),\
+			self.server.ResolveService(int(val[C_INTERFACE]), int(val[C_PROTOCOL]), val[C_BARE_NAME], \
+				self.stype, val[C_DOMAIN], avahi.PROTO_UNSPEC, dbus.UInt32(0),\
 				reply_handler=self.service_resolved_all_callback, error_handler=self.print_error_callback)
 
 	def get_contacts(self):
 		return self.contacts
 
 	def get_contact(self, jid):
-		if self.contacts.has_key(jid):
-			return self.contacts[jid]
+		return self.contacts[jid]
 		
 	def update_txt(self, txt):
 		# update only given keys
@@ -301,14 +299,12 @@ class Zeroconf:
 
 	def send_message(self, jid, msg, type = 'chat'):
 		print 'zeroconf.py: send_message:'+ msg
-		jid = self.recreate_bad_jid(jid)
-			
-		sock = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
- 		#sock.setblocking(False)
-
-		sock.connect ( ( self.contacts[jid][4], self.contacts[jid][6] ) )
 		
-		print (self.txt_array_to_dict(self.contacts[jid][7]))['port.p2pj']
+		sock = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
+		#sock.setblocking(False)
+		sock.connect ( ( self.contacts[jid][C_ADDRESS], self.contacts[jid][C_PORT] ) )
+		
+		#print (self.txt_array_to_dict(self.contacts[jid][C_TXT]))['port.p2pj']
 
 		#was for adium which uses the txt record
 		#sock.connect ( ( self.contacts[jid][5], int((self.txt_array_to_dict(self.contacts[jid][7]))['port.p2pj']) ) )

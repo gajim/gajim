@@ -164,8 +164,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			diffs = self.roster.getDiffs()
 			for key in diffs:
 				self.roster.setItem(key)
-				display_key = self.zeroconf.check_jid(key)
-				self.dispatch('NOTIFY', (display_key, self.roster.getStatus(key), self.roster.getMessage(key), 'local', 0, None, 0))
+				self.dispatch('NOTIFY', (key, self.roster.getStatus(key), self.roster.getMessage(key), 'local', 0, None, 0))
 		return self.call_resolve_timeout
 
 	# callbacks called from zeroconf	
