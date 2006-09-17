@@ -294,7 +294,12 @@ class ConnectionHandlersZeroconf(ConnectionVcard):
 					dic[i]['values'] = [dic[i]['options'][0]['values'][0]]
 			i += 1
 		return dic
-		
+	
+	def store_metacontacts(self, tags):
+		''' fake empty method '''
+		# serverside metacontacts  are not supported with zeroconf 
+		# (there is no server)
+		pass
 	def remove_transfers_for_contact(self, contact):
 		''' stop all active transfer for contact '''
 		'''for file_props in self.files_props.values():
