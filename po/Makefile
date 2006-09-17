@@ -1,5 +1,5 @@
 NAME = gajim
-LANGS   := fr pt el pl es ru bg de nb cs nl pt_BR sv it eu sk no zh_CN
+LANGS   := fr pt el pl es ru bg de nb cs nl pt_BR sv it eu sk no zh_CN br eo
 LANGS_PO:=$(foreach LANG, ${LANGS}, ${LANG}.po)
 LANGS_MO:=$(foreach LANG, ${LANGS}, ${LANG}.mo)
 DATADIR:=$(subst //,/,${DESTDIR}/${PREFIX}/share)
@@ -9,6 +9,9 @@ all: $(LANGS_MO)
 %.mo: %.po
 	msgfmt $< -o $@
 
+%.glade.h: %.glade
+	intltool-extract --type=gettext/glade $<
+
 gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/account_context_menu.glade.h \
 			../data/glade/account_creation_wizard_window.glade.h \
@@ -16,6 +19,7 @@ gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/accounts_window.glade.h \
 			../data/glade/add_new_contact_window.glade.h \
 			../data/glade/advanced_configuration_window.glade.h \
+			../data/glade/advanced_notifications_window.glade.h \
 			../data/glade/advanced_menuitem_menu.glade.h \
 			../data/glade/change_password_dialog.glade.h \
 			../data/glade/change_status_message_dialog.glade.h \
@@ -28,18 +32,20 @@ gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/gajim_themes_window.glade.h \
 			../data/glade/gc_control_popup_menu.glade.h \
 			../data/glade/gc_occupants_menu.glade.h \
-			../data/glade/gtkgui.glade.h \
 			../data/glade/history_manager.glade.h \
 			../data/glade/history_window.glade.h \
 			../data/glade/input_dialog.glade.h \
 			../data/glade/invitation_received_dialog.glade.h \
 			../data/glade/join_groupchat_window.glade.h \
+			../data/glade/manage_accounts_window.glade.h \
 			../data/glade/manage_bookmarks_window.glade.h \
 			../data/glade/manage_proxies_window.glade.h \
 			../data/glade/message_window.glade.h \
 			../data/glade/passphrase_dialog.glade.h \
 			../data/glade/popup_notification_window.glade.h \
 			../data/glade/preferences_window.glade.h \
+			../data/glade/privacy_list_edit_window.glade.h \
+			../data/glade/privacy_lists_first_window.glade.h \
 			../data/glade/progress_dialog.glade.h \
 			../data/glade/remove_account_window.glade.h \
 			../data/glade/roster_contact_context_menu.glade.h \

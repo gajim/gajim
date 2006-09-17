@@ -1,3 +1,3 @@
-#!/bin/sh
+#!/bin/bash
 cd `dirname $0`/src
-exec python -OOt gajim.py $@
+exec -a gajim python -OOt gajim.py $@

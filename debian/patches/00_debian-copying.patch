@@ -1,21 +1,21 @@
 Index: Makefile
 ===================================================================
---- Makefile	(revision 4702)
+--- Makefile	(revision 6485)
 +++ Makefile	(working copy)
-@@ -87,7 +87,6 @@
- 			mkdir -p "$(DESTDIR)$(PREFIX)/share/locale/$$d"; \
- 		fi; \
+@@ -89,7 +89,6 @@
  	done
- 	${MAKE} -C po install PREFIX=$(PREFIX)
+ 	if [[  -n $$(find po -name *.mo) ]]; then \
+ 		${MAKE} -C po install PREFIX=$(PREFIX) ; \
+ 	fi
 -	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
-	cp THANKS "$(DESTDIR)$(PREFIX)/share/gajim/";
+ 	cp THANKS "$(DESTDIR)$(PREFIX)/share/gajim/";
+ 	cp AUTHORS "$(DESTDIR)$(PREFIX)/share/gajim/";
  	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
- 	cp data/pixmaps/gajim.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
 Index: src/dialogs.py
 ===================================================================
---- src/dialogs.py	(revision 4702)
+--- src/dialogs.py	(revision 6485)
 +++ src/dialogs.py	(working copy)
-@@ -443,7 +443,7 @@
+@@ -558,7 +558,7 @@
  		dlg.set_version(gajim.version)
  		s = u'Copyright \xa9 2003-2005 Gajim Team'
  		dlg.set_copyright(s)
