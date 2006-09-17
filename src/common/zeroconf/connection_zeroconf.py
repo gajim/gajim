@@ -66,11 +66,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		#self.new_account_info = None
 		self.bookmarks = []
 
-		self.on_purpose = False
-		#self.last_io = gajim.idlequeue.current_time()
-		#self.last_sent = []
-		#self.last_history_line = {}
-
 		#we don't need a password, but must be non-empty
 		self.password = 'zeroconf'
 
@@ -130,8 +125,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def quit(self, kill_core):
 	
 		if kill_core and self.connected > 1:
-			self.disconnect(on_purpose = True)
+			self.disconnect()
 	
+	def disable_account(self):
+		self.disconnect()
+
 	def test_gpg_passphrase(self, password):
 		self.gpg.passphrase = password
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
@@ -213,7 +211,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 
 	def disconnect(self, on_purpose = False):
-		self.on_purpose = on_purpose
 		self.connected = 0
 		self.time_to_reconnect = None
 		if self.connection:
@@ -232,7 +229,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		# 'connect'
 		if show != 'offline' and not self.connected:
-			self.on_purpose = False
 			self.connect_and_init(show, msg, '')
 			if show != 'invisible':
 					check = self.zeroconf.announce()
