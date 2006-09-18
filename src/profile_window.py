@@ -67,6 +67,9 @@ class ProfileWindow:
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
 
+		# Create Image for avatar button
+		image = gtk.Image()
+		self.xml.get_widget('PHOTO_button').set_image(image)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -79,8 +82,10 @@ class ProfileWindow:
 
 	def on_clear_button_clicked(self, widget):
 		# empty the image
-		self.xml.get_widget('PHOTO_image').set_from_icon_name('stock_person',
-			gtk.ICON_SIZE_DIALOG)
+		button = self.xml.get_widget('PHOTO_button')
+		image = button.get_image()
+		image.set_from_pixbuf(None)
+		button.set_label(_('Click to set your avatar'))
 		self.avatar_encoded = None
 		self.avatar_mime_type = None
 
@@ -124,8 +129,10 @@ class ProfileWindow:
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
 			# rescale it
 			pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
-			image = self.xml.get_widget('PHOTO_image')
+			button = self.xml.get_widget('PHOTO_button')
+			image = button.get_image()
 			image.set_from_pixbuf(pixbuf)
+			button.set_label('')
 			self.avatar_encoded = base64.encodestring(data)
 			# returns None if unknown type
 			self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
@@ -162,18 +169,23 @@ class ProfileWindow:
 	def set_values(self, vcard):
 		if not 'PHOTO' in vcard:
 			# set default image
-			image = self.xml.get_widget('PHOTO_image')
-			image.set_from_icon_name('stock_person', gtk.ICON_SIZE_DIALOG)
+			button = self.xml.get_widget('PHOTO_button')
+			image = button.get_image()
+			image.set_from_pixbuf(None)
+			button.set_label(_('Click to set your avatar'))
 		for i in vcard.keys():
 			if i == 'PHOTO':
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
 					get_avatar_pixbuf_encoded_mime(vcard[i])
-				image = self.xml.get_widget('PHOTO_image')
+				button = self.xml.get_widget('PHOTO_button')
+				image = button.get_image()
 				if not pixbuf:
-					image.set_from_icon_name('stock_person', gtk.ICON_SIZE_DIALOG)
+					image.set_from_pixbuf(None)
+					button.set_label(_('Click to set your avatar'))
 					continue
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 				image.set_from_pixbuf(pixbuf)
+				button.set_label('')
 				continue
 			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
 				for entry in vcard[i]:
@@ -275,8 +287,10 @@ class ProfileWindow:
 			for e in entries:
 				self.xml.get_widget(e + '_entry').set_text('')
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
-			self.xml.get_widget('PHOTO_image').set_from_icon_name('stock_person',
-				gtk.ICON_SIZE_DIALOG)
+			button = self.xml.get_widget('PHOTO_button')
+			image = button.get_image()
+			image.set_from_pixbuf(None)
+			button.set_label(_('Click to set your avatar'))
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
