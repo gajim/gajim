@@ -235,11 +235,12 @@ class ConnectionHandlersZeroconf(ConnectionVcard):
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
-		frm = str(msg.getFrom())
+		frm = msg.getFrom()
 		if frm == None:
 			for key in self.zeroconf.contacts:
 				if ip == self.zeroconf.contacts[key][zeroconf.C_ADDRESS]:
 					frm = key
+		frm = str(frm)
 		jid  = frm
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for').split()

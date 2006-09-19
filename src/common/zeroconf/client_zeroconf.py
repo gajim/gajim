@@ -91,7 +91,8 @@ class P2PClient(IdleObject):
 		self._owner = self
 		self.Namespace = 'jabber:client'
 		self.defaultNamespace = self.Namespace
-		self._component=0
+		self._component = 0
+		self._registered_name = None
 		self._caller = caller
 		self.Server = host
 		self.DBG = 'client'
@@ -163,9 +164,6 @@ class P2PConnection(IdleObject, PlugIn):
 		self.on_connect = on_connect
 		self.writable = False
 		self.readable = False
-		# waiting for first bytes
-		# start waiting for data
-		self._registered_name = None
 		self._exported_methods=[self.send, self.disconnect, self.onreceive]
 		self.on_receive = None
 		if _sock:
@@ -220,8 +218,8 @@ class P2PConnection(IdleObject, PlugIn):
 		r = stanza
 		if isinstance(r, unicode): 
 			r = r.encode('utf-8')
-		#~ elif not isinstance(r, str): 
-			#~ r = ustr(r).encode('utf-8')
+		elif not isinstance(r, str): 
+			r = ustr(r).encode('utf-8')
 		self.sendqueue.append(r)
 		self._plug_idle()
 		
