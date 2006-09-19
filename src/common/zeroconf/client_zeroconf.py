@@ -362,7 +362,8 @@ class P2PConnection(IdleObject, PlugIn):
 			pass
 		self.fd = -1
 		self.state = -1
-		self._owner.on_disconnect()
+		if self._owner:
+			self._owner.on_disconnect()
 
 	def _do_send(self):
 		if not self.sendbuff:
