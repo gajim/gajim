@@ -60,18 +60,25 @@ class ProfileWindow:
 	def __init__(self, account):
 		self.xml = gtkgui_helpers.get_glade('profile_window.glade')
 		self.window = self.xml.get_widget('profile_window')
+		self.progressbar = self.xml.get_widget('progressbar')
 
 		self.account = account
 		self.jid = gajim.get_jid_from_account(account)
 
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
+		self.update_progressbar_timeout_id = gobject.timeout_add(100,
+			self.update_progressbar)
 
 		# Create Image for avatar button
 		image = gtk.Image()
 		self.xml.get_widget('PHOTO_button').set_image(image)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+
+	def update_progressbar(self):
+		self.progressbar.pulse()
+		return True # loop forever
 
 	def on_profile_window_destroy(self, widget):
 		del gajim.interface.instances[self.account]['profile']
@@ -203,6 +210,12 @@ class ProfileWindow:
 						vcard[i], 0)
 				else:
 					self.set_value(i + '_entry', vcard[i])
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+			# redraw progressbar after avatar is set so that windows is already
+			# resized. Else progressbar is not correctly redrawn
+			gobject.idle_add(self.progressbar.set_fraction, 0)
+			self.update_progressbar_timeout_id = None
 
 	def add_to_vcard(self, vcard, entry, txt):
 		'''Add an information to the vCard dictionary'''
@@ -260,6 +273,9 @@ class ProfileWindow:
 		return vcard
 
 	def on_publish_button_clicked(self, widget):
+		if self.update_progressbar_timeout_id:
+			# Operation in progress
+			return
 		if gajim.connections[self.account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
         		_('Without a connection you can not publish your contact '
@@ -273,8 +289,28 @@ class ProfileWindow:
 			nick = gajim.config.get_per('accounts', self.account, 'name')
 		gajim.nicks[self.account] = nick
 		gajim.connections[self.account].send_vcard(vcard)
+		self.update_progressbar_timeout_id = gobject.timeout_add(100,
+			self.update_progressbar)
+
+	def vcard_published(self):
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+			self.progressbar.set_fraction(0)
+			self.update_progressbar_timeout_id = None
+
+	def vcard_not_published(self):
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+			self.progressbar.set_fraction(0)
+			self.update_progressbar_timeout_id = None
+		dialogs.InformationDialog(_('vCard publication failed'),
+			_('There was an error while publishing your personal information, '
+			'try again later.'))
 
 	def on_retrieve_button_clicked(self, widget):
+		if self.update_progressbar_timeout_id:
+			# Operation in progress
+			return
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
 			'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
 			'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',
@@ -294,4 +330,6 @@ class ProfileWindow:
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
-  		    	_('Without a connection, you can not get your contact information.'))
+			_('Without a connection, you can not get your contact information.'))
+		self.update_progressbar_timeout_id = gobject.timeout_add(100,
+			self.update_progressbar)

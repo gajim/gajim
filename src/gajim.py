@@ -1009,7 +1009,7 @@ class Interface:
 				return
 			# Add it to roster
 			contact = gajim.contacts.create_contact(jid = jid, name = name,
-			groups = groups, show = 'offline', sub = sub, ask = ask)
+				groups = groups, show = 'offline', sub = sub, ask = ask)
 			gajim.contacts.add_contact(account, contact)
 			self.roster.add_contact_to_roster(jid, account)
 		else:
@@ -1327,7 +1327,9 @@ class Interface:
 			self.instances[account]['xml_console'].print_stanza(stanza, 'outgoing')
 
 	def handle_event_vcard_published(self, account, array):
-		dialogs.InformationDialog(_('vCard publication succeeded'), _('Your personal information has been published successfully.'))
+		if self.instances[account].has_key('profile'):
+			win = self.instances[account]['profile']
+			win.vcard_published()
 		for gc_control in self.msg_win_mgr.get_controls(message_control.TYPE_GC):
 			if gc_control.account == account:
 				show = gajim.SHOW_LIST[gajim.connections[account].connected]
@@ -1336,7 +1338,9 @@ class Interface:
 					gc_control.room_jid, show, status)
 
 	def handle_event_vcard_not_published(self, account, array):
-		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
+		if self.instances[account].has_key('profile'):
+			win = self.instances[account]['profile']
+			win.vcard_not_published()
 
 	def handle_event_signed_in(self, account, empty):
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
