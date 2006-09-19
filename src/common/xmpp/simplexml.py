@@ -362,7 +362,7 @@ class NodeBuilder:
 		if self.last_is_data:
 			if self.data_buffer:
 				self.data_buffer.append(data)
-		else:
+		elif self._ptr:
 			self.data_buffer = [data]
 			self.last_is_data = 1
 	
