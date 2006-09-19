@@ -557,8 +557,7 @@ class PreferencesWindow:
 			if gajim.interface.instances.has_key('accounts'):
 				gajim.interface.instances['accounts'].init_accounts()
 		else:
-			#enable
-			#gajim.config.add_per('accounts', 'zeroconf') # if not already there (how?)
+			#enable (will create new account if not present)
 			gajim.connections['zeroconf'] = common.zeroconf.connection_zeroconf.ConnectionZeroconf('zeroconf')
 			# update variables
 			gajim.interface.instances['zeroconf'] = {'infos': {}, 'disco': {},
@@ -590,6 +589,12 @@ class PreferencesWindow:
 
 		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
 
+	def on_zeroconf_properties_button_clicked(self, widget):
+		if gajim.interface.instances.has_key('zeroconf_properties'):
+			gajim.interface.instances['zeroconf_properties'].window.present()
+		else:
+			gajim.interface.instances['zeroconf_properties'] = \
+				ZeroconfPropertiesWindow()
 
 	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
@@ -1168,8 +1173,7 @@ class AccountModificationWindow:
 	def init_account_gpg(self):
 		keyid = gajim.config.get_per('accounts', self.account, 'keyid')
 		keyname = gajim.config.get_per('accounts', self.account, 'keyname')
-		savegpgpass = gajim.config.get_per('accounts', self.account,
-																'savegpgpass')
+		savegpgpass = gajim.config.get_per('accounts', self.account,'savegpgpass')
 
 		if not keyid or not gajim.config.get('usegpg'):
 			return
@@ -3029,3 +3033,102 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		gajim.interface.roster.draw_roster()
 		gajim.interface.roster.actions_menu_needs_rebuild = True
 		gajim.interface.save_config()
+
+#---------- ZeroconfPropertiesWindow class -------------#
+class ZeroconfPropertiesWindow:
+	def __init__(self):
+		self.xml = gtkgui_helpers.get_glade('zeroconf_properties_window.glade')
+		self.window = self.xml.get_widget('zeroconf_properties_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
+		self.xml.signal_autoconnect(self)
+		
+		st = gajim.config.get_per('accounts', 'zeroconf', 'autoconnect')
+		if st:
+			self.xml.get_widget('autoconnect_checkbutton').set_active(st)
+
+		st = gajim.config.get_per('accounts', 'zeroconf', 'no_log_for')
+		if st:
+			self.xml.get_widget('log_history_checkbutton').set_active(bool(st))
+		
+		st = gajim.config.get_per('accounts', 'zeroconf', 'sync_with_global_status')
+		if st:
+			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(st)
+
+		st = gajim.config.get_per('accounts', 'zeroconf', 'first_name')
+		if st:
+			self.xml.get_widget('first_name_entry').set_text(st)
+
+		st = gajim.config.get_per('accounts', 'zeroconf', 'last_name')
+		if st:
+			self.xml.get_widget('last_name_entry').set_text(st)
+		
+		st = gajim.config.get_per('accounts', 'zeroconf', 'jabber_id')
+		if st:
+			self.xml.get_widget('jabber_id_entry').set_text(st)
+
+		st = gajim.config.get_per('accounts', 'zeroconf', 'email')
+		if st:
+			self.xml.get_widget('email_entry').set_text(st)
+
+		st = gajim.config.get_per('accounts', 'zeroconf', 'use_tls')
+		if st:
+			self.xml.get_widget('use_tls_checkbutton').set_active(st)
+
+		st = gajim.config.get_per('accounts', 'zeroconf', 'custom_port')
+		if st:
+			self.xml.get_widget('custom_port_entry').set_text(str(st))
+	
+		self.xml.get_widget('custom_port_entry').set_sensitive(True)
+
+		self.xml.get_widget('save_button').grab_focus()
+		self.window.show_all()
+
+	def on_zeroconf_properties_window_destroy(self, widget):
+		#close window
+		if gajim.interface.instances.has_key('zeroconf_properties'):
+			del gajim.interface.instances['zeroconf_properties']
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+	
+	def on_save_button_clicked(self, widget):
+		st = self.xml.get_widget('autoconnect_checkbutton').get_active()
+		gajim.config.set_per('accounts', 'zeroconf', 'autoconnect', st)
+
+		st = self.xml.get_widget('log_history_checkbutton').get_active()
+		gajim.config.set_per('accounts', 'zeroconf', 'no_log_for', st)
+
+		st = self.xml.get_widget('sync_with_global_status_checkbutton').get_active()
+		gajim.config.set_per('accounts', 'zeroconf', 'sync_with_global_status', st)
+
+		st = self.xml.get_widget('custom_port_entry').get_text()
+		gajim.config.set_per('accounts', 'zeroconf', 'custom_port', st)
+		
+		'''
+		st = gajim.config.get_per('accounts', 'zeroconf', 'first_name')
+		if st:
+			self.xml.get_widget('first_name_entry').set_text(st)
+
+		st = gajim.config.get_per('accounts', 'zeroconf', 'last_name')
+		if st:
+			self.xml.get_widget('last_name_entry').set_text(st)
+		
+		st = gajim.config.get_per('accounts', 'zeroconf', 'jabber_id')
+		if st:
+			self.xml.get_widget('jabber_id_entry').set_text(st)
+
+		st = gajim.config.get_per('accounts', 'zeroconf', 'email')
+		if st:
+			self.xml.get_widget('email_entry').set_text(st)
+
+		st = gajim.config.get_per('accounts', 'zeroconf', 'use_tls')
+		if st:
+			self.xml.get_widget('use_tls_checkbutton').set_active(st)
+
+		'''
+
+		self.window.destroy()
+
+	def on_custom_port_checkbutton(self, widget):
+		pass
+

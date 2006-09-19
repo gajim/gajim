@@ -471,6 +471,7 @@ class ClientZeroconf:
 			BindPortError(port)
 			return None
 	
+
 	def getRoster(self):
 		return self.roster.getRoster()
 

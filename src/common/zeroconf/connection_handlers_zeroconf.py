@@ -227,6 +227,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard):
 			idle.init()
 		except:
 			HAS_IDLE = False
+			
 	def _messageCB(self, ip, con, msg):
 		'''Called when we receive a message'''
 		msgtxt = msg.getBody()

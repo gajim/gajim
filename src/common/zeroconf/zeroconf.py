@@ -106,8 +106,8 @@ class Zeroconf:
 		return items
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
-		print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
-		print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, avahi.txt_array_to_string_array(txt))
+		#print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
+		#print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, avahi.txt_array_to_string_array(txt))
 		bare_name = name
 		if name.find('@') == -1:
 			name = name + '@' + name
@@ -293,7 +293,7 @@ class Zeroconf:
 			self.txt['status'] = self.replace_show(txt['status'])
 
 		txt = avahi.dict_to_txt_array(self.txt)
-		if self.entrygroup:
+		if self.connected and self.entrygroup:
 			self.entrygroup.UpdateServiceTxt(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype,'', txt, reply_handler=self.service_updated_callback, error_handler=self.print_error_callback)
 			return True
 		else:

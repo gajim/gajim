@@ -37,6 +37,7 @@ if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 import getpass
 import gobject
+import notify
 
 from common import helpers
 from common import gajim
@@ -69,7 +70,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		#we don't need a password, but must be non-empty
 		self.password = 'zeroconf'
 
-		self.privacy_rules_supported = False
+		#XXX use that somewhere
+		self.autoconnect = False
+		self.sync_with_global_status = True
+		self.no_log_for = False
+
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
 		if USE_GPG:
@@ -93,6 +98,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			print 'Creating zeroconf account'
 			gajim.config.add_per('accounts', 'zeroconf')
 			gajim.config.set_per('accounts', 'zeroconf', 'autoconnect', True)
+			gajim.config.set_per('accounts', 'zeroconf', 'no_log_for', False)
 			gajim.config.set_per('accounts', 'zeroconf', 'password', 'zeroconf')
 			gajim.config.set_per('accounts', 'zeroconf', 'sync_with_global_status', True)
 			username = unicode(getpass.getuser())
@@ -106,6 +112,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			username = gajim.config.get_per('accounts', 'zeroconf', 'name')
 			host = gajim.config.get_per('accounts', 'zeroconf', 'hostname')
 			port = gajim.config.get_per('accounts', 'zeroconf', 'custom_port')
+			self.autoconnect = gajim.config.get_per('accounts', 'zeroconf', 'autoconnect')
+			self.sync_with_global_status = gajim.config.get_per('accounts', 'zeroconf', 'sync_with_global_status')
+			self.no_log_for = gajim.config.get_per('accounts', 'zeroconf', 'no_log_for')
+
 		self.zeroconf = zeroconf.Zeroconf(self._on_new_service, self._on_remove_service, username, host, port)
 
 	# END __init__
@@ -258,6 +268,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if check:
 			self.dispatch('STATUS', show)
 		else:
+#			self.dispatch('ERROR', 'Could not change status. Please check if avahi-daemon is running.')
+			notify.popup(_('Connection problem:'), 'zeroconf', None,
+					title=_('Could not change status'),
+					text=_('Please check if avahi-daemon is running.') ) 
 			self.dispatch('STATUS', 'offline')
 
 	def get_status(self):
