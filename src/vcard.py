@@ -61,6 +61,7 @@ class VcardWindow:
 		# the contact variable is the jid if vcard is true
 		self.xml = gtkgui_helpers.get_glade('vcard_information_window.glade')
 		self.window = self.xml.get_widget('vcard_information_window')
+		self.progressbar = self.xml.get_widget('progressbar')
 
 		self.contact = contact
 		self.account = account
@@ -68,13 +69,23 @@ class VcardWindow:
 
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
+		self.vcard_arrived = False
+		self.os_info_arrived = False
+		self.update_progressbar_timeout_id = gobject.timeout_add(100,
+			self.update_progressbar)
 
 		self.fill_jabber_page()
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def update_progressbar(self):
+		self.progressbar.pulse()
+		return True # loop forever
+
 	def on_vcard_information_window_destroy(self, widget):
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
 		del gajim.interface.instances[self.account]['infos'][self.contact.jid]
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
@@ -154,6 +165,15 @@ class VcardWindow:
 						vcard[i], 0)
 				else:
 					self.set_value(i + '_label', vcard[i])
+		self.vcard_arrived = True
+		self.test_remove_progressbar()
+
+	def test_remove_progressbar(self):
+		if self.update_progressbar_timeout_id is not None and \
+		self.vcard_arrived and self.os_info_arrived:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+			self.progressbar.hide()
+			self.update_progressbar_timeout_id = None
 
 	def set_last_status_time(self):
 		self.fill_status_label()
@@ -182,6 +202,8 @@ class VcardWindow:
 			os = Q_('?OS:Unknown')
 		self.xml.get_widget('client_name_version_label').set_text(client)
 		self.xml.get_widget('os_label').set_text(os)
+		self.os_info_arrived = True
+		self.test_remove_progressbar()
 
 	def fill_status_label(self):
 		if self.xml.get_widget('information_notebook').get_n_pages() < 4:

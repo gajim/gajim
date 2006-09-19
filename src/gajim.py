@@ -850,6 +850,7 @@ class Interface:
 			self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
 
 	def handle_event_os_info(self, account, array):
+		#'OS_INFO' (account, (jid, resource, client_info, os_info))
 		win = None
 		if self.instances[account]['infos'].has_key(array[0]):
 			win = self.instances[account]['infos'][array[0]]

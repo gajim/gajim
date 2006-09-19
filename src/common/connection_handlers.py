@@ -1134,6 +1134,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
+		gajim.log.debug('ErrorCB')
+		if iq_obj.getQueryNS() == common.xmpp.NS_VERSION:
+			who = helpers.get_full_jid_from_iq(iq_obj)
+			jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+			self.dispatch('OS_INFO', (jid_stripped, resource, '', ''))
+			return
 		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
 		jid_from = helpers.get_full_jid_from_iq(iq_obj)
