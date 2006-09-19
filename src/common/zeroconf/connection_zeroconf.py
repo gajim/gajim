@@ -267,7 +267,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	chatstate = None, msg_id = None, composing_jep = None, resource = None, 
 	user_nick = None):
 		print 'connection_zeroconf.py: send_message'
-
 		fjid = jid
 
 		if not self.connection:
@@ -319,7 +318,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				# when msgtxt, requests JEP-0022 composing notification
 				if chatstate is 'composing' or msgtxt: 
 					chatstate_node.addChild(name = 'composing') 
-
+		
+		self.connection.send(msg_iq)
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		ji = gajim.get_jid_without_resource(jid)
 		if self.name not in no_log_for and ji not in no_log_for:
@@ -332,8 +332,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				else:
 					kind = 'single_msg_sent'
 				gajim.logger.write(kind, jid, log_msg)
-		
-		self.zeroconf.send_message(jid, msgtxt, type)
+		#~ self.zeroconf.send_message(jid, msgtxt, type)
 		
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 		
