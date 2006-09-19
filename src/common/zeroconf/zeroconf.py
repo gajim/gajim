@@ -299,48 +299,6 @@ class Zeroconf:
 		else:
 			return False
 
-	def send (self, msg, sock):
-		print 'send:', msg
-		totalsent = 0
-		while totalsent < len(msg):
-			sent = sock.send(msg[totalsent:])
-			if sent == 0:
-				raise RuntimeError, "socket connection broken"
-			totalsent = totalsent + sent
-
-	def send_message(self, jid, msg, type = 'chat'):
-		print 'zeroconf.py: send_message:', msg
-		if not msg :
-			return
-		sock = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
-		#sock.setblocking(False)
-		sock.connect ( ( self.contacts[jid][C_ADDRESS], self.contacts[jid][C_PORT] ) )
-		
-		print (self.txt_array_to_dict(self.contacts[jid][C_TXT]))['port.p2pj']
-
-		#was for adium which uses the txt record
-		#sock.connect ( ( self.contacts[jid][5], int((self.txt_array_to_dict(self.contacts[jid][7]))['port.p2pj']) ) )
-		
-		self.send("<?xml version='1.0' encoding='UTF-8'?><stream:stream xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>", sock)
-	
-		try: recvd = sock.recv(16384)
-		except: recvd = ''
-		print 'receive:' + recvd
-		
-		message = xmpp.Message(typ=type, to=jid, frm=self.name)
-		message.setBody(msg)
-#		no html for now, necessary for anything else but adium?
-#		html = message.getTag('html', namespace = 'html://www.w3.org/1999/xhtml')
-#		html.addChild(...
-		message.addChild(name = 'x', namespace = xmpp.NS_EVENT).addChild(name = 'composing')
-
-		self.send(str(message),sock)
-
-		#adium requires the html parts
-		#self.send("<message to='" + jid + "' from='" + self.name + "' type='" + type + "'><body>" + msg + "</body><html xmlns='html://www.w3.org/1999/xhtml'><body ichatballoncolor='#5598d7' ichattextcolor='#000000'><font face='Courier' ABSZ='3'>" + msg +"</font></body></html><x xmlns='jabber:x:event'><composing /></x></message>", sock)
-
-		self.send('</stream:stream>', sock)
-		sock.close()
 
 # END Zeroconf
 
