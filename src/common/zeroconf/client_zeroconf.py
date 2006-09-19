@@ -1,4 +1,4 @@
-##      common/zeroconf/client_zeroconf.py
+﻿##      common/zeroconf/client_zeroconf.py
 ##
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ## 				2006 Dimitur Kirov <dkirov@gmail.com>
@@ -14,7 +14,7 @@
 ##
 from common import gajim
 from common.xmpp.idlequeue import IdleObject
-from common.xmpp import dispatcher_nb, debug
+from common.xmpp import dispatcher_nb
 from common.xmpp.client import *
 from common.xmpp.simplexml import ustr
 from dialogs import BindPortError
@@ -58,12 +58,12 @@ class ZeroconfListener(IdleObject):
 	
 	def pollend(self):
 		''' called when we stop listening on (host, port) '''
-		self.disconnect2()
+		self.disconnect()
 	
 	def pollin(self):
 		''' accept a new incomming connection and notify queue'''
 		sock = self.accept_conn()
-		P2PConnection('', sock[0], sock[1][0], sock[1][1], self.caller)
+		P2PClient(sock[0], sock[1][0], sock[1][1], self.caller)
 	
 	def disconnect(self):
 		''' free all resources, we are not listening anymore '''
@@ -83,60 +83,33 @@ class ZeroconfListener(IdleObject):
 		return _sock
 
 
-class P2PConnection(IdleObject, PlugIn):
-	''' class for sending file to socket over socks5 '''
-	def __init__(self, sock_hash, _sock, host = None, port = None, caller = None):
-		PlugIn.__init__(self)
-		self.sendqueue = []
-		self.sendbuff = None
-		self._sock = _sock
-		self._sock.setblocking(False)
-		self.fd = _sock.fileno()
-		self._recv = _sock.recv
-		self._send = _sock.send
-		self.connected = True
-		self.state = 1 
-		self.writable = False
-		self.readable = False
-		# waiting for first bytes
-		# start waiting for data
+
+class P2PClient(IdleObject):
+	def __init__(self, _sock, host, port, caller):
+		self._owner = self
 		self.Namespace = 'jabber:client'
 		self.defaultNamespace = self.Namespace
 		self._component=0
 		self._caller = caller
 		self.Server = host
-		self.Connection = self
-		self._registered_name = None
 		self.DBG = 'client'
 		debug = ['always', 'nodebuilder']
 		self._DEBUG = Debug.Debug(debug)
 		self.DEBUG = self._DEBUG.Show
 		self.debug_flags = self._DEBUG.debug_flags
 		self.debug_flags.append(self.DBG)
-		self._owner = self
-		self._exported_methods=[self.send_stanza, self.disconnect2, self.pollend]	
-		self.on_receive = None
-		gajim.idlequeue.plug_idle(self, False, True)
-		self.onreceive(self._on_receive_document_attrs)
+		self.Connection = P2PConnection('', _sock, host, port, caller)
+		self.Connection.PlugIn(self)
 		dispatcher_nb.Dispatcher().PlugIn(self)
+		
 		self.RegisterHandler('message', self._messageCB)
 	
+	def disconnected(self):
+		if self.__dict__.has_key('Dispatcher'):
+			self.Dispatcher.PlugOut()
+		if self.__dict__.has_key('P2PConnection'):
+			self.P2PConnection.PlugOut()
 		
-	def _messageCB(self, conn, data):
-		self._caller._messageCB(self.Server, conn, data)
-	
-	def onreceive(self, recv_handler):
-		if not recv_handler:
-			if hasattr(self._owner, 'Dispatcher'):
-				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
-			else:
-				self.on_receive = None
-			return
-		_tmp = self.on_receive
-		# make sure this cb is not overriden by recursive calls
-		if not recv_handler(None) and _tmp == self.on_receive:
-			self.on_receive = recv_handler
-	
 	def _on_receive_document_attrs(self, data):
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
@@ -151,8 +124,68 @@ class P2PConnection(IdleObject, PlugIn):
 				return
 		self.onreceive(None)
 		return True
+		
+		
+	def _messageCB(self, conn, data):
+		self._caller._messageCB(self.Server, conn, data)
+		
+		
+class P2PConnection(IdleObject, PlugIn):
+	''' class for sending file to socket over socks5 '''
+	def __init__(self, sock_hash, _sock, host = None, port = None, caller = None):
+		IdleObject.__init__(self)
+		PlugIn.__init__(self)
+		self.DBG_LINE='socket'
+		self.sendqueue = []
+		self.sendbuff = None
+		self._sock = _sock
+		self._sock.setblocking(False)
+		self.fd = _sock.fileno()
+		self._recv = _sock.recv
+		self._send = _sock.send
+		self.connected = True
+		self.state = 1 
+		self.writable = False
+		self.readable = False
+		# waiting for first bytes
+		# start waiting for data
+		
+		
+		
+		#~ self.Connection = self
+		self._registered_name = None
+		
+		self._exported_methods=[self.send, self.disconnect, self.onreceive]	
+		self.on_receive = None
+		
+		
+	def plugin(self, owner):
+		self.onreceive(owner._on_receive_document_attrs)
+		gajim.idlequeue.plug_idle(self, False, True)
+		return True
 	
-	def send_stanza(self, stanza):
+	def plugout(self):
+		''' Disconnect from the remote server and unregister self.disconnected method from
+			the owner's dispatcher. '''
+		self.disconnect()
+		self._owner.Connection = None
+		self._owner = None
+	
+	def onreceive(self, recv_handler):
+		if not recv_handler:
+			if hasattr(self._owner, 'Dispatcher'):
+				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
+			else:
+				self.on_receive = None
+			return
+		_tmp = self.on_receive
+		# make sure this cb is not overriden by recursive calls
+		if not recv_handler(None) and _tmp == self.on_receive:
+			self.on_receive = recv_handler
+	
+	
+	
+	def send(self, stanza):
 		'''Append stanza to the queue of messages to be send. 
 		If supplied data is unicode string, encode it to utf-8.
 		'''
@@ -161,8 +194,8 @@ class P2PConnection(IdleObject, PlugIn):
 		r = stanza
 		if isinstance(r, unicode): 
 			r = r.encode('utf-8')
-		elif not isinstance(r, str): 
-			r = ustr(r).encode('utf-8')
+		#~ elif not isinstance(r, str): 
+			#~ r = ustr(r).encode('utf-8')
 		self.sendqueue.append(r)
 		self._plug_idle()
 		
@@ -177,11 +210,10 @@ class P2PConnection(IdleObject, PlugIn):
 			return
 		gajim.idlequeue.remove_timeout(self.fd)
 		self._do_send()
-		# self.idlequeue.plug_idle(self, False, True)
 	
 	def pollend(self):
 		self.state = -1
-		self.disconnect2()
+		self.disconnect()
 	
 	def pollin(self):
 		''' Reads all pending incoming data. Calls owner's disconnected() method if appropriate.'''
@@ -206,7 +238,7 @@ class P2PConnection(IdleObject, PlugIn):
 				# 8 EOF occurred in violation of protocol
 				self.pollend()
 			if self.state >= 0:
-				self.disconnect2()
+				self.disconnect()
 			return
 		
 		if self.state < 0:
@@ -218,7 +250,7 @@ class P2PConnection(IdleObject, PlugIn):
 		else:
 			# This should never happed, so we need the debug
 			self.DEBUG('Unhandled data received: %s' % received,'got')
-			self.disconnect2()
+			self.disconnect()
 			if self.on_connect_failure:
 				self.on_connect_failure()
 		return True
@@ -235,7 +267,7 @@ class P2PConnection(IdleObject, PlugIn):
 		if not recv_handler(None) and _tmp == self.on_receive:
 			self.on_receive = recv_handler
 	
-	def disconnect2(self):
+	def disconnect(self):
 		''' Closes the socket. '''
 		gajim.idlequeue.remove_timeout(self.fd)
 		gajim.idlequeue.unplug_idle(self.fd)
@@ -248,6 +280,7 @@ class P2PConnection(IdleObject, PlugIn):
 		self.connected = False
 		self.fd = -1
 		self.state = -1
+		self._owner.disconnected()
 
 	def _do_send(self):
 		if not self.sendbuff:
@@ -263,7 +296,7 @@ class P2PConnection(IdleObject, PlugIn):
 					if self.state < 0:
 						gajim.idlequeue.unplug_idle(self.fd)
 						self._on_send()
-						self.disconnect2()
+						self.disconnect()
 						return
 					# we are not waiting for write 
 					self._plug_idle()
@@ -273,11 +306,10 @@ class P2PConnection(IdleObject, PlugIn):
 			if e[0] == socket.SSL_ERROR_WANT_WRITE:
 				return True		
 			if self.state < 0:
-				self.disconnect2()
+				self.disconnect()
 				return
-			if self._on_send_failure:
-				self._on_send_failure()
-				return
+			self._on_send_failure()
+			return
 		return True
 	
 	def _plug_idle(self):
