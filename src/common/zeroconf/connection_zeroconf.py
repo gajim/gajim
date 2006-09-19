@@ -214,9 +214,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connected = 0
 		self.time_to_reconnect = None
 		if self.connection:
-			# make sure previous connection is completely closed
-			self.last_connection = None
-			self.connection.listener.disconnect()
+			if self.connection.listener:
+				self.connection.listener.disconnect()
 			self.connection = None
 			# stop calling the timeout
 			self.call_resolve_timeout = False
