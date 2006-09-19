@@ -88,7 +88,7 @@ class ZeroconfListener(IdleObject):
 
 
 class P2PClient(IdleObject):
-	def __init__(self, _sock, host, port, conn_holder, messagequeue = []):
+	def __init__(self, _sock, host, port, conn_holder, messagequeue = [], to = None):
 		self._owner = self
 		self.Namespace = 'jabber:client'
 		self.defaultNamespace = self.Namespace
@@ -97,6 +97,7 @@ class P2PClient(IdleObject):
 		self._caller = conn_holder.caller
 		self.conn_holder = conn_holder
 		self.messagequeue = messagequeue
+		self.to = to
 		self.Server = host
 		self.DBG = 'client'
 		self.Connection = None
@@ -110,15 +111,24 @@ class P2PClient(IdleObject):
 			self.sock_type = TYPE_SERVER
 		else:
 			self.sock_type = TYPE_CLIENT
-		P2PConnection('', _sock, host, port, self._caller, self.on_connect)
+		conn = P2PConnection('', _sock, host, port, self._caller, self.on_connect)
+		self.sock_hash = conn._sock.__hash__
+		self.conn_holder.add_connection(self, self.Server, self.to)
+	
+	def add_message(self, message):
+		if self.Connection:
+			if self.Connection.state == -1:
+				return False
+			self.send(message)
+		else:
+			messagequeue.append(message)
+		return True
 	
 	def on_connect(self, conn):
 		self.Connection = conn
 		self.Connection.PlugIn(self)
 		dispatcher_nb.Dispatcher().PlugIn(self)
 		self.RegisterHandler('message', self._messageCB)
-		self.sock_hash = conn._sock.__hash__
-		self.conn_holder.add_connection(self)
 		if self.sock_type == TYPE_CLIENT:
 			while self.messagequeue:
 				message = self.messagequeue.pop(0)
@@ -424,19 +434,32 @@ class ClientZeroconf:
 		self.caller = caller
 		self.start_listener(zeroconf.port)
 		self.connections = {}
+		self.recipient_to_hash = {}
+		self.ip_to_hash = {}
 		
 	def kill_all_connections(self):
 		for connection in self.connections.values():
 			connection.force_disconnect()
 	
-	def add_connection(self, connection):
+	def add_connection(self, connection, ip, recipient):
 		sock_hash = connection.sock_hash
 		if sock_hash not in self.connections:
 			self.connections[sock_hash] = connection
+		self.ip_to_hash[ip] = sock_hash
+		if recipient:
+			self.recipient_to_hash[recipient] = sock_hash
 		
 	def remove_connection(self, sock_hash):
 		if sock_hash in self.connections:
-			self.connections[sock_hash]
+			del self.connections[sock_hash]
+		for i in self.recipient_to_hash:
+			if self.recipient_to_hash[i] == sock_hash:
+				del self.recipient_to_hash[i]
+				break
+		for i in self.ip_to_hash:
+			if self.ip_to_hash[i] == sock_hash:
+				del self.ip_to_hash[i]
+				break
 		
 	def start_listener(self, port):
 		self.listener = ZeroconfListener(port, self)
@@ -454,10 +477,18 @@ class ClientZeroconf:
 	def send(self, msg_iq):
 		msg_iq.setFrom(self.roster.zeroconf.name)
 		to = msg_iq.getTo()
+		if to in self.recipient_to_hash:
+			conn = self.connections[self.recipient_to_hash[to]]
+			if conn.add_message(msg_iq):
+				return
 		try:
 			item = self.roster[to]
 		except KeyError:
 			#XXX invalid recipient, show some error maybe ?
 			return
-		P2PClient(None, item['address'], item['port'], self, [msg_iq])
+		if item['address'] in self.ip_to_hash:
+			conn = self.connections[self.ip_to_hash[item['address']]]
+			if conn.add_message(msg_iq):
+				return
+		P2PClient(None, item['address'], item['port'], self, [msg_iq], to)
 
