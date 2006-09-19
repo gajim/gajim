@@ -1343,7 +1343,7 @@ class RosterWindow:
 		'''Make contact's popup menu'''
 		model = self.tree.get_model()
 		jid = model[iter][C_JID].decode('utf-8')
-		path = model.get_path(iter)
+		tree_path = model.get_path(iter)
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 		our_jid = jid == gajim.get_jid_from_account(account)
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
@@ -1422,7 +1422,7 @@ class RosterWindow:
 
 		else: # one resource
 			start_chat_menuitem.connect('activate',
-				self.on_roster_treeview_row_activated, path)
+				self.on_roster_treeview_row_activated, tree_path)
 
 		if contact.resource:
 			send_file_menuitem.connect('activate',
@@ -1463,7 +1463,7 @@ class RosterWindow:
 				menuitem.connect('activate', self.on_invite_to_room,
 					[(contact, account)], room_jid, acct)
 				submenu.append(menuitem)
-		rename_menuitem.connect('activate', self.on_rename, iter, path)
+		rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
 		remove_from_roster_menuitem.connect('activate', self.on_req_usub,
 			[(contact, account)])
 		information_menuitem.connect('activate', self.on_info, contact,
