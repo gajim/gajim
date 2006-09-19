@@ -292,6 +292,8 @@ class P2PConnection(IdleObject, PlugIn):
 		if self.state < 0:
 			return
 		if self.on_receive:
+			if received.strip():
+				self.DEBUG(received, 'got')
 			if hasattr(self._owner, 'Dispatcher'):
 				self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
 			self.on_receive(received)
@@ -372,7 +374,7 @@ class P2PConnection(IdleObject, PlugIn):
 	
 	def _on_send(self):
 		if self.sent_data and self.sent_data.strip():
-			#~ self.DEBUG(self.sent_data,'sent')
+			self.DEBUG(self.sent_data,'sent')
 			if hasattr(self._owner, 'Dispatcher'):
 				self._owner.Dispatcher.Event('', DATA_SENT, self.sent_data)
 		self.sent_data  = None
