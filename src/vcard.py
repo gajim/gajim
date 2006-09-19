@@ -163,7 +163,7 @@ class VcardWindow:
 				if i == 'DESC':
 					self.xml.get_widget('DESC_textview').get_buffer().set_text(
 						vcard[i], 0)
-				else:
+				elif i != 'jid': # Do not override jid_label
 					self.set_value(i + '_label', vcard[i])
 		self.vcard_arrived = True
 		self.test_remove_progressbar()
