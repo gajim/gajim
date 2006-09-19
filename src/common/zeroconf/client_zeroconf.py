@@ -14,10 +14,11 @@
 ##
 from common import gajim
 from common.xmpp.idlequeue import IdleObject
-from common.xmpp import dispatcher_nb
+from common.xmpp import dispatcher_nb, simplexml
 from common.xmpp.client import *
 from common.xmpp.simplexml import ustr
 from dialogs import BindPortError
+from  common.xmpp.protocol import *
 import socket
 import errno
 
@@ -26,7 +27,7 @@ from common.zeroconf import roster_zeroconf
 MAX_BUFF_LEN = 65536
 DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
-
+TYPE_SERVER, TYPE_CLIENT = range(2)
 
 class ZeroconfListener(IdleObject):
 	def __init__(self, port, caller = None):
@@ -75,6 +76,7 @@ class ZeroconfListener(IdleObject):
 			self._serv.close()
 		except:
 			pass
+		#XXX kill all active connection
 	
 	def accept_conn(self):
 		''' accepts a new incomming connection '''
@@ -98,11 +100,29 @@ class P2PClient(IdleObject):
 		self.DEBUG = self._DEBUG.Show
 		self.debug_flags = self._DEBUG.debug_flags
 		self.debug_flags.append(self.DBG)
-		self.Connection = P2PConnection('', _sock, host, port, caller)
+		P2PConnection('', _sock, host, port, caller, self.on_connect)
+	
+	def on_connect(self, conn):
+		self.Connection = conn
 		self.Connection.PlugIn(self)
 		dispatcher_nb.Dispatcher().PlugIn(self)
-		
 		self.RegisterHandler('message', self._messageCB)
+	
+	def StreamInit(self):
+		''' Send an initial stream header. '''
+		self.Dispatcher.Stream = simplexml.NodeBuilder()
+		self.Dispatcher.Stream._dispatch_depth = 2
+		self.Dispatcher.Stream.dispatch = self.Dispatcher.dispatch
+		self.Dispatcher.Stream.stream_header_received = self.Dispatcher._check_stream_start
+		self.debug_flags.append(simplexml.DBG_NODEBUILDER)
+		self.Dispatcher.Stream.DEBUG = self.DEBUG
+		self.Dispatcher.Stream.features = None
+		self.Dispatcher._metastream = Node('stream:stream')
+		self.Dispatcher._metastream.setNamespace(self.Namespace)
+		#~ self._metastream.setAttr('version', '1.0')
+		self.Dispatcher._metastream.setAttr('xmlns:stream', NS_STREAMS)
+		#~ self._metastream.setAttr('to', self._owner.Server)
+		self.Dispatcher.send("<?xml version='1.0'?>%s>" % str(self.Dispatcher._metastream)[:-2])
 	
 	def disconnected(self):
 		if self.__dict__.has_key('Dispatcher'):
@@ -132,36 +152,42 @@ class P2PClient(IdleObject):
 		
 class P2PConnection(IdleObject, PlugIn):
 	''' class for sending file to socket over socks5 '''
-	def __init__(self, sock_hash, _sock, host = None, port = None, caller = None):
+	def __init__(self, sock_hash, _sock, host = None, port = None, caller = None, on_connect = None):
 		IdleObject.__init__(self)
 		PlugIn.__init__(self)
 		self.DBG_LINE='socket'
 		self.sendqueue = []
 		self.sendbuff = None
 		self._sock = _sock
-		self._sock.setblocking(False)
-		self.fd = _sock.fileno()
-		self._recv = _sock.recv
-		self._send = _sock.send
-		self.connected = True
-		self.state = 1 
+		self.host, self.port = host, port
+		self.on_connect = on_connect
 		self.writable = False
 		self.readable = False
 		# waiting for first bytes
 		# start waiting for data
-		
-		
-		
-		#~ self.Connection = self
 		self._registered_name = None
-		
-		self._exported_methods=[self.send, self.disconnect, self.onreceive]	
+		self._exported_methods=[self.send, self.disconnect, self.onreceive]
 		self.on_receive = None
+		if _sock:
+			self.sock_type = TYPE_SERVER
+			self.connected = True
+			self.state = 1 
+			_sock.setblocking(False)
+			self.fd = _sock.fileno()
+			self.on_connect(self)
+		else:
+			self.sock_type = TYPE_CLIENT
+			self.connected = False
+			self.state = 0
+			self.idlequeue.plug_idle(self, True, False)
+			self.do_connect()
+			
+		
 		
 		
 	def plugin(self, owner):
 		self.onreceive(owner._on_receive_document_attrs)
-		gajim.idlequeue.plug_idle(self, False, True)
+		self._plug_idle()
 		return True
 	
 	def plugout(self):
@@ -204,9 +230,33 @@ class P2PConnection(IdleObject, PlugIn):
 		# no activity for foo seconds
 		# self.pollend()
 	
+	
+	def do_connect(self):
+		try:
+			self._sock.connect((self.host, self.port))
+			self._sock.setblocking(False)
+		except Exception, ee:
+			(errnum, errstr) = ee
+			if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK): 
+				return
+			# win32 needs this
+			elif errnum not in  (10056, errno.EISCONN) or self.state != 0:
+				self.disconnect()
+				return None
+			else: # socket is already connected
+				self._sock.setblocking(False)
+		self.connected = True
+		self.state = 1 # connected
+		self.on_connect(self)
+		return 1 # we are connected
+	
+	
 	def pollout(self):
 		if not self.connected:
-			self.disconnect2()
+			self.disconnect()
+			return
+		if self.state == 0:
+			self.do_connect()
 			return
 		gajim.idlequeue.remove_timeout(self.fd)
 		self._do_send()
@@ -221,7 +271,7 @@ class P2PConnection(IdleObject, PlugIn):
 		errnum = 0
 		try: 
 			# get as many bites, as possible, but not more than RECV_BUFSIZE
-			received = self._recv(MAX_BUFF_LEN)
+			received = self._sock.recv(MAX_BUFF_LEN)
 		except Exception, e:
 			if len(e.args)  > 0 and isinstance(e.args[0], int):
 				errnum = e[0]
@@ -289,7 +339,7 @@ class P2PConnection(IdleObject, PlugIn):
 			self.sendbuff = self.sendqueue.pop(0)
 			self.sent_data = self.sendbuff
 		try:
-			send_count = self._send(self.sendbuff)
+			send_count = self._sock.send(self.sendbuff)
 			if send_count:
 				self.sendbuff = self.sendbuff[send_count:]
 				if not self.sendbuff and not self.sendqueue:
