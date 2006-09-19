@@ -339,7 +339,7 @@ class Zeroconf:
 		#adium requires the html parts
 		#self.send("<message to='" + jid + "' from='" + self.name + "' type='" + type + "'><body>" + msg + "</body><html xmlns='html://www.w3.org/1999/xhtml'><body ichatballoncolor='#5598d7' ichattextcolor='#000000'><font face='Courier' ABSZ='3'>" + msg +"</font></body></html><x xmlns='jabber:x:event'><composing /></x></message>", sock)
 
-		self.send('</stream>', sock)
+		self.send('</stream:stream>', sock)
 		sock.close()
 
 # END Zeroconf
