@@ -74,7 +74,6 @@ class Dispatcher(PlugIn):
 		self.RegisterProtocol('presence', Presence)
 		self.RegisterProtocol('message', Message)
 		self.RegisterDefaultHandler(self.returnStanzaHandler)
-		# Register Gajim's event handler as soon as dispatcher begins
 		self.RegisterEventHandler(self._owner._caller._event_dispatcher)
 		self.on_responses = {}
 		
@@ -84,7 +83,10 @@ class Dispatcher(PlugIn):
 		self._owner.lastErrNode = None
 		self._owner.lastErr = None
 		self._owner.lastErrCode = None
-		self.StreamInit()
+		if hasattr(self._owner, 'StreamInit'):
+			self._owner.StreamInit()
+		else:
+			self.StreamInit()
 	
 	def plugout(self):
 		''' Prepares instance to be destructed. '''
@@ -134,7 +136,7 @@ class Dispatcher(PlugIn):
 				return 0
 		except ExpatError:
 			sys.exc_clear()
-			self.DEBUG('Invalid XML received from server. Forcing disconnect.')
+			self.DEBUG('Invalid XML received from server. Forcing disconnect.', 'error')
 			self._owner.Connection.pollend()
 			return 0
 		if len(self._pendingExceptions) > 0:
