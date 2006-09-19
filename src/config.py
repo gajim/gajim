@@ -1798,11 +1798,33 @@ class AccountsWindow:
 			dialogs.ErrorDialog(_('Unread events'),
 				_('Read all pending events before removing this account.'))
 			return
-		if gajim.interface.instances[account].has_key('remove_account'):
-			gajim.interface.instances[account]['remove_account'].window.present()
+		win_opened = False
+		if gajim.interface.msg_win_mgr.get_controls(acct = account):
+			win_opened = True
 		else:
-			gajim.interface.instances[account]['remove_account'] = \
-				RemoveAccountWindow(account)
+			for key in gajim.interface.instances[account]:
+				if gajim.interface.instances[account][key]:
+					win_opened = True
+					break
+		# Detect if we have opened windows for this account
+		self.dialog = None
+		def remove(widget, account):
+			if self.dialog:
+				self.dialog.destroy()
+			if gajim.interface.instances[account].has_key('remove_account'):
+				gajim.interface.instances[account]['remove_account'].window.\
+					present()
+			else:
+				gajim.interface.instances[account]['remove_account'] = \
+					RemoveAccountWindow(account)
+		if win_opened:
+			self.dialog = dialogs.ConfirmationDialog(
+				_('You have opened chat in account %s') % account,
+				_('All chat and groupchat windows will be closed. Do you want to '
+				'continue?'),
+				on_response_ok = (remove, account))
+		else:
+			remove(widget, account)
 
 	def on_modify_button_clicked(self, widget):
 		'''When modify button is clicked:
