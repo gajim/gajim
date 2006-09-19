@@ -87,13 +87,14 @@ class ZeroconfListener(IdleObject):
 
 
 class P2PClient(IdleObject):
-	def __init__(self, _sock, host, port, caller):
+	def __init__(self, _sock, host, port, caller, messagequeue = []):
 		self._owner = self
 		self.Namespace = 'jabber:client'
 		self.defaultNamespace = self.Namespace
 		self._component = 0
 		self._registered_name = None
 		self._caller = caller
+		self.messagequeue = messagequeue
 		self.Server = host
 		self.DBG = 'client'
 		debug = ['always', 'nodebuilder']
@@ -101,6 +102,10 @@ class P2PClient(IdleObject):
 		self.DEBUG = self._DEBUG.Show
 		self.debug_flags = self._DEBUG.debug_flags
 		self.debug_flags.append(self.DBG)
+		if _sock:
+			self.sock_type = TYPE_SERVER
+		else:
+			self.sock_type = TYPE_CLIENT
 		P2PConnection('', _sock, host, port, caller, self.on_connect)
 	
 	def on_connect(self, conn):
@@ -114,16 +119,28 @@ class P2PClient(IdleObject):
 		self.Dispatcher.Stream = simplexml.NodeBuilder()
 		self.Dispatcher.Stream._dispatch_depth = 2
 		self.Dispatcher.Stream.dispatch = self.Dispatcher.dispatch
-		self.Dispatcher.Stream.stream_header_received = self.Dispatcher._check_stream_start
+		self.Dispatcher.Stream.stream_header_received = self._check_stream_start
 		self.debug_flags.append(simplexml.DBG_NODEBUILDER)
 		self.Dispatcher.Stream.DEBUG = self.DEBUG
 		self.Dispatcher.Stream.features = None
+		if self.sock_type == TYPE_CLIENT:
+			self.send_stream_header()
+	
+	def send_stream_header(self):
 		self.Dispatcher._metastream = Node('stream:stream')
 		self.Dispatcher._metastream.setNamespace(self.Namespace)
+		# XXX TLS support
 		#~ self._metastream.setAttr('version', '1.0')
 		self.Dispatcher._metastream.setAttr('xmlns:stream', NS_STREAMS)
-		#~ self._metastream.setAttr('to', self._owner.Server)
 		self.Dispatcher.send("<?xml version='1.0'?>%s>" % str(self.Dispatcher._metastream)[:-2])
+	
+	def _check_stream_start(self, ns, tag, attrs):
+		if ns<>NS_STREAMS or tag<>'stream':
+			raise ValueError('Incorrect stream start: (%s,%s). Terminating.' % (tag, ns))
+		if self.sock_type == TYPE_SERVER:
+			self.send_stream_header()
+			for message in self.messagequeue:
+				self.send(message)
 	
 	def disconnected(self):
 		if self.__dict__.has_key('Dispatcher'):
@@ -167,14 +184,12 @@ class P2PConnection(IdleObject, PlugIn):
 		self._exported_methods=[self.send, self.disconnect, self.onreceive]
 		self.on_receive = None
 		if _sock:
-			self.sock_type = TYPE_SERVER
 			self.connected = True
 			self.state = 1 
 			_sock.setblocking(False)
 			self.fd = _sock.fileno()
 			self.on_connect(self)
 		else:
-			self.sock_type = TYPE_CLIENT
 			self.connected = False
 			self.state = 0
 			self.idlequeue.plug_idle(self, True, False)
