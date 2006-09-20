@@ -13,6 +13,7 @@
 ## GNU General Public License for more details.
 ##
 from common import gajim
+import common.xmpp
 from common.xmpp.idlequeue import IdleObject
 from common.xmpp import dispatcher_nb, simplexml
 from common.xmpp.client import *
@@ -135,7 +136,7 @@ class P2PClient(IdleObject):
 		self.Connection = conn
 		self.Connection.PlugIn(self)
 		dispatcher_nb.Dispatcher().PlugIn(self)
-		self.RegisterHandler('message', self._messageCB)
+		self._register_handlers()
 		if self.sock_type == TYPE_CLIENT:
 			while self.messagequeue:
 				message = self.messagequeue.pop(0)
@@ -206,10 +207,22 @@ class P2PClient(IdleObject):
 		return True
 		
 		
-	def _messageCB(self, conn, data):
-		self._caller._messageCB(self.Server, conn, data)
-		
-		
+	
+	def _register_handlers(self):
+		self.RegisterHandler('message', lambda conn, data:self._caller._messageCB(self.Server, conn, data))
+		self.RegisterHandler('iq', self._caller._siSetCB, 'set',
+			common.xmpp.NS_SI)
+		self.RegisterHandler('iq', self._caller._siErrorCB, 'error',
+			common.xmpp.NS_SI)
+		self.RegisterHandler('iq', self._caller._siResultCB, 'result',
+			common.xmpp.NS_SI)
+		self.RegisterHandler('iq', self._caller._bytestreamSetCB, 'set',
+			common.xmpp.NS_BYTESTREAM)
+		self.RegisterHandler('iq', self._caller._bytestreamResultCB, 'result',
+			common.xmpp.NS_BYTESTREAM)
+		self.RegisterHandler('iq', self._caller._bytestreamErrorCB, 'error',
+			common.xmpp.NS_BYTESTREAM)
+	
 class P2PConnection(IdleObject, PlugIn):
 	''' class for sending file to socket over socks5 '''
 	def __init__(self, sock_hash, _sock, host = None, port = None, caller = None, on_connect = None):
