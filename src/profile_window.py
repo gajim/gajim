@@ -61,12 +61,16 @@ class ProfileWindow:
 		self.xml = gtkgui_helpers.get_glade('profile_window.glade')
 		self.window = self.xml.get_widget('profile_window')
 		self.progressbar = self.xml.get_widget('progressbar')
+		self.statusbar = self.xml.get_widget('statusbar')
+		self.context_id = self.statusbar.get_context_id('profile')
 
 		self.account = account
 		self.jid = gajim.get_jid_from_account(account)
 
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Retrieving profile...'))
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 			self.update_progressbar)
 
@@ -211,6 +215,12 @@ class ProfileWindow:
 				else:
 					self.set_value(i + '_entry', vcard[i])
 		if self.update_progressbar_timeout_id is not None:
+			if self.message_id:
+				self.statusbar.remove(self.context_id, self.message_id)
+			self.message_id = self.statusbar.push(self.context_id,
+				_('Information received'))
+			gobject.timeout_add(3000, self.statusbar.remove, self.context_id,
+				self.message_id)
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			# redraw progressbar after avatar is set so that windows is already
 			# resized. Else progressbar is not correctly redrawn
@@ -289,16 +299,30 @@ class ProfileWindow:
 			nick = gajim.config.get_per('accounts', self.account, 'name')
 		gajim.nicks[self.account] = nick
 		gajim.connections[self.account].send_vcard(vcard)
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Sending profile...'))
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 			self.update_progressbar)
 
 	def vcard_published(self):
+		if self.message_id:
+			self.statusbar.remove(self.context_id, self.message_id)
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Information published'))
+		gobject.timeout_add(3000, self.statusbar.remove, self.context_id,
+			self.message_id)
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			self.progressbar.set_fraction(0)
 			self.update_progressbar_timeout_id = None
 
 	def vcard_not_published(self):
+		if self.message_id:
+			self.statusbar.remove(self.context_id, self.message_id)
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Information NOT published'))
+		gobject.timeout_add(3000, self.statusbar.remove. self.context_id,
+			self.message_id)
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			self.progressbar.set_fraction(0)
@@ -331,5 +355,7 @@ class ProfileWindow:
 		else:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
 			_('Without a connection, you can not get your contact information.'))
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Retrieving profile...'))
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 			self.update_progressbar)

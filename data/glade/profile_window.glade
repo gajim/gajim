@@ -4,7 +4,6 @@
 <glade-interface>
 
 <widget class="GtkWindow" id="profile_window">
-  <property name="border_width">12</property>
   <property name="title">Personal Information</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -29,6 +28,7 @@
 
       <child>
 	<widget class="GtkNotebook" id="information_notebook">
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="show_tabs">True</property>
 	  <property name="show_border">True</property>
@@ -1829,6 +1829,7 @@
 
       <child>
 	<widget class="GtkHBox" id="hbox2">
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
@@ -2015,6 +2016,18 @@
 	  <property name="padding">0</property>
 	  <property name="expand">False</property>
 	  <property name="fill">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkStatusbar" id="statusbar">
+	  <property name="visible">True</property>
+	  <property name="has_resize_grip">False</property>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
 	</packing>
       </child>
     </widget>
