@@ -1842,8 +1842,9 @@ class AccountsWindow:
 		model = self.accounts_treeview.get_model()
 		model.clear()
 		for account in gajim.connections:
-			iter = model.append()
-			model.set(iter, 0, account, 1, gajim.get_hostname_from_account(account))
+#			if account != 'zeroconf':
+				iter = model.append()
+				model.set(iter, 0, account, 1, gajim.get_hostname_from_account(account))
 
 	def on_accounts_treeview_cursor_changed(self, widget):
 		'''Activate delete and modify buttons when a row is selected'''

@@ -101,13 +101,15 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			gajim.config.set_per('accounts', 'zeroconf', 'no_log_for', False)
 			gajim.config.set_per('accounts', 'zeroconf', 'password', 'zeroconf')
 			gajim.config.set_per('accounts', 'zeroconf', 'sync_with_global_status', True)
+
 			username = unicode(getpass.getuser())
 			gajim.config.set_per('accounts', 'zeroconf', 'name', username)
 			#XXX make sure host is US-ASCII
 			host = unicode(socket.gethostname())
 			gajim.config.set_per('accounts', 'zeroconf', 'hostname', host)
 			port = 5298
-			gajim.config.set_per('accounts', 'zeroconf', 'custom_port', 5298)
+			gajim.config.set_per('accounts', 'zeroconf', 'custom_port', port)
+			gajim.config.set_per('accounts', 'zeroconf', 'is_zeroconf', True)
 		else:
 			username = gajim.config.get_per('accounts', 'zeroconf', 'name')
 			host = gajim.config.get_per('accounts', 'zeroconf', 'hostname')
