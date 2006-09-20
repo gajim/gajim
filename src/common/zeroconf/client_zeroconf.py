@@ -348,7 +348,8 @@ class P2PConnection(IdleObject, PlugIn):
 		if self.state < 0:
 			return
 		if self.on_receive:
-			self.set_timeout(ACTIVITY_TIMEOUT_SECONDS)
+			if self._owner.sock_type == TYPE_CLIENT:
+				self.set_timeout(ACTIVITY_TIMEOUT_SECONDS)
 			if received.strip():
 				self.DEBUG(received, 'got')
 			if hasattr(self._owner, 'Dispatcher'):
@@ -415,7 +416,8 @@ class P2PConnection(IdleObject, PlugIn):
 				return
 			self._on_send_failure()
 			return
-		self.set_timeout(ACTIVITY_TIMEOUT_SECONDS)
+		if self._owner.sock_type == TYPE_CLIENT:
+			self.set_timeout(ACTIVITY_TIMEOUT_SECONDS)
 		return True
 	
 	def _plug_idle(self):
