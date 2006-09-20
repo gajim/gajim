@@ -717,6 +717,13 @@ class RosterWindow:
 			return
 		new_chat_menuitem = self.xml.get_widget('new_chat_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
+		iconset = gajim.config.get('iconset') 
+		if not iconset: 
+			iconset = DEFAULT_ICONSET 
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16') 
+		state_images = self.load_iconset(path) 
+		if state_images.has_key('muc_active'): 
+			join_gc_menuitem.set_image(state_images['muc_active'])
 		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
 		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')

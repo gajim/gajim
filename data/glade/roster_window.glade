@@ -21,6 +21,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="delete_event" handler="on_roster_window_delete_event" last_modification_time="Mon, 21 Mar 2005 12:34:59 GMT"/>
   <signal name="focus_in_event" handler="on_roster_window_focus_in_event" last_modification_time="Sun, 04 Sep 2005 16:33:35 GMT"/>
   <signal name="key_press_event" handler="on_roster_window_key_press_event" last_modification_time="Tue, 20 Sep 2005 19:26:27 GMT"/>
@@ -35,6 +36,8 @@
       <child>
 	<widget class="GtkMenuBar" id="menubar">
 	  <property name="visible">True</property>
+	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
+	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="actions_menu">
@@ -406,4 +409,5 @@
     </widget>
   </child>
 </widget>
+
 </glade-interface>
