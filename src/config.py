@@ -211,19 +211,23 @@ class PreferencesWindow:
 
 		#before time
 		st = gajim.config.get('before_time')
-		self.xml.get_widget('before_time_entry').set_text(st)
+		st = helpers.from_one_line(st)
+		self.xml.get_widget('before_time_textview').get_buffer().set_text(st)
 
 		#after time
 		st = gajim.config.get('after_time')
-		self.xml.get_widget('after_time_entry').set_text(st)
+		st = helpers.from_one_line(st)
+		self.xml.get_widget('after_time_textview').get_buffer().set_text(st)
 
 		#before nickname
 		st = gajim.config.get('before_nickname')
-		self.xml.get_widget('before_nickname_entry').set_text(st)
+		st = helpers.from_one_line(st)
+		self.xml.get_widget('before_nickname_textview').get_buffer().set_text(st)
 
 		#after nickanme
 		st = gajim.config.get('after_nickname')
-		self.xml.get_widget('after_nickname_entry').set_text(st)
+		st = helpers.from_one_line(st)
+		self.xml.get_widget('after_nickname_textview').get_buffer().set_text(st)
 
 		#Color for incomming messages
 		colSt = gajim.config.get('inmsgcolor')
@@ -644,9 +648,9 @@ class PreferencesWindow:
 
 	def _set_sensitivity_for_before_after_time_widgets(self, sensitive):
 		self.xml.get_widget('before_time_label').set_sensitive(sensitive)
-		self.xml.get_widget('before_time_entry').set_sensitive(sensitive)
+		self.xml.get_widget('before_time_textview').set_sensitive(sensitive)
 		self.xml.get_widget('after_time_label').set_sensitive(sensitive)
-		self.xml.get_widget('after_time_entry').set_sensitive(sensitive)
+		self.xml.get_widget('after_time_textview').set_sensitive(sensitive)
 	
 	def on_time_never_radiobutton_toggled(self, widget):
 		if widget.get_active():
@@ -666,20 +670,33 @@ class PreferencesWindow:
 		self._set_sensitivity_for_before_after_time_widgets(True)
 		gajim.interface.save_config()
 
-	def on_before_time_entry_focus_out_event(self, widget, event):
-		gajim.config.set('before_time', widget.get_text().decode('utf-8'))
+	def _get_textview_text(self, tv):
+		buffer = tv.get_buffer()
+		begin, end = buffer.get_bounds()
+		return buffer.get_text(begin, end).decode('utf-8')
+
+	def on_before_time_textview_focus_out_event(self, widget, event):
+		text = self._get_textview_text(widget)
+		text = helpers.to_one_line(text)
+		gajim.config.set('before_time', text)
 		gajim.interface.save_config()
 
-	def on_after_time_entry_focus_out_event(self, widget, event):
-		gajim.config.set('after_time', widget.get_text().decode('utf-8'))
+	def on_after_time_textview_focus_out_event(self, widget, event):
+		text = self._get_textview_text(widget)
+		text = helpers.to_one_line(text)
+		gajim.config.set('after_time', text)
 		gajim.interface.save_config()
 
-	def on_before_nickname_entry_focus_out_event(self, widget, event):
-		gajim.config.set('before_nickname', widget.get_text().decode('utf-8'))
+	def on_before_nickname_textview_focus_out_event(self, widget, event):
+		text = self._get_textview_text(widget)
+		text = helpers.to_one_line(text)
+		gajim.config.set('before_nickname', text)
 		gajim.interface.save_config()
 
-	def on_after_nickname_entry_focus_out_event(self, widget, event):
-		gajim.config.set('after_nickname', widget.get_text().decode('utf-8'))
+	def on_after_nickname_textview_focus_out_event(self, widget, event):
+		text = self._get_textview_text(widget)
+		text = helpers.to_one_line(text)
+		gajim.config.set('after_nickname', text)
 		gajim.interface.save_config()
 
 	def update_text_tags(self):

@@ -664,7 +664,9 @@ class ConversationTextview:
 		current_print_time = gajim.config.get('print_time')
 		if current_print_time == 'always' and kind != 'info':
 			before_str = gajim.config.get('before_time')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_time')
+			after_str = helpers.from_one_line(after_str)
 			# get difference in days since epoch (86400 = 24*3600)
 			# number of days since epoch for current time (in GMT) -
 			# number of days since epoch for message (in GMT)
@@ -748,7 +750,9 @@ class ConversationTextview:
 			name_tags = other_tags_for_name[:] # create a new list
 			name_tags.append(kind)
 			before_str = gajim.config.get('before_nickname')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_nickname')
+			after_str = helpers.from_one_line(after_str)
 			format = before_str + name + after_str + ' '
 			buffer.insert_with_tags_by_name(end_iter, format, *name_tags)
 
