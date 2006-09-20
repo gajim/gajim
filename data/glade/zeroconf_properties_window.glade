@@ -416,6 +416,7 @@
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
+			  <signal name="toggled" handler="on_custom_port_checkbutton_toggled" last_modification_time="Wed, 20 Sep 2006 18:29:49 GMT"/>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>

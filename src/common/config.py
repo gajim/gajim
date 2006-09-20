@@ -247,6 +247,11 @@ class Config:
 			'msgwin-y-position': [opt_int, -1], # Default is to let the wm decide
 			'msgwin-width': [opt_int, 480],
 			'msgwin-height': [opt_int, 440],
+			'is_zeroconf': [opt_bool, False],
+			'zeroconf_first_name': [ opt_str, '', '', True ],
+			'zeroconf_last_name': [ opt_str, '', '', True ],
+			'zeroconf_jabber_id': [ opt_str, '', '', True ],
+			'zeroconf_email': [ opt_str, '', '', True ],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],

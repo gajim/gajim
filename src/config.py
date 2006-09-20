@@ -586,6 +586,7 @@ class PreferencesWindow:
 			gajim.interface.roster.draw_roster()
 			gajim.interface.roster.actions_menu_needs_rebuild = True
 			gajim.interface.save_config()
+			gajim.connections['zeroconf'].change_status('online', '')
 
 		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
 
@@ -3041,44 +3042,56 @@ class ZeroconfPropertiesWindow:
 		self.window = self.xml.get_widget('zeroconf_properties_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.xml.signal_autoconnect(self)
+
+		self.account = 'zeroconf'
 		
 		st = gajim.config.get_per('accounts', 'zeroconf', 'autoconnect')
 		if st:
 			self.xml.get_widget('autoconnect_checkbutton').set_active(st)
-
-		st = gajim.config.get_per('accounts', 'zeroconf', 'no_log_for')
-		if st:
-			self.xml.get_widget('log_history_checkbutton').set_active(bool(st))
 		
+		list_no_log_for = gajim.config.get_per('accounts', self.account,'no_log_for').split()
+		if 'zeroconf' in list_no_log_for:
+			self.xml.get_widget('log_history_checkbutton').set_active(0)
+		else:
+			self.xml.get_widget('log_history_checkbutton').set_active(1)
+
+
 		st = gajim.config.get_per('accounts', 'zeroconf', 'sync_with_global_status')
 		if st:
 			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(st)
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'first_name')
+		st = gajim.config.get_per('accounts', 'zeroconf', 'zeroconf_first_name')
 		if st:
 			self.xml.get_widget('first_name_entry').set_text(st)
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'last_name')
+		st = gajim.config.get_per('accounts', 'zeroconf', 'zeroconf_last_name')
 		if st:
 			self.xml.get_widget('last_name_entry').set_text(st)
 		
-		st = gajim.config.get_per('accounts', 'zeroconf', 'jabber_id')
+		st = gajim.config.get_per('accounts', 'zeroconf', 'zeroconf_jabber_id')
 		if st:
 			self.xml.get_widget('jabber_id_entry').set_text(st)
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'email')
+		st = gajim.config.get_per('accounts', 'zeroconf', 'zeroconf_email')
 		if st:
 			self.xml.get_widget('email_entry').set_text(st)
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'use_tls')
+		st = gajim.config.get_per('accounts', 'zeroconf', 'use_ssl')
 		if st:
 			self.xml.get_widget('use_tls_checkbutton').set_active(st)
 
 		st = gajim.config.get_per('accounts', 'zeroconf', 'custom_port')
 		if st:
 			self.xml.get_widget('custom_port_entry').set_text(str(st))
+		
+		st = gajim.config.get_per('accounts', 'zeroconf', 'use_custom_host')
+		if st:
+			self.xml.get_widget('custom_port_checkbutton').set_active(st)
 	
-		self.xml.get_widget('custom_port_entry').set_sensitive(True)
+		self.xml.get_widget('custom_port_entry').set_sensitive(bool(st))
+
+		if not st:
+			gajim.config.set_per('accounts', 'zeroconf', 'custom_port', '5298')
 
 		self.xml.get_widget('save_button').grab_focus()
 		self.window.show_all()
@@ -3087,48 +3100,48 @@ class ZeroconfPropertiesWindow:
 		#close window
 		if gajim.interface.instances.has_key('zeroconf_properties'):
 			del gajim.interface.instances['zeroconf_properties']
-
+	
+	def on_custom_port_checkbutton_toggled(self, widget):
+		st = self.xml.get_widget('custom_port_checkbutton').get_active()
+		self.xml.get_widget('custom_port_entry').set_sensitive(bool(st))
+	
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
 	
 	def on_save_button_clicked(self, widget):
 		st = self.xml.get_widget('autoconnect_checkbutton').get_active()
 		gajim.config.set_per('accounts', 'zeroconf', 'autoconnect', st)
-
-		st = self.xml.get_widget('log_history_checkbutton').get_active()
-		gajim.config.set_per('accounts', 'zeroconf', 'no_log_for', st)
-
+		list_no_log_for = gajim.config.get_per('accounts',
+				self.account, 'no_log_for').split()
+		if self.account in list_no_log_for:
+			list_no_log_for.remove(self.account)
+		if not self.xml.get_widget('log_history_checkbutton').get_active():
+			list_no_log_for.append(self.account)
+		gajim.config.set_per('accounts', 'zeroconf', 'no_log_for', ' '.join(list_no_log_for))
+		
 		st = self.xml.get_widget('sync_with_global_status_checkbutton').get_active()
 		gajim.config.set_per('accounts', 'zeroconf', 'sync_with_global_status', st)
 
+		st = self.xml.get_widget('first_name_entry').get_text()
+		gajim.config.set_per('accounts', 'zeroconf', 'zeroconf_first_name', st)
+		
+		st = self.xml.get_widget('last_name_entry').get_text()
+		gajim.config.set_per('accounts', 'zeroconf', 'zeroconf_last_name', st)
+
+		st = self.xml.get_widget('jabber_id_entry').get_text()
+		gajim.config.set_per('accounts', 'zeroconf', 'zeroconf_jabber_id', st)
+
+		st = self.xml.get_widget('email_entry').get_text()
+		gajim.config.set_per('accounts', 'zeroconf', 'zeroconf_email', st)
+
+		st = self.xml.get_widget('use_tls_checkbutton').get_active()
+		gajim.config.set_per('accounts', 'zeroconf', 'use_ssl', st)
+
+		st = self.xml.get_widget('custom_port_checkbutton').get_active()
+		gajim.config.set_per('accounts', 'zeroconf', 'use_custom_host', st)
+			
 		st = self.xml.get_widget('custom_port_entry').get_text()
 		gajim.config.set_per('accounts', 'zeroconf', 'custom_port', st)
-		
-		'''
-		st = gajim.config.get_per('accounts', 'zeroconf', 'first_name')
-		if st:
-			self.xml.get_widget('first_name_entry').set_text(st)
-
-		st = gajim.config.get_per('accounts', 'zeroconf', 'last_name')
-		if st:
-			self.xml.get_widget('last_name_entry').set_text(st)
-		
-		st = gajim.config.get_per('accounts', 'zeroconf', 'jabber_id')
-		if st:
-			self.xml.get_widget('jabber_id_entry').set_text(st)
-
-		st = gajim.config.get_per('accounts', 'zeroconf', 'email')
-		if st:
-			self.xml.get_widget('email_entry').set_text(st)
-
-		st = gajim.config.get_per('accounts', 'zeroconf', 'use_tls')
-		if st:
-			self.xml.get_widget('use_tls_checkbutton').set_active(st)
-
-		'''
-
+	
 		self.window.destroy()
-
-	def on_custom_port_checkbutton(self, widget):
-		pass
 

@@ -280,7 +280,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None, 
 	user_nick = None):
-		print 'connection_zeroconf.py: send_message'
 		fjid = jid
 
 		if not self.connection:
