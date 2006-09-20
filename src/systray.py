@@ -129,6 +129,9 @@ class Systray:
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = gajim.interface.roster.load_iconset(path)
 
+		if state_images.has_key('muc_active'):
+			join_gc_menuitem.set_image(state_images['muc_active'])
+
 		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 			uf_show = helpers.get_uf_show(show, use_mnemonic = True)
 			item = gtk.ImageMenuItem(uf_show)

@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+
 <widget class="GtkMenu" id="systray_context_menu">
 
   <child>
@@ -11,7 +12,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1371">
+	<widget class="GtkImage" id="image1448">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-network</property>
 	  <property name="icon_size">1</property>
@@ -31,7 +32,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1372">
+	<widget class="GtkImage" id="image1449">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -45,22 +46,10 @@
   </child>
 
   <child>
-    <widget class="GtkImageMenuItem" id="join_gc_menuitem">
+    <widget class="GtkMenuItem" id="join_gc_menuitem">
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Group Chat</property>
       <property name="use_underline">True</property>
-
-      <child internal-child="image">
-	<widget class="GtkImage" id="image1445">
-	  <property name="visible">True</property>
-	  <property name="stock">gtk-connect</property>
-	  <property name="icon_size">1</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	</widget>
-      </child>
     </widget>
   </child>
 
@@ -71,7 +60,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1373">
+	<widget class="GtkImage" id="image1450">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -107,7 +96,7 @@
       <signal name="activate" handler="on_show_roster_menuitem_activate" last_modification_time="Sat, 29 Oct 2005 23:55:24 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1374">
+	<widget class="GtkImage" id="image1451">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-home</property>
 	  <property name="icon_size">1</property>
@@ -144,4 +133,5 @@
     </widget>
   </child>
 </widget>
+
 </glade-interface>
