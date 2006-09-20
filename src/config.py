@@ -2923,9 +2923,6 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		con = connection.Connection(self.account)
 		con.password = password
 
-		if not savepass:
-			password = ""
-
 		config = {}
 		config['name'] = login
 		config['hostname'] = server
@@ -2954,6 +2951,10 @@ _('You can set advanced account options by pressing Advanced button, or later by
 
 	def create_vars(self, config):
 		gajim.config.add_per('accounts', self.account)
+
+		if not config['savepass']:
+			config['password'] = ''
+
 		for opt in config:
 			gajim.config.set_per('accounts', self.account, opt, config[opt])
 
