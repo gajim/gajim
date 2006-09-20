@@ -29,6 +29,12 @@ DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
 TYPE_SERVER, TYPE_CLIENT = range(2)
 
+# wait XX sec to establish a connection
+CONNECT_TIMEOUT_SECONDS = 30
+
+# after XX sec with no activity, close the stream
+ACTIVITY_TIMEOUT_SECONDS = 180
+
 class ZeroconfListener(IdleObject):
 	def __init__(self, port, conn_holder):
 		''' handle all incomming connections on ('0.0.0.0', port)'''
@@ -85,8 +91,6 @@ class ZeroconfListener(IdleObject):
 		_sock[0].setblocking(False)
 		return _sock
 
-
-
 class P2PClient(IdleObject):
 	def __init__(self, _sock, host, port, conn_holder, messagequeue = [], to = None):
 		self._owner = self
@@ -101,7 +105,10 @@ class P2PClient(IdleObject):
 		self.Server = host
 		self.DBG = 'client'
 		self.Connection = None
-		debug = ['always', 'nodebuilder']
+		if gajim.verbose:
+			debug = ['always', 'nodebuilder']
+		else:
+			debug = []
 		self._DEBUG = Debug.Debug(debug)
 		self.DEBUG = self._DEBUG.Show
 		self.debug_flags = self._DEBUG.debug_flags
@@ -230,7 +237,13 @@ class P2PConnection(IdleObject, PlugIn):
 			self._sock.setblocking(False)
 			self.fd = self._sock.fileno()
 			gajim.idlequeue.plug_idle(self, True, False)
+			self.set_timeout(CONNECT_TIMEOUT_SECONDS)
 			self.do_connect()
+	
+	def set_timeout(self, timeout):
+		gajim.idlequeue.remove_timeout(self.fd)
+		if self.state >= 0:
+			gajim.idlequeue.set_read_timeout(self.fd, timeout)
 
 	def plugin(self, owner):
 		self.onreceive(owner._on_receive_document_attrs)
@@ -272,9 +285,7 @@ class P2PConnection(IdleObject, PlugIn):
 		self._plug_idle()
 		
 	def read_timeout(self):
-		gajim.idlequeue.remove_timeout(self.fd)
-		# no activity for foo seconds
-		# self.pollend()
+		self.pollend()
 	
 	
 	def do_connect(self):
@@ -337,6 +348,7 @@ class P2PConnection(IdleObject, PlugIn):
 		if self.state < 0:
 			return
 		if self.on_receive:
+			self.set_timeout(ACTIVITY_TIMEOUT_SECONDS)
 			if received.strip():
 				self.DEBUG(received, 'got')
 			if hasattr(self._owner, 'Dispatcher'):
@@ -403,6 +415,7 @@ class P2PConnection(IdleObject, PlugIn):
 				return
 			self._on_send_failure()
 			return
+		self.set_timeout(ACTIVITY_TIMEOUT_SECONDS)
 		return True
 	
 	def _plug_idle(self):
