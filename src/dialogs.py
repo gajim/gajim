@@ -1196,7 +1196,7 @@ class NewChatDialog(InputDialog):
 			title = _('Start Chat with account %s') % account
 		else:
 			title = _('Start Chat')
-		prompt_text = _('Fill in the jid, or nick of the contact you would like\nto send a chat message to:')
+		prompt_text = _('Fill in the nickname or the Jabber ID of the contact you would like\nto send a chat message to:')
 		InputDialog.__init__(self, title, prompt_text, is_modal = False)
 		
 		self.completion_dict = {}
