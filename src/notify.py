@@ -28,9 +28,8 @@ from common import helpers
 import dbus_support
 if dbus_support.supported:
 	import dbus
-	if dbus_support.version >= (0, 41, 0):
-		import dbus.glib
-		import dbus.service
+	import dbus.glib
+	import dbus.service
 
 def get_show_in_roster(event, account, contact):
 	'''Return True if this event must be shown in roster, else False'''
