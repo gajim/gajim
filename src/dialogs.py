@@ -2295,6 +2295,18 @@ class ImageChooserDialog(FileChooserDialog):
 			return
 		widget.get_preview_widget().set_from_pixbuf(pixbuf)
 
+class AvatarChooserDialog(ImageChooserDialog):
+	def __init__(self, path_to_file = '', on_response_ok = None,
+	on_response_cancel = None, on_response_clear = None):
+		ImageChooserDialog.__init__(self, path_to_file, on_response_ok,
+			on_response_cancel)
+		button = gtk.Button(None, gtk.STOCK_CLEAR)
+		if on_response_clear:
+			button.connect('clicked', on_response_clear)
+		button.show_all()
+		self.action_area.pack_start(button)
+		self.action_area.reorder_child(button, 0)
+
 class AddSpecialNotificationDialog:
 	def __init__(self, jid):
 		'''jid is the jid for which we want to add special notification

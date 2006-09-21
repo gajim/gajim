@@ -148,7 +148,12 @@ class ProfileWindow:
 			# returns None if unknown type
 			self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
 
-		self.dialog = dialogs.ImageChooserDialog(on_response_ok = on_ok)
+		def on_clear(widget):
+			self.dialog.destroy()
+			self.on_clear_button_clicked(widget)
+
+		self.dialog = dialogs.AvatarChooserDialog(on_response_ok = on_ok,
+			on_response_clear = on_clear)
 
 	def on_PHOTO_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
