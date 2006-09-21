@@ -1204,24 +1204,24 @@ Per type</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkScrolledWindow" id="scrolledwindow25">
+				<widget class="GtkScrolledWindow" id="scrolledwindow26">
 				  <property name="height_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+				  <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
 				  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 				  <property name="shadow_type">GTK_SHADOW_IN</property>
 				  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 				  <child>
-				    <widget class="GtkTextView" id="before_time_textview">
+				    <widget class="GtkTextView" id="after_time_textview">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="editable">True</property>
 				      <property name="overwrite">False</property>
 				      <property name="accepts_tab">True</property>
 				      <property name="justification">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap_mode">GTK_WRAP_NONE</property>
+				      <property name="wrap_mode">GTK_WRAP_CHAR</property>
 				      <property name="cursor_visible">True</property>
 				      <property name="pixels_above_lines">0</property>
 				      <property name="pixels_below_lines">0</property>
@@ -1230,56 +1230,15 @@ Per type</property>
 				      <property name="right_margin">0</property>
 				      <property name="indent">0</property>
 				      <property name="text" translatable="yes"></property>
-				      <signal name="focus_out_event" handler="on_before_time_textview_focus_out_event" last_modification_time="Wed, 20 Sep 2006 18:21:39 GMT"/>
+				      <signal name="focus_out_event" handler="on_after_time_textview_focus_out_event" last_modification_time="Wed, 20 Sep 2006 19:52:22 GMT"/>
 				    </widget>
 				  </child>
 				</widget>
 				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
+				  <property name="left_attach">3</property>
+				  <property name="right_attach">4</property>
 				  <property name="top_attach">0</property>
 				  <property name="bottom_attach">1</property>
-				  <property name="x_options">fill</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkScrolledWindow" id="scrolledwindow27">
-				  <property name="height_request">30</property>
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-				  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-				  <property name="shadow_type">GTK_SHADOW_IN</property>
-				  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-				  <child>
-				    <widget class="GtkTextView" id="before_nickname_textview">
-				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="editable">True</property>
-				      <property name="overwrite">False</property>
-				      <property name="accepts_tab">True</property>
-				      <property name="justification">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap_mode">GTK_WRAP_NONE</property>
-				      <property name="cursor_visible">True</property>
-				      <property name="pixels_above_lines">0</property>
-				      <property name="pixels_below_lines">0</property>
-				      <property name="pixels_inside_wrap">0</property>
-				      <property name="left_margin">0</property>
-				      <property name="right_margin">0</property>
-				      <property name="indent">0</property>
-				      <property name="text" translatable="yes"></property>
-				      <signal name="focus_out_event" handler="on_before_nickname_textview_focus_out_event" last_modification_time="Wed, 20 Sep 2006 19:52:05 GMT"/>
-				    </widget>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
 				  <property name="x_options">fill</property>
 				  <property name="y_options"></property>
 				</packing>
@@ -1290,7 +1249,7 @@ Per type</property>
 				  <property name="height_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+				  <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
 				  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 				  <property name="shadow_type">GTK_SHADOW_IN</property>
 				  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
@@ -1303,7 +1262,7 @@ Per type</property>
 				      <property name="overwrite">False</property>
 				      <property name="accepts_tab">True</property>
 				      <property name="justification">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap_mode">GTK_WRAP_NONE</property>
+				      <property name="wrap_mode">GTK_WRAP_CHAR</property>
 				      <property name="cursor_visible">True</property>
 				      <property name="pixels_above_lines">0</property>
 				      <property name="pixels_below_lines">0</property>
@@ -1327,24 +1286,24 @@ Per type</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkScrolledWindow" id="scrolledwindow26">
+				<widget class="GtkScrolledWindow" id="scrolledwindow27">
 				  <property name="height_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+				  <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
 				  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 				  <property name="shadow_type">GTK_SHADOW_IN</property>
 				  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 				  <child>
-				    <widget class="GtkTextView" id="after_time_textview">
+				    <widget class="GtkTextView" id="before_nickname_textview">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="editable">True</property>
 				      <property name="overwrite">False</property>
 				      <property name="accepts_tab">True</property>
 				      <property name="justification">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap_mode">GTK_WRAP_NONE</property>
+				      <property name="wrap_mode">GTK_WRAP_CHAR</property>
 				      <property name="cursor_visible">True</property>
 				      <property name="pixels_above_lines">0</property>
 				      <property name="pixels_below_lines">0</property>
@@ -1353,13 +1312,54 @@ Per type</property>
 				      <property name="right_margin">0</property>
 				      <property name="indent">0</property>
 				      <property name="text" translatable="yes"></property>
-				      <signal name="focus_out_event" handler="on_after_time_textview_focus_out_event" last_modification_time="Wed, 20 Sep 2006 19:52:22 GMT"/>
+				      <signal name="focus_out_event" handler="on_before_nickname_textview_focus_out_event" last_modification_time="Wed, 20 Sep 2006 19:52:05 GMT"/>
 				    </widget>
 				  </child>
 				</widget>
 				<packing>
-				  <property name="left_attach">3</property>
-				  <property name="right_attach">4</property>
+				  <property name="left_attach">1</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">1</property>
+				  <property name="bottom_attach">2</property>
+				  <property name="x_options">fill</property>
+				  <property name="y_options"></property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkScrolledWindow" id="scrolledwindow25">
+				  <property name="height_request">30</property>
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+				  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+				  <property name="shadow_type">GTK_SHADOW_IN</property>
+				  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+				  <child>
+				    <widget class="GtkTextView" id="before_time_textview">
+				      <property name="visible">True</property>
+				      <property name="can_focus">True</property>
+				      <property name="editable">True</property>
+				      <property name="overwrite">False</property>
+				      <property name="accepts_tab">True</property>
+				      <property name="justification">GTK_JUSTIFY_LEFT</property>
+				      <property name="wrap_mode">GTK_WRAP_CHAR</property>
+				      <property name="cursor_visible">True</property>
+				      <property name="pixels_above_lines">0</property>
+				      <property name="pixels_below_lines">0</property>
+				      <property name="pixels_inside_wrap">0</property>
+				      <property name="left_margin">0</property>
+				      <property name="right_margin">0</property>
+				      <property name="indent">0</property>
+				      <property name="text" translatable="yes"></property>
+				      <signal name="focus_out_event" handler="on_before_time_textview_focus_out_event" last_modification_time="Wed, 20 Sep 2006 18:21:39 GMT"/>
+				    </widget>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="left_attach">1</property>
+				  <property name="right_attach">2</property>
 				  <property name="top_attach">0</property>
 				  <property name="bottom_attach">1</property>
 				  <property name="x_options">fill</property>
