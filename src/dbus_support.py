@@ -26,11 +26,8 @@ try:
 	import dbus.service
 	# cause dbus 0.35+ doesn't return signal replies without it
 	import dbus.glib 
-
-	version = getattr(dbus, 'version')
 	supported = True
 except ImportError:
-	version = (0, 0, 0)
 	supported = False
 	if not os.name == 'nt': # only say that to non Windows users
 		print _('D-Bus python bindings are missing in this computer')
