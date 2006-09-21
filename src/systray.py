@@ -253,11 +253,11 @@ class Systray:
 		if len(gajim.events.get_systray_events()) == 0:
 			# no pending events, so toggle visible/hidden for roster window
 			if win.get_property('visible'): # visible in ANY virtual desktop?
-				win.hide() # we hide it from VD that was visible in
 
-				# but we could be in another VD right now. eg vd2
-				# and we want not only to hide it in vd1 but also show it in vd2
-				gtkgui_helpers.possibly_move_window_in_current_desktop(win)
+				# we could be in another VD right now. eg vd2
+				# and we want to show it in vd2
+				if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
+					win.hide() # else we hide it from VD that was visible in
 			else:
 				win.present()
 		else:

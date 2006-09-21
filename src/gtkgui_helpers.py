@@ -390,7 +390,7 @@ def possibly_move_window_in_current_desktop(window):
 	current virtual desktop
 	window is GTK window'''
 	if os.name == 'nt':
-		return
+		return False
 
 	root_window = gtk.gdk.screen_get_default().get_root_window()
 	# current user's vd
@@ -406,6 +406,8 @@ def possibly_move_window_in_current_desktop(window):
 			# we are in another VD that the window was
 			# so show it in current VD
 			window.present()
+			return True
+	return False
 
 def file_is_locked(path_to_file):
 	'''returns True if file is locked (WINDOWS ONLY)'''
