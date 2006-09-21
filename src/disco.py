@@ -905,6 +905,8 @@ class AgentBrowser:
 	def _agent_items(self, jid, node, items, force):
 		'''Callback for when we receive a list of agent items.'''
 		model = self.window.services_treeview.get_model()
+		model.clear()
+		self._total_items = 0
 		gobject.source_remove(self._pulse_timeout)
 		self.window.progressbar.hide()
 		# The server returned an error
@@ -916,17 +918,13 @@ class AgentBrowser:
 _('This service does not contain any items to browse.'))
 			return
 		# We got a list of items
+		self.window.services_treeview.set_model(None)
 		for item in items:
 			jid = item['jid']
 			node = item.get('node', '')
-			iter = self._find_item(jid, node)
-			if iter:
-				# Already in the treeview
-				self._update_item(model, iter, jid, node, item)
-			else:
-				# Not in the treeview
-				self._total_items += 1
-				self._add_item(model, jid, node, item, force)
+			self._total_items += 1
+			self._add_item(model, jid, node, item, force)
+		self.window.services_treeview.set_model(model)
 
 	def _agent_info(self, jid, node, identities, features, data):
 		'''Callback for when we receive info about an agent's item.'''
@@ -1327,15 +1325,13 @@ class ToplevelAgentBrowser(AgentBrowser):
 				cat, prio = _cat_to_descr['other']
 		return cat, prio
 
-	def _create_category(self, cat, type=None):
+	def _create_category(self, model, cat, type=None):
 		'''Creates a category row.'''
-		model = self.window.services_treeview.get_model()
 		cat, prio = self._friendly_category(cat, type)
 		return model.append(None, ('', '', None, cat, prio))
 
-	def _find_category(self, cat, type=None):
+	def _find_category(self, model, cat, type=None):
 		'''Looks up a category row and returns the iterator to it, or None.'''
-		model = self.window.services_treeview.get_model()
 		cat, prio = self._friendly_category(cat, type)
 		iter = model.get_iter_root()
 		while iter:
@@ -1384,9 +1380,9 @@ class ToplevelAgentBrowser(AgentBrowser):
 		# Set the pixmap for the row
 		pix = self.cache.get_icon(identities)
 		# Put it in the right category
-		cat = self._find_category(*cat_args)
+		cat = self._find_category(model, *cat_args)
 		if not cat:
-			cat = self._create_category(*cat_args)
+			cat = self._create_category(model, *cat_args)
 		model.append(cat, (item['jid'], item.get('node', ''), pix, descr, 1))
 		self._expand_all()
 		# Grab info on the service
@@ -1436,13 +1432,13 @@ class ToplevelAgentBrowser(AgentBrowser):
 
 		# Check if the old category is empty
 		if not model.iter_is_valid(old_cat_iter):
-			old_cat_iter = self._find_category(old_cat)
+			old_cat_iter = self._find_category(model, old_cat)
 		if not model.iter_children(old_cat_iter):
 			model.remove(old_cat_iter)
 
-		cat_iter = self._find_category(cat, type)
+		cat_iter = self._find_category(model, cat, type)
 		if not cat_iter:
-			cat_iter = self._create_category(cat, type)
+			cat_iter = self._create_category(model, cat, type)
 		model.append(cat_iter, (jid, node, pix, descr, 0))
 		self._expand_all()
 
