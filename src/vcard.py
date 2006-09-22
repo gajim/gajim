@@ -126,11 +126,11 @@ class VcardWindow:
 		try:
 			if value and entry_name == 'URL_label':
 				if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-					self.url_label = gtk.LinkButton(value)
+					url_label = gtk.LinkButton(value)
 				else:
-					self.url_label = gtk.Label(value)
+					url_label = gtk.Label(value)
 				table = self.xml.get_widget('personal_info_table')
-				table.attach(self.url_label, 1, 4, 3, 4, yoptions = 0)
+				table.attach(url_label, 1, 4, 3, 4, yoptions = 0)
 			else:
 				self.xml.get_widget(entry_name).set_text(value)
 		except AttributeError:
