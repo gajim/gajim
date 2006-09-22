@@ -159,12 +159,20 @@ class ProfileWindow:
 		'''If right-clicked, show popup'''
 		if event.button == 3 and self.avatar_encoded: # right click
 			menu = gtk.Menu()
-			nick = gajim.config.get_per('accounts', self.account, 'name')
-			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
-			menuitem.connect('activate',
-				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.jid, None, nick + '.jpeg')
-			menu.append(menuitem)
+			
+			# Try to get pixbuf
+			is_fake = False
+			if account and gajim.contacts.is_pm_from_jid(account, jid):
+				is_fake = True
+			pixbuf = get_avatar_pixbuf_from_cache(jid, is_fake)
+
+			if pixbuf:
+				nick = gajim.config.get_per('accounts', self.account, 'name')
+				menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+				menuitem.connect('activate',
+					gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+					self.jid, None, nick + '.jpeg')
+				menu.append(menuitem)
 			# show clear
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
 			menuitem.connect('activate', self.on_clear_button_clicked)
