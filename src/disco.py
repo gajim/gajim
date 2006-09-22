@@ -1448,11 +1448,6 @@ class MucBrowser(AgentBrowser):
 		AgentBrowser.__init__(self, *args, **kwargs)
 		self.join_button = None
 
-	def _agent_items(self, jid, node, items, force):
-		AgentBrowser._agent_items(self, jid, node, items, force)
-		print 'resize column'
-#		self.window.services_treeview.get
-
 	def _create_treemodel(self):
 		# JID, node, name, users, description, fetched
 		# This is rather long, I'd rather not use a data_func here though.
@@ -1462,6 +1457,8 @@ class MucBrowser(AgentBrowser):
 		self.window.services_treeview.set_model(self.model)
 		# Name column
 		col = gtk.TreeViewColumn(_('Name'))
+		col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+		col.set_fixed_width(100)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = 2)
