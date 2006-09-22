@@ -1,3 +1,8 @@
+Gajim 0.11 (XX October 2006)
+
+  * Put your stuff here [each dev put their own please; next time we do this everytime we commit sth major and not in the end]
+  * Gajim now requires Python 2.4 to run
+
 Gajim 0.10.1 (06 June 2006)
 
   * freeze and lost contacts in roster (#1953)
