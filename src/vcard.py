@@ -126,7 +126,7 @@ class VcardWindow:
 		try:
 			if value and entry_name == 'URL_label':
 				if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-					url_label = gtk.LinkButton(value)
+					url_label = gtk.LinkButton(value, value)
 				else:
 					url_label = gtk.Label(value)
 				table = self.xml.get_widget('personal_info_table')
