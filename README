@@ -1,10 +1,10 @@
 Welcome and thanks for trying out Gajim.
 
 =RUNTIME REQUIREMENTS=
-python2.4 (python2.3 should work too)
+python2.4 or higher
 pygtk2.6 or higher
 python-libglade
-pysqlite2 (aka. python-pysqlite2)
+pysqlite2 (if you have python 2.5, you already have this)
 
 some distros also split too much python standard library.
 I know SUSE does. In such distros you also need python-xml
@@ -29,7 +29,8 @@ notification-daemon (and D-Bus) to get cooler popups
 D-Bus to have gajim-remote working
 
 NOTE TO PACKAGERS:
-Gajim is a GTK+ app and not a gnome one. Just do 'make' so you don't require gnomepythonextras
+Gajim is a GTK+ app and not a gnome one.
+Just do 'make' so you don't require gnomepythonextras
 which is gnome dep
 
 =INSTALLATION PROCEDURE=
@@ -65,9 +66,6 @@ you're advised to enable verbose via advanced configuration window.
 If you don't want to make this permanent, execute gajim with --verbose
 everytime you want to have verbose output.
 
-Cannot join room with password:
-please read the FAQ for the reply on this issue
-
 =FAQ/Wiki=
 FAQ can be found at http://trac.gajim.org/wiki/GajimFaq
 Wiki can be found at http://trac.gajim.org/wiki
@@ -75,13 +73,13 @@ Wiki can be found at http://trac.gajim.org/wiki
 
 That is all, enjoy!
 
-(C) 2003-2005
+(C) 2003-2006
 The Gajim Team
 http://gajim.org
 
 
 PS.
-we use original art and parts of sounds and other art from Psi, Gossip,
+We use original art and parts of sounds and other art from Psi, Gossip,
 Gnomebaker, Gaim and some icons from various gnome-icons
 (mostly Dropline Etiquette) we found at art.gnome.org
-If you think we're violating a license please inform us
+If you think we're violating a license please inform us. Thank you
