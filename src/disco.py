@@ -36,10 +36,10 @@
 # - def update_actions(self)
 # - def default_action(self)
 # - def _find_item(self, jid, node)
-# - def _add_item(self, model, jid, node, item, force)
-# - def _update_item(self, model, iter, jid, node, item)
-# - def _update_info(self, model, iter, jid, node, identities, features, data)
-# - def _update_error(self, model, iter, jid, node)
+# - def _add_item(self, jid, node, item, force)
+# - def _update_item(self, iter, jid, node, item)
+# - def _update_info(self, iter, jid, node, identities, features, data)
+# - def _update_error(self, iter, jid, node)
 #
 # * Should call the super class for this method.
 # All others do not have to call back to the super class. (but can if they want
@@ -422,6 +422,7 @@ _('Without a connection, you can not browse available services'))
 		self.xml = gtkgui_helpers.get_glade('service_discovery_window.glade')
 		self.window = self.xml.get_widget('service_discovery_window')
 		self.services_treeview = self.xml.get_widget('services_treeview')
+		self.model = None
 		# This is more reliable than the cursor-changed signal.
 		selection = self.services_treeview.get_selection()
 		selection.connect_after('changed',
@@ -720,9 +721,9 @@ class AgentBrowser:
 		note that the first two columns should ALWAYS be of type string and
 		contain the JID and node of the item respectively.'''
 		# JID, node, name, address
-		model = gtk.ListStore(str, str, str, str)
-		model.set_sort_column_id(3, gtk.SORT_ASCENDING)
-		self.window.services_treeview.set_model(model)
+		self.model = gtk.ListStore(str, str, str, str)
+		self.model.set_sort_column_id(3, gtk.SORT_ASCENDING)
+		self.window.services_treeview.set_model(self.model)
 		# Name column
 		col = gtk.TreeViewColumn(_('Name'))
 		renderer = gtk.CellRendererText()
@@ -740,7 +741,7 @@ class AgentBrowser:
 		self.window.services_treeview.set_headers_visible(True)
 
 	def _clean_treemodel(self):
-		self.window.services_treeview.get_model().clear()
+		self.model.clear()
 		for col in self.window.services_treeview.get_columns():
 			self.window.services_treeview.remove_column(col)
 		self.window.services_treeview.set_headers_visible(False)
@@ -872,8 +873,7 @@ class AgentBrowser:
 
 	def browse(self, force = False):
 		'''Fill the treeview with agents, fetching the info if necessary.'''
-		model = self.window.services_treeview.get_model()
-		model.clear()
+		self.model.clear()
 		self._total_items = self._progress = 0
 		self.window.progressbar.show()
 		self._pulse_timeout = gobject.timeout_add(250, self._pulse_timeout_cb)
@@ -890,22 +890,20 @@ class AgentBrowser:
 	def _find_item(self, jid, node):
 		'''Check if an item is already in the treeview. Return an iter to it
 		if so, None otherwise.'''
-		model = self.window.services_treeview.get_model()
-		iter = model.get_iter_root()
+		iter = self.model.get_iter_root()
 		while iter:
-			cjid = model.get_value(iter, 0).decode('utf-8')
-			cnode = model.get_value(iter, 1).decode('utf-8')
+			cjid = self.model.get_value(iter, 0).decode('utf-8')
+			cnode = self.model.get_value(iter, 1).decode('utf-8')
 			if jid == cjid and node == cnode:
 				break
-			iter = model.iter_next(iter)
+			iter = self.model.iter_next(iter)
 		if iter:
 			return iter
 		return None
 
 	def _agent_items(self, jid, node, items, force):
 		'''Callback for when we receive a list of agent items.'''
-		model = self.window.services_treeview.get_model()
-		model.clear()
+		self.model.clear()
 		self._total_items = 0
 		gobject.source_remove(self._pulse_timeout)
 		self.window.progressbar.hide()
@@ -923,44 +921,43 @@ _('This service does not contain any items to browse.'))
 			jid = item['jid']
 			node = item.get('node', '')
 			self._total_items += 1
-			self._add_item(model, jid, node, item, force)
-		self.window.services_treeview.set_model(model)
+			self._add_item(jid, node, item, force)
+		self.window.services_treeview.set_model(self.model)
 
 	def _agent_info(self, jid, node, identities, features, data):
 		'''Callback for when we receive info about an agent's item.'''
 		addr = get_agent_address(jid, node)
-		model = self.window.services_treeview.get_model()
 		iter = self._find_item(jid, node)
 		if not iter:
 			# Not in the treeview, stop
 			return
 		if identities == 0:
 			# The server returned an error
-			self._update_error(model, iter, jid, node)
+			self._update_error(iter, jid, node)
 		else:
 			# We got our info
-			self._update_info(model, iter, jid, node,
+			self._update_info(iter, jid, node,
 				identities, features, data)
 		self.update_actions()
 
-	def _add_item(self, model, jid, node, item, force):
+	def _add_item(self, jid, node, item, force):
 		'''Called when an item should be added to the model. The result of a
 		disco#items query.'''
-		model.append((jid, node, item.get('name', ''),
+		self.model.append((jid, node, item.get('name', ''),
 			get_agent_address(jid, node)))
 
-	def _update_item(self, model, iter, jid, node, item):
+	def _update_item(self, iter, jid, node, item):
 		'''Called when an item should be updated in the model. The result of a
 		disco#items query. (seldom)'''
 		if item.has_key('name'):
-			model[iter][2] = item['name']
+			self.model[iter][2] = item['name']
 
-	def _update_info(self, model, iter, jid, node, identities, features, data):
+	def _update_info(self, iter, jid, node, identities, features, data):
 		'''Called when an item should be updated in the model with further info.
 		The result of a disco#info query.'''
-		model[iter][2] = identities[0].get('name', '')
+		self.model[iter][2] = identities[0].get('name', '')
 
-	def _update_error(self, model, iter, jid, node):
+	def _update_error(self, iter, jid, node):
 		'''Called when a disco#info query failed for an item.'''
 		pass
 
@@ -1044,14 +1041,12 @@ class ToplevelAgentBrowser(AgentBrowser):
 
 	# These are all callbacks to make tooltips work
 	def on_treeview_leave_notify_event(self, widget, event):
-		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.id == props[0]:
 				self.tooltip.hide_tooltip()
 
 	def on_treeview_motion_notify_event(self, widget, event):
-		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.id != props[0]:
@@ -1060,12 +1055,12 @@ class ToplevelAgentBrowser(AgentBrowser):
 			[row, col, x, y] = props
 			iter = None
 			try:
-				iter = model.get_iter(row)
+				iter = self.model.get_iter(row)
 			except:
 				self.tooltip.hide_tooltip()
 				return
-			jid = model[iter][0]
-			state = model[iter][4]
+			jid = self.model[iter][0]
+			state = self.model[iter][4]
 			# Not a category, and we have something to say about state
 			if jid and state > 0 and \
 					(self.tooltip.timeout == 0 or self.tooltip.id != props[0]):
@@ -1082,10 +1077,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 		# JID, node, icon, description, state
 		# State means 2 when error, 1 when fetching, 0 when succes.
 		view = self.window.services_treeview
-		model = gtk.TreeStore(str, str, gtk.gdk.Pixbuf, str, int)
-		model.set_sort_func(4, self._treemodel_sort_func)
-		model.set_sort_column_id(4, gtk.SORT_ASCENDING)
-		view.set_model(model)
+		self.model = gtk.TreeStore(str, str, gtk.gdk.Pixbuf, str, int)
+		self.model.set_sort_func(4, self._treemodel_sort_func)
+		self.model.set_sort_column_id(4, gtk.SORT_ASCENDING)
+		view.set_model(self.model)
 
 		col = gtk.TreeViewColumn()
 		# Icon Renderer
@@ -1325,41 +1320,40 @@ class ToplevelAgentBrowser(AgentBrowser):
 				cat, prio = _cat_to_descr['other']
 		return cat, prio
 
-	def _create_category(self, model, cat, type=None):
+	def _create_category(self, cat, type=None):
 		'''Creates a category row.'''
 		cat, prio = self._friendly_category(cat, type)
-		return model.append(None, ('', '', None, cat, prio))
+		return self.model.append(None, ('', '', None, cat, prio))
 
-	def _find_category(self, model, cat, type=None):
+	def _find_category(self, cat, type=None):
 		'''Looks up a category row and returns the iterator to it, or None.'''
 		cat, prio = self._friendly_category(cat, type)
-		iter = model.get_iter_root()
+		iter = self.model.get_iter_root()
 		while iter:
-			if model.get_value(iter, 3).decode('utf-8') == cat:
+			if self.model.get_value(iter, 3).decode('utf-8') == cat:
 				break
-			iter = model.iter_next(iter)
+			iter = self.model.iter_next(iter)
 		if iter:
 			return iter
 		return None
 
 	def _find_item(self, jid, node):
-		model = self.window.services_treeview.get_model()
 		iter = None
-		cat_iter = model.get_iter_root()
+		cat_iter = self.model.get_iter_root()
 		while cat_iter and not iter:
-			iter = model.iter_children(cat_iter)
+			iter = self.model.iter_children(cat_iter)
 			while iter:
-				cjid = model.get_value(iter, 0).decode('utf-8')
-				cnode = model.get_value(iter, 1).decode('utf-8')
+				cjid = self.model.get_value(iter, 0).decode('utf-8')
+				cnode = self.model.get_value(iter, 1).decode('utf-8')
 				if jid == cjid and node == cnode:
 					break
-				iter = model.iter_next(iter)
-			cat_iter = model.iter_next(cat_iter)
+				iter = self.model.iter_next(iter)
+			cat_iter = self.model.iter_next(cat_iter)
 		if iter:
 			return iter
 		return None
 
-	def _add_item(self, model, jid, node, item, force):
+	def _add_item(self, jid, node, item, force):
 		# Row text
 		addr = get_agent_address(jid, node)
 		if item.has_key('name'):
@@ -1380,24 +1374,24 @@ class ToplevelAgentBrowser(AgentBrowser):
 		# Set the pixmap for the row
 		pix = self.cache.get_icon(identities)
 		# Put it in the right category
-		cat = self._find_category(model, *cat_args)
+		cat = self._find_category(*cat_args)
 		if not cat:
-			cat = self._create_category(model, *cat_args)
-		model.append(cat, (item['jid'], item.get('node', ''), pix, descr, 1))
+			cat = self._create_category(*cat_args)
+		self.model.append(cat, (item['jid'], item.get('node', ''), pix, descr, 1))
 		self._expand_all()
 		# Grab info on the service
 		self.cache.get_info(jid, node, self._agent_info, force = force)
 		self._update_progressbar()
 
-	def _update_item(self, model, iter, jid, node, item):
+	def _update_item(self, iter, jid, node, item):
 		addr = get_agent_address(jid, node)
 		if item.has_key('name'):
 			descr = "<b>%s</b>\n%s" % (item['name'], addr)
 		else:
 			descr = "<b>%s</b>" % addr
-		model[iter][3] = descr
+		self.model[iter][3] = descr
 
-	def _update_info(self, model, iter, jid, node, identities, features, data):
+	def _update_info(self, iter, jid, node, identities, features, data):
 		addr = get_agent_address(jid, node)
 		name = identities[0].get('name', '')
 		if name:
@@ -1419,32 +1413,32 @@ class ToplevelAgentBrowser(AgentBrowser):
 			break
 
 		# Check if we have to move categories
-		old_cat_iter = model.iter_parent(iter)
-		old_cat = model.get_value(old_cat_iter, 3).decode('utf-8')
-		if model.get_value(old_cat_iter, 3) == cat:
+		old_cat_iter = self.model.iter_parent(iter)
+		old_cat = self.model.get_value(old_cat_iter, 3).decode('utf-8')
+		if self.model.get_value(old_cat_iter, 3) == cat:
 			# Already in the right category, just update
-			model[iter][2] = pix
-			model[iter][3] = descr
-			model[iter][4] = 0
+			self.model[iter][2] = pix
+			self.model[iter][3] = descr
+			self.model[iter][4] = 0
 			return
 		# Not in the right category, move it.
-		model.remove(iter)
+		self.model.remove(iter)
 
 		# Check if the old category is empty
-		if not model.iter_is_valid(old_cat_iter):
-			old_cat_iter = self._find_category(model, old_cat)
-		if not model.iter_children(old_cat_iter):
-			model.remove(old_cat_iter)
+		if not self.model.iter_is_valid(old_cat_iter):
+			old_cat_iter = self._find_category(old_cat)
+		if not self.model.iter_children(old_cat_iter):
+			self.model.remove(old_cat_iter)
 
-		cat_iter = self._find_category(model, cat, type)
+		cat_iter = self._find_category(cat, type)
 		if not cat_iter:
-			cat_iter = self._create_category(model, cat, type)
-		model.append(cat_iter, (jid, node, pix, descr, 0))
+			cat_iter = self._create_category(cat, type)
+		self.model.append(cat_iter, (jid, node, pix, descr, 0))
 		self._expand_all()
 
-	def _update_error(self, model, iter, jid, node):
+	def _update_error(self, iter, jid, node):
 		addr = get_agent_address(jid, node)
-		model[iter][4] = 2
+		self.model[iter][4] = 2
 		self._progress += 1
 		self._update_progressbar()
 
@@ -1454,13 +1448,18 @@ class MucBrowser(AgentBrowser):
 		AgentBrowser.__init__(self, *args, **kwargs)
 		self.join_button = None
 
+	def _agent_items(self, jid, node, items, force):
+		AgentBrowser._agent_items(self, jid, node, items, force)
+		print 'resize column'
+#		self.window.services_treeview.get
+
 	def _create_treemodel(self):
 		# JID, node, name, users, description, fetched
 		# This is rather long, I'd rather not use a data_func here though.
 		# Users is a string, because want to be able to leave it empty.
-		model = gtk.ListStore(str, str, str, str, str, bool)
-		model.set_sort_column_id(2, gtk.SORT_ASCENDING)
-		self.window.services_treeview.set_model(model)
+		self.model = gtk.ListStore(str, str, str, str, str, bool)
+		self.model.set_sort_column_id(2, gtk.SORT_ASCENDING)
+		self.window.services_treeview.set_model(self.model)
 		# Name column
 		col = gtk.TreeViewColumn(_('Name'))
 		renderer = gtk.CellRendererText()
@@ -1571,7 +1570,6 @@ class MucBrowser(AgentBrowser):
 			# Prevent a silly warning, try again in a bit.
 			self._fetch_source = gobject.timeout_add(100, self._start_info_query)
 			return
-		model = view.get_model()
 		# We have to do this in a pygtk <2.8 compatible way :/
 		#start, end = self.window.services_treeview.get_visible_range()
 		rect = view.get_visible_rect()
@@ -1580,7 +1578,7 @@ class MucBrowser(AgentBrowser):
 		try:
 			sx, sy = view.tree_to_widget_coords(rect.x, rect.y)
 			spath = view.get_path_at_pos(sx, sy)[0]
-			iter = model.get_iter(spath)
+			iter = self.model.get_iter(spath)
 		except TypeError:
 			self._fetch_source = None
 			return
@@ -1594,14 +1592,14 @@ class MucBrowser(AgentBrowser):
 		except TypeError:
 			# We're at the end of the model, we can leave end=None though.
 			pass
-		while iter and model.get_path(iter) != end:
-			if not model.get_value(iter, 5):
-				jid = model.get_value(iter, 0).decode('utf-8')
-				node = model.get_value(iter, 1).decode('utf-8')
+		while iter and self.model.get_path(iter) != end:
+			if not self.model.get_value(iter, 5):
+				jid = self.model.get_value(iter, 0).decode('utf-8')
+				node = self.model.get_value(iter, 1).decode('utf-8')
 				self.cache.get_info(jid, node, self._agent_info)
 				self._fetch_source = True
 				return
-			iter = model.iter_next(iter)
+			iter = self.model.iter_next(iter)
 		self._fetch_source = None
 
 	def _channel_altinfo(self, jid, node, items, name = None):
@@ -1622,22 +1620,21 @@ class MucBrowser(AgentBrowser):
 				self._fetch_source = None
 				return
 		else:
-			model = self.window.services_treeview.get_model()
 			iter = self._find_item(jid, node)
 			if iter:
 				if name:
-					model[iter][2] = name
-				model[iter][3] = len(items)		# The number of users
-				model[iter][5] = True
+					self.model[iter][2] = name
+				self.model[iter][3] = len(items)		# The number of users
+				self.model[iter][5] = True
 		self._fetch_source = None
 		self._query_visible()
 
-	def _add_item(self, model, jid, node, item, force):
-		model.append((jid, node, item.get('name', ''), '', '', False))
+	def _add_item(self, jid, node, item, force):
+		self.model.append((jid, node, item.get('name', ''), '', '', False))
 		if not self._fetch_source:
 			self._fetch_source = gobject.idle_add(self._start_info_query)
 
-	def _update_info(self, model, iter, jid, node, identities, features, data):
+	def _update_info(self, iter, jid, node, identities, features, data):
 		name = identities[0].get('name', '')
 		for form in data:
 			typefield = form.getField('FORM_TYPE')
@@ -1647,14 +1644,14 @@ class MucBrowser(AgentBrowser):
 				users = form.getField('muc#roominfo_occupants')
 				descr = form.getField('muc#roominfo_description')
 				if users:
-					model[iter][3] = users.getValue()
+					self.model[iter][3] = users.getValue()
 				if descr:
-					model[iter][4] = descr.getValue()
+					self.model[iter][4] = descr.getValue()
 				# Only set these when we find a form with additional info
 				# Some servers don't support forms and put extra info in
 				# the name attribute, so we preserve it in that case.
-				model[iter][2] = name
-				model[iter][5] = True
+				self.model[iter][2] = name
+				self.model[iter][5] = True
 				break
 		else:
 			# We didn't find a form, switch to alternate query mode
@@ -1664,7 +1661,7 @@ class MucBrowser(AgentBrowser):
 		self._fetch_source = None
 		self._query_visible()
 
-	def _update_error(self, model, iter, jid, node):
+	def _update_error(self, iter, jid, node):
 		# switch to alternate query mode
 		self.cache.get_items(jid, node, self._channel_altinfo)
 
