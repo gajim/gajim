@@ -624,9 +624,6 @@ class RosterWindow:
 		self.join_gc_room(account, bookmark['jid'], bookmark['nick'],
 			bookmark['password'])
 
-	def on_bm_header_changed_state(self, widget, event):
-		widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
-
 	def on_send_server_message_menuitem_activate(self, widget, account):
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		server += '/announce/online'
@@ -794,7 +791,7 @@ class RosterWindow:
 				label.set_use_underline(False)
 				gc_item = gtk.MenuItem()
 				gc_item.add(label)
-				gc_item.connect('state-changed', self.on_bm_header_changed_state)
+				gc_item.connect('state-changed', gtkgui_helpers.on_bm_header_changed_state)
 				gc_sub_menu.append(gc_item)
 				
 				self.add_bookmarks_list(gc_sub_menu, account)

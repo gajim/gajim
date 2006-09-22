@@ -197,6 +197,7 @@ class Systray:
 					label.set_use_underline(False)
 					gc_item = gtk.MenuItem()
 					gc_item.add(label)
+					gc_item.connect('state-changed', gtkgui_helpers.on_bm_header_changed_state)
 					gc_sub_menu.append(gc_item)
 					gajim.interface.roster.add_bookmarks_list(gc_sub_menu, account)
 

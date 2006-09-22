@@ -752,3 +752,6 @@ default_name = ''):
 	dialog.set_current_name(default_name)
 	dialog.connect('delete-event', lambda widget, event:
 		on_cancel(widget))
+
+def on_bm_header_changed_state(widget, event):
+	widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
