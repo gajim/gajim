@@ -1735,11 +1735,13 @@ class Interface:
 		elif type_ in ('printed_chat', 'chat'):
 			if self.msg_win_mgr.has_window(fjid, account):
 				w = self.msg_win_mgr.get_window(fjid, account)
+			elif self.msg_win_mgr.has_window(jid, account):
+				w = self.msg_win_mgr.get_window(jid, account)
 			else:
 				contact = gajim.contacts.get_contact(account, jid, resource)
 				if isinstance(contact, list):
 					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-				self.roster.new_chat(contact, account, resource = resource)
+				self.roster.new_chat(contact, account)
 				w = self.msg_win_mgr.get_window(fjid, account)
 				gajim.last_message_time[account][jid] = 0 # long time ago
 		elif type_ in ('printed_pm', 'pm'):
