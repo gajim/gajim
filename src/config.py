@@ -95,10 +95,6 @@ class PreferencesWindow:
 		st = gajim.config.get('sort_by_show')
 		self.xml.get_widget('sort_by_show_checkbutton').set_active(st)
 
-		# enable zeroconf
-		st = gajim.config.get('enable_zeroconf')
-		self.xml.get_widget('enable_zeroconf_checkbutton').set_active(st)
-
 		# Display avatars in roster
 		st = gajim.config.get('show_avatars_in_roster')
 		self.xml.get_widget('show_avatars_in_roster_checkbutton').set_active(st)
@@ -528,75 +524,6 @@ class PreferencesWindow:
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
 		gajim.interface.roster.draw_roster()
 		
-	def on_enable_zeroconf_checkbutton_toggled(self, widget):
-		if gajim.config.get('enable_zeroconf'):
-			# disable
-			gajim.interface.roster.close_all('zeroconf')
-			gajim.connections['zeroconf'].disable_account()
-			del gajim.connections['zeroconf']
-			gajim.interface.save_config()
-			del gajim.interface.instances['zeroconf']
-			del gajim.nicks['zeroconf']
-			del gajim.block_signed_in_notifications['zeroconf']
-			del gajim.groups['zeroconf']
-			gajim.contacts.remove_account('zeroconf')
-			del gajim.gc_connected['zeroconf']
-			del gajim.automatic_rooms['zeroconf']
-			del gajim.to_be_removed['zeroconf']
-			del gajim.newly_added['zeroconf']
-			del gajim.sleeper_state['zeroconf']
-			del gajim.encrypted_chats['zeroconf']
-			del gajim.last_message_time['zeroconf']
-			del gajim.status_before_autoaway['zeroconf']
-			if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
-				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
-			else: 
-				gajim.interface.roster.regroup = False
-			gajim.interface.roster.draw_roster()
-			gajim.interface.roster.actions_menu_needs_rebuild = True
-			if gajim.interface.instances.has_key('accounts'):
-				gajim.interface.instances['accounts'].init_accounts()
-		else:
-			#enable (will create new account if not present)
-			gajim.connections['zeroconf'] = common.zeroconf.connection_zeroconf.ConnectionZeroconf('zeroconf')
-			# update variables
-			gajim.interface.instances['zeroconf'] = {'infos': {}, 'disco': {},
-				'gc_config': {}}
-			gajim.connections['zeroconf'].connected = 0
-			gajim.groups['zeroconf'] = {}
-			gajim.contacts.add_account('zeroconf')
-			gajim.gc_connected['zeroconf'] = {}
-			gajim.automatic_rooms['zeroconf'] = {}
-			gajim.newly_added['zeroconf'] = []
-			gajim.to_be_removed['zeroconf'] = []
-			gajim.nicks['zeroconf'] = 'zeroconf'
-			gajim.block_signed_in_notifications['zeroconf'] = True
-			gajim.sleeper_state['zeroconf'] = 'off'
-			gajim.encrypted_chats['zeroconf'] = []
-			gajim.last_message_time['zeroconf'] = {}
-			gajim.status_before_autoaway['zeroconf'] = ''
-			# refresh accounts window
-			if gajim.interface.instances.has_key('accounts'):
-				gajim.interface.instances['accounts'].init_accounts()
-			# refresh roster
-			if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
-				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
-			else: 
-				gajim.interface.roster.regroup = False
-			gajim.interface.roster.draw_roster()
-			gajim.interface.roster.actions_menu_needs_rebuild = True
-			gajim.interface.save_config()
-			gajim.connections['zeroconf'].change_status('online', '')
-
-		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
-
-	def on_zeroconf_properties_button_clicked(self, widget):
-		if gajim.interface.instances.has_key('zeroconf_properties'):
-			gajim.interface.instances['zeroconf_properties'].window.present()
-		else:
-			gajim.interface.instances['zeroconf_properties'] = \
-				ZeroconfPropertiesWindow()
-
 	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
 		gajim.interface.roster.draw_roster()
@@ -1831,6 +1758,12 @@ class AccountsWindow:
 		st = gajim.config.get('mergeaccounts')
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
+		# enable zeroconf
+		st = gajim.config.get('enable_zeroconf')
+		w = self.xml.get_widget('enable_zeroconf_checkbutton')
+		w.set_active(st)
+		w.connect('toggled', self.on_enable_zeroconf_checkbutton_toggled)
+
 	def on_accounts_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
 			self.window.destroy()
@@ -1842,9 +1775,8 @@ class AccountsWindow:
 		model = self.accounts_treeview.get_model()
 		model.clear()
 		for account in gajim.connections:
-#			if account != 'zeroconf':
-				iter = model.append()
-				model.set(iter, 0, account, 1, gajim.get_hostname_from_account(account))
+			iter = model.append()
+			model.set(iter, 0, account, 1, gajim.get_hostname_from_account(account))
 
 	def on_accounts_treeview_cursor_changed(self, widget):
 		'''Activate delete and modify buttons when a row is selected'''
@@ -1885,7 +1817,14 @@ class AccountsWindow:
 		if not iter:
 			return
 		account = model[iter][0].decode('utf-8')
-		self.show_modification_window(account)
+		if account == 'zeroconf':
+			if gajim.interface.instances.has_key('zeroconf_properties'):
+				gajim.interface.instances['zeroconf_properties'].window.present()
+			else:
+				gajim.interface.instances['zeroconf_properties'] = \
+					ZeroconfPropertiesWindow()
+		else:
+			self.show_modification_window(account)
 
 	def on_accounts_treeview_row_activated(self, widget, path, column):
 		model = widget.get_model()
@@ -1899,15 +1838,85 @@ class AccountsWindow:
 			gajim.interface.instances[account]['account_modification'] = \
 				AccountModificationWindow(account)
 
-	def on_merge_checkbutton_toggled(self, widget):
-		gajim.config.set('mergeaccounts', widget.get_active())
+	def on_checkbutton_toggled(self, widget, config_name,
+		change_sensitivity_widgets = None):
+		gajim.config.set(config_name, widget.get_active())
+		if change_sensitivity_widgets:
+			for w in change_sensitivity_widgets:
+				w.set_sensitive(widget.get_active())
 		gajim.interface.save_config()
+
+	def on_merge_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'mergeaccounts')
 		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
 		else:
 			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
+	
+	def on_enable_zeroconf_checkbutton_toggled(self, widget):
+		if gajim.config.get('enable_zeroconf'):
+			#disable
+			gajim.interface.roster.close_all('zeroconf')
+			gajim.connections['zeroconf'].disable_account()
+			del gajim.connections['zeroconf']
+			gajim.interface.save_config()
+			del gajim.interface.instances['zeroconf']
+			del gajim.nicks['zeroconf']
+			del gajim.block_signed_in_notifications['zeroconf']
+			del gajim.groups['zeroconf']
+			gajim.contacts.remove_account('zeroconf')
+			del gajim.gc_connected['zeroconf']
+			del gajim.automatic_rooms['zeroconf']
+			del gajim.to_be_removed['zeroconf']
+			del gajim.newly_added['zeroconf']
+			del gajim.sleeper_state['zeroconf']
+			del gajim.encrypted_chats['zeroconf']
+			del gajim.last_message_time['zeroconf']
+			del gajim.status_before_autoaway['zeroconf']
+			if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
+				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
+			else: 
+				gajim.interface.roster.regroup = False
+			gajim.interface.roster.draw_roster()
+			gajim.interface.roster.actions_menu_needs_rebuild = True
+			if gajim.interface.instances.has_key('accounts'):
+				gajim.interface.instances['accounts'].init_accounts()
+			
+		else:
+			# enable (will create new account if not present)
+			gajim.connections['zeroconf'] = common.zeroconf.connection_zeroconf.ConnectionZeroconf('zeroconf')
+			# update variables
+			gajim.interface.instances['zeroconf'] = {'infos': {}, 'disco': {},
+				'gc_config': {}}
+			gajim.connections['zeroconf'].connected = 0
+			gajim.groups['zeroconf'] = {}
+			gajim.contacts.add_account('zeroconf')
+			gajim.gc_connected['zeroconf'] = {}
+			gajim.automatic_rooms['zeroconf'] = {}
+			gajim.newly_added['zeroconf'] = []
+			gajim.to_be_removed['zeroconf'] = []
+			gajim.nicks['zeroconf'] = 'zeroconf'
+			gajim.block_signed_in_notifications['zeroconf'] = True
+			gajim.sleeper_state['zeroconf'] = 'off'
+			gajim.encrypted_chats['zeroconf'] = []
+			gajim.last_message_time['zeroconf'] = {}
+			gajim.status_before_autoaway['zeroconf'] = ''
+			# refresh accounts window
+			if gajim.interface.instances.has_key('accounts'):
+				gajim.interface.instances['accounts'].init_accounts()
+			# refresh roster
+			if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
+				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
+			else: 
+				gajim.interface.roster.regroup = False
+			gajim.interface.roster.draw_roster()
+			gajim.interface.roster.actions_menu_needs_rebuild = True
+			gajim.interface.save_config()
+			gajim.connections['zeroconf'].change_status('online', '')
 
+		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
+		
 class DataFormWindow:
 	def __init__(self, account, config):
 		self.account = account

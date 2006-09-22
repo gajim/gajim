@@ -98,7 +98,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			print 'Creating zeroconf account'
 			gajim.config.add_per('accounts', 'zeroconf')
 			gajim.config.set_per('accounts', 'zeroconf', 'autoconnect', True)
-			gajim.config.set_per('accounts', 'zeroconf', 'no_log_for', False)
+			gajim.config.set_per('accounts', 'zeroconf', 'no_log_for', '')
 			gajim.config.set_per('accounts', 'zeroconf', 'password', 'zeroconf')
 			gajim.config.set_per('accounts', 'zeroconf', 'sync_with_global_status', True)
 
