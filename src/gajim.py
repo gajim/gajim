@@ -1768,8 +1768,11 @@ class Interface:
 			if not event:
 				# default to jid without resource
 				event = gajim.events.get_first_event(account, jid, type_)
-			# Open the window
-			self.roster.open_event(account, jid, event)
+				# Open the window
+				self.roster.open_event(account, jid, event)
+			else:
+				# Open the window
+				self.roster.open_event(account, fjid, event)
 		elif type_ == 'gmail':
 			if gajim.config.get_per('accounts', account, 'savepass'):
 				url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') %\
