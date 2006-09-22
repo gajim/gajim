@@ -605,7 +605,7 @@ class Interface:
 		msg = message
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
-		notify.notify('new_message', jid, account, [msg_type, first, nickname,
+		notify.notify('new_message', full_jid_with_resource, account, [msg_type, first, nickname,
 			msg], advanced_notif_num)
 
 		if self.remote_ctrl:
@@ -1762,7 +1762,10 @@ class Interface:
 		elif type_ in ('normal', 'file-request', 'file-request-error',
 		'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 			# Get the first single message event
-			event = gajim.events.get_first_event(account, jid, type_)
+			event = gajim.events.get_first_event(account, fjid, type_)
+			if not event:
+				# default to jid without resource
+				event = gajim.events.get_first_event(account, jid, type_)
 			# Open the window
 			self.roster.open_event(account, jid, event)
 		elif type_ == 'gmail':
