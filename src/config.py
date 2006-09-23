@@ -1,7 +1,7 @@
 ##	config.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab@snarc.org>
 ##
@@ -181,7 +181,7 @@ class PreferencesWindow:
 			theme = config_theme.replace('_', ' ')
 			model.append([theme])
 			if gajim.config.get('roster_theme') == config_theme:
-			         theme_combobox.set_active(i)
+				theme_combobox.set_active(i)
 			i += 1
 		self.on_theme_combobox_changed(theme_combobox)
 
@@ -458,12 +458,18 @@ class PreferencesWindow:
 		# send os info
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
+
+		# set status msg from currently playing music track
+		st = gajim.config.get('set_status_msg_from_current_music_track')
+		self.xml.get_widget(
+			'set_status_msg_from_current_music_track_checkbutton').set_active(st)
 		
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
 		frame_gmail = self.xml.get_widget('frame_gmail')
 		notify_gmail_checkbutton = self.xml.get_widget('notify_gmail_checkbutton')
-		notify_gmail_extra_checkbutton = self.xml.get_widget('notify_gmail_extra_checkbutton')
+		notify_gmail_extra_checkbutton = self.xml.get_widget(
+			'notify_gmail_extra_checkbutton')
 		frame_gmail.set_no_show_all(True)
 		
 		for account in gajim.config.get_per('accounts'):
@@ -1081,6 +1087,13 @@ class PreferencesWindow:
 		else:
 			gajim.interface.instances['advanced_config'] = \
 				dialogs.AdvancedConfigurationWindow()
+
+	def set_status_msg_from_current_music_track_checkbutton_toggled(self,
+		widget):
+		self.on_checkbutton_toggled(widget,
+			'set_status_msg_from_current_music_track')
+		gajim.interface.roster.enable_syncing_status_msg_from_current_music_track(
+			widget.get_active())
 
 #---------- AccountModificationWindow class -------------#
 class AccountModificationWindow:
@@ -2383,7 +2396,7 @@ class ManageBookmarksWindow:
 			if gajim.connections[account].connected <= 1:
 				continue
 			iter = self.treestore.append(None, [None, account,None,
-							    None, None, None, None])
+				None, None, None, None])
 
 			for bookmark in gajim.connections[account].bookmarks:
 				if bookmark['name'] == '':

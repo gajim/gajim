@@ -125,6 +125,7 @@ class Config:
 		'before_nickname': [ opt_str, '' ],
 		'after_nickname': [ opt_str, ':' ],
 		'send_os_info': [ opt_bool, True ],
+		'set_status_msg_from_current_music_track': [ opt_bool, False ],
 		'notify_on_new_gmail_email': [ opt_bool, True ],
 		'notify_on_new_gmail_email_extra': [ opt_bool, False ],
 		'usegpg': [ opt_bool, False, '', True ],

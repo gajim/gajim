@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##	roster_window.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
@@ -38,6 +39,7 @@ from message_window import MessageWindowMgr
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
+from music_track_listener import MusicTrackListener
 
 #(icon, name, type, jid, account, editable, second pixbuf)
 (
@@ -2382,6 +2384,36 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self.send_status(acct, status, message)
 		self.update_status_combobox()
 
+	## enable setting status msg from currently playing music track
+	def enable_syncing_status_msg_from_current_music_track(self, enabled):
+		'''if enabled is True, we listen to events from music players about
+		currently played music track, and we update our
+		status message accordinly'''
+		if enabled:
+			if self._music_track_changed_signal is None:
+				listener = MusicTrackListener.get()
+				self._music_track_changed_signal = listener.connect(
+					'music-track-changed', self._music_track_changed)
+		else:
+			if self._music_track_changed_signal is not None:
+				listener = MusicTrackListener.get()
+				listener.disconnect(self._music_track_changed_signal)
+				self._music_track_changed_signal = None
+			self._music_track_changed(None, None)
+	
+	def _music_track_changed(self, unused_listener, music_track_info):
+		accounts = gajim.connections.keys()
+		if music_track_info is None:
+			status_message = ''
+		else:
+			status_message = _('♪ "%(title)s" by %(artist)s ♪') % \
+				{'title': music_track_info.title,
+					'artist': music_track_info.artist }
+		for acct in accounts:
+			current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
+			self.send_status(acct, current_show, status_message)
+
+
 	def update_status_combobox(self):
 		# table to change index in connection.connected to index in combobox
 		table = {'offline':9, 'connecting':9, 'online':0, 'chat':1, 'away':2,
@@ -3686,6 +3718,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
 		self.window = self.xml.get_widget('roster_window')
+		self._music_track_changed_signal = None
 		gajim.interface.msg_win_mgr = MessageWindowMgr()
 		self.advanced_menus = [] # We keep them to destroy them
 		if gajim.config.get('roster_window_skip_taskbar'):
@@ -3861,6 +3894,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
 		self.tooltip = tooltips.RosterTooltip()
 		self.draw_roster()
+
+		## Music Track notifications
+		self.enable_syncing_status_msg_from_current_music_track(gajim.config.get(
+			'set_status_msg_from_current_music_track'))
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
