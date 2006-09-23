@@ -2622,7 +2622,7 @@ Disabled</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="set_status_msg_from_current_music_track_checkbuttontoggled" last_modification_time="Fri, 22 Sep 2006 18:13:39 GMT"/>
+		  <signal name="toggled" handler="set_status_msg_from_current_music_track_checkbutton_toggled" last_modification_time="Fri, 22 Sep 2006 18:13:39 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
