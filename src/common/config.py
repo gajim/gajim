@@ -37,6 +37,8 @@ opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
 opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
 
+DEFAULT_ICONSET = 'dcraven'
+
 class Config:
 
 	__options = {
@@ -67,7 +69,7 @@ class Config:
 		'last_status_msg_invisible': [ opt_str, '' ],
 		'last_status_msg_offline': [ opt_str, '' ],
 		'trayicon': [ opt_bool, True, '', True ],
-		'iconset': [ opt_str, 'dcraven', '', True ],
+		'iconset': [ opt_str, DEFAULT_ICONSET, '', True ],
 		'use_transports_iconsets': [ opt_bool, True, '', True ],
 		'inmsgcolor': [ opt_color, '#a34526', '', True ],
 		'outmsgcolor': [ opt_color, '#164e6f', '', True ],
