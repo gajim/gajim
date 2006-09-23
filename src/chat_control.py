@@ -196,7 +196,6 @@ class ChatControlBase(MessageControl):
 					self.msg_textview.lang = lang
 					spell.set_language(lang)
 			except (gobject.GError, RuntimeError), msg:
-				#FIXME: add a ui for this use spell.set_language()
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language '
 					'for which you want to highlight misspelled words, then please '
 					'set your $LANG as appropriate. Eg. for French do export '
