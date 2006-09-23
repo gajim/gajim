@@ -241,8 +241,6 @@ class ConversationTextview:
 			before_img_iter = end_iter.copy()
 			before_img_iter.backward_char() # one char back (an image also takes one char)
 			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
-			#FIXME: remove this workaround when bug is fixed
-			# c http://bugzilla.gnome.org/show_bug.cgi?id=318569
 
 			self.allow_focus_out_line = False
 
