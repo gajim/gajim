@@ -2395,7 +2395,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self._music_track_changed_signal = listener.connect(
 					'music-track-changed', self._music_track_changed)
 				track = listener.get_playing_track()
-					self._music_track_changed(listener, track)
+				self._music_track_changed(listener, track)
 		else:
 			if self._music_track_changed_signal is not None:
 				listener = MusicTrackListener.get()
