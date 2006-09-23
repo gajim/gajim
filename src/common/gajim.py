@@ -120,6 +120,9 @@ status_before_autoaway = {}
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 
+# zeroconf account name
+LOCAL_ACC = 'local'
+
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]

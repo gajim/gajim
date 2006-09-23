@@ -106,8 +106,8 @@ class Zeroconf:
 		return items
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
-		#print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
-		#print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, avahi.txt_array_to_string_array(txt))
+		# print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
+		# print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, avahi.txt_array_to_string_array(txt))
 		bare_name = name
 		if name.find('@') == -1:
 			name = name + '@' + name
@@ -127,8 +127,8 @@ class Zeroconf:
 
 	# different handler when resolving all contacts
 	def service_resolved_all_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
-		#print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
-		#print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
+		# print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
+		# print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
 		bare_name = name
 		if name.find('@') == -1:
 			name = name + '@' + name

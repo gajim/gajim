@@ -1817,14 +1817,7 @@ class AccountsWindow:
 		if not iter:
 			return
 		account = model[iter][0].decode('utf-8')
-		if account == 'zeroconf':
-			if gajim.interface.instances.has_key('zeroconf_properties'):
-				gajim.interface.instances['zeroconf_properties'].window.present()
-			else:
-				gajim.interface.instances['zeroconf_properties'] = \
-					ZeroconfPropertiesWindow()
-		else:
-			self.show_modification_window(account)
+		self.show_modification_window(account)
 
 	def on_accounts_treeview_row_activated(self, widget, path, column):
 		model = widget.get_model()
@@ -1832,11 +1825,18 @@ class AccountsWindow:
 		self.show_modification_window(account)
 
 	def show_modification_window(self, account):
-		if gajim.interface.instances[account].has_key('account_modification'):
-			gajim.interface.instances[account]['account_modification'].window.present()
+		if account == gajim.LOCAL_ACC:
+			if gajim.interface.instances.has_key('zeroconf_properties'):
+				gajim.interface.instances['zeroconf_properties'].window.present()
+			else:
+				gajim.interface.instances['zeroconf_properties'] = \
+					ZeroconfPropertiesWindow()
 		else:
-			gajim.interface.instances[account]['account_modification'] = \
-				AccountModificationWindow(account)
+			if gajim.interface.instances[account].has_key('account_modification'):
+				gajim.interface.instances[account]['account_modification'].window.present()
+			else:
+				gajim.interface.instances[account]['account_modification'] = \
+					AccountModificationWindow(account)
 
 	def on_checkbutton_toggled(self, widget, config_name,
 		change_sensitivity_widgets = None):
@@ -1857,23 +1857,23 @@ class AccountsWindow:
 	def on_enable_zeroconf_checkbutton_toggled(self, widget):
 		if gajim.config.get('enable_zeroconf'):
 			#disable
-			gajim.interface.roster.close_all('zeroconf')
-			gajim.connections['zeroconf'].disable_account()
-			del gajim.connections['zeroconf']
+			gajim.interface.roster.close_all(gajim.LOCAL_ACC)
+			gajim.connections[gajim.LOCAL_ACC].disable_account()
+			del gajim.connections[gajim.LOCAL_ACC]
 			gajim.interface.save_config()
-			del gajim.interface.instances['zeroconf']
-			del gajim.nicks['zeroconf']
-			del gajim.block_signed_in_notifications['zeroconf']
-			del gajim.groups['zeroconf']
-			gajim.contacts.remove_account('zeroconf')
-			del gajim.gc_connected['zeroconf']
-			del gajim.automatic_rooms['zeroconf']
-			del gajim.to_be_removed['zeroconf']
-			del gajim.newly_added['zeroconf']
-			del gajim.sleeper_state['zeroconf']
-			del gajim.encrypted_chats['zeroconf']
-			del gajim.last_message_time['zeroconf']
-			del gajim.status_before_autoaway['zeroconf']
+			del gajim.interface.instances[gajim.LOCAL_ACC]
+			del gajim.nicks[gajim.LOCAL_ACC]
+			del gajim.block_signed_in_notifications[gajim.LOCAL_ACC]
+			del gajim.groups[gajim.LOCAL_ACC]
+			gajim.contacts.remove_account(gajim.LOCAL_ACC)
+			del gajim.gc_connected[gajim.LOCAL_ACC]
+			del gajim.automatic_rooms[gajim.LOCAL_ACC]
+			del gajim.to_be_removed[gajim.LOCAL_ACC]
+			del gajim.newly_added[gajim.LOCAL_ACC]
+			del gajim.sleeper_state[gajim.LOCAL_ACC]
+			del gajim.encrypted_chats[gajim.LOCAL_ACC]
+			del gajim.last_message_time[gajim.LOCAL_ACC]
+			del gajim.status_before_autoaway[gajim.LOCAL_ACC]
 			if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
 				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
 			else: 
@@ -1885,23 +1885,23 @@ class AccountsWindow:
 			
 		else:
 			# enable (will create new account if not present)
-			gajim.connections['zeroconf'] = common.zeroconf.connection_zeroconf.ConnectionZeroconf('zeroconf')
+			gajim.connections[gajim.LOCAL_ACC] = common.zeroconf.connection_zeroconf.ConnectionZeroconf(gajim.LOCAL_ACC)
 			# update variables
-			gajim.interface.instances['zeroconf'] = {'infos': {}, 'disco': {},
+			gajim.interface.instances[gajim.LOCAL_ACC] = {'infos': {}, 'disco': {},
 				'gc_config': {}}
-			gajim.connections['zeroconf'].connected = 0
-			gajim.groups['zeroconf'] = {}
-			gajim.contacts.add_account('zeroconf')
-			gajim.gc_connected['zeroconf'] = {}
-			gajim.automatic_rooms['zeroconf'] = {}
-			gajim.newly_added['zeroconf'] = []
-			gajim.to_be_removed['zeroconf'] = []
-			gajim.nicks['zeroconf'] = 'zeroconf'
-			gajim.block_signed_in_notifications['zeroconf'] = True
-			gajim.sleeper_state['zeroconf'] = 'off'
-			gajim.encrypted_chats['zeroconf'] = []
-			gajim.last_message_time['zeroconf'] = {}
-			gajim.status_before_autoaway['zeroconf'] = ''
+			gajim.connections[gajim.LOCAL_ACC].connected = 0
+			gajim.groups[gajim.LOCAL_ACC] = {}
+			gajim.contacts.add_account(gajim.LOCAL_ACC)
+			gajim.gc_connected[gajim.LOCAL_ACC] = {}
+			gajim.automatic_rooms[gajim.LOCAL_ACC] = {}
+			gajim.newly_added[gajim.LOCAL_ACC] = []
+			gajim.to_be_removed[gajim.LOCAL_ACC] = []
+			gajim.nicks[gajim.LOCAL_ACC] = gajim.LOCAL_ACC
+			gajim.block_signed_in_notifications[gajim.LOCAL_ACC] = True
+			gajim.sleeper_state[gajim.LOCAL_ACC] = 'off'
+			gajim.encrypted_chats[gajim.LOCAL_ACC] = []
+			gajim.last_message_time[gajim.LOCAL_ACC] = {}
+			gajim.status_before_autoaway[gajim.LOCAL_ACC] = ''
 			# refresh accounts window
 			if gajim.interface.instances.has_key('accounts'):
 				gajim.interface.instances['accounts'].init_accounts()
@@ -1913,7 +1913,7 @@ class AccountsWindow:
 			gajim.interface.roster.draw_roster()
 			gajim.interface.roster.actions_menu_needs_rebuild = True
 			gajim.interface.save_config()
-			gajim.connections['zeroconf'].change_status('online', '')
+			gajim.connections[gajim.LOCAL_ACC].change_status('online', '')
 
 		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
 		
@@ -3053,55 +3053,53 @@ class ZeroconfPropertiesWindow:
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.xml.signal_autoconnect(self)
 
-		self.account = 'zeroconf'
-		
-		st = gajim.config.get_per('accounts', 'zeroconf', 'autoconnect')
+		st = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'autoconnect')
 		if st:
 			self.xml.get_widget('autoconnect_checkbutton').set_active(st)
 		
-		list_no_log_for = gajim.config.get_per('accounts', self.account,'no_log_for').split()
-		if 'zeroconf' in list_no_log_for:
+		list_no_log_for = gajim.config.get_per('accounts', gajim.LOCAL_ACC,'no_log_for').split()
+		if gajim.LOCAL_ACC in list_no_log_for:
 			self.xml.get_widget('log_history_checkbutton').set_active(0)
 		else:
 			self.xml.get_widget('log_history_checkbutton').set_active(1)
 
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'sync_with_global_status')
+		st = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'sync_with_global_status')
 		if st:
 			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(st)
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'zeroconf_first_name')
+		st = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'zeroconf_first_name')
 		if st:
 			self.xml.get_widget('first_name_entry').set_text(st)
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'zeroconf_last_name')
+		st = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'zeroconf_last_name')
 		if st:
 			self.xml.get_widget('last_name_entry').set_text(st)
 		
-		st = gajim.config.get_per('accounts', 'zeroconf', 'zeroconf_jabber_id')
+		st = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'zeroconf_jabber_id')
 		if st:
 			self.xml.get_widget('jabber_id_entry').set_text(st)
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'zeroconf_email')
+		st = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'zeroconf_email')
 		if st:
 			self.xml.get_widget('email_entry').set_text(st)
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'use_ssl')
+		st = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'use_ssl')
 		if st:
 			self.xml.get_widget('use_tls_checkbutton').set_active(st)
 
-		st = gajim.config.get_per('accounts', 'zeroconf', 'custom_port')
+		st = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'custom_port')
 		if st:
 			self.xml.get_widget('custom_port_entry').set_text(str(st))
 		
-		st = gajim.config.get_per('accounts', 'zeroconf', 'use_custom_host')
+		st = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'use_custom_host')
 		if st:
 			self.xml.get_widget('custom_port_checkbutton').set_active(st)
 	
 		self.xml.get_widget('custom_port_entry').set_sensitive(bool(st))
 
 		if not st:
-			gajim.config.set_per('accounts', 'zeroconf', 'custom_port', '5298')
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'custom_port', '5298')
 
 		self.xml.get_widget('save_button').grab_focus()
 		self.window.show_all()
@@ -3120,38 +3118,44 @@ class ZeroconfPropertiesWindow:
 	
 	def on_save_button_clicked(self, widget):
 		st = self.xml.get_widget('autoconnect_checkbutton').get_active()
-		gajim.config.set_per('accounts', 'zeroconf', 'autoconnect', st)
+		gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'autoconnect', st)
 		list_no_log_for = gajim.config.get_per('accounts',
-				self.account, 'no_log_for').split()
-		if self.account in list_no_log_for:
-			list_no_log_for.remove(self.account)
+				gajim.LOCAL_ACC, 'no_log_for').split()
+		if gajim.LOCAL_ACC in list_no_log_for:
+			list_no_log_for.remove(gajim.LOCAL_ACC)
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
-			list_no_log_for.append(self.account)
-		gajim.config.set_per('accounts', 'zeroconf', 'no_log_for', ' '.join(list_no_log_for))
+			list_no_log_for.append(gajim.LOCAL_ACC)
+		gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'no_log_for', ' '.join(list_no_log_for))
 		
 		st = self.xml.get_widget('sync_with_global_status_checkbutton').get_active()
-		gajim.config.set_per('accounts', 'zeroconf', 'sync_with_global_status', st)
+		gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'sync_with_global_status', st)
 
 		st = self.xml.get_widget('first_name_entry').get_text()
-		gajim.config.set_per('accounts', 'zeroconf', 'zeroconf_first_name', st)
+		gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'zeroconf_first_name', st)
 		
 		st = self.xml.get_widget('last_name_entry').get_text()
-		gajim.config.set_per('accounts', 'zeroconf', 'zeroconf_last_name', st)
+		gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'zeroconf_last_name', st)
 
 		st = self.xml.get_widget('jabber_id_entry').get_text()
-		gajim.config.set_per('accounts', 'zeroconf', 'zeroconf_jabber_id', st)
+		gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'zeroconf_jabber_id', st)
 
 		st = self.xml.get_widget('email_entry').get_text()
-		gajim.config.set_per('accounts', 'zeroconf', 'zeroconf_email', st)
+		gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'zeroconf_email', st)
 
 		st = self.xml.get_widget('use_tls_checkbutton').get_active()
-		gajim.config.set_per('accounts', 'zeroconf', 'use_ssl', st)
+		gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'use_ssl', st)
 
 		st = self.xml.get_widget('custom_port_checkbutton').get_active()
-		gajim.config.set_per('accounts', 'zeroconf', 'use_custom_host', st)
+		gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'use_custom_host', st)
+
+		if st:	
+			st = self.xml.get_widget('custom_port_entry').get_text()
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'custom_port', st)
+		else:
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'custom_port', '5298')
 			
-		st = self.xml.get_widget('custom_port_entry').get_text()
-		gajim.config.set_per('accounts', 'zeroconf', 'custom_port', st)
-	
+		if gajim.connections.has_key(gajim.LOCAL_ACC):
+			gajim.connections[gajim.LOCAL_ACC].reconnect()
+
 		self.window.destroy()
 

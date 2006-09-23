@@ -1853,12 +1853,10 @@ class Interface:
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
 		self.register_handlers()
 		if gajim.config.get('enable_zeroconf'):
-			gajim.connections['zeroconf'] = common.zeroconf.connection_zeroconf.ConnectionZeroconf('zeroconf')
+			gajim.connections[gajim.LOCAL_ACC] = common.zeroconf.connection_zeroconf.ConnectionZeroconf(gajim.LOCAL_ACC)
 		for account in gajim.config.get_per('accounts'):
-			if account != 'zeroconf':
+			if account != gajim.LOCAL_ACC:
 				gajim.connections[account] = common.connection.Connection(account)
-		
-
 		
 		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')

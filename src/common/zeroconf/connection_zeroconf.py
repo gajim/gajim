@@ -68,7 +68,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.bookmarks = []
 
 		#we don't need a password, but must be non-empty
-		self.password = 'zeroconf'
+		self.password = gajim.LOCAL_ACC
 
 		#XXX use that somewhere
 		self.autoconnect = False
@@ -88,37 +88,40 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
 		self.get_config_values_or_default()
+		self.zeroconf = zeroconf.Zeroconf(self._on_new_service, self._on_remove_service, self.username, self.host, self.port)
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.vcard_supported = False
 
 	def get_config_values_or_default(self):
 		''' get name, host, port from config, or 
 		create zeroconf account with default values'''
-		if not gajim.config.get_per('accounts', 'zeroconf', 'name'):
+		if not gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'name'):
 			print 'Creating zeroconf account'
-			gajim.config.add_per('accounts', 'zeroconf')
-			gajim.config.set_per('accounts', 'zeroconf', 'autoconnect', True)
-			gajim.config.set_per('accounts', 'zeroconf', 'no_log_for', '')
-			gajim.config.set_per('accounts', 'zeroconf', 'password', 'zeroconf')
-			gajim.config.set_per('accounts', 'zeroconf', 'sync_with_global_status', True)
+			gajim.config.add_per('accounts', gajim.LOCAL_ACC)
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'autoconnect', True)
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'no_log_for', '')
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'password', 'zeroconf')
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'sync_with_global_status', True)
 
-			username = unicode(getpass.getuser())
-			gajim.config.set_per('accounts', 'zeroconf', 'name', username)
+			self.username = unicode(getpass.getuser())
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'name', self.username)
 			#XXX make sure host is US-ASCII
-			host = unicode(socket.gethostname())
-			gajim.config.set_per('accounts', 'zeroconf', 'hostname', host)
-			port = 5298
-			gajim.config.set_per('accounts', 'zeroconf', 'custom_port', port)
-			gajim.config.set_per('accounts', 'zeroconf', 'is_zeroconf', True)
+			self.host = unicode(socket.gethostname())
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'hostname', self.host)
+			self.port = 5298
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'custom_port', self.port)
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'is_zeroconf', True)
 		else:
-			username = gajim.config.get_per('accounts', 'zeroconf', 'name')
-			host = gajim.config.get_per('accounts', 'zeroconf', 'hostname')
-			port = gajim.config.get_per('accounts', 'zeroconf', 'custom_port')
-			self.autoconnect = gajim.config.get_per('accounts', 'zeroconf', 'autoconnect')
-			self.sync_with_global_status = gajim.config.get_per('accounts', 'zeroconf', 'sync_with_global_status')
-			self.no_log_for = gajim.config.get_per('accounts', 'zeroconf', 'no_log_for')
-
-		self.zeroconf = zeroconf.Zeroconf(self._on_new_service, self._on_remove_service, username, host, port)
+			self.username = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'name')
+			self.host = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'hostname')
+			self.port = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'custom_port')
+			self.autoconnect = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'autoconnect')
+			self.sync_with_global_status = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'sync_with_global_status')
+			self.no_log_for = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'no_log_for')
+			self.first = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'zeroconf_first_name')
+			self.last = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'zeroconf_last_name')
+			self.jabber_id = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'zeroconf_jabber_id')
+			self.email = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'zeroconf_email')
 
 	# END __init__
 	def put_event(self, ev):
@@ -190,8 +193,19 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# keyID, timestamp))
 		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0))
 
+	def connect(self, data = None, show = 'online', msg = ''):
+		self.get_config_values_or_default()
 
-	def connect(self, data = None, show = 'online'):
+		self.zeroconf.txt['status'] = show
+		self.zeroconf.txt['msg'] = msg
+		self.zeroconf.txt['1st'] = self.first
+		self.zeroconf.txt['last'] = self.last
+		self.zeroconf.txt['jid'] = self.jabber_id
+		self.zeroconf.txt['email'] = self.email
+		self.zeroconf.username = self.username
+		self.zeroconf.host = self.host
+		self.zeroconf.port = self.port
+
 		if self.connection:
 			return self.connection, ''
 		
@@ -211,16 +225,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.call_resolve_timeout = True
 			gobject.timeout_add(10000, self._on_resolve_timeout)
 		else:
-			pass
-			#TODO: display visual notification that we could not connect to avahi
-
-	def connect_and_init(self, show, msg, signed):
-		self.continue_connect_info = [show, msg, signed]
-		
-		self.zeroconf.txt['status'] = show
-		self.zeroconf.txt['msg'] = msg
-		self.connect('',show)
-
+			notify.popup(_('Connection problem:'), gajim.LOCAL_ACC, None,
+					title=_('Can not get connection'),
+					text=_('Please check if avahi-daemon is running.') ) 
+			self.dispatch('STATUS', 'offline')
+			self.status = 'offline'
 
 	def disconnect(self, on_purpose = False):
 		self.connected = 0
@@ -233,15 +242,23 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.call_resolve_timeout = False
 			self.zeroconf.disconnect()
 
+	def reconnect(self):
+		status = self.status
+		if status != 'offline':
+			msg = self.zeroconf.txt['msg']
+			self.change_status('offline', msg)
+			self.change_status(status, msg)
+
 	def change_status(self, show, msg, sync = False, auto = False):
 		if not show in STATUS_LIST:
 			return -1
+		self.status = show
 
 		check = True		#to check for errors from zeroconf
 
 		# 'connect'
 		if show != 'offline' and not self.connected:
-			self.connect_and_init(show, msg, '')
+			self.connect(None, show, msg)
 			if show != 'invisible':
 					check = self.zeroconf.announce()
 			else:
@@ -270,11 +287,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if check:
 			self.dispatch('STATUS', show)
 		else:
-#			self.dispatch('ERROR', 'Could not change status. Please check if avahi-daemon is running.')
-			notify.popup(_('Connection problem:'), 'zeroconf', None,
+			notify.popup(_('Connection problem:'), gajim.LOCAL_ACC, None,
 					title=_('Could not change status'),
 					text=_('Please check if avahi-daemon is running.') ) 
 			self.dispatch('STATUS', 'offline')
+			self.status = 'offline'
 
 	def get_status(self):
 		return STATUS_LIST[self.connected]
