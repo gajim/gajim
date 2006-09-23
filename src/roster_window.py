@@ -2401,7 +2401,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				listener = MusicTrackListener.get()
 				listener.disconnect(self._music_track_changed_signal)
 				self._music_track_changed_signal = None
-			self._music_track_changed(None, None)
+				self._music_track_changed(None, None)
 	
 	def _music_track_changed(self, unused_listener, music_track_info):
 		accounts = gajim.connections.keys()
