@@ -1075,7 +1075,7 @@ class Interface:
 		gmail_messages_list = array[2]
 		if gajim.config.get('notify_on_new_gmail_email'):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'single_msg_recv.png') #FIXME: find a better image
+				'new_email_recv.png')
 			title = _('New E-mail on %(gmail_mail_address)s') % \
 				{'gmail_mail_address': jid}
 			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
