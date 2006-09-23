@@ -40,32 +40,77 @@ class MusicTrackListener(gobject.GObject):
 		bus.add_signal_receiver(self._rhythmbox_music_track_change_cb,
 			'playingUriChanged', 'org.gnome.Rhythmbox.Player')
 
-	def _muine_music_track_change_cb(self, arg):
-		d = dict((x.strip() for x in  s1.split(':', 1)) for s1 in arg.split('\n'))
+	def _muine_properties_extract(self, song_string):
+		d = dict((x.strip() for x in  s1.split(':', 1)) for s1 in song_string.split('\n'))
 		info = MusicTrackInfo()
 		info.title = d['title']
 		info.album = d['album']
 		info.artist = d['artist']
 		info.duration = int(d['duration'])
 		info.track_number = int(d['track_number'])
+		return info
+
+	def _muine_music_track_change_cb(self, arg):
+		info = self._muine_properties_extract(arg)
 		self.emit('music-track-changed', info)
 
-	def _rhythmbox_music_track_change_cb(self, uri):
-		bus = dbus.SessionBus()
-		rbshellobj = bus.get_object('org.gnome.Rhythmbox', '/org/gnome/Rhythmbox/Shell')
-		rbshell = rbshell = dbus.Interface(rbshellobj, 'org.gnome.Rhythmbox.Shell')
-		props = rbshell.getSongProperties(uri)
+	def _rhythmbox_properties_extract(self, props):
 		info = MusicTrackInfo()
 		info.title = props['title']
 		info.album = props['album']
 		info.artist = props['artist']
 		info.duration = int(props['duration'])
 		info.track_number = int(props['track-number'])
+		return info
+	
+	def _rhythmbox_music_track_change_cb(self, uri):
+		bus = dbus.SessionBus()
+		rbshellobj = bus.get_object('org.gnome.Rhythmbox', '/org/gnome/Rhythmbox/Shell')
+		rbshell = dbus.Interface(rbshellobj, 'org.gnome.Rhythmbox.Shell')
+		props = rbshell.getSongProperties(uri)
+		info = self._rhythmbox_properties_extract(props)
 		self.emit('music-track-changed', info)
+
+	def get_playing_track(self):
+		'''Return a MusicTrackInfo for the currently playing
+		song, or None if no song is playing'''
+
+		bus = dbus.SessionBus()
+
+		## Check Muine playing track
+		if dbus.dbus_bindings.bus_name_has_owner(bus.get_connection(),
+			'org.gnome.Muine'):
+			obj = bus.get_object('org.gnome.Muine', '/org/gnome/Muine/Player')
+			player = dbus.Interface(obj, 'org.gnome.Muine.Player')
+			if player.GetPlaying():
+				song_string = player.GetCurrentSong()
+				song = self._muine_properties_extract(song_string)
+				return song
+
+		## Check Rhythmbox playing song
+		if dbus.dbus_bindings.bus_name_has_owner(bus.get_connection(),
+			'org.gnome.Rhythmbox'):
+			rbshellobj = bus.get_object('org.gnome.Rhythmbox', '/org/gnome/Rhythmbox/Shell')
+			player = dbus.Interface(
+				bus.get_object('org.gnome.Rhythmbox', '/org/gnome/Rhythmbox/Player'),
+				'org.gnome.Rhythmbox.Player')
+			rbshell = dbus.Interface(rbshellobj, 'org.gnome.Rhythmbox.Shell')
+			uri = player.getPlayingUri()
+			props = rbshell.getSongProperties(uri)
+			info = self._rhythmbox_properties_extract(props)
+			return info
+
+		return None
 
 # here we test :)
 if __name__ == '__main__':
 	def music_track_change_cb(listener, music_track_info):
 		print music_track_info.title
-	MusicTrackListener.get().connect('music-track-changed', music_track_change_cb)
+	listener = MusicTrackListener.get()
+	listener.connect('music-track-changed', music_track_change_cb)
+	track = listener.get_playing_track()
+	if track is None:
+		print 'Now not playing anything'
+	else:
+		print 'Now playing: "%s" by %s' % (track.title, track.artist)
 	gobject.MainLoop().run()

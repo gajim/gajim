@@ -2394,6 +2394,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				listener = MusicTrackListener.get()
 				self._music_track_changed_signal = listener.connect(
 					'music-track-changed', self._music_track_changed)
+				track = listener.get_playing_track()
+					self._music_track_changed(listener, track)
 		else:
 			if self._music_track_changed_signal is not None:
 				listener = MusicTrackListener.get()
@@ -3900,8 +3902,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.draw_roster()
 
 		## Music Track notifications
-		self.enable_syncing_status_msg_from_current_music_track(gajim.config.get(
-			'set_status_msg_from_current_music_track'))
+		## FIXME: we use a timeout because changing status of
+		## accounts has no effect until they are connected.
+		gobject.timeout_add(1000,
+			self.enable_syncing_status_msg_from_current_music_track,
+			gajim.config.get('set_status_msg_from_current_music_track'))
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
