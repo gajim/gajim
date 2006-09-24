@@ -365,18 +365,13 @@ class GCTooltip(BaseTooltip):
 		vcard_current_row = 1
 		properties = []
 		
-		if contact.jid.strip() != '':
-			jid_markup = '<span weight="bold">' + contact.jid + '</span>' 
-		else:
-			jid_markup = '<span weight="bold">' + \
+
+		nick_markup = '<span weight="bold">' + \
 			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
 			+ '</span>'
-		properties.append((jid_markup, None))	
-		properties.append((_('Role: '), helpers.get_uf_role(contact.role)))
-		properties.append((_('Affiliation: '), contact.affiliation.capitalize()))
-		if hasattr(contact, 'resource') and contact.resource.strip() != '':
-			properties.append((_('Resource: '), 
-				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
+		properties.append((nick_markup, None))
+
+		# status :
 		show = helpers.get_uf_show(contact.show)
 		if contact.status:
 			status = contact.status.strip()
@@ -384,7 +379,15 @@ class GCTooltip(BaseTooltip):
 				# escape markup entities
 				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 5)
 				show += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
-		properties.append((_('Status: '), show))
+		properties.append((show, None))
+
+		if contact.jid.strip() != '':
+			properties.append((_('JID: '), contact.jid))	
+		if contact.affiliation != "none":
+			properties.append((_('Affiliation: '), contact.affiliation.capitalize()))
+		if hasattr(contact, 'resource') and contact.resource.strip() != '':
+			properties.append((_('Resource: '), 
+				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
 		
 		# Add avatar
 		puny_name = helpers.sanitize_filename(contact.name)
@@ -403,6 +406,12 @@ class GCTooltip(BaseTooltip):
 		while properties:
 			property = properties.pop(0)
 			vcard_current_row += 1
+			if vcard_current_row == 4:
+			# horizontal separator after status, if something after
+				h_separator = gtk.HSeparator()
+				vcard_table.attach(h_separator, 1, 3, vcard_current_row, vcard_current_row + 1,\
+							 gtk.FILL, vertical_fill, 0)
+				vcard_current_row += 1
 			vertical_fill = gtk.FILL
 			if not properties:
 				vertical_fill |= gtk.EXPAND
@@ -421,7 +430,7 @@ class GCTooltip(BaseTooltip):
 			else:
 				label.set_markup(property[0])
 				vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, 
-															gtk.FILL, vertical_fill, 0)
+										gtk.FILL, vertical_fill, 0)
 		
 		self.avatar_image.set_alignment(0, 0)
 		vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row +1, 
