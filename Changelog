@@ -1,19 +1,38 @@
 Gajim 0.11 (XX October 2006)
 
   * Put your stuff here [each dev put their own please; next time we do this everytime we commit sth major and not in the end]
+
+  * We can now operate on more than one contact in one in time in roster (#1514)
+  * Connection lost is now a non-intrusive popup
+  * Try to get contact desired nick when we add him to roster aka User Nickname (JEP-0172)
+  * Better design of User Profile window
+  * New Add User dialog, with possibility to register to transport directly from it
+  * Completion for "Start Chat" input dialog
+  * We can now have a different spellchecking language in each chat window. (#2383 and #746)
+  * Support for Privacy Lists
+  * Forbid to run multiple instances (but you can use differents profiles)
+  * We can save avatar with right click on avatar in chat banner
+  * Use differents colors for nickname colors of occupants in groupchats.
+  * Ability to show only Join/Leave in groupchats instead of all status changes
+  * New possibilities to insert nickname of an occupant in groupchats conversations : Tab in an empty line now cycle through nicks, maj+right click->insert nickname, maj+click on name in gc-roster, /names command to show all users presents
+
+  * Fixed bugs when removing or renaming an account with tabs open (#2369 and #2370)
+
+  * FIXME : Ad-Hoc for 0.11 ? 
+  * FIXME : does that work ? not tested : Metacontacts across accounts (#1596)
   * Gajim now requires Python 2.4 to run
 
 Gajim 0.10.1 (06 June 2006)
 
-  * freeze and lost contacts in roster (#1953)
-  * popup menus are correctly placed
-  * high CPU usage on FreeBSD (#1963)
-  * nickname can contain '|' (#1913)
-  * update pl, cs, fr translations
-  * don't play sound, when no event is shown (#1970)
-  * set gajim icon for history manager
+  * Freeze and lost contacts in roster (#1953)
+  * Popup menus are correctly placed
+  * High CPU usage on FreeBSD (#1963)
+  * Nickname can contain '|' (#1913)
+  * Update pl, cs, fr translations
+  * Don't play sound, when no event is shown (#1970)
+  * Set gajim icon for history manager
   * gajim.desktop is generated with translation (#834)
-  * preventing several TBs and annoyances (r6273, r6275, r6279, r6301,
+  * Preventing several TBs and annoyances (r6273, r6275, r6279, r6301,
   r6308, r6311, r6323, r6326, r6327, r6335, r6342, r6346, r6348)
 
 Gajim 0.10 (01 May 2006)
