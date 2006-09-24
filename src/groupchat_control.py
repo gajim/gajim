@@ -857,7 +857,10 @@ class GroupchatControl(ChatControlBase):
 				print_status = gajim.config.get('print_status_in_muc')
 			nick_jid = nick
 			if jid:
-				nick_jid += ' (%s)' % jid
+				# delete ressource
+				jid_splitted = jid.split('/')
+				simple_jid = jid_splitted[0]
+				nick_jid += ' (%s)' % simple_jid
 			if show == 'offline' and print_status in ('all', 'in_and_out'):
 				st = _('%s has left') % nick_jid
 				if reason:

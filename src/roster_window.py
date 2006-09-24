@@ -1093,8 +1093,12 @@ class RosterWindow:
 				win.redraw_tab(ctrl)
 
 				name = contact.get_shown_name()
-				if contact.resource != '':
+
+				# if multiple resources (or second one disconnecting)
+				if (len(contact_instances) > 1 or (len(contact_instances) == 1 and \
+					show in ('offline', 'error'))) and contact.resource != '':
 					name += '/' + contact.resource
+				
 				uf_show = helpers.get_uf_show(show)
 				if status: 
 					ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
