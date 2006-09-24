@@ -36,14 +36,9 @@ from dialogs import AddNewContactWindow, NewChatDialog
 import dbus_support
 if dbus_support.supported:
 	import dbus
-	if dbus_support.version >= (0, 41, 0):
+	if dbus_support:
 		import dbus.service
-		import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
-		DbusPrototype = dbus.service.Object
-	elif dbus_support.version >= (0, 20, 0):
-		DbusPrototype = dbus.Object
-	else: #dbus is not defined
-		DbusPrototype = str 
+		import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it 
 
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
@@ -133,7 +128,7 @@ class Remote:
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
 			self.signal_object.raise_signal(signal, 
-										get_dbus_struct(arg))
+				get_dbus_struct(arg))
 
 
 class SignalObject(DbusPrototype):
@@ -159,7 +154,7 @@ class SignalObject(DbusPrototype):
 				self.change_status,
 				self.open_chat,
 				self.send_message,
-                                self.send_single_message,
+ 				self.send_single_message,
 				self.contact_info,
 				self.send_file,
 				self.prefs_list,
