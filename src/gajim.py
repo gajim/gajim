@@ -551,7 +551,7 @@ class Interface:
 			chat_control = self.msg_win_mgr.get_control(jid, account)
 
 		# Handle chat states  
-		contact = gajim.contacts.get_contact(account, jid, resource)
+		contact = gajim.contacts.get_contact(account, jid)
 		if contact and isinstance(contact, list):
 			contact = contact[0]
 		if contact:
