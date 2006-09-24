@@ -39,7 +39,10 @@ from message_window import MessageWindowMgr
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
-from music_track_listener import MusicTrackListener
+
+import dbus_support
+if dbus_support.supported:
+	from music_track_listener import MusicTrackListener
 
 #(icon, name, type, jid, account, editable, second pixbuf)
 (
@@ -2389,6 +2392,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		'''if enabled is True, we listen to events from music players about
 		currently played music track, and we update our
 		status message accordinly'''
+		if not dbus_support.supported: # do nothing if we haven't D-Bus running
+			return
 		if enabled:
 			if self._music_track_changed_signal is None:
 				listener = MusicTrackListener.get()

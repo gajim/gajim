@@ -14,8 +14,10 @@
 ## GNU General Public License for more details.
 ##
 import gobject
-import dbus
-import dbus.glib
+import dbus_support
+if dbus_support.supported:
+	import dbus
+	import dbus.glib
 
 class MusicTrackInfo(object):
 	__slots__ = ['title', 'album', 'artist', 'duration', 'track_number']

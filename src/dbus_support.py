@@ -25,7 +25,7 @@ try:
 	import dbus
 	import dbus.service
 	# cause dbus 0.35+ doesn't return signal replies without it
-	import dbus.glib 
+	import dbus.glib
 	supported = True
 except ImportError:
 	supported = False
