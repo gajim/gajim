@@ -364,7 +364,7 @@ class GCTooltip(BaseTooltip):
 		vcard_table.set_homogeneous(False)
 		vcard_current_row = 1
 		properties = []
-		
+		status_message_present = False
 
 		nick_markup = '<span weight="bold">' + \
 			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
@@ -373,13 +373,18 @@ class GCTooltip(BaseTooltip):
 
 		# status :
 		show = helpers.get_uf_show(contact.show)
-		if contact.status:
-			status = contact.status.strip()
-			if status != '':
-				# escape markup entities
-				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 5)
-				show += ' - ' + gtkgui_helpers.escape_for_pango_markup(status)
 		properties.append((show, None))
+		
+		#status message :
+		if contact.status:
+			status_message = contact.status.strip()
+			if status_message != '':
+				# escape markup entities
+				status_message = gtkgui_helpers.reduce_chars_newlines(status_message, 200, 5)
+				status_message = '<span style="italic">' +\
+					 gtkgui_helpers.escape_for_pango_markup(status_message) + '</span>'
+				properties.append((status_message, None))
+				status_message_present = True 
 
 		if contact.jid.strip() != '':
 			properties.append((_('JID: '), contact.jid))	
@@ -406,7 +411,8 @@ class GCTooltip(BaseTooltip):
 		while properties:
 			property = properties.pop(0)
 			vcard_current_row += 1
-			if vcard_current_row == 4:
+			if vcard_current_row == 4 and not status_message_present or\
+				vcard_current_row == 5 and status_message_present:
 			# horizontal separator after status, if something after
 				h_separator = gtk.HSeparator()
 				vcard_table.attach(h_separator, 1, 3, vcard_current_row, vcard_current_row + 1,\
