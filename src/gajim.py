@@ -581,7 +581,10 @@ class Interface:
 		if gajim.config.get('ignore_unknown_contacts') and \
 			not gajim.contacts.get_contact(account, jid) and not pm:
 			return
-
+		if not contact:
+			# contact is not in the roster, create a fake one to display
+			# notification
+			contact = common.contacts.Contact(jid = jid, resource = resource) 
 		advanced_notif_num = notify.get_advanced_notification('message_received',
 			account, contact)
 
