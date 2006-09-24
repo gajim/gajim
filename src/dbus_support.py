@@ -24,9 +24,8 @@ from common import exceptions
 try:
 	import dbus
 	import dbus.service
-	# cause dbus 0.35+ doesn't return signal replies without it
 	import dbus.glib
-	supported = True
+	supported = True # does use have D-Bus bindings?
 except ImportError:
 	supported = False
 	if not os.name == 'nt': # only say that to non Windows users
@@ -34,7 +33,7 @@ except ImportError:
 		print _('D-Bus capabilities of Gajim cannot be used')
 
 class SessionBus:
-	'''A Singleton for the DBus SessionBus'''
+	'''A Singleton for the D-Bus SessionBus'''
 	def __init__(self):
 		self.session_bus = None
 	

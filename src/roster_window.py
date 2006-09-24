@@ -2392,7 +2392,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		'''if enabled is True, we listen to events from music players about
 		currently played music track, and we update our
 		status message accordinly'''
-		if not dbus_support.supported: # do nothing if we haven't D-Bus running
+		if not dbus_support.supported:
+			# do nothing if user doesn't have D-Bus bindings
 			return
 		if enabled:
 			if self._music_track_changed_signal is None:
