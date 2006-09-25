@@ -96,8 +96,8 @@ class Remote:
 
 
 class SignalObject(dbus.service.Object):
-	''' Local object definition for /org/gajim/dbus/RemoteObject. This doc must 
-	not be visible, because the clients can access only the remote object. '''
+	''' Local object definition for /org/gajim/dbus/RemoteObject.
+	(This docstring is not be visible, because the clients can access only the remote object.)'''
 
 	def __init__(self, service):
 		self.first_show = True
