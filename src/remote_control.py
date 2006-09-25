@@ -1,19 +1,9 @@
 ##	remote_control.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Dimitur Kirov <dkirov@gmail.com>
-##	- Andrew Sayman <lorien420@myrealbox.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -38,50 +28,28 @@ if dbus_support.supported:
 	import dbus
 	if dbus_support:
 		import dbus.service
-		import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it 
+		import dbus.glib
 
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 SERVICE = 'org.gajim.dbus'
 
-# type mapping, it is different in each version
-ident = lambda e: e
-if dbus_support.version[1] >= 43:
-	# in most cases it is a utf-8 string
-	DBUS_STRING = dbus.String
+# type mapping
 
-	# general type (for use in dicts, 
-	#   where all values should have the same type)
-	DBUS_VARIANT = dbus.Variant
-	DBUS_BOOLEAN = dbus.Boolean
-	DBUS_DOUBLE = dbus.Double
-	DBUS_INT32 = dbus.Int32
-	# dictionary with string key and binary value
-	DBUS_DICT_SV = lambda : dbus.Dictionary({}, signature="sv")
-	# dictionary with string key and value
-	DBUS_DICT_SS = lambda : dbus.Dictionary({}, signature="ss")
-	# empty type
-	DBUS_NONE = lambda : dbus.Variant(0)
+# in most cases it is a utf-8 string
+DBUS_STRING = dbus.String
 
-else: # 33, 35, 36
-	DBUS_DICT_SV = lambda : {}
-	DBUS_DICT_SS = lambda : {}
-	DBUS_STRING = lambda e: unicode(e).encode('utf-8')
-	# this is the only way to return lists and dicts of mixed types
-	DBUS_VARIANT = lambda e: (isinstance(e, (str, unicode)) and \
-								DBUS_STRING(e)) or repr(e)
-	DBUS_NONE = lambda : ''
-	if dbus_support.version[1] >= 41: # 35, 36
-		DBUS_BOOLEAN = dbus.Boolean
-		DBUS_DOUBLE = dbus.Double
-		DBUS_INT32 = dbus.Int32
-	else: # 33
-		DBUS_BOOLEAN = ident
-		DBUS_INT32 = ident
-		DBUS_DOUBLE = ident
-
-STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-	'invisible']
+# general type (for use in dicts, where all values should have the same type)
+DBUS_VARIANT = dbus.Variant
+DBUS_BOOLEAN = dbus.Boolean
+DBUS_DOUBLE = dbus.Double
+DBUS_INT32 = dbus.Int32
+# dictionary with string key and binary value
+DBUS_DICT_SV = lambda : dbus.Dictionary({}, signature="sv")
+# dictionary with string key and value
+DBUS_DICT_SS = lambda : dbus.Dictionary({}, signature="ss")
+# empty type
+DBUS_NONE = lambda : dbus.Variant(0)
 
 def get_dbus_struct(obj):
 	''' recursively go through all the items and replace
@@ -140,43 +108,17 @@ class SignalObject(DbusPrototype):
 		self.vcard_account = None
 
 		# register our dbus API
-		if dbus_support.version[1] >= 41:
-			DbusPrototype.__init__(self, service, OBJ_PATH)
-		elif dbus_support.version[1] >= 30:
-			DbusPrototype.__init__(self, OBJ_PATH, service)
-		else:
-			DbusPrototype.__init__(self, OBJ_PATH, service, 
-			[	self.toggle_roster_appearance,
-				self.show_next_unread,
-				self.list_contacts,
-				self.list_accounts,
-				self.account_info,
-				self.change_status,
-				self.open_chat,
-				self.send_message,
- 				self.send_single_message,
-				self.contact_info,
-				self.send_file,
-				self.prefs_list,
-				self.prefs_store,
-				self.prefs_del,
-				self.prefs_put,
-				self.add_contact,
-				self.remove_contact,
-				self.get_status,
-				self.get_status_message,
-				self.start_chat,
-				self.send_xml,
-			])
+		DbusPrototype.__init__(self, service, OBJ_PATH)
 
 	def raise_signal(self, signal, arg):
-		''' raise a signal, with a single string message '''
+		'''raise a signal, with a single string message'''
 		from dbus import dbus_bindings
 		message = dbus_bindings.Signal(OBJ_PATH, INTERFACE, signal)
 		i = message.get_iter(True)
 		i.append(arg)
 		self._connection.send(message)
 
+	@dbus.service.method(INTERFACE)
 	def get_status(self, *args):
 		'''get_status(account = None)
 		returns status (show to be exact) which is the global one
@@ -188,8 +130,9 @@ class SignalObject(DbusPrototype):
 			return helpers.get_global_show()
 		# return show for the given account
 		index = gajim.connections[account].connected
-		return DBUS_STRING(STATUS_LIST[index])
+		return DBUS_STRING(gajim.SHOW_LIST[index])
 
+	@dbus.service.method(INTERFACE)
 	def get_status_message(self, *args):
 		'''get_status(account = None)
 		returns status which is the global one
@@ -203,7 +146,7 @@ class SignalObject(DbusPrototype):
 		status = gajim.connections[account].status
 		return DBUS_STRING(status)
 
-
+	@dbus.service.method(INTERFACE)
 	def get_account_and_contact(self, account, jid):
 		''' get the account (if not given) and contact instance from jid'''
 		connected_account = None
@@ -231,6 +174,7 @@ class SignalObject(DbusPrototype):
 
 		return connected_account, contact
 
+	@dbus.service.method(INTERFACE)
 	def send_file(self, *args):
 		'''send_file(file_path, jid, account=None) 
 		send file, located at 'file_path' to 'jid', using account 
@@ -249,7 +193,7 @@ class SignalObject(DbusPrototype):
 		return False
 
 	def _send_message(self, jid, message, keyID, account, type = 'chat', subject = None):
-		''' can be called from send_chat_message (default when send_message)
+		'''can be called from send_chat_message (default when send_message)
 		or send_single_message'''
 		if not jid or not message:
 			return None # or raise error
@@ -264,22 +208,25 @@ class SignalObject(DbusPrototype):
 			return True
 		return False
 
+	@dbus.service.method(INTERFACE)
 	def send_chat_message(self, *args):
-		''' send_message(jid, message, keyID=None, account=None)
+		'''send_message(jid, message, keyID=None, account=None)
 		send chat 'message' to 'jid', using account (optional) 'account'.
 		if keyID is specified, encrypt the message with the pgp key '''
 		jid, message, keyID, account = self._get_real_arguments(args, 4)
 		jid = self._get_real_jid(jid, account)
 		return self._send_message(jid, message, keyID, account)
 
+	@dbus.service.method(INTERFACE)
 	def send_single_message(self, *args):
-		''' send_single_message(jid, subject, message, keyID=None, account=None)
+		'''send_single_message(jid, subject, message, keyID=None, account=None)
 		send single 'message' to 'jid', using account (optional) 'account'.
 		if keyID is specified, encrypt the message with the pgp key '''
 		jid, subject, message, keyID, account = self._get_real_arguments(args, 5)
 		jid = self._get_real_jid(jid, account)
 		return self._send_message(jid, message, keyID, account, type, subject)
 
+	@dbus.service.method(INTERFACE)
 	def open_chat(self, *args):
 		''' start_chat(jid, account=None) -> shows the tabbed window for new 
 		message to 'jid', using account(optional) 'account' '''
@@ -327,6 +274,7 @@ class SignalObject(DbusPrototype):
 			return True
 		return False
 
+	@dbus.service.method(INTERFACE)
 	def change_status(self, *args, **keywords):
 		''' change_status(status, message, account). account is optional -
 		if not specified status is changed for all accounts. '''
@@ -347,13 +295,15 @@ class SignalObject(DbusPrototype):
 					status, message)
 		return None
 
+	@dbus.service.method(INTERFACE)
 	def show_next_unread(self, *args):
-		''' Show the window(s) with next waiting messages in tabbed/group chats. '''
+		'''Show the window(s) with next waiting messages in tabbed/group chats. '''
 		if gajim.events.get_nb_events():
 			gajim.interface.systray.handle_first_event()
 
+	@dbus.service.method(INTERFACE)
 	def contact_info(self, *args):
-		''' get vcard info for a contact. Return cached value of the vcard.
+		'''get vcard info for a contact. Return cached value of the vcard.
 		'''
 		[jid] = self._get_real_arguments(args, 1)
 		if not isinstance(jid, unicode):
@@ -370,8 +320,9 @@ class SignalObject(DbusPrototype):
 		# return empty dict
 		return DBUS_DICT_SV()
 
+	@dbus.service.method(INTERFACE)
 	def list_accounts(self, *args):
-		''' list register accounts '''
+		'''list register accounts'''
 		result = gajim.contacts.get_accounts()
 		if result and len(result) > 0:
 			result_array = []
@@ -380,8 +331,9 @@ class SignalObject(DbusPrototype):
 			return result_array
 		return None
 
+	@dbus.service.method(INTERFACE)
 	def account_info(self, *args):
-		''' show info on account: resource, jid, nick, prio, message '''
+		'''show info on account: resource, jid, nick, prio, message'''
 		[for_account] = self._get_real_arguments(args, 1)
 		if not gajim.connections.has_key(for_account):
 			# account is invalid
@@ -389,19 +341,20 @@ class SignalObject(DbusPrototype):
 		account = gajim.connections[for_account]
 		result = DBUS_DICT_SS()
 		index = account.connected
-		result['status'] = DBUS_STRING(STATUS_LIST[index])
+		result['status'] = DBUS_STRING(gajim.SHOW_LIST[index])
 		result['name'] = DBUS_STRING(account.name)
 		result['jid'] = DBUS_STRING(gajim.get_jid_from_account(account.name))
 		result['message'] = DBUS_STRING(account.status)
 		result['priority'] = DBUS_STRING(unicode(gajim.config.get_per('accounts', 
-								account.name, 'priority')))
+			account.name, 'priority')))
 		result['resource'] = DBUS_STRING(unicode(gajim.config.get_per('accounts', 
-								account.name, 'resource')))
+			account.name, 'resource')))
 		return result
 
+	@dbus.service.method(INTERFACE)
 	def list_contacts(self, *args):
-		''' list all contacts in the roster. If the first argument is specified,
-		then return the contacts for the specified account '''
+		'''list all contacts in the roster. If the first argument is specified,
+		then return the contacts for the specified account'''
 		[for_account] = self._get_real_arguments(args, 1)
 		result = []
 		accounts = gajim.contacts.get_accounts()
@@ -423,6 +376,7 @@ class SignalObject(DbusPrototype):
 			return None
 		return result
 
+	@dbus.service.method(INTERFACE)
 	def toggle_roster_appearance(self, *args):
 		''' shows/hides the roster window '''
 		win = gajim.interface.roster.window
@@ -436,6 +390,7 @@ class SignalObject(DbusPrototype):
 			else:
 				win.window.focus(long(time()))
 
+	@dbus.service.method(INTERFACE)
 	def prefs_list(self, *args):
 		prefs_dict = DBUS_DICT_SS()
 		def get_prefs(data, name, path, value):
@@ -450,6 +405,7 @@ class SignalObject(DbusPrototype):
 		gajim.config.foreach(get_prefs)
 		return prefs_dict
 
+	@dbus.service.method(INTERFACE)
 	def prefs_store(self, *args):
 		try:
 			gajim.interface.save_config()
@@ -457,6 +413,7 @@ class SignalObject(DbusPrototype):
 			return False
 		return True
 
+	@dbus.service.method(INTERFACE)
 	def prefs_del(self, *args):
 		[key] = self._get_real_arguments(args, 1)
 		if not key:
@@ -470,6 +427,7 @@ class SignalObject(DbusPrototype):
 			gajim.config.del_per(key_path[0], key_path[1], key_path[2])
 		return True
 
+	@dbus.service.method(INTERFACE)
 	def prefs_put(self, *args):
 		[key] = self._get_real_arguments(args, 1)
 		if not key:
@@ -483,6 +441,7 @@ class SignalObject(DbusPrototype):
 		gajim.config.set_per(key_path[0], key_path[1], subname, value)
 		return True
 
+	@dbus.service.method(INTERFACE)
 	def add_contact(self, *args):
 		[jid, account] = self._get_real_arguments(args, 2)
 		if account:
@@ -498,6 +457,7 @@ class SignalObject(DbusPrototype):
 			AddNewContactWindow(account = None, jid = jid)
 		return True
 
+	@dbus.service.method(INTERFACE)
 	def remove_contact(self, *args):
 		[jid, account] = self._get_real_arguments(args, 2)
 		jid = self._get_real_jid(jid, account)
@@ -592,9 +552,11 @@ class SignalObject(DbusPrototype):
 		contact_dict['resources'] = DBUS_VARIANT(contact_dict['resources'])
 		return contact_dict
 
+	@dbus.service.method(INTERFACE)
 	def get_unread_msgs_number(self, *args):
 		return str(gajim.events.get_nb_events)
 
+	@dbus.service.method(INTERFACE)
 	def start_chat(self, *args):
 		[account] = self._get_real_arguments(args, 1)
 		if not account:
@@ -603,6 +565,7 @@ class SignalObject(DbusPrototype):
 		NewChatDialog(account)
 		return True
 
+	@dbus.service.method(INTERFACE)
 	def send_xml(self, *args):
 		xml, account = self._get_real_arguments(args, 2)
 		if account:
@@ -610,36 +573,3 @@ class SignalObject(DbusPrototype):
 		else:
 			for acc in gajim.contacts.get_accounts():
 				gajim.connections[acc].send_stanza(xml)
-
-	if dbus_support.version[1] >= 30 and dbus_support.version[1] <= 40:
-		method = dbus.method
-		signal = dbus.signal
-	elif dbus_support.version[1] >= 41:
-		method = dbus.service.method
-		signal = dbus.service.signal
-
-	# prevent using decorators, because they are not supported 
-	# on python < 2.4
-	# FIXME: use decorators when python2.3 (and dbus 0.23) is OOOOOOLD
-	toggle_roster_appearance = method(INTERFACE)(toggle_roster_appearance)
-	list_contacts = method(INTERFACE)(list_contacts)
-	list_accounts = method(INTERFACE)(list_accounts)
-	show_next_unread = method(INTERFACE)(show_next_unread)
-	change_status = method(INTERFACE)(change_status)
-	open_chat = method(INTERFACE)(open_chat)
-	contact_info = method(INTERFACE)(contact_info)
-	send_message = method(INTERFACE)(send_chat_message)
-	send_single_message = method(INTERFACE)(send_single_message)
-	send_file = method(INTERFACE)(send_file)
-	prefs_list = method(INTERFACE)(prefs_list)
-	prefs_put = method(INTERFACE)(prefs_put)
-	prefs_del = method(INTERFACE)(prefs_del)
-	prefs_store = method(INTERFACE)(prefs_store)
-	remove_contact = method(INTERFACE)(remove_contact)
-	add_contact = method(INTERFACE)(add_contact)
-	get_status = method(INTERFACE)(get_status)
-	get_status_message = method(INTERFACE)(get_status_message)
-	account_info = method(INTERFACE)(account_info)
-	get_unread_msgs_number = method(INTERFACE)(get_unread_msgs_number)
-	start_chat = method(INTERFACE)(start_chat)
-	send_xml = method(INTERFACE)(send_xml)
