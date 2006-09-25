@@ -124,8 +124,6 @@ class Systray:
 
 		# We need our own set of status icons, let's make 'em!
 		iconset = gajim.config.get('iconset')
-		if not iconset:
-			iconset = 'dcraven'
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = gajim.interface.roster.load_iconset(path)
 

@@ -720,8 +720,6 @@ class RosterWindow:
 		new_chat_menuitem = self.xml.get_widget('new_chat_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		iconset = gajim.config.get('iconset') 
-		if not iconset: 
-			iconset = DEFAULT_ICONSET 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16') 
 		state_images = self.load_iconset(path) 
 		if state_images.has_key('muc_active'): 
@@ -1393,8 +1391,6 @@ class RosterWindow:
 			rename_menuitem.set_image(img)
 
 		iconset = gajim.config.get('iconset')
-		if not iconset:
-			iconset = DEFAULT_ICONSET
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = self.load_iconset(path)
 		if state_images.has_key('muc_active'):
@@ -1419,8 +1415,6 @@ class RosterWindow:
 			start_chat_menuitem.set_submenu(sub_menu)
 
 			iconset = gajim.config.get('iconset')
-			if not iconset:
-				iconset = DEFAULT_ICONSET
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			for c in contacts:
 				# icon MUST be different instance for every item
@@ -1798,8 +1792,6 @@ class RosterWindow:
 		# we have to create our own set of icons for the menu
 		# using self.jabber_status_images is poopoo
 		iconset = gajim.config.get('iconset')
-		if not iconset:
-			iconset = DEFAULT_ICONSET
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = self.load_iconset(path)
 
@@ -1880,8 +1872,6 @@ class RosterWindow:
 		else:
 			menu = gtk.Menu()
 			iconset = gajim.config.get('iconset')
-			if not iconset:
-				iconset = DEFAULT_ICONSET
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			accounts = [] # Put accounts in a list to sort them
 			for account in gajim.connections:
