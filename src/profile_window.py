@@ -374,5 +374,4 @@ class ProfileWindow:
 			self.update_progressbar)
 
 	def on_close_button_clicked(self, widget):
-		self.progressbar.destroy()
 		self.window.destroy()
