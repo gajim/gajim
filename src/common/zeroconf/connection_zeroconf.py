@@ -53,6 +53,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	'''Connection class'''
 	def __init__(self, name):
 		ConnectionHandlersZeroconf.__init__(self)
+		# system username
+		self.username = None
 		self.name = name
 		self.connected = 0 # offline
 		self.connection = None
@@ -102,6 +104,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def get_config_values_or_default(self):
 		''' get name, host, port from config, or 
 		create zeroconf account with default values'''
+		if not self.username:
+			self.username = unicode(getpass.getuser())
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'name', self.username)
+		else:
+			self.username = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'name')
 		if not gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'name'):
 			print 'Creating zeroconf account'
 			gajim.config.add_per('accounts', gajim.LOCAL_ACC)
@@ -109,9 +116,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'no_log_for', '')
 			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'password', 'zeroconf')
 			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'sync_with_global_status', True)
-
-			self.username = unicode(getpass.getuser())
-			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'name', self.username)
+			
 			#XXX make sure host is US-ASCII
 			self.host = unicode(socket.gethostname())
 			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'hostname', self.host)
@@ -119,7 +124,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'custom_port', self.port)
 			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'is_zeroconf', True)
 		else:
-			self.username = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'name')
+			
 			self.host = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'hostname')
 			self.port = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'custom_port')
 			self.autoconnect = gajim.config.get_per('accounts', gajim.LOCAL_ACC, 'autoconnect')
@@ -200,9 +205,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0))
 
 	def connect(self, data = None, show = 'online', msg = ''):
-		print 'CONNECT'
 		self.get_config_values_or_default()
-		print 'self.username', self.username
 
 		self.zeroconf.txt['status'] = show
 		self.zeroconf.txt['msg'] = msg
