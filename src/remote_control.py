@@ -86,12 +86,8 @@ class Remote:
 		self.signal_object = None
 		session_bus = dbus_support.session_bus.SessionBus()
 
-		if dbus_support.version[1] >= 41:
-			service = dbus.service.BusName(SERVICE, bus=session_bus)
-			self.signal_object = SignalObject(service)
-		elif dbus_support.version[1] <= 40 and dbus_support.version[1] >= 20:
-			service=dbus.Service(SERVICE, session_bus)
-			self.signal_object = SignalObject(service)
+		service = dbus.service.BusName(SERVICE, bus=session_bus)
+		self.signal_object = SignalObject(service)
 
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
@@ -99,7 +95,7 @@ class Remote:
 				get_dbus_struct(arg))
 
 
-class SignalObject(DbusPrototype):
+class SignalObject(dbus.service.Object):
 	''' Local object definition for /org/gajim/dbus/RemoteObject. This doc must 
 	not be visible, because the clients can access only the remote object. '''
 
@@ -108,7 +104,7 @@ class SignalObject(DbusPrototype):
 		self.vcard_account = None
 
 		# register our dbus API
-		DbusPrototype.__init__(self, service, OBJ_PATH)
+		dbus.service.Object.__init__(self, service, OBJ_PATH)
 
 	def raise_signal(self, signal, arg):
 		'''raise a signal, with a single string message'''
