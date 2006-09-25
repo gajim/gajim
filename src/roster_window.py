@@ -3142,7 +3142,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		'''initialise jabber_state_images dict'''
 		iconset = gajim.config.get('iconset')
 		if iconset:
-			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
+			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			if not os.path.exists(path):
 				iconset = DEFAULT_ICONSET
 		else: 
