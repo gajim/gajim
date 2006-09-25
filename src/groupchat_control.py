@@ -858,8 +858,7 @@ class GroupchatControl(ChatControlBase):
 			nick_jid = nick
 			if jid:
 				# delete ressource
-				jid_splitted = jid.split('/')
-				simple_jid = jid_splitted[0]
+				simple_jid = gajim.get_jid_without_resource(jid)
 				nick_jid += ' (%s)' % simple_jid
 			if show == 'offline' and print_status in ('all', 'in_and_out'):
 				st = _('%s has left') % nick_jid
