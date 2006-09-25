@@ -372,13 +372,13 @@ class GroupchatControl(ChatControlBase):
 		elif chatstate:
 			if chatstate == 'active' or (current_tab and has_focus):
 				self.attention_flag = False
-				color = gajim.config.get_per('themes', theme,
-								'state_active_color')
 			elif chatstate == 'newmsg' and (not has_focus or not current_tab) and\
 					not self.attention_flag:
 				color = gajim.config.get_per('themes', theme, 'state_muc_msg_color')
 		if color:
 			color = gtk.gdk.colormap_get_system().alloc_color(color)
+		else:
+			color = self.parent_win.notebook.style.fg[gtk.STATE_ACTIVE]
 
 		label_str = self.name
 		return (label_str, color)

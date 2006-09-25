@@ -1275,9 +1275,6 @@ class ChatControl(ChatControlBase):
 			elif chatstate == 'paused':
 				color = gajim.config.get_per('themes', theme,
 						'state_paused_color')
-			else:
-				color = gajim.config.get_per('themes', theme,
-						'state_active_color')
 		if color:
 			# We set the color for when it's the current tab or not
 			color = gtk.gdk.colormap_get_system().alloc_color(color)
@@ -1286,6 +1283,9 @@ class ChatControl(ChatControlBase):
 			if chatstate in ('inactive', 'gone') and\
 			self.parent_win.get_active_control() != self:
 				color = self.lighten_color(color)
+		else: # active or no chatstate
+			color = self.parent_win.notebook.style.fg[gtk.STATE_ACTIVE]
+		
 
 		name = self.contact.get_shown_name()
 		if self.resource:
