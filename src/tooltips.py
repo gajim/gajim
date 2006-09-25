@@ -408,13 +408,6 @@ class GCTooltip(BaseTooltip):
 		while properties:
 			property = properties.pop(0)
 			vcard_current_row += 1
-			if vcard_current_row == 3 and not status_message_present or\
-				vcard_current_row == 4 and status_message_present:
-			# horizontal separator after status, if something after
-				h_separator = gtk.HSeparator()
-				vcard_table.attach(h_separator, 1, 3, vcard_current_row, vcard_current_row + 1,\
-							 gtk.FILL, vertical_fill, 0)
-				vcard_current_row += 1
 			vertical_fill = gtk.FILL
 			if not properties:
 				vertical_fill |= gtk.EXPAND
@@ -564,9 +557,14 @@ class RosterTooltip(NotificationAreaTooltip):
 					text = _('Last status on %s')
 				else:
 					text = _('Since %s')
-
-				# time.strftime returns locale encoded string
-				local_time = time.strftime('%c', contact.last_status_time)
+				
+				if time.strftime('%j', time.localtime())== \
+						time.strftime('%j', contact.last_status_time):
+				# it's today, show only the locale hour representation
+					local_time = time.strftime('%X', contact.last_status_time)	
+				else:
+					# time.strftime returns locale encoded string
+					local_time = time.strftime('%c', contact.last_status_time)
 				local_time = local_time.decode(locale.getpreferredencoding()) 
 				text = text % local_time 
 				properties.append(('<span style="italic">%s</span>' % text, None))
