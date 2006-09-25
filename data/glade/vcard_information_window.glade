@@ -2555,43 +2555,56 @@
       </child>
 
       <child>
-	<widget class="GtkProgressBar" id="progressbar">
+	<widget class="GtkHBox" id="hbox4">
 	  <property name="visible">True</property>
-	  <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
-	  <property name="fraction">0</property>
-	  <property name="pulse_step">0.10000000149</property>
-	  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">False</property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkHButtonBox" id="hbuttonbox1">
-	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkButton" id="close_button">
+	    <widget class="GtkProgressBar" id="progressbar">
 	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-close</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Mon, 25 Sep 2006 05:08:55 GMT"/>
+	      <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
+	      <property name="fraction">0</property>
+	      <property name="pulse_step">0.10000000149</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkHButtonBox" id="hbuttonbox1">
+	      <property name="visible">True</property>
+	      <property name="layout_style">GTK_BUTTONBOX_END</property>
+	      <property name="spacing">0</property>
+
+	      <child>
+		<widget class="GtkButton" id="close_button">
+		  <property name="visible">True</property>
+		  <property name="can_default">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label">gtk-close</property>
+		  <property name="use_stock">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Mon, 25 Sep 2006 05:08:55 GMT"/>
+		</widget>
+	      </child>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
+	    </packing>
 	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">False</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
 	</packing>
       </child>
     </widget>
