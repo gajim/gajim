@@ -1742,7 +1742,7 @@ class Interface:
 				w = self.msg_win_mgr.get_window(jid, account)
 			else:
 				contact = gajim.contacts.get_contact(account, jid, resource)
-				if isinstance(contact, list):
+				if not contact or isinstance(contact, list):
 					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 				self.roster.new_chat(contact, account)
 				w = self.msg_win_mgr.get_window(fjid, account)
