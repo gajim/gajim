@@ -560,6 +560,7 @@ class ConversationTextview:
 			img.show()
 			#add with possible animation
 			self.tv.add_child_at_anchor(img, anchor)
+		#FIXME: one day, somehow sync with regexp in gajim.py
 		elif special_text.startswith('http://') or \
 			special_text.startswith('www.') or \
 			special_text.startswith('ftp://') or \
