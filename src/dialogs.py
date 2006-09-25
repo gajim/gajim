@@ -1729,10 +1729,13 @@ class XMLConsoleWindow:
 			self.input_textview.grab_focus()
 
 class PrivacyListWindow:
-	def __init__(self, account, privacy_list, list_type):
-		'''list_type can be 0 if list is created or 1 if it id edited'''
+	'''Window that is used for creating NEW or EDITING already there privacy
+	lists'''
+	def __init__(self, account, privacy_list_name, action):
+		'''action is 'edit' or 'new' depending on if we create a new priv list
+		or edit an already existing one'''
 		self.account = account
-		self.privacy_list = privacy_list
+		self.privacy_list_name = privacy_list_name
 
 		# Dicts and Default Values
 		self.active_rule = ''
@@ -1744,7 +1747,7 @@ class PrivacyListWindow:
 		self.allow_deny = 'allow'
 
 		# Connect to glade
-		self.xml = gtkgui_helpers.get_glade('privacy_list_edit_window.glade')
+		self.xml = gtkgui_helpers.get_glade('privacy_list_window.glade')
 		self.window = self.xml.get_widget('privacy_list_edit_window')
 
 		# Add Widgets
@@ -1766,10 +1769,10 @@ class PrivacyListWindow:
 		'privacy_list_default_checkbutton']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
-		# Send translations
+
 		self.privacy_lists_title_label.set_label(
 			_('Privacy List <b><i>%s</i></b>') % \
-			gtkgui_helpers.escape_for_pango_markup(self.privacy_list))
+			gtkgui_helpers.escape_for_pango_markup(self.privacy_list_name))
 
 		if len(gajim.connections) > 1:
 			title = _('Privacy List for %s') % self.account
@@ -1781,8 +1784,7 @@ class PrivacyListWindow:
 		self.privacy_list_active_checkbutton.set_sensitive(False)
 		self.privacy_list_default_checkbutton.set_sensitive(False)
 
-		# Check if list is created (0) or edited (1)
-		if list_type == 1:
+		if action == 'edit':
 			self.refresh_rules()
 
 		count = 0
@@ -1803,16 +1805,16 @@ class PrivacyListWindow:
 	def on_privacy_list_edit_window_destroy(self, widget):
 		'''close window'''
 		if gajim.interface.instances[self.account].has_key('privacy_list_%s' % \
-		self.privacy_list):
+		self.privacy_list_name):
 			del gajim.interface.instances[self.account]['privacy_list_%s' % \
-				self.privacy_list]
+				self.privacy_list_name]
 
 	def check_active_default(self, a_d_dict):
-		if a_d_dict['active'] == self.privacy_list:
+		if a_d_dict['active'] == self.privacy_list_name:
 			self.privacy_list_active_checkbutton.set_active(True)
 		else:
 			self.privacy_list_active_checkbutton.set_active(False)
-		if a_d_dict['default'] == self.privacy_list:
+		if a_d_dict['default'] == self.privacy_list_name:
 			self.privacy_list_default_checkbutton.set_active(True)
 		else:
 			self.privacy_list_default_checkbutton.set_active(False)		
@@ -1849,7 +1851,7 @@ class PrivacyListWindow:
 		gajim.connections[self.account].get_active_default_lists()
 
 	def refresh_rules(self):
-		gajim.connections[self.account].get_privacy_list(self.privacy_list)
+		gajim.connections[self.account].get_privacy_list(self.privacy_list_name)
 
 	def on_delete_rule_button_clicked(self, widget):
 		tags = []
@@ -1858,7 +1860,7 @@ class PrivacyListWindow:
 				self.list_of_rules_combobox.get_active_text().decode('utf-8'):
 				tags.append(self.global_rules[rule])
 		gajim.connections[self.account].set_privacy_list(
-			self.privacy_list, tags)
+			self.privacy_list_name, tags)
 		self.privacy_list_received(tags)
 		self.add_edit_vbox.hide()
 
@@ -1922,13 +1924,13 @@ class PrivacyListWindow:
 	
 	def on_privacy_list_active_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			gajim.connections[self.account].set_active_list(self.privacy_list)
+			gajim.connections[self.account].set_active_list(self.privacy_list_name)
 		else:
 			gajim.connections[self.account].set_active_list(None)
 
 	def on_privacy_list_default_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			gajim.connections[self.account].set_default_list(self.privacy_list)
+			gajim.connections[self.account].set_default_list(self.privacy_list_name)
 		else:
 			gajim.connections[self.account].set_default_list(None)
 
@@ -1998,7 +2000,7 @@ class PrivacyListWindow:
 			else:
 				tags.append(current_tags)
 
-		gajim.connections[self.account].set_privacy_list(self.privacy_list, tags)
+		gajim.connections[self.account].set_privacy_list(self.privacy_list_name, tags)
 		self.privacy_list_received(tags)
 		self.add_edit_vbox.hide()
 
@@ -2023,7 +2025,9 @@ class PrivacyListWindow:
 		self.add_edit_vbox.hide()
 
 class PrivacyListsWindow:
-# To do: UTF-8 ???????
+	'''Window that is the main window for Privacy Lists;
+	we can list there the privacy lists and ask to create a new one
+	or edit an already there one'''
 	def __init__(self, account):
 		self.account = account
 
@@ -2031,7 +2035,7 @@ class PrivacyListsWindow:
 
 		self.privacy_lists_save = []		
 
-		self.xml = gtkgui_helpers.get_glade('privacy_lists_first_window.glade')
+		self.xml = gtkgui_helpers.get_glade('privacy_lists_window.glade')
 
 		self.window = self.xml.get_widget('privacy_lists_first_window')
 		for widget_to_add in ['list_of_privacy_lists_combobox',
@@ -2091,7 +2095,7 @@ class PrivacyListsWindow:
 			self.list_of_privacy_lists_combobox.get_active()]
 		gajim.connections[self.account].del_privacy_list(active_list)
 		self.privacy_lists_save.remove(active_list)
-		self.privacy_lists_received({'lists':self.privacy_lists_save})
+		self.privacy_lists_received({'lists': self.privacy_lists_save})
 
 	def privacy_lists_received(self, lists):
 		if not lists:
@@ -2111,7 +2115,7 @@ class PrivacyListsWindow:
 				window.present()
 		else:
 			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
-				PrivacyListWindow(self.account, name, 0)
+				PrivacyListWindow(self.account, name, 'new')
 		self.new_privacy_list_entry.set_text('')
 
 	def on_privacy_lists_refresh_button_clicked(self, widget):
@@ -2126,7 +2130,7 @@ class PrivacyListsWindow:
 				window.present()
 		else:
 			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
-				PrivacyListWindow(self.account, name, 1)
+				PrivacyListWindow(self.account, name, 'edit')
 
 class InvitationReceivedDialog:
 	def __init__(self, account, room_jid, contact_jid, password = None, comment = None):
