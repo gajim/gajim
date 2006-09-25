@@ -55,9 +55,6 @@ C_EDITABLE, # cellrenderer text that holds name editable or not?
 C_SECPIXBUF, # secondary_pixbuf (holds avatar or padlock)
 ) = range(7)
 
-
-DEFAULT_ICONSET = 'dcraven'
-
 class RosterWindow:
 	'''Class for main window of gtkgui interface'''
 
@@ -3134,9 +3131,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if iconset:
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			if not os.path.exists(path):
-				iconset = DEFAULT_ICONSET
+				iconset = gajim.config.DEFAULT_ICONSET
 		else: 
-			iconset = DEFAULT_ICONSET
+			iconset = gajim.config.DEFAULT_ICONSET
 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
 		self.jabber_state_images['32'] = self.load_iconset(path)
