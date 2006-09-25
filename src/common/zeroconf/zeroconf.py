@@ -48,7 +48,7 @@ class Zeroconf:
 		self.remove_serviceCB = remove_serviceCB
 		self.name_conflictCB = name_conflictCB
 		
-		self.service_browsers = {}
+		self.service_browser = None
 		self.contacts = {}    # all current local contacts with data
 		self.entrygroup = None
 		self.connected = False
@@ -84,20 +84,15 @@ class Zeroconf:
 
 	def new_service_type(self, interface, protocol, stype, domain, flags):
 		# Are we already browsing this domain for this type? 
-		if self.service_browsers.has_key((interface, protocol, stype, domain)):
+		if self.service_browser:
 			return
 
-		# print "Browsing for services of type '%s' in domain '%s' on %i.%i ..." % (stype, domain, interface, protocol)
-
-		b = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
+		self.service_browser = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
 				self.server.ServiceBrowserNew(interface, protocol, \
 				stype, domain, dbus.UInt32(0))),avahi.DBUS_INTERFACE_SERVICE_BROWSER)
-		print 'b', dir(b), dir(self.server)
-		b.Free()
-		b.connect_to_signal('ItemNew', self.new_service_callback)
-		b.connect_to_signal('ItemRemove', self.remove_service_callback)
-		#~ b.Free()
-		self.service_browsers[(interface, protocol, stype, domain)] = b
+		#print 'b', dir(b), dir(self.server)
+		self.service_browser.connect_to_signal('ItemNew', self.new_service_callback)
+		self.service_browser.connect_to_signal('ItemRemove', self.remove_service_callback)
 
 	def new_domain_callback(self,interface, protocol, domain, flags):
 		if domain != "local":
