@@ -1803,11 +1803,15 @@ class AccountsWindow:
 			dialogs.ErrorDialog(_('Unread events'),
 				_('Read all pending events before removing this account.'))
 			return
-		if gajim.interface.instances[account].has_key('remove_account'):
-			gajim.interface.instances[account]['remove_account'].window.present()
+		if account == gajim.ZEROCONF_ACC_NAME:
+			w = self.xml.get_widget('enable_zeroconf_checkbutton')
+			w.set_active(False)
 		else:
-			gajim.interface.instances[account]['remove_account'] = \
-				RemoveAccountWindow(account)
+			if gajim.interface.instances[account].has_key('remove_account'):
+				gajim.interface.instances[account]['remove_account'].window.present()
+			else:
+				gajim.interface.instances[account]['remove_account'] = \
+					RemoveAccountWindow(account)
 
 	def on_modify_button_clicked(self, widget):
 		'''When modify button is clicked:
