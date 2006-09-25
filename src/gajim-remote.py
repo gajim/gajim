@@ -51,13 +51,10 @@ def send_error(error_message):
 
 try:
 	import dbus
-except:
-	raise exceptions.DbusNotSupported
-
-_version = getattr(dbus, 'version', (0, 20, 0))
-if _version[1] >= 41:
 	import dbus.service
 	import dbus.glib
+except:
+	raise exceptions.DbusNotSupported
 
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
@@ -320,14 +317,8 @@ class GajimRemote:
 		except:
 			raise exceptions.SessionBusNotPresent
 
-		if _version[1] >= 30:
-			obj = self.sbus.get_object(SERVICE, OBJ_PATH)
-			interface = dbus.Interface(obj, INTERFACE)
-		elif _version[1] < 30:
-			self.service = self.sbus.get_service(SERVICE)
-			interface = self.service.get_object(OBJ_PATH, INTERFACE)
-		else:
-			send_error(_('Unknown D-Bus version: %s') % _version[1])
+		obj = self.sbus.get_object(SERVICE, OBJ_PATH)
+		interface = dbus.Interface(obj, INTERFACE)
 
 		# get the function asked
 		self.method = interface.__getattr__(self.command)
@@ -447,10 +438,7 @@ class GajimRemote:
 		''' calls self.method with arguments from sys.argv[2:] '''
 		args = sys.argv[2:]
 		args = [i.decode(PREFERRED_ENCODING) for i in sys.argv[2:]]
-		if _version[1] >= 41:
-			args = [dbus.String(i) for i in args]
-		else:
-			args = [i.encode('UTF-8') for i in sys.argv[2:]]
+		args = [dbus.String(i) for i in args]
 		try:
 			res = self.method(*args)
 			return res
