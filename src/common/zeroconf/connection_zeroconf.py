@@ -88,9 +88,16 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.retrycount = 0
 		self.jids_for_auto_auth = [] # list of jid to auto-authorize
 		self.get_config_values_or_default()
-		self.zeroconf = zeroconf.Zeroconf(self._on_new_service, self._on_remove_service, self.username, self.host, self.port)
+		self.zeroconf = zeroconf.Zeroconf(self._on_new_service,
+			self._on_remove_service, self._on_name_conflictCB, self.username,
+			self.host, self.port)
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.vcard_supported = False
+
+	def _on_name_conflictCB(self, alt_name):
+		self.disconnect()
+		self.dispatch('STATUS', 'offline')
+		self.dispatch('ZC_NAME_CONFLICT', alt_name)
 
 	def get_config_values_or_default(self):
 		''' get name, host, port from config, or 
@@ -185,7 +192,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.roster.setItem(jid)
 		self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
 		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
-		
 	
 	def _on_remove_service(self,jid):
 		self.roster.delItem(jid)
@@ -194,7 +200,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0))
 
 	def connect(self, data = None, show = 'online', msg = ''):
+		print 'CONNECT'
 		self.get_config_values_or_default()
+		print 'self.username', self.username
 
 		self.zeroconf.txt['status'] = show
 		self.zeroconf.txt['msg'] = msg
@@ -206,6 +214,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.zeroconf.host = self.host
 		self.zeroconf.port = self.port
 
+		print 'self.connection', self.connection
 		if self.connection:
 			return self.connection, ''
 		

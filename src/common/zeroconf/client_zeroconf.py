@@ -129,7 +129,7 @@ class P2PClient(IdleObject):
 				return False
 			self.send(message)
 		else:
-			messagequeue.append(message)
+			self.messagequeue.append(message)
 		return True
 	
 	def on_connect(self, conn):
@@ -227,6 +227,7 @@ class P2PConnection(IdleObject, PlugIn):
 	''' class for sending file to socket over socks5 '''
 	def __init__(self, sock_hash, _sock, host = None, port = None, caller = None, on_connect = None):
 		IdleObject.__init__(self)
+		self._owner = None
 		PlugIn.__init__(self)
 		self.DBG_LINE='socket'
 		self.sendqueue = []

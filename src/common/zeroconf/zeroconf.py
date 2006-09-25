@@ -33,17 +33,20 @@ C_NAME, C_DOMAIN, C_INTERFACE, C_PROTOCOL, C_HOST, \
 C_ADDRESS, C_PORT, C_BARE_NAME, C_TXT = range(9)
 
 class Zeroconf:
-	def __init__(self, new_serviceCB, remove_serviceCB, name, host, port):
+	def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB, name, host, port):
+		self.server = None
 		self.domain = None   # specific domain to browse
 		self.stype = '_presence._tcp'	
 		self.port = port  # listening port that gets announced	
 		self.username = name
 		self.host = host
-		self.name = self.username+'@'+ self.host # service name
 		self.txt = {}		# service data
 		
+		#XXX these CBs should be set to None when we destroy the object 
+		# (go offline), because they create a circular reference 
 		self.new_serviceCB = new_serviceCB
 		self.remove_serviceCB = remove_serviceCB
+		self.name_conflictCB = name_conflictCB
 		
 		self.service_browsers = {}
 		self.contacts = {}    # all current local contacts with data
@@ -54,13 +57,14 @@ class Zeroconf:
 
 
 	## handlers for dbus callbacks
-
-	# error handler - maybe replace with gui version/gajim facilities
 	def print_error_callback(self, err):
-		print "Error:", str(err)
+		# error handler - maybe replace with gui version/gajim facilities
+		gajim.log.debug(str(err))
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
-		# print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
+		print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
+		if not self.connected:
+			return
 		
 		#synchronous resolving
 		self.server.ResolveService( int(interface), int(protocol), name, stype, \
@@ -69,6 +73,8 @@ class Zeroconf:
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		# print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
+		if not self.connected:
+			return
 		if name != self.name:
 			for key in self.contacts.keys():
 				if self.contacts[key][C_BARE_NAME] == name:
@@ -86,9 +92,11 @@ class Zeroconf:
 		b = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
 				self.server.ServiceBrowserNew(interface, protocol, \
 				stype, domain, dbus.UInt32(0))),avahi.DBUS_INTERFACE_SERVICE_BROWSER)
+		print 'b', dir(b), dir(self.server)
+		b.Free()
 		b.connect_to_signal('ItemNew', self.new_service_callback)
 		b.connect_to_signal('ItemRemove', self.remove_service_callback)
-
+		#~ b.Free()
 		self.service_browsers[(interface, protocol, stype, domain)] = b
 
 	def new_domain_callback(self,interface, protocol, domain, flags):
@@ -106,8 +114,10 @@ class Zeroconf:
 		return items
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
-		# print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
+		print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
 		# print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, avahi.txt_array_to_string_array(txt))
+		if not self.connected:
+			return
 		bare_name = name
 		if name.find('@') == -1:
 			name = name + '@' + name
@@ -129,32 +139,35 @@ class Zeroconf:
 	def service_resolved_all_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
 		# print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
 		# print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
+		if not self.connected:
+			return
 		bare_name = name
 		if name.find('@') == -1:
 			name = name + '@' + name
 		self.contacts[name] = (name, domain, interface, protocol, host, address, port, bare_name, txt)
 
 	def service_added_callback(self):
-		# print 'Service successfully added'
+		print 'Service successfully added'
 		pass
 
 	def service_committed_callback(self):
-		# print 'Service successfully committed'
+		print 'Service successfully committed'
 		pass
 
 	def service_updated_callback(self):
-		# print 'Service successfully updated'
+		print 'Service successfully updated'
 		pass
 
 	def service_add_fail_callback(self, err):
-		print 'Error while adding service:', str(err)
-		old_name = self.name
-		self.name = self.server.GetAlternativeServiceName(self.name)
-		self.create_service()
-		if self.invalid_self_contact.has_key(old_name):
-			self.contacts[old_name] = self.invalid_self_contact[old_name]
-			self.new_serviceCB(old_name)
-			del self.invalid_self_contact[old_name]
+		gajim.log.debug('Error while adding service. %s' % str(err))
+		alternative_name = self.server.GetAlternativeServiceName(self.username)
+		self.disconnect()
+		self.name_conflictCB(alternative_name)
+		#~ self.create_service()
+		#~ if self.invalid_self_contact.has_key(old_name):
+			#~ self.contacts[old_name] = self.invalid_self_contact[old_name]
+			#~ self.new_serviceCB(old_name)
+			#~ del self.invalid_self_contact[old_name]
 
 	def server_state_changed_callback(self, state, error):
 		print 'server.state %s' % state
@@ -162,7 +175,8 @@ class Zeroconf:
 			self.create_service()
 		elif state == avahi.SERVER_COLLISION:
 			self.entrygroup.Reset()
-#		elif state == avahi.CLIENT_FAILURE:           # TODO: add error handling (avahi daemon dies...?)
+		elif state == avahi.CLIENT_FAILURE:           # TODO: add error handling (avahi daemon dies...?)
+			print 'CLIENT FAILURE'
 
 	def entrygroup_state_changed_callback(self, state, error):
 		# the name is already present, so recreate
@@ -173,10 +187,10 @@ class Zeroconf:
 
 	# make zeroconf-valid names
 	def replace_show(self, show):
-		if show == 'chat' or show == 'online' or show == '':
-			show = 'avail'
+		if show in ['chat', 'online', '']:
+			return 'avail'
 		elif show == 'xa':
-			show = 'away'
+			return 'away'
 		return show
 
 	def create_service(self):
@@ -205,17 +219,18 @@ class Zeroconf:
 			return False
 			
 	def announce(self):
-		if self.connected:
-			state = self.server.GetState()
-
-			if state == avahi.SERVER_RUNNING:
-				self.create_service()
-				self.announced = True
-				return True
-		else:
+		print 'announce'
+		if not self.connected:
 			return False
 
+		state = self.server.GetState()
+		if state == avahi.SERVER_RUNNING:
+			self.create_service()
+			self.announced = True
+			return True
+
 	def remove_announce(self):
+		print 'remove announce'
 		if self.announced == False:
 			return False
 		try:
@@ -234,20 +249,27 @@ class Zeroconf:
 		self.new_service_type(interface, protocol, self.stype, domain, '')
 
 	# connect to dbus
-	def connect(self):
+	def connect_dbus(self):
+		if self.server:
+			return True
 		try:
 			self.bus = dbus.SystemBus()
 			# is there any way to check, if a dbus name exists?
 			# that might make the Introspect Error go away...
 			self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
 			avahi.DBUS_PATH_SERVER), avahi.DBUS_INTERFACE_SERVER)
-			
 			self.server.connect_to_signal('StateChanged', self.server_state_changed_callback)
 		except dbus.dbus_bindings.DBusException, e:
 			# Avahi service is not present
 			gajim.log.debug(str(e))
 			return False
+		else:
+			return True
 
+	def connect(self):
+		self.name = self.username + '@' + self.host # service name
+		if not self.connect_dbus():
+			return False
 		self.connected = True
 		
 		# start browsing

@@ -1397,6 +1397,21 @@ class Interface:
 			if win.startswith('privacy_list_'):
 				self.instances[account][win].check_active_default(data)
 
+	def handle_event_zc_name_conflict(self, account, data):
+		dlg = dialogs.InputDialog(_('Username Conflict'),
+			_('Please type a new username for your local account'), 
+			is_modal = True)
+		dlg.input_entry.set_text(data)
+		response = dlg.get_response()
+		if response == gtk.RESPONSE_OK:
+			new_name = dlg.input_entry.get_text()
+			print 'account, data', account, data, new_name
+			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'name', new_name)
+			status = gajim.connections[account].status
+			print 'status', status
+			gajim.connections[account].reconnect()
+		
+
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -1702,6 +1717,7 @@ class Interface:
 			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
 			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
 				self.handle_event_privacy_lists_active_default,
+			'ZC_NAME_CONFLICT': self.handle_event_zc_name_conflict,
 		}
 		gajim.handlers = self.handlers
 
