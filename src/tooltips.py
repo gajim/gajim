@@ -366,15 +366,12 @@ class GCTooltip(BaseTooltip):
 		properties = []
 		status_message_present = False
 
-		nick_markup = '<span weight="bold">' + \
-			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
-			+ '</span>'
-		properties.append((nick_markup, None))
-
-		# status :
 		show = helpers.get_uf_show(contact.show)
-		properties.append((show, None))
-		
+		nick_show_markup = '<span weight="bold">' + \
+			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
+			+ '</span> (' + show + ')' 
+		properties.append((nick_show_markup, None))
+
 		#status message :
 		if contact.status:
 			status_message = contact.status.strip()
@@ -411,8 +408,8 @@ class GCTooltip(BaseTooltip):
 		while properties:
 			property = properties.pop(0)
 			vcard_current_row += 1
-			if vcard_current_row == 4 and not status_message_present or\
-				vcard_current_row == 5 and status_message_present:
+			if vcard_current_row == 3 and not status_message_present or\
+				vcard_current_row == 4 and status_message_present:
 			# horizontal separator after status, if something after
 				h_separator = gtk.HSeparator()
 				vcard_table.attach(h_separator, 1, 3, vcard_current_row, vcard_current_row + 1,\
