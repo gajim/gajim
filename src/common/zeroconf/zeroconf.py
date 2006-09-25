@@ -72,9 +72,9 @@ class Zeroconf:
 					reply_handler=self.service_resolved_callback, error_handler=self.print_error_callback)
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
-		# print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
-		if not self.connected:
-			return
+		print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
+		#if not self.connected:
+		#	return
 		if name != self.name:
 			for key in self.contacts.keys():
 				if self.contacts[key][C_BARE_NAME] == name:
@@ -286,6 +286,8 @@ class Zeroconf:
 	def disconnect(self):
 		if self.connected:
 			self.connected = False
+			self.service_browser.Free()
+			self.service_browser = None
 			self.remove_announce()
 
 	# refresh txt data of all contacts manually (no callback available)
