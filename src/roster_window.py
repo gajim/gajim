@@ -3148,6 +3148,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		else: 
 			iconset = DEFAULT_ICONSET
 
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
 		self.jabber_state_images['32'] = self.load_iconset(path)
 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
