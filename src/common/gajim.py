@@ -121,7 +121,7 @@ SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 
 # zeroconf account name
-LOCAL_ACC = 'local'
+ZEROCONF_ACC_NAME = 'Local'
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
