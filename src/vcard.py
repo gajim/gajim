@@ -313,3 +313,6 @@ class VcardWindow:
 		self.fill_status_label()
 
 		gajim.connections[self.account].request_vcard(self.contact.jid, self.is_fake)
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()

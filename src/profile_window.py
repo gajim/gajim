@@ -372,3 +372,7 @@ class ProfileWindow:
 			_('Retrieving profile...'))
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 			self.update_progressbar)
+
+	def on_close_button_clicked(self, widget):
+		self.progressbar.destroy()
+		self.window.destroy()

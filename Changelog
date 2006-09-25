@@ -5,7 +5,7 @@ Gajim 0.11 (XX October 2006)
   * We can now operate on more than one contact in one in time in roster (#1514)
   * Connection lost is now a non-intrusive popup
   * Try to get contact desired nick when we add him to roster aka User Nickname (JEP-0172)
-  * Better design of User Profile window
+  * Better design of User Profile window, with a progress bar
   * New Add User dialog, with possibility to register to transport directly from it
   * Completion for "Start Chat" input dialog
   * We can now have a different spellchecking language in each chat window. (#2383 and #746)
