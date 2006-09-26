@@ -529,7 +529,12 @@ class RosterTooltip(NotificationAreaTooltip):
 					if time.strftime('%j', time.localtime())== \
 							time.strftime('%j', contact.last_status_time):
 					# it's today, show only the locale hour representation
-						local_time = time.strftime('%X', contact.last_status_time)	
+						local_time = time.strftime('%X', contact.last_status_time)
+						# Hack to delete seconds 
+						# We can't use hour:minutes directly because we don't
+						# know if we should use %H or %I (depend of user locale) 
+						# See http://docs.python.org/lib/module-time.html
+						local_time = local_time[:-3]
 					else:
 						# time.strftime returns locale encoded string
 						local_time = time.strftime('%c', contact.last_status_time)
