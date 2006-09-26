@@ -57,6 +57,10 @@ class MusicTrackListener(gobject.GObject):
 		bus.add_signal_receiver(self._player_playing_changed_cb,
 			'playingChanged', 'org.gnome.Rhythmbox.Player')
 
+	def do_music_track_changed(self, info):
+		if info is not None:
+			self._last_playing_music = info
+
 	def _player_name_owner_changed(self, name, old, new):
 		if not new:
 			self.emit('music-track-changed', None)
