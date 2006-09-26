@@ -14,6 +14,8 @@
 ## GNU General Public License for more details.
 ##
 import gobject
+if __name__ == '__main__':
+	from common import i18n
 import dbus_support
 if dbus_support.supported:
 	import dbus
