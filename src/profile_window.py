@@ -73,6 +73,7 @@ class ProfileWindow:
 			_('Retrieving profile...'))
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 			self.update_progressbar)
+		self.remove_statusbar_timeout_id = None
 
 		# Create Image for avatar button
 		image = gtk.Image()
@@ -84,7 +85,15 @@ class ProfileWindow:
 		self.progressbar.pulse()
 		return True # loop forever
 
+	def remove_statusbar(self, message_id):
+		self.statusbar.remove(self.context_id, message_id)
+		self.remove_statusbar_timeout_id = None
+
 	def on_profile_window_destroy(self, widget):
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+		if self.remove_statusbar_timeout_id is not None:
+			gobject.source_remove(self.remove_statusbar_timeout_id)
 		del gajim.interface.instances[self.account]['profile']
 
 	def on_profile_window_key_press_event(self, widget, event):
@@ -232,8 +241,8 @@ class ProfileWindow:
 				self.statusbar.remove(self.context_id, self.message_id)
 			self.message_id = self.statusbar.push(self.context_id,
 				_('Information received'))
-			gobject.timeout_add(3000, self.statusbar.remove, self.context_id,
-				self.message_id)
+			self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
+				self.remove_statusbar, self.message_id)
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			# redraw progressbar after avatar is set so that windows is already
 			# resized. Else progressbar is not correctly redrawn
@@ -322,8 +331,8 @@ class ProfileWindow:
 			self.statusbar.remove(self.context_id, self.message_id)
 		self.message_id = self.statusbar.push(self.context_id,
 			_('Information published'))
-		gobject.timeout_add(3000, self.statusbar.remove, self.context_id,
-			self.message_id)
+		self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
+			self.remove_statusbar, self.message_id)
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			self.progressbar.set_fraction(0)
@@ -334,8 +343,8 @@ class ProfileWindow:
 			self.statusbar.remove(self.context_id, self.message_id)
 		self.message_id = self.statusbar.push(self.context_id,
 			_('Information NOT published'))
-		gobject.timeout_add(3000, self.statusbar.remove. self.context_id,
-			self.message_id)
+		self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
+			self.remove_statusbar, self.message_id)
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			self.progressbar.set_fraction(0)
