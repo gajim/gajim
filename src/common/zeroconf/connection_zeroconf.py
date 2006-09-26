@@ -60,6 +60,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connection = None
 		self.gpg = None
 		self.is_zeroconf = True
+		self.privacy_rules_supported = False
 		self.status = ''
 		self.old_show = ''
 	
