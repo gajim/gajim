@@ -2412,6 +2412,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				{'title': music_track_info.title,
 					'artist': music_track_info.artist }
 		for acct in accounts:
+			if not gajim.config.get_per('accounts', acct,
+			'sync_with_global_status'):
+				continue
+			if not gajim.connections[acct].connected:
+				continue
 			current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 			self.send_status(acct, current_show, status_message)
 
