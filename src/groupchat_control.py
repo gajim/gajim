@@ -1263,6 +1263,10 @@ class GroupchatControl(ChatControlBase):
 			del self.handlers[i]
 
 	def allow_shutdown(self):
+		model, iter = self.list_treeview.get_selection().get_selected()
+		if iter:
+			self.list_treeview.get_selection().unselect_all()
+			return False
 		retval = True
 		includes = gajim.config.get('confirm_close_muc_rooms').split(' ')
 		excludes = gajim.config.get('noconfirm_close_muc_rooms').split(' ')
@@ -1449,7 +1453,11 @@ class GroupchatControl(ChatControlBase):
 
 	def on_list_treeview_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
-			widget.get_selection().unselect_all()
+			selection = widget.get_selection()
+			model, iter = selection.get_selected()
+			if iter:
+				widget.get_selection().unselect_all()
+				return True
 
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded: change the icon of the arrow'''
