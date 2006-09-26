@@ -390,7 +390,7 @@ def possibly_move_window_in_current_desktop(window):
 	current virtual desktop
 	window is GTK window'''
 	if os.name == 'nt':
-		return
+		return False
 
 	root_window = gtk.gdk.screen_get_default().get_root_window()
 	# current user's vd
@@ -406,6 +406,8 @@ def possibly_move_window_in_current_desktop(window):
 			# we are in another VD that the window was
 			# so show it in current VD
 			window.present()
+			return True
+	return False
 
 def file_is_locked(path_to_file):
 	'''returns True if file is locked (WINDOWS ONLY)'''
@@ -680,6 +682,14 @@ default_name = ''):
 		file_path = dialog.get_filename()
 		file_path = decode_filechooser_file_paths((file_path,))[0]
 		if os.path.exists(file_path):
+			# check if we have write permissions
+			if not os.access(file_path, os.W_OK):
+				file_name = os.path.basename(file_path)
+				dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' % 
+					file_name),
+				_('A file with this name already exists and you do not have '
+				'permission to overwrite it.'))
+				return
 			dialog2 = dialogs.FTOverwriteConfirmationDialog(
 				_('This file already exists'), _('What do you want to do?'),
 				False)
@@ -687,6 +697,13 @@ default_name = ''):
 			dialog2.set_destroy_with_parent(True)
 			response = dialog2.get_response()
 			if response < 0:
+				return
+		else:
+			dirname = os.path.dirname(file_path)
+			if not os.access(dirname, os.W_OK):
+				dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
+				dirname, _('You do not have permission to create files in this'
+				' directory.'))
 				return
 
 		# Get pixbuf
@@ -710,8 +727,8 @@ default_name = ''):
 		try:
 			pixbuf.save(file_path, type_)
 		except:
-			#XXX Check for permissions
-			os.remove(file_path)
+			if os.path.exists(file_path):
+				os.remove(file_path)
 			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
 			dialog2 = dialogs.ConfirmationDialog(_('Extension not supported'),
 				_('Image cannot be saved in %(type)s format. Save as %(new_filename)s?') % {'type': type_, 'new_filename': new_file_path},
@@ -735,3 +752,6 @@ default_name = ''):
 	dialog.set_current_name(default_name)
 	dialog.connect('delete-event', lambda widget, event:
 		on_cancel(widget))
+
+def on_bm_header_changed_state(widget, event):
+	widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state

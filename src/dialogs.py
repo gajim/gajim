@@ -837,27 +837,31 @@ class FileChooserDialog(gtk.FileChooserDialog):
 			self.set_current_folder(current_folder)
 		else:
 			self.set_current_folder(helpers.get_documents_path())
-
-		buttons = self.action_area.get_children()
-		possible_responses = {gtk.STOCK_OPEN: on_response_ok,
-			gtk.STOCK_SAVE: on_response_ok,
-			gtk.STOCK_CANCEL: on_response_cancel}
-		for b in buttons:
-			for response in possible_responses:
-				if b.get_label() == response:
-					if not possible_responses[response]:
-						b.connect('clicked', self.just_destroy)
-					elif isinstance(possible_responses[response], tuple):
-						if len(possible_responses[response]) == 1:
-							b.connect('clicked', possible_responses[response][0])
-						else:
-							b.connect('clicked', *possible_responses[response])
-					else:
-						b.connect('clicked', possible_responses[response])
-					break
-
+		self.response_ok, self.response_cancel = \
+			on_response_ok, on_response_cancel
+		# in gtk+-2.10 clicked signal on some of the buttons in a dialog
+		# is emitted twice, so we cannot rely on 'clicked' signal
+		self.connect('response', self.on_dialog_response)
 		self.show_all()
 
+	def on_dialog_response(self, dialog, response):
+		if response in (gtk.RESPONSE_CANCEL, gtk.RESPONSE_CLOSE):
+			if self.response_cancel:
+				if isinstance(self.response_cancel, tuple):
+					self.response_cancel[0](dialog, *self.response_cancel[1:])
+				else:
+					self.response_cancel(dialog)
+			else:
+				self.just_destroy(dialog)
+		elif response == gtk.RESPONSE_OK:
+			if self.response_ok:
+				if isinstance(self.response_ok, tuple):
+					self.response_ok[0](dialog, *self.response_ok[1:])
+				else:
+					self.response_ok(dialog)
+			else:
+				self.just_destroy(dialog)
+			
 	def just_destroy(self, widget):
 		self.destroy()
 
@@ -1192,7 +1196,7 @@ class NewChatDialog(InputDialog):
 			title = _('Start Chat with account %s') % account
 		else:
 			title = _('Start Chat')
-		prompt_text = _('Fill in the jid, or nick of the contact you would like\nto send a chat message to:')
+		prompt_text = _('Fill in the nickname or the Jabber ID of the contact you would like\nto send a chat message to:')
 		InputDialog.__init__(self, title, prompt_text, is_modal = False)
 		
 		self.completion_dict = {}
@@ -1725,10 +1729,13 @@ class XMLConsoleWindow:
 			self.input_textview.grab_focus()
 
 class PrivacyListWindow:
-	def __init__(self, account, privacy_list, list_type):
-		'''list_type can be 0 if list is created or 1 if it id edited'''
+	'''Window that is used for creating NEW or EDITING already there privacy
+	lists'''
+	def __init__(self, account, privacy_list_name, action):
+		'''action is 'edit' or 'new' depending on if we create a new priv list
+		or edit an already existing one'''
 		self.account = account
-		self.privacy_list = privacy_list
+		self.privacy_list_name = privacy_list_name
 
 		# Dicts and Default Values
 		self.active_rule = ''
@@ -1740,7 +1747,7 @@ class PrivacyListWindow:
 		self.allow_deny = 'allow'
 
 		# Connect to glade
-		self.xml = gtkgui_helpers.get_glade('privacy_list_edit_window.glade')
+		self.xml = gtkgui_helpers.get_glade('privacy_list_window.glade')
 		self.window = self.xml.get_widget('privacy_list_edit_window')
 
 		# Add Widgets
@@ -1762,10 +1769,10 @@ class PrivacyListWindow:
 		'privacy_list_default_checkbutton']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
-		# Send translations
+
 		self.privacy_lists_title_label.set_label(
 			_('Privacy List <b><i>%s</i></b>') % \
-			gtkgui_helpers.escape_for_pango_markup(self.privacy_list))
+			gtkgui_helpers.escape_for_pango_markup(self.privacy_list_name))
 
 		if len(gajim.connections) > 1:
 			title = _('Privacy List for %s') % self.account
@@ -1777,8 +1784,7 @@ class PrivacyListWindow:
 		self.privacy_list_active_checkbutton.set_sensitive(False)
 		self.privacy_list_default_checkbutton.set_sensitive(False)
 
-		# Check if list is created (0) or edited (1)
-		if list_type == 1:
+		if action == 'edit':
 			self.refresh_rules()
 
 		count = 0
@@ -1799,16 +1805,16 @@ class PrivacyListWindow:
 	def on_privacy_list_edit_window_destroy(self, widget):
 		'''close window'''
 		if gajim.interface.instances[self.account].has_key('privacy_list_%s' % \
-		self.privacy_list):
+		self.privacy_list_name):
 			del gajim.interface.instances[self.account]['privacy_list_%s' % \
-				self.privacy_list]
+				self.privacy_list_name]
 
 	def check_active_default(self, a_d_dict):
-		if a_d_dict['active'] == self.privacy_list:
+		if a_d_dict['active'] == self.privacy_list_name:
 			self.privacy_list_active_checkbutton.set_active(True)
 		else:
 			self.privacy_list_active_checkbutton.set_active(False)
-		if a_d_dict['default'] == self.privacy_list:
+		if a_d_dict['default'] == self.privacy_list_name:
 			self.privacy_list_default_checkbutton.set_active(True)
 		else:
 			self.privacy_list_default_checkbutton.set_active(False)		
@@ -1845,7 +1851,7 @@ class PrivacyListWindow:
 		gajim.connections[self.account].get_active_default_lists()
 
 	def refresh_rules(self):
-		gajim.connections[self.account].get_privacy_list(self.privacy_list)
+		gajim.connections[self.account].get_privacy_list(self.privacy_list_name)
 
 	def on_delete_rule_button_clicked(self, widget):
 		tags = []
@@ -1854,7 +1860,7 @@ class PrivacyListWindow:
 				self.list_of_rules_combobox.get_active_text().decode('utf-8'):
 				tags.append(self.global_rules[rule])
 		gajim.connections[self.account].set_privacy_list(
-			self.privacy_list, tags)
+			self.privacy_list_name, tags)
 		self.privacy_list_received(tags)
 		self.add_edit_vbox.hide()
 
@@ -1918,13 +1924,13 @@ class PrivacyListWindow:
 	
 	def on_privacy_list_active_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			gajim.connections[self.account].set_active_list(self.privacy_list)
+			gajim.connections[self.account].set_active_list(self.privacy_list_name)
 		else:
 			gajim.connections[self.account].set_active_list(None)
 
 	def on_privacy_list_default_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			gajim.connections[self.account].set_default_list(self.privacy_list)
+			gajim.connections[self.account].set_default_list(self.privacy_list_name)
 		else:
 			gajim.connections[self.account].set_default_list(None)
 
@@ -1994,7 +2000,7 @@ class PrivacyListWindow:
 			else:
 				tags.append(current_tags)
 
-		gajim.connections[self.account].set_privacy_list(self.privacy_list, tags)
+		gajim.connections[self.account].set_privacy_list(self.privacy_list_name, tags)
 		self.privacy_list_received(tags)
 		self.add_edit_vbox.hide()
 
@@ -2019,7 +2025,9 @@ class PrivacyListWindow:
 		self.add_edit_vbox.hide()
 
 class PrivacyListsWindow:
-# To do: UTF-8 ???????
+	'''Window that is the main window for Privacy Lists;
+	we can list there the privacy lists and ask to create a new one
+	or edit an already there one'''
 	def __init__(self, account):
 		self.account = account
 
@@ -2027,7 +2035,7 @@ class PrivacyListsWindow:
 
 		self.privacy_lists_save = []		
 
-		self.xml = gtkgui_helpers.get_glade('privacy_lists_first_window.glade')
+		self.xml = gtkgui_helpers.get_glade('privacy_lists_window.glade')
 
 		self.window = self.xml.get_widget('privacy_lists_first_window')
 		for widget_to_add in ['list_of_privacy_lists_combobox',
@@ -2087,7 +2095,7 @@ class PrivacyListsWindow:
 			self.list_of_privacy_lists_combobox.get_active()]
 		gajim.connections[self.account].del_privacy_list(active_list)
 		self.privacy_lists_save.remove(active_list)
-		self.privacy_lists_received({'lists':self.privacy_lists_save})
+		self.privacy_lists_received({'lists': self.privacy_lists_save})
 
 	def privacy_lists_received(self, lists):
 		if not lists:
@@ -2107,7 +2115,7 @@ class PrivacyListsWindow:
 				window.present()
 		else:
 			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
-				PrivacyListWindow(self.account, name, 0)
+				PrivacyListWindow(self.account, name, 'new')
 		self.new_privacy_list_entry.set_text('')
 
 	def on_privacy_lists_refresh_button_clicked(self, widget):
@@ -2122,7 +2130,7 @@ class PrivacyListsWindow:
 				window.present()
 		else:
 			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
-				PrivacyListWindow(self.account, name, 1)
+				PrivacyListWindow(self.account, name, 'edit')
 
 class InvitationReceivedDialog:
 	def __init__(self, account, room_jid, contact_jid, password = None, comment = None):
@@ -2290,6 +2298,18 @@ class ImageChooserDialog(FileChooserDialog):
 		except gobject.GError:
 			return
 		widget.get_preview_widget().set_from_pixbuf(pixbuf)
+
+class AvatarChooserDialog(ImageChooserDialog):
+	def __init__(self, path_to_file = '', on_response_ok = None,
+	on_response_cancel = None, on_response_clear = None):
+		ImageChooserDialog.__init__(self, path_to_file, on_response_ok,
+			on_response_cancel)
+		button = gtk.Button(None, gtk.STOCK_CLEAR)
+		if on_response_clear:
+			button.connect('clicked', on_response_clear)
+		button.show_all()
+		self.action_area.pack_start(button)
+		self.action_area.reorder_child(button, 0)
 
 class AddSpecialNotificationDialog:
 	def __init__(self, jid):

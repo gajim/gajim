@@ -28,9 +28,8 @@ from common import helpers
 import dbus_support
 if dbus_support.supported:
 	import dbus
-	if dbus_support.version >= (0, 41, 0):
-		import dbus.glib
-		import dbus.service
+	import dbus.glib
+	import dbus.service
 
 def get_show_in_roster(event, account, contact):
 	'''Return True if this event must be shown in roster, else False'''
@@ -42,11 +41,9 @@ def get_show_in_roster(event, account, contact):
 			return False
 	if event == 'message_received':
 		chat_control = helpers.get_chat_control(account, contact)
-		if not chat_control:
-			return True
-	elif event == 'ft_request':
-		return True
-	return False
+		if chat_control:
+			return False
+	return True
 
 def get_show_in_systray(event, account, contact):
 	'''Return True if this event must be shown in roster, else False'''
@@ -56,10 +53,7 @@ def get_show_in_systray(event, account, contact):
 			return True
 		if gajim.config.get_per('notifications', str(num), 'systray') == 'no':
 			return False
-	if event in ('message_received', 'ft_request', 'gc_msg_highlight',
-	'ft_request'):
-		return True
-	return False
+	return True
 
 def get_advanced_notification(event, account, contact):
 	'''Returns the number of the first advanced notification or None'''

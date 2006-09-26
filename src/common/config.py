@@ -37,6 +37,8 @@ opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
 opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
 
+DEFAULT_ICONSET = 'dcraven'
+
 class Config:
 
 	__options = {
@@ -67,7 +69,7 @@ class Config:
 		'last_status_msg_invisible': [ opt_str, '' ],
 		'last_status_msg_offline': [ opt_str, '' ],
 		'trayicon': [ opt_bool, True, '', True ],
-		'iconset': [ opt_str, 'dcraven', '', True ],
+		'iconset': [ opt_str, DEFAULT_ICONSET, '', True ],
 		'use_transports_iconsets': [ opt_bool, True, '', True ],
 		'inmsgcolor': [ opt_color, '#a34526', '', True ],
 		'outmsgcolor': [ opt_color, '#164e6f', '', True ],
@@ -126,6 +128,7 @@ class Config:
 		'before_nickname': [ opt_str, '' ],
 		'after_nickname': [ opt_str, ':' ],
 		'send_os_info': [ opt_bool, True ],
+		'set_status_msg_from_current_music_track': [ opt_bool, False ],
 		'notify_on_new_gmail_email': [ opt_bool, True ],
 		'notify_on_new_gmail_email_extra': [ opt_bool, False ],
 		'usegpg': [ opt_bool, False, '', True ],
@@ -188,7 +191,7 @@ class Config:
 		'restored_messages_color': [opt_str, 'grey'],
 		'restored_messages_small': [opt_bool, True, _('If True, restored messages will use a smaller font than the default one.')],
 		'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
-		'roster_window_skip_taskbar': [opt_bool, False],
+		'roster_window_skip_taskbar': [opt_bool, False, _('Don\'t show roster in the system taskbar.')],
 		'use_urgency_hint': [opt_bool, True, _('If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],
 		'notification_timeout': [opt_int, 5],
 		'send_sha_in_gc_presence': [opt_bool, True, _('Jabberd1.4 does not like sha info when one join a password protected room. Turn this option to False to stop sending sha info in group chat presences.')],
@@ -290,8 +293,6 @@ class Config:
 			'bannerfontattrs': [ opt_str, 'B', '', True ],
 				
 			# http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
-			# FIXME: not black but the default color from gtk+ theme
-			'state_active_color': [ opt_color, 'black' ],
 			'state_inactive_color': [ opt_color, 'grey62' ],
 			'state_composing_color': [ opt_color, 'green4' ],
 			'state_paused_color': [ opt_color, 'mediumblue' ],

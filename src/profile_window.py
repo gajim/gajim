@@ -60,17 +60,40 @@ class ProfileWindow:
 	def __init__(self, account):
 		self.xml = gtkgui_helpers.get_glade('profile_window.glade')
 		self.window = self.xml.get_widget('profile_window')
+		self.progressbar = self.xml.get_widget('progressbar')
+		self.statusbar = self.xml.get_widget('statusbar')
+		self.context_id = self.statusbar.get_context_id('profile')
 
 		self.account = account
 		self.jid = gajim.get_jid_from_account(account)
 
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Retrieving profile...'))
+		self.update_progressbar_timeout_id = gobject.timeout_add(100,
+			self.update_progressbar)
+		self.remove_statusbar_timeout_id = None
 
+		# Create Image for avatar button
+		image = gtk.Image()
+		self.xml.get_widget('PHOTO_button').set_image(image)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def update_progressbar(self):
+		self.progressbar.pulse()
+		return True # loop forever
+
+	def remove_statusbar(self, message_id):
+		self.statusbar.remove(self.context_id, message_id)
+		self.remove_statusbar_timeout_id = None
+
 	def on_profile_window_destroy(self, widget):
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+		if self.remove_statusbar_timeout_id is not None:
+			gobject.source_remove(self.remove_statusbar_timeout_id)
 		del gajim.interface.instances[self.account]['profile']
 
 	def on_profile_window_key_press_event(self, widget, event):
@@ -79,8 +102,10 @@ class ProfileWindow:
 
 	def on_clear_button_clicked(self, widget):
 		# empty the image
-		self.xml.get_widget('PHOTO_image').set_from_icon_name('stock_person',
-			gtk.ICON_SIZE_DIALOG)
+		button = self.xml.get_widget('PHOTO_button')
+		image = button.get_image()
+		image.set_from_pixbuf(None)
+		button.set_label(_('Click to set your avatar'))
 		self.avatar_encoded = None
 		self.avatar_mime_type = None
 
@@ -124,24 +149,39 @@ class ProfileWindow:
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
 			# rescale it
 			pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
-			image = self.xml.get_widget('PHOTO_image')
+			button = self.xml.get_widget('PHOTO_button')
+			image = button.get_image()
 			image.set_from_pixbuf(pixbuf)
+			button.set_label('')
 			self.avatar_encoded = base64.encodestring(data)
 			# returns None if unknown type
 			self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
 
-		self.dialog = dialogs.ImageChooserDialog(on_response_ok = on_ok)
+		def on_clear(widget):
+			self.dialog.destroy()
+			self.on_clear_button_clicked(widget)
+
+		self.dialog = dialogs.AvatarChooserDialog(on_response_ok = on_ok,
+			on_response_clear = on_clear)
 
 	def on_PHOTO_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3 and self.avatar_encoded: # right click
 			menu = gtk.Menu()
-			nick = gajim.config.get_per('accounts', self.account, 'name')
-			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
-			menuitem.connect('activate',
-				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.jid, None, nick + '.jpeg')
-			menu.append(menuitem)
+			
+			# Try to get pixbuf
+			is_fake = False
+			if account and gajim.contacts.is_pm_from_jid(account, jid):
+				is_fake = True
+			pixbuf = get_avatar_pixbuf_from_cache(jid, is_fake)
+
+			if pixbuf:
+				nick = gajim.config.get_per('accounts', self.account, 'name')
+				menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+				menuitem.connect('activate',
+					gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+					self.jid, None, nick + '.jpeg')
+				menu.append(menuitem)
 			# show clear
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
 			menuitem.connect('activate', self.on_clear_button_clicked)
@@ -162,18 +202,23 @@ class ProfileWindow:
 	def set_values(self, vcard):
 		if not 'PHOTO' in vcard:
 			# set default image
-			image = self.xml.get_widget('PHOTO_image')
-			image.set_from_icon_name('stock_person', gtk.ICON_SIZE_DIALOG)
+			button = self.xml.get_widget('PHOTO_button')
+			image = button.get_image()
+			image.set_from_pixbuf(None)
+			button.set_label(_('Click to set your avatar'))
 		for i in vcard.keys():
 			if i == 'PHOTO':
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
 					get_avatar_pixbuf_encoded_mime(vcard[i])
-				image = self.xml.get_widget('PHOTO_image')
+				button = self.xml.get_widget('PHOTO_button')
+				image = button.get_image()
 				if not pixbuf:
-					image.set_from_icon_name('stock_person', gtk.ICON_SIZE_DIALOG)
+					image.set_from_pixbuf(None)
+					button.set_label(_('Click to set your avatar'))
 					continue
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 				image.set_from_pixbuf(pixbuf)
+				button.set_label('')
 				continue
 			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
 				for entry in vcard[i]:
@@ -191,6 +236,18 @@ class ProfileWindow:
 						vcard[i], 0)
 				else:
 					self.set_value(i + '_entry', vcard[i])
+		if self.update_progressbar_timeout_id is not None:
+			if self.message_id:
+				self.statusbar.remove(self.context_id, self.message_id)
+			self.message_id = self.statusbar.push(self.context_id,
+				_('Information received'))
+			self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
+				self.remove_statusbar, self.message_id)
+			gobject.source_remove(self.update_progressbar_timeout_id)
+			# redraw progressbar after avatar is set so that windows is already
+			# resized. Else progressbar is not correctly redrawn
+			gobject.idle_add(self.progressbar.set_fraction, 0)
+			self.update_progressbar_timeout_id = None
 
 	def add_to_vcard(self, vcard, entry, txt):
 		'''Add an information to the vCard dictionary'''
@@ -248,6 +305,9 @@ class ProfileWindow:
 		return vcard
 
 	def on_publish_button_clicked(self, widget):
+		if self.update_progressbar_timeout_id:
+			# Operation in progress
+			return
 		if gajim.connections[self.account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
         		_('Without a connection you can not publish your contact '
@@ -261,8 +321,42 @@ class ProfileWindow:
 			nick = gajim.config.get_per('accounts', self.account, 'name')
 		gajim.nicks[self.account] = nick
 		gajim.connections[self.account].send_vcard(vcard)
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Sending profile...'))
+		self.update_progressbar_timeout_id = gobject.timeout_add(100,
+			self.update_progressbar)
+
+	def vcard_published(self):
+		if self.message_id:
+			self.statusbar.remove(self.context_id, self.message_id)
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Information published'))
+		self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
+			self.remove_statusbar, self.message_id)
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+			self.progressbar.set_fraction(0)
+			self.update_progressbar_timeout_id = None
+
+	def vcard_not_published(self):
+		if self.message_id:
+			self.statusbar.remove(self.context_id, self.message_id)
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Information NOT published'))
+		self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
+			self.remove_statusbar, self.message_id)
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+			self.progressbar.set_fraction(0)
+			self.update_progressbar_timeout_id = None
+		dialogs.InformationDialog(_('vCard publication failed'),
+			_('There was an error while publishing your personal information, '
+			'try again later.'))
 
 	def on_retrieve_button_clicked(self, widget):
+		if self.update_progressbar_timeout_id:
+			# Operation in progress
+			return
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
 			'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
 			'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',
@@ -275,9 +369,18 @@ class ProfileWindow:
 			for e in entries:
 				self.xml.get_widget(e + '_entry').set_text('')
 			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
-			self.xml.get_widget('PHOTO_image').set_from_icon_name('stock_person',
-				gtk.ICON_SIZE_DIALOG)
+			button = self.xml.get_widget('PHOTO_button')
+			image = button.get_image()
+			image.set_from_pixbuf(None)
+			button.set_label(_('Click to set your avatar'))
 			gajim.connections[self.account].request_vcard(self.jid)
 		else:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
-  		    	_('Without a connection, you can not get your contact information.'))
+			_('Without a connection, you can not get your contact information.'))
+		self.message_id = self.statusbar.push(self.context_id,
+			_('Retrieving profile...'))
+		self.update_progressbar_timeout_id = gobject.timeout_add(100,
+			self.update_progressbar)
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()

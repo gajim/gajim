@@ -552,7 +552,7 @@ class Interface:
 			chat_control = self.msg_win_mgr.get_control(jid, account)
 
 		# Handle chat states  
-		contact = gajim.contacts.get_contact(account, jid, resource)
+		contact = gajim.contacts.get_contact(account, jid)
 		if contact and isinstance(contact, list):
 			contact = contact[0]
 		if contact:
@@ -582,7 +582,10 @@ class Interface:
 		if gajim.config.get('ignore_unknown_contacts') and \
 			not gajim.contacts.get_contact(account, jid) and not pm:
 			return
-
+		if not contact:
+			# contact is not in the roster, create a fake one to display
+			# notification
+			contact = common.contacts.Contact(jid = jid, resource = resource) 
 		advanced_notif_num = notify.get_advanced_notification('message_received',
 			account, contact)
 
@@ -606,7 +609,7 @@ class Interface:
 		msg = message
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
-		notify.notify('new_message', jid, account, [msg_type, first, nickname,
+		notify.notify('new_message', full_jid_with_resource, account, [msg_type, first, nickname,
 			msg], advanced_notif_num)
 
 		if self.remote_ctrl:
@@ -851,6 +854,7 @@ class Interface:
 			self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
 
 	def handle_event_os_info(self, account, array):
+		#'OS_INFO' (account, (jid, resource, client_info, os_info))
 		win = None
 		if self.instances[account]['infos'].has_key(array[0]):
 			win = self.instances[account]['infos'][array[0]]
@@ -1010,7 +1014,7 @@ class Interface:
 				return
 			# Add it to roster
 			contact = gajim.contacts.create_contact(jid = jid, name = name,
-			groups = groups, show = 'offline', sub = sub, ask = ask)
+				groups = groups, show = 'offline', sub = sub, ask = ask)
 			gajim.contacts.add_contact(account, contact)
 			self.roster.add_contact_to_roster(jid, account)
 		else:
@@ -1075,7 +1079,7 @@ class Interface:
 		gmail_messages_list = array[2]
 		if gajim.config.get('notify_on_new_gmail_email'):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'single_msg_recv.png') #FIXME: find a better image
+				'new_email_recv.png')
 			title = _('New E-mail on %(gmail_mail_address)s') % \
 				{'gmail_mail_address': jid}
 			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
@@ -1328,7 +1332,9 @@ class Interface:
 			self.instances[account]['xml_console'].print_stanza(stanza, 'outgoing')
 
 	def handle_event_vcard_published(self, account, array):
-		dialogs.InformationDialog(_('vCard publication succeeded'), _('Your personal information has been published successfully.'))
+		if self.instances[account].has_key('profile'):
+			win = self.instances[account]['profile']
+			win.vcard_published()
 		for gc_control in self.msg_win_mgr.get_controls(message_control.TYPE_GC):
 			if gc_control.account == account:
 				show = gajim.SHOW_LIST[gajim.connections[account].connected]
@@ -1337,7 +1343,9 @@ class Interface:
 					gc_control.room_jid, show, status)
 
 	def handle_event_vcard_not_published(self, account, array):
-		dialogs.InformationDialog(_('vCard publication failed'), _('There was an error while publishing your personal information, try again later.'))
+		if self.instances[account].has_key('profile'):
+			win = self.instances[account]['profile']
+			win.vcard_not_published()
 
 	def handle_event_signed_in(self, account, empty):
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
@@ -1406,10 +1414,10 @@ class Interface:
 		if response == gtk.RESPONSE_OK:
 			new_name = dlg.input_entry.get_text()
 			print 'account, data', account, data, new_name
-			gajim.config.set_per('accounts', gajim.LOCAL_ACC, 'name', new_name)
+			gajim.config.set_per('accounts', account, 'name', new_name)
 			status = gajim.connections[account].status
-			print 'status', status
-			gajim.connections[account].reconnect()
+			gajim.connections[account].username = new_name
+			gajim.connections[account].change_status(status, '')
 		
 
 	def read_sleepy(self):	
@@ -1744,14 +1752,17 @@ class Interface:
 		jid = gajim.get_jid_without_resource(jid)
 		if type_ in ('printed_gc_msg', 'gc_msg'):
 			w = self.msg_win_mgr.get_window(jid, account)
-		elif type_ in ('printed_chat', 'chat'):
+		elif type_ in ('printed_chat', 'chat', ''):
+			# '' is for log in/out notifications
 			if self.msg_win_mgr.has_window(fjid, account):
 				w = self.msg_win_mgr.get_window(fjid, account)
+			elif self.msg_win_mgr.has_window(jid, account):
+				w = self.msg_win_mgr.get_window(jid, account)
 			else:
 				contact = gajim.contacts.get_contact(account, jid, resource)
-				if isinstance(contact, list):
+				if not contact or isinstance(contact, list):
 					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-				self.roster.new_chat(contact, account, resource = resource)
+				self.roster.new_chat(contact, account)
 				w = self.msg_win_mgr.get_window(fjid, account)
 				gajim.last_message_time[account][jid] = 0 # long time ago
 		elif type_ in ('printed_pm', 'pm'):
@@ -1774,9 +1785,15 @@ class Interface:
 		elif type_ in ('normal', 'file-request', 'file-request-error',
 		'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
 			# Get the first single message event
-			event = gajim.events.get_first_event(account, jid, type_)
-			# Open the window
-			self.roster.open_event(account, jid, event)
+			event = gajim.events.get_first_event(account, fjid, type_)
+			if not event:
+				# default to jid without resource
+				event = gajim.events.get_first_event(account, jid, type_)
+				# Open the window
+				self.roster.open_event(account, jid, event)
+			else:
+				# Open the window
+				self.roster.open_event(account, fjid, event)
 		elif type_ == 'gmail':
 			if gajim.config.get_per('accounts', account, 'savepass'):
 				url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') %\
@@ -1873,9 +1890,12 @@ class Interface:
 		for account in gajim.config.get_per('accounts'):
 			if account != gajim.ZEROCONF_ACC_NAME:
 				gajim.connections[account] = common.connection.Connection(account)
-		
+
+		# gtk hooks
 		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
+		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
+			gtk.link_button_set_uri_hook(self.on_launch_browser_mailer, 'url')
 		
 		self.instances = {'logs': {}}
 		
@@ -1919,6 +1939,8 @@ class Interface:
 		self.systray_capabilities = False
 		
 		if os.name == 'nt':
+			pass
+			'''
 			try:
 				import systraywin32
 			except: # user doesn't have trayicon capabilities
@@ -1926,6 +1948,7 @@ class Interface:
 			else:
 				self.systray_capabilities = True
 				self.systray = systraywin32.SystrayWin32()
+			'''
 		else:
 			self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
 			if self.systray_capabilities:

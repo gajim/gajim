@@ -246,11 +246,16 @@ _('Connection with peer cannot be established.'))
 			gtk.RESPONSE_OK,
 			True, # select multiple true as we can select many files to send
 			gajim.config.get('last_send_dir'),
+			on_response_ok = on_ok,
+			on_response_cancel = lambda e:dialog.destroy()
 			)
 
-		btn = dialog.add_button(_('_Send'), gtk.RESPONSE_OK)
-		btn.set_use_stock(True) # FIXME: add send icon to this button (JUMP_TO)
-		btn.connect('clicked', on_ok)
+		btn = gtk.Button(_('_Send'))
+		btn.set_property('can-default', True)
+		# FIXME: add send icon to this button (JUMP_TO)
+		dialog.add_action_widget(btn, gtk.RESPONSE_OK)
+		dialog.set_default_response(gtk.RESPONSE_OK)
+		btn.show()
 
 	def send_file(self, account, contact, file_path):
 		''' start the real transfer(upload) of the file '''
@@ -450,8 +455,10 @@ _('Connection with peer cannot be established.'))
 			for ev_type in ('file-error', 'file-completed', 'file-request-error',
 			'file-send-error', 'file-stopped'):
 				for event in gajim.events.get_events(account, jid, [ev_type]):
-					if event.parameters[1]['sid'] == file_props['sid']:
+					if event.parameters['sid'] == file_props['sid']:
 						gajim.events.remove_events(account, jid, event)
+						gajim.interface.roster.draw_contact(jid, account)
+						gajim.interface.roster.show_title()
 		del(self.files_props[sid[0]][sid[1:]])
 		del(file_props)
 		

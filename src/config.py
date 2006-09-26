@@ -1,7 +1,7 @@
 ##	config.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab@snarc.org>
 ##
@@ -182,7 +182,7 @@ class PreferencesWindow:
 			theme = config_theme.replace('_', ' ')
 			model.append([theme])
 			if gajim.config.get('roster_theme') == config_theme:
-			         theme_combobox.set_active(i)
+				theme_combobox.set_active(i)
 			i += 1
 		self.on_theme_combobox_changed(theme_combobox)
 
@@ -212,19 +212,23 @@ class PreferencesWindow:
 
 		#before time
 		st = gajim.config.get('before_time')
-		self.xml.get_widget('before_time_entry').set_text(st)
+		st = helpers.from_one_line(st)
+		self.xml.get_widget('before_time_textview').get_buffer().set_text(st)
 
 		#after time
 		st = gajim.config.get('after_time')
-		self.xml.get_widget('after_time_entry').set_text(st)
+		st = helpers.from_one_line(st)
+		self.xml.get_widget('after_time_textview').get_buffer().set_text(st)
 
 		#before nickname
 		st = gajim.config.get('before_nickname')
-		self.xml.get_widget('before_nickname_entry').set_text(st)
+		st = helpers.from_one_line(st)
+		self.xml.get_widget('before_nickname_textview').get_buffer().set_text(st)
 
 		#after nickanme
 		st = gajim.config.get('after_nickname')
-		self.xml.get_widget('after_nickname_entry').set_text(st)
+		st = helpers.from_one_line(st)
+		self.xml.get_widget('after_nickname_textview').get_buffer().set_text(st)
 
 		#Color for incomming messages
 		colSt = gajim.config.get('inmsgcolor')
@@ -455,12 +459,18 @@ class PreferencesWindow:
 		# send os info
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
+
+		# set status msg from currently playing music track
+		st = gajim.config.get('set_status_msg_from_current_music_track')
+		self.xml.get_widget(
+			'set_status_msg_from_current_music_track_checkbutton').set_active(st)
 		
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
 		frame_gmail = self.xml.get_widget('frame_gmail')
 		notify_gmail_checkbutton = self.xml.get_widget('notify_gmail_checkbutton')
-		notify_gmail_extra_checkbutton = self.xml.get_widget('notify_gmail_extra_checkbutton')
+		notify_gmail_extra_checkbutton = self.xml.get_widget(
+			'notify_gmail_extra_checkbutton')
 		frame_gmail.set_no_show_all(True)
 		
 		for account in gajim.config.get_per('accounts'):
@@ -512,6 +522,8 @@ class PreferencesWindow:
 			gajim.interface.systray.change_status(show)
 		else:
 			gajim.config.set('trayicon', False)
+			if not gajim.interface.roster.window.get_property('visible'):
+				gajim.interface.roster.window.present()
 			gajim.interface.hide_systray()
 			gajim.config.set('show_roster_on_startup', True) # no tray, show roster!
 		gajim.interface.roster.draw_roster()
@@ -523,7 +535,7 @@ class PreferencesWindow:
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
 		gajim.interface.roster.draw_roster()
-		
+
 	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
 		gajim.interface.roster.draw_roster()
@@ -643,9 +655,9 @@ class PreferencesWindow:
 
 	def _set_sensitivity_for_before_after_time_widgets(self, sensitive):
 		self.xml.get_widget('before_time_label').set_sensitive(sensitive)
-		self.xml.get_widget('before_time_entry').set_sensitive(sensitive)
+		self.xml.get_widget('before_time_textview').set_sensitive(sensitive)
 		self.xml.get_widget('after_time_label').set_sensitive(sensitive)
-		self.xml.get_widget('after_time_entry').set_sensitive(sensitive)
+		self.xml.get_widget('after_time_textview').set_sensitive(sensitive)
 	
 	def on_time_never_radiobutton_toggled(self, widget):
 		if widget.get_active():
@@ -665,20 +677,33 @@ class PreferencesWindow:
 		self._set_sensitivity_for_before_after_time_widgets(True)
 		gajim.interface.save_config()
 
-	def on_before_time_entry_focus_out_event(self, widget, event):
-		gajim.config.set('before_time', widget.get_text().decode('utf-8'))
+	def _get_textview_text(self, tv):
+		buffer = tv.get_buffer()
+		begin, end = buffer.get_bounds()
+		return buffer.get_text(begin, end).decode('utf-8')
+
+	def on_before_time_textview_focus_out_event(self, widget, event):
+		text = self._get_textview_text(widget)
+		text = helpers.to_one_line(text)
+		gajim.config.set('before_time', text)
 		gajim.interface.save_config()
 
-	def on_after_time_entry_focus_out_event(self, widget, event):
-		gajim.config.set('after_time', widget.get_text().decode('utf-8'))
+	def on_after_time_textview_focus_out_event(self, widget, event):
+		text = self._get_textview_text(widget)
+		text = helpers.to_one_line(text)
+		gajim.config.set('after_time', text)
 		gajim.interface.save_config()
 
-	def on_before_nickname_entry_focus_out_event(self, widget, event):
-		gajim.config.set('before_nickname', widget.get_text().decode('utf-8'))
+	def on_before_nickname_textview_focus_out_event(self, widget, event):
+		text = self._get_textview_text(widget)
+		text = helpers.to_one_line(text)
+		gajim.config.set('before_nickname', text)
 		gajim.interface.save_config()
 
-	def on_after_nickname_entry_focus_out_event(self, widget, event):
-		gajim.config.set('after_nickname', widget.get_text().decode('utf-8'))
+	def on_after_nickname_textview_focus_out_event(self, widget, event):
+		text = self._get_textview_text(widget)
+		text = helpers.to_one_line(text)
+		gajim.config.set('after_nickname', text)
 		gajim.interface.save_config()
 
 	def update_text_tags(self):
@@ -1064,6 +1089,13 @@ class PreferencesWindow:
 			gajim.interface.instances['advanced_config'] = \
 				dialogs.AdvancedConfigurationWindow()
 
+	def set_status_msg_from_current_music_track_checkbutton_toggled(self,
+		widget):
+		self.on_checkbutton_toggled(widget,
+			'set_status_msg_from_current_music_track')
+		gajim.interface.roster.enable_syncing_status_msg_from_current_music_track(
+			widget.get_active())
+
 #---------- AccountModificationWindow class -------------#
 class AccountModificationWindow:
 	'''Class for account informations'''
@@ -1097,11 +1129,12 @@ class AccountModificationWindow:
 		'''set or unset sensitivity of widgets when widget is toggled'''
 		for w in widgets:
 			w.set_sensitive(widget.get_active())
-	
+
 	def init_account_gpg(self):
 		keyid = gajim.config.get_per('accounts', self.account, 'keyid')
 		keyname = gajim.config.get_per('accounts', self.account, 'keyname')
-		savegpgpass = gajim.config.get_per('accounts', self.account,'savegpgpass')
+		savegpgpass = gajim.config.get_per('accounts', self.account,
+																'savegpgpass')
 
 		if not keyid or not gajim.config.get('usegpg'):
 			return
@@ -1358,8 +1391,7 @@ class AccountModificationWindow:
 			gajim.events.change_account_name(self.account, name)
 
 			# change account variable for chat / gc controls
-			for ctrl in gajim.interface.msg_win_mgr.get_controls():
-				ctrl.account = name
+			gajim.interface.msg_win_mgr.change_account_name(self.account, name)
 			# upgrade account variable in opened windows
 			for kind in ('infos', 'disco', 'gc_config'):
 				for j in gajim.interface.instances[name][kind]:
@@ -1857,6 +1889,7 @@ class AccountsWindow:
 		else:
 			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
+
 	
 	def on_enable_zeroconf_checkbutton_toggled(self, widget):
 		if gajim.config.get('enable_zeroconf'):
@@ -2987,9 +3020,6 @@ _('You can set advanced account options by pressing Advanced button, or later by
 		con = connection.Connection(self.account)
 		con.password = password
 
-		if not savepass:
-			password = ""
-
 		config = {}
 		config['name'] = login
 		config['hostname'] = server
@@ -3018,6 +3048,10 @@ _('You can set advanced account options by pressing Advanced button, or later by
 
 	def create_vars(self, config):
 		gajim.config.add_per('accounts', self.account)
+
+		if not config['savepass']:
+			config['password'] = ''
+
 		for opt in config:
 			gajim.config.set_per('accounts', self.account, opt, config[opt])
 

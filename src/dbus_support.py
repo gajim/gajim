@@ -23,25 +23,17 @@ from common import exceptions
 
 try:
 	import dbus
-	version = getattr(dbus, 'version', (0, 20, 0))
-	supported = True
+	import dbus.service
+	import dbus.glib
+	supported = True # does use have D-Bus bindings?
 except ImportError:
-	version = (0, 0, 0)
 	supported = False
 	if not os.name == 'nt': # only say that to non Windows users
 		print _('D-Bus python bindings are missing in this computer')
 		print _('D-Bus capabilities of Gajim cannot be used')
-	
-# dbus 0.23 leads to segfault with threads_init()
-if sys.version[:4] >= '2.4' and version[1] < 30:
-	supported = False
-
-if version >= (0, 41, 0):
-	import dbus.service
-	import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
 
 class SessionBus:
-	'''A Singleton for the DBus SessionBus'''
+	'''A Singleton for the D-Bus SessionBus'''
 	def __init__(self):
 		self.session_bus = None
 	

@@ -51,7 +51,7 @@ class GajimThemesWindow:
 		self.themes_tree = self.xml.get_widget('themes_treeview')
 		self.theme_options_vbox = self.xml.get_widget('theme_options_vbox')
 		self.colorbuttons = {}
-		for chatstate in ('active', 'inactive', 'composing', 'paused', 'gone',
+		for chatstate in ('inactive', 'composing', 'paused', 'gone',
 		'muc_msg', 'muc_directed_msg'):
 			self.colorbuttons[chatstate] = self.xml.get_widget(chatstate + \
 				'_colorbutton')
@@ -198,7 +198,7 @@ class GajimThemesWindow:
 		self.no_update = False
 		gajim.interface.roster.change_roster_style(None)
 
-		for chatstate in ('active', 'inactive', 'composing', 'paused', 'gone',
+		for chatstate in ('inactive', 'composing', 'paused', 'gone',
 		'muc_msg', 'muc_directed_msg'):
 			color = gajim.config.get_per('themes', theme, 'state_' + chatstate + \
 				'_color')
@@ -332,11 +332,6 @@ class GajimThemesWindow:
 		if font_description.get_style() != pango.STYLE_ITALIC:
 			font_props[1] = True
 		return font_props
-
-	def on_active_colorbutton_color_set(self, widget):
-		self.no_update = True
-		self._set_color(True, widget, 'state_active_color')
-		self.no_update = False
 
 	def on_inactive_colorbutton_color_set(self, widget):
 		self.no_update = True

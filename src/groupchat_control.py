@@ -226,9 +226,6 @@ class GroupchatControl(ChatControlBase):
 		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
-		id = self.parent_win.window.connect('focus-in-event',
-						self._on_window_focus_in_event)
-		self.handlers[id] = self.parent_win.window
 
 		# set the position of the current hpaned
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
@@ -320,11 +317,6 @@ class GroupchatControl(ChatControlBase):
 		return gajim.config.get('notify_on_all_muc_messages') or \
 			self.attention_flag
 
-	def _on_window_focus_in_event(self, widget, event):
-		'''When window gets focus'''
-		if self.parent_win.get_active_jid() == self.room_jid:
-			self.conv_textview.allow_focus_out_line = True
-	
 	def on_treeview_size_allocate(self, widget, allocation):
 		'''The MUC treeview has resized. Move the hpaned in all tabs to match'''
 		self.hpaned_position = self.hpaned.get_position()
@@ -371,23 +363,24 @@ class GroupchatControl(ChatControlBase):
 
 		has_focus = self.parent_win.window.get_property('has-toplevel-focus')
 		current_tab = self.parent_win.get_active_control() == self
+		color_name = None
 		color = None
 		theme = gajim.config.get('roster_theme')
 		if chatstate == 'attention' and (not has_focus or not current_tab):
 			self.attention_flag = True
-			color = gajim.config.get_per('themes', theme,
+			color_name = gajim.config.get_per('themes', theme,
 							'state_muc_directed_msg_color')
 		elif chatstate:
 			if chatstate == 'active' or (current_tab and has_focus):
 				self.attention_flag = False
-				color = gajim.config.get_per('themes', theme,
-								'state_active_color')
+				# get active color from gtk
+				color = self.parent_win.notebook.style.fg[gtk.STATE_ACTIVE]
 			elif chatstate == 'newmsg' and (not has_focus or not current_tab) and\
 					not self.attention_flag:
-				color = gajim.config.get_per('themes', theme, 'state_muc_msg_color')
-		if color:
-			color = gtk.gdk.colormap_get_system().alloc_color(color)
-
+				color_name = gajim.config.get_per('themes', theme, 'state_muc_msg_color')
+		if color_name:
+			color = gtk.gdk.colormap_get_system().alloc_color(color_name)
+			
 		label_str = self.name
 		return (label_str, color)
 
@@ -865,7 +858,9 @@ class GroupchatControl(ChatControlBase):
 				print_status = gajim.config.get('print_status_in_muc')
 			nick_jid = nick
 			if jid:
-				nick_jid += ' (%s)' % jid
+				# delete ressource
+				simple_jid = gajim.get_jid_without_resource(jid)
+				nick_jid += ' (%s)' % simple_jid
 			if show == 'offline' and print_status in ('all', 'in_and_out'):
 				st = _('%s has left') % nick_jid
 				if reason:
@@ -1268,6 +1263,10 @@ class GroupchatControl(ChatControlBase):
 			del self.handlers[i]
 
 	def allow_shutdown(self):
+		model, iter = self.list_treeview.get_selection().get_selected()
+		if iter:
+			self.list_treeview.get_selection().unselect_all()
+			return False
 		retval = True
 		includes = gajim.config.get('confirm_close_muc_rooms').split(' ')
 		excludes = gajim.config.get('noconfirm_close_muc_rooms').split(' ')
@@ -1293,6 +1292,7 @@ class GroupchatControl(ChatControlBase):
 		return retval
 
 	def set_control_active(self, state):
+		self.conv_textview.allow_focus_out_line = True
 		self.attention_flag = False
 		ChatControlBase.set_control_active(self, state)
 		if not state:
@@ -1453,7 +1453,11 @@ class GroupchatControl(ChatControlBase):
 
 	def on_list_treeview_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
-			widget.get_selection().unselect_all()
+			selection = widget.get_selection()
+			model, iter = selection.get_selected()
+			if iter:
+				widget.get_selection().unselect_all()
+				return True
 
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded: change the icon of the arrow'''

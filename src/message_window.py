@@ -104,6 +104,16 @@ class MessageWindow:
 		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
 			gtk.gdk.ACTION_MOVE)
 
+	def change_account_name(self, old_name, new_name):
+		if self._controls.has_key(old_name):
+			self._controls[new_name] = self._controls[old_name]
+			del self._controls[old_name]
+		for ctrl in self.controls():
+			if ctrl.account == old_name:
+				ctrl.account = new_name
+		if self.account == old_name:
+			self.account = new_name
+
 	def get_num_controls(self):
 		n = 0
 		for dict in self._controls.values():
@@ -618,7 +628,11 @@ class MessageWindowMgr:
 		# Map the mode to a int constant for frequent compares
 		mode = gajim.config.get('one_message_window')
 		self.mode = common.config.opt_one_window_types.index(mode)
-	
+
+	def change_account_name(self, old_name, new_name):
+		for win in self.windows():
+			win.change_account_name(old_name, new_name)
+
 	def _new_window(self, acct, type):
 		win = MessageWindow(acct, type)
 		# we track the lifetime of this window

@@ -138,6 +138,9 @@ class ConversationTextview:
 		self.focus_out_end_iter_offset = None
 
 		self.line_tooltip = tooltips.BaseTooltip()
+		
+		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+		self.focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 
 	def del_handlers(self):
 		for i in self.handlers.keys():
@@ -230,19 +233,14 @@ class ConversationTextview:
 					end_iter_for_previous_line)
 
 			# add the new focus out line
-			# FIXME: Why is this loaded from disk everytime
-			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
-			focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, '\n')
-			buffer.insert_pixbuf(end_iter, focus_out_line_pixbuf)
+			buffer.insert_pixbuf(end_iter, self.focus_out_line_pixbuf)
 
 			end_iter = buffer.get_end_iter()
 			before_img_iter = end_iter.copy()
 			before_img_iter.backward_char() # one char back (an image also takes one char)
 			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
-			#FIXME: remove this workaround when bug is fixed
-			# c http://bugzilla.gnome.org/show_bug.cgi?id=318569
 
 			self.allow_focus_out_line = False
 
@@ -562,6 +560,7 @@ class ConversationTextview:
 			img.show()
 			#add with possible animation
 			self.tv.add_child_at_anchor(img, anchor)
+		#FIXME: one day, somehow sync with regexp in gajim.py
 		elif special_text.startswith('http://') or \
 			special_text.startswith('www.') or \
 			special_text.startswith('ftp://') or \
@@ -664,7 +663,9 @@ class ConversationTextview:
 		current_print_time = gajim.config.get('print_time')
 		if current_print_time == 'always' and kind != 'info':
 			before_str = gajim.config.get('before_time')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_time')
+			after_str = helpers.from_one_line(after_str)
 			# get difference in days since epoch (86400 = 24*3600)
 			# number of days since epoch for current time (in GMT) -
 			# number of days since epoch for message (in GMT)
@@ -748,7 +749,9 @@ class ConversationTextview:
 			name_tags = other_tags_for_name[:] # create a new list
 			name_tags.append(kind)
 			before_str = gajim.config.get('before_nickname')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_nickname')
+			after_str = helpers.from_one_line(after_str)
 			format = before_str + name + after_str + ' '
 			buffer.insert_with_tags_by_name(end_iter, format, *name_tags)
 

@@ -19,7 +19,7 @@ Protocol module contains tools that is needed for processing of
 xmpp-related data structures.
 """
 
-from simplexml import Node,ustr
+from simplexml import Node,NodeBuilder,ustr
 import time
 NS_ACTIVITY     ='http://jabber.org/protocol/activity'                  # JEP-0108
 NS_ADDRESS      ='http://jabber.org/protocol/address'                   # JEP-0033
@@ -94,6 +94,7 @@ NS_VCARD_UPDATE =NS_VCARD+':x:update'
 NS_VERSION      ='jabber:iq:version'
 NS_WAITINGLIST  ='http://jabber.org/protocol/waitinglist'               # JEP-0130
 NS_XHTML_IM     ='http://jabber.org/protocol/xhtml-im'                  # JEP-0071
+NS_XHTML        = 'http://www.w3.org/1999/xhtml'                        #  "
 NS_DATA_LAYOUT  ='http://jabber.org/protocol/xdata-layout'              # JEP-0141
 NS_DATA_VALIDATE='http://jabber.org/protocol/xdata-validate'            # JEP-0122
 NS_XMPP_STREAMS ='urn:ietf:params:xml:ns:xmpp-streams'
@@ -385,16 +386,21 @@ class Protocol(Node):
 
 class Message(Protocol):
     """ XMPP Message stanza - "push" mechanism."""
-    def __init__(self, to=None, body=None, typ=None, subject=None, attrs={}, frm=None, payload=[], timestamp=None, xmlns=NS_CLIENT, node=None):
+    def __init__(self, to=None, body=None, xhtml=None, typ=None, subject=None, attrs={}, frm=None, payload=[], timestamp=None, xmlns=NS_CLIENT, node=None):
         """ Create message object. You can specify recipient, text of message, type of message
             any additional attributes, sender of the message, any additional payload (f.e. jabber:x:delay element) and namespace in one go.
             Alternatively you can pass in the other XML object as the 'node' parameted to replicate it as message. """
         Protocol.__init__(self, 'message', to=to, typ=typ, attrs=attrs, frm=frm, payload=payload, timestamp=timestamp, xmlns=xmlns, node=node)
         if body: self.setBody(body)
+        if xhtml: self.setXHTML(xhtml)
         if subject: self.setSubject(subject)
     def getBody(self):
         """ Returns text of the message. """
         return self.getTagData('body')
+    def getXHTML(self):
+        """ Returns serialized xhtml-im body text of the message. """
+        xhtml = self.getTag('html')
+        return str(xhtml.getTag('body'))
     def getSubject(self):
         """ Returns subject of the message. """
         return self.getTagData('subject')
@@ -404,6 +410,11 @@ class Message(Protocol):
     def setBody(self,val):
         """ Sets the text of the message. """
         self.setTagData('body',val)
+    def setXHTML(self,val):
+        """ Sets the xhtml text of the message (JEP-0071).
+            The parameter is the "inner html" to the body."""
+        dom = NodeBuilder(val)
+        self.setTag('html',namespace=NS_XHTML_IM).setTag('body',namespace=NS_XHTML).addChild(node=dom.getDom())
     def setSubject(self,val):
         """ Sets the subject of the message. """
         self.setTagData('subject',val)

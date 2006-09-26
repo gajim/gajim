@@ -1334,7 +1334,7 @@ msgstr "W każdej _wiadomości"
 
 #: ../data/glade/preferences_window.glade.h:58
 msgid "One message _window:"
-msgstr "Wyślij wiadomość i _zamknij okno"
+msgstr "Grupuj okna:"
 
 #: ../data/glade/preferences_window.glade.h:59
 msgid "Play _sounds"

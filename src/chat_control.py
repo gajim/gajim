@@ -196,7 +196,6 @@ class ChatControlBase(MessageControl):
 					self.msg_textview.lang = lang
 					spell.set_language(lang)
 			except (gobject.GError, RuntimeError), msg:
-				#FIXME: add a ui for this use spell.set_language()
 				dialogs.ErrorDialog(unicode(msg), _('If that is not your language '
 					'for which you want to highlight misspelled words, then please '
 					'set your $LANG as appropriate. Eg. for French do export '
@@ -1018,7 +1017,7 @@ class ChatControl(ChatControlBase):
 		acct_info = ''
 		self.account_displayed = False
 		for ctrl in self.parent_win.controls():
-			if ctrl == self:
+			if ctrl == self or ctrl.type_id == 'gc':
 				continue
 			if self.contact.get_shown_name() == ctrl.contact.get_shown_name()\
 			and not avoid_showing_account_too:
@@ -1276,9 +1275,6 @@ class ChatControl(ChatControlBase):
 			elif chatstate == 'paused':
 				color = gajim.config.get_per('themes', theme,
 						'state_paused_color')
-			else:
-				color = gajim.config.get_per('themes', theme,
-						'state_active_color')
 		if color:
 			# We set the color for when it's the current tab or not
 			color = gtk.gdk.colormap_get_system().alloc_color(color)
@@ -1287,6 +1283,9 @@ class ChatControl(ChatControlBase):
 			if chatstate in ('inactive', 'gone') and\
 			self.parent_win.get_active_control() != self:
 				color = self.lighten_color(color)
+		elif chatstate == 'active' : # active, get color from gtk
+			color = self.parent_win.notebook.style.fg[gtk.STATE_ACTIVE]
+		
 
 		name = self.contact.get_shown_name()
 		if self.resource:

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##	roster_window.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
@@ -39,6 +40,10 @@ from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
 
+import dbus_support
+if dbus_support.supported:
+	from music_track_listener import MusicTrackListener
+
 #(icon, name, type, jid, account, editable, second pixbuf)
 (
 C_IMG, # image to show state (online, new message etc)
@@ -49,9 +54,6 @@ C_ACCOUNT, # cellrenderer text that holds account name
 C_EDITABLE, # cellrenderer text that holds name editable or not?
 C_SECPIXBUF, # secondary_pixbuf (holds avatar or padlock)
 ) = range(7)
-
-
-DEFAULT_ICONSET = 'dcraven'
 
 class RosterWindow:
 	'''Class for main window of gtkgui interface'''
@@ -624,9 +626,6 @@ class RosterWindow:
 		self.join_gc_room(account, bookmark['jid'], bookmark['nick'],
 			bookmark['password'])
 
-	def on_bm_header_changed_state(self, widget, event):
-		widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
-
 	def on_send_server_message_menuitem_activate(self, widget, account):
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		server += '/announce/online'
@@ -717,6 +716,11 @@ class RosterWindow:
 			return
 		new_chat_menuitem = self.xml.get_widget('new_chat_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
+		iconset = gajim.config.get('iconset') 
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16') 
+		state_images = self.load_iconset(path) 
+		if state_images.has_key('muc_active'): 
+			join_gc_menuitem.set_image(state_images['muc_active'])
 		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
 		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
@@ -787,7 +791,7 @@ class RosterWindow:
 				label.set_use_underline(False)
 				gc_item = gtk.MenuItem()
 				gc_item.add(label)
-				gc_item.connect('state-changed', self.on_bm_header_changed_state)
+				gc_item.connect('state-changed', gtkgui_helpers.on_bm_header_changed_state)
 				gc_sub_menu.append(gc_item)
 				
 				self.add_bookmarks_list(gc_sub_menu, account)
@@ -1084,8 +1088,12 @@ class RosterWindow:
 				win.redraw_tab(ctrl)
 
 				name = contact.get_shown_name()
-				if contact.resource != '':
+
+				# if multiple resources (or second one disconnecting)
+				if (len(contact_instances) > 1 or (len(contact_instances) == 1 and \
+					show in ('offline', 'error'))) and contact.resource != '':
 					name += '/' + contact.resource
+				
 				uf_show = helpers.get_uf_show(show)
 				if status: 
 					ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
@@ -1204,7 +1212,7 @@ class RosterWindow:
 		gajim.connections[account].request_register_agent_info(contact.jid)
 
 	def on_remove_agent(self, widget, list_):
-		'''When an agent is requested to log in or off. list_ is a list of
+		'''When an agent is requested to be removed. list_ is a list of
 		(contact, account) tuple'''
 		for (contact, account) in list_:
 			if gajim.config.get_per('accounts', account, 'hostname') == \
@@ -1226,6 +1234,17 @@ class RosterWindow:
 				gajim.contacts.remove_jid(account, contact.jid)
 				gajim.contacts.remove_contact(account, contact)
 
+		# Check if there are unread events from some contacts
+		has_unread_events = False
+		for (contact, account) in list_:
+			for jid in gajim.events.get_events(account):
+				if jid.endswith(contact.jid):
+					has_unread_events = True
+					break
+		if has_unread_events:
+			dialogs.ErrorDialog(_('You have unread messages'),
+				_('You must read them before removing this transport.'))
+			return
 		if len(list_) == 1:
 			pritext = _('Transport "%s" will be removed') % contact.jid
 			sectext = _('You will no longer be able to send and receive messages to contacts from this transport.')
@@ -1332,7 +1351,7 @@ class RosterWindow:
 		'''Make contact's popup menu'''
 		model = self.tree.get_model()
 		jid = model[iter][C_JID].decode('utf-8')
-		path = model.get_path(iter)
+		tree_path = model.get_path(iter)
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 		our_jid = jid == gajim.get_jid_from_account(account)
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
@@ -1368,6 +1387,12 @@ class RosterWindow:
 			img.set_from_file(path_to_kbd_input_img)
 			rename_menuitem.set_image(img)
 
+		iconset = gajim.config.get('iconset')
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		state_images = self.load_iconset(path)
+		if state_images.has_key('muc_active'):
+			invite_menuitem.set_image(state_images['muc_active'])
+
 		above_subscription_separator = xml.get_widget(
 			'above_subscription_separator')
 		subscription_menuitem = xml.get_widget('subscription_menuitem')
@@ -1387,8 +1412,6 @@ class RosterWindow:
 			start_chat_menuitem.set_submenu(sub_menu)
 
 			iconset = gajim.config.get('iconset')
-			if not iconset:
-				iconset = DEFAULT_ICONSET
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			for c in contacts:
 				# icon MUST be different instance for every item
@@ -1403,7 +1426,7 @@ class RosterWindow:
 
 		else: # one resource
 			start_chat_menuitem.connect('activate',
-				self.on_roster_treeview_row_activated, path)
+				self.on_roster_treeview_row_activated, tree_path)
 
 		if contact.resource:
 			send_file_menuitem.connect('activate',
@@ -1444,7 +1467,7 @@ class RosterWindow:
 				menuitem.connect('activate', self.on_invite_to_room,
 					[(contact, account)], room_jid, acct)
 				submenu.append(menuitem)
-		rename_menuitem.connect('activate', self.on_rename, iter, path)
+		rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
 		remove_from_roster_menuitem.connect('activate', self.on_req_usub,
 			[(contact, account)])
 		information_menuitem.connect('activate', self.on_info, contact,
@@ -1774,8 +1797,6 @@ class RosterWindow:
 		# we have to create our own set of icons for the menu
 		# using self.jabber_status_images is poopoo
 		iconset = gajim.config.get('iconset')
-		if not iconset:
-			iconset = DEFAULT_ICONSET
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = self.load_iconset(path)
 
@@ -1908,8 +1929,6 @@ class RosterWindow:
 		else:
 			menu = gtk.Menu()
 			iconset = gajim.config.get('iconset')
-			if not iconset:
-				iconset = DEFAULT_ICONSET
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			accounts = [] # Put accounts in a list to sort them
 			for account in gajim.connections:
@@ -2419,6 +2438,41 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self.send_status(acct, status, message)
 		self.update_status_combobox()
 
+	## enable setting status msg from currently playing music track
+	def enable_syncing_status_msg_from_current_music_track(self, enabled):
+		'''if enabled is True, we listen to events from music players about
+		currently played music track, and we update our
+		status message accordinly'''
+		if not dbus_support.supported:
+			# do nothing if user doesn't have D-Bus bindings
+			return
+		if enabled:
+			if self._music_track_changed_signal is None:
+				listener = MusicTrackListener.get()
+				self._music_track_changed_signal = listener.connect(
+					'music-track-changed', self._music_track_changed)
+				track = listener.get_playing_track()
+				self._music_track_changed(listener, track)
+		else:
+			if self._music_track_changed_signal is not None:
+				listener = MusicTrackListener.get()
+				listener.disconnect(self._music_track_changed_signal)
+				self._music_track_changed_signal = None
+				self._music_track_changed(None, None)
+	
+	def _music_track_changed(self, unused_listener, music_track_info):
+		accounts = gajim.connections.keys()
+		if music_track_info is None:
+			status_message = ''
+		else:
+			status_message = _('♪ "%(title)s" by %(artist)s ♪') % \
+				{'title': music_track_info.title,
+					'artist': music_track_info.artist }
+		for acct in accounts:
+			current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
+			self.send_status(acct, current_show, status_message)
+
+
 	def update_status_combobox(self):
 		# table to change index in connection.connected to index in combobox
 		table = {'offline':9, 'connecting':9, 'online':0, 'chat':1, 'away':2,
@@ -2599,12 +2653,12 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		# We save it in a queue
 		type_ = 'chat'
+		event_type = 'message_received'
 		if msg_type == 'normal':
 			type_ = 'normal'
-		show_in_roster = notify.get_show_in_roster('message_received', account,
-			contact)
-		show_in_systray = notify.get_show_in_systray('message_received', account,
-			contact)
+			event_type = 'single_message_received'
+		show_in_roster = notify.get_show_in_roster(event_type, account, contact)
+		show_in_systray = notify.get_show_in_systray(event_type, account, contact)
 		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
 			encrypted, resource, msg_id), show_in_roster = show_in_roster,
 			show_in_systray = show_in_systray)
@@ -3134,8 +3188,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def make_jabber_state_images(self):
 		'''initialise jabber_state_images dict'''
 		iconset = gajim.config.get('iconset')
-		if not iconset:
-			iconset = 'dcraven'
+		if iconset:
+			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+			if not os.path.exists(path):
+				iconset = gajim.config.DEFAULT_ICONSET
+		else: 
+			iconset = gajim.config.DEFAULT_ICONSET
+
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
 		self.jabber_state_images['32'] = self.load_iconset(path)
 
@@ -3174,7 +3233,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				model[iter][1] = self.jabber_state_images['16'][model[iter][2]]
 			iter = model.iter_next(iter)
 		# Update the systray
-		gajim.interface.systray.set_img()
+		if gajim.interface.systray_enabled:
+			gajim.interface.systray.set_img()
 
 		for win in gajim.interface.msg_win_mgr.windows():
 			for ctrl in win.controls():
@@ -3722,6 +3782,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
 		self.window = self.xml.get_widget('roster_window')
+		self._music_track_changed_signal = None
 		gajim.interface.msg_win_mgr = MessageWindowMgr()
 		self.advanced_menus = [] # We keep them to destroy them
 		if gajim.config.get('roster_window_skip_taskbar'):
@@ -3897,6 +3958,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
 		self.tooltip = tooltips.RosterTooltip()
 		self.draw_roster()
+
+		## Music Track notifications
+		## FIXME: we use a timeout because changing status of
+		## accounts has no effect until they are connected.
+		gobject.timeout_add(1000,
+			self.enable_syncing_status_msg_from_current_music_track,
+			gajim.config.get('set_status_msg_from_current_music_track'))
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()

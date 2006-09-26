@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+
 <widget class="GtkMenu" id="systray_context_menu">
 
   <child>
@@ -11,7 +12,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1371">
+	<widget class="GtkImage" id="image1455">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-network</property>
 	  <property name="icon_size">1</property>
@@ -31,7 +32,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1372">
+	<widget class="GtkImage" id="image1456">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -51,7 +52,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1445">
+	<widget class="GtkImage" id="image1457">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-connect</property>
 	  <property name="icon_size">1</property>
@@ -71,7 +72,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1373">
+	<widget class="GtkImage" id="image1458">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -107,7 +108,7 @@
       <signal name="activate" handler="on_show_roster_menuitem_activate" last_modification_time="Sat, 29 Oct 2005 23:55:24 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1374">
+	<widget class="GtkImage" id="image1459">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-home</property>
 	  <property name="icon_size">1</property>
@@ -144,4 +145,5 @@
     </widget>
   </child>
 </widget>
+
 </glade-interface>
