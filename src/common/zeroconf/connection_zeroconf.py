@@ -224,11 +224,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.zeroconf.host = self.host
 		self.zeroconf.port = self.port
 
-		if self.connection:
-			return self.connection, ''
-		
 		if self.zeroconf.connect():
-			self.connection = client_zeroconf.ClientZeroconf(self.zeroconf, self)
+			if not self.connection:
+				self.connection = client_zeroconf.ClientZeroconf(self.zeroconf, self)
+			else:
+				self.zeroconf.announce()
 			self.roster = self.connection.getRoster()
 			self.dispatch('ROSTER', self.roster)
 
@@ -278,6 +278,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.zeroconf.remove_announce()
 		self.zeroconf.txt = txt2
 		self.zeroconf.port = port
+		self.zeroconf.username = self.username
 		self.zeroconf.announce()
 
 	def change_status(self, show, msg, sync = False, auto = False):
