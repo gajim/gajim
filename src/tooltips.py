@@ -177,8 +177,8 @@ class StatusTable:
 				# make sure 'status' is unicode before we send to to reduce_chars
 				if isinstance(status, str):
 					status = unicode(status, encoding='utf-8')
-				# reduce to 200 chars, 1 line
-				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 1)
+				# reduce to 100 chars, 1 line
+				status = gtkgui_helpers.reduce_chars_newlines(status, 100, 1)
 				str_status = gtkgui_helpers.escape_for_pango_markup(str_status)
 				status = gtkgui_helpers.escape_for_pango_markup(status)
 				str_status += ' - <span style="italic">' + status + '</span>'
@@ -369,7 +369,7 @@ class GCTooltip(BaseTooltip):
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities
-				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 5)
+				status = gtkgui_helpers.reduce_chars_newlines(status, 100, 5)
 				status = '<span style="italic">' +\
 					 gtkgui_helpers.escape_for_pango_markup(status) + '</span>'
 				properties.append((status, None))
@@ -537,18 +537,18 @@ class RosterTooltip(NotificationAreaTooltip):
 					text = text % local_time 
 					show += text
 				show = u'<span style="italic">' + show + '</span>'
-				# we append show at end of properties below
+				# we append show below
 				
 				if contact.status:
 					status = contact.status.strip()
 					if status:
 						# reduce long status
-						# (no more than 200 chars on line and no more than 5 lines)
-						status = gtkgui_helpers.reduce_chars_newlines(status, 200, 5)
+						# (no more than 100 chars on line and no more than 5 lines)
+						status = gtkgui_helpers.reduce_chars_newlines(status, 100, 5)
 						# escape markup entities. 
 						status = gtkgui_helpers.escape_for_pango_markup(status)
 						properties.append((u'<span style="italic">%s</span>' % status, None))
-
+				properties.append((show, None))
 		
 		properties.append((_('Jabber ID: '), prim_contact.jid ))
 		if prim_contact.sub and prim_contact.sub != 'both':
@@ -565,13 +565,12 @@ class RosterTooltip(NotificationAreaTooltip):
 				properties.append((_('OpenPGP: '),
 					gtkgui_helpers.escape_for_pango_markup(keyID)))
 
-		if num_resources <= 1: 
-		# contact is offline(show only show) or has only one ressource
-			if num_resources == 1 and contact.resource:
-				properties.append((_('Resource: '),
-					gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + \
-					unicode(contact.priority) + ')'))
-			properties.append((show, None))
+		# contact has only one ressource
+		if num_resources == 1 and contact.resource:
+			properties.append((_('Resource: '),
+				gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + \
+				unicode(contact.priority) + ')'))
+			
 		
 		while properties:
 			property = properties.pop(0)
@@ -584,7 +583,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			if property[1]:
 				label.set_markup(property[0])
 				vcard_table.attach(label, 1, 2, vcard_current_row, vcard_current_row + 1, 
-														gtk.FILL,  vertical_fill, 0, 0)
+										gtk.FILL,  vertical_fill, 0, 0)
 				label = gtk.Label()
 				if num_resources > 1 and not properties:
 					label.set_alignment(0, 1)
