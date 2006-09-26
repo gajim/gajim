@@ -41,6 +41,7 @@ VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
 METACONTACTS_ARRIVED = 'metacontacts_arrived'
+PRIVACY_ARRIVED = 'privacy_arrived'
 HAS_IDLE = True
 try:
 	import common.idle as idle # when we launch gajim from sources
@@ -1004,6 +1005,11 @@ class ConnectionVcard:
 				self.dispatch('METACONTACTS', meta_list)
 			# We can now continue connection by requesting the roster
 			self.connection.initRoster()
+		elif self.awaiting_answers[id][0] == PRIVACY_ARRIVED:
+			if iq_obj.getType() != 'error':
+				self.privacy_rules_supported = True
+			# Ask metacontacts before roster
+			self.get_metacontacts()
 
 		del self.awaiting_answers[id]
 	

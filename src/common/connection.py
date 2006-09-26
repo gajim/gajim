@@ -404,8 +404,6 @@ class Connection(ConnectionHandlers):
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 		gajim.log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
 			self._current_host['port'], con_type))
-		# Ask metacontacts before roster
-		self.get_metacontacts()
 		self._register_handlers(con, con_type)
 		return True
 
@@ -591,8 +589,11 @@ class Connection(ConnectionHandlers):
 		if self.connection:
 			con.set_send_timeout(self.keepalives, self.send_keepalive)
 			self.connection.onreceive(None)
-			# Ask metacontacts before roster
-			self.get_metacontacts()
+			iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
+			id = self.connection.getAnID()
+			iq.setID(id)
+			self.awaiting_answers[id] = (PRIVACY_ARRIVED, )
+			self.connection.send(iq)
 
 	def change_status(self, show, msg, auto = False):
 		if not show in STATUS_LIST:

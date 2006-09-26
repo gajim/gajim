@@ -691,8 +691,11 @@ class RosterWindow:
 		xml_console_menuitem.connect('activate',
 			self.on_xml_console_menuitem_activate, account)
 
-		privacy_lists_menuitem.connect('activate',
-			self.on_privacy_lists_menuitem_activate, account)
+		if gajim.connections[account] and gajim.connections[account].privacy_rules_supported:
+			privacy_lists_menuitem.connect('activate',
+				self.on_privacy_lists_menuitem_activate, account)
+		else:
+			privacy_lists_menuitem.set_sensitive(False)
 
 		send_server_message_menuitem.connect('activate',
 			self.on_send_server_message_menuitem_activate, account)
