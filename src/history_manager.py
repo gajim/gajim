@@ -193,7 +193,9 @@ class HistoryManager:
 		gtk.main_quit()
 	
 	def _fill_jids_listview(self):
-		self.cur.execute('SELECT jid, jid_id FROM jids ORDER BY jid')
+		# get those jids that have at least one entry in logs
+		self.cur.execute('SELECT jid, jid_id FROM jids WHERE jid_id IN (SELECT '
+			'distinct logs.jid_id FROM logs) ORDER BY jid')
 		rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
 		for row in rows:
 			self.jids_already_in.append(row[0]) # jid

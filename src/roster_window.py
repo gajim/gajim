@@ -691,8 +691,11 @@ class RosterWindow:
 		xml_console_menuitem.connect('activate',
 			self.on_xml_console_menuitem_activate, account)
 
-		privacy_lists_menuitem.connect('activate',
-			self.on_privacy_lists_menuitem_activate, account)
+		if gajim.connections[account] and gajim.connections[account].privacy_rules_supported:
+			privacy_lists_menuitem.connect('activate',
+				self.on_privacy_lists_menuitem_activate, account)
+		else:
+			privacy_lists_menuitem.set_sensitive(False)
 
 		send_server_message_menuitem.connect('activate',
 			self.on_send_server_message_menuitem_activate, account)
@@ -2469,6 +2472,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				{'title': music_track_info.title,
 					'artist': music_track_info.artist }
 		for acct in accounts:
+			if not gajim.config.get_per('accounts', acct,
+			'sync_with_global_status'):
+				continue
+			if not gajim.connections[acct].connected:
+				continue
 			current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 			self.send_status(acct, current_show, status_message)
 
