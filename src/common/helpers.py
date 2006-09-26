@@ -290,6 +290,21 @@ def get_uf_role(role, plural = False):
 		else:
 			role_name = _('Visitor')
 	return role_name
+	
+def get_uf_affiliation(affiliation):
+	'''Get a nice and translated affilition for muc'''
+	if affiliation == 'none': 
+		affiliation_name = Q_('?Group Chat Contact Affiliation:None')
+	elif affiliation == 'owner':
+		affiliation_name = _('Owner')
+	elif affiliation == 'admin':
+		affiliation_name = _('Administrator')
+	elif affiliation == 'member':
+		affiliation_name = _('Member')
+	else: # Argl ! An unknown affiliation !
+		affiliation_name = affiliation.capitalize()
+	return affiliation_name
+
 
 def get_sorted_keys(adict):
 	keys = adict.keys()

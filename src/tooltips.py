@@ -179,8 +179,10 @@ class StatusTable:
 					status = unicode(status, encoding='utf-8')
 				# reduce to 200 chars, 1 line
 				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 1)
-				str_status += ' - ' + status
-		return gtkgui_helpers.escape_for_pango_markup(str_status)
+				str_status = gtkgui_helpers.escape_for_pango_markup(str_status)
+				status = gtkgui_helpers.escape_for_pango_markup(status)
+				str_status += ' - <span style="italic">' + status + '</span>'
+		return str_status
 	
 	def add_status_row(self, file_path, show, str_status, status_time = None, show_lock = False):
 		''' appends a new row with status icon to the table '''
@@ -213,13 +215,6 @@ class StatusTable:
 				gtk.ICON_SIZE_MENU)
 			self.table.attach(lock_image, 4, 5, self.current_row,
 				self.current_row + 1, 0, 0, 0, 0)
-		if status_time:
-			self.current_row += 1
-			# decode locale encoded string, the same way as below (10x nk)
-			local_time = time.strftime("%c", status_time)
-			local_time = local_time.decode(locale.getpreferredencoding()) 
-			status_time_label = gtk.Label(local_time)
-			status_time_label.set_alignment(0, 0)
 	
 class NotificationAreaTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the notification area '''
@@ -364,32 +359,34 @@ class GCTooltip(BaseTooltip):
 		vcard_table.set_homogeneous(False)
 		vcard_current_row = 1
 		properties = []
-		status_message_present = False
 
-		show = helpers.get_uf_show(contact.show)
-		nick_show_markup = '<span weight="bold">' + \
+		nick_markup = '<span weight="bold">' + \
 			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
-			+ '</span> (' + show + ')' 
-		properties.append((nick_show_markup, None))
+			+ '</span>' 
+		properties.append((nick_markup, None))
 
-		#status message :
-		if contact.status:
-			status_message = contact.status.strip()
-			if status_message != '':
+		if contact.status: # status message 
+			status = contact.status.strip()
+			if status != '':
 				# escape markup entities
-				status_message = gtkgui_helpers.reduce_chars_newlines(status_message, 200, 5)
-				status_message = '<span style="italic">' +\
-					 gtkgui_helpers.escape_for_pango_markup(status_message) + '</span>'
-				properties.append((status_message, None))
-				status_message_present = True 
+				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 5)
+				status = '<span style="italic">' +\
+					 gtkgui_helpers.escape_for_pango_markup(status) + '</span>'
+				properties.append((status, None))
+		else: # no status message, show SHOW instead
+			show = helpers.get_uf_show(contact.show)
+			show = '<span style="italic">' + show + '</span>'
+			properties.append((show, None))
 
 		if contact.jid.strip() != '':
-			properties.append((_('JID: '), contact.jid))	
-		if contact.affiliation != "none":
-			properties.append((_('Affiliation: '), contact.affiliation.capitalize()))
+			properties.append((_('Jabber ID: '), contact.jid))	
 		if hasattr(contact, 'resource') and contact.resource.strip() != '':
 			properties.append((_('Resource: '), 
 				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
+		if contact.affiliation != 'none':
+			affiliation = helpers.get_uf_affiliation(contact.affiliation) +\
+					 _(' of the room')
+			properties.append((affiliation, None))
 		
 		# Add avatar
 		puny_name = helpers.sanitize_filename(contact.name)
@@ -491,23 +488,10 @@ class RosterTooltip(NotificationAreaTooltip):
 		vcard_table.set_homogeneous(False)
 		vcard_current_row = 1
 		properties = []
-		jid_markup = '<span weight="bold">' + prim_contact.jid + '</span>'
-		properties.append((jid_markup, None))
-
-		properties.append((_('Name: '), gtkgui_helpers.escape_for_pango_markup(
-			prim_contact.get_shown_name())))
-		if prim_contact.sub:
-			properties.append(( _('Subscription: '), 
-				gtkgui_helpers.escape_for_pango_markup(helpers.get_uf_sub(prim_contact.sub))))
-		if prim_contact.keyID:
-			keyID = None
-			if len(prim_contact.keyID) == 8:
-				keyID = prim_contact.keyID
-			elif len(prim_contact.keyID) == 16:
-				keyID = prim_contact.keyID[8:]
-			if keyID:
-				properties.append((_('OpenPGP: '),
-					gtkgui_helpers.escape_for_pango_markup(keyID)))
+		name_markup = u'<span weight="bold">' +  gtkgui_helpers.escape_for_pango_markup(
+			prim_contact.get_shown_name())+ '</span>'
+		properties.append((name_markup, None))
+		
 		num_resources = 0
 		# put contacts in dict, where key is priority
 		contacts_dict = {}
@@ -518,11 +502,6 @@ class RosterTooltip(NotificationAreaTooltip):
 					contacts_dict[contact.priority].append(contact)
 				else:
 					contacts_dict[contact.priority] = [contact]
-
-		if num_resources == 1 and contact.resource:
-			properties.append((_('Resource: '),
-				gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + \
-				unicode(contact.priority) + ')'))
 		if num_resources > 1:
 			properties.append((_('Status: '),	' '))
 			contact_keys = contacts_dict.keys()
@@ -540,6 +519,26 @@ class RosterTooltip(NotificationAreaTooltip):
 		else: # only one resource
 			if contact.show:
 				show = helpers.get_uf_show(contact.show) 
+				if contact.last_status_time:
+					vcard_current_row += 1
+					if contact.show == 'offline':
+						text = ' - ' + _('Last status : %s')
+					else:
+						text = _(' since %s')
+					
+					if time.strftime('%j', time.localtime())== \
+							time.strftime('%j', contact.last_status_time):
+					# it's today, show only the locale hour representation
+						local_time = time.strftime('%X', contact.last_status_time)	
+					else:
+						# time.strftime returns locale encoded string
+						local_time = time.strftime('%c', contact.last_status_time)
+					local_time = local_time.decode(locale.getpreferredencoding()) 
+					text = text % local_time 
+					show += text
+				show = u'<span style="italic">' + show + '</span>'
+				# we append show at end of properties below
+				
 				if contact.status:
 					status = contact.status.strip()
 					if status:
@@ -548,26 +547,32 @@ class RosterTooltip(NotificationAreaTooltip):
 						status = gtkgui_helpers.reduce_chars_newlines(status, 200, 5)
 						# escape markup entities. 
 						status = gtkgui_helpers.escape_for_pango_markup(status)
-						show += ' - ' + status
-				properties.append((_('Status: '),	show))
-			
-			if contact.last_status_time:
-				vcard_current_row += 1
-				if contact.show == 'offline':
-					text = _('Last status on %s')
-				else:
-					text = _('Since %s')
-				
-				if time.strftime('%j', time.localtime())== \
-						time.strftime('%j', contact.last_status_time):
-				# it's today, show only the locale hour representation
-					local_time = time.strftime('%X', contact.last_status_time)	
-				else:
-					# time.strftime returns locale encoded string
-					local_time = time.strftime('%c', contact.last_status_time)
-				local_time = local_time.decode(locale.getpreferredencoding()) 
-				text = text % local_time 
-				properties.append(('<span style="italic">%s</span>' % text, None))
+						properties.append((u'<span style="italic">%s</span>' % status, None))
+
+		
+		properties.append((_('Jabber ID: '), prim_contact.jid ))
+		if prim_contact.sub and prim_contact.sub != 'both':
+			# ('both' is the normal sub so we don't show it)
+			properties.append(( _('Subscription: '), 
+				gtkgui_helpers.escape_for_pango_markup(helpers.get_uf_sub(prim_contact.sub))))
+		if prim_contact.keyID:
+			keyID = None
+			if len(prim_contact.keyID) == 8:
+				keyID = prim_contact.keyID
+			elif len(prim_contact.keyID) == 16:
+				keyID = prim_contact.keyID[8:]
+			if keyID:
+				properties.append((_('OpenPGP: '),
+					gtkgui_helpers.escape_for_pango_markup(keyID)))
+
+		if num_resources <= 1: 
+		# contact is offline(show only show) or has only one ressource
+			if num_resources == 1 and contact.resource:
+				properties.append((_('Resource: '),
+					gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + \
+					unicode(contact.priority) + ')'))
+			properties.append((show, None))
+		
 		while properties:
 			property = properties.pop(0)
 			vcard_current_row += 1
