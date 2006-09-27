@@ -3584,6 +3584,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if account_dest == 'all':
 			# drop on account row in merged mode: we can't know which account it is
 			return
+		
+		if account_dest == gajim.ZEROCONF_ACC_NAME:
+			# drop on zeroconf account, no contact adds possible
+			return
 
 		# if account is not connected, do nothing
 		if gajim.connections[account_dest].connected < 2:
