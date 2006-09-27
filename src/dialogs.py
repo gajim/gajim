@@ -405,12 +405,12 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
-	uid_labels = {'jabber': _('Jabber ID'),
-		'aim': _('AIM Address'),
-		'gadu-gadu': _('GG Number'),
-		'icq': _('ICQ Number'),
-		'msn': _('MSN Address'),
-		'yahoo': _('Yahoo! Address')}
+	uid_labels = {'jabber': _('Jabber ID:'),
+		'aim': _('AIM Address:'),
+		'gadu-gadu': _('GG Number:'),
+		'icq': _('ICQ Number:'),
+		'msn': _('MSN Address:'),
+		'yahoo': _('Yahoo! Address:')}
 	def __init__(self, account = None, jid = None, user_nick = None,
 	group = None):
 		self.account = account
@@ -647,7 +647,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if type_ in self.uid_labels:
 			self.uid_label.set_text(self.uid_labels[type_])
 		else:
-			self.uid_label.set_text(_('User ID'))
+			self.uid_label.set_text(_('User ID:'))
 		if type_ == 'jabber':
 			self.message_scrolledwindow.show()
 		else:
