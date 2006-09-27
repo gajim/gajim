@@ -384,9 +384,10 @@ class GCTooltip(BaseTooltip):
 			properties.append((_('Resource: '), 
 				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
 		if contact.affiliation != 'none':
-			affiliation = helpers.get_uf_affiliation(contact.affiliation) +\
-					 _(' of the room')
-			properties.append((affiliation, None))
+			uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
+			affiliation_str = _('%(owner_or_admin_or_member)s of this room') %\
+				{'owner_or_admin_or_member': uf_affiliation}
+			properties.append((affiliation_str, None))
 		
 		# Add avatar
 		puny_name = helpers.sanitize_filename(contact.name)
