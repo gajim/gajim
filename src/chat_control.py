@@ -880,8 +880,6 @@ class ChatControl(ChatControlBase):
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
-		# is account displayed after nick in banner ?
-		self.account_displayed= False
 
 	def notify_on_new_messages(self):
 		return gajim.config.get('trayicon_notification_on_new_messages')
@@ -1000,10 +998,8 @@ class ChatControl(ChatControlBase):
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
 		name = contact.get_shown_name()
-		avoid_showing_account_too = False
 		if self.resource:
 			name += '/' + self.resource
-			avoid_showing_account_too = True
 		if self.TYPE_ID == message_control.TYPE_PM:
 			room_jid = self.contact.jid.split('/')[0]
 			room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid,
@@ -1011,23 +1007,21 @@ class ChatControl(ChatControlBase):
 			name = _('%s from room %s') % (name, room_ctrl.name)
 		name = gtkgui_helpers.escape_for_pango_markup(name)
 
-		# We know our contacts nick, but if there are any other controls 
-		# with the same nick we need to also display the account
+		# We know our contacts nick, but if another contact has the same nick
+		# in another account we need to also display the account.
 		# except if we are talking to two different resources of the same contact
 		acct_info = ''
-		self.account_displayed = False
-		for ctrl in self.parent_win.controls():
-			if ctrl == self or ctrl.type_id == 'gc':
+		for account in gajim.contacts.get_accounts():
+			if account == self.account:
 				continue
-			if self.contact.get_shown_name() == ctrl.contact.get_shown_name()\
-			and not avoid_showing_account_too:
-				self.account_displayed = True
-				if not ctrl.account_displayed:
-					# do that after this instance exists
-					gobject.idle_add(ctrl.draw_banner)
-				acct_info = ' (%s)' % \
-						gtkgui_helpers.escape_for_pango_markup(self.account)
+			if acct_info: # We already found a contact with same nick
 				break
+			for jid in gajim.contacts.get_jid_list(account):
+				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+				if contact.get_shown_name() == self.contact.get_shown_name():
+					acct_info = ' (%s)' % \
+						gtkgui_helpers.escape_for_pango_markup(self.account)
+					break
 
 		status = contact.status
 		if status is not None:
