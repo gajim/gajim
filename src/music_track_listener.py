@@ -14,6 +14,9 @@
 ## GNU General Public License for more details.
 ##
 import gobject
+if __name__ == '__main__':
+	# install _() func before importing dbus_support
+	from common import i18n
 
 import dbus_support
 if dbus_support.supported:
@@ -141,8 +144,6 @@ class MusicTrackListener(gobject.GObject):
 
 # here we test :)
 if __name__ == '__main__':
-	from common import i18n
-	
 	def music_track_change_cb(listener, music_track_info):
 		if music_track_info is None:
 			print "Stop!"
