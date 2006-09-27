@@ -3625,6 +3625,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		if type_dest == 'account' and account_source == account_dest:
 			return
+		if account_source == gajim.ZEROCONF_ACC_NAME:
+			return
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':
 			it = model.iter_parent(it)
