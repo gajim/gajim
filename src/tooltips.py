@@ -181,7 +181,7 @@ class StatusTable:
 				status = gtkgui_helpers.reduce_chars_newlines(status, 100, 1)
 				str_status = gtkgui_helpers.escape_for_pango_markup(str_status)
 				status = gtkgui_helpers.escape_for_pango_markup(status)
-				str_status += ' - <span style="italic">' + status + '</span>'
+				str_status += ' - <i>' + status + '</i>'
 		return str_status
 	
 	def add_status_row(self, file_path, show, str_status, status_time = None, show_lock = False):
@@ -360,9 +360,9 @@ class GCTooltip(BaseTooltip):
 		vcard_current_row = 1
 		properties = []
 
-		nick_markup = '<span weight="bold">' + \
+		nick_markup = '<b>' + \
 			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
-			+ '</span>' 
+			+ '</b>' 
 		properties.append((nick_markup, None))
 
 		if contact.status: # status message 
@@ -370,12 +370,12 @@ class GCTooltip(BaseTooltip):
 			if status != '':
 				# escape markup entities
 				status = gtkgui_helpers.reduce_chars_newlines(status, 100, 5)
-				status = '<span style="italic">' +\
-					 gtkgui_helpers.escape_for_pango_markup(status) + '</span>'
+				status = '<i>' +\
+					 gtkgui_helpers.escape_for_pango_markup(status) + '</i>'
 				properties.append((status, None))
 		else: # no status message, show SHOW instead
 			show = helpers.get_uf_show(contact.show)
-			show = '<span style="italic">' + show + '</span>'
+			show = '<i>' + show + '</i>'
 			properties.append((show, None))
 
 		if contact.jid.strip() != '':
@@ -413,22 +413,23 @@ class GCTooltip(BaseTooltip):
 			label.set_alignment(0, 0)
 			if property[1]:
 				label.set_markup(property[0])
-				vcard_table.attach(label, 1, 2, vcard_current_row, vcard_current_row + 1, 
-														gtk.FILL,  vertical_fill, 0, 0)
+				vcard_table.attach(label, 1, 2, vcard_current_row,
+					vcard_current_row + 1, gtk.FILL, vertical_fill, 0, 0)
 				label = gtk.Label()
 				label.set_alignment(0, 0)
 				label.set_markup(property[1])
 				label.set_line_wrap(True)
-				vcard_table.attach(label, 2, 3, vcard_current_row, vcard_current_row + 1, 
-										gtk.EXPAND | gtk.FILL, vertical_fill, 0, 0)
+				vcard_table.attach(label, 2, 3, vcard_current_row,
+					vcard_current_row + 1, gtk.EXPAND | gtk.FILL,
+					vertical_fill, 0, 0)
 			else:
 				label.set_markup(property[0])
-				vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, 
-										gtk.FILL, vertical_fill, 0)
+				vcard_table.attach(label, 1, 3, vcard_current_row,
+					vcard_current_row + 1, gtk.FILL, vertical_fill, 0)
 		
 		self.avatar_image.set_alignment(0, 0)
-		vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row +1, 
-									gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
+		vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row + 1, 
+			gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
 		self.win.add(vcard_table)
 
 class RosterTooltip(NotificationAreaTooltip):
@@ -489,8 +490,8 @@ class RosterTooltip(NotificationAreaTooltip):
 		vcard_table.set_homogeneous(False)
 		vcard_current_row = 1
 		properties = []
-		name_markup = u'<span weight="bold">' +  gtkgui_helpers.escape_for_pango_markup(
-			prim_contact.get_shown_name())+ '</span>'
+		name_markup = '<b>%s</b>' % gtkgui_helpers.escape_for_pango_markup(
+			prim_contact.get_shown_name())
 		properties.append((name_markup, None))
 		
 		num_resources = 0
@@ -523,7 +524,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				if contact.last_status_time:
 					vcard_current_row += 1
 					if contact.show == 'offline':
-						text = ' - ' + _('Last status : %s')
+						text = ' - ' + _('Last status: %s')
 					else:
 						text = _(' since %s')
 					
@@ -531,14 +532,17 @@ class RosterTooltip(NotificationAreaTooltip):
 							time.strftime('%j', contact.last_status_time):
 					# it's today, show only the locale hour representation
 						# FIXME : last_status_time is UTC but _we_ may not be
-						local_time = time.strftime('%X', contact.last_status_time)
+						local_time = time.strftime('%X',
+							contact.last_status_time)
 					else:
 						# time.strftime returns locale encoded string
-						local_time = time.strftime('%c', contact.last_status_time)
-					local_time = local_time.decode(locale.getpreferredencoding()) 
+						local_time = time.strftime('%c',
+							contact.last_status_time)
+					local_time = local_time.decode(
+						locale.getpreferredencoding())
 					text = text % local_time 
 					show += text
-				show = u'<span style="italic">' + show + '</span>'
+				show = '<i>' + show + '</i>'
 				# we append show below
 				
 				if contact.status:
@@ -549,7 +553,7 @@ class RosterTooltip(NotificationAreaTooltip):
 						status = gtkgui_helpers.reduce_chars_newlines(status, 100, 5)
 						# escape markup entities. 
 						status = gtkgui_helpers.escape_for_pango_markup(status)
-						properties.append((u'<span style="italic">%s</span>' % status, None))
+						properties.append(('<i>%s</i>' % status, None))
 				properties.append((show, None))
 		
 		properties.append((_('Jabber ID: '), prim_contact.jid ))
@@ -557,8 +561,8 @@ class RosterTooltip(NotificationAreaTooltip):
 		# contact has only one ressource
 		if num_resources == 1 and contact.resource:
 			properties.append((_('Resource: '),
-				gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + \
-				unicode(contact.priority) + ')'))
+				gtkgui_helpers.escape_for_pango_markup(contact.resource) +\
+				' (' + unicode(contact.priority) + ')'))
 		
 		if prim_contact.sub and prim_contact.sub != 'both':
 			# ('both' is the normal sub so we don't show it)
@@ -585,8 +589,8 @@ class RosterTooltip(NotificationAreaTooltip):
 			label.set_alignment(0, 0)
 			if property[1]:
 				label.set_markup(property[0])
-				vcard_table.attach(label, 1, 2, vcard_current_row, vcard_current_row + 1, 
-										gtk.FILL,  vertical_fill, 0, 0)
+				vcard_table.attach(label, 1, 2, vcard_current_row,
+					vcard_current_row + 1, gtk.FILL,  vertical_fill, 0, 0)
 				label = gtk.Label()
 				if num_resources > 1 and not properties:
 					label.set_alignment(0, 1)
@@ -594,19 +598,20 @@ class RosterTooltip(NotificationAreaTooltip):
 					label.set_alignment(0, 0)
 				label.set_markup(property[1])
 				label.set_line_wrap(True)
-				vcard_table.attach(label, 2, 3, vcard_current_row, vcard_current_row + 1, 
-										gtk.EXPAND | gtk.FILL, vertical_fill, 0, 0)
+				vcard_table.attach(label, 2, 3, vcard_current_row,
+					vcard_current_row + 1, gtk.EXPAND | gtk.FILL,
+						vertical_fill, 0, 0)
 			else:
 				if isinstance(property[0], unicode):
 					label.set_markup(property[0])
 				else:
 					label = property[0]
-				vcard_table.attach(label, 1, 3, vcard_current_row, vcard_current_row + 1, 
-															gtk.FILL, vertical_fill, 0)
+				vcard_table.attach(label, 1, 3, vcard_current_row,
+					vcard_current_row + 1, gtk.FILL, vertical_fill, 0)
 		self.avatar_image.set_alignment(0, 0)
 		if table_size == 4:
-			vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row +1, 
-										gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
+			vcard_table.attach(self.avatar_image, 3, 4, 2,
+				vcard_current_row + 1, gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
 		self.win.add(vcard_table)
 
 class FileTransfersTooltip(BaseTooltip):
