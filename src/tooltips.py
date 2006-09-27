@@ -530,12 +530,8 @@ class RosterTooltip(NotificationAreaTooltip):
 					if time.strftime('%j', time.localtime())== \
 							time.strftime('%j', contact.last_status_time):
 					# it's today, show only the locale hour representation
+						# FIXME : last_status_time is UTC but _we_ may not be
 						local_time = time.strftime('%X', contact.last_status_time)
-						# Hack to delete seconds 
-						# We can't use hour:minutes directly because we don't
-						# know if we should use %H or %I (depend of user locale) 
-						# See http://docs.python.org/lib/module-time.html
-						local_time = local_time[:-3]
 					else:
 						# time.strftime returns locale encoded string
 						local_time = time.strftime('%c', contact.last_status_time)
@@ -557,10 +553,18 @@ class RosterTooltip(NotificationAreaTooltip):
 				properties.append((show, None))
 		
 		properties.append((_('Jabber ID: '), prim_contact.jid ))
+
+		# contact has only one ressource
+		if num_resources == 1 and contact.resource:
+			properties.append((_('Resource: '),
+				gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + \
+				unicode(contact.priority) + ')'))
+		
 		if prim_contact.sub and prim_contact.sub != 'both':
 			# ('both' is the normal sub so we don't show it)
 			properties.append(( _('Subscription: '), 
 				gtkgui_helpers.escape_for_pango_markup(helpers.get_uf_sub(prim_contact.sub))))
+	
 		if prim_contact.keyID:
 			keyID = None
 			if len(prim_contact.keyID) == 8:
@@ -570,13 +574,6 @@ class RosterTooltip(NotificationAreaTooltip):
 			if keyID:
 				properties.append((_('OpenPGP: '),
 					gtkgui_helpers.escape_for_pango_markup(keyID)))
-
-		# contact has only one ressource
-		if num_resources == 1 and contact.resource:
-			properties.append((_('Resource: '),
-				gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + \
-				unicode(contact.priority) + ')'))
-			
 		
 		while properties:
 			property = properties.pop(0)
