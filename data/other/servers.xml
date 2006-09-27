@@ -75,6 +75,9 @@
   <item jid="illx.org" name="Jabber server hosted by illx.org">
     <active port="5222"/>
   </item>
+  <item jid='im.apinc.org' name='French server hosted by APINC'> 
+    <active port='5222'/> 
+  </item>
   <item jid="im.flosoft.biz" name="">
     <active port="5222"/>
   </item>
@@ -138,7 +141,7 @@
   <item jid="jabber.felisberto.net" name="Server in Portugal">
     <active port="5222"/>
   </item>
-  <item jid="jabber.fr" name="">
+  <item jid="jabber.fr" name="French server hosted by APINC">
     <active port="5222"/>
   </item>
   <item jid="jabber.freenet.de" name="Server in Germany">
