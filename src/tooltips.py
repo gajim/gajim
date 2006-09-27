@@ -602,7 +602,7 @@ class RosterTooltip(NotificationAreaTooltip):
 					vcard_current_row + 1, gtk.EXPAND | gtk.FILL,
 						vertical_fill, 0, 0)
 			else:
-				if isinstance(property[0], unicode):
+				if isinstance(property[0], (unicode, str)): #FIXME: rm unicode?
 					label.set_markup(property[0])
 				else:
 					label = property[0]
