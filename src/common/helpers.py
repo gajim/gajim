@@ -747,20 +747,20 @@ def sanitize_filename(filename):
 	
 	return filename
 
-def allow_showing_notification(account, type = None, advanced_notif_num = None,
-first = True):
+def allow_showing_notification(account, type = None,
+	advanced_notif_num = None, is_first_message = True):
 	'''is it allowed to show nofication?
 	check OUR status and if we allow notifications for that status
-	type is the option that need to be True ex: notify_on_signing
-	first: set it to false when it's not the first message'''
-	if advanced_notif_num != None:
+	type is the option that need to be True e.g.: notify_on_signing
+	is_first_message: set it to false when it's not the first message'''
+	if advanced_notif_num is not None:
 		popup = gajim.config.get_per('notifications', str(advanced_notif_num),
 			'popup')
 		if popup == 'yes':
 			return True
 		if popup == 'no':
 			return False
-	if type and (not gajim.config.get(type) or not first):
+	if type and (not gajim.config.get(type) or not is_first_message):
 		return False
 	if gajim.config.get('autopopupaway'): # always show notification
 		return True
@@ -785,7 +785,7 @@ def allow_popup_window(account, advanced_notif_num = None):
 	return False
 
 def allow_sound_notification(sound_event, advanced_notif_num = None):
-	if advanced_notif_num != None:
+	if advanced_notif_num is not None:
 		sound = gajim.config.get_per('notifications', str(advanced_notif_num),
 			'sound')
 		if sound == 'yes':

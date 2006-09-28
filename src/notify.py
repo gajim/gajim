@@ -64,7 +64,8 @@ def get_show_in_systray(event, account, contact):
 	return True
 
 def get_advanced_notification(event, account, contact):
-	'''Returns the number of the first advanced notification or None'''
+	'''Returns the number of the first (top most)
+	advanced notification else None'''
 	num = 0
 	notif = gajim.config.get_per('notifications', str(num))
 	while notif:
@@ -112,7 +113,8 @@ def get_advanced_notification(event, account, contact):
 
 def notify(event, jid, account, parameters, advanced_notif_num = None):
 	'''Check what type of notifications we want, depending on basic 
-	and the advanced configuration of notifications and do these notifications'''
+	and the advanced configuration of notifications and do these notifications;
+	advanced_notif_num'''
 	# First, find what notifications we want
 	do_popup = False
 	do_sound = False
@@ -146,17 +148,17 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 			do_sound = True
 	elif event == 'new_message':
 		message_type = parameters[0]
-		first = parameters[1]
+		is_first_message = parameters[1]
 		nickname = parameters[2]
 		message = parameters[3]
 		if helpers.allow_showing_notification(account, 'notify_on_new_message',
-		advanced_notif_num, first):
+		advanced_notif_num, is_first_message):
 			do_popup = True
-		if first and helpers.allow_sound_notification('first_message_received',
-		advanced_notif_num):
+		if is_first_message and helpers.allow_sound_notification(
+			'first_message_received', advanced_notif_num):
 			do_sound = True
-		elif not first and helpers.allow_sound_notification(
-		'next_message_received', advanced_notif_num):
+		elif not is_first_message and helpers.allow_sound_notification(
+			'next_message_received', advanced_notif_num):
 			do_sound = True
 	else:
 		print '*Event not implemeted yet*'
@@ -253,7 +255,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 			elif advanced_notif_num is not None and gajim.config.get_per(
 			'notifications', str(advanced_notif_num), 'sound') == 'no':
 				pass # do not set snd_event
-			elif first:
+			elif is_first_message:
 				snd_event = 'first_message_received'
 			else:
 				snd_event = 'next_message_received'
