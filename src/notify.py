@@ -111,8 +111,8 @@ def get_advanced_notification(event, account, contact):
 		notif = gajim.config.get_per('notifications', str(num))
 
 def notify(event, jid, account, parameters, advanced_notif_num = None):
-	'''Check what type of notifications we want, depending on basic configuration
-	of notifications and advanced one and do these notifications'''
+	'''Check what type of notifications we want, depending on basic 
+	and the advanced configuration of notifications and do these notifications'''
 	# First, find what notifications we want
 	do_popup = False
 	do_sound = False

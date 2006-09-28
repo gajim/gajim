@@ -377,9 +377,14 @@ def is_in_path(name_of_command, return_abs_path = False):
 		return is_in_dir
 
 def exec_command(command):
-	'''command is a string that contain arguments'''
-#	os.system(command)
-	subprocess.Popen(command.split())
+	subprocess.Popen(command, shell = True)
+
+def build_command(executable, parameter):
+	# we add to the parameter (can hold path with spaces)
+	# "" so we have good parsing from shell
+	parameter = parameter.replace('"', '\\"') # but first escape "
+	command = '%s "%s"' % (command , parameter)
+	return command
 
 def launch_browser_mailer(kind, uri):
 	#kind = 'url' or 'mail'
@@ -404,7 +409,8 @@ def launch_browser_mailer(kind, uri):
 				command = gajim.config.get('custommailapp')
 			if command == '': # if no app is configured
 				return
-		command = command + ' ' + uri
+
+		command = build_command(command, uri)
 		try:
 			exec_command(command)
 		except:
@@ -425,7 +431,7 @@ def launch_file_manager(path_to_open):
 			command = gajim.config.get('custom_file_manager')
 		if command == '': # if no app is configured
 			return
-		command = command + ' ' + path_to_open
+		command = build_command(command, path_to_open)
 		try:
 			exec_command(command)
 		except:
@@ -453,7 +459,7 @@ def play_sound_file(path_to_soundfile):
 		if gajim.config.get('soundplayer') == '':
 			return
 		player = gajim.config.get('soundplayer')
-		command = player + ' ' + path_to_soundfile
+		command = build_command(player, path_to_soundfile)
 		exec_command(command)
 
 def get_file_path_from_dnd_dropped_uri(uri):
