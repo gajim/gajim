@@ -383,7 +383,7 @@ def build_command(executable, parameter):
 	# we add to the parameter (can hold path with spaces)
 	# "" so we have good parsing from shell
 	parameter = parameter.replace('"', '\\"') # but first escape "
-	command = '%s "%s"' % (command , parameter)
+	command = '%s "%s"' % (executable , parameter)
 	return command
 
 def launch_browser_mailer(kind, uri):
