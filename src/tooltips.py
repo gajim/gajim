@@ -462,15 +462,6 @@ class RosterTooltip(NotificationAreaTooltip):
 		prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contacts)
 		
-		transport = gajim.get_transport_name_from_jid(prim_contact.jid)
-		if transport:
-			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports', 
-				transport , '16x16')
-		else:
-			iconset = gajim.config.get('iconset')
-			if not iconset:
-				iconset = 'dcraven'
-			file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		puny_jid = helpers.sanitize_filename(prim_contact.jid)
 		table_size = 3
 		
@@ -506,6 +497,17 @@ class RosterTooltip(NotificationAreaTooltip):
 					contacts_dict[contact.priority] = [contact]
 		if num_resources > 1:
 			properties.append((_('Status: '),	' '))
+			transport = gajim.get_transport_name_from_jid(prim_contact.jid)
+			if transport:
+				file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 
+					'transports', transport , '16x16')
+			else:
+				iconset = gajim.config.get('iconset')
+				if not iconset:
+					iconset = 'dcraven'
+				file_path = os.path.join(gajim.DATA_DIR,
+					'iconsets', iconset, '16x16')
+
 			contact_keys = contacts_dict.keys()
 			contact_keys.sort()
 			contact_keys.reverse()
