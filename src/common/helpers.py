@@ -383,7 +383,7 @@ def build_command(executable, parameter):
 	# we add to the parameter (can hold path with spaces)
 	# "" so we have good parsing from shell
 	parameter = parameter.replace('"', '\\"') # but first escape "
-	command = '%s "%s"' % (executable , parameter)
+	command = '%s "%s"' % (executable, parameter)
 	return command
 
 def launch_browser_mailer(kind, uri):
@@ -620,7 +620,6 @@ def get_documents_path():
 		path = os.path.expanduser('~')
 	return path
 
-# moved from connection.py
 def get_full_jid_from_iq(iq_obj):
 	'''return the full jid (with resource) from an iq as unicode'''
 	return parse_jid(str(iq_obj.getFrom()))
@@ -748,7 +747,7 @@ def sanitize_filename(filename):
 	return filename
 
 def allow_showing_notification(account, type = None,
-	advanced_notif_num = None, is_first_message = True):
+advanced_notif_num = None, is_first_message = True):
 	'''is it allowed to show nofication?
 	check OUR status and if we allow notifications for that status
 	type is the option that need to be True e.g.: notify_on_signing
