@@ -492,10 +492,14 @@ class RosterWindow:
 			add_acct = False
 			# look through all contacts of all accounts
 			for a in gajim.connections:
+				if a == account: # useless to add accout name
+					continue
 				for j in gajim.contacts.get_jid_list(a):
 					# [0] cause it'fster than highest_prio
 					c = gajim.contacts.get_first_contact_from_jid(a, j)
-					if c.name == contact.name and (j, a) != (jid, account):
+					if c.get_shown_name() == \
+					contact.get_shown_name() and\
+					(j, a) != (jid, account):
 						add_acct = True
 						break
 				if add_acct:
