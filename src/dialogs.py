@@ -1306,7 +1306,8 @@ class PopupNotificationWindow:
 		# default image
 		if not path_to_image:
 			path_to_image = os.path.abspath(
-				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'chat_msg_recv.png')) # img to display
+				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+					'chat_msg_recv.png')) # img to display
 
 		if event_type == _('Contact Signed In'):
 			bg_color = 'limegreen'
@@ -1326,7 +1327,7 @@ class PopupNotificationWindow:
 			bg_color = 'tan1'
 		elif event_type == _('Contact Changed Status'):			
 			bg_color = 'thistle2'
-		else: # Unknown event ! Shouldn't happen but deal with it
+		else: # Unknown event! Shouldn't happen but deal with it
 			bg_color = 'white'
 		popup_bg_color = gtk.gdk.color_parse(bg_color)
 		close_button.modify_bg(gtk.STATE_NORMAL, popup_bg_color)

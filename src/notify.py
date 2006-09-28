@@ -31,6 +31,14 @@ if dbus_support.supported:
 	import dbus.glib
 	import dbus.service
 
+
+USER_HAS_PYNOTIFY = True # user has pynotify module
+try:
+	import pynotify
+	pynotify.init('Gajim Notification')
+except ImportError:
+	USER_HAS_PYNOTIFY = False
+
 def get_show_in_roster(event, account, contact):
 	'''Return True if this event must be shown in roster, else False'''
 	num = get_advanced_notification(event, account, contact)
@@ -271,20 +279,61 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 	the older style PopupNotificationWindow method.'''
 	text = gtkgui_helpers.escape_for_pango_markup(text)
 	title = gtkgui_helpers.escape_for_pango_markup(title)
+
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
 			DesktopNotification(event_type, jid, account, msg_type,
 				path_to_image, title, text)
-			return
+			return	# sucessfully did D-Bus Notification procedure!
 		except dbus.dbus_bindings.DBusException, e:
-			# Connection to D-Bus failed, try popup
+			# Connection to D-Bus failed
 			gajim.log.debug(str(e))
 		except TypeError, e:
 			# This means that we sent the message incorrectly
 			gajim.log.debug(str(e))
-	instance = dialogs.PopupNotificationWindow(event_type, jid, account,
-		msg_type, path_to_image, title, text)
-	gajim.interface.roster.popup_notification_windows.append(instance)
+	# we failed to speak to notification daemon via D-Bus
+	if USER_HAS_PYNOTIFY: # try via libnotify
+		if not text:
+			text = gajim.get_name_from_jid(account, jid) # default value of text
+		if not title:
+			title = event_type
+		# default image
+		if not path_to_image:
+			path_to_image = os.path.abspath(
+				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+					'chat_msg_recv.png')) # img to display
+		
+		
+		notification = pynotify.Notification(title, text)
+		timeout = gajim.config.get('notification_timeout') * 1000 # make it ms
+		notification.set_timeout(timeout)
+		
+		notification.set_category(event_type)
+		notification.set_data('event_type', event_type)
+		notification.set_data('jid', jid)
+		notification.set_data('account', account)
+		notification.set_data('msg_type', event_type)
+		notification.set_data('path_to_image', path_to_image)
+		notification.add_action('default', 'Default Action',
+			on_pynotify_notification_clicked)
+		
+		notification.show()
+
+	else: # go old style
+		instance = dialogs.PopupNotificationWindow(event_type, jid,
+			account, msg_type, path_to_image, title, text)
+		gajim.interface.roster.popup_notification_windows.append(
+			instance)
+
+def on_pynotify_notification_clicked(notification, action):
+	event_type = notification.get_data('event_type')
+	jid = notification.get_data('jid')
+	account = notification.get_data('account')
+	msg_type = notification.get_data('msg_type')
+	path_to_image = notification.get_data('path_to_image')
+
+	notification.close()
+	gajim.interface.handle_event(account, jid, msg_type)
 
 class NotificationResponseManager:
 	'''Collects references to pending DesktopNotifications and manages there
@@ -337,7 +386,7 @@ class NotificationResponseManager:
 notification_response_manager = NotificationResponseManager()
 
 class DesktopNotification:
-	'''A DesktopNotification that interfaces with DBus via the Desktop
+	'''A DesktopNotification that interfaces with D-Bus via the Desktop
 	Notification specification'''
 	def __init__(self, event_type, jid, account, msg_type = '',
 		path_to_image = None, title = None, text = None):
