@@ -175,11 +175,14 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
 	If any of the params is not present (None or 0) the action
 	on it is not performed'''
 
-	def _cut_if_long(str):
-		if len(str) > max_chars:
-			str = str[:max_chars - 3] + '...'
-		return str
+	def _cut_if_long(string):
+		if len(string) > max_chars:
+			string = string[:max_chars - 3] + '...'
+		return string
 	
+	if isinstance(text, str):
+		text = text.decode('utf-8')
+
 	if max_lines == 0:
 		lines = text.split('\n')
 	else:
