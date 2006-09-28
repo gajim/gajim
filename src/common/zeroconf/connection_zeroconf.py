@@ -188,6 +188,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.zeroconf.resolve_all()
 			diffs = self.roster.getDiffs()
 			for key in diffs:
+				print key
+				print self.roster.getStatus(key)
+				print self.roster.getMessage(key),
 				self.roster.setItem(key)
 				self.dispatch('NOTIFY', (key, self.roster.getStatus(key), self.roster.getMessage(key), 'local', 0, None, 0))
 		return self.call_resolve_timeout
@@ -258,16 +261,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.call_resolve_timeout = False
 			self.zeroconf.disconnect()
 
-	def reconnect(self, new_port, use_tls):
+	def reconnect(self, new_port):
 		txt = {}
 		txt['1st'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_first_name')
 		txt['last'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_last_name')
 		txt['jid'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_jabber_id')
 		txt['email'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_email')
-		txt2 = {}
-		for key, val in txt.iteritems():
-			if val != '':
-				txt2[key] = val
 
 		port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
 
@@ -277,7 +276,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.connection.start_listener(port)
 
 		self.zeroconf.remove_announce()
-		self.zeroconf.txt = txt2
+		self.zeroconf.txt = txt
 		self.zeroconf.port = port
 		self.zeroconf.username = self.username
 		self.zeroconf.announce()

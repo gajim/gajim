@@ -121,6 +121,7 @@ class Roster:
 
 	def getStatus(self, jid):
 		if self._data.has_key(jid):
+			print 'roster: getStatus: %s' % self._data[jid]['status']
 			return self._data[jid]['status']
 
 	def getMessage(self, jid):

@@ -3122,10 +3122,6 @@ class ZeroconfPropertiesWindow:
 		if st:
 			self.xml.get_widget('email_entry').set_text(st)
 
-		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'use_ssl')
-		if st:
-			self.xml.get_widget('use_tls_checkbutton').set_active(st)
-
 		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
 		if st:
 			self.xml.get_widget('custom_port_entry').set_text(str(st))
@@ -3180,9 +3176,6 @@ class ZeroconfPropertiesWindow:
 		st = self.xml.get_widget('email_entry').get_text()
 		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_email', st)
 
-		use_tls = self.xml.get_widget('use_tls_checkbutton').get_active()
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'use_ssl', use_tls)
-
 		use_custom_port = self.xml.get_widget('custom_port_checkbutton').get_active()
 		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'use_custom_host', use_custom_port)
 
@@ -3201,7 +3194,7 @@ class ZeroconfPropertiesWindow:
 			use_custom_port = False
 
 		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
-			gajim.connections[gajim.ZEROCONF_ACC_NAME].reconnect(use_custom_port, use_tls)
+			gajim.connections[gajim.ZEROCONF_ACC_NAME].reconnect(use_custom_port)
 
 		self.window.destroy()
 

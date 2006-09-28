@@ -201,14 +201,26 @@ class Zeroconf:
 				# create an EntryGroup for publishing
 				self.entrygroup = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, self.server.EntryGroupNew()), avahi.DBUS_INTERFACE_ENTRY_GROUP)
 				self.entrygroup.connect_to_signal('StateChanged', self.entrygroup_state_changed_callback)
-
-			self.txt['port.p2pj'] = self.port
-			self.txt['version'] = 1
-			self.txt['txtvers'] = 1
 			
+			txt = {}
+			
+			#remove empty keys
+			for key,val in self.txt.iteritems():
+				if val:
+					txt[key] = val
+			
+			txt['port.p2pj'] = self.port
+			txt['version'] = 1
+			txt['txtvers'] = 1
+
 			# replace gajim's show messages with compatible ones
 			if self.txt.has_key('status'):
-					self.txt['status'] = self.replace_show(self.txt['status'])
+				txt['status'] = self.replace_show(self.txt['status'])
+			else:
+				txt['status'] = 'avail'
+
+
+			self.txt = txt
 
 			# print "Publishing service '%s' of type %s" % (self.name, self.stype)
 			self.entrygroup.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
@@ -255,7 +267,7 @@ class Zeroconf:
 			return True
 		try:
 			self.bus = dbus.SystemBus()
-			# is there any way to check, if a dbus name exists?
+			# is there any way to check if a dbus name exists?
 			# that might make the Introspect Error go away...
 			self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
 			avahi.DBUS_PATH_SERVER), avahi.DBUS_INTERFACE_SERVER)
@@ -317,9 +329,10 @@ class Zeroconf:
 		return self.contacts[jid]
 		
 	def update_txt(self, txt):
-		# update only given keys
+		# update only new non-empty keys
 		for key in txt.keys():
-			self.txt[key]=txt[key]
+			if txt[key]:
+				self.txt[key]=txt[key]
 
 		if txt.has_key('status'):
 			self.txt['status'] = self.replace_show(txt['status'])
