@@ -114,7 +114,8 @@ def get_advanced_notification(event, account, contact):
 def notify(event, jid, account, parameters, advanced_notif_num = None):
 	'''Check what type of notifications we want, depending on basic 
 	and the advanced configuration of notifications and do these notifications;
-	advanced_notif_num'''
+	advanced_notif_num holds the number of the first (top most) advanced
+	notification'''
 	# First, find what notifications we want
 	do_popup = False
 	do_sound = False
