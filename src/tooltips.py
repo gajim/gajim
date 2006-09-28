@@ -497,7 +497,8 @@ class RosterTooltip(NotificationAreaTooltip):
 					contacts_dict[contact.priority] = [contact]
 		if num_resources > 1:
 			properties.append((_('Status: '),	' '))
-			transport = gajim.get_transport_name_from_jid(prim_contact.jid)
+			transport = gajim.get_transport_name_from_jid(
+				prim_contact.jid)
 			if transport:
 				file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 
 					'transports', transport , '16x16')
