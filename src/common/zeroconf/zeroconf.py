@@ -21,7 +21,7 @@ from common import xmpp
 try:
 	import avahi, gobject, dbus
 except ImportError:
-	gajim.log.debug("Error: python-avahi and python-dbus need to be installed. No zeroconf support.")
+	gajim.log.debug('Error: python-avahi and python-dbus need to be installed. No zeroconf support.')
 
 try:
 	import dbus.glib
@@ -71,7 +71,7 @@ class Zeroconf:
 		self.disconnected_CB()
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
-		print "Found service '%s' in domain '%s' on %i.%i." % (name, domain, interface, protocol)
+		gajim.log.debug('Found service %s in domain %s on %i.%i.' % (name, domain, interface, protocol))
 		if not self.connected:
 			return
 		
@@ -81,7 +81,7 @@ class Zeroconf:
 					reply_handler=self.service_resolved_callback, error_handler=self.error_callback)
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
-		print "Service '%s' in domain '%s' on %i.%i disappeared." % (name, domain, interface, protocol)
+		gajim.log.debug('Service %s in domain %s on %i.%i disappeared.' % (name, domain, interface, protocol))
 		#if not self.connected:
 		#	return
 		if name != self.name:
@@ -121,8 +121,8 @@ class Zeroconf:
 		return items
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
-		print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
-		# print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, avahi.txt_array_to_string_array(txt))
+		gajim.log.debug('Service data for service %s in domain %s on %i.%i:' % (name, domain, interface, protocol))
+		gajim.log.debug('Host %s (%s), port %i, TXT data: %s' % (host, address, port, avahi.txt_array_to_string_array(txt)))
 		if not self.connected:
 			return
 		bare_name = name
@@ -144,8 +144,6 @@ class Zeroconf:
 
 	# different handler when resolving all contacts
 	def service_resolved_all_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
-		# print "Service data for service '%s' in domain '%s' on %i.%i:" % (name, domain, interface, protocol)
-		# print "\tHost %s (%s), port %i, TXT data: %s" % (host, address, port, str(avahi.txt_array_to_string_array(txt)))
 		if not self.connected:
 			return
 		bare_name = name
@@ -154,16 +152,13 @@ class Zeroconf:
 		self.contacts[name] = (name, domain, interface, protocol, host, address, port, bare_name, txt)
 
 	def service_added_callback(self):
-		print 'Service successfully added'
-		pass
+		gajim.log.debug('Service successfully added')
 
 	def service_committed_callback(self):
-		print 'Service successfully committed'
-		pass
+		gajim.log.debug('Service successfully committed')
 
 	def service_updated_callback(self):
-		print 'Service successfully updated'
-		pass
+		gajim.log.debug('Service successfully updated')
 
 	def service_add_fail_callback(self, err):
 		gajim.log.debug('Error while adding service. %s' % str(err))
@@ -222,7 +217,7 @@ class Zeroconf:
 
 			self.txt = txt
 
-			# print "Publishing service '%s' of type %s" % (self.name, self.stype)
+			gajim.log.debug('Publishing service %s of type %s' % (self.name, self.stype))
 			self.entrygroup.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
 			self.entrygroup.Commit(reply_handler=self.service_committed_callback, 
 				error_handler=self.entrygroup_commit_error_CB)
@@ -256,7 +251,7 @@ class Zeroconf:
 			else:
 				return False
 		except dbus.dbus_bindings.DBusException, e:
-			print "zeroconf.py: Can't remove service, avahi daemon not running?"
+			gajim.log.debug("Can't remove service. That should not happen")
 
 	def browse_domain(self, interface, protocol, domain):
 		self.new_service_type(interface, protocol, self.stype, domain, '')

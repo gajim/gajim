@@ -188,11 +188,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.zeroconf.resolve_all()
 			diffs = self.roster.getDiffs()
 			for key in diffs:
-				print key
-				print self.roster.getStatus(key)
-				print self.roster.getMessage(key),
 				self.roster.setItem(key)
+				self.dispatch('ROSTER_INFO', (key, self.roster.getName(key), 'both', 'no', self.roster.getGroups(key)))
 				self.dispatch('NOTIFY', (key, self.roster.getStatus(key), self.roster.getMessage(key), 'local', 0, None, 0))
+				#XXX open chat windows don't get refreshed (full name), add that
 		return self.call_resolve_timeout
 
 	# callbacks called from zeroconf	
@@ -243,9 +242,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 			self.connected = STATUS_LIST.index(show)
 
-			# refresh all contacts data every second
+			# refresh all contacts data every five seconds
 			self.call_resolve_timeout = True
-			gobject.timeout_add(10000, self._on_resolve_timeout)
+			gobject.timeout_add(5000, self._on_resolve_timeout)
 		else:
 			self.dispatch('STATUS', 'offline')
 			self.status = 'offline'
@@ -326,8 +325,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				(_('Could not change status of account "%s"') % self.name,
 				_('Please check if avahi-daemon is running.')))
 			
-			
-
 	def get_status(self):
 		return STATUS_LIST[self.connected]
 
@@ -399,7 +396,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				else:
 					kind = 'single_msg_sent'
 				gajim.logger.write(kind, jid, log_msg)
-		#~ self.zeroconf.send_message(jid, msgtxt, type)
 		
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 		

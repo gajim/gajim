@@ -53,7 +53,7 @@ class ZeroconfListener(IdleObject):
 		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 		self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-		# will fail when port as busy, or we don't have rights to bind
+		# will fail when port is busy, or we don't have rights to bind
 		try:
 			self._serv.bind(('0.0.0.0', self.port))
 		except Exception, e:
@@ -500,7 +500,6 @@ class ClientZeroconf:
 			BindPortError(port)
 			return None
 	
-
 	def getRoster(self):
 		return self.roster.getRoster()
 

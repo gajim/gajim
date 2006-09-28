@@ -115,13 +115,13 @@ class Roster:
 		
 	def getGroups(self, jid):
 		return self._data[jid]['groups']
+
 	def getName(self, jid):
 		if self._data.has_key(jid):
 			return self._data[jid]['name']
 
 	def getStatus(self, jid):
 		if self._data.has_key(jid):
-			print 'roster: getStatus: %s' % self._data[jid]['status']
 			return self._data[jid]['status']
 
 	def getMessage(self, jid):
