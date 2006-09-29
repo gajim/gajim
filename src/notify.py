@@ -25,7 +25,7 @@ import gtkgui_helpers
 from common import gajim
 from common import helpers
 
-import dbus_support
+from common import dbus_support
 if dbus_support.supported:
 	import dbus
 	import dbus.glib

@@ -40,7 +40,7 @@ from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
 
-import dbus_support
+from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
 

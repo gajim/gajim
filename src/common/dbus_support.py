@@ -21,6 +21,8 @@ import sys
 from common import gajim
 from common import exceptions
 
+_GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
+
 try:
 	import dbus
 	import dbus.service
@@ -94,4 +96,13 @@ def get_interface(interface, path):
 
 def get_notifications_interface():
 	'''Returns the notifications interface.'''
-	return get_interface('org.freedesktop.Notifications','/org/freedesktop/Notifications')
+	return get_interface('org.freedesktop.Notifications',
+		'/org/freedesktop/Notifications')
+
+if supported:
+	class MissingArgument(dbus.DBusException):
+		_dbus_error_name = _GAJIM_ERROR_IFACE + '.MissingArgument'
+	
+	class InvalidArgument(dbus.DBusException):
+		'''Raised when one of the provided arguments is invalid.'''
+		_dbus_error_name = _GAJIM_ERROR_IFACE + '.InvalidArgument'
