@@ -256,24 +256,25 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.zeroconf.disconnect()
 
 	def reconnect(self, new_port):
-		txt = {}
-		txt['1st'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_first_name')
-		txt['last'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_last_name')
-		txt['jid'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_jabber_id')
-		txt['email'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_email')
+		if self.connected:
+			txt = {}
+			txt['1st'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_first_name')
+			txt['last'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_last_name')
+			txt['jid'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_jabber_id')
+			txt['email'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_email')
 
-		port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
+			port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
 
-		if new_port or use_tls:
-			self.connection.kill_all_connections()
-			self.connection.listener.disconnect()
-			self.connection.start_listener(port)
+			if new_port or use_tls:
+				self.connection.kill_all_connections()
+				self.connection.listener.disconnect()
+				self.connection.start_listener(port)
 
-		self.zeroconf.remove_announce()
-		self.zeroconf.txt = txt
-		self.zeroconf.port = port
-		self.zeroconf.username = self.username
-		self.zeroconf.announce()
+			self.zeroconf.remove_announce()
+			self.zeroconf.txt = txt
+			self.zeroconf.port = port
+			self.zeroconf.username = self.username
+			self.zeroconf.announce()
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		if not show in STATUS_LIST:

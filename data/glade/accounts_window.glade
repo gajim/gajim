@@ -95,7 +95,8 @@
       <child>
 	<widget class="GtkCheckButton" id="enable_zeroconf_checkbutton">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">If checked, all local contacts that use a Bonjour compatible chat client (like iChat, Trillian or Gaim) will be shown in roster. You don't need a jabber server for it.</property>
+	  <property name="tooltip" translatable="yes">If checked, all local contacts that use a Bonjour compatible chat client (like iChat, Trillian or Gaim) will be shown in roster. You don't need to be connected to a jabber server for it to work.
+This is only available if python-avahi is installed and avahi-daemon is running.</property>
 	  <property name="can_focus">True</property>
 	  <property name="label" translatable="yes">_Enable link-local messaging</property>
 	  <property name="use_underline">True</property>

@@ -1790,10 +1790,20 @@ class AccountsWindow:
 		st = gajim.config.get('mergeaccounts')
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
+		import os
+
+		avahi_error = False
+		try:
+			import avahi
+		except ImportError:
+			avahi_error = True
+
 		# enable zeroconf
 		st = gajim.config.get('enable_zeroconf')
 		w = self.xml.get_widget('enable_zeroconf_checkbutton')
 		w.set_active(st)
+		if os.name == 'nt' or avahi_error:
+			w.set_sensitive(False)
 		w.connect('toggled', self.on_enable_zeroconf_checkbutton_toggled)
 
 	def on_accounts_window_key_press_event(self, widget, event):
