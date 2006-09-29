@@ -208,7 +208,7 @@ class RosterWindow:
 
 	def add_contact_to_roster(self, jid, account):
 		'''Add a contact to the roster and add groups if they aren't in roster
-		force is about	force to add it, even if it is offline and show offline
+		force is about force to add it, even if it is offline and show offline
 		is False, because it has online children, so we need to show it.
 		If add_children is True, we also add all children, even if they were not
 		already drawn'''
@@ -224,7 +224,11 @@ class RosterWindow:
 			self.add_self_contact(account)
 			return
 		if gajim.jid_is_transport(contact.jid):
+			# if jid is transport, check if we wanna show it in roster
+			if not gajim.config.get('show_transports_group'):
+				return
 			contact.groups = [_('Transports')]
+			
 
 		# JEP-0162
 		hide = True
@@ -308,25 +312,25 @@ class RosterWindow:
 			groups = [_('Observers')]
 		elif not groups:
 			groups = [_('General')]
-		for g in groups:
-			iterG = self.get_group_iter(g, account)
+		for group in groups:
+			iterG = self.get_group_iter(group, account)
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, [
 					self.jabber_state_images['16']['closed'],
-					gtkgui_helpers.escape_for_pango_markup(g), 'group', g, account,
-					False, None])
-			if not gajim.groups[account].has_key(g): # It can probably never append
-				if account + g in self.collapsed_rows:
+					gtkgui_helpers.escape_for_pango_markup(group), 'group',
+						group, account,	False, None])
+			if group not in gajim.groups[account]: # It can probably never append
+				if account + group in self.collapsed_rows:
 					ishidden = False
 				else:
 					ishidden = True
-				gajim.groups[account][g] = { 'expand': ishidden }
+				gajim.groups[account][group] = {'expand': ishidden}
 			if not account in self.collapsed_rows:
 				self.tree.expand_row((model.get_path(iterG)[0]), False)
 
 			typestr = 'contact'
-			if g == _('Transports'):
+			if group == _('Transports'):
 				typestr = 'agent'
 
 			name = contact.get_shown_name()
@@ -334,7 +338,7 @@ class RosterWindow:
 			model.append(iterG, (None, name, typestr, contact.jid, account,
 				False, None))
 
-			if gajim.groups[account][g]['expand']:
+			if gajim.groups[account][group]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
 		self.draw_contact(jid, account)
 		self.draw_avatar(jid, account)
@@ -2699,12 +2703,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		else:
 			gajim.interface.instances['file_transfers'].window.show_all()
 
-	def on_show_transports_menu_activate(self, widget):
-		#FIXME: implement me
-		if widget.get_active():
-			print 'show transports group IF NEEDED'
-		else:
-			print 'hide transports group IF NEEDED'
+	def on_show_transports_menuitem_activate(self, widget):
+		gajim.config.set('show_transports_group', widget.get_active())
+		self.draw_roster()
 
 	def on_manage_bookmarks_menuitem_activate(self, widget):
 		config.ManageBookmarksWindow()
@@ -3865,6 +3866,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		showOffline = gajim.config.get('showoffline')
 		self.xml.get_widget('show_offline_contacts_menuitem').set_active(
 			showOffline)
+
+		show_transports_group = gajim.config.get('show_transports_group')
+		self.xml.get_widget('show_transports_menuitem').set_active(
+			show_transports_group)
 
 		# columns
 
