@@ -727,11 +727,9 @@ class RosterWindow:
 			return
 		new_chat_menuitem = self.xml.get_widget('new_chat_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
-		iconset = gajim.config.get('iconset') 
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16') 
-		state_images = self.load_iconset(path) 
-		if state_images.has_key('muc_active'): 
-			join_gc_menuitem.set_image(state_images['muc_active'])
+		muc_icon = self.load_icon('muc_active')
+		if muc_icon:
+			join_gc_menuitem.set_image(muc_icon)
 		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
 		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
@@ -1399,11 +1397,9 @@ class RosterWindow:
 			img.set_from_file(path_to_kbd_input_img)
 			rename_menuitem.set_image(img)
 
-		iconset = gajim.config.get('iconset')
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
-		state_images = self.load_iconset(path)
-		if state_images.has_key('muc_active'):
-			invite_menuitem.set_image(state_images['muc_active'])
+		muc_icon = self.load_icon('muc_active')
+		if muc_icon:
+			invite_menuitem.set_image(muc_icon)
 
 		above_subscription_separator = xml.get_widget(
 			'above_subscription_separator')
@@ -3109,9 +3105,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				pass
 
 	def load_iconset(self, path, pixbuf2 = None, transport = False):
-		'''load an iconset from the given path, and add pixbuf2 on top left of
-		each static images'''
-		imgs = {}
+		'''load full iconset from the given path, and add
+		pixbuf2 on top left of each static images'''
 		path += '/'
 		if transport:
 			list = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
@@ -3123,15 +3118,28 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if pixbuf2:
 				list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 					'offline', 'error', 'requested', 'message', 'not in roster')
-		for state in list:
+		return self._load_icon_list(list, path, pixbuf2)
+		
+	def load_icon(self, icon_name):
+		'''load an icon from the iconset in 16x16'''
+		iconset = gajim.config.get('iconset')
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16'+ '/')
+		icon_list = self._load_icon_list([icon_name], path)
+		return icon_list[icon_name]
+		
+	def _load_icon_list(self, icons_list, path, pixbuf2 = None):
+		'''load icons in icons_list from the given path, 
+		and add pixbuf2 on top left of each static images'''
+		imgs = {}
+		for icon in icons_list:
 			# try to open a pixfile with the correct method
-			state_file = state.replace(' ', '_')
+			icon_file = icon.replace(' ', '_')
 			files = []
-			files.append(path + state_file + '.gif')
-			files.append(path + state_file + '.png')
+			files.append(path + icon_file + '.gif')
+			files.append(path + icon_file + '.png')
 			image = gtk.Image()
 			image.show()
-			imgs[state] = image
+			imgs[icon] = image
 			for file in files: # loop seeking for either gif or png
 				if os.path.exists(file):
 					image.set_from_file(file)
