@@ -172,17 +172,20 @@ class GroupchatControl(ChatControlBase):
 		self.nick = contact.name
 		self.name = self.room_jid.split('@')[0]
 
-		self.hide_chat_buttons_always = gajim.config.get('always_hide_groupchat_buttons')
+		self.hide_chat_buttons_always = gajim.config.get(
+			'always_hide_groupchat_buttons')
 		self.chat_buttons_set_visible(self.hide_chat_buttons_always)
-		self.widget_set_visible(self.xml.get_widget('banner_eventbox'), gajim.config.get('hide_groupchat_banner'))
-		self.widget_set_visible(self.xml.get_widget('list_scrolledwindow'), gajim.config.get('hide_groupchat_occupants_list'))
+		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
+			gajim.config.get('hide_groupchat_banner'))
+		self.widget_set_visible(self.xml.get_widget('list_scrolledwindow'),
+			gajim.config.get('hide_groupchat_occupants_list'))
 		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 
 		self._last_selected_contact = None # None or holds jid, account tuple
 		# alphanum sorted
 		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact',
-			'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick', 'part',
-			'names', 'say', 'topic']
+			'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick',
+			'part', 'names', 'say', 'topic']
 		# muc attention flag (when we are mentioned in a muc)
 		# if True, the room has mentioned us
 		self.attention_flag = False
@@ -200,7 +203,8 @@ class GroupchatControl(ChatControlBase):
 		xm = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
 
 		widget = xm.get_widget('bookmark_room_menuitem')
-		id = widget.connect('activate', self._on_bookmark_room_menuitem_activate)
+		id = widget.connect('activate',
+			self._on_bookmark_room_menuitem_activate)
 		self.handlers[id] = widget
 
 		widget = xm.get_widget('change_nick_menuitem')
@@ -208,11 +212,13 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = widget
 
 		widget = xm.get_widget('configure_room_menuitem')
-		id = widget.connect('activate', self._on_configure_room_menuitem_activate)
+		id = widget.connect('activate',
+			self._on_configure_room_menuitem_activate)
 		self.handlers[id] = widget
 
 		widget = xm.get_widget('change_subject_menuitem')
-		id = widget.connect('activate', self._on_change_subject_menuitem_activate)
+		id = widget.connect('activate',
+			self._on_change_subject_menuitem_activate)
 		self.handlers[id] = widget
 
 		widget = xm.get_widget('compact_view_menuitem')
@@ -232,13 +238,14 @@ class GroupchatControl(ChatControlBase):
 		self.hpaned = self.xml.get_widget('hpaned')
 		self.hpaned.set_position(self.hpaned_position)
 
-		list_treeview = self.list_treeview = self.xml.get_widget('list_treeview')
-		selection = list_treeview.get_selection()
+		self.list_treeview = self.xml.get_widget('list_treeview')
+		selection = self.list_treeview.get_selection()
 		id = selection.connect('changed', 
 				self.on_list_treeview_selection_changed)
 		self.handlers[id] = selection
-		id = list_treeview.connect('style-set', self.on_list_treeview_style_set)
-		self.handlers[id] = list_treeview
+		id = self.list_treeview.connect('style-set',
+			self.on_list_treeview_style_set)
+		self.handlers[id] = self.list_treeview
 		# we want to know when the the widget resizes, because that is
 		# an indication that the hpaned has moved...
 		# FIXME: Find a better indicator that the hpaned has moved.
@@ -272,7 +279,8 @@ class GroupchatControl(ChatControlBase):
 		renderer_text = gtk.CellRendererText() # nickname
 		column.pack_start(renderer_text, expand = True)
 		column.add_attribute(renderer_text, 'markup', C_TEXT)
-		column.set_cell_data_func(renderer_text, tree_cell_data_func, self.list_treeview)
+		column.set_cell_data_func(renderer_text, tree_cell_data_func,
+			self.list_treeview)
 
 		self.list_treeview.append_column(column)
 
