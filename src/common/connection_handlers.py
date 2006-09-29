@@ -1121,11 +1121,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 	
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':
-			iq = iq_obj.buildReply('result')
+			self.connection.send(iq_obj.buildReply('result'))
 		elif answer == 'no':
-			iq = iq_obj.buildReply('error')
-			iq.setError('not-authorized', 401)
-		self.connection.send(iq)
+			from common.xmpp.protocol import ERR_NOT_AUTHORIZED
+			err = common.xmpp.Error(iq_obj, ERR_NOT_AUTHORIZED)
+			self.connection.send(err)
 	
 	def _HttpAuthCB(self, con, iq_obj):
 		gajim.log.debug('HttpAuthCB')

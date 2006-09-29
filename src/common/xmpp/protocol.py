@@ -357,10 +357,10 @@ class Protocol(Node):
                 if tag.getName()=='text': return tag.getData()
             return self.getError()
     def getErrorCode(self):
-        """ Return the error code. Obsolette. """
+        """ Return the error code. Obsolete. """
         return self.getTagAttr('error','code')
     def setError(self,error,code=None):
-        """ Set the error code. Obsolette. Use error-conditions instead. """
+        """ Set the error code. Obsolete. Use error-conditions instead. """
         if code:
             if str(code) in _errorcodes.keys(): error=ErrorNode(_errorcodes[str(code)],text=error)
             else: error=ErrorNode(ERR_UNDEFINED_CONDITION,code=code,typ='cancel',text=error)
