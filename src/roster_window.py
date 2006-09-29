@@ -1361,6 +1361,117 @@ class RosterWindow:
 		if not contact:
 			return
 
+		if account == gajim.ZEROCONF_ACC_NAME:
+			xml = gtkgui_helpers.get_glade('zeroconf_contact_context_menu.glade')
+			zeroconf_contact_context_menu = xml.get_widget('zeroconf_contact_context_menu')
+			
+			start_chat_menuitem = xml.get_widget('start_chat_menuitem')
+			rename_menuitem = xml.get_widget('rename_menuitem')
+			edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
+			# separator has with send file, assign_openpgp_key_menuitem, etc..
+			above_send_file_separator = xml.get_widget('above_send_file_separator')
+			send_file_menuitem = xml.get_widget('send_file_menuitem')
+			assign_openpgp_key_menuitem = xml.get_widget(
+				'assign_openpgp_key_menuitem')
+			add_special_notification_menuitem = xml.get_widget(
+				'add_special_notification_menuitem')
+			
+			add_special_notification_menuitem.hide()
+			add_special_notification_menuitem.set_no_show_all(True)
+
+			if not our_jid:
+				# add a special img for rename menuitem
+				path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+					'kbd_input.png')
+				img = gtk.Image()
+				img.set_from_file(path_to_kbd_input_img)
+				rename_menuitem.set_image(img)
+
+			above_information_separator = xml.get_widget(
+				'above_information_separator')
+
+			# skip a separator
+			information_menuitem = xml.get_widget('information_menuitem')
+			history_menuitem = xml.get_widget('history_menuitem')
+
+			contacts = gajim.contacts.get_contact(account, jid)
+			if len(contacts) > 1: # sevral resources
+				sub_menu = gtk.Menu()
+				start_chat_menuitem.set_submenu(sub_menu)
+
+				iconset = gajim.config.get('iconset')
+				path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+				for c in contacts:
+					# icon MUST be different instance for every item
+					state_images = self.load_iconset(path)
+					item = gtk.ImageMenuItem(c.resource + ' (' + str(c.priority) + ')')
+					icon_name = helpers.get_icon_name_to_show(c, account)
+					icon = state_images[icon_name]
+					item.set_image(icon)
+					sub_menu.append(item)
+					item.connect('activate', self.on_open_chat_window, c, account,
+						c.resource)
+
+			else: # one resource
+				start_chat_menuitem.connect('activate',
+					self.on_roster_treeview_row_activated, tree_path)
+
+			if contact.resource:
+				send_file_menuitem.connect('activate',
+					self.on_send_file_menuitem_activate, account, contact)
+			else: # if we do not have resource we cannot send file
+				send_file_menuitem.hide()
+				send_file_menuitem.set_no_show_all(True)
+
+			rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
+			information_menuitem.connect('activate', self.on_info, contact,
+				account)
+			history_menuitem.connect('activate', self.on_history, contact,
+				account)
+
+			if _('Not in Roster') not in contact.groups:
+				#contact is in normal group
+				edit_groups_menuitem.set_no_show_all(False)
+				assign_openpgp_key_menuitem.set_no_show_all(False)
+				edit_groups_menuitem.connect('activate', self.on_edit_groups, [(
+					contact,account)])
+
+				if gajim.config.get('usegpg'):
+					assign_openpgp_key_menuitem.connect('activate',
+						self.on_assign_pgp_key, contact, account)
+
+			else: # contact is in group 'Not in Roster'
+				edit_groups_menuitem.hide()
+				edit_groups_menuitem.set_no_show_all(True)
+				# hide first of the two consecutive separators
+				above_send_file_separator.hide()
+				above_send_file_separator.set_no_show_all(True)
+				assign_openpgp_key_menuitem.hide()
+				assign_openpgp_key_menuitem.set_no_show_all(True)
+
+			# Remove many items when it's self contact row
+			if our_jid:
+				for menuitem in (rename_menuitem, edit_groups_menuitem,
+				above_information_separator):
+					menuitem.set_no_show_all(True)
+					menuitem.hide()
+
+			# Unsensitive many items when account is offline
+			if gajim.connections[account].connected < 2:
+				for widget in [start_chat_menuitem,	rename_menuitem, edit_groups_menuitem, send_file_menuitem]:
+					widget.set_sensitive(False)
+
+			event_button = gtkgui_helpers.get_possible_button_event(event)
+
+			zeroconf_contact_context_menu.attach_to_widget(self.tree, None)
+			zeroconf_contact_context_menu.connect('selection-done',
+				gtkgui_helpers.destroy_widget)
+			zeroconf_contact_context_menu.show_all()
+			zeroconf_contact_context_menu.popup(None, None, None, event_button,
+				event.time)
+			return
+
+		# normal account
 		xml = gtkgui_helpers.get_glade('roster_contact_context_menu.glade')
 		roster_contact_context_menu = xml.get_widget(
 			'roster_contact_context_menu')
