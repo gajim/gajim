@@ -1116,6 +1116,14 @@ class RosterWindow:
 		else:
 			info[contact.jid] = vcard.VcardWindow(contact, account)
 
+	def on_info_zeroconf(self, widget, contact, account):
+		info = gajim.interface.instances[account]['infos']
+		if info.has_key(contact.jid):
+			info[contact.jid].window.present()
+		else:
+			info[contact.jid] = vcard.ZeroconfVcardWindow(contact, account)
+
+
 	def show_tooltip(self, contact):
 		pointer = self.tree.get_pointer()
 		props = self.tree.get_path_at_pos(pointer[0], pointer[1])
@@ -1424,7 +1432,7 @@ class RosterWindow:
 				send_file_menuitem.set_no_show_all(True)
 
 			rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
-			information_menuitem.connect('activate', self.on_info, contact,
+			information_menuitem.connect('activate', self.on_info_zeroconf, contact,
 				account)
 			history_menuitem.connect('activate', self.on_history, contact,
 				account)
@@ -1470,6 +1478,7 @@ class RosterWindow:
 			zeroconf_contact_context_menu.popup(None, None, None, event_button,
 				event.time)
 			return
+
 
 		# normal account
 		xml = gtkgui_helpers.get_glade('roster_contact_context_menu.glade')

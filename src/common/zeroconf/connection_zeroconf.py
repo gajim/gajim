@@ -73,7 +73,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		#we don't need a password, but must be non-empty
 		self.password = 'zeroconf'
 
-		#XXX use that somewhere
 		self.autoconnect = False
 		self.sync_with_global_status = True
 		self.no_log_for = False
@@ -86,10 +85,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		else:
 			gajim.config.set('usegpg', False)
 		
-		self.on_connect_success = None
-		self.on_connect_failure = None
-		self.retrycount = 0
-		self.jids_for_auto_auth = [] # list of jid to auto-authorize
 		self.get_config_values_or_default()
 		self.zeroconf = zeroconf.Zeroconf(self._on_new_service,
 			self._on_remove_service, self._on_name_conflictCB, 
@@ -148,9 +143,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		gajim.log.debug('reconnect')
 
 		signed = self.get_signed_msg(self.status)
-			
+		self.reconnect()
+
 	def quit(self, kill_core):
-	
 		if kill_core and self.connected > 1:
 			self.disconnect()
 	
@@ -445,19 +440,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def request_last_status_time(self, jid, resource):
 		gajim.log.debug('This should not happen (request_last_status_time)')
-		
+
 	def request_os_info(self, jid, resource):
-		'''
-		if not self.connection:
-			return
-		to_whom_jid = jid
-		if resource:
-			to_whom_jid += '/' + resource
-		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
-			common.xmpp.NS_VERSION)
-		self.connection.send(iq)
-		'''
-		pass
+		gajim.log.debug('This should not happen (request_os_info)')
 
 	def get_settings(self):
 		gajim.log.debug('This should not happen (get_settings)')
@@ -474,39 +459,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def send_agent_status(self, agent, ptype):
 		gajim.log.debug('This should not happen (send_agent_status)')
 
-	def join_gc(self, nick, room, server, password):
-		gajim.log.debug('This should not happen (join_gc)')
-		
-	def send_gc_message(self, jid, msg):
-		gajim.log.debug('This should not happen (send_gc_message)')
-		
-	def send_gc_subject(self, jid, subject):
-		gajim.log.debug('This should not happen (send_gc_subject)')
-		
-	def request_gc_config(self, room_jid):
-		gajim.log.debug('This should not happen (request_gc_config)')
-		
-	def change_gc_nick(self, room_jid, nick):
-		gajim.log.debug('This should not happen (change_gc_nick)')
-		
-	def send_gc_status(self, nick, jid, show, status):
-		gajim.log.debug('This should not happen (send_gc_status)')
-		
-	def gc_set_role(self, room_jid, nick, role, reason = ''):
-		gajim.log.debug('This should not happen (gc_set_role)')
-		
-	def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
-		gajim.log.debug('This should not happen (gc_set_affiliation)')
-		
-	def send_gc_affiliation_list(self, room_jid, list):
-		gajim.log.debug('This should not happen (send_gc_affiliation_list)')
-		
-	def get_affiliation_list(self, room_jid, affiliation):
-		gajim.log.debug('This should not happen (get_affiliation_list)')
-		
-	def send_gc_config(self, room_jid, config):
-		gajim.log.debug('This should not happen (send_gc_config)')
-		
 	def gpg_passphrase(self, passphrase):
 		if USE_GPG:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
@@ -527,30 +479,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			return keys
 		return None
 
-	def change_password(self, password):
-		if not self.connection:
-			return
-		'''
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		username = gajim.config.get_per('accounts', self.name, 'name')
-		iq = common.xmpp.Iq(typ = 'set', to = hostname)
-		q = iq.setTag(common.xmpp.NS_REGISTER + ' query')
-		q.setTagData('username',username)
-		q.setTagData('password',password)
-		self.connection.send(iq)
-		'''
-		pass
-		
-	def unregister_account(self, on_remove_success):
-		gajim.log.debug('This should not happen (unregister_account)')
-		
-	def send_invite(self, room, to, reason=''):
-		gajim.log.debug('This should not happen (send_invite)')
-		
-	def send_keepalive(self):
-		# nothing received for the last foo seconds (60 secs by default)
-		pass
-		
 	def _event_dispatcher(self, realm, event, data):
 		if realm == '':
 			if event == common.xmpp.transports.DATA_RECEIVED:
