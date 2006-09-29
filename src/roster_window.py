@@ -904,11 +904,12 @@ class RosterWindow:
 		else:
 			profile_avatar_menuitem.set_sensitive(True)
 
-			newitem = gtk.ImageMenuItem(_('Manage Bookmarks...'))
+			newitem = gtk.ImageMenuItem(_('_Manage Bookmarks...'))
 			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
 				gtk.ICON_SIZE_MENU)
 			newitem.set_image(img)
-			newitem.connect('activate', self.on_manage_bookmarks_menuitem_activate)
+			newitem.connect('activate',
+				self.on_manage_bookmarks_menuitem_activate)
 			gc_sub_menu.append(newitem)
 			gc_sub_menu.show_all()
 			
@@ -2697,6 +2698,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.interface.instances['file_transfers'].window.present()
 		else:
 			gajim.interface.instances['file_transfers'].window.show_all()
+
+	def on_show_transports_menu_activate(self, widget):
+		#FIXME: implement me
+		if widget.get_active():
+			print 'show transports group IF NEEDED'
+		else:
+			print 'hide transports group IF NEEDED'
 
 	def on_manage_bookmarks_menuitem_activate(self, widget):
 		config.ManageBookmarksWindow()
