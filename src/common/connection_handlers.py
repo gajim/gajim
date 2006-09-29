@@ -1123,8 +1123,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 		if answer == 'yes':
 			self.connection.send(iq_obj.buildReply('result'))
 		elif answer == 'no':
-			from common.xmpp.protocol import ERR_NOT_AUTHORIZED
-			err = common.xmpp.Error(iq_obj, ERR_NOT_AUTHORIZED)
+			err = common.xmpp.Error(iq_obj,
+				common.xmpp.protocol.ERR_NOT_AUTHORIZED)
 			self.connection.send(err)
 	
 	def _HttpAuthCB(self, con, iq_obj):
