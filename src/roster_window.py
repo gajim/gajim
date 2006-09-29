@@ -3584,11 +3584,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if account_dest == 'all':
 			# drop on account row in merged mode: we can't know which account it is
 			return
-		
-		if account_dest == gajim.ZEROCONF_ACC_NAME:
-			# drop on zeroconf account, no contact adds possible
-			return
-
+	
 		# if account is not connected, do nothing
 		if gajim.connections[account_dest].connected < 2:
 			return
@@ -3612,6 +3608,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				if os.path.isfile(path): # is it file?
 					gajim.interface.instances['file_transfers'].send_file(
 						account_dest, c_dest, path)
+			return
+
+		if account_dest == gajim.ZEROCONF_ACC_NAME:
+			# drop on zeroconf account, no contact adds possible
 			return
 
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:

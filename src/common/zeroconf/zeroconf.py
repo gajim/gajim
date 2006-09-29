@@ -67,8 +67,10 @@ class Zeroconf:
 	
 	def error_callback(self, err):
 		gajim.log.debug(str(err))
-		self.disconnect()
-		self.disconnected_CB()
+		# timeouts are non-critical
+		if str(err) != 'Timeout reached':
+			self.disconnect()
+			self.disconnected_CB()
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
 		gajim.log.debug('Found service %s in domain %s on %i.%i.' % (name, domain, interface, protocol))
