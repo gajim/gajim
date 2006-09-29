@@ -930,7 +930,11 @@ class RosterWindow:
 			advanced_menuitem_menu.show_all()
 		else: # user has *more* than one account : build advanced submenus
 			advanced_sub_menu = gtk.Menu()
+			accounts = [] # Put accounts in a list to sort them
 			for account in gajim.connections:
+				accounts.append(account)
+			accounts.sort()
+			for account in accounts:
 				advanced_item = gtk.MenuItem(_('for account %s') % account, False)
 				advanced_sub_menu.append(advanced_item)
 				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
