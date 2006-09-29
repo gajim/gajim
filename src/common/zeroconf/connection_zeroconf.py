@@ -86,9 +86,18 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			gajim.config.set('usegpg', False)
 		
 		self.get_config_values_or_default()
-		self.zeroconf = zeroconf.Zeroconf(self._on_new_service,
-			self._on_remove_service, self._on_name_conflictCB, 
-			self._on_disconnected, self.username, self.host, self.port)
+		
+		self.avahi_error = False
+		try:
+			import avahi
+		except ImportError:
+			self.avahi_error = True
+
+		if not self.avahi_error:
+			self.zeroconf = zeroconf.Zeroconf(self._on_new_service,
+				self._on_remove_service, self._on_name_conflictCB, 
+				self._on_disconnected, self.username, self.host, self.port)
+
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.vcard_supported = False
 
@@ -282,6 +291,14 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.status = show
 
 		check = True		#to check for errors from zeroconf
+
+		if self.avahi_error:
+			self.dispatch('STATUS', 'offline')
+			self.status = 'offline'
+			self.dispatch('CONNECTION_LOST',
+				(_('Could not connect "%s"') % self.name,
+				_('Please check if avahi is installed.')))
+			return
 
 		# 'connect'
 		if show != 'offline' and not self.connected:
