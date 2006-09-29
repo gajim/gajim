@@ -1802,7 +1802,7 @@ class AccountsWindow:
 		st = gajim.config.get('enable_zeroconf')
 		w = self.xml.get_widget('enable_zeroconf_checkbutton')
 		w.set_active(st)
-		if os.name == 'nt' or avahi_error:
+		if os.name == 'nt' or (avahi_error and not w.get_active()):
 			w.set_sensitive(False)
 		w.connect('toggled', self.on_enable_zeroconf_checkbutton_toggled)
 
