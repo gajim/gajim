@@ -1004,7 +1004,8 @@ class ChatControl(ChatControlBase):
 			room_jid = self.contact.jid.split('/')[0]
 			room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid,
 				self.account)
-			name = _('%s from room %s') % (name, room_ctrl.name)
+			name = _('%(nickname)s from room %(room_name)s') %\
+				{'nickname': name, 'room_name': room_ctrl.name}
 		name = gtkgui_helpers.escape_for_pango_markup(name)
 
 		# We know our contacts nick, but if another contact has the same nick
