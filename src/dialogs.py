@@ -2036,7 +2036,7 @@ class PrivacyListsWindow:
 		self.window = self.xml.get_widget('privacy_lists_first_window')
 		for widget_to_add in ['list_of_privacy_lists_combobox',
 		'delete_privacy_list_button', 'open_privacy_list_button',
-		'new_privacy_list_button', 'new_privacy_list_entry', 'buttons_hbox',
+		'new_privacy_list_button', 'new_privacy_list_entry',
 		'privacy_lists_refresh_button', 'close_privacy_lists_window_button']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(
 				widget_to_add)		
@@ -2069,15 +2069,18 @@ class PrivacyListsWindow:
 			self.list_of_privacy_lists_combobox.append_text(add_item)
 		if len(self.privacy_lists) == 0:
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
-			self.buttons_hbox.set_sensitive(False)
+			self.open_privacy_list_button.set_sensitive(False)
+			self.delete_privacy_list_button.set_sensitive(False)
 		elif len(self.privacy_lists) == 1:
 			self.list_of_privacy_lists_combobox.set_active(0)
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
-			self.buttons_hbox.set_sensitive(True)	
+			self.open_privacy_list_button.set_sensitive(True)
+			self.delete_privacy_list_button.set_sensitive(True)
 		else:
 			self.list_of_privacy_lists_combobox.set_sensitive(True)
-			self.buttons_hbox.set_sensitive(True)
 			self.list_of_privacy_lists_combobox.set_active(0)
+			self.open_privacy_list_button.set_sensitive(True)
+			self.delete_privacy_list_button.set_sensitive(True)
 		self.privacy_lists = []
 
 	def on_privacy_lists_refresh_button_clicked(self, widget):
