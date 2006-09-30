@@ -18,7 +18,7 @@ if __name__ == '__main__':
 	# install _() func before importing dbus_support
 	from common import i18n
 
-import dbus_support
+from common import dbus_support
 if dbus_support.supported:
 	import dbus
 	import dbus.glib
