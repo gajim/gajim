@@ -402,14 +402,11 @@ class GroupchatControl(ChatControlBase):
 
 	def get_tab_image(self):
 		# Set tab image (always 16x16)
-		img_16 = gajim.interface.roster.get_appropriate_state_images(
-			self.room_jid)
-
 		tab_image = None
 		if gajim.gc_connected[self.account][self.room_jid]:
-			tab_image = img_16['muc_active']
+			tab_image = gajim.interface.roster.load_icon('muc_active')
 		else:
-			tab_image = img_16['muc_inactive']
+			tab_image = gajim.interface.roster.load_icon('muc_inactive')
 		return tab_image
 
 	def update_ui(self):
