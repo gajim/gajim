@@ -1357,6 +1357,9 @@ class AccountModificationWindow:
 		config['custom_host'] = self.xml.get_widget(
 			'custom_host_entry').get_text().decode('utf-8')
 
+		# update in case the name changed to local accounts name
+		config['is_zeroconf'] = False
+
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().decode('utf-8')
 		if config['keyname'] == '': #no key selected
 			config['keyid'] = ''
@@ -1804,7 +1807,7 @@ class AccountsWindow:
 		w.set_active(st)
 		if os.name == 'nt' or (avahi_error and not w.get_active()):
 			w.set_sensitive(False)
-		w.connect('toggled', self.on_enable_zeroconf_checkbutton_toggled)
+		self.zeroconf_toggled_id = w.connect('toggled', self.on_enable_zeroconf_checkbutton_toggled)
 
 	def on_accounts_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
@@ -1845,7 +1848,7 @@ class AccountsWindow:
 			dialogs.ErrorDialog(_('Unread events'),
 				_('Read all pending events before removing this account.'))
 			return
-		if account == gajim.ZEROCONF_ACC_NAME:
+		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 			w = self.xml.get_widget('enable_zeroconf_checkbutton')
 			w.set_active(False)
 		else:
@@ -1871,7 +1874,7 @@ class AccountsWindow:
 		self.show_modification_window(account)
 
 	def show_modification_window(self, account):
-		if account == gajim.ZEROCONF_ACC_NAME:
+		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 			if gajim.interface.instances.has_key('zeroconf_properties'):
 				gajim.interface.instances['zeroconf_properties'].window.present()
 			else:
@@ -1902,6 +1905,14 @@ class AccountsWindow:
 
 	
 	def on_enable_zeroconf_checkbutton_toggled(self, widget):
+		# don't do anything if there is an account with the local name but is a normal account
+		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME) and not gajim.connections[gajim.ZEROCONF_ACC_NAME].is_zeroconf:
+			gajim.connections[gajim.ZEROCONF_ACC_NAME].dispatch('ERROR', (_('Account Local already exists.'),_('Please rename or remove it before enabling link-local messaging.')))
+			widget.disconnect(self.zeroconf_toggled_id)
+			widget.set_active(False)
+			self.zeroconf_toggled_id = widget.connect('toggled', self.on_enable_zeroconf_checkbutton_toggled)
+			return
+
 		if gajim.config.get('enable_zeroconf'):
 			#disable
 			gajim.interface.roster.close_all(gajim.ZEROCONF_ACC_NAME)

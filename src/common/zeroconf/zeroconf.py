@@ -74,18 +74,18 @@ class Zeroconf:
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
 		gajim.log.debug('Found service %s in domain %s on %i.%i.' % (name, domain, interface, protocol))
-		if not self.connected:
-			return
+		# if not self.connected:
+		# 	return
 		
-		#synchronous resolving
+		# synchronous resolving
 		self.server.ResolveService( int(interface), int(protocol), name, stype, \
 					domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), \
 					reply_handler=self.service_resolved_callback, error_handler=self.error_callback)
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		gajim.log.debug('Service %s in domain %s on %i.%i disappeared.' % (name, domain, interface, protocol))
-		#if not self.connected:
-		#	return
+		# if not self.connected:
+		# 	return
 		if name != self.name:
 			for key in self.contacts.keys():
 				if self.contacts[key][C_BARE_NAME] == name:
@@ -97,7 +97,6 @@ class Zeroconf:
 		# Are we already browsing this domain for this type? 
 		if self.service_browser:
 			return
-
 
 		object_path = self.server.ServiceBrowserNew(interface, protocol, \
 				stype, domain, dbus.UInt32(0))

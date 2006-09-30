@@ -1369,7 +1369,7 @@ class RosterWindow:
 		if not contact:
 			return
 
-		if account == gajim.ZEROCONF_ACC_NAME:
+		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 			xml = gtkgui_helpers.get_glade('zeroconf_contact_context_menu.glade')
 			zeroconf_contact_context_menu = xml.get_widget('zeroconf_contact_context_menu')
 			
@@ -3730,7 +3730,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 						account_dest, c_dest, path)
 			return
 
-		if account_dest == gajim.ZEROCONF_ACC_NAME:
+		if gajim.config.get_per('accounts', account_dest, 'is_zeroconf'):
 			# drop on zeroconf account, no contact adds possible
 			return
 
@@ -3745,7 +3745,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		if type_dest == 'account' and account_source == account_dest:
 			return
-		if account_source == gajim.ZEROCONF_ACC_NAME:
+		if gajim.config.get_per('accounts', account_source, 'is_zeroconf'):
 			return
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':
