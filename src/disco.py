@@ -390,7 +390,7 @@ class ServicesCache:
 			if self._cbs.has_key(cbkey):
 				del self._cbs[cbkey]
 
-# object is needed so that property() works
+# object is needed so that @property works
 class ServiceDiscoveryWindow(object):
 	'''Class that represents the Services Discovery window.'''
 	def __init__(self, account, jid = '', node = '',
@@ -473,15 +473,16 @@ _('Without a connection, you can not browse available services'))
 		self.travel(jid, node)
 		self.window.show_all()
 
+	@property
 	def _get_account(self):
 		return self._account
 
+	@property
 	def _set_account(self, value):
 		self._account = value
 		self.cache.account = value
 		if self.browser:
 			self.browser.account = value
-	account = property(_get_account, _set_account)
 
 	def _initial_state(self):
 		'''Set some initial state on the window. Separated in a method because
