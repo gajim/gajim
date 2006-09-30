@@ -228,6 +228,11 @@ class ChatControlBase(MessageControl):
 		item = gtk.SeparatorMenuItem()
 		menu.prepend(item)
 
+		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+		menu.prepend(item)
+		id = item.connect('activate', self.msg_textview.clear)
+		self.handlers[id] = item
+
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			item = gtk.MenuItem(_('Spelling language'))
 			menu.prepend(item)
@@ -240,11 +245,6 @@ class ChatControlBase(MessageControl):
 				submenu.append(item)
 				id = item.connect('activate', _on_select_dictionary, langs[lang])
 				self.handlers[id] = item
-
-		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
-		menu.prepend(item)
-		id = item.connect('activate', self.msg_textview.clear)
-		self.handlers[id] = item
 
 		menu.show_all()
 
