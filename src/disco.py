@@ -491,7 +491,7 @@ _('Without a connection, you can not browse available services'))
 		self._set_window_banner_text(_('Service Discovery'))
 		# FIXME: use self.banner_icon.clear() when we switch to GTK 2.8
 		self.banner_icon.set_from_file(None)
-		self.banner_icon.hide()		# Just clearing it doesn't work
+		self.banner_icon.hide() # Just clearing it doesn't work
 
 	def _set_window_banner_text(self, text, text_after = None):
 		theme = gajim.config.get('roster_theme')
