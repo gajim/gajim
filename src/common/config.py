@@ -329,15 +329,15 @@ class Config:
 		_('Movie'): _("I'm watching a movie."),
 		_('Working'): _("I'm working."),
 		_('Phone'): _("I'm on the phone."),
-		_('Out'): _("I'm out enjoying life"),
+		_('Out'): _("I'm out enjoying life."),
 	}
 
 	defaultstatusmsg_default = {
-		'online': [ False, _("I'm available") ],
-		'chat': [ False, _("I'm free for chat") ],
-		'away': [ False, _('Be right back') ],
-		'xa': [ False, _("I'm not available") ],
-		'dnd': [ False, _('Do not disturb') ],
+		'online': [ False, _("I'm available.") ],
+		'chat': [ False, _("I'm free for chat.") ],
+		'away': [ False, _('Be right back.') ],
+		'xa': [ False, _("I'm not available.") ],
+		'dnd': [ False, _('Do not disturb.') ],
 		'invisible': [ False, _('Bye!') ],
 		'offline': [ False, _('Bye!') ],
 	}
