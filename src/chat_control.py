@@ -112,7 +112,7 @@ class ChatControlBase(MessageControl):
 	acct, resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
 			display_names,	contact, acct, resource = resource);
-		# when/if we do XHTML we will but formatting buttons back
+		# when/if we do XHTML we will put formatting buttons back
 		widget = self.xml.get_widget('emoticons_button')
 		id = widget.connect('clicked', self.on_emoticons_button_clicked)
 		self.handlers[id] = widget
@@ -554,9 +554,15 @@ class ChatControlBase(MessageControl):
 		full_jid != self.parent_win.get_active_jid() or \
 		not self.parent_win.is_active() or not end) and \
 		kind in ('incoming', 'incoming_queue'):
-			if self.notify_on_new_messages():
+			gc_message = False
+			if self.type_id  == message_control.TYPE_GC:
+				gc_message = True
+			if self.notify_on_new_messages() or \
+			(gc_message and other_tags_for_text == ['marked']):
+			# we want to have save this message in events list
+			# other_tags_for_text == ['marked'] --> highlighted gc message
 				type_ = 'printed_' + self.type_id
-				if self.type_id == message_control.TYPE_GC:
+				if gc_message:
 					type_ = 'printed_gc_msg'
 				show_in_roster = notify.get_show_in_roster('message_received',
 					self.account, self.contact)

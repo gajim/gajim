@@ -464,7 +464,7 @@ class RosterWindow:
 	def get_appropriate_state_images(self, jid, size = '16',
 		icon_name = 'online'):
 		'''check jid and return the appropriate state images dict for
-		the demanded size. icon_name is taken into account when jis is from
+		the demanded size. icon_name is taken into account when jid is from
 		transport: transport iconset doesn't contain all icons, so we fall back
 		to jabber one'''
 		transport = gajim.get_transport_name_from_jid(jid)

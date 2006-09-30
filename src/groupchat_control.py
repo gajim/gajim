@@ -322,8 +322,7 @@ class GroupchatControl(ChatControlBase):
 		menu.show_all()
 
 	def notify_on_new_messages(self):
-		return gajim.config.get('notify_on_all_muc_messages') or \
-			self.attention_flag
+		return gajim.config.get('notify_on_all_muc_messages')
 
 	def on_treeview_size_allocate(self, widget, allocation):
 		'''The MUC treeview has resized. Move the hpaned in all tabs to match'''
@@ -390,21 +389,27 @@ class GroupchatControl(ChatControlBase):
 			color = gtk.gdk.colormap_get_system().alloc_color(color_name)
 			
 		label_str = self.name
+		
+		# count waiting highlighted messages
+		unread = ''
+		jid = self.contact.jid
+		num_unread = len(gajim.events.get_events(self.account, jid,
+			['printed_gc_msg']))
+		if num_unread > 1:
+			unread = '[' + unicode(num_unread) + ']'
+		label_str = unread + label_str
 		return (label_str, color)
 
 	def get_tab_image(self):
-		# Set tab image (always 16x16); unread messages show the 'message' image
+		# Set tab image (always 16x16)
 		img_16 = gajim.interface.roster.get_appropriate_state_images(
-			self.room_jid, icon_name = 'message')
+			self.room_jid)
 
 		tab_image = None
-		if self.attention_flag and gajim.config.get('show_unread_tab_icon'):
-			tab_image = img_16['message']
+		if gajim.gc_connected[self.account][self.room_jid]:
+			tab_image = img_16['muc_active']
 		else:
-			if gajim.gc_connected[self.account][self.room_jid]:
-				tab_image = img_16['muc_active']
-			else:
-				tab_image = img_16['muc_inactive']
+			tab_image = img_16['muc_inactive']
 		return tab_image
 
 	def update_ui(self):
