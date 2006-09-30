@@ -2893,6 +2893,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.interface.remove_first_event(account, jid, event.type_)
 			ft.show_completed(jid, data)
 			return True
+		elif event.type_ == 'gc-invitation':
+			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
+				data[1])
+			gajim.interface.remove_first_event(account, jid, event.type_)
+			return True
 		return False
 
 	def on_open_chat_window(self, widget, contact, account, resource = None):
