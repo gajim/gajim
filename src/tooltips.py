@@ -254,7 +254,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			# there are possible pango TBs on 'set_markup'
 			if isinstance(message, str):
 				message = unicode(message, encoding = 'utf-8')
-			message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
+			message = gtkgui_helpers.reduce_chars_newlines(message, 100, 1)
 			message = gtkgui_helpers.escape_for_pango_markup(message)
 			if gajim.con_types.has_key(acct['name']) and \
 				gajim.con_types[acct['name']] in ('tls', 'ssl'):
@@ -329,7 +329,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 
 		elif len(accounts) == 1:
 			message = accounts[0]['status_line']
-			message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
+			message = gtkgui_helpers.reduce_chars_newlines(message, 100, 1)
 			message = gtkgui_helpers.escape_for_pango_markup(message)
 			text = _('Gajim - %s') % message
 		else:

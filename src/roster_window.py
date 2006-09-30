@@ -495,15 +495,16 @@ class RosterWindow:
 		if self.regroup:
 			add_acct = False
 			# look through all contacts of all accounts
-			for a in gajim.connections:
-				if a == account: # useless to add accout name
+			for account_iter in gajim.connections:
+				if account_iter == account: # useless to add accout name
 					continue
-				for j in gajim.contacts.get_jid_list(a):
+				for jid_iter in gajim.contacts.get_jid_list(account_iter):
 					# [0] cause it'fster than highest_prio
-					c = gajim.contacts.get_first_contact_from_jid(a, j)
-					if c.get_shown_name() == \
+					contact_iter = gajim.contacts.\
+						get_first_contact_from_jid(account_iter, jid_iter)
+					if contact_iter.get_shown_name() == \
 					contact.get_shown_name() and\
-					(j, a) != (jid, account):
+					(jid_iter, account_iter) != (jid, account):
 						add_acct = True
 						break
 				if add_acct:
