@@ -296,8 +296,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.dispatch('STATUS', 'offline')
 			self.status = 'offline'
 			self.dispatch('CONNECTION_LOST',
-				(_('Could not connect "%s"') % self.name,
-				_('Please check if avahi is installed.')))
+				(_('Could not connect to "%s"') % self.name,
+				_('Please check if Avahi is installed.')))
 			return
 
 		# 'connect'
