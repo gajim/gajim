@@ -1019,6 +1019,12 @@ class SubscriptionRequestWindow:
 		xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def prepare_popup_menu(self):
+		xml = gtkgui_helpers.get_glade('subscription_request_popup_menu.glade')
+		menu = xml.get_widget('subscription_request_popup_menu')
+		xml.signal_autoconnect(self)
+		return menu
+
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 		
@@ -1029,7 +1035,7 @@ class SubscriptionRequestWindow:
 		if self.jid not in gajim.contacts.get_jid_list(self.account):
 			AddNewContactWindow(self.account, self.jid, self.user_nick)
 
-	def on_contact_info_button_clicked(self, widget):
+	def on_contact_info_activate(self, widget):
 		'''ask vcard'''
 		if gajim.interface.instances[self.account]['infos'].has_key(self.jid):
 			gajim.interface.instances[self.account]['infos'][self.jid].window.present()
@@ -1043,10 +1049,21 @@ class SubscriptionRequestWindow:
 			gajim.interface.instances[self.account]['infos'][self.jid].xml.\
 				get_widget('information_notebook').remove_page(0)
 	
+	def on_start_chat_activate(self, widget):
+		'''open chat'''
+		gajim.interface.roster.new_chat_from_jid(self.account, self.jid)
+
 	def on_deny_button_clicked(self, widget):
 		'''refuse the request'''
 		gajim.connections[self.account].refuse_authorization(self.jid)
 		self.window.destroy()
+
+	def on_actions_button_clicked(self, widget):
+		'''popup action menu'''
+		menu = self.prepare_popup_menu()
+		menu.show_all()
+		gtkgui_helpers.popup_emoticons_under_button(menu, widget, self.window.window)
+
 
 class JoinGroupchatWindow:
 	def __init__(self, account, server = '', room = '', nick = '',
