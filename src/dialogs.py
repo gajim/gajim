@@ -517,13 +517,13 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				i += 1
 
 			# set protocol_jid_combobox
-			self.protocol_combobox.set_active(0)
+			self.protocol_jid_combobox.set_active(0)
 			model = self.protocol_jid_combobox.get_model()
 			iter = model.get_iter_first()
 			i = 0
 			while iter:
 				if model[iter][0] == transport:
-					self.protocol_combobox.set_active(i)
+					self.protocol_jid_combobox.set_active(i)
 					break
 				iter = model.iter_next(iter)
 				i += 1
