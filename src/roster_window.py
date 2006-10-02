@@ -2075,7 +2075,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					return True
 				for acct in gajim.connections:
 					if not gajim.config.get_per('accounts', acct,
-						'sync_with_global_status'):
+					'sync_with_global_status'):
 						continue
 					current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 					self.send_status(acct, current_show, message)

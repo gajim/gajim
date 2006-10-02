@@ -121,7 +121,7 @@ class Connection(ConnectionHandlers):
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
 		gajim.log.debug('disconnectedReconnCB')
-		if gajim.account_is_connected(self):
+		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
 			# after we auth to server
 			self.old_show = STATUS_LIST[self.connected]
@@ -450,7 +450,7 @@ class Connection(ConnectionHandlers):
 	# END connect
 
 	def quit(self, kill_core):
-		if kill_core and gajim.account_is_connected(self):
+		if kill_core and gajim.account_is_connected(self.name):
 			self.disconnect(on_purpose = True)
 	
 	def get_privacy_lists(self):
@@ -1108,7 +1108,7 @@ class Connection(ConnectionHandlers):
 		# as a class property as pass it as an argument
 		def _on_unregister_account_connect(con):
 			self.on_connect_auth = None
-			if gajim.account_is_connected(self):
+			if gajim.account_is_connected(self.name):
 				hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 				iq = common.xmpp.Iq(typ = 'set', to = hostname)
 				q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
