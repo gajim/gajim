@@ -2420,10 +2420,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if not gajim.config.get_per('accounts', account,
 			'sync_with_global_status'):
 				continue
-			if not gajim.connections[acct].connected:
+			if not gajim.connections[account].connected:
 				continue
-			current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
-			self.send_status(acct, current_show, status_message)
+			current_show = gajim.SHOW_LIST[gajim.connections[account].connected]
+			self.send_status(account, current_show, status_message)
 
 
 	def update_status_combobox(self):
