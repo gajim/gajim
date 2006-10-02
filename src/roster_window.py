@@ -1783,12 +1783,8 @@ class RosterWindow:
 				config.AccountModificationWindow(account)
 
 	def on_open_gmail_inbox(self, widget, account):
-		if gajim.config.get_per('accounts', account, 'savepass'):
-			url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') %\
-			(urllib.quote(gajim.config.get_per('accounts', account, 'name')),
-			urllib.quote(gajim.config.get_per('accounts', account, 'password')))
-		else:
-			url = ('http://mail.google.com/')
+		url = 'http://mail.google.com/mail?account_id=%s' % urllib.quote(
+			gajim.config.get_per('accounts', account, 'name'))
 		helpers.launch_browser_mailer('url', url)
 
 	def on_change_status_message_activate(self, widget, account):

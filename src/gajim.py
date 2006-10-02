@@ -1778,12 +1778,8 @@ class Interface:
 				# Open the window
 				self.roster.open_event(account, fjid, event)
 		elif type_ == 'gmail':
-			if gajim.config.get_per('accounts', account, 'savepass'):
-				url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') %\
-				(urllib.quote(gajim.config.get_per('accounts', account, 'name')),
-				urllib.quote(gajim.config.get_per('accounts', account, 'password')))
-			else:
-				url = ('http://mail.google.com/')
+			url = 'http://mail.google.com/mail?account_id=%s' % urllib.quote(
+				gajim.config.get_per('accounts', account, 'name'))
 			helpers.launch_browser_mailer('url', url)
 		elif type_ == 'gc-invitation':
 			event = gajim.events.get_first_event(account, jid, type_)
