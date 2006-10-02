@@ -497,7 +497,9 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.protocol_jid_combobox.set_model(liststore)
 		self.xml.signal_autoconnect(self)
 		if jid:
-			type_ = gajim.get_transport_name_from_jid(jid) or 'jabber'
+			type_ = gajim.get_transport_name_from_jid(jid)
+			if not type_:
+				type_ = 'jabber'
 			if type_ == 'jabber':
 				self.uid_entry.set_text(jid)
 			else:
