@@ -13,6 +13,8 @@
 ## GNU General Public License for more details.
 ##
 
+# THIS FILE IS FOR **OTHERS'** PROFILE (when we VIEW their INFO)
+
 import gtk
 import gobject
 import base64
@@ -129,6 +131,7 @@ class VcardWindow:
 					widget = gtk.LinkButton(value, value)
 				else:
 					widget = gtk.Label(value)
+				widget.show()
 				table = self.xml.get_widget('personal_info_table')
 				table.attach(widget, 1, 4, 3, 4, yoptions = 0)
 			else:
@@ -149,7 +152,7 @@ class VcardWindow:
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 				image.set_from_pixbuf(pixbuf)
 				continue
-			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
+			if i in ('ADR', 'TEL', 'EMAIL'):
 				for entry in vcard[i]:
 					add_on = '_HOME'
 					if 'WORK' in entry:
