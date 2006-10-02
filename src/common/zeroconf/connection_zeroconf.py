@@ -189,8 +189,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			diffs = self.roster.getDiffs()
 			for key in diffs:
 				self.roster.setItem(key)
-				self.dispatch('ROSTER_INFO', (key, self.roster.getName(key), 'both', 'no', self.roster.getGroups(key)))
-				self.dispatch('NOTIFY', (key, self.roster.getStatus(key), self.roster.getMessage(key), 'local', 0, None, 0))
+				self.dispatch('ROSTER_INFO', (key, self.roster.getName(key),
+							'both', 'no', self.roster.getGroups(key)))
+				self.dispatch('NOTIFY', (key, self.roster.getStatus(key),
+							self.roster.getMessage(key), 'local', 0, None, 0))
 				#XXX open chat windows don't get refreshed (full name), add that
 		return self.call_resolve_timeout
 
@@ -259,27 +261,28 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			# stop calling the timeout
 			self.call_resolve_timeout = False
 			self.zeroconf.disconnect()
-
-	def reconnect(self, new_port):
+	
+	def reconnect(self):
 		if self.connected:
 			txt = {}
 			txt['1st'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_first_name')
 			txt['last'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_last_name')
 			txt['jid'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_jabber_id')
 			txt['email'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_email')
-
-			port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
-
-			if new_port or use_tls:
-				self.connection.kill_all_connections()
-				self.connection.listener.disconnect()
-				self.connection.start_listener(port)
-
+			 
 			self.zeroconf.remove_announce()
 			self.zeroconf.txt = txt
-			self.zeroconf.port = port
+			self.zeroconf.port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
 			self.zeroconf.username = self.username
 			self.zeroconf.announce()
+
+	def restart_listener(self):
+		if self.connection:
+			port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
+			self.connection.kill_all_connections()
+			if self.connection.listener:
+				self.connection.listener.disconnect()
+			self.connection.start_listener(port)
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		if not show in STATUS_LIST:

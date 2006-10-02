@@ -3233,14 +3233,8 @@ class ZeroconfPropertiesWindow:
 		if use_custom_port:
 			port = self.xml.get_widget('custom_port_entry').get_text()
 		else:
-			port = '5298'
-		
-		# force restart of listener (because port has changed) 
-		if port != old_port:
-			use_custom_port = True
-		else:
-			use_custom_port = False
-		
+			port = 5298
+			
 		config['custom_port'] = port
 	
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().decode('utf-8')
@@ -3255,11 +3249,20 @@ class ZeroconfPropertiesWindow:
 			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry'
 				).get_text().decode('utf-8')
 
-		for opt in config:
+		reconnect = False
+		for opt in ('zeroconf_first_name','zeroconf_last_name', 'zeroconf_jabber_id', 'zeroconf_email', 'custom_port'):
+			if gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, opt) != config[opt]:
+				reconnect = True
+		
+		for opt	in config:
 			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, opt, config[opt])
 
 		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
-			gajim.connections[gajim.ZEROCONF_ACC_NAME].reconnect(use_custom_port)
+			if port != old_port:
+				# restart listener if port has changed
+				gajim.connections[gajim.ZEROCONF_ACC_NAME].restart_listener()
+			if reconnect:
+				gajim.connections[gajim.ZEROCONF_ACC_NAME].reconnect()
 
 		self.window.destroy()
 	

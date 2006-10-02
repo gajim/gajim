@@ -566,6 +566,7 @@ You might consider to change possible firewall settings.</property>
 			  <child>
 			    <widget class="GtkEntry" id="gpg_password_entry">
 			      <property name="visible">True</property>
+			      <property name="sensitive">False</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">False</property>
