@@ -22,6 +22,7 @@ from dialogs import BindPortError
 from  common.xmpp.protocol import *
 import socket
 import errno
+import sys
 
 from common.zeroconf import roster_zeroconf
 
