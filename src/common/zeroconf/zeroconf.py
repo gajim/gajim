@@ -324,14 +324,9 @@ class Zeroconf:
 	def get_contact(self, jid):
 		return self.contacts[jid]
 		
-	def update_txt(self, txt):
-		# update only new non-empty keys
-		for key in txt.keys():
-			if txt[key]:
-				self.txt[key]=txt[key]
-
-		if txt.has_key('status'):
-			self.txt['status'] = self.replace_show(txt['status'])
+	def update_txt(self, show = None):
+		if show:
+			self.txt['status'] = self.replace_show(show)
 
 		txt = avahi.dict_to_txt_array(self.txt)
 		if self.connected and self.entrygroup:

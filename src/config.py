@@ -3215,16 +3215,16 @@ class ZeroconfPropertiesWindow:
 		config['sync_with_global_status'] = st
 
 		st = self.xml.get_widget('first_name_entry').get_text()
-		config['zeroconf_first_name'] = st
+		config['zeroconf_first_name'] = st.decode('utf-8')
 		
 		st = self.xml.get_widget('last_name_entry').get_text()
-		config['zeroconf_last_name'] = st
+		config['zeroconf_last_name'] = st.decode('utf-8')
 
 		st = self.xml.get_widget('jabber_id_entry').get_text()
-		config['zeroconf_jabber_id'] = st
+		config['zeroconf_jabber_id'] = st.decode('utf-8')
 
 		st = self.xml.get_widget('email_entry').get_text()
-		config['zeroconf_email'] = st
+		config['zeroconf_email'] = st.decode('utf-8')
 
 		use_custom_port = self.xml.get_widget('custom_port_checkbutton').get_active()
 		config['use_custom_host'] = use_custom_port
@@ -3258,12 +3258,9 @@ class ZeroconfPropertiesWindow:
 			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, opt, config[opt])
 
 		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
-			if port != old_port:
-				# restart listener if port has changed
-				gajim.connections[gajim.ZEROCONF_ACC_NAME].restart_listener()
-			if reconnect:
-				gajim.connections[gajim.ZEROCONF_ACC_NAME].reconnect()
-
+			if port != old_port or reconnect:
+				gajim.connections[gajim.ZEROCONF_ACC_NAME].update_details()
+		
 		self.window.destroy()
 	
 	def on_gpg_choose_button_clicked(self, widget, data = None):

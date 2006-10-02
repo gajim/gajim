@@ -18,7 +18,8 @@ from common.xmpp.idlequeue import IdleObject
 from common.xmpp import dispatcher_nb, simplexml
 from common.xmpp.client import *
 from common.xmpp.simplexml import ustr
-from dialogs import BindPortError
+from common.zeroconf import zeroconf
+
 from  common.xmpp.protocol import *
 import socket
 import errno
@@ -459,13 +460,86 @@ class P2PConnection(IdleObject, PlugIn):
 
 
 class ClientZeroconf:
-	def __init__(self, zeroconf, caller):
-		self.roster = roster_zeroconf.Roster(zeroconf)
+	def __init__(self, caller):
 		self.caller = caller
-		self.start_listener(zeroconf.port)
+		self.zeroconf = None
+		self.roster = None
+		self.last_msg = ''
 		self.connections = {}
 		self.recipient_to_hash = {}
 		self.ip_to_hash = {}
+
+	def test_avahi(self):
+		#~ self.avahi_error = False
+		try:
+			import avahi
+		except ImportError:
+			#~ self.avahi_error = True
+			return False
+		return True
+
+	def connect(self, show, msg):
+		self.port = self.start_listener(self.caller.port)
+		if not self.port:
+			return
+		self.zeroconf_init(show, msg)
+		if not self.zeroconf.connect():
+			self.disconnect()
+			return 
+		self.roster = roster_zeroconf.Roster(self.zeroconf)
+
+	def remove_announce(self):
+		return self.zeroconf.remove_announce()
+	
+	def announce(self):
+		return self.zeroconf.announce()
+	
+	def set_show_msg(self, show, msg):
+		self.zeroconf.txt['msg'] = msg
+		self.last_msg = msg
+		return self.zeroconf.update_txt(show)
+	
+	def resolve_all(self):
+		self.zeroconf.resolve_all()
+	
+	def reannounce(self, txt):
+		#~ if self.zeroconf:
+		self.remove_announce()
+		self.zeroconf.txt = txt
+		self.zeroconf.port = self.port
+		self.zeroconf.username = self.caller.username
+		return self.announce()
+
+
+	def zeroconf_init(self, show, msg):
+		self.zeroconf = zeroconf.Zeroconf(self.caller._on_new_service,
+			self.caller._on_remove_service, self.caller._on_name_conflictCB, 
+			self.caller._on_disconnected, self.caller.username, self.caller.host, 
+			self.port)
+		self.zeroconf.txt['msg'] = msg
+		self.zeroconf.txt['status'] = show
+		self.zeroconf.txt['1st'] = self.caller.first
+		self.zeroconf.txt['last'] = self.caller.last
+		self.zeroconf.txt['jid'] = self.caller.jabber_id
+		self.zeroconf.txt['email'] = self.caller.email
+		self.zeroconf.username = self.caller.username
+		self.zeroconf.host = self.caller.host
+		self.zeroconf.port = self.port
+		self.last_msg = msg
+
+	def disconnect(self):
+		if self.listener:
+			self.listener.disconnect()
+			self.listener = None
+		if self.zeroconf:
+			self.zeroconf.disconnect()
+			self.zeroconf = None
+		if self.roster:
+			self.roster.zeroconf = None
+			self.roster._data = None
+			self.roster = None
+		#~ self.caller.show = 'offline'
+		#~ self.caller.dispatch('STATUS', 'offline')
 		
 	def kill_all_connections(self):
 		for connection in self.connections.values():
@@ -492,14 +566,13 @@ class ClientZeroconf:
 				break
 		
 	def start_listener(self, port):
-		self.listener = ZeroconfListener(port, self)
-		self.listener.bind()
-		if self.listener.started is False:
-			self.listener = None
-			# We cannot bind port, call error 
-			# dialog from dialogs.py and fail
-			BindPortError(port)
-			return None
+		for p in range(port, port + 5):
+			self.listener = ZeroconfListener(p, self)
+			self.listener.bind()
+			if self.listener.started:
+				return p
+		self.listener = None
+		return False
 	
 	def getRoster(self):
 		return self.roster.getRoster()

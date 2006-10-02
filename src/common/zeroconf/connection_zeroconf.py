@@ -42,7 +42,6 @@ import notify
 from common import helpers
 from common import gajim
 from common import GnuPG
-from common.zeroconf import zeroconf
 from common.zeroconf import connection_handlers_zeroconf
 from common.zeroconf import client_zeroconf
 from connection_handlers_zeroconf import *
@@ -87,17 +86,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		
 		self.get_config_values_or_default()
 		
-		self.avahi_error = False
-		try:
-			import avahi
-		except ImportError:
-			self.avahi_error = True
-
-		if not self.avahi_error:
-			self.zeroconf = zeroconf.Zeroconf(self._on_new_service,
-				self._on_remove_service, self._on_name_conflictCB, 
-				self._on_disconnected, self.username, self.host, self.port)
-
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.vcard_supported = False
 
@@ -185,7 +173,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def _on_resolve_timeout(self):
 		if self.connected:
-			self.zeroconf.resolve_all()
+			self.connection.resolve_all()
 			diffs = self.roster.getDiffs()
 			for key in diffs:
 				self.roster.setItem(key)
@@ -218,71 +206,72 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def connect(self, data = None, show = 'online', msg = ''):
 		self.get_config_values_or_default()
-
-		self.zeroconf.txt['status'] = show
-		self.zeroconf.txt['msg'] = msg
-		self.zeroconf.txt['1st'] = self.first
-		self.zeroconf.txt['last'] = self.last
-		self.zeroconf.txt['jid'] = self.jabber_id
-		self.zeroconf.txt['email'] = self.email
-		self.zeroconf.username = self.username
-		self.zeroconf.host = self.host
-		self.zeroconf.port = self.port
-
-		if self.zeroconf.connect():
-			if not self.connection:
-				self.connection = client_zeroconf.ClientZeroconf(self.zeroconf, self)
-			else:
-				self.zeroconf.announce()
-			self.roster = self.connection.getRoster()
-			self.dispatch('ROSTER', self.roster)
-
-			#display contacts already detected and resolved
-			for jid in self.roster.keys():
-				self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
-				self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
-
-			self.connected = STATUS_LIST.index(show)
-
-			# refresh all contacts data every five seconds
-			self.call_resolve_timeout = True
-			gobject.timeout_add(5000, self._on_resolve_timeout)
+		if not self.connection:
+			self.connection = client_zeroconf.ClientZeroconf(self)
+			if not self.connection.test_avahi():
+				self.dispatch('STATUS', 'offline')
+				self.status = 'offline'
+				self.dispatch('CONNECTION_LOST',
+					(_('Could not connect to "%s"') % self.name,
+					_('Please check if Avahi is installed.')))
+				return
+			self.connection.connect(show, msg)
+			if not self.connection.listener:
+				self.status = 'offline'
+				self.dispatch('CONNECTION_LOST',
+					(_('Could not start local service') % self.name,
+					_('Unable to bind to port "%d".' % self.port)))
+				return
 		else:
-			self.dispatch('STATUS', 'offline')
-			self.status = 'offline'
+			self.connection.announce()
+		self.roster = self.connection.getRoster()
+		self.dispatch('ROSTER', self.roster)
+
+		#display contacts already detected and resolved
+		for jid in self.roster.keys():
+			self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
+			self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
+
+		self.connected = STATUS_LIST.index(show)
+
+		# refresh all contacts data every five seconds
+		self.call_resolve_timeout = True
+		gobject.timeout_add(5000, self._on_resolve_timeout)
+		return True
 
 	def disconnect(self, on_purpose = False):
 		self.connected = 0
 		self.time_to_reconnect = None
 		if self.connection:
-			if self.connection.listener:
-				self.connection.listener.disconnect()
+			self.connection.disconnect()
 			self.connection = None
 			# stop calling the timeout
 			self.call_resolve_timeout = False
-			self.zeroconf.disconnect()
+			
 	
-	def reconnect(self):
+	def reannounce(self):
 		if self.connected:
 			txt = {}
 			txt['1st'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_first_name')
 			txt['last'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_last_name')
 			txt['jid'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_jabber_id')
 			txt['email'] = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_email')
-			 
-			self.zeroconf.remove_announce()
-			self.zeroconf.txt = txt
-			self.zeroconf.port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
-			self.zeroconf.username = self.username
-			self.zeroconf.announce()
+			self.connection.reannounce(txt)
 
-	def restart_listener(self):
+	def update_details(self):
 		if self.connection:
 			port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
-			self.connection.kill_all_connections()
-			if self.connection.listener:
-				self.connection.listener.disconnect()
-			self.connection.start_listener(port)
+			if self.connection:
+				if port != self.port:
+					self.port = port
+					last_msg = self.connection.last_msg
+					self.disconnect()
+					if not self.connect(show = self.status, msg = last_msg):
+						return
+					if self.status != 'invisible':
+						self.connection.announce()
+			else:
+				self.reannounce()
 
 	def change_status(self, show, msg, sync = False, auto = False):
 		if not show in STATUS_LIST:
@@ -290,22 +279,14 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.status = show
 
 		check = True		#to check for errors from zeroconf
-
-		if self.avahi_error:
-			self.dispatch('STATUS', 'offline')
-			self.status = 'offline'
-			self.dispatch('CONNECTION_LOST',
-				(_('Could not connect to "%s"') % self.name,
-				_('Please check if Avahi is installed.')))
-			return
-
 		# 'connect'
 		if show != 'offline' and not self.connected:
-			self.connect(None, show, msg)
+			if not self.connect(None, show, msg):
+				return
 			if show != 'invisible':
-					check = self.zeroconf.announce()
+				check = self.connection.announce()
 			else:
-					self.connected = STATUS_LIST.index(show)
+				self.connected = STATUS_LIST.index(show)
 
 		# 'disconnect'
 		elif show == 'offline' and self.connected:
@@ -317,14 +298,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
-				check = check and self.zeroconf.remove_announce()
+				check = check and self.connection.remove_announce()
 			elif was_invisible:
-				check = check and self.zeroconf.announce()
+				check = check and self.connection.announce()
 			if self.connection and not show == 'invisible':
-				txt = {}
-				txt['status'] = show
-				txt['msg'] = msg
-				check = check and self.zeroconf.update_txt(txt)
+				check = check and self.connection.set_show_msg(show, msg)
 
 		#stay offline when zeroconf does something wrong
 		if check:
