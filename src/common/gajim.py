@@ -28,7 +28,7 @@ from events import Events
 interface = None # The actual interface (the gtk one for the moment)
 config = config.Config()
 version = config.get('version')
-connections = {}
+connections = {} # 'account name': 'account (connection.Connection) instance'
 verbose = False
 
 h = logging.StreamHandler()
