@@ -787,20 +787,11 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
 				chatstate, msg_id, composing_jep, user_nick))
-		else: # it's single message
+		elif mtype == 'normal': # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
-			if invite is not None:
-				item = invite.getTag('invite')
-				jid_from = item.getAttr('from')
-				if jid_from == None:
-					jid_from = frm
-				reason = item.getTagData('reason')
-				item = invite.getTag('password')
-				password = invite.getTagData('password')
-				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
-			else:
+			if invite:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
 					subject, chatstate, msg_id, composing_jep, user_nick))
 	# END messageCB
