@@ -486,7 +486,8 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				liststore.append([type_, type_])
 		self.protocol_combobox.set_model(liststore)
 		self.protocol_combobox.set_active(0)
-		self.protocol_jid_combobox.set_sensitive(False)
+		self.protocol_jid_combobox.set_no_show_all(True)
+		self.protocol_jid_combobox.hide()
 		self.subscription_table.set_no_show_all(True)
 		self.message_scrolledwindow.set_no_show_all(True)
 		self.register_hbox.set_no_show_all(True)
@@ -643,9 +644,11 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			for jid_ in self.agents[type_]:
 				model.append([jid_])
 			self.protocol_jid_combobox.set_active(0)
-			self.protocol_jid_combobox.set_sensitive(True)
+		if len(self.agents[type_]) > 1:
+			self.protocol_jid_combobox.set_no_show_all(False)
+			self.protocol_jid_combobox.show_all()
 		else:
-			self.protocol_jid_combobox.set_sensitive(False)
+			self.protocol_jid_combobox.hide()
 		if type_ in self.uid_labels:
 			self.uid_label.set_text(self.uid_labels[type_])
 		else:
