@@ -2377,15 +2377,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				global_sync_accounts.append(acct)
 		global_sync_connected_accounts = gajim.get_number_of_connected_accounts(
 			global_sync_accounts)
-		for acct in accounts:
-			if not gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
+		for account in accounts:
+			if not gajim.config.get_per('accounts', account,
+			'sync_with_global_status'):
 				continue
 			# we are connected (so we wanna change show and status)
 			# or no account is connected and we want to connect with new show and status
 
 			if not global_sync_connected_accounts > 0 or \
 			gajim.account_is_connected(account):
-				self.send_status(acct, status, message)
+				self.send_status(account, status, message)
 		self.update_status_combobox()
 
 	## enable setting status msg from currently playing music track
