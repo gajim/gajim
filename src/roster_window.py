@@ -145,8 +145,7 @@ class RosterWindow:
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
 
 		tls_pixbuf = None
-		if gajim.con_types.has_key(account) and \
-			gajim.con_types[account] in ('tls', 'ssl'):
+		if gajim.account_is_securely_connected(account):
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
 
@@ -164,11 +163,7 @@ class RosterWindow:
 		else:
 			accounts = [account]
 		num_of_accounts = len(accounts)
-		num_of_secured = 0
-		for acct in accounts:
-			if gajim.con_types.has_key(acct) and \
-			gajim.con_types[acct] in ('tls', 'ssl'):
-				num_of_secured += 1
+		num_of_secured = gajim.get_number_of_securely_connected_accounts()
 		if num_of_secured:
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
@@ -2334,14 +2329,16 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			dlg = dialogs.ChangeStatusMessageDialog(status)
 			message = dlg.run()
 			if message is not None: # None if user pressed Cancel
-				for acct in accounts:
-					if not gajim.config.get_per('accounts', acct,
+				for account in accounts:
+					if not gajim.config.get_per('accounts', account,
 						'sync_with_global_status'):
 						continue
-					current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
-					self.send_status(acct, current_show, message)
+					current_show = gajim.SHOW_LIST[
+						gajim.connections[account].connected]
+					self.send_status(account, current_show, message)
 			self.combobox_callback_active = False
-			self.status_combobox.set_active(self.previous_status_combobox_active)
+			self.status_combobox.set_active(
+				self.previous_status_combobox_active)
 			self.combobox_callback_active = True
 			return
 		# we are about to change show, so save this new show so in case
@@ -2351,13 +2348,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		connected_accounts = gajim.get_number_of_connected_accounts()
 		if status == 'invisible':
 			bug_user = False
-			for acct in accounts:
+			for account in accounts:
 				if connected_accounts < 1 or gajim.account_is_connected(account):
-					if not gajim.config.get_per('accounts', acct,
+					if not gajim.config.get_per('accounts', account,
 							'sync_with_global_status'):
 						continue
 					# We're going to change our status to invisible
-					if self.connected_rooms(acct):
+					if self.connected_rooms(account):
 						bug_user = True
 						break
 			if bug_user:
@@ -2419,8 +2416,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			status_message = _('♪ "%(title)s" by %(artist)s ♪') % \
 				{'title': music_track_info.title,
 					'artist': music_track_info.artist }
-		for acct in accounts:
-			if not gajim.config.get_per('accounts', acct,
+		for account in accounts:
+			if not gajim.config.get_per('accounts', account,
 			'sync_with_global_status'):
 				continue
 			if not gajim.connections[acct].connected:

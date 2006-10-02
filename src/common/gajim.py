@@ -212,6 +212,29 @@ def get_number_of_connected_accounts(accounts_list = None):
 			connected_accounts = connected_accounts + 1
 	return connected_accounts
 
+def account_is_connected(account):
+	if connections[account].connected > 1: # 0 is offline, 1 is connecting
+		return True
+	else:
+		return False
+
+def account_is_disconnected(account):
+	return not account_is_connected(account)
+
+def get_number_of_securely_connected_accounts():
+	'''returns the number of the accounts that are SSL/TLS connected'''
+	num_of_secured = 0
+	for account in connections:
+		if account_is_securely_connected(account):
+			num_of_secured += 1
+	return num_of_secured
+
+def account_is_securely_connected(account):
+	if account in con_types and con_types[account] in ('tls', 'ssl'):
+		return True
+	else:
+		return False
+
 def get_transport_name_from_jid(jid, use_config_setting = True):
 	'''returns 'aim', 'gg', 'irc' etc
 	if JID is not from transport returns None'''
@@ -259,15 +282,6 @@ def jid_is_transport(jid):
 	if jid.find('@') <= 0:
 		return True
 	return False
-
-def account_is_connected(account):
-	if connections[account].connected > 1: # 0 is offline, 1 is connecting
-		return True
-	else:
-		return False
-
-def account_is_disconnected(account):
-	return not account_is_connected(account)
 
 def get_jid_from_account(account_name):
 	'''return the jid we use in the given account'''
