@@ -65,6 +65,9 @@ class Zeroconf:
 		# left for eventual later use
 		pass
 	
+	def error_callback1(self, err):
+		gajim.log.debug('RR' + str(err))
+	
 	def error_callback(self, err):
 		gajim.log.debug(str(err))
 		# timeouts are non-critical
@@ -80,7 +83,7 @@ class Zeroconf:
 		# synchronous resolving
 		self.server.ResolveService( int(interface), int(protocol), name, stype, \
 					domain, avahi.PROTO_UNSPEC, dbus.UInt32(0), \
-					reply_handler=self.service_resolved_callback, error_handler=self.error_callback)
+					reply_handler=self.service_resolved_callback, error_handler=self.error_callback1)
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		gajim.log.debug('Service %s in domain %s on %i.%i disappeared.' % (name, domain, interface, protocol))
@@ -215,9 +218,7 @@ class Zeroconf:
 			else:
 				txt['status'] = 'avail'
 
-
 			self.txt = txt
-
 			gajim.log.debug('Publishing service %s of type %s' % (self.name, self.stype))
 			self.entrygroup.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
 			self.entrygroup.Commit(reply_handler=self.service_committed_callback, 
@@ -257,18 +258,34 @@ class Zeroconf:
 	def browse_domain(self, interface, protocol, domain):
 		self.new_service_type(interface, protocol, self.stype, domain, '')
 
+	def avahi_dbus_connect_cb(self, a, connect, disconnect):
+		if connect != "":
+			gajim.log.debug('Lost connection to avahi-daemon')
+			try:
+				self.connected = False
+				self.disconnect()
+				self.disconnected_CB()
+			except Exception, e:
+				print e
+		else:
+			gajim.log.debug('We are connected to avahi-daemon')
+			
+			
+			
 	# connect to dbus
 	def connect_dbus(self):
 		if self.server:
 			return True
 		try:
 			self.bus = dbus.SystemBus()
-			# is there any way to check if a dbus name exists?
-			# that might make the Introspect Error go away...
+			self.bus.add_signal_receiver(self.avahi_dbus_connect_cb, 
+				"NameOwnerChanged", "org.freedesktop.DBus", 
+				arg0="org.freedesktop.Avahi")
 			self.server = dbus.Interface(self.bus.get_object(avahi.DBUS_NAME, \
 			avahi.DBUS_PATH_SERVER), avahi.DBUS_INTERFACE_SERVER)
-			self.server.connect_to_signal('StateChanged', self.server_state_changed_callback)
-		except dbus.dbus_bindings.DBusException, e:
+			self.server.connect_to_signal('StateChanged', 
+				self.server_state_changed_callback)
+		except Exception, e:
 			# Avahi service is not present
 			self.server = None
 			gajim.log.debug(str(e))
@@ -280,8 +297,8 @@ class Zeroconf:
 		self.name = self.username + '@' + self.host # service name
 		if not self.connect_dbus():
 			return False
-		self.connected = True
 		
+		self.connected = True
 		# start browsing
 		if self.domain is None:
 			# Explicitly browse .local
@@ -304,11 +321,11 @@ class Zeroconf:
 			self.connected = False
 			if self.service_browser:
 				self.service_browser.Free()
-				self.service_browser = None
 			if self.domain_browser:
 				self.domain_browser.Free()
-				self.domain_browser = None
 			self.remove_announce()
+		self.service_browser = None
+		self.domain_browser = None
 		self.server = None
 
 	# refresh txt data of all contacts manually (no callback available)

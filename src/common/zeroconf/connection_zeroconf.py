@@ -203,8 +203,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			(_('Connection with account "%s" has been lost') % self.name,
 			_('To continue sending and receiving messages, you will need to reconnect.')))
 		self.status = 'offline'
+		self.disconnect()
 
-	def connect(self, data = None, show = 'online', msg = ''):
+	def connect(self, show = 'online', msg = ''):
 		self.get_config_values_or_default()
 		if not self.connection:
 			self.connection = client_zeroconf.ClientZeroconf(self)
@@ -214,13 +215,16 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.dispatch('CONNECTION_LOST',
 					(_('Could not connect to "%s"') % self.name,
 					_('Please check if Avahi is installed.')))
+				self.disconnect()
 				return
 			self.connection.connect(show, msg)
 			if not self.connection.listener:
+				self.dispatch('STATUS', 'offline')
 				self.status = 'offline'
 				self.dispatch('CONNECTION_LOST',
-					(_('Could not start local service') % self.name,
-					_('Unable to bind to port "%d".' % self.port)))
+					(_('Could not start local service'),
+					_('Please check if avahi-daemon is running.')))
+				self.disconnect()
 				return
 		else:
 			self.connection.announce()
@@ -247,8 +251,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.connection = None
 			# stop calling the timeout
 			self.call_resolve_timeout = False
-			
-	
+
 	def reannounce(self):
 		if self.connected:
 			txt = {}
@@ -266,7 +269,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					self.port = port
 					last_msg = self.connection.last_msg
 					self.disconnect()
-					if not self.connect(show = self.status, msg = last_msg):
+					if not self.connect(self.status, last_msg):
 						return
 					if self.status != 'invisible':
 						self.connection.announce()
@@ -281,7 +284,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		check = True		#to check for errors from zeroconf
 		# 'connect'
 		if show != 'offline' and not self.connected:
-			if not self.connect(None, show, msg):
+			if not self.connect(show, msg):
 				return
 			if show != 'invisible':
 				check = self.connection.announce()

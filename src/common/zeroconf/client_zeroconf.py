@@ -470,11 +470,9 @@ class ClientZeroconf:
 		self.ip_to_hash = {}
 
 	def test_avahi(self):
-		#~ self.avahi_error = False
 		try:
 			import avahi
 		except ImportError:
-			#~ self.avahi_error = True
 			return False
 		return True
 
@@ -489,21 +487,24 @@ class ClientZeroconf:
 		self.roster = roster_zeroconf.Roster(self.zeroconf)
 
 	def remove_announce(self):
-		return self.zeroconf.remove_announce()
+		if self.zeroconf:
+			return self.zeroconf.remove_announce()
 	
 	def announce(self):
-		return self.zeroconf.announce()
+		if self.zeroconf:
+			return self.zeroconf.announce()
 	
 	def set_show_msg(self, show, msg):
-		self.zeroconf.txt['msg'] = msg
-		self.last_msg = msg
-		return self.zeroconf.update_txt(show)
+		if self.zeroconf:
+			self.zeroconf.txt['msg'] = msg
+			self.last_msg = msg
+			return self.zeroconf.update_txt(show)
 	
 	def resolve_all(self):
-		self.zeroconf.resolve_all()
+		if self.zeroconf:
+			self.zeroconf.resolve_all()
 	
 	def reannounce(self, txt):
-		#~ if self.zeroconf:
 		self.remove_announce()
 		self.zeroconf.txt = txt
 		self.zeroconf.port = self.port
@@ -538,8 +539,6 @@ class ClientZeroconf:
 			self.roster.zeroconf = None
 			self.roster._data = None
 			self.roster = None
-		#~ self.caller.show = 'offline'
-		#~ self.caller.dispatch('STATUS', 'offline')
 		
 	def kill_all_connections(self):
 		for connection in self.connections.values():
@@ -575,7 +574,9 @@ class ClientZeroconf:
 		return False
 	
 	def getRoster(self):
-		return self.roster.getRoster()
+		if self.roster:
+			return self.roster.getRoster()
+		return {}
 
 	def send(self, msg_iq):
 		msg_iq.setFrom(self.roster.zeroconf.name)

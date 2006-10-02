@@ -712,8 +712,8 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 		tim = time.localtime(timegm(tim))
 		frm = msg.getFrom()
 		if frm == None:
-			for key in self.zeroconf.contacts:
-				if ip == self.zeroconf.contacts[key][zeroconf.C_ADDRESS]:
+			for key in self.connection.zeroconf.contacts:
+				if ip == self.connection.zeroconf.contacts[key][zeroconf.C_ADDRESS]:
 					frm = key
 		frm = str(frm)
 		jid  = frm

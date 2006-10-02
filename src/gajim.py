@@ -1413,7 +1413,6 @@ class Interface:
 		response = dlg.get_response()
 		if response == gtk.RESPONSE_OK:
 			new_name = dlg.input_entry.get_text()
-			print 'account, data', account, data, new_name
 			gajim.config.set_per('accounts', account, 'name', new_name)
 			status = gajim.connections[account].status
 			gajim.connections[account].username = new_name
