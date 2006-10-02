@@ -1,19 +1,11 @@
 ##	common/connection.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Dimitur Kirov <dkirov@gmail.com>
-##	- Travis Shirk <travis@pobox.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -129,8 +121,8 @@ class Connection(ConnectionHandlers):
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
 		gajim.log.debug('disconnectedReconnCB')
-		if self.connected > 1:
-			# we cannot change our status to offline or connectiong
+		if gajim.account_is_connected(self):
+			# we cannot change our status to offline or connecting
 			# after we auth to server
 			self.old_show = STATUS_LIST[self.connected]
 		self.connected = 0
@@ -458,7 +450,7 @@ class Connection(ConnectionHandlers):
 	# END connect
 
 	def quit(self, kill_core):
-		if kill_core and self.connected > 1:
+		if kill_core and gajim.account_is_connected(self):
 			self.disconnect(on_purpose = True)
 	
 	def get_privacy_lists(self):
@@ -1116,7 +1108,7 @@ class Connection(ConnectionHandlers):
 		# as a class property as pass it as an argument
 		def _on_unregister_account_connect(con):
 			self.on_connect_auth = None
-			if self.connected > 1:
+			if gajim.account_is_connected(self):
 				hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 				iq = common.xmpp.Iq(typ = 'set', to = hostname)
 				q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')

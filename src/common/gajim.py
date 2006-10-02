@@ -207,8 +207,8 @@ def get_number_of_connected_accounts(accounts_list = None):
 		accounts = connections.keys()
 	else:
 		accounts = accounts_list
-	for acct in accounts:
-		if connections[acct].connected > 1:
+	for account in accounts:
+		if account_is_connected(account):
 			connected_accounts = connected_accounts + 1
 	return connected_accounts
 
@@ -259,6 +259,15 @@ def jid_is_transport(jid):
 	if jid.find('@') <= 0:
 		return True
 	return False
+
+def account_is_connected(account):
+	if connections[account].connected > 1: # 0 is offline, 1 is connecting
+		return True
+	else:
+		return False
+
+def account_is_disconnected(account):
+	return not account_is_connected(account)
 
 def get_jid_from_account(account_name):
 	'''return the jid we use in the given account'''

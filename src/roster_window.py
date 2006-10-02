@@ -56,7 +56,7 @@ C_SECPIXBUF, # secondary_pixbuf (holds avatar or padlock)
 ) = range(7)
 
 class RosterWindow:
-	'''Class for main window of gtkgui interface'''
+	'''Class for main window of the GTK+ interface'''
 
 	def get_account_iter(self, name):
 		model = self.tree.get_model()
@@ -393,8 +393,8 @@ class RosterWindow:
 			return
 		if contact.jid in gajim.newly_added[account]:
 			return
-		if contact.jid.find('@') < 1 and gajim.connections[account].connected > 1:
-			# It's an agent
+		if gajim.jid_is_transport(contact.jid) and gajim.account_is_connected(
+			account): # It's an agent
 			return
 		if contact.jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(contact.jid)
@@ -410,7 +410,7 @@ class RosterWindow:
 		showOffline = gajim.config.get('showoffline')
 		if (contact.show in ('offline', 'error') or hide) and \
 			not showOffline and (not _('Transports') in contact.groups or \
-			gajim.connections[account].connected < 2) and \
+			gajim.account_is_disconnected(account)) and \
 			len(gajim.events.get_events(account, contact.jid, ['chat'])) == 0:
 			self.remove_contact(contact, account)
 		else:
@@ -836,7 +836,7 @@ class RosterWindow:
 
 		elif connected_accounts == 1: # user has only one account
 			for account in gajim.connections:
-				if gajim.connections[account].connected > 1: # THE connected account
+				if gajim.account_is_connected(account): # THE connected account
 					# gc
 					self.add_bookmarks_list(gc_sub_menu, account)
 					# add
@@ -879,7 +879,7 @@ class RosterWindow:
 
 		connected_accounts_with_vcard = []
 		for account in gajim.connections:
-			if gajim.connections[account].connected > 1 and \
+			if gajim.account_is_connected(account) and \
 			gajim.connections[account].vcard_supported:
 				connected_accounts_with_vcard.append(account)
 		if len(connected_accounts_with_vcard) > 1:
@@ -1714,7 +1714,6 @@ class RosterWindow:
 		jid = model[iter][C_JID].decode('utf-8')
 		path = model.get_path(iter)
 		account = model[iter][C_ACCOUNT].decode('utf-8')
-		is_connected = gajim.connections[account].connected > 1
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		menu = gtk.Menu()
 
@@ -1723,7 +1722,8 @@ class RosterWindow:
 		item.set_image(icon)
 		menu.append(item)
 		show = contact.show
-		if (show != 'offline' and show != 'error') or not is_connected:
+		if (show != 'offline' and show != 'error') or\
+			gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, None, account)
 
@@ -1731,7 +1731,8 @@ class RosterWindow:
 		icon = gtk.image_new_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		menu.append(item)
-		if show in ('offline', 'error') or not is_connected:
+		if show in ('offline', 'error') or gajim.account_is_disconnected(
+			account):
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
 			account)
@@ -1744,7 +1745,7 @@ class RosterWindow:
 		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_edit_agent, contact, account)
-		if not is_connected:
+		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 		
 		item = gtk.ImageMenuItem(_('_Rename'))
@@ -1756,7 +1757,7 @@ class RosterWindow:
 		item.set_image(img)
 		menu.append(item)
 		item.connect('activate', self.on_rename, iter, path)
-		if not is_connected:
+		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 
 		item = gtk.ImageMenuItem(_('_Remove from Roster'))
@@ -1764,7 +1765,7 @@ class RosterWindow:
 		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_remove_agent, [(contact, account)])
-		if not is_connected:
+		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
@@ -2266,7 +2267,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if gc_control.account == account:
 				gajim.connections[account].send_gc_status(gc_control.nick,
 					gc_control.room_jid, status, txt)
-		if gajim.connections[account].connected > 1:
+		if gajim.account_is_connected(account):
 			if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
 				gajim.sleeper_state[account] = 'online'
@@ -2351,7 +2352,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if status == 'invisible':
 			bug_user = False
 			for acct in accounts:
-				if connected_accounts < 1 or gajim.connections[acct].connected > 1:
+				if connected_accounts < 1 or gajim.account_is_connected(account):
 					if not gajim.config.get_per('accounts', acct,
 							'sync_with_global_status'):
 						continue
@@ -2383,7 +2384,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			# or no account is connected and we want to connect with new show and status
 
 			if not global_sync_connected_accounts > 0 or \
-			gajim.connections[acct].connected > 1:
+			gajim.account_is_connected(account):
 				self.send_status(acct, status, message)
 		self.update_status_combobox()
 
