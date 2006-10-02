@@ -488,16 +488,20 @@ _('Without a connection, you can not browse available services'))
 		'''Set some initial state on the window. Separated in a method because
 		it's handy to use within browser's cleanup method.'''
 		self.progressbar.hide()
-		self.window.set_title(_('Service Discovery using account %s') % self.account)
+		title_text = _('Service Discovery using account %s') % self._account
+		self.window.set_title(title_text)
 		self._set_window_banner_text(_('Service Discovery'))
-		# FIXME: use self.banner_icon.clear() when we switch to GTK 2.8
-		self.banner_icon.set_from_file(None)
+		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
+			self.banner_icon.clear()
+		else:
+			self.banner_icon.set_from_file(None)
 		self.banner_icon.hide() # Just clearing it doesn't work
 
 	def _set_window_banner_text(self, text, text_after = None):
 		theme = gajim.config.get('roster_theme')
 		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
-		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
+		bannerfontattrs = gajim.config.get_per('themes', theme,
+			'bannerfontattrs')
 		
 		if bannerfont:
 			font = pango.FontDescription(bannerfont)
