@@ -4,6 +4,7 @@
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -1357,7 +1358,7 @@ class AccountModificationWindow:
 		config['custom_host'] = self.xml.get_widget(
 			'custom_host_entry').get_text().decode('utf-8')
 
-		# update in case the name changed to local accounts name
+		# update in case the name was changed to local account's name
 		config['is_zeroconf'] = False
 
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().decode('utf-8')
@@ -3112,6 +3113,13 @@ class ZeroconfPropertiesWindow:
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.xml.signal_autoconnect(self)
 
+		self.init_account()
+		self.init_account_gpg()
+
+		self.xml.get_widget('save_button').grab_focus()
+		self.window.show_all()
+	
+	def init_account(self):
 		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'autoconnect')
 		if st:
 			self.xml.get_widget('autoconnect_checkbutton').set_active(st)
@@ -3156,8 +3164,27 @@ class ZeroconfPropertiesWindow:
 		if not st:
 			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port', '5298')
 
-		self.xml.get_widget('save_button').grab_focus()
-		self.window.show_all()
+	def init_account_gpg(self):
+		keyid = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'keyid')
+		keyname = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'keyname')
+		savegpgpass = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,'savegpgpass')
+
+		if not keyid or not gajim.config.get('usegpg'):
+			return
+
+		self.xml.get_widget('gpg_key_label').set_text(keyid)
+		self.xml.get_widget('gpg_name_label').set_text(keyname)
+		gpg_save_password_checkbutton = \
+			self.xml.get_widget('gpg_save_password_checkbutton')
+		gpg_save_password_checkbutton.set_sensitive(True)
+		gpg_save_password_checkbutton.set_active(savegpgpass)
+
+		if savegpgpass:
+			entry = self.xml.get_widget('gpg_password_entry')
+			entry.set_sensitive(True)
+			gpgpassword = gajim.config.get_per('accounts',
+						gajim.ZEROCONF_ACC_NAME, 'gpgpassword')
+			entry.set_text(gpgpassword)
 
 	def on_zeroconf_properties_window_destroy(self, widget):
 		#close window
@@ -3172,33 +3199,35 @@ class ZeroconfPropertiesWindow:
 		self.window.destroy()
 	
 	def on_save_button_clicked(self, widget):
+		config = {}
+
 		st = self.xml.get_widget('autoconnect_checkbutton').get_active()
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'autoconnect', st)
+		config['autoconnect'] = st
 		list_no_log_for = gajim.config.get_per('accounts',
 				gajim.ZEROCONF_ACC_NAME, 'no_log_for').split()
 		if gajim.ZEROCONF_ACC_NAME in list_no_log_for:
 			list_no_log_for.remove(gajim.ZEROCONF_ACC_NAME)
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
 			list_no_log_for.append(gajim.ZEROCONF_ACC_NAME)
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'no_log_for', ' '.join(list_no_log_for))
+		config['no_log_for'] =  ' '.join(list_no_log_for)
 		
 		st = self.xml.get_widget('sync_with_global_status_checkbutton').get_active()
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'sync_with_global_status', st)
+		config['sync_with_global_status'] = st
 
 		st = self.xml.get_widget('first_name_entry').get_text()
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_first_name', st)
+		config['zeroconf_first_name'] = st
 		
 		st = self.xml.get_widget('last_name_entry').get_text()
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_last_name', st)
+		config['zeroconf_last_name'] = st
 
 		st = self.xml.get_widget('jabber_id_entry').get_text()
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_jabber_id', st)
+		config['zeroconf_jabber_id'] = st
 
 		st = self.xml.get_widget('email_entry').get_text()
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_email', st)
+		config['zeroconf_email'] = st
 
 		use_custom_port = self.xml.get_widget('custom_port_checkbutton').get_active()
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'use_custom_host', use_custom_port)
+		config['use_custom_host'] = use_custom_port
 
 		old_port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
 		if use_custom_port:
@@ -3206,16 +3235,72 @@ class ZeroconfPropertiesWindow:
 		else:
 			port = '5298'
 		
-		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port', port)
-	
 		# force restart of listener (because port has changed) 
 		if port != old_port:
 			use_custom_port = True
 		else:
 			use_custom_port = False
+		
+		config['custom_port'] = port
+	
+		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().decode('utf-8')
+		if config['keyname'] == '': #no key selected
+			config['keyid'] = ''
+			config['savegpgpass'] = False
+			config['gpgpassword'] = ''
+		else:
+			config['keyid'] = self.xml.get_widget('gpg_key_label').get_text().decode('utf-8')
+			config['savegpgpass'] = self.xml.get_widget(
+					'gpg_save_password_checkbutton').get_active()
+			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry'
+				).get_text().decode('utf-8')
+
+		for opt in config:
+			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, opt, config[opt])
 
 		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
 			gajim.connections[gajim.ZEROCONF_ACC_NAME].reconnect(use_custom_port)
 
 		self.window.destroy()
+	
+	def on_gpg_choose_button_clicked(self, widget, data = None):
+		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
+			secret_keys = gajim.connections[gajim.ZEROCONF_ACC_NAME].ask_gpg_secrete_keys()
 
+		# self.account is None and/or gajim.connections is {}
+		else:
+			from common import GnuPG
+			if GnuPG.USE_GPG:
+				secret_keys = GnuPG.GnuPG().get_secret_keys()
+			else:
+				secret_keys = []
+		if not secret_keys:
+			dialogs.ErrorDialog(_('Failed to get secret keys'),
+				_('There was a problem retrieving your OpenPGP secret keys.'))
+			return
+		secret_keys[_('None')] = _('None')
+		instance = dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
+			_('Choose your OpenPGP key'), secret_keys)
+		keyID = instance.run()
+		if keyID is None:
+			return
+		checkbutton = self.xml.get_widget('gpg_save_password_checkbutton')
+		gpg_key_label = self.xml.get_widget('gpg_key_label')
+		gpg_name_label = self.xml.get_widget('gpg_name_label')
+		if keyID[0] == _('None'):
+			gpg_key_label.set_text(_('No key selected'))
+			gpg_name_label.set_text('')
+			checkbutton.set_sensitive(False)
+			self.xml.get_widget('gpg_password_entry').set_sensitive(False)
+		else:
+			gpg_key_label.set_text(keyID[0])
+			gpg_name_label.set_text(keyID[1])
+			checkbutton.set_sensitive(True)
+		checkbutton.set_active(False)
+		self.xml.get_widget('gpg_password_entry').set_text('')
+
+	def on_gpg_save_password_checkbutton_toggled(self, widget):
+		st = widget.get_active()
+		w = self.xml.get_widget('gpg_password_entry')
+		w.set_sensitive(bool(st))
+#		w.set_text = ''
