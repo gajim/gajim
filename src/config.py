@@ -460,9 +460,14 @@ class PreferencesWindow:
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
 
 		# set status msg from currently playing music track
-		st = gajim.config.get('set_status_msg_from_current_music_track')
-		self.xml.get_widget(
-			'set_status_msg_from_current_music_track_checkbutton').set_active(st)
+		widget = self.xml.get_widget(
+			'set_status_msg_from_current_music_track_checkbutton')
+		if os.name == 'nt':
+			widget.set_no_show_all(True)
+			widget.hide()
+		else:
+			st = gajim.config.get('set_status_msg_from_current_music_track')
+			widget.set_active(st)
 		
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
