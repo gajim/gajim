@@ -1024,8 +1024,8 @@ class ChatControl(ChatControlBase):
 			if acct_info: # We already found a contact with same nick
 				break
 			for jid in gajim.contacts.get_jid_list(account):
-				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-				if contact.get_shown_name() == self.contact.get_shown_name():
+				contact_ = gajim.contacts.get_first_contact_from_jid(account, jid)
+				if contact_.get_shown_name() == self.contact.get_shown_name():
 					acct_info = ' (%s)' % \
 						gtkgui_helpers.escape_for_pango_markup(self.account)
 					break
