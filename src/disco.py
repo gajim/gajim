@@ -1238,7 +1238,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 				contact = gajim.contacts.get_first_contact_from_jid(
 					self.account, jid)
 				if _('Transports') in contact.groups:
-					registered_transports.append(j)
+					registered_transports.append(jid)
 			if jid in registered_transports:
 				self.register_button.set_label(_('_Edit'))
 			else:
