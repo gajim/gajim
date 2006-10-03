@@ -279,10 +279,11 @@ class MessageWindow:
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 	
-	def remove_tab(self, ctrl, reason = None):
-		'''reason is only for gc (offline status message)'''
+	def remove_tab(self, ctrl, reason = None, force = False):
+		'''reason is only for gc (offline status message)
+		if force is True, do not ask any confirmation'''
 		# Shutdown the MessageControl
-		if not ctrl.allow_shutdown():
+		if not force and not ctrl.allow_shutdown():
 			return
 		if reason is not None: # We are leaving gc with a status message
 			ctrl.shutdown(reason)

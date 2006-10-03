@@ -213,6 +213,8 @@ def get_number_of_connected_accounts(accounts_list = None):
 	return connected_accounts
 
 def account_is_connected(account):
+	if account not in connections:
+		return False
 	if connections[account].connected > 1: # 0 is offline, 1 is connecting
 		return True
 	else:

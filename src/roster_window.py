@@ -2717,11 +2717,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			else:
 				w.window.destroy()
 	
-	def close_all(self, account):
-		'''close all the windows from an account'''
+	def close_all(self, account, force = False):
+		'''close all the windows from an account
+		if force is True, do not ask confirmation before closing chat/gc windows
+		'''
 		self.close_all_from_dict(gajim.interface.instances[account])
 		for ctrl in gajim.interface.msg_win_mgr.get_controls(acct = account):
-			ctrl.parent_win.remove_tab(ctrl)
+			ctrl.parent_win.remove_tab(ctrl, force = force)
 
 	def on_roster_window_delete_event(self, widget, event):
 		'''When we want to close the window'''
