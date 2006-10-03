@@ -103,9 +103,10 @@ class PrivateChatControl(ChatControl):
 		if not message:
 			return
 
-		# We need to make sure that we can still send through the room and that the
-		# recipient did not go away
-		contact = gajim.contacts.get_first_contact_from_jid(self.account, self.contact.jid)
+		# We need to make sure that we can still send through the room and that
+		# the recipient did not go away
+		contact = gajim.contacts.get_first_contact_from_jid(self.account,
+			self.contact.jid)
 		if contact is None:
 			# contact was from pm in MUC
 			room, nick = gajim.get_room_and_nick_from_fjid(self.contact.jid)
@@ -384,7 +385,8 @@ class GroupchatControl(ChatControlBase):
 				color = self.parent_win.notebook.style.fg[gtk.STATE_ACTIVE]
 			elif chatstate == 'newmsg' and (not has_focus or not current_tab) and\
 					not self.attention_flag:
-				color_name = gajim.config.get_per('themes', theme, 'state_muc_msg_color')
+				color_name = gajim.config.get_per('themes', theme,
+					'state_muc_msg_color')
 		if color_name:
 			color = gtk.gdk.colormap_get_system().alloc_color(color_name)
 			
@@ -433,18 +435,18 @@ class GroupchatControl(ChatControlBase):
 			childs[3].set_sensitive(False)
 		return menu
 
-	def on_message(self, nick, msg, tim, has_timestamp = False):
+	def on_message(self, nick, msg, tim, has_timestamp = False, xhtml = None):
 		if not nick:
 			# message from server
-			self.print_conversation(msg, tim = tim)
+			self.print_conversation(msg, tim = tim, xhtml = xhtml)
 		else:
 			# message from someone
 			if has_timestamp:
-				self.print_old_conversation(msg, nick, tim)
+				self.print_old_conversation(msg, nick, tim, xhtml)
 			else:
-				self.print_conversation(msg, nick, tim)
+				self.print_conversation(msg, nick, tim, xhtml)
 
-	def on_private_message(self, nick, msg, tim):
+	def on_private_message(self, nick, msg, tim, xhtml):
 		# Do we have a queue?
 		fjid = self.room_jid + '/' + nick
 		no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
@@ -452,7 +454,7 @@ class GroupchatControl(ChatControlBase):
 		# We print if window is opened
 		pm_control = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
 		if pm_control:
-			pm_control.print_conversation(msg, tim = tim)
+			pm_control.print_conversation(msg, tim = tim, xhtml = xhtml)
 			return
 
 		event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
@@ -505,7 +507,7 @@ class GroupchatControl(ChatControlBase):
 	gc_count_nicknames_colors = 0
 	gc_custom_colors = {}  
 
-	def print_old_conversation(self, text, contact, tim = None):
+	def print_old_conversation(self, text, contact, tim = None, xhtml = None):
 		if isinstance(text, str):
 			text = unicode(text, 'utf-8')
 		if contact == self.nick: # it's us
@@ -518,9 +520,9 @@ class GroupchatControl(ChatControlBase):
 			small_attr = []
 		ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
 			small_attr, small_attr + ['restored_message'],
-			small_attr + ['restored_message'])
+			small_attr + ['restored_message'], xhtml = xhtml)
 
-	def print_conversation(self, text, contact = '', tim = None):
+	def print_conversation(self, text, contact = '', tim = None, xhtml = None):
 		'''Print a line in the conversation:
 		if contact is set: it's a message from someone or an info message (contact
 		= 'info' in such a case)
@@ -574,7 +576,7 @@ class GroupchatControl(ChatControlBase):
 			self.check_and_possibly_add_focus_out_line()
 
 		ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
-			other_tags_for_name, [], other_tags_for_text)
+			other_tags_for_name, [], other_tags_for_text, xhtml = xhtml)
 
 	def get_nb_unread(self):
 		nb = len(gajim.events.get_events(self.account, self.room_jid,
@@ -643,13 +645,16 @@ class GroupchatControl(ChatControlBase):
 						word[char_position:char_position+1]
 					if (refer_to_nick_char != ''):
 						refer_to_nick_char_code = ord(refer_to_nick_char)
-						if ((refer_to_nick_char_code < 65 or refer_to_nick_char_code > 123)\
-							or (refer_to_nick_char_code < 97 and refer_to_nick_char_code > 90)):
+						if ((refer_to_nick_char_code < 65 or \
+						refer_to_nick_char_code > 123) or \
+						(refer_to_nick_char_code < 97 and \
+						refer_to_nick_char_code > 90)):
 							return True
 						else: 
-							# This is A->Z or a->z, we can be sure our nick is the beginning
-							# of a real word, do not highlight. Note that we can probably 
-							# do a better detection of non-punctuation characters
+							# This is A->Z or a->z, we can be sure our nick is the
+							# beginning of a real word, do not highlight. Note that we
+							# can probably do a better detection of non-punctuation
+							# characters
 							return False
 					else: # Special word == word, no char after in word
 						return True 
@@ -698,7 +703,8 @@ class GroupchatControl(ChatControlBase):
 						gc_contact.affiliation, gc_contact.status,
 						gc_contact.jid)
 
-	def on_send_pm(self, widget=None, model=None, iter=None, nick=None, msg=None):
+	def on_send_pm(self, widget = None, model = None, iter = None, nick = None,
+	msg = None):
 		'''opens a chat window and msg is not None sends private message to a
 		contact in a room'''
 		if nick is None:
@@ -707,14 +713,16 @@ class GroupchatControl(ChatControlBase):
 
 		self._start_private_message(nick)
 		if msg:
-			gajim.interface.msg_win_mgr.get_control(fjid, self.account).send_message(msg)
+			gajim.interface.msg_win_mgr.get_control(fjid, self.account).\
+				send_message(msg)
 
 	def draw_contact(self, nick, selected=False, focus=False):
 		iter = self.get_contact_iter(nick)
 		if not iter:
 			return
 		model = self.list_treeview.get_model()
-		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+			nick)
 		state_images = gajim.interface.roster.jabber_state_images['16']
 		if len(gajim.events.get_events(self.account, self.room_jid + '/' + nick)):
 			image = state_images['message']
@@ -752,8 +760,8 @@ class GroupchatControl(ChatControlBase):
 			scaled_pixbuf = None
 		model[iter][C_AVATAR] = scaled_pixbuf
 
-	def chg_contact_status(self, nick, show, status, role, affiliation, jid, reason, actor,
-				statusCode, new_nick):
+	def chg_contact_status(self, nick, show, status, role, affiliation, jid,
+	reason, actor, statusCode, new_nick):
 		'''When an occupant changes his or her status'''
 		if show == 'invisible':
 			return
@@ -845,7 +853,8 @@ class GroupchatControl(ChatControlBase):
 					self.add_contact_to_roster(nick, show, role,
 						affiliation, status, jid)
 				else:
-					c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+					c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+						nick)
 					if c.show == show and c.status == status and \
 						c.affiliation == affiliation: #no change
 						return
@@ -948,7 +957,8 @@ class GroupchatControl(ChatControlBase):
 		iter = self.get_contact_iter(nick)
 		if not iter:
 			return
-		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+			nick)
 		if gc_contact:
 			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		parent_iter = model.iter_parent(iter)
@@ -1096,7 +1106,8 @@ class GroupchatControl(ChatControlBase):
 			if len(message_array):
 				message_array = message_array[0].split()
 				nick = message_array.pop(0)
-				room_nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+				room_nicks = gajim.contacts.get_nick_list(self.account,
+					self.room_jid)
 				reason = ' '.join(message_array)
 				if nick in room_nicks:
 					ban_jid = gajim.construct_fjid(self.room_jid, nick)
@@ -1117,7 +1128,8 @@ class GroupchatControl(ChatControlBase):
 			if len(message_array):
 				message_array = message_array[0].split()
 				nick = message_array.pop(0)
-				room_nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+				room_nicks = gajim.contacts.get_nick_list(self.account,
+					self.room_jid)
 				reason = ' '.join(message_array)
 				if nick in room_nicks:
 					gajim.connections[self.account].gc_set_role(self.room_jid, nick,
@@ -1177,7 +1189,8 @@ class GroupchatControl(ChatControlBase):
 
 			if not self._process_command(message):
 				# Send the message
-				gajim.connections[self.account].send_gc_message(self.room_jid, message)
+				gajim.connections[self.account].send_gc_message(self.room_jid,
+					message)
 				self.msg_textview.get_buffer().set_text('')
 				self.msg_textview.grab_focus()
 
@@ -1200,7 +1213,8 @@ class GroupchatControl(ChatControlBase):
 			self.print_conversation(_('Usage: /%s [reason], closes the current '
 				'window or tab, displaying reason if specified.') % command, 'info')
 		elif command == 'compact':
-			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % command, 'info')
+			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % \
+				command, 'info')
 		elif command == 'invite':
 			self.print_conversation(_('Usage: /%s <JID> [reason], invites JID to '
 				'the current room, optionally providing a reason.') % command,
@@ -1241,7 +1255,8 @@ class GroupchatControl(ChatControlBase):
 			self.print_conversation(_('No help info for /%s') % command, 'info')
 
 	def get_role(self, nick):
-		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+			nick)
 		if gc_contact:
 			return gc_contact.role
 		else:
@@ -1327,7 +1342,8 @@ class GroupchatControl(ChatControlBase):
 			_('Please specify the new subject:'), self.subject)
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
-			# Note, we don't update self.subject since we don't know whether it will work yet
+			# Note, we don't update self.subject since we don't know whether it
+			# will work yet
 			subject = instance.input_entry.get_text().decode('utf-8')
 			gajim.connections[self.account].send_gc_subject(self.room_jid, subject)
 
@@ -1372,7 +1388,8 @@ class GroupchatControl(ChatControlBase):
 				_('Bookmark has been added successfully'),
 				_('You can manage your bookmarks via Actions menu in your roster.'))
 
-	def handle_message_textview_mykey_press(self, widget, event_keyval, event_keymod):
+	def handle_message_textview_mykey_press(self, widget, event_keyval,
+	event_keymod):
 		# NOTE: handles mykeypress which is custom signal connected to this
 		# CB in new_room(). for this singal see message_textview.py
 
@@ -1384,12 +1401,14 @@ class GroupchatControl(ChatControlBase):
 
 		message_buffer = widget.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+		message = message_buffer.get_text(start_iter, end_iter, False).decode(
+			'utf-8')
 
 		if event.keyval == gtk.keysyms.Tab: # TAB
 			cursor_position = message_buffer.get_insert()
 			end_iter = message_buffer.get_iter_at_mark(cursor_position)
-			text = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+			text = message_buffer.get_text(start_iter, end_iter, False).decode(
+				'utf-8')
 			if text.endswith(' '):
 				if not self.last_key_tabs:
 					return False
@@ -1505,8 +1524,8 @@ class GroupchatControl(ChatControlBase):
 
 		# looking for user's affiliation and role
 		user_nick = self.nick
-		user_affiliation = gajim.contacts.get_gc_contact(self.account, self.room_jid,
-			user_nick).affiliation
+		user_affiliation = gajim.contacts.get_gc_contact(self.account,
+			self.room_jid, user_nick).affiliation
 		user_role = self.get_role(user_nick)
 
 		# making menu from glade
@@ -1515,9 +1534,10 @@ class GroupchatControl(ChatControlBase):
 		# these conditions were taken from JEP 0045
 		item = xml.get_widget('kick_menuitem')
 		if user_role != 'moderator' or \
-			(user_affiliation == 'admin' and target_affiliation == 'owner') or \
-			(user_affiliation == 'member' and target_affiliation in ('admin', 'owner')) or \
-			(user_affiliation == 'none' and target_affiliation != 'none'):
+		(user_affiliation == 'admin' and target_affiliation == 'owner') or \
+		(user_affiliation == 'member' and target_affiliation in ('admin',
+		'owner')) or (user_affiliation == 'none' and target_affiliation != \
+		'none'):
 			item.set_sensitive(False)
 		id = item.connect('activate', self.kick, nick)
 		self.handlers[id] = item
@@ -1525,18 +1545,18 @@ class GroupchatControl(ChatControlBase):
 		item = xml.get_widget('voice_checkmenuitem')
 		item.set_active(target_role != 'visitor')
 		if user_role != 'moderator' or \
-			user_affiliation == 'none' or \
-			(user_affiliation=='member' and target_affiliation!='none') or \
-			target_affiliation in ('admin', 'owner'):
+		user_affiliation == 'none' or \
+		(user_affiliation=='member' and target_affiliation!='none') or \
+		target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
 		id = item.connect('activate', self.on_voice_checkmenuitem_activate, 
-					nick)
+			nick)
 		self.handlers[id] = item
 
 		item = xml.get_widget('moderator_checkmenuitem')
 		item.set_active(target_role == 'moderator')
 		if not user_affiliation in ('admin', 'owner') or \
-			target_affiliation in ('admin', 'owner'):
+		target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
 		id = item.connect('activate', self.on_moderator_checkmenuitem_activate,
 					nick)
@@ -1544,8 +1564,8 @@ class GroupchatControl(ChatControlBase):
 	
 		item = xml.get_widget('ban_menuitem')
 		if not user_affiliation in ('admin', 'owner') or \
-			(target_affiliation in ('admin', 'owner') and\
-			user_affiliation != 'owner'):
+		(target_affiliation in ('admin', 'owner') and\
+		user_affiliation != 'owner'):
 			item.set_sensitive(False)
 		id = item.connect('activate', self.ban, jid)
 		self.handlers[id] = item
@@ -1553,7 +1573,7 @@ class GroupchatControl(ChatControlBase):
 		item = xml.get_widget('member_checkmenuitem')
 		item.set_active(target_affiliation != 'none')
 		if not user_affiliation in ('admin', 'owner') or \
-			(user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
+		(user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
 			item.set_sensitive(False)
 		id = item.connect('activate', self.on_member_checkmenuitem_activate, 
 					jid)
@@ -1743,19 +1763,23 @@ class GroupchatControl(ChatControlBase):
 
 	def grant_voice(self, widget, nick):
 		'''grant voice privilege to a user'''
-		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'participant')
+		gajim.connections[self.account].gc_set_role(self.room_jid, nick,
+			'participant')
 
 	def revoke_voice(self, widget, nick):
 		'''revoke voice privilege to a user'''
-		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'visitor')
+		gajim.connections[self.account].gc_set_role(self.room_jid, nick,
+			'visitor')
 
 	def grant_moderator(self, widget, nick):
 		'''grant moderator privilege to a user'''
-		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'moderator')
+		gajim.connections[self.account].gc_set_role(self.room_jid, nick,
+			'moderator')
 
 	def revoke_moderator(self, widget, nick):
 		'''revoke moderator privilege to a user'''
-		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'participant')
+		gajim.connections[self.account].gc_set_role(self.room_jid, nick,
+			'participant')
 
 	def ban(self, widget, jid):
 		'''ban a user'''
@@ -1770,17 +1794,17 @@ class GroupchatControl(ChatControlBase):
 		else:
 			return # stop banning procedure
 		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-								'outcast', reason)
+			'outcast', reason)
 
 	def grant_membership(self, widget, jid):
 		'''grant membership privilege to a user'''
 		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-								'member')
+			'member')
 
 	def revoke_membership(self, widget, jid):
 		'''revoke membership privilege to a user'''
 		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-								'none')
+			'none')
 
 	def grant_admin(self, widget, jid):
 		'''grant administrative privilege to a user'''
@@ -1804,7 +1828,8 @@ class GroupchatControl(ChatControlBase):
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		c2 = gajim.contacts.contact_from_gc_contact(c)
 		if gajim.interface.instances[self.account]['infos'].has_key(c2.jid):
-			gajim.interface.instances[self.account]['infos'][c2.jid].window.present()
+			gajim.interface.instances[self.account]['infos'][c2.jid].window.\
+				present()
 		else:
 			gajim.interface.instances[self.account]['infos'][c2.jid] = \
 				vcard.VcardWindow(c2, self.account, is_fake = True)

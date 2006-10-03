@@ -397,10 +397,18 @@ class Message(Protocol):
     def getBody(self):
         """ Returns text of the message. """
         return self.getTagData('body')
-    def getXHTML(self):
-        """ Returns serialized xhtml-im body text of the message. """
+    def getXHTML(self, xmllang=None):
+        """ Returns serialized xhtml-im element text of the message.
+
+            TODO: Returning a DOM could make rendering faster."""
         xhtml = self.getTag('html')
-        return str(xhtml.getTag('body'))
+        if xhtml:
+            if xmllang:
+                body = xhtml.getTag('body', attrs={'xml:lang':xmllang})
+            else:
+                body = xhtml.getTag('body')
+            return str(body)
+        return None
     def getSubject(self):
         """ Returns subject of the message. """
         return self.getTagData('subject')
@@ -410,11 +418,22 @@ class Message(Protocol):
     def setBody(self,val):
         """ Sets the text of the message. """
         self.setTagData('body',val)
-    def setXHTML(self,val):
+
+    def setXHTML(self,val,xmllang=None):
         """ Sets the xhtml text of the message (JEP-0071).
             The parameter is the "inner html" to the body."""
-        dom = NodeBuilder(val)
-        self.setTag('html',namespace=NS_XHTML_IM).setTag('body',namespace=NS_XHTML).addChild(node=dom.getDom())
+        try:
+            if xmllang:
+                dom = NodeBuilder('<body xmlns="'+NS_XHTML+'" xml:lang="'+xmllang+'" >' + val + '</body>').getDom()
+            else:
+                dom = NodeBuilder('<body xmlns="'+NS_XHTML+'">'+val+'</body>',0).getDom()
+            if self.getTag('html'):
+                self.getTag('html').addChild(node=dom)
+            else:
+                self.setTag('html',namespace=NS_XHTML_IM).addChild(node=dom)
+        except Exception, e:
+            print "Error", e
+            pass #FIXME: log. we could not set xhtml (parse error, whatever)
     def setSubject(self,val):
         """ Sets the subject of the message. """
         self.setTagData('subject',val)

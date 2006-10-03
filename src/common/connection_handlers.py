@@ -1317,6 +1317,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
 		msgtxt = msg.getBody()
+		msghtml = msg.getXHTML()
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
 		tim = msg.getTimestamp()
@@ -1402,7 +1403,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				has_timestamp = False
 				if msg.timestamp:
 					has_timestamp = True
-				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp))
+				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
 				if self.name not in no_log_for and not int(float(time.mktime(tim))) <= \
 					self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
@@ -1414,7 +1415,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id, composing_jep, user_nick))
+						chatstate, msg_id, composing_jep, user_nick, msghtml))
 		else: # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
@@ -1428,7 +1429,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 			else:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, chatstate, msg_id, composing_jep, user_nick))
+					subject, chatstate, msg_id, composing_jep, user_nick, msghtml))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
@@ -1445,8 +1446,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				# one
 				who = str(prs.getFrom())
 				jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-				self.dispatch('GC_MSG', (jid_stripped, _('Nickname not allowed: %s') % \
-					resource, None, False))
+				self.dispatch('GC_MSG', (jid_stripped,
+					_('Nickname not allowed: %s') % resource, None, False, None))
 			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None

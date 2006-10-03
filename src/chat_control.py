@@ -424,7 +424,8 @@ class ChatControlBase(MessageControl):
 		message_textview = widget
 		message_buffer = message_textview.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+		message = message_buffer.get_text(start_iter, end_iter, False).decode(
+			'utf-8')
 
 		# construct event instance from binding
 		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
@@ -470,7 +471,8 @@ class ChatControlBase(MessageControl):
 				self.send_message(message) # send the message
 		else:
 			# Give the control itself a chance to process
-			self.handle_message_textview_mykey_press(widget, event_keyval, event_keymod)
+			self.handle_message_textview_mykey_press(widget, event_keyval,
+				event_keymod)
 
 	def _process_command(self, message):
 		if not message:
@@ -533,7 +535,7 @@ class ChatControlBase(MessageControl):
 	def print_conversation_line(self, text, kind, name, tim,
 		other_tags_for_name = [], other_tags_for_time = [], 
 		other_tags_for_text = [], count_as_new = True,
-		subject = None, old_kind = None):
+		subject = None, old_kind = None, xhtml = None):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
 		full_jid = self.get_full_jid()
@@ -543,7 +545,7 @@ class ChatControlBase(MessageControl):
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
-			subject, old_kind)
+			subject, old_kind, xhtml)
 
 		if not count_as_new:
 			return
@@ -765,7 +767,8 @@ class ChatControlBase(MessageControl):
 			#whatever is already typed
 			start_iter = conv_buf.get_start_iter()
 			end_iter = conv_buf.get_end_iter()
-			self.orig_msg = conv_buf.get_text(start_iter, end_iter, 0).decode('utf-8')
+			self.orig_msg = conv_buf.get_text(start_iter, end_iter, 0).decode(
+				'utf-8')
 			self.typing_new = False
 		if direction == 'up':
 			if self.sent_history_pos == 0:
@@ -825,8 +828,8 @@ class ChatControl(ChatControlBase):
 	old_msg_kind = None # last kind of the printed message
 	
 	def __init__(self, parent_win, contact, acct, resource = None):
-		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
-			(_('Chat'), _('Chats')), contact, acct, resource)
+		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
+			'chat_child_vbox', (_('Chat'), _('Chats')), contact, acct, resource)
 			
 		# for muc use:
 		# widget = self.xml.get_widget('muc_window_actions_button')
@@ -834,13 +837,16 @@ class ChatControl(ChatControlBase):
 		id = widget.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = widget
 
-		self.hide_chat_buttons_always = gajim.config.get('always_hide_chat_buttons')
+		self.hide_chat_buttons_always = gajim.config.get(
+			'always_hide_chat_buttons')
 		self.chat_buttons_set_visible(self.hide_chat_buttons_always)
-		self.widget_set_visible(self.xml.get_widget('banner_eventbox'), gajim.config.get('hide_chat_banner'))
+		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
+			gajim.config.get('hide_chat_banner'))
 		# Initialize drag-n-drop
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
-		id = self.widget.connect('drag_data_received', self._on_drag_data_received)
+		id = self.widget.connect('drag_data_received',
+			self._on_drag_data_received)
 		self.handlers[id] = self.widget
 		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
 			gtk.DEST_DEFAULT_HIGHLIGHT |
@@ -862,17 +868,21 @@ class ChatControl(ChatControlBase):
 			self._on_window_motion_notify)
 		self.handlers[id] = self.parent_win.window
 		message_tv_buffer = self.msg_textview.get_buffer()
-		id = message_tv_buffer.connect('changed', self._on_message_tv_buffer_changed)
+		id = message_tv_buffer.connect('changed',
+			self._on_message_tv_buffer_changed)
 		self.handlers[id] = message_tv_buffer
 		
 		widget = self.xml.get_widget('avatar_eventbox')
-		id = widget.connect('enter-notify-event', self.on_avatar_eventbox_enter_notify_event)
+		id = widget.connect('enter-notify-event',
+			self.on_avatar_eventbox_enter_notify_event)
 		self.handlers[id] = widget
 
-		id = widget.connect('leave-notify-event', self.on_avatar_eventbox_leave_notify_event)
+		id = widget.connect('leave-notify-event',
+			self.on_avatar_eventbox_leave_notify_event)
 		self.handlers[id] = widget
 
-		id = widget.connect('button-press-event', self.on_avatar_eventbox_button_press_event)
+		id = widget.connect('button-press-event',
+			self.on_avatar_eventbox_button_press_event)
 		self.handlers[id] = widget
 
 		widget = self.xml.get_widget('gpg_togglebutton')
@@ -1166,8 +1176,8 @@ class ChatControl(ChatControlBase):
 			if current_state == 'composing':
 				self.send_chatstate('paused') # pause composing
 
-		# assume no activity and let the motion-notify or 'insert-text' make them True
-		# refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
+		# assume no activity and let the motion-notify or 'insert-text' make them
+		# True refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
 		self.reset_kbd_mouse_timeout_vars()
 		return True # loop forever		
 
@@ -1186,11 +1196,12 @@ class ChatControl(ChatControlBase):
 		if self.mouse_over_in_last_5_secs or self.kbd_activity_in_last_5_secs:
 			return True # loop forever
 
-		if not self.mouse_over_in_last_30_secs or self.kbd_activity_in_last_30_secs:
+		if not self.mouse_over_in_last_30_secs or \
+		self.kbd_activity_in_last_30_secs:
 			self.send_chatstate('inactive', contact)
 
-		# assume no activity and let the motion-notify or 'insert-text' make them True
-		# refresh 30 seconds too or else it's 30 - 5 = 25 seconds!
+		# assume no activity and let the motion-notify or 'insert-text' make them
+		# True refresh 30 seconds too or else it's 30 - 5 = 25 seconds!
 		self.reset_kbd_mouse_timeout_vars()
 		return True # loop forever
 
@@ -1201,7 +1212,7 @@ class ChatControl(ChatControlBase):
 		self.kbd_activity_in_last_30_secs = False
 
 	def print_conversation(self, text, frm = '', tim = None,
-		encrypted = False, subject = None):
+		encrypted = False, subject = None, xhtml = None):
 		'''Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
@@ -1241,7 +1252,7 @@ class ChatControl(ChatControlBase):
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
-			subject = subject, old_kind = self.old_msg_kind)
+			subject = subject, old_kind = self.old_msg_kind, xhtml = xhtml)
 		if text.startswith('/me ') or text.startswith('/me\n'):
 			self.old_msg_kind = None
 		else:
@@ -1459,18 +1470,20 @@ class ChatControl(ChatControlBase):
 
 		# prevent going paused if we we were not composing (JEP violation)
 		if state == 'paused' and not contact.our_chatstate == 'composing':
-			MessageControl.send_message(self, None, chatstate = 'active') # go active before
+			# go active before
+			MessageControl.send_message(self, None, chatstate = 'active')
 			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()
 		
 		# if we're inactive prevent composing (JEP violation)
 		elif contact.our_chatstate == 'inactive' and state == 'composing':
-			MessageControl.send_message(self, None, chatstate = 'active') # go active before
+			# go active before
+			MessageControl.send_message(self, None, chatstate = 'active')
 			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()
 
-		MessageControl.send_message(self, None, chatstate = state, msg_id = contact.msg_id,
-									composing_jep = contact.composing_jep)
+		MessageControl.send_message(self, None, chatstate = state,
+			msg_id = contact.msg_id, composing_jep = contact.composing_jep)
 		contact.our_chatstate = state
 		if contact.our_chatstate == 'active':
 			self.reset_kbd_mouse_timeout_vars()

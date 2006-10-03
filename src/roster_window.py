@@ -2531,7 +2531,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,
 			msg_type = '', subject = None, resource = '', msg_id = None,
-			user_nick = '', advanced_notif_num = None):
+			user_nick = '', advanced_notif_num = None, xhtml = None):
 		'''when we receive a message'''
 		contact = None
 		# if chat window will be for specific resource
@@ -2599,7 +2599,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if msg_type == 'error':
 				typ = 'status'
 			ctrl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
-						subject = subject)
+						subject = subject, xhtml = xhtml)
 			if msg_id:
 				gajim.logger.set_read_messages([msg_id])
 			return
@@ -2613,7 +2613,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		show_in_roster = notify.get_show_in_roster(event_type, account, contact)
 		show_in_systray = notify.get_show_in_systray(event_type, account, contact)
 		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-			encrypted, resource, msg_id), show_in_roster = show_in_roster,
+			encrypted, resource, msg_id, xhtml), show_in_roster = show_in_roster,
 			show_in_systray = show_in_systray)
 		gajim.events.add_event(account, fjid, event)
 		if popup:

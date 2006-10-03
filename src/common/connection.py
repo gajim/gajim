@@ -34,6 +34,8 @@ from common import GnuPG
 from connection_handlers import *
 USE_GPG = GnuPG.USE_GPG
 
+from rst_xhtml_generator import create_xhtml
+
 class Connection(ConnectionHandlers):
 	'''Connection class'''
 	def __init__(self, name):
@@ -650,6 +652,7 @@ class Connection(ConnectionHandlers):
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			if self.connection:
 				self.connection.send(p)
+				self.priority = priority
 			self.dispatch('STATUS', show)
 
 	def _on_disconnected(self):
@@ -660,15 +663,18 @@ class Connection(ConnectionHandlers):
 	def get_status(self):
 		return STATUS_LIST[self.connected]
 
-	def send_motd(self, jid, subject = '', msg = ''):
+
+	def send_motd(self, jid, subject = '', msg = '', xhtml = None):
 		if not self.connection:
 			return
-		msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject)
+		msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject,
+			xhtml = xhtml)
+
 		self.connection.send(msg_iq)
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None,
-	user_nick = None):
+	user_nick = None, xhtml = None):
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
@@ -684,18 +690,20 @@ class Connection(ConnectionHandlers):
 			if msgenc:
 				msgtxt = '[This message is encrypted]'
 				lang = os.getenv('LANG')
-				if lang is not None or lang != 'en': # we're not english
-					msgtxt = _('[This message is encrypted]') +\
-						' ([This message is encrypted])' # one  in locale and one en
+				if lang is not None and lang != 'en': # we're not english
+					# one  in locale and one en
+					msgtxt = _('[This message is *encrypted* (See :JEP:`27`]') +\
+						' ([This message is *encrypted* (See :JEP:`27`])'
 		if type == 'chat':
-			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type)
+			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type,
+				xhtml = xhtml)
 		else:
 			if subject:
 				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
-					typ = 'normal', subject = subject)
+					typ = 'normal', subject = subject, xhtml = xhtml)
 			else:
 				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
-					typ = 'normal')
+					typ = 'normal', xhtml = xhtml)
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
@@ -713,7 +721,8 @@ class Connection(ConnectionHandlers):
 				msg_iq.setTag(chatstate, namespace = common.xmpp.NS_CHATSTATES)
 			if composing_jep == 'JEP-0022' or not composing_jep:
 				# JEP-0022
-				chatstate_node = msg_iq.setTag('x', namespace = common.xmpp.NS_EVENT)
+				chatstate_node = msg_iq.setTag('x',
+					namespace = common.xmpp.NS_EVENT)
 				if not msgtxt: # when no <body>, add <id>
 					if not msg_id: # avoid putting 'None' in <id> tag
 						msg_id = ''
@@ -975,10 +984,10 @@ class Connection(ConnectionHandlers):
 			last_log = 0
 		self.last_history_line[jid]= last_log
 
-	def send_gc_message(self, jid, msg):
+	def send_gc_message(self, jid, msg, xhtml = None):
 		if not self.connection:
 			return
-		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat')
+		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat', xhtml = xhtml)
 		self.connection.send(msg_iq)
 		self.dispatch('MSGSENT', (jid, msg))
 
@@ -1104,8 +1113,8 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def unregister_account(self, on_remove_success):
-		# no need to write this as a class method and keep the value of on_remove_success
-		# as a class property as pass it as an argument
+		# no need to write this as a class method and keep the value of
+		# on_remove_success as a class property as pass it as an argument
 		def _on_unregister_account_connect(con):
 			self.on_connect_auth = None
 			if gajim.account_is_connected(self.name):

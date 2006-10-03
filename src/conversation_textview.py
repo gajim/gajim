@@ -39,12 +39,16 @@ from common import helpers
 from calendar import timegm
 from common.fuzzyclock import FuzzyClock
 
+from htmltextview import HtmlTextView
+
+
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
 	def __init__(self, account):
 		# no need to inherit TextView, use it as property is safer
-		self.tv = gtk.TextView()
+		self.tv = HtmlTextView()
+		self.tv.html_hyperlink_handler = self.html_hyperlink_handler
 
 		# set properties
 		self.tv.set_border_width(1)
@@ -98,7 +102,7 @@ class ConversationTextview:
 		tag.set_property('weight', pango.WEIGHT_BOLD)
 
 		tag = buffer.create_tag('time_sometimes')
-		tag.set_property('foreground', 'grey')
+		tag.set_property('foreground', 'darkgrey')
 		tag.set_property('scale', pango.SCALE_SMALL)
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
 
@@ -141,6 +145,8 @@ class ConversationTextview:
 		
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
 		self.focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
+		# use it for hr too
+		self.tv.focus_out_line_pixbuf = self.focus_out_line_pixbuf
 
 	def del_handlers(self):
 		for i in self.handlers.keys():
@@ -504,6 +510,15 @@ class ConversationTextview:
 				# we launch the correct application
 				helpers.launch_browser_mailer(kind, word)
 
+	def html_hyperlink_handler(self, texttag, widget, event, iter, kind, href):
+		if event.type == gtk.gdk.BUTTON_PRESS:
+			if event.button == 3: # right click
+				self.make_link_menu(event, kind, href)
+			else:
+				# we launch the correct application
+				helpers.launch_browser_mailer(kind, href)
+
+
 	def detect_and_print_special_text(self, otext, other_tags):
 		'''detects special text (emots & links & formatting)
 		prints normal text before any special text it founts,
@@ -637,11 +652,11 @@ class ConversationTextview:
 	def print_empty_line(self):
 		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
-		buffer.insert(end_iter, '\n')
+		buffer.insert_with_tags_by_name(end_iter, '\n', 'eol')
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
-			other_tags_for_name = [], other_tags_for_time = [],
-			other_tags_for_text = [], subject = None, old_kind = None):
+	other_tags_for_name = [], other_tags_for_time = [], other_tags_for_text = [],
+	subject = None, old_kind = None, xhtml = None):
 		'''prints 'chat' type messages'''
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
@@ -651,7 +666,7 @@ class ConversationTextview:
 			at_the_end = True
 
 		if buffer.get_char_count() > 0:
-			buffer.insert(end_iter, '\n')
+			buffer.insert_with_tags_by_name(end_iter, '\n', 'eol')
 		if kind == 'incoming_queue':
 			kind = 'incoming'
 		if old_kind == 'incoming_queue':
@@ -726,7 +741,7 @@ class ConversationTextview:
 			else:
 				self.print_name(name, kind, other_tags_for_name)
 		self.print_subject(subject)
-		self.print_real_text(text, text_tags, name)
+		self.print_real_text(text, text_tags, name, xhtml)
 
 		# scroll to the end of the textview
 		if at_the_end or kind == 'outgoing':
@@ -763,8 +778,18 @@ class ConversationTextview:
 			buffer.insert(end_iter, subject)
 			self.print_empty_line()
 
-	def print_real_text(self, text, text_tags = [], name = None):
+	def print_real_text(self, text, text_tags = [], name = None, xhtml = None):
 		'''this adds normal and special text. call this to add text'''
+		if xhtml:
+			try:
+				if name and (text.startswith('/me ') or text.startswith('/me\n')):
+					xhtml = xhtml.replace('/me', '<dfn>%s</dfn>'% (name,), 1)
+				self.tv.display_html(xhtml.encode('utf-8'))
+				return
+			except Exception, e:
+				gajim.log.debug(str("Error processing xhtml")+str(e))
+				gajim.log.debug(str("with |"+xhtml+"|"))
+
 		buffer = self.tv.get_buffer()
 		# /me is replaced by name if name is given
 		if name and (text.startswith('/me ') or text.startswith('/me\n')):
