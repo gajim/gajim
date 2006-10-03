@@ -34,6 +34,8 @@ from message_textview import MessageTextView
 from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
+from rst_xhtml_generator import create_xhtml
+from common.xmpp.protocol import NS_XHTML
 
 try:
 	import gtkspell
@@ -1251,6 +1253,8 @@ class ChatControl(ChatControlBase):
 			else:
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
+				if not xhtml and not encrypted and gajim.config.get('rst_formatting_outgoing_messages'):
+					xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, create_xhtml(text))
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
 			subject = subject, old_kind = self.old_msg_kind, xhtml = xhtml)
 		if text.startswith('/me ') or text.startswith('/me\n'):

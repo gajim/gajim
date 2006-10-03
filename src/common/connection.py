@@ -652,7 +652,6 @@ class Connection(ConnectionHandlers):
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			if self.connection:
 				self.connection.send(p)
-				self.priority = priority
 			self.dispatch('STATUS', show)
 
 	def _on_disconnected(self):
@@ -677,6 +676,8 @@ class Connection(ConnectionHandlers):
 	user_nick = None, xhtml = None):
 		if not self.connection:
 			return
+		if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+			xhtml = create_xhtml(msg)
 		if not msg and chatstate is None:
 			return
 		fjid = jid
@@ -694,6 +695,10 @@ class Connection(ConnectionHandlers):
 					# one  in locale and one en
 					msgtxt = _('[This message is *encrypted* (See :JEP:`27`]') +\
 						' ([This message is *encrypted* (See :JEP:`27`])'
+		if msgtxt and not xhtml and gajim.config.get(
+		'rst_formatting_outgoing_messages'):
+			# Generate a XHTML part using reStructured text markup
+			xhtml = create_xhtml(msgtxt)
 		if type == 'chat':
 			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type,
 				xhtml = xhtml)
@@ -987,6 +992,8 @@ class Connection(ConnectionHandlers):
 	def send_gc_message(self, jid, msg, xhtml = None):
 		if not self.connection:
 			return
+		if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+			xhtml = create_xhtml(msg)
 		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat', xhtml = xhtml)
 		self.connection.send(msg_iq)
 		self.dispatch('MSGSENT', (jid, msg))
