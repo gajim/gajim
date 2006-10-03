@@ -19,8 +19,8 @@ gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/accounts_window.glade.h \
 			../data/glade/add_new_contact_window.glade.h \
 			../data/glade/advanced_configuration_window.glade.h \
-			../data/glade/advanced_notifications_window.glade.h \
 			../data/glade/advanced_menuitem_menu.glade.h \
+			../data/glade/advanced_notifications_window.glade.h \
 			../data/glade/change_password_dialog.glade.h \
 			../data/glade/change_status_message_dialog.glade.h \
 			../data/glade/chat_context_menu.glade.h \
@@ -44,8 +44,9 @@ gajim.pot: ../src/*py ../src/common/*py \
 			../data/glade/passphrase_dialog.glade.h \
 			../data/glade/popup_notification_window.glade.h \
 			../data/glade/preferences_window.glade.h \
-			../data/glade/privacy_list_edit_window.glade.h \
-			../data/glade/privacy_lists_first_window.glade.h \
+			../data/glade/privacy_list_window.glade.h \
+			../data/glade/privacy_lists_window.glade.h \
+			../data/glade/profile_window.glade.h \
 			../data/glade/progress_dialog.glade.h \
 			../data/glade/remove_account_window.glade.h \
 			../data/glade/roster_contact_context_menu.glade.h \
