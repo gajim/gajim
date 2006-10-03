@@ -1787,6 +1787,7 @@ class Interface:
 			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
 				data[1])
 			gajim.events.remove_events(account, jid, event)
+			self.roster.draw_contact(jid, account)
 		if w:
 			w.set_active_tab(fjid, account)
 			w.window.present()
