@@ -5447,7 +5447,7 @@ msgstr "Inconnu"
 
 #: ../src/common/helpers.py:245
 msgid "?contact has status:Has errors"
-msgstr "a une erreur"
+msgstr "en erreur"
 
 #: ../src/common/helpers.py:250
 msgid "?Subscription we already have:None"
