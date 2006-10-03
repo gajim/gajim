@@ -441,7 +441,8 @@ class AddNewContactWindow:
 		'uid_label', 'uid_entry', 'protocol_combobox', 'protocol_jid_combobox',
 		'protocol_hbox', 'nickname_entry', 'message_scrolledwindow',
 		'register_hbox', 'subscription_table', 'add_button',
-		'message_textview', 'connected_label', 'group_comboboxentry'):
+		'message_textview', 'connected_label', 'group_comboboxentry',
+		'auto_authorize_checkbutton'):
 			self.__dict__[w] = self.xml.get_widget(w)
 		if account and len(gajim.connections) >= 2:
 			prompt_text =\
@@ -489,6 +490,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.protocol_jid_combobox.set_no_show_all(True)
 		self.protocol_jid_combobox.hide()
 		self.subscription_table.set_no_show_all(True)
+		self.auto_authorize_checkbutton.show()
 		self.message_scrolledwindow.set_no_show_all(True)
 		self.register_hbox.set_no_show_all(True)
 		self.register_hbox.hide()
@@ -629,7 +631,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		else:
 			message= ''
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
-		auto_auth = self.xml.get_widget('auto_authorize_checkbutton').get_active()
+		auto_auth = self.auto_authorize_checkbutton.get_active()
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname, auto_auth = auto_auth)
 		self.window.destroy()
@@ -660,6 +662,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if type_ in self.available_types:
 			self.register_hbox.set_no_show_all(False)
 			self.register_hbox.show_all()
+			self.auto_authorize_checkbutton.hide()
 			self.connected_label.hide()
 			self.subscription_table.hide()
 			self.add_button.set_sensitive(False)
@@ -673,9 +676,11 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 					self.subscription_table.hide()
 					self.connected_label.show()
 					self.add_button.set_sensitive(False)
+					self.auto_authorize_checkbutton.hide()
 					return
 			self.subscription_table.set_no_show_all(False)
 			self.subscription_table.show_all()
+			self.auto_authorize_checkbutton.show()
 			self.connected_label.hide()
 			self.add_button.set_sensitive(True)
 
