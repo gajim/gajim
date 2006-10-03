@@ -629,7 +629,7 @@ class Interface:
 		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
 		gc_control = self.msg_win_mgr.get_control(jid, account)
-		if gc_control.type_id != message_control.TYPE_GC:
+		if gc_control and gc_control.type_id != message_control.TYPE_GC:
 			gc_control = None
 		if gc_control:
 			if len(jids) > 1: # it's a pm
