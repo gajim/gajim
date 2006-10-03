@@ -619,32 +619,32 @@ class Interface:
 		full_jid_with_resource = array[0]
 		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
-		gcs = self.msg_win_mgr.get_controls(message_control.TYPE_GC)
-		for gc_control in gcs:
-			if jid == gc_control.contact.jid:
-				if len(jids) > 1: # it's a pm
-					nick = jids[1]
-					if not self.msg_win_mgr.get_control(full_jid_with_resource, account):
-						tv = gc_control.list_treeview
-						model = tv.get_model()
-						i = gc_control.get_contact_iter(nick)
-						if i:
-							show = model[i][3]
-						else:
-							show = 'offline'
-						gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
-							name = nick, show = show)
-						c = gajim.contacts.contact_from_gc_contact(gc_c)
-						self.roster.new_chat(c, account, private_chat = True)
-					ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
-					ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
-								'status')
-					return
-
-				gc_control.print_conversation('Error %s: %s' % (array[1], array[2]))
-				if gc_control.parent_win.get_active_jid() == jid:
-					gc_control.set_subject(gc_control.subject)
+		gc_control = self.msg_win_mgr.get_control(jid, account)
+		if gc_control:
+			if len(jids) > 1: # it's a pm
+				nick = jids[1]
+				if not self.msg_win_mgr.get_control(full_jid_with_resource,
+				account):
+					tv = gc_control.list_treeview
+					model = tv.get_model()
+					iter = gc_control.get_contact_iter(nick)
+					if iter:
+						show = model[iter][3]
+					else:
+						show = 'offline'
+					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
+						name = nick, show = show)
+					c = gajim.contacts.contact_from_gc_contact(gc_c)
+					self.roster.new_chat(c, account, private_chat = True)
+				ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
+				ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
+							'status')
 				return
+
+			gc_control.print_conversation('Error %s: %s' % (array[1], array[2]))
+			if gc_control.parent_win.get_active_jid() == jid:
+				gc_control.set_subject(gc_control.subject)
+			return
 
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
