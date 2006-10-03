@@ -341,8 +341,7 @@ class SignalObject(dbus.service.Object):
 		result['name'] = DBUS_STRING(account.name)
 		result['jid'] = DBUS_STRING(gajim.get_jid_from_account(account.name))
 		result['message'] = DBUS_STRING(account.status)
-		result['priority'] = DBUS_STRING(unicode(gajim.config.get_per('accounts', 
-			account.name, 'priority')))
+		result['priority'] = DBUS_STRING(unicode(account.priority))
 		result['resource'] = DBUS_STRING(unicode(gajim.config.get_per('accounts', 
 			account.name, 'resource')))
 		return result

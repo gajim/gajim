@@ -1192,6 +1192,9 @@ class AccountModificationWindow:
 
 		self.xml.get_widget('resource_entry').set_text(gajim.config.get_per(
 			'accounts', self.account, 'resource'))
+		self.xml.get_widget('adjust_priority_with_status_checkbutton').set_active(
+			gajim.config.get_per('accounts', self.account,
+			'adjust_priority_with_status'))
 		self.xml.get_widget('priority_spinbutton').set_value(gajim.config.\
 			get_per('accounts', self.account, 'priority'))
 
@@ -1255,6 +1258,10 @@ class AccountModificationWindow:
 			if self.option_changed(config, option):
 				return True
 		return False
+
+	def on_adjust_priority_with_status_checkbutton_toggled(self, widget):
+		self.xml.get_widget('priority_spinbutton').set_sensitive(
+			not widget.get_active())
 
 	def on_save_button_clicked(self, widget):
 		'''When save button is clicked: Save information in config file'''

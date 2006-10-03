@@ -120,6 +120,10 @@ status_before_autoaway = {}
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 
+priority_dict = {}
+for status in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
+	priority_dict[status] = config.get('autopriority' + status)
+
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]
@@ -324,3 +328,12 @@ def get_name_from_jid(account, jid):
 	else:
 		actor = jid
 	return actor
+
+def get_priority(account, show):
+	'''return the priority an account must have'''
+	if not show:
+		show = 'online'
+	if show in priority_dict and config.get_per('accounts', account,
+	'adjust_priority_with_status'):
+		return priority_dict[show]
+	return config.get_per('accounts', account, 'priority')

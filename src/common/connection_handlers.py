@@ -956,9 +956,7 @@ class ConnectionVcard:
 					'invisible':
 					self.vcard_sha = new_sha
 					sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
-					prio = unicode(gajim.config.get_per('accounts', self.name,
-						'priority'))
-					p = common.xmpp.Presence(typ = None, priority = prio,
+					p = common.xmpp.Presence(typ = None, priority = self.priority,
 						show = sshow, status = self.status)
 					p = self.add_sha(p)
 					self.connection.send(p)
@@ -1089,10 +1087,8 @@ class ConnectionVcard:
 				if STATUS_LIST[self.connected] == 'invisible':
 					return
 				sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
-				prio = unicode(gajim.config.get_per('accounts', self.name,
-					'priority'))
-				p = common.xmpp.Presence(typ = None, priority = prio, show = sshow,
-					status = self.status)
+				p = common.xmpp.Presence(typ = None, priority = self.priority,
+					show = sshow, status = self.status)
 				p = self.add_sha(p)
 				self.connection.send(p)
 			else:
@@ -1803,12 +1799,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			if show == 'invisible':
 				self.send_invisible_presence(msg, signed, True)
 				return
-			prio =  unicode(gajim.config.get_per('accounts', self.name,
-				'priority'))
+			priority = gajim.get_priority(self.name, sshow)
 			vcard = self.get_cached_vcard(jid)
 			if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
 				self.vcard_sha = vcard['PHOTO']['SHA']
-			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
+			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
 			p = self.add_sha(p)
 			if msg:
 				p.setStatus(msg)
@@ -1817,6 +1812,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 
 			if self.connection:
 				self.connection.send(p)
+				self.priority = priority
 			self.dispatch('STATUS', show)
 			# ask our VCard
 			self.request_vcard(None)

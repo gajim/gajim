@@ -1186,8 +1186,7 @@ class RosterWindow:
 					status = connection.status,
 					resource = gajim.config.get_per('accounts', connection.name,
 						'resource'),
-					priority = gajim.config.get_per('accounts', connection.name,
-						'priority'),
+					priority = connection.priority,
 					keyID = gajim.config.get_per('accounts', connection.name,
 						'keyid'))
 				contacts.append(contact)

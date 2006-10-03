@@ -47,6 +47,7 @@ class Connection(ConnectionHandlers):
 		self.last_connection = None # last ClientCommon instance
 		self.gpg = None
 		self.status = ''
+		self.priority = gajim.get_priority(name, 'offline')
 		self.old_show = ''
 		# increase/decrease default timeout for server responses
 		self.try_connecting_for_foo_secs = 45
@@ -524,14 +525,15 @@ class Connection(ConnectionHandlers):
 			# active the privacy rule
 			self.privacy_rules_supported = True
 			self.activate_privacy_rule('invisible')
-		prio = unicode(gajim.config.get_per('accounts', self.name, 'priority'))
-		p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
+		priority = unicode(gajim.get_priority(self.name, show))
+		p = common.xmpp.Presence(typ = ptype, priority = priority, show = show)
 		p = self.add_sha(p, ptype != 'unavailable')
 		if msg:
 			p.setStatus(msg)
 		if signed:
 			p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 		self.connection.send(p)
+		self.priority = priority
 		self.dispatch('STATUS', 'invisible')
 		if initial:
 			#ask our VCard
@@ -642,9 +644,8 @@ class Connection(ConnectionHandlers):
 				iq = self.build_privacy_rule('visible', 'allow')
 				self.connection.send(iq)
 				self.activate_privacy_rule('visible')
-			prio = unicode(gajim.config.get_per('accounts', self.name,
-				'priority'))
-			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
+			priority = unicode(gajim.get_priority(self.name, sshow))
+			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
 			p = self.add_sha(p)
 			if msg:
 				p.setStatus(msg)
@@ -652,6 +653,7 @@ class Connection(ConnectionHandlers):
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			if self.connection:
 				self.connection.send(p)
+				self.priority = priority
 			self.dispatch('STATUS', show)
 
 	def _on_disconnected(self):
@@ -696,7 +698,7 @@ class Connection(ConnectionHandlers):
 					msgtxt = _('[This message is *encrypted* (See :JEP:`27`]') +\
 						' ([This message is *encrypted* (See :JEP:`27`])'
 		if msgtxt and not xhtml and gajim.config.get(
-		'rst_formatting_outgoing_messages'):
+			'rst_formatting_outgoing_messages'):
 			# Generate a XHTML part using reStructured text markup
 			xhtml = create_xhtml(msgtxt)
 		if type == 'chat':
