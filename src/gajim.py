@@ -4,20 +4,11 @@ exec python -OOt "$0" ${1+"$@"}
 ' '''
 ##	gajim.py
 ##
-## Contributors for this file:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - Nikos Kouremenos <kourem@gmail.com>
-## - Dimitur Kirov <dkirov@gmail.com>
-## - Travis Shirk <travis@pobox.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -193,7 +184,6 @@ atexit.register(on_exit)
 parser = optparser.OptionsParser(config_filename)
 
 import roster_window
-import systray
 import profile_window
 import config
 
@@ -1925,21 +1915,18 @@ class Interface:
 		self.systray_enabled = False
 		self.systray_capabilities = False
 		
-		if os.name == 'nt':
-			pass
-			'''
-			try:
-				import systraywin32
-			except: # user doesn't have trayicon capabilities
-				pass
-			else:
-				self.systray_capabilities = True
-				self.systray = systraywin32.SystrayWin32()
-			'''
-		else:
+		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and\
+		gtk.gtk_version >= (2, 10, 0):
+			import statusicon 
+			self.systray = statusicon.StatusIcon() 
+			self.systray_capabilities = True
+		else: # use ours, not GTK+ one
+			# [FIXME: remove this when we migrate to 2.10 and we can do
+			# cool tooltips somehow and (not dying to keep) animation]
+			import systray
 			self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
 			if self.systray_capabilities:
-			    self.systray = systray.Systray()
+				self.systray = systray.Systray()
 
 		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()
