@@ -14,9 +14,6 @@
 
 @SET_MAKE@
 
-#CLEANFILES = \
-#	trayicon.c
-
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -87,6 +84,8 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BUILD_GTKSPELL_FALSE = @BUILD_GTKSPELL_FALSE@
+BUILD_GTKSPELL_TRUE = @BUILD_GTKSPELL_TRUE@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -253,9 +252,9 @@ idlelibdir = $(libdir)/gajim
 idle_la_LIBADD = $(XSCREENSAVER_LIBS) 
 idle_la_SOURCES = idle.c
 idle_la_LDFLAGS = \
-	-module -avoid-version -no-undefined
+	-module -avoid-version
 
-idle_la_CFLAGS = $(XSCREENSAVER_CFLAGS)
+idle_la_CFLAGS = $(XSCREENSAVER_CFLAGS) $(PYTHON_INCLUDES)
 all: all-am
 
 .SUFFIXES:

@@ -68,6 +68,8 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BUILD_GTKSPELL_FALSE = @BUILD_GTKSPELL_FALSE@
+BUILD_GTKSPELL_TRUE = @BUILD_GTKSPELL_TRUE@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -422,14 +424,14 @@ uninstall-am: uninstall-iconsetDATA uninstall-info-am
 install-data-local:
 	@for d in $(ICONSET_DIRS);do \
 		if test -d $$d;then \
-			echo " $(mkinstalldirs) $(pkgdatadir)/data/iconsets/$$d"; \
-			$(mkinstalldirs) $(pkgdatadir)/data/iconsets/$$d || exit 1; \
+			echo " $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/data/iconsets/$$d"; \
+			$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/data/iconsets/$$d || exit 1; \
 		fi; \
 	done
 	for f in $(ICONSET_FILES);do \
 		if test -f $$f; then \
-			echo " $(INSTALL_DATA) $$f $(pkgdatadir)/data/iconsets/$$f"; \
-			$(INSTALL_DATA) $$f $(pkgdatadir)/data/iconsets/$$f || exit 1; \
+			echo " $(INSTALL_DATA) $$f $(DESTDIR)$(pkgdatadir)/data/iconsets/$$f"; \
+			$(INSTALL_DATA) $$f $(DESTDIR)$(pkgdatadir)/data/iconsets/$$f || exit 1; \
 		fi; \
 	done; 
 

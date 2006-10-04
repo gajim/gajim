@@ -5,6 +5,7 @@ CLEANFILES = \
 INCLUDES = \
 	$(PYTHON_INCLUDES) 
 
+if BUILD_GTKSPELL
 gtkspelllib_LTLIBRARIES = gtkspell.la
 gtkspelllibdir = $(libdir)/gajim
 
@@ -15,9 +16,10 @@ gtkspell_la_SOURCES = \
 	gtkspellmodule.c
 
 gtkspell_la_LDFLAGS = \
-	-module -avoid-version -no-undefined
+	-module -avoid-version 
 
 gtkspell_la_CFLAGS = $(GTKSPELL_CFLAGS) $(PYGTK_CFLAGS)
+endif
 
 trayiconlib_LTLIBRARIES = trayicon.la
 trayiconlibdir = $(libdir)/gajim
@@ -28,7 +30,7 @@ trayicon_la_SOURCES = \
 nodist_trayicon_la_SOURCES = \
 					trayicon.c
 trayicon_la_LDFLAGS = \
-	-module -avoid-version -no-undefined
+	-module -avoid-version 
 trayicon_la_CFLAGS = $(PYGTK_CFLAGS)
 
 trayicon.c: trayicon.defs trayicon.override

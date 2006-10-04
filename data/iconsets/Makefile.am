@@ -11,14 +11,14 @@ ICONSET_FILES = **/{16x16,32x32,48x48}/{*.gif,*.png} \
 install-data-local:
 	@for d in $(ICONSET_DIRS);do \
 		if test -d $$d;then \
-			echo " $(mkinstalldirs) $(pkgdatadir)/data/iconsets/$$d"; \
-			$(mkinstalldirs) $(pkgdatadir)/data/iconsets/$$d || exit 1; \
+			echo " $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/data/iconsets/$$d"; \
+			$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/data/iconsets/$$d || exit 1; \
 		fi; \
 	done
 	for f in $(ICONSET_FILES);do \
 		if test -f $$f; then \
-			echo " $(INSTALL_DATA) $$f $(pkgdatadir)/data/iconsets/$$f"; \
-			$(INSTALL_DATA) $$f $(pkgdatadir)/data/iconsets/$$f || exit 1; \
+			echo " $(INSTALL_DATA) $$f $(DESTDIR)$(pkgdatadir)/data/iconsets/$$f"; \
+			$(INSTALL_DATA) $$f $(DESTDIR)$(pkgdatadir)/data/iconsets/$$f || exit 1; \
 		fi; \
 	done; 
 
