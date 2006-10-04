@@ -1,15 +1,19 @@
-SUBDIRS = po src data
+SUBDIRS = data src po
 bin_SCRIPTS = scripts/gajim
 
+commonfilesdir = $(pkgdatadir)
+commonfiles_DATA = COPYING	\
+				   README 	\
+				   ChangeLog \
+				   THANKS	\
+				   AUTHORS
+
 EXTRA_DIST =			\
-	autogen.sh		\
-	COPYING		\
-	ChangeLog  		\
-	README 			\
-	THANKS 			\
-	intltool-extract.in 	\
+	$(commonfiles_DATA) \
+	autogen.sh			\
+	intltool-extract.in \
 	intltool-merge.in 	\
-	intltool-update.in \
+	intltool-update.in	\
 	scripts/gajim.in
 	
 DISTCLEANFILES = 		\
