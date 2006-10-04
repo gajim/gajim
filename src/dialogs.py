@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
@@ -405,12 +405,12 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
-	uid_labels = {'jabber': _('Jabber ID'),
-		'aim': _('AIM Address'),
-		'gadu-gadu': _('GG Number'),
-		'icq': _('ICQ Number'),
-		'msn': _('MSN Address'),
-		'yahoo': _('Yahoo! Address')}
+	uid_labels = {'jabber': _('Jabber ID:'),
+		'aim': _('AIM Address:'),
+		'gadu-gadu': _('GG Number:'),
+		'icq': _('ICQ Number:'),
+		'msn': _('MSN Address:'),
+		'yahoo': _('Yahoo! Address:')}
 	def __init__(self, account = None, jid = None, user_nick = None,
 	group = None):
 		self.account = account
@@ -441,7 +441,8 @@ class AddNewContactWindow:
 		'uid_label', 'uid_entry', 'protocol_combobox', 'protocol_jid_combobox',
 		'protocol_hbox', 'nickname_entry', 'message_scrolledwindow',
 		'register_hbox', 'subscription_table', 'add_button',
-		'message_textview', 'connected_label', 'group_comboboxentry'):
+		'message_textview', 'connected_label', 'group_comboboxentry',
+		'auto_authorize_checkbutton'):
 			self.__dict__[w] = self.xml.get_widget(w)
 		if account and len(gajim.connections) >= 2:
 			prompt_text =\
@@ -486,8 +487,10 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				liststore.append([type_, type_])
 		self.protocol_combobox.set_model(liststore)
 		self.protocol_combobox.set_active(0)
-		self.protocol_jid_combobox.set_sensitive(False)
+		self.protocol_jid_combobox.set_no_show_all(True)
+		self.protocol_jid_combobox.hide()
 		self.subscription_table.set_no_show_all(True)
+		self.auto_authorize_checkbutton.show()
 		self.message_scrolledwindow.set_no_show_all(True)
 		self.register_hbox.set_no_show_all(True)
 		self.register_hbox.hide()
@@ -497,7 +500,9 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.protocol_jid_combobox.set_model(liststore)
 		self.xml.signal_autoconnect(self)
 		if jid:
-			type_ = gajim.get_transport_name_from_jid(jid) or 'jabber'
+			type_ = gajim.get_transport_name_from_jid(jid)
+			if not type_:
+				type_ = 'jabber'
 			if type_ == 'jabber':
 				self.uid_entry.set_text(jid)
 			else:
@@ -515,13 +520,13 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				i += 1
 
 			# set protocol_jid_combobox
-			self.protocol_combobox.set_active(0)
+			self.protocol_jid_combobox.set_active(0)
 			model = self.protocol_jid_combobox.get_model()
 			iter = model.get_iter_first()
 			i = 0
 			while iter:
 				if model[iter][0] == transport:
-					self.protocol_combobox.set_active(i)
+					self.protocol_jid_combobox.set_active(i)
 					break
 				iter = model.iter_next(iter)
 				i += 1
@@ -626,7 +631,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		else:
 			message= ''
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
-		auto_auth = self.xml.get_widget('auto_authorize_checkbutton').get_active()
+		auto_auth = self.auto_authorize_checkbutton.get_active()
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname, auto_auth = auto_auth)
 		self.window.destroy()
@@ -641,13 +646,15 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			for jid_ in self.agents[type_]:
 				model.append([jid_])
 			self.protocol_jid_combobox.set_active(0)
-			self.protocol_jid_combobox.set_sensitive(True)
+		if len(self.agents[type_]) > 1:
+			self.protocol_jid_combobox.set_no_show_all(False)
+			self.protocol_jid_combobox.show_all()
 		else:
-			self.protocol_jid_combobox.set_sensitive(False)
+			self.protocol_jid_combobox.hide()
 		if type_ in self.uid_labels:
 			self.uid_label.set_text(self.uid_labels[type_])
 		else:
-			self.uid_label.set_text(_('User ID'))
+			self.uid_label.set_text(_('User ID:'))
 		if type_ == 'jabber':
 			self.message_scrolledwindow.show()
 		else:
@@ -655,6 +662,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if type_ in self.available_types:
 			self.register_hbox.set_no_show_all(False)
 			self.register_hbox.show_all()
+			self.auto_authorize_checkbutton.hide()
 			self.connected_label.hide()
 			self.subscription_table.hide()
 			self.add_button.set_sensitive(False)
@@ -668,9 +676,11 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 					self.subscription_table.hide()
 					self.connected_label.show()
 					self.add_button.set_sensitive(False)
+					self.auto_authorize_checkbutton.hide()
 					return
 			self.subscription_table.set_no_show_all(False)
 			self.subscription_table.show_all()
+			self.auto_authorize_checkbutton.show()
 			self.connected_label.hide()
 			self.add_button.set_sensitive(True)
 
@@ -1019,6 +1029,12 @@ class SubscriptionRequestWindow:
 		xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def prepare_popup_menu(self):
+		xml = gtkgui_helpers.get_glade('subscription_request_popup_menu.glade')
+		menu = xml.get_widget('subscription_request_popup_menu')
+		xml.signal_autoconnect(self)
+		return menu
+
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 		
@@ -1029,7 +1045,7 @@ class SubscriptionRequestWindow:
 		if self.jid not in gajim.contacts.get_jid_list(self.account):
 			AddNewContactWindow(self.account, self.jid, self.user_nick)
 
-	def on_contact_info_button_clicked(self, widget):
+	def on_contact_info_activate(self, widget):
 		'''ask vcard'''
 		if gajim.interface.instances[self.account]['infos'].has_key(self.jid):
 			gajim.interface.instances[self.account]['infos'][self.jid].window.present()
@@ -1043,10 +1059,21 @@ class SubscriptionRequestWindow:
 			gajim.interface.instances[self.account]['infos'][self.jid].xml.\
 				get_widget('information_notebook').remove_page(0)
 	
+	def on_start_chat_activate(self, widget):
+		'''open chat'''
+		gajim.interface.roster.new_chat_from_jid(self.account, self.jid)
+
 	def on_deny_button_clicked(self, widget):
 		'''refuse the request'''
 		gajim.connections[self.account].refuse_authorization(self.jid)
 		self.window.destroy()
+
+	def on_actions_button_clicked(self, widget):
+		'''popup action menu'''
+		menu = self.prepare_popup_menu()
+		menu.show_all()
+		gtkgui_helpers.popup_emoticons_under_button(menu, widget, self.window.window)
+
 
 class JoinGroupchatWindow:
 	def __init__(self, account, server = '', room = '', nick = '',
@@ -1306,7 +1333,8 @@ class PopupNotificationWindow:
 		# default image
 		if not path_to_image:
 			path_to_image = os.path.abspath(
-				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'chat_msg_recv.png')) # img to display
+				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+					'chat_msg_recv.png')) # img to display
 
 		if event_type == _('Contact Signed In'):
 			bg_color = 'limegreen'
@@ -1326,7 +1354,7 @@ class PopupNotificationWindow:
 			bg_color = 'tan1'
 		elif event_type == _('Contact Changed Status'):			
 			bg_color = 'thistle2'
-		else: # Unknown event ! Shouldn't happen but deal with it
+		else: # Unknown event! Shouldn't happen but deal with it
 			bg_color = 'white'
 		popup_bg_color = gtk.gdk.color_parse(bg_color)
 		close_button.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
@@ -1732,7 +1760,7 @@ class PrivacyListWindow:
 	'''Window that is used for creating NEW or EDITING already there privacy
 	lists'''
 	def __init__(self, account, privacy_list_name, action):
-		'''action is 'edit' or 'new' depending on if we create a new priv list
+		'''action is 'EDIT' or 'NEW' depending on if we create a new priv list
 		or edit an already existing one'''
 		self.account = account
 		self.privacy_list_name = privacy_list_name
@@ -1784,7 +1812,7 @@ class PrivacyListWindow:
 		self.privacy_list_active_checkbutton.set_sensitive(False)
 		self.privacy_list_default_checkbutton.set_sensitive(False)
 
-		if action == 'edit':
+		if action == 'EDIT':
 			self.refresh_rules()
 
 		count = 0
@@ -1803,11 +1831,9 @@ class PrivacyListWindow:
 		self.xml.signal_autoconnect(self)
 
 	def on_privacy_list_edit_window_destroy(self, widget):
-		'''close window'''
-		if gajim.interface.instances[self.account].has_key('privacy_list_%s' % \
-		self.privacy_list_name):
-			del gajim.interface.instances[self.account]['privacy_list_%s' % \
-				self.privacy_list_name]
+		key_name = 'privacy_list_%s' % self.privacy_list_name
+		if key_name in gajim.interface.instances[self.account]:
+			del gajim.interface.instances[self.account][key_name]
 
 	def check_active_default(self, a_d_dict):
 		if a_d_dict['active'] == self.privacy_list_name:
@@ -1824,11 +1850,10 @@ class PrivacyListWindow:
 		self.global_rules = {}
 		for rule in rules:
 			if rule.has_key('type'):
-				text_item = 'Order: %s, action: %s, type: %s, value: %s' % \
-					(rule['order'], rule['action'], rule['type'],
-					rule['value'])
+				text_item = _('Order: %s, action: %s, type: %s, value: %s') % \
+					(rule['order'], rule['action'], rule['type'], rule['value'])
 			else:
-				text_item = 'Order: %s, action: %s' % (rule['order'],
+				text_item = _('Order: %s, action: %s') % (rule['order'],
 					rule['action'])
 			self.global_rules[text_item] = rule
 			self.list_of_rules_combobox.append_text(text_item)
@@ -1856,8 +1881,7 @@ class PrivacyListWindow:
 	def on_delete_rule_button_clicked(self, widget):
 		tags = []
 		for rule in self.global_rules:
-			if rule != \
-				self.list_of_rules_combobox.get_active_text().decode('utf-8'):
+			if rule != self.list_of_rules_combobox.get_active_text():
 				tags.append(self.global_rules[rule])
 		gajim.connections[self.account].set_privacy_list(
 			self.privacy_list_name, tags)
@@ -1866,7 +1890,7 @@ class PrivacyListWindow:
 
 	def on_open_rule_button_clicked(self, widget):
 		self.add_edit_rule_label.set_label(
-		_('<b>Edit a rule</b>'))
+			_('<b>Edit a rule</b>'))
 		active_num = self.list_of_rules_combobox.get_active()
 		if active_num == -1:
 			self.active_rule = ''
@@ -1917,20 +1941,22 @@ class PrivacyListWindow:
 					self.edit_send_messages_checkbutton.set_active(True)
 		
 			if rule_info['action'] == 'allow':
-					self.edit_allow_radiobutton.set_active(True)
+				self.edit_allow_radiobutton.set_active(True)
 			else:
-					self.edit_deny_radiobutton.set_active(True)
+				self.edit_deny_radiobutton.set_active(True)
 		self.add_edit_vbox.show()
 	
 	def on_privacy_list_active_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			gajim.connections[self.account].set_active_list(self.privacy_list_name)
+			gajim.connections[self.account].set_active_list(
+				self.privacy_list_name)
 		else:
 			gajim.connections[self.account].set_active_list(None)
 
 	def on_privacy_list_default_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			gajim.connections[self.account].set_default_list(self.privacy_list_name)
+			gajim.connections[self.account].set_default_list(
+				self.privacy_list_name)
 		else:
 			gajim.connections[self.account].set_default_list(None)
 
@@ -1956,12 +1982,10 @@ class PrivacyListWindow:
 	def get_current_tags(self):
 		if self.edit_type_jabberid_radiobutton.get_active():
 			edit_type = 'jid'
-			edit_value = \
-				self.edit_type_jabberid_entry.get_text().decode('utf-8')
+			edit_value = self.edit_type_jabberid_entry.get_text()
 		elif self.edit_type_group_radiobutton.get_active():
 			edit_type = 'group'
-			edit_value = \
-				self.edit_type_group_combobox.get_active_text().decode('utf-8')
+			edit_value = self.edit_type_group_combobox.get_active_text()
 		elif self.edit_type_subscription_radiobutton.get_active():
 			edit_type = 'subscription'
 			subs = ['none', 'both', 'from', 'to']
@@ -2000,7 +2024,8 @@ class PrivacyListWindow:
 			else:
 				tags.append(current_tags)
 
-		gajim.connections[self.account].set_privacy_list(self.privacy_list_name, tags)
+		gajim.connections[self.account].set_privacy_list(
+			self.privacy_list_name, tags)
 		self.privacy_list_received(tags)
 		self.add_edit_vbox.hide()
 
@@ -2030,19 +2055,18 @@ class PrivacyListsWindow:
 	or edit an already there one'''
 	def __init__(self, account):
 		self.account = account
-
 		self.privacy_lists = []
-
 		self.privacy_lists_save = []		
 
 		self.xml = gtkgui_helpers.get_glade('privacy_lists_window.glade')
 
 		self.window = self.xml.get_widget('privacy_lists_first_window')
 		for widget_to_add in ['list_of_privacy_lists_combobox',
-			'delete_privacy_list_button', 'open_privacy_list_button',
-			'new_privacy_list_button', 'new_privacy_list_entry', 'buttons_hbox',
-			'privacy_lists_refresh_button', 'close_privacy_lists_window_button']:
-			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)		
+		'delete_privacy_list_button', 'open_privacy_list_button',
+		'new_privacy_list_button', 'new_privacy_list_entry',
+		'privacy_lists_refresh_button', 'close_privacy_lists_window_button']:
+			self.__dict__[widget_to_add] = self.xml.get_widget(
+				widget_to_add)		
 
 		self.draw_privacy_lists_in_combobox()
 		self.privacy_lists_refresh()
@@ -2061,8 +2085,7 @@ class PrivacyListsWindow:
 		self.xml.signal_autoconnect(self)
 
 	def on_privacy_lists_first_window_destroy(self, widget):
-		'''close window'''
-		if gajim.interface.instances[self.account].has_key('privacy_lists'):
+		if 'privacy_lists' in gajim.interface.instances[self.account]:
 			del gajim.interface.instances[self.account]['privacy_lists']
 
 	def draw_privacy_lists_in_combobox(self):
@@ -2073,15 +2096,18 @@ class PrivacyListsWindow:
 			self.list_of_privacy_lists_combobox.append_text(add_item)
 		if len(self.privacy_lists) == 0:
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
-			self.buttons_hbox.set_sensitive(False)
+			self.open_privacy_list_button.set_sensitive(False)
+			self.delete_privacy_list_button.set_sensitive(False)
 		elif len(self.privacy_lists) == 1:
 			self.list_of_privacy_lists_combobox.set_active(0)
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
-			self.buttons_hbox.set_sensitive(True)	
+			self.open_privacy_list_button.set_sensitive(True)
+			self.delete_privacy_list_button.set_sensitive(True)
 		else:
 			self.list_of_privacy_lists_combobox.set_sensitive(True)
-			self.buttons_hbox.set_sensitive(True)
 			self.list_of_privacy_lists_combobox.set_active(0)
+			self.open_privacy_list_button.set_sensitive(True)
+			self.delete_privacy_list_button.set_sensitive(True)
 		self.privacy_lists = []
 
 	def on_privacy_lists_refresh_button_clicked(self, widget):
@@ -2108,14 +2134,13 @@ class PrivacyListsWindow:
 		gajim.connections[self.account].get_privacy_lists()
 
 	def on_new_privacy_list_button_clicked(self, widget):
-		name = self.new_privacy_list_entry.get_text().decode('utf-8')
-		if gajim.interface.instances[self.account].has_key(
-		'privacy_list_%s' % name):
-			gajim.interface.instances[self.account]['privacy_list_%s' % name].\
-				window.present()
+		name = self.new_privacy_list_entry.get_text()
+		key_name = 'privacy_list_%s' % name
+		if gajim.interface.instances[self.account].has_key(key_name):
+			gajim.interface.instances[self.account][key_name].window.present()
 		else:
-			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
-				PrivacyListWindow(self.account, name, 'new')
+			gajim.interface.instances[self.account][key_name] = \
+				PrivacyListWindow(self.account, name, 'NEW')
 		self.new_privacy_list_entry.set_text('')
 
 	def on_privacy_lists_refresh_button_clicked(self, widget):
@@ -2124,16 +2149,17 @@ class PrivacyListsWindow:
 	def on_open_privacy_list_button_clicked(self, widget):
 		name = self.privacy_lists_save[
 			self.list_of_privacy_lists_combobox.get_active()]
+		key_name = 'privacy_list_%s' % name
 		if gajim.interface.instances[self.account].has_key(
-		'privacy_list_%s' % name):
-			gajim.interface.instances[self.account]['privacy_list_%s' % name].\
-				window.present()
+		key_name):
+			gajim.interface.instances[self.account][key_name].window.present()
 		else:
-			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
-				PrivacyListWindow(self.account, name, 'edit')
+			gajim.interface.instances[self.account][key_name] = \
+				PrivacyListWindow(self.account, name, 'EDIT')
 
 class InvitationReceivedDialog:
-	def __init__(self, account, room_jid, contact_jid, password = None, comment = None):
+	def __init__(self, account, room_jid, contact_jid, password = None,
+	comment = None):
 
 		self.room_jid = room_jid
 		self.account = account

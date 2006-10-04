@@ -13,6 +13,8 @@
 ## GNU General Public License for more details.
 ##
 
+# THIS FILE IS FOR **OUR** PROFILE (when we edit our INFO)
+
 import gtk
 import gobject
 import base64

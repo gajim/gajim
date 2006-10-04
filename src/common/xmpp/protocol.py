@@ -357,10 +357,10 @@ class Protocol(Node):
                 if tag.getName()=='text': return tag.getData()
             return self.getError()
     def getErrorCode(self):
-        """ Return the error code. Obsolette. """
+        """ Return the error code. Obsolete. """
         return self.getTagAttr('error','code')
     def setError(self,error,code=None):
-        """ Set the error code. Obsolette. Use error-conditions instead. """
+        """ Set the error code. Obsolete. Use error-conditions instead. """
         if code:
             if str(code) in _errorcodes.keys(): error=ErrorNode(_errorcodes[str(code)],text=error)
             else: error=ErrorNode(ERR_UNDEFINED_CONDITION,code=code,typ='cancel',text=error)
@@ -397,10 +397,18 @@ class Message(Protocol):
     def getBody(self):
         """ Returns text of the message. """
         return self.getTagData('body')
-    def getXHTML(self):
-        """ Returns serialized xhtml-im body text of the message. """
+    def getXHTML(self, xmllang=None):
+        """ Returns serialized xhtml-im element text of the message.
+
+            TODO: Returning a DOM could make rendering faster."""
         xhtml = self.getTag('html')
-        return str(xhtml.getTag('body'))
+        if xhtml:
+            if xmllang:
+                body = xhtml.getTag('body', attrs={'xml:lang':xmllang})
+            else:
+                body = xhtml.getTag('body')
+            return str(body)
+        return None
     def getSubject(self):
         """ Returns subject of the message. """
         return self.getTagData('subject')
@@ -410,11 +418,22 @@ class Message(Protocol):
     def setBody(self,val):
         """ Sets the text of the message. """
         self.setTagData('body',val)
-    def setXHTML(self,val):
+
+    def setXHTML(self,val,xmllang=None):
         """ Sets the xhtml text of the message (JEP-0071).
             The parameter is the "inner html" to the body."""
-        dom = NodeBuilder(val)
-        self.setTag('html',namespace=NS_XHTML_IM).setTag('body',namespace=NS_XHTML).addChild(node=dom.getDom())
+        try:
+            if xmllang:
+                dom = NodeBuilder('<body xmlns="'+NS_XHTML+'" xml:lang="'+xmllang+'" >' + val + '</body>').getDom()
+            else:
+                dom = NodeBuilder('<body xmlns="'+NS_XHTML+'">'+val+'</body>',0).getDom()
+            if self.getTag('html'):
+                self.getTag('html').addChild(node=dom)
+            else:
+                self.setTag('html',namespace=NS_XHTML_IM).addChild(node=dom)
+        except Exception, e:
+            print "Error", e
+            pass #FIXME: log. we could not set xhtml (parse error, whatever)
     def setSubject(self,val):
         """ Sets the subject of the message. """
         self.setTagData('subject',val)

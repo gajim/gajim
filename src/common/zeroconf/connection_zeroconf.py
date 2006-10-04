@@ -62,6 +62,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.privacy_rules_supported = False
 		self.status = ''
 		self.old_show = ''
+		self.priority = 0
 	
 		self.call_resolve_timeout = False
 		

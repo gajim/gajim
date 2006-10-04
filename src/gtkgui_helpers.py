@@ -2,7 +2,7 @@
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
@@ -175,11 +175,14 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
 	If any of the params is not present (None or 0) the action
 	on it is not performed'''
 
-	def _cut_if_long(str):
-		if len(str) > max_chars:
-			str = str[:max_chars - 3] + '...'
-		return str
+	def _cut_if_long(string):
+		if len(string) > max_chars:
+			string = string[:max_chars - 3] + '...'
+		return string
 	
+	if isinstance(text, str):
+		text = text.decode('utf-8')
+
 	if max_lines == 0:
 		lines = text.split('\n')
 	else:

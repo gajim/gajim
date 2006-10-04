@@ -23,7 +23,7 @@ from common import helpers
 from time import time
 from dialogs import AddNewContactWindow, NewChatDialog
 
-import dbus_support
+from common import dbus_support
 if dbus_support.supported:
 	import dbus
 	if dbus_support:
@@ -228,7 +228,7 @@ class SignalObject(dbus.service.Object):
 		message to 'jid', using account(optional) 'account' '''
 		jid, account = self._get_real_arguments(args, 2)
 		if not jid:
-			# FIXME: raise exception for missing argument (dbus0.35+)
+			raise MissingArgument
 			return None
 		jid = self._get_real_jid(jid, account)
 
@@ -277,7 +277,7 @@ class SignalObject(dbus.service.Object):
 		status, message, account = self._get_real_arguments(args, 3)
 		if status not in ('offline', 'online', 'chat', 
 			'away', 'xa', 'dnd', 'invisible'):
-			# FIXME: raise exception for bad status (dbus0.35)
+			raise InvalidArgument
 			return None
 		if account:
 			gobject.idle_add(gajim.interface.roster.send_status, account, 
@@ -305,7 +305,7 @@ class SignalObject(dbus.service.Object):
 		if not isinstance(jid, unicode):
 			jid = unicode(jid)
 		if not jid:
-			# FIXME: raise exception for missing argument (0.3+)
+			raise MissingArgument
 			return None
 		jid = self._get_real_jid(jid, account)
 
@@ -341,8 +341,7 @@ class SignalObject(dbus.service.Object):
 		result['name'] = DBUS_STRING(account.name)
 		result['jid'] = DBUS_STRING(gajim.get_jid_from_account(account.name))
 		result['message'] = DBUS_STRING(account.status)
-		result['priority'] = DBUS_STRING(unicode(gajim.config.get_per('accounts', 
-			account.name, 'priority')))
+		result['priority'] = DBUS_STRING(unicode(account.priority))
 		result['resource'] = DBUS_STRING(unicode(gajim.config.get_per('accounts', 
 			account.name, 'resource')))
 		return result

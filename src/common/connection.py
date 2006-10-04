@@ -42,6 +42,8 @@ from common import GnuPG
 from connection_handlers import *
 USE_GPG = GnuPG.USE_GPG
 
+from rst_xhtml_generator import create_xhtml
+
 class Connection(ConnectionHandlers):
 	'''Connection class'''
 	def __init__(self, name):
@@ -54,6 +56,7 @@ class Connection(ConnectionHandlers):
 		self.is_zeroconf = False
 		self.gpg = None
 		self.status = ''
+		self.priority = gajim.get_priority(name, 'offline')
 		self.old_show = ''
 		# increase/decrease default timeout for server responses
 		self.try_connecting_for_foo_secs = 45
@@ -119,6 +122,7 @@ class Connection(ConnectionHandlers):
 		self.on_purpose = on_purpose
 		self.connected = 0
 		self.time_to_reconnect = None
+		self.privacy_rules_supported = False
 		if self.connection:
 			# make sure previous connection is completely closed
 			gajim.proxy65_manager.disconnect(self.connection)
@@ -129,8 +133,8 @@ class Connection(ConnectionHandlers):
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
 		gajim.log.debug('disconnectedReconnCB')
-		if self.connected > 1:
-			# we cannot change our status to offline or connectiong
+		if gajim.account_is_connected(self.name):
+			# we cannot change our status to offline or connecting
 			# after we auth to server
 			self.old_show = STATUS_LIST[self.connected]
 		self.connected = 0
@@ -405,8 +409,6 @@ class Connection(ConnectionHandlers):
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 		gajim.log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
 			self._current_host['port'], con_type))
-		# Ask metacontacts before roster
-		self.get_metacontacts()
 		self._register_handlers(con, con_type)
 		return True
 
@@ -460,7 +462,7 @@ class Connection(ConnectionHandlers):
 	# END connect
 
 	def quit(self, kill_core):
-		if kill_core and self.connected > 1:
+		if kill_core and gajim.account_is_connected(self.name):
 			self.disconnect(on_purpose = True)
 	
 	def get_privacy_lists(self):
@@ -532,14 +534,15 @@ class Connection(ConnectionHandlers):
 			# active the privacy rule
 			self.privacy_rules_supported = True
 			self.activate_privacy_rule('invisible')
-		prio = unicode(gajim.config.get_per('accounts', self.name, 'priority'))
-		p = common.xmpp.Presence(typ = ptype, priority = prio, show = show)
+		priority = unicode(gajim.get_priority(self.name, show))
+		p = common.xmpp.Presence(typ = ptype, priority = priority, show = show)
 		p = self.add_sha(p, ptype != 'unavailable')
 		if msg:
 			p.setStatus(msg)
 		if signed:
 			p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 		self.connection.send(p)
+		self.priority = priority
 		self.dispatch('STATUS', 'invisible')
 		if initial:
 			#ask our VCard
@@ -592,8 +595,11 @@ class Connection(ConnectionHandlers):
 		if self.connection:
 			con.set_send_timeout(self.keepalives, self.send_keepalive)
 			self.connection.onreceive(None)
-			# Ask metacontacts before roster
-			self.get_metacontacts()
+			iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
+			id = self.connection.getAnID()
+			iq.setID(id)
+			self.awaiting_answers[id] = (PRIVACY_ARRIVED, )
+			self.connection.send(iq)
 
 	def change_status(self, show, msg, auto = False):
 		if not show in STATUS_LIST:
@@ -647,9 +653,8 @@ class Connection(ConnectionHandlers):
 				iq = self.build_privacy_rule('visible', 'allow')
 				self.connection.send(iq)
 				self.activate_privacy_rule('visible')
-			prio = unicode(gajim.config.get_per('accounts', self.name,
-				'priority'))
-			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
+			priority = unicode(gajim.get_priority(self.name, sshow))
+			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
 			p = self.add_sha(p)
 			if msg:
 				p.setStatus(msg)
@@ -657,6 +662,7 @@ class Connection(ConnectionHandlers):
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			if self.connection:
 				self.connection.send(p)
+				self.priority = priority
 			self.dispatch('STATUS', show)
 
 	def _on_disconnected(self):
@@ -667,17 +673,22 @@ class Connection(ConnectionHandlers):
 	def get_status(self):
 		return STATUS_LIST[self.connected]
 
-	def send_motd(self, jid, subject = '', msg = ''):
+
+	def send_motd(self, jid, subject = '', msg = '', xhtml = None):
 		if not self.connection:
 			return
-		msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject)
+		msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject,
+			xhtml = xhtml)
+
 		self.connection.send(msg_iq)
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None,
-	user_nick = None):
+	user_nick = None, xhtml = None):
 		if not self.connection:
 			return
+		if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+			xhtml = create_xhtml(msg)
 		if not msg and chatstate is None:
 			return
 		fjid = jid
@@ -691,18 +702,24 @@ class Connection(ConnectionHandlers):
 			if msgenc:
 				msgtxt = '[This message is encrypted]'
 				lang = os.getenv('LANG')
-				if lang is not None or lang != 'en': # we're not english
-					msgtxt = _('[This message is encrypted]') +\
-						' ([This message is encrypted])' # one  in locale and one en
+				if lang is not None and lang != 'en': # we're not english
+					# one  in locale and one en
+					msgtxt = _('[This message is *encrypted* (See :JEP:`27`]') +\
+						' ([This message is *encrypted* (See :JEP:`27`])'
+		if msgtxt and not xhtml and gajim.config.get(
+			'rst_formatting_outgoing_messages'):
+			# Generate a XHTML part using reStructured text markup
+			xhtml = create_xhtml(msgtxt)
 		if type == 'chat':
-			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type)
+			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type,
+				xhtml = xhtml)
 		else:
 			if subject:
 				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
-					typ = 'normal', subject = subject)
+					typ = 'normal', subject = subject, xhtml = xhtml)
 			else:
 				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
-					typ = 'normal')
+					typ = 'normal', xhtml = xhtml)
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
@@ -720,7 +737,8 @@ class Connection(ConnectionHandlers):
 				msg_iq.setTag(chatstate, namespace = common.xmpp.NS_CHATSTATES)
 			if composing_jep == 'JEP-0022' or not composing_jep:
 				# JEP-0022
-				chatstate_node = msg_iq.setTag('x', namespace = common.xmpp.NS_EVENT)
+				chatstate_node = msg_iq.setTag('x',
+					namespace = common.xmpp.NS_EVENT)
 				if not msgtxt: # when no <body>, add <id>
 					if not msg_id: # avoid putting 'None' in <id> tag
 						msg_id = ''
@@ -982,10 +1000,12 @@ class Connection(ConnectionHandlers):
 			last_log = 0
 		self.last_history_line[jid]= last_log
 
-	def send_gc_message(self, jid, msg):
+	def send_gc_message(self, jid, msg, xhtml = None):
 		if not self.connection:
 			return
-		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat')
+		if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+			xhtml = create_xhtml(msg)
+		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat', xhtml = xhtml)
 		self.connection.send(msg_iq)
 		self.dispatch('MSGSENT', (jid, msg))
 
@@ -1111,11 +1131,11 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def unregister_account(self, on_remove_success):
-		# no need to write this as a class method and keep the value of on_remove_success
-		# as a class property as pass it as an argument
+		# no need to write this as a class method and keep the value of
+		# on_remove_success as a class property as pass it as an argument
 		def _on_unregister_account_connect(con):
 			self.on_connect_auth = None
-			if self.connected > 1:
+			if gajim.account_is_connected(self.name):
 				hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 				iq = common.xmpp.Iq(typ = 'set', to = hostname)
 				q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')

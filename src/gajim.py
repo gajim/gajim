@@ -14,7 +14,7 @@ exec python -OOt "$0" ${1+"$@"}
 ##                         Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
@@ -509,13 +509,14 @@ class Interface:
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
-		# chatstate, msg_id, composing_jep, user_nick)) user_nick is JEP-0172
+		# chatstate, msg_id, composing_jep, user_nick, xhtml)) user_nick is JEP-0172
 
 		full_jid_with_resource = array[0]
 		jid = gajim.get_jid_without_resource(full_jid_with_resource)
 		resource = gajim.get_resource_from_jid(full_jid_with_resource)
 
 		message = array[1]
+		encrypted = array[3]
 		msg_type = array[4]
 		subject = array[5]
 		chatstate = array[6]
@@ -599,18 +600,26 @@ class Interface:
 		if pm:
 			nickname = resource
 			msg_type = 'pm'
-			groupchat_control.on_private_message(nickname, message, array[2])
+			groupchat_control.on_private_message(nickname, message, array[2],
+				array[10])
 		else:
 			# array: (jid, msg, time, encrypted, msg_type, subject)
-			self.roster.on_message(jid, message, array[2], account, array[3],
-				msg_type, subject, resource, msg_id, array[9], advanced_notif_num)
+			if encrypted:
+				self.roster.on_message(jid, message, array[2], account, array[3],
+					msg_type, subject, resource, msg_id, array[9],
+					advanced_notif_num)
+			else:
+				#xhtml in last element
+				self.roster.on_message(jid, message, array[2], account, array[3],
+					msg_type, subject, resource, msg_id, array[9],
+					advanced_notif_num, xhtml = array[10])
 			nickname = gajim.get_name_from_jid(account, jid)
 		# Check and do wanted notifications	
 		msg = message
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
-		notify.notify('new_message', full_jid_with_resource, account, [msg_type, first, nickname,
-			msg], advanced_notif_num)
+		notify.notify('new_message', full_jid_with_resource, account, [msg_type,
+			first, nickname, msg], advanced_notif_num)
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
@@ -620,32 +629,34 @@ class Interface:
 		full_jid_with_resource = array[0]
 		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
-		gcs = self.msg_win_mgr.get_controls(message_control.TYPE_GC)
-		for gc_control in gcs:
-			if jid == gc_control.contact.jid:
-				if len(jids) > 1: # it's a pm
-					nick = jids[1]
-					if not self.msg_win_mgr.get_control(full_jid_with_resource, account):
-						tv = gc_control.list_treeview
-						model = tv.get_model()
-						i = gc_control.get_contact_iter(nick)
-						if i:
-							show = model[i][3]
-						else:
-							show = 'offline'
-						gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
-							name = nick, show = show)
-						c = gajim.contacts.contact_from_gc_contact(gc_c)
-						self.roster.new_chat(c, account, private_chat = True)
-					ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
-					ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
-								'status')
-					return
-
-				gc_control.print_conversation('Error %s: %s' % (array[1], array[2]))
-				if gc_control.parent_win.get_active_jid() == jid:
-					gc_control.set_subject(gc_control.subject)
+		gc_control = self.msg_win_mgr.get_control(jid, account)
+		if gc_control and gc_control.type_id != message_control.TYPE_GC:
+			gc_control = None
+		if gc_control:
+			if len(jids) > 1: # it's a pm
+				nick = jids[1]
+				if not self.msg_win_mgr.get_control(full_jid_with_resource,
+				account):
+					tv = gc_control.list_treeview
+					model = tv.get_model()
+					iter = gc_control.get_contact_iter(nick)
+					if iter:
+						show = model[iter][3]
+					else:
+						show = 'offline'
+					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
+						name = nick, show = show)
+					c = gajim.contacts.contact_from_gc_contact(gc_c)
+					self.roster.new_chat(c, account, private_chat = True)
+				ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
+				ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
+							'status')
 				return
+
+			gc_control.print_conversation('Error %s: %s' % (array[1], array[2]))
+			if gc_control.parent_win.get_active_jid() == jid:
+				gc_control.set_subject(gc_control.subject)
+			return
 
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
@@ -700,8 +711,8 @@ class Interface:
 			self.remote_ctrl.raise_signal('Subscribed', (account, array))
 
 	def handle_event_unsubscribed(self, account, jid):
-		dialogs.InformationDialog(_('Contact "%s" removed subscription from you') % jid,
-				_('You will always see him or her as offline.'))
+		dialogs.InformationDialog(_('Contact "%s" removed subscription from you')\
+			% jid, _('You will always see him or her as offline.'))
 		# FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does not show deny
 		gajim.connections[account].ack_unsubscribed(jid)
 		if self.remote_ctrl:
@@ -744,8 +755,8 @@ class Interface:
 			config.ServiceRegistrationWindow(array[0], array[1], account,
 				array[2])
 		else:
-			dialogs.ErrorDialog(_('Contact with "%s" cannot be established')\
-% array[0], _('Check your connection or try again later.'))
+			dialogs.ErrorDialog(_('Contact with "%s" cannot be established') \
+				% array[0], _('Check your connection or try again later.'))
 
 	def handle_event_agent_info_items(self, account, array):
 		#('AGENT_INFO_ITEMS', account, (agent, node, items))
@@ -879,8 +890,8 @@ class Interface:
 		# Get the window and control for the updated status, this may be a PrivateChatControl
 		control = self.msg_win_mgr.get_control(room_jid, account)
 		if control:
-			control.chg_contact_status(nick, show, status, array[4], array[5], array[6],
-						array[7], array[8], array[9], array[10])
+			control.chg_contact_status(nick, show, status, array[4], array[5],
+				array[6], array[7], array[8], array[9], array[10])
 
 		# print status in chat window and update status/GPG image
 		if self.msg_win_mgr.has_window(fjid, account):
@@ -898,7 +909,7 @@ class Interface:
 
 
 	def handle_event_gc_msg(self, account, array):
-		# ('GC_MSG', account, (jid, msg, time, has_timestamp))
+		# ('GC_MSG', account, (jid, msg, time, has_timestamp, htmlmsg))
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
 		gc_control = self.msg_win_mgr.get_control(room_jid, account)
@@ -910,7 +921,7 @@ class Interface:
 		else:
 			# message from someone
 			nick = jids[1]
-		gc_control.on_message(nick, array[1], array[2], array[3])
+		gc_control.on_message(nick, array[1], array[2], array[3], array[4])
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 
@@ -927,7 +938,8 @@ class Interface:
 			gc_control.print_conversation(array[2])
 		# ... Or the message comes from the occupant who set the subject
 		elif len(jids) > 1:
-			gc_control.print_conversation('%s has set the subject to %s' % (jids[1], array[1]))
+			gc_control.print_conversation('%s has set the subject to %s' % (
+				jids[1], array[1]))
 
 	def handle_event_gc_config(self, account, array):
 		#('GC_CONFIG', account, (jid, config))  config is a dict
@@ -1794,12 +1806,8 @@ class Interface:
 				# Open the window
 				self.roster.open_event(account, fjid, event)
 		elif type_ == 'gmail':
-			if gajim.config.get_per('accounts', account, 'savepass'):
-				url = ('http://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=%s&Passwd=%s&continue=https://mail.google.com/mail') %\
-				(urllib.quote(gajim.config.get_per('accounts', account, 'name')),
-				urllib.quote(gajim.config.get_per('accounts', account, 'password')))
-			else:
-				url = ('http://mail.google.com/')
+			url = 'http://mail.google.com/mail?account_id=%s' % urllib.quote(
+				gajim.config.get_per('accounts', account, 'name'))
 			helpers.launch_browser_mailer('url', url)
 		elif type_ == 'gc-invitation':
 			event = gajim.events.get_first_event(account, jid, type_)
@@ -1807,6 +1815,7 @@ class Interface:
 			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
 				data[1])
 			gajim.events.remove_events(account, jid, event)
+			self.roster.draw_contact(jid, account)
 		if w:
 			w.set_active_tab(fjid, account)
 			w.window.present()

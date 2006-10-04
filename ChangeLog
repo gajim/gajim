@@ -1,0 +1,208 @@
+Gajim 0.11 (XX October 2006)
+
+  * Put your stuff here [each dev put their own please; next time we do this everytime we commit sth major and not in the end]
+
+  * We can now operate on more than one contact in one in time in roster (#1514)
+  * Connection lost is now a non-intrusive popup
+  * Try to get contact desired nick when we add him to roster aka User Nickname (JEP-0172)
+  * Better design of User Profile window, with a progress bar
+  * New Add User dialog, with possibility to register to transport directly from it
+  * Completion for "Start Chat" input dialog
+  * We can now have a different spellchecking language in each chat window. (#2383 and #746)
+  * Support for Privacy Lists
+  * Forbid to run multiple instances (but you can use differents profiles)
+  * We can save avatar with right click on avatar in chat banner
+  * Use differents colors for nickname colors of occupants in groupchats.
+  * Ability to show only Join/Leave in groupchats instead of all status changes
+  * New possibilities to insert nickname of an occupant in groupchats conversations : Tab in an empty line now cycle through nicks, maj+right click->insert nickname, maj+click on name in gc-roster, /names command to show all users presents
+
+  * Fixed bugs when removing or renaming an account with tabs open (#2369 and #2370)
+
+  * FIXME : Ad-Hoc for 0.11 ? 
+  * FIXME : does that work ? not tested : Metacontacts across accounts (#1596)
+  * Gajim now requires Python 2.4 to run
+
+Gajim 0.10.1 (06 June 2006)
+
+  * Freeze and lost contacts in roster (#1953)
+  * Popup menus are correctly placed
+  * High CPU usage on FreeBSD (#1963)
+  * Nickname can contain '|' (#1913)
+  * Update pl, cs, fr translations
+  * Don't play sound, when no event is shown (#1970)
+  * Set gajim icon for history manager
+  * gajim.desktop is generated with translation (#834)
+  * Preventing several TBs and annoyances (r6273, r6275, r6279, r6301,
+  r6308, r6311, r6323, r6326, r6327, r6335, r6342, r6346, r6348)
+
+Gajim 0.10 (01 May 2006)
+
+  * One Messages Window ability (default to it) with tab reordering ability
+  * Non blocking socket connections. Gajim no longer remains unresponsive.
+  * Gajim now uses less memory
+  * File Transfer improvements (now should work out of the box for all)
+  * Meta Contacts ability (relationships between contacts)
+  * Support for legacy composing event (JEP-0022). Now 'Contact is composing a message' will always work
+  * Gajim now defaults to theme that uses GTK colors
+  * Roster Management Improvements (f.e. editablity of transport names, extended Drag and Drop Functionality)
+  * History (chat logs) Manager (search globally, delete, etc)
+  * Animated Emoticons ability
+  * Support for GTalk email notifications for GMail
+  * Room administrators can modify room ban list
+  * Gajim no longer optionally depends on pydns or dnspython. Requires
+  dnsutils (or whatever package provides the nslookup binary)
+  * gajim-remote has extended functionality
+  * Improved Preset Status Messages Experience
+  * Detection for CRUX as user's operating system
+  * New art included, appropriate sizes of icons used where available
+  * Translations under Windows now work okay
+  * Tons of fixes for bugs and annoyances: http://trac.gajim.org/query?status=closed&milestone=0.10
+
+
+Gajim 0.9.1 (27 December 2005)
+
+  * Fix bug when joining a Groupchat
+  * Fix bug when starting Gajim without old logs
+
+Gajim 0.9 (23 December 2005)
+
+  * Avatars and status messages in roster window
+  * Improved service discovery window
+  * Emoticons selector, Cooler Popup Windows (notification-daemon). Read more information in case you did not notice something different in http://trac.gajim.org/wiki/GajimDBus#notif_daemon
+  * Caching of Avatars, Less UI freezing
+  * New Account creation wizard
+  * Better History Window with searching capabilities
+  * Gajim now tries to reconnect to a jabber server if connection is lost
+  * Queue for all events (File Transfer, private messages, etc)
+  * A lot of new irc-like commands in group chat. Do for example /help invite
+  * X11 Session Management support
+  * Gajim registers and handles xmpp: and xmpp:// (GNOME/gconfd only)
+  * Use pysqlite for conversation history. Automigration for old logs 
+  * New translations: Italian, Swedish, Slovak, Basque
+
+Gajim 0.8.2 (06 Sep 2005)
+  
+  * Fix so Gajim runs in pygtk2.8.x
+  * Gajim can use pydns too (apart from dnspython) to do SRV lookup
+  * Other minor fixes
+
+Gajim 0.8.1 (02 Sep 2005)
+
+  * Systray icon for windows
+  * Gajim is available in Dutch
+  * Gajim can use gpg-agent
+
+Gajim 0.8 (18 Aug 2005)
+
+  * Avatars (JEP-0153)
+  * Chat state notifications aka. typing notification (JEP-0085)
+  * Bookmark storage (JEP-0048)
+  * File Transfer (JEP-0096)
+  * Major changes to adhere to GNOME HIG
+  * Complete vcard fields support
+  * New and better user interface for chat and groupchat windows
+  * SRV capabilities and custom hostname/port
+  * Many improvements in group chat and IRC emulation (eg. nick autocompletation and cycling)
+  * Gajim can now send and receive single messages
+  * New iconsets and new dialog for customizing the user interface
+  * Mouseover information for contacts in the roster window (aka tooltips)
+  * DBus Capabilities. Now Gajim can be remote controlled
+  * Authenticating HTTP Requests via XMPP (JEP-0070)
+  * Now you can lookup a word in Wikipedia, dictionary or in search engine
+  * XML Console
+  * Gajim is now also available in norwegian and czech language
+
+
+Gajim 0.7.1 (5 Jun 2005)  
+
+  * Transports icon as an option and error/mesage icon for transports  
+  * Gajim is more HIG compatible  
+  * Editing registration information on transports  
+  * Messages stanza without <body> element are not printed  
+  * SASL bugfix  
+  * GtkSpell capabilities  
+  * Support SSL (legacy) connection  
+  * Assign gpg key to specific contact  
+  * Contacts are sortable by status  
+  * Gajim remembers last lines when reopening chat  
+  * New translations available: German, Russian, Spanish, Bulgarian
+
+Gajim 0.7 (23 May 2005)
+
+  * Ability for groupchat reserved rooms with full affiliations and roles support
+  * Popup notification for incoming events
+  * Protocol icons for contacts from transports
+  * Gajim's user interface is now more HIG compliant
+  * Gajim now detects and can send operating system information
+  * Gajim now can inform the user about new version availability
+  * Gajim jabber library migration from jabberpy to xmpppy
+  * Rewrite the plugin system to remove threads and improve latency
+  * Gajim now supports Nodes in Service Discovery
+  * Greek and Polish translations
+
+
+Gajim 0.6.1 (03 April 2005)
+
+  * Rewrite of service discovery. It doesn't freeze Gajim anymore.
+  * More HIG Compliant.
+  * Gajim is faster (do not redraw preferences_window each time we open it, use
+  of psyco if available)
+
+Gajim 0.6 (23 March 2005)
+
+  * Gajim's user interface is now nicer.
+  * Groupchat just got better.
+  * URL, mailto and ascii formatin (* / _) detection
+  * Better transports detection, group management, and many minor additions/bugfixes
+
+Gajim 0.5.1 (27 February 2005)
+
+  * Minor bugfixes.
+
+Gajim 0.5 (26 February 2005)
+
+  * Possibility to use tabbed chat window
+  * Sound support under GNU/linux
+  * Autoaway available under Microsoft Windows
+
+Gajim 0.4.1 (23 January 2005)
+
+  * Bugfix in config file parser (fix config file parser to handle emoticons)
+  * Bugfix with GPG signatures
+
+Gajim 0.4 (21 January 2005)
+
+  * New option: regroup accounts
+  * Emoticons support with a binder
+  * GUI improvements
+  * Bugfixes
+
+Gajim 0.3 (18 December 2004)
+
+  * GUI improvements
+  * group chat support with MUC (JEP 45)
+  * New agent browser (JEP 30)
+  * GnuPG support
+  * Autoconnect at startup
+  * New socket plugin 
+
+Gajim 0.2.1 (1 July 2004)
+
+  * bugfixes : when configfile is incomplete
+  * icon in systray with popup menu (for linux)
+  * "auto away even if not online" option
+  * always show contacts with unread messages
+  * new imageCellRenderer to show animated gifs
+  * allow agents unregistration 
+
+Gajim 0.2 (8 June 2004)
+
+  * bugfix for french translation
+  * multi-resource support
+  * auto away support (for linux)
+  * invisible support
+  * priority support 
+
+Gajim 0.1 (21 May 2004)
+
+  * Initial release. 

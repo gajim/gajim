@@ -4,7 +4,7 @@
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
 ##
-## DBUS/libnotify connection code:
+## Notification daemon connection via D-Bus code:
 ## Copyright (C) 2005 by Sebastian Estienne
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -25,11 +25,19 @@ import gtkgui_helpers
 from common import gajim
 from common import helpers
 
-import dbus_support
+from common import dbus_support
 if dbus_support.supported:
 	import dbus
 	import dbus.glib
 	import dbus.service
+
+
+USER_HAS_PYNOTIFY = True # user has pynotify module
+try:
+	import pynotify
+	pynotify.init('Gajim Notification')
+except ImportError:
+	USER_HAS_PYNOTIFY = False
 
 def get_show_in_roster(event, account, contact):
 	'''Return True if this event must be shown in roster, else False'''
@@ -56,7 +64,8 @@ def get_show_in_systray(event, account, contact):
 	return True
 
 def get_advanced_notification(event, account, contact):
-	'''Returns the number of the first advanced notification or None'''
+	'''Returns the number of the first (top most)
+	advanced notification else None'''
 	num = 0
 	notif = gajim.config.get_per('notifications', str(num))
 	while notif:
@@ -103,17 +112,19 @@ def get_advanced_notification(event, account, contact):
 		notif = gajim.config.get_per('notifications', str(num))
 
 def notify(event, jid, account, parameters, advanced_notif_num = None):
-	'''Check what type of notifications we want, depending on basic configuration
-	of notifications and advanced one and do these notifications'''
+	'''Check what type of notifications we want, depending on basic 
+	and the advanced configuration of notifications and do these notifications;
+	advanced_notif_num holds the number of the first (top most) advanced
+	notification'''
 	# First, find what notifications we want
 	do_popup = False
 	do_sound = False
 	do_cmd = False
-	if (event == 'status_change'):
+	if event == 'status_change':
 		new_show = parameters[0]
 		status_message = parameters[1]
-		# Default : No popup for status change
-	elif  (event == 'contact_connected'):
+		# Default: No popup for status change
+	elif event == 'contact_connected':
 		status_message = parameters
 		j = gajim.get_jid_without_resource(jid)
 		server = gajim.get_server_from_jid(j)
@@ -129,43 +140,44 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		'enabled') and not gajim.block_signed_in_notifications[account] and \
 		not block_transport:
 			do_sound = True
-	elif (event == 'contact_disconnected'):
+	elif event == 'contact_disconnected':
 		status_message = parameters
 		if helpers.allow_showing_notification(account, 'notify_on_signout'):
 			do_popup = True
 		if gajim.config.get_per('soundevents', 'contact_disconnected',
 			'enabled'):
 			do_sound = True
-	elif (event == 'new_message'):
+	elif event == 'new_message':
 		message_type = parameters[0]
-		first = parameters[1]
+		is_first_message = parameters[1]
 		nickname = parameters[2]
 		message = parameters[3]
 		if helpers.allow_showing_notification(account, 'notify_on_new_message',
-		advanced_notif_num, first):
+		advanced_notif_num, is_first_message):
 			do_popup = True
-		if first and helpers.allow_sound_notification('first_message_received',
-		advanced_notif_num):
+		if is_first_message and helpers.allow_sound_notification(
+		'first_message_received', advanced_notif_num):
 			do_sound = True
-		elif not first and helpers.allow_sound_notification(
+		elif not is_first_message and helpers.allow_sound_notification(
 		'next_message_received', advanced_notif_num):
 			do_sound = True
 	else:
 		print '*Event not implemeted yet*'
 
-	if advanced_notif_num != None and gajim.config.get_per('notifications',
+	if advanced_notif_num is not None and gajim.config.get_per('notifications',
 	str(advanced_notif_num), 'run_command'):
 		do_cmd = True
 			
 	# Do the wanted notifications	
-	if (do_popup):
-		if (event == 'contact_connected' or event == 'contact_disconnected' or \
-			event == 'status_change'): # Common code for popup for these 3 events
-			if (event == 'contact_disconnected'):
+	if do_popup:
+		if event in ('contact_connected', 'contact_disconnected',
+		'status_change'): # Common code for popup for these three events
+			if event == 'contact_disconnected':
 				show_image = 'offline.png'
 				suffix = '_notif_size_bw.png'
 			else: #Status Change or Connected
-				# TODO : for status change, we don't always 'online.png', but we 
+				# FIXME: for status change,
+				# we don't always 'online.png', but we 
 				# first need 48x48 for all status
 				show_image = 'online.png'
 				suffix = '_notif_size_colored.png'	
@@ -180,7 +192,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 						iconset, '48x48', show_image)
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
 				jid = jid, suffix = suffix)
-			if (event == 'status_change'):
+			if event == 'status_change':
 				title = _('%(nick)s Changed Status') % \
 					{'nick': gajim.get_name_from_jid(account, jid)}
 				text = _('%(nick)s is now %(status)s') % \
@@ -190,7 +202,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 					text =  text + " : " + status_message
 				popup(_('Contact Changed Status'), jid, account,
 					path_to_image = path, title = title, text = text)
-			elif (event == 'contact_connected'):
+			elif event == 'contact_connected':
 				title = _('%(nickname)s Signed In') % \
 					{'nickname': gajim.get_name_from_jid(account, jid)}
 				text = ''
@@ -198,7 +210,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 					text = status_message
 				popup(_('Contact Signed In'), jid, account,
 					path_to_image = path, title = title, text = text)
-			elif (event == 'contact_disconnected'):
+			elif event == 'contact_disconnected':
 				title = _('%(nickname)s Signed Out') % \
 					{'nickname': gajim.get_name_from_jid(account, jid)}
 				text = ''
@@ -206,7 +218,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 					text = status_message
 				popup(_('Contact Signed Out'), jid, account,
 					path_to_image = path, title = title, text = text)
-		elif (event == 'new_message'):
+		elif event == 'new_message':
 			if message_type == 'normal': # single message
 				event_type = _('New Single Message')
 				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
@@ -233,18 +245,18 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 			popup(event_type, jid, account, message_type,
 				path_to_image = path, title = title, text = text)
 
-	if (do_sound):
+	if do_sound:
 		snd_file = None
 		snd_event = None # If not snd_file, play the event
-		if (event == 'new_message'):
-			if advanced_notif_num != None and gajim.config.get_per('notifications',
-			str(advanced_notif_num), 'sound') == 'yes':
+		if event == 'new_message':
+			if advanced_notif_num is not None and gajim.config.get_per(
+			'notifications', str(advanced_notif_num), 'sound') == 'yes':
 				snd_file = gajim.config.get_per('notifications',
 					str(advanced_notif_num), 'sound_file')
-			elif advanced_notif_num != None and gajim.config.get_per(
+			elif advanced_notif_num is not None and gajim.config.get_per(
 			'notifications', str(advanced_notif_num), 'sound') == 'no':
 				pass # do not set snd_event
-			elif first:
+			elif is_first_message:
 				snd_event = 'first_message_received'
 			else:
 				snd_event = 'next_message_received'
@@ -270,20 +282,61 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 	the older style PopupNotificationWindow method.'''
 	text = gtkgui_helpers.escape_for_pango_markup(text)
 	title = gtkgui_helpers.escape_for_pango_markup(title)
+
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
-			DesktopNotification(event_type, jid, account, msg_type, path_to_image,
-				title, text)
-			return
+			DesktopNotification(event_type, jid, account, msg_type,
+				path_to_image, title, text)
+			return	# sucessfully did D-Bus Notification procedure!
 		except dbus.dbus_bindings.DBusException, e:
-			# Connection to D-Bus failed, try popup
+			# Connection to D-Bus failed
 			gajim.log.debug(str(e))
 		except TypeError, e:
 			# This means that we sent the message incorrectly
 			gajim.log.debug(str(e))
-	instance = dialogs.PopupNotificationWindow(event_type, jid, account, msg_type, \
-		path_to_image, title, text)
-	gajim.interface.roster.popup_notification_windows.append(instance)
+	# we failed to speak to notification daemon via D-Bus
+	if USER_HAS_PYNOTIFY: # try via libnotify
+		if not text:
+			text = gajim.get_name_from_jid(account, jid) # default value of text
+		if not title:
+			title = event_type
+		# default image
+		if not path_to_image:
+			path_to_image = os.path.abspath(
+				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+					'chat_msg_recv.png')) # img to display
+		
+		
+		notification = pynotify.Notification(title, text)
+		timeout = gajim.config.get('notification_timeout') * 1000 # make it ms
+		notification.set_timeout(timeout)
+		
+		notification.set_category(event_type)
+		notification.set_data('event_type', event_type)
+		notification.set_data('jid', jid)
+		notification.set_data('account', account)
+		notification.set_data('msg_type', event_type)
+		notification.set_data('path_to_image', path_to_image)
+		notification.add_action('default', 'Default Action',
+			on_pynotify_notification_clicked)
+		
+		notification.show()
+
+	else: # go old style
+		instance = dialogs.PopupNotificationWindow(event_type, jid,
+			account, msg_type, path_to_image, title, text)
+		gajim.interface.roster.popup_notification_windows.append(
+			instance)
+
+def on_pynotify_notification_clicked(notification, action):
+	event_type = notification.get_data('event_type')
+	jid = notification.get_data('jid')
+	account = notification.get_data('account')
+	msg_type = notification.get_data('msg_type')
+	path_to_image = notification.get_data('path_to_image')
+
+	notification.close()
+	gajim.interface.handle_event(account, jid, msg_type)
 
 class NotificationResponseManager:
 	'''Collects references to pending DesktopNotifications and manages there
@@ -336,7 +389,7 @@ class NotificationResponseManager:
 notification_response_manager = NotificationResponseManager()
 
 class DesktopNotification:
-	'''A DesktopNotification that interfaces with DBus via the Desktop
+	'''A DesktopNotification that interfaces with D-Bus via the Desktop
 	Notification specification'''
 	def __init__(self, event_type, jid, account, msg_type = '',
 		path_to_image = None, title = None, text = None):

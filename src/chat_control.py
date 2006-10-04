@@ -34,6 +34,8 @@ from message_textview import MessageTextView
 from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
+from rst_xhtml_generator import create_xhtml
+from common.xmpp.protocol import NS_XHTML
 
 try:
 	import gtkspell
@@ -112,7 +114,7 @@ class ChatControlBase(MessageControl):
 	acct, resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
 			display_names,	contact, acct, resource = resource);
-		# when/if we do XHTML we will but formatting buttons back
+		# when/if we do XHTML we will put formatting buttons back
 		widget = self.xml.get_widget('emoticons_button')
 		id = widget.connect('clicked', self.on_emoticons_button_clicked)
 		self.handlers[id] = widget
@@ -228,6 +230,11 @@ class ChatControlBase(MessageControl):
 		item = gtk.SeparatorMenuItem()
 		menu.prepend(item)
 
+		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+		menu.prepend(item)
+		id = item.connect('activate', self.msg_textview.clear)
+		self.handlers[id] = item
+
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			item = gtk.MenuItem(_('Spelling language'))
 			menu.prepend(item)
@@ -240,11 +247,6 @@ class ChatControlBase(MessageControl):
 				submenu.append(item)
 				id = item.connect('activate', _on_select_dictionary, langs[lang])
 				self.handlers[id] = item
-
-		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
-		menu.prepend(item)
-		id = item.connect('activate', self.msg_textview.clear)
-		self.handlers[id] = item
 
 		menu.show_all()
 
@@ -424,7 +426,8 @@ class ChatControlBase(MessageControl):
 		message_textview = widget
 		message_buffer = message_textview.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+		message = message_buffer.get_text(start_iter, end_iter, False).decode(
+			'utf-8')
 
 		# construct event instance from binding
 		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
@@ -470,7 +473,8 @@ class ChatControlBase(MessageControl):
 				self.send_message(message) # send the message
 		else:
 			# Give the control itself a chance to process
-			self.handle_message_textview_mykey_press(widget, event_keyval, event_keymod)
+			self.handle_message_textview_mykey_press(widget, event_keyval,
+				event_keymod)
 
 	def _process_command(self, message):
 		if not message:
@@ -533,7 +537,7 @@ class ChatControlBase(MessageControl):
 	def print_conversation_line(self, text, kind, name, tim,
 		other_tags_for_name = [], other_tags_for_time = [], 
 		other_tags_for_text = [], count_as_new = True,
-		subject = None, old_kind = None):
+		subject = None, old_kind = None, xhtml = None):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
 		full_jid = self.get_full_jid()
@@ -543,7 +547,7 @@ class ChatControlBase(MessageControl):
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
-			subject, old_kind)
+			subject, old_kind, xhtml)
 
 		if not count_as_new:
 			return
@@ -554,9 +558,15 @@ class ChatControlBase(MessageControl):
 		full_jid != self.parent_win.get_active_jid() or \
 		not self.parent_win.is_active() or not end) and \
 		kind in ('incoming', 'incoming_queue'):
-			if self.notify_on_new_messages():
+			gc_message = False
+			if self.type_id  == message_control.TYPE_GC:
+				gc_message = True
+			if self.notify_on_new_messages() or \
+			(gc_message and other_tags_for_text == ['marked']):
+			# we want to have save this message in events list
+			# other_tags_for_text == ['marked'] --> highlighted gc message
 				type_ = 'printed_' + self.type_id
-				if self.type_id == message_control.TYPE_GC:
+				if gc_message:
 					type_ = 'printed_gc_msg'
 				show_in_roster = notify.get_show_in_roster('message_received',
 					self.account, self.contact)
@@ -759,7 +769,8 @@ class ChatControlBase(MessageControl):
 			#whatever is already typed
 			start_iter = conv_buf.get_start_iter()
 			end_iter = conv_buf.get_end_iter()
-			self.orig_msg = conv_buf.get_text(start_iter, end_iter, 0).decode('utf-8')
+			self.orig_msg = conv_buf.get_text(start_iter, end_iter, 0).decode(
+				'utf-8')
 			self.typing_new = False
 		if direction == 'up':
 			if self.sent_history_pos == 0:
@@ -819,8 +830,8 @@ class ChatControl(ChatControlBase):
 	old_msg_kind = None # last kind of the printed message
 	
 	def __init__(self, parent_win, contact, acct, resource = None):
-		ChatControlBase.__init__(self, self.TYPE_ID, parent_win, 'chat_child_vbox',
-			(_('Chat'), _('Chats')), contact, acct, resource)
+		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
+			'chat_child_vbox', (_('Chat'), _('Chats')), contact, acct, resource)
 			
 		# for muc use:
 		# widget = self.xml.get_widget('muc_window_actions_button')
@@ -828,13 +839,16 @@ class ChatControl(ChatControlBase):
 		id = widget.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = widget
 
-		self.hide_chat_buttons_always = gajim.config.get('always_hide_chat_buttons')
+		self.hide_chat_buttons_always = gajim.config.get(
+			'always_hide_chat_buttons')
 		self.chat_buttons_set_visible(self.hide_chat_buttons_always)
-		self.widget_set_visible(self.xml.get_widget('banner_eventbox'), gajim.config.get('hide_chat_banner'))
+		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
+			gajim.config.get('hide_chat_banner'))
 		# Initialize drag-n-drop
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
-		id = self.widget.connect('drag_data_received', self._on_drag_data_received)
+		id = self.widget.connect('drag_data_received',
+			self._on_drag_data_received)
 		self.handlers[id] = self.widget
 		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
 			gtk.DEST_DEFAULT_HIGHLIGHT |
@@ -856,17 +870,21 @@ class ChatControl(ChatControlBase):
 			self._on_window_motion_notify)
 		self.handlers[id] = self.parent_win.window
 		message_tv_buffer = self.msg_textview.get_buffer()
-		id = message_tv_buffer.connect('changed', self._on_message_tv_buffer_changed)
+		id = message_tv_buffer.connect('changed',
+			self._on_message_tv_buffer_changed)
 		self.handlers[id] = message_tv_buffer
 		
 		widget = self.xml.get_widget('avatar_eventbox')
-		id = widget.connect('enter-notify-event', self.on_avatar_eventbox_enter_notify_event)
+		id = widget.connect('enter-notify-event',
+			self.on_avatar_eventbox_enter_notify_event)
 		self.handlers[id] = widget
 
-		id = widget.connect('leave-notify-event', self.on_avatar_eventbox_leave_notify_event)
+		id = widget.connect('leave-notify-event',
+			self.on_avatar_eventbox_leave_notify_event)
 		self.handlers[id] = widget
 
-		id = widget.connect('button-press-event', self.on_avatar_eventbox_button_press_event)
+		id = widget.connect('button-press-event',
+			self.on_avatar_eventbox_button_press_event)
 		self.handlers[id] = widget
 
 		widget = self.xml.get_widget('gpg_togglebutton')
@@ -880,8 +898,6 @@ class ChatControl(ChatControlBase):
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
-		# is account displayed after nick in banner ?
-		self.account_displayed= False
 
 	def notify_on_new_messages(self):
 		return gajim.config.get('trayicon_notification_on_new_messages')
@@ -1000,34 +1016,31 @@ class ChatControl(ChatControlBase):
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
 		name = contact.get_shown_name()
-		avoid_showing_account_too = False
 		if self.resource:
 			name += '/' + self.resource
-			avoid_showing_account_too = True
 		if self.TYPE_ID == message_control.TYPE_PM:
 			room_jid = self.contact.jid.split('/')[0]
 			room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid,
 				self.account)
-			name = _('%s from room %s') % (name, room_ctrl.name)
+			name = _('%(nickname)s from room %(room_name)s') %\
+				{'nickname': name, 'room_name': room_ctrl.name}
 		name = gtkgui_helpers.escape_for_pango_markup(name)
 
-		# We know our contacts nick, but if there are any other controls 
-		# with the same nick we need to also display the account
+		# We know our contacts nick, but if another contact has the same nick
+		# in another account we need to also display the account.
 		# except if we are talking to two different resources of the same contact
 		acct_info = ''
-		self.account_displayed = False
-		for ctrl in self.parent_win.controls():
-			if ctrl == self or ctrl.type_id == 'gc':
+		for account in gajim.contacts.get_accounts():
+			if account == self.account:
 				continue
-			if self.contact.get_shown_name() == ctrl.contact.get_shown_name()\
-			and not avoid_showing_account_too:
-				self.account_displayed = True
-				if not ctrl.account_displayed:
-					# do that after this instance exists
-					gobject.idle_add(ctrl.draw_banner)
-				acct_info = ' (%s)' % \
-						gtkgui_helpers.escape_for_pango_markup(self.account)
+			if acct_info: # We already found a contact with same nick
 				break
+			for jid in gajim.contacts.get_jid_list(account):
+				contact_ = gajim.contacts.get_first_contact_from_jid(account, jid)
+				if contact_.get_shown_name() == self.contact.get_shown_name():
+					acct_info = ' (%s)' % \
+						gtkgui_helpers.escape_for_pango_markup(self.account)
+					break
 
 		status = contact.status
 		if status is not None:
@@ -1165,8 +1178,8 @@ class ChatControl(ChatControlBase):
 			if current_state == 'composing':
 				self.send_chatstate('paused') # pause composing
 
-		# assume no activity and let the motion-notify or 'insert-text' make them True
-		# refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
+		# assume no activity and let the motion-notify or 'insert-text' make them
+		# True refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
 		self.reset_kbd_mouse_timeout_vars()
 		return True # loop forever		
 
@@ -1185,11 +1198,12 @@ class ChatControl(ChatControlBase):
 		if self.mouse_over_in_last_5_secs or self.kbd_activity_in_last_5_secs:
 			return True # loop forever
 
-		if not self.mouse_over_in_last_30_secs or self.kbd_activity_in_last_30_secs:
+		if not self.mouse_over_in_last_30_secs or \
+		self.kbd_activity_in_last_30_secs:
 			self.send_chatstate('inactive', contact)
 
-		# assume no activity and let the motion-notify or 'insert-text' make them True
-		# refresh 30 seconds too or else it's 30 - 5 = 25 seconds!
+		# assume no activity and let the motion-notify or 'insert-text' make them
+		# True refresh 30 seconds too or else it's 30 - 5 = 25 seconds!
 		self.reset_kbd_mouse_timeout_vars()
 		return True # loop forever
 
@@ -1200,7 +1214,7 @@ class ChatControl(ChatControlBase):
 		self.kbd_activity_in_last_30_secs = False
 
 	def print_conversation(self, text, frm = '', tim = None,
-		encrypted = False, subject = None):
+		encrypted = False, subject = None, xhtml = None):
 		'''Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
@@ -1239,8 +1253,10 @@ class ChatControl(ChatControlBase):
 			else:
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
+				if not xhtml and not encrypted and gajim.config.get('rst_formatting_outgoing_messages'):
+					xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, create_xhtml(text))
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
-			subject = subject, old_kind = self.old_msg_kind)
+			subject = subject, old_kind = self.old_msg_kind, xhtml = xhtml)
 		if text.startswith('/me ') or text.startswith('/me\n'):
 			self.old_msg_kind = None
 		else:
@@ -1458,18 +1474,20 @@ class ChatControl(ChatControlBase):
 
 		# prevent going paused if we we were not composing (JEP violation)
 		if state == 'paused' and not contact.our_chatstate == 'composing':
-			MessageControl.send_message(self, None, chatstate = 'active') # go active before
+			# go active before
+			MessageControl.send_message(self, None, chatstate = 'active')
 			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()
 		
 		# if we're inactive prevent composing (JEP violation)
 		elif contact.our_chatstate == 'inactive' and state == 'composing':
-			MessageControl.send_message(self, None, chatstate = 'active') # go active before
+			# go active before
+			MessageControl.send_message(self, None, chatstate = 'active')
 			contact.our_chatstate = 'active'
 			self.reset_kbd_mouse_timeout_vars()
 
-		MessageControl.send_message(self, None, chatstate = state, msg_id = contact.msg_id,
-									composing_jep = contact.composing_jep)
+		MessageControl.send_message(self, None, chatstate = state,
+			msg_id = contact.msg_id, composing_jep = contact.composing_jep)
 		contact.our_chatstate = state
 		if contact.our_chatstate == 'active':
 			self.reset_kbd_mouse_timeout_vars()

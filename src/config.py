@@ -462,9 +462,14 @@ class PreferencesWindow:
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
 
 		# set status msg from currently playing music track
-		st = gajim.config.get('set_status_msg_from_current_music_track')
-		self.xml.get_widget(
-			'set_status_msg_from_current_music_track_checkbutton').set_active(st)
+		widget = self.xml.get_widget(
+			'set_status_msg_from_current_music_track_checkbutton')
+		if os.name == 'nt':
+			widget.set_no_show_all(True)
+			widget.hide()
+		else:
+			st = gajim.config.get('set_status_msg_from_current_music_track')
+			widget.set_active(st)
 		
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
@@ -1189,6 +1194,9 @@ class AccountModificationWindow:
 
 		self.xml.get_widget('resource_entry').set_text(gajim.config.get_per(
 			'accounts', self.account, 'resource'))
+		self.xml.get_widget('adjust_priority_with_status_checkbutton').set_active(
+			gajim.config.get_per('accounts', self.account,
+			'adjust_priority_with_status'))
 		self.xml.get_widget('priority_spinbutton').set_value(gajim.config.\
 			get_per('accounts', self.account, 'priority'))
 
@@ -1252,6 +1260,10 @@ class AccountModificationWindow:
 			if self.option_changed(config, option):
 				return True
 		return False
+
+	def on_adjust_priority_with_status_checkbutton_toggled(self, widget):
+		self.xml.get_widget('priority_spinbutton').set_sensitive(
+			not widget.get_active())
 
 	def on_save_button_clicked(self, widget):
 		'''When save button is clicked: Save information in config file'''
@@ -1858,6 +1870,14 @@ class AccountsWindow:
 			else:
 				gajim.interface.instances[account]['remove_account'] = \
 					RemoveAccountWindow(account)
+		if win_opened:
+			self.dialog = dialogs.ConfirmationDialog(
+				_('You have opened chat in account %s') % account,
+				_('All chat and groupchat windows will be closed. Do you want to '
+				'continue?'),
+				on_response_ok = (remove, account))
+		else:
+			remove(widget, account)
 
 	def on_modify_button_clicked(self, widget):
 		'''When modify button is clicked:
@@ -2442,7 +2462,7 @@ class RemoveAccountWindow:
 		if not res:
 			return
 		# Close all opened windows
-		gajim.interface.roster.close_all(self.account)
+		gajim.interface.roster.close_all(self.account, force = True)
 		gajim.connections[self.account].disconnect(on_purpose = True)
 		del gajim.connections[self.account]
 		gajim.config.del_per('accounts', self.account)
@@ -2485,7 +2505,7 @@ class ManageBookmarksWindow:
 			if gajim.connections[account].connected <= 1:
 				continue
 			iter = self.treestore.append(None, [None, account,None,
-							    None, None, None, None])
+				None, None, None, None])
 
 			for bookmark in gajim.connections[account].bookmarks:
 				if bookmark['name'] == '':

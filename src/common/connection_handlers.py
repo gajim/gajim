@@ -3,7 +3,7 @@
 ##
 ## Contributors for this file:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <nkour@jabber.org>
+##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
 ##
@@ -41,6 +41,7 @@ VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
 METACONTACTS_ARRIVED = 'metacontacts_arrived'
+PRIVACY_ARRIVED = 'privacy_arrived'
 HAS_IDLE = True
 try:
 	import common.idle as idle # when we launch gajim from sources
@@ -955,9 +956,7 @@ class ConnectionVcard:
 					'invisible':
 					self.vcard_sha = new_sha
 					sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
-					prio = unicode(gajim.config.get_per('accounts', self.name,
-						'priority'))
-					p = common.xmpp.Presence(typ = None, priority = prio,
+					p = common.xmpp.Presence(typ = None, priority = self.priority,
 						show = sshow, status = self.status)
 					p = self.add_sha(p)
 					self.connection.send(p)
@@ -1004,6 +1003,11 @@ class ConnectionVcard:
 				self.dispatch('METACONTACTS', meta_list)
 			# We can now continue connection by requesting the roster
 			self.connection.initRoster()
+		elif self.awaiting_answers[id][0] == PRIVACY_ARRIVED:
+			if iq_obj.getType() != 'error':
+				self.privacy_rules_supported = True
+			# Ask metacontacts before roster
+			self.get_metacontacts()
 
 		del self.awaiting_answers[id]
 	
@@ -1083,10 +1087,8 @@ class ConnectionVcard:
 				if STATUS_LIST[self.connected] == 'invisible':
 					return
 				sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
-				prio = unicode(gajim.config.get_per('accounts', self.name,
-					'priority'))
-				p = common.xmpp.Presence(typ = None, priority = prio, show = sshow,
-					status = self.status)
+				p = common.xmpp.Presence(typ = None, priority = self.priority,
+					show = sshow, status = self.status)
 				p = self.add_sha(p)
 				self.connection.send(p)
 			else:
@@ -1115,11 +1117,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 	
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':
-			iq = iq_obj.buildReply('result')
+			self.connection.send(iq_obj.buildReply('result'))
 		elif answer == 'no':
-			iq = iq_obj.buildReply('error')
-			iq.setError('not-authorized', 401)
-		self.connection.send(iq)
+			err = common.xmpp.Error(iq_obj,
+				common.xmpp.protocol.ERR_NOT_AUTHORIZED)
+			self.connection.send(err)
 	
 	def _HttpAuthCB(self, con, iq_obj):
 		gajim.log.debug('HttpAuthCB')
@@ -1311,6 +1313,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
 		msgtxt = msg.getBody()
+		msghtml = msg.getXHTML()
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
 		tim = msg.getTimestamp()
@@ -1396,7 +1399,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				has_timestamp = False
 				if msg.timestamp:
 					has_timestamp = True
-				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp))
+				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
 				if self.name not in no_log_for and not int(float(time.mktime(tim))) <= \
 					self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
@@ -1408,7 +1411,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id, composing_jep, user_nick))
+						chatstate, msg_id, composing_jep, user_nick, msghtml))
 		else: # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
@@ -1422,7 +1425,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 			else:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, chatstate, msg_id, composing_jep, user_nick))
+					subject, chatstate, msg_id, composing_jep, user_nick, msghtml))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
@@ -1439,8 +1442,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				# one
 				who = str(prs.getFrom())
 				jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-				self.dispatch('GC_MSG', (jid_stripped, _('Nickname not allowed: %s') % \
-					resource, None, False))
+				self.dispatch('GC_MSG', (jid_stripped,
+					_('Nickname not allowed: %s') % resource, None, False, None))
 			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
@@ -1796,12 +1799,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			if show == 'invisible':
 				self.send_invisible_presence(msg, signed, True)
 				return
-			prio =  unicode(gajim.config.get_per('accounts', self.name,
-				'priority'))
+			priority = gajim.get_priority(self.name, sshow)
 			vcard = self.get_cached_vcard(jid)
 			if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
 				self.vcard_sha = vcard['PHOTO']['SHA']
-			p = common.xmpp.Presence(typ = None, priority = prio, show = sshow)
+			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
 			p = self.add_sha(p)
 			if msg:
 				p.setStatus(msg)
@@ -1810,6 +1812,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 
 			if self.connection:
 				self.connection.send(p)
+				self.priority = priority
 			self.dispatch('STATUS', show)
 			# ask our VCard
 			self.request_vcard(None)

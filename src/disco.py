@@ -1,19 +1,9 @@
 # -*- coding: utf-8 -*-
 ##	config.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Stéphan Kochen <stephan@kochen.nl>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Stéphan Kochen <stephan@kochen.nl>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -390,12 +380,12 @@ class ServicesCache:
 			if self._cbs.has_key(cbkey):
 				del self._cbs[cbkey]
 
-# object is needed so that property() works
+# object is needed so that @property works
 class ServiceDiscoveryWindow(object):
 	'''Class that represents the Services Discovery window.'''
 	def __init__(self, account, jid = '', node = '',
 			address_entry = False, parent = None):
-		self._account = account
+		self.account = account
 		self.parent = parent
 		if not jid:
 			jid = gajim.config.get_per('accounts', account, 'hostname')
@@ -473,30 +463,35 @@ _('Without a connection, you can not browse available services'))
 		self.travel(jid, node)
 		self.window.show_all()
 
+	@property
 	def _get_account(self):
-		return self._account
+		return self.account
 
+	@property
 	def _set_account(self, value):
-		self._account = value
+		self.account = value
 		self.cache.account = value
 		if self.browser:
 			self.browser.account = value
-	account = property(_get_account, _set_account)
 
 	def _initial_state(self):
 		'''Set some initial state on the window. Separated in a method because
 		it's handy to use within browser's cleanup method.'''
 		self.progressbar.hide()
-		self.window.set_title(_('Service Discovery using account %s') % self.account)
+		title_text = _('Service Discovery using account %s') % self.account
+		self.window.set_title(title_text)
 		self._set_window_banner_text(_('Service Discovery'))
-		# FIXME: use self.banner_icon.clear() when we switch to GTK 2.8
-		self.banner_icon.set_from_file(None)
-		self.banner_icon.hide()		# Just clearing it doesn't work
+		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
+			self.banner_icon.clear()
+		else:
+			self.banner_icon.set_from_file(None)
+		self.banner_icon.hide() # Just clearing it doesn't work
 
 	def _set_window_banner_text(self, text, text_after = None):
 		theme = gajim.config.get('roster_theme')
 		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
-		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
+		bannerfontattrs = gajim.config.get_per('themes', theme,
+			'bannerfontattrs')
 		
 		if bannerfont:
 			font = pango.FontDescription(bannerfont)
@@ -1239,10 +1234,11 @@ class ToplevelAgentBrowser(AgentBrowser):
 			# We can register this agent
 			registered_transports = []
 			jid_list = gajim.contacts.get_jid_list(self.account)
-			for j in jid_list:
-				contact = gajim.contacts.get_first_contact_from_jid(self.account, j)
+			for jid in jid_list:
+				contact = gajim.contacts.get_first_contact_from_jid(
+					self.account, jid)
 				if _('Transports') in contact.groups:
-					registered_transports.append(j)
+					registered_transports.append(jid)
 			if jid in registered_transports:
 				self.register_button.set_label(_('_Edit'))
 			else:
@@ -1528,7 +1524,7 @@ class MucBrowser(AgentBrowser):
 			service = services[1]
 		else:
 			room = model[iter][1].decode('utf-8')
-		if not gajim.interface.instances[self.account].has_key('join_gc'):
+		if 'join_gc' not in gajim.interface.instances[self.account]:
 			try:
 				dialogs.JoinGroupchatWindow(self.account, service, room)
 			except RuntimeError:

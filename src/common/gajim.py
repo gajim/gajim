@@ -28,7 +28,7 @@ from events import Events
 interface = None # The actual interface (the gtk one for the moment)
 config = config.Config()
 version = config.get('version')
-connections = {}
+connections = {} # 'account name': 'account (connection.Connection) instance'
 verbose = False
 
 h = logging.StreamHandler()
@@ -122,6 +122,9 @@ SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
+priority_dict = {}
+for status in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
+	priority_dict[status] = config.get('autopriority' + status)
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
@@ -210,10 +213,35 @@ def get_number_of_connected_accounts(accounts_list = None):
 		accounts = connections.keys()
 	else:
 		accounts = accounts_list
-	for acct in accounts:
-		if connections[acct].connected > 1:
+	for account in accounts:
+		if account_is_connected(account):
 			connected_accounts = connected_accounts + 1
 	return connected_accounts
+
+def account_is_connected(account):
+	if account not in connections:
+		return False
+	if connections[account].connected > 1: # 0 is offline, 1 is connecting
+		return True
+	else:
+		return False
+
+def account_is_disconnected(account):
+	return not account_is_connected(account)
+
+def get_number_of_securely_connected_accounts():
+	'''returns the number of the accounts that are SSL/TLS connected'''
+	num_of_secured = 0
+	for account in connections:
+		if account_is_securely_connected(account):
+			num_of_secured += 1
+	return num_of_secured
+
+def account_is_securely_connected(account):
+	if account in con_types and con_types[account] in ('tls', 'ssl'):
+		return True
+	else:
+		return False
 
 def get_transport_name_from_jid(jid, use_config_setting = True):
 	'''returns 'aim', 'gg', 'irc' etc
@@ -302,3 +330,12 @@ def get_name_from_jid(account, jid):
 	else:
 		actor = jid
 	return actor
+
+def get_priority(account, show):
+	'''return the priority an account must have'''
+	if not show:
+		show = 'online'
+	if show in priority_dict and config.get_per('accounts', account,
+	'adjust_priority_with_status'):
+		return priority_dict[show]
+	return config.get_per('accounts', account, 'priority')
