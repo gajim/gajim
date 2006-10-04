@@ -547,7 +547,7 @@ class ChatControlBase(MessageControl):
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
-			subject, old_kind, xhtml = xhtml)
+			subject, old_kind, xhtml)
 
 		if not count_as_new:
 			return
