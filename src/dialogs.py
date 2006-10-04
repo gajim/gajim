@@ -139,6 +139,9 @@ class EditGroupsDialog:
 		group = self.xml.get_widget('group_entry').get_text().decode('utf-8')
 		if not group:
 			return
+		# Do not allow special groups
+		if group in helpers.special_groups:
+			return
 		# check if it already exists
 		model = self.list.get_model()
 		iter = model.get_iter_root()
@@ -180,14 +183,16 @@ class EditGroupsDialog:
 			if account not in accounts:
 				accounts.append(account)
 				for g in gajim.groups[account].keys():
-					if g in helpers.special_groups:
-						continue
 					if g in groups:
 						continue
 					groups[g] = 0
 			for g in contact.groups:
 				groups[g] += 1
-		group_list = groups.keys()
+		group_list = []
+		# Remove special groups if they are empty
+		for group in groups:
+			if group not in helpers.special_groups or groups[group] > 0:
+				group_list.append(group)
 		group_list.sort()			
 		for group in group_list:
 			iter = store.append()
