@@ -217,7 +217,8 @@ class Systray:
 						account)
 					break # No other connected account
 
-		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
+		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and\
+		gtk.gtk_version >= (2, 10, 0):
 			self.systray_context_menu.popup(None, None,
 				gtk.status_icon_position_menu, event_button,
 					event_time, self.status_icon)
@@ -277,7 +278,9 @@ class Systray:
 
 	def on_clicked(self, widget, event):
 		self.on_tray_leave_notify_event(widget, None)
-		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1: # Left click
+		if event.type != gtk.gdk.BUTTON_PRESS:
+			return
+		if event.button == 1: # Left click
 			self.on_left_click()
 		elif event.button == 2: # middle click
 			self.on_middle_click()
