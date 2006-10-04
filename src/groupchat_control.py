@@ -397,7 +397,9 @@ class GroupchatControl(ChatControlBase):
 		jid = self.contact.jid
 		num_unread = len(gajim.events.get_events(self.account, jid,
 			['printed_gc_msg']))
-		if num_unread > 1:
+		if num_unread == 1:
+			unread = '*'
+		elif num_unread > 1:
 			unread = '[' + unicode(num_unread) + ']'
 		label_str = unread + label_str
 		return (label_str, color)
