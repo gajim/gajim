@@ -547,7 +547,7 @@ class ChatControlBase(MessageControl):
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
-			subject, old_kind, xhtml)
+			subject, old_kind, xhtml = xhtml)
 
 		if not count_as_new:
 			return
@@ -1254,7 +1254,9 @@ class ChatControl(ChatControlBase):
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
 				if not xhtml and not encrypted and gajim.config.get('rst_formatting_outgoing_messages'):
-					xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, create_xhtml(text))
+					xhtml = create_xhtml(text)
+					if xhtml:
+						xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
 			subject = subject, old_kind = self.old_msg_kind, xhtml = xhtml)
 		if text.startswith('/me ') or text.startswith('/me\n'):

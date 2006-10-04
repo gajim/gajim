@@ -678,7 +678,7 @@ class Connection(ConnectionHandlers):
 	user_nick = None, xhtml = None):
 		if not self.connection:
 			return
-		if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
 			xhtml = create_xhtml(msg)
 		if not msg and chatstate is None:
 			return
