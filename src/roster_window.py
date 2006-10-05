@@ -192,6 +192,7 @@ class RosterWindow:
 		if self.regroup:
 			account = _('Merged accounts')
 		if not self.tree.row_expanded(path) and model.iter_has_child(iter):
+			# account row not expanded
 			model[iter][C_NAME] = '[%s]' % account
 		else:
 			model[iter][C_NAME] = account
@@ -1868,7 +1869,7 @@ class RosterWindow:
 		model = self.tree.get_model()
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 
-		if account != 'all':
+		if account != 'all': # not in merged mode
 			menu = self.build_account_menu(account)
 		else:
 			menu = gtk.Menu()
@@ -2958,7 +2959,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''
 		model = self.tree.get_model()
-		if gajim.config.get('mergeaccounts'):
+		if self.regroup: # merged accounts
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
@@ -2990,7 +2991,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		'''When a row is collapsed :
 		change the icon of the arrow'''
 		model = self.tree.get_model()
-		if gajim.config.get('mergeaccounts'):
+		if self.regroup: # merged accounts
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
