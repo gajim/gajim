@@ -210,7 +210,22 @@ def escape_for_pango_markup(string):
 	return escaped_str
 
 def autodetect_browser_mailer():
-	# recognize the environment for appropriate browser/mailer
+	# recognize the environment and set appropriate browser/mailer
+	if user_runs_gnome():
+		gajim.config.set('openwith', 'gnome-open')
+	elif user_runs_kde():
+		gajim.config.set('openwith', 'kfmclient exec')
+	else:
+		gajim.config.set('openwith', 'custom')
+
+def user_runs_gnome():
+	return 'gnome-session' in get_running_processes()
+
+def user_runs_kde():
+	return 'startkde' in get_running_processes()
+
+def get_running_processes():
+	'''returns running processes or None (if not /proc exists)'''
 	if os.path.isdir('/proc'):
 		# under Linux: checking if 'gnome-session' or
 		# 'startkde' programs were run before gajim, by
@@ -240,12 +255,8 @@ def autodetect_browser_mailer():
 
 		# list of processes
 		processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f in files]
-		if 'gnome-session' in processes:
-			gajim.config.set('openwith', 'gnome-open')
-		elif 'startkde' in processes:
-			gajim.config.set('openwith', 'kfmclient exec')
-		else:
-			gajim.config.set('openwith', 'custom')
+		
+		return processes
 
 def move_window(window, x, y):
 	'''moves the window but also checks if out of screen'''
