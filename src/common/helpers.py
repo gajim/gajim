@@ -28,7 +28,9 @@ from encodings.punycode import punycode_encode
 
 import gajim
 from i18n import Q_
+from i18n import ngettext
 from xmpp_stringprep import nodeprep, resourceprep, nameprep
+
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -814,3 +816,84 @@ def get_chat_control(account, contact):
 	highest_contact.resource:
 		return None
 	return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+
+def get_notification_icon_tooltip_text():
+	text = None
+	unread_chat = gajim.events.get_nb_events(types = ['printed_chat',
+		'chat'])
+	unread_single_chat = gajim.events.get_nb_events(types = ['normal'])
+	unread_gc = gajim.events.get_nb_events(types = ['printed_gc_msg',
+		'gc_msg'])
+	unread_pm = gajim.events.get_nb_events(types = ['printed_pm', 'pm'])
+
+	accounts = get_accounts_info()
+
+	if unread_chat or unread_single_chat or unread_gc or unread_pm:
+		text = 'Gajim '
+		awaiting_events = unread_chat + unread_single_chat + unread_gc + unread_pm
+		if awaiting_events == unread_chat or awaiting_events == unread_single_chat \
+			or awaiting_events == unread_gc or awaiting_events == unread_pm:
+			# This condition is like previous if but with xor... 
+			# Print in one line
+			text += '-'
+		else:
+			# Print in multiple lines
+			text += '\n   '
+		if unread_chat:
+			text += ngettext(
+				' %d unread message',
+				' %d unread messages',
+				unread_chat, unread_chat, unread_chat)
+			text += '\n   '
+		if unread_single_chat:
+			text += ngettext(
+				' %d unread single message',
+				' %d unread single messages',
+				unread_single_chat, unread_single_chat, unread_single_chat)
+			text += '\n   '
+		if unread_gc:
+			text += ngettext(
+				' %d unread group chat message',
+				' %d unread group chat messages',
+				unread_gc, unread_gc, unread_gc)
+			text += '\n   '
+		if unread_pm:
+			text += ngettext(
+				' %d unread private message',
+				' %d unread private messages',
+				unread_pm, unread_pm, unread_pm)
+			text += '\n   '
+		text = text[:-4] # remove latest '\n   '
+	elif len(accounts) > 1:
+		text = _('Gajim')
+	elif len(accounts) == 1:
+		message = accounts[0]['status_line']
+		message = gtkgui_helpers.reduce_chars_newlines(message, 100, 1)
+		message = gtkgui_helpers.escape_for_pango_markup(message)
+		text = _('Gajim - %s') % message
+	else:
+		text = _('Gajim - %s') % get_uf_show('offline')
+		
+	return text
+
+def get_accounts_info():
+	'''helper for notification icon tooltip'''
+	accounts = []
+	accounts_list = gajim.contacts.get_accounts()
+	accounts_list.sort()
+	for account in accounts_list:
+		status_idx = gajim.connections[account].connected
+		# uncomment the following to hide offline accounts
+		# if status_idx == 0: continue
+		status = gajim.SHOW_LIST[status_idx]
+		message = gajim.connections[account].status
+		single_line = get_uf_show(status)
+		if message is None:
+			message = ''
+		else:
+			message = message.strip()
+		if message != '':
+			single_line += ': ' + message
+		accounts.append({'name': account, 'status_line': single_line, 
+				'show': status, 'message': message})
+	return accounts
