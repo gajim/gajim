@@ -1,6 +1,7 @@
 Gajim 0.11 (XX October 2006)
 
   * Intoducing View Menu (GNOME HIG)
+  * GNOME Keyring Support (if GNOME keyring available, manage passwords and save them in an encrypted file).
   * Ability to now hide the Transports group
   * Support for notify-python so if notification-daemon is not available, we still can show cool popups
   * Ability to operate on more than one contact in one in time in roster (#1514)
