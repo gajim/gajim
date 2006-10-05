@@ -37,6 +37,7 @@ except:
 from common import helpers
 from common import gajim
 from common import connection
+from common import passwords
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
@@ -1454,9 +1455,9 @@ class AccountModificationWindow:
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 		if config['savepass']:
-			gajim.connections[name].password = config['password']
+                        passwords.save_password(name, config['password'])
 		else:
-			gajim.connections[name].password = None
+                        passwords.save_password(name, None)
 		# refresh accounts window
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()

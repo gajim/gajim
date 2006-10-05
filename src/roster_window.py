@@ -35,6 +35,7 @@ import notify
 
 from common import gajim
 from common import helpers
+from common import passwords
 from message_window import MessageWindowMgr
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
@@ -2206,8 +2207,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					gajim.connections[account].password = passphrase
 					if save:
 						gajim.config.set_per('accounts', account, 'savepass', True)
-						gajim.config.set_per('accounts', account, 'password',
-							passphrase)
+						passwords.save_password(account, passphrase)
 
 			keyid = None
 			use_gpg_agent = gajim.config.get('use_gpg_agent')

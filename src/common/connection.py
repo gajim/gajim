@@ -30,6 +30,7 @@ import common.xmpp
 from common import helpers
 from common import gajim
 from common import GnuPG
+from common import passwords
 
 from connection_handlers import *
 USE_GPG = GnuPG.USE_GPG
@@ -60,7 +61,7 @@ class Connection(ConnectionHandlers):
 		self.last_io = gajim.idlequeue.current_time()
 		self.last_sent = []
 		self.last_history_line = {}
-		self.password = gajim.config.get_per('accounts', name, 'password')
+		self.password = passwords.get_password(name)
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
 		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
 			self.keepalives = gajim.config.get_per('accounts', self.name,'keep_alive_every_foo_secs')
