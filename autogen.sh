@@ -1,8 +1,8 @@
 #!/bin/sh
-
-aclocal -I ./m4 \
-  && libtoolize --force --copy \
+  intltoolize --force --automake \
+  && aclocal -I ./m4 \
+  && libtoolize --copy --force --automake \
   && autoheader \
-  && automake --add-missing --foreign --copy \
+  && automake --add-missing --gnu --copy \
   && autoconf \
   && ./configure $@
