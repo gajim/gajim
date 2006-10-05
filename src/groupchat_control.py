@@ -674,8 +674,6 @@ class GroupchatControl(ChatControlBase):
 			text += '\n<span %s>%s</span>' % (font_attrs_small, subject)
 		self.name_label.set_markup(text)
 		event_box = self.name_label.get_parent()
-		if subject == '':
-			self.subject = _('This room has no subject')
 
 		# tooltip must always hold ALL the subject
 		self.subject_tooltip.set_tip(event_box, self.subject)
@@ -1040,8 +1038,10 @@ class GroupchatControl(ChatControlBase):
 				new_topic = message_array.pop(0)
 				gajim.connections[self.account].send_gc_subject(self.room_jid,
 					new_topic)
-			else:
+			elif self.subject is not '':
 				self.print_conversation(self.subject, 'info')
+			else:
+				self.print_conversation(_('This room has no subject'), 'info')
 			self.clear(self.msg_textview)
 			return True
 		elif command == 'invite':
