@@ -121,6 +121,13 @@ class CacheDictionary:
 		def __call__(self):
 			return self.value
 
+	def cleanup(self):
+		for key in self.cache.keys():
+			item = self.cache[key]
+			if item.source:
+				gobject.source_remove(item.source)
+			del self.cache[key]
+
 	def _expire_timeout(self, key):
 		'''The timeout has expired, remove the object.'''
 		if key in self.cache:
@@ -132,8 +139,9 @@ class CacheDictionary:
 		item = self.cache[key]
 		if item.source:
 			gobject.source_remove(item.source)
-		source = gobject.timeout_add(self.lifetime, self._expire_timeout, key)
-		item.source = source
+		if self.lifetime:
+			source = gobject.timeout_add(self.lifetime, self._expire_timeout, key)
+			item.source = source
 
 	def __getitem__(self, key):
 		item = self.cache[key]
@@ -205,9 +213,13 @@ class ServicesCache:
 	ServiceCache instance.'''
 	def __init__(self, account):
 		self.account = account
-		self._items = CacheDictionary(1, getrefresh = True)
-		self._info = CacheDictionary(1, getrefresh = True)
+		self._items = CacheDictionary(0, getrefresh = False)
+		self._info = CacheDictionary(0, getrefresh = False)
 		self._cbs = {}
+
+	def cleanup(self):
+		self._items.cleanup()
+		self._info.cleanup()
 
 	def _clean_closure(self, cb, type, addr):
 		# A closure died, clean up
@@ -584,6 +596,7 @@ _('Without a connection, you can not browse available services'))
 			self.browser = None
 		self.window.destroy()
 
+		self.cache.cleanup()
 		for child in self.children[:]:
 			child.parent = None
 			if chain:
