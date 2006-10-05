@@ -5,7 +5,7 @@ desktop_in_files = gajim.desktop.in.in
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
 soundsdir = $(pkgdatadir)/data/sounds
-sounds_DATA = sounds/*.wav
+sounds_DATA = $(srcdir)/sounds/*.wav
 
 otherdir = $(pkgdatadir)/data/others
 other_DATA = other/servers.xml

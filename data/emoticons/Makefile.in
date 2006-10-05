@@ -40,7 +40,8 @@ subdir = data/emoticons
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/glib-gettext.m4 \
-	$(top_srcdir)/m4/python.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/python.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -70,6 +71,12 @@ AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 BUILD_GTKSPELL_FALSE = @BUILD_GTKSPELL_FALSE@
 BUILD_GTKSPELL_TRUE = @BUILD_GTKSPELL_TRUE@
+BUILD_IDLE_FALSE = @BUILD_IDLE_FALSE@
+BUILD_IDLE_TRUE = @BUILD_IDLE_TRUE@
+BUILD_REMOTE_CONTROL_FALSE = @BUILD_REMOTE_CONTROL_FALSE@
+BUILD_REMOTE_CONTROL_TRUE = @BUILD_REMOTE_CONTROL_TRUE@
+BUILD_TRAYICON_FALSE = @BUILD_TRAYICON_FALSE@
+BUILD_TRAYICON_TRUE = @BUILD_TRAYICON_TRUE@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -244,9 +251,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  data/emoticons/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  data/emoticons/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  data/emoticons/Makefile
+	  $(AUTOMAKE) --foreign  data/emoticons/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

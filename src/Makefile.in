@@ -41,7 +41,8 @@ subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/glib-gettext.m4 \
-	$(top_srcdir)/m4/python.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/python.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -68,12 +69,16 @@ am__gtkspell_la_SOURCES_DIST = gtkspellmodule.c
 @BUILD_GTKSPELL_TRUE@	gtkspell_la-gtkspellmodule.lo
 gtkspell_la_OBJECTS = $(am_gtkspell_la_OBJECTS)
 @BUILD_GTKSPELL_TRUE@am_gtkspell_la_rpath = -rpath $(gtkspelllibdir)
-trayicon_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
-am_trayicon_la_OBJECTS = trayicon_la-eggtrayicon.lo \
-	trayicon_la-trayiconmodule.lo
-nodist_trayicon_la_OBJECTS = trayicon_la-trayicon.lo
+@BUILD_TRAYICON_TRUE@trayicon_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
+am__trayicon_la_SOURCES_DIST = eggtrayicon.c trayiconmodule.c
+@BUILD_TRAYICON_TRUE@am_trayicon_la_OBJECTS =  \
+@BUILD_TRAYICON_TRUE@	trayicon_la-eggtrayicon.lo \
+@BUILD_TRAYICON_TRUE@	trayicon_la-trayiconmodule.lo
+@BUILD_TRAYICON_TRUE@nodist_trayicon_la_OBJECTS =  \
+@BUILD_TRAYICON_TRUE@	trayicon_la-trayicon.lo
 trayicon_la_OBJECTS = $(am_trayicon_la_OBJECTS) \
 	$(nodist_trayicon_la_OBJECTS)
+@BUILD_TRAYICON_TRUE@am_trayicon_la_rpath = -rpath $(trayiconlibdir)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -87,7 +92,8 @@ LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(gtkspell_la_SOURCES) $(trayicon_la_SOURCES) \
 	$(nodist_trayicon_la_SOURCES)
-DIST_SOURCES = $(am__gtkspell_la_SOURCES_DIST) $(trayicon_la_SOURCES)
+DIST_SOURCES = $(am__gtkspell_la_SOURCES_DIST) \
+	$(am__trayicon_la_SOURCES_DIST)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -116,6 +122,12 @@ AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 BUILD_GTKSPELL_FALSE = @BUILD_GTKSPELL_FALSE@
 BUILD_GTKSPELL_TRUE = @BUILD_GTKSPELL_TRUE@
+BUILD_IDLE_FALSE = @BUILD_IDLE_FALSE@
+BUILD_IDLE_TRUE = @BUILD_IDLE_TRUE@
+BUILD_REMOTE_CONTROL_FALSE = @BUILD_REMOTE_CONTROL_FALSE@
+BUILD_REMOTE_CONTROL_TRUE = @BUILD_REMOTE_CONTROL_TRUE@
+BUILD_TRAYICON_FALSE = @BUILD_TRAYICON_FALSE@
+BUILD_TRAYICON_TRUE = @BUILD_TRAYICON_TRUE@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -293,33 +305,33 @@ INCLUDES = \
 @BUILD_GTKSPELL_TRUE@	-module -avoid-version 
 
 @BUILD_GTKSPELL_TRUE@gtkspell_la_CFLAGS = $(GTKSPELL_CFLAGS) $(PYGTK_CFLAGS)
-trayiconlib_LTLIBRARIES = trayicon.la
-trayiconlibdir = $(libdir)/gajim
-trayicon_la_LIBADD = $(PYGTK_LIBS)
-trayicon_la_SOURCES = \
-					  eggtrayicon.c \
-					  trayiconmodule.c
+@BUILD_TRAYICON_TRUE@trayiconlib_LTLIBRARIES = trayicon.la
+@BUILD_TRAYICON_TRUE@trayiconlibdir = $(libdir)/gajim
+@BUILD_TRAYICON_TRUE@trayicon_la_LIBADD = $(PYGTK_LIBS)
+@BUILD_TRAYICON_TRUE@trayicon_la_SOURCES = \
+@BUILD_TRAYICON_TRUE@					  eggtrayicon.c \
+@BUILD_TRAYICON_TRUE@					  trayiconmodule.c
 
-nodist_trayicon_la_SOURCES = \
-					trayicon.c
+@BUILD_TRAYICON_TRUE@nodist_trayicon_la_SOURCES = \
+@BUILD_TRAYICON_TRUE@					trayicon.c
 
-trayicon_la_LDFLAGS = \
-	-module -avoid-version 
+@BUILD_TRAYICON_TRUE@trayicon_la_LDFLAGS = \
+@BUILD_TRAYICON_TRUE@	-module -avoid-version 
 
-trayicon_la_CFLAGS = $(PYGTK_CFLAGS)
+@BUILD_TRAYICON_TRUE@trayicon_la_CFLAGS = $(PYGTK_CFLAGS)
 gajimsrcdir = $(pkgdatadir)/src
-gajimsrc_DATA = *.py 
+gajimsrc_DATA = $(srcdir)/*.py 
 gajimsrc1dir = $(pkgdatadir)/src/common
 gajimsrc1_DATA = \
-				common/*.py 
+				$(srcdir)/common/*.py 
 
 gajimsrc2dir = $(pkgdatadir)/src/common/xmpp
 gajimsrc2_DATA = \
-				common/xmpp/*.py 
+				$(srcdir)/common/xmpp/*.py 
 
 gajimsrc3dir = $(pkgdatadir)/src/common/zeroconf
 gajimsrc3_DATA = \
-				common/zeroconf/*.py 
+				$(srcdir)/common/zeroconf/*.py 
 
 EXTRA_DIST = $(gajimsrc_DATA) \
 			$(gajimsrc1_DATA) \
@@ -345,9 +357,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/Makefile
+	  $(AUTOMAKE) --foreign  src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -422,7 +434,7 @@ clean-trayiconlibLTLIBRARIES:
 gtkspell.la: $(gtkspell_la_OBJECTS) $(gtkspell_la_DEPENDENCIES) 
 	$(LINK) $(am_gtkspell_la_rpath) $(gtkspell_la_LDFLAGS) $(gtkspell_la_OBJECTS) $(gtkspell_la_LIBADD) $(LIBS)
 trayicon.la: $(trayicon_la_OBJECTS) $(trayicon_la_DEPENDENCIES) 
-	$(LINK) -rpath $(trayiconlibdir) $(trayicon_la_LDFLAGS) $(trayicon_la_OBJECTS) $(trayicon_la_LIBADD) $(LIBS)
+	$(LINK) $(am_trayicon_la_rpath) $(trayicon_la_LDFLAGS) $(trayicon_la_OBJECTS) $(trayicon_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -695,7 +707,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/common $(distdir)/common/xmpp $(distdir)/common/zeroconf
+	$(mkdir_p) $(distdir)/$(srcdir) $(distdir)/$(srcdir)/common $(distdir)/$(srcdir)/common/xmpp $(distdir)/$(srcdir)/common/zeroconf
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -850,12 +862,12 @@ uninstall-info: uninstall-info-recursive
 	uninstall-trayiconlibLTLIBRARIES
 
 
-trayicon.c: trayicon.defs trayicon.override
-	    pygtk-codegen-2.0 --prefix trayicon \
-		    --register $(PYGTK_DEFS)/gdk-types.defs \
-		    --register $(PYGTK_DEFS)/gtk-types.defs \
-		    --override trayicon.override \
-		    trayicon.defs > $@
+@BUILD_TRAYICON_TRUE@trayicon.c: 
+@BUILD_TRAYICON_TRUE@	    pygtk-codegen-2.0 --prefix trayicon \
+@BUILD_TRAYICON_TRUE@		    --register $(PYGTK_DEFS)/gdk-types.defs \
+@BUILD_TRAYICON_TRUE@		    --register $(PYGTK_DEFS)/gtk-types.defs \
+@BUILD_TRAYICON_TRUE@		    --override $(srcdir)/trayicon.override \
+@BUILD_TRAYICON_TRUE@		    $(srcdir)/trayicon.defs > $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

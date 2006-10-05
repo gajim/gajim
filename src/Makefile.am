@@ -20,7 +20,7 @@ gtkspell_la_LDFLAGS = \
 
 gtkspell_la_CFLAGS = $(GTKSPELL_CFLAGS) $(PYGTK_CFLAGS)
 endif
-
+if BUILD_TRAYICON
 trayiconlib_LTLIBRARIES = trayicon.la
 trayiconlibdir = $(libdir)/gajim
 trayicon_la_LIBADD = $(PYGTK_LIBS)
@@ -33,27 +33,27 @@ trayicon_la_LDFLAGS = \
 	-module -avoid-version 
 trayicon_la_CFLAGS = $(PYGTK_CFLAGS)
 
-trayicon.c: trayicon.defs trayicon.override
+trayicon.c: 
 	    pygtk-codegen-2.0 --prefix trayicon \
 		    --register $(PYGTK_DEFS)/gdk-types.defs \
 		    --register $(PYGTK_DEFS)/gtk-types.defs \
-		    --override trayicon.override \
-		    trayicon.defs > $@
-
+		    --override $(srcdir)/trayicon.override \
+		    $(srcdir)/trayicon.defs > $@
+endif
 gajimsrcdir = $(pkgdatadir)/src
-gajimsrc_DATA = *.py 
+gajimsrc_DATA = $(srcdir)/*.py 
 
 gajimsrc1dir = $(pkgdatadir)/src/common
 gajimsrc1_DATA = \
-				common/*.py 
+				$(srcdir)/common/*.py 
 
 gajimsrc2dir = $(pkgdatadir)/src/common/xmpp
 gajimsrc2_DATA = \
-				common/xmpp/*.py 
+				$(srcdir)/common/xmpp/*.py 
 
 gajimsrc3dir = $(pkgdatadir)/src/common/zeroconf
 gajimsrc3_DATA = \
-				common/zeroconf/*.py 
+				$(srcdir)/common/zeroconf/*.py 
 
 EXTRA_DIST = $(gajimsrc_DATA) \
 			$(gajimsrc1_DATA) \

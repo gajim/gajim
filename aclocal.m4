@@ -7856,4 +7856,5 @@ AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
 m4_include([m4/glib-gettext.m4])
+m4_include([m4/nls.m4])
 m4_include([m4/python.m4])

@@ -1,4 +1,7 @@
 SUBDIRS = data src po
+
+ACLOCAL_AMFLAGS = -I m4
+
 bin_SCRIPTS = scripts/gajim
 
 commonfilesdir = $(pkgdatadir)
@@ -8,7 +11,7 @@ commonfiles_DATA = COPYING	\
 				   THANKS	\
 				   AUTHORS
 
-EXTRA_DIST =			\
+EXTRA_DIST = config.rpath 			\
 	$(commonfiles_DATA) \
 	autogen.sh			\
 	intltool-extract.in \

@@ -40,7 +40,8 @@ subdir = src/common
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/glib-gettext.m4 \
-	$(top_srcdir)/m4/python.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/python.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -56,8 +57,10 @@ am__installdirs = "$(DESTDIR)$(idlelibdir)"
 idlelibLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(idlelib_LTLIBRARIES)
 idle_la_DEPENDENCIES =
-am_idle_la_OBJECTS = idle_la-idle.lo
+am__idle_la_SOURCES_DIST = idle.c
+@BUILD_IDLE_TRUE@am_idle_la_OBJECTS = idle_la-idle.lo
 idle_la_OBJECTS = $(am_idle_la_OBJECTS)
+@BUILD_IDLE_TRUE@am_idle_la_rpath = -rpath $(idlelibdir)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -70,7 +73,7 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(idle_la_SOURCES)
-DIST_SOURCES = $(idle_la_SOURCES)
+DIST_SOURCES = $(am__idle_la_SOURCES_DIST)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -86,6 +89,12 @@ AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 BUILD_GTKSPELL_FALSE = @BUILD_GTKSPELL_FALSE@
 BUILD_GTKSPELL_TRUE = @BUILD_GTKSPELL_TRUE@
+BUILD_IDLE_FALSE = @BUILD_IDLE_FALSE@
+BUILD_IDLE_TRUE = @BUILD_IDLE_TRUE@
+BUILD_REMOTE_CONTROL_FALSE = @BUILD_REMOTE_CONTROL_FALSE@
+BUILD_REMOTE_CONTROL_TRUE = @BUILD_REMOTE_CONTROL_TRUE@
+BUILD_TRAYICON_FALSE = @BUILD_TRAYICON_FALSE@
+BUILD_TRAYICON_TRUE = @BUILD_TRAYICON_TRUE@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -247,14 +256,14 @@ target_alias = @target_alias@
 INCLUDES = \
 	$(PYTHON_INCLUDES) 
 
-idlelib_LTLIBRARIES = idle.la
-idlelibdir = $(libdir)/gajim
-idle_la_LIBADD = $(XSCREENSAVER_LIBS) 
-idle_la_SOURCES = idle.c
-idle_la_LDFLAGS = \
-	-module -avoid-version
+@BUILD_IDLE_TRUE@idlelib_LTLIBRARIES = idle.la
+@BUILD_IDLE_TRUE@idlelibdir = $(libdir)/gajim
+@BUILD_IDLE_TRUE@idle_la_LIBADD = $(XSCREENSAVER_LIBS) 
+@BUILD_IDLE_TRUE@idle_la_SOURCES = idle.c
+@BUILD_IDLE_TRUE@idle_la_LDFLAGS = \
+@BUILD_IDLE_TRUE@	-module -avoid-version
 
-idle_la_CFLAGS = $(XSCREENSAVER_CFLAGS) $(PYTHON_INCLUDES)
+@BUILD_IDLE_TRUE@idle_la_CFLAGS = $(XSCREENSAVER_CFLAGS) $(PYTHON_INCLUDES)
 all: all-am
 
 .SUFFIXES:
@@ -268,9 +277,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/common/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/common/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/common/Makefile
+	  $(AUTOMAKE) --foreign  src/common/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -316,7 +325,7 @@ clean-idlelibLTLIBRARIES:
 	  rm -f "$${dir}/so_locations"; \
 	done
 idle.la: $(idle_la_OBJECTS) $(idle_la_DEPENDENCIES) 
-	$(LINK) -rpath $(idlelibdir) $(idle_la_LDFLAGS) $(idle_la_OBJECTS) $(idle_la_LIBADD) $(LIBS)
+	$(LINK) $(am_idle_la_rpath) $(idle_la_LDFLAGS) $(idle_la_OBJECTS) $(idle_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

@@ -1,6 +1,8 @@
 #!/bin/sh
 
-aclocal -I ./m4 --force
-autoconf 
-autoheader 
-automake --add-missing 
+aclocal -I ./m4 \
+  && libtoolize --force --copy \
+  && autoheader \
+  && automake --add-missing --foreign --copy \
+  && autoconf \
+  && ./configure $@
