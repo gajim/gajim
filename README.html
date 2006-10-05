@@ -1,0 +1,130 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+ <title>Gajim - Read Me</title>
+</head>
+<body>
+
+<h1>Gajim Read Me</h1>
+
+<p>
+Welcome to Gajim and thank you for trying out our client.
+</p>
+
+<h2>Runtime Requirements</h2>
+<ul>
+<li>python2.4 or higher</li>
+<li>pygtk2.6 or higher</li>
+<li>python-libglade</li>
+<li>pysqlite2 (if you have python 2.5, you already have this)</li>
+</ul>
+
+<p>
+<strong>Note to packagers</strong>
+Gajim is a GTK+ app that loves GNOME. You can do 'make' so you don't require gnomepythonextras (aka gnome-python-desktop) which is gnome dep, but you will miss gnomekeyring intergration.
+</p>
+
+<h2>Optional Runtime Requirements</h2>
+<ul>
+<li>dnsutils (or whatever package provides the nslookup binary) for SRV support; if you don't know what that is, you don't need it</li>
+<li>gtkspell and aspell-LANG where lang is your locale eg. en, fr etc</li>
+<li>GnomePythonExtras 2.10 or above (aka gnome-python-desktop) so you can avoid compiling trayicon and gtkspell</li>
+<li>gnome-python-desktop (for GnomeKeyring support)</li>
+<li>notification-daemon or notify-python (and D-Bus) to get cooler popups</li>
+<li>D-Bus to have gajim-remote working</li>
+</ul>
+
+<p>
+Some distributions also split too much python standard library.
+I know SUSE does. In such distros you also need python-xml
+the xml lib that *comes* with python and not pyxml or whatever.
+</p>
+
+<h2>Compile-time Requirements</h2>
+<ul>
+<li>python-dev</li>
+<li>python-gtk2-dev</li>
+<li>libgtk2.0-dev aka. gtk2-devel</li>
+<li>libxss-dev (for idle detection module; some distributions such as Debian split xscreensaver)</li>
+<li>libgtkspell-dev	(for the gtkspell module)</li>
+<li>intltool</li>
+</ul>
+
+<p>
+<strong>NOTE:</strong>
+If you still have problems compiling, you may want to try removing the gtk1 series of the above dependencies.
+</p>
+
+<h2>Installation Procedure</h2>
+<ol>
+<li>tar jxvf gajim-version.tar.bz2</li>
+</li>cd gajim</li>
+</li>make (builds all modules)</li>
+</li>su -c make install</li>
+</ol>
+
+<p>
+To specify what modules to build do:
+make help
+</p>
+
+<p>
+To specify where to install do:
+su -c make PREFIX=custom_path install
+</p>
+
+<h2>Running Gajim</h2>
+<p>
+Just do <em>gajim</em> or you can run Gajim from your GNOME/XFCE/KDE/whatever menus.<br/><br/>
+
+or if you didn't 'make install' you can also run from gajim folder with
+<em>./launch.sh</em>
+</p>
+
+<h2>Uninstallation Procedure</h2>
+<p>
+su -c make uninstall<br/>
+this will try to remove Gajim from the default directories.
+If you want to remove it from custom directory provide it as:<br/>
+make PREFIX=custom_path uninstall
+</p>
+
+<h2>Miscellaneous</h2>
+<h3>XML & Debugging</h3>
+<p>
+If you want to see the xml stanzas and/or help us debugging 
+you're advised to enable verbose via advanced configuration window.
+If you don't want to make this permanent, execute gajim with --verbose
+everytime you want to have verbose output.
+</p>
+
+<h3>FAQ/Wiki</h3>
+<p>
+FAQ can be found at <a href="http://trac.gajim.org/wiki/GajimFaq">http://trac.gajim.org/wiki/GajimFaq</a>
+Wiki can be found at <a href="http://trac.gajim.org/wiki">http://trac.gajim.org/wiki</a>
+</p>
+
+
+<p>
+That is all, <strong>enjoy!</strong>
+</p>
+
+<p>
+<br/>
+<br/>
+<br/>
+(C) 2003-2006<br/>
+The Gajim Team<br/>
+http://gajim.org<br/>
+<br/>
+<br/>
+
+PS.
+We use original art and parts of sounds and other art from Psi, Gossip,
+Gnomebaker, Gaim and some icons from various gnome-icons
+(mostly Dropline Etiquette) we found at art.gnome.org
+If you think we're violating a license please inform us. Thank you.
+</p>
+</body></html>
