@@ -1,33 +1,33 @@
 Welcome and thanks for trying out Gajim.
 
 =RUNTIME REQUIREMENTS=
-python2.4 or higher
-pygtk2.6 or higher
-python-libglade
-pysqlite2 (if you have python 2.5, you already have this)
+ * python2.4 or higher
+ * pygtk2.6 or higher
+ * python-libglade
+ * pysqlite2 (if you have python 2.5, you already have this)
 
 some distros also split too much python standard library.
 I know SUSE does. In such distros you also need python-xml
 the xml lib that *comes* with python and not pyxml or whatever
 
 =COMPILE-TIME REQUIREMENTS=
-python-dev
-python-gtk2-dev
-libgtk2.0-dev		# aka. gtk2-devel
-libxss-dev			# for idle detection module (Some distributions (f.e. Debian) split xscreensaver)
-libgtkspell-dev	# for gtkspell module
-intltool
+ * python-dev
+ * python-gtk2-dev
+ * libgtk2.0-dev		# aka. gtk2-devel
+ * libxss-dev			# for idle detection module (Some distributions (f.e. Debian) split xscreensaver)
+ * libgtkspell-dev	# for gtkspell module
+ * intltool
 
 NOTE:
-if you still have problems compiling, you may want to try removing the gtk1 series of the above dependencies
+If you still have problems compiling, you may want to try removing the gtk1 series of the above dependencies
 
 Optionally:
-gnome-python-desktop (for GnomeKeyring support)
-dnsutils (or whatever package provides the nslookup binary) for SRV support; if you don't know what that is, you don't need it
-gtkspell and aspell-LANG where lang is your locale eg. en, fr etc
-GnomePythonExtras 2.10 or above so you can avoid compiling trayicon and gtkspell
-notification-daemon or notify-python (and D-Bus) to get cooler popups
-D-Bus to have gajim-remote working
+ * dnsutils (or whatever package provides the nslookup binary) for SRV support; if you don't know what that is, you don't need it
+ * gtkspell and aspell-LANG where lang is your locale eg. en, fr etc
+ * GnomePythonExtras 2.10 or above (aka gnome-python-desktop) so you can avoid compiling trayicon and gtkspell
+ * gnome-python-desktop (for GnomeKeyring support)
+ * notification-daemon or notify-python (and D-Bus) to get cooler popups
+ * D-Bus to have gajim-remote working
 
 NOTE TO PACKAGERS:
 Gajim is a GTK+ app and not a gnome one.
