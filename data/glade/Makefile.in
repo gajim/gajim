@@ -251,9 +251,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  data/glade/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  data/glade/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  data/glade/Makefile
+	  $(AUTOMAKE) --gnu  data/glade/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

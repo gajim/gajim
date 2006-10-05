@@ -11,7 +11,7 @@ commonfiles_DATA = COPYING	\
 				   THANKS	\
 				   AUTHORS
 
-EXTRA_DIST = config.rpath 			\
+EXTRA_DIST = \
 	$(commonfiles_DATA) \
 	autogen.sh			\
 	intltool-extract.in \
