@@ -498,7 +498,8 @@ class Interface:
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
-		# chatstate, msg_id, composing_jep, user_nick, xhtml)) user_nick is JEP-0172
+		# chatstate, msg_id, composing_jep, user_nick, xhtml))
+		# user_nick is JEP-0172
 
 		full_jid_with_resource = array[0]
 		jid = gajim.get_jid_without_resource(full_jid_with_resource)
@@ -598,7 +599,7 @@ class Interface:
 					msg_type, subject, resource, msg_id, array[9],
 					advanced_notif_num)
 			else:
-				#xhtml in last element
+				# xhtml in last element
 				self.roster.on_message(jid, message, array[2], account, array[3],
 					msg_type, subject, resource, msg_id, array[9],
 					advanced_notif_num, xhtml = array[10])
