@@ -1,16 +1,18 @@
 Gajim 0.11 (XX October 2006)
 
+  * Intoducing View Menu (GNOME HIG)
+  * Ability to now hide the Transports group
   * Support for notify-python so if notification-daemon is not available, we still can show cool popups
-  * We can now operate on more than one contact in one in time in roster (#1514)
+  * Ability to operate on more than one contact in one in time in roster (#1514)
   * Connection lost is now a non-intrusive popup
   * Try to get contact desired nick when we add him to roster aka User Nickname (JEP-0172)
   * Better design of User Profile window, with a progress bar
   * New Add User dialog, with possibility to register to transport directly from it
   * Completion for "Start Chat" input dialog
-  * We can now have a different spellchecking language in each chat window. (#2383 and #746)
+  * Ability to have a different spellchecking language in each chat window. (#2383 and #746)
   * Support for Privacy Lists
   * Forbid to run multiple instances (but you can use differents profiles)
-  * We can save avatar with right click on avatar in chat banner
+  * Ability to save avatar with right click on avatar in chat banner
   * Use differents colors for nickname colors of occupants in groupchats.
   * Ability to show only Join/Leave in groupchats instead of all status changes
   * New possibilities to insert nickname of an occupant in groupchats conversations: Tab in an empty line now cycle through nicks, maj+right click->insert nickname, maj+click on name in gc-roster, /names command to show all users presents
