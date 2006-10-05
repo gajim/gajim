@@ -712,6 +712,7 @@ class ConnectionDisco:
 		q.addChild('feature', attrs = {'var': common.xmpp.NS_SI})
 		q.addChild('feature', attrs = {'var': common.xmpp.NS_FILE})
 		q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
+		q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
 		self.connection.send(iq)
 		raise common.xmpp.NodeProcessed
 
