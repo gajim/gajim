@@ -59,7 +59,7 @@ def get_avatar_pixbuf_encoded_mime(photo):
 class VcardWindow:
 	'''Class for contact's information window'''
 
-	def __init__(self, contact, account, is_fake = False):
+	def __init__(self, contact, account, gc_contact = None):
 		# the contact variable is the jid if vcard is true
 		self.xml = gtkgui_helpers.get_glade('vcard_information_window.glade')
 		self.window = self.xml.get_widget('vcard_information_window')
@@ -67,7 +67,7 @@ class VcardWindow:
 
 		self.contact = contact
 		self.account = account
-		self.is_fake = is_fake
+		self.gc_contact = gc_contact
 
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
@@ -245,26 +245,38 @@ class VcardWindow:
 			self.contact.get_shown_name() +
 			'</span></b>')
 		self.xml.get_widget('jid_label').set_text(self.contact.jid)
-		uf_sub = helpers.get_uf_sub(self.contact.sub)
-		self.xml.get_widget('subscription_label').set_text(uf_sub)
-		eb = self.xml.get_widget('subscription_label_eventbox')
-		if self.contact.sub == 'from':
-			tt_text = _("This contact is interested in your presence information, but you are not interested in his/her presence")
-		elif self.contact.sub == 'to':
-			tt_text = _("You are interested in the contact's presence information, but he/she is not interested in yours")
-		elif self.contact.sub == 'both':
-			tt_text = _("You and the contact are interested in each other's presence information")
-		else: # None
-			tt_text = _("You are not interested in the contact's presence, and neither he/she is interested in yours")
-		tooltips.set_tip(eb, tt_text)
+		
+		subscription_label = self.xml.get_widget('subscription_label')
+		ask_label = self.xml.get_widget('ask_label')
+		if self.gc_contact:
+			self.xml.get_widget('subscription_title_label').set_text(_("Role:"))
+			uf_role = helpers.get_uf_role(self.gc_contact.role)
+			subscription_label.set_text(uf_role)
 
-		label = self.xml.get_widget('ask_label')
-		uf_ask = helpers.get_uf_ask(self.contact.ask)
-		label.set_text(uf_ask)
-		eb = self.xml.get_widget('ask_label_eventbox')
-		if self.contact.ask == 'subscribe':
-			tooltips.set_tip(eb,
-			_("You are waiting contact's answer about your subscription request"))
+			self.xml.get_widget('ask_title_label').set_text(_("Affiliation:"))
+			uf_affiliation = helpers.get_uf_affiliation(self.gc_contact.affiliation)
+			ask_label.set_text(uf_affiliation)
+		else:
+			uf_sub = helpers.get_uf_sub(self.contact.sub)
+			subscription_label.set_text(uf_sub)
+			eb = self.xml.get_widget('subscription_label_eventbox')
+			if self.contact.sub == 'from':
+				tt_text = _("This contact is interested in your presence information, but you are not interested in his/her presence")
+			elif self.contact.sub == 'to':
+				tt_text = _("You are interested in the contact's presence information, but he/she is not interested in yours")
+			elif self.contact.sub == 'both':
+				tt_text = _("You and the contact are interested in each other's presence information")
+			else: # None
+				tt_text = _("You are not interested in the contact's presence, and neither he/she is interested in yours")
+			tooltips.set_tip(eb, tt_text)
+
+			uf_ask = helpers.get_uf_ask(self.contact.ask)
+			ask_label.set_text(uf_ask)
+			eb = self.xml.get_widget('ask_label_eventbox')
+			if self.contact.ask == 'subscribe':
+				tooltips.set_tip(eb,
+				_("You are waiting contact's answer about your subscription request"))
+
 		log = True
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 			'no_log_for').split(' '):
@@ -317,7 +329,8 @@ class VcardWindow:
 
 		self.fill_status_label()
 
-		gajim.connections[self.account].request_vcard(self.contact.jid, self.is_fake)
+		gajim.connections[self.account].request_vcard(self.contact.jid,
+			self.gc_contact is not None)
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()

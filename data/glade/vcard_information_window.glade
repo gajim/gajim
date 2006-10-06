@@ -448,7 +448,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="label45">
+			    <widget class="GtkLabel" id="subscription_title_label">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes" comments="Family Name">Subscription:</property>
 			      <property name="use_underline">False</property>
@@ -476,7 +476,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="label46">
+			    <widget class="GtkLabel" id="ask_title_label">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes" comments="Given Name">Ask:</property>
 			      <property name="use_underline">False</property>
