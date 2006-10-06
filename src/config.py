@@ -1437,12 +1437,12 @@ class AccountModificationWindow:
 			# check if relogin is needed
 			relogin_needed = False
 			if self.options_changed_need_relogin(config,
-				('resource', 'proxy', 'usessl', 'keyname',
-				'use_custom_host', 'custom_host')):
+			('resource', 'proxy', 'usessl', 'keyname',
+			'use_custom_host', 'custom_host')):
 				relogin_needed = True
 
 			elif config['use_custom_host'] and (self.option_changed(config,
-				'custom_host') or self.option_changed(config, 'custom_port')):
+			'custom_host') or self.option_changed(config, 'custom_port')):
 				relogin_needed = True
 
 			if self.option_changed(config, 'use_ft_proxies') and \
@@ -1455,9 +1455,9 @@ class AccountModificationWindow:
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 		if config['savepass']:
-                        passwords.save_password(name, config['password'])
+			passwords.save_password(name, config['password'])
 		else:
-                        passwords.save_password(name, None)
+			passwords.save_password(name, None)
 		# refresh accounts window
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
