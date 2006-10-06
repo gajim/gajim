@@ -130,7 +130,7 @@ class Logger:
 
 	def jid_is_room_jid(self, jid):
 		self.cur.execute('SELECT jid_id FROM jids WHERE jid=?  AND type=?', 
-			(possible_room_jid, constants.JID_ROOM_TYPE))
+			(jid, constants.JID_ROOM_TYPE))
 		row = self.cur.fetchone()
 		if row is None:
 			return False
