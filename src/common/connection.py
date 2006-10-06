@@ -35,7 +35,7 @@ from common import passwords
 from connection_handlers import *
 USE_GPG = GnuPG.USE_GPG
 
-from rst_xhtml_generator import create_xhtml
+from common.rst_xhtml_generator import create_xhtml
 
 class Connection(ConnectionHandlers):
 	'''Connection class'''

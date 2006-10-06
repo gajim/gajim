@@ -34,7 +34,7 @@ from message_textview import MessageTextView
 from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
-from rst_xhtml_generator import create_xhtml
+from common.rst_xhtml_generator import create_xhtml
 from common.xmpp.protocol import NS_XHTML
 
 try:
