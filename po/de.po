@@ -373,7 +373,7 @@ msgstr "Konto-Status mit globalem Status abgleichen"
 
 #: ../data/glade/account_modification_window.glade.h:40
 msgid "Use _SSL (legacy)"
-msgstr "_SSL verwenden"
+msgstr "_SSL verwenden (veraltet)"
 
 #: ../data/glade/account_modification_window.glade.h:41
 msgid "Use custom hostname/port"
