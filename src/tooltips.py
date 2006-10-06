@@ -178,7 +178,7 @@ class StatusTable:
 				if isinstance(status, str):
 					status = unicode(status, encoding='utf-8')
 				# reduce to 100 chars, 1 line
-				status = gtkgui_helpers.reduce_chars_newlines(status, 100, 1)
+				status = helpers.reduce_chars_newlines(status, 100, 1)
 				str_status = gtkgui_helpers.escape_for_pango_markup(str_status)
 				status = gtkgui_helpers.escape_for_pango_markup(status)
 				str_status += ' - <i>' + status + '</i>'
@@ -233,7 +233,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			# there are possible pango TBs on 'set_markup'
 			if isinstance(message, str):
 				message = unicode(message, encoding = 'utf-8')
-			message = gtkgui_helpers.reduce_chars_newlines(message, 100, 1)
+			message = helpers.reduce_chars_newlines(message, 100, 1)
 			message = gtkgui_helpers.escape_for_pango_markup(message)
 			if gajim.con_types.has_key(acct['name']) and \
 				gajim.con_types[acct['name']] in ('tls', 'ssl'):
@@ -296,7 +296,7 @@ class GCTooltip(BaseTooltip):
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities
-				status = gtkgui_helpers.reduce_chars_newlines(status, 100, 5)
+				status = helpers.reduce_chars_newlines(status, 100, 5)
 				status = '<i>' +\
 					 gtkgui_helpers.escape_for_pango_markup(status) + '</i>'
 				properties.append((status, None))
@@ -479,7 +479,7 @@ class RosterTooltip(NotificationAreaTooltip):
 					if status:
 						# reduce long status
 						# (no more than 100 chars on line and no more than 5 lines)
-						status = gtkgui_helpers.reduce_chars_newlines(status, 100, 5)
+						status = helpers.reduce_chars_newlines(status, 100, 5)
 						# escape markup entities. 
 						status = gtkgui_helpers.escape_for_pango_markup(status)
 						properties.append(('<i>%s</i>' % status, None))

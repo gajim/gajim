@@ -666,7 +666,7 @@ class GroupchatControl(ChatControlBase):
 		self.subject = subject
 
 		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
-		subject = gtkgui_helpers.reduce_chars_newlines(subject, max_lines = 2)
+		subject = helpers.reduce_chars_newlines(subject, max_lines = 2)
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
@@ -735,7 +735,7 @@ class GroupchatControl(ChatControlBase):
 		if status and gajim.config.get('show_status_msgs_in_roster'):
 			status = status.strip()
 			if status != '':
-				status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 1)
+				status = helpers.reduce_chars_newlines(status, max_lines = 1)
 				# escape markup entities and make them small italic and fg color
 				color = gtkgui_helpers._get_fade_color(self.list_treeview,
 					selected, focus)

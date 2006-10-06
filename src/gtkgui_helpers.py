@@ -169,33 +169,6 @@ def get_default_font():
 	
 	return None
 	
-def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
-	'''Cut the chars after 'max_chars' on each line
-	and show only the first 'max_lines'.
-	If any of the params is not present (None or 0) the action
-	on it is not performed'''
-
-	def _cut_if_long(string):
-		if len(string) > max_chars:
-			string = string[:max_chars - 3] + '...'
-		return string
-	
-	if isinstance(text, str):
-		text = text.decode('utf-8')
-
-	if max_lines == 0:
-		lines = text.split('\n')
-	else:
-		lines = text.split('\n', max_lines)[:max_lines]
-	if max_chars > 0:
-		if lines:
-			lines = map(lambda e: _cut_if_long(e), lines)
-	if lines:
-		reduced_text = reduce(lambda e, e1: e + '\n' + e1, lines)
-	else:
-		reduced_text = ''
-	return reduced_text
-
 def escape_for_pango_markup(string):
 	# escapes < > & ' "
 	# for pango markup not to break
