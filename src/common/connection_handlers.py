@@ -820,6 +820,8 @@ class ConnectionVcard:
 		puny_jid = helpers.sanitize_filename(jid)
 		path = os.path.join(gajim.VCARD_PATH, puny_jid)
 		if jid in self.room_jids or os.path.isdir(path):
+			if not nick:
+				return
 			# remove room_jid file if needed
 			if os.path.isfile(path):
 				os.remove(path)
