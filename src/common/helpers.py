@@ -896,7 +896,6 @@ def get_notification_icon_tooltip_text():
 	elif len(accounts) == 1:
 		message = accounts[0]['status_line']
 		message = reduce_chars_newlines(message, 100, 1)
-		message = gtkgui_helpers.escape_for_pango_markup(message)
 		text = _('Gajim - %s') % message
 	else:
 		text = _('Gajim - %s') % get_uf_show('offline')

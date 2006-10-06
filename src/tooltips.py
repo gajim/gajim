@@ -260,6 +260,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		self.table.set_property('column-spacing', 1)
 
 		text = helpers.get_notification_icon_tooltip_text()
+		text = gtkgui_helpers.escape_for_pango_markup(text)
 		
 		self.add_text_row(text)
 		self.hbox.add(self.table)

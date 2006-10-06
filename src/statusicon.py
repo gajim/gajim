@@ -52,6 +52,8 @@ class StatusIcon(systray.Systray):
 		if not gajim.interface.systray_enabled:
 			return
 		text = helpers.get_notification_icon_tooltip_text()
+		#FIXME: if you do that, import gtkgui_helpers
+		text = gtkgui_helpers.escape_for_pango_markup(text)
 		self.status_icon.set_tooltip(text)
 		if gajim.events.get_nb_systray_events():
 			state = 'message'
