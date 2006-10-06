@@ -60,14 +60,14 @@ class GnomePasswordStorage(object):
 		auth_token = gnomekeyring.item_create_sync(
 			self.keyring, gnomekeyring.ITEM_GENERIC_SECRET,
 			display_name, attributes, password, update)
-		token = 'gnomekeyring:%i' % (auth_token,)
+		token = 'gnomekeyring:%i' % auth_token
 		gajim.config.set_per('accounts', account_name, 'password', token)
 
 
 storage = None
 def get_storage():
 	global storage
-	if storage is None:
+	if storage is None: # None is only in first time get_storage is called
 		if USER_HAS_GNOMEKEYRING:
 			#FIXME: detect if we're running under GNOME or not
 			#before deciding to use the GnomeKeyring backend
