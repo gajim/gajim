@@ -43,9 +43,9 @@ from conversation_textview import ConversationTextview
 #(status_image, type, nick, shown_nick)
 (
 C_IMG, # image to show state (online, new message etc)
-C_TYPE, # type of the row ('contact' or 'group')
+C_TEXT, # type of the row ('contact' or 'group')
+C_TYPE, # text shown in the cellrenderer
 C_NICK, # contact nickame or group name
-C_TEXT, # text shown in the cellrenderer
 C_AVATAR, # avatar of the contact
 ) = range(5)
 	
@@ -253,7 +253,7 @@ class GroupchatControl(ChatControlBase):
 		id = self.list_treeview.connect('size-allocate',
 			self.on_treeview_size_allocate)
 		self.handlers[id] = self.list_treeview
-		#status_image, type, nickname, shown_nick
+		#status_image, shown_nick, type, nickname, avatar
 		store = gtk.TreeStore(gtk.Image, str, str, str, gtk.gdk.Pixbuf)
 		store.set_sort_column_id(C_TEXT, gtk.SORT_ASCENDING)
 		self.list_treeview.set_model(store)
