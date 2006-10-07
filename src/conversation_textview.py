@@ -394,7 +394,7 @@ class ConversationTextview:
 				self.handlers[id] = item
 			submenu.append(item)
 			
-			item = gtk.MenuItem(_('Open as _link'))
+			item = gtk.MenuItem(_('Open as _Link'))
 			id = item.connect('activate', self.visit_url_from_menuitem, link)
 			self.handlers[id] = item
 			submenu.append(item)
