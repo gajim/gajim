@@ -174,7 +174,6 @@ class Systray:
 			self.popup_menus.append(account_menu_for_single_message)
 
 			accounts_list = gajim.contacts.get_accounts()
-			accounts_list.sort()
 			for account in accounts_list:
 				if gajim.connections[account].connected > 1:
 					#for chat_with
