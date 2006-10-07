@@ -40,6 +40,8 @@ class GnomePasswordStorage(object):
 
 	def get_password(self, account_name):
 		conf = gajim.config.get_per('accounts', account_name, 'password')
+		if conf is None:
+			return None
 		try:
 			unused, auth_token = conf.split('gnomekeyring:')
 			auth_token = int(auth_token)
