@@ -4485,7 +4485,7 @@ msgstr "für Konto %s"
 #. History manager
 #: ../src/roster_window.py:933
 msgid "History Manager"
-msgstr "Verlaufmanager"
+msgstr "Verlaufsmanager"
 
 #: ../src/roster_window.py:942
 msgid "_Join New Room"
