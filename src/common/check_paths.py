@@ -128,7 +128,7 @@ def migrate_logs_db_to_indeces():
 	cur.executescript(
 		'''
 		CREATE INDEX IF NOT EXISTS idx_logs_jid_id_kind ON logs (jid_id, kind);
-		CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
+		CREATE INDEX IF NOT EXISTS idx_unread_messages_jid_id ON unread_messages (jid_id);
 		'''
 	)
 
