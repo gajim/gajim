@@ -126,8 +126,7 @@ class OptionsParser:
 		os.chmod(self.__filename, 0600)
 
 	def update_config(self, old_version, new_version):
-		# Convert '0.x.y' to (0, x, y)
-		old_version_list = old_version.split('.')
+		old_version_list = old_version.split('.') # convert '0.x.y' to (0, x, y)
 		old = []
 		while len(old_version_list):
 			old.append(int(old_version_list.pop(0)))
@@ -146,7 +145,9 @@ class OptionsParser:
 			self.update_config_to_01012()
 		if old < [0, 10, 1, 3] and new >= [0, 10, 1, 3]:
 			self.update_config_to_01013()
-	
+		if old < [0, 10, 1, 4] and new >= [0, 10, 1, 4]:
+			self.update_config_to_01014()
+
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
 	
@@ -301,3 +302,26 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.10.1.3')
+
+	def update_config_to_01014():
+		'''apply indeces to the logs database'''
+		import exceptions
+		try:
+			from pysqlite2 import dbapi2 as sqlite
+		except ImportError:
+			raise exceptions.PysqliteNotAvailable
+		import logger
+		print _('migrating logs database to indeces')
+		con = sqlite.connect(logger.LOG_DB_PATH) 
+		cur = con.cursor()
+		# apply indeces
+		cur.executescript(
+			'''
+			CREATE INDEX IF NOT EXISTS idx_logs_jid_id_kind ON logs (jid_id, kind);
+			CREATE INDEX IF NOT EXISTS idx_unread_messages_jid_id ON unread_messages (jid_id);
+			'''
+		)
+
+		con.commit()
+		con.close()
+		gajim.config.set('version', '0.10.1.4')

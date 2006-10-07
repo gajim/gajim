@@ -120,21 +120,6 @@ def check_and_possibly_create_paths():
 			create_log_db()
 			gajim.logger.init_vars()
 
-def migrate_logs_db_to_indeces():
-	print _('migrating logs database to indeces')
-	con = sqlite.connect(logger.LOG_DB_PATH) 
-	cur = con.cursor()
-	# apply indeces
-	cur.executescript(
-		'''
-		CREATE INDEX IF NOT EXISTS idx_logs_jid_id_kind ON logs (jid_id, kind);
-		CREATE INDEX IF NOT EXISTS idx_unread_messages_jid_id ON unread_messages (jid_id);
-		'''
-	)
-
-	con.commit()
-	con.close()
-
 def create_path(directory):
 	print _('creating %s directory') % directory
 	os.mkdir(directory, 0700)
