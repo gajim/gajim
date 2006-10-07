@@ -1,17 +1,8 @@
 ##	conversation_textview.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -329,10 +320,10 @@ class ConversationTextview:
 		id = item.connect('activate', self.clear)
 		self.handlers[id] = item
 		if self.selected_phrase:
-			s = self.selected_phrase
-			if len(s) > 25:
-				s = s[:21] + '...'
-			item = gtk.MenuItem(_('Actions for "%s"') % s)
+			if len(self.selected_phrase) > 25:
+				self.selected_phrase = helpers.reduce_chars_newlines(
+					self.selected_phrase, 25)
+			item = gtk.MenuItem(_('_Actions for "%s"') % self.selected_phrase)
 			menu.prepend(item)
 			submenu = gtk.Menu()
 			item.set_submenu(submenu)
@@ -369,7 +360,8 @@ class ConversationTextview:
 					item.set_property('sensitive', False)
 				else:
 					link = dict_link % self.selected_phrase
-					id = item.connect('activate', self.visit_url_from_menuitem, link)
+					id = item.connect('activate', self.visit_url_from_menuitem,
+						link)
 					self.handlers[id] = item
 			submenu.append(item)
 
@@ -385,13 +377,17 @@ class ConversationTextview:
 				id = item.connect('activate', self.visit_url_from_menuitem, link)
 				self.handlers[id] = item
 			submenu.append(item)
+			
+			item = gtk.MenuItem(_('Open as _link'))
+			id = item.connect('activate', self.visit_url_from_menuitem, link)
+			self.handlers[id] = item
+			submenu.append(item)
 
 		menu.show_all()
 
 	def on_textview_button_press_event(self, widget, event):
 		# If we clicked on a taged text do NOT open the standard popup menu
 		# if normal text check if we have sth selected
-
 		self.selected_phrase = ''
 
 		if event.button != 3: # if not right click
