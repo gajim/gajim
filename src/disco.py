@@ -49,6 +49,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import xmpp
+from common.exceptions import GajimGeneralException as GajimGeneralException
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -1194,7 +1195,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if not gajim.interface.instances[self.account].has_key('join_gc'):
 			try:
 				dialogs.JoinGroupchatWindow(self.account, service)
-			except RuntimeError:
+			except GajimGeneralException:
 				pass
 		else:
 			gajim.interface.instances[self.account]['join_gc'].window.present()

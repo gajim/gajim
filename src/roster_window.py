@@ -36,6 +36,8 @@ import notify
 from common import gajim
 from common import helpers
 from common import passwords
+from common.exceptions import GajimGeneralException as GajimGeneralException
+
 from message_window import MessageWindowMgr
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
@@ -1574,7 +1576,7 @@ class RosterWindow:
 						dialogs.JoinGroupchatWindow(account,
 							gajim.connections[account].muc_jid[type_],
 							automatic = {'invities': jid_list})
-				except RuntimeError:
+				except GajimGeneralException:
 					continue
 				break
 
@@ -2669,7 +2671,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			try:
 				gajim.interface.instances[account]['join_gc'] = \
 					dialogs.JoinGroupchatWindow(account)
-			except RuntimeError:
+			except GajimGeneralException:
 				pass
 
 	def on_new_message_menuitem_activate(self, widget, account):
@@ -3108,7 +3110,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			try:
 				# Object will add itself to the window dict
 				disco.ServiceDiscoveryWindow(account, address_entry = True)
-			except RuntimeError:
+			except GajimGeneralException:
 				pass
 
 	def load_iconset(self, path, pixbuf2 = None, transport = False):

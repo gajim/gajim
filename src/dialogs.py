@@ -40,6 +40,7 @@ from advanced import AdvancedConfigurationWindow
 
 from common import gajim
 from common import helpers
+from common.exceptions import GajimGeneralException as GajimGeneralException
 
 class EditGroupsDialog:
 	'''Class for the edit group dialog window'''
@@ -1089,7 +1090,7 @@ class JoinGroupchatWindow:
 			if room_jid in gajim.gc_connected[account] and\
 			gajim.gc_connected[account][room_jid]:
 				ErrorDialog(_('You are already in room %s') % room_jid)
-				raise RuntimeError, 'You are already in this room'
+				raise GajimGeneralException, 'You are already in this room'
 		self.account = account
 		self.automatic = automatic
 		if nick == '':
@@ -1097,7 +1098,7 @@ class JoinGroupchatWindow:
 		if gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
 				_('You can not join a group chat unless you are connected.'))
-			raise RuntimeError, 'You must be connected to join a groupchat'
+			raise GajimGeneralException, 'You must be connected to join a groupchat'
 
 		self._empty_required_widgets = []
 
@@ -1255,7 +1256,7 @@ class ChangePasswordDialog:
 		if not account or gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
 				_('Without a connection, you can not change your password.'))
-			raise RuntimeError, 'You are not connected to the server'
+			raise GajimGeneralException, 'You are not connected to the server'
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_password_dialog.glade')
 		self.dialog = self.xml.get_widget('change_password_dialog')

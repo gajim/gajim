@@ -39,6 +39,8 @@ from common import gajim
 from common import connection
 from common import passwords
 
+from common.exceptions import GajimGeneralException as GajimGeneralException
+
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
 	'''Class for Preferences window'''
@@ -1506,7 +1508,7 @@ class AccountModificationWindow:
 	def on_change_password_button_clicked(self, widget):
 		try:
 			dialog = dialogs.ChangePasswordDialog(self.account)
-		except RuntimeError:
+		except GajimGeneralException:
 			#if we showed ErrorDialog, there will not be dialog instance
 			return
 

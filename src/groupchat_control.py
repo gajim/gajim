@@ -43,9 +43,9 @@ from conversation_textview import ConversationTextview
 #(status_image, type, nick, shown_nick)
 (
 C_IMG, # image to show state (online, new message etc)
-C_TEXT, # type of the row ('contact' or 'group')
-C_TYPE, # text shown in the cellrenderer
-C_NICK, # contact nickame or group name
+C_NICK, # contact nickame or ROLE name
+C_TYPE, # type of the row ('contact' or 'role')
+C_TEXT, # text shown in the cellrenderer
 C_AVATAR, # avatar of the contact
 ) = range(5)
 	
@@ -913,9 +913,9 @@ class GroupchatControl(ChatControlBase):
 		role_iter = self.get_role_iter(role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(gajim.interface.roster.jabber_state_images['16']['closed'], 'role',
-				role, '<b>%s</b>' % role_name, None))
-		iter = model.append(role_iter, (None, 'contact', nick, name, None))
+				(gajim.interface.roster.jabber_state_images['16']['closed'], role, 
+				'role', '<b>%s</b>' % role_name,  None))
+		iter = model.append(role_iter, (None, nick, 'contact', name, None))
 		if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			gc_contact = gajim.contacts.create_gc_contact(room_jid = self.room_jid,
 				name = nick, show = show, status = status, role = role,
