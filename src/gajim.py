@@ -1980,7 +1980,8 @@ if __name__ == '__main__':
 			cli = gnome.ui.master_client()
 			cli.connect('die', die_cb)
 			
-			path_to_gajim_script = gtkgui_helpers.get_abspath_for_script('gajim')
+			path_to_gajim_script = gtkgui_helpers.get_abspath_for_script(
+				'gajim')
 			
 			if path_to_gajim_script:
 				argv = [path_to_gajim_script]
@@ -1995,5 +1996,11 @@ if __name__ == '__main__':
 		gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
 
 	check_paths.check_and_possibly_create_paths()
+	
+	#FIXME: when .14 is out, remove this :D
+	if gajim.config.get('version') <= '0.10.1.3':
+		gajim.config.set('version', '0.10.1.4')
+		check_paths.migrate_logs_db_to_indeces()
+
 	Interface()
 	gtk.main()

@@ -1,16 +1,7 @@
-## Contributors for this file:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - Nikos Kouremenos <kourem@gmail.com>
-## - Travis Shirk <travis@pobox.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -57,11 +48,13 @@ def create_log_db():
 			jid_id INTEGER
 		);
 		
+		CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
+		
 		CREATE TABLE transports_cache (
 			transport TEXT UNIQUE,
 			type INTEGER
 		);
-																
+		
 		CREATE TABLE logs(
 			log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid_id INTEGER,
@@ -72,6 +65,8 @@ def create_log_db():
 			message TEXT,
 			subject TEXT
 		);
+		
+		CREATE INDEX idx_logs_jid_id_kind ON logs (jid_id, kind);
 		'''
 		)
 
@@ -124,6 +119,21 @@ def check_and_possibly_create_paths():
 		if not os.path.isfile(LOG_DB_PATH):
 			create_log_db()
 			gajim.logger.init_vars()
+
+def migrate_logs_db_to_indeces():
+	print _('migrating logs database to indeces')
+	con = sqlite.connect(logger.LOG_DB_PATH) 
+	cur = con.cursor()
+	# apply indeces
+	cur.executescript(
+		'''
+		CREATE INDEX IF NOT EXISTS idx_logs_jid_id_kind ON logs (jid_id, kind);
+		CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
+		'''
+	)
+
+	con.commit()
+	con.close()
 
 def create_path(directory):
 	print _('creating %s directory') % directory
