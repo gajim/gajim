@@ -1378,7 +1378,7 @@ class GroupchatControl(ChatControlBase):
 			if bookmark['jid'] == bm['jid']:
 				dialogs.ErrorDialog(
 					_('Bookmark already set'),
-					_('Room "%s" is already in your bookmarks.') % bm['jid'])
+					_('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
 				return
 
 		gajim.connections[self.account].bookmarks.append(bm)

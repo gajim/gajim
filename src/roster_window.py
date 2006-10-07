@@ -963,8 +963,8 @@ class RosterWindow:
 		item.connect('activate', self.on_history_manager_menuitem_activate)
 		
 	def add_bookmarks_list(self, gc_sub_menu, account):
-		'''Print join new room item and bookmarks list for an account'''
-		item = gtk.MenuItem(_('_Join New Room'))
+		'''Show join new group chat item and bookmarks list for an account'''
+		item = gtk.MenuItem(_('_Join New Group Chat'))
 		item.connect('activate', self.on_join_gc_activate, account)
 		gc_sub_menu.append(item)
 

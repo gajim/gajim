@@ -2402,10 +2402,10 @@ class ManageBookmarksWindow:
 		self.window = self.xml.get_widget('manage_bookmarks_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 
-		#Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick, Show_Status
+		# Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick, Show_Status
 		self.treestore = gtk.TreeStore(str, str, str, bool, str, str, str)
 
-		#Store bookmarks in treeview.
+		# Store bookmarks in treeview.
 		for account in gajim.connections:
 			if gajim.connections[account].connected <= 1:
 				continue
@@ -2510,7 +2510,7 @@ class ManageBookmarksWindow:
 
 		account = model[add_to][1].decode('utf-8')
 		nick = gajim.nicks[account]
-		self.treestore.append(add_to, [account, _('New Room'), '', False, '',
+		self.treestore.append(add_to, [account, _('New Group Chat'), '', False, '',
 			nick, 'in_and_out'])
 
 		self.view.expand_row(model.get_path(add_to), True)

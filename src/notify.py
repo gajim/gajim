@@ -231,7 +231,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				room_name = gajim.get_nick_from_jid(jid)
 				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 					'priv_msg_recv.png')
-				title = _('New Private Message from room %s') % room_name
+				title = _('New Private Message from group chat %s') % room_name
 				text = _('%(nickname)s: %(message)s') % {'nickname': nickname,
 					'message': message}
 			else: # chat message
