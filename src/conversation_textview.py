@@ -36,8 +36,12 @@ from htmltextview import HtmlTextView
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
-	def __init__(self, account):
-		# no need to inherit TextView, use it as property is safer
+	def __init__(self, account, used_in_history_window = False):
+		'''if used_in_history_window is True, then we do not show
+		Clear menuitem in context menu'''
+		self.used_in_history_window = used_in_history_window
+		
+		# no need to inherit TextView, use it as atrribute is safer
 		self.tv = HtmlTextView()
 		self.tv.html_hyperlink_handler = self.html_hyperlink_handler
 
@@ -52,11 +56,13 @@ class ConversationTextview:
 		self.handlers = {}
 
 		# connect signals
-		id = self.tv.connect('motion_notify_event', self.on_textview_motion_notify_event)
+		id = self.tv.connect('motion_notify_event',
+			self.on_textview_motion_notify_event)
 		self.handlers[id] = self.tv
 		id = self.tv.connect('populate_popup', self.on_textview_populate_popup)
 		self.handlers[id] = self.tv
-		id = self.tv.connect('button_press_event', self.on_textview_button_press_event)
+		id = self.tv.connect('button_press_event',
+			self.on_textview_button_press_event)
 		self.handlers[id] = self.tv
 
 		self.account = account
@@ -145,7 +151,7 @@ class ConversationTextview:
 				self.handlers[i].disconnect(i)
 		del self.handlers
 		self.tv.destroy()
-		#TODO
+		#FIXME:
 		# self.line_tooltip.destroy()
 	
 	def update_tags(self):
@@ -311,18 +317,28 @@ class ConversationTextview:
 
 	def on_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
+		(only if used_in_history_window is False)
 		and if we have sth selected we show a submenu with actions on the phrase
 		(see on_conversation_textview_button_press_event)'''
-		item = gtk.SeparatorMenuItem()
-		menu.prepend(item)
-		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
-		menu.prepend(item)
-		id = item.connect('activate', self.clear)
-		self.handlers[id] = item
+
+		separator_menuitem_was_added = False
+		if not self.used_in_history_window:
+			item = gtk.SeparatorMenuItem()
+			menu.prepend(item)
+			separator_menuitem_was_added = True
+
+			item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+			menu.prepend(item)
+			id = item.connect('activate', self.clear)
+			self.handlers[id] = item
+
 		if self.selected_phrase:
-			if len(self.selected_phrase) > 25:
-				self.selected_phrase = helpers.reduce_chars_newlines(
-					self.selected_phrase, 25)
+			if not separator_menuitem_was_added:
+				item = gtk.SeparatorMenuItem()
+				menu.prepend(item)
+
+			self.selected_phrase = helpers.reduce_chars_newlines(
+				self.selected_phrase, 25)
 			item = gtk.MenuItem(_('_Actions for "%s"') % self.selected_phrase)
 			menu.prepend(item)
 			submenu = gtk.Menu()

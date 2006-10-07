@@ -59,7 +59,8 @@ class HistoryWindow:
 		
 		self.calendar = xml.get_widget('calendar')
 		scrolledwindow = xml.get_widget('scrolledwindow')
-		self.history_textview = conversation_textview.ConversationTextview(account)
+		self.history_textview = conversation_textview.ConversationTextview(
+			account, used_in_history_window = True)
 		scrolledwindow.add(self.history_textview.tv)
 		self.history_buffer = self.history_textview.tv.get_buffer()
 		self.history_buffer.create_tag('highlight', background = 'yellow')
