@@ -613,13 +613,12 @@ class RosterWindow:
 			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
 				)
 			return
-		room, server = room_jid.split('@')
 		if not gajim.interface.msg_win_mgr.has_window(room_jid, account):
 			self.new_room(room_jid, nick, account)
 		gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
 		gc_win.set_active_tab(room_jid, account)
 		gc_win.window.present()
-		gajim.connections[account].join_gc(nick, room, server, password)
+		gajim.connections[account].join_gc(nick, room_jid, password)
 		if password:
 			gajim.gc_passwords[room_jid] = password
 
