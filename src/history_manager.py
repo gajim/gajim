@@ -1,7 +1,4 @@
-#!/bin/sh
-''':'
-exec python -OOt "$0" ${1+"$@"}
-' '''
+#!/usr/bin/env python
 ## history_manager.py
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
@@ -51,7 +48,6 @@ except ImportError:
 
 
 class HistoryManager:
-
 	def __init__(self):
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
