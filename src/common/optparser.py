@@ -303,7 +303,7 @@ class OptionsParser:
 		con.close()
 		gajim.config.set('version', '0.10.1.3')
 
-	def update_config_to_01014():
+	def update_config_to_01014(self):
 		'''apply indeces to the logs database'''
 		import exceptions
 		try:
