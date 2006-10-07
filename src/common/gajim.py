@@ -137,10 +137,10 @@ def get_nick_from_fjid(jid):
 	# gaim@conference.jabber.no/nick/nick-continued
 	return jid.split('/', 1)[1]
 
-def get_room_name_and_server_from_room_jid(jid):
-	room_name = get_nick_from_jid(jid)
+def get_name_and_server_from_jid(jid):
+	name = get_nick_from_jid(jid)
 	server = get_server_from_jid(jid)
-	return room_name, server
+	return name, server
 
 def get_room_and_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room

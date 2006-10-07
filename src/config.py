@@ -2846,7 +2846,7 @@ class AccountCreationWizardWindow:
 				self.account = server + str(i)
 				i += 1
 
-			username, server = gajim.get_room_name_and_server_from_room_jid(jid)
+			username, server = gajim.get_name_and_server_from_jid(jid)
 			self.save_account(username, server, savepass, password)
 			self.cancel_button.hide()
 			self.back_button.hide()

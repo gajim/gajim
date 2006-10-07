@@ -1191,15 +1191,9 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if not iter:
 			return
 		service = model[iter][0].decode('utf-8')
-		if service.find('@') != -1:
-			services = service.split('@', 1)
-			room = services[0]
-			service = services[1]
-		else:
-			room = ''
 		if not gajim.interface.instances[self.account].has_key('join_gc'):
 			try:
-				dialogs.JoinGroupchatWindow(self.account, service, room)
+				dialogs.JoinGroupchatWindow(self.account, service)
 			except RuntimeError:
 				pass
 		else:
@@ -1502,7 +1496,8 @@ class MucBrowser(AgentBrowser):
 		self.vadj = self.window.services_scrollwin.get_property('vadjustment')
 		self.vadj_cbid = self.vadj.connect('value-changed', self.on_scroll)
 		# And to size changes
-		self.size_cbid = self.window.services_scrollwin.connect('size-allocate', self.on_scroll)
+		self.size_cbid = self.window.services_scrollwin.connect(
+			'size-allocate', self.on_scroll)
 
 	def _clean_treemodel(self):
 		if self.size_cbid:
@@ -1531,15 +1526,10 @@ class MucBrowser(AgentBrowser):
 		if not iter:
 			return
 		service = model[iter][0].decode('utf-8')
-		if service.find('@') != -1:
-			services = service.split('@', 1)
-			room = services[0]
-			service = services[1]
-		else:
-			room = model[iter][1].decode('utf-8')
 		if 'join_gc' not in gajim.interface.instances[self.account]:
 			try:
-				dialogs.JoinGroupchatWindow(self.account, service, room)
+				room_jid = '%s@%s' % (service, room)
+				dialogs.JoinGroupchatWindow(self.account, service)
 			except RuntimeError:
 				pass
 		else:

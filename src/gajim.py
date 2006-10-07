@@ -1370,12 +1370,11 @@ class Interface:
 			if gajim.gc_connected[account].has_key(room_jid) and\
 					gajim.gc_connected[account][room_jid]:
 				continue
-			room, server = gajim.get_room_name_and_server_from_room_jid(room_jid)
 			nick = gc_control.nick
 			password = ''
 			if gajim.gc_passwords.has_key(room_jid):
 				password = gajim.gc_passwords[room_jid]
-			gajim.connections[account].join_gc(nick, room, server, password)
+			gajim.connections[account].join_gc(nick, room_jid, password)
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)

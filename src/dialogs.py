@@ -511,7 +511,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			if type_ == 'jabber':
 				self.uid_entry.set_text(jid)
 			else:
-				uid, transport = gajim.get_room_name_and_server_from_room_jid(jid)
+				uid, transport = gajim.get_name_and_server_from_jid(jid)
 				self.uid_entry.set_text(uid.replace('%', '@', 1))
 			#set protocol_combobox
 			model = self.protocol_combobox.get_model()
@@ -1081,15 +1081,14 @@ class SubscriptionRequestWindow:
 
 
 class JoinGroupchatWindow:
-	def __init__(self, account, server = '', room = '', nick = '',
-	automatic = False):
+	def __init__(self, account, room_jid = '', nick = '', automatic = False):
 		'''automatic is a dict like {'invities': []}
 		If automatic is not empty, this means room must be automaticaly configured
 		and when done, invities must be automatically invited'''
-		if server and room:
-			jid = room + '@' + server
-			if jid in gajim.gc_connected[account] and gajim.gc_connected[account][jid]:
-				ErrorDialog(_('You are already in room %s') % jid)
+		if room_jid != '':
+			if room_jid in gajim.gc_connected[account] and\
+			gajim.gc_connected[account][room_jid]:
+				ErrorDialog(_('You are already in room %s') % room_jid)
 				raise RuntimeError, 'You are already in this room'
 		self.account = account
 		self.automatic = automatic
@@ -1097,16 +1096,18 @@ class JoinGroupchatWindow:
 			nick = gajim.nicks[self.account]
 		if gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
-_('You can not join a group chat unless you are connected.'))
+				_('You can not join a group chat unless you are connected.'))
 			raise RuntimeError, 'You must be connected to join a groupchat'
 
 		self._empty_required_widgets = []
 
 		self.xml = gtkgui_helpers.get_glade('join_groupchat_window.glade')
 		self.window = self.xml.get_widget('join_groupchat_window')
-		self.xml.get_widget('server_entry').set_text(server)
-		self.xml.get_widget('room_entry').set_text(room)
-		self.xml.get_widget('nickname_entry').set_text(nick)
+		self._room_jid_entry = self.xml.get_widget('room_jid_entry')
+		self._nickname_entry = self.xml.get_widget('nickname_entry')
+		
+		self._room_jid_entry.set_text(room_jid)
+		self._nickname_entry.set_text(nick)
 		self.xml.signal_autoconnect(self)
 		gajim.interface.instances[account]['join_gc'] = self #now add us to open windows
 		if len(gajim.connections) > 1:
@@ -1126,18 +1127,13 @@ _('You can not join a group chat unless you are connected.'))
 			self.recently_combobox.append_text(g)
 		if len(self.recently_groupchat) == 0:
 			self.recently_combobox.set_sensitive(False)
-		elif server == '' and room == '':
+		elif room_jid == '':
 			self.recently_combobox.set_active(0)
-			self.xml.get_widget('room_entry').select_region(0, -1)
-		elif room and server:
+			self._room_jid_entry.select_region(0, -1)
+		elif room_jid != '':
 			self.xml.get_widget('join_button').grab_focus()
 
-		self._server_entry = self.xml.get_widget('server_entry')
-		self._room_entry = self.xml.get_widget('room_entry')
-		self._nickname_entry = self.xml.get_widget('nickname_entry')
-		if not self._server_entry.get_text():
-			self._empty_required_widgets.append(self._server_entry)
-		if not self._room_entry.get_text():
+		if not self._room_jid_entry.get_text():
 			self._empty_required_widgets.append(self._room_entry)
 		if not self._nickname_entry.get_text():
 			self._empty_required_widgets.append(self._nickname_entry)
@@ -1165,27 +1161,11 @@ _('You can not join a group chat unless you are connected.'))
 				if len(self._empty_required_widgets) == 0:
 					self.xml.get_widget('join_button').set_sensitive(True)
 
-	def on_room_entry_key_press_event(self, widget, event):
-		# Check for pressed @ and jump to server_entry if found
-		if event.keyval == gtk.keysyms.at:
-			self.xml.get_widget('server_entry').grab_focus()
-			return True
-
-	def on_server_entry_key_press_event(self, widget, event):
-		# If backspace is pressed in empty server_entry, return to the room entry
-		backspace = event.keyval == gtk.keysyms.BackSpace
-		server_entry = self.xml.get_widget('server_entry')
-		empty = len(server_entry.get_text()) == 0
-		if backspace and empty:
-			self.xml.get_widget('room_entry').grab_focus()
-			return True
-
 	def on_recently_combobox_changed(self, widget):
 		model = widget.get_model()
-		iter = widget.get_active_iter()
-		gid = model[iter][0].decode('utf-8')
-		self.xml.get_widget('room_entry').set_text(gid.split('@')[0])
-		self.xml.get_widget('server_entry').set_text(gid.split('@')[1])
+		iter_ = widget.get_active_iter()
+		room_jid = model[iter_][0].decode('utf-8')
+		self._room_jid_entry.set_text(room_jid)
 
 	def on_cancel_button_clicked(self, widget):
 		'''When Cancel button is clicked'''
@@ -1193,30 +1173,29 @@ _('You can not join a group chat unless you are connected.'))
 
 	def on_join_button_clicked(self, widget):
 		'''When Join button is clicked'''
-		nickname = self.xml.get_widget('nickname_entry').get_text().decode(
-			'utf-8')
-		room = self.xml.get_widget('room_entry').get_text().decode('utf-8')
-		server = self.xml.get_widget('server_entry').get_text().decode('utf-8')
+		nickname = self._nickname_entry.get_text().decode('utf-8')
+		room_jid = self._room_jid_entry.get_text().decode('utf-8')
 		password = self.xml.get_widget('password_entry').get_text().decode(
 			'utf-8')
-		jid = '%s@%s' % (room, server)
 		try:
-			jid = helpers.parse_jid(jid)
+			room_jid = helpers.parse_jid(room_jid)
 		except:
-			ErrorDialog(_('Invalid room or server name'),
-				_('The room name or server name has not allowed characters.'))
+			ErrorDialog(_('Invalid room Jabber ID'),
+				_('The room Jabber ID has not allowed characters.'))
 			return
 
-		if jid in self.recently_groupchat:
-			self.recently_groupchat.remove(jid)
-		self.recently_groupchat.insert(0, jid)
+		if room_jid in self.recently_groupchat:
+			self.recently_groupchat.remove(room_jid)
+		self.recently_groupchat.insert(0, room_jid)
 		if len(self.recently_groupchat) > 10:
 			self.recently_groupchat = self.recently_groupchat[0:10]
-		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
+		gajim.config.set('recently_groupchat',
+			' '.join(self.recently_groupchat))
 
 		if self.automatic:
-			gajim.automatic_rooms[self.account][jid] = self.automatic
-		gajim.interface.roster.join_gc_room(self.account, jid, nickname, password)
+			gajim.automatic_rooms[self.account][room_jid] = self.automatic
+		gajim.interface.roster.join_gc_room(self.account, room_jid, nickname,
+			password)
 
 		self.window.destroy()
 
@@ -2194,9 +2173,8 @@ class InvitationReceivedDialog:
 	
 	def on_accept_button_clicked(self, widget):
 		self.dialog.destroy()
-		room, server = gajim.get_room_name_and_server_from_room_jid(self.room_jid)
 		try:
-			JoinGroupchatWindow(self.account, server = server, room = room)
+			JoinGroupchatWindow(self.account, self.room_jid)
 		except RuntimeError:
 			pass
 			

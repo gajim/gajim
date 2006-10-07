@@ -969,14 +969,15 @@ class Connection(ConnectionHandlers):
 		p = self.add_sha(p, ptype != 'unavailable')
 		self.connection.send(p)
 
-	def join_gc(self, nick, room, server, password):
+	def join_gc(self, nick, room_jid, password):
+		# FIXME: This room JID needs to be normalized; see #1364
 		if not self.connection:
 			return
 		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
 		if show == 'invisible':
 			# Never join a room when invisible
 			return
-		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
+		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick),
 			show = show, status = self.status)
 		if gajim.config.get('send_sha_in_gc_presence'):
 			p = self.add_sha(p)
@@ -985,12 +986,11 @@ class Connection(ConnectionHandlers):
 			t.setTagData('password', password)
 		self.connection.send(p)
 		#last date/time in history to avoid duplicate
-		# FIXME: This JID needs to be normalized; see #1364
-		jid='%s@%s' % (room, server)
-		last_log = gajim.logger.get_last_date_that_has_logs(jid, is_room = True)
+		last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
+			is_room = True)
 		if last_log is None:
 			last_log = 0
-		self.last_history_line[jid]= last_log
+		self.last_history_line[room_jid]= last_log
 
 	def send_gc_message(self, jid, msg, xhtml = None):
 		if not self.connection:

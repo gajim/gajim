@@ -1572,7 +1572,7 @@ class RosterWindow:
 				try:
 					gajim.interface.instances[account]['join_gc'] = \
 						dialogs.JoinGroupchatWindow(account,
-							server = gajim.connections[account].muc_jid[type_],
+							gajim.connections[account].muc_jid[type_],
 							automatic = {'invities': jid_list})
 				except RuntimeError:
 					continue

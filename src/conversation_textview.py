@@ -430,17 +430,15 @@ class ConversationTextview:
 	def on_start_chat_activate(self, widget, jid):
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
-	def on_join_group_chat_menuitem_activate(self, widget, jid):
-		room, server = jid.split('@')
+	def on_join_group_chat_menuitem_activate(self, widget, room_jid):
 		if gajim.interface.instances[self.account].has_key('join_gc'):
 			instance = gajim.interface.instances[self.account]['join_gc']
-			instance.xml.get_widget('server_entry').set_text(server)
-			instance.xml.get_widget('room_entry').set_text(room)
+			instance.xml.get_widget('room_jid_entry').set_text(room_jid)
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		else:
 			try:
 				gajim.interface.instances[self.account]['join_gc'] = \
-				dialogs.JoinGroupchatWindow(self.account, server, room)
+				dialogs.JoinGroupchatWindow(self.account, room_jid)
 			except RuntimeError:
 				pass
 

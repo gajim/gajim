@@ -228,7 +228,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				text = message
 			elif message_type == 'pm': # private message
 				event_type = _('New Private Message')
-				room_name, t = gajim.get_room_name_and_server_from_room_jid(jid)
+				room_name = gajim.get_nick_from_jid(jid)
 				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 					'priv_msg_recv.png')
 				title = _('New Private Message from room %s') % room_name
