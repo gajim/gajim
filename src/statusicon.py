@@ -27,6 +27,8 @@ class StatusIcon(systray.Systray):
 	#NOTE: gtk api does NOT allow:
 	# leave, enter motion notify
 	# and can't do cool tooltips we use
+	# and we could use blinking instead of unsupported animation
+	# or we could emulate animation by every foo ms chaning the image
 	def __init__(self):
 		systray.Systray.__init__(self)
 		self.status_icon = gtk.StatusIcon()
@@ -48,12 +50,10 @@ class StatusIcon(systray.Systray):
 		self.on_left_click()
 
 	def set_img(self):
-		'''apart from image, I also update tooltip text'
+		'''apart from image, we also update tooltip text here'
 		if not gajim.interface.systray_enabled:
 			return
 		text = helpers.get_notification_icon_tooltip_text()
-		#FIXME: if you do that, import gtkgui_helpers
-		text = gtkgui_helpers.escape_for_pango_markup(text)
 		self.status_icon.set_tooltip(text)
 		if gajim.events.get_nb_systray_events():
 			state = 'message'
