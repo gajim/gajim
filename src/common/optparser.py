@@ -344,5 +344,6 @@ class OptionsParser:
 				show))
 		cur.execute('update logs set show = NULL where show not in (0, 1, 2, 3, 4, 5);')
 		con.commit()
+		cur.close()
 		con.close()
 		gajim.config.set('version', '0.10.1.5')
