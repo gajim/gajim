@@ -1076,7 +1076,7 @@ class GroupchatControl(ChatControlBase):
 						room_jid, nick = room_jid.split('/', 1)
 					else:
 						nick = ''
-					#join_gc window is needed in order to provide for password entry.
+					# join_gc window is needed in order to provide for password entry.
 					if gajim.interface.instances[self.account].has_key('join_gc'):
 						gajim.interface.instances[self.account]['join_gc'].\
 							window.present()
@@ -1090,7 +1090,7 @@ class GroupchatControl(ChatControlBase):
 					self.clear(self.msg_textview)
 				else:
 					#%s is something the user wrote but it is not a jid so we inform
-					s = _('%s does not appear to be a valid JID') % message_array
+					s = _('%s does not appear to be a valid JID') % message_array[0]
 					self.print_conversation(s, 'info')
 			else:
 				self.get_command_help(command)
