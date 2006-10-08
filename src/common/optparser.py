@@ -342,7 +342,7 @@ class OptionsParser:
 		for show in status:
 			cur.execute('update logs set show = ? where show = ?;', (status[show],
 				show))
-		cur.executescript('update logs set show = NULL where show not in (0, 1, 2, 3, 4, 5);')
+		cur.execute('update logs set show = NULL where show not in (0, 1, 2, 3, 4, 5);')
 		con.commit()
 		con.close()
 		gajim.config.set('version', '0.10.1.5')
