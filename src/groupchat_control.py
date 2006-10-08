@@ -1086,7 +1086,7 @@ class GroupchatControl(ChatControlBase):
 						try:
 							gajim.interface.instances[self.account]['join_gc'] =\
 								dialogs.JoinGroupchatWindow(self.account,
-									server = server, room = room, nick = nick)
+									server = server, room_jid = room, nick = nick)
 						except GajimGeneralException:
 							pass
 					self.clear(self.msg_textview)
