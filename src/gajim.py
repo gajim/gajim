@@ -1078,12 +1078,16 @@ class Interface:
 		if gajim.config.get('notify_on_new_gmail_email'):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'new_email_recv.png')
-			title = _('New E-mail on %(gmail_mail_address)s') % \
+			title = _('New mail on %(gmail_mail_address)s') % \
 				{'gmail_mail_address': jid}
-			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
+			text = i18n.ngettext('You have %d new mail conversation',
+				'You have %d new mail conversations', gmail_new_messages,
+				gmail_new_messages, gmail_new_messages)
 			
 			if gajim.config.get('notify_on_new_gmail_email_extra'):
 				for gmessage in gmail_messages_list:
+					#FIXME: emulate Gtalk client popups. find out what they parse and how
+					#they decide what to show
 					# each message has a 'From', 'Subject' and 'Snippet' field
 					text += _('\nFrom: %(from_address)s') % \
 						{'from_address': gmessage['From']}
