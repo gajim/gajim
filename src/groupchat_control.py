@@ -1070,13 +1070,11 @@ class GroupchatControl(ChatControlBase):
 		elif command == 'join':
 			# example: /join room@conference.example.com/nick
 			if len(message_array):
-				message_array = message_array[0]
-				if message_array.find('@') >= 0:
-					room, servernick = message_array.split('@')
-					if servernick.find('/') >= 0:
-						server, nick = servernick.split('/', 1)
+				room_jid = message_array[0]
+				if room_jid.find('@') >= 0:
+					if room_jid.find('/') >= 0:
+						room_jid, nick = room_jid.split('/', 1)
 					else:
-						server = servernick
 						nick = ''
 					#join_gc window is needed in order to provide for password entry.
 					if gajim.interface.instances[self.account].has_key('join_gc'):
@@ -1086,7 +1084,7 @@ class GroupchatControl(ChatControlBase):
 						try:
 							gajim.interface.instances[self.account]['join_gc'] =\
 								dialogs.JoinGroupchatWindow(self.account,
-									server = server, room_jid = room, nick = nick)
+									room_jid = room_jid, nick = nick)
 						except GajimGeneralException:
 							pass
 					self.clear(self.msg_textview)
