@@ -30,6 +30,9 @@ import dialogs
 import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants
 
+#FIXME: constants should implement 2 way mappings 
+status = dict((constants.__dict__[i], i[5:].lower()) for i in \
+	constants.__dict__.keys() if i.startswith('SHOW_')) 
 from common import gajim
 from common import helpers
 
@@ -308,6 +311,7 @@ class HistoryManager:
 			except ValueError:
 				pass
 			else:
+				color = None
 				if kind in (constants.KIND_SINGLE_MSG_RECV,
 				constants.KIND_CHAT_MSG_RECV, constants.KIND_GC_MSG):
 					# it is the other side
@@ -323,10 +327,13 @@ class HistoryManager:
 						message = ''
 					else:
 						message = ' : ' + message 
-					message = helpers.get_uf_show(show) + message
-					
-				message = '<span foreground="%s">%s</span>' % (color,
-					gtkgui_helpers.escape_for_pango_markup(message))
+					message = helpers.get_uf_show(gajim.SHOW_LIST[show]) + message
+
+				message = '<span'
+				if color:
+					message += ' foreground="%s"' % color
+				message += '>%s</span>' % \
+					gtkgui_helpers.escape_for_pango_markup(message)
 				self.logs_liststore.append((log_line_id, jid_id, time_, message,
 					subject, nickname))
 
