@@ -280,7 +280,9 @@ class HistoryWindow:
 		if contact_name and kind != constants.KIND_GCSTATUS:
 			# add stuff before and after contact name
 			before_str = gajim.config.get('before_nickname')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_nickname')
+			after_str = helpers.from_one_line(after_str)
 			format = before_str + contact_name + after_str + ' '
 			buf.insert_with_tags_by_name(end_iter, format, tag_name)
 
