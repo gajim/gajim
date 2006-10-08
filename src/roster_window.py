@@ -788,7 +788,9 @@ class RosterWindow:
 			disco_sub_menu = gtk.Menu()
 			new_chat_sub_menu = gtk.Menu()
 
-			for account in gajim.connections:
+			accounts_list = gajim.contacts.get_accounts() 
+			accounts_list.sort() 
+			for account in accounts_list:
 				if gajim.connections[account].connected <= 1:
 					# if offline or connecting
 					continue
@@ -799,7 +801,8 @@ class RosterWindow:
 				label.set_use_underline(False)
 				gc_item = gtk.MenuItem()
 				gc_item.add(label)
-				gc_item.connect('state-changed', gtkgui_helpers.on_bm_header_changed_state)
+				gc_item.connect('state-changed',
+					gtkgui_helpers.on_bm_header_changed_state)
 				gc_sub_menu.append(gc_item)
 				
 				self.add_bookmarks_list(gc_sub_menu, account)
