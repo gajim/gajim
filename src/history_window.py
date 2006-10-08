@@ -210,7 +210,9 @@ class HistoryWindow:
 		
 		if gajim.config.get('print_time') == 'always':
 			before_str = gajim.config.get('before_time')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_time')
+			after_str = helpers.from_one_line(after_str)
 			format = before_str + '%X' + after_str + ' '
 			tim = time.strftime(format, time.localtime(float(tim)))
 			buf.insert(end_iter, tim) # add time
