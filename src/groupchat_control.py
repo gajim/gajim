@@ -39,6 +39,7 @@ from common import helpers
 from chat_control import ChatControl
 from chat_control import ChatControlBase
 from conversation_textview import ConversationTextview
+from common.exceptions import GajimGeneralException as GajimGeneralException
 
 #(status_image, type, nick, shown_nick)
 (
@@ -1086,7 +1087,7 @@ class GroupchatControl(ChatControlBase):
 							gajim.interface.instances[self.account]['join_gc'] =\
 								dialogs.JoinGroupchatWindow(self.account,
 									server = server, room = room, nick = nick)
-						except RuntimeError:
+						except GajimGeneralException:
 							pass
 					self.clear(self.msg_textview)
 				else:
