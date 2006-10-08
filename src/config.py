@@ -1324,6 +1324,8 @@ class AccountModificationWindow:
 		config['password'] = self.xml.get_widget('password_entry').get_text().\
 			decode('utf-8')
 		config['resource'] = resource
+		config['adjust_priority_with_status'] = self.xml.get_widget(
+			'adjust_priority_with_status_checkbutton').get_active()
 		config['priority'] = self.xml.get_widget('priority_spinbutton').\
 																			get_value_as_int()
 		config['autoconnect'] = self.xml.get_widget('autoconnect_checkbutton').\
@@ -1451,7 +1453,8 @@ class AccountModificationWindow:
 			config['use_ft_proxies']:
 				gajim.connections[self.account].discover_ft_proxies()
 
-			if self.option_changed(config, 'priority'):
+			if self.option_changed(config, 'priority') or self.option_changed(
+			config, 'adjust_priority_with_status'):
 				resend_presence = True
 
 		for opt in config:
