@@ -329,12 +329,12 @@ class HistoryManager:
 						message = ' : ' + message 
 					message = helpers.get_uf_show(gajim.SHOW_LIST[show]) + message
 
-				message = '<span'
+				message_ = '<span'
 				if color:
-					message += ' foreground="%s"' % color
-				message += '>%s</span>' % \
+					message_ += ' foreground="%s"' % color
+				message_ += '>%s</span>' % \
 					gtkgui_helpers.escape_for_pango_markup(message)
-				self.logs_liststore.append((log_line_id, jid_id, time_, message,
+				self.logs_liststore.append((log_line_id, jid_id, time_, message_,
 					subject, nickname))
 
 	def _fill_search_results_listview(self, text):
