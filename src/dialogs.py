@@ -2176,7 +2176,7 @@ class InvitationReceivedDialog:
 		self.dialog.destroy()
 		try:
 			JoinGroupchatWindow(self.account, self.room_jid)
-		except RuntimeError:
+		except GajimGeneralException:
 			pass
 			
 class ProgressDialog:

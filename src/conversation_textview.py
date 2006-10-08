@@ -31,7 +31,7 @@ from calendar import timegm
 from common.fuzzyclock import FuzzyClock
 
 from htmltextview import HtmlTextView
-
+from common.exceptions import GajimGeneralException as GajimGeneralException
 
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
@@ -443,7 +443,7 @@ class ConversationTextview:
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
 	def on_join_group_chat_menuitem_activate(self, widget, room_jid):
-		if gajim.interface.instances[self.account].has_key('join_gc'):
+		if 'join_gc' in gajim.interface.instances[self.account]:
 			instance = gajim.interface.instances[self.account]['join_gc']
 			instance.xml.get_widget('room_jid_entry').set_text(room_jid)
 			gajim.interface.instances[self.account]['join_gc'].window.present()
@@ -451,7 +451,7 @@ class ConversationTextview:
 			try:
 				gajim.interface.instances[self.account]['join_gc'] = \
 				dialogs.JoinGroupchatWindow(self.account, room_jid)
-			except RuntimeError:
+			except GajimGeneralException:
 				pass
 
 	def on_add_to_roster_activate(self, widget, jid):

@@ -1532,7 +1532,7 @@ class MucBrowser(AgentBrowser):
 			try:
 				room_jid = '%s@%s' % (service, room)
 				dialogs.JoinGroupchatWindow(self.account, service)
-			except RuntimeError:
+			except GajimGeneralException:
 				pass
 		else:
 			gajim.interface.instances[self.account]['join_gc'].window.present()
