@@ -473,6 +473,7 @@ class ConversationTextview:
 			childs[6].hide() # join group chat
 			childs[7].hide() # add to roster
 		else: # It's a mail or a JID
+			text = text.lower()
 			id = childs[2].connect('activate', self.on_copy_link_activate, text)
 			self.handlers[id] = childs[2]
 			id = childs[3].connect('activate', self.on_open_link_activate, kind, text)
