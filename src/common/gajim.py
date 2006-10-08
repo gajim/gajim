@@ -333,5 +333,4 @@ def get_priority(account, show):
 	if show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible') and \
 	config.get_per('accounts', account, 'adjust_priority_with_status'):
 		return config.get_per('accounts', account, 'autopriority_' + show)
-	print '1', config.get_per('accounts', account, 'priority')
 	return config.get_per('accounts', account, 'priority')
