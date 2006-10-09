@@ -133,15 +133,14 @@ class Connection(ConnectionHandlers):
 		self.dispatch('STATUS', 'offline')
 		if not self.on_purpose:
 			self.disconnect()
-			if gajim.config.get_per('accounts', self.name, 'autoreconnect') \
-			and self.retrycount <= 10:
+			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
 				self.connected = 1
 				self.dispatch('STATUS', 'connecting')
 				# this check has moved from _reconnect method
 				if self.retrycount > 5:
-					self.time_to_reconnect = 20
+					self.time_to_reconnect = random.randint(15, 25)
 				else:
-					self.time_to_reconnect = 10
+					self.time_to_reconnect = random.randint(5, 15)
 				gajim.idlequeue.set_alarm(self._reconnect_alarm,
 					self.time_to_reconnect)
 			elif self.on_connect_failure:
@@ -365,7 +364,7 @@ class Connection(ConnectionHandlers):
 				secure = self._secure)
 			return
 		else:
-			if not retry or self.retrycount > 10:
+			if not retry:
 				self.retrycount = 0
 				self.time_to_reconnect = None
 				if self.on_connect_failure:
