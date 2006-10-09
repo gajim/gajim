@@ -31,6 +31,7 @@ class SimplePasswordStorage(object):
 		return gajim.config.get_per('accounts', account_name, 'password')
 
 	def save_password(self, account_name, password):
+		gajim.config.set_per('accounts', account_name, 'password', password)
 		gajim.connections[account_name].password = password
 
 
