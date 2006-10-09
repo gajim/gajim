@@ -2157,6 +2157,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if not len(list_of_paths):
 				return
 			type = model[list_of_paths[0]][C_TYPE]
+			account = model[list_of_paths[0]][C_ACCOUNT]
 			list_ = []
 			for path in list_of_paths:
 				if model[path][C_TYPE] != type:
@@ -2166,7 +2167,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
 				list_.append((contact, account))
-			if type in ('account', 'group', 'self_contact'):
+			if type in ('account', 'group', 'self_contact') or account == gajim.ZEROCONF_ACC_NAME:
 				return
 			if type == 'contact':
 				self.on_req_usub(widget, list_)
