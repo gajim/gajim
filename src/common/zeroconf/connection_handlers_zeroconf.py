@@ -705,6 +705,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 	def _messageCB(self, ip, con, msg):
 		'''Called when we receive a message'''
 		msgtxt = msg.getBody()
+		msghtml = msg.getXHTML()
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
 		tim = msg.getTimestamp()
@@ -786,7 +787,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id, composing_jep, user_nick))
+				chatstate, msg_id, composing_jep, user_nick, msghtml))
 		elif mtype == 'normal': # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
