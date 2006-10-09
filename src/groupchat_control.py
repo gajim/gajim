@@ -461,7 +461,7 @@ class GroupchatControl(ChatControlBase):
 			return
 
 		event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
-			False, '', None))
+			False, '', None, xhtml))
 		gajim.events.add_event(self.account, fjid, event)
 
 		autopopup = gajim.config.get('autopopup')
