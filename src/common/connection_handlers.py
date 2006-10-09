@@ -1416,9 +1416,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
 						chatstate, msg_id, composing_jep, user_nick, msghtml))
 		else: # it's single message
-			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
-				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
-					subject = subject)
 			if invite is not None:
 				item = invite.getTag('invite')
 				jid_from = item.getAttr('from')
@@ -1426,9 +1423,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				item = invite.getTag('password')
 				password = invite.getTagData('password')
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
-			else:
-				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, chatstate, msg_id, composing_jep, user_nick, msghtml))
+				return
+			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
+				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
+					subject = subject)
+			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
+				subject, chatstate, msg_id, composing_jep, user_nick, msghtml))
 	# END messageCB
 
 	def _presenceCB(self, con, prs):
