@@ -1105,7 +1105,7 @@ class GroupchatControl(ChatControlBase):
 			reason = 'offline'
 			if len(message_array):
 				reason = message_array.pop(0)
-			self.parent_win.remove_tab(self,reason)
+			self.parent_win.remove_tab(self, reason, force = True)
 			self.clear(self.msg_textview)
 			return True
 		elif command == 'ban':
