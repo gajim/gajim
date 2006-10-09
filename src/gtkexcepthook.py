@@ -22,6 +22,7 @@ import threading
 
 import gtk
 import pango
+from common import i18n
 import dialogs
 
 from cStringIO import StringIO

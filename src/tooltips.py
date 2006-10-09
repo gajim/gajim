@@ -38,7 +38,7 @@ class BaseTooltip:
 				tooltip.hide_tooltip()
 		
 		* data - the text to be displayed  (extenders override this argument and 
-			dislpay more complex contents)
+			display more complex contents)
 		* widget_height  - the height of the widget on which we want to show tooltip
 		* widget_y_position - the vertical position of the widget on the screen
 		
@@ -135,7 +135,7 @@ class BaseTooltip:
 		preferred_y = widget_y_position + widget_height + 4
 		
 		self.preferred_position = [pointer_x, preferred_y]
-		self.widget_height =widget_height
+		self.widget_height = widget_height
 		self.win.ensure_style()
 		self.win.show_all()
 
@@ -177,10 +177,12 @@ class StatusTable:
 				# make sure 'status' is unicode before we send to to reduce_chars
 				if isinstance(status, str):
 					status = unicode(status, encoding='utf-8')
-				# reduce to 200 chars, 1 line
-				status = gtkgui_helpers.reduce_chars_newlines(status, 200, 1)
-				str_status += ' - ' + status
-		return gtkgui_helpers.escape_for_pango_markup(str_status)
+				# reduce to 100 chars, 1 line
+				status = helpers.reduce_chars_newlines(status, 100, 1)
+				str_status = gtkgui_helpers.escape_for_pango_markup(str_status)
+				status = gtkgui_helpers.escape_for_pango_markup(status)
+				str_status += ' - <i>' + status + '</i>'
+		return str_status
 	
 	def add_status_row(self, file_path, show, str_status, status_time = None, show_lock = False):
 		''' appends a new row with status icon to the table '''
@@ -227,27 +229,6 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		BaseTooltip.__init__(self)
 		StatusTable.__init__(self)
 
-	def get_accounts_info(self):
-		accounts = []
-		accounts_list = gajim.contacts.get_accounts()
-		accounts_list.sort()
-		for account in accounts_list:
-			status_idx = gajim.connections[account].connected
-			# uncomment the following to hide offline accounts
-			# if status_idx == 0: continue
-			status = gajim.SHOW_LIST[status_idx]
-			message = gajim.connections[account].status
-			single_line = helpers.get_uf_show(status)
-			if message is None:
-				message = ''
-			else:
-				message = message.strip()
-			if message != '':
-				single_line += ': ' + message
-			accounts.append({'name': account, 'status_line': single_line, 
-					'show': status, 'message': message})
-		return accounts
-
 	def fill_table_with_accounts(self, accounts):
 		iconset = gajim.config.get('iconset')
 		if not iconset:
@@ -259,7 +240,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			# there are possible pango TBs on 'set_markup'
 			if isinstance(message, str):
 				message = unicode(message, encoding = 'utf-8')
-			message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
+			message = helpers.reduce_chars_newlines(message, 100, 1)
 			message = gtkgui_helpers.escape_for_pango_markup(message)
 			if gajim.con_types.has_key(acct['name']) and \
 				gajim.con_types[acct['name']] in ('tls', 'ssl'):
@@ -278,67 +259,16 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 	def populate(self, data):
 		self.create_window()
 		self.create_table()
-		self.hbox = gtk.HBox()
-		self.table.set_property('column-spacing', 1)
-		text, single_line = '', ''
-
-		unread_chat = gajim.events.get_nb_events(types = ['printed_chat', 'chat'])
-		unread_single_chat = gajim.events.get_nb_events(types = ['normal'])
-		unread_gc = gajim.events.get_nb_events(types = ['printed_gc_msg',
-			'gc_msg'])
-		unread_pm = gajim.events.get_nb_events(types = ['printed_pm', 'pm'])
-
-		accounts = self.get_accounts_info()
-
-		if unread_chat or unread_single_chat or unread_gc or unread_pm:
-			text = 'Gajim '
-			awaiting_events = unread_chat + unread_single_chat + unread_gc + unread_pm
-			if awaiting_events == unread_chat or awaiting_events == unread_single_chat \
-				or awaiting_events == unread_gc or awaiting_events == unread_pm:
-				# This condition is like previous if but with xor... 
-				# Print in one line
-				text += '-'
-			else:
-				# Print in multiple lines
-				text += '\n   '
-			if unread_chat:
-				text += i18n.ngettext(
-					' %d unread message',
-					' %d unread messages',
-					unread_chat, unread_chat, unread_chat)
-				text += '\n   '
-			if unread_single_chat:
-				text += i18n.ngettext(
-					' %d unread single message',
-					' %d unread single messages',
-					unread_single_chat, unread_single_chat, unread_single_chat)
-				text += '\n   '
-			if unread_gc:
-				text += i18n.ngettext(
-					' %d unread group chat message',
-					' %d unread group chat messages',
-					unread_gc, unread_gc, unread_gc)
-				text += '\n   '
-			if unread_pm:
-				text += i18n.ngettext(
-					' %d unread private message',
-					' %d unread private messages',
-					unread_pm, unread_pm, unread_pm)
-				text += '\n   '
-			text = text[:-4] # remove latest '\n   '
-		elif len(accounts) > 1:
-			text = _('Gajim')
-			self.current_current_row = 1
+		accounts = helpers.get_accounts_info()
+		if len(accounts) > 1:
 			self.table.resize(2, 1)
 			self.fill_table_with_accounts(accounts)
+		self.hbox = gtk.HBox()
+		self.table.set_property('column-spacing', 1)
 
-		elif len(accounts) == 1:
-			message = accounts[0]['status_line']
-			message = gtkgui_helpers.reduce_chars_newlines(message, 50, 1)
-			message = gtkgui_helpers.escape_for_pango_markup(message)
-			text = _('Gajim - %s') % message
-		else:
-			text = _('Gajim - %s') % helpers.get_uf_show('offline')
+		text = helpers.get_notification_icon_tooltip_text()
+		text = gtkgui_helpers.escape_for_pango_markup(text)
+		
 		self.add_text_row(text)
 		self.hbox.add(self.table)
 		self.win.add(self.hbox)
@@ -364,7 +294,25 @@ class GCTooltip(BaseTooltip):
 		vcard_table.set_homogeneous(False)
 		vcard_current_row = 1
 		properties = []
-		
+
+		nick_markup = '<b>' + \
+			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
+			+ '</b>' 
+		properties.append((nick_markup, None))
+
+		if contact.status: # status message 
+			status = contact.status.strip()
+			if status != '':
+				# escape markup entities
+				status = helpers.reduce_chars_newlines(status, 100, 5)
+				status = '<i>' +\
+					 gtkgui_helpers.escape_for_pango_markup(status) + '</i>'
+				properties.append((status, None))
+		else: # no status message, show SHOW instead
+			show = helpers.get_uf_show(contact.show)
+			show = '<i>' + show + '</i>'
+			properties.append((show, None))
+
 		if contact.jid.strip() != '':
 			jid_markup = '<span weight="bold">' + contact.jid + '</span>' 
 		else:
@@ -445,8 +393,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		self.create_table()
 		if not contacts or len(contacts) == 0:
 			# Tooltip for merged accounts row
-			accounts = self.get_accounts_info()
-			self.current_current_row = 0
+			accounts = helpers.get_accounts_info()
 			self.table.resize(2, 1)
 			self.spacer_label = ''
 			self.fill_table_with_accounts(accounts)
@@ -539,8 +486,8 @@ class RosterTooltip(NotificationAreaTooltip):
 					status = contact.status.strip()
 					if status:
 						# reduce long status
-						# (no more than 200 chars on line and no more than 5 lines)
-						status = gtkgui_helpers.reduce_chars_newlines(status, 200, 5)
+						# (no more than 100 chars on line and no more than 5 lines)
+						status = helpers.reduce_chars_newlines(status, 100, 5)
 						# escape markup entities. 
 						status = gtkgui_helpers.escape_for_pango_markup(status)
 						show += ' - ' + status

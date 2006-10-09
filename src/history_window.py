@@ -59,7 +59,8 @@ class HistoryWindow:
 		
 		self.calendar = xml.get_widget('calendar')
 		scrolledwindow = xml.get_widget('scrolledwindow')
-		self.history_textview = conversation_textview.ConversationTextview(account)
+		self.history_textview = conversation_textview.ConversationTextview(
+			account, used_in_history_window = True)
 		scrolledwindow.add(self.history_textview.tv)
 		self.history_buffer = self.history_textview.tv.get_buffer()
 		self.history_buffer.create_tag('highlight', background = 'yellow')
@@ -209,7 +210,9 @@ class HistoryWindow:
 		
 		if gajim.config.get('print_time') == 'always':
 			before_str = gajim.config.get('before_time')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_time')
+			after_str = helpers.from_one_line(after_str)
 			format = before_str + '%X' + after_str + ' '
 			tim = time.strftime(format, time.localtime(float(tim)))
 			buf.insert(end_iter, tim) # add time
@@ -277,7 +280,9 @@ class HistoryWindow:
 		if contact_name and kind != constants.KIND_GCSTATUS:
 			# add stuff before and after contact name
 			before_str = gajim.config.get('before_nickname')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_nickname')
+			after_str = helpers.from_one_line(after_str)
 			format = before_str + contact_name + after_str + ' '
 			buf.insert_with_tags_by_name(end_iter, format, tag_name)
 

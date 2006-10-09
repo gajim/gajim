@@ -139,10 +139,10 @@ def get_nick_from_fjid(jid):
 	# gaim@conference.jabber.no/nick/nick-continued
 	return jid.split('/', 1)[1]
 
-def get_room_name_and_server_from_room_jid(jid):
-	room_name = get_nick_from_jid(jid)
+def get_name_and_server_from_jid(jid):
+	name = get_nick_from_jid(jid)
 	server = get_server_from_jid(jid)
-	return room_name, server
+	return name, server
 
 def get_room_and_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room
@@ -335,7 +335,8 @@ def get_priority(account, show):
 	'''return the priority an account must have'''
 	if not show:
 		show = 'online'
-	if show in priority_dict and config.get_per('accounts', account,
-	'adjust_priority_with_status'):
-		return priority_dict[show]
+
+	if show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible') and \
+	config.get_per('accounts', account, 'adjust_priority_with_status'):
+		return config.get_per('accounts', account, 'autopriority_' + show)
 	return config.get_per('accounts', account, 'priority')

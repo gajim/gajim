@@ -1,18 +1,8 @@
 ##	advanced.py
 ##
-## Contributors for this file:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - Nikos Kouremenos <kourem@gmail.com>
-## - Vincent Hanquez <tab@snarc.org>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005 Vincent Hanquez <tab@snarc.org>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -42,7 +32,7 @@ C_TYPE
 
 GTKGUI_GLADE = 'manage_accounts_window.glade'
 
-class AdvancedConfigurationWindow:
+class AdvancedConfigurationWindow(object):
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('advanced_configuration_window.glade')
 		self.window = self.xml.get_widget('advanced_configuration_window')

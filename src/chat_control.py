@@ -34,7 +34,7 @@ from message_textview import MessageTextView
 from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
-from rst_xhtml_generator import create_xhtml
+from common.rst_xhtml_generator import create_xhtml
 from common.xmpp.protocol import NS_XHTML
 
 try:
@@ -1045,7 +1045,7 @@ class ChatControl(ChatControlBase):
 		status = contact.status
 		if status is not None:
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
-			status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 2)
+			status = helpers.reduce_chars_newlines(status, max_lines = 2)
 		status_escaped = gtkgui_helpers.escape_for_pango_markup(status)
 
 		font_attrs, font_attrs_small = self.get_font_attrs()
@@ -1254,7 +1254,9 @@ class ChatControl(ChatControlBase):
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
 				if not xhtml and not encrypted and gajim.config.get('rst_formatting_outgoing_messages'):
-					xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, create_xhtml(text))
+					xhtml = create_xhtml(text)
+					if xhtml:
+						xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
 			subject = subject, old_kind = self.old_msg_kind, xhtml = xhtml)
 		if text.startswith('/me ') or text.startswith('/me\n'):
@@ -1674,7 +1676,7 @@ class ChatControl(ChatControlBase):
 			else:
 				kind = 'print_queue'
 			self.print_conversation(data[0], kind, tim = data[3],
-						encrypted = data[4], subject = data[1])
+						encrypted = data[4], subject = data[1], xhtml = data[7])
 			if len(data) > 6 and isinstance(data[6], int):
 				message_ids.append(data[6])
 		if message_ids:

@@ -94,7 +94,7 @@ class Config:
 		'show_ascii_formatting_chars': [ opt_bool, True , _('If True, do not '
 			'remove */_ . So *abc* will be bold but with * * not removed.')],
 		'rst_formatting_outgoing_messages': [ opt_bool, False,
-			_('Uses ReStructured text markup for HTML, plus ascii formatting if selected.')],
+			_('Uses ReStructured text markup for HTML, plus ascii formatting if selected. (If you want to use this, install docutils)')],
 		'sounds_on': [ opt_bool, True ],
 		# 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
 		'soundplayer': [ opt_str, '' ],
@@ -143,7 +143,7 @@ class Config:
 		'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
-		'version': [ opt_str, '0.10.1.3' ], # which version created the config
+		'version': [ opt_str, '0.10.1.5' ], # which version created the config
 		'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
 		'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
 		'always_english_wikipedia': [opt_bool, False],

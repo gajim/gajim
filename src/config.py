@@ -38,7 +38,10 @@ except:
 from common import helpers
 from common import gajim
 from common import connection
+from common import passwords
 from common import zeroconf
+
+from common.exceptions import GajimGeneralException as GajimGeneralException
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
@@ -435,8 +438,7 @@ class PreferencesWindow:
 			self.xml.get_widget('custom_apps_frame').set_no_show_all(True)
 			if gajim.config.get('autodetect_browser_mailer'):
 				self.applications_combobox.set_active(0)
-				gtkgui_helpers.autodetect_browser_mailer()
-			# autodetect_browser_mailer is now False.
+			# else autodetect_browser_mailer is False.
 			# so user has 'Always Use GNOME/KDE' or Custom
 			elif gajim.config.get('openwith') == 'gnome-open':
 				self.applications_combobox.set_active(1)
@@ -1324,6 +1326,8 @@ class AccountModificationWindow:
 		config['password'] = self.xml.get_widget('password_entry').get_text().\
 			decode('utf-8')
 		config['resource'] = resource
+		config['adjust_priority_with_status'] = self.xml.get_widget(
+			'adjust_priority_with_status_checkbutton').get_active()
 		config['priority'] = self.xml.get_widget('priority_spinbutton').\
 																			get_value_as_int()
 		config['autoconnect'] = self.xml.get_widget('autoconnect_checkbutton').\
@@ -1442,27 +1446,28 @@ class AccountModificationWindow:
 			# check if relogin is needed
 			relogin_needed = False
 			if self.options_changed_need_relogin(config,
-				('resource', 'proxy', 'usessl', 'keyname',
-				'use_custom_host', 'custom_host')):
+			('resource', 'proxy', 'usessl', 'keyname',
+			'use_custom_host', 'custom_host')):
 				relogin_needed = True
 
 			elif config['use_custom_host'] and (self.option_changed(config,
-				'custom_host') or self.option_changed(config, 'custom_port')):
+			'custom_host') or self.option_changed(config, 'custom_port')):
 				relogin_needed = True
 
 			if self.option_changed(config, 'use_ft_proxies') and \
 			config['use_ft_proxies']:
 				gajim.connections[self.account].discover_ft_proxies()
 
-			if self.option_changed(config, 'priority'):
+			if self.option_changed(config, 'priority') or self.option_changed(
+			config, 'adjust_priority_with_status'):
 				resend_presence = True
 
 		for opt in config:
 			gajim.config.set_per('accounts', name, opt, config[opt])
 		if config['savepass']:
-			gajim.connections[name].password = config['password']
+			passwords.save_password(name, config['password'])
 		else:
-			gajim.connections[name].password = None
+			passwords.save_password(name, None)
 		# refresh accounts window
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
@@ -1511,7 +1516,7 @@ class AccountModificationWindow:
 	def on_change_password_button_clicked(self, widget):
 		try:
 			dialog = dialogs.ChangePasswordDialog(self.account)
-		except RuntimeError:
+		except GajimGeneralException:
 			#if we showed ErrorDialog, there will not be dialog instance
 			return
 
@@ -2497,10 +2502,10 @@ class ManageBookmarksWindow:
 		self.window = self.xml.get_widget('manage_bookmarks_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 
-		#Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick, Show_Status
+		# Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick, Show_Status
 		self.treestore = gtk.TreeStore(str, str, str, bool, str, str, str)
 
-		#Store bookmarks in treeview.
+		# Store bookmarks in treeview.
 		for account in gajim.connections:
 			if gajim.connections[account].connected <= 1:
 				continue
@@ -2605,7 +2610,7 @@ class ManageBookmarksWindow:
 
 		account = model[add_to][1].decode('utf-8')
 		nick = gajim.nicks[account]
-		self.treestore.append(add_to, [account, _('New Room'), '', False, '',
+		self.treestore.append(add_to, [account, _('New Group Chat'), '', False, '',
 			nick, 'in_and_out'])
 
 		self.view.expand_row(model.get_path(add_to), True)
@@ -2943,7 +2948,7 @@ class AccountCreationWizardWindow:
 				self.account = server + str(i)
 				i += 1
 
-			username, server = gajim.get_room_name_and_server_from_room_jid(jid)
+			username, server = gajim.get_name_and_server_from_jid(jid)
 			self.save_account(username, server, savepass, password)
 			self.cancel_button.hide()
 			self.back_button.hide()

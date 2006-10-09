@@ -49,6 +49,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import xmpp
+from common.exceptions import GajimGeneralException as GajimGeneralException
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -121,6 +122,13 @@ class CacheDictionary:
 		def __call__(self):
 			return self.value
 
+	def cleanup(self):
+		for key in self.cache.keys():
+			item = self.cache[key]
+			if item.source:
+				gobject.source_remove(item.source)
+			del self.cache[key]
+
 	def _expire_timeout(self, key):
 		'''The timeout has expired, remove the object.'''
 		if key in self.cache:
@@ -132,8 +140,9 @@ class CacheDictionary:
 		item = self.cache[key]
 		if item.source:
 			gobject.source_remove(item.source)
-		source = gobject.timeout_add(self.lifetime, self._expire_timeout, key)
-		item.source = source
+		if self.lifetime:
+			source = gobject.timeout_add(self.lifetime, self._expire_timeout, key)
+			item.source = source
 
 	def __getitem__(self, key):
 		item = self.cache[key]
@@ -205,9 +214,13 @@ class ServicesCache:
 	ServiceCache instance.'''
 	def __init__(self, account):
 		self.account = account
-		self._items = CacheDictionary(1, getrefresh = True)
-		self._info = CacheDictionary(1, getrefresh = True)
+		self._items = CacheDictionary(0, getrefresh = False)
+		self._info = CacheDictionary(0, getrefresh = False)
 		self._cbs = {}
+
+	def cleanup(self):
+		self._items.cleanup()
+		self._info.cleanup()
 
 	def _clean_closure(self, cb, type, addr):
 		# A closure died, clean up
@@ -584,6 +597,7 @@ _('Without a connection, you can not browse available services'))
 			self.browser = None
 		self.window.destroy()
 
+		self.cache.cleanup()
 		for child in self.children[:]:
 			child.parent = None
 			if chain:
@@ -1178,16 +1192,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if not iter:
 			return
 		service = model[iter][0].decode('utf-8')
-		if service.find('@') != -1:
-			services = service.split('@', 1)
-			room = services[0]
-			service = services[1]
-		else:
-			room = ''
 		if not gajim.interface.instances[self.account].has_key('join_gc'):
 			try:
-				dialogs.JoinGroupchatWindow(self.account, service, room)
-			except RuntimeError:
+				dialogs.JoinGroupchatWindow(self.account, service)
+			except GajimGeneralException:
 				pass
 		else:
 			gajim.interface.instances[self.account]['join_gc'].window.present()
@@ -1489,7 +1497,8 @@ class MucBrowser(AgentBrowser):
 		self.vadj = self.window.services_scrollwin.get_property('vadjustment')
 		self.vadj_cbid = self.vadj.connect('value-changed', self.on_scroll)
 		# And to size changes
-		self.size_cbid = self.window.services_scrollwin.connect('size-allocate', self.on_scroll)
+		self.size_cbid = self.window.services_scrollwin.connect(
+			'size-allocate', self.on_scroll)
 
 	def _clean_treemodel(self):
 		if self.size_cbid:
@@ -1518,16 +1527,12 @@ class MucBrowser(AgentBrowser):
 		if not iter:
 			return
 		service = model[iter][0].decode('utf-8')
-		if service.find('@') != -1:
-			services = service.split('@', 1)
-			room = services[0]
-			service = services[1]
-		else:
-			room = model[iter][1].decode('utf-8')
+		room = model[iter][1].decode('utf-8')
 		if 'join_gc' not in gajim.interface.instances[self.account]:
 			try:
-				dialogs.JoinGroupchatWindow(self.account, service, room)
-			except RuntimeError:
+				room_jid = '%s@%s' % (service, room)
+				dialogs.JoinGroupchatWindow(self.account, service)
+			except GajimGeneralException:
 				pass
 		else:
 			gajim.interface.instances[self.account]['join_gc'].window.present()

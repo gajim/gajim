@@ -38,11 +38,12 @@ import common.xmpp
 from common import helpers
 from common import gajim
 from common import GnuPG
+from common import passwords
 
 from connection_handlers import *
 USE_GPG = GnuPG.USE_GPG
 
-from rst_xhtml_generator import create_xhtml
+from common.rst_xhtml_generator import create_xhtml
 
 class Connection(ConnectionHandlers):
 	'''Connection class'''
@@ -69,7 +70,7 @@ class Connection(ConnectionHandlers):
 		self.last_io = gajim.idlequeue.current_time()
 		self.last_sent = []
 		self.last_history_line = {}
-		self.password = gajim.config.get_per('accounts', name, 'password')
+		self.password = passwords.get_password(name)
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
 		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
 			self.keepalives = gajim.config.get_per('accounts', self.name,'keep_alive_every_foo_secs')
@@ -687,7 +688,7 @@ class Connection(ConnectionHandlers):
 	user_nick = None, xhtml = None):
 		if not self.connection:
 			return
-		if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
 			xhtml = create_xhtml(msg)
 		if not msg and chatstate is None:
 			return
@@ -977,14 +978,15 @@ class Connection(ConnectionHandlers):
 		p = self.add_sha(p, ptype != 'unavailable')
 		self.connection.send(p)
 
-	def join_gc(self, nick, room, server, password):
+	def join_gc(self, nick, room_jid, password):
+		# FIXME: This room JID needs to be normalized; see #1364
 		if not self.connection:
 			return
 		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
 		if show == 'invisible':
 			# Never join a room when invisible
 			return
-		p = common.xmpp.Presence(to = '%s@%s/%s' % (room, server, nick),
+		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick),
 			show = show, status = self.status)
 		if gajim.config.get('send_sha_in_gc_presence'):
 			p = self.add_sha(p)
@@ -993,12 +995,11 @@ class Connection(ConnectionHandlers):
 			t.setTagData('password', password)
 		self.connection.send(p)
 		#last date/time in history to avoid duplicate
-		# FIXME: This JID needs to be normalized; see #1364
-		jid='%s@%s' % (room, server)
-		last_log = gajim.logger.get_last_date_that_has_logs(jid, is_room = True)
+		last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
+			is_room = True)
 		if last_log is None:
 			last_log = 0
-		self.last_history_line[jid]= last_log
+		self.last_history_line[room_jid]= last_log
 
 	def send_gc_message(self, jid, msg, xhtml = None):
 		if not self.connection:

@@ -35,6 +35,9 @@ import notify
 
 from common import gajim
 from common import helpers
+from common import passwords
+from common.exceptions import GajimGeneralException as GajimGeneralException
+
 from message_window import MessageWindowMgr
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
@@ -192,6 +195,7 @@ class RosterWindow:
 		if self.regroup:
 			account = _('Merged accounts')
 		if not self.tree.row_expanded(path) and model.iter_has_child(iter):
+			# account row not expanded
 			model[iter][C_NAME] = '[%s]' % account
 		else:
 			model[iter][C_NAME] = account
@@ -512,7 +516,7 @@ class RosterWindow:
 		if contact.status and gajim.config.get('show_status_msgs_in_roster'):
 			status = contact.status.strip()
 			if status != '':
-				status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 1)
+				status = helpers.reduce_chars_newlines(status, max_lines = 1)
 				# escape markup entities and make them small italic and fg color
 				color = gtkgui_helpers._get_fade_color(self.tree, selected, focus)
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
@@ -609,13 +613,12 @@ class RosterWindow:
 			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
 				)
 			return
-		room, server = room_jid.split('@')
 		if not gajim.interface.msg_win_mgr.has_window(room_jid, account):
 			self.new_room(room_jid, nick, account)
 		gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
 		gc_win.set_active_tab(room_jid, account)
 		gc_win.window.present()
-		gajim.connections[account].join_gc(nick, room, server, password)
+		gajim.connections[account].join_gc(nick, room_jid, password)
 		if password:
 			gajim.gc_passwords[room_jid] = password
 
@@ -785,7 +788,9 @@ class RosterWindow:
 			disco_sub_menu = gtk.Menu()
 			new_chat_sub_menu = gtk.Menu()
 
-			for account in gajim.connections:
+			accounts_list = gajim.contacts.get_accounts() 
+			accounts_list.sort() 
+			for account in accounts_list:
 				if gajim.connections[account].connected <= 1:
 					# if offline or connecting
 					continue
@@ -796,7 +801,8 @@ class RosterWindow:
 				label.set_use_underline(False)
 				gc_item = gtk.MenuItem()
 				gc_item.add(label)
-				gc_item.connect('state-changed', gtkgui_helpers.on_bm_header_changed_state)
+				gc_item.connect('state-changed',
+					gtkgui_helpers.on_bm_header_changed_state)
 				gc_sub_menu.append(gc_item)
 				
 				self.add_bookmarks_list(gc_sub_menu, account)
@@ -960,8 +966,8 @@ class RosterWindow:
 		item.connect('activate', self.on_history_manager_menuitem_activate)
 		
 	def add_bookmarks_list(self, gc_sub_menu, account):
-		'''Print join new room item and bookmarks list for an account'''
-		item = gtk.MenuItem(_('_Join New Room'))
+		'''Show join new group chat item and bookmarks list for an account'''
+		item = gtk.MenuItem(_('_Join New Group Chat'))
 		item.connect('activate', self.on_join_gc_activate, account)
 		gc_sub_menu.append(item)
 
@@ -1690,9 +1696,9 @@ class RosterWindow:
 				try:
 					gajim.interface.instances[account]['join_gc'] = \
 						dialogs.JoinGroupchatWindow(account,
-							server = gajim.connections[account].muc_jid[type_],
+							gajim.connections[account].muc_jid[type_],
 							automatic = {'invities': jid_list})
-				except RuntimeError:
+				except GajimGeneralException:
 					continue
 				break
 
@@ -2048,7 +2054,7 @@ class RosterWindow:
 		model = self.tree.get_model()
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 
-		if account != 'all':
+		if account != 'all': # not in merged mode
 			menu = self.build_account_menu(account)
 		else:
 			menu = gtk.Menu()
@@ -2385,8 +2391,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					gajim.connections[account].password = passphrase
 					if save:
 						gajim.config.set_per('accounts', account, 'savepass', True)
-						gajim.config.set_per('accounts', account, 'password',
-							passphrase)
+						passwords.save_password(account, passphrase)
 
 			keyid = None
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
@@ -2848,7 +2853,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			try:
 				gajim.interface.instances[account]['join_gc'] = \
 					dialogs.JoinGroupchatWindow(account)
-			except RuntimeError:
+			except GajimGeneralException:
 				pass
 
 	def on_new_message_menuitem_activate(self, widget, account):
@@ -3138,7 +3143,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''
 		model = self.tree.get_model()
-		if gajim.config.get('mergeaccounts'):
+		if self.regroup: # merged accounts
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
@@ -3170,7 +3175,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		'''When a row is collapsed :
 		change the icon of the arrow'''
 		model = self.tree.get_model()
-		if gajim.config.get('mergeaccounts'):
+		if self.regroup: # merged accounts
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
@@ -3287,7 +3292,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			try:
 				# Object will add itself to the window dict
 				disco.ServiceDiscoveryWindow(account, address_entry = True)
-			except RuntimeError:
+			except GajimGeneralException:
 				pass
 
 	def load_iconset(self, path, pixbuf2 = None, transport = False):

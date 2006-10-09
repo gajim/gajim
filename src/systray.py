@@ -43,7 +43,7 @@ except:
 
 class Systray:
 	'''Class for icon in the notification area
-	This class is both base class (for systraywin32.py) and normal class
+	This class is both base class (for statusicon.py) and normal class
 	for trayicon in GNU/Linux'''
 
 	def __init__(self):
@@ -94,16 +94,14 @@ class Systray:
 	def on_new_chat(self, widget, account):
 		dialogs.NewChatDialog(account)
 
-	def make_menu(self, event = None):
-		'''create chat with and new message (sub) menus/menuitems
-		event is None when we're in Windows
-		'''
-
+	def make_menu(self, event_button, event_time):
+		'''create chat with and new message (sub) menus/menuitems'''
 		for m in self.popup_menus:
 			m.destroy()
 
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
-		single_message_menuitem = self.xml.get_widget('single_message_menuitem')
+		single_message_menuitem = self.xml.get_widget(
+			'single_message_menuitem')
 		status_menuitem = self.xml.get_widget('status_menu')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 
@@ -171,7 +169,8 @@ class Systray:
 			self.popup_menus.append(account_menu_for_chat_with)
 
 			account_menu_for_single_message = gtk.Menu()
-			single_message_menuitem.set_submenu(account_menu_for_single_message)
+			single_message_menuitem.set_submenu(
+				account_menu_for_single_message)
 			self.popup_menus.append(account_menu_for_single_message)
 
 			accounts_list = gajim.contacts.get_accounts()
@@ -195,9 +194,11 @@ class Systray:
 					label.set_use_underline(False)
 					gc_item = gtk.MenuItem()
 					gc_item.add(label)
-					gc_item.connect('state-changed', gtkgui_helpers.on_bm_header_changed_state)
+					gc_item.connect('state-changed',
+						gtkgui_helpers.on_bm_header_changed_state)
 					gc_sub_menu.append(gc_item)
-					gajim.interface.roster.add_bookmarks_list(gc_sub_menu, account)
+					gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
+						account)
 
 		elif connected_accounts == 1: # one account
 			# one account connected, no need to show 'as jid'
@@ -207,24 +208,24 @@ class Systray:
 							'activate', self.on_new_chat, account)
 					# for single message
 					single_message_menuitem.remove_submenu()
-					self.single_message_handler_id = single_message_menuitem.connect(
-						'activate', self.on_single_message_menuitem_activate, account)
+					self.single_message_handler_id = single_message_menuitem.\
+						connect('activate',
+						self.on_single_message_menuitem_activate, account)
 
 					# join gc
-					gajim.interface.roster.add_bookmarks_list(gc_sub_menu, account)
+					gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
+						account)
 					break # No other connected account
 
-		if event is None:
-			# None means windows (we explicitly popup in systraywin32.py)
-			if self.added_hide_menuitem is False:
-				self.systray_context_menu.prepend(gtk.SeparatorMenuItem())
-				item = gtk.MenuItem(_('Hide this menu'))
-				self.systray_context_menu.prepend(item)
-				self.added_hide_menuitem = True
+		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and\
+		gtk.gtk_version >= (2, 10, 0):
+			self.systray_context_menu.popup(None, None,
+				gtk.status_icon_position_menu, event_button,
+					event_time, self.status_icon)
 
 		else: # GNU and Unices
-			self.systray_context_menu.popup(None, None, None, event.button,
-				event.time)
+			self.systray_context_menu.popup(None, None, None, event_button,
+				event_time)
 		self.systray_context_menu.show_all()
 
 	def on_show_all_events_menuitem_activate(self, widget):
@@ -277,12 +278,14 @@ class Systray:
 
 	def on_clicked(self, widget, event):
 		self.on_tray_leave_notify_event(widget, None)
-		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1: # Left click
+		if event.type != gtk.gdk.BUTTON_PRESS:
+			return
+		if event.button == 1: # Left click
 			self.on_left_click()
 		elif event.button == 2: # middle click
 			self.on_middle_click()
 		elif event.button == 3: # right click
-			self.make_menu(event)
+			self.make_menu(event.button, event.time)
 
 	def on_show_menuitem_activate(self, widget, show):
 		# we all add some fake (we cannot select those nor have them as show)

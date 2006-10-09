@@ -39,12 +39,13 @@ from common import helpers
 from chat_control import ChatControl
 from chat_control import ChatControlBase
 from conversation_textview import ConversationTextview
+from common.exceptions import GajimGeneralException as GajimGeneralException
 
 #(status_image, type, nick, shown_nick)
 (
 C_IMG, # image to show state (online, new message etc)
-C_TYPE, # type of the row ('contact' or 'group')
-C_NICK, # contact nickame or group name
+C_NICK, # contact nickame or ROLE name
+C_TYPE, # type of the row ('contact' or 'role')
 C_TEXT, # text shown in the cellrenderer
 C_AVATAR, # avatar of the contact
 ) = range(5)
@@ -253,7 +254,7 @@ class GroupchatControl(ChatControlBase):
 		id = self.list_treeview.connect('size-allocate',
 			self.on_treeview_size_allocate)
 		self.handlers[id] = self.list_treeview
-		#status_image, type, nickname, shown_nick
+		#status_image, shown_nick, type, nickname, avatar
 		store = gtk.TreeStore(gtk.Image, str, str, str, gtk.gdk.Pixbuf)
 		store.set_sort_column_id(C_TEXT, gtk.SORT_ASCENDING)
 		self.list_treeview.set_model(store)
@@ -397,7 +398,9 @@ class GroupchatControl(ChatControlBase):
 		jid = self.contact.jid
 		num_unread = len(gajim.events.get_events(self.account, jid,
 			['printed_gc_msg']))
-		if num_unread > 1:
+		if num_unread == 1:
+			unread = '*'
+		elif num_unread > 1:
 			unread = '[' + unicode(num_unread) + ']'
 		label_str = unread + label_str
 		return (label_str, color)
@@ -664,7 +667,7 @@ class GroupchatControl(ChatControlBase):
 		self.subject = subject
 
 		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
-		subject = gtkgui_helpers.reduce_chars_newlines(subject, max_lines = 2)
+		subject = helpers.reduce_chars_newlines(subject, max_lines = 2)
 		subject = gtkgui_helpers.escape_for_pango_markup(subject)
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
@@ -672,8 +675,6 @@ class GroupchatControl(ChatControlBase):
 			text += '\n<span %s>%s</span>' % (font_attrs_small, subject)
 		self.name_label.set_markup(text)
 		event_box = self.name_label.get_parent()
-		if subject == '':
-			self.subject = _('This room has no subject')
 
 		# tooltip must always hold ALL the subject
 		self.subject_tooltip.set_tip(event_box, self.subject)
@@ -735,7 +736,7 @@ class GroupchatControl(ChatControlBase):
 		if status and gajim.config.get('show_status_msgs_in_roster'):
 			status = status.strip()
 			if status != '':
-				status = gtkgui_helpers.reduce_chars_newlines(status, max_lines = 1)
+				status = helpers.reduce_chars_newlines(status, max_lines = 1)
 				# escape markup entities and make them small italic and fg color
 				color = gtkgui_helpers._get_fade_color(self.list_treeview,
 					selected, focus)
@@ -913,9 +914,9 @@ class GroupchatControl(ChatControlBase):
 		role_iter = self.get_role_iter(role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(gajim.interface.roster.jabber_state_images['16']['closed'], 'role',
-				role, '<b>%s</b>' % role_name, None))
-		iter = model.append(role_iter, (None, 'contact', nick, name, None))
+				(gajim.interface.roster.jabber_state_images['16']['closed'], role, 
+				'role', '<b>%s</b>' % role_name,  None))
+		iter = model.append(role_iter, (None, nick, 'contact', name, None))
 		if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			gc_contact = gajim.contacts.create_gc_contact(room_jid = self.room_jid,
 				name = nick, show = show, status = status, role = role,
@@ -924,7 +925,7 @@ class GroupchatControl(ChatControlBase):
 		self.draw_contact(nick)
 		self.draw_avatar(nick)
 		# Do not ask avatar to irc rooms as irc transports reply with messages
-		r, server = gajim.get_room_name_and_server_from_room_jid(self.room_jid)
+		server = gajim.get_server_from_jid(self.room_jid)
 		if gajim.config.get('ask_avatars_on_startup') and \
 		not server.startswith('irc'):
 			fjid = self.room_jid + '/' + nick
@@ -1038,8 +1039,10 @@ class GroupchatControl(ChatControlBase):
 				new_topic = message_array.pop(0)
 				gajim.connections[self.account].send_gc_subject(self.room_jid,
 					new_topic)
-			else:
+			elif self.subject is not '':
 				self.print_conversation(self.subject, 'info')
+			else:
+				self.print_conversation(_('This room has no subject'), 'info')
 			self.clear(self.msg_textview)
 			return True
 		elif command == 'invite':
@@ -1067,15 +1070,13 @@ class GroupchatControl(ChatControlBase):
 		elif command == 'join':
 			# example: /join room@conference.example.com/nick
 			if len(message_array):
-				message_array = message_array[0]
-				if message_array.find('@') >= 0:
-					room, servernick = message_array.split('@')
-					if servernick.find('/') >= 0:
-						server, nick = servernick.split('/', 1)
+				room_jid = message_array[0]
+				if room_jid.find('@') >= 0:
+					if room_jid.find('/') >= 0:
+						room_jid, nick = room_jid.split('/', 1)
 					else:
-						server = servernick
 						nick = ''
-					#join_gc window is needed in order to provide for password entry.
+					# join_gc window is needed in order to provide for password entry.
 					if gajim.interface.instances[self.account].has_key('join_gc'):
 						gajim.interface.instances[self.account]['join_gc'].\
 							window.present()
@@ -1083,13 +1084,13 @@ class GroupchatControl(ChatControlBase):
 						try:
 							gajim.interface.instances[self.account]['join_gc'] =\
 								dialogs.JoinGroupchatWindow(self.account,
-									server = server, room = room, nick = nick)
-						except RuntimeError:
+									room_jid = room_jid, nick = nick)
+						except GajimGeneralException:
 							pass
 					self.clear(self.msg_textview)
 				else:
 					#%s is something the user wrote but it is not a jid so we inform
-					s = _('%s does not appear to be a valid JID') % message_array
+					s = _('%s does not appear to be a valid JID') % message_array[0]
 					self.print_conversation(s, 'info')
 			else:
 				self.get_command_help(command)
@@ -1376,7 +1377,7 @@ class GroupchatControl(ChatControlBase):
 			if bookmark['jid'] == bm['jid']:
 				dialogs.ErrorDialog(
 					_('Bookmark already set'),
-					_('Room "%s" is already in your bookmarks.') % bm['jid'])
+					_('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
 				return
 
 		gajim.connections[self.account].bookmarks.append(bm)
@@ -1832,7 +1833,7 @@ class GroupchatControl(ChatControlBase):
 				present()
 		else:
 			gajim.interface.instances[self.account]['infos'][c2.jid] = \
-				vcard.VcardWindow(c2, self.account, is_fake = True)
+				vcard.VcardWindow(c2, self.account, c)
 
 	def on_history(self, widget, nick):
 		jid = gajim.construct_fjid(self.room_jid, nick)

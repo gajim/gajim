@@ -4,20 +4,11 @@ exec python -OOt "$0" ${1+"$@"}
 ' '''
 ##	gajim.py
 ##
-## Contributors for this file:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - Nikos Kouremenos <kourem@gmail.com>
-## - Dimitur Kirov <dkirov@gmail.com>
-## - Travis Shirk <travis@pobox.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -82,16 +73,14 @@ except exceptions.PysqliteNotAvailable, e:
 if os.name == 'nt':
 	try:
 		import winsound # windows-only built-in module for playing wav
-		import win32api
-		import win32con
 	except:
 		pritext = _('Gajim needs pywin32 to run')
 		sectext = _('Please make sure that Pywin32 is installed on your system. You can get it at %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
 
 if pritext:
 	dlg = gtk.MessageDialog(None, 
-				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = pritext)
+		gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
+		gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = pritext)
 
 	dlg.format_secondary_text(sectext)
 	dlg.run()
@@ -194,7 +183,6 @@ atexit.register(on_exit)
 parser = optparser.OptionsParser(config_filename)
 
 import roster_window
-import systray
 import profile_window
 import config
 
@@ -509,7 +497,8 @@ class Interface:
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
-		# chatstate, msg_id, composing_jep, user_nick, xhtml)) user_nick is JEP-0172
+		# chatstate, msg_id, composing_jep, user_nick, xhtml))
+		# user_nick is JEP-0172
 
 		full_jid_with_resource = array[0]
 		jid = gajim.get_jid_without_resource(full_jid_with_resource)
@@ -609,7 +598,7 @@ class Interface:
 					msg_type, subject, resource, msg_id, array[9],
 					advanced_notif_num)
 			else:
-				#xhtml in last element
+				# xhtml in last element
 				self.roster.on_message(jid, message, array[2], account, array[3],
 					msg_type, subject, resource, msg_id, array[9],
 					advanced_notif_num, xhtml = array[10])
@@ -1092,12 +1081,16 @@ class Interface:
 		if gajim.config.get('notify_on_new_gmail_email'):
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'new_email_recv.png')
-			title = _('New E-mail on %(gmail_mail_address)s') % \
+			title = _('New mail on %(gmail_mail_address)s') % \
 				{'gmail_mail_address': jid}
-			text = i18n.ngettext('You have %d new E-mail message', 'You have %d new E-mail messages', gmail_new_messages, gmail_new_messages, gmail_new_messages)
+			text = i18n.ngettext('You have %d new mail conversation',
+				'You have %d new mail conversations', gmail_new_messages,
+				gmail_new_messages, gmail_new_messages)
 			
 			if gajim.config.get('notify_on_new_gmail_email_extra'):
 				for gmessage in gmail_messages_list:
+					#FIXME: emulate Gtalk client popups. find out what they parse and how
+					#they decide what to show
 					# each message has a 'From', 'Subject' and 'Snippet' field
 					text += _('\nFrom: %(from_address)s') % \
 						{'from_address': gmessage['From']}
@@ -1382,12 +1375,11 @@ class Interface:
 			if gajim.gc_connected[account].has_key(room_jid) and\
 					gajim.gc_connected[account][room_jid]:
 				continue
-			room, server = gajim.get_room_name_and_server_from_room_jid(room_jid)
 			nick = gc_control.nick
 			password = ''
 			if gajim.gc_passwords.has_key(room_jid):
 				password = gajim.gc_passwords[room_jid]
-			gajim.connections[account].join_gc(nick, room, server, password)
+			gajim.connections[account].join_gc(nick, room_jid, password)
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
@@ -1946,21 +1938,18 @@ class Interface:
 		self.systray_enabled = False
 		self.systray_capabilities = False
 		
-		if os.name == 'nt':
-			pass
-			'''
-			try:
-				import systraywin32
-			except: # user doesn't have trayicon capabilities
-				pass
-			else:
-				self.systray_capabilities = True
-				self.systray = systraywin32.SystrayWin32()
-			'''
-		else:
+		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and\
+		gtk.gtk_version >= (2, 10, 0):
+			import statusicon 
+			self.systray = statusicon.StatusIcon() 
+			self.systray_capabilities = True
+		else: # use ours, not GTK+ one
+			# [FIXME: remove this when we migrate to 2.10 and we can do
+			# cool tooltips somehow and (not dying to keep) animation]
+			import systray
 			self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
 			if self.systray_capabilities:
-			    self.systray = systray.Systray()
+				self.systray = systray.Systray()
 
 		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()
@@ -2013,7 +2002,8 @@ if __name__ == '__main__':
 			cli = gnome.ui.master_client()
 			cli.connect('die', die_cb)
 			
-			path_to_gajim_script = gtkgui_helpers.get_abspath_for_script('gajim')
+			path_to_gajim_script = gtkgui_helpers.get_abspath_for_script(
+				'gajim')
 			
 			if path_to_gajim_script:
 				argv = [path_to_gajim_script]
@@ -2028,5 +2018,6 @@ if __name__ == '__main__':
 		gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
 
 	check_paths.check_and_possibly_create_paths()
+
 	Interface()
 	gtk.main()

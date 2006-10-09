@@ -1,11 +1,7 @@
 ## exceptions.py
 ##
-## Contributors for this file:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - 
-##
 ## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
-##                         Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -48,3 +44,12 @@ class SessionBusNotPresent(Exception):
 
 	def __str__(self):
 		return _('Session bus is not available.\nTry reading http://trac.gajim.org/wiki/GajimDBus')
+
+class GajimGeneralException(Exception):
+	'''This exception ir our general exception'''
+	def __init__(self, text=''):
+		Exception.__init__(self)
+		self.text = text
+
+	def __str__(self):
+		return self.text

@@ -1,17 +1,8 @@
 ##	conversation_textview.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -40,13 +31,17 @@ from calendar import timegm
 from common.fuzzyclock import FuzzyClock
 
 from htmltextview import HtmlTextView
-
+from common.exceptions import GajimGeneralException as GajimGeneralException
 
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
-	def __init__(self, account):
-		# no need to inherit TextView, use it as property is safer
+	def __init__(self, account, used_in_history_window = False):
+		'''if used_in_history_window is True, then we do not show
+		Clear menuitem in context menu'''
+		self.used_in_history_window = used_in_history_window
+		
+		# no need to inherit TextView, use it as atrribute is safer
 		self.tv = HtmlTextView()
 		self.tv.html_hyperlink_handler = self.html_hyperlink_handler
 
@@ -61,11 +56,13 @@ class ConversationTextview:
 		self.handlers = {}
 
 		# connect signals
-		id = self.tv.connect('motion_notify_event', self.on_textview_motion_notify_event)
+		id = self.tv.connect('motion_notify_event',
+			self.on_textview_motion_notify_event)
 		self.handlers[id] = self.tv
 		id = self.tv.connect('populate_popup', self.on_textview_populate_popup)
 		self.handlers[id] = self.tv
-		id = self.tv.connect('button_press_event', self.on_textview_button_press_event)
+		id = self.tv.connect('button_press_event',
+			self.on_textview_button_press_event)
 		self.handlers[id] = self.tv
 
 		self.account = account
@@ -154,7 +151,7 @@ class ConversationTextview:
 				self.handlers[i].disconnect(i)
 		del self.handlers
 		self.tv.destroy()
-		#TODO
+		#FIXME:
 		# self.line_tooltip.destroy()
 	
 	def update_tags(self):
@@ -320,19 +317,29 @@ class ConversationTextview:
 
 	def on_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
+		(only if used_in_history_window is False)
 		and if we have sth selected we show a submenu with actions on the phrase
 		(see on_conversation_textview_button_press_event)'''
-		item = gtk.SeparatorMenuItem()
-		menu.prepend(item)
-		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
-		menu.prepend(item)
-		id = item.connect('activate', self.clear)
-		self.handlers[id] = item
+
+		separator_menuitem_was_added = False
+		if not self.used_in_history_window:
+			item = gtk.SeparatorMenuItem()
+			menu.prepend(item)
+			separator_menuitem_was_added = True
+
+			item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+			menu.prepend(item)
+			id = item.connect('activate', self.clear)
+			self.handlers[id] = item
+
 		if self.selected_phrase:
-			s = self.selected_phrase
-			if len(s) > 25:
-				s = s[:21] + '...'
-			item = gtk.MenuItem(_('Actions for "%s"') % s)
+			if not separator_menuitem_was_added:
+				item = gtk.SeparatorMenuItem()
+				menu.prepend(item)
+
+			self.selected_phrase = helpers.reduce_chars_newlines(
+				self.selected_phrase, 25)
+			item = gtk.MenuItem(_('_Actions for "%s"') % self.selected_phrase)
 			menu.prepend(item)
 			submenu = gtk.Menu()
 			item.set_submenu(submenu)
@@ -369,7 +376,8 @@ class ConversationTextview:
 					item.set_property('sensitive', False)
 				else:
 					link = dict_link % self.selected_phrase
-					id = item.connect('activate', self.visit_url_from_menuitem, link)
+					id = item.connect('activate', self.visit_url_from_menuitem,
+						link)
 					self.handlers[id] = item
 			submenu.append(item)
 
@@ -385,13 +393,17 @@ class ConversationTextview:
 				id = item.connect('activate', self.visit_url_from_menuitem, link)
 				self.handlers[id] = item
 			submenu.append(item)
+			
+			item = gtk.MenuItem(_('Open as _Link'))
+			id = item.connect('activate', self.visit_url_from_menuitem, link)
+			self.handlers[id] = item
+			submenu.append(item)
 
 		menu.show_all()
 
 	def on_textview_button_press_event(self, widget, event):
 		# If we clicked on a taged text do NOT open the standard popup menu
 		# if normal text check if we have sth selected
-
 		self.selected_phrase = ''
 
 		if event.button != 3: # if not right click
@@ -430,18 +442,16 @@ class ConversationTextview:
 	def on_start_chat_activate(self, widget, jid):
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
-	def on_join_group_chat_menuitem_activate(self, widget, jid):
-		room, server = jid.split('@')
-		if gajim.interface.instances[self.account].has_key('join_gc'):
+	def on_join_group_chat_menuitem_activate(self, widget, room_jid):
+		if 'join_gc' in gajim.interface.instances[self.account]:
 			instance = gajim.interface.instances[self.account]['join_gc']
-			instance.xml.get_widget('server_entry').set_text(server)
-			instance.xml.get_widget('room_entry').set_text(room)
+			instance.xml.get_widget('room_jid_entry').set_text(room_jid)
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		else:
 			try:
 				gajim.interface.instances[self.account]['join_gc'] = \
-				dialogs.JoinGroupchatWindow(self.account, server, room)
-			except RuntimeError:
+				dialogs.JoinGroupchatWindow(self.account, room_jid)
+			except GajimGeneralException:
 				pass
 
 	def on_add_to_roster_activate(self, widget, jid):
@@ -463,6 +473,7 @@ class ConversationTextview:
 			childs[6].hide() # join group chat
 			childs[7].hide() # add to roster
 		else: # It's a mail or a JID
+			text = text.lower()
 			id = childs[2].connect('activate', self.on_copy_link_activate, text)
 			self.handlers[id] = childs[2]
 			id = childs[3].connect('activate', self.on_open_link_activate, kind, text)
@@ -701,7 +712,6 @@ class ConversationTextview:
 			# if tim_format comes as unicode because of day_str.
 			# we convert it to the encoding that we want (and that is utf-8)
 			tim_format = helpers.ensure_utf8_string(tim_format)
-			tim_format = tim_format.encode('utf-8')
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
 		elif current_print_time == 'sometimes' and kind != 'info':

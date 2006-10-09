@@ -900,7 +900,6 @@ Per type</property>
 				    <widget class="GtkFontButton" id="conversation_fontbutton">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
-				      <property name="title" translatable="yes">Επιλογή μιας γραμματοσειράς</property>
 				      <property name="show_style">True</property>
 				      <property name="show_size">True</property>
 				      <property name="use_font">False</property>
@@ -952,7 +951,6 @@ Per type</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="use_alpha">False</property>
-				  <property name="title" translatable="yes">Επιλογή χρώματος</property>
 				  <property name="focus_on_click">True</property>
 				  <signal name="color_set" handler="on_outgoing_msg_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:07:56 GMT"/>
 				</widget>
@@ -971,7 +969,6 @@ Per type</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="use_alpha">False</property>
-				  <property name="title" translatable="yes">Επιλογή χρώματος</property>
 				  <property name="focus_on_click">True</property>
 				  <signal name="color_set" handler="on_url_msg_colorbutton_color_set" last_modification_time="Sun, 25 Dec 2005 15:22:17 GMT"/>
 				</widget>
@@ -1051,7 +1048,6 @@ Per type</property>
 				  <property name="can_focus">True</property>
 				  <property name="has_focus">True</property>
 				  <property name="use_alpha">False</property>
-				  <property name="title" translatable="yes">Επιλογή χρώματος</property>
 				  <property name="focus_on_click">True</property>
 				  <signal name="color_set" handler="on_incoming_msg_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:07:44 GMT"/>
 				</widget>
@@ -1070,7 +1066,6 @@ Per type</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="use_alpha">False</property>
-				  <property name="title" translatable="yes">Επιλογή χρώματος</property>
 				  <property name="focus_on_click">True</property>
 				  <signal name="color_set" handler="on_status_msg_colorbutton_color_set" last_modification_time="Sun, 06 Mar 2005 14:08:04 GMT"/>
 				</widget>
