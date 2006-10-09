@@ -188,7 +188,6 @@ class PreferencesWindow:
 			if gajim.config.get('roster_theme') == config_theme:
 				theme_combobox.set_active(i)
 			i += 1
-		self.on_theme_combobox_changed(theme_combobox)
 
 		#use speller
 		if os.name == 'nt':
