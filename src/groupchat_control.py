@@ -753,6 +753,8 @@ class GroupchatControl(ChatControlBase):
 	def draw_avatar(self, nick):
 		model = self.list_treeview.get_model()
 		iter = self.get_contact_iter(nick)
+		if not iter:
+			return
 		if gajim.config.get('show_avatars_in_roster'):
 			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.room_jid + \
 				'/' + nick, True)
