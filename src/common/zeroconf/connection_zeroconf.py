@@ -265,15 +265,14 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def update_details(self):
 		if self.connection:
 			port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
-			if self.connection:
-				if port != self.port:
-					self.port = port
-					last_msg = self.connection.last_msg
-					self.disconnect()
-					if not self.connect(self.status, last_msg):
-						return
-					if self.status != 'invisible':
-						self.connection.announce()
+			if port != self.port:
+				self.port = port
+				last_msg = self.connection.last_msg
+				self.disconnect()
+				if not self.connect(self.status, last_msg):
+					return
+				if self.status != 'invisible':
+					self.connection.announce()
 			else:
 				self.reannounce()
 
