@@ -1116,11 +1116,10 @@ class GroupchatControl(ChatControlBase):
 					self.room_jid)
 				reason = ' '.join(message_array)
 				if nick in room_nicks:
-					ban_jid = gajim.construct_fjid(self.room_jid, nick)
-					gajim.connections[self.account].gc_set_affiliation(self.room_jid,
-						ban_jid, 'outcast', reason)
-					self.clear(self.msg_textview)
-				elif nick.find('@') >= 0:
+					gc_contact = gajim.contacts.get_gc_contact(self.account,
+						self.room_jid, nick)
+					nick = gc_contact.jid
+				if nick.find('@') >= 0:
 					gajim.connections[self.account].gc_set_affiliation(self.room_jid,
 						nick, 'outcast', reason)
 					self.clear(self.msg_textview)
