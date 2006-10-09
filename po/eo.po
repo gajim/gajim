@@ -4261,7 +4261,7 @@ msgstr "Elpelatas %s"
 
 #: ../src/groupchat_control.py:1512 ../src/groupchat_control.py:1795
 msgid "You may specify a reason below:"
-msgstr "Vi devas specifi kialon sube:"
+msgstr "Vi povas specifi kialon sube:"
 
 #. ask for reason
 #: ../src/groupchat_control.py:1794
