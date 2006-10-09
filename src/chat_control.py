@@ -1019,11 +1019,8 @@ class ChatControl(ChatControlBase):
 		if self.resource:
 			name += '/' + self.resource
 		if self.TYPE_ID == message_control.TYPE_PM:
-			room_jid = self.contact.jid.split('/')[0]
-			room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid,
-				self.account)
 			name = _('%(nickname)s from room %(room_name)s') %\
-				{'nickname': name, 'room_name': room_ctrl.name}
+				{'nickname': name, 'room_name': self.room_name}
 		name = gtkgui_helpers.escape_for_pango_markup(name)
 
 		# We know our contacts nick, but if another contact has the same nick
@@ -1676,7 +1673,7 @@ class ChatControl(ChatControlBase):
 			else:
 				kind = 'print_queue'
 			self.print_conversation(data[0], kind, tim = data[3],
-						encrypted = data[4], subject = data[1], xhtml = data[7])
+				encrypted = data[4], subject = data[1], xhtml = data[7])
 			if len(data) > 6 and isinstance(data[6], int):
 				message_ids.append(data[6])
 		if message_ids:

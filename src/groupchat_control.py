@@ -95,6 +95,9 @@ class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
 
 	def __init__(self, parent_win, contact, acct):
+		room_jid = contact.jid.split('/')[0]
+		room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, acct)
+		self.room_name = room_ctrl.name
 		ChatControl.__init__(self, parent_win, contact, acct)
 		self.TYPE_ID = 'pm'
 		self.display_names = (_('Private Chat'), _('Private Chats'))
