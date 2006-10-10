@@ -1494,7 +1494,7 @@
 	      <child>
 		<widget class="GtkEventBox" id="eventbox1">
 		  <property name="visible">True</property>
-		  <property name="tooltip">Format: YYYY-MM-DD</property>
+		  <property name="tooltip" translatable="yes">Format: YYYY-MM-DD</property>
 		  <property name="visible_window">True</property>
 		  <property name="above_child">False</property>
 
