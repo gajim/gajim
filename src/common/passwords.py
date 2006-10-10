@@ -72,8 +72,6 @@ def get_storage():
 	global storage
 	if storage is None: # None is only in first time get_storage is called
 		if USER_HAS_GNOMEKEYRING:
-			#FIXME: detect if we're running under GNOME or not
-			#before deciding to use the GnomeKeyring backend
 			storage = GnomePasswordStorage()
 		else:
 			storage = SimplePasswordStorage()
