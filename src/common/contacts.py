@@ -82,7 +82,7 @@ class Contact:
 	def is_observer(self):
 		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
 		is_observer = False
-		if is_hidden_in_roster() and if contact.sub == 'from':
+		if is_hidden_in_roster() and contact.sub == 'from':
 			is_observer = True
 		return is_observer
 				
