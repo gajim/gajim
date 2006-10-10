@@ -71,18 +71,18 @@ class Contact:
 		'''if roster should not be visible in roster'''
 		# JEP-0162
 		hide = True
-		if contact.sub in ('both', 'to', 'from'):
+		if self.sub in ('both', 'to', 'from'):
 			hide = False
-		elif contact.ask == 'subscribe':
+		elif self.ask == 'subscribe':
 			hide = False
-		elif contact.name or len(contact.groups):
+		elif self.name or len(self.groups):
 			hide = False
 		return hide
 	
 	def is_observer(self):
 		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
 		is_observer = False
-		if is_hidden_in_roster() and contact.sub == 'from':
+		if self.is_hidden_from_roster() and self.sub == 'from':
 			is_observer = True
 		return is_observer
 				
