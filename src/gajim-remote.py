@@ -40,7 +40,8 @@ try:
 	import dbus.service
 	import dbus.glib
 except:
-	raise exceptions.DbusNotSupported
+	print str(exceptions.DbusNotSupported())
+	sys.exit(1)
 
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
