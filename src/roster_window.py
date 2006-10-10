@@ -2138,7 +2138,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 							account)
 						ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid,
 							account)
-						msg_win.remove_tab(ctrl)
+						msg_win.remove_tab(ctrl, msg_win.CLOSE_CLOSE_BUTTON)
 					else:
 						need_readd = True
 				if need_readd:

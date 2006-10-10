@@ -57,7 +57,7 @@ class MessageControl:
 		or inactive (state is False)'''
 		pass  # Derived types MUST implement this method
 
-	def allow_shutdown(self):
+	def allow_shutdown(self, method):
 		'''Called to check is a control is allowed to shutdown.
 		If a control is not in a suitable shutdown state this method
 		should return False'''

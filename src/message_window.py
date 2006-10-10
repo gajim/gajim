@@ -40,6 +40,13 @@ class MessageWindow:
 	# DND_TARGETS is the targets needed by drag_source_set and drag_dest_set
 	DND_TARGETS = [('GAJIM_TAB', 0, 81)]
 	hid = 0 # drag_data_received handler id
+	(
+		CLOSE_TAB_MIDDLE_CLICK,
+		CLOSE_ESC,
+		CLOSE_CLOSE_BUTTON,
+		CLOSE_COMMAND,
+		CLOSE_CTRL_KEY
+	) = range(5)
 	
 	def __init__(self, acct, type):
 		# A dictionary of dictionaries where _contacts[account][jid] == A MessageControl
@@ -140,7 +147,7 @@ class MessageWindow:
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
 		for ctrl in self.controls():
-			if not ctrl.allow_shutdown():
+			if not ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON):
 				return True # halt the delete
 		return False
 
@@ -199,7 +206,7 @@ class MessageWindow:
 			self.popup_menu(event)
 		elif event.button == 2: # middle click
 			ctrl = self._widget_to_control(child)
-			self.remove_tab(ctrl)
+			self.remove_tab(ctrl, self.CLOSE_TAB_MIDDLE_CLICK)
 
 	def _on_message_textview_mykeypress_event(self, widget, event_keyval,
 		event_keymod):
@@ -224,7 +231,7 @@ class MessageWindow:
 
 	def _on_close_button_clicked(self, button, control):
 		'''When close button is pressed: close a tab'''
-		self.remove_tab(control)
+		self.remove_tab(control, self.CLOSE_CLOSE_BUTTON)
 
 	def show_title(self, urgent = True, control = None):
 		'''redraw the window's title'''
@@ -279,11 +286,11 @@ class MessageWindow:
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 	
-	def remove_tab(self, ctrl, reason = None, force = False):
+	def remove_tab(self, ctrl, mothod, reason = None, force = False):
 		'''reason is only for gc (offline status message)
 		if force is True, do not ask any confirmation'''
 		# Shutdown the MessageControl
-		if not force and not ctrl.allow_shutdown():
+		if not force and not ctrl.allow_shutdown(mothod):
 			return
 		if reason is not None: # We are leaving gc with a status message
 			ctrl.shutdown(reason)
@@ -499,9 +506,9 @@ class MessageWindow:
 			elif event.keyval == gtk.keysyms.Tab: # CTRL + TAB
 				self.move_to_next_unread_tab(True)
 			elif event.keyval == gtk.keysyms.F4: # CTRL + F4
-				self.remove_tab(ctrl)
+				self.remove_tab(ctrl, self.CLOSE_CTRL_KEY)
 			elif event.keyval == gtk.keysyms.w: # CTRL + W
-				self.remove_tab(ctrl)
+				self.remove_tab(ctrl, self.CLOSE_CTRL_KEY)
 
 		# MOD1 (ALT) mask
 		elif event.state & gtk.gdk.MOD1_MASK:
@@ -524,7 +531,7 @@ class MessageWindow:
 		# Close tab bindings
 		elif event.keyval == gtk.keysyms.Escape and \
 				gajim.config.get('escape_key_closes'): # Escape
-			self.remove_tab(ctrl)
+			self.remove_tab(ctrl, self.CLOSE_ESC)
 		else:
 			# If the active control has a message_textview pass the event to it
 			active_ctrl = self.get_active_control()

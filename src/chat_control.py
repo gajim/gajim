@@ -1517,7 +1517,7 @@ class ChatControl(ChatControlBase):
 		self.msg_textview.destroy()
 		
 
-	def allow_shutdown(self):
+	def allow_shutdown(self, method):
 		if time.time() - gajim.last_message_time[self.account]\
 		[self.get_full_jid()] < 2:
 			# 2 seconds

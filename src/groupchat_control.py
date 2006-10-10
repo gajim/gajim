@@ -1105,7 +1105,7 @@ class GroupchatControl(ChatControlBase):
 			reason = 'offline'
 			if len(message_array):
 				reason = message_array.pop(0)
-			self.parent_win.remove_tab(self, reason, force = True)
+			self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND, reason)
 			self.clear(self.msg_textview)
 			return True
 		elif command == 'ban':
@@ -1292,11 +1292,13 @@ class GroupchatControl(ChatControlBase):
 				self.handlers[i].disconnect(i)
 			del self.handlers[i]
 
-	def allow_shutdown(self):
-		model, iter = self.list_treeview.get_selection().get_selected()
-		if iter:
-			self.list_treeview.get_selection().unselect_all()
-			return False
+	def allow_shutdown(self, method):
+		'''If check_selection is True, '''
+		if method == self.parent_win.CLOSE_ESC:
+			model, iter = self.list_treeview.get_selection().get_selected()
+			if iter:
+				self.list_treeview.get_selection().unselect_all()
+				return False
 		retval = True
 		includes = gajim.config.get('confirm_close_muc_rooms').split(' ')
 		excludes = gajim.config.get('noconfirm_close_muc_rooms').split(' ')
