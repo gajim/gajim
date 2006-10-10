@@ -38,6 +38,7 @@ from common import helpers
 from common import gajim
 from common import connection
 from common import passwords
+from common import dbus_support
 
 from common.exceptions import GajimGeneralException
 
@@ -466,9 +467,11 @@ class PreferencesWindow:
 		if os.name == 'nt':
 			widget.set_no_show_all(True)
 			widget.hide()
-		else:
+		elif dbus_support.supported:
 			st = gajim.config.get('set_status_msg_from_current_music_track')
 			widget.set_active(st)
+		else:
+			widget.set_sensitive(False)
 		
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
