@@ -222,6 +222,8 @@ class RosterWindow:
 		if jid == gajim.get_jid_from_account(account):
 			self.add_self_contact(account)
 			return
+		if contact.sub != 'from':
+			return
 		if gajim.jid_is_transport(contact.jid):
 			# if jid is transport, check if we wanna show it in roster
 			if not gajim.config.get('show_transports_group'):
@@ -238,12 +240,7 @@ class RosterWindow:
 		elif contact.name or len(contact.groups):
 			hide = False
 
-		observer = False
-		if hide:
-			if contact.sub == 'from':
-				observer = True
-			else:
-				return
+		observer = contact.is_observer()
 
 		if observer:
 			# if he has a tag, remove it
@@ -397,14 +394,9 @@ class RosterWindow:
 			return
 		if contact.jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(contact.jid)
-		# JEP-0162
-		hide = True
-		if contact.sub in ('both', 'to', 'from'):
-			hide = False
-		elif contact.ask == 'subscribe':
-			hide = False
-		elif contact.name or len(contact.groups):
-			hide = False
+		
+		
+		hide = contact.is_hidden_in_roster()
 
 		showOffline = gajim.config.get('showoffline')
 		if (contact.show in ('offline', 'error') or hide) and \
