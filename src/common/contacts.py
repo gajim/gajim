@@ -67,6 +67,26 @@ class Contact:
 			return self.name
 		return self.jid.split('@')[0]
 
+	def is_hidden_from_roster(self):
+		'''if roster should not be visible in roster'''
+		# JEP-0162
+		hide = True
+		if contact.sub in ('both', 'to', 'from'):
+			hide = False
+		elif contact.ask == 'subscribe':
+			hide = False
+		elif contact.name or len(contact.groups):
+			hide = False
+		return hide
+	
+	def is_observer(self):
+		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
+		is_observer = False
+		if is_hidden_in_roster() and if contact.sub == 'from':
+			is_observer = True
+		return is_observer
+				
+
 class GC_Contact:
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', name='', show='', status='', role='',
