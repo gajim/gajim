@@ -49,7 +49,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import xmpp
-from common.exceptions import GajimGeneralException as GajimGeneralException
+from common.exceptions import GajimGeneralException
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.

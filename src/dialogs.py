@@ -40,7 +40,7 @@ from advanced import AdvancedConfigurationWindow
 
 from common import gajim
 from common import helpers
-from common.exceptions import GajimGeneralException as GajimGeneralException
+from common.exceptions import GajimGeneralException
 
 class EditGroupsDialog:
 	'''Class for the edit group dialog window'''

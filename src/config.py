@@ -39,7 +39,7 @@ from common import gajim
 from common import connection
 from common import passwords
 
-from common.exceptions import GajimGeneralException as GajimGeneralException
+from common.exceptions import GajimGeneralException
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:

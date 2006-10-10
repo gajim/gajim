@@ -36,7 +36,7 @@ import notify
 from common import gajim
 from common import helpers
 from common import passwords
-from common.exceptions import GajimGeneralException as GajimGeneralException
+from common.exceptions import GajimGeneralException
 
 from message_window import MessageWindowMgr
 from chat_control import ChatControl

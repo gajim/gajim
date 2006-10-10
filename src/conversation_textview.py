@@ -31,7 +31,7 @@ from calendar import timegm
 from common.fuzzyclock import FuzzyClock
 
 from htmltextview import HtmlTextView
-from common.exceptions import GajimGeneralException as GajimGeneralException
+from common.exceptions import GajimGeneralException
 
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
