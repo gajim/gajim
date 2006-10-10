@@ -50,7 +50,7 @@ class StatusIcon(systray.Systray):
 		self.on_left_click()
 
 	def set_img(self):
-		'''apart from image, we also update tooltip text here'
+		'''apart from image, we also update tooltip text here'''
 		if not gajim.interface.systray_enabled:
 			return
 		text = helpers.get_notification_icon_tooltip_text()
