@@ -553,7 +553,7 @@ class ConnectionVcard:
 	
 	def node_to_dict(self, node):
 		dict = {}
-		'''
+		
 		for info in node.getChildren():
 			name = info.getName()
 			if name in ('ADR', 'TEL', 'EMAIL'): # we can have several
@@ -569,7 +569,7 @@ class ConnectionVcard:
 				dict[name] = {}
 				for c in info.getChildren():
 					 dict[name][c.getName()] = c.getData()
-		'''
+		
 		return dict
 
 	def save_vcard_to_hd(self, full_jid, card):
