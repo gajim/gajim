@@ -92,7 +92,7 @@
 		<widget class="GtkExpander" id="expander1">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="expanded">False</property>
+		  <property name="expanded">True</property>
 		  <property name="spacing">0</property>
 
 		  <child>
@@ -928,7 +928,7 @@
 	      <child>
 		<widget class="GtkEventBox" id="eventbox1">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Format: YYYY-MM-DD</property>
+		  <property name="tooltip" translatable="yes" comments="Do NOT change sequence. Just translate YYYY and MM and DD (from Year, Month, Day accordingly)">Format: YYYY-MM-DD</property>
 		  <property name="visible_window">True</property>
 		  <property name="above_child">False</property>
 
