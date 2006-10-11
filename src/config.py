@@ -1884,7 +1884,7 @@ class AccountsWindow:
 			win_opened = True
 		else:
 			for key in gajim.interface.instances[account]:
-				if gajim.interface.instances[account][key]:
+				if gajim.interface.instances[account][key] and key != 'remove_account':
 					win_opened = True
 					break
 		# Detect if we have opened windows for this account
