@@ -4,19 +4,17 @@ ACLOCAL_AMFLAGS = -I m4
 
 bin_SCRIPTS = scripts/gajim
 
-commonfilesdir = $(pkgdatadir)
-commonfiles_DATA = COPYING	\
-				   THANKS	\
-				   AUTHORS
 
 docfilesdir = $(docdir)
 docfiles_DATA = README \
 				README.html \
 				ChangeLog \
+				COPYING \
 				THANKS \
-				AUTHORS
+				AUTHORS 
+
 EXTRA_DIST = \
-	$(commonfiles_DATA) \
+	$(docfiles_DATA) \
 	autogen.sh			\
 	intltool-extract.in \
 	intltool-merge.in 	\
