@@ -29,8 +29,27 @@ try:
 	import defs
 except ImportError:
 	print >> sys.stderr, '''defs.py is missing!
-If you start gajim from svn, do:
-$ sh autogen.sh'''
+
+If you start gajim from svn:
+ * Make sure you have GNU autotools installed.
+   This includes the following packages:
+    aclocal-1.9
+    automake-1.9
+    autoconf >= 2.59
+    intltool-0.35
+    libtool
+ * Run
+    $ sh autogen.sh
+ * Optionally, install gajim
+    $ make
+    $ sudo make install
+
+**** Note for translators ****
+ You can get the latest string updates, by running:
+    $ cd po/
+    $ make update-po
+
+'''
 	sys.exit(1)
 
 interface = None # The actual interface (the gtk one for the moment)
