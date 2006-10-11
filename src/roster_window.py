@@ -1119,6 +1119,14 @@ class RosterWindow:
 		else:
 			info[contact.jid] = vcard.VcardWindow(contact, account)
 
+	def on_info_zeroconf(self, widget, contact, account):
+		info = gajim.interface.instances[account]['infos']
+		if info.has_key(contact.jid):
+			info[contact.jid].window.present()
+		else:
+			info[contact.jid] = vcard.ZeroconfVcardWindow(contact, account)
+
+
 	def show_tooltip(self, contact):
 		pointer = self.tree.get_pointer()
 		props = self.tree.get_path_at_pos(pointer[0], pointer[1])
@@ -1363,6 +1371,118 @@ class RosterWindow:
 		if not contact:
 			return
 
+		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+			xml = gtkgui_helpers.get_glade('zeroconf_contact_context_menu.glade')
+			zeroconf_contact_context_menu = xml.get_widget('zeroconf_contact_context_menu')
+			
+			start_chat_menuitem = xml.get_widget('start_chat_menuitem')
+			rename_menuitem = xml.get_widget('rename_menuitem')
+			edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
+			# separator has with send file, assign_openpgp_key_menuitem, etc..
+			above_send_file_separator = xml.get_widget('above_send_file_separator')
+			send_file_menuitem = xml.get_widget('send_file_menuitem')
+			assign_openpgp_key_menuitem = xml.get_widget(
+				'assign_openpgp_key_menuitem')
+			add_special_notification_menuitem = xml.get_widget(
+				'add_special_notification_menuitem')
+			
+			add_special_notification_menuitem.hide()
+			add_special_notification_menuitem.set_no_show_all(True)
+
+			if not our_jid:
+				# add a special img for rename menuitem
+				path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+					'kbd_input.png')
+				img = gtk.Image()
+				img.set_from_file(path_to_kbd_input_img)
+				rename_menuitem.set_image(img)
+
+			above_information_separator = xml.get_widget(
+				'above_information_separator')
+
+			# skip a separator
+			information_menuitem = xml.get_widget('information_menuitem')
+			history_menuitem = xml.get_widget('history_menuitem')
+
+			contacts = gajim.contacts.get_contact(account, jid)
+			if len(contacts) > 1: # sevral resources
+				sub_menu = gtk.Menu()
+				start_chat_menuitem.set_submenu(sub_menu)
+
+				iconset = gajim.config.get('iconset')
+				path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+				for c in contacts:
+					# icon MUST be different instance for every item
+					state_images = self.load_iconset(path)
+					item = gtk.ImageMenuItem(c.resource + ' (' + str(c.priority) + ')')
+					icon_name = helpers.get_icon_name_to_show(c, account)
+					icon = state_images[icon_name]
+					item.set_image(icon)
+					sub_menu.append(item)
+					item.connect('activate', self.on_open_chat_window, c, account,
+						c.resource)
+
+			else: # one resource
+				start_chat_menuitem.connect('activate',
+					self.on_roster_treeview_row_activated, tree_path)
+
+			if contact.resource:
+				send_file_menuitem.connect('activate',
+					self.on_send_file_menuitem_activate, account, contact)
+			else: # if we do not have resource we cannot send file
+				send_file_menuitem.hide()
+				send_file_menuitem.set_no_show_all(True)
+
+			rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
+			information_menuitem.connect('activate', self.on_info_zeroconf, contact,
+				account)
+			history_menuitem.connect('activate', self.on_history, contact,
+				account)
+
+			if _('Not in Roster') not in contact.groups:
+				#contact is in normal group
+				edit_groups_menuitem.set_no_show_all(False)
+				assign_openpgp_key_menuitem.set_no_show_all(False)
+				edit_groups_menuitem.connect('activate', self.on_edit_groups, [(
+					contact,account)])
+
+				if gajim.config.get('usegpg'):
+					assign_openpgp_key_menuitem.connect('activate',
+						self.on_assign_pgp_key, contact, account)
+
+			else: # contact is in group 'Not in Roster'
+				edit_groups_menuitem.hide()
+				edit_groups_menuitem.set_no_show_all(True)
+				# hide first of the two consecutive separators
+				above_send_file_separator.hide()
+				above_send_file_separator.set_no_show_all(True)
+				assign_openpgp_key_menuitem.hide()
+				assign_openpgp_key_menuitem.set_no_show_all(True)
+
+			# Remove many items when it's self contact row
+			if our_jid:
+				for menuitem in (rename_menuitem, edit_groups_menuitem,
+				above_information_separator):
+					menuitem.set_no_show_all(True)
+					menuitem.hide()
+
+			# Unsensitive many items when account is offline
+			if gajim.connections[account].connected < 2:
+				for widget in [start_chat_menuitem,	rename_menuitem, edit_groups_menuitem, send_file_menuitem]:
+					widget.set_sensitive(False)
+
+			event_button = gtkgui_helpers.get_possible_button_event(event)
+
+			zeroconf_contact_context_menu.attach_to_widget(self.tree, None)
+			zeroconf_contact_context_menu.connect('selection-done',
+				gtkgui_helpers.destroy_widget)
+			zeroconf_contact_context_menu.show_all()
+			zeroconf_contact_context_menu.popup(None, None, None, event_button,
+				event.time)
+			return
+
+
+		# normal account
 		xml = gtkgui_helpers.get_glade('roster_contact_context_menu.glade')
 		roster_contact_context_menu = xml.get_widget(
 			'roster_contact_context_menu')
@@ -1773,6 +1893,14 @@ class RosterWindow:
 			gajim.interface.instances[account]['account_modification'] = \
 				config.AccountModificationWindow(account)
 
+	def on_zeroconf_properties(self, widget, account):
+		if gajim.interface.instances.has_key('zeroconf_properties'):
+			gajim.interface.instances['zeroconf_properties'].\
+			window.present()
+		else:
+			gajim.interface.instances['zeroconf_properties'] = \
+				config.ZeroconfPropertiesWindow()
+
 	def on_open_gmail_inbox(self, widget, account):
 		url = 'http://mail.google.com/mail?account_id=%s' % urllib.quote(
 			gajim.config.get_per('accounts', account, 'name'))
@@ -1792,71 +1920,123 @@ class RosterWindow:
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = self.load_iconset(path)
 
-		xml = gtkgui_helpers.get_glade('account_context_menu.glade')
-		account_context_menu = xml.get_widget('account_context_menu')
+		if not gajim.config.get_per('accounts', account, 'is_zeroconf'):
+			xml = gtkgui_helpers.get_glade('account_context_menu.glade')
+			account_context_menu = xml.get_widget('account_context_menu')
 
-		status_menuitem = xml.get_widget('status_menuitem')
-		join_group_chat_menuitem =xml.get_widget('join_group_chat_menuitem')
-		open_gmail_inbox_menuitem = xml.get_widget('open_gmail_inbox_menuitem')
-		new_message_menuitem = xml.get_widget('new_message_menuitem')
-		add_contact_menuitem = xml.get_widget('add_contact_menuitem')
-		service_discovery_menuitem = xml.get_widget('service_discovery_menuitem')
-		edit_account_menuitem = xml.get_widget('edit_account_menuitem')
-		sub_menu = gtk.Menu()
-		status_menuitem.set_submenu(sub_menu)
+			status_menuitem = xml.get_widget('status_menuitem')
+			join_group_chat_menuitem =xml.get_widget('join_group_chat_menuitem')
+			open_gmail_inbox_menuitem = xml.get_widget('open_gmail_inbox_menuitem')
+			new_message_menuitem = xml.get_widget('new_message_menuitem')
+			add_contact_menuitem = xml.get_widget('add_contact_menuitem')
+			service_discovery_menuitem = xml.get_widget('service_discovery_menuitem')
+			edit_account_menuitem = xml.get_widget('edit_account_menuitem')
+			sub_menu = gtk.Menu()
+			status_menuitem.set_submenu(sub_menu)
 
-		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-			uf_show = helpers.get_uf_show(show, use_mnemonic = True)
+			for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
+				uf_show = helpers.get_uf_show(show, use_mnemonic = True)
+				item = gtk.ImageMenuItem(uf_show)
+				icon = state_images[show]
+				item.set_image(icon)
+				sub_menu.append(item)
+				item.connect('activate', self.change_status, account, show)
+
+			item = gtk.SeparatorMenuItem()
+			sub_menu.append(item)
+
+			item = gtk.ImageMenuItem(_('_Change Status Message'))
+			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
+			img = gtk.Image()
+			img.set_from_file(path)
+			item.set_image(img)
+			sub_menu.append(item)
+			item.connect('activate', self.on_change_status_message_activate, account)
+			if gajim.connections[account].connected < 2:
+				item.set_sensitive(False)
+
+			uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
 			item = gtk.ImageMenuItem(uf_show)
-			icon = state_images[show]
+			icon = state_images['offline']
 			item.set_image(icon)
 			sub_menu.append(item)
-			item.connect('activate', self.change_status, account, show)
+			item.connect('activate', self.change_status, account, 'offline')
 
-		item = gtk.SeparatorMenuItem()
-		sub_menu.append(item)
+			if gajim.config.get_per('accounts', account, 'hostname') not in gajim.gmail_domains:
+				open_gmail_inbox_menuitem.set_no_show_all(True)
+				open_gmail_inbox_menuitem.hide()
+			else:
+				open_gmail_inbox_menuitem.connect('activate', self.on_open_gmail_inbox,
+					account)
 
-		item = gtk.ImageMenuItem(_('_Change Status Message'))
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
-		img = gtk.Image()
-		img.set_from_file(path)
-		item.set_image(img)
-		sub_menu.append(item)
-		item.connect('activate', self.on_change_status_message_activate, account)
-		if gajim.connections[account].connected < 2:
-			item.set_sensitive(False)
+			edit_account_menuitem.connect('activate', self.on_edit_account, account)
+			add_contact_menuitem.connect('activate', self.on_add_new_contact, account)
+			service_discovery_menuitem.connect('activate',
+				self.on_service_disco_menuitem_activate, account)
+			
+			gc_sub_menu = gtk.Menu() # gc is always a submenu
+			join_group_chat_menuitem.set_submenu(gc_sub_menu)
+			self.add_bookmarks_list(gc_sub_menu, account)
+			new_message_menuitem.connect('activate',
+				self.on_new_message_menuitem_activate, account)
 
-		uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
-		item = gtk.ImageMenuItem(uf_show)
-		icon = state_images['offline']
-		item.set_image(icon)
-		sub_menu.append(item)
-		item.connect('activate', self.change_status, account, 'offline')
-
-		if gajim.config.get_per('accounts', account, 'hostname') not in gajim.gmail_domains:
-			open_gmail_inbox_menuitem.set_no_show_all(True)
-			open_gmail_inbox_menuitem.hide()
+			# make some items insensitive if account is offline
+			if gajim.connections[account].connected < 2:
+				for widget in [add_contact_menuitem, service_discovery_menuitem,
+				join_group_chat_menuitem, new_message_menuitem]:
+					widget.set_sensitive(False)
 		else:
-			open_gmail_inbox_menuitem.connect('activate', self.on_open_gmail_inbox,
-				account)
+			xml = gtkgui_helpers.get_glade('zeroconf_context_menu.glade')
+			account_context_menu = xml.get_widget('zeroconf_context_menu')
 
-		edit_account_menuitem.connect('activate', self.on_edit_account, account)
-		add_contact_menuitem.connect('activate', self.on_add_new_contact, account)
-		service_discovery_menuitem.connect('activate',
-			self.on_service_disco_menuitem_activate, account)
-		
-		gc_sub_menu = gtk.Menu() # gc is always a submenu
-		join_group_chat_menuitem.set_submenu(gc_sub_menu)
-		self.add_bookmarks_list(gc_sub_menu, account)
-		new_message_menuitem.connect('activate',
-			self.on_new_message_menuitem_activate, account)
+			status_menuitem = xml.get_widget('status_menuitem')
+			#join_group_chat_menuitem =xml.get_widget('join_group_chat_menuitem')
+			new_message_menuitem = xml.get_widget('new_message_menuitem')
+			zeroconf_properties_menuitem = xml.get_widget('zeroconf_properties_menuitem')
+			sub_menu = gtk.Menu()
+			status_menuitem.set_submenu(sub_menu)
 
-		# make some items insensitive if account is offline
-		if gajim.connections[account].connected < 2:
-			for widget in [add_contact_menuitem, service_discovery_menuitem,
-			join_group_chat_menuitem, new_message_menuitem]:
-				widget.set_sensitive(False)
-		
+			for show in ('online', 'away', 'dnd', 'invisible'):
+				uf_show = helpers.get_uf_show(show, use_mnemonic = True)
+				item = gtk.ImageMenuItem(uf_show)
+				icon = state_images[show]
+				item.set_image(icon)
+				sub_menu.append(item)
+				item.connect('activate', self.change_status, account, show)
+
+			item = gtk.SeparatorMenuItem()
+			sub_menu.append(item)
+
+			item = gtk.ImageMenuItem(_('_Change Status Message'))
+			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
+			img = gtk.Image()
+			img.set_from_file(path)
+			item.set_image(img)
+			sub_menu.append(item)
+			item.connect('activate', self.on_change_status_message_activate, account)
+			if gajim.connections[account].connected < 2:
+				item.set_sensitive(False)
+
+			uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
+			item = gtk.ImageMenuItem(uf_show)
+			icon = state_images['offline']
+			item.set_image(icon)
+			sub_menu.append(item)
+			item.connect('activate', self.change_status, account, 'offline')
+
+			zeroconf_properties_menuitem.connect('activate', self.on_zeroconf_properties, account)			
+			#gc_sub_menu = gtk.Menu() # gc is always a submenu
+			#join_group_chat_menuitem.set_submenu(gc_sub_menu)
+			#self.add_bookmarks_list(gc_sub_menu, account)
+			#new_message_menuitem.connect('activate',
+			#	self.on_new_message_menuitem_activate, account)
+
+			# make some items insensitive if account is offline
+			#if gajim.connections[account].connected < 2:
+			#	for widget in [join_group_chat_menuitem, new_message_menuitem]:
+			#		widget.set_sensitive(False)
+			#	new_message_menuitem.set_sensitive(False)
+					
 		return account_context_menu
 
 	def make_account_menu(self, event, iter):
@@ -1967,6 +2147,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if not len(list_of_paths):
 				return
 			type = model[list_of_paths[0]][C_TYPE]
+			account = model[list_of_paths[0]][C_ACCOUNT]
 			list_ = []
 			for path in list_of_paths:
 				if model[path][C_TYPE] != type:
@@ -1976,7 +2157,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
 				list_.append((contact, account))
-			if type in ('account', 'group', 'self_contact'):
+			if type in ('account', 'group', 'self_contact') or account == gajim.ZEROCONF_ACC_NAME:
 				return
 			if type == 'contact':
 				self.on_req_usub(widget, list_)
@@ -3572,6 +3753,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 						account_dest, c_dest, path)
 			return
 
+		if gajim.config.get_per('accounts', account_dest, 'is_zeroconf'):
+			# drop on zeroconf account, no contact adds possible
+			return
+
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
 			# dropped before a group : we drop it in the previous group
 			path_dest = (path_dest[0], path_dest[1]-1)
@@ -3582,6 +3767,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if type_source != 'contact': # source is not a contact
 			return
 		if type_dest == 'account' and account_source == account_dest:
+			return
+		if gajim.config.get_per('accounts', account_source, 'is_zeroconf'):
 			return
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':

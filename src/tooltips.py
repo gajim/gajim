@@ -307,7 +307,14 @@ class GCTooltip(BaseTooltip):
 			properties.append((show, None))
 
 		if contact.jid.strip() != '':
-			properties.append((_('Jabber ID: '), contact.jid))	
+			jid_markup = '<span weight="bold">' + contact.jid + '</span>' 
+		else:
+			jid_markup = '<span weight="bold">' + \
+			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
+			+ '</span>'
+		properties.append((jid_markup, None))	
+		properties.append((_('Role: '), helpers.get_uf_role(contact.role)))
+		properties.append((_('Affiliation: '), contact.affiliation.capitalize()))
 		if hasattr(contact, 'resource') and contact.resource.strip() != '':
 			properties.append((_('Resource: '), 
 				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
@@ -408,10 +415,25 @@ class RosterTooltip(NotificationAreaTooltip):
 		vcard_table.set_homogeneous(False)
 		vcard_current_row = 1
 		properties = []
-		name_markup = '<b>%s</b>' % gtkgui_helpers.escape_for_pango_markup(
-			prim_contact.get_shown_name())
-		properties.append((name_markup, None))
 		
+		jid_markup = '<span weight="bold">' + prim_contact.jid + '</span>'
+		properties.append((jid_markup, None))
+
+		properties.append((_('Name: '), gtkgui_helpers.escape_for_pango_markup(
+			prim_contact.get_shown_name())))
+		if prim_contact.sub:
+			properties.append(( _('Subscription: '), 
+				gtkgui_helpers.escape_for_pango_markup(helpers.get_uf_sub(prim_contact.sub))))
+		if prim_contact.keyID:
+			keyID = None
+			if len(prim_contact.keyID) == 8:
+				keyID = prim_contact.keyID
+			elif len(prim_contact.keyID) == 16:
+				keyID = prim_contact.keyID[8:]
+			if keyID:
+				properties.append((_('OpenPGP: '),
+					gtkgui_helpers.escape_for_pango_markup(keyID)))
+
 		num_resources = 0
 		# put contacts in dict, where key is priority
 		contacts_dict = {}
@@ -422,6 +444,11 @@ class RosterTooltip(NotificationAreaTooltip):
 					contacts_dict[contact.priority].append(contact)
 				else:
 					contacts_dict[contact.priority] = [contact]
+
+		if num_resources == 1 and contact.resource:
+			properties.append((_('Resource: '),
+				gtkgui_helpers.escape_for_pango_markup(contact.resource) + ' (' + \
+				unicode(contact.priority) + ')'))
 		if num_resources > 1:
 			properties.append((_('Status: '),	' '))
 			transport = gajim.get_transport_name_from_jid(

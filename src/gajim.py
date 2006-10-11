@@ -31,6 +31,7 @@ import message_control
 from chat_control import ChatControlBase
 
 from common import exceptions
+from common.zeroconf import connection_zeroconf
 
 if os.name == 'posix': # dl module is Unix Only
 	try: # rename the process name to gajim
@@ -618,7 +619,9 @@ class Interface:
 		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
 		gc_control = self.msg_win_mgr.get_control(jid, account)
-		if gc_control and gc_control.type_id == message_control.TYPE_GC:
+		if gc_control and gc_control.type_id != message_control.TYPE_GC:
+			gc_control = None
+		if gc_control:
 			if len(jids) > 1: # it's a pm
 				nick = jids[1]
 				if not self.msg_win_mgr.get_control(full_jid_with_resource,
@@ -1406,6 +1409,20 @@ class Interface:
 			if win.startswith('privacy_list_'):
 				self.instances[account][win].check_active_default(data)
 
+	def handle_event_zc_name_conflict(self, account, data):
+		dlg = dialogs.InputDialog(_('Username Conflict'),
+			_('Please type a new username for your local account'), 
+			is_modal = True)
+		dlg.input_entry.set_text(data)
+		response = dlg.get_response()
+		if response == gtk.RESPONSE_OK:
+			new_name = dlg.input_entry.get_text()
+			gajim.config.set_per('accounts', account, 'name', new_name)
+			status = gajim.connections[account].status
+			gajim.connections[account].username = new_name
+			gajim.connections[account].change_status(status, '')
+		
+
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -1711,6 +1728,7 @@ class Interface:
 			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
 			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
 				self.handle_event_privacy_lists_active_default,
+			'ZC_NAME_CONFLICT': self.handle_event_zc_name_conflict,
 		}
 		gajim.handlers = self.handlers
 
@@ -1867,9 +1885,13 @@ class Interface:
 			self.handle_event_file_progress)
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
 		self.register_handlers()
+		if gajim.config.get('enable_zeroconf'):
+			gajim.connections[gajim.ZEROCONF_ACC_NAME] = common.zeroconf.connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
 		for account in gajim.config.get_per('accounts'):
-			gajim.connections[account] = common.connection.Connection(account)
-															
+			if not gajim.config.get_per('accounts', account, 'is_zeroconf'):
+				gajim.connections[account] = common.connection.Connection(account)
+
+		# gtk hooks
 		# gtk hooks
 		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')

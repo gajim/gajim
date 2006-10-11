@@ -120,6 +120,12 @@ status_before_autoaway = {}
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 
+# zeroconf account name
+ZEROCONF_ACC_NAME = 'Local'
+priority_dict = {}
+for status in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
+	priority_dict[status] = config.get('autopriority' + status)
+
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]

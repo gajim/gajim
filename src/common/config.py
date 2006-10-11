@@ -6,7 +6,8 @@
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
-##
+## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
+## 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
 ## by the Free Software Foundation; version 2 only.
@@ -82,6 +83,7 @@ class Config:
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
+		'enable_zeroconf': [opt_bool, False, _('Enable link-local/zeroconf messaging')],
 		'use_speller': [ opt_bool, False, ],
 		'speller_language': [ opt_str, '', _('Language used by speller')],
 		'print_time': [ opt_str, 'always',  _('\'always\' - print time for every message.\n\'sometimes\' - print time every print_ichat_every_foo_minutes minute.\n\'never\' - never print time.')],
@@ -259,6 +261,11 @@ class Config:
 			'msgwin-y-position': [opt_int, -1], # Default is to let the wm decide
 			'msgwin-width': [opt_int, 480],
 			'msgwin-height': [opt_int, 440],
+			'is_zeroconf': [opt_bool, False],
+			'zeroconf_first_name': [ opt_str, '', '', True ],
+			'zeroconf_last_name': [ opt_str, '', '', True ],
+			'zeroconf_jabber_id': [ opt_str, '', '', True ],
+			'zeroconf_email': [ opt_str, '', '', True ],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],

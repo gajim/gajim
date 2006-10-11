@@ -2,6 +2,7 @@
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -333,6 +334,153 @@ class VcardWindow:
 
 		gajim.connections[self.account].request_vcard(self.contact.jid,
 			self.gc_contact is not None)
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()
+
+
+class ZeroconfVcardWindow:
+	def __init__(self, contact, account, is_fake = False):
+		# the contact variable is the jid if vcard is true
+		self.xml = gtkgui_helpers.get_glade('zeroconf_information_window.glade')
+		self.window = self.xml.get_widget('zeroconf_information_window')
+
+		self.contact = contact
+		self.account = account
+		self.is_fake = is_fake
+
+	#	self.avatar_mime_type = None
+	#	self.avatar_encoded = None
+
+		self.fill_contact_page()
+		self.fill_personal_page()
+
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_zeroconf_information_window_destroy(self, widget):
+		del gajim.interface.instances[self.account]['infos'][self.contact.jid]
+
+	def on_zeroconf_information_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			self.window.destroy()
+
+	def on_log_history_checkbutton_toggled(self, widget):
+		#log conversation history?
+		oldlog = True
+		no_log_for = gajim.config.get_per('accounts', self.account,
+			'no_log_for').split()
+		if self.contact.jid in no_log_for:
+			oldlog = False
+		log = widget.get_active()
+		if not log and not self.contact.jid in no_log_for:
+			no_log_for.append(self.contact.jid)
+		if log and self.contact.jid in no_log_for:
+			no_log_for.remove(self.contact.jid)
+		if oldlog != log:
+			gajim.config.set_per('accounts', self.account, 'no_log_for',
+				' '.join(no_log_for))
+
+	def on_PHOTO_eventbox_button_press_event(self, widget, event):
+		'''If right-clicked, show popup'''
+		if event.button == 3: # right click
+			menu = gtk.Menu()
+			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+			menuitem.connect('activate',
+				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+				self.contact.jid, self.account, self.contact.name + '.jpeg')
+			menu.append(menuitem)
+			menu.connect('selection-done', lambda w:w.destroy())	
+			# show the menu
+			menu.show_all()
+			menu.popup(None, None, None, event.button, event.time)
+
+	def set_value(self, entry_name, value):
+		try:
+			if value and entry_name == 'URL_label':
+				if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
+					widget = gtk.LinkButton(value, value)
+				else:
+					widget = gtk.Label(value)
+				table = self.xml.get_widget('personal_info_table')
+				table.attach(widget, 1, 4, 3, 4, yoptions = 0)
+			else:
+				self.xml.get_widget(entry_name).set_text(value)
+		except AttributeError:
+			pass
+
+	def fill_status_label(self):
+		if self.xml.get_widget('information_notebook').get_n_pages() < 2:
+			return
+		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		# stats holds show and status message
+		stats = ''
+		one = True # Are we adding the first line ?
+		if contact_list:
+			for c in contact_list:
+				if not one:
+					stats += '\n'
+				stats += helpers.get_uf_show(c.show)
+				if c.status:
+					stats += ': ' + c.status
+				if c.last_status_time:
+					stats += '\n' + _('since %s') % time.strftime('%c',
+						c.last_status_time).decode(locale.getpreferredencoding())
+				one = False
+		else: # Maybe gc_vcard ?
+			stats = helpers.get_uf_show(self.contact.show)
+			if self.contact.status:
+				stats += ': ' + self.contact.status
+		status_label = self.xml.get_widget('status_label')
+		status_label.set_max_width_chars(15)
+		status_label.set_text(stats)
+
+		tip = gtk.Tooltips()
+		status_label_eventbox = self.xml.get_widget('status_label_eventbox')
+		tip.set_tip(status_label_eventbox, stats)
+	
+	def fill_contact_page(self):
+		tooltips = gtk.Tooltips()
+		self.xml.get_widget('nickname_label').set_markup(
+			'<b><span size="x-large">' +
+			self.contact.get_shown_name() +
+			'</span></b>')
+		self.xml.get_widget('local_jid_label').set_text(self.contact.jid)
+
+		log = True
+		if self.contact.jid in gajim.config.get_per('accounts', self.account,
+			'no_log_for').split(' '):
+			log = False
+		checkbutton = self.xml.get_widget('log_history_checkbutton')
+		checkbutton.set_active(log)
+		checkbutton.connect('toggled', self.on_log_history_checkbutton_toggled)
+		
+		resources = '%s (%s)' % (self.contact.resource, unicode(
+			self.contact.priority))
+		uf_resources = self.contact.resource + _(' resource with priority ')\
+			+ unicode(self.contact.priority)
+		if not self.contact.status:
+			self.contact.status = ''
+
+		# Request list time status
+	#	gajim.connections[self.account].request_last_status_time(self.contact.jid,
+	#		self.contact.resource)
+
+		self.xml.get_widget('resource_prio_label').set_text(resources)
+		resource_prio_label_eventbox = self.xml.get_widget(
+			'resource_prio_label_eventbox')
+		tooltips.set_tip(resource_prio_label_eventbox, uf_resources)
+
+		self.fill_status_label()
+
+	#	gajim.connections[self.account].request_vcard(self.contact.jid, self.is_fake)
+	
+	def fill_personal_page(self):
+		contact = gajim.connections[gajim.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)
+		self.xml.get_widget('first_name_label').set_text(contact['txt_dict']['1st'])
+		self.xml.get_widget('last_name_label').set_text(contact['txt_dict']['last'])
+		self.xml.get_widget('jabber_id_label').set_text(contact['txt_dict']['jid'])
+		self.xml.get_widget('email_label').set_text(contact['txt_dict']['email'])
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
