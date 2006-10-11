@@ -480,12 +480,13 @@ class ClientZeroconf:
 	def connect(self, show, msg):
 		self.port = self.start_listener(self.caller.port)
 		if not self.port:
-			return
+			return False
 		self.zeroconf_init(show, msg)
 		if not self.zeroconf.connect():
 			self.disconnect()
-			return 
+			return None
 		self.roster = roster_zeroconf.Roster(self.zeroconf)
+		return True
 
 	def remove_announce(self):
 		if self.zeroconf:

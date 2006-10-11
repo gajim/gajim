@@ -218,11 +218,16 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					_('Please check if Avahi is installed.')))
 				self.disconnect()
 				return
-			self.connection.connect(show, msg)
-			if not self.connection.listener:
+			result = self.connection.connect(show, msg)
+			if not result:
 				self.dispatch('STATUS', 'offline')
 				self.status = 'offline'
-				self.dispatch('CONNECTION_LOST',
+				if result is False:
+					self.dispatch('CONNECTION_LOST',
+						(_('Could not start local service'),
+						_('Unable to bind to port %d.' % self.port)))
+				else: # result is None
+					self.dispatch('CONNECTION_LOST',
 					(_('Could not start local service'),
 					_('Please check if avahi-daemon is running.')))
 				self.disconnect()
