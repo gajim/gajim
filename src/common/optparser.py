@@ -1,16 +1,6 @@
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -27,11 +17,21 @@ import sys
 import locale
 from common import gajim
 
+import exceptions
+try:
+	import sqlite3 as sqlite # python 2.5
+except ImportError:
+	try:
+		from pysqlite2 import dbapi2 as sqlite
+	except ImportError:
+		raise exceptions.PysqliteNotAvailable
+import logger
+
 class OptionsParser:
 	def __init__(self, filename):
 		self.__filename = filename
-		self.old_values = {} # values that are saved in the file and maybe
-									# no longer valid
+		self.old_values = {}	# values that are saved in the file and maybe
+								# no longer valid
 
 	def read_line(self, line):
 		index = line.find(' = ')
@@ -205,16 +205,6 @@ class OptionsParser:
 
 	def assert_unread_msgs_table_exists(self):
 		'''create table unread_messages if there is no such table'''
-		import exceptions
-		try:
-			import sqlite3 as sqlite # python 2.5
-		except ImportError:
-			try:
-				from pysqlite2 import dbapi2 as sqlite
-			except ImportError:
-				raise exceptions.PysqliteNotAvailable
-		import logger
-
 		con = sqlite.connect(logger.LOG_DB_PATH) 
 		cur = con.cursor()
 		try:
@@ -284,16 +274,6 @@ class OptionsParser:
 
 	def update_config_to_01013(self):
 		'''create table transports_cache if there is no such table'''
-		import exceptions
-		try:
-			import sqlite3 as sqlite # python 2.5
-		except ImportError:
-			try:
-				from pysqlite2 import dbapi2 as sqlite
-			except ImportError:
-				raise exceptions.PysqliteNotAvailable
-		import logger
-
 		con = sqlite.connect(logger.LOG_DB_PATH) 
 		cur = con.cursor()
 		try:
@@ -313,15 +293,6 @@ class OptionsParser:
 
 	def update_config_to_01014(self):
 		'''apply indeces to the logs database'''
-		import exceptions
-		try:
-			import sqlite3 as sqlite # python 2.5
-		except ImportError:
-			try:
-				from pysqlite2 import dbapi2 as sqlite
-			except ImportError:
-				raise exceptions.PysqliteNotAvailable
-		import logger
 		print _('migrating logs database to indeces')
 		con = sqlite.connect(logger.LOG_DB_PATH) 
 		cur = con.cursor()
@@ -342,14 +313,6 @@ class OptionsParser:
 
 	def update_config_to_01015(self):
 		'''clean show values in logs database'''
-		try:
-			import sqlite3 as sqlite # python 2.5
-		except ImportError:
-			try:
-				from pysqlite2 import dbapi2 as sqlite
-			except ImportError:
-				raise exceptions.PysqliteNotAvailable
-		import logger
 		con = sqlite.connect(logger.LOG_DB_PATH)
 		cur = con.cursor()
 		status = dict((i[5:].lower(), logger.constants.__dict__[i]) for i in \
