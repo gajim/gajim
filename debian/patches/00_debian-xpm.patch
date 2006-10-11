@@ -333,14 +333,14 @@
 +"           @.@+@@@#@$@%@&@*@=@-@;@>@,@'@)@)@!@~@{@]@^@*.        ",
 +"          *.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.        ",
 +"                                                                "}
---- Makefile
-+++ Makefile
-@@ -91,7 +91,7 @@
- 	done
- 	cp COPYING "$(DESTDIR)$(PREFIX)/share/gajim/";
- 	mkdir -p "$(DESTDIR)$(PREFIX)/share/pixmaps";
--	cp data/pixmaps/gajim.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
-+	cp data/pixmaps/gajim.xpm "$(DESTDIR)$(PREFIX)/share/pixmaps/";
- 	cp data/pixmaps/gajim_about.png "$(DESTDIR)$(PREFIX)/share/pixmaps/";
- 	mkdir -p "$(DESTDIR)$(PREFIX)/share/applications";
- 	cp gajim.desktop "$(DESTDIR)$(PREFIX)/share/applications/";
+--- data/pixmaps/Makefile.am	(revision 7199)
++++ data/pixmaps/Makefile.am	(working copy)
+@@ -6,7 +6,7 @@
+ EXTRA_DIST = $(pixmaps_DATA)
+ 
+ gajimpixmapdir = $(datadir)/pixmaps
+-gajimpixmap_DATA = gajim.png \
++gajimpixmap_DATA = gajim.xpm \
+ 				   gajim_about.png
+ 
+ MAINTAINERCLEANFILES = Makefile.in

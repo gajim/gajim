@@ -1,3 +1,44 @@
+gajim (0.10.1-6) unstable; urgency=low
+
+  * fix LDFLAGS problem. Closes: #384439
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Mon, 24 Jul 2006 14:45:34 +0200
+
+gajim (0.10.1-5) unstable; urgency=low
+
+  * Add dependance on python2.4. Closes: #379662
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Mon, 19 Jul 2006 21:30:08 +0200
+
+gajim (0.10.1-4) unstable; urgency=low
+
+  * Fix warning at installation. Closes: #366725
+  * Fix pt_BR translation.
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Mon, 19 Jul 2006 21:30:08 +0200
+
+gajim (0.10.1-3) unstable; urgency=low
+
+  * Updated for new Python policy.
+  * nautilus-sendto is now suggested. Closes: #377309
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Mon, 17 Jul 2006 16:46:58 +0200
+
+gajim (0.10.1-2) unstable; urgency=low
+
+  * new pytyhon policy Closes: #375310
+  * default player is now 'aplay -q' Closes: #374529
+  * python-gnupginterface now support python2.4. Recommends this one.
+  * Standards-version updated to 3.7.2 (no changes needed).
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Tue, 27 Jun 2006 22:47:08 +0200
+
+gajim (0.10.1-1) unstable; urgency=low
+
+  * new upstream release
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Fri,  2 Jun 2006 22:07:29 +0200
+
 gajim (0.10-1) unstable; urgency=low
 
   * new upstream release

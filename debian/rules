@@ -1,15 +1,18 @@
 #!/usr/bin/make -f
+DEB_PYTHON_SYSTEM=pysupport
+
+# Debhelper must be included before python-distutils to use
+# # # dh_python / dh_pycentral / dh_pysupport
 include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/makefile.mk
 include /usr/share/cdbs/1/rules/simple-patchsys.mk
+include /usr/share/cdbs/1/class/autotools.mk
 
-PYTHON = python2.4
 PYTHONVER = 2.4
-CFLAGS = `pkg-config --cflags gtk+-2.0 pygtk-2.0` -fPIC -I/usr/include/python$(PYTHONVER) -I.
-LDFLAGS = `pkg-config --libs gtk+-2.0 pygtk-2.0`
-
-DEB_MAKE_BUILD_TARGET    := all PYTHON=python2.4
-DEB_MAKE_INSTALL_TARGET = install PYTHON=python2.4 PREFIX=/usr DESTDIR=$(DEB_DESTDIR)
+DEB_CONFIGURE_EXTRA_FLAGS := --prefix=/usr
+DEB_MAKE_BUILD_TARGET    := all PYTHON=python$(PYTHONVER)
+DEB_MAKE_INSTALL_TARGET = install PYTHON=python$(PYTHONVER) DESTDIR=$(DEB_DESTDIR)
 
 binary-install/gajim::
+	rm $(DEB_DESTDIR)/usr/share/gajim/src/common/GnuPGInterface.py
+	dh_pycentral -pgajim
 	dh_python -pgajim /usr/share/gajim/src
