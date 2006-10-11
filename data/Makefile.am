@@ -22,3 +22,5 @@ EXTRA_DIST = $(desktop_in_files) \
 DISTCLEANFILES = $(desktop_DATA)
 
 CLEANFILES = gajim.desktop
+
+MAINTAINERCLEANFILES = Makefile.in

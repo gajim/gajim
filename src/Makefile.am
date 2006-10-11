@@ -27,8 +27,10 @@ trayicon_la_LIBADD = $(PYGTK_LIBS)
 trayicon_la_SOURCES = \
 					  eggtrayicon.c \
 					  trayiconmodule.c
+
 nodist_trayicon_la_SOURCES = \
 					trayicon.c
+
 trayicon_la_LDFLAGS = \
 	-module -avoid-version 
 trayicon_la_CFLAGS = $(PYGTK_CFLAGS)
@@ -66,3 +68,4 @@ EXTRA_DIST = $(gajimsrc_DATA) \
 			trayicon.defs \
 			trayicon.override
 
+MAINTAINERCLEANFILES = Makefile.in

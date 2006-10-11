@@ -24,3 +24,20 @@ DISTCLEANFILES = 		\
 	intltool-merge 		\
 	intltool-update		\
 	scripts/gajim
+
+MAINTAINERCLEANFILES = \
+	configure \
+	Makefile.in \
+	intltool-extract.in \
+	intltool-update.in \
+	intltool-merge.in \
+	ltmain.sh \
+	missing \
+	mkinstalldirs \
+	install-sh \
+	compile \
+	depcomp \
+	config.guess \
+	config.sub \
+	aclocal.m4 \
+	libtool

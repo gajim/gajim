@@ -4,3 +4,5 @@ pixmaps_DATA = $(srcdir)/*.png \
 			   $(srcdir)/events/*.png \
 			   $(srcdir)/agents/*.png
 EXTRA_DIST = $(pixmaps_DATA)
+
+MAINTAINERCLEANFILES = Makefile.in

@@ -34,4 +34,6 @@ dist-hook:
 			echo " cp -pR $(srcdir)/$$f $(distdir)/$$f"; \
 			cp -pR $(srcdir)/$$f $(distdir)/$$f || exit 1; \
 		fi; \
-	done; 
+	done;
+
+MAINTAINERCLEANFILES = Makefile.in
