@@ -15,4 +15,8 @@ idle_la_LDFLAGS = \
 idle_la_CFLAGS = $(XSCREENSAVER_CFLAGS) $(PYTHON_INCLUDES)
 endif
 
+DISTCLEANFILES = defs.py
+
+EXTRA_DIST = defs.py.in
+
 MAINTAINERCLEANFILES = Makefile.in

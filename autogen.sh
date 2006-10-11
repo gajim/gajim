@@ -8,6 +8,6 @@
   && aclocal -I ./m4 \
   && libtoolize --copy --force --automake \
   && autoheader \
+  && autoconf  \
   && automake --add-missing --gnu --copy \
-  && autoconf \
   && ./configure $@

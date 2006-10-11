@@ -129,6 +129,20 @@ AM_CONDITIONAL(BUILD_TRAYICON, $have_trayicon)
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 AC_SUBST([PYTHON_INCLUDES])
 
+AS_AC_EXPAND(DATADIR, "${datadir}")
+
+AS_AC_EXPAND(LIBDIR, ${libdir})
+
+AS_AC_EXPAND(DOCDIR, "${docdir}")
+
+AC_SUBST(VERSION)
+AC_SUBST(PACKAGE)
+AC_SUBST(DATADIR)
+AC_SUBST(LIBDIR)
+AS_AC_EXPAND(DATADIR, "${DATADIR}")
+AC_SUBST(DOCDIR)
+AS_AC_EXPAND(DOCDIR, "${DOCDIR}")
+
 AC_CONFIG_FILES([ 
 	Makefile
 	data/Makefile
@@ -139,6 +153,7 @@ AC_CONFIG_FILES([
 	data/gajim.desktop.in
 	src/Makefile
 	src/common/Makefile
+	src/common/defs.py
 	scripts/gajim
 	po/Makefile.in
 ])
