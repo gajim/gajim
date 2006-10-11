@@ -344,6 +344,6 @@ class OptionsParser:
 				show))
 		cur.execute('update logs set show = NULL where show not in (0, 1, 2, 3, 4, 5);')
 		con.commit()
-		cur.close()
+		cur.close() # remove this in 2007 [pysqlite old versions need this]
 		con.close()
 		gajim.config.set('version', '0.10.1.5')
