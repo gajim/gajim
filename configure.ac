@@ -1,9 +1,9 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
 		[0.11.0],[http://trac.gajim.org/],[gajim])
 AC_PREREQ([2.59])
-AM_INIT_AUTOMAKE([1.9])
+AM_INIT_AUTOMAKE([1.8])
 AC_CONFIG_HEADER(config.h)
-
+AC_CONFIG_MACRO_DIR([m4])
 AM_MAINTAINER_MODE
 
 IT_PROG_INTLTOOL([0.35.0])
@@ -125,6 +125,9 @@ AC_ARG_ENABLE(trayicon,
   enable_trayicon=$enableval, enable_trayicon=yes)
 test "x$enable_trayicon" = "xyes" && have_trayicon=true || have_trayicon=false
 AM_CONDITIONAL(BUILD_TRAYICON, $have_trayicon)
+
+ACLOCAL_AMFLAGS="\${ACLOCAL_FLAGS}"
+AC_SUBST(ACLOCAL_AMFLAGS)
 
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 AC_SUBST([PYTHON_INCLUDES])
