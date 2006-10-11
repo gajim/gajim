@@ -20,7 +20,14 @@ import stat
 from common import gajim
 import logger
 
-from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
+# DO NOT MOVE ABOVE OF import gajim
+try:
+	import sqlite3 as sqlite # python 2.5
+except ImportError:
+	try:
+		from pysqlite2 import dbapi2 as sqlite
+	except ImportError:
+		raise exceptions.PysqliteNotAvailable
 
 def create_log_db():
 	print _('creating logs database')

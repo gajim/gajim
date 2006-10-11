@@ -207,9 +207,12 @@ class OptionsParser:
 		'''create table unread_messages if there is no such table'''
 		import exceptions
 		try:
-			from pysqlite2 import dbapi2 as sqlite
+			import sqlite3 as sqlite # python 2.5
 		except ImportError:
-			raise exceptions.PysqliteNotAvailable
+			try:
+				from pysqlite2 import dbapi2 as sqlite
+			except ImportError:
+				raise exceptions.PysqliteNotAvailable
 		import logger
 
 		con = sqlite.connect(logger.LOG_DB_PATH) 
@@ -283,9 +286,12 @@ class OptionsParser:
 		'''create table transports_cache if there is no such table'''
 		import exceptions
 		try:
-			from pysqlite2 import dbapi2 as sqlite
+			import sqlite3 as sqlite # python 2.5
 		except ImportError:
-			raise exceptions.PysqliteNotAvailable
+			try:
+				from pysqlite2 import dbapi2 as sqlite
+			except ImportError:
+				raise exceptions.PysqliteNotAvailable
 		import logger
 
 		con = sqlite.connect(logger.LOG_DB_PATH) 
@@ -309,9 +315,12 @@ class OptionsParser:
 		'''apply indeces to the logs database'''
 		import exceptions
 		try:
-			from pysqlite2 import dbapi2 as sqlite
+			import sqlite3 as sqlite # python 2.5
 		except ImportError:
-			raise exceptions.PysqliteNotAvailable
+			try:
+				from pysqlite2 import dbapi2 as sqlite
+			except ImportError:
+				raise exceptions.PysqliteNotAvailable
 		import logger
 		print _('migrating logs database to indeces')
 		con = sqlite.connect(logger.LOG_DB_PATH) 
@@ -333,7 +342,13 @@ class OptionsParser:
 
 	def update_config_to_01015(self):
 		'''clean show values in logs database'''
-		from pysqlite2 import dbapi2 as sqlite
+		try:
+			import sqlite3 as sqlite # python 2.5
+		except ImportError:
+			try:
+				from pysqlite2 import dbapi2 as sqlite
+			except ImportError:
+				raise exceptions.PysqliteNotAvailable
 		import logger
 		con = sqlite.connect(logger.LOG_DB_PATH)
 		cur = con.cursor()
