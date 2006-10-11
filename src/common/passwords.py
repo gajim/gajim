@@ -25,8 +25,14 @@ except ImportError:
 else:
 	USER_HAS_GNOMEKEYRING = True
 
+class PasswordStorage(object):
+	def get_password(self, account_name):
+		raise NotImplementedError
+	def save_password(self, account_name, password):
+		raise NotImplementedError
+	
 
-class SimplePasswordStorage(object):
+class SimplePasswordStorage(PasswordStorage):
 	def get_password(self, account_name):
 		return gajim.config.get_per('accounts', account_name, 'password')
 
@@ -35,7 +41,7 @@ class SimplePasswordStorage(object):
 		gajim.connections[account_name].password = password
 
 
-class GnomePasswordStorage(object):
+class GnomePasswordStorage(PasswordStorage):
 	def __init__(self):
 		self.keyring = gnomekeyring.get_default_keyring_sync()
 
@@ -49,12 +55,20 @@ class GnomePasswordStorage(object):
 		except ValueError:
 			password = conf
 			## migrate the password over to keyring
-			self.save_password(account_name, password, update=False)
+			try:
+				self.save_password(account_name, password, update=False)
+			except gnomekeyring.NoKeyringDaemonError:
+				## no keyring daemon: in the future, stop using it
+				set_storage(SimplePasswordStorage())
 			return password
 		try:
 			return gnomekeyring.item_get_info_sync(self.keyring,
 				auth_token).get_secret()
 		except gnomekeyring.DeniedError:
+			return None
+		except gnomekeyring.NoKeyringDaemonError:
+			## no keyring daemon: in the future, stop using it
+			set_storage(SimplePasswordStorage())
 			return None
 		
 	def save_password(self, account_name, password, update=True):
@@ -72,10 +86,19 @@ def get_storage():
 	global storage
 	if storage is None: # None is only in first time get_storage is called
 		if USER_HAS_GNOMEKEYRING:
-			storage = GnomePasswordStorage()
+			try:
+				storage = GnomePasswordStorage()
+			except gnomekeyring.NoKeyringDaemonError:
+				storage = SimplePasswordStorage()
 		else:
 			storage = SimplePasswordStorage()
 	return storage
+
+def set_storage(storage_):
+	global storage
+	assert isinstance(storage, PasswordStorage)
+	storage = storage_
+
 
 def get_password(account_name):
 	return get_storage().get_password(account_name)
