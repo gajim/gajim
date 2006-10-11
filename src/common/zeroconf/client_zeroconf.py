@@ -468,6 +468,7 @@ class ClientZeroconf:
 		self.connections = {}
 		self.recipient_to_hash = {}
 		self.ip_to_hash = {}
+		self.listener = None
 
 	def test_avahi(self):
 		try:
