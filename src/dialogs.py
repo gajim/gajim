@@ -713,8 +713,14 @@ class AboutDialog:
 		dlg.set_version(gajim.version)
 		s = u'Copyright © 2003-2006 Gajim Team'
 		dlg.set_copyright(s)
-		text = open('../COPYING').read()
-		dlg.set_license(text)
+		copying_file_path = None
+		if os.path.isfile(os.path.join(gajim.defs.docdir, 'COPYING')):
+			copying_file_path = os.path.join(gajim.defs.docdir, 'COPYING')
+		elif os.path.isfile('../COPYING'):
+			copying_file_path = '../COPYING'
+		if copying_file_path:
+			text = open(copying_file_path).read()
+			dlg.set_license(text)
 		
 		dlg.set_comments('%s\n%s %s\n%s %s' 
 			% (_('A GTK+ jabber client'), \
@@ -722,28 +728,40 @@ class AboutDialog:
 			_('PyGTK Version:'), self.tuple2str(gtk.pygtk_version)))
 		dlg.set_website('http://www.gajim.org/')
 
-		authors = []
-		authors_file = open('../AUTHORS').read()
-		authors_file = authors_file.split('\n')
-		for author in authors_file:
-			if author == 'CURRENT DEVELOPERS:':
-				authors.append(_('Current Developers:'))
-			elif author == 'PAST DEVELOPERS:':
-				authors.append('\n' + _('Past Developers:'))
-			elif author != '': # Real author line
-				authors.append(author)
+		authors_file_path = None
+		if os.path.isfile(os.path.join(gajim.defs.docdir, 'AUTHORS')):
+			authors_file_path = os.path.join(gajim.defs.docdir, 'AUTHORS')
+		elif os.path.isfile('../AUTHORS'):
+			authors_file_path = '../AUTHORS'
+		if authors_file_path:
+			authors = []
+			authors_file = open(authors_file_path).read()
+			authors_file = authors_file.split('\n')
+			for author in authors_file:
+				if author == 'CURRENT DEVELOPERS:':
+					authors.append(_('Current Developers:'))
+				elif author == 'PAST DEVELOPERS:':
+					authors.append('\n' + _('Past Developers:'))
+				elif author != '': # Real author line
+					authors.append(author)
+	
+			thanks_file_path = None
+			if os.path.isfile(os.path.join(gajim.defs.docdir, 'THANKS')):
+				thanks_file_path = os.path.join(gajim.defs.docdir, 'THANKS')
+			elif os.path.isfile('../THANKS'):
+				thanks_file_path = '../THANKS'
+			if thanks_file_path:
+				authors.append('\n' + _('THANKS:'))
 				
-		authors.append('\n' + _('THANKS:'))
-				
-		text = open('../THANKS').read()
-		text_splitted = text.split('\n')
-		text = '\n'.join(text_splitted[:-2]) # remove one english sentence
-		# and add it manually as translatable
-		text += '\n%s\n' % _('Last but not least, we would like to thank all '
-			'the package maintainers.')
-		authors.append(text)
+				text = open(thanks_file_path).read()
+				text_splitted = text.split('\n')
+				text = '\n'.join(text_splitted[:-2]) # remove one english sentence
+				# and add it manually as translatable
+				text += '\n%s\n' % _('Last but not least, we would like to thank all '
+					'the package maintainers.')
+				authors.append(text)
 		
-		dlg.set_authors(authors)
+			dlg.set_authors(authors)
 		
 		if gtk.pygtk_version >= (2, 8, 0) and gtk.gtk_version >= (2, 8, 0):
 			dlg.props.wrap_license = True

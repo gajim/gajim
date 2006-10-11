@@ -25,6 +25,8 @@ import config
 from contacts import Contacts
 from events import Events
 
+import defs
+
 interface = None # The actual interface (the gtk one for the moment)
 config = config.Config()
 version = config.get('version')
