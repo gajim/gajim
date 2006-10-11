@@ -33,8 +33,7 @@ except ImportError:
 If you start gajim from svn:
  * Make sure you have GNU autotools installed.
    This includes the following packages:
-    aclocal-1.9
-    automake-1.9
+    automake >= 1.8
     autoconf >= 2.59
     intltool-0.35
     libtool

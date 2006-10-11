@@ -1,5 +1,6 @@
 Gajim 0.11 (XX October 2006)
-
+  * New build system, using GNU autotools. See README.
+  * Support for link-local messaging via zeroconf/bonjour
   * Intoducing View Menu (GNOME HIG)
   * GNOME Keyring Support (if GNOME keyring available, manage passwords and save them in an encrypted file).
   * Ability to now hide the Transports group

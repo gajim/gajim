@@ -60,9 +60,10 @@ If you still have problems compiling, you may want to try removing the gtk1 seri
 <h2>Installation Procedure</h2>
 <ol>
 <li>tar jxvf gajim-version.tar.bz2</li>
-</li>cd gajim</li>
-</li>make (builds all modules)</li>
-</li>su -c make install</li>
+<li>cd gajim</li>
+<li>./configure</li>
+<li>make (builds all modules)</li>
+<li>su -c make install</li>
 </ol>
 
 <p>
@@ -81,8 +82,22 @@ Just do <em>gajim</em> or you can run Gajim from your GNOME/XFCE/KDE/whatever me
 
 or if you didn't 'make install' you can also run from gajim folder with
 <em>./launch.sh</em>
+<hr>
+<h3>Note for svn users</h3>
+You will need GNU autotools in order to install Gajim from svn. This includes: 
+<ul>
+<li>automake &gt;= 1.8 </li>
+<li>autoconf &gt;= 2.59 </li>
+<li>libtool</li>
+<li>intltool-0.35.0 </li>
+</ul>
 </p>
-
+steps to compile gajim:
+<pre>
+    $ sh autogen.sh
+    $ ./configure
+    $ make
+</pre>
 <h2>Uninstallation Procedure</h2>
 <p>
 su -c make uninstall<br/>
