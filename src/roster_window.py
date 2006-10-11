@@ -167,7 +167,7 @@ class RosterWindow:
 			accounts = [account]
 		num_of_accounts = len(accounts)
 		num_of_secured = gajim.get_number_of_securely_connected_accounts()
-		if num_of_secured:
+		if num_of_secured and gajim.con_types.has_key(account) and gajim.con_types[account] in ('tls', 'ssl'):
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
 			if num_of_secured < num_of_accounts:
