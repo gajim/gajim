@@ -365,7 +365,7 @@ class Config:
 		'contact_disconnected': [ True, '../data/sounds/disconnected.wav' ],
 		'message_sent': [ True, '../data/sounds/sent.wav' ],
 		'muc_message_highlight': [ True, '../data/sounds/gc_message1.wav', _('Sound to play when a MUC message contains one of the words in muc_highlight_words, or when a MUC message contains your nickname.')],
-		'muc_message_received': [ True, '../data/sounds/gc_message2.wav', _('Sound to play when any MUC message arrives. (This setting is taken into account only if notify_on_all_muc_messages is True)') ],
+		'muc_message_received': [ False, '../data/sounds/gc_message2.wav', _('Sound to play when any MUC message arrives.') ],
 	}
 
 	themes_default = {

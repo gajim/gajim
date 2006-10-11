@@ -599,8 +599,7 @@ class GroupchatControl(ChatControlBase):
 
 		# Do we play a sound on every muc message?
 		if gajim.config.get_per('soundevents', 'muc_message_received', 'enabled'):
-			if gajim.config.get('notify_on_all_muc_messages'):
-				sound = 'received'
+			sound = 'received'
 
 		# Are any of the defined highlighting words in the text?
 		if self.needs_visual_notification(text):
