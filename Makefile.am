@@ -6,11 +6,15 @@ bin_SCRIPTS = scripts/gajim
 
 commonfilesdir = $(pkgdatadir)
 commonfiles_DATA = COPYING	\
-				   README 	\
-				   ChangeLog \
 				   THANKS	\
 				   AUTHORS
 
+docfilesdir = $(docdir)
+docfiles_DATA = README \
+				README.html \
+				ChangeLog \
+				THANKS \
+				AUTHORS
 EXTRA_DIST = \
 	$(commonfiles_DATA) \
 	autogen.sh			\
