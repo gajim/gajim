@@ -257,7 +257,7 @@ desktop_in_files = gajim.desktop.in.in
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 soundsdir = $(pkgdatadir)/data/sounds
 sounds_DATA = $(srcdir)/sounds/*.wav
-otherdir = $(pkgdatadir)/data/others
+otherdir = $(pkgdatadir)/data/other
 other_DATA = other/servers.xml
 man_MANS = gajim.1 gajim-remote.1
 EXTRA_DIST = $(desktop_in_files) \
@@ -266,6 +266,7 @@ EXTRA_DIST = $(desktop_in_files) \
 			 $(man_MANS)
 
 DISTCLEANFILES = $(desktop_DATA)
+CLEANFILES = gajim.desktop
 all: all-recursive
 
 .SUFFIXES:
@@ -607,6 +608,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -683,7 +685,6 @@ uninstall-man: uninstall-man1
 	tags tags-recursive uninstall uninstall-am \
 	uninstall-desktopDATA uninstall-info-am uninstall-man \
 	uninstall-man1 uninstall-otherDATA uninstall-soundsDATA
-
 
 @INTLTOOL_DESKTOP_RULE@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

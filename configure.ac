@@ -24,7 +24,6 @@ AC_PATH_X
 GETTEXT_PACKAGE=gajim
 AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"], [Gettext package])
-ALL_LINGUAS="fr pt el pl es ru bg de nb cs nl pt_BR sv it eu sk no zh_CN br eo"
 AM_GLIB_GNU_GETTEXT
 AM_NLS
 

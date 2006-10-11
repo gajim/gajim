@@ -22002,7 +22002,6 @@ cat >>confdefs.h <<_ACEOF
 #define GETTEXT_PACKAGE "$GETTEXT_PACKAGE"
 _ACEOF
 
-ALL_LINGUAS="fr pt el pl es ru bg de nb cs nl pt_BR sv it eu sk no zh_CN br eo"
 
 
 for ac_header in locale.h
