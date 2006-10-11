@@ -25,7 +25,13 @@ import config
 from contacts import Contacts
 from events import Events
 
-import defs
+try:
+	import defs
+except ImportError:
+	print >> sys.stderr, '''defs.py is missing!
+If you start gajim from svn, do:
+$ sh autogen.sh'''
+	sys.exit(1)
 
 interface = None # The actual interface (the gtk one for the moment)
 config = config.Config()
