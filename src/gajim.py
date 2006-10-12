@@ -1763,6 +1763,7 @@ class Interface:
 					account, jid)
 				if resource and highest_contact.resource == resource:
 					resource = None
+					fjid = jid
 				contact = gajim.contacts.get_contact(account, jid, resource)
 				if not contact or isinstance(contact, list):
 					contact = highest_contact
