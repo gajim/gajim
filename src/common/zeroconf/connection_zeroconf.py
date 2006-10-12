@@ -98,15 +98,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def get_config_values_or_default(self):
 		''' get name, host, port from config, or 
 		create zeroconf account with default values'''
-
-		if not self.username:
-			self.username = unicode(getpass.getuser())
-			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name', self.username)
-		else:
-			self.username = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name')
-
+		
 		if not gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name'):
-			print 'Creating zeroconf account'
+			gajim.log.debug('Creating zeroconf account')
 			gajim.config.add_per('accounts', gajim.ZEROCONF_ACC_NAME)
 			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'autoconnect', True)
 			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'no_log_for', '')
@@ -127,6 +121,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.last = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_last_name')
 		self.jabber_id = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_jabber_id')
 		self.email = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'zeroconf_email')
+
+		if not self.username:
+			self.username = unicode(getpass.getuser())
+			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name', self.username)
+		else:
+			self.username = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name')
 	# END __init__
 
 	def dispatch(self, event, data):
