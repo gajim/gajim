@@ -1107,8 +1107,8 @@ class JoinGroupchatWindow:
 		if room_jid != '':
 			if room_jid in gajim.gc_connected[account] and\
 			gajim.gc_connected[account][room_jid]:
-				ErrorDialog(_('You are already in room %s') % room_jid)
-				raise GajimGeneralException, 'You are already in this room'
+				ErrorDialog(_('You are already in group chat %s') % room_jid)
+				raise GajimGeneralException, 'You are already in this group chat'
 		self.account = account
 		self.automatic = automatic
 		if nick == '':
@@ -1199,8 +1199,8 @@ class JoinGroupchatWindow:
 		try:
 			room_jid = helpers.parse_jid(room_jid)
 		except:
-			ErrorDialog(_('Invalid room Jabber ID'),
-				_('The room Jabber ID has not allowed characters.'))
+			ErrorDialog(_('Invalid group chat Jabber ID'),
+				_('The group chat Jabber ID has not allowed characters.'))
 			return
 
 		if room_jid in self.recently_groupchat:
@@ -2170,8 +2170,8 @@ class InvitationReceivedDialog:
 		self.dialog = xml.get_widget('invitation_received_dialog')
 
 		#FIXME: use nickname instead of contact_jid
-		pritext = _('%(contact_jid)s has invited you to %(room_jid)s room') % {
-			'room_jid': room_jid, 'contact_jid': contact_jid }
+		pritext = _('%(contact_jid)s has invited you to group chat %(room_jid)s')\
+			% {'room_jid': room_jid, 'contact_jid': contact_jid }
 		
 		label_text = '<big><b>%s</b></big>' % pritext
 

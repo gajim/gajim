@@ -596,11 +596,11 @@ class RosterWindow:
 			win = gajim.interface.msg_win_mgr.get_window(room_jid,  account)
 			win.window.present()
 			win.set_active_tab(room_jid,  account)
-			dialogs.ErrorDialog(_('You are already in room %s') % room_jid)
+			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
-			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
+			dialogs.ErrorDialog(_('You cannot join a group chat while you are invisible')
 				)
 			return
 		if not gajim.interface.msg_win_mgr.has_window(room_jid, account):
@@ -1563,7 +1563,7 @@ class RosterWindow:
 
 		submenu = gtk.Menu()
 		invite_menuitem.set_submenu(submenu)
-		menuitem = gtk.ImageMenuItem(_('_New room'))
+		menuitem = gtk.ImageMenuItem(_('_New group chat'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
 		menuitem.set_image(icon)
 		menuitem.connect('activate', self.on_invite_to_new_room, [(contact,
@@ -1738,7 +1738,7 @@ class RosterWindow:
 		else:
 
 			sub_menu = gtk.Menu()
-			menuitem = gtk.ImageMenuItem(_('_New room'))
+			menuitem = gtk.ImageMenuItem(_('_New group chat'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
 			menuitem.set_image(icon)
 			menuitem.connect('activate', self.on_invite_to_new_room, list_)
@@ -2834,7 +2834,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		'''when the join gc menuitem is clicked, show the join gc window'''
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
-			dialogs.ErrorDialog(_('You cannot join a room while you are invisible')
+			dialogs.ErrorDialog(_('You cannot join a group chat while you are invisible')
 				)
 			return
 		if gajim.interface.instances[account].has_key('join_gc'):

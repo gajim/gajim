@@ -320,7 +320,8 @@ class GCTooltip(BaseTooltip):
 				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
 		if contact.affiliation != 'none':
 			uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
-			affiliation_str = _('%(owner_or_admin_or_member)s of this room') %\
+			affiliation_str = \
+				_('%(owner_or_admin_or_member)s of this group chat') %\
 				{'owner_or_admin_or_member': uf_affiliation}
 			properties.append((affiliation_str, None))
 		

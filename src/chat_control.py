@@ -1019,7 +1019,7 @@ class ChatControl(ChatControlBase):
 		if self.resource:
 			name += '/' + self.resource
 		if self.TYPE_ID == message_control.TYPE_PM:
-			name = _('%(nickname)s from room %(room_name)s') %\
+			name = _('%(nickname)s from group chat %(room_name)s') %\
 				{'nickname': name, 'room_name': self.room_name}
 		name = gtkgui_helpers.escape_for_pango_markup(name)
 

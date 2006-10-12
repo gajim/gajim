@@ -119,7 +119,7 @@ class PrivateChatControl(ChatControl):
 				dialogs.ErrorDialog(
 					_('Sending private message failed'),
 					#in second %s code replaces with nickname
-					_('You are no longer in room "%s" or "%s" has left.') % \
+					_('You are no longer in group chat "%s" or "%s" has left.') % \
 					(room, nick))
 				return
 
@@ -891,7 +891,7 @@ class GroupchatControl(ChatControlBase):
 					st += ' [%s]' % reason
 			else:
 				if newly_created and print_status in ('all', 'in_and_out'):
-					st = _('%s has joined the room') % nick_jid
+					st = _('%s has joined the group chat') % nick_jid
 				elif print_status == 'all':
 					st = _('%s is now %s') % (nick_jid, helpers.get_uf_show(show))
 			if st:
@@ -1046,7 +1046,7 @@ class GroupchatControl(ChatControlBase):
 			elif self.subject is not '':
 				self.print_conversation(self.subject, 'info')
 			else:
-				self.print_conversation(_('This room has no subject'), 'info')
+				self.print_conversation(_('This group chat has no subject'), 'info')
 			self.clear(self.msg_textview)
 			return True
 		elif command == 'invite':
@@ -1202,10 +1202,11 @@ class GroupchatControl(ChatControlBase):
 		if command == 'help':
 			self.print_conversation(_('Commands: %s') % self.muc_cmds, 'info')
 		elif command == 'ban':
-			s = _('Usage: /%s <nickname|JID> [reason], bans the JID from the room.'
+			s = _('Usage: /%s <nickname|JID> [reason], bans the JID from the group chat.'
 				' The nickname of an occupant may be substituted, but not if it '
-				'contains "@". If the JID is currently in the room, he/she/it will '
-				'also be kicked. Does NOT support spaces in nickname.') % command
+				'contains "@". If the JID is currently in the group chat, '
+				'he/she/it will also be kicked. Does NOT support spaces in '
+				'nickname.') % command
 			self.print_conversation(s, 'info')
 		elif command == 'chat' or command == 'query':
 			self.print_conversation(_('Usage: /%s <nickname>, opens a private chat'
@@ -1221,7 +1222,7 @@ class GroupchatControl(ChatControlBase):
 				command, 'info')
 		elif command == 'invite':
 			self.print_conversation(_('Usage: /%s <JID> [reason], invites JID to '
-				'the current room, optionally providing a reason.') % command,
+				'the current group chat, optionally providing a reason.') % command,
 				'info')
 		elif command == 'join':
 			self.print_conversation(_('Usage: /%s <room>@<server>[/nickname], '
@@ -1229,12 +1230,12 @@ class GroupchatControl(ChatControlBase):
 				% command, 'info')
 		elif command == 'kick':
 			self.print_conversation(_('Usage: /%s <nickname> [reason], removes '
-				'the occupant specified by nickname from the room and optionally '
-				'displays a reason. Does NOT support spaces in nickname.') % \
-				command, 'info')
+				'the occupant specified by nickname from the group chat and '
+				'optionally displays a reason. Does NOT support spaces in '
+				'nickname.') % command, 'info')
 		elif command == 'me':
 			self.print_conversation(_('Usage: /%s <action>, sends action to the '
-				'current room. Use third person. (e.g. /%s explodes.)') % \
+				'current group chat. Use third person. (e.g. /%s explodes.)') % \
 				(command, command), 'info')
 		elif command == 'msg':
 			s = _('Usage: /%s <nickname> [message], opens a private message window'
@@ -1242,16 +1243,16 @@ class GroupchatControl(ChatControlBase):
 				command
 			self.print_conversation(s, 'info')
 		elif command == 'nick':
-			s = _('Usage: /%s <nickname>, changes your nickname in current room.')\
-				% command
+			s = _('Usage: /%s <nickname>, changes your nickname in current group '
+				'chat.')	% command
 			self.print_conversation(s, 'info')
 		elif command == 'names':
-			s = _('Usage: /%s , display the names of room occupants.')\
+			s = _('Usage: /%s , display the names of group chat occupants.')\
 				% command
 			self.print_conversation(s, 'info')
 		elif command == 'topic':
 			self.print_conversation(_('Usage: /%s [topic], displays or updates the'
-				' current room topic.') % command, 'info')
+				' current group chat topic.') % command, 'info')
 		elif command == 'say':
 			self.print_conversation(_('Usage: /%s <message>, sends a message '
 				'without looking for other commands.') % command, 'info')
@@ -1305,9 +1306,10 @@ class GroupchatControl(ChatControlBase):
 		if (gajim.config.get('confirm_close_muc') or self.room_jid in includes) \
 		and gajim.gc_connected[self.account][self.room_jid] and self.room_jid not\
 		in excludes:
-			pritext = _('Are you sure you want to leave room "%s"?') % self.name
+			pritext = _('Are you sure you want to leave group chat "%s"?')\
+				% self.name
 			sectext = _('If you close this window, you will be disconnected '
-					'from this room.')
+					'from this group chat.')
 
 			dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
 						_('Do _not ask me again'))
