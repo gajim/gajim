@@ -90,11 +90,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.vcard_supported = False
 
-	def _on_name_conflictCB(self, alt_name):
-		self.disconnect()
-		self.dispatch('STATUS', 'offline')
-		self.dispatch('ZC_NAME_CONFLICT', alt_name)
-
 	def get_config_values_or_default(self):
 		''' get name, host, port from config, or 
 		create zeroconf account with default values'''
@@ -206,6 +201,14 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.status = 'offline'
 		self.disconnect()
 
+	def _on_name_conflictCB(self, alt_name):
+		self.disconnect()
+		self.dispatch('STATUS', 'offline')
+		self.dispatch('ZC_NAME_CONFLICT', alt_name)
+
+	def _on_error(self, message):
+		self.dispatch('ERROR', (_('Avahi error'), _("%s\nLink-local messaging might not work properly.") % message))
+	
 	def connect(self, show = 'online', msg = ''):
 		self.get_config_values_or_default()
 		if not self.connection:

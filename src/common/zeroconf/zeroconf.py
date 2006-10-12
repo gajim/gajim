@@ -34,7 +34,7 @@ C_ADDRESS, C_PORT, C_BARE_NAME, C_TXT = range(9)
 
 class Zeroconf:
 	def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB, 
-		disconnected_CB, name, host, port):
+		disconnected_CB, error_CB, name, host, port):
 		self.server = None
 		self.domain = None   # specific domain to browse
 		self.stype = '_presence._tcp'	
@@ -49,6 +49,7 @@ class Zeroconf:
 		self.remove_serviceCB = remove_serviceCB
 		self.name_conflictCB = name_conflictCB
 		self.disconnected_CB = disconnected_CB
+		self.error_CB = error_CB
 		
 		self.service_browser = None
 		self.domain_browser = None
@@ -166,9 +167,12 @@ class Zeroconf:
 
 	def service_add_fail_callback(self, err):
 		gajim.log.debug('Error while adding service. %s' % str(err))
-		alternative_name = self.server.GetAlternativeServiceName(self.username)
+		if str(err) == 'Local name collision':
+			alternative_name = self.server.GetAlternativeServiceName(self.username)
+			self.name_conflictCB(alternative_name)
+		else:
+			self.error_CB(_('Error while adding service. %s') % str(err))
 		self.disconnect()
-		self.name_conflictCB(alternative_name)
 
 	def server_state_changed_callback(self, state, error):
 		print 'server.state %s' % state
