@@ -527,10 +527,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				vcard_table.attach(label, 1, 2, vcard_current_row,
 					vcard_current_row + 1, gtk.FILL,  vertical_fill, 0, 0)
 				label = gtk.Label()
-				if num_resources > 1 and not properties:
-					label.set_alignment(0, 1)
-				else:
-					label.set_alignment(0, 0)
+				label.set_alignment(0, 0)
 				label.set_markup(property[1])
 				label.set_line_wrap(True)
 				vcard_table.attach(label, 2, 3, vcard_current_row,
