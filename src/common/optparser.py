@@ -149,6 +149,8 @@ class OptionsParser:
 			self.update_config_to_01014()
 		if old < [0, 10, 1, 5] and new >= [0, 10, 1, 5]:
 			self.update_config_to_01015()
+		if old < [0, 10, 1, 6] and new >= [0, 10, 1, 6]:
+			self.update_config_to_01016()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -325,3 +327,14 @@ class OptionsParser:
 		cur.close() # remove this in 2007 [pysqlite old versions need this]
 		con.close()
 		gajim.config.set('version', '0.10.1.5')
+		
+	def update_config_to_01016(self):
+		'''#2494 : Now we play gc_received_message sound even if 
+		notify_on_all_muc_messages is false. Keep precedent behaviour.'''
+		if self.old_values.has_key('notify_on_all_muc_messages') and \
+		self.old_values['notify_on_all_muc_messages'] == 'False' and \
+		gajim.config.get_per('soundevents', 'muc_message_received', 'enabled'):
+			gajim.config.set_per('soundevents',\
+				'muc_message_received', 'enabled', False)
+		
+		gajim.config.set('version', '0.10.1.6')
