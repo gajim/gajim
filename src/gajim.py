@@ -1748,24 +1748,25 @@ class Interface:
 				err_str)
 			sys.exit()
 
-	def handle_event(self, account, jid, type_):
+	def handle_event(self, account, fjid, type_):
 		w = None
-		fjid = jid
-		resource = gajim.get_resource_from_jid(jid)
-		jid = gajim.get_jid_without_resource(jid)
+		resource = gajim.get_resource_from_jid(fjid)
+		jid = gajim.get_jid_without_resource(fjid)
 		if type_ in ('printed_gc_msg', 'gc_msg'):
 			w = self.msg_win_mgr.get_window(jid, account)
 		elif type_ in ('printed_chat', 'chat', ''):
 			# '' is for log in/out notifications
 			if self.msg_win_mgr.has_window(fjid, account):
 				w = self.msg_win_mgr.get_window(fjid, account)
-			elif self.msg_win_mgr.has_window(jid, account):
-				w = self.msg_win_mgr.get_window(jid, account)
 			else:
+				highest_contact = gajim.contacts.get_contact_with_highest_priority(
+					account, jid)
+				if resource and highest_contact.resource == resource:
+					resource = None
 				contact = gajim.contacts.get_contact(account, jid, resource)
 				if not contact or isinstance(contact, list):
-					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-				self.roster.new_chat(contact, account)
+					contact = highest_contact
+				self.roster.new_chat(contact, account, resource = resource)
 				w = self.msg_win_mgr.get_window(fjid, account)
 				gajim.last_message_time[account][jid] = 0 # long time ago
 		elif type_ in ('printed_pm', 'pm'):
