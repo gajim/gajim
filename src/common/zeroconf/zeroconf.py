@@ -186,7 +186,7 @@ class Zeroconf:
 	def entrygroup_state_changed_callback(self, state, error):
 		# the name is already present, so recreate
 		if state == avahi.ENTRY_GROUP_COLLISION:
-			self.service_add_fail_callback('Local name collision, recreating.')
+			self.service_add_fail_callback('Local name collision')
 		elif state == avahi.ENTRY_GROUP_FAILURE:
 			print 'zeroconf.py: ENTRY_GROUP_FAILURE reached(that should not happen)'
 

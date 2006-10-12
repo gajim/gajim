@@ -2532,6 +2532,8 @@ class ManageBookmarksWindow:
 		for account in gajim.connections:
 			if gajim.connections[account].connected <= 1:
 				continue
+			if gajim.connections[account].is_zeroconf:
+				continue
 			iter = self.treestore.append(None, [None, account,None,
 				None, None, None, None])
 

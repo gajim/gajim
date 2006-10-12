@@ -784,7 +784,9 @@ class RosterWindow:
 				if gajim.connections[account].connected <= 1:
 					# if offline or connecting
 					continue
-				
+				if gajim.config.get_per('accounts', account, 'is_zeroconf'): 
+					continue 	
+
 				# join gc
 				label = gtk.Label()
 				label.set_markup('<u>' + account.upper() +'</u>')
@@ -853,7 +855,8 @@ class RosterWindow:
 					
 					break # No other account connected
 		
-		if connected_accounts == 0:
+		if connected_accounts == 0 or (connected_accounts == 1 and
+				gajim.connections[gajim.connections.keys()[0]].is_zeroconf):
 			# no connected accounts, make the menuitems insensitive
 			new_chat_menuitem.set_sensitive(False)
 			join_gc_menuitem.set_sensitive(False)

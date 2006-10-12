@@ -158,7 +158,8 @@ class Systray:
 		sub_menu.append(item)
 		item.connect('activate', self.on_show_menuitem_activate, 'offline')
 
-		iskey = connected_accounts > 0
+		iskey = connected_accounts > 0 and not (connected_accounts == 1 and
+				gajim.connections[gajim.connections.keys()[0]].is_zeroconf)
 		chat_with_menuitem.set_sensitive(iskey)
 		single_message_menuitem.set_sensitive(iskey)
 		join_gc_menuitem.set_sensitive(iskey)
@@ -176,6 +177,8 @@ class Systray:
 			accounts_list = gajim.contacts.get_accounts()
 			accounts_list.sort()
 			for account in accounts_list:
+				if gajim.connections[account].is_zeroconf:
+					continue
 				if gajim.connections[account].connected > 1:
 					#for chat_with
 					item = gtk.MenuItem(_('using account %s') % account)
