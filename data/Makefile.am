@@ -5,7 +5,7 @@ desktopdir = $(datadir)/applications
 desktop_in_files = gajim.desktop.in.in 
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
-installdefsdir = $(pkgdatadir)/src
+installdefsdir = $(pkgdatadir)/src/common
 installdefs_DATA = defs.py
 
 soundsdir = $(pkgdatadir)/data/sounds
