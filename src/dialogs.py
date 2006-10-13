@@ -1890,6 +1890,11 @@ class PrivacyListWindow:
 			self.privacy_list_name, tags)
 		self.privacy_list_received(tags)
 		self.add_edit_vbox.hide()
+		if not tags: # we removed latest rule
+			if 'privacy_lists' in gajim.interface.instances[self.account]:
+				win = gajim.interface.instances[self.account]['privacy_lists']
+				win.remove_privacy_list_from_combobox(self.privacy_list_name)
+				win.draw_widgets()
 
 	def on_open_rule_button_clicked(self, widget):
 		self.add_edit_rule_label.set_label(
@@ -2031,6 +2036,10 @@ class PrivacyListWindow:
 			self.privacy_list_name, tags)
 		self.privacy_list_received(tags)
 		self.add_edit_vbox.hide()
+		if 'privacy_lists' in gajim.interface.instances[self.account]:
+			win = gajim.interface.instances[self.account]['privacy_lists']
+			win.add_privacy_list_to_combobox(self.privacy_list_name)
+			win.draw_widgets()
 
 	def on_list_of_rules_combobox_changed(self, widget):
 		self.add_edit_vbox.hide()
@@ -2090,17 +2099,33 @@ class PrivacyListsWindow:
 		if 'privacy_lists' in gajim.interface.instances[self.account]:
 			del gajim.interface.instances[self.account]['privacy_lists']
 
+	def remove_privacy_list_from_combobox(self, privacy_list):
+		if privacy_list not in self.privacy_lists_save:
+			return
+		privacy_list_index = self.privacy_lists_save.index(privacy_list)
+		self.list_of_privacy_lists_combobox.remove_text(privacy_list_index)
+		self.privacy_lists_save.remove(privacy_list)
+
+	def add_privacy_list_to_combobox(self, privacy_list):
+		if privacy_list in self.privacy_lists_save:
+			return
+		self.list_of_privacy_lists_combobox.append_text(privacy_list)
+		self.privacy_lists_save.append(privacy_list)
+
 	def draw_privacy_lists_in_combobox(self, privacy_lists):
 		self.list_of_privacy_lists_combobox.set_active(-1)
 		self.list_of_privacy_lists_combobox.get_model().clear()
-		self.privacy_lists_save = privacy_lists
+		self.privacy_lists_save = []
 		for add_item in privacy_lists:
-			self.list_of_privacy_lists_combobox.append_text(add_item)
-		if len(privacy_lists) == 0:
+			self.add_privacy_list_to_combobox(add_item)
+		self.draw_widgets()
+
+	def draw_widgets(self):
+		if len(self.privacy_lists_save) == 0:
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
 			self.open_privacy_list_button.set_sensitive(False)
 			self.delete_privacy_list_button.set_sensitive(False)
-		elif len(privacy_lists) == 1:
+		elif len(self.privacy_lists_save) == 1:
 			self.list_of_privacy_lists_combobox.set_active(0)
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
 			self.open_privacy_list_button.set_sensitive(True)
