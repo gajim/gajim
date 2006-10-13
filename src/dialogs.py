@@ -2058,7 +2058,6 @@ class PrivacyListsWindow:
 	or edit an already there one'''
 	def __init__(self, account):
 		self.account = account
-		self.privacy_lists = []
 		self.privacy_lists_save = []		
 
 		self.xml = gtkgui_helpers.get_glade('privacy_lists_window.glade')
@@ -2071,7 +2070,7 @@ class PrivacyListsWindow:
 			self.__dict__[widget_to_add] = self.xml.get_widget(
 				widget_to_add)		
 
-		self.draw_privacy_lists_in_combobox()
+		self.draw_privacy_lists_in_combobox([])
 		self.privacy_lists_refresh()
 
 		self.enabled = True
@@ -2091,17 +2090,17 @@ class PrivacyListsWindow:
 		if 'privacy_lists' in gajim.interface.instances[self.account]:
 			del gajim.interface.instances[self.account]['privacy_lists']
 
-	def draw_privacy_lists_in_combobox(self):
+	def draw_privacy_lists_in_combobox(self, privacy_lists):
 		self.list_of_privacy_lists_combobox.set_active(-1)
 		self.list_of_privacy_lists_combobox.get_model().clear()
-		self.privacy_lists_save = self.privacy_lists
-		for add_item in self.privacy_lists:
+		self.privacy_lists_save = privacy_lists
+		for add_item in privacy_lists:
 			self.list_of_privacy_lists_combobox.append_text(add_item)
-		if len(self.privacy_lists) == 0:
+		if len(privacy_lists) == 0:
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
 			self.open_privacy_list_button.set_sensitive(False)
 			self.delete_privacy_list_button.set_sensitive(False)
-		elif len(self.privacy_lists) == 1:
+		elif len(privacy_lists) == 1:
 			self.list_of_privacy_lists_combobox.set_active(0)
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
 			self.open_privacy_list_button.set_sensitive(True)
@@ -2111,10 +2110,6 @@ class PrivacyListsWindow:
 			self.list_of_privacy_lists_combobox.set_active(0)
 			self.open_privacy_list_button.set_sensitive(True)
 			self.delete_privacy_list_button.set_sensitive(True)
-		self.privacy_lists = []
-
-	def on_privacy_lists_refresh_button_clicked(self, widget):
-		self.privacy_lists_refresh()
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
@@ -2129,9 +2124,10 @@ class PrivacyListsWindow:
 	def privacy_lists_received(self, lists):
 		if not lists:
 			return
+		privacy_lists = []
 		for privacy_list in lists['lists']:
-			self.privacy_lists += [privacy_list]
-		self.draw_privacy_lists_in_combobox()
+			privacy_lists.append(privacy_list)
+		self.draw_privacy_lists_in_combobox(privacy_lists)
 
 	def privacy_lists_refresh(self):
 		gajim.connections[self.account].get_privacy_lists()
