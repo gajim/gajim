@@ -154,9 +154,9 @@ AC_CONFIG_FILES([
 	data/pixmaps/Makefile
 	data/iconsets/Makefile
 	data/gajim.desktop.in
+	data/defs.py
 	src/Makefile
 	src/common/Makefile
-	src/common/defs.py
 	scripts/gajim
 	po/Makefile.in
 ])

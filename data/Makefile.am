@@ -5,6 +5,9 @@ desktopdir = $(datadir)/applications
 desktop_in_files = gajim.desktop.in.in 
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
+installdefsdir = $(pkgdatadir)/src
+installdefs_DATA = defs.py
+
 soundsdir = $(pkgdatadir)/data/sounds
 sounds_DATA = $(srcdir)/sounds/*.wav
 
@@ -17,10 +20,13 @@ man_MANS = gajim.1 gajim-remote.1
 EXTRA_DIST = $(desktop_in_files) \
 			 $(sounds_DATA) \
 			 $(other_DATA) \
-			 $(man_MANS)
+			 $(man_MANS) \
+			 defs.py.in
 
-DISTCLEANFILES = $(desktop_DATA)
 
-CLEANFILES = gajim.desktop
+DISTCLEANFILES = $(desktop_DATA) \
+				 $(installdefs_DATA)
+
+CLEANFILES = gajim.desktop 
 
 MAINTAINERCLEANFILES = Makefile.in
