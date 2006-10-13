@@ -57,7 +57,7 @@ gajimsrc3dir = $(pkgdatadir)/src/common/zeroconf
 gajimsrc3_DATA = \
 				$(srcdir)/common/zeroconf/*.py 
 
-DISTCLEANFILES =$(srcdir)/common/defs.py
+DISTCLEANFILES = 
 
 EXTRA_DIST = $(gajimsrc_DATA) \
 			$(gajimsrc1_DATA) \
@@ -68,7 +68,6 @@ EXTRA_DIST = $(gajimsrc_DATA) \
 			trayiconmodule.c \
 			eggtrayicon.h \
 			trayicon.defs \
-			trayicon.override \
-			common/defs.py.in
+			trayicon.override 
 
 MAINTAINERCLEANFILES = Makefile.in
