@@ -2138,6 +2138,10 @@ class PrivacyListsWindow:
 
 	def on_new_privacy_list_button_clicked(self, widget):
 		name = self.new_privacy_list_entry.get_text()
+		if not name:
+			ErrorDialog(_('Invalid List Name'),
+				_('You must enter a name to create a privacy list.'))
+			return
 		key_name = 'privacy_list_%s' % name
 		if gajim.interface.instances[self.account].has_key(key_name):
 			gajim.interface.instances[self.account][key_name].window.present()
