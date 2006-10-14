@@ -25,6 +25,7 @@ import os
 import gtkgui_helpers
 import vcard
 import conversation_textview
+import message_control
 
 try:
 	import gtkspell
@@ -1203,6 +1204,12 @@ class JoinGroupchatWindow:
 				_('The group chat Jabber ID has not allowed characters.'))
 			return
 
+		if gajim.interface.msg_win_mgr.has_window(room_jid, self.account):
+			ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, self.account)
+			if ctrl.type_id != message_control.TYPE_GC:
+				ErrorDialog(_('This is not a group chat'),
+					_('%s is not the name of a group chat.') % room_jid)
+				return
 		if room_jid in self.recently_groupchat:
 			self.recently_groupchat.remove(room_jid)
 		self.recently_groupchat.insert(0, room_jid)
