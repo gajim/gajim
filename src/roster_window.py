@@ -682,9 +682,6 @@ class RosterWindow:
 		update_motd_menuitem = xml.get_widget('update_motd_menuitem')
 		delete_motd_menuitem = xml.get_widget('delete_motd_menuitem')
 
-		send_single_message_menuitem.connect('activate',
-			self.on_send_single_message_menuitem_activate, account)
-
 		xml_console_menuitem.connect('activate',
 			self.on_xml_console_menuitem_activate, account)
 
@@ -694,17 +691,28 @@ class RosterWindow:
 		else:
 			privacy_lists_menuitem.set_sensitive(False)
 
-		send_server_message_menuitem.connect('activate',
-			self.on_send_server_message_menuitem_activate, account)
+		if gajim.connections[account].is_zeroconf:
+			send_single_message_menuitem.set_sensitive(False)
+			administrator_menuitem.set_sensitive(False)
+			send_server_message_menuitem.set_sensitive(False)
+			set_motd_menuitem.set_sensitive(False)
+			update_motd_menuitem.set_sensitive(False)
+			delete_motd_menuitem.set_sensitive(False)
+		else:
+			send_single_message_menuitem.connect('activate',
+				self.on_send_single_message_menuitem_activate, account)
+			
+			send_server_message_menuitem.connect('activate',
+				self.on_send_server_message_menuitem_activate, account)
 
-		set_motd_menuitem.connect('activate',
-			self.on_set_motd_menuitem_activate, account)
+			set_motd_menuitem.connect('activate',
+				self.on_set_motd_menuitem_activate, account)
 
-		update_motd_menuitem.connect('activate',
-			self.on_update_motd_menuitem_activate, account)
+			update_motd_menuitem.connect('activate',
+				self.on_update_motd_menuitem_activate, account)
 
-		delete_motd_menuitem.connect('activate',
-			self.on_delete_motd_menuitem_activate, account)
+			delete_motd_menuitem.connect('activate',
+				self.on_delete_motd_menuitem_activate, account)
 
 		advanced_menuitem_menu.show_all()
 
