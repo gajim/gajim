@@ -1080,8 +1080,8 @@ class ChatControl(ChatControlBase):
 		banner_name_label.set_markup(label_text)
 
 	def on_toggle_gpg_togglebutton(self, widget):
-		gajim.config.set_per('contacts', self.contact.get_full_jid(),
-			'gpg_enabled', widget.get_active())
+		gajim.config.set_per('contacts', self.contact.jid, 'gpg_enabled',
+			widget.get_active())
 
 	def _update_gpg(self):
 		tb = self.xml.get_widget('gpg_togglebutton')
