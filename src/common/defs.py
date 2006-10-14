@@ -1,5 +1,5 @@
-docdir = "../"
+docdir = '../'
 
-datadir = "../"
+datadir = '../'
 
-version = "0.10.1.6"
+version = '0.10.1.6'
