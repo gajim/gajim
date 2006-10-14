@@ -321,6 +321,10 @@ class ConversationTextview:
 		and if we have sth selected we show a submenu with actions on the phrase
 		(see on_conversation_textview_button_press_event)'''
 
+		for menuitem in menu.get_children():
+			label = menuitem.get_child()
+			if label and label.get_text() in (_('Cut'), _('Paste'), _('Delete')):
+				menu.remove(menuitem)
 		separator_menuitem_was_added = False
 		if not self.used_in_history_window:
 			item = gtk.SeparatorMenuItem()
