@@ -227,17 +227,11 @@ class RosterWindow:
 			if not gajim.config.get('show_transports_group'):
 				return
 			contact.groups = [_('Transports')]
-			
 
 		# JEP-0162
-		hide = True
-		if contact.sub in ('both', 'to'):
-			hide = False
-		elif contact.ask == 'subscribe':
-			hide = False
-		elif contact.name or len(contact.groups):
-			hide = False
-
+		hide = contact.is_hidden_from_roster()
+		if hide and contact.sub != 'from':
+			return 
 		observer = contact.is_observer()
 
 		if observer:
