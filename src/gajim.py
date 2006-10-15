@@ -1759,7 +1759,10 @@ class Interface:
 			else:
 				highest_contact = gajim.contacts.get_contact_with_highest_priority(
 					account, jid)
-				if resource and highest_contact.resource == resource:
+				# jid can have a window if this resource was lower when he sent
+				# message and is now higher because the other one is offline
+				if resource and highest_contact.resource == resource and \
+				not self.msg_win_mgr.has_window(jid, account):
 					resource = None
 					fjid = jid
 				contact = gajim.contacts.get_contact(account, jid, resource)
