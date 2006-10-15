@@ -324,7 +324,7 @@ class ConversationTextview:
 		for menuitem in menu.get_children():
 			label = menuitem.get_child()
 			if label and label.get_text() in (_('Cut'), _('Paste'), _('Delete')):
-				menu.remove(menuitem)
+				menuitem.set_sensitive(False)
 		separator_menuitem_was_added = False
 		if not self.used_in_history_window:
 			item = gtk.SeparatorMenuItem()
@@ -375,7 +375,7 @@ class ConversationTextview:
 				self.handlers[id] = item
 			else:
 				if dict_link.find('%s') == -1:
-					#we must have %s in the url if not WIKTIONARY
+					# we must have %s in the url if not WIKTIONARY
 					item = gtk.MenuItem(_('Dictionary URL is missing an "%s" and it is not WIKTIONARY'))
 					item.set_property('sensitive', False)
 				else:
@@ -388,7 +388,7 @@ class ConversationTextview:
 
 			search_link = gajim.config.get('search_engine')
 			if search_link.find('%s') == -1:
-				#we must have %s in the url
+				# we must have %s in the url
 				item = gtk.MenuItem(_('Web Search URL is missing an "%s"'))
 				item.set_property('sensitive', False)
 			else:
@@ -408,7 +408,7 @@ class ConversationTextview:
 	def on_textview_button_press_event(self, widget, event):
 		# If we clicked on a taged text do NOT open the standard popup menu
 		# if normal text check if we have sth selected
-		self.selected_phrase = ''
+		self.selected_phrase = '' # do not move belove event button check!
 
 		if event.button != 3: # if not right click
 			return False
