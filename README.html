@@ -90,11 +90,17 @@ You will need GNU autotools in order to install Gajim from svn. This includes:
 <li>autoconf &gt;= 2.59 </li>
 <li>libtool</li>
 <li>intltool-0.35.0 </li>
+<li>pkgconfig &gt;= 0.19</li>
 </ul>
 </p>
 steps to compile gajim:
 <pre>
     $ sh autogen.sh
+    $ ./configure
+    $ make
+</pre>
+Alternatively, if you don't want to install all these packages, you can get a nightly snapshot from <a href="http://www.gajim.org/downloads/snap/">here</a> and procede as usual:
+<pre>
     $ ./configure
     $ make
 </pre>
