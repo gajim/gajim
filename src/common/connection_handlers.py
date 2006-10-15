@@ -1508,22 +1508,22 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
 						prio, keyID, timestamp))
 				elif errcode == '401': # password required to join
-					self.dispatch('ERROR', (_('Unable to join room'),
-						_('A password is required to join this room.')))
+					self.dispatch('ERROR', (_('Unable to join group chat'),
+						_('A password is required to join this group chat.')))
 				elif errcode == '403': # we are banned
-					self.dispatch('ERROR', (_('Unable to join room'),
-						_('You are banned from this room.')))
-				elif errcode == '404': # room does not exist
-					self.dispatch('ERROR', (_('Unable to join room'),
-						_('Such room does not exist.')))
+					self.dispatch('ERROR', (_('Unable to join group chat'),
+						_('You are banned from this group chat.')))
+				elif errcode == '404': # group chat does not exist
+					self.dispatch('ERROR', (_('Unable to join group chat'),
+						_('Such group chat does not exist.')))
 				elif errcode == '405':
-					self.dispatch('ERROR', (_('Unable to join room'),
-						_('Room creation is restricted.')))
+					self.dispatch('ERROR', (_('Unable to join group chat'),
+						_('Group chat creation is restricted.')))
 				elif errcode == '406':
-					self.dispatch('ERROR', (_('Unable to join room'),
+					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('Your registered nickname must be used.')))
 				elif errcode == '407':
-					self.dispatch('ERROR', (_('Unable to join room'),
+					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are not in the members list.')))
 				elif errcode == '409': # nick conflict
 					# the jid_from in this case is FAKE JID: room_jid/nick
@@ -1531,7 +1531,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 					proposed_nickname = resource + \
 						gajim.config.get('gc_proposed_nick_char')
 					room_jid = gajim.get_room_from_fjid(who)
-					self.dispatch('ASK_NEW_NICK', (room_jid, _('Unable to join room'),
+					self.dispatch('ASK_NEW_NICK', (room_jid, _('Unable to join group chat'),
 		_('Your desired nickname is in use or registered by another occupant.\nPlease specify another nickname below:'), proposed_nickname))
 				else:	# print in the window the error
 					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
