@@ -1,16 +1,8 @@
 ## common/contacts.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -27,8 +19,8 @@ import common.gajim
 class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-			ask='', resource='', priority=0, keyID='', our_chatstate=None,
-			chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
+	ask='', resource='', priority=0, keyID='', our_chatstate=None,
+	chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
 		self.jid = jid
 		self.name = name
 		self.groups = groups
@@ -68,29 +60,37 @@ class Contact:
 		return self.jid.split('@')[0]
 
 	def is_hidden_from_roster(self):
-		'''if roster should not be visible in roster'''
-		# JEP-0162
-		hide = True
-		if self.sub in ('both', 'to', 'from'):
+		'''if contact should not be visible in roster'''
+		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
+		if self.sub in ('both', 'to'):
 			hide = False
-		elif self.ask == 'subscribe':
+		elif self.sub in ('none', 'from') and self.ask == 'subscribe':
 			hide = False
-		elif self.name or len(self.groups):
+		elif self.sub in ('none', 'from') and (self.name or len(self.groups)):
 			hide = False
+		else:
+			hide = True
 		return hide
-	
+
 	def is_observer(self):
 		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
 		is_observer = False
-		if self.is_hidden_from_roster() and self.sub == 'from':
+		if self.sub == 'from' and not self.is_transport()\
+		and self.is_hidden_from_roster():
 			is_observer = True
 		return is_observer
-				
+
+	def is_transport(self):
+		# if not '@' or '@' starts the jid then contact is transport
+		if self.jid.find('@') <= 0:
+			return True
+		return False
+
 
 class GC_Contact:
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', name='', show='', status='', role='',
-			affiliation='', jid = '', resource = ''):
+	affiliation='', jid = '', resource = ''):
 		self.room_jid = room_jid
 		self.name = name
 		self.show = show

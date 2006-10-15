@@ -228,10 +228,10 @@ class RosterWindow:
 				return
 			contact.groups = [_('Transports')]
 
-		# JEP-0162
+		# XEP-0162
 		hide = contact.is_hidden_from_roster()
 		if hide and contact.sub != 'from':
-			return 
+			return
 		observer = contact.is_observer()
 
 		if observer:
