@@ -31,7 +31,6 @@ class Zeroconf:
 	def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB, 
 		disconnected_CB, error_CB, name, host, port):
 		self.avahi = None
-		self.server = None
 		self.domain = None   # specific domain to browse
 		self.stype = '_presence._tcp'	
 		self.port = port  # listening port that gets announced	
@@ -49,6 +48,7 @@ class Zeroconf:
 		
 		self.service_browser = None
 		self.domain_browser = None
+		self.bus = None
 		self.server = None
 		self.contacts = {}    # all current local contacts with data
 		self.entrygroup = None
@@ -74,8 +74,8 @@ class Zeroconf:
 
 	def new_service_callback(self, interface, protocol, name, stype, domain, flags):
 		gajim.log.debug('Found service %s in domain %s on %i.%i.' % (name, domain, interface, protocol))
-		# if not self.connected:
-		# 	return
+		if not self.connected:
+		 	return
 		
 		# synchronous resolving
 		self.server.ResolveService( int(interface), int(protocol), name, stype, \
@@ -84,8 +84,8 @@ class Zeroconf:
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain, flags):
 		gajim.log.debug('Service %s in domain %s on %i.%i disappeared.' % (name, domain, interface, protocol))
-		# if not self.connected:
-		# 	return
+		if not self.connected:
+		 	return
 		if name != self.name:
 			for key in self.contacts.keys():
 				if self.contacts[key][C_BARE_NAME] == name:
@@ -110,20 +110,27 @@ class Zeroconf:
 	def new_domain_callback(self,interface, protocol, domain, flags):
 		if domain != "local":
 			self.browse_domain(interface, protocol, domain)
-
-	def txt_array_to_dict(self,txt_array):
-		items = {}
-
-		for byte_array in txt_array:
-			# 'str' is used for string type in python
-			value = self.avahi.byte_array_to_string(byte_array)
-			poseq = value.find('=')
-			items[value[:poseq]] = value[poseq+1:]
-		return items
+	
+	def txt_array_to_dict(self, txt_array):
+		txt_dict = {}
+		for els in txt_array:
+			key, val = '', None
+			for c in els:
+				c = chr(c)
+				if val is None:
+					if c == '=':
+						val = ''
+					else:
+					 key += c
+				else:
+					val += c
+			txt_dict[key] = val.decode('utf-8')
+		return txt_dict
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
 		gajim.log.debug('Service data for service %s in domain %s on %i.%i:' % (name, domain, interface, protocol))
-		gajim.log.debug('Host %s (%s), port %i, TXT data: %s' % (host, address, port, self.avahi.txt_array_to_string_array(txt)))
+		gajim.log.debug('Host %s (%s), port %i, TXT data: %s' % (host, address, port, 
+			self.txt_array_to_dict(txt)))
 		if not self.connected:
 			return
 		bare_name = name
@@ -165,26 +172,28 @@ class Zeroconf:
 		gajim.log.debug('Error while adding service. %s' % str(err))
 		if str(err) == 'Local name collision':
 			alternative_name = self.server.GetAlternativeServiceName(self.username)
+			self.disconnect()
 			self.name_conflictCB(alternative_name)
-		else:
-			self.error_CB(_('Error while adding service. %s') % str(err))
+			return
+		self.error_CB(_('Error while adding service. %s') % str(err))
 		self.disconnect()
 
 	def server_state_changed_callback(self, state, error):
-		print 'server.state %s' % state
 		if state == self.avahi.SERVER_RUNNING:
 			self.create_service()
 		elif state == self.avahi.SERVER_COLLISION:
 			self.entrygroup.Reset()
-		elif state == self.avahi.CLIENT_FAILURE:           # TODO: add error handling (avahi daemon dies...?)
-			print 'CLIENT FAILURE'
+		elif state == self.avahi.CLIENT_FAILURE:
+			# does it ever go here?
+			gajim.log.debug('CLIENT FAILURE')
 
 	def entrygroup_state_changed_callback(self, state, error):
 		# the name is already present, so recreate
 		if state == self.avahi.ENTRY_GROUP_COLLISION:
 			self.service_add_fail_callback('Local name collision')
 		elif state == self.avahi.ENTRY_GROUP_FAILURE:
-			print 'zeroconf.py: ENTRY_GROUP_FAILURE reached(that should not happen)'
+			gajim.log.debug('zeroconf.py: ENTRY_GROUP_FAILURE reached(that'
+				' should not happen)')
 
 	# make zeroconf-valid names
 	def replace_show(self, show):
@@ -193,6 +202,16 @@ class Zeroconf:
 		elif show == 'xa':
 			return 'away'
 		return show
+
+	def avahi_txt(self):
+		utf8_dict = {}
+		for key in self.txt:
+			val = self.txt[key]
+			if isinstance(val, unicode):
+				utf8_dict[key] = val.encode('utf-8')
+			else:
+				utf8_dict[key] = val
+		return self.avahi.dict_to_txt_array(utf8_dict)
 
 	def create_service(self):
 		try:
@@ -220,7 +239,8 @@ class Zeroconf:
 
 			self.txt = txt
 			gajim.log.debug('Publishing service %s of type %s' % (self.name, self.stype))
-			self.entrygroup.AddService(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, self.avahi.dict_to_txt_array(self.txt), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
+			self.entrygroup.AddService(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, self.avahi_txt(), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
+			
 			self.entrygroup.Commit(reply_handler=self.service_committed_callback, 
 				error_handler=self.entrygroup_commit_error_CB)
 
@@ -247,8 +267,13 @@ class Zeroconf:
 			if self.entrygroup.GetState() != self.avahi.ENTRY_GROUP_FAILURE:
 				self.entrygroup.Reset()
 				self.entrygroup.Free()
+				# .Free() has mem leaks
+				obj = self.entrygroup._obj
+				obj._bus = None
+				self.entrygroup._obj = None
 				self.entrygroup = None
 				self.announced = False
+				
 				return True
 			else:
 				return False
@@ -261,33 +286,48 @@ class Zeroconf:
 	def avahi_dbus_connect_cb(self, a, connect, disconnect):
 		if connect != "":
 			gajim.log.debug('Lost connection to avahi-daemon')
-			try:
-				self.connected = False
-				self.disconnect()
+			self.disconnect()
+			if self.disconnected_CB:
 				self.disconnected_CB()
-			except Exception, e:
-				print e
 		else:
 			gajim.log.debug('We are connected to avahi-daemon')
-			
-			
-			
+
 	# connect to dbus
 	def connect_dbus(self):
 		try:
-			import avahi, gobject, dbus
-			self.avahi = avahi
+			import dbus
 		except ImportError:
-			gajim.log.debug('Error: python-avahi and python-dbus need to be installed. No zeroconf support.')
+			gajim.log.debug('Error: python-dbus needs to be installed. No zeroconf support.')
 			return False
-
-		if self.server:
+		if self.bus:
 			return True
 		try:
 			self.bus = dbus.SystemBus()
 			self.bus.add_signal_receiver(self.avahi_dbus_connect_cb, 
 				"NameOwnerChanged", "org.freedesktop.DBus", 
 				arg0="org.freedesktop.Avahi")
+		except Exception, e:
+			# System bus is not present
+			self.bus = None
+			gajim.log.debug(str(e))
+			return False
+		else:
+			return True
+
+	# connect to avahi
+	def connect_avahi(self):
+		if not self.connect_dbus():
+			return False
+		try:
+			import avahi
+			self.avahi = avahi
+		except ImportError:
+			gajim.log.debug('Error: python-avahi needs to be installed. No zeroconf support.')
+			return False
+
+		if self.server:
+			return True
+		try:
 			self.server = dbus.Interface(self.bus.get_object(self.avahi.DBUS_NAME, \
 			self.avahi.DBUS_PATH_SERVER), self.avahi.DBUS_INTERFACE_SERVER)
 			self.server.connect_to_signal('StateChanged', 
@@ -302,7 +342,7 @@ class Zeroconf:
 
 	def connect(self):
 		self.name = self.username + '@' + self.host # service name
-		if not self.connect_dbus():
+		if not self.connect_avahi():
 			return False
 		
 		self.connected = True
@@ -328,15 +368,23 @@ class Zeroconf:
 			self.connected = False
 			if self.service_browser:
 				self.service_browser.Free()
+				self.service_browser._obj._bus = None
+				self.service_browser._obj = None
 			if self.domain_browser:
 				self.domain_browser.Free()
+				self.domain_browser._obj._bus = None
+				self.domain_browser._obj = None
 			self.remove_announce()
+			self.server._obj._bus = None
+			self.server._obj = None
+		self.server = None
 		self.service_browser = None
 		self.domain_browser = None
-		self.server = None
 
 	# refresh txt data of all contacts manually (no callback available)
 	def resolve_all(self):
+		if not self.connected:
+			return
 		for val in self.contacts.values():
 			self.server.ResolveService(int(val[C_INTERFACE]), int(val[C_PROTOCOL]), val[C_BARE_NAME], \
 				self.stype, val[C_DOMAIN], self.avahi.PROTO_UNSPEC, dbus.UInt32(0),\
@@ -352,7 +400,7 @@ class Zeroconf:
 		if show:
 			self.txt['status'] = self.replace_show(show)
 
-		txt = self.avahi.dict_to_txt_array(self.txt)
+		txt = self.avahi_txt()
 		if self.connected and self.entrygroup:
 			self.entrygroup.UpdateServiceTxt(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype,'', txt, reply_handler=self.service_updated_callback, error_handler=self.error_callback)
 			return True

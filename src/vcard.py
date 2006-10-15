@@ -477,6 +477,9 @@ class ZeroconfVcardWindow:
 	
 	def fill_personal_page(self):
 		contact = gajim.connections[gajim.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)
+		for key in ('1st', 'last', 'jid', 'email'):
+			if not contact['txt_dict'].has_key(key):
+				contact['txt_dict'][key] = ''
 		self.xml.get_widget('first_name_label').set_text(contact['txt_dict']['1st'])
 		self.xml.get_widget('last_name_label').set_text(contact['txt_dict']['last'])
 		self.xml.get_widget('jabber_id_label').set_text(contact['txt_dict']['jid'])
