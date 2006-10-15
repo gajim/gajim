@@ -1637,16 +1637,14 @@ class Interface:
 		return menu
 
 	def init_emoticons(self):
-		if not gajim.config.get('emoticons_theme'):
+		emot_theme = gajim.config.get('emoticons_theme')
+		if not emot_theme:
 			return
 
 		#initialize emoticons dictionary and unique images list
 		self.emoticons_images = list()
 		self.emoticons = dict()
 
-		emot_theme = gajim.config.get('emoticons_theme')
-		if not emot_theme:
-			return
 		path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
 		if not os.path.exists(path):
 			# It's maybe a user theme
