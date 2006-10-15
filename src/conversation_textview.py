@@ -342,7 +342,7 @@ class ConversationTextview:
 				menu.prepend(item)
 
 			self.selected_phrase = helpers.reduce_chars_newlines(
-				self.selected_phrase, 25)
+				self.selected_phrase, 25, 2)
 			item = gtk.MenuItem(_('_Actions for "%s"') % self.selected_phrase)
 			menu.prepend(item)
 			submenu = gtk.Menu()
