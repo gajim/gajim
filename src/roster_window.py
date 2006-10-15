@@ -471,8 +471,12 @@ class RosterWindow:
 			return
 		name = gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name())
 
-		if len(contact_instances) > 1:
-			name += ' (' + unicode(len(contact_instances)) + ')'
+		nb_connected_contact = 0
+		for c in contact_instances:
+			if c.show not in ('error', 'offline'):
+				nb_connected_contact += 1
+		if nb_connected_contact > 1:
+			name += ' (' + unicode(nb_connected_contact) + ')'
 
 		# show (account_name) if there are 2 contact with same jid in merged mode
 		if self.regroup:
@@ -1175,8 +1179,15 @@ class RosterWindow:
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
 					contacts = gajim.contacts.get_contact(account, jid)
+					connected_contacts = []
+					for c in contacts:
+						if c.show not in ('offline', 'error'):
+							connected_contacts.append(c)
+					if not connected_contacts:
+						# no connected contacts, show the ofline one
+						connected_contacts = contacts
 					self.tooltip.timeout = gobject.timeout_add(500,
-						self.show_tooltip, contacts)
+						self.show_tooltip, connected_contacts)
 			elif model[iter][C_TYPE] == 'account':
 				# we're on an account entry in the roster
 				account = model[iter][C_ACCOUNT].decode('utf-8')

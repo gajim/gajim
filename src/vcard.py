@@ -213,11 +213,18 @@ class VcardWindow:
 		if self.xml.get_widget('information_notebook').get_n_pages() < 4:
 			return
 		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		connected_contact_list = []
+		for c in contact_list:
+			if c.show not in ('offline', 'error'):
+				connected_contact_list.append(c)
+		if not connected_contact_list:
+			# no connected contact, get the offline one
+			connected_contact_list = contact_list
 		# stats holds show and status message
 		stats = ''
 		one = True # Are we adding the first line ?
-		if contact_list:
-			for c in contact_list:
+		if connected_contact_list:
+			for c in connected_contact_list:
 				if not one:
 					stats += '\n'
 				stats += helpers.get_uf_show(c.show)
