@@ -159,7 +159,7 @@ BLOCK_HEAD = set(( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ))
 BLOCK_PHRASAL = set(( 'address', 'blockquote', 'pre', ))
 BLOCK_PRES = set(( 'hr', )) #not in xhtml-im
 BLOCK_STRUCT = set(( 'div', 'p', ))
-BLOCK_HACKS = set(( 'table', 'tr' ))
+BLOCK_HACKS = set(( 'table', 'tr' )) # at the very least, they will start line ;)
 BLOCK = BLOCK_HEAD.union(BLOCK_PHRASAL).union(BLOCK_STRUCT).union(BLOCK_PRES).union(BLOCK_HACKS)
 
 INLINE_PHRASAL = set('abbr, acronym, cite, code, dfn, em, kbd, q, samp, strong, var'.split(', '))
@@ -576,9 +576,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				anchor = self.textbuf.create_child_anchor(self.iter)
 				img = gtk.Image()
 				img.set_from_file(self.textview.interface.emoticons[emot_ascii])
+				img.show()
 				# TODO: add alt/tooltip with the special_text (a11y) 
 				self.textview.add_child_at_anchor(img, anchor)
-				img.show()
 			else:
 				# now print it
 				if special_text.startswith('/'): # it's explicit italics
@@ -592,7 +592,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 					self.endElement('u')
 				if special_text.startswith('/'): # it's explicit italics
 					self.endElement('i')
-		self._insert_text(text[index:])
+		if index < len(text):
+			self._insert_text(text[index:])
 		
 	def characters(self, content):
 		if self.preserve:
@@ -601,11 +602,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		if allwhitespace_rx.match(content) is not None and self._starts_line():
 			return
 		self.text += content
-		#if self.text: self.text += ' '
-		#self.handle_specials(whitespace_rx.sub(' ', content))
-		if allwhitespace_rx.match(self.text) is not None and self._starts_line():
-			self.text = ''
-		#self._flush_text()
+		self.starting = False
 
 
 	def startElement(self, name, attrs):
