@@ -1701,10 +1701,12 @@ class ChatControl(ChatControlBase):
 			gajim.interface.roster.draw_contact(jid, self.account)
 		# Redraw parent too
 		gajim.interface.roster.draw_parent_contact(jid, self.account)
-		if (self.contact.show == 'offline' or self.contact.show == 'error'):
-			showOffline = gajim.config.get('showoffline')
-			if not showOffline and typ == 'chat' and \
-			len(gajim.contacts.get_contact(self.account, jid)) < 2:
+		if (self.contact.show in ('offline', 'error')):
+			show_offline = gajim.config.get('showoffline')
+			show_transports = gajim.config.get('show_transports_group')
+			if (not show_transports and gajim.jid_is_transport(jid)) or \
+			(not show_offline and typ == 'chat' and \
+			len(gajim.contacts.get_contact(self.account, jid)) < 2):
 				gajim.interface.roster.really_remove_contact(self.contact,
 					self.account)
 			elif typ == 'pm':

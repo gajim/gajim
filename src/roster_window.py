@@ -224,7 +224,8 @@ class RosterWindow:
 			return
 		if gajim.jid_is_transport(contact.jid):
 			# if jid is transport, check if we wanna show it in roster
-			if not gajim.config.get('show_transports_group'):
+			if not gajim.config.get('show_transports_group') and \
+			not gajim.events.get_nb_roster_events(account, contact.jid):
 				return
 			contact.groups = [_('Transports')]
 
@@ -382,7 +383,8 @@ class RosterWindow:
 		if contact.jid in gajim.newly_added[account]:
 			return
 		if gajim.jid_is_transport(contact.jid) and gajim.account_is_connected(
-			account): # It's an agent
+		account) and gajim.config.get('show_transports_group'):
+			# It's an agent and we show them
 			return
 		if contact.jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(contact.jid)
@@ -390,11 +392,13 @@ class RosterWindow:
 		
 		hide = contact.is_hidden_from_roster()
 
-		showOffline = gajim.config.get('showoffline')
+		show_offline = gajim.config.get('showoffline')
+		show_transports = gajim.config.get('show_transports_group')
 		if (contact.show in ('offline', 'error') or hide) and \
-			not showOffline and (not _('Transports') in contact.groups or \
-			gajim.account_is_disconnected(account)) and \
-			len(gajim.events.get_events(account, contact.jid, ['chat'])) == 0:
+		(_('Transports') in contact.groups and not show_transports) or \
+		(not show_offline and (not _('Transports') in contact.groups or \
+		gajim.account_is_disconnected(account))) and \
+		len(gajim.events.get_events(account, contact.jid, ['chat'])) == 0:
 			self.remove_contact(contact, account)
 		else:
 			self.draw_contact(contact.jid, account)
