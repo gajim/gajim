@@ -63,14 +63,14 @@ class Contact:
 		'''if contact should not be visible in roster'''
 		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
 		if self.sub in ('both', 'to'):
-			hide = False
-		elif self.sub in ('none', 'from') and self.ask == 'subscribe':
-			hide = False
-		elif self.sub in ('none', 'from') and (self.name or len(self.groups)):
-			hide = False
-		else:
-			hide = True
-		return hide
+			return False
+		if self.sub in ('none', 'from') and self.ask == 'subscribe':
+			return False
+		if self.sub in ('none', 'from') and (self.name or len(self.groups)):
+			return False
+		if _('Not in Roster') in self.groups:
+			return False
+		return True
 
 	def is_observer(self):
 		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
