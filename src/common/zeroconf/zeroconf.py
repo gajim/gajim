@@ -121,9 +121,11 @@ class Zeroconf:
 					if c == '=':
 						val = ''
 					else:
-					 key += c
+						key += c
 				else:
 					val += c
+			if val is None: # missing '='
+				val = ''
 			txt_dict[key] = val.decode('utf-8')
 		return txt_dict
 	
