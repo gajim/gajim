@@ -678,8 +678,9 @@ class GroupchatControl(ChatControlBase):
 		self.name_label.set_markup(text)
 		event_box = self.name_label.get_parent()
 
-		# tooltip must always hold ALL the subject
-		self.subject_tooltip.set_tip(event_box, self.subject)
+		if self.subject:
+			# tooltip must always hold ALL the subject
+			self.subject_tooltip.set_tip(event_box, self.subject)
 
 	def got_connected(self):
 		gajim.gc_connected[self.account][self.room_jid] = True
