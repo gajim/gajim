@@ -1997,7 +1997,10 @@ if __name__ == '__main__':
 		try:
 			import gnome.ui
 		except ImportError:
-			print >> sys.stderr, _('Session Management support not available (missing gnome.ui module)')
+			try:
+				print >> sys.stderr, _('Session Management support not available (missing gnome.ui module)')
+			except IOError:
+				pass
 		else:
 			def die_cb(cli):
 				gtk.main_quit()
