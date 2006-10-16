@@ -409,6 +409,7 @@ class ZeroconfVcardWindow:
 					widget = gtk.LinkButton(value, value)
 				else:
 					widget = gtk.Label(value)
+					widget.set_selectable(True)
 				table = self.xml.get_widget('personal_info_table')
 				table.attach(widget, 1, 4, 3, 4, yoptions = 0)
 			else:
