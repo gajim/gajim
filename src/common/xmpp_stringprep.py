@@ -185,7 +185,8 @@ class NamePrep:
 	prohibiteds = [unichr(n) for n in range(0x00, 0x2c + 1) +
 									   range(0x2e, 0x2f + 1) +
 									   range(0x3a, 0x40 + 1) +
-									   range(0x5b, 0x60 + 1) +
+									   range(0x5b, 0x5e + 1) +
+									   range(0x60, 0x60 + 1) +
 									   range(0x7b, 0x7f + 1) ]
 
 	def prepare(self, string):

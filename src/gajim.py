@@ -1895,7 +1895,6 @@ class Interface:
 				gajim.connections[account] = common.connection.Connection(account)
 
 		# gtk hooks
-		# gtk hooks
 		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
 		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
