@@ -3863,7 +3863,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			menu = gtk.Menu()
 			item = gtk.MenuItem(_('Drop %s in group %s') % (c_source.name,
 				grp_dest))
-			item.connect('activate', self.on_drop_in_group, account_dest, c_source,
+			item.connect('activate', self.on_drop_in_group, account_source, c_source,
 				grp_dest, context, etime, grp_source)
 			menu.append(item)
 			c_dest = gajim.contacts.get_contact_with_highest_priority(
