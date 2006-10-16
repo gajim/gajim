@@ -1173,7 +1173,7 @@ class Interface:
 			if not gajim.config.get('showoffline'):
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
-				if contact:	
+				if contact and contact.show in ('error', 'offline'):	
 					self.roster.really_remove_contact(contact, account)
 		self.roster.show_title()
 		self.roster.draw_contact(jid, account)
