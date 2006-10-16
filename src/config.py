@@ -1872,6 +1872,7 @@ class AccountsWindow:
 		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 			w = self.xml.get_widget('enable_zeroconf_checkbutton')
 			w.set_active(False)
+			return
 		else:
 			if gajim.interface.instances[account].has_key('remove_account'):
 				gajim.interface.instances[account]['remove_account'].window.present()
