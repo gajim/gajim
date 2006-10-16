@@ -567,7 +567,7 @@ _('Connection with peer cannot be established.'))
 			(file_path, file_name) = os.path.split(file_props['file-name'])
 		else:
 			file_name = file_props['name']
-		text_props = file_name + '\n'
+		text_props = gtkgui_helpers.escape_for_pango_markup(file_name) + '\n'
 		text_props += contact.get_shown_name()
 		self.model.set(iter, 1, text_labels, 2, text_props, C_SID,
 			file_props['type'] + file_props['sid'])
