@@ -116,22 +116,26 @@ class Zeroconf:
 		for els in txt_array:
 			key, val = '', None
 			for c in els:
-				c = chr(c)
-				if val is None:
-					if c == '=':
-						val = ''
+					if c < 0 or c > 255:
+						c = '.'
 					else:
-						key += c
-				else:
-					val += c
+						c = chr(c)
+					if val is None:
+						if c == '=':
+							val = ''
+						else:
+							key += c
+					else:
+						val += c
 			if val is None: # missing '='
 				val = ''
 			txt_dict[key] = val.decode('utf-8')
 		return txt_dict
 	
 	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
-		gajim.log.debug('Service data for service %s in domain %s on %i.%i:' % (name, domain, interface, protocol))
-		gajim.log.debug('Host %s (%s), port %i, TXT data: %s' % (host, address, port, 
+		gajim.log.debug('Service data for service %s in domain %s on %i.%i:'
+				% (name, domain, interface, protocol))
+		gajim.log.debug('Host %s (%s), port %i, TXT data: %s' % (host, address, port,
 			self.txt_array_to_dict(txt)))
 		if not self.connected:
 			return
@@ -393,6 +397,8 @@ class Zeroconf:
 				reply_handler=self.service_resolved_all_callback, error_handler=self.error_callback)
 
 	def get_contacts(self):
+		if not jid in self.contacts:
+			return None
 		return self.contacts
 
 	def get_contact(self, jid):
