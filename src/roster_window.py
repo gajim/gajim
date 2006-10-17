@@ -47,6 +47,10 @@ from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
 
+from common import dbus_support
+if dbus_support.supported:
+	from network_manager_listener import NetworkManagerListener
+
 #(icon, name, type, jid, account, editable, second pixbuf)
 (
 C_IMG, # image to show state (online, new message etc)
@@ -4168,4 +4172,14 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if len(gajim.connections) == 0: # if we have no account
 			gajim.interface.instances['account_creation_wizard'] = \
 				config.AccountCreationWizardWindow()
+
+		nm_listener = NetworkManagerListener(self.nm_activated_CB, self.nm_deactivated_CB)
+
+	def nm_activated_CB(self, dev, net):
+		for acc in gajim.contacts.get_accounts():
+			gajim.interface.roster.send_status(acc, 'online', '')
+
+	def nm_deactivated_CB(self, dev):
+		for acc in gajim.contacts.get_accounts():
+			gajim.interface.roster.send_status(acc, 'offline', '')
 
