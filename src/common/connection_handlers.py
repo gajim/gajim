@@ -1308,7 +1308,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				if gm.getTag('mailbox').getTag('mail-thread-info'):
 					gmail_messages = gm.getTag('mailbox').getTags('mail-thread-info')
 					for gmessage in gmail_messages:
-						gmail_from = gmessage.getTag('senders').getTag('sender').getAttr('address')
+						sender = gmessage.getTag('senders').getTag('sender')
+						if not sender:
+							continue
+						gmail_from = sender.getAttr('address')
 						gmail_subject = gmessage.getTag('subject').getData()
 						gmail_snippet = gmessage.getTag('snippet').getData()
 						gmail_messages_list.append({ \
