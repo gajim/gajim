@@ -1454,8 +1454,11 @@ class RosterWindow:
 				send_file_menuitem.set_no_show_all(True)
 
 			rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
-			information_menuitem.connect('activate', self.on_info_zeroconf, contact,
-				account)
+			if contact.show == 'offline':
+				information_menuitem.set_sensitive(False)
+			else:
+				information_menuitem.connect('activate', self.on_info_zeroconf, contact,
+					account)
 			history_menuitem.connect('activate', self.on_history, contact,
 				account)
 
