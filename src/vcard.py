@@ -25,7 +25,6 @@ import time
 import locale
 
 import gtkgui_helpers
-import dialogs
 
 from common import helpers
 from common import gajim
