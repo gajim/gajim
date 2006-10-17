@@ -694,7 +694,7 @@ class ConnectionDisco:
 				continue
 			try:
 				helpers.parse_jid(attr['jid'])
-			except:
+			except common.helpers.InvalidFormat:
 				# jid is not conform
 				continue
 			items.append(attr)
