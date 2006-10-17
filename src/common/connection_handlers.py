@@ -690,6 +690,13 @@ class ConnectionDisco:
 			attr = {}
 			for key in i.getAttrs():
 				attr[key] = i.getAttrs()[key]
+			if 'jid' not in attr:
+				continue
+			try:
+				helpers.parse_jid(attr['jid'])
+			except:
+				# jid is not conform
+				continue
 			items.append(attr)
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		hostname = gajim.config.get_per('accounts', self.name, 
