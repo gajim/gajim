@@ -395,7 +395,7 @@ class RosterWindow:
 		show_offline = gajim.config.get('showoffline')
 		show_transports = gajim.config.get('show_transports_group')
 		if (_('Transports') in contact.groups and not show_transports) or \
-		(contact.show in ('offline', 'error') or hide and not show_offline and \
+		((contact.show in ('offline', 'error') or hide) and not show_offline and \
 		(not _('Transports') in contact.groups or \
 		gajim.account_is_disconnected(account))) and \
 		len(gajim.events.get_events(account, contact.jid, ['chat'])) == 0:
