@@ -1137,6 +1137,11 @@ class RosterWindow:
 		if info.has_key(contact.jid):
 			info[contact.jid].window.present()
 		else:
+			contact = gajim.contacts.get_first_contact_from_jid(account, 
+							contact.jid)
+			if contact.show in ('offline', 'error'):
+				# don't show info on offline contacts
+				return
 			info[contact.jid] = vcard.ZeroconfVcardWindow(contact, account)
 
 
@@ -1454,8 +1459,9 @@ class RosterWindow:
 				send_file_menuitem.set_no_show_all(True)
 
 			rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
-			if contact.show == 'offline':
+			if contact.show in ('offline', 'error'):
 				information_menuitem.set_sensitive(False)
+				send_file_menuitem.set_sensitive(False)
 			else:
 				information_menuitem.connect('activate', self.on_info_zeroconf, contact,
 					account)

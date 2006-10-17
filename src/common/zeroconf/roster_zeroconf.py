@@ -47,8 +47,12 @@ class Roster:
 		
 	def setItem(self, jid, name = '', groups = ''):
 		#print 'roster_zeroconf.py: setItem %s' % jid
+		contact = self.zeroconf.get_contact(jid)
+		if not contact:
+			return
+
 		(service_jid, domain, interface, protocol, host, address, port, bare_jid, txt)  \
-			= self.zeroconf.get_contact(jid)
+			= contact
 
 		self._data[jid]={}
 		self._data[jid]['ask'] = 'no'  #?
