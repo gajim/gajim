@@ -716,7 +716,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 			for key in self.connection.zeroconf.contacts:
 				if ip == self.connection.zeroconf.contacts[key][zeroconf.C_ADDRESS]:
 					frm = key
-		frm = str(frm)
+		frm = unicode(frm)
 		jid  = frm
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for').split()
@@ -733,9 +733,6 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) != None
 		msg_id = None
 		composing_jep = None
-		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
-		# invitation
-		# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
 		xtags = msg.getTags('x')
 		# chatstates - look for chatstate tags in a message if not delayed
 		if not delayed:
