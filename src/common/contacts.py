@@ -62,6 +62,8 @@ class Contact:
 	def is_hidden_from_roster(self):
 		'''if contact should not be visible in roster'''
 		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
+		if self.is_transport():
+			return False
 		if self.sub in ('both', 'to'):
 			return False
 		if self.sub in ('none', 'from') and self.ask == 'subscribe':

@@ -1170,11 +1170,13 @@ class Interface:
 			return
 		# no other event?
 		if not len(gajim.events.get_events(account, jid)):
-			if not gajim.config.get('showoffline'):
-				contact = gajim.contacts.get_contact_with_highest_priority(account,
-					jid)
-				if contact and contact.show in ('error', 'offline'):	
-					self.roster.really_remove_contact(contact, account)
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+			show_transport = gajim.config.get('show_transports_group')
+			if contact and (contact.show in ('error', 'offline') and \
+			not gajim.config.get('showoffline') or (
+			gajim.jid_is_transport(jid) and not show_transport)):
+				self.roster.really_remove_contact(contact, account)
 		self.roster.show_title()
 		self.roster.draw_contact(jid, account)
 
