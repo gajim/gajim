@@ -85,7 +85,7 @@ storage = None
 def get_storage():
 	global storage
 	if storage is None: # None is only in first time get_storage is called
-		if USER_HAS_GNOMEKEYRING:
+		if USER_HAS_GNOMEKEYRING and gnomekeyring.is_available():
 			try:
 				storage = GnomePasswordStorage()
 			except gnomekeyring.NoKeyringDaemonError:
