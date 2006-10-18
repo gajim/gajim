@@ -402,6 +402,8 @@ class Zeroconf:
 		return self.contacts
 
 	def get_contact(self, jid):
+		if not jid in self.contacts:
+			return None
 		return self.contacts[jid]
 		
 	def update_txt(self, show = None):
@@ -417,20 +419,3 @@ class Zeroconf:
 
 
 # END Zeroconf
-
-'''
-# how to use
-		
-	zeroconf = Zeroconf()
-	zeroconf.connect()				
-	zeroconf.txt['1st'] = 'foo'
-	zeroconf.txt['last'] = 'bar'
-	zeroconf.txt['email'] = foo@bar.org
-	zeroconf.announce()
-
-	# updating after announcing
-	txt = {}
-	txt['status'] = 'avail'
-	txt['msg'] = 'Here I am'
-	zeroconf.update_txt(txt)
-'''
