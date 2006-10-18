@@ -18,6 +18,7 @@
 import gtk
 import gobject
 import os
+import sys
 import time
 import urllib
 
@@ -4173,7 +4174,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.interface.instances['account_creation_wizard'] = \
 				config.AccountCreationWizardWindow()
 
-		nm_listener = NetworkManagerListener(self.nm_activated_CB, self.nm_deactivated_CB)
+		try:
+			nm_listener = NetworkManagerListener(self.nm_activated_CB,
+				self.nm_deactivated_CB)
+		except:
+			print >> sys.stderr, _('Network manager support not available')
 
 	def nm_activated_CB(self, dev, net):
 		for acc in gajim.contacts.get_accounts():
