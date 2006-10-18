@@ -511,6 +511,9 @@ class Interface:
 		chatstate = array[6]
 		msg_id = array[7]
 		composing_jep = array[8]
+		xhtml = array[10]
+		if gajim.config.get('ignore_incoming_xhtml'):
+			xhtml = None
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
 
@@ -590,7 +593,7 @@ class Interface:
 			nickname = resource
 			msg_type = 'pm'
 			groupchat_control.on_private_message(nickname, message, array[2],
-				array[10])
+				xhtml)
 		else:
 			# array: (jid, msg, time, encrypted, msg_type, subject)
 			if encrypted:
@@ -601,7 +604,7 @@ class Interface:
 				# xhtml in last element
 				self.roster.on_message(jid, message, array[2], account, array[3],
 					msg_type, subject, resource, msg_id, array[9],
-					advanced_notif_num, xhtml = array[10])
+					advanced_notif_num, xhtml = xhtml)
 			nickname = gajim.get_name_from_jid(account, jid)
 		# Check and do wanted notifications	
 		msg = message
@@ -904,13 +907,16 @@ class Interface:
 		gc_control = self.msg_win_mgr.get_control(room_jid, account)
 		if not gc_control:
 			return
+		xhtml = array[4]
+		if gajim.config.get('ignore_incoming_xhtml'):
+			xhtml = None
 		if len(jids) == 1:
 			# message from server
 			nick = ''
 		else:
 			# message from someone
 			nick = jids[1]
-		gc_control.on_message(nick, array[1], array[2], array[3], array[4])
+		gc_control.on_message(nick, array[1], array[2], array[3], xhtml)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 

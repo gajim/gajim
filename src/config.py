@@ -190,7 +190,7 @@ class PreferencesWindow:
 				theme_combobox.set_active(i)
 			i += 1
 
-		#use speller
+		# use speller
 		if os.name == 'nt':
 			self.xml.get_widget('speller_checkbutton').set_no_show_all(True)
 		else:
@@ -200,7 +200,11 @@ class PreferencesWindow:
 			else:
 				self.xml.get_widget('speller_checkbutton').set_sensitive(False)
 
-		#Print time
+		# Ignore XHTML
+		st = gajim.config.get('ignore_incoming_xhtml')
+		self.xml.get_widget('xhtml_checkbutton').set_active(st)
+
+		# Print time
 		st = gajim.config.get('print_ichat_every_foo_minutes')
 		text = _('Every %s _minutes') % st
 		self.xml.get_widget('time_sometimes_radiobutton').set_label(text)
@@ -663,6 +667,9 @@ class PreferencesWindow:
 		else:
 			self.remove_speller()
 
+	def on_xhtml_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
+		
 	def _set_sensitivity_for_before_after_time_widgets(self, sensitive):
 		self.xml.get_widget('before_time_label').set_sensitive(sensitive)
 		self.xml.get_widget('before_time_textview').set_sensitive(sensitive)
