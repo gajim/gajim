@@ -1807,7 +1807,6 @@ class PrivacyListWindow:
 		'privacy_list_default_checkbutton']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
-
 		self.privacy_lists_title_label.set_label(
 			_('Privacy List <b><i>%s</i></b>') % \
 			gtkgui_helpers.escape_for_pango_markup(self.privacy_list_name))
@@ -1821,6 +1820,7 @@ class PrivacyListWindow:
 		self.open_rule_button.set_sensitive(False)
 		self.privacy_list_active_checkbutton.set_sensitive(False)
 		self.privacy_list_default_checkbutton.set_sensitive(False)
+		self.list_of_rules_combobox.set_sensitive(False)
 
 		if action == 'EDIT':
 			self.refresh_rules()
@@ -1837,7 +1837,7 @@ class PrivacyListWindow:
 		self.add_edit_vbox.set_no_show_all(True)
 		self.window.show_all()
 		self.add_edit_vbox.hide()
-		
+
 		self.xml.signal_autoconnect(self)
 
 	def on_privacy_list_edit_window_destroy(self, widget):
@@ -1954,13 +1954,13 @@ class PrivacyListWindow:
 					self.edit_queries_send_checkbutton.set_active(True)
 				elif child == 'message':
 					self.edit_send_messages_checkbutton.set_active(True)
-		
+
 			if rule_info['action'] == 'allow':
 				self.edit_allow_radiobutton.set_active(True)
 			else:
 				self.edit_deny_radiobutton.set_active(True)
 		self.add_edit_vbox.show()
-	
+
 	def on_privacy_list_active_checkbutton_toggled(self, widget):
 		if widget.get_active():
 			gajim.connections[self.account].set_active_list(
@@ -1978,7 +1978,7 @@ class PrivacyListWindow:
 	def on_new_rule_button_clicked(self, widget):
 		self.reset_fields()
 		self.add_edit_vbox.show()
-	
+
 	def reset_fields(self):
 		self.edit_type_jabberid_entry.set_text('')
 		self.edit_allow_radiobutton.set_active(True)
@@ -2061,12 +2061,8 @@ class PrivacyListWindow:
 		if active_bool:
 			self.allow_deny = radiobutton
 
-	def on_privacy_list_close_button_clicked(self, widget):
+	def on_close_button_clicked(self, widget):
 		self.window.destroy()
-	
-	def on_privacy_list_refresh_button_clicked(self, widget):
-		self.refresh_rules()
-		self.add_edit_vbox.hide()
 
 class PrivacyListsWindow:
 	'''Window that is the main window for Privacy Lists;
@@ -2132,11 +2128,6 @@ class PrivacyListsWindow:
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
 			self.open_privacy_list_button.set_sensitive(False)
 			self.delete_privacy_list_button.set_sensitive(False)
-		elif len(self.privacy_lists_save) == 1:
-			self.list_of_privacy_lists_combobox.set_active(0)
-			self.list_of_privacy_lists_combobox.set_sensitive(False)
-			self.open_privacy_list_button.set_sensitive(True)
-			self.delete_privacy_list_button.set_sensitive(True)
 		else:
 			self.list_of_privacy_lists_combobox.set_sensitive(True)
 			self.list_of_privacy_lists_combobox.set_active(0)
