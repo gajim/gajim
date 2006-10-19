@@ -1154,7 +1154,7 @@ class JoinGroupchatWindow:
 			self.xml.get_widget('join_button').grab_focus()
 
 		if not self._room_jid_entry.get_text():
-			self._empty_required_widgets.append(self._room_entry)
+			self._empty_required_widgets.append(self._room_jid_entry)
 		if not self._nickname_entry.get_text():
 			self._empty_required_widgets.append(self._nickname_entry)
 		if len(self._empty_required_widgets):
