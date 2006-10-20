@@ -379,7 +379,6 @@ def is_in_path(name_of_command, return_abs_path = False):
 		return is_in_dir
 
 def exec_command(command):
-	print command
 	subprocess.Popen(command, shell = True)
 
 def build_command(executable, parameter):
