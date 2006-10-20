@@ -75,7 +75,7 @@ class GajimRemote:
 					[]
 				], 
 			'show_next_unread': [
-					_('Popups a window with the next unread message'),
+					_('Popups a window with the next unread event'),
 					[]
 				],
 			'list_contacts': [
