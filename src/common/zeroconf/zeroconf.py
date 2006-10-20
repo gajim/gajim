@@ -59,11 +59,11 @@ class Zeroconf:
 
 	## handlers for dbus callbacks
 	def entrygroup_commit_error_CB(self, err):
-		# left for eventual later use
+		# left blank for possible later usage
 		pass
 	
 	def error_callback1(self, err):
-		gajim.log.debug('RR' + str(err))
+		gajim.log.debug('Error while resolving: ' + str(err))
 	
 	def error_callback(self, err):
 		gajim.log.debug(str(err))
@@ -116,6 +116,7 @@ class Zeroconf:
 		for els in txt_array:
 			key, val = '', None
 			for c in els:
+					#FIXME: remove when outdated, this is for avahi < 0.6.14
 					if c < 0 or c > 255:
 						c = '.'
 					else:
@@ -178,7 +179,6 @@ class Zeroconf:
 		gajim.log.debug('Error while adding service. %s' % str(err))
 		if str(err) == 'Local name collision':
 			alternative_name = self.server.GetAlternativeServiceName(self.username)
-			self.disconnect()
 			self.name_conflictCB(alternative_name)
 			return
 		self.error_CB(_('Error while adding service. %s') % str(err))
