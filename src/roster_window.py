@@ -3120,6 +3120,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			# last message is long time ago
 			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
 		win.set_active_tab(fjid, account)
+		if gajim.connections[account].is_zeroconf and \
+				gajim.connections[account].status in ('offline', 'invisible'):
+			win.get_control(fjid, account).got_disconnected()
 		win.window.present()
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):

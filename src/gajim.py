@@ -329,7 +329,8 @@ class Interface:
 		# Inform all controls for this account of the connection state change
 		for ctrl in self.msg_win_mgr.get_controls():
 			if ctrl.account == account:
-				if status == 'offline':
+				if status == 'offline' or (status == 'invisible' and \
+						gajim.connections[account].is_zeroconf):
 					ctrl.got_disconnected()
 				else:
 					# Other code rejoins all GCs, so we don't do it here
