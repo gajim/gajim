@@ -16,9 +16,9 @@
 import dbus
 import dbus.glib
 
-NM_OBJ_PATH = "/org/freedesktop/NetworkManager"
-NM_INTERFACE = "org.freedesktop.NetworkManager"
-NM_SERVICE = "org.freedesktop.NetworkManager"
+NM_OBJ_PATH = '/org/freedesktop/NetworkManager'
+NM_INTERFACE = 'org.freedesktop.NetworkManager'
+NM_SERVICE = 'org.freedesktop.NetworkManager'
 
 class NetworkManagerListener:
 	def __init__(self, nm_activated_CB, nm_deactivated_CB):
@@ -28,5 +28,7 @@ class NetworkManagerListener:
 
 		self._devices = self._nm_iface.getDevices()
 
-		self._nm_iface.connect_to_signal('DeviceNowActive', nm_activated_CB)
-		self._nm_iface.connect_to_signal('DeviceNoLongerActive', nm_deactivated_CB)
+		self._nm_iface.connect_to_signal('DeviceNowActive',
+			nm_activated_CB)
+		self._nm_iface.connect_to_signal('DeviceNoLongerActive',
+			nm_deactivated_CB)

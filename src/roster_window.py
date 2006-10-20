@@ -4178,7 +4178,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			nm_listener = NetworkManagerListener(self.nm_activated_CB,
 				self.nm_deactivated_CB)
 		except:
-			print >> sys.stderr, _('Network manager support not available')
+			print >> sys.stderr, _('Network Manager support not available')
 
 	def nm_activated_CB(self, dev, net):
 		for acc in gajim.contacts.get_accounts():
