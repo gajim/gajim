@@ -929,7 +929,7 @@ class PreferencesWindow:
 
 	def on_applications_combobox_changed(self, widget):
 		gajim.config.set('autodetect_browser_mailer', False)
-		if widget.get_active() == 3:
+		if widget.get_active() == 4:
 			self.xml.get_widget('custom_apps_frame').show()
 			gajim.config.set('openwith', 'custom')
 		else:
@@ -939,6 +939,8 @@ class PreferencesWindow:
 				gajim.config.set('openwith', 'gnome-open')
 			elif widget.get_active() == 2:
 				gajim.config.set('openwith', 'kfmclient exec')
+			elif widget.get_active() == 3:
+				gajim.config.set('openwith', 'exo-open')
 			self.xml.get_widget('custom_apps_frame').hide()
 		gajim.interface.save_config()
 

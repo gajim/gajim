@@ -188,6 +188,8 @@ def autodetect_browser_mailer():
 		gajim.config.set('openwith', 'gnome-open')
 	elif user_runs_kde():
 		gajim.config.set('openwith', 'kfmclient exec')
+	elif user_runs_xfce():
+		gajim.config.set('openwith', 'exo-open')
 	else:
 		gajim.config.set('openwith', 'custom')
 
@@ -196,6 +198,12 @@ def user_runs_gnome():
 
 def user_runs_kde():
 	return 'startkde' in get_running_processes()
+
+der user_runs_xfce():
+	procs = get_running_processes()
+	if 'startxfce4' in procs or 'xfce4-session' in procs:
+		return True
+	return False
 
 def get_running_processes():
 	'''returns running processes or None (if not /proc exists)'''
