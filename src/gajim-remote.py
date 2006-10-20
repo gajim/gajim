@@ -74,8 +74,8 @@ class GajimRemote:
 					_('Shows or hides the roster window'),
 					[]
 				], 
-			'show_next_unread': [
-					_('Popups a window with the next unread event'),
+			'show_next_pending_event': [
+					_('Popups a window with the next pending event'),
 					[]
 				],
 			'list_contacts': [

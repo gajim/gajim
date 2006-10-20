@@ -205,7 +205,7 @@ class GlibIdleQueue(idlequeue.IdleQueue):
 		Start listening for events from fd
 		'''
 		res = gobject.io_add_watch(fd, flags, self.process_events, 
-										priority=gobject.PRIORITY_LOW)
+			priority=gobject.PRIORITY_LOW)
 		# store the id of the watch, so that we can remove it on unplug
 		self.events[fd] = res
 	

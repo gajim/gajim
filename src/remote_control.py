@@ -292,8 +292,8 @@ class SignalObject(dbus.service.Object):
 		return None
 
 	@dbus.service.method(INTERFACE)
-	def show_next_unread(self, *args):
-		'''Show the window(s) with next waiting messages in tabbed/group chats. '''
+	def show_next_pending_event(self, *args):
+		'''Show the window(s) with next pending event in tabbed/group chats.'''
 		if gajim.events.get_nb_events():
 			gajim.interface.systray.handle_first_event()
 
