@@ -404,6 +404,8 @@ def launch_browser_mailer(kind, uri):
 			command = 'gnome-open'
 		elif gajim.config.get('openwith') == 'kfmclient exec':
 			command = 'kfmclient exec'
+		elif gajim.config.get('openwith') == 'exo-open':
+			command = 'exo-open'
 		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
 				command = gajim.config.get('custombrowser')
@@ -429,6 +431,8 @@ def launch_file_manager(path_to_open):
 			command = 'gnome-open'
 		elif gajim.config.get('openwith') == 'kfmclient exec':
 			command = 'kfmclient exec'
+		elif gajim.config.get('openwith') == 'exo-open':
+			command = 'exo-open'
 		elif gajim.config.get('openwith') == 'custom':
 			command = gajim.config.get('custom_file_manager')
 		if command == '': # if no app is configured
