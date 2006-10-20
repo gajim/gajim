@@ -443,13 +443,15 @@ class PreferencesWindow:
 			if gajim.config.get('autodetect_browser_mailer'):
 				self.applications_combobox.set_active(0)
 			# else autodetect_browser_mailer is False.
-			# so user has 'Always Use GNOME/KDE' or Custom
+			# so user has 'Always Use GNOME/KDE/XFCE4' or Custom
 			elif gajim.config.get('openwith') == 'gnome-open':
 				self.applications_combobox.set_active(1)
 			elif gajim.config.get('openwith') == 'kfmclient exec':
 				self.applications_combobox.set_active(2)
+			elif gajim.config.get('openwith') == 'exo-open':
+				self.applications_combobox.set_active(3)				
 			elif gajim.config.get('openwith') == 'custom':
-				self.applications_combobox.set_active(3)
+				self.applications_combobox.set_active(4)
 				self.xml.get_widget('custom_apps_frame').show()
 				
 			self.xml.get_widget('custom_browser_entry').set_text(
