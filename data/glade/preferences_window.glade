@@ -2630,7 +2630,7 @@ Disabled</property>
 	      <child>
 		<widget class="GtkCheckButton" id="set_status_msg_from_current_music_track_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Works only for Muine and Rhythmbox players</property>
+		  <property name="tooltip" translatable="yes">Works for Rhythmbox and Muine players. For more players, please visit http://trac.gajim.org/wiki/GajimAndMusicPlayer</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Set status message to reflect currently playing _music track</property>
 		  <property name="use_underline">True</property>
