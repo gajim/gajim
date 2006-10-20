@@ -199,7 +199,7 @@ def user_runs_gnome():
 def user_runs_kde():
 	return 'startkde' in get_running_processes()
 
-der user_runs_xfce():
+def user_runs_xfce():
 	procs = get_running_processes()
 	if 'startxfce4' in procs or 'xfce4-session' in procs:
 		return True
