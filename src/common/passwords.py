@@ -21,9 +21,12 @@ from common import gajim
 try:
 	import gnomekeyring
 except ImportError:
-	USER_HAS_GNOMEKEYRING = False
+	USER_USES_GNOMEKEYRING = False
 else:
-	USER_HAS_GNOMEKEYRING = True
+	if gnomekeyring.is_available():
+		USER_USES_GNOMEKEYRING = True
+	else:
+		USER_USES_GNOMEKEYRING = False
 
 class PasswordStorage(object):
 	def get_password(self, account_name):
@@ -85,7 +88,7 @@ storage = None
 def get_storage():
 	global storage
 	if storage is None: # None is only in first time get_storage is called
-		if USER_HAS_GNOMEKEYRING and gnomekeyring.is_available():
+		if USER_USES_GNOMEKEYRING:
 			try:
 				storage = GnomePasswordStorage()
 			except gnomekeyring.NoKeyringDaemonError:
@@ -96,7 +99,6 @@ def get_storage():
 
 def set_storage(storage_):
 	global storage
-	assert isinstance(storage, PasswordStorage)
 	storage = storage_
 
 
