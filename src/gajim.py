@@ -1430,7 +1430,8 @@ class Interface:
 			status = gajim.connections[account].status
 			gajim.connections[account].username = new_name
 			gajim.connections[account].change_status(status, '')
-		
+		else:
+			gajim.connections[account].change_status('offline','')
 
 	def read_sleepy(self):	
 		'''Check idle status and change that status if needed'''
@@ -1936,6 +1937,12 @@ class Interface:
 				self.remote_ctrl = None
 		else:
 			self.remote_ctrl = None
+
+		if gajim.config.get('networkmanager_support'):
+			try:
+				import network_manager_listener
+			except ImportError:
+				pass
 
 		self.show_vcard_when_connect = []
 

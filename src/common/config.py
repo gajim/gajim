@@ -151,6 +151,7 @@ class Config:
 		'always_english_wikipedia': [opt_bool, False],
 		'always_english_wiktionary': [opt_bool, True],
 		'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
+		'networkmanager_support': [opt_bool, True, _('If checked, listen for DBus signals from NetworkManager and change the status of your Jabber connections based upon the status of your network connection.'), True],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
 		'autodetect_browser_mailer': [opt_bool, False, '', True],
 		'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes.')],
@@ -263,6 +264,7 @@ class Config:
 			'msgwin-y-position': [opt_int, -1], # Default is to let the wm decide
 			'msgwin-width': [opt_int, 480],
 			'msgwin-height': [opt_int, 440],
+			'listen_to_network_manager' : [opt_bool, True],
 			'is_zeroconf': [opt_bool, False],
 			'zeroconf_first_name': [ opt_str, '', '', True ],
 			'zeroconf_last_name': [ opt_str, '', '', True ],

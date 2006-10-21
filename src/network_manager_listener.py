@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##	network_manager_listener.py
-##
-## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
+## Copyright (C) 2006 Jeffrey C. Ollie <jeff at ocjtech.us>
+## Copyright (C) 2006 Stefan Bethge <stefan at lanpartei.de>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -13,22 +13,35 @@
 ## GNU General Public License for more details.
 ##
 
+from common import gajim
+
+def device_now_active(self, *args):
+	for connection in gajim.connections.itervalues():
+		if gajim.config.get_per('accounts', connection.name, 'listen_to_network_manager'):
+			connection.change_status('online', '')
+
+def device_no_longer_active(self, *args):
+	for connection in gajim.connections.itervalues():
+		if gajim.config.get_per('accounts', connection.name, 'listen_to_network_manager'):
+			connection.change_status('offline', '')
+
+
+from common.dbus_support import system_bus
+
 import dbus
 import dbus.glib
 
-NM_OBJ_PATH = '/org/freedesktop/NetworkManager'
-NM_INTERFACE = 'org.freedesktop.NetworkManager'
-NM_SERVICE = 'org.freedesktop.NetworkManager'
+bus = system_bus.SystemBus()
 
-class NetworkManagerListener:
-	def __init__(self, nm_activated_CB, nm_deactivated_CB):
-		sys_bus = dbus.SystemBus()
-		proxy_obj = sys_bus.get_object(NM_SERVICE, NM_OBJ_PATH)
-		self._nm_iface = dbus.Interface(proxy_obj, NM_INTERFACE)
+bus.add_signal_receiver(device_no_longer_active,
+							'DeviceNoLongerActive',
+							'org.freedesktop.NetworkManager',
+							'org.freedesktop.NetworkManager',
+							'/org/freedesktop/NetworkManager')
 
-		self._devices = self._nm_iface.getDevices()
+bus.add_signal_receiver(device_now_active,
+							'DeviceNowActive',
+							'org.freedesktop.NetworkManager',
+							'org.freedesktop.NetworkManager',
+							'/org/freedesktop/NetworkManager')
 
-		self._nm_iface.connect_to_signal('DeviceNowActive',
-			nm_activated_CB)
-		self._nm_iface.connect_to_signal('DeviceNoLongerActive',
-			nm_deactivated_CB)

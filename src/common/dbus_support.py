@@ -34,6 +34,37 @@ except ImportError:
 		print _('D-Bus python bindings are missing in this computer')
 		print _('D-Bus capabilities of Gajim cannot be used')
 
+class SystemBus:
+	'''A Singleton for the DBus SystemBus'''
+	def __init__(self):
+		self.system_bus = None
+	
+	def SystemBus(self):
+		if not supported:
+			raise exceptions.DbusNotSupported
+
+		if not self.present():
+				raise exceptions.SystemBusNotPresent
+		return self.system_bus
+
+	def bus(self):
+		return self.SystemBus()
+
+	def present(self):
+		if not supported:
+			return False
+		if self.system_bus is None:
+			try:
+				self.system_bus = dbus.SystemBus()
+			except dbus.dbus_bindings.DBusException:
+				self.system_bus = None
+				return False
+			if self.system_bus is None:
+				return False
+		return True
+
+system_bus = SystemBus()
+
 class SessionBus:
 	'''A Singleton for the D-Bus SessionBus'''
 	def __init__(self):
