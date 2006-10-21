@@ -151,7 +151,7 @@ class Config:
 		'always_english_wikipedia': [opt_bool, False],
 		'always_english_wiktionary': [opt_bool, True],
 		'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
-		'networkmanager_support': [opt_bool, True, _('If checked, listen for DBus signals from NetworkManager and change the status of your Jabber connections based upon the status of your network connection.'), True],
+		'networkmanager_support': [opt_bool, True, _('If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False) based upon the status of the network connection.'), True],
 		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
 		'autodetect_browser_mailer': [opt_bool, False, '', True],
 		'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes.')],
