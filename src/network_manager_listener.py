@@ -17,12 +17,12 @@ from common import gajim
 
 def device_now_active(self, *args):
 	for connection in gajim.connections.itervalues():
-		if gajim.config.get_per('accounts', connection.name, 'listen_to_network_manager'):
+		if gajim.config.get_per('accounts', connection.name, 'listen_to_network_manager') and gajim.config.get_per('accounts', connection.name, 'sync_with_global_status'):
 			connection.change_status('online', '')
 
 def device_no_longer_active(self, *args):
 	for connection in gajim.connections.itervalues():
-		if gajim.config.get_per('accounts', connection.name, 'listen_to_network_manager'):
+		if gajim.config.get_per('accounts', connection.name, 'listen_to_network_manager') and gajim.config.get_per('accounts', connection.name, 'sync_with_global_status'):
 			connection.change_status('offline', '')
 
 
