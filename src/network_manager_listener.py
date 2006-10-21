@@ -34,14 +34,14 @@ import dbus.glib
 bus = system_bus.SystemBus()
 
 bus.add_signal_receiver(device_no_longer_active,
-							'DeviceNoLongerActive',
-							'org.freedesktop.NetworkManager',
-							'org.freedesktop.NetworkManager',
-							'/org/freedesktop/NetworkManager')
+	'DeviceNoLongerActive',
+	'org.freedesktop.NetworkManager',
+	'org.freedesktop.NetworkManager',
+	'/org/freedesktop/NetworkManager')
 
 bus.add_signal_receiver(device_now_active,
-							'DeviceNowActive',
-							'org.freedesktop.NetworkManager',
-							'org.freedesktop.NetworkManager',
-							'/org/freedesktop/NetworkManager')
+	'DeviceNowActive',
+	'org.freedesktop.NetworkManager',
+	'org.freedesktop.NetworkManager',
+	'/org/freedesktop/NetworkManager')
 

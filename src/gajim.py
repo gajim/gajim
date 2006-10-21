@@ -32,6 +32,7 @@ from chat_control import ChatControlBase
 
 from common import exceptions
 from common.zeroconf import connection_zeroconf
+from common import dbus_support
 
 if os.name == 'posix': # dl module is Unix Only
 	try: # rename the process name to gajim
@@ -1938,11 +1939,11 @@ class Interface:
 		else:
 			self.remote_ctrl = None
 
-		if gajim.config.get('networkmanager_support'):
+		if gajim.config.get('networkmanager_support') and dbus_support.supported:
 			try:
 				import network_manager_listener
-			except ImportError:
-				pass
+			except:
+				print >> sys.stderr, _('Network Manager support not available')
 
 		self.show_vcard_when_connect = []
 
