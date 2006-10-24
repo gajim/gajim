@@ -22,9 +22,12 @@ import exceptions
 import gajim
 
 try:
-	from pysqlite2 import dbapi2 as sqlite
+	import sqlite3 as sqlite # python 2.5
 except ImportError:
-	raise exceptions.PysqliteNotAvailable
+	try:
+		from pysqlite2 import dbapi2 as sqlite
+	except ImportError:
+		raise exceptions.PysqliteNotAvailable
 
 if os.name == 'nt':
 	try:
