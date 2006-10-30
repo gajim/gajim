@@ -466,7 +466,6 @@ class RosterTooltip(NotificationAreaTooltip):
 					if time.strftime('%j', time.localtime())== \
 							time.strftime('%j', contact.last_status_time):
 					# it's today, show only the locale hour representation
-						# FIXME : last_status_time is UTC but _we_ may not be
 						local_time = time.strftime('%X',
 							contact.last_status_time)
 					else:
