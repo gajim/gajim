@@ -1,7 +1,4 @@
-#!/bin/sh
-''':'
-exec python -OOt "$0" ${1+"$@"}
-' '''
+#!/usr/bin/env python
 ##	gajim.py
 ##
 ##
