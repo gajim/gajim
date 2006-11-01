@@ -33,7 +33,7 @@ class PasswordStorage(object):
 		raise NotImplementedError
 	def save_password(self, account_name, password):
 		raise NotImplementedError
-	
+
 
 class SimplePasswordStorage(PasswordStorage):
 	def get_password(self, account_name):
@@ -46,7 +46,15 @@ class SimplePasswordStorage(PasswordStorage):
 
 class GnomePasswordStorage(PasswordStorage):
 	def __init__(self):
-		self.keyring = gnomekeyring.get_default_keyring_sync()
+		# self.keyring = gnomekeyring.get_default_keyring_sync() 
+
+		## above line commented and code below inserted as workaround 
+		## for the bug http://bugzilla.gnome.org/show_bug.cgi?id=363019 
+		self.keyring = "default" 
+		try: 
+			gnomekeyring.create_sync(self.keyring, None) 
+		except gnomekeyring.AlreadyExistsError: 
+			pass
 
 	def get_password(self, account_name):
 		conf = gajim.config.get_per('accounts', account_name, 'password')
@@ -73,7 +81,7 @@ class GnomePasswordStorage(PasswordStorage):
 			## no keyring daemon: in the future, stop using it
 			set_storage(SimplePasswordStorage())
 			return None
-		
+
 	def save_password(self, account_name, password, update=True):
 		display_name = _('Gajim account %s') % account_name
 		attributes = dict(account_name=str(account_name), gajim=1)
