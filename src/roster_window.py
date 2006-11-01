@@ -215,6 +215,7 @@ class RosterWindow:
 		showOffline = gajim.config.get('showoffline')
 		model = self.tree.get_model()
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		nb_events = gajim.events.get_nb_roster_events(account, contact.jid)
 		if not contact:
 			return
 		# If contact already in roster, do not add it
@@ -225,10 +226,12 @@ class RosterWindow:
 			return
 		if gajim.jid_is_transport(contact.jid):
 			# if jid is transport, check if we wanna show it in roster
-			if not gajim.config.get('show_transports_group') and \
-			not gajim.events.get_nb_roster_events(account, contact.jid):
+			if not gajim.config.get('show_transports_group') and not nb_events:
 				return
 			contact.groups = [_('Transports')]
+		elif not showOffline and not gajim.account_is_connected(account) and \
+		nb_events == 0:
+			return
 
 		# XEP-0162
 		hide = contact.is_hidden_from_roster()
