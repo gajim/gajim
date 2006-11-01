@@ -2650,8 +2650,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			return
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
-		if accountIter:
-			model[accountIter][0] = self.jabber_state_images['16'][status]
+		if accountIter and (not self.regroup or gajim.config.get_per('accounts',
+		account, 'sync_with_global_status')):
+			model[accountIter][C_IMG] = self.jabber_state_images['16'][status]
 		if status == 'offline':
 			if self.quit_on_next_offline > -1:
 				self.quit_on_next_offline -= 1
