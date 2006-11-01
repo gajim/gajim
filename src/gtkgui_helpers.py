@@ -238,6 +238,7 @@ def get_running_processes():
 		processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f in files]
 		
 		return processes
+	return []
 
 def move_window(window, x, y):
 	'''moves the window but also checks if out of screen'''
