@@ -1609,7 +1609,7 @@ class ChatControl(ChatControlBase):
 			return
 		timeout = gajim.config.get('restore_timeout') # in minutes
 
-		events = gajim.events.get_events(self.account, jid, ['chat'])
+		events = gajim.events.get_events(self.account, jid, ['chat', 'pm'])
 		# number of messages that are in queue and are already logged, we want
 		# to avoid duplication
 		pending_how_many = len(events)
