@@ -1107,6 +1107,7 @@ class RosterWindow:
 				jid = contact.jid
 				win = gajim.interface.msg_win_mgr.get_window(j, account)
 				ctrl = win.get_control(j, account)
+				ctrl.contact = contact
 				ctrl.update_ui()
 				win.redraw_tab(ctrl)
 
