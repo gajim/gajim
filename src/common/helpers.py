@@ -17,6 +17,7 @@
 ##
 
 import sre
+import locale
 import os
 import subprocess
 import urllib
@@ -553,7 +554,7 @@ def decode_string(string):
 	if isinstance(string, unicode):
 		return string
 	# by the time we go to iso15 it better be the one else we show bad characters
-	encodings = (sys.getfilesystemencoding(), 'utf-8', 'iso-8859-15')
+	encodings = (locale.getpreferredencoding(), 'utf-8', 'iso-8859-15')
 	for encoding in encodings:
 		try:
 			string = string.decode(encoding)
