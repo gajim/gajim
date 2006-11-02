@@ -80,6 +80,7 @@ class VcardWindow:
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+		self.xml.get_widget('close_button').grab_focus()
 
 	def update_progressbar(self):
 		self.progressbar.pulse()
