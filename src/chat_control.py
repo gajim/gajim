@@ -477,7 +477,7 @@ class ChatControlBase(MessageControl):
 				event_keymod)
 
 	def _process_command(self, message):
-		if not message:
+		if not message or message[0] != '/':
 			return False
 
 		message = message[1:]
