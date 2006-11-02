@@ -3908,6 +3908,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def show_title(self):
 		change_title_allowed = gajim.config.get('change_roster_title')
+		nb_unread = 0
 		if change_title_allowed:
 			start = ''
 			nb_unread = gajim.events.get_nb_events(['chat', 'normal',
