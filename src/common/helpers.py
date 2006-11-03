@@ -23,7 +23,6 @@ import subprocess
 import urllib
 import errno
 import select
-import sys
 import sha
 from encodings.punycode import punycode_encode
 
