@@ -1,7 +1,8 @@
 Gajim 0.11 (XX October 2006)
   * New build system, using GNU autotools. See README.html
   * Support for link-local messaging via zeroconf using avahi
-  * Intoducing View Menu (GNOME HIG)
+  * Automatically connect and disconnect when Network Manager does it.
+  * Introducing View Menu (GNOME HIG)
   * GNOME Keyring Support (if GNOME keyring available, manage passwords and save them in an encrypted file).
   * Ability to now hide the Transports group
   * Support for notify-python so if notification-daemon is not available, we still can show cool popups
