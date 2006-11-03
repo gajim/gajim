@@ -553,7 +553,6 @@ class ChatControlBase(MessageControl):
 			return
 		if kind == 'incoming':
 			gajim.last_message_time[self.account][full_jid] = time.time()
-		urgent = True
 		if (not self.parent_win.get_active_jid() or \
 		full_jid != self.parent_win.get_active_jid() or \
 		not self.parent_win.is_active() or not end) and \
@@ -581,10 +580,11 @@ class ChatControlBase(MessageControl):
 					gajim.interface.roster.draw_contact(self.contact.jid,
 						self.account)
 			self.parent_win.redraw_tab(self)
+			ctrl = gajim.interface.msg_win_mgr.get_control(full_jid,	self.account)
 			if not self.parent_win.is_active():
-				ctrl = gajim.interface.msg_win_mgr.get_control(full_jid,
-					self.account)
-				self.parent_win.show_title(urgent, ctrl)
+				self.parent_win.show_title(True, ctrl) # Enabled Urgent
+			else:
+				self.parent_win.show_title(False, ctrl) # Disabled Urgent
 
 	def toggle_emoticons(self):
 		'''hide show emoticons_button and make sure emoticons_menu is always there
