@@ -928,13 +928,15 @@ class Interface:
 		if not gc_control:
 			return
 		gc_control.set_subject(array[1])
-		# We can receive a subject with a body that contains "X has set the subject to Y" ...
-		if array[2]:
-			gc_control.print_conversation(array[2])
-		# ... Or the message comes from the occupant who set the subject
-		elif len(jids) > 1:
+		# Standard way, the message comes from the occupant who set the subject
+		if len(jids) > 1:
 			gc_control.print_conversation('%s has set the subject to %s' % (
 				jids[1], array[1]))
+		# Workaround for psi bug http://flyspray.psi-im.org/task/595 , to be 
+		# deleted one day. We can receive a subject with a body that contains 
+		# "X has set the subject to Y" ...
+		elif array[2]:
+			gc_control.print_conversation(array[2])
 
 	def handle_event_gc_config(self, account, array):
 		#('GC_CONFIG', account, (jid, config))  config is a dict
