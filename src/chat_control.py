@@ -560,7 +560,7 @@ class ChatControlBase(MessageControl):
 			gc_message = False
 			if self.type_id  == message_control.TYPE_GC:
 				gc_message = True
-			if self.notify_on_new_messages() or \
+			if not gc_message or \
 			(gc_message and other_tags_for_text == ['marked']):
 			# we want to have save this message in events list
 			# other_tags_for_text == ['marked'] --> highlighted gc message
@@ -580,11 +580,11 @@ class ChatControlBase(MessageControl):
 					gajim.interface.roster.draw_contact(self.contact.jid,
 						self.account)
 			self.parent_win.redraw_tab(self)
-			ctrl = gajim.interface.msg_win_mgr.get_control(full_jid,	self.account)
+			ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, self.account)
 			if not self.parent_win.is_active():
-				self.parent_win.show_title(True, ctrl) # Enabled Urgent
+				self.parent_win.show_title(True, ctrl) # Enabled Urgent hint
 			else:
-				self.parent_win.show_title(False, ctrl) # Disabled Urgent
+				self.parent_win.show_title(False, ctrl) # Disabled Urgent hint
 
 	def toggle_emoticons(self):
 		'''hide show emoticons_button and make sure emoticons_menu is always there
@@ -899,9 +899,6 @@ class ChatControl(ChatControlBase):
 		# restore previous conversation
 		self.restore_conversation()
 
-	def notify_on_new_messages(self):
-		return gajim.config.get('trayicon_notification_on_new_messages')
-	
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''we enter the eventbox area so we under conditions add a timeout
 		to show a bigger avatar after 0.5 sec'''

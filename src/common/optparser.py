@@ -151,6 +151,8 @@ class OptionsParser:
 			self.update_config_to_01015()
 		if old < [0, 10, 1, 6] and new >= [0, 10, 1, 6]:
 			self.update_config_to_01016()
+		if old < [0, 10, 1, 7] and new >= [0, 10, 1, 7]:
+			self.update_config_to_01017()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -336,5 +338,12 @@ class OptionsParser:
 		gajim.config.get_per('soundevents', 'muc_message_received', 'enabled'):
 			gajim.config.set_per('soundevents',\
 				'muc_message_received', 'enabled', False)
-		
 		gajim.config.set('version', '0.10.1.6')
+
+	def update_config_to_01017(self):
+		'''trayicon_notification_on_new_messages ->
+		trayicon_notification_on_events '''
+		if self.old_values.has_key('trayicon_notification_on_new_messages'):
+			gajim.config.set('trayicon_notification_on_events',
+				 self.old_values['trayicon_notification_on_new_messages']) 
+		gajim.config.set('version', '0.10.1.7')

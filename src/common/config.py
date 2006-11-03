@@ -165,7 +165,7 @@ class Config:
 		'roster_font': [opt_str, ''],
 		'use_kib_mib': [opt_bool, False, _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.')],
 		'notify_on_all_muc_messages': [opt_bool, False],
-		'trayicon_notification_on_new_messages': [opt_bool, True],
+		'trayicon_notification_on_events': [opt_bool, True, _('Notify of events in the system trayicon.')],
 		'last_save_dir': [opt_str, ''],
 		'last_send_dir': [opt_str, ''],
 		'last_emoticons_dir': [opt_str, ''],

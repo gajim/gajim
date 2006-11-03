@@ -54,14 +54,14 @@ def get_show_in_roster(event, account, contact):
 	return True
 
 def get_show_in_systray(event, account, contact):
-	'''Return True if this event must be shown in roster, else False'''
+	'''Return True if this event must be shown in systray, else False'''
 	num = get_advanced_notification(event, account, contact)
 	if num != None:
 		if gajim.config.get_per('notifications', str(num), 'systray') == 'yes':
 			return True
 		if gajim.config.get_per('notifications', str(num), 'systray') == 'no':
 			return False
-	return True
+	return gajim.config.get('trayicon_notification_on_events')
 
 def get_advanced_notification(event, account, contact):
 	'''Returns the number of the first (top most)
