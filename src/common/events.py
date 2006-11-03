@@ -149,7 +149,7 @@ class Events:
 		return first_event
 
 	def _get_nb_events(self, account = None, jid = None, attribute = None, types = []):
-		'''return the number of events'''
+		'''return the number of pending events'''
 		nb = 0
 		if account:
 			accounts = [account]

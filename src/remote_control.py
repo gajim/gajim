@@ -549,7 +549,7 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE)
 	def get_unread_msgs_number(self, *args):
-		return str(gajim.events.get_nb_events)
+		return str(gajim.events.get_nb_events())
 
 	@dbus.service.method(INTERFACE)
 	def start_chat(self, *args):
