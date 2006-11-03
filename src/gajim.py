@@ -522,6 +522,7 @@ class Interface:
 		message_control.TYPE_GC:
 			# It's a Private message
 			pm = True
+			msg_type = 'pm'
 
 		chat_control = None
 		jid_of_control = full_jid_with_resource
@@ -583,14 +584,15 @@ class Interface:
 
 		# Is it a first or next message received ?
 		first = False
-		if not chat_control and not gajim.events.get_events(account,
-		jid_of_control, ['chat']):
-			# It's a first message and not a Private Message
+		if msg_type == 'normal':
+			if not gajim.events.get_events(account,jid, ['normal']):
+				first = True
+		elif not chat_control and not gajim.events.get_events(account, 
+		jid_of_control, [msg_type]): # msg_type can be chat or pm
 			first = True
 
 		if pm:
 			nickname = resource
-			msg_type = 'pm'
 			groupchat_control.on_private_message(nickname, message, array[2],
 				xhtml)
 		else:

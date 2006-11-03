@@ -81,7 +81,7 @@ class Events:
 			gajim.interface.systray.set_img()
 
 	def remove_events(self, account, jid, event = None, types = []):
-		'''if event is not speficied, remove all events from this jid,
+		'''if event is not specified, remove all events from this jid,
 		optionnaly only from given type
 		return True if no such event found'''
 		if not self._events.has_key(account):
@@ -122,7 +122,7 @@ class Events:
 		return self._get_nb_events(types = types)
 
 	def get_events(self, account, jid = None, types = []):
-		'''if event is not speficied, remove all events from this jid,
+		'''if event is not specified, get all events from this jid,
 		optionnaly only from given type'''
 		if not self._events.has_key(account):
 			return []
