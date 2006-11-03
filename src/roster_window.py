@@ -134,6 +134,31 @@ class RosterWindow:
 			group_iter = model.iter_next(group_iter)
 		return found
 
+	def get_path(self, jid, account):
+		''' Try to get line of contact in roster	'''
+		iters = self.get_contact_iter(jid, account)
+		if iters:
+			path = self.tree.get_model().get_path(iters[0])
+		else:
+			path = None
+		return path
+
+	def show_and_select_path(self, path, jid, account):	
+		'''Show contact in roster (if he is invisible for example) 
+		and select line'''
+		if not path:
+			# contact is in roster but we curently don't see him online
+			# show him
+			self.add_contact_to_roster(jid, account)
+			iters = self.get_contact_iter(jid, account)
+			path = self.tree.get_model().get_path(iters[0])
+		# popup == False so we show awaiting event in roster
+		# show and select contact line in roster (even if he is not in roster) 
+		self.tree.expand_row(path[0:1], False)
+		self.tree.expand_row(path[0:2], False)
+		self.tree.scroll_to_cell(path)
+		self.tree.set_cursor(path)
+
 	def add_account_to_roster(self, account):
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
@@ -340,6 +365,22 @@ class RosterWindow:
 			contacts = gajim.contacts.get_contact(data['account'],
 				data['jid'])
 			self.add_contact_to_roster(data['jid'], data['account'])
+
+	def add_to_not_in_the_roster(self, account, jid):
+		''' add jid to group "not in the roster", he MUST not be in roster yet,
+		 return contact '''
+		keyID = ''
+		attached_keys = gajim.config.get_per('accounts', account,
+			'attached_gpg_keys').split()
+		if jid in attached_keys:
+			keyID = attached_keys[attached_keys.index(jid) + 1]
+		contact = gajim.contacts.create_contact(jid = jid,
+			name = '', groups = [_('Not in Roster')],
+			show = 'not in roster', status = '', sub = 'none',
+			keyID = keyID)
+		gajim.contacts.add_contact(account, contact)
+		self.add_contact_to_roster(contact.jid, account)
+		return contact
 
 	def get_self_contact_iter(self, account):
 		model = self.tree.get_model()
@@ -2704,20 +2745,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def new_chat_from_jid(self, account, jid):
 		jid = gajim.get_jid_without_resource(jid)
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		no_contact = False
+		added_to_roster = False
 		if not contact:
-			no_contact = True
-			keyID = ''
-			attached_keys = gajim.config.get_per('accounts', account,
-				'attached_gpg_keys').split()
-			if jid in attached_keys:
-				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact = gajim.contacts.create_contact(jid = jid,
-				name = '', groups = [_('Not in Roster')],
-				show = 'not in roster', status = '', sub = 'none',
-				keyID = keyID)
-			gajim.contacts.add_contact(account, contact)
-			self.add_contact_to_roster(contact.jid, account)
+			added_to_roster = True
+			contact = self.add_to_not_in_the_roster(account, jid) 
 
 		if not gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			self.new_chat(contact, account)
@@ -2725,7 +2756,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		mw.set_active_tab(jid, account)
 		mw.window.present()
 		# For JEP-0172
-		if no_contact:
+		if added_to_roster:
 			mc = mw.get_control(jid, account)
 			mc.user_nick = gajim.nicks[account]
 
@@ -2759,27 +2790,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			contact = highest_contact
 		if not contact:
 			# contact is not in roster
-			keyID = ''
-			attached_keys = gajim.config.get_per('accounts', account,
-				'attached_gpg_keys').split()
-			if jid in attached_keys:
-				keyID = attached_keys[attached_keys.index(jid) + 1]
-			if user_nick:
-				nick = user_nick
-			else:
-				nick = jid.split('@')[0]
-			contact = gajim.contacts.create_contact(jid = jid,
-				name = nick, groups = [_('Not in Roster')],
-				show = 'not in roster', status = '', ask = 'none',
-				keyID = keyID, resource = resource)
-			gajim.contacts.add_contact(account, contact)
-			self.add_contact_to_roster(jid, account)
+			contact = self.add_to_not_in_the_roster(account, jid)
 
-		iters = self.get_contact_iter(jid, account)
-		if iters:
-			path = self.tree.get_model().get_path(iters[0])
-		else:
-			path = None
+		path = self.get_path(jid, account) # Try to get line of contact in roster
 
 		# Look for a chat control that has the given resource
 		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
@@ -2840,21 +2853,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		else:
 			if no_queue: # We didn't have a queue: we change icons
 				self.draw_contact(jid, account)
-				# Redraw parent too
-				self.draw_parent_contact(jid, account)
 			self.show_title() # we show the * or [n]
-			if not path:
-				# contact is in roster but we curently don't see him online
-				# show him
-				self.add_contact_to_roster(jid, account)
-				iters = self.get_contact_iter(jid, account)
-				path = self.tree.get_model().get_path(iters[0])
-			# popup == False so we show awaiting event in roster
-			# show and select contact line in roster (even if he is not in roster) 
-			self.tree.expand_row(path[0:1], False)
-			self.tree.expand_row(path[0:2], False)
-			self.tree.scroll_to_cell(path)
-			self.tree.set_cursor(path)
+			# Show contact in roster (if he is invisible for example) and select
+			# line
+			self.show_and_select_path(path, jid, account)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if gajim.interface.instances.has_key('preferences'):

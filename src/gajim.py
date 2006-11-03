@@ -898,7 +898,6 @@ class Interface:
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
-
 	def handle_event_gc_msg(self, account, array):
 		# ('GC_MSG', account, (jid, msg, time, has_timestamp, htmlmsg))
 		jids = array[0].split('/', 1)
@@ -1163,7 +1162,14 @@ class Interface:
 
 		self.roster.show_title()
 		if no_queue: # We didn't have a queue: we change icons
+			if not gajim.contacts.get_contact_with_highest_priority(account, jid):
+				# add contact to roster ("Not In The Roster") if he is not
+				self.roster.add_to_not_in_the_roster(account, jid) 
 			self.roster.draw_contact(jid, account)
+
+		# Show contact in roster (if he is invisible for example) and select line
+		path = self.roster.get_path(jid, account)		
+		self.roster.show_and_select_path(path, jid, account)
 
 	def remove_first_event(self, account, jid, type_ = None):
 		event = gajim.events.get_first_event(account, jid, type_)
