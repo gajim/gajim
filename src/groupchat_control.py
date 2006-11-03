@@ -326,9 +326,6 @@ class GroupchatControl(ChatControlBase):
 
 		menu.show_all()
 
-	def notify_on_new_messages(self):
-		return gajim.config.get('notify_on_all_muc_messages')
-
 	def on_treeview_size_allocate(self, widget, allocation):
 		'''The MUC treeview has resized. Move the hpaned in all tabs to match'''
 		self.hpaned_position = self.hpaned.get_position()

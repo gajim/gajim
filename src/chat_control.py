@@ -561,7 +561,8 @@ class ChatControlBase(MessageControl):
 			if self.type_id  == message_control.TYPE_GC:
 				gc_message = True
 			if not gc_message or \
-			(gc_message and other_tags_for_text == ['marked']):
+			(gc_message and (other_tags_for_text == ['marked'] or \
+			gajim.config.get('notify_on_all_muc_messages'))):
 			# we want to have save this message in events list
 			# other_tags_for_text == ['marked'] --> highlighted gc message
 				type_ = 'printed_' + self.type_id
