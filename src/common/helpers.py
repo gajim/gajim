@@ -755,7 +755,7 @@ def sanitize_filename(filename):
 	
 	return filename
 
-def allow_showing_notification(account, type = None,
+def allow_showing_notification(account, type = 'notify_on_new_message',
 advanced_notif_num = None, is_first_message = True):
 	'''is it allowed to show nofication?
 	check OUR status and if we allow notifications for that status

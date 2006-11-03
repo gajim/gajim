@@ -968,7 +968,7 @@ class Interface:
 		self.add_event(account, jid, 'gc-invitation', (room_jid, array[2],
 			array[3]))
 
-		if helpers.allow_showing_notification(account, 'notify_on_new_message'):
+		if helpers.allow_showing_notification(account):
 			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'gc_invitation.png')
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
