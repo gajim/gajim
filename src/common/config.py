@@ -162,6 +162,7 @@ class Config:
 		'file_transfers_port': [opt_int, 28011],
 		'ft_override_host_to_send': [opt_str, '', _('Overrides the host we send for File Transfer in case of address translation/port forwarding.')], 
 		'conversation_font': [opt_str, ''],
+		'roster_font': [opt_str, ''],
 		'use_kib_mib': [opt_bool, False, _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.')],
 		'notify_on_all_muc_messages': [opt_bool, False],
 		'trayicon_notification_on_new_messages': [opt_bool, True],

@@ -268,6 +268,16 @@ class PreferencesWindow:
 		else:
 			fontbutton.set_font_name(font)
 
+		#Font for roster
+		roster_font = gajim.config.get('roster_font')
+		# try to set default font for the current desktop env
+		if roster_font == '':
+			roster_font = gtkgui_helpers.get_default_font()
+			if roster_font is None:
+				roster_font = 'Sans 10'
+			gajim.config.set('roster_font', roster_font)
+		self.xml.get_widget('roster_fontbutton').set_font_name(roster_font)
+
 		# on new message
 		only_in_roster = True
 		if gajim.config.get('notify_on_new_message'):
@@ -737,19 +747,20 @@ class PreferencesWindow:
 		self.update_text_tags()
 		gajim.interface.save_config()
 
-	def on_preference_widget_font_set(self, widget, text):
+	def on_preference_widget_font_set(self, widget, config_name):
 		if widget:
 			font = widget.get_font_name()
 		else:
 			font = ''
-		gajim.config.set(text, font)
+		gajim.config.set(config_name, font)
 		self.update_text_font()
 		gajim.interface.save_config()
 
 	def update_text_font(self):
-		'''Update text font in Opened Chat Windows'''
+		'''Update text font in Opened Chat Windows and in roster'''
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.update_font()
+		gajim.interface.roster.update_font()
 
 	def on_incoming_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'inmsgcolor')
@@ -774,6 +785,9 @@ class PreferencesWindow:
 		else:
 			font_widget.set_sensitive(True)
 		self.on_preference_widget_font_set(font_widget, 'conversation_font')
+
+	def on_roster_fontbutton_font_set(self, widget):
+		self.on_preference_widget_font_set(widget, 'roster_font')
 
 	def on_reset_colors_button_clicked(self, widget):
 		for i in ('inmsgcolor', 'outmsgcolor', 'statusmsgcolor', 'urlmsgcolor'):

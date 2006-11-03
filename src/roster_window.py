@@ -21,6 +21,7 @@ import os
 import sys
 import time
 import urllib
+import pango
 
 import common.sleepy
 import history_window
@@ -1047,6 +1048,11 @@ class RosterWindow:
 		for ctrl in gajim.interface.msg_win_mgr.controls():
 			if ctrl.type_id == message_control.TYPE_GC:
 				ctrl.update_ui()
+
+	def update_font(self):
+		'''update the font used inthe roster'''
+		font = pango.FontDescription(gajim.config.get('roster_font'))
+		self.tree.modify_font(font)
 
 	def draw_roster(self):
 		'''clear and draw roster'''
@@ -4160,6 +4166,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
 		self.tooltip = tooltips.RosterTooltip()
+		self.update_font()
 		self.draw_roster()
 
 		## Music Track notifications
