@@ -131,23 +131,16 @@ for o, a in opts:
 	elif o in ('-p', '--profile'): # gajim --profile name
 		profile = a
 
-pid_filename = os.path.expanduser('~/.gajim/gajim')
-config_filename = os.path.expanduser('~/.gajim/config')
-if os.name == 'nt':
-	try:
-		# Documents and Settings\[User Name]\Application Data\Gajim\logs
-		config_filename = os.environ['appdata'] + '/Gajim/config'
-		pid_filename = os.environ['appdata'] + '/Gajim/gajim'
-	except KeyError:
-		# win9x so ./config
-		config_filename = 'config'
-		pid_filename = 'gajim'
+import locale
+profile = unicode(profile, locale.getpreferredencoding())
 
-if profile:
-	config_filename += '.%s' % profile
-	pid_filename += '.%s' % profile
+import common.configpaths
+common.configpaths.init_profile(profile)
+gajimpaths = common.configpaths.gajimpaths
 
-pid_filename += '.pid'
+pid_filename = gajimpaths['PID_FILE']
+config_filename = gajimpaths['CONFIG_FILE']
+
 import dialogs
 if os.path.exists(pid_filename):
 	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')

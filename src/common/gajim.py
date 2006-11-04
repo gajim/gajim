@@ -66,38 +66,17 @@ log.addHandler(h)
 import logger
 logger = logger.Logger() # init the logger
 
-if os.name == 'nt':
-	DATA_DIR = os.path.join('..', 'data')
-	try:
-		# Documents and Settings\[User Name]\Application Data\Gajim
-		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
-		VCARD_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
-		AVATAR_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Avatars')
-		MY_EMOTS_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Emoticons')
-	except KeyError:
-		# win9x, in cwd
-		LOGPATH = 'Logs' # deprecated
-		VCARD_PATH = 'Vcards'
-		AVATAR_PATH = 'Avatars'
-		MY_EMOTS_PATH = 'Emoticons'
-else: # Unices
-	DATA_DIR = '../data'
-	LOGPATH = os.path.expanduser('~/.gajim/logs') # deprecated
-	VCARD_PATH = os.path.expanduser('~/.gajim/vcards')
-	AVATAR_PATH = os.path.expanduser('~/.gajim/avatars')
-	MY_EMOTS_PATH = os.path.expanduser('~/.gajim/emoticons')
+import configpaths
+gajimpaths = configpaths.gajimpaths
 
-HOME_DIR = os.path.expanduser('~')
-TMP = tempfile.gettempdir()
+LOGPATH = gajimpaths['LOG'] # deprecated
+VCARD_PATH = gajimpaths['VCARD']
+AVATAR_PATH = gajimpaths['AVATAR']
+MY_EMOTS_PATH = gajimpaths['MY_EMOTS']
+TMP = gajimpaths['TMP']
+DATA_DIR = gajimpaths['DATA']
+HOME_DIR = gajimpaths['HOME']
 
-try:
-	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
-	VCARD_PATH = VCARD_PATH.decode(sys.getfilesystemencoding())
-	TMP = TMP.decode(sys.getfilesystemencoding())
-	AVATAR_PATH = AVATAR_PATH.decode(sys.getfilesystemencoding())
-	MY_EMOTS_PATH = MY_EMOTS_PATH.decode(sys.getfilesystemencoding())
-except:
-	pass
 try:
 	LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
 except (ValueError, locale.Error):

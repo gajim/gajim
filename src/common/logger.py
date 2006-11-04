@@ -29,20 +29,8 @@ except ImportError:
 	except ImportError:
 		raise exceptions.PysqliteNotAvailable
 
-if os.name == 'nt':
-	try:
-		# Documents and Settings\[User Name]\Application Data\Gajim\logs.db
-		LOG_DB_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'logs.db')
-	except KeyError:
-		# win9x, ./logs.db
-		LOG_DB_PATH = 'logs.db'
-else: # Unices
-	LOG_DB_PATH = os.path.expanduser('~/.gajim/logs.db')
-
-try:
-	LOG_DB_PATH = LOG_DB_PATH.decode(sys.getfilesystemencoding())
-except:
-	pass
+import configpaths
+LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
 
 class Constants:
 	def __init__(self):
