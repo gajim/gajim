@@ -122,6 +122,8 @@ class PreferencesWindow:
 		emoticons_combobox.set_model(model)
 		l = []
 		for dir in emoticons_list:
+			if not os.path.isdir(os.path.join(gajim.DATA_DIR, 'emoticons', dir)):
+				continue
 			if dir != '.svn':
 				l.append(dir)
 		l.append(_('Disabled'))
@@ -146,6 +148,8 @@ class PreferencesWindow:
 		self.iconset_combobox.set_model(model)
 		l = []
 		for dir in iconsets_list:
+			if not os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', dir)):
+				continue
 			if dir != '.svn' and dir != 'transports':
 				l.append(dir)
 		if l.count == 0:
