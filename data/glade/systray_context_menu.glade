@@ -101,6 +101,15 @@
   </child>
 
   <child>
+    <widget class="GtkCheckMenuItem" id="sounds_mute_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Mute Sounds</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_sounds_mute_menuitem_activate" last_modification_time="Sat, 29 Oct 2005 23:55:24 GMT"/>
+    </widget>
+  </child>
+
+  <child>
     <widget class="GtkImageMenuItem" id="show_roster_menuitem">
       <property name="visible">True</property>
       <property name="label" translatable="yes">Show _Roster</property>
