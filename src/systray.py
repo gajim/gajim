@@ -309,6 +309,7 @@ class Systray:
 		active = gajim.interface.roster.status_combobox.get_active()
 		status = model[active][2].decode('utf-8')
 		dlg = dialogs.ChangeStatusMessageDialog(status)
+		dlg.window.present()
 		message = dlg.run()
 		if message is not None: # None if user press Cancel
 			accounts = gajim.connections.keys()
