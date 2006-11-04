@@ -122,10 +122,10 @@
 	      <child>
 		<widget class="GtkComboBox" id="options_combobox">
 		  <property name="visible">True</property>
-		  <property name="items" translatable="yes">Account
-Group
-Contact
-Banner</property>
+		  <property name="items" translatable="yes">Account row
+Group row
+Contact row
+Chat Banner</property>
 		  <property name="add_tearoffs">False</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="changed" handler="on_options_combobox_changed" last_modification_time="Fri, 16 Sep 2005 21:44:05 GMT"/>
