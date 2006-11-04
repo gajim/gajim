@@ -2696,18 +2696,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if not accountIter:
 			return
 		if not self.regroup:
-			model[accountIter][C_IMG] = self.jabber_state_images['16'][status]
-			return
-		status = 0
-		for acct in gajim.connections:
-			connected = gajim.connections[acct].connected
-			if connected == 1: # connecting
-				status = 1
-				break
-			if gajim.config.get_per('accounts', acct, 'sync_with_global_status') \
-			and connected > 1 and (status == 0 or connected < status):
-				status = connected
-		show = gajim.SHOW_LIST[status]
+			show = gajim.SHOW_LIST[status]
+		else:	# accounts merged
+			show = helpers.get_global_show()
 		model[accountIter][C_IMG] = self.jabber_state_images['16'][show]
 
 	def on_status_changed(self, account, status):
