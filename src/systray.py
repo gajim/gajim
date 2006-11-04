@@ -104,6 +104,7 @@ class Systray:
 			'single_message_menuitem')
 		status_menuitem = self.xml.get_widget('status_menu')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
+		sounds_mute_menuitem = self.xml.get_widget('sounds_mute_menuitem')
 
 		if self.single_message_handler_id:
 			single_message_menuitem.handler_disconnect(
@@ -220,6 +221,7 @@ class Systray:
 						account)
 					break # No other connected account
 
+		sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
 		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and\
 		gtk.gtk_version >= (2, 10, 0):
 			self.systray_context_menu.popup(None, None,
@@ -237,6 +239,10 @@ class Systray:
 			for jid in events[account]:
 				for event in events[account][jid]:
 					gajim.interface.handle_event(account, jid, event.type_)
+
+	def on_sounds_mute_menuitem_activate(self, widget):
+		gajim.config.set('sounds_on', not widget.get_active()) 
+		gajim.interface.save_config()
 
 	def on_show_roster_menuitem_activate(self, widget):
 		win = gajim.interface.roster.window
