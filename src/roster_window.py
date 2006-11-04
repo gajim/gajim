@@ -2689,15 +2689,34 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status(show)
 
+	def set_account_status_icon(self, account):
+		status = gajim.connections[account].connected
+		model = self.tree.get_model()
+		accountIter = self.get_account_iter(account)
+		if not accountIter:
+			return
+		if not self.regroup:
+			model[accountIter][C_IMG] = self.jabber_state_images['16'][status]
+			return
+		status = 0
+		for acct in gajim.connections:
+			connected = gajim.connections[acct].connected
+			if connected == 1: # connecting
+				status = 1
+				break
+			if gajim.config.get_per('accounts', acct, 'sync_with_global_status') \
+			and connected > 1 and (status == 0 or connected < status):
+				status = connected
+		show = gajim.SHOW_LIST[status]
+		model[accountIter][C_IMG] = self.jabber_state_images['16'][show]
+
 	def on_status_changed(self, account, status):
 		'''the core tells us that our status has changed'''
 		if account not in gajim.contacts.get_accounts():
 			return
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
-		if accountIter and (not self.regroup or gajim.config.get_per('accounts',
-		account, 'sync_with_global_status')):
-			model[accountIter][C_IMG] = self.jabber_state_images['16'][status]
+		self.set_account_status_icon(account)
 		if status == 'offline':
 			if self.quit_on_next_offline > -1:
 				self.quit_on_next_offline -= 1
