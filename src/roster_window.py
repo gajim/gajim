@@ -3699,34 +3699,55 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
 		c_dest, was_big_brother, context, etime):
-		# children must take the new tag too, so remember old tag
-		old_tag = gajim.contacts.get_metacontacts_tag(account_source,
-			c_source.jid)
-		# remove the source row
-		self.remove_contact(c_source, account_source)
-		# brother inherite big brother groups
-		c_source.groups = []
-		for g in c_dest.groups:
-			c_source.groups.append(g)
-		gajim.connections[account_source].update_contact(c_source.jid,
-			c_source.name, c_source.groups)
-		gajim.contacts.add_metacontact(account_dest, c_dest.jid, account_source,
-			c_source.jid)
-		if was_big_brother:
-			# add brothers too
-			all_jid = gajim.contacts.get_metacontacts_jids(old_tag)
-			for _account in all_jid:
-				for _jid in all_jid[_account]:
-					gajim.contacts.add_metacontact(account_dest, c_dest.jid,
-						_account, _jid)
-					_c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
-					self.remove_contact(_c, _account)
-					self.add_contact_to_roster(_jid, _account)
-					self.draw_contact(_jid, _account)
-		self.add_contact_to_roster(c_source.jid, account_source)
-		self.draw_contact(c_dest.jid, account_dest)
+		if not gajim.connections[account_source].metacontacts_supported or not \
+		gajim.connections[account_dest].metacontacts_supported:
+			dialogs.WarningDialog(_('Metacontacts storage not supported by your server'), _('Your server does not support storing metacontacts information. So those information will not be save on next reconnection.'))
+		def merge_contacts(widget = None):
+			if widget: # dialog has been shown
+				dlg.destroy()
+				if dlg.is_checked(): # user does not want to be asked again
+					gajim.config.set('confirm_metacontacts', 'no')
+				else:
+					gajim.config.set('confirm_metacontacts', 'yes')
+			# children must take the new tag too, so remember old tag
+			old_tag = gajim.contacts.get_metacontacts_tag(account_source,
+				c_source.jid)
+			# remove the source row
+			self.remove_contact(c_source, account_source)
+			# brother inherite big brother groups
+			c_source.groups = []
+			for g in c_dest.groups:
+				c_source.groups.append(g)
+			gajim.connections[account_source].update_contact(c_source.jid,
+				c_source.name, c_source.groups)
+			gajim.contacts.add_metacontact(account_dest, c_dest.jid,
+				account_source, c_source.jid)
+			if was_big_brother:
+				# add brothers too
+				all_jid = gajim.contacts.get_metacontacts_jids(old_tag)
+				for _account in all_jid:
+					for _jid in all_jid[_account]:
+						gajim.contacts.add_metacontact(account_dest, c_dest.jid,
+							_account, _jid)
+						_c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
+						self.remove_contact(_c, _account)
+						self.add_contact_to_roster(_jid, _account)
+						self.draw_contact(_jid, _account)
+			self.add_contact_to_roster(c_source.jid, account_source)
+			self.draw_contact(c_dest.jid, account_dest)
 
-		context.finish(True, True, etime)
+			context.finish(True, True, etime)
+
+		confirm_metacontacts = gajim.config.get('confirm_metacontacts')
+		if confirm_metacontacts == 'no':
+			merge_contacts()
+			return
+		pritext = _('You are about to create a metacontact. Are you sure you want to continue?')
+		sectext = _('Metacontacts are a way to regroup several contacts in one line. Generaly it is used when the same person has several Jabber accounts or transport accounts.')
+		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
+			_('Do _not ask me again'), on_response_ok = merge_contacts)
+		if not confirm_metacontacts: # First time we see this window
+			dlg.checkbutton.set_active(True)
 
 	def on_drop_in_group(self, widget, account, c_source, grp_dest, context,
 		etime, grp_source = None):
