@@ -926,11 +926,11 @@ class Connection(ConnectionHandlers):
 			# Only add optional elements if not empty
 			# Note: need to handle both None and '' as empty
 			#   thus shouldn't use "is not None"
-			if bm['nick']:
+			if bm.get('nick', None):
 				iq5 = iq4.setTagData('nick', bm['nick'])
-			if bm['password']:
+			if bm.get('password', None):
 				iq5 = iq4.setTagData('password', bm['password'])
-			if bm['print_status']:
+			if bm.get('print_status', None):
 				iq5 = iq4.setTagData('print_status', bm['print_status'])
 		self.connection.send(iq)
 

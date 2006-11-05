@@ -2564,10 +2564,9 @@ class ManageBookmarksWindow:
 				autojoin = helpers.from_xs_boolean_to_python_boolean(
 					bookmark['autojoin'])
 
-				if bookmark.has_key('print_status'):
-					print_status = bookmark['print_status']
-				if not print_status:
-					print_status = gajim.config.get('print_status_in_muc')
+				print_status = bookmark.get('print_status', '')
+				if print_status not in ('', 'all', 'in_and_out', 'none'):
+					print_status = ''
 				self.treestore.append( iter, [
 						account,
 						bookmark['name'],
@@ -2580,7 +2579,7 @@ class ManageBookmarksWindow:
 		self.print_status_combobox = self.xml.get_widget('print_status_combobox')
 		model = gtk.ListStore(str, str)
 
-		self.option_list = {'all': _('All'),
+		self.option_list = {'': _('Default'), 'all': _('All'),
 			'in_and_out': _('Enter and leave only'), 'none': _('None')}
 		opts = self.option_list.keys()
 		opts.sort()

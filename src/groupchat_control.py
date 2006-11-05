@@ -874,9 +874,9 @@ class GroupchatControl(ChatControlBase):
 			print_status = None
 			for bookmark in gajim.connections[self.account].bookmarks:
 				if bookmark['jid'] == self.room_jid:
-					print_status = bookmark['print_status']
+					print_status = bookmark.get('print_status', None)
 					break
-			if print_status is None:
+			if not print_status:
 				print_status = gajim.config.get('print_status_in_muc')
 			nick_jid = nick
 			if jid:
@@ -1374,8 +1374,7 @@ class GroupchatControl(ChatControlBase):
 			'jid': self.room_jid,
 			'autojoin': '0',
 			'password': '',
-			'nick': self.nick,
-			'print_status' : gajim.config.get('print_status_in_muc')
+			'nick': self.nick
 		}
 
 		for bookmark in gajim.connections[self.account].bookmarks:
