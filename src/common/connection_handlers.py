@@ -1404,17 +1404,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
 				tim))
 		elif mtype == 'groupchat':
+			has_timestamp = False
+			if msg.timestamp:
+				has_timestamp = True
 			if subject:
-				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt))
+				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
 			else:
 				if not msg.getTag('body'): #no <body>
 					return
 				# Ignore message from room in which we are not
 				if not self.last_history_line.has_key(jid):
 					return
-				has_timestamp = False
-				if msg.timestamp:
-					has_timestamp = True
 				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
 				if self.name not in no_log_for and not int(float(time.mktime(tim))) <= \
 					self.last_history_line[jid] and msgtxt:

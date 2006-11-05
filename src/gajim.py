@@ -914,7 +914,7 @@ class Interface:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 
 	def handle_event_gc_subject(self, account, array):
-		#('GC_SUBJECT', account, (jid, subject, body))
+		#('GC_SUBJECT', account, (jid, subject, body, has_timestamp))
 		jids = array[0].split('/', 1)
 		jid = jids[0]
 		gc_control = self.msg_win_mgr.get_control(jid, account)
@@ -922,14 +922,19 @@ class Interface:
 			return
 		gc_control.set_subject(array[1])
 		# Standard way, the message comes from the occupant who set the subject
+		text = None
 		if len(jids) > 1:
-			gc_control.print_conversation('%s has set the subject to %s' % (
-				jids[1], array[1]))
+			text = '%s has set the subject to %s' % (jids[1], array[1])
 		# Workaround for psi bug http://flyspray.psi-im.org/task/595 , to be 
 		# deleted one day. We can receive a subject with a body that contains 
 		# "X has set the subject to Y" ...
 		elif array[2]:
-			gc_control.print_conversation(array[2])
+			text = array[2]
+		if text is not None:
+			if array[3]:
+				gc_control.print_old_conversation(text)
+			else:
+				gc_control.print_conversation(text)
 
 	def handle_event_gc_config(self, account, array):
 		#('GC_CONFIG', account, (jid, config))  config is a dict

@@ -510,13 +510,17 @@ class GroupchatControl(ChatControlBase):
 	gc_count_nicknames_colors = 0
 	gc_custom_colors = {}  
 
-	def print_old_conversation(self, text, contact, tim = None, xhtml = None):
+	def print_old_conversation(self, text, contact = '', tim = None,
+	xhtml = None):
 		if isinstance(text, str):
 			text = unicode(text, 'utf-8')
-		if contact == self.nick: # it's us
-			kind = 'outgoing'
+		if contact:
+			if contact == self.nick: # it's us
+				kind = 'outgoing'
+			else:
+				kind = 'incoming'
 		else:
-			kind = 'incoming'
+			kind = 'status'
 		if gajim.config.get('restored_messages_small'):
 			small_attr = ['small']
 		else:
