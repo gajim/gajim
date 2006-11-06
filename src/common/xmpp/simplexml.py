@@ -191,6 +191,18 @@ class Node:
 				else: nodes.append(node)
 			if one and nodes: return nodes[0]
 		if not one: return nodes
+	
+	def iterTags(self, name, attrs={}, namespace=None):
+		""" Iterate over all children using specified arguments as filter. """
+		for node in self.kids:
+			if namespace is not None and namespace!=node.getNamespace(): continue
+			if node.getName() == name:
+				for key in attrs.keys():
+					if not node.attrs.has_key(key) or \
+						node.attrs[key]!=attrs[key]: break
+					else:
+						yield node
+
 	def setAttr(self, key, val):
 		""" Sets attribute "key" with the value "val". """
 		self.attrs[key]=val
