@@ -1136,6 +1136,7 @@ class RosterWindow:
 		contact.show = show
 		contact.status = status
 		if show in ('offline', 'error') and \
+		len(gajim.events.get_events(account, contact.get_full_jid())) == 0 and \
 		len(gajim.events.get_events(account, contact.jid)) == 0:
 			if len(contact_instances) > 1:
 				# if multiple resources
