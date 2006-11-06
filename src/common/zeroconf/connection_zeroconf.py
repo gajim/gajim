@@ -208,7 +208,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def _on_error(self, message):
 		self.dispatch('ERROR', (_('Avahi error'), _("%s\nLink-local messaging might not work properly.") % message))
-	
+
 	def connect(self, show = 'online', msg = ''):
 		self.get_config_values_or_default()
 		if not self.connection:
@@ -302,7 +302,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# 'disconnect'
 		elif show == 'offline' and self.connected:
 			self.disconnect()
-			self.dispatch('STATUS', 'offline')
 			
 		# update status
 		elif show != 'offline' and self.connected:
@@ -311,6 +310,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			if show == 'invisible':
 				check = check and self.connection.remove_announce()
 			elif was_invisible:
+				if not self.connected:
+					check = check and self.connect(show, msg)
 				check = check and self.connection.announce()
 			if self.connection and not show == 'invisible':
 				check = check and self.connection.set_show_msg(show, msg)
@@ -319,7 +320,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if check:
 			self.dispatch('STATUS', show)
 		else:
-			# show notification that avahi, or system bus is down	
+			# show notification that avahi or system bus is down	
 			self.dispatch('STATUS', 'offline')
 			self.status = 'offline'
 			self.dispatch('CONNECTION_LOST',
@@ -333,12 +334,16 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	chatstate = None, msg_id = None, composing_jep = None, resource = None, 
 	user_nick = None):
 		fjid = jid
-
+		
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
 			return
 		
+		if self.status in ('invisible', 'offline'):
+			self.dispatch('MSGERROR', [unicode(jid), '-1', _('You are not connected or not visible to others. Your message could not be sent.'), None, None])
+			return
+
 		msgtxt = msg
 		msgenc = ''
 		if keyID and USE_GPG:
@@ -384,7 +389,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				if chatstate is 'composing' or msgtxt: 
 					chatstate_node.addChild(name = 'composing') 
 		
-		self.connection.send(msg_iq)
+		if not self.connection.send(msg_iq, msg != None):
+			return
+
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		ji = gajim.get_jid_without_resource(jid)
 		if self.name not in no_log_for and ji not in no_log_for:
@@ -402,11 +409,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		
 	def send_stanza(self, stanza):
 		# send a stanza untouched
-		print 'connection_zeroconf.py: send_stanza'
 		if not self.connection:
 			return
-		#self.connection.send(stanza)
-		pass
+		self.connection.send(stanza)
 	
 	def ack_subscribed(self, jid):
 		gajim.log.debug('This should not happen (ack_subscribed)')
