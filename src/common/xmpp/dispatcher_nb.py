@@ -425,7 +425,10 @@ class Dispatcher(PlugIn):
 			stanza=route
 		stanza.setNamespace(self._owner.Namespace)
 		stanza.setParent(self._metastream)
-		self._owner.Connection.send(stanza, is_message)
+		if is_message:
+			self._owner.Connection.send(stanza, True)
+		else:
+			self._owner.Connection.send(stanza)
 		return _ID
 	
 	def disconnect(self):
