@@ -3508,7 +3508,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def nameCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for name renderer'''
 		theme = gajim.config.get('roster_theme')
-		if model[iter][C_TYPE] == 'account':
+		type_ = model[iter][C_TYPE]
+		if type_ == 'account':
 			color = gajim.config.get_per('themes', theme, 'accounttextcolor')
 			if color:
 				renderer.set_property('foreground', color)
@@ -3523,7 +3524,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				gtkgui_helpers.get_theme_font_for_option(theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
 			renderer.set_property('width', 3)
-		elif model[iter][C_TYPE] == 'group':
+		elif type_ == 'group':
 			color = gajim.config.get_per('themes', theme, 'grouptextcolor')
 			if color:
 				renderer.set_property('foreground', color)
@@ -3537,7 +3538,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
-		else:
+		elif type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			color = gajim.config.get_per('themes', theme, 'contacttextcolor')
