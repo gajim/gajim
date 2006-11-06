@@ -1657,7 +1657,7 @@ class Interface:
 		if not emot_theme:
 			return
 
-		#initialize emoticons dictionary and unique images list
+		# initialize emoticons dictionary and unique images list
 		self.emoticons_images = list()
 		self.emoticons = dict()
 

@@ -122,7 +122,8 @@ class PreferencesWindow:
 		emoticons_combobox.set_model(model)
 		l = []
 		for dir in emoticons_list:
-			if not os.path.isdir(os.path.join(gajim.DATA_DIR, 'emoticons', dir)):
+			if not os.path.isdir(os.path.join(gajim.DATA_DIR, 'emoticons', dir)) \
+			and not os.path.isdir(os.path.join(gajim.MY_EMOTS_PATH, dir)) :
 				continue
 			if dir != '.svn':
 				l.append(dir)
