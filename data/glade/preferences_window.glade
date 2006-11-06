@@ -296,6 +296,7 @@
 			      <child>
 				<widget class="GtkButton" id="manage_theme_button">
 				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Configure color and font of the interface</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Ma_nage...</property>
 				  <property name="use_underline">True</property>
