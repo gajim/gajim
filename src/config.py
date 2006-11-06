@@ -577,7 +577,7 @@ class PreferencesWindow:
 		else:
 			gajim.config.set('emoticons_theme', emot_theme)
 
-		gajim.interface.init_emoticons()
+		gajim.interface.init_emoticons(need_reload = True)
 		gajim.interface.make_regexps()
 		self.toggle_emoticons()
 

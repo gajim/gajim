@@ -1652,12 +1652,12 @@ class Interface:
 		menu.show_all()
 		return menu
 
-	def init_emoticons(self):
+	def init_emoticons(self, need_reload = False):
 		emot_theme = gajim.config.get('emoticons_theme')
 		if not emot_theme:
 			return
 
-		# initialize emoticons dictionary and unique images list
+		#initialize emoticons dictionary and unique images list
 		self.emoticons_images = list()
 		self.emoticons = dict()
 
@@ -1668,7 +1668,11 @@ class Interface:
 			if not os.path.exists(path): # theme doesn't exist
 				return
 		sys.path.append(path)
-		from emoticons import emoticons as emots
+		import emoticons
+		if need_reload:
+			# we need to reload else that doesn't work when changing emoticon set
+			reload(emoticons) 
+		emots = emoticons.emoticons
 		for emot in emots:
 			emot_file = os.path.join(path, emots[emot])
 			if not self.image_is_ok(emot_file):
@@ -1682,7 +1686,7 @@ class Interface:
 				self.emoticons_images.append((emot, pix))
 			self.emoticons[emot.upper()] = emot_file
 		sys.path.remove(path)
-		del emots
+		del emoticons
 		if self.emoticons_menu:
 			self.emoticons_menu.destroy()
 		self.emoticons_menu = self.prepare_emoticons_menu()
