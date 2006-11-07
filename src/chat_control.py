@@ -657,17 +657,7 @@ class ChatControlBase(MessageControl):
 				if not gajim.events.remove_events(self.account, self.get_full_jid(),
 				types = [type_]):
 					# There were events to remove
-					self.parent_win.redraw_tab(self)
-					self.parent_win.show_title()
-					# redraw roster
-					if self.type_id == message_control.TYPE_PM:
-						room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-						groupchat_control = gajim.interface.msg_win_mgr.get_control(
-							room_jid, self.account)
-						groupchat_control.draw_contact(nick)
-					else:
-						gajim.interface.roster.draw_contact(jid, self.account)
-						gajim.interface.roster.show_title()
+					self.redraw_after_event_removed(jid)
 			self.msg_textview.grab_focus()
 			# Note, we send None chatstate to preserve current
 			self.parent_win.redraw_tab(self)
@@ -760,8 +750,22 @@ class ChatControlBase(MessageControl):
 			if not gajim.events.remove_events(self.account, self.get_full_jid(),
 			types = ['printed_' + type_, type_]):
 				# There were events to remove
-				self.parent_win.redraw_tab(self)
-				self.parent_win.show_title()
+				self.redraw_after_event_removed(jid)
+
+	def redraw_after_event_removed(self, jid):
+		''' We just removed a 'printed_*' event, redraw contact in roster or 
+		gc_roster and titles in	roster and msg_win '''
+		self.parent_win.redraw_tab(self)
+		self.parent_win.show_title()
+		# TODO : get the contact and check notify.get_show_in_roster()
+		if self.type_id == message_control.TYPE_PM:
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+			groupchat_control = gajim.interface.msg_win_mgr.get_control(
+				room_jid, self.account)
+			groupchat_control.draw_contact(nick)
+		else:
+			gajim.interface.roster.draw_contact(jid, self.account)
+			gajim.interface.roster.show_title()
 
 	def sent_messages_scroll(self, direction, conv_buf):
 		size = len(self.sent_history) 
@@ -1679,26 +1683,13 @@ class ChatControl(ChatControlBase):
 		gajim.events.remove_events(self.account, jid_with_resource,
 			types = [self.type_id])
 
-		self.parent_win.show_title()
-		self.parent_win.redraw_tab(self)
-		# redraw roster
-		gajim.interface.roster.show_title()
-
 		typ = 'chat' # Is it a normal chat or a pm ?
 		# reset to status image in gc if it is a pm
 		if is_pm:
 			control.update_ui()
 			typ = 'pm'
 
-		if is_pm:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-			groupchat_control = gajim.interface.msg_win_mgr.get_control(
-				room_jid, self.account)
-			groupchat_control.draw_contact(nick)
-		else:
-			gajim.interface.roster.draw_contact(jid, self.account)
-		# Redraw parent too
-		gajim.interface.roster.draw_parent_contact(jid, self.account)
+			self.redraw_after_event_removed(jid)
 		if (self.contact.show in ('offline', 'error')):
 			show_offline = gajim.config.get('showoffline')
 			show_transports = gajim.config.get('show_transports_group')
