@@ -402,12 +402,13 @@ class Interface:
 				elif contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
 				if (resources != [''] and (len(lcontact) != 1 or 
-					lcontact[0].show != 'offline')) and jid.find('@') > 0:
+				lcontact[0].show != 'offline')) and jid.find('@') > 0:
 					old_show = 0
 					contact1 = gajim.contacts.copy_contact(contact1)
 					lcontact.append(contact1)
 				contact1.resource = resource
-			if contact1.jid.find('@') > 0 and len(lcontact) == 1: # It's not an agent
+			if contact1.jid.find('@') > 0 and len(lcontact) == 1:
+				# It's not an agent
 				if old_show == 0 and new_show > 1:
 					if not contact1.jid in gajim.newly_added[account]:
 						gajim.newly_added[account].append(contact1.jid)
@@ -538,7 +539,7 @@ class Interface:
 			chat_control = self.msg_win_mgr.get_control(jid, account)
 
 		# Handle chat states  
-		contact = gajim.contacts.get_contact(account, jid)
+		contact = gajim.contacts.get_contact(account, jid, resource)
 		if contact and isinstance(contact, list):
 			contact = contact[0]
 		if contact:
@@ -578,7 +579,7 @@ class Interface:
 		# Is it a first or next message received ?
 		first = False
 		if msg_type == 'normal':
-			if not gajim.events.get_events(account,jid, ['normal']):
+			if not gajim.events.get_events(account, jid, ['normal']):
 				first = True
 		elif not chat_control and not gajim.events.get_events(account, 
 		jid_of_control, [msg_type]): # msg_type can be chat or pm

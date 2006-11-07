@@ -2795,10 +2795,23 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		highest_contact = gajim.contacts.get_contact_with_highest_priority(
 			account, jid)
 		if not contact:
-			# Default to highest prio
-			fjid = jid
-			resource_for_chat = None
-			contact = highest_contact
+			# If there is another resource, it may be a message from an invisible
+			# resource
+			lcontact = gajim.contacts.get_contacts_from_jid(account, jid)
+			if (len(lcontact) != 1 or lcontact[0].show != 'offline') and \
+			jid.find('@') > 0:
+				contact = gajim.contacts.copy_contact(highest_contact)
+				contact.resource = resource
+				contact.priority = 0
+				contact.show = 'offline'
+				contact.status = ''
+				gajim.contacts.add_contact(account, contact)
+
+			else:
+				# Default to highest prio
+				fjid = jid
+				resource_for_chat = None
+				contact = highest_contact
 		if not contact:
 			# contact is not in roster
 			contact = self.add_to_not_in_the_roster(account, jid)
