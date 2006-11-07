@@ -604,7 +604,7 @@ class Interface:
 		msg = message
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
-		notify.notify('new_message', full_jid_with_resource, account, [msg_type,
+		notify.notify('new_message', jid_of_control, account, [msg_type,
 			first, nickname, msg], advanced_notif_num)
 
 		if self.remote_ctrl:
