@@ -3961,8 +3961,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			start = ''
 			nb_unread = gajim.events.get_nb_events(['chat', 'normal',
 				'file-request', 'file-error', 'file-completed',
-				'file-request-error', 'file-send-error', 'file-stopped', 'gc_msg',
-				'printed_chat', 'printed_gc_msg'])
+				'file-request-error', 'file-send-error', 'file-stopped',
+				'printed_chat'])
 			if nb_unread > 1:
 				start = '[' + str(nb_unread) + ']  '
 			elif nb_unread == 1:

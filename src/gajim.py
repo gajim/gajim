@@ -562,7 +562,7 @@ class Interface:
 					contact.msg_id = msg_id
 
 		# THIS MUST BE AFTER chatstates handling
-		# AND BEFORE playsound (else we here sounding on chatstates!)
+		# AND BEFORE playsound (else we ear sounding on chatstates!)
 		if not message: # empty message text
 			return
 
