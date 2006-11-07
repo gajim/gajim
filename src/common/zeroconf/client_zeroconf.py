@@ -126,7 +126,15 @@ class P2PClient(IdleObject):
 		self.sock_hash = conn._sock.__hash__
 		self.fd = conn.fd
 		self.conn_holder.add_connection(self, self.Server, port, self.to)
-		self.conn_holder.number_of_awaiting_messages[self.fd] = len(self.stanzaqueue)
+		# count messages in queue
+		for val in self.stanzaqueue:
+			stanza, is_message = val
+			if is_message:
+				if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
+					self.conn_holder.number_of_awaiting_messages[self.fd]+=1
+				else:
+					self.conn_holder.number_of_awaiting_messages[self.fd]=1
+		#print self.conn_holder.number_of_awaiting_messages
 	
 	def add_stanza(self, stanza, is_message = False):
 		if self.Connection:
@@ -142,7 +150,7 @@ class P2PClient(IdleObject):
 				self.conn_holder.number_of_awaiting_messages[self.fd]+=1
 			else:
 				self.conn_holder.number_of_awaiting_messages[self.fd] = 1
-		
+
 			#print "number_of_awaiting_messages %s" % self.conn_holder.number_of_awaiting_messages
 		return True
 	
@@ -202,6 +210,7 @@ class P2PClient(IdleObject):
 					self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
 					_('Connection to host could not be established'), None, None])
 				del self.conn_holder.number_of_awaiting_messages[self.fd]
+				#print self.conn_holder.number_of_awaiting_messages
 			self.conn_holder.remove_connection(self.sock_hash) 
 		if self.__dict__.has_key('Dispatcher'):
 			self.Dispatcher.PlugOut()
@@ -330,12 +339,12 @@ class P2PConnection(IdleObject, PlugIn):
 		
 	def read_timeout(self):
 		#print 'read_timeout: %s' % self.fd
-		#print self.client.conn_holder.number_of_awaiting_messages
 		if self.client.conn_holder.number_of_awaiting_messages[self.fd] > 0:
 			self.client._caller.dispatch('MSGERROR',[unicode(self.client.to), -1, \
 					_('Connection to host could not be established'), None, None])
 			#print 'error, set to zero'
 			self.client.conn_holder.number_of_awaiting_messages[self.fd] = 0 
+		#print self.client.conn_holder.number_of_awaiting_messages
 		self.pollend()
 
 	def do_connect(self):
