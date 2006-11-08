@@ -941,7 +941,7 @@ class ChatControl(ChatControlBase):
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			id = menuitem.connect('activate', 
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.contact.jid, self.account, self.contact.get_shown_name() + \ 
+				self.contact.jid, self.account, self.contact.get_shown_name() +  
 					'.jpeg')
 			self.handlers[id] = menuitem
 			menu.append(menuitem)
