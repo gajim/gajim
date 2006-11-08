@@ -1690,7 +1690,7 @@ class ChatControl(ChatControlBase):
 			control.update_ui()
 			typ = 'pm'
 
-			self.redraw_after_event_removed(jid)
+		self.redraw_after_event_removed(jid)
 		if (self.contact.show in ('offline', 'error')):
 			show_offline = gajim.config.get('showoffline')
 			show_transports = gajim.config.get('show_transports_group')
