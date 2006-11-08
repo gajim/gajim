@@ -118,8 +118,8 @@ class Events:
 		if gajim.interface.systray_capabilities:
 			gajim.interface.systray.set_img()
 
-	def get_nb_events(self, types = []):
-		return self._get_nb_events(types = types)
+	def get_nb_events(self, types = [], account = None):
+		return self._get_nb_events(types = types, account = account)
 
 	def get_events(self, account, jid = None, types = []):
 		'''if event is not specified, get all events from this jid,

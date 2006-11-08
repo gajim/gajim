@@ -3962,10 +3962,13 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		nb_unread = 0
 		if change_title_allowed:
 			start = ''
-			nb_unread = gajim.events.get_nb_events(['chat', 'normal',
-				'file-request', 'file-error', 'file-completed',
-				'file-request-error', 'file-send-error', 'file-stopped',
-				'printed_chat'])
+			for account in gajim.connections:
+				# Count events in roster title only if we don't auto open them
+				if not helpers.allow_popup_window(account):
+					nb_unread += gajim.events.get_nb_events(['chat', 'normal',
+						'file-request', 'file-error', 'file-completed',
+						'file-request-error', 'file-send-error', 'file-stopped',
+						'printed_chat'], account)
 			if nb_unread > 1:
 				start = '[' + str(nb_unread) + ']  '
 			elif nb_unread == 1:
