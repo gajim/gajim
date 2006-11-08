@@ -2788,6 +2788,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		contact = None
 		# if chat window will be for specific resource
 		resource_for_chat = resource
+		fjid = jid
 		# Try to catch the contact with correct resource
 		if resource:
 			fjid = jid + '/' + resource
@@ -2802,6 +2803,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			lcontact[0].show != 'offline')) and jid.find('@') > 0:
 				contact = gajim.contacts.copy_contact(highest_contact)
 				contact.resource = resource
+				if resource:
+					fjid = jid + '/' + resource
 				contact.priority = 0
 				contact.show = 'offline'
 				contact.status = ''
