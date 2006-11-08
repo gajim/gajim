@@ -118,7 +118,8 @@ class VcardWindow:
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			menuitem.connect('activate',
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.contact.jid, self.account, self.contact.name + '.jpeg')
+				self.contact.jid, self.account, self.contact.get_shown_name() +
+				'.jpeg')
 			menu.append(menuitem)
 			menu.connect('selection-done', lambda w:w.destroy())	
 			# show the menu
@@ -395,7 +396,8 @@ class ZeroconfVcardWindow:
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			menuitem.connect('activate',
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.contact.jid, self.account, self.contact.name + '.jpeg')
+				self.contact.jid, self.account, self.contact.get_shown_name() +
+				'.jpeg')
 			menu.append(menuitem)
 			menu.connect('selection-done', lambda w:w.destroy())	
 			# show the menu
