@@ -531,7 +531,8 @@ class Interface:
 			# unknow contact or offline message
 			jid_of_control = jid
 			chat_control = self.msg_win_mgr.get_control(jid, account)
-		elif highest_contact and resource != highest_contact.resource:
+		elif highest_contact and resource != highest_contact.resource and \
+		highest_contact.show != 'offline':
 			jid_of_control = full_jid_with_resource
 			chat_control = None
 		elif not pm:
