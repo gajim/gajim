@@ -33,13 +33,10 @@ STATE_AWAKE    = 'awake'
 
 SUPPORTED = True
 try:
-	import common.idle as idle # when we launch gajim from sources
+	import idle
 except:
-	try:
-		import idle # when Gajim is installed
-	except:
-		gajim.log.debug('Unable to load idle module')
-		SUPPORTED = False
+	gajim.log.debug('Unable to load idle module')
+	SUPPORTED = False
 
 class Sleepy:
 

@@ -44,13 +44,10 @@ METACONTACTS_ARRIVED = 'metacontacts_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
 HAS_IDLE = True
 try:
-	import common.idle as idle # when we launch gajim from sources
+	import idle
 except:
-	try:
-		import idle # when Gajim is installed
-	except:
-		gajim.log.debug(_('Unable to load idle module'))
-		HAS_IDLE = False
+	gajim.log.debug(_('Unable to load idle module'))
+	HAS_IDLE = False
 
 class ConnectionBytestream:
 	def __init__(self):
