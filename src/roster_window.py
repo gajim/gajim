@@ -2798,8 +2798,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			# If there is another resource, it may be a message from an invisible
 			# resource
 			lcontact = gajim.contacts.get_contacts_from_jid(account, jid)
-			if (len(lcontact) != 1 or lcontact[0].show != 'offline') and \
-			jid.find('@') > 0:
+			if (len(lcontact) > 1 or (lcontact and \
+			lcontact[0].show != 'offline')) and jid.find('@') > 0:
 				contact = gajim.contacts.copy_contact(highest_contact)
 				contact.resource = resource
 				contact.priority = 0
