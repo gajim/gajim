@@ -839,6 +839,14 @@ class RosterWindow:
 				if gajim.connections[account].connected <= 1:
 					# if offline or connecting
 					continue
+
+				# new chat
+				new_chat_item = gtk.MenuItem(_('using account %s') % account,
+					False)
+				new_chat_sub_menu.append(new_chat_item)
+				new_chat_item.connect('activate',
+					self.on_new_chat_menuitem_activate,	account)
+
 				if gajim.config.get_per('accounts', account, 'is_zeroconf'): 
 					continue 	
 
@@ -854,7 +862,7 @@ class RosterWindow:
 				
 				self.add_bookmarks_list(gc_sub_menu, account)
 
-				# the 'manage gc bookmarks' item is showed
+				# the 'manage gc bookmarks' item is shown
 				# below to avoid duplicate code
 
 				# add
@@ -868,12 +876,6 @@ class RosterWindow:
 				disco_item.connect('activate',
 					self.on_service_disco_menuitem_activate, account)
 
-				# new chat
-				new_chat_item = gtk.MenuItem(_('using account %s') % account,
-					False)
-				new_chat_sub_menu.append(new_chat_item)
-				new_chat_item.connect('activate',
-					self.on_new_chat_menuitem_activate,	account)
 
 			add_new_contact_menuitem.set_submenu(add_sub_menu)
 			add_sub_menu.show_all()
@@ -910,18 +912,25 @@ class RosterWindow:
 					
 					break # No other account connected
 		
-		if connected_accounts == 0 or (connected_accounts == 1 and
-				gajim.connections[gajim.connections.keys()[0]].is_zeroconf):
+		if connected_accounts == 0:
 			# no connected accounts, make the menuitems insensitive
-			new_chat_menuitem.set_sensitive(False)
-			join_gc_menuitem.set_sensitive(False)
-			add_new_contact_menuitem.set_sensitive(False)
-			service_disco_menuitem.set_sensitive(False)
+			for item in [new_chat_menuitem, join_gc_menuitem,\
+					add_new_contact_menuitem, service_disco_menuitem]:
+				item.set_sensitive(False)
 		else: # we have one or more connected accounts
-			new_chat_menuitem.set_sensitive(True)
-			join_gc_menuitem.set_sensitive(True)
-			add_new_contact_menuitem.set_sensitive(True)
-			service_disco_menuitem.set_sensitive(True)
+			for item in [new_chat_menuitem, join_gc_menuitem,\
+						add_new_contact_menuitem, service_disco_menuitem]:
+				item.set_sensitive(True)
+			
+			# disable some fields if only local account is there
+			if connected_accounts == 1:
+				for account in gajim.connections:
+					if gajim.account_is_connected(account) and \
+							gajim.connections[account].is_zeroconf:
+						for item in [join_gc_menuitem,\
+								add_new_contact_menuitem, service_disco_menuitem]:
+							item.set_sensitive(False)
+
 			# show the 'manage gc bookmarks' item
 			newitem = gtk.SeparatorMenuItem() # separator
 			gc_sub_menu.append(newitem)
