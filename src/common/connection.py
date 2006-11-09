@@ -58,6 +58,7 @@ class Connection(ConnectionHandlers):
 		self.time_to_reconnect = None
 		self.new_account_info = None
 		self.bookmarks = []
+		self.annotations = {}
 		self.on_purpose = False
 		self.last_io = gajim.idlequeue.current_time()
 		self.last_sent = []
@@ -543,6 +544,9 @@ class Connection(ConnectionHandlers):
 
 			#Get bookmarks from private namespace
 			self.get_bookmarks()
+			
+			#Get annotations
+			self.get_annotations()
 
 			#Inform GUI we just signed in
 			self.dispatch('SIGNED_IN', ())
@@ -933,6 +937,31 @@ class Connection(ConnectionHandlers):
 			if bm.get('print_status', None):
 				iq5 = iq4.setTagData('print_status', bm['print_status'])
 		self.connection.send(iq)
+
+	def get_annotations(self):
+		'''Get Annonations from storage as described in XEP 0048, and XEP 0145'''
+		self.annotations = {}
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ='get')
+		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2.addChild(name='storage', namespace='storage:rosternotes')
+		self.connection.send(iq)
+
+	def store_annotations(self):
+		'''Set Annonations in private storage as described in XEP 0048, and XEP 0145'''
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ='set')
+		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq3 = iq2.addChild(name='storage', namespace='storage:rosternotes')
+		for jid in self.annotations.keys():
+			if self.annotations[jid]:
+				iq4 = iq3.addChild(name = "note")
+				iq4.setAttr('jid', jid)
+				iq4.setData(self.annotations[jid])
+		self.connection.send(iq)
+
 
 	def get_metacontacts(self):
 		'''Get metacontacts list from storage as described in JEP 0049'''

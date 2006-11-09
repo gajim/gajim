@@ -1192,6 +1192,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 				# http://www.jabber.org/jeps/jep-0049.html
 				#TODO: implement this
 				pass
+			elif ns == 'storage:rosternotes':
+				# Annotations
+				# http://www.xmpp.org/extensions/xep-0145.html
+				notes = storage.getTags('note')
+				for note in notes:
+					jid = note.getAttr('jid')
+					annotation = note.getData()
+					self.annotations[jid] = annotation
 
 	def _PrivateErrorCB(self, con, iq_obj):
 		gajim.log.debug('PrivateErrorCB')
@@ -1832,6 +1840,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 
 			# Get bookmarks from private namespace
 			self.get_bookmarks()
+
+			# Get annotations from private namespace
+			self.get_annotations()
 
 			# If it's a gmail account,
 			# inform the server that we want e-mail notifications
