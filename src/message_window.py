@@ -310,28 +310,22 @@ class MessageWindow:
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]
 
-		# Notify a dupicate nick to update their banner and clear account display
-		for c in self.controls():
-			if c == self:
-				continue
-			if ctrl.contact.get_shown_name() == c.contact.get_shown_name():
-				c.draw_banner()
-
-		if self.get_num_controls() == 1: # we are going from two tabs to one
-			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
-			self.notebook.set_show_tabs(show_tabs_if_one_tab)
-			if not show_tabs_if_one_tab:
-				self.alignment.set_property('top-padding', 0)
-			self.show_title()
-		elif self.get_num_controls() == 0:
+		if self.get_num_controls() == 0:
 			# These are not called when the window is destroyed like this, fake it
 			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
 			gajim.interface.msg_win_mgr._on_window_destroy(self.window)
 			# dnd clean up
 			self.notebook.disconnect(self.hid)
 			self.notebook.drag_dest_unset()
-
 			self.window.destroy()
+			return # don't show_title, we are dead
+		elif self.get_num_controls() == 1: # we are going from two tabs to one
+			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
+			self.notebook.set_show_tabs(show_tabs_if_one_tab)
+			if not show_tabs_if_one_tab:
+				self.alignment.set_property('top-padding', 0)
+		self.show_title()
+
 			
 	def redraw_tab(self, ctrl, chatstate = None):
 		hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
