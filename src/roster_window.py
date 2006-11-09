@@ -2539,6 +2539,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			show == 'invisible':
 			return ''
 		dlg = dialogs.ChangeStatusMessageDialog(show)
+		dlg.window.present() # show it on current workspace
 		message = dlg.run()
 		return message
 
