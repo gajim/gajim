@@ -68,7 +68,6 @@ class ZeroconfListener(IdleObject):
 		self.started = True
 	
 	def pollend(self):
-		#print 'pollend'
 		''' called when we stop listening on (host, port) '''
 		self.disconnect()
 	
@@ -134,7 +133,6 @@ class P2PClient(IdleObject):
 					self.conn_holder.number_of_awaiting_messages[self.fd]+=1
 				else:
 					self.conn_holder.number_of_awaiting_messages[self.fd]=1
-		#print self.conn_holder.number_of_awaiting_messages
 	
 	def add_stanza(self, stanza, is_message = False):
 		if self.Connection:
@@ -145,20 +143,15 @@ class P2PClient(IdleObject):
 			self.stanzaqueue.append((stanza, is_message))
 
 		if is_message:
-			#print 'fd: %s' % self.fd
 			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
 				self.conn_holder.number_of_awaiting_messages[self.fd]+=1
 			else:
 				self.conn_holder.number_of_awaiting_messages[self.fd] = 1
 
-			#print "number_of_awaiting_messages %s" % self.conn_holder.number_of_awaiting_messages
 		return True
 	
 	def on_message_sent(self, connection_id):
-		#print 'message successfully sent'
-		#print connection_id
 		self.conn_holder.number_of_awaiting_messages[connection_id]-=1
-		#print self.conn_holder.number_of_awaiting_messages
 
 	def on_connect(self, conn):
 		self.Connection = conn
@@ -192,6 +185,8 @@ class P2PClient(IdleObject):
 	
 	def _check_stream_start(self, ns, tag, attrs):
 		if ns<>NS_STREAMS or tag<>'stream':
+			self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
+				_('Connection to host could not be established: Incorrect answer from server.'), None, None])
 			self.Connection.DEBUG('Incorrect stream start: (%s,%s).Terminating! ' % (tag, ns), 'error')
 			self.Connection.disconnect()
 			return
@@ -203,14 +198,12 @@ class P2PClient(IdleObject):
 
 	
 	def on_disconnect(self):
-		#print 'on_disconnect, to:%s' % self.to
 		if self.conn_holder:
 			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
 				if self.conn_holder.number_of_awaiting_messages[self.fd] > 0:
 					self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
 					_('Connection to host could not be established'), None, None])
 				del self.conn_holder.number_of_awaiting_messages[self.fd]
-				#print self.conn_holder.number_of_awaiting_messages
 			self.conn_holder.remove_connection(self.sock_hash) 
 		if self.__dict__.has_key('Dispatcher'):
 			self.Dispatcher.PlugOut()
@@ -241,8 +234,6 @@ class P2PClient(IdleObject):
 		self.onreceive(None)
 		return True
 		
-		
-	
 	def _register_handlers(self):
 		self.RegisterHandler('message', lambda conn, data:self._caller._messageCB(self.Server, conn, data))
 		self.RegisterHandler('iq', self._caller._siSetCB, 'set',
@@ -338,13 +329,11 @@ class P2PConnection(IdleObject, PlugIn):
 		self._plug_idle()
 		
 	def read_timeout(self):
-		#print 'read_timeout: %s' % self.fd
-		if self.client.conn_holder.number_of_awaiting_messages[self.fd] > 0:
+		if self.client.conn_holder.number_of_awaiting_messages.has_key(self.fd) \
+				and self.client.conn_holder.number_of_awaiting_messages[self.fd] > 0:
 			self.client._caller.dispatch('MSGERROR',[unicode(self.client.to), -1, \
-					_('Connection to host could not be established'), None, None])
-			#print 'error, set to zero'
+					_('Connection to host could not be established: Timeout while sending data.'), None, None])
 			self.client.conn_holder.number_of_awaiting_messages[self.fd] = 0 
-		#print self.client.conn_holder.number_of_awaiting_messages
 		self.pollend()
 
 	def do_connect(self):
@@ -371,7 +360,6 @@ class P2PConnection(IdleObject, PlugIn):
 		if self.state == 0:
 			self.do_connect()
 			return
-		#print 'pollout:'
 		gajim.idlequeue.remove_timeout(self.fd)
 		self._do_send()
 	
@@ -435,7 +423,6 @@ class P2PConnection(IdleObject, PlugIn):
 	
 	def disconnect(self):
 		''' Closes the socket. '''
-		#print 'disconnect'
 		gajim.idlequeue.remove_timeout(self.fd)
 		gajim.idlequeue.unplug_idle(self.fd)
 		try:
@@ -634,8 +621,6 @@ class ClientZeroconf:
 		return {}
 
 	def send(self, stanza, is_message = False):
-		#print 'send called, is_message = %s' % is_message
-		#print stanza
 		stanza.setFrom(self.roster.zeroconf.name)
 		to = stanza.getTo()
 		
@@ -648,16 +633,12 @@ class ClientZeroconf:
 		# look for hashed connections
 		if to in self.recipient_to_hash:
 			conn = self.connections[self.recipient_to_hash[to]]
-			#print 'hashed recipient: %s' % conn.sock_hash
 			if conn.add_stanza(stanza, is_message):
 				return
 
-		#print 'hash_to_port: %s' % self.hash_to_port
-		#print 'ip_to_hash: %s' % self.ip_to_hash
 		if item['address'] in self.ip_to_hash:
 			hash = self.ip_to_hash[item['address']]
 			if self.hash_to_port[hash] == item['port']:
-				#print 'hashed recipient by address: %s' % conn.sock_hash
 				conn = self.connections[hash]
 				if conn.add_stanza(stanza, is_message):
 					return
