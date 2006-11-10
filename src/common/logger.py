@@ -88,15 +88,33 @@ class Logger:
 			return
 		self.init_vars()
 
-	def init_vars(self):
-		# if locked, wait up to 20 sec to unlock
-		# before raise (hopefully should be enough)
+	def close_db(self):
 		if self.con:
 			self.con.close()
+		self.con = None
+		self.cur = None
+
+	def open_db(self):
+		self.close_db()
+
+		# if locked, wait up to 20 sec to unlock
+		# before raise (hopefully should be enough)
 		self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 			isolation_level = 'IMMEDIATE')
 		self.cur = self.con.cursor()
+		self.set_synchronous(False)
 
+	def set_synchronous(self, sync):
+		try:
+			if sync:
+				self.cur.execute("PRAGMA synchronous = NORMAL")
+			else:
+				self.cur.execute("PRAGMA synchronous = OFF")
+		except sqlite.Error, e:
+			gajim.log.debug("Failed to set_synchronous(%s): %s" % (sync, str(e)))
+
+	def init_vars(self):
+		self.open_db()
 		self.get_jids_already_in_db()
 
 	def get_jids_already_in_db(self):
@@ -327,10 +345,8 @@ class Logger:
 		ROOM_JID/nick if pm-related.'''
 
 		if self.jids_already_in == []: # only happens if we just created the db
-			self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
-				isolation_level = 'IMMEDIATE')
-			self.cur = self.con.cursor()
-			
+			self.open_db()
+
 		jid = jid.lower()
 		contact_name_col = None # holds nickname for kinds gcstatus, gc_msg
 		# message holds the message unless kind is status or gcstatus,
