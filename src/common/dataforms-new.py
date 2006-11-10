@@ -10,7 +10,7 @@ class UnknownDataForm(Error): pass	# when we get xmpp.Node which we do not under
 class WrongFieldValue(Error): pass	# when we get xmpp.Node which contains bad fields
 
 # helper class to change class of already existing object
-class Extends(object):
+class ExtendedNode(xmpp.Node, object):
 	def __new__(cls, *a, **b):
 		print 'Extends.__new__'
 		if 'extend' not in b.keys():
@@ -26,7 +26,7 @@ def nested_property(f):
 	ret = f()
 	p = {'doc': f.__doc__}
 	for v in ('fget', 'fset', 'fdel', 'doc'):
-		if v in ret: p[v]=ret[v]
+		if v in ret.keys(): p[v]=ret[v]
 	return property(**p)
 
 # helper to create fields from scratch
@@ -47,7 +47,7 @@ def Field(typ, **attrs):
 		f.setattr(key, value)
 	return f
 
-class DataField(Extends, xmpp.Node):
+class DataField(ExtendedNode):
 	""" Keeps data about one field - var, field type, labels, instructions... """
 	def __init__(self, typ=None, var=None, value=None, label=None, desc=None, required=None,
 		options=None, extend=None):
@@ -235,18 +235,17 @@ class TextMultiField(DataField):
 				self.delChild(element)
 		return locals()
 
-class DataRecord(Extends, xmpp.Node):
+class DataRecord(ExtendedNode):
 	'''The container for data fields - an xml element which has DataField
 	elements as children.'''
 	def __init__(self, fields=None, associated=None, extend=None):
-		self.associated = None
+		self.associated = associated
 		self.vars = {}
 		if extend is None:
 			# we have to build this object from scratch
 			xmpp.Node.__init__(self)
 
 			if fields is not None: self.fields = fields
-			if associated is not None: self.associated = associated
 		else:
 			# we already have xmpp.Node inside - try to convert all
 			# fields into DataField objects
@@ -286,9 +285,11 @@ class DataRecord(Extends, xmpp.Node):
 	def __getitem__(self, item):
 		return self.vars[item]
 
-class DataForm(Extends, DataRecord):
-	def __init__(self, replyto=None, extends=None):
-		pass
+class DataForm(ExtendedNode):
+	def __init__(self, replyto=None, extend=None):
+		if extend is None:
+			# we have to build form from scratch
+			xmpp.Node.__init__(self, 'x', attrs={'xmlns': xmpp.NS_DATA})
 
 	@nested_property
 	def type():
@@ -314,6 +315,7 @@ class DataForm(Extends, DataRecord):
 				self.delChild('title')
 			except ValueError:
 				pass
+		return locals()
 
 	@nested_property
 	def instructions():
@@ -332,15 +334,54 @@ class DataForm(Extends, DataRecord):
 		def fdel(self):
 			for value in self.iterTags('value'):
 				self.delChild(value)
+		return locals()
 
-class SimpleDataForm(DataForm):
-	pass
+class SimpleDataForm(DataForm, DataRecord):
+	def __init__(self, extend=None):
+		if extend is None:
+			# we have to build form from scratch
+			DataForm.__init__(self)
+			DataRecord.__init__(self, extend=self, associated=self)
+		else:
+			# we already have node, just change it to real form object
+			pass
 
 class MultipleDataForm(DataForm):
 	def __init__(self):
 		# all records, recorded into DataRecords
+		pass
 
 	@nested_property
-	def records():
+	def items():
 		''' A list of all records. '''
-		
+		def fget(self):
+			return list(self.iter_records())
+		def fset(self, records):
+			fdel(self)
+			for record in records:
+				if not isinstance(record, DataRecord):
+					DataRecord(extend=record)
+				self.addChild(node=record)
+		def fdel(self):
+			for record in self.iterTags('record'):
+				self.delChild(record)
+		return locals()
+
+	def iter_records():
+		for record in self.iterTags('item'):
+			yield item
+
+	@nested_property
+	def recorded():
+		''' DataRecord that contains descriptions of fields in records.'''
+		def fget(self):
+			return self.getTag('recorded')
+		def fset(self, record):
+			try:
+				self.delChild('recorded')
+			except:
+				pass
+
+			record.setName('recorded')
+			self.addChild(node=record)
+		return locals()
