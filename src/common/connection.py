@@ -162,7 +162,7 @@ class Connection(ConnectionHandlers):
 		self.dispatch('STATUS', 'offline')
 		self.dispatch('CONNECTION_LOST',
 			(_('Connection with account "%s" has been lost') % self.name,
-			_('To continue sending and receiving messages, you will need to reconnect.')))
+			_('Reconnect manually.')))
 
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
