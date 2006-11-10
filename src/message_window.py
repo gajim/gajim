@@ -238,8 +238,10 @@ class MessageWindow:
 		unread = 0
 		for ctrl in self.controls():
 			if ctrl.type_id == message_control.TYPE_GC and not \
-				gajim.config.get('notify_on_all_muc_messages') and not \
-				ctrl.attention_flag:
+			gajim.config.get('notify_on_all_muc_messages') and not \
+			ctrl.attention_flag:
+				# count only pm messages
+				unread += ctrl.get_nb_unread_pm()
 				continue
 			unread += ctrl.get_nb_unread()
 

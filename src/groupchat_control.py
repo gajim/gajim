@@ -395,9 +395,7 @@ class GroupchatControl(ChatControlBase):
 		
 		# count waiting highlighted messages
 		unread = ''
-		jid = self.contact.jid
-		num_unread = len(gajim.events.get_events(self.account, jid,
-			['printed_gc_msg']))
+		num_unread = self.get_nb_unread()
 		if num_unread == 1:
 			unread = '*'
 		elif num_unread > 1:
@@ -469,7 +467,7 @@ class GroupchatControl(ChatControlBase):
 		iter = self.get_contact_iter(nick)
 		path = self.list_treeview.get_model().get_path(iter)
 		if not autopopup or (not autopopupaway and \
-					gajim.connections[self.account].connected > 2):
+		gajim.connections[self.account].connected > 2):
 			if no_queue: # We didn't have a queue: we change icons
 				model = self.list_treeview.get_model()
 				state_images =\
@@ -478,6 +476,7 @@ class GroupchatControl(ChatControlBase):
 				image = state_images['message']
 				model[iter][C_IMG] = image
 			self.parent_win.show_title()
+			self.parent_win.redraw_tab(self)
 		else:
 			self._start_private_message(nick)
 		# Scroll to line
@@ -588,6 +587,11 @@ class GroupchatControl(ChatControlBase):
 	def get_nb_unread(self):
 		nb = len(gajim.events.get_events(self.account, self.room_jid,
 			['printed_gc_msg']))
+		nb += self.get_nb_unread_pm()
+		return nb
+
+	def get_nb_unread_pm(self):
+		nb = 0
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			nb += len(gajim.events.get_events(self.account, self.room_jid + '/' + \
 				nick, ['pm']))
