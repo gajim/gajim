@@ -1153,7 +1153,10 @@ class RosterWindow:
 		self.remove_contact(contact, account)
 		self.add_contact_to_roster(contact.jid, account)
 		# print status in chat window and update status/GPG image
-		for j in (contact.jid, contact.get_full_jid()):
+		jid_list = [contact.jid]
+		if contact.get_full_jid() != contact.jid:
+			jid_list.append(contact.get_full_jid())
+		for j in jid_list:
 			if gajim.interface.msg_win_mgr.has_window(j, account):
 				jid = contact.jid
 				win = gajim.interface.msg_win_mgr.get_window(j, account)
@@ -1166,11 +1169,12 @@ class RosterWindow:
 
 				# if multiple resources (or second one disconnecting)
 				if (len(contact_instances) > 1 or (len(contact_instances) == 1 and \
-					show in ('offline', 'error'))) and contact.resource != '':
+				show in ('offline', 'error'))) and contact.resource != '':
 					name += '/' + contact.resource
 				
 				uf_show = helpers.get_uf_show(show)
 				if status: 
+					print '1'
 					ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
 						status), 'status')
 				else: # No status message
