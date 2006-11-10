@@ -1418,11 +1418,22 @@ class GroupchatControl(ChatControlBase):
 			end_iter = message_buffer.get_iter_at_mark(cursor_position)
 			text = message_buffer.get_text(start_iter, end_iter, False).decode(
 				'utf-8')
-			if text.endswith(' '):
-				if not self.last_key_tabs:
-					return False
 
 			splitted_text = text.split()
+			# topic completion
+			splitted_text2 = text.split(None, 1)
+			if text.startswith('/topic '):
+				if len(splitted_text2) == 2 and \
+					    self.subject.startswith(splitted_text2[1]) and\
+					    len(self.subject) > len(splitted_text2[1]):
+					message_buffer.insert_at_cursor(
+						self.subject[len(splitted_text2[1]):])
+					return True
+				elif len(splitted_text2) == 1 and text.startswith('/topic  '):
+					message_buffer.delete(start_iter, end_iter)
+					message_buffer.insert_at_cursor('/topic '+self.subject)
+					return True
+
 			# command completion
 			if text.startswith('/') and len(splitted_text) == 1:
 				text = splitted_text[0]
