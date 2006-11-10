@@ -193,7 +193,7 @@ class VcardWindow:
 		self.fill_status_label()
 
 	def set_os_info(self, resource, client_info, os_info):
-		if self.xml.get_widget('information_notebook').get_n_pages() < 4:
+		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
 			return
 		i = 0
 		client = ''
@@ -220,7 +220,7 @@ class VcardWindow:
 		self.test_remove_progressbar()
 
 	def fill_status_label(self):
-		if self.xml.get_widget('information_notebook').get_n_pages() < 4:
+		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
 			return
 		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
 		connected_contact_list = []
