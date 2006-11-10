@@ -1463,8 +1463,12 @@ class SingleMessageWindow:
 		self.cancel_button = self.xml.get_widget('cancel_button')
 		self.close_button = self.xml.get_widget('close_button')
 		self.message_tv_buffer.connect('changed', self.update_char_counter)
-		
-		self.to_entry.set_text(to)
+		if type(to) == type([]):
+			jid = ', '.join( [i[0].jid + '/' + i[0].resource for i in to])
+			self.to_entry.set_text(jid)
+			self.to_entry.set_sensitive(False)
+		else:
+			self.to_entry.set_text(to)
 		
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL and action == 'send':
 			try:
@@ -1616,22 +1620,27 @@ class SingleMessageWindow:
 			ErrorDialog(_('Connection not available'),
 		_('Please make sure you are connected with "%s".') % self.account)
 			return
-		to_whom_jid = self.to_entry.get_text().decode('utf-8')
-		if self.completion_dict.has_key(to_whom_jid):
-			to_whom_jid = self.completion_dict[to_whom_jid].jid
-		subject = self.subject_entry.get_text().decode('utf-8')
-		begin, end = self.message_tv_buffer.get_bounds()
-		message = self.message_tv_buffer.get_text(begin, end).decode('utf-8')
+		if type(self.to) == type([]):
+			sender_list = [i[0].jid + '/' + i[0].resource for i in self.to]
+		else:
+			sender_list = [self.to_entry.get_text().decode('utf-8')]
+ 
+		for to_whom_jid in sender_list:
+			if self.completion_dict.has_key(to_whom_jid):
+				to_whom_jid = self.completion_dict[to_whom_jid].jid
+			subject = self.subject_entry.get_text().decode('utf-8')
+			begin, end = self.message_tv_buffer.get_bounds()
+			message = self.message_tv_buffer.get_text(begin, end).decode('utf-8')
 
-		if to_whom_jid.find('/announce/') != -1:
-			gajim.connections[self.account].send_motd(to_whom_jid, subject,
-				message)
-			return
+			if to_whom_jid.find('/announce/') != -1:
+				gajim.connections[self.account].send_motd(to_whom_jid, subject,
+					message)
+				return
 
-		# FIXME: allow GPG message some day
-		gajim.connections[self.account].send_message(to_whom_jid, message,
-			keyID = None, type = 'normal', subject=subject)
-		
+			# FIXME: allow GPG message some day
+			gajim.connections[self.account].send_message(to_whom_jid, message,
+				keyID = None, type = 'normal', subject=subject)
+			
 		self.subject_entry.set_text('') # we sent ok, clear the subject
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
 
