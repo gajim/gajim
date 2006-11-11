@@ -1174,7 +1174,6 @@ class RosterWindow:
 				
 				uf_show = helpers.get_uf_show(show)
 				if status: 
-					print '1'
 					ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
 						status), 'status')
 				else: # No status message
