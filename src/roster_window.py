@@ -312,10 +312,11 @@ class RosterWindow:
 				return
 
 		if (contact.show in ('offline', 'error') or hide) and \
-			not showOffline and (not _('Transports') in contact.groups or \
-			gajim.connections[account].connected < 2) and \
-			len(gajim.events.get_events(account, jid)) == 0 and \
-			not _('Not in Roster') in contact.groups:
+		not showOffline and (not _('Transports') in contact.groups or \
+		gajim.connections[account].connected < 2) and \
+		len(gajim.contacts.get_contact(account, jid)) == 1 and \
+		len(gajim.events.get_events(account, jid)) == 0 and \
+		not _('Not in Roster') in contact.groups:
 			return
 
 		# Remove brother contacts that are already in roster to add them
@@ -3249,7 +3250,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					fjid += '/' + resource
 				if self.open_event(account, fjid, first_ev):
 					return
-			c = gajim.contacts.get_contact_with_highest_priority(account, jid)
+			c = gajim.contacts.get_contact(account, jid, resource)
+			if not c or isinstance(c, list):
+				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
 			if jid == gajim.get_jid_from_account(account):
 				resource = c.resource
 			self.on_open_chat_window(widget, c, account, resource = resource)
