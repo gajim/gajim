@@ -241,6 +241,11 @@ class RosterWindow:
 		model = self.tree.get_model()
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		nb_events = gajim.events.get_nb_roster_events(account, contact.jid)
+		# count events from all resources
+		for contact_ in gajim.contacts.get_contact(account, jid):
+			if contact_.resource:
+				nb_events += gajim.events.get_nb_roster_events(account,
+					contact_.get_full_jid())
 		if not contact:
 			return
 		# If contact already in roster, do not add it
@@ -314,8 +319,7 @@ class RosterWindow:
 		if (contact.show in ('offline', 'error') or hide) and \
 		not showOffline and (not _('Transports') in contact.groups or \
 		gajim.connections[account].connected < 2) and \
-		len(gajim.contacts.get_contact(account, jid)) == 1 and \
-		len(gajim.events.get_events(account, jid)) == 0 and \
+		len(gajim.contacts.get_contact(account, jid)) == 1 and nb_events == 0 and\
 		not _('Not in Roster') in contact.groups:
 			return
 
