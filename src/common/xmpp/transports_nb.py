@@ -249,7 +249,6 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._sock.setblocking(False)
 		except:
 			traceback.print_exc()
-			sys.exc_clear()
 			if self.on_connect_failure:
 				self.on_connect_failure()
 			return False
@@ -303,7 +302,6 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		except:
 			traceback.print_exc()
 			# socket is already closed
-			sys.exc_clear()
 		# socket descriptor cannot be (un)plugged anymore
 		self.fd = -1
 		if self.on_disconnect:
@@ -432,7 +430,6 @@ class NonBlockingTcp(PlugIn, IdleObject):
 				self._on_send()
 		except socket.error, e:
 			traceback.print_exc()
-			sys.exc_clear()
 			if e[0] == socket.SSL_ERROR_WANT_WRITE:
 				return True		
 			if self.state < 0:
@@ -453,7 +450,6 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		except socket.error, e:
 			traceback.print_exc()
 			errnum = e[0]
-			sys.exc_clear()
 		# in progress, or would block
 		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK): 
 			return
