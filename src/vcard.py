@@ -98,7 +98,7 @@ class VcardWindow:
 		annotation = buffer.get_text(buffer.get_start_iter(),
 			buffer.get_end_iter())
 		connection = gajim.connections[self.account]
-		if annotation != connection.annotations[self.contact.jid]:
+		if annotation != connection.annotations.get(self.contact.jid, ''):
 			connection.annotations[self.contact.jid] = annotation
 			connection.store_annotations()
 
