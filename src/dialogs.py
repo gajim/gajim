@@ -271,6 +271,7 @@ class ChooseGPGKeyDialog:
 		renderer = gtk.CellRendererText()
 		self.keys_treeview.insert_column_with_attributes(-1, _('Contact name'),
 			renderer, text = 1)
+		self.keys_treeview.set_search_column(1)
 		self.fill_tree(secret_keys, selected)
 		self.window.show_all()
 
