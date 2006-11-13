@@ -68,6 +68,11 @@ def torf(cond, tv, fv):
 	return fv
 
 class SSLWrapper:
+	def Error(Exception):
+		parent = Exception
+		def __init__(this, *args):
+			this.parent.__init__(this, *args)
+
 	def __init__(this, sslobj):
 		this.sslobj = sslobj
 		print "init called with", sslobj
@@ -105,6 +110,10 @@ class PyOpenSSLWrapper(SSLWrapper):
 			else:		  retval = this.sslobj.recv(bufsize, flags)
 		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
 			log.debug("Recv: " + repr(e))
+		except OpenSSL.SSL.SysCallError:
+			log.error("Got OpenSSL.SSL.SysCallError: " + repr(e))
+			traceback.print_exc()
+			raise SSLWrapper.Error(('OpenSSL.SSL.SysCallError', e.args))
 		except OpenSSL.SSL.Error, e:
 			"Recv: Caught OpenSSL.SSL.Error:"
 			traceback.print_exc()
@@ -365,6 +374,9 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			traceback.print_stack()
 			errnum = ERR_OTHER
 			errtxt = repr("socket.sslerror: " + e.args)
+		except SSLWrapper.Error:
+			errnum = ERR_OTHER
+			errtxt = repr(e.args)
 
 		# Should we really do this? In C, recv() will happily return 0
 		# in nonblocking mode when there is no data waiting, and in
@@ -378,6 +390,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 
 		if errnum in (ERR_DISCONN, errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN):
 			self.DEBUG(errtxt, 'error')
+			log.error("Got Disconnected: " + errtxt)
 			self.pollend()
 			# don't proccess result, cas it will raise error
 			return
@@ -385,6 +398,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		if received is None:
 			if errnum != 0:
 				self.DEBUG(errtxt, 'error')
+				log.error("Error: " + errtxt)
 				if self.state >= 0:
 					self.disconnect()
 				return
@@ -631,7 +645,7 @@ class NonBlockingTLS(PlugIn):
 			self.starttls='in progress'
 			tcpsock._sslObj.do_handshake()
 		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
-			log.debug("do_handshake: " + str(e))
+			log.debug("do_handshake: " + repr(e))
 		#tcpsock._sslObj.setblocking(False)
 		#print "Done handshake"
 		print "Async handshake started..."
