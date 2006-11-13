@@ -1391,6 +1391,22 @@ class RosterWindow:
 		model[iter][C_EDITABLE] = True # set 'editable' to True
 		self.tree.set_cursor(path, self.tree.get_column(0), True)
 
+	def on_remove_group_item_activated(self, widget, group, account):
+		dlg = dialogs.ConfirmationDialogCheck(_('Remove Group'),
+			_('Do you want to remove the group %s from the roster ?' % group),
+			_('Remove also all contacts in this group from your roster'))
+		dlg.set_default_response(gtk.BUTTONS_OK_CANCEL)
+		response = dlg.run()
+		if response == gtk.RESPONSE_OK:
+			for contact in gajim.contacts.get_contacts_from_group(account, group):
+				if not dlg.is_checked():
+					self.remove_contact_from_group(account, contact, group)
+					gajim.connections[account].update_contact(contact.jid,
+						contact.name, contact.groups)
+					self.add_contact_to_roster(contact.jid, account)
+				else:
+					gajim.connections[account].unsubscribe(contact.jid) 
+		
 	def on_assign_pgp_key(self, widget, contact, account):
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
@@ -1916,18 +1932,26 @@ class RosterWindow:
 			menu.append(rename_item)
 			rename_item.connect('activate', self.on_rename, iter, path)
 
+			# Remove group
+			remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
+			remove_item.set_image(icon)
+			menu.append(remove_item)
+			remove_item.connect('activate', self.on_remove_group_item_activated,
+				group, account)
+
 			# unsensitive if account is not connected
 			if gajim.connections[account].connected < 2:
 				rename_item.set_sensitive(False)
 		send_group_message_item = gtk.MenuItem(_('Send Group M_essage'))
-	
+
 		send_group_message_submenu = gtk.Menu()
 		send_group_message_item.set_submenu(send_group_message_submenu)
 		menu.append(send_group_message_item)
-		
+
 		group_message_to_all_item = gtk.MenuItem(_('To all users'))
 		send_group_message_submenu.append(group_message_to_all_item)
-		
+
 		group_message_to_all_online_item = gtk.MenuItem(_('To all online users'))
 		send_group_message_submenu.append(group_message_to_all_online_item)
 		list_ = [] # list of (jid, account) tuples
@@ -1946,7 +1970,6 @@ class RosterWindow:
 			self.on_send_single_message_menuitem_activate, account, list_online)
 		group_message_to_all_item.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, list_)
-
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 

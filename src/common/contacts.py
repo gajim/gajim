@@ -242,6 +242,15 @@ class Contacts:
 			return self._contacts[account][jid][0]
 		return None
 
+	def get_contacts_from_group(self, account, group):
+		'''Returns all contacts in the given group'''
+		group_contacts = []
+		for jid in self._contacts[account]:
+			contacts = self.get_contacts_from_jid(account, jid)
+			if group in contacts[0].groups:
+				group_contacts += contacts
+		return group_contacts
+		
 	def define_metacontacts(self, account, tags_list):
 		self._metacontacts_tags[account] = tags_list
 
