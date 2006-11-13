@@ -95,9 +95,12 @@ class VcardWindow:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		del gajim.interface.instances[self.account]['infos'][self.contact.jid]
 		buffer = self.xml.get_widget('textview_annotation').get_buffer()
-		gajim.connections[self.account].annotations[self.contact.jid] = \
-			buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())
-		gajim.connections[self.account].store_annotations()
+		annotation = buffer.get_text(buffer.get_start_iter(),
+			buffer.get_end_iter())
+		connection = gajim.connections[self.account]
+		if annotation != connection.annotations[self.contact.jid]:
+			connection.annotations[self.contact.jid] = annotation
+			connection.store_annotations()
 
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
