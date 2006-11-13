@@ -3552,21 +3552,22 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def iconCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for icon renderer'''
 		theme = gajim.config.get('roster_theme')
-		if model[iter][C_TYPE] == 'account':
+		type_ = model[iter][C_TYPE]
+		if type_ == 'account':
 			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
 				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
 			renderer.set_property('xalign', 0)
-		elif model[iter][C_TYPE] == 'group':
+		elif type_ == 'group':
 			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
 				self.set_renderer_color(renderer, gtk.STATE_PRELIGHT)
 			renderer.set_property('xalign', 0.2)
-		else:
+		elif type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
@@ -3648,19 +3649,20 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter, data=None):
 		'''When a row is added, set properties for secondary renderer (avatar or padlock)'''
 		theme = gajim.config.get('roster_theme')
-		if model[iter][C_TYPE] == 'account':
+		type_ = model[iter][C_TYPE]
+		if type_ == 'account':
 			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
 				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
-		elif model[iter][C_TYPE] == 'group':
+		elif type_ == 'group':
 			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
 				self.set_renderer_color(renderer, gtk.STATE_PRELIGHT)
-		else: # contact
+		elif type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
