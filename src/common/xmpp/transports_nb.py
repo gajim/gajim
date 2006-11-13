@@ -25,6 +25,33 @@ import sys
 import os
 import errno
 
+import traceback
+import thread
+
+import logging
+h = logging.StreamHandler()
+f = logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s')
+h.setFormatter(f)
+log = logging.getLogger('Gajim.transports')
+log.addHandler(h)
+log.setLevel(logging.DEBUG)
+log.propagate = False
+del h, f
+
+USE_PYOPENSSL = False
+
+try:
+	#raise ImportError("Manually disabled PyOpenSSL")
+	import OpenSSL.SSL
+	import OpenSSL.crypto
+	USE_PYOPENSSL = True
+	print "PyOpenSSL loaded."
+except ImportError:
+	# FIXME: Remove these prints before release, replace with a warning dialog.
+	print "=" * 79
+	print "PyOpenSSL not found, falling back to Python builtin SSL objects (insecure)."
+	print "=" * 79
+
 # timeout to connect to the server socket, it doesn't include auth 
 CONNECT_TIMEOUT_SECONDS = 30
 
@@ -33,7 +60,120 @@ DISCONNECT_TIMEOUT_SECONDS = 10
 
 # size of the buffer which reads data from server
 # if lower, more stanzas will be fragmented and processed twice
-RECV_BUFSIZE = 1048576
+RECV_BUFSIZE = 32768 # 2x maximum size of ssl packet, should be plenty
+#RECV_BUFSIZE = 16 # FIXME: (#2634) gajim breaks with this setting: it's inefficient but should work.
+
+def torf(cond, tv, fv):
+	if cond: return tv
+	return fv
+
+class SSLWrapper:
+	def __init__(this, sslobj):
+		this.sslobj = sslobj
+		print "init called with", sslobj
+
+	# We can return None out of this function to signal that no data is
+	# available right now. Better than an exception, which differs
+	# depending on which SSL lib we're using. Unfortunately returning ''
+	# can indicate that the socket has been closed, so to be sure, we avoid
+	# this.
+
+	def recv(this, data, flags=None):
+		raise NotImplementedException()
+
+	def send(this, data, flags=None):
+		raise NotImplementedException()
+
+class PyOpenSSLWrapper(SSLWrapper):
+	'''Wrapper class for PyOpenSSL's recv() and send() methods'''
+	parent = SSLWrapper
+
+	def __init__(this, *args):
+		this.parent.__init__(this, *args)
+
+	def is_numtoolarge(this, e):
+		t = ('asn1 encoding routines', 'a2d_ASN1_OBJECT', 'first num too large')
+		return isinstance(e.args, (list, tuple)) and len(e.args) == 1 and \
+		isinstance(e.args[0], (list, tuple)) and len(e.args[0]) == 2 and \
+		e.args[0][0] == e.args[0][1] == t
+
+	def recv(this, bufsize, flags=None):
+		retval = None
+		try:
+			#print "recv: thread id:", thread.get_ident()
+			if flags is None: retval = this.sslobj.recv(bufsize)
+			else:		  retval = this.sslobj.recv(bufsize, flags)
+		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
+			log.debug("Recv: " + repr(e))
+		except OpenSSL.SSL.Error, e:
+			"Recv: Caught OpenSSL.SSL.Error:"
+			traceback.print_exc()
+			print "Current Stack:"
+			traceback.print_stack()
+			if this.is_numtoolarge(e):
+				# print an error but ignore this exception
+				log.warning("Recv: OpenSSL: asn1enc: first num too large (eaten)")
+			else:
+				raise
+
+		return retval
+
+	def send(this, data, flags=None):
+		try:
+			#print "send: thread id:", thread.get_ident()
+			if flags is None: return this.sslobj.send(data)
+			else:		  return this.sslobj.send(data, flags)
+		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
+			log.debug("Send: " + repr(e))
+		except OpenSSL.SSL.Error, e:
+			print "Send: Caught OpenSSL.SSL.Error:"
+			traceback.print_exc()
+			print "Current Stack:"
+			traceback.print_stack()
+			if this.is_numtoolarge(e):
+				# warn, but ignore this exception
+				log.warning("Send: OpenSSL: asn1enc: first num too large (ignoring)")
+			else:
+				raise
+		return 0
+
+class StdlibSSLWrapper(SSLWrapper):
+	'''Wrapper class for Python's socket.ssl read() and write() methods'''
+	parent = SSLWrapper
+
+	def __init__(this, *args):
+		this.parent.__init__(this, *args)
+
+	def recv(this, bufsize, flags=None):
+		# we simply ignore flags since ssl object doesn't support it
+		retval = None
+		try:
+			retval = this.sslobj.read(bufsize)
+		except socket.sslerror, e:
+			print "Got socket.sslerror"
+			print e, e.args
+			traceback.print_exc()
+			print "Current Stack:"
+			traceback.print_stack()
+			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
+				raise
+		if retval is None: return ''
+		if retval == '': raise SSLWrapper.SocketShutdown('Connection Closed')
+		return retval
+
+	def send(this, data, flags=None):
+		# we simply ignore flags since ssl object doesn't support it
+		try:
+			return this.sslobj.write(data)
+		except socket.sslerror, e:
+			print "Got socket.sslerror"
+			print e, e.args
+			traceback.print_exc()
+			print "Current Stack:"
+			traceback.print_stack()
+			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
+				raise
+		return 0
 
 class NonBlockingTcp(PlugIn, IdleObject):
 	''' This class can be used instead of transports.Tcp in threadless implementations '''
@@ -109,6 +249,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			self._sock.setblocking(False)
 		except:
+			traceback.print_exc()
 			sys.exc_clear()
 			if self.on_connect_failure:
 				self.on_connect_failure()
@@ -161,6 +302,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._sock.shutdown(socket.SHUT_RDWR)
 			self._sock.close()
 		except:
+			traceback.print_exc()
 			# socket is already closed
 			sys.exc_clear()
 		# socket descriptor cannot be (un)plugged anymore
@@ -204,34 +346,56 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		
 	def _do_receive(self):
 		''' Reads all pending incoming data. Calls owner's disconnected() method if appropriate.'''
-		received = ''
+		ERR_DISCONN = -2 # Misc error signifying that we got disconnected
+		ERR_OTHER = -1 # Other error
+		received = None
 		errnum = 0
+		errtxt = 'No Error Set'
 		try: 
 			# get as many bites, as possible, but not more than RECV_BUFSIZE
 			received = self._recv(RECV_BUFSIZE)
-		except Exception, e:
-			if len(e.args)  > 0 and isinstance(e.args[0], int):
-				errnum = e[0]
-			sys.exc_clear()
-			# "received" will be empty anyhow 
-		if errnum == socket.SSL_ERROR_WANT_READ:
-			pass
-		elif errnum in [errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN]:
+		except (socket.error, socket.herror, socket.gaierror), e:
+			print "Got socket exception"
+			traceback.print_exc()
+			print "Current Stack:"
+			traceback.print_stack()
+			errnum = e[0]
+			errtxt = str(errnum) + ':' + e[1]
+		except socket.sslerror, e:
+			print "Got unknown socket.sslerror"
+			traceback.print_exc()
+			print "Current Stack:"
+			traceback.print_stack()
+			errnum = ERR_OTHER
+			errtxt = repr("socket.sslerror: " + e.args)
+
+		# Should we really do this? In C, recv() will happily return 0
+		# in nonblocking mode when there is no data waiting, and in
+		# some cases select() will mark the socket for reading when
+		# there is nothing to read, and the socket is still open. For
+		# example, this can happen when the remote sends a zero-length
+		# tcp packet.
+		if received is '':
+			errnum = ERR_DISCONN
+			errtxt = "Connection closed unexpectedly"
+
+		if errnum in (ERR_DISCONN, errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN):
+			self.DEBUG(errtxt, 'error')
 			self.pollend()
 			# don't proccess result, cas it will raise error
 			return
-		elif not received :
-			if errnum != socket.SSL_ERROR_EOF: 
-				# 8 EOF occurred in violation of protocol
-				self.DEBUG('Socket error while receiving data', 'error')
-				self.pollend()
-			if self.state >= 0:
-				self.disconnect()
-			return
-		
+
+		if received is None:
+			if errnum != 0:
+				self.DEBUG(errtxt, 'error')
+				if self.state >= 0:
+					self.disconnect()
+				return
+			received = ''
+
 		if self.state < 0:
 			return
-		
+
 		# we have received some bites, stop the timeout!
 		self.renew_send_timeout()
 		if self.on_receive:
@@ -268,6 +432,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 					self._plug_idle()
 				self._on_send()
 		except socket.error, e:
+			traceback.print_exc()
 			sys.exc_clear()
 			if e[0] == socket.SSL_ERROR_WANT_WRITE:
 				return True		
@@ -287,6 +452,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		try:
 			self._sock.connect(self._server)
 		except socket.error, e:
+			traceback.print_exc()
 			errnum = e[0]
 			sys.exc_clear()
 		# in progress, or would block
@@ -361,6 +527,14 @@ class NonBlockingTcp(PlugIn, IdleObject):
 
 class NonBlockingTLS(PlugIn):
 	''' TLS connection used to encrypts already estabilished tcp connection.'''
+
+	# from ssl.h (partial extract)
+	ssl_h_bits = {	"SSL_ST_CONNECT": 0x1000, "SSL_ST_ACCEPT": 0x2000, 
+			"SSL_CB_LOOP": 0x01, "SSL_CB_EXIT": 0x02, 
+			"SSL_CB_READ": 0x04, "SSL_CB_WRITE": 0x08, 
+			"SSL_CB_ALERT": 0x4000, 
+			"SSL_CB_HANDSHAKE_START": 0x10, "SSL_CB_HANDSHAKE_DONE": 0x20}
+
 	def PlugIn(self, owner, now=0, on_tls_start = None):
 		''' If the 'now' argument is true then starts using encryption immidiatedly.
 			If 'now' in false then starts encryption as soon as TLS feature is
@@ -375,6 +549,7 @@ class NonBlockingTLS(PlugIn):
 			try:
 				res = self._startSSL()
 			except Exception, e:
+				traceback.print_exc()
 				self._owner.socket.pollend()
 				return
 			self.tls_start()
@@ -416,17 +591,117 @@ class NonBlockingTLS(PlugIn):
 		self.tls_start()
 		raise NodeProcessed
 
+	def _dumpX509(this, cert):
+		print "Digest (SHA-1):", cert.digest("sha1")
+		print "Digest (MD5):", cert.digest("md5")
+		print "Serial #:", cert.get_serial_number()
+		print "Version:", cert.get_version()
+		print "Expired:", torf(cert.has_expired(), "Yes", "No")
+		print "Subject:"
+		this._dumpX509Name(cert.get_subject())
+		print "Issuer:"
+		this._dumpX509Name(cert.get_issuer())
+		this._dumpPKey(cert.get_pubkey())
+
+	def _dumpX509Name(this, name):
+		print "X509Name:", str(name)
+
+	def _dumpPKey(this, pkey):
+		typedict = {OpenSSL.crypto.TYPE_RSA: "RSA", OpenSSL.crypto.TYPE_DSA: "DSA"}
+		print "PKey bits:", pkey.bits()
+		print "PKey type: %s (%d)" % (typedict.get(pkey.type(), "Unknown"), pkey.type())
+
 	def _startSSL(self):
 		''' Immidiatedly switch socket to TLS mode. Used internally.'''
+		print "_startSSL called"
+		if USE_PYOPENSSL: return self._startSSL_pyOpenSSL()
+		return self._startSSL_stdlib()
+
+	def _startSSL_pyOpenSSL(self):
+		print "_startSSL_pyOpenSSL called, thread id:", thread.get_ident()
+		tcpsock = self._owner.Connection
+		# FIXME: should method be configurable?
+		tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
+		tcpsock._sslContext.set_info_callback(self._ssl_info_callback)
+		tcpsock._sslObj = OpenSSL.SSL.Connection(tcpsock._sslContext, tcpsock._sock)
+		tcpsock._sslObj.set_connect_state() # set to client mode
+
+		wrapper = PyOpenSSLWrapper(tcpsock._sslObj)
+		tcpsock._recv = wrapper.recv
+		tcpsock._send = wrapper.send
+
+		print "Initiating handshake..."
+		#tcpsock._sslObj.setblocking(True)
+		try:
+			self.starttls='in progress'
+			tcpsock._sslObj.do_handshake()
+		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
+			log.debug("do_handshake: " + str(e))
+		#tcpsock._sslObj.setblocking(False)
+		#print "Done handshake"
+		print "Async handshake started..."
+
+	def _on_ssl_handshake_done(self):
+		print "Handshake done!"
+		self.starttls='success'
+
+		tcpsock = self._owner.Connection
+		cert = tcpsock._sslObj.get_peer_certificate()
+		peer = cert.get_subject()
+		issuer = cert.get_issuer()
+		tcpsock._sslIssuer = unicode(issuer)
+		tcpsock._sslServer = unicode(peer)
+
+		# FIXME: remove debug prints
+		peercert = tcpsock._sslObj.get_peer_certificate()
+		ciphers = tcpsock._sslObj.get_cipher_list()
+
+		print "Ciphers:", ciphers
+		print "Peer cert:", peercert
+		self._dumpX509(peercert)
+
+		print OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, peercert)
+
+	def _startSSL_stdlib(self):
+		print "_startSSL_stdlib called"
 		tcpsock=self._owner.Connection
 		tcpsock._sock.setblocking(True)
 		tcpsock._sslObj = socket.ssl(tcpsock._sock, None, None)
 		tcpsock._sock.setblocking(False)
 		tcpsock._sslIssuer = tcpsock._sslObj.issuer()
 		tcpsock._sslServer = tcpsock._sslObj.server()
-		tcpsock._recv = tcpsock._sslObj.read
-		tcpsock._send = tcpsock._sslObj.write
+		wrapper = StdlibSSLWrapper(tcpsock._sslObj)
+		tcpsock._recv = wrapper.recv
+		tcpsock._send = wrapper.send
 		self.starttls='success'
+
+	def _ssl_info_callback(this, sslconn, type, st):
+		# Exceptions can't propagate up through this callback, so print them here.
+		try:    this._ssl_info_callback_guarded(sslconn, type, st)
+		except: traceback.print_exc()
+
+	def _ssl_info_callback_guarded(this, sslconn, type, st):
+		b = this.ssl_h_bits
+
+		#if type & b['SSL_CB_LOOP']:
+		#	if type & SSL_ST_CONNECT: tls_state = "connect"
+		#	elif type & SSL_ST_ACCEPT: tls_state = "accept"
+		#	else: tls_state = "undefined"
+		#	print "tls_state: %s: %s" % (tls_state, sslconn.state_string())
+
+		#if type & b['SSL_CB_ALERT']:
+		#	if type & SSL_CB_READ: rdwr = "read"
+		#	elif type & SSL_CB_WRITE: rdwr = "write"
+		#	else: rdwr = "unknown"
+		#	print "tls_alert: %s:%d: %s" % (rdwr, st, sslconn.state_string())
+
+		#mask = ""
+		#for k, v in b.iteritems():
+		#	if type & v: mask += " " + k
+		#print "mask:", mask, st
+
+		if type & b['SSL_CB_HANDSHAKE_DONE']:
+			this._on_ssl_handshake_done()
 
 	def StartTLSHandler(self, conn, starttls):
 		''' Handle server reply if TLS is allowed to process. Behaves accordingly.
@@ -441,6 +716,7 @@ class NonBlockingTLS(PlugIn):
 		try:
 			self._startSSL()
 		except Exception, e:
+			traceback.print_exc()
 			self._owner.socket.pollend()
 			return
 		self._owner.Dispatcher.PlugOut()
@@ -499,6 +775,7 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 		try: 
 			proto, code, desc = reply.split('\n')[0].split(' ', 2)
 		except: 
+			traceback.print_exc()
 			raise error('Invalid proxy reply')
 		if code <> '200':
 			self.DEBUG('Invalid proxy reply: %s %s %s' % (proto, code, desc),'error')
