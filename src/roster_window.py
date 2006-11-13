@@ -3568,7 +3568,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				self.set_renderer_color(renderer, gtk.STATE_PRELIGHT)
 			renderer.set_property('xalign', 0.2)
 		elif type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
-			if not model[iter][C_JID]:
+			if not model[iter][C_JID] or not model[iter][C_ACCOUNT]:
 				# This can append when at the moment we add the row
 				return
 			jid = model[iter][C_JID].decode('utf-8')
@@ -3624,7 +3624,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
 		elif type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
-			if not model[iter][C_JID]:
+			if not model[iter][C_JID] or not model[iter][C_ACCOUNT]:
 				# This can append when at the moment we add the row
 				return
 			jid = model[iter][C_JID].decode('utf-8')
@@ -3669,7 +3669,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			else:
 				self.set_renderer_color(renderer, gtk.STATE_PRELIGHT)
 		elif type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
-			if not model[iter][C_JID]:
+			if not model[iter][C_JID] or not model[iter][C_ACCOUNT]:
 				# This can append when at the moment we add the row
 				return
 			jid = model[iter][C_JID].decode('utf-8')
