@@ -3967,13 +3967,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if jid_source == jid_dest:
 			if grp_source == grp_dest and account_source == account_dest:
 				return
-			if context.action == gtk.gdk.ACTION_COPY:
-				self.on_drop_in_group(None, account_source, c_source, grp_dest,
-					context, etime)
-				return
-			self.on_drop_in_group(None, account_source, c_source, grp_dest,
-				context, etime, grp_source)
-			return
 		if grp_source == grp_dest:
 			# Add meta contact
 			#FIXME: doesn't work under windows:
@@ -4006,8 +3999,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			menu.append(item)
 			c_dest = gajim.contacts.get_contact_with_highest_priority(
 				account_dest, jid_dest)
-			item = gtk.MenuItem(_('Make %s and %s metacontacts') % (c_source.name,
-				c_dest.name))
+			item = gtk.MenuItem(_('Make %s and %s metacontacts') %
+				(c_source.get_shown_name(), c_dest.get_shown_name()))
 			is_big_brother = False
 			if model.iter_has_child(iter_source):
 				is_big_brother = True
