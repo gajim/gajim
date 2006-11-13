@@ -157,8 +157,7 @@ class StdlibSSLWrapper(SSLWrapper):
 			traceback.print_stack()
 			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
 				raise
-		if retval is None: return ''
-		if retval == '': raise SSLWrapper.SocketShutdown('Connection Closed')
+
 		return retval
 
 	def send(this, data, flags=None):
