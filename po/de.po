@@ -5770,7 +5770,7 @@ msgstr "Verbindung mit Konto \"%s\" abgebrochen"
 #: ../src/common/zeroconf/connection_zeroconf.py:205
 msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr ""
-"Um weiter Senden um Empfangen zu können, müssen Sie sich erneut verbinden."
+"Um weiterhin Nachrichten Senden und Empfangen zu können, müssen Sie sich erneut verbinden."
 
 #: ../src/common/connection.py:175 ../src/common/connection.py:201
 #, python-format
