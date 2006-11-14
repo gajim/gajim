@@ -702,6 +702,7 @@ def get_os_info():
 			output = temp_failure_retry(child_stdout.readline).strip()
 			child_stdout.close()
 			child_stdin.close()
+			os.wait()
 			# some distros put n/a in places, so remove those
 			output = output.replace('n/a', '').replace('N/A', '')
 			return output
