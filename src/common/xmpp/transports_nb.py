@@ -110,7 +110,7 @@ class PyOpenSSLWrapper(SSLWrapper):
 			else:		  retval = this.sslobj.recv(bufsize, flags)
 		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
 			log.debug("Recv: " + repr(e))
-		except OpenSSL.SSL.SysCallError:
+		except OpenSSL.SSL.SysCallError, e:
 			log.error("Got OpenSSL.SSL.SysCallError: " + repr(e))
 			traceback.print_exc()
 			raise SSLWrapper.Error(('OpenSSL.SSL.SysCallError', e.args))
