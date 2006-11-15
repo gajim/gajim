@@ -440,6 +440,7 @@ class Interface:
 			if ji in jid_list:
 				# Update existing iter
 				self.roster.draw_contact(ji, account)
+				self.roster.draw_group(_('Transports'), account)
 				# transport just signed in/out, don't show popup notifications
 				# for 30s
 				account_ji = account + '/' + ji

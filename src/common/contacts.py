@@ -259,8 +259,12 @@ class Contacts:
 		nbr_online = 0
 		nbr_total = 0
 		for account in accounts:
+			our_jid = common.gajim.get_jid_from_account(account)
 			for jid in self.get_jid_list(account):
-				if common.gajim.jid_is_transport(jid):
+				if jid == our_jid:
+					continue
+				if common.gajim.jid_is_transport(jid) and not \
+				common.gajim.config.get('show_transports_group'):
 					# do not count transports
 					continue
 				contact = self.get_contact_with_highest_priority(account, jid)
