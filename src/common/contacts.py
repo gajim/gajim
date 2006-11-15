@@ -250,7 +250,39 @@ class Contacts:
 			if group in contacts[0].groups:
 				group_contacts += contacts
 		return group_contacts
-		
+
+	def get_nb_online_total_contacts(self, accounts = [], groups = []):
+		'''Returns the number of online contacts and the total number of
+		contacts'''
+		if accounts == []:
+			accounts = self.get_accounts()
+		nbr_online = 0
+		nbr_total = 0
+		for account in accounts:
+			for jid in self.get_jid_list(account):
+				if common.gajim.jid_is_transport(jid):
+					# do not count transports
+					continue
+				contact = self.get_contact_with_highest_priority(account, jid)
+				in_groups = False
+				if groups == []:
+					in_groups = True
+				else:
+					contact_groups = contact.groups
+					if not contact_groups:
+						# Contact is not in a group, so count it in General group
+						contact_groups.append(_('General'))
+					for group in groups:
+						if group in contact_groups:
+							in_groups = True
+							break
+
+				if in_groups:
+					if contact.show not in ('offline', 'error'):
+						nbr_online += 1
+					nbr_total += 1
+		return nbr_online, nbr_total
+
 	def define_metacontacts(self, account, tags_list):
 		self._metacontacts_tags[account] = tags_list
 

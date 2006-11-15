@@ -80,9 +80,8 @@ class RosterWindow:
 		root = self.get_account_iter(account)
 		group_iter = model.iter_children(root)
 		# C_NAME column contacts the pango escaped group name
-		name = gtkgui_helpers.escape_for_pango_markup(name)
 		while group_iter:
-			group_name = model[group_iter][C_NAME].decode('utf-8')
+			group_name = model[group_iter][C_JID].decode('utf-8')
 			if name == group_name:
 				break
 			group_iter = model.iter_next(group_iter)
@@ -217,13 +216,20 @@ class RosterWindow:
 		else:
 			model[iter][C_SECPIXBUF] = None
 		path = model.get_path(iter)
+		account_name = account
+		accounts = [account]
 		if self.regroup:
-			account = _('Merged accounts')
+			account_name = _('Merged accounts')
+			accounts = []
 		if not self.tree.row_expanded(path) and model.iter_has_child(iter):
 			# account row not expanded
-			model[iter][C_NAME] = '[%s]' % account
-		else:
-			model[iter][C_NAME] = account
+			account_name = '[%s]' % account_name
+		if gajim.account_is_connected(account) or (self.regroup and \
+		gajim.get_number_of_connected_accounts()):
+			nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
+				accounts = accounts)		
+			account_name += ' (%s/%s)' % (repr(nbr_on),repr(nbr_total))
+		model[iter][C_NAME] = account_name
 
 	def remove_newly_added(self, jid, account):
 		if jid in gajim.newly_added[account]:
@@ -341,7 +347,8 @@ class RosterWindow:
 				iterG = model.append(IterAcct, [
 					self.jabber_state_images['16']['closed'],
 					gtkgui_helpers.escape_for_pango_markup(group), 'group',
-					group, account,	False, None])
+					group, account, False, None])
+				self.draw_group(group, account)
 				if model.iter_n_children(IterAcct) == 1: # We added the first one
 					self.draw_account(account)
 			if group not in gajim.groups[account]: # It can probably never append
@@ -371,6 +378,20 @@ class RosterWindow:
 			contacts = gajim.contacts.get_contact(data['account'],
 				data['jid'])
 			self.add_contact_to_roster(data['jid'], data['account'])
+
+	def draw_group(self, group, account):
+		iter = self.get_group_iter(group, account)
+		if not iter:
+			return
+		if self.regroup:
+			accounts = []
+		else:
+			accounts = [account]
+		nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
+			accounts = accounts, groups = [group])
+		model = self.tree.get_model()
+		model.set_value(iter, 1 , gtkgui_helpers.escape_for_pango_markup(
+			'%s (%s/%s)' % (group, repr(nbr_on), repr(nbr_total))))		
 
 	def add_to_not_in_the_roster(self, account, jid):
 		''' add jid to group "not in the roster", he MUST not be in roster yet,
@@ -1189,6 +1210,14 @@ class RosterWindow:
 				account, contact.jid):
 					ctrl.draw_banner()
 
+		if not contact.groups:
+			self.draw_group(_('General'), account)
+		else:
+			for group in contact.groups:
+				self.draw_group(group, account)
+
+		self.draw_account(account) 
+
 	def on_info(self, widget, contact, account):
 		'''Call vcard_information_window class to display contact's information'''
 		info = gajim.interface.instances[account]['infos']
@@ -1275,8 +1304,14 @@ class RosterWindow:
 				contacts = []
 				connection = gajim.connections[account]
 				# get our current contact info
-				contact = gajim.contacts.create_contact(jid = jid, name = account,
-					show = connection.get_status(), sub = '',
+
+				nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
+					accounts = [account])
+				account_name = account
+				if gajim.account_is_connected(account):
+					account_name += '(%s/%s)' % (repr(nbr_on), repr(nbr_total))
+				contact = gajim.contacts.create_contact(jid = jid,
+					name = account_name, show = connection.get_status(), sub = '',
 					status = connection.status,
 					resource = gajim.config.get_per('accounts', connection.name,
 						'resource'),
