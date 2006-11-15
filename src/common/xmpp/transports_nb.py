@@ -143,11 +143,11 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	def pollin(self):
 		self._do_receive() 
 	
-	def pollend(self):
+	def pollend(self, retry = False):
 		conn_failure_cb = self.on_connect_failure
 		self.disconnect()
 		if conn_failure_cb:
-			conn_failure_cb()
+			conn_failure_cb(retry)
 		
 	def disconnect(self):
 		if self.state == -2: # already disconnected
@@ -216,15 +216,19 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			# "received" will be empty anyhow 
 		if errnum == socket.SSL_ERROR_WANT_READ:
 			pass
-		elif errnum in [errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN]:
+		elif errnum  == errno.ECONNRESET:
+			self.pollend(True)
+			# don't proccess result, caus it will raise error
+			return
+		elif errnum in [errno.ENOTCONN, errno.ESHUTDOWN]:
 			self.pollend()
-			# don't proccess result, cas it will raise error
+			# don't proccess result, caus it will raise error
 			return
 		elif not received :
 			if errnum != socket.SSL_ERROR_EOF: 
 				# 8 EOF occurred in violation of protocol
 				self.DEBUG('Socket error while receiving data', 'error')
-				self.pollend()
+				self.pollend(True)
 			if self.state >= 0:
 				self.disconnect()
 			return

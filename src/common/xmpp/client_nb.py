@@ -125,6 +125,8 @@ class NBCommonClient(CommonClient):
 			self.on_connect_failure(retry)
 
 	def _on_connected(self):
+		# connect succeded, so no need of this callback anymore
+		self.on_connect_failure = None
 		self.connected = 'tcp'
 		if self._Ssl:
 			transports_nb.NonBlockingTLS().PlugIn(self, now=1)

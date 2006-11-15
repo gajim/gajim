@@ -367,8 +367,7 @@ class Connection(ConnectionHandlers):
 				secure = self._secure)
 			return
 		else:
-			if not retry:
-				self.retrycount = 0
+			if not retry and self.retrycount == 0:
 				self.time_to_reconnect = None
 				if self.on_connect_failure:
 					self.on_connect_failure()
