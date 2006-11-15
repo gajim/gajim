@@ -154,7 +154,8 @@ class VcardWindow:
 
 	def set_values(self, vcard):
 		for i in vcard.keys():
-			if i == 'PHOTO':
+			if i == 'PHOTO' and self.xml.get_widget('information_notebook').\
+			get_n_pages() > 4:
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
 					get_avatar_pixbuf_encoded_mime(vcard[i])
 				image = self.xml.get_widget('PHOTO_image')
