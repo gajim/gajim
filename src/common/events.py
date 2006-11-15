@@ -223,7 +223,7 @@ class Events:
 		return self._get_first_event_with_attribute(events)
 
 	def get_nb_roster_events(self, account = None, jid = None, types = []):
-		'''returns the number of events displayedin roster'''
+		'''returns the number of events displayed in roster'''
 		return self._get_nb_events(attribute = 'roster', account = account,
 			jid = jid, types = types)
 

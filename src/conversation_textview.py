@@ -18,7 +18,6 @@ import gtk
 import pango
 import gobject
 import time
-import sys
 import os
 import tooltips
 import dialogs

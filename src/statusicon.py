@@ -14,7 +14,6 @@
 ##
 
 import gtk
-import gobject
 import systray
 
 from common import gajim

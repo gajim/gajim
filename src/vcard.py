@@ -19,8 +19,6 @@
 import gtk
 import gobject
 import base64
-import mimetypes
-import os
 import time
 import locale
 

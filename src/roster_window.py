@@ -18,7 +18,6 @@
 import gtk
 import gobject
 import os
-import sys
 import time
 import urllib
 

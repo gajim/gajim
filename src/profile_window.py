@@ -20,13 +20,10 @@ import gobject
 import base64
 import mimetypes
 import os
-import time
-import locale
 
 import gtkgui_helpers
 import dialogs
 
-from common import helpers
 from common import gajim
 from common.i18n import Q_
 
@@ -172,10 +169,7 @@ class ProfileWindow:
 			menu = gtk.Menu()
 			
 			# Try to get pixbuf
-			is_fake = False
-			if account and gajim.contacts.is_pm_from_jid(account, jid):
-				is_fake = True
-			pixbuf = get_avatar_pixbuf_from_cache(jid, is_fake)
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid)
 
 			if pixbuf:
 				nick = gajim.config.get_per('accounts', self.account, 'name')

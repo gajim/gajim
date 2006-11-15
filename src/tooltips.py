@@ -21,7 +21,6 @@ import time
 import locale
 
 import gtkgui_helpers
-import message_control
 
 from common import gajim
 from common import helpers

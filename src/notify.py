@@ -101,7 +101,7 @@ def get_advanced_notification(event, account, contact):
 			if tab_opened == 'both':
 				tab_opened_ok = True
 			else:
-				chat_control = helper.get_chat_control(account, contact)
+				chat_control = helpers.get_chat_control(account, contact)
 				if (chat_control and tab_opened == 'yes') or (not chat_control and \
 				tab_opened == 'no'):
 					tab_opened_ok = True

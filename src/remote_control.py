@@ -307,7 +307,7 @@ class SignalObject(dbus.service.Object):
 		if not jid:
 			raise MissingArgument
 			return None
-		jid = self._get_real_jid(jid, account)
+		jid = self._get_real_jid(jid)
 
 		cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
 		if cached_vcard:

@@ -24,7 +24,6 @@ import common.sleepy
 
 import gtkgui_helpers
 import dialogs
-import vcard
 import cell_renderer_image
 import message_control
 import chat_control
