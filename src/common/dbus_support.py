@@ -16,7 +16,6 @@
 ##
 
 import os
-import sys
 
 from common import gajim
 from common import exceptions

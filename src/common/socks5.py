@@ -27,11 +27,8 @@
 
 
 import socket
-import select
-import os
 import struct
 import sha
-import time
 from dialogs import BindPortError
 
 from errno import EWOULDBLOCK
@@ -213,7 +210,7 @@ class SocksQueue:
 			
 			sender = self.senders[file_props['hash']]
 			sender.account = account
-			result = get_file_contents(0)
+			result = self.get_file_contents(0)
 			self.process_result(result, sender)
 	
 	def result_sha(self, sha_str, idx):
