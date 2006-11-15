@@ -744,7 +744,8 @@ class Connection(ConnectionHandlers):
 					chatstate_node.addChild(name = 'composing') 
 
 		self.connection.send(msg_iq)
-		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
+		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
+			.split()
 		ji = gajim.get_jid_without_resource(jid)
 		if self.name not in no_log_for and ji not in no_log_for:
 			log_msg = msg
