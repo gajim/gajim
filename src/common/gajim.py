@@ -15,9 +15,7 @@
 ## GNU General Public License for more details.
 ##
 
-import os
 import sys
-import tempfile
 import logging
 import locale
 
