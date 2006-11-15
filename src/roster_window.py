@@ -393,7 +393,7 @@ class RosterWindow:
 		model.set_value(iter, 1 , gtkgui_helpers.escape_for_pango_markup(
 			'%s (%s/%s)' % (group, repr(nbr_on), repr(nbr_total))))		
 
-	def add_to_not_in_the_roster(self, account, jid):
+	def add_to_not_in_the_roster(self, account, jid, nick = ''):
 		''' add jid to group "not in the roster", he MUST not be in roster yet,
 		 return contact '''
 		keyID = ''
@@ -402,7 +402,7 @@ class RosterWindow:
 		if jid in attached_keys:
 			keyID = attached_keys[attached_keys.index(jid) + 1]
 		contact = gajim.contacts.create_contact(jid = jid,
-			name = '', groups = [_('Not in Roster')],
+			name = nick, groups = [_('Not in Roster')],
 			show = 'not in roster', status = '', sub = 'none',
 			keyID = keyID)
 		gajim.contacts.add_contact(account, contact)
@@ -2936,7 +2936,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				contact = highest_contact
 		if not contact:
 			# contact is not in roster
-			contact = self.add_to_not_in_the_roster(account, jid)
+			contact = self.add_to_not_in_the_roster(account, jid, user_nick)
 
 		path = self.get_path(jid, account) # Try to get line of contact in roster
 
