@@ -32,6 +32,7 @@ Gajim 0.11 (XX October 2006)
   * Ability to show only Join/Leave in groupchats instead of all status changes
   * New possibilities to insert nickname of an occupant in groupchats conversations: Tab in an empty line now cycle through nicks, maj+right click->insert nickname, maj+click on name in gc-roster, /names command to show all users presents
   * Fixed bugs when removing or renaming an account with tabs open (#2369 and #2370)
+  * New translations: Croatian, Esperanto
 
   * FIXME : Ad-Hoc for 0.11 ? 
   * FIXME : does that work ? not tested : Metacontacts across accounts (#1596)
