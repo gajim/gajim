@@ -1668,7 +1668,8 @@ class Interface:
 		if not os.path.exists(path):
 			# It's maybe a user theme
 			path = os.path.join(gajim.MY_EMOTS_PATH, emot_theme)
-			if not os.path.exists(path): # theme doesn't exist
+			if not os.path.exists(path): # theme doesn't exist, disable emoticons
+				gajim.config.set('emoticons_theme', '')
 				return
 		sys.path.append(path)
 		import emoticons
