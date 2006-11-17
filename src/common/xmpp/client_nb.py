@@ -74,7 +74,7 @@ class NBCommonClient(CommonClient):
 		''' Called on disconnection. Calls disconnect handlers and cleans things up. '''
 		self.connected=''
 		self.DEBUG(self.DBG,'Disconnect detected','stop')
-		for i in self.disconnect_handlers.reverse(): 
+		for i in reversed(self.disconnect_handlers):
 			i()
 		if self.__dict__.has_key('NonBlockingRoster'):
 			self.NonBlockingRoster.PlugOut()
