@@ -19,7 +19,7 @@
 ##
 
 
-import sre
+import re
 import copy
 import defs
 
@@ -441,7 +441,7 @@ class Config:
 		elif type[0] == 'string':
 			return self.is_valid_string(val)
 		else:
-			if sre.match(type[1], val):
+			if re.match(type[1], val):
 				return val
 			else:
 				return None

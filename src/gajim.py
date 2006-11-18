@@ -96,7 +96,7 @@ del path
 
 import gobject
 
-import sre
+import re
 import signal
 import getopt
 import time
@@ -1573,7 +1573,7 @@ class Interface:
 		basic_pattern = links + mail
 		if gajim.config.get('ascii_formatting'):
 			basic_pattern += formatting
-		self.basic_pattern_re = sre.compile(basic_pattern, sre.IGNORECASE)
+		self.basic_pattern_re = re.compile(basic_pattern, re.IGNORECASE)
 		
 		emoticons_pattern = ''
 		if gajim.config.get('emoticons_theme'):
@@ -1587,7 +1587,7 @@ class Interface:
 			emoticons_pattern_postmatch = ''
 			emoticon_length = 0
 			for emoticon in keys: # travel thru emoticons list
-				emoticon_escaped = sre.escape(emoticon) # espace regexp metachars
+				emoticon_escaped = re.escape(emoticon) # espace regexp metachars
 				emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
 				if (emoticon_length != len(emoticon)):
 					# Build up expressions to match emoticons next to other emoticons
@@ -1607,12 +1607,12 @@ class Interface:
 		# because emoticons match later (in the string) they need to be after
 		# basic matches that may occur earlier
 		emot_and_basic_pattern = basic_pattern + emoticons_pattern
-		self.emot_and_basic_re = sre.compile(emot_and_basic_pattern, sre.IGNORECASE)
+		self.emot_and_basic_re = re.compile(emot_and_basic_pattern, re.IGNORECASE)
 		
 		# at least one character in 3 parts (before @, after @, after .)
-		self.sth_at_sth_dot_sth_re = sre.compile(r'\S+@\S+\.\S*[^\s)?]')
+		self.sth_at_sth_dot_sth_re = re.compile(r'\S+@\S+\.\S*[^\s)?]')
 		
-		sre.purge() # clear the regular expression cache
+		re.purge() # clear the regular expression cache
 
 	def on_emoticon_sort(self, emot1, emot2):
 		len1 = len(emot1)

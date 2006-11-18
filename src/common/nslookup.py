@@ -14,7 +14,7 @@
 
 import sys
 import os
-import sre
+import re
 
 from xmpp.idlequeue import *
 
@@ -24,10 +24,10 @@ elif os.name == 'posix':
 	import fcntl
 
 # it is good to check validity of arguments, when calling system commands
-ns_type_pattern = sre.compile('^[a-z]+$')
+ns_type_pattern = re.compile('^[a-z]+$')
 
 # match srv host_name
-host_pattern = sre.compile('^[a-z0-9\-._]*[a-z0-9]\.[a-z]{2,}$')
+host_pattern = re.compile('^[a-z0-9\-._]*[a-z0-9]\.[a-z]{2,}$')
 
 class Resolver:
 	def __init__(self, idlequeue):

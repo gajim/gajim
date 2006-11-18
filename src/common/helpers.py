@@ -16,7 +16,7 @@
 ## GNU General Public License for more details.
 ##
 
-import sre
+import re
 import locale
 import os
 import subprocess
@@ -328,7 +328,7 @@ def from_one_line(msg):
 	# to match the regexp that follows it
 
 	# So here match '\\n' but not if you have a '\' before that
-	re = sre.compile(r'(?<!\\)\\n')
+	re = re.compile(r'(?<!\\)\\n')
 	msg = re.sub('\n', msg)
 	msg = msg.replace('\\\\', '\\')
 	# s12 = 'test\\ntest\\\\ntest'
