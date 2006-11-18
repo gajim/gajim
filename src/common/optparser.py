@@ -1,16 +1,6 @@
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -27,11 +17,21 @@ import sys
 import locale
 from common import gajim
 
+import exceptions
+try:
+	import sqlite3 as sqlite # python 2.5
+except ImportError:
+	try:
+		from pysqlite2 import dbapi2 as sqlite
+	except ImportError:
+		raise exceptions.PysqliteNotAvailable
+import logger
+
 class OptionsParser:
 	def __init__(self, filename):
 		self.__filename = filename
-		self.old_values = {} # values that are saved in the file and maybe
-									# no longer valid
+		self.old_values = {}	# values that are saved in the file and maybe
+								# no longer valid
 
 	def read_line(self, line):
 		index = line.find(' = ')
@@ -126,8 +126,7 @@ class OptionsParser:
 		os.chmod(self.__filename, 0600)
 
 	def update_config(self, old_version, new_version):
-		# Convert '0.x.y' to (0, x, y)
-		old_version_list = old_version.split('.')
+		old_version_list = old_version.split('.') # convert '0.x.y' to (0, x, y)
 		old = []
 		while len(old_version_list):
 			old.append(int(old_version_list.pop(0)))
@@ -146,7 +145,15 @@ class OptionsParser:
 			self.update_config_to_01012()
 		if old < [0, 10, 1, 3] and new >= [0, 10, 1, 3]:
 			self.update_config_to_01013()
-	
+		if old < [0, 10, 1, 4] and new >= [0, 10, 1, 4]:
+			self.update_config_to_01014()
+		if old < [0, 10, 1, 5] and new >= [0, 10, 1, 5]:
+			self.update_config_to_01015()
+		if old < [0, 10, 1, 6] and new >= [0, 10, 1, 6]:
+			self.update_config_to_01016()
+		if old < [0, 10, 1, 7] and new >= [0, 10, 1, 7]:
+			self.update_config_to_01017()
+
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
 	
@@ -202,13 +209,6 @@ class OptionsParser:
 
 	def assert_unread_msgs_table_exists(self):
 		'''create table unread_messages if there is no such table'''
-		import exceptions
-		try:
-			from pysqlite2 import dbapi2 as sqlite
-		except ImportError:
-			raise exceptions.PysqliteNotAvailable
-		import logger
-
 		con = sqlite.connect(logger.LOG_DB_PATH) 
 		cur = con.cursor()
 		try:
@@ -278,13 +278,6 @@ class OptionsParser:
 
 	def update_config_to_01013(self):
 		'''create table transports_cache if there is no such table'''
-		import exceptions
-		try:
-			from pysqlite2 import dbapi2 as sqlite
-		except ImportError:
-			raise exceptions.PysqliteNotAvailable
-		import logger
-
 		con = sqlite.connect(logger.LOG_DB_PATH) 
 		cur = con.cursor()
 		try:
@@ -301,3 +294,56 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.10.1.3')
+
+	def update_config_to_01014(self):
+		'''apply indeces to the logs database'''
+		print _('migrating logs database to indeces')
+		con = sqlite.connect(logger.LOG_DB_PATH) 
+		cur = con.cursor()
+		# apply indeces
+		try:
+			cur.executescript(
+				'''
+				CREATE INDEX idx_logs_jid_id_kind ON logs (jid_id, kind);
+				CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
+				'''
+			)
+
+			con.commit()
+		except:
+			pass
+		con.close()
+		gajim.config.set('version', '0.10.1.4')
+
+	def update_config_to_01015(self):
+		'''clean show values in logs database'''
+		con = sqlite.connect(logger.LOG_DB_PATH)
+		cur = con.cursor()
+		status = dict((i[5:].lower(), logger.constants.__dict__[i]) for i in \
+			logger.constants.__dict__.keys() if i.startswith('SHOW_'))
+		for show in status:
+			cur.execute('update logs set show = ? where show = ?;', (status[show],
+				show))
+		cur.execute('update logs set show = NULL where show not in (0, 1, 2, 3, 4, 5);')
+		con.commit()
+		cur.close() # remove this in 2007 [pysqlite old versions need this]
+		con.close()
+		gajim.config.set('version', '0.10.1.5')
+		
+	def update_config_to_01016(self):
+		'''#2494 : Now we play gc_received_message sound even if 
+		notify_on_all_muc_messages is false. Keep precedent behaviour.'''
+		if self.old_values.has_key('notify_on_all_muc_messages') and \
+		self.old_values['notify_on_all_muc_messages'] == 'False' and \
+		gajim.config.get_per('soundevents', 'muc_message_received', 'enabled'):
+			gajim.config.set_per('soundevents',\
+				'muc_message_received', 'enabled', False)
+		gajim.config.set('version', '0.10.1.6')
+
+	def update_config_to_01017(self):
+		'''trayicon_notification_on_new_messages ->
+		trayicon_notification_on_events '''
+		if self.old_values.has_key('trayicon_notification_on_new_messages'):
+			gajim.config.set('trayicon_notification_on_events',
+				 self.old_values['trayicon_notification_on_new_messages']) 
+		gajim.config.set('version', '0.10.1.7')

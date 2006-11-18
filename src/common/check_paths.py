@@ -1,16 +1,7 @@
-## Contributors for this file:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - Nikos Kouremenos <kourem@gmail.com>
-## - Travis Shirk <travis@pobox.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -29,7 +20,14 @@ import stat
 from common import gajim
 import logger
 
-from pysqlite2 import dbapi2 as sqlite # DO NOT MOVE ABOVE OF import gajim
+# DO NOT MOVE ABOVE OF import gajim
+try:
+	import sqlite3 as sqlite # python 2.5
+except ImportError:
+	try:
+		from pysqlite2 import dbapi2 as sqlite
+	except ImportError:
+		raise exceptions.PysqliteNotAvailable
 
 def create_log_db():
 	print _('creating logs database')
@@ -57,11 +55,13 @@ def create_log_db():
 			jid_id INTEGER
 		);
 		
+		CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
+		
 		CREATE TABLE transports_cache (
 			transport TEXT UNIQUE,
 			type INTEGER
 		);
-																
+		
 		CREATE TABLE logs(
 			log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid_id INTEGER,
@@ -72,6 +72,8 @@ def create_log_db():
 			message TEXT,
 			subject TEXT
 		);
+		
+		CREATE INDEX idx_logs_jid_id_kind ON logs (jid_id, kind);
 		'''
 		)
 

@@ -1,7 +1,4 @@
-#!/bin/sh
-''':'
-exec python -OOt "$0" ${1+"$@"}
-' '''
+#!/usr/bin/env python
 ## history_manager.py
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
@@ -33,6 +30,9 @@ import dialogs
 import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants
 
+#FIXME: constants should implement 2 way mappings 
+status = dict((constants.__dict__[i], i[5:].lower()) for i in \
+	constants.__dict__.keys() if i.startswith('SHOW_')) 
 from common import gajim
 from common import helpers
 
@@ -44,14 +44,17 @@ C_SUBJECT,
 C_NICKNAME
 ) = range(2, 6)
 
+
 try:
-	from pysqlite2 import dbapi2 as sqlite
+	import sqlite3 as sqlite # python 2.5
 except ImportError:
-	raise exceptions.PysqliteNotAvailable
+	try:
+		from pysqlite2 import dbapi2 as sqlite
+	except ImportError:
+		raise exceptions.PysqliteNotAvailable
 
 
 class HistoryManager:
-
 	def __init__(self):
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
@@ -193,7 +196,9 @@ class HistoryManager:
 		gtk.main_quit()
 	
 	def _fill_jids_listview(self):
-		self.cur.execute('SELECT jid, jid_id FROM jids ORDER BY jid')
+		# get those jids that have at least one entry in logs
+		self.cur.execute('SELECT jid, jid_id FROM jids WHERE jid_id IN (SELECT '
+			'distinct logs.jid_id FROM logs) ORDER BY jid')
 		rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
 		for row in rows:
 			self.jids_already_in.append(row[0]) # jid
@@ -310,6 +315,7 @@ class HistoryManager:
 			except ValueError:
 				pass
 			else:
+				color = None
 				if kind in (constants.KIND_SINGLE_MSG_RECV,
 				constants.KIND_CHAT_MSG_RECV, constants.KIND_GC_MSG):
 					# it is the other side
@@ -325,11 +331,14 @@ class HistoryManager:
 						message = ''
 					else:
 						message = ' : ' + message 
-					message = helpers.get_uf_show(show) + message
-					
-				message = '<span foreground="%s">%s</span>' % (color,
-					gtkgui_helpers.escape_for_pango_markup(message))
-				self.logs_liststore.append((log_line_id, jid_id, time_, message,
+					message = helpers.get_uf_show(gajim.SHOW_LIST[show]) + message
+
+				message_ = '<span'
+				if color:
+					message_ += ' foreground="%s"' % color
+				message_ += '>%s</span>' % \
+					gtkgui_helpers.escape_for_pango_markup(message)
+				self.logs_liststore.append((log_line_id, jid_id, time_, message_,
 					subject, nickname))
 
 	def _fill_search_results_listview(self, text):

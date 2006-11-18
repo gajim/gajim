@@ -17,18 +17,20 @@
 ##
 
 import sre
+import locale
 import os
 import subprocess
 import urllib
 import errno
 import select
-import sys
 import sha
 from encodings.punycode import punycode_encode
 
 import gajim
 from i18n import Q_
+from i18n import ngettext
 from xmpp_stringprep import nodeprep, resourceprep, nameprep
+
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -290,6 +292,21 @@ def get_uf_role(role, plural = False):
 		else:
 			role_name = _('Visitor')
 	return role_name
+	
+def get_uf_affiliation(affiliation):
+	'''Get a nice and translated affilition for muc'''
+	if affiliation == 'none': 
+		affiliation_name = Q_('?Group Chat Contact Affiliation:None')
+	elif affiliation == 'owner':
+		affiliation_name = _('Owner')
+	elif affiliation == 'admin':
+		affiliation_name = _('Administrator')
+	elif affiliation == 'member':
+		affiliation_name = _('Member')
+	else: # Argl ! An unknown affiliation !
+		affiliation_name = affiliation.capitalize()
+	return affiliation_name
+
 
 def get_sorted_keys(adict):
 	keys = adict.keys()
@@ -362,9 +379,14 @@ def is_in_path(name_of_command, return_abs_path = False):
 		return is_in_dir
 
 def exec_command(command):
-	'''command is a string that contain arguments'''
-#	os.system(command)
-	subprocess.Popen(command.split())
+	subprocess.Popen(command, shell = True)
+
+def build_command(executable, parameter):
+	# we add to the parameter (can hold path with spaces)
+	# "" so we have good parsing from shell
+	parameter = parameter.replace('"', '\\"') # but first escape "
+	command = '%s "%s"' % (executable, parameter)
+	return command
 
 def launch_browser_mailer(kind, uri):
 	#kind = 'url' or 'mail'
@@ -382,6 +404,8 @@ def launch_browser_mailer(kind, uri):
 			command = 'gnome-open'
 		elif gajim.config.get('openwith') == 'kfmclient exec':
 			command = 'kfmclient exec'
+		elif gajim.config.get('openwith') == 'exo-open':
+			command = 'exo-open'
 		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
 				command = gajim.config.get('custombrowser')
@@ -389,7 +413,8 @@ def launch_browser_mailer(kind, uri):
 				command = gajim.config.get('custommailapp')
 			if command == '': # if no app is configured
 				return
-		command = command + ' ' + uri
+
+		command = build_command(command, uri)
 		try:
 			exec_command(command)
 		except:
@@ -406,11 +431,13 @@ def launch_file_manager(path_to_open):
 			command = 'gnome-open'
 		elif gajim.config.get('openwith') == 'kfmclient exec':
 			command = 'kfmclient exec'
+		elif gajim.config.get('openwith') == 'exo-open':
+			command = 'exo-open'
 		elif gajim.config.get('openwith') == 'custom':
 			command = gajim.config.get('custom_file_manager')
 		if command == '': # if no app is configured
 			return
-		command = command + ' ' + path_to_open
+		command = build_command(command, path_to_open)
 		try:
 			exec_command(command)
 		except:
@@ -438,7 +465,7 @@ def play_sound_file(path_to_soundfile):
 		if gajim.config.get('soundplayer') == '':
 			return
 		player = gajim.config.get('soundplayer')
-		command = player + ' ' + path_to_soundfile
+		command = build_command(player, path_to_soundfile)
 		exec_command(command)
 
 def get_file_path_from_dnd_dropped_uri(uri):
@@ -523,8 +550,10 @@ def get_icon_name_to_show(contact, account = None):
 
 def decode_string(string):
 	'''try to decode (to make it Unicode instance) given string'''
+	if isinstance(string, unicode):
+		return string
 	# by the time we go to iso15 it better be the one else we show bad characters
-	encodings = (sys.getfilesystemencoding(), 'utf-8', 'iso-8859-15')
+	encodings = (locale.getpreferredencoding(), 'utf-8', 'iso-8859-15')
 	for encoding in encodings:
 		try:
 			string = string.decode(encoding)
@@ -599,7 +628,6 @@ def get_documents_path():
 		path = os.path.expanduser('~')
 	return path
 
-# moved from connection.py
 def get_full_jid_from_iq(iq_obj):
 	'''return the full jid (with resource) from an iq as unicode'''
 	return parse_jid(str(iq_obj.getFrom()))
@@ -674,6 +702,7 @@ def get_os_info():
 			output = temp_failure_retry(child_stdout.readline).strip()
 			child_stdout.close()
 			child_stdin.close()
+			os.wait()
 			# some distros put n/a in places, so remove those
 			output = output.replace('n/a', '').replace('N/A', '')
 			return output
@@ -726,23 +755,21 @@ def sanitize_filename(filename):
 	
 	return filename
 
-def allow_showing_notification(account, type = None, advanced_notif_num = None,
-first = True):
+def allow_showing_notification(account, type = 'notify_on_new_message',
+advanced_notif_num = None, is_first_message = True):
 	'''is it allowed to show nofication?
 	check OUR status and if we allow notifications for that status
-	type is the option that need to be True ex: notify_on_signing
-	first: set it to false when it's not the first message'''
-	if advanced_notif_num != None:
+	type is the option that need to be True e.g.: notify_on_signing
+	is_first_message: set it to false when it's not the first message'''
+	if advanced_notif_num is not None:
 		popup = gajim.config.get_per('notifications', str(advanced_notif_num),
 			'popup')
 		if popup == 'yes':
 			return True
 		if popup == 'no':
 			return False
-	if type and (not gajim.config.get(type) or not first):
+	if type and (not gajim.config.get(type) or not is_first_message):
 		return False
-	if type and gajim.config.get(type) and first:
-		return True
 	if gajim.config.get('autopopupaway'): # always show notification
 		return True
 	if gajim.connections[account].connected in (2, 3): # we're online or chat
@@ -766,7 +793,7 @@ def allow_popup_window(account, advanced_notif_num = None):
 	return False
 
 def allow_sound_notification(sound_event, advanced_notif_num = None):
-	if advanced_notif_num != None:
+	if advanced_notif_num is not None:
 		sound = gajim.config.get_per('notifications', str(advanced_notif_num),
 			'sound')
 		if sound == 'yes':
@@ -796,3 +823,110 @@ def get_chat_control(account, contact):
 	highest_contact.resource:
 		return None
 	return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+
+def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
+	'''Cut the chars after 'max_chars' on each line
+	and show only the first 'max_lines'.
+	If any of the params is not present (None or 0) the action
+	on it is not performed'''
+
+	def _cut_if_long(string):
+		if len(string) > max_chars:
+			string = string[:max_chars - 3] + '...'
+		return string
+
+	if isinstance(text, str):
+		text = text.decode('utf-8')
+
+	if max_lines == 0:
+		lines = text.split('\n')
+	else:
+		lines = text.split('\n', max_lines)[:max_lines]
+	if max_chars > 0:
+		if lines:
+			lines = map(lambda e: _cut_if_long(e), lines)
+	if lines:
+		reduced_text = reduce(lambda e, e1: e + '\n' + e1, lines)
+	else:
+		reduced_text = ''
+	return reduced_text
+
+def get_notification_icon_tooltip_text():
+	text = None
+	unread_chat = gajim.events.get_nb_events(types = ['printed_chat',
+		'chat'])
+	unread_single_chat = gajim.events.get_nb_events(types = ['normal'])
+	unread_gc = gajim.events.get_nb_events(types = ['printed_gc_msg',
+		'gc_msg'])
+	unread_pm = gajim.events.get_nb_events(types = ['printed_pm', 'pm'])
+
+	accounts = get_accounts_info()
+
+	if unread_chat or unread_single_chat or unread_gc or unread_pm:
+		text = 'Gajim '
+		awaiting_events = unread_chat + unread_single_chat + unread_gc + unread_pm
+		if awaiting_events == unread_chat or awaiting_events == unread_single_chat \
+			or awaiting_events == unread_gc or awaiting_events == unread_pm:
+			# This condition is like previous if but with xor... 
+			# Print in one line
+			text += '-'
+		else:
+			# Print in multiple lines
+			text += '\n   '
+		if unread_chat:
+			text += ngettext(
+				' %d unread message',
+				' %d unread messages',
+				unread_chat, unread_chat, unread_chat)
+			text += '\n   '
+		if unread_single_chat:
+			text += ngettext(
+				' %d unread single message',
+				' %d unread single messages',
+				unread_single_chat, unread_single_chat, unread_single_chat)
+			text += '\n   '
+		if unread_gc:
+			text += ngettext(
+				' %d unread group chat message',
+				' %d unread group chat messages',
+				unread_gc, unread_gc, unread_gc)
+			text += '\n   '
+		if unread_pm:
+			text += ngettext(
+				' %d unread private message',
+				' %d unread private messages',
+				unread_pm, unread_pm, unread_pm)
+			text += '\n   '
+		text = text[:-4] # remove latest '\n   '
+	elif len(accounts) > 1:
+		text = _('Gajim')
+	elif len(accounts) == 1:
+		message = accounts[0]['status_line']
+		message = reduce_chars_newlines(message, 100, 1)
+		text = _('Gajim - %s') % message
+	else:
+		text = _('Gajim - %s') % get_uf_show('offline')
+		
+	return text
+
+def get_accounts_info():
+	'''helper for notification icon tooltip'''
+	accounts = []
+	accounts_list = gajim.contacts.get_accounts()
+	accounts_list.sort()
+	for account in accounts_list:
+		status_idx = gajim.connections[account].connected
+		# uncomment the following to hide offline accounts
+		# if status_idx == 0: continue
+		status = gajim.SHOW_LIST[status_idx]
+		message = gajim.connections[account].status
+		single_line = get_uf_show(status)
+		if message is None:
+			message = ''
+		else:
+			message = message.strip()
+		if message != '':
+			single_line += ': ' + message
+		accounts.append({'name': account, 'status_line': single_line, 
+				'show': status, 'message': message})
+	return accounts

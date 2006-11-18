@@ -183,7 +183,7 @@ class Session:
         if self.sendbuffer:
             try:
                 # LOCK_QUEUE
-                sent=self._send(self.sendbuffer)    # Блокирующая штучка!
+                sent=self._send(self.sendbuffer)    # blocking socket
             except:
                 # UNLOCK_QUEUE
                 self.set_socket_state(SOCKET_DEAD)

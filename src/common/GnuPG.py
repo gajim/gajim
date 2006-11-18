@@ -2,13 +2,13 @@
 ##
 ## Contributors for this file:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <nkour@jabber.org>
+##	- Nikos Kouremenos <kourem@gmail.com>
 ##
 ## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>

@@ -74,10 +74,8 @@ class NBCommonClient(CommonClient):
 		''' Called on disconnection. Calls disconnect handlers and cleans things up. '''
 		self.connected=''
 		self.DEBUG(self.DBG,'Disconnect detected','stop')
-		self.disconnect_handlers.reverse()
-		for i in self.disconnect_handlers: 
+		for i in reversed(self.disconnect_handlers):
 			i()
-		self.disconnect_handlers.reverse()
 		if self.__dict__.has_key('NonBlockingRoster'):
 			self.NonBlockingRoster.PlugOut()
 		if self.__dict__.has_key('NonBlockingBind'):
@@ -125,6 +123,8 @@ class NBCommonClient(CommonClient):
 			self.on_connect_failure(retry)
 
 	def _on_connected(self):
+		# connect succeded, so no need of this callback anymore
+		self.on_connect_failure = None
 		self.connected = 'tcp'
 		if self._Ssl:
 			transports_nb.NonBlockingTLS().PlugIn(self, now=1)

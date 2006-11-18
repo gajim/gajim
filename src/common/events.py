@@ -5,7 +5,7 @@
 ##
 ## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
@@ -81,7 +81,7 @@ class Events:
 			gajim.interface.systray.set_img()
 
 	def remove_events(self, account, jid, event = None, types = []):
-		'''if event is not speficied, remove all events from this jid,
+		'''if event is not specified, remove all events from this jid,
 		optionnaly only from given type
 		return True if no such event found'''
 		if not self._events.has_key(account):
@@ -118,11 +118,11 @@ class Events:
 		if gajim.interface.systray_capabilities:
 			gajim.interface.systray.set_img()
 
-	def get_nb_events(self, types = []):
-		return self._get_nb_events(types = types)
+	def get_nb_events(self, types = [], account = None):
+		return self._get_nb_events(types = types, account = account)
 
 	def get_events(self, account, jid = None, types = []):
-		'''if event is not speficied, remove all events from this jid,
+		'''if event is not specified, get all events from this jid,
 		optionnaly only from given type'''
 		if not self._events.has_key(account):
 			return []
@@ -149,7 +149,7 @@ class Events:
 		return first_event
 
 	def _get_nb_events(self, account = None, jid = None, attribute = None, types = []):
-		'''return the number of events'''
+		'''return the number of pending events'''
 		nb = 0
 		if account:
 			accounts = [account]
@@ -223,7 +223,7 @@ class Events:
 		return self._get_first_event_with_attribute(events)
 
 	def get_nb_roster_events(self, account = None, jid = None, types = []):
-		'''returns the number of events displayedin roster'''
+		'''returns the number of events displayed in roster'''
 		return self._get_nb_events(attribute = 'roster', account = account,
 			jid = jid, types = types)
 

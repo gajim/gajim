@@ -1,16 +1,8 @@
 ## common/contacts.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -27,8 +19,8 @@ import common.gajim
 class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-			ask='', resource='', priority=0, keyID='', our_chatstate=None,
-			chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
+	ask='', resource='', priority=0, keyID='', our_chatstate=None,
+	chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
 		self.jid = jid
 		self.name = name
 		self.groups = groups
@@ -67,10 +59,40 @@ class Contact:
 			return self.name
 		return self.jid.split('@')[0]
 
+	def is_hidden_from_roster(self):
+		'''if contact should not be visible in roster'''
+		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
+		if self.is_transport():
+			return False
+		if self.sub in ('both', 'to'):
+			return False
+		if self.sub in ('none', 'from') and self.ask == 'subscribe':
+			return False
+		if self.sub in ('none', 'from') and (self.name or len(self.groups)):
+			return False
+		if _('Not in Roster') in self.groups:
+			return False
+		return True
+
+	def is_observer(self):
+		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
+		is_observer = False
+		if self.sub == 'from' and not self.is_transport()\
+		and self.is_hidden_from_roster():
+			is_observer = True
+		return is_observer
+
+	def is_transport(self):
+		# if not '@' or '@' starts the jid then contact is transport
+		if self.jid.find('@') <= 0:
+			return True
+		return False
+
+
 class GC_Contact:
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', name='', show='', status='', role='',
-			affiliation='', jid = '', resource = ''):
+	affiliation='', jid = '', resource = ''):
 		self.room_jid = room_jid
 		self.name = name
 		self.show = show
@@ -219,6 +241,51 @@ class Contacts:
 		if jid in self._contacts[account]:
 			return self._contacts[account][jid][0]
 		return None
+
+	def get_contacts_from_group(self, account, group):
+		'''Returns all contacts in the given group'''
+		group_contacts = []
+		for jid in self._contacts[account]:
+			contacts = self.get_contacts_from_jid(account, jid)
+			if group in contacts[0].groups:
+				group_contacts += contacts
+		return group_contacts
+
+	def get_nb_online_total_contacts(self, accounts = [], groups = []):
+		'''Returns the number of online contacts and the total number of
+		contacts'''
+		if accounts == []:
+			accounts = self.get_accounts()
+		nbr_online = 0
+		nbr_total = 0
+		for account in accounts:
+			our_jid = common.gajim.get_jid_from_account(account)
+			for jid in self.get_jid_list(account):
+				if jid == our_jid:
+					continue
+				if common.gajim.jid_is_transport(jid) and not \
+				common.gajim.config.get('show_transports_group'):
+					# do not count transports
+					continue
+				contact = self.get_contact_with_highest_priority(account, jid)
+				in_groups = False
+				if groups == []:
+					in_groups = True
+				else:
+					contact_groups = contact.groups
+					if not contact_groups:
+						# Contact is not in a group, so count it in General group
+						contact_groups.append(_('General'))
+					for group in groups:
+						if group in contact_groups:
+							in_groups = True
+							break
+
+				if in_groups:
+					if contact.show not in ('offline', 'error'):
+						nbr_online += 1
+					nbr_total += 1
+		return nbr_online, nbr_total
 
 	def define_metacontacts(self, account, tags_list):
 		self._metacontacts_tags[account] = tags_list

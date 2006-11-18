@@ -74,7 +74,6 @@ class Dispatcher(PlugIn):
 		self.RegisterProtocol('presence', Presence)
 		self.RegisterProtocol('message', Message)
 		self.RegisterDefaultHandler(self.returnStanzaHandler)
-		# Register Gajim's event handler as soon as dispatcher begins
 		self.RegisterEventHandler(self._owner._caller._event_dispatcher)
 		self.on_responses = {}
 		
@@ -84,7 +83,10 @@ class Dispatcher(PlugIn):
 		self._owner.lastErrNode = None
 		self._owner.lastErr = None
 		self._owner.lastErrCode = None
-		self.StreamInit()
+		if hasattr(self._owner, 'StreamInit'):
+			self._owner.StreamInit()
+		else:
+			self.StreamInit()
 	
 	def plugout(self):
 		''' Prepares instance to be destructed. '''
@@ -129,17 +131,18 @@ class Dispatcher(PlugIn):
 		try:
 			self.Stream.Parse(data)
 			# end stream:stream tag received
-			if self.Stream and self.Stream._NodeBuilder__depth == 0:
+			if self.Stream and self.Stream.has_received_endtag():
 				self._owner.Connection.disconnect()
 				return 0
 		except ExpatError:
 			sys.exc_clear()
-			self.DEBUG('Invalid XML received from server. Forcing disconnect.')
+			self.DEBUG('Invalid XML received from server. Forcing disconnect.', 'error')
 			self._owner.Connection.pollend()
 			return 0
 		if len(self._pendingExceptions) > 0:
 			 _pendingException = self._pendingExceptions.pop()
 			 raise _pendingException[0], _pendingException[1], _pendingException[2]
+		if len(data) == 0: return '0'
 		return len(data)
 	
 	def RegisterNamespace(self, xmlns, order='info'):
@@ -396,7 +399,7 @@ class Dispatcher(PlugIn):
 			Additional callback arguments can be specified in args. '''
 		self.SendAndWaitForResponse(stanza, 0, func, args)
 	
-	def send(self, stanza):
+	def send(self, stanza, is_message = False):
 		''' Serialise stanza and put it on the wire. Assign an unique ID to it before send.
 			Returns assigned ID.'''
 		if type(stanza) in [type(''), type(u'')]: 
@@ -423,7 +426,10 @@ class Dispatcher(PlugIn):
 			stanza=route
 		stanza.setNamespace(self._owner.Namespace)
 		stanza.setParent(self._metastream)
-		self._owner.Connection.send(stanza)
+		if is_message:
+			self._owner.Connection.send(stanza, True)
+		else:
+			self._owner.Connection.send(stanza)
 		return _ID
 	
 	def disconnect(self):

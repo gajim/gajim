@@ -2,7 +2,7 @@
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
@@ -169,30 +169,6 @@ def get_default_font():
 	
 	return None
 	
-def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
-	'''Cut the chars after 'max_chars' on each line
-	and show only the first 'max_lines'.
-	If any of the params is not present (None or 0) the action
-	on it is not performed'''
-
-	def _cut_if_long(str):
-		if len(str) > max_chars:
-			str = str[:max_chars - 3] + '...'
-		return str
-	
-	if max_lines == 0:
-		lines = text.split('\n')
-	else:
-		lines = text.split('\n', max_lines)[:max_lines]
-	if max_chars > 0:
-		if lines:
-			lines = map(lambda e: _cut_if_long(e), lines)
-	if lines:
-		reduced_text = reduce(lambda e, e1: e + '\n' + e1, lines)
-	else:
-		reduced_text = ''
-	return reduced_text
-
 def escape_for_pango_markup(string):
 	# escapes < > & ' "
 	# for pango markup not to break
@@ -207,7 +183,30 @@ def escape_for_pango_markup(string):
 	return escaped_str
 
 def autodetect_browser_mailer():
-	# recognize the environment for appropriate browser/mailer
+	# recognize the environment and set appropriate browser/mailer
+	if user_runs_gnome():
+		gajim.config.set('openwith', 'gnome-open')
+	elif user_runs_kde():
+		gajim.config.set('openwith', 'kfmclient exec')
+	elif user_runs_xfce():
+		gajim.config.set('openwith', 'exo-open')
+	else:
+		gajim.config.set('openwith', 'custom')
+
+def user_runs_gnome():
+	return 'gnome-session' in get_running_processes()
+
+def user_runs_kde():
+	return 'startkde' in get_running_processes()
+
+def user_runs_xfce():
+	procs = get_running_processes()
+	if 'startxfce4' in procs or 'xfce4-session' in procs:
+		return True
+	return False
+
+def get_running_processes():
+	'''returns running processes or None (if not /proc exists)'''
 	if os.path.isdir('/proc'):
 		# under Linux: checking if 'gnome-session' or
 		# 'startkde' programs were run before gajim, by
@@ -237,12 +236,9 @@ def autodetect_browser_mailer():
 
 		# list of processes
 		processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f in files]
-		if 'gnome-session' in processes:
-			gajim.config.set('openwith', 'gnome-open')
-		elif 'startkde' in processes:
-			gajim.config.set('openwith', 'kfmclient exec')
-		else:
-			gajim.config.set('openwith', 'custom')
+		
+		return processes
+	return []
 
 def move_window(window, x, y):
 	'''moves the window but also checks if out of screen'''
@@ -390,7 +386,7 @@ def possibly_move_window_in_current_desktop(window):
 	current virtual desktop
 	window is GTK window'''
 	if os.name == 'nt':
-		return
+		return False
 
 	root_window = gtk.gdk.screen_get_default().get_root_window()
 	# current user's vd
@@ -406,6 +402,8 @@ def possibly_move_window_in_current_desktop(window):
 			# we are in another VD that the window was
 			# so show it in current VD
 			window.present()
+			return True
+	return False
 
 def file_is_locked(path_to_file):
 	'''returns True if file is locked (WINDOWS ONLY)'''
@@ -680,6 +678,14 @@ default_name = ''):
 		file_path = dialog.get_filename()
 		file_path = decode_filechooser_file_paths((file_path,))[0]
 		if os.path.exists(file_path):
+			# check if we have write permissions
+			if not os.access(file_path, os.W_OK):
+				file_name = os.path.basename(file_path)
+				dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' % 
+					file_name),
+				_('A file with this name already exists and you do not have '
+				'permission to overwrite it.'))
+				return
 			dialog2 = dialogs.FTOverwriteConfirmationDialog(
 				_('This file already exists'), _('What do you want to do?'),
 				False)
@@ -687,6 +693,13 @@ default_name = ''):
 			dialog2.set_destroy_with_parent(True)
 			response = dialog2.get_response()
 			if response < 0:
+				return
+		else:
+			dirname = os.path.dirname(file_path)
+			if not os.access(dirname, os.W_OK):
+				dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
+				dirname, _('You do not have permission to create files in this'
+				' directory.'))
 				return
 
 		# Get pixbuf
@@ -710,8 +723,8 @@ default_name = ''):
 		try:
 			pixbuf.save(file_path, type_)
 		except:
-			#XXX Check for permissions
-			os.remove(file_path)
+			if os.path.exists(file_path):
+				os.remove(file_path)
 			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
 			dialog2 = dialogs.ConfirmationDialog(_('Extension not supported'),
 				_('Image cannot be saved in %(type)s format. Save as %(new_filename)s?') % {'type': type_, 'new_filename': new_file_path},
@@ -735,3 +748,6 @@ default_name = ''):
 	dialog.set_current_name(default_name)
 	dialog.connect('delete-event', lambda widget, event:
 		on_cancel(widget))
+
+def on_bm_header_changed_state(widget, event):
+	widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state

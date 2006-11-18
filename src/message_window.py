@@ -4,7 +4,7 @@
 ##                         Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
@@ -40,6 +40,13 @@ class MessageWindow:
 	# DND_TARGETS is the targets needed by drag_source_set and drag_dest_set
 	DND_TARGETS = [('GAJIM_TAB', 0, 81)]
 	hid = 0 # drag_data_received handler id
+	(
+		CLOSE_TAB_MIDDLE_CLICK,
+		CLOSE_ESC,
+		CLOSE_CLOSE_BUTTON,
+		CLOSE_COMMAND,
+		CLOSE_CTRL_KEY
+	) = range(5)
 	
 	def __init__(self, acct, type):
 		# A dictionary of dictionaries where _contacts[account][jid] == A MessageControl
@@ -104,6 +111,16 @@ class MessageWindow:
 		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
 			gtk.gdk.ACTION_MOVE)
 
+	def change_account_name(self, old_name, new_name):
+		if self._controls.has_key(old_name):
+			self._controls[new_name] = self._controls[old_name]
+			del self._controls[old_name]
+		for ctrl in self.controls():
+			if ctrl.account == old_name:
+				ctrl.account = new_name
+		if self.account == old_name:
+			self.account = new_name
+
 	def get_num_controls(self):
 		n = 0
 		for dict in self._controls.values():
@@ -130,7 +147,7 @@ class MessageWindow:
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
 		for ctrl in self.controls():
-			if not ctrl.allow_shutdown():
+			if not ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON):
 				return True # halt the delete
 		return False
 
@@ -189,7 +206,7 @@ class MessageWindow:
 			self.popup_menu(event)
 		elif event.button == 2: # middle click
 			ctrl = self._widget_to_control(child)
-			self.remove_tab(ctrl)
+			self.remove_tab(ctrl, self.CLOSE_TAB_MIDDLE_CLICK)
 
 	def _on_message_textview_mykeypress_event(self, widget, event_keyval,
 		event_keymod):
@@ -214,15 +231,17 @@ class MessageWindow:
 
 	def _on_close_button_clicked(self, button, control):
 		'''When close button is pressed: close a tab'''
-		self.remove_tab(control)
+		self.remove_tab(control, self.CLOSE_CLOSE_BUTTON)
 
 	def show_title(self, urgent = True, control = None):
 		'''redraw the window's title'''
 		unread = 0
 		for ctrl in self.controls():
 			if ctrl.type_id == message_control.TYPE_GC and not \
-				gajim.config.get('notify_on_all_muc_messages') and not \
-				ctrl.attention_flag:
+			gajim.config.get('notify_on_all_muc_messages') and not \
+			ctrl.attention_flag:
+				# count only pm messages
+				unread += ctrl.get_nb_unread_pm()
 				continue
 			unread += ctrl.get_nb_unread()
 
@@ -269,10 +288,11 @@ class MessageWindow:
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 	
-	def remove_tab(self, ctrl, reason = None):
-		'''reason is only for gc (offline status message)'''
+	def remove_tab(self, ctrl, mothod, reason = None, force = False):
+		'''reason is only for gc (offline status message)
+		if force is True, do not ask any confirmation'''
 		# Shutdown the MessageControl
-		if not ctrl.allow_shutdown():
+		if not force and not ctrl.allow_shutdown(mothod):
 			return
 		if reason is not None: # We are leaving gc with a status message
 			ctrl.shutdown(reason)
@@ -292,28 +312,22 @@ class MessageWindow:
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]
 
-		# Notify a dupicate nick to update their banner and clear account display
-		for c in self.controls():
-			if c == self:
-				continue
-			if ctrl.contact.get_shown_name() == c.contact.get_shown_name():
-				c.draw_banner()
-
-		if self.get_num_controls() == 1: # we are going from two tabs to one
-			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
-			self.notebook.set_show_tabs(show_tabs_if_one_tab)
-			if not show_tabs_if_one_tab:
-				self.alignment.set_property('top-padding', 0)
-			self.show_title()
-		elif self.get_num_controls() == 0:
+		if self.get_num_controls() == 0:
 			# These are not called when the window is destroyed like this, fake it
 			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
 			gajim.interface.msg_win_mgr._on_window_destroy(self.window)
 			# dnd clean up
 			self.notebook.disconnect(self.hid)
 			self.notebook.drag_dest_unset()
-
 			self.window.destroy()
+			return # don't show_title, we are dead
+		elif self.get_num_controls() == 1: # we are going from two tabs to one
+			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
+			self.notebook.set_show_tabs(show_tabs_if_one_tab)
+			if not show_tabs_if_one_tab:
+				self.alignment.set_property('top-padding', 0)
+		self.show_title()
+
 			
 	def redraw_tab(self, ctrl, chatstate = None):
 		hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
@@ -488,9 +502,9 @@ class MessageWindow:
 			elif event.keyval == gtk.keysyms.Tab: # CTRL + TAB
 				self.move_to_next_unread_tab(True)
 			elif event.keyval == gtk.keysyms.F4: # CTRL + F4
-				self.remove_tab(ctrl)
+				self.remove_tab(ctrl, self.CLOSE_CTRL_KEY)
 			elif event.keyval == gtk.keysyms.w: # CTRL + W
-				self.remove_tab(ctrl)
+				self.remove_tab(ctrl, self.CLOSE_CTRL_KEY)
 
 		# MOD1 (ALT) mask
 		elif event.state & gtk.gdk.MOD1_MASK:
@@ -513,7 +527,7 @@ class MessageWindow:
 		# Close tab bindings
 		elif event.keyval == gtk.keysyms.Escape and \
 				gajim.config.get('escape_key_closes'): # Escape
-			self.remove_tab(ctrl)
+			self.remove_tab(ctrl, self.CLOSE_ESC)
 		else:
 			# If the active control has a message_textview pass the event to it
 			active_ctrl = self.get_active_control()
@@ -618,7 +632,11 @@ class MessageWindowMgr:
 		# Map the mode to a int constant for frequent compares
 		mode = gajim.config.get('one_message_window')
 		self.mode = common.config.opt_one_window_types.index(mode)
-	
+
+	def change_account_name(self, old_name, new_name):
+		for win in self.windows():
+			win.change_account_name(old_name, new_name)
+
 	def _new_window(self, acct, type):
 		win = MessageWindow(acct, type)
 		# we track the lifetime of this window

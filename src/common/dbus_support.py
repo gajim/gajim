@@ -16,32 +16,56 @@
 ##
 
 import os
-import sys
 
 from common import gajim
 from common import exceptions
 
+_GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
+
 try:
 	import dbus
-	version = getattr(dbus, 'version', (0, 20, 0))
-	supported = True
+	import dbus.service
+	import dbus.glib
+	supported = True # does use have D-Bus bindings?
 except ImportError:
-	version = (0, 0, 0)
 	supported = False
 	if not os.name == 'nt': # only say that to non Windows users
 		print _('D-Bus python bindings are missing in this computer')
 		print _('D-Bus capabilities of Gajim cannot be used')
-	
-# dbus 0.23 leads to segfault with threads_init()
-if sys.version[:4] >= '2.4' and version[1] < 30:
-	supported = False
 
-if version >= (0, 41, 0):
-	import dbus.service
-	import dbus.glib # cause dbus 0.35+ doesn't return signal replies without it
+class SystemBus:
+	'''A Singleton for the DBus SystemBus'''
+	def __init__(self):
+		self.system_bus = None
+	
+	def SystemBus(self):
+		if not supported:
+			raise exceptions.DbusNotSupported
+
+		if not self.present():
+				raise exceptions.SystemBusNotPresent
+		return self.system_bus
+
+	def bus(self):
+		return self.SystemBus()
+
+	def present(self):
+		if not supported:
+			return False
+		if self.system_bus is None:
+			try:
+				self.system_bus = dbus.SystemBus()
+			except dbus.dbus_bindings.DBusException:
+				self.system_bus = None
+				return False
+			if self.system_bus is None:
+				return False
+		return True
+
+system_bus = SystemBus()
 
 class SessionBus:
-	'''A Singleton for the DBus SessionBus'''
+	'''A Singleton for the D-Bus SessionBus'''
 	def __init__(self):
 		self.session_bus = None
 	
@@ -102,4 +126,13 @@ def get_interface(interface, path):
 
 def get_notifications_interface():
 	'''Returns the notifications interface.'''
-	return get_interface('org.freedesktop.Notifications','/org/freedesktop/Notifications')
+	return get_interface('org.freedesktop.Notifications',
+		'/org/freedesktop/Notifications')
+
+if supported:
+	class MissingArgument(dbus.DBusException):
+		_dbus_error_name = _GAJIM_ERROR_IFACE + '.MissingArgument'
+	
+	class InvalidArgument(dbus.DBusException):
+		'''Raised when one of the provided arguments is invalid.'''
+		_dbus_error_name = _GAJIM_ERROR_IFACE + '.InvalidArgument'

@@ -1,22 +1,8 @@
-#!/bin/sh
-''':'
-exec python -OOt "$0" ${1+"$@"}
-' '''
-##	scripts/gajim-remote.py
+#!/usr/bin/env python
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##	- Dimitur Kirov <dkirov@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -28,7 +14,7 @@ exec python -OOt "$0" ${1+"$@"}
 ## GNU General Public License for more details.
 ##
 
-# gajim-remote help will show you the DBUS API of Gajim
+# gajim-remote help will show you the D-BUS API of Gajim
 
 import sys
 import locale
@@ -51,13 +37,11 @@ def send_error(error_message):
 
 try:
 	import dbus
-except:
-	raise exceptions.DbusNotSupported
-
-_version = getattr(dbus, 'version', (0, 20, 0))
-if _version[1] >= 41:
 	import dbus.service
 	import dbus.glib
+except:
+	print str(exceptions.DbusNotSupported())
+	sys.exit(1)
 
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
@@ -90,8 +74,8 @@ class GajimRemote:
 					_('Shows or hides the roster window'),
 					[]
 				], 
-			'show_next_unread': [
-					_('Popups a window with the next unread message'),
+			'show_next_pending_event': [
+					_('Popups a window with the next pending event'),
 					[]
 				],
 			'list_contacts': [
@@ -320,14 +304,8 @@ class GajimRemote:
 		except:
 			raise exceptions.SessionBusNotPresent
 
-		if _version[1] >= 30:
-			obj = self.sbus.get_object(SERVICE, OBJ_PATH)
-			interface = dbus.Interface(obj, INTERFACE)
-		elif _version[1] < 30:
-			self.service = self.sbus.get_service(SERVICE)
-			interface = self.service.get_object(OBJ_PATH, INTERFACE)
-		else:
-			send_error(_('Unknown D-Bus version: %s') % _version[1])
+		obj = self.sbus.get_object(SERVICE, OBJ_PATH)
+		interface = dbus.Interface(obj, INTERFACE)
 
 		# get the function asked
 		self.method = interface.__getattr__(self.command)
@@ -447,10 +425,7 @@ class GajimRemote:
 		''' calls self.method with arguments from sys.argv[2:] '''
 		args = sys.argv[2:]
 		args = [i.decode(PREFERRED_ENCODING) for i in sys.argv[2:]]
-		if _version[1] >= 41:
-			args = [dbus.String(i) for i in args]
-		else:
-			args = [i.encode('UTF-8') for i in sys.argv[2:]]
+		args = [dbus.String(i) for i in args]
 		try:
 			res = self.method(*args)
 			return res

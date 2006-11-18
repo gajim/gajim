@@ -8,7 +8,7 @@
 ##                         Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
@@ -33,13 +33,10 @@ STATE_AWAKE    = 'awake'
 
 SUPPORTED = True
 try:
-	import common.idle as idle # when we launch gajim from sources
+	import idle
 except:
-	try:
-		import idle # when Gajim is installed
-	except:
-		gajim.log.debug('Unable to load idle module')
-		SUPPORTED = False
+	gajim.log.debug('Unable to load idle module')
+	SUPPORTED = False
 
 class Sleepy:
 

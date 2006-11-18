@@ -43,7 +43,7 @@ except:
 
 class Systray:
 	'''Class for icon in the notification area
-	This class is both base class (for systraywin32.py) and normal class
+	This class is both base class (for statusicon.py) and normal class
 	for trayicon in GNU/Linux'''
 
 	def __init__(self):
@@ -94,18 +94,17 @@ class Systray:
 	def on_new_chat(self, widget, account):
 		dialogs.NewChatDialog(account)
 
-	def make_menu(self, event = None):
-		'''create chat with and new message (sub) menus/menuitems
-		event is None when we're in Windows
-		'''
-
+	def make_menu(self, event_button, event_time):
+		'''create chat with and new message (sub) menus/menuitems'''
 		for m in self.popup_menus:
 			m.destroy()
 
 		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
-		single_message_menuitem = self.xml.get_widget('single_message_menuitem')
+		single_message_menuitem = self.xml.get_widget(
+			'single_message_menuitem')
 		status_menuitem = self.xml.get_widget('status_menu')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
+		sounds_mute_menuitem = self.xml.get_widget('sounds_mute_menuitem')
 
 		if self.single_message_handler_id:
 			single_message_menuitem.handler_disconnect(
@@ -124,10 +123,11 @@ class Systray:
 
 		# We need our own set of status icons, let's make 'em!
 		iconset = gajim.config.get('iconset')
-		if not iconset:
-			iconset = 'dcraven'
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		state_images = gajim.interface.roster.load_iconset(path)
+
+		if state_images.has_key('muc_active'):
+			join_gc_menuitem.set_image(state_images['muc_active'])
 
 		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 			uf_show = helpers.get_uf_show(show, use_mnemonic = True)
@@ -159,7 +159,8 @@ class Systray:
 		sub_menu.append(item)
 		item.connect('activate', self.on_show_menuitem_activate, 'offline')
 
-		iskey = connected_accounts > 0
+		iskey = connected_accounts > 0 and not (connected_accounts == 1 and
+				gajim.connections[gajim.connections.keys()[0]].is_zeroconf)
 		chat_with_menuitem.set_sensitive(iskey)
 		single_message_menuitem.set_sensitive(iskey)
 		join_gc_menuitem.set_sensitive(iskey)
@@ -170,12 +171,15 @@ class Systray:
 			self.popup_menus.append(account_menu_for_chat_with)
 
 			account_menu_for_single_message = gtk.Menu()
-			single_message_menuitem.set_submenu(account_menu_for_single_message)
+			single_message_menuitem.set_submenu(
+				account_menu_for_single_message)
 			self.popup_menus.append(account_menu_for_single_message)
 
 			accounts_list = gajim.contacts.get_accounts()
 			accounts_list.sort()
 			for account in accounts_list:
+				if gajim.connections[account].is_zeroconf:
+					continue
 				if gajim.connections[account].connected > 1:
 					#for chat_with
 					item = gtk.MenuItem(_('using account %s') % account)
@@ -194,8 +198,11 @@ class Systray:
 					label.set_use_underline(False)
 					gc_item = gtk.MenuItem()
 					gc_item.add(label)
+					gc_item.connect('state-changed',
+						gtkgui_helpers.on_bm_header_changed_state)
 					gc_sub_menu.append(gc_item)
-					gajim.interface.roster.add_bookmarks_list(gc_sub_menu, account)
+					gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
+						account)
 
 		elif connected_accounts == 1: # one account
 			# one account connected, no need to show 'as jid'
@@ -205,24 +212,25 @@ class Systray:
 							'activate', self.on_new_chat, account)
 					# for single message
 					single_message_menuitem.remove_submenu()
-					self.single_message_handler_id = single_message_menuitem.connect(
-						'activate', self.on_single_message_menuitem_activate, account)
+					self.single_message_handler_id = single_message_menuitem.\
+						connect('activate',
+						self.on_single_message_menuitem_activate, account)
 
 					# join gc
-					gajim.interface.roster.add_bookmarks_list(gc_sub_menu, account)
+					gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
+						account)
 					break # No other connected account
 
-		if event is None:
-			# None means windows (we explicitly popup in systraywin32.py)
-			if self.added_hide_menuitem is False:
-				self.systray_context_menu.prepend(gtk.SeparatorMenuItem())
-				item = gtk.MenuItem(_('Hide this menu'))
-				self.systray_context_menu.prepend(item)
-				self.added_hide_menuitem = True
+		sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
+		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and\
+		gtk.gtk_version >= (2, 10, 0):
+			self.systray_context_menu.popup(None, None,
+				gtk.status_icon_position_menu, event_button,
+					event_time, self.status_icon)
 
 		else: # GNU and Unices
-			self.systray_context_menu.popup(None, None, None, event.button,
-				event.time)
+			self.systray_context_menu.popup(None, None, None, event_button,
+				event_time)
 		self.systray_context_menu.show_all()
 
 	def on_show_all_events_menuitem_activate(self, widget):
@@ -231,6 +239,10 @@ class Systray:
 			for jid in events[account]:
 				for event in events[account][jid]:
 					gajim.interface.handle_event(account, jid, event.type_)
+
+	def on_sounds_mute_menuitem_activate(self, widget):
+		gajim.config.set('sounds_on', not widget.get_active()) 
+		gajim.interface.save_config()
 
 	def on_show_roster_menuitem_activate(self, widget):
 		win = gajim.interface.roster.window
@@ -250,11 +262,11 @@ class Systray:
 		if len(gajim.events.get_systray_events()) == 0:
 			# no pending events, so toggle visible/hidden for roster window
 			if win.get_property('visible'): # visible in ANY virtual desktop?
-				win.hide() # we hide it from VD that was visible in
 
-				# but we could be in another VD right now. eg vd2
-				# and we want not only to hide it in vd1 but also show it in vd2
-				gtkgui_helpers.possibly_move_window_in_current_desktop(win)
+				# we could be in another VD right now. eg vd2
+				# and we want to show it in vd2
+				if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
+					win.hide() # else we hide it from VD that was visible in
 			else:
 				win.present()
 		else:
@@ -275,12 +287,14 @@ class Systray:
 
 	def on_clicked(self, widget, event):
 		self.on_tray_leave_notify_event(widget, None)
-		if event.type == gtk.gdk.BUTTON_PRESS and event.button == 1: # Left click
+		if event.type != gtk.gdk.BUTTON_PRESS:
+			return
+		if event.button == 1: # Left click
 			self.on_left_click()
 		elif event.button == 2: # middle click
 			self.on_middle_click()
 		elif event.button == 3: # right click
-			self.make_menu(event)
+			self.make_menu(event.button, event.time)
 
 	def on_show_menuitem_activate(self, widget, show):
 		# we all add some fake (we cannot select those nor have them as show)
@@ -295,6 +309,7 @@ class Systray:
 		active = gajim.interface.roster.status_combobox.get_active()
 		status = model[active][2].decode('utf-8')
 		dlg = dialogs.ChangeStatusMessageDialog(status)
+		dlg.window.present()
 		message = dlg.run()
 		if message is not None: # None if user press Cancel
 			accounts = gajim.connections.keys()

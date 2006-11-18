@@ -19,7 +19,7 @@ Protocol module contains tools that is needed for processing of
 xmpp-related data structures.
 """
 
-from simplexml import Node,ustr
+from simplexml import Node,NodeBuilder,ustr
 import time
 NS_ACTIVITY     ='http://jabber.org/protocol/activity'                  # JEP-0108
 NS_ADDRESS      ='http://jabber.org/protocol/address'                   # JEP-0033
@@ -94,6 +94,7 @@ NS_VCARD_UPDATE =NS_VCARD+':x:update'
 NS_VERSION      ='jabber:iq:version'
 NS_WAITINGLIST  ='http://jabber.org/protocol/waitinglist'               # JEP-0130
 NS_XHTML_IM     ='http://jabber.org/protocol/xhtml-im'                  # JEP-0071
+NS_XHTML        = 'http://www.w3.org/1999/xhtml'                        #  "
 NS_DATA_LAYOUT  ='http://jabber.org/protocol/xdata-layout'              # JEP-0141
 NS_DATA_VALIDATE='http://jabber.org/protocol/xdata-validate'            # JEP-0122
 NS_XMPP_STREAMS ='urn:ietf:params:xml:ns:xmpp-streams'
@@ -348,11 +349,18 @@ class Protocol(Node):
             for tag in errtag.getChildren():
                 if tag.getName()<>'text': return tag.getName()
             return errtag.getData()
+    def getErrorMsg(self):
+        """ Return the textual description of the error (if present) or the error condition """
+        errtag=self.getTag('error')
+        if errtag:
+            for tag in errtag.getChildren():
+                if tag.getName()=='text': return tag.getData()
+            return self.getError()
     def getErrorCode(self):
-        """ Return the error code. Obsolette. """
+        """ Return the error code. Obsolete. """
         return self.getTagAttr('error','code')
     def setError(self,error,code=None):
-        """ Set the error code. Obsolette. Use error-conditions instead. """
+        """ Set the error code. Obsolete. Use error-conditions instead. """
         if code:
             if str(code) in _errorcodes.keys(): error=ErrorNode(_errorcodes[str(code)],text=error)
             else: error=ErrorNode(ERR_UNDEFINED_CONDITION,code=code,typ='cancel',text=error)
@@ -378,16 +386,29 @@ class Protocol(Node):
 
 class Message(Protocol):
     """ XMPP Message stanza - "push" mechanism."""
-    def __init__(self, to=None, body=None, typ=None, subject=None, attrs={}, frm=None, payload=[], timestamp=None, xmlns=NS_CLIENT, node=None):
+    def __init__(self, to=None, body=None, xhtml=None, typ=None, subject=None, attrs={}, frm=None, payload=[], timestamp=None, xmlns=NS_CLIENT, node=None):
         """ Create message object. You can specify recipient, text of message, type of message
             any additional attributes, sender of the message, any additional payload (f.e. jabber:x:delay element) and namespace in one go.
             Alternatively you can pass in the other XML object as the 'node' parameted to replicate it as message. """
         Protocol.__init__(self, 'message', to=to, typ=typ, attrs=attrs, frm=frm, payload=payload, timestamp=timestamp, xmlns=xmlns, node=node)
         if body: self.setBody(body)
+        if xhtml: self.setXHTML(xhtml)
         if subject: self.setSubject(subject)
     def getBody(self):
         """ Returns text of the message. """
         return self.getTagData('body')
+    def getXHTML(self, xmllang=None):
+        """ Returns serialized xhtml-im element text of the message.
+
+            TODO: Returning a DOM could make rendering faster."""
+        xhtml = self.getTag('html')
+        if xhtml:
+            if xmllang:
+                body = xhtml.getTag('body', attrs={'xml:lang':xmllang})
+            else:
+                body = xhtml.getTag('body')
+            return str(body)
+        return None
     def getSubject(self):
         """ Returns subject of the message. """
         return self.getTagData('subject')
@@ -397,6 +418,22 @@ class Message(Protocol):
     def setBody(self,val):
         """ Sets the text of the message. """
         self.setTagData('body',val)
+
+    def setXHTML(self,val,xmllang=None):
+        """ Sets the xhtml text of the message (JEP-0071).
+            The parameter is the "inner html" to the body."""
+        try:
+            if xmllang:
+                dom = NodeBuilder('<body xmlns="'+NS_XHTML+'" xml:lang="'+xmllang+'" >' + val + '</body>').getDom()
+            else:
+                dom = NodeBuilder('<body xmlns="'+NS_XHTML+'">'+val+'</body>',0).getDom()
+            if self.getTag('html'):
+                self.getTag('html').addChild(node=dom)
+            else:
+                self.setTag('html',namespace=NS_XHTML_IM).addChild(node=dom)
+        except Exception, e:
+            print "Error", e
+            pass #FIXME: log. we could not set xhtml (parse error, whatever)
     def setSubject(self,val):
         """ Sets the subject of the message. """
         self.setTagData('subject',val)

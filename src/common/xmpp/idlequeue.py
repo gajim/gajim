@@ -53,7 +53,6 @@ class IdleQueue:
 		self.selector = select.poll()
 	
 	def remove_timeout(self, fd):
-		''' self explanatory, remove the timeout from 'read_timeouts' dict  '''
 		if self.read_timeouts.has_key(fd):
 			del(self.read_timeouts[fd])
 	

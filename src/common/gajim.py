@@ -15,9 +15,7 @@
 ## GNU General Public License for more details.
 ##
 
-import os
 import sys
-import tempfile
 import logging
 import locale
 
@@ -25,10 +23,36 @@ import config
 from contacts import Contacts
 from events import Events
 
+try:
+	import defs
+except ImportError:
+	print >> sys.stderr, '''defs.py is missing!
+
+If you start gajim from svn:
+ * Make sure you have GNU autotools installed.
+   This includes the following packages:
+    automake >= 1.8
+    autoconf >= 2.59
+    intltool-0.35
+    libtool
+ * Run
+    $ sh autogen.sh
+ * Optionally, install gajim
+    $ make
+    $ sudo make install
+
+**** Note for translators ****
+ You can get the latest string updates, by running:
+    $ cd po/
+    $ make update-po
+
+'''
+	sys.exit(1)
+
 interface = None # The actual interface (the gtk one for the moment)
 config = config.Config()
 version = config.get('version')
-connections = {}
+connections = {} # 'account name': 'account (connection.Connection) instance'
 verbose = False
 
 h = logging.StreamHandler()
@@ -40,38 +64,17 @@ log.addHandler(h)
 import logger
 logger = logger.Logger() # init the logger
 
-if os.name == 'nt':
-	DATA_DIR = os.path.join('..', 'data')
-	try:
-		# Documents and Settings\[User Name]\Application Data\Gajim
-		LOGPATH = os.path.join(os.environ['appdata'], 'Gajim', 'Logs') # deprecated
-		VCARD_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Vcards')
-		AVATAR_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Avatars')
-		MY_EMOTS_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'Emoticons')
-	except KeyError:
-		# win9x, in cwd
-		LOGPATH = 'Logs' # deprecated
-		VCARD_PATH = 'Vcards'
-		AVATAR_PATH = 'Avatars'
-		MY_EMOTS_PATH = 'Emoticons'
-else: # Unices
-	DATA_DIR = '../data'
-	LOGPATH = os.path.expanduser('~/.gajim/logs') # deprecated
-	VCARD_PATH = os.path.expanduser('~/.gajim/vcards')
-	AVATAR_PATH = os.path.expanduser('~/.gajim/avatars')
-	MY_EMOTS_PATH = os.path.expanduser('~/.gajim/emoticons')
+import configpaths
+gajimpaths = configpaths.gajimpaths
 
-HOME_DIR = os.path.expanduser('~')
-TMP = tempfile.gettempdir()
+LOGPATH = gajimpaths['LOG'] # deprecated
+VCARD_PATH = gajimpaths['VCARD']
+AVATAR_PATH = gajimpaths['AVATAR']
+MY_EMOTS_PATH = gajimpaths['MY_EMOTS']
+TMP = gajimpaths['TMP']
+DATA_DIR = gajimpaths['DATA']
+HOME_DIR = gajimpaths['HOME']
 
-try:
-	LOGPATH = LOGPATH.decode(sys.getfilesystemencoding())
-	VCARD_PATH = VCARD_PATH.decode(sys.getfilesystemencoding())
-	TMP = TMP.decode(sys.getfilesystemencoding())
-	AVATAR_PATH = AVATAR_PATH.decode(sys.getfilesystemencoding())
-	MY_EMOTS_PATH = MY_EMOTS_PATH.decode(sys.getfilesystemencoding())
-except:
-	pass
 try:
 	LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
 except (ValueError, locale.Error):
@@ -120,6 +123,12 @@ status_before_autoaway = {}
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 
+# zeroconf account name
+ZEROCONF_ACC_NAME = 'Local'
+priority_dict = {}
+for status in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
+	priority_dict[status] = config.get('autopriority' + status)
+
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]
@@ -133,10 +142,10 @@ def get_nick_from_fjid(jid):
 	# gaim@conference.jabber.no/nick/nick-continued
 	return jid.split('/', 1)[1]
 
-def get_room_name_and_server_from_room_jid(jid):
-	room_name = get_nick_from_jid(jid)
+def get_name_and_server_from_jid(jid):
+	name = get_nick_from_jid(jid)
 	server = get_server_from_jid(jid)
-	return room_name, server
+	return name, server
 
 def get_room_and_nick_from_fjid(jid):
 	# fake jid is the jid for a contact in a room
@@ -207,10 +216,35 @@ def get_number_of_connected_accounts(accounts_list = None):
 		accounts = connections.keys()
 	else:
 		accounts = accounts_list
-	for acct in accounts:
-		if connections[acct].connected > 1:
+	for account in accounts:
+		if account_is_connected(account):
 			connected_accounts = connected_accounts + 1
 	return connected_accounts
+
+def account_is_connected(account):
+	if account not in connections:
+		return False
+	if connections[account].connected > 1: # 0 is offline, 1 is connecting
+		return True
+	else:
+		return False
+
+def account_is_disconnected(account):
+	return not account_is_connected(account)
+
+def get_number_of_securely_connected_accounts():
+	'''returns the number of the accounts that are SSL/TLS connected'''
+	num_of_secured = 0
+	for account in connections:
+		if account_is_securely_connected(account):
+			num_of_secured += 1
+	return num_of_secured
+
+def account_is_securely_connected(account):
+	if account in con_types and con_types[account] in ('tls', 'ssl'):
+		return True
+	else:
+		return False
 
 def get_transport_name_from_jid(jid, use_config_setting = True):
 	'''returns 'aim', 'gg', 'irc' etc
@@ -299,3 +333,13 @@ def get_name_from_jid(account, jid):
 	else:
 		actor = jid
 	return actor
+
+def get_priority(account, show):
+	'''return the priority an account must have'''
+	if not show:
+		show = 'online'
+
+	if show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible') and \
+	config.get_per('accounts', account, 'adjust_priority_with_status'):
+		return config.get_per('accounts', account, 'autopriority_' + show)
+	return config.get_per('accounts', account, 'priority')

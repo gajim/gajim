@@ -1,17 +1,8 @@
 ##	conversation_textview.py
 ##
-## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -27,7 +18,6 @@ import gtk
 import pango
 import gobject
 import time
-import sys
 import os
 import tooltips
 import dialogs
@@ -39,12 +29,20 @@ from common import helpers
 from calendar import timegm
 from common.fuzzyclock import FuzzyClock
 
+from htmltextview import HtmlTextView
+from common.exceptions import GajimGeneralException
+
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
-	def __init__(self, account):
-		# no need to inherit TextView, use it as property is safer
-		self.tv = gtk.TextView()
+	def __init__(self, account, used_in_history_window = False):
+		'''if used_in_history_window is True, then we do not show
+		Clear menuitem in context menu'''
+		self.used_in_history_window = used_in_history_window
+		
+		# no need to inherit TextView, use it as atrribute is safer
+		self.tv = HtmlTextView()
+		self.tv.html_hyperlink_handler = self.html_hyperlink_handler
 
 		# set properties
 		self.tv.set_border_width(1)
@@ -57,11 +55,13 @@ class ConversationTextview:
 		self.handlers = {}
 
 		# connect signals
-		id = self.tv.connect('motion_notify_event', self.on_textview_motion_notify_event)
+		id = self.tv.connect('motion_notify_event',
+			self.on_textview_motion_notify_event)
 		self.handlers[id] = self.tv
 		id = self.tv.connect('populate_popup', self.on_textview_populate_popup)
 		self.handlers[id] = self.tv
-		id = self.tv.connect('button_press_event', self.on_textview_button_press_event)
+		id = self.tv.connect('button_press_event',
+			self.on_textview_button_press_event)
 		self.handlers[id] = self.tv
 
 		self.account = account
@@ -98,7 +98,7 @@ class ConversationTextview:
 		tag.set_property('weight', pango.WEIGHT_BOLD)
 
 		tag = buffer.create_tag('time_sometimes')
-		tag.set_property('foreground', 'grey')
+		tag.set_property('foreground', 'darkgrey')
 		tag.set_property('scale', pango.SCALE_SMALL)
 		tag.set_property('justification', gtk.JUSTIFY_CENTER)
 
@@ -138,6 +138,11 @@ class ConversationTextview:
 		self.focus_out_end_iter_offset = None
 
 		self.line_tooltip = tooltips.BaseTooltip()
+		
+		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+		self.focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
+		# use it for hr too
+		self.tv.focus_out_line_pixbuf = self.focus_out_line_pixbuf
 
 	def del_handlers(self):
 		for i in self.handlers.keys():
@@ -145,7 +150,7 @@ class ConversationTextview:
 				self.handlers[i].disconnect(i)
 		del self.handlers
 		self.tv.destroy()
-		#TODO
+		#FIXME:
 		# self.line_tooltip.destroy()
 	
 	def update_tags(self):
@@ -230,19 +235,14 @@ class ConversationTextview:
 					end_iter_for_previous_line)
 
 			# add the new focus out line
-			# FIXME: Why is this loaded from disk everytime
-			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
-			focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, '\n')
-			buffer.insert_pixbuf(end_iter, focus_out_line_pixbuf)
+			buffer.insert_pixbuf(end_iter, self.focus_out_line_pixbuf)
 
 			end_iter = buffer.get_end_iter()
 			before_img_iter = end_iter.copy()
 			before_img_iter.backward_char() # one char back (an image also takes one char)
 			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
-			#FIXME: remove this workaround when bug is fixed
-			# c http://bugzilla.gnome.org/show_bug.cgi?id=318569
 
 			self.allow_focus_out_line = False
 
@@ -316,19 +316,29 @@ class ConversationTextview:
 
 	def on_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
+		(only if used_in_history_window is False)
 		and if we have sth selected we show a submenu with actions on the phrase
 		(see on_conversation_textview_button_press_event)'''
-		item = gtk.SeparatorMenuItem()
-		menu.prepend(item)
-		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
-		menu.prepend(item)
-		id = item.connect('activate', self.clear)
-		self.handlers[id] = item
+
+		separator_menuitem_was_added = False
+		if not self.used_in_history_window:
+			item = gtk.SeparatorMenuItem()
+			menu.prepend(item)
+			separator_menuitem_was_added = True
+
+			item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+			menu.prepend(item)
+			id = item.connect('activate', self.clear)
+			self.handlers[id] = item
+
 		if self.selected_phrase:
-			s = self.selected_phrase
-			if len(s) > 25:
-				s = s[:21] + '...'
-			item = gtk.MenuItem(_('Actions for "%s"') % s)
+			if not separator_menuitem_was_added:
+				item = gtk.SeparatorMenuItem()
+				menu.prepend(item)
+
+			self.selected_phrase = helpers.reduce_chars_newlines(
+				self.selected_phrase, 25, 2)
+			item = gtk.MenuItem(_('_Actions for "%s"') % self.selected_phrase)
 			menu.prepend(item)
 			submenu = gtk.Menu()
 			item.set_submenu(submenu)
@@ -360,19 +370,20 @@ class ConversationTextview:
 				self.handlers[id] = item
 			else:
 				if dict_link.find('%s') == -1:
-					#we must have %s in the url if not WIKTIONARY
+					# we must have %s in the url if not WIKTIONARY
 					item = gtk.MenuItem(_('Dictionary URL is missing an "%s" and it is not WIKTIONARY'))
 					item.set_property('sensitive', False)
 				else:
 					link = dict_link % self.selected_phrase
-					id = item.connect('activate', self.visit_url_from_menuitem, link)
+					id = item.connect('activate', self.visit_url_from_menuitem,
+						link)
 					self.handlers[id] = item
 			submenu.append(item)
 
 
 			search_link = gajim.config.get('search_engine')
 			if search_link.find('%s') == -1:
-				#we must have %s in the url
+				# we must have %s in the url
 				item = gtk.MenuItem(_('Web Search URL is missing an "%s"'))
 				item.set_property('sensitive', False)
 			else:
@@ -381,14 +392,18 @@ class ConversationTextview:
 				id = item.connect('activate', self.visit_url_from_menuitem, link)
 				self.handlers[id] = item
 			submenu.append(item)
+			
+			item = gtk.MenuItem(_('Open as _Link'))
+			id = item.connect('activate', self.visit_url_from_menuitem, link)
+			self.handlers[id] = item
+			submenu.append(item)
 
 		menu.show_all()
 
 	def on_textview_button_press_event(self, widget, event):
 		# If we clicked on a taged text do NOT open the standard popup menu
 		# if normal text check if we have sth selected
-
-		self.selected_phrase = ''
+		self.selected_phrase = '' # do not move belove event button check!
 
 		if event.button != 3: # if not right click
 			return False
@@ -426,18 +441,16 @@ class ConversationTextview:
 	def on_start_chat_activate(self, widget, jid):
 		gajim.interface.roster.new_chat_from_jid(self.account, jid)
 
-	def on_join_group_chat_menuitem_activate(self, widget, jid):
-		room, server = jid.split('@')
-		if gajim.interface.instances[self.account].has_key('join_gc'):
+	def on_join_group_chat_menuitem_activate(self, widget, room_jid):
+		if 'join_gc' in gajim.interface.instances[self.account]:
 			instance = gajim.interface.instances[self.account]['join_gc']
-			instance.xml.get_widget('server_entry').set_text(server)
-			instance.xml.get_widget('room_entry').set_text(room)
+			instance.xml.get_widget('room_jid_entry').set_text(room_jid)
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		else:
 			try:
 				gajim.interface.instances[self.account]['join_gc'] = \
-				dialogs.JoinGroupchatWindow(self.account, server, room)
-			except RuntimeError:
+				dialogs.JoinGroupchatWindow(self.account, room_jid)
+			except GajimGeneralException:
 				pass
 
 	def on_add_to_roster_activate(self, widget, jid):
@@ -459,6 +472,7 @@ class ConversationTextview:
 			childs[6].hide() # join group chat
 			childs[7].hide() # add to roster
 		else: # It's a mail or a JID
+			text = text.lower()
 			id = childs[2].connect('activate', self.on_copy_link_activate, text)
 			self.handlers[id] = childs[2]
 			id = childs[3].connect('activate', self.on_open_link_activate, kind, text)
@@ -505,6 +519,15 @@ class ConversationTextview:
 			else:
 				# we launch the correct application
 				helpers.launch_browser_mailer(kind, word)
+
+	def html_hyperlink_handler(self, texttag, widget, event, iter, kind, href):
+		if event.type == gtk.gdk.BUTTON_PRESS:
+			if event.button == 3: # right click
+				self.make_link_menu(event, kind, href)
+			else:
+				# we launch the correct application
+				helpers.launch_browser_mailer(kind, href)
+
 
 	def detect_and_print_special_text(self, otext, other_tags):
 		'''detects special text (emots & links & formatting)
@@ -562,6 +585,7 @@ class ConversationTextview:
 			img.show()
 			#add with possible animation
 			self.tv.add_child_at_anchor(img, anchor)
+		#FIXME: one day, somehow sync with regexp in gajim.py
 		elif special_text.startswith('http://') or \
 			special_text.startswith('www.') or \
 			special_text.startswith('ftp://') or \
@@ -638,11 +662,11 @@ class ConversationTextview:
 	def print_empty_line(self):
 		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
-		buffer.insert(end_iter, '\n')
+		buffer.insert_with_tags_by_name(end_iter, '\n', 'eol')
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
-			other_tags_for_name = [], other_tags_for_time = [],
-			other_tags_for_text = [], subject = None, old_kind = None):
+	other_tags_for_name = [], other_tags_for_time = [], other_tags_for_text = [],
+	subject = None, old_kind = None, xhtml = None):
 		'''prints 'chat' type messages'''
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
@@ -652,7 +676,7 @@ class ConversationTextview:
 			at_the_end = True
 
 		if buffer.get_char_count() > 0:
-			buffer.insert(end_iter, '\n')
+			buffer.insert_with_tags_by_name(end_iter, '\n', 'eol')
 		if kind == 'incoming_queue':
 			kind = 'incoming'
 		if old_kind == 'incoming_queue':
@@ -664,7 +688,9 @@ class ConversationTextview:
 		current_print_time = gajim.config.get('print_time')
 		if current_print_time == 'always' and kind != 'info':
 			before_str = gajim.config.get('before_time')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_time')
+			after_str = helpers.from_one_line(after_str)
 			# get difference in days since epoch (86400 = 24*3600)
 			# number of days since epoch for current time (in GMT) -
 			# number of days since epoch for message (in GMT)
@@ -682,10 +708,10 @@ class ConversationTextview:
 				format += day_str + ' '
 			format += '%X' + after_str
 			tim_format = time.strftime(format, tim)
-			# if tim_format comes as unicode because of day_str.
-			# we convert it to the encoding that we want (and that is utf-8)
-			tim_format = helpers.ensure_utf8_string(tim_format)
-			tim_format = tim_format.encode('utf-8')
+			if locale.getpreferredencoding() == 'UTF-8':
+				# if tim_format comes as unicode because of day_str.
+				# we convert it to the encoding that we want (and that is utf-8)
+				tim_format = helpers.ensure_utf8_string(tim_format)
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
 		elif current_print_time == 'sometimes' and kind != 'info':
@@ -725,7 +751,7 @@ class ConversationTextview:
 			else:
 				self.print_name(name, kind, other_tags_for_name)
 		self.print_subject(subject)
-		self.print_real_text(text, text_tags, name)
+		self.print_real_text(text, text_tags, name, xhtml)
 
 		# scroll to the end of the textview
 		if at_the_end or kind == 'outgoing':
@@ -748,7 +774,9 @@ class ConversationTextview:
 			name_tags = other_tags_for_name[:] # create a new list
 			name_tags.append(kind)
 			before_str = gajim.config.get('before_nickname')
+			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_nickname')
+			after_str = helpers.from_one_line(after_str)
 			format = before_str + name + after_str + ' '
 			buffer.insert_with_tags_by_name(end_iter, format, *name_tags)
 
@@ -760,8 +788,18 @@ class ConversationTextview:
 			buffer.insert(end_iter, subject)
 			self.print_empty_line()
 
-	def print_real_text(self, text, text_tags = [], name = None):
+	def print_real_text(self, text, text_tags = [], name = None, xhtml = None):
 		'''this adds normal and special text. call this to add text'''
+		if xhtml:
+			try:
+				if name and (text.startswith('/me ') or text.startswith('/me\n')):
+					xhtml = xhtml.replace('/me', '<dfn>%s</dfn>'% (name,), 1)
+				self.tv.display_html(xhtml.encode('utf-8'))
+				return
+			except Exception, e:
+				gajim.log.debug(str("Error processing xhtml")+str(e))
+				gajim.log.debug(str("with |"+xhtml+"|"))
+
 		buffer = self.tv.get_buffer()
 		# /me is replaced by name if name is given
 		if name and (text.startswith('/me ') or text.startswith('/me\n')):

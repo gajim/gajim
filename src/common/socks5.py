@@ -3,14 +3,14 @@
 ##
 ## Contributors for this file:
 ##	- Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <nkour@jabber.org>
+##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##
 ## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
@@ -27,11 +27,8 @@
 
 
 import socket
-import select
-import os
 import struct
 import sha
-import time
 from dialogs import BindPortError
 
 from errno import EWOULDBLOCK
@@ -74,13 +71,13 @@ class SocksQueue:
 		self.on_success = None
 		self.on_failure = None
 	
-	def start_listener(self, host, port, sha_str, sha_handler, sid):
+	def start_listener(self, port, sha_str, sha_handler, sid):
 		''' start waiting for incomming connections on (host, port)
 		and do a socks5 authentication using sid for generated sha
 		'''
 		self.sha_handlers[sha_str] = (sha_handler, sid)
 		if self.listener == None:
-			self.listener = Socks5Listener(self.idlequeue, host, port)
+			self.listener = Socks5Listener(self.idlequeue, port)
 			self.listener.queue = self
 			self.listener.bind()
 			if self.listener.started is False:
@@ -213,7 +210,7 @@ class SocksQueue:
 			
 			sender = self.senders[file_props['hash']]
 			sender.account = account
-			result = get_file_contents(0)
+			result = self.get_file_contents(0)
 			self.process_result(result, sender)
 	
 	def result_sha(self, sha_str, idx):
@@ -350,7 +347,10 @@ class SocksQueue:
 class Socks5:
 	def __init__(self, idlequeue, host, port, initiator, target, sid):
 		if host is not None:
-			self.host = socket.gethostbyname(host)
+			try:
+				self.host = socket.gethostbyname(host)
+			except socket.gaierror:
+				self.host = None
 		self.idlequeue = idlequeue
 		self.fd = -1
 		self.port = port
@@ -787,12 +787,12 @@ class Socks5Sender(Socks5, IdleObject):
 			self.queue.remove_sender(self.queue_idx, False)
 
 class Socks5Listener(IdleObject):
-	def __init__(self, idlequeue, host, port):
-		''' handle all incomming connections on (host, port) 
+	def __init__(self, idlequeue, port):
+		''' handle all incomming connections on (0.0.0.0, port) 
 		This class implements IdleObject, but we will expect
 		only pollin events though
 		'''
-		self.host, self.port = host, port
+		self.port = port
 		self.queue_idx = -1	
 		self.idlequeue = idlequeue
 		self.queue = None

@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
@@ -25,6 +25,7 @@ import os
 import gtkgui_helpers
 import vcard
 import conversation_textview
+import message_control
 
 try:
 	import gtkspell
@@ -40,6 +41,7 @@ from advanced import AdvancedConfigurationWindow
 
 from common import gajim
 from common import helpers
+from common.exceptions import GajimGeneralException
 
 class EditGroupsDialog:
 	'''Class for the edit group dialog window'''
@@ -139,6 +141,9 @@ class EditGroupsDialog:
 		group = self.xml.get_widget('group_entry').get_text().decode('utf-8')
 		if not group:
 			return
+		# Do not allow special groups
+		if group in helpers.special_groups:
+			return
 		# check if it already exists
 		model = self.list.get_model()
 		iter = model.get_iter_root()
@@ -180,14 +185,16 @@ class EditGroupsDialog:
 			if account not in accounts:
 				accounts.append(account)
 				for g in gajim.groups[account].keys():
-					if g in helpers.special_groups:
-						continue
 					if g in groups:
 						continue
 					groups[g] = 0
 			for g in contact.groups:
 				groups[g] += 1
-		group_list = groups.keys()
+		group_list = []
+		# Remove special groups if they are empty
+		for group in groups:
+			if group not in helpers.special_groups or groups[group] > 0:
+				group_list.append(group)
 		group_list.sort()			
 		for group in group_list:
 			iter = store.append()
@@ -264,6 +271,7 @@ class ChooseGPGKeyDialog:
 		renderer = gtk.CellRendererText()
 		self.keys_treeview.insert_column_with_attributes(-1, _('Contact name'),
 			renderer, text = 1)
+		self.keys_treeview.set_search_column(1)
 		self.fill_tree(secret_keys, selected)
 		self.window.show_all()
 
@@ -405,12 +413,12 @@ class ChangeStatusMessageDialog:
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
-	uid_labels = {'jabber': _('Jabber ID'),
-		'aim': _('AIM Address'),
-		'gadu-gadu': _('GG Number'),
-		'icq': _('ICQ Number'),
-		'msn': _('MSN Address'),
-		'yahoo': _('Yahoo! Address')}
+	uid_labels = {'jabber': _('Jabber ID:'),
+		'aim': _('AIM Address:'),
+		'gadu-gadu': _('GG Number:'),
+		'icq': _('ICQ Number:'),
+		'msn': _('MSN Address:'),
+		'yahoo': _('Yahoo! Address:')}
 	def __init__(self, account = None, jid = None, user_nick = None,
 	group = None):
 		self.account = account
@@ -441,7 +449,8 @@ class AddNewContactWindow:
 		'uid_label', 'uid_entry', 'protocol_combobox', 'protocol_jid_combobox',
 		'protocol_hbox', 'nickname_entry', 'message_scrolledwindow',
 		'register_hbox', 'subscription_table', 'add_button',
-		'message_textview', 'connected_label', 'group_comboboxentry'):
+		'message_textview', 'connected_label', 'group_comboboxentry',
+		'auto_authorize_checkbutton'):
 			self.__dict__[w] = self.xml.get_widget(w)
 		if account and len(gajim.connections) >= 2:
 			prompt_text =\
@@ -486,8 +495,10 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				liststore.append([type_, type_])
 		self.protocol_combobox.set_model(liststore)
 		self.protocol_combobox.set_active(0)
-		self.protocol_jid_combobox.set_sensitive(False)
+		self.protocol_jid_combobox.set_no_show_all(True)
+		self.protocol_jid_combobox.hide()
 		self.subscription_table.set_no_show_all(True)
+		self.auto_authorize_checkbutton.show()
 		self.message_scrolledwindow.set_no_show_all(True)
 		self.register_hbox.set_no_show_all(True)
 		self.register_hbox.hide()
@@ -497,11 +508,13 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.protocol_jid_combobox.set_model(liststore)
 		self.xml.signal_autoconnect(self)
 		if jid:
-			type_ = gajim.get_transport_name_from_jid(jid) or 'jabber'
+			type_ = gajim.get_transport_name_from_jid(jid)
+			if not type_:
+				type_ = 'jabber'
 			if type_ == 'jabber':
 				self.uid_entry.set_text(jid)
 			else:
-				uid, transport = gajim.get_room_name_and_server_from_room_jid(jid)
+				uid, transport = gajim.get_name_and_server_from_jid(jid)
 				self.uid_entry.set_text(uid.replace('%', '@', 1))
 			#set protocol_combobox
 			model = self.protocol_combobox.get_model()
@@ -515,13 +528,13 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				i += 1
 
 			# set protocol_jid_combobox
-			self.protocol_combobox.set_active(0)
+			self.protocol_jid_combobox.set_active(0)
 			model = self.protocol_jid_combobox.get_model()
 			iter = model.get_iter_first()
 			i = 0
 			while iter:
 				if model[iter][0] == transport:
-					self.protocol_combobox.set_active(i)
+					self.protocol_jid_combobox.set_active(i)
 					break
 				iter = model.iter_next(iter)
 				i += 1
@@ -626,7 +639,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		else:
 			message= ''
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
-		auto_auth = self.xml.get_widget('auto_authorize_checkbutton').get_active()
+		auto_auth = self.auto_authorize_checkbutton.get_active()
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
 			group = group, pseudo = nickname, auto_auth = auto_auth)
 		self.window.destroy()
@@ -641,13 +654,15 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			for jid_ in self.agents[type_]:
 				model.append([jid_])
 			self.protocol_jid_combobox.set_active(0)
-			self.protocol_jid_combobox.set_sensitive(True)
+		if len(self.agents[type_]) > 1:
+			self.protocol_jid_combobox.set_no_show_all(False)
+			self.protocol_jid_combobox.show_all()
 		else:
-			self.protocol_jid_combobox.set_sensitive(False)
+			self.protocol_jid_combobox.hide()
 		if type_ in self.uid_labels:
 			self.uid_label.set_text(self.uid_labels[type_])
 		else:
-			self.uid_label.set_text(_('User ID'))
+			self.uid_label.set_text(_('User ID:'))
 		if type_ == 'jabber':
 			self.message_scrolledwindow.show()
 		else:
@@ -655,6 +670,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if type_ in self.available_types:
 			self.register_hbox.set_no_show_all(False)
 			self.register_hbox.show_all()
+			self.auto_authorize_checkbutton.hide()
 			self.connected_label.hide()
 			self.subscription_table.hide()
 			self.add_button.set_sensitive(False)
@@ -668,9 +684,11 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 					self.subscription_table.hide()
 					self.connected_label.show()
 					self.add_button.set_sensitive(False)
+					self.auto_authorize_checkbutton.hide()
 					return
 			self.subscription_table.set_no_show_all(False)
 			self.subscription_table.show_all()
+			self.auto_authorize_checkbutton.show()
 			self.connected_label.hide()
 			self.add_button.set_sensitive(True)
 
@@ -697,8 +715,14 @@ class AboutDialog:
 		dlg.set_version(gajim.version)
 		s = u'Copyright © 2003-2006 Gajim Team'
 		dlg.set_copyright(s)
-		text = open('../COPYING').read()
-		dlg.set_license(text)
+		copying_file_path = None
+		if os.path.isfile(os.path.join(gajim.defs.docdir, 'COPYING')):
+			copying_file_path = os.path.join(gajim.defs.docdir, 'COPYING')
+		elif os.path.isfile('../COPYING'):
+			copying_file_path = '../COPYING'
+		if copying_file_path:
+			text = open(copying_file_path).read()
+			dlg.set_license(text)
 		
 		dlg.set_comments('%s\n%s %s\n%s %s' 
 			% (_('A GTK+ jabber client'), \
@@ -706,28 +730,40 @@ class AboutDialog:
 			_('PyGTK Version:'), self.tuple2str(gtk.pygtk_version)))
 		dlg.set_website('http://www.gajim.org/')
 
-		authors = []
-		authors_file = open('../AUTHORS').read()
-		authors_file = authors_file.split('\n')
-		for author in authors_file:
-			if author == 'CURRENT DEVELOPERS:':
-				authors.append(_('Current Developers:'))
-			elif author == 'PAST DEVELOPERS:':
-				authors.append('\n' + _('Past Developers:'))
-			elif author != '': # Real author line
-				authors.append(author)
+		authors_file_path = None
+		if os.path.isfile(os.path.join(gajim.defs.docdir, 'AUTHORS')):
+			authors_file_path = os.path.join(gajim.defs.docdir, 'AUTHORS')
+		elif os.path.isfile('../AUTHORS'):
+			authors_file_path = '../AUTHORS'
+		if authors_file_path:
+			authors = []
+			authors_file = open(authors_file_path).read()
+			authors_file = authors_file.split('\n')
+			for author in authors_file:
+				if author == 'CURRENT DEVELOPERS:':
+					authors.append(_('Current Developers:'))
+				elif author == 'PAST DEVELOPERS:':
+					authors.append('\n' + _('Past Developers:'))
+				elif author != '': # Real author line
+					authors.append(author)
+	
+			thanks_file_path = None
+			if os.path.isfile(os.path.join(gajim.defs.docdir, 'THANKS')):
+				thanks_file_path = os.path.join(gajim.defs.docdir, 'THANKS')
+			elif os.path.isfile('../THANKS'):
+				thanks_file_path = '../THANKS'
+			if thanks_file_path:
+				authors.append('\n' + _('THANKS:'))
 				
-		authors.append('\n' + _('THANKS:'))
-				
-		text = open('../THANKS').read()
-		text_splitted = text.split('\n')
-		text = '\n'.join(text_splitted[:-2]) # remove one english sentence
-		# and add it manually as translatable
-		text += '\n%s\n' % _('Last but not least, we would like to thank all '
-			'the package maintainers.')
-		authors.append(text)
+				text = open(thanks_file_path).read()
+				text_splitted = text.split('\n')
+				text = '\n'.join(text_splitted[:-2]) # remove one english sentence
+				# and add it manually as translatable
+				text += '\n%s\n' % _('Last but not least, we would like to thank all '
+					'the package maintainers.')
+				authors.append(text)
 		
-		dlg.set_authors(authors)
+			dlg.set_authors(authors)
 		
 		if gtk.pygtk_version >= (2, 8, 0) and gtk.gtk_version >= (2, 8, 0):
 			dlg.props.wrap_license = True
@@ -837,27 +873,31 @@ class FileChooserDialog(gtk.FileChooserDialog):
 			self.set_current_folder(current_folder)
 		else:
 			self.set_current_folder(helpers.get_documents_path())
-
-		buttons = self.action_area.get_children()
-		possible_responses = {gtk.STOCK_OPEN: on_response_ok,
-			gtk.STOCK_SAVE: on_response_ok,
-			gtk.STOCK_CANCEL: on_response_cancel}
-		for b in buttons:
-			for response in possible_responses:
-				if b.get_label() == response:
-					if not possible_responses[response]:
-						b.connect('clicked', self.just_destroy)
-					elif isinstance(possible_responses[response], tuple):
-						if len(possible_responses[response]) == 1:
-							b.connect('clicked', possible_responses[response][0])
-						else:
-							b.connect('clicked', *possible_responses[response])
-					else:
-						b.connect('clicked', possible_responses[response])
-					break
-
+		self.response_ok, self.response_cancel = \
+			on_response_ok, on_response_cancel
+		# in gtk+-2.10 clicked signal on some of the buttons in a dialog
+		# is emitted twice, so we cannot rely on 'clicked' signal
+		self.connect('response', self.on_dialog_response)
 		self.show_all()
 
+	def on_dialog_response(self, dialog, response):
+		if response in (gtk.RESPONSE_CANCEL, gtk.RESPONSE_CLOSE):
+			if self.response_cancel:
+				if isinstance(self.response_cancel, tuple):
+					self.response_cancel[0](dialog, *self.response_cancel[1:])
+				else:
+					self.response_cancel(dialog)
+			else:
+				self.just_destroy(dialog)
+		elif response == gtk.RESPONSE_OK:
+			if self.response_ok:
+				if isinstance(self.response_ok, tuple):
+					self.response_ok[0](dialog, *self.response_ok[1:])
+				else:
+					self.response_ok(dialog)
+			else:
+				self.just_destroy(dialog)
+			
 	def just_destroy(self, widget):
 		self.destroy()
 
@@ -1015,6 +1055,12 @@ class SubscriptionRequestWindow:
 		xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def prepare_popup_menu(self):
+		xml = gtkgui_helpers.get_glade('subscription_request_popup_menu.glade')
+		menu = xml.get_widget('subscription_request_popup_menu')
+		xml.signal_autoconnect(self)
+		return menu
+
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 		
@@ -1025,7 +1071,7 @@ class SubscriptionRequestWindow:
 		if self.jid not in gajim.contacts.get_jid_list(self.account):
 			AddNewContactWindow(self.account, self.jid, self.user_nick)
 
-	def on_contact_info_button_clicked(self, widget):
+	def on_contact_info_activate(self, widget):
 		'''ask vcard'''
 		if gajim.interface.instances[self.account]['infos'].has_key(self.jid):
 			gajim.interface.instances[self.account]['infos'][self.jid].window.present()
@@ -1039,38 +1085,50 @@ class SubscriptionRequestWindow:
 			gajim.interface.instances[self.account]['infos'][self.jid].xml.\
 				get_widget('information_notebook').remove_page(0)
 	
+	def on_start_chat_activate(self, widget):
+		'''open chat'''
+		gajim.interface.roster.new_chat_from_jid(self.account, self.jid)
+
 	def on_deny_button_clicked(self, widget):
 		'''refuse the request'''
 		gajim.connections[self.account].refuse_authorization(self.jid)
 		self.window.destroy()
 
+	def on_actions_button_clicked(self, widget):
+		'''popup action menu'''
+		menu = self.prepare_popup_menu()
+		menu.show_all()
+		gtkgui_helpers.popup_emoticons_under_button(menu, widget, self.window.window)
+
+
 class JoinGroupchatWindow:
-	def __init__(self, account, server = '', room = '', nick = '',
-	automatic = False):
+	def __init__(self, account, room_jid = '', nick = '', automatic = False):
 		'''automatic is a dict like {'invities': []}
 		If automatic is not empty, this means room must be automaticaly configured
 		and when done, invities must be automatically invited'''
-		if server and room:
-			jid = room + '@' + server
-			if jid in gajim.gc_connected[account] and gajim.gc_connected[account][jid]:
-				ErrorDialog(_('You are already in room %s') % jid)
-				raise RuntimeError, 'You are already in this room'
+		if room_jid != '':
+			if room_jid in gajim.gc_connected[account] and\
+			gajim.gc_connected[account][room_jid]:
+				ErrorDialog(_('You are already in group chat %s') % room_jid)
+				raise GajimGeneralException, 'You are already in this group chat'
 		self.account = account
 		self.automatic = automatic
 		if nick == '':
 			nick = gajim.nicks[self.account]
 		if gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
-_('You can not join a group chat unless you are connected.'))
-			raise RuntimeError, 'You must be connected to join a groupchat'
+				_('You can not join a group chat unless you are connected.'))
+			raise GajimGeneralException, 'You must be connected to join a groupchat'
 
 		self._empty_required_widgets = []
 
 		self.xml = gtkgui_helpers.get_glade('join_groupchat_window.glade')
 		self.window = self.xml.get_widget('join_groupchat_window')
-		self.xml.get_widget('server_entry').set_text(server)
-		self.xml.get_widget('room_entry').set_text(room)
-		self.xml.get_widget('nickname_entry').set_text(nick)
+		self._room_jid_entry = self.xml.get_widget('room_jid_entry')
+		self._nickname_entry = self.xml.get_widget('nickname_entry')
+		
+		self._room_jid_entry.set_text(room_jid)
+		self._nickname_entry.set_text(nick)
 		self.xml.signal_autoconnect(self)
 		gajim.interface.instances[account]['join_gc'] = self #now add us to open windows
 		if len(gajim.connections) > 1:
@@ -1090,19 +1148,14 @@ _('You can not join a group chat unless you are connected.'))
 			self.recently_combobox.append_text(g)
 		if len(self.recently_groupchat) == 0:
 			self.recently_combobox.set_sensitive(False)
-		elif server == '' and room == '':
+		elif room_jid == '':
 			self.recently_combobox.set_active(0)
-			self.xml.get_widget('room_entry').select_region(0, -1)
-		elif room and server:
+			self._room_jid_entry.select_region(0, -1)
+		elif room_jid != '':
 			self.xml.get_widget('join_button').grab_focus()
 
-		self._server_entry = self.xml.get_widget('server_entry')
-		self._room_entry = self.xml.get_widget('room_entry')
-		self._nickname_entry = self.xml.get_widget('nickname_entry')
-		if not self._server_entry.get_text():
-			self._empty_required_widgets.append(self._server_entry)
-		if not self._room_entry.get_text():
-			self._empty_required_widgets.append(self._room_entry)
+		if not self._room_jid_entry.get_text():
+			self._empty_required_widgets.append(self._room_jid_entry)
 		if not self._nickname_entry.get_text():
 			self._empty_required_widgets.append(self._nickname_entry)
 		if len(self._empty_required_widgets):
@@ -1129,27 +1182,11 @@ _('You can not join a group chat unless you are connected.'))
 				if len(self._empty_required_widgets) == 0:
 					self.xml.get_widget('join_button').set_sensitive(True)
 
-	def on_room_entry_key_press_event(self, widget, event):
-		# Check for pressed @ and jump to server_entry if found
-		if event.keyval == gtk.keysyms.at:
-			self.xml.get_widget('server_entry').grab_focus()
-			return True
-
-	def on_server_entry_key_press_event(self, widget, event):
-		# If backspace is pressed in empty server_entry, return to the room entry
-		backspace = event.keyval == gtk.keysyms.BackSpace
-		server_entry = self.xml.get_widget('server_entry')
-		empty = len(server_entry.get_text()) == 0
-		if backspace and empty:
-			self.xml.get_widget('room_entry').grab_focus()
-			return True
-
 	def on_recently_combobox_changed(self, widget):
 		model = widget.get_model()
-		iter = widget.get_active_iter()
-		gid = model[iter][0].decode('utf-8')
-		self.xml.get_widget('room_entry').set_text(gid.split('@')[0])
-		self.xml.get_widget('server_entry').set_text(gid.split('@')[1])
+		iter_ = widget.get_active_iter()
+		room_jid = model[iter_][0].decode('utf-8')
+		self._room_jid_entry.set_text(room_jid)
 
 	def on_cancel_button_clicked(self, widget):
 		'''When Cancel button is clicked'''
@@ -1157,30 +1194,35 @@ _('You can not join a group chat unless you are connected.'))
 
 	def on_join_button_clicked(self, widget):
 		'''When Join button is clicked'''
-		nickname = self.xml.get_widget('nickname_entry').get_text().decode(
-			'utf-8')
-		room = self.xml.get_widget('room_entry').get_text().decode('utf-8')
-		server = self.xml.get_widget('server_entry').get_text().decode('utf-8')
+		nickname = self._nickname_entry.get_text().decode('utf-8')
+		room_jid = self._room_jid_entry.get_text().decode('utf-8')
 		password = self.xml.get_widget('password_entry').get_text().decode(
 			'utf-8')
-		jid = '%s@%s' % (room, server)
 		try:
-			jid = helpers.parse_jid(jid)
+			room_jid = helpers.parse_jid(room_jid)
 		except:
-			ErrorDialog(_('Invalid room or server name'),
-				_('The room name or server name has not allowed characters.'))
+			ErrorDialog(_('Invalid group chat Jabber ID'),
+				_('The group chat Jabber ID has not allowed characters.'))
 			return
 
-		if jid in self.recently_groupchat:
-			self.recently_groupchat.remove(jid)
-		self.recently_groupchat.insert(0, jid)
+		if gajim.interface.msg_win_mgr.has_window(room_jid, self.account):
+			ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, self.account)
+			if ctrl.type_id != message_control.TYPE_GC:
+				ErrorDialog(_('This is not a group chat'),
+					_('%s is not the name of a group chat.') % room_jid)
+				return
+		if room_jid in self.recently_groupchat:
+			self.recently_groupchat.remove(room_jid)
+		self.recently_groupchat.insert(0, room_jid)
 		if len(self.recently_groupchat) > 10:
 			self.recently_groupchat = self.recently_groupchat[0:10]
-		gajim.config.set('recently_groupchat', ' '.join(self.recently_groupchat))
+		gajim.config.set('recently_groupchat',
+			' '.join(self.recently_groupchat))
 
 		if self.automatic:
-			gajim.automatic_rooms[self.account][jid] = self.automatic
-		gajim.interface.roster.join_gc_room(self.account, jid, nickname, password)
+			gajim.automatic_rooms[self.account][room_jid] = self.automatic
+		gajim.interface.roster.join_gc_room(self.account, room_jid, nickname,
+			password)
 
 		self.window.destroy()
 
@@ -1192,7 +1234,7 @@ class NewChatDialog(InputDialog):
 			title = _('Start Chat with account %s') % account
 		else:
 			title = _('Start Chat')
-		prompt_text = _('Fill in the jid, or nick of the contact you would like\nto send a chat message to:')
+		prompt_text = _('Fill in the nickname or the Jabber ID of the contact you would like\nto send a chat message to:')
 		InputDialog.__init__(self, title, prompt_text, is_modal = False)
 		
 		self.completion_dict = {}
@@ -1240,7 +1282,7 @@ class ChangePasswordDialog:
 		if not account or gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
 				_('Without a connection, you can not change your password.'))
-			raise RuntimeError, 'You are not connected to the server'
+			raise GajimGeneralException, 'You are not connected to the server'
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_password_dialog.glade')
 		self.dialog = self.xml.get_widget('change_password_dialog')
@@ -1302,7 +1344,8 @@ class PopupNotificationWindow:
 		# default image
 		if not path_to_image:
 			path_to_image = os.path.abspath(
-				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'chat_msg_recv.png')) # img to display
+				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+					'chat_msg_recv.png')) # img to display
 
 		if event_type == _('Contact Signed In'):
 			bg_color = 'limegreen'
@@ -1322,7 +1365,7 @@ class PopupNotificationWindow:
 			bg_color = 'tan1'
 		elif event_type == _('Contact Changed Status'):			
 			bg_color = 'thistle2'
-		else: # Unknown event ! Shouldn't happen but deal with it
+		else: # Unknown event! Shouldn't happen but deal with it
 			bg_color = 'white'
 		popup_bg_color = gtk.gdk.color_parse(bg_color)
 		close_button.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
@@ -1421,8 +1464,12 @@ class SingleMessageWindow:
 		self.cancel_button = self.xml.get_widget('cancel_button')
 		self.close_button = self.xml.get_widget('close_button')
 		self.message_tv_buffer.connect('changed', self.update_char_counter)
-		
-		self.to_entry.set_text(to)
+		if type(to) == type([]):
+			jid = ', '.join( [i[0].jid + '/' + i[0].resource for i in to])
+			self.to_entry.set_text(jid)
+			self.to_entry.set_sensitive(False)
+		else:
+			self.to_entry.set_text(to)
 		
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL and action == 'send':
 			try:
@@ -1574,22 +1621,27 @@ class SingleMessageWindow:
 			ErrorDialog(_('Connection not available'),
 		_('Please make sure you are connected with "%s".') % self.account)
 			return
-		to_whom_jid = self.to_entry.get_text().decode('utf-8')
-		if self.completion_dict.has_key(to_whom_jid):
-			to_whom_jid = self.completion_dict[to_whom_jid].jid
-		subject = self.subject_entry.get_text().decode('utf-8')
-		begin, end = self.message_tv_buffer.get_bounds()
-		message = self.message_tv_buffer.get_text(begin, end).decode('utf-8')
+		if type(self.to) == type([]):
+			sender_list = [i[0].jid + '/' + i[0].resource for i in self.to]
+		else:
+			sender_list = [self.to_entry.get_text().decode('utf-8')]
+ 
+		for to_whom_jid in sender_list:
+			if self.completion_dict.has_key(to_whom_jid):
+				to_whom_jid = self.completion_dict[to_whom_jid].jid
+			subject = self.subject_entry.get_text().decode('utf-8')
+			begin, end = self.message_tv_buffer.get_bounds()
+			message = self.message_tv_buffer.get_text(begin, end).decode('utf-8')
 
-		if to_whom_jid.find('/announce/') != -1:
-			gajim.connections[self.account].send_motd(to_whom_jid, subject,
-				message)
-			return
+			if to_whom_jid.find('/announce/') != -1:
+				gajim.connections[self.account].send_motd(to_whom_jid, subject,
+					message)
+				return
 
-		# FIXME: allow GPG message some day
-		gajim.connections[self.account].send_message(to_whom_jid, message,
-			keyID = None, type = 'normal', subject=subject)
-		
+			# FIXME: allow GPG message some day
+			gajim.connections[self.account].send_message(to_whom_jid, message,
+				keyID = None, type = 'normal', subject=subject)
+			
 		self.subject_entry.set_text('') # we sent ok, clear the subject
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
 
@@ -1725,10 +1777,13 @@ class XMLConsoleWindow:
 			self.input_textview.grab_focus()
 
 class PrivacyListWindow:
-	def __init__(self, account, privacy_list, list_type):
-		'''list_type can be 0 if list is created or 1 if it id edited'''
+	'''Window that is used for creating NEW or EDITING already there privacy
+	lists'''
+	def __init__(self, account, privacy_list_name, action):
+		'''action is 'EDIT' or 'NEW' depending on if we create a new priv list
+		or edit an already existing one'''
 		self.account = account
-		self.privacy_list = privacy_list
+		self.privacy_list_name = privacy_list_name
 
 		# Dicts and Default Values
 		self.active_rule = ''
@@ -1740,7 +1795,7 @@ class PrivacyListWindow:
 		self.allow_deny = 'allow'
 
 		# Connect to glade
-		self.xml = gtkgui_helpers.get_glade('privacy_list_edit_window.glade')
+		self.xml = gtkgui_helpers.get_glade('privacy_list_window.glade')
 		self.window = self.xml.get_widget('privacy_list_edit_window')
 
 		# Add Widgets
@@ -1762,10 +1817,9 @@ class PrivacyListWindow:
 		'privacy_list_default_checkbutton']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
-		# Send translations
 		self.privacy_lists_title_label.set_label(
 			_('Privacy List <b><i>%s</i></b>') % \
-			gtkgui_helpers.escape_for_pango_markup(self.privacy_list))
+			gtkgui_helpers.escape_for_pango_markup(self.privacy_list_name))
 
 		if len(gajim.connections) > 1:
 			title = _('Privacy List for %s') % self.account
@@ -1776,9 +1830,9 @@ class PrivacyListWindow:
 		self.open_rule_button.set_sensitive(False)
 		self.privacy_list_active_checkbutton.set_sensitive(False)
 		self.privacy_list_default_checkbutton.set_sensitive(False)
+		self.list_of_rules_combobox.set_sensitive(False)
 
-		# Check if list is created (0) or edited (1)
-		if list_type == 1:
+		if action == 'EDIT':
 			self.refresh_rules()
 
 		count = 0
@@ -1793,22 +1847,20 @@ class PrivacyListWindow:
 		self.add_edit_vbox.set_no_show_all(True)
 		self.window.show_all()
 		self.add_edit_vbox.hide()
-		
+
 		self.xml.signal_autoconnect(self)
 
 	def on_privacy_list_edit_window_destroy(self, widget):
-		'''close window'''
-		if gajim.interface.instances[self.account].has_key('privacy_list_%s' % \
-		self.privacy_list):
-			del gajim.interface.instances[self.account]['privacy_list_%s' % \
-				self.privacy_list]
+		key_name = 'privacy_list_%s' % self.privacy_list_name
+		if key_name in gajim.interface.instances[self.account]:
+			del gajim.interface.instances[self.account][key_name]
 
 	def check_active_default(self, a_d_dict):
-		if a_d_dict['active'] == self.privacy_list:
+		if a_d_dict['active'] == self.privacy_list_name:
 			self.privacy_list_active_checkbutton.set_active(True)
 		else:
 			self.privacy_list_active_checkbutton.set_active(False)
-		if a_d_dict['default'] == self.privacy_list:
+		if a_d_dict['default'] == self.privacy_list_name:
 			self.privacy_list_default_checkbutton.set_active(True)
 		else:
 			self.privacy_list_default_checkbutton.set_active(False)		
@@ -1818,11 +1870,10 @@ class PrivacyListWindow:
 		self.global_rules = {}
 		for rule in rules:
 			if rule.has_key('type'):
-				text_item = 'Order: %s, action: %s, type: %s, value: %s' % \
-					(rule['order'], rule['action'], rule['type'],
-					rule['value'])
+				text_item = _('Order: %s, action: %s, type: %s, value: %s') % \
+					(rule['order'], rule['action'], rule['type'], rule['value'])
 			else:
-				text_item = 'Order: %s, action: %s' % (rule['order'],
+				text_item = _('Order: %s, action: %s') % (rule['order'],
 					rule['action'])
 			self.global_rules[text_item] = rule
 			self.list_of_rules_combobox.append_text(text_item)
@@ -1845,22 +1896,26 @@ class PrivacyListWindow:
 		gajim.connections[self.account].get_active_default_lists()
 
 	def refresh_rules(self):
-		gajim.connections[self.account].get_privacy_list(self.privacy_list)
+		gajim.connections[self.account].get_privacy_list(self.privacy_list_name)
 
 	def on_delete_rule_button_clicked(self, widget):
 		tags = []
 		for rule in self.global_rules:
-			if rule != \
-				self.list_of_rules_combobox.get_active_text().decode('utf-8'):
+			if rule != self.list_of_rules_combobox.get_active_text():
 				tags.append(self.global_rules[rule])
 		gajim.connections[self.account].set_privacy_list(
-			self.privacy_list, tags)
+			self.privacy_list_name, tags)
 		self.privacy_list_received(tags)
 		self.add_edit_vbox.hide()
+		if not tags: # we removed latest rule
+			if 'privacy_lists' in gajim.interface.instances[self.account]:
+				win = gajim.interface.instances[self.account]['privacy_lists']
+				win.remove_privacy_list_from_combobox(self.privacy_list_name)
+				win.draw_widgets()
 
 	def on_open_rule_button_clicked(self, widget):
 		self.add_edit_rule_label.set_label(
-		_('<b>Edit a rule</b>'))
+			_('<b>Edit a rule</b>'))
 		active_num = self.list_of_rules_combobox.get_active()
 		if active_num == -1:
 			self.active_rule = ''
@@ -1909,29 +1964,31 @@ class PrivacyListWindow:
 					self.edit_queries_send_checkbutton.set_active(True)
 				elif child == 'message':
 					self.edit_send_messages_checkbutton.set_active(True)
-		
+
 			if rule_info['action'] == 'allow':
-					self.edit_allow_radiobutton.set_active(True)
+				self.edit_allow_radiobutton.set_active(True)
 			else:
-					self.edit_deny_radiobutton.set_active(True)
+				self.edit_deny_radiobutton.set_active(True)
 		self.add_edit_vbox.show()
-	
+
 	def on_privacy_list_active_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			gajim.connections[self.account].set_active_list(self.privacy_list)
+			gajim.connections[self.account].set_active_list(
+				self.privacy_list_name)
 		else:
 			gajim.connections[self.account].set_active_list(None)
 
 	def on_privacy_list_default_checkbutton_toggled(self, widget):
 		if widget.get_active():
-			gajim.connections[self.account].set_default_list(self.privacy_list)
+			gajim.connections[self.account].set_default_list(
+				self.privacy_list_name)
 		else:
 			gajim.connections[self.account].set_default_list(None)
 
 	def on_new_rule_button_clicked(self, widget):
 		self.reset_fields()
 		self.add_edit_vbox.show()
-	
+
 	def reset_fields(self):
 		self.edit_type_jabberid_entry.set_text('')
 		self.edit_allow_radiobutton.set_active(True)
@@ -1950,12 +2007,10 @@ class PrivacyListWindow:
 	def get_current_tags(self):
 		if self.edit_type_jabberid_radiobutton.get_active():
 			edit_type = 'jid'
-			edit_value = \
-				self.edit_type_jabberid_entry.get_text().decode('utf-8')
+			edit_value = self.edit_type_jabberid_entry.get_text()
 		elif self.edit_type_group_radiobutton.get_active():
 			edit_type = 'group'
-			edit_value = \
-				self.edit_type_group_combobox.get_active_text().decode('utf-8')
+			edit_value = self.edit_type_group_combobox.get_active_text()
 		elif self.edit_type_subscription_radiobutton.get_active():
 			edit_type = 'subscription'
 			subs = ['none', 'both', 'from', 'to']
@@ -1994,9 +2049,14 @@ class PrivacyListWindow:
 			else:
 				tags.append(current_tags)
 
-		gajim.connections[self.account].set_privacy_list(self.privacy_list, tags)
+		gajim.connections[self.account].set_privacy_list(
+			self.privacy_list_name, tags)
 		self.privacy_list_received(tags)
 		self.add_edit_vbox.hide()
+		if 'privacy_lists' in gajim.interface.instances[self.account]:
+			win = gajim.interface.instances[self.account]['privacy_lists']
+			win.add_privacy_list_to_combobox(self.privacy_list_name)
+			win.draw_widgets()
 
 	def on_list_of_rules_combobox_changed(self, widget):
 		self.add_edit_vbox.hide()
@@ -2011,32 +2071,28 @@ class PrivacyListWindow:
 		if active_bool:
 			self.allow_deny = radiobutton
 
-	def on_privacy_list_close_button_clicked(self, widget):
+	def on_close_button_clicked(self, widget):
 		self.window.destroy()
-	
-	def on_privacy_list_refresh_button_clicked(self, widget):
-		self.refresh_rules()
-		self.add_edit_vbox.hide()
 
 class PrivacyListsWindow:
-# To do: UTF-8 ???????
+	'''Window that is the main window for Privacy Lists;
+	we can list there the privacy lists and ask to create a new one
+	or edit an already there one'''
 	def __init__(self, account):
 		self.account = account
-
-		self.privacy_lists = []
-
 		self.privacy_lists_save = []		
 
-		self.xml = gtkgui_helpers.get_glade('privacy_lists_first_window.glade')
+		self.xml = gtkgui_helpers.get_glade('privacy_lists_window.glade')
 
 		self.window = self.xml.get_widget('privacy_lists_first_window')
 		for widget_to_add in ['list_of_privacy_lists_combobox',
-			'delete_privacy_list_button', 'open_privacy_list_button',
-			'new_privacy_list_button', 'new_privacy_list_entry', 'buttons_hbox',
-			'privacy_lists_refresh_button', 'close_privacy_lists_window_button']:
-			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)		
+		'delete_privacy_list_button', 'open_privacy_list_button',
+		'new_privacy_list_button', 'new_privacy_list_entry',
+		'privacy_lists_refresh_button', 'close_privacy_lists_window_button']:
+			self.__dict__[widget_to_add] = self.xml.get_widget(
+				widget_to_add)		
 
-		self.draw_privacy_lists_in_combobox()
+		self.draw_privacy_lists_in_combobox([])
 		self.privacy_lists_refresh()
 
 		self.enabled = True
@@ -2053,31 +2109,40 @@ class PrivacyListsWindow:
 		self.xml.signal_autoconnect(self)
 
 	def on_privacy_lists_first_window_destroy(self, widget):
-		'''close window'''
-		if gajim.interface.instances[self.account].has_key('privacy_lists'):
+		if 'privacy_lists' in gajim.interface.instances[self.account]:
 			del gajim.interface.instances[self.account]['privacy_lists']
 
-	def draw_privacy_lists_in_combobox(self):
+	def remove_privacy_list_from_combobox(self, privacy_list):
+		if privacy_list not in self.privacy_lists_save:
+			return
+		privacy_list_index = self.privacy_lists_save.index(privacy_list)
+		self.list_of_privacy_lists_combobox.remove_text(privacy_list_index)
+		self.privacy_lists_save.remove(privacy_list)
+
+	def add_privacy_list_to_combobox(self, privacy_list):
+		if privacy_list in self.privacy_lists_save:
+			return
+		self.list_of_privacy_lists_combobox.append_text(privacy_list)
+		self.privacy_lists_save.append(privacy_list)
+
+	def draw_privacy_lists_in_combobox(self, privacy_lists):
 		self.list_of_privacy_lists_combobox.set_active(-1)
 		self.list_of_privacy_lists_combobox.get_model().clear()
-		self.privacy_lists_save = self.privacy_lists
-		for add_item in self.privacy_lists:
-			self.list_of_privacy_lists_combobox.append_text(add_item)
-		if len(self.privacy_lists) == 0:
+		self.privacy_lists_save = []
+		for add_item in privacy_lists:
+			self.add_privacy_list_to_combobox(add_item)
+		self.draw_widgets()
+
+	def draw_widgets(self):
+		if len(self.privacy_lists_save) == 0:
 			self.list_of_privacy_lists_combobox.set_sensitive(False)
-			self.buttons_hbox.set_sensitive(False)
-		elif len(self.privacy_lists) == 1:
-			self.list_of_privacy_lists_combobox.set_active(0)
-			self.list_of_privacy_lists_combobox.set_sensitive(False)
-			self.buttons_hbox.set_sensitive(True)	
+			self.open_privacy_list_button.set_sensitive(False)
+			self.delete_privacy_list_button.set_sensitive(False)
 		else:
 			self.list_of_privacy_lists_combobox.set_sensitive(True)
-			self.buttons_hbox.set_sensitive(True)
 			self.list_of_privacy_lists_combobox.set_active(0)
-		self.privacy_lists = []
-
-	def on_privacy_lists_refresh_button_clicked(self, widget):
-		self.privacy_lists_refresh()
+			self.open_privacy_list_button.set_sensitive(True)
+			self.delete_privacy_list_button.set_sensitive(True)
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
@@ -2087,27 +2152,31 @@ class PrivacyListsWindow:
 			self.list_of_privacy_lists_combobox.get_active()]
 		gajim.connections[self.account].del_privacy_list(active_list)
 		self.privacy_lists_save.remove(active_list)
-		self.privacy_lists_received({'lists':self.privacy_lists_save})
+		self.privacy_lists_received({'lists': self.privacy_lists_save})
 
 	def privacy_lists_received(self, lists):
 		if not lists:
 			return
+		privacy_lists = []
 		for privacy_list in lists['lists']:
-			self.privacy_lists += [privacy_list]
-		self.draw_privacy_lists_in_combobox()
+			privacy_lists.append(privacy_list)
+		self.draw_privacy_lists_in_combobox(privacy_lists)
 
 	def privacy_lists_refresh(self):
 		gajim.connections[self.account].get_privacy_lists()
 
 	def on_new_privacy_list_button_clicked(self, widget):
-		name = self.new_privacy_list_entry.get_text().decode('utf-8')
-		if gajim.interface.instances[self.account].has_key(
-		'privacy_list_%s' % name):
-			gajim.interface.instances[self.account]['privacy_list_%s' % name].\
-				window.present()
+		name = self.new_privacy_list_entry.get_text()
+		if not name:
+			ErrorDialog(_('Invalid List Name'),
+				_('You must enter a name to create a privacy list.'))
+			return
+		key_name = 'privacy_list_%s' % name
+		if gajim.interface.instances[self.account].has_key(key_name):
+			gajim.interface.instances[self.account][key_name].window.present()
 		else:
-			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
-				PrivacyListWindow(self.account, name, 0)
+			gajim.interface.instances[self.account][key_name] = \
+				PrivacyListWindow(self.account, name, 'NEW')
 		self.new_privacy_list_entry.set_text('')
 
 	def on_privacy_lists_refresh_button_clicked(self, widget):
@@ -2116,16 +2185,17 @@ class PrivacyListsWindow:
 	def on_open_privacy_list_button_clicked(self, widget):
 		name = self.privacy_lists_save[
 			self.list_of_privacy_lists_combobox.get_active()]
+		key_name = 'privacy_list_%s' % name
 		if gajim.interface.instances[self.account].has_key(
-		'privacy_list_%s' % name):
-			gajim.interface.instances[self.account]['privacy_list_%s' % name].\
-				window.present()
+		key_name):
+			gajim.interface.instances[self.account][key_name].window.present()
 		else:
-			gajim.interface.instances[self.account]['privacy_list_%s' % name] = \
-				PrivacyListWindow(self.account, name, 1)
+			gajim.interface.instances[self.account][key_name] = \
+				PrivacyListWindow(self.account, name, 'EDIT')
 
 class InvitationReceivedDialog:
-	def __init__(self, account, room_jid, contact_jid, password = None, comment = None):
+	def __init__(self, account, room_jid, contact_jid, password = None,
+	comment = None):
 
 		self.room_jid = room_jid
 		self.account = account
@@ -2133,8 +2203,8 @@ class InvitationReceivedDialog:
 		self.dialog = xml.get_widget('invitation_received_dialog')
 
 		#FIXME: use nickname instead of contact_jid
-		pritext = _('%(contact_jid)s has invited you to %(room_jid)s room') % {
-			'room_jid': room_jid, 'contact_jid': contact_jid }
+		pritext = _('%(contact_jid)s has invited you to group chat %(room_jid)s')\
+			% {'room_jid': room_jid, 'contact_jid': contact_jid }
 		
 		label_text = '<big><b>%s</b></big>' % pritext
 
@@ -2155,10 +2225,9 @@ class InvitationReceivedDialog:
 	
 	def on_accept_button_clicked(self, widget):
 		self.dialog.destroy()
-		room, server = gajim.get_room_name_and_server_from_room_jid(self.room_jid)
 		try:
-			JoinGroupchatWindow(self.account, server = server, room = room)
-		except RuntimeError:
+			JoinGroupchatWindow(self.account, self.room_jid)
+		except GajimGeneralException:
 			pass
 			
 class ProgressDialog:
@@ -2290,6 +2359,18 @@ class ImageChooserDialog(FileChooserDialog):
 		except gobject.GError:
 			return
 		widget.get_preview_widget().set_from_pixbuf(pixbuf)
+
+class AvatarChooserDialog(ImageChooserDialog):
+	def __init__(self, path_to_file = '', on_response_ok = None,
+	on_response_cancel = None, on_response_clear = None):
+		ImageChooserDialog.__init__(self, path_to_file, on_response_ok,
+			on_response_cancel)
+		button = gtk.Button(None, gtk.STOCK_CLEAR)
+		if on_response_clear:
+			button.connect('clicked', on_response_clear)
+		button.show_all()
+		self.action_area.pack_start(button)
+		self.action_area.reorder_child(button, 0)
 
 class AddSpecialNotificationDialog:
 	def __init__(self, jid):

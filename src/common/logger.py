@@ -1,17 +1,7 @@
 ## logger.py
 ##
-## Contributors for this file:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -32,24 +22,15 @@ import exceptions
 import gajim
 
 try:
-	from pysqlite2 import dbapi2 as sqlite
+	import sqlite3 as sqlite # python 2.5
 except ImportError:
-	raise exceptions.PysqliteNotAvailable
-
-if os.name == 'nt':
 	try:
-		# Documents and Settings\[User Name]\Application Data\Gajim\logs.db
-		LOG_DB_PATH = os.path.join(os.environ['appdata'], 'Gajim', 'logs.db')
-	except KeyError:
-		# win9x, ./logs.db
-		LOG_DB_PATH = 'logs.db'
-else: # Unices
-	LOG_DB_PATH = os.path.expanduser('~/.gajim/logs.db')
+		from pysqlite2 import dbapi2 as sqlite
+	except ImportError:
+		raise exceptions.PysqliteNotAvailable
 
-try:
-	LOG_DB_PATH = LOG_DB_PATH.decode(sys.getfilesystemencoding())
-except:
-	pass
+import configpaths
+LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
 
 class Constants:
 	def __init__(self):
@@ -107,15 +88,33 @@ class Logger:
 			return
 		self.init_vars()
 
-	def init_vars(self):
-		# if locked, wait up to 20 sec to unlock
-		# before raise (hopefully should be enough)
+	def close_db(self):
 		if self.con:
 			self.con.close()
+		self.con = None
+		self.cur = None
+
+	def open_db(self):
+		self.close_db()
+
+		# if locked, wait up to 20 sec to unlock
+		# before raise (hopefully should be enough)
 		self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
 			isolation_level = 'IMMEDIATE')
 		self.cur = self.con.cursor()
+		self.set_synchronous(False)
 
+	def set_synchronous(self, sync):
+		try:
+			if sync:
+				self.cur.execute("PRAGMA synchronous = NORMAL")
+			else:
+				self.cur.execute("PRAGMA synchronous = OFF")
+		except sqlite.Error, e:
+			gajim.log.debug("Failed to set_synchronous(%s): %s" % (sync, str(e)))
+
+	def init_vars(self):
+		self.open_db()
 		self.get_jids_already_in_db()
 
 	def get_jids_already_in_db(self):
@@ -136,9 +135,11 @@ class Logger:
 		and after that all okay'''
 		
 		possible_room_jid, possible_nick = jid.split('/', 1)
+		return self.jid_is_room_jid(possible_room_jid)
 
+	def jid_is_room_jid(self, jid):
 		self.cur.execute('SELECT jid_id FROM jids WHERE jid=?  AND type=?', 
-			(possible_room_jid, constants.JID_ROOM_TYPE))
+			(jid, constants.JID_ROOM_TYPE))
 		row = self.cur.fetchone()
 		if row is None:
 			return False
@@ -344,10 +345,8 @@ class Logger:
 		ROOM_JID/nick if pm-related.'''
 
 		if self.jids_already_in == []: # only happens if we just created the db
-			self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
-				isolation_level = 'IMMEDIATE')
-			self.cur = self.con.cursor()
-			
+			self.open_db()
+
 		jid = jid.lower()
 		contact_name_col = None # holds nickname for kinds gcstatus, gc_msg
 		# message holds the message unless kind is status or gcstatus,
