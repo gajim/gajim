@@ -290,6 +290,8 @@ class NodeBuilder:
 		self.Parse = self._parser.Parse
 
 		self.__depth = 0
+		self.__last_depth = 0
+		self.__max_depth = 0
 		self._dispatch_depth = 1
 		self._document_attrs = None
 		self._mini_dom=initial_node
@@ -326,7 +328,7 @@ class NodeBuilder:
 			ns=attr[:sp]           #
 			attrs[self.namespaces[ns]+attr[sp+1:]]=attrs[attr]
 			del attrs[attr]        #
-		self.__depth += 1
+		self._inc_depth()
 		self.DEBUG(DBG_NODEBUILDER, "DEPTH -> %i , tag -> %s, attrs -> %s" % (self.__depth, tag, `attrs`), 'down')
 		if self.__depth == self._dispatch_depth:
 			if not self._mini_dom : 
@@ -354,7 +356,7 @@ class NodeBuilder:
 			self._ptr = self._ptr.parent
 		else:
 			self.DEBUG(DBG_NODEBUILDER, "Got higher than dispatch level. Stream terminated?", 'stop')
-		self.__depth -= 1
+		self._dec_depth()
 		self.last_is_data = 0
 		if self.__depth == 0: self.stream_footer_received()
 	
@@ -386,6 +388,19 @@ class NodeBuilder:
 	def stream_footer_received(self):
 		""" Method called when stream just closed. """
 		self.check_data_buffer()
+
+	def has_received_endtag(self, level=0):
+		""" Return True if at least one end tag was seen (at level) """
+		return self.__depth <= level and self.__max_depth > level
+
+	def _inc_depth(self):
+		self.__last_depth = self.__depth
+		self.__depth += 1
+		self.__max_depth = max(self.__depth, self.__max_depth)
+
+	def _dec_depth(self):
+		self.__last_depth = self.__depth
+		self.__depth -= 1
 
 def XML2Node(xml):
 	""" Converts supplied textual string into XML node. Handy f.e. for reading configuration file.

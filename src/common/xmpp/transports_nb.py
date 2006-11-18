@@ -650,9 +650,12 @@ class NonBlockingTLS(PlugIn):
 		#print "Done handshake"
 		print "Async handshake started..."
 
+		# fake it, for now
+		self.starttls='success'
+
 	def _on_ssl_handshake_done(self):
 		print "Handshake done!"
-		self.starttls='success'
+		#self.starttls='success'
 
 		tcpsock = self._owner.Connection
 		cert = tcpsock._sslObj.get_peer_certificate()

@@ -131,7 +131,7 @@ class Dispatcher(PlugIn):
 		try:
 			self.Stream.Parse(data)
 			# end stream:stream tag received
-			if self.Stream and self.Stream._NodeBuilder__depth == 0:
+			if self.Stream and self.Stream.has_received_endtag():
 				self._owner.Connection.disconnect()
 				return 0
 		except ExpatError:
@@ -141,6 +141,7 @@ class Dispatcher(PlugIn):
 		if len(self._pendingExceptions) > 0:
 			 _pendingException = self._pendingExceptions.pop()
 			 raise _pendingException[0], _pendingException[1], _pendingException[2]
+		if len(data) == 0: return '0'
 		return len(data)
 	
 	def RegisterNamespace(self, xmlns, order='info'):
