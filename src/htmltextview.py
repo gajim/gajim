@@ -38,6 +38,7 @@ from cStringIO import StringIO
 import urllib2
 import operator
 
+from common import gajim
 #from common import i18n
 
 
@@ -728,7 +729,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				#self._insert_text(u"\u2550"*40)
 				self._jump_line()
 			except Exception, e:
-				log.debug(str("Error in hr"+e))
+				gajim.log.debug(str("Error in hr"+e))
 		elif name in LIST_ELEMS:
 			self.list_counters.pop()
 		elif name == 'li':
@@ -773,11 +774,8 @@ class HtmlTextView(gtk.TextView):
 		self.connect("enter-notify-event", self.__motion_notify_event)
 		self.get_buffer().create_tag('eol', scale = pango.SCALE_XX_SMALL)
 		self.tooltip = tooltips.BaseTooltip()
-		# needed to avoid bootstrapping problems
-		from common import gajim
 		self.config = gajim.config
 		self.interface = gajim.interface
-		self.log = gajim.log
 		# end big hack
 		build_patterns(self,gajim.config,gajim.interface)
 
