@@ -97,6 +97,7 @@ if test "x$enable_idle" = "xyes";then
 		have_idle=true
 	else
 		# Checks for libraries.
+		LIBS=-L$x_libraries
 		AC_CHECK_LIB([X11], [XOpenDisplay])
 		AC_CHECK_LIB([Xext], [XMissingExtension])
 		AC_CHECK_LIB([Xss], [XScreenSaverAllocInfo])
