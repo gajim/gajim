@@ -1002,7 +1002,7 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
 class InputDialog:
 	'''Class for Input dialog'''
 	def __init__(self, title, label_str, input_str = None, is_modal = True,
-	ok_handler = None, cancel_handler = None):
+ok_handler = None):
 		# if modal is True you also need to call get_response()
 		# and ok_handler won't be used
 		self.xml = gtkgui_helpers.get_glade('input_dialog.glade')
@@ -1011,7 +1011,6 @@ class InputDialog:
 		self.input_entry = self.xml.get_widget('input_entry')
 		self.dialog.set_title(title)
 		label.set_markup(label_str)
-		self.cancel_handler = cancel_handler
 		if input_str:
 			self.input_entry.set_text(input_str)
 			self.input_entry.select_region(0, -1) # select all
@@ -1023,22 +1022,14 @@ class InputDialog:
 			okbutton.connect('clicked', self.on_okbutton_clicked)
 			cancelbutton = self.xml.get_widget('cancelbutton')
 			cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
-			self.xml.signal_autoconnect(self)
 			self.dialog.show_all()
 
-	def on_input_dialog_destroy(self, widget):
-		if self.cancel_handler:
-			self.cancel_handler()
-
-	def on_okbutton_clicked(self, widget):
+	def on_okbutton_clicked(self,  widget):
 		user_input = self.input_entry.get_text().decode('utf-8')
 		self.dialog.destroy()
-		if isinstance(self.ok_handler, tuple):
-			self.ok_handler[0](user_input, *self.ok_handler[1:])
-		else:
-			self.ok_handler(user_input)
+		self.ok_handler(user_input)
 	
-	def on_cancelbutton_clicked(self, widget):
+	def on_cancelbutton_clicked(self,  widget):
 		self.dialog.destroy()
 
 	def get_response(self):

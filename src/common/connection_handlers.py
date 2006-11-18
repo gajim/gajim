@@ -33,6 +33,10 @@ import common.xmpp
 from common import GnuPG
 from common import helpers
 from common import gajim
+from common import dataforms
+from common import atom
+from common.commands import ConnectionCommands
+from common.pubsub import ConnectionPubSub
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
@@ -661,6 +665,10 @@ class ConnectionDisco:
 		feature = common.xmpp.Node('feature')
 		feature.setAttr('var', common.xmpp.NS_FILE)
 		query.addChild(node=feature)
+		# exposing adhoc commands
+		feature = common.xmpp.Node('feature')
+		feature.setAttr('var', common.xmpp.NS_COMMANDS)
+		query.addChild(node=feature)
 		
 		self.connection.send(iq)
 		raise common.xmpp.NodeProcessed
@@ -705,20 +713,34 @@ class ConnectionDisco:
 		else:
 			self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
+	def _DiscoverItemsGetCB(self, con, iq_obj):
+		gajim.log.debug('DiscoverItemsGetCB')
+		node = iq_obj.getTagAttr('query', 'node')
+		if node==common.xmpp.NS_COMMANDS:
+			self.commandListQuery(con, iq_obj)
+			raise common.xmpp.NodeProcessed
+
 	def _DiscoverInfoGetCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoGetCB')
-		iq = iq_obj.buildReply('result')
-		q = iq.getTag('query')
-		q.addChild('identity', attrs = {'type': 'pc',
-						'category': 'client',
-						'name': 'Gajim'})
-		q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
-		q.addChild('feature', attrs = {'var': common.xmpp.NS_SI})
-		q.addChild('feature', attrs = {'var': common.xmpp.NS_FILE})
-		q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
-		q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
-		self.connection.send(iq)
-		raise common.xmpp.NodeProcessed
+		q = iq_obj.getTag('query')
+		node = q.getAttr('node')
+
+		if self.commandQuery(con, iq_obj):
+			raise NodeProcessed
+		
+		elif node is None:
+			iq = iq_obj.buildReply('result')
+			q = iq.getTag('query')
+			q.addChild('identity', attrs = {'type': 'pc',
+							'category': 'client',
+							'name': 'Gajim'})
+			q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
+			q.addChild('feature', attrs = {'var': common.xmpp.NS_SI})
+			q.addChild('feature', attrs = {'var': common.xmpp.NS_FILE})
+			q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
+			q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
+			self.connection.send(iq)
+			raise common.xmpp.NodeProcessed
 
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoErrorCB')
@@ -1103,11 +1125,12 @@ class ConnectionVcard:
 			else:
 				self.dispatch('VCARD', vcard)
 
-
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco):
+class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
+		ConnectionCommands.__init__(self)
+		ConnectionPubSub.__init__(self)
 		# List of IDs we are waiting answers for {id: (type_of_request, data), }
 		self.awaiting_answers = {}
 		# List of IDs that will produce a timeout is answer doesn't arrive
@@ -1333,6 +1356,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
+		# check if the message is pubsub#event
+		if msg.getTag('event') is not None:
+			self._pubsubEventCB(con, msg)
+			return
 		msgtxt = msg.getBody()
 		msghtml = msg.getXHTML()
 		mtype = msg.getType()
@@ -1448,6 +1475,32 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
 				subject, chatstate, msg_id, composing_jep, user_nick, msghtml))
 	# END messageCB
+
+	def _pubsubEventCB(self, con, msg):
+		''' Called when we receive <message/> with pubsub event. '''
+		# TODO: Logging? (actually services where logging would be useful, should
+		# TODO: allow to access archives remotely...)
+		event = msg.getTag('event')
+
+		items = event.getTag('items')
+		if items is None: return
+
+		for item in items.getTags('item'):
+			# check for event type (for now only one type supported: pubsub.com events)
+			child = item.getTag('pubsub-message')
+			if child is not None:
+				# we have pubsub.com notification
+				child = child.getTag('feed')
+				if child is None: continue
+
+				for entry in child.getTags('entry'):
+					# for each entry in feed (there shouldn't be more than one,
+					# but to be sure...
+					self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
+				continue
+			# unknown type... probably user has another client who understands that event
+		
+		raise common.xmpp.NodeProcessed
 
 	def _presenceCB(self, con, prs):
 		'''Called when we receive a presence'''
@@ -1918,12 +1971,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco)
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',
 			common.xmpp.NS_HTTP_AUTH)
+		con.RegisterHandler('iq', self._CommandExecuteCB, 'set',
+			common.xmpp.NS_COMMANDS)
 		con.RegisterHandler('iq', self._gMailNewMailCB, 'set',
 			common.xmpp.NS_GMAILNOTIFY)
 		con.RegisterHandler('iq', self._gMailQueryCB, 'result',
 			common.xmpp.NS_GMAILNOTIFY)
 		con.RegisterHandler('iq', self._DiscoverInfoGetCB, 'get',
 			common.xmpp.NS_DISCO_INFO)
+		con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
+			common.xmpp.NS_DISCO_ITEMS)
+		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)

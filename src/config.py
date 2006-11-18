@@ -2068,7 +2068,7 @@ class DataFormWindow:
 	def __init__(self, account, config):
 		self.account = account
 		self.config = config
-		self.xml = gtkgui_helpers.get_glade('data_form_window.glade')
+		self.xml = gtkgui_helpers.get_glade('data_form_window.glade', 'data_form_window')
 		self.window = self.xml.get_widget('data_form_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.config_vbox = self.xml.get_widget('config_vbox')

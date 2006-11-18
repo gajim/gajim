@@ -26,6 +26,7 @@ from common import i18n
 import message_control
 
 from chat_control import ChatControlBase
+from atom_window import AtomWindow
 
 from common import exceptions
 from common.zeroconf import connection_zeroconf
@@ -1405,6 +1406,10 @@ class Interface:
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
 
+	def handle_atom_entry(self, account, data):
+		atom_entry, = data
+		AtomWindow.newAtomEntry(atom_entry)
+
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
 		if not self.instances.has_key(account):
@@ -1749,6 +1754,7 @@ class Interface:
 			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
 			'SIGNED_IN': self.handle_event_signed_in,
 			'METACONTACTS': self.handle_event_metacontacts,
+			'ATOM_ENTRY': self.handle_atom_entry,
 			'PRIVACY_LISTS_RECEIVED': self.handle_event_privacy_lists_received,
 			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
 			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
@@ -1963,10 +1969,9 @@ class Interface:
 
 		self.show_vcard_when_connect = []
 
-		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
+		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
-		# set the icon to all newly opened windows
-		gtk.window_set_default_icon(pix)
+		gtk.window_set_default_icon(pix) # set the icon to all newly opened windows
 		self.roster.window.set_icon_from_file(path_to_file) # and to roster window
 		self.sleeper = common.sleepy.Sleepy(
 			gajim.config.get('autoawaytime') * 60, # make minutes to seconds

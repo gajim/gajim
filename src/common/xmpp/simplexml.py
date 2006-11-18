@@ -33,7 +33,7 @@ def ustr(what):
 	if type(r)<>type(u''): return unicode(r,ENCODING)
 	return r
 
-class Node:
+class Node(object):
 	""" Node class describes syntax of separate XML Node. It have a constructor that permits node creation
 		from set of "namespace name", attributes and payload of text strings and other nodes.
 		It does not natively support building node from text string and uses NodeBuilder class for that purpose.
@@ -58,9 +58,9 @@ class Node:
 			"node" and other arguments is provided then the node initially created as replica of "node"
 			provided and then modified to be compliant with other arguments."""
 		if node:
-			if self.FORCE_NODE_RECREATION and type(node)==type(self): 
+			if self.FORCE_NODE_RECREATION and isinstance(node, Node): 
 				node=str(node)
-			if type(node)<>type(self): 
+			if not isinstance(node, Node): 
 				node=NodeBuilder(node,self)
 			else:
 				self.name,self.namespace,self.attrs,self.data,self.kids,self.parent = node.name,node.namespace,{},[],[],node.parent
@@ -74,9 +74,9 @@ class Node:
 		if self.parent and not self.namespace: self.namespace=self.parent.namespace
 		for attr in attrs.keys():
 			self.attrs[attr]=attrs[attr]
-		if type(payload) in (type(''),type(u'')): payload=[payload]
+		if isinstance(payload, basestring): payload=[payload]
 		for i in payload:
-			if type(i)==type(self): self.addChild(node=i)
+			if isinstance(i, Node): self.addChild(node=i)
 			else: self.data.append(ustr(i))
 
 	def __str__(self,fancy=0):
@@ -130,7 +130,7 @@ class Node:
 	def delChild(self, node, attrs={}):
 		""" Deletes the "node" from the node's childs list, if "node" is an instance.
 			Else deletes the first node that have specified name and (optionally) attributes. """
-		if type(node)<>type(self): node=self.getTag(node,attrs)
+		if not isinstance(node, Node): node=self.getTag(node,attrs)
 		self.kids.remove(node)
 		return node
 	def getAttrs(self):
@@ -191,6 +191,18 @@ class Node:
 				else: nodes.append(node)
 			if one and nodes: return nodes[0]
 		if not one: return nodes
+	
+	def iterTags(self, name, attrs={}, namespace=None):
+		""" Iterate over all children using specified arguments as filter. """
+		for node in self.kids:
+			if namespace is not None and namespace!=node.getNamespace(): continue
+			if node.getName() == name:
+				for key in attrs.keys():
+					if not node.attrs.has_key(key) or \
+						node.attrs[key]!=attrs[key]: break
+					else:
+						yield node
+
 	def setAttr(self, key, val):
 		""" Sets attribute "key" with the value "val". """
 		self.attrs[key]=val
