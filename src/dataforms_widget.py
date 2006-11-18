@@ -65,26 +65,26 @@ class DataFormWidget(gtk.Alignment, object):
 
 		self.del_data_form()
 		self._data_form = dataform
-		if dataform.mode==dataforms.DATAFORM_SINGLE:
+		if isinstance(dataform, dataforms.SimpleDataForm):
 			self.build_single_data_form()
 		else:
 			self.build_multiple_data_form()
 
 		# create appropriate description for instructions field if there isn't any
-		if dataform.instructions is None:
+		if dataform.instructions=='':
 			if dataform.type=='result':
 				# form is single
 				instructions = _('This is result of query.')
 			else:
-				# form is writable
-				if dataform.mode==dataforms.DATAFORM_SINGLE:
+				# form is writable (TODO: move that to build_*_data_form()?
+				if isinstance(dataform, dataforms.SimpleDataForm):
 					instructions = _('Fill in the form.')
 				else:
 					instructions = _('Edit items on the list')
 		else:
 			instructions = dataform.instructions
 
-		self.instructions_label.set_text(dataform.instructions)
+		self.instructions_label.set_text(instructions)
 
 	def get_data_form(self):
 		""" Data form displayed in the widget or None if no form. """
@@ -101,9 +101,8 @@ class DataFormWidget(gtk.Alignment, object):
 		""" Get the title of data form, as a unicode object. If no
 		title or no form, returns u''. Useful for setting window title. """
 		if self._data_form is not None:
-			if self._data_form.has_key('title'):
-				# TODO: encode really needed? check this
-				return self._data_form['title'].encode('utf-8')
+			if self._data_form.title is not None:
+				return self._data_form.title
 		return u''
 
 	title = property(get_title, None, None, "Data form title")
@@ -125,7 +124,7 @@ class DataFormWidget(gtk.Alignment, object):
 
 	def build_single_data_form(self):
 		'''Invoked when new single form is to be created.'''
-		assert self._data_form.mode==dataforms.DATAFORM_SINGLE
+		assert isinstance(self._data_form, dataforms.SimpleDataForm)
 
 		self.clean_data_form()
 
@@ -146,13 +145,13 @@ class DataFormWidget(gtk.Alignment, object):
 
 	def build_multiple_data_form(self):
 		'''Invoked when new multiple form is to be created.'''
-		assert self._data_form.mode==dataforms.DATAFORM_MULTIPLE
+		assert isinstance(self._data_form, dataforms.MultipleDataForm)
 
 		self.clean_data_form()
 
 		# creating model for form...
 		fieldtypes = []
-		for field in self._data_form.iter_fields():
+		for field in self._data_form.recorded.iter_fields():
 			# note: we store also text-private and hidden fields,
 			# we just do not display them.
 			# TODO: boolean fields
@@ -163,7 +162,8 @@ class DataFormWidget(gtk.Alignment, object):
 
 		# moving all data to model
 		for item in self._data_form.iter_records():
-			
+			# TODO: probably wrong... (.value[s]?, fields not in the same order?)
+			# not checking multiple-item forms...
 			self.multiplemodel.append([field.value for field in item.iter_fields()])
 
 		# constructing columns...
@@ -264,7 +264,7 @@ class SingleForm(gtk.Table, object):
 	not only to display single forms, but to form input windows of multiple-type
 	forms, it is in another class."""
 	def __init__(self, dataform):
-		assert dataform.mode==dataforms.DATAFORM_SINGLE
+		assert isinstance(dataform, dataforms.SimpleDataForm)
 
 		gtk.Table.__init__(self)
 		self.set_col_spacings(6)
@@ -319,7 +319,7 @@ class SingleForm(gtk.Table, object):
 						field, value)
 					if first_radio is None:
 						first_radio = radio
-						if field.value is None:
+						if field.value=='':	# TODO: is None when done
 							field.value = value
 					if value == field.value:
 						radio.set_active(True)
@@ -330,7 +330,7 @@ class SingleForm(gtk.Table, object):
 				widget = gtk.VBox()
 				for value, label in field.iter_options():
 					check = gtk.CheckButton(label, use_underline=False)
-					check.set_active(value in field.value)
+					check.set_active(value in field.values)
 					check.connect('toggled', self.on_list_multi_checkbutton_toggled,
 						field, value)
 					widget.pack_start(check, expand=False)
@@ -338,8 +338,6 @@ class SingleForm(gtk.Table, object):
 			elif field.type == 'jid-single':
 				widget = gtk.Entry()
 				widget.connect('changed', self.on_text_single_entry_changed, field)
-				if field.value is None:
-					field.value = u''
 				widget.set_text(field.value)
 
 			elif field.type == 'jid-multi':
@@ -381,8 +379,6 @@ class SingleForm(gtk.Table, object):
 				widget = gtk.Entry()
 				widget.connect('changed', self.on_text_single_entry_changed, field)
 				widget.set_visibility(False)
-				if field.value is None:
-					field.value = u''
 				widget.set_text(field.value)
 
 			elif field.type == 'text-multi':
@@ -393,8 +389,6 @@ class SingleForm(gtk.Table, object):
 				textwidget.set_wrap_mode(gtk.WRAP_WORD)
 				textwidget.get_buffer().connect('changed', self.on_text_multi_textbuffer_changed,
 					field)
-				if field.value is None:
-					field.value = u''
 				textwidget.get_buffer().set_text(field.value)
 				
 				widget = gtk.ScrolledWindow()
@@ -423,7 +417,7 @@ class SingleForm(gtk.Table, object):
 					yoptions=gtk.FILL)
 			widget.show_all()
 
-			if commondesc and field.description is not None:
+			if commondesc and field.description!='':
 				label = gtk.Label()
 				label.set_markup('<small>'+\
 					gtkgui_helpers.escape_for_pango_markup(field.description)+\
@@ -448,10 +442,10 @@ class SingleForm(gtk.Table, object):
 
 	def on_list_multi_checkbutton_toggled(self, widget, field, value):
 		# TODO: make some methods like add_value and remove_value
-		if widget.get_active() and value not in field.value:
-			field.value += [value]
-		elif not widget.get_active() and value in field.value:
-			field.value = [v for v in field.value if v!=value]
+		if widget.get_active() and value not in field.values:
+			field.values += [value]
+		elif not widget.get_active() and value in field.values:
+			field.values = [v for v in field.values if v!=value]
 
 	def on_text_single_entry_changed(self, widget, field):
 		field.value = widget.get_text()
@@ -465,14 +459,14 @@ class SingleForm(gtk.Table, object):
 		old=model[path][0]
 		model[path][0]=newtext
 
-		values = field.value
+		values = field.values
 		values[values.index(old)]=newtext
-		field.value = values
+		field.values = values
 
 	def on_jid_multi_add_button_clicked(self, widget, treeview, model, field):
 		iter = model.insert(999999, ("new@jabber.id",))
 		treeview.set_cursor(model.get_path(iter), treeview.get_column(0), True)
-		field.value = field.value + ["new@jabber.id"]
+		field.values = field.values + ["new@jabber.id"]
 
 	def on_jid_multi_edit_button_clicked(self, widget, treeview):
 		model, iter = treeview.get_selection().get_selected()
@@ -490,8 +484,8 @@ class SingleForm(gtk.Table, object):
 			model.remove(iter)
 
 		selection.selected_foreach(remove, deleted)
-		field.value = (v for v in field.value if v not in deleted)
+		field.values = (v for v in field.values if v not in deleted)
 
 	def on_jid_multi_clean_button_clicked(self, widget, model, field):
 		model.clear()
-		del field.value
+		del field.values

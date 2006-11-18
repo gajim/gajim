@@ -306,12 +306,12 @@ class CommandWindow:
 		self.form_status = command.getAttr('status')
 
 		if command.getTag('x') is not None:
-			self.dataform = dataforms.DataForm(node=command.getTag('x'))
+			self.dataform = dataforms.ExtendForm(node=command.getTag('x'))
 
 			self.data_form_widget.set_sensitive(True)
 			try:
 				self.data_form_widget.data_form=self.dataform
-			except dataforms.BadDataFormNode:
+			except dataforms.Error:
 				# TODO: translate
 				self.stage5(error='Service sent malformed data', senderror=True)
 			self.data_form_widget.show()
@@ -480,7 +480,9 @@ class CommandWindow:
 			cmdnode.setAttr('sessionid', self.sessionid)
 
 		if self.data_form_widget.data_form is not None:
-			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
+#			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
+			# TODO: simplified form to send
+			cmdnode.addChild(node=self.data_form_widget.data_form)
 
 		def callback(response):
 			# TODO: move to connection_handlers.py

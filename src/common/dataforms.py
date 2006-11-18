@@ -64,6 +64,13 @@ def ExtendField(node):
 	}[typ](extend=node)
 	return f
 
+def ExtendForm(node):
+	''' Helper function to extend a node to form of appropriate type. '''
+	if node.getTag('recorded') is not None:
+		return MultipleDataForm(extend=node)
+	else:
+		return SimpleDataForm(extend=node)
+
 class DataField(ExtendedNode):
 	""" Keeps data about one field - var, field type, labels, instructions... """
 	def __init__(self, typ=None, var=None, value=None, label=None, desc=None, required=False,
@@ -180,10 +187,12 @@ class StringField(DataField):
 				return fdel(self)
 			self.setTagData('value', value)
 		def fdel(self):
-			t = self.getTag('value')
-			if t is not None:
-				self.delChild(t)
+			try:
+				self.delChild(self.getTag('value'))
+			except ValueError: # if there already were no value tag
+				pass
 		return locals()
+
 
 class ListField(DataField):
 	''' Covers fields of types: jid-multi, jid-single, list-multi, list-single. '''
@@ -207,10 +216,10 @@ class ListField(DataField):
 		return locals()
 
 	def iter_options(self):
-		for element in self.iterTags('option'):
+		for element in self.getTags('option'):	# TODO: iter!
 			v = element.getTagData('value')
 			if v is None: raise WrongFieldValue
-			yield (element.getAttr('label'), v)
+			yield (v, element.getAttr('label'))
 
 class ListSingleField(ListField, StringField):
 	'''Covers list-single and jid-single fields.'''
@@ -301,7 +310,7 @@ class DataRecord(ExtendedNode):
 	def iter_fields(self):
 		''' Iterate over fields in this record. Do not take associated
 		into account. '''
-		for field in self.iterTags('field'):
+		for field in self.getTags('field'):	# TODO: iter!
 			yield field
 
 	def iter_with_associated(self):
@@ -326,7 +335,7 @@ class DataForm(ExtendedNode):
 	@nested_property
 	def type():
 		''' Type of the form. Must be one of: 'form', 'submit', 'cancel', 'result'.
-		'form' - this form is to be filled in; you can do:
+		'form' - this form is to be filled in; you will be able soon to do:
 			filledform = DataForm(replyto=thisform)...'''
 		def fget(self):
 			return self.getAttr('type')
