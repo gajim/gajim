@@ -27,6 +27,9 @@ if [ `id -u` -eq 0 ]; then
 	echo "You must not launch Gajim as root, it is INSECURE"
 fi
 
-cd PREFIX/share/gajim/src
-export PYTHONPATH="$PYTHONPATH:PREFIXLIB/gajim"
-exec -a gajim PYTHON_EXEC -OO gajim.py $@
+datadir=@DATADIR@
+PYTHON_EXEC=@PYTHON@
+
+cd ${datadir}/gajim/src
+export PYTHONPATH="$PYTHONPATH:@LIBDIR@/gajim"
+exec -a gajim ${PYTHON_EXEC} -OO gajim.py $@

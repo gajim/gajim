@@ -1,0 +1,7 @@
+# this file is automatically generate by configure
+# do not edit it!
+docdir = "@DOCDIR@"
+
+datadir = "@DATADIR@"
+
+version = "@VERSION@"

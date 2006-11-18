@@ -374,7 +374,7 @@ Status message</property>
 				  <child>
 				    <widget class="GtkImage" id="image1338">
 				      <property name="visible">True</property>
-				      <property name="stock">gtk-preferences</property>
+				      <property name="stock">gtk-execute</property>
 				      <property name="icon_size">4</property>
 				      <property name="xalign">0.5</property>
 				      <property name="yalign">0.5</property>
@@ -916,7 +916,7 @@ topic</property>
 				  <child>
 				    <widget class="GtkImage" id="image1344">
 				      <property name="visible">True</property>
-				      <property name="stock">gtk-preferences</property>
+				      <property name="stock">gtk-execute</property>
 				      <property name="icon_size">4</property>
 				      <property name="xalign">0.5</property>
 				      <property name="yalign">0.5</property>

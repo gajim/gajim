@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+
 <widget class="GtkWindow" id="account_modification_window">
   <property name="border_width">12</property>
   <property name="title" translatable="yes">Account Modification</property>
@@ -16,6 +17,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="destroy" handler="on_account_modification_window_destroy" last_modification_time="Mon, 07 Mar 2005 16:05:10 GMT"/>
 
   <child>
@@ -332,6 +334,30 @@
 	      </child>
 
 	      <child>
+		<widget class="GtkCheckButton" id="adjust_priority_with_status_checkbutton">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Priority will change automatically according to your status.</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">_Adjust to status</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="on_adjust_priority_with_status_checkbutton_toggled" last_modification_time="Tue, 03 Oct 2006 00:04:37 GMT"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">2</property>
+		  <property name="top_attach">3</property>
+		  <property name="bottom_attach">4</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
 		<widget class="GtkSpinButton" id="priority_spinbutton">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Priority is used in Jabber to determine who gets the events from the jabber server when two or more clients are connected using the same account; The client with the highest priority gets the events</property>
@@ -345,11 +371,11 @@
 		  <property name="adjustment">5 0 127 1 5 5</property>
 		</widget>
 		<packing>
-		  <property name="left_attach">1</property>
-		  <property name="right_attach">2</property>
+		  <property name="left_attach">2</property>
+		  <property name="right_attach">3</property>
 		  <property name="top_attach">3</property>
 		  <property name="bottom_attach">4</property>
-		  <property name="x_options">shrink|fill</property>
+		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
 	      </child>
@@ -1197,4 +1223,5 @@
     </widget>
   </child>
 </widget>
+
 </glade-interface>

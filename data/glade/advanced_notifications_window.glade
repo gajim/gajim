@@ -387,7 +387,7 @@ everybody</property>
 		  <child>
 		    <widget class="GtkLabel" id="label402">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">when I'm </property>
+		      <property name="label" translatable="yes">when I'm in</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -419,7 +419,7 @@ everybody</property>
 			<widget class="GtkRadioButton" id="all_status_rb">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">All Status </property>
+			  <property name="label" translatable="yes">All statuses</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -439,7 +439,7 @@ everybody</property>
 			<widget class="GtkRadioButton" id="special_status_rb">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Some special(s) status...</property>
+			  <property name="label" translatable="yes">One or more special statuses...</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -1185,7 +1185,7 @@ everybody</property>
 		    <widget class="GtkCheckButton" id="urgency_hint_cb">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">_Activate Windows manager UrgencyHint to make chat taskbar to flash</property>
+		      <property name="label" translatable="yes">_Activate window manager's UrgencyHint to make chat window in taskbar flash</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>

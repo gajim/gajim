@@ -19,6 +19,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_SOUTH_EAST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="button_press_event" handler="on_popup_notification_window_button_press_event" last_modification_time="Thu, 21 Apr 2005 21:20:43 GMT"/>
 
   <child>
@@ -71,7 +72,7 @@
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
+		      <property name="wrap">True</property>
 		      <property name="selectable">False</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
@@ -85,7 +86,7 @@
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">False</property>
+		      <property name="fill">True</property>
 		    </packing>
 		  </child>
 
@@ -117,7 +118,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -137,7 +138,7 @@
 		  <property name="yalign">0.5</property>
 		  <property name="xpad">0</property>
 		  <property name="ypad">0</property>
-		  <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 		  <property name="width_chars">-1</property>
 		  <property name="single_line_mode">False</property>
 		  <property name="angle">0</property>

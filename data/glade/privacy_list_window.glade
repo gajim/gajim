@@ -725,50 +725,28 @@ to</property>
       </child>
 
       <child>
-	<widget class="GtkHBox" id="last_buttons_hbox">
+	<widget class="GtkHButtonBox" id="hbuttonbox1">
+	  <property name="border_width">6</property>
 	  <property name="visible">True</property>
-	  <property name="homogeneous">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkButton" id="privacy_list_refresh_button">
-	      <property name="border_width">5</property>
+	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-refresh</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_privacy_list_refresh_button_clicked" last_modification_time="Sat, 01 Jul 2006 13:09:35 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="padding">0</property>
-	      <property name="expand">False</property>
-	      <property name="fill">False</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="privacy_list_close_button">
-	      <property name="border_width">5</property>
-	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_privacy_list_close_button_clicked" last_modification_time="Sat, 01 Jul 2006 13:09:28 GMT"/>
+	      <signal name="clicked" handler="on_close_button_clicked" last_modification_time="Wed, 18 Oct 2006 08:31:02 GMT"/>
 	    </widget>
-	    <packing>
-	      <property name="padding">0</property>
-	      <property name="expand">False</property>
-	      <property name="fill">False</property>
-	    </packing>
 	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
-	  <property name="expand">False</property>
+	  <property name="expand">True</property>
 	  <property name="fill">True</property>
 	</packing>
       </child>
