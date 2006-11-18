@@ -2360,10 +2360,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 	def on_roster_treeview_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''
 		self.tooltip.hide_tooltip()
-		if event.keyval == gtk.keysyms.Menu:
-			self.show_treeview_menu(event)
-			return True
-		elif event.keyval == gtk.keysyms.Escape:
+		if event.keyval == gtk.keysyms.Escape:
 			self.tree.get_selection().unselect_all()
 		elif event.keyval == gtk.keysyms.F2:
 			treeselection = self.tree.get_selection()
@@ -3180,6 +3177,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			not gajim.config.get('quit_on_roster_x_button'):
 				self.tooltip.hide_tooltip()
 				self.window.hide()
+
+	def on_roster_window_popup_menu(self, widget):
+		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
+		self.show_treeview_menu(event)
 
 	def quit_gtkgui_interface(self):
 		'''When we quit the gtk interface :
