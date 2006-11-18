@@ -74,7 +74,7 @@ class Node(object):
 		if self.parent and not self.namespace: self.namespace=self.parent.namespace
 		for attr in attrs.keys():
 			self.attrs[attr]=attrs[attr]
-		if isinstance(payload, basestring)
+		if isinstance(payload, basestring): payload=[payload]
 		for i in payload:
 			if isinstance(i, Node): self.addChild(node=i)
 			else: self.data.append(ustr(i))
@@ -130,7 +130,7 @@ class Node(object):
 	def delChild(self, node, attrs={}):
 		""" Deletes the "node" from the node's childs list, if "node" is an instance.
 			Else deletes the first node that have specified name and (optionally) attributes. """
-		if type(node)<>type(self): node=self.getTag(node,attrs)
+		if not isinstance(node, Node): node=self.getTag(node,attrs)
 		self.kids.remove(node)
 		return node
 	def getAttrs(self):
