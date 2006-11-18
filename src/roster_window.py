@@ -54,9 +54,8 @@ C_NAME, # cellrenderer text that holds contact nickame
 C_TYPE, # account, group or contact?
 C_JID, # the jid of the row
 C_ACCOUNT, # cellrenderer text that holds account name
-C_EDITABLE, # cellrenderer text that holds name editable or not?
 C_SECPIXBUF, # secondary_pixbuf (holds avatar or padlock)
-) = range(7)
+) = range(6)
 
 class RosterWindow:
 	'''Class for main window of the GTK+ interface'''
@@ -165,7 +164,7 @@ class RosterWindow:
 		if self.regroup:
 			show = helpers.get_global_show()
 			model.append(None, [self.jabber_state_images['16'][show],
-				_('Merged accounts'), 'account', '', 'all', False, None])
+				_('Merged accounts'), 'account', '', 'all', None])
 			self.draw_account(account)
 			return
 
@@ -180,7 +179,7 @@ class RosterWindow:
 
 		model.append(None, [self.jabber_state_images['16'][show],
 			gtkgui_helpers.escape_for_pango_markup(account),
-			'account', our_jid, account, False, tls_pixbuf])
+			'account', our_jid, account, tls_pixbuf])
 
 	def draw_account(self, account):
 		model = self.tree.get_model()
@@ -313,8 +312,7 @@ class RosterWindow:
 				name = contact.get_shown_name()
 				for i in parent_iters:
 					# we add some values here. see draw_contact for more
-					model.append(i, (None, name, 'contact', jid, account,
-						False, None))
+					model.append(i, (None, name, 'contact', jid, account, None))
 				self.draw_contact(jid, account)
 				self.draw_avatar(jid, account)
 				# Redraw parent to change icon
@@ -347,7 +345,7 @@ class RosterWindow:
 				iterG = model.append(IterAcct, [
 					self.jabber_state_images['16']['closed'],
 					gtkgui_helpers.escape_for_pango_markup(group), 'group',
-					group, account, False, None])
+					group, account, None])
 				self.draw_group(group, account)
 				if model.iter_n_children(IterAcct) == 1: # We added the first one
 					self.draw_account(account)
@@ -366,8 +364,7 @@ class RosterWindow:
 
 			name = contact.get_shown_name()
 			# we add some values here. see draw_contact for more
-			model.append(iterG, (None, name, typestr, contact.jid, account,
-				False, None))
+			model.append(iterG, (None, name, typestr, contact.jid, account, None))
 
 			if gajim.groups[account][group]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
@@ -437,7 +434,7 @@ class RosterWindow:
 		model = self.tree.get_model()
 		iterAcct = self.get_account_iter(account)
 		model.append(iterAcct, (None, gajim.nicks[account], 'self_contact', jid,
-			account, False, None))
+			account, None))
 		self.draw_contact(jid, account)
 		self.draw_avatar(jid, account)
 
@@ -1397,12 +1394,9 @@ class RosterWindow:
 
 	def on_rename(self, widget, iter, path):
 		# this function is called either by F2 or by Rename menuitem
-		# to display that menuitem we show a menu, that does focus-out
-		# we then select Rename and focus-in
-		# focus-in callback checks on this var and if is NOT None
-		# it redraws the selected contact resulting in stopping our rename
-		# procedure. So set this to None to stop that
-		self._last_selected_contact = []
+		if gajim.interface.instances.has_key('rename'):
+			gajim.interface.instances['rename'].dialog.window.present()
+			return
 		model = self.tree.get_model()
 
 		row_type = model[iter][C_TYPE]
@@ -1413,16 +1407,66 @@ class RosterWindow:
 			return
 		if row_type in ('contact', 'agent'):
 			# it's jid
-			# Remove possible resource indicator (Name (2))
-			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-			name = contact.name
-			model[iter][C_NAME] = gtkgui_helpers.escape_for_pango_markup(name)
+			title = _('Rename Contact')
+			message = _('Enter a new nickname for contact %s') % jid
+			old_text = gajim.contacts.get_contact_with_highest_priority(account,
+				jid).name
 		elif row_type == 'group':
 			if jid in helpers.special_groups + (_('General'),):
 				return
+			old_text = model[iter][C_JID].decode('utf-8')
+			title = _('Rename Group')
+			message = _('Enter a new name for group %s') % old_text
 
-		model[iter][C_EDITABLE] = True # set 'editable' to True
-		self.tree.set_cursor(path, self.tree.get_column(0), True)
+		def on_renamed(new_text, account, row_type, jid, old_text):
+			if gajim.interface.instances.has_key('rename'):
+				del gajim.interface.instances['rename']
+			if row_type in ('contact', 'agent'):
+				if old_text == new_text:
+					return
+				for u in gajim.contacts.get_contact(account, jid):
+					u.name = new_text
+				gajim.connections[account].update_contact(jid, new_text, u.groups)
+				self.draw_contact(jid, account)
+				# Update opened chat
+				ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
+				if ctrl:
+					ctrl.update_ui()
+					win = gajim.interface.msg_win_mgr.get_window(jid, account)
+					win.redraw_tab(ctrl)
+					win.show_title()
+			elif row_type == 'group':
+				# in C_JID column, we hold the group name (which is not escaped)
+				if old_text == new_text:
+					return
+				# Groups may not change name from or to a special groups
+				for g in helpers.special_groups:
+					if g in (new_text, old_text):
+						return
+				# get all contacts in that group
+				for jid in gajim.contacts.get_jid_list(account):
+					contact = gajim.contacts.get_contact_with_highest_priority(
+						account, jid)
+					if old_text in contact.groups:
+						# set them in the new one and remove it from the old
+						contact.groups.remove(old_text)
+						self.remove_contact(contact, account)
+						if new_text not in contact.groups:
+							contact.groups.append(new_text)
+						self.add_contact_to_roster(contact.jid, account)
+						gajim.connections[account].update_contact(contact.jid,
+							contact.name, contact.groups)
+				# If last removed iter was not visible, gajim.groups is not cleaned
+				if gajim.groups[account].has_key(old_text):
+					del gajim.groups[account][old_text]
+
+		def on_canceled():
+			if gajim.interface.instances.has_key('rename'):
+				del gajim.interface.instances['rename']
+			
+		gajim.interface.instances['rename'] = dialogs.InputDialog(title, message,
+			old_text, False, (on_renamed, account, row_type, jid, old_text),
+			on_canceled)
 
 	def on_remove_group_item_activated(self, widget, group, account):
 		dlg = dialogs.ConfirmationDialogCheck(_('Remove Group'),
@@ -2327,12 +2371,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			if len(list_of_paths) != 1:
 				return
 			path = list_of_paths[0]
-			type = model[path][C_TYPE]
-			if type in ('contact', 'group', 'agent'):
-				if not model[path][C_EDITABLE]:
-					# we are NOT already renaming it
-					iter = model.get_iter(path)
-					self.on_rename(widget, iter, path)
+			type_ = model[path][C_TYPE]
+			if type_ in ('contact', 'group', 'agent'):
+				iter = model.get_iter(path)
+				self.on_rename(widget, iter, path)
 
 		elif event.keyval == gtk.keysyms.Delete:
 			treeselection = self.tree.get_selection()
@@ -3377,91 +3419,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			self.draw_contact(jid, account)
 
-	def on_editing_started(self, cell, event, row):
-		''' start editing a cell in the tree'''
-		path = self.tree.get_cursor()[0]
-		self.editing_path = path
-
-	def on_editing_canceled(self, cell):
-		'''editing has been canceled'''
-		path = self.tree.get_cursor()[0]
-		# do not set new name if row order has changed
-		if path != self.editing_path:
-			self.editing_path = None
-			return
-		self.editing_path = None
-		model = self.tree.get_model()
-		iter = model.get_iter(path)
-		account = model[iter][C_ACCOUNT].decode('utf-8')
-		jid = model[iter][C_JID].decode('utf-8')
-		type = model[iter][C_TYPE]
-		# restore the number of resources string at the end of contact name
-		contacts = gajim.contacts.get_contact(account, jid)
-		if type in ('contact', 'agent'):
-			self.draw_contact(jid, account)
-		# reset editable to False
-		model[iter][C_EDITABLE] = False
-
-	def on_cell_edited(self, cell, row, new_text):
-		'''When an iter is edited:
-		if text has changed, rename the contact'''
-		model = self.tree.get_model()
-		# if this is a last item in the group, row is invalid
-		try:
-			iter = model.get_iter_from_string(row)
-		except:
-			self.editing_path = None
-			return
-		path = model.get_path(iter)
-		# do not set new name if row order has changed
-		if path != self.editing_path:
-			self.editing_path = None
-			return
-		self.editing_path = None
-		new_text = new_text.decode('utf-8')
-		account = model[iter][C_ACCOUNT].decode('utf-8')
-		jid = model[iter][C_JID].decode('utf-8')
-		type = model[iter][C_TYPE]
-		model[iter][C_EDITABLE] = False
-		if type in ('contact', 'agent'):
-			old_text = gajim.contacts.get_contact_with_highest_priority(account,
-				jid).name
-			if old_text != new_text:
-				for u in gajim.contacts.get_contact(account, jid):
-					u.name = new_text
-				gajim.connections[account].update_contact(jid, new_text, u.groups)
-			self.draw_contact(jid, account)
-			# Update opened chat
-			ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
-			if ctrl:
-				ctrl.update_ui()
-				win = gajim.interface.msg_win_mgr.get_window(jid, account)
-				win.redraw_tab(ctrl)
-				win.show_title()
-		elif type == 'group':
-			# in C_JID column, we hold the group name (which is not escaped)
-			old_name = model[iter][C_JID].decode('utf-8')
-			# Groups may not change name from or to a special groups
-			for g in helpers.special_groups:
-				if g in (new_text, old_name):
-					return
-			# get all contacts in that group
-			for jid in gajim.contacts.get_jid_list(account):
-				contact = gajim.contacts.get_contact_with_highest_priority(account,
-					jid)
-				if old_name in contact.groups:
-					# set them in the new one and remove it from the old
-					contact.groups.remove(old_name)
-					self.remove_contact(contact, account)
-					if not new_text in contact.groups:
-						contact.groups.append(new_text)
-					self.add_contact_to_roster(contact.jid, account)
-					gajim.connections[account].update_contact(contact.jid,
-						contact.name, contact.groups)
-			# If last removed iter was not visible, gajim.groups is not cleaned
-			if gajim.groups[account].has_key(old_name):
-				del gajim.groups[account][old_name]
-
 	def on_service_disco_menuitem_activate(self, widget, account):
 		server_jid = gajim.config.get_per('accounts', account, 'hostname')
 		if gajim.interface.instances[account]['disco'].has_key(server_jid):
@@ -4128,10 +4085,6 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def _on_treeview_selection_changed(self, selection):
 		model, list_of_paths = selection.get_selected_rows()
-		if len(list_of_paths) == 1 and model[list_of_paths[0]][C_EDITABLE]:
-			# We are editing this row, do not modify self._last_selected_contact
-			# Cause that cancel editing
-			return
 		if len(self._last_selected_contact):
 			# update unselected rows
 			for (jid, account) in self._last_selected_contact:
@@ -4200,7 +4153,7 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		self.gpg_passphrase = {}
 
 		#(icon, name, type, jid, account, editable, secondary_pixbuf)
-		model = gtk.TreeStore(gtk.Image, str, str, str, str, bool, gtk.gdk.Pixbuf)
+		model = gtk.TreeStore(gtk.Image, str, str, str, str, gtk.gdk.Pixbuf)
 
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -4297,12 +4250,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		col.set_cell_data_func(render_image, self.iconCellDataFunc, None)
 
 		render_text = gtk.CellRendererText() # contact or group or account name
-		render_text.connect('edited', self.on_cell_edited)
-		render_text.connect('editing-canceled', self.on_editing_canceled)
-		render_text.connect('editing-started', self.on_editing_started)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
-		col.add_attribute(render_text, 'editable', C_EDITABLE) # where we hold if the row is editable
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
 
 		render_pixbuf = gtk.CellRendererPixbuf() # tls or avatar img
