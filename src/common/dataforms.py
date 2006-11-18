@@ -201,7 +201,7 @@ class ListField(DataField):
 		'''Options.'''
 		def fget(self):
 			options = []
-			for element in self.iterTags('option'):
+			for element in self.getTags('option'):
 				v = element.getTagData('value')
 				if v is None: raise WrongFieldValue
 				options.append((element.getAttr('label'), v))
@@ -211,7 +211,7 @@ class ListField(DataField):
 			for value, label in values:
 				self.addChild('option', {'label': label}).setTagData('value', value)
 		def fdel(self):
-			for element in self.iterTags('option'):
+			for element in self.getTags('option'):
 				self.delChild(element)
 		return locals()
 
@@ -232,7 +232,7 @@ class ListMultiField(ListField):
 		'''Values held in field.'''
 		def fget(self):
 			values = []
-			for element in self.iterTags('value'):
+			for element in self.getTags('value'):
 				values.append(element.getData())
 			return values
 		def fset(self, values):
@@ -240,12 +240,12 @@ class ListMultiField(ListField):
 			for value in values:
 				self.addChild('value').setData(value)
 		def fdel(self):
-			for element in self.iterTags('value'):
+			for element in self.getTags('value'):
 				self.delChild(element)
 		return locals()
 	
 	def iter_values():
-		for element in self.iterTags('value'):
+		for element in self.getTags('value'):
 			yield element.getData()
 
 class TextMultiField(DataField):
@@ -263,7 +263,7 @@ class TextMultiField(DataField):
 			for line in value.split('\n'):
 				self.addChild('value').setData(line)
 		def fdel(self):
-			for element in self.iterTags('value'):
+			for element in self.getTags('value'):
 				self.delChild(element)
 		return locals()
 
@@ -287,7 +287,7 @@ class DataRecord(ExtendedNode):
 						ExtendField(field)
 					self.vars[field.var] = field
 			else:
-				for field in self.iterTags('field'):
+				for field in self.getTags('field'):
 					self.delChild(field)
 				self.fields = fields
 
@@ -303,7 +303,7 @@ class DataRecord(ExtendedNode):
 					ExtendField(extend=field)
 				self.addChild(node=field)
 		def fdel(self):
-			for element in self.iterTags('field'):
+			for element in self.getTags('field'):
 				self.delChild(element)
 		return locals()
 
@@ -364,7 +364,7 @@ class DataForm(ExtendedNode):
 		# TODO: the same code is in TextMultiField. join them
 		def fget(self):
 			value = u''
-			for value in self.iterTags('value'):
+			for value in self.getTags('value'):
 				value += '\n' + value.getData()
 			return value[1:]
 		def fset(self, value):
@@ -373,7 +373,7 @@ class DataForm(ExtendedNode):
 			for line in value.split('\n'):
 				self.addChild('value').setData(line)
 		def fdel(self):
-			for value in self.iterTags('value'):
+			for value in self.getTags('value'):
 				self.delChild(value)
 		return locals()
 
@@ -399,12 +399,12 @@ class MultipleDataForm(DataForm):
 					DataRecord(extend=record)
 				self.addChild(node=record)
 		def fdel(self):
-			for record in self.iterTags('record'):
+			for record in self.getTags('record'):
 				self.delChild(record)
 		return locals()
 
 	def iter_records():
-		for record in self.iterTags('item'):
+		for record in self.getTags('item'):
 			yield item
 
 	@nested_property

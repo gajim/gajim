@@ -98,7 +98,6 @@ class AtomWindow:
 
 	def on_entry_title_button_press_event(self, widget, event):
 		# TODO: make it using special gtk2.10 widget
-		print 1
 		if event.button == 1:	# left click
 			uri = self.entry.uri
 			if uri is not None:
@@ -107,7 +106,6 @@ class AtomWindow:
 
 	def on_feed_title_button_press_event(self, widget, event):
 		# TODO: make it using special gtk2.10 widget
-		print 2
 		if event.button == 1:	# left click
 			uri = self.entry.feed_uri
 			if uri is not None:

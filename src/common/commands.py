@@ -68,7 +68,6 @@ class ChangeStatusCommand(AdHocCommand):
 	@staticmethod
 	def isVisibleFor(samejid):
 		''' Change status is visible only if the entity has the same bare jid. '''
-		print 'isVisibleFor', samejid
 		return True	# TODO: Remove that!
 		return samejid
 
@@ -156,7 +155,6 @@ class ConnectionCommands:
 		return xmpp.JID(jid).getStripped() == self.getOurBareJID()
 
 	def commandListQuery(self, con, iq_obj):
-		print 'commandListQuery'
 		iq = iq_obj.buildReply('result')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		q = iq.getTag('query')
