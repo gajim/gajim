@@ -184,7 +184,6 @@ class Connection(ConnectionHandlers):
 						if not common.xmpp.isResultNode(result):
 							self.dispatch('ACC_NOT_OK', (result.getError()))
 							return
-						self.connected = 0
 						self.password = self.new_account_info['password']
 						if USE_GPG:
 							self.gpg = GnuPG.GnuPG()
@@ -194,7 +193,9 @@ class Connection(ConnectionHandlers):
 						gajim.connections[self.name] = self
 						self.dispatch('ACC_OK', (self.new_account_info))
 						self.new_account_info = None
-						self.connection = None
+						if self.connection:
+							self.connection.UnregisterDisconnectHandler(self._on_new_account)
+						self.disconnect(on_purpose=True)
 					common.xmpp.features_nb.register(self.connection, data[0],
 						req, _on_register_result)
 					return
@@ -848,7 +849,7 @@ class Connection(ConnectionHandlers):
 		if self.connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
-	
+
 	def new_account(self, name, config, sync = False):
 		# If a connection already exist we cannot create a new account
 		if self.connection:
@@ -867,6 +868,8 @@ class Connection(ConnectionHandlers):
 			return
 		self.on_connect_failure = None
 		self.connection = con
+		if con:
+			con.RegisterDisconnectHandler(self._on_new_account)
 		common.xmpp.features_nb.getRegInfo(con, self._hostname)
 
 	def account_changed(self, new_name):
