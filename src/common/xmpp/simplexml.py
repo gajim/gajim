@@ -74,9 +74,9 @@ class Node(object):
 		if self.parent and not self.namespace: self.namespace=self.parent.namespace
 		for attr in attrs.keys():
 			self.attrs[attr]=attrs[attr]
-		if type(payload) in (type(''),type(u'')): payload=[payload]
+		if isinstance(payload, basestring)
 		for i in payload:
-			if type(i)==type(self): self.addChild(node=i)
+			if isinstance(i, Node): self.addChild(node=i)
 			else: self.data.append(ustr(i))
 
 	def __str__(self,fancy=0):
