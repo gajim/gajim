@@ -328,8 +328,8 @@ def from_one_line(msg):
 	# to match the regexp that follows it
 
 	# So here match '\\n' but not if you have a '\' before that
-	re = re.compile(r'(?<!\\)\\n')
-	msg = re.sub('\n', msg)
+	expr = re.compile(r'(?<!\\)\\n')
+	msg = expr.sub('\n', msg)
 	msg = msg.replace('\\\\', '\\')
 	# s12 = 'test\\ntest\\\\ntest'
 	# s13 = re.sub('\n', s12)
