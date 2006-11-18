@@ -1251,8 +1251,11 @@ class Interface:
 				path_to_image = path, title = event_type, text = txt)
 
 	def handle_event_file_progress(self, account, file_props):
-		self.instances['file_transfers'].set_progress(file_props['type'], 
-			file_props['sid'], file_props['received-len'])
+		if time.time() - self.last_ftwindow_update > 0.5:
+			# update ft window every 500ms
+			self.last_ftwindow_update = time.time()
+			self.instances['file_transfers'].set_progress(file_props['type'], 
+				file_props['sid'], file_props['received-len'])
 
 	def handle_event_file_rcv_completed(self, account, file_props):
 		ft = self.instances['file_transfers']
@@ -2012,6 +2015,9 @@ class Interface:
 					'choose another language by setting the speller_language option.'
 					) % lang)
 				gajim.config.set('use_speller', False)
+
+		self.last_ftwindow_update = 0
+
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add(500, self.read_sleepy)
