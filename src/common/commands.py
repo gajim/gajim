@@ -53,8 +53,8 @@ class AdHocCommand:
 			cmd.addChild('actions', attrs, actions)
 		return response, cmd
 
-	def badRequest(self):
-		self.connection.connection.send(xmpp.Error(xmpp.NS_STANZAS+' bad-request'))
+	def badRequest(self, stanza):
+		self.connection.connection.send(xmpp.Error(stanza, xmpp.NS_STANZAS+' bad-request'))
 
 	def cancel(self, request):
 		response, cmd = self.buildResponse(request, status='canceled')
@@ -68,17 +68,20 @@ class ChangeStatusCommand(AdHocCommand):
 	@staticmethod
 	def isVisibleFor(samejid):
 		''' Change status is visible only if the entity has the same bare jid. '''
+		print 'isVisibleFor', samejid
+		return True	# TODO: Remove that!
 		return samejid
 
 	def execute(self, request):
 		# first query...
 		response, cmd = self.buildResponse(request, defaultaction='execute', actions=['execute'])
 		
-		cmd.addChild(node=dataforms.DataForm(
+		cmd.addChild(node=dataforms.SimpleDataForm(
 			title='Change status',
 			instructions='Set the presence type and description',
 			fields=[
-				dataforms.DataField('list-single', 'presence-type',
+				dataforms.Field('list-single',
+					var='presence-type',
 					label='Type of presence:',
 					options=[
 						(u'free-for-chat', u'Free for chat'),
@@ -89,7 +92,8 @@ class ChangeStatusCommand(AdHocCommand):
 						(u'offline', u'Offline - disconnect')],
 					value='online',
 					required=True),
-				dataforms.DataField('text-multi', 'presence-desc',
+				dataforms.Field('text-multi',
+					var='presence-desc',
 					label='Presence description:')]))
 
 		self.connection.connection.send(response)
@@ -102,23 +106,25 @@ class ChangeStatusCommand(AdHocCommand):
 	def changestatus(self, request):
 		# check if the data is correct
 		try:
-			form=dataforms.DataForm(node=request.getTag('command').getTag('x'))
-		except TypeError:
-			self.badRequest()
+			form=dataforms.SimpleDataForm(extend=request.getTag('command').getTag('x'))
+		except:
+			self.badRequest(request)
 			return False
 		
 		try:
-			presencetype = form['presence-type']
-			if not presencetype in ('free-for-chat', 'online', 'away', 'xa', 'dnd', 'offline'):
-				self.badRequest()
+			presencetype = form['presence-type'].value
+			if not presencetype in \
+			    ('free-for-chat', 'online', 'away', 'xa', 'dnd', 'offline'):
+				self.badRequest(request)
 				return False
-		except KeyError:
-			self.badRequest()
+		except:	# KeyError if there's no presence-type field in form or
+			# AttributeError if that field is of wrong type
+			self.badRequest(request)
 			return False
 
 		try:
-			presencedesc = form['presence-desc']
-		except KeyError:
+			presencedesc = form['presence-desc'].value
+		except:	# same exceptions as in last comment
 			presencedesc = u''
 
 		response, cmd = self.buildResponse(request, status='completed')
@@ -150,6 +156,7 @@ class ConnectionCommands:
 		return xmpp.JID(jid).getStripped() == self.getOurBareJID()
 
 	def commandListQuery(self, con, iq_obj):
+		print 'commandListQuery'
 		iq = iq_obj.buildReply('result')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		q = iq.getTag('query')
@@ -224,11 +231,12 @@ class ConnectionCommands:
 			obj = self.__sessions[magictuple]
 
 			try:
-				if action == 'cancel': rc = obj.cancel(iq_obj)
-				elif action == 'prev': rc = obj.prev(iq_obj)
-				elif action == 'next': rc = obj.next(iq_obj)
-				elif action == 'execute': rc = obj.execute(iq_obj)
-				elif action == 'complete': rc = obj.complete(iq_obj)
+				if action == 'cancel':		rc = obj.cancel(iq_obj)
+				elif action == 'prev':		rc = obj.prev(iq_obj)
+				elif action == 'next':		rc = obj.next(iq_obj)
+				elif action == 'execute' or action is None:
+								rc = obj.execute(iq_obj)
+				elif action == 'complete':	rc = obj.complete(iq_obj)
 				else:
 					# action is wrong. stop the session, send error
 					raise AttributeError

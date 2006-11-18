@@ -33,7 +33,7 @@ def ustr(what):
 	if type(r)<>type(u''): return unicode(r,ENCODING)
 	return r
 
-class Node:
+class Node(object):
 	""" Node class describes syntax of separate XML Node. It have a constructor that permits node creation
 		from set of "namespace name", attributes and payload of text strings and other nodes.
 		It does not natively support building node from text string and uses NodeBuilder class for that purpose.

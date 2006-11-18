@@ -1,560 +1,415 @@
 # this will go to src/common/xmpp later, for now it is in src/common
+""" This module contains wrappers for different parts of data forms (JEP 0004). For information
+how to use them, read documentation. """
 
 import xmpp
 
-# Helpers, to handle multi-element values like field values of instructions elements
+# exceptions used in this module
+class Error(Exception): pass	# base class
+class UnknownDataForm(Error): pass	# when we get xmpp.Node which we do not understand
+class WrongFieldValue(Error): pass	# when we get xmpp.Node which contains bad fields
 
-def get_multiple_tag_value(node, childname):
-	""" Join by u'/n' all occurences of childname in node, as described in JEP-0004 for value data for
-	*-multi fields."""
-	assert isinstance(node, xmpp.Node)
-	assert isinstance(childname, basestring)
+# helper class to change class of already existing object
+class ExtendedNode(xmpp.Node, object):
+	@classmethod
+	def __new__(cls,  *a, **b):
+		if 'extend' not in b.keys():
+			return object.__new__(cls)
 
-	nodes = node.getTags(childname)
-	values = (node.getData().decode('utf-8') for node in nodes)	# using python2.4 iterators
-	return u"\n".join(values)
+		extend = b['extend']
+		assert issubclass(cls, extend.__class__)
+		extend.__class__ = cls
+		return extend
 
-def set_multiple_tag_value(node, childname, value):
-	""" Set children nodes to value, splitting lines between different nodes, as described in JEP-0004
-	for value data for *-multi fields. If you try to set the value to None, all tag values will be
-	deleted. """
-	assert isinstance(node, xmpp.Node)
-	assert isinstance(childname, basestring)
-	assert isinstance(value, basestring) or value is None
+# helper decorator to create properties in cleaner way
+def nested_property(f):
+	ret = f()
+	p = {'doc': f.__doc__}
+	for v in ('fget', 'fset', 'fdel', 'doc'):
+		if v in ret.keys(): p[v]=ret[v]
+	return property(**p)
 
-	del_multiple_tag_value(node, childname)
+# helper to create fields from scratch
+def Field(typ, **attrs):
+	''' Helper function to create a field of given type. '''
+	f = {
+		'boolean': BooleanField,
+		'fixed': StringField,
+		'hidden': StringField,
+		'text-private': StringField,
+		'text-single': StringField,
+		'jid-multi': ListMultiField,
+		'jid-single': ListSingleField,
+		'list-multi': ListMultiField,
+		'list-single': ListSingleField,
+		'text-multi': TextMultiField,
+	}[typ](typ=typ, **attrs)
+	return f
 
-	if value is None: return
+def ExtendField(node):
+	''' Helper function to extend a node to field of appropriate type. '''
+	# TODO: move the dict out
+	typ=node.getAttr('type')
+	f = {
+		'boolean': BooleanField,
+		'fixed': StringField,
+		'hidden': StringField,
+		'text-private': StringField,
+		'text-single': StringField,
+		'jid-multi': ListMultiField,
+		'jid-single': ListSingleField,
+		'list-multi': ListMultiField,
+		'list-single': ListSingleField,
+		'text-multi': TextMultiField,
+	}[typ](extend=node)
+	return f
 
-	values = value.split(u'\n')
-	nodes = (xmpp.Node(childname, payload=[value.encode('utf-8')]) for value in values)# using python2.4 iterators
-	for new in nodes:
-		node.addChild(node=new)
+class DataField(ExtendedNode):
+	""" Keeps data about one field - var, field type, labels, instructions... """
+	def __init__(self, typ=None, var=None, value=None, label=None, desc=None, required=False,
+		options=None, extend=None):
 
-def del_multiple_tag_value(node, childname):
-	""" Delete a value from node, when the value is splitted between many childname elements inside
-	node, as described in JEP-0004 for value for *-multi fields. It also removes every instance of
-	childname in node.
-	"""
+		if extend is None:
+			ExtendedNode.__init__(self, 'field')
 
-	try:
-		while node.delChild(childname):
-			pass
-	except ValueError:
-		pass
+			self.type = typ
+			self.var = var
+			if value is not None:	self.value = value
+			if label is not None:	self.label = label
+			if desc  is not None:	self.desc = desc
+			self.required = required
+			self.options = options
 
-def iter_elements(node, childname):
-	""" Iterate over childname children of node element. """
-	for element in node.getChildren():
-		if isinstance(element, xmpp.Node) and element.getName()==childname:
-			yield element
-
-(DATAFORM_SINGLE, DATAFORM_MULTIPLE) = range(2)
-
-class RecordDoesNotContainRequiredField(Exception): pass
-class BadDataFormNode(Exception): pass
-
-class DataForm(xmpp.Node, object):
-	""" Data form as described in JEP-0004. """
-	# NOTES: single forms contain children nodes 'field' of type DataField,
-	# NOTES: multiple forms contain children do not contain 'item' elements of type DataRecord
-	# NOTES: - these are created only when needed
-
-	def __init__(self, typ=None, title=None, instructions=None, fields=None, records=None, node=None, tofill=None):
-		""" Create new node, based on the node given by 'node' parameter, or new.
-		You can prefill some form properties, look at their description for meaning.
-
-		You can also set 'tofill' to DataForm to get a form of type 'submit' with the
-		same fields as in the form given, but without unnecessary data like
-		instructions or title. Also the type will be set to 'submit' by default."""
-		# assert that at most one of these fields (node and tofill) is filled
-		assert node is None or isinstance(node, xmpp.Node)
-		assert tofill is None or isinstance(tofill, xmpp.Node)
-		assert node is None or tofill is None
-
-		assert typ in (None, 'form', 'submit', 'cancel', 'result')
-		assert title is None or isinstance(title, basestring)
-		assert instructions is None or isinstance(instructions, basestring)
-		assert (fields is None or fields.__iter__)
-
-		xmpp.Node.__init__(self, 'x', node=node)
-		self.setNamespace(xmpp.NS_DATA)
-
-		if tofill is not None:
-			self._mode = tofill.mode
-			self.fields = (field for field in tofill.fields if field.type!='fixed')
-			self.records = tofill.records
-			self.type = 'submit'
-			for field in self.iter_fields():
-				field.required=False
-				del field.label
-				del field.options
-				del field.description
-
-		elif node is not None:
-			# helper function - convert all <field/> elements to DataField
-			def convert_fields(node):
-				toadd=[]
-				for field in iter_elements(node, 'field'):
-					if not isinstance(field, DataField):
-						field=DataField(node=field)
-					toadd.append(field)
-				del_multiple_tag_value(node, 'field')
-				for field in toadd:
-					node.addChild(node=field)
-
-			# if there is <recorded/> element, the form contains multiple records
-			if self.getTag('recorded') is not None:
-				# in multiple-record forms there must not be any fields not in <items/>
-				if self.getTag('field') is not None: raise BadDataNodeForm
-				self._mode = DATAFORM_MULTIPLE
-
-				# change every <field/> in every <item/> element to DataField object
-				for item in iter_elements(self, 'item'):
-					convert_fields(item)
-
-				# the same in <recorded/> element
-				convert_fields(self.getTag('recorded'))
-			else:
-				self._mode = DATAFORM_SINGLE
-
-				convert_fields(self)
-
-		else: # both tofill and node are None
-			if typ is None: typ='result'
-			if records is not None and len(records)>1:
-				self._mode = DATAFORM_MULTIPLE
-			else:
-				self._mode = DATAFORM_SINGLE
-
-		if typ is not None: self.type = typ
-		if title is not None: self.title = title
-		if instructions is not None: self.instructions = instructions
-		if fields is not None: self.fields = fields
-		if records is not None: self.records = records
-
-	def get_type(self):
-		return self.getAttr('type')
-
-	def set_type(self, type):
-		assert type in ('form', 'submit', 'cancel', 'result')
-		self.setAttr('type', type)
-
-	type = property(get_type, set_type, None,
-		"""Form type, one of:
-		'form', when it is meant to complete,
-		'submit', when it is meant to transport completed form,
-		'cancel', when it is meant to cancel the process,
-		'result', when it is meant to provide some data. (the default)""")
-
-	def get_title(self):
-		return self.getTagData('title')
-
-	def set_title(self, title):
-		self.setTagData('title', title)
-
-	def del_title(self):
-		try:
-			self.delChild('title')
-		except ValueError:
-			pass
-
-	title = property(get_title, set_title, del_title,
-		"Form title, in unicode, from <title/> element.")
-
-	def get_instructions(self):
-		return get_multiple_tag_value(self, 'instructions')
-
-	def set_instructions(self, data):
-		assert isinstance(data, basestring)
-		set_multiple_tag_value(self, 'instructions', data)
-
-	def del_instructions(self):
-		del_multiple_tag_value(self, 'instructions')
-
-	instructions = property(get_instructions, set_instructions, None,
-		"Instructions how to fill the form, in unicode, from <instructions/> element.")
-
-	def get_mode(self):
-		return self._mode
-
-	def set_mode(self, mode):
-		assert mode in (DATAFORM_SINGLE, DATAFORM_MULTIPLE)
-		assert self.getTag('field') is None
-		assert self.getTag('reported') is None
-		assert self.getTag('item') is None
-		self._mode = mode
-
-	mode = property(get_mode, set_mode, None,
-		"""Data form mode: DATAFORM_SINGLE or DATAFORM_MULTIPLE, if the form contains
-		more than one record of data. Changing mode is allowed as long as there is no
-		values in form.""")
-
-	def iter_records(self):
-		if self.mode is DATAFORM_SINGLE:
-			yield DataRecord(node=self, associated=self)
-		else:
-			for i in iter_elements(self, 'item'):
-				yield DataRecord(node=i, associated=self)
-
-	def get_records(self):
-		return list(self.iter_records())
-
-	def set_records(self, records):
-		''' Set new records. For single dataform only the first element in
-		'records' iterable will be chosen.
-
-		Elements from the iterable must be a dictionary (with keys equal to
-		field names and values filled with field value) or any xmpp.Node
-		containing <field/> elements with appropriate format according to JEP-0004.
-		Therefore, you can pass an array of single forms, all of them with the
-		same fields, to create one big multiple form.'''
-		if self.mode is DATAFORM_SINGLE:
-			# get only first record...
-			record = records.__iter__().next()
-
-			if isinstance(record, dict):
-				for var, value in record:
-					self[var]=value
-			elif isinstance(record, xmpp.Node):
-				for field in iter_elements(record, 'field'):
-					self[field.getAttr('var')]=field.getAttr('value')
-			else:
-				assert 'This should not happen' and False
-		else:
-			self.del_records()
-			for record in records:
-				newitem = self.addChild('item')
-				if isinstance(record, dict):
-					for key, value in record.iteritems():
-						newitem.addChild(node=DataField(
-							var=key,
-							value=value,
-							typ=self.get_field(key).type))
-				elif isinstance(record, xmpp.Node):
-					for field in iter_elements(record, 'field'):
-						newitem.addChild(node=DataField(
-							var=field.getAttr('var'),
-							value=field.getAttr('value'),
-							typ=field.getAttr('type')))
-				else:
-					assert 'This should not happen' and False
-
-	def del_records(self):
-		if self.mode is DATAFORM_SINGLE:
-			# removing values from every field
-			for field in self.iter_fields():
-				del_multiple_tag_value(field, "value")
-		else:
-			# removing all <items/> elements
-			del_multiple_tag_value(self, "items")
-
-	records = property(get_records, set_records, del_records,
-		"""Records kept in this form; if in DATAFORM_SINGLE mode, there will be exactly
-		one record, otherwise there might be more or less records.""")
-
-	def iter_fields(self):
-		if self.mode is DATAFORM_SINGLE:
-			container = self
-		else:
-			container = self.getTag("recorded")
-
-		return iter_elements(container, 'field')
-
-	def get_field(self, fieldvar):
-		''' Find DataField that has fieldvar as var. '''
-		for field in self.iter_fields():
-			if field.var == fieldvar: return field
-		raise KeyError, "This form does not contain %r field." % fieldvar
-
-	def get_fields(self):
-		return list(self.iter_fields)
-
-	def set_fields(self, fields):
-		if self.mode is DATAFORM_SINGLE:
-			del_multiple_tag_value(self, "field")
-			for field in fields:
-				assert isinstance(field, DataField)
-				self.addChild(node=field)
-		else:
-			assert len(self.records)==0
-			try:
-				self.delChild('recorded')
-			except ValueError:
-				pass
-			recorded = self.addChild('recorded')
-			for field in fields:
-				if not isinstance(field, DataField):
-					field = DataField(field)
-				recorded.addChild(node=field)
-
-	def del_fields(self):
-		if self.mode is DATAFORM_SINGLE:
-			del_multiple_tag_value(self, "field")
-		else:
-			try:
-				self.delChild('recorded')
-			except ValueError:
-				pass
-
-	fields = property(get_fields, set_fields, del_fields,
-		"""Fields in this form; a list; if in DATAFORM_SINGLE mode, you should not
-		set their values directly.""")
-
-	def __getitem__(self, var):
-		for field in self.iter_fields():
-			if field.var==var:
-				return field.value
-		raise KeyError, "This form does not contain %r field." % var
-
-	def __setitem__(self, var, value):
-		for field in self.iter_fields():
-			if field.var==var:
-				field.value=value
-				return
-		raise KeyError, "This form does not contain %r field." % var
-
-	def __contains__(self, name):
-		for field in self.iter_fields():
-			if field.var==name:
-				return True
-		else:
-			return False
-
-class DataField(xmpp.Node, object):
-	def __init__(self, typ=None,var=None, value=None, label=None, desc=None,
-		required=None, options=None, node=None):
-
-		assert typ in ('boolean', 'fixed', 'hidden', 'jid-multi', 'jid-single', 'list-multi',
-			'list-single', 'text-multi', 'text-private', 'text-single',None)
-		
-		xmpp.Node.__init__(self, 'field', node=node)
-		if typ is not None: self.type = typ
-		if var is not None: self.var = var
-		if label is not None: self.label = label
-		if desc is not None: self.description = desc
-		if required is not None: self.required = required
-		if value is not None: self.value = value
-		if options is not None: self.options = options
-
-	def get_type(self):
-		# JEP says that if we don't understand field name, we should treat it as text-single
-		t = self.getAttr('type')
-		if t not in ('boolean', 'fixed', 'hidden', 'jid-multi', 'jid-single', 'list-multi',
-			'list-single', 'text-multi', 'text-private'):
-			return 'text-single'
-		else:
+	@nested_property
+	def type():
+		'''Type of field. Recognized values are: 'boolean', 'fixed', 'hidden', 'jid-multi',
+		'jid-single', 'list-multi', 'list-single', 'text-multi', 'text-private',
+		'text-single'. If you set this to something different, DataField will store
+		given name, but treat all data as text-single.'''
+		def fget(self):
+			t = self.getAttr('type')
+			if t is None: return 'text-single'
 			return t
-
-	def set_type(self, typ):
-		assert typ in ('boolean', 'fixed', 'hidden', 'jid-multi', 'jid-single', 'list-multi',
-			'list-single', 'text-multi', 'text-private', 'text-single')
-
-		if typ!='text-single':
-			self.setAttr('type', typ)
-		else:
-			try:
-				self.delAttr('type')
-			except KeyError:
-				pass
-
-	type = property(get_type, set_type, None,
-		""" Field type. One of: 'boolean', 'fixed', 'hidden', 'jid-multi', 'jid-single',
-		'list-multi', 'list-single', 'text-multi', 'text-private', 'text-single'.""")
-
-	def get_var(self):
-		return self.getAttr('var')
-
-	def set_var(self, var):
-		self.setAttr('var', var)
-
-	def del_var(self):
-		try:
+		def fset(self, value):
+			assert isinstance(value, basestring)
+			self.setAttr('type', value)
+		return locals()
+	
+	@nested_property
+	def var():
+		'''Field identifier.'''
+		def fget(self):
+			return self.getAttr('var')
+		def fset(self, value):
+			assert isinstance(value, basestring)
+			self.setAttr('var', value)
+		def fdel(self):
 			self.delAttr('var')
-		except KeyError:
-			pass
+		return locals()
 
-	var = property(get_var, set_var, del_var,
-		""" Field name. """)
-
-	def get_label(self):
-		return self.getAttr('label')
-
-	def set_label(self, label):
-		self.setAttr('label', label)
-
-	def del_label(self):
-		try:
+	@nested_property
+	def label():
+		'''Human-readable field name.'''
+		def fget(self):
+			return self.getAttr('label')
+		def fset(self, value):
+			assert isinstance(value, basestring)
+			self.setAttr('label', value)
+		def fdel(self):
 			self.delAttr('label')
-		except KeyError:
-			pass
+		return locals()
 
-	label = property(get_label, set_label, del_label,
-		""" Human-readable name for field. """)
+	@nested_property
+	def description():
+		'''Human-readable description of field meaning.'''
+		def fget(self):
+			return self.getTagData('desc') or u''
+		def fset(self, value):
+			assert isinstance(value, basestring)
+			if value == '':
+				fdel(self)
+			else:
+				self.setTagData('desc', value)
+		def fdel(self):
+			t = self.getTag('desc')
+			if t is not None:
+				self.delChild(t)
+		return locals()
 
-	def get_description(self):
-		return self.getTagData('desc')
-
-	def set_description(self, desc):
-		self.setTagData('desc', desc)
-
-	def del_description(self):
-		try:
-			self.delChild('desc')
-		except ValueError:
-			pass
-
-	description = property(get_description, set_description, del_description,
-		""" A natural-language description of the field. It should not contain
-		newlines. """)
-
-	def get_required(self):
-		return self.getTag('required') is not None
-
-	def set_required(self, req):
-		assert req in (True, False)
-
-		if self.getTag('required') is not None:
-			if req is False:
-				self.delChild('required')
-		else:
-			if req is True:
+	@nested_property
+	def required():
+		'''Controls whether this field required to fill. Boolean.'''
+		def fget(self):
+			return boolean(self.getTag('required'))
+		def fset(self, value):
+			t = self.getTag('required')
+			if t and not value:
+				self.delChild(t)
+			elif not t and value:
 				self.addChild('required')
+		return locals()
 
-	required = property(get_required, set_required, None,
-		""" If this is set to True, the field is required for form to be valid. """)
+class BooleanField(DataField):
+	@nested_property
+	def value():
+		'''Value of field. May contain True, False or None.'''
+		def fget(self):
+			v = self.getTagData('value')
+			if v in ('0', 'false'): return False
+			if v in ('1', 'true'): return True
+			if v is None: return None
+			raise WrongFieldValue
+		def fset(self, value):
+			self.setTagData('value', value and '1' or '0')
+		def fdel(self, value):
+			t = self.getTag('value')
+			if t is not None:
+				self.delChild(t)
+		return locals()
 
-	def iter_values(self):
-		assert self.type in ('list-single', 'list-multi', 'jid-multi')
-
-		for element in self.getChildren():
-			if not isinstance(element, xmpp.Node): continue
-			if not element.getName()=='value': continue
-			yield element.getData().decode('utf-8')
-
-	def get_value(self):
-		if self.type in ('boolean',):
-			if self.getTagData('value') in (1, 'true'):
-				return True
-			else:
-				return False
-
-		elif self.type in ('fixed','text-multi'):
-			return get_multiple_tag_value(self, 'value')
-
-		elif self.type in ('jid-multi', 'list-multi'):
-			return [value.getData() for value in self.getTags('value')]
-
-		elif self.type in ('hidden', 'jid-single', 'list-single', 'text-single', 'text-private') or True:
-			return self.getTagData('value')
-
-	def set_value(self, value):
-		if self.type in ('boolean',):
-			if value:
-				self.setTagData('value', '1')
-			else:
-				self.setTagData('value', '0')
-
-		elif self.type in ('fixed','text-multi'):
-			set_multiple_tag_value(self, 'value', value)
-
-		elif self.type in ('jid-multi', 'list-multi'):
-			del_multiple_tag_value(self, 'value')
-			for item in value:
-				self.addChild('value', {}, (item,))
-
-		elif self.type in ('hidden', 'jid-single', 'list-single', 'text-single', 'text-private'):
+class StringField(DataField):
+	''' Covers fields of types: fixed, hidden, text-private, text-single. '''
+	@nested_property
+	def value():
+		'''Value of field. May be any unicode string.'''
+		def fget(self):
+			return self.getTagData('value') or u''
+		def fset(self, value):
+			assert isinstance(value, basestring)
+			if value == '':
+				return fdel(self)
 			self.setTagData('value', value)
+		def fdel(self):
+			t = self.getTag('value')
+			if t is not None:
+				self.delChild(t)
+		return locals()
 
-	def del_value(self):
-		del_multiple_tag_value(self, 'value')
-
-	value = property(get_value, set_value, del_value,
-		""" The value of field. Depending on the type, it is a boolean, a unicode string or a list
-		of stings. """)
+class ListField(DataField):
+	''' Covers fields of types: jid-multi, jid-single, list-multi, list-single. '''
+	@nested_property
+	def options():
+		'''Options.'''
+		def fget(self):
+			options = []
+			for element in self.iterTags('option'):
+				v = element.getTagData('value')
+				if v is None: raise WrongFieldValue
+				options.append((element.getAttr('label'), v))
+			return options
+		def fset(self, values):
+			fdel(self)
+			for value, label in values:
+				self.addChild('option', {'label': label}).setTagData('value', value)
+		def fdel(self):
+			for element in self.iterTags('option'):
+				self.delChild(element)
+		return locals()
 
 	def iter_options(self):
-		""" Yields a pair: label, value """
-		for element in self.getChildren():
-			if not isinstance(element, xmpp.Node): continue
-			if not element.getName()=='option': continue
-			try:
-				yield element.getAttr('label'), element.getTag('value').getData()
-			except TypeError:
-				raise BadDataFormNode
+		for element in self.iterTags('option'):
+			v = element.getTagData('value')
+			if v is None: raise WrongFieldValue
+			yield (element.getAttr('label'), v)
 
-	def get_options(self):
-		""" Returns a list of tuples: (label, value). """
-		return [(tag.getAttr('label'), tag.getTag('value').getData()) for tag in self.getTags('option')]
+class ListSingleField(ListField, StringField):
+	'''Covers list-single and jid-single fields.'''
+	pass
 
-	def set_options(self, options):
-		""" Options need to be a list of tuples (label, value), both unicode. """
-		assert options.__iter__
+class ListMultiField(ListField):
+	'''Covers list-multi and jid-multi fields.'''
+	@nested_property
+	def values():
+		'''Values held in field.'''
+		def fget(self):
+			values = []
+			for element in self.iterTags('value'):
+				values.append(element.getData())
+			return values
+		def fset(self, values):
+			fdel(self)
+			for value in values:
+				self.addChild('value').setData(value)
+		def fdel(self):
+			for element in self.iterTags('value'):
+				self.delChild(element)
+		return locals()
+	
+	def iter_values():
+		for element in self.iterTags('value'):
+			yield element.getData()
 
-		del_multiple_tag_value(self, 'option')
-		for option in options:
-			assert option[0] is None or isinstance(option[0], unicode)
-			assert isinstance(option[1], unicode)
-			if option[0] is None:
-				attr={}
-			else:
-				attr={'label': option[0].encode('utf-8')}
-			self.addChild('option', attr, (xmpp.Node('value', {}, (option[1].encode('utf-8'),)),))
+class TextMultiField(DataField):
+	@nested_property
+	def value():
+		'''Value held in field.'''
+		def fget(self):
+			value = u''
+			for element in self.getTags('value'):	# TODO: iter!
+				value += '\n' + element.getData()
+			return value[1:]
+		def fset(self, value):
+			fdel(self)
+			if value == '': return
+			for line in value.split('\n'):
+				self.addChild('value').setData(line)
+		def fdel(self):
+			for element in self.iterTags('value'):
+				self.delChild(element)
+		return locals()
 
-	def del_options(self):
-		del_multiple_tag_value(self, 'option')
-
-	options = property(get_options, set_options, del_options,
-		""" Options to choose between in list-* fields. """)
-
-class DataRecord(xmpp.Node):
-	""" Class to store fields. May be used as temporary storage (for example when reading a list of
-	fields from DataForm in DATAFORM_SINGLE mode), may be used as permanent storage place (for example
-	for DataForms in DATAFORM_MULTIPLE mode). It expects that every <field/> element is actually
-	a DataField instance. Read-only."""
-	def __init__(self, fields=None, node=None, associated=None):
-		''' Create new instance of DataRecord. You can use 'associated' to provide form which
-		contains field descriptions. This way iterating over fields in this record will be
-		in the same order as fields in given DataForm, with None when field does not exist
-		in this record. '''
-		assert (fields is None) or (node is None)
-		assert (fields is None) or (fields.__iter__)
-		assert (node is None) or (isinstance(node, xmpp.Node))
-		assert (associated is None) or (isinstance(associated, DataForm))
-
-		self.vars = {}
+class DataRecord(ExtendedNode):
+	'''The container for data fields - an xml element which has DataField
+	elements as children.'''
+	def __init__(self, fields=None, associated=None, extend=None):
 		self.associated = associated
+		self.vars = {}
+		if extend is None:
+			# we have to build this object from scratch
+			xmpp.Node.__init__(self)
 
-		xmpp.Node.__init__(self, node=node)
+			if fields is not None: self.fields = fields
+		else:
+			# we already have xmpp.Node inside - try to convert all
+			# fields into DataField objects
+			if fields is None:
+				for field in self.getTags('field'): # TODO: iter!
+					if not isinstance(field, DataField):
+						ExtendField(field)
+					self.vars[field.var] = field
+			else:
+				for field in self.iterTags('field'):
+					self.delChild(field)
+				self.fields = fields
 
-		if node is not None:
-			for field in iter_elements(node, 'field'):
-				assert isinstance(field, DataField)
-				self.vars[field.var] = field
-
-		if fields is not None:
+	@nested_property
+	def fields():
+		'''List of fields in this record.'''
+		def fget(self):
+			return self.getTags('field')
+		def fset(self, fields):
+			fdel(self)
 			for field in fields:
-				assert isinstance(field, DataField)
+				if not isinstance(field, DataField):
+					ExtendField(extend=field)
 				self.addChild(node=field)
-				self.vars[field.var] = field
-
-	# if there will be ever needed access to all fields as a list, write it here, in form of property
+		def fdel(self):
+			for element in self.iterTags('field'):
+				self.delChild(element)
+		return locals()
 
 	def iter_fields(self):
-		if self.associated is not None:
-			for field in self.associated.iter_fields():
-				if field.var in self.vars:
-					yield self.vars[field.var]
-				else:
-					yield None
-		else:
-			for field in self.vars.itervalues():
-				yield field
+		''' Iterate over fields in this record. Do not take associated
+		into account. '''
+		for field in self.iterTags('field'):
+			yield field
+
+	def iter_with_associated(self):
+		''' Iterate over associated, yielding both our field and
+		associated one together. '''
+		for field in self.associated.iter_fields():
+			yield self[field.var], field
 
 	def __getitem__(self, item):
-		# if the field is in associated but not here - return None
-		# NOTE: last predicate is meant to raise KeyError if no such item in associated
-		if self.associated is not None and item not in self.vars and \
-		   self.associated[item] is not None:
-			return None
 		return self.vars[item]
+
+class DataForm(ExtendedNode):
+	def __init__(self, type=None, title=None, instructions=None, extend=None):
+		if extend is None:
+			# we have to build form from scratch
+			xmpp.Node.__init__(self, 'x', attrs={'xmlns': xmpp.NS_DATA})
+
+		if type is not None:		self.type=type
+		if title is not None:		self.title=title
+		if instructions is not None:	self.instructions=instructions
+
+	@nested_property
+	def type():
+		''' Type of the form. Must be one of: 'form', 'submit', 'cancel', 'result'.
+		'form' - this form is to be filled in; you can do:
+			filledform = DataForm(replyto=thisform)...'''
+		def fget(self):
+			return self.getAttr('type')
+		def fset(self):
+			assert type in ('form', 'submit', 'cancel', 'result')
+			self.setAttr('type', type)
+		return locals()
+
+	@nested_property
+	def title():
+		''' Title of the form. Human-readable, should not contain any \\r\\n.'''
+		def fget(self):
+			return self.getTagData('title')
+		def fset(self, title):
+			self.setTagData('title', title)
+		def fdel(self):
+			try:
+				self.delChild('title')
+			except ValueError:
+				pass
+		return locals()
+
+	@nested_property
+	def instructions():
+		''' Instructions for this form. Human-readable, may contain \\r\\n. '''
+		# TODO: the same code is in TextMultiField. join them
+		def fget(self):
+			value = u''
+			for value in self.iterTags('value'):
+				value += '\n' + value.getData()
+			return value[1:]
+		def fset(self, value):
+			fdel(self)
+			if value == '': return
+			for line in value.split('\n'):
+				self.addChild('value').setData(line)
+		def fdel(self):
+			for value in self.iterTags('value'):
+				self.delChild(value)
+		return locals()
+
+class SimpleDataForm(DataForm, DataRecord):
+	def __init__(self, type=None, title=None, instructions=None, fields=None, extend=None):
+		DataForm.__init__(self, type=type, title=title, instructions=instructions, extend=extend)
+		DataRecord.__init__(self, fields=fields, extend=self, associated=self)
+
+class MultipleDataForm(DataForm):
+	def __init__(self):
+		# all records, recorded into DataRecords
+		pass
+
+	@nested_property
+	def items():
+		''' A list of all records. '''
+		def fget(self):
+			return list(self.iter_records())
+		def fset(self, records):
+			fdel(self)
+			for record in records:
+				if not isinstance(record, DataRecord):
+					DataRecord(extend=record)
+				self.addChild(node=record)
+		def fdel(self):
+			for record in self.iterTags('record'):
+				self.delChild(record)
+		return locals()
+
+	def iter_records():
+		for record in self.iterTags('item'):
+			yield item
+
+	@nested_property
+	def recorded():
+		''' DataRecord that contains descriptions of fields in records.'''
+		def fget(self):
+			return self.getTag('recorded')
+		def fset(self, record):
+			try:
+				self.delChild('recorded')
+			except:
+				pass
+
+			record.setName('recorded')
+			self.addChild(node=record)
+		return locals()
+
