@@ -658,11 +658,9 @@ def get_state_image_from_file_path_show(file_path, show):
 def get_possible_button_event(event):
 	'''mouse or keyboard caused the event?'''
 	if event.type == gtk.gdk.KEY_PRESS:
-		event_button = 0 # no event.button so pass 0
-	else: # BUTTON_PRESS event, so pass event.button
-		event_button = event.button
-
-	return event_button
+		return 0 # no event.button so pass 0
+	# BUTTON_PRESS event, so pass event.button
+	return event.button
 
 def destroy_widget(widget):
 	widget.destroy()
