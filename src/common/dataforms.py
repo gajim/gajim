@@ -364,8 +364,8 @@ class DataForm(ExtendedNode):
 		# TODO: the same code is in TextMultiField. join them
 		def fget(self):
 			value = u''
-			for value in self.getTags('value'):
-				value += '\n' + value.getData()
+			for valuenode in self.getTags('value'):
+				value += '\n' + valuenode.getData()
 			return value[1:]
 		def fset(self, value):
 			fdel(self)
