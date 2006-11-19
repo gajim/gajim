@@ -130,7 +130,7 @@ def _ReceivedRegInfo(con, resp, agent):
 		return
 	df=DataForm(typ='form')
 	for i in resp.getQueryPayload():
-		if isinstance(i, Iq):
+		if not isinstance(i, Node):
 			pass
 		elif i.getName()=='instructions': 
 			df.addInstructions(i.getData())
