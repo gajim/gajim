@@ -2076,7 +2076,7 @@ class RosterWindow:
 		menu.append(item)
 		item.connect('activate', self.on_execute_command, contact, account,
 			contact.resource)
-		if not is_connected:
+		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 
 		item = gtk.ImageMenuItem(_('_Rename'))
