@@ -1460,6 +1460,7 @@ class RosterWindow:
 				# If last removed iter was not visible, gajim.groups is not cleaned
 				if gajim.groups[account].has_key(old_text):
 					del gajim.groups[account][old_text]
+				self.draw_group(new_text, account)
 
 		def on_canceled():
 			if gajim.interface.instances.has_key('rename'):
