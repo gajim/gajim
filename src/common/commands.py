@@ -68,7 +68,6 @@ class ChangeStatusCommand(AdHocCommand):
 	@staticmethod
 	def isVisibleFor(samejid):
 		''' Change status is visible only if the entity has the same bare jid. '''
-		return True	# TODO: Remove that!
 		return samejid
 
 	def execute(self, request):
