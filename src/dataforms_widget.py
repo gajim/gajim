@@ -76,7 +76,7 @@ class DataFormWidget(gtk.Alignment, object):
 				# form is single
 				instructions = _('This is result of query.')
 			else:
-				# form is writable (TODO: move that to build_*_data_form()?
+				# form is writable (TODO: move that to build_*_data_form()?)
 				if isinstance(dataform, dataforms.SimpleDataForm):
 					instructions = _('Fill in the form.')
 				else:

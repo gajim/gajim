@@ -48,7 +48,9 @@ def Field(typ, **attrs):
 
 def ExtendField(node):
 	''' Helper function to extend a node to field of appropriate type. '''
-	# TODO: move the dict out
+	# when validation (XEP-122) will go in, we could have another classes
+	# like DateTimeField - so that dicts in Field() and ExtendField() will
+	# be different...
 	typ=node.getAttr('type')
 	f = {
 		'boolean': BooleanField,
@@ -216,7 +218,7 @@ class ListField(DataField):
 		return locals()
 
 	def iter_options(self):
-		for element in self.getTags('option'):	# TODO: iter!
+		for element in self.iterTags('option'):
 			v = element.getTagData('value')
 			if v is None: raise WrongFieldValue
 			yield (v, element.getAttr('label'))
@@ -254,7 +256,7 @@ class TextMultiField(DataField):
 		'''Value held in field.'''
 		def fget(self):
 			value = u''
-			for element in self.getTags('value'):	# TODO: iter!
+			for element in self.iterTags('value'):
 				value += '\n' + element.getData()
 			return value[1:]
 		def fset(self, value):
@@ -282,7 +284,7 @@ class DataRecord(ExtendedNode):
 			# we already have xmpp.Node inside - try to convert all
 			# fields into DataField objects
 			if fields is None:
-				for field in self.getTags('field'): # TODO: iter!
+				for field in self.iterTags('field'):
 					if not isinstance(field, DataField):
 						ExtendField(field)
 					self.vars[field.var] = field
@@ -310,7 +312,7 @@ class DataRecord(ExtendedNode):
 	def iter_fields(self):
 		''' Iterate over fields in this record. Do not take associated
 		into account. '''
-		for field in self.getTags('field'):	# TODO: iter!
+		for field in self.iterTags('field'):
 			yield field
 
 	def iter_with_associated(self):

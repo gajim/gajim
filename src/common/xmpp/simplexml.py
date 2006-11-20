@@ -200,8 +200,8 @@ class Node(object):
 				for key in attrs.keys():
 					if not node.attrs.has_key(key) or \
 						node.attrs[key]!=attrs[key]: break
-					else:
-						yield node
+				else:
+					yield node
 
 	def setAttr(self, key, val):
 		""" Sets attribute "key" with the value "val". """
