@@ -1064,17 +1064,9 @@ class RosterWindow:
 			gc_sub_menu.append(item)
 
 	def _change_style(self, model, path, iter, option):
-		if option is None:
+		if option is None or model[iter][C_TYPE] == option: 
+			# We changed style for this type of row
 			model[iter][C_NAME] = model[iter][C_NAME]
-		elif model[iter][C_TYPE] == 'account':
-			if option == 'account':
-				model[iter][C_NAME] = model[iter][C_NAME]
-		elif model[iter][C_TYPE] == 'group':
-			if option == 'group':
-				model[iter][C_NAME] = model[iter][C_NAME]
-		elif model[iter][C_TYPE] == 'contact':
-			if option == 'contact':
-				model[iter][C_NAME] = model[iter][C_NAME]
 
 	def change_roster_style(self, option):
 		model = self.tree.get_model()
@@ -2067,7 +2059,7 @@ class RosterWindow:
 		list_ = [] # list of (jid, account) tuples
 		list_online = [] # list of (jid, account) tuples
 
-		group = model[iter][C_NAME]
+		group = model[iter][C_JID]
 		for jid in gajim.contacts.get_jid_list(account):
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
