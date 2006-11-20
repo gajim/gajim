@@ -278,6 +278,10 @@ class Systray:
 				if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
 					win.hide() # else we hide it from VD that was visible in
 			else:
+                                # in Windows (perhaps other Window Managers too) minimize state
+                                # is remembered, so make sure it's not minimized (iconified)
+                                # because user wants to see roster
+                                win.deiconify()
 				win.present()
 		else:
 			self.handle_first_event()
