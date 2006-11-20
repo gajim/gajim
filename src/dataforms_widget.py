@@ -111,6 +111,9 @@ class DataFormWidget(gtk.Alignment, object):
 # we have actually two different kinds of data forms: one is a simple form to fill,
 # second is a table with several records; 
 
+	def empty_method(self):
+		pass
+
 	def clean_data_form(self):
 		'''Remove data about existing form. This metod is empty, because
 		it is rewritten by build_*_data_form, according to type of form
@@ -136,6 +139,7 @@ class DataFormWidget(gtk.Alignment, object):
 		'''(Called as clean_data_form, read the docs of clean_data_form()).
 		Remove form from widget.'''
 		self.singleform.destroy()
+		self.clean_data_form = self.empty_method	# we won't call it twice
 		del self.singleform
 
 	def build_multiple_data_form(self):
@@ -183,6 +187,7 @@ class DataFormWidget(gtk.Alignment, object):
 	def clean_multiple_data_form(self):
 		'''(Called as clean_data_form, read the docs of clean_data_form()).
 		Remove form from widget.'''
+		self.clean_data_form = self.empty_method	# we won't call it twice
 		del self.multiplemodel
 
 	def refresh_multiple_buttons(self):
