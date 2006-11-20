@@ -418,7 +418,7 @@ class SingleForm(gtk.Table, object):
 
 			if commonlabel and field.label is not None:
 				label = gtk.Label(field.label)
-				label.set_alignment(1.0, 0.5)
+				label.set_alignment(0.0, 0.5)
 				self.attach(label, 0, 1, linecounter, linecounter+1,
 					xoptions=gtk.FILL, yoptions=gtk.FILL)
 
