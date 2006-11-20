@@ -246,7 +246,7 @@ class ListMultiField(ListField):
 				self.delChild(element)
 		return locals()
 	
-	def iter_values():
+	def iter_values(self):
 		for element in self.getTags('value'):
 			yield element.getData()
 
