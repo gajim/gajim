@@ -50,6 +50,8 @@ class Systray:
 		self.single_message_handler_id = None
 		self.new_chat_handler_id = None
 		self.t = None
+		# click somewhere else does not popdown menu. workaround this.
+		self.added_hide_menuitem = False 
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
 		self.xml = gtkgui_helpers.get_glade('systray_context_menu.glade')
@@ -222,10 +224,18 @@ class Systray:
 					break # No other connected account
 
 		sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
-		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and\
-		gtk.gtk_version >= (2, 10, 0):
-			self.systray_context_menu.popup(None, None,
-				gtk.status_icon_position_menu, event_button,
+
+		if os.name == 'nt':
+			# see http://bugzilla.gnome.org/show_bug.cgi?id=377349
+			#FIXME: until it is fixed, put under mouse coordinates
+			if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
+                                if self.added_hide_menuitem is False:
+					self.systray_context_menu.prepend(gtk.SeparatorMenuItem()) 
+					item = gtk.MenuItem(_('Hide this menu')) 
+					self.systray_context_menu.prepend(item) 
+					self.added_hide_menuitem = True 
+				self.systray_context_menu.popup(None, None,
+					gtk.status_icon_position_menu, event_button,
 					event_time, self.status_icon)
 
 		else: # GNU and Unices
