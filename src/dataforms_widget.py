@@ -19,9 +19,6 @@ Words single and multiple refers here to types of data forms:
 single means these with one record of data (without <recorded/> element),
 multiple - these which may contain more data (with <recorded/> element)."""
 
-# TODO: forms of type='result' should be read-only
-# TODO: remove tabs from dialog
-
 import gtk
 
 import gtkgui_helpers
@@ -273,6 +270,9 @@ class SingleForm(gtk.Table, object):
 		# building widget
 		linecounter = 0
 
+		# is the form changeable?
+		readwrite = dataform.type != 'result'
+
 		# for each field...
 		for field in self._data_form.iter_fields():
 			if field.type=='hidden': continue
@@ -321,6 +321,7 @@ class SingleForm(gtk.Table, object):
 							field.value = value
 					if value == field.value:
 						radio.set_active(True)
+					widget.set_sensitive(readwrite)
 					widget.pack_start(radio, expand=False)
 
 			elif field.type == 'list-multi':
@@ -331,6 +332,7 @@ class SingleForm(gtk.Table, object):
 					check.set_active(value in field.values)
 					check.connect('toggled', self.on_list_multi_checkbutton_toggled,
 						field, value)
+					widget.set_sensitive(readwrite)
 					widget.pack_start(check, expand=False)
 
 			elif field.type == 'jid-single':
@@ -360,15 +362,25 @@ class SingleForm(gtk.Table, object):
 				treeview.append_column(gtk.TreeViewColumn(None, renderer,
 					text=0))
 
-				xml.get_widget('add_button').connect('clicked',
+				add_button=xml.get_widget('add_button')
+				add_button.connect('clicked',
 					self.on_jid_multi_add_button_clicked, treeview, listmodel, field)
-				xml.get_widget('edit_button').connect('clicked',
+				edit_button=xml.get_widget('edit_button')
+				edit_button.connect('clicked',
 					self.on_jid_multi_edit_button_clicked, treeview)
-				xml.get_widget('remove_button').connect('clicked',
+				remove_button=xml.get_widget('remove_button')
+				remove_button.connect('clicked',
 					self.on_jid_multi_remove_button_clicked, treeview, field)
-				xml.get_widget('clear_button').connect('clicked',
+				clear_button=xml.get_widget('clear_button')
+				clear_button.connect('clicked',
 					self.on_jid_multi_clean_button_clicked, listmodel, field)
+				if not readwrite:
+					add_button.set_no_show_all(True)
+					edit_button.set_no_show_all(True)
+					remove_button.set_no_show_all(True)
+					clear_button.set_no_show_all(True)
 
+				widget.set_sensitive(readwrite)
 				self.attach(widget, 1, 2, linecounter, linecounter+1)
 
 				del xml
@@ -392,6 +404,7 @@ class SingleForm(gtk.Table, object):
 				widget = gtk.ScrolledWindow()
 				widget.add(textwidget)
 
+				widget.set_sensitive(readwrite)
 				self.attach(widget, 1, 2, linecounter, linecounter+1)
 
 			else:# field.type == 'text-single' or field.type is nonstandard:
@@ -411,6 +424,7 @@ class SingleForm(gtk.Table, object):
 
 			if commonwidget:
 				assert widget is not None
+				widget.set_sensitive(readwrite)
 				self.attach(widget, 1, 2, linecounter, linecounter+1,
 					yoptions=gtk.FILL)
 			widget.show_all()
