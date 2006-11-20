@@ -583,9 +583,9 @@ class RosterWindow:
 				# escape markup entities and make them small italic and fg color
 				color = gtkgui_helpers._get_fade_color(self.tree, selected, focus)
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
-				name += '\n<span size="small" style="italic" foreground="%s">%s' + \
-					'</span>' % (colorstring, gtkgui_helpers.escape_for_pango_markup(
-					status))
+				name += \
+					'\n<span size="small" style="italic" foreground="%s">%s</span>' \
+					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
 
 		iter = iters[0] # choose the icon with the first iter
 		icon_name = helpers.get_icon_name_to_show(contact, account)
@@ -3677,9 +3677,11 @@ class RosterWindow:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background', '#adc3c6')
+				renderer.set_property('cell-background', gajim.config.get(
+					'just_connected_bg_color'))
 			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background', '#ab6161')
+				renderer.set_property('cell-background', gajim.config.get(
+					'just_disconnected_bg_color'))
 			else:
 				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
 				if color:
@@ -3738,9 +3740,11 @@ class RosterWindow:
 			else:
 				renderer.set_property('foreground', None)
 			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background', '#adc3c6')
+				renderer.set_property('cell-background', gajim.config.get(
+					'just_connected_bg_color'))
 			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background', '#ab6161')
+				renderer.set_property('cell-background', gajim.config.get(
+					'just_disconnected_bg_color'))
 			else:
 				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
 				if color:
@@ -3780,9 +3784,11 @@ class RosterWindow:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background', '#adc3c6')
+				renderer.set_property('cell-background', gajim.config.get(
+					'just_connected_bg_color'))
 			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background', '#ab6161')
+				renderer.set_property('cell-background', gajim.config.get(
+					'just_disconnected_bg_color'))
 			else:
 				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
 				if color:
