@@ -250,7 +250,6 @@ class P2PClient(IdleObject):
 			common.xmpp.NS_BYTESTREAM)
 	
 class P2PConnection(IdleObject, PlugIn):
-	''' class for sending file to socket over socks5 '''
 	def __init__(self, sock_hash, _sock, host = None, port = None, caller = None, on_connect = None, client = None):
 		IdleObject.__init__(self)
 		self._owner = client

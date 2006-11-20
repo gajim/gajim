@@ -12,11 +12,7 @@
 ## GNU General Public License for more details.
 ##
 
-import os
-import sys
-import socket
 from common import gajim
-from common import xmpp
 
 try:
 	import dbus.glib
@@ -365,7 +361,7 @@ class Zeroconf:
 			self.domain_browser.connect_to_signal('ItemNew', self.new_domain_callback)
 			self.domain_browser.connect_to_signal('Failure', self.error_callback)
 		else:
-			self.browse_domain(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC, domain)
+			self.browse_domain(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC, self.domain)
 		
 		return True
 
@@ -397,8 +393,6 @@ class Zeroconf:
 				reply_handler=self.service_resolved_all_callback, error_handler=self.error_callback)
 
 	def get_contacts(self):
-		if not jid in self.contacts:
-			return None
 		return self.contacts
 
 	def get_contact(self, jid):

@@ -134,7 +134,7 @@ class Roster:
 
 	def getShow(self, jid):
 		#print 'roster_zeroconf.py: getShow'
-		return getStatus(jid)
+		return self.getStatus(jid)
 
 	def getPriority(jid):
 		return 5

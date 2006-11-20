@@ -37,12 +37,9 @@ if os.name != 'nt':
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 import getpass
 import gobject
-import notify
 
-from common import helpers
 from common import gajim
 from common import GnuPG
-from common.zeroconf import connection_handlers_zeroconf
 from common.zeroconf import client_zeroconf
 from connection_handlers_zeroconf import *
 
