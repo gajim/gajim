@@ -23,11 +23,9 @@ multiple - these which may contain more data (with <recorded/> element)."""
 # TODO: remove tabs from dialog
 
 import gtk
-import pango
 
 import gtkgui_helpers
 
-import common.xmpp as xmpp
 import common.dataforms as dataforms
 
 import itertools

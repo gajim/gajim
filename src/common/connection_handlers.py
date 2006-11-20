@@ -33,7 +33,6 @@ import common.xmpp
 from common import GnuPG
 from common import helpers
 from common import gajim
-from common import dataforms
 from common import atom
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
@@ -726,7 +725,7 @@ class ConnectionDisco:
 		node = q.getAttr('node')
 
 		if self.commandQuery(con, iq_obj):
-			raise NodeProcessed
+			raise common.xmpp.NodeProcessed
 		
 		elif node is None:
 			iq = iq_obj.buildReply('result')

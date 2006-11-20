@@ -149,7 +149,7 @@ class DataField(ExtendedNode):
 	def required():
 		'''Controls whether this field required to fill. Boolean.'''
 		def fget(self):
-			return boolean(self.getTag('required'))
+			return bool(self.getTag('required'))
 		def fset(self, value):
 			t = self.getTag('required')
 			if t and not value:
@@ -405,9 +405,9 @@ class MultipleDataForm(DataForm):
 				self.delChild(record)
 		return locals()
 
-	def iter_records():
+	def iter_records(self):
 		for record in self.getTags('item'):
-			yield item
+			yield record
 
 	@nested_property
 	def recorded():
