@@ -68,7 +68,7 @@ class MessageControl:
 		# NOTE: Derived classes MUST implement this
 		pass
 
-	def repaint_themed_widgets(self, theme):
+	def repaint_themed_widgets(self):
 		pass # NOTE: Derived classes SHOULD implement this
 
 	def update_ui(self):

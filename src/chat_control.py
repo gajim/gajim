@@ -259,7 +259,7 @@ class ChatControlBase(MessageControl):
 	def _on_send_button_clicked(self, widget):
 		'''When send button is pressed: send the current message'''
 		if gajim.connections[self.account].connected < 2: # we are not connected
-			dialog = dialogs.ErrorDialog(_('A connection is not available'),
+			dialogs.ErrorDialog(_('A connection is not available'),
 				_('Your message can not be sent until you are connected.'))
 			return
 		message_buffer = self.msg_textview.get_buffer()
@@ -465,7 +465,7 @@ class ChatControlBase(MessageControl):
 					send_message = True
 				
 			if gajim.connections[self.account].connected < 2: # we are not connected
-				dialog = dialogs.ErrorDialog(_('A connection is not available'),
+				dialogs.ErrorDialog(_('A connection is not available'),
 					_('Your message can not be sent until you are connected.'))
 				send_message = False
 
