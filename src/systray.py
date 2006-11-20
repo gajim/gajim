@@ -229,7 +229,7 @@ class Systray:
 			# see http://bugzilla.gnome.org/show_bug.cgi?id=377349
 			#FIXME: until it is fixed, put under mouse coordinates
 			if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-                                if self.added_hide_menuitem is False:
+				if self.added_hide_menuitem is False:
 					self.systray_context_menu.prepend(gtk.SeparatorMenuItem()) 
 					item = gtk.MenuItem(_('Hide this menu')) 
 					self.systray_context_menu.prepend(item) 
@@ -278,10 +278,10 @@ class Systray:
 				if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
 					win.hide() # else we hide it from VD that was visible in
 			else:
-                                # in Windows (perhaps other Window Managers too) minimize state
-                                # is remembered, so make sure it's not minimized (iconified)
-                                # because user wants to see roster
-                                win.deiconify()
+				# in Windows (perhaps other Window Managers too) minimize state
+				# is remembered, so make sure it's not minimized (iconified)
+				# because user wants to see roster
+				win.deiconify()
 				win.present()
 		else:
 			self.handle_first_event()
