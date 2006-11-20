@@ -39,6 +39,11 @@ setup(
     name = 'Gajim',
     version = '0.11',
     description = 'A full featured Jabber client',
+    author = 'Gajim Development Team',
+    url = 'http://www.gajim.org/',
+    download_url = 'http://www.gajim.org/downloads.php',
+    license = 'GPL',
+    
     windows = [{'script': 'src/gajim.py',
                 'icon_resources': [(1, 'data/pixmaps/gajim.ico')]},
                {'script': 'src/history_manager.py',
