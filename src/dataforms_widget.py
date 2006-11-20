@@ -417,6 +417,7 @@ class SingleForm(gtk.Table, object):
 
 			if commondesc and field.description!='':
 				label = gtk.Label()
+				label.set_alignment(0.0, 0.5)	# align to left
 				label.set_markup('<small>'+\
 					gtkgui_helpers.escape_for_pango_markup(field.description)+\
 					'</small>')
