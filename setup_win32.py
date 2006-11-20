@@ -37,8 +37,8 @@ opts = {
 
 setup(
     name = 'Gajim',
-    version = '9',
-    description = 'A Jabber client written in PyGTK',
+    version = '0.11',
+    description = 'A full featured Jabber client',
     windows = [{'script': 'src/gajim.py',
                 'icon_resources': [(1, 'data/pixmaps/gajim.ico')]},
                {'script': 'src/history_manager.py',
