@@ -168,11 +168,10 @@ class Connection(ConnectionHandlers):
 		if realm == common.xmpp.NS_REGISTER:
 			if event == common.xmpp.features_nb.REGISTER_DATA_RECEIVED:
 				# data is (agent, DataFrom, is_form)
-				if self.new_account_info and\
+				if self.new_account_info and \
 				self.new_account_info['hostname'] == data[0]:
-					#it's a new account
+					# it's a new account
 					if not data[1]: # wrong answer
-						print self.connection.lastErr
 						self.dispatch('ACC_NOT_OK', (
 							_('Transport %s answered wrongly to register request.') % \
 							data[0]))
