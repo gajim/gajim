@@ -1734,14 +1734,14 @@ class RosterWindow:
 		history_menuitem = xml.get_widget('history_menuitem')
 
 		contacts = gajim.contacts.get_contact(account, jid)
-		if len(contacts) > 1: # sevral resources
+		if len(contacts) > 1: # several resources
 			def resources_submenu(action):
 				""" Build a submenu with contact's resources. """
 				sub_menu = gtk.Menu()
 
 				iconset = gajim.config.get('iconset')
 				if not iconset:
-					iconset = DEFAULT_ICONSET
+					iconset = gajim.config.DEFAULT_ICONSET
 				path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 				for c in contacts:
 					# icon MUST be different instance for every item
