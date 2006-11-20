@@ -191,7 +191,8 @@ class RosterWindow:
 			accounts = [account]
 		num_of_accounts = len(accounts)
 		num_of_secured = gajim.get_number_of_securely_connected_accounts()
-		if num_of_secured and gajim.con_types.has_key(account) and gajim.con_types[account] in ('tls', 'ssl'):
+		if num_of_secured and gajim.con_types.has_key(account) and \
+		gajim.con_types[account] in ('tls', 'ssl'):
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
 			if num_of_secured < num_of_accounts:
@@ -582,8 +583,9 @@ class RosterWindow:
 				# escape markup entities and make them small italic and fg color
 				color = gtkgui_helpers._get_fade_color(self.tree, selected, focus)
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
-				name += '\n<span size="small" style="italic" foreground="%s">%s</span>'\
-					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
+				name += '\n<span size="small" style="italic" foreground="%s">%s' + \
+					'</span>' % (colorstring, gtkgui_helpers.escape_for_pango_markup(
+					status))
 
 		iter = iters[0] # choose the icon with the first iter
 		icon_name = helpers.get_icon_name_to_show(contact, account)
@@ -672,8 +674,8 @@ class RosterWindow:
 			return
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
-			dialogs.ErrorDialog(_('You cannot join a group chat while you are invisible')
-				)
+			dialogs.ErrorDialog(
+				_('You cannot join a group chat while you are invisible'))
 			return
 		if not gajim.interface.msg_win_mgr.has_window(room_jid, account):
 			self.new_room(room_jid, nick, account)
@@ -757,7 +759,8 @@ class RosterWindow:
 		xml_console_menuitem.connect('activate',
 			self.on_xml_console_menuitem_activate, account)
 
-		if gajim.connections[account] and gajim.connections[account].privacy_rules_supported:
+		if gajim.connections[account] and gajim.connections[account].\
+		privacy_rules_supported:
 			privacy_lists_menuitem.connect('activate',
 				self.on_privacy_lists_menuitem_activate, account)
 		else:
@@ -921,8 +924,9 @@ class RosterWindow:
 							'activate', self.on_add_new_contact, account)
 					# disco
 					if not self.service_disco_handler_id:
-						self.service_disco_handler_id = service_disco_menuitem.connect(
-							'activate', self.on_service_disco_menuitem_activate, account)
+						self.service_disco_handler_id = service_disco_menuitem.\
+							connect('activate',
+							self.on_service_disco_menuitem_activate, account)
 					# new chat
 					if not self.new_chat_menuitem_handler_id:
 						self.new_chat_menuitem_handler_id = new_chat_menuitem.\
@@ -1021,8 +1025,8 @@ class RosterWindow:
 			for account in accounts:
 				advanced_item = gtk.MenuItem(_('for account %s') % account, False)
 				advanced_sub_menu.append(advanced_item)
-				advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
-					account)
+				advanced_menuitem_menu = \
+					self.get_and_connect_advanced_menuitem_menu(account)
 				self.advanced_menus.append(advanced_menuitem_menu)
 				advanced_item.set_submenu(advanced_menuitem_menu)
 			
@@ -1319,7 +1323,8 @@ class RosterWindow:
 				# if we're online ...
 				if connection.connection:
 					roster = connection.connection.getRoster()
-					# in threadless connection when no roster stanza is sent, 'roster' is None
+					# in threadless connection when no roster stanza is sent,
+					# 'roster' is None
 					if roster and roster.getItem(jid):
 						resources = roster.getResources(jid)
 						# ...get the contact info for our other online resources
@@ -1382,14 +1387,16 @@ class RosterWindow:
 			return
 		if len(list_) == 1:
 			pritext = _('Transport "%s" will be removed') % contact.jid
-			sectext = _('You will no longer be able to send and receive messages to contacts from this transport.')
+			sectext = _('You will no longer be able to send and receive messages '
+				'to contacts from this transport.')
 		else:
 			pritext = _('Transports will be removed')
 			jids = ''
 			for (contact, account) in list_:
 				jids += '\n  ' + contact.get_shown_name() + ','
 			jids = jids[:-1] + '.'
-			sectext = _('You will no longer be able to send and receive messages to contacts from these transports:%s') % jids
+			sectext = _('You will no longer be able to send and receive messages '
+				'to contacts from these transports:%s') % jids
 		self.dialog = dialogs.ConfirmationDialog(pritext, sectext,
 			on_response_ok = (remove, list_))
 
@@ -1544,7 +1551,7 @@ class RosterWindow:
 	def on_send_file_menuitem_activate(self, widget, account, contact):
 		gajim.interface.instances['file_transfers'].show_file_send_request(
 			account, contact)
-	
+
 	def on_add_special_notification_menuitem_activate(self, widget, jid):
 		dialogs.AddSpecialNotificationDialog(jid)
 
@@ -1561,8 +1568,9 @@ class RosterWindow:
 
 		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 			xml = gtkgui_helpers.get_glade('zeroconf_contact_context_menu.glade')
-			zeroconf_contact_context_menu = xml.get_widget('zeroconf_contact_context_menu')
-			
+			zeroconf_contact_context_menu = xml.get_widget(
+				'zeroconf_contact_context_menu')
+
 			start_chat_menuitem = xml.get_widget('start_chat_menuitem')
 			rename_menuitem = xml.get_widget('rename_menuitem')
 			edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
@@ -1573,7 +1581,7 @@ class RosterWindow:
 				'assign_openpgp_key_menuitem')
 			add_special_notification_menuitem = xml.get_widget(
 				'add_special_notification_menuitem')
-			
+
 			add_special_notification_menuitem.hide()
 			add_special_notification_menuitem.set_no_show_all(True)
 
@@ -1602,7 +1610,8 @@ class RosterWindow:
 				for c in contacts:
 					# icon MUST be different instance for every item
 					state_images = self.load_iconset(path)
-					item = gtk.ImageMenuItem(c.resource + ' (' + str(c.priority) + ')')
+					item = gtk.ImageMenuItem('%s (%s)' % (c.resource,
+						str(c.priority)))
 					icon_name = helpers.get_icon_name_to_show(c, account)
 					icon = state_images[icon_name]
 					item.set_image(icon)
@@ -1626,8 +1635,8 @@ class RosterWindow:
 				information_menuitem.set_sensitive(False)
 				send_file_menuitem.set_sensitive(False)
 			else:
-				information_menuitem.connect('activate', self.on_info_zeroconf, contact,
-					account)
+				information_menuitem.connect('activate', self.on_info_zeroconf,
+					contact, account)
 			history_menuitem.connect('activate', self.on_history, contact,
 				account)
 
@@ -1660,7 +1669,8 @@ class RosterWindow:
 
 			# Unsensitive many items when account is offline
 			if gajim.connections[account].connected < 2:
-				for widget in [start_chat_menuitem,	rename_menuitem, edit_groups_menuitem, send_file_menuitem]:
+				for widget in [start_chat_menuitem,	rename_menuitem,
+				edit_groups_menuitem, send_file_menuitem]:
 					widget.set_sensitive(False)
 
 			event_button = gtkgui_helpers.get_possible_button_event(event)
@@ -1694,7 +1704,7 @@ class RosterWindow:
 			'add_special_notification_menuitem')
 		execute_command_menuitem = xml.get_widget(
 			'execute_command_menuitem')
-		
+
 		add_special_notification_menuitem.hide()
 		add_special_notification_menuitem.set_no_show_all(True)
 
@@ -1736,7 +1746,8 @@ class RosterWindow:
 				for c in contacts:
 					# icon MUST be different instance for every item
 					state_images = self.load_iconset(path)
-					item = gtk.ImageMenuItem(c.resource + ' (' + str(c.priority) + ')')
+					item = gtk.ImageMenuItem('%s (%s)' % (c.resource,
+						str(c.priority)))
 					icon_name = helpers.get_icon_name_to_show(c, account)
 					icon = state_images[icon_name]
 					item.set_image(icon)
@@ -1745,8 +1756,10 @@ class RosterWindow:
 						c.resource)
 				return sub_menu
 
-			start_chat_menuitem.set_submenu(resources_submenu(self.on_open_chat_window))
-			execute_command_menuitem.set_submenu(resources_submenu(self.on_execute_command))
+			start_chat_menuitem.set_submenu(resources_submenu(
+				self.on_open_chat_window))
+			execute_command_menuitem.set_submenu(resources_submenu(
+				self.on_execute_command))
 
 		else: # one resource
 			start_chat_menuitem.connect('activate',
@@ -2058,7 +2071,8 @@ class RosterWindow:
 		for jid in gajim.contacts.get_jid_list(account):
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
-			if group in contact.groups or (contact.groups == [] and group == _('General')):
+			if group in contact.groups or (contact.groups == [] and group == \
+			_('General')):
 				if contact.show not in ('offline', 'error'):
 					list_online.append((contact, account))
 				list_.append((contact, account))
@@ -2195,7 +2209,8 @@ class RosterWindow:
 			open_gmail_inbox_menuitem = xml.get_widget('open_gmail_inbox_menuitem')
 			new_message_menuitem = xml.get_widget('new_message_menuitem')
 			add_contact_menuitem = xml.get_widget('add_contact_menuitem')
-			service_discovery_menuitem = xml.get_widget('service_discovery_menuitem')
+			service_discovery_menuitem = xml.get_widget(
+				'service_discovery_menuitem')
 			execute_command_menuitem = xml.get_widget('execute_command_menuitem')
 			edit_account_menuitem = xml.get_widget('edit_account_menuitem')
 			sub_menu = gtk.Menu()
@@ -2218,7 +2233,8 @@ class RosterWindow:
 			img.set_from_file(path)
 			item.set_image(img)
 			sub_menu.append(item)
-			item.connect('activate', self.on_change_status_message_activate, account)
+			item.connect('activate', self.on_change_status_message_activate,
+				account)
 			if gajim.connections[account].connected < 2:
 				item.set_sensitive(False)
 
@@ -2229,15 +2245,18 @@ class RosterWindow:
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, 'offline')
 
-			if gajim.config.get_per('accounts', account, 'hostname') not in gajim.gmail_domains:
+			if gajim.config.get_per('accounts', account, 'hostname') not in \
+			gajim.gmail_domains:
 				open_gmail_inbox_menuitem.set_no_show_all(True)
 				open_gmail_inbox_menuitem.hide()
 			else:
-				open_gmail_inbox_menuitem.connect('activate', self.on_open_gmail_inbox,
-					account)
+				open_gmail_inbox_menuitem.connect('activate',
+					self.on_open_gmail_inbox, account)
 
-			edit_account_menuitem.connect('activate', self.on_edit_account, account)
-			add_contact_menuitem.connect('activate', self.on_add_new_contact, account)
+			edit_account_menuitem.connect('activate', self.on_edit_account,
+				account)
+			add_contact_menuitem.connect('activate', self.on_add_new_contact,
+				account)
 			service_discovery_menuitem.connect('activate',
 				self.on_service_disco_menuitem_activate, account)
 			hostname = gajim.config.get_per('accounts', account, 'hostname')
@@ -2264,7 +2283,8 @@ class RosterWindow:
 			status_menuitem = xml.get_widget('status_menuitem')
 			#join_group_chat_menuitem =xml.get_widget('join_group_chat_menuitem')
 			new_message_menuitem = xml.get_widget('new_message_menuitem')
-			zeroconf_properties_menuitem = xml.get_widget('zeroconf_properties_menuitem')
+			zeroconf_properties_menuitem = xml.get_widget(
+				'zeroconf_properties_menuitem')
 			sub_menu = gtk.Menu()
 			status_menuitem.set_submenu(sub_menu)
 
@@ -2285,7 +2305,8 @@ class RosterWindow:
 			img.set_from_file(path)
 			item.set_image(img)
 			sub_menu.append(item)
-			item.connect('activate', self.on_change_status_message_activate, account)
+			item.connect('activate', self.on_change_status_message_activate,
+				account)
 			if gajim.connections[account].connected < 2:
 				item.set_sensitive(False)
 
@@ -2296,7 +2317,8 @@ class RosterWindow:
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, 'offline')
 
-			zeroconf_properties_menuitem.connect('activate', self.on_zeroconf_properties, account)			
+			zeroconf_properties_menuitem.connect('activate',
+				self.on_zeroconf_properties, account)
 			#gc_sub_menu = gtk.Menu() # gc is always a submenu
 			#join_group_chat_menuitem.set_submenu(gc_sub_menu)
 			#self.add_bookmarks_list(gc_sub_menu, account)
@@ -2308,7 +2330,7 @@ class RosterWindow:
 			#	for widget in [join_group_chat_menuitem, new_message_menuitem]:
 			#		widget.set_sensitive(False)
 			#	new_message_menuitem.set_sensitive(False)
-					
+
 		return account_context_menu
 
 	def make_account_menu(self, event, iter):
@@ -2375,7 +2397,8 @@ class RosterWindow:
 		else:
 			if not _('Not in Roster') in contact.groups:
 				dialogs.InformationDialog(_('Subscription request has been sent'),
-_('If "%s" accepts this request you will know his or her status.') % jid)
+					_('If "%s" accepts this request you will know his or her status.'
+					) % jid)
 				return
 			contact.groups = group
 			if pseudo:
@@ -2424,7 +2447,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
 				list_.append((contact, account))
-			if type in ('account', 'group', 'self_contact') or account == gajim.ZEROCONF_ACC_NAME:
+			if type in ('account', 'group', 'self_contact') or \
+			account == gajim.ZEROCONF_ACC_NAME:
 				return
 			if type == 'contact':
 				self.on_req_usub(widget, list_)
@@ -2593,11 +2617,14 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				contact.get_shown_name()
 			if contact.sub == 'to':
 				self.dialog = dialogs.ConfirmationDialog(pritext,
-					_('By removing this contact you also remove authorization resulting in him or her always seeing you as offline.'),
+					_('By removing this contact you also remove authorization '
+					'resulting in him or her always seeing you as offline.'),
 					on_response_ok = (on_ok, list_))
 			else:
 				self.dialog = dialogs.ConfirmationDialogCheck(pritext,
-					_('By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline.'),
+					_('By removing this contact you also by default remove '
+					'authorization resulting in him or her always seeing you as '
+					'offline.'),
 					_('I want this contact to know my status after removal'),
 					on_response_ok = (on_ok, list_))
 		else:
@@ -2606,7 +2633,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			jids = ''
 			for (contact, account) in list_:
 				jids += '\n  ' + contact.get_shown_name() + ','
-			sectext = _('By removing these contacts:%s\nyou also remove authorization resulting in them always seeing you as offline.') % jids
+			sectext = _('By removing these contacts:%s\nyou also remove '
+				'authorization resulting in them always seeing you as offline.') % \
+				jids
 			self.dialog = dialogs.ConfirmationDialog(pritext, sectext,
 				on_response_ok = (on_ok, list_))
 
@@ -2667,7 +2696,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					self.gpg_passphrase[keyid] = None
 				else:
 					if save_gpg_pass:
-						passphrase = gajim.config.get_per('accounts', account, 'gpgpassword')
+						passphrase = gajim.config.get_per('accounts', account,
+							'gpgpassword')
 					else:
 						if self.gpg_passphrase.has_key(keyid):
 							passphrase = self.gpg_passphrase[keyid]
@@ -2690,17 +2720,21 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 									password_ok = gajim.connections[account].\
 										test_gpg_passphrase(passphrase)
 									title = _('Wrong Passphrase')
-									second = _('Please retype your GPG passphrase or press Cancel.')
+									second = _('Please retype your GPG passphrase or '
+										'press Cancel.')
 							if passphrase != None:
 								self.gpg_passphrase[keyid] = passphrase
-								gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
+								gobject.timeout_add(30000, self.forget_gpg_passphrase,
+									keyid)
 						if save:
-							gajim.config.set_per('accounts', account, 'savegpgpass', True)
+							gajim.config.set_per('accounts', account, 'savegpgpass',
+								True)
 							gajim.config.set_per('accounts', account, 'gpgpassword',
-														passphrase)
+								passphrase)
 					gajim.connections[account].gpg_passphrase(passphrase)
 
-		for gc_control in gajim.interface.msg_win_mgr.get_controls(message_control.TYPE_GC):
+		for gc_control in gajim.interface.msg_win_mgr.get_controls(
+		message_control.TYPE_GC):
 			if gc_control.account == account:
 				gajim.connections[account].send_gc_status(gc_control.nick,
 					gc_control.room_jid, status, txt)
@@ -2744,7 +2778,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if status == 'invisible' and self.connected_rooms(account):
 			self.dialog = dialogs.ConfirmationDialog(
 				_('You are participating in one or more group chats'),
-				_('Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?'),
+				_('Changing your status to invisible will result in disconnection '
+				'from those group chats. Are you sure you want to go invisible?'),
 				on_response_ok = (change, account, status))
 		else:
 			change(None, account, status)
@@ -2802,8 +2837,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 						break
 			if bug_user:
 				dialog = dialogs.ConfirmationDialog(
-		_('You are participating in one or more group chats'),
-		_('Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?'))
+					_('You are participating in one or more group chats'),
+					_('Changing your status to invisible will result in '
+					'disconnection from those group chats. Are you sure you want to '
+					'go invisible?'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					self.update_status_combobox()
 					return
@@ -2822,7 +2859,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			'sync_with_global_status'):
 				continue
 			# we are connected (so we wanna change show and status)
-			# or no account is connected and we want to connect with new show and status
+			# or no account is connected and we want to connect with new show and
+			# status
 
 			if not global_sync_connected_accounts > 0 or \
 			gajim.account_is_connected(account):
@@ -3090,8 +3128,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		'''when the join gc menuitem is clicked, show the join gc window'''
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
-			dialogs.ErrorDialog(_('You cannot join a group chat while you are invisible')
-				)
+			dialogs.ErrorDialog(_('You cannot join a group chat while you are '
+				'invisible'))
 			return
 		if gajim.interface.instances[account].has_key('join_gc'):
 			gajim.interface.instances[account]['join_gc'].window.present()
@@ -3113,7 +3151,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		helpers.launch_browser_mailer('url', 'http://trac.gajim.org/wiki')
 
 	def on_faq_menuitem_activate(self, widget):
-		helpers.launch_browser_mailer('url', 'http://trac.gajim.org/wiki/GajimFaq')
+		helpers.launch_browser_mailer('url',
+			'http://trac.gajim.org/wiki/GajimFaq')
 
 	def on_about_menuitem_activate(self, widget):
 		dialogs.AboutDialog()
@@ -3125,7 +3164,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			gajim.interface.instances['accounts'] = config.AccountsWindow()
 
 	def on_file_transfers_menuitem_activate(self, widget):
-		if gajim.interface.instances['file_transfers'].window.get_property('visible'):
+		if gajim.interface.instances['file_transfers'].window.get_property(
+		'visible'):
 			gajim.interface.instances['file_transfers'].window.present()
 		else:
 			gajim.interface.instances['file_transfers'].window.show_all()
@@ -3158,7 +3198,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 	def on_roster_window_delete_event(self, widget, event):
 		'''When we want to close the window'''
-		if gajim.interface.systray_enabled and not gajim.config.get('quit_on_roster_x_button'):
+		if gajim.interface.systray_enabled and not gajim.config.get(
+		'quit_on_roster_x_button'):
 			self.tooltip.hide_tooltip()
 			self.window.hide()
 		else:
@@ -3171,7 +3212,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 					break
 			if get_msg:
 				message = self.get_status_message('offline')
-				if message is None: # user pressed Cancel to change status message dialog
+				if message is None:
+					# user pressed Cancel to change status message dialog
 					message = ''
 				
 				for acct in accounts:
@@ -3251,7 +3293,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 				break
 		if get_msg:
 			message = self.get_status_message('offline')
-			if message is None: # user pressed Cancel to change status message dialog
+			if message is None:
+				# user pressed Cancel to change status message dialog
 				return
 			# check if we have unread or recent mesages
 			unread = False
@@ -3279,13 +3322,15 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 							break
 			if unread:
 				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
-					_('Messages will only be available for reading them later if you have history enabled.'))
+					_('Messages will only be available for reading them later if you'
+					' have history enabled.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 
 			if recent:
 				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
-					_('Messages will only be available for reading them later if you have history enabled.'))
+					_('Messages will only be available for reading them later if you'
+					' have history enabled.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 			self.quit_on_next_offline = 0
@@ -3710,8 +3755,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			else:
 				renderer.set_property('xpad', 8)
 
-	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter, data=None):
-		'''When a row is added, set properties for secondary renderer (avatar or padlock)'''
+	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter,
+	data = None):
+		'''When a row is added, set properties for secondary renderer (avatar or
+		padlock)'''
 		theme = gajim.config.get('roster_theme')
 		type_ = model[iter][C_TYPE]
 		if type_ == 'account':
@@ -3852,7 +3899,10 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		c_dest, was_big_brother, context, etime):
 		if not gajim.connections[account_source].metacontacts_supported or not \
 		gajim.connections[account_dest].metacontacts_supported:
-			dialogs.WarningDialog(_('Metacontacts storage not supported by your server'), _('Your server does not support storing metacontacts information. So those information will not be save on next reconnection.'))
+			dialogs.WarningDialog(_('Metacontacts storage not supported by your '
+				'server'),
+				_('Your server does not support storing metacontacts information. '
+				'So those information will not be save on next reconnection.'))
 		def merge_contacts(widget = None):
 			if widget: # dialog has been shown
 				dlg.destroy()
@@ -3893,8 +3943,11 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		if confirm_metacontacts == 'no':
 			merge_contacts()
 			return
-		pritext = _('You are about to create a metacontact. Are you sure you want to continue?')
-		sectext = _('Metacontacts are a way to regroup several contacts in one line. Generaly it is used when the same person has several Jabber accounts or transport accounts.')
+		pritext = _('You are about to create a metacontact. Are you sure you want'
+			' to continue?')
+		sectext = _('Metacontacts are a way to regroup several contacts in one '
+			'line. Generaly it is used when the same person has several Jabber '
+			'accounts or transport accounts.')
 		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
 			_('Do _not ask me again'), on_response_ok = merge_contacts)
 		if not confirm_metacontacts: # First time we see this window
@@ -4063,8 +4116,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 			menu = gtk.Menu()
 			item = gtk.MenuItem(_('Drop %s in group %s') % (c_source.name,
 				grp_dest))
-			item.connect('activate', self.on_drop_in_group, account_source, c_source,
-				grp_dest, context, etime, grp_source)
+			item.connect('activate', self.on_drop_in_group, account_source,
+				c_source, grp_dest, context, etime, grp_source)
 			menu.append(item)
 			c_dest = gajim.contacts.get_contact_with_highest_priority(
 				account_dest, jid_dest)
@@ -4245,7 +4298,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 
 		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 			uf_show = helpers.get_uf_show(show)
-			liststore.append([uf_show, self.jabber_state_images['16'][show], show, True])
+			liststore.append([uf_show, self.jabber_state_images['16'][show], show,
+				True])
 		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
 		liststore.append(['SEPARATOR', None, '', True])
 
@@ -4262,8 +4316,9 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		liststore.append([uf_show, self.jabber_state_images['16']['offline'],
 			'offline', True])
 
-		status_combobox_items = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
-			'separator1', 'change_status_msg', 'separator2', 'offline']
+		status_combobox_items = ['online', 'chat', 'away', 'xa', 'dnd',
+			'invisible', 'separator1', 'change_status_msg', 'separator2',
+			'offline']
 		self.status_combobox.set_model(liststore)
 
 		# default to offline
@@ -4289,7 +4344,8 @@ _('If "%s" accepts this request you will know his or her status.') % jid)
 		# first one img, second one text, third is sec pixbuf
 		col = gtk.TreeViewColumn()
 
-		render_image = cell_renderer_image.CellRendererImage(0, 0) # show img or +-
+		render_image = cell_renderer_image.CellRendererImage(0, 0)
+		# show img or +-
 		col.pack_start(render_image, expand = False)
 		col.add_attribute(render_image, 'image', C_IMG)
 		col.set_cell_data_func(render_image, self.iconCellDataFunc, None)
