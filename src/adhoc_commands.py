@@ -60,7 +60,7 @@ class CommandWindow:
 		# retrieving widgets from xml
 		self.xml = gtkgui_helpers.get_glade('adhoc_commands_window.glade')
 		self.window = self.xml.get_widget('adhoc_commands_window')
-		for name in ('cancel_button', 'back_button', 'forward_button',
+		for name in ('back_button', 'forward_button',
 			'execute_button','close_button','stages_notebook',
 			'retrieving_commands_stage_vbox',
 			'command_list_stage_vbox','command_list_vbox',
@@ -75,7 +75,6 @@ class CommandWindow:
 		self.sending_form_stage_vbox.pack_start(self.data_form_widget)
 
 		# setting initial stage
-		self.close_button.set_no_show_all(True)
 		self.stage1()
 
 		# displaying the window
@@ -84,7 +83,6 @@ class CommandWindow:
 
 # these functions are set up by appropriate stageX methods
 	def stage_finish(self, *anything): pass
-	def stage_cancel_button_clicked(self, *anything): assert False
 	def stage_back_button_clicked(self, *anything): assert False
 	def stage_forward_button_clicked(self, *anything): assert False
 	def stage_execute_button_clicked(self, *anything): assert False
@@ -93,9 +91,6 @@ class CommandWindow:
 	def do_nothing(self, *anything): return False
 
 # widget callbacks
-	def on_cancel_button_clicked(self, *anything):
-		return self.stage_cancel_button_clicked(*anything)
-
 	def on_back_button_clicked(self, *anything):
 		return self.stage_back_button_clicked(*anything)
 
@@ -131,7 +126,7 @@ class CommandWindow:
 				self.retrieving_commands_stage_vbox))
 
 		# set widgets' state
-		self.cancel_button.set_sensitive(True)
+		self.close_button.set_sensitive(True)
 		self.back_button.set_sensitive(False)
 		self.forward_button.set_sensitive(False)
 		self.execute_button.set_sensitive(False)
@@ -143,13 +138,13 @@ class CommandWindow:
 
 		# setup the callbacks
 		self.stage_finish = self.stage1_finish
-		self.stage_cancel_button_clicked = self.stage1_cancel_button_clicked
+		self.stage_close_button_clicked = self.stage1_close_button_clicked
 		self.stage_adhoc_commands_window_delete_event = self.stage1_adhoc_commands_window_delete_event
 
 	def stage1_finish(self):
 		self.remove_pulsing()
 
-	def stage1_cancel_button_clicked(self, widget):
+	def stage1_close_button_clicked(self, widget):
 		# cancelling in this stage is not critical, so we don't
 		# show any popups to user
 		self.stage1_finish()
@@ -173,7 +168,7 @@ class CommandWindow:
 			self.stages_notebook.page_num(
 				self.command_list_stage_vbox))
 
-		self.cancel_button.set_sensitive(True)
+		self.close_button.set_sensitive(True)
 		self.back_button.set_sensitive(False)
 		self.forward_button.set_sensitive(True)
 		self.execute_button.set_sensitive(False)
@@ -190,7 +185,7 @@ class CommandWindow:
 		self.command_list_vbox.show_all()
 
 		self.stage_finish = self.stage2_finish
-		self.stage_cancel_button_clicked = self.stage2_cancel_button_clicked
+		self.stage_close_button_clicked = self.stage2_close_button_clicked
 		self.stage_forward_button_clicked = self.stage2_forward_button_clicked
 		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
@@ -200,7 +195,7 @@ class CommandWindow:
 			self.command_list_vbox.remove(widget)
 		self.command_list_vbox.foreach(remove_widget)
 
-	def stage2_cancel_button_clicked(self, widget):
+	def stage2_close_button_clicked(self, widget):
 		self.stage_finish()
 		self.window.destroy()
 
@@ -226,7 +221,7 @@ class CommandWindow:
 			self.stages_notebook.page_num(
 				self.sending_form_stage_vbox))
 
-		self.cancel_button.set_sensitive(True)
+		self.close_button.set_sensitive(True)
 		self.back_button.set_sensitive(False)
 		self.forward_button.set_sensitive(False)
 		self.execute_button.set_sensitive(False)
@@ -234,22 +229,25 @@ class CommandWindow:
 		self.stage3_submit_form()
 
 		self.stage_finish = self.stage3_finish
-		self.stage_cancel_button_clicked = self.stage3_cancel_button_clicked
 		self.stage_back_button_clicked = self.stage3_back_button_clicked
 		self.stage_forward_button_clicked = self.stage3_forward_button_clicked
 		self.stage_execute_button_clicked = self.stage3_execute_button_clicked
 		self.stage_close_button_clicked = self.stage3_close_button_clicked
-		self.stage_adhoc_commands_window_delete_event = self.stage3_cancel_button_clicked
+		self.stage_adhoc_commands_window_delete_event = self.stage3_close_button_clicked
 
 	def stage3_finish(self):
 		pass
 
-	def stage3_cancel_button_clicked(self, widget, *anything):
+	def stage3_close_button_clicked(self, widget):
 		''' We are in the middle of executing command. Ask user if he really want to cancel
 		the process, then... cancel it. '''
 		# this works also as a handler for window_delete_event, so we have to return appropriate
 		# values
-		# TODO: translate it
+		if self.form_status == 'completed':
+			if widget!=self.window:
+				self.window.destroy()
+			return False
+
 		dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
 			gtk.BUTTONS_YES_NO, 'Cancel confirmation',
 			'You are in process of executing command. Do you really want to cancel it?')
@@ -261,15 +259,6 @@ class CommandWindow:
 			else:
 				self.window.destroy()
 			return False
-		return True
-
-	def stage3_close_button_clicked(self, widget):
-		# this works also as a handler for window_delete_event, so we have to return appropriate
-		# values
-		if widget==self.window:
-			return False
-		else:
-			self.window.destroy()
 
 	def stage3_back_button_clicked(self, widget):
 		self.stage3_submit_form('prev')
@@ -285,7 +274,7 @@ class CommandWindow:
 		if self.data_form_widget.get_data_form() is None:
 			self.data_form_widget.hide()
 
-		self.cancel_button.set_sensitive(True)
+		self.close_button.set_sensitive(True)
 		self.back_button.set_sensitive(False)
 		self.forward_button.set_sensitive(False)
 		self.execute_button.set_sensitive(False)
@@ -320,24 +309,22 @@ class CommandWindow:
 
 		action = command.getTag('action')
 		if action is None:
-			self.cancel_button.set_sensitive(True)
+			self.close_button.set_sensitive(True)
 			self.back_button.set_sensitive(False)
 			self.forward_button.set_sensitive(False)
 			self.execute_button.set_sensitive(True)
 		else:
 			# actions, actions, actions...
-			self.cancel_button.set_sensitive(True)
+			self.close_button.set_sensitive(True)
 			self.back_button.set_sensitive(action.getTag('prev') is not None)
 			self.forward_button.set_sensitive(action.getTag('next') is not None)
 			self.execute_button.set_sensitive(True)
 
 		if self.form_status == 'completed':
-			self.cancel_button.set_sensitive(False)
-			self.back_button.set_sensitive(False)
-			self.forward_button.set_sensitive(False)
-			self.execute_button.set_no_show_all(True)
+			self.close_button.set_sensitive(True)
+			self.back_button.hide()
+			self.forward_button.hide()
 			self.execute_button.hide()
-			self.close_button.set_no_show_all(False)
 			self.close_button.show()
 			self.stage_adhoc_commands_window_delete_event = self.stage3_close_button_clicked
 
@@ -360,16 +347,16 @@ class CommandWindow:
 			self.stages_notebook.page_num(
 				self.no_commands_stage_vbox))
 
-		self.cancel_button.set_sensitive(True)
+		self.close_button.set_sensitive(True)
 		self.back_button.set_sensitive(False)
 		self.forward_button.set_sensitive(False)
 		self.execute_button.set_sensitive(False)
 
 		self.stage_finish = self.do_nothing
-		self.stage_cancel_button_clicked = self.stage4_cancel_button_clicked
+		self.stage_close_button_clicked = self.stage4_close_button_clicked
 		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
-	def stage4_cancel_button_clicked(self, widget):
+	def stage4_close_button_clicked(self, widget):
 		self.window.destroy()
 
 	def on_check_commands_2_button_clicked(self, widget):
@@ -401,18 +388,18 @@ class CommandWindow:
 			self.stages_notebook.page_num(
 				self.error_stage_vbox))
 
-		self.cancel_button.set_sensitive(True)
-		self.back_button.set_sensitive(False)
-		self.forward_button.set_sensitive(False)
-		self.execute_button.set_sensitive(False)
+		self.close_button.set_sensitive(True)
+		self.back_button.hide()
+		self.forward_button.hide()
+		self.execute_button.hide()
 
 		self.error_description_label.set_text(error)
 
 		self.stage_finish = self.do_nothing
-		self.stage_cancel_button_clicked = self.stage5_cancel_button_clicked
+		self.stage_close_button_clicked = self.stage5_close_button_clicked
 		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
-	def stage5_cancel_button_clicked(self, widget):
+	def stage5_close_button_clicked(self, widget):
 		self.window.destroy()
 
 # helpers to handle pulsing in progressbar
