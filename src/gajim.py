@@ -888,7 +888,7 @@ class Interface:
 		# Get the window and control for the updated status, this may be a
 		# PrivateChatControl
 		control = self.msg_win_mgr.get_control(room_jid, account)
-		if control.type_id != message_control.TYPE_GC:
+		if control and control.type_id != message_control.TYPE_GC:
 			return
 		if control:
 			control.chg_contact_status(nick, show, status, array[4], array[5],
