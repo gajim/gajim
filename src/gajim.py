@@ -1804,6 +1804,8 @@ class Interface:
 				# message and is now higher because the other one is offline
 				if resource and highest_contact.resource == resource and \
 				not self.msg_win_mgr.has_window(jid, account):
+					# remove resource of events too
+					gajim.events.change_jid(account, fjid, jid)
 					resource = None
 					fjid = jid
 				contact = gajim.contacts.get_contact(account, jid, resource)

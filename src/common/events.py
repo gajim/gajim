@@ -118,6 +118,15 @@ class Events:
 		if gajim.interface.systray_capabilities:
 			gajim.interface.systray.set_img()
 
+	def change_jid(self, account, old_jid, new_jid):
+		if not self._events[account].has_key(old_jid):
+			return
+		if self._events[account].has_key(new_jid):
+			self._events[account][new_jid] += self._events[account][old_jid]
+		else:
+			self._events[account][new_jid] = self._events[account][old_jid]
+		del self._events[account][old_jid]
+
 	def get_nb_events(self, types = [], account = None):
 		return self._get_nb_events(types = types, account = account)
 
