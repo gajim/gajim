@@ -392,7 +392,8 @@ class Contacts:
 		contact = self.get_contact_with_highest_priority(account, jid)
 		score = (max_order - order)*10000
 		
-		if common.gajim.get_transport_name_from_jid(jid) is None:
+		if common.gajim.get_transport_name_from_jid(jid) is None and \
+		contact.show not in ('error', 'offline'):
 			score += 10
 			if contact.priority > 0:
 				score += contact.priority * 10
