@@ -1220,8 +1220,11 @@ class AccountModificationWindow:
 		self.xml.get_widget('adjust_priority_with_status_checkbutton').set_active(
 			gajim.config.get_per('accounts', self.account,
 			'adjust_priority_with_status'))
-		self.xml.get_widget('priority_spinbutton').set_value(gajim.config.\
-			get_per('accounts', self.account, 'priority'))
+		spinbutton = self.xml.get_widget('priority_spinbutton')
+		if gajim.config.get('enable_negative_priority'):
+			spinbutton.set_range(-128, 127)
+		spinbutton.set_value(gajim.config.get_per('accounts', self.account,
+			'priority'))
 
 		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
 		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
