@@ -58,7 +58,7 @@ class EditGroupsDialog:
 			self.xml.get_widget('nickname_label').set_markup(
 				_("Contact name: <i>%s</i>") % contact.get_shown_name())
 			self.xml.get_widget('jid_label').set_markup(
-				_('JID: <i>%s</i>') % contact.jid)
+				_('Jabber ID: <i>%s</i>') % contact.jid)
 		else:
 			self.xml.get_widget('nickname_label').set_no_show_all(True)
 			self.xml.get_widget('nickname_label').hide()
