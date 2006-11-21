@@ -885,8 +885,11 @@ class Interface:
 		show = array[1]
 		status = array[2]
 
-		# Get the window and control for the updated status, this may be a PrivateChatControl
+		# Get the window and control for the updated status, this may be a
+		# PrivateChatControl
 		control = self.msg_win_mgr.get_control(room_jid, account)
+		if control.type_id != message_control.TYPE_GC:
+			return
 		if control:
 			control.chg_contact_status(nick, show, status, array[4], array[5],
 				array[6], array[7], array[8], array[9], array[10])
