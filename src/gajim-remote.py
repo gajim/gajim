@@ -109,7 +109,7 @@ class GajimRemote:
 						'contact list of this account'), False)
 					]
 				],
-			'send_message':[
+			'send_chat_message':[
 					_('Sends new chat message to a contact in the roster. Both OpenPGP key '
 					'and account are optional. If you want to set only \'account\', '
 					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'), 
