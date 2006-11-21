@@ -120,7 +120,6 @@ class SignalObject(dbus.service.Object):
 		returns status (show to be exact) which is the global one
 		unless account is given'''
 		account = self._get_real_arguments(args, 1)[0]
-		accounts = gajim.contacts.get_accounts()
 		if not account:
 			# If user did not ask for account, returns the global status
 			return helpers.get_global_show()
@@ -134,7 +133,6 @@ class SignalObject(dbus.service.Object):
 		returns status which is the global one
 		unless account is given'''
 		account = self._get_real_arguments(args, 1)[0]
-		accounts = gajim.contacts.get_accounts()
 		if not account:
 			# If user did not ask for account, returns the global status
 			return str(helpers.get_global_status())

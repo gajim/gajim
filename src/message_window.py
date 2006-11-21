@@ -491,8 +491,6 @@ class MessageWindow:
 	def _on_notebook_key_press(self, widget, event):
 		st = '1234567890' # alt+1 means the first tab (tab 0)
 		ctrl = self.get_active_control()
-		contact = ctrl.contact
-		jid = ctrl.contact.jid
 
 		# CTRL mask
 		if event.state & gtk.gdk.CONTROL_MASK:
@@ -557,7 +555,6 @@ class MessageWindow:
 		source_page_num = int(selection.data)
 		dest_page_num, to_right = self.get_tab_at_xy(x, y)
 		source_child = self.notebook.get_nth_page(source_page_num)
-		source_tab_label = self.notebook.get_tab_label(source_child)
 		if dest_page_num != source_page_num:
 			self.notebook.reorder_child(source_child, dest_page_num)
 		

@@ -58,8 +58,6 @@ class OldEntry(xmpp.Node, object):
 	def get_feed_title(self):
 		''' Returns title of feed, where the entry was created. The result is the feed name
 		concatenated with source-feed title. '''
-		title = u''
-
 		if self.parent is not None:
 			main_feed = self.parent.getTagData('title')
 		else:

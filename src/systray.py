@@ -341,7 +341,6 @@ class Systray:
 			self.tooltip.show_tooltip('', size[1], position[1])
 
 	def on_tray_motion_notify_event(self, widget, event):
-		wireq=widget.size_request()
 		position = widget.window.get_origin()
 		if self.tooltip.timeout > 0:
 			if self.tooltip.id != position:

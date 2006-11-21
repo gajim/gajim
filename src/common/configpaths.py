@@ -26,11 +26,11 @@ def fse(s):
 	return unicode(s, sys.getfilesystemencoding())
 
 class ConfigPaths:
-	def __init__(this, root=None):
-		this.root = root
-		this.paths = {}
+	def __init__(self, root=None):
+		self.root = root
+		self.paths = {}
 
-		if this.root is None:
+		if self.root is None:
 			if os.name == 'nt':
 				try:
 					# Documents and Settings\[User Name]\Application Data\Gajim
@@ -38,35 +38,35 @@ class ConfigPaths:
 					# How are we supposed to know what encoding the environment
 					# variable 'appdata' is in? Assuming it to be in filesystem
 					# encoding.
-					this.root = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
+					self.root = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
 				except KeyError:
 					# win9x, in cwd
-					this.root = u''
+					self.root = u''
 			else: # Unices
 				# Pass in an Unicode string, and hopefully get one back.
-				this.root = os.path.expanduser(u'~/.gajim')
+				self.root = os.path.expanduser(u'~/.gajim')
 
-	def add_from_root(this, name, path):
-		this.paths[name] = (True, path)
+	def add_from_root(self, name, path):
+		self.paths[name] = (True, path)
 
-	def add(this, name, path):
-		this.paths[name] = (False, path)
+	def add(self, name, path):
+		self.paths[name] = (False, path)
 
-	def __getitem__(this, key):
-		relative, path = this.paths[key]
+	def __getitem__(self, key):
+		relative, path = self.paths[key]
 		if not relative:
 			return path
-		return os.path.join(this.root, path)
+		return os.path.join(self.root, path)
 
-	def get(this, key, default=None):
+	def get(self, key, default=None):
 		try:
-			return this[key]
+			return self[key]
 		except KeyError:
 			return default
 
-	def iteritems(this):
-		for key in this.paths.iterkeys():
-			yield (key, this[key])
+	def iteritems(self):
+		for key in self.paths.iterkeys():
+			yield (key, self[key])
 
 def windowsify(s):
 	if os.name == 'nt':

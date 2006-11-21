@@ -329,11 +329,9 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 			instance)
 
 def on_pynotify_notification_clicked(notification, action):
-	event_type = notification.get_data('event_type')
 	jid = notification.get_data('jid')
 	account = notification.get_data('account')
 	msg_type = notification.get_data('msg_type')
-	path_to_image = notification.get_data('path_to_image')
 
 	notification.close()
 	gajim.interface.handle_event(account, jid, msg_type)

@@ -107,8 +107,11 @@ class ProxyResolver:
 		query = iq.setTag('query')
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
 		query.setAttr('sid',  self.sid)
-		activate = query.setTag('activate')
+		
+		query.setTag('activate')
+		# activate = query.setTag('activate')
 		# activate.setData(self.jid + "/" + self.sid)
+
 		if self.active_connection:
 			self.active_connection.send(iq)
 			self.state = S_ACTIVATED

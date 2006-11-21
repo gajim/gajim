@@ -268,7 +268,6 @@ class ConversationTextview:
 		if over_line and not self.line_tooltip.win:
 			# check if the current pointer is still over the line
 			position = self.tv.window.get_origin()
-			win = self.tv.get_toplevel()
 			self.line_tooltip.show_tooltip(_('Text below this line is what has '
 			'been said since the last time you paid attention to this group chat'),	8, position[1] + pointer[1])
 
@@ -408,7 +407,6 @@ class ConversationTextview:
 		if event.button != 3: # if not right click
 			return False
 
-		win = self.tv.get_window(gtk.TEXT_WINDOW_TEXT)
 		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
 			int(event.x), int(event.y))
 		iter = self.tv.get_iter_at_location(x, y)
@@ -691,27 +689,7 @@ class ConversationTextview:
 			before_str = helpers.from_one_line(before_str)
 			after_str = gajim.config.get('after_time')
 			after_str = helpers.from_one_line(after_str)
-			# get difference in days since epoch (86400 = 24*3600)
-			# number of days since epoch for current time (in GMT) -
-			# number of days since epoch for message (in GMT)
-			diff_day = int(timegm(time.localtime())) / 86400 - int(timegm(tim)) / 86400
-			if diff_day == 0:
-				day_str = ''
-			elif diff_day == 1:
-				day_str = _('Yesterday')
-			else:
-				#the number is >= 2
-				# %i is day in year (1-365), %d (1-31) we want %i
-				day_str = _('%i days ago') % diff_day
-			format = before_str
-			if day_str:
-				format += day_str + ' '
-			format += '%X' + after_str
-			tim_format = time.strftime(format, tim)
-			if locale.getpreferredencoding() == 'UTF-8':
-				# if tim_format comes as unicode because of day_str.
-				# we convert it to the encoding that we want (and that is utf-8)
-				tim_format = helpers.ensure_utf8_string(tim_format)
+			tim_format = before_str + self.get_time_to_show(tim) + after_str
 			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
 				*other_tags_for_time)
 		elif current_print_time == 'sometimes' and kind != 'info':
@@ -727,9 +705,7 @@ class ConversationTextview:
 					ft = fc.getFuzzyTime(gajim.config.get('print_time_fuzzy'))
 					tim_format = ft.decode(locale.getpreferredencoding())
 				else:
-					tim_format = time.strftime('%H:%M', tim).decode(
-						locale.getpreferredencoding())
-
+					tim_format = self.get_time_to_show(tim)
 				buffer.insert_with_tags_by_name(end_iter, tim_format + '\n',
 					'time_sometimes')
 		# kind = info, we print things as if it was a status: same color, ...
@@ -760,6 +736,33 @@ class ConversationTextview:
 			gobject.idle_add(self.scroll_to_end)
 
 		buffer.end_user_action()
+
+	def get_time_to_show(self, tim):
+		'''Get the time, with the day before if needed and return it.
+		It DOESN'T format a fuzzy time'''
+		format = ''
+		# get difference in days since epoch (86400 = 24*3600)
+		# number of days since epoch for current time (in GMT) -
+		# number of days since epoch for message (in GMT)
+		diff_day = int(timegm(time.localtime())) / 86400 -\
+			 int(timegm(tim)) / 86400
+		if diff_day == 0:
+			day_str = ''
+		elif diff_day == 1:
+			day_str = _('Yesterday')
+		else:
+			#the number is >= 2
+			# %i is day in year (1-365), %d (1-31) we want %i
+			day_str = _('%i days ago') % diff_day
+		if day_str:
+			format += day_str + ' '
+		format += '%X'
+		tim_format = time.strftime(format, tim)
+		if locale.getpreferredencoding() == 'UTF-8':
+			# if tim_format comes as unicode because of day_str.
+			# we convert it to the encoding that we want (and that is utf-8)
+			tim_format = helpers.ensure_utf8_string(tim_format)
+		return tim_format
 
 	def detect_other_text_tag(self, text, kind):
 		if kind == 'status':

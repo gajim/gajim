@@ -306,7 +306,7 @@ class GCTooltip(BaseTooltip):
 			properties.append((show, None))
 
 		if contact.jid.strip() != '':
-			properties.append((_('JID: '), contact.jid))
+			properties.append((_('Jabber ID: '), contact.jid))
 
 		if hasattr(contact, 'resource') and contact.resource.strip() != '':
 			properties.append((_('Resource: '), 

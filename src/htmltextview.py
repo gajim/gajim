@@ -792,7 +792,6 @@ class HtmlTextView(gtk.TextView):
 			if text:
 				pointer = self.get_pointer()
 				position = self.window.get_origin()
-				win = self.get_toplevel()
 				self.tooltip.show_tooltip(text, 8, position[1] + pointer[1])
 
 	def __motion_notify_event(self, widget, event):

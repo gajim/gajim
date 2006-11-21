@@ -878,7 +878,6 @@ class GroupchatControl(ChatControlBase):
 		if (time.time() - self.room_creation) > 30 and \
 				nick != self.nick and statusCode != '303':
 			st = ''
-			found = False
 			print_status = None
 			for bookmark in gajim.connections[self.account].bookmarks:
 				if bookmark['jid'] == self.room_jid:
@@ -1414,8 +1413,6 @@ class GroupchatControl(ChatControlBase):
 
 		message_buffer = widget.get_buffer()
 		start_iter, end_iter = message_buffer.get_bounds()
-		message = message_buffer.get_text(start_iter, end_iter, False).decode(
-			'utf-8')
 
 		if event.keyval == gtk.keysyms.Tab: # TAB
 			cursor_position = message_buffer.get_insert()
@@ -1765,7 +1762,6 @@ class GroupchatControl(ChatControlBase):
 						self.room_jid, nick))
 
 	def on_list_treeview_leave_notify_event(self, widget, event):
-		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.id == props[0]:

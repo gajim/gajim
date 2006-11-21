@@ -805,8 +805,6 @@ class RosterWindow:
 		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
 		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
-		show_offline_contacts_menuitem = self.xml.get_widget(
-			'show_offline_contacts_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')	
 
 		# destroy old advanced menus
@@ -1161,7 +1159,6 @@ class RosterWindow:
 
 	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his or her status'''
-		showOffline = gajim.config.get('showoffline')
 		contact_instances = gajim.contacts.get_contact(account, contact.jid)
 		contact.show = show
 		contact.status = status
@@ -1176,11 +1173,10 @@ class RosterWindow:
 		jid_list = [contact.jid]
 		if contact.get_full_jid() != contact.jid:
 			jid_list.append(contact.get_full_jid())
-		for j in jid_list:
-			if gajim.interface.msg_win_mgr.has_window(j, account):
-				jid = contact.jid
-				win = gajim.interface.msg_win_mgr.get_window(j, account)
-				ctrl = win.get_control(j, account)
+		for jid in jid_list:
+			if gajim.interface.msg_win_mgr.has_window(jid, account):
+				win = gajim.interface.msg_win_mgr.get_window(jid, account)
+				ctrl = win.get_control(jid, account)
 				ctrl.contact = contact
 				ctrl.update_ui()
 				win.redraw_tab(ctrl)
@@ -1248,7 +1244,6 @@ class RosterWindow:
 			self.tooltip.hide_tooltip()
 
 	def on_roster_treeview_leave_notify_event(self, widget, event):
-		model = widget.get_model()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.id == props[0]:
@@ -3976,7 +3971,6 @@ class RosterWindow:
 			contact.groups)
 
 	def remove_contact_from_group(self, account, contact, group):
-		model = self.tree.get_model()
 		# Make sure contact was in the group
 		if group in contact.groups:
 			contact.groups.remove(group)
@@ -4049,7 +4043,6 @@ class RosterWindow:
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':
 			it = model.iter_parent(it)
-		iter_group_source = it
 		grp_source = model[it][C_JID].decode('utf-8')
 		if grp_source in helpers.special_groups:
 			return

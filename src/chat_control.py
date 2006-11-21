@@ -1120,7 +1120,6 @@ class ChatControl(ChatControlBase):
 		self.reset_kbd_mouse_timeout_vars()
 
 		contact = self.contact
-		jid = self.contact.jid
 
 		keyID = ''
 		encrypted = False
@@ -1189,7 +1188,6 @@ class ChatControl(ChatControlBase):
 		if yes we go active
 		if no we go inactive '''
 		contact = self.contact
-		jid = contact.jid
 
 		current_state = contact.our_chatstate
 		if current_state is False: # jid doesn't support chatstates
@@ -1439,7 +1437,6 @@ class ChatControl(ChatControlBase):
 				# contact was from pm in MUC, and left the room so contact is None
 				# so we cannot send chatstate anymore
 				return
-		jid = contact.jid
 
 		# Don't send chatstates to offline contacts
 		if contact.show == 'offline':

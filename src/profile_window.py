@@ -109,7 +109,6 @@ class ProfileWindow:
 		self.avatar_mime_type = None
 
 	def on_set_avatar_button_clicked(self, widget):
-		f = None
 		def on_ok(widget, path_to_file):
 			filesize = os.path.getsize(path_to_file) # in bytes
 			#FIXME: use messages for invalid file for 0.11

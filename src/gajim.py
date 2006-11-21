@@ -131,6 +131,8 @@ for o, a in opts:
 		gajim.verbose = True
 	elif o in ('-p', '--profile'): # gajim --profile name
 		profile = a
+del opts
+del args
 
 import locale
 profile = unicode(profile, locale.getpreferredencoding())
@@ -152,8 +154,13 @@ if os.path.exists(pid_filename):
 	dialog = dialogs.YesNoDialog(pritext, sectext)
 	if dialog.get_response() != gtk.RESPONSE_YES:
 		sys.exit(3)
+	# run anyway, delete pid and useless global vars
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)
+	del path_to_file
+	del pix
+	del pritext
+	del sectext
 	dialog.destroy()
 
 # Create .gajim dir
@@ -163,6 +170,7 @@ if not os.path.exists(pid_dir):
 # Create pid file
 f = open(pid_filename, 'a')
 f.close()
+del pid_dir
 
 def on_exit():
 	# delete pid file on normal exit
@@ -1145,7 +1153,7 @@ class Interface:
 				path_to_bw_file = path_to_file + '_notif_size_bw.png'
 				bwbuf.save(path_to_bw_file, 'png')
 
-	def add_event(self, account, jid, type_, args):
+	def add_event(self, account, jid, type_, event_args):
 		'''add an event to the gajim.events var'''
 		# We add it to the gajim.events queue
 		# Do we have a queue?
@@ -1161,7 +1169,7 @@ class Interface:
 			event_type = event_types[type_]
 		show_in_roster = notify.get_show_in_roster(event_type, account, jid)
 		show_in_systray = notify.get_show_in_systray(event_type, account, jid)
-		event = gajim.events.create_event(type_, args,
+		event = gajim.events.create_event(type_, event_args,
 			show_in_roster = show_in_roster,
 			show_in_systray = show_in_systray)
 		gajim.events.add_event(account, jid, event)
