@@ -465,11 +465,19 @@ class RosterWindow:
 
 		show_offline = gajim.config.get('showoffline')
 		show_transports = gajim.config.get('show_transports_group')
+
+		nb_events = 0
+		jid_list = [contact.jid]
+		if contact.get_full_jid() != contact.jid:
+			jid_list.append(contact.get_full_jid())
+		for jid in jid_list:
+			# dont't count printed_chat messages
+			nb_events += gajim.events.get_nb_roster_events(account, jid, ['chat'])
+
 		if (_('Transports') in contact.groups and not show_transports) or \
 		((contact.show in ('offline', 'error') or hide) and not show_offline and \
 		(not _('Transports') in contact.groups or \
-		gajim.account_is_disconnected(account))) and \
-		len(gajim.events.get_events(account, contact.jid, ['chat'])) == 0:
+		gajim.account_is_disconnected(account))) and nb_events == 0:
 			self.remove_contact(contact, account)
 		else:
 			self.draw_contact(contact.jid, account)
