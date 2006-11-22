@@ -415,11 +415,19 @@ class SingleForm(gtk.Table, object):
 			else:# field.type == 'text-single' or field.type is nonstandard:
 				# JEP says that if we don't understand some type, we
 				# should handle it as text-single
-				widget = gtk.Entry()
-				widget.connect('changed', self.on_text_single_entry_changed, field)
-				if field.value is None:
-					field.value = u''
-				widget.set_text(field.value)
+				if readwrite:
+					widget = gtk.Entry()
+					widget.connect('changed', self.on_text_single_entry_changed, field)
+					if field.value is None:
+						field.value = u''
+					widget.set_text(field.value)
+				else:
+					commonwidget=False
+					widget = gtk.Label(field.value)
+					widget.set_sensitive(True)
+					widget.set_alignment(0.0, 0.5)
+					self.attach(widget, 1, 2, linecounter, linecounter+1,
+						yoptions=gtk.FILL)
 
 			if commonlabel and field.label is not None:
 				label = gtk.Label(field.label)
