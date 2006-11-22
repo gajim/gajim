@@ -167,14 +167,14 @@ class Connection(ConnectionHandlers):
 	def _event_dispatcher(self, realm, event, data):
 		if realm == common.xmpp.NS_REGISTER:
 			if event == common.xmpp.features_nb.REGISTER_DATA_RECEIVED:
-				# data is (agent, DataFrom, is_form)
+				# data is (agent, DataFrom, is_form, error_msg)
 				if self.new_account_info and \
 				self.new_account_info['hostname'] == data[0]:
 					# it's a new account
 					if not data[1]: # wrong answer
 						self.dispatch('ACC_NOT_OK', (
-							_('Transport %s answered wrongly to register request.') % \
-							data[0]))
+							_('Transport %s answered wrongly to register request: %s')\
+							% (data[0], data[3])))
 						return
 					req = data[1].asDict()
 					req['username'] = self.new_account_info['name']
@@ -200,8 +200,8 @@ class Connection(ConnectionHandlers):
 					return
 				if not data[1]: # wrong answer
 					self.dispatch('ERROR', (_('Invalid answer'),
-						_('Transport %s answered wrongly to register request.') % \
-						data[0]))
+						_('Transport %s answered wrongly to register request: %s') % \
+						(data[0], data[3])))
 					return
 				is_form = data[2]
 				if is_form:
