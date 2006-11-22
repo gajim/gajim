@@ -44,11 +44,7 @@ special_groups = (_('Transports'), _('Not in Roster'), _('Observers'))
 class InvalidFormat(Exception):
 	pass
 
-def parse_jid(jidstring):
-	'''Perform stringprep on all JID fragments from a string
-	and return the full jid'''
-	# This function comes from http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
-
+def decompose_jid(jidstring):
 	user = None
 	server = None
 	resource = None
@@ -80,8 +76,14 @@ def parse_jid(jidstring):
 				# server/resource (with an @ in resource)
 				server = jidstring[0:res_sep]
 				resource = jidstring[res_sep + 1:] or None
+	return user, server, resource
 
-	return prep(user, server, resource)
+def parse_jid(jidstring):
+	'''Perform stringprep on all JID fragments from a string
+	and return the full jid'''
+	# This function comes from http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
+
+	return prep(*decompose_jid(jidstring))
 
 def parse_resource(resource):
 	'''Perform stringprep on resource and return it'''

@@ -1207,6 +1207,11 @@ class JoinGroupchatWindow:
 		room_jid = self._room_jid_entry.get_text().decode('utf-8')
 		password = self.xml.get_widget('password_entry').get_text().decode(
 			'utf-8')
+		user, server, resource = helpers.decompose_jid(room_jid)
+		if not user or not server or resource:
+			ErrorDialog(_('Invalid group chat Jabber ID'),
+				_('The group chat Jabber ID has not allowed characters.'))
+			return
 		try:
 			room_jid = helpers.parse_jid(room_jid)
 		except:
