@@ -259,7 +259,7 @@ class GajimRemote:
 	def print_result(self, res):
 		''' Print retrieved result to the output '''
 		if res is not None:
-			if self.command in ('open_chat', 'send_message', 'send_single_message', 'start_chat'):
+			if self.command in ('open_chat', 'send_chat_message', 'send_single_message', 'start_chat'):
 				if self.command in ('send_message', 'send_single_message'):
 					self.argv_len -= 2
 

@@ -195,10 +195,9 @@ class SignalObject(dbus.service.Object):
 			keyID = ''
 
 		connected_account, contact = self.get_account_and_contact(account, jid)
-
 		if connected_account:
 			connection = gajim.connections[connected_account]
-			res = connection.send_message(jid, message, keyID, type, subject)
+			connection.send_message(jid, message, keyID, type, subject)
 			return True
 		return False
 
