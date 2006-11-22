@@ -144,25 +144,46 @@ gajimpaths = common.configpaths.gajimpaths
 pid_filename = gajimpaths['PID_FILE']
 config_filename = gajimpaths['CONFIG_FILE']
 
+import traceback
+import errno
+
 import dialogs
 def pid_alive():
 	if os.name == 'nt':
 		if os.path.exists(pid_filename):
 			return True
 		return False
-	try: 
+
+	try:
 		pf = open(pid_filename)
+	except:
+		# probably file not found
+		return False
+
+	if not os.path.exists('/proc'):
+		return True # no /proc, assume Gajim is running
+
+	try:
 		pid = int(pf.read().strip())
 		pf.close()
-		f = open('/proc/%d/status'% pid) 
-		n = f.readline()
+		try:
+			f = open('/proc/%d/cmdline'% pid) 
+		except IOError, e:
+			if e.errno == errno.ENOENT:
+				return False # file/pid does not exist
+			raise 
+
+		n = f.read().lower()
 		f.close()
-		n = n.split()[1].strip()
-		if n == 'gajim':
-			return True 
+		if n.find('gajim') < 0:
+			return False
+		return True # Running Gajim found at pid
 	except:
-		pass
-	return False
+		traceback.print_exc()
+
+	# If we are here, pidfile exists, but some unexpected error occured.
+	# Assume Gajim is running.
+	return True
 
 if pid_alive():
 	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
