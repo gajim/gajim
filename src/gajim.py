@@ -150,7 +150,7 @@ import errno
 import dialogs
 def pid_alive():
 	if os.name == 'nt':
-		return os.path.exists(pid_filename):
+		return os.path.exists(pid_filename)
 	try:
 		pf = open(pid_filename)
 	except:
