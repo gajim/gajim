@@ -5803,11 +5803,11 @@ msgstr "Zostanie połączony z %s bez obsługi OpenPGP."
 #. do not show I'm invisible!
 #: ../src/common/connection.py:611
 msgid "invisible"
-msgstr "Niewidoczny"
+msgstr "niewidoczny"
 
 #: ../src/common/connection.py:612
 msgid "offline"
-msgstr "Rozłączony"
+msgstr "rozłączony"
 
 #: ../src/common/connection.py:613
 #, python-format
