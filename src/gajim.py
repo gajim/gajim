@@ -150,22 +150,19 @@ import errno
 import dialogs
 def pid_alive():
 	if os.name == 'nt':
-		if os.path.exists(pid_filename):
-			return True
-		return False
-
+		return os.path.exists(pid_filename):
 	try:
 		pf = open(pid_filename)
 	except:
 		# probably file not found
 		return False
-
-	if not os.path.exists('/proc'):
-		return True # no /proc, assume Gajim is running
-
 	try:
 		pid = int(pf.read().strip())
 		pf.close()
+
+		if not os.path.exists('/proc'):
+			return True # no /proc, assume Gajim is running
+
 		try:
 			f = open('/proc/%d/cmdline'% pid) 
 		except IOError, e:
