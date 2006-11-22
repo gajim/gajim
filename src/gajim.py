@@ -145,7 +145,26 @@ pid_filename = gajimpaths['PID_FILE']
 config_filename = gajimpaths['CONFIG_FILE']
 
 import dialogs
-if os.path.exists(pid_filename):
+def pid_alive():
+	if os.name == 'nt':
+		if os.path.exists(pid_filename):
+			return True
+		return False
+	try: 
+		pf = open(pid_filename)
+		pid = int(pf.read().strip())
+		pf.close()
+		f = open('/proc/%d/status'% pid) 
+		n = f.readline()
+		f.close()
+		n = n.split()[1].strip()
+		if n == 'gajim':
+			return True 
+	except:
+		pass
+	return False
+
+if pid_alive():
 	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
 	pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
 	gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
@@ -168,7 +187,8 @@ pid_dir =  os.path.dirname(pid_filename)
 if not os.path.exists(pid_dir):
 	check_paths.create_path(pid_dir)
 # Create pid file
-f = open(pid_filename, 'a')
+f = open(pid_filename, 'w')
+f.write(str(os.getpid()))
 f.close()
 del pid_dir
 
