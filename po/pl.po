@@ -4956,7 +4956,7 @@ msgstr "Błędne hasło"
 
 #: ../src/roster_window.py:2557
 msgid "Please retype your GPG passphrase or press Cancel."
-msgstr "Proszę ponownie wprowadzić swoje hało GPH lub kliknąć przycisk Anuluj."
+msgstr "Proszę ponownie wprowadzić swoje hasło GPG lub kliknąć przycisk Anuluj."
 
 #: ../src/roster_window.py:2610 ../src/roster_window.py:2669
 msgid "You are participating in one or more group chats"
