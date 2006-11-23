@@ -18,6 +18,7 @@
 ## GNU General Public License for more details.
 ##
 
+import os
 import time
 import socket
 
@@ -43,6 +44,95 @@ except:
 	gajim.log.debug(_('Unable to load idle module'))
 	HAS_IDLE = False
 
+class ConnectionVcard:
+	def __init__(self): 
+		self.vcard_sha = None 
+		self.vcard_shas = {} # sha of contacts 
+		self.room_jids = [] # list of gc jids so that vcard are saved in a folder
+
+	def add_sha(self, p, send_caps = True): 
+		pass 
+	
+	def add_caps(self, p):
+		pass
+
+	def node_to_dict(self, node):
+		dict = {}
+		
+		for info in node.getChildren():
+			name = info.getName()
+			if name in ('ADR', 'TEL', 'EMAIL'): # we can have several
+				if not dict.has_key(name):
+					dict[name] = []
+				entry = {}
+				for c in info.getChildren():
+					 entry[c.getName()] = c.getData()
+				dict[name].append(entry)
+			elif info.getChildren() == []:
+				dict[name] = info.getData()
+			else:
+				dict[name] = {}
+				for c in info.getChildren():
+					 dict[name][c.getName()] = c.getData()
+		
+		return dict
+
+	def save_vcard_to_hd(self, full_jid, card):
+		jid, nick = gajim.get_room_and_nick_from_fjid(full_jid)
+		puny_jid = helpers.sanitize_filename(jid)
+		path = os.path.join(gajim.VCARD_PATH, puny_jid)
+		if jid in self.room_jids or os.path.isdir(path):
+			# remove room_jid file if needed
+			if os.path.isfile(path):
+				os.remove(path)
+			# create folder if needed
+			if not os.path.isdir(path):
+				os.mkdir(path, 0700)
+			puny_nick = helpers.sanitize_filename(nick)
+			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
+		else:
+			path_to_file = path
+		fil = open(path_to_file, 'w')
+		fil.write(str(card))
+		fil.close()
+	
+	def get_cached_vcard(self, fjid, is_fake_jid = False):
+		'''return the vcard as a dict
+		return {} if vcard was too old
+		return None if we don't have cached vcard'''
+		jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
+		puny_jid = helpers.sanitize_filename(jid)
+		if is_fake_jid:
+			puny_nick = helpers.sanitize_filename(nick)
+			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
+		else:
+			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid)
+		if not os.path.isfile(path_to_file):
+			return None
+		# We have the vcard cached
+		f = open(path_to_file)
+		c = f.read()
+		f.close()
+		card = common.xmpp.Node(node = c)
+		vcard = self.node_to_dict(card)
+		if vcard.has_key('PHOTO'):
+			if not isinstance(vcard['PHOTO'], dict):
+				del vcard['PHOTO']
+			elif vcard['PHOTO'].has_key('SHA'):
+				cached_sha = vcard['PHOTO']['SHA']
+				if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
+					cached_sha:
+					# user change his vcard so don't use the cached one
+					return {}
+		vcard['jid'] = jid
+		vcard['resource'] = gajim.get_resource_from_jid(fjid)
+		return vcard
+
+	def request_vcard(self, jid = None, is_fake_jid = False):
+		pass
+		
+	def send_vcard(self, vcard):
+		pass
 
 class ConnectionBytestream:
 	def __init__(self):
@@ -514,7 +604,7 @@ class ConnectionBytestream:
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise common.xmpp.NodeProcessed
 
-class ConnectionHandlersZeroconf(ConnectionBytestream):
+class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 	def __init__(self):
 		ConnectionBytestream.__init__(self)
 		# List of IDs we are waiting answers for {id: (type_of_request, data), }
