@@ -2609,7 +2609,7 @@ class ManageBookmarksWindow:
 		self.print_status_combobox = self.xml.get_widget('print_status_combobox')
 		model = gtk.ListStore(str, str)
 
-		self.option_list = {'': _('Default'), 'all': _('All'),
+                self.option_list = {'': _('Default'), 'all': _('?print_status:All'),
 			'in_and_out': _('Enter and leave only'), 'none': _('None')}
 		opts = self.option_list.keys()
 		opts.sort()

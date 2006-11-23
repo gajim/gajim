@@ -1474,7 +1474,7 @@ class RosterWindow:
 
 	def on_remove_group_item_activated(self, widget, group, account):
 		dlg = dialogs.ConfirmationDialogCheck(_('Remove Group'),
-			_('Do you want to remove the group %s from the roster ?' % group),
+			_('Do you want to remove group %s from the roster?' % group),
 			_('Remove also all contacts in this group from your roster'))
 		dlg.set_default_response(gtk.BUTTONS_OK_CANCEL)
 		response = dlg.run()
