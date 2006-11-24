@@ -2200,7 +2200,10 @@ class RosterWindow:
 			account_context_menu = xml.get_widget('account_context_menu')
 
 			status_menuitem = xml.get_widget('status_menuitem')
-			join_group_chat_menuitem =xml.get_widget('join_group_chat_menuitem')
+			join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
+			muc_icon = self.load_icon('muc_active')
+			if muc_icon:
+				join_group_chat_menuitem.set_image(muc_icon)
 			open_gmail_inbox_menuitem = xml.get_widget('open_gmail_inbox_menuitem')
 			new_message_menuitem = xml.get_widget('new_message_menuitem')
 			add_contact_menuitem = xml.get_widget('add_contact_menuitem')
@@ -2276,7 +2279,6 @@ class RosterWindow:
 			account_context_menu = xml.get_widget('zeroconf_context_menu')
 
 			status_menuitem = xml.get_widget('status_menuitem')
-			#join_group_chat_menuitem =xml.get_widget('join_group_chat_menuitem')
 			new_message_menuitem = xml.get_widget('new_message_menuitem')
 			zeroconf_properties_menuitem = xml.get_widget(
 				'zeroconf_properties_menuitem')
