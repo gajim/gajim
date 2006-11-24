@@ -1217,6 +1217,10 @@ class RosterWindow:
 
 	def on_info(self, widget, contact, account):
 		'''Call vcard_information_window class to display contact's information'''
+		if gajim.connections[account].is_zeroconf:
+			self.on_info_zeroconf(widget, contact, account)
+			return
+
 		info = gajim.interface.instances[account]['infos']
 		if info.has_key(contact.jid):
 			info[contact.jid].window.present()
