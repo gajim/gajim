@@ -363,6 +363,11 @@ class Connection(ConnectionHandlers):
 			host = self.select_next_host(self._hosts)
 			self._current_host = host
 			self._hosts.remove(host)
+
+			# FIXME: this is a hack; need a better way
+			if self.on_connect_success == self._on_new_account:
+				con.RegisterDisconnectHandler(self._on_new_account)
+
 			con.connect((host['host'], host['port']), proxy = self._proxy,
 				secure = self._secure)
 			return
@@ -867,8 +872,8 @@ class Connection(ConnectionHandlers):
 			return
 		self.on_connect_failure = None
 		self.connection = con
-		if con:
-			con.RegisterDisconnectHandler(self._on_new_account)
+		#if con:
+		#	con.RegisterDisconnectHandler(self._on_new_account)
 		common.xmpp.features_nb.getRegInfo(con, self._hostname)
 
 	def account_changed(self, new_name):
