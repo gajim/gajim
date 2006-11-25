@@ -95,13 +95,17 @@ class TCPsocket(PlugIn):
     def connect(self,server=None):
         """ Try to connect. Returns non-empty string on success. """
         try:
-            if not server: server=self._server
-            self._sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self._sock.connect(server)
-            self._send=self._sock.sendall
-            self._recv=self._sock.recv
-            self.DEBUG("Successfully connected to remote host %s"%`server`,'start')
-            return 'ok'
+            if not server:
+                server=self._server
+            for ai in socket.getaddrinfo(server[0],server[1],socket.AF_UNSPEC,socket.SOCK_STREAM):
+                try:
+                    self._sock=socket.socket(*ai[:3])
+                    self._sock.connect(ai[4])
+                    self._send=self._sock.sendall
+                    self._recv=self._sock.recv
+                    self.DEBUG("Successfully connected to remote host %s"%`server`,'start')
+                    return 'ok'
+                except: continue
         except: pass
 
     def plugout(self):

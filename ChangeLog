@@ -1,8 +1,9 @@
-Gajim 0.11 (XX October 2006)
+Gajim 0.11 (XX December 2006)
   * New build system, using GNU autotools. See README.html
   * Support for link-local messaging via Zeroconf using Avahi (XEP-0174)
   * Automatically connect and disconnect to accounts according to network availability (if Network Manager is present)
-  * GNOME Keyring Support (if GNOME keyring is available, manage passwords and save them in an encrypted file).
+  * IPV6 support to connect to server
+  * GNOME Keyring Support (if GNOME keyring is available, manage passwords and save them in an encrypted file)
   * Introducing View Menu (GNOME HIG)
   * Ability to now hide the Transports group
   * Support for notify-python. So if notification-daemon is not available, we still can show cool popups
@@ -33,8 +34,8 @@ Gajim 0.11 (XX October 2006)
   * Fixed bugs when removing or renaming an account with tabs open (#2369 and #2370)
   * New translations: Croatian, Esperanto
 
-  * FIXME : Ad-Hoc for 0.11 ? 
-  * FIXME : does that work ? not tested : Metacontacts across accounts (#1596)
+  * Ad-Hoc commands
+  * Metacontacts across accounts (#1596)
   * Gajim now requires Python 2.4 to run
 
 Gajim 0.10.1 (06 June 2006)

@@ -106,8 +106,17 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._server = server
 		self.state = 0
 		try:
-			self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			self._sock.setblocking(False)
+			for ai in socket.getaddrinfo(server[0],server[1],socket.AF_UNSPEC,socket.SOCK_STREAM):
+				try:
+					self._sock=socket.socket(*ai[:3])
+					self._sock.setblocking(False)
+					self._server=ai[4]
+					break
+				except:
+					if sys.exc_value[0] == errno.EINPROGRESS:
+						break
+					#for all errors, we try other addresses
+					continue
 		except:
 			sys.exc_clear()
 			if self.on_connect_failure:
