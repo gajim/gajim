@@ -758,7 +758,7 @@ class ConversationTextview:
 			format += day_str + ' '
 		format += '%X'
 		tim_format = time.strftime(format, tim)
-		if locale.getpreferredencoding() == 'UTF-8':
+		if locale.getpreferredencoding() != 'KOI8-R':
 			# if tim_format comes as unicode because of day_str.
 			# we convert it to the encoding that we want (and that is utf-8)
 			tim_format = helpers.ensure_utf8_string(tim_format)
