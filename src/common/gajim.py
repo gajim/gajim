@@ -265,26 +265,12 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 		# now we support both 'icq.' and 'icq' but not icqsucks.org
 		host = host_splitted[0]
 
-	if host == 'aim':
-		return 'aim'
+	if host in ('aim', 'irc', 'icq', 'msn', 'sms', 'tlen', 'weather', 'yahoo'):
+		return host
 	elif host == 'gg':
 		return 'gadu-gadu'
-	elif host == 'irc':
-		return 'irc'
-	elif host == 'icq':
-		return 'icq'
 	elif host == 'jit':
 		return 'icq'
-	elif host == 'msn':
-		return 'msn'
-	elif host == 'sms':
-		return 'sms'
-	elif host == 'tlen':
-		return 'tlen'
-	elif host == 'weather':
-		return 'weather'
-	elif host == 'yahoo':
-		return 'yahoo'
 	else:
 		return None
 
