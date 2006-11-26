@@ -3,6 +3,7 @@ Gajim 0.11 (XX December 2006)
   * Support for link-local messaging via Zeroconf using Avahi (XEP-0174)
   * Automatically connect and disconnect to accounts according to network availability (if Network Manager is present)
   * IPV6 support to connect to server
+  * Ad-Hoc commands
   * GNOME Keyring Support (if GNOME keyring is available, manage passwords and save them in an encrypted file)
   * Introducing View Menu (GNOME HIG)
   * Ability to now hide the Transports group
@@ -13,6 +14,7 @@ Gajim 0.11 (XX December 2006)
   * Better design of User Profile window, with a progress bar
   * New Add User dialog, with possibility to register to transport directly from it
   * Completion for "Start Chat" input dialog
+  * Metacontacts across accounts (#1596)
   * Ability to have a different spellchecking language in each chat window. (#2383 and #746)
   * Forbid to run multiple instances (but you can use differents profiles)
   * Ability to save avatar with right click on avatar in chat banner
@@ -27,16 +29,11 @@ Gajim 0.11 (XX December 2006)
   * Fuzzyclock support
   * Mute sounds from systray menu
   * Add possibility to start a chat or see contact's infos from subscription request window
-  * Use GnomeKeyring to store passwords if possible
   * Use different colors for each participant in groupchats
   * Ability to show only Join/Leave in groupchats instead of all status changes
   * New possibilities to insert nickname of a participant in groupchat conversations: Tab in an empty line now cycles through nicks, maj+right click->inserts nickname, maj+click on name in gc-roster, /names command to show all users presence
   * Fixed bugs when removing or renaming an account with tabs open (#2369 and #2370)
   * New translations: Croatian, Esperanto
-
-  * Ad-Hoc commands
-  * Metacontacts across accounts (#1596)
-  * Gajim now requires Python 2.4 to run
 
 Gajim 0.10.1 (06 June 2006)
 
