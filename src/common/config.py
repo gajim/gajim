@@ -152,7 +152,8 @@ class Config:
 		'always_english_wiktionary': [opt_bool, True],
 		'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
 		'networkmanager_support': [opt_bool, True, _('If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection.'), True],
-		'chat_state_notifications': [opt_str, 'all'], # 'all', 'composing_only', 'disabled'
+		'outgoing_chat_state_notifications': [opt_str, 'all', _('Sent chat state notifications. Can be one of all, composing_only, disabled.')],
+		'displayed_chat_state_notifications': [opt_str, 'all', _('Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled.')],
 		'autodetect_browser_mailer': [opt_bool, False, '', True],
 		'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes.')],
 		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],

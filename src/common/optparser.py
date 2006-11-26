@@ -153,6 +153,8 @@ class OptionsParser:
 			self.update_config_to_01016()
 		if old < [0, 10, 1, 7] and new >= [0, 10, 1, 7]:
 			self.update_config_to_01017()
+		if old < [0, 10, 1, 8] and new >= [0, 10, 1, 8]:
+			self.update_config_to_01018()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -345,5 +347,12 @@ class OptionsParser:
 		trayicon_notification_on_events '''
 		if self.old_values.has_key('trayicon_notification_on_new_messages'):
 			gajim.config.set('trayicon_notification_on_events',
-				 self.old_values['trayicon_notification_on_new_messages']) 
+				 self.old_values['trayicon_notification_on_new_messages'])
 		gajim.config.set('version', '0.10.1.7')
+
+	def update_config_to_01018(self):
+		'''chat_state_notifications -> outgoing_chat_state_notifications'''
+		if self.old_values.has_key('chat_state_notifications'):
+			gajim.config.set('outgoing_chat_state_notifications',
+				 self.old_values['chat_state_notifications'])
+		gajim.config.set('version', '0.10.1.8')

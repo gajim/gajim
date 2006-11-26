@@ -224,47 +224,47 @@ class PreferencesWindow:
 		else:
 			self.xml.get_widget('time_always_radiobutton').set_active(True)
 
-		#before time
+		# before time
 		st = gajim.config.get('before_time')
 		st = helpers.from_one_line(st)
 		self.xml.get_widget('before_time_textview').get_buffer().set_text(st)
 
-		#after time
+		# after time
 		st = gajim.config.get('after_time')
 		st = helpers.from_one_line(st)
 		self.xml.get_widget('after_time_textview').get_buffer().set_text(st)
 
-		#before nickname
+		# before nickname
 		st = gajim.config.get('before_nickname')
 		st = helpers.from_one_line(st)
 		self.xml.get_widget('before_nickname_textview').get_buffer().set_text(st)
 
-		#after nickanme
+		# after nickanme
 		st = gajim.config.get('after_nickname')
 		st = helpers.from_one_line(st)
 		self.xml.get_widget('after_nickname_textview').get_buffer().set_text(st)
 
-		#Color for incomming messages
+		# Color for incomming messages
 		colSt = gajim.config.get('inmsgcolor')
 		self.xml.get_widget('incoming_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
 
-		#Color for outgoing messages
+		# Color for outgoing messages
 		colSt = gajim.config.get('outmsgcolor')
 		self.xml.get_widget('outgoing_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
 
-		#Color for status messages
+		# Color for status messages
 		colSt = gajim.config.get('statusmsgcolor')
 		self.xml.get_widget('status_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
 		
-		#Color for hyperlinks
+		# Color for hyperlinks
 		colSt = gajim.config.get('urlmsgcolor')
 		self.xml.get_widget('url_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
 
-		#Font for messages
+		# Font for messages
 		font = gajim.config.get('conversation_font')
 		# try to set default font for the current desktop env
 		fontbutton = self.xml.get_widget('conversation_fontbutton')
@@ -286,25 +286,25 @@ class PreferencesWindow:
 		if only_in_roster:
 			self.xml.get_widget('only_in_roster_radiobutton').set_active(True)
 
-		#notify on online statuses
+		# notify on online statuses
 		st = gajim.config.get('notify_on_signin')
 		self.notify_on_signin_checkbutton.set_active(st)
 
-		#notify on offline statuses
+		# notify on offline statuses
 		st = gajim.config.get('notify_on_signout')
 		self.notify_on_signout_checkbutton.set_active(st)
 
-		#autopopupaway
+		# autopopupaway
 		st = gajim.config.get('autopopupaway')
 		self.auto_popup_away_checkbutton.set_active(st)
 
-		#Ignore messages from unknown contacts
+		# Ignore messages from unknown contacts
 		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
 			set_active(gajim.config.get('ignore_unknown_contacts'))
 
-		# send chat state notifications
-		st = gajim.config.get('chat_state_notifications')
-		combo = self.xml.get_widget('chat_states_combobox')
+		# outgoing send chat state notifications
+		st = gajim.config.get('outgoing_chat_state_notifications')
+		combo = self.xml.get_widget('outgoing_chat_states_combobox')
 		if st == 'all':
 			combo.set_active(0)
 		elif st == 'composing_only':
@@ -312,7 +312,17 @@ class PreferencesWindow:
 		else: # disabled
 			combo.set_active(2)
 
-		#sounds
+		# displayed send chat state notifications
+		st = gajim.config.get('displayed_chat_state_notifications')
+		combo = self.xml.get_widget('displayed_chat_states_combobox')
+		if st == 'all':
+			combo.set_active(0)
+		elif st == 'composing_only':
+			combo.set_active(1)
+		else: # disabled
+			combo.set_active(2)
+
+		# sounds
 		if os.name == 'nt':
 			# if windows, player must not become visible on show_all
 			soundplayer_hbox = self.xml.get_widget('soundplayer_hbox')
@@ -822,15 +832,24 @@ class PreferencesWindow:
 	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
 
-	def on_chat_states_combobox_changed(self, widget):
+	def on_outgoing_chat_states_combobox_changed(self, widget):
 		active = widget.get_active()
 		if active == 0: # all
-			gajim.config.set('chat_state_notifications', 'all')
+			gajim.config.set('outgoing_chat_state_notifications', 'all')
 		elif active == 1: # only composing
-			gajim.config.set('chat_state_notifications', 'composing_only')
+			gajim.config.set('outgoing_chat_state_notifications', 'composing_only')
 		else: # disabled
-			gajim.config.set('chat_state_notifications', 'disabled')
+			gajim.config.set('outgoing_chat_state_notifications', 'disabled')
 
+	def on_displayed_chat_states_combobox_changed(self, widget):
+		active = widget.get_active()
+		if active == 0: # all
+			gajim.config.set('displayed_chat_state_notifications', 'all')
+		elif active == 1: # only composing
+			gajim.config.set('displayed_chat_state_notifications',
+				'composing_only')
+		else: # disabled
+			gajim.config.set('displayed_chat_state_notifications', 'disabled')
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',

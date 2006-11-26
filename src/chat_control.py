@@ -1049,13 +1049,16 @@ class ChatControl(ChatControlBase):
 		status_escaped = gtkgui_helpers.escape_for_pango_markup(status)
 
 		font_attrs, font_attrs_small = self.get_font_attrs()
-		st = gajim.config.get('chat_state_notifications')
+		st = gajim.config.get('displayed_chat_state_notifications')
 		cs = contact.chatstate
 		if cs and st in ('composing_only', 'all'):
 			if contact.show == 'offline':
 				chatstate = ''
 			elif contact.composing_jep == 'JEP-0085':
-				chatstate = helpers.get_uf_chatstate(cs)
+				if st == 'all' or cs == 'composing':
+					chatstate = helpers.get_uf_chatstate(cs)
+				else:
+					chatstate = ''
 			elif contact.composing_jep == 'JEP-0022':
 				if cs in ('composing', 'paused'):
 					# only print composing, paused
@@ -1128,7 +1131,8 @@ class ChatControl(ChatControlBase):
 			encrypted = True
 
 
-		chatstates_on = gajim.config.get('chat_state_notifications') != 'disabled'
+		chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
+			'disabled'
 		chatstate_to_send = None
 		if chatstates_on and contact is not None:
 			if contact.composing_jep is None:
@@ -1424,7 +1428,7 @@ class ChatControl(ChatControlBase):
 		# do not send nothing if we have chat state notifications disabled
 		# that means we won't reply to the <active/> from other peer
 		# so we do not broadcast jep85 capabalities
-		chatstate_setting = gajim.config.get('chat_state_notifications')
+		chatstate_setting = gajim.config.get('outgoing_chat_state_notifications')
 		if chatstate_setting == 'disabled':
 			return
 		elif chatstate_setting == 'composing_only' and state != 'active' and\
