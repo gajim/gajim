@@ -375,6 +375,7 @@ class Config:
 		'message_sent': [ True, '../data/sounds/sent.wav' ],
 		'muc_message_highlight': [ True, '../data/sounds/gc_message1.wav', _('Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname.')],
 		'muc_message_received': [ False, '../data/sounds/gc_message2.wav', _('Sound to play when any MUC message arrives.') ],
+		'gmail_received': [ False, '../data/sounds/message1.wav' ],
 	}
 
 	themes_default = {

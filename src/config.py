@@ -1071,6 +1071,13 @@ class PreferencesWindow:
 			'muc_message_highlight': _('Group Chat Message Highlight'),
 			'muc_message_received': _('Group Chat Message Received')
 		}
+
+		# In case of a GMail account we provide a sound notification option
+		for account in gajim.config.get_per('accounts'):
+			jid = gajim.get_jid_from_account(account)
+			if gajim.get_server_from_jid(jid) in gajim.gmail_domains:
+				sounds_dict['gmail_received'] = _('GMail Email Received')
+				break
 		
 		for sound_event_config_name, sound_ui_name in sounds_dict.items():
 			enabled = gajim.config.get_per('soundevents',

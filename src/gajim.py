@@ -1155,6 +1155,7 @@ class Interface:
 						{'from_address': gmessage['From']}
 					
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			helpers.play_sound('gmail_received')
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
 				path_to_image = path, title = title, text = text)
 
