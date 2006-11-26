@@ -592,7 +592,8 @@ class Interface:
 		if contact and isinstance(contact, list):
 			contact = contact[0]
 		if contact:
-			contact.composing_jep = composing_jep
+			if contact.composing_jep != 'JEP-0085': # We cache xep85 support
+				contact.composing_jep = composing_jep
 			if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
 				if chatstate is not None:
 					# other peer sent us reply, so he supports jep85 or jep22

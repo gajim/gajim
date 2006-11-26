@@ -733,10 +733,11 @@ class Connection(ConnectionHandlers):
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
 		if chatstate is not None:
-			if composing_jep == 'JEP-0085' or not composing_jep:
+			if (composing_jep == 'JEP-0085' or not composing_jep) and \
+			composing_jep != 'asked_once':
 				# JEP-0085
 				msg_iq.setTag(chatstate, namespace = common.xmpp.NS_CHATSTATES)
-			if composing_jep == 'JEP-0022' or not composing_jep:
+			if composing_jep in ('JEP-0022', 'asked_once') or not composing_jep:
 				# JEP-0022
 				chatstate_node = msg_iq.setTag('x',
 					namespace = common.xmpp.NS_EVENT)

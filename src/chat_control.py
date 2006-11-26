@@ -1133,19 +1133,28 @@ class ChatControl(ChatControlBase):
 
 		chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
 			'disabled'
+		composing_jep = contact.composing_jep
 		chatstate_to_send = None
 		if chatstates_on and contact is not None:
-			if contact.composing_jep is None:
+			if composing_jep is None:
 				# no info about peer
 				# send active to discover chat state capabilities
 				# this is here (and not in send_chatstate)
 				# because we want it sent with REAL message
 				# (not standlone) eg. one that has body
+				
+				# Enable 3 next lines after 0.11 release.
+				# Having this disabled violate xep85 5.1.2 but then we don't break
+				# notifications between 0.10.1 and 0.11   See #2637
+				# if contact.our_chatstate:
+				#	# We already ask for xep 85, don't ask it twice
+				#	composing_jep = 'asked_once'
+
 				chatstate_to_send = 'active'
 				contact.our_chatstate = 'ask' # pseudo state
 			# if peer supports jep85 and we are not 'ask', send 'active'
 			# NOTE: first active and 'ask' is set in gajim.py
-			elif contact.composing_jep is not False:
+			elif composing_jep is not False:
 				#send active chatstate on every message (as JEP says)
 				chatstate_to_send = 'active'
 				contact.our_chatstate = 'active'
@@ -1156,7 +1165,7 @@ class ChatControl(ChatControlBase):
 				
 		ChatControlBase.send_message(self, message, keyID, type = 'chat',
 			chatstate = chatstate_to_send,
-			composing_jep = contact.composing_jep)
+			composing_jep = composing_jep)
 		self.print_conversation(message, self.contact.jid, encrypted = encrypted)
 
 	def check_for_possible_paused_chatstate(self, arg):
