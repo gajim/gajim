@@ -1923,7 +1923,7 @@ Per type</property>
 		      <child>
 			<widget class="GtkLabel" id="label354">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Chat state noti_fications:</property>
+			  <property name="label" translatable="yes">Outgoing Chat state noti_fications:</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1933,7 +1933,6 @@ Per type</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
-			  <property name="mnemonic_widget">chat_states_combobox</property>
 			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			  <property name="width_chars">-1</property>
 			  <property name="single_line_mode">False</property>
@@ -1949,14 +1948,14 @@ Per type</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkComboBox" id="chat_states_combobox">
+		    <widget class="GtkComboBox" id="outgoing_chat_states_combobox">
 		      <property name="visible">True</property>
 		      <property name="items" translatable="yes">All chat states
 Composing only
 Disabled</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="focus_on_click">True</property>
-		      <signal name="changed" handler="on_chat_states_combobox_changed" last_modification_time="Sun, 07 Aug 2005 19:15:49 GMT"/>
+		      <signal name="changed" handler="on_outgoing_chat_states_combobox_changed" last_modification_time="Sun, 26 Nov 2006 08:09:53 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -1973,145 +1972,100 @@ Disabled</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkFrame" id="sounds_frame">
+		<widget class="GtkHBox" id="hbox3023">
 		  <property name="visible">True</property>
-		  <property name="label_xalign">0</property>
-		  <property name="label_yalign">0.5</property>
-		  <property name="shadow_type">GTK_SHADOW_NONE</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">12</property>
 
 		  <child>
-		    <widget class="GtkAlignment" id="alignment55">
-		      <property name="border_width">6</property>
+		    <widget class="GtkEventBox" id="eventbox7">
 		      <property name="visible">True</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xscale">1</property>
-		      <property name="yscale">1</property>
-		      <property name="top_padding">0</property>
-		      <property name="bottom_padding">0</property>
-		      <property name="left_padding">12</property>
-		      <property name="right_padding">0</property>
+		      <property name="tooltip" translatable="yes">Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to display in chat windows.</property>
+		      <property name="visible_window">True</property>
+		      <property name="above_child">False</property>
 
 		      <child>
-			<widget class="GtkVBox" id="vbox65">
+			<widget class="GtkLabel" id="label386">
 			  <property name="visible">True</property>
-			  <property name="homogeneous">False</property>
+			  <property name="label" translatable="yes">Displayed Chat state noti_fications:</property>
+			  <property name="use_underline">True</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkComboBox" id="displayed_chat_states_combobox">
+		      <property name="visible">True</property>
+		      <property name="items" translatable="yes">All chat states
+Composing only
+Disabled</property>
+		      <property name="add_tearoffs">False</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="changed" handler="on_displayed_chat_states_combobox_changed" last_modification_time="Sun, 26 Nov 2006 08:19:34 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkExpander" id="expander2">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="expanded">False</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkVBox" id="vbox65">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">6</property>
+
+		      <child>
+			<widget class="GtkHBox" id="hbox2946">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">True</property>
 			  <property name="spacing">6</property>
 
 			  <child>
-			    <widget class="GtkHBox" id="hbox2946">
-			      <property name="visible">True</property>
-			      <property name="homogeneous">True</property>
-			      <property name="spacing">6</property>
-
-			      <child>
-				<widget class="GtkCheckButton" id="play_sounds_checkbutton">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Play _sounds</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <signal name="toggled" handler="on_play_sounds_checkbutton_toggled" last_modification_time="Wed, 06 Apr 2005 19:05:21 GMT"/>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">True</property>
-				  <property name="fill">True</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkHBox" id="soundplayer_hbox">
-				  <property name="homogeneous">False</property>
-				  <property name="spacing">5</property>
-
-				  <child>
-				    <widget class="GtkLabel" id="label189">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">_Player:</property>
-				      <property name="use_underline">True</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				      <property name="mnemonic_widget">soundplayer_entry</property>
-				      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				      <property name="width_chars">-1</property>
-				      <property name="single_line_mode">False</property>
-				      <property name="angle">0</property>
-				    </widget>
-				    <packing>
-				      <property name="padding">0</property>
-				      <property name="expand">True</property>
-				      <property name="fill">True</property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkEntry" id="soundplayer_entry">
-				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="editable">True</property>
-				      <property name="visibility">True</property>
-				      <property name="max_length">0</property>
-				      <property name="text" translatable="yes"></property>
-				      <property name="has_frame">True</property>
-				      <property name="invisible_char">*</property>
-				      <property name="activates_default">False</property>
-				      <signal name="changed" handler="on_soundplayer_entry_changed" last_modification_time="Tue, 08 Mar 2005 22:59:53 GMT"/>
-				    </widget>
-				    <packing>
-				      <property name="padding">0</property>
-				      <property name="expand">True</property>
-				      <property name="fill">True</property>
-				    </packing>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">True</property>
-				  <property name="fill">True</property>
-				</packing>
-			      </child>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkScrolledWindow" id="sounds_scrolledwindow">
+			    <widget class="GtkCheckButton" id="play_sounds_checkbutton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-			      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-			      <property name="shadow_type">GTK_SHADOW_IN</property>
-			      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-			      <child>
-				<widget class="GtkTreeView" id="sounds_treeview">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="headers_visible">True</property>
-				  <property name="rules_hint">False</property>
-				  <property name="reorderable">False</property>
-				  <property name="enable_search">True</property>
-				  <property name="fixed_height_mode">False</property>
-				  <property name="hover_selection">False</property>
-				  <property name="hover_expand">False</property>
-				  <signal name="cursor_changed" handler="on_treeview_sounds_cursor_changed" last_modification_time="Wed, 09 Feb 2005 22:51:36 GMT"/>
-				</widget>
-			      </child>
+			      <property name="label" translatable="yes">Play _sounds</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			      <signal name="toggled" handler="on_play_sounds_checkbutton_toggled" last_modification_time="Wed, 06 Apr 2005 19:05:21 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -2121,23 +2075,28 @@ Disabled</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="browse_sounds_hbox">
-			      <property name="visible">True</property>
+			    <widget class="GtkHBox" id="soundplayer_hbox">
 			      <property name="homogeneous">False</property>
-			      <property name="spacing">6</property>
+			      <property name="spacing">5</property>
 
 			      <child>
-				<widget class="GtkEntry" id="sounds_entry">
+				<widget class="GtkLabel" id="label189">
 				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="editable">True</property>
-				  <property name="visibility">True</property>
-				  <property name="max_length">0</property>
-				  <property name="text" translatable="yes"></property>
-				  <property name="has_frame">True</property>
-				  <property name="invisible_char">*</property>
-				  <property name="activates_default">False</property>
-				  <signal name="changed" handler="on_sounds_entry_changed" last_modification_time="Mon, 06 Jun 2005 19:59:41 GMT"/>
+				  <property name="label" translatable="yes">_Player:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">soundplayer_entry</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -2147,62 +2106,151 @@ Disabled</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkButton" id="browse_for_sounds_button">
+				<widget class="GtkEntry" id="soundplayer_entry">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="label">...</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <signal name="clicked" handler="on_browse_for_sounds_button_clicked" last_modification_time="Thu, 16 Feb 2006 14:51:54 GMT"/>
+				  <property name="editable">True</property>
+				  <property name="visibility">True</property>
+				  <property name="max_length">0</property>
+				  <property name="text" translatable="yes"></property>
+				  <property name="has_frame">True</property>
+				  <property name="invisible_char">*</property>
+				  <property name="activates_default">False</property>
+				  <signal name="changed" handler="on_soundplayer_entry_changed" last_modification_time="Tue, 08 Mar 2005 22:59:53 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkButton" id="play_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <signal name="clicked" handler="on_play_button_clicked" last_modification_time="Thu, 02 Feb 2006 07:19:21 GMT"/>
-
-				  <child>
-				    <widget class="GtkImage" id="image1370">
-				      <property name="visible">True</property>
-				      <property name="stock">gtk-media-play</property>
-				      <property name="icon_size">4</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				    </widget>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
 				</packing>
 			      </child>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
-			      <property name="expand">False</property>
+			      <property name="expand">True</property>
 			      <property name="fill">True</property>
 			    </packing>
 			  </child>
 			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkScrolledWindow" id="sounds_scrolledwindow">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+			  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+			  <property name="shadow_type">GTK_SHADOW_IN</property>
+			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+			  <child>
+			    <widget class="GtkTreeView" id="sounds_treeview">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="headers_visible">True</property>
+			      <property name="rules_hint">False</property>
+			      <property name="reorderable">False</property>
+			      <property name="enable_search">True</property>
+			      <property name="fixed_height_mode">False</property>
+			      <property name="hover_selection">False</property>
+			      <property name="hover_expand">False</property>
+			      <signal name="cursor_changed" handler="on_treeview_sounds_cursor_changed" last_modification_time="Wed, 09 Feb 2005 22:51:36 GMT"/>
+			    </widget>
+			  </child>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkHBox" id="browse_sounds_hbox">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">6</property>
+
+			  <child>
+			    <widget class="GtkEntry" id="sounds_entry">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="editable">True</property>
+			      <property name="visibility">True</property>
+			      <property name="max_length">0</property>
+			      <property name="text" translatable="yes"></property>
+			      <property name="has_frame">True</property>
+			      <property name="invisible_char">*</property>
+			      <property name="activates_default">False</property>
+			      <signal name="changed" handler="on_sounds_entry_changed" last_modification_time="Mon, 06 Jun 2005 19:59:41 GMT"/>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkButton" id="browse_for_sounds_button">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label">...</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <signal name="clicked" handler="on_browse_for_sounds_button_clicked" last_modification_time="Thu, 16 Feb 2006 14:51:54 GMT"/>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkButton" id="play_button">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <signal name="clicked" handler="on_play_button_clicked" last_modification_time="Thu, 02 Feb 2006 07:19:21 GMT"/>
+
+			      <child>
+				<widget class="GtkImage" id="image1370">
+				  <property name="visible">True</property>
+				  <property name="stock">gtk-media-play</property>
+				  <property name="icon_size">4</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">True</property>
+			</packing>
 		      </child>
 		    </widget>
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="label234">
+		    <widget class="GtkLabel" id="label385">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">&lt;b&gt;Sounds&lt;/b&gt;</property>
 		      <property name="use_underline">False</property>
@@ -2226,7 +2274,7 @@ Disabled</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
