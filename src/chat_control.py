@@ -1143,9 +1143,10 @@ class ChatControl(ChatControlBase):
 				# because we want it sent with REAL message
 				# (not standlone) eg. one that has body
 				
+				#FIXME:
 				# Enable 3 next lines after 0.11 release.
-				# Having this disabled violate xep85 5.1.2 but then we don't break
-				# notifications between 0.10.1 and 0.11   See #2637
+				# Having this disabled violate xep85 5.1.2 but then we don't break
+				# notifications between 0.10.1 and 0.11 See #2637
 				# if contact.our_chatstate:
 				#	# We already ask for xep 85, don't ask it twice
 				#	composing_jep = 'asked_once'
