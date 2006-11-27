@@ -470,6 +470,12 @@ class ConversationTextview:
 			childs[6].hide() # join group chat
 			childs[7].hide() # add to roster
 		else: # It's a mail or a JID
+			# load muc icon
+			join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
+			muc_icon = gajim.interface.roster.load_icon('muc_active')
+			if muc_icon: 
+				join_group_chat_menuitem.set_image(muc_icon) 
+
 			text = text.lower()
 			id = childs[2].connect('activate', self.on_copy_link_activate, text)
 			self.handlers[id] = childs[2]
@@ -598,12 +604,9 @@ class ConversationTextview:
 			#it's a url
 			tags.append('url')
 			use_other_tags = False
-		elif special_text.startswith('mailto:'):
-			#it's a mail
-			tags.append('mail')
-			use_other_tags = False
-		elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text):
-			#it's a mail
+		elif special_text.startswith('mailto:') or \
+		gajim.interface.sth_at_sth_dot_sth_re.match(special_text):
+			# it's a mail
 			tags.append('mail')
 			use_other_tags = False
 		elif special_text.startswith('*'): # it's a bold text
