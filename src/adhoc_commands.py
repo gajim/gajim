@@ -373,10 +373,13 @@ class CommandWindow:
 
 		if errorid is not None:
 			# we've got error code, display appropriate message
-			errorname = xmpp.NS_STANZAS + ' ' + str(errorid)
-			errordesc = xmpp.ERRORS[errorname][2]
-			error = errordesc.decode('utf-8')
-			del errorname, errordesc
+			try:
+				errorname = xmpp.NS_STANZAS + ' ' + str(errorid)
+				errordesc = xmpp.ERRORS[errorname][2]
+				error = errordesc.decode('utf-8')
+				del errorname, errordesc
+			except KeyError:	# when stanza doesn't have error description
+				error = 'Service returned an error.'
 		elif error is not None:
 			# we've got error message
 			pass
