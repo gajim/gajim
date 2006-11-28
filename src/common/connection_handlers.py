@@ -1621,7 +1621,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						# we know real jid, save it in db
 						st += ' (%s)' % jid
 					gajim.logger.write('gcstatus', who, st, show)
-				if avatar_sha:
+				if avatar_sha or avatar_sha == '':
+					if avatar_sha == '':
+						# contact has no avatar
+						puny_nick = helpers.sanitize_filename(resource)
+						gajim.interface.remove_avatar_files(jid_stripped, puny_nick)
 					if self.vcard_shas.has_key(who):
 						if avatar_sha != self.vcard_shas[who]:
 							# avatar has been updated

@@ -1196,10 +1196,12 @@ class Interface:
 				path_to_bw_file = path_to_file + '_notif_size_bw.png'
 				bwbuf.save(path_to_bw_file, 'png')
 
-	def remove_avatar_files(self, jid):
+	def remove_avatar_files(self, jid, puny_nick = None):
 		'''remove avatar files of a jid'''
 		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
+		if puny_nick:
+			path_to_file = os.path.join(path_to_file, puny_nick)
 		for ext in ('.jpeg', '.png', '_notif_size_colored.png',
 		'_notif_size_bw.png'):
 			path_to_original_file = path_to_file + ext
