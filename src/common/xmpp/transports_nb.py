@@ -81,10 +81,10 @@ class SSLWrapper:
 
 			this.exc = exc
 
-			this.errno = errno or gattr(this.exc, 'errno', 0)
-			this.strerror = strerror or gattr(this.exc, 'strerror') or gattr(this.exc, 'args')
+			errno = errno or gattr(this.exc, 'errno', 0)
+			strerror = strerror or gattr(this.exc, 'strerror') or gattr(this.exc, 'args')
 
-			this.parent.__init__(this, errno, strerror)
+			this.parent.__init__(this, this.errno, this.strerror)
 			this.peer = peer
 			this.exc_name = None
 
@@ -111,7 +111,7 @@ class SSLWrapper:
 				s += ", Caused by %s" % this.exc_name
 				if this.exc_str:
 					if this.strerror: s += "(%s)" % this.exc_str
-					else: s += "(%s)" % this.exc_args
+					else: s += "(%s)" % str(this.exc_args)
 			return s
 
 	def __init__(this, sslobj, sock=None):
@@ -177,7 +177,7 @@ class PyOpenSSLWrapper(SSLWrapper):
 			log.debug("Send: " + repr(e))
 			time.sleep(0.1) # prevent 100% CPU usage
 		except OpenSSL.SSL.SysCallError, e:
-			log.error("Recv: Got OpenSSL.SSL.SysCallError: " + repr(e))
+			log.error("Send: Got OpenSSL.SSL.SysCallError: " + repr(e))
 			traceback.print_exc()
 			raise SSLWrapper.Error(this.sock or this.sslobj, e)
 		except OpenSSL.SSL.Error, e:
