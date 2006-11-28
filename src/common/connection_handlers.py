@@ -940,15 +940,17 @@ class ConnectionVcard:
 		iq.setID(id)
 		self.connection.send(iq)
 
+		our_jid = gajim.get_jid_from_account(self.name)
 		# Add the sha of the avatar
 		if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
 		vcard['PHOTO'].has_key('BINVAL'):
 			photo = vcard['PHOTO']['BINVAL']
 			photo_decoded = base64.decodestring(photo)
-			our_jid = gajim.get_jid_from_account(self.name)
 			gajim.interface.save_avatar_files(our_jid, photo_decoded)
 			avatar_sha = sha.sha(photo_decoded).hexdigest()
 			iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
+		else:
+			gajim.interface.remove_avatar_files(our_jid)
 
 		self.awaiting_answers[id] = (VCARD_PUBLISHED, iq2)
 	
