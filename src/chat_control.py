@@ -763,6 +763,8 @@ class ChatControlBase(MessageControl):
 			groupchat_control = gajim.interface.msg_win_mgr.get_control(
 				room_jid, self.account)
 			groupchat_control.draw_contact(nick)
+			mw = gajim.interface.msg_win_mgr.get_window(room_jid, self.account)
+			mw.redraw_tab(groupchat_control)
 		else:
 			gajim.interface.roster.draw_contact(jid, self.account)
 			gajim.interface.roster.show_title()
