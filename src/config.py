@@ -244,7 +244,7 @@ class PreferencesWindow:
 		st = helpers.from_one_line(st)
 		self.xml.get_widget('after_nickname_textview').get_buffer().set_text(st)
 
-		# Color for incomming messages
+		# Color for incoming messages
 		colSt = gajim.config.get('inmsgcolor')
 		self.xml.get_widget('incoming_msg_colorbutton').set_color(
 			gtk.gdk.color_parse(colSt))
