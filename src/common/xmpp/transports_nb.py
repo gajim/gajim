@@ -24,6 +24,7 @@ from transports import *
 import sys
 import os
 import errno
+import time
 
 import traceback
 import thread
@@ -67,14 +68,55 @@ def torf(cond, tv, fv):
 	if cond: return tv
 	return fv
 
-class SSLWrapper:
-	def Error(Exception):
-		parent = Exception
-		def __init__(this, *args):
-			this.parent.__init__(this, *args)
+def gattr(obj, attr, default=None):
+	try:
+		return getattr(obj, attr)
+	except:
+		return default
 
-	def __init__(this, sslobj):
+class SSLWrapper:
+	class Error(IOError):
+		def __init__(this, sock=None, exc=None, errno=None, strerror=None, peer=None):
+			this.parent = IOError
+
+			this.exc = exc
+
+			this.errno = errno or gattr(this.exc, 'errno', 0)
+			this.strerror = strerror or gattr(this.exc, 'strerror') or gattr(this.exc, 'args')
+
+			this.parent.__init__(this, errno, strerror)
+			this.peer = peer
+			this.exc_name = None
+
+			if this.exc is not None:
+				this.exc_name = str(this.exc.__class__)
+				this.exc_args = gattr(this.exc, 'args')
+				this.exc_str = str(this.exc)
+				this.exc_repr = repr(this.exc)
+
+			if this.peer is None and sock is not None:
+				try:
+					ppeer = this.obj.getpeername()
+					if len(ppeer) == 2 and isinstance(ppeer[0], basestring) \
+					and isinstance(ppeer[1], int):
+						this.peer = ppeer
+				except: pass
+
+		def __str__(this):
+			s = str(this.__class__)
+			if this.peer: s += "for %s:%d" % this.peer
+			if this.errno is not None: s += ": [Errno: %d]" % this.errno
+			if this.strerror: s += " (%s)" % this.strerror
+			if this.exc_name:
+				s += ", Caused by %s" % this.exc_name
+				if this.exc_str:
+					if this.strerror: s += "(%s)" % this.exc_str
+					else: s += "(%s)" % this.exc_args
+			return s
+
+	def __init__(this, sslobj, sock=None):
 		this.sslobj = sslobj
+		this.sock = sock
 		print "init called with", sslobj
 
 	# We can return None out of this function to signal that no data is
@@ -91,9 +133,9 @@ class SSLWrapper:
 
 class PyOpenSSLWrapper(SSLWrapper):
 	'''Wrapper class for PyOpenSSL's recv() and send() methods'''
-	parent = SSLWrapper
 
 	def __init__(this, *args):
+		this.parent = SSLWrapper
 		this.parent.__init__(this, *args)
 
 	def is_numtoolarge(this, e):
@@ -111,20 +153,19 @@ class PyOpenSSLWrapper(SSLWrapper):
 		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
 			log.debug("Recv: " + repr(e))
 		except OpenSSL.SSL.SysCallError, e:
-			log.error("Got OpenSSL.SSL.SysCallError: " + repr(e))
+			log.error("Recv: Got OpenSSL.SSL.SysCallError: " + repr(e))
 			traceback.print_exc()
-			raise SSLWrapper.Error(('OpenSSL.SSL.SysCallError', e.args))
+			raise SSLWrapper.Error(this.sock or this.sslobj, e)
 		except OpenSSL.SSL.Error, e:
-			"Recv: Caught OpenSSL.SSL.Error:"
-			traceback.print_exc()
-			print "Current Stack:"
-			traceback.print_stack()
 			if this.is_numtoolarge(e):
-				# print an error but ignore this exception
-				log.warning("Recv: OpenSSL: asn1enc: first num too large (eaten)")
+				# warn, but ignore this exception
+				log.warning("Recv: OpenSSL: asn1enc: first num too large (ignored)")
 			else:
-				raise
-
+				log.warning("Recv: Caught OpenSSL.SSL.Error:")
+				traceback.print_exc()
+				print "Current Stack:"
+				traceback.print_stack()
+				raise SSLWrapper.Error(this.sock or this.sslobj, e)
 		return retval
 
 	def send(this, data, flags=None):
@@ -134,23 +175,28 @@ class PyOpenSSLWrapper(SSLWrapper):
 			else:		  return this.sslobj.send(data, flags)
 		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
 			log.debug("Send: " + repr(e))
-		except OpenSSL.SSL.Error, e:
-			print "Send: Caught OpenSSL.SSL.Error:"
+			time.sleep(0.1) # prevent 100% CPU usage
+		except OpenSSL.SSL.SysCallError, e:
+			log.error("Recv: Got OpenSSL.SSL.SysCallError: " + repr(e))
 			traceback.print_exc()
-			print "Current Stack:"
-			traceback.print_stack()
+			raise SSLWrapper.Error(this.sock or this.sslobj, e)
+		except OpenSSL.SSL.Error, e:
 			if this.is_numtoolarge(e):
 				# warn, but ignore this exception
-				log.warning("Send: OpenSSL: asn1enc: first num too large (ignoring)")
+				log.warning("Send: OpenSSL: asn1enc: first num too large (ignored)")
 			else:
-				raise
+				log.warning("Send: Caught OpenSSL.SSL.Error:")
+				traceback.print_exc()
+				print "Current Stack:"
+				traceback.print_stack()
+				raise SSLWrapper.Error(this.sock or this.sslobj, e)
 		return 0
 
 class StdlibSSLWrapper(SSLWrapper):
 	'''Wrapper class for Python's socket.ssl read() and write() methods'''
-	parent = SSLWrapper
 
 	def __init__(this, *args):
+		this.parent = SSLWrapper
 		this.parent.__init__(this, *args)
 
 	def recv(this, bufsize, flags=None):
@@ -165,7 +211,7 @@ class StdlibSSLWrapper(SSLWrapper):
 			print "Current Stack:"
 			traceback.print_stack()
 			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
-				raise
+				raise SSLWrapper.Error(this.sock or this.sslobj, e)
 
 		return retval
 
@@ -180,7 +226,7 @@ class StdlibSSLWrapper(SSLWrapper):
 			print "Current Stack:"
 			traceback.print_stack()
 			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
-				raise
+				raise SSLWrapper.Error(this.sock or this.sslobj, e)
 		return 0
 
 class NonBlockingTcp(PlugIn, IdleObject):
@@ -305,12 +351,10 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.remove_timeout() 
 		self._owner.disconnected()
 		self.idlequeue.unplug_idle(self.fd)
-		try:
-			self._sock.shutdown(socket.SHUT_RDWR)
-			self._sock.close()
-		except:
-			traceback.print_exc()
-			# socket is already closed
+		try: self._sock.shutdown(socket.SHUT_RDWR)
+		except: traceback.print_exc()
+		try: self._sock.close()
+		except: traceback.print_exc()
 		# socket descriptor cannot be (un)plugged anymore
 		self.fd = -1
 		if self.on_disconnect:
@@ -374,9 +418,11 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			traceback.print_stack()
 			errnum = ERR_OTHER
 			errtxt = repr("socket.sslerror: " + e.args)
-		except SSLWrapper.Error:
-			errnum = ERR_OTHER
-			errtxt = repr(e.args)
+		except SSLWrapper.Error, e:
+			print "caught " + str(e)
+			errnum = gattr(e, 'errno', ERR_OTHER)
+			if errnum == 0: errnum = ERR_OTHER # unset, but we must put a status
+			errtxt = gattr(e, 'strerror') or repr(e.args)
 
 		# Should we really do this? In C, recv() will happily return 0
 		# in nonblocking mode when there is no data waiting, and in
@@ -400,7 +446,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 				self.DEBUG(errtxt, 'error')
 				log.error("Error: " + errtxt)
 				if self.state >= 0:
-					self.disconnect()
+					self.pollend()
 				return
 			received = ''
 
@@ -682,7 +728,7 @@ class NonBlockingTLS(PlugIn):
 		tcpsock._sock.setblocking(False)
 		tcpsock._sslIssuer = tcpsock._sslObj.issuer()
 		tcpsock._sslServer = tcpsock._sslObj.server()
-		wrapper = StdlibSSLWrapper(tcpsock._sslObj)
+		wrapper = StdlibSSLWrapper(tcpsock._sslObj, tcpsock._sock)
 		tcpsock._recv = wrapper.recv
 		tcpsock._send = wrapper.send
 		self.starttls='success'
