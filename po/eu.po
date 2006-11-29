@@ -3,14 +3,13 @@
 # This file is distributed under the same license as the gajim package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
-#: ../src/gajim-remote.py:202 ../src/gajim-remote.py:209
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-26 22:15+0100\n"
-"PO-Revision-Date: 2006-07-19 22:02+0100\n"
-"Last-Translator: Urtzi Alfaro <urtzi@altza.net>\n"
+"POT-Creation-Date: 2006-04-13 12:52+0200\n"
+"PO-Revision-Date: 2006-11-29 16:28+0100\n"
+"Last-Translator: Urtzi \n"
 "Language-Team: Basque <urtzi@altza.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +31,7 @@ msgstr "IM Jabber Bezeroa"
 
 #: ../data/glade/account_context_menu.glade.h:1
 msgid "Send Single _Message..."
-msgstr "Bidali Mezu _Bakarra..."
+msgstr "Bidali _Mezu Bakarra..."
 
 #: ../data/glade/account_context_menu.glade.h:2
 msgid "_Add Contact..."
@@ -44,7 +43,7 @@ msgstr "_Zerbitzuak Aurkitu..."
 
 #: ../data/glade/account_context_menu.glade.h:4
 msgid "_Execute Command..."
-msgstr ""
+msgstr "_Komandoa Exekutatu..."
 
 #: ../data/glade/account_context_menu.glade.h:5
 #: ../data/glade/roster_window.glade.h:16
@@ -58,9 +57,8 @@ msgid "_Modify Account..."
 msgstr "Kontua E_ditatu"
 
 #: ../data/glade/account_context_menu.glade.h:7
-#, fuzzy
 msgid "_Open Gmail Inbox"
-msgstr "_Ireki E-posta Konposatzailea"
+msgstr "_Ireki Gmail posta"
 
 #: ../data/glade/account_context_menu.glade.h:8
 #: ../data/glade/zeroconf_context_menu.glade.h:2
@@ -87,8 +85,7 @@ msgstr "<b>Mesedez bete zure kontu berrirako informazioa</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:6
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr ""
-"Sakatu Jabber zerbitzariaren zenbait aukera(Msn ,ICQ, transport) ikusteko"
+msgstr "Sakatu Jabber zerbitzariaren zenbait aukera(Msn ,ICQ, transport) ikusteko"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:7
 msgid "Connect when I press Finish"
@@ -219,16 +216,8 @@ msgid "Chan_ge Password"
 msgstr "Al_datu Pasahitza"
 
 #: ../data/glade/account_modification_window.glade.h:9
-msgid ""
-"Check this so Gajim will connect in port 5223 where legacy servers are "
-"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
-"default if broadcasted by the server, and with this option enabled TLS will "
-"be disabled"
-msgstr ""
-"Check this so Gajim will connect in port 5223 where legacy servers are "
-"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
-"default if broadcasted by the server, and with this option enabled TLS will "
-"be disabled"
+msgid "Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default if broadcasted by the server, and with this option enabled TLS will be disabled"
+msgstr "Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default if broadcasted by the server, and with this option enabled TLS will be disabled"
 
 #: ../data/glade/account_modification_window.glade.h:10
 #: ../data/glade/zeroconf_properties_window.glade.h:4
@@ -248,8 +237,11 @@ msgid "Edit Personal Information..."
 msgstr "Informazio Pertsonala Editatu..."
 
 #: ../data/glade/account_modification_window.glade.h:14
-#: ../data/glade/roster_window.glade.h:5 ../src/notify.py:453
-#: ../src/notify.py:475 ../src/notify.py:487 ../src/common/helpers.py:904
+#: ../data/glade/roster_window.glade.h:5
+#: ../src/notify.py:453
+#: ../src/notify.py:475
+#: ../src/notify.py:487
+#: ../src/common/helpers.py:904
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -257,9 +249,12 @@ msgstr "Gajim"
 #: ../data/glade/account_modification_window.glade.h:15
 #: ../data/glade/preferences_window.glade.h:49
 #: ../data/glade/zeroconf_properties_window.glade.h:7
-#: ../src/roster_window.py:342 ../src/roster_window.py:1211
-#: ../src/roster_window.py:1422 ../src/roster_window.py:2032
-#: ../src/roster_window.py:2074 ../src/common/contacts.py:278
+#: ../src/roster_window.py:342
+#: ../src/roster_window.py:1211
+#: ../src/roster_window.py:1422
+#: ../src/roster_window.py:2032
+#: ../src/roster_window.py:2074
+#: ../src/common/contacts.py:278
 msgid "General"
 msgstr "Orokorra"
 
@@ -268,49 +263,27 @@ msgid "Hostname: "
 msgstr "Hostname: "
 
 #: ../data/glade/account_modification_window.glade.h:17
-msgid ""
-"If checked, Gajim will also broadcast some more IPs except from just your "
-"IP, so file transfer has higher chances of working."
-msgstr ""
-"If checked, Gajim will also broadcast some more IPs except from just your "
-"IP, so file transfer has higher chances of working."
+msgid "If checked, Gajim will also broadcast some more IPs except from just your IP, so file transfer has higher chances of working."
+msgstr "If checked, Gajim will also broadcast some more IPs except from just your IP, so file transfer has higher chances of working."
 
 #: ../data/glade/account_modification_window.glade.h:19
-msgid ""
-"If checked, Gajim will send keep-alive packets so it prevents connection "
-"timeout which results in disconnection"
-msgstr ""
-"Hautatua badago, Gajim-ek keep-alive paketeak bidaliko ditu deskonexioa "
-"gerta ez dadin"
+msgid "If checked, Gajim will send keep-alive packets so it prevents connection timeout which results in disconnection"
+msgstr "Hautatua badago, Gajim-ek keep-alive paketeak bidaliko ditu deskonexioa gerta ez dadin"
 
 #: ../data/glade/account_modification_window.glade.h:20
 #: ../data/glade/zeroconf_properties_window.glade.h:8
-msgid ""
-"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
-"permission only for you"
-msgstr ""
-"Hautatua badago, Gajim-ek pasahitzak  ~/.gajim/config gordeko ditu "
-"irakurtzeko baimena zuk bakarrik izanik"
+msgid "If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you"
+msgstr "Hautatua badago, Gajim-ek pasahitzak  ~/.gajim/config gordeko ditu irakurtzeko baimena zuk bakarrik izanik"
 
 #: ../data/glade/account_modification_window.glade.h:21
 #: ../data/glade/zeroconf_properties_window.glade.h:9
-msgid ""
-"If checked, Gajim, when launched, will automatically connect to jabber using "
-"this account"
-msgstr ""
-"Hautatua badago, abiaraztean, automatikoki jabber-era konektatuko da kontu "
-"hau erabiliz"
+msgid "If checked, Gajim, when launched, will automatically connect to jabber using this account"
+msgstr "Hautatua badago, abiaraztean, automatikoki jabber-era konektatuko da kontu hau erabiliz"
 
 #: ../data/glade/account_modification_window.glade.h:22
 #: ../data/glade/zeroconf_properties_window.glade.h:10
-msgid ""
-"If checked, any change to the global status (handled by the combobox at the "
-"bottom of the roster window) will change the status of this account "
-"accordingly"
-msgstr ""
-"If checked, any change to the global status (handled by the combobox at the "
-"bottom of the roster window) will change the status of this account "
-"accordingly"
+msgid "If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly"
+msgstr "If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly"
 
 #: ../data/glade/account_modification_window.glade.h:23
 msgid "Information about you, as stored in the server"
@@ -321,17 +294,26 @@ msgid "Manage..."
 msgstr "Moldatu..."
 
 #: ../data/glade/account_modification_window.glade.h:25
-#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1636
+#: ../data/glade/zeroconf_properties_window.glade.h:16
+#: ../src/config.py:1636
 #: ../src/config.py:3429
 msgid "No key selected"
 msgstr "Ez da koderik aukeratu"
 
 #. None means no proxy profile selected
-#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1218
-#: ../src/config.py:1223 ../src/config.py:1407 ../src/config.py:1626
-#: ../src/config.py:1635 ../src/config.py:1694 ../src/config.py:1768
-#: ../src/config.py:2639 ../src/config.py:3419 ../src/config.py:3428
-#: ../src/dialogs.py:281 ../src/dialogs.py:283
+#: ../data/glade/account_modification_window.glade.h:27
+#: ../src/config.py:1218
+#: ../src/config.py:1223
+#: ../src/config.py:1407
+#: ../src/config.py:1626
+#: ../src/config.py:1635
+#: ../src/config.py:1694
+#: ../src/config.py:1768
+#: ../src/config.py:2639
+#: ../src/config.py:3419
+#: ../src/config.py:3428
+#: ../src/dialogs.py:281
+#: ../src/dialogs.py:283
 msgid "None"
 msgstr "Ezer ez"
 
@@ -349,18 +331,12 @@ msgid "Priori_ty:"
 msgstr "Lehentas_una:"
 
 #: ../data/glade/account_modification_window.glade.h:31
-msgid ""
-"Priority is used in Jabber to determine who gets the events from the jabber "
-"server when two or more clients are connected using the same account; The "
-"client with the highest priority gets the events"
-msgstr ""
-"Jabber-en lehentasuna, bi bezero edo gehiago konektatuta daudenean kontu "
-"berdinarekin, zeinek jaso behar duen informazioa determinatzen du; "
-"Lehentasun handiena duen bezeroak jasotzen ditu mezuak"
+msgid "Priority is used in Jabber to determine who gets the events from the jabber server when two or more clients are connected using the same account; The client with the highest priority gets the events"
+msgstr "Jabber-en lehentasuna, bi bezero edo gehiago konektatuta daudenean kontu berdinarekin, zeinek jaso behar duen informazioa determinatzen du; Lehentasun handiena duen bezeroak jasotzen ditu mezuak"
 
 #: ../data/glade/account_modification_window.glade.h:32
 msgid "Priority will change automatically according to your status."
-msgstr ""
+msgstr "Lehentasuna automatikoki ezarriko da zure egoeraren arabera."
 
 #: ../data/glade/account_modification_window.glade.h:33
 msgid "Proxy:"
@@ -371,18 +347,8 @@ msgid "Resour_ce: "
 msgstr "Baliabid_ea: "
 
 #: ../data/glade/account_modification_window.glade.h:35
-msgid ""
-"Resource is sent to the Jabber server in order to separate the same JID in "
-"two or more parts depending on the number of the clients connected in the "
-"same server with the same account. So you might be connected in the same "
-"account with resource 'Home' and 'Work' at the same time. The resource which "
-"has the highest priority will get the events. (see below)"
-msgstr ""
-"Baliabidea Jabber-eko zerbitzarira bidaltzen da JID berdineko eta zerbitzari "
-"berdinera konektatutako kontua bi zati desberdinetan edo gehiagotan "
-"banatzeko asmoarekin. Hau horrela dabil: kontu bat  `Lana` baliabidearekin "
-"jarrita eta kontu berdera `etxea` baliabidearekin jarria baduzu, mezua "
-"lehentasun handiena duenera bidaliko da. (Behean ikusi) "
+msgid "Resource is sent to the Jabber server in order to separate the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)"
+msgstr "Baliabidea Jabber-eko zerbitzarira bidaltzen da JID berdineko eta zerbitzari berdinera konektatutako kontua bi zati desberdinetan edo gehiagotan banatzeko asmoarekin. Hau horrela dabil: kontu bat  `Lana` baliabidearekin jarrita eta kontu berdera `etxea` baliabidearekin jarria baduzu, mezua lehentasun handiena duenera bidaliko da. (Behean ikusi) "
 
 #: ../data/glade/account_modification_window.glade.h:36
 #: ../data/glade/zeroconf_properties_window.glade.h:18
@@ -417,7 +383,7 @@ msgstr "Erabili proxy fitxero transferentzia"
 
 #: ../data/glade/account_modification_window.glade.h:44
 msgid "_Adjust to status"
-msgstr ""
+msgstr "Egoerarekin b_at egin"
 
 #: ../data/glade/account_modification_window.glade.h:45
 msgid "_Jabber ID:"
@@ -433,29 +399,23 @@ msgstr "Kontuak"
 
 #: ../data/glade/accounts_window.glade.h:2
 msgid ""
-"If checked, all local contacts that use a Bonjour compatible chat client "
-"(like iChat, Trillian or Gaim) will be shown in roster. You don't need to be "
-"connected to a jabber server for it to work.\n"
-"This is only available if python-avahi is installed and avahi-daemon is "
-"running."
+"If checked, all local contacts that use a Bonjour compatible chat client (like iChat, Trillian or Gaim) will be shown in roster. You don't need to be connected to a jabber server for it to work.\n"
+"This is only available if python-avahi is installed and avahi-daemon is running."
 msgstr ""
+"Aukeratuta badago, Bonnjour-ekin bateragarriak diren txat programak (iChat, Trillian edota Gaim bezalakoak) erabiltzen duten kontaktu guztiak azal araziko dira zerrendan. Ez duzu jabber zerbitzari batera konektatu egon beharrik funtziona dezan.\n"
+"Hau erabilgarri izango da python-avahi instalatuta baldin badago eta avahi-daemon funtzionamenduan  badago. "
 
 #: ../data/glade/accounts_window.glade.h:4
-msgid ""
-"If you have 2 or more accounts and it is checked, Gajim will list all "
-"contacts as if you had one account"
-msgstr ""
-"Bi kontu edo gehiago badituzu eta aukera hau hautatua badago, Gajim-ek "
-"kontaktu guztiak kontu bat izango bazenu bezala jarriko lituzke zerrendan"
+msgid "If you have 2 or more accounts and it is checked, Gajim will list all contacts as if you had one account"
+msgstr "Bi kontu edo gehiago badituzu eta aukera hau hautatua badago, Gajim-ek kontaktu guztiak kontu bat izango bazenu bezala jarriko lituzke zerrendan"
 
 #: ../data/glade/accounts_window.glade.h:5
-#, fuzzy
 msgid "Mer_ge accounts"
 msgstr "_Batu kontuak"
 
 #: ../data/glade/accounts_window.glade.h:6
 msgid "_Enable link-local messaging"
-msgstr ""
+msgstr "_Enable link-local messaging"
 
 #: ../data/glade/accounts_window.glade.h:7
 msgid "_Modify"
@@ -467,7 +427,6 @@ msgid "_Remove"
 msgstr "_Ezabatu"
 
 #: ../data/glade/add_new_contact_window.glade.h:1
-#, fuzzy
 msgid "A_ccount:"
 msgstr "Kontu_a:"
 
@@ -490,12 +449,17 @@ msgid ""
 "protocol. Click on register button to\n"
 "proceed."
 msgstr ""
+"Transporte honetara erregistratu behar zara\n"
+"protokolo honetako kontaktu bat ezartzeko.\n"
+"Sakatu erregistratu botoian jarraitzeko."
 
 #: ../data/glade/add_new_contact_window.glade.h:9
 msgid ""
 "You must be connected to the transport to be able\n"
 "to add a contact from this protocol."
 msgstr ""
+"Transporte batera konektatuta egon behar zara\n"
+"protokolo honetako kontaktu bat sartzeko."
 
 #: ../data/glade/add_new_contact_window.glade.h:11
 msgid "_Group:"
@@ -510,7 +474,6 @@ msgid "_Protocol:"
 msgstr "_Protokoloa:"
 
 #: ../data/glade/add_new_contact_window.glade.h:14
-#, fuzzy
 msgid "_Register"
 msgstr "Erre_gistratu"
 
@@ -524,9 +487,7 @@ msgstr "<b>Deskribapena</b>"
 
 #: ../data/glade/advanced_configuration_window.glade.h:2
 msgid "<b>NOTE:</b> You should restart gajim for some setting to take effect"
-msgstr ""
-"<b>OHARRA:</b> Gajim berriro abiarazi beharko duzu aldagai batzuek efektua "
-"sor dezaten"
+msgstr "<b>OHARRA:</b> Gajim berriro abiarazi beharko duzu aldagai batzuek efektua sor dezaten"
 
 #: ../data/glade/advanced_configuration_window.glade.h:3
 msgid "Advanced Configuration Editor"
@@ -546,8 +507,7 @@ msgstr "Eguneko Mezuak Ezabatu"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:3
 msgid "Sends a message to currently connected users to this server"
-msgstr ""
-"Bidali mezu bat zerbitzari honetara orain konektatuta dauden kontaktuei"
+msgstr "Bidali mezu bat zerbitzari honetara orain konektatuta dauden kontaktuei"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:4
 msgid "Set MOTD"
@@ -611,7 +571,6 @@ msgid "Advanced Notifications Control"
 msgstr "Notifikazio Aurreratuaren Kontrola"
 
 #: ../data/glade/advanced_notifications_window.glade.h:7
-#, fuzzy
 msgid "All statuses"
 msgstr "Egoera Guztiak"
 
@@ -647,9 +606,8 @@ msgid "Not Available"
 msgstr "Ez Erabilgarri"
 
 #: ../data/glade/advanced_notifications_window.glade.h:15
-#, fuzzy
 msgid "One or more special statuses..."
-msgstr "Egorera berezi bat(zuk)..."
+msgstr "Egorera berezi bat edo gehiago..."
 
 #: ../data/glade/advanced_notifications_window.glade.h:16
 msgid "Online / Free For Chat"
@@ -686,10 +644,8 @@ msgid "When "
 msgstr "Denean"
 
 #: ../data/glade/advanced_notifications_window.glade.h:28
-#, fuzzy
-msgid ""
-"_Activate window manager's UrgencyHint to make chat window in taskbar flash"
-msgstr "_Activate Windows manager UrgencyHint to make chat taskbar to flash"
+msgid "_Activate window manager's UrgencyHint to make chat window in taskbar flash"
+msgstr "_Activate window manager's UrgencyHint to make chat window in taskbar flash"
 
 #: ../data/glade/advanced_notifications_window.glade.h:29
 msgid "_Disable auto opening chat window"
@@ -728,7 +684,6 @@ msgid "_Show event in systray"
 msgstr "Iku_si gertaerak systray-ean"
 
 #: ../data/glade/advanced_notifications_window.glade.h:38
-#, fuzzy
 msgid "and I "
 msgstr "eta nik"
 
@@ -747,7 +702,6 @@ msgid "for "
 msgstr "norentzat"
 
 #: ../data/glade/advanced_notifications_window.glade.h:43
-#, fuzzy
 msgid "when I'm in"
 msgstr "Nagoenean"
 
@@ -837,9 +791,8 @@ msgid "_History"
 msgstr "_Historiala"
 
 #: ../data/glade/data_form_window.glade.h:1
-#, fuzzy
 msgid "Fill in the form."
-msgstr "talde hontakoak"
+msgstr "Formularioan bete"
 
 #: ../data/glade/data_form_window.glade.h:2
 msgid "Room Configuration"
@@ -863,9 +816,7 @@ msgstr "Kantzelatu aukeratutako fitxategi transferentzia"
 
 #: ../data/glade/filetransfers.glade.h:4
 msgid "Cancels the selected file transfer and removes incomplete file"
-msgstr ""
-"Kantzelatu aukeratutako fitxategi transferentzia eta ezabatu bukatu gabeko "
-"fitxeroa "
+msgstr "Kantzelatu aukeratutako fitxategi transferentzia eta ezabatu bukatu gabeko fitxeroa "
 
 #: ../data/glade/filetransfers.glade.h:5
 msgid "Clean _up"
@@ -885,27 +836,22 @@ msgstr "Listatik fitxero tranferentzia ezabatu."
 
 #: ../data/glade/filetransfers.glade.h:9
 msgid "Removes completed, canceled and failed file transfers from the list"
-msgstr ""
-"Ezabatu  kantzelatuak, osorik eta huts egin dutenak  fitxero transferentzia "
-"zerrendatik"
+msgstr "Ezabatu  kantzelatuak, osorik eta huts egin dutenak  fitxero transferentzia zerrendatik"
 
 #: ../data/glade/filetransfers.glade.h:10
 msgid "Shows a list of file transfers between you and other"
 msgstr "Erakutsi zu eta beste baten arteko fitxero transferentzia"
 
 #: ../data/glade/filetransfers.glade.h:11
-msgid ""
-"This action removes single file transfer from the list. If the transfer is "
-"active, it is first stopped and then removed"
-msgstr ""
-"Aukera honek fitxero transferentzia bakar bat kantzelatzen du. "
-"Transferentzia martxan badago, lehenik gelditu egingo da eta ondoren ezabatu."
+msgid "This action removes single file transfer from the list. If the transfer is active, it is first stopped and then removed"
+msgstr "Aukera honek fitxero transferentzia bakar bat kantzelatzen du. Transferentzia martxan badago, lehenik gelditu egingo da eta ondoren ezabatu."
 
 #: ../data/glade/filetransfers.glade.h:12
 msgid "When a file transfer is complete show a popup notification"
 msgstr "Fitxero transferentzia bukatzean erakutsi popup jakinarazte bat"
 
-#: ../data/glade/filetransfers.glade.h:13 ../src/filetransfers_window.py:761
+#: ../data/glade/filetransfers.glade.h:13
+#: ../src/filetransfers_window.py:761
 msgid "_Continue"
 msgstr "_Jarraitu"
 
@@ -913,7 +859,8 @@ msgstr "_Jarraitu"
 msgid "_Notify me when a file transfer is complete"
 msgstr "_Jakinarazi  fitxeroa transferitu denean"
 
-#: ../data/glade/filetransfers.glade.h:15 ../src/filetransfers_window.py:190
+#: ../data/glade/filetransfers.glade.h:15
+#: ../src/filetransfers_window.py:190
 msgid "_Open Containing Folder"
 msgstr "_Ireki Fitxeroaren Edukia"
 
@@ -930,17 +877,16 @@ msgid "<b>Chatstate Tab Colors</b>"
 msgstr "<b>Elkarrizketako Egoeren Koloreak</b>"
 
 #: ../data/glade/gajim_themes_window.glade.h:2
-#, fuzzy
 msgid ""
 "Account row\n"
 "Group row\n"
 "Contact row\n"
 "Chat Banner"
 msgstr ""
-"Kontua\n"
-"Taldea\n"
-"Kontaktua\n"
-"Banner"
+"Kontu zerrenda\n"
+"Talde zerrenda\n"
+"Kontaktu zerrenda\n"
+"Banner Elkarrizketa "
 
 #: ../data/glade/gajim_themes_window.glade.h:6
 msgid "Bold"
@@ -1065,16 +1011,14 @@ msgid ""
 "You can select logs from the left and/or search database from below.\n"
 "\n"
 "<b>WARNING:</b>\n"
-"If you plan to do massive deletions, please make sure Gajim is not running. "
-"Generally avoid deletions with contacts you currently chat with."
+"If you plan to do massive deletions, please make sure Gajim is not running. Generally avoid deletions with contacts you currently chat with."
 msgstr ""
 "<big><b>Ongi Etorri Gajim Log Historial Administratzailera</b></big>\n"
 "\n"
 "Eskubian log-ak hautatu ditzakezu edo/eta behean datu basean bilatu.\n"
 "\n"
 "<b>OHARRA:</b>\n"
-"Ezabatze handia egin behar baduzu, Gajim abiarazita ez dagoela begira ezazu. "
-"Normalean hitz egiten ari zaren kontaktuaen ezabaketak arbuilatzen ditu."
+"Ezabatze handia egin behar baduzu, Gajim abiarazita ez dagoela begira ezazu. Normalean hitz egiten ari zaren kontaktuaen ezabaketak arbuilatzen ditu."
 
 #: ../data/glade/history_manager.glade.h:7
 msgid "Delete"
@@ -1125,7 +1069,8 @@ msgstr "Ukatu"
 msgid "Invitation Received"
 msgstr "Gonbidapena Jasoa"
 
-#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1146
+#: ../data/glade/join_groupchat_window.glade.h:1
+#: ../src/dialogs.py:1146
 msgid "Join Group Chat"
 msgstr "Txat Taldean Sartu"
 
@@ -1150,7 +1095,8 @@ msgstr "Berriki:"
 msgid "Room:"
 msgstr "Gela:"
 
-#: ../data/glade/join_groupchat_window.glade.h:6 ../src/disco.py:1150
+#: ../data/glade/join_groupchat_window.glade.h:6
+#: ../src/disco.py:1150
 #: ../src/disco.py:1517
 msgid "_Join"
 msgstr "_Sartu"
@@ -1217,7 +1163,8 @@ msgstr "Erabili autentifikazioa"
 msgid "Click to insert an emoticon (Alt+M)"
 msgstr "Sakatu emoticon bat ezartzeko (Alt+M)"
 
-#: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1099
+#: ../data/glade/message_window.glade.h:2
+#: ../src/chat_control.py:1099
 msgid "OpenPGP Encryption"
 msgstr "Ireki OpenPGP Enkriptazioa"
 
@@ -1296,20 +1243,15 @@ msgstr "Baimena _OS informazioa bidaltzeko"
 
 #: ../data/glade/preferences_window.glade.h:18
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-msgstr ""
-"Baimendu Popup/Jakinarazteak nagoenean:  Kanpoan/Ez Erabilgarri/Lanpetuta/"
-"Ikusezin"
+msgstr "Baimendu Popup/Jakinarazteak nagoenean:  Kanpoan/Ez Erabilgarri/Lanpetuta/Ikusezin"
 
 #: ../data/glade/preferences_window.glade.h:19
 msgid "Also known as iChat style"
 msgstr "iChat estiloa bezala ere ezagutua"
 
 #: ../data/glade/preferences_window.glade.h:20
-msgid ""
-"An example: If you have enabled status message for away, Gajim won't ask you "
-"anymore for a status message when you change your status to away; it will "
-"use the default one set here"
-msgstr ""
+msgid "An example: If you have enabled status message for away, Gajim won't ask you anymore for a status message when you change your status to away; it will use the default one set here"
+msgstr "Adibide bat: Egoera mezu kanpoan bezala ezarri baduzu, Gajim-ek ez dizu gehiago galdetuko egoera mezuaz kanpoan egoera ezartzean; ezarritako erabiliko da beti"
 
 #: ../data/glade/preferences_window.glade.h:21
 msgid "Ask status message when I:"
@@ -1324,7 +1266,6 @@ msgid "Auto _not available after:"
 msgstr "Automatikoki _Ez Erabilgarri ondoren:"
 
 #: ../data/glade/preferences_window.glade.h:24
-#, fuzzy
 msgid ""
 "Autodetect on every Gajim startup\n"
 "Always use GNOME default applications\n"
@@ -1335,33 +1276,29 @@ msgstr ""
 "Autodetektatu Gajim abiarazten den bakoitzean\n"
 "Beti GNOME-ren berezko aplikazioak erabili\n"
 "Beti KDE-ren berezko aplikazioak erabili\n"
+"Beti XFCE4-ren berezko aplikazioak erabili\n"
 "Bezeroa"
 
 #: ../data/glade/preferences_window.glade.h:29
 msgid "B_efore nickname:"
 msgstr "Izengoitia baino l_ehen:"
 
-#: ../data/glade/preferences_window.glade.h:30 ../src/chat_control.py:839
+#: ../data/glade/preferences_window.glade.h:30
+#: ../src/chat_control.py:839
 msgid "Chat"
 msgstr "Txat"
 
 #: ../data/glade/preferences_window.glade.h:31
-msgid ""
-"Check this option, only if someone you don't have in the roster spams/annoys "
-"you. Use with caution, cause it blocks all messages from any contact that is "
-"not in the roster"
-msgstr ""
-"Bakarrik hautatu aukera hau zerrendan ez duzun norbaitek zirikatzen bazaitu. "
-"Kontu handiz erabili, zerrendan ez dagoen edonoren mezuak blokeatzen ditu"
+msgid "Check this option, only if someone you don't have in the roster spams/annoys you. Use with caution, cause it blocks all messages from any contact that is not in the roster"
+msgstr "Bakarrik hautatu aukera hau zerrendan ez duzun norbaitek zirikatzen bazaitu. Kontu handiz erabili, zerrendan ez dagoen edonoren mezuak blokeatzen ditu"
 
 #: ../data/glade/preferences_window.glade.h:32
 msgid "Configure color and font of the interface"
-msgstr ""
+msgstr "Interfazeko kolorea eta letra konfiguratu"
 
 #: ../data/glade/preferences_window.glade.h:33
-#, fuzzy
 msgid "Default Status Messages"
-msgstr "Egoera Mezua"
+msgstr "Berezko Egoera Mezuak"
 
 #: ../data/glade/preferences_window.glade.h:34
 msgid "Default status _iconset:"
@@ -1380,9 +1317,8 @@ msgid "Display status _messages of contacts in roster"
 msgstr "Erakuts arazi kontaktuen egoera _mezua zerrendan"
 
 #: ../data/glade/preferences_window.glade.h:38
-#, fuzzy
 msgid "Displayed Chat state noti_fications:"
-msgstr "Txateko egoeraren ja_kinaraztea:"
+msgstr "Txat-eko egoeren jakinarazteak aza_l arazi:"
 
 #: ../data/glade/preferences_window.glade.h:39
 msgid "E_very 5 minutes"
@@ -1397,111 +1333,60 @@ msgid "Events"
 msgstr "Gertaerak"
 
 #: ../data/glade/preferences_window.glade.h:42
-#, fuzzy
-msgid ""
-"Gajim can send and receive meta-information related to a conversation you "
-"may have with a contact. Here you can specify which chatstates you want to "
-"display in chat windows."
-msgstr ""
-"Gajim can send and receive meta-information related to a conversation you "
-"may have with a contact. Here you can specify which chatstates you want to "
-"send to the other party."
+msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to display in chat windows."
+msgstr "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to display in chat windows."
 
 #: ../data/glade/preferences_window.glade.h:43
-msgid ""
-"Gajim can send and receive meta-information related to a conversation you "
-"may have with a contact. Here you can specify which chatstates you want to "
-"send to the other party."
-msgstr ""
-"Gajim can send and receive meta-information related to a conversation you "
-"may have with a contact. Here you can specify which chatstates you want to "
-"send to the other party."
+msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party."
+msgstr "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party."
 
 #: ../data/glade/preferences_window.glade.h:44
-msgid ""
-"Gajim will automatically show new events by poping up the relative window"
-msgstr ""
-"Gajim-ek automatikoki gertaera berriak agertaraziko ditu hautatutako leihoan "
+msgid "Gajim will automatically show new events by poping up the relative window"
+msgstr "Gajim-ek automatikoki gertaera berriak agertaraziko ditu hautatutako leihoan "
 
 #: ../data/glade/preferences_window.glade.h:45
-msgid ""
-"Gajim will notify you for new events via a popup in the bottom right of the "
-"screen"
-msgstr ""
-"Gajim-ek gertaera berriez jakinaraziko dizu popup bidez pantailaren beheko "
-"eskubiko aldean"
+msgid "Gajim will notify you for new events via a popup in the bottom right of the screen"
+msgstr "Gajim-ek gertaera berriez jakinaraziko dizu popup bidez pantailaren beheko eskubiko aldean"
 
 #: ../data/glade/preferences_window.glade.h:46
-msgid ""
-"Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just signed in"
+msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed in"
 msgstr "Sartu berri diren kontaktuez jakinaraziko dizu Gajim-ek popup bidez"
 
 #: ../data/glade/preferences_window.glade.h:47
-msgid ""
-"Gajim will notify you via a popup window in the bottom right of the screen "
-"about contacts that just signed out"
-msgstr ""
-"Deskonektatu diren kontaktuez Gajim-ek jakinaraziko dizu popup bidez "
-"pantailako beheko eskubiko aldean"
+msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed out"
+msgstr "Deskonektatu diren kontaktuez Gajim-ek jakinaraziko dizu popup bidez pantailako beheko eskubiko aldean"
 
 #: ../data/glade/preferences_window.glade.h:48
-msgid ""
-"Gajim will only change the icon of the contact that triggered the new event"
-msgstr ""
-"Gajim-ek bakarrik kontaktuaren ikonoa aldatuko du gertaera berri bat duenean"
+msgid "Gajim will only change the icon of the contact that triggered the new event"
+msgstr "Gajim-ek bakarrik kontaktuaren ikonoa aldatuko du gertaera berri bat duenean"
 
 #: ../data/glade/preferences_window.glade.h:50
-msgid ""
-"If checked, Gajim will also include information about the sender of the new "
-"emails"
-msgstr ""
+msgid "If checked, Gajim will also include information about the sender of the new emails"
+msgstr "Aukeratu baduzu, Gajim-ek e-postako mezu berrien bidaltzailearen informazioa ere jarriko du."
 
 #: ../data/glade/preferences_window.glade.h:51
-msgid ""
-"If checked, Gajim will display avatars of contacts in roster window and in "
-"group chats"
-msgstr ""
-"Hautatua badago, Gajim-ek zerrendan eta txat taldeetan kontaktuen abatereak "
-"azalaraziko ditu"
+msgid "If checked, Gajim will display avatars of contacts in roster window and in group chats"
+msgstr "Hautatua badago, Gajim-ek zerrendan eta txat taldeetan kontaktuen abatereak azalaraziko ditu"
 
 #: ../data/glade/preferences_window.glade.h:52
-msgid ""
-"If checked, Gajim will display status messages of contacts under the contact "
-"name in roster window and in group chats"
-msgstr ""
-"Hautatua badago, Gajim-ek egoera mezua zerrendan erakutsaraziko du izenen "
-"azpian eta txat taldeetan"
+msgid "If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats"
+msgstr "Hautatua badago, Gajim-ek egoera mezua zerrendan erakutsaraziko du izenen azpian eta txat taldeetan"
 
 #: ../data/glade/preferences_window.glade.h:53
-msgid ""
-"If checked, Gajim will remember the roster and chat window positions in the "
-"screen and the sizes of them next time you run it"
-msgstr ""
-"Hautatua badago, Gajim-ek berriz abiarazten duzunean zerrendako eta baita "
-"txat leihoaren pantailako lekua eta tamaina gogoraraziko dizu"
+msgid "If checked, Gajim will remember the roster and chat window positions in the screen and the sizes of them next time you run it"
+msgstr "Hautatua badago, Gajim-ek berriz abiarazten duzunean zerrendako eta baita txat leihoaren pantailako lekua eta tamaina gogoraraziko dizu"
 
 #: ../data/glade/preferences_window.glade.h:54
-msgid ""
-"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
-"from MSN will have the equivalent msn icon for status online, away, busy, "
-"etc...)"
-msgstr ""
-"Hautatua badago, Gajim-ek protokolo bakoitzaren egoera ikurrak irabiliko "
-"ditu (Adibidez: MSN bada, protokolo honek erabiltzen dituen berezko ikurrak "
-"jarriko dira)"
+msgid "If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)"
+msgstr "Hautatua badago, Gajim-ek protokolo bakoitzaren egoera ikurrak irabiliko ditu (Adibidez: MSN bada, protokolo honek erabiltzen dituen berezko ikurrak jarriko dira)"
 
 #: ../data/glade/preferences_window.glade.h:55
-msgid ""
-"If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
-"animated or static graphical emoticons"
-msgstr ""
-"Ez badago ezeztatuta, Gajim-ek  ´:)´ ascii hauek bere irudi grafiko estatiko "
-"edo animatura eraldatuko ditu"
+msgid "If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons"
+msgstr "Ez badago ezeztatuta, Gajim-ek  ´:)´ ascii hauek bere irudi grafiko estatiko edo animatura eraldatuko ditu"
 
 #: ../data/glade/preferences_window.glade.h:56
 msgid "Ignore rich content in incoming messages"
-msgstr ""
+msgstr "Ez kasu egin gehiegizko edukiari sarrera mezuetan"
 
 #: ../data/glade/preferences_window.glade.h:57
 msgid "Ma_nage..."
@@ -1536,9 +1421,8 @@ msgid "One message _window:"
 msgstr "M_ezu leiho bat"
 
 #: ../data/glade/preferences_window.glade.h:66
-#, fuzzy
 msgid "Outgoing Chat state noti_fications:"
-msgstr "Txateko egoeraren ja_kinaraztea:"
+msgstr "Txat irteeren egoeren ja_kinarazteak:"
 
 #: ../data/glade/preferences_window.glade.h:67
 msgid "Play _sounds"
@@ -1558,7 +1442,7 @@ msgstr "Gorde zerrendaren eta txat leihoaren _lekua eta tamaina"
 
 #: ../data/glade/preferences_window.glade.h:71
 msgid "Set status message to reflect currently playing _music track"
-msgstr ""
+msgstr "Orain duzun  playing _music  pista jarri egoera mezu bezala"
 
 #: ../data/glade/preferences_window.glade.h:72
 msgid "Show only in _roster"
@@ -1573,10 +1457,8 @@ msgid "Sign _out"
 msgstr "_Deskonektatuta"
 
 #: ../data/glade/preferences_window.glade.h:75
-msgid ""
-"Some messages may include rich content (formatting, colors etc). If checked, "
-"Gajim will just display the raw message text."
-msgstr ""
+msgid "Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text."
+msgstr "Mezu batzuk gehiegizko edukia izan dezakete(koloreak, tamaina...). Hautatua badago, Gajim-ek testua modu sinple batean erakutsiko du. "
 
 #: ../data/glade/preferences_window.glade.h:76
 msgid "Status"
@@ -1607,26 +1489,16 @@ msgid "Use t_rayicon (aka. notification area icon)"
 msgstr "E_rabili ikonifikazioa (aka. notification area)"
 
 #: ../data/glade/preferences_window.glade.h:83
-msgid ""
-"When a new event (message, file transfer request etc..) is received, the "
-"following methods may be used to inform you about it. Please note that "
-"events about new messages only occur if it is a new message from a contact "
-"you are not already chatting with"
-msgstr ""
-"Metodo honekin, gertaera berri bat (mezu bat, fitxero trasferentzia "
-"eskaera...) jasotzean, horiei buruz jakinaraziko zaizu. Mezu berri baten "
-"jakinaraztea, bakarrik, dagoeneko hitz egiten ari zaren pertsona batekin "
-"izan ezik izango da"
+msgid "When a new event (message, file transfer request etc..) is received, the following methods may be used to inform you about it. Please note that events about new messages only occur if it is a new message from a contact you are not already chatting with"
+msgstr "Metodo honekin, gertaera berri bat (mezu bat, fitxero trasferentzia eskaera...) jasotzean, horiei buruz jakinaraziko zaizu. Mezu berri baten jakinaraztea, bakarrik, dagoeneko hitz egiten ari zaren pertsona batekin izan ezik izango da"
 
 #: ../data/glade/preferences_window.glade.h:84
 msgid "When new event is received"
 msgstr "Ekintza berri bat jasotzean."
 
 #: ../data/glade/preferences_window.glade.h:85
-msgid ""
-"Works for Rhythmbox and Muine players. For more players, please visit http://"
-"trac.gajim.org/wiki/GajimAndMusicPlayer"
-msgstr ""
+msgid "Works for Rhythmbox and Muine players. For more players, please visit http://trac.gajim.org/wiki/GajimAndMusicPlayer"
+msgstr " Rhythmbox eta Muine erreprodukzio programekin bakarrik funtzionatzen du. Erreprodukzio programa gehiagotarako, bisitatu http://trac.gajim.org/wiki/GajimAndMusicPlayer"
 
 #: ../data/glade/preferences_window.glade.h:86
 msgid "_Advanced Notifications Control..."
@@ -1717,9 +1589,8 @@ msgid "minutes"
 msgstr "minutu"
 
 #: ../data/glade/privacy_lists_window.glade.h:1
-#, fuzzy
 msgid "Privacy Lists:"
-msgstr "Debekatze Zerrenda"
+msgstr "Debekatze Zerrendak:"
 
 #: ../data/glade/privacy_list_window.glade.h:1
 msgid "<b>Add / Edit a rule</b>"
@@ -1735,12 +1606,11 @@ msgstr "<i>Debekatze Zerrenda</i>"
 
 #: ../data/glade/privacy_list_window.glade.h:4
 msgid "Active for this session"
-msgstr ""
+msgstr "Aktibatu saio honetarako"
 
 #: ../data/glade/privacy_list_window.glade.h:5
-#, fuzzy
 msgid "Active on each startup"
-msgstr "K_onektatu Gajim irikitzean"
+msgstr "Aktibatu hastean"
 
 #: ../data/glade/privacy_list_window.glade.h:6
 msgid "All"
@@ -1758,7 +1628,8 @@ msgstr "JabberID"
 msgid "Order:"
 msgstr "Ordena:"
 
-#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1841
+#: ../data/glade/privacy_list_window.glade.h:11
+#: ../src/dialogs.py:1841
 msgid "Privacy List"
 msgstr "Debekatze Zerrenda"
 
@@ -1810,9 +1681,8 @@ msgid "Address"
 msgstr "Helbidea"
 
 #: ../data/glade/profile_window.glade.h:4
-#, fuzzy
 msgid "Avatar:"
-msgstr "Ezarri _Abatereak"
+msgstr "Abatarea:"
 
 #: ../data/glade/profile_window.glade.h:5
 #: ../data/glade/vcard_information_window.glade.h:6
@@ -1887,7 +1757,6 @@ msgstr "Gehiago"
 
 #: ../data/glade/profile_window.glade.h:24
 #: ../data/glade/vcard_information_window.glade.h:30
-#, fuzzy
 msgid "Personal Info"
 msgstr "Informazio Pertsonala "
 
@@ -1913,7 +1782,8 @@ msgid "Prefix:"
 msgstr "Aurreizkia izenean:"
 
 #: ../data/glade/profile_window.glade.h:30
-#: ../data/glade/vcard_information_window.glade.h:37 ../src/vcard.py:273
+#: ../data/glade/vcard_information_window.glade.h:37
+#: ../src/vcard.py:273
 msgid "Role:"
 msgstr "Eginkizuna:"
 
@@ -1981,17 +1851,17 @@ msgstr "Editatu _Taldeak"
 #: ../data/glade/roster_contact_context_menu.glade.h:5
 #: ../src/roster_window.py:2131
 msgid "Execute Command..."
-msgstr ""
+msgstr "Komandoa Exekutatu..."
 
 #: ../data/glade/roster_contact_context_menu.glade.h:6
 #: ../src/roster_window.py:1954
 msgid "In_vite to"
-msgstr ""
+msgstr "Honera gonbidatu"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:7
 #: ../data/glade/systray_context_menu.glade.h:2
 msgid "Send Single _Message"
-msgstr "Bidali Mezu _Bakarra"
+msgstr "Bidali _Mezu Bakarra"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:9
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:5
@@ -2008,7 +1878,8 @@ msgstr "Debekatu nire egoera ikustea"
 
 #. Remove group
 #: ../data/glade/roster_contact_context_menu.glade.h:14
-#: ../src/roster_window.py:1948 ../src/roster_window.py:2045
+#: ../src/roster_window.py:1948
+#: ../src/roster_window.py:2045
 #: ../src/roster_window.py:2152
 msgid "_Remove from Roster"
 msgstr "_Zerrendatik Ezabatua"
@@ -2021,7 +1892,7 @@ msgstr "_Berrrizenpetu"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:16
 msgid "_Subscription"
-msgstr "_Harpidetza"
+msgstr "Har_pidetza"
 
 #: ../data/glade/roster_window.glade.h:1
 msgid "A_ccounts"
@@ -2044,14 +1915,12 @@ msgid "Help online"
 msgstr "Online laguntza"
 
 #: ../data/glade/roster_window.glade.h:7
-#, fuzzy
 msgid "Profile, A_vatar"
-msgstr "Profila, Abatareak"
+msgstr "Profila, A_batarea"
 
 #: ../data/glade/roster_window.glade.h:8
-#, fuzzy
 msgid "Show Trans_ports"
-msgstr "Transportea"
+msgstr "Trans_porteak Erakutsi"
 
 #: ../data/glade/roster_window.glade.h:9
 msgid "Show _Offline Contacts"
@@ -2065,7 +1934,8 @@ msgstr "_Edukiak"
 msgid "_Discover Services"
 msgstr "_Zerbitzuak Aurkitu"
 
-#: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1255
+#: ../data/glade/roster_window.glade.h:14
+#: ../src/disco.py:1255
 #: ../src/roster_window.py:2123
 msgid "_Edit"
 msgstr "_Editatu"
@@ -2087,9 +1957,8 @@ msgid "_Quit"
 msgstr "At_era"
 
 #: ../data/glade/roster_window.glade.h:21
-#, fuzzy
 msgid "_View"
-msgstr "_Ahotsa"
+msgstr "_Ikusi"
 
 #: ../data/glade/service_discovery_window.glade.h:1
 msgid "G_o"
@@ -2156,7 +2025,6 @@ msgid "_Send & Close"
 msgstr "_Bidali eta Itxi"
 
 #: ../data/glade/subscription_request_window.glade.h:1
-#, fuzzy
 msgid "Au_thorize"
 msgstr "_Autorizatu"
 
@@ -2177,9 +2045,8 @@ msgid "_Deny"
 msgstr "_Ukatu"
 
 #: ../data/glade/systray_context_menu.glade.h:1
-#, fuzzy
 msgid "Mute Sounds"
-msgstr "Wav Soinuak"
+msgstr "Soinua Kendu"
 
 #: ../data/glade/systray_context_menu.glade.h:3
 msgid "Show All Pending _Events"
@@ -2203,19 +2070,18 @@ msgid "Client:"
 msgstr "Bezeroa:"
 
 #: ../data/glade/vcard_information_window.glade.h:9
-#, fuzzy
 msgid "Comments"
-msgstr "Azalpenak: %s"
+msgstr "Azalpenak"
 
 #: ../data/glade/vcard_information_window.glade.h:11
 #: ../data/glade/zeroconf_information_window.glade.h:1
-#, fuzzy
 msgid "Contact"
 msgstr "Kontaktua"
 
 #: ../data/glade/vcard_information_window.glade.h:23
 #: ../data/glade/zeroconf_information_window.glade.h:4
-#: ../data/glade/zeroconf_properties_window.glade.h:13 ../src/dialogs.py:416
+#: ../data/glade/zeroconf_properties_window.glade.h:13
+#: ../src/dialogs.py:416
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
@@ -2276,41 +2142,37 @@ msgstr "_Egoera"
 
 #: ../data/glade/zeroconf_information_window.glade.h:3
 #: ../data/glade/zeroconf_properties_window.glade.h:6
-#, fuzzy
 msgid "First Name:"
-msgstr "Izena:"
+msgstr "Lehen Izena:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:5
 #: ../data/glade/zeroconf_properties_window.glade.h:14
-#, fuzzy
 msgid "Last Name:"
-msgstr "Izena:"
+msgstr "Azken Izena:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:6
 msgid "Local jid:"
-msgstr ""
+msgstr "Tokiko jid-a:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:7
-#, fuzzy
 msgid "Personal"
-msgstr "Informazio pertsonala"
+msgstr "Pertsonala"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:11
 msgid ""
-"If the default port that is used for incoming messages is unfitting for your "
-"setup you can select another one here.\n"
+"If the default port that is used for incoming messages is unfitting for your setup you can select another one here.\n"
 "You might consider to change possible firewall settings."
 msgstr ""
+"If the default port that is used for incoming messages is unfitting for your setup you can select another one here.\n"
+"You might consider to change possible firewall settings."
 
 #: ../data/glade/zeroconf_properties_window.glade.h:15
-#, fuzzy
 msgid "Modify Account"
-msgstr "Kontua E_ditatu"
+msgstr "Kontua E_raldatu"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:21
-#, fuzzy
 msgid "Use custom port:"
-msgstr "Erabili bezeroaren hostname/portua"
+msgstr "Erabili ezarritako portua:"
 
 #: ../src/advanced.py:57
 msgid "Preference Name"
@@ -2341,123 +2203,115 @@ msgstr "Ikusezin"
 #. echo "{_('en'):'en'",$LANG"}"
 #: ../src/chat_control.py:52
 msgid "English"
-msgstr ""
+msgstr "Ingelesa"
 
 #: ../src/chat_control.py:52
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulgariera"
 
 #: ../src/chat_control.py:52
 msgid "Briton"
-msgstr ""
+msgstr "Briton"
 
 #: ../src/chat_control.py:52
 msgid "Czech"
-msgstr ""
+msgstr "Czech"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "German"
-msgstr "Orokorra"
+msgstr "Alemaniera"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Greek"
-msgstr "berdea"
+msgstr "Greziera"
 
 #: ../src/chat_control.py:52
 msgid "Esperanto"
-msgstr ""
+msgstr "Esperantoa"
 
 #: ../src/chat_control.py:52
 msgid "Spanish"
-msgstr ""
+msgstr "Gaztelania"
 
 #: ../src/chat_control.py:52
 msgid "Basc"
-msgstr ""
+msgstr "Basc"
 
 #: ../src/chat_control.py:52
 msgid "French"
-msgstr ""
+msgstr "Frantsesa"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Croatian"
-msgstr "Kokapena"
+msgstr "Kroaziera"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Italian"
-msgstr "Etzana"
+msgstr "Italiera"
 
 #: ../src/chat_control.py:52
 msgid "Norvegian b"
-msgstr ""
+msgstr "Norvegian b"
 
 #: ../src/chat_control.py:52
 msgid "Dutch"
-msgstr ""
+msgstr "Alemana"
 
 #: ../src/chat_control.py:52
 msgid "Norvegian"
-msgstr ""
+msgstr "Norbegiera"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Polish"
-msgstr "_Argitaratu"
+msgstr "Polakoa"
 
 #: ../src/chat_control.py:52
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugesa"
 
 #: ../src/chat_control.py:52
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Brasileko Portugesa"
 
 #: ../src/chat_control.py:52
 msgid "Russian"
-msgstr ""
+msgstr "Rusiera"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
-msgstr ""
+msgstr "Eslovakoa"
 
 #: ../src/chat_control.py:52
 msgid "Swedish"
-msgstr ""
+msgstr "Swedish"
 
 #: ../src/chat_control.py:52
 msgid "Chinese (Ch)"
-msgstr ""
+msgstr "Txinera (Ch)"
 
-#: ../src/chat_control.py:201 ../src/dialogs.py:1497
+#: ../src/chat_control.py:201
+#: ../src/dialogs.py:1497
 msgid ""
-"If that is not your language for which you want to highlight misspelled "
-"words, then please set your $LANG as appropriate. Eg. for French do export "
-"LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it "
-"global in /etc/profile.\n"
+"If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n"
 "\n"
 "Highlighting misspelled words feature will not be used"
 msgstr ""
-"If that is not your language for which you want to highlight misspelled "
-"words, then please set your $LANG as appropriate. Eg. for French do export "
-"LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it "
-"global in /etc/profile.\n"
+"If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n"
 "\n"
 "Highlighting misspelled words feature will not be used"
 
 #: ../src/chat_control.py:239
 msgid "Spelling language"
-msgstr ""
+msgstr "Ortografia hizkuntza"
 
 #. we are not connected
-#: ../src/chat_control.py:262 ../src/chat_control.py:468
+#: ../src/chat_control.py:262
+#: ../src/chat_control.py:468
 msgid "A connection is not available"
 msgstr "Konexioa ez dago erabilgarri"
 
-#: ../src/chat_control.py:263 ../src/chat_control.py:469
+#: ../src/chat_control.py:263
+#: ../src/chat_control.py:469
 msgid "Your message can not be sent until you are connected."
 msgstr "Zure mezua ezin da bidali konektatu harte"
 
@@ -2466,9 +2320,9 @@ msgid "Chats"
 msgstr "Txat-ak"
 
 #: ../src/chat_control.py:1025
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
-msgstr "%(nickname)s: %(message)s"
+msgstr "%(nickname)s  %(room_name)s gelatik"
 
 #. we talk about a contact here
 #: ../src/chat_control.py:1113
@@ -2485,14 +2339,23 @@ msgid "Encryption disabled"
 msgstr "Enkriptazioa desaktibatuta"
 
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1386 ../src/conversation_textview.py:487
-#: ../src/dialogs.py:629 ../src/gajim.py:725 ../src/gajim.py:726
-#: ../src/gajim.py:1065 ../src/roster_window.py:328
-#: ../src/roster_window.py:404 ../src/roster_window.py:1642
-#: ../src/roster_window.py:1823 ../src/roster_window.py:2399
-#: ../src/roster_window.py:2598 ../src/roster_window.py:2609
-#: ../src/roster_window.py:3831 ../src/roster_window.py:3833
-#: ../src/common/contacts.py:73 ../src/common/helpers.py:42
+#: ../src/chat_control.py:1386
+#: ../src/conversation_textview.py:487
+#: ../src/dialogs.py:629
+#: ../src/gajim.py:725
+#: ../src/gajim.py:726
+#: ../src/gajim.py:1065
+#: ../src/roster_window.py:328
+#: ../src/roster_window.py:404
+#: ../src/roster_window.py:1642
+#: ../src/roster_window.py:1823
+#: ../src/roster_window.py:2399
+#: ../src/roster_window.py:2598
+#: ../src/roster_window.py:2609
+#: ../src/roster_window.py:3831
+#: ../src/roster_window.py:3833
+#: ../src/common/contacts.py:73
+#: ../src/common/helpers.py:42
 #: ../src/common/helpers.py:246
 msgid "Not in Roster"
 msgstr "Ez dago zerrendan"
@@ -2504,14 +2367,11 @@ msgid "You just received a new message from \"%s\""
 msgstr "\"%s\" -tik mezu berri bat jaso duzu"
 
 #: ../src/chat_control.py:1531
-msgid ""
-"If you close this tab and you have history disabled, this message will be "
-"lost."
-msgstr ""
-"Leiho hau isten baduzu eta ez baduzu historiala aktibatua mezu hau galduko "
-"duzu."
+msgid "If you close this tab and you have history disabled, this message will be lost."
+msgstr "Leiho hau isten baduzu eta ez baduzu historiala aktibatua mezu hau galduko duzu."
 
-#: ../src/config.py:129 ../src/config.py:588
+#: ../src/config.py:129
+#: ../src/config.py:588
 msgid "Disabled"
 msgstr "Ezindu"
 
@@ -2528,17 +2388,17 @@ msgstr "Aktibatuta"
 msgid "Event"
 msgstr "Gertaera"
 
-#: ../src/config.py:678 ../src/gajim.py:2072
-#, fuzzy, python-format
-msgid "Dictionary for lang %s not available"
-msgstr "Konexioa ez dago erabilgarri"
-
-#: ../src/config.py:679 ../src/gajim.py:2073
+#: ../src/config.py:678
+#: ../src/gajim.py:2072
 #, python-format
-msgid ""
-"You have to install %s dictionary to use spellchecking, or choose another "
-"language by setting the speller_language option."
-msgstr ""
+msgid "Dictionary for lang %s not available"
+msgstr "%s hizkuntzarako hiztegia ez dago erabilgarri"
+
+#: ../src/config.py:679
+#: ../src/gajim.py:2073
+#, python-format
+msgid "You have to install %s dictionary to use spellchecking, or choose another language by setting the speller_language option."
+msgstr "%s hiztegia instalatu behar duzu zuzentzailea erabiltzeko, edota beste hizkuntz bat aukeratu speller_language aukera erabiliz."
 
 #: ../src/config.py:1031
 msgid "status message title"
@@ -2577,9 +2437,8 @@ msgid "Group Chat Message Received"
 msgstr "Txat Taldeko Mezua Jasotzean"
 
 #: ../src/config.py:1079
-#, fuzzy
 msgid "GMail Email Received"
-msgstr "Gonbidapena Jasoa"
+msgstr "GMail posta jasoa"
 
 #: ../src/config.py:1282
 msgid "OpenPGP is not usable in this computer"
@@ -2593,29 +2452,25 @@ msgstr "Zerbitzarira konektatu zaude dagoeneko"
 msgid "To change the account name, you must be disconnected."
 msgstr "Kontuko izena aldatzeko deskonektatuta egon behar zara."
 
-#: ../src/config.py:1332 ../src/config.py:1924
+#: ../src/config.py:1332
+#: ../src/config.py:1924
 msgid "Unread events"
 msgstr "Irakurri gabeko gertaerak"
 
 #: ../src/config.py:1333
 msgid "To change the account name, you must read all pending events."
-msgstr ""
-"Kontuko izena aldatzeko,  irakurri gabeko gertaera guztiak irakurri behar "
-"dituzu."
+msgstr "Kontuko izena aldatzeko,  irakurri gabeko gertaera guztiak irakurri behar dituzu."
 
 #: ../src/config.py:1337
 msgid "Account Name Already Used"
 msgstr "Kontu Izena Jadanik Erabilia"
 
 #: ../src/config.py:1338
-msgid ""
-"This name is already used by another of your accounts. Please choose another "
-"name."
-msgstr ""
-"Izen hau jadanik zure kontaktu batengatik erabilita dago. Mesedez aukeratu "
-"beste izen bat."
+msgid "This name is already used by another of your accounts. Please choose another name."
+msgstr "Izen hau jadanik zure kontaktu batengatik erabilita dago. Mesedez aukeratu beste izen bat."
 
-#: ../src/config.py:1342 ../src/config.py:1346
+#: ../src/config.py:1342
+#: ../src/config.py:1346
 msgid "Invalid account name"
 msgstr "Kontu izen baliogabea"
 
@@ -2627,7 +2482,9 @@ msgstr "Kontu izena ezin da hustu."
 msgid "Account name cannot contain spaces."
 msgstr "Kontuko izenak ezin du espaziorik izan."
 
-#: ../src/config.py:1355 ../src/config.py:1361 ../src/config.py:1371
+#: ../src/config.py:1355
+#: ../src/config.py:1361
+#: ../src/config.py:1371
 #: ../src/config.py:3029
 msgid "Invalid Jabber ID"
 msgstr "Jabber ID baliogabea"
@@ -2644,7 +2501,8 @@ msgstr "Sarrera baliogabea"
 msgid "Custom port must be a port number."
 msgstr "Bezeroaren portua portu zenbaki bat izan behar da."
 
-#: ../src/config.py:1548 ../src/common/config.py:363
+#: ../src/config.py:1548
+#: ../src/common/config.py:363
 msgid "Be right back."
 msgstr "Be right back."
 
@@ -2654,8 +2512,7 @@ msgstr "Birkargatu orain?"
 
 #: ../src/config.py:1559
 msgid "If you want all the changes to apply instantly, you must relogin."
-msgstr ""
-"Momentuan aldaturiko aukerak ezarri nahi badituzu, birkargatu beharko duzu."
+msgstr "Momentuan aldaturiko aukerak ezarri nahi badituzu, birkargatu beharko duzu."
 
 #: ../src/config.py:1585
 msgid "No such account available"
@@ -2665,8 +2522,11 @@ msgstr "Horrelako konturik ez erabilgarri"
 msgid "You must create your account before editing your personal information."
 msgstr "Kontu bat sortu behar duzu informazio petsonala editatu baino lehen."
 
-#: ../src/config.py:1593 ../src/dialogs.py:1128 ../src/dialogs.py:1297
-#: ../src/disco.py:417 ../src/profile_window.py:307
+#: ../src/config.py:1593
+#: ../src/dialogs.py:1128
+#: ../src/dialogs.py:1297
+#: ../src/disco.py:417
+#: ../src/profile_window.py:307
 #: ../src/profile_window.py:373
 msgid "You are not connected to the server"
 msgstr "Ez zaude zerbitzarira konektatuta"
@@ -2677,32 +2537,38 @@ msgstr "Konektatzen ez bazara, ezin duzu zure informazio pertsonala aldatu."
 
 #: ../src/config.py:1598
 msgid "Your server doesn't support Vcard"
-msgstr ""
+msgstr "Zure zerbitzariak ez du Vcard-ik onartzen"
 
 #: ../src/config.py:1599
-#, fuzzy
 msgid "Your server can't save your personal information."
-msgstr "Kontu bat sortu behar duzu informazio petsonala editatu baino lehen."
+msgstr "Zerbitzariak ezin du zure informazio pertsonala gorde"
 
-#: ../src/config.py:1623 ../src/config.py:3416
+#: ../src/config.py:1623
+#: ../src/config.py:3416
 msgid "Failed to get secret keys"
 msgstr "Kode sekretua lortzeko huts egitea"
 
-#: ../src/config.py:1624 ../src/config.py:3417
+#: ../src/config.py:1624
+#: ../src/config.py:3417
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Problema bat egon da zure OpenPGP-ko kode sekretua lortzeko."
 
-#: ../src/config.py:1627 ../src/config.py:3420
+#: ../src/config.py:1627
+#: ../src/config.py:3420
 msgid "OpenPGP Key Selection"
 msgstr "OpenPGP Giltzaren Aukera"
 
-#: ../src/config.py:1628 ../src/config.py:3421
+#: ../src/config.py:1628
+#: ../src/config.py:3421
 msgid "Choose your OpenPGP key"
 msgstr "Aukeratu zure OpenPGP kodea"
 
 #. Name column
-#: ../src/config.py:1858 ../src/disco.py:740 ../src/disco.py:1466
-#: ../src/disco.py:1704 ../src/history_window.py:78
+#: ../src/config.py:1858
+#: ../src/disco.py:740
+#: ../src/disco.py:1466
+#: ../src/disco.py:1704
+#: ../src/history_window.py:78
 msgid "Name"
 msgstr "Izena"
 
@@ -2712,26 +2578,24 @@ msgstr "Zerbitzaria"
 
 #: ../src/config.py:1925
 msgid "Read all pending events before removing this account."
-msgstr ""
-"Irakurri pendiente dituzun gertaera guztiak kontu hau ezabatu baino lehen. "
+msgstr "Irakurri pendiente dituzun gertaera guztiak kontu hau ezabatu baino lehen. "
 
 #: ../src/config.py:1962
-#, fuzzy, python-format
+#, python-format
 msgid "You have opened chat in account %s"
-msgstr "Ez duzu aktibatutako konturik"
+msgstr "Txat-a %s kontuan ireki duzu"
 
 #: ../src/config.py:1963
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
-msgstr ""
+msgstr "Elkarrizketa guztiak itxiko dira. Jarraitu nahi al duzu?"
 
 #: ../src/config.py:2022
-#, fuzzy
 msgid "Account Local already exists."
-msgstr "Kontu Izena Jadanik Erabilia"
+msgstr "Kontu izena jadanik badago"
 
 #: ../src/config.py:2023
 msgid "Please rename or remove it before enabling link-local messaging."
-msgstr ""
+msgstr "Mesedez berridatzi edo ezabatu hori  link-local messaging martxan jarri baino lehen."
 
 #: ../src/config.py:2255
 #, python-format
@@ -2762,7 +2626,9 @@ msgstr "Administratzaile Zerrenda"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2365 ../src/disco.py:747 ../src/history_manager.py:154
+#: ../src/config.py:2365
+#: ../src/disco.py:747
+#: ../src/history_manager.py:154
 msgid "JID"
 msgstr "JID"
 
@@ -2848,16 +2714,19 @@ msgstr ""
 msgid "Removing %s account"
 msgstr "%s kontua ezabatzen"
 
-#: ../src/config.py:2537 ../src/roster_window.py:2667
+#: ../src/config.py:2537
+#: ../src/roster_window.py:2667
 msgid "Password Required"
 msgstr "Pasahitza behar da"
 
-#: ../src/config.py:2538 ../src/roster_window.py:2668
+#: ../src/config.py:2538
+#: ../src/roster_window.py:2668
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "%s kontuaren pasahitza sartu"
 
-#: ../src/config.py:2539 ../src/roster_window.py:2669
+#: ../src/config.py:2539
+#: ../src/roster_window.py:2669
 msgid "Save password"
 msgstr "Gorde pasahitza"
 
@@ -2875,29 +2744,24 @@ msgid "Default"
 msgstr "Berezkoa"
 
 #: ../src/config.py:2638
-#, fuzzy
 msgid "?print_status:All"
-msgstr "Inprimatu egoera:"
+msgstr "Denak"
 
 #: ../src/config.py:2639
 msgid "Enter and leave only"
 msgstr "Sarrerak eta irteerak bakarrik"
 
 #: ../src/config.py:2709
-#, fuzzy
 msgid "New Group Chat"
-msgstr "Txat Taldea"
+msgstr "Txat Taldea Berria"
 
 #: ../src/config.py:2741
 msgid "This bookmark has invalid data"
 msgstr "Talde agenda honek datu-banku baliogabea du"
 
 #: ../src/config.py:2742
-msgid ""
-"Please be sure to fill out server and room fields or remove this bookmark."
-msgstr ""
-"Mesedez ziurtatu ezazu zerbitzariaren eta gelaren informazioa betetzeaz edo "
-"talde agenda hau ezabatzeaz"
+msgid "Please be sure to fill out server and room fields or remove this bookmark."
+msgstr "Mesedez ziurtatu ezazu zerbitzariaren eta gelaren informazioa betetzeaz edo talde agenda hau ezabatzeaz"
 
 #: ../src/config.py:3004
 msgid "Invalid username"
@@ -2907,7 +2771,8 @@ msgstr "Baliogabeko izena"
 msgid "You must provide a username to configure this account."
 msgstr "Izen bat sartu behar duzu kontu bat sortzeko."
 
-#: ../src/config.py:3015 ../src/dialogs.py:1316
+#: ../src/config.py:3015
+#: ../src/dialogs.py:1316
 msgid "Invalid password"
 msgstr "Pasahitz baliogabea"
 
@@ -2915,11 +2780,13 @@ msgstr "Pasahitz baliogabea"
 msgid "You must enter a password for the new account."
 msgstr "Kontu berrirako pasahitz bat sartu behar duzu."
 
-#: ../src/config.py:3020 ../src/dialogs.py:1321
+#: ../src/config.py:3020
+#: ../src/dialogs.py:1321
 msgid "Passwords do not match"
 msgstr "Pasahitzak desberdinak dira"
 
-#: ../src/config.py:3021 ../src/dialogs.py:1322
+#: ../src/config.py:3021
+#: ../src/dialogs.py:1322
 msgid "The passwords typed in both fields must be identical."
 msgstr "Bi lekuetan pasahitza berdina izan behar du."
 
@@ -2935,10 +2802,9 @@ msgstr "Kontaktu hau dagoeneko Gajim-en konfiguratua dago."
 msgid "Account has been added successfully"
 msgstr "Kontua egoki sartua izan da"
 
-#: ../src/config.py:3059 ../src/config.py:3094
-msgid ""
-"You can set advanced account options by pressing Advanced button, or later "
-"by clicking in Accounts menuitem under Edit menu from the main window."
+#: ../src/config.py:3059
+#: ../src/config.py:3094
+msgid "You can set advanced account options by pressing Advanced button, or later by clicking in Accounts menuitem under Edit menu from the main window."
 msgstr "Kontuko aukera aurreratuak ezarri ditzakezu Aurreratu botoila sakatuz."
 
 #: ../src/config.py:3093
@@ -2958,15 +2824,13 @@ msgid "You already have an account using this name."
 msgstr "Jadanik baduzu kontu izen hau erabilgarri."
 
 #: ../src/conversation_textview.py:271
-msgid ""
-"Text below this line is what has been said since the last time you paid "
-"attention to this group chat"
+msgid "Text below this line is what has been said since the last time you paid attention to this group chat"
 msgstr "Beheko testua adi zeuden azken uneko txat taldeko mezuak dira"
 
 #: ../src/conversation_textview.py:340
-#, fuzzy, python-format
+#, python-format
 msgid "_Actions for \"%s\""
-msgstr "\"%s\" -rako aukerak"
+msgstr " \"%s\" -rako _aukerak"
 
 #: ../src/conversation_textview.py:352
 msgid "Read _Wikipedia Article"
@@ -2994,7 +2858,7 @@ msgstr "Web _Bilaketa "
 
 #: ../src/conversation_textview.py:395
 msgid "Open as _Link"
-msgstr ""
+msgstr "Ireki _lotura bezala"
 
 #: ../src/conversation_textview.py:752
 msgid "Yesterday"
@@ -3014,14 +2878,14 @@ msgid "Subject: %s\n"
 msgstr "Gaia: %s\n"
 
 #: ../src/dialogs.py:59
-#, fuzzy, python-format
+#, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "Kontaktuaren izena: <i>%s</i>"
 
 #: ../src/dialogs.py:61
-#, fuzzy, python-format
+#, python-format
 msgid "Jabber ID: <i>%s</i>"
-msgstr "JID: <i>%s</i>"
+msgstr "Jabber ID: <i>%s</i>"
 
 #: ../src/dialogs.py:211
 msgid "Group"
@@ -3057,27 +2921,24 @@ msgid "Please type a name for this status message"
 msgstr "Mesedez ezarri izen bat egoera mezu honetarako"
 
 #: ../src/dialogs.py:417
-#, fuzzy
 msgid "AIM Address:"
-msgstr "_Helbidea:"
+msgstr "AIM Hebidea:"
 
 #: ../src/dialogs.py:418
 msgid "GG Number:"
-msgstr ""
+msgstr "GG zenbakia:"
 
 #: ../src/dialogs.py:419
 msgid "ICQ Number:"
-msgstr ""
+msgstr "ICQ zanbakia:"
 
 #: ../src/dialogs.py:420
-#, fuzzy
 msgid "MSN Address:"
-msgstr "_Helbidea:"
+msgstr "MSN Helbidea:"
 
 #: ../src/dialogs.py:421
-#, fuzzy
 msgid "Yahoo! Address:"
-msgstr "Helbide Gehigarria:"
+msgstr "Yahoo! Helbide:"
 
 #: ../src/dialogs.py:457
 #, python-format
@@ -3088,16 +2949,25 @@ msgstr "Mesedez ezarri sartu nahi duzun kontaktuaren informazioa %s kontuarako"
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Mesedez bete sartu nahi duzun kontaktuaren informazioa"
 
-#: ../src/dialogs.py:467 ../src/disco.py:102 ../src/disco.py:103
-#: ../src/disco.py:1252 ../src/gajim.py:490 ../src/roster_window.py:267
-#: ../src/roster_window.py:325 ../src/roster_window.py:364
-#: ../src/roster_window.py:445 ../src/roster_window.py:477
-#: ../src/roster_window.py:479 ../src/roster_window.py:3827
-#: ../src/roster_window.py:3829 ../src/common/helpers.py:42
+#: ../src/dialogs.py:467
+#: ../src/disco.py:102
+#: ../src/disco.py:103
+#: ../src/disco.py:1252
+#: ../src/gajim.py:490
+#: ../src/roster_window.py:267
+#: ../src/roster_window.py:325
+#: ../src/roster_window.py:364
+#: ../src/roster_window.py:445
+#: ../src/roster_window.py:477
+#: ../src/roster_window.py:479
+#: ../src/roster_window.py:3827
+#: ../src/roster_window.py:3829
+#: ../src/common/helpers.py:42
 msgid "Transports"
 msgstr "Transportea"
 
-#: ../src/dialogs.py:609 ../src/dialogs.py:615
+#: ../src/dialogs.py:609
+#: ../src/dialogs.py:615
 msgid "Invalid User ID"
 msgstr "Bezero ID Baliogabea"
 
@@ -3114,9 +2984,8 @@ msgid "This contact is already listed in your roster."
 msgstr "Kontaktu hau zure zerrendan dago ezarria jadanik."
 
 #: ../src/dialogs.py:665
-#, fuzzy
 msgid "User ID:"
-msgstr "E_rabiltzailearen ID:"
+msgstr "Erabiltzailearen ID:"
 
 #: ../src/dialogs.py:728
 msgid "A GTK+ jabber client"
@@ -3161,12 +3030,8 @@ msgid "Unable to bind to port %s."
 msgstr "Unable to bind to port %s."
 
 #: ../src/dialogs.py:907
-msgid ""
-"Maybe you have another running instance of Gajim. File Transfer will be "
-"canceled."
-msgstr ""
-"Beharbada beste Gajim prozesu bat abiarazita duzu. Fitxero transferentzia "
-"bertan behera utziko da."
+msgid "Maybe you have another running instance of Gajim. File Transfer will be canceled."
+msgstr "Beharbada beste Gajim prozesu bat abiarazita duzu. Fitxero transferentzia bertan behera utziko da."
 
 #: ../src/dialogs.py:1058
 #, python-format
@@ -3178,8 +3043,9 @@ msgstr "Harpidetza baimena %s kontutik %s kontura"
 msgid "Subscription request from %s"
 msgstr "Harpidetza baimena %s kontutik"
 
-#: ../src/dialogs.py:1121 ../src/roster_window.py:681
-#, fuzzy, python-format
+#: ../src/dialogs.py:1121
+#: ../src/roster_window.py:681
+#, python-format
 msgid "You are already in group chat %s"
 msgstr "%s gelan zaude dagoeneko"
 
@@ -3192,24 +3058,24 @@ msgstr "Ezin duzu txat talde batera sartu konektatuta ez zauden bitartean."
 msgid "Join Group Chat with account %s"
 msgstr "Txat Taldera Sartu %s kontuarekin"
 
-#: ../src/dialogs.py:1212 ../src/dialogs.py:1218
-#, fuzzy
+#: ../src/dialogs.py:1212
+#: ../src/dialogs.py:1218
 msgid "Invalid group chat Jabber ID"
-msgstr "Jabber ID baliogabea"
+msgstr "Jabber ID gela baliogabea"
 
-#: ../src/dialogs.py:1213 ../src/dialogs.py:1219
-#, fuzzy
+#: ../src/dialogs.py:1213
+#: ../src/dialogs.py:1219
 msgid "The group chat Jabber ID has not allowed characters."
-msgstr "Gela izenak edo zerbitzariak ez du onartzen karaktererik."
+msgstr "ID Jabber gelak ez du onartzen karaktererik."
 
 #: ../src/dialogs.py:1225
 msgid "This is not a group chat"
-msgstr ""
+msgstr "Hau ez da txat talde bat"
 
 #: ../src/dialogs.py:1226
-#, fuzzy, python-format
+#, python-format
 msgid "%s is not the name of a group chat."
-msgstr "Ezkutatu banner-a txat talde leihoan"
+msgstr "%s ez da txat gela baten izena."
 
 #: ../src/dialogs.py:1248
 #, python-format
@@ -3221,25 +3087,29 @@ msgid "Start Chat"
 msgstr "Elkarrizketa Hasi"
 
 #: ../src/dialogs.py:1251
-#, fuzzy
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
 msgstr ""
 "Idatzi mezua bidali nahi diozun\n"
-"kontaktuaren jid-a edota izengoitia:"
+"kontaktuaren Jabber ID-a edota izengoitia:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:1276 ../src/dialogs.py:1635 ../src/dialogs.py:1764
+#: ../src/dialogs.py:1276
+#: ../src/dialogs.py:1635
+#: ../src/dialogs.py:1764
 msgid "Connection not available"
 msgstr "Konexioa ez erablgarri"
 
-#: ../src/dialogs.py:1277 ../src/dialogs.py:1636 ../src/dialogs.py:1765
+#: ../src/dialogs.py:1277
+#: ../src/dialogs.py:1636
+#: ../src/dialogs.py:1765
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Mesedez begiratu \"%s\" -rekin konektatuta zauden."
 
-#: ../src/dialogs.py:1286 ../src/dialogs.py:1289
+#: ../src/dialogs.py:1286
+#: ../src/dialogs.py:1289
 msgid "Invalid JID"
 msgstr "JID Baliogabea"
 
@@ -3258,68 +3128,93 @@ msgstr "Pasahitza sartu behar duzu."
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:1364 ../src/notify.py:211 ../src/notify.py:411
+#: ../src/dialogs.py:1364
+#: ../src/notify.py:211
+#: ../src/notify.py:411
 msgid "Contact Signed In"
 msgstr "Kontaktua konektatuta"
 
-#: ../src/dialogs.py:1366 ../src/notify.py:219 ../src/notify.py:413
+#: ../src/dialogs.py:1366
+#: ../src/notify.py:219
+#: ../src/notify.py:413
 msgid "Contact Signed Out"
 msgstr "Kontaktua deskonektatuta"
 
 #. chat message
-#: ../src/dialogs.py:1368 ../src/notify.py:238 ../src/notify.py:415
+#: ../src/dialogs.py:1368
+#: ../src/notify.py:238
+#: ../src/notify.py:415
 msgid "New Message"
 msgstr "Mezu Berria Bat"
 
 #. single message
-#: ../src/dialogs.py:1368 ../src/notify.py:223 ../src/notify.py:415
+#: ../src/dialogs.py:1368
+#: ../src/notify.py:223
+#: ../src/notify.py:415
 msgid "New Single Message"
 msgstr "Mezu Berri Bat"
 
 #. private message
-#: ../src/dialogs.py:1369 ../src/notify.py:230 ../src/notify.py:416
+#: ../src/dialogs.py:1369
+#: ../src/notify.py:230
+#: ../src/notify.py:416
 msgid "New Private Message"
 msgstr "Mezu Pribatu Berri Bat"
 
-#: ../src/dialogs.py:1369 ../src/gajim.py:1159 ../src/notify.py:424
+#: ../src/dialogs.py:1369
+#: ../src/gajim.py:1159
+#: ../src/notify.py:424
 msgid "New E-mail"
 msgstr "E-Posta Berria"
 
-#: ../src/dialogs.py:1371 ../src/gajim.py:1300 ../src/notify.py:418
+#: ../src/dialogs.py:1371
+#: ../src/gajim.py:1300
+#: ../src/notify.py:418
 msgid "File Transfer Request"
 msgstr "Fitxeroa Transferitzeko Baimena"
 
-#: ../src/dialogs.py:1373 ../src/gajim.py:1132 ../src/gajim.py:1276
+#: ../src/dialogs.py:1373
+#: ../src/gajim.py:1132
+#: ../src/gajim.py:1276
 #: ../src/notify.py:420
 msgid "File Transfer Error"
 msgstr "Fitxero Transferitze Errorea"
 
-#: ../src/dialogs.py:1375 ../src/gajim.py:1339 ../src/gajim.py:1361
-#: ../src/gajim.py:1378 ../src/notify.py:422
+#: ../src/dialogs.py:1375
+#: ../src/gajim.py:1339
+#: ../src/gajim.py:1361
+#: ../src/gajim.py:1378
+#: ../src/notify.py:422
 msgid "File Transfer Completed"
 msgstr "Fitxero Transferitzea Egina"
 
-#: ../src/dialogs.py:1376 ../src/gajim.py:1342 ../src/notify.py:422
+#: ../src/dialogs.py:1376
+#: ../src/gajim.py:1342
+#: ../src/notify.py:422
 msgid "File Transfer Stopped"
 msgstr "Fitxero Transferentzia Gelditua"
 
-#: ../src/dialogs.py:1378 ../src/gajim.py:1030 ../src/notify.py:426
+#: ../src/dialogs.py:1378
+#: ../src/gajim.py:1030
+#: ../src/notify.py:426
 msgid "Groupchat Invitation"
 msgstr "Txat Taldeko Gonbidapena"
 
-#: ../src/dialogs.py:1380 ../src/notify.py:203 ../src/notify.py:428
+#: ../src/dialogs.py:1380
+#: ../src/notify.py:203
+#: ../src/notify.py:428
 msgid "Contact Changed Status"
 msgstr "Kontaktu Egoera Aldaketa"
 
 #: ../src/dialogs.py:1565
-#, fuzzy, python-format
+#, python-format
 msgid "Single Message using account %s"
-msgstr "Mezu Bakarra %s Kontuarekin"
+msgstr "Mezu Bakarra %s Kontua erabiliz"
 
 #: ../src/dialogs.py:1567
-#, fuzzy, python-format
+#, python-format
 msgid "Single Message in account %s"
-msgstr "Mezu Bakarra %s Kontuarekin"
+msgstr "Mezu Bakarra %s Kontuan"
 
 #: ../src/dialogs.py:1569
 msgid "Single Message"
@@ -3370,12 +3265,12 @@ msgstr "Debekatze Zerrenda %s-entzat"
 #: ../src/dialogs.py:1887
 #, python-format
 msgid "Order: %s, action: %s, type: %s, value: %s"
-msgstr ""
+msgstr "Agindua: %s, akzioa: %s, mota %s, balorea %s"
 
 #: ../src/dialogs.py:1890
-#, fuzzy, python-format
+#, python-format
 msgid "Order: %s, action: %s"
-msgstr "Deskribapena: %s"
+msgstr "Agindu: %s, ekintza: %s"
 
 #: ../src/dialogs.py:1932
 msgid "<b>Edit a rule</b>"
@@ -3395,18 +3290,16 @@ msgid "Privacy Lists"
 msgstr "Debekatze Zerrenda"
 
 #: ../src/dialogs.py:2185
-#, fuzzy
 msgid "Invalid List Name"
-msgstr "Baliogabeko izena"
+msgstr "Baliogabeko izen zerrenda"
 
 #: ../src/dialogs.py:2186
-#, fuzzy
 msgid "You must enter a name to create a privacy list."
-msgstr "Kontu berrirako pasahitz bat sartu behar duzu."
+msgstr "Izen bat sartu beharra duzu debekatze zerrenda bat egiteko."
 
 #. FIXME: use nickname instead of contact_jid
 #: ../src/dialogs.py:2220
-#, fuzzy, python-format
+#, python-format
 msgid "%(contact_jid)s has invited you to group chat %(room_jid)s"
 msgstr "%(contact_jid)s -ek %(room_jid)s gelara gonbidatu zaitu"
 
@@ -3420,7 +3313,8 @@ msgstr "Azalpenak: %s"
 msgid "Choose Sound"
 msgstr "Aukeratu Soinua"
 
-#: ../src/dialogs.py:2298 ../src/dialogs.py:2343
+#: ../src/dialogs.py:2298
+#: ../src/dialogs.py:2343
 msgid "All files"
 msgstr "Fitxategi guztiak"
 
@@ -3449,16 +3343,15 @@ msgstr "Jakinarazketa Berezia Gehitzen %s-entzat"
 #. # means number
 #: ../src/dialogs.py:2478
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: ../src/dialogs.py:2484
 msgid "Condition"
 msgstr "Condition"
 
 #: ../src/dialogs.py:2605
-#, fuzzy
 msgid "when I am "
-msgstr "Nagoenean"
+msgstr "nagoenean"
 
 #: ../src/disco.py:101
 msgid "Others"
@@ -3487,14 +3380,11 @@ msgid "The service could not be found"
 msgstr "Zerbitzua ezin izan da aurkitu"
 
 #: ../src/disco.py:642
-msgid ""
-"There is no service at the address you entered, or it is not responding. "
-"Check the address and try again."
-msgstr ""
-"Ez dago zerbitzurik zuk sartu duzun helbidean edo ez du erantzuten. Begiratu "
-"helbidea eta saiatu berriro."
+msgid "There is no service at the address you entered, or it is not responding. Check the address and try again."
+msgstr "Ez dago zerbitzurik zuk sartu duzun helbidean edo ez du erantzuten. Begiratu helbidea eta saiatu berriro."
 
-#: ../src/disco.py:646 ../src/disco.py:927
+#: ../src/disco.py:646
+#: ../src/disco.py:927
 msgid "The service is not browsable"
 msgstr "Zerbitzua erabilezina"
 
@@ -3515,7 +3405,8 @@ msgstr "_Bilatu"
 msgid "This service does not contain any items to browse."
 msgstr "Zerbitzari honek ez du begiratzeko menurik."
 
-#: ../src/disco.py:1142 ../src/disco.py:1257
+#: ../src/disco.py:1142
+#: ../src/disco.py:1257
 msgid "Re_gister"
 msgstr "Erre_gistratu"
 
@@ -3537,25 +3428,23 @@ msgstr "Deskribapena"
 #. Id column
 #: ../src/disco.py:1489
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: ../src/disco.py:1712
-#, fuzzy
 msgid "Subscribed"
 msgstr "Harpidetu"
 
 #: ../src/disco.py:1738
 msgid "New post"
-msgstr ""
+msgstr "Mezu berria"
 
 #: ../src/disco.py:1744
 msgid "_Subscribe"
 msgstr "_Harpidetu"
 
 #: ../src/disco.py:1750
-#, fuzzy
 msgid "_Unsubscribe"
-msgstr "_Harpidetu"
+msgstr "Harpidetza ezabat_u"
 
 #: ../src/filetransfers_window.py:72
 msgid "File"
@@ -3569,19 +3458,22 @@ msgstr "Denbora"
 msgid "Progress"
 msgstr "Prozesua"
 
-#: ../src/filetransfers_window.py:163 ../src/filetransfers_window.py:223
+#: ../src/filetransfers_window.py:163
+#: ../src/filetransfers_window.py:223
 #, python-format
 msgid "Filename: %s"
 msgstr "Fitxeroaren izena: %s"
 
-#: ../src/filetransfers_window.py:164 ../src/filetransfers_window.py:298
+#: ../src/filetransfers_window.py:164
+#: ../src/filetransfers_window.py:298
 #, python-format
 msgid "Size: %s"
 msgstr "Tamaina: %s"
 
 #. You is a reply of who sent a file
 #. You is a reply of who received a file
-#: ../src/filetransfers_window.py:173 ../src/filetransfers_window.py:183
+#: ../src/filetransfers_window.py:173
+#: ../src/filetransfers_window.py:183
 #: ../src/history_manager.py:463
 msgid "You"
 msgstr "Zu"
@@ -3591,7 +3483,8 @@ msgstr "Zu"
 msgid "Sender: %s"
 msgstr "Bidaltzaile: %s"
 
-#: ../src/filetransfers_window.py:175 ../src/filetransfers_window.py:564
+#: ../src/filetransfers_window.py:175
+#: ../src/filetransfers_window.py:564
 #: ../src/tooltips.py:573
 msgid "Recipient: "
 msgstr "Hartzailea: "
@@ -3605,23 +3498,25 @@ msgstr "%s gordea"
 msgid "File transfer completed"
 msgstr "Fitxero transferentzia osatua"
 
-#: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:212
+#: ../src/filetransfers_window.py:204
+#: ../src/filetransfers_window.py:212
 msgid "File transfer canceled"
 msgstr "Fitxero transferentzia ezeztatua"
 
-#: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:213
+#: ../src/filetransfers_window.py:204
+#: ../src/filetransfers_window.py:213
 msgid "Connection with peer cannot be established."
 msgstr "Connection with peer cannot be established."
 
 #: ../src/filetransfers_window.py:224
-#, fuzzy, python-format
+#, python-format
 msgid "Recipient: %s"
-msgstr "Hartzailea: "
+msgstr "Hartzailea: %s"
 
 #: ../src/filetransfers_window.py:226
-#, fuzzy, python-format
+#, python-format
 msgid "Error message: %s"
-msgstr "Errorea fitxeroa irakurtzean:"
+msgstr "Errore mezua: %s"
 
 #: ../src/filetransfers_window.py:227
 msgid "File transfer stopped by the contact of the other side"
@@ -3659,32 +3554,35 @@ msgstr "Deskribapena: %s"
 msgid "%s wants to send you a file:"
 msgstr "%s fitxero bat bidali nahi dizu:"
 
-#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:682
+#: ../src/filetransfers_window.py:318
+#: ../src/gtkgui_helpers.py:682
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Ezin izan da gainarazi \"%s\" fitxeroa"
 
-#: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:684
-msgid ""
-"A file with this name already exists and you do not have permission to "
-"overwrite it."
-msgstr ""
-"Izen honekin dagoeneko badago fitxerorik eta ez duzu baimenik gainarazteko."
+#: ../src/filetransfers_window.py:319
+#: ../src/gtkgui_helpers.py:684
+msgid "A file with this name already exists and you do not have permission to overwrite it."
+msgstr "Izen honekin dagoeneko badago fitxerorik eta ez duzu baimenik gainarazteko."
 
-#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:688
+#: ../src/filetransfers_window.py:326
+#: ../src/gtkgui_helpers.py:688
 msgid "This file already exists"
 msgstr "Fitxero hau jadanik badago"
 
-#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:688
+#: ../src/filetransfers_window.py:326
+#: ../src/gtkgui_helpers.py:688
 msgid "What do you want to do?"
 msgstr "Zer nahi duzu egitea?"
 
-#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:698
+#: ../src/filetransfers_window.py:338
+#: ../src/gtkgui_helpers.py:698
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "\"%s\" kokapena ez da idazgarria"
 
-#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:699
+#: ../src/filetransfers_window.py:338
+#: ../src/gtkgui_helpers.py:699
 msgid "You do not have permission to create files in this directory."
 msgstr "Ez duzu baimenik kokapen honetan fitxerorik sortzeko."
 
@@ -3708,7 +3606,8 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: ../src/filetransfers_window.py:536 ../src/filetransfers_window.py:539
+#: ../src/filetransfers_window.py:536
+#: ../src/filetransfers_window.py:539
 msgid "Invalid File"
 msgstr "Fitxero Baliogabea"
 
@@ -3720,11 +3619,13 @@ msgstr "Fitxeroa:"
 msgid "It is not possible to send empty files"
 msgstr "Ez da posible hutsik dauden artxiboak bidaltzea"
 
-#: ../src/filetransfers_window.py:560 ../src/tooltips.py:563
+#: ../src/filetransfers_window.py:560
+#: ../src/tooltips.py:563
 msgid "Name: "
 msgstr "Izena: "
 
-#: ../src/filetransfers_window.py:562 ../src/tooltips.py:567
+#: ../src/filetransfers_window.py:562
+#: ../src/tooltips.py:567
 msgid "Sender: "
 msgstr "Bidaltzailea: "
 
@@ -3758,15 +3659,11 @@ msgstr "GTK+ rutinak ez du libglade sostengatzen"
 
 #: ../src/gajim.py:62
 #, python-format
-msgid ""
-"Please remove your current GTK+ runtime and install the latest stable "
-"version from %s"
-msgstr ""
-"GTK+ rutina ezabatu eta instalatu ezazu azken bertsio establea %s hemendik"
+msgid "Please remove your current GTK+ runtime and install the latest stable version from %s"
+msgstr "GTK+ rutina ezabatu eta instalatu ezazu azken bertsio establea %s hemendik"
 
 #: ../src/gajim.py:64
-msgid ""
-"Please make sure that GTK+ and PyGTK have libglade support in your system."
+msgid "Please make sure that GTK+ and PyGTK have libglade support in your system."
 msgstr "Konproba ezazu GTK+ eta  PyGTK  libglade onartzen dutea zure sistemak."
 
 #: ../src/gajim.py:69
@@ -3774,16 +3671,13 @@ msgid "Gajim needs PySQLite2 to run"
 msgstr "Gajim-ek PySQLite2 behar du abiarazteko"
 
 #: ../src/gajim.py:76
-#, fuzzy
 msgid "Gajim needs pywin32 to run"
-msgstr "Gajim-ek PySQLite2 behar du abiarazteko"
+msgstr "Gajim-ek  pywin32  behar du abiarazteko"
 
 #: ../src/gajim.py:77
 #, python-format
-msgid ""
-"Please make sure that Pywin32 is installed on your system. You can get it at "
-"%s"
-msgstr ""
+msgid "Please make sure that Pywin32 is installed on your system. You can get it at %s"
+msgstr "Mesedez begiratu Pywin32 instalatuta dagoela sisteman. %s-etin lortu dezakezu hau."
 
 #. set the icon to all newly opened wind
 #: ../src/gajim.py:189
@@ -3807,15 +3701,15 @@ msgstr "HTTP (%s) Autorizazioa %s(id: %s)-entzat"
 msgid "Do you accept this request?"
 msgstr "Baimen hau onartzen al duzu?"
 
-#: ../src/gajim.py:344 ../src/notify.py:430
-#, fuzzy
+#: ../src/gajim.py:344
+#: ../src/notify.py:430
 msgid "Connection Failed"
-msgstr "Konektatu"
+msgstr "Konexioak huts egin du"
 
 #: ../src/gajim.py:656
-#, fuzzy, python-format
+#, python-format
 msgid "Subject: %s"
-msgstr "Gaia: %s\n"
+msgstr "Gaia: %s"
 
 #: ../src/gajim.py:701
 #, python-format
@@ -3845,11 +3739,13 @@ msgstr "Beti deskonektatuta ikusiko duzu."
 msgid "Contact with \"%s\" cannot be established"
 msgstr "\"%s\" ezin izan da kontaktuan jarri"
 
-#: ../src/gajim.py:795 ../src/common/connection.py:395
+#: ../src/gajim.py:795
+#: ../src/common/connection.py:395
 msgid "Check your connection or try again later."
 msgstr "Begiratu zure konexioa edo saiatu berriro beranduago."
 
-#: ../src/gajim.py:943 ../src/roster_window.py:1201
+#: ../src/gajim.py:943
+#: ../src/roster_window.py:1201
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s orain %s dago: (%s)"
@@ -3863,16 +3759,16 @@ msgid "You are currently connected without your OpenPGP key."
 msgstr "Zure OpenPGP koderik gabe konektatu zara."
 
 #: ../src/gajim.py:1143
-#, fuzzy, python-format
+#, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "E-posta Berria %(gmail_mail_address)s -en"
 
 #: ../src/gajim.py:1145
-#, fuzzy, python-format
+#, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
-msgstr[0] "E-posta berri %d duzu"
-msgstr[1] "%d E-mail berri dituzu"
+msgstr[0] "%d e-posta elkarrizketa duzu"
+msgstr[1] "%d e-posta elkarrizketa dituzu"
 
 #. FIXME: emulate Gtalk client popups. find out what they parse and how
 #. they decide what to show
@@ -3900,8 +3796,7 @@ msgstr "Ondo jasoa izan da  %(name)s-ren %(filename)s  fitxeroa."
 #: ../src/gajim.py:1366
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
-msgstr ""
-"%(name)s -eko %(filename)s -ren fitxero trasferentzia gelditua izan da."
+msgstr "%(name)s -eko %(filename)s -ren fitxero trasferentzia gelditua izan da."
 
 #: ../src/gajim.py:1379
 #, python-format
@@ -3916,12 +3811,11 @@ msgstr "Fitxero transferentzia %(filename)s -rena %(name)s -entzat gelditua."
 
 #: ../src/gajim.py:1489
 msgid "Username Conflict"
-msgstr ""
+msgstr "Erabiltze izenarekin gatazka"
 
 #: ../src/gajim.py:1490
-#, fuzzy
 msgid "Please type a new username for your local account"
-msgstr "<b>Mesedez bete zure kontu berrirako informazioa</b>"
+msgstr "Mesedez ezarri erabiltzaile izen berri bat kontu lokalerako"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
@@ -3930,18 +3824,16 @@ msgid "Could not save your settings and preferences"
 msgstr "Ezin izan dira zure aldaketak eta hobespenak gorde"
 
 #: ../src/gajim.py:2020
-#, fuzzy
 msgid "Network Manager support not available"
-msgstr "Konexioa ez dago erabilgarri"
+msgstr "Network Kudeatzailea ez dago erabilgarri"
 
 #: ../src/gajim.py:2095
 msgid "Session Management support not available (missing gnome.ui module)"
 msgstr "Session Management support not available (missing gnome.ui module)"
 
 #: ../src/gajim-remote.py:66
-#, fuzzy
 msgid "Shows a help on specific command"
-msgstr "shows a help on specific command"
+msgstr "Shows a help on specific command"
 
 #. User gets help for the command, specified by this parameter
 #: ../src/gajim-remote.py:69
@@ -3957,23 +3849,23 @@ msgid "Shows or hides the roster window"
 msgstr "Erakutsi edo ezkutatu zerrenda leihoa"
 
 #: ../src/gajim-remote.py:78
-#, fuzzy
 msgid "Popups a window with the next pending event"
-msgstr "Agertarazi leiho bat irakurri gabeko hurrengo mezuarekin"
+msgstr "Agertarazi leiho bat hurrengo irakurri gabeko gertaerarekin"
 
 #: ../src/gajim-remote.py:82
-msgid ""
-"Prints a list of all contacts in the roster. Each contact appear on a "
-"separate line"
-msgstr ""
-"Zerrendan inprimatu kontaktu guztien lista. Kontaktu horiek hainbat lerrotan "
-"agertuko dira."
+msgid "Prints a list of all contacts in the roster. Each contact appear on a separate line"
+msgstr "Zerrendan inprimatu kontaktu guztien lista. Kontaktu horiek hainbat lerrotan agertuko dira."
 
-#: ../src/gajim-remote.py:84 ../src/gajim-remote.py:98
-#: ../src/gajim-remote.py:108 ../src/gajim-remote.py:121
-#: ../src/gajim-remote.py:135 ../src/gajim-remote.py:156
-#: ../src/gajim-remote.py:186 ../src/gajim-remote.py:195
-#: ../src/gajim-remote.py:202 ../src/gajim-remote.py:209
+#: ../src/gajim-remote.py:84
+#: ../src/gajim-remote.py:98
+#: ../src/gajim-remote.py:108
+#: ../src/gajim-remote.py:121
+#: ../src/gajim-remote.py:135
+#: ../src/gajim-remote.py:156
+#: ../src/gajim-remote.py:186
+#: ../src/gajim-remote.py:195
+#: ../src/gajim-remote.py:202
+#: ../src/gajim-remote.py:209
 #: ../src/gajim-remote.py:220
 msgid "account"
 msgstr "kontua"
@@ -3999,7 +3891,8 @@ msgstr "egoera"
 msgid "one of: offline, online, chat, away, xa, dnd, invisible "
 msgstr "hauetako bat: offline, online, chat, away, xa, dnd, invisible "
 
-#: ../src/gajim-remote.py:97 ../src/gajim-remote.py:118
+#: ../src/gajim-remote.py:97
+#: ../src/gajim-remote.py:118
 #: ../src/gajim-remote.py:132
 msgid "message"
 msgstr "mezua"
@@ -4009,13 +3902,8 @@ msgid "status message"
 msgstr "egoera mezua"
 
 #: ../src/gajim-remote.py:98
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"\"kontua\" kontuaren egoera aldatu. Ez badago zehaztua, saiatu "
-"\"Sinkronizatu egoera globalarekin\" aukera hautatua duten kontu guztien "
-"egoera aldatzen"
+msgid "change status of account \"account\". If not specified, try to change status of all accounts that have \"sync with global status\" option set"
+msgstr "\"kontua\" kontuaren egoera aldatu. Ez badago zehaztua, saiatu \"Sinkronizatu egoera globalarekin\" aukera hautatua duten kontu guztien egoera aldatzen"
 
 #: ../src/gajim-remote.py:104
 msgid "Shows the chat dialog so that you can send messages to a contact"
@@ -4025,49 +3913,43 @@ msgstr "Txat leihoa erakutsi, honela, kontaktuari mezua bidali diezaiokezu"
 msgid "JID of the contact that you want to chat with"
 msgstr "Txateatu nahi duzun pertsonaren JID-a"
 
-#: ../src/gajim-remote.py:108 ../src/gajim-remote.py:186
+#: ../src/gajim-remote.py:108
+#: ../src/gajim-remote.py:186
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "hautatua badago, kontaktua kontu honen kontaktu listatik lortuko da."
 
 #: ../src/gajim-remote.py:113
-msgid ""
-"Sends new chat message to a contact in the roster. Both OpenPGP key and "
-"account are optional. If you want to set only 'account', without 'OpenPGP "
-"key', just set 'OpenPGP key' to ''."
-msgstr ""
-"Zerrendako kontaktu bati mezu berri bat bidali. Bai OpenPGP kodea eta baita "
-"kontua dira aukerazkoak. `Kontua` bakarrik zehaztu nahi baduzu, `OpenPGP "
-"koderik` gabe, bakarrik `OpenPGP kodea` -entzat zehaztu."
+msgid "Sends new chat message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''."
+msgstr "Zerrendako kontaktu bati mezu berri bat bidali. Bai OpenPGP kodea eta baita kontua dira aukerazkoak. `Kontua` bakarrik zehaztu nahi baduzu, `OpenPGP koderik` gabe, bakarrik `OpenPGP kodea` -entzat zehaztu."
 
-#: ../src/gajim-remote.py:117 ../src/gajim-remote.py:130
+#: ../src/gajim-remote.py:117
+#: ../src/gajim-remote.py:130
 msgid "JID of the contact that will receive the message"
 msgstr "Mezua jaso dugun kontuaren JID-a"
 
-#: ../src/gajim-remote.py:118 ../src/gajim-remote.py:132
+#: ../src/gajim-remote.py:118
+#: ../src/gajim-remote.py:132
 msgid "message contents"
 msgstr "mezuaren edukia"
 
-#: ../src/gajim-remote.py:119 ../src/gajim-remote.py:133
+#: ../src/gajim-remote.py:119
+#: ../src/gajim-remote.py:133
 msgid "pgp key"
 msgstr "pgp giltza"
 
-#: ../src/gajim-remote.py:119 ../src/gajim-remote.py:133
+#: ../src/gajim-remote.py:119
+#: ../src/gajim-remote.py:133
 msgid "if specified, the message will be encrypted using this public key"
 msgstr "hautatua badago, kode publikoa erabiliz enkriptatuko da mezua"
 
-#: ../src/gajim-remote.py:121 ../src/gajim-remote.py:135
+#: ../src/gajim-remote.py:121
+#: ../src/gajim-remote.py:135
 msgid "if specified, the message will be sent using this account"
 msgstr "hautatua badago, mezua kontu hau erabiliz bidaliko da"
 
 #: ../src/gajim-remote.py:126
-msgid ""
-"Sends new single message to a contact in the roster. Both OpenPGP key and "
-"account are optional. If you want to set only 'account', without 'OpenPGP "
-"key', just set 'OpenPGP key' to ''."
-msgstr ""
-"Zerrendako kontaktu bati mezu berri bat bidali. Bai OpenPGP kodea eta baita "
-"kontua dira aukerazkoak. `Kontua` bakarrik zehaztu nahi baduzu, `OpenPGP "
-"koderik` gabe, bakarrik `OpenPGP kodea` -entzat zehaztu."
+msgid "Sends new single message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''."
+msgstr "Zerrendako kontaktu bati mezu berri bat bidali. Bai OpenPGP kodea eta baita kontua dira aukerazkoak. `Kontua` bakarrik zehaztu nahi baduzu, `OpenPGP koderik` gabe, bakarrik `OpenPGP kodea` -entzat zehaztu."
 
 #: ../src/gajim-remote.py:131
 msgid "subject"
@@ -4081,8 +3963,10 @@ msgstr "mezuaren gaia"
 msgid "Gets detailed info on a contact"
 msgstr "Kontaktu baten informazioa lortu"
 
-#: ../src/gajim-remote.py:142 ../src/gajim-remote.py:155
-#: ../src/gajim-remote.py:185 ../src/gajim-remote.py:194
+#: ../src/gajim-remote.py:142
+#: ../src/gajim-remote.py:155
+#: ../src/gajim-remote.py:185
+#: ../src/gajim-remote.py:194
 msgid "JID of the contact"
 msgstr "Kontaktuaren JID-a"
 
@@ -4163,17 +4047,14 @@ msgid "Returns current status (the global one unless account is specified)"
 msgstr "Oraingo egoera itzuli (Globala, ez badago kontu bat aukeratuta)"
 
 #: ../src/gajim-remote.py:207
-msgid ""
-"Returns current status message(the global one unless account is specified)"
-msgstr ""
-"Oraingo egoera mezua itzuli(Globala aukeratu ez badago kontu bat aukeratuta)"
+msgid "Returns current status message(the global one unless account is specified)"
+msgstr "Oraingo egoera mezua itzuli(Globala aukeratu ez badago kontu bat aukeratuta)"
 
 #: ../src/gajim-remote.py:214
 msgid "Returns number of unreaded messages"
 msgstr "Irakurri gabeko mezuen kontaketa itzuli"
 
 #: ../src/gajim-remote.py:218
-#, fuzzy
 msgid "Opens 'Start Chat' dialog"
 msgstr "Ireki  'Txat-a Hasi' leiho"
 
@@ -4183,18 +4064,15 @@ msgstr "Elkarrizketa hasi, kontu hau rabiliz"
 
 #: ../src/gajim-remote.py:224
 msgid "Sends custom XML"
-msgstr ""
+msgstr "Sends custom XML"
 
 #: ../src/gajim-remote.py:226
-#, fuzzy
 msgid "XML to send"
-msgstr " XML Konsola"
+msgstr " XML bidaltzeko"
 
 #: ../src/gajim-remote.py:227
-msgid ""
-"Account in which the xml will be sent; if not specified, xml will be sent to "
-"all accounts"
-msgstr ""
+msgid "Account in which the xml will be sent; if not specified, xml will be sent to all accounts"
+msgstr "Xml-a bidaliko den kontua ez badako zehaztuta, kontu guztietara bidaliko da"
 
 #: ../src/gajim-remote.py:249
 msgid "Missing argument \"contact_jid\""
@@ -4280,9 +4158,9 @@ msgstr "Mezu pribatua bidaltzeak huts egin du"
 
 #. in second %s code replaces with nickname
 #: ../src/groupchat_control.py:122
-#, fuzzy, python-format
+#, python-format
 msgid "You are no longer in group chat \"%s\" or \"%s\" has left."
-msgstr "Ez zaude gela honetan \"%s\" edo \"%s\" joan da."
+msgstr "Ez zaude gela honetan \"%s\"jadanik edo \"%s\" joan da."
 
 #: ../src/groupchat_control.py:141
 msgid "Group Chat"
@@ -4334,24 +4212,26 @@ msgid "%s has left"
 msgstr "%s deskonektatu da"
 
 #: ../src/groupchat_control.py:899
-#, fuzzy, python-format
+#, python-format
 msgid "%s has joined the group chat"
 msgstr "%s gelan sartu da"
 
 #. No status message
-#: ../src/groupchat_control.py:901 ../src/roster_window.py:1204
+#: ../src/groupchat_control.py:901
+#: ../src/roster_window.py:1204
 #, python-format
 msgid "%s is now %s"
 msgstr "%s orain %s da"
 
-#: ../src/groupchat_control.py:1020 ../src/groupchat_control.py:1038
-#: ../src/groupchat_control.py:1131 ../src/groupchat_control.py:1148
+#: ../src/groupchat_control.py:1020
+#: ../src/groupchat_control.py:1038
+#: ../src/groupchat_control.py:1131
+#: ../src/groupchat_control.py:1148
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "Izengoitia aurkitugabea: %s"
 
 #: ../src/groupchat_control.py:1054
-#, fuzzy
 msgid "This group chat has no subject"
 msgstr "Gela honek ez du gairik"
 
@@ -4361,7 +4241,8 @@ msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "Gonbidatu  %(contact_jid)s %(room_jid)s. gelara."
 
 #. %s is something the user wrote but it is not a jid so we inform
-#: ../src/groupchat_control.py:1074 ../src/groupchat_control.py:1102
+#: ../src/groupchat_control.py:1074
+#: ../src/groupchat_control.py:1102
 #, python-format
 msgid "%s does not appear to be a valid JID"
 msgstr "%s ez du ematen baliozko JID bat denik"
@@ -4377,25 +4258,14 @@ msgid "Commands: %s"
 msgstr "Azalpenak: %s"
 
 #: ../src/groupchat_control.py:1210
-#, fuzzy, python-format
-msgid ""
-"Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
-"nickname of an occupant may be substituted, but not if it contains \"@\". If "
-"the JID is currently in the group chat, he/she/it will also be kicked. Does "
-"NOT support spaces in nickname."
-msgstr ""
-"Erabilera:  /%s <nickname|JID> [reason], debekatua JID-a gelatik. Erabiltzen "
-"ari den baten izengoitia aldatu egin beharko da, baina ez da aldatu "
-"beharko   \"@\" -rik  badu. JID-a jadanik gelan bada, bera botatata izango "
-"da. Izengoitiak EZ du onartzen tarterik. "
+#, python-format
+msgid "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The nickname of an occupant may be substituted, but not if it contains \"@\". If the JID is currently in the group chat, he/she/it will also be kicked. Does NOT support spaces in nickname."
+msgstr "Erabilera:  /%s <nickname|JID> [reason], debekatua JID-a gelatik. Erabiltzen ari den baten izengoitia aldatu egin beharko da, baina ez da aldatu beharko   \"@\" -rik  badu. JID-a jadanik gelan bada, bera botatata izango da ere. Izengoitiak EZ du onartzen tarterik. "
 
 #: ../src/groupchat_control.py:1217
 #, python-format
-msgid ""
-"Usage: /%s <nickname>, opens a private chat window to the specified occupant."
-msgstr ""
-"Erabilera: /%s <nickname>, ireki txat pribatu bat espezifikatutako "
-"erabiltzaileari."
+msgid "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
+msgstr "Erabilera: /%s <nickname>, ireki txat pribatu bat espezifikatutako erabiltzaileari."
 
 #: ../src/groupchat_control.py:1221
 #, python-format
@@ -4404,9 +4274,7 @@ msgstr "Erabilera: %s, testu leihoa itxi."
 
 #: ../src/groupchat_control.py:1223
 #, python-format
-msgid ""
-"Usage: /%s [reason], closes the current window or tab, displaying reason if "
-"specified."
+msgid "Usage: /%s [reason], closes the current window or tab, displaying reason if specified."
 msgstr "Erabilera: /%s [reason],  itxi leihoa, zergatia erakutsiz behar bada."
 
 #: ../src/groupchat_control.py:1226
@@ -4415,74 +4283,49 @@ msgid "Usage: /%s, hide the chat buttons."
 msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
 
 #: ../src/groupchat_control.py:1229
-#, fuzzy, python-format
-msgid ""
-"Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
-"providing a reason."
-msgstr ""
-"Erabilera: /%s <JID> [reason], gonbidatu JID-a oraingo gelara, aukerazko "
-"arrazoi bat emanez. "
+#, python-format
+msgid "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally providing a reason."
+msgstr "Erabilera: /%s <JID> [reason], gonbidatu JID-a oraingo gelara, aukerazko arrazoi bat emanez. "
 
 #: ../src/groupchat_control.py:1233
 #, python-format
-msgid ""
-"Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
-"using specified nickname."
-msgstr ""
-"Erabilera:  /%s <room>@<server>[/nickname], eskaini room@server-era sartzen "
-"aukeraz izengoiti bat ezarriz."
+msgid "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally using specified nickname."
+msgstr "Erabilera:  /%s <room>@<server>[/nickname], eskaini room@server-era sartzen aukeraz izengoiti bat ezarriz."
 
 #: ../src/groupchat_control.py:1237
-#, fuzzy, python-format
-msgid ""
-"Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
-"from the group chat and optionally displays a reason. Does NOT support "
-"spaces in nickname."
-msgstr ""
-"Erabilera: /%s <nickname> [reason], ezabatu izengoitiaren bidez aukeratutako "
-"erabiltzailea gelatik eta nahi bada arrazoi bat adierazi. EZ da onartzen "
-"espazioak nick-an."
+#, python-format
+msgid "Usage: /%s <nickname> [reason], removes the occupant specified by nickname from the group chat and optionally displays a reason. Does NOT support spaces in nickname."
+msgstr "Erabilera: /%s <nickname> [reason], ezabatu izengoitiaren bidez aukeratutako erabiltzailea gelatik eta nahi bada arrazoi bat adierazi. EZ da onartzen espazioak iznegoitian."
 
 #: ../src/groupchat_control.py:1242
-#, fuzzy, python-format
-msgid ""
-"Usage: /%s <action>, sends action to the current group chat. Use third "
-"person. (e.g. /%s explodes.)"
-msgstr ""
-"Erabilera:  /%s <action>, bidali aukeratutako ekintza daukazun oraingo "
-"gelara. Erabili 3. pertsona. (e.g. /%s explodes.)"
+#, python-format
+msgid "Usage: /%s <action>, sends action to the current group chat. Use third person. (e.g. /%s explodes.)"
+msgstr "Erabilera:  /%s <action>, bidali aukeratutako ekintza daukazun oraingo gelara. Erabili 3. pertsona. (e.g. /%s explodes.)"
 
 #: ../src/groupchat_control.py:1246
 #, python-format
-msgid ""
-"Usage: /%s <nickname> [message], opens a private message windowand sends "
-"message to the occupant specified by nickname."
-msgstr ""
-"Erabilera: /%s <nickname> [message], ireki mezu pribatuko leiho bat eta "
-"bidali zehaztutako izengoitiaren erabiltzailera."
+msgid "Usage: /%s <nickname> [message], opens a private message windowand sends message to the occupant specified by nickname."
+msgstr "Erabilera: /%s <nickname> [message], ireki mezu pribatuko leiho bat eta bidali zehaztutako izengoitiaren erabiltzailera."
 
 #: ../src/groupchat_control.py:1251
-#, fuzzy, python-format
+#, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 msgstr "Erabilera:  /%s <nickname>, aldatu zure izengoitia gela hontan."
 
 #: ../src/groupchat_control.py:1255
-#, fuzzy, python-format
+#, python-format
 msgid "Usage: /%s , display the names of group chat occupants."
 msgstr "Erabilera:/%s , erakutsarazi gelako pertsonen izenak."
 
 #: ../src/groupchat_control.py:1259
-#, fuzzy, python-format
+#, python-format
 msgid "Usage: /%s [topic], displays or updates the current group chat topic."
-msgstr ""
-"Erabilera: /%s [topic], erakuts arazi edo aktualizatu oraingo gelako gaia."
+msgstr "Erabilera: /%s [topic], erakuts arazi edo aktualizatu oraingo gelako gaia."
 
 #: ../src/groupchat_control.py:1262
 #, python-format
-msgid ""
-"Usage: /%s <message>, sends a message without looking for other commands."
-msgstr ""
-"Erabilera:  /%s <message>, mezu bat bidali beste komandoak bilatu gabe."
+msgid "Usage: /%s <message>, sends a message without looking for other commands."
+msgstr "Erabilera:  /%s <message>, mezu bat bidali beste komandoak bilatu gabe."
 
 #: ../src/groupchat_control.py:1265
 #, python-format
@@ -4490,17 +4333,16 @@ msgid "No help info for /%s"
 msgstr "Ez dago laguntza informazioa  /%s -rentzat"
 
 #: ../src/groupchat_control.py:1314
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
 
 #: ../src/groupchat_control.py:1316
-#, fuzzy
-msgid ""
-"If you close this window, you will be disconnected from this group chat."
+msgid "If you close this window, you will be disconnected from this group chat."
 msgstr "Leiho hau isten baduzu, gela honetatik deskonektatuko zara."
 
-#: ../src/groupchat_control.py:1320 ../src/roster_window.py:3961
+#: ../src/groupchat_control.py:1320
+#: ../src/roster_window.py:3961
 msgid "Do _not ask me again"
 msgstr "E_z galdetu berriro  "
 
@@ -4525,9 +4367,9 @@ msgid "Bookmark already set"
 msgstr "Talde agenda ezarria"
 
 #: ../src/groupchat_control.py:1391
-#, fuzzy, python-format
+#, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
-msgstr "\"%s\" gela zure talde agendan dago."
+msgstr "\"%s\" gela zure talde agendan dago jadanik."
 
 #: ../src/groupchat_control.py:1400
 msgid "Bookmark has been added successfully"
@@ -4535,8 +4377,7 @@ msgstr "Talde agenda egoki sortu da"
 
 #: ../src/groupchat_control.py:1401
 msgid "You can manage your bookmarks via Actions menu in your roster."
-msgstr ""
-"Zure talde agenda moldatu dezakezu zure zerrendako aukera menuaren bidez."
+msgstr "Zure talde agenda moldatu dezakezu zure zerrendako aukera menuaren bidez."
 
 #. ask for reason
 #: ../src/groupchat_control.py:1527
@@ -4544,7 +4385,8 @@ msgstr ""
 msgid "Kicking %s"
 msgstr "Botatzen %s"
 
-#: ../src/groupchat_control.py:1528 ../src/groupchat_control.py:1810
+#: ../src/groupchat_control.py:1528
+#: ../src/groupchat_control.py:1810
 msgid "You may specify a reason below:"
 msgstr "Arrazoia zehaztu behar duzu behean:"
 
@@ -4559,12 +4401,8 @@ msgid "A programming error has been detected"
 msgstr "Programazio errore bat detektatu da"
 
 #: ../src/gtkexcepthook.py:42
-msgid ""
-"It probably is not fatal, but should be reported to the developers "
-"nonetheless."
-msgstr ""
-"Seguraski ez da garrantzitsua, baina diseinatzailei abisatu beharko "
-"litzateke."
+msgid "It probably is not fatal, but should be reported to the developers nonetheless."
+msgstr "Seguraski ez da garrantzitsua, baina diseinatzailei abisatu beharko litzateke."
 
 #: ../src/gtkexcepthook.py:48
 msgid "_Report Bug"
@@ -4575,7 +4413,8 @@ msgid "Details"
 msgstr "Zehaztapenak"
 
 #. we talk about file
-#: ../src/gtkgui_helpers.py:153 ../src/gtkgui_helpers.py:168
+#: ../src/gtkgui_helpers.py:153
+#: ../src/gtkgui_helpers.py:168
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Errorea: ezin da %s ireki irakurtzeko"
@@ -4593,8 +4432,7 @@ msgstr "Errorea fitxeroa analizatzean:"
 #: ../src/gtkgui_helpers.py:334
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
-msgstr ""
-"ezin izan da  %s-ri idatzi. Sesio administratzailea euskarria ez dago lanean."
+msgstr "ezin izan da  %s-ri idatzi. Sesio administratzailea euskarria ez dago lanean."
 
 #: ../src/gtkgui_helpers.py:727
 msgid "Extension not supported"
@@ -4603,8 +4441,7 @@ msgstr "Gehigarriak ez eskuragarri"
 #: ../src/gtkgui_helpers.py:728
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
-msgstr ""
-"Irudia ezin izan da %(type)s formatuan gorde. Gorde %(new_filename)s bezala?"
+msgstr "Irudia ezin izan da %(type)s formatuan gorde. Gorde %(new_filename)s bezala?"
 
 #: ../src/gtkgui_helpers.py:737
 msgid "Save Image as..."
@@ -4620,45 +4457,42 @@ msgid "Contacts"
 msgstr "Kontaktua"
 
 #. holds time
-#: ../src/history_manager.py:120 ../src/history_manager.py:160
+#: ../src/history_manager.py:120
+#: ../src/history_manager.py:160
 #: ../src/history_window.py:86
 msgid "Date"
 msgstr "Data"
 
 #. holds nickname
-#: ../src/history_manager.py:126 ../src/history_manager.py:178
+#: ../src/history_manager.py:126
+#: ../src/history_manager.py:178
 msgid "Nickname"
 msgstr "Izengoitia"
 
 #. holds message
-#: ../src/history_manager.py:134 ../src/history_manager.py:166
+#: ../src/history_manager.py:134
+#: ../src/history_manager.py:166
 #: ../src/history_window.py:94
 msgid "Message"
 msgstr "Mezua"
 
 #. holds subject
-#: ../src/history_manager.py:141 ../src/history_manager.py:172
+#: ../src/history_manager.py:141
+#: ../src/history_manager.py:172
 msgid "Subject"
 msgstr "Gaia"
 
 #: ../src/history_manager.py:186
-msgid ""
-"Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
-"RUNNING)"
-msgstr ""
-"Garbitu nahi al duzu datu basea?(EZ DA GOMENDATZEN GAJIM ABIARAZIA BADAGO)"
+msgid "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)"
+msgstr "Garbitu nahi al duzu datu basea?(EZ DA GOMENDATZEN GAJIM ABIARAZIA BADAGO)"
 
 #: ../src/history_manager.py:188
 msgid ""
-"Normally allocated database size will not be freed, it will just become "
-"reusable. If you really want to reduce database filesize, click YES, else "
-"click NO.\n"
+"Normally allocated database size will not be freed, it will just become reusable. If you really want to reduce database filesize, click YES, else click NO.\n"
 "\n"
 "In case you click YES, please wait..."
 msgstr ""
-"Normalean hautaturiko datu basearen tamaina ez da libratuko, ezta ere "
-"berrerabilgarri bihurtuko. Datu basearen tamaina gutxitu nahi baduzu, BAI "
-"sakatu, bestela EZ.\n"
+"Normalean hautaturiko datu basearen tamaina ez da libratuko, ezta ere berrerabilgarri bihurtuko. Datu basearen tamaina gutxitu nahi baduzu, BAI sakatu, bestela EZ.\n"
 "\n"
 "BAI sakatu baduzu, mesedez itxoin..."
 
@@ -4675,10 +4509,10 @@ msgstr "%(who)s %(time)s-ean esan du: %(message)s\n"
 msgid "Do you really want to delete logs of the selected contact?"
 msgid_plural "Do you really want to delete logs of the selected contacts?"
 msgstr[0] "Ziur al zaude hautaturiko kontaktuaren log-a ezabatu nahi duzula?"
-msgstr[1] ""
-"Ziur al zaude hautaturiko kontaktuaren log-ak ezabatu nahi dituzula?"
+msgstr[1] "Ziur al zaude hautaturiko kontaktuaren log-ak ezabatu nahi dituzula?"
 
-#: ../src/history_manager.py:518 ../src/history_manager.py:554
+#: ../src/history_manager.py:518
+#: ../src/history_manager.py:554
 msgid "This is an irreversible operation."
 msgstr "Itzulgaitza den operazio bat da hau."
 
@@ -4688,7 +4522,8 @@ msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
 msgstr[1] "Ziur al zaude hautaturiko mezuak ezabatu nahi dituzula?"
 
-#: ../src/history_window.py:103 ../src/history_window.py:105
+#: ../src/history_window.py:103
+#: ../src/history_window.py:105
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Elkarrizketa Historiala %s-rekin"
@@ -4698,7 +4533,8 @@ msgstr "Elkarrizketa Historiala %s-rekin"
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s orain %(status)s dago: %(status_msg)s"
 
-#: ../src/history_window.py:265 ../src/notify.py:198
+#: ../src/history_window.py:265
+#: ../src/notify.py:198
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s orain dago %(status)s"
@@ -4743,7 +4579,7 @@ msgid "New Single Message from %(nickname)s"
 msgstr "Mezu Berria %(nickname)s -etik"
 
 #: ../src/notify.py:234
-#, fuzzy, python-format
+#, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Mezu Pribatu Berri Bat %s gelatik"
 
@@ -4757,14 +4593,17 @@ msgstr "%(nickname)s: %(message)s"
 msgid "New Message from %(nickname)s"
 msgstr "Mezu Berria %(nickname)s -etik"
 
-#: ../src/profile_window.py:72 ../src/profile_window.py:376
+#: ../src/profile_window.py:72
+#: ../src/profile_window.py:376
 msgid "Retrieving profile..."
-msgstr ""
+msgstr "Profila jasotzen..."
 
-#: ../src/profile_window.py:107 ../src/profile_window.py:203
-#: ../src/profile_window.py:212 ../src/profile_window.py:370
+#: ../src/profile_window.py:107
+#: ../src/profile_window.py:203
+#: ../src/profile_window.py:212
+#: ../src/profile_window.py:370
 msgid "Click to set your avatar"
-msgstr ""
+msgstr "Sakatu abatarea ezartzeko"
 
 #. keep identation
 #: ../src/profile_window.py:136
@@ -4772,9 +4611,8 @@ msgid "Could not load image"
 msgstr "Ezin izan da irudia kargatu"
 
 #: ../src/profile_window.py:238
-#, fuzzy
 msgid "Information received"
-msgstr "Gonbidapena Jasoa"
+msgstr "Informazioa jasoa"
 
 #: ../src/profile_window.py:308
 msgid "Without a connection you can not publish your contact information."
@@ -4782,49 +4620,49 @@ msgstr "Konexiorik gabe ezin duzu zure kontaktuaren informazioa ezarri."
 
 #: ../src/profile_window.py:320
 msgid "Sending profile..."
-msgstr ""
+msgstr "Profila bidaltzen..."
 
 #: ../src/profile_window.py:328
 msgid "Information published"
-msgstr ""
+msgstr "Informazio argitaratua"
 
 #: ../src/profile_window.py:340
 msgid "Information NOT published"
-msgstr ""
+msgstr "Informazio EZ argitaratua"
 
 #: ../src/profile_window.py:347
 msgid "vCard publication failed"
 msgstr "vCard argitarapenak hust egin du"
 
 #: ../src/profile_window.py:348
-msgid ""
-"There was an error while publishing your personal information, try again "
-"later."
-msgstr ""
-"Errore bat agertu da zure informazio pertsonala argitaratzen zen bitartean, "
-"saiatu berriro beranduago."
+msgid "There was an error while publishing your personal information, try again later."
+msgstr "Errore bat agertu da zure informazio pertsonala argitaratzen zen bitartean, saiatu berriro beranduago."
 
 #: ../src/profile_window.py:374
 msgid "Without a connection, you can not get your contact information."
 msgstr "Konexiorik gabe ezin duzu zure kontaktu informazioa lortu."
 
-#: ../src/roster_window.py:168 ../src/roster_window.py:223
+#: ../src/roster_window.py:168
+#: ../src/roster_window.py:223
 msgid "Merged accounts"
 msgstr "Batu kontuak"
 
-#: ../src/roster_window.py:340 ../src/common/helpers.py:42
+#: ../src/roster_window.py:340
+#: ../src/common/helpers.py:42
 msgid "Observers"
 msgstr "Begiratzaileak"
 
-#: ../src/roster_window.py:686 ../src/roster_window.py:3132
-#, fuzzy
+#: ../src/roster_window.py:686
+#: ../src/roster_window.py:3132
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Ezin duzu txat talde batera sartu ikusezin zauden bitartean"
 
 #. new chat
 #. for chat_with
 #. for single message
-#: ../src/roster_window.py:878 ../src/systray.py:187 ../src/systray.py:192
+#: ../src/roster_window.py:878
+#: ../src/systray.py:187
+#: ../src/systray.py:192
 #, python-format
 msgid "using account %s"
 msgstr "%s kontua erabiliz "
@@ -4850,9 +4688,8 @@ msgid "of account %s"
 msgstr "%s kontukoa"
 
 #: ../src/roster_window.py:1003
-#, fuzzy
 msgid "_Manage Bookmarks..."
-msgstr "Talde Agenda Moldatu..."
+msgstr "Talde Agenda _Moldatu..."
 
 #: ../src/roster_window.py:1032
 #, python-format
@@ -4865,20 +4702,18 @@ msgid "History Manager"
 msgstr "Historial Administratzailea"
 
 #: ../src/roster_window.py:1062
-#, fuzzy
 msgid "_Join New Group Chat"
-msgstr "Txat Taldean Sartu"
+msgstr "T_xat Talde Berrian Sartu"
 
-#: ../src/roster_window.py:1384 ../src/roster_window.py:3325
+#: ../src/roster_window.py:1384
+#: ../src/roster_window.py:3325
 #: ../src/roster_window.py:3332
 msgid "You have unread messages"
 msgstr "Irakurri gabeko mezu bat duzu"
 
 #: ../src/roster_window.py:1385
-#, fuzzy
 msgid "You must read them before removing this transport."
-msgstr ""
-"Irakurri pendiente dituzun gertaera guztiak kontu hau ezabatu baino lehen. "
+msgstr "Irakurri behar dituzu transporte hau ezabatu baino lehen."
 
 #: ../src/roster_window.py:1388
 #, python-format
@@ -4886,62 +4721,49 @@ msgid "Transport \"%s\" will be removed"
 msgstr "\"%s\" transportea ezabatu da"
 
 #: ../src/roster_window.py:1389
-msgid ""
-"You will no longer be able to send and receive messages to contacts from "
-"this transport."
-msgstr ""
-"You will no longer be able to send and receive messages to contacts from "
-"this transport."
+msgid "You will no longer be able to send and receive messages to contacts from this transport."
+msgstr "You will no longer be able to send and receive messages to contacts from this transport."
 
 #: ../src/roster_window.py:1392
-#, fuzzy
 msgid "Transports will be removed"
-msgstr "\"%s\" transportea ezabatu da"
+msgstr "Transporteak ezabatuko dira"
 
 #: ../src/roster_window.py:1397
-#, fuzzy, python-format
-msgid ""
-"You will no longer be able to send and receive messages to contacts from "
-"these transports:%s"
-msgstr ""
-"You will no longer be able to send and receive messages to contacts from "
-"this transport."
+#, python-format
+msgid "You will no longer be able to send and receive messages to contacts from these transports:%s"
+msgstr "Ezin izango duzu transporte hauetako kontaktuen mezuak jaso ezta bidali ere: %s"
 
 #. it's jid
 #: ../src/roster_window.py:1417
-#, fuzzy
 msgid "Rename Contact"
-msgstr "Kontaktua"
+msgstr "Berridatzi Kontaktua"
 
 #: ../src/roster_window.py:1418
-#, fuzzy, python-format
+#, python-format
 msgid "Enter a new nickname for contact %s"
-msgstr "Sartu GPG kodearen pasa-esaldia %s konturako."
+msgstr "Sartu %s kontaktuarentzat nick berri bat"
 
 #: ../src/roster_window.py:1425
-#, fuzzy
 msgid "Rename Group"
-msgstr "_Berrrizenpetu"
+msgstr "Berrrizenpetu Taldea"
 
 #: ../src/roster_window.py:1426
-#, fuzzy, python-format
+#, python-format
 msgid "Enter a new name for group %s"
-msgstr "Sartu GPG kodearen pasa-esaldia %s konturako."
+msgstr "Sartu %s taldearentzat izen berri bat"
 
 #: ../src/roster_window.py:1480
-#, fuzzy
 msgid "Remove Group"
-msgstr "_Ezabatu"
+msgstr "Ezabatu Taldea"
 
 #: ../src/roster_window.py:1481
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
-msgstr ""
+msgstr "Ezabatu nahi al duzu %s taldea zerrendatik?"
 
 #: ../src/roster_window.py:1482
-#, fuzzy
 msgid "Remove also all contacts in this group from your roster"
-msgstr "Zerrendatik kontaktua ezabatu"
+msgstr "Zerrendatik talde honetako kontaktu guztiak ere ezabatu"
 
 #: ../src/roster_window.py:1506
 msgid "Assign OpenPGP Key"
@@ -4951,19 +4773,19 @@ msgstr "OpenPGP Kodea Izendatu"
 msgid "Select a key to apply to the contact"
 msgstr "Kode bat aukeratu kontuari ezartzeko"
 
-#: ../src/roster_window.py:1788 ../src/roster_window.py:1963
-#, fuzzy
+#: ../src/roster_window.py:1788
+#: ../src/roster_window.py:1963
 msgid "_New group chat"
-msgstr "Txat Taldea"
+msgstr "T_xat Talde Berria"
 
 #: ../src/roster_window.py:1846
 msgid "I would like to add you to my roster"
 msgstr "Nire zerrendara nahi nizuke sartu"
 
-#: ../src/roster_window.py:2008 ../src/roster_window.py:2055
-#, fuzzy
+#: ../src/roster_window.py:2008
+#: ../src/roster_window.py:2055
 msgid "Send Group M_essage"
-msgstr "_Bidali Zerbitzarira Mezua"
+msgstr "_Bidali Taldeari Mezua"
 
 #: ../src/roster_window.py:2034
 msgid "Re_name"
@@ -4971,11 +4793,11 @@ msgstr "_Berrizenpetu"
 
 #: ../src/roster_window.py:2061
 msgid "To all users"
-msgstr ""
+msgstr "Kontaktu guztiei"
 
 #: ../src/roster_window.py:2064
 msgid "To all online users"
-msgstr ""
+msgstr "Konektatutako kontaktu guztiei"
 
 #: ../src/roster_window.py:2100
 msgid "_Log on"
@@ -4985,7 +4807,8 @@ msgstr "_Log aktibatua"
 msgid "Log _off"
 msgstr "Log _desaktibatua"
 
-#: ../src/roster_window.py:2232 ../src/roster_window.py:2303
+#: ../src/roster_window.py:2232
+#: ../src/roster_window.py:2303
 msgid "_Change Status Message"
 msgstr "_Egoera Mezua aldatu"
 
@@ -5022,20 +4845,12 @@ msgid "Contact \"%s\" will be removed from your roster"
 msgstr "\"%s\" kontaktua ezabatua izango da zure zerrendatik"
 
 #: ../src/roster_window.py:2621
-msgid ""
-"By removing this contact you also remove authorization resulting in him or "
-"her always seeing you as offline."
-msgstr ""
-"Kontaktua ezabatuz bere autorizazioa ere ezabatzen duzu. Beraz, kontaktuak "
-"deskonektatuta ikusiko zaitu beti."
+msgid "By removing this contact you also remove authorization resulting in him or her always seeing you as offline."
+msgstr "Kontaktua ezabatuz bere autorizazioa ere ezabatzen duzu. Beraz, kontaktuak deskonektatuta ikusiko zaitu beti."
 
 #: ../src/roster_window.py:2626
-msgid ""
-"By removing this contact you also by default remove authorization resulting "
-"in him or her always seeing you as offline."
-msgstr ""
-"Kontaktua ezabatuz bere autorizazioa ere borratzen duzu. Beraz,  kontaktuak "
-"deskonektatuta ikusiko zaitu beti."
+msgid "By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline."
+msgstr "Kontaktua ezabatuz bere autorizazioa ere borratzen duzu. Beraz,  kontaktuak deskonektatuta ikusiko zaitu beti."
 
 #: ../src/roster_window.py:2629
 msgid "I want this contact to know my status after removal"
@@ -5043,18 +4858,17 @@ msgstr "Kontaktu hau ezabatu ondoren nire egoera jakitea nahi dut"
 
 #. several contact to remove at the same time
 #: ../src/roster_window.py:2633
-#, fuzzy
 msgid "Contacts will be removed from your roster"
-msgstr "\"%s\" kontaktua ezabatua izango da zure zerrendatik"
+msgstr "Kontaktuak ezabatuak izango dira zure zerrendatik"
 
 #: ../src/roster_window.py:2637
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "By removing these contacts:%s\n"
 "you also remove authorization resulting in them always seeing you as offline."
 msgstr ""
-"Kontaktua ezabatuz bere autorizazioa ere ezabatzen duzu. Beraz, kontaktuak "
-"deskonektatuta ikusiko zaitu beti."
+"Kontaktu hauek ezabatuz: %s\n"
+" bere autorizazioa ere ezabatzen duzu. Beraz, kontaktuak deskonektatuta ikusiko zaitu beti."
 
 #: ../src/roster_window.py:2709
 msgid "Passphrase Required"
@@ -5077,17 +4891,15 @@ msgstr "Pasa-esaldi okerra"
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Mesedez berridatzi zure GPG pasa-esaldia edo kantzelatu."
 
-#: ../src/roster_window.py:2781 ../src/roster_window.py:2841
+#: ../src/roster_window.py:2781
+#: ../src/roster_window.py:2841
 msgid "You are participating in one or more group chats"
 msgstr "Txat talde bat baino gehiegotan parte hartzen ari zara."
 
-#: ../src/roster_window.py:2782 ../src/roster_window.py:2842
-msgid ""
-"Changing your status to invisible will result in disconnection from those "
-"group chats. Are you sure you want to go invisible?"
-msgstr ""
-"Zure egoera ikusezinera pasatzen baduzu deskonektatu egingo zara txat talde "
-"honetatik. Ziur al zaude ikusezin jarri nahi duzula?"
+#: ../src/roster_window.py:2782
+#: ../src/roster_window.py:2842
+msgid "Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?"
+msgstr "Zure egoera ikusezinera pasatzen baduzu deskonektatu egingo zara txat talde honetatik. Ziur al zaude ikusezin jarri nahi duzula?"
 
 #: ../src/roster_window.py:2799
 msgid "No account available"
@@ -5095,43 +4907,33 @@ msgstr "Ez dago konturik erabilgarri"
 
 #: ../src/roster_window.py:2800
 msgid "You must create an account before you can chat with other contacts."
-msgstr ""
-"Kontu bat sortu behar duzu norbaitekin txateatzeko aukera izan baino lehen."
+msgstr "Kontu bat sortu behar duzu norbaitekin txateatzeko aukera izan baino lehen."
 
 #: ../src/roster_window.py:2898
 #, python-format
 msgid "♪ \"%(title)s\" by %(artist)s ♪"
-msgstr ""
+msgstr "♪ \"%(title)s\" by %(artist)s ♪"
 
-#: ../src/roster_window.py:3326 ../src/roster_window.py:3333
-msgid ""
-"Messages will only be available for reading them later if you have history "
-"enabled."
+#: ../src/roster_window.py:3326
+#: ../src/roster_window.py:3333
+msgid "Messages will only be available for reading them later if you have history enabled."
 msgstr "Mezuak gero irakurri ahalko dira historiala aktibatua baduzu."
 
 #: ../src/roster_window.py:3911
 msgid "Metacontacts storage not supported by your server"
-msgstr ""
+msgstr "Metacontacts storage not supported by your server"
 
 #: ../src/roster_window.py:3913
-msgid ""
-"Your server does not support storing metacontacts information. So those "
-"information will not be save on next reconnection."
-msgstr ""
+msgid "Your server does not support storing metacontacts information. So those information will not be save on next reconnection."
+msgstr "Your server does not support storing metacontacts information. So those information will not be save on next reconnection."
 
 #: ../src/roster_window.py:3955
-#, fuzzy
-msgid ""
-"You are about to create a metacontact. Are you sure you want to continue?"
-msgstr ""
-"Kontu bat sortu behar duzu norbaitekin txateatzeko aukera izan baino lehen."
+msgid "You are about to create a metacontact. Are you sure you want to continue?"
+msgstr "Metakontaktu bat sortuko duzu. Jarraitu nahi al duzu?"
 
 #: ../src/roster_window.py:3957
-msgid ""
-"Metacontacts are a way to regroup several contacts in one line. Generaly it "
-"is used when the same person has several Jabber accounts or transport "
-"accounts."
-msgstr ""
+msgid "Metacontacts are a way to regroup several contacts in one line. Generaly it is used when the same person has several Jabber accounts or transport accounts."
+msgstr "Metakontaktua kontaktu bera lerro batean elkartzeko modua da. Normalean, kontaktuak jabber kontu bat baino gehiago duenean edo transporteetan harpidetuta dagonean erabiltzen da. "
 
 #: ../src/roster_window.py:4124
 #, python-format
@@ -5155,33 +4957,35 @@ msgstr "_Egoera Mezua Aldatu..."
 msgid "Hide this menu"
 msgstr "Ezkutatu Menua"
 
-#: ../src/tooltips.py:309 ../src/tooltips.py:492
-#, fuzzy
+#: ../src/tooltips.py:309
+#: ../src/tooltips.py:492
 msgid "Jabber ID: "
-msgstr "Jabber ID:"
+msgstr "Jabber ID: "
 
-#: ../src/tooltips.py:312 ../src/tooltips.py:496
+#: ../src/tooltips.py:312
+#: ../src/tooltips.py:496
 msgid "Resource: "
 msgstr "Baliabideak: "
 
 #: ../src/tooltips.py:317
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr ""
+msgstr "Gela honetako %(owner_or_admin_or_member)s "
 
-#: ../src/tooltips.py:430 ../src/tooltips.py:610
+#: ../src/tooltips.py:430
+#: ../src/tooltips.py:610
 msgid "Status: "
 msgstr "Egoera: "
 
 #: ../src/tooltips.py:461
-#, fuzzy, python-format
+#, python-format
 msgid "Last status: %s"
-msgstr "Azken egoera %s-ean"
+msgstr "Azken egoera: %s"
 
 #: ../src/tooltips.py:463
-#, fuzzy, python-format
+#, python-format
 msgid " since %s"
-msgstr "noiztik %s"
+msgstr " %s-etik"
 
 #. ('both' is the normal sub so we don't show it)
 #: ../src/tooltips.py:502
@@ -5208,7 +5012,8 @@ msgstr "Mota: "
 msgid "Transferred: "
 msgstr "Transferitua:"
 
-#: ../src/tooltips.py:588 ../src/tooltips.py:609
+#: ../src/tooltips.py:588
+#: ../src/tooltips.py:609
 msgid "Not started"
 msgstr "Hasigabea"
 
@@ -5216,13 +5021,14 @@ msgstr "Hasigabea"
 msgid "Stopped"
 msgstr "Gelditua"
 
-#: ../src/tooltips.py:594 ../src/tooltips.py:597
+#: ../src/tooltips.py:594
+#: ../src/tooltips.py:597
 msgid "Completed"
 msgstr "Osatua"
 
 #: ../src/tooltips.py:601
 msgid "?transfer status:Paused"
-msgstr ""
+msgstr "Gelditua"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
 #: ../src/tooltips.py:605
@@ -5253,31 +5059,23 @@ msgstr "Aurkitu gabea"
 msgid "?OS:Unknown"
 msgstr "Aurkitu gabea"
 
-#: ../src/vcard.py:247 ../src/vcard.py:449
+#: ../src/vcard.py:247
+#: ../src/vcard.py:449
 #, python-format
 msgid "since %s"
 msgstr "noiztik %s"
 
 #: ../src/vcard.py:277
-#, fuzzy
 msgid "Affiliation:"
 msgstr "Afizioak: "
 
 #: ../src/vcard.py:285
-msgid ""
-"This contact is interested in your presence information, but you are not "
-"interested in his/her presence"
-msgstr ""
-"Kontu hau zure egoera informazioan interesatuta dago , baina zu ez zaude "
-"haren egoera informazioan interesatuta"
+msgid "This contact is interested in your presence information, but you are not interested in his/her presence"
+msgstr "Kontu hau zure egoera informazioan interesatuta dago , baina zu ez zaude haren egoera informazioan interesatuta"
 
 #: ../src/vcard.py:287
-msgid ""
-"You are interested in the contact's presence information, but he/she is not "
-"interested in yours"
-msgstr ""
-"Kontaktuaren egoera informazioan interesatuta zaude, baina berak ez du zugan "
-"interesik"
+msgid "You are interested in the contact's presence information, but he/she is not interested in yours"
+msgstr "Kontaktuaren egoera informazioan interesatuta zaude, baina berak ez du zugan interesik"
 
 #: ../src/vcard.py:289
 msgid "You and the contact are interested in each other's presence information"
@@ -5285,18 +5083,16 @@ msgstr "Zu eta kontaktua, bien egoera informazioetan interesatuta zaudete"
 
 #. None
 #: ../src/vcard.py:291
-msgid ""
-"You are not interested in the contact's presence, and neither he/she is "
-"interested in yours"
-msgstr ""
-"Zu ez zaude haren egoera informazioan interesatuta, bera zugan interesa du"
+msgid "You are not interested in the contact's presence, and neither he/she is interested in yours"
+msgstr "Zu ez zaude haren egoera informazioan interesatuta, bera zugan interesa du"
 
 #: ../src/vcard.py:299
 msgid "You are waiting contact's answer about your subscription request"
-msgstr ""
-"Zure harpidetza eskariaren erantzunaren zain zaude kontaktuaren aldetik"
+msgstr "Zure harpidetza eskariaren erantzunaren zain zaude kontaktuaren aldetik"
 
-#: ../src/vcard.py:311 ../src/vcard.py:338 ../src/vcard.py:482
+#: ../src/vcard.py:311
+#: ../src/vcard.py:338
+#: ../src/vcard.py:482
 msgid " resource with priority "
 msgstr "baliabidea lehentasunarekin: "
 
@@ -5304,14 +5100,17 @@ msgstr "baliabidea lehentasunarekin: "
 msgid "creating logs database"
 msgstr "logs-en datu basea sortzen"
 
-#: ../src/common/check_paths.py:89 ../src/common/check_paths.py:100
+#: ../src/common/check_paths.py:89
+#: ../src/common/check_paths.py:100
 #: ../src/common/check_paths.py:107
 #, python-format
 msgid "%s is file but it should be a directory"
 msgstr "%s fitxero bat da baina direktorio bat izan daiteke"
 
-#: ../src/common/check_paths.py:90 ../src/common/check_paths.py:101
-#: ../src/common/check_paths.py:108 ../src/common/check_paths.py:116
+#: ../src/common/check_paths.py:90
+#: ../src/common/check_paths.py:101
+#: ../src/common/check_paths.py:108
+#: ../src/common/check_paths.py:116
 msgid "Gajim will now exit"
 msgstr "Gajim orain badago"
 
@@ -5326,9 +5125,8 @@ msgid "creating %s directory"
 msgstr "%s direktorioa sortzen"
 
 #: ../src/common/config.py:55
-#, fuzzy
 msgid "Use D-Bus and Notification-Daemon to show notifications"
-msgstr "Erabili DBus eta Notification-Daemon jakinarazketak erakusteko."
+msgstr "Erabili D-Bus eta Notification-Daemon jakinarazketak erakusteko"
 
 #: ../src/common/config.py:60
 msgid "Time in minutes, after which your status changes to away."
@@ -5347,19 +5145,16 @@ msgid "Not available as a result of being idle"
 msgstr "Ez erabilgarri beste zerbaitetan egoteagatik"
 
 #: ../src/common/config.py:82
-#, fuzzy
-msgid ""
-"List (space separated) of rows (accounts and groups) that are collapsed."
-msgstr ""
-"List (space separated) of rows (accounts and groups) that are collapsed"
+msgid "List (space separated) of rows (accounts and groups) that are collapsed."
+msgstr "List (space separated) of rows (accounts and groups) that are collapsed."
 
 #: ../src/common/config.py:87
 msgid "Enable link-local/zeroconf messaging"
-msgstr ""
+msgstr "Enable link-local/zeroconf messaging"
 
 #: ../src/common/config.py:90
 msgid "Language used by speller"
-msgstr ""
+msgstr "Zuzentzaileak erabiltzen duen hizkuntza"
 
 #: ../src/common/config.py:91
 msgid ""
@@ -5372,72 +5167,44 @@ msgstr ""
 "'never' - inoiz ez inprimatu ordua."
 
 #: ../src/common/config.py:92
-#, fuzzy
-msgid ""
-"Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 "
-"to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one. "
-"This is used only if print_time is 'sometimes'."
-msgstr ""
-"1-tik 4-rako baloreak eman fuzziness-ri eta 0 fuzzyclock ezintzeko. 1 ordu "
-"zehatzena da, 4 berriz, zehaztasun gutxienekoa."
+msgid "Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one. This is used only if print_time is 'sometimes'."
+msgstr "Imprimatu ordua Fuzzy Clock erabiliz. 1-tik 4-rako baloreak eman  fuzzyclocks-ri eta 0 fuzzyclock ezintzeko. 1 ordu zehatzena da, 4 berriz, zehaztasun gutxienekoa."
 
 #: ../src/common/config.py:95
 msgid "Treat * / _ pairs as possible formatting characters."
 msgstr "Treat * / _ pairs as possible formatting characters."
 
 #: ../src/common/config.py:96
-msgid ""
-"If True, do not remove */_ . So *abc* will be bold but with * * not removed."
-msgstr ""
-"If True, do not remove */_ . So *abc* will be bold but with * * not removed."
+msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
+msgstr "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
 
 #: ../src/common/config.py:99
-msgid ""
-"Uses ReStructured text markup for HTML, plus ascii formatting if selected. "
-"(If you want to use this, install docutils)"
-msgstr ""
+msgid "Uses ReStructured text markup for HTML, plus ascii formatting if selected. (If you want to use this, install docutils)"
+msgstr "Uses ReStructured text markup for HTML, plus ascii formatting if selected. (If you want to use this, install docutils)"
 
 #: ../src/common/config.py:108
-#, fuzzy
-msgid ""
-"Character to add after nickname when using nick completion (tab) in group "
-"chat."
-msgstr ""
-"Izengoitiaren ondoren ezartzeko karakterea txat talde batean tab-a "
-"erabiltzen bada"
+msgid "Character to add after nickname when using nick completion (tab) in group chat."
+msgstr "Izengoitiaren ondoren ezartzeko karakterea txat talde batean tab-a erabiltzen bada."
 
 #: ../src/common/config.py:109
-#, fuzzy
-msgid ""
-"Character to propose to add after desired nickname when desired nickname is "
-"used by someone else in group chat."
-msgstr ""
-"Izengoitiaren ondoren jartzeko proposatzen den karakterea, txat taldean "
-"beste pertsona batek izengoiti berbera badu"
+msgid "Character to propose to add after desired nickname when desired nickname is used by someone else in group chat."
+msgstr "Izengoitiaren ondoren jartzeko proposatzen den karakterea, txat taldean beste pertsona batek izengoiti berbera badu."
 
 #: ../src/common/config.py:142
 msgid "Add * and [n] in roster title?"
 msgstr "Sartu * eta [n] zerrendako izenburuan?"
 
 #: ../src/common/config.py:143
-msgid ""
-"How many lines to remember from previous conversation when a chat tab/window "
-"is reopened."
+msgid "How many lines to remember from previous conversation when a chat tab/window is reopened."
 msgstr "Zenbat lerro gogoarazteko lehengo elkarrizketatik leihoa irikitzean."
 
 #: ../src/common/config.py:144
 msgid "How many minutes should last lines from previous conversation last."
-msgstr ""
-"Zenbat minutu izan behar ditu azken lerroak  lehengo elkarrizketaren "
-"azkenetik."
+msgstr "Zenbat minutu izan behar ditu azken lerroak  lehengo elkarrizketaren azkenetik."
 
 #: ../src/common/config.py:145
-msgid ""
-"Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
-"Client default behaviour)."
-msgstr ""
-"Bidali mezua Ctrl+Enter -rekin eta Enter-ekin lerro berria egin. (Mirabilis "
-"ICQ Client default behaviour)."
+msgid "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour)."
+msgstr "Bidali mezua Ctrl+Enter -rekin eta Enter-ekin lerro berria egin. (Mirabilis ICQ Client default behaviour)."
 
 #: ../src/common/config.py:147
 msgid "How many lines to store for Ctrl+KeyUP."
@@ -5445,83 +5212,52 @@ msgstr "How many lines to store for Ctrl+KeyUP."
 
 #: ../src/common/config.py:150
 #, python-format
-msgid ""
-"Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
-"which means use wiktionary."
-msgstr ""
-"Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
-"which means use wiktionary."
+msgid "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
+msgstr "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
 
 #: ../src/common/config.py:153
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "Hautatua badago, Gajim gajim-remote erabiliz kontrolatu daiteke."
 
 #: ../src/common/config.py:154
-msgid ""
-"If True, listen to D-Bus signals from NetworkManager and change the status "
-"of accounts (provided they do not have listen_to_network_manager set to "
-"False and they sync with global status) based upon the status of the network "
-"connection."
-msgstr ""
+msgid "If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection."
+msgstr "If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection."
 
 #: ../src/common/config.py:155
-msgid ""
-"Sent chat state notifications. Can be one of all, composing_only, disabled."
-msgstr ""
+msgid "Sent chat state notifications. Can be one of all, composing_only, disabled."
+msgstr "Bidali txat elkarrizketaren egoera. All, composing_only edo disabled izan daiteke. "
 
 #: ../src/common/config.py:156
-msgid ""
-"Displayed chat state notifications in chat windows. Can be one of all, "
-"composing_only, disabled."
-msgstr ""
+msgid "Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled."
+msgstr "Txat elkarrizketen goera mezua ikusarazi txat leihoan. All, composing_only edo disabled izan daiteke. "
 
 #: ../src/common/config.py:158
-#, fuzzy
-msgid ""
-"When not printing time for every message (print_time==sometimes), print it "
-"every x minutes."
-msgstr ""
-"Ez denean ordua mezu bakoitzeko inprimatzen (print_time==sometimes), "
-"imprimatu x minuturo"
+msgid "When not printing time for every message (print_time==sometimes), print it every x minutes."
+msgstr "Ez denean ordua mezu bakoitzeko inprimatzen (print_time==sometimes), imprimatu x minuturo."
 
 #: ../src/common/config.py:159
 msgid "Ask before closing a group chat tab/window."
 msgstr "Galdetu leiho bat itxi baino lehen."
 
 #: ../src/common/config.py:160
-#, fuzzy
-msgid ""
-"Always ask before closing group chat tab/window in this space separated list "
-"of group chat jids."
-msgstr ""
-"Always ask before closing group chat tab/window in this space separated list "
-"of room jids."
+msgid "Always ask before closing group chat tab/window in this space separated list of group chat jids."
+msgstr "Always ask before closing group chat tab/window in this space separated list of group chat jids."
 
 #: ../src/common/config.py:161
-#, fuzzy
-msgid ""
-"Never ask before closing group chat tab/window in this space separated list "
-"of group chat jids."
-msgstr ""
-"Never ask before closing group chat tab/window in this space separated list "
-"of room jids."
+msgid "Never ask before closing group chat tab/window in this space separated list of group chat jids."
+msgstr "Never ask before closing group chat tab/window in this space separated list of group chat jids."
 
 #: ../src/common/config.py:164
-msgid ""
-"Overrides the host we send for File Transfer in case of address translation/"
-"port forwarding."
-msgstr ""
-"Overrides the host we send for File Transfer in case of address translation/"
-"port forwarding."
+msgid "Overrides the host we send for File Transfer in case of address translation/port forwarding."
+msgstr "Overrides the host we send for File Transfer in case of address translation/port forwarding."
 
 #: ../src/common/config.py:166
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC estandarrak esaten du KiB = 1024 bytes, KB = 1000 bytes."
 
 #: ../src/common/config.py:168
-#, fuzzy
 msgid "Notify of events in the system trayicon."
-msgstr "Ez erakutsarazi transporteen ikurrak."
+msgstr "Jakin arazi gertaerak system trayicon-ean."
 
 #: ../src/common/config.py:174
 msgid "Show tab when only one conversation?"
@@ -5536,153 +5272,95 @@ msgid "Show close button in tab?"
 msgstr "Isteko botoila erakutsi tab-ean?"
 
 #: ../src/common/config.py:189
-#, fuzzy
-msgid ""
-"A semicolon-separated list of words that will be highlighted in group chats."
-msgstr ""
-"A semicolon-separated list of words that will be highlighted in multi-user "
-"chat."
+msgid "A semicolon-separated list of words that will be highlighted in group chats."
+msgstr "A semicolon-separated list of words that will be highlighted in group chats."
 
 #: ../src/common/config.py:190
-msgid ""
-"If True, quits Gajim when X button of Window Manager is clicked. This "
-"setting is taken into account only if trayicon is used."
-msgstr ""
-"If True, quits Gajim when X button of Window Manager is clicked. This "
-"setting is taken into account only if trayicon is used."
+msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
+msgstr "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
 
 #: ../src/common/config.py:191
 msgid "If True, Gajim registers for xmpp:// on each startup."
 msgstr "Egia bada, Gajim-ek erregistratuko du xmpp:/ abiaraztean."
 
 #: ../src/common/config.py:192
-msgid ""
-"If True, Gajim will display an icon on each tab containing unread messages. "
-"Depending on the theme, this icon may be animated."
-msgstr ""
-"Egia bada, Gajim-ek  ikono bat azalaraziko du leiho horretan irakurri gabeko "
-"mezuak adieraziz. Gaiaren arabera ikonoa animatua izan daiteke."
+msgid "If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated."
+msgstr "Egia bada, Gajim-ek  ikono bat azalaraziko du leiho horretan irakurri gabeko mezuak adieraziz. Gaiaren arabera ikonoa animatua izan daiteke."
 
 #: ../src/common/config.py:193
-#, fuzzy
-msgid ""
-"If True, Gajim will display the status message, if not empty, for every "
-"contact under the contact name in roster window."
-msgstr ""
-"Egia bada, Gajim-ek egoera mezua azalaraziko du, hutsik ez badago, zerrendan "
-"kontaktuaren izenaren azpian azalduko dira."
+msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window."
+msgstr "Egia bada, Gajim-ek egoera mezua azalaraziko du, hutsik ez badago, zerrendan kontaktuaren izenaren azpian azalduko dira."
 
 #: ../src/common/config.py:195
-msgid ""
-"If True, Gajim will ask for avatar each contact that did not have an avatar "
-"last time or has one cached that is too old."
-msgstr ""
-"If True, Gajim will ask for avatar each contact that did not have an avatar "
-"last time or has one cached that is too old."
+msgid "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old."
+msgstr "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old."
 
 #: ../src/common/config.py:196
-msgid ""
-"If False, Gajim will no longer print status line in chats when a contact "
-"changes his or her status and/or his or her status message."
-msgstr ""
-"Gezurra bada, ez da egoera lerroa inprimatuko kontaktu batek bere egoera "
-"aldaketa egiten duenean edo/eta bere egoera mezua."
+msgid "If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message."
+msgstr "Gezurra bada, ez da egoera lerroa inprimatuko kontaktu batek bere egoera aldaketa egiten duenean edo/eta bere egoera mezua."
 
 #: ../src/common/config.py:197
-#, fuzzy
-msgid ""
-"can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no "
-"longer print status line in groupchats when a member changes his or her "
-"status and/or his or her status message. If \"all\" Gajim will print all "
-"status messages. If \"in_and_out\", gajim will only print FOO enters/leaves "
-"group chat."
-msgstr ""
-"izan daiteke \"none\", \"all\" edo  \"in_and_out\". If \"none\", Gajim-ek ez "
-"du inprimatuko egoera lerroa txat talde batean partaide batek bere egoera "
-"edo egoera mezua aldatzean. \"all\" bada Gajim-ek egoera guztiak inprimatuko "
-"ditu. \"in_and_out\" bada, Gajim-ek sarrera/irteerak inprimatuko ditu "
-"bakarrik"
+msgid "can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If \"all\" Gajim will print all status messages. If \"in_and_out\", gajim will only print FOO enters/leaves group chat."
+msgstr "izan daiteke \"none\", \"all\" edo  \"in_and_out\". \"none\" bada, Gajim-ek ez du inprimatuko egoera lerroa txat talde batean partaide batek bere egoera edo egoera mezua aldatzean. \"all\" bada, Gajim-ek egoera guztiak inprimatuko ditu. \"in_and_out\" bada, Gajim-ek sarrera/irteerak inprimatuko ditu bakarrik."
 
 #: ../src/common/config.py:199
 msgid "Background color of contacts when they just signed in."
-msgstr ""
+msgstr "Kontaktuen atzealdeko kolorea momentuan konektatzen direnean."
 
 #: ../src/common/config.py:200
 msgid "Background color of contacts when they just signed out."
-msgstr ""
+msgstr "Kontaktuen atzealdeko kolorea momentuan deskonektatzen direnean."
 
 #: ../src/common/config.py:202
-msgid ""
-"If True, restored messages will use a smaller font than the default one."
-msgstr ""
+msgid "If True, restored messages will use a smaller font than the default one."
+msgstr "Egia bada, mezuen berrezartzea tamaia txikian egingo dira eta ez ezarritakoan."
 
 #: ../src/common/config.py:203
 msgid "Don't show avatar for the transport itself."
 msgstr "Ez erakutsarazi transporteen ikurrak."
 
 #: ../src/common/config.py:204
-#, fuzzy
 msgid "Don't show roster in the system taskbar."
-msgstr "Ez erakutsarazi transporteen ikurrak."
+msgstr "ez erakutsi zerrenda sistemako zeregin barran."
 
 #: ../src/common/config.py:205
-msgid ""
-"If True and installed GTK+ and PyGTK versions are at least 2.8, make the "
-"window flash (the default behaviour in most Window Managers) when holding "
-"pending events."
-msgstr ""
-"Hautatu badago eta GTK+ eta PyGTK bertsioak gutxienez 2.8 bertsiokoak "
-"badira, make the window flash (the default behaviour in most Window "
-"Managers) when holding pending events."
+msgid "If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events."
+msgstr "Hautatu badago eta GTK+ eta PyGTK bertsioak gutxienez 2.8 bertsiokoak badira, make the window flash (the default behaviour in most Window Managers) when holding pending events."
 
 #: ../src/common/config.py:207
-#, fuzzy
-msgid ""
-"Jabberd1.4 does not like sha info when one join a password protected group "
-"chat. Turn this option to False to stop sending sha info in group chat "
-"presences."
-msgstr ""
-"Jabberd1.4 does not like sha info when one join a password protected room. "
-"Turn this option to False to stop sending sha info in groupchat presences"
+msgid "Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences."
+msgstr "Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences."
 
 #. always, never, peracct, pertype should not be translated
 #: ../src/common/config.py:210
-#, fuzzy
 msgid ""
 "Controls the window where new messages are placed.\n"
 "'always' - All messages are sent to a single window.\n"
 "'never' - All messages get their own window.\n"
 "'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g., chats vs. groupchats) are sent to a "
-"specific window. Note, changing this option requires restarting Gajim before "
-"the changes will take effect."
+"'pertype' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect."
 msgstr ""
 "Kontrolatu leihoa mezu berri bat dagoenean.\n"
 "'always' - Leiho bakarrean jarriko dira mezu guztiak.\n"
 "'never' - Mezu bakoitzak bere leihoa izango du.\n"
 "'peracct' - Kontaktu baten mezuak leiho berera bidaliko dira.\n"
-"'pertype' - Mezuko gaiak(txat edo txat taldekoena adibidez) leiho konkretu "
-"batera bidaliko dira. Kontuz, funtziona dezan Gajim berriarazi behar da"
+"'pertype' - Mezu bateko gaiak(txat edo txat taldekoena adibidez) leiho konkretu batera bidaliko dira. Kontuz, funtziona dezan Gajim berriarazi behar da."
 
 #: ../src/common/config.py:211
-#, fuzzy
 msgid "If False, you will no longer see the avatar in the chat window."
-msgstr "Gezurra bada, txat leihoan ez duzu abatererik ikusiko "
+msgstr "Gezurra bada, txat leihoan ez duzu abatererik ikusiko. "
 
 #: ../src/common/config.py:212
-#, fuzzy
 msgid "If True, pressing the escape key closes a tab/window."
-msgstr "Egia bada, ateratzeko botoila sakatzean tab/leihoa itxiko da"
+msgstr "Egia bada, ateratzeko botoila sakatzean tab/leihoa itxiko da."
 
 #: ../src/common/config.py:213
-#, fuzzy
 msgid "Hides the buttons in group chat window."
-msgstr "Ezkutatu botoiak txat taldeko leihoan"
+msgstr "Ezkutatu botoiak txat taldeko leihoan."
 
 #: ../src/common/config.py:214
-#, fuzzy
 msgid "Hides the buttons in two persons chat window."
-msgstr "Ezkutatu botoilak bi pertsonen txat leihoan "
+msgstr "Ezkutatu botoilak bi pertsonen txat leihoan. "
 
 #: ../src/common/config.py:215
 msgid "Hides the banner in a group chat window"
@@ -5693,48 +5371,36 @@ msgid "Hides the banner in two persons chat window"
 msgstr "Ezkutatu banner-a bi pertsonen txat leihoan "
 
 #: ../src/common/config.py:217
-#, fuzzy
 msgid "Hides the group chat occupants list in group chat window."
-msgstr "Ezkutatu gelako jendearen zerrenda txat taldeko leihoan"
+msgstr "Ezkutatu gelako jendearen zerrenda txat taldeko leihoan."
 
 #: ../src/common/config.py:218
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking than in previous message."
-msgstr ""
+msgid "In a chat, show the nickname at the beginning of a line only when it's not the same person talking than in previous message."
+msgstr "Elkarrizketa batean, bakarrik lerroaren hasieran izengoitia erakutsi  ez denean lehengo mezuan hitz egiten ari zinen pertsona bera. "
 
 #: ../src/common/config.py:219
-#, fuzzy
 msgid "Indentation when using merge consecutive nickame."
-msgstr "Indentation when using merge consecutive nickame"
+msgstr "Indentation when using merge consecutive nickame."
 
 #: ../src/common/config.py:220
-#, fuzzy
 msgid "List of colors that will be used to color nicknames in group chats."
 msgstr "Txat taldeko izengoitietan erabiliko diren koloreen zerrenda"
 
 #: ../src/common/config.py:221
 msgid "Ctrl-Tab go to next composing tab when none is unread."
-msgstr ""
+msgstr "Ctrl-Tab go to next composing tab when none is unread."
 
 #: ../src/common/config.py:222
-msgid ""
-"Should we show the confirm metacontacts creation dialog or not? Empty string "
-"means we never show the dialog."
-msgstr ""
+msgid "Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog."
+msgstr "Ikusi beharko da metakontaktuen baieztatze leihoa?  Empty string means we never show the dialog."
 
 #: ../src/common/config.py:223
-msgid ""
-"If True, you will be able to set a negative priority to your account in "
-"account modification window. BE CAREFULL, when you are logged in with a "
-"negative priority, you will NOT receive any message from your server."
-msgstr ""
+msgid "If True, you will be able to set a negative priority to your account in account modification window. BE CAREFULL, when you are logged in with a negative priority, you will NOT receive any message from your server."
+msgstr "Egia bada, lehentasuna negatiboa izateko aukera izango duzu. KONTUZ, lehentasun negatiboarekin konektatzean, EZ duzu mezurik jasoko zerbitzariarengandik. "
 
 #: ../src/common/config.py:234
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in autopriority_* options."
-msgstr ""
+msgid "Priority will change automatically according to your status. Priorities are defined in autopriority_* options."
+msgstr "Lehentasuna zure egoeraren arabera aldatuko da. Lehentasunak autopriority_* aukeran ezarriak daude."
 
 #. yes, no, ask
 #: ../src/common/config.py:263
@@ -5742,35 +5408,33 @@ msgid "Jabberd2 workaround"
 msgstr "Jabberd2 workaround"
 
 #: ../src/common/config.py:267
-msgid ""
-"If checked, Gajim will use your IP and proxies defined in "
-"file_transfer_proxies option for file transfer."
-msgstr ""
-"Hautatuta badago, Gajim-ek zure IP eta definituriko proxy-ak erabiliko ditu "
-"file_transfer_proxies-en  fitxero transferentziarako."
+msgid "If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer."
+msgstr "Hautatuta badago, Gajim-ek zure IP eta definituriko proxy-ak erabiliko ditu file_transfer_proxies-en  fitxero transferentziarako."
 
 #: ../src/common/config.py:326
-#, fuzzy
 msgid "Is OpenPGP enabled for this contact?"
-msgstr "OpenPGP ezin da ordenagailu honetan erabili"
+msgstr "OpenPGP aktibatu al dago kontu honetarako?"
 
-#: ../src/common/config.py:327 ../src/common/config.py:330
+#: ../src/common/config.py:327
+#: ../src/common/config.py:330
 msgid "Language for which we want to check misspelled words"
-msgstr ""
+msgstr "Zuzentzeko erabili nahi dugun hizkuntza"
 
 #: ../src/common/config.py:336
 msgid "all or space separated status"
-msgstr ""
+msgstr "dena edo espazio egoera banandua"
 
 #: ../src/common/config.py:337
 msgid "'yes', 'no', or 'both'"
-msgstr ""
+msgstr "'bai', 'ez', edo 'biak'"
 
-#: ../src/common/config.py:338 ../src/common/config.py:340
-#: ../src/common/config.py:341 ../src/common/config.py:344
+#: ../src/common/config.py:338
+#: ../src/common/config.py:340
+#: ../src/common/config.py:341
+#: ../src/common/config.py:344
 #: ../src/common/config.py:345
 msgid "'yes', 'no' or ''"
-msgstr ""
+msgstr "'bai', 'ez' edo ''"
 
 #: ../src/common/config.py:351
 msgid "Sleeping"
@@ -5821,51 +5485,45 @@ msgid "Out"
 msgstr "kanpoan"
 
 #: ../src/common/config.py:357
-#, fuzzy
 msgid "I'm out enjoying life."
-msgstr "Kanpoan naiz bizitza disfrutatzen"
+msgstr "Kanpoan naiz bizitza disfrutatzen."
 
 #: ../src/common/config.py:361
-#, fuzzy
 msgid "I'm available."
-msgstr "Libre"
+msgstr "Libre."
 
 #: ../src/common/config.py:362
-#, fuzzy
 msgid "I'm free for chat."
-msgstr "Libre Hitz Egiteko"
+msgstr "Libre Hitz Egiteko."
 
 #: ../src/common/config.py:364
-#, fuzzy
 msgid "I'm not available."
-msgstr "Ez Erabilgarri"
+msgstr "Ez Erabilgarri."
 
 #: ../src/common/config.py:365
 msgid "Do not disturb."
-msgstr ""
+msgstr "Ez nahasi."
 
-#: ../src/common/config.py:366 ../src/common/config.py:367
+#: ../src/common/config.py:366
+#: ../src/common/config.py:367
 msgid "Bye!"
-msgstr ""
+msgstr "Agur!"
 
 #: ../src/common/config.py:376
-#, fuzzy
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"muc_highlight_words, or when a group chat message contains your nickname."
-msgstr ""
-"Soinua bat entzun MUC-ak muc_highlight_words-eko hitz bat agertzean edota "
-"MUC-aren mezu batek zure izengoitia duenean."
+msgid "Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname."
+msgstr "Soinua bat entzun MUC-ak muc_highlight_words-eko hitz bat agertzean edota gela bateko mezu batek zure izengoitia duenean."
 
 #: ../src/common/config.py:377
 msgid "Sound to play when any MUC message arrives."
-msgstr ""
+msgstr "Soinu bat ezarri MUC-eko edozein mezu iristean."
 
-#: ../src/common/config.py:386 ../src/common/optparser.py:197
+#: ../src/common/config.py:386
+#: ../src/common/optparser.py:197
 msgid "green"
 msgstr "berdea"
 
-#: ../src/common/config.py:390 ../src/common/optparser.py:183
+#: ../src/common/config.py:390
+#: ../src/common/optparser.py:183
 msgid "grocery"
 msgstr "grocery"
 
@@ -5884,16 +5542,13 @@ msgstr "Ez izan da idle modulua kargatu"
 
 #: ../src/common/connection_handlers.py:177
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
-#, fuzzy
 msgid "Wrong host"
-msgstr "Pasa-esaldi okerra"
+msgstr "Host okerra"
 
 #: ../src/common/connection_handlers.py:177
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
-msgid ""
-"The host you configured as the ft_override_host_to_send advanced option is "
-"not valid, so ignored."
-msgstr ""
+msgid "The host you configured as the ft_override_host_to_send advanced option is not valid, so ignored."
+msgstr "The host you configured as the ft_override_host_to_send advanced option is not valid, so ignored."
 
 #: ../src/common/connection_handlers.py:590
 #, python-format
@@ -5901,9 +5556,9 @@ msgid "Registration information for transport %s has not arrived in time"
 msgstr "Erregistroaren informazioa transporteetarako %s ez da denboran iritsi"
 
 #: ../src/common/connection_handlers.py:1519
-#, fuzzy, python-format
+#, python-format
 msgid "Nickname not allowed: %s"
-msgstr "Izengoitia aurkitugabea: %s"
+msgstr "Baimenik gabeko izengoitia: %s"
 
 #. password required to join
 #. we are banned
@@ -5915,27 +5570,22 @@ msgstr "Izengoitia aurkitugabea: %s"
 #: ../src/common/connection_handlers.py:1593
 #: ../src/common/connection_handlers.py:1596
 #: ../src/common/connection_handlers.py:1604
-#, fuzzy
 msgid "Unable to join group chat"
 msgstr "Ezin da gela honetara sartu"
 
 #: ../src/common/connection_handlers.py:1582
-#, fuzzy
 msgid "A password is required to join this group chat."
-msgstr "Pasahitza behar da gela onetan sartzeko."
+msgstr "Pasahitza behar da gela honetan sartzeko."
 
 #: ../src/common/connection_handlers.py:1585
-#, fuzzy
 msgid "You are banned from this group chat."
 msgstr "Gela honetan ukatua izan zara."
 
 #: ../src/common/connection_handlers.py:1588
-#, fuzzy
 msgid "Such group chat does not exist."
 msgstr "Honako gela honek ez du existitzen."
 
 #: ../src/common/connection_handlers.py:1591
-#, fuzzy
 msgid "Group chat creation is restricted."
 msgstr "Gela sortzea mugatua dago."
 
@@ -5977,12 +5627,8 @@ msgstr "%s -ren harpidetzatik kenduta gaude"
 
 #: ../src/common/connection_handlers.py:1846
 #, python-format
-msgid ""
-"JID %s is not RFC compliant. It will not be added to your roster. Use roster "
-"management tools such as http://jru.jabberstudio.org/ to remove it"
-msgstr ""
-"JID %s is not RFC compliant. It will not be added to your roster. Use roster "
-"management tools such as http://jru.jabberstudio.org/ to remove it"
+msgid "JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it"
+msgstr "JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it"
 
 #: ../src/common/connection.py:164
 #: ../src/common/zeroconf/connection_zeroconf.py:196
@@ -5992,19 +5638,21 @@ msgstr "\"%s\" kontuarekin konexioa galdu da"
 
 #: ../src/common/connection.py:165
 msgid "Reconnect manually."
-msgstr ""
+msgstr "Manualki konektatu berriro."
 
-#: ../src/common/connection.py:176 ../src/common/connection.py:203
-#, fuzzy, python-format
+#: ../src/common/connection.py:176
+#: ../src/common/connection.py:203
+#, python-format
 msgid "Transport %s answered wrongly to register request: %s"
-msgstr "%s transporteak harpidetza baimenari errore batez erantzun dio."
+msgstr "%s transporteak harpidetza baimenari errore batez erantzun dio: %s"
 
 #. wrong answer
 #: ../src/common/connection.py:202
 msgid "Invalid answer"
 msgstr "Erantzun baliogabea"
 
-#: ../src/common/connection.py:394 ../src/common/connection.py:429
+#: ../src/common/connection.py:394
+#: ../src/common/connection.py:429
 #: ../src/common/connection.py:871
 #: ../src/common/zeroconf/connection_zeroconf.py:217
 #, python-format
@@ -6059,9 +5707,8 @@ msgstr "%s naiz"
 #. we're not english
 #. one  in locale and one en
 #: ../src/common/connection.py:708
-#, fuzzy
 msgid "[This message is *encrypted* (See :JEP:`27`]"
-msgstr "[Mezu hau enkriptatua dago]"
+msgstr "[Mezu hau *enkriptatua\" dago (Ikusi: JEP:`27`]"
 
 #: ../src/common/connection.py:758
 #: ../src/common/zeroconf/connection_zeroconf.py:397
@@ -6075,7 +5722,7 @@ msgstr ""
 
 #: ../src/common/connection.py:897
 msgid "Not fetched because of invisible status"
-msgstr ""
+msgstr "Ez bidali ikusezin egoerarengatik"
 
 #. only say that to non Windows users
 #: ../src/common/dbus_support.py:33
@@ -6092,14 +5739,11 @@ msgstr "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
 
 #: ../src/common/exceptions.py:30
 msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Zerbitzua ez erabilgarri: Gajim ez dago abiarazita edota remote_control "
-"False egoeran dago"
+msgstr "Zerbitzua ez erabilgarri: Gajim ez dago abiarazita edota remote_control False egoeran dago"
 
 #: ../src/common/exceptions.py:38
 msgid "D-Bus is not present on this machine or python module is missing"
-msgstr ""
-"D-bus ez dago ordenagailu honetan edo python moduloak ez daude erabilgarri"
+msgstr "D-bus ez dago ordenagailu honetan edo python moduloak ez daude erabilgarri"
 
 #: ../src/common/exceptions.py:46
 msgid ""
@@ -6110,167 +5754,168 @@ msgstr ""
 "Saiatu irakurtzen http://trac.gajim.org/wiki/GajimDBus"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "one"
-msgstr "Ezer ez"
+msgstr "bat"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "two"
-msgstr "zein"
+msgstr "bi"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "three"
-msgstr "Kalea:"
+msgstr "hiru"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "four"
-msgstr "norentzat"
+msgstr "lau"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "five"
-msgstr "fitxeroa"
+msgstr "bost"
 
 #: ../src/common/fuzzyclock.py:42
 msgid "six"
-msgstr ""
+msgstr "sei"
 
 #: ../src/common/fuzzyclock.py:43
-#, fuzzy
 msgid "seven"
-msgstr "Gertaera"
+msgstr "zazpi"
 
 #: ../src/common/fuzzyclock.py:43
 msgid "eight"
-msgstr ""
+msgstr "zortzi"
 
 #: ../src/common/fuzzyclock.py:43
-#, fuzzy
 msgid "nine"
-msgstr "_Jarraitu"
+msgstr "bederatzi"
 
 #: ../src/common/fuzzyclock.py:43
 msgid "ten"
-msgstr ""
+msgstr "Hamar"
 
 #: ../src/common/fuzzyclock.py:43
-#, fuzzy
 msgid "eleven"
-msgstr "Ezabatu"
+msgstr "hamaika"
 
 #: ../src/common/fuzzyclock.py:44
 msgid "twelve"
-msgstr ""
+msgstr "Hamabi"
 
 #. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
 #. A "singular-form". It is used when talking about hour 0
-#: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
+#: ../src/common/fuzzyclock.py:47
+#: ../src/common/fuzzyclock.py:55
 #, python-format
 msgid "%0 o'clock"
-msgstr ""
+msgstr "%0 o'clock"
 
-#: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
+#: ../src/common/fuzzyclock.py:47
+#: ../src/common/fuzzyclock.py:55
 msgid "five past %0"
-msgstr ""
+msgstr "%0 eta bost"
 
-#: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:56
+#: ../src/common/fuzzyclock.py:47
+#: ../src/common/fuzzyclock.py:56
 msgid "ten past %0"
-msgstr ""
+msgstr "&0 eta hamar"
 
-#: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
+#: ../src/common/fuzzyclock.py:48
+#: ../src/common/fuzzyclock.py:56
 msgid "quarter past %0"
-msgstr ""
+msgstr "%0 eta laurden"
 
-#: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:57
+#: ../src/common/fuzzyclock.py:48
+#: ../src/common/fuzzyclock.py:57
 msgid "twenty past %0"
-msgstr ""
+msgstr "%0 eta hogei"
 
-#: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
+#: ../src/common/fuzzyclock.py:49
+#: ../src/common/fuzzyclock.py:57
 msgid "twenty five past %0"
-msgstr ""
+msgstr "%0 eta hogeita bost"
 
-#: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:58
+#: ../src/common/fuzzyclock.py:49
+#: ../src/common/fuzzyclock.py:58
 msgid "half past %0"
-msgstr ""
+msgstr "%0 eta erdiak"
 
-#: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
+#: ../src/common/fuzzyclock.py:50
+#: ../src/common/fuzzyclock.py:58
 msgid "twenty five to %1"
-msgstr ""
+msgstr "%1 hogeita bost gutxi "
 
-#: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:59
+#: ../src/common/fuzzyclock.py:50
+#: ../src/common/fuzzyclock.py:59
 msgid "twenty to %1"
-msgstr ""
+msgstr "%1 hogei gutxi"
 
-#: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
+#: ../src/common/fuzzyclock.py:51
+#: ../src/common/fuzzyclock.py:59
 msgid "quarter to %1"
-msgstr ""
+msgstr "%1 laurden gutxi"
 
-#: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:60
-#, fuzzy
+#: ../src/common/fuzzyclock.py:51
+#: ../src/common/fuzzyclock.py:60
 msgid "ten to %1"
-msgstr "%s -ra erregistratua"
+msgstr "%1 -tik hamarrera"
 
-#: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:60
+#: ../src/common/fuzzyclock.py:51
+#: ../src/common/fuzzyclock.py:60
 msgid "five to %1"
-msgstr ""
+msgstr "%1 bost gutxi"
 
-#: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
+#: ../src/common/fuzzyclock.py:52
+#: ../src/common/fuzzyclock.py:60
 msgid "%1 o'clock"
-msgstr ""
+msgstr "%1 ordu batak"
 
 #: ../src/common/fuzzyclock.py:62
 msgid "Night"
-msgstr ""
+msgstr "Gaua"
 
 #: ../src/common/fuzzyclock.py:62
 msgid "Early morning"
-msgstr ""
+msgstr "Goizaldea"
 
 #: ../src/common/fuzzyclock.py:62
-#, fuzzy
 msgid "Morning"
-msgstr "Lanean"
+msgstr "Goiza"
 
 #: ../src/common/fuzzyclock.py:62
 msgid "Almost noon"
-msgstr ""
+msgstr "Eguerdia"
 
 #: ../src/common/fuzzyclock.py:63
-#, fuzzy
 msgid "Noon"
-msgstr "Ezer ez"
+msgstr "Eguerdia"
 
 #: ../src/common/fuzzyclock.py:63
 msgid "Afternoon"
-msgstr ""
+msgstr "Arratsaldea"
 
 #: ../src/common/fuzzyclock.py:63
-#, fuzzy
 msgid "Evening"
-msgstr "Gertaera"
+msgstr "Arratsaldea"
 
 #: ../src/common/fuzzyclock.py:63
 msgid "Late evening"
-msgstr ""
+msgstr "Ilunabarra"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "Start of week"
-msgstr ""
+msgstr "Aste hasiera"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "Middle of week"
-msgstr ""
+msgstr "Aste erdia"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "End of week"
-msgstr ""
+msgstr "Aste bukaera"
 
 #: ../src/common/fuzzyclock.py:66
 msgid "Weekend!"
-msgstr ""
+msgstr "Asteburua!"
 
 #: ../src/common/helpers.py:105
 msgid "Invalid character in username."
@@ -6439,24 +6084,20 @@ msgid "Visitor"
 msgstr "Bisitaria"
 
 #: ../src/common/helpers.py:301
-#, fuzzy
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "Inor ez"
 
 #: ../src/common/helpers.py:303
-#, fuzzy
 msgid "Owner"
-msgstr "_Jabea"
+msgstr "Jabea"
 
 #: ../src/common/helpers.py:305
-#, fuzzy
 msgid "Administrator"
-msgstr "_Administratzailea"
+msgstr "Administratzailea"
 
 #: ../src/common/helpers.py:307
-#, fuzzy
 msgid "Member"
-msgstr "_Partaidea"
+msgstr "Partaidea"
 
 #: ../src/common/helpers.py:346
 msgid "is paying attention to the conversation"
@@ -6507,7 +6148,8 @@ msgid_plural " %d unread private messages"
 msgstr[0] "%d mezu pribatu irakurri gabe"
 msgstr[1] "%d mezu pribatu irakurri gabe"
 
-#: ../src/common/helpers.py:908 ../src/common/helpers.py:910
+#: ../src/common/helpers.py:908
+#: ../src/common/helpers.py:910
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
@@ -6522,47 +6164,43 @@ msgstr "errorea: ezin da %s ireki irakurtzeko"
 msgid "gtk+"
 msgstr "gtk+"
 
-#: ../src/common/optparser.py:192 ../src/common/optparser.py:193
+#: ../src/common/optparser.py:192
+#: ../src/common/optparser.py:193
 msgid "cyan"
 msgstr "cyan"
 
 #: ../src/common/optparser.py:302
-#, fuzzy
 msgid "migrating logs database to indeces"
-msgstr "logs-en datu basea sortzen"
+msgstr "migrating logs database to indeces"
 
 #: ../src/common/passwords.py:86
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim account %s"
-msgstr "%s kontukoa"
+msgstr "%s gajim kontua"
 
 #: ../src/common/zeroconf/client_zeroconf.py:189
-msgid ""
-"Connection to host could not be established: Incorrect answer from server."
-msgstr ""
+msgid "Connection to host could not be established: Incorrect answer from server."
+msgstr "Host-era konexioa ezin izan da ezarri. Zerbitzariaren erantzuna ez da egokia izan. "
 
 #: ../src/common/zeroconf/client_zeroconf.py:205
-#, fuzzy
 msgid "Connection to host could not be established"
-msgstr "Connection with peer cannot be established."
+msgstr "Hots-eko konexioa ezin izan da ezarri"
 
 #: ../src/common/zeroconf/client_zeroconf.py:334
-msgid ""
-"Connection to host could not be established: Timeout while sending data."
-msgstr ""
+msgid "Connection to host could not be established: Timeout while sending data."
+msgstr "Host-era konexioa ezin izan da ezarri. Denbora joan da."
 
 #: ../src/common/zeroconf/client_zeroconf.py:629
 msgid "Contact is offline. Your message could not be sent."
-msgstr ""
+msgstr "Kontaktua deskonektatua dago. Zure mezua ezin izan da bidali. "
 
 #: ../src/common/zeroconf/connection_zeroconf.py:197
 msgid "To continue sending and receiving messages, you will need to reconnect."
-msgstr ""
-"Mezuak jasotzen eta bidaltzen jarraitzeko berriro konektatu beharko zara."
+msgstr "Mezuak jasotzen eta bidaltzen jarraitzeko berriro konektatu beharko zara."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:207
 msgid "Avahi error"
-msgstr ""
+msgstr "Avahi error"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:207
 #, python-format
@@ -6570,37 +6208,36 @@ msgid ""
 "%s\n"
 "Link-local messaging might not work properly."
 msgstr ""
+"%s\n"
+"Link-local messaging might not work properly."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:218
 msgid "Please check if Avahi is installed."
-msgstr ""
+msgstr "Mesedez begiratu Avahi  instalatuta dagoen."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:227
 #: ../src/common/zeroconf/connection_zeroconf.py:231
-#, fuzzy
 msgid "Could not start local service"
-msgstr "Ezin izan da irudia kargatu"
+msgstr "Ezin izan da zerbitzu lokalak hasi"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:228
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to bind to port %d."
-msgstr "Unable to bind to port %s."
+msgstr "Unable to bind to port %d."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:232
 #: ../src/common/zeroconf/connection_zeroconf.py:325
 msgid "Please check if avahi-daemon is running."
-msgstr ""
+msgstr "Mesedez begiratu avahi-daemon martxan dagoen."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:324
-#, fuzzy, python-format
+#, python-format
 msgid "Could not change status of account \"%s\""
-msgstr "Ezin izan da konektatu \"%s\" -rekin"
+msgstr "Ezin izan da \"%s\" -ren egoera aldatu"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:341
-msgid ""
-"You are not connected or not visible to others. Your message could not be "
-"sent."
-msgstr ""
+msgid "You are not connected or not visible to others. Your message could not be sent."
+msgstr "Ez zaude konektatuta edo ikusezin zaude. Ezin izan da zure mezua bidali."
 
 #. we're not english
 #: ../src/common/zeroconf/connection_zeroconf.py:353
@@ -6608,89 +6245,84 @@ msgid "[This message is encrypted]"
 msgstr "[Mezu hau enkriptatua dago]"
 
 #: ../src/common/zeroconf/zeroconf.py:180
-#, fuzzy, python-format
+#, python-format
 msgid "Error while adding service. %s"
-msgstr "errorea bidaltzen zen bitartean %s ( %s )"
+msgstr "Errorea zerbitzarian sartzean.%s"
 
-#, fuzzy
-#~ msgid "_New room"
-#~ msgstr "Gela Berria"
+msgid "_New room"
+msgstr "_Gela Berria"
 
-#~ msgid "Role: "
-#~ msgstr "Eginkizun:"
+msgid "Role: "
+msgstr "Eginkizun:"
 
-#~ msgid "Affiliation: "
-#~ msgstr "Afizioak: "
+msgid "Affiliation: "
+msgstr "Afizioak: "
 
-#, fuzzy
-#~ msgid "Merge consecutive nickname in chat window."
-#~ msgstr "Elkartu hurren hurreneko izengoitia elkarrizketa leihoan"
+msgid "Merge consecutive nickname in chat window."
+msgstr "Elkartu hurren hurreneko izengoitia elkarrizketa leihoan."
 
-#~ msgid ""
-#~ "Sound to play when any MUC message arrives. (This setting is taken into "
-#~ "account only if notify_on_all_muc_messages is True)"
-#~ msgstr ""
-#~ "Soinu bat entzun MUC mezu bat jasotzean. (Aukera hau bakarrik kontuan "
-#~ "hartzen da kontuaren notify_on_all_muc_messages True bada)"
+msgid "Sound to play when any MUC message arrives. (This setting is taken into account only if notify_on_all_muc_messages is True)"
+msgstr "Soinu bat entzun MUC mezu bat jasotzean. (Aukera hau bakarrik kontuan hartzen da kontuaren notify_on_all_muc_messages True bada)"
 
-#~ msgid "Add"
-#~ msgstr "Gehitu"
+msgid "Add"
+msgstr "Gehitu"
 
-#~ msgid "Away "
-#~ msgstr "Kanpoan"
+msgid "Away "
+msgstr "Kanpoan"
 
-#~ msgid "Down"
-#~ msgstr "Bera"
+msgid "Down"
+msgstr "Behean"
 
-#~ msgid "List of special notifications settings"
-#~ msgstr "Notifikazio berezien aldaketen zerrenda"
+msgid "List of special notifications settings"
+msgstr "Jakinarazketa berezien zerrenden aukerak"
 
-#~ msgid "Not Available "
-#~ msgstr "Ez Erabilgarri"
+msgid "Not Available "
+msgstr "Ez Erabilgarri"
 
-#~ msgid "Up"
-#~ msgstr "Gora"
+msgid "Up"
+msgstr "Gora"
 
-#~ msgid "Create your own Privacy Lists"
-#~ msgstr "Sortu zure debekatze zerrenda"
+msgid "Create your own Privacy Lists"
+msgstr "Zure Debekatze Zerrenda egin"
 
-#~ msgid "Server-based Privacy Lists"
-#~ msgstr "Zerbitzarian oinarritutako Debekatze Zerrenda"
+msgid "Server-based Privacy Lists"
+msgstr "Zerbitzariako Debekatze Zerrenda"
 
-#~ msgid "Contact _Info"
-#~ msgstr "Kontaktuaren _ Informazioa"
+msgid "Contact _Info"
+msgstr "Kontaturen _Informazioa"
 
-#~ msgid "Contact Information"
-#~ msgstr "Kontaktuaren Informazioa"
+msgid "Contact Information"
+msgstr "Kontaktuaren Informazioa"
 
-#~ msgid "Jabber"
-#~ msgstr "Jabber"
+msgid "Jabber"
+msgstr "Jabber"
 
-#~ msgid "Invalid room or server name"
-#~ msgstr "Baliogabeko gela edo zerbitzari izena"
+msgid "Invalid room or server name"
+msgstr "Baliogabeko gela edo zerbitzari izena"
 
-#~ msgid "Unknown D-Bus version: %s"
-#~ msgstr "D-Bus bertsioa aurkitugabea: %s"
+msgid "Unknown D-Bus version: %s"
+msgstr "D-Bus bertsioa aurkitugabea: %s"
 
-#~ msgid "vCard publication succeeded"
-#~ msgstr "vCard argitarapena egina"
+msgid "vCard publication succeeded"
+msgstr "vCard argitarapena egina"
 
-#~ msgid "Your personal information has been published successfully."
-#~ msgstr "Zure informazio pertsonala egoki argitaratua izan da."
+msgid "Your personal information has been published successfully."
+msgstr "Zure informazio pertsonala argitaratua izan da."
 
-#~ msgid "Migrating Logs..."
-#~ msgstr "Log-ak Eraldatzen..."
+msgid "Migrating Logs..."
+msgstr "Historialeko Log-ak Esportatzen...."
 
-#~ msgid "Please wait while logs are being migrated..."
-#~ msgstr "Mesedez itxoin log-a eraldatzen den bitartean...."
+msgid "Please wait while logs are being migrated..."
+msgstr "Mesedez itxoin log-a eraldatzen den bitartean...."
 
-#~ msgid "_Join New Room"
-#~ msgstr "Gela Berrian _Sartu"
+msgid "_Join New Room"
+msgstr "_Gela Berri Sartu"
 
-#~ msgid "Gajim - %d unread message"
-#~ msgid_plural "Gajim - %d unread messages"
-#~ msgstr[0] "Gajim - %d mezu irakurri gabe"
-#~ msgstr[1] "Gajim - %d irakurri gabeko mezuak"
+msgid "Gajim - %d unread message"
+msgid_plural "Gajim - %d unread messages"
+msgstr[0] "Gajim - %d mezu irakurri gabe"
+msgstr[1] "Gajim - %d mezu irakurri gabe"
 
-#~ msgid "Since %s"
-#~ msgstr "Noiztik %s"
+msgid "Since %s"
+msgstr "Noiztik %s"
+
