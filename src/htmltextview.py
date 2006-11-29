@@ -623,8 +623,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		#id_ = attrs.get('id',None) 
 		id_ = None
 		if name == 'a':
-            #TODO: accesskey, charset, hreflang, rel, rev, tabindex, type
-			href = attrs.get('href', None)
+			#TODO: accesskey, charset, hreflang, rel, rev, tabindex, type
+			if "href" in attrs: href = attrs.get('href', None)
+			elif "HREF" in attrs: href = attrs.get('HREF', None)
+			# Gaim sends HREF instead of href
 			title = attrs.get('title', attrs.get('rel',href))
 			type_ = attrs.get('type', None)
 			tag = self._create_url(href, title, type_, id_)
