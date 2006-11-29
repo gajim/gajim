@@ -1270,7 +1270,6 @@ msgid "Auto _not available after:"
 msgstr "Automatisch _nicht verfügbar nach:"
 
 #: ../data/glade/preferences_window.glade.h:24
-#, fuzzy
 msgid ""
 "Autodetect on every Gajim startup\n"
 "Always use GNOME default applications\n"
@@ -1321,9 +1320,8 @@ msgid "Display status _messages of contacts in roster"
 msgstr "Zeige die Status_nachrichten von Kontakten im Roster"
 
 #: ../data/glade/preferences_window.glade.h:38
-#, fuzzy
 msgid "Displayed Chat state noti_fications:"
-msgstr "Sende Statusbenachrichtigungen:"
+msgstr "Zeige Benachrichtigung über Chatstadien:"
 
 #: ../data/glade/preferences_window.glade.h:39
 msgid "E_very 5 minutes"
@@ -1427,9 +1425,8 @@ msgid "One message _window:"
 msgstr "Ein _Nachrichtenfenster:"
 
 #: ../data/glade/preferences_window.glade.h:66
-#, fuzzy
 msgid "Outgoing Chat state noti_fications:"
-msgstr "Sende Statusbenachrichtigungen:"
+msgstr "Sende Chatstadien:"
 
 #: ../data/glade/preferences_window.glade.h:67
 msgid "Play _sounds"
@@ -1449,7 +1446,7 @@ msgstr "Speichere _Position und Größe der Kontaktliste und Chatfenster"
 
 #: ../data/glade/preferences_window.glade.h:71
 msgid "Set status message to reflect currently playing _music track"
-msgstr ""
+msgstr "Setze Status-Nachricht auf den aktuell spielenden _Musiktitel"
 
 #: ../data/glade/preferences_window.glade.h:72
 msgid "Show only in _roster"
@@ -4645,13 +4642,13 @@ msgstr "mit Konto %s"
 #: ../src/roster_window.py:903
 #, python-format
 msgid "to %s account"
-msgstr "an %s Konto"
+msgstr "an Konto %s"
 
 #. disco
 #: ../src/roster_window.py:908
 #, python-format
 msgid "using %s account"
-msgstr "mit %s Konto"
+msgstr "mit Konto %s"
 
 #. profile, avatar
 #: ../src/roster_window.py:983
