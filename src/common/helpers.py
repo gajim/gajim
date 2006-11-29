@@ -688,7 +688,8 @@ def get_os_info():
 			(2, 4, 0): 'NT',
 			(2, 5, 0): '2000',
 			(2, 5, 1): 'XP',
-			(2, 5, 2): '2003'
+			(2, 5, 2): '2003',
+                        (2, 6, 0): 'Vista',
 		}
 		if win_version.has_key(ver_format):
 			return 'Windows' + ' ' + win_version[ver_format]
