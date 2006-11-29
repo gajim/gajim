@@ -2,7 +2,13 @@ SUBDIRS = src data po
 
 ACLOCAL_AMFLAGS = -I m4
 
-bin_SCRIPTS = scripts/gajim
+if BUILD_REMOTE_CONTROL
+OPTIONAL_BIN = scripts/gajim-remote
+else
+OPTIONAL_BIN =
+endif
+
+bin_SCRIPTS = scripts/gajim $(OPTIONAL_BIN)
 
 
 docfilesdir = $(docdir)
@@ -19,13 +25,15 @@ EXTRA_DIST = \
 	intltool-extract.in \
 	intltool-merge.in 	\
 	intltool-update.in	\
-	scripts/gajim.in
+	scripts/gajim.in	\
+	scripts/gajim-remote.in
 	
 DISTCLEANFILES = 		\
 	intltool-extract 	\
 	intltool-merge 		\
 	intltool-update		\
-	scripts/gajim
+	scripts/gajim		\
+	scripts/gajim-remote
 
 MAINTAINERCLEANFILES = \
 	configure \

@@ -160,6 +160,7 @@ AC_CONFIG_FILES([
 	src/Makefile
 	src/common/Makefile
 	scripts/gajim
+	scripts/gajim-remote
 	po/Makefile.in
 ])
 AC_OUTPUT
