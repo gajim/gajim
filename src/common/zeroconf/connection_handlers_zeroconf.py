@@ -606,6 +606,7 @@ class ConnectionBytestream:
 
 class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 	def __init__(self):
+		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
 		# List of IDs we are waiting answers for {id: (type_of_request, data), }
 		self.awaiting_answers = {}
