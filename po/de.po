@@ -4950,7 +4950,7 @@ msgstr "Letzter Status: %s"
 
 #: ../src/tooltips.py:463
 msgid " since %s"
-msgstr "seit %s"
+msgstr " seit %s"
 
 #. ('both' is the normal sub so we don't show it)
 #: ../src/tooltips.py:502
