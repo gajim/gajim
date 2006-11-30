@@ -420,14 +420,18 @@ class GroupchatControl(ChatControlBase):
 	def _update_banner_state_image(self):
 		banner_status_img = self.xml.get_widget('gc_banner_status_image')
 		images = gajim.interface.roster.jabber_state_images
-		if images.has_key('32') and images['32'].has_key('muc_active'):
-			muc_icon = images['32']['muc_active']
+		if gajim.gc_connected[self.account][self.room_jid]:
+			image = 'muc_active'
+		else:
+			image = 'muc_inactive'
+		if images.has_key('32') and images['32'].has_key(image):
+			muc_icon = images['32'][image]
 			if muc_icon.get_storage_type() != gtk.IMAGE_EMPTY:
 				pix = muc_icon.get_pixbuf()
 				banner_status_img.set_from_pixbuf(pix)
 				return
 		# we need to scale 16x16 to 32x32
-		muc_icon = images['16']['muc_active']
+		muc_icon = images['16'][image]
 		pix = muc_icon.get_pixbuf()
 		scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
 		banner_status_img.set_from_pixbuf(scaled_pix)
