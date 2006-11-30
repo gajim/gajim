@@ -417,6 +417,21 @@ class GroupchatControl(ChatControlBase):
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			self.draw_contact(nick)
 
+	def _update_banner_state_image(self):
+		banner_status_img = self.xml.get_widget('gc_banner_status_image')
+		images = gajim.interface.roster.jabber_state_images
+		if images.has_key('32') and images['32'].has_key('muc_active'):
+			muc_icon = images['32']['muc_active']
+			if muc_icon.get_storage_type() != gtk.IMAGE_EMPTY:
+				pix = muc_icon.get_pixbuf()
+				banner_status_img.set_from_pixbuf(pix)
+				return
+		# we need to scale 16x16 to 32x32
+		muc_icon = images['16']['muc_active']
+		pix = muc_icon.get_pixbuf()
+		scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
+		banner_status_img.set_from_pixbuf(scaled_pix)
+
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
 		sets sensitivity state for configure_room'''
