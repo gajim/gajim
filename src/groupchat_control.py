@@ -709,6 +709,7 @@ class GroupchatControl(ChatControlBase):
 	def got_connected(self):
 		gajim.gc_connected[self.account][self.room_jid] = True
 		ChatControlBase.got_connected(self)
+		self.draw_banner()
 
 	def got_disconnected(self):
 		self.list_treeview.get_model().clear()
@@ -721,6 +722,7 @@ class GroupchatControl(ChatControlBase):
 		# Note, since this method is called during initialization it is NOT safe
 		# to call self.parent_win.redraw_tab here
 		ChatControlBase.got_disconnected(self)
+		self.draw_banner()
 
 	def draw_roster(self):
 		self.list_treeview.get_model().clear()
