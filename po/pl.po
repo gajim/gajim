@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-27 13:26+0100\n"
+"POT-Creation-Date: 2006-11-28 19:06+0100\n"
 "PO-Revision-Date: 2006-11-08 09:01+0100\n"
 "Last-Translator: Maciej Chojnacki <byte@byte.livenet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -61,7 +61,7 @@ msgstr "_Modyfikuj konto..."
 
 #: ../data/glade/account_context_menu.glade.h:7
 msgid "_Open Gmail Inbox"
-msgstr "_Otwórz skrzynkę odbiorczą Gmail"
+msgstr "_Otwórz skrzynkę Gmail"
 
 #: ../data/glade/account_context_menu.glade.h:8
 #: ../data/glade/zeroconf_context_menu.glade.h:2
@@ -309,7 +309,7 @@ msgid ""
 "accordingly"
 msgstr ""
 "Jeśli jest zaznaczone, to każda zmiana statusu globalnego (ustawianego z "
-"menu na dole okna listy kontaktów) wpłynie odpowiednio na stutus tego konta"
+"menu na dole okna listy kontaktów) wpłynie odpowiednio na status tego konta"
 
 #: ../data/glade/account_modification_window.glade.h:23
 msgid "Information about you, as stored in the server"
@@ -600,11 +600,11 @@ msgstr "Ustawia Wiadomość Dnia"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:6
 msgid "Show _XML Console"
-msgstr "Pokaż Konsolę _XML"
+msgstr "Konsola _XML"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:7
 msgid "Update MOTD"
-msgstr "Ukatualnij MOTD"
+msgstr "Uaktualnij MOTD"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:8
 msgid "Updates Message of the Day"
@@ -1148,9 +1148,9 @@ msgid ""
 "If you plan to do massive deletions, please make sure Gajim is not running. "
 "Generally avoid deletions with contacts you currently chat with."
 msgstr ""
-"<big><b>Witamy w Menedżerze historii rozmów Gajima</b></big>\n"
+"<big><b>Witaj w historii rozmów</b></big>\n"
 "\n"
-"Z lewej strony znajduje się lista logów z historią rozmów, za pomocą "
+"Z lewej strony znajduje się lista zapisanych rozmów, za pomocą "
 "poniższego pola możesz bezpośrednio przeszukiwać bazę danych.\n"
 "\n"
 "<b>UWAGA:</b>\n"
@@ -1168,7 +1168,7 @@ msgstr "Eksport"
 
 #: ../data/glade/history_manager.glade.h:9
 msgid "Gajim History Logs Manager"
-msgstr "Menedżer historii rozmów Gajima"
+msgstr "Historia rozmów"
 
 #: ../data/glade/history_manager.glade.h:10
 msgid "_Search Database"
@@ -1299,7 +1299,7 @@ msgstr "Używaj autoryzacji"
 msgid "Click to insert an emoticon (Alt+M)"
 msgstr "Kliknij by wstawić emotikon (Alt+E)"
 
-#: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1099
+#: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1101
 msgid "OpenPGP Encryption"
 msgstr "Szyfrowanie OpenPGP"
 
@@ -1340,7 +1340,7 @@ msgstr "<b>Format linii</b>"
 
 #: ../data/glade/preferences_window.glade.h:6
 msgid "<b>GMail Options</b>"
-msgstr "<b>Opcje konta GMail</b>"
+msgstr "<b>Opcje konta Gmail</b>"
 
 #: ../data/glade/preferences_window.glade.h:7
 msgid "<b>Interface Customization</b>"
@@ -1426,7 +1426,7 @@ msgstr ""
 msgid "B_efore nickname:"
 msgstr "_Przed pseudonimem:"
 
-#: ../data/glade/preferences_window.glade.h:30 ../src/chat_control.py:839
+#: ../data/glade/preferences_window.glade.h:30 ../src/chat_control.py:841
 msgid "Chat"
 msgstr "Rozmowa"
 
@@ -1611,7 +1611,7 @@ msgstr "Powiadom mnie o kontaktach zmieniających status na: "
 
 #: ../data/glade/preferences_window.glade.h:63
 msgid "Notify on new _GMail email"
-msgstr "Powiadamiaj o nowej poczcie na koncie _GMail"
+msgstr "Powiadamiaj o nowej poczcie na koncie _Gmail"
 
 #: ../data/glade/preferences_window.glade.h:64
 msgid "On every _message"
@@ -1800,7 +1800,7 @@ msgstr "_Informacja o statusie:"
 
 #: ../data/glade/preferences_window.glade.h:106
 msgid "_URL:"
-msgstr "_URL"
+msgstr "_URL:"
 
 #: ../data/glade/preferences_window.glade.h:107
 msgid "minutes"
@@ -1836,7 +1836,7 @@ msgstr "Zezwól"
 
 #: ../data/glade/privacy_list_window.glade.h:9
 msgid "JabberID"
-msgstr "Jabber ID"
+msgstr "JID"
 
 #: ../data/glade/privacy_list_window.glade.h:10
 msgid "Order:"
@@ -2535,33 +2535,33 @@ msgstr "Połączenie jest niemożliwe"
 msgid "Your message can not be sent until you are connected."
 msgstr "Nie możesz wysłać wiadomości dopóki nie będziesz połączony."
 
-#: ../src/chat_control.py:839
+#: ../src/chat_control.py:841
 msgid "Chats"
 msgstr "Rozmowy"
 
-#: ../src/chat_control.py:1025
+#: ../src/chat_control.py:1027
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s z pokoju %(room_name)s"
 
 #. we talk about a contact here
-#: ../src/chat_control.py:1113
+#: ../src/chat_control.py:1115
 #, python-format
 msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 msgstr ""
 "Ani %s nie przesyła swojego klucza OpenPGP, ani Ty nie przypisałeś mu "
 "żadnego klucza"
 
-#: ../src/chat_control.py:1249
+#: ../src/chat_control.py:1251
 msgid "Encryption enabled"
 msgstr "Szyfrowanie włączone"
 
-#: ../src/chat_control.py:1254
+#: ../src/chat_control.py:1256
 msgid "Encryption disabled"
 msgstr "Szyfrowanie wyłączone"
 
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1396 ../src/conversation_textview.py:487
+#: ../src/chat_control.py:1398 ../src/conversation_textview.py:493
 #: ../src/dialogs.py:629 ../src/gajim.py:726 ../src/gajim.py:727
 #: ../src/gajim.py:1066 ../src/roster_window.py:328
 #: ../src/roster_window.py:404 ../src/roster_window.py:1642
@@ -2574,12 +2574,12 @@ msgid "Not in Roster"
 msgstr "spoza listy kontaktów"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:1540
+#: ../src/chat_control.py:1542
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Właśnie otrzymałeś nową wiadomość od \"%s\""
 
-#: ../src/chat_control.py:1541
+#: ../src/chat_control.py:1543
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -2656,7 +2656,7 @@ msgstr "Otrzymano wiadomość na czacie"
 
 #: ../src/config.py:1079
 msgid "GMail Email Received"
-msgstr "Nowa poczta na koncie GMail"
+msgstr "Nowa poczta na koncie Gmail"
 
 #: ../src/config.py:1282
 msgid "OpenPGP is not usable in this computer"
@@ -2952,7 +2952,7 @@ msgstr "Domyślny"
 
 #: ../src/config.py:2638
 msgid "?print_status:All"
-msgstr "Wyświetlaj status:Wszystkie"
+msgstr "?print_status:Wszystkie"
 
 #: ../src/config.py:2639
 msgid "Enter and leave only"
@@ -3072,19 +3072,19 @@ msgstr "Szukaj w _Internecie"
 msgid "Open as _Link"
 msgstr "Otwórz jako _odnośnik"
 
-#: ../src/conversation_textview.py:752
+#: ../src/conversation_textview.py:755
 msgid "Yesterday"
 msgstr "Wczoraj"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
-#: ../src/conversation_textview.py:756
+#: ../src/conversation_textview.py:759
 #, python-format
 msgid "%i days ago"
 msgstr "%i dni temu"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:788
+#: ../src/conversation_textview.py:791
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Temat: %s\n"
@@ -3104,6 +3104,7 @@ msgid "Contact name: <i>%s</i>"
 msgstr "Nazwa kontaktu: <i>%s</i>"
 
 #: ../src/dialogs.py:61
+#, python-format
 msgid "Jabber ID: <i>%s</i>"
 msgstr "JID : <i>%s</i>"
 
@@ -3303,7 +3304,7 @@ msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
 msgstr ""
-"Wpisz jid lub nazwę użytkownika kontaktu, któremu chcesz\n"
+"Wpisz JID lub nazwę użytkownika kontaktu, któremu chcesz\n"
 "wysłać wiadomość:"
 
 #. if offline or connecting
@@ -4975,6 +4976,7 @@ msgid "Rename Contact"
 msgstr "Zmień nazwę dla kontaktu"
 
 #: ../src/roster_window.py:1418
+#, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "Wpisz nazwę dla kontaktu %s."
 
@@ -4983,6 +4985,7 @@ msgid "Rename Group"
 msgstr "Zmień nazwę grupy"
 
 #: ../src/roster_window.py:1426
+#, python-format
 msgid "Enter a new name for group %s"
 msgstr "Wpisz nową nazwę dla grupy %s."
 
@@ -5025,7 +5028,7 @@ msgstr "_Zmień nazwę"
 
 #: ../src/roster_window.py:2061
 msgid "To all users"
-msgstr "Do wszystkoch użytkowników"
+msgstr "Do wszystkich użytkowników"
 
 #: ../src/roster_window.py:2064
 msgid "To all online users"
@@ -5041,7 +5044,7 @@ msgstr "R_ozłącz"
 
 #: ../src/roster_window.py:2232 ../src/roster_window.py:2303
 msgid "_Change Status Message"
-msgstr "_Zmień Opis Statusu"
+msgstr "_Zmień opis statusu"
 
 #: ../src/roster_window.py:2375
 msgid "Authorization has been sent"
@@ -5206,11 +5209,11 @@ msgstr "Przekształć %s oraz %s w metakontakty"
 
 #: ../src/roster_window.py:4318
 msgid "Change Status Message..."
-msgstr "Zmień Opis Statusu..."
+msgstr "Zmień opis statusu..."
 
 #: ../src/systray.py:144
 msgid "_Change Status Message..."
-msgstr "_Zmień Opis Statusu..."
+msgstr "_Zmień opis statusu..."
 
 #: ../src/systray.py:234
 msgid "Hide this menu"
@@ -5535,13 +5538,17 @@ msgstr ""
 #: ../src/common/config.py:155
 msgid ""
 "Sent chat state notifications. Can be one of all, composing_only, disabled."
-msgstr "Wysyłaj informacje o twoim statusie podczas prowadzenia rozmowy. Może przyjmować wartości all, composing_only, disabled."
+msgstr ""
+"Wysyłaj informacje o twoim statusie podczas prowadzenia rozmowy. Może "
+"przyjmować wartości all, composing_only, disabled."
 
 #: ../src/common/config.py:156
 msgid ""
 "Displayed chat state notifications in chat windows. Can be one of all, "
 "composing_only, disabled."
-msgstr "Informacje o statusie rozmówcy wyświetlane w oknie rozmowy. Przyjmuje wartości all, composing_only, disabled."
+msgstr ""
+"Informacje o statusie rozmówcy wyświetlane w oknie rozmowy. Przyjmuje "
+"wartości all, composing_only, disabled."
 
 #: ../src/common/config.py:158
 msgid ""
@@ -5802,7 +5809,11 @@ msgid ""
 "If True, you will be able to set a negative priority to your account in "
 "account modification window. BE CAREFULL, when you are logged in with a "
 "negative priority, you will NOT receive any message from your server."
-msgstr "Jeżeli opcja ustawiona jest na True, w oknie modyfikacji właściwości konta będziesz mógł korzystać z ujemnych priorytetów. Zauważ, że po zalogowaniu z ujemnym priorytetem nie będziesz otrzymywał żadnych wiadomości z twojego serwera."
+msgstr ""
+"Jeżeli opcja ustawiona jest na True, w oknie modyfikacji właściwości konta "
+"będziesz mógł korzystać z ujemnych priorytetów. Zauważ, że po zalogowaniu z "
+"ujemnym priorytetem nie będziesz otrzymywał żadnych wiadomości z twojego "
+"serwera."
 
 #: ../src/common/config.py:234
 msgid ""
@@ -5959,8 +5970,10 @@ msgid "Reconnect manually."
 msgstr "Połącz ponownie ręcznie."
 
 #: ../src/common/connection.py:176 ../src/common/connection.py:203
+#, python-format
 msgid "Transport %s answered wrongly to register request: %s"
-msgstr "Transport %s udzielił nieprawidłowej odpowiedzi na żądnie rejestracji: %s"
+msgstr ""
+"Transport %s udzielił nieprawidłowej odpowiedzi na żądnie rejestracji: %s"
 
 #. wrong answer
 #: ../src/common/connection.py:202
