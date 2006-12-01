@@ -883,12 +883,6 @@ class ConnectionVcard:
 		if vcard.has_key('PHOTO'):
 			if not isinstance(vcard['PHOTO'], dict):
 				del vcard['PHOTO']
-			elif vcard['PHOTO'].has_key('SHA'):
-				cached_sha = vcard['PHOTO']['SHA']
-				if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
-					cached_sha:
-					# user change his vcard so don't use the cached one
-					return {}
 		vcard['jid'] = jid
 		vcard['resource'] = gajim.get_resource_from_jid(fjid)
 		return vcard
