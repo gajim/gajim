@@ -4929,7 +4929,7 @@ msgstr "dla konta %s"
 #. History manager
 #: ../src/roster_window.py:1053
 msgid "History Manager"
-msgstr "Menedżer historii rozmów"
+msgstr "Historia rozmów"
 
 #: ../src/roster_window.py:1062
 msgid "_Join New Group Chat"
