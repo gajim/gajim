@@ -39,9 +39,9 @@ opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
 opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
 
-DEFAULT_ICONSET = 'dcraven'
-
 class Config:
+
+	DEFAULT_ICONSET = 'dcraven'
 
 	__options = {
 		# name: [ type, default_value, help_string ]
