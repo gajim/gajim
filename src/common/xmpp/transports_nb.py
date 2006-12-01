@@ -79,14 +79,19 @@ class SSLWrapper:
 		def __init__(this, sock=None, exc=None, errno=None, strerror=None, peer=None):
 			this.parent = IOError
 
+			errno = errno or gattr(exc, 'errno', 0)
+			strerror = strerror or gattr(exc, 'strerror') or gattr(exc, 'args')
+			if not isinstance(strerror, basestring): strerror = repr(strerror)
+
+			this.parent.__init__(this, errno, strerror)
+
+			this.sock = sock
 			this.exc = exc
-
-			errno = errno or gattr(this.exc, 'errno', 0)
-			strerror = strerror or gattr(this.exc, 'strerror') or gattr(this.exc, 'args')
-
-			this.parent.__init__(this, this.errno, this.strerror)
 			this.peer = peer
 			this.exc_name = None
+			this.exc_args = None
+			this.exc_str = None
+			this.exc_repr = None
 
 			if this.exc is not None:
 				this.exc_name = str(this.exc.__class__)
@@ -96,7 +101,7 @@ class SSLWrapper:
 
 			if this.peer is None and sock is not None:
 				try:
-					ppeer = this.obj.getpeername()
+					ppeer = this.sock.getpeername()
 					if len(ppeer) == 2 and isinstance(ppeer[0], basestring) \
 					and isinstance(ppeer[1], int):
 						this.peer = ppeer
@@ -104,7 +109,7 @@ class SSLWrapper:
 
 		def __str__(this):
 			s = str(this.__class__)
-			if this.peer: s += "for %s:%d" % this.peer
+			if this.peer: s += " for %s:%d" % this.peer
 			if this.errno is not None: s += ": [Errno: %d]" % this.errno
 			if this.strerror: s += " (%s)" % this.strerror
 			if this.exc_name:
