@@ -34,7 +34,6 @@ Gajim 0.11 (XX December 2006)
   * New possibilities to insert nickname of a participant in groupchat conversations: Tab in an empty line now cycles through nicks, maj+right click->inserts nickname, maj+click on name in gc-roster, /names command to show all users presence
   * Fixed bugs when removing or renaming an account with tabs open (#2369 and #2370)
   * New translations: Croatian, Esperanto, British English, Belarusian
-  * Gajim now requires Python 2.4 to run
 
 Gajim 0.10.1 (06 June 2006)
 
