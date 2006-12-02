@@ -72,6 +72,7 @@ except exceptions.PysqliteNotAvailable, e:
 if os.name == 'nt':
 	try:
 		import winsound # windows-only built-in module for playing wav
+		import win32api # do NOT remove. we req this module
 	except:
 		pritext = _('Gajim needs pywin32 to run')
 		sectext = _('Please make sure that Pywin32 is installed on your system. You can get it at %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
