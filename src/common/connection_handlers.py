@@ -817,7 +817,7 @@ class ConnectionVcard:
 		''' advertise our capabilities in presence stanza (jep-0115)'''
 		c = p.setTag('c', namespace = common.xmpp.NS_CAPS)
 		c.setAttr('node', 'http://gajim.org/caps')
-		c.setAttr('ext', 'ftrans')
+		c.setAttr('ext', 'ftrans xhtml')
 		c.setAttr('ver', gajim.version)
 		return p
 	
