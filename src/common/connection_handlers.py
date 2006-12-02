@@ -727,19 +727,27 @@ class ConnectionDisco:
 		if self.commandQuery(con, iq_obj):
 			raise common.xmpp.NodeProcessed
 		
-		elif node is None:
+		else:
 			iq = iq_obj.buildReply('result')
 			q = iq.getTag('query')
-			q.addChild('identity', attrs = {'type': 'pc',
-							'category': 'client',
-							'name': 'Gajim'})
-			q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
-			q.addChild('feature', attrs = {'var': common.xmpp.NS_SI})
-			q.addChild('feature', attrs = {'var': common.xmpp.NS_FILE})
-			q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
-			q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
-			self.connection.send(iq)
-			raise common.xmpp.NodeProcessed
+			q.addChild('identity', attrs = {'type': 'pc', 'category': 'client',
+				'name': 'Gajim'})
+			extension = None
+			if node and node.find('#') != -1:
+				extension = node[node.index('#') + 1:]
+			client_version = 'http://gajim.org/caps#' + gajim.version
+
+			if node in (None, client_version) or extension == 'ftrans':
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_SI})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_FILE})
+			if node in (None, client_version) or extension == 'xhtml':
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
+			if node in (None, client_version):
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
+			if q.getChildren():
+				self.connection.send(iq)
+				raise common.xmpp.NodeProcessed
 
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoErrorCB')
