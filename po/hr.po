@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-26 22:15+0100\n"
+"POT-Creation-Date: 2006-12-02 17:15+0100\n"
 "PO-Revision-Date: 2006-08-12 21:05+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -252,7 +252,7 @@ msgstr "Izmjeni Osobne Informacije"
 
 #: ../data/glade/account_modification_window.glade.h:14
 #: ../data/glade/roster_window.glade.h:5 ../src/notify.py:453
-#: ../src/notify.py:475 ../src/notify.py:487 ../src/common/helpers.py:904
+#: ../src/notify.py:475 ../src/notify.py:487 ../src/common/helpers.py:905
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -323,16 +323,16 @@ msgid "Manage..."
 msgstr "Podesi..."
 
 #: ../data/glade/account_modification_window.glade.h:25
-#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1636
-#: ../src/config.py:3429
+#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1637
+#: ../src/config.py:3430
 msgid "No key selected"
 msgstr "Niti jedan ključ nije odabran"
 
 #. None means no proxy profile selected
-#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1218
-#: ../src/config.py:1223 ../src/config.py:1407 ../src/config.py:1626
-#: ../src/config.py:1635 ../src/config.py:1694 ../src/config.py:1768
-#: ../src/config.py:2639 ../src/config.py:3419 ../src/config.py:3428
+#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1219
+#: ../src/config.py:1224 ../src/config.py:1408 ../src/config.py:1627
+#: ../src/config.py:1636 ../src/config.py:1695 ../src/config.py:1769
+#: ../src/config.py:2640 ../src/config.py:3420 ../src/config.py:3429
 #: ../src/dialogs.py:281 ../src/dialogs.py:283
 msgid "None"
 msgstr "Ništa"
@@ -1218,7 +1218,7 @@ msgstr "Koristi autentifikaciju"
 msgid "Click to insert an emoticon (Alt+M)"
 msgstr "Kliknite da ubacite emoticon (Alt+M)"
 
-#: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1099
+#: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1116
 msgid "OpenPGP Encryption"
 msgstr "OpenPGP Enkripcija"
 
@@ -1341,7 +1341,7 @@ msgstr ""
 msgid "B_efore nickname:"
 msgstr "Prij_e nadimka"
 
-#: ../data/glade/preferences_window.glade.h:30 ../src/chat_control.py:839
+#: ../data/glade/preferences_window.glade.h:30 ../src/chat_control.py:841
 msgid "Chat"
 msgstr "Razgovor"
 
@@ -2463,33 +2463,33 @@ msgstr "Veza nije dostupna"
 msgid "Your message can not be sent until you are connected."
 msgstr "Vaša poruka ne može biti poslana dok niste spojeni."
 
-#: ../src/chat_control.py:839
+#: ../src/chat_control.py:841
 msgid "Chats"
 msgstr "Razgovori"
 
-#: ../src/chat_control.py:1025
+#: ../src/chat_control.py:1042
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr ""
 
 #. we talk about a contact here
-#: ../src/chat_control.py:1113
+#: ../src/chat_control.py:1130
 #, python-format
 msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 msgstr "%s nije ustupio OpenPGP ključ, niti mu je ikoji dodijeljen"
 
-#: ../src/chat_control.py:1239
+#: ../src/chat_control.py:1266
 msgid "Encryption enabled"
 msgstr "Enkripcija omogućena"
 
-#: ../src/chat_control.py:1244
+#: ../src/chat_control.py:1271
 msgid "Encryption disabled"
 msgstr "Enkripcija onemogućena"
 
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1386 ../src/conversation_textview.py:487
-#: ../src/dialogs.py:629 ../src/gajim.py:725 ../src/gajim.py:726
-#: ../src/gajim.py:1065 ../src/roster_window.py:328
+#: ../src/chat_control.py:1413 ../src/conversation_textview.py:493
+#: ../src/dialogs.py:629 ../src/gajim.py:727 ../src/gajim.py:728
+#: ../src/gajim.py:1067 ../src/roster_window.py:328
 #: ../src/roster_window.py:404 ../src/roster_window.py:1642
 #: ../src/roster_window.py:1823 ../src/roster_window.py:2399
 #: ../src/roster_window.py:2598 ../src/roster_window.py:2609
@@ -2500,12 +2500,12 @@ msgid "Not in Roster"
 msgstr "Nije na Listi Kontakata"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:1530
+#: ../src/chat_control.py:1557
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Upravo ste primili novu poruku od \"%s\""
 
-#: ../src/chat_control.py:1531
+#: ../src/chat_control.py:1558
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -2513,275 +2513,275 @@ msgstr ""
 "Ako zatvorite ovaj tab, a imate povijest onemogućenu, ova poruka biti će "
 "izgubljena."
 
-#: ../src/config.py:129 ../src/config.py:588
+#: ../src/config.py:130 ../src/config.py:589
 msgid "Disabled"
 msgstr "Onemogućeno"
 
-#: ../src/config.py:215
+#: ../src/config.py:216
 #, python-format
 msgid "Every %s _minutes"
 msgstr "Svakih %s _minuta"
 
-#: ../src/config.py:357
+#: ../src/config.py:358
 msgid "Active"
 msgstr "Aktivno"
 
-#: ../src/config.py:365
+#: ../src/config.py:366
 msgid "Event"
 msgstr "Događaj"
 
-#: ../src/config.py:678 ../src/gajim.py:2072
+#: ../src/config.py:679 ../src/gajim.py:2086
 #, fuzzy, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "Veza nije dostupna"
 
-#: ../src/config.py:679 ../src/gajim.py:2073
+#: ../src/config.py:680 ../src/gajim.py:2087
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
 "language by setting the speller_language option."
 msgstr ""
 
-#: ../src/config.py:1031
+#: ../src/config.py:1032
 msgid "status message title"
 msgstr "naslov statusne poruke"
 
-#: ../src/config.py:1031
+#: ../src/config.py:1032
 msgid "status message text"
 msgstr "tekst statusne poruke"
 
-#: ../src/config.py:1066
+#: ../src/config.py:1067
 msgid "First Message Received"
 msgstr "Prva Poruka Primljena"
 
-#: ../src/config.py:1067
+#: ../src/config.py:1068
 msgid "Next Message Received"
 msgstr "Sljedeća Poruka Primljena"
 
-#: ../src/config.py:1068
+#: ../src/config.py:1069
 msgid "Contact Connected"
 msgstr "Kontakt Spojen"
 
-#: ../src/config.py:1069
+#: ../src/config.py:1070
 msgid "Contact Disconnected"
 msgstr "Kontakt Odspojen"
 
-#: ../src/config.py:1070
+#: ../src/config.py:1071
 msgid "Message Sent"
 msgstr "Poruka Poslana"
 
-#: ../src/config.py:1071
+#: ../src/config.py:1072
 msgid "Group Chat Message Highlight"
 msgstr "Označavanje Poruke Grupnog Razgovora"
 
-#: ../src/config.py:1072
+#: ../src/config.py:1073
 msgid "Group Chat Message Received"
 msgstr "Primljena Poruka Grupnog Razgovora"
 
-#: ../src/config.py:1079
+#: ../src/config.py:1080
 #, fuzzy
 msgid "GMail Email Received"
 msgstr "Primljen Poziv"
 
-#: ../src/config.py:1282
+#: ../src/config.py:1283
 msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP nije moguće koristiti na ovom računalu"
 
-#: ../src/config.py:1328
+#: ../src/config.py:1329
 msgid "You are currently connected to the server"
 msgstr "Trenutno ste spojeni na poslužitelj"
 
-#: ../src/config.py:1329
+#: ../src/config.py:1330
 msgid "To change the account name, you must be disconnected."
 msgstr "Za promjenu imena računa morate se odspojiti."
 
-#: ../src/config.py:1332 ../src/config.py:1924
+#: ../src/config.py:1333 ../src/config.py:1925
 msgid "Unread events"
 msgstr "Nepročitani događaji"
 
-#: ../src/config.py:1333
+#: ../src/config.py:1334
 msgid "To change the account name, you must read all pending events."
 msgstr ""
 "Da biste mogli promjeniti ime računa, morate pročitati sve čekajuće događaje"
 
-#: ../src/config.py:1337
+#: ../src/config.py:1338
 msgid "Account Name Already Used"
 msgstr "Ime Računa Već Upotrebljeno"
 
-#: ../src/config.py:1338
+#: ../src/config.py:1339
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr "Ovo ime već koristi vaš drugi račun. Molimo odaberite drugo ime."
 
-#: ../src/config.py:1342 ../src/config.py:1346
+#: ../src/config.py:1343 ../src/config.py:1347
 msgid "Invalid account name"
 msgstr "Neispravno ime računa"
 
-#: ../src/config.py:1343
+#: ../src/config.py:1344
 msgid "Account name cannot be empty."
 msgstr "Ime računa ne može biti prazno."
 
-#: ../src/config.py:1347
+#: ../src/config.py:1348
 msgid "Account name cannot contain spaces."
 msgstr "Ime računa ne može sadržavati razmake."
 
-#: ../src/config.py:1355 ../src/config.py:1361 ../src/config.py:1371
-#: ../src/config.py:3029
+#: ../src/config.py:1356 ../src/config.py:1362 ../src/config.py:1372
+#: ../src/config.py:3030
 msgid "Invalid Jabber ID"
 msgstr "Neispravan Jabber ID"
 
-#: ../src/config.py:1362
+#: ../src/config.py:1363
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabber ID mora biti forme \"korisnik@poslužitelj\"."
 
-#: ../src/config.py:1421
+#: ../src/config.py:1422
 msgid "Invalid entry"
 msgstr "Neispravan unos"
 
-#: ../src/config.py:1422
+#: ../src/config.py:1423
 msgid "Custom port must be a port number."
 msgstr "Osobni port mora biti broj porta."
 
-#: ../src/config.py:1548 ../src/common/config.py:363
+#: ../src/config.py:1549 ../src/common/config.py:363
 msgid "Be right back."
 msgstr "Odmah se vraćam."
 
-#: ../src/config.py:1558
+#: ../src/config.py:1559
 msgid "Relogin now?"
 msgstr "Prijaviti se odmah?"
 
-#: ../src/config.py:1559
+#: ../src/config.py:1560
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr ""
 "Ako želite da se sve promjene odmah primjene, morate se ponovo prijaviti."
 
-#: ../src/config.py:1585
+#: ../src/config.py:1586
 msgid "No such account available"
 msgstr "Takav račun nije dostupan"
 
-#: ../src/config.py:1586
+#: ../src/config.py:1587
 msgid "You must create your account before editing your personal information."
 msgstr "Morate napravit svoj račun prije izmjena osobnih informacija."
 
-#: ../src/config.py:1593 ../src/dialogs.py:1128 ../src/dialogs.py:1297
+#: ../src/config.py:1594 ../src/dialogs.py:1128 ../src/dialogs.py:1297
 #: ../src/disco.py:417 ../src/profile_window.py:307
 #: ../src/profile_window.py:373
 msgid "You are not connected to the server"
 msgstr "Niste spojeni na poslužitelj."
 
-#: ../src/config.py:1594
+#: ../src/config.py:1595
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Bez veze sa poslužiteljom nije moguća izmjena osobnih informacija."
 
-#: ../src/config.py:1598
+#: ../src/config.py:1599
 msgid "Your server doesn't support Vcard"
 msgstr ""
 
-#: ../src/config.py:1599
+#: ../src/config.py:1600
 #, fuzzy
 msgid "Your server can't save your personal information."
 msgstr "Morate napravit svoj račun prije izmjena osobnih informacija."
 
-#: ../src/config.py:1623 ../src/config.py:3416
+#: ../src/config.py:1624 ../src/config.py:3417
 msgid "Failed to get secret keys"
 msgstr "Neuspješno dohvaćanje tajnih ključeva"
 
-#: ../src/config.py:1624 ../src/config.py:3417
+#: ../src/config.py:1625 ../src/config.py:3418
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Došlo je do problema pri dohvaćanju vaših OpenPGP tajnih ključeva."
 
-#: ../src/config.py:1627 ../src/config.py:3420
+#: ../src/config.py:1628 ../src/config.py:3421
 msgid "OpenPGP Key Selection"
 msgstr "Odabir OpenPGP Ključeva"
 
-#: ../src/config.py:1628 ../src/config.py:3421
+#: ../src/config.py:1629 ../src/config.py:3422
 msgid "Choose your OpenPGP key"
 msgstr "Odaberite svoj OpenPGP ključ"
 
 #. Name column
-#: ../src/config.py:1858 ../src/disco.py:740 ../src/disco.py:1466
+#: ../src/config.py:1859 ../src/disco.py:740 ../src/disco.py:1466
 #: ../src/disco.py:1704 ../src/history_window.py:78
 msgid "Name"
 msgstr "Ime"
 
-#: ../src/config.py:1861
+#: ../src/config.py:1862
 msgid "Server"
 msgstr "Poslužitelj"
 
-#: ../src/config.py:1925
+#: ../src/config.py:1926
 msgid "Read all pending events before removing this account."
 msgstr "Pročitajte sve događaje na čekanju prije uklanjanja ovog računa."
 
-#: ../src/config.py:1962
+#: ../src/config.py:1963
 #, fuzzy, python-format
 msgid "You have opened chat in account %s"
 msgstr "nemate aktivnih računa"
 
-#: ../src/config.py:1963
+#: ../src/config.py:1964
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr ""
 
-#: ../src/config.py:2022
+#: ../src/config.py:2023
 #, fuzzy
 msgid "Account Local already exists."
 msgstr "Ime Računa Već Upotrebljeno"
 
-#: ../src/config.py:2023
+#: ../src/config.py:2024
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr ""
 
-#: ../src/config.py:2255
+#: ../src/config.py:2256
 #, python-format
 msgid "Edit %s"
 msgstr "Izmjena %s"
 
-#: ../src/config.py:2257
+#: ../src/config.py:2258
 #, python-format
 msgid "Register to %s"
 msgstr "Registrirati se na %s"
 
 #. list at the begining
-#: ../src/config.py:2329
+#: ../src/config.py:2330
 msgid "Ban List"
 msgstr "Ban Lista"
 
-#: ../src/config.py:2330
+#: ../src/config.py:2331
 msgid "Member List"
 msgstr "Lista Članova"
 
-#: ../src/config.py:2331
+#: ../src/config.py:2332
 msgid "Owner List"
 msgstr "Lista Vasnika"
 
-#: ../src/config.py:2332
+#: ../src/config.py:2333
 msgid "Administrator List"
 msgstr "Lista Administratora"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2365 ../src/disco.py:747 ../src/history_manager.py:154
+#: ../src/config.py:2366 ../src/disco.py:747 ../src/history_manager.py:154
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2373
+#: ../src/config.py:2374
 msgid "Reason"
 msgstr "Razlog"
 
-#: ../src/config.py:2378
+#: ../src/config.py:2379
 msgid "Nick"
 msgstr "Nadimak"
 
-#: ../src/config.py:2382
+#: ../src/config.py:2383
 msgid "Role"
 msgstr "Uloga"
 
-#: ../src/config.py:2403
+#: ../src/config.py:2404
 msgid "Banning..."
 msgstr "Zabranjivanje..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2405
+#: ../src/config.py:2406
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2789,11 +2789,11 @@ msgstr ""
 "<b>Koga želite zabraniti?</b>\n"
 "\n"
 
-#: ../src/config.py:2407
+#: ../src/config.py:2408
 msgid "Adding Member..."
 msgstr "Dodaja Člana..."
 
-#: ../src/config.py:2408
+#: ../src/config.py:2409
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2801,11 +2801,11 @@ msgstr ""
 "<b>Koga želite učiniti članom?</b>\n"
 "\n"
 
-#: ../src/config.py:2410
+#: ../src/config.py:2411
 msgid "Adding Owner..."
 msgstr "Dodavanje Vlasnika..."
 
-#: ../src/config.py:2411
+#: ../src/config.py:2412
 msgid ""
 "<b>Whom do you want to make a owner?</b>\n"
 "\n"
@@ -2813,11 +2813,11 @@ msgstr ""
 "<b>Koga želite učiniti vlasnikom?</b>\n"
 "\n"
 
-#: ../src/config.py:2413
+#: ../src/config.py:2414
 msgid "Adding Administrator..."
 msgstr "Dodajem Administratora..."
 
-#: ../src/config.py:2414
+#: ../src/config.py:2415
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2825,7 +2825,7 @@ msgstr ""
 "<b>Koga želite učiniti administratorom?</b>\n"
 "\n"
 
-#: ../src/config.py:2415
+#: ../src/config.py:2416
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2841,99 +2841,99 @@ msgstr ""
 "4. domena (sama domena se poklapa, kao i bilo koji korisnik@domena,\n"
 "domena/resurs, ili adresa koja sadrži poddomenu."
 
-#: ../src/config.py:2520
+#: ../src/config.py:2521
 #, python-format
 msgid "Removing %s account"
 msgstr "Uklanjanje %s računa"
 
-#: ../src/config.py:2537 ../src/roster_window.py:2667
+#: ../src/config.py:2538 ../src/roster_window.py:2667
 msgid "Password Required"
 msgstr "Potrebna Lozinka"
 
-#: ../src/config.py:2538 ../src/roster_window.py:2668
+#: ../src/config.py:2539 ../src/roster_window.py:2668
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Unesite svoju lozinku za račun %s"
 
-#: ../src/config.py:2539 ../src/roster_window.py:2669
+#: ../src/config.py:2540 ../src/roster_window.py:2669
 msgid "Save password"
 msgstr "Spremiti lozinku"
 
-#: ../src/config.py:2553
+#: ../src/config.py:2554
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Račun \"%s\" je spojen na poslužitelj"
 
-#: ../src/config.py:2554
+#: ../src/config.py:2555
 msgid "If you remove it, the connection will be lost."
 msgstr "Ukoliko ga uklonite, veza će biti izgubljena."
 
-#: ../src/config.py:2638
+#: ../src/config.py:2639
 msgid "Default"
 msgstr "Predefinirano"
 
-#: ../src/config.py:2638
+#: ../src/config.py:2639
 #, fuzzy
 msgid "?print_status:All"
 msgstr "Ispis statusa:"
 
-#: ../src/config.py:2639
+#: ../src/config.py:2640
 msgid "Enter and leave only"
 msgstr "Ući i samo napustiti"
 
-#: ../src/config.py:2709
+#: ../src/config.py:2710
 #, fuzzy
 msgid "New Group Chat"
 msgstr "Grupni Razgovor"
 
-#: ../src/config.py:2741
+#: ../src/config.py:2742
 msgid "This bookmark has invalid data"
 msgstr "Ova knjižna oznaka ima neispravne podatke"
 
-#: ../src/config.py:2742
+#: ../src/config.py:2743
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Molimo obavezno ispunite polja poslužitelja i sobe ili uklonite ovu kljižnu "
 "oznaku."
 
-#: ../src/config.py:3004
+#: ../src/config.py:3005
 msgid "Invalid username"
 msgstr "Neispravno korisničko ime"
 
-#: ../src/config.py:3005
+#: ../src/config.py:3006
 msgid "You must provide a username to configure this account."
 msgstr "Morate ponuditi korisničko ime za postavke ovog računa."
 
-#: ../src/config.py:3015 ../src/dialogs.py:1316
+#: ../src/config.py:3016 ../src/dialogs.py:1316
 msgid "Invalid password"
 msgstr "Neispravna lozinka"
 
-#: ../src/config.py:3016
+#: ../src/config.py:3017
 msgid "You must enter a password for the new account."
 msgstr "Morate unesti lozinku za novi račun"
 
-#: ../src/config.py:3020 ../src/dialogs.py:1321
+#: ../src/config.py:3021 ../src/dialogs.py:1321
 msgid "Passwords do not match"
 msgstr "Lozinke se ne podudaraju"
 
-#: ../src/config.py:3021 ../src/dialogs.py:1322
+#: ../src/config.py:3022 ../src/dialogs.py:1322
 msgid "The passwords typed in both fields must be identical."
 msgstr "Lozinke upisane u oba polja moraju biti identične."
 
-#: ../src/config.py:3040
+#: ../src/config.py:3041
 msgid "Duplicate Jabber ID"
 msgstr "Dvostruki Jabber ID"
 
-#: ../src/config.py:3041
+#: ../src/config.py:3042
 msgid "This account is already configured in Gajim."
 msgstr "Ovaj račun je već konfiguriran u Gajimu."
 
-#: ../src/config.py:3058
+#: ../src/config.py:3059
 msgid "Account has been added successfully"
 msgstr "Račun je uspješno dodan"
 
-#: ../src/config.py:3059 ../src/config.py:3094
+#: ../src/config.py:3060 ../src/config.py:3095
 msgid ""
 "You can set advanced account options by pressing Advanced button, or later "
 "by clicking in Accounts menuitem under Edit menu from the main window."
@@ -2941,19 +2941,19 @@ msgstr ""
 "Napredne opcije računa možete podesiti pritiskom na gumb Napredno, ili "
 "kasnije klikom na element Računi pod izbornikom Uredi iz glavnog prozora."
 
-#: ../src/config.py:3093
+#: ../src/config.py:3094
 msgid "Your new account has been created successfully"
 msgstr "Vaš novi račun je uspješno stvoren"
 
-#: ../src/config.py:3111
+#: ../src/config.py:3112
 msgid "An error occured during account creation"
 msgstr "Pojavila se greška pri stvaranju računa"
 
-#: ../src/config.py:3169
+#: ../src/config.py:3170
 msgid "Account name is in use"
 msgstr "Ime računa se već koristi"
 
-#: ../src/config.py:3170
+#: ../src/config.py:3171
 msgid "You already have an account using this name."
 msgstr "Već imate račun pod tim imenom."
 
@@ -2998,19 +2998,19 @@ msgstr "_Pretraži Web"
 msgid "Open as _Link"
 msgstr ""
 
-#: ../src/conversation_textview.py:752
+#: ../src/conversation_textview.py:755
 msgid "Yesterday"
 msgstr "Jučer"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
-#: ../src/conversation_textview.py:756
+#: ../src/conversation_textview.py:759
 #, python-format
 msgid "%i days ago"
 msgstr "Prije %i dana"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:788
+#: ../src/conversation_textview.py:791
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Tema: %s\n"
@@ -3091,7 +3091,7 @@ msgid "Please fill in the data of the contact you want to add"
 msgstr "Molimo ispunite podatke kontakta kojeg želite dodati"
 
 #: ../src/dialogs.py:467 ../src/disco.py:102 ../src/disco.py:103
-#: ../src/disco.py:1252 ../src/gajim.py:490 ../src/roster_window.py:267
+#: ../src/disco.py:1252 ../src/gajim.py:491 ../src/roster_window.py:267
 #: ../src/roster_window.py:325 ../src/roster_window.py:364
 #: ../src/roster_window.py:445 ../src/roster_window.py:477
 #: ../src/roster_window.py:479 ../src/roster_window.py:3827
@@ -3287,29 +3287,29 @@ msgstr "Nova Jedna Poruka"
 msgid "New Private Message"
 msgstr "Nova Privatna Poruka"
 
-#: ../src/dialogs.py:1369 ../src/gajim.py:1159 ../src/notify.py:424
+#: ../src/dialogs.py:1369 ../src/gajim.py:1161 ../src/notify.py:424
 msgid "New E-mail"
 msgstr "Novi E-mail"
 
-#: ../src/dialogs.py:1371 ../src/gajim.py:1300 ../src/notify.py:418
+#: ../src/dialogs.py:1371 ../src/gajim.py:1314 ../src/notify.py:418
 msgid "File Transfer Request"
 msgstr "Zahtjev Razmjene Datoteka"
 
-#: ../src/dialogs.py:1373 ../src/gajim.py:1132 ../src/gajim.py:1276
+#: ../src/dialogs.py:1373 ../src/gajim.py:1134 ../src/gajim.py:1290
 #: ../src/notify.py:420
 msgid "File Transfer Error"
 msgstr "Greška u Razmjeni Datoteka"
 
-#: ../src/dialogs.py:1375 ../src/gajim.py:1339 ../src/gajim.py:1361
-#: ../src/gajim.py:1378 ../src/notify.py:422
+#: ../src/dialogs.py:1375 ../src/gajim.py:1353 ../src/gajim.py:1375
+#: ../src/gajim.py:1392 ../src/notify.py:422
 msgid "File Transfer Completed"
 msgstr "Razmjena Datoteka Završena"
 
-#: ../src/dialogs.py:1376 ../src/gajim.py:1342 ../src/notify.py:422
+#: ../src/dialogs.py:1376 ../src/gajim.py:1356 ../src/notify.py:422
 msgid "File Transfer Stopped"
 msgstr "Razmjena Datoteka Zaustavljena"
 
-#: ../src/dialogs.py:1378 ../src/gajim.py:1030 ../src/notify.py:426
+#: ../src/dialogs.py:1378 ../src/gajim.py:1032 ../src/notify.py:426
 msgid "Groupchat Invitation"
 msgstr "Poziv na Grupni Razgovor"
 
@@ -3781,12 +3781,12 @@ msgstr ""
 msgid "Gajim needs PySQLite2 to run"
 msgstr "Gajim treba PySQLite2 za pokretanje"
 
-#: ../src/gajim.py:76
+#: ../src/gajim.py:77
 #, fuzzy
 msgid "Gajim needs pywin32 to run"
 msgstr "Gajim treba PySQLite2 za pokretanje"
 
-#: ../src/gajim.py:77
+#: ../src/gajim.py:78
 #, python-format
 msgid ""
 "Please make sure that Pywin32 is installed on your system. You can get it at "
@@ -3794,11 +3794,11 @@ msgid ""
 msgstr ""
 
 #. set the icon to all newly opened wind
-#: ../src/gajim.py:189
+#: ../src/gajim.py:190
 msgid "Gajim is already running"
 msgstr "Gajim je već pokrenut"
 
-#: ../src/gajim.py:190
+#: ../src/gajim.py:191
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
@@ -3806,76 +3806,76 @@ msgstr ""
 "Trenutno je već pokrenuta jedna instanca Gajima\n"
 "Svejedno pokrenuti?"
 
-#: ../src/gajim.py:297
+#: ../src/gajim.py:298
 #, python-format
 msgid "HTTP (%s) Authorization for %s (id: %s)"
 msgstr "HTTP (%s) Autorizacija za %s (id: %s)"
 
-#: ../src/gajim.py:298
+#: ../src/gajim.py:299
 msgid "Do you accept this request?"
 msgstr "Prihvaćate li ovaj zahtjev?"
 
-#: ../src/gajim.py:344 ../src/notify.py:430
+#: ../src/gajim.py:345 ../src/notify.py:430
 #, fuzzy
 msgid "Connection Failed"
 msgstr "Veza"
 
-#: ../src/gajim.py:656
+#: ../src/gajim.py:658
 #, fuzzy, python-format
 msgid "Subject: %s"
 msgstr "Tema: %s\n"
 
-#: ../src/gajim.py:701
+#: ../src/gajim.py:703
 #, python-format
 msgid "error while sending %s ( %s )"
 msgstr "greška prilikom slanja %s ( %s )"
 
-#: ../src/gajim.py:741
+#: ../src/gajim.py:743
 msgid "Authorization accepted"
 msgstr "Autorizacija prihvaćena"
 
-#: ../src/gajim.py:742
+#: ../src/gajim.py:744
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "Kontakt \"%s\" vam je dozvolio da vidite njegov ili njezin status."
 
-#: ../src/gajim.py:750
+#: ../src/gajim.py:752
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Kontankt \"%s\" je uklonio pretplatu od vas"
 
-#: ../src/gajim.py:751
+#: ../src/gajim.py:753
 msgid "You will always see him or her as offline."
 msgstr "Uvijek ćete vidjeti njega ili nju kao nepriključenog."
 
-#: ../src/gajim.py:794
+#: ../src/gajim.py:796
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kontakt sa \"%s\" ne može biti uspostavljen"
 
-#: ../src/gajim.py:795 ../src/common/connection.py:395
+#: ../src/gajim.py:797 ../src/common/connection.py:395
 msgid "Check your connection or try again later."
 msgstr "Provjerite svoju vezu ili pokušajte kasnije."
 
-#: ../src/gajim.py:943 ../src/roster_window.py:1201
+#: ../src/gajim.py:945 ../src/roster_window.py:1201
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s je sada %s (%s)"
 
-#: ../src/gajim.py:1040
+#: ../src/gajim.py:1042
 msgid "Your passphrase is incorrect"
 msgstr "Vaša lozinka nije točna"
 
-#: ../src/gajim.py:1041
+#: ../src/gajim.py:1043
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Trenutno ste spojeni bez OpenPGP ključa."
 
-#: ../src/gajim.py:1143
+#: ../src/gajim.py:1145
 #, fuzzy, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Novi E-mail na %(gmail_mail_address)s"
 
-#: ../src/gajim.py:1145
+#: ../src/gajim.py:1147
 #, fuzzy, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
@@ -3886,7 +3886,7 @@ msgstr[2] "Imate %d novih E-mail poruka"
 #. FIXME: emulate Gtalk client popups. find out what they parse and how
 #. they decide what to show
 #. each message has a 'From', 'Subject' and 'Snippet' field
-#: ../src/gajim.py:1154
+#: ../src/gajim.py:1156
 #, python-format
 msgid ""
 "\n"
@@ -3895,54 +3895,54 @@ msgstr ""
 "\n"
 "Od: %(from_address)s"
 
-#: ../src/gajim.py:1297
+#: ../src/gajim.py:1311
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s vam želi poslati datoteku."
 
-#: ../src/gajim.py:1362
+#: ../src/gajim.py:1376
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Uspješno ste primili %(filename)s od %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1366
+#: ../src/gajim.py:1380
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Prijenos %(filename)s od %(name)s je zaustavljen."
 
-#: ../src/gajim.py:1379
+#: ../src/gajim.py:1393
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Uspješno ste poslali %(filename)s %(name)s"
 
 #. ft stopped
-#: ../src/gajim.py:1383
+#: ../src/gajim.py:1397
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Prijenos %(filename)s %(name)s je zaustavljen. "
 
-#: ../src/gajim.py:1489
+#: ../src/gajim.py:1503
 msgid "Username Conflict"
 msgstr ""
 
-#: ../src/gajim.py:1490
+#: ../src/gajim.py:1504
 #, fuzzy
 msgid "Please type a new username for your local account"
 msgstr "<b>Molimo popunite podatke za vaš novi korisnički račun</b>"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:1828
+#: ../src/gajim.py:1842
 msgid "Could not save your settings and preferences"
 msgstr "Nije moguće spremanje vaših postavki"
 
-#: ../src/gajim.py:2020
+#: ../src/gajim.py:2034
 #, fuzzy
 msgid "Network Manager support not available"
 msgstr "Veza nije dostupna"
 
-#: ../src/gajim.py:2095
+#: ../src/gajim.py:2109
 msgid "Session Management support not available (missing gnome.ui module)"
 msgstr ""
 "Podrška za Upravljanje Seansama nije dostupna (nedostaje gnome.ui modul)"
@@ -4306,88 +4306,88 @@ msgid "Insert Nickname"
 msgstr "Umetni _Nadimak"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:789
+#: ../src/groupchat_control.py:810
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s je izbačen: %(reason)s"
 
-#: ../src/groupchat_control.py:793
+#: ../src/groupchat_control.py:814
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s je izbačen od strane %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:800
+#: ../src/groupchat_control.py:821
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s ima zabranjen pristup: %(reason)s"
 
-#: ../src/groupchat_control.py:804
+#: ../src/groupchat_control.py:825
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s ima zabranjen pristup od strane %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:812
+#: ../src/groupchat_control.py:833
 #, python-format
 msgid "You are now known as %s"
 msgstr "Od sada ste poznati kao %s"
 
-#: ../src/groupchat_control.py:814
+#: ../src/groupchat_control.py:835
 #, python-format
 msgid "%s is now known as %s"
 msgstr "%s je od sada poznat kao %s"
 
-#: ../src/groupchat_control.py:894
+#: ../src/groupchat_control.py:915
 #, python-format
 msgid "%s has left"
 msgstr "%s je napustio"
 
-#: ../src/groupchat_control.py:899
+#: ../src/groupchat_control.py:920
 #, fuzzy, python-format
 msgid "%s has joined the group chat"
 msgstr "%s se pridružio sobi"
 
 #. No status message
-#: ../src/groupchat_control.py:901 ../src/roster_window.py:1204
+#: ../src/groupchat_control.py:922 ../src/roster_window.py:1204
 #, python-format
 msgid "%s is now %s"
 msgstr "%s je sada %s"
 
-#: ../src/groupchat_control.py:1020 ../src/groupchat_control.py:1038
-#: ../src/groupchat_control.py:1131 ../src/groupchat_control.py:1148
+#: ../src/groupchat_control.py:1041 ../src/groupchat_control.py:1059
+#: ../src/groupchat_control.py:1152 ../src/groupchat_control.py:1169
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "Nadimak nije pronađen: %s "
 
-#: ../src/groupchat_control.py:1054
+#: ../src/groupchat_control.py:1075
 #, fuzzy
 msgid "This group chat has no subject"
 msgstr "Ova soba nema naslov"
 
-#: ../src/groupchat_control.py:1067
+#: ../src/groupchat_control.py:1088
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "Pozvali ste %(contact_jid)s na %(room_jid)s"
 
 #. %s is something the user wrote but it is not a jid so we inform
-#: ../src/groupchat_control.py:1074 ../src/groupchat_control.py:1102
+#: ../src/groupchat_control.py:1095 ../src/groupchat_control.py:1123
 #, python-format
 msgid "%s does not appear to be a valid JID"
 msgstr "%s ne izgleda kao valjani JID"
 
-#: ../src/groupchat_control.py:1185
+#: ../src/groupchat_control.py:1206
 #, python-format
 msgid "No such command: /%s (if you want to send this, prefix it with /say)"
 msgstr ""
 "Ne postoji komanda: /%s (ako želite poslati to kao poruku, prefiksirajte je "
 "sa /say)"
 
-#: ../src/groupchat_control.py:1208
+#: ../src/groupchat_control.py:1229
 #, python-format
 msgid "Commands: %s"
 msgstr "Komanda: %s"
 
-#: ../src/groupchat_control.py:1210
+#: ../src/groupchat_control.py:1231
 #, fuzzy, python-format
 msgid ""
 "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
@@ -4400,19 +4400,19 @@ msgstr ""
 "trenutno u sobi, on/ona/ono će biti izbačen(a/o). Razmaci u imenima nisu "
 "podržani."
 
-#: ../src/groupchat_control.py:1217
+#: ../src/groupchat_control.py:1238
 #, python-format
 msgid ""
 "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
 msgstr ""
 "Način korištenja: /%s <nickname>, otvara privatni razgovor sa učesnikom"
 
-#: ../src/groupchat_control.py:1221
+#: ../src/groupchat_control.py:1242
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Način korištenja: /%s, prazni tekstualni prozor"
 
-#: ../src/groupchat_control.py:1223
+#: ../src/groupchat_control.py:1244
 #, python-format
 msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
@@ -4421,12 +4421,12 @@ msgstr ""
 "Način korištenja: /%s [razlog], zatvara trenutni prozor ili tab, i prikazuje "
 "razlog ako je specificiran."
 
-#: ../src/groupchat_control.py:1226
+#: ../src/groupchat_control.py:1247
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "Način korištenja: /%s, sakriva dugmadi."
 
-#: ../src/groupchat_control.py:1229
+#: ../src/groupchat_control.py:1250
 #, fuzzy, python-format
 msgid ""
 "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
@@ -4435,7 +4435,7 @@ msgstr ""
 "Način korištenja: /%s <JID> [razlog], poziva JID u trenutnu sobu, opcionalno "
 "dajući razlog."
 
-#: ../src/groupchat_control.py:1233
+#: ../src/groupchat_control.py:1254
 #, python-format
 msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
@@ -4444,7 +4444,7 @@ msgstr ""
 "Način korištenja: /%s <soba>@<poslužitelj>[/nadimak], nudi mogućnost "
 "spajanja na sobu@poslužitelj koristeći navedeni nadimak."
 
-#: ../src/groupchat_control.py:1237
+#: ../src/groupchat_control.py:1258
 #, fuzzy, python-format
 msgid ""
 "Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
@@ -4455,7 +4455,7 @@ msgstr ""
 "nadimkom iz sobe i opcionalno prikazuje razlog. NE podržava razmake u "
 "nadimku."
 
-#: ../src/groupchat_control.py:1242
+#: ../src/groupchat_control.py:1263
 #, fuzzy, python-format
 msgid ""
 "Usage: /%s <action>, sends action to the current group chat. Use third "
@@ -4464,7 +4464,7 @@ msgstr ""
 "Način korištenja: /%s <action>, šalje akciju trenutnoj sobi. Koristi treću "
 "osobu. (npr. /%s eksplodira.)"
 
-#: ../src/groupchat_control.py:1246
+#: ../src/groupchat_control.py:1267
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message windowand sends "
@@ -4473,96 +4473,96 @@ msgstr ""
 "Način korištenja: /%s <nickname> [poruka], otvara prozor privatne poruke i "
 "šalje poruku učesniku specificiranom pomoću nadimka."
 
-#: ../src/groupchat_control.py:1251
+#: ../src/groupchat_control.py:1272
 #, fuzzy, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 msgstr ""
 "Način korištenja: /%s <nickname>, mijenja vaš nadimak u trenutnoj sobi."
 
-#: ../src/groupchat_control.py:1255
+#: ../src/groupchat_control.py:1276
 #, fuzzy, python-format
 msgid "Usage: /%s , display the names of group chat occupants."
 msgstr "Način korištenja: /%s , prikazuje imena učesnika u sobi."
 
-#: ../src/groupchat_control.py:1259
+#: ../src/groupchat_control.py:1280
 #, fuzzy, python-format
 msgid "Usage: /%s [topic], displays or updates the current group chat topic."
 msgstr "Način korištenja: /%s [tema], prikazuje ili ažurira temu sobe."
 
-#: ../src/groupchat_control.py:1262
+#: ../src/groupchat_control.py:1283
 #, python-format
 msgid ""
 "Usage: /%s <message>, sends a message without looking for other commands."
 msgstr ""
 "Način korištenja: /%s <message>, šalje poruku bez gledanja za ostale komande."
 
-#: ../src/groupchat_control.py:1265
+#: ../src/groupchat_control.py:1286
 #, python-format
 msgid "No help info for /%s"
 msgstr "Nema informacija ni pomoći za /%s"
 
-#: ../src/groupchat_control.py:1314
+#: ../src/groupchat_control.py:1335
 #, fuzzy, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Želite li napustiti sobu \"%s\"?"
 
-#: ../src/groupchat_control.py:1316
+#: ../src/groupchat_control.py:1337
 #, fuzzy
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Ako zatvorite ovaj prozor, biti ćete odspojen iz sobe."
 
-#: ../src/groupchat_control.py:1320 ../src/roster_window.py:3961
+#: ../src/groupchat_control.py:1341 ../src/roster_window.py:3961
 msgid "Do _not ask me again"
 msgstr "_Ne pitaj me više"
 
-#: ../src/groupchat_control.py:1354
+#: ../src/groupchat_control.py:1375
 msgid "Changing Subject"
 msgstr "Mijenjanje Teme"
 
-#: ../src/groupchat_control.py:1355
+#: ../src/groupchat_control.py:1376
 msgid "Please specify the new subject:"
 msgstr "Molimo specificirajte novu temu:"
 
-#: ../src/groupchat_control.py:1364
+#: ../src/groupchat_control.py:1385
 msgid "Changing Nickname"
 msgstr "Mijenjam Nadimak"
 
-#: ../src/groupchat_control.py:1365
+#: ../src/groupchat_control.py:1386
 msgid "Please specify the new nickname you want to use:"
 msgstr "Molimo specificirajte novi nadimak ako ga želite koristiti:"
 
-#: ../src/groupchat_control.py:1390
+#: ../src/groupchat_control.py:1411
 msgid "Bookmark already set"
 msgstr "Knjižna oznaka je već postavljena"
 
-#: ../src/groupchat_control.py:1391
+#: ../src/groupchat_control.py:1412
 #, fuzzy, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Soba \"%s\" je već u vašim knjižnim oznakama."
 
-#: ../src/groupchat_control.py:1400
+#: ../src/groupchat_control.py:1421
 msgid "Bookmark has been added successfully"
 msgstr "Knjižna oznaka je bez uspješno dodana"
 
-#: ../src/groupchat_control.py:1401
+#: ../src/groupchat_control.py:1422
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "Možete upravljati vašim knjižnim oznakama pomoću izbornika Akcije u vašem "
 "spisku."
 
 #. ask for reason
-#: ../src/groupchat_control.py:1527
+#: ../src/groupchat_control.py:1548
 #, python-format
 msgid "Kicking %s"
 msgstr "Izbacujem %s"
 
-#: ../src/groupchat_control.py:1528 ../src/groupchat_control.py:1810
+#: ../src/groupchat_control.py:1549 ../src/groupchat_control.py:1831
 msgid "You may specify a reason below:"
 msgstr "Možete specificirati razlog ispod:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:1809
+#: ../src/groupchat_control.py:1830
 #, python-format
 msgid "Banning %s"
 msgstr "Zabranjujem pristup %s"
@@ -5916,7 +5916,7 @@ msgstr ""
 msgid "Registration information for transport %s has not arrived in time"
 msgstr "Registracijske informacije za transport %s nisu došle na vrijeme"
 
-#: ../src/common/connection_handlers.py:1519
+#: ../src/common/connection_handlers.py:1515
 #, fuzzy, python-format
 msgid "Nickname not allowed: %s"
 msgstr "Nadimak nije pronađen: %s "
@@ -5924,46 +5924,46 @@ msgstr "Nadimak nije pronađen: %s "
 #. password required to join
 #. we are banned
 #. group chat does not exist
-#: ../src/common/connection_handlers.py:1581
-#: ../src/common/connection_handlers.py:1584
-#: ../src/common/connection_handlers.py:1587
-#: ../src/common/connection_handlers.py:1590
-#: ../src/common/connection_handlers.py:1593
-#: ../src/common/connection_handlers.py:1596
-#: ../src/common/connection_handlers.py:1604
+#: ../src/common/connection_handlers.py:1577
+#: ../src/common/connection_handlers.py:1580
+#: ../src/common/connection_handlers.py:1583
+#: ../src/common/connection_handlers.py:1586
+#: ../src/common/connection_handlers.py:1589
+#: ../src/common/connection_handlers.py:1592
+#: ../src/common/connection_handlers.py:1600
 #, fuzzy
 msgid "Unable to join group chat"
 msgstr "Nije moguće pridružiti se sobi"
 
-#: ../src/common/connection_handlers.py:1582
+#: ../src/common/connection_handlers.py:1578
 #, fuzzy
 msgid "A password is required to join this group chat."
 msgstr "Potrebna je lozinka za pridruživanje ovoj sobi."
 
-#: ../src/common/connection_handlers.py:1585
+#: ../src/common/connection_handlers.py:1581
 #, fuzzy
 msgid "You are banned from this group chat."
 msgstr "Zabranjen vam je pristup ovoj sobi."
 
-#: ../src/common/connection_handlers.py:1588
+#: ../src/common/connection_handlers.py:1584
 #, fuzzy
 msgid "Such group chat does not exist."
 msgstr "Takva soba ne postoji."
 
-#: ../src/common/connection_handlers.py:1591
+#: ../src/common/connection_handlers.py:1587
 #, fuzzy
 msgid "Group chat creation is restricted."
 msgstr "Stvaranje soba je ograničeno."
 
-#: ../src/common/connection_handlers.py:1594
+#: ../src/common/connection_handlers.py:1590
 msgid "Your registered nickname must be used."
 msgstr "Morate koristiti vaš registrirani nadimak."
 
-#: ../src/common/connection_handlers.py:1597
+#: ../src/common/connection_handlers.py:1593
 msgid "You are not in the members list."
 msgstr "Niste u listi članova."
 
-#: ../src/common/connection_handlers.py:1605
+#: ../src/common/connection_handlers.py:1601
 msgid ""
 "Your desired nickname is in use or registered by another occupant.\n"
 "Please specify another nickname below:"
@@ -6023,7 +6023,7 @@ msgid "Invalid answer"
 msgstr "Nepravilan odgovor"
 
 #: ../src/common/connection.py:394 ../src/common/connection.py:429
-#: ../src/common/connection.py:871
+#: ../src/common/connection.py:872
 #: ../src/common/zeroconf/connection_zeroconf.py:217
 #, python-format
 msgid "Could not connect to \"%s\""
@@ -6081,7 +6081,7 @@ msgstr "Ja sam %s"
 msgid "[This message is *encrypted* (See :JEP:`27`]"
 msgstr "[Ova poruka je kriptirana]"
 
-#: ../src/common/connection.py:758
+#: ../src/common/connection.py:759
 #: ../src/common/zeroconf/connection_zeroconf.py:397
 #, python-format
 msgid ""
@@ -6091,7 +6091,7 @@ msgstr ""
 "Tema: %s\n"
 "%s"
 
-#: ../src/common/connection.py:897
+#: ../src/common/connection.py:898
 msgid "Not fetched because of invisible status"
 msgstr ""
 
@@ -6495,35 +6495,35 @@ msgstr "stanka pri pisanju poruke"
 msgid "has closed the chat window or tab"
 msgstr "je zatvorio/zatvorila prozor za razgovor"
 
-#: ../src/common/helpers.py:880
+#: ../src/common/helpers.py:881
 #, python-format
 msgid " %d unread message"
 msgid_plural " %d unread messages"
 msgstr[0] "%d nepročitana poruka"
 msgstr[1] "%d nepročitanih poruka"
 
-#: ../src/common/helpers.py:886
+#: ../src/common/helpers.py:887
 #, python-format
 msgid " %d unread single message"
 msgid_plural " %d unread single messages"
 msgstr[0] "%d nepročitana jedna poruka"
 msgstr[1] "%d nepročitanih jednih poruka"
 
-#: ../src/common/helpers.py:892
+#: ../src/common/helpers.py:893
 #, python-format
 msgid " %d unread group chat message"
 msgid_plural " %d unread group chat messages"
 msgstr[0] "%d nepročitana poruka grupnih razgovora"
 msgstr[1] "%d nepročitanih poruka grupnih razgovora"
 
-#: ../src/common/helpers.py:898
+#: ../src/common/helpers.py:899
 #, python-format
 msgid " %d unread private message"
 msgid_plural " %d unread private messages"
 msgstr[0] "Gajim - %d nepročitana privatna poruka"
 msgstr[1] "%d nepročitanih privatnih poruka"
 
-#: ../src/common/helpers.py:908 ../src/common/helpers.py:910
+#: ../src/common/helpers.py:909 ../src/common/helpers.py:911
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
