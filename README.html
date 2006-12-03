@@ -19,6 +19,7 @@ Welcome to Gajim and thank you for trying out our client.
 <li>pygtk2.6 or higher</li>
 <li>python-libglade</li>
 <li>pysqlite2 (if you have python 2.5, you already have this)</li>
+<li>For zeroconf (bonjour), the "enable link-local messaging" checkbox, you need dbus-glib, python-avahi</li>
 </ul>
 
 <p>
@@ -82,8 +83,8 @@ su -c make PREFIX=custom_path install
 Just do <em>gajim</em> or you can run Gajim from your GNOME/XFCE/KDE/whatever menus.<br/><br/>
 
 or if you didn't 'make install' you can also run from gajim folder with
-<em>./launch.sh</em>
-<hr>
+<em>./launch.sh</em></p>
+<hr />
 <h3>Note for svn users</h3>
 You will need GNU autotools in order to install Gajim from svn. This includes: 
 <ul>
@@ -114,7 +115,7 @@ make PREFIX=custom_path uninstall
 </p>
 
 <h2>Miscellaneous</h2>
-<h3>XML & Debugging</h3>
+<h3>XML &amp; Debugging</h3>
 <p>
 If you want to see the xml stanzas and/or help us debugging 
 you're advised to enable verbose via advanced configuration window.
