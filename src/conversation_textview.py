@@ -109,18 +109,18 @@ class ConversationTextview:
 		color = gajim.config.get('restored_messages_color')
 		tag.set_property('foreground', color)
 
-		tag = buffer.create_tag('url')
+		self.tagURL = buffer.create_tag('url')
 		color = gajim.config.get('urlmsgcolor')
-		tag.set_property('foreground', color)
-		tag.set_property('underline', pango.UNDERLINE_SINGLE)
-		id = tag.connect('event', self.hyperlink_handler, 'url')
-		self.handlers[id] = tag
+		self.tagURL.set_property('foreground', color)
+		self.tagURL.set_property('underline', pango.UNDERLINE_SINGLE)
+		id = self.tagURL.connect('event', self.hyperlink_handler, 'url')
+		self.handlers[id] = self.tagURL
 
-		tag = buffer.create_tag('mail')
-		tag.set_property('foreground', color)
-		tag.set_property('underline', pango.UNDERLINE_SINGLE)
-		id = tag.connect('event', self.hyperlink_handler, 'mail')
-		self.handlers[id] = tag
+		self.tagMail = buffer.create_tag('mail')
+		self.tagMail.set_property('foreground', color)
+		self.tagMail.set_property('underline', pango.UNDERLINE_SINGLE)
+		id = self.tagMail.connect('event', self.hyperlink_handler, 'mail')
+		self.handlers[id] = self.tagMail
 
 		tag = buffer.create_tag('bold')
 		tag.set_property('weight', pango.WEIGHT_BOLD)
@@ -158,6 +158,8 @@ class ConversationTextview:
 		self.tagOut.set_property('foreground', gajim.config.get('outmsgcolor'))
 		self.tagStatus.set_property('foreground',
 			gajim.config.get('statusmsgcolor'))
+		self.tagURL.set_property('foreground', gajim.config.get('urlmsgcolor'))
+		self.tagMail.set_property('foreground', gajim.config.get('urlmsgcolor'))
 
 	def at_the_end(self):
 		buffer = self.tv.get_buffer()
