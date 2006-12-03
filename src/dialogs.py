@@ -776,7 +776,7 @@ class AboutDialog:
 		dlg.set_translator_credits(_('translator-credits'))
 		
 		artists = ['Anders Ström', 'Christophe Got', 'Dennis Craven',
-			'Guillaume Morin', 'Membris Khan']
+			'Guillaume Morin', 'Josef Vybíral', 'Membris Khan']
 		dlg.set_artists(artists)
 
 		rep = dlg.run()
