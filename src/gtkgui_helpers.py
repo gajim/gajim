@@ -525,7 +525,8 @@ def make_color_string(color):
 	'''create #aabbcc color string from gtk color'''
 	col = '#'
 	for i in (color.red, color.green, color.blue):
-		h = hex(i)[2:4]
+		# GTK sometime return a value > 256
+		h = hex(i%256)[2:4]
 		if len(h) == 1:
 			h = '0' + h
 		col += h
