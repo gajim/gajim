@@ -1156,8 +1156,9 @@ class Interface:
 					text += _('\nFrom: %(from_address)s') % \
 						{'from_address': gmessage['From']}
 					
+			if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
+				helpers.play_sound('gmail_received')
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-			helpers.play_sound('gmail_received')
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
 				path_to_image = path, title = title, text = text)
 
