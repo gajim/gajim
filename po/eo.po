@@ -3850,7 +3850,7 @@ msgid ""
 "From: %(from_address)s"
 msgstr ""
 "\n"
-"De: %(from_adress)s"
+"De: %(from_address)s"
 
 #: ../src/gajim.py:1311
 #, python-format
@@ -5920,7 +5920,7 @@ msgstr "Rekonektu mane."
 #: ../src/common/connection.py:176 ../src/common/connection.py:203
 #, python-format
 msgid "Transport %s answered wrongly to register request: %s"
-msgstr "Transportilo %s respondis malprave al registra peto: $s"
+msgstr "Transportilo %s respondis malprave al registra peto: %s"
 
 #. wrong answer
 #: ../src/common/connection.py:202
@@ -6080,7 +6080,6 @@ msgstr "dekdu"
 #. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
-#, python-format
 msgid "%0 o'clock"
 msgstr "la %0a horo"
 
@@ -6486,7 +6485,7 @@ msgstr "Ne povas lanĉi lokan servon"
 #: ../src/common/zeroconf/connection_zeroconf.py:228
 #, python-format
 msgid "Unable to bind to port %d."
-msgstr "Neeblas aliĝi al pordo %s."
+msgstr "Neeblas aliĝi al pordo %d."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:232
 #: ../src/common/zeroconf/connection_zeroconf.py:325

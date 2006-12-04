@@ -5804,7 +5804,6 @@ msgstr "十二"
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47
 #: ../src/common/fuzzyclock.py:55
-#, python-format
 msgid "%0 o'clock"
 msgstr "%0 点钟"
 
