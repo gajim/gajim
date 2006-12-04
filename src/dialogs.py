@@ -2458,6 +2458,9 @@ class AdvancedNotificationsWindow:
 		'run_command_cb', 'command_entry', 'urgency_hint_cb'):
 			self.__dict__[w] = self.xml.get_widget(w)
 
+		#FIXME: remove when this will be implemented
+		self.urgency_hint_cb.set_no_show_all(True)
+		self.urgency_hint_cb.hide()
 		# Contains status checkboxes
 		childs = self.status_hbox.get_children()
 
