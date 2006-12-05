@@ -26,8 +26,6 @@ class StatusIcon(systray.Systray):
 	#NOTE: gtk api does NOT allow:
 	# leave, enter motion notify
 	# and can't do cool tooltips we use
-	# and we could use blinking instead of unsupported animation
-	# or we could emulate animation by every foo ms chaning the image
 	def __init__(self):
 		systray.Systray.__init__(self)
 		self.status_icon = gtk.StatusIcon()
@@ -55,9 +53,12 @@ class StatusIcon(systray.Systray):
 		text = helpers.get_notification_icon_tooltip_text()
 		self.status_icon.set_tooltip(text)
 		if gajim.events.get_nb_systray_events():
-			state = 'message'
+			state = 'message' # FIXME: this state should be called event, not message
+			self.status_icon.props.blinking = True
 		else:
 			state = self.status
+			self.status_icon.props.blinking = False
+		
 		#FIXME: do not always use 16x16 (ask actually used size and use that)
 		image = gajim.interface.roster.jabber_state_images['16'][state]
 		if image.get_storage_type() == gtk.IMAGE_PIXBUF:

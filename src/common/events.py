@@ -219,7 +219,7 @@ class Events:
 		return first_account, first_jid, first_event
 
 	def get_nb_systray_events(self, types = []):
-		'''returns the number of events displayedin roster'''
+		'''returns the number of events displayed in roster'''
 		return self._get_nb_events(attribute = 'systray', types = types)
 
 	def get_systray_events(self):
