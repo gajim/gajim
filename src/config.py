@@ -85,6 +85,11 @@ class PreferencesWindow:
 		self.one_window_type_combobox =\
 			self.xml.get_widget('one_window_type_combobox')
 
+		#FIXME: remove when ANC will be implemented
+		w = self.xml.get_widget('hbox3020')
+		w.set_no_show_all(True)
+		w.hide()
+
 		#trayicon
 		if gajim.interface.systray_capabilities:
 			st = gajim.config.get('trayicon')
