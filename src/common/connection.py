@@ -687,11 +687,11 @@ class Connection(ConnectionHandlers):
 	chatstate = None, msg_id = None, composing_jep = None, resource = None,
 	user_nick = None, xhtml = None):
 		if not self.connection:
-			return
+			return 1
 		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
 			xhtml = create_xhtml(msg)
 		if not msg and chatstate is None:
-			return
+			return 2
 		fjid = jid
 		if resource:
 			fjid += '/' + resource
@@ -699,14 +699,19 @@ class Connection(ConnectionHandlers):
 		msgenc = ''
 		if keyID and USE_GPG:
 			#encrypt
-			msgenc = self.gpg.encrypt(msg, [keyID])
-			if msgenc:
+			msgenc, error = self.gpg.encrypt(msg, [keyID])
+			if msgenc and not error:
 				msgtxt = '[This message is encrypted]'
 				lang = os.getenv('LANG')
 				if lang is not None and lang != 'en': # we're not english
 					# one  in locale and one en
 					msgtxt = _('[This message is *encrypted* (See :JEP:`27`]') +\
 						' ([This message is *encrypted* (See :JEP:`27`])'
+			else:
+				# Encryption failed, do not send message
+				tim = time.localtime()
+				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim))
+				return 3
 		if msgtxt and not xhtml and gajim.config.get(
 			'rst_formatting_outgoing_messages'):
 			# Generate a XHTML part using reStructured text markup

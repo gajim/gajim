@@ -710,7 +710,13 @@ class Interface:
 		# do not play sound when standalone chatstate message (eg no msg)
 		if msg and gajim.config.get_per('soundevents', 'message_sent', 'enabled'):
 			helpers.play_sound('message_sent')
-		
+
+	def handle_event_msgnotsent(self, account, array):
+		#('MSGNOTSENT', account, (jid, ierror_msg, msg, time))
+		msg = _('error while sending %s ( %s )') % (array[2], array[1])
+		self.roster.on_message(array[0], msg, array[3], account,
+			msg_type='error')
+
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is JEP-0172
 		dialogs.SubscriptionRequestWindow(array[0], array[1], account, array[2])
@@ -1780,6 +1786,7 @@ class Interface:
 			'MSG': self.handle_event_msg,
 			'MSGERROR': self.handle_event_msgerror,
 			'MSGSENT': self.handle_event_msgsent,
+			'MSGNOTSENT': self.handle_event_msgnotsent,
 			'SUBSCRIBED': self.handle_event_subscribed,
 			'UNSUBSCRIBED': self.handle_event_unsubscribed,
 			'SUBSCRIBE': self.handle_event_subscribe,

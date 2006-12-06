@@ -79,16 +79,20 @@ else:
 				return str
 			self.options.recipients = recipients   # a list!
 
-			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout'])
+			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout',
+				'stderr'])
 			proc.handles['stdin'].write(str)
 			proc.handles['stdin'].close()
 
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
 
+			error = proc.handles['stderr'].read()
+			proc.handles['stderr'].close()
+
 			try: proc.wait()
 			except IOError: pass
-			return self._stripHeaderFooter(output)
+			return self._stripHeaderFooter(output), error
 
 		def decrypt(self, str, keyID):
 			if not USE_GPG:

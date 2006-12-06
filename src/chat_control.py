@@ -498,16 +498,19 @@ class ChatControlBase(MessageControl):
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None,
 	msg_id = None, composing_jep = None, resource = None):
-		'''Send the given message to the active tab'''
+		'''Send the given message to the active tab. Doesn't return None if error
+		'''
 		if not message or message == '\n':
-			return
+			return 1
 
 
 		if not self._process_command(message):
-			MessageControl.send_message(self, message, keyID, type = type,
+			ret = MessageControl.send_message(self, message, keyID, type = type,
 				chatstate = chatstate, msg_id = msg_id,
 				composing_jep = composing_jep, resource = resource,
 				user_nick = self.user_nick)
+			if ret:
+				return ret
 			# Record message history
 			self.save_sent_message(message)
 
@@ -1166,10 +1169,10 @@ class ChatControl(ChatControlBase):
 				gobject.source_remove(self.possible_inactive_timeout_id)
 				self._schedule_activity_timers()
 				
-		ChatControlBase.send_message(self, message, keyID, type = 'chat',
-			chatstate = chatstate_to_send,
-			composing_jep = composing_jep)
-		self.print_conversation(message, self.contact.jid, encrypted = encrypted)
+		if not ChatControlBase.send_message(self, message, keyID, type = 'chat',
+		chatstate = chatstate_to_send, composing_jep = composing_jep):
+			self.print_conversation(message, self.contact.jid,
+				encrypted = encrypted)
 
 	def check_for_possible_paused_chatstate(self, arg):
 		''' did we move mouse of that window or write something in message
