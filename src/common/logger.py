@@ -232,7 +232,7 @@ class Logger:
 			return constants.TYPE_SMS
 		if type_ == 'smtp':
 			return constants.TYPE_SMTP
-		if type_ == 'tlen':
+		if type_ in ('tlen', 'x-tlen'):
 			return constants.TYPE_TLEN
 		if type_ == 'yahoo':
 			return constants.TYPE_YAHOO
