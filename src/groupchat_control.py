@@ -90,6 +90,8 @@ def tree_cell_data_func(column, renderer, model, iter, tv=None):
 				renderer.set_property('foreground', color)
 			else:
 				set_renderer_color(tv, renderer, False)
+			renderer.set_property('font',
+				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 
 class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
@@ -945,7 +947,7 @@ class GroupchatControl(ChatControlBase):
 		if not role_iter:
 			role_iter = model.append(None,
 				(gajim.interface.roster.jabber_state_images['16']['closed'], role, 
-				'role', '<b>%s</b>' % role_name,  None))
+				'role', '%s' % role_name,  None))
 		iter = model.append(role_iter, (None, nick, 'contact', name, None))
 		if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			gc_contact = gajim.contacts.create_gc_contact(room_jid = self.room_jid,
