@@ -342,11 +342,11 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	def pollin(self):
 		self._do_receive() 
 	
-	def pollend(self):
+	def pollend(self, retry=False):
 		conn_failure_cb = self.on_connect_failure
 		self.disconnect()
 		if conn_failure_cb:
-			conn_failure_cb()
+			conn_failure_cb(retry)
 		
 	def disconnect(self):
 		if self.state == -2: # already disconnected
@@ -442,8 +442,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		if errnum in (ERR_DISCONN, errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN):
 			self.DEBUG(errtxt, 'error')
 			log.error("Got Disconnected: " + errtxt)
-			self.pollend()
-			# don't proccess result, cas it will raise error
+			self.pollend(retry=(errnum in (ERR_DISCONN, errno.ECONNRESET)))
+			# don't process result, because it will raise an error
 			return
 
 		if received is None:
@@ -451,7 +451,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 				self.DEBUG(errtxt, 'error')
 				log.error("Error: " + errtxt)
 				if self.state >= 0:
-					self.pollend()
+					self.pollend(retry=True)
 				return
 			received = ''
 
