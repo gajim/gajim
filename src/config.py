@@ -1527,7 +1527,7 @@ class AccountModificationWindow:
 		if config['savepass']:
 			passwords.save_password(name, config['password'])
 		else:
-			passwords.save_password(name, None)
+			passwords.save_password(name, '')
 		# refresh accounts window
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
