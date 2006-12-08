@@ -624,8 +624,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		id_ = None
 		if name == 'a':
 			#TODO: accesskey, charset, hreflang, rel, rev, tabindex, type
-			if "href" in attrs: href = attrs.get('href', None)
-			elif "HREF" in attrs: href = attrs.get('HREF', None)
+			href = attrs.get('href', None)
+			if not href:
+				href = attrs.get('HREF', None)
 			# Gaim sends HREF instead of href
 			title = attrs.get('title', attrs.get('rel',href))
 			type_ = attrs.get('type', None)
