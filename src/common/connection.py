@@ -20,7 +20,12 @@
 
 import os
 import random
-random.seed()
+
+try:
+	randomsource = random.SystemRandom()
+except:
+	randomsource = random.Random()
+	randomsource.seed()
 
 import signal
 if os.name != 'nt':
@@ -56,6 +61,7 @@ class Connection(ConnectionHandlers):
 		# holds the actual hostname to which we are connected
 		self.connected_hostname = None
 		self.time_to_reconnect = None
+		self.last_time_to_reconnect = None
 		self.new_account_info = None
 		self.bookmarks = []
 		self.annotations = {}
@@ -140,10 +146,15 @@ class Connection(ConnectionHandlers):
 				self.connected = 1
 				self.dispatch('STATUS', 'connecting')
 				# this check has moved from _reconnect method
-				if self.retrycount > 5:
-					self.time_to_reconnect = random.randint(15, 25)
-				else:
-					self.time_to_reconnect = random.randint(5, 15)
+				# do exponential backoff until 15 minutes,
+				# then small linear increase
+				if self.retrycount < 2 or self.last_time_to_reconnect is None:
+					self.last_time_to_reconnect = 5
+				if self.last_time_to_reconnect < 800:
+					self.last_time_to_reconnect *= 1.5
+				self.last_time_to_reconnect += randomsource.randint(0, 5)
+				self.time_to_reconnect = int(self.last_time_to_reconnect)
+				gajim.log.debug("Reconnect to %s in %ss", self.name, self.time_to_reconnect)
 				gajim.idlequeue.set_alarm(self._reconnect_alarm,
 					self.time_to_reconnect)
 			elif self.on_connect_failure:
