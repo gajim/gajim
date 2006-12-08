@@ -1297,12 +1297,12 @@ class GroupchatControl(ChatControlBase):
 
 	def show_change_nick_input_dialog(self, title, prompt, proposed_nick = None):
 		'''asks user for new nick and on ok it sets it on room'''
-		instance = dialogs.InputDialog(title, prompt, proposed_nick)
-		response = instance.get_response()
-		if response == gtk.RESPONSE_OK:
+		def on_ok(widget):
 			nick = instance.input_entry.get_text().decode('utf-8')
 			gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
 			self.nick = nick
+		instance = dialogs.InputDialog(title, prompt, proposed_nick,
+			is_modal = False, ok_handler = on_ok)
 
 	def shutdown(self, status='offline'):
 		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
