@@ -12,6 +12,7 @@ emoticons = {
 	':->': 'biggrin.png',
 	':D': 'biggrin.png',
 	':>': 'biggrin.png',
+	'xD': 'biggrin.png',	
 #	
 	':-(': 'unhappy.png',
 	':(': 'unhappy.png',
