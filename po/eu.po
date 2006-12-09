@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-12-09 10:02+0100\n"
-"PO-Revision-Date: 2006-11-29 16:28+0100\n"
+"PO-Revision-Date: 2006-12-09 17:38+0100\n"
 "Last-Translator: Urtzi \n"
 "Language-Team: Basque <urtzi@altza.net>\n"
 "MIME-Version: 1.0\n"
@@ -527,42 +527,39 @@ msgstr "E_rabiltzailearen ID:"
 
 #: ../data/glade/adhoc_commands_window.glade.h:1
 msgid "<b>An error has occured:</b>"
-msgstr ""
+msgstr "<b>Akats bat gertatu da:</b>"
 
 #: ../data/glade/adhoc_commands_window.glade.h:2
 msgid "<b>Choose command to execute:</b>"
-msgstr ""
+msgstr "<b>Aukeratu betebeharreko komandoa:</b>"
 
 #: ../data/glade/adhoc_commands_window.glade.h:3
 msgid "Ad-hoc Commands - Gajim"
-msgstr ""
+msgstr "Ad-hoc Commands - Gajim"
 
 #: ../data/glade/adhoc_commands_window.glade.h:4
 msgid "Check once more"
-msgstr ""
+msgstr "Berriro saiatu"
 
 #: ../data/glade/adhoc_commands_window.glade.h:5
-#, fuzzy
 msgid "Error description..."
-msgstr "Deskribapena"
+msgstr "Deskripzio errorea...."
 
 #: ../data/glade/adhoc_commands_window.glade.h:6
-#, fuzzy
 msgid "Please wait while retrieving command list..."
-msgstr "Mesedez itxoin log-a eraldatzen den bitartean...."
+msgstr "Mesedez itxoin komandoak jasotzen diren bitartean..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:7
-#, fuzzy
 msgid "Please wait while the command is sending..."
-msgstr "Mesedez itxoin log-a eraldatzen den bitartean...."
+msgstr "Mesedez itxoin komandua bidaltzen den bitartean..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:8
 msgid "Please wait..."
-msgstr ""
+msgstr "Mesedez itxoin..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:9
 msgid "This jabber entity does not expose any commands."
-msgstr ""
+msgstr "E  Ez da komandurik aurkitu"
 
 #: ../data/glade/advanced_configuration_window.glade.h:1
 msgid "<b>Description</b>"
@@ -715,15 +712,15 @@ msgid ""
 "File Transfert Started \n"
 "File Transfert Finished"
 msgstr ""
-"Mezu bat Jasotzean\n"
-"Kontaktua Konektatzean\n"
-"Kontaktua Deskonektatzean\n"
-"Kontaktuak Egoeraz Aldatzean\n"
-"Txat Taldeko Mezu bat Bistaratzean\n"
-"Txat Taldeko Mezu bat Jasotzean\n"
-"Fitxero Transferentzia Eskatzean\n"
-"Fitxero Transferentzia Hastean\n"
-"Fitxero Transferentzia Bukatzean"
+"Mezu bat Jasoa\n"
+"Kontaktua Konektatua\n"
+"Kontaktua Deskonektatua\n"
+"Kontaktuak Egoeraz Aldatua\n"
+"Txat Taldeko Mezu bat Bistaratua\n"
+"Txat Taldeko Mezu bat Jasoa\n"
+"Fitxero Transferentzia Eskatua\n"
+"Fitxero Transferentzia Hasia\n"
+"Fitxero Transferentzia Bukatua"
 
 #: ../data/glade/advanced_notifications_window.glade.h:27
 msgid "When "
@@ -795,43 +792,39 @@ msgstr "Nagoenean"
 
 #: ../data/glade/atom_entry_window.glade.h:1
 msgid "2003-12-13T18:30:02Z"
-msgstr ""
+msgstr "2003-12-13T18:30:02Z"
 
 #: ../data/glade/atom_entry_window.glade.h:2
 msgid "<small>Romeo and Juliet</small>"
-msgstr ""
+msgstr "<small>Romeo eta Juliet</small>"
 
 #: ../data/glade/atom_entry_window.glade.h:3
-#, fuzzy
 msgid "Entry:"
-msgstr "Estatua:"
+msgstr "Sarrera:"
 
 #: ../data/glade/atom_entry_window.glade.h:4
-#, fuzzy
 msgid "Feed name:"
-msgstr "gaiaren izena"
+msgstr "Emandako izena:"
 
 #: ../data/glade/atom_entry_window.glade.h:5
-#, fuzzy
 msgid "Last modified:"
-msgstr "Azken Izena:"
+msgstr "Azken Eraldaketa:"
 
 #: ../data/glade/atom_entry_window.glade.h:6
-#, fuzzy
 msgid "New entry received"
-msgstr "Ekintza berri bat jasotzean."
+msgstr "Ekintza berri bat jasoa"
 
 #: ../data/glade/atom_entry_window.glade.h:7
 msgid "Old stories"
-msgstr ""
+msgstr "Old stories"
 
 #: ../data/glade/atom_entry_window.glade.h:8
 msgid "Soliloquy"
-msgstr ""
+msgstr "Soliloquy"
 
 #: ../data/glade/atom_entry_window.glade.h:9
 msgid "You have received new entry:"
-msgstr ""
+msgstr "Sarrera berri bat jaso duzu:"
 
 #: ../data/glade/change_password_dialog.glade.h:1
 msgid "Change Password"
@@ -1139,9 +1132,8 @@ msgid "_Voice"
 msgstr "_Ahotsa"
 
 #: ../data/glade/groups_post_window.glade.h:1
-#, fuzzy
 msgid "Create new post"
-msgstr "Mezu berria"
+msgstr "Mezu berria sortu"
 
 #: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:259
 msgid "From"
@@ -3098,11 +3090,11 @@ msgstr "Gaia: %s\n"
 #. form is single
 #: ../src/dataforms_widget.py:72
 msgid "This is result of query."
-msgstr ""
+msgstr "This is result of query."
 
 #: ../src/dataforms_widget.py:78
 msgid "Edit items on the list"
-msgstr ""
+msgstr "Editatu zerrendako atalak"
 
 #: ../src/dialogs.py:59
 #, python-format
