@@ -2,11 +2,12 @@
 # This file is distributed under the same license as the Gajim package.
 # Stian B. Barmen <stian@jabber.no>, 2005.
 #
+#: ../src/gajim-remote.py:202 ../src/gajim-remote.py:209
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-26 22:15+0100\n"
+"POT-Creation-Date: 2006-12-09 10:02+0100\n"
 "PO-Revision-Date: 2006-12-05 11:35+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: \n"
@@ -84,7 +85,8 @@ msgstr "<b>Vennligst fyll in data for din nye konto</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:6
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr "Klikk for å se tjenester (som MSN og ICQ transporter) på jabber serveren"
+msgstr ""
+"Klikk for å se tjenester (som MSN og ICQ transporter) på jabber serveren"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:7
 msgid "Connect when I press Finish"
@@ -215,8 +217,16 @@ msgid "Chan_ge Password"
 msgstr "En_dre Passord"
 
 #: ../data/glade/account_modification_window.glade.h:9
-msgid "Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default if broadcasted by the server, and with this option enabled TLS will be disabled"
-msgstr "Velg denne slik at Gajim vil prøve å koble til port 5223 som gamle servere forventes å ha SSL muligheter. Merk at Gajim bruker TLS kryptering som standard dersom dette tilbys av servere, og med dette valget blir TLS deaktivert."
+msgid ""
+"Check this so Gajim will connect in port 5223 where legacy servers are "
+"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
+"default if broadcasted by the server, and with this option enabled TLS will "
+"be disabled"
+msgstr ""
+"Velg denne slik at Gajim vil prøve å koble til port 5223 som gamle servere "
+"forventes å ha SSL muligheter. Merk at Gajim bruker TLS kryptering som "
+"standard dersom dette tilbys av servere, og med dette valget blir TLS "
+"deaktivert."
 
 #: ../data/glade/account_modification_window.glade.h:10
 #: ../data/glade/zeroconf_properties_window.glade.h:4
@@ -236,11 +246,8 @@ msgid "Edit Personal Information..."
 msgstr "Rediger Personlig Informasjon..."
 
 #: ../data/glade/account_modification_window.glade.h:14
-#: ../data/glade/roster_window.glade.h:5
-#: ../src/notify.py:453
-#: ../src/notify.py:475
-#: ../src/notify.py:487
-#: ../src/common/helpers.py:904
+#: ../data/glade/roster_window.glade.h:5 ../src/notify.py:453
+#: ../src/notify.py:475 ../src/notify.py:487 ../src/common/helpers.py:905
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -248,12 +255,9 @@ msgstr "Gajim"
 #: ../data/glade/account_modification_window.glade.h:15
 #: ../data/glade/preferences_window.glade.h:49
 #: ../data/glade/zeroconf_properties_window.glade.h:7
-#: ../src/roster_window.py:342
-#: ../src/roster_window.py:1211
-#: ../src/roster_window.py:1422
-#: ../src/roster_window.py:2032
-#: ../src/roster_window.py:2074
-#: ../src/common/contacts.py:278
+#: ../src/roster_window.py:342 ../src/roster_window.py:1211
+#: ../src/roster_window.py:1422 ../src/roster_window.py:2032
+#: ../src/roster_window.py:2074 ../src/common/contacts.py:278
 msgid "General"
 msgstr "Generelle"
 
@@ -262,27 +266,48 @@ msgid "Hostname: "
 msgstr "Maskinnavn:"
 
 #: ../data/glade/account_modification_window.glade.h:17
-msgid "If checked, Gajim will also broadcast some more IPs except from just your IP, so file transfer has higher chances of working."
-msgstr "Dersom valgt vil Gajim sende ut noen flere IP adresser i tillegg til din egen, så filoverføringen har større mulighet for å fungere. "
+msgid ""
+"If checked, Gajim will also broadcast some more IPs except from just your "
+"IP, so file transfer has higher chances of working."
+msgstr ""
+"Dersom valgt vil Gajim sende ut noen flere IP adresser i tillegg til din "
+"egen, så filoverføringen har større mulighet for å fungere. "
 
 #: ../data/glade/account_modification_window.glade.h:19
-msgid "If checked, Gajim will send keep-alive packets so it prevents connection timeout which results in disconnection"
-msgstr "Dersom valgt vil Gajim sende hold-i-live pakker så man ikke får en frakobling på grunn av inaktivitet"
+msgid ""
+"If checked, Gajim will send keep-alive packets so it prevents connection "
+"timeout which results in disconnection"
+msgstr ""
+"Dersom valgt vil Gajim sende hold-i-live pakker så man ikke får en "
+"frakobling på grunn av inaktivitet"
 
 #: ../data/glade/account_modification_window.glade.h:20
 #: ../data/glade/zeroconf_properties_window.glade.h:8
-msgid "If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you"
-msgstr "Dersom valgt vil Gajim lagre passord i ~/.gajim/config med 'les' rettighet bare for deg"
+msgid ""
+"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
+"permission only for you"
+msgstr ""
+"Dersom valgt vil Gajim lagre passord i ~/.gajim/config med 'les' rettighet "
+"bare for deg"
 
 #: ../data/glade/account_modification_window.glade.h:21
 #: ../data/glade/zeroconf_properties_window.glade.h:9
-msgid "If checked, Gajim, when launched, will automatically connect to jabber using this account"
-msgstr "Dersom valgt, vil Gajim automatisk koble seg til jabber med denne kontoen ved oppstart"
+msgid ""
+"If checked, Gajim, when launched, will automatically connect to jabber using "
+"this account"
+msgstr ""
+"Dersom valgt, vil Gajim automatisk koble seg til jabber med denne kontoen "
+"ved oppstart"
 
 #: ../data/glade/account_modification_window.glade.h:22
 #: ../data/glade/zeroconf_properties_window.glade.h:10
-msgid "If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly"
-msgstr "Dersom valgt vil endringer til global status (håndtert av kombomenyen nederst i kontaktvinduet) endre status på denne kontoen. "
+msgid ""
+"If checked, any change to the global status (handled by the combobox at the "
+"bottom of the roster window) will change the status of this account "
+"accordingly"
+msgstr ""
+"Dersom valgt vil endringer til global status (håndtert av kombomenyen "
+"nederst i kontaktvinduet) endre status på denne kontoen. "
 
 #: ../data/glade/account_modification_window.glade.h:23
 msgid "Information about you, as stored in the server"
@@ -293,26 +318,17 @@ msgid "Manage..."
 msgstr "Behandle..."
 
 #: ../data/glade/account_modification_window.glade.h:25
-#: ../data/glade/zeroconf_properties_window.glade.h:16
-#: ../src/config.py:1636
-#: ../src/config.py:3429
+#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1642
+#: ../src/config.py:3435
 msgid "No key selected"
 msgstr "Ingen nøkkel valgt"
 
 #. None means no proxy profile selected
-#: ../data/glade/account_modification_window.glade.h:27
-#: ../src/config.py:1218
-#: ../src/config.py:1223
-#: ../src/config.py:1407
-#: ../src/config.py:1626
-#: ../src/config.py:1635
-#: ../src/config.py:1694
-#: ../src/config.py:1768
-#: ../src/config.py:2639
-#: ../src/config.py:3419
-#: ../src/config.py:3428
-#: ../src/dialogs.py:281
-#: ../src/dialogs.py:283
+#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1224
+#: ../src/config.py:1229 ../src/config.py:1413 ../src/config.py:1632
+#: ../src/config.py:1641 ../src/config.py:1700 ../src/config.py:1774
+#: ../src/config.py:2645 ../src/config.py:3425 ../src/config.py:3434
+#: ../src/dialogs.py:281 ../src/dialogs.py:283
 msgid "None"
 msgstr "Ingen"
 
@@ -330,8 +346,14 @@ msgid "Priori_ty:"
 msgstr "Priorit_et:"
 
 #: ../data/glade/account_modification_window.glade.h:31
-msgid "Priority is used in Jabber to determine who gets the events from the jabber server when two or more clients are connected using the same account; The client with the highest priority gets the events"
-msgstr "Prioritet brukes av Jabber for å finne ut hvem som skal få hendelser fra jabber serveren når to eller flere klienter er tilkoblet med samme konto. Klienten med den høyeste prioriteten vil få hendelsen"
+msgid ""
+"Priority is used in Jabber to determine who gets the events from the jabber "
+"server when two or more clients are connected using the same account; The "
+"client with the highest priority gets the events"
+msgstr ""
+"Prioritet brukes av Jabber for å finne ut hvem som skal få hendelser fra "
+"jabber serveren når to eller flere klienter er tilkoblet med samme konto. "
+"Klienten med den høyeste prioriteten vil få hendelsen"
 
 #: ../data/glade/account_modification_window.glade.h:32
 msgid "Priority will change automatically according to your status."
@@ -346,8 +368,18 @@ msgid "Resour_ce: "
 msgstr "Ressu_rs:"
 
 #: ../data/glade/account_modification_window.glade.h:35
-msgid "Resource is sent to the Jabber server in order to separate the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)"
-msgstr "Ressurs navnet blir sendt til Jabber serveren for å separere JID'en din i to eller flere deler alt etter hvor mange ganger du er tilkoblet til serveren (samtidig). Dette gjør at du kan være tilkoblet med samme konto med ressurs navn 'Hjeme' og 'Jobb' på samme tid. Ressursen med høyest prioritet vil få hendelsene. (se under)"
+msgid ""
+"Resource is sent to the Jabber server in order to separate the same JID in "
+"two or more parts depending on the number of the clients connected in the "
+"same server with the same account. So you might be connected in the same "
+"account with resource 'Home' and 'Work' at the same time. The resource which "
+"has the highest priority will get the events. (see below)"
+msgstr ""
+"Ressurs navnet blir sendt til Jabber serveren for å separere JID'en din i to "
+"eller flere deler alt etter hvor mange ganger du er tilkoblet til serveren "
+"(samtidig). Dette gjør at du kan være tilkoblet med samme konto med ressurs "
+"navn 'Hjeme' og 'Jobb' på samme tid. Ressursen med høyest prioritet vil få "
+"hendelsene. (se under)"
 
 #: ../data/glade/account_modification_window.glade.h:36
 #: ../data/glade/zeroconf_properties_window.glade.h:18
@@ -398,15 +430,25 @@ msgstr "Kontoer"
 
 #: ../data/glade/accounts_window.glade.h:2
 msgid ""
-"If checked, all local contacts that use a Bonjour compatible chat client (like iChat, Trillian or Gaim) will be shown in roster. You don't need to be connected to a jabber server for it to work.\n"
-"This is only available if python-avahi is installed and avahi-daemon is running."
+"If checked, all local contacts that use a Bonjour compatible chat client "
+"(like iChat, Trillian or Gaim) will be shown in roster. You don't need to be "
+"connected to a jabber server for it to work.\n"
+"This is only available if python-avahi is installed and avahi-daemon is "
+"running."
 msgstr ""
-"Dersom valgt vil alle lokale kontakter som bruker en Bonjour kompatibel samtale klient (som iChat, Trillian eller Gaim) vil vises i kontaktlisten. Du trenger ikke være koblet til en jabber server for at det skal virke.\n"
-"Dette er bare tilgjengelig dersom python-avahi er installert og avahi-tjenesten kjører."
+"Dersom valgt vil alle lokale kontakter som bruker en Bonjour kompatibel "
+"samtale klient (som iChat, Trillian eller Gaim) vil vises i kontaktlisten. "
+"Du trenger ikke være koblet til en jabber server for at det skal virke.\n"
+"Dette er bare tilgjengelig dersom python-avahi er installert og avahi-"
+"tjenesten kjører."
 
 #: ../data/glade/accounts_window.glade.h:4
-msgid "If you have 2 or more accounts and it is checked, Gajim will list all contacts as if you had one account"
-msgstr "Dersom du har 2 eller flere kontoer og denne er valgt, vil Gajim liste alle kontakter som om du hadde en konto"
+msgid ""
+"If you have 2 or more accounts and it is checked, Gajim will list all "
+"contacts as if you had one account"
+msgstr ""
+"Dersom du har 2 eller flere kontoer og denne er valgt, vil Gajim liste alle "
+"kontakter som om du hadde en konto"
 
 #: ../data/glade/accounts_window.glade.h:5
 msgid "Mer_ge accounts"
@@ -481,13 +523,54 @@ msgstr "_Registrer"
 msgid "_User ID:"
 msgstr "_Bruker ID:"
 
+#: ../data/glade/adhoc_commands_window.glade.h:1
+#, fuzzy
+msgid "<b>An error has occured:</b>"
+msgstr "En protokoll feil har skjedd:"
+
+#: ../data/glade/adhoc_commands_window.glade.h:2
+msgid "<b>Choose command to execute:</b>"
+msgstr ""
+
+#: ../data/glade/adhoc_commands_window.glade.h:3
+msgid "Ad-hoc Commands - Gajim"
+msgstr ""
+
+#: ../data/glade/adhoc_commands_window.glade.h:4
+msgid "Check once more"
+msgstr ""
+
+#: ../data/glade/adhoc_commands_window.glade.h:5
+#, fuzzy
+msgid "Error description..."
+msgstr "Beskrivelse"
+
+#: ../data/glade/adhoc_commands_window.glade.h:6
+#, fuzzy
+msgid "Please wait while retrieving command list..."
+msgstr "Vennligst vent mens loggene blir migrert..."
+
+#: ../data/glade/adhoc_commands_window.glade.h:7
+#, fuzzy
+msgid "Please wait while the command is sending..."
+msgstr "Vennligst vent mens loggene blir migrert..."
+
+#: ../data/glade/adhoc_commands_window.glade.h:8
+msgid "Please wait..."
+msgstr ""
+
+#: ../data/glade/adhoc_commands_window.glade.h:9
+msgid "This jabber entity does not expose any commands."
+msgstr ""
+
 #: ../data/glade/advanced_configuration_window.glade.h:1
 msgid "<b>Description</b>"
 msgstr "<b>Beskrivelse</b>"
 
 #: ../data/glade/advanced_configuration_window.glade.h:2
 msgid "<b>NOTE:</b> You should restart gajim for some setting to take effect"
-msgstr "<b>MERK:</b> Du må starte gajim på nytt for å aktivere noen instillinger"
+msgstr ""
+"<b>MERK:</b> Du må starte gajim på nytt for å aktivere noen instillinger"
 
 #: ../data/glade/advanced_configuration_window.glade.h:3
 msgid "Advanced Configuration Editor"
@@ -620,13 +703,13 @@ msgstr "Spill av en lyd"
 #: ../data/glade/advanced_notifications_window.glade.h:18
 msgid ""
 "Receive a Message\n"
-"Contact Connected\n"
-"Contact Disconnected\n"
-"Contact Change Status\n"
-"Group Chat Message Highlight\n"
-"Group Chat Message Received\n"
-"File Transfert Resquest\n"
-"File Transfert Started\n"
+"Contact Connected \n"
+"Contact Disconnected \n"
+"Contact Change Status \n"
+"Group Chat Message Highlight \n"
+"Group Chat Message Received \n"
+"File Transfert Resquest \n"
+"File Transfert Started \n"
 "File Transfert Finished"
 msgstr ""
 "Motta en Melding\n"
@@ -644,8 +727,11 @@ msgid "When "
 msgstr "Når"
 
 #: ../data/glade/advanced_notifications_window.glade.h:28
-msgid "_Activate window manager's UrgencyHint to make chat window in taskbar flash"
-msgstr "_Aktiver vindu behandlerens HasterHint for å få samtalevinduet i oppgavelinjen til å blinke"
+msgid ""
+"_Activate window manager's UrgencyHint to make chat window in taskbar flash"
+msgstr ""
+"_Aktiver vindu behandlerens HasterHint for å få samtalevinduet i "
+"oppgavelinjen til å blinke"
 
 #: ../data/glade/advanced_notifications_window.glade.h:29
 msgid "_Disable auto opening chat window"
@@ -704,6 +790,46 @@ msgstr "for "
 #: ../data/glade/advanced_notifications_window.glade.h:43
 msgid "when I'm in"
 msgstr "når jeg er i"
+
+#: ../data/glade/atom_entry_window.glade.h:1
+msgid "2003-12-13T18:30:02Z"
+msgstr ""
+
+#: ../data/glade/atom_entry_window.glade.h:2
+msgid "<small>Romeo and Juliet</small>"
+msgstr ""
+
+#: ../data/glade/atom_entry_window.glade.h:3
+#, fuzzy
+msgid "Entry:"
+msgstr "Land:"
+
+#: ../data/glade/atom_entry_window.glade.h:4
+#, fuzzy
+msgid "Feed name:"
+msgstr "tema navn"
+
+#: ../data/glade/atom_entry_window.glade.h:5
+#, fuzzy
+msgid "Last modified:"
+msgstr "Etternavn:"
+
+#: ../data/glade/atom_entry_window.glade.h:6
+#, fuzzy
+msgid "New entry received"
+msgstr "Når en ny hendelse blir motatt"
+
+#: ../data/glade/atom_entry_window.glade.h:7
+msgid "Old stories"
+msgstr ""
+
+#: ../data/glade/atom_entry_window.glade.h:8
+msgid "Soliloquy"
+msgstr ""
+
+#: ../data/glade/atom_entry_window.glade.h:9
+msgid "You have received new entry:"
+msgstr ""
 
 #: ../data/glade/change_password_dialog.glade.h:1
 msgid "Change Password"
@@ -790,7 +916,7 @@ msgstr "_Kompakt Utseende    Alt+C"
 msgid "_History"
 msgstr "_Historie"
 
-#: ../data/glade/data_form_window.glade.h:1
+#: ../data/glade/data_form_window.glade.h:1 ../src/dataforms_widget.py:76
 msgid "Fill in the form."
 msgstr "Fyll inn skjemaet."
 
@@ -843,15 +969,18 @@ msgid "Shows a list of file transfers between you and other"
 msgstr "Viser en liste over overføringer mellom deg og andre"
 
 #: ../data/glade/filetransfers.glade.h:11
-msgid "This action removes single file transfer from the list. If the transfer is active, it is first stopped and then removed"
-msgstr "Dette valget fjerner en filoverføring fra listen. Dersom den er aktiv vil den først bli stoppet og så fjernet."
+msgid ""
+"This action removes single file transfer from the list. If the transfer is "
+"active, it is first stopped and then removed"
+msgstr ""
+"Dette valget fjerner en filoverføring fra listen. Dersom den er aktiv vil "
+"den først bli stoppet og så fjernet."
 
 #: ../data/glade/filetransfers.glade.h:12
 msgid "When a file transfer is complete show a popup notification"
 msgstr "Når en fil overføring er komplett vis en sprettopp informasjon"
 
-#: ../data/glade/filetransfers.glade.h:13
-#: ../src/filetransfers_window.py:761
+#: ../data/glade/filetransfers.glade.h:13 ../src/filetransfers_window.py:761
 msgid "_Continue"
 msgstr "_Fortsett"
 
@@ -859,8 +988,7 @@ msgstr "_Fortsett"
 msgid "_Notify me when a file transfer is complete"
 msgstr "_Gi meg beskjed når filoverføring er komplett"
 
-#: ../data/glade/filetransfers.glade.h:15
-#: ../src/filetransfers_window.py:190
+#: ../data/glade/filetransfers.glade.h:15 ../src/filetransfers_window.py:190
 msgid "_Open Containing Folder"
 msgstr "_Åpne Foreldre Katalog"
 
@@ -1004,6 +1132,21 @@ msgstr "_Send Privat Melding"
 msgid "_Voice"
 msgstr "_Stemme"
 
+#: ../data/glade/groups_post_window.glade.h:1
+#, fuzzy
+msgid "Create new post"
+msgstr "Ny post"
+
+#: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:259
+msgid "From"
+msgstr "Fra"
+
+#. holds subject
+#: ../data/glade/groups_post_window.glade.h:3 ../src/history_manager.py:141
+#: ../src/history_manager.py:172
+msgid "Subject"
+msgstr "Tittel"
+
 #: ../data/glade/history_manager.glade.h:1
 msgid ""
 "<big><b>Welcome to Gajim History Logs Manager</b></big>\n"
@@ -1011,14 +1154,16 @@ msgid ""
 "You can select logs from the left and/or search database from below.\n"
 "\n"
 "<b>WARNING:</b>\n"
-"If you plan to do massive deletions, please make sure Gajim is not running. Generally avoid deletions with contacts you currently chat with."
+"If you plan to do massive deletions, please make sure Gajim is not running. "
+"Generally avoid deletions with contacts you currently chat with."
 msgstr ""
 "<big><b>Velkommen til Gajim Historiske Logg Behandler</b></big>\n"
 "\n"
 "Du kan velge logger fra venstre og/eller søke databasen under.\n"
 "\n"
 "<b>ADVARSEL:</b>\n"
-"Dersom du planlegger å gjøre store slette operasjoner, pass på at Gajim ikke kjører. Generelt bør man unngå å slette fra kontakter du er i samtale med."
+"Dersom du planlegger å gjøre store slette operasjoner, pass på at Gajim ikke "
+"kjører. Generelt bør man unngå å slette fra kontakter du er i samtale med."
 
 #: ../data/glade/history_manager.glade.h:7
 msgid "Delete"
@@ -1069,8 +1214,7 @@ msgstr "Nekt"
 msgid "Invitation Received"
 msgstr "Invitasjon motatt"
 
-#: ../data/glade/join_groupchat_window.glade.h:1
-#: ../src/dialogs.py:1146
+#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1146
 msgid "Join Group Chat"
 msgstr "Bli med i Gruppesamtale"
 
@@ -1095,8 +1239,7 @@ msgstr "Nylig:"
 msgid "Room:"
 msgstr "Rom:"
 
-#: ../data/glade/join_groupchat_window.glade.h:6
-#: ../src/disco.py:1150
+#: ../data/glade/join_groupchat_window.glade.h:6 ../src/disco.py:1150
 #: ../src/disco.py:1517
 msgid "_Join"
 msgstr "_Bli med"
@@ -1163,8 +1306,7 @@ msgstr "Bruk autentisering"
 msgid "Click to insert an emoticon (Alt+M)"
 msgstr "Klikk for å sette inn et uttrykksikon (Alt+M)"
 
-#: ../data/glade/message_window.glade.h:2
-#: ../src/chat_control.py:1099
+#: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1104
 msgid "OpenPGP Encryption"
 msgstr "OpenPGP Kryptering"
 
@@ -1243,15 +1385,22 @@ msgstr "Tillat _OS informasjon å bli sendt"
 
 #: ../data/glade/preferences_window.glade.h:18
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-msgstr "Tillat sprettopp/melding når jeg er _borte/ikke tilgjengelig/opptatt/usynlig"
+msgstr ""
+"Tillat sprettopp/melding når jeg er _borte/ikke tilgjengelig/opptatt/usynlig"
 
 #: ../data/glade/preferences_window.glade.h:19
 msgid "Also known as iChat style"
 msgstr "Også kjent som iChat stil"
 
 #: ../data/glade/preferences_window.glade.h:20
-msgid "An example: If you have enabled status message for away, Gajim won't ask you anymore for a status message when you change your status to away; it will use the default one set here"
-msgstr "Et eksempel: Dersom du har slått på status melding for borte, så vil Gajim ikke spør flere ganger etter melding når du endrer status til borte; den vil bruke standard meldingen du lager her"
+msgid ""
+"An example: If you have enabled status message for away, Gajim won't ask you "
+"anymore for a status message when you change your status to away; it will "
+"use the default one set here"
+msgstr ""
+"Et eksempel: Dersom du har slått på status melding for borte, så vil Gajim "
+"ikke spør flere ganger etter melding når du endrer status til borte; den vil "
+"bruke standard meldingen du lager her"
 
 #: ../data/glade/preferences_window.glade.h:21
 msgid "Ask status message when I:"
@@ -1283,14 +1432,19 @@ msgstr ""
 msgid "B_efore nickname:"
 msgstr "F_ør kallenavn:"
 
-#: ../data/glade/preferences_window.glade.h:30
-#: ../src/chat_control.py:839
+#: ../data/glade/preferences_window.glade.h:30 ../src/chat_control.py:844
 msgid "Chat"
 msgstr "Samtale"
 
 #: ../data/glade/preferences_window.glade.h:31
-msgid "Check this option, only if someone you don't have in the roster spams/annoys you. Use with caution, cause it blocks all messages from any contact that is not in the roster"
-msgstr "Velg dette valget bare dersom noen i kontaktlisten spammer/irriterer deg. Bruk med varsomhet, fordi det blokkerer alle meldinger fra alle kontakter som ikke er i kontaktlisten"
+msgid ""
+"Check this option, only if someone you don't have in the roster spams/annoys "
+"you. Use with caution, cause it blocks all messages from any contact that is "
+"not in the roster"
+msgstr ""
+"Velg dette valget bare dersom noen i kontaktlisten spammer/irriterer deg. "
+"Bruk med varsomhet, fordi det blokkerer alle meldinger fra alle kontakter "
+"som ikke er i kontaktlisten"
 
 #: ../data/glade/preferences_window.glade.h:32
 msgid "Configure color and font of the interface"
@@ -1333,56 +1487,108 @@ msgid "Events"
 msgstr "Hendelser"
 
 #: ../data/glade/preferences_window.glade.h:42
-msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to display in chat windows."
-msgstr "Gajim kan sende og motta meta-informasjon relatert til en samtale du kan ha med en kontakt. Her kan du spesifisere hvilke samtalestatuser du ønsker å vise i samtale vinduer."
+msgid ""
+"Gajim can send and receive meta-information related to a conversation you "
+"may have with a contact. Here you can specify which chatstates you want to "
+"display in chat windows."
+msgstr ""
+"Gajim kan sende og motta meta-informasjon relatert til en samtale du kan ha "
+"med en kontakt. Her kan du spesifisere hvilke samtalestatuser du ønsker å "
+"vise i samtale vinduer."
 
 #: ../data/glade/preferences_window.glade.h:43
-msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party."
-msgstr "Gajim kan sende og motta meta-informasjon relatert til en samtale du kan ha med en kontakt. Her kan du spesifisere hvilke samtalestatuser du ønsker å sende motparten."
+msgid ""
+"Gajim can send and receive meta-information related to a conversation you "
+"may have with a contact. Here you can specify which chatstates you want to "
+"send to the other party."
+msgstr ""
+"Gajim kan sende og motta meta-informasjon relatert til en samtale du kan ha "
+"med en kontakt. Her kan du spesifisere hvilke samtalestatuser du ønsker å "
+"sende motparten."
 
 #: ../data/glade/preferences_window.glade.h:44
-msgid "Gajim will automatically show new events by poping up the relative window"
-msgstr "Gajim vil autmatisk vise deg den nye hendelser ved å sprette opp det relative vinduet"
+msgid ""
+"Gajim will automatically show new events by poping up the relative window"
+msgstr ""
+"Gajim vil autmatisk vise deg den nye hendelser ved å sprette opp det "
+"relative vinduet"
 
 #: ../data/glade/preferences_window.glade.h:45
-msgid "Gajim will notify you for new events via a popup in the bottom right of the screen"
-msgstr "Gajim vil alarmere deg med sprett-opp vindu i bunnen til høyre på skjermen"
+msgid ""
+"Gajim will notify you for new events via a popup in the bottom right of the "
+"screen"
+msgstr ""
+"Gajim vil alarmere deg med sprett-opp vindu i bunnen til høyre på skjermen"
 
 #: ../data/glade/preferences_window.glade.h:46
-msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed in"
-msgstr "Gajim vil alarmere deg med sprett-opp vindu i bunnen til høyre på skjermen om at en kontakt har akkurat logget inn"
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed in"
+msgstr ""
+"Gajim vil alarmere deg med sprett-opp vindu i bunnen til høyre på skjermen "
+"om at en kontakt har akkurat logget inn"
 
 #: ../data/glade/preferences_window.glade.h:47
-msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed out"
-msgstr "Gajim vil alarmere deg med sprett-opp vindu i bunnen til høyre på skjermen om at en kontakt har akkurat logget ut"
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed out"
+msgstr ""
+"Gajim vil alarmere deg med sprett-opp vindu i bunnen til høyre på skjermen "
+"om at en kontakt har akkurat logget ut"
 
 #: ../data/glade/preferences_window.glade.h:48
-msgid "Gajim will only change the icon of the contact that triggered the new event"
-msgstr "Gajim vil bare endre ikonet til kontakten som har sendt den nye hendelsen"
+msgid ""
+"Gajim will only change the icon of the contact that triggered the new event"
+msgstr ""
+"Gajim vil bare endre ikonet til kontakten som har sendt den nye hendelsen"
 
 #: ../data/glade/preferences_window.glade.h:50
-msgid "If checked, Gajim will also include information about the sender of the new emails"
-msgstr "Desrom valgt vil Gajim også inkludere informasjon om senderen av nye e-post"
+msgid ""
+"If checked, Gajim will also include information about the sender of the new "
+"emails"
+msgstr ""
+"Desrom valgt vil Gajim også inkludere informasjon om senderen av nye e-post"
 
 #: ../data/glade/preferences_window.glade.h:51
-msgid "If checked, Gajim will display avatars of contacts in roster window and in group chats"
-msgstr "Dersom valgt vil Gajim vise ikonbilder for kontakter i kontaktliste vinduet og i gruppesamtaler"
+msgid ""
+"If checked, Gajim will display avatars of contacts in roster window and in "
+"group chats"
+msgstr ""
+"Dersom valgt vil Gajim vise ikonbilder for kontakter i kontaktliste vinduet "
+"og i gruppesamtaler"
 
 #: ../data/glade/preferences_window.glade.h:52
-msgid "If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats"
-msgstr "Dersom valg vil Gajim vise status melding til kontakter under kontakt navnet i kontaktliste vinduet og i gruppesamtaler"
+msgid ""
+"If checked, Gajim will display status messages of contacts under the contact "
+"name in roster window and in group chats"
+msgstr ""
+"Dersom valg vil Gajim vise status melding til kontakter under kontakt navnet "
+"i kontaktliste vinduet og i gruppesamtaler"
 
 #: ../data/glade/preferences_window.glade.h:53
-msgid "If checked, Gajim will remember the roster and chat window positions in the screen and the sizes of them next time you run it"
-msgstr "Dersom valgt vil Gajim huske kontaktliste og samtalevindu posisjoner på skjermen, samt størrelsen på de til neste gang du åpner de"
+msgid ""
+"If checked, Gajim will remember the roster and chat window positions in the "
+"screen and the sizes of them next time you run it"
+msgstr ""
+"Dersom valgt vil Gajim huske kontaktliste og samtalevindu posisjoner på "
+"skjermen, samt størrelsen på de til neste gang du åpner de"
 
 #: ../data/glade/preferences_window.glade.h:54
-msgid "If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)"
-msgstr "Dersom valgt vil Gajim bruke protkoll-spesifikke ikoner. (En kontakt fra MSN vil ha msn ikoner for status pålogget, borte, opptatt, osv...)"
+msgid ""
+"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
+"from MSN will have the equivalent msn icon for status online, away, busy, "
+"etc...)"
+msgstr ""
+"Dersom valgt vil Gajim bruke protkoll-spesifikke ikoner. (En kontakt fra MSN "
+"vil ha msn ikoner for status pålogget, borte, opptatt, osv...)"
 
 #: ../data/glade/preferences_window.glade.h:55
-msgid "If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons"
-msgstr "Dersom ikke deaktiver, vil Gajim bytte ut ascii smil som ':)' med animerte eller statiske grafiske uttrykksikoner"
+msgid ""
+"If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
+"animated or static graphical emoticons"
+msgstr ""
+"Dersom ikke deaktiver, vil Gajim bytte ut ascii smil som ':)' med animerte "
+"eller statiske grafiske uttrykksikoner"
 
 #: ../data/glade/preferences_window.glade.h:56
 msgid "Ignore rich content in incoming messages"
@@ -1457,8 +1663,12 @@ msgid "Sign _out"
 msgstr "Logger _ut"
 
 #: ../data/glade/preferences_window.glade.h:75
-msgid "Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text."
-msgstr "Noen meldinger kan inkludere rikt innhold (formatering, farger osv). Dersom valgt vil Gajim kun vise rå meldings tekst."
+msgid ""
+"Some messages may include rich content (formatting, colors etc). If checked, "
+"Gajim will just display the raw message text."
+msgstr ""
+"Noen meldinger kan inkludere rikt innhold (formatering, farger osv). Dersom "
+"valgt vil Gajim kun vise rå meldings tekst."
 
 #: ../data/glade/preferences_window.glade.h:76
 msgid "Status"
@@ -1489,16 +1699,28 @@ msgid "Use t_rayicon (aka. notification area icon)"
 msgstr "Bruk Ikon i s_ystemstatusfelt (også kjent som systray)"
 
 #: ../data/glade/preferences_window.glade.h:83
-msgid "When a new event (message, file transfer request etc..) is received, the following methods may be used to inform you about it. Please note that events about new messages only occur if it is a new message from a contact you are not already chatting with"
-msgstr "Når en ny hendelse (melding, fil overføring osv.) blir motatt, vil følgende metoder kunne bli brukt for å informere deg om det. Vennligst merk at ny melding hendelser vil bare skje dersom du får en ny melding fra en kontakt du ikke er i samtale med."
+msgid ""
+"When a new event (message, file transfer request etc..) is received, the "
+"following methods may be used to inform you about it. Please note that "
+"events about new messages only occur if it is a new message from a contact "
+"you are not already chatting with"
+msgstr ""
+"Når en ny hendelse (melding, fil overføring osv.) blir motatt, vil følgende "
+"metoder kunne bli brukt for å informere deg om det. Vennligst merk at ny "
+"melding hendelser vil bare skje dersom du får en ny melding fra en kontakt "
+"du ikke er i samtale med."
 
 #: ../data/glade/preferences_window.glade.h:84
 msgid "When new event is received"
 msgstr "Når en ny hendelse blir motatt"
 
 #: ../data/glade/preferences_window.glade.h:85
-msgid "Works for Rhythmbox and Muine players. For more players, please visit http://trac.gajim.org/wiki/GajimAndMusicPlayer"
-msgstr "Virker for Rhythmbox og Muine avspillere. For flere avspillere kan du besøke http://trac.gajim.org/wiki/GajimAndMusicPlayer"
+msgid ""
+"Works for Rhythmbox and Muine players. For more players, please visit http://"
+"trac.gajim.org/wiki/GajimAndMusicPlayer"
+msgstr ""
+"Virker for Rhythmbox og Muine avspillere. For flere avspillere kan du besøke "
+"http://trac.gajim.org/wiki/GajimAndMusicPlayer"
 
 #: ../data/glade/preferences_window.glade.h:86
 msgid "_Advanced Notifications Control..."
@@ -1628,8 +1850,7 @@ msgstr "JabberID"
 msgid "Order:"
 msgstr "Rekkefølge:"
 
-#: ../data/glade/privacy_list_window.glade.h:11
-#: ../src/dialogs.py:1841
+#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1841
 msgid "Privacy List"
 msgstr "Liste over Utestengte"
 
@@ -1782,8 +2003,7 @@ msgid "Prefix:"
 msgstr "Tittel:"
 
 #: ../data/glade/profile_window.glade.h:30
-#: ../data/glade/vcard_information_window.glade.h:37
-#: ../src/vcard.py:273
+#: ../data/glade/vcard_information_window.glade.h:37 ../src/vcard.py:273
 msgid "Role:"
 msgstr "Rolle:"
 
@@ -1878,8 +2098,7 @@ msgstr "_Forby han/henne å se min status"
 
 #. Remove group
 #: ../data/glade/roster_contact_context_menu.glade.h:14
-#: ../src/roster_window.py:1948
-#: ../src/roster_window.py:2045
+#: ../src/roster_window.py:1948 ../src/roster_window.py:2045
 #: ../src/roster_window.py:2152
 msgid "_Remove from Roster"
 msgstr "_Fjern fra Kontaktliste"
@@ -1934,8 +2153,7 @@ msgstr "_Innhold"
 msgid "_Discover Services"
 msgstr "_Oppdag Tjenester"
 
-#: ../data/glade/roster_window.glade.h:14
-#: ../src/disco.py:1255
+#: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1255
 #: ../src/roster_window.py:2123
 msgid "_Edit"
 msgstr "_Rediger"
@@ -2080,8 +2298,7 @@ msgstr "Kontakt"
 
 #: ../data/glade/vcard_information_window.glade.h:23
 #: ../data/glade/zeroconf_information_window.glade.h:4
-#: ../data/glade/zeroconf_properties_window.glade.h:13
-#: ../src/dialogs.py:416
+#: ../data/glade/zeroconf_properties_window.glade.h:13 ../src/dialogs.py:416
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
@@ -2160,10 +2377,12 @@ msgstr "Personlige"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:11
 msgid ""
-"If the default port that is used for incoming messages is unfitting for your setup you can select another one here.\n"
+"If the default port that is used for incoming messages is unfitting for your "
+"setup you can select another one here.\n"
 "You might consider to change possible firewall settings."
 msgstr ""
-"Dersom standard porten som brukes til inngående meldinger ikke passer for ditt oppsett kan du velge en annen her.\n"
+"Dersom standard porten som brukes til inngående meldinger ikke passer for "
+"ditt oppsett kan du velge en annen her.\n"
 "Du kan også vurdere å endre mulige brannmur innstillinger."
 
 #: ../data/glade/zeroconf_properties_window.glade.h:15
@@ -2289,14 +2508,19 @@ msgstr "Svensk"
 msgid "Chinese (Ch)"
 msgstr "Kinesisk (Ch)"
 
-#: ../src/chat_control.py:201
-#: ../src/dialogs.py:1497
+#: ../src/chat_control.py:201 ../src/dialogs.py:1497
 msgid ""
-"If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n"
+"If that is not your language for which you want to highlight misspelled "
+"words, then please set your $LANG as appropriate. Eg. for French do export "
+"LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it "
+"global in /etc/profile.\n"
 "\n"
 "Highlighting misspelled words feature will not be used"
 msgstr ""
-"Dersom dette ikke er språket du ønsker å utheve feilstavede ord i, så vennligst endre $LANG slik at det stemmer. For eksempel for Fransk gjør du export LANG=fr_FR eller export LANG=fr_FR.UTF-8 i ~/.bash_profile eller i den globale /etc/profile.\n"
+"Dersom dette ikke er språket du ønsker å utheve feilstavede ord i, så "
+"vennligst endre $LANG slik at det stemmer. For eksempel for Fransk gjør du "
+"export LANG=fr_FR eller export LANG=fr_FR.UTF-8 i ~/.bash_profile eller i "
+"den globale /etc/profile.\n"
 "\n"
 "Utheving av feilstavede ord funksjonen vil ikke bli brukt."
 
@@ -2305,351 +2529,334 @@ msgid "Spelling language"
 msgstr "Stavekontroll språk"
 
 #. we are not connected
-#: ../src/chat_control.py:262
-#: ../src/chat_control.py:468
+#: ../src/chat_control.py:262 ../src/chat_control.py:468
 msgid "A connection is not available"
 msgstr "Tilkobling ikke tilgjengelig"
 
-#: ../src/chat_control.py:263
-#: ../src/chat_control.py:469
+#: ../src/chat_control.py:263 ../src/chat_control.py:469
 msgid "Your message can not be sent until you are connected."
 msgstr "Meldingen din kan ikke sendes før du er tilkoblet."
 
-#: ../src/chat_control.py:839
+#: ../src/chat_control.py:844
 msgid "Chats"
 msgstr "Samtaler"
 
-#: ../src/chat_control.py:1025
+#: ../src/chat_control.py:1030
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s fra gruppesamtale %(room_name)s"
 
 #. we talk about a contact here
-#: ../src/chat_control.py:1113
+#: ../src/chat_control.py:1118
 #, python-format
 msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 msgstr "%s har ikke publisert en OpenPGP nøkkel og du har ikke tilegnet en"
 
-#: ../src/chat_control.py:1239
+#: ../src/chat_control.py:1254
 msgid "Encryption enabled"
 msgstr "Kryptering påslått"
 
-#: ../src/chat_control.py:1244
+#: ../src/chat_control.py:1259
 msgid "Encryption disabled"
 msgstr "Kryptering avslått"
 
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1386
-#: ../src/conversation_textview.py:487
-#: ../src/dialogs.py:629
-#: ../src/gajim.py:725
-#: ../src/gajim.py:726
-#: ../src/gajim.py:1065
-#: ../src/roster_window.py:328
-#: ../src/roster_window.py:404
-#: ../src/roster_window.py:1642
-#: ../src/roster_window.py:1823
-#: ../src/roster_window.py:2399
-#: ../src/roster_window.py:2598
-#: ../src/roster_window.py:2609
-#: ../src/roster_window.py:3831
-#: ../src/roster_window.py:3833
-#: ../src/common/contacts.py:73
-#: ../src/common/helpers.py:42
+#: ../src/chat_control.py:1401 ../src/conversation_textview.py:495
+#: ../src/dialogs.py:629 ../src/gajim.py:733 ../src/gajim.py:734
+#: ../src/gajim.py:1073 ../src/roster_window.py:328
+#: ../src/roster_window.py:404 ../src/roster_window.py:1642
+#: ../src/roster_window.py:1823 ../src/roster_window.py:2399
+#: ../src/roster_window.py:2598 ../src/roster_window.py:2609
+#: ../src/roster_window.py:3831 ../src/roster_window.py:3833
+#: ../src/common/contacts.py:73 ../src/common/helpers.py:42
 #: ../src/common/helpers.py:246
 msgid "Not in Roster"
 msgstr "ikke i kontaktliste"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:1530
+#: ../src/chat_control.py:1545
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Du fikk akkurat en ny melding fra \"%s\""
 
-#: ../src/chat_control.py:1531
-msgid "If you close this tab and you have history disabled, this message will be lost."
-msgstr "Dersom du lukker vinduet og du har slått av historikk, så vil meldingen bli mistet."
+#: ../src/chat_control.py:1546
+msgid ""
+"If you close this tab and you have history disabled, this message will be "
+"lost."
+msgstr ""
+"Dersom du lukker vinduet og du har slått av historikk, så vil meldingen bli "
+"mistet."
 
-#: ../src/config.py:129
-#: ../src/config.py:588
+#: ../src/config.py:135 ../src/config.py:594
 msgid "Disabled"
 msgstr "Deaktivert"
 
-#: ../src/config.py:215
+#: ../src/config.py:221
 #, python-format
 msgid "Every %s _minutes"
 msgstr "Hvert %s _minutt"
 
-#: ../src/config.py:357
+#: ../src/config.py:363
 msgid "Active"
 msgstr "Aktiv"
 
-#: ../src/config.py:365
+#: ../src/config.py:371
 msgid "Event"
 msgstr "Hendelse"
 
-#: ../src/config.py:678
-#: ../src/gajim.py:2072
+#: ../src/config.py:684 ../src/gajim.py:2094
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "Ordliste for språk %s er ikke tilgjengelig"
 
-#: ../src/config.py:679
-#: ../src/gajim.py:2073
+#: ../src/config.py:685 ../src/gajim.py:2095
 #, python-format
-msgid "You have to install %s dictionary to use spellchecking, or choose another language by setting the speller_language option."
-msgstr "Du må installere %s ordbok for å bruke stavekontroll, eller velge et annet språk ved å sette stavekontro_llspråk valget."
+msgid ""
+"You have to install %s dictionary to use spellchecking, or choose another "
+"language by setting the speller_language option."
+msgstr ""
+"Du må installere %s ordbok for å bruke stavekontroll, eller velge et annet "
+"språk ved å sette stavekontro_llspråk valget."
 
-#: ../src/config.py:1031
+#: ../src/config.py:1037
 msgid "status message title"
 msgstr "status melding tittel"
 
-#: ../src/config.py:1031
+#: ../src/config.py:1037
 msgid "status message text"
 msgstr "status melding tekst"
 
-#: ../src/config.py:1066
+#: ../src/config.py:1072
 msgid "First Message Received"
 msgstr "Første Melding Motatt"
 
-#: ../src/config.py:1067
+#: ../src/config.py:1073
 msgid "Next Message Received"
 msgstr "Neste Melding Motatt"
 
-#: ../src/config.py:1068
+#: ../src/config.py:1074
 msgid "Contact Connected"
 msgstr "Kontakt Koblet til"
 
-#: ../src/config.py:1069
+#: ../src/config.py:1075
 msgid "Contact Disconnected"
 msgstr "Kontakt Frakoblet"
 
-#: ../src/config.py:1070
+#: ../src/config.py:1076
 msgid "Message Sent"
 msgstr "Melding Sendt"
 
-#: ../src/config.py:1071
+#: ../src/config.py:1077
 msgid "Group Chat Message Highlight"
 msgstr "Gruppe Samtale Melding Utheving"
 
-#: ../src/config.py:1072
+#: ../src/config.py:1078
 msgid "Group Chat Message Received"
 msgstr "Gruppe Samtale Melding Motatt"
 
-#: ../src/config.py:1079
+#: ../src/config.py:1085
 msgid "GMail Email Received"
 msgstr "Gmail E-post Motatt"
 
-#: ../src/config.py:1282
+#: ../src/config.py:1288
 msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP er ikke tilgjenglig på denne maskinen"
 
-#: ../src/config.py:1328
+#: ../src/config.py:1334
 msgid "You are currently connected to the server"
 msgstr "Du er for øyeblikket tilkoblet til serveren"
 
-#: ../src/config.py:1329
+#: ../src/config.py:1335
 msgid "To change the account name, you must be disconnected."
 msgstr "For å endre konto navnet må du ikke være tilkoblet."
 
-#: ../src/config.py:1332
-#: ../src/config.py:1924
+#: ../src/config.py:1338 ../src/config.py:1930
 msgid "Unread events"
 msgstr "Uleste hendelser"
 
-#: ../src/config.py:1333
+#: ../src/config.py:1339
 msgid "To change the account name, you must read all pending events."
 msgstr "For å endre konto navnet må du lese alle ventende hendelser."
 
-#: ../src/config.py:1337
+#: ../src/config.py:1343
 msgid "Account Name Already Used"
 msgstr "Konto Navnet er Allerede i Bruk"
 
-#: ../src/config.py:1338
-msgid "This name is already used by another of your accounts. Please choose another name."
-msgstr "Dette navnet er allerede i bruk av en annen av dine kontoer. Vennligst velg et annet navn."
+#: ../src/config.py:1344
+msgid ""
+"This name is already used by another of your accounts. Please choose another "
+"name."
+msgstr ""
+"Dette navnet er allerede i bruk av en annen av dine kontoer. Vennligst velg "
+"et annet navn."
 
-#: ../src/config.py:1342
-#: ../src/config.py:1346
+#: ../src/config.py:1348 ../src/config.py:1352
 msgid "Invalid account name"
 msgstr "Ugyldig konto navn"
 
-#: ../src/config.py:1343
+#: ../src/config.py:1349
 msgid "Account name cannot be empty."
 msgstr "Konto navn kan ikke være tomt."
 
-#: ../src/config.py:1347
+#: ../src/config.py:1353
 msgid "Account name cannot contain spaces."
 msgstr "Konto navn kan ikke inneholde mellomrom."
 
-#: ../src/config.py:1355
-#: ../src/config.py:1361
-#: ../src/config.py:1371
-#: ../src/config.py:3029
+#: ../src/config.py:1361 ../src/config.py:1367 ../src/config.py:1377
+#: ../src/config.py:3035
 msgid "Invalid Jabber ID"
 msgstr "Ugyldig Jabber ID"
 
-#: ../src/config.py:1362
+#: ../src/config.py:1368
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "En Jabber ID må skrives som \"bruker@servernavn\"."
 
-#: ../src/config.py:1421
+#: ../src/config.py:1427
 msgid "Invalid entry"
 msgstr "Ugyldig innlegg"
 
-#: ../src/config.py:1422
+#: ../src/config.py:1428
 msgid "Custom port must be a port number."
 msgstr "Egendefinert port må være et port nummer"
 
-#: ../src/config.py:1548
-#: ../src/common/config.py:363
+#: ../src/config.py:1554 ../src/common/config.py:363
 msgid "Be right back."
 msgstr "Snart tilbake."
 
-#: ../src/config.py:1558
+#: ../src/config.py:1564
 msgid "Relogin now?"
 msgstr "Logge inn på nytt nå?"
 
-#: ../src/config.py:1559
+#: ../src/config.py:1565
 msgid "If you want all the changes to apply instantly, you must relogin."
-msgstr "Dersom du ønsker at endringene skal tre i kraft umiddelbart, må du logge inn på nytt."
+msgstr ""
+"Dersom du ønsker at endringene skal tre i kraft umiddelbart, må du logge inn "
+"på nytt."
 
-#: ../src/config.py:1585
+#: ../src/config.py:1591
 msgid "No such account available"
 msgstr "Ingen slik konto tilgjengelig"
 
-#: ../src/config.py:1586
+#: ../src/config.py:1592
 msgid "You must create your account before editing your personal information."
 msgstr "Du må lage en konto før du kan redigere din personlige informasjon."
 
-#: ../src/config.py:1593
-#: ../src/dialogs.py:1128
-#: ../src/dialogs.py:1297
-#: ../src/disco.py:417
-#: ../src/profile_window.py:307
+#: ../src/config.py:1599 ../src/dialogs.py:1128 ../src/dialogs.py:1297
+#: ../src/disco.py:417 ../src/profile_window.py:307
 #: ../src/profile_window.py:373
 msgid "You are not connected to the server"
 msgstr "Du er ikke tilkoblet til serveren"
 
-#: ../src/config.py:1594
+#: ../src/config.py:1600
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Du kan ikke endre din personlige informasjon uten å være tilkoblet."
 
-#: ../src/config.py:1598
+#: ../src/config.py:1604
 msgid "Your server doesn't support Vcard"
 msgstr "Din server støtter ikke Vcard"
 
-#: ../src/config.py:1599
+#: ../src/config.py:1605
 msgid "Your server can't save your personal information."
 msgstr "Din server kan ikke lagre din personlige informasjon."
 
-#: ../src/config.py:1623
-#: ../src/config.py:3416
+#: ../src/config.py:1629 ../src/config.py:3422
 msgid "Failed to get secret keys"
 msgstr "Klarte ikke å hente hemmelig nøkkel"
 
-#: ../src/config.py:1624
-#: ../src/config.py:3417
+#: ../src/config.py:1630 ../src/config.py:3423
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Det oppsto et problem ved henting av dine OpenPGP nøkler."
 
-#: ../src/config.py:1627
-#: ../src/config.py:3420
+#: ../src/config.py:1633 ../src/config.py:3426
 msgid "OpenPGP Key Selection"
 msgstr "OpenPGP Nøkkel Valg"
 
-#: ../src/config.py:1628
-#: ../src/config.py:3421
+#: ../src/config.py:1634 ../src/config.py:3427
 msgid "Choose your OpenPGP key"
 msgstr "Velg din OpenPGP nøkkel"
 
 #. Name column
-#: ../src/config.py:1858
-#: ../src/disco.py:740
-#: ../src/disco.py:1466
-#: ../src/disco.py:1704
-#: ../src/history_window.py:78
+#: ../src/config.py:1864 ../src/disco.py:740 ../src/disco.py:1466
+#: ../src/disco.py:1704 ../src/history_window.py:78
 msgid "Name"
 msgstr "Navn"
 
-#: ../src/config.py:1861
+#: ../src/config.py:1867
 msgid "Server"
 msgstr "Server"
 
-#: ../src/config.py:1925
+#: ../src/config.py:1931
 msgid "Read all pending events before removing this account."
 msgstr "Les alle ventende meldinger før du fjerner denne kontoen."
 
-#: ../src/config.py:1962
+#: ../src/config.py:1968
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "Du har åpne samtaler på konto %s"
 
-#: ../src/config.py:1963
+#: ../src/config.py:1969
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "Alle samtaler og gruppesamtaler vil bli lukket. Ønsker du å fortsette?"
 
-#: ../src/config.py:2022
+#: ../src/config.py:2028
 msgid "Account Local already exists."
 msgstr "Konto Lokal eksisterer allerede."
 
-#: ../src/config.py:2023
+#: ../src/config.py:2029
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "Vennligst omdøp eller fjern den før du slår på link-lokal meldinger."
 
-#: ../src/config.py:2255
+#: ../src/config.py:2261
 #, python-format
 msgid "Edit %s"
 msgstr "Rediger %s"
 
-#: ../src/config.py:2257
+#: ../src/config.py:2263
 #, python-format
 msgid "Register to %s"
 msgstr "Registrer til %s"
 
 #. list at the begining
-#: ../src/config.py:2329
+#: ../src/config.py:2335
 msgid "Ban List"
 msgstr "Listen over Utestengte"
 
-#: ../src/config.py:2330
+#: ../src/config.py:2336
 msgid "Member List"
 msgstr "Medlems Liste"
 
-#: ../src/config.py:2331
+#: ../src/config.py:2337
 msgid "Owner List"
 msgstr "Eier Liste"
 
-#: ../src/config.py:2332
+#: ../src/config.py:2338
 msgid "Administrator List"
 msgstr "Administrator Liste"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2365
-#: ../src/disco.py:747
-#: ../src/history_manager.py:154
+#: ../src/config.py:2371 ../src/disco.py:747 ../src/history_manager.py:154
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2373
+#: ../src/config.py:2379
 msgid "Reason"
 msgstr "Grunn"
 
-#: ../src/config.py:2378
+#: ../src/config.py:2384
 msgid "Nick"
 msgstr "Kallenavn"
 
-#: ../src/config.py:2382
+#: ../src/config.py:2388
 msgid "Role"
 msgstr "Rolle"
 
-#: ../src/config.py:2403
+#: ../src/config.py:2409
 msgid "Banning..."
 msgstr "Utvis..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2405
+#: ../src/config.py:2411
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2657,11 +2864,11 @@ msgstr ""
 "<b>Hvem ønsker du å utvise?</b>\n"
 "\n"
 
-#: ../src/config.py:2407
+#: ../src/config.py:2413
 msgid "Adding Member..."
 msgstr "Legger til Medlem..."
 
-#: ../src/config.py:2408
+#: ../src/config.py:2414
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2669,11 +2876,11 @@ msgstr ""
 "<b>Hvem ønsker du å gjøre til medlem?</b>\n"
 "\n"
 
-#: ../src/config.py:2410
+#: ../src/config.py:2416
 msgid "Adding Owner..."
 msgstr "Legger til Eier..."
 
-#: ../src/config.py:2411
+#: ../src/config.py:2417
 msgid ""
 "<b>Whom do you want to make a owner?</b>\n"
 "\n"
@@ -2681,11 +2888,11 @@ msgstr ""
 "<b>Hvem ønsker du å gjøre til eier?</b>\n"
 "\n"
 
-#: ../src/config.py:2413
+#: ../src/config.py:2419
 msgid "Adding Administrator..."
 msgstr "Legger til Administrator..."
 
-#: ../src/config.py:2414
+#: ../src/config.py:2420
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2693,7 +2900,7 @@ msgstr ""
 "<b>Hvem ønsker du å gjøre til administrator?</b>\n"
 "\n"
 
-#: ../src/config.py:2415
+#: ../src/config.py:2421
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2709,173 +2916,185 @@ msgstr ""
 "4. domene (domene selv treffer, smt treffer alle bruker@domene,\n"
 "domene/ressurs, eller adresser i et underdomene."
 
-#: ../src/config.py:2520
+#: ../src/config.py:2526
 #, python-format
 msgid "Removing %s account"
 msgstr "Fjerner %s kontoen"
 
-#: ../src/config.py:2537
-#: ../src/roster_window.py:2667
+#: ../src/config.py:2543 ../src/roster_window.py:2667
 msgid "Password Required"
 msgstr "Krever Passord"
 
-#: ../src/config.py:2538
-#: ../src/roster_window.py:2668
+#: ../src/config.py:2544 ../src/roster_window.py:2668
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Skriv inn passord for kontoen %s"
 
-#: ../src/config.py:2539
-#: ../src/roster_window.py:2669
+#: ../src/config.py:2545 ../src/roster_window.py:2669
 msgid "Save password"
 msgstr "Lagre passord"
 
-#: ../src/config.py:2553
+#: ../src/config.py:2559
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Kontoen \"%s\" er tilkoblet til serveren"
 
-#: ../src/config.py:2554
+#: ../src/config.py:2560
 msgid "If you remove it, the connection will be lost."
 msgstr "Dersom du fjerner den vil tilkoblingen mistes."
 
-#: ../src/config.py:2638
+#: ../src/config.py:2644
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/config.py:2638
+#: ../src/config.py:2644
 msgid "?print_status:All"
 msgstr "?print_status:Alle"
 
-#: ../src/config.py:2639
+#: ../src/config.py:2645
 msgid "Enter and leave only"
 msgstr "Gå inn og legg igjen bare"
 
-#: ../src/config.py:2709
+#: ../src/config.py:2715
 msgid "New Group Chat"
 msgstr "Ny Gruppesamtale"
 
-#: ../src/config.py:2741
+#: ../src/config.py:2747
 msgid "This bookmark has invalid data"
 msgstr "Dette bokmerket har ugyldig innhold"
 
-#: ../src/config.py:2742
-msgid "Please be sure to fill out server and room fields or remove this bookmark."
+#: ../src/config.py:2748
+msgid ""
+"Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "Vennligst fyll inn server og rom feltene for å fjerne dette bokmerket."
 
-#: ../src/config.py:3004
+#: ../src/config.py:3010
 msgid "Invalid username"
 msgstr "Ugyldig brukernavn"
 
-#: ../src/config.py:3005
+#: ../src/config.py:3011
 msgid "You must provide a username to configure this account."
 msgstr "Du må oppgi et brukernavn for å konfigurere denne kontoen."
 
-#: ../src/config.py:3015
-#: ../src/dialogs.py:1316
+#: ../src/config.py:3021 ../src/dialogs.py:1316
 msgid "Invalid password"
 msgstr "Ugyldig passord"
 
-#: ../src/config.py:3016
+#: ../src/config.py:3022
 msgid "You must enter a password for the new account."
 msgstr "Du må skrive inn et passord for den nye kontoen"
 
-#: ../src/config.py:3020
-#: ../src/dialogs.py:1321
+#: ../src/config.py:3026 ../src/dialogs.py:1321
 msgid "Passwords do not match"
 msgstr "Passordene er ikke like"
 
-#: ../src/config.py:3021
-#: ../src/dialogs.py:1322
+#: ../src/config.py:3027 ../src/dialogs.py:1322
 msgid "The passwords typed in both fields must be identical."
 msgstr "Passordene du skriver inn i begge felt må være identiske."
 
-#: ../src/config.py:3040
+#: ../src/config.py:3046
 msgid "Duplicate Jabber ID"
 msgstr "Duplikat Jabber ID"
 
-#: ../src/config.py:3041
+#: ../src/config.py:3047
 msgid "This account is already configured in Gajim."
 msgstr "Kontakten er allerede konfigurert i Gajim."
 
-#: ../src/config.py:3058
+#: ../src/config.py:3064
 msgid "Account has been added successfully"
 msgstr "Kontoen har blitt lagt til uten feilmeldinger"
 
-#: ../src/config.py:3059
-#: ../src/config.py:3094
-msgid "You can set advanced account options by pressing Advanced button, or later by clicking in Accounts menuitem under Edit menu from the main window."
-msgstr "Du kan sette avanserte konto instillinger ved å trykke på Avansert knappen, eller senere ved å klikke under Kontoer menyvalget, under Rediger menyen fra hovedvinduet."
+#: ../src/config.py:3065 ../src/config.py:3100
+msgid ""
+"You can set advanced account options by pressing Advanced button, or later "
+"by clicking in Accounts menuitem under Edit menu from the main window."
+msgstr ""
+"Du kan sette avanserte konto instillinger ved å trykke på Avansert knappen, "
+"eller senere ved å klikke under Kontoer menyvalget, under Rediger menyen fra "
+"hovedvinduet."
 
-#: ../src/config.py:3093
+#: ../src/config.py:3099
 msgid "Your new account has been created successfully"
 msgstr "Din nye konto har blitt opprettet uten feilmeldinger"
 
-#: ../src/config.py:3111
+#: ../src/config.py:3117
 msgid "An error occured during account creation"
 msgstr "Det skjedde en feil ved oppretting av kontoen"
 
-#: ../src/config.py:3169
+#: ../src/config.py:3175
 msgid "Account name is in use"
 msgstr "Konto navnet er i bruk"
 
-#: ../src/config.py:3170
+#: ../src/config.py:3176
 msgid "You already have an account using this name."
 msgstr "Du har allerede en konto med dette navnet."
 
-#: ../src/conversation_textview.py:271
-msgid "Text below this line is what has been said since the last time you paid attention to this group chat"
-msgstr "Tekst under denne linjen er hva som har blitt sagt siden sist du fulgte med i denne gruppe samtalen"
+#: ../src/conversation_textview.py:273
+msgid ""
+"Text below this line is what has been said since the last time you paid "
+"attention to this group chat"
+msgstr ""
+"Tekst under denne linjen er hva som har blitt sagt siden sist du fulgte med "
+"i denne gruppe samtalen"
 
-#: ../src/conversation_textview.py:340
+#: ../src/conversation_textview.py:342
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_Handlinger for \"%s\""
 
-#: ../src/conversation_textview.py:352
+#: ../src/conversation_textview.py:354
 msgid "Read _Wikipedia Article"
 msgstr "Les_Wikipedia Artikkel"
 
-#: ../src/conversation_textview.py:357
+#: ../src/conversation_textview.py:359
 msgid "Look it up in _Dictionary"
 msgstr "Slå det opp i _Ordbok"
 
 #. we must have %s in the url if not WIKTIONARY
-#: ../src/conversation_textview.py:373
+#: ../src/conversation_textview.py:375
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "Ordbok URL mangler en \"%s\" og den må ikke være WIKTIONARY"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:386
+#: ../src/conversation_textview.py:388
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "Web Søk URL mangler en \"%s\""
 
-#: ../src/conversation_textview.py:389
+#: ../src/conversation_textview.py:391
 msgid "Web _Search for it"
 msgstr "Web _Søk etter den"
 
-#: ../src/conversation_textview.py:395
+#: ../src/conversation_textview.py:397
 msgid "Open as _Link"
 msgstr "Åpne som _Link"
 
-#: ../src/conversation_textview.py:752
+#: ../src/conversation_textview.py:757
 msgid "Yesterday"
 msgstr "I går"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
-#: ../src/conversation_textview.py:756
+#: ../src/conversation_textview.py:761
 #, python-format
 msgid "%i days ago"
 msgstr "%i dager siden"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:788
+#: ../src/conversation_textview.py:793
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Tittel: %s\n"
+
+#. form is single
+#: ../src/dataforms_widget.py:72
+msgid "This is result of query."
+msgstr ""
+
+#: ../src/dataforms_widget.py:78
+msgid "Edit items on the list"
+msgstr ""
 
 #: ../src/dialogs.py:59
 #, python-format
@@ -2943,31 +3162,23 @@ msgstr "Yahoo Adresse:"
 #: ../src/dialogs.py:457
 #, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
-msgstr "Vennligst fyll inn dataene til kontakten du ønsker å legge til kontoen %s"
+msgstr ""
+"Vennligst fyll inn dataene til kontakten du ønsker å legge til kontoen %s"
 
 #: ../src/dialogs.py:459
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Vennligst fyll inn dataene til kontakten du ønsker å legge til"
 
-#: ../src/dialogs.py:467
-#: ../src/disco.py:102
-#: ../src/disco.py:103
-#: ../src/disco.py:1252
-#: ../src/gajim.py:490
-#: ../src/roster_window.py:267
-#: ../src/roster_window.py:325
-#: ../src/roster_window.py:364
-#: ../src/roster_window.py:445
-#: ../src/roster_window.py:477
-#: ../src/roster_window.py:479
-#: ../src/roster_window.py:3827
-#: ../src/roster_window.py:3829
-#: ../src/common/helpers.py:42
+#: ../src/dialogs.py:467 ../src/disco.py:102 ../src/disco.py:103
+#: ../src/disco.py:1252 ../src/gajim.py:491 ../src/roster_window.py:267
+#: ../src/roster_window.py:325 ../src/roster_window.py:364
+#: ../src/roster_window.py:445 ../src/roster_window.py:477
+#: ../src/roster_window.py:479 ../src/roster_window.py:3827
+#: ../src/roster_window.py:3829 ../src/common/helpers.py:42
 msgid "Transports"
 msgstr "Transporter"
 
-#: ../src/dialogs.py:609
-#: ../src/dialogs.py:615
+#: ../src/dialogs.py:609 ../src/dialogs.py:615
 msgid "Invalid User ID"
 msgstr "Ugyldig Bruker ID"
 
@@ -3015,7 +3226,8 @@ msgstr "TUSEN TAKK:"
 #. and add it manually as translatable
 #: ../src/dialogs.py:762
 msgid "Last but not least, we would like to thank all the package maintainers."
-msgstr "Sist men ikke minst ønsker vi å takke alle de som lager installasjonspakker."
+msgstr ""
+"Sist men ikke minst ønsker vi å takke alle de som lager installasjonspakker."
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:776
@@ -3028,8 +3240,12 @@ msgid "Unable to bind to port %s."
 msgstr "Klarer ikke å lytte til port %s."
 
 #: ../src/dialogs.py:907
-msgid "Maybe you have another running instance of Gajim. File Transfer will be canceled."
-msgstr "Kanskje du har en annen kjørende instans av Gajim. Filoverføring vil bli avbrutt."
+msgid ""
+"Maybe you have another running instance of Gajim. File Transfer will be "
+"canceled."
+msgstr ""
+"Kanskje du har en annen kjørende instans av Gajim. Filoverføring vil bli "
+"avbrutt."
 
 #: ../src/dialogs.py:1058
 #, python-format
@@ -3041,8 +3257,7 @@ msgstr "Abonnerings ønske for konto %s fra %s"
 msgid "Subscription request from %s"
 msgstr "Abonnerings ønske fra %s"
 
-#: ../src/dialogs.py:1121
-#: ../src/roster_window.py:681
+#: ../src/dialogs.py:1121 ../src/roster_window.py:681
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Du er allerede i gruppesamtale %s"
@@ -3056,13 +3271,11 @@ msgstr "Du kan ikke gå inn i en gruppe samtale uten å være tilkoblet."
 msgid "Join Group Chat with account %s"
 msgstr "Bli med i samtalegruppe med konto %s"
 
-#: ../src/dialogs.py:1212
-#: ../src/dialogs.py:1218
+#: ../src/dialogs.py:1212 ../src/dialogs.py:1218
 msgid "Invalid group chat Jabber ID"
 msgstr "Ugyldig gruppesamtale Jabber ID"
 
-#: ../src/dialogs.py:1213
-#: ../src/dialogs.py:1219
+#: ../src/dialogs.py:1213 ../src/dialogs.py:1219
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "Gruppesamtalens Jabber ID inneholder ulovlige symboler."
 
@@ -3093,21 +3306,16 @@ msgstr ""
 "å sende en samtale melding til:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:1276
-#: ../src/dialogs.py:1635
-#: ../src/dialogs.py:1764
+#: ../src/dialogs.py:1276 ../src/dialogs.py:1635 ../src/dialogs.py:1764
 msgid "Connection not available"
 msgstr "Tilkobling ikke tilgjengelig"
 
-#: ../src/dialogs.py:1277
-#: ../src/dialogs.py:1636
-#: ../src/dialogs.py:1765
+#: ../src/dialogs.py:1277 ../src/dialogs.py:1636 ../src/dialogs.py:1765
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Vennligst sjekk at du er tilkoblet med \"%s\"."
 
-#: ../src/dialogs.py:1286
-#: ../src/dialogs.py:1289
+#: ../src/dialogs.py:1286 ../src/dialogs.py:1289
 msgid "Invalid JID"
 msgstr "Ugyldig JID"
 
@@ -3126,81 +3334,56 @@ msgstr "Du må skrive inn et passord."
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:1364
-#: ../src/notify.py:211
-#: ../src/notify.py:411
+#: ../src/dialogs.py:1364 ../src/notify.py:211 ../src/notify.py:411
 msgid "Contact Signed In"
 msgstr "Kontakt Logget På"
 
-#: ../src/dialogs.py:1366
-#: ../src/notify.py:219
-#: ../src/notify.py:413
+#: ../src/dialogs.py:1366 ../src/notify.py:219 ../src/notify.py:413
 msgid "Contact Signed Out"
 msgstr "Kontakt Logget Av"
 
 #. chat message
-#: ../src/dialogs.py:1368
-#: ../src/notify.py:238
-#: ../src/notify.py:415
+#: ../src/dialogs.py:1368 ../src/notify.py:238 ../src/notify.py:415
 msgid "New Message"
 msgstr "Ny Melding"
 
 #. single message
-#: ../src/dialogs.py:1368
-#: ../src/notify.py:223
-#: ../src/notify.py:415
+#: ../src/dialogs.py:1368 ../src/notify.py:223 ../src/notify.py:415
 msgid "New Single Message"
 msgstr "Ny Melding"
 
 #. private message
-#: ../src/dialogs.py:1369
-#: ../src/notify.py:230
-#: ../src/notify.py:416
+#: ../src/dialogs.py:1369 ../src/notify.py:230 ../src/notify.py:416
 msgid "New Private Message"
 msgstr "Ny Privat Melding"
 
-#: ../src/dialogs.py:1369
-#: ../src/gajim.py:1159
-#: ../src/notify.py:424
+#: ../src/dialogs.py:1369 ../src/gajim.py:1168 ../src/notify.py:424
 msgid "New E-mail"
 msgstr "Ny E-post"
 
-#: ../src/dialogs.py:1371
-#: ../src/gajim.py:1300
-#: ../src/notify.py:418
+#: ../src/dialogs.py:1371 ../src/gajim.py:1321 ../src/notify.py:418
 msgid "File Transfer Request"
 msgstr "Fil Overførings Forespørsel"
 
-#: ../src/dialogs.py:1373
-#: ../src/gajim.py:1132
-#: ../src/gajim.py:1276
+#: ../src/dialogs.py:1373 ../src/gajim.py:1140 ../src/gajim.py:1297
 #: ../src/notify.py:420
 msgid "File Transfer Error"
 msgstr "Fil Overføring Feilet"
 
-#: ../src/dialogs.py:1375
-#: ../src/gajim.py:1339
-#: ../src/gajim.py:1361
-#: ../src/gajim.py:1378
-#: ../src/notify.py:422
+#: ../src/dialogs.py:1375 ../src/gajim.py:1360 ../src/gajim.py:1382
+#: ../src/gajim.py:1399 ../src/notify.py:422
 msgid "File Transfer Completed"
 msgstr "Fil Overføring Komplett"
 
-#: ../src/dialogs.py:1376
-#: ../src/gajim.py:1342
-#: ../src/notify.py:422
+#: ../src/dialogs.py:1376 ../src/gajim.py:1363 ../src/notify.py:422
 msgid "File Transfer Stopped"
 msgstr "Fil Overføring Stoppet"
 
-#: ../src/dialogs.py:1378
-#: ../src/gajim.py:1030
-#: ../src/notify.py:426
+#: ../src/dialogs.py:1378 ../src/gajim.py:1038 ../src/notify.py:426
 msgid "Groupchat Invitation"
 msgstr "Gruppesamtale invitasjon"
 
-#: ../src/dialogs.py:1380
-#: ../src/notify.py:203
-#: ../src/notify.py:428
+#: ../src/dialogs.py:1380 ../src/notify.py:203 ../src/notify.py:428
 msgid "Contact Changed Status"
 msgstr "Kontakt Endret Status"
 
@@ -3311,8 +3494,7 @@ msgstr "Kommentar: %s"
 msgid "Choose Sound"
 msgstr "Velg Lyd"
 
-#: ../src/dialogs.py:2298
-#: ../src/dialogs.py:2343
+#: ../src/dialogs.py:2298 ../src/dialogs.py:2343
 msgid "All files"
 msgstr "Alle filer"
 
@@ -3378,11 +3560,14 @@ msgid "The service could not be found"
 msgstr "Tjenesten ble ikke funnet"
 
 #: ../src/disco.py:642
-msgid "There is no service at the address you entered, or it is not responding. Check the address and try again."
-msgstr "Det er ingen tjeneste på adressen du oppgav, eller den svarer ikke. Sjekk adressen og prøv igjen."
+msgid ""
+"There is no service at the address you entered, or it is not responding. "
+"Check the address and try again."
+msgstr ""
+"Det er ingen tjeneste på adressen du oppgav, eller den svarer ikke. Sjekk "
+"adressen og prøv igjen."
 
-#: ../src/disco.py:646
-#: ../src/disco.py:927
+#: ../src/disco.py:646 ../src/disco.py:927
 msgid "The service is not browsable"
 msgstr "Ikke mulig å utforske tjeneste"
 
@@ -3403,8 +3588,7 @@ msgstr "_Utforsk"
 msgid "This service does not contain any items to browse."
 msgstr "Denne tjenesten innholer ingen elementer å utforske."
 
-#: ../src/disco.py:1142
-#: ../src/disco.py:1257
+#: ../src/disco.py:1142 ../src/disco.py:1257
 msgid "Re_gister"
 msgstr "Re_gistrer"
 
@@ -3456,22 +3640,19 @@ msgstr "Tid"
 msgid "Progress"
 msgstr "Fremdrift"
 
-#: ../src/filetransfers_window.py:163
-#: ../src/filetransfers_window.py:223
+#: ../src/filetransfers_window.py:163 ../src/filetransfers_window.py:223
 #, python-format
 msgid "Filename: %s"
 msgstr "Filnavn: %s"
 
-#: ../src/filetransfers_window.py:164
-#: ../src/filetransfers_window.py:298
+#: ../src/filetransfers_window.py:164 ../src/filetransfers_window.py:298
 #, python-format
 msgid "Size: %s"
 msgstr "Størrelse: %s"
 
 #. You is a reply of who sent a file
 #. You is a reply of who received a file
-#: ../src/filetransfers_window.py:173
-#: ../src/filetransfers_window.py:183
+#: ../src/filetransfers_window.py:173 ../src/filetransfers_window.py:183
 #: ../src/history_manager.py:463
 msgid "You"
 msgstr "Du"
@@ -3481,8 +3662,7 @@ msgstr "Du"
 msgid "Sender: %s"
 msgstr "Sender: %s"
 
-#: ../src/filetransfers_window.py:175
-#: ../src/filetransfers_window.py:564
+#: ../src/filetransfers_window.py:175 ../src/filetransfers_window.py:564
 #: ../src/tooltips.py:573
 msgid "Recipient: "
 msgstr "Mottaker: "
@@ -3496,13 +3676,11 @@ msgstr "Lagret i: %s"
 msgid "File transfer completed"
 msgstr "Fil overføring komplett"
 
-#: ../src/filetransfers_window.py:204
-#: ../src/filetransfers_window.py:212
+#: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:212
 msgid "File transfer canceled"
 msgstr "Fil overføring avbrutt"
 
-#: ../src/filetransfers_window.py:204
-#: ../src/filetransfers_window.py:213
+#: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:213
 msgid "Connection with peer cannot be established."
 msgstr "Tilkoblingen kan ikke opprettes."
 
@@ -3552,35 +3730,33 @@ msgstr "Beskrivelse: %s"
 msgid "%s wants to send you a file:"
 msgstr "%s ønsker å sende deg en fil:"
 
-#: ../src/filetransfers_window.py:318
-#: ../src/gtkgui_helpers.py:682
+#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:683
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Kan ikke overskrive eksisterende fil \"%s\""
 
-#: ../src/filetransfers_window.py:319
-#: ../src/gtkgui_helpers.py:684
-msgid "A file with this name already exists and you do not have permission to overwrite it."
-msgstr "En fil med dette navnet eksisterer og du har ikke rettigheter til å overskrive den."
+#: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:685
+msgid ""
+"A file with this name already exists and you do not have permission to "
+"overwrite it."
+msgstr ""
+"En fil med dette navnet eksisterer og du har ikke rettigheter til å "
+"overskrive den."
 
-#: ../src/filetransfers_window.py:326
-#: ../src/gtkgui_helpers.py:688
+#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:689
 msgid "This file already exists"
 msgstr "Denne filen finnes fra før"
 
-#: ../src/filetransfers_window.py:326
-#: ../src/gtkgui_helpers.py:688
+#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:689
 msgid "What do you want to do?"
 msgstr "Hva ønsker du å gjøre?"
 
-#: ../src/filetransfers_window.py:338
-#: ../src/gtkgui_helpers.py:698
+#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:699
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "Katalogen \"%s\" er ikke skrivbar"
 
-#: ../src/filetransfers_window.py:338
-#: ../src/gtkgui_helpers.py:699
+#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:700
 msgid "You do not have permission to create files in this directory."
 msgstr "Du har ikke rettigheter til å lage filer i denne katalogen."
 
@@ -3604,8 +3780,7 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: ../src/filetransfers_window.py:536
-#: ../src/filetransfers_window.py:539
+#: ../src/filetransfers_window.py:536 ../src/filetransfers_window.py:539
 msgid "Invalid File"
 msgstr "Ugyldig Fil"
 
@@ -3617,13 +3792,11 @@ msgstr "Fil: "
 msgid "It is not possible to send empty files"
 msgstr "Det er ikke mulig å sende tomme filer"
 
-#: ../src/filetransfers_window.py:560
-#: ../src/tooltips.py:563
+#: ../src/filetransfers_window.py:560 ../src/tooltips.py:563
 msgid "Name: "
 msgstr "Navn: "
 
-#: ../src/filetransfers_window.py:562
-#: ../src/tooltips.py:567
+#: ../src/filetransfers_window.py:562 ../src/tooltips.py:567
 msgid "Sender: "
 msgstr "Avsender: "
 
@@ -3657,32 +3830,41 @@ msgstr "GTK+ mangler libglade støtte"
 
 #: ../src/gajim.py:62
 #, python-format
-msgid "Please remove your current GTK+ runtime and install the latest stable version from %s"
-msgstr "Vennligst fjern din gjeldende GTK+ installasjon og installer siste stabile versjon fra %s"
+msgid ""
+"Please remove your current GTK+ runtime and install the latest stable "
+"version from %s"
+msgstr ""
+"Vennligst fjern din gjeldende GTK+ installasjon og installer siste stabile "
+"versjon fra %s"
 
 #: ../src/gajim.py:64
-msgid "Please make sure that GTK+ and PyGTK have libglade support in your system."
+msgid ""
+"Please make sure that GTK+ and PyGTK have libglade support in your system."
 msgstr "Vennligst sjekk at GTK+ og PyGTK har libglade støtte på ditt system."
 
 #: ../src/gajim.py:69
 msgid "Gajim needs PySQLite2 to run"
 msgstr "Gajim trenger PySQLite2 for å kjøre"
 
-#: ../src/gajim.py:76
+#: ../src/gajim.py:77
 msgid "Gajim needs pywin32 to run"
 msgstr "Gajim trenger pywin32 for å kjøre"
 
-#: ../src/gajim.py:77
+#: ../src/gajim.py:78
 #, python-format
-msgid "Please make sure that Pywin32 is installed on your system. You can get it at %s"
-msgstr "Vennligst pass på at Pywin32 er installert på ditt system. Du kan hente den på %s"
+msgid ""
+"Please make sure that Pywin32 is installed on your system. You can get it at "
+"%s"
+msgstr ""
+"Vennligst pass på at Pywin32 er installert på ditt system. Du kan hente den "
+"på %s"
 
 #. set the icon to all newly opened wind
-#: ../src/gajim.py:189
+#: ../src/gajim.py:190
 msgid "Gajim is already running"
 msgstr "Gajim kjører allerede"
 
-#: ../src/gajim.py:190
+#: ../src/gajim.py:191
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
@@ -3690,78 +3872,76 @@ msgstr ""
 "En annen instans av Gajim ser ut til å kjøre\n"
 "Start likevel?"
 
-#: ../src/gajim.py:297
+#: ../src/gajim.py:298
 #, python-format
 msgid "HTTP (%s) Authorization for %s (id: %s)"
 msgstr "HTTP (%s) Autentisering for %s (id: %s)"
 
-#: ../src/gajim.py:298
+#: ../src/gajim.py:299
 msgid "Do you accept this request?"
 msgstr "Godtar du denne forespørselen?"
 
-#: ../src/gajim.py:344
-#: ../src/notify.py:430
+#: ../src/gajim.py:345 ../src/notify.py:430
 msgid "Connection Failed"
 msgstr "Tilkobling Feilet"
 
-#: ../src/gajim.py:656
+#: ../src/gajim.py:658
 #, python-format
 msgid "Subject: %s"
 msgstr "Tittel: %s"
 
-#: ../src/gajim.py:701
+#. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time))
+#: ../src/gajim.py:703 ../src/gajim.py:716
 #, python-format
 msgid "error while sending %s ( %s )"
 msgstr "feil ved sending %s ( %s )"
 
-#: ../src/gajim.py:741
+#: ../src/gajim.py:749
 msgid "Authorization accepted"
 msgstr "Godkjenningsforespørel akseptert"
 
-#: ../src/gajim.py:742
+#: ../src/gajim.py:750
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "Kontakten \"%s\" har godkjent at du kan se hans eller hennes status."
 
-#: ../src/gajim.py:750
+#: ../src/gajim.py:758
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Kontakten \"%s\" fjernet abonnementet fra deg"
 
-#: ../src/gajim.py:751
+#: ../src/gajim.py:759
 msgid "You will always see him or her as offline."
 msgstr "Du vil alltid se han eller henne som frakoblet."
 
-#: ../src/gajim.py:794
+#: ../src/gajim.py:802
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kontakt med \"%s\" kan ikke opprettes"
 
-#: ../src/gajim.py:795
-#: ../src/common/connection.py:395
+#: ../src/gajim.py:803 ../src/common/connection.py:395
 msgid "Check your connection or try again later."
 msgstr "Sjekk nettverkstilkoblingen eller prøv igjen senere."
 
-#: ../src/gajim.py:943
-#: ../src/roster_window.py:1201
+#: ../src/gajim.py:951 ../src/roster_window.py:1201
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s er nå %s (%s)"
 
-#: ../src/gajim.py:1040
+#: ../src/gajim.py:1048
 msgid "Your passphrase is incorrect"
 msgstr "Passord setningen din er ikke riktig"
 
-#: ../src/gajim.py:1041
+#: ../src/gajim.py:1049
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Du er nå tilkoblet uten din OpenPGP nøkkel."
 
-#: ../src/gajim.py:1143
+#: ../src/gajim.py:1151
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Ny e-post på %(gmail_mail_address)s"
 
-#: ../src/gajim.py:1145
+#: ../src/gajim.py:1153
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
@@ -3771,7 +3951,7 @@ msgstr[1] "Du har %d nye e-post samtaler"
 #. FIXME: emulate Gtalk client popups. find out what they parse and how
 #. they decide what to show
 #. each message has a 'From', 'Subject' and 'Snippet' field
-#: ../src/gajim.py:1154
+#: ../src/gajim.py:1162
 #, python-format
 msgid ""
 "\n"
@@ -3780,54 +3960,55 @@ msgstr ""
 "\n"
 "Fra: %(from_address)s"
 
-#: ../src/gajim.py:1297
+#: ../src/gajim.py:1318
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s ønsker å sende deg en fil."
 
-#: ../src/gajim.py:1362
+#: ../src/gajim.py:1383
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Du har vellykket motatt %(filename)s fra %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1366
+#: ../src/gajim.py:1387
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Fil overføring av %(filename)s fra %(name)s stoppet."
 
-#: ../src/gajim.py:1379
+#: ../src/gajim.py:1400
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Du har vellykket sendt %(filename)s til %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1383
+#: ../src/gajim.py:1404
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Fil overføring av %(filename)s til %(name)s er stoppet."
 
-#: ../src/gajim.py:1489
+#: ../src/gajim.py:1510
 msgid "Username Conflict"
 msgstr "Brukernavn Konflikt"
 
-#: ../src/gajim.py:1490
+#: ../src/gajim.py:1511
 msgid "Please type a new username for your local account"
 msgstr "Vennligst skriv inn et nytt brukernavn for din lokale konto"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:1828
+#: ../src/gajim.py:1850
 msgid "Could not save your settings and preferences"
 msgstr "Kan ikke lagre dine innstillinger og valg"
 
-#: ../src/gajim.py:2020
+#: ../src/gajim.py:2042
 msgid "Network Manager support not available"
 msgstr "Network Manager støtte er ikke tilgjengelig"
 
-#: ../src/gajim.py:2095
+#: ../src/gajim.py:2117
 msgid "Session Management support not available (missing gnome.ui module)"
-msgstr "Sesjons Administrasjons støtte ikke tilgjengelig (mangler gnome.ui modul)"
+msgstr ""
+"Sesjons Administrasjons støtte ikke tilgjengelig (mangler gnome.ui modul)"
 
 #: ../src/gajim-remote.py:66
 msgid "Shows a help on specific command"
@@ -3851,19 +4032,18 @@ msgid "Popups a window with the next pending event"
 msgstr "Aktiver nytt vindu med den neste ventende hendelsen"
 
 #: ../src/gajim-remote.py:82
-msgid "Prints a list of all contacts in the roster. Each contact appear on a separate line"
-msgstr "Skriv ut en liste over alle kontakter i kontaklisten. Hver kontakt kommer på en egen linje"
+msgid ""
+"Prints a list of all contacts in the roster. Each contact appear on a "
+"separate line"
+msgstr ""
+"Skriv ut en liste over alle kontakter i kontaklisten. Hver kontakt kommer på "
+"en egen linje"
 
-#: ../src/gajim-remote.py:84
-#: ../src/gajim-remote.py:98
-#: ../src/gajim-remote.py:108
-#: ../src/gajim-remote.py:121
-#: ../src/gajim-remote.py:135
-#: ../src/gajim-remote.py:156
-#: ../src/gajim-remote.py:186
-#: ../src/gajim-remote.py:195
-#: ../src/gajim-remote.py:202
-#: ../src/gajim-remote.py:209
+#: ../src/gajim-remote.py:84 ../src/gajim-remote.py:98
+#: ../src/gajim-remote.py:108 ../src/gajim-remote.py:121
+#: ../src/gajim-remote.py:135 ../src/gajim-remote.py:156
+#: ../src/gajim-remote.py:186 ../src/gajim-remote.py:195
+#: ../src/gajim-remote.py:202 ../src/gajim-remote.py:209
 #: ../src/gajim-remote.py:220
 msgid "account"
 msgstr "konto"
@@ -3887,10 +4067,11 @@ msgstr "status"
 
 #: ../src/gajim-remote.py:96
 msgid "one of: offline, online, chat, away, xa, dnd, invisible "
-msgstr "en av: frakoblet, tilkoblet, samtale, borte, mer borte, ikke forstyrr, usynlig"
+msgstr ""
+"en av: frakoblet, tilkoblet, samtale, borte, mer borte, ikke forstyrr, "
+"usynlig"
 
-#: ../src/gajim-remote.py:97
-#: ../src/gajim-remote.py:118
+#: ../src/gajim-remote.py:97 ../src/gajim-remote.py:118
 #: ../src/gajim-remote.py:132
 msgid "message"
 msgstr "melding"
@@ -3900,8 +4081,12 @@ msgid "status message"
 msgstr "status melding"
 
 #: ../src/gajim-remote.py:98
-msgid "change status of account \"account\". If not specified, try to change status of all accounts that have \"sync with global status\" option set"
-msgstr "endre status til konto \"konto\". Dersom uspesifisert, prøv å endre status til alle kontoer som har \"synkroniser med global status\" valget påslått"
+msgid ""
+"change status of account \"account\". If not specified, try to change status "
+"of all accounts that have \"sync with global status\" option set"
+msgstr ""
+"endre status til konto \"konto\". Dersom uspesifisert, prøv å endre status "
+"til alle kontoer som har \"synkroniser med global status\" valget påslått"
 
 #: ../src/gajim-remote.py:104
 msgid "Shows the chat dialog so that you can send messages to a contact"
@@ -3911,43 +4096,50 @@ msgstr "Vis samtale vinduet så du kan sende meldinger til en kontakt"
 msgid "JID of the contact that you want to chat with"
 msgstr "JID til kontakten du ønsker å snakke med"
 
-#: ../src/gajim-remote.py:108
-#: ../src/gajim-remote.py:186
+#: ../src/gajim-remote.py:108 ../src/gajim-remote.py:186
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "om spesifisert vil kontakten fjernes fra listen på denne kontoen"
 
 #: ../src/gajim-remote.py:113
-msgid "Sends new chat message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''."
-msgstr "Sender ny samtale melding til en kontakt i kontaktlisten. Både OpenPGP nøkkelen og konto er valgfri. Dersom du ønsker å sette bare 'konto', uten 'OpenPGP nøkkel', sett bare 'OpenPGP nøkkel' til ''."
+msgid ""
+"Sends new chat message to a contact in the roster. Both OpenPGP key and "
+"account are optional. If you want to set only 'account', without 'OpenPGP "
+"key', just set 'OpenPGP key' to ''."
+msgstr ""
+"Sender ny samtale melding til en kontakt i kontaktlisten. Både OpenPGP "
+"nøkkelen og konto er valgfri. Dersom du ønsker å sette bare 'konto', uten "
+"'OpenPGP nøkkel', sett bare 'OpenPGP nøkkel' til ''."
 
-#: ../src/gajim-remote.py:117
-#: ../src/gajim-remote.py:130
+#: ../src/gajim-remote.py:117 ../src/gajim-remote.py:130
 msgid "JID of the contact that will receive the message"
 msgstr "JID til kontakten som vil motta meldingen"
 
-#: ../src/gajim-remote.py:118
-#: ../src/gajim-remote.py:132
+#: ../src/gajim-remote.py:118 ../src/gajim-remote.py:132
 msgid "message contents"
 msgstr "meldings innhold"
 
-#: ../src/gajim-remote.py:119
-#: ../src/gajim-remote.py:133
+#: ../src/gajim-remote.py:119 ../src/gajim-remote.py:133
 msgid "pgp key"
 msgstr "pgp nøkkel"
 
-#: ../src/gajim-remote.py:119
-#: ../src/gajim-remote.py:133
+#: ../src/gajim-remote.py:119 ../src/gajim-remote.py:133
 msgid "if specified, the message will be encrypted using this public key"
-msgstr "dersom spesifisert vil meldingen bli kryptert med denne offentlige nøkkelen"
+msgstr ""
+"dersom spesifisert vil meldingen bli kryptert med denne offentlige nøkkelen"
 
-#: ../src/gajim-remote.py:121
-#: ../src/gajim-remote.py:135
+#: ../src/gajim-remote.py:121 ../src/gajim-remote.py:135
 msgid "if specified, the message will be sent using this account"
 msgstr "dersom spesifisert, vil meldingen bli sendt med denne kontoen"
 
 #: ../src/gajim-remote.py:126
-msgid "Sends new single message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''."
-msgstr "Sender ny enkelt melding til en kontakt i kontaktlisten. Både OpenPGP nøkkelen og konto er valgfritt. Dersom du ønsker å sette bare 'konto', uten 'OpenPGP nøkkel', sett bare 'OpenPGP nøkkel' til ''."
+msgid ""
+"Sends new single message to a contact in the roster. Both OpenPGP key and "
+"account are optional. If you want to set only 'account', without 'OpenPGP "
+"key', just set 'OpenPGP key' to ''."
+msgstr ""
+"Sender ny enkelt melding til en kontakt i kontaktlisten. Både OpenPGP "
+"nøkkelen og konto er valgfritt. Dersom du ønsker å sette bare 'konto', uten "
+"'OpenPGP nøkkel', sett bare 'OpenPGP nøkkel' til ''."
 
 #: ../src/gajim-remote.py:131
 msgid "subject"
@@ -3961,10 +4153,8 @@ msgstr "meldings tittel"
 msgid "Gets detailed info on a contact"
 msgstr "Henter detaljert informasjon om en kontakt"
 
-#: ../src/gajim-remote.py:142
-#: ../src/gajim-remote.py:155
-#: ../src/gajim-remote.py:185
-#: ../src/gajim-remote.py:194
+#: ../src/gajim-remote.py:142 ../src/gajim-remote.py:155
+#: ../src/gajim-remote.py:185 ../src/gajim-remote.py:194
 msgid "JID of the contact"
 msgstr "JID til kontakten"
 
@@ -4042,11 +4232,16 @@ msgstr "Legger til en ny kontakt til denne kontoen."
 
 #: ../src/gajim-remote.py:200
 msgid "Returns current status (the global one unless account is specified)"
-msgstr "Returnerer innstillinger (globale innstillinger om ikke en konto er spesifisert)"
+msgstr ""
+"Returnerer innstillinger (globale innstillinger om ikke en konto er "
+"spesifisert)"
 
 #: ../src/gajim-remote.py:207
-msgid "Returns current status message(the global one unless account is specified)"
-msgstr "Returnerer gjeldende status melding (den globale om ikke en konto er spesifisert)"
+msgid ""
+"Returns current status message(the global one unless account is specified)"
+msgstr ""
+"Returnerer gjeldende status melding (den globale om ikke en konto er "
+"spesifisert)"
 
 #: ../src/gajim-remote.py:214
 msgid "Returns number of unreaded messages"
@@ -4069,8 +4264,12 @@ msgid "XML to send"
 msgstr "XML for sending"
 
 #: ../src/gajim-remote.py:227
-msgid "Account in which the xml will be sent; if not specified, xml will be sent to all accounts"
-msgstr "Kontoen som xmlen vil bli sendt; dersom ikke spesifisert vil xmlen bli sendt til alle kontoer"
+msgid ""
+"Account in which the xml will be sent; if not specified, xml will be sent to "
+"all accounts"
+msgstr ""
+"Kontoen som xmlen vil bli sendt; dersom ikke spesifisert vil xmlen bli sendt "
+"til alle kontoer"
 
 #: ../src/gajim-remote.py:249
 msgid "Missing argument \"contact_jid\""
@@ -4142,254 +4341,295 @@ msgstr "Du kan ikke slette ditt gjeldene tema"
 msgid "Please first choose another for your current theme."
 msgstr "Vennligst velg en annen for ditt gjeldende tema."
 
-#: ../src/groupchat_control.py:103
+#: ../src/groupchat_control.py:105
 msgid "Private Chat"
 msgstr "Privat Samtale"
 
-#: ../src/groupchat_control.py:103
+#: ../src/groupchat_control.py:105
 msgid "Private Chats"
 msgstr "Private Samtaler"
 
-#: ../src/groupchat_control.py:120
+#: ../src/groupchat_control.py:122
 msgid "Sending private message failed"
 msgstr "Sending av privat melding feilet"
 
 #. in second %s code replaces with nickname
-#: ../src/groupchat_control.py:122
+#: ../src/groupchat_control.py:124
 #, python-format
 msgid "You are no longer in group chat \"%s\" or \"%s\" has left."
 msgstr "Du er ikke lenger i samtalerommet \"%s\" eller \"%s\" har dratt."
 
-#: ../src/groupchat_control.py:141
+#: ../src/groupchat_control.py:143
 msgid "Group Chat"
 msgstr "Gruppe Samtale"
 
-#: ../src/groupchat_control.py:141
+#: ../src/groupchat_control.py:143
 msgid "Group Chats"
 msgstr "Gruppe Samtaler"
 
-#: ../src/groupchat_control.py:315
+#: ../src/groupchat_control.py:317
 msgid "Insert Nickname"
 msgstr "Skriv inn Kallenavn"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:789
+#: ../src/groupchat_control.py:812
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s har blitt utvist: %(reason)s"
 
-#: ../src/groupchat_control.py:793
+#: ../src/groupchat_control.py:816
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s har blitt utvist av %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:800
+#: ../src/groupchat_control.py:823
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s er blitt uønsket: %(reason)s"
 
-#: ../src/groupchat_control.py:804
+#: ../src/groupchat_control.py:827
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s har blitt uønsket av %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:812
+#: ../src/groupchat_control.py:835
 #, python-format
 msgid "You are now known as %s"
 msgstr "Du er nå kjent som %s"
 
-#: ../src/groupchat_control.py:814
+#: ../src/groupchat_control.py:837
 #, python-format
 msgid "%s is now known as %s"
 msgstr "%s er nå kjent som %s"
 
-#: ../src/groupchat_control.py:894
+#: ../src/groupchat_control.py:917
 #, python-format
 msgid "%s has left"
 msgstr "%s har dratt"
 
-#: ../src/groupchat_control.py:899
+#: ../src/groupchat_control.py:922
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s har blitt med i gruppesamtalen"
 
 #. No status message
-#: ../src/groupchat_control.py:901
-#: ../src/roster_window.py:1204
+#: ../src/groupchat_control.py:924 ../src/roster_window.py:1204
 #, python-format
 msgid "%s is now %s"
 msgstr "%s er nå %s"
 
-#: ../src/groupchat_control.py:1020
-#: ../src/groupchat_control.py:1038
-#: ../src/groupchat_control.py:1131
-#: ../src/groupchat_control.py:1148
+#: ../src/groupchat_control.py:1043 ../src/groupchat_control.py:1061
+#: ../src/groupchat_control.py:1154 ../src/groupchat_control.py:1171
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "Kallenavn ikke funnet: %s"
 
-#: ../src/groupchat_control.py:1054
+#: ../src/groupchat_control.py:1077
 msgid "This group chat has no subject"
 msgstr "Dette gruppesamtalerommet har ikke tittel"
 
-#: ../src/groupchat_control.py:1067
+#: ../src/groupchat_control.py:1090
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "Invitert %(contact_jid)s til %(room_jid)s."
 
 #. %s is something the user wrote but it is not a jid so we inform
-#: ../src/groupchat_control.py:1074
-#: ../src/groupchat_control.py:1102
+#: ../src/groupchat_control.py:1097 ../src/groupchat_control.py:1125
 #, python-format
 msgid "%s does not appear to be a valid JID"
 msgstr "%s ser ikke ut til å være en gyldig JID"
 
-#: ../src/groupchat_control.py:1185
+#: ../src/groupchat_control.py:1208
 #, python-format
 msgid "No such command: /%s (if you want to send this, prefix it with /say)"
-msgstr "Ingen slik kommando: /%s (dersom du ønsker å sende dette, så skriv /say før teksten)"
+msgstr ""
+"Ingen slik kommando: /%s (dersom du ønsker å sende dette, så skriv /say før "
+"teksten)"
 
-#: ../src/groupchat_control.py:1208
+#: ../src/groupchat_control.py:1231
 #, python-format
 msgid "Commands: %s"
 msgstr "Kommandoer: %s"
 
-#: ../src/groupchat_control.py:1210
+#: ../src/groupchat_control.py:1233
 #, python-format
-msgid "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The nickname of an occupant may be substituted, but not if it contains \"@\". If the JID is currently in the group chat, he/she/it will also be kicked. Does NOT support spaces in nickname."
-msgstr "Bruksanvisning: /%s <kallenavn|JID> [grunn], utviser JIDen fra samtalerommet. Kallenavnet til en bruker kan bli brukt, men ikke dersom det inneholder \"@\". Skulle en bruker med den JIDen være tilstede i rommet vil denne også bli kastet ut. Det støttes ikke med mellomrom i kallenavnet."
+msgid ""
+"Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
+"nickname of an occupant may be substituted, but not if it contains \"@\". If "
+"the JID is currently in the group chat, he/she/it will also be kicked. Does "
+"NOT support spaces in nickname."
+msgstr ""
+"Bruksanvisning: /%s <kallenavn|JID> [grunn], utviser JIDen fra "
+"samtalerommet. Kallenavnet til en bruker kan bli brukt, men ikke dersom det "
+"inneholder \"@\". Skulle en bruker med den JIDen være tilstede i rommet vil "
+"denne også bli kastet ut. Det støttes ikke med mellomrom i kallenavnet."
 
-#: ../src/groupchat_control.py:1217
+#: ../src/groupchat_control.py:1240
 #, python-format
-msgid "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
-msgstr "Bruksanvisning: /%s <kallenavn>, åpner en privat samtale vindu til den spesifiserte brukeren."
+msgid ""
+"Usage: /%s <nickname>, opens a private chat window to the specified occupant."
+msgstr ""
+"Bruksanvisning: /%s <kallenavn>, åpner en privat samtale vindu til den "
+"spesifiserte brukeren."
 
-#: ../src/groupchat_control.py:1221
+#: ../src/groupchat_control.py:1244
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Bruksanvisning: /%s, tømmer tekst vinduet."
 
-#: ../src/groupchat_control.py:1223
+#: ../src/groupchat_control.py:1246
 #, python-format
-msgid "Usage: /%s [reason], closes the current window or tab, displaying reason if specified."
-msgstr "Bruksanvisning: /%s [årsak], lukker gjeldende vindu eller fane, viser årsak dersom spesifisert."
+msgid ""
+"Usage: /%s [reason], closes the current window or tab, displaying reason if "
+"specified."
+msgstr ""
+"Bruksanvisning: /%s [årsak], lukker gjeldende vindu eller fane, viser årsak "
+"dersom spesifisert."
 
-#: ../src/groupchat_control.py:1226
+#: ../src/groupchat_control.py:1249
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "Bruk: /%s, gjemmer samtale knappene."
 
-#: ../src/groupchat_control.py:1229
+#: ../src/groupchat_control.py:1252
 #, python-format
-msgid "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally providing a reason."
-msgstr "Bruksanvisning: /%s <JID> [grunn], inviterer JID til gjeldende rom, og viser en grunn dersom spesifisert."
+msgid ""
+"Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
+"providing a reason."
+msgstr ""
+"Bruksanvisning: /%s <JID> [grunn], inviterer JID til gjeldende rom, og viser "
+"en grunn dersom spesifisert."
 
-#: ../src/groupchat_control.py:1233
+#: ../src/groupchat_control.py:1256
 #, python-format
-msgid "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally using specified nickname."
-msgstr "Bruksanvisning: /%s <rom>@<server>[/kallenavn], inviterer til rom@server og gir mulighet for å spesifisere valgfritt kallenavn."
+msgid ""
+"Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
+"using specified nickname."
+msgstr ""
+"Bruksanvisning: /%s <rom>@<server>[/kallenavn], inviterer til rom@server og "
+"gir mulighet for å spesifisere valgfritt kallenavn."
 
-#: ../src/groupchat_control.py:1237
+#: ../src/groupchat_control.py:1260
 #, python-format
-msgid "Usage: /%s <nickname> [reason], removes the occupant specified by nickname from the group chat and optionally displays a reason. Does NOT support spaces in nickname."
-msgstr "Bruksanvisning: /%s <kallenavn> [grunn], fjerner brukeren spesifisert av kallenavn fra rommet og viser om spesifisert en grunn. Støtter ikke mellomrom i kallenavn."
+msgid ""
+"Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
+"from the group chat and optionally displays a reason. Does NOT support "
+"spaces in nickname."
+msgstr ""
+"Bruksanvisning: /%s <kallenavn> [grunn], fjerner brukeren spesifisert av "
+"kallenavn fra rommet og viser om spesifisert en grunn. Støtter ikke "
+"mellomrom i kallenavn."
 
-#: ../src/groupchat_control.py:1242
+#: ../src/groupchat_control.py:1265
 #, python-format
-msgid "Usage: /%s <action>, sends action to the current group chat. Use third person. (e.g. /%s explodes.)"
-msgstr "Bruksanvisning: /%s <handling>, sender handling til gjeldende rom. Bruk tredje person. (f.eks. /%s explodes.)"
+msgid ""
+"Usage: /%s <action>, sends action to the current group chat. Use third "
+"person. (e.g. /%s explodes.)"
+msgstr ""
+"Bruksanvisning: /%s <handling>, sender handling til gjeldende rom. Bruk "
+"tredje person. (f.eks. /%s explodes.)"
 
-#: ../src/groupchat_control.py:1246
+#: ../src/groupchat_control.py:1269
 #, python-format
-msgid "Usage: /%s <nickname> [message], opens a private message windowand sends message to the occupant specified by nickname."
-msgstr "Bruk: /%s <kallenavn> [melding], åpner et privat meldingsvindu og sender meldingen til brukeren spesifisert av kallenavn."
+msgid ""
+"Usage: /%s <nickname> [message], opens a private message windowand sends "
+"message to the occupant specified by nickname."
+msgstr ""
+"Bruk: /%s <kallenavn> [melding], åpner et privat meldingsvindu og sender "
+"meldingen til brukeren spesifisert av kallenavn."
 
-#: ../src/groupchat_control.py:1251
+#: ../src/groupchat_control.py:1274
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
-msgstr "Bruksanvisning: /%s <kallenavn>, endrer kallenavnet ditt i gjeldende samtalerom."
+msgstr ""
+"Bruksanvisning: /%s <kallenavn>, endrer kallenavnet ditt i gjeldende "
+"samtalerom."
 
-#: ../src/groupchat_control.py:1255
+#: ../src/groupchat_control.py:1278
 #, python-format
 msgid "Usage: /%s , display the names of group chat occupants."
 msgstr "Bruksanvisning: /%s , viser navnene til deltakere i samtalerommet."
 
-#: ../src/groupchat_control.py:1259
+#: ../src/groupchat_control.py:1282
 #, python-format
 msgid "Usage: /%s [topic], displays or updates the current group chat topic."
-msgstr "Bruksanvisning: /%s [tittel], viser eller oppdaterer samtalerom tittel."
+msgstr ""
+"Bruksanvisning: /%s [tittel], viser eller oppdaterer samtalerom tittel."
 
-#: ../src/groupchat_control.py:1262
+#: ../src/groupchat_control.py:1285
 #, python-format
-msgid "Usage: /%s <message>, sends a message without looking for other commands."
-msgstr "Bruksanvisning: /%s <melding>, sender en melding uten å se etter andre kommandoer."
+msgid ""
+"Usage: /%s <message>, sends a message without looking for other commands."
+msgstr ""
+"Bruksanvisning: /%s <melding>, sender en melding uten å se etter andre "
+"kommandoer."
 
-#: ../src/groupchat_control.py:1265
+#: ../src/groupchat_control.py:1288
 #, python-format
 msgid "No help info for /%s"
 msgstr "Ingen hjelpe informasjon for /%s"
 
-#: ../src/groupchat_control.py:1314
+#: ../src/groupchat_control.py:1337
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Er du sikker på at du vil gå ut av samtalerommet \"%s\"?"
 
-#: ../src/groupchat_control.py:1316
-msgid "If you close this window, you will be disconnected from this group chat."
-msgstr "Dersom du lukker dette vinduet, så vil du bli koblet fra dette samtalerommet."
+#: ../src/groupchat_control.py:1339
+msgid ""
+"If you close this window, you will be disconnected from this group chat."
+msgstr ""
+"Dersom du lukker dette vinduet, så vil du bli koblet fra dette samtalerommet."
 
-#: ../src/groupchat_control.py:1320
-#: ../src/roster_window.py:3961
+#: ../src/groupchat_control.py:1343 ../src/roster_window.py:3961
 msgid "Do _not ask me again"
 msgstr "_Ikke spør meg igjen"
 
-#: ../src/groupchat_control.py:1354
+#: ../src/groupchat_control.py:1377
 msgid "Changing Subject"
 msgstr "Endrer Tittel"
 
-#: ../src/groupchat_control.py:1355
+#: ../src/groupchat_control.py:1378
 msgid "Please specify the new subject:"
 msgstr "Vennlist skriv inn ny tittel:"
 
-#: ../src/groupchat_control.py:1364
+#: ../src/groupchat_control.py:1387
 msgid "Changing Nickname"
 msgstr "Endrer Kallenavn"
 
-#: ../src/groupchat_control.py:1365
+#: ../src/groupchat_control.py:1388
 msgid "Please specify the new nickname you want to use:"
 msgstr "Vennlist skriv det nye kallenavnet du ønsker å bruke:"
 
-#: ../src/groupchat_control.py:1390
+#: ../src/groupchat_control.py:1413
 msgid "Bookmark already set"
 msgstr "Bokmerke allerede satt"
 
-#: ../src/groupchat_control.py:1391
+#: ../src/groupchat_control.py:1414
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Gruppesamtalen \"%s\" er allerede i dine bokmerker."
 
-#: ../src/groupchat_control.py:1400
+#: ../src/groupchat_control.py:1423
 msgid "Bookmark has been added successfully"
 msgstr "Bokmerke har blitt lagt til"
 
-#: ../src/groupchat_control.py:1401
+#: ../src/groupchat_control.py:1424
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "Du kan behandle bokmerkene dine fra Handlinger menyen i kontaktlisten."
 
 #. ask for reason
-#: ../src/groupchat_control.py:1527
+#: ../src/groupchat_control.py:1550
 #, python-format
 msgid "Kicking %s"
 msgstr "Utkasting %s"
 
-#: ../src/groupchat_control.py:1528
-#: ../src/groupchat_control.py:1810
+#: ../src/groupchat_control.py:1551 ../src/groupchat_control.py:1833
 msgid "You may specify a reason below:"
 msgstr "Du kan spesifisere grunn under:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:1809
+#: ../src/groupchat_control.py:1832
 #, python-format
 msgid "Banning %s"
 msgstr "Utvise %s"
@@ -4399,8 +4639,12 @@ msgid "A programming error has been detected"
 msgstr "En programmerings feil har blitt detektert"
 
 #: ../src/gtkexcepthook.py:42
-msgid "It probably is not fatal, but should be reported to the developers nonetheless."
-msgstr "Det er sannsynligvis ikke kritisk, men bør rapporteres til utviklerene likevel."
+msgid ""
+"It probably is not fatal, but should be reported to the developers "
+"nonetheless."
+msgstr ""
+"Det er sannsynligvis ikke kritisk, men bør rapporteres til utviklerene "
+"likevel."
 
 #: ../src/gtkexcepthook.py:48
 msgid "_Report Bug"
@@ -4411,8 +4655,7 @@ msgid "Details"
 msgstr "Detaljer"
 
 #. we talk about file
-#: ../src/gtkgui_helpers.py:153
-#: ../src/gtkgui_helpers.py:168
+#: ../src/gtkgui_helpers.py:153 ../src/gtkgui_helpers.py:168
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Feil: kan ikke åpne %s for lesing"
@@ -4432,16 +4675,16 @@ msgstr "Feil under traversering av fil:"
 msgid "Could not write to %s. Session Management support will not work"
 msgstr "Kunne ikke skrive til %s. Sesjons Håndterings støtte vil ikke virke."
 
-#: ../src/gtkgui_helpers.py:727
+#: ../src/gtkgui_helpers.py:728
 msgid "Extension not supported"
 msgstr "Utvidelse ikke støttet"
 
-#: ../src/gtkgui_helpers.py:728
+#: ../src/gtkgui_helpers.py:729
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr "Bilde kan ikke lagres i %(type)s format. Lagre som %(new_filename)s?"
 
-#: ../src/gtkgui_helpers.py:737
+#: ../src/gtkgui_helpers.py:738
 msgid "Save Image as..."
 msgstr "Lagre Bilde som..."
 
@@ -4455,42 +4698,39 @@ msgid "Contacts"
 msgstr "Kontakter"
 
 #. holds time
-#: ../src/history_manager.py:120
-#: ../src/history_manager.py:160
+#: ../src/history_manager.py:120 ../src/history_manager.py:160
 #: ../src/history_window.py:86
 msgid "Date"
 msgstr "Dato"
 
 #. holds nickname
-#: ../src/history_manager.py:126
-#: ../src/history_manager.py:178
+#: ../src/history_manager.py:126 ../src/history_manager.py:178
 msgid "Nickname"
 msgstr "Kallenavn"
 
 #. holds message
-#: ../src/history_manager.py:134
-#: ../src/history_manager.py:166
+#: ../src/history_manager.py:134 ../src/history_manager.py:166
 #: ../src/history_window.py:94
 msgid "Message"
 msgstr "Melding"
 
-#. holds subject
-#: ../src/history_manager.py:141
-#: ../src/history_manager.py:172
-msgid "Subject"
-msgstr "Tittel"
-
 #: ../src/history_manager.py:186
-msgid "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)"
+msgid ""
+"Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
+"RUNNING)"
 msgstr "Ønsker du å rengjøre databasen? (STERKT FRARÅDET MENS GAJIM KJØRER)"
 
 #: ../src/history_manager.py:188
 msgid ""
-"Normally allocated database size will not be freed, it will just become reusable. If you really want to reduce database filesize, click YES, else click NO.\n"
+"Normally allocated database size will not be freed, it will just become "
+"reusable. If you really want to reduce database filesize, click YES, else "
+"click NO.\n"
 "\n"
 "In case you click YES, please wait..."
 msgstr ""
-"Normalt vil tildelt database plass ikke frigjøres, den vil bare be merket som ledig. Dersom du virkelig ønsker å redusere fil størrelsen klikker du JA, ellers klikker du NEI.\n"
+"Normalt vil tildelt database plass ikke frigjøres, den vil bare be merket "
+"som ledig. Dersom du virkelig ønsker å redusere fil størrelsen klikker du "
+"JA, ellers klikker du NEI.\n"
 "\n"
 "I tilfelle du klikker JA, vennligst vent..."
 
@@ -4509,8 +4749,7 @@ msgid_plural "Do you really want to delete logs of the selected contacts?"
 msgstr[0] "Ønsker du virkelig å slette loggene til den valgte kontakten?"
 msgstr[1] "Ønsker du virkelig å slette loggene fra de valgte kontaktene?"
 
-#: ../src/history_manager.py:518
-#: ../src/history_manager.py:554
+#: ../src/history_manager.py:518 ../src/history_manager.py:554
 msgid "This is an irreversible operation."
 msgstr "Denne operasjonen kan ikke angres."
 
@@ -4520,8 +4759,7 @@ msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "Ønsker du virkelig å slette den valgte meldingen?"
 msgstr[1] "Ønsker du virkelig å slette de valgte meldingene?"
 
-#: ../src/history_window.py:103
-#: ../src/history_window.py:105
+#: ../src/history_window.py:103 ../src/history_window.py:105
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Samtale Historikk med %s"
@@ -4531,8 +4769,7 @@ msgstr "Samtale Historikk med %s"
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s er nå %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:265
-#: ../src/notify.py:198
+#: ../src/history_window.py:265 ../src/notify.py:198
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s er nå %(status)s"
@@ -4591,15 +4828,12 @@ msgstr "%(nickname)s: %(message)s"
 msgid "New Message from %(nickname)s"
 msgstr "Ny Melding fra %(nickname)s"
 
-#: ../src/profile_window.py:72
-#: ../src/profile_window.py:376
+#: ../src/profile_window.py:72 ../src/profile_window.py:376
 msgid "Retrieving profile..."
 msgstr "Henter profil..."
 
-#: ../src/profile_window.py:107
-#: ../src/profile_window.py:203
-#: ../src/profile_window.py:212
-#: ../src/profile_window.py:370
+#: ../src/profile_window.py:107 ../src/profile_window.py:203
+#: ../src/profile_window.py:212 ../src/profile_window.py:370
 msgid "Click to set your avatar"
 msgstr "Klikk for å sette ditt kontaktbilde"
 
@@ -4633,34 +4867,33 @@ msgid "vCard publication failed"
 msgstr "vCard publisering feilet"
 
 #: ../src/profile_window.py:348
-msgid "There was an error while publishing your personal information, try again later."
-msgstr "Det skjedde en feil med publisering av din personlige informasjon, prøv igjen senere."
+msgid ""
+"There was an error while publishing your personal information, try again "
+"later."
+msgstr ""
+"Det skjedde en feil med publisering av din personlige informasjon, prøv "
+"igjen senere."
 
 #: ../src/profile_window.py:374
 msgid "Without a connection, you can not get your contact information."
 msgstr "Uten en tilkobling kan du ikke hente din kontakt informasjon."
 
-#: ../src/roster_window.py:168
-#: ../src/roster_window.py:223
+#: ../src/roster_window.py:168 ../src/roster_window.py:223
 msgid "Merged accounts"
 msgstr "Samlede kontoer"
 
-#: ../src/roster_window.py:340
-#: ../src/common/helpers.py:42
+#: ../src/roster_window.py:340 ../src/common/helpers.py:42
 msgid "Observers"
 msgstr "Observerere"
 
-#: ../src/roster_window.py:686
-#: ../src/roster_window.py:3132
+#: ../src/roster_window.py:686 ../src/roster_window.py:3132
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Du kan ikke gå inn i en gruppesamtale når du er usynlig"
 
 #. new chat
 #. for chat_with
 #. for single message
-#: ../src/roster_window.py:878
-#: ../src/systray.py:187
-#: ../src/systray.py:192
+#: ../src/roster_window.py:878 ../src/systray.py:187 ../src/systray.py:192
 #, python-format
 msgid "using account %s"
 msgstr "bruker kontoen %s"
@@ -4703,8 +4936,7 @@ msgstr "Historikk Behandler"
 msgid "_Join New Group Chat"
 msgstr "_Bli med i Gruppesamtale"
 
-#: ../src/roster_window.py:1384
-#: ../src/roster_window.py:3325
+#: ../src/roster_window.py:1384 ../src/roster_window.py:3325
 #: ../src/roster_window.py:3332
 msgid "You have unread messages"
 msgstr "Du har uleste meldinger"
@@ -4719,8 +4951,12 @@ msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" vil bli fjernet"
 
 #: ../src/roster_window.py:1389
-msgid "You will no longer be able to send and receive messages to contacts from this transport."
-msgstr "Du vil ikke lenger kunne sende og motta meldinger med kontakter fra denne transporten."
+msgid ""
+"You will no longer be able to send and receive messages to contacts from "
+"this transport."
+msgstr ""
+"Du vil ikke lenger kunne sende og motta meldinger med kontakter fra denne "
+"transporten."
 
 #: ../src/roster_window.py:1392
 msgid "Transports will be removed"
@@ -4728,8 +4964,12 @@ msgstr "Transportene vil bli fjernet"
 
 #: ../src/roster_window.py:1397
 #, python-format
-msgid "You will no longer be able to send and receive messages to contacts from these transports:%s"
-msgstr "Du vil ikke lenger kunne sende og motta meldinger med kontakter fra disse transportene:%s"
+msgid ""
+"You will no longer be able to send and receive messages to contacts from "
+"these transports:%s"
+msgstr ""
+"Du vil ikke lenger kunne sende og motta meldinger med kontakter fra disse "
+"transportene:%s"
 
 #. it's jid
 #: ../src/roster_window.py:1417
@@ -4771,8 +5011,7 @@ msgstr "Tilegn OpenPGP Nøkkel"
 msgid "Select a key to apply to the contact"
 msgstr "Velger en nøkkel til en kontakt"
 
-#: ../src/roster_window.py:1788
-#: ../src/roster_window.py:1963
+#: ../src/roster_window.py:1788 ../src/roster_window.py:1963
 msgid "_New group chat"
 msgstr "_Ny gruppe samtale"
 
@@ -4780,8 +5019,7 @@ msgstr "_Ny gruppe samtale"
 msgid "I would like to add you to my roster"
 msgstr "Jeg ønsker å legge deg til min kontaktliste"
 
-#: ../src/roster_window.py:2008
-#: ../src/roster_window.py:2055
+#: ../src/roster_window.py:2008 ../src/roster_window.py:2055
 msgid "Send Group M_essage"
 msgstr "Send Gruppe M_elding"
 
@@ -4805,8 +5043,7 @@ msgstr "_Logg på"
 msgid "Log _off"
 msgstr "Logg _av"
 
-#: ../src/roster_window.py:2232
-#: ../src/roster_window.py:2303
+#: ../src/roster_window.py:2232 ../src/roster_window.py:2303
 msgid "_Change Status Message"
 msgstr "_Endre Status Melding"
 
@@ -4826,7 +5063,9 @@ msgstr "Abonnerings forespørsel er sendt"
 #: ../src/roster_window.py:2401
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
-msgstr "Dersom \"%s\" aksepterer denne forespørselen vil du få vite hans eller hennes status."
+msgstr ""
+"Dersom \"%s\" aksepterer denne forespørselen vil du få vite hans eller "
+"hennes status."
 
 #: ../src/roster_window.py:2413
 msgid "Authorization has been removed"
@@ -4843,12 +5082,20 @@ msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Kontakten \"%s\" vil fjernes fra din kontaktliste"
 
 #: ../src/roster_window.py:2621
-msgid "By removing this contact you also remove authorization resulting in him or her always seeing you as offline."
-msgstr "Ved å fjerne denne kontakten fjerner du også godkjenningen som gjør at han eller henne alltid vil se deg som frakoblet."
+msgid ""
+"By removing this contact you also remove authorization resulting in him or "
+"her always seeing you as offline."
+msgstr ""
+"Ved å fjerne denne kontakten fjerner du også godkjenningen som gjør at han "
+"eller henne alltid vil se deg som frakoblet."
 
 #: ../src/roster_window.py:2626
-msgid "By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline."
-msgstr "Ved å fjerne denne kontakten fjerner du også godkjenningen som resulterer i at han eller henne alltid vil se deg som frakoblet."
+msgid ""
+"By removing this contact you also by default remove authorization resulting "
+"in him or her always seeing you as offline."
+msgstr ""
+"Ved å fjerne denne kontakten fjerner du også godkjenningen som resulterer i "
+"at han eller henne alltid vil se deg som frakoblet."
 
 #: ../src/roster_window.py:2629
 msgid "I want this contact to know my status after removal"
@@ -4866,7 +5113,8 @@ msgid ""
 "you also remove authorization resulting in them always seeing you as offline."
 msgstr ""
 "Ved å fjerne disse kontaktene:%s\n"
-"fjerner du også autorisasjonen som gjør at de alltid vil se deg som frakoblet."
+"fjerner du også autorisasjonen som gjør at de alltid vil se deg som "
+"frakoblet."
 
 #: ../src/roster_window.py:2709
 msgid "Passphrase Required"
@@ -4889,15 +5137,17 @@ msgstr "Feil Passordsetning"
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Vennligst skriv inn GPG passordsetningen igjen eller trykk Avbryt."
 
-#: ../src/roster_window.py:2781
-#: ../src/roster_window.py:2841
+#: ../src/roster_window.py:2781 ../src/roster_window.py:2841
 msgid "You are participating in one or more group chats"
 msgstr "Du er med i en eller flere gruppesamtaler"
 
-#: ../src/roster_window.py:2782
-#: ../src/roster_window.py:2842
-msgid "Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?"
-msgstr "Endring av status til usynlig vil resultere i at du forlater disse gruppe samtalene. Er du sikker på at du ønsker å bli usynlig?"
+#: ../src/roster_window.py:2782 ../src/roster_window.py:2842
+msgid ""
+"Changing your status to invisible will result in disconnection from those "
+"group chats. Are you sure you want to go invisible?"
+msgstr ""
+"Endring av status til usynlig vil resultere i at du forlater disse gruppe "
+"samtalene. Er du sikker på at du ønsker å bli usynlig?"
 
 #: ../src/roster_window.py:2799
 msgid "No account available"
@@ -4912,26 +5162,41 @@ msgstr "Du må lage en konto før du kan snakke med andre kontakter."
 msgid "♪ \"%(title)s\" by %(artist)s ♪"
 msgstr "♪ \"%(title)s\" etter %(artist)s ♪"
 
-#: ../src/roster_window.py:3326
-#: ../src/roster_window.py:3333
-msgid "Messages will only be available for reading them later if you have history enabled."
-msgstr "Meldinger vil kun være tilgjengelig for lesing senere dersom du har historikk påslått."
+#: ../src/roster_window.py:3326 ../src/roster_window.py:3333
+msgid ""
+"Messages will only be available for reading them later if you have history "
+"enabled."
+msgstr ""
+"Meldinger vil kun være tilgjengelig for lesing senere dersom du har "
+"historikk påslått."
 
 #: ../src/roster_window.py:3911
 msgid "Metacontacts storage not supported by your server"
 msgstr "Metakontakter lagring støttes ikke av din server"
 
 #: ../src/roster_window.py:3913
-msgid "Your server does not support storing metacontacts information. So those information will not be save on next reconnection."
-msgstr "Din server støtter ikke lagring av metakontakt informasjon. Så denne informasjonen vil ikke bli lagret på neste oppkobling."
+msgid ""
+"Your server does not support storing metacontacts information. So those "
+"information will not be save on next reconnection."
+msgstr ""
+"Din server støtter ikke lagring av metakontakt informasjon. Så denne "
+"informasjonen vil ikke bli lagret på neste oppkobling."
 
 #: ../src/roster_window.py:3955
-msgid "You are about to create a metacontact. Are you sure you want to continue?"
-msgstr "Du skal til å lage en metakontakt. Er du sikker på at du ønsker å fortsette?"
+msgid ""
+"You are about to create a metacontact. Are you sure you want to continue?"
+msgstr ""
+"Du skal til å lage en metakontakt. Er du sikker på at du ønsker å fortsette?"
 
 #: ../src/roster_window.py:3957
-msgid "Metacontacts are a way to regroup several contacts in one line. Generaly it is used when the same person has several Jabber accounts or transport accounts."
-msgstr "Metakontakter er en måte å gruppere flere kontakter på en linje. Generelt brukes dette når samme person har flere Jabber kontoer eller transport kontoer."
+msgid ""
+"Metacontacts are a way to regroup several contacts in one line. Generaly it "
+"is used when the same person has several Jabber accounts or transport "
+"accounts."
+msgstr ""
+"Metakontakter er en måte å gruppere flere kontakter på en linje. Generelt "
+"brukes dette når samme person har flere Jabber kontoer eller transport "
+"kontoer."
 
 #: ../src/roster_window.py:4124
 #, python-format
@@ -4955,13 +5220,11 @@ msgstr "_Endre Status Melding..."
 msgid "Hide this menu"
 msgstr "Gjem dette vinduet"
 
-#: ../src/tooltips.py:309
-#: ../src/tooltips.py:492
+#: ../src/tooltips.py:309 ../src/tooltips.py:492
 msgid "Jabber ID: "
 msgstr "Jabber ID:"
 
-#: ../src/tooltips.py:312
-#: ../src/tooltips.py:496
+#: ../src/tooltips.py:312 ../src/tooltips.py:496
 msgid "Resource: "
 msgstr "Ressurs: "
 
@@ -4970,8 +5233,7 @@ msgstr "Ressurs: "
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "%(owner_or_admin_or_member)s av denne samtalegruppen"
 
-#: ../src/tooltips.py:430
-#: ../src/tooltips.py:610
+#: ../src/tooltips.py:430 ../src/tooltips.py:610
 msgid "Status: "
 msgstr "Status: "
 
@@ -5010,8 +5272,7 @@ msgstr "Type: "
 msgid "Transferred: "
 msgstr "Overført: "
 
-#: ../src/tooltips.py:588
-#: ../src/tooltips.py:609
+#: ../src/tooltips.py:588 ../src/tooltips.py:609
 msgid "Not started"
 msgstr "Ikke startet"
 
@@ -5019,8 +5280,7 @@ msgstr "Ikke startet"
 msgid "Stopped"
 msgstr "Stoppet"
 
-#: ../src/tooltips.py:594
-#: ../src/tooltips.py:597
+#: ../src/tooltips.py:594 ../src/tooltips.py:597
 msgid "Completed"
 msgstr "Komplett"
 
@@ -5057,8 +5317,7 @@ msgstr "?Client:Ukjent"
 msgid "?OS:Unknown"
 msgstr "?OS:Ukjent"
 
-#: ../src/vcard.py:247
-#: ../src/vcard.py:449
+#: ../src/vcard.py:247 ../src/vcard.py:449
 #, python-format
 msgid "since %s"
 msgstr "siden %s"
@@ -5068,29 +5327,40 @@ msgid "Affiliation:"
 msgstr "Tilhørighet: "
 
 #: ../src/vcard.py:285
-msgid "This contact is interested in your presence information, but you are not interested in his/her presence"
-msgstr "Denne kontakten er interessert i din tilstedeværelses informasjon, men du er ikke interessert i hans/hennes status."
+msgid ""
+"This contact is interested in your presence information, but you are not "
+"interested in his/her presence"
+msgstr ""
+"Denne kontakten er interessert i din tilstedeværelses informasjon, men du er "
+"ikke interessert i hans/hennes status."
 
 #: ../src/vcard.py:287
-msgid "You are interested in the contact's presence information, but he/she is not interested in yours"
-msgstr "Du er interessert i denne kontaktens tilstedeværelses informasjon, men han/hun er ikke interessert i din."
+msgid ""
+"You are interested in the contact's presence information, but he/she is not "
+"interested in yours"
+msgstr ""
+"Du er interessert i denne kontaktens tilstedeværelses informasjon, men han/"
+"hun er ikke interessert i din."
 
 #: ../src/vcard.py:289
 msgid "You and the contact are interested in each other's presence information"
-msgstr "Du og kontakten er interessert i hverandres tilstedeværelses informasjon"
+msgstr ""
+"Du og kontakten er interessert i hverandres tilstedeværelses informasjon"
 
 #. None
 #: ../src/vcard.py:291
-msgid "You are not interested in the contact's presence, and neither he/she is interested in yours"
-msgstr "Du er ikke interessert i kontaktens tilstedeværelses informasjon, ei heller han/hun i din."
+msgid ""
+"You are not interested in the contact's presence, and neither he/she is "
+"interested in yours"
+msgstr ""
+"Du er ikke interessert i kontaktens tilstedeværelses informasjon, ei heller "
+"han/hun i din."
 
 #: ../src/vcard.py:299
 msgid "You are waiting contact's answer about your subscription request"
 msgstr "Du venter på kontaktens svar på din abonnerings forespørsel"
 
-#: ../src/vcard.py:311
-#: ../src/vcard.py:338
-#: ../src/vcard.py:482
+#: ../src/vcard.py:311 ../src/vcard.py:338 ../src/vcard.py:482
 msgid " resource with priority "
 msgstr " ressurs med prioritet"
 
@@ -5098,17 +5368,14 @@ msgstr " ressurs med prioritet"
 msgid "creating logs database"
 msgstr "lager logg database"
 
-#: ../src/common/check_paths.py:89
-#: ../src/common/check_paths.py:100
+#: ../src/common/check_paths.py:89 ../src/common/check_paths.py:100
 #: ../src/common/check_paths.py:107
 #, python-format
 msgid "%s is file but it should be a directory"
 msgstr "%s er en fil men skulle ha vært en katalog"
 
-#: ../src/common/check_paths.py:90
-#: ../src/common/check_paths.py:101
-#: ../src/common/check_paths.py:108
-#: ../src/common/check_paths.py:116
+#: ../src/common/check_paths.py:90 ../src/common/check_paths.py:101
+#: ../src/common/check_paths.py:108 ../src/common/check_paths.py:116
 msgid "Gajim will now exit"
 msgstr "Gajim vill nå lukkes"
 
@@ -5143,8 +5410,10 @@ msgid "Not available as a result of being idle"
 msgstr "Ikke tilgjengelig på grunn av inaktivitet"
 
 #: ../src/common/config.py:82
-msgid "List (space separated) of rows (accounts and groups) that are collapsed."
-msgstr "Liste (mellomrom separert) av rader (kontoer og grupper) som er kollapset."
+msgid ""
+"List (space separated) of rows (accounts and groups) that are collapsed."
+msgstr ""
+"Liste (mellomrom separert) av rader (kontoer og grupper) som er kollapset."
 
 #: ../src/common/config.py:87
 msgid "Enable link-local/zeroconf messaging"
@@ -5165,44 +5434,74 @@ msgstr ""
 "'never' - aldri vis klokkeslett."
 
 #: ../src/common/config.py:92
-msgid "Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one. This is used only if print_time is 'sometimes'."
-msgstr "Skriv klokkeslett i samtaler med Fuzzy Clock. Verdien av fuzziness fra 1 til 4, eller 0 for å deaktiver fuzzyclock. 1 er den mest presise klokke, 4 er den mindre presise. Dette brukes bare dersom print_time er 'sometimes'."
+msgid ""
+"Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 "
+"to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one. "
+"This is used only if print_time is 'sometimes'."
+msgstr ""
+"Skriv klokkeslett i samtaler med Fuzzy Clock. Verdien av fuzziness fra 1 til "
+"4, eller 0 for å deaktiver fuzzyclock. 1 er den mest presise klokke, 4 er "
+"den mindre presise. Dette brukes bare dersom print_time er 'sometimes'."
 
 #: ../src/common/config.py:95
 msgid "Treat * / _ pairs as possible formatting characters."
 msgstr "Behandle * / _ par som mulige formaterings symboler."
 
 #: ../src/common/config.py:96
-msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
-msgstr "Dersom True, ikke fjern */_ . Så *abc* vil bli uthevet men * * ikke vil bli fjernet."
+msgid ""
+"If True, do not remove */_ . So *abc* will be bold but with * * not removed."
+msgstr ""
+"Dersom True, ikke fjern */_ . Så *abc* vil bli uthevet men * * ikke vil bli "
+"fjernet."
 
 #: ../src/common/config.py:99
-msgid "Uses ReStructured text markup for HTML, plus ascii formatting if selected. (If you want to use this, install docutils)"
-msgstr "Bruker ReStrukturert tekstoppmerking for HTML, pluss ascii formatering dersom valgt. (Dersom du ønsker å bruke dette, må du installere docutils)"
+msgid ""
+"Uses ReStructured text markup for HTML, plus ascii formatting if selected. "
+"(If you want to use this, install docutils)"
+msgstr ""
+"Bruker ReStrukturert tekstoppmerking for HTML, pluss ascii formatering "
+"dersom valgt. (Dersom du ønsker å bruke dette, må du installere docutils)"
 
 #: ../src/common/config.py:108
-msgid "Character to add after nickname when using nick completion (tab) in group chat."
-msgstr "Tegn å legge til etter kallenavn når du bruker kallenavn fullføring (tab) i gruppesamtaler."
+msgid ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
+msgstr ""
+"Tegn å legge til etter kallenavn når du bruker kallenavn fullføring (tab) i "
+"gruppesamtaler."
 
 #: ../src/common/config.py:109
-msgid "Character to propose to add after desired nickname when desired nickname is used by someone else in group chat."
-msgstr "Tegnforslag å legge til nytt kallenavn når det ønskede kallenavnet er opptatt av noen andre i samtalegruppen."
+msgid ""
+"Character to propose to add after desired nickname when desired nickname is "
+"used by someone else in group chat."
+msgstr ""
+"Tegnforslag å legge til nytt kallenavn når det ønskede kallenavnet er "
+"opptatt av noen andre i samtalegruppen."
 
 #: ../src/common/config.py:142
 msgid "Add * and [n] in roster title?"
 msgstr "Legg * og [n] inn i kontaktliste tittelen?"
 
 #: ../src/common/config.py:143
-msgid "How many lines to remember from previous conversation when a chat tab/window is reopened."
-msgstr "Hvor mange linjer skal huskes fra forrige samtale når et samtale vindu/fane blir åpnet på nytt."
+msgid ""
+"How many lines to remember from previous conversation when a chat tab/window "
+"is reopened."
+msgstr ""
+"Hvor mange linjer skal huskes fra forrige samtale når et samtale vindu/fane "
+"blir åpnet på nytt."
 
 #: ../src/common/config.py:144
 msgid "How many minutes should last lines from previous conversation last."
-msgstr "Hvor mange minutter skal de siste linjene fra forrige konversasjon vare."
+msgstr ""
+"Hvor mange minutter skal de siste linjene fra forrige konversasjon vare."
 
 #: ../src/common/config.py:145
-msgid "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour)."
-msgstr "Send meldinger med Ctrl+Enter og med Enter lag ny linje (Mirabilis ICQ Klient standard oppførsel)."
+msgid ""
+"Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
+"Client default behaviour)."
+msgstr ""
+"Send meldinger med Ctrl+Enter og med Enter lag ny linje (Mirabilis ICQ "
+"Klient standard oppførsel)."
 
 #: ../src/common/config.py:147
 msgid "How many lines to store for Ctrl+KeyUP."
@@ -5210,44 +5509,77 @@ msgstr "Hvor mange linjer skal lagres for Ctrl+PilOPP."
 
 #: ../src/common/config.py:150
 #, python-format
-msgid "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
-msgstr "Enten bruk egendefinert url med %s i seg hvor %s er ordet/frasen eller 'WIKTIONARY' som betyr bruk wiktionary."
+msgid ""
+"Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
+"which means use wiktionary."
+msgstr ""
+"Enten bruk egendefinert url med %s i seg hvor %s er ordet/frasen eller "
+"'WIKTIONARY' som betyr bruk wiktionary."
 
 #: ../src/common/config.py:153
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "Dersom valgt vil Gajim kunne bli fjernstyr med gajim-remote."
 
 #: ../src/common/config.py:154
-msgid "If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection."
-msgstr "Dersom True så lytt til D-Bus signaler fra NetworkManager og endre status for kontoer (gitt at de ikke har listen_to_network_manager satt til False og at de synkroniserer med global status) basert på statusen til nettverks tilkoblingen."
+msgid ""
+"If True, listen to D-Bus signals from NetworkManager and change the status "
+"of accounts (provided they do not have listen_to_network_manager set to "
+"False and they sync with global status) based upon the status of the network "
+"connection."
+msgstr ""
+"Dersom True så lytt til D-Bus signaler fra NetworkManager og endre status "
+"for kontoer (gitt at de ikke har listen_to_network_manager satt til False og "
+"at de synkroniserer med global status) basert på statusen til nettverks "
+"tilkoblingen."
 
 #: ../src/common/config.py:155
-msgid "Sent chat state notifications. Can be one of all, composing_only, disabled."
+msgid ""
+"Sent chat state notifications. Can be one of all, composing_only, disabled."
 msgstr "Sendt samtale status melding. Kan være alle, bare_skriving, avslått."
 
 #: ../src/common/config.py:156
-msgid "Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled."
-msgstr "Vist samtale status melding i samtalevindu. Kan være alle, bare_skriving, avslått."
+msgid ""
+"Displayed chat state notifications in chat windows. Can be one of all, "
+"composing_only, disabled."
+msgstr ""
+"Vist samtale status melding i samtalevindu. Kan være alle, bare_skriving, "
+"avslått."
 
 #: ../src/common/config.py:158
-msgid "When not printing time for every message (print_time==sometimes), print it every x minutes."
-msgstr "Når man ikke viser klokkeslett for hver melding (print_time==av-og-til), vis det hvert x minutt."
+msgid ""
+"When not printing time for every message (print_time==sometimes), print it "
+"every x minutes."
+msgstr ""
+"Når man ikke viser klokkeslett for hver melding (print_time==av-og-til), vis "
+"det hvert x minutt."
 
 #: ../src/common/config.py:159
 msgid "Ask before closing a group chat tab/window."
 msgstr "Spør før lukking av gruppesamtale fane/vindu."
 
 #: ../src/common/config.py:160
-msgid "Always ask before closing group chat tab/window in this space separated list of group chat jids."
-msgstr "Spør alltid før lukking av gruppesamtale fane/vindu i denne mellomrom separerte listen av rom jider."
+msgid ""
+"Always ask before closing group chat tab/window in this space separated list "
+"of group chat jids."
+msgstr ""
+"Spør alltid før lukking av gruppesamtale fane/vindu i denne mellomrom "
+"separerte listen av rom jider."
 
 #: ../src/common/config.py:161
-msgid "Never ask before closing group chat tab/window in this space separated list of group chat jids."
-msgstr "Aldri spør før lukking av gruppesamtale fane/vindu i denne mellomroms separerte listen av rom jider."
+msgid ""
+"Never ask before closing group chat tab/window in this space separated list "
+"of group chat jids."
+msgstr ""
+"Aldri spør før lukking av gruppesamtale fane/vindu i denne mellomroms "
+"separerte listen av rom jider."
 
 #: ../src/common/config.py:164
-msgid "Overrides the host we send for File Transfer in case of address translation/port forwarding."
-msgstr "Overstyrer maskinen navnet vi sender for Fil Overføring i tilfeller med adresse oversetting/port videresending."
+msgid ""
+"Overrides the host we send for File Transfer in case of address translation/"
+"port forwarding."
+msgstr ""
+"Overstyrer maskinen navnet vi sender for Fil Overføring i tilfeller med "
+"adresse oversetting/port videresending."
 
 #: ../src/common/config.py:166
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -5270,36 +5602,66 @@ msgid "Show close button in tab?"
 msgstr "Vis lukk knapp på fanen?"
 
 #: ../src/common/config.py:189
-msgid "A semicolon-separated list of words that will be highlighted in group chats."
+msgid ""
+"A semicolon-separated list of words that will be highlighted in group chats."
 msgstr "En semikolon-delt liste av ord som vil bli uthevet i gruppesamtaler."
 
 #: ../src/common/config.py:190
-msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
-msgstr "Dersom True vil Gajim avslutte når X knappen i Vindubehandleren blir trykket på. Dette valget vil kun brukes dersom systemstatus ikon er i bruk. "
+msgid ""
+"If True, quits Gajim when X button of Window Manager is clicked. This "
+"setting is taken into account only if trayicon is used."
+msgstr ""
+"Dersom True vil Gajim avslutte når X knappen i Vindubehandleren blir trykket "
+"på. Dette valget vil kun brukes dersom systemstatus ikon er i bruk. "
 
 #: ../src/common/config.py:191
 msgid "If True, Gajim registers for xmpp:// on each startup."
 msgstr "Dersom True vil Gajim registreres for xmpp:// ved hver oppstart."
 
 #: ../src/common/config.py:192
-msgid "If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated."
-msgstr "Dersom True vil Gajim ise et ikon på hver fane som inneholder uleste meldinger. Avhengig av valgte tema kan dette ikonet være animert."
+msgid ""
+"If True, Gajim will display an icon on each tab containing unread messages. "
+"Depending on the theme, this icon may be animated."
+msgstr ""
+"Dersom True vil Gajim ise et ikon på hver fane som inneholder uleste "
+"meldinger. Avhengig av valgte tema kan dette ikonet være animert."
 
 #: ../src/common/config.py:193
-msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window."
-msgstr "Dersom True vil Gajim vise status meldingen, om den ikke er tom, for hver kontakt under kontaktens navn i kontaktliste vinduet."
+msgid ""
+"If True, Gajim will display the status message, if not empty, for every "
+"contact under the contact name in roster window."
+msgstr ""
+"Dersom True vil Gajim vise status meldingen, om den ikke er tom, for hver "
+"kontakt under kontaktens navn i kontaktliste vinduet."
 
 #: ../src/common/config.py:195
-msgid "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old."
-msgstr "Dersom True vil Gajim spør etter ikonbilde for hver kontakt som ikke hadde et ikonbilde sist gang eller har en lagret som er for gammel."
+msgid ""
+"If True, Gajim will ask for avatar each contact that did not have an avatar "
+"last time or has one cached that is too old."
+msgstr ""
+"Dersom True vil Gajim spør etter ikonbilde for hver kontakt som ikke hadde "
+"et ikonbilde sist gang eller har en lagret som er for gammel."
 
 #: ../src/common/config.py:196
-msgid "If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message."
-msgstr "Dersom False vil du ikke lenger kunne se status linjer i samtaler når en kontakt endrer hans eller hennes status og/eller status melding. "
+msgid ""
+"If False, Gajim will no longer print status line in chats when a contact "
+"changes his or her status and/or his or her status message."
+msgstr ""
+"Dersom False vil du ikke lenger kunne se status linjer i samtaler når en "
+"kontakt endrer hans eller hennes status og/eller status melding. "
 
 #: ../src/common/config.py:197
-msgid "can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If \"all\" Gajim will print all status messages. If \"in_and_out\", gajim will only print FOO enters/leaves group chat."
-msgstr "kan være \"none\",\"all\" eller \"in_and_out\". Dersom \"none\" vil Gajim ikke lenger vise status linje i gruppesamtaler når et medlem endrer hans/hennes status melding. Dersom \"all\" vil Gajim vise alle status meldinger. Dersom \"in_and_out\" vil Gajim bare vise FOO kommer/drar fra gruppesamtalen."
+msgid ""
+"can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no "
+"longer print status line in groupchats when a member changes his or her "
+"status and/or his or her status message. If \"all\" Gajim will print all "
+"status messages. If \"in_and_out\", gajim will only print FOO enters/leaves "
+"group chat."
+msgstr ""
+"kan være \"none\",\"all\" eller \"in_and_out\". Dersom \"none\" vil Gajim "
+"ikke lenger vise status linje i gruppesamtaler når et medlem endrer hans/"
+"hennes status melding. Dersom \"all\" vil Gajim vise alle status meldinger. "
+"Dersom \"in_and_out\" vil Gajim bare vise FOO kommer/drar fra gruppesamtalen."
 
 #: ../src/common/config.py:199
 msgid "Background color of contacts when they just signed in."
@@ -5310,8 +5672,10 @@ msgid "Background color of contacts when they just signed out."
 msgstr "Bakgrunnsfargen for kontakter når de akkurat har logget ut."
 
 #: ../src/common/config.py:202
-msgid "If True, restored messages will use a smaller font than the default one."
-msgstr "Dersom True vil gjenopprettede meldinger bruke en mindre font en standard."
+msgid ""
+"If True, restored messages will use a smaller font than the default one."
+msgstr ""
+"Dersom True vil gjenopprettede meldinger bruke en mindre font en standard."
 
 #: ../src/common/config.py:203
 msgid "Don't show avatar for the transport itself."
@@ -5322,12 +5686,24 @@ msgid "Don't show roster in the system taskbar."
 msgstr "Ikke vis kontaktlisten i systemstatus-feltet."
 
 #: ../src/common/config.py:205
-msgid "If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events."
-msgstr "Dersom True og de installerte GTK+ og PyGTK versjonene er minst 2.8, vil vindusbehandleren blinke (vanlig oppførsel i de fleste vindusbehandlere) når det er ventende hendelser."
+msgid ""
+"If True and installed GTK+ and PyGTK versions are at least 2.8, make the "
+"window flash (the default behaviour in most Window Managers) when holding "
+"pending events."
+msgstr ""
+"Dersom True og de installerte GTK+ og PyGTK versjonene er minst 2.8, vil "
+"vindusbehandleren blinke (vanlig oppførsel i de fleste vindusbehandlere) når "
+"det er ventende hendelser."
 
 #: ../src/common/config.py:207
-msgid "Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences."
-msgstr "Jabberd1.4 liker ikke sha informasjon når man går inn i et passord beskyttet samtalerom. Sett dette valget til False for å slutte å sende sha informasjon til gruppesamtaler"
+msgid ""
+"Jabberd1.4 does not like sha info when one join a password protected group "
+"chat. Turn this option to False to stop sending sha info in group chat "
+"presences."
+msgstr ""
+"Jabberd1.4 liker ikke sha informasjon når man går inn i et passord beskyttet "
+"samtalerom. Sett dette valget til False for å slutte å sende sha informasjon "
+"til gruppesamtaler"
 
 #. always, never, peracct, pertype should not be translated
 #: ../src/common/config.py:210
@@ -5336,13 +5712,17 @@ msgid ""
 "'always' - All messages are sent to a single window.\n"
 "'never' - All messages get their own window.\n"
 "'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect."
+"'pertype' - Each message type (e.g., chats vs. groupchats) are sent to a "
+"specific window. Note, changing this option requires restarting Gajim before "
+"the changes will take effect."
 msgstr ""
 "Kontrollerer vinduet hvor nye meldinger skal plasseres.\n"
 "'always' - Alle meldinger sendes til ett vindu.\n"
 "'never' - Alle meldinger får egne vindu.\n"
 "'peracct' - Meldinger for hver konto sendes til egne vindu.\n"
-"'pertype' - Hver meldingstype (f.eks., samtaler og gruppesamtaler) sendes til forskjellige vinduer. Merk, endring av dette valget krever omstart av Gajim før det aktiveres"
+"'pertype' - Hver meldingstype (f.eks., samtaler og gruppesamtaler) sendes "
+"til forskjellige vinduer. Merk, endring av dette valget krever omstart av "
+"Gajim før det aktiveres"
 
 #: ../src/common/config.py:211
 msgid "If False, you will no longer see the avatar in the chat window."
@@ -5373,8 +5753,12 @@ msgid "Hides the group chat occupants list in group chat window."
 msgstr "Gjemmer rommets medlemsliste i gruppesamtale vinduet."
 
 #: ../src/common/config.py:218
-msgid "In a chat, show the nickname at the beginning of a line only when it's not the same person talking than in previous message."
-msgstr "I en samtale, vis kallenavnet i starten av linjen bare når det ikke er den samme person som snakker som i den forrige meldingen."
+msgid ""
+"In a chat, show the nickname at the beginning of a line only when it's not "
+"the same person talking than in previous message."
+msgstr ""
+"I en samtale, vis kallenavnet i starten av linjen bare når det ikke er den "
+"samme person som snakker som i den forrige meldingen."
 
 #: ../src/common/config.py:219
 msgid "Indentation when using merge consecutive nickame."
@@ -5382,23 +5766,38 @@ msgstr "Innrykk når man bruker sammenslåing av like kallenavn."
 
 #: ../src/common/config.py:220
 msgid "List of colors that will be used to color nicknames in group chats."
-msgstr "Liste av farger som vil bli brukt til å farge kallenavn i gruppesamtaler."
+msgstr ""
+"Liste av farger som vil bli brukt til å farge kallenavn i gruppesamtaler."
 
 #: ../src/common/config.py:221
 msgid "Ctrl-Tab go to next composing tab when none is unread."
 msgstr "Ctrl-Tab går til neste skrivefane når ingenting er ulest."
 
 #: ../src/common/config.py:222
-msgid "Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog."
-msgstr "Skal vi vise bekreft metakontakt opprettings dialogen eller ikke?Tomt innhold mener at vi aldri viser dialogen."
+msgid ""
+"Should we show the confirm metacontacts creation dialog or not? Empty string "
+"means we never show the dialog."
+msgstr ""
+"Skal vi vise bekreft metakontakt opprettings dialogen eller ikke?Tomt "
+"innhold mener at vi aldri viser dialogen."
 
 #: ../src/common/config.py:223
-msgid "If True, you will be able to set a negative priority to your account in account modification window. BE CAREFULL, when you are logged in with a negative priority, you will NOT receive any message from your server."
-msgstr "Dersom True vil du kunne sette en negativ prioritet til din konto i kontoinnstillingene. VÆR FORSIKTIG, når du er logget inn med en negativ prioritet vil du ikke motta noen meldinger fra din server."
+msgid ""
+"If True, you will be able to set a negative priority to your account in "
+"account modification window. BE CAREFULL, when you are logged in with a "
+"negative priority, you will NOT receive any message from your server."
+msgstr ""
+"Dersom True vil du kunne sette en negativ prioritet til din konto i "
+"kontoinnstillingene. VÆR FORSIKTIG, når du er logget inn med en negativ "
+"prioritet vil du ikke motta noen meldinger fra din server."
 
 #: ../src/common/config.py:234
-msgid "Priority will change automatically according to your status. Priorities are defined in autopriority_* options."
-msgstr "Prioritet vil endre automatisk i følge med din status. Prioritetene defineres i autopriority_* valgene."
+msgid ""
+"Priority will change automatically according to your status. Priorities are "
+"defined in autopriority_* options."
+msgstr ""
+"Prioritet vil endre automatisk i følge med din status. Prioritetene "
+"defineres i autopriority_* valgene."
 
 #. yes, no, ask
 #: ../src/common/config.py:263
@@ -5406,15 +5805,18 @@ msgid "Jabberd2 workaround"
 msgstr "Jabberd2 omvei"
 
 #: ../src/common/config.py:267
-msgid "If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer."
-msgstr "Dersom valgt vil Gajim bruke din IP og proxier definert i file_transfer_proxies valget for filoverføring."
+msgid ""
+"If checked, Gajim will use your IP and proxies defined in "
+"file_transfer_proxies option for file transfer."
+msgstr ""
+"Dersom valgt vil Gajim bruke din IP og proxier definert i "
+"file_transfer_proxies valget for filoverføring."
 
 #: ../src/common/config.py:326
 msgid "Is OpenPGP enabled for this contact?"
 msgstr "Er OpenPGP tilgjengelig for denne kontakten?"
 
-#: ../src/common/config.py:327
-#: ../src/common/config.py:330
+#: ../src/common/config.py:327 ../src/common/config.py:330
 msgid "Language for which we want to check misspelled words"
 msgstr "Språk som vi ønsker å sjekke feilstavede ord med"
 
@@ -5426,10 +5828,8 @@ msgstr "alle eller mellomroms separert status"
 msgid "'yes', 'no', or 'both'"
 msgstr "'yes', 'no', eller 'both'"
 
-#: ../src/common/config.py:338
-#: ../src/common/config.py:340
-#: ../src/common/config.py:341
-#: ../src/common/config.py:344
+#: ../src/common/config.py:338 ../src/common/config.py:340
+#: ../src/common/config.py:341 ../src/common/config.py:344
 #: ../src/common/config.py:345
 msgid "'yes', 'no' or ''"
 msgstr "'yes', 'no' eller ''"
@@ -5502,26 +5902,28 @@ msgstr "Jeg er ikke tilgjengelig."
 msgid "Do not disturb."
 msgstr "Ikke forstyrr."
 
-#: ../src/common/config.py:366
-#: ../src/common/config.py:367
+#: ../src/common/config.py:366 ../src/common/config.py:367
 msgid "Bye!"
 msgstr "Hade bra!"
 
 #: ../src/common/config.py:376
-msgid "Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname."
-msgstr "Lyd som spilles når en samtalerom melding inneholder et av ordene i muc_highlight_words, eller når en samtalerom melding inneholder ditt kallenavn."
+msgid ""
+"Sound to play when a group chat message contains one of the words in "
+"muc_highlight_words, or when a group chat message contains your nickname."
+msgstr ""
+"Lyd som spilles når en samtalerom melding inneholder et av ordene i "
+"muc_highlight_words, eller når en samtalerom melding inneholder ditt "
+"kallenavn."
 
 #: ../src/common/config.py:377
 msgid "Sound to play when any MUC message arrives."
 msgstr "Lyd som spilles når en ny samtalerom melding mottas."
 
-#: ../src/common/config.py:386
-#: ../src/common/optparser.py:197
+#: ../src/common/config.py:386 ../src/common/optparser.py:197
 msgid "green"
 msgstr "grønn"
 
-#: ../src/common/config.py:390
-#: ../src/common/optparser.py:183
+#: ../src/common/config.py:390 ../src/common/optparser.py:183
 msgid "grocery"
 msgstr "varehandel"
 
@@ -5545,15 +5947,19 @@ msgstr "Feil maskinnavn"
 
 #: ../src/common/connection_handlers.py:177
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
-msgid "The host you configured as the ft_override_host_to_send advanced option is not valid, so ignored."
-msgstr "Maskinen du konfigurerte som ft_override_host_to_send avanserte valg er ikke gyldig, så den ignoreres."
+msgid ""
+"The host you configured as the ft_override_host_to_send advanced option is "
+"not valid, so ignored."
+msgstr ""
+"Maskinen du konfigurerte som ft_override_host_to_send avanserte valg er ikke "
+"gyldig, så den ignoreres."
 
 #: ../src/common/connection_handlers.py:590
 #, python-format
 msgid "Registration information for transport %s has not arrived in time"
 msgstr "Registrerings informasjon for transport %s har ikke kommet tidsnok"
 
-#: ../src/common/connection_handlers.py:1519
+#: ../src/common/connection_handlers.py:1523
 #, python-format
 msgid "Nickname not allowed: %s"
 msgstr "Kallenavn ikke lovlig: %s"
@@ -5561,72 +5967,78 @@ msgstr "Kallenavn ikke lovlig: %s"
 #. password required to join
 #. we are banned
 #. group chat does not exist
-#: ../src/common/connection_handlers.py:1581
-#: ../src/common/connection_handlers.py:1584
-#: ../src/common/connection_handlers.py:1587
-#: ../src/common/connection_handlers.py:1590
-#: ../src/common/connection_handlers.py:1593
-#: ../src/common/connection_handlers.py:1596
-#: ../src/common/connection_handlers.py:1604
+#: ../src/common/connection_handlers.py:1585
+#: ../src/common/connection_handlers.py:1588
+#: ../src/common/connection_handlers.py:1591
+#: ../src/common/connection_handlers.py:1594
+#: ../src/common/connection_handlers.py:1597
+#: ../src/common/connection_handlers.py:1600
+#: ../src/common/connection_handlers.py:1608
 msgid "Unable to join group chat"
 msgstr "Klarer ikke å gå inn i gruppesamtale"
 
-#: ../src/common/connection_handlers.py:1582
+#: ../src/common/connection_handlers.py:1586
 msgid "A password is required to join this group chat."
 msgstr "Et passord kreves for å bli med i dette samtalerommet."
 
-#: ../src/common/connection_handlers.py:1585
+#: ../src/common/connection_handlers.py:1589
 msgid "You are banned from this group chat."
 msgstr "Du er uønsket i dette samtalerommet."
 
-#: ../src/common/connection_handlers.py:1588
+#: ../src/common/connection_handlers.py:1592
 msgid "Such group chat does not exist."
 msgstr "Et slikt samtalerom finnes ikke."
 
-#: ../src/common/connection_handlers.py:1591
+#: ../src/common/connection_handlers.py:1595
 msgid "Group chat creation is restricted."
 msgstr "Gruppesamtale oppretting er begrenset."
 
-#: ../src/common/connection_handlers.py:1594
+#: ../src/common/connection_handlers.py:1598
 msgid "Your registered nickname must be used."
 msgstr "Ditt registrerte kallenavn må bli brukt. "
 
-#: ../src/common/connection_handlers.py:1597
+#: ../src/common/connection_handlers.py:1601
 msgid "You are not in the members list."
 msgstr "Du er ikke medlems listen."
 
-#: ../src/common/connection_handlers.py:1605
+#: ../src/common/connection_handlers.py:1609
 msgid ""
 "Your desired nickname is in use or registered by another occupant.\n"
 "Please specify another nickname below:"
 msgstr ""
-"Ditt ønskede kallenavn er i bruk eller er registrert av en annen samtalebruker.\n"
+"Ditt ønskede kallenavn er i bruk eller er registrert av en annen "
+"samtalebruker.\n"
 "Vennligst skriv et annet kallenavn under:"
 
-#: ../src/common/connection_handlers.py:1651
+#: ../src/common/connection_handlers.py:1659
 msgid "I would like to add you to my roster."
 msgstr "Jeg vil legge deg til min kontaktliste."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection_handlers.py:1672
+#: ../src/common/connection_handlers.py:1680
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr "vi abonnerer nå på %s"
 
-#: ../src/common/connection_handlers.py:1674
+#: ../src/common/connection_handlers.py:1682
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "frakoblings ønske fra %s"
 
-#: ../src/common/connection_handlers.py:1676
+#: ../src/common/connection_handlers.py:1684
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "vi abonnerer ikke lenger på %s"
 
-#: ../src/common/connection_handlers.py:1846
+#: ../src/common/connection_handlers.py:1854
 #, python-format
-msgid "JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it"
-msgstr "JID %s er ikke RFC kompatibel. Den vil ikke bli lagt til kontaktlisten. Bruk kontaktliste administrasjons verktøy som http://jru.jabberstudio.org/ for å fjerne den"
+msgid ""
+"JID %s is not RFC compliant. It will not be added to your roster. Use roster "
+"management tools such as http://jru.jabberstudio.org/ to remove it"
+msgstr ""
+"JID %s er ikke RFC kompatibel. Den vil ikke bli lagt til kontaktlisten. Bruk "
+"kontaktliste administrasjons verktøy som http://jru.jabberstudio.org/ for å "
+"fjerne den"
 
 #: ../src/common/connection.py:164
 #: ../src/common/zeroconf/connection_zeroconf.py:196
@@ -5638,8 +6050,7 @@ msgstr "Tilkobling til konto \"%s\" har blitt mistet"
 msgid "Reconnect manually."
 msgstr "Automatisk tilkobling."
 
-#: ../src/common/connection.py:176
-#: ../src/common/connection.py:203
+#: ../src/common/connection.py:176 ../src/common/connection.py:203
 #, python-format
 msgid "Transport %s answered wrongly to register request: %s"
 msgstr "Transporten %s svarte feil på registrerings forespørselen: %s"
@@ -5649,9 +6060,8 @@ msgstr "Transporten %s svarte feil på registrerings forespørselen: %s"
 msgid "Invalid answer"
 msgstr "Ugyldig svar"
 
-#: ../src/common/connection.py:394
-#: ../src/common/connection.py:429
-#: ../src/common/connection.py:871
+#: ../src/common/connection.py:394 ../src/common/connection.py:429
+#: ../src/common/connection.py:877
 #: ../src/common/zeroconf/connection_zeroconf.py:217
 #, python-format
 msgid "Could not connect to \"%s\""
@@ -5708,7 +6118,7 @@ msgstr "Jeg er %s"
 msgid "[This message is *encrypted* (See :JEP:`27`]"
 msgstr "[Denne meldingen er *kryptert* (Se: JEP:`27`]"
 
-#: ../src/common/connection.py:758
+#: ../src/common/connection.py:764
 #: ../src/common/zeroconf/connection_zeroconf.py:397
 #, python-format
 msgid ""
@@ -5718,7 +6128,7 @@ msgstr ""
 "Tittel: %s\n"
 "%s"
 
-#: ../src/common/connection.py:897
+#: ../src/common/connection.py:903
 msgid "Not fetched because of invisible status"
 msgstr "Ikke hentet på grunn av usynlig status"
 
@@ -5733,11 +6143,14 @@ msgstr "D-Bus egenskapene til Gajim kan ikke brukes"
 
 #: ../src/common/exceptions.py:22
 msgid "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
-msgstr "pysqlite2 (også kjent som python-pysqlite2) avhengighet mangler. Avslutter..."
+msgstr ""
+"pysqlite2 (også kjent som python-pysqlite2) avhengighet mangler. Avslutter..."
 
 #: ../src/common/exceptions.py:30
 msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr "Tjeneste ikke tilgjengelig: Gajim kjører ikke, eller remote_control er satt til False"
+msgstr ""
+"Tjeneste ikke tilgjengelig: Gajim kjører ikke, eller remote_control er satt "
+"til False"
 
 #: ../src/common/exceptions.py:38
 msgid "D-Bus is not present on this machine or python module is missing"
@@ -5801,68 +6214,55 @@ msgstr "tolv"
 
 #. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
 #. A "singular-form". It is used when talking about hour 0
-#: ../src/common/fuzzyclock.py:47
-#: ../src/common/fuzzyclock.py:55
+#: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "%0 o'clock"
 msgstr "klokken %0"
 
-#: ../src/common/fuzzyclock.py:47
-#: ../src/common/fuzzyclock.py:55
+#: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "five past %0"
 msgstr "fem over %0"
 
-#: ../src/common/fuzzyclock.py:47
-#: ../src/common/fuzzyclock.py:56
+#: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:56
 msgid "ten past %0"
 msgstr "ti over %0"
 
-#: ../src/common/fuzzyclock.py:48
-#: ../src/common/fuzzyclock.py:56
+#: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
 msgid "quarter past %0"
 msgstr "kvart over %0"
 
-#: ../src/common/fuzzyclock.py:48
-#: ../src/common/fuzzyclock.py:57
+#: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:57
 msgid "twenty past %0"
 msgstr "ti på halv %1"
 
-#: ../src/common/fuzzyclock.py:49
-#: ../src/common/fuzzyclock.py:57
+#: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 msgid "twenty five past %0"
 msgstr "fem på halv %1"
 
-#: ../src/common/fuzzyclock.py:49
-#: ../src/common/fuzzyclock.py:58
+#: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:58
 msgid "half past %0"
 msgstr "halv %1"
 
-#: ../src/common/fuzzyclock.py:50
-#: ../src/common/fuzzyclock.py:58
+#: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 msgid "twenty five to %1"
 msgstr "fem over halv %1"
 
-#: ../src/common/fuzzyclock.py:50
-#: ../src/common/fuzzyclock.py:59
+#: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:59
 msgid "twenty to %1"
 msgstr "ti over halv %1"
 
-#: ../src/common/fuzzyclock.py:51
-#: ../src/common/fuzzyclock.py:59
+#: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
 msgid "quarter to %1"
 msgstr "kvart på %1"
 
-#: ../src/common/fuzzyclock.py:51
-#: ../src/common/fuzzyclock.py:60
+#: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:60
 msgid "ten to %1"
 msgstr "ti til %1"
 
-#: ../src/common/fuzzyclock.py:51
-#: ../src/common/fuzzyclock.py:60
+#: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:60
 msgid "five to %1"
 msgstr "fem på %1"
 
-#: ../src/common/fuzzyclock.py:52
-#: ../src/common/fuzzyclock.py:60
+#: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
 msgid "%1 o'clock"
 msgstr "%1"
 
@@ -6036,10 +6436,6 @@ msgstr "?Subscription we already have:Ingen"
 msgid "To"
 msgstr "Til"
 
-#: ../src/common/helpers.py:259
-msgid "From"
-msgstr "Fra"
-
 #: ../src/common/helpers.py:261
 msgid "Both"
 msgstr "Begge"
@@ -6117,36 +6513,35 @@ msgstr "tok pause i skriving av en melding"
 msgid "has closed the chat window or tab"
 msgstr "har lukket samtalevinduet eller fanen"
 
-#: ../src/common/helpers.py:880
+#: ../src/common/helpers.py:881
 #, python-format
 msgid " %d unread message"
 msgid_plural " %d unread messages"
 msgstr[0] "%d ulest melding"
 msgstr[1] "%d uleste meldinger"
 
-#: ../src/common/helpers.py:886
+#: ../src/common/helpers.py:887
 #, python-format
 msgid " %d unread single message"
 msgid_plural " %d unread single messages"
 msgstr[0] "%d ulest enkelt melding"
 msgstr[1] "%d uleste enkelt meldinger"
 
-#: ../src/common/helpers.py:892
+#: ../src/common/helpers.py:893
 #, python-format
 msgid " %d unread group chat message"
 msgid_plural " %d unread group chat messages"
 msgstr[0] "%d ulest gruppesamtale melding"
 msgstr[1] "%d uleste gruppesamtale meldinger"
 
-#: ../src/common/helpers.py:898
+#: ../src/common/helpers.py:899
 #, python-format
 msgid " %d unread private message"
 msgid_plural " %d unread private messages"
 msgstr[0] "%d ulest privat melding"
 msgstr[1] "%d uleste private meldinger"
 
-#: ../src/common/helpers.py:908
-#: ../src/common/helpers.py:910
+#: ../src/common/helpers.py:909 ../src/common/helpers.py:911
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
@@ -6161,8 +6556,7 @@ msgstr "feil: kan ikke åpne %s for lesing"
 msgid "gtk+"
 msgstr "gtk+"
 
-#: ../src/common/optparser.py:192
-#: ../src/common/optparser.py:193
+#: ../src/common/optparser.py:192 ../src/common/optparser.py:193
 msgid "cyan"
 msgstr "turkis"
 
@@ -6176,7 +6570,8 @@ msgid "Gajim account %s"
 msgstr "Gajim konto %s"
 
 #: ../src/common/zeroconf/client_zeroconf.py:189
-msgid "Connection to host could not be established: Incorrect answer from server."
+msgid ""
+"Connection to host could not be established: Incorrect answer from server."
 msgstr "Tilkobling til maskinen kunne ikke opprettes: Feil svar fra serveren."
 
 #: ../src/common/zeroconf/client_zeroconf.py:205
@@ -6184,8 +6579,11 @@ msgid "Connection to host could not be established"
 msgstr "Tilkobling til maskin kunne ikke opprettes"
 
 #: ../src/common/zeroconf/client_zeroconf.py:334
-msgid "Connection to host could not be established: Timeout while sending data."
-msgstr "Tilkobling til maskinen kunne ikke opprettes: Tidsutløp under sending av data."
+msgid ""
+"Connection to host could not be established: Timeout while sending data."
+msgstr ""
+"Tilkobling til maskinen kunne ikke opprettes: Tidsutløp under sending av "
+"data."
 
 #: ../src/common/zeroconf/client_zeroconf.py:629
 msgid "Contact is offline. Your message could not be sent."
@@ -6233,8 +6631,12 @@ msgid "Could not change status of account \"%s\""
 msgstr "Kunne ikke endre status til konto \"%s\""
 
 #: ../src/common/zeroconf/connection_zeroconf.py:341
-msgid "You are not connected or not visible to others. Your message could not be sent."
-msgstr "Du er ikke tilkoblet eller er usynlig for andre. Din melding kunne ikke sendes."
+msgid ""
+"You are not connected or not visible to others. Your message could not be "
+"sent."
+msgstr ""
+"Du er ikke tilkoblet eller er usynlig for andre. Din melding kunne ikke "
+"sendes."
 
 #. we're not english
 #: ../src/common/zeroconf/connection_zeroconf.py:353
@@ -6249,10 +6651,13 @@ msgstr "Feil ved tilføying av tjeneste. %s"
 #, fuzzy
 #~ msgid "_New room"
 #~ msgstr "Nytt Rom"
+
 #~ msgid "Role: "
 #~ msgstr "Rolle: "
+
 #~ msgid "Affiliation: "
 #~ msgstr "Tilhørighet: "
+
 #~ msgid ""
 #~ "Sound to play when any MUC message arrives. (This setting is taken into "
 #~ "account only if notify_on_all_muc_messages is True)"
@@ -6279,42 +6684,57 @@ msgstr "Feil ved tilføying av tjeneste. %s"
 #, fuzzy
 #~ msgid "Not Available "
 #~ msgstr "Ikke tilgjengelig"
+
 #~ msgid "Contact _Info"
 #~ msgstr "Kontakt_Info"
+
 #~ msgid "Contact Information"
 #~ msgstr "Kontaktinformasjon"
+
 #~ msgid "Jabber"
 #~ msgstr "Jabber"
+
 #~ msgid "Invalid room or server name"
 #~ msgstr "Ugyldig rom eller servernavn"
+
 #~ msgid "Unknown D-Bus version: %s"
 #~ msgstr "Ukjent D-Bus versjon: %s"
+
 #~ msgid "vCard publication succeeded"
 #~ msgstr "vCard publisering vellykket"
+
 #~ msgid "Your personal information has been published successfully."
 #~ msgstr "Din personlige informasjon har blitt publisert uten feil."
+
 #~ msgid "Migrating Logs..."
 #~ msgstr "Migrerer Logger..."
-#~ msgid "Please wait while logs are being migrated..."
-#~ msgstr "Vennligst vent mens loggene blir migrert..."
+
 #~ msgid "_Join New Room"
 #~ msgstr "_Bli med i Nytt Rom"
+
 #~ msgid "Gajim - %d unread message"
 #~ msgid_plural "Gajim - %d unread messages"
 #~ msgstr[0] "Gajim - %d ulest melding"
 #~ msgstr[1] "Gajim - %d uleste meldinger"
+
 #~ msgid "Since %s"
 #~ msgstr "Siden %s"
+
 #~ msgid "Automatically authorize contact"
 #~ msgstr "Automatisk godkjenn kontakt"
+
 #~ msgid "Send File"
 #~ msgstr "Send Fil"
+
 #~ msgid "Underline"
 #~ msgstr "Strek Under"
+
 #~ msgid "Would you like to overwrite it?"
 #~ msgstr "Ønsker du å overskrive den?"
+
 #~ msgid "_Join New Room..."
 #~ msgstr "_Bli med i Nytt Rom"
+
 #~ msgid "Usage: /%s, sets the groupchat window to compact mode."
 #~ msgstr ""
 #~ "Bruksanvisning: /%s, setter gruppesamtale vinduet til kompakt modus."
@@ -6322,6 +6742,7 @@ msgstr "Feil ved tilføying av tjeneste. %s"
 #, fuzzy
 #~ msgid "<b>Please modify your special notification below</b>"
 #~ msgstr "<b>Vennligst velg ett av valgene under:</b>"
+
 #~ msgid "Delete Message of the Day"
 #~ msgstr "Slett Melding for Dagen"
 
@@ -6332,101 +6753,140 @@ msgstr "Feil ved tilføying av tjeneste. %s"
 #, fuzzy
 #~ msgid "I want to listen to:"
 #~ msgstr "%s ønsker å sende deg en fil:"
+
 #~ msgid "Send _New Message..."
 #~ msgstr "Send _Ny Melding..."
+
 #~ msgid "Set Message of the Day"
 #~ msgstr "Velg Melding for Dagen"
+
 #~ msgid "Update Message of the Day"
 #~ msgstr "Oppdater Melding for Dagen"
+
 #~ msgid "_XML Console..."
 #~ msgstr "_XML Konsoll..."
+
 #~ msgid "Choose Avatar"
 #~ msgstr "Velg Bilde"
+
 #~ msgid "Use compact view when you open a chat window"
 #~ msgstr "Bruk kompakt utseende når du åpner et samtale vindu"
+
 #~ msgid "Use compact view when you open a group chat window"
 #~ msgstr "Bruk kompakt utseende når du åpner et gruppe samtale vindu"
+
 #~ msgid "plain"
 #~ msgstr "enkel"
+
 #~ msgid "Send"
 #~ msgstr "Send"
+
 #~ msgid "%(nickname)s in room %(room_name)s has sent you a new message."
 #~ msgstr "%(nickname)s i rom %(room_name)s har sendt deg en ny melding."
+
 #~ msgid "%s has sent you a new message."
 #~ msgstr "%s har sendt deg en ny melding."
 
 #, fuzzy
 #~ msgid "GUI Migration failed"
 #~ msgstr "vCard publisering feilet"
+
 #~ msgid "Logs have been successfully migrated to the database."
 #~ msgstr "Loggene ble migrert til databasen uten feil."
+
 #~ msgid "If checked, Gajim will also have a trayicon"
 #~ msgstr "Dresom valgt vil Gajim ha et statusikon (trayicon)"
 
 #, fuzzy
 #~ msgid "Start Chat with Contact"
 #~ msgstr "Start samtale med konto %s"
+
 #~ msgid "All contacts in this group are offline or have errors"
 #~ msgstr "Alle kontakter in denne gruppen er frakoblet eller har feil"
+
 #~ msgid "Size: "
 #~ msgstr "Størrelse: "
+
 #~ msgid "Session bus is not available"
 #~ msgstr "Sesjons buss ikke tilgjengelig"
+
 #~ msgid "Sound"
 #~ msgstr "Lyd"
+
 #~ msgid "Text"
 #~ msgstr "Tekst"
+
 #~ msgid "Image"
 #~ msgstr "Bilde"
+
 #~ msgid "From %s"
 #~ msgstr "Fra %s"
+
 #~ msgid "To %s"
 #~ msgstr "Til %s"
+
 #~ msgid "You have been invited to the %(room_jid)s room by %(contact_jid)s"
 #~ msgstr "Du har blitt invitert til %(room_jid)s rommet av %(contact_jid)s"
+
 #~ msgid "Manage Emoticons"
 #~ msgstr "Behandle Uttrykksikoner"
+
 #~ msgid "Or choose a preset message:"
 #~ msgstr "Eller velg en forhåndsvalgt melding:"
+
 #~ msgid "Use _emoticons"
 #~ msgstr "Bruk _uttrykksikoner"
+
 #~ msgid "_Set Image..."
 #~ msgstr "_Velg Bilde..."
+
 #~ msgid "Switch to %s"
 #~ msgstr "Endre til %s"
+
 #~ msgid "using account "
 #~ msgstr "bruker konto"
+
 #~ msgid "The filesize of image \"%s\" is too large"
 #~ msgstr "Filstørrelsen på bilde \"%s\" er for stor"
+
 #~ msgid "The file must not be more than 32 kilobytes."
 #~ msgstr "Filen må ikke være mer enn 32 kilobyte."
+
 #~ msgid "Timeout"
 #~ msgstr "Tidsavbrudd"
-#~ msgid "A protocol error has occured:"
-#~ msgstr "En protokoll feil har skjedd:"
+
 #~ msgid "account: "
 #~ msgstr "konto:"
+
 #~ msgid "Are you sure you want to leave rooms \"%s\"?"
 #~ msgstr "Er du sikker på at du vil gå ut av rommene \"%s\"?"
+
 #~ msgid "If you close this window, you will be disconnected from these rooms."
 #~ msgstr ""
 #~ "Dersom du lukker dette vinduet, så vil du bli frakoblet fra disse rommene."
+
 #~ msgid "Activate/Disable notification for when a file transfer is complete"
 #~ msgstr "Aktiver/Deaktiver melding om at filoverføring er komplett"
+
 #~ msgid "Removing selected file transfer"
 #~ msgstr "Fjern valgte filoverføring"
+
 #~ msgid "Stoping selected file transfer"
 #~ msgstr "Stopp valgte filoverføring"
+
 #~ msgid ""
 #~ "If you close this tab and you have history disabled, the message will be "
 #~ "lost."
 #~ msgstr ""
 #~ "Dersom du lukke denne fanen og du har slått av historikk, vil meldingen "
 #~ "bli borte."
+
 #~ msgid "Cannot remove last group"
 #~ msgstr "Kan ikke fjerne den siste gruppen"
+
 #~ msgid "At least one contact group must be present."
 #~ msgstr "Du må ha minst en kontakt gruppe."
+
 #~ msgid ""
 #~ "pysqlite2 (aka python-pysqlite2) dependency is missing. After you install "
 #~ "pysqlite3, if you want to migrate your logs to the new database, please "
@@ -6436,12 +6896,13 @@ msgstr "Feil ved tilføying av tjeneste. %s"
 #~ "installert pysqlite2, og om du ønsker å migrere loggene dine til den nye "
 #~ "databasen, vennligst les:http://trac.gajim.org/wiki/MigrateLogToDot9DB "
 #~ "Avslutter..."
+
 #~ msgid "Image is too big"
 #~ msgstr "Bilde er for stort"
+
 #~ msgid ""
 #~ "Image for emoticon has to be less than or equal to 24 pixels in width and "
 #~ "24 in height."
 #~ msgstr ""
 #~ "Bilde for uttrykksikon må være mindre enn eller lik 24 piksler i bredde "
 #~ "og 24 i høyde."
-

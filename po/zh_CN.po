@@ -5,11 +5,12 @@
 # wwld <wwld@radio.lzusiyu.org>, 2005.
 # kangkang <kanger@gamil.com>, 2005.
 #
+#: ../src/gajim-remote.py:202 ../src/gajim-remote.py:209
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-26 22:15+0100\n"
+"POT-Creation-Date: 2006-12-09 10:02+0100\n"
 "PO-Revision-Date: 2006-12-04 01:07+0800\n"
 "Last-Translator: kangkang <kanger@gmail.com>\n"
 "Language-Team: sIyU <jabber@lzusiyu.org>\n"
@@ -219,8 +220,14 @@ msgid "Chan_ge Password"
 msgstr "更换密码(_G)"
 
 #: ../data/glade/account_modification_window.glade.h:9
-msgid "Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default if broadcasted by the server, and with this option enabled TLS will be disabled"
-msgstr "检查这里， Gajim 将连接代理服务器具有 SSL 能力的 5523 端口。注意， Gajim 使用 TLS 加密接受服务器广播，而使用该选项将禁用 TLS"
+msgid ""
+"Check this so Gajim will connect in port 5223 where legacy servers are "
+"expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
+"default if broadcasted by the server, and with this option enabled TLS will "
+"be disabled"
+msgstr ""
+"检查这里， Gajim 将连接代理服务器具有 SSL 能力的 5523 端口。注意， Gajim 使"
+"用 TLS 加密接受服务器广播，而使用该选项将禁用 TLS"
 
 #: ../data/glade/account_modification_window.glade.h:10
 #: ../data/glade/zeroconf_properties_window.glade.h:4
@@ -240,11 +247,8 @@ msgid "Edit Personal Information..."
 msgstr "编辑个人信息..."
 
 #: ../data/glade/account_modification_window.glade.h:14
-#: ../data/glade/roster_window.glade.h:5
-#: ../src/notify.py:453
-#: ../src/notify.py:475
-#: ../src/notify.py:487
-#: ../src/common/helpers.py:904
+#: ../data/glade/roster_window.glade.h:5 ../src/notify.py:453
+#: ../src/notify.py:475 ../src/notify.py:487 ../src/common/helpers.py:905
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -252,12 +256,9 @@ msgstr "Gajim"
 #: ../data/glade/account_modification_window.glade.h:15
 #: ../data/glade/preferences_window.glade.h:49
 #: ../data/glade/zeroconf_properties_window.glade.h:7
-#: ../src/roster_window.py:342
-#: ../src/roster_window.py:1211
-#: ../src/roster_window.py:1422
-#: ../src/roster_window.py:2032
-#: ../src/roster_window.py:2074
-#: ../src/common/contacts.py:278
+#: ../src/roster_window.py:342 ../src/roster_window.py:1211
+#: ../src/roster_window.py:1422 ../src/roster_window.py:2032
+#: ../src/roster_window.py:2074 ../src/common/contacts.py:278
 msgid "General"
 msgstr "常规"
 
@@ -266,27 +267,42 @@ msgid "Hostname: "
 msgstr "主机名："
 
 #: ../data/glade/account_modification_window.glade.h:17
-msgid "If checked, Gajim will also broadcast some more IPs except from just your IP, so file transfer has higher chances of working."
-msgstr "如选定， Gajim 将广播除了你的 IP 外的更多 IP，文件传输将有较多机会可以工作。"
+msgid ""
+"If checked, Gajim will also broadcast some more IPs except from just your "
+"IP, so file transfer has higher chances of working."
+msgstr ""
+"如选定， Gajim 将广播除了你的 IP 外的更多 IP，文件传输将有较多机会可以工作。"
 
 #: ../data/glade/account_modification_window.glade.h:19
-msgid "If checked, Gajim will send keep-alive packets so it prevents connection timeout which results in disconnection"
+msgid ""
+"If checked, Gajim will send keep-alive packets so it prevents connection "
+"timeout which results in disconnection"
 msgstr "如果选定，Gajim 会发送数据包防止超时造成的连接断开"
 
 #: ../data/glade/account_modification_window.glade.h:20
 #: ../data/glade/zeroconf_properties_window.glade.h:8
-msgid "If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you"
-msgstr "如果选定，Gajim 会以已读许可方式为您个人把密码保存在 ~/.gajim/config 文件中"
+msgid ""
+"If checked, Gajim will store the password in ~/.gajim/config with 'read' "
+"permission only for you"
+msgstr ""
+"如果选定，Gajim 会以已读许可方式为您个人把密码保存在 ~/.gajim/config 文件中"
 
 #: ../data/glade/account_modification_window.glade.h:21
 #: ../data/glade/zeroconf_properties_window.glade.h:9
-msgid "If checked, Gajim, when launched, will automatically connect to jabber using this account"
+msgid ""
+"If checked, Gajim, when launched, will automatically connect to jabber using "
+"this account"
 msgstr "如果选定，Gajim 会在运行时使用本帐户自动连接 jabber"
 
 #: ../data/glade/account_modification_window.glade.h:22
 #: ../data/glade/zeroconf_properties_window.glade.h:10
-msgid "If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly"
-msgstr "如果选定，改变全局状态(在名单窗口下方复选框中调节)就会相应地改变当前帐户的状态"
+msgid ""
+"If checked, any change to the global status (handled by the combobox at the "
+"bottom of the roster window) will change the status of this account "
+"accordingly"
+msgstr ""
+"如果选定，改变全局状态(在名单窗口下方复选框中调节)就会相应地改变当前帐户的状"
+"态"
 
 #: ../data/glade/account_modification_window.glade.h:23
 msgid "Information about you, as stored in the server"
@@ -297,26 +313,17 @@ msgid "Manage..."
 msgstr "管理..."
 
 #: ../data/glade/account_modification_window.glade.h:25
-#: ../data/glade/zeroconf_properties_window.glade.h:16
-#: ../src/config.py:1636
-#: ../src/config.py:3429
+#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1642
+#: ../src/config.py:3435
 msgid "No key selected"
 msgstr "没有选择钥匙"
 
 #. None means no proxy profile selected
-#: ../data/glade/account_modification_window.glade.h:27
-#: ../src/config.py:1218
-#: ../src/config.py:1223
-#: ../src/config.py:1407
-#: ../src/config.py:1626
-#: ../src/config.py:1635
-#: ../src/config.py:1694
-#: ../src/config.py:1768
-#: ../src/config.py:2639
-#: ../src/config.py:3419
-#: ../src/config.py:3428
-#: ../src/dialogs.py:281
-#: ../src/dialogs.py:283
+#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1224
+#: ../src/config.py:1229 ../src/config.py:1413 ../src/config.py:1632
+#: ../src/config.py:1641 ../src/config.py:1700 ../src/config.py:1774
+#: ../src/config.py:2645 ../src/config.py:3425 ../src/config.py:3434
+#: ../src/dialogs.py:281 ../src/dialogs.py:283
 msgid "None"
 msgstr "无"
 
@@ -334,8 +341,13 @@ msgid "Priori_ty:"
 msgstr "优先级(_T):"
 
 #: ../data/glade/account_modification_window.glade.h:31
-msgid "Priority is used in Jabber to determine who gets the events from the jabber server when two or more clients are connected using the same account; The client with the highest priority gets the events"
-msgstr "优先级是当多个客户端使用同一帐户连接到服务器时， Jabber 决定事件响应对象的依据。"
+msgid ""
+"Priority is used in Jabber to determine who gets the events from the jabber "
+"server when two or more clients are connected using the same account; The "
+"client with the highest priority gets the events"
+msgstr ""
+"优先级是当多个客户端使用同一帐户连接到服务器时， Jabber 决定事件响应对象的依"
+"据。"
 
 #: ../data/glade/account_modification_window.glade.h:32
 msgid "Priority will change automatically according to your status."
@@ -350,8 +362,16 @@ msgid "Resour_ce: "
 msgstr "资源(_C)："
 
 #: ../data/glade/account_modification_window.glade.h:35
-msgid "Resource is sent to the Jabber server in order to separate the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)"
-msgstr "资源被发往 Jabber 服务器后，通过同时连接到服务器的多个客户端将 JID 分成若干部分。您可以利用“家庭”和“工作”两个资源同时连接到服务器。拥有更高优先级的资源得到服务器的事件响应。"
+msgid ""
+"Resource is sent to the Jabber server in order to separate the same JID in "
+"two or more parts depending on the number of the clients connected in the "
+"same server with the same account. So you might be connected in the same "
+"account with resource 'Home' and 'Work' at the same time. The resource which "
+"has the highest priority will get the events. (see below)"
+msgstr ""
+"资源被发往 Jabber 服务器后，通过同时连接到服务器的多个客户端将 JID 分成若干部"
+"分。您可以利用“家庭”和“工作”两个资源同时连接到服务器。拥有更高优先级的资源得"
+"到服务器的事件响应。"
 
 #: ../data/glade/account_modification_window.glade.h:36
 #: ../data/glade/zeroconf_properties_window.glade.h:18
@@ -402,15 +422,23 @@ msgstr "帐户"
 
 #: ../data/glade/accounts_window.glade.h:2
 msgid ""
-"If checked, all local contacts that use a Bonjour compatible chat client (like iChat, Trillian or Gaim) will be shown in roster. You don't need to be connected to a jabber server for it to work.\n"
-"This is only available if python-avahi is installed and avahi-daemon is running."
+"If checked, all local contacts that use a Bonjour compatible chat client "
+"(like iChat, Trillian or Gaim) will be shown in roster. You don't need to be "
+"connected to a jabber server for it to work.\n"
+"This is only available if python-avahi is installed and avahi-daemon is "
+"running."
 msgstr ""
-"如果选择，所有使用群体兼容聊天客户端(如iChat，Trillian 或 Gaim)的本地联系人将在名单中显示。您将可使它工作而不用连接到 Jabber 服务器。\n"
+"如果选择，所有使用群体兼容聊天客户端(如iChat，Trillian 或 Gaim)的本地联系人将"
+"在名单中显示。您将可使它工作而不用连接到 Jabber 服务器。\n"
 "只在 python-avahi 安装且 avahi 守护进程运行时有效。"
 
 #: ../data/glade/accounts_window.glade.h:4
-msgid "If you have 2 or more accounts and it is checked, Gajim will list all contacts as if you had one account"
-msgstr "如果选定，当您拥有多个帐户时，Gajim 会在列表中列出所有联系人，而看上去他们就像属于同一个帐户"
+msgid ""
+"If you have 2 or more accounts and it is checked, Gajim will list all "
+"contacts as if you had one account"
+msgstr ""
+"如果选定，当您拥有多个帐户时，Gajim 会在列表中列出所有联系人，而看上去他们就"
+"像属于同一个帐户"
 
 #: ../data/glade/accounts_window.glade.h:5
 msgid "Mer_ge accounts"
@@ -483,6 +511,46 @@ msgstr "注册(_G)："
 #: ../data/glade/add_new_contact_window.glade.h:15
 msgid "_User ID:"
 msgstr "用户 ID(_U):"
+
+#: ../data/glade/adhoc_commands_window.glade.h:1
+#, fuzzy
+msgid "<b>An error has occured:</b>"
+msgstr "发生了一个协议错误："
+
+#: ../data/glade/adhoc_commands_window.glade.h:2
+msgid "<b>Choose command to execute:</b>"
+msgstr ""
+
+#: ../data/glade/adhoc_commands_window.glade.h:3
+msgid "Ad-hoc Commands - Gajim"
+msgstr ""
+
+#: ../data/glade/adhoc_commands_window.glade.h:4
+msgid "Check once more"
+msgstr ""
+
+#: ../data/glade/adhoc_commands_window.glade.h:5
+#, fuzzy
+msgid "Error description..."
+msgstr "描述"
+
+#: ../data/glade/adhoc_commands_window.glade.h:6
+#, fuzzy
+msgid "Please wait while retrieving command list..."
+msgstr "请等待日志被移动..."
+
+#: ../data/glade/adhoc_commands_window.glade.h:7
+#, fuzzy
+msgid "Please wait while the command is sending..."
+msgstr "请等待日志被移动..."
+
+#: ../data/glade/adhoc_commands_window.glade.h:8
+msgid "Please wait..."
+msgstr ""
+
+#: ../data/glade/adhoc_commands_window.glade.h:9
+msgid "This jabber entity does not expose any commands."
+msgstr ""
 
 #: ../data/glade/advanced_configuration_window.glade.h:1
 msgid "<b>Description</b>"
@@ -623,13 +691,13 @@ msgstr "播放声音"
 #: ../data/glade/advanced_notifications_window.glade.h:18
 msgid ""
 "Receive a Message\n"
-"Contact Connected\n"
-"Contact Disconnected\n"
-"Contact Change Status\n"
-"Group Chat Message Highlight\n"
-"Group Chat Message Received\n"
-"File Transfert Resquest\n"
-"File Transfert Started\n"
+"Contact Connected \n"
+"Contact Disconnected \n"
+"Contact Change Status \n"
+"Group Chat Message Highlight \n"
+"Group Chat Message Received \n"
+"File Transfert Resquest \n"
+"File Transfert Started \n"
 "File Transfert Finished"
 msgstr ""
 "接受消息\n"
@@ -647,7 +715,8 @@ msgid "When "
 msgstr "当"
 
 #: ../data/glade/advanced_notifications_window.glade.h:28
-msgid "_Activate window manager's UrgencyHint to make chat window in taskbar flash"
+msgid ""
+"_Activate window manager's UrgencyHint to make chat window in taskbar flash"
 msgstr "激活窗口管理器事件提示使任务栏的聊天窗口闪烁(_A)"
 
 #: ../data/glade/advanced_notifications_window.glade.h:29
@@ -707,6 +776,46 @@ msgstr "为"
 #: ../data/glade/advanced_notifications_window.glade.h:43
 msgid "when I'm in"
 msgstr "当我在"
+
+#: ../data/glade/atom_entry_window.glade.h:1
+msgid "2003-12-13T18:30:02Z"
+msgstr ""
+
+#: ../data/glade/atom_entry_window.glade.h:2
+msgid "<small>Romeo and Juliet</small>"
+msgstr ""
+
+#: ../data/glade/atom_entry_window.glade.h:3
+#, fuzzy
+msgid "Entry:"
+msgstr "国家："
+
+#: ../data/glade/atom_entry_window.glade.h:4
+#, fuzzy
+msgid "Feed name:"
+msgstr "主题名称"
+
+#: ../data/glade/atom_entry_window.glade.h:5
+#, fuzzy
+msgid "Last modified:"
+msgstr "名："
+
+#: ../data/glade/atom_entry_window.glade.h:6
+#, fuzzy
+msgid "New entry received"
+msgstr "当新事件发生时"
+
+#: ../data/glade/atom_entry_window.glade.h:7
+msgid "Old stories"
+msgstr ""
+
+#: ../data/glade/atom_entry_window.glade.h:8
+msgid "Soliloquy"
+msgstr ""
+
+#: ../data/glade/atom_entry_window.glade.h:9
+msgid "You have received new entry:"
+msgstr ""
 
 #: ../data/glade/change_password_dialog.glade.h:1
 msgid "Change Password"
@@ -793,7 +902,7 @@ msgstr "紧凑模式(_C)  Alt+C"
 msgid "_History"
 msgstr "历史(_H)"
 
-#: ../data/glade/data_form_window.glade.h:1
+#: ../data/glade/data_form_window.glade.h:1 ../src/dataforms_widget.py:76
 msgid "Fill in the form."
 msgstr "填写表格。"
 
@@ -846,15 +955,16 @@ msgid "Shows a list of file transfers between you and other"
 msgstr "显示文件传输列表"
 
 #: ../data/glade/filetransfers.glade.h:11
-msgid "This action removes single file transfer from the list. If the transfer is active, it is first stopped and then removed"
+msgid ""
+"This action removes single file transfer from the list. If the transfer is "
+"active, it is first stopped and then removed"
 msgstr "该操作会从列表中移除文件传输。如果该传输处于活动状态，将被先中止后移除"
 
 #: ../data/glade/filetransfers.glade.h:12
 msgid "When a file transfer is complete show a popup notification"
 msgstr "传输完成后显示弹出气泡提示"
 
-#: ../data/glade/filetransfers.glade.h:13
-#: ../src/filetransfers_window.py:761
+#: ../data/glade/filetransfers.glade.h:13 ../src/filetransfers_window.py:761
 msgid "_Continue"
 msgstr "继续(_C)"
 
@@ -862,8 +972,7 @@ msgstr "继续(_C)"
 msgid "_Notify me when a file transfer is complete"
 msgstr "文件传输完成时提醒我(_N)"
 
-#: ../data/glade/filetransfers.glade.h:15
-#: ../src/filetransfers_window.py:190
+#: ../data/glade/filetransfers.glade.h:15 ../src/filetransfers_window.py:190
 msgid "_Open Containing Folder"
 msgstr "打开文件夹(_O)"
 
@@ -1007,6 +1116,21 @@ msgstr "发送私聊消息(_S)"
 msgid "_Voice"
 msgstr "语音(_V)"
 
+#: ../data/glade/groups_post_window.glade.h:1
+#, fuzzy
+msgid "Create new post"
+msgstr "新发表"
+
+#: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:259
+msgid "From"
+msgstr "来自"
+
+#. holds subject
+#: ../data/glade/groups_post_window.glade.h:3 ../src/history_manager.py:141
+#: ../src/history_manager.py:172
+msgid "Subject"
+msgstr "主题"
+
 #: ../data/glade/history_manager.glade.h:1
 msgid ""
 "<big><b>Welcome to Gajim History Logs Manager</b></big>\n"
@@ -1014,14 +1138,16 @@ msgid ""
 "You can select logs from the left and/or search database from below.\n"
 "\n"
 "<b>WARNING:</b>\n"
-"If you plan to do massive deletions, please make sure Gajim is not running. Generally avoid deletions with contacts you currently chat with."
+"If you plan to do massive deletions, please make sure Gajim is not running. "
+"Generally avoid deletions with contacts you currently chat with."
 msgstr ""
 "<big><b>欢迎使用 Gajim 历史记录管理器</b></big>\n"
 "\n"
 "You can select logs from the left and/or search database from below.\n"
 "\n"
 "<b>WARNING:</b>\n"
-"If you plan to do massive deletions, please make sure Gajim is not running. Generally avoid deletions with contacts you currently chat with."
+"If you plan to do massive deletions, please make sure Gajim is not running. "
+"Generally avoid deletions with contacts you currently chat with."
 
 #: ../data/glade/history_manager.glade.h:7
 msgid "Delete"
@@ -1072,8 +1198,7 @@ msgstr "拒绝"
 msgid "Invitation Received"
 msgstr "收到邀请"
 
-#: ../data/glade/join_groupchat_window.glade.h:1
-#: ../src/dialogs.py:1146
+#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1146
 msgid "Join Group Chat"
 msgstr "加入群聊"
 
@@ -1098,8 +1223,7 @@ msgstr "最近："
 msgid "Room:"
 msgstr "房间："
 
-#: ../data/glade/join_groupchat_window.glade.h:6
-#: ../src/disco.py:1150
+#: ../data/glade/join_groupchat_window.glade.h:6 ../src/disco.py:1150
 #: ../src/disco.py:1517
 msgid "_Join"
 msgstr "加入(_J)"
@@ -1166,8 +1290,7 @@ msgstr "使用验证"
 msgid "Click to insert an emoticon (Alt+M)"
 msgstr "点这里插入表情符 (Alt+M)"
 
-#: ../data/glade/message_window.glade.h:2
-#: ../src/chat_control.py:1099
+#: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1104
 msgid "OpenPGP Encryption"
 msgstr "OpenPGP 加密"
 
@@ -1253,8 +1376,13 @@ msgid "Also known as iChat style"
 msgstr "也就是 i 聊天风格"
 
 #: ../data/glade/preferences_window.glade.h:20
-msgid "An example: If you have enabled status message for away, Gajim won't ask you anymore for a status message when you change your status to away; it will use the default one set here"
-msgstr "例如：当您允许离开的状态消息，当您改变状态至离开时 Gajim 将不再询问您状态消息；将会使用默认设置的消息"
+msgid ""
+"An example: If you have enabled status message for away, Gajim won't ask you "
+"anymore for a status message when you change your status to away; it will "
+"use the default one set here"
+msgstr ""
+"例如：当您允许离开的状态消息，当您改变状态至离开时 Gajim 将不再询问您状态消"
+"息；将会使用默认设置的消息"
 
 #: ../data/glade/preferences_window.glade.h:21
 msgid "Ask status message when I:"
@@ -1286,14 +1414,18 @@ msgstr ""
 msgid "B_efore nickname:"
 msgstr "在昵称前：(_E)"
 
-#: ../data/glade/preferences_window.glade.h:30
-#: ../src/chat_control.py:839
+#: ../data/glade/preferences_window.glade.h:30 ../src/chat_control.py:844
 msgid "Chat"
 msgstr "聊天"
 
 #: ../data/glade/preferences_window.glade.h:31
-msgid "Check this option, only if someone you don't have in the roster spams/annoys you. Use with caution, cause it blocks all messages from any contact that is not in the roster"
-msgstr "当被不在名单中的联系人骚扰时，检查此选项。它会屏蔽所有名单之外联系人的消息，请谨慎使用。"
+msgid ""
+"Check this option, only if someone you don't have in the roster spams/annoys "
+"you. Use with caution, cause it blocks all messages from any contact that is "
+"not in the roster"
+msgstr ""
+"当被不在名单中的联系人骚扰时，检查此选项。它会屏蔽所有名单之外联系人的消息，"
+"请谨慎使用。"
 
 #: ../data/glade/preferences_window.glade.h:32
 msgid "Configure color and font of the interface"
@@ -1336,55 +1468,88 @@ msgid "Events"
 msgstr "事件"
 
 #: ../data/glade/preferences_window.glade.h:42
-msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to display in chat windows."
-msgstr "Gajim 可以收发您与联系人所进行谈话的相关信息。此处您可是指定您想在聊天窗口中显示的聊天状态。"
+msgid ""
+"Gajim can send and receive meta-information related to a conversation you "
+"may have with a contact. Here you can specify which chatstates you want to "
+"display in chat windows."
+msgstr ""
+"Gajim 可以收发您与联系人所进行谈话的相关信息。此处您可是指定您想在聊天窗口中"
+"显示的聊天状态。"
 
 #: ../data/glade/preferences_window.glade.h:43
-msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party."
-msgstr "Gajim 可以收发您与联系人所进行谈话的相关信息。此处您可是指定发给第三方的角色。"
+msgid ""
+"Gajim can send and receive meta-information related to a conversation you "
+"may have with a contact. Here you can specify which chatstates you want to "
+"send to the other party."
+msgstr ""
+"Gajim 可以收发您与联系人所进行谈话的相关信息。此处您可是指定发给第三方的角"
+"色。"
 
 #: ../data/glade/preferences_window.glade.h:44
-msgid "Gajim will automatically show new events by poping up the relative window"
+msgid ""
+"Gajim will automatically show new events by poping up the relative window"
 msgstr "Gajim 会自动弹出相关窗口以显示新的事件"
 
 #: ../data/glade/preferences_window.glade.h:45
-msgid "Gajim will notify you for new events via a popup in the bottom right of the screen"
+msgid ""
+"Gajim will notify you for new events via a popup in the bottom right of the "
+"screen"
 msgstr "Gajim 会通过屏幕右下方的弹出气泡提示新消息"
 
 #: ../data/glade/preferences_window.glade.h:46
-msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed in"
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed in"
 msgstr "Gajim 会通过屏幕右下方的弹出气泡提示刚刚登录的联系人"
 
 #: ../data/glade/preferences_window.glade.h:47
-msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed out"
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed out"
 msgstr "Gajim 会通过屏幕右下方的弹出气泡提示刚刚离开的联系人"
 
 #: ../data/glade/preferences_window.glade.h:48
-msgid "Gajim will only change the icon of the contact that triggered the new event"
+msgid ""
+"Gajim will only change the icon of the contact that triggered the new event"
 msgstr "Gajim 仅会改变触发了新事件的联系人图标"
 
 #: ../data/glade/preferences_window.glade.h:50
-msgid "If checked, Gajim will also include information about the sender of the new emails"
+msgid ""
+"If checked, Gajim will also include information about the sender of the new "
+"emails"
 msgstr "如果选中，Gajim 将包含关于新的电子邮件发送者的信息"
 
 #: ../data/glade/preferences_window.glade.h:51
-msgid "If checked, Gajim will display avatars of contacts in roster window and in group chats"
+msgid ""
+"If checked, Gajim will display avatars of contacts in roster window and in "
+"group chats"
 msgstr "如果选定，Gajim 会在名单和群聊窗口中显示名单中的联系人明细"
 
 #: ../data/glade/preferences_window.glade.h:52
-msgid "If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats"
+msgid ""
+"If checked, Gajim will display status messages of contacts under the contact "
+"name in roster window and in group chats"
 msgstr "如果选定，Gajim 会在名单和群聊窗口中联系人名下方显示联系人状态消息"
 
 #: ../data/glade/preferences_window.glade.h:53
-msgid "If checked, Gajim will remember the roster and chat window positions in the screen and the sizes of them next time you run it"
+msgid ""
+"If checked, Gajim will remember the roster and chat window positions in the "
+"screen and the sizes of them next time you run it"
 msgstr "如果选定，Gajim 会在下次运行时使用本次设定的名单及聊天窗口的位置和大小"
 
 #: ../data/glade/preferences_window.glade.h:54
-msgid "If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)"
-msgstr "如果选定，Gajim 会以协议特定方式显示状态图标。(例如，MSN 联系人会以 MSN 相同图标方式显示，以表示在线，离开，忙，等等...)"
+msgid ""
+"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
+"from MSN will have the equivalent msn icon for status online, away, busy, "
+"etc...)"
+msgstr ""
+"如果选定，Gajim 会以协议特定方式显示状态图标。(例如，MSN 联系人会以 MSN 相同"
+"图标方式显示，以表示在线，离开，忙，等等...)"
 
 #: ../data/glade/preferences_window.glade.h:55
-msgid "If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons"
+msgid ""
+"If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
+"animated or static graphical emoticons"
 msgstr "如果不禁用，Gajim 会用相应的图片表情符替代字符表情,例如“:)”"
 
 #: ../data/glade/preferences_window.glade.h:56
@@ -1460,8 +1625,12 @@ msgid "Sign _out"
 msgstr "退出登录(_O)"
 
 #: ../data/glade/preferences_window.glade.h:75
-msgid "Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text."
-msgstr "一些消息会包含丰富的内容(例如 格式，颜色) 。如果选定，Gajim 将显示原本的消息内容。"
+msgid ""
+"Some messages may include rich content (formatting, colors etc). If checked, "
+"Gajim will just display the raw message text."
+msgstr ""
+"一些消息会包含丰富的内容(例如 格式，颜色) 。如果选定，Gajim 将显示原本的消息"
+"内容。"
 
 #: ../data/glade/preferences_window.glade.h:76
 msgid "Status"
@@ -1492,16 +1661,26 @@ msgid "Use t_rayicon (aka. notification area icon)"
 msgstr "使用托盘图标(aka. 提示区域图表)(_R)"
 
 #: ../data/glade/preferences_window.glade.h:83
-msgid "When a new event (message, file transfer request etc..) is received, the following methods may be used to inform you about it. Please note that events about new messages only occur if it is a new message from a contact you are not already chatting with"
-msgstr "下列方式可用来提示您收到新的事件（消息，文件传输请求等）。请注意，只有未和您进行聊天的用户发送的新消息才会触发新消息事件"
+msgid ""
+"When a new event (message, file transfer request etc..) is received, the "
+"following methods may be used to inform you about it. Please note that "
+"events about new messages only occur if it is a new message from a contact "
+"you are not already chatting with"
+msgstr ""
+"下列方式可用来提示您收到新的事件（消息，文件传输请求等）。请注意，只有未和您"
+"进行聊天的用户发送的新消息才会触发新消息事件"
 
 #: ../data/glade/preferences_window.glade.h:84
 msgid "When new event is received"
 msgstr "当新事件发生时"
 
 #: ../data/glade/preferences_window.glade.h:85
-msgid "Works for Rhythmbox and Muine players. For more players, please visit http://trac.gajim.org/wiki/GajimAndMusicPlayer"
-msgstr "为 Rhythmbox 和 Muine 播放器工作。 更多的播放器，请访问 http://trac.gajim.org/wiki/GajimAndMusicPlayer。"
+msgid ""
+"Works for Rhythmbox and Muine players. For more players, please visit http://"
+"trac.gajim.org/wiki/GajimAndMusicPlayer"
+msgstr ""
+"为 Rhythmbox 和 Muine 播放器工作。 更多的播放器，请访问 http://trac.gajim."
+"org/wiki/GajimAndMusicPlayer。"
 
 #: ../data/glade/preferences_window.glade.h:86
 msgid "_Advanced Notifications Control..."
@@ -1631,8 +1810,7 @@ msgstr "Jabber ID"
 msgid "Order:"
 msgstr "订阅："
 
-#: ../data/glade/privacy_list_window.glade.h:11
-#: ../src/dialogs.py:1841
+#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1841
 msgid "Privacy List"
 msgstr "私人列表"
 
@@ -1785,8 +1963,7 @@ msgid "Prefix:"
 msgstr "前缀："
 
 #: ../data/glade/profile_window.glade.h:30
-#: ../data/glade/vcard_information_window.glade.h:37
-#: ../src/vcard.py:273
+#: ../data/glade/vcard_information_window.glade.h:37 ../src/vcard.py:273
 msgid "Role:"
 msgstr "角色："
 
@@ -1881,8 +2058,7 @@ msgstr "禁止他/她查看我的状态(_F)"
 
 #. Remove group
 #: ../data/glade/roster_contact_context_menu.glade.h:14
-#: ../src/roster_window.py:1948
-#: ../src/roster_window.py:2045
+#: ../src/roster_window.py:1948 ../src/roster_window.py:2045
 #: ../src/roster_window.py:2152
 msgid "_Remove from Roster"
 msgstr "从名单中移除(_R)"
@@ -1937,8 +2113,7 @@ msgstr "内容(_C)"
 msgid "_Discover Services"
 msgstr "发掘服务(_D)"
 
-#: ../data/glade/roster_window.glade.h:14
-#: ../src/disco.py:1255
+#: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1255
 #: ../src/roster_window.py:2123
 msgid "_Edit"
 msgstr "编辑(_E)"
@@ -2083,8 +2258,7 @@ msgstr "联系人"
 
 #: ../data/glade/vcard_information_window.glade.h:23
 #: ../data/glade/zeroconf_information_window.glade.h:4
-#: ../data/glade/zeroconf_properties_window.glade.h:13
-#: ../src/dialogs.py:416
+#: ../data/glade/zeroconf_properties_window.glade.h:13 ../src/dialogs.py:416
 msgid "Jabber ID:"
 msgstr "Jabber ID"
 
@@ -2163,7 +2337,8 @@ msgstr "个人"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:11
 msgid ""
-"If the default port that is used for incoming messages is unfitting for your setup you can select another one here.\n"
+"If the default port that is used for incoming messages is unfitting for your "
+"setup you can select another one here.\n"
 "You might consider to change possible firewall settings."
 msgstr ""
 "如果用于接受消息的默认端口不适合您的设置您可以在这里选择另外一个。\n"
@@ -2292,14 +2467,18 @@ msgstr "Swedish"
 msgid "Chinese (Ch)"
 msgstr "中文"
 
-#: ../src/chat_control.py:201
-#: ../src/dialogs.py:1497
+#: ../src/chat_control.py:201 ../src/dialogs.py:1497
 msgid ""
-"If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n"
+"If that is not your language for which you want to highlight misspelled "
+"words, then please set your $LANG as appropriate. Eg. for French do export "
+"LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it "
+"global in /etc/profile.\n"
 "\n"
 "Highlighting misspelled words feature will not be used"
 msgstr ""
-"如果拼写检查不匹配您所使用用的语言，请正确设定您的 $LANG 。例如，中文用户就在 ~/.bash_profile 中键入 LANG=zh_CN 或 LANG=zh_CN.UTF-8 ，或在 /etc/profile 中进行全局设定。\n"
+"如果拼写检查不匹配您所使用用的语言，请正确设定您的 $LANG 。例如，中文用户就"
+"在 ~/.bash_profile 中键入 LANG=zh_CN 或 LANG=zh_CN.UTF-8 ，或在 /etc/profile "
+"中进行全局设定。\n"
 "\n"
 "拼写检查功能未启用"
 
@@ -2308,351 +2487,327 @@ msgid "Spelling language"
 msgstr "拼写检查"
 
 #. we are not connected
-#: ../src/chat_control.py:262
-#: ../src/chat_control.py:468
+#: ../src/chat_control.py:262 ../src/chat_control.py:468
 msgid "A connection is not available"
 msgstr "连接不可用"
 
-#: ../src/chat_control.py:263
-#: ../src/chat_control.py:469
+#: ../src/chat_control.py:263 ../src/chat_control.py:469
 msgid "Your message can not be sent until you are connected."
 msgstr "连接之后您的消息才能发送"
 
-#: ../src/chat_control.py:839
+#: ../src/chat_control.py:844
 msgid "Chats"
 msgstr "聊天"
 
-#: ../src/chat_control.py:1025
+#: ../src/chat_control.py:1030
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "群聊 %(room_name)s 的 %(nickname)s"
 
 #. we talk about a contact here
-#: ../src/chat_control.py:1113
+#: ../src/chat_control.py:1118
 #, python-format
 msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 msgstr " %s 没有广播 OpenPGP 公钥或您未指定"
 
-#: ../src/chat_control.py:1239
+#: ../src/chat_control.py:1254
 msgid "Encryption enabled"
 msgstr "启用加密"
 
-#: ../src/chat_control.py:1244
+#: ../src/chat_control.py:1259
 msgid "Encryption disabled"
 msgstr "禁用加密"
 
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1386
-#: ../src/conversation_textview.py:487
-#: ../src/dialogs.py:629
-#: ../src/gajim.py:725
-#: ../src/gajim.py:726
-#: ../src/gajim.py:1065
-#: ../src/roster_window.py:328
-#: ../src/roster_window.py:404
-#: ../src/roster_window.py:1642
-#: ../src/roster_window.py:1823
-#: ../src/roster_window.py:2399
-#: ../src/roster_window.py:2598
-#: ../src/roster_window.py:2609
-#: ../src/roster_window.py:3831
-#: ../src/roster_window.py:3833
-#: ../src/common/contacts.py:73
-#: ../src/common/helpers.py:42
+#: ../src/chat_control.py:1401 ../src/conversation_textview.py:495
+#: ../src/dialogs.py:629 ../src/gajim.py:733 ../src/gajim.py:734
+#: ../src/gajim.py:1073 ../src/roster_window.py:328
+#: ../src/roster_window.py:404 ../src/roster_window.py:1642
+#: ../src/roster_window.py:1823 ../src/roster_window.py:2399
+#: ../src/roster_window.py:2598 ../src/roster_window.py:2609
+#: ../src/roster_window.py:3831 ../src/roster_window.py:3833
+#: ../src/common/contacts.py:73 ../src/common/helpers.py:42
 #: ../src/common/helpers.py:246
 msgid "Not in Roster"
 msgstr "不在名单中"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:1530
+#: ../src/chat_control.py:1545
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "收到一条来自 “%s” 的消息"
 
-#: ../src/chat_control.py:1531
-msgid "If you close this tab and you have history disabled, this message will be lost."
+#: ../src/chat_control.py:1546
+msgid ""
+"If you close this tab and you have history disabled, this message will be "
+"lost."
 msgstr "如果您关闭此标签并且禁用历史，此消息会丢失。"
 
-#: ../src/config.py:129
-#: ../src/config.py:588
+#: ../src/config.py:135 ../src/config.py:594
 msgid "Disabled"
 msgstr "禁用"
 
-#: ../src/config.py:215
+#: ../src/config.py:221
 #, python-format
 msgid "Every %s _minutes"
 msgstr "每 %s 分钟(m)"
 
-#: ../src/config.py:357
+#: ../src/config.py:363
 msgid "Active"
 msgstr "活动"
 
-#: ../src/config.py:365
+#: ../src/config.py:371
 msgid "Event"
 msgstr "事件"
 
-#: ../src/config.py:678
-#: ../src/gajim.py:2072
+#: ../src/config.py:684 ../src/gajim.py:2094
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "语言 %s 的字典不可用"
 
-#: ../src/config.py:679
-#: ../src/gajim.py:2073
+#: ../src/config.py:685 ../src/gajim.py:2095
 #, python-format
-msgid "You have to install %s dictionary to use spellchecking, or choose another language by setting the speller_language option."
-msgstr "您需安装 %s 字典以使用拼写检查，或者设置拼写检查选项以选择另外一种语言。(_L)"
+msgid ""
+"You have to install %s dictionary to use spellchecking, or choose another "
+"language by setting the speller_language option."
+msgstr ""
+"您需安装 %s 字典以使用拼写检查，或者设置拼写检查选项以选择另外一种语言。(_L)"
 
-#: ../src/config.py:1031
+#: ../src/config.py:1037
 msgid "status message title"
 msgstr "状态消息标题"
 
-#: ../src/config.py:1031
+#: ../src/config.py:1037
 msgid "status message text"
 msgstr "状态消息文本"
 
-#: ../src/config.py:1066
+#: ../src/config.py:1072
 msgid "First Message Received"
 msgstr "最初收到的消息"
 
-#: ../src/config.py:1067
+#: ../src/config.py:1073
 msgid "Next Message Received"
 msgstr "收到的下一条消息"
 
-#: ../src/config.py:1068
+#: ../src/config.py:1074
 msgid "Contact Connected"
 msgstr "已连接的联系人"
 
-#: ../src/config.py:1069
+#: ../src/config.py:1075
 msgid "Contact Disconnected"
 msgstr "联系人已断开连接"
 
-#: ../src/config.py:1070
+#: ../src/config.py:1076
 msgid "Message Sent"
 msgstr "消息已发送"
 
-#: ../src/config.py:1071
+#: ../src/config.py:1077
 msgid "Group Chat Message Highlight"
 msgstr "群聊消息突出显示"
 
-#: ../src/config.py:1072
+#: ../src/config.py:1078
 msgid "Group Chat Message Received"
 msgstr "收到的群聊消息"
 
-#: ../src/config.py:1079
+#: ../src/config.py:1085
 msgid "GMail Email Received"
 msgstr "收到 GMail 邮件"
 
-#: ../src/config.py:1282
+#: ../src/config.py:1288
 msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP 在本机不可用"
 
-#: ../src/config.py:1328
+#: ../src/config.py:1334
 msgid "You are currently connected to the server"
 msgstr "正在连接到服务器"
 
-#: ../src/config.py:1329
+#: ../src/config.py:1335
 msgid "To change the account name, you must be disconnected."
 msgstr "如要改变账户名称，需断开连接。"
 
-#: ../src/config.py:1332
-#: ../src/config.py:1924
+#: ../src/config.py:1338 ../src/config.py:1930
 msgid "Unread events"
 msgstr "未读取的事件"
 
-#: ../src/config.py:1333
+#: ../src/config.py:1339
 msgid "To change the account name, you must read all pending events."
 msgstr "如要更改账户名称，需先处理所有未决事件"
 
-#: ../src/config.py:1337
+#: ../src/config.py:1343
 msgid "Account Name Already Used"
 msgstr "帐户名已经被占用"
 
-#: ../src/config.py:1338
-msgid "This name is already used by another of your accounts. Please choose another name."
+#: ../src/config.py:1344
+msgid ""
+"This name is already used by another of your accounts. Please choose another "
+"name."
 msgstr "该名称已被您的另一个帐号使用。请选择其他名称"
 
-#: ../src/config.py:1342
-#: ../src/config.py:1346
+#: ../src/config.py:1348 ../src/config.py:1352
 msgid "Invalid account name"
 msgstr "无效的账户名称"
 
-#: ../src/config.py:1343
+#: ../src/config.py:1349
 msgid "Account name cannot be empty."
 msgstr "账户名不能为空。"
 
-#: ../src/config.py:1347
+#: ../src/config.py:1353
 msgid "Account name cannot contain spaces."
 msgstr "账户名不能包含空格。"
 
-#: ../src/config.py:1355
-#: ../src/config.py:1361
-#: ../src/config.py:1371
-#: ../src/config.py:3029
+#: ../src/config.py:1361 ../src/config.py:1367 ../src/config.py:1377
+#: ../src/config.py:3035
 msgid "Invalid Jabber ID"
 msgstr "无效的 Jabber ID"
 
-#: ../src/config.py:1362
+#: ../src/config.py:1368
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabber ID 的格式为 “用户@服务器名”。"
 
-#: ../src/config.py:1421
+#: ../src/config.py:1427
 msgid "Invalid entry"
 msgstr "无效输入"
 
-#: ../src/config.py:1422
+#: ../src/config.py:1428
 msgid "Custom port must be a port number."
 msgstr "自定义端口必须为端口号。"
 
-#: ../src/config.py:1548
-#: ../src/common/config.py:363
+#: ../src/config.py:1554 ../src/common/config.py:363
 msgid "Be right back."
 msgstr "很快回来。"
 
-#: ../src/config.py:1558
+#: ../src/config.py:1564
 msgid "Relogin now?"
 msgstr "现在重新登录？"
 
-#: ../src/config.py:1559
+#: ../src/config.py:1565
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr "如果想使所有调整立即生效，您必须重新登录。"
 
-#: ../src/config.py:1585
+#: ../src/config.py:1591
 msgid "No such account available"
 msgstr "没有有效账户"
 
-#: ../src/config.py:1586
+#: ../src/config.py:1592
 msgid "You must create your account before editing your personal information."
 msgstr "您必须在编辑个人信息前创建账户。"
 
-#: ../src/config.py:1593
-#: ../src/dialogs.py:1128
-#: ../src/dialogs.py:1297
-#: ../src/disco.py:417
-#: ../src/profile_window.py:307
+#: ../src/config.py:1599 ../src/dialogs.py:1128 ../src/dialogs.py:1297
+#: ../src/disco.py:417 ../src/profile_window.py:307
 #: ../src/profile_window.py:373
 msgid "You are not connected to the server"
 msgstr "尚未连接到服务器"
 
-#: ../src/config.py:1594
+#: ../src/config.py:1600
 msgid "Without a connection, you can not edit your personal information."
 msgstr "无法脱机编辑个人信息。"
 
-#: ../src/config.py:1598
+#: ../src/config.py:1604
 msgid "Your server doesn't support Vcard"
 msgstr "您的服务器不支持 Vcard"
 
-#: ../src/config.py:1599
+#: ../src/config.py:1605
 msgid "Your server can't save your personal information."
 msgstr "您的服务器无法保存您的个人信息。"
 
-#: ../src/config.py:1623
-#: ../src/config.py:3416
+#: ../src/config.py:1629 ../src/config.py:3422
 msgid "Failed to get secret keys"
 msgstr "获取密钥失败"
 
-#: ../src/config.py:1624
-#: ../src/config.py:3417
+#: ../src/config.py:1630 ../src/config.py:3423
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "在取回 OpenPGP 密钥时发生错误。"
 
-#: ../src/config.py:1627
-#: ../src/config.py:3420
+#: ../src/config.py:1633 ../src/config.py:3426
 msgid "OpenPGP Key Selection"
 msgstr "OpenPGP 密钥选择"
 
-#: ../src/config.py:1628
-#: ../src/config.py:3421
+#: ../src/config.py:1634 ../src/config.py:3427
 msgid "Choose your OpenPGP key"
 msgstr "选择您的 OpenPGP 钥匙"
 
 #. Name column
-#: ../src/config.py:1858
-#: ../src/disco.py:740
-#: ../src/disco.py:1466
-#: ../src/disco.py:1704
-#: ../src/history_window.py:78
+#: ../src/config.py:1864 ../src/disco.py:740 ../src/disco.py:1466
+#: ../src/disco.py:1704 ../src/history_window.py:78
 msgid "Name"
 msgstr "名称"
 
-#: ../src/config.py:1861
+#: ../src/config.py:1867
 msgid "Server"
 msgstr "服务器"
 
-#: ../src/config.py:1925
+#: ../src/config.py:1931
 msgid "Read all pending events before removing this account."
 msgstr "移除帐号前请阅读所有未决事件。"
 
-#: ../src/config.py:1962
+#: ../src/config.py:1968
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "您已在账户 %s 打开聊天"
 
-#: ../src/config.py:1963
+#: ../src/config.py:1969
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "所有的聊天和群聊窗口将会关闭。您想继续吗？"
 
-#: ../src/config.py:2022
+#: ../src/config.py:2028
 msgid "Account Local already exists."
 msgstr "帐户本地已存在。"
 
-#: ../src/config.py:2023
+#: ../src/config.py:2029
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "请在使用本地消息前重命名或移除它。"
 
-#: ../src/config.py:2255
+#: ../src/config.py:2261
 #, python-format
 msgid "Edit %s"
 msgstr "编辑 %s"
 
-#: ../src/config.py:2257
+#: ../src/config.py:2263
 #, python-format
 msgid "Register to %s"
 msgstr "注册到 %s"
 
 #. list at the begining
-#: ../src/config.py:2329
+#: ../src/config.py:2335
 msgid "Ban List"
 msgstr "封禁名单"
 
-#: ../src/config.py:2330
+#: ../src/config.py:2336
 msgid "Member List"
 msgstr "成员列表"
 
-#: ../src/config.py:2331
+#: ../src/config.py:2337
 msgid "Owner List"
 msgstr "房主列表"
 
-#: ../src/config.py:2332
+#: ../src/config.py:2338
 msgid "Administrator List"
 msgstr "管理员列表"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2365
-#: ../src/disco.py:747
-#: ../src/history_manager.py:154
+#: ../src/config.py:2371 ../src/disco.py:747 ../src/history_manager.py:154
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2373
+#: ../src/config.py:2379
 msgid "Reason"
 msgstr "原因"
 
-#: ../src/config.py:2378
+#: ../src/config.py:2384
 msgid "Nick"
 msgstr "昵称"
 
-#: ../src/config.py:2382
+#: ../src/config.py:2388
 msgid "Role"
 msgstr "角色"
 
-#: ../src/config.py:2403
+#: ../src/config.py:2409
 msgid "Banning..."
 msgstr "封禁..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2405
+#: ../src/config.py:2411
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2660,11 +2815,11 @@ msgstr ""
 "<b>想做封禁谁？</b>\n"
 "\n"
 
-#: ../src/config.py:2407
+#: ../src/config.py:2413
 msgid "Adding Member..."
 msgstr "正在添加成员..."
 
-#: ../src/config.py:2408
+#: ../src/config.py:2414
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2672,11 +2827,11 @@ msgstr ""
 "<b>想要将谁加为成员？</b>\n"
 "\n"
 
-#: ../src/config.py:2410
+#: ../src/config.py:2416
 msgid "Adding Owner..."
 msgstr "添加房主..."
 
-#: ../src/config.py:2411
+#: ../src/config.py:2417
 msgid ""
 "<b>Whom do you want to make a owner?</b>\n"
 "\n"
@@ -2684,11 +2839,11 @@ msgstr ""
 "<b>想要将谁加为房主？</b>\n"
 "\n"
 
-#: ../src/config.py:2413
+#: ../src/config.py:2419
 msgid "Adding Administrator..."
 msgstr "添加管理员..."
 
-#: ../src/config.py:2414
+#: ../src/config.py:2420
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2696,7 +2851,7 @@ msgstr ""
 "<b>想要指定谁为管理员？</b>\n"
 "\n"
 
-#: ../src/config.py:2415
+#: ../src/config.py:2421
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2712,173 +2867,182 @@ msgstr ""
 "4. domain (该域本身匹配, 例如任何 user@domain,\n"
 "domain/resource, 或者地址包含一个子域."
 
-#: ../src/config.py:2520
+#: ../src/config.py:2526
 #, python-format
 msgid "Removing %s account"
 msgstr "移除账户 %s"
 
-#: ../src/config.py:2537
-#: ../src/roster_window.py:2667
+#: ../src/config.py:2543 ../src/roster_window.py:2667
 msgid "Password Required"
 msgstr "需要密码"
 
-#: ../src/config.py:2538
-#: ../src/roster_window.py:2668
+#: ../src/config.py:2544 ../src/roster_window.py:2668
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "输入帐户 %s 的密码"
 
-#: ../src/config.py:2539
-#: ../src/roster_window.py:2669
+#: ../src/config.py:2545 ../src/roster_window.py:2669
 msgid "Save password"
 msgstr "保存密码"
 
-#: ../src/config.py:2553
+#: ../src/config.py:2559
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "账户 “%s” 已连接到服务器"
 
-#: ../src/config.py:2554
+#: ../src/config.py:2560
 msgid "If you remove it, the connection will be lost."
 msgstr "如果移除，将会丢失连接"
 
-#: ../src/config.py:2638
+#: ../src/config.py:2644
 msgid "Default"
 msgstr "默认"
 
-#: ../src/config.py:2638
+#: ../src/config.py:2644
 msgid "?print_status:All"
 msgstr "?print_status:全部"
 
-#: ../src/config.py:2639
+#: ../src/config.py:2645
 msgid "Enter and leave only"
 msgstr "只是登录和离开"
 
-#: ../src/config.py:2709
+#: ../src/config.py:2715
 msgid "New Group Chat"
 msgstr "新群聊"
 
-#: ../src/config.py:2741
+#: ../src/config.py:2747
 msgid "This bookmark has invalid data"
 msgstr "此书签含无效数据"
 
-#: ../src/config.py:2742
-msgid "Please be sure to fill out server and room fields or remove this bookmark."
+#: ../src/config.py:2748
+msgid ""
+"Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "请确认填写服务器与房间字段或移除此书签。"
 
-#: ../src/config.py:3004
+#: ../src/config.py:3010
 msgid "Invalid username"
 msgstr "无效用户名"
 
-#: ../src/config.py:3005
+#: ../src/config.py:3011
 msgid "You must provide a username to configure this account."
 msgstr "必须提供用户名来配置此账户。"
 
-#: ../src/config.py:3015
-#: ../src/dialogs.py:1316
+#: ../src/config.py:3021 ../src/dialogs.py:1316
 msgid "Invalid password"
 msgstr "无效密码"
 
-#: ../src/config.py:3016
+#: ../src/config.py:3022
 msgid "You must enter a password for the new account."
 msgstr "必须为新账户输入密码。"
 
-#: ../src/config.py:3020
-#: ../src/dialogs.py:1321
+#: ../src/config.py:3026 ../src/dialogs.py:1321
 msgid "Passwords do not match"
 msgstr "密码不符"
 
-#: ../src/config.py:3021
-#: ../src/dialogs.py:1322
+#: ../src/config.py:3027 ../src/dialogs.py:1322
 msgid "The passwords typed in both fields must be identical."
 msgstr "两次密码输入不一致。"
 
-#: ../src/config.py:3040
+#: ../src/config.py:3046
 msgid "Duplicate Jabber ID"
 msgstr "复制 Jabber ID"
 
-#: ../src/config.py:3041
+#: ../src/config.py:3047
 msgid "This account is already configured in Gajim."
 msgstr "此帐号已在 Gajim 中配置过。"
 
-#: ../src/config.py:3058
+#: ../src/config.py:3064
 msgid "Account has been added successfully"
 msgstr "成功添加账户"
 
-#: ../src/config.py:3059
-#: ../src/config.py:3094
-msgid "You can set advanced account options by pressing Advanced button, or later by clicking in Accounts menuitem under Edit menu from the main window."
-msgstr "您可以通过点击高级按钮进行高级设置，或稍后点击主窗口中编辑菜单下的账户菜单项。"
+#: ../src/config.py:3065 ../src/config.py:3100
+msgid ""
+"You can set advanced account options by pressing Advanced button, or later "
+"by clicking in Accounts menuitem under Edit menu from the main window."
+msgstr ""
+"您可以通过点击高级按钮进行高级设置，或稍后点击主窗口中编辑菜单下的账户菜单"
+"项。"
 
-#: ../src/config.py:3093
+#: ../src/config.py:3099
 msgid "Your new account has been created successfully"
 msgstr "注册新账户成功"
 
-#: ../src/config.py:3111
+#: ../src/config.py:3117
 msgid "An error occured during account creation"
 msgstr "创建帐户过程中发生错误"
 
-#: ../src/config.py:3169
+#: ../src/config.py:3175
 msgid "Account name is in use"
 msgstr "帐户名已经被使用"
 
-#: ../src/config.py:3170
+#: ../src/config.py:3176
 msgid "You already have an account using this name."
 msgstr "有同名账户。"
 
-#: ../src/conversation_textview.py:271
-msgid "Text below this line is what has been said since the last time you paid attention to this group chat"
+#: ../src/conversation_textview.py:273
+msgid ""
+"Text below this line is what has been said since the last time you paid "
+"attention to this group chat"
 msgstr "以下文字是您上次发言至今的群聊内容"
 
-#: ../src/conversation_textview.py:340
+#: ../src/conversation_textview.py:342
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "“%s”的动作(_A)"
 
-#: ../src/conversation_textview.py:352
+#: ../src/conversation_textview.py:354
 msgid "Read _Wikipedia Article"
 msgstr "读取 Wikipedia 文章(_W)"
 
-#: ../src/conversation_textview.py:357
+#: ../src/conversation_textview.py:359
 msgid "Look it up in _Dictionary"
 msgstr "从字典(_D)中搜索"
 
 #. we must have %s in the url if not WIKTIONARY
-#: ../src/conversation_textview.py:373
+#: ../src/conversation_textview.py:375
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "字典地址缺少 “%s” 并且它不是 WIKTIONARY"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:386
+#: ../src/conversation_textview.py:388
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "网站搜索地址缺少 “%s”"
 
-#: ../src/conversation_textview.py:389
+#: ../src/conversation_textview.py:391
 msgid "Web _Search for it"
 msgstr "用网页搜索(_S)"
 
-#: ../src/conversation_textview.py:395
+#: ../src/conversation_textview.py:397
 msgid "Open as _Link"
 msgstr "作为链接打开(_L)："
 
-#: ../src/conversation_textview.py:752
+#: ../src/conversation_textview.py:757
 msgid "Yesterday"
 msgstr "昨天"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
-#: ../src/conversation_textview.py:756
+#: ../src/conversation_textview.py:761
 #, python-format
 msgid "%i days ago"
 msgstr "%i 天前"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:788
+#: ../src/conversation_textview.py:793
 #, python-format
 msgid "Subject: %s\n"
 msgstr "主题：%s\n"
+
+#. form is single
+#: ../src/dataforms_widget.py:72
+msgid "This is result of query."
+msgstr ""
+
+#: ../src/dataforms_widget.py:78
+msgid "Edit items on the list"
+msgstr ""
 
 #: ../src/dialogs.py:59
 #, python-format
@@ -2952,25 +3116,16 @@ msgstr "请为账户 %s 填入您想增加的联系人数据"
 msgid "Please fill in the data of the contact you want to add"
 msgstr "请填入您想增加的联系人数据"
 
-#: ../src/dialogs.py:467
-#: ../src/disco.py:102
-#: ../src/disco.py:103
-#: ../src/disco.py:1252
-#: ../src/gajim.py:490
-#: ../src/roster_window.py:267
-#: ../src/roster_window.py:325
-#: ../src/roster_window.py:364
-#: ../src/roster_window.py:445
-#: ../src/roster_window.py:477
-#: ../src/roster_window.py:479
-#: ../src/roster_window.py:3827
-#: ../src/roster_window.py:3829
-#: ../src/common/helpers.py:42
+#: ../src/dialogs.py:467 ../src/disco.py:102 ../src/disco.py:103
+#: ../src/disco.py:1252 ../src/gajim.py:491 ../src/roster_window.py:267
+#: ../src/roster_window.py:325 ../src/roster_window.py:364
+#: ../src/roster_window.py:445 ../src/roster_window.py:477
+#: ../src/roster_window.py:479 ../src/roster_window.py:3827
+#: ../src/roster_window.py:3829 ../src/common/helpers.py:42
 msgid "Transports"
 msgstr "代理"
 
-#: ../src/dialogs.py:609
-#: ../src/dialogs.py:615
+#: ../src/dialogs.py:609 ../src/dialogs.py:615
 msgid "Invalid User ID"
 msgstr "无效的用户 ID"
 
@@ -3034,7 +3189,9 @@ msgid "Unable to bind to port %s."
 msgstr "无法绑定端口%s。"
 
 #: ../src/dialogs.py:907
-msgid "Maybe you have another running instance of Gajim. File Transfer will be canceled."
+msgid ""
+"Maybe you have another running instance of Gajim. File Transfer will be "
+"canceled."
 msgstr "或许您正在运行另一个 Gajim 实例。文件传输将被取消。"
 
 #: ../src/dialogs.py:1058
@@ -3047,8 +3204,7 @@ msgstr "该认证要求来自帐户 %s 由 %s 发送"
 msgid "Subscription request from %s"
 msgstr "来自 %s 的认证请求"
 
-#: ../src/dialogs.py:1121
-#: ../src/roster_window.py:681
+#: ../src/dialogs.py:1121 ../src/roster_window.py:681
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "您已经在群聊房间 %s 。"
@@ -3062,13 +3218,11 @@ msgstr "请在加入群聊前先连接到服务器。"
 msgid "Join Group Chat with account %s"
 msgstr "使用账户 %s 加入群聊"
 
-#: ../src/dialogs.py:1212
-#: ../src/dialogs.py:1218
+#: ../src/dialogs.py:1212 ../src/dialogs.py:1218
 msgid "Invalid group chat Jabber ID"
 msgstr "无效的群聊 Jabber ID"
 
-#: ../src/dialogs.py:1213
-#: ../src/dialogs.py:1219
+#: ../src/dialogs.py:1213 ../src/dialogs.py:1219
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "群聊 Jabber ID 包含非法字符。"
 
@@ -3097,21 +3251,16 @@ msgid ""
 msgstr "填写您想发送聊天消息到的联系人 ID 或昵称："
 
 #. if offline or connecting
-#: ../src/dialogs.py:1276
-#: ../src/dialogs.py:1635
-#: ../src/dialogs.py:1764
+#: ../src/dialogs.py:1276 ../src/dialogs.py:1635 ../src/dialogs.py:1764
 msgid "Connection not available"
 msgstr "连接不可用"
 
-#: ../src/dialogs.py:1277
-#: ../src/dialogs.py:1636
-#: ../src/dialogs.py:1765
+#: ../src/dialogs.py:1277 ../src/dialogs.py:1636 ../src/dialogs.py:1765
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "请确认已连接到 “%s”。"
 
-#: ../src/dialogs.py:1286
-#: ../src/dialogs.py:1289
+#: ../src/dialogs.py:1286 ../src/dialogs.py:1289
 msgid "Invalid JID"
 msgstr "无效的 Jabber ID"
 
@@ -3130,81 +3279,56 @@ msgstr "此处必须输入密码"
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:1364
-#: ../src/notify.py:211
-#: ../src/notify.py:411
+#: ../src/dialogs.py:1364 ../src/notify.py:211 ../src/notify.py:411
 msgid "Contact Signed In"
 msgstr "联系人登录"
 
-#: ../src/dialogs.py:1366
-#: ../src/notify.py:219
-#: ../src/notify.py:413
+#: ../src/dialogs.py:1366 ../src/notify.py:219 ../src/notify.py:413
 msgid "Contact Signed Out"
 msgstr "联系人退出登录"
 
 #. chat message
-#: ../src/dialogs.py:1368
-#: ../src/notify.py:238
-#: ../src/notify.py:415
+#: ../src/dialogs.py:1368 ../src/notify.py:238 ../src/notify.py:415
 msgid "New Message"
 msgstr "新消息"
 
 #. single message
-#: ../src/dialogs.py:1368
-#: ../src/notify.py:223
-#: ../src/notify.py:415
+#: ../src/dialogs.py:1368 ../src/notify.py:223 ../src/notify.py:415
 msgid "New Single Message"
 msgstr "新消息"
 
 #. private message
-#: ../src/dialogs.py:1369
-#: ../src/notify.py:230
-#: ../src/notify.py:416
+#: ../src/dialogs.py:1369 ../src/notify.py:230 ../src/notify.py:416
 msgid "New Private Message"
 msgstr "新的个人消息"
 
-#: ../src/dialogs.py:1369
-#: ../src/gajim.py:1159
-#: ../src/notify.py:424
+#: ../src/dialogs.py:1369 ../src/gajim.py:1168 ../src/notify.py:424
 msgid "New E-mail"
 msgstr "新的电子邮件"
 
-#: ../src/dialogs.py:1371
-#: ../src/gajim.py:1300
-#: ../src/notify.py:418
+#: ../src/dialogs.py:1371 ../src/gajim.py:1321 ../src/notify.py:418
 msgid "File Transfer Request"
 msgstr "文件传输请求"
 
-#: ../src/dialogs.py:1373
-#: ../src/gajim.py:1132
-#: ../src/gajim.py:1276
+#: ../src/dialogs.py:1373 ../src/gajim.py:1140 ../src/gajim.py:1297
 #: ../src/notify.py:420
 msgid "File Transfer Error"
 msgstr "文件传输错误"
 
-#: ../src/dialogs.py:1375
-#: ../src/gajim.py:1339
-#: ../src/gajim.py:1361
-#: ../src/gajim.py:1378
-#: ../src/notify.py:422
+#: ../src/dialogs.py:1375 ../src/gajim.py:1360 ../src/gajim.py:1382
+#: ../src/gajim.py:1399 ../src/notify.py:422
 msgid "File Transfer Completed"
 msgstr "文件传输完成"
 
-#: ../src/dialogs.py:1376
-#: ../src/gajim.py:1342
-#: ../src/notify.py:422
+#: ../src/dialogs.py:1376 ../src/gajim.py:1363 ../src/notify.py:422
 msgid "File Transfer Stopped"
 msgstr "文件传输已停止"
 
-#: ../src/dialogs.py:1378
-#: ../src/gajim.py:1030
-#: ../src/notify.py:426
+#: ../src/dialogs.py:1378 ../src/gajim.py:1038 ../src/notify.py:426
 msgid "Groupchat Invitation"
 msgstr "群聊邀请"
 
-#: ../src/dialogs.py:1380
-#: ../src/notify.py:203
-#: ../src/notify.py:428
+#: ../src/dialogs.py:1380 ../src/notify.py:203 ../src/notify.py:428
 msgid "Contact Changed Status"
 msgstr "联系人状态改变"
 
@@ -3315,8 +3439,7 @@ msgstr "注释： %s"
 msgid "Choose Sound"
 msgstr "选择声音"
 
-#: ../src/dialogs.py:2298
-#: ../src/dialogs.py:2343
+#: ../src/dialogs.py:2298 ../src/dialogs.py:2343
 msgid "All files"
 msgstr "全部文件"
 
@@ -3382,11 +3505,12 @@ msgid "The service could not be found"
 msgstr "找不到该服务"
 
 #: ../src/disco.py:642
-msgid "There is no service at the address you entered, or it is not responding. Check the address and try again."
+msgid ""
+"There is no service at the address you entered, or it is not responding. "
+"Check the address and try again."
 msgstr "此地址没有服务或无应答。请检查地址后重试。"
 
-#: ../src/disco.py:646
-#: ../src/disco.py:927
+#: ../src/disco.py:646 ../src/disco.py:927
 msgid "The service is not browsable"
 msgstr "该服务无法浏览"
 
@@ -3407,8 +3531,7 @@ msgstr "浏览(_B)"
 msgid "This service does not contain any items to browse."
 msgstr "此服务不包含任何项目可浏览。"
 
-#: ../src/disco.py:1142
-#: ../src/disco.py:1257
+#: ../src/disco.py:1142 ../src/disco.py:1257
 msgid "Re_gister"
 msgstr "注册(_G)"
 
@@ -3460,22 +3583,19 @@ msgstr "时间"
 msgid "Progress"
 msgstr "进程"
 
-#: ../src/filetransfers_window.py:163
-#: ../src/filetransfers_window.py:223
+#: ../src/filetransfers_window.py:163 ../src/filetransfers_window.py:223
 #, python-format
 msgid "Filename: %s"
 msgstr "文件名： %s"
 
-#: ../src/filetransfers_window.py:164
-#: ../src/filetransfers_window.py:298
+#: ../src/filetransfers_window.py:164 ../src/filetransfers_window.py:298
 #, python-format
 msgid "Size: %s"
 msgstr "大小： %s"
 
 #. You is a reply of who sent a file
 #. You is a reply of who received a file
-#: ../src/filetransfers_window.py:173
-#: ../src/filetransfers_window.py:183
+#: ../src/filetransfers_window.py:173 ../src/filetransfers_window.py:183
 #: ../src/history_manager.py:463
 msgid "You"
 msgstr "您"
@@ -3485,8 +3605,7 @@ msgstr "您"
 msgid "Sender: %s"
 msgstr "发送者： %s"
 
-#: ../src/filetransfers_window.py:175
-#: ../src/filetransfers_window.py:564
+#: ../src/filetransfers_window.py:175 ../src/filetransfers_window.py:564
 #: ../src/tooltips.py:573
 msgid "Recipient: "
 msgstr "接收者： %s"
@@ -3500,13 +3619,11 @@ msgstr "保存在： %s"
 msgid "File transfer completed"
 msgstr "文件传输已完成"
 
-#: ../src/filetransfers_window.py:204
-#: ../src/filetransfers_window.py:212
+#: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:212
 msgid "File transfer canceled"
 msgstr "文件传输已取消"
 
-#: ../src/filetransfers_window.py:204
-#: ../src/filetransfers_window.py:213
+#: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:213
 msgid "Connection with peer cannot be established."
 msgstr "无法与对方建立连接。"
 
@@ -3556,35 +3673,31 @@ msgstr "描述： %s"
 msgid "%s wants to send you a file:"
 msgstr "%s 想发送给您一个文件："
 
-#: ../src/filetransfers_window.py:318
-#: ../src/gtkgui_helpers.py:682
+#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:683
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "无法覆盖现有文件\"%s\""
 
-#: ../src/filetransfers_window.py:319
-#: ../src/gtkgui_helpers.py:684
-msgid "A file with this name already exists and you do not have permission to overwrite it."
+#: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:685
+msgid ""
+"A file with this name already exists and you do not have permission to "
+"overwrite it."
 msgstr "文件名已经存在且您没有权限覆盖它。"
 
-#: ../src/filetransfers_window.py:326
-#: ../src/gtkgui_helpers.py:688
+#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:689
 msgid "This file already exists"
 msgstr "文件已经存在"
 
-#: ../src/filetransfers_window.py:326
-#: ../src/gtkgui_helpers.py:688
+#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:689
 msgid "What do you want to do?"
 msgstr "想做什么？"
 
-#: ../src/filetransfers_window.py:338
-#: ../src/gtkgui_helpers.py:698
+#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:699
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "目录 \"%s\" 不可写"
 
-#: ../src/filetransfers_window.py:338
-#: ../src/gtkgui_helpers.py:699
+#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:700
 msgid "You do not have permission to create files in this directory."
 msgstr "您没有权限在这个目录里创建文件。"
 
@@ -3608,8 +3721,7 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: ../src/filetransfers_window.py:536
-#: ../src/filetransfers_window.py:539
+#: ../src/filetransfers_window.py:536 ../src/filetransfers_window.py:539
 msgid "Invalid File"
 msgstr "无效文件"
 
@@ -3621,13 +3733,11 @@ msgstr "文件："
 msgid "It is not possible to send empty files"
 msgstr "无法发送空文件"
 
-#: ../src/filetransfers_window.py:560
-#: ../src/tooltips.py:563
+#: ../src/filetransfers_window.py:560 ../src/tooltips.py:563
 msgid "Name: "
 msgstr "名称："
 
-#: ../src/filetransfers_window.py:562
-#: ../src/tooltips.py:567
+#: ../src/filetransfers_window.py:562 ../src/tooltips.py:567
 msgid "Sender: "
 msgstr "发送者："
 
@@ -3661,32 +3771,37 @@ msgstr "GTK+ 运行时环境缺少 libglade 支持"
 
 #: ../src/gajim.py:62
 #, python-format
-msgid "Please remove your current GTK+ runtime and install the latest stable version from %s"
+msgid ""
+"Please remove your current GTK+ runtime and install the latest stable "
+"version from %s"
 msgstr "请移除当前的 GTK+ 运行时环境并从 %s 安装最新稳定版本"
 
 #: ../src/gajim.py:64
-msgid "Please make sure that GTK+ and PyGTK have libglade support in your system."
+msgid ""
+"Please make sure that GTK+ and PyGTK have libglade support in your system."
 msgstr "请确认您系统中 gtk+ 及 pygtk 对 libglade 的支持。"
 
 #: ../src/gajim.py:69
 msgid "Gajim needs PySQLite2 to run"
 msgstr "运行 Gajim 需要 PySQLite2 "
 
-#: ../src/gajim.py:76
+#: ../src/gajim.py:77
 msgid "Gajim needs pywin32 to run"
 msgstr "运行 Gajim 需要 pywin32"
 
-#: ../src/gajim.py:77
+#: ../src/gajim.py:78
 #, python-format
-msgid "Please make sure that Pywin32 is installed on your system. You can get it at %s"
+msgid ""
+"Please make sure that Pywin32 is installed on your system. You can get it at "
+"%s"
 msgstr "请确认 Pywin32 已经安装在您的系统中。您可以从 %s取得它"
 
 #. set the icon to all newly opened wind
-#: ../src/gajim.py:189
+#: ../src/gajim.py:190
 msgid "Gajim is already running"
 msgstr "Gajim 已经在运行"
 
-#: ../src/gajim.py:190
+#: ../src/gajim.py:191
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
@@ -3694,78 +3809,76 @@ msgstr ""
 "Gajim 另一个实例似乎正在运行 \n"
 "运行？"
 
-#: ../src/gajim.py:297
+#: ../src/gajim.py:298
 #, python-format
 msgid "HTTP (%s) Authorization for %s (id: %s)"
 msgstr "HTTP (%s) 授权给 %s (id: %s)"
 
-#: ../src/gajim.py:298
+#: ../src/gajim.py:299
 msgid "Do you accept this request?"
 msgstr "是否接受这个请求？"
 
-#: ../src/gajim.py:344
-#: ../src/notify.py:430
+#: ../src/gajim.py:345 ../src/notify.py:430
 msgid "Connection Failed"
 msgstr "连接失败"
 
-#: ../src/gajim.py:656
+#: ../src/gajim.py:658
 #, python-format
 msgid "Subject: %s"
 msgstr "主题：%s"
 
-#: ../src/gajim.py:701
+#. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time))
+#: ../src/gajim.py:703 ../src/gajim.py:716
 #, python-format
 msgid "error while sending %s ( %s )"
 msgstr "发送 %s ( %s ) 时出现错误"
 
-#: ../src/gajim.py:741
+#: ../src/gajim.py:749
 msgid "Authorization accepted"
 msgstr "授权被接受"
 
-#: ../src/gajim.py:742
+#: ../src/gajim.py:750
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "联系人“%s”已授权您查看他/她的状态。"
 
-#: ../src/gajim.py:750
+#: ../src/gajim.py:758
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "联系人“%s”移除了来自您的认证"
 
-#: ../src/gajim.py:751
+#: ../src/gajim.py:759
 msgid "You will always see him or her as offline."
 msgstr "您将一直看到他/她的状态为离线。"
 
-#: ../src/gajim.py:794
+#: ../src/gajim.py:802
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "无法与对方“ %s ”建立连接。"
 
-#: ../src/gajim.py:795
-#: ../src/common/connection.py:395
+#: ../src/gajim.py:803 ../src/common/connection.py:395
 msgid "Check your connection or try again later."
 msgstr "检查连接并稍后重试。"
 
-#: ../src/gajim.py:943
-#: ../src/roster_window.py:1201
+#: ../src/gajim.py:951 ../src/roster_window.py:1201
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s 正在 %s (%s)."
 
-#: ../src/gajim.py:1040
+#: ../src/gajim.py:1048
 msgid "Your passphrase is incorrect"
 msgstr "您的密文不正确"
 
-#: ../src/gajim.py:1041
+#: ../src/gajim.py:1049
 msgid "You are currently connected without your OpenPGP key."
 msgstr "已建立没有 OpenPGP 密钥的连接"
 
-#: ../src/gajim.py:1143
+#: ../src/gajim.py:1151
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr " %(gmail_mail_address)s 上的新邮件"
 
-#: ../src/gajim.py:1145
+#: ../src/gajim.py:1153
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
@@ -3774,7 +3887,7 @@ msgstr[0] "您有 %d 条新邮件会话"
 #. FIXME: emulate Gtalk client popups. find out what they parse and how
 #. they decide what to show
 #. each message has a 'From', 'Subject' and 'Snippet' field
-#: ../src/gajim.py:1154
+#: ../src/gajim.py:1162
 #, python-format
 msgid ""
 "\n"
@@ -3783,52 +3896,52 @@ msgstr ""
 "\n"
 "从：%(from_address)s"
 
-#: ../src/gajim.py:1297
+#: ../src/gajim.py:1318
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s 想发送给您一个文件。"
 
-#: ../src/gajim.py:1362
+#: ../src/gajim.py:1383
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "您成功的从 %(name)s 收到文件  %(filename)s。"
 
 #. ft stopped
-#: ../src/gajim.py:1366
+#: ../src/gajim.py:1387
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "从 %(name)s 传输的文件 %(filename)s 被停止。"
 
-#: ../src/gajim.py:1379
+#: ../src/gajim.py:1400
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "您成功的给 %(name)s 发送了文件 %(filename)s。"
 
 #. ft stopped
-#: ../src/gajim.py:1383
+#: ../src/gajim.py:1404
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "到 %(name)s 的文件传输 %(filename)s 被停止。"
 
-#: ../src/gajim.py:1489
+#: ../src/gajim.py:1510
 msgid "Username Conflict"
 msgstr "用户名冲突"
 
-#: ../src/gajim.py:1490
+#: ../src/gajim.py:1511
 msgid "Please type a new username for your local account"
 msgstr "<b>请在您本地账户填写新的用户名</b>"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:1828
+#: ../src/gajim.py:1850
 msgid "Could not save your settings and preferences"
 msgstr "无法保存您的设置。"
 
-#: ../src/gajim.py:2020
+#: ../src/gajim.py:2042
 msgid "Network Manager support not available"
 msgstr "网络管理支持不可用"
 
-#: ../src/gajim.py:2095
+#: ../src/gajim.py:2117
 msgid "Session Management support not available (missing gnome.ui module)"
 msgstr "会话管理器支持不可用(丢失 gnome.ui 模块)"
 
@@ -3854,19 +3967,16 @@ msgid "Popups a window with the next pending event"
 msgstr "为下一条未读消息弹出窗口"
 
 #: ../src/gajim-remote.py:82
-msgid "Prints a list of all contacts in the roster. Each contact appear on a separate line"
+msgid ""
+"Prints a list of all contacts in the roster. Each contact appear on a "
+"separate line"
 msgstr "打印名单中所有联系人。每个联系人一行。"
 
-#: ../src/gajim-remote.py:84
-#: ../src/gajim-remote.py:98
-#: ../src/gajim-remote.py:108
-#: ../src/gajim-remote.py:121
-#: ../src/gajim-remote.py:135
-#: ../src/gajim-remote.py:156
-#: ../src/gajim-remote.py:186
-#: ../src/gajim-remote.py:195
-#: ../src/gajim-remote.py:202
-#: ../src/gajim-remote.py:209
+#: ../src/gajim-remote.py:84 ../src/gajim-remote.py:98
+#: ../src/gajim-remote.py:108 ../src/gajim-remote.py:121
+#: ../src/gajim-remote.py:135 ../src/gajim-remote.py:156
+#: ../src/gajim-remote.py:186 ../src/gajim-remote.py:195
+#: ../src/gajim-remote.py:202 ../src/gajim-remote.py:209
 #: ../src/gajim-remote.py:220
 msgid "account"
 msgstr "账户"
@@ -3892,8 +4002,7 @@ msgstr "状态"
 msgid "one of: offline, online, chat, away, xa, dnd, invisible "
 msgstr "下列中的一项： 离线，在线，聊天，离开，不可用, dnd, 隐身"
 
-#: ../src/gajim-remote.py:97
-#: ../src/gajim-remote.py:118
+#: ../src/gajim-remote.py:97 ../src/gajim-remote.py:118
 #: ../src/gajim-remote.py:132
 msgid "message"
 msgstr "消息"
@@ -3903,7 +4012,9 @@ msgid "status message"
 msgstr "状态消息"
 
 #: ../src/gajim-remote.py:98
-msgid "change status of account \"account\". If not specified, try to change status of all accounts that have \"sync with global status\" option set"
+msgid ""
+"change status of account \"account\". If not specified, try to change status "
+"of all accounts that have \"sync with global status\" option set"
 msgstr "改变账户的状态。如果不指明，将改变设置“与全局同步”选项的账户"
 
 #: ../src/gajim-remote.py:104
@@ -3914,43 +4025,47 @@ msgstr "显示对话框用于给联系人发送消息"
 msgid "JID of the contact that you want to chat with"
 msgstr "您想聊天的 JID"
 
-#: ../src/gajim-remote.py:108
-#: ../src/gajim-remote.py:186
+#: ../src/gajim-remote.py:108 ../src/gajim-remote.py:186
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "如指定，将从此帐户列表下移出联系人"
 
 #: ../src/gajim-remote.py:113
-msgid "Sends new chat message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''."
-msgstr "发送新聊天消息至名单中的联系人。 OpenPGP 密钥与帐户均可选。如果只选择“帐户”而不需要“ OpenPGP 密钥”，只需将“ OpenPGP 密钥”置为空。"
+msgid ""
+"Sends new chat message to a contact in the roster. Both OpenPGP key and "
+"account are optional. If you want to set only 'account', without 'OpenPGP "
+"key', just set 'OpenPGP key' to ''."
+msgstr ""
+"发送新聊天消息至名单中的联系人。 OpenPGP 密钥与帐户均可选。如果只选择“帐户”而"
+"不需要“ OpenPGP 密钥”，只需将“ OpenPGP 密钥”置为空。"
 
-#: ../src/gajim-remote.py:117
-#: ../src/gajim-remote.py:130
+#: ../src/gajim-remote.py:117 ../src/gajim-remote.py:130
 msgid "JID of the contact that will receive the message"
 msgstr "联系人的JID将收到消息"
 
-#: ../src/gajim-remote.py:118
-#: ../src/gajim-remote.py:132
+#: ../src/gajim-remote.py:118 ../src/gajim-remote.py:132
 msgid "message contents"
 msgstr "消息内容"
 
-#: ../src/gajim-remote.py:119
-#: ../src/gajim-remote.py:133
+#: ../src/gajim-remote.py:119 ../src/gajim-remote.py:133
 msgid "pgp key"
 msgstr "PGP 钥匙"
 
-#: ../src/gajim-remote.py:119
-#: ../src/gajim-remote.py:133
+#: ../src/gajim-remote.py:119 ../src/gajim-remote.py:133
 msgid "if specified, the message will be encrypted using this public key"
 msgstr "如指定，该消息将使用本公共密钥加密"
 
-#: ../src/gajim-remote.py:121
-#: ../src/gajim-remote.py:135
+#: ../src/gajim-remote.py:121 ../src/gajim-remote.py:135
 msgid "if specified, the message will be sent using this account"
 msgstr "如指定，消息将被用此账户发送"
 
 #: ../src/gajim-remote.py:126
-msgid "Sends new single message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''."
-msgstr "发送新单条消息至名单中的联系人。 OpenPGP 密钥与帐户均可选。如果只选择“帐户”而不需要“ OpenPGP 密钥”，只需将“ OpenPGP 密钥”置为空。"
+msgid ""
+"Sends new single message to a contact in the roster. Both OpenPGP key and "
+"account are optional. If you want to set only 'account', without 'OpenPGP "
+"key', just set 'OpenPGP key' to ''."
+msgstr ""
+"发送新单条消息至名单中的联系人。 OpenPGP 密钥与帐户均可选。如果只选择“帐户”而"
+"不需要“ OpenPGP 密钥”，只需将“ OpenPGP 密钥”置为空。"
 
 #: ../src/gajim-remote.py:131
 msgid "subject"
@@ -3964,10 +4079,8 @@ msgstr "消息主题"
 msgid "Gets detailed info on a contact"
 msgstr "获得联系人的详细信息"
 
-#: ../src/gajim-remote.py:142
-#: ../src/gajim-remote.py:155
-#: ../src/gajim-remote.py:185
-#: ../src/gajim-remote.py:194
+#: ../src/gajim-remote.py:142 ../src/gajim-remote.py:155
+#: ../src/gajim-remote.py:185 ../src/gajim-remote.py:194
 msgid "JID of the contact"
 msgstr "联系人的 JID "
 
@@ -4048,7 +4161,8 @@ msgid "Returns current status (the global one unless account is specified)"
 msgstr "返回当前状态(如不指定账户将返回全局设置)"
 
 #: ../src/gajim-remote.py:207
-msgid "Returns current status message(the global one unless account is specified)"
+msgid ""
+"Returns current status message(the global one unless account is specified)"
 msgstr "返回当前状态信息(如不指定账户将返回全局设置)"
 
 #: ../src/gajim-remote.py:214
@@ -4072,7 +4186,9 @@ msgid "XML to send"
 msgstr "发送 XML"
 
 #: ../src/gajim-remote.py:227
-msgid "Account in which the xml will be sent; if not specified, xml will be sent to all accounts"
+msgid ""
+"Account in which the xml will be sent; if not specified, xml will be sent to "
+"all accounts"
 msgstr "XML 将被发送的账户；如果不指定，XML 将被发送至所有账户"
 
 #: ../src/gajim-remote.py:249
@@ -4145,254 +4261,274 @@ msgstr "无法删除当前主题"
 msgid "Please first choose another for your current theme."
 msgstr "请先选择其他主题作为当前主题"
 
-#: ../src/groupchat_control.py:103
+#: ../src/groupchat_control.py:105
 msgid "Private Chat"
 msgstr "私聊"
 
-#: ../src/groupchat_control.py:103
+#: ../src/groupchat_control.py:105
 msgid "Private Chats"
 msgstr "私聊"
 
-#: ../src/groupchat_control.py:120
+#: ../src/groupchat_control.py:122
 msgid "Sending private message failed"
 msgstr "发送私有消息失败"
 
 #. in second %s code replaces with nickname
-#: ../src/groupchat_control.py:122
+#: ../src/groupchat_control.py:124
 #, python-format
 msgid "You are no longer in group chat \"%s\" or \"%s\" has left."
 msgstr "您不再在群聊“%s”中或“%s”已离开。"
 
-#: ../src/groupchat_control.py:141
+#: ../src/groupchat_control.py:143
 msgid "Group Chat"
 msgstr "群聊"
 
-#: ../src/groupchat_control.py:141
+#: ../src/groupchat_control.py:143
 msgid "Group Chats"
 msgstr "群聊"
 
-#: ../src/groupchat_control.py:315
+#: ../src/groupchat_control.py:317
 msgid "Insert Nickname"
 msgstr "插入昵称"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:789
+#: ../src/groupchat_control.py:812
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s 被踢出：%(reason)s"
 
-#: ../src/groupchat_control.py:793
+#: ../src/groupchat_control.py:816
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s 被 %(who)s 踢出：%(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:800
+#: ../src/groupchat_control.py:823
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s 被封禁：%(reason)s"
 
-#: ../src/groupchat_control.py:804
+#: ../src/groupchat_control.py:827
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s 被 %(who)s 封禁：%(reason)s"
 
-#: ../src/groupchat_control.py:812
+#: ../src/groupchat_control.py:835
 #, python-format
 msgid "You are now known as %s"
 msgstr "您现在成了 %s "
 
-#: ../src/groupchat_control.py:814
+#: ../src/groupchat_control.py:837
 #, python-format
 msgid "%s is now known as %s"
 msgstr "%s 现在成了 %s"
 
-#: ../src/groupchat_control.py:894
+#: ../src/groupchat_control.py:917
 #, python-format
 msgid "%s has left"
 msgstr " %s 离开了"
 
-#: ../src/groupchat_control.py:899
+#: ../src/groupchat_control.py:922
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s 加入群聊"
 
 #. No status message
-#: ../src/groupchat_control.py:901
-#: ../src/roster_window.py:1204
+#: ../src/groupchat_control.py:924 ../src/roster_window.py:1204
 #, python-format
 msgid "%s is now %s"
 msgstr "%s 正在 %s"
 
-#: ../src/groupchat_control.py:1020
-#: ../src/groupchat_control.py:1038
-#: ../src/groupchat_control.py:1131
-#: ../src/groupchat_control.py:1148
+#: ../src/groupchat_control.py:1043 ../src/groupchat_control.py:1061
+#: ../src/groupchat_control.py:1154 ../src/groupchat_control.py:1171
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "昵称未找到： %s "
 
-#: ../src/groupchat_control.py:1054
+#: ../src/groupchat_control.py:1077
 msgid "This group chat has no subject"
 msgstr "这个群聊没有主题"
 
-#: ../src/groupchat_control.py:1067
+#: ../src/groupchat_control.py:1090
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "邀请 %(contact_jid)s 到 %(room_jid)s。"
 
 #. %s is something the user wrote but it is not a jid so we inform
-#: ../src/groupchat_control.py:1074
-#: ../src/groupchat_control.py:1102
+#: ../src/groupchat_control.py:1097 ../src/groupchat_control.py:1125
 #, python-format
 msgid "%s does not appear to be a valid JID"
 msgstr " %s 可能不是有效的 JID "
 
-#: ../src/groupchat_control.py:1185
+#: ../src/groupchat_control.py:1208
 #, python-format
 msgid "No such command: /%s (if you want to send this, prefix it with /say)"
 msgstr "没有此命令：/%s ( 如果想送出，请用请用前缀 /say )"
 
-#: ../src/groupchat_control.py:1208
+#: ../src/groupchat_control.py:1231
 #, python-format
 msgid "Commands: %s"
 msgstr "命令： %s "
 
-#: ../src/groupchat_control.py:1210
+#: ../src/groupchat_control.py:1233
 #, python-format
-msgid "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The nickname of an occupant may be substituted, but not if it contains \"@\". If the JID is currently in the group chat, he/she/it will also be kicked. Does NOT support spaces in nickname."
-msgstr "用法：/%s <昵称|JID> [原因]，从此群聊封禁 JID。昵称可能被代替，除了包含“@”。如果 JID 在群聊里，他/她/它将被踢出。注意：不支持包含空格的昵称。"
+msgid ""
+"Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
+"nickname of an occupant may be substituted, but not if it contains \"@\". If "
+"the JID is currently in the group chat, he/she/it will also be kicked. Does "
+"NOT support spaces in nickname."
+msgstr ""
+"用法：/%s <昵称|JID> [原因]，从此群聊封禁 JID。昵称可能被代替，除了包含“@”。"
+"如果 JID 在群聊里，他/她/它将被踢出。注意：不支持包含空格的昵称。"
 
-#: ../src/groupchat_control.py:1217
+#: ../src/groupchat_control.py:1240
 #, python-format
-msgid "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
+msgid ""
+"Usage: /%s <nickname>, opens a private chat window to the specified occupant."
 msgstr "用法：/%s <昵称>, 为指定房主打开一个私聊窗口"
 
-#: ../src/groupchat_control.py:1221
+#: ../src/groupchat_control.py:1244
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "用法：/%s，清除文本窗口。"
 
-#: ../src/groupchat_control.py:1223
+#: ../src/groupchat_control.py:1246
 #, python-format
-msgid "Usage: /%s [reason], closes the current window or tab, displaying reason if specified."
+msgid ""
+"Usage: /%s [reason], closes the current window or tab, displaying reason if "
+"specified."
 msgstr "用法：/%s [原因]，关闭当前窗口或标签，如果指定将显示原因。"
 
-#: ../src/groupchat_control.py:1226
+#: ../src/groupchat_control.py:1249
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "用法：/%s，隐藏聊天按钮。"
 
-#: ../src/groupchat_control.py:1229
+#: ../src/groupchat_control.py:1252
 #, python-format
-msgid "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally providing a reason."
+msgid ""
+"Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
+"providing a reason."
 msgstr "用法：/%s <JID> [原因]，邀请 JID 到当前群聊，可以提供一个原因。"
 
-#: ../src/groupchat_control.py:1233
+#: ../src/groupchat_control.py:1256
 #, python-format
-msgid "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally using specified nickname."
+msgid ""
+"Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
+"using specified nickname."
 msgstr "用法: /%s <房间>@<服务器>[/昵称], 申请以指定昵称加入“房间@服务器”。"
 
-#: ../src/groupchat_control.py:1237
+#: ../src/groupchat_control.py:1260
 #, python-format
-msgid "Usage: /%s <nickname> [reason], removes the occupant specified by nickname from the group chat and optionally displays a reason. Does NOT support spaces in nickname."
-msgstr "用法：/%s <昵称> [原因]，通过昵称移除群聊房主，原因可选。注意：不支持含空格的昵称。"
+msgid ""
+"Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
+"from the group chat and optionally displays a reason. Does NOT support "
+"spaces in nickname."
+msgstr ""
+"用法：/%s <昵称> [原因]，通过昵称移除群聊房主，原因可选。注意：不支持含空格的"
+"昵称。"
 
-#: ../src/groupchat_control.py:1242
+#: ../src/groupchat_control.py:1265
 #, python-format
-msgid "Usage: /%s <action>, sends action to the current group chat. Use third person. (e.g. /%s explodes.)"
-msgstr "用法：/%s <动作>，发送动作到当前群聊。使用第三人称。(例如：/%s exploeds)"
+msgid ""
+"Usage: /%s <action>, sends action to the current group chat. Use third "
+"person. (e.g. /%s explodes.)"
+msgstr ""
+"用法：/%s <动作>，发送动作到当前群聊。使用第三人称。(例如：/%s exploeds)"
 
-#: ../src/groupchat_control.py:1246
+#: ../src/groupchat_control.py:1269
 #, python-format
-msgid "Usage: /%s <nickname> [message], opens a private message windowand sends message to the occupant specified by nickname."
-msgstr "用法： /%s <昵称> [消息], 打开一个私聊窗口并且向指定昵称的联系人发送消息 "
+msgid ""
+"Usage: /%s <nickname> [message], opens a private message windowand sends "
+"message to the occupant specified by nickname."
+msgstr ""
+"用法： /%s <昵称> [消息], 打开一个私聊窗口并且向指定昵称的联系人发送消息 "
 
-#: ../src/groupchat_control.py:1251
+#: ../src/groupchat_control.py:1274
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 msgstr "用法：/%s <昵称>，在当前群聊中改变昵称。"
 
-#: ../src/groupchat_control.py:1255
+#: ../src/groupchat_control.py:1278
 #, python-format
 msgid "Usage: /%s , display the names of group chat occupants."
 msgstr "用法：/%s [主题]，显示或更新群聊的拥有者。"
 
-#: ../src/groupchat_control.py:1259
+#: ../src/groupchat_control.py:1282
 #, python-format
 msgid "Usage: /%s [topic], displays or updates the current group chat topic."
 msgstr "用法：/%s [主题]，显示或更新当前群聊的主题。"
 
-#: ../src/groupchat_control.py:1262
+#: ../src/groupchat_control.py:1285
 #, python-format
-msgid "Usage: /%s <message>, sends a message without looking for other commands."
+msgid ""
+"Usage: /%s <message>, sends a message without looking for other commands."
 msgstr "用法：/%s <消息>，不使用其他命令发送消息。"
 
-#: ../src/groupchat_control.py:1265
+#: ../src/groupchat_control.py:1288
 #, python-format
 msgid "No help info for /%s"
 msgstr "没有 /%s 的帮助信息"
 
-#: ../src/groupchat_control.py:1314
+#: ../src/groupchat_control.py:1337
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "确定要离开群聊“ %s ”？"
 
-#: ../src/groupchat_control.py:1316
-msgid "If you close this window, you will be disconnected from this group chat."
+#: ../src/groupchat_control.py:1339
+msgid ""
+"If you close this window, you will be disconnected from this group chat."
 msgstr "如果关闭此窗口，您将断开此群聊的连接。"
 
-#: ../src/groupchat_control.py:1320
-#: ../src/roster_window.py:3961
+#: ../src/groupchat_control.py:1343 ../src/roster_window.py:3961
 msgid "Do _not ask me again"
 msgstr "不再提问此问题(_N)"
 
-#: ../src/groupchat_control.py:1354
+#: ../src/groupchat_control.py:1377
 msgid "Changing Subject"
 msgstr "正在更换话题"
 
-#: ../src/groupchat_control.py:1355
+#: ../src/groupchat_control.py:1378
 msgid "Please specify the new subject:"
 msgstr "请指定新话题："
 
-#: ../src/groupchat_control.py:1364
+#: ../src/groupchat_control.py:1387
 msgid "Changing Nickname"
 msgstr "正在更换昵称"
 
-#: ../src/groupchat_control.py:1365
+#: ../src/groupchat_control.py:1388
 msgid "Please specify the new nickname you want to use:"
 msgstr "请指定您想使用的新昵称："
 
-#: ../src/groupchat_control.py:1390
+#: ../src/groupchat_control.py:1413
 msgid "Bookmark already set"
 msgstr "书签已设定"
 
-#: ../src/groupchat_control.py:1391
+#: ../src/groupchat_control.py:1414
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "群聊“%s”已在您的书签中。"
 
-#: ../src/groupchat_control.py:1400
+#: ../src/groupchat_control.py:1423
 msgid "Bookmark has been added successfully"
 msgstr "书签添加成功"
 
-#: ../src/groupchat_control.py:1401
+#: ../src/groupchat_control.py:1424
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "您可以通过“动作”菜单管理您的名单。"
 
 #. ask for reason
-#: ../src/groupchat_control.py:1527
+#: ../src/groupchat_control.py:1550
 #, python-format
 msgid "Kicking %s"
 msgstr "踢出 %s"
 
-#: ../src/groupchat_control.py:1528
-#: ../src/groupchat_control.py:1810
+#: ../src/groupchat_control.py:1551 ../src/groupchat_control.py:1833
 msgid "You may specify a reason below:"
 msgstr "您可以指定一个原因："
 
 #. ask for reason
-#: ../src/groupchat_control.py:1809
+#: ../src/groupchat_control.py:1832
 #, python-format
 msgid "Banning %s"
 msgstr "封禁 %s"
@@ -4402,7 +4538,9 @@ msgid "A programming error has been detected"
 msgstr "发现一个程序错误"
 
 #: ../src/gtkexcepthook.py:42
-msgid "It probably is not fatal, but should be reported to the developers nonetheless."
+msgid ""
+"It probably is not fatal, but should be reported to the developers "
+"nonetheless."
 msgstr "它可能不是致命的，但仍应该提交给开发者。"
 
 #: ../src/gtkexcepthook.py:48
@@ -4414,8 +4552,7 @@ msgid "Details"
 msgstr "细节"
 
 #. we talk about file
-#: ../src/gtkgui_helpers.py:153
-#: ../src/gtkgui_helpers.py:168
+#: ../src/gtkgui_helpers.py:153 ../src/gtkgui_helpers.py:168
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "错误：无法按读打开文件 %s"
@@ -4435,16 +4572,16 @@ msgstr "分析文件错误："
 msgid "Could not write to %s. Session Management support will not work"
 msgstr "不能写入到 %s 。会话管理支持功能未启用"
 
-#: ../src/gtkgui_helpers.py:727
+#: ../src/gtkgui_helpers.py:728
 msgid "Extension not supported"
 msgstr "不支持扩展"
 
-#: ../src/gtkgui_helpers.py:728
+#: ../src/gtkgui_helpers.py:729
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr "图片不能被保存为 %(type)s 格式。保存为 %(new_filename)s？"
 
-#: ../src/gtkgui_helpers.py:737
+#: ../src/gtkgui_helpers.py:738
 msgid "Save Image as..."
 msgstr "图片另存为..."
 
@@ -4458,42 +4595,38 @@ msgid "Contacts"
 msgstr "联系人"
 
 #. holds time
-#: ../src/history_manager.py:120
-#: ../src/history_manager.py:160
+#: ../src/history_manager.py:120 ../src/history_manager.py:160
 #: ../src/history_window.py:86
 msgid "Date"
 msgstr "日期"
 
 #. holds nickname
-#: ../src/history_manager.py:126
-#: ../src/history_manager.py:178
+#: ../src/history_manager.py:126 ../src/history_manager.py:178
 msgid "Nickname"
 msgstr "昵称"
 
 #. holds message
-#: ../src/history_manager.py:134
-#: ../src/history_manager.py:166
+#: ../src/history_manager.py:134 ../src/history_manager.py:166
 #: ../src/history_window.py:94
 msgid "Message"
 msgstr "消息"
 
-#. holds subject
-#: ../src/history_manager.py:141
-#: ../src/history_manager.py:172
-msgid "Subject"
-msgstr "主题"
-
 #: ../src/history_manager.py:186
-msgid "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)"
+msgid ""
+"Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
+"RUNNING)"
 msgstr "您确定要清除数据库？（强烈建议 GAJIM 运行时不要进行此操作）"
 
 #: ../src/history_manager.py:188
 msgid ""
-"Normally allocated database size will not be freed, it will just become reusable. If you really want to reduce database filesize, click YES, else click NO.\n"
+"Normally allocated database size will not be freed, it will just become "
+"reusable. If you really want to reduce database filesize, click YES, else "
+"click NO.\n"
 "\n"
 "In case you click YES, please wait..."
 msgstr ""
-"通常已占用的数据库空间不会被释放，以便于恢复操作。如果您的确需要压缩数据库的体积，点击 “是”，否则点击“否”。\n"
+"通常已占用的数据库空间不会被释放，以便于恢复操作。如果您的确需要压缩数据库的"
+"体积，点击 “是”，否则点击“否”。\n"
 "\n"
 "如果您点击“是”，请等待..."
 
@@ -4511,8 +4644,7 @@ msgid "Do you really want to delete logs of the selected contact?"
 msgid_plural "Do you really want to delete logs of the selected contacts?"
 msgstr[0] "您确定要删除所选定联系人的历史记录？"
 
-#: ../src/history_manager.py:518
-#: ../src/history_manager.py:554
+#: ../src/history_manager.py:518 ../src/history_manager.py:554
 msgid "This is an irreversible operation."
 msgstr "该操作是不可撤消的。"
 
@@ -4521,8 +4653,7 @@ msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "您确定要删除所选定的消息？"
 
-#: ../src/history_window.py:103
-#: ../src/history_window.py:105
+#: ../src/history_window.py:103 ../src/history_window.py:105
 #, python-format
 msgid "Conversation History with %s"
 msgstr "与 %s 的聊天历史"
@@ -4532,8 +4663,7 @@ msgstr "与 %s 的聊天历史"
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s 的状态是 %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:265
-#: ../src/notify.py:198
+#: ../src/history_window.py:265 ../src/notify.py:198
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s 的状态是 %(status)s"
@@ -4592,15 +4722,12 @@ msgstr "%(nickname)s： %(message)s"
 msgid "New Message from %(nickname)s"
 msgstr "来自 %(nickname)s 的新消息"
 
-#: ../src/profile_window.py:72
-#: ../src/profile_window.py:376
+#: ../src/profile_window.py:72 ../src/profile_window.py:376
 msgid "Retrieving profile..."
 msgstr "取回概况..."
 
-#: ../src/profile_window.py:107
-#: ../src/profile_window.py:203
-#: ../src/profile_window.py:212
-#: ../src/profile_window.py:370
+#: ../src/profile_window.py:107 ../src/profile_window.py:203
+#: ../src/profile_window.py:212 ../src/profile_window.py:370
 msgid "Click to set your avatar"
 msgstr "单击以设置您的明细"
 
@@ -4634,34 +4761,31 @@ msgid "vCard publication failed"
 msgstr "vCard 发布失败"
 
 #: ../src/profile_window.py:348
-msgid "There was an error while publishing your personal information, try again later."
+msgid ""
+"There was an error while publishing your personal information, try again "
+"later."
 msgstr "发布您的个人信息时发生错误，请稍后重试。"
 
 #: ../src/profile_window.py:374
 msgid "Without a connection, you can not get your contact information."
 msgstr "无法脱机获取个人信息。"
 
-#: ../src/roster_window.py:168
-#: ../src/roster_window.py:223
+#: ../src/roster_window.py:168 ../src/roster_window.py:223
 msgid "Merged accounts"
 msgstr "已合并的帐户"
 
-#: ../src/roster_window.py:340
-#: ../src/common/helpers.py:42
+#: ../src/roster_window.py:340 ../src/common/helpers.py:42
 msgid "Observers"
 msgstr "旁观者"
 
-#: ../src/roster_window.py:686
-#: ../src/roster_window.py:3132
+#: ../src/roster_window.py:686 ../src/roster_window.py:3132
 msgid "You cannot join a group chat while you are invisible"
 msgstr "隐身时无法加入群聊"
 
 #. new chat
 #. for chat_with
 #. for single message
-#: ../src/roster_window.py:878
-#: ../src/systray.py:187
-#: ../src/systray.py:192
+#: ../src/roster_window.py:878 ../src/systray.py:187 ../src/systray.py:192
 #, python-format
 msgid "using account %s"
 msgstr "使用账户 %s"
@@ -4704,8 +4828,7 @@ msgstr "历史管理器"
 msgid "_Join New Group Chat"
 msgstr "加入新群聊(_J)"
 
-#: ../src/roster_window.py:1384
-#: ../src/roster_window.py:3325
+#: ../src/roster_window.py:1384 ../src/roster_window.py:3325
 #: ../src/roster_window.py:3332
 msgid "You have unread messages"
 msgstr "您有未读消息"
@@ -4720,7 +4843,9 @@ msgid "Transport \"%s\" will be removed"
 msgstr "代理“%s”将被移除"
 
 #: ../src/roster_window.py:1389
-msgid "You will no longer be able to send and receive messages to contacts from this transport."
+msgid ""
+"You will no longer be able to send and receive messages to contacts from "
+"this transport."
 msgstr "您将无法从此代理收发消息。"
 
 #: ../src/roster_window.py:1392
@@ -4729,7 +4854,9 @@ msgstr "代理将被移除"
 
 #: ../src/roster_window.py:1397
 #, python-format
-msgid "You will no longer be able to send and receive messages to contacts from these transports:%s"
+msgid ""
+"You will no longer be able to send and receive messages to contacts from "
+"these transports:%s"
 msgstr "您将无法从这些代理的联系人收发消息：%s"
 
 #. it's jid
@@ -4772,8 +4899,7 @@ msgstr "指定您的 OpenPGP 钥匙"
 msgid "Select a key to apply to the contact"
 msgstr "选择一个键应用于联系人。"
 
-#: ../src/roster_window.py:1788
-#: ../src/roster_window.py:1963
+#: ../src/roster_window.py:1788 ../src/roster_window.py:1963
 msgid "_New group chat"
 msgstr "新群聊(_N)"
 
@@ -4781,8 +4907,7 @@ msgstr "新群聊(_N)"
 msgid "I would like to add you to my roster"
 msgstr "我想加您为好友"
 
-#: ../src/roster_window.py:2008
-#: ../src/roster_window.py:2055
+#: ../src/roster_window.py:2008 ../src/roster_window.py:2055
 msgid "Send Group M_essage"
 msgstr "发送群组消息(_E)"
 
@@ -4806,8 +4931,7 @@ msgstr "登入(_L)"
 msgid "Log _off"
 msgstr "退出登录(_O)"
 
-#: ../src/roster_window.py:2232
-#: ../src/roster_window.py:2303
+#: ../src/roster_window.py:2232 ../src/roster_window.py:2303
 msgid "_Change Status Message"
 msgstr "更改状态消息(_C)"
 
@@ -4844,11 +4968,15 @@ msgid "Contact \"%s\" will be removed from your roster"
 msgstr "联系人“%s”将从您的名单中移除"
 
 #: ../src/roster_window.py:2621
-msgid "By removing this contact you also remove authorization resulting in him or her always seeing you as offline."
+msgid ""
+"By removing this contact you also remove authorization resulting in him or "
+"her always seeing you as offline."
 msgstr "移除此联系人的同时将移除认证，导致他/她将一直看到您为离线。"
 
 #: ../src/roster_window.py:2626
-msgid "By removing this contact you also by default remove authorization resulting in him or her always seeing you as offline."
+msgid ""
+"By removing this contact you also by default remove authorization resulting "
+"in him or her always seeing you as offline."
 msgstr "移除此联系人的同时将默认移除认证，导致他/她将一直看到您为离线。"
 
 #: ../src/roster_window.py:2629
@@ -4890,14 +5018,14 @@ msgstr "错误字段"
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "请重新输入您的 GPG 字段或点“取消”"
 
-#: ../src/roster_window.py:2781
-#: ../src/roster_window.py:2841
+#: ../src/roster_window.py:2781 ../src/roster_window.py:2841
 msgid "You are participating in one or more group chats"
 msgstr "您在一或多个群聊中"
 
-#: ../src/roster_window.py:2782
-#: ../src/roster_window.py:2842
-msgid "Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?"
+#: ../src/roster_window.py:2782 ../src/roster_window.py:2842
+msgid ""
+"Changing your status to invisible will result in disconnection from those "
+"group chats. Are you sure you want to go invisible?"
 msgstr "隐身将从所有群聊中断开。确定隐身？"
 
 #: ../src/roster_window.py:2799
@@ -4913,9 +5041,10 @@ msgstr "您必须在与他人聊天前新建账户。"
 msgid "♪ \"%(title)s\" by %(artist)s ♪"
 msgstr "♪ \"%(title)s\" %(artist)s ♪"
 
-#: ../src/roster_window.py:3326
-#: ../src/roster_window.py:3333
-msgid "Messages will only be available for reading them later if you have history enabled."
+#: ../src/roster_window.py:3326 ../src/roster_window.py:3333
+msgid ""
+"Messages will only be available for reading them later if you have history "
+"enabled."
 msgstr "启用历史后才能再次重读消息"
 
 #: ../src/roster_window.py:3911
@@ -4923,16 +5052,25 @@ msgid "Metacontacts storage not supported by your server"
 msgstr "您的服务器不支持元联系人存储"
 
 #: ../src/roster_window.py:3913
-msgid "Your server does not support storing metacontacts information. So those information will not be save on next reconnection."
-msgstr "您的服务器不支持存储元联系人信息。所以这些信息在下次重新连接时将不被保存。"
+msgid ""
+"Your server does not support storing metacontacts information. So those "
+"information will not be save on next reconnection."
+msgstr ""
+"您的服务器不支持存储元联系人信息。所以这些信息在下次重新连接时将不被保存。"
 
 #: ../src/roster_window.py:3955
-msgid "You are about to create a metacontact. Are you sure you want to continue?"
+msgid ""
+"You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "您在创建一个元联系人。确定继续？"
 
 #: ../src/roster_window.py:3957
-msgid "Metacontacts are a way to regroup several contacts in one line. Generaly it is used when the same person has several Jabber accounts or transport accounts."
-msgstr "元联系人是一种分组若干联系人的方法。一般而言这用在当一个人有若干 Jabber 账户或代理账户时。"
+msgid ""
+"Metacontacts are a way to regroup several contacts in one line. Generaly it "
+"is used when the same person has several Jabber accounts or transport "
+"accounts."
+msgstr ""
+"元联系人是一种分组若干联系人的方法。一般而言这用在当一个人有若干 Jabber 账户"
+"或代理账户时。"
 
 #: ../src/roster_window.py:4124
 #, python-format
@@ -4956,13 +5094,11 @@ msgstr "更改状态消息_(C)..."
 msgid "Hide this menu"
 msgstr "隐藏本菜单"
 
-#: ../src/tooltips.py:309
-#: ../src/tooltips.py:492
+#: ../src/tooltips.py:309 ../src/tooltips.py:492
 msgid "Jabber ID: "
 msgstr "Jabber ID："
 
-#: ../src/tooltips.py:312
-#: ../src/tooltips.py:496
+#: ../src/tooltips.py:312 ../src/tooltips.py:496
 msgid "Resource: "
 msgstr "资源："
 
@@ -4971,8 +5107,7 @@ msgstr "资源："
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "此群聊的 %(owner_or_admin_or_member)s"
 
-#: ../src/tooltips.py:430
-#: ../src/tooltips.py:610
+#: ../src/tooltips.py:430 ../src/tooltips.py:610
 msgid "Status: "
 msgstr "状态"
 
@@ -5011,8 +5146,7 @@ msgstr "类型"
 msgid "Transferred: "
 msgstr "已传输："
 
-#: ../src/tooltips.py:588
-#: ../src/tooltips.py:609
+#: ../src/tooltips.py:588 ../src/tooltips.py:609
 msgid "Not started"
 msgstr "未开始"
 
@@ -5020,8 +5154,7 @@ msgstr "未开始"
 msgid "Stopped"
 msgstr "已停止"
 
-#: ../src/tooltips.py:594
-#: ../src/tooltips.py:597
+#: ../src/tooltips.py:594 ../src/tooltips.py:597
 msgid "Completed"
 msgstr "已完成"
 
@@ -5058,8 +5191,7 @@ msgstr "?Client: 未知"
 msgid "?OS:Unknown"
 msgstr "?OS: 未知"
 
-#: ../src/vcard.py:247
-#: ../src/vcard.py:449
+#: ../src/vcard.py:247 ../src/vcard.py:449
 #, python-format
 msgid "since %s"
 msgstr "自 %s"
@@ -5069,11 +5201,15 @@ msgid "Affiliation:"
 msgstr "关系："
 
 #: ../src/vcard.py:285
-msgid "This contact is interested in your presence information, but you are not interested in his/her presence"
+msgid ""
+"This contact is interested in your presence information, but you are not "
+"interested in his/her presence"
 msgstr "此联系人对您的状态信息感兴趣，但您不关心他/她的状态"
 
 #: ../src/vcard.py:287
-msgid "You are interested in the contact's presence information, but he/she is not interested in yours"
+msgid ""
+"You are interested in the contact's presence information, but he/she is not "
+"interested in yours"
 msgstr "您对此联系人的状态信息感兴趣，但他/她不关心您的状态"
 
 #: ../src/vcard.py:289
@@ -5082,16 +5218,16 @@ msgstr "您与此联系人同时对对方的状态信息感兴趣"
 
 #. None
 #: ../src/vcard.py:291
-msgid "You are not interested in the contact's presence, and neither he/she is interested in yours"
+msgid ""
+"You are not interested in the contact's presence, and neither he/she is "
+"interested in yours"
 msgstr "您与他/她互不关心对方的状态信息"
 
 #: ../src/vcard.py:299
 msgid "You are waiting contact's answer about your subscription request"
 msgstr "等待联系人回应您的认证请求"
 
-#: ../src/vcard.py:311
-#: ../src/vcard.py:338
-#: ../src/vcard.py:482
+#: ../src/vcard.py:311 ../src/vcard.py:338 ../src/vcard.py:482
 msgid " resource with priority "
 msgstr "带有优先级的资源"
 
@@ -5099,17 +5235,14 @@ msgstr "带有优先级的资源"
 msgid "creating logs database"
 msgstr "建立日志数据库"
 
-#: ../src/common/check_paths.py:89
-#: ../src/common/check_paths.py:100
+#: ../src/common/check_paths.py:89 ../src/common/check_paths.py:100
 #: ../src/common/check_paths.py:107
 #, python-format
 msgid "%s is file but it should be a directory"
 msgstr "%s 应为文件但它应为一个目录"
 
-#: ../src/common/check_paths.py:90
-#: ../src/common/check_paths.py:101
-#: ../src/common/check_paths.py:108
-#: ../src/common/check_paths.py:116
+#: ../src/common/check_paths.py:90 ../src/common/check_paths.py:101
+#: ../src/common/check_paths.py:108 ../src/common/check_paths.py:116
 msgid "Gajim will now exit"
 msgstr "Gajim 即将退出"
 
@@ -5144,7 +5277,8 @@ msgid "Not available as a result of being idle"
 msgstr "发呆导致的不可用"
 
 #: ../src/common/config.py:82
-msgid "List (space separated) of rows (accounts and groups) that are collapsed."
+msgid ""
+"List (space separated) of rows (accounts and groups) that are collapsed."
 msgstr "折叠的列(账户和组)的列表(空格分隔)。"
 
 #: ../src/common/config.py:87
@@ -5166,27 +5300,41 @@ msgstr ""
 "'从不' - 从不打印时间。"
 
 #: ../src/common/config.py:92
-msgid "Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one. This is used only if print_time is 'sometimes'."
-msgstr "使用模糊时钟打印时间。模糊度的值从 1 到 4，或者 0 禁用模糊时钟。1 是最精确的时钟，4 是最不精确的。只在打印时间为 '有时' 时生效。"
+msgid ""
+"Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 "
+"to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one. "
+"This is used only if print_time is 'sometimes'."
+msgstr ""
+"使用模糊时钟打印时间。模糊度的值从 1 到 4，或者 0 禁用模糊时钟。1 是最精确的"
+"时钟，4 是最不精确的。只在打印时间为 '有时' 时生效。"
 
 #: ../src/common/config.py:95
 msgid "Treat * / _ pairs as possible formatting characters."
 msgstr "如可能对 * / _ 格式化字串。"
 
 #: ../src/common/config.py:96
-msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
+msgid ""
+"If True, do not remove */_ . So *abc* will be bold but with * * not removed."
 msgstr "如果为真，不要移除 */_。所以 *abc* 将被加粗但 * * 不会被移除"
 
 #: ../src/common/config.py:99
-msgid "Uses ReStructured text markup for HTML, plus ascii formatting if selected. (If you want to use this, install docutils)"
-msgstr "为 HTML 使用重构文本标记，如果选择加入 ASCII 格式。(如果您想使用此功能，请安装 docutils)"
+msgid ""
+"Uses ReStructured text markup for HTML, plus ascii formatting if selected. "
+"(If you want to use this, install docutils)"
+msgstr ""
+"为 HTML 使用重构文本标记，如果选择加入 ASCII 格式。(如果您想使用此功能，请安"
+"装 docutils)"
 
 #: ../src/common/config.py:108
-msgid "Character to add after nickname when using nick completion (tab) in group chat."
+msgid ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
 msgstr "当在群聊中使用昵称补全时加到昵称后的字母"
 
 #: ../src/common/config.py:109
-msgid "Character to propose to add after desired nickname when desired nickname is used by someone else in group chat."
+msgid ""
+"Character to propose to add after desired nickname when desired nickname is "
+"used by someone else in group chat."
 msgstr "当请求的昵称被群聊中的其他人使用时要加到被请求的昵称后的字母。"
 
 #: ../src/common/config.py:142
@@ -5194,7 +5342,9 @@ msgid "Add * and [n] in roster title?"
 msgstr "加入 * 和 [n] 在名单标题？"
 
 #: ../src/common/config.py:143
-msgid "How many lines to remember from previous conversation when a chat tab/window is reopened."
+msgid ""
+"How many lines to remember from previous conversation when a chat tab/window "
+"is reopened."
 msgstr "聊天标签/窗口被重新打开时显示的历史谈话行数"
 
 #: ../src/common/config.py:144
@@ -5202,7 +5352,9 @@ msgid "How many minutes should last lines from previous conversation last."
 msgstr "距上次谈话结束的分钟数"
 
 #: ../src/common/config.py:145
-msgid "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour)."
+msgid ""
+"Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
+"Client default behaviour)."
 msgstr "用 Ctrl+回车 发行消息，回车开始新行(紫茉莉 ICQ 客户端默认操作)。"
 
 #: ../src/common/config.py:147
@@ -5211,27 +5363,41 @@ msgstr "Ctrl+上箭头 存储行数。"
 
 #: ../src/common/config.py:150
 #, python-format
-msgid "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
-msgstr "自定义地址 %s 在 %s 是单词/短语时，或 'WIKTIONARY' 意味着使用 wiktionary。"
+msgid ""
+"Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
+"which means use wiktionary."
+msgstr ""
+"自定义地址 %s 在 %s 是单词/短语时，或 'WIKTIONARY' 意味着使用 wiktionary。"
 
 #: ../src/common/config.py:153
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "如果选中，Gajim 可以接受 gajim-remote 远程控制。"
 
 #: ../src/common/config.py:154
-msgid "If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection."
-msgstr "如果为真，监听 NetworkManager 和状态改变(被没有监听网络管理器设置为假和它们使用全局状态同步提供)的基于网络连接的 D-Bus 信号。"
+msgid ""
+"If True, listen to D-Bus signals from NetworkManager and change the status "
+"of accounts (provided they do not have listen_to_network_manager set to "
+"False and they sync with global status) based upon the status of the network "
+"connection."
+msgstr ""
+"如果为真，监听 NetworkManager 和状态改变(被没有监听网络管理器设置为假和它们使"
+"用全局状态同步提供)的基于网络连接的 D-Bus 信号。"
 
 #: ../src/common/config.py:155
-msgid "Sent chat state notifications. Can be one of all, composing_only, disabled."
+msgid ""
+"Sent chat state notifications. Can be one of all, composing_only, disabled."
 msgstr "发送聊天状态通知。可以是全部，打字，禁用中的一个。"
 
 #: ../src/common/config.py:156
-msgid "Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled."
+msgid ""
+"Displayed chat state notifications in chat windows. Can be one of all, "
+"composing_only, disabled."
 msgstr "在聊天窗口中显示聊天状态通知。可以是全部，打字，禁用中的一个。"
 
 #: ../src/common/config.py:158
-msgid "When not printing time for every message (print_time==sometimes), print it every x minutes."
+msgid ""
+"When not printing time for every message (print_time==sometimes), print it "
+"every x minutes."
 msgstr "当不是每条消息打印时间(打印时间为有时)时，每几分钟打印它。"
 
 #: ../src/common/config.py:159
@@ -5239,15 +5405,21 @@ msgid "Ask before closing a group chat tab/window."
 msgstr "关闭群聊标签/窗口前询问。"
 
 #: ../src/common/config.py:160
-msgid "Always ask before closing group chat tab/window in this space separated list of group chat jids."
+msgid ""
+"Always ask before closing group chat tab/window in this space separated list "
+"of group chat jids."
 msgstr "关闭这个空格分隔的列表中的群聊 JID 标签/窗口前总是询问。"
 
 #: ../src/common/config.py:161
-msgid "Never ask before closing group chat tab/window in this space separated list of group chat jids."
+msgid ""
+"Never ask before closing group chat tab/window in this space separated list "
+"of group chat jids."
 msgstr "关闭这个空格分隔的列表中的群聊 JID 标签/窗口前不再询问。"
 
 #: ../src/common/config.py:164
-msgid "Overrides the host we send for File Transfer in case of address translation/port forwarding."
+msgid ""
+"Overrides the host we send for File Transfer in case of address translation/"
+"port forwarding."
 msgstr "为防止地址翻译转发，忽略用以发起文件传输的主机"
 
 #: ../src/common/config.py:166
@@ -5271,36 +5443,61 @@ msgid "Show close button in tab?"
 msgstr "在标签上显示关闭键？"
 
 #: ../src/common/config.py:189
-msgid "A semicolon-separated list of words that will be highlighted in group chats."
+msgid ""
+"A semicolon-separated list of words that will be highlighted in group chats."
 msgstr "用分号隔开的群聊中将高亮显示的单词列表。"
 
 #: ../src/common/config.py:190
-msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
-msgstr "如选是， 单击窗口管理器的 X 键，会退出 Gajim。这一设定仅当启用了系统托盘图标时才会生效。"
+msgid ""
+"If True, quits Gajim when X button of Window Manager is clicked. This "
+"setting is taken into account only if trayicon is used."
+msgstr ""
+"如选是， 单击窗口管理器的 X 键，会退出 Gajim。这一设定仅当启用了系统托盘图标"
+"时才会生效。"
 
 #: ../src/common/config.py:191
 msgid "If True, Gajim registers for xmpp:// on each startup."
 msgstr "如选是， Gajim 会在每次启动时为 xmpp:// 注册。"
 
 #: ../src/common/config.py:192
-msgid "If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated."
-msgstr "如选是， Gajim 会在每个含有未读消息的标签上显示一个图标。根据主题，该图标可能是动态的。"
+msgid ""
+"If True, Gajim will display an icon on each tab containing unread messages. "
+"Depending on the theme, this icon may be animated."
+msgstr ""
+"如选是， Gajim 会在每个含有未读消息的标签上显示一个图标。根据主题，该图标可能"
+"是动态的。"
 
 #: ../src/common/config.py:193
-msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window."
-msgstr "如选是， Gajim 将显示状态消息，如果不为空，将在名单窗口中每一个联系人名字的下方显示状态信息。"
+msgid ""
+"If True, Gajim will display the status message, if not empty, for every "
+"contact under the contact name in roster window."
+msgstr ""
+"如选是， Gajim 将显示状态消息，如果不为空，将在名单窗口中每一个联系人名字的下"
+"方显示状态信息。"
 
 #: ../src/common/config.py:195
-msgid "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old."
+msgid ""
+"If True, Gajim will ask for avatar each contact that did not have an avatar "
+"last time or has one cached that is too old."
 msgstr "如选是， Gajim 会为每一个缓存过久或上次未获得明细的联系人请求明细"
 
 #: ../src/common/config.py:196
-msgid "If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message."
+msgid ""
+"If False, Gajim will no longer print status line in chats when a contact "
+"changes his or her status and/or his or her status message."
 msgstr "如选否，您将不再打印聊天中的联系人变更其状态和状态消息的状态行。"
 
 #: ../src/common/config.py:197
-msgid "can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If \"all\" Gajim will print all status messages. If \"in_and_out\", gajim will only print FOO enters/leaves group chat."
-msgstr "可以是 \"无\"， \"全部\" 或 \"登入与登出\"。如果是 \"无\"，当成员改变他/她的状态或他/她的状态消息时 Gajim 将不再打印状态行。如果是 \"全部\" Gajim 将打印所有的状态消息。如果是 \"登入与登出\"， Gajim 将只打印群聊中登入与登出消息。"
+msgid ""
+"can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no "
+"longer print status line in groupchats when a member changes his or her "
+"status and/or his or her status message. If \"all\" Gajim will print all "
+"status messages. If \"in_and_out\", gajim will only print FOO enters/leaves "
+"group chat."
+msgstr ""
+"可以是 \"无\"， \"全部\" 或 \"登入与登出\"。如果是 \"无\"，当成员改变他/她的"
+"状态或他/她的状态消息时 Gajim 将不再打印状态行。如果是 \"全部\" Gajim 将打印"
+"所有的状态消息。如果是 \"登入与登出\"， Gajim 将只打印群聊中登入与登出消息。"
 
 #: ../src/common/config.py:199
 msgid "Background color of contacts when they just signed in."
@@ -5311,7 +5508,8 @@ msgid "Background color of contacts when they just signed out."
 msgstr "当联系人登出时的背景色。"
 
 #: ../src/common/config.py:202
-msgid "If True, restored messages will use a smaller font than the default one."
+msgid ""
+"If True, restored messages will use a smaller font than the default one."
 msgstr "如果为真，还原消息将用较小的字体。"
 
 #: ../src/common/config.py:203
@@ -5323,12 +5521,22 @@ msgid "Don't show roster in the system taskbar."
 msgstr "不在系统任务栏显示名单。"
 
 #: ../src/common/config.py:205
-msgid "If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events."
-msgstr "如选是并且 GTK+ 和 PyGTK 版本高于2.8，当有未决事件时窗口将会闪动(大部分窗口管理器的默认响应)"
+msgid ""
+"If True and installed GTK+ and PyGTK versions are at least 2.8, make the "
+"window flash (the default behaviour in most Window Managers) when holding "
+"pending events."
+msgstr ""
+"如选是并且 GTK+ 和 PyGTK 版本高于2.8，当有未决事件时窗口将会闪动(大部分窗口管"
+"理器的默认响应)"
 
 #: ../src/common/config.py:207
-msgid "Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences."
-msgstr "有人加入被密码保护的群聊时，Jabberd1.4 不需要 SHA 信息。将此选项置为“否”以停止在群聊中发送 SHA 信息。"
+msgid ""
+"Jabberd1.4 does not like sha info when one join a password protected group "
+"chat. Turn this option to False to stop sending sha info in group chat "
+"presences."
+msgstr ""
+"有人加入被密码保护的群聊时，Jabberd1.4 不需要 SHA 信息。将此选项置为“否”以停"
+"止在群聊中发送 SHA 信息。"
 
 #. always, never, peracct, pertype should not be translated
 #: ../src/common/config.py:210
@@ -5337,13 +5545,16 @@ msgid ""
 "'always' - All messages are sent to a single window.\n"
 "'never' - All messages get their own window.\n"
 "'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect."
+"'pertype' - Each message type (e.g., chats vs. groupchats) are sent to a "
+"specific window. Note, changing this option requires restarting Gajim before "
+"the changes will take effect."
 msgstr ""
 "选择新消息在窗口中的位置。\n"
 "'总是' - 所有消息都发送到一个窗口。\n"
 "'从不' - 所有消息都打开单独的窗口。\n"
 "'每一个帐号' - 每个帐号的消息都发送到一个单独的窗口。\n"
-"'每种类型' - 每种类型的消息 (例如, 单独聊天 及 群聊) 都发送到一个单独的窗口。注意，改变该选项后必须重启 Gajim 使设置生效。"
+"'每种类型' - 每种类型的消息 (例如, 单独聊天 及 群聊) 都发送到一个单独的窗口。"
+"注意，改变该选项后必须重启 Gajim 使设置生效。"
 
 #: ../src/common/config.py:211
 msgid "If False, you will no longer see the avatar in the chat window."
@@ -5374,7 +5585,9 @@ msgid "Hides the group chat occupants list in group chat window."
 msgstr "在群聊窗口中隐藏房主列表。"
 
 #: ../src/common/config.py:218
-msgid "In a chat, show the nickname at the beginning of a line only when it's not the same person talking than in previous message."
+msgid ""
+"In a chat, show the nickname at the beginning of a line only when it's not "
+"the same person talking than in previous message."
 msgstr "在聊天中，只在当前一条消息不是同一人发出的的时候在一行前显示昵称。"
 
 #: ../src/common/config.py:219
@@ -5390,15 +5603,24 @@ msgid "Ctrl-Tab go to next composing tab when none is unread."
 msgstr "当没有新消息时按 Ctrl-Tab 转到下一个撰写标签。"
 
 #: ../src/common/config.py:222
-msgid "Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog."
+msgid ""
+"Should we show the confirm metacontacts creation dialog or not? Empty string "
+"means we never show the dialog."
 msgstr "是否显示确认元联系人创建对话框？空字符串意味着从不显示对话框。"
 
 #: ../src/common/config.py:223
-msgid "If True, you will be able to set a negative priority to your account in account modification window. BE CAREFULL, when you are logged in with a negative priority, you will NOT receive any message from your server."
-msgstr "如果为真，您将可以在修改账户窗口中为您的账户可以设置一个否定优先级。注意！当您使用否定优先级登入时您将从服务器收不到任何消息。"
+msgid ""
+"If True, you will be able to set a negative priority to your account in "
+"account modification window. BE CAREFULL, when you are logged in with a "
+"negative priority, you will NOT receive any message from your server."
+msgstr ""
+"如果为真，您将可以在修改账户窗口中为您的账户可以设置一个否定优先级。注意！当"
+"您使用否定优先级登入时您将从服务器收不到任何消息。"
 
 #: ../src/common/config.py:234
-msgid "Priority will change automatically according to your status. Priorities are defined in autopriority_* options."
+msgid ""
+"Priority will change automatically according to your status. Priorities are "
+"defined in autopriority_* options."
 msgstr "优先级将根据您的状态自动改变。优先级在 autopriority_* 选项中定义。"
 
 #. yes, no, ask
@@ -5407,15 +5629,18 @@ msgid "Jabberd2 workaround"
 msgstr "Jabberd2 工作区"
 
 #: ../src/common/config.py:267
-msgid "If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer."
-msgstr "如果选定， Gajim 将会使把您当前的 IP 和代理服务器设置用于文件传输代理服务器设置(_P)"
+msgid ""
+"If checked, Gajim will use your IP and proxies defined in "
+"file_transfer_proxies option for file transfer."
+msgstr ""
+"如果选定， Gajim 将会使把您当前的 IP 和代理服务器设置用于文件传输代理服务器设"
+"置(_P)"
 
 #: ../src/common/config.py:326
 msgid "Is OpenPGP enabled for this contact?"
 msgstr "是否为此联系人使用 OpenPGP?"
 
-#: ../src/common/config.py:327
-#: ../src/common/config.py:330
+#: ../src/common/config.py:327 ../src/common/config.py:330
 msgid "Language for which we want to check misspelled words"
 msgstr "想要检查拼写的语言"
 
@@ -5427,10 +5652,8 @@ msgstr "全部或空格分隔的状态"
 msgid "'yes', 'no', or 'both'"
 msgstr "'是'，'否'或'两者'"
 
-#: ../src/common/config.py:338
-#: ../src/common/config.py:340
-#: ../src/common/config.py:341
-#: ../src/common/config.py:344
+#: ../src/common/config.py:338 ../src/common/config.py:340
+#: ../src/common/config.py:341 ../src/common/config.py:344
 #: ../src/common/config.py:345
 msgid "'yes', 'no' or ''"
 msgstr "'是'，'否'或''"
@@ -5503,26 +5726,25 @@ msgstr "我现在不可用。"
 msgid "Do not disturb."
 msgstr "不分发。"
 
-#: ../src/common/config.py:366
-#: ../src/common/config.py:367
+#: ../src/common/config.py:366 ../src/common/config.py:367
 msgid "Bye!"
 msgstr "再见！"
 
 #: ../src/common/config.py:376
-msgid "Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname."
+msgid ""
+"Sound to play when a group chat message contains one of the words in "
+"muc_highlight_words, or when a group chat message contains your nickname."
 msgstr "当收到的群聊消息包含 “MUC 高亮单词”或您的昵称时播放的声音。"
 
 #: ../src/common/config.py:377
 msgid "Sound to play when any MUC message arrives."
 msgstr "当 MUC 信息到达时的声音"
 
-#: ../src/common/config.py:386
-#: ../src/common/optparser.py:197
+#: ../src/common/config.py:386 ../src/common/optparser.py:197
 msgid "green"
 msgstr "绿色"
 
-#: ../src/common/config.py:390
-#: ../src/common/optparser.py:183
+#: ../src/common/config.py:390 ../src/common/optparser.py:183
 msgid "grocery"
 msgstr "杂货店"
 
@@ -5546,7 +5768,9 @@ msgstr "错误主机"
 
 #: ../src/common/connection_handlers.py:177
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
-msgid "The host you configured as the ft_override_host_to_send advanced option is not valid, so ignored."
+msgid ""
+"The host you configured as the ft_override_host_to_send advanced option is "
+"not valid, so ignored."
 msgstr "您配置主机为 ft_override_host_to_send 高级选项无效，忽略。"
 
 #: ../src/common/connection_handlers.py:590
@@ -5554,7 +5778,7 @@ msgstr "您配置主机为 ft_override_host_to_send 高级选项无效，忽略�
 msgid "Registration information for transport %s has not arrived in time"
 msgstr "代理 %s 所需的注册信息未按时抵达"
 
-#: ../src/common/connection_handlers.py:1519
+#: ../src/common/connection_handlers.py:1523
 #, python-format
 msgid "Nickname not allowed: %s"
 msgstr "昵称不允许： %s "
@@ -5562,41 +5786,41 @@ msgstr "昵称不允许： %s "
 #. password required to join
 #. we are banned
 #. group chat does not exist
-#: ../src/common/connection_handlers.py:1581
-#: ../src/common/connection_handlers.py:1584
-#: ../src/common/connection_handlers.py:1587
-#: ../src/common/connection_handlers.py:1590
-#: ../src/common/connection_handlers.py:1593
-#: ../src/common/connection_handlers.py:1596
-#: ../src/common/connection_handlers.py:1604
+#: ../src/common/connection_handlers.py:1585
+#: ../src/common/connection_handlers.py:1588
+#: ../src/common/connection_handlers.py:1591
+#: ../src/common/connection_handlers.py:1594
+#: ../src/common/connection_handlers.py:1597
+#: ../src/common/connection_handlers.py:1600
+#: ../src/common/connection_handlers.py:1608
 msgid "Unable to join group chat"
 msgstr "无法加入群聊"
 
-#: ../src/common/connection_handlers.py:1582
+#: ../src/common/connection_handlers.py:1586
 msgid "A password is required to join this group chat."
 msgstr "该群聊要求密码才能加入。"
 
-#: ../src/common/connection_handlers.py:1585
+#: ../src/common/connection_handlers.py:1589
 msgid "You are banned from this group chat."
 msgstr "您被该群聊封禁。"
 
-#: ../src/common/connection_handlers.py:1588
+#: ../src/common/connection_handlers.py:1592
 msgid "Such group chat does not exist."
 msgstr "不存在这样的群聊"
 
-#: ../src/common/connection_handlers.py:1591
+#: ../src/common/connection_handlers.py:1595
 msgid "Group chat creation is restricted."
 msgstr "群聊创建受限。"
 
-#: ../src/common/connection_handlers.py:1594
+#: ../src/common/connection_handlers.py:1598
 msgid "Your registered nickname must be used."
 msgstr "您注册的昵称已被使用"
 
-#: ../src/common/connection_handlers.py:1597
+#: ../src/common/connection_handlers.py:1601
 msgid "You are not in the members list."
 msgstr "您不在成员名单中。"
 
-#: ../src/common/connection_handlers.py:1605
+#: ../src/common/connection_handlers.py:1609
 msgid ""
 "Your desired nickname is in use or registered by another occupant.\n"
 "Please specify another nickname below:"
@@ -5604,30 +5828,34 @@ msgstr ""
 "您申请的昵称正在使用或被其他人占有。\n"
 "从下列昵称中另外指定一个："
 
-#: ../src/common/connection_handlers.py:1651
+#: ../src/common/connection_handlers.py:1659
 msgid "I would like to add you to my roster."
 msgstr "我申请添加您到联系人名单"
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection_handlers.py:1672
+#: ../src/common/connection_handlers.py:1680
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr " %s 请求认证"
 
-#: ../src/common/connection_handlers.py:1674
+#: ../src/common/connection_handlers.py:1682
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr " %s 请求解除认证"
 
-#: ../src/common/connection_handlers.py:1676
+#: ../src/common/connection_handlers.py:1684
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "%s 解除了认证"
 
-#: ../src/common/connection_handlers.py:1846
+#: ../src/common/connection_handlers.py:1854
 #, python-format
-msgid "JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it"
-msgstr "JID %s 不识配 RFC，未被加入名单。请使用诸如 http://jru.jabberstudio.org/ 的名单管理工具移除。"
+msgid ""
+"JID %s is not RFC compliant. It will not be added to your roster. Use roster "
+"management tools such as http://jru.jabberstudio.org/ to remove it"
+msgstr ""
+"JID %s 不识配 RFC，未被加入名单。请使用诸如 http://jru.jabberstudio.org/ 的名"
+"单管理工具移除。"
 
 #: ../src/common/connection.py:164
 #: ../src/common/zeroconf/connection_zeroconf.py:196
@@ -5639,8 +5867,7 @@ msgstr "帐户“%s”的连接丢失"
 msgid "Reconnect manually."
 msgstr "手动重连。"
 
-#: ../src/common/connection.py:176
-#: ../src/common/connection.py:203
+#: ../src/common/connection.py:176 ../src/common/connection.py:203
 #, python-format
 msgid "Transport %s answered wrongly to register request: %s"
 msgstr "服务代理 %s 对注册请求响应错误：%s"
@@ -5650,9 +5877,8 @@ msgstr "服务代理 %s 对注册请求响应错误：%s"
 msgid "Invalid answer"
 msgstr "无效答案"
 
-#: ../src/common/connection.py:394
-#: ../src/common/connection.py:429
-#: ../src/common/connection.py:871
+#: ../src/common/connection.py:394 ../src/common/connection.py:429
+#: ../src/common/connection.py:877
 #: ../src/common/zeroconf/connection_zeroconf.py:217
 #, python-format
 msgid "Could not connect to \"%s\""
@@ -5709,7 +5935,7 @@ msgstr "我是 %s"
 msgid "[This message is *encrypted* (See :JEP:`27`]"
 msgstr "[本条消息已 *加密* (见 :JEP:`27`]"
 
-#: ../src/common/connection.py:758
+#: ../src/common/connection.py:764
 #: ../src/common/zeroconf/connection_zeroconf.py:397
 #, python-format
 msgid ""
@@ -5719,7 +5945,7 @@ msgstr ""
 "主题：%s\n"
 "%s"
 
-#: ../src/common/connection.py:897
+#: ../src/common/connection.py:903
 msgid "Not fetched because of invisible status"
 msgstr "由于隐身状态不获取"
 
@@ -5802,68 +6028,55 @@ msgstr "十二"
 
 #. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
 #. A "singular-form". It is used when talking about hour 0
-#: ../src/common/fuzzyclock.py:47
-#: ../src/common/fuzzyclock.py:55
+#: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "%0 o'clock"
 msgstr "%0 点钟"
 
-#: ../src/common/fuzzyclock.py:47
-#: ../src/common/fuzzyclock.py:55
+#: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "five past %0"
 msgstr "五过 %0"
 
-#: ../src/common/fuzzyclock.py:47
-#: ../src/common/fuzzyclock.py:56
+#: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:56
 msgid "ten past %0"
 msgstr "十过 %0"
 
-#: ../src/common/fuzzyclock.py:48
-#: ../src/common/fuzzyclock.py:56
+#: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
 msgid "quarter past %0"
 msgstr "四分之一过 %0"
 
-#: ../src/common/fuzzyclock.py:48
-#: ../src/common/fuzzyclock.py:57
+#: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:57
 msgid "twenty past %0"
 msgstr "二十过 %0"
 
-#: ../src/common/fuzzyclock.py:49
-#: ../src/common/fuzzyclock.py:57
+#: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 msgid "twenty five past %0"
 msgstr "二十五过 %0"
 
-#: ../src/common/fuzzyclock.py:49
-#: ../src/common/fuzzyclock.py:58
+#: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:58
 msgid "half past %0"
 msgstr "半过 %0"
 
-#: ../src/common/fuzzyclock.py:50
-#: ../src/common/fuzzyclock.py:58
+#: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 msgid "twenty five to %1"
 msgstr "二十五到 %1"
 
-#: ../src/common/fuzzyclock.py:50
-#: ../src/common/fuzzyclock.py:59
+#: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:59
 msgid "twenty to %1"
 msgstr "二十到 %1"
 
-#: ../src/common/fuzzyclock.py:51
-#: ../src/common/fuzzyclock.py:59
+#: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
 msgid "quarter to %1"
 msgstr "四分之一到 %1"
 
-#: ../src/common/fuzzyclock.py:51
-#: ../src/common/fuzzyclock.py:60
+#: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:60
 msgid "ten to %1"
 msgstr "十到 %1"
 
-#: ../src/common/fuzzyclock.py:51
-#: ../src/common/fuzzyclock.py:60
+#: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:60
 msgid "five to %1"
 msgstr "五到 %1"
 
-#: ../src/common/fuzzyclock.py:52
-#: ../src/common/fuzzyclock.py:60
+#: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
 msgid "%1 o'clock"
 msgstr "%1 点"
 
@@ -6037,10 +6250,6 @@ msgstr "?Subscription we already have: 无"
 msgid "To"
 msgstr "到"
 
-#: ../src/common/helpers.py:259
-msgid "From"
-msgstr "来自"
-
 #: ../src/common/helpers.py:261
 msgid "Both"
 msgstr "双方"
@@ -6118,32 +6327,31 @@ msgstr "中断输入消息"
 msgid "has closed the chat window or tab"
 msgstr "关闭了聊天窗口或标签"
 
-#: ../src/common/helpers.py:880
+#: ../src/common/helpers.py:881
 #, python-format
 msgid " %d unread message"
 msgid_plural " %d unread messages"
 msgstr[0] " %d 条未读消息 "
 
-#: ../src/common/helpers.py:886
+#: ../src/common/helpers.py:887
 #, python-format
 msgid " %d unread single message"
 msgid_plural " %d unread single messages"
 msgstr[0] " %d 条未读单独消息"
 
-#: ../src/common/helpers.py:892
+#: ../src/common/helpers.py:893
 #, python-format
 msgid " %d unread group chat message"
 msgid_plural " %d unread group chat messages"
 msgstr[0] " %d 条未读群聊消息"
 
-#: ../src/common/helpers.py:898
+#: ../src/common/helpers.py:899
 #, python-format
 msgid " %d unread private message"
 msgid_plural " %d unread private messages"
 msgstr[0] " %d 未读私人消息"
 
-#: ../src/common/helpers.py:908
-#: ../src/common/helpers.py:910
+#: ../src/common/helpers.py:909 ../src/common/helpers.py:911
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
@@ -6158,8 +6366,7 @@ msgstr "错误：无法按读打开文件 %s"
 msgid "gtk+"
 msgstr "gtk+"
 
-#: ../src/common/optparser.py:192
-#: ../src/common/optparser.py:193
+#: ../src/common/optparser.py:192 ../src/common/optparser.py:193
 msgid "cyan"
 msgstr "青色"
 
@@ -6173,7 +6380,8 @@ msgid "Gajim account %s"
 msgstr "Gajim 帐户 %s"
 
 #: ../src/common/zeroconf/client_zeroconf.py:189
-msgid "Connection to host could not be established: Incorrect answer from server."
+msgid ""
+"Connection to host could not be established: Incorrect answer from server."
 msgstr "到主机的连接无法建立：服务器应答不正确。"
 
 #: ../src/common/zeroconf/client_zeroconf.py:205
@@ -6181,7 +6389,8 @@ msgid "Connection to host could not be established"
 msgstr "到主机的连接无法建立"
 
 #: ../src/common/zeroconf/client_zeroconf.py:334
-msgid "Connection to host could not be established: Timeout while sending data."
+msgid ""
+"Connection to host could not be established: Timeout while sending data."
 msgstr "到主机的连接无法建立：发送数据超时。"
 
 #: ../src/common/zeroconf/client_zeroconf.py:629
@@ -6230,7 +6439,9 @@ msgid "Could not change status of account \"%s\""
 msgstr "无法改变账户“%s”的状态"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:341
-msgid "You are not connected or not visible to others. Your message could not be sent."
+msgid ""
+"You are not connected or not visible to others. Your message could not be "
+"sent."
 msgstr "没有连接或隐身。您的消息将不会被发送。"
 
 #. we're not english
@@ -6246,10 +6457,13 @@ msgstr "添加服务错误。 %s"
 #, fuzzy
 #~ msgid "_New room"
 #~ msgstr "新房间"
+
 #~ msgid "Role: "
 #~ msgstr "角色："
+
 #~ msgid "Affiliation: "
 #~ msgstr "会籍："
+
 #~ msgid ""
 #~ "Sound to play when any MUC message arrives. (This setting is taken into "
 #~ "account only if notify_on_all_muc_messages is True)"
@@ -6276,47 +6490,63 @@ msgstr "添加服务错误。 %s"
 #, fuzzy
 #~ msgid "Not Available "
 #~ msgstr "不可用"
+
 #~ msgid "Contact _Info"
 #~ msgstr "联系人信息(_I)"
+
 #~ msgid "Contact Information"
 #~ msgstr "联系人信息"
+
 #~ msgid "Jabber"
 #~ msgstr "Jabber"
+
 #~ msgid "Invalid room or server name"
 #~ msgstr "无效房间或服务器名"
+
 #~ msgid "Unknown D-Bus version: %s"
 #~ msgstr "未知的 D-Bus 版本： %s"
+
 #~ msgid "vCard publication succeeded"
 #~ msgstr " vCard 发布成功"
+
 #~ msgid "Your personal information has been published successfully."
 #~ msgstr "您的个人信息被成功发布。"
+
 #~ msgid "Migrating Logs..."
 #~ msgstr "正在移动日志..."
-#~ msgid "Please wait while logs are being migrated..."
-#~ msgstr "请等待日志被移动..."
+
 #~ msgid "_Join New Room"
 #~ msgstr "加入新房间(_J)"
+
 #~ msgid "Gajim - %d unread message"
 #~ msgid_plural "Gajim - %d unread messages"
 #~ msgstr[0] "Gajim - %d 条未读消息 "
+
 #~ msgid "Since %s"
 #~ msgstr "自 %s"
+
 #~ msgid "Automatically authorize contact"
 #~ msgstr "自动向联系人授权"
+
 #~ msgid "Send File"
 #~ msgstr "发送文件"
+
 #~ msgid "Underline"
 #~ msgstr "下划线"
+
 #~ msgid "Would you like to overwrite it?"
 #~ msgstr "确认覆盖该文件？"
+
 #~ msgid "_Join New Room..."
 #~ msgstr "加入新房间(_J)..."
+
 #~ msgid "Usage: /%s, sets the groupchat window to compact mode."
 #~ msgstr "用法：/%s，设置群聊窗口为紧凑模式。"
 
 #, fuzzy
 #~ msgid "<b>Please modify your special notification below</b>"
 #~ msgstr "<b>请选择一个选项</b>："
+
 #~ msgid "Delete Message of the Day"
 #~ msgstr "删除每日消息"
 
@@ -6327,98 +6557,137 @@ msgstr "添加服务错误。 %s"
 #, fuzzy
 #~ msgid "I want to listen to:"
 #~ msgstr "%s 想发送给您一个文件："
+
 #~ msgid "Send _New Message..."
 #~ msgstr "发送新消息(_N)"
+
 #~ msgid "Set Message of the Day"
 #~ msgstr "设定每日消息"
+
 #~ msgid "Update Message of the Day"
 #~ msgstr "更新每日消息"
+
 #~ msgid "_XML Console..."
 #~ msgstr "XML 控制(_X)..."
+
 #~ msgid "Choose Avatar"
 #~ msgstr "选择明细"
+
 #~ msgid "Use compact view when you open a chat window"
 #~ msgstr "开启新聊天窗口时使用紧凑模式"
+
 #~ msgid "Use compact view when you open a group chat window"
 #~ msgstr "开启新群聊窗口时使用紧凑模式"
+
 #~ msgid "plain"
 #~ msgstr "高原"
+
 #~ msgid "Send"
 #~ msgstr "发送"
+
 #~ msgid "%(nickname)s in room %(room_name)s has sent you a new message."
 #~ msgstr "房间 %(room_name)s 的 %(nickname)s 向您发送了一条新消息。"
+
 #~ msgid "%s has sent you a new message."
 #~ msgstr "%s 给您发送了一条新消息。"
 
 #, fuzzy
 #~ msgid "GUI Migration failed"
 #~ msgstr "vCard 发布失败"
+
 #~ msgid "Logs have been successfully migrated to the database."
 #~ msgstr "日志被成功移动到数据库。"
+
 #~ msgid "If checked, Gajim will also have a trayicon"
 #~ msgstr "如果选定，Gajim 同样可以显示系统托盘图标"
 
 #, fuzzy
 #~ msgid "Start Chat with Contact"
 #~ msgstr "使用账户 %s 加入群聊"
+
 #~ msgid "All contacts in this group are offline or have errors"
 #~ msgstr "该组中所有联系人离线或有错误"
+
 #~ msgid "Size: "
 #~ msgstr "大小："
+
 #~ msgid "Session bus is not available"
 #~ msgstr "会话总线不可用"
+
 #~ msgid "Sound"
 #~ msgstr "声音"
+
 #~ msgid "Text"
 #~ msgstr "文本"
+
 #~ msgid "Image"
 #~ msgstr "形象"
+
 #~ msgid "From %s"
 #~ msgstr "来自 %s"
+
 #~ msgid "To %s"
 #~ msgstr "到 %s"
+
 #~ msgid "You have been invited to the %(room_jid)s room by %(contact_jid)s"
 #~ msgstr "您被邀请到 %(room_jid)s 房间，邀请人 %(contact_jid)s "
+
 #~ msgid "Manage Emoticons"
 #~ msgstr "表情符管理"
+
 #~ msgid "Or choose a preset message:"
 #~ msgstr "或选择一条当前消息："
+
 #~ msgid "Use _emoticons"
 #~ msgstr "使用表情符(_E)"
+
 #~ msgid "_Set Image..."
 #~ msgstr "选择形象(_S)..."
+
 #~ msgid "Switch to %s"
 #~ msgstr "切换到 %s"
+
 #~ msgid "using account "
 #~ msgstr "使用帐户"
+
 #~ msgid "The filesize of image \"%s\" is too large"
 #~ msgstr "图像文件 “%s” 太大"
+
 #~ msgid "The file must not be more than 32 kilobytes."
 #~ msgstr "文件必须小于 32 kB 。"
+
 #~ msgid "Timeout"
 #~ msgstr "超时"
-#~ msgid "A protocol error has occured:"
-#~ msgstr "发生了一个协议错误："
+
 #~ msgid "account: "
 #~ msgstr "账户："
+
 #~ msgid "Cannot remove last group"
 #~ msgstr "无法移除上一个群"
+
 #~ msgid "At least one contact group must be present."
 #~ msgstr "至少保留一个联系群组"
+
 #~ msgid "Are you sure you want to leave rooms \"%s\"?"
 #~ msgstr "确定要离开房间“ %s ”？"
+
 #~ msgid "If you close this window, you will be disconnected from these rooms."
 #~ msgstr "如果关闭此窗口，您将断开这些房间的连接。"
+
 #~ msgid "Activate/Disable notification for when a file transfer is complete"
 #~ msgstr "启用/关闭文件传送完成提示"
+
 #~ msgid "Removing selected file transfer"
 #~ msgstr "正在移除指定的文件传输"
+
 #~ msgid "Stoping selected file transfer"
 #~ msgstr "中止选定的文件传输"
+
 #~ msgid ""
 #~ "If you close this tab and you have history disabled, the message will be "
 #~ "lost."
 #~ msgstr "如果您关闭此标签并且禁用历史，消息会丢失。"
+
 #~ msgid ""
 #~ "pysqlite2 (aka python-pysqlite2) dependency is missing. After you install "
 #~ "pysqlite3, if you want to migrate your logs to the new database, please "
@@ -6427,4 +6696,3 @@ msgstr "添加服务错误。 %s"
 #~ "pysqlite2 (即 python-pysqlite2) 依赖丢失。在您安装 pysqlite3 后，如果您想"
 #~ "移动日志到新的数据库，请参阅：http://trac.gajim.org/wiki/"
 #~ "MigrateLogToDot9DB 退出..."
-
