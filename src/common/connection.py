@@ -453,6 +453,7 @@ class Connection(ConnectionHandlers):
 		if auth:
 			self.last_io = gajim.idlequeue.current_time()
 			self.connected = 2
+			self.retrycount = 0
 			if self.on_connect_auth:
 				self.on_connect_auth(con)
 				self.on_connect_auth = None
