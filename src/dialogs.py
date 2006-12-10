@@ -641,7 +641,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
 		auto_auth = self.auto_authorize_checkbutton.get_active()
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
-			group = group, pseudo = nickname, auto_auth = auto_auth)
+			groups = [group], nickname = nickname, auto_auth = auto_auth)
 		self.window.destroy()
 
 	def on_protocol_combobox_changed(self, widget):

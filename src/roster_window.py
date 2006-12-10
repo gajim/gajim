@@ -1843,7 +1843,8 @@ class RosterWindow:
 					self.on_add_special_notification_menuitem_activate, jid)
 			else:
 				ask_auth_menuitem.connect('activate', self.req_sub, jid,
-					_('I would like to add you to my roster'), account)
+					_('I would like to add you to my roster'), account,
+					contact.groups, contact.name)
 			if contact.sub in ('to', 'none'):
 				revoke_auth_menuitem.set_sensitive(False)
 			else:
@@ -2375,15 +2376,11 @@ class RosterWindow:
 		dialogs.InformationDialog(_('Authorization has been sent'),
 			_('Now "%s" will know your status.') %jid)
 
-	def req_sub(self, widget, jid, txt, account, group = None, pseudo = None,
+	def req_sub(self, widget, jid, txt, account, groups = [], nickname = None,
 	auto_auth = False):
 		'''Request subscription to a contact'''
-		if group:
-			group = [group]
-		else:
-			group = []
-		gajim.connections[account].request_subscription(jid, txt, pseudo, group,
-			auto_auth, gajim.nicks[account])
+		gajim.connections[account].request_subscription(jid, txt, nickname,
+			groups, auto_auth, gajim.nicks[account])
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			keyID = ''
@@ -2391,8 +2388,8 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact = gajim.contacts.create_contact(jid = jid, name = pseudo,
-				groups = group, show = 'requested', status = '', ask = 'none',
+			contact = gajim.contacts.create_contact(jid = jid, name = nickname,
+				groups = groups, show = 'requested', status = '', ask = 'none',
 				sub = 'subscribe', keyID = keyID)
 			gajim.contacts.add_contact(account, contact)
 		else:
@@ -2401,9 +2398,9 @@ class RosterWindow:
 					_('If "%s" accepts this request you will know his or her status.'
 					) % jid)
 				return
-			contact.groups = group
-			if pseudo:
-				contact.name = pseudo
+			contact.groups = groups
+			if nickname:
+				contact.name = nickname
 			self.remove_contact(contact, account)
 		self.add_contact_to_roster(jid, account)
 
