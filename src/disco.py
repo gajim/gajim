@@ -600,7 +600,6 @@ _('Without a connection, you can not browse available services'))
 			self.browser = None
 		self.window.destroy()
 
-		self.cache.cleanup()
 		for child in self.children[:]:
 			child.parent = None
 			if chain:
@@ -612,6 +611,8 @@ _('Without a connection, you can not browse available services'))
 			if chain and not self.parent.children:
 				self.parent.destroy(chain = chain)
 				self.parent = None
+		else:
+			self.cache.cleanup()
 
 	def travel(self, jid, node):
 		'''Travel to an agent within the current services window.'''
