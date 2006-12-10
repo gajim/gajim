@@ -5,7 +5,7 @@
 
 <widget class="GtkWindow" id="vcard_information_window">
   <property name="border_width">12</property>
-  <property name="title">Contact Information</property>
+  <property name="title" translatable="yes">Contact Information</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
