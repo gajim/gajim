@@ -464,7 +464,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		for acct in accounts:
 			for j in gajim.contacts.get_jid_list(acct):
 				contact = gajim.contacts.get_first_contact_from_jid(acct, j)
-				if _('Transports') in contact.groups:
+				if gajim.jid_is_transport(j):
 					type_ = gajim.get_transport_name_from_jid(j)
 					if self.agents.has_key(type_):
 						self.agents[type_].append(j)
