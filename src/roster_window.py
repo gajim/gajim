@@ -2749,8 +2749,8 @@ class RosterWindow:
 			if gajim.config.get_per('defaultstatusmsg', show, 'enabled'):
 				return gajim.config.get_per('defaultstatusmsg', show, 'message')
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
-			(show == 'offline' and not gajim.config.get('ask_offline_status')) or \
-			show == 'invisible':
+		(show in ('offline', 'invisible') 
+		and not gajim.config.get('ask_offline_status')):
 			return ''
 		dlg = dialogs.ChangeStatusMessageDialog(show)
 		dlg.window.present() # show it on current workspace
