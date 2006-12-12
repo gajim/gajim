@@ -299,8 +299,7 @@ class GroupchatControl(ChatControlBase):
 		column.set_visible(False)
 		self.list_treeview.set_expander_column(column)
 
-		# set an empty subject to show the room_jid
-		self.set_subject('')
+		self.draw_banner()
 		self.got_disconnected() # init some variables
 
 		self.update_ui()
@@ -422,7 +421,8 @@ class GroupchatControl(ChatControlBase):
 	def _update_banner_state_image(self):
 		banner_status_img = self.xml.get_widget('gc_banner_status_image')
 		images = gajim.interface.roster.jabber_state_images
-		if gajim.gc_connected[self.account][self.room_jid]:
+		if gajim.gc_connected[self.account].has_key(self.room_jid) and \
+		gajim.gc_connected[self.account][self.room_jid]:
 			image = 'muc_active'
 		else:
 			image = 'muc_inactive'
@@ -438,6 +438,26 @@ class GroupchatControl(ChatControlBase):
 		scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
 		banner_status_img.set_from_pixbuf(scaled_pix)
 
+	def draw_banner(self):	
+		'''Draw the fat line at the top of the window that 
+		houses the muc icon, room jid, subject. 
+		'''
+		ChatControlBase.draw_banner(self)
+
+		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
+		font_attrs, font_attrs_small = self.get_font_attrs()
+		text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
+		if self.subject:
+			subject = helpers.reduce_chars_newlines(self.subject, max_lines = 2)
+			subject = gtkgui_helpers.escape_for_pango_markup(subject)
+			text += '\n<span %s>%s</span>' % (font_attrs_small, subject)
+
+			# tooltip must always hold ALL the subject			
+			event_box = self.name_label.get_parent()
+			self.subject_tooltip.set_tip(event_box, self.subject)
+
+		self.name_label.set_markup(text)
+	
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
 		sets sensitivity state for configure_room'''
@@ -693,20 +713,7 @@ class GroupchatControl(ChatControlBase):
 
 	def set_subject(self, subject):
 		self.subject = subject
-
-		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
-		subject = helpers.reduce_chars_newlines(subject, max_lines = 2)
-		subject = gtkgui_helpers.escape_for_pango_markup(subject)
-		font_attrs, font_attrs_small = self.get_font_attrs()
-		text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
-		if subject:
-			text += '\n<span %s>%s</span>' % (font_attrs_small, subject)
-		self.name_label.set_markup(text)
-		event_box = self.name_label.get_parent()
-
-		if self.subject:
-			# tooltip must always hold ALL the subject
-			self.subject_tooltip.set_tip(event_box, self.subject)
+		self.draw_banner()
 
 	def got_connected(self):
 		gajim.gc_connected[self.account][self.room_jid] = True
