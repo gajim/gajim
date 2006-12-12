@@ -77,6 +77,8 @@ def tree_cell_data_func(column, renderer, model, iter, tv=None):
 				renderer.set_property('foreground', color)
 			else:
 				renderer.set_property('foreground', None)
+			renderer.set_property('font',
+				gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
 	else: # it is root (eg. group)
 		bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
 		if bgcolor:
