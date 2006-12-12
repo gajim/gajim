@@ -239,6 +239,7 @@ class GroupchatControl(ChatControlBase):
 		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
+		self.event_box = self.xml.get_widget('banner_eventbox')
 
 		# set the position of the current hpaned
 		self.hpaned_position = gajim.config.get('gc-hpaned-position')
@@ -452,9 +453,8 @@ class GroupchatControl(ChatControlBase):
 			subject = gtkgui_helpers.escape_for_pango_markup(subject)
 			text += '\n<span %s>%s</span>' % (font_attrs_small, subject)
 
-			# tooltip must always hold ALL the subject			
-			event_box = self.name_label.get_parent()
-			self.subject_tooltip.set_tip(event_box, self.subject)
+			# tooltip must always hold ALL the subject
+			self.subject_tooltip.set_tip(self.event_box, self.subject)
 
 		self.name_label.set_markup(text)
 	
