@@ -23,6 +23,7 @@
 ## GNU General Public License for more details.
 ##
 
+import os
 from os import tmpfile
 from common import helpers
 
@@ -37,6 +38,10 @@ except ImportError:
 		USE_GPG = False # user can't do OpenGPG only if he or she removed the file!
 	
 else:
+	status = os.system('gpg -h >/dev/null 2>&1')
+	if status != 0:
+		USE_GPG = False
+
 	class GnuPG(GnuPGInterface.GnuPG):
 		def __init__(self):
 			GnuPGInterface.GnuPG.__init__(self)
