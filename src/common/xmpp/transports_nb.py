@@ -79,11 +79,9 @@ class SSLWrapper:
 		def __init__(this, sock=None, exc=None, errno=None, strerror=None, peer=None):
 			this.parent = IOError
 
-			errno = errno or gattr(exc, 'errno', 0)
+			errno = errno or gattr(exc, 'errno')
 			strerror = strerror or gattr(exc, 'strerror') or gattr(exc, 'args')
 			if not isinstance(strerror, basestring): strerror = repr(strerror)
-
-			this.parent.__init__(this, errno, strerror)
 
 			this.sock = sock
 			this.exc = exc
@@ -98,6 +96,15 @@ class SSLWrapper:
 				this.exc_args = gattr(this.exc, 'args')
 				this.exc_str = str(this.exc)
 				this.exc_repr = repr(this.exc)
+				if not errno:
+					try:
+						if isinstance(exc, OpenSSL.SSL.SysCallError):
+							if this.exc_args[0] > 0:
+								errno = this.exc_args[0]
+							strerror = this.exc_args[1]
+					except: traceback.print_exc() # FIXME: pass
+
+			this.parent.__init__(this, errno, strerror)
 
 			if this.peer is None and sock is not None:
 				try:
@@ -356,8 +363,11 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.remove_timeout() 
 		self._owner.disconnected()
 		self.idlequeue.unplug_idle(self.fd)
-		try: self._sock.shutdown(socket.SHUT_RDWR)
-		except: traceback.print_exc()
+		try:
+			self._sock.shutdown(socket.SHUT_RDWR)
+		except socket.error, e:
+			if e[0] != errno.ENOTCONN:
+				traceback.print_exc()
 		try: self._sock.close()
 		except: traceback.print_exc()
 		# socket descriptor cannot be (un)plugged anymore
@@ -441,7 +451,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 
 		if errnum in (ERR_DISCONN, errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN):
 			self.DEBUG(errtxt, 'error')
-			log.error("Got Disconnected: " + errtxt)
+			log.error("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
 			self.pollend(retry=(errnum in (ERR_DISCONN, errno.ECONNRESET)))
 			# don't process result, because it will raise an error
 			return
@@ -449,7 +459,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		if received is None:
 			if errnum != 0:
 				self.DEBUG(errtxt, 'error')
-				log.error("Error: " + errtxt)
+				log.error("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
 				if self.state >= 0:
 					self.pollend(retry=True)
 				return
@@ -513,8 +523,9 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		try:
 			self._sock.connect(self._server)
 		except socket.error, e:
-			traceback.print_exc()
 			errnum = e[0]
+			if errnum != errno.EINPROGRESS:
+				traceback.print_exc()
 		# in progress, or would block
 		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK): 
 			return
@@ -580,7 +591,14 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	def getHost(self):
 		''' Return the 'host' value that is connection is [will be] made to.'''
 		return self._server[0]
-	
+
+	def getName(self):
+		''' Return the server's name, or 'getHost()' if not available.'''
+		retval = None
+		if self._owner: retval = gattr(self._owner, 'name')
+		if retval: return retval
+		return self.getHost()
+
 	def getPort(self):
 		''' Return the 'port' value that is connection is [will be] made to.'''
 		return self._server[1]
