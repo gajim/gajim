@@ -150,17 +150,58 @@ import errno
 
 import dialogs
 def pid_alive():
-	if os.name == 'nt':
-		return os.path.exists(pid_filename)
 	try:
 		pf = open(pid_filename)
 	except:
 		# probably file not found
 		return False
-	try:
-		pid = int(pf.read().strip())
-		pf.close()
+	pid = int(pf.read().strip())
+	pf.close()
 
+	if os.name == 'nt':
+		try:
+			from ctypes import (windll, c_ulong, c_int, Structure, c_char, POINTER, pointer, )
+		except:
+			return True
+
+		class PROCESSENTRY32(Structure):
+			_fields_ = [
+				('dwSize', c_ulong, ),
+				('cntUsage', c_ulong, ),
+				('th32ProcessID', c_ulong, ),
+				('th32DefaultHeapID', c_ulong, ),
+				('th32ModuleID', c_ulong, ),
+				('cntThreads', c_ulong, ),
+				('th32ParentProcessID', c_ulong, ),
+				('pcPriClassBase', c_ulong, ),
+				('dwFlags', c_ulong, ),
+				('szExeFile', c_char*512, ),
+				]
+			def __init__(self):
+				Structure.__init__(self, 512+9*4)
+
+		k = windll.kernel32
+		k.CreateToolhelp32Snapshot.argtypes = c_ulong, c_ulong,
+		k.CreateToolhelp32Snapshot.restype = c_int
+		k.Process32First.argtypes = c_int, POINTER(PROCESSENTRY32),
+		k.Process32First.restype = c_int
+		k.Process32Next.argtypes = c_int, POINTER(PROCESSENTRY32),
+		k.Process32Next.restype = c_int
+
+		def get_p(p):
+			h = k.CreateToolhelp32Snapshot(2, 0) # TH32CS_SNAPPROCESS
+			assert h > 0, 'CreateToolhelp32Snapshot failed'
+			b = pointer(PROCESSENTRY32())
+			f = k.Process32First(h, b)
+			while f:
+				if b.contents.th32ProcessID == p:
+					return b.contents.szExeFile
+				f = k.Process32Next(h, b)
+
+		if get_p(pid) == 'python.exe':
+			return True
+		return False
+	try:
 		if not os.path.exists('/proc'):
 			return True # no /proc, assume Gajim is running
 
