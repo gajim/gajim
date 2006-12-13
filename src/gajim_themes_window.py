@@ -121,7 +121,20 @@ class GajimThemesWindow:
 				self.themes_tree.get_selection().select_iter(iter)
 				self.xml.get_widget('remove_button').set_sensitive(True)
 				self.theme_options_vbox.set_sensitive(True)
-	
+
+	def select_active_theme(self):
+		model = self.themes_tree.get_model()
+		iter = model.get_iter_root()
+		active_theme = gajim.config.get('roster_theme')
+		while iter:
+			theme = model[iter][0]
+			if theme == active_theme:
+				self.themes_tree.get_selection().select_iter(iter)
+				self.xml.get_widget('remove_button').set_sensitive(True)
+				self.theme_options_vbox.set_sensitive(True)
+				break
+			iter = model.iter_next(iter)
+
 	def selection_changed(self, widget = None):
 		(model, iter) = self.themes_tree.get_selection().get_selected()
 		selected = self.themes_tree.get_selection().get_selected_rows()

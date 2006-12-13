@@ -622,6 +622,7 @@ class PreferencesWindow:
 			self.theme_preferences = dialogs.GajimThemesWindow()
 		else:
 			self.theme_preferences.window.present()
+			self.theme_preferences.select_active_theme()
 
 	def on_theme_combobox_changed(self, widget):
 		model = widget.get_model()
