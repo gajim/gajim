@@ -1707,6 +1707,7 @@ class ChatControl(ChatControlBase):
 		# reset to status image in gc if it is a pm
 		if is_pm:
 			control.update_ui()
+			control.parent_win.show_title()
 			typ = 'pm'
 
 		self.redraw_after_event_removed(jid)
