@@ -142,7 +142,7 @@ msgid ""
 "to the Jabber network."
 msgstr ""
 "Необходимо создать учетную запись для присоединения \n"
-"к Jabber сети."
+"к сети Jabber."
 
 #: ../data/glade/account_creation_wizard_window.glade.h:18
 msgid "Your JID:"
@@ -454,8 +454,8 @@ msgid ""
 "If you have 2 or more accounts and it is checked, Gajim will list all "
 "contacts as if you had one account"
 msgstr ""
-"Если у вас 2 и более учетных записей, то отметив здесь, вы заставите Gajim "
-"выводить вместе контакты из всех учетных записей"
+"Если у вас 2 и более учетных записей, то, отметив здесь, вы заставите Gajim "
+"показывать вместе контакты из всех учетных записей"
 
 #: ../data/glade/accounts_window.glade.h:5
 msgid "Mer_ge accounts"
@@ -623,7 +623,7 @@ msgstr "_Администрирование"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:10
 msgid "_Privacy Lists"
-msgstr ""
+msgstr "Списки доступа"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:11
 msgid "_Send Server Message"
@@ -638,14 +638,12 @@ msgid " a window/tab opened with that contact "
 msgstr ""
 
 #: ../data/glade/advanced_notifications_window.glade.h:2
-#, fuzzy
 msgid "<b>Actions</b>"
-msgstr "<b>Приложения</b>"
+msgstr "<b>Действия</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:3
-#, fuzzy
 msgid "<b>Conditions</b>"
-msgstr "<b>Звуки</b>"
+msgstr "<b>Условия</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:4
 #: ../data/glade/preferences_window.glade.h:10
@@ -1393,7 +1391,7 @@ msgstr "Позволять уведомления в режиме _ушел/не
 
 #: ../data/glade/preferences_window.glade.h:19
 msgid "Also known as iChat style"
-msgstr "как iChat стиль"
+msgstr "В стиле iChat"
 
 #: ../data/glade/preferences_window.glade.h:20
 msgid ""
@@ -1404,7 +1402,7 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:21
 msgid "Ask status message when I:"
-msgstr "Запрашивать сообщение о статусе в момент: "
+msgstr "Запрашивать сообщение о статусе, когда я: "
 
 #: ../data/glade/preferences_window.glade.h:22
 msgid "Auto _away after:"
@@ -1456,7 +1454,7 @@ msgstr "Автоматические статусные сообщения"
 
 #: ../data/glade/preferences_window.glade.h:34
 msgid "Default status _iconset:"
-msgstr "_Иконки по умолчанию для статуса:"
+msgstr "Тема статусных _иконок:"
 
 #: ../data/glade/preferences_window.glade.h:35
 msgid "Display _extra email details"
@@ -1504,15 +1502,15 @@ msgid ""
 "may have with a contact. Here you can specify which chatstates you want to "
 "send to the other party."
 msgstr ""
-"Gajim может отсылать и получать метаданные относящиеся к беседе с контактом. "
-"Здесь вы можете указать какие состояние беседы клиент будет отсылать вашему "
+"Gajim может отсылать и получать метаданные, относящиеся к беседе с контактом. "
+"Здесь вы можете указать, какие состояния беседы клиент будет отсылать вашему "
 "респонденту."
 
 #: ../data/glade/preferences_window.glade.h:44
 msgid ""
 "Gajim will automatically show new events by poping up the relative window"
 msgstr ""
-"Gajim будет автоматически показывать новые события поднимая соответствующее "
+"Gajim будет автоматически показывать новые события, поднимая соответствующее "
 "окно."
 
 #: ../data/glade/preferences_window.glade.h:45
@@ -1536,7 +1534,7 @@ msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed out"
 msgstr ""
-"Gajim будет уведомлять вас о отсоединившемся контакте с помощью сообщения в "
+"Gajim будет уведомлять вас об отсоединившемся контакте с помощью сообщения в "
 "правом нижнем углу экрана"
 
 #: ../data/glade/preferences_window.glade.h:48
@@ -1580,16 +1578,17 @@ msgid ""
 "etc...)"
 msgstr ""
 "Если отмечено, то Gajim будет использовать для каждого протокола свои иконки "
-"(например: Контакты с MSN будут иметь соответствующие иконки msn для "
-"статусов в сети, ушел, занят и т.д....)"
+"(например, контакты из MSN будут иметь соответствующие иконки msn для "
+"статусов \"в сети\", \"ушёл\", \"занят\" и т.д.)"
 
 #: ../data/glade/preferences_window.glade.h:55
 msgid ""
 "If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
 "animated or static graphical emoticons"
 msgstr ""
-"Если отмечено, то Gajim будет заменять текстовые смайлики, например ':)', их "
-"графическим или анимированным эквивалентом"
+"Gajim заменяет текстовые смайлики, например ':)', их "
+"графическим или анимированным эквивалентом. Выберите \"Отключены\", "
+"чтобы этого не происходило."
 
 #: ../data/glade/preferences_window.glade.h:56
 msgid "Ignore rich content in incoming messages"
@@ -1613,7 +1612,7 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:62
 msgid "Notify me about contacts that: "
-msgstr "Уведомлять о контактах которые: "
+msgstr "Уведомлять о контактах, которые: "
 
 #: ../data/glade/preferences_window.glade.h:63
 msgid "Notify on new _GMail email"
@@ -1669,6 +1668,8 @@ msgid ""
 "Some messages may include rich content (formatting, colors etc). If checked, "
 "Gajim will just display the raw message text."
 msgstr ""
+"Некоторые сообщения могут содержать форматирование (цвет, шрифт и т.д.). "
+"Если отмечено, Gajim будет отображать только их текст, без форматирования."
 
 #: ../data/glade/preferences_window.glade.h:76
 msgid "Status"
@@ -1688,7 +1689,7 @@ msgstr "Сообщение о статусе для авто-недоступе�
 
 #: ../data/glade/preferences_window.glade.h:80
 msgid "Use _transports iconsets"
-msgstr "Использовать иконки для _транспортов"
+msgstr "Использовать иконки _транспортов"
 
 #: ../data/glade/preferences_window.glade.h:81
 msgid "Use system _default"
@@ -1761,7 +1762,7 @@ msgstr "_Входящее сообщение:"
 
 #: ../data/glade/preferences_window.glade.h:95
 msgid "_Log status changes of contacts"
-msgstr "_История изменений статуса контактов"
+msgstr "_Записывать изменения статуса контактов"
 
 #: ../data/glade/preferences_window.glade.h:96
 msgid "_Mail client:"
@@ -2586,7 +2587,7 @@ msgstr ""
 
 #: ../src/config.py:135 ../src/config.py:594
 msgid "Disabled"
-msgstr "Отключено"
+msgstr "Отключены"
 
 #: ../src/config.py:221
 #, python-format
@@ -2612,6 +2613,8 @@ msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
 "language by setting the speller_language option."
 msgstr ""
+"Чтобы воспользоваться проверкой правописания, установите словарь "
+"для языка %s или выберите другой язык, исправив настройку speller_language."
 
 #: ../src/config.py:1037
 msgid "status message title"
@@ -4463,7 +4466,7 @@ msgid ""
 msgstr ""
 "Использование: /%s <ник|JID> [причина], запрещает JID заходить в комнату. "
 "Ник посетителя можно подставить, если он не содержит \"@\". Если JID в "
-"данный момент находится в комнате, то он/она/оно так же будет выгнан. НЕ "
+"данный момент находится в комнате, то он/она/оно также будет выгнан. НЕ "
 "поддерживает пробелы в никах."
 
 #: ../src/groupchat_control.py:1240
@@ -4802,12 +4805,12 @@ msgstr "%(nick)s меняет статус"
 #: ../src/notify.py:206
 #, python-format
 msgid "%(nickname)s Signed In"
-msgstr "%(nickname)s подключился"
+msgstr "%(nickname)s подключается"
 
 #: ../src/notify.py:214
 #, python-format
 msgid "%(nickname)s Signed Out"
-msgstr "%(nickname)s отключился"
+msgstr "%(nickname)s отключается"
 
 #: ../src/notify.py:226
 #, python-format
@@ -4903,19 +4906,16 @@ msgstr "используя учетную запись %s"
 #. below to avoid duplicate code
 #. add
 #: ../src/roster_window.py:903
-#, python-format
 msgid "to %s account"
-msgstr "учетной записи %s"
+msgstr "для учетной записи %s"
 
 #. disco
 #: ../src/roster_window.py:908
-#, python-format
 msgid "using %s account"
-msgstr "используя %s учетную запись"
+msgstr "учетной записи %s"
 
 #. profile, avatar
 #: ../src/roster_window.py:983
-#, python-format
 msgid "of account %s"
 msgstr "для учетной записи %s"
 
@@ -5085,8 +5085,8 @@ msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
 msgstr ""
-"Если вы удалите контакт, вы так же удалите и авторизацию, то вы будете "
-"видеть его или её всегда в оффлайне."
+"Удаляя контакт, вы одновременно удалите авторизацию, "
+"и этот человек больше не сможет видеть ваш статус."
 
 #: ../src/roster_window.py:2626
 msgid ""
@@ -5098,7 +5098,7 @@ msgstr ""
 
 #: ../src/roster_window.py:2629
 msgid "I want this contact to know my status after removal"
-msgstr "Я хочу чтобы этот контакт видел мой статус после удаления"
+msgstr "Я хочу, чтобы этот контакт видел мой статус после удаления"
 
 #. several contact to remove at the same time
 #: ../src/roster_window.py:2633
