@@ -81,7 +81,7 @@ else:
 
 		def encrypt(self, str, recipients):
 			if not USE_GPG:
-				return str
+				return str, 'GnuPG not usable'
 			self.options.recipients = recipients   # a list!
 
 			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout',
