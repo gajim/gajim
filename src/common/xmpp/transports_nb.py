@@ -436,7 +436,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		except SSLWrapper.Error, e:
 			print "caught " + str(e)
 			errnum = gattr(e, 'errno', ERR_OTHER)
-			if errnum == 0: errnum = ERR_OTHER # unset, but we must put a status
+			if not errnum: errnum = ERR_OTHER # unset, but we must put a status
 			errtxt = gattr(e, 'strerror') or repr(e.args)
 
 		# Should we really do this? In C, recv() will happily return 0
@@ -595,7 +595,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	def getName(self):
 		''' Return the server's name, or 'getHost()' if not available.'''
 		retval = None
-		if self._owner: retval = gattr(self._owner, 'name')
+		retval = gattr(self._owner, 'name')
 		if retval: return retval
 		return self.getHost()
 
