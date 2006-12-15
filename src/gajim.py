@@ -155,8 +155,15 @@ def pid_alive():
 	except:
 		# probably file not found
 		return False
-	pid = int(pf.read().strip())
-	pf.close()
+
+	try:
+		pid = int(pf.read().strip())
+		pf.close()
+	except:
+		traceback.print_exc()
+		# PID file exists, but something happened trying to read PID
+		# Could be 0.10 style empty PID file, so assume Gajim is running
+		return True
 
 	if os.name == 'nt':
 		try:
