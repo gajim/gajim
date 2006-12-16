@@ -270,6 +270,20 @@ class SingleForm(gtk.Table, object):
 		self.set_col_spacings(6)
 		self.set_row_spacings(6)
 
+		self.tooltips = gtk.Tooltips()
+
+		def decorate_with_tooltip(widget, field):
+			""" Adds a tooltip containing field's description to a widget.
+			Creates EventBox if widget doesn't have its own gdk window.
+			Returns decorated widget. """
+			if field.description!='':
+				if widget.flags()&gtk.NO_WINDOW:
+					evbox = gtk.EventBox()
+					evbox.add(widget)
+					widget = evbox
+				self.tooltips.set_tip(widget, field.description)
+			return widget
+
 		self._data_form = dataform
 
 		# building widget
@@ -283,7 +297,6 @@ class SingleForm(gtk.Table, object):
 			if field.type=='hidden': continue
 
 			commonlabel = True
-			commondesc = True
 			commonwidget = True
 			widget = None
 
@@ -298,9 +311,6 @@ class SingleForm(gtk.Table, object):
 				if field.label is None:
 					commonlabel = False
 					leftattach = 0
-				if field.description is None:
-					commondesc = False
-					rightattach = 3
 				
 				commonwidget=False
 				widget = gtk.Label(field.value)
@@ -367,6 +377,8 @@ class SingleForm(gtk.Table, object):
 				treeview.append_column(gtk.TreeViewColumn(None, renderer,
 					text=0))
 
+				decorate_with_tooltip(treeview, field)
+
 				add_button=xml.get_widget('add_button')
 				add_button.connect('clicked',
 					self.on_jid_multi_add_button_clicked, treeview, listmodel, field)
@@ -410,6 +422,7 @@ class SingleForm(gtk.Table, object):
 				widget.add(textwidget)
 
 				widget.set_sensitive(readwrite)
+				widget=decorate_with_tooltip(widget, field)
 				self.attach(widget, 1, 2, linecounter, linecounter+1)
 
 			else:# field.type == 'text-single' or field.type is nonstandard:
@@ -418,6 +431,7 @@ class SingleForm(gtk.Table, object):
 				if readwrite:
 					widget = gtk.Entry()
 					widget.connect('changed', self.on_text_single_entry_changed, field)
+					widget.set_sensitive(readwrite)
 					if field.value is None:
 						field.value = u''
 					widget.set_text(field.value)
@@ -426,31 +440,24 @@ class SingleForm(gtk.Table, object):
 					widget = gtk.Label(field.value)
 					widget.set_sensitive(True)
 					widget.set_alignment(0.0, 0.5)
+					widget=decorate_with_tooltip(widget, field)
 					self.attach(widget, 1, 2, linecounter, linecounter+1,
 						yoptions=gtk.FILL)
 
 			if commonlabel and field.label is not None:
 				label = gtk.Label(field.label)
 				label.set_alignment(0.0, 0.5)
+				label = decorate_with_tooltip(label, field)
 				self.attach(label, 0, 1, linecounter, linecounter+1,
 					xoptions=gtk.FILL, yoptions=gtk.FILL)
 
 			if commonwidget:
 				assert widget is not None
 				widget.set_sensitive(readwrite)
+				widget = decorate_with_tooltip(widget, field)
 				self.attach(widget, 1, 2, linecounter, linecounter+1,
 					yoptions=gtk.FILL)
 			widget.show_all()
-
-			if commondesc and field.description!='':
-				label = gtk.Label()
-				label.set_alignment(0.0, 0.5)	# align to left
-				label.set_markup('<small>'+\
-					gtkgui_helpers.escape_for_pango_markup(field.description)+\
-					'</small>')
-				label.set_line_wrap(True)
-				self.attach(label, 2, 3, linecounter, linecounter+1,
-					xoptions=gtk.FILL|gtk.SHRINK, yoptions=gtk.FILL|gtk.SHRINK)
 
 			linecounter+=1
 		if self.get_property('visible'):
