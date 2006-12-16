@@ -421,6 +421,17 @@ class GroupchatControl(ChatControlBase):
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			self.draw_contact(nick)
 
+	def _change_style(self, model, path, iter):
+		model[iter][C_NICK] = model[iter][C_NICK]
+
+	def change_roster_style(self):
+		model = self.list_treeview.get_model()
+		model.foreach(self._change_style)
+
+	def repaint_themed_widgets(self):
+		ChatControlBase.repaint_themed_widgets(self)
+		self.change_roster_style()
+
 	def _update_banner_state_image(self):
 		banner_status_img = self.xml.get_widget('gc_banner_status_image')
 		images = gajim.interface.roster.jabber_state_images

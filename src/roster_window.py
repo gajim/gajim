@@ -1079,10 +1079,6 @@ class RosterWindow:
 		model.foreach(self._change_style, option)
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.repaint_themed_widgets()
-		# update gc's roster
-		for ctrl in gajim.interface.msg_win_mgr.controls():
-			if ctrl.type_id == message_control.TYPE_GC:
-				ctrl.update_ui()
 
 	def draw_roster(self):
 		'''clear and draw roster'''
