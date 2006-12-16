@@ -67,19 +67,10 @@ class DataFormWidget(gtk.Alignment, object):
 
 		# create appropriate description for instructions field if there isn't any
 		if dataform.instructions=='':
-			if dataform.type=='result':
-				# form is single
-				instructions = _('This is result of query.')
-			else:
-				# form is writable (TODO: move that to build_*_data_form()?)
-				if isinstance(dataform, dataforms.SimpleDataForm):
-					instructions = _('Fill in the form.')
-				else:
-					instructions = _('Edit items on the list')
+			self.instructions_label.set_no_show_all(True)
+			self.instructions_label.hide()
 		else:
-			instructions = dataform.instructions
-
-		self.instructions_label.set_text(instructions)
+			self.instructions_label.set_text(instructions)
 
 	def get_data_form(self):
 		""" Data form displayed in the widget or None if no form. """
@@ -267,7 +258,7 @@ class SingleForm(gtk.Table, object):
 		assert isinstance(dataform, dataforms.SimpleDataForm)
 
 		gtk.Table.__init__(self)
-		self.set_col_spacings(6)
+		self.set_col_spacings(12)
 		self.set_row_spacings(6)
 
 		self.tooltips = gtk.Tooltips()
@@ -297,10 +288,12 @@ class SingleForm(gtk.Table, object):
 			if field.type=='hidden': continue
 
 			commonlabel = True
+			commonlabelcenter = False
 			commonwidget = True
 			widget = None
 
 			if field.type=='boolean':
+				commonlabelcenter = True
 				widget = gtk.CheckButton()
 				widget.connect('toggled', self.on_boolean_checkbutton_toggled, field)
 				widget.set_active(field.value)
@@ -403,6 +396,7 @@ class SingleForm(gtk.Table, object):
 				del xml
 
 			elif field.type == 'text-private':
+				commonlabelcenter = True
 				widget = gtk.Entry()
 				widget.connect('changed', self.on_text_single_entry_changed, field)
 				widget.set_visibility(False)
@@ -428,6 +422,7 @@ class SingleForm(gtk.Table, object):
 			else:# field.type == 'text-single' or field.type is nonstandard:
 				# JEP says that if we don't understand some type, we
 				# should handle it as text-single
+				commonlabelcenter = True
 				if readwrite:
 					widget = gtk.Entry()
 					widget.connect('changed', self.on_text_single_entry_changed, field)
@@ -446,7 +441,10 @@ class SingleForm(gtk.Table, object):
 
 			if commonlabel and field.label is not None:
 				label = gtk.Label(field.label)
-				label.set_alignment(0.0, 0.5)
+				if commonlabelcenter:
+					label.set_alignment(0.0, 0.5)
+				else:
+					label.set_alignment(0.0, 0.0)
 				label = decorate_with_tooltip(label, field)
 				self.attach(label, 0, 1, linecounter, linecounter+1,
 					xoptions=gtk.FILL, yoptions=gtk.FILL)

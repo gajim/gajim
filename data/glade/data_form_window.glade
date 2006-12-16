@@ -466,7 +466,7 @@
 	<widget class="GtkNotebook" id="data_form_types_notebook">
 	  <property name="visible">True</property>
 	  <property name="show_tabs">False</property>
-	  <property name="show_border">True</property>
+	  <property name="show_border">False</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">False</property>
 	  <property name="enable_popup">False</property>
@@ -483,7 +483,7 @@
 	      <child>
 		<widget class="GtkViewport" id="single_form_viewport">
 		  <property name="visible">True</property>
-		  <property name="shadow_type">GTK_SHADOW_IN</property>
+		  <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 		  <child>
 		    <placeholder/>
