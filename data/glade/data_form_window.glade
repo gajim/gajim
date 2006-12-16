@@ -19,6 +19,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="destroy" handler="on_data_form_window_destroy" last_modification_time="Thu, 19 Jan 2006 12:55:13 GMT"/>
 
   <child>
@@ -197,6 +198,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GtkVBox" id="vbox111">
@@ -426,6 +428,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GtkVBox" id="data_form_vbox">
@@ -460,17 +463,6 @@
       </child>
 
       <child>
-	<widget class="GtkHSeparator" id="instructions_hseparator">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
 	<widget class="GtkNotebook" id="data_form_types_notebook">
 	  <property name="visible">True</property>
 	  <property name="show_tabs">False</property>
@@ -500,7 +492,7 @@
 	      </child>
 	    </widget>
 	    <packing>
-	      <property name="tab_expand">False</property>
+	      <property name="tab_expand">True</property>
 	      <property name="tab_fill">True</property>
 	    </packing>
 	  </child>
