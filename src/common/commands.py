@@ -204,6 +204,12 @@ class ConnectionCommands:
 		sessionid = cmd.getAttr('sessionid')
 		if sessionid is None:
 			# we start a new command session... only if we are visible for the jid
+			# and command exist
+			if node not in self.__commands.keys():
+				self.connection.send(
+					xmpp.Error(iq_obj, xmpp.NS_STANZAS+' item-not-found'))
+				raise xmpp.NodeProcessed
+
 			newcmd = self.__commands[node]
 			if not newcmd.isVisibleFor(self.isSameJID(jid)):
 				return
