@@ -2578,8 +2578,11 @@ class RosterWindow:
 				for c in gajim.contacts.get_contact(account, contact.jid):
 					self.remove_contact(c, account)
 				gajim.contacts.remove_jid(account, c.jid)
+				# redraw group rows for contact numbers
 				for group in c.groups:
 					self.draw_group(group, account)
+				# redraw account rows for contact numbers
+				self.draw_account(account)
 				need_readd = False
 				if not remove_auth and contact.sub == 'both':
 					contact.name = ''
