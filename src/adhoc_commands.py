@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-##	config.py
+##	adhoc_commands.py
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
 ##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -19,9 +13,8 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-# TODO: think if we need caching command list. it may be wrong if there will
-# TODO: be entities that often change the list, it may be slow to fetch it
-# TODO: every time
+# FIXME: think if we need caching command list. it may be wrong if there will
+# be entities that often change the list, it may be slow to fetch it every time
 
 import gobject
 import gtk
@@ -157,7 +150,7 @@ class CommandWindow:
 # stage 2: choosing the command to execute
 	def stage2(self):
 		'''Populate the command list vbox with radiobuttons
-		(TODO: if there is more commands, maybe some kind of list?),
+		(FIXME: if there is more commands, maybe some kind of list?),
 		set widgets' state.'''
 		# close old stage
 		self.stage_finish()
@@ -301,7 +294,7 @@ class CommandWindow:
 			try:
 				self.data_form_widget.data_form=self.dataform
 			except dataforms.Error:
-				# TODO: translate
+				# FIXME: translate
 				self.stage5(error='Service sent malformed data', senderror=True)
 			self.data_form_widget.show()
 		else:
@@ -365,7 +358,7 @@ class CommandWindow:
 # stage 5: an error has occured
 	def stage5(self, error=None, errorid=None, senderror=False):
 		'''Display the error message. Wait for user to close the window'''
-		# TODO: sending error to responder
+		# FIXME: sending error to responder
 		# close old stage
 		self.stage_finish()
 
@@ -433,7 +426,7 @@ class CommandWindow:
 
 		def callback(response):
 			'''Called on response to query.'''
-			# TODO: move to connection_handlers.py
+			# FIXME: move to connection_handlers.py
 			# is error => error stage
 			error = response.getError()
 			if error is not None:
@@ -471,11 +464,11 @@ class CommandWindow:
 
 		if self.data_form_widget.data_form is not None:
 #			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
-			# TODO: simplified form to send
+			# FIXME: simplified form to send
 			cmdnode.addChild(node=self.data_form_widget.data_form)
 
 		def callback(response):
-			# TODO: move to connection_handlers.py
+			# FIXME: move to connection_handlers.py
 			err = response.getError()
 			if err is not None:
 				self.stage5(errorid = err)
@@ -499,6 +492,6 @@ class CommandWindow:
 	
 			self.account.connection.send(stanza)
 		else:
-			# we did not received any reply from service; TODO: we should wait and
+			# we did not received any reply from service; FIXME: we should wait and
 			# then send cancel; for now we do nothing
 			pass
