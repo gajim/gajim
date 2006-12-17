@@ -40,7 +40,6 @@ SERVICE = 'org.gajim.dbus'
 DBUS_STRING = dbus.String
 
 # general type (for use in dicts, where all values should have the same type)
-DBUS_VARIANT = dbus.Variant
 DBUS_BOOLEAN = dbus.Boolean
 DBUS_DOUBLE = dbus.Double
 DBUS_INT32 = dbus.Int32
@@ -48,8 +47,9 @@ DBUS_INT32 = dbus.Int32
 DBUS_DICT_SV = lambda : dbus.Dictionary({}, signature="sv")
 # dictionary with string key and value
 DBUS_DICT_SS = lambda : dbus.Dictionary({}, signature="ss")
-# empty type
-DBUS_NONE = lambda : dbus.Variant(0)
+# empty type (there is no equivalent of None on D-Bus, but historically gajim
+# used 0 instead)
+DBUS_NONE = lambda : dbus.Int32(0)
 
 def get_dbus_struct(obj):
 	''' recursively go through all the items and replace
@@ -66,15 +66,15 @@ def get_dbus_struct(obj):
 	if isinstance(obj, bool):
 		return DBUS_BOOLEAN(obj)
 	if isinstance(obj, (list, tuple)):
-		result = [DBUS_VARIANT(get_dbus_struct(i)) for i in obj]
+		result = dbus.Array([get_dbus_struct(i)) for i in obj],
+			signature='v')
 		if result == []:
 			return DBUS_NONE()
 		return result
 	if isinstance(obj, dict):
 		result = DBUS_DICT_SV()
 		for key, value in obj.items():
-			result[DBUS_STRING(key)] = DBUS_VARIANT(get_dbus_struct(
-													value))
+			result[DBUS_STRING(key)] = get_dbus_struct(value)
 		if result == {}:
 			return DBUS_NONE()
 		return result
@@ -91,8 +91,7 @@ class Remote:
 
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
-			self.signal_object.raise_signal(signal, 
-				get_dbus_struct(arg))
+			self.signal_object.getattr(signal)(get_dbus_struct(arg))
 
 
 class SignalObject(dbus.service.Object):
@@ -106,13 +105,81 @@ class SignalObject(dbus.service.Object):
 		# register our dbus API
 		dbus.service.Object.__init__(self, service, OBJ_PATH)
 
+	# FIXME: what are the signatures for these signals?
+
+	@dbus.service.signal(INTERFACE)
+	def Roster(self, account_and_data):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def AccountPresence(self, status_and_account):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def ContactPresence(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def ContactAbsence(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def NewMessage(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def Subscribe(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def Subscribed(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def Unsubscribed(self, account_and_jid):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def NewAccount(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def VcardInfo(self, account_and_vcard):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def LastStatusTime(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def OsInfo(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def GCPresence(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def GCMessage(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def RosterInfo(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE)
+	def NewGmail(self, account_and_array):
+		pass
+
 	def raise_signal(self, signal, arg):
-		'''raise a signal, with a single string message'''
-		from dbus import dbus_bindings
-		message = dbus_bindings.Signal(OBJ_PATH, INTERFACE, signal)
-		i = message.get_iter(True)
-		i.append(arg)
-		self._connection.send(message)
+		'''raise a signal, with a single argument of unspecified type
+
+		Instead of obj.raise_signal("Foo", bar), use obj.Foo(bar).'''
+		getattr(self, signal)(arg)
+
+	# FIXME: can't specify any introspect signature for any of these
+	# since they take a variable number of arguments (this is not
+	# recommended in a D-Bus interface)
 
 	@dbus.service.method(INTERFACE)
 	def get_status(self, *args):
@@ -526,9 +593,9 @@ class SignalObject(dbus.service.Object):
 			if prim_contact == None or contact.priority > prim_contact.priority:
 				prim_contact = contact
 		contact_dict = DBUS_DICT_SV()
-		contact_dict['name'] = DBUS_VARIANT(DBUS_STRING(prim_contact.name))
-		contact_dict['show'] = DBUS_VARIANT(DBUS_STRING(prim_contact.show))
-		contact_dict['jid'] = DBUS_VARIANT(DBUS_STRING(prim_contact.jid))
+		contact_dict['name'] = DBUS_STRING(prim_contact.name)
+		contact_dict['show'] = DBUS_STRING(prim_contact.show)
+		contact_dict['jid'] = DBUS_STRING(prim_contact.jid)
 		if prim_contact.keyID:
 			keyID = None
 			if len(prim_contact.keyID) == 8:
@@ -537,11 +604,10 @@ class SignalObject(dbus.service.Object):
 				keyID = prim_contact.keyID[8:]
 			if keyID:
 				contact_dict['openpgp'] = keyID
-		contact_dict['resources'] = []
+		contact_dict['resources'] = dbus.Array([], signature='(sis)')
 		for contact in contacts:
-			resource_props = [DBUS_STRING(contact.resource), contact.priority, DBUS_STRING(contact.status)]
-			contact_dict['resources'].append(tuple(resource_props))
-		contact_dict['resources'] = DBUS_VARIANT(contact_dict['resources'])
+			resource_props = dbus.Struct((DBUS_STRING(contact.resource), contact.priority, DBUS_STRING(contact.status)), signature='sis')
+			contact_dict['resources'].append(resource_props)
 		return contact_dict
 
 	@dbus.service.method(INTERFACE)
