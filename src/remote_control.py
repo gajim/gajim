@@ -66,7 +66,7 @@ def get_dbus_struct(obj):
 	if isinstance(obj, bool):
 		return DBUS_BOOLEAN(obj)
 	if isinstance(obj, (list, tuple)):
-		result = dbus.Array([get_dbus_struct(i)) for i in obj],
+		result = dbus.Array([get_dbus_struct(i) for i in obj],
 			signature='v')
 		if result == []:
 			return DBUS_NONE()
