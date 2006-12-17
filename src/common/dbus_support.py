@@ -55,7 +55,7 @@ class SystemBus:
 		if self.system_bus is None:
 			try:
 				self.system_bus = dbus.SystemBus()
-			except dbus.dbus_bindings.DBusException:
+			except dbus.DBusException:
 				self.system_bus = None
 				return False
 			if self.system_bus is None:
@@ -86,7 +86,7 @@ class SessionBus:
 		if self.session_bus is None:
 			try:
 				self.session_bus = dbus.SessionBus()
-			except dbus.dbus_bindings.DBusException:
+			except dbus.DBusException:
 				self.session_bus = None
 				return False
 			if self.session_bus is None:

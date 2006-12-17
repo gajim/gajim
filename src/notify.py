@@ -288,7 +288,7 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 			DesktopNotification(event_type, jid, account, msg_type,
 				path_to_image, title, text)
 			return	# sucessfully did D-Bus Notification procedure!
-		except dbus.dbus_bindings.DBusException, e:
+		except dbus.DBusException, e:
 			# Connection to D-Bus failed
 			gajim.log.debug(str(e))
 		except TypeError, e:
@@ -438,7 +438,7 @@ class DesktopNotification:
 
 		self.notif = dbus_support.get_notifications_interface()
 		if self.notif is None:
-			raise dbus.dbus_bindings.DBusException()
+			raise dbus.DBusException('unable to get notifications interface')
 		self.ntype = ntype
 
 		self.get_version()
