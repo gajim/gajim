@@ -70,7 +70,7 @@ class DataFormWidget(gtk.Alignment, object):
 			self.instructions_label.set_no_show_all(True)
 			self.instructions_label.hide()
 		else:
-			self.instructions_label.set_text(instructions)
+			self.instructions_label.set_text(dataform.instructions)
 
 	def get_data_form(self):
 		""" Data form displayed in the widget or None if no form. """

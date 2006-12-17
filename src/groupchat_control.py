@@ -71,8 +71,7 @@ def tree_cell_data_func(column, renderer, model, iter, tv=None):
 			renderer.set_property('cell-background', None)
 		if isinstance(renderer, gtk.CellRendererText):
 			# foreground property is only with CellRendererText
-			color = gajim.config.get_per('themes', theme, 
-				'contacttextcolor')
+			color = gajim.config.get_per('themes', theme, 'contacttextcolor')
 			if color:
 				renderer.set_property('foreground', color)
 			else:
