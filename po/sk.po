@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-09 10:02+0100\n"
-"PO-Revision-Date: 2006-06-19 22:44+0100\n"
+"POT-Creation-Date: 2006-12-17 11:47+0100\n"
+"PO-Revision-Date: 2006-12-17 11:20+0100\n"
 "Last-Translator: Juraj Michalek <juraj.michalek@asinus.org>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,6 @@ msgid "Jabber IM Client"
 msgstr "Jabber IM klient"
 
 #: ../data/glade/account_context_menu.glade.h:1
-#, fuzzy
 msgid "Send Single _Message..."
 msgstr "Poslať jednoduchú _správu"
 
@@ -53,7 +52,7 @@ msgstr ""
 #: ../data/glade/roster_window.glade.h:16
 #: ../data/glade/systray_context_menu.glade.h:6
 msgid "_Group Chat"
-msgstr "Skupinový rozhovor"
+msgstr "_Diskusná skupina"
 
 #: ../data/glade/account_context_menu.glade.h:6
 #: ../data/glade/zeroconf_context_menu.glade.h:1
@@ -61,9 +60,8 @@ msgid "_Modify Account..."
 msgstr "_Upraviť účet..."
 
 #: ../data/glade/account_context_menu.glade.h:7
-#, fuzzy
 msgid "_Open Gmail Inbox"
-msgstr "_Otvoriť nový e-mail"
+msgstr "_Otvoriť Gmail Inbox"
 
 #: ../data/glade/account_context_menu.glade.h:8
 #: ../data/glade/zeroconf_context_menu.glade.h:2
@@ -129,9 +127,8 @@ msgid "Servers Features"
 msgstr "Vlastnosti servera"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:15
-#, fuzzy
 msgid "Set my profile when I connect"
-msgstr "Nastaviť avatara, keď som pripojený(á)"
+msgstr "Nastaviť môj profil, keď som pripojený(á)"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:16
 msgid ""
@@ -260,9 +257,9 @@ msgstr "Gajim"
 #: ../data/glade/account_modification_window.glade.h:15
 #: ../data/glade/preferences_window.glade.h:49
 #: ../data/glade/zeroconf_properties_window.glade.h:7
-#: ../src/roster_window.py:342 ../src/roster_window.py:1211
-#: ../src/roster_window.py:1422 ../src/roster_window.py:2032
-#: ../src/roster_window.py:2074 ../src/common/contacts.py:278
+#: ../src/roster_window.py:342 ../src/roster_window.py:1207
+#: ../src/roster_window.py:1418 ../src/roster_window.py:2029
+#: ../src/roster_window.py:2071 ../src/common/contacts.py:278
 msgid "General"
 msgstr "Všeobecné"
 
@@ -275,6 +272,8 @@ msgid ""
 "If checked, Gajim will also broadcast some more IPs except from just your "
 "IP, so file transfer has higher chances of working."
 msgstr ""
+"Ak je zaškrtnuté, Gajim bude rozosielať informácie aj na niekoľko ďalších IP "
+"adries okrem vašej, takže je vyššia šanca, že prenos súborov bude fungovať."
 
 #: ../data/glade/account_modification_window.glade.h:19
 msgid ""
@@ -321,21 +320,22 @@ msgid "Manage..."
 msgstr "Upraviť..."
 
 #: ../data/glade/account_modification_window.glade.h:25
-#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1642
-#: ../src/config.py:3435
+#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1643
+#: ../src/config.py:3436
 msgid "No key selected"
 msgstr "Žiadny kľúč nie je vybraný"
 
 #. None means no proxy profile selected
-#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1224
-#: ../src/config.py:1229 ../src/config.py:1413 ../src/config.py:1632
-#: ../src/config.py:1641 ../src/config.py:1700 ../src/config.py:1774
-#: ../src/config.py:2645 ../src/config.py:3425 ../src/config.py:3434
+#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1225
+#: ../src/config.py:1230 ../src/config.py:1414 ../src/config.py:1633
+#: ../src/config.py:1642 ../src/config.py:1701 ../src/config.py:1775
+#: ../src/config.py:2646 ../src/config.py:3426 ../src/config.py:3435
 #: ../src/dialogs.py:281 ../src/dialogs.py:283
 msgid "None"
 msgstr "Nič"
 
 #: ../data/glade/account_modification_window.glade.h:28
+#: ../data/glade/profile_window.glade.h:25
 #: ../data/glade/zeroconf_properties_window.glade.h:17
 msgid "Personal Information"
 msgstr "Osobné informácie"
@@ -360,7 +360,7 @@ msgstr ""
 
 #: ../data/glade/account_modification_window.glade.h:32
 msgid "Priority will change automatically according to your status."
-msgstr ""
+msgstr "Priorita sa zmení automatický podľa stavu."
 
 #: ../data/glade/account_modification_window.glade.h:33
 msgid "Proxy:"
@@ -412,13 +412,12 @@ msgid "Use custom hostname/port"
 msgstr "Použiť vlastné nastavenie server/port"
 
 #: ../data/glade/account_modification_window.glade.h:43
-#, fuzzy
 msgid "Use file transfer proxies"
-msgstr "zoznam prenosu súborov"
+msgstr "Použiť proxy pre prenos súborov"
 
 #: ../data/glade/account_modification_window.glade.h:44
 msgid "_Adjust to status"
-msgstr ""
+msgstr "_Upraviť stav"
 
 #: ../data/glade/account_modification_window.glade.h:45
 msgid "_Jabber ID:"
@@ -440,6 +439,10 @@ msgid ""
 "This is only available if python-avahi is installed and avahi-daemon is "
 "running."
 msgstr ""
+"Ak je zaškrtnuté, všetky lokálne kontakty, ktoré používajú klienta "
+"kompatibilného s Bonjour  (ako iChat, Trillian alebo Gaim) budú zobrazené v "
+"zozname. Nie je nutné kontaktovať Jabber server.\n"
+"Toto je k dispozícii, že python-avahi je nainštalovaný a avahi-daemon beží."
 
 #: ../data/glade/accounts_window.glade.h:4
 msgid ""
@@ -450,13 +453,12 @@ msgstr ""
 "kontakty akoby ste mali len jeden účet"
 
 #: ../data/glade/accounts_window.glade.h:5
-#, fuzzy
 msgid "Mer_ge accounts"
-msgstr "_Zlúčiť účty"
+msgstr "Z_lúčiť účty"
 
 #: ../data/glade/accounts_window.glade.h:6
 msgid "_Enable link-local messaging"
-msgstr ""
+msgstr "_Povoliť link-local správy"
 
 #: ../data/glade/accounts_window.glade.h:7
 msgid "_Modify"
@@ -468,14 +470,12 @@ msgid "_Remove"
 msgstr "_Odstrániť"
 
 #: ../data/glade/add_new_contact_window.glade.h:1
-#, fuzzy
 msgid "A_ccount:"
-msgstr "Účet"
+msgstr "Úč_et"
 
 #: ../data/glade/add_new_contact_window.glade.h:2
-#, fuzzy
 msgid "A_llow this contact to view my status"
-msgstr "Povoliť jemu/jej vidieť môj stav"
+msgstr "P_ovoliť jemu/jej vidieť môj stav"
 
 #: ../data/glade/add_new_contact_window.glade.h:3
 msgid "Add New Contact"
@@ -492,37 +492,38 @@ msgid ""
 "protocol. Click on register button to\n"
 "proceed."
 msgstr ""
+"Je potrebné, aby ste bol(a) príhlásený(a) k tomuto transportu,\n"
+"aby ste mohol(a) pridať kontakt s použitím tohoto\n"
+"protokolu. Kliknite na tlačidlo registrovať, posunie vás\n"
+"na ďalší krok."
 
 #: ../data/glade/add_new_contact_window.glade.h:9
 msgid ""
 "You must be connected to the transport to be able\n"
 "to add a contact from this protocol."
 msgstr ""
+"Musíte byť pripojený(á) k transportu, aby ste mohol(a)\n"
+"pridať kontakt s použitím tohoto protokolu."
 
 #: ../data/glade/add_new_contact_window.glade.h:11
-#, fuzzy
 msgid "_Group:"
-msgstr "Skupina:"
+msgstr "_Skupina"
 
 #: ../data/glade/add_new_contact_window.glade.h:12
-#, fuzzy
 msgid "_Nickname:"
-msgstr "Prezývka:"
+msgstr "_Prezývka"
 
 #: ../data/glade/add_new_contact_window.glade.h:13
-#, fuzzy
 msgid "_Protocol:"
-msgstr "Protokol:"
+msgstr "_Protokol"
 
 #: ../data/glade/add_new_contact_window.glade.h:14
-#, fuzzy
 msgid "_Register"
-msgstr "Re_gistrácia"
+msgstr "_Registrácia"
 
 #: ../data/glade/add_new_contact_window.glade.h:15
-#, fuzzy
 msgid "_User ID:"
-msgstr "Používateľské ID:"
+msgstr "_Používateľské ID:"
 
 #: ../data/glade/adhoc_commands_window.glade.h:1
 #, fuzzy
@@ -620,7 +621,7 @@ msgstr "_Administrátor"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:10
 msgid "_Privacy Lists"
-msgstr ""
+msgstr "_Súkromný zoznam"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:11
 msgid "_Send Server Message"
@@ -632,17 +633,15 @@ msgstr "_Poslať jednoduchú správu"
 
 #: ../data/glade/advanced_notifications_window.glade.h:1
 msgid " a window/tab opened with that contact "
-msgstr ""
+msgstr "Okno alebo záložka otvorená pre tento kontakt"
 
 #: ../data/glade/advanced_notifications_window.glade.h:2
-#, fuzzy
 msgid "<b>Actions</b>"
-msgstr "<b>Aplikácie</b>"
+msgstr "<b>Akcie</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:3
-#, fuzzy
 msgid "<b>Conditions</b>"
-msgstr "<b>Zvuky</b>"
+msgstr "<b>Podmienky</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:4
 #: ../data/glade/preferences_window.glade.h:10
@@ -650,19 +649,17 @@ msgid "<b>Sounds</b>"
 msgstr "<b>Zvuky</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:5
-#, fuzzy
 msgid "Advanced Actions"
-msgstr "_Rozšírené akcie"
+msgstr "Rozšírené akcie"
 
 #: ../data/glade/advanced_notifications_window.glade.h:6
-#, fuzzy
 msgid "Advanced Notifications Control"
-msgstr "Rozšírený editor na editovanie konfigurácie"
+msgstr "Rozšírené nastavenie upozornení"
 
 #: ../data/glade/advanced_notifications_window.glade.h:7
 #, fuzzy
 msgid "All statuses"
-msgstr "Stav:"
+msgstr "Všetky stavy"
 
 #: ../data/glade/advanced_notifications_window.glade.h:8
 #: ../src/common/helpers.py:234
@@ -670,17 +667,16 @@ msgid "Away"
 msgstr "Preč"
 
 #: ../data/glade/advanced_notifications_window.glade.h:9
-#, fuzzy
 msgid "Busy "
-msgstr "Zaneprázdnený"
+msgstr "Zaneprázdnený(á)"
 
 #: ../data/glade/advanced_notifications_window.glade.h:10
 msgid "Don't have "
-msgstr ""
+msgstr "Nemá"
 
 #: ../data/glade/advanced_notifications_window.glade.h:11
 msgid "Have "
-msgstr ""
+msgstr "Má"
 
 #: ../data/glade/advanced_notifications_window.glade.h:12
 #: ../src/common/helpers.py:244
@@ -688,9 +684,8 @@ msgid "Invisible"
 msgstr "Neviditeľný"
 
 #: ../data/glade/advanced_notifications_window.glade.h:13
-#, fuzzy
 msgid "Launch a command"
-msgstr "príkaz"
+msgstr "Vykonať príkaz"
 
 #: ../data/glade/advanced_notifications_window.glade.h:14
 #: ../src/common/helpers.py:217
@@ -698,20 +693,20 @@ msgid "Not Available"
 msgstr "Neprítomný"
 
 #: ../data/glade/advanced_notifications_window.glade.h:15
+#, fuzzy
 msgid "One or more special statuses..."
-msgstr ""
+msgstr "Niektoré špeciálne stavy..."
 
 #: ../data/glade/advanced_notifications_window.glade.h:16
-#, fuzzy
 msgid "Online / Free For Chat"
 msgstr "Mám čas na debatu"
 
 #: ../data/glade/advanced_notifications_window.glade.h:17
-#, fuzzy
 msgid "Play a sound"
-msgstr "Prehrať _zvuky"
+msgstr "Prehrať zvuk"
 
 #: ../data/glade/advanced_notifications_window.glade.h:18
+#, fuzzy
 msgid ""
 "Receive a Message\n"
 "Contact Connected \n"
@@ -723,58 +718,66 @@ msgid ""
 "File Transfert Started \n"
 "File Transfert Finished"
 msgstr ""
+"Prijať správu\n"
+"Kontakt pripojený\n"
+"Kontakt odpojený\n"
+"Kontakt zmenil stav\n"
+"Zvýraznenie správ v diskusnej skupine\n"
+"Prijatá správa do diskusnej skupiny\n"
+"Požiadavka na prenos súboru\n"
+"Začiatok prenosu súboru\n"
+"Ukončenie prenosu súboru"
 
 #: ../data/glade/advanced_notifications_window.glade.h:27
 msgid "When "
-msgstr ""
+msgstr "Kedy"
 
 #: ../data/glade/advanced_notifications_window.glade.h:28
+#, fuzzy
 msgid ""
 "_Activate window manager's UrgencyHint to make chat window in taskbar flash"
 msgstr ""
+"_Aktivovať vlastnosť urgentného upozornenia - okno v zozname úloh bude blikať"
 
 #: ../data/glade/advanced_notifications_window.glade.h:29
 msgid "_Disable auto opening chat window"
-msgstr ""
+msgstr "_Vypnúť automatické otváranie diskusných okien"
 
 #: ../data/glade/advanced_notifications_window.glade.h:30
 msgid "_Disable existing popup window"
-msgstr ""
+msgstr "_Vypnúť existujúce vyskakovacie okná (popup)"
 
 #: ../data/glade/advanced_notifications_window.glade.h:31
 msgid "_Disable existing sound for this event"
-msgstr ""
+msgstr "_Vypnúť zvuky pre túto udalosť"
 
 #: ../data/glade/advanced_notifications_window.glade.h:32
 msgid "_Disable showing event in roster"
-msgstr ""
+msgstr "_Vypnúť zobrazovanie udalostí v zozname"
 
 #: ../data/glade/advanced_notifications_window.glade.h:33
 msgid "_Disable showing event in systray"
-msgstr ""
+msgstr "_Vypnúť zobrazovanie udalostí v oblasti systémových upozornení"
 
 #: ../data/glade/advanced_notifications_window.glade.h:34
 msgid "_Inform me with a popup window"
-msgstr ""
+msgstr "_Informovať ma pomocou vyskakovacieho okna (popup)"
 
 #: ../data/glade/advanced_notifications_window.glade.h:35
-#, fuzzy
 msgid "_Open chat window with user"
-msgstr "Použiť jedno okno na rozhovor so _záložkami"
+msgstr "_Otvoriť diskusné okno"
 
 #: ../data/glade/advanced_notifications_window.glade.h:36
-#, fuzzy
 msgid "_Show event in roster"
-msgstr "Zobraziť len v _zozname"
+msgstr "_Zobraziť udalosť v zozname"
 
 #: ../data/glade/advanced_notifications_window.glade.h:37
-#, fuzzy
 msgid "_Show event in systray"
-msgstr "Zobraziť len v _zozname"
+msgstr "_Zobraziť udalosť v oblasti systémových upozornení"
 
 #: ../data/glade/advanced_notifications_window.glade.h:38
 msgid "and I "
-msgstr ""
+msgstr "a ja"
 
 #: ../data/glade/advanced_notifications_window.glade.h:39
 msgid ""
@@ -782,15 +785,18 @@ msgid ""
 "group(s)\n"
 "everybody"
 msgstr ""
+"contact(s)\n"
+"group(s)\n"
+"everybody"
 
 #: ../data/glade/advanced_notifications_window.glade.h:42
-#, fuzzy
 msgid "for "
-msgstr "Port: "
+msgstr "pre"
 
 #: ../data/glade/advanced_notifications_window.glade.h:43
+#, fuzzy
 msgid "when I'm in"
-msgstr ""
+msgstr "keď som"
 
 #: ../data/glade/atom_entry_window.glade.h:1
 msgid "2003-12-13T18:30:02Z"
@@ -813,7 +819,7 @@ msgstr "názov témy"
 #: ../data/glade/atom_entry_window.glade.h:5
 #, fuzzy
 msgid "Last modified:"
-msgstr "Meno:"
+msgstr "Posledné meno:"
 
 #: ../data/glade/atom_entry_window.glade.h:6
 #, fuzzy
@@ -858,7 +864,7 @@ msgstr "Uložiť ako prednastavené..."
 
 #: ../data/glade/chat_context_menu.glade.h:1
 msgid "Join _Group Chat"
-msgstr "_Pripojiť sa k skupinovej diskusii"
+msgstr "_Pripojiť sa k diskusnej skupine"
 
 #: ../data/glade/chat_context_menu.glade.h:2
 #: ../data/glade/chat_control_popup_menu.glade.h:4
@@ -917,10 +923,10 @@ msgstr "_Kompaktný pohľad    Alt+C"
 msgid "_History"
 msgstr "_História"
 
-#: ../data/glade/data_form_window.glade.h:1 ../src/dataforms_widget.py:76
+#: ../data/glade/data_form_window.glade.h:1
 #, fuzzy
 msgid "Fill in the form."
-msgstr "V skupine"
+msgstr "všetko v skupine"
 
 #: ../data/glade/data_form_window.glade.h:2
 msgid "Room Configuration"
@@ -982,7 +988,7 @@ msgstr ""
 msgid "When a file transfer is complete show a popup notification"
 msgstr "Keď je prenos súboru dokončené zobraziť popup upozornenie"
 
-#: ../data/glade/filetransfers.glade.h:13 ../src/filetransfers_window.py:761
+#: ../data/glade/filetransfers.glade.h:13 ../src/filetransfers_window.py:769
 msgid "_Continue"
 msgstr "_Pokračovať"
 
@@ -1004,7 +1010,7 @@ msgstr "zoznam prenosu súborov"
 
 #: ../data/glade/gajim_themes_window.glade.h:1
 msgid "<b>Chatstate Tab Colors</b>"
-msgstr ""
+msgstr "<b>Farby záložiek diskusného okna</b>"
 
 #: ../data/glade/gajim_themes_window.glade.h:2
 #, fuzzy
@@ -1025,7 +1031,7 @@ msgstr "Tučné"
 
 #: ../data/glade/gajim_themes_window.glade.h:7
 msgid "Composing"
-msgstr ""
+msgstr "Píše správu"
 
 #: ../data/glade/gajim_themes_window.glade.h:8
 msgid "Font style:"
@@ -1036,31 +1042,32 @@ msgid "Gajim Themes Customization"
 msgstr "Úprava tém Gajimu"
 
 #: ../data/glade/gajim_themes_window.glade.h:10
-#, fuzzy
 msgid "Gone"
-msgstr "Nič"
+msgstr "Preč"
 
 #: ../data/glade/gajim_themes_window.glade.h:11
-#, fuzzy
 msgid "Inactive"
-msgstr "Aktívne"
+msgstr "Neaktívny"
 
 #: ../data/glade/gajim_themes_window.glade.h:12
 msgid "Italic"
 msgstr "Kurzíva"
 
 #: ../data/glade/gajim_themes_window.glade.h:13
-#, fuzzy
 msgid ""
 "MUC\n"
 "Messages"
-msgstr "Správy"
+msgstr ""
+"MUC\n"
+"Správy"
 
 #: ../data/glade/gajim_themes_window.glade.h:15
 msgid ""
 "MUC Directed\n"
 "Messages"
 msgstr ""
+"MUC\n"
+"Správy"
 
 #: ../data/glade/gajim_themes_window.glade.h:17
 msgid "Paused"
@@ -1145,12 +1152,10 @@ msgstr "Od"
 #. holds subject
 #: ../data/glade/groups_post_window.glade.h:3 ../src/history_manager.py:141
 #: ../src/history_manager.py:172
-#, fuzzy
 msgid "Subject"
-msgstr "Predmet:"
+msgstr "Predmet"
 
 #: ../data/glade/history_manager.glade.h:1
-#, fuzzy
 msgid ""
 "<big><b>Welcome to Gajim History Logs Manager</b></big>\n"
 "\n"
@@ -1160,7 +1165,7 @@ msgid ""
 "If you plan to do massive deletions, please make sure Gajim is not running. "
 "Generally avoid deletions with contacts you currently chat with."
 msgstr ""
-"<big>Víta vás Gajim - správca histórie</big>\n"
+"<big><b>Víta vás Gajim - správca histórie</b></big>\n"
 "\n"
 "Môžete si vybrať záznam z ľava, prípadne prehľadať databázu (dole).\n"
 "\n"
@@ -1218,12 +1223,12 @@ msgstr "Prijaté pozvanie"
 
 #: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1146
 msgid "Join Group Chat"
-msgstr "Pripojiť sa ku skupinovému rozhovoru"
+msgstr "Pripojiť sa k diskusnej skupine"
 
 #: ../data/glade/join_groupchat_window.glade.h:2
 #: ../data/glade/manage_bookmarks_window.glade.h:4
 #: ../data/glade/profile_window.glade.h:23
-#: ../data/glade/vcard_information_window.glade.h:28
+#: ../data/glade/vcard_information_window.glade.h:29
 msgid "Nickname:"
 msgstr "Prezývka:"
 
@@ -1241,8 +1246,8 @@ msgstr "Posledné:"
 msgid "Room:"
 msgstr "Miestnosť:"
 
-#: ../data/glade/join_groupchat_window.glade.h:6 ../src/disco.py:1150
-#: ../src/disco.py:1517
+#: ../data/glade/join_groupchat_window.glade.h:6 ../src/disco.py:1151
+#: ../src/disco.py:1518
 msgid "_Join"
 msgstr "_Pripojiť"
 
@@ -1263,9 +1268,8 @@ msgid "Manage Bookmarks"
 msgstr "Upraviť záložky"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:6
-#, fuzzy
 msgid "Print status:"
-msgstr "Čas tlače:"
+msgstr "Vypísať stav:"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:8
 msgid "Server:"
@@ -1293,7 +1297,7 @@ msgstr "Upraviť Proxy nastavenia"
 
 #: ../data/glade/manage_proxies_window.glade.h:5
 #: ../data/glade/profile_window.glade.h:22
-#: ../data/glade/vcard_information_window.glade.h:27
+#: ../data/glade/vcard_information_window.glade.h:28
 msgid "Name:"
 msgstr "Meno:"
 
@@ -1349,9 +1353,8 @@ msgid "<b>Format of a line</b>"
 msgstr "<b>Formát riadku rozhovoru</b>"
 
 #: ../data/glade/preferences_window.glade.h:6
-#, fuzzy
 msgid "<b>GMail Options</b>"
-msgstr "<b>Aplikácie</b>"
+msgstr "<b>Nastavenia GMail</b>"
 
 #: ../data/glade/preferences_window.glade.h:7
 msgid "<b>Interface Customization</b>"
@@ -1366,9 +1369,8 @@ msgid "<b>Visual Notifications</b>"
 msgstr "<b>Vizuálne upozornenie</b>"
 
 #: ../data/glade/preferences_window.glade.h:12
-#, fuzzy
 msgid "A_fter nickname:"
-msgstr "Po prezývke:"
+msgstr "Po _prezývke:"
 
 #: ../data/glade/preferences_window.glade.h:13
 msgid "Advanced"
@@ -1403,6 +1405,9 @@ msgid ""
 "anymore for a status message when you change your status to away; it will "
 "use the default one set here"
 msgstr ""
+"Príklad: Ak máte nastavenú správu pre stav Preč, Gajim nebude od nikoho "
+"požadovať informáciu o stave, v prípade, váš stav nastavíte na Preč; Použije "
+"predvolené nastavenie."
 
 #: ../data/glade/preferences_window.glade.h:21
 msgid "Ask status message when I:"
@@ -1431,9 +1436,8 @@ msgstr ""
 "Vlastné"
 
 #: ../data/glade/preferences_window.glade.h:29
-#, fuzzy
 msgid "B_efore nickname:"
-msgstr "Pred prezývkou:"
+msgstr "_Pred prezývkou:"
 
 #: ../data/glade/preferences_window.glade.h:30 ../src/chat_control.py:844
 msgid "Chat"
@@ -1454,28 +1458,24 @@ msgid "Configure color and font of the interface"
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:33
-#, fuzzy
 msgid "Default Status Messages"
-msgstr "Správa o stave"
+msgstr "Východzia správa o stave"
 
 #: ../data/glade/preferences_window.glade.h:34
-#, fuzzy
 msgid "Default status _iconset:"
-msgstr "Základná _sada ikoniek:"
+msgstr "Základná sada _ikoniek:"
 
 #: ../data/glade/preferences_window.glade.h:35
 msgid "Display _extra email details"
-msgstr ""
+msgstr "Zobraziť ďalši_e detaily o emaile"
 
 #: ../data/glade/preferences_window.glade.h:36
-#, fuzzy
 msgid "Display a_vatars of contacts in roster"
-msgstr "Zobraziť avatarov kontaktov v zozname"
+msgstr "Zobraziť a_vatarov zozname kontaktov"
 
 #: ../data/glade/preferences_window.glade.h:37
-#, fuzzy
 msgid "Display status _messages of contacts in roster"
-msgstr "Zobraziť stavovú správu kontaktov v zozname"
+msgstr "Zobraziť stavovú _informáciu zozname kontaktov"
 
 #: ../data/glade/preferences_window.glade.h:38
 #, fuzzy
@@ -1483,7 +1483,6 @@ msgid "Displayed Chat state noti_fications:"
 msgstr "Zmeniť upozornen_ie na stav:"
 
 #: ../data/glade/preferences_window.glade.h:39
-#, fuzzy
 msgid "E_very 5 minutes"
 msgstr "Každých 5 _minút"
 
@@ -1554,23 +1553,23 @@ msgstr "Gajim bude len meniť ikony kontaktov, ktoré spustili novú udalosť"
 msgid ""
 "If checked, Gajim will also include information about the sender of the new "
 "emails"
-msgstr ""
+msgstr "Ak je zapnuté, Gajim pridá informácie o odosielateľovi do novej správy"
 
 #: ../data/glade/preferences_window.glade.h:51
-#, fuzzy
 msgid ""
 "If checked, Gajim will display avatars of contacts in roster window and in "
 "group chats"
-msgstr "Ak je zaškrtnuté, Gajim bude zobrazovať avatarov v zozname"
+msgstr ""
+"Ak je zaškrtnuté, Gajim bude zobrazovať avatarov v zozname kontaktov a v "
+"oknách s diskusnými skupinami."
 
 #: ../data/glade/preferences_window.glade.h:52
-#, fuzzy
 msgid ""
 "If checked, Gajim will display status messages of contacts under the contact "
 "name in roster window and in group chats"
 msgstr ""
 "Ak je zaškrtnuté, Gajim bude zobrazovať správu o stave kontaktov pod menom v "
-"zozname"
+"zozname kontaktov a v oknách s diskusnými skupinami"
 
 #: ../data/glade/preferences_window.glade.h:53
 msgid ""
@@ -1603,9 +1602,8 @@ msgid "Ignore rich content in incoming messages"
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:57
-#, fuzzy
 msgid "Ma_nage..."
-msgstr "Upraviť..."
+msgstr "U_praviť..."
 
 #: ../data/glade/preferences_window.glade.h:58
 msgid ""
@@ -1624,9 +1622,8 @@ msgid "Notify me about contacts that: "
 msgstr "Upozorni ma na kontakt, ktorý:"
 
 #: ../data/glade/preferences_window.glade.h:63
-#, fuzzy
 msgid "Notify on new _GMail email"
-msgstr "Upozorniť keď príde _Gmail e-mail"
+msgstr "Upozorniť keď príde na _Gmail e-mail"
 
 #: ../data/glade/preferences_window.glade.h:64
 msgid "On every _message"
@@ -1659,7 +1656,7 @@ msgstr "Uložiť _pozíciu a veľkosť zoznamu a diskusného okna"
 
 #: ../data/glade/preferences_window.glade.h:71
 msgid "Set status message to reflect currently playing _music track"
-msgstr ""
+msgstr "Nastaviť stavovú správu podľa toho aká _hudba práve hrá"
 
 #: ../data/glade/preferences_window.glade.h:72
 msgid "Show only in _roster"
@@ -1684,9 +1681,8 @@ msgid "Status"
 msgstr "Stav"
 
 #: ../data/glade/preferences_window.glade.h:77
-#, fuzzy
 msgid "T_heme:"
-msgstr "Téma:"
+msgstr "_Téma:"
 
 #: ../data/glade/preferences_window.glade.h:78
 msgid "The auto away status message"
@@ -1702,12 +1698,11 @@ msgstr "Použiť _transportnú sadu obrázkov"
 
 #: ../data/glade/preferences_window.glade.h:81
 msgid "Use system _default"
-msgstr ""
+msgstr "Použiť systémové _nastavenia"
 
 #: ../data/glade/preferences_window.glade.h:82
-#, fuzzy
 msgid "Use t_rayicon (aka. notification area icon)"
-msgstr "_Ikonka v paneli (tj. v upozorňovacej oblasti)"
+msgstr "_Ikonka v oblasti systémových upozornení"
 
 #: ../data/glade/preferences_window.glade.h:83
 msgid ""
@@ -1732,33 +1727,28 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:86
-#, fuzzy
 msgid "_Advanced Notifications Control..."
-msgstr "Rozšírený editor na editovanie konfigurácie"
+msgstr "_Rozšírené nastavenie upozornení"
 
 #: ../data/glade/preferences_window.glade.h:87
-#, fuzzy
 msgid "_After time:"
-msgstr "Po čase:"
+msgstr "_Po čase:"
 
 #: ../data/glade/preferences_window.glade.h:88
-#, fuzzy
 msgid "_Before time:"
-msgstr "Pred časom:"
+msgstr "_Pred časom:"
 
 #: ../data/glade/preferences_window.glade.h:89
 msgid "_Browser:"
 msgstr "_Prechádzať:"
 
 #: ../data/glade/preferences_window.glade.h:90
-#, fuzzy
 msgid "_File manager:"
-msgstr "Správca súborov:"
+msgstr "_Správca súborov:"
 
 #: ../data/glade/preferences_window.glade.h:91
-#, fuzzy
 msgid "_Font:"
-msgstr "Font:"
+msgstr "_Písmo:"
 
 #: ../data/glade/preferences_window.glade.h:92
 msgid "_Highlight misspelled words"
@@ -1769,9 +1759,8 @@ msgid "_Ignore events from contacts not in the roster"
 msgstr "_Ignorovať udalosti od kontaktov, ktorí nie sú v zozname"
 
 #: ../data/glade/preferences_window.glade.h:94
-#, fuzzy
 msgid "_Incoming message:"
-msgstr "Prichádzajúca správa:"
+msgstr "_Prichádzajúca správa:"
 
 #: ../data/glade/preferences_window.glade.h:95
 msgid "_Log status changes of contacts"
@@ -1790,14 +1779,12 @@ msgid "_Notify me about it"
 msgstr "_Upozorni ma na to"
 
 #: ../data/glade/preferences_window.glade.h:99
-#, fuzzy
 msgid "_Open..."
-msgstr "Otvoriť..."
+msgstr "_Otvoriť..."
 
 #: ../data/glade/preferences_window.glade.h:100
-#, fuzzy
 msgid "_Outgoing message:"
-msgstr "Odchádzajúca správa:"
+msgstr "_Odchádzajúca správa:"
 
 #: ../data/glade/preferences_window.glade.h:101
 msgid "_Player:"
@@ -1808,88 +1795,76 @@ msgid "_Pop it up"
 msgstr "_Popup"
 
 #: ../data/glade/preferences_window.glade.h:103
-#, fuzzy
 msgid "_Reset to Default Colors"
-msgstr "Návrat Pôvodného nastavenia farieb"
+msgstr "Návrat k Pôvodnému nastaveniu farieb"
 
 #: ../data/glade/preferences_window.glade.h:104
-#, fuzzy
 msgid "_Sort contacts by status"
-msgstr "Zotriediť kontakty podľa stavu"
+msgstr "_Zotriediť kontakty podľa stavu"
 
 #: ../data/glade/preferences_window.glade.h:105
-#, fuzzy
 msgid "_Status message:"
-msgstr "Správa o stave:"
+msgstr "_Správa o stave:"
 
 #: ../data/glade/preferences_window.glade.h:106
-#, fuzzy
 msgid "_URL:"
-msgstr "URL:"
+msgstr "_URL:"
 
 #: ../data/glade/preferences_window.glade.h:107
 msgid "minutes"
 msgstr "minuty"
 
 #: ../data/glade/privacy_lists_window.glade.h:1
-#, fuzzy
 msgid "Privacy Lists:"
-msgstr "Súkromné rozhovory"
+msgstr "Súkromné zoznamy:"
 
 #: ../data/glade/privacy_list_window.glade.h:1
 msgid "<b>Add / Edit a rule</b>"
-msgstr ""
+msgstr "<b>Pridať / zmeniť pravidlo</b>"
 
 #: ../data/glade/privacy_list_window.glade.h:2
-#, fuzzy
 msgid "<b>List of rules</b>"
-msgstr "<b>Formát riadku rozhovoru</b>"
+msgstr "<b>Zoznam pravidiel</b>"
 
 #: ../data/glade/privacy_list_window.glade.h:3
 msgid "<i>Privacy List</i>"
-msgstr ""
+msgstr "<i>Súkromný zoznam</i>"
 
 #: ../data/glade/privacy_list_window.glade.h:4
 msgid "Active for this session"
-msgstr ""
+msgstr "Aktívne pre toto sedenie"
 
 #: ../data/glade/privacy_list_window.glade.h:5
-#, fuzzy
 msgid "Active on each startup"
-msgstr "_Pripojiť Gajim pri štarte"
+msgstr "Aktivovať pri každom spustení"
 
 #: ../data/glade/privacy_list_window.glade.h:6
 msgid "All"
-msgstr ""
+msgstr "Všetko"
 
 #: ../data/glade/privacy_list_window.glade.h:7
 msgid "Allow"
-msgstr ""
+msgstr "Povoliť"
 
 #: ../data/glade/privacy_list_window.glade.h:9
-#, fuzzy
 msgid "JabberID"
-msgstr "Jabber ID:"
+msgstr "JabberID"
 
 #: ../data/glade/privacy_list_window.glade.h:10
-#, fuzzy
 msgid "Order:"
-msgstr "Server:"
+msgstr "Poradie:"
 
 #: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1841
-#, fuzzy
 msgid "Privacy List"
-msgstr "Čierna listina"
+msgstr "Súkromný zoznam"
 
 #: ../data/glade/privacy_list_window.glade.h:12
-#, fuzzy
 msgid "all by subscription"
-msgstr "_Požiadavky"
+msgstr "všetko podľa prihlásenia"
 
 #: ../data/glade/privacy_list_window.glade.h:13
-#, fuzzy
 msgid "all in the group"
-msgstr "V skupine"
+msgstr "všetko v skupine"
 
 #: ../data/glade/privacy_list_window.glade.h:14
 msgid ""
@@ -1898,25 +1873,26 @@ msgid ""
 "from\n"
 "to"
 msgstr ""
+"nič\n"
+"oba\n"
+"od\n"
+"k"
 
 #: ../data/glade/privacy_list_window.glade.h:18
-#, fuzzy
 msgid "to send me messages"
-msgstr "Poslať správu"
+msgstr "poslať mi správu"
 
 #: ../data/glade/privacy_list_window.glade.h:19
 msgid "to send me queries"
-msgstr ""
+msgstr "odosielať požiadavku"
 
 #: ../data/glade/privacy_list_window.glade.h:20
-#, fuzzy
 msgid "to send me status"
-msgstr "Požiadať jeho/ju o súhlas pre zobrazenie stavu"
+msgstr "poslať mi stav"
 
 #: ../data/glade/privacy_list_window.glade.h:21
-#, fuzzy
 msgid "to view my status"
-msgstr "Povoliť jemu/jej vidieť môj stav"
+msgstr "vidieť môj stav"
 
 #. "About" is the text of a tab of vcard window
 #: ../data/glade/profile_window.glade.h:2
@@ -1930,9 +1906,8 @@ msgid "Address"
 msgstr "Adresa"
 
 #: ../data/glade/profile_window.glade.h:4
-#, fuzzy
 msgid "Avatar:"
-msgstr "Nastaviť _avatara"
+msgstr "Avatar:"
 
 #: ../data/glade/profile_window.glade.h:5
 #: ../data/glade/vcard_information_window.glade.h:6
@@ -1950,119 +1925,118 @@ msgid "Company:"
 msgstr "Spoločnosť:"
 
 #: ../data/glade/profile_window.glade.h:8
-#: ../data/glade/vcard_information_window.glade.h:12
+#: ../data/glade/vcard_information_window.glade.h:13
 msgid "Country:"
 msgstr "Krajina:"
 
 #: ../data/glade/profile_window.glade.h:9
-#: ../data/glade/vcard_information_window.glade.h:13
+#: ../data/glade/vcard_information_window.glade.h:14
 msgid "Department:"
 msgstr "Oddelenie:"
 
 #: ../data/glade/profile_window.glade.h:10
-#: ../data/glade/vcard_information_window.glade.h:14
+#: ../data/glade/vcard_information_window.glade.h:15
 #: ../data/glade/zeroconf_information_window.glade.h:2
 #: ../data/glade/zeroconf_properties_window.glade.h:5
 msgid "E-Mail:"
 msgstr "E-Mail:"
 
 #: ../data/glade/profile_window.glade.h:11
-#: ../data/glade/vcard_information_window.glade.h:15
+#: ../data/glade/vcard_information_window.glade.h:16
 msgid "Extra Address:"
 msgstr "Extra adresa:"
 
 #. Family Name
 #: ../data/glade/profile_window.glade.h:13
-#: ../data/glade/vcard_information_window.glade.h:17
+#: ../data/glade/vcard_information_window.glade.h:18
 msgid "Family:"
 msgstr "Priezvisko:"
 
 #. Do NOT change sequence. Just translate YYYY and MM and DD (from Year, Month, Day accordingly)
 #: ../data/glade/profile_window.glade.h:15
-#: ../data/glade/vcard_information_window.glade.h:19
+#: ../data/glade/vcard_information_window.glade.h:20
 msgid "Format: YYYY-MM-DD"
 msgstr "Formát: YYYY-MM-DD"
 
 #. Given Name
 #: ../data/glade/profile_window.glade.h:17
-#: ../data/glade/vcard_information_window.glade.h:21
+#: ../data/glade/vcard_information_window.glade.h:22
 msgid "Given:"
 msgstr "Meno:"
 
 #: ../data/glade/profile_window.glade.h:18
-#: ../data/glade/vcard_information_window.glade.h:22
+#: ../data/glade/vcard_information_window.glade.h:23
 msgid "Homepage:"
 msgstr "Domovská stránka:"
 
 #. Middle Name
 #: ../data/glade/profile_window.glade.h:20
-#: ../data/glade/vcard_information_window.glade.h:25
+#: ../data/glade/vcard_information_window.glade.h:26
 msgid "Middle:"
 msgstr "Prostredné meno:"
 
 #: ../data/glade/profile_window.glade.h:21
-#: ../data/glade/vcard_information_window.glade.h:26
+#: ../data/glade/vcard_information_window.glade.h:27
 msgid "More"
 msgstr "Viac"
 
 #: ../data/glade/profile_window.glade.h:24
-#: ../data/glade/vcard_information_window.glade.h:30
-#, fuzzy
+#: ../data/glade/vcard_information_window.glade.h:31
 msgid "Personal Info"
 msgstr "Osobné informácie"
 
-#: ../data/glade/profile_window.glade.h:25
-#: ../data/glade/vcard_information_window.glade.h:31
+#: ../data/glade/profile_window.glade.h:26
+#: ../data/glade/vcard_information_window.glade.h:32
 msgid "Phone No.:"
 msgstr "Telefónne č.:"
 
-#: ../data/glade/profile_window.glade.h:26
-#: ../data/glade/vcard_information_window.glade.h:32
+#: ../data/glade/profile_window.glade.h:27
+#: ../data/glade/vcard_information_window.glade.h:33
 msgid "Position:"
 msgstr "Pozícia:"
 
-#: ../data/glade/profile_window.glade.h:27
-#: ../data/glade/vcard_information_window.glade.h:33
+#: ../data/glade/profile_window.glade.h:28
+#: ../data/glade/vcard_information_window.glade.h:34
 msgid "Postal Code:"
 msgstr "PSČ:"
 
 #. Prefix in Name
-#: ../data/glade/profile_window.glade.h:29
-#: ../data/glade/vcard_information_window.glade.h:35
+#: ../data/glade/profile_window.glade.h:30
+#: ../data/glade/vcard_information_window.glade.h:36
 msgid "Prefix:"
 msgstr "Prefix:"
 
-#: ../data/glade/profile_window.glade.h:30
-#: ../data/glade/vcard_information_window.glade.h:37 ../src/vcard.py:273
+#: ../data/glade/profile_window.glade.h:31
+#: ../data/glade/vcard_information_window.glade.h:38 ../src/vcard.py:273
 msgid "Role:"
 msgstr "Rola:"
 
-#: ../data/glade/profile_window.glade.h:31
-#: ../data/glade/vcard_information_window.glade.h:38
+#: ../data/glade/profile_window.glade.h:32
+#: ../data/glade/vcard_information_window.glade.h:39
 msgid "State:"
 msgstr "Stav:"
 
-#: ../data/glade/profile_window.glade.h:32
-#: ../data/glade/vcard_information_window.glade.h:40
+#: ../data/glade/profile_window.glade.h:33
+#: ../data/glade/vcard_information_window.glade.h:41
 msgid "Street:"
 msgstr "Ulica:"
 
 #. Suffix in Name
-#: ../data/glade/profile_window.glade.h:34
-#: ../data/glade/vcard_information_window.glade.h:44
+#: ../data/glade/profile_window.glade.h:35
+#: ../data/glade/vcard_information_window.glade.h:45
 msgid "Suffix:"
 msgstr "Titul za:"
 
-#: ../data/glade/profile_window.glade.h:35
-#: ../data/glade/vcard_information_window.glade.h:45
+#: ../data/glade/profile_window.glade.h:36
+#: ../data/glade/vcard_information_window.glade.h:46
 msgid "Work"
 msgstr "Práca"
 
-#: ../data/glade/profile_window.glade.h:36
+#: ../data/glade/profile_window.glade.h:37
 msgid "_Publish"
 msgstr "_Zverejniť"
 
-#: ../data/glade/profile_window.glade.h:37
+#: ../data/glade/profile_window.glade.h:38
 msgid "_Retrieve"
 msgstr "_Získať"
 
@@ -2079,9 +2053,8 @@ msgid "Remove account from Gajim and from _server"
 msgstr "Odstrániť účet z Gajima a zo _serveru"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:1
-#, fuzzy
 msgid "A_sk to see his/her status"
-msgstr "Požiadať jeho/ju o súhlas pre zobrazenie stavu"
+msgstr "P_ožiadať jeho/ju o súhlas k zobrazeniu stavu"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:2
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:1
@@ -2095,19 +2068,19 @@ msgstr "Prideliť Open_PGP kľúč"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:4
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:3
-#: ../src/roster_window.py:1996
+#: ../src/roster_window.py:1993
 msgid "Edit _Groups"
 msgstr "Upraviť _Skupiny"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:5
-#: ../src/roster_window.py:2131
+#: ../src/roster_window.py:2128
 msgid "Execute Command..."
 msgstr ""
 
 #: ../data/glade/roster_contact_context_menu.glade.h:6
-#: ../src/roster_window.py:1954
+#: ../src/roster_window.py:1951
 msgid "In_vite to"
-msgstr ""
+msgstr "Poz_vať do"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:7
 #: ../data/glade/systray_context_menu.glade.h:2
@@ -2120,25 +2093,23 @@ msgid "Start _Chat"
 msgstr "Začať _rozhovor"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:11
-#, fuzzy
 msgid "_Allow him/her to see my status"
-msgstr "Povoliť jemu/jej vidieť môj stav"
+msgstr "_Povoliť jemu/jej vidieť môj stav"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:12
-#, fuzzy
 msgid "_Forbid him/her to see my status"
-msgstr "Odmietnuť zobraziť stav"
+msgstr "_Odmietnuť zobrazenie stavu"
 
 #. Remove group
 #: ../data/glade/roster_contact_context_menu.glade.h:14
-#: ../src/roster_window.py:1948 ../src/roster_window.py:2045
-#: ../src/roster_window.py:2152
+#: ../src/roster_window.py:1945 ../src/roster_window.py:2042
+#: ../src/roster_window.py:2149
 msgid "_Remove from Roster"
 msgstr "_Odstrániť zo zoznamu"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:15
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:7
-#: ../src/roster_window.py:2140
+#: ../src/roster_window.py:2137
 msgid "_Rename"
 msgstr "_Premenovať"
 
@@ -2167,14 +2138,12 @@ msgid "Help online"
 msgstr "Online pomoc"
 
 #: ../data/glade/roster_window.glade.h:7
-#, fuzzy
 msgid "Profile, A_vatar"
-msgstr "Profil, Avatar"
+msgstr "Profil, A_vatar"
 
 #: ../data/glade/roster_window.glade.h:8
-#, fuzzy
 msgid "Show Trans_ports"
-msgstr "Transporty"
+msgstr "Zobraziť transporty"
 
 #: ../data/glade/roster_window.glade.h:9
 msgid "Show _Offline Contacts"
@@ -2188,8 +2157,8 @@ msgstr "_Obsah dokumentácie"
 msgid "_Discover Services"
 msgstr "_Preskúmať služby"
 
-#: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1255
-#: ../src/roster_window.py:2123
+#: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1256
+#: ../src/roster_window.py:2120
 msgid "_Edit"
 msgstr "_Upraviť"
 
@@ -2210,9 +2179,8 @@ msgid "_Quit"
 msgstr "_Koniec"
 
 #: ../data/glade/roster_window.glade.h:21
-#, fuzzy
 msgid "_View"
-msgstr "_Hlas"
+msgstr "_Zobrazenie"
 
 #: ../data/glade/service_discovery_window.glade.h:1
 msgid "G_o"
@@ -2334,36 +2302,39 @@ msgstr "Komentár: %s"
 
 #: ../data/glade/vcard_information_window.glade.h:11
 #: ../data/glade/zeroconf_information_window.glade.h:1
-#, fuzzy
 msgid "Contact"
-msgstr "_Obsah dokumentácie"
+msgstr "Kontakt"
 
-#: ../data/glade/vcard_information_window.glade.h:23
+#: ../data/glade/vcard_information_window.glade.h:12
+msgid "Contact Information"
+msgstr "Kontaktné informácie"
+
+#: ../data/glade/vcard_information_window.glade.h:24
 #: ../data/glade/zeroconf_information_window.glade.h:4
 #: ../data/glade/zeroconf_properties_window.glade.h:13 ../src/dialogs.py:416
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
-#: ../data/glade/vcard_information_window.glade.h:29
+#: ../data/glade/vcard_information_window.glade.h:30
 msgid "OS:"
 msgstr "Operačný systém:"
 
-#: ../data/glade/vcard_information_window.glade.h:36
+#: ../data/glade/vcard_information_window.glade.h:37
 #: ../data/glade/zeroconf_information_window.glade.h:8
 msgid "Resource:"
 msgstr "Zdroj:"
 
-#: ../data/glade/vcard_information_window.glade.h:39
+#: ../data/glade/vcard_information_window.glade.h:40
 #: ../data/glade/zeroconf_information_window.glade.h:9
 msgid "Status:"
 msgstr "Stav:"
 
 #. Family Name
-#: ../data/glade/vcard_information_window.glade.h:42
+#: ../data/glade/vcard_information_window.glade.h:43
 msgid "Subscription:"
 msgstr "Zápis:"
 
-#: ../data/glade/vcard_information_window.glade.h:46
+#: ../data/glade/vcard_information_window.glade.h:47
 #: ../data/glade/zeroconf_information_window.glade.h:10
 msgid "_Log conversation history"
 msgstr "História _konverzácie"
@@ -2401,24 +2372,21 @@ msgstr "_Prítomnosť"
 
 #: ../data/glade/zeroconf_information_window.glade.h:3
 #: ../data/glade/zeroconf_properties_window.glade.h:6
-#, fuzzy
 msgid "First Name:"
-msgstr "Meno:"
+msgstr "Prvé meno:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:5
 #: ../data/glade/zeroconf_properties_window.glade.h:14
-#, fuzzy
 msgid "Last Name:"
-msgstr "Meno:"
+msgstr "Posledné meno:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:6
 msgid "Local jid:"
-msgstr ""
+msgstr "Lokálny jid:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:7
-#, fuzzy
 msgid "Personal"
-msgstr "Osobné detaily"
+msgstr "Osobné"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:11
 msgid ""
@@ -2426,16 +2394,17 @@ msgid ""
 "setup you can select another one here.\n"
 "You might consider to change possible firewall settings."
 msgstr ""
+"Ak vám nevyhovuje predvolený port na príjem správ, tu si môžete zvoliť "
+"vlastný.\n"
+"Zoberte v úvahu aj prípadné nastavenie firewallu."
 
 #: ../data/glade/zeroconf_properties_window.glade.h:15
-#, fuzzy
 msgid "Modify Account"
-msgstr "_Upraviť účet..."
+msgstr "Upraviť účet"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:21
-#, fuzzy
 msgid "Use custom port:"
-msgstr "Použiť vlastné nastavenie server/port"
+msgstr "Použiť port:"
 
 #: ../src/advanced.py:57
 msgid "Preference Name"
@@ -2466,96 +2435,91 @@ msgstr "Skryté"
 #. echo "{_('en'):'en'",$LANG"}"
 #: ../src/chat_control.py:52
 msgid "English"
-msgstr ""
+msgstr "Anglicky"
 
 #: ../src/chat_control.py:52
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulharsky"
 
 #: ../src/chat_control.py:52
 msgid "Briton"
-msgstr ""
+msgstr "Briton"
 
 #: ../src/chat_control.py:52
 msgid "Czech"
-msgstr ""
+msgstr "Česky"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "German"
-msgstr "Všeobecné"
+msgstr "German"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Greek"
-msgstr "zelená"
+msgstr "Greek"
 
 #: ../src/chat_control.py:52
 msgid "Esperanto"
-msgstr ""
+msgstr "Esperanto"
 
 #: ../src/chat_control.py:52
 msgid "Spanish"
-msgstr ""
+msgstr "Španiesky"
 
 #: ../src/chat_control.py:52
 msgid "Basc"
-msgstr ""
+msgstr "Basc"
 
 #: ../src/chat_control.py:52
 msgid "French"
-msgstr ""
+msgstr "Francúzsky"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Croatian"
-msgstr "Miesto"
+msgstr "Croatian"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Italian"
-msgstr "Kurzíva"
+msgstr "Italian"
 
 #: ../src/chat_control.py:52
 msgid "Norvegian b"
-msgstr ""
+msgstr "Norvegian b"
 
 #: ../src/chat_control.py:52
 msgid "Dutch"
-msgstr ""
+msgstr "Dutch"
 
 #: ../src/chat_control.py:52
 msgid "Norvegian"
-msgstr ""
+msgstr "Norvegian"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Polish"
-msgstr "_Zverejniť"
+msgstr "Polish"
 
 #: ../src/chat_control.py:52
 msgid "Portuguese"
-msgstr ""
+msgstr "Portuguese"
 
 #: ../src/chat_control.py:52
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Brazilian Portuguese"
 
 #: ../src/chat_control.py:52
 msgid "Russian"
-msgstr ""
+msgstr "Rusky"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
-msgstr ""
+msgstr "Slovensky"
 
 #: ../src/chat_control.py:52
 msgid "Swedish"
-msgstr ""
+msgstr "Swedish"
 
 #: ../src/chat_control.py:52
 msgid "Chinese (Ch)"
-msgstr ""
+msgstr "Chinese (Ch)"
 
 #: ../src/chat_control.py:201 ../src/dialogs.py:1497
 msgid ""
@@ -2576,7 +2540,7 @@ msgstr ""
 
 #: ../src/chat_control.py:239
 msgid "Spelling language"
-msgstr ""
+msgstr "Jazyk používaný pri kontrole pravopisu"
 
 #. we are not connected
 #: ../src/chat_control.py:262 ../src/chat_control.py:468
@@ -2594,7 +2558,7 @@ msgstr "Rozhovory"
 #: ../src/chat_control.py:1030
 #, fuzzy, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
-msgstr "%(who)s o %(time)s povedal(a): %(message)s\n"
+msgstr "%(nickname)s z miestnosti %(room_name)s"
 
 #. we talk about a contact here
 #: ../src/chat_control.py:1118
@@ -2612,12 +2576,12 @@ msgstr "Šifrovanie vypnuté"
 
 #. add_to_roster_menuitem
 #: ../src/chat_control.py:1401 ../src/conversation_textview.py:495
-#: ../src/dialogs.py:629 ../src/gajim.py:733 ../src/gajim.py:734
-#: ../src/gajim.py:1073 ../src/roster_window.py:328
-#: ../src/roster_window.py:404 ../src/roster_window.py:1642
-#: ../src/roster_window.py:1823 ../src/roster_window.py:2399
-#: ../src/roster_window.py:2598 ../src/roster_window.py:2609
-#: ../src/roster_window.py:3831 ../src/roster_window.py:3833
+#: ../src/dialogs.py:629 ../src/gajim.py:781 ../src/gajim.py:782
+#: ../src/gajim.py:1121 ../src/roster_window.py:328
+#: ../src/roster_window.py:404 ../src/roster_window.py:1638
+#: ../src/roster_window.py:1819 ../src/roster_window.py:2392
+#: ../src/roster_window.py:2596 ../src/roster_window.py:2607
+#: ../src/roster_window.py:3832 ../src/roster_window.py:3834
 #: ../src/common/contacts.py:73 ../src/common/helpers.py:42
 #: ../src/common/helpers.py:246
 msgid "Not in Roster"
@@ -2653,259 +2617,261 @@ msgstr "Aktívne"
 msgid "Event"
 msgstr "Udalosť"
 
-#: ../src/config.py:684 ../src/gajim.py:2094
-#, fuzzy, python-format
+#: ../src/config.py:685 ../src/gajim.py:2142
+#, python-format
 msgid "Dictionary for lang %s not available"
-msgstr "Pripojenie nie je dostupné"
+msgstr "Slovník pre jazyk %s nie je k dispozícii"
 
-#: ../src/config.py:685 ../src/gajim.py:2095
+#: ../src/config.py:686 ../src/gajim.py:2143
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
 "language by setting the speller_language option."
 msgstr ""
+"Potrebujete nainštalovať %s slovník, aby bolo možné prevádzať kontrolu "
+"pravopisu, prípadne si môžete zvoliť iný jazyk na kontrolu pravopisu "
+"nastavením premennej setting the speller_language."
 
-#: ../src/config.py:1037
+#: ../src/config.py:1038
 msgid "status message title"
 msgstr "titulok správy o stave"
 
-#: ../src/config.py:1037
+#: ../src/config.py:1038
 msgid "status message text"
 msgstr "text správy o stave"
 
-#: ../src/config.py:1072
+#: ../src/config.py:1073
 msgid "First Message Received"
 msgstr "Prvá prijatá správa"
 
-#: ../src/config.py:1073
+#: ../src/config.py:1074
 msgid "Next Message Received"
 msgstr "Ďalšia prijatá správa správa"
 
-#: ../src/config.py:1074
+#: ../src/config.py:1075
 msgid "Contact Connected"
 msgstr "Kotakt pripojený"
 
-#: ../src/config.py:1075
+#: ../src/config.py:1076
 msgid "Contact Disconnected"
 msgstr "Kontakt odpojený"
 
-#: ../src/config.py:1076
+#: ../src/config.py:1077
 msgid "Message Sent"
 msgstr "Správa odoslaná"
 
-#: ../src/config.py:1077
-msgid "Group Chat Message Highlight"
-msgstr "Zvýraznenie správy v skupinovej diskusii"
-
 #: ../src/config.py:1078
-msgid "Group Chat Message Received"
-msgstr "Prijatá správa v skupinovej diskusii"
+msgid "Group Chat Message Highlight"
+msgstr "Zvýraznenie správ v diskusnej skupine"
 
-#: ../src/config.py:1085
+#: ../src/config.py:1079
+msgid "Group Chat Message Received"
+msgstr "Prijatá správa - diskusná skupina"
+
+#: ../src/config.py:1086
 #, fuzzy
 msgid "GMail Email Received"
 msgstr "Prijaté pozvanie"
 
-#: ../src/config.py:1288
+#: ../src/config.py:1289
 msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP nie je použiteľné na tomto počítači"
 
-#: ../src/config.py:1334
+#: ../src/config.py:1335
 msgid "You are currently connected to the server"
 msgstr "Ste pripojený(á) na server"
 
-#: ../src/config.py:1335
+#: ../src/config.py:1336
 msgid "To change the account name, you must be disconnected."
 msgstr "Pre zmenu názvu účtu, musíte byť odpojený."
 
-#: ../src/config.py:1338 ../src/config.py:1930
+#: ../src/config.py:1339 ../src/config.py:1931
 msgid "Unread events"
-msgstr ""
+msgstr "Neprečítané udalosti"
 
-#: ../src/config.py:1339
-#, fuzzy
+#: ../src/config.py:1340
 msgid "To change the account name, you must read all pending events."
-msgstr "Pre zmenu názvu účtu, musíte byť odpojený."
-
-#: ../src/config.py:1343
-#, fuzzy
-msgid "Account Name Already Used"
-msgstr "Názov účtu je už používané"
+msgstr "Pre zmenu názvu účtu, musíte mať prečítané všetky čakajúce správy."
 
 #: ../src/config.py:1344
+msgid "Account Name Already Used"
+msgstr "Názov účtu je už používaný"
+
+#: ../src/config.py:1345
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr ""
+"Toto meno je už použité jednom z vašich účtom. Prosím, zvoľte si iné meno."
 
-#: ../src/config.py:1348 ../src/config.py:1352
+#: ../src/config.py:1349 ../src/config.py:1353
 msgid "Invalid account name"
 msgstr "Nesprávny názov účtu"
 
-#: ../src/config.py:1349
+#: ../src/config.py:1350
 msgid "Account name cannot be empty."
 msgstr "Názov účtu nemôže byť prázdny."
 
-#: ../src/config.py:1353
+#: ../src/config.py:1354
 msgid "Account name cannot contain spaces."
 msgstr "Názov účtu nemôže obsahovať medzery."
 
-#: ../src/config.py:1361 ../src/config.py:1367 ../src/config.py:1377
-#: ../src/config.py:3035
+#: ../src/config.py:1362 ../src/config.py:1368 ../src/config.py:1378
+#: ../src/config.py:3036
 msgid "Invalid Jabber ID"
 msgstr "Nespravné Jabber ID"
 
-#: ../src/config.py:1368
+#: ../src/config.py:1369
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabbe ID musí byť v tvare \"používateľ@menoserveru\""
 
-#: ../src/config.py:1427
+#: ../src/config.py:1428
 msgid "Invalid entry"
 msgstr "Nesprávny záznam"
 
-#: ../src/config.py:1428
+#: ../src/config.py:1429
 msgid "Custom port must be a port number."
 msgstr "Port musí byť číslo."
 
-#: ../src/config.py:1554 ../src/common/config.py:363
+#: ../src/config.py:1555 ../src/common/config.py:363
 msgid "Be right back."
 msgstr "Za chvíľu som späť."
 
-#: ../src/config.py:1564
+#: ../src/config.py:1565
 msgid "Relogin now?"
 msgstr "Prihlásiť znovu?"
 
-#: ../src/config.py:1565
+#: ../src/config.py:1566
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr ""
 "Ak chcete, aby boli všetky zmeny naraz aplikované, musíte sa znovu prihlásiť."
 
-#: ../src/config.py:1591
+#: ../src/config.py:1592
 msgid "No such account available"
 msgstr "Taký účet nie je k dispozícii"
 
-#: ../src/config.py:1592
+#: ../src/config.py:1593
 msgid "You must create your account before editing your personal information."
 msgstr "Musíte si vytvoriť účet, aby ste mohli meniť osobné informácie."
 
-#: ../src/config.py:1599 ../src/dialogs.py:1128 ../src/dialogs.py:1297
+#: ../src/config.py:1600 ../src/dialogs.py:1128 ../src/dialogs.py:1297
 #: ../src/disco.py:417 ../src/profile_window.py:307
 #: ../src/profile_window.py:373
 msgid "You are not connected to the server"
 msgstr "Nie ste pripojený na server"
 
-#: ../src/config.py:1600
+#: ../src/config.py:1601
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Bez pripojenia nemôžete meniť osobné informácie."
 
-#: ../src/config.py:1604
-msgid "Your server doesn't support Vcard"
-msgstr ""
-
 #: ../src/config.py:1605
-#, fuzzy
-msgid "Your server can't save your personal information."
-msgstr "Musíte si vytvoriť účet, aby ste mohli meniť osobné informácie."
+msgid "Your server doesn't support Vcard"
+msgstr "Server nepodporuje Vcard"
 
-#: ../src/config.py:1629 ../src/config.py:3422
+#: ../src/config.py:1606
+msgid "Your server can't save your personal information."
+msgstr "Váš server neumožňuje uloženie vašich osobných informácií."
+
+#: ../src/config.py:1630 ../src/config.py:3423
 msgid "Failed to get secret keys"
 msgstr "Nepodarilo sa získať tajné kľúče"
 
-#: ../src/config.py:1630 ../src/config.py:3423
+#: ../src/config.py:1631 ../src/config.py:3424
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Vznikol problém pri získavaní vášho OpenPGP tajného kľúča."
 
-#: ../src/config.py:1633 ../src/config.py:3426
+#: ../src/config.py:1634 ../src/config.py:3427
 msgid "OpenPGP Key Selection"
 msgstr "Výber OpenPGP kľúča"
 
-#: ../src/config.py:1634 ../src/config.py:3427
+#: ../src/config.py:1635 ../src/config.py:3428
 msgid "Choose your OpenPGP key"
 msgstr "Vyberte váš OpenPGP kľúč"
 
 #. Name column
-#: ../src/config.py:1864 ../src/disco.py:740 ../src/disco.py:1466
-#: ../src/disco.py:1704 ../src/history_window.py:78
+#: ../src/config.py:1865 ../src/disco.py:741 ../src/disco.py:1467
+#: ../src/disco.py:1705 ../src/history_window.py:78
 msgid "Name"
 msgstr "Meno"
 
-#: ../src/config.py:1867
+#: ../src/config.py:1868
 msgid "Server"
 msgstr "Server"
 
-#: ../src/config.py:1931
+#: ../src/config.py:1932
 msgid "Read all pending events before removing this account."
-msgstr ""
-
-#: ../src/config.py:1968
-#, fuzzy, python-format
-msgid "You have opened chat in account %s"
-msgstr "Nemáte žiadny aktívny účet"
+msgstr "Prečítať všetky správy pred odstránením tohoto účtu."
 
 #: ../src/config.py:1969
+#, python-format
+msgid "You have opened chat in account %s"
+msgstr "Máte otvorenú diskusiu pod účtom %s"
+
+#: ../src/config.py:1970
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr ""
-
-#: ../src/config.py:2028
-#, fuzzy
-msgid "Account Local already exists."
-msgstr "Názov účtu je už používané"
+"Všetky okná s diskusiami a diskusnými skupinami budú zatvorené. Prajete si "
+"pokračovať?"
 
 #: ../src/config.py:2029
-msgid "Please rename or remove it before enabling link-local messaging."
-msgstr ""
+msgid "Account Local already exists."
+msgstr "Účet Local už existuje."
 
-#: ../src/config.py:2261
+#: ../src/config.py:2030
+msgid "Please rename or remove it before enabling link-local messaging."
+msgstr "Prosím, premenujte alebo odstráňte to pred zapnutím link-local správ."
+
+#: ../src/config.py:2262
 #, python-format
 msgid "Edit %s"
 msgstr "Upraviť %s"
 
-#: ../src/config.py:2263
+#: ../src/config.py:2264
 #, python-format
 msgid "Register to %s"
 msgstr "Registrovať na %s"
 
 #. list at the begining
-#: ../src/config.py:2335
+#: ../src/config.py:2336
 msgid "Ban List"
 msgstr "Čierna listina"
 
-#: ../src/config.py:2336
+#: ../src/config.py:2337
 msgid "Member List"
 msgstr "Zoznam členov"
 
-#: ../src/config.py:2337
+#: ../src/config.py:2338
 msgid "Owner List"
 msgstr "Zoznam vlastníkov"
 
-#: ../src/config.py:2338
+#: ../src/config.py:2339
 msgid "Administrator List"
 msgstr "Zoznam správcov"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2371 ../src/disco.py:747 ../src/history_manager.py:154
+#: ../src/config.py:2372 ../src/disco.py:748 ../src/history_manager.py:154
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2379
+#: ../src/config.py:2380
 msgid "Reason"
 msgstr "Dôvod"
 
-#: ../src/config.py:2384
+#: ../src/config.py:2385
 msgid "Nick"
 msgstr "Prezývka"
 
-#: ../src/config.py:2388
+#: ../src/config.py:2389
 msgid "Role"
 msgstr "Rola"
 
-#: ../src/config.py:2409
+#: ../src/config.py:2410
 msgid "Banning..."
 msgstr "Zakazujem..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2411
+#: ../src/config.py:2412
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2913,11 +2879,11 @@ msgstr ""
 "<b>Koho chcete zakázať?</b>\n"
 "\n"
 
-#: ../src/config.py:2413
+#: ../src/config.py:2414
 msgid "Adding Member..."
 msgstr "Pridáva sa člen..."
 
-#: ../src/config.py:2414
+#: ../src/config.py:2415
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2925,11 +2891,11 @@ msgstr ""
 "<b>Koho chcete pridať k členom?</b>\n"
 "\n"
 
-#: ../src/config.py:2416
+#: ../src/config.py:2417
 msgid "Adding Owner..."
 msgstr "Pridáva sa vlastník..."
 
-#: ../src/config.py:2417
+#: ../src/config.py:2418
 msgid ""
 "<b>Whom do you want to make a owner?</b>\n"
 "\n"
@@ -2937,11 +2903,11 @@ msgstr ""
 "<b>Koho chcete určiť za vlastníka?</b>\n"
 "\n"
 
-#: ../src/config.py:2419
+#: ../src/config.py:2420
 msgid "Adding Administrator..."
 msgstr "Pridáva sa Administrátor..."
 
-#: ../src/config.py:2420
+#: ../src/config.py:2421
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2949,7 +2915,7 @@ msgstr ""
 "<b>koho chcete určiť za vlastníka?</b>\n"
 "\n"
 
-#: ../src/config.py:2421
+#: ../src/config.py:2422
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2965,102 +2931,99 @@ msgstr ""
 "4. doména (doména sama o sebe, ľubovoľný používateľ@doména,\n"
 "doména/zdroj, alebo adresa obsahujúca subdoménu."
 
-#: ../src/config.py:2526
+#: ../src/config.py:2527
 #, python-format
 msgid "Removing %s account"
 msgstr "Odstraňuje sa účet %s"
 
-#: ../src/config.py:2543 ../src/roster_window.py:2667
+#: ../src/config.py:2544 ../src/roster_window.py:2665
 msgid "Password Required"
 msgstr "Heslo je požadované"
 
-#: ../src/config.py:2544 ../src/roster_window.py:2668
+#: ../src/config.py:2545 ../src/roster_window.py:2666
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Vložte heslo pre váš účet %s"
 
-#: ../src/config.py:2545 ../src/roster_window.py:2669
+#: ../src/config.py:2546 ../src/roster_window.py:2667
 msgid "Save password"
 msgstr "Uložiť heslo"
 
-#: ../src/config.py:2559
+#: ../src/config.py:2560
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Účet \"%s\" je pripojený na server"
 
-#: ../src/config.py:2560
+#: ../src/config.py:2561
 msgid "If you remove it, the connection will be lost."
 msgstr "Ak dôjde k odstráneniu, stratíte spojenie."
 
-#: ../src/config.py:2644
+#: ../src/config.py:2645
 #, fuzzy
 msgid "Default"
 msgstr "Zmazať"
 
-#: ../src/config.py:2644
+#: ../src/config.py:2645
 #, fuzzy
 msgid "?print_status:All"
-msgstr "Čas tlače:"
+msgstr "Vypísať stav:"
 
-#: ../src/config.py:2645
+#: ../src/config.py:2646
 msgid "Enter and leave only"
-msgstr ""
+msgstr "Len vstúpiť a vystúpiť"
 
-#: ../src/config.py:2715
-#, fuzzy
+#: ../src/config.py:2716
 msgid "New Group Chat"
-msgstr "Skupinový rozhovor"
+msgstr "Nová diskusná skupina"
 
-#: ../src/config.py:2747
+#: ../src/config.py:2748
 msgid "This bookmark has invalid data"
 msgstr "Táto záložka obsahuje chybné údaje"
 
-#: ../src/config.py:2748
+#: ../src/config.py:2749
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Prosim, uistite sa, že je vyplnená položka server a miestnosť alebo "
 "odstráňte túto záložku."
 
-#: ../src/config.py:3010
+#: ../src/config.py:3011
 msgid "Invalid username"
 msgstr "Nesprávne meno používateľa"
 
-#: ../src/config.py:3011
+#: ../src/config.py:3012
 msgid "You must provide a username to configure this account."
 msgstr "Musíte vložiť meno používateľa pre konfuguráciu tohoto účtu."
 
-#: ../src/config.py:3021 ../src/dialogs.py:1316
+#: ../src/config.py:3022 ../src/dialogs.py:1316
 msgid "Invalid password"
 msgstr "Nesprávne heslo"
 
-#: ../src/config.py:3022
+#: ../src/config.py:3023
 msgid "You must enter a password for the new account."
 msgstr "Musíte vložiť heslo pre nový účet."
 
-#: ../src/config.py:3026 ../src/dialogs.py:1321
+#: ../src/config.py:3027 ../src/dialogs.py:1321
 msgid "Passwords do not match"
 msgstr "Heslá sa nezhodujú"
 
-#: ../src/config.py:3027 ../src/dialogs.py:1322
+#: ../src/config.py:3028 ../src/dialogs.py:1322
 msgid "The passwords typed in both fields must be identical."
 msgstr "Heslá vložené do oboch polí musia zhodovať."
 
-#: ../src/config.py:3046
-#, fuzzy
-msgid "Duplicate Jabber ID"
-msgstr "Nespravné Jabber ID"
-
 #: ../src/config.py:3047
-#, fuzzy
-msgid "This account is already configured in Gajim."
-msgstr "Tento kontakt je už uvedený v zozname."
+msgid "Duplicate Jabber ID"
+msgstr "Duplikované Jabber ID"
 
-#: ../src/config.py:3064
+#: ../src/config.py:3048
+msgid "This account is already configured in Gajim."
+msgstr "Tento účet už v Gajime nastavný."
+
+#: ../src/config.py:3065
 msgid "Account has been added successfully"
 msgstr "Účet bol úspešne pridaný"
 
-#: ../src/config.py:3065 ../src/config.py:3100
+#: ../src/config.py:3066 ../src/config.py:3101
 msgid ""
 "You can set advanced account options by pressing Advanced button, or later "
 "by clicking in Accounts menuitem under Edit menu from the main window."
@@ -3069,19 +3032,19 @@ msgstr ""
 "možnosti, alebo neskôr kliknutím na položku Účty v menu Upraviť, v hlavnom "
 "okne"
 
-#: ../src/config.py:3099
+#: ../src/config.py:3100
 msgid "Your new account has been created successfully"
 msgstr "Váš nový účet bol vytvorený úspešne"
 
-#: ../src/config.py:3117
+#: ../src/config.py:3118
 msgid "An error occured during account creation"
 msgstr "Nastala chyba pri vytváraní účtu"
 
-#: ../src/config.py:3175
+#: ../src/config.py:3176
 msgid "Account name is in use"
 msgstr "Názov účtu je už používané"
 
-#: ../src/config.py:3176
+#: ../src/config.py:3177
 msgid "You already have an account using this name."
 msgstr "Už máte účet s týmto názvom."
 
@@ -3090,13 +3053,13 @@ msgid ""
 "Text below this line is what has been said since the last time you paid "
 "attention to this group chat"
 msgstr ""
-"Text pod touto čiarou bol povedaný za dobu čo ste jej nevenovali pozornosť "
-"skupinovému rozhovoru"
+"Zatiaľ čo ste nevenovali pozornosť tejto diskusnej skupine, pribudol "
+"nasledujúci text"
 
 #: ../src/conversation_textview.py:342
-#, fuzzy, python-format
+#, python-format
 msgid "_Actions for \"%s\""
-msgstr "Akcie pre \"%s\""
+msgstr "_Akcie pre \"%s\""
 
 #: ../src/conversation_textview.py:354
 msgid "Read _Wikipedia Article"
@@ -3124,7 +3087,7 @@ msgstr "_Hľadať na webe"
 
 #: ../src/conversation_textview.py:397
 msgid "Open as _Link"
-msgstr ""
+msgstr "Otvoriť ako _odkaz"
 
 #: ../src/conversation_textview.py:757
 msgid "Yesterday"
@@ -3143,19 +3106,10 @@ msgstr "Pred %i dňami"
 msgid "Subject: %s\n"
 msgstr "Predmet: %s\n"
 
-#. form is single
-#: ../src/dataforms_widget.py:72
-msgid "This is result of query."
-msgstr ""
-
-#: ../src/dataforms_widget.py:78
-msgid "Edit items on the list"
-msgstr ""
-
 #: ../src/dialogs.py:59
-#, fuzzy, python-format
+#, python-format
 msgid "Contact name: <i>%s</i>"
-msgstr "Meno kontaktu: <i>%s</i>"
+msgstr "Kontaktné meno: <i>%s</i>"
 
 #: ../src/dialogs.py:61
 #, fuzzy, python-format
@@ -3196,27 +3150,24 @@ msgid "Please type a name for this status message"
 msgstr "Zadajte prosím názov pre túto stavovú správu"
 
 #: ../src/dialogs.py:417
-#, fuzzy
 msgid "AIM Address:"
-msgstr "_Adresa:"
+msgstr "_AIM adresa:"
 
 #: ../src/dialogs.py:418
 msgid "GG Number:"
-msgstr ""
+msgstr "GG číslo:"
 
 #: ../src/dialogs.py:419
 msgid "ICQ Number:"
-msgstr ""
+msgstr "ICQ číslo:"
 
 #: ../src/dialogs.py:420
-#, fuzzy
 msgid "MSN Address:"
-msgstr "_Adresa:"
+msgstr "_MSN adresa:"
 
 #: ../src/dialogs.py:421
-#, fuzzy
 msgid "Yahoo! Address:"
-msgstr "Extra adresa:"
+msgstr "Yahoo! adresa:"
 
 #: ../src/dialogs.py:457
 #, python-format
@@ -3226,15 +3177,6 @@ msgstr "Prosím vyplnte údaje o kontakte, ktorý chcete pridať do účtu %s"
 #: ../src/dialogs.py:459
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Prosím vyplnte údaje o kontakte, ktorý chcete pridať"
-
-#: ../src/dialogs.py:467 ../src/disco.py:102 ../src/disco.py:103
-#: ../src/disco.py:1252 ../src/gajim.py:491 ../src/roster_window.py:267
-#: ../src/roster_window.py:325 ../src/roster_window.py:364
-#: ../src/roster_window.py:445 ../src/roster_window.py:477
-#: ../src/roster_window.py:479 ../src/roster_window.py:3827
-#: ../src/roster_window.py:3829 ../src/common/helpers.py:42
-msgid "Transports"
-msgstr "Transporty"
 
 #: ../src/dialogs.py:609 ../src/dialogs.py:615
 msgid "Invalid User ID"
@@ -3253,7 +3195,6 @@ msgid "This contact is already listed in your roster."
 msgstr "Tento kontakt je už uvedený v zozname."
 
 #: ../src/dialogs.py:665
-#, fuzzy
 msgid "User ID:"
 msgstr "Používateľské ID:"
 
@@ -3263,16 +3204,15 @@ msgstr "GTK+ jabber klient"
 
 #: ../src/dialogs.py:729
 msgid "GTK+ Version:"
-msgstr ""
+msgstr "GTK+ verzia:"
 
 #: ../src/dialogs.py:730
 msgid "PyGTK Version:"
-msgstr ""
+msgstr "PyGTK verzia:"
 
 #: ../src/dialogs.py:744
-#, fuzzy
 msgid "Current Developers:"
-msgstr "Bývalí vývojári:"
+msgstr "Súčasní vývojári:"
 
 #: ../src/dialogs.py:746
 msgid "Past Developers:"
@@ -3297,15 +3237,16 @@ msgstr ""
 "Peter Trško (dogmat AT dogmat.us)"
 
 #: ../src/dialogs.py:906
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to bind to port %s."
-msgstr "Nie je možné vstúpiť do miestnosti"
+msgstr "Nie je možné pripojiť sa k portu %s."
 
 #: ../src/dialogs.py:907
 msgid ""
 "Maybe you have another running instance of Gajim. File Transfer will be "
 "canceled."
 msgstr ""
+"Pravdepodobne beží už druhý program Gajim. Prenos súborov bude zrušený."
 
 #: ../src/dialogs.py:1058
 #, python-format
@@ -3330,17 +3271,17 @@ msgstr ""
 #: ../src/dialogs.py:1144
 #, python-format
 msgid "Join Group Chat with account %s"
-msgstr "Pripojiť sa ku skupinovému rozhovoru s účtom %s"
+msgstr "Pripojiť sa k diskusnej skupine s účtom %s"
 
 #: ../src/dialogs.py:1212 ../src/dialogs.py:1218
 #, fuzzy
 msgid "Invalid group chat Jabber ID"
-msgstr "Nespravné Jabber ID"
+msgstr "Nesprávné Jabber ID miestnosti"
 
 #: ../src/dialogs.py:1213 ../src/dialogs.py:1219
 #, fuzzy
 msgid "The group chat Jabber ID has not allowed characters."
-msgstr "Názov miestnosti alebo meno servera obsahuje nepovolené znaky"
+msgstr "Názov miestnosti obsahuje nepovolené znaky"
 
 #: ../src/dialogs.py:1225
 msgid "This is not a group chat"
@@ -3349,7 +3290,7 @@ msgstr ""
 #: ../src/dialogs.py:1226
 #, fuzzy, python-format
 msgid "%s is not the name of a group chat."
-msgstr "Spýtať sa pred zatvorením okna/záložky pre skupinovú diskusiu."
+msgstr "Skrývanie titilku v okne s diskusnou skupinou."
 
 #: ../src/dialogs.py:1248
 #, python-format
@@ -3361,12 +3302,11 @@ msgid "Start Chat"
 msgstr "Začať rozhovor"
 
 #: ../src/dialogs.py:1251
-#, fuzzy
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
 msgstr ""
-"Vyplnte ID kontaktu, ktorému chcete\n"
+"Vyplňte prezývku alebo Jabber ID kontaktu, ktorému si želáte\n"
 "odoslať správu:"
 
 #. if offline or connecting
@@ -3380,14 +3320,13 @@ msgid "Please make sure you are connected with \"%s\"."
 msgstr "Prosím, uistite sa, že ste pripojený(á) k \"%s\"."
 
 #: ../src/dialogs.py:1286 ../src/dialogs.py:1289
-#, fuzzy
 msgid "Invalid JID"
-msgstr "Nespravné Jabber ID"
+msgstr "Nespravné JID"
 
 #: ../src/dialogs.py:1289
 #, python-format
 msgid "Unable to parse \"%s\"."
-msgstr ""
+msgstr "Nie je možné spracovať \"%s\"."
 
 #: ../src/dialogs.py:1298
 msgid "Without a connection, you can not change your password."
@@ -3422,47 +3361,45 @@ msgstr "Nová jednoduchá správa"
 msgid "New Private Message"
 msgstr "Nová privátna správa"
 
-#: ../src/dialogs.py:1369 ../src/gajim.py:1168 ../src/notify.py:424
+#: ../src/dialogs.py:1369 ../src/gajim.py:1216 ../src/notify.py:424
 msgid "New E-mail"
 msgstr "Nový E-mail"
 
-#: ../src/dialogs.py:1371 ../src/gajim.py:1321 ../src/notify.py:418
+#: ../src/dialogs.py:1371 ../src/gajim.py:1369 ../src/notify.py:418
 msgid "File Transfer Request"
 msgstr "Požiadavka na prenos súboru"
 
-#: ../src/dialogs.py:1373 ../src/gajim.py:1140 ../src/gajim.py:1297
+#: ../src/dialogs.py:1373 ../src/gajim.py:1188 ../src/gajim.py:1345
 #: ../src/notify.py:420
 msgid "File Transfer Error"
 msgstr "Chyba pri prenose súboru"
 
-#: ../src/dialogs.py:1375 ../src/gajim.py:1360 ../src/gajim.py:1382
-#: ../src/gajim.py:1399 ../src/notify.py:422
+#: ../src/dialogs.py:1375 ../src/gajim.py:1408 ../src/gajim.py:1430
+#: ../src/gajim.py:1447 ../src/notify.py:422
 msgid "File Transfer Completed"
 msgstr "Prenos súboru dokončený"
 
-#: ../src/dialogs.py:1376 ../src/gajim.py:1363 ../src/notify.py:422
+#: ../src/dialogs.py:1376 ../src/gajim.py:1411 ../src/notify.py:422
 msgid "File Transfer Stopped"
 msgstr "Prenos súboru zastavený"
 
-#: ../src/dialogs.py:1378 ../src/gajim.py:1038 ../src/notify.py:426
-#, fuzzy
+#: ../src/dialogs.py:1378 ../src/gajim.py:1086 ../src/notify.py:426
 msgid "Groupchat Invitation"
-msgstr "?Skupinová diskusia - rola: Nič"
+msgstr "Pozvánka do diskusnej skupiny"
 
 #: ../src/dialogs.py:1380 ../src/notify.py:203 ../src/notify.py:428
-#, fuzzy
 msgid "Contact Changed Status"
-msgstr "Kontakt sa odhlásil"
+msgstr "Kontakt zmenil stav"
 
 #: ../src/dialogs.py:1565
-#, fuzzy, python-format
+#, python-format
 msgid "Single Message using account %s"
-msgstr "Jednoduchá správa s účtom %s"
+msgstr "Jednoduchá správa s použitím účtu %s"
 
 #: ../src/dialogs.py:1567
-#, fuzzy, python-format
+#, python-format
 msgid "Single Message in account %s"
-msgstr "Jednoduchá správa s účtom %s"
+msgstr "Jednoduchá správa v účte %s"
 
 #: ../src/dialogs.py:1569
 msgid "Single Message"
@@ -3503,42 +3440,39 @@ msgstr "XML konzola"
 #: ../src/dialogs.py:1835
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
-msgstr ""
+msgstr "Súkromný zoznam <b><i>%s</i></b>"
 
 #: ../src/dialogs.py:1839
 #, python-format
 msgid "Privacy List for %s"
-msgstr ""
+msgstr "Súkromný zoznam pre %s"
 
 #: ../src/dialogs.py:1887
 #, python-format
 msgid "Order: %s, action: %s, type: %s, value: %s"
-msgstr ""
+msgstr "Poradie: %s, akcia: %s, typ: %s, hodnota: %s"
 
 #: ../src/dialogs.py:1890
-#, fuzzy, python-format
+#, python-format
 msgid "Order: %s, action: %s"
-msgstr "Popis: %s"
+msgstr "Poradie: %s, akcia: %s"
 
 #: ../src/dialogs.py:1932
-#, fuzzy
 msgid "<b>Edit a rule</b>"
-msgstr "<b>Formát riadku rozhovoru</b>"
+msgstr "<b>Upraviť pravidlo</b>"
 
 #: ../src/dialogs.py:2019
-#, fuzzy
 msgid "<b>Add a rule</b>"
-msgstr "<b>Formát riadku rozhovoru</b>"
+msgstr "<b>Pridať pravidlo</b>"
 
 #: ../src/dialogs.py:2115
 #, python-format
 msgid "Privacy Lists for %s"
-msgstr ""
+msgstr "Súkromný zoznam pre %s"
 
 #: ../src/dialogs.py:2117
-#, fuzzy
 msgid "Privacy Lists"
-msgstr "Súkromné rozhovory"
+msgstr "Súkromný zoznam"
 
 #: ../src/dialogs.py:2185
 #, fuzzy
@@ -3595,20 +3529,28 @@ msgstr "Pridať špeciálne na %s"
 #. # means number
 #: ../src/dialogs.py:2478
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: ../src/dialogs.py:2484
-#, fuzzy
 msgid "Condition"
-msgstr "Spojenie"
+msgstr "Podmienka"
 
 #: ../src/dialogs.py:2605
 msgid "when I am "
-msgstr ""
+msgstr "keď som"
 
 #: ../src/disco.py:101
 msgid "Others"
 msgstr "Ostatný"
+
+#: ../src/disco.py:102 ../src/disco.py:103 ../src/disco.py:1253
+#: ../src/gajim.py:539 ../src/roster_window.py:267 ../src/roster_window.py:325
+#: ../src/roster_window.py:364 ../src/roster_window.py:445
+#: ../src/roster_window.py:477 ../src/roster_window.py:479
+#: ../src/roster_window.py:3828 ../src/roster_window.py:3830
+#: ../src/common/helpers.py:42
+msgid "Transports"
+msgstr "Transporty"
 
 #. conference is a category for listing mostly groupchats in service discovery
 #: ../src/disco.py:105
@@ -3628,11 +3570,11 @@ msgstr "Prehľadávanie služieb s použitím účtu %s"
 msgid "Service Discovery"
 msgstr "Prehľadávanie služieb"
 
-#: ../src/disco.py:641
+#: ../src/disco.py:642
 msgid "The service could not be found"
 msgstr "Služba nebola nájdená"
 
-#: ../src/disco.py:642
+#: ../src/disco.py:643
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
@@ -3640,65 +3582,65 @@ msgstr ""
 "Žiadna služba Nie je k dispozícii na zadanej adrese alebo neodpovedá. "
 "Skontrolujte adresu a skúste opäť."
 
-#: ../src/disco.py:646 ../src/disco.py:927
+#: ../src/disco.py:647 ../src/disco.py:928
 msgid "The service is not browsable"
 msgstr "Služba nie je prehľadávateľná"
 
-#: ../src/disco.py:647
+#: ../src/disco.py:648
 msgid "This type of service does not contain any items to browse."
 msgstr "Tento typ služby neobsahuje žiadne položky na prehľadávanie."
 
-#: ../src/disco.py:727
+#: ../src/disco.py:728
 #, python-format
 msgid "Browsing %s using account %s"
 msgstr "Prehľadávanie %s s použitím účtu %s"
 
-#: ../src/disco.py:766
+#: ../src/disco.py:767
 msgid "_Browse"
 msgstr "_Prehľadávať"
 
-#: ../src/disco.py:928
+#: ../src/disco.py:929
 msgid "This service does not contain any items to browse."
 msgstr "Táto služba neobsahuje žiadne položky."
 
-#: ../src/disco.py:1142 ../src/disco.py:1257
+#: ../src/disco.py:1143 ../src/disco.py:1258
 msgid "Re_gister"
 msgstr "Re_gistrácia"
 
-#: ../src/disco.py:1294
+#: ../src/disco.py:1295
 #, python-format
 msgid "Scanning %d / %d.."
 msgstr "Prieskum %d / %d.."
 
 #. Users column
-#: ../src/disco.py:1475
+#: ../src/disco.py:1476
 msgid "Users"
 msgstr "Používatelia"
 
 #. Description column
-#: ../src/disco.py:1482
+#: ../src/disco.py:1483
 msgid "Description"
 msgstr "Popis"
 
 #. Id column
-#: ../src/disco.py:1489
+#: ../src/disco.py:1490
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
-#: ../src/disco.py:1712
+#: ../src/disco.py:1713
 #, fuzzy
 msgid "Subscribed"
 msgstr "Zapísať"
 
-#: ../src/disco.py:1738
+#: ../src/disco.py:1739
 msgid "New post"
 msgstr ""
 
-#: ../src/disco.py:1744
+#: ../src/disco.py:1745
 msgid "_Subscribe"
 msgstr "_Zapísať"
 
-#: ../src/disco.py:1750
+#: ../src/disco.py:1751
 #, fuzzy
 msgid "_Unsubscribe"
 msgstr "_Zapísať"
@@ -3737,7 +3679,7 @@ msgstr "Vy"
 msgid "Sender: %s"
 msgstr "Odosielateľ: %s"
 
-#: ../src/filetransfers_window.py:175 ../src/filetransfers_window.py:564
+#: ../src/filetransfers_window.py:175 ../src/filetransfers_window.py:572
 #: ../src/tooltips.py:573
 msgid "Recipient: "
 msgstr "Príjemca:"
@@ -3760,14 +3702,14 @@ msgid "Connection with peer cannot be established."
 msgstr "Spojenie s druhou stranou nie je možné nadviazať."
 
 #: ../src/filetransfers_window.py:224
-#, fuzzy, python-format
+#, python-format
 msgid "Recipient: %s"
-msgstr "Príjemca:"
+msgstr "Príjemca: %s"
 
 #: ../src/filetransfers_window.py:226
-#, fuzzy, python-format
+#, python-format
 msgid "Error message: %s"
-msgstr "Chyba čítania súboru:"
+msgstr "Chybová správa: %s"
 
 #: ../src/filetransfers_window.py:227
 msgid "File transfer stopped by the contact of the other side"
@@ -3808,13 +3750,14 @@ msgstr "%s vám chce poslať súbor:"
 #: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:683
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
-msgstr ""
+msgstr "Nie je možné prepísať existujúci súbor \"%s\""
 
 #: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:685
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr ""
+"Súbor s rovnakým menom už existuje a nemáte oprávnenie na jeho prepísanie."
 
 #: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:689
 msgid "This file already exists"
@@ -3827,11 +3770,11 @@ msgstr "Čo si prajete vykonať?"
 #: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:699
 #, python-format
 msgid "Directory \"%s\" is not writable"
-msgstr ""
+msgstr "Do adresára \"%s\" nie je možné zapisovať"
 
 #: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:700
 msgid "You do not have permission to create files in this directory."
-msgstr ""
+msgstr "Nemáte oprávnenie vytvoriť súbor v tomto adresári."
 
 #: ../src/filetransfers_window.py:348
 msgid "Save File as..."
@@ -3840,7 +3783,7 @@ msgstr "Uložiť súbor ako..."
 #. Print remaining time in format 00:00:00
 #. You can change the places of (hours), (minutes), (seconds) -
 #. they are not translatable.
-#: ../src/filetransfers_window.py:427
+#: ../src/filetransfers_window.py:429
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
@@ -3848,32 +3791,32 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
 #. Only the 's' after / (which means second) should be translated.
-#: ../src/filetransfers_window.py:500
+#: ../src/filetransfers_window.py:505
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: ../src/filetransfers_window.py:536 ../src/filetransfers_window.py:539
+#: ../src/filetransfers_window.py:544 ../src/filetransfers_window.py:547
 msgid "Invalid File"
 msgstr "Nesprávny súbor"
 
-#: ../src/filetransfers_window.py:536
+#: ../src/filetransfers_window.py:544
 msgid "File: "
 msgstr "Súbor: "
 
-#: ../src/filetransfers_window.py:540
+#: ../src/filetransfers_window.py:548
 msgid "It is not possible to send empty files"
 msgstr "Nie je možné poslať prázdne súbory"
 
-#: ../src/filetransfers_window.py:560 ../src/tooltips.py:563
+#: ../src/filetransfers_window.py:568 ../src/tooltips.py:563
 msgid "Name: "
 msgstr "Meno: "
 
-#: ../src/filetransfers_window.py:562 ../src/tooltips.py:567
+#: ../src/filetransfers_window.py:570 ../src/tooltips.py:567
 msgid "Sender: "
 msgstr "Odosielateľ: "
 
-#: ../src/filetransfers_window.py:750
+#: ../src/filetransfers_window.py:758
 msgid "Pause"
 msgstr "Pauza"
 
@@ -3922,9 +3865,8 @@ msgid "Gajim needs PySQLite2 to run"
 msgstr "Gajim potrebuje PySQLite2 pre svoj beh"
 
 #: ../src/gajim.py:77
-#, fuzzy
 msgid "Gajim needs pywin32 to run"
-msgstr "Gajim potrebuje PySQLite2 pre svoj beh"
+msgstr "Gajim vyžaduje pywin32 na spustenie"
 
 #: ../src/gajim.py:78
 #, python-format
@@ -3932,91 +3874,94 @@ msgid ""
 "Please make sure that Pywin32 is installed on your system. You can get it at "
 "%s"
 msgstr ""
+"Prosím, uistite sa, že Pywin32 je nainštalovaný na vašom systéme. Môžete ho "
+"získať na %s"
 
 #. set the icon to all newly opened wind
-#: ../src/gajim.py:190
+#: ../src/gajim.py:238
 msgid "Gajim is already running"
-msgstr ""
+msgstr "Gajim už beží"
 
-#: ../src/gajim.py:191
+#: ../src/gajim.py:239
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
 msgstr ""
+"Pravdepodobne už jeden program Gajim beží\n"
+"Želáte si aj napriek tomu spustiť Gajim?"
 
-#: ../src/gajim.py:298
+#: ../src/gajim.py:346
 #, python-format
 msgid "HTTP (%s) Authorization for %s (id: %s)"
 msgstr "HTTP (%s) Autorizácia pre %s (id: %s)"
 
-#: ../src/gajim.py:299
+#: ../src/gajim.py:347
 msgid "Do you accept this request?"
 msgstr "Akceptujete túto požiadavku?"
 
-#: ../src/gajim.py:345 ../src/notify.py:430
-#, fuzzy
+#: ../src/gajim.py:393 ../src/notify.py:430
 msgid "Connection Failed"
-msgstr "Spojenie"
+msgstr "Spojenie zlyhalo"
 
-#: ../src/gajim.py:658
-#, fuzzy, python-format
+#: ../src/gajim.py:706
+#, python-format
 msgid "Subject: %s"
-msgstr "Predmet: %s\n"
+msgstr "Predmet: %s"
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time))
-#: ../src/gajim.py:703 ../src/gajim.py:716
-#, fuzzy, python-format
+#: ../src/gajim.py:751 ../src/gajim.py:764
+#, python-format
 msgid "error while sending %s ( %s )"
-msgstr "chyba pri odosielaní"
+msgstr "chyba pri odosielaní %s ( %s )"
 
-#: ../src/gajim.py:749
+#: ../src/gajim.py:797
 msgid "Authorization accepted"
 msgstr "Autorizácia akceptovaná"
 
-#: ../src/gajim.py:750
+#: ../src/gajim.py:798
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr ""
 "Kontakt \"%s\" vás autorizoval, aby ste mohol(a) vidieť jeho alebo jej stav."
 
-#: ../src/gajim.py:758
+#: ../src/gajim.py:806
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Kontakt \"%s\" vás odobral zo svojho zoznamu"
 
-#: ../src/gajim.py:759
+#: ../src/gajim.py:807
 msgid "You will always see him or her as offline."
 msgstr "Vždy uvidíte jeho alebo ju ako offline."
 
-#: ../src/gajim.py:802
+#: ../src/gajim.py:850
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Spojenie s \"%s\" nie je možné nadviazať"
 
-#: ../src/gajim.py:803 ../src/common/connection.py:395
+#: ../src/gajim.py:851 ../src/common/connection.py:406
 msgid "Check your connection or try again later."
 msgstr "Skontrolujte svoje pripojenie alebo skúste neskôr."
 
-#: ../src/gajim.py:951 ../src/roster_window.py:1201
+#: ../src/gajim.py:999 ../src/roster_window.py:1197
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s je teraz %s (%s)"
 
-#: ../src/gajim.py:1048
+#: ../src/gajim.py:1096
 msgid "Your passphrase is incorrect"
 msgstr "Vaša passfráza je nesprávna"
 
-#: ../src/gajim.py:1049
+#: ../src/gajim.py:1097
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Momentálne ste pripojený(á) bez vášho OpenPGP kľúča."
 
-#: ../src/gajim.py:1151
-#, fuzzy, python-format
+#: ../src/gajim.py:1199
+#, python-format
 msgid "New mail on %(gmail_mail_address)s"
-msgstr "%(new_mail_gajim_ui_msg)s na %(gmail_mail_address)s"
+msgstr "Nový mail %(gmail_mail_address)s"
 
-#: ../src/gajim.py:1153
-#, fuzzy, python-format
+#: ../src/gajim.py:1201
+#, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
 msgstr[0] "Máte %d novú E-mailovú správu"
@@ -4026,68 +3971,68 @@ msgstr[2] "Máte %d nových E-mailových správ"
 #. FIXME: emulate Gtalk client popups. find out what they parse and how
 #. they decide what to show
 #. each message has a 'From', 'Subject' and 'Snippet' field
-#: ../src/gajim.py:1162
+#: ../src/gajim.py:1210
 #, python-format
 msgid ""
 "\n"
 "From: %(from_address)s"
 msgstr ""
+"\n"
+"Od: %(from_address)s"
 
-#: ../src/gajim.py:1318
+#: ../src/gajim.py:1366
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s vám chce poslať súbor."
 
-#: ../src/gajim.py:1383
+#: ../src/gajim.py:1431
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Úspešne ste prijali(a) súbor %(filename)s od %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1387
+#: ../src/gajim.py:1435
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Prenos súboru %(filename)s od %(name)s zastavený."
 
-#: ../src/gajim.py:1400
+#: ../src/gajim.py:1448
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Úspešne odoslaný súbor %(filename)s pre %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1404
+#: ../src/gajim.py:1452
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Prenos súboru %(filename)s pre %(name)s zastavený."
 
-#: ../src/gajim.py:1510
+#: ../src/gajim.py:1558
 msgid "Username Conflict"
-msgstr ""
+msgstr "Konflikt používateľských mien"
 
-#: ../src/gajim.py:1511
-#, fuzzy
+#: ../src/gajim.py:1559
 msgid "Please type a new username for your local account"
-msgstr "<b>Prosím, vyplnte údaje o vašom účte</b>"
+msgstr "Prosím, zadajte nové používateľské meno pre váš lokálny účet"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:1850
+#: ../src/gajim.py:1898
 msgid "Could not save your settings and preferences"
 msgstr "Nie je možné uložiť nastavenia."
 
-#: ../src/gajim.py:2042
+#: ../src/gajim.py:2090
 #, fuzzy
 msgid "Network Manager support not available"
-msgstr "Pripojenie nie je dostupné"
+msgstr "Slovník pre jazyk %s nie je k dispozícii"
 
-#: ../src/gajim.py:2117
+#: ../src/gajim.py:2165
 msgid "Session Management support not available (missing gnome.ui module)"
 msgstr "Podpora Správy sedenia nie je dostupná (chýba modul gnome.ui)"
 
 #: ../src/gajim-remote.py:66
-#, fuzzy
 msgid "Shows a help on specific command"
-msgstr "ukáže pomoc pre konkrétný príkaz"
+msgstr "Zobrazí pomoc pre daný príkaz"
 
 #. User gets help for the command, specified by this parameter
 #: ../src/gajim-remote.py:69
@@ -4176,13 +4121,12 @@ msgid "if specified, contact is taken from the contact list of this account"
 msgstr "ak je špecifikované, kontakt je zobraný zo zoznamu pre tento účet"
 
 #: ../src/gajim-remote.py:113
-#, fuzzy
 msgid ""
 "Sends new chat message to a contact in the roster. Both OpenPGP key and "
 "account are optional. If you want to set only 'account', without 'OpenPGP "
 "key', just set 'OpenPGP key' to ''."
 msgstr ""
-"Poslať novú správu kontaktu v zozname. Oboje OpenPGP kľúč a účet sú "
+"Poslať novú správu kontaktu v zozname. Oboje, OpenPGP kľúč a účet sú "
 "nepovinné. Ak chcete nastaviť iba 'účet', bez 'OpenPGP kľúča', nastavte "
 "'OpenPGP kľúč' na ''."
 
@@ -4208,25 +4152,22 @@ msgid "if specified, the message will be sent using this account"
 msgstr "ak je špecifikovaný, správa bude odoslaná s použitím tohoto účtu"
 
 #: ../src/gajim-remote.py:126
-#, fuzzy
 msgid ""
 "Sends new single message to a contact in the roster. Both OpenPGP key and "
 "account are optional. If you want to set only 'account', without 'OpenPGP "
 "key', just set 'OpenPGP key' to ''."
 msgstr ""
-"Poslať novú správu kontaktu v zozname. Oboje OpenPGP kľúč a účet sú "
+"Poslať jednoduchú správu kontaktu v zozname. Oboje, OpenPGP kľúč a účet sú "
 "nepovinné. Ak chcete nastaviť iba 'účet', bez 'OpenPGP kľúča', nastavte "
 "'OpenPGP kľúč' na ''."
 
 #: ../src/gajim-remote.py:131
-#, fuzzy
 msgid "subject"
-msgstr "Predmet:"
+msgstr "predmet"
 
 #: ../src/gajim-remote.py:131
-#, fuzzy
 msgid "message subject"
-msgstr "Správa odoslaná"
+msgstr "Predmet správy"
 
 #: ../src/gajim-remote.py:140
 msgid "Gets detailed info on a contact"
@@ -4304,12 +4245,11 @@ msgstr "Pridá kontakt do zoznamu"
 
 #: ../src/gajim-remote.py:194
 msgid "jid"
-msgstr ""
+msgstr "jid"
 
 #: ../src/gajim-remote.py:195
-#, fuzzy
 msgid "Adds new contact to this account"
-msgstr "Pridá nový kontakt pre tento účet"
+msgstr "Pridá nový kontakt k tomuto účtu"
 
 #: ../src/gajim-remote.py:200
 msgid "Returns current status (the global one unless account is specified)"
@@ -4328,27 +4268,27 @@ msgstr "Vráti počet neprečítaných správ"
 
 #: ../src/gajim-remote.py:218
 msgid "Opens 'Start Chat' dialog"
-msgstr ""
+msgstr "Otvorí dialóg 'Začiatok diskusie'"
 
 #: ../src/gajim-remote.py:220
-#, fuzzy
 msgid "Starts chat, using this account"
-msgstr "Začať rozhovor s účtom %s"
+msgstr "Začať rozhovor s použitím účtu %s"
 
 #: ../src/gajim-remote.py:224
 msgid "Sends custom XML"
-msgstr ""
+msgstr "Odoslať vlastné XML"
 
 #: ../src/gajim-remote.py:226
-#, fuzzy
 msgid "XML to send"
-msgstr "XML konzola"
+msgstr "XML na odoslanie"
 
 #: ../src/gajim-remote.py:227
 msgid ""
 "Account in which the xml will be sent; if not specified, xml will be sent to "
 "all accounts"
 msgstr ""
+"Účet na ktorý bude XML odoslané; ak nie je špecifikovaný, XML bude odoslané "
+"všetkým účtom"
 
 #: ../src/gajim-remote.py:249
 msgid "Missing argument \"contact_jid\""
@@ -4408,132 +4348,131 @@ msgid "Theme"
 msgstr "Téma"
 
 #. don't confuse translators
-#: ../src/gajim_themes_window.py:142
+#: ../src/gajim_themes_window.py:155
 msgid "theme name"
 msgstr "názov témy"
 
-#: ../src/gajim_themes_window.py:159
+#: ../src/gajim_themes_window.py:172
 msgid "You cannot delete your current theme"
 msgstr "Nemôžete zmazať aktuálnu tému"
 
-#: ../src/gajim_themes_window.py:160
+#: ../src/gajim_themes_window.py:173
 msgid "Please first choose another for your current theme."
 msgstr "Prosím, vyberte najskôr inú tému."
 
-#: ../src/groupchat_control.py:105
+#: ../src/groupchat_control.py:107
 msgid "Private Chat"
 msgstr "Súkromný rozhovor"
 
-#: ../src/groupchat_control.py:105
+#: ../src/groupchat_control.py:107
 msgid "Private Chats"
 msgstr "Súkromné rozhovory"
 
-#: ../src/groupchat_control.py:122
+#: ../src/groupchat_control.py:124
 msgid "Sending private message failed"
 msgstr "Odoslanie súkromnej správy sa nepodarilo"
 
 #. in second %s code replaces with nickname
-#: ../src/groupchat_control.py:124
+#: ../src/groupchat_control.py:126
 #, fuzzy, python-format
 msgid "You are no longer in group chat \"%s\" or \"%s\" has left."
 msgstr "Nie ste už pripojený(á) do miestnosti \"%s\" alebo \"%s\" odišiel(a)."
 
-#: ../src/groupchat_control.py:143
+#: ../src/groupchat_control.py:145
 msgid "Group Chat"
-msgstr "Skupinový rozhovor"
+msgstr "Diskusná skupina"
 
-#: ../src/groupchat_control.py:143
+#: ../src/groupchat_control.py:145
 msgid "Group Chats"
-msgstr "Skupinové diskusie"
+msgstr "Diskusné skupiny"
 
-#: ../src/groupchat_control.py:317
-#, fuzzy
+#: ../src/groupchat_control.py:319
 msgid "Insert Nickname"
-msgstr "Zmeniť _prezývku"
+msgstr "Vložiť prezývku"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:812
+#: ../src/groupchat_control.py:832
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s bol vykopnutý: %(reason)s"
 
-#: ../src/groupchat_control.py:816
+#: ../src/groupchat_control.py:836
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s bol vykopnutý - %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:823
+#: ../src/groupchat_control.py:843
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s bol zakázaný: %(reason)s"
 
-#: ../src/groupchat_control.py:827
+#: ../src/groupchat_control.py:847
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s bol zakázaný - %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:835
+#: ../src/groupchat_control.py:855
 #, python-format
 msgid "You are now known as %s"
 msgstr "Teraz ste známy(a) ako %s"
 
-#: ../src/groupchat_control.py:837
+#: ../src/groupchat_control.py:857
 #, python-format
 msgid "%s is now known as %s"
 msgstr "%s je známy(a) ako %s"
 
-#: ../src/groupchat_control.py:917
+#: ../src/groupchat_control.py:937
 #, python-format
 msgid "%s has left"
 msgstr "%s odišiel"
 
-#: ../src/groupchat_control.py:922
+#: ../src/groupchat_control.py:942
 #, fuzzy, python-format
 msgid "%s has joined the group chat"
-msgstr "V skupine"
+msgstr "%s sa pripojil(a) do miestnosti"
 
 #. No status message
-#: ../src/groupchat_control.py:924 ../src/roster_window.py:1204
+#: ../src/groupchat_control.py:944 ../src/roster_window.py:1200
 #, python-format
 msgid "%s is now %s"
 msgstr "%s je teraz %s"
 
-#: ../src/groupchat_control.py:1043 ../src/groupchat_control.py:1061
-#: ../src/groupchat_control.py:1154 ../src/groupchat_control.py:1171
+#: ../src/groupchat_control.py:1063 ../src/groupchat_control.py:1081
+#: ../src/groupchat_control.py:1174 ../src/groupchat_control.py:1191
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "Prezývka nenájdená: %s"
 
-#: ../src/groupchat_control.py:1077
+#: ../src/groupchat_control.py:1097
 #, fuzzy
 msgid "This group chat has no subject"
 msgstr "Táto miestnosť nemá nastavenú tému"
 
-#: ../src/groupchat_control.py:1090
+#: ../src/groupchat_control.py:1110
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "Pozvaný(á) %(contact_jid)s do %(room_jid)s."
 
 #. %s is something the user wrote but it is not a jid so we inform
-#: ../src/groupchat_control.py:1097 ../src/groupchat_control.py:1125
+#: ../src/groupchat_control.py:1117 ../src/groupchat_control.py:1145
 #, python-format
 msgid "%s does not appear to be a valid JID"
 msgstr "%s nevyzerá ako správny JID"
 
-#: ../src/groupchat_control.py:1208
+#: ../src/groupchat_control.py:1228
 #, python-format
 msgid "No such command: /%s (if you want to send this, prefix it with /say)"
 msgstr ""
 "Neznámy príkaz: /%s (ak chcete toto odoslať, zaraďte /say pred to, čo "
 "hovoríte)"
 
-#: ../src/groupchat_control.py:1231
+#: ../src/groupchat_control.py:1251
 #, python-format
 msgid "Commands: %s"
 msgstr "Príkazy: %s"
 
-#: ../src/groupchat_control.py:1233
+#: ../src/groupchat_control.py:1253
 #, fuzzy, python-format
 msgid ""
 "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
@@ -4545,19 +4484,19 @@ msgstr ""
 "človeka môže byť zmenená, ale nesmie obsahovať \"@\". Ak je JID práve v "
 "miestnosti, on/ona/ono bude vykoponutý(á). Nepodporuje medzery v prezývkach."
 
-#: ../src/groupchat_control.py:1240
+#: ../src/groupchat_control.py:1260
 #, python-format
 msgid ""
 "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
 msgstr ""
 "Použitie: /%s <prezývka>, otvorí okno na súkromnú komunikáciu s človekom."
 
-#: ../src/groupchat_control.py:1244
+#: ../src/groupchat_control.py:1264
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Použiteie: /%s, vyčistí textové okno."
 
-#: ../src/groupchat_control.py:1246
+#: ../src/groupchat_control.py:1266
 #, python-format
 msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
@@ -4566,12 +4505,12 @@ msgstr ""
 "Použitie: /%s [dôvod], zatvorí aktuálnu záložku v okne a zobrazí "
 "zdôvodnenie, pokiaľ je špecifikované."
 
-#: ../src/groupchat_control.py:1249
-#, fuzzy, python-format
+#: ../src/groupchat_control.py:1269
+#, python-format
 msgid "Usage: /%s, hide the chat buttons."
-msgstr "Použiteie: /%s, vyčistí textové okno."
+msgstr "Použitie: /%s, skryje tlačidlá."
 
-#: ../src/groupchat_control.py:1252
+#: ../src/groupchat_control.py:1272
 #, fuzzy, python-format
 msgid ""
 "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
@@ -4580,7 +4519,7 @@ msgstr ""
 "Použitie: /%s <JID> [dôvod], pozve JID do aktuálnej miestosti, prípadne sa "
 "zobrazí aj oddôvodnenie."
 
-#: ../src/groupchat_control.py:1256
+#: ../src/groupchat_control.py:1276
 #, python-format
 msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
@@ -4589,7 +4528,7 @@ msgstr ""
 "Použitie: /%s <miestnosť>@<server>[/prezývka], ponúkne možnosť pripojiť sa "
 "do miestnosť@server pre nick, ak je špecifikovaný."
 
-#: ../src/groupchat_control.py:1260
+#: ../src/groupchat_control.py:1280
 #, fuzzy, python-format
 msgid ""
 "Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
@@ -4599,7 +4538,7 @@ msgstr ""
 "Použitie: /%s <prezývka> [dôvod], odstráni navštevníka z miestnosti podľa "
 "prezývky, prípadne zobrazí dôvod. Nepodporuje medzery v menách."
 
-#: ../src/groupchat_control.py:1265
+#: ../src/groupchat_control.py:1285
 #, fuzzy, python-format
 msgid ""
 "Usage: /%s <action>, sends action to the current group chat. Use third "
@@ -4608,7 +4547,7 @@ msgstr ""
 "Použitie: /%s <akcia>, odošle akciu pre aktuálnu miestnosť. Používajte "
 "tretiu osobu. (napr. /%s exlodoval(a).)"
 
-#: ../src/groupchat_control.py:1269
+#: ../src/groupchat_control.py:1289
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message windowand sends "
@@ -4617,92 +4556,92 @@ msgstr ""
 "Použitie: /%s <prezývka> [správa], otvorí okno na súkromnú komunikáciu a "
 "prípadne odošle správu členovi s prezývkou."
 
-#: ../src/groupchat_control.py:1274
+#: ../src/groupchat_control.py:1294
 #, fuzzy, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 msgstr "Použitie: /%s <prezývka>, zmení prezývku v aktuálnej miestnosti."
 
-#: ../src/groupchat_control.py:1278
+#: ../src/groupchat_control.py:1298
 #, fuzzy, python-format
 msgid "Usage: /%s , display the names of group chat occupants."
-msgstr "Použitie: /%s [téma], zobrazí alebo zaktualizuje tému v miestnosti."
+msgstr "Použitie: /%s [téma], zobrazí mená členov v miestnosti."
 
-#: ../src/groupchat_control.py:1282
+#: ../src/groupchat_control.py:1302
 #, fuzzy, python-format
 msgid "Usage: /%s [topic], displays or updates the current group chat topic."
 msgstr "Použitie: /%s [téma], zobrazí alebo zaktualizuje tému v miestnosti."
 
-#: ../src/groupchat_control.py:1285
+#: ../src/groupchat_control.py:1305
 #, python-format
 msgid ""
 "Usage: /%s <message>, sends a message without looking for other commands."
 msgstr "Použitie: /%s <správa>, odošle správu, bezohľadu na ďalšie príkazy."
 
-#: ../src/groupchat_control.py:1288
+#: ../src/groupchat_control.py:1308
 #, python-format
 msgid "No help info for /%s"
 msgstr "Žiadne informácie s pomocou pre /%s"
 
-#: ../src/groupchat_control.py:1337
+#: ../src/groupchat_control.py:1357
 #, fuzzy, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Ste si istý(á), že chcete opustiť miestnosť \"%s\"?"
 
-#: ../src/groupchat_control.py:1339
+#: ../src/groupchat_control.py:1359
 #, fuzzy
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Ak zatvoríte okno, budete odpojený(á) z tejto miestnosti."
 
-#: ../src/groupchat_control.py:1343 ../src/roster_window.py:3961
+#: ../src/groupchat_control.py:1363 ../src/roster_window.py:3962
 msgid "Do _not ask me again"
 msgstr "Znovu sa už _nepýtať"
 
-#: ../src/groupchat_control.py:1377
+#: ../src/groupchat_control.py:1397
 msgid "Changing Subject"
 msgstr "Zmena predmetu"
 
-#: ../src/groupchat_control.py:1378
+#: ../src/groupchat_control.py:1398
 msgid "Please specify the new subject:"
 msgstr "Prosím, špecifikujte nový predmet:"
 
-#: ../src/groupchat_control.py:1387
+#: ../src/groupchat_control.py:1407
 msgid "Changing Nickname"
 msgstr "Zmena prezývky"
 
-#: ../src/groupchat_control.py:1388
+#: ../src/groupchat_control.py:1408
 msgid "Please specify the new nickname you want to use:"
 msgstr "Prosím špecifikujte novú prezývku, ktorú chcete používať:"
 
-#: ../src/groupchat_control.py:1413
+#: ../src/groupchat_control.py:1433
 msgid "Bookmark already set"
 msgstr "Záložka je už nastavená"
 
-#: ../src/groupchat_control.py:1414
-#, fuzzy, python-format
+#: ../src/groupchat_control.py:1434
+#, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
-msgstr "Miestnosť \"%s\" je už vo vašich záložkách."
+msgstr "Diskusná skupina \"%s\" je už vo vašich záložkách."
 
-#: ../src/groupchat_control.py:1423
+#: ../src/groupchat_control.py:1443
 msgid "Bookmark has been added successfully"
 msgstr "Záložka bola úspešne pridaná"
 
-#: ../src/groupchat_control.py:1424
+#: ../src/groupchat_control.py:1444
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "Môžete spravovať záložky cez Akcie v menu vo vašom zozname."
 
 #. ask for reason
-#: ../src/groupchat_control.py:1550
+#: ../src/groupchat_control.py:1570
 #, python-format
 msgid "Kicking %s"
 msgstr "Vykopnúť %s"
 
-#: ../src/groupchat_control.py:1551 ../src/groupchat_control.py:1833
+#: ../src/groupchat_control.py:1571 ../src/groupchat_control.py:1853
 msgid "You may specify a reason below:"
 msgstr "Môžete špecifikovať dôvod:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:1832
+#: ../src/groupchat_control.py:1852
 #, python-format
 msgid "Banning %s"
 msgstr "Zakázať %s"
@@ -4749,19 +4688,18 @@ msgid "Could not write to %s. Session Management support will not work"
 msgstr "Nie je možné zapisovať do %s. Správca sedenia nebude fungovať."
 
 #: ../src/gtkgui_helpers.py:728
-#, fuzzy
 msgid "Extension not supported"
-msgstr "Dbus nie je podporovaný."
+msgstr "Rozšírenie nie je podporovaný."
 
 #: ../src/gtkgui_helpers.py:729
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr ""
+"Obrázok nie je možné uložiť vo formáte %(type)s. Uložiť ako %(new_filename)s?"
 
 #: ../src/gtkgui_helpers.py:738
-#, fuzzy
 msgid "Save Image as..."
-msgstr "Uložiť súbor ako..."
+msgstr "Uložiť obrázok ako..."
 
 #: ../src/history_manager.py:64
 msgid "Cannot find history logs database"
@@ -4769,9 +4707,8 @@ msgstr "Nie je možné nájsť databázu so záznamami o histórii"
 
 #. holds jid
 #: ../src/history_manager.py:107
-#, fuzzy
 msgid "Contacts"
-msgstr "_Obsah dokumentácie"
+msgstr "Kontakty"
 
 #. holds time
 #: ../src/history_manager.py:120 ../src/history_manager.py:160
@@ -4781,9 +4718,8 @@ msgstr "Dátum"
 
 #. holds nickname
 #: ../src/history_manager.py:126 ../src/history_manager.py:178
-#, fuzzy
 msgid "Nickname"
-msgstr "Prezývka:"
+msgstr "Prezývka"
 
 #. holds message
 #: ../src/history_manager.py:134 ../src/history_manager.py:166
@@ -4792,11 +4728,12 @@ msgid "Message"
 msgstr "Správa"
 
 #: ../src/history_manager.py:186
-#, fuzzy
 msgid ""
 "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
 "RUNNING)"
-msgstr "Skutočne si želáte vyčistiť databázu?"
+msgstr ""
+"Skutočne si želáte vyčistiť databázu? (Varovanie: Nepoužívajte v prípade, že "
+"Gajim beží)"
 
 #: ../src/history_manager.py:188
 msgid ""
@@ -4877,48 +4814,48 @@ msgid "%s - Gajim"
 msgstr "%s - Gajim"
 
 #: ../src/notify.py:196
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s Changed Status"
-msgstr "%(nick)s je teraz %(status)s"
+msgstr "%(nick)s zmenil(a) stav"
 
 #: ../src/notify.py:206
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s Signed In"
-msgstr "Kontakt sa prihlasil"
+msgstr "%(nickname)s sa prihlásil(a)"
 
 #: ../src/notify.py:214
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s Signed Out"
-msgstr "Kontakt sa odhlásil"
+msgstr "%(nickname)s sa odhlásil"
 
 #: ../src/notify.py:226
-#, fuzzy, python-format
+#, python-format
 msgid "New Single Message from %(nickname)s"
-msgstr "Nová jednoduchá správa"
+msgstr "Nová správa od %(nickname)s"
 
 #: ../src/notify.py:234
-#, fuzzy, python-format
+#, python-format
 msgid "New Private Message from group chat %s"
-msgstr "Nová privátna správa"
+msgstr "Nová súkromná správa v diskusnej skupine %s"
 
 #: ../src/notify.py:235
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s: %(message)s"
-msgstr "%(who)s o %(time)s povedal(a): %(message)s\n"
+msgstr "%(nickname)s: %(message)s"
 
 #: ../src/notify.py:241
-#, fuzzy, python-format
+#, python-format
 msgid "New Message from %(nickname)s"
-msgstr "Nová správa ako %s"
+msgstr "Správa od %(nickname)s"
 
 #: ../src/profile_window.py:72 ../src/profile_window.py:376
 msgid "Retrieving profile..."
-msgstr ""
+msgstr "Získavanie profilu..."
 
 #: ../src/profile_window.py:107 ../src/profile_window.py:203
 #: ../src/profile_window.py:212 ../src/profile_window.py:370
 msgid "Click to set your avatar"
-msgstr ""
+msgstr "Kliknite pre výber avatara"
 
 #. keep identation
 #: ../src/profile_window.py:136
@@ -4926,9 +4863,8 @@ msgid "Could not load image"
 msgstr "Nie je možné načítať obrázok"
 
 #: ../src/profile_window.py:238
-#, fuzzy
 msgid "Information received"
-msgstr "Prijaté pozvanie"
+msgstr "Informácie prijaté"
 
 #: ../src/profile_window.py:308
 msgid "Without a connection you can not publish your contact information."
@@ -4936,15 +4872,15 @@ msgstr "Bez pripojenie nemôžete publikovať informácie o vašom kontakte."
 
 #: ../src/profile_window.py:320
 msgid "Sending profile..."
-msgstr ""
+msgstr "Odosielanie profilu..."
 
 #: ../src/profile_window.py:328
 msgid "Information published"
-msgstr ""
+msgstr "Informácie boli zverejnené"
 
 #: ../src/profile_window.py:340
 msgid "Information NOT published"
-msgstr ""
+msgstr "Informácie neboli zverejnené"
 
 #: ../src/profile_window.py:347
 msgid "vCard publication failed"
@@ -4969,7 +4905,7 @@ msgstr "Spojiť účty"
 msgid "Observers"
 msgstr "Pozorovatelia"
 
-#: ../src/roster_window.py:686 ../src/roster_window.py:3132
+#: ../src/roster_window.py:686 ../src/roster_window.py:3133
 #, fuzzy
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Nemôžete sa pripojiť do miestnosti, pokiaľ ste neviditeľný(á)"
@@ -4998,14 +4934,13 @@ msgstr "použiť %s účet"
 
 #. profile, avatar
 #: ../src/roster_window.py:983
-#, fuzzy, python-format
+#, python-format
 msgid "of account %s"
-msgstr "pre účet %s"
+msgstr "účtu %s"
 
 #: ../src/roster_window.py:1003
-#, fuzzy
 msgid "_Manage Bookmarks..."
-msgstr "Spravovať záložky..."
+msgstr "_Spravovať záložky..."
 
 #: ../src/roster_window.py:1032
 #, python-format
@@ -5014,30 +4949,28 @@ msgstr "pre účet %s"
 
 #. History manager
 #: ../src/roster_window.py:1053
-#, fuzzy
 msgid "History Manager"
-msgstr "Gajim - správca histórie"
+msgstr "Správca histórie"
 
 #: ../src/roster_window.py:1062
-#, fuzzy
 msgid "_Join New Group Chat"
-msgstr "Pripojiť sa ku skupinovému rozhovoru"
+msgstr "_Pripojiť sa k diskusnej skupine"
 
-#: ../src/roster_window.py:1384 ../src/roster_window.py:3325
-#: ../src/roster_window.py:3332
+#: ../src/roster_window.py:1380 ../src/roster_window.py:3326
+#: ../src/roster_window.py:3333
 msgid "You have unread messages"
 msgstr "Máte neprečítané správy"
 
-#: ../src/roster_window.py:1385
+#: ../src/roster_window.py:1381
 msgid "You must read them before removing this transport."
-msgstr ""
+msgstr "Musíte si ich prečítať pred odstránením tohoto transportu."
 
-#: ../src/roster_window.py:1388
+#: ../src/roster_window.py:1384
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" bude odstránený"
 
-#: ../src/roster_window.py:1389
+#: ../src/roster_window.py:1385
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
 "this transport."
@@ -5045,137 +4978,135 @@ msgstr ""
 "Už nebudete môcť prijímať a odosielať správy k tomuto kontaktu cez tento "
 "transport."
 
-#: ../src/roster_window.py:1392
-#, fuzzy
+#: ../src/roster_window.py:1388
 msgid "Transports will be removed"
-msgstr "Transport \"%s\" bude odstránený"
+msgstr "Transport bude odstránený"
 
-#: ../src/roster_window.py:1397
-#, fuzzy, python-format
+#: ../src/roster_window.py:1393
+#, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
 "these transports:%s"
 msgstr ""
-"Už nebudete môcť prijímať a odosielať správy k tomuto kontaktu cez tento "
-"transport."
+"Už nebudete môcť prijímať a odosielať správy tomuto kontaktu cez tento "
+"transport:%s"
 
 #. it's jid
-#: ../src/roster_window.py:1417
+#: ../src/roster_window.py:1413
 #, fuzzy
 msgid "Rename Contact"
-msgstr "_Obsah dokumentácie"
+msgstr "Konflikt používateľských mien"
 
-#: ../src/roster_window.py:1418
+#: ../src/roster_window.py:1414
 #, fuzzy, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "Vložiť passfrázu ku GPG kľúču pre účet %s."
 
-#: ../src/roster_window.py:1425
+#: ../src/roster_window.py:1421
 #, fuzzy
 msgid "Rename Group"
 msgstr "_Premenovať"
 
-#: ../src/roster_window.py:1426
+#: ../src/roster_window.py:1422
 #, fuzzy, python-format
 msgid "Enter a new name for group %s"
 msgstr "Vložiť passfrázu ku GPG kľúču pre účet %s."
 
-#: ../src/roster_window.py:1480
+#: ../src/roster_window.py:1476
 #, fuzzy
 msgid "Remove Group"
 msgstr "_Odstrániť"
 
-#: ../src/roster_window.py:1481
+#: ../src/roster_window.py:1477
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr ""
 
-#: ../src/roster_window.py:1482
+#: ../src/roster_window.py:1478
 #, fuzzy
 msgid "Remove also all contacts in this group from your roster"
 msgstr "Odstráni kontakt zo zoznamu"
 
-#: ../src/roster_window.py:1506
+#: ../src/roster_window.py:1502
 msgid "Assign OpenPGP Key"
 msgstr "Priradiť OpenPGP kľúč"
 
-#: ../src/roster_window.py:1507
+#: ../src/roster_window.py:1503
 msgid "Select a key to apply to the contact"
 msgstr "Vybrať kľúč a aplikovať ho na kontakt"
 
-#: ../src/roster_window.py:1788 ../src/roster_window.py:1963
+#: ../src/roster_window.py:1784 ../src/roster_window.py:1960
 #, fuzzy
 msgid "_New group chat"
-msgstr "Skupinový rozhovor"
+msgstr "Nová diskusná skupina"
 
-#: ../src/roster_window.py:1846
+#: ../src/roster_window.py:1842
 msgid "I would like to add you to my roster"
 msgstr "Chce si vás pridať do svojho zoznamu"
 
-#: ../src/roster_window.py:2008 ../src/roster_window.py:2055
+#: ../src/roster_window.py:2005 ../src/roster_window.py:2052
 #, fuzzy
 msgid "Send Group M_essage"
 msgstr "Poslať novú správu"
 
-#: ../src/roster_window.py:2034
+#: ../src/roster_window.py:2031
 msgid "Re_name"
 msgstr "Preme_novať"
 
-#: ../src/roster_window.py:2061
+#: ../src/roster_window.py:2058
 msgid "To all users"
 msgstr ""
 
-#: ../src/roster_window.py:2064
+#: ../src/roster_window.py:2061
 #, fuzzy
 msgid "To all online users"
 msgstr "_Onlien používatelia"
 
-#: ../src/roster_window.py:2100
+#: ../src/roster_window.py:2097
 msgid "_Log on"
 msgstr "_Prihlásiť"
 
-#: ../src/roster_window.py:2110
+#: ../src/roster_window.py:2107
 msgid "Log _off"
 msgstr "_Odhlásiť"
 
-#: ../src/roster_window.py:2232 ../src/roster_window.py:2303
+#: ../src/roster_window.py:2229 ../src/roster_window.py:2300
 msgid "_Change Status Message"
 msgstr "_Zmeniť správu o stave"
 
-#: ../src/roster_window.py:2375
+#: ../src/roster_window.py:2372
 msgid "Authorization has been sent"
 msgstr "Autorizácia bola odoslaná"
 
-#: ../src/roster_window.py:2376
+#: ../src/roster_window.py:2373
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "Od teraz  bude \"%s\" vidieť váš stav."
 
-#: ../src/roster_window.py:2400
+#: ../src/roster_window.py:2393
 msgid "Subscription request has been sent"
 msgstr "Žiadosť o zapísanie bola odoslaná"
 
-#: ../src/roster_window.py:2401
+#: ../src/roster_window.py:2394
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Ak \"%s\" akceptuje túto požiadavku, budete vidieť jeho/jej stav."
 
-#: ../src/roster_window.py:2413
+#: ../src/roster_window.py:2406
 msgid "Authorization has been removed"
 msgstr "Autorizácia bola odstránená"
 
-#: ../src/roster_window.py:2414
+#: ../src/roster_window.py:2407
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "Odteraz \"%s\" vás uvidí len v stave offline."
 
-#: ../src/roster_window.py:2617
+#: ../src/roster_window.py:2615
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Kontakt \"%s\" bude odstránený zo zoznamu"
 
-#: ../src/roster_window.py:2621
-#, fuzzy
+#: ../src/roster_window.py:2619
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -5183,7 +5114,7 @@ msgstr ""
 "Odstránením tohoto kontaktu, automaticky odstránite aj autorizáciu, to "
 "znamená, že ona/on vás vždy uvidí ako offline."
 
-#: ../src/roster_window.py:2626
+#: ../src/roster_window.py:2624
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -5191,114 +5122,122 @@ msgstr ""
 "Odstránením tohoto kontaktu, automaticky odstránite aj autorizáciu, to "
 "znamená, že ona/on vás vždy uvidí ako offline."
 
-#: ../src/roster_window.py:2629
+#: ../src/roster_window.py:2627
 msgid "I want this contact to know my status after removal"
 msgstr "Chcem upozorniť kontakt, na to, že bol odstránený"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:2633
-#, fuzzy
+#: ../src/roster_window.py:2631
 msgid "Contacts will be removed from your roster"
-msgstr "Kontakt \"%s\" bude odstránený zo zoznamu"
+msgstr "Kontakt bude odstránený zo zoznamu"
 
-#: ../src/roster_window.py:2637
-#, fuzzy, python-format
+#: ../src/roster_window.py:2635
+#, python-format
 msgid ""
 "By removing these contacts:%s\n"
 "you also remove authorization resulting in them always seeing you as offline."
 msgstr ""
-"Odstránením tohoto kontaktu, automaticky odstránite aj autorizáciu, to "
-"znamená, že ona/on vás vždy uvidí ako offline."
+"Odstránením nasledujúcich kontaktov:%s\n"
+"taktiež odstránite vašu autorizáciu, to znamená, že vás budú vidieť ako "
+"offline."
 
-#: ../src/roster_window.py:2709
+#. TODO: make this string translatable
+#. %s is the account name here
+#: ../src/roster_window.py:2693 ../src/common/connection.py:587
+#: ../src/common/zeroconf/connection_zeroconf.py:158
+#, python-format
+msgid "You will be connected to %s without OpenPGP."
+msgstr "Budete pripojený(á) k %s bez OpenPGP."
+
+#: ../src/roster_window.py:2710
 msgid "Passphrase Required"
 msgstr "Passfráza je požadovaná"
 
-#: ../src/roster_window.py:2710
+#: ../src/roster_window.py:2711
 #, python-format
 msgid "Enter GPG key passphrase for account %s."
 msgstr "Vložiť passfrázu ku GPG kľúču pre účet %s."
 
-#: ../src/roster_window.py:2715
+#: ../src/roster_window.py:2716
 msgid "Save passphrase"
 msgstr "Uložiť passfrázu"
 
-#: ../src/roster_window.py:2723
+#: ../src/roster_window.py:2724
 msgid "Wrong Passphrase"
 msgstr "Nesprávna passfráza"
 
-#: ../src/roster_window.py:2724
+#: ../src/roster_window.py:2725
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Prosím zadajte znova vašu GPG passfrázu alebo stlačte Zrušiť."
 
-#: ../src/roster_window.py:2781 ../src/roster_window.py:2841
+#: ../src/roster_window.py:2782 ../src/roster_window.py:2842
 msgid "You are participating in one or more group chats"
 msgstr "Ste v jednej alebo viacerých diskusných skupinách"
 
-#: ../src/roster_window.py:2782 ../src/roster_window.py:2842
+#: ../src/roster_window.py:2783 ../src/roster_window.py:2843
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
 msgstr ""
-"Zmena stavu na neviditeľný, automaticky spôsobí, že budete odpojený(á) zo "
-"skupinových diskusií. Ste si skutočne istý(á), že chcete zmeniť stav na "
+"Zmena stavu na neviditeľný, automaticky spôsobí, že budete odpojený(á) z "
+"diskusných skupín. Ste si skutočne istý(á), že chcete zmeniť stav na "
 "neviditeľný?"
 
-#: ../src/roster_window.py:2799
+#: ../src/roster_window.py:2800
 msgid "No account available"
 msgstr "Žiadne účty nie sú dostupné"
 
-#: ../src/roster_window.py:2800
+#: ../src/roster_window.py:2801
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "Musíte si vytvoriť účet predtým, než budete môcť komunikovať s ostatnými."
 
-#: ../src/roster_window.py:2898
+#: ../src/roster_window.py:2899
 #, python-format
 msgid "♪ \"%(title)s\" by %(artist)s ♪"
-msgstr ""
+msgstr "♪ \"%(title)s\" od %(artist)s ♪"
 
-#: ../src/roster_window.py:3326 ../src/roster_window.py:3333
+#: ../src/roster_window.py:3327 ../src/roster_window.py:3334
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
 msgstr "Správu bude možné prečítať, ak máte povolenú históriu."
 
-#: ../src/roster_window.py:3911
+#: ../src/roster_window.py:3912
 msgid "Metacontacts storage not supported by your server"
 msgstr ""
 
-#: ../src/roster_window.py:3913
+#: ../src/roster_window.py:3914
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be save on next reconnection."
 msgstr ""
 
-#: ../src/roster_window.py:3955
+#: ../src/roster_window.py:3956
 #, fuzzy
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr ""
 "Musíte si vytvoriť účet predtým, než budete môcť komunikovať s ostatnými."
 
-#: ../src/roster_window.py:3957
+#: ../src/roster_window.py:3958
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generaly it "
 "is used when the same person has several Jabber accounts or transport "
 "accounts."
 msgstr ""
 
-#: ../src/roster_window.py:4124
+#: ../src/roster_window.py:4125
 #, python-format
 msgid "Drop %s in group %s"
 msgstr "Vložiť %s do skupiny %s"
 
-#: ../src/roster_window.py:4131
-#, fuzzy, python-format
+#: ../src/roster_window.py:4132
+#, python-format
 msgid "Make %s and %s metacontacts"
-msgstr "Zmeniť %s ako podkontakt pre %s"
+msgstr "Vytvoriť %s a %s metakontakty"
 
-#: ../src/roster_window.py:4318
+#: ../src/roster_window.py:4319
 msgid "Change Status Message..."
 msgstr "Zmeniť Správu o stave..."
 
@@ -5311,7 +5250,6 @@ msgid "Hide this menu"
 msgstr "Ukryť toto menu"
 
 #: ../src/tooltips.py:309 ../src/tooltips.py:492
-#, fuzzy
 msgid "Jabber ID: "
 msgstr "Jabber ID:"
 
@@ -5320,21 +5258,21 @@ msgid "Resource: "
 msgstr "Zdroj:"
 
 #: ../src/tooltips.py:317
-#, python-format
+#, fuzzy, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr ""
+msgstr "%(owner_or_admin_or_member)s tejto miestnosti"
 
 #: ../src/tooltips.py:430 ../src/tooltips.py:610
 msgid "Status: "
 msgstr "Stav:"
 
 #: ../src/tooltips.py:461
-#, fuzzy, python-format
+#, python-format
 msgid "Last status: %s"
-msgstr "Posledná informácia o %s"
+msgstr "Posledný stav: %s"
 
 #: ../src/tooltips.py:463
-#, fuzzy, python-format
+#, python-format
 msgid " since %s"
 msgstr "od %s"
 
@@ -5414,9 +5352,8 @@ msgid "since %s"
 msgstr "od %s"
 
 #: ../src/vcard.py:277
-#, fuzzy
 msgid "Affiliation:"
-msgstr "Pripojenie:"
+msgstr "Príslušnosť:"
 
 #: ../src/vcard.py:285
 msgid ""
@@ -5483,7 +5420,6 @@ msgid "creating %s directory"
 msgstr "vytvorenie %s adresára"
 
 #: ../src/common/config.py:55
-#, fuzzy
 msgid "Use D-Bus and Notification-Daemon to show notifications"
 msgstr "Použiť DBus a Notification-Daemon pre zobrazenie upozornení"
 
@@ -5507,14 +5443,15 @@ msgstr "Neprítomný(á) ako výsledok nečinnosti"
 msgid ""
 "List (space separated) of rows (accounts and groups) that are collapsed."
 msgstr ""
+"Zoznam (oddelený medzerami) a riadkov (účet a skupina), ktoré sú zabalené."
 
 #: ../src/common/config.py:87
 msgid "Enable link-local/zeroconf messaging"
-msgstr ""
+msgstr "Povoliť link-local/zeroconf správy"
 
 #: ../src/common/config.py:90
 msgid "Language used by speller"
-msgstr ""
+msgstr "Jazyk pre kontrolu pravopisu"
 
 #: ../src/common/config.py:91
 msgid ""
@@ -5522,6 +5459,9 @@ msgid ""
 "'sometimes' - print time every print_ichat_every_foo_minutes minute.\n"
 "'never' - never print time."
 msgstr ""
+"'always' - zobraziť čas pre každú správu.\n"
+"'sometimes' - zobraziť každých print_ichat_every_foo_minutes minút.\n"
+"'never' - nezobrazovať čas."
 
 #: ../src/common/config.py:92
 msgid ""
@@ -5529,6 +5469,10 @@ msgid ""
 "to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one. "
 "This is used only if print_time is 'sometimes'."
 msgstr ""
+"Vypísať čas vo formáte Fuzzy Clock. Je možné použiť hodnoty od 1 do 4, or 0 "
+"to vypne Fuzzy Clock. 1 je najpodrobnejšie zobrazenie, 4 je najmenej "
+"podrobné zobrazenie. Táto voľba je použitá len v prípade, že premenná "
+"print_time je nastavená na 'sometimes'."
 
 #: ../src/common/config.py:95
 msgid "Treat * / _ pairs as possible formatting characters."
@@ -5546,18 +5490,24 @@ msgid ""
 "Uses ReStructured text markup for HTML, plus ascii formatting if selected. "
 "(If you want to use this, install docutils)"
 msgstr ""
+"Ak je zvolené, použije sa ReStructured text alebo HTML, plus ascii "
+"formátovanie. (If you want to use this, install docutils)"
 
 #: ../src/common/config.py:108
 msgid ""
 "Character to add after nickname when using nick completion (tab) in group "
 "chat."
 msgstr ""
+"Znak použitý za prezývkou, keď sa používa automatické dopĺňanie (tab) v "
+"diskusnej skupine."
 
 #: ../src/common/config.py:109
 msgid ""
 "Character to propose to add after desired nickname when desired nickname is "
 "used by someone else in group chat."
 msgstr ""
+"Vaša prezývka koliduje s inou prezývkou v diskusnej miestnosti aj po "
+"pripojení znaku."
 
 #: ../src/common/config.py:142
 msgid "Add * and [n] in roster title?"
@@ -5625,10 +5575,12 @@ msgid ""
 "When not printing time for every message (print_time==sometimes), print it "
 "every x minutes."
 msgstr ""
+"Pokiaľ sa čas pri každej správe (print_time==sometimes), vypíše sa každých x "
+"minút."
 
 #: ../src/common/config.py:159
 msgid "Ask before closing a group chat tab/window."
-msgstr "Spýtať sa pred zatvorením okna/záložky pre skupinovú diskusiu."
+msgstr "Spýtať sa pred zatvorením okna/záložky pre diskusnú skupinu."
 
 #: ../src/common/config.py:160
 #, fuzzy
@@ -5636,8 +5588,8 @@ msgid ""
 "Always ask before closing group chat tab/window in this space separated list "
 "of group chat jids."
 msgstr ""
-"Spýtať sa vždy pred zatvorením okna/záložky pre skupinový rozhovor, ktorej "
-"meno je uvedené v zozname oddelenom medzerov."
+"Spýtať sa vždy pred zatvorením okna/záložky diskusnej skupiny, ktorej meno "
+"je uvedené v zozname oddelenom medzerou."
 
 #: ../src/common/config.py:161
 #, fuzzy
@@ -5645,7 +5597,7 @@ msgid ""
 "Never ask before closing group chat tab/window in this space separated list "
 "of group chat jids."
 msgstr ""
-"Nikdy sa nepýtať pred zatvorením okna/záložky pre skupinovú diskusiu, ktorej "
+"Nikdy sa nepýtať pred zatvorením okna/záložky pre diskusnú skupinu, ktorej "
 "meno je špecifikované v zozname oddelenom medzerami"
 
 #: ../src/common/config.py:164
@@ -5659,17 +5611,17 @@ msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC štandard znamná KiB = 1024 bajtov, KB = 1000 bajtov."
 
 #: ../src/common/config.py:168
+#, fuzzy
 msgid "Notify of events in the system trayicon."
-msgstr ""
+msgstr "Nezobrazovať zoznam kontaktov v paneli úloh."
 
 #: ../src/common/config.py:174
 msgid "Show tab when only one conversation?"
 msgstr "Ukázať záložku len ak prebieha konverzácia?"
 
 #: ../src/common/config.py:175
-#, fuzzy
 msgid "Show tabbed notebook border in chat windows?"
-msgstr "Zobraziť okraj ak niekto konverzuje?"
+msgstr "Zobraziť záložky v okne s diskusnou skupinou?"
 
 #: ../src/common/config.py:176
 msgid "Show close button in tab?"
@@ -5704,13 +5656,12 @@ msgstr ""
 "správy. Závisí na téme, ikonka môže byť animovaná."
 
 #: ../src/common/config.py:193
-#, fuzzy
 msgid ""
 "If True, Gajim will display the status message, if not empty, for every "
 "contact under the contact name in roster window."
 msgstr ""
-"Ak je pravda, Gajim zobrazí stavovú správu, ak nie je prázdna, pre každý "
-"kontakt v zozname."
+"Ak je pravda, Gajim zobrazí stavovú správu v zozname kontaktov, za "
+"predpokladu, že táto správa nie je prázdna."
 
 #: ../src/common/config.py:195
 msgid ""
@@ -5721,15 +5672,15 @@ msgstr ""
 "avatara z posledného spojenia, alebo ak nie je cache príliš zastaralá."
 
 #: ../src/common/config.py:196
-#, fuzzy
 msgid ""
 "If False, Gajim will no longer print status line in chats when a contact "
 "changes his or her status and/or his or her status message."
 msgstr ""
-"Ak nie je pravda, nebudete vidieť riadok o zmene stavu kontaktu a jeho/jej "
-"stavovú správu"
+"Ak nie je pravda, nebudete vidieť informáciu o zmene stavu kontaktu a jeho/"
+"jej stavovú správu"
 
 #: ../src/common/config.py:197
+#, fuzzy
 msgid ""
 "can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no "
 "longer print status line in groupchats when a member changes his or her "
@@ -5737,6 +5688,10 @@ msgid ""
 "status messages. If \"in_and_out\", gajim will only print FOO enters/leaves "
 "group chat."
 msgstr ""
+"Môže byť \"none\", \"all\" alebo \"in_and_out\". Ak je \"none\", Gajim "
+"nebude zobrazovať správu o stave v diskusnej skupine a zmení ona/on svoj "
+"stav. Ak je \"all\" Gajim bude zobrazovať informáciu o stave. Ak je "
+"\"in_and_out\", Gajim zobrazí len FOO vstúpil/opustil miestnosť."
 
 #: ../src/common/config.py:199
 msgid "Background color of contacts when they just signed in."
@@ -5749,15 +5704,15 @@ msgstr ""
 #: ../src/common/config.py:202
 msgid ""
 "If True, restored messages will use a smaller font than the default one."
-msgstr ""
+msgstr "Ak je zapnuté, obnovené správy budú zobrazené menším písmom."
 
 #: ../src/common/config.py:203
 msgid "Don't show avatar for the transport itself."
-msgstr ""
+msgstr "Nezobrazovať avatarov pre transport."
 
 #: ../src/common/config.py:204
 msgid "Don't show roster in the system taskbar."
-msgstr ""
+msgstr "Nezobrazovať zoznam kontaktov v paneli úloh."
 
 #: ../src/common/config.py:205
 msgid ""
@@ -5782,7 +5737,6 @@ msgstr ""
 
 #. always, never, peracct, pertype should not be translated
 #: ../src/common/config.py:210
-#, fuzzy
 msgid ""
 "Controls the window where new messages are placed.\n"
 "'always' - All messages are sent to a single window.\n"
@@ -5792,48 +5746,43 @@ msgid ""
 "specific window. Note, changing this option requires restarting Gajim before "
 "the changes will take effect."
 msgstr ""
-"Nastavuje okno, kam sú umiestňované nové správy.\n"
+"Nastavuje okno, kde sú zobrazované nové správy.\n"
 "'vždy' - Všetky správy sa zobrazia v jednom okne.\n"
-"'nikdy' - Každá správa má svoje vlastné okno.\n"
-"'podľa účtu' - Správy pre jednotlivé účty sú zobrazované v jednotlivých "
+"'nikdy' - Každá správa sa zobrazí v samostatnom okne.\n"
+"'podľa účtu' - Správy pre jednotlivé účty sú zobrazované v samostatných "
 "oknách.\n"
-"'podľa typu' - Každý typ správy (e.g., rozhovor vs. skupinová diskusia) sú "
+"'podľa typu' - Každý typ správy (e.g., rozhovor, diskusná skupina) sú "
 "zobrazené v samostatnom okne. Poznámka: pre aplikovanie zmeny tohoto "
 "nastavenia, je nutné reštartovať Gajim"
 
 #: ../src/common/config.py:211
-#, fuzzy
 msgid "If False, you will no longer see the avatar in the chat window."
 msgstr "Ak je Vypnuté, neuvidíte avatarov v diskusnom okne"
 
 #: ../src/common/config.py:212
-#, fuzzy
 msgid "If True, pressing the escape key closes a tab/window."
-msgstr "Ak je  pravda, stlačením escape klávesy zatvoríte tab/okno"
+msgstr "Ak je  pravda, stlačením ESC klávesy zatvoríte tab/okno."
 
 #: ../src/common/config.py:213
-#, fuzzy
 msgid "Hides the buttons in group chat window."
-msgstr "Spýtať sa pred zatvorením okna/záložky pre skupinovú diskusiu."
+msgstr "Skrývanie tlačidiel v okne s diskusnou skupinou."
 
 #: ../src/common/config.py:214
-#, fuzzy
 msgid "Hides the buttons in two persons chat window."
-msgstr "Spýtať sa pred zatvorením okna/záložky pre skupinovú diskusiu."
+msgstr "Skrývanie tlačidiel v okne s rozhovorom medzi dvoma osobami."
 
 #: ../src/common/config.py:215
-#, fuzzy
 msgid "Hides the banner in a group chat window"
-msgstr "Spýtať sa pred zatvorením okna/záložky pre skupinovú diskusiu."
+msgstr "Skrývanie titilku v okne s diskusnou skupinou."
 
 #: ../src/common/config.py:216
 msgid "Hides the banner in two persons chat window"
-msgstr ""
+msgstr "Skryť titulok v okne s diskusiou dvoch osôb."
 
 #: ../src/common/config.py:217
 #, fuzzy
 msgid "Hides the group chat occupants list in group chat window."
-msgstr "Spýtať sa pred zatvorením okna/záložky pre skupinovú diskusiu."
+msgstr "Skrývanie zoznamu účastníkov v okne s diskusnou skupinou."
 
 #: ../src/common/config.py:218
 msgid ""
@@ -5843,15 +5792,18 @@ msgstr ""
 
 #: ../src/common/config.py:219
 msgid "Indentation when using merge consecutive nickame."
-msgstr ""
+msgstr "Zarovnanie v prípade zlúčenia prezývok."
 
 #: ../src/common/config.py:220
 msgid "List of colors that will be used to color nicknames in group chats."
 msgstr ""
+"Zoznam farieb, ktoré budú použité na zafarbenie prezývok v diskusnej skupine."
 
 #: ../src/common/config.py:221
 msgid "Ctrl-Tab go to next composing tab when none is unread."
 msgstr ""
+"CTRL+TAB vás presunie na ďalšiu záložku, pokiaľ už nie sú žiadne neprečítané "
+"správy."
 
 #: ../src/common/config.py:222
 msgid ""
@@ -5871,40 +5823,43 @@ msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
 msgstr ""
+"Priorita sa zmení automaticky vzhľadom k vášmu stavu. Priority sú definované "
+"v premenných autopriority_* nastaveniach."
 
 #. yes, no, ask
 #: ../src/common/config.py:263
 msgid "Jabberd2 workaround"
-msgstr ""
+msgstr "Jabberd2 workaround"
 
 #: ../src/common/config.py:267
 msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
 msgstr ""
+"Ak je zapnuté, Gajim použije vašu IP adresu a proxy definovanú v premennej "
+"file_transfer_proxies na prenos súborov."
 
 #: ../src/common/config.py:326
-#, fuzzy
 msgid "Is OpenPGP enabled for this contact?"
-msgstr "OpenPGP nie je použiteľné na tomto počítači"
+msgstr "Má tento kontakt k dispozícii OpenPGP?"
 
 #: ../src/common/config.py:327 ../src/common/config.py:330
 msgid "Language for which we want to check misspelled words"
-msgstr ""
+msgstr "Jazyk v ktorom má byť prevádzaná kontrola pravopisu"
 
 #: ../src/common/config.py:336
 msgid "all or space separated status"
-msgstr ""
+msgstr "všetky alebo medzerou oddelené stavu"
 
 #: ../src/common/config.py:337
 msgid "'yes', 'no', or 'both'"
-msgstr ""
+msgstr "'áno', 'nie', alebo 'oboje'"
 
 #: ../src/common/config.py:338 ../src/common/config.py:340
 #: ../src/common/config.py:341 ../src/common/config.py:344
 #: ../src/common/config.py:345
 msgid "'yes', 'no' or ''"
-msgstr ""
+msgstr "'áno', 'nie' alebo ''"
 
 #: ../src/common/config.py:351
 msgid "Sleeping"
@@ -5955,32 +5910,28 @@ msgid "Out"
 msgstr "Vonku"
 
 #: ../src/common/config.py:357
-#, fuzzy
 msgid "I'm out enjoying life."
-msgstr "Šiel som von užívať si život."
+msgstr "Som vonku a užívam si život."
 
 #: ../src/common/config.py:361
-#, fuzzy
 msgid "I'm available."
-msgstr "Prítomný"
+msgstr "Prítomný."
 
 #: ../src/common/config.py:362
-#, fuzzy
 msgid "I'm free for chat."
-msgstr "Mám čas na debatu"
+msgstr "Mám čas na debatu."
 
 #: ../src/common/config.py:364
-#, fuzzy
 msgid "I'm not available."
-msgstr "Služba nie je dostupná"
+msgstr "Nie som prítomný(á)."
 
 #: ../src/common/config.py:365
 msgid "Do not disturb."
-msgstr ""
+msgstr "Nerušiť."
 
 #: ../src/common/config.py:366 ../src/common/config.py:367
 msgid "Bye!"
-msgstr ""
+msgstr "Ahoj!"
 
 #: ../src/common/config.py:376
 #, fuzzy
@@ -6018,9 +5969,8 @@ msgstr "Nie je možné nahrať idle modul"
 
 #: ../src/common/connection_handlers.py:177
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
-#, fuzzy
 msgid "Wrong host"
-msgstr "Nesprávna passfráza"
+msgstr "Nesprávna host"
 
 #: ../src/common/connection_handlers.py:177
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
@@ -6028,6 +5978,8 @@ msgid ""
 "The host you configured as the ft_override_host_to_send advanced option is "
 "not valid, so ignored."
 msgstr ""
+"Host, ktorý ste nastavili ako ft_override_host_to_send v rozšírených "
+"nastaveniach nie je správny a bude preto ignorovaný."
 
 #: ../src/common/connection_handlers.py:590
 #, python-format
@@ -6035,9 +5987,9 @@ msgid "Registration information for transport %s has not arrived in time"
 msgstr "Redistračné informácie pre službu %s nedorazili včas"
 
 #: ../src/common/connection_handlers.py:1523
-#, fuzzy, python-format
+#, python-format
 msgid "Nickname not allowed: %s"
-msgstr "Prezývka nenájdená: %s"
+msgstr "Prezývka nie je povolená: %s"
 
 #. password required to join
 #. we are banned
@@ -6119,86 +6071,78 @@ msgstr ""
 "nástroje na správu zoznamu, napríklad: http://jru.jabberstudio.org/ pre jeho "
 "odstránenie"
 
-#: ../src/common/connection.py:164
+#: ../src/common/connection.py:175
 #: ../src/common/zeroconf/connection_zeroconf.py:196
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Spojenie s účtom \"%s\" bolo stratené"
 
-#: ../src/common/connection.py:165
+#: ../src/common/connection.py:176
 msgid "Reconnect manually."
 msgstr ""
 
-#: ../src/common/connection.py:176 ../src/common/connection.py:203
+#: ../src/common/connection.py:187 ../src/common/connection.py:214
 #, fuzzy, python-format
 msgid "Transport %s answered wrongly to register request: %s"
 msgstr "Transport %s odpovedal nekorektne na registračnú požiadavky."
 
 #. wrong answer
-#: ../src/common/connection.py:202
+#: ../src/common/connection.py:213
 msgid "Invalid answer"
 msgstr "Nesprávna odpoveď"
 
-#: ../src/common/connection.py:394 ../src/common/connection.py:429
-#: ../src/common/connection.py:877
+#: ../src/common/connection.py:405 ../src/common/connection.py:440
+#: ../src/common/connection.py:889
 #: ../src/common/zeroconf/connection_zeroconf.py:217
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Nie je možné pripojiť sa k \"%s\""
 
-#: ../src/common/connection.py:408
+#: ../src/common/connection.py:419
 #, python-format
 msgid "Connected to server %s:%s with %s"
 msgstr "Pripojený na server %s:%s s %s"
 
-#: ../src/common/connection.py:430
+#: ../src/common/connection.py:441
 msgid "Check your connection or try again later"
 msgstr "Skontrolujte svoje pripojenie alebo skúste neskôr"
 
-#: ../src/common/connection.py:455
+#: ../src/common/connection.py:467
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Autentifikácia bola neúspešná s \"%s\""
 
-#: ../src/common/connection.py:456
+#: ../src/common/connection.py:468
 msgid "Please check your login and password for correctness."
 msgstr "Prosím, skontrolujte správnosť prihlasovacieho mena a hesla."
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:573
+#: ../src/common/connection.py:585
 #: ../src/common/zeroconf/connection_zeroconf.py:156
 msgid "OpenPGP passphrase was not given"
 msgstr "OpenPGP passfráza nebola zadaná"
 
-#. %s is the account name here
-#: ../src/common/connection.py:575
-#: ../src/common/zeroconf/connection_zeroconf.py:158
-#, python-format
-msgid "You will be connected to %s without OpenPGP."
-msgstr "Budete pripojený(á) k %s bez OpenPGP."
-
 #. do not show I'm invisible!
-#: ../src/common/connection.py:615
+#: ../src/common/connection.py:627
 msgid "invisible"
 msgstr "neviditeľný"
 
-#: ../src/common/connection.py:616
+#: ../src/common/connection.py:628
 msgid "offline"
 msgstr "offline"
 
-#: ../src/common/connection.py:617
+#: ../src/common/connection.py:629
 #, python-format
 msgid "I'm %s"
 msgstr "Som %s"
 
 #. we're not english
 #. one  in locale and one en
-#: ../src/common/connection.py:708
-#, fuzzy
+#: ../src/common/connection.py:720
 msgid "[This message is *encrypted* (See :JEP:`27`]"
-msgstr "[Táto správa je šifrovaná]"
+msgstr "[Táto správa je *šifrovaná* (See :JEP:`27`]"
 
-#: ../src/common/connection.py:764
+#: ../src/common/connection.py:776
 #: ../src/common/zeroconf/connection_zeroconf.py:397
 #, python-format
 msgid ""
@@ -6208,9 +6152,9 @@ msgstr ""
 "Predmet: %s\n"
 "%s"
 
-#: ../src/common/connection.py:903
+#: ../src/common/connection.py:915
 msgid "Not fetched because of invisible status"
-msgstr ""
+msgstr "Nie je možné získať, pretože aktuálny stav je: Neviditeľný"
 
 #. only say that to non Windows users
 #: ../src/common/dbus_support.py:33
@@ -6240,169 +6184,159 @@ msgid ""
 "Session bus is not available.\n"
 "Try reading http://trac.gajim.org/wiki/GajimDBus"
 msgstr ""
+"Session bus nie je k dispozícii.\n"
+"Viac informácií nájdete na adrese http://trac.gajim.org/wiki/GajimDBus"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "one"
-msgstr "Nič"
+msgstr "jedna"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "two"
-msgstr "kto"
+msgstr "dva"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "three"
-msgstr "Ulica:"
+msgstr "tri"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "four"
-msgstr "Port: "
+msgstr "štyri"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "five"
-msgstr "súbor"
+msgstr "päť"
 
 #: ../src/common/fuzzyclock.py:42
 msgid "six"
-msgstr ""
+msgstr "šesť"
 
 #: ../src/common/fuzzyclock.py:43
-#, fuzzy
 msgid "seven"
-msgstr "Udalosť"
+msgstr "sedem"
 
 #: ../src/common/fuzzyclock.py:43
 msgid "eight"
-msgstr ""
+msgstr "osem"
 
 #: ../src/common/fuzzyclock.py:43
-#, fuzzy
 msgid "nine"
-msgstr "_Pokračovať"
+msgstr "deväť"
 
 #: ../src/common/fuzzyclock.py:43
 msgid "ten"
-msgstr ""
+msgstr "desať"
 
 #: ../src/common/fuzzyclock.py:43
-#, fuzzy
 msgid "eleven"
-msgstr "Zmazať"
+msgstr "jedenásť"
 
 #: ../src/common/fuzzyclock.py:44
 msgid "twelve"
-msgstr ""
+msgstr "dvanásť"
 
 #. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 #, python-format
 msgid "%0 o'clock"
-msgstr ""
+msgstr "%0 hodín"
 
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "five past %0"
-msgstr ""
+msgstr "%0 a päť minút"
 
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:56
 msgid "ten past %0"
-msgstr ""
+msgstr "%0 a desať minút"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
 msgid "quarter past %0"
-msgstr ""
+msgstr "%0 a štvrť"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:57
 msgid "twenty past %0"
-msgstr ""
+msgstr "%0 a dvadsať minút"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 msgid "twenty five past %0"
-msgstr ""
+msgstr "%0 a dvadsať päť minút"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:58
 msgid "half past %0"
-msgstr ""
+msgstr "%0 a pol"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 msgid "twenty five to %1"
-msgstr ""
+msgstr "o dvadsať päť minút %1"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:59
 msgid "twenty to %1"
-msgstr ""
+msgstr "o dvadsať minút %1"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
 msgid "quarter to %1"
-msgstr ""
+msgstr "o štvrť %1"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:60
-#, fuzzy
 msgid "ten to %1"
-msgstr "Registrovať na %s"
+msgstr "Desať minút pred %1"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:60
 msgid "five to %1"
-msgstr ""
+msgstr "o päť minút %1"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
 msgid "%1 o'clock"
-msgstr ""
+msgstr "%1 hodina"
 
 #: ../src/common/fuzzyclock.py:62
 msgid "Night"
-msgstr ""
+msgstr "Noc"
 
 #: ../src/common/fuzzyclock.py:62
 msgid "Early morning"
-msgstr ""
+msgstr "Skoré ráno"
 
 #: ../src/common/fuzzyclock.py:62
-#, fuzzy
 msgid "Morning"
-msgstr "Pracujem"
+msgstr "Ráno"
 
 #: ../src/common/fuzzyclock.py:62
 msgid "Almost noon"
-msgstr ""
+msgstr "Takmer poludnie"
 
 #: ../src/common/fuzzyclock.py:63
-#, fuzzy
 msgid "Noon"
-msgstr "Nič"
+msgstr "Obed"
 
 #: ../src/common/fuzzyclock.py:63
 msgid "Afternoon"
-msgstr ""
+msgstr "Popoludnie"
 
 #: ../src/common/fuzzyclock.py:63
-#, fuzzy
 msgid "Evening"
-msgstr "Udalosť"
+msgstr "Večer"
 
 #: ../src/common/fuzzyclock.py:63
 msgid "Late evening"
-msgstr ""
+msgstr "neskorý večer"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "Start of week"
-msgstr ""
+msgstr "Začiatok týždňa"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "Middle of week"
-msgstr ""
+msgstr "Stred týždňa"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "End of week"
-msgstr ""
+msgstr "Koniec týždňa"
 
 #: ../src/common/fuzzyclock.py:66
 msgid "Weekend!"
-msgstr ""
+msgstr "Víkend!"
 
 #: ../src/common/helpers.py:105
 msgid "Invalid character in username."
@@ -6540,7 +6474,7 @@ msgstr "Zapísať"
 
 #: ../src/common/helpers.py:280
 msgid "?Group Chat Contact Role:None"
-msgstr "?Skupinová diskusia - rola: Nič"
+msgstr "?Rola kontaktu v diskusnej skupine: žiadna"
 
 #: ../src/common/helpers.py:283
 msgid "Moderators"
@@ -6567,24 +6501,20 @@ msgid "Visitor"
 msgstr "Návštevník"
 
 #: ../src/common/helpers.py:301
-#, fuzzy
 msgid "?Group Chat Contact Affiliation:None"
-msgstr "?Skupinová diskusia - rola: Nič"
+msgstr "?Príslušnosť kontaktu v diskusnej skupine: žiadna"
 
 #: ../src/common/helpers.py:303
-#, fuzzy
 msgid "Owner"
-msgstr "_Vlastník"
+msgstr "Vlastník"
 
 #: ../src/common/helpers.py:305
-#, fuzzy
 msgid "Administrator"
-msgstr "_Administrátor"
+msgstr "Administrátor"
 
 #: ../src/common/helpers.py:307
-#, fuzzy
 msgid "Member"
-msgstr "_Člen"
+msgstr "Člen"
 
 #: ../src/common/helpers.py:346
 msgid "is paying attention to the conversation"
@@ -6608,36 +6538,36 @@ msgid "has closed the chat window or tab"
 msgstr "zatvoril okno alebo záložku"
 
 #: ../src/common/helpers.py:881
-#, fuzzy, python-format
+#, python-format
 msgid " %d unread message"
 msgid_plural " %d unread messages"
-msgstr[0] "Gajim - %d neprečítaná správa"
-msgstr[1] "Gajim - %d neprečítaných správ"
-msgstr[2] ""
+msgstr[0] "%d neprečítaná správa"
+msgstr[1] "%d neprečítaných správ"
+msgstr[2] "%d neprečítaných správ"
 
 #: ../src/common/helpers.py:887
-#, fuzzy, python-format
+#, python-format
 msgid " %d unread single message"
 msgid_plural " %d unread single messages"
-msgstr[0] "Gajim - %d neprečítaná jednoduchá správa"
-msgstr[1] "Gajim - %d neprečítané jednoduché správy"
-msgstr[2] ""
+msgstr[0] "%d neprečítaná jednoduchá správa"
+msgstr[1] "%d neprečítaných jednoduchých správ"
+msgstr[2] "%d neprečítaných jednoduchých správ"
 
 #: ../src/common/helpers.py:893
-#, fuzzy, python-format
+#, python-format
 msgid " %d unread group chat message"
 msgid_plural " %d unread group chat messages"
-msgstr[0] "Gajim - %d neprečítaná správa zo skupinovej diskusie"
-msgstr[1] "Gajim - %d neprečítané správy zo skupinovej diskusie"
-msgstr[2] ""
+msgstr[0] "%d neprečítaná správa z diskusnej skupiny"
+msgstr[1] "%d neprečítaných správ z diskusnej skupiny"
+msgstr[2] "%d neprečítaných správ z diskusnej skupiny"
 
 #: ../src/common/helpers.py:899
-#, fuzzy, python-format
+#, python-format
 msgid " %d unread private message"
 msgid_plural " %d unread private messages"
-msgstr[0] "Gajim - %d neprečítaná súkromná správa"
-msgstr[1] "Gajim - %d neprečítané súkromné správy"
-msgstr[2] ""
+msgstr[0] "%d neprečítaná súkromná správa"
+msgstr[1] "%d neprečítané súkromné správy"
+msgstr[2] "%d neprečítaných súkromných správ"
 
 #: ../src/common/helpers.py:909 ../src/common/helpers.py:911
 #, python-format
@@ -6652,21 +6582,20 @@ msgstr "chyba: nie je možné otvoriť %s na čítanie"
 
 #: ../src/common/optparser.py:183
 msgid "gtk+"
-msgstr ""
+msgstr "gtk+"
 
 #: ../src/common/optparser.py:192 ../src/common/optparser.py:193
 msgid "cyan"
 msgstr "azúrová"
 
 #: ../src/common/optparser.py:302
-#, fuzzy
 msgid "migrating logs database to indeces"
-msgstr "vytváranie záznamov databáz"
+msgstr "migrácia databázových záznamov"
 
 #: ../src/common/passwords.py:86
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim account %s"
-msgstr "pre účet %s"
+msgstr "Gajim účet %s"
 
 #: ../src/common/zeroconf/client_zeroconf.py:189
 msgid ""
@@ -6705,28 +6634,27 @@ msgstr ""
 
 #: ../src/common/zeroconf/connection_zeroconf.py:218
 msgid "Please check if Avahi is installed."
-msgstr ""
+msgstr "Prosím skontrolujte, či je nainštalovaný program Avahi"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:227
 #: ../src/common/zeroconf/connection_zeroconf.py:231
-#, fuzzy
 msgid "Could not start local service"
-msgstr "Nie je možné načítať obrázok"
+msgstr "Nie je možné spustiť lokálnu službu"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:228
 #, fuzzy, python-format
 msgid "Unable to bind to port %d."
-msgstr "Nie je možné vstúpiť do miestnosti"
+msgstr "Nie je možné pripojiť sa k portu %s."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:232
 #: ../src/common/zeroconf/connection_zeroconf.py:325
 msgid "Please check if avahi-daemon is running."
-msgstr ""
+msgstr "Prosím skontrolujte, či je spustený program avahi-démon"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:324
-#, fuzzy, python-format
+#, python-format
 msgid "Could not change status of account \"%s\""
-msgstr "Nie je možné pripojiť sa k \"%s\""
+msgstr "Nie je možné zmeniť stav účtu \"%s\""
 
 #: ../src/common/zeroconf/connection_zeroconf.py:341
 msgid ""
@@ -6742,17 +6670,19 @@ msgstr "[Táto správa je šifrovaná]"
 #: ../src/common/zeroconf/zeroconf.py:180
 #, fuzzy, python-format
 msgid "Error while adding service. %s"
-msgstr "chyba pri odosielaní"
+msgstr "chyba pri odosielaní %s ( %s )"
 
-#, fuzzy
 #~ msgid "_New room"
-#~ msgstr "Nová miestnosť"
+#~ msgstr "_Nová miestnosť"
 
 #~ msgid "Role: "
 #~ msgstr "Rola:"
 
 #~ msgid "Affiliation: "
-#~ msgstr "Pripojenie:"
+#~ msgstr "Príslušnosť:"
+
+#~ msgid "Merge consecutive nickname in chat window."
+#~ msgstr "Zlúčiť prezývky v diskusnom okne."
 
 #~ msgid ""
 #~ "Sound to play when any MUC message arrives. (This setting is taken into "
@@ -6783,9 +6713,6 @@ msgstr "chyba pri odosielaní"
 
 #~ msgid "Contact _Info"
 #~ msgstr "Kontaktné _info"
-
-#~ msgid "Contact Information"
-#~ msgstr "Kontaktné informácie"
 
 #~ msgid "Jabber"
 #~ msgstr "Jabber"
