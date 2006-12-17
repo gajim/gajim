@@ -91,7 +91,8 @@ class Remote:
 
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
-			self.signal_object.getattr(signal)(get_dbus_struct(arg))
+			self.signal_object.raise_signal(signal, get_dbus_struct(arg))
+#			self.signal_object.getattr(signal)(get_dbus_struct(arg))
 
 
 class SignalObject(dbus.service.Object):
