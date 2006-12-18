@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-18 01:13+0100\n"
+"POT-Creation-Date: 2006-12-18 09:32+0100\n"
 "PO-Revision-Date: 2005-05-21 20:03+0100\n"
 "Last-Translator: Membris Khan <membriskhan@gmail.com>\n"
 "Language-Team: none\n"
@@ -3287,9 +3287,9 @@ msgid "This is not a group chat"
 msgstr "Esto no es un grupo de charla"
 
 #: ../src/dialogs.py:1226
-#, fuzzy, python-format
+#, python-format
 msgid "%s is not the name of a group chat."
-msgstr "% no es el nombre de un grupo de charla."
+msgstr "%s no es el nombre de un grupo de charla."
 
 #: ../src/dialogs.py:1248
 #, python-format
@@ -4355,117 +4355,117 @@ msgstr "No puedes eliminar el tema actual"
 msgid "Please first choose another for your current theme."
 msgstr "Por favor, primero elige otro distinto como tema actual."
 
-#: ../src/groupchat_control.py:107
+#: ../src/groupchat_control.py:106
 msgid "Private Chat"
 msgstr "Conversación privada"
 
-#: ../src/groupchat_control.py:107
+#: ../src/groupchat_control.py:106
 msgid "Private Chats"
 msgstr "Conversaciones privadas"
 
-#: ../src/groupchat_control.py:124
+#: ../src/groupchat_control.py:123
 msgid "Sending private message failed"
 msgstr "Falló el envío del mensaje privado"
 
 #. in second %s code replaces with nickname
-#: ../src/groupchat_control.py:126
+#: ../src/groupchat_control.py:125
 #, python-format
 msgid "You are no longer in group chat \"%s\" or \"%s\" has left."
 msgstr "Ya no estás en el grupo de charla \"%s\" o bien \"%s\" ya no existe."
 
-#: ../src/groupchat_control.py:145
+#: ../src/groupchat_control.py:144
 msgid "Group Chat"
 msgstr "Grupos de charla"
 
-#: ../src/groupchat_control.py:145
+#: ../src/groupchat_control.py:144
 msgid "Group Chats"
 msgstr "Grupos de charla"
 
-#: ../src/groupchat_control.py:319
+#: ../src/groupchat_control.py:318
 msgid "Insert Nickname"
 msgstr "Insertar alias"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:832
+#: ../src/groupchat_control.py:831
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s ha sido expulsado por %(reason)s"
 
-#: ../src/groupchat_control.py:836
+#: ../src/groupchat_control.py:835
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s ha sido expulsado por %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:843
+#: ../src/groupchat_control.py:842
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s ha sido expulsado: %(reason)s"
 
-#: ../src/groupchat_control.py:847
+#: ../src/groupchat_control.py:846
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s ha sido expulsado por %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:855
+#: ../src/groupchat_control.py:854
 #, python-format
 msgid "You are now known as %s"
 msgstr "Eres ahora conocido como %s"
 
-#: ../src/groupchat_control.py:857
+#: ../src/groupchat_control.py:856
 #, python-format
 msgid "%s is now known as %s"
 msgstr "%s es ahora conocido como %s"
 
-#: ../src/groupchat_control.py:937
+#: ../src/groupchat_control.py:936
 #, python-format
 msgid "%s has left"
 msgstr "%s ha salido"
 
-#: ../src/groupchat_control.py:942
-#, fuzzy, python-format
+#: ../src/groupchat_control.py:941
+#, python-format
 msgid "%s has joined the group chat"
-msgstr "% ha entrado en el grupo de charla"
+msgstr "%s ha entrado en el grupo de charla"
 
 #. No status message
-#: ../src/groupchat_control.py:944 ../src/roster_window.py:1200
+#: ../src/groupchat_control.py:943 ../src/roster_window.py:1200
 #, python-format
 msgid "%s is now %s"
 msgstr "%s está ahora %s"
 
-#: ../src/groupchat_control.py:1063 ../src/groupchat_control.py:1081
-#: ../src/groupchat_control.py:1174 ../src/groupchat_control.py:1191
+#: ../src/groupchat_control.py:1062 ../src/groupchat_control.py:1080
+#: ../src/groupchat_control.py:1173 ../src/groupchat_control.py:1190
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "Alias no encontrado: %s"
 
-#: ../src/groupchat_control.py:1097
+#: ../src/groupchat_control.py:1096
 msgid "This group chat has no subject"
 msgstr "Este grupo de charla no tiene tema"
 
-#: ../src/groupchat_control.py:1110
+#: ../src/groupchat_control.py:1109
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "%(contact_jid)s invitado a %(room_jid)s."
 
 #. %s is something the user wrote but it is not a jid so we inform
-#: ../src/groupchat_control.py:1117 ../src/groupchat_control.py:1145
+#: ../src/groupchat_control.py:1116 ../src/groupchat_control.py:1144
 #, python-format
 msgid "%s does not appear to be a valid JID"
 msgstr "%s no parece ser un JID válido"
 
-#: ../src/groupchat_control.py:1228
+#: ../src/groupchat_control.py:1227
 #, python-format
 msgid "No such command: /%s (if you want to send this, prefix it with /say)"
 msgstr ""
 "No existe tal comando: /%s (si quieres enviar esto, usa el prefijo /say)"
 
-#: ../src/groupchat_control.py:1251
+#: ../src/groupchat_control.py:1250
 #, python-format
 msgid "Commands: %s"
 msgstr "Comandos: %s"
 
-#: ../src/groupchat_control.py:1253
+#: ../src/groupchat_control.py:1252
 #, python-format
 msgid ""
 "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
@@ -4478,7 +4478,7 @@ msgstr ""
 "está actualmente en el grupo de conversación, el/ella será también "
 "expulsado. NO soporta espacio en el alias."
 
-#: ../src/groupchat_control.py:1260
+#: ../src/groupchat_control.py:1259
 #, python-format
 msgid ""
 "Usage: /%s <nickname>, opens a private chat window to the specified occupant."
@@ -4486,12 +4486,12 @@ msgstr ""
 "Uso: /%s <alias>, abre una ventana de conversación con el ocupante "
 "especificado."
 
-#: ../src/groupchat_control.py:1264
+#: ../src/groupchat_control.py:1263
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Uso: /%s, limpia de texto la ventana."
 
-#: ../src/groupchat_control.py:1266
+#: ../src/groupchat_control.py:1265
 #, python-format
 msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
@@ -4500,12 +4500,12 @@ msgstr ""
 "Uso: /%s [motivo], cierra la ventana o pestaña actual, mostrando el motivo "
 "si se especifica."
 
-#: ../src/groupchat_control.py:1269
+#: ../src/groupchat_control.py:1268
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "Uso: /%s, oculta los botones de conversación."
 
-#: ../src/groupchat_control.py:1272
+#: ../src/groupchat_control.py:1271
 #, python-format
 msgid ""
 "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
@@ -4514,7 +4514,7 @@ msgstr ""
 "Uso: /%s <JID> [reason], invita al JID al grupo de charla actual, "
 "opcionalmente proveyendo un motivo."
 
-#: ../src/groupchat_control.py:1276
+#: ../src/groupchat_control.py:1275
 #, python-format
 msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
@@ -4523,7 +4523,7 @@ msgstr ""
 "Uso: /%s <salón>@<servidor>[/alias], ofrece la entrada a salón@servidor "
 "opcionalmente usando el alias especificado"
 
-#: ../src/groupchat_control.py:1280
+#: ../src/groupchat_control.py:1279
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
@@ -4533,7 +4533,7 @@ msgstr ""
 "Uso: /%s <alias> [motivo], elimina del salón al ocupante especificado por el "
 "alias y opcionalmente muestra un motivo. NO soporta espacios en el alias."
 
-#: ../src/groupchat_control.py:1285
+#: ../src/groupchat_control.py:1284
 #, python-format
 msgid ""
 "Usage: /%s <action>, sends action to the current group chat. Use third "
@@ -4542,7 +4542,7 @@ msgstr ""
 "Uso: /%s <acción>, envía una acción al grupo de charla actual. Usa la "
 "tercera persona. (p.ej. /%s grita.)"
 
-#: ../src/groupchat_control.py:1289
+#: ../src/groupchat_control.py:1288
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message windowand sends "
@@ -4551,91 +4551,91 @@ msgstr ""
 "Uso: /%s <alias> [message], abre una ventana de conversación privada y envía "
 "un mensaje al ocupante especificado por el alias."
 
-#: ../src/groupchat_control.py:1294
+#: ../src/groupchat_control.py:1293
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 msgstr "Uso: /%s <alias>, cambia tu alias en el salón actual."
 
-#: ../src/groupchat_control.py:1298
+#: ../src/groupchat_control.py:1297
 #, python-format
 msgid "Usage: /%s , display the names of group chat occupants."
 msgstr "Uso: /%s , muestra los nombres de los ocupantes del grupo de charla."
 
-#: ../src/groupchat_control.py:1302
+#: ../src/groupchat_control.py:1301
 #, python-format
 msgid "Usage: /%s [topic], displays or updates the current group chat topic."
 msgstr "Uso: /%s [tema], muestra o actualiza el tema actual del salón."
 
-#: ../src/groupchat_control.py:1305
+#: ../src/groupchat_control.py:1304
 #, python-format
 msgid ""
 "Usage: /%s <message>, sends a message without looking for other commands."
 msgstr "Uso: /%s <mensaje>, envía un mensaje sin buscar otros comandos."
 
-#: ../src/groupchat_control.py:1308
+#: ../src/groupchat_control.py:1307
 #, python-format
 msgid "No help info for /%s"
 msgstr "No hay información de ayuda para /%s"
 
-#: ../src/groupchat_control.py:1357
+#: ../src/groupchat_control.py:1356
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "¿Estás seguro de querer abandonar el salón \"%s\"?"
 
-#: ../src/groupchat_control.py:1359
+#: ../src/groupchat_control.py:1358
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Si cierras esta ventana, serás desconectado de este grupo de charla."
 
-#: ../src/groupchat_control.py:1363 ../src/roster_window.py:3962
+#: ../src/groupchat_control.py:1362 ../src/roster_window.py:3962
 msgid "Do _not ask me again"
 msgstr "_No preguntarme otra vez"
 
-#: ../src/groupchat_control.py:1397
+#: ../src/groupchat_control.py:1396
 msgid "Changing Subject"
 msgstr "Cambiando el tema"
 
-#: ../src/groupchat_control.py:1398
+#: ../src/groupchat_control.py:1397
 msgid "Please specify the new subject:"
 msgstr "Especifica el nuevo tema:"
 
-#: ../src/groupchat_control.py:1407
+#: ../src/groupchat_control.py:1406
 msgid "Changing Nickname"
 msgstr "Cambiando alias"
 
-#: ../src/groupchat_control.py:1408
+#: ../src/groupchat_control.py:1407
 msgid "Please specify the new nickname you want to use:"
 msgstr "Especifica el nuevo alias que quieres usar:"
 
-#: ../src/groupchat_control.py:1433
+#: ../src/groupchat_control.py:1432
 msgid "Bookmark already set"
 msgstr "Marcador ya definido"
 
-#: ../src/groupchat_control.py:1434
+#: ../src/groupchat_control.py:1433
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "El salón \"%s\" ya se encuentra en tus marcadores."
 
-#: ../src/groupchat_control.py:1443
+#: ../src/groupchat_control.py:1442
 msgid "Bookmark has been added successfully"
 msgstr "Marcador añadido con éxito"
 
-#: ../src/groupchat_control.py:1444
+#: ../src/groupchat_control.py:1443
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "Puedes gestionar tus marcadores mediante el menú Acciones de tu roster"
 
 #. ask for reason
-#: ../src/groupchat_control.py:1570
+#: ../src/groupchat_control.py:1569
 #, python-format
 msgid "Kicking %s"
 msgstr "Expulsando a %s"
 
-#: ../src/groupchat_control.py:1571 ../src/groupchat_control.py:1853
+#: ../src/groupchat_control.py:1570 ../src/groupchat_control.py:1852
 msgid "You may specify a reason below:"
 msgstr "Debes especificar un motivo debajo:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:1852
+#: ../src/groupchat_control.py:1851
 #, python-format
 msgid "Banning %s"
 msgstr "Expulsando a %s"
@@ -6235,7 +6235,6 @@ msgstr "doce"
 #. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
-#, fuzzy, python-format
 msgid "%0 o'clock"
 msgstr "%0 en punto"
 
@@ -6666,9 +6665,9 @@ msgid "[This message is encrypted]"
 msgstr "[Este mensaje está encriptado]"
 
 #: ../src/common/zeroconf/zeroconf.py:180
-#, fuzzy, python-format
+#, python-format
 msgid "Error while adding service. %s"
-msgstr "Error añadiendo el servicio. %"
+msgstr "Error añadiendo el servicio. %s"
 
 #~ msgid "This is result of query."
 #~ msgstr "Este es el resultado de la consulta."
@@ -6676,7 +6675,6 @@ msgstr "Error añadiendo el servicio. %"
 #~ msgid "Edit items on the list"
 #~ msgstr "Editar los elementos de la lista"
 
-#, fuzzy
 #~ msgid "_New room"
 #~ msgstr "Nuevo salón"
 
@@ -6759,15 +6757,12 @@ msgstr "Error añadiendo el servicio. %"
 #~ msgid "zh_CN"
 #~ msgstr "chino (China)"
 
-#, fuzzy
 #~ msgid "Jabber ID"
 #~ msgstr "ID de Jabber:"
 
-#, fuzzy
 #~ msgid "User ID"
 #~ msgstr "Identificador:"
 
-#, fuzzy
 #~ msgid "Invalid room or server name"
 #~ msgstr "Nombre de usuario no válido"
 
@@ -6788,27 +6783,21 @@ msgstr "Error añadiendo el servicio. %"
 #~ msgstr[0] "Gajim - %d mensaje sin leer"
 #~ msgstr[1] "Gajim - %d mensajes sin leer"
 
-#, fuzzy
 #~ msgid "Since %s"
 #~ msgstr "Tamaño: %s"
 
-#, fuzzy
 #~ msgid "Add"
 #~ msgstr "Dirección"
 
-#, fuzzy
 #~ msgid "Away "
 #~ msgstr "Ausente"
 
-#, fuzzy
 #~ msgid "Down"
 #~ msgstr "Descarga"
 
-#, fuzzy
 #~ msgid "List of special notifications settings"
 #~ msgstr "<b>Notificationes Visuales</b>"
 
-#, fuzzy
 #~ msgid "Not Available "
 #~ msgstr "No disponible"
 
@@ -6836,18 +6825,15 @@ msgstr "Error añadiendo el servicio. %"
 #~ msgid "Usage: /%s, sets the groupchat window to compact mode."
 #~ msgstr "Uso: /%s, cambia la ventana de salón a modo compacto."
 
-#, fuzzy
 #~ msgid "<b>Please modify your special notification below</b>"
 #~ msgstr "<b>Por favor, elige una de las siguientes opciones:</b>"
 
 #~ msgid "Delete Message of the Day"
 #~ msgstr "Eliminar mensaje del día"
 
-#, fuzzy
 #~ msgid "I want a notification popup:"
 #~ msgstr "Noti_ficaciones del estado del chat"
 
-#, fuzzy
 #~ msgid "I want to listen to:"
 #~ msgstr "%s quiere enviarte un archivo:"
 
@@ -6878,7 +6864,6 @@ msgstr "Error añadiendo el servicio. %"
 #~ msgid "%s has sent you a new message."
 #~ msgstr "%s te ha enviado un nuevo mensaje"
 
-#, fuzzy
 #~ msgid "GUI Migration failed"
 #~ msgstr "falló la publicación de la vCard"
 
@@ -6890,7 +6875,6 @@ msgstr "Error añadiendo el servicio. %"
 #~ "Si está marcado, Gajim alojará un icono en el área de notificación del "
 #~ "sistema"
 
-#, fuzzy
 #~ msgid "Start Chat with Contact"
 #~ msgstr "Iniciar conversación con la cuenta %s"
 
