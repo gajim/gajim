@@ -114,12 +114,15 @@ class MusicTrackListener(gobject.GObject):
 
 		bus = dbus.SessionBus()
 
-		if not hasattr(bus, 'name_has_owner'):
-			print 'You need dbus-python >= 0.80' #FIXME: translate me or RM me for .12
-			return None
-
 		## Check Muine playing track
-		if bus.name_has_owner('org.gnome.Muine'):
+		test = False
+		if hasattr(bus, 'name_has_owner'):
+			if bus.name_has_owner('org.gnome.Muine'):
+				test = True
+		elif dbus.dbus_bindings.bus_name_has_owner(bus.get_connection(),
+		'org.gnome.Muine'):
+			test = True
+		if test:
 			obj = bus.get_object('org.gnome.Muine', '/org/gnome/Muine/Player')
 			player = dbus.Interface(obj, 'org.gnome.Muine.Player')
 			if player.GetPlaying():
@@ -129,7 +132,14 @@ class MusicTrackListener(gobject.GObject):
 				return song
 
 		## Check Rhythmbox playing song
-		if bus.name_has_owner('org.gnome.Rhythmbox'):
+		test = False
+		if hasattr(bus, 'name_has_owner'):
+			if bus.name_has_owner('org.gnome.Rhythmbox'):
+				test = True
+		elif dbus.dbus_bindings.bus_name_has_owner(bus.get_connection(),
+		'org.gnome.Rhythmbox'):
+			test = True
+		if test:
 			rbshellobj = bus.get_object('org.gnome.Rhythmbox',
 				'/org/gnome/Rhythmbox/Shell')
 			player = dbus.Interface(
