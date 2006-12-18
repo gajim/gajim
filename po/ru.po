@@ -5168,8 +5168,8 @@ msgstr ""
 
 #: ../src/roster_window.py:2899
 #, fuzzy, python-format
-msgid "♪ \"%(title)s\" by %(artist)s ♪"
-msgstr "♪ %(artist)s \"%(title)s\" ♪"
+msgid "\"%(title)s\" by %(artist)s"
+msgstr "%(artist)s \"%(title)s\""
 
 #: ../src/roster_window.py:3327 ../src/roster_window.py:3334
 msgid ""

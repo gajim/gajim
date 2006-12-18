@@ -5176,8 +5176,8 @@ msgstr "Debes crear una cuenta antes de poder conversar con otros contactos."
 
 #: ../src/roster_window.py:2899
 #, python-format
-msgid "♪ \"%(title)s\" by %(artist)s ♪"
-msgstr "♪ \"%(title)s\" por %(artist)s ♪"
+msgid "\"%(title)s\" by %(artist)s"
+msgstr "\"%(title)s\" por %(artist)s"
 
 #: ../src/roster_window.py:3327 ../src/roster_window.py:3334
 msgid ""

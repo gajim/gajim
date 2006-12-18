@@ -2896,9 +2896,9 @@ class RosterWindow:
 		if music_track_info is None:
 			status_message = ''
 		else:
-			status_message = _('♪ "%(title)s" by %(artist)s ♪') % \
+			status_message = '♪ ' + _('"%(title)s" by %(artist)s') % \
 				{'title': music_track_info.title,
-					'artist': music_track_info.artist }
+					'artist': music_track_info.artist } + ' ♪'
 		for account in accounts:
 			if not gajim.config.get_per('accounts', account,
 			'sync_with_global_status'):

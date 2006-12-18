@@ -5163,8 +5163,8 @@ msgstr "Du må lage en konto før du kan snakke med andre kontakter."
 
 #: ../src/roster_window.py:2899
 #, python-format
-msgid "♪ \"%(title)s\" by %(artist)s ♪"
-msgstr "♪ \"%(title)s\" etter %(artist)s ♪"
+msgid "\"%(title)s\" by %(artist)s"
+msgstr "\"%(title)s\" etter %(artist)s"
 
 #: ../src/roster_window.py:3327 ../src/roster_window.py:3334
 msgid ""
