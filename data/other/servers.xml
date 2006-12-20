@@ -369,10 +369,4 @@
   <item jid="xmpp.us" name="">
     <active port="5222"/>
   </item>
-  <item jid="zloygod.serveftp.com" name="Rituko's server">
-    <active port="5222"/>
-  </item>
-  <item jid="localhost" name="Localhost">
-    <active port="5222"/>
-  </item>
 </query>
