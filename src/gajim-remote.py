@@ -27,7 +27,6 @@ from common import i18n
 try:
 	PREFERRED_ENCODING = locale.getpreferredencoding()
 except:
-	sys.exc_clear()
 	PREFERRED_ENCODING = 'UTF-8'
 
 def send_error(error_message):

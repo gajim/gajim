@@ -123,8 +123,12 @@ class NBCommonClient(CommonClient):
 			self.on_connect_failure(retry)
 
 	def _on_connected(self):
-		# connect succeded, so no need of this callback anymore
-		self.on_connect_failure = None
+		# FIXME: why was this needed? Please note that we're working
+		# in nonblocking mode, and this handler is actually called
+		# as soon as connection is initiated, NOT when connection
+		# succeeds, as the name suggests.
+		# # connect succeeded, so no need of this callback anymore 
+		# self.on_connect_failure = None
 		self.connected = 'tcp'
 		if self._Ssl:
 			transports_nb.NonBlockingTLS().PlugIn(self, now=1)

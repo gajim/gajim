@@ -376,7 +376,6 @@ class P2PConnection(IdleObject, PlugIn):
 		except Exception, e:
 			if len(e.args)  > 0 and isinstance(e.args[0], int):
 				errnum = e[0]
-			sys.exc_clear()
 			# "received" will be empty anyhow 
 		if errnum == socket.SSL_ERROR_WANT_READ:
 			pass
@@ -456,7 +455,6 @@ class P2PConnection(IdleObject, PlugIn):
 				self._on_send()
 
 		except socket.error, e:
-			sys.exc_clear()
 			if e[0] == socket.SSL_ERROR_WANT_WRITE:
 				return True		
 			if self.state < 0:
