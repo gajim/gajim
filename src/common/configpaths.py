@@ -87,7 +87,7 @@ def init():
 		paths.add_from_root(n, p)
 
 	paths.add('DATA', os.path.join(u'..', windowsify(u'data')))
-	paths.add('HOME', os.path.expanduser(u'~'))
+	paths.add('HOME', fse(os.path.expanduser('~')))
 	paths.add('TMP', fse(tempfile.gettempdir()))
 
 	try:

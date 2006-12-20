@@ -121,7 +121,7 @@ sleeper_state = {} # whether we pass auto away / xa or not
 status_before_autoaway = {}
 
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-	'invisible']
+	'invisible', 'error']
 
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'

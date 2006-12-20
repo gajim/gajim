@@ -38,7 +38,7 @@ from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-	'invisible']
+	'invisible', 'error']
 # kind of events we can wait for an answer
 VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'

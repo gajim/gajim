@@ -2157,6 +2157,10 @@ if __name__ == '__main__':
 	# ^C exits the application normally to delete pid file
 	signal.signal(signal.SIGINT, sigint_cb)
 
+	if gajim.verbose:
+		print >> sys.stderr, "Encodings: d:%s, fs:%s, p:%s" % \
+		(sys.getdefaultencoding(), sys.getfilesystemencoding(), locale.getpreferredencoding())
+
 	if os.name != 'nt':
 		# Session Management support
 		try:

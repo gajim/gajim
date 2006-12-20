@@ -109,6 +109,8 @@ class Connection(ConnectionHandlers):
 		self.time_to_reconnect = None
 		if self.connected < 2: #connection failed
 			gajim.log.debug('reconnect')
+			self.connected = 1
+			self.dispatch('STATUS', 'connecting')
 			self.retrycount += 1
 			signed = self.get_signed_msg(self.status)
 			self.on_connect_auth = self._init_roster
@@ -143,8 +145,8 @@ class Connection(ConnectionHandlers):
 		if not self.on_purpose:
 			self.disconnect()
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
-				self.connected = 1
-				self.dispatch('STATUS', 'connecting')
+				self.connected = -1
+				self.dispatch('STATUS', 'error')
 				# this check has moved from _reconnect method
 				# do exponential backoff until 15 minutes,
 				# then small linear increase
@@ -154,7 +156,7 @@ class Connection(ConnectionHandlers):
 					self.last_time_to_reconnect *= 1.5
 				self.last_time_to_reconnect += randomsource.randint(0, 5)
 				self.time_to_reconnect = int(self.last_time_to_reconnect)
-				gajim.log.debug("Reconnect to %s in %ss", self.name, self.time_to_reconnect)
+				gajim.log.info("Reconnect to %s in %ss", self.name, self.time_to_reconnect)
 				gajim.idlequeue.set_alarm(self._reconnect_alarm,
 					self.time_to_reconnect)
 			elif self.on_connect_failure:
@@ -379,11 +381,13 @@ class Connection(ConnectionHandlers):
 			if self.on_connect_success == self._on_new_account:
 				con.RegisterDisconnectHandler(self._on_new_account)
 
+			gajim.log.info("Connecting to %s: [%s:%d]", self.name, host['host'], host['port'])
 			con.connect((host['host'], host['port']), proxy = self._proxy,
 				secure = self._secure)
 			return
 		else:
 			if not retry and self.retrycount == 0:
+				gajim.log.error("Out of hosts, giving up connecting to %s", self.name)
 				self.time_to_reconnect = None
 				if self.on_connect_failure:
 					self.on_connect_failure()
