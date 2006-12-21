@@ -217,7 +217,7 @@ class StdlibSSLWrapper(SSLWrapper):
 		try:
 			return self.sslobj.read(bufsize)
 		except socket.sslerror, e:
-			log.debug("Recv: Caught socket.sslerror:", exc_info=True)
+			#log.debug("Recv: Caught socket.sslerror:", exc_info=True)
 			#traceback.print_exc()
 			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
 				raise SSLWrapper.Error(self.sock or self.sslobj, e)
@@ -228,7 +228,7 @@ class StdlibSSLWrapper(SSLWrapper):
 		try:
 			return self.sslobj.write(data)
 		except socket.sslerror, e:
-			log.debug("Send: Caught socket.sslerror:", exc_info=True)
+			#log.debug("Send: Caught socket.sslerror:", exc_info=True)
 			#traceback.print_exc()
 			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
 				raise SSLWrapper.Error(self.sock or self.sslobj, e)
@@ -710,8 +710,8 @@ class NonBlockingTLS(PlugIn):
 		log.debug("_startSSL_pyOpenSSL called")
 		tcpsock = self._owner.Connection
 		# FIXME: should method be configurable?
-		#tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
-		tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
+		tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
+		#tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
 		tcpsock._sslContext.set_info_callback(self._ssl_info_callback)
 		tcpsock._sslObj = OpenSSL.SSL.Connection(tcpsock._sslContext, tcpsock._sock)
 		tcpsock._sslObj.set_connect_state() # set to client mode
