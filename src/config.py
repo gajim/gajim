@@ -2916,7 +2916,8 @@ class AccountCreationWizardWindow:
 		servers = gtkgui_helpers.parse_server_xml(servers_xml)
 		servers_model = gtk.ListStore(str, int)
 		for server in servers:
-			servers_model.append((str(server[0]), int(server[1])))
+			if not server[2]['hidden']:
+				servers_model.append((str(server[0]), int(server[1])))
 
 		completion.set_model(servers_model)
 		completion.set_text_column(0)

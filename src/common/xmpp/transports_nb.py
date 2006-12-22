@@ -721,7 +721,7 @@ class NonBlockingTLS(PlugIn):
 		tcpsock._send = wrapper.send
 
 		log.debug("Initiating handshake...")
-		#tcpsock._sslObj.setblocking(True)
+		tcpsock._sslObj.setblocking(False)
 		try:
 			self.starttls='in progress'
 			tcpsock._sslObj.do_handshake()
@@ -744,6 +744,8 @@ class NonBlockingTLS(PlugIn):
 		issuer = cert.get_issuer()
 		tcpsock._sslIssuer = unicode(issuer)
 		tcpsock._sslServer = unicode(peer)
+		tcpsock.serverDigestSHA1 = cert.digest('sha1')
+		tcpsock.serverDigestMD5 = cert.digest('md5')
 
 		# FIXME: remove debug prints
 		peercert = tcpsock._sslObj.get_peer_certificate()

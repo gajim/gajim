@@ -42,6 +42,18 @@ USE_GPG = GnuPG.USE_GPG
 
 from common.rst_xhtml_generator import create_xhtml
 
+import logging
+h = logging.StreamHandler()
+f = logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s')
+h.setFormatter(f)
+log = logging.getLogger('Gajim.connection')
+log.addHandler(h)
+log.setLevel(logging.DEBUG)
+log.propagate = False
+del h, f
+
+import gtkgui_helpers
+
 class Connection(ConnectionHandlers):
 	'''Connection class'''
 	def __init__(self, name):
@@ -434,6 +446,52 @@ class Connection(ConnectionHandlers):
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		self.connection = con
+
+		# FIXME: find a more permanent place for loading servers.xml
+		servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
+		servers = gtkgui_helpers.parse_server_xml(servers_xml)
+		servers = dict(map(lambda e: (e[0], e), servers))
+
+		fpr_good = None # None: No fpr in database, False: mismatch, True: match
+		try:
+			log.debug("con: %s", con)
+			log.debug("con.Connection: %s", con.Connection)
+			log.debug("con.Connection.serverDigestSHA1: %s", con.Connection.serverDigestSHA1)
+			log.debug("con.Connection.serverDigestMD5: %s", con.Connection.serverDigestMD5)
+			sha1 = gtkgui_helpers.HashDigest('sha1', con.Connection.serverDigestSHA1)
+			md5 = gtkgui_helpers.HashDigest('md5', con.Connection.serverDigestMD5)
+			log.debug("sha1: %s", repr(sha1))
+			log.debug("md5: %s", repr(md5))
+
+			for got in (sha1, md5):
+				svent = servers.get(hostname)
+				if not svent: continue
+				expected = svent[2]['digest'].get(got.algo)
+				if expected:
+					fpr_good = got == expected
+					break
+
+		except AttributeError:
+			log.debug("Connection to %s doesn't seem to have a fingerprint:", hostname, exc_info=True)
+
+		if fpr_good == False:
+			log.error("Fingerprint mismatch for %s: Got %s, expected %s", hostname, got, expected)
+			self.disconnect(on_purpose = True)
+			self.dispatch('STATUS', 'offline')
+			self.dispatch('CONNECTION_LOST',
+				(_('Bad fingerprint for "%s"') % self._hostname,
+				_("Server's key changed, or spy attack.")))
+			if self.on_connect_auth:
+				self.on_connect_auth(None)
+				self.on_connect_auth = None
+			return
+
+		if fpr_good == None:
+			log.warning(_("No fingerprint in database for %s. Connection could be insecure."), hostname)
+
+		if fpr_good == True:
+			log.debug("Fingerprint found and matched for %s.", hostname)
+
 		con.auth(name, self.password, resource, 1, self.__on_auth)
 
 	def __on_auth(self, con, auth):

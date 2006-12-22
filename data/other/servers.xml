@@ -32,6 +32,7 @@
   </item>
   <item jid="amessage.info" name="Jabber server from amessage">
     <active port="5222"/>
+    <digest algo="sha1" value="69:FA:D6:32:BF:84:CE:01:D9:FC:C5:1A:E3:04:12:FB:A5:28:03:1A"/>
   </item>
   <item jid="amessage.li" name="Jabber server in Liechtenstein">
     <active port="5222"/>
@@ -191,6 +192,7 @@
   </item>
   <item jid="jabber.org" name="Server hosted by the Jabber Software Foundation">
     <active port="5222"/>
+    <digest algo="sha1" value="69:AE:AE:B0:3E:5A:55:56:68:65:BB:76:87:EA:FB:B5:21:E6:07:E7"/>
   </item>
   <item jid="jabber.org.au" name="Server in Australia">
     <active port="5222"/>
@@ -215,6 +217,7 @@
   </item>
   <item jid="jabber.sk" name="Slovak Jabber server">
     <active port="5222"/>
+    <digest algo="sha1" value="EB:2C:ED:CC:FD:C1:F8:8F:58:07:CE:EF:09:0F:72:45:5E:1E:7A:96"/>
   </item>
   <item jid="jabber.snc.ru" name="Jabber server in Russia">
     <active port="5222"/>
@@ -368,5 +371,9 @@
   </item>
   <item jid="xmpp.us" name="">
     <active port="5222"/>
+  </item>
+  <item jid="gajim.org" name="Official server of Gajim" hidden="True">
+    <active port="5222"/>
+    <digest algo="sha1" value="78:CE:51:E9:0D:56:5D:8B:16:9C:10:9E:24:ED:5C:F8:46:59:B1:19"/>
   </item>
 </query>

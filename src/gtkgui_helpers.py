@@ -258,34 +258,93 @@ def resize_window(window, w, h):
 		h = screen_h
 	window.resize(abs(w), abs(h))
 
-class TagInfoHandler(xml.sax.ContentHandler):
-	def __init__(self, tagname1, tagname2):
+class HashDigest:
+	def __init__(self, algo, digest):
+		self.algo = self.cleanAlgo(algo)
+		self.digest = self.cleanDigest(digest)
+
+	def cleanAlgo(self, algo):
+		algo = algo.strip().lower()
+		for strip in (' :.-_'): algo = algo.replace(strip, '')
+		return algo
+
+	def cleanDigest(self, digest):
+		digest = digest.strip().lower()
+		for strip in (' :.'): digest = digest.replace(strip, '')
+		return digest
+
+	def __eq__(self, other):
+		sa, sd = self.algo, self.digest
+		if isinstance(other, self.__class__):
+			oa, od = other.algo, other.digest
+		elif isinstance(other, basestring):
+			sa, oa, od = None, None, self.cleanDigest(other)
+		elif isinstance(other, tuple) and len(other) == 2:
+			oa, od = self.cleanAlgo(other[0]), self.cleanDigest(other[1])
+		else:
+			return False
+
+		return sa == oa and sd == od
+
+	def __ne__(self, other):
+		return not self == other
+
+	def __hash__(self):
+		return self.algo ^ self.digest
+
+	def __str__(self):
+		prettydigest = ''
+		for i in xrange(0, len(self.digest), 2):
+			prettydigest += self.digest[i:i + 2] + ':'
+		return prettydigest[:-1]
+
+	def __repr__(self):
+		return "%s(%s, %s)" % (self.__class__, repr(self.algo), repr(str(self)))
+
+class ServersXMLHandler(xml.sax.ContentHandler):
+	def __init__(self):
 		xml.sax.ContentHandler.__init__(self)
-		self.tagname1 = tagname1
-		self.tagname2 = tagname2
 		self.servers = []
 
 	def startElement(self, name, attributes):
-		if name == self.tagname1:
+		if name == 'item':
+			# we will get the port next time so we just set it 0 here
+			sitem = [None, 0, {}]
+			sitem[2]['digest'] = {}
+			sitem[2]['hidden'] = False
 			for attribute in attributes.getNames():
 				if attribute == 'jid':
 					jid = attributes.getValue(attribute)
-					# we will get the port next time so we just set it 0 here
-					self.servers.append([jid, 0])
-		elif name == self.tagname2:
+					sitem[0] = jid
+				elif attribute == 'hidden':
+					hidden = attributes.getValue(attribute)
+					if hidden.lower() in ('1', 'yes', 'true'):
+						sitem[2]['hidden'] = True
+			self.servers.append(sitem)
+		elif name == 'active':
 			for attribute in attributes.getNames():
 				if attribute == 'port':
 					port = attributes.getValue(attribute)
 					# we received the jid last time, so we now assign the port
 					# number to the last jid in the list
 					self.servers[-1][1] = port
+		elif name == 'digest':
+			algo=None
+			digest=None
+			for attribute in attributes.getNames():
+				if attribute == 'algo':
+					algo = attributes.getValue(attribute)
+				elif attribute == 'value':
+					digest = attributes.getValue(attribute)
+			hd = HashDigest(algo, digest)
+			self.servers[-1][2]['digest'][hd.algo] = hd
 
 	def endElement(self, name):
 		pass
 
 def parse_server_xml(path_to_file):
 	try:
-		handler = TagInfoHandler('item', 'active')
+		handler = ServersXMLHandler()
 		xml.sax.parse(path_to_file, handler)
 		return handler.servers
 	# handle exception if unable to open file
