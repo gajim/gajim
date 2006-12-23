@@ -30,14 +30,7 @@ import traceback
 import thread
 
 import logging
-h = logging.StreamHandler()
-f = logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s')
-h.setFormatter(f)
-log = logging.getLogger('Gajim.transports')
-log.addHandler(h)
-log.setLevel(logging.DEBUG)
-log.propagate = False
-del h, f
+log = logging.getLogger('gajim.c.x.transports')
 
 USE_PYOPENSSL = False
 
@@ -534,7 +527,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._sock.connect(self._server)
 		except socket.error, e:
 			errnum = e[0]
-			if errnum != errno.EINPROGRESS:
+			# 10035 - winsock equivalent of EINPROGRESS
+			if errnum not in (errno.EINPROGRESS, 10035):
 				log.error("_do_connect:", exc_info=True)
 				#traceback.print_exc()
 		# in progress, or would block
@@ -747,15 +741,15 @@ class NonBlockingTLS(PlugIn):
 		tcpsock.serverDigestSHA1 = cert.digest('sha1')
 		tcpsock.serverDigestMD5 = cert.digest('md5')
 
-		# FIXME: remove debug prints
-		peercert = tcpsock._sslObj.get_peer_certificate()
-		ciphers = tcpsock._sslObj.get_cipher_list()
+		if log.getEffectiveLevel() <= logging.DEBUG:
+			peercert = tcpsock._sslObj.get_peer_certificate()
+			ciphers = tcpsock._sslObj.get_cipher_list()
 
-		print >> sys.stderr, "Ciphers:", ciphers
-		print >> sys.stderr, "Peer cert:", peercert
-		self._dumpX509(peercert)
+			print >> sys.stderr, "Ciphers:", ciphers
+			print >> sys.stderr, "Peer cert:", peercert
+			self._dumpX509(peercert)
 
-		print >> sys.stderr, OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, peercert)
+			print >> sys.stderr, OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, peercert)
 
 	def _startSSL_stdlib(self):
 		log.debug("_startSSL_stdlib called")

@@ -260,27 +260,22 @@ def resize_window(window, w, h):
 
 class HashDigest:
 	def __init__(self, algo, digest):
-		self.algo = self.cleanAlgo(algo)
-		self.digest = self.cleanDigest(digest)
+		self.algo = self.cleanID(algo)
+		self.digest = self.cleanID(digest)
 
-	def cleanAlgo(self, algo):
-		algo = algo.strip().lower()
-		for strip in (' :.-_'): algo = algo.replace(strip, '')
-		return algo
-
-	def cleanDigest(self, digest):
-		digest = digest.strip().lower()
-		for strip in (' :.'): digest = digest.replace(strip, '')
-		return digest
+	def cleanID(self, id):
+		id = id.strip().lower()
+		for strip in (' :.-_'): id = id.replace(strip, '')
+		return id
 
 	def __eq__(self, other):
 		sa, sd = self.algo, self.digest
 		if isinstance(other, self.__class__):
 			oa, od = other.algo, other.digest
 		elif isinstance(other, basestring):
-			sa, oa, od = None, None, self.cleanDigest(other)
+			sa, oa, od = None, None, self.cleanID(other)
 		elif isinstance(other, tuple) and len(other) == 2:
-			oa, od = self.cleanAlgo(other[0]), self.cleanDigest(other[1])
+			oa, od = self.cleanID(other[0]), self.cleanID(other[1])
 		else:
 			return False
 
@@ -318,7 +313,7 @@ class ServersXMLHandler(xml.sax.ContentHandler):
 					sitem[0] = jid
 				elif attribute == 'hidden':
 					hidden = attributes.getValue(attribute)
-					if hidden.lower() in ('1', 'yes', 'true'):
+					if hidden.lower() in ('1', 'y', 'yes', 't', 'true', 'on'):
 						sitem[2]['hidden'] = True
 			self.servers.append(sitem)
 		elif name == 'active':
@@ -329,8 +324,7 @@ class ServersXMLHandler(xml.sax.ContentHandler):
 					# number to the last jid in the list
 					self.servers[-1][1] = port
 		elif name == 'digest':
-			algo=None
-			digest=None
+			algo, digest = None, None
 			for attribute in attributes.getNames():
 				if attribute == 'algo':
 					algo = attributes.getValue(attribute)

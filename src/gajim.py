@@ -21,7 +21,82 @@ import sys
 import os
 import urllib
 
+import logging
+consoleloghandler = logging.StreamHandler()
+consoleloghandler.setLevel(logging.WARNING)
+consoleloghandler.setFormatter(
+logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s'))
+log = logging.getLogger('gajim')
+log.setLevel(logging.INFO)
+log.addHandler(consoleloghandler)
+log.propagate = False
+log = logging.getLogger('gajim.gajim')
+
+# create intermediate loggers
+logging.getLogger('gajim.c')
+logging.getLogger('gajim.c.x')
+
+import getopt
 from common import i18n
+
+def parseLogLevel(arg):
+	if arg.isdigit():
+		return int(arg)
+	if arg.isupper():
+		return getattr(logging, arg)
+	raise ValueError(_("%s is not a valid loglevel"), repr(arg))
+
+def parseLogTarget(arg):
+	arg = arg.lower()
+	if arg.startswith('.'): return arg[1:]
+	if arg.startswith('gajim'): return arg
+	return 'gajim.' + arg
+
+def parseAndSetLogLevels(arg):
+	directives = arg.split(',')
+	for directive in directives:
+		directive = directive.strip()
+		target, level = directive.split('=')
+		target = parseLogTarget(target.strip())
+		level = parseLogLevel(level.strip())
+
+		if target == '':
+			consoleloghandler.setLevel(level)
+			print "consoleloghandler level set to %s" % level
+		else:
+			logger = logging.getLogger(target)
+			logger.setLevel(level)
+			print "Logger %s level set to %d" % (target, level)
+
+def parseOpts():
+	profile = ''
+	verbose = False
+
+	try:
+		shortargs = 'hqvl:p:'
+		longargs = 'help quiet verbose loglevel= profile='
+		opts, args = getopt.getopt(sys.argv[1:], shortargs, longargs.split())
+	except getopt.error, msg:
+		print msg
+		print 'for help use --help'
+		sys.exit(2)
+	for o, a in opts:
+		if o in ('-h', '--help'):
+			print 'gajim [--help] [--quiet] [--verbose] [--loglevel subsystem=level[,subsystem=level[...]]] [--profile name]'
+			sys.exit()
+		elif o in ('-q', '--quiet'):
+			consoleloghandler.setLevel(logging.CRITICAL)
+			verbose = False
+		elif o in ('-v', '--verbose'):
+			consoleloghandler.setLevel(logging.INFO)
+			verbose = True
+		elif o in ('-p', '--profile'): # gajim --profile name
+			profile = a
+		elif o in ('-l', '--loglevel'):
+			parseAndSetLogLevels(a)
+	return profile, verbose
+
+profile, verbose = parseOpts()
 
 import message_control
 
@@ -116,24 +191,7 @@ from common import gajim
 from common import helpers
 from common import optparser
 
-profile = ''
-try:
-	opts, args = getopt.getopt(sys.argv[1:], 'hvp:', ['help', 'verbose',
-		'profile=', 'sm-config-prefix=', 'sm-client-id='])
-except getopt.error, msg:
-	print msg
-	print 'for help use --help'
-	sys.exit(2)
-for o, a in opts:
-	if o in ('-h', '--help'):
-		print 'gajim [--help] [--verbose] [--profile name]'
-		sys.exit()
-	elif o in ('-v', '--verbose'):
-		gajim.verbose = True
-	elif o in ('-p', '--profile'): # gajim --profile name
-		profile = a
-del opts
-del args
+if verbose: gajim.verbose = True
 
 import locale
 profile = unicode(profile, locale.getpreferredencoding())

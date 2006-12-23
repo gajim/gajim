@@ -104,6 +104,10 @@ def init():
 gajimpaths = init()
 
 def init_profile(profile, paths=gajimpaths):
+	# no unicode
+	if isinstance(profile, unicode):
+		profile = profile.encode(sys.getfilesystemencoding())
+
 	conffile = windowsify('config')
 	pidfile = windowsify('gajim')
 

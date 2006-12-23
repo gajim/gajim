@@ -43,14 +43,7 @@ USE_GPG = GnuPG.USE_GPG
 from common.rst_xhtml_generator import create_xhtml
 
 import logging
-h = logging.StreamHandler()
-f = logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s')
-h.setFormatter(f)
-log = logging.getLogger('Gajim.connection')
-log.addHandler(h)
-log.setLevel(logging.DEBUG)
-log.propagate = False
-del h, f
+log = logging.getLogger('gajim.c.connection')
 
 import gtkgui_helpers
 
@@ -120,7 +113,7 @@ class Connection(ConnectionHandlers):
 		# Do not try to reco while we are already trying
 		self.time_to_reconnect = None
 		if self.connected < 2: #connection failed
-			gajim.log.debug('reconnect')
+			log.debug('reconnect')
 			self.connected = 1
 			self.dispatch('STATUS', 'connecting')
 			self.retrycount += 1
@@ -147,7 +140,7 @@ class Connection(ConnectionHandlers):
 	
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
-		gajim.log.debug('disconnectedReconnCB')
+		log.debug('disconnectedReconnCB')
 		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
 			# after we auth to server
@@ -168,7 +161,7 @@ class Connection(ConnectionHandlers):
 					self.last_time_to_reconnect *= 1.5
 				self.last_time_to_reconnect += randomsource.randint(0, 5)
 				self.time_to_reconnect = int(self.last_time_to_reconnect)
-				gajim.log.info("Reconnect to %s in %ss", self.name, self.time_to_reconnect)
+				log.info("Reconnect to %s in %ss", self.name, self.time_to_reconnect)
 				gajim.idlequeue.set_alarm(self._reconnect_alarm,
 					self.time_to_reconnect)
 			elif self.on_connect_failure:
@@ -393,13 +386,13 @@ class Connection(ConnectionHandlers):
 			if self.on_connect_success == self._on_new_account:
 				con.RegisterDisconnectHandler(self._on_new_account)
 
-			gajim.log.info("Connecting to %s: [%s:%d]", self.name, host['host'], host['port'])
+			log.info("Connecting to %s: [%s:%d]", self.name, host['host'], host['port'])
 			con.connect((host['host'], host['port']), proxy = self._proxy,
 				secure = self._secure)
 			return
 		else:
 			if not retry and self.retrycount == 0:
-				gajim.log.error("Out of hosts, giving up connecting to %s", self.name)
+				log.debug("Out of hosts, giving up connecting to %s", self.name)
 				self.time_to_reconnect = None
 				if self.on_connect_failure:
 					self.on_connect_failure()
@@ -427,21 +420,15 @@ class Connection(ConnectionHandlers):
 			return
 		self.hosts = []
 		if not con_type:
-			gajim.log.debug('Could not connect to %s:%s' % (self._current_host['host'],
+			log.debug('Could not connect to %s:%s' % (self._current_host['host'],
 				self._current_host['port']))
 		self.connected_hostname = self._current_host['host']
 		self.on_connect_failure = None
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
-		gajim.log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
+		log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
 			self._current_host['port'], con_type))
 		self._register_handlers(con, con_type)
-		return True
 
-	def _register_handlers(self, con, con_type):
-		self.peerhost = con.get_peerhost()
-		# notify the gui about con_type
-		self.dispatch('CON_TYPE', con_type)
-		ConnectionHandlers._register_handlers(self, con, con_type)
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
@@ -463,19 +450,23 @@ class Connection(ConnectionHandlers):
 			log.debug("sha1: %s", repr(sha1))
 			log.debug("md5: %s", repr(md5))
 
-			for got in (sha1, md5):
-				svent = servers.get(hostname)
-				if not svent: continue
-				expected = svent[2]['digest'].get(got.algo)
-				if expected:
-					fpr_good = got == expected
-					break
+			sv = servers.get(hostname)
+			if sv:
+				for got in (sha1, md5):
+					expected = sv[2]['digest'].get(got.algo)
+					if expected:
+						fpr_good = (got == expected)
+						break
 
 		except AttributeError:
-			log.debug("Connection to %s doesn't seem to have a fingerprint:", hostname, exc_info=True)
+			if con_type in ('ssl', 'tls'):
+				log.error(_("Missing fingerprint in SSL connection to %s") + ':', hostname, exc_info=True)
+				# fpr_good = False # FIXME: enable this when sequence is sorted
+			else:
+				log.debug("Connection to %s doesn't seem to have a fingerprint:", hostname, exc_info=True)
 
 		if fpr_good == False:
-			log.error("Fingerprint mismatch for %s: Got %s, expected %s", hostname, got, expected)
+			log.error(_("Fingerprint mismatch for %s: Got %s, expected %s"), hostname, got, expected)
 			self.disconnect(on_purpose = True)
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('CONNECTION_LOST',
@@ -490,9 +481,17 @@ class Connection(ConnectionHandlers):
 			log.warning(_("No fingerprint in database for %s. Connection could be insecure."), hostname)
 
 		if fpr_good == True:
-			log.debug("Fingerprint found and matched for %s.", hostname)
+			log.info("Fingerprint found and matched for %s.", hostname)
 
 		con.auth(name, self.password, resource, 1, self.__on_auth)
+
+		return True
+
+	def _register_handlers(self, con, con_type):
+		self.peerhost = con.get_peerhost()
+		# notify the gui about con_type
+		self.dispatch('CON_TYPE', con_type)
+		ConnectionHandlers._register_handlers(self, con, con_type)
 
 	def __on_auth(self, con, auth):
 		if not con:
@@ -853,14 +852,14 @@ class Connection(ConnectionHandlers):
 	def ack_subscribed(self, jid):
 		if not self.connection:
 			return
-		gajim.log.debug('ack\'ing subscription complete for %s' % jid)
+		log.debug('ack\'ing subscription complete for %s' % jid)
 		p = common.xmpp.Presence(jid, 'subscribe')
 		self.connection.send(p)
 
 	def ack_unsubscribed(self, jid):
 		if not self.connection:
 			return
-		gajim.log.debug('ack\'ing unsubscription complete for %s' % jid)
+		log.debug('ack\'ing unsubscription complete for %s' % jid)
 		p = common.xmpp.Presence(jid, 'unsubscribe')
 		self.connection.send(p)
 
@@ -868,7 +867,7 @@ class Connection(ConnectionHandlers):
 	auto_auth = False, user_nick = ''):
 		if not self.connection:
 			return
-		gajim.log.debug('subscription request for %s' % jid)
+		log.debug('subscription request for %s' % jid)
 		if auto_auth:
 			self.jids_for_auto_auth.append(jid)
 		# RFC 3921 section 8.2
