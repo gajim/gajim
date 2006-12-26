@@ -1472,6 +1472,27 @@ class RosterWindow:
 			old_text, False, (on_renamed, account, row_type, jid, old_text),
 			on_canceled)
 
+	def readd_if_needed(self, contact, account):
+		need_readd = False
+		if len(gajim.events.get_events(account, contact.jid)):
+			need_readd = True
+		elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+			if _('Not in Roster') in contact.groups:
+				# Close chat window
+				msg_win = gajim.interface.msg_win_mgr.get_window(contact.jid,
+					account)
+				ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+				msg_win.remove_tab(ctrl, msg_win.CLOSE_CLOSE_BUTTON)
+			else:
+				need_readd = True
+		if need_readd:
+			c = gajim.contacts.create_contact(jid = contact.jid,
+				name = '', groups = [_('Not in Roster')],
+				show = 'not in roster', status = '', ask = 'none',
+				keyID = contact.keyID)
+			gajim.contacts.add_contact(account, c)
+			self.add_contact_to_roster(contact.jid, account)
+
 	def on_remove_group_item_activated(self, widget, group, account):
 		dlg = dialogs.ConfirmationDialogCheck(_('Remove Group'),
 			_('Do you want to remove group %s from the roster?' % group),
@@ -1487,7 +1508,12 @@ class RosterWindow:
 					self.add_contact_to_roster(contact.jid, account)
 				else:
 					gajim.connections[account].unsubscribe(contact.jid) 
-		
+					for c in gajim.contacts.get_contact(account, contact.jid):
+						self.remove_contact(c, account)
+					gajim.contacts.remove_jid(account, c.jid)
+					self.readd_if_needed(contact, account)
+			self.draw_account(account)
+
 	def on_assign_pgp_key(self, widget, contact, account):
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
@@ -2583,32 +2609,14 @@ class RosterWindow:
 					self.draw_group(group, account)
 				# redraw account rows for contact numbers
 				self.draw_account(account)
-				need_readd = False
 				if not remove_auth and contact.sub == 'both':
 					contact.name = ''
 					contact.groups = []
 					contact.sub = 'from'
 					gajim.contacts.add_contact(account, contact)
 					self.add_contact_to_roster(contact.jid, account)
-				elif len(gajim.events.get_events(account, contact.jid)):
-					need_readd = True
-				elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-					if _('Not in Roster') in contact.groups:
-						# Close chat window
-						msg_win = gajim.interface.msg_win_mgr.get_window(contact.jid,
-							account)
-						ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid,
-							account)
-						msg_win.remove_tab(ctrl, msg_win.CLOSE_CLOSE_BUTTON)
-					else:
-						need_readd = True
-				if need_readd:
-					c = gajim.contacts.create_contact(jid = contact.jid,
-						name = '', groups = [_('Not in Roster')],
-						show = 'not in roster', status = '', ask = 'none',
-						keyID = contact.keyID)
-					gajim.contacts.add_contact(account, c)
-					self.add_contact_to_roster(contact.jid, account)
+				else:
+					self.readd_if_needed(contact, account)
 		if len(list_) == 1:
 			contact = list_[0][0]
 			account = list_[0][1]

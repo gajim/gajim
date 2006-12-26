@@ -1169,6 +1169,7 @@ class Interface:
 				c = contacts[0]
 				self.roster.remove_contact(c, account)
 				gajim.contacts.remove_jid(account, jid)
+				self.roster.draw_account(account)
 				if gajim.events.get_events(account, c.jid):
 					keyID = ''
 					attached_keys = gajim.config.get_per('accounts', account,
