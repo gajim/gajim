@@ -264,7 +264,7 @@ class Contacts:
 				if jid == our_jid:
 					continue
 				if common.gajim.jid_is_transport(jid) and not \
-				common.gajim.config.get('show_transports_group'):
+					_('Transports') in groups:
 					# do not count transports
 					continue
 				contact = self.get_contact_with_highest_priority(account, jid)
