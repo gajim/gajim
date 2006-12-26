@@ -268,6 +268,8 @@ class Contacts:
 					# do not count transports
 					continue
 				contact = self.get_contact_with_highest_priority(account, jid)
+				if _('Not in roster') in contact.groups:
+					continue
 				in_groups = False
 				if groups == []:
 					in_groups = True
