@@ -366,13 +366,15 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.remove_timeout() 
 		self._owner.disconnected()
 		self.idlequeue.unplug_idle(self.fd)
-		try:
-			self._sock.shutdown(socket.SHUT_RDWR)
-		except socket.error, e:
-			if e[0] != errno.ENOTCONN:
-				log.error("Error shutting down socket for %s:", self.getName(), exc_info=True)
-		try: self._sock.close()
-		except: log.error("Error closing socket for %s:", self.getName(), exc_info=True)
+		sock = getattr(self, '_sock', None)
+		if sock:
+			try:
+				sock.shutdown(socket.SHUT_RDWR)
+			except socket.error, e:
+				if e[0] != errno.ENOTCONN:
+					log.error("Error shutting down socket for %s:", self.getName(), exc_info=True)
+			try: sock.close()
+			except: log.error("Error closing socket for %s:", self.getName(), exc_info=True)
 		# socket descriptor cannot be (un)plugged anymore
 		self.fd = -1
 		if self.on_disconnect:
