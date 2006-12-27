@@ -300,24 +300,31 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._server = server
 		self.printed_error = False
 		self.state = 0
+		success = False
 		try:
 			for ai in socket.getaddrinfo(server[0],server[1],socket.AF_UNSPEC,socket.SOCK_STREAM):
 				try:
 					self._sock=socket.socket(*ai[:3])
 					self._sock.setblocking(False)
 					self._server=ai[4]
+					success = True
 					break
 				except:
 					if sys.exc_value[0] == errno.EINPROGRESS:
+						success = True
 						break
 					#for all errors, we try other addresses
 					continue
+		except socket.gaierror, e:
+			log.info("Lookup failure for %s: %s[%s]", self.getName(), e[1], repr(e[0]), exc_info=True)
 		except:
 			log.error("Exception trying to connect to %s:", self.getName(), exc_info=True)
-			#traceback.print_exc()
+
+		if not success:
 			if self.on_connect_failure:
 				self.on_connect_failure()
 			return False
+
 		self.fd = self._sock.fileno()
 		self.idlequeue.plug_idle(self, True, False)
 		self.set_timeout(CONNECT_TIMEOUT_SECONDS)
