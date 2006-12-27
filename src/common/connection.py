@@ -470,8 +470,8 @@ class Connection(ConnectionHandlers):
 			self.disconnect(on_purpose = True)
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('CONNECTION_LOST',
-				(_('Bad fingerprint for "%s"') % self._hostname,
-				_("Server's key changed, or spy attack.")))
+				(_('Security error connecting to "%s"') % self._hostname,
+				_("The server's key has changed, or someone is trying to hack your connection.")))
 			if self.on_connect_auth:
 				self.on_connect_auth(None)
 				self.on_connect_auth = None

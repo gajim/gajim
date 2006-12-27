@@ -23,11 +23,11 @@ import urllib
 
 import logging
 consoleloghandler = logging.StreamHandler()
-consoleloghandler.setLevel(logging.WARNING)
+consoleloghandler.setLevel(1)
 consoleloghandler.setFormatter(
 logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s'))
 log = logging.getLogger('gajim')
-log.setLevel(logging.INFO)
+log.setLevel(logging.WARNING)
 log.addHandler(consoleloghandler)
 log.propagate = False
 log = logging.getLogger('gajim.gajim')
@@ -53,20 +53,19 @@ def parseLogTarget(arg):
 	return 'gajim.' + arg
 
 def parseAndSetLogLevels(arg):
-	directives = arg.split(',')
-	for directive in directives:
+	for directive in arg.split(','):
 		directive = directive.strip()
-		target, level = directive.split('=')
-		target = parseLogTarget(target.strip())
+		targets, level = directive.rsplit('=', 1)
 		level = parseLogLevel(level.strip())
-
-		if target == '':
-			consoleloghandler.setLevel(level)
-			print "consoleloghandler level set to %s" % level
-		else:
-			logger = logging.getLogger(target)
-			logger.setLevel(level)
-			print "Logger %s level set to %d" % (target, level)
+		for target in targets.split('='):
+			target = parseLogTarget(target.strip())
+			if target == '':
+				consoleloghandler.setLevel(level)
+				print "consoleloghandler level set to %s" % level
+			else:
+				logger = logging.getLogger(target)
+				logger.setLevel(level)
+				print "Logger %s level set to %d" % (target, level)
 
 def parseOpts():
 	profile = ''
@@ -97,6 +96,7 @@ def parseOpts():
 	return profile, verbose
 
 profile, verbose = parseOpts()
+del parseOpts, parseAndSetLogLevels, parseLogTarget, parseLogLevel
 
 import message_control
 

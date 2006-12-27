@@ -423,7 +423,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			# get as many bites, as possible, but not more than RECV_BUFSIZE
 			received = self._recv(RECV_BUFSIZE)
 		except (socket.error, socket.herror, socket.gaierror), e:
-			log.error("_do_receive: got %s:", e.__class__, exc_info=True)
+			log.debug("_do_receive: got %s:", e.__class__, exc_info=True)
 			#traceback.print_exc()
 			#print "Current Stack:"
 			#traceback.print_stack()
