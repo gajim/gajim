@@ -434,12 +434,39 @@ class Connection(ConnectionHandlers):
 		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		self.connection = con
 
+		fpr_good = self._check_fingerprint(con, con_type)
+		if fpr_good == False:
+			log.error(_("Fingerprint mismatch for %s: Got %s, expected %s"), hostname, got, expected)
+			self.disconnect(on_purpose = True)
+			self.dispatch('STATUS', 'offline')
+			self.dispatch('CONNECTION_LOST',
+				(_('Security error connecting to "%s"') % self._hostname,
+				_("The server's key has changed, or someone is trying to hack your connection.")))
+			if self.on_connect_auth:
+				self.on_connect_auth(None)
+				self.on_connect_auth = None
+			return
+
+		if fpr_good == None:
+			log.warning(_("No fingerprint in database for %s. Connection could be insecure."), hostname)
+
+		if fpr_good == True:
+			log.info("Fingerprint found and matched for %s.", hostname)
+
+		con.auth(name, self.password, resource, 1, self.__on_auth)
+
+		return True
+
+	def _check_fingerprint(self, con, con_type):
+		fpr_good = None # None: No fpr in database, False: mismatch, True: match
+
 		# FIXME: find a more permanent place for loading servers.xml
 		servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
 		servers = gtkgui_helpers.parse_server_xml(servers_xml)
 		servers = dict(map(lambda e: (e[0], e), servers))
 
-		fpr_good = None # None: No fpr in database, False: mismatch, True: match
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+
 		try:
 			log.debug("con: %s", con)
 			log.debug("con.Connection: %s", con.Connection)
@@ -465,27 +492,7 @@ class Connection(ConnectionHandlers):
 			else:
 				log.debug("Connection to %s doesn't seem to have a fingerprint:", hostname, exc_info=True)
 
-		if fpr_good == False:
-			log.error(_("Fingerprint mismatch for %s: Got %s, expected %s"), hostname, got, expected)
-			self.disconnect(on_purpose = True)
-			self.dispatch('STATUS', 'offline')
-			self.dispatch('CONNECTION_LOST',
-				(_('Security error connecting to "%s"') % self._hostname,
-				_("The server's key has changed, or someone is trying to hack your connection.")))
-			if self.on_connect_auth:
-				self.on_connect_auth(None)
-				self.on_connect_auth = None
-			return
-
-		if fpr_good == None:
-			log.warning(_("No fingerprint in database for %s. Connection could be insecure."), hostname)
-
-		if fpr_good == True:
-			log.info("Fingerprint found and matched for %s.", hostname)
-
-		con.auth(name, self.password, resource, 1, self.__on_auth)
-
-		return True
+		return fpr_good
 
 	def _register_handlers(self, con, con_type):
 		self.peerhost = con.get_peerhost()
