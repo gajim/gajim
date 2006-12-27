@@ -1054,8 +1054,12 @@ class Interface:
 			contact.status = status
 			ctrl.update_ui()
 			uf_show = helpers.get_uf_show(show)
-			ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
-						'status')
+			if status:
+				ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show,
+					status), 'status')
+			else:
+				ctrl.print_conversation(_('%s is now %s') % (nick, uf_show),
+					'status')
 			ctrl.parent_win.redraw_tab(ctrl)
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
