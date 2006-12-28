@@ -461,7 +461,6 @@ class Connection(ConnectionHandlers):
 		fpr_good = None # None: Unable to check fpr, False: mismatch, True: match
 
 		# FIXME: not tidy
-		import common.xmpp.transports_nb
 		if not common.xmpp.transports_nb.USE_PYOPENSSL: return None
 
 		# FIXME: find a more permanent place for loading servers.xml

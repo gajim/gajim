@@ -30,7 +30,7 @@ import traceback
 import thread
 
 import logging
-log = logging.getLogger('gajim.c.x.transports')
+log = logging.getLogger('gajim.c.x.transports_nb')
 
 USE_PYOPENSSL = False
 
