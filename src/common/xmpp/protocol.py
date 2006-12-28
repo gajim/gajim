@@ -85,6 +85,7 @@ NS_STANZAS      ='urn:ietf:params:xml:ns:xmpp-stanzas'
 NS_STREAM       ='http://affinix.com/jabber/stream'
 NS_STREAMS      ='http://etherx.jabber.org/streams'
 NS_TIME         ='jabber:iq:time'                                       # JEP-0900
+NS_TIME_REVISED ='http://www.xmpp.org/extensions/xep-0202.html#ns'      # JEP-0202
 NS_TLS          ='urn:ietf:params:xml:ns:xmpp-tls'
 NS_VACATION     ='http://jabber.org/protocol/vacation'
 NS_VCARD        ='vcard-temp'
