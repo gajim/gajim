@@ -40,7 +40,7 @@ class PasswordStorage(object):
 class SimplePasswordStorage(PasswordStorage):
 	def get_password(self, account_name):
 		passwd = gajim.config.get_per('accounts', account_name, 'password')
-		if passwd.startswith('gnomekeyring:'):
+		if passwd and passwd.startswith('gnomekeyring:'):
 			return None # this is not a real password, it's a gnome keyring token
 		else:
 			return passwd
