@@ -21,8 +21,10 @@ from common import gajim
 try:
 	import gnomekeyring
 except ImportError:
+	USER_HAS_GNOMEKEYRING = False
 	USER_USES_GNOMEKEYRING = False
 else:
+	USER_HAS_GNOMEKEYRING = True
 	if gnomekeyring.is_available():
 		USER_USES_GNOMEKEYRING = True
 	else:
