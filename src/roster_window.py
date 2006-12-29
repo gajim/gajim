@@ -228,8 +228,9 @@ class RosterWindow:
 		if not self.tree.row_expanded(path) and model.iter_has_child(iter):
 			# account row not expanded
 			account_name = '[%s]' % account_name
-		if gajim.account_is_connected(account) or (self.regroup and \
-		gajim.get_number_of_connected_accounts()):
+		if (gajim.account_is_connected(account) or (self.regroup and \
+		gajim.get_number_of_connected_accounts())) and gajim.config.get(
+		'show_contacts_number'):
 			nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
 				accounts = accounts)		
 			account_name += ' (%s/%s)' % (repr(nbr_on),repr(nbr_total))
@@ -389,11 +390,13 @@ class RosterWindow:
 			accounts = []
 		else:
 			accounts = [account]
-		nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
-			accounts = accounts, groups = [group])
+		text = group
+		if gajim.config.get('show_contacts_number'):
+			nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
+				accounts = accounts, groups = [group])
+			text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 		model = self.tree.get_model()
-		model.set_value(iter, 1 , gtkgui_helpers.escape_for_pango_markup(
-			'%s (%s/%s)' % (group, repr(nbr_on), repr(nbr_total))))		
+		model.set_value(iter, 1 , gtkgui_helpers.escape_for_pango_markup(text))
 
 	def add_to_not_in_the_roster(self, account, jid, nick = ''):
 		''' add jid to group "not in the roster", he MUST not be in roster yet,

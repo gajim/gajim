@@ -222,6 +222,7 @@ class Config:
 		'confirm_metacontacts': [ opt_str, '', _('Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog.')],
 		'enable_negative_priority': [ opt_bool, False, _('If True, you will be able to set a negative priority to your account in account modification window. BE CAREFULL, when you are logged in with a negative priority, you will NOT receive any message from your server.')],
 		'use_gnomekeyring': [opt_bool, True, _('If True, Gajim will use Gnome Keyring (if available) to store account passwords.')],
+		'show_contacts_number': [opt_bool, True, _('If True, Gajim will show number of online and total contacts in account and group rows.')],
 	}
 
 	__options_per_key = {
