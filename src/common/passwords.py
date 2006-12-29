@@ -18,17 +18,19 @@ import gobject
 
 from common import gajim
 
-try:
-	import gnomekeyring
-except ImportError:
-	USER_HAS_GNOMEKEYRING = False
-	USER_USES_GNOMEKEYRING = False
-else:
-	USER_HAS_GNOMEKEYRING = True
-	if gnomekeyring.is_available():
-		USER_USES_GNOMEKEYRING = True
+USER_HAS_GNOMEKEYRING = False
+USER_USES_GNOMEKEYRING = False
+if gajim.config.get('use_gnomekeyring'):
+	try:
+		import gnomekeyring
+	except ImportError:
+		pass
 	else:
-		USER_USES_GNOMEKEYRING = False
+		USER_HAS_GNOMEKEYRING = True
+		if gnomekeyring.is_available():
+			USER_USES_GNOMEKEYRING = True
+		else:
+			USER_USES_GNOMEKEYRING = False
 
 class PasswordStorage(object):
 	def get_password(self, account_name):
