@@ -299,7 +299,7 @@ class ProfileWindow:
 				vcard['PHOTO']['TYPE'] = self.avatar_mime_type
 		return vcard
 
-	def on_publish_button_clicked(self, widget):
+	def on_ok_button_clicked(self, widget):
 		if self.update_progressbar_timeout_id:
 			# Operation in progress
 			return
@@ -322,16 +322,11 @@ class ProfileWindow:
 			self.update_progressbar)
 
 	def vcard_published(self):
-		if self.message_id:
-			self.statusbar.remove(self.context_id, self.message_id)
-		self.message_id = self.statusbar.push(self.context_id,
-			_('Information published'))
-		self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
-			self.remove_statusbar, self.message_id)
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			self.progressbar.set_fraction(0)
 			self.update_progressbar_timeout_id = None
+		self.window.destroy()
 
 	def vcard_not_published(self):
 		if self.message_id:
@@ -348,34 +343,5 @@ class ProfileWindow:
 			_('There was an error while publishing your personal information, '
 			'try again later.'))
 
-	def on_retrieve_button_clicked(self, widget):
-		if self.update_progressbar_timeout_id:
-			# Operation in progress
-			return
-		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
-			'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
-			'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',
-			'ADR_HOME_REGION', 'ADR_HOME_PCODE', 'ADR_HOME_CTRY', 'ORG_ORGNAME',
-			'ORG_ORGUNIT', 'TITLE', 'ROLE', 'ADR_WORK_STREET', 'ADR_WORK_EXTADR',
-			'ADR_WORK_LOCALITY', 'ADR_WORK_REGION', 'ADR_WORK_PCODE',
-			'ADR_WORK_CTRY']
-		if gajim.connections[self.account].connected > 1:
-			# clear all entries
-			for e in entries:
-				self.xml.get_widget(e + '_entry').set_text('')
-			self.xml.get_widget('DESC_textview').get_buffer().set_text('')
-			button = self.xml.get_widget('PHOTO_button')
-			image = button.get_image()
-			image.set_from_pixbuf(None)
-			button.set_label(_('Click to set your avatar'))
-			gajim.connections[self.account].request_vcard(self.jid)
-		else:
-			dialogs.ErrorDialog(_('You are not connected to the server'),
-			_('Without a connection, you can not get your contact information.'))
-		self.message_id = self.statusbar.push(self.context_id,
-			_('Retrieving profile...'))
-		self.update_progressbar_timeout_id = gobject.timeout_add(100,
-			self.update_progressbar)
-
-	def on_close_button_clicked(self, widget):
+	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
