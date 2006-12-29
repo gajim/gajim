@@ -150,8 +150,11 @@ class RosterWindow:
 			self.add_contact_to_roster(jid, account)
 			iters = self.get_contact_iter(jid, account)
 			path = self.tree.get_model().get_path(iters[0])
+		if self.draging:
+			# do not change selection while DND'ing
+			return
 		# popup == False so we show awaiting event in roster
-		# show and select contact line in roster (even if he is not in roster) 
+		# show and select contact line in roster (even if he is not in roster)
 		self.tree.expand_row(path[0:1], False)
 		self.tree.expand_row(path[0:2], False)
 		self.tree.scroll_to_cell(path)
@@ -3111,10 +3114,11 @@ class RosterWindow:
 		if popup:
 			if not ctrl:
 				self.new_chat(contact, account, resource = resource_for_chat)
-				if path:
+				if path and not self.draging:
 					# we curently see contact in our roster OR he
 					# is not in the roster at all. 
 					# show and select his line in roster 
+					# do not change selection while DND'ing
 					self.tree.expand_row(path[0:1], False)
 					self.tree.expand_row(path[0:2], False)
 					self.tree.scroll_to_cell(path)
@@ -3915,6 +3919,12 @@ class RosterWindow:
 			data = model[path][C_JID]
 		selection.set(selection.target, 8, data)
 
+	def drag_begin(self, treeview, context):
+		self.draging = True
+
+	def drag_end(self, treeview, context):
+		self.draging = False
+
 	def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
 		c_dest, was_big_brother, context, etime):
 		if not gajim.connections[account_source].metacontacts_supported or not \
@@ -4397,6 +4407,8 @@ class RosterWindow:
 		self.tree.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, TARGETS,
 			gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_COPY)
 		self.tree.enable_model_drag_dest(TARGETS2, gtk.gdk.ACTION_DEFAULT)
+		self.tree.connect('drag_begin', self.drag_begin)
+		self.tree.connect('drag_end', self.drag_end)
 		self.tree.connect('drag_data_get', self.drag_data_get_data)
 		self.tree.connect('drag_data_received', self.drag_data_received_data)
 		self.xml.signal_autoconnect(self)
