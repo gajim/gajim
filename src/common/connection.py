@@ -436,7 +436,6 @@ class Connection(ConnectionHandlers):
 
 		fpr_good = self._check_fingerprint(con, con_type)
 		if fpr_good == False:
-			log.error(_("Fingerprint mismatch for %s: Got %s, expected %s"), hostname, got, expected)
 			self.disconnect(on_purpose = True)
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('CONNECTION_LOST',
@@ -494,6 +493,9 @@ class Connection(ConnectionHandlers):
 				# fpr_good = False # FIXME: enable this when sequence is sorted
 			else:
 				log.debug("Connection to %s doesn't seem to have a fingerprint:", hostname, exc_info=True)
+
+		if fpr_good == False:
+			log.error(_("Fingerprint mismatch for %s: Got %s, expected %s"), hostname, got, expected)
 
 		return fpr_good
 

@@ -41,6 +41,8 @@ try:
 	USE_PYOPENSSL = True
 	log.info("PyOpenSSL loaded")
 except ImportError:
+	log.debug("Import of PyOpenSSL failed:", exc_info=True)
+
 	# FIXME: Remove these prints before release, replace with a warning dialog.
 	print >> sys.stderr, "=" * 79
 	print >> sys.stderr, "PyOpenSSL not found, falling back to Python builtin SSL objects (insecure)."

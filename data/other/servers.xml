@@ -374,6 +374,6 @@
   </item>
   <item jid="gajim.org" name="Official server of Gajim" hidden="True">
     <active port="5222"/>
-    <digest algo="sha1" value="78:CE:51:E9:0D:56:5D:8B:16:9C:10:9E:24:ED:5C:F8:46:59:B1:19"/>
+    <digest algo="sha1" value="25:79:5D:AC:3A:62:C0:96:5A:C9:36:76:D8:B0:78:1F:AA:DA:79:18"/>
   </item>
 </query>
