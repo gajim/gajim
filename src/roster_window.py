@@ -150,7 +150,7 @@ class RosterWindow:
 			self.add_contact_to_roster(jid, account)
 			iters = self.get_contact_iter(jid, account)
 			path = self.tree.get_model().get_path(iters[0])
-		if self.draging:
+		if self.dragging:
 			# do not change selection while DND'ing
 			return
 		# popup == False so we show awaiting event in roster
@@ -3117,7 +3117,7 @@ class RosterWindow:
 		if popup:
 			if not ctrl:
 				self.new_chat(contact, account, resource = resource_for_chat)
-				if path and not self.draging:
+				if path and not self.dragging:
 					# we curently see contact in our roster OR he
 					# is not in the roster at all. 
 					# show and select his line in roster 
@@ -3923,10 +3923,10 @@ class RosterWindow:
 		selection.set(selection.target, 8, data)
 
 	def drag_begin(self, treeview, context):
-		self.draging = True
+		self.dragging = True
 
 	def drag_end(self, treeview, context):
-		self.draging = False
+		self.dragging = False
 
 	def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
 		c_dest, was_big_brother, context, etime):
@@ -4414,6 +4414,7 @@ class RosterWindow:
 		self.tree.connect('drag_end', self.drag_end)
 		self.tree.connect('drag_data_get', self.drag_data_get_data)
 		self.tree.connect('drag_data_received', self.drag_data_received_data)
+		self.dragging = False
 		self.xml.signal_autoconnect(self)
 		self.combobox_callback_active = True
 
