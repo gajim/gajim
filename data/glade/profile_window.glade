@@ -16,7 +16,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <signal name="key_press_event" handler="on_profile_window_key_press_event" last_modification_time="Fri, 08 Sep 2006 11:39:24 GMT"/>
   <signal name="destroy" handler="on_profile_window_destroy" last_modification_time="Fri, 08 Sep 2006 11:39:32 GMT"/>
 
@@ -92,7 +91,7 @@
 		<widget class="GtkExpander" id="expander1">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="expanded">True</property>
+		  <property name="expanded">False</property>
 		  <property name="spacing">0</property>
 
 		  <child>
