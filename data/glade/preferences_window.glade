@@ -1508,7 +1508,7 @@ Per type</property>
 				      <child>
 					<widget class="GtkRadioButton" id="popup_new_message_radiobutton">
 					  <property name="visible">True</property>
-					  <property name="tooltip" translatable="yes">Gajim will automatically show new events by poping up the relative window</property>
+					  <property name="tooltip" translatable="yes">Gajim will automatically show new events by popping up the relevant window</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">_Pop it up</property>
 					  <property name="use_underline">True</property>

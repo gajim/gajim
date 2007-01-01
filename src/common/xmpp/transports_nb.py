@@ -162,7 +162,7 @@ class PyOpenSSLWrapper(SSLWrapper):
 			pass
 			# log.debug("Recv: " + repr(e))
 		except OpenSSL.SSL.SysCallError, e:
-			log.error("Recv: Got OpenSSL.SSL.SysCallError: " + repr(e), exc_info=True)
+			log.debug("Recv: Got OpenSSL.SSL.SysCallError: " + repr(e), exc_info=True)
 			#traceback.print_exc()
 			raise SSLWrapper.Error(self.sock or self.sslobj, e)
 		except OpenSSL.SSL.Error, e:
@@ -170,7 +170,7 @@ class PyOpenSSLWrapper(SSLWrapper):
 				# warn, but ignore this exception
 				log.warning("Recv: OpenSSL: asn1enc: first num too large (ignored)")
 			else:
-				log.error("Recv: Caught OpenSSL.SSL.Error:", exc_info=True)
+				log.debug("Recv: Caught OpenSSL.SSL.Error:", exc_info=True)
 				#traceback.print_exc()
 				#print "Current Stack:"
 				#traceback.print_stack()
