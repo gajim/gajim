@@ -20,11 +20,10 @@ import tempfile
 # happily pass to functions that operate on files and directories, so we can
 # just leave it as is. Since these paths are meant to be internal to Gajim and
 # not displayed to the user, Unicode is not really necessary here.
-#
-# Update: Python stdlib seems broken, and uses sys.getdefaultencoding() instead
-# of sys.getfilesystemencoding() for converting unicode paths in file operations.
-# Additionally, PyGTK overrides defaultencoding to utf-8, overriding site.py.
-# Therefore, we now use bytestrings and never unicode. (See #2812.)
+
+def fse(s):
+	'''Convert from filesystem encoding if not already Unicode'''
+	return unicode(s, sys.getfilesystemencoding())
 
 class ConfigPaths:
 	def __init__(self, root=None):
@@ -39,12 +38,13 @@ class ConfigPaths:
 					# How are we supposed to know what encoding the environment
 					# variable 'appdata' is in? Assuming it to be in filesystem
 					# encoding.
-					self.root = os.path.join(os.environ['appdata'], 'Gajim')
+					self.root = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
 				except KeyError:
 					# win9x, in cwd
-					self.root = ''
+					self.root = u''
 			else: # Unices
-				self.root = os.path.expanduser('~/.gajim')
+				# Pass in an Unicode string, and hopefully get one back.
+				self.root = os.path.expanduser(u'~/.gajim')
 
 	def add_from_root(self, name, path):
 		self.paths[name] = (True, path)
@@ -77,8 +77,8 @@ def init():
 	paths = ConfigPaths()
 
 	# LOG is deprecated
-	k = ('LOG',  'LOG_DB',  'VCARD',  'AVATAR',  'MY_EMOTS' )
-	v = ('logs', 'logs.db', 'vcards', 'avatars', 'emoticons')
+	k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS' )
+	v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons')
 
 	if os.name == 'nt':
 		v = map(lambda x: x.capitalize(), v)
@@ -86,9 +86,9 @@ def init():
 	for n, p in zip(k, v):
 		paths.add_from_root(n, p)
 
-	paths.add('DATA', os.path.join('..', windowsify('data')))
-	paths.add('HOME', os.path.expanduser('~'))
-	paths.add('TMP', tempfile.gettempdir())
+	paths.add('DATA', os.path.join(u'..', windowsify(u'data')))
+	paths.add('HOME', fse(os.path.expanduser('~')))
+	paths.add('TMP', fse(tempfile.gettempdir()))
 
 	try:
 		import svn_config
@@ -104,17 +104,13 @@ def init():
 gajimpaths = init()
 
 def init_profile(profile, paths=gajimpaths):
-	# no unicode
-	if isinstance(profile, unicode):
-		profile = profile.encode(sys.getfilesystemencoding())
-
-	conffile = windowsify('config')
-	pidfile = windowsify('gajim')
+	conffile = windowsify(u'config')
+	pidfile = windowsify(u'gajim')
 
 	if len(profile) > 0:
-		conffile += '.' + profile
-		pidfile += '.' + profile
-	pidfile += '.pid'
+		conffile += u'.' + profile
+		pidfile += u'.' + profile
+	pidfile += u'.pid'
 	paths.add_from_root('CONFIG_FILE', conffile)
 	paths.add_from_root('PID_FILE', pidfile)
 

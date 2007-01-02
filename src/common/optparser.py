@@ -98,11 +98,6 @@ class OptionsParser:
 	
 	def write(self):
 		(base_dir, filename) = os.path.split(self.__filename)
-		try:
-			base_dir = base_dir.decode(sys.getfilesystemencoding())
-			filename = filename.decode(sys.getfilesystemencoding())
-		except:
-			pass
 		self.__tempfile = os.path.join(base_dir, '.' + filename)
 		try:
 			f = open(self.__tempfile, 'w')
@@ -211,7 +206,11 @@ class OptionsParser:
 
 	def assert_unread_msgs_table_exists(self):
 		'''create table unread_messages if there is no such table'''
-		con = sqlite.connect(logger.LOG_DB_PATH) 
+		#FIXME see #2812
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
 		cur = con.cursor()
 		try:
 			cur.executescript(
@@ -280,7 +279,11 @@ class OptionsParser:
 
 	def update_config_to_01013(self):
 		'''create table transports_cache if there is no such table'''
-		con = sqlite.connect(logger.LOG_DB_PATH) 
+		#FIXME see #2812
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
 		cur = con.cursor()
 		try:
 			cur.executescript(
@@ -300,7 +303,11 @@ class OptionsParser:
 	def update_config_to_01014(self):
 		'''apply indeces to the logs database'''
 		print _('migrating logs database to indices')
-		con = sqlite.connect(logger.LOG_DB_PATH) 
+		#FIXME see #2812
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
 		cur = con.cursor()
 		# apply indeces
 		try:
@@ -319,7 +326,11 @@ class OptionsParser:
 
 	def update_config_to_01015(self):
 		'''clean show values in logs database'''
-		con = sqlite.connect(logger.LOG_DB_PATH)
+		#FIXME see #2812
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
 		cur = con.cursor()
 		status = dict((i[5:].lower(), logger.constants.__dict__[i]) for i in \
 			logger.constants.__dict__.keys() if i.startswith('SHOW_'))
