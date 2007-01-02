@@ -1257,7 +1257,7 @@ class GroupchatControl(ChatControlBase):
 			self.print_conversation(s, 'info')
 		elif command == 'chat' or command == 'query':
 			self.print_conversation(_('Usage: /%s <nickname>, opens a private chat'
-				' window to the specified occupant.') % command, 'info')
+				' window with the specified occupant.') % command, 'info')
 		elif command == 'clear':
 			self.print_conversation(
 				_('Usage: /%s, clears the text window.') % command, 'info')
@@ -1286,7 +1286,7 @@ class GroupchatControl(ChatControlBase):
 				(command, command), 'info')
 		elif command == 'msg':
 			s = _('Usage: /%s <nickname> [message], opens a private message window'
-				'and sends message to the occupant specified by nickname.') % \
+				' and sends message to the occupant specified by nickname.') % \
 				command
 			self.print_conversation(s, 'info')
 		elif command == 'nick':

@@ -74,13 +74,15 @@ class GajimRemote:
 					[]
 				], 
 			'show_next_pending_event': [
-					_('Popups a window with the next pending event'),
+					_('Pops up a window with the next pending event'),
 					[]
 				],
 			'list_contacts': [
-					_('Prints a list of all contacts in the roster. Each contact appear on a separate line'),
+					_('Prints a list of all contacts in the roster. Each contact '
+					'appears on a separate line'),
 					[
-						(_('account'), _('show only contacts of the given account'), False)
+						(_('account'), _('show only contacts of the given account'),
+							False)
 					]
 
 				],	

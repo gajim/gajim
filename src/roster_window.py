@@ -1398,7 +1398,7 @@ class RosterWindow:
 		if len(list_) == 1:
 			pritext = _('Transport "%s" will be removed') % contact.jid
 			sectext = _('You will no longer be able to send and receive messages '
-				'to contacts from this transport.')
+				'from contacts using this transport.')
 		else:
 			pritext = _('Transports will be removed')
 			jids = ''

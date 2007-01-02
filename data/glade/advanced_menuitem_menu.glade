@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+
 <widget class="GtkMenu" id="advanced_menuitem_menu">
 
   <child>
@@ -10,7 +11,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1453">
+	<widget class="GtkImage" id="image1457">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -52,12 +53,12 @@
 
 	  <child>
 	    <widget class="GtkImageMenuItem" id="send_server_message_menuitem">
-	      <property name="tooltip" translatable="yes">Sends a message to currently connected users to this server</property>
+	      <property name="tooltip" translatable="yes">Sends a message to users currently connected to this server</property>
 	      <property name="label" translatable="yes">_Send Server Message</property>
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1454">
+		<widget class="GtkImage" id="image1458">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-new</property>
 		  <property name="icon_size">1</property>
@@ -99,7 +100,7 @@
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1455">
+		<widget class="GtkImage" id="image1459">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-clear</property>
 		  <property name="icon_size">1</property>
@@ -116,4 +117,5 @@
     </widget>
   </child>
 </widget>
+
 </glade-interface>

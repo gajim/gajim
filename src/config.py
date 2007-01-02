@@ -2419,7 +2419,7 @@ class GroupchatConfigWindow(DataFormWindow):
 			prompt = _('<b>Whom do you want to make a member?</b>\n\n')
 		elif affiliation == 'owner':
 			title = _('Adding Owner...')
-			prompt = _('<b>Whom do you want to make a owner?</b>\n\n')
+			prompt = _('<b>Whom do you want to make an owner?</b>\n\n')
 		else:
 			title = _('Adding Administrator...')
 			prompt = _('<b>Whom do you want to make an administrator?</b>\n\n')
@@ -3069,9 +3069,9 @@ class AccountCreationWizardWindow:
 			if self.modify:
 				finish_text = '<big><b>%s</b></big>\n\n%s' % (
 					_('Account has been added successfully'),
-					_('You can set advanced account options by pressing Advanced '
-					'button, or later by clicking in Accounts menuitem under Edit '
-					'menu from the main window.'))
+					_('You can set advanced account options by pressing the '
+					'Advanced button, or later by choosing the Accounts menuitem '
+					'under the Edit menu from the main window.'))
 				self.finish_label.set_markup(finish_text)
 				self.finish_button.show()
 				self.finish_button.set_property('has-default', True)
@@ -3104,9 +3104,9 @@ class AccountCreationWizardWindow:
 
 		finish_text = '<big><b>%s</b></big>\n\n%s' % (
 			_('Your new account has been created successfully'),
-			_('You can set advanced account options by pressing Advanced button, '
-			'or later by clicking in Accounts menuitem under Edit menu from the '
-			'main window.'))
+			_('You can set advanced account options by pressing the Advanced '
+			'button, or later by choosing the Accounts menuitem under the Edit '
+			'menu from the main window.'))
 		self.finish_label.set_markup(finish_text)
 		self.notebook.set_current_page(3) # show finish page
 

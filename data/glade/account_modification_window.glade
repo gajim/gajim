@@ -670,7 +670,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="send_keepalive_checkbutton">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">If checked, Gajim will send keep-alive packets so it prevents connection timeout which results in disconnection</property>
+			      <property name="tooltip" translatable="yes">If checked, Gajim will send keep-alive packets to prevent connection timeout which results in disconnection</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Send keep-alive packets</property>
 			      <property name="use_underline">True</property>

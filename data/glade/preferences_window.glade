@@ -1829,7 +1829,7 @@ Per type</property>
 	      <child>
 		<widget class="GtkCheckButton" id="ignore_events_from_unknown_contacts_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Check this option, only if someone you don't have in the roster spams/annoys you. Use with caution, cause it blocks all messages from any contact that is not in the roster</property>
+		  <property name="tooltip" translatable="yes">Check this option, only if someone you don't have in the roster spams/annoys you. Use with caution, because it blocks all messages from any contact that is not in the roster</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Ignore events from contacts not in the roster</property>
 		  <property name="use_underline">True</property>
