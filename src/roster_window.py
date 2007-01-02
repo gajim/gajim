@@ -1187,7 +1187,8 @@ class RosterWindow:
 			if gajim.interface.msg_win_mgr.has_window(jid, account):
 				win = gajim.interface.msg_win_mgr.get_window(jid, account)
 				ctrl = win.get_control(jid, account)
-				ctrl.contact = contact
+				ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
+					account, contact.jid)
 				ctrl.update_ui()
 				win.redraw_tab(ctrl)
 
