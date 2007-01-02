@@ -1467,6 +1467,7 @@ class AccountModificationWindow:
 				gajim.last_message_time[self.account]
 			gajim.status_before_autoaway[name] = \
 				gajim.status_before_autoaway[self.account]
+			gajim.transport_avatar[name] = gajim.transport_avatar[self.account]
 
 			gajim.contacts.change_account_name(self.account, name)
 			gajim.events.change_account_name(self.account, name)
@@ -1493,6 +1494,7 @@ class AccountModificationWindow:
 			del gajim.encrypted_chats[self.account]
 			del gajim.last_message_time[self.account]
 			del gajim.status_before_autoaway[self.account]
+			del gajim.transport_avatar[self.account]
 			gajim.connections[self.account].name = name
 			gajim.connections[name] = gajim.connections[self.account]
 			del gajim.connections[self.account]
@@ -2054,6 +2056,7 @@ class AccountsWindow:
 			del gajim.encrypted_chats[gajim.ZEROCONF_ACC_NAME]
 			del gajim.last_message_time[gajim.ZEROCONF_ACC_NAME]
 			del gajim.status_before_autoaway[gajim.ZEROCONF_ACC_NAME]
+			del gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME]
 			if len(gajim.connections) >= 2:
 				# Do not merge accounts if only one exists
 				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
@@ -2084,6 +2087,7 @@ class AccountsWindow:
 			gajim.encrypted_chats[gajim.ZEROCONF_ACC_NAME] = []
 			gajim.last_message_time[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.status_before_autoaway[gajim.ZEROCONF_ACC_NAME] = ''
+			gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME] = {}
 			# refresh accounts window
 			if gajim.interface.instances.has_key('accounts'):
 				gajim.interface.instances['accounts'].init_accounts()
@@ -2587,6 +2591,7 @@ class RemoveAccountWindow:
 		del gajim.encrypted_chats[self.account]
 		del gajim.last_message_time[self.account]
 		del gajim.status_before_autoaway[self.account]
+		del gajim.transport_avatar[self.account]
 		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
 		else: 
@@ -3231,6 +3236,7 @@ class AccountCreationWizardWindow:
 		gajim.encrypted_chats[self.account] = []
 		gajim.last_message_time[self.account] = {}
 		gajim.status_before_autoaway[self.account] = ''
+		gajim.transport_avatar[self.account] = {}
 		# refresh accounts window
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()

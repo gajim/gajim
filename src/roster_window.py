@@ -1157,10 +1157,18 @@ class RosterWindow:
 			if gajim.config.get('ask_avatars_on_startup'):
 				pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(ji)
 				if pixbuf == 'ask':
-					jid_with_resource = contact1.jid
-					if contact1.resource:
-						jid_with_resource += '/' + contact1.resource
-					gajim.connections[account].request_vcard(jid_with_resource)
+					transport = gajim.get_transport_name_from_jid(contact1.jid)
+					if not transport or gajim.jid_is_transport(contact1.jid):
+						jid_with_resource = contact1.jid
+						if contact1.resource:
+							jid_with_resource += '/' + contact1.resource
+						gajim.connections[account].request_vcard(jid_with_resource)
+					else:
+						host = gajim.get_server_from_jid(contact1.jid)
+						if not gajim.transport_avatar[account].has_key(host):
+							gajim.transport_avatar[account][host] = [contact1.jid]
+						else:
+							gajim.transport_avatar[account][host].append(contact1.jid)
 			# If we already have a chat window opened, update it with new contact
 			# instance
 			chat_control = gajim.interface.msg_win_mgr.get_control(ji, account)
@@ -4256,7 +4264,7 @@ class RosterWindow:
 			'closed': {}}
 		self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
 			'closed': {}}
-		
+
 		self.last_save_dir = None
 		self.editing_path = None  # path of row with cell in edit mode
 		self.add_new_contact_handler_id = False

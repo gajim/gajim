@@ -595,6 +595,10 @@ class Interface:
 				# Update existing iter
 				self.roster.draw_contact(ji, account)
 				self.roster.draw_group(_('Transports'), account)
+				if new_show > 1 and ji in gajim.transport_avatar[account]:
+					# transport just signed in. request avatars
+					for jid_ in gajim.transport_avatar[account][ji]:
+						gajim.connections[account].request_vcard(jid_)
 				# transport just signed in/out, don't show popup notifications
 				# for 30s
 				account_ji = account + '/' + ji
@@ -2134,6 +2138,7 @@ class Interface:
 			gajim.encrypted_chats[a] = []
 			gajim.last_message_time[a] = {}
 			gajim.status_before_autoaway[a] = ''
+			gajim.transport_avatar[a] = {}
 
 		self.roster = roster_window.RosterWindow()
 		
