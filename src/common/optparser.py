@@ -299,7 +299,7 @@ class OptionsParser:
 
 	def update_config_to_01014(self):
 		'''apply indeces to the logs database'''
-		print _('migrating logs database to indeces')
+		print _('migrating logs database to indices')
 		con = sqlite.connect(logger.LOG_DB_PATH) 
 		cur = con.cursor()
 		# apply indeces

@@ -49,7 +49,7 @@ except:
 ##!/bin/sh
 #LANG=$(for i in *.po; do  j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
 #echo "{_('en'):'en'",$LANG"}"
-langs = {_('English'): 'en', _('Bulgarian'): 'bg', _('Briton'): 'br', _('Czech'): 'cs', _('German'): 'de', _('Greek'): 'el', _('Esperanto'): 'eo', _('Spanish'): 'es', _('Basc'): 'eu', _('French'): 'fr', _('Croatian'): 'hr', _('Italian'): 'it', _('Norvegian b'): 'nb', _('Dutch'): 'nl', _('Norvegian'): 'no', _('Polish'): 'pl', _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR', _('Russian'): 'ru', _('Slovak'): 'sk', _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
+langs = {_('English'): 'en', _('Bulgarian'): 'bg', _('Briton'): 'br', _('Czech'): 'cs', _('German'): 'de', _('Greek'): 'el', _('Esperanto'): 'eo', _('Spanish'): 'es', _('Basc'): 'eu', _('French'): 'fr', _('Croatian'): 'hr', _('Italian'): 'it', _('Norwegian b'): 'nb', _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl', _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR', _('Russian'): 'ru', _('Slovak'): 'sk', _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
 
 
 ################################################################################

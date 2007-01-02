@@ -210,7 +210,7 @@ class GajimRemote:
 				],				
 
 			'get_unread_msgs_number': [
-				_('Returns number of unreaded messages'),
+				_('Returns number of unread messages'),
 					[ ]
 				],
 			'start_chat': [

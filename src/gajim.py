@@ -119,7 +119,7 @@ try:
 	import gtk
 except RuntimeError, msg:
 	if str(msg) == 'could not open display':
-		print >> sys.stderr, _('Gajim needs Xserver to run. Quiting...')
+		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
 		sys.exit()
 pritext = ''
 if gtk.pygtk_version < (2, 6, 0):

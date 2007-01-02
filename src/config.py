@@ -2336,7 +2336,7 @@ class GroupchatConfigWindow(DataFormWindow):
 		self.room_jid = room_jid
 		self.remove_button = {}
 		self.affiliation_treeview = {}
-		self.list_init = {} # list at the begining
+		self.list_init = {} # list at the beginning
 		ui_list = {'outcast': _('Ban List'),
 			'member': _('Member List'),
 			'owner': _('Owner List'),
@@ -3121,7 +3121,7 @@ class AccountCreationWizardWindow:
 		self.show_vcard_checkbutton.hide()
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
-		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occured during '
+		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occurred during '
 			'account creation') , reason)
 		self.finish_label.set_markup(finish_text)
 		self.notebook.set_current_page(3) # show finish page

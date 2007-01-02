@@ -908,7 +908,7 @@ class BindPortError(HigDialog):
 	def __init__(self, port):
 		ErrorDialog(_('Unable to bind to port %s.') % port,
 			_('Maybe you have another running instance of Gajim. '
-			'File Transfer will be canceled.'))
+			'File Transfer will be cancelled.'))
 
 class ConfirmationDialog(HigDialog):
 	'''HIG compliant confirmation dialog.'''

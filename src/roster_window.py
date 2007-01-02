@@ -3988,7 +3988,7 @@ class RosterWindow:
 		pritext = _('You are about to create a metacontact. Are you sure you want'
 			' to continue?')
 		sectext = _('Metacontacts are a way to regroup several contacts in one '
-			'line. Generaly it is used when the same person has several Jabber '
+			'line. Generally it is used when the same person has several Jabber '
 			'accounts or transport accounts.')
 		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
 			_('Do _not ask me again'), on_response_ok = merge_contacts)
