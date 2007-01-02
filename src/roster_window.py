@@ -2471,41 +2471,41 @@ class RosterWindow:
 			model, list_of_paths = treeselection.get_selected_rows()
 			if not len(list_of_paths):
 				return
-			type = model[list_of_paths[0]][C_TYPE]
+			type_ = model[list_of_paths[0]][C_TYPE]
 			account = model[list_of_paths[0]][C_ACCOUNT]
 			list_ = []
 			for path in list_of_paths:
-				if model[path][C_TYPE] != type:
+				if model[path][C_TYPE] != type_:
 					return
 				jid = model[path][C_JID].decode('utf-8')
 				account = model[path][C_ACCOUNT].decode('utf-8')
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
 				list_.append((contact, account))
-			if type in ('account', 'group', 'self_contact') or \
+			if type_ in ('account', 'group', 'self_contact') or \
 			account == gajim.ZEROCONF_ACC_NAME:
 				return
-			if type == 'contact':
+			if type_ == 'contact':
 				self.on_req_usub(widget, list_)
-			elif type == 'agent':
+			elif type_ == 'agent':
 				self.on_remove_agent(widget, list_)
 
 	def show_appropriate_context_menu(self, event, iters):
 		# iters must be all of the same type
 		model = self.tree.get_model()
-		type = model[iters[0]][C_TYPE]
+		type_ = model[iters[0]][C_TYPE]
 		for iter in iters[1:]:
-			if model[iter][C_TYPE] != type:
+			if model[iter][C_TYPE] != type_:
 				return
-		if type == 'group' and len(iters) == 1:
+		if type_ == 'group' and len(iters) == 1:
 			self.make_group_menu(event, iters[0])
-		elif type == 'agent' and len(iters) == 1:
+		elif type_ == 'agent' and len(iters) == 1:
 			self.make_transport_menu(event, iters[0])
-		elif type in ('contact', 'self_contact') and len(iters) == 1:
+		elif type_ in ('contact', 'self_contact') and len(iters) == 1:
 			self.make_contact_menu(event, iters[0])
-		elif type  == 'contact':
+		elif type_  == 'contact':
 			self.make_multiple_contact_menu(event, iters)
-		elif type == 'account' and len(iters) == 1:
+		elif type_ == 'account' and len(iters) == 1:
 			self.make_account_menu(event, iters[0])
 
 	def show_treeview_menu(self, event):
@@ -2558,10 +2558,10 @@ class RosterWindow:
 			if list_of_paths != [path]:
 				self.tree.get_selection().unselect_all()
 				self.tree.get_selection().select_path(path)
-			type = model[path][C_TYPE]
-			if type in ('agent', 'contact', 'self_contact'):
+			type_ = model[path][C_TYPE]
+			if type_ in ('agent', 'contact', 'self_contact'):
 				self.on_roster_treeview_row_activated(widget, path)
-			elif type == 'account':
+			elif type_ == 'account':
 				account = model[path][C_ACCOUNT].decode('utf-8')
 				if account != 'all':
 					show = gajim.connections[account].connected
@@ -2585,15 +2585,15 @@ class RosterWindow:
 
 		elif event.button == 1: # Left click
 			model = self.tree.get_model()
-			type = model[path][C_TYPE]
-			if type == 'group' and x < 27:
+			type_ = model[path][C_TYPE]
+			if type_ == 'group' and x < 27:
 				# first cell in 1st column (the arrow SINGLE clicked)
 				if (self.tree.row_expanded(path)):
 					self.tree.collapse_row(path)
 				else:
 					self.tree.expand_row(path, False)
 
-			elif type == 'contact' and x < 27:
+			elif type_ == 'contact' and x < 27:
 				account = model[path][C_ACCOUNT].decode('utf-8')
 				jid = model[path][C_JID].decode('utf-8')
 				# first cell in 1st column (the arrow SINGLE clicked)
@@ -2988,16 +2988,16 @@ class RosterWindow:
 	def new_chat(self, contact, account, private_chat = False, resource = None):
 		# Get target window, create a control, and associate it with the window
 		if not private_chat:
-			type = message_control.TYPE_CHAT
+			type_ = message_control.TYPE_CHAT
 		else:
-			type = message_control.TYPE_PM
+			type_ = message_control.TYPE_PM
 
 		fjid = contact.jid
 		if resource:
 			fjid += '/' + resource
 		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		if not mw:
-			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type)
+			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
 
 		if not private_chat:
 			chat_control = ChatControl(mw, contact, account, resource)
@@ -3438,11 +3438,11 @@ class RosterWindow:
 		'''When an iter is double clicked: open the first event window'''
 		model = self.tree.get_model()
 		account = model[path][C_ACCOUNT].decode('utf-8')
-		type = model[path][C_TYPE]
+		type_ = model[path][C_TYPE]
 		jid = model[path][C_JID].decode('utf-8')
 		resource = None
 		iter = model.get_iter(path)
-		if type in ('group', 'account'):
+		if type_ in ('group', 'account'):
 			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
 			else:
@@ -3486,8 +3486,8 @@ class RosterWindow:
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
-		type = model[iter][C_TYPE]
-		if type == 'group':
+		type_ = model[iter][C_TYPE]
+		if type_ == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['16']['opened'])
 			jid = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
@@ -3495,7 +3495,7 @@ class RosterWindow:
 					gajim.groups[account][jid]['expand'] = True
 					if account + jid in self.collapsed_rows:
 						self.collapsed_rows.remove(account + jid)
-		elif type == 'account':
+		elif type_ == 'account':
 			account = accounts[0] # There is only one cause we don't use merge
 			if account in self.collapsed_rows:
 				self.collapsed_rows.remove(account)
@@ -3505,7 +3505,7 @@ class RosterWindow:
 					pathG = model.get_path(groupIter)
 					self.tree.expand_row(pathG, False)
 			self.draw_account(account)
-		elif type == 'contact':
+		elif type_ == 'contact':
 			jid =  model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			self.draw_contact(jid, account)
@@ -3518,8 +3518,8 @@ class RosterWindow:
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
-		type = model[iter][C_TYPE]
-		if type == 'group':
+		type_ = model[iter][C_TYPE]
+		if type_ == 'group':
 			model.set_value(iter, 0, self.jabber_state_images['16']['closed'])
 			jid = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
@@ -3527,12 +3527,12 @@ class RosterWindow:
 					gajim.groups[account][jid]['expand'] = False
 					if not account + jid in self.collapsed_rows:
 						self.collapsed_rows.append(account + jid)
-		elif type == 'account':
+		elif type_ == 'account':
 			account = accounts[0] # There is only one cause we don't use merge
 			if not account in self.collapsed_rows:
 				self.collapsed_rows.append(account)
 			self.draw_account(account)
-		elif type == 'contact':
+		elif type_ == 'contact':
 			jid =  model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			self.draw_contact(jid, account)
