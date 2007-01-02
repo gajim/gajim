@@ -239,9 +239,8 @@ class ProfileWindow:
 			self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
 				self.remove_statusbar, self.message_id)
 			gobject.source_remove(self.update_progressbar_timeout_id)
-			# redraw progressbar after avatar is set so that windows is already
-			# resized. Else progressbar is not correctly redrawn
-			gobject.idle_add(self.progressbar.set_fraction, 0)
+			self.progressbar.hide()
+			self.progressbar.set_fraction(0)
 			self.update_progressbar_timeout_id = None
 
 	def add_to_vcard(self, vcard, entry, txt):
@@ -318,13 +317,13 @@ class ProfileWindow:
 		gajim.connections[self.account].send_vcard(vcard)
 		self.message_id = self.statusbar.push(self.context_id,
 			_('Sending profile...'))
+		self.progressbar.show()
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 			self.update_progressbar)
 
 	def vcard_published(self):
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
-			self.progressbar.set_fraction(0)
 			self.update_progressbar_timeout_id = None
 		self.window.destroy()
 
