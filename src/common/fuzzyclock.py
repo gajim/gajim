@@ -44,20 +44,22 @@ class FuzzyClock:
                              _('twelve')]
 
         #Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
-        self.__normalFuzzy = [ _("%0 o'clock"), _('five past %0'), _('ten past %0'),
-                               _('quarter past %0'), _('twenty past %0'),
-                               _('twenty five past %0'), _('half past %0'),
-                               _('twenty five to %1'), _('twenty to %1'),
-                               _('quarter to %1'), _('ten to %1'), _('five to %1'),
-                               _("%1 o'clock") ]
+        self.__normalFuzzy = [ _("$0 o'clock"), _('five past $0'),
+		  								_('ten past $0'), _('quarter past $0'),
+										_('twenty past $0'), _('twenty five past $0'),
+										_('half past $0'), _('twenty five to $1'),
+										_('twenty to $1'), _('quarter to $1'),
+										_('ten to $1'), _('five to $1'), _("$1 o'clock") ]
 
         #A "singular-form". It is used when talking about hour 0
-        self.__normalFuzzyOne = [ _("%0 o'clock"), _('five past %0'),
-                                  _('ten past %0'), _('quarter past %0'),
-                                  _('twenty past %0'), _('twenty five past %0'),
-                                  _('half past %0'), _('twenty five to %1'),
-                                  _('twenty to %1'), _('quarter to %1'),
-                                  _('ten to %1'), _('five to %1'), _("%1 o'clock") ]
+        self.__normalFuzzyOne = [ _("$0 o'clock"), _('five past $0'),
+                                  _('ten past $0'), _('quarter past $0'),
+                                  _('twenty past $0'), _('twenty five past $0'),
+                                  _('half past $0'), _('twenty five to $1'),
+                                  _('twenty to $1'), _('quarter to $1'),
+                                  _('ten to $1'), _('five to $1'),
+											 _("$1 o'clock") ]
+
 
         self.__dayTime = [ _('Night'), _('Early morning'), _('Morning'), _('Almost noon'),
                            _('Noon'), _('Afternoon'), _('Evening'), _('Late evening') ]
@@ -102,8 +104,8 @@ class FuzzyClock:
                     sector = ((self.__minute - 7) / 15 + 1) * 3
 
             newTimeStr = self.__normalFuzzy[sector]
-            #%0 or %1?
-            deltaHour = int(newTimeStr[newTimeStr.find("%")+1])
+            #$0 or $1?
+            deltaHour = int(newTimeStr[newTimeStr.find("$")+1])
 
             if (self.__hour + deltaHour) % 12 > 0:
                 realHour = (self.__hour + deltaHour) % 12 - 1
@@ -113,7 +115,7 @@ class FuzzyClock:
             if realHour == 0:
                 newTimeStr = self.__normalFuzzyOne[sector]
 
-            newTimeStr = newTimeStr.replace("%"+str(deltaHour),
+            newTimeStr = newTimeStr.replace("$"+str(deltaHour),
                                             self.__hourNames[realHour])
 
 
