@@ -1236,6 +1236,23 @@ class JoinGroupchatWindow:
 		gajim.config.set('recently_groupchat',
 			' '.join(self.recently_groupchat))
 
+		if self.xml.get_widget('auto_join_checkbutton').get_active():
+			# create the bookmark-dict
+			# is it already bookmarked ?
+			room_jid_bookmarked = False
+			for bmdict in gajim.connections[self.account].bookmarks:
+				if bmdict['jid'] == room_jid:
+					room_jid_bookmarked = True
+					break
+			if not room_jid_bookmarked:
+				name = gajim.get_nick_from_jid(room_jid)
+				bmdict = { 'name': name, 'jid': room_jid, 'autojoin': u'1',
+					'password': password, 'nick': nickname,
+					'print_status': gajim.config.get('print_status_in_muc')}
+
+				gajim.connections[self.account].bookmarks.append(bmdict)
+				gajim.connections[self.account].store_bookmarks()
+
 		if self.automatic:
 			gajim.automatic_rooms[self.account][room_jid] = self.automatic
 		gajim.interface.roster.join_gc_room(self.account, room_jid, nickname,
