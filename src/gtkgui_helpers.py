@@ -665,9 +665,9 @@ def possibly_set_gajim_as_xmpp_handler():
 	path_to_gajim_script, typ = get_abspath_for_script('gajim-remote', True)
 	if path_to_gajim_script:
 		if typ == 'svn':
-			command = path_to_gajim_script + ' open_chat %s'
+			command = path_to_gajim_script + ' handle_uri %s'
 		else: # 'installed'
-			command = 'gajim-remote open_chat %s'
+			command = 'gajim-remote handle_uri %s'
 		
 		# setting for GNOME/Gconf
 		client.set_bool('/desktop/gnome/url-handlers/xmpp/enabled', True)

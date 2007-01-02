@@ -228,6 +228,23 @@ class GajimRemote:
 							False)
 					]
 				],
+			'handle_uri': [
+					_('Handle a xmpp:/ uri'),
+					[
+						(_('uri'), _(''), True),
+						(_('account'), _(''), False)
+					]
+				],
+			'join_room': [
+					_('Join a MUC room'),
+					[
+						(_('room'), _(''), True),
+						(_('nick'), _(''), False),
+						(_('password'), _(''), False),
+						(_('account'), _(''), False)
+					]
+				],
+
 			}
 		if self.argv_len  < 2 or \
 			sys.argv[1] not in self.commands.keys(): # no args or bad args
@@ -239,7 +256,8 @@ class GajimRemote:
 			else:
 				print self.compose_help().encode(PREFERRED_ENCODING)
 			sys.exit(0)
-
+		if self.command == 'handle_uri':
+			self.handle_uri()
 		self.init_connection()
 		self.check_arguments()
 
@@ -419,6 +437,22 @@ class GajimRemote:
 				send_error(_('Argument "%s" is not specified. \n'
 					'Type "%s help %s" for more info') % 
 					(args[argv_len][0], BASENAME, self.command))
+
+	def handle_uri(self):
+		if not sys.argv[2:][0].startswith('xmpp:'):
+			send_error(_('Wrong uri'))
+		sys.argv[2] = sys.argv[2][5:]
+		uri = sys.argv[2:][0]
+		if not '?' in uri:
+			self.command = sys.argv[1] = 'open_chat'
+			return
+		(jid, action) = uri.split('?', 1)
+		sys.argv[2] = jid
+		if action == 'join':
+			self.command = sys.argv[1] = 'join_room'
+			return
+			
+		sys.exit(0)
 
 	def call_remote_method(self):
 		''' calls self.method with arguments from sys.argv[2:] '''
