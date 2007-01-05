@@ -295,6 +295,11 @@ class SignalObject(dbus.service.Object):
 			raise MissingArgument
 			return None
 		jid = self._get_real_jid(jid, account)
+		try:
+			jid = helpers.parse_jid(jid)
+		except:
+			# Jid is not conform, ignore it
+			return None
 
 		if account:
 			accounts = [account]
@@ -564,6 +569,8 @@ class SignalObject(dbus.service.Object):
 			accounts = [account]
 		else:
 			accounts = gajim.connections.keys()
+		if jid.startswith('xmpp://'):
+			return jid[7:] # len('xmpp://') = 7
 		if jid.startswith('xmpp:'):
 			return jid[5:] # len('xmpp:') = 5
 		nick_in_roster = None # Is jid a nick ?
@@ -644,7 +651,6 @@ class SignalObject(dbus.service.Object):
 					break
 			if not account:
 				account = gajim.contacts.get_accounts()[0]
-		print account
 		if nick is None:
 			nick = ''
 			gajim.interface.instances[account]['join_gc'] = \
