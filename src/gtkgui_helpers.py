@@ -695,7 +695,7 @@ Description=xmpp
 	if we_set:
 		set_gajim_as_xmpp_handler()
 	elif old_command and not old_command.endswith(' handle_uri %s'):
-		# xmpp:// is currently handled by another program, so ask the user
+		# xmpp: is currently handled by another program, so ask the user
 		pritext = _('Gajim is not the default Jabber client')
 		sectext = _('Would you like to make Gajim the default Jabber client?')
 		checktext = _('Always check to see if Gajim is the default Jabber client '
