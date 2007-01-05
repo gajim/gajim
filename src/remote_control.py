@@ -569,8 +569,6 @@ class SignalObject(dbus.service.Object):
 			accounts = [account]
 		else:
 			accounts = gajim.connections.keys()
-		if jid.startswith('xmpp://'):
-			return jid[7:] # len('xmpp://') = 7
 		if jid.startswith('xmpp:'):
 			return jid[5:] # len('xmpp:') = 5
 		nick_in_roster = None # Is jid a nick ?
