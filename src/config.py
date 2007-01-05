@@ -492,6 +492,10 @@ class PreferencesWindow:
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
 
+		# send os info
+		st = gajim.config.get('check_if_gajim_is_default')
+		self.xml.get_widget('check_default_client_checkbutton').set_active(st)
+
 		# set status msg from currently playing music track
 		widget = self.xml.get_widget(
 			'set_status_msg_from_current_music_track_checkbutton')
@@ -997,13 +1001,16 @@ class PreferencesWindow:
 
 	def on_send_os_info_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'send_os_info')
-		
+
+	def on_check_default_client_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'check_if_gajim_is_default')
+
 	def on_notify_gmail_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email')
 
 	def on_notify_gmail_extra_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email_extra')
-		
+
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
 		model = self.msg_tree.get_model()

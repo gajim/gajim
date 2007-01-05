@@ -2061,6 +2061,11 @@ class Interface:
 		# Do not set gajim.verbose to False if -v option was given
 		if gajim.config.get('verbose'):
 			gajim.verbose = True
+
+		# Is Gajim default app?
+		if os.name != 'nt' and gajim.config.get('check_if_gajim_is_default'):
+			gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
+
 		#add default status messages if there is not in the config file
 		if len(gajim.config.get_per('statusmsg')) == 0:
 			for msg in gajim.config.statusmsg_default:
@@ -2255,8 +2260,6 @@ if __name__ == '__main__':
 				except TypeError:
 					cli.set_restart_command(len(argv), argv)
 		
-		gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
-
 	check_paths.check_and_possibly_create_paths()
 
 	Interface()
