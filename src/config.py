@@ -84,6 +84,8 @@ class PreferencesWindow:
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		self.one_window_type_combobox =\
 			self.xml.get_widget('one_window_type_combobox')
+		self.treat_incoming_messages_combobox =\
+			self.xml.get_widget('treat_incoming_messages_combobox')
 
 		#FIXME: remove when ANC will be implemented
 		w = self.xml.get_widget('hbox3020')
@@ -140,7 +142,7 @@ class PreferencesWindow:
 		if not gajim.config.get('emoticons_theme'):
 			emoticons_combobox.set_active(len(l)-1)
 
-		#iconset
+		# iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
 		# new model, image in 0, string in 1
 		model = gtk.ListStore(gtk.Image, str)
@@ -181,6 +183,14 @@ class PreferencesWindow:
 			self.one_window_type_combobox.set_active(choices.index(type))
 		else:
 			self.one_window_type_combobox.set_active(0)
+
+		# Set default for treat incoming messages
+		choices = common.config.opt_treat_incoming_messages
+		type = gajim.config.get('treat_incoming_messages')
+		if type in choices:
+			self.treat_incoming_messages_combobox.set_active(choices.index(type))
+		else:
+			self.treat_incoming_messages_combobox.set_active(0)
 
 		# Use transports iconsets
 		st = gajim.config.get('use_transports_iconsets')
@@ -353,7 +363,7 @@ class PreferencesWindow:
 					gajim.config.set('soundplayer', command)
 					break
 
-		#sounds treeview
+		# sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
 		
 		# active, event ui name, path to sound file, event_config_name
@@ -380,31 +390,31 @@ class PreferencesWindow:
 		st = gajim.config.get('autoaway')
 		self.auto_away_checkbutton.set_active(st)
 
-		#Autoawaytime
+		# Autoawaytime
 		st = gajim.config.get('autoawaytime')
 		self.auto_away_time_spinbutton.set_value(st)
 		self.auto_away_time_spinbutton.set_sensitive(gajim.config.get('autoaway'))
 
-		#autoaway message
+		# autoaway message
 		st = gajim.config.get('autoaway_message')
 		self.auto_away_message_entry.set_text(st)
 		self.auto_away_message_entry.set_sensitive(gajim.config.get('autoaway'))
 
-		#Autoxa
+		# Autoxa
 		st = gajim.config.get('autoxa')
 		self.auto_xa_checkbutton.set_active(st)
 
-		#Autoxatime
+		# Autoxatime
 		st = gajim.config.get('autoxatime')
 		self.auto_xa_time_spinbutton.set_value(st)
 		self.auto_xa_time_spinbutton.set_sensitive(gajim.config.get('autoxa'))
 
-		#autoxa message
+		# autoxa message
 		st = gajim.config.get('autoxa_message')
 		self.auto_xa_message_entry.set_text(st)
 		self.auto_xa_message_entry.set_sensitive(gajim.config.get('autoxa'))
 
-		#ask_status when online / offline
+		# ask_status when online / offline
 		st = gajim.config.get('ask_online_status')
 		self.xml.get_widget('prompt_online_status_message_checkbutton').\
 			set_active(st)
@@ -438,7 +448,7 @@ class PreferencesWindow:
 		renderer.connect('toggled', self.default_msg_toggled_cb)
 		self.fill_default_msg_treeview()
 
-		#Status messages
+		# Status messages
 		self.msg_tree = self.xml.get_widget('msg_treeview')
 		model = gtk.ListStore(str, str)
 		self.msg_tree.set_model(model)
@@ -453,7 +463,7 @@ class PreferencesWindow:
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		buf.connect('changed', self.on_msg_textview_changed)
 
-		#open links with
+		# open links with
 		if os.name == 'nt':
 			applications_frame = self.xml.get_widget('applications_frame')
 			applications_frame.set_no_show_all(True)
@@ -649,6 +659,11 @@ class PreferencesWindow:
 		gajim.config.set('one_message_window', config_type)
 		gajim.interface.save_config()
 		gajim.interface.msg_win_mgr.reconfig()
+
+	def on_treat_incoming_messages_combobox_changed(self, widget):
+		active = widget.get_active()
+		config_type = common.config.opt_treat_incoming_messages[active]
+		gajim.config.set('treat_incoming_messages', config_type)
 
 	def apply_speller(self):
 		for acct in gajim.connections:
