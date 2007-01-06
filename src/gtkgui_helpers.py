@@ -675,7 +675,7 @@ icon=gajim
 Description=xmpp
 ''' % command)
 					f.close()
-				except:
+				except IOError:
 					pass
 
 	try:
