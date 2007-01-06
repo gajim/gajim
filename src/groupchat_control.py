@@ -1341,6 +1341,8 @@ class GroupchatControl(ChatControlBase):
 			if self.handlers[i].handler_is_connected(i):
 				self.handlers[i].disconnect(i)
 			del self.handlers[i]
+		# Remove unread events from systray
+		gajim.events.remove_events(self.account, self.room_jid)
 
 	def allow_shutdown(self, method):
 		'''If check_selection is True, '''
