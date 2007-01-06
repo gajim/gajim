@@ -341,7 +341,7 @@ class DataForm(ExtendedNode):
 			filledform = DataForm(replyto=thisform)...'''
 		def fget(self):
 			return self.getAttr('type')
-		def fset(self):
+		def fset(self, type):
 			assert type in ('form', 'submit', 'cancel', 'result')
 			self.setAttr('type', type)
 		return locals()

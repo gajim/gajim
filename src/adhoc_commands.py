@@ -266,6 +266,8 @@ class CommandWindow:
 		self.data_form_widget.set_sensitive(False)
 		if self.data_form_widget.get_data_form() is None:
 			self.data_form_widget.hide()
+		else:
+			self.data_form_widget.data_form.type='submit'
 
 		self.close_button.set_sensitive(True)
 		self.back_button.set_sensitive(False)
@@ -296,7 +298,11 @@ class CommandWindow:
 			except dataforms.Error:
 				# FIXME: translate
 				self.stage5(error='Service sent malformed data', senderror=True)
+				return
 			self.data_form_widget.show()
+			if self.data_form_widget.title:
+				self.window.set_title("%s - Ad-hoc Commands - Gajim" % \
+					self.data_form_widget.title)
 		else:
 			self.data_form_widget.hide()
 
@@ -465,6 +471,7 @@ class CommandWindow:
 		if self.data_form_widget.data_form is not None:
 #			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
 			# FIXME: simplified form to send
+			
 			cmdnode.addChild(node=self.data_form_widget.data_form)
 
 		def callback(response):
