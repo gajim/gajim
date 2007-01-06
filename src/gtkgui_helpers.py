@@ -657,8 +657,9 @@ def possibly_set_gajim_as_xmpp_handler():
 
 			# setting for KDE
 			if path_to_kde_file is not None: # user has run kde at least once
-				f = open(path_to_kde_file, 'a')
-				f.write('''\
+				try:
+					f = open(path_to_kde_file, 'a')
+					f.write('''\
 [Protocol]
 exec=%s "%%u"
 protocol=xmpp
@@ -673,7 +674,9 @@ deleting=false
 icon=gajim
 Description=xmpp
 ''' % command)
-				f.close()
+					f.close()
+				except:
+					pass
 
 	try:
 		import gconf
