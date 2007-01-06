@@ -41,7 +41,7 @@ class ConfigPaths:
 					self.root = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
 				except KeyError:
 					# win9x, in cwd
-					self.root = u''
+					self.root = u'.'
 			else: # Unices
 				# Pass in an Unicode string, and hopefully get one back.
 				self.root = os.path.expanduser(u'~/.gajim')
