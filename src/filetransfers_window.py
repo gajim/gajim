@@ -201,7 +201,7 @@ class FileTransfersWindow:
 		has been canceled'''
 		self.window.present()
 		self.window.window.focus()
-		dialogs.InformationDialog(_('File transfer canceled'), _('Connection with peer cannot be established.'))
+		dialogs.InformationDialog(_('File transfer cancelled'), _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
 	def show_send_error(self, file_props):
@@ -209,7 +209,7 @@ class FileTransfersWindow:
 		has been canceled'''
 		self.window.present()
 		self.window.window.focus()
-		dialogs.InformationDialog(_('File transfer canceled'),
+		dialogs.InformationDialog(_('File transfer cancelled'),
 _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
@@ -224,8 +224,8 @@ _('Connection with peer cannot be established.'))
 		sectext += '\n\t' + _('Recipient: %s') % jid
 		if error_msg:
 			sectext += '\n\t' + _('Error message: %s') % error_msg
-		dialogs.ErrorDialog(_('File transfer stopped by the contact of the other side'), \
-			sectext)
+		dialogs.ErrorDialog(_('File transfer stopped by the contact at the other '
+			'end'), sectext)
 		self.tree.get_selection().unselect_all()
 
 	def show_file_send_request(self, account, contact):

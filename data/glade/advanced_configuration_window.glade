@@ -20,6 +20,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="destroy" handler="on_advanced_configuration_window_destroy" last_modification_time="Sat, 14 May 2005 01:39:26 GMT"/>
 
   <child>
@@ -203,7 +204,7 @@
 
       <child>
 	<widget class="GtkLabel" id="restart_label">
-	  <property name="label" translatable="yes">&lt;b&gt;NOTE:&lt;/b&gt; You should restart gajim for some setting to take effect</property>
+	  <property name="label" translatable="yes">&lt;b&gt;NOTE:&lt;/b&gt; You should restart Gajim for some settings to take effect</property>
 	  <property name="use_underline">True</property>
 	  <property name="use_markup">True</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>

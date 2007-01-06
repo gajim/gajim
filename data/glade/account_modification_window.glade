@@ -35,7 +35,7 @@
 	  <child>
 	    <widget class="GtkLabel" id="name_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">_Name: </property>
+	      <property name="label" translatable="yes">_Name:</property>
 	      <property name="use_underline">True</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -234,7 +234,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label11">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Resour_ce: </property>
+		  <property name="label" translatable="yes">Resour_ce:</property>
 		  <property name="use_underline">True</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -440,7 +440,7 @@
 		<widget class="GtkCheckButton" id="autoreconnect_checkbutton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Autoreconnect when connection is lost</property>
+		  <property name="label" translatable="yes">Auto-reconnect when connection is lost</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -670,7 +670,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="send_keepalive_checkbutton">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">If checked, Gajim will send keep-alive packets so it prevents connection timeout which results in disconnection</property>
+			      <property name="tooltip" translatable="yes">If checked, Gajim will send keep-alive packets to prevent connection timeout which results in disconnection</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Send keep-alive packets</property>
 			      <property name="use_underline">True</property>

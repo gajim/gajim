@@ -44,7 +44,7 @@ try:
 	import gtk
 except RuntimeError, msg:
 	if str(msg) == 'could not open display':
-		print >> sys.stderr, _('Gajim needs Xserver to run. Quiting...')
+		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
 		sys.exit()
 pritext = ''
 if gtk.pygtk_version < (2, 6, 0):
@@ -537,6 +537,10 @@ class Interface:
 				# Update existing iter
 				self.roster.draw_contact(ji, account)
 				self.roster.draw_group(_('Transports'), account)
+				if new_show > 1 and ji in gajim.transport_avatar[account]:
+					# transport just signed in. request avatars
+					for jid_ in gajim.transport_avatar[account][ji]:
+						gajim.connections[account].request_vcard(jid_)
 				# transport just signed in/out, don't show popup notifications
 				# for 30s
 				account_ji = account + '/' + ji
@@ -996,8 +1000,12 @@ class Interface:
 			contact.status = status
 			ctrl.update_ui()
 			uf_show = helpers.get_uf_show(show)
-			ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show, status),
-						'status')
+			if status:
+				ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show,
+					status), 'status')
+			else:
+				ctrl.print_conversation(_('%s is now %s') % (nick, uf_show),
+					'status')
 			ctrl.parent_win.redraw_tab(ctrl)
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
@@ -1111,6 +1119,7 @@ class Interface:
 				c = contacts[0]
 				self.roster.remove_contact(c, account)
 				gajim.contacts.remove_jid(account, jid)
+				self.roster.draw_account(account)
 				if gajim.events.get_events(account, c.jid):
 					keyID = ''
 					attached_keys = gajim.config.get_per('accounts', account,
@@ -1994,6 +2003,11 @@ class Interface:
 		# Do not set gajim.verbose to False if -v option was given
 		if gajim.config.get('verbose'):
 			gajim.verbose = True
+
+		# Is Gajim default app?
+		if os.name != 'nt' and gajim.config.get('check_if_gajim_is_default'):
+			gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
+
 		#add default status messages if there is not in the config file
 		if len(gajim.config.get_per('statusmsg')) == 0:
 			for msg in gajim.config.statusmsg_default:
@@ -2071,6 +2085,7 @@ class Interface:
 			gajim.encrypted_chats[a] = []
 			gajim.last_message_time[a] = {}
 			gajim.status_before_autoaway[a] = ''
+			gajim.transport_avatar[a] = {}
 
 		self.roster = roster_window.RosterWindow()
 		
@@ -2183,8 +2198,6 @@ if __name__ == '__main__':
 				except TypeError:
 					cli.set_restart_command(len(argv), argv)
 		
-		gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
-
 	check_paths.check_and_possibly_create_paths()
 
 	Interface()

@@ -18,15 +18,19 @@ import gobject
 
 from common import gajim
 
-try:
-	import gnomekeyring
-except ImportError:
-	USER_USES_GNOMEKEYRING = False
-else:
-	if gnomekeyring.is_available():
-		USER_USES_GNOMEKEYRING = True
+USER_HAS_GNOMEKEYRING = False
+USER_USES_GNOMEKEYRING = False
+if gajim.config.get('use_gnomekeyring'):
+	try:
+		import gnomekeyring
+	except ImportError:
+		pass
 	else:
-		USER_USES_GNOMEKEYRING = False
+		USER_HAS_GNOMEKEYRING = True
+		if gnomekeyring.is_available():
+			USER_USES_GNOMEKEYRING = True
+		else:
+			USER_USES_GNOMEKEYRING = False
 
 class PasswordStorage(object):
 	def get_password(self, account_name):
@@ -37,7 +41,11 @@ class PasswordStorage(object):
 
 class SimplePasswordStorage(PasswordStorage):
 	def get_password(self, account_name):
-		return gajim.config.get_per('accounts', account_name, 'password')
+		passwd = gajim.config.get_per('accounts', account_name, 'password')
+		if passwd and passwd.startswith('gnomekeyring:'):
+			return None # this is not a real password, it's a gnome keyring token
+		else:
+			return passwd
 
 	def save_password(self, account_name, password):
 		gajim.config.set_per('accounts', account_name, 'password', password)
@@ -48,12 +56,12 @@ class GnomePasswordStorage(PasswordStorage):
 	def __init__(self):
 		# self.keyring = gnomekeyring.get_default_keyring_sync() 
 
-		## above line commented and code below inserted as workaround 
-		## for the bug http://bugzilla.gnome.org/show_bug.cgi?id=363019 
-		self.keyring = "default" 
-		try: 
-			gnomekeyring.create_sync(self.keyring, None) 
-		except gnomekeyring.AlreadyExistsError: 
+		## above line commented and code below inserted as workaround
+		## for the bug http://bugzilla.gnome.org/show_bug.cgi?id=363019
+		self.keyring = "default"
+		try:
+			gnomekeyring.create_sync(self.keyring, None)
+		except gnomekeyring.AlreadyExistsError:
 			pass
 
 	def get_password(self, account_name):

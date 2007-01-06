@@ -120,6 +120,10 @@ sleeper_state = {} # whether we pass auto away / xa or not
 #'autoxa': autoxa and use sleeper
 status_before_autoaway = {}
 
+# jid of transport contacts for which we need to ask avatar when transport will
+# be online
+transport_avatar = {} # {transport_jid: [jid_list]}
+
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
 

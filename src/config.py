@@ -84,6 +84,8 @@ class PreferencesWindow:
 		self.notebook = self.xml.get_widget('preferences_notebook')
 		self.one_window_type_combobox =\
 			self.xml.get_widget('one_window_type_combobox')
+		self.treat_incoming_messages_combobox =\
+			self.xml.get_widget('treat_incoming_messages_combobox')
 
 		#FIXME: remove when ANC will be implemented
 		w = self.xml.get_widget('hbox3020')
@@ -140,7 +142,7 @@ class PreferencesWindow:
 		if not gajim.config.get('emoticons_theme'):
 			emoticons_combobox.set_active(len(l)-1)
 
-		#iconset
+		# iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
 		# new model, image in 0, string in 1
 		model = gtk.ListStore(gtk.Image, str)
@@ -181,6 +183,14 @@ class PreferencesWindow:
 			self.one_window_type_combobox.set_active(choices.index(type))
 		else:
 			self.one_window_type_combobox.set_active(0)
+
+		# Set default for treat incoming messages
+		choices = common.config.opt_treat_incoming_messages
+		type = gajim.config.get('treat_incoming_messages')
+		if type in choices:
+			self.treat_incoming_messages_combobox.set_active(choices.index(type))
+		else:
+			self.treat_incoming_messages_combobox.set_active(0)
 
 		# Use transports iconsets
 		st = gajim.config.get('use_transports_iconsets')
@@ -353,7 +363,7 @@ class PreferencesWindow:
 					gajim.config.set('soundplayer', command)
 					break
 
-		#sounds treeview
+		# sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
 		
 		# active, event ui name, path to sound file, event_config_name
@@ -380,31 +390,31 @@ class PreferencesWindow:
 		st = gajim.config.get('autoaway')
 		self.auto_away_checkbutton.set_active(st)
 
-		#Autoawaytime
+		# Autoawaytime
 		st = gajim.config.get('autoawaytime')
 		self.auto_away_time_spinbutton.set_value(st)
 		self.auto_away_time_spinbutton.set_sensitive(gajim.config.get('autoaway'))
 
-		#autoaway message
+		# autoaway message
 		st = gajim.config.get('autoaway_message')
 		self.auto_away_message_entry.set_text(st)
 		self.auto_away_message_entry.set_sensitive(gajim.config.get('autoaway'))
 
-		#Autoxa
+		# Autoxa
 		st = gajim.config.get('autoxa')
 		self.auto_xa_checkbutton.set_active(st)
 
-		#Autoxatime
+		# Autoxatime
 		st = gajim.config.get('autoxatime')
 		self.auto_xa_time_spinbutton.set_value(st)
 		self.auto_xa_time_spinbutton.set_sensitive(gajim.config.get('autoxa'))
 
-		#autoxa message
+		# autoxa message
 		st = gajim.config.get('autoxa_message')
 		self.auto_xa_message_entry.set_text(st)
 		self.auto_xa_message_entry.set_sensitive(gajim.config.get('autoxa'))
 
-		#ask_status when online / offline
+		# ask_status when online / offline
 		st = gajim.config.get('ask_online_status')
 		self.xml.get_widget('prompt_online_status_message_checkbutton').\
 			set_active(st)
@@ -438,7 +448,7 @@ class PreferencesWindow:
 		renderer.connect('toggled', self.default_msg_toggled_cb)
 		self.fill_default_msg_treeview()
 
-		#Status messages
+		# Status messages
 		self.msg_tree = self.xml.get_widget('msg_treeview')
 		model = gtk.ListStore(str, str)
 		self.msg_tree.set_model(model)
@@ -453,7 +463,7 @@ class PreferencesWindow:
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		buf.connect('changed', self.on_msg_textview_changed)
 
-		#open links with
+		# open links with
 		if os.name == 'nt':
 			applications_frame = self.xml.get_widget('applications_frame')
 			applications_frame.set_no_show_all(True)
@@ -491,6 +501,10 @@ class PreferencesWindow:
 		# send os info
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
+
+		# send os info
+		st = gajim.config.get('check_if_gajim_is_default')
+		self.xml.get_widget('check_default_client_checkbutton').set_active(st)
 
 		# set status msg from currently playing music track
 		widget = self.xml.get_widget(
@@ -645,6 +659,11 @@ class PreferencesWindow:
 		gajim.config.set('one_message_window', config_type)
 		gajim.interface.save_config()
 		gajim.interface.msg_win_mgr.reconfig()
+
+	def on_treat_incoming_messages_combobox_changed(self, widget):
+		active = widget.get_active()
+		config_type = common.config.opt_treat_incoming_messages[active]
+		gajim.config.set('treat_incoming_messages', config_type)
 
 	def apply_speller(self):
 		for acct in gajim.connections:
@@ -997,13 +1016,16 @@ class PreferencesWindow:
 
 	def on_send_os_info_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'send_os_info')
-		
+
+	def on_check_default_client_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'check_if_gajim_is_default')
+
 	def on_notify_gmail_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email')
 
 	def on_notify_gmail_extra_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email_extra')
-		
+
 	def fill_msg_treeview(self):
 		self.xml.get_widget('delete_msg_button').set_sensitive(False)
 		model = self.msg_tree.get_model()
@@ -1467,6 +1489,7 @@ class AccountModificationWindow:
 				gajim.last_message_time[self.account]
 			gajim.status_before_autoaway[name] = \
 				gajim.status_before_autoaway[self.account]
+			gajim.transport_avatar[name] = gajim.transport_avatar[self.account]
 
 			gajim.contacts.change_account_name(self.account, name)
 			gajim.events.change_account_name(self.account, name)
@@ -1493,6 +1516,7 @@ class AccountModificationWindow:
 			del gajim.encrypted_chats[self.account]
 			del gajim.last_message_time[self.account]
 			del gajim.status_before_autoaway[self.account]
+			del gajim.transport_avatar[self.account]
 			gajim.connections[self.account].name = name
 			gajim.connections[name] = gajim.connections[self.account]
 			del gajim.connections[self.account]
@@ -2054,6 +2078,7 @@ class AccountsWindow:
 			del gajim.encrypted_chats[gajim.ZEROCONF_ACC_NAME]
 			del gajim.last_message_time[gajim.ZEROCONF_ACC_NAME]
 			del gajim.status_before_autoaway[gajim.ZEROCONF_ACC_NAME]
+			del gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME]
 			if len(gajim.connections) >= 2:
 				# Do not merge accounts if only one exists
 				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
@@ -2084,6 +2109,7 @@ class AccountsWindow:
 			gajim.encrypted_chats[gajim.ZEROCONF_ACC_NAME] = []
 			gajim.last_message_time[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.status_before_autoaway[gajim.ZEROCONF_ACC_NAME] = ''
+			gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME] = {}
 			# refresh accounts window
 			if gajim.interface.instances.has_key('accounts'):
 				gajim.interface.instances['accounts'].init_accounts()
@@ -2332,7 +2358,7 @@ class GroupchatConfigWindow(DataFormWindow):
 		self.room_jid = room_jid
 		self.remove_button = {}
 		self.affiliation_treeview = {}
-		self.list_init = {} # list at the begining
+		self.list_init = {} # list at the beginning
 		ui_list = {'outcast': _('Ban List'),
 			'member': _('Member List'),
 			'owner': _('Owner List'),
@@ -2415,7 +2441,7 @@ class GroupchatConfigWindow(DataFormWindow):
 			prompt = _('<b>Whom do you want to make a member?</b>\n\n')
 		elif affiliation == 'owner':
 			title = _('Adding Owner...')
-			prompt = _('<b>Whom do you want to make a owner?</b>\n\n')
+			prompt = _('<b>Whom do you want to make an owner?</b>\n\n')
 		else:
 			title = _('Adding Administrator...')
 			prompt = _('<b>Whom do you want to make an administrator?</b>\n\n')
@@ -2587,6 +2613,7 @@ class RemoveAccountWindow:
 		del gajim.encrypted_chats[self.account]
 		del gajim.last_message_time[self.account]
 		del gajim.status_before_autoaway[self.account]
+		del gajim.transport_avatar[self.account]
 		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
 		else: 
@@ -3063,9 +3090,9 @@ class AccountCreationWizardWindow:
 			if self.modify:
 				finish_text = '<big><b>%s</b></big>\n\n%s' % (
 					_('Account has been added successfully'),
-					_('You can set advanced account options by pressing Advanced '
-					'button, or later by clicking in Accounts menuitem under Edit '
-					'menu from the main window.'))
+					_('You can set advanced account options by pressing the '
+					'Advanced button, or later by choosing the Accounts menuitem '
+					'under the Edit menu from the main window.'))
 				self.finish_label.set_markup(finish_text)
 				self.finish_button.show()
 				self.finish_button.set_property('has-default', True)
@@ -3098,9 +3125,9 @@ class AccountCreationWizardWindow:
 
 		finish_text = '<big><b>%s</b></big>\n\n%s' % (
 			_('Your new account has been created successfully'),
-			_('You can set advanced account options by pressing Advanced button, '
-			'or later by clicking in Accounts menuitem under Edit menu from the '
-			'main window.'))
+			_('You can set advanced account options by pressing the Advanced '
+			'button, or later by choosing the Accounts menuitem under the Edit '
+			'menu from the main window.'))
 		self.finish_label.set_markup(finish_text)
 		self.notebook.set_current_page(3) # show finish page
 
@@ -3115,7 +3142,7 @@ class AccountCreationWizardWindow:
 		self.show_vcard_checkbutton.hide()
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
-		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occured during '
+		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occurred during '
 			'account creation') , reason)
 		self.finish_label.set_markup(finish_text)
 		self.notebook.set_current_page(3) # show finish page
@@ -3230,6 +3257,7 @@ class AccountCreationWizardWindow:
 		gajim.encrypted_chats[self.account] = []
 		gajim.last_message_time[self.account] = {}
 		gajim.status_before_autoaway[self.account] = ''
+		gajim.transport_avatar[self.account] = {}
 		# refresh accounts window
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()

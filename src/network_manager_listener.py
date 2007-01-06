@@ -17,13 +17,15 @@ from common import gajim
 
 def device_now_active(self, *args):
 	for connection in gajim.connections.itervalues():
-		if gajim.config.get_per('accounts', connection.name, 'listen_to_network_manager') and gajim.config.get_per('accounts', connection.name, 'sync_with_global_status'):
-			connection.change_status('online', '')
+		if gajim.config.get_per('accounts', connection.name,
+		'listen_to_network_manager') and connection.time_to_reconnect:
+			connection._reconnect()
 
 def device_no_longer_active(self, *args):
 	for connection in gajim.connections.itervalues():
-		if gajim.config.get_per('accounts', connection.name, 'listen_to_network_manager') and gajim.config.get_per('accounts', connection.name, 'sync_with_global_status'):
-			connection.change_status('offline', '')
+		if gajim.config.get_per('accounts', connection.name,
+		'listen_to_network_manager') and connection.connected > 1:
+			connection._disconnectedReconnCB()
 
 
 from common.dbus_support import system_bus

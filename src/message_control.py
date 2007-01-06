@@ -55,7 +55,7 @@ class MessageControl:
 	def set_control_active(self, state):
 		'''Called when the control becomes active (state is True)
 		or inactive (state is False)'''
-		pass  # Derived types MUST implement this method
+		pass  # Derived classes MUST implement this method
 
 	def allow_shutdown(self, method):
 		'''Called to check is a control is allowed to shutdown.

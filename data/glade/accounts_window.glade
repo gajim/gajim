@@ -19,6 +19,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="destroy" handler="on_accounts_window_destroy" last_modification_time="Sat, 02 Apr 2005 20:34:04 GMT"/>
   <signal name="key_press_event" handler="on_accounts_window_key_press_event" last_modification_time="Wed, 25 May 2005 23:19:56 GMT"/>
 
@@ -63,7 +64,7 @@
       <child>
 	<widget class="GtkCheckButton" id="merge_checkbutton">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">If you have 2 or more accounts and it is checked, Gajim will list all contacts as if you had one account</property>
+	  <property name="tooltip" translatable="yes">If you have 2 or more accounts and this is checked, Gajim will list all contacts as if you had one account</property>
 	  <property name="can_focus">True</property>
 	  <property name="label" translatable="yes">Mer_ge accounts</property>
 	  <property name="use_underline">True</property>

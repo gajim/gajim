@@ -404,7 +404,7 @@
 	  <child>
 	    <widget class="GtkLabel" id="label224">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">You have to register to this transport
+	      <property name="label" translatable="yes">You have to register with this transport
 to be able to add a contact from this
 protocol. Click on register button to
 proceed.</property>

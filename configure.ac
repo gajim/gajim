@@ -103,7 +103,7 @@ if test "x$enable_idle" = "xyes";then
 		AC_CHECK_LIB([Xss], [XScreenSaverAllocInfo])
 		XSCRNSAVER_LIBS="$LIBS"
 		AC_SUBST([XSCRNSAVER_LIBS])
-		if test "x$XSCRNSAVER_LIBS" = "x";then 
+		if test "x$XSCRNSAVER_LIBS" = "x-L";then 
 			have_idle=false
 		else
 			have_idle=true

@@ -38,6 +38,7 @@ opt_str = [ 'string', 0 ]
 opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
 opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
+opt_treat_incoming_messages = ['', 'chat', 'normal']
 
 class Config:
 
@@ -89,7 +90,7 @@ class Config:
 		'ignore_incoming_xhtml': [ opt_bool, False, ],
 		'speller_language': [ opt_str, '', _('Language used by speller')],
 		'print_time': [ opt_str, 'always',  _('\'always\' - print time for every message.\n\'sometimes\' - print time every print_ichat_every_foo_minutes minute.\n\'never\' - never print time.')],
-		'print_time_fuzzy': [ opt_int, 0, _('Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the less precise one. This is used only if print_time is \'sometimes\'.') ],
+		'print_time_fuzzy': [ opt_int, 0, _('Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. This is used only if print_time is \'sometimes\'.') ],
 		'emoticons_theme': [opt_str, 'static', '', True ],
 		'ascii_formatting': [ opt_bool, True,
 			_('Treat * / _ pairs as possible formatting characters.'), True],
@@ -188,13 +189,13 @@ class Config:
 		'notification_avatar_height': [opt_int, 48],
 		'muc_highlight_words': [opt_str, '', _('A semicolon-separated list of words that will be highlighted in group chats.')],
 		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used.')],
-		'set_xmpp://_handler_everytime': [opt_bool, False, _('If True, Gajim registers for xmpp:// on each startup.')],
+		'check_if_gajim_is_default': [opt_bool, True, _('If True, Gajim will check if it\'s the default jabber client on each startup.')],
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
 		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window.'), True],
 		'show_avatars_in_roster': [opt_bool, True, '', True],
 		'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old.')],
 		'print_status_in_chats': [opt_bool, True, _('If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message.')],
-		'print_status_in_muc': [opt_str, 'in_and_out', _('can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", gajim will only print FOO enters/leaves group chat.')],
+		'print_status_in_muc': [opt_str, 'in_and_out', _('can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", Gajim will only print FOO enters/leaves group chat.')],
 		'log_contact_status_changes': [opt_bool, False],
 		'just_connected_bg_color': [opt_str, '#adc3c6', _('Background color of contacts when they just signed in.')],
 		'just_disconnected_bg_color': [opt_str, '#ab6161', _('Background color of contacts when they just signed out.')],
@@ -216,11 +217,14 @@ class Config:
 		'hide_chat_banner': [opt_bool, False, _('Hides the banner in two persons chat window')],
 		'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the group chat occupants list in group chat window.')],
 		'chat_merge_consecutive_nickname': [opt_bool, False, _('In a chat, show the nickname at the beginning of a line only when it\'s not the same person talking than in previous message.')],
-		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickame.')],
+		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickname.')],
 		'gc_nicknames_colors': [ opt_str, '#a34526:#c000ff:#0012ff:#388a99:#045723:#7c7c7c:#ff8a00:#94452d:#244b5a:#32645a', _('List of colors that will be used to color nicknames in group chats.'), True ],
 		'ctrl_tab_go_to_next_composing': [opt_bool, True, _('Ctrl-Tab go to next composing tab when none is unread.')],
 		'confirm_metacontacts': [ opt_str, '', _('Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog.')],
-		'enable_negative_priority': [ opt_bool, False, _('If True, you will be able to set a negative priority to your account in account modification window. BE CAREFULL, when you are logged in with a negative priority, you will NOT receive any message from your server.')],
+		'enable_negative_priority': [ opt_bool, False, _('If True, you will be able to set a negative priority to your account in account modification window. BE CAREFUL, when you are logged in with a negative priority, you will NOT receive any message from your server.')],
+		'use_gnomekeyring': [opt_bool, True, _('If True, Gajim will use Gnome Keyring (if available) to store account passwords.')],
+		'show_contacts_number': [opt_bool, True, _('If True, Gajim will show number of online and total contacts in account and group rows.')],
+		'treat_incoming_messages': [ opt_str, '', _('Can be empty, \'chat\' or \'normal\'. If not empty, treat all incoming messages as if they were of this type')],
 	}
 
 	__options_per_key = {

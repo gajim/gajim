@@ -508,7 +508,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			if id_:
 				tag = self.textbuf.create_tag(id_)
 			else:
-				tag = self.textbuf.create_tag()
+				tag = self.textbuf.create_tag() # we create anonymous tag
 		for attr, val in [item.split(':', 1) for item in style.split(';') if len(item.strip())]:
 			attr = attr.strip().lower()
 			val = val.strip()

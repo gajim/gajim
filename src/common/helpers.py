@@ -349,7 +349,7 @@ def get_uf_chatstate(chatstate):
 	elif chatstate == 'composing':
 		return _('is composing a message...')
 	elif chatstate == 'paused':
-		#paused means he or she was compoing but has stopped for a while
+		#paused means he or she was composing but has stopped for a while
 		return _('paused composing a message')
 	elif chatstate == 'gone':
 		return _('has closed the chat window or tab')

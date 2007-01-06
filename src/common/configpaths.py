@@ -41,7 +41,7 @@ class ConfigPaths:
 					self.root = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
 				except KeyError:
 					# win9x, in cwd
-					self.root = u''
+					self.root = u'.'
 			else: # Unices
 				# Pass in an Unicode string, and hopefully get one back.
 				self.root = os.path.expanduser(u'~/.gajim')
@@ -87,7 +87,7 @@ def init():
 		paths.add_from_root(n, p)
 
 	paths.add('DATA', os.path.join(u'..', windowsify(u'data')))
-	paths.add('HOME', os.path.expanduser(u'~'))
+	paths.add('HOME', fse(os.path.expanduser('~')))
 	paths.add('TMP', fse(tempfile.gettempdir()))
 
 	try:
@@ -96,8 +96,8 @@ def init():
 	except (ImportError, AttributeError):
 		pass
 
-	#for k, v in paths.iteritems():
-	#	print "%s: %s" % (k, v)
+	# for k, v in paths.iteritems():
+	# 	print "%s: %s" % (repr(k), repr(v))
 
 	return paths
 
@@ -113,3 +113,6 @@ def init_profile(profile, paths=gajimpaths):
 	pidfile += u'.pid'
 	paths.add_from_root('CONFIG_FILE', conffile)
 	paths.add_from_root('PID_FILE', pidfile)
+
+	# for k, v in paths.iteritems():
+	# 	print "%s: %s" % (repr(k), repr(v))

@@ -24,7 +24,7 @@ import sha
 import socket
 import sys
 
-from time import localtime, strftime, gmtime
+from time import localtime, strftime, gmtime, timezone
 from calendar import timegm
 
 import socks5
@@ -1314,7 +1314,15 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
-	
+	def _TimeRevisedCB(self, con, iq_obj):
+		gajim.log.debug('TimeRevisedCB')
+		iq_obj = iq_obj.buildReply('result')
+		qp = iq_obj.setTag('time')
+		qp.setTagData('utc', strftime("%Y-%m-%dT%TZ", gmtime()))
+		qp.setTagData('tzo', "%+03d:00"% (time.timezone/(60*60)))
+		self.connection.send(iq_obj)
+		raise common.xmpp.NodeProcessed
+
 	def _gMailNewMailCB(self, con, gm):
 		'''Called when we get notified of new mail messages in gmail account'''
 		if not gm.getTag('new-mail'):
@@ -1438,6 +1446,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					subject = subject)
 			self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
 				tim))
+			return
 		elif mtype == 'groupchat':
 			has_timestamp = False
 			if msg.timestamp:
@@ -1451,9 +1460,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if not self.last_history_line.has_key(jid):
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
-				if self.name not in no_log_for and not int(float(time.mktime(tim))) <= \
-					self.last_history_line[jid] and msgtxt:
+				if self.name not in no_log_for and not int(float(time.mktime(tim)))\
+				<= self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
+			return
 		elif mtype == 'chat': # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
@@ -1461,8 +1471,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				no_log_for and msgtxt:
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
-			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-						chatstate, msg_id, composing_jep, user_nick, msghtml))
 		else: # it's single message
 			if invite is not None:
 				item = invite.getTag('invite')
@@ -1475,8 +1483,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
-			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-				subject, chatstate, msg_id, composing_jep, user_nick, msghtml))
+			mtype = 'normal'
+		treat_as = gajim.config.get('treat_incoming_messages')
+		if treat_as:
+			mtype = treat_as
+		self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype,
+			subject, chatstate, msg_id, composing_jep, user_nick, msghtml))
 	# END messageCB
 
 	def _pubsubEventCB(self, con, msg):
@@ -1962,6 +1974,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_VERSION)
 		con.RegisterHandler('iq', self._TimeCB, 'get',
 			common.xmpp.NS_TIME)
+		con.RegisterHandler('iq', self._TimeRevisedCB, 'get',
+			common.xmpp.NS_TIME_REVISED)
 		con.RegisterHandler('iq', self._LastCB, 'get',
 			common.xmpp.NS_LAST)
 		con.RegisterHandler('iq', self._LastResultCB, 'result',

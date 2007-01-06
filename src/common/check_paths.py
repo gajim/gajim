@@ -86,7 +86,7 @@ def check_and_possibly_create_paths():
 	AVATAR_PATH = gajim.AVATAR_PATH
 	dot_gajim = os.path.dirname(VCARD_PATH)
 	if os.path.isfile(dot_gajim):
-		print _('%s is file but it should be a directory') % dot_gajim
+		print _('%s is a file but it should be a directory') % dot_gajim
 		print _('Gajim will now exit')
 		sys.exit()
 	elif os.path.isdir(dot_gajim):
@@ -97,14 +97,14 @@ def check_and_possibly_create_paths():
 		if not os.path.exists(VCARD_PATH):
 			create_path(VCARD_PATH)
 		elif os.path.isfile(VCARD_PATH):
-			print _('%s is file but it should be a directory') % VCARD_PATH
+			print _('%s is a file but it should be a directory') % VCARD_PATH
 			print _('Gajim will now exit')
 			sys.exit()
 
 		if not os.path.exists(AVATAR_PATH):
 			create_path(AVATAR_PATH)
 		elif os.path.isfile(AVATAR_PATH):
-			print _('%s is file but it should be a directory') % AVATAR_PATH
+			print _('%s is a file but it should be a directory') % AVATAR_PATH
 			print _('Gajim will now exit')
 			sys.exit()
 
@@ -112,7 +112,7 @@ def check_and_possibly_create_paths():
 			create_log_db()
 			gajim.logger.init_vars()
 		elif os.path.isdir(LOG_DB_PATH):
-			print _('%s is directory but should be file') % LOG_DB_PATH
+			print _('%s is a directory but should be a file') % LOG_DB_PATH
 			print _('Gajim will now exit')
 			sys.exit()
 

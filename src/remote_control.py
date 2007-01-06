@@ -21,7 +21,7 @@ import os
 from common import gajim
 from common import helpers
 from time import time
-from dialogs import AddNewContactWindow, NewChatDialog
+from dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
 
 from common import dbus_support
 if dbus_support.supported:
@@ -91,8 +91,7 @@ class Remote:
 
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
-			self.signal_object.raise_signal(signal, get_dbus_struct(arg))
-#			self.signal_object.getattr(signal)(get_dbus_struct(arg))
+			getattr(self.signal_object, signal)(get_dbus_struct(arg))
 
 
 class SignalObject(dbus.service.Object):
@@ -296,6 +295,11 @@ class SignalObject(dbus.service.Object):
 			raise MissingArgument
 			return None
 		jid = self._get_real_jid(jid, account)
+		try:
+			jid = helpers.parse_jid(jid)
+		except:
+			# Jid is not conform, ignore it
+			return None
 
 		if account:
 			accounts = [account]
@@ -632,3 +636,22 @@ class SignalObject(dbus.service.Object):
 		else:
 			for acc in gajim.contacts.get_accounts():
 				gajim.connections[acc].send_stanza(xml)
+
+	@dbus.service.method(INTERFACE)
+	def join_room(self, *args):
+		room_jid, nick, passwd, account = self._get_real_arguments(args, 4)
+		if not account:
+			# get the first connected account
+			accounts = gajim.connections.keys()
+			for acct in accounts:
+				if gajim.account_is_connected(acct):
+					account = acct
+					break
+			if not account:
+				account = gajim.contacts.get_accounts()[0]
+		if nick is None:
+			nick = ''
+			gajim.interface.instances[account]['join_gc'] = \
+					JoinGroupchatWindow(account, room_jid, nick)
+		else:
+			gajim.connections[account].join_gc(nick, room_jid, password)

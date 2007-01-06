@@ -31,6 +31,7 @@ except ImportError:
 
 import configpaths
 LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
+LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
 
 class Constants:
 	def __init__(self):
@@ -97,10 +98,18 @@ class Logger:
 	def open_db(self):
 		self.close_db()
 
+		# FIXME: sqlite3_open wants UTF8 strings. So a path with
+		# non-ascii chars doesn't work. See #2812 and
+		# http://lists.initd.org/pipermail/pysqlite/2005-August/000134.html
+		back = os.getcwd()
+		os.chdir(LOG_DB_FOLDER)
+
 		# if locked, wait up to 20 sec to unlock
 		# before raise (hopefully should be enough)
-		self.con = sqlite.connect(LOG_DB_PATH, timeout = 20.0,
+
+		self.con = sqlite.connect(LOG_DB_FILE, timeout = 20.0,
 			isolation_level = 'IMMEDIATE')
+		os.chdir(back)
 		self.cur = self.con.cursor()
 		self.set_synchronous(False)
 

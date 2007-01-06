@@ -282,9 +282,9 @@ Contact Disconnected
 Contact Change Status 
 Group Chat Message Highlight 
 Group Chat Message Received 
-File Transfert Resquest 
-File Transfert Started 
-File Transfert Finished</property>
+File Transfer Request 
+File Transfer Started 
+File Transfer Finished</property>
 		      <property name="add_tearoffs">False</property>
 		      <property name="focus_on_click">True</property>
 		      <signal name="changed" handler="on_event_combobox_changed" last_modification_time="Sun, 09 Jul 2006 01:54:11 GMT"/>

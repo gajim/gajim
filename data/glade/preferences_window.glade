@@ -486,6 +486,61 @@ Per type</property>
 	      </child>
 
 	      <child>
+		<widget class="GtkHBox" id="hbox3024">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkLabel" id="label387">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Treat incoming and single messages as:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">1</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkComboBox" id="treat_incoming_messages_combobox">
+		      <property name="visible">True</property>
+		      <property name="items" translatable="yes">Determined by sender
+Chat message
+Single message</property>
+		      <property name="add_tearoffs">False</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="changed" handler="on_treat_incoming_messages_combobox_changed" last_modification_time="Fri, 05 Jan 2007 20:16:54 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+
+	      <child>
 		<widget class="GtkHBox" id="hbox2947">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
@@ -1508,7 +1563,7 @@ Per type</property>
 				      <child>
 					<widget class="GtkRadioButton" id="popup_new_message_radiobutton">
 					  <property name="visible">True</property>
-					  <property name="tooltip" translatable="yes">Gajim will automatically show new events by poping up the relative window</property>
+					  <property name="tooltip" translatable="yes">Gajim will automatically show new events by popping up the relative window</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">_Pop it up</property>
 					  <property name="use_underline">True</property>
@@ -1829,7 +1884,7 @@ Per type</property>
 	      <child>
 		<widget class="GtkCheckButton" id="ignore_events_from_unknown_contacts_checkbutton">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Check this option, only if someone you don't have in the roster spams/annoys you. Use with caution, cause it blocks all messages from any contact that is not in the roster</property>
+		  <property name="tooltip" translatable="yes">Check this option, only if someone you don't have in the roster spams/annoys you. Use with caution, because it blocks all messages from any contact that is not in the roster</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Ignore events from contacts not in the roster</property>
 		  <property name="use_underline">True</property>
@@ -2214,7 +2269,7 @@ Disabled</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">False</property>
+		  <property name="expand">True</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -3352,6 +3407,26 @@ Custom</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
 			      <signal name="toggled" handler="on_send_os_info_checkbutton_toggled" last_modification_time="Wed, 06 Apr 2005 14:43:56 GMT"/>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="check_default_client_checkbutton">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Always check to see if Gajim is the _default Jabber client on startup</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			      <signal name="toggled" handler="on_check_default_client_checkbutton_toggled" last_modification_time="Fri, 05 Jan 2007 17:15:21 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>

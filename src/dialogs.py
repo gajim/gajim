@@ -639,9 +639,12 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		else:
 			message= ''
 		group = self.group_comboboxentry.child.get_text().decode('utf-8')
+		groups = []
+		if group:
+			groups = [group]
 		auto_auth = self.auto_authorize_checkbutton.get_active()
 		gajim.interface.roster.req_sub(self, jid, message, self.account,
-			groups = [group], nickname = nickname, auto_auth = auto_auth)
+			groups = groups, nickname = nickname, auto_auth = auto_auth)
 		self.window.destroy()
 
 	def on_protocol_combobox_changed(self, widget):
@@ -905,7 +908,7 @@ class BindPortError(HigDialog):
 	def __init__(self, port):
 		ErrorDialog(_('Unable to bind to port %s.') % port,
 			_('Maybe you have another running instance of Gajim. '
-			'File Transfer will be canceled.'))
+			'File Transfer will be cancelled.'))
 
 class ConfirmationDialog(HigDialog):
 	'''HIG compliant confirmation dialog.'''
@@ -919,7 +922,7 @@ class ConfirmationDialog(HigDialog):
 class NonModalConfirmationDialog(HigDialog):
 	'''HIG compliant non modal confirmation dialog.'''
 	def __init__(self, pritext, sectext='', on_response_ok = None,
-			on_response_cancel = None):
+	on_response_cancel = None):
 		HigDialog.__init__(self, None, 
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
 			on_response_ok, on_response_cancel)
@@ -1232,6 +1235,23 @@ class JoinGroupchatWindow:
 			self.recently_groupchat = self.recently_groupchat[0:10]
 		gajim.config.set('recently_groupchat',
 			' '.join(self.recently_groupchat))
+
+		if self.xml.get_widget('auto_join_checkbutton').get_active():
+			# create the bookmark-dict
+			# is it already bookmarked ?
+			room_jid_bookmarked = False
+			for bmdict in gajim.connections[self.account].bookmarks:
+				if bmdict['jid'] == room_jid:
+					room_jid_bookmarked = True
+					break
+			if not room_jid_bookmarked:
+				name = gajim.get_nick_from_jid(room_jid)
+				bmdict = { 'name': name, 'jid': room_jid, 'autojoin': u'1',
+					'password': password, 'nick': nickname,
+					'print_status': gajim.config.get('print_status_in_muc')}
+
+				gajim.connections[self.account].bookmarks.append(bmdict)
+				gajim.connections[self.account].store_bookmarks()
 
 		if self.automatic:
 			gajim.automatic_rooms[self.account][room_jid] = self.automatic
