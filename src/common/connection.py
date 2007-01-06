@@ -84,7 +84,7 @@ class Connection(ConnectionHandlers):
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
 		if USE_GPG:
-			self.gpg = GnuPG.GnuPG()
+			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 			gajim.config.set('usegpg', True)
 		else:
 			gajim.config.set('usegpg', False)
@@ -203,7 +203,7 @@ class Connection(ConnectionHandlers):
 							return
 						self.password = self.new_account_info['password']
 						if USE_GPG:
-							self.gpg = GnuPG.GnuPG()
+							self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 							gajim.config.set('usegpg', True)
 						else:
 							gajim.config.set('usegpg', False)

@@ -43,8 +43,9 @@ else:
 		USE_GPG = False
 
 	class GnuPG(GnuPGInterface.GnuPG):
-		def __init__(self):
+		def __init__(self, use_agent = False):
 			GnuPGInterface.GnuPG.__init__(self)
+			self.use_agent = use_agent
 			self._setup_my_options()
 
 		def _setup_my_options(self):
@@ -53,6 +54,8 @@ else:
 			self.options.extra_args.append('--no-secmem-warning')
 			# Nolith's patch - prevent crashs on non fully-trusted keys
 			self.options.extra_args.append('--always-trust')
+			if self.use_agent:
+				self.options.extra_args.append('--use-agent')
 
 		def _read_response(self, child_stdout):
 			# Internal method: reads all the output from GPG, taking notice
