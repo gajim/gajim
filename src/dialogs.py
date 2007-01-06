@@ -922,7 +922,7 @@ class ConfirmationDialog(HigDialog):
 class NonModalConfirmationDialog(HigDialog):
 	'''HIG compliant non modal confirmation dialog.'''
 	def __init__(self, pritext, sectext='', on_response_ok = None,
-			on_response_cancel = None):
+	on_response_cancel = None):
 		HigDialog.__init__(self, None, 
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
 			on_response_ok, on_response_cancel)
