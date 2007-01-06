@@ -1320,7 +1320,7 @@ class RosterWindow:
 					accounts = [account])
 				account_name = account
 				if gajim.account_is_connected(account):
-					account_name += '(%s/%s)' % (repr(nbr_on), repr(nbr_total))
+					account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 				contact = gajim.contacts.create_contact(jid = jid,
 					name = account_name, show = connection.get_status(), sub = '',
 					status = connection.status,
