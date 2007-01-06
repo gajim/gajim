@@ -1764,6 +1764,8 @@ class XMLConsoleWindow:
 		# kind must be 'incoming' or 'outgoing'
 		if not self.enabled:
 			return
+		if not stanza:
+			return
 
 		buffer = self.stanzas_log_textview.get_buffer()
 		at_the_end = False
