@@ -28,6 +28,9 @@ import sys
 import vcard
 import dialogs
 
+import logging
+log = logging.getLogger('gajim.gtkgui_helpers')
+
 
 HAS_PYWIN32 = True
 if os.name == 'nt':
@@ -676,7 +679,7 @@ Description=xmpp
 ''' % command)
 					f.close()
 				except IOError:
-					pass
+					log.debug("I/O Error writing settings to %s", repr(path_to_kde_file), exc_info=True)
 
 	try:
 		import gconf
