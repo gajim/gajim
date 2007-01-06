@@ -418,7 +418,7 @@ class ConversationTextview:
 		if tags: # we clicked on sth special (it can be status message too)
 			for tag in tags:
 				tag_name = tag.get_property('name')
-				if tag_name is not None and tag_name in ('url', 'mail'):
+				if tag_name in ('url', 'mail'):
 					return True # we block normal context menu
 
 		# we check if sth was selected and if it was we assign
