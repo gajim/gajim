@@ -857,9 +857,9 @@ class ChatControl(ChatControlBase):
 		id = widget.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = widget
 
-		self.hide_chat_buttons_always = gajim.config.get(
+		hide_chat_buttons_always = gajim.config.get(
 			'always_hide_chat_buttons')
-		self.chat_buttons_set_visible(self.hide_chat_buttons_always)
+		self.chat_buttons_set_visible(hide_chat_buttons_always)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_chat_banner'))
 		# Initialize drag-n-drop

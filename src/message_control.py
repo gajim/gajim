@@ -37,7 +37,6 @@ class MessageControl:
 		self.display_names = display_names
 		self.contact = contact
 		self.account = account
-		self.hide_chat_buttons_always = False
 		self.hide_chat_buttons_current = False
 		self.resource = resource
 

@@ -180,9 +180,9 @@ class GroupchatControl(ChatControlBase):
 		self.nick = contact.name
 		self.name = self.room_jid.split('@')[0]
 
-		self.hide_chat_buttons_always = gajim.config.get(
+		hide_chat_buttons_always = gajim.config.get(
 			'always_hide_groupchat_buttons')
-		self.chat_buttons_set_visible(self.hide_chat_buttons_always)
+		self.chat_buttons_set_visible(hide_chat_buttons_always)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_groupchat_banner'))
 		self.widget_set_visible(self.xml.get_widget('list_scrolledwindow'),

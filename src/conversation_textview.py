@@ -246,8 +246,6 @@ class ConversationTextview:
 			before_img_iter.backward_char() # one char back (an image also takes one char)
 			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
 
-			self.allow_focus_out_line = False
-
 			# update the iter we hold to make comparison the next time
 			self.focus_out_end_iter_offset = buffer.get_end_iter().get_offset()
 
