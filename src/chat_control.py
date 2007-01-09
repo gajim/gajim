@@ -1074,7 +1074,8 @@ class ChatControl(ChatControlBase):
 					chatstate = helpers.get_uf_chatstate(cs)
 				else:
 					chatstate = ''
-			elif chatstate is None:
+			else:
+				# When does that happen ? See [7797] and [7804]
 				chatstate = helpers.get_uf_chatstate(cs)
 
 			label_text = '<span %s>%s</span><span %s>%s %s</span>' % \
