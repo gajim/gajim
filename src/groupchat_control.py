@@ -729,7 +729,8 @@ class GroupchatControl(ChatControlBase):
 	def got_connected(self):
 		gajim.gc_connected[self.account][self.room_jid] = True
 		ChatControlBase.got_connected(self)
-		self.draw_banner()
+		# We don't redraw the whole banner here, because only icon change
+		self._update_banner_state_image()
 
 	def got_disconnected(self):
 		self.list_treeview.get_model().clear()
