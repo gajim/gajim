@@ -301,8 +301,8 @@ class GroupchatControl(ChatControlBase):
 		column.set_visible(False)
 		self.list_treeview.set_expander_column(column)
 
-		self.draw_banner()
-		self.got_disconnected() # init some variables
+		gajim.gc_connected[self.account][self.room_jid] = False
+		ChatControlBase.got_disconnected(self) 
 
 		self.update_ui()
 		self.conv_textview.tv.grab_focus()
@@ -451,12 +451,10 @@ class GroupchatControl(ChatControlBase):
 		scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
 		banner_status_img.set_from_pixbuf(scaled_pix)
 
-	def draw_banner(self):	
-		'''Draw the fat line at the top of the window that 
-		houses the muc icon, room jid, subject. 
+	def draw_banner_text(self):		
+		'''Draw the text in the fat line at the top of the window that 
+		houses the room jid, subject. 
 		'''
-		ChatControlBase.draw_banner(self)
-
 		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
@@ -725,7 +723,7 @@ class GroupchatControl(ChatControlBase):
 
 	def set_subject(self, subject):
 		self.subject = subject
-		self.draw_banner()
+		self.draw_banner_text()
 
 	def got_connected(self):
 		gajim.gc_connected[self.account][self.room_jid] = True
@@ -740,10 +738,8 @@ class GroupchatControl(ChatControlBase):
 				nick)
 			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		gajim.gc_connected[self.account][self.room_jid] = False
-		# Note, since this method is called during initialization it is NOT safe
-		# to call self.parent_win.redraw_tab here
 		ChatControlBase.got_disconnected(self)
-		self.draw_banner()
+		self._update_banner_state_image()
 
 	def draw_roster(self):
 		self.list_treeview.get_model().clear()

@@ -1214,9 +1214,6 @@ class RosterWindow:
 				else: # No status message
 					ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
 						'status')
-				if contact == gajim.contacts.get_contact_with_highest_priority(
-				account, contact.jid):
-					ctrl.draw_banner()
 
 		if not contact.groups:
 			self.draw_group(_('General'), account)

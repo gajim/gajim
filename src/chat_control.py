@@ -91,15 +91,22 @@ class ChatControlBase(MessageControl):
 			type_]))
 
 	def draw_banner(self):
-		self._paint_banner()
+		'''Draw the fat line at the top of the window that 
+		houses the icon, jid, ... 
+		'''
+		self.draw_banner_text()
 		self._update_banner_state_image()
-		# Derived types SHOULD implement this
+		# Derived types MAY implement this
+
+	def draw_banner_text(self):
+		pass # Derived types SHOULD implement this
 
 	def update_ui(self):
 		self.draw_banner()
 		# Derived types SHOULD implement this
 
 	def repaint_themed_widgets(self):
+		self._paint_banner()
 		self.draw_banner()
 		# Derived classes MAY implement this
 
@@ -208,6 +215,7 @@ class ChatControlBase(MessageControl):
 
 		self.style_event_id = 0
 		self.conv_textview.tv.show()
+		self._paint_banner()
 
 		# For JEP-0172
 		self.user_nick = None
@@ -1011,14 +1019,10 @@ class ChatControl(ChatControlBase):
 
 		self._update_gpg()
 
-	def draw_banner(self, chatstate = None):
-		'''Draw the fat line at the top of the window that 
-		houses the status icon, name, jid.  The chatstate arg should
-		only be used if the control's chatstate member is NOT to be use, such as
-		composing, paused, etc.
+	def draw_banner_text(self):
+		'''Draw the text in the fat line at the top of the window that 
+		houses the name, jid. 
 		'''
-		ChatControlBase.draw_banner(self)
-
 		contact = self.contact
 		jid = contact.jid
 
@@ -1551,7 +1555,7 @@ class ChatControl(ChatControlBase):
 
 	def handle_incoming_chatstate(self):
 		''' handle incoming chatstate that jid SENT TO us '''
-		self.draw_banner()
+		self.draw_banner_text()
 		# update chatstate in tab for this chat
 		self.parent_win.redraw_tab(self, self.contact.chatstate)
 
