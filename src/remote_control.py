@@ -611,7 +611,8 @@ class SignalObject(dbus.service.Object):
 				contact_dict['openpgp'] = keyID
 		contact_dict['resources'] = dbus.Array([], signature='(sis)')
 		for contact in contacts:
-			resource_props = dbus.Struct((DBUS_STRING(contact.resource), contact.priority, DBUS_STRING(contact.status)), signature='sis')
+			resource_props = dbus.Struct((DBUS_STRING(contact.resource),
+				dbus.Int32(contact.priority), DBUS_STRING(contact.status)))
 			contact_dict['resources'].append(resource_props)
 		return contact_dict
 
