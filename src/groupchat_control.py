@@ -187,7 +187,6 @@ class GroupchatControl(ChatControlBase):
 			gajim.config.get('hide_groupchat_banner'))
 		self.widget_set_visible(self.xml.get_widget('list_scrolledwindow'),
 			gajim.config.get('hide_groupchat_occupants_list'))
-		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 
 		self._last_selected_contact = None # None or holds jid, account tuple
 		# alphanum sorted
@@ -1510,9 +1509,10 @@ class GroupchatControl(ChatControlBase):
 			else:
 				begin = ''
 
+			gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 			if len(self.nick_hits) and \
 					self.nick_hits[0].startswith(begin.replace(
-					self.gc_refer_to_nick_char, '')) and \
+					gc_refer_to_nick_char, '')) and \
 					self.last_key_tabs: # we should cycle
 				self.nick_hits.append(self.nick_hits[0])
 				self.nick_hits.pop(0)
@@ -1527,7 +1527,7 @@ class GroupchatControl(ChatControlBase):
 						self.nick_hits.append(nick)
 			if len(self.nick_hits):
 				if len(splitted_text)  < 2: # This is the 1st word of the line or no word
-					add = self.gc_refer_to_nick_char + ' '
+					add = gc_refer_to_nick_char + ' '
 				else:
 					add = ' '
 				start_iter = end_iter.copy()
@@ -1780,7 +1780,8 @@ class GroupchatControl(ChatControlBase):
 				start = ' '
 			add = ' '
 		else:
-			add = self.gc_refer_to_nick_char + ' '
+			gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
+			add = gc_refer_to_nick_char + ' '
 		message_buffer.insert_at_cursor(start + nick + add)
 
 	def on_list_treeview_motion_notify_event(self, widget, event):
