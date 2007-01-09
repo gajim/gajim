@@ -302,6 +302,7 @@ class GroupchatControl(ChatControlBase):
 		self.list_treeview.set_expander_column(column)
 
 		gajim.gc_connected[self.account][self.room_jid] = False
+		# disable win, we are connected yet
 		ChatControlBase.got_disconnected(self) 
 
 		self.update_ui()
@@ -451,7 +452,7 @@ class GroupchatControl(ChatControlBase):
 		scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
 		banner_status_img.set_from_pixbuf(scaled_pix)
 
-	def draw_banner_text(self):		
+	def draw_banner_text(self):
 		'''Draw the text in the fat line at the top of the window that 
 		houses the room jid, subject. 
 		'''
@@ -739,6 +740,7 @@ class GroupchatControl(ChatControlBase):
 			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		gajim.gc_connected[self.account][self.room_jid] = False
 		ChatControlBase.got_disconnected(self)
+		# We don't redraw the whole banner here, because only icon change
 		self._update_banner_state_image()
 
 	def draw_roster(self):
