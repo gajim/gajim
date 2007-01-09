@@ -1184,13 +1184,19 @@ class RosterWindow:
 		len(gajim.events.get_events(account, contact.get_full_jid())) == 0:
 			if len(contact_instances) > 1:
 				# if multiple resources
+				jid_with_resource = contact.jid + '/' + contact.resource
+				if gajim.interface.msg_win_mgr.has_window(jid_with_resource,
+				account):
+					win = gajim.interface.msg_win_mgr.get_window(jid_with_resource,
+						account)
+					ctrl = win.get_control(jid_with_resource, account)
+					ctrl.update_ui()
+					win.redraw_tab(ctrl)
 				gajim.contacts.remove_contact(account, contact)
 		self.remove_contact(contact, account)
 		self.add_contact_to_roster(contact.jid, account)
 		# print status in chat window and update status/GPG image
 		jid_list = [contact.jid]
-		if contact.get_full_jid() != contact.jid:
-			jid_list.append(contact.get_full_jid())
 		for jid in jid_list:
 			if gajim.interface.msg_win_mgr.has_window(jid, account):
 				win = gajim.interface.msg_win_mgr.get_window(jid, account)
