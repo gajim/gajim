@@ -302,7 +302,7 @@ class GroupchatControl(ChatControlBase):
 		self.list_treeview.set_expander_column(column)
 
 		gajim.gc_connected[self.account][self.room_jid] = False
-		# disable win, we are connected yet
+		# disable win, we are not connected yet
 		ChatControlBase.got_disconnected(self) 
 
 		self.update_ui()
