@@ -1655,6 +1655,8 @@ class ChatControl(ChatControlBase):
 					constants.KIND_CHAT_MSG_RECV):
 				kind = 'incoming'
 				name = self.contact.get_shown_name()
+			elif row[1] == constants.KIND_ERROR:
+				kind = 'status'
 
 			tim = time.localtime(float(row[0]))
 
