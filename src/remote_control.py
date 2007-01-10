@@ -86,8 +86,8 @@ class Remote:
 		self.signal_object = None
 		session_bus = dbus_support.session_bus.SessionBus()
 
-		service = dbus.service.BusName(SERVICE, bus=session_bus)
-		self.signal_object = SignalObject(service)
+		bus_name = dbus.service.BusName(SERVICE, bus=session_bus)
+		self.signal_object = SignalObject(bus_name)
 
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
@@ -98,12 +98,12 @@ class SignalObject(dbus.service.Object):
 	''' Local object definition for /org/gajim/dbus/RemoteObject.
 	(This docstring is not be visible, because the clients can access only the remote object.)'''
 
-	def __init__(self, service):
+	def __init__(self, bus_name):
 		self.first_show = True
 		self.vcard_account = None
 
 		# register our dbus API
-		dbus.service.Object.__init__(self, service, OBJ_PATH)
+		dbus.service.Object.__init__(self, bus_name, OBJ_PATH)
 
 	# FIXME: what are the signatures for these signals?
 
@@ -253,7 +253,8 @@ class SignalObject(dbus.service.Object):
 				return True
 		return False
 
-	def _send_message(self, jid, message, keyID, account, type = 'chat', subject = None):
+	def _send_message(self, jid, message, keyID, account, type = 'chat',
+	subject = None):
 		'''can be called from send_chat_message (default when send_message)
 		or send_single_message'''
 		if not jid or not message:
@@ -333,7 +334,8 @@ class SignalObject(dbus.service.Object):
 		if connected_account:
 			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
-			win = gajim.interface.msg_win_mgr.get_window(jid, connected_account).window
+			win = gajim.interface.msg_win_mgr.get_window(jid,
+				connected_account).window
 			if win.get_property('visible'):
 				win.window.focus()
 			return True
@@ -354,7 +356,8 @@ class SignalObject(dbus.service.Object):
 		else:
 			# account not specified, so change the status of all accounts
 			for acc in gajim.contacts.get_accounts():
-				if not gajim.config.get_per('accounts', acc, 'sync_with_global_status'):
+				if not gajim.config.get_per('accounts', acc,
+				'sync_with_global_status'):
 					continue
 				gobject.idle_add(gajim.interface.roster.send_status, acc, 
 					status, message)
