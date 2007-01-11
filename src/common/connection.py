@@ -561,7 +561,16 @@ class Connection(ConnectionHandlers):
 	def del_privacy_list(self, privacy_list):
 		if not self.connection:
 			return
-		common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list)
+		def _on_del_privacy_list_result(result):
+			if result:
+				self.dispatch('PRIVACY_LIST_REMOVED', privacy_list)
+			else:
+				self.dispatch('ERROR', (_('Error while removing privacy list'),
+					_('Privacy list %s has not been removed. It is maybe active in '
+					'one of your connected resources. Desactivate it and try '
+					'again.') % privacy_list))
+		common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list,
+			_on_del_privacy_list_result)
 	
 	def get_privacy_list(self, title):
 		if not self.connection:

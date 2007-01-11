@@ -249,7 +249,7 @@ def setPrivacyList(disp, listname, tags):
 				item_tag.setTag(child_tag)
 	_on_default_response(disp, iq, None)
 
-def delPrivacyList(disp,listname):
+def delPrivacyList(disp,listname,cb=None):
 	""" Deletes privacy list 'listname'. Returns true on success."""
 	iq = Iq('set',NS_PRIVACY,payload=[Node('list',{'name':listname})])
-	_on_default_response(disp, iq, None)
+	_on_default_response(disp, iq, cb)
