@@ -2670,7 +2670,8 @@ class ManageBookmarksWindow:
 		model = gtk.ListStore(str, str)
 
 		self.option_list = {'': _('Default'), 'all': Q_('?print_status:All'),
-			'in_and_out': _('Enter and leave only'), 'none': _('None')}
+			'in_and_out': _('Enter and leave only'),
+			'none': _('?print_status:None')}
 		opts = self.option_list.keys()
 		opts.sort()
 		for opt in opts:
