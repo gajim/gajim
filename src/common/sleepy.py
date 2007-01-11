@@ -49,15 +49,15 @@ except:
 	SUPPORTED = False
 
 class SleepyWindows:
-		def __init__(self, away_interval = 60, xa_interval = 120):
-			self.away_interval = away_interval
-			self.xa_interval = xa_interval
-			self.state = STATE_AWAKE # assume we are awake
+	def __init__(self, away_interval = 60, xa_interval = 120):
+		self.away_interval = away_interval
+		self.xa_interval = xa_interval
+		self.state = STATE_AWAKE # assume we are awake
 
-		def getIdleSec(self):
-			GetLastInputInfo(ctypes.byref(lastInputInfo))
-			idleDelta = float(GetTickCount() - lastInputInfo.dwTime) / 1000
-			return idleDelta
+	def getIdleSec(self):
+		GetLastInputInfo(ctypes.byref(lastInputInfo))
+		idleDelta = float(GetTickCount() - lastInputInfo.dwTime) / 1000
+		return idleDelta
 
 	def poll(self):
 		'''checks to see if we should change state'''
