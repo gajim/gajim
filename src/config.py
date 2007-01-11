@@ -1058,6 +1058,7 @@ class PreferencesWindow:
 		model = self.msg_tree.get_model()
 		iter = model.append()
 		model.set(iter, 0, _('status message title'), 1, _('status message text'))
+		self.msg_tree.set_cursor(model.get_path(iter))
 
 	def on_delete_msg_button_clicked(self, widget, data = None):
 		(model, iter) = self.msg_tree.get_selection().get_selected()
@@ -2721,9 +2722,7 @@ class ManageBookmarksWindow:
 		del gajim.interface.instances['manage_bookmarks']
 
 	def on_add_bookmark_button_clicked(self, widget):
-		'''
-		Add a new bookmark.
-		'''
+		'''Add a new bookmark.'''
 		# Get the account that is currently used
 		# (the parent of the currently selected item)
 		(model, iter) = self.selection.get_selected()
