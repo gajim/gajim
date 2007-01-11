@@ -92,8 +92,8 @@ class SleepyUnix:
 			SUPPORTED = False
 			self.state = STATE_UNKNOWN
 
-		def getIdleSec(self):
-			return idle.getIdleSec()
+	def getIdleSec(self):
+		return idle.getIdleSec()
 
 	def poll(self):
 		'''checks to see if we should change state'''
