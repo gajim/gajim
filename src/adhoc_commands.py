@@ -487,7 +487,7 @@ class CommandWindow:
 	def send_cancel(self):
 		'''Send the command with action='cancel'. '''
 		assert self.commandnode is not None
-		if self.sessionid is not None:
+		if self.sessionid is not None and self.account.connection:
 			# we already have sessionid, so the service sent at least one reply.
 			stanza = xmpp.Iq(typ='set', to=self.jid)
 			stanza.addChild('command', attrs={
@@ -496,7 +496,7 @@ class CommandWindow:
 					'sessionid':self.sessionid,
 					'action':'cancel'
 				})
-	
+
 			self.account.connection.send(stanza)
 		else:
 			# we did not received any reply from service; FIXME: we should wait and
