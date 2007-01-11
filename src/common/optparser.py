@@ -13,7 +13,6 @@
 ##
 
 import os
-import sys
 import locale
 from common import gajim
 

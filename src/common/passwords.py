@@ -14,8 +14,6 @@
 
 __all__ = ['get_password', 'save_password']
 
-import gobject
-
 from common import gajim
 
 USER_HAS_GNOMEKEYRING = False

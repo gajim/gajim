@@ -594,7 +594,7 @@ class SignalObject(dbus.service.Object):
 				gajim.connections[acc].send_stanza(xml)
 
 	@dbus.service.method(INTERFACE, in_signature='ssss', out_signature='')
-	def join_room(self, room_jid, nick, passwd, account):
+	def join_room(self, room_jid, nick, password, account):
 		if not account:
 			# get the first connected account
 			accounts = gajim.connections.keys()

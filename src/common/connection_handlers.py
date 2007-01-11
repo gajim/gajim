@@ -24,7 +24,7 @@ import sha
 import socket
 import sys
 
-from time import localtime, strftime, gmtime, timezone
+from time import localtime, strftime, gmtime
 from calendar import timegm
 
 import socks5
