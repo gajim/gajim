@@ -50,9 +50,9 @@ except:
 
 class SleepyWindows:
 		def __init__(self, away_interval = 60, xa_interval = 120):
-		self.away_interval = away_interval
-		self.xa_interval = xa_interval
-		self.state = STATE_AWAKE # assume we are awake
+			self.away_interval = away_interval
+			self.xa_interval = xa_interval
+			self.state = STATE_AWAKE # assume we are awake
 
 		def getIdleSec(self):
 			GetLastInputInfo(ctypes.byref(lastInputInfo))
