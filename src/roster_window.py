@@ -1551,13 +1551,15 @@ class RosterWindow:
 		if keyID[0] == 'None':
 			if contact.jid in keys:
 				del keys[contact.jid]
+			for u in gajim.contacts.get_contact(account, contact.jid):
+				u.keyID = ''
 		else:
 			keys[contact.jid] = keyID[0]
 			for u in gajim.contacts.get_contact(account, contact.jid):
 				u.keyID = keyID[0]
-			if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-				ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
-				ctrl.update_ui()
+		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+			ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+			ctrl.update_ui()
 		keys_str = ''
 		for jid in keys:
 			keys_str += jid + ' ' + keys[jid] + ' '
