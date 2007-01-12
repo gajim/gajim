@@ -688,12 +688,10 @@ class ConversationTextview:
 			tim = time.localtime()
 		current_print_time = gajim.config.get('print_time')
 		if current_print_time == 'always' and kind != 'info':
-			before_str = gajim.config.get('before_time')
-			before_str = helpers.from_one_line(before_str)
-			after_str = gajim.config.get('after_time')
-			after_str = helpers.from_one_line(after_str)
-			tim_format = before_str + self.get_time_to_show(tim) + after_str
-			buffer.insert_with_tags_by_name(end_iter, tim_format + ' ',
+			timestamp_str = gajim.config.get('time_stamp')
+			timestamp_str = helpers.from_one_line(timestamp_str)
+			timestamp = time.strftime(timestamp_str, tim)
+			buffer.insert_with_tags_by_name(end_iter, timestamp,
 				*other_tags_for_time)
 		elif current_print_time == 'sometimes' and kind != 'info':
 			every_foo_seconds = 60 * gajim.config.get(

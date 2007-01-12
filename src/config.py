@@ -240,15 +240,10 @@ class PreferencesWindow:
 		else:
 			self.xml.get_widget('time_always_radiobutton').set_active(True)
 
-		# before time
-		st = gajim.config.get('before_time')
+		# TimeStamp
+		st = gajim.config.get('time_stamp')
 		st = helpers.from_one_line(st)
-		self.xml.get_widget('before_time_textview').get_buffer().set_text(st)
-
-		# after time
-		st = gajim.config.get('after_time')
-		st = helpers.from_one_line(st)
-		self.xml.get_widget('after_time_textview').get_buffer().set_text(st)
+		self.xml.get_widget('time_stamp_textview').get_buffer().set_text(st)
 
 		# before nickname
 		st = gajim.config.get('before_nickname')
@@ -717,10 +712,8 @@ class PreferencesWindow:
 		self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
 		
 	def _set_sensitivity_for_before_after_time_widgets(self, sensitive):
-		self.xml.get_widget('before_time_label').set_sensitive(sensitive)
-		self.xml.get_widget('before_time_textview').set_sensitive(sensitive)
-		self.xml.get_widget('after_time_label').set_sensitive(sensitive)
-		self.xml.get_widget('after_time_textview').set_sensitive(sensitive)
+		self.xml.get_widget('time_stamp_label').set_sensitive(sensitive)
+		self.xml.get_widget('time_stamp_textview').set_sensitive(sensitive)
 	
 	def on_time_never_radiobutton_toggled(self, widget):
 		if widget.get_active():
@@ -745,16 +738,10 @@ class PreferencesWindow:
 		begin, end = buffer.get_bounds()
 		return buffer.get_text(begin, end).decode('utf-8')
 
-	def on_before_time_textview_focus_out_event(self, widget, event):
+	def on_time_stamp_textview_focus_out_event(self, widget, event):
 		text = self._get_textview_text(widget)
 		text = helpers.to_one_line(text)
-		gajim.config.set('before_time', text)
-		gajim.interface.save_config()
-
-	def on_after_time_textview_focus_out_event(self, widget, event):
-		text = self._get_textview_text(widget)
-		text = helpers.to_one_line(text)
-		gajim.config.set('after_time', text)
+		gajim.config.set('time_stamp', text)
 		gajim.interface.save_config()
 
 	def on_before_nickname_textview_focus_out_event(self, widget, event):
