@@ -886,7 +886,12 @@ class ConnectionVcard:
 		f = open(path_to_file)
 		c = f.read()
 		f.close()
-		card = common.xmpp.Node(node = c)
+		try:
+			card = common.xmpp.Node(node = c)
+		except:
+			# We are unable to parse it. Remove it
+			os.remove(path_to_file)
+			return None
 		vcard = self.node_to_dict(card)
 		if vcard.has_key('PHOTO'):
 			if not isinstance(vcard['PHOTO'], dict):
