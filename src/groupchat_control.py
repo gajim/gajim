@@ -180,14 +180,13 @@ class GroupchatControl(ChatControlBase):
 		self.nick = contact.name
 		self.name = self.room_jid.split('@')[0]
 
-		self.hide_chat_buttons_always = gajim.config.get(
+		hide_chat_buttons_always = gajim.config.get(
 			'always_hide_groupchat_buttons')
-		self.chat_buttons_set_visible(self.hide_chat_buttons_always)
+		self.chat_buttons_set_visible(hide_chat_buttons_always)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_groupchat_banner'))
 		self.widget_set_visible(self.xml.get_widget('list_scrolledwindow'),
 			gajim.config.get('hide_groupchat_occupants_list'))
-		self.gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 
 		self._last_selected_contact = None # None or holds jid, account tuple
 		# alphanum sorted
@@ -301,8 +300,9 @@ class GroupchatControl(ChatControlBase):
 		column.set_visible(False)
 		self.list_treeview.set_expander_column(column)
 
-		self.draw_banner()
-		self.got_disconnected() # init some variables
+		gajim.gc_connected[self.account][self.room_jid] = False
+		# disable win, we are not connected yet
+		ChatControlBase.got_disconnected(self) 
 
 		self.update_ui()
 		self.conv_textview.tv.grab_focus()
@@ -451,12 +451,10 @@ class GroupchatControl(ChatControlBase):
 		scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
 		banner_status_img.set_from_pixbuf(scaled_pix)
 
-	def draw_banner(self):	
-		'''Draw the fat line at the top of the window that 
-		houses the muc icon, room jid, subject. 
+	def draw_banner_text(self):
+		'''Draw the text in the fat line at the top of the window that 
+		houses the room jid, subject. 
 		'''
-		ChatControlBase.draw_banner(self)
-
 		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
@@ -725,12 +723,13 @@ class GroupchatControl(ChatControlBase):
 
 	def set_subject(self, subject):
 		self.subject = subject
-		self.draw_banner()
+		self.draw_banner_text()
 
 	def got_connected(self):
 		gajim.gc_connected[self.account][self.room_jid] = True
 		ChatControlBase.got_connected(self)
-		self.draw_banner()
+		# We don't redraw the whole banner here, because only icon change
+		self._update_banner_state_image()
 
 	def got_disconnected(self):
 		self.list_treeview.get_model().clear()
@@ -740,10 +739,9 @@ class GroupchatControl(ChatControlBase):
 				nick)
 			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		gajim.gc_connected[self.account][self.room_jid] = False
-		# Note, since this method is called during initialization it is NOT safe
-		# to call self.parent_win.redraw_tab here
 		ChatControlBase.got_disconnected(self)
-		self.draw_banner()
+		# We don't redraw the whole banner here, because only icon change
+		self._update_banner_state_image()
 
 	def draw_roster(self):
 		self.list_treeview.get_model().clear()
@@ -1341,6 +1339,8 @@ class GroupchatControl(ChatControlBase):
 			if self.handlers[i].handler_is_connected(i):
 				self.handlers[i].disconnect(i)
 			del self.handlers[i]
+		# Remove unread events from systray
+		gajim.events.remove_events(self.account, self.room_jid)
 
 	def allow_shutdown(self, method):
 		'''If check_selection is True, '''
@@ -1509,9 +1509,10 @@ class GroupchatControl(ChatControlBase):
 			else:
 				begin = ''
 
+			gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 			if len(self.nick_hits) and \
 					self.nick_hits[0].startswith(begin.replace(
-					self.gc_refer_to_nick_char, '')) and \
+					gc_refer_to_nick_char, '')) and \
 					self.last_key_tabs: # we should cycle
 				self.nick_hits.append(self.nick_hits[0])
 				self.nick_hits.pop(0)
@@ -1519,13 +1520,14 @@ class GroupchatControl(ChatControlBase):
 				self.nick_hits = [] # clear the hit list
 				list_nick = gajim.contacts.get_nick_list(self.account,
 									self.room_jid)
+				list_nick.remove(self.nick) # Skip self
 				for nick in list_nick:
 					if nick.lower().startswith(begin.lower()):
 						# the word is the begining of a nick
 						self.nick_hits.append(nick)
 			if len(self.nick_hits):
 				if len(splitted_text)  < 2: # This is the 1st word of the line or no word
-					add = self.gc_refer_to_nick_char + ' '
+					add = gc_refer_to_nick_char + ' '
 				else:
 					add = ' '
 				start_iter = end_iter.copy()
@@ -1778,7 +1780,8 @@ class GroupchatControl(ChatControlBase):
 				start = ' '
 			add = ' '
 		else:
-			add = self.gc_refer_to_nick_char + ' '
+			gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
+			add = gc_refer_to_nick_char + ' '
 		message_buffer.insert_at_cursor(start + nick + add)
 
 	def on_list_treeview_motion_notify_event(self, widget, event):

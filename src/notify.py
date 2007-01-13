@@ -319,14 +319,18 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 		notification.set_data('path_to_image', path_to_image)
 		notification.add_action('default', 'Default Action',
 			on_pynotify_notification_clicked)
-		
-		notification.show()
 
-	else: # go old style
-		instance = dialogs.PopupNotificationWindow(event_type, jid,
-			account, msg_type, path_to_image, title, text)
-		gajim.interface.roster.popup_notification_windows.append(
-			instance)
+		try:
+			notification.show()
+			return
+		except gobject.GError, e:
+			# Connection to notification-daemon failed, see #2893
+			gajim.log.debug(str(e))
+
+	# go old style
+	instance = dialogs.PopupNotificationWindow(event_type, jid, account,
+		msg_type, path_to_image, title, text)
+	gajim.interface.roster.popup_notification_windows.append(instance)
 
 def on_pynotify_notification_clicked(notification, action):
 	jid = notification.get_data('jid')

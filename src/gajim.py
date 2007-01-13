@@ -1563,6 +1563,13 @@ class Interface:
 			if win.startswith('privacy_list_'):
 				self.instances[account][win].check_active_default(data)
 
+	def handle_event_privacy_list_removed(self, account, name):
+		# ('PRIVACY_LISTS_REMOVED', account, name)
+		if not self.instances.has_key(account):
+			return
+		if self.instances[account].has_key('privacy_lists'):
+			self.instances[account]['privacy_lists'].privacy_list_removed(name)
+
 	def handle_event_zc_name_conflict(self, account, data):
 		dlg = dialogs.InputDialog(_('Username Conflict'),
 			_('Please type a new username for your local account'), 
@@ -1888,6 +1895,7 @@ class Interface:
 			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
 			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
 				self.handle_event_privacy_lists_active_default,
+			'PRIVACY_LIST_REMOVED': self.handle_event_privacy_list_removed,
 			'ZC_NAME_CONFLICT': self.handle_event_zc_name_conflict,
 		}
 		gajim.handlers = self.handlers

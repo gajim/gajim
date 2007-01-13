@@ -425,10 +425,11 @@ class Logger:
 		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
 		self.cur.execute('''
 			SELECT time, kind, message FROM logs
-			WHERE (%s) AND kind IN (%d, %d, %d, %d) AND time > %d
+			WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
 			ORDER BY time DESC LIMIT %d OFFSET %d
-			''' % (where_sql, constants.KIND_SINGLE_MSG_RECV, constants.KIND_CHAT_MSG_RECV,
-				constants.KIND_SINGLE_MSG_SENT, constants.KIND_CHAT_MSG_SENT,
+			''' % (where_sql, constants.KIND_SINGLE_MSG_RECV,
+				constants.KIND_CHAT_MSG_RECV, constants.KIND_SINGLE_MSG_SENT,
+				constants.KIND_CHAT_MSG_SENT, constants.KIND_ERROR,
 				timed_out, restore_how_many_rows, pending_how_many)
 			)
 
@@ -515,7 +516,7 @@ class Logger:
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
 		result = self.cur.fetchall()
 
-		# Copy all interesant time in a temporary table 
+		# Copy all interesting times in a temporary table 
 		self.cur.execute('CREATE TEMPORARY TABLE blabla(time,INTEGER)') 
 		for line in result: 
 			self.cur.execute(''' 
@@ -554,10 +555,9 @@ class Logger:
 			jid_id = self.get_jid_id(jid, 'ROOM')
 			where_sql = 'jid_id = %s' % jid_id	
 		self.cur.execute('''
-			SELECT time FROM logs
+			SELECT MAX(time) FROM logs
 			WHERE (%s) 
 			AND kind NOT IN (%d, %d)
-			ORDER BY time DESC LIMIT 1
 			''' % (where_sql, constants.KIND_STATUS, constants.KIND_GCSTATUS))
 
 		results = self.cur.fetchone()

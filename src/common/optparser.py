@@ -13,7 +13,6 @@
 ##
 
 import os
-import sys
 import locale
 from common import gajim
 
@@ -150,6 +149,8 @@ class OptionsParser:
 			self.update_config_to_01017()
 		if old < [0, 10, 1, 8] and new >= [0, 10, 1, 8]:
 			self.update_config_to_01018()
+		if old < [0, 11, 0, 1] and new >= [0, 11, 0, 1]:
+			self.update_config_to_01101()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -367,3 +368,10 @@ class OptionsParser:
 			gajim.config.set('outgoing_chat_state_notifications',
 				 self.old_values['chat_state_notifications'])
 		gajim.config.set('version', '0.10.1.8')
+
+	def update_config_to_01101(self):
+		'''fill time_stamp from before_time and after_time'''
+		if self.old_values.has_key('before_time'):
+			gajim.config.set('time_stamp', '%s%%H:%%M%s ' % (
+				self.old_values['before_time'], self.old_values['after_time']))
+		gajim.config.set('version', '0.11.0.1')

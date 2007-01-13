@@ -79,7 +79,7 @@ class Connection(ConnectionHandlers):
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
 		if USE_GPG:
-			self.gpg = GnuPG.GnuPG()
+			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 			gajim.config.set('usegpg', True)
 		else:
 			gajim.config.set('usegpg', False)
@@ -196,7 +196,7 @@ class Connection(ConnectionHandlers):
 							return
 						self.password = self.new_account_info['password']
 						if USE_GPG:
-							self.gpg = GnuPG.GnuPG()
+							self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 							gajim.config.set('usegpg', True)
 						else:
 							gajim.config.set('usegpg', False)
@@ -488,7 +488,16 @@ class Connection(ConnectionHandlers):
 	def del_privacy_list(self, privacy_list):
 		if not self.connection:
 			return
-		common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list)
+		def _on_del_privacy_list_result(result):
+			if result:
+				self.dispatch('PRIVACY_LIST_REMOVED', privacy_list)
+			else:
+				self.dispatch('ERROR', (_('Error while removing privacy list'),
+					_('Privacy list %s has not been removed. It is maybe active in '
+					'one of your connected resources. Desactivate it and try '
+					'again.') % privacy_list))
+		common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list,
+			_on_del_privacy_list_result)
 	
 	def get_privacy_list(self, title):
 		if not self.connection:
@@ -1040,12 +1049,15 @@ class Connection(ConnectionHandlers):
 		if password:
 			t.setTagData('password', password)
 		self.connection.send(p)
+
 		#last date/time in history to avoid duplicate
-		last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
-			is_room = True)
-		if last_log is None:
-			last_log = 0
-		self.last_history_line[room_jid]= last_log
+		if not self.last_history_line.has_key(room_jid): 
+			# Not in memory, get it from DB
+			last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
+				is_room = True)
+			if last_log is None:
+				last_log = 0
+			self.last_history_line[room_jid]= last_log
 
 	def send_gc_message(self, jid, msg, xhtml = None):
 		if not self.connection:
@@ -1090,6 +1102,9 @@ class Connection(ConnectionHandlers):
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server
 		self.connection.send(p)
+		# Save the time we quit to avoid duplicate logs AND be faster than 
+		# get that date from DB
+		self.last_history_line[jid] = time.time()
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		'''role is for all the life of the room so it's based on nick'''

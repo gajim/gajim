@@ -791,6 +791,16 @@ class HtmlTextView(gtk.TextView):
 	def show_tooltip(self, tag):
 		if not self.tooltip.win:
 			# check if the current pointer is still over the line
+			x, y, _ = self.window.get_pointer()
+			x, y = self.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
+			tags = self.get_iter_at_location(x, y).get_tags()
+			is_over_anchor = False
+			for tag_ in tags:
+				if getattr(tag_, 'is_anchor', False):
+					is_over_anchor = True
+					break
+			if not is_over_anchor:
+				return
 			text = getattr(tag, 'title', False)
 			if text:
 				pointer = self.get_pointer()
@@ -814,8 +824,7 @@ class HtmlTextView(gtk.TextView):
 			window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
 			window.set_cursor(gtk.gdk.Cursor(gtk.gdk.HAND2))
 			self._changed_cursor = True
-			gobject.timeout_add(500,
-								self.show_tooltip, tag)
+			self.tooltip.timeout = gobject.timeout_add(500, self.show_tooltip, tag)
 		elif self._changed_cursor and not is_over_anchor:
 			window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
 			window.set_cursor(gtk.gdk.Cursor(gtk.gdk.XTERM))

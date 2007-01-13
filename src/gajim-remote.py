@@ -435,11 +435,26 @@ class GajimRemote:
 		''' Make check if all necessary arguments are given '''
 		argv_len = self.argv_len - 2
 		args = self.commands[self.command][1]
+		if len(args) < argv_len:
+			send_error(_('Too many arguments. \n'
+				'Type "%s help %s" for more info') % (BASENAME, self.command))
 		if len(args) > argv_len:
 			if args[argv_len][2]:
 				send_error(_('Argument "%s" is not specified. \n'
 					'Type "%s help %s" for more info') % 
 					(args[argv_len][0], BASENAME, self.command))
+		self.arguments = []
+		i = 0
+		for arg in sys.argv[2:]:
+			i += 1
+			if i < len(args):
+				self.arguments.append(arg)
+			else:
+				# it's latest argument with spaces
+				self.arguments.append(' '.join(sys.argv[i+1:]))
+				break
+		# add empty string for missing args
+		self.arguments += ['']*(len(args)-i)
 
 	def handle_uri(self):
 		if not sys.argv[2:][0].startswith('xmpp:'):
@@ -459,8 +474,7 @@ class GajimRemote:
 
 	def call_remote_method(self):
 		''' calls self.method with arguments from sys.argv[2:] '''
-		args = sys.argv[2:]
-		args = [i.decode(PREFERRED_ENCODING) for i in sys.argv[2:]]
+		args = [i.decode(PREFERRED_ENCODING) for i in self.arguments]
 		args = [dbus.String(i) for i in args]
 		try:
 			res = self.method(*args)

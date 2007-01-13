@@ -128,7 +128,9 @@ class ChangeStatusCommand(AdHocCommand):
 		response, cmd = self.buildResponse(request, status='completed')
 		cmd.addChild('note', {}, 'The status has been changed.')
 
-		self.connection.connection.send(response)
+		# if going offline, we need to push response so it won't go into
+		# queue and disappear
+		self.connection.connection.send(response, presencetype=='offline')
 
 		# send new status
 		gajim.interface.roster.send_status(self.connection.name, presencetype, presencedesc)

@@ -1764,6 +1764,8 @@ class XMLConsoleWindow:
 		# kind must be 'incoming' or 'outgoing'
 		if not self.enabled:
 			return
+		if not stanza:
+			return
 
 		buffer = self.stanzas_log_textview.get_buffer()
 		at_the_end = False
@@ -2185,6 +2187,8 @@ class PrivacyListsWindow:
 		active_list = self.privacy_lists_save[
 			self.list_of_privacy_lists_combobox.get_active()]
 		gajim.connections[self.account].del_privacy_list(active_list)
+	
+	def privacy_list_removed(self, active_list):
 		self.privacy_lists_save.remove(active_list)
 		self.privacy_lists_received({'lists': self.privacy_lists_save})
 

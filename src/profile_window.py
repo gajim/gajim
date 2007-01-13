@@ -110,6 +110,7 @@ class ProfileWindow:
 
 	def on_set_avatar_button_clicked(self, widget):
 		def on_ok(widget, path_to_file):
+			must_delete = False
 			filesize = os.path.getsize(path_to_file) # in bytes
 			#FIXME: use messages for invalid file for 0.11
 			invalid_file = False
@@ -140,6 +141,7 @@ class ProfileWindow:
 						path_to_file = os.path.join(gajim.TMP,
 							'avatar_scaled.png')
 						scaled_pixbuf.save(path_to_file, 'png')
+						must_delete = True
 			self.dialog.destroy()
 
 			fd = open(path_to_file, 'rb')
@@ -154,6 +156,11 @@ class ProfileWindow:
 			self.avatar_encoded = base64.encodestring(data)
 			# returns None if unknown type
 			self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
+			if must_delete: 
+				try: 
+					os.remove(path_to_file) 
+				except OSError: 
+					gajim.log.debug('Cannot remove %s' % path_to_file)
 
 		def on_clear(widget):
 			self.dialog.destroy()
