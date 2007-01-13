@@ -150,7 +150,7 @@ class OptionsParser:
 		if old < [0, 10, 1, 8] and new >= [0, 10, 1, 8]:
 			self.update_config_to_01018()
 		if old < [0, 11, 0, 1] and new >= [0, 11, 0, 1]:
-			self.update_config_to_01018()
+			self.update_config_to_01101()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
