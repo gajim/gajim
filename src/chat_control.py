@@ -1657,6 +1657,7 @@ class ChatControl(ChatControlBase):
 				name = self.contact.get_shown_name()
 			elif row[1] == constants.KIND_ERROR:
 				kind = 'status'
+				name = self.contact.get_shown_name()
 
 			tim = time.localtime(float(row[0]))
 
