@@ -48,7 +48,7 @@ class AdvancedConfigurationWindow(object):
 		self.changed_opts = {}
 		
 		# For i18n
-		self.right_true_dict = {True: _('True'), False: _('False')} 
+		self.right_true_dict = {True: _('Activated'), False: _('Deactivated')} 
 		self.types = {
 			'boolean': _('Boolean'),
 			'integer': _('Integer'),
