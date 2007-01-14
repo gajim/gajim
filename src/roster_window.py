@@ -1642,7 +1642,7 @@ class RosterWindow:
 			history_menuitem = xml.get_widget('history_menuitem')
 
 			contacts = gajim.contacts.get_contact(account, jid)
-			if len(contacts) > 1: # sevral resources
+			if len(contacts) > 1: # several resources
 				sub_menu = gtk.Menu()
 				start_chat_menuitem.set_submenu(sub_menu)
 
@@ -1775,9 +1775,35 @@ class RosterWindow:
 		history_menuitem = xml.get_widget('history_menuitem')
 
 		contacts = gajim.contacts.get_contact(account, jid)
+
+		# Invite to
+		invite_to_submenu = gtk.Menu()
+		invite_menuitem.set_submenu(invite_to_submenu)
+		invite_to_new_room_menuitem = gtk.ImageMenuItem(_('_New group chat'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+		invite_to_new_room_menuitem.set_image(icon)
+		contact_transport = gajim.get_transport_name_from_jid(contact.jid)
+		t = contact_transport or 'jabber' # transform None in 'jabber'
+		if not gajim.connections[account].muc_jid.has_key(t):
+			invite_to_new_room_menuitem.set_sensitive(False)
+		invite_to_submenu.append(invite_to_new_room_menuitem)
+		rooms = [] # a list of (room_jid, account) tuple
+		for gc_control in gajim.interface.msg_win_mgr.get_controls(
+		message_control.TYPE_GC):
+			acct = gc_control.account
+			room_jid = gc_control.room_jid
+			if gajim.gc_connected[acct].has_key(room_jid) and \
+			gajim.gc_connected[acct][room_jid] and \
+			contact_transport == gajim.get_transport_name_from_jid(room_jid):
+				rooms.append((room_jid, acct))
+		if len(rooms):
+			item = gtk.SeparatorMenuItem() # separator
+			invite_to_submenu.append(item)
+
 		if len(contacts) > 1: # several resources
-			def resources_submenu(action):
-				""" Build a submenu with contact's resources. """
+			def resources_submenu(action, room_jid = None, room_account = None):
+				''' Build a submenu with contact's resources. 
+				room_jid and room_account are for action self.on_invite_to_room '''
 				sub_menu = gtk.Menu()
 
 				iconset = gajim.config.get('iconset')
@@ -1793,14 +1819,26 @@ class RosterWindow:
 					icon = state_images[icon_name]
 					item.set_image(icon)
 					sub_menu.append(item)
-					item.connect('activate', action, c, account,
-						c.resource)
+					if action == self.on_invite_to_room:
+						item.connect('activate', action, [(c, account)], 
+							room_jid, room_account, c.resource)
+					elif action == self.on_invite_to_new_room:
+						item.connect('activate', action, [(c, account)], c.resource)
+					else: # start_chat, execute_command
+						item.connect('activate', action, c, account, c.resource)
 				return sub_menu
 
 			start_chat_menuitem.set_submenu(resources_submenu(
 				self.on_open_chat_window))
 			execute_command_menuitem.set_submenu(resources_submenu(
 				self.on_execute_command))
+			invite_to_new_room_menuitem.set_submenu(resources_submenu(
+				self.on_invite_to_new_room))
+			for (room_jid, room_account) in rooms:
+				menuitem = gtk.MenuItem(room_jid.split('@')[0])
+				menuitem.set_submenu(resources_submenu(self.on_invite_to_room, 
+					room_jid, room_account))
+				invite_to_submenu.append(menuitem)
 
 		else: # one resource
 			start_chat_menuitem.connect('activate',
@@ -1815,6 +1853,22 @@ class RosterWindow:
 				execute_command_menuitem.hide()
 				execute_command_menuitem.set_no_show_all(True)
 
+			our_jid_other_resource = None
+			if our_jid:
+				# It's another resource of us, be sure to send invite to her
+				our_jid_other_resource = contact.resource 
+			# Else this var is useless but harmless in next connect calls
+				
+			invite_to_new_room_menuitem.connect('activate', 
+				self.on_invite_to_new_room, [(contact, account)], 
+				our_jid_other_resource)
+			for (room_jid, room_account) in rooms:
+				menuitem = gtk.MenuItem(room_jid.split('@')[0])
+				menuitem.connect('activate', self.on_invite_to_room,
+					[(contact, account)], room_jid, room_account, 
+					our_jid_other_resource)
+				invite_to_submenu.append(menuitem)
+
 		if contact.resource:
 			send_file_menuitem.connect('activate',
 				self.on_send_file_menuitem_activate, account, contact)
@@ -1825,35 +1879,6 @@ class RosterWindow:
 		send_single_message_menuitem.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, contact)
 
-		submenu = gtk.Menu()
-		invite_menuitem.set_submenu(submenu)
-		menuitem = gtk.ImageMenuItem(_('_New group chat'))
-		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
-		menuitem.set_image(icon)
-		menuitem.connect('activate', self.on_invite_to_new_room, [(contact,
-			account)])
-		contact_transport = gajim.get_transport_name_from_jid(contact.jid)
-		t = contact_transport or 'jabber' # transform None in 'jabber'
-		if not gajim.connections[account].muc_jid.has_key(t):
-			menuitem.set_sensitive(False)
-		submenu.append(menuitem)
-		rooms = [] # a list of (room_jid, account) tuple
-		for gc_control in gajim.interface.msg_win_mgr.get_controls(
-		message_control.TYPE_GC):
-			acct = gc_control.account
-			room_jid = gc_control.room_jid
-			if gajim.gc_connected[acct].has_key(room_jid) and \
-			gajim.gc_connected[acct][room_jid] and \
-			contact_transport == gajim.get_transport_name_from_jid(room_jid):
-				rooms.append((room_jid, acct))
-		if len(rooms):
-			item = gtk.SeparatorMenuItem() # separator
-			submenu.append(item)
-			for (room_jid, acct) in rooms:
-				menuitem = gtk.MenuItem(room_jid.split('@')[0])
-				menuitem.connect('activate', self.on_invite_to_room,
-					[(contact, account)], room_jid, acct)
-				submenu.append(menuitem)
 		rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
 		remove_from_roster_menuitem.connect('activate', self.on_req_usub,
 			[(contact, account)])
@@ -1933,12 +1958,18 @@ class RosterWindow:
 		roster_contact_context_menu.popup(None, None, None, event_button,
 			event.time)
 
-	def on_invite_to_new_room(self, widget, list_):
+	def on_invite_to_new_room(self, widget, list_, resource = None):
+		''' resource parameter MUST NOT be used if more than one contact in 
+		list '''
 		account_list = []
 		jid_list = []
 		for (contact, account) in list_:
 			if contact.jid not in jid_list:
-				jid_list.append(contact.jid)
+				if resource: # we MUST have one contact only in list_
+					fjid = contact.jid + '/' + resource
+					jid_list.append(fjid)
+				else:
+					jid_list.append(contact.jid)
 			if account not in account_list:
 				account_list.append(account)
 		# transform None in 'jabber'
@@ -1957,9 +1988,15 @@ class RosterWindow:
 					continue
 				break
 
-	def on_invite_to_room(self, widget, list_, room_jid, account):
+	def on_invite_to_room(self, widget, list_, room_jid, room_account, 
+		resource = None):
+		''' resource parameter MUST NOT be used if more than one contact in 
+		list '''
 		for (contact, acct) in list_:
-			gajim.connections[account].send_invite(room_jid, contact.jid)
+			contact_jid = contact.jid
+			if resource: # we MUST have one contact only in list_
+				contact_jid += '/' + resource
+			gajim.connections[room_account].send_invite(room_jid, contact_jid)
 		
 
 	def make_multiple_contact_menu(self, event, iters):
