@@ -46,6 +46,14 @@ class AdvancedConfigurationWindow(object):
 		# key = option name (root/subopt/opt separated by \n then)
 		# value = array(oldval, newval)
 		self.changed_opts = {}
+		
+		# For i18n
+		self.right_true_dict = {True: _('True'), False: _('False')} 
+		self.types = {
+			'boolean': _('Boolean'),
+			'integer': _('Integer'),
+			'string': _('Text'),
+			'color': _('Color')} 
 
 		treeview = self.xml.get_widget('advanced_treeview')
 		self.model = gtk.TreeStore(str, str, str)
@@ -91,7 +99,8 @@ class AdvancedConfigurationWindow(object):
 		make the cellrenderertext not editable else it's editable'''
 		optname = model[iter][C_PREFNAME]
 		opttype = model[iter][C_TYPE]
-		if opttype == 'boolean' or optname in ('password', 'gpgpassword'):
+		if opttype == self.types['boolean'] or optname in ('password', 
+			'gpgpassword'):
 			cell.set_property('editable', False)
 		else:
 			cell.set_property('editable', True)
@@ -137,8 +146,11 @@ class AdvancedConfigurationWindow(object):
 		modelpath = self.modelfilter.convert_path_to_child_path(path)
 		modelrow = self.model[modelpath]
 		option = modelrow[0].decode('utf-8')
-		if modelrow[2] == 'boolean':
-			newval = {'False': 'True', 'True': 'False'}[modelrow[1]]
+		if modelrow[2] == self.types['boolean']:
+			for key in self.right_true_dict.keys():
+				if self.right_true_dict[key] == modelrow[1]:
+					modelrow[1] = key
+			newval = {'False': True, 'True': False}[modelrow[1]]
 			if len(modelpath) > 1:
 				optnamerow = self.model[modelpath[0]]
 				optname = optnamerow[0].decode('utf-8')
@@ -152,7 +164,7 @@ class AdvancedConfigurationWindow(object):
 				self.remember_option(option, modelrow[1], newval)
 				gajim.config.set(option, newval)
 			gajim.interface.save_config()
-			modelrow[1] = newval
+			modelrow[1] = self.right_true_dict[newval]
 			self.check_for_restart()
 
 	def check_for_restart(self):
@@ -221,10 +233,13 @@ class AdvancedConfigurationWindow(object):
 		type = ''
 		if val[OPT_TYPE]:
 			type = val[OPT_TYPE][0]
+			type = self.types[type] # i18n
 		value = val[OPT_VAL]
 		if name in ('password', 'gpgpassword'):
 			#we talk about password
 			value = _('Hidden') # override passwords with this string
+		if value in self.right_true_dict:
+			value = self.right_true_dict[value]
 		model.append(iter, [name, value, type])
 
 	def visible_func(self, model, iter):
