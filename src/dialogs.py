@@ -214,7 +214,7 @@ class EditGroupsDialog:
 		renderer = gtk.CellRendererText()
 		column.pack_start(renderer)
 		column.set_attributes(renderer, text = 0)
-		
+
 		column = gtk.TreeViewColumn(_('In the group'))
 		column.set_expand(False)
 		self.list.append_column(column)
@@ -319,7 +319,7 @@ class ChangeStatusMessageDialog:
 		else:
 			title_text = _('Status Message')
 		self.window.set_title(title_text)
-		
+
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
 		self.message_buffer.connect('changed',
@@ -331,7 +331,7 @@ class ChangeStatusMessageDialog:
 			msg = ''
 		msg = helpers.from_one_line(msg)
 		self.message_buffer.set_text(msg)
-		
+
 		# have an empty string selectable, so user can clear msg
 		self.preset_messages_dict = {'': ''}
 		for msg_name in gajim.config.get_per('statusmsg'):
@@ -339,7 +339,7 @@ class ChangeStatusMessageDialog:
 			msg_text = helpers.from_one_line(msg_text)
 			self.preset_messages_dict[msg_name] = msg_text
 		sorted_keys_list = helpers.get_sorted_keys(self.preset_messages_dict)
-		
+
 		self.message_liststore = gtk.ListStore(str) # msg_name
 		self.message_combobox = self.xml.get_widget('message_combobox')
 		self.message_combobox.set_model(self.message_liststore)
@@ -374,7 +374,7 @@ class ChangeStatusMessageDialog:
 			return None
 		name = model[active][0].decode('utf-8')
 		self.message_buffer.set_text(self.preset_messages_dict[name])
-	
+
 	def on_change_status_message_dialog_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Return or \
 		event.keyval == gtk.keysyms.KP_Enter:  # catch CTRL+ENTER
@@ -387,7 +387,7 @@ class ChangeStatusMessageDialog:
 			btn.set_sensitive(False)
 		else:
 			btn.set_sensitive(True)
-	
+
 	def on_save_as_preset_button_clicked(self, widget):
 		start_iter, finish_iter = self.message_buffer.get_bounds()
 		status_message_to_save_as_preset = self.message_buffer.get_text(
@@ -403,7 +403,7 @@ class ChangeStatusMessageDialog:
 				msg_name = msg_text_1l
 			msg_name = msg_name.decode('utf-8')
 			iter_ = self.message_liststore.append((msg_name,))
-			
+
 			gajim.config.add_per('statusmsg', msg_name)
 			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text_1l)
 			self.preset_messages_dict[msg_name] = msg_text
@@ -601,7 +601,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			transport = self.protocol_jid_combobox.get_active_text().decode(
 				'utf-8')
 			jid = jid.replace('@', '%') + '@' + transport
-		
+
 		# check if jid is conform to RFC and stringprep it
 		try:
 			jid = helpers.parse_jid(jid)
@@ -726,7 +726,7 @@ class AboutDialog:
 		if copying_file_path:
 			text = open(copying_file_path).read()
 			dlg.set_license(text)
-		
+
 		dlg.set_comments('%s\n%s %s\n%s %s' 
 			% (_('A GTK+ jabber client'), \
 			_('GTK+ Version:'), self.tuple2str(gtk.gtk_version), \
@@ -749,7 +749,7 @@ class AboutDialog:
 					authors.append('\n' + _('Past Developers:'))
 				elif author != '': # Real author line
 					authors.append(author)
-	
+
 			thanks_file_path = None
 			if os.path.isfile(os.path.join(gajim.defs.docdir, 'THANKS')):
 				thanks_file_path = os.path.join(gajim.defs.docdir, 'THANKS')
@@ -757,7 +757,7 @@ class AboutDialog:
 				thanks_file_path = '../THANKS'
 			if thanks_file_path:
 				authors.append('\n' + _('THANKS:'))
-				
+
 				text = open(thanks_file_path).read()
 				text_splitted = text.split('\n')
 				text = '\n'.join(text_splitted[:-2]) # remove one english sentence
@@ -765,9 +765,9 @@ class AboutDialog:
 				text += '\n%s\n' % _('Last but not least, we would like to thank all '
 					'the package maintainers.')
 				authors.append(text)
-		
+
 			dlg.set_authors(authors)
-		
+
 		if gtk.pygtk_version >= (2, 8, 0) and gtk.gtk_version >= (2, 8, 0):
 			dlg.props.wrap_license = True
 
@@ -777,14 +777,14 @@ class AboutDialog:
 		dlg.set_logo(pixbuf)
 		#here you write your name in the form Name FamilyName <someone@somewhere>
 		dlg.set_translator_credits(_('translator-credits'))
-		
+
 		artists = ['Anders Ström', 'Christophe Got', 'Dennis Craven',
 			'Guillaume Morin', 'Josef Vybíral', 'Membris Khan']
 		dlg.set_artists(artists)
 
 		rep = dlg.run()
 		dlg.destroy()
-	
+
 	def tuple2str(self, tuple_):
 		str_ = ''
 		for num in tuple_:
@@ -900,7 +900,7 @@ class FileChooserDialog(gtk.FileChooserDialog):
 					self.response_ok(dialog)
 			else:
 				self.just_destroy(dialog)
-			
+
 	def just_destroy(self, widget):
 		self.destroy()
 
@@ -1018,7 +1018,7 @@ class InputDialog:
 		if input_str:
 			self.input_entry.set_text(input_str)
 			self.input_entry.select_region(0, -1) # select all
-		
+
 		self.is_modal = is_modal
 		if not is_modal and ok_handler is not None:
 			self.ok_handler = ok_handler
@@ -1040,7 +1040,7 @@ class InputDialog:
 			self.ok_handler[0](user_input, *self.ok_handler[1:])
 		else:
 			self.ok_handler(user_input)
-	
+
 	def on_cancelbutton_clicked(self, widget):
 		self.dialog.destroy()
 
@@ -1075,7 +1075,7 @@ class SubscriptionRequestWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
-		
+
 	def on_authorize_button_clicked(self, widget):
 		'''accept the request'''
 		gajim.connections[self.account].send_authorization(self.jid)
@@ -1096,7 +1096,7 @@ class SubscriptionRequestWindow:
 			# Remove jabber page
 			gajim.interface.instances[self.account]['infos'][self.jid].xml.\
 				get_widget('information_notebook').remove_page(0)
-	
+
 	def on_start_chat_activate(self, widget):
 		'''open chat'''
 		gajim.interface.roster.new_chat_from_jid(self.account, self.jid)
@@ -1138,7 +1138,7 @@ class JoinGroupchatWindow:
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self._room_jid_entry = self.xml.get_widget('room_jid_entry')
 		self._nickname_entry = self.xml.get_widget('nickname_entry')
-		
+
 		self._room_jid_entry.set_text(room_jid)
 		self._nickname_entry.set_text(nick)
 		self.xml.signal_autoconnect(self)
@@ -1263,14 +1263,14 @@ class JoinGroupchatWindow:
 class NewChatDialog(InputDialog):
 	def __init__(self, account):
 		self.account = account
-		
+
 		if len(gajim.connections) > 1:
 			title = _('Start Chat with account %s') % account
 		else:
 			title = _('Start Chat')
 		prompt_text = _('Fill in the nickname or the Jabber ID of the contact you would like\nto send a chat message to:')
 		InputDialog.__init__(self, title, prompt_text, is_modal = False)
-		
+
 		self.completion_dict = {}
 		liststore = gtkgui_helpers.get_completion_liststore(self.input_entry)
 		self.completion_dict = helpers.get_contact_dict_for_account(account)
@@ -1288,7 +1288,7 @@ class NewChatDialog(InputDialog):
 		cancelbutton = self.xml.get_widget('cancelbutton')
 		cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
 		self.dialog.show_all()
-			
+
 	def new_chat_response(self, jid):
 		''' called when ok button is clicked '''
 		if gajim.connections[self.account].connected <= 1:
@@ -1406,10 +1406,10 @@ class PopupNotificationWindow:
 		eventbox.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
 		event_description_label.set_markup(
 			'<span foreground="black">%s</span>' % text)	
-			
+
 		# set the image
 		image.set_from_file(path_to_image)
-		
+
 		# position the window to bottom-right of screen
 		window_width, self.window_height = self.window.get_size()
 		gajim.interface.roster.popups_notification_height += self.window_height
@@ -1440,7 +1440,7 @@ class PopupNotificationWindow:
 		if len(gajim.interface.roster.popup_notification_windows) > 0:
 			# we want to remove the first window added in the list
 			gajim.interface.roster.popup_notification_windows.pop(0) # remove 1st item
-		
+
 		# move the rest of popup windows
 		gajim.interface.roster.popups_notification_height = 0
 		for window_instance in gajim.interface.roster.popup_notification_windows:
@@ -1471,7 +1471,7 @@ class SingleMessageWindow:
 		self.to = to
 		self.from_whom = from_whom
 		self.resource = resource
-		
+
 		self.xml = gtkgui_helpers.get_glade('single_message_window.glade')
 		self.window = self.xml.get_widget('single_message_window')
 		self.count_chars_label = self.xml.get_widget('count_chars_label')
@@ -1504,7 +1504,7 @@ class SingleMessageWindow:
 			self.to_entry.set_sensitive(False)
 		else:
 			self.to_entry.set_text(to)
-		
+
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL and action == 'send':
 			try:
 				spell1 = gtkspell.Spell(self.conversation_textview.tv)
@@ -1516,7 +1516,7 @@ class SingleMessageWindow:
 			except gobject.GError, msg:
 				ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used'))
 				gajim.config.set('use_speller', False)
-		
+
 		self.send_button.set_no_show_all(True)
 		self.reply_button.set_no_show_all(True)
 		self.send_and_close_button.set_no_show_all(True)
@@ -1528,7 +1528,7 @@ class SingleMessageWindow:
 		self.cancel_button.set_no_show_all(True)
 		self.message_scrolledwindow.set_no_show_all(True)
 		self.conversation_scrolledwindow.set_no_show_all(True)
-		
+
 		self.prepare_widgets_for(self.action)
 
 		# set_text(None) raises TypeError exception
@@ -1599,7 +1599,7 @@ class SingleMessageWindow:
 			self.from_entry.hide()
 			self.conversation_scrolledwindow.hide()
 			self.message_scrolledwindow.show()
-			
+
 			if self.message: # we come from a reply?
 				self.message_textview.grab_focus()
 				self.cancel_button.hide()
@@ -1610,7 +1610,7 @@ class SingleMessageWindow:
 				self.close_button.hide()
 				if self.to: # do we already have jid?
 					self.subject_entry.grab_focus()
-			
+
 		elif action == 'receive': # prepare UI for Receiving
 			title = _('Received %s') % title
 			self.reply_button.show()
@@ -1634,7 +1634,7 @@ class SingleMessageWindow:
 			self.reply_button.grab_focus()
 			self.cancel_button.hide()
 			self.close_button.show()
-		
+
 		self.window.set_title(title)
 
 	def on_cancel_button_clicked(self, widget):
@@ -1648,7 +1648,7 @@ class SingleMessageWindow:
 	def update_char_counter(self, widget):
 		characters_no = self.message_tv_buffer.get_char_count()
 		self.count_chars_label.set_text(unicode(characters_no))
-	
+
 	def send_single_message(self):
 		if gajim.connections[self.account].connected <= 1:
 			# if offline or connecting
@@ -1675,7 +1675,7 @@ class SingleMessageWindow:
 			# FIXME: allow GPG message some day
 			gajim.connections[self.account].send_message(to_whom_jid, message,
 				keyID = None, type = 'normal', subject=subject)
-			
+
 		self.subject_entry.set_text('') # we sent ok, clear the subject
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
 
@@ -1706,7 +1706,7 @@ class SingleMessageWindow:
 class XMLConsoleWindow:
 	def __init__(self, account):
 		self.account = account
-		
+
 		self.xml = gtkgui_helpers.get_glade('xml_console_window.glade')
 		self.window = self.xml.get_widget('xml_console_window')
 		self.input_textview = self.xml.get_widget('input_textview')
@@ -1715,7 +1715,7 @@ class XMLConsoleWindow:
 		buffer = self.stanzas_log_textview.get_buffer()
 		end_iter = buffer.get_end_iter()
 		buffer.create_mark('end', end_iter, False)
-		
+
 		self.tagIn = buffer.create_tag('incoming')
 		color = gajim.config.get('inmsgcolor')
 		self.tagIn.set_property('foreground', color)
@@ -1727,15 +1727,15 @@ class XMLConsoleWindow:
 
 		self.input_textview.modify_text(
 			gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
-		
+
 		if len(gajim.connections) > 1:
 			title = _('XML Console for %s') % self.account
 		else:
 			title = _('XML Console')
-		
+
 		self.window.set_title(title)
 		self.window.show_all()
-		
+
 		self.xml.signal_autoconnect(self)
 
 	def on_xml_console_window_delete_event(self, widget, event):
@@ -1791,7 +1791,7 @@ class XMLConsoleWindow:
 		if stanza:
 			gajim.connections[self.account].send_stanza(stanza)
 			self.input_tv_buffer.set_text('') # we sent ok, clear the textview
-	
+
 	def on_presence_button_clicked(self, widget):
 		self.input_tv_buffer.set_text(
 		'<presence><show></show><status></status><priority></priority></presence>'
@@ -1801,7 +1801,7 @@ class XMLConsoleWindow:
 		self.input_tv_buffer.set_text(
 			'<iq to="" type=""><query xmlns=""></query></iq>'
 		)
-	
+
 	def on_message_button_clicked(self, widget):
 		self.input_tv_buffer.set_text(
 			'<message to="" type=""><body></body></message>'
@@ -2187,7 +2187,7 @@ class PrivacyListsWindow:
 		active_list = self.privacy_lists_save[
 			self.list_of_privacy_lists_combobox.get_active()]
 		gajim.connections[self.account].del_privacy_list(active_list)
-	
+
 	def privacy_list_removed(self, active_list):
 		self.privacy_lists_save.remove(active_list)
 		self.privacy_lists_received({'lists': self.privacy_lists_save})
@@ -2240,10 +2240,16 @@ class InvitationReceivedDialog:
 		xml = gtkgui_helpers.get_glade('invitation_received_dialog.glade')
 		self.dialog = xml.get_widget('invitation_received_dialog')
 
-		#FIXME: use nickname instead of contact_jid
-		pritext = _('%(contact_jid)s has invited you to group chat %(room_jid)s')\
-			% {'room_jid': room_jid, 'contact_jid': contact_jid }
-		
+		#Don't translate $Contact
+		pritext = _('$Contact has invited you to group chat %(room_jid)s')\
+			% {'room_jid': room_jid}
+		contact = gajim.contacts.get_first_contact_from_jid(account, contact_jid)
+		if contact and contact.name:
+			contact_text = '%s (%s)' % (contact.name, contact_jid)
+		else:
+			contact_text = contact_jid
+		pritext = pritext.replace('$Contact', contact_text)
+
 		label_text = '<big><b>%s</b></big>' % pritext
 
 		if comment: # only if not None and not ''
@@ -2257,17 +2263,17 @@ class InvitationReceivedDialog:
 		xml.get_widget('accept_button').connect('clicked',
 			self.on_accept_button_clicked)
 		self.dialog.show_all()
-	
+
 	def on_deny_button_clicked(self, widget):
 		self.dialog.destroy()
-	
+
 	def on_accept_button_clicked(self, widget):
 		self.dialog.destroy()
 		try:
 			JoinGroupchatWindow(self.account, self.room_jid)
 		except GajimGeneralException:
 			pass
-			
+
 class ProgressDialog:
 	def __init__(self, title_text, during_text, messages_queue):
 		'''during text is what to show during the procedure,
@@ -2282,7 +2288,7 @@ class ProgressDialog:
 		self.dialog.set_default_size(450, 250)
 		self.dialog.show_all()
 		self.xml.signal_autoconnect(self)
-		
+
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 					self.update_progressbar)
 

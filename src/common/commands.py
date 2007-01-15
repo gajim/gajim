@@ -25,8 +25,8 @@ class AdHocCommand:
 	def isVisibleFor(samejid):
 		''' This returns True if that command should be visible and invokable
 		for others.
-		samejid - True when command is invoked by an entity with the same bare jid.
-		'''
+		samejid - True when command is invoked by an entity with the same bare 
+		jid.'''
 		return True
 
 	def __init__(self, conn, jid, sessionid):
@@ -34,7 +34,8 @@ class AdHocCommand:
 		self.jid = jid
 		self.sessionid = sessionid
 
-	def buildResponse(self, request, status='executing', defaultaction=None, actions=None):
+	def buildResponse(self, request, status = 'executing', defaultaction = None,
+	actions = None):
 		assert status in ('executing', 'completed', 'canceled')
 
 		response = request.buildReply('result')
@@ -45,7 +46,8 @@ class AdHocCommand:
 			'status': status})
 		if defaultaction is not None or actions is not None:
 			if defaultaction is not None:
-				assert defaultaction in ('cancel', 'execute', 'prev', 'next', 'complete')
+				assert defaultaction in ('cancel', 'execute', 'prev', 'next',
+					'complete')
 				attrs = {'action': defaultaction}
 			else:
 				attrs = {}
@@ -54,16 +56,17 @@ class AdHocCommand:
 		return response, cmd
 
 	def badRequest(self, stanza):
-		self.connection.connection.send(xmpp.Error(stanza, xmpp.NS_STANZAS+' bad-request'))
+		self.connection.connection.send(xmpp.Error(stanza, xmpp.NS_STANZAS + \
+			' bad-request'))
 
 	def cancel(self, request):
-		response, cmd = self.buildResponse(request, status='canceled')
+		response, cmd = self.buildResponse(request, status = 'canceled')
 		self.connection.connection.send(response)
 		return False	# finish the session
 
 class ChangeStatusCommand(AdHocCommand):
 	commandnode = 'change-status'
-	commandname = 'Change status information'
+	commandname = _('Change status information')
 
 	@staticmethod
 	def isVisibleFor(samejid):
@@ -72,27 +75,28 @@ class ChangeStatusCommand(AdHocCommand):
 
 	def execute(self, request):
 		# first query...
-		response, cmd = self.buildResponse(request, defaultaction='execute', actions=['execute'])
+		response, cmd = self.buildResponse(request, defaultaction = 'execute',
+			actions = ['execute'])
 		
-		cmd.addChild(node=dataforms.SimpleDataForm(
-			title='Change status',
-			instructions='Set the presence type and description',
-			fields=[
+		cmd.addChild(node = dataforms.SimpleDataForm(
+			title = _('Change status'),
+			instructions = _('Set the presence type and description'),
+			fields = [
 				dataforms.Field('list-single',
-					var='presence-type',
-					label='Type of presence:',
-					options=[
-						(u'free-for-chat', u'Free for chat'),
-						(u'online', u'Online'),
-						(u'away', u'Away'),
-						(u'xa', u'Extended away'),
-						(u'dnd', u'Do not disturb'),
-						(u'offline', u'Offline - disconnect')],
-					value='online',
-					required=True),
+					var = 'presence-type',
+					label = 'Type of presence:',
+					options = [
+						(u'free-for-chat', _('Free for chat')),
+						(u'online', _('Online')),
+						(u'away', _('Away')),
+						(u'xa', _('Extended away')),
+						(u'dnd', _('Do not disturb')),
+						(u'offline', _('Offline - disconnect'))],
+					value = 'online',
+					required = True),
 				dataforms.Field('text-multi',
-					var='presence-desc',
-					label='Presence description:')]))
+					var = 'presence-desc',
+					label = _('Presence description:'))]))
 
 		self.connection.connection.send(response)
 
@@ -104,11 +108,12 @@ class ChangeStatusCommand(AdHocCommand):
 	def changestatus(self, request):
 		# check if the data is correct
 		try:
-			form=dataforms.SimpleDataForm(extend=request.getTag('command').getTag('x'))
+			form = dataforms.SimpleDataForm(extend = request.getTag('command').\
+				getTag('x'))
 		except:
 			self.badRequest(request)
 			return False
-		
+
 		try:
 			presencetype = form['presence-type'].value
 			if not presencetype in \
@@ -125,24 +130,118 @@ class ChangeStatusCommand(AdHocCommand):
 		except:	# same exceptions as in last comment
 			presencedesc = u''
 
-		response, cmd = self.buildResponse(request, status='completed')
-		cmd.addChild('note', {}, 'The status has been changed.')
+		response, cmd = self.buildResponse(request, status = 'completed')
+		cmd.addChild('note', {}, _('The status has been changed.'))
 
 		# if going offline, we need to push response so it won't go into
 		# queue and disappear
-		self.connection.connection.send(response, presencetype=='offline')
+		self.connection.connection.send(response, presencetype == 'offline')
 
 		# send new status
-		gajim.interface.roster.send_status(self.connection.name, presencetype, presencedesc)
+		gajim.interface.roster.send_status(self.connection.name, presencetype,
+			presencedesc)
 
 		return False	# finish the session
+
+def find_current_groupchats(account):
+	import message_control
+	rooms = []
+	for gc_control in gajim.interface.msg_win_mgr.get_controls(
+	message_control.TYPE_GC):
+		acct = gc_control.account
+		# check if account is the good one
+		if acct != account:
+			continue
+		room_jid = gc_control.room_jid
+		nick = gc_control.nick
+		if gajim.gc_connected[acct].has_key(room_jid) and \
+		gajim.gc_connected[acct][room_jid]:
+			rooms.append((room_jid, nick,))
+	return rooms
+
+
+class LeaveGroupchatsCommand(AdHocCommand):
+	commandnode = 'leave-groupchats'
+	commandname = 'Leave Groupchats'
+
+	@staticmethod
+	def isVisibleFor(samejid):
+		''' Change status is visible only if the entity has the same bare jid. '''
+		return samejid
+
+	def execute(self, request):
+		# first query...
+		response, cmd = self.buildResponse(request, defaultaction = 'execute',
+			actions=['execute'])
+		options = []
+		account = self.connection.name
+		for gc in find_current_groupchats(account):
+			options.append((u'%s' %(gc[0]), _('%(nickname)s on %(room_jid)s') % \
+				{'nickname': gc[1], 'room_jid': gc[0]}))
+		if not len(options):
+			response, cmd = self.buildResponse(request, status = 'completed')
+			cmd.addChild('note', {}, _('You have not joined a groupchat.'))
+		
+			self.connection.connection.send(response)
+			return False
+
+		cmd.addChild(node=dataforms.SimpleDataForm(
+			title = _('Leave Groupchats'),
+			instructions = _('Choose the groupchats you want to leave'),
+			fields=[
+				dataforms.Field('list-multi',
+					var = 'groupchats',
+					label = _('Groupchats'),
+					options = options,
+					required = True)]))
+
+		self.connection.connection.send(response)
+
+		# for next invocation
+		self.execute = self.leavegroupchats
+		
+		return True	# keep the session
+
+	def leavegroupchats(self, request):
+		# check if the data is correct
+		try:
+			form = dataforms.SimpleDataForm(extend = request.getTag('command').\
+				getTag('x'))
+		except:
+			self.badRequest(request)
+			return False
+
+		try:
+			gc = form['groupchats'].values
+		except:	# KeyError if there's no presence-type field in form or
+			# AttributeError if that field is of wrong type
+			self.badRequest(request)
+			return False
+		account = self.connection.name
+		try:
+			for room_jid in gc:
+				gc_control = gajim.interface.msg_win_mgr.get_control(room_jid,
+					account)
+				gc_control.parent_win.remove_tab(gc_control, None, force = True)
+		except:	# KeyError if there's no presence-type field in form or
+			self.badRequest(request)
+			return False
+		response, cmd = self.buildResponse(request, status = 'completed')
+		note = _('You leaved the following groupchats:')
+		for room_jid in gc:
+			note += '\n\t' + room_jid
+		cmd.addChild('note', {}, note)
+
+		self.connection.connection.send(response)
+		return False
+
 
 class ConnectionCommands:
 	''' This class depends on that it is a part of Connection() class. '''
 	def __init__(self):
 		# a list of all commands exposed: node -> command class
 		self.__commands = {}
-		for cmdobj in (ChangeStatusCommand,):
+		for cmdobj in (ChangeStatusCommand, LeaveGroupchatsCommand):
 			self.__commands[cmdobj.commandnode] = cmdobj
 
 		# a list of sessions; keys are tuples (jid, sessionid, node)
@@ -164,7 +263,7 @@ class ConnectionCommands:
 			if cmd.isVisibleFor(self.isSameJID(jid)):
 				q.addChild('item', {
 					# TODO: find the jid
-					'jid': self.getOurBareJID()+u'/'+self.server_resource,
+					'jid': self.getOurBareJID() + u'/' + self.server_resource,
 					'node': node,
 					'name': cmd.commandname})
 
@@ -209,7 +308,7 @@ class ConnectionCommands:
 			# and command exist
 			if node not in self.__commands.keys():
 				self.connection.send(
-					xmpp.Error(iq_obj, xmpp.NS_STANZAS+' item-not-found'))
+					xmpp.Error(iq_obj, xmpp.NS_STANZAS + ' item-not-found'))
 				raise xmpp.NodeProcessed
 
 			newcmd = self.__commands[node]
@@ -220,7 +319,7 @@ class ConnectionCommands:
 			sessionid = self.connection.getAnID()
 
 			# create new instance and run it
-			obj = newcmd(conn=self, jid=jid, sessionid=sessionid)
+			obj = newcmd(conn = self, jid = jid, sessionid = sessionid)
 			rc = obj.execute(iq_obj)
 			if rc:
 				self.__sessions[(jid, sessionid, node)] = obj
@@ -236,12 +335,16 @@ class ConnectionCommands:
 			obj = self.__sessions[magictuple]
 
 			try:
-				if action == 'cancel':		rc = obj.cancel(iq_obj)
-				elif action == 'prev':		rc = obj.prev(iq_obj)
-				elif action == 'next':		rc = obj.next(iq_obj)
+				if action == 'cancel':
+					rc = obj.cancel(iq_obj)
+				elif action == 'prev':
+					rc = obj.prev(iq_obj)
+				elif action == 'next':
+					rc = obj.next(iq_obj)
 				elif action == 'execute' or action is None:
-								rc = obj.execute(iq_obj)
-				elif action == 'complete':	rc = obj.complete(iq_obj)
+					rc = obj.execute(iq_obj)
+				elif action == 'complete':
+					rc = obj.complete(iq_obj)
 				else:
 					# action is wrong. stop the session, send error
 					raise AttributeError
@@ -256,4 +359,3 @@ class ConnectionCommands:
 				del self.__sessions[magictuple]
 
 			raise xmpp.NodeProcessed
-
