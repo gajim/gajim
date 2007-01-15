@@ -92,14 +92,14 @@ class PreferencesWindow:
 		w.set_no_show_all(True)
 		w.hide()
 
-		#trayicon
+		# trayicon
 		if gajim.interface.systray_capabilities:
 			st = gajim.config.get('trayicon')
 			self.trayicon_checkbutton.set_active(st)
 		else:
 			self.trayicon_checkbutton.set_sensitive(False)
 
-		#Save position
+		# Save position
 		st = gajim.config.get('saveposition')
 		self.xml.get_widget('save_position_checkbutton').set_active(st)
 
@@ -239,21 +239,6 @@ class PreferencesWindow:
 			self._set_sensitivity_for_before_after_time_widgets(False)
 		else:
 			self.xml.get_widget('time_always_radiobutton').set_active(True)
-
-		# TimeStamp
-		st = gajim.config.get('time_stamp')
-		st = helpers.from_one_line(st)
-		self.xml.get_widget('time_stamp_textview').get_buffer().set_text(st)
-
-		# before nickname
-		st = gajim.config.get('before_nickname')
-		st = helpers.from_one_line(st)
-		self.xml.get_widget('before_nickname_textview').get_buffer().set_text(st)
-
-		# after nickanme
-		st = gajim.config.get('after_nickname')
-		st = helpers.from_one_line(st)
-		self.xml.get_widget('after_nickname_textview').get_buffer().set_text(st)
 
 		# Color for incoming messages
 		colSt = gajim.config.get('inmsgcolor')
@@ -731,29 +716,6 @@ class PreferencesWindow:
 		if widget.get_active():
 			gajim.config.set('print_time', 'always')
 		self._set_sensitivity_for_before_after_time_widgets(True)
-		gajim.interface.save_config()
-
-	def _get_textview_text(self, tv):
-		buffer = tv.get_buffer()
-		begin, end = buffer.get_bounds()
-		return buffer.get_text(begin, end).decode('utf-8')
-
-	def on_time_stamp_textview_focus_out_event(self, widget, event):
-		text = self._get_textview_text(widget)
-		text = helpers.to_one_line(text)
-		gajim.config.set('time_stamp', text)
-		gajim.interface.save_config()
-
-	def on_before_nickname_textview_focus_out_event(self, widget, event):
-		text = self._get_textview_text(widget)
-		text = helpers.to_one_line(text)
-		gajim.config.set('before_nickname', text)
-		gajim.interface.save_config()
-
-	def on_after_nickname_textview_focus_out_event(self, widget, event):
-		text = self._get_textview_text(widget)
-		text = helpers.to_one_line(text)
-		gajim.config.set('after_nickname', text)
 		gajim.interface.save_config()
 
 	def update_text_tags(self):
