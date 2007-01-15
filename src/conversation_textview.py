@@ -688,8 +688,7 @@ class ConversationTextview:
 			tim = time.localtime()
 		current_print_time = gajim.config.get('print_time')
 		if current_print_time == 'always' and kind != 'info':
-			timestamp_str = gajim.config.get('time_stamp')
-			timestamp_str = helpers.from_one_line(timestamp_str)
+			timestamp_str = self.get_time_to_show(tim)
 			timestamp = time.strftime(timestamp_str, tim)
 			buffer.insert_with_tags_by_name(end_iter, timestamp,
 				*other_tags_for_time)
@@ -757,7 +756,9 @@ class ConversationTextview:
 			day_str = _('%i days ago') % diff_day
 		if day_str:
 			format += day_str + ' '
-		format += '%X'
+		timestamp_str = gajim.config.get('time_stamp')
+		timestamp_str = helpers.from_one_line(timestamp_str)
+		format += timestamp_str
 		tim_format = time.strftime(format, tim)
 		if locale.getpreferredencoding() != 'KOI8-R':
 			# if tim_format comes as unicode because of day_str.
