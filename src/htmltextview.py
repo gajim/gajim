@@ -681,8 +681,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				self._jump_line()
 		elif name == 'img':
 			try:
-				## Max image size = 10 MB (to try to prevent DoS)
-				mem = urllib2.urlopen(attrs['src']).read(10*1024*1024)
+				## Max image size = 2 MB (to try to prevent DoS)
+				mem = urllib2.urlopen(attrs['src']).read(2*1024*1024)
 				## Caveat: GdkPixbuf is known not to be safe to load
 				## images from network... this program is now potentially
 				## hackable ;)
