@@ -122,12 +122,12 @@ except RuntimeError, msg:
 		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
 		sys.exit()
 pritext = ''
-if gtk.pygtk_version < (2, 6, 0):
-	pritext = _('Gajim needs PyGTK 2.6 or above')
-	sectext = _('Gajim needs PyGTK 2.6 or above to run. Quiting...')
-elif gtk.gtk_version < (2, 6, 0):
-	pritext = _('Gajim needs GTK 2.6 or above')
-	sectext = _('Gajim needs GTK 2.6 or above to run. Quiting...')
+if gtk.pygtk_version < (2, 8, 0):
+	pritext = _('Gajim needs PyGTK 2.8 or above')
+	sectext = _('Gajim needs PyGTK 2.8 or above to run. Quiting...')
+elif gtk.gtk_version < (2, 8, 0):
+	pritext = _('Gajim needs GTK 2.8 or above')
+	sectext = _('Gajim needs GTK 2.8 or above to run. Quiting...')
 
 try:
 	import gtk.glade # check if user has libglade (in pygtk and in gtk)
@@ -340,10 +340,9 @@ class GlibIdleQueue(idlequeue.IdleQueue):
 		''' this method is called at the end of class constructor.
 		Creates a dict, which maps file/pipe/sock descriptor to glib event id'''
 		self.events = {}
-		if gtk.pygtk_version >= (2, 8, 0):
-			# time() is already called in glib, we just get the last value 
-			# overrides IdleQueue.current_time()
-			self.current_time = lambda: gobject.get_current_time()
+		# time() is already called in glib, we just get the last value 
+		# overrides IdleQueue.current_time()
+		self.current_time = lambda: gobject.get_current_time()
 			
 	def add_idle(self, fd, flags):
 		''' this method is called when we plug a new idle object.
@@ -2107,9 +2106,9 @@ class Interface:
 		else:
 			gajim.log.setLevel(None)
 		
-		# pygtk2.8 on win, breaks io_add_watch. We use good old select.select()
-		if os.name == 'nt' and (gtk.pygtk_version > (2, 8, 0) or 
-			gtk.gtk_version > (2, 8, 0)):
+		# pygtk2.8+ on win, breaks io_add_watch.
+		# We use good old select.select()
+		if os.name == 'nt':
 			gajim.idlequeue = idlequeue.SelectIdleQueue()
 		else:
 			# in a nongui implementation, just call:

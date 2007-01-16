@@ -1,7 +1,7 @@
 ##	chat_control.py
 ##
 ## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2006-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov@gmail.com>
 ##
@@ -1033,7 +1033,7 @@ class ChatControl(ChatControlBase):
 		if self.TYPE_ID == message_control.TYPE_PM:
 			name = _('%(nickname)s from group chat %(room_name)s') %\
 				{'nickname': name, 'room_name': self.room_name}
-		name = gtkgui_helpers.escape_for_pango_markup(name)
+		name = gobject.markup_escape_text(name)
 
 		# We know our contacts nick, but if another contact has the same nick
 		# in another account we need to also display the account.
@@ -1048,14 +1048,14 @@ class ChatControl(ChatControlBase):
 				contact_ = gajim.contacts.get_first_contact_from_jid(account, jid)
 				if contact_.get_shown_name() == self.contact.get_shown_name():
 					acct_info = ' (%s)' % \
-						gtkgui_helpers.escape_for_pango_markup(self.account)
+						gobject.markup_escape_text(self.account)
 					break
 
 		status = contact.status
 		if status is not None:
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
 			status = helpers.reduce_chars_newlines(status, max_lines = 2)
-		status_escaped = gtkgui_helpers.escape_for_pango_markup(status)
+		status_escaped = gobject.markup_escape_text(status)
 
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		st = gajim.config.get('displayed_chat_state_notifications')
@@ -1330,7 +1330,7 @@ class ChatControl(ChatControlBase):
 		name = self.contact.get_shown_name()
 		if self.resource:
 			name += '/' + self.resource
-		label_str = gtkgui_helpers.escape_for_pango_markup(name)
+		label_str = gobject.markup_escape_text(name)
 		if num_unread: # if unread, text in the label becomes bold
 			label_str = '<b>' + unread + label_str + '</b>'
 		return (label_str, color)

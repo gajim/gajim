@@ -4,11 +4,11 @@
 ##                         Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -460,7 +460,7 @@ class GroupchatControl(ChatControlBase):
 		text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
 		if self.subject:
 			subject = helpers.reduce_chars_newlines(self.subject, max_lines = 2)
-			subject = gtkgui_helpers.escape_for_pango_markup(subject)
+			subject = gobject.markup_escape_text(subject)
 			text += '\n<span %s>%s</span>' % (font_attrs_small, subject)
 
 			# tooltip must always hold ALL the subject
@@ -778,7 +778,7 @@ class GroupchatControl(ChatControlBase):
 		else:
 			image = state_images[gc_contact.show]
 
-		name = gtkgui_helpers.escape_for_pango_markup(gc_contact.name)
+		name = gobject.markup_escape_text(gc_contact.name)
 		status = gc_contact.status
 		# add status msg, if not empty, under contact name in the treeview
 		if status and gajim.config.get('show_status_msgs_in_roster'):
@@ -790,7 +790,7 @@ class GroupchatControl(ChatControlBase):
 					selected, focus)
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
 				name += '\n' '<span size="small" style="italic" foreground="%s">%s</span>'\
-					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
+					% (colorstring, gobject.markup_escape_text(status))
 
 		model[iter][C_IMG] = image
 		model[iter][C_TEXT] = name

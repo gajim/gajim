@@ -1,7 +1,7 @@
 ##	tooltips.py
 ##
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -178,8 +178,8 @@ class StatusTable:
 					status = unicode(status, encoding='utf-8')
 				# reduce to 100 chars, 1 line
 				status = helpers.reduce_chars_newlines(status, 100, 1)
-				str_status = gtkgui_helpers.escape_for_pango_markup(str_status)
-				status = gtkgui_helpers.escape_for_pango_markup(status)
+				str_status = gobject.markup_escape_text(str_status)
+				status = gobject.markup_escape_text(status)
 				str_status += ' - <i>' + status + '</i>'
 		return str_status
 	
@@ -233,7 +233,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			if isinstance(message, str):
 				message = unicode(message, encoding = 'utf-8')
 			message = helpers.reduce_chars_newlines(message, 100, 1)
-			message = gtkgui_helpers.escape_for_pango_markup(message)
+			message = gobject.markup_escape_text(message)
 			if gajim.con_types.has_key(acct['name']) and \
 				gajim.con_types[acct['name']] in ('tls', 'ssl'):
 				show_lock = True
@@ -241,11 +241,11 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				show_lock = False
 			if message:
 				self.add_status_row(file_path, acct['show'], 
-					gtkgui_helpers.escape_for_pango_markup(acct['name']) + \
+					gobject.markup_escape_text(acct['name']) + \
 					' - ' + message, show_lock=show_lock)
 			else:
 				self.add_status_row(file_path, acct['show'], 
-					gtkgui_helpers.escape_for_pango_markup(acct['name']) 
+					gobject.markup_escape_text(acct['name']) 
 					, show_lock=show_lock)
 
 	def populate(self, data):
@@ -259,7 +259,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		self.table.set_property('column-spacing', 1)
 
 		text = helpers.get_notification_icon_tooltip_text()
-		text = gtkgui_helpers.escape_for_pango_markup(text)
+		text = gobject.markup_escape_text(text)
 		
 		self.add_text_row(text)
 		self.hbox.add(self.table)
@@ -288,7 +288,7 @@ class GCTooltip(BaseTooltip):
 		properties = []
 
 		nick_markup = '<b>' + \
-			gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name()) \
+			gobject.markup_escape_text(contact.get_shown_name()) \
 			+ '</b>' 
 		properties.append((nick_markup, None))
 
@@ -298,7 +298,7 @@ class GCTooltip(BaseTooltip):
 				# escape markup entities
 				status = helpers.reduce_chars_newlines(status, 100, 5)
 				status = '<i>' +\
-					 gtkgui_helpers.escape_for_pango_markup(status) + '</i>'
+					 gobject.markup_escape_text(status) + '</i>'
 				properties.append((status, None))
 		else: # no status message, show SHOW instead
 			show = helpers.get_uf_show(contact.show)
@@ -310,7 +310,7 @@ class GCTooltip(BaseTooltip):
 
 		if hasattr(contact, 'resource') and contact.resource.strip() != '':
 			properties.append((_('Resource: '), 
-				gtkgui_helpers.escape_for_pango_markup(contact.resource) ))
+				gobject.markup_escape_text(contact.resource) ))
 		if contact.affiliation != 'none':
 			uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
 			affiliation_str = \
@@ -411,7 +411,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		properties = []
 
 		name_markup = u'<span weight="bold">' + \
-			gtkgui_helpers.escape_for_pango_markup(prim_contact.get_shown_name())\
+			gobject.markup_escape_text(prim_contact.get_shown_name())\
 			+ '</span>'
 		properties.append((name_markup, None))
 		
@@ -485,7 +485,7 @@ class RosterTooltip(NotificationAreaTooltip):
 						# (no more than 100 chars on line and no more than 5 lines)
 						status = helpers.reduce_chars_newlines(status, 100, 5)
 						# escape markup entities. 
-						status = gtkgui_helpers.escape_for_pango_markup(status)
+						status = gobject.markup_escape_text(status)
 						properties.append(('<i>%s</i>' % status, None))
 				properties.append((show, None))
 		
@@ -494,13 +494,13 @@ class RosterTooltip(NotificationAreaTooltip):
 		# contact has only one ressource
 		if num_resources == 1 and contact.resource:
 			properties.append((_('Resource: '),
-				gtkgui_helpers.escape_for_pango_markup(contact.resource) +\
+				gobject.markup_escape_text(contact.resource) +\
 				' (' + unicode(contact.priority) + ')'))
 		
 		if prim_contact.sub and prim_contact.sub != 'both':
 			# ('both' is the normal sub so we don't show it)
 			properties.append(( _('Subscription: '), 
-				gtkgui_helpers.escape_for_pango_markup(helpers.get_uf_sub(prim_contact.sub))))
+				gobject.markup_escape_text(helpers.get_uf_sub(prim_contact.sub))))
 	
 		if prim_contact.keyID:
 			keyID = None
@@ -510,7 +510,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				keyID = prim_contact.keyID[8:]
 			if keyID:
 				properties.append((_('OpenPGP: '),
-					gtkgui_helpers.escape_for_pango_markup(keyID)))
+					gobject.markup_escape_text(keyID)))
 		
 		while properties:
 			property = properties.pop(0)
@@ -561,7 +561,7 @@ class FileTransfersTooltip(BaseTooltip):
 		else:
 			file_name = file_props['name']
 		properties.append((_('Name: '), 
-			gtkgui_helpers.escape_for_pango_markup(file_name)))
+			gobject.markup_escape_text(file_name)))
 		if file_props['type'] == 'r':
 			type =  _('Download')
 			actor = _('Sender: ') 
@@ -577,7 +577,7 @@ class FileTransfersTooltip(BaseTooltip):
 			else:
 				name = receiver.split('/')[0]
 		properties.append((_('Type: '), type))
-		properties.append((actor, gtkgui_helpers.escape_for_pango_markup(name)))
+		properties.append((actor, gobject.markup_escape_text(name)))
 		
 		transfered_len = 0
 		if file_props.has_key('received-len'):

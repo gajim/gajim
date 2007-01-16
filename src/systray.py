@@ -225,9 +225,7 @@ class Systray:
 
 		sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
 
-		if os.name == 'nt':
-			# see http://bugzilla.gnome.org/show_bug.cgi?id=377349
-			#FIXME: until it is fixed, put under mouse coordinates
+		if os.name == 'nt': 
 			if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
 				if self.added_hide_menuitem is False:
 					self.systray_context_menu.prepend(gtk.SeparatorMenuItem()) 

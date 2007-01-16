@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
@@ -768,8 +768,7 @@ class AboutDialog:
 
 			dlg.set_authors(authors)
 
-		if gtk.pygtk_version >= (2, 8, 0) and gtk.gtk_version >= (2, 8, 0):
-			dlg.props.wrap_license = True
+		dlg.props.wrap_license = True
 
 		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(
 			gajim.DATA_DIR, 'pixmaps', 'gajim_about.png'))			
@@ -1855,7 +1854,7 @@ class PrivacyListWindow:
 
 		self.privacy_lists_title_label.set_label(
 			_('Privacy List <b><i>%s</i></b>') % \
-			gtkgui_helpers.escape_for_pango_markup(self.privacy_list_name))
+			gobject.markup_escape_text(self.privacy_list_name))
 
 		if len(gajim.connections) > 1:
 			title = _('Privacy List for %s') % self.account

@@ -172,19 +172,6 @@ def get_default_font():
 	
 	return None
 	
-def escape_for_pango_markup(string):
-	# escapes < > & ' "
-	# for pango markup not to break
-	if string is None:
-		return
-	if gtk.pygtk_version >= (2, 8, 0) and gtk.gtk_version >= (2, 8, 0):
-		escaped_str = gobject.markup_escape_text(string)
-	else:
-		escaped_str = xml.sax.saxutils.escape(string, {"'": '&apos;',
-			'"': '&quot;'})
-	
-	return escaped_str
-
 def autodetect_browser_mailer():
 	# recognize the environment and set appropriate browser/mailer
 	if user_runs_gnome():
@@ -354,8 +341,7 @@ def parse_server_xml(path_to_file):
 def set_unset_urgency_hint(window, unread_messages_no):
 	'''sets/unsets urgency hint in window argument
 	depending if we have unread messages or not'''
-	if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0) and \
-		gajim.config.get('use_urgency_hint'):
+	if gajim.config.get('use_urgency_hint'):
 		if unread_messages_no > 0:
 			window.props.urgency_hint = True
 		else:

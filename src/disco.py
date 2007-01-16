@@ -2,7 +2,7 @@
 ##	config.py
 ##
 ## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Stéphan Kochen <stephan@kochen.nl>
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -41,6 +41,7 @@ import inspect
 import weakref
 import gobject
 import gtk
+import gobject
 import pango
 
 import dialogs
@@ -497,10 +498,7 @@ _('Without a connection, you can not browse available services'))
 		title_text = _('Service Discovery using account %s') % self.account
 		self.window.set_title(title_text)
 		self._set_window_banner_text(_('Service Discovery'))
-		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
-			self.banner_icon.clear()
-		else:
-			self.banner_icon.set_from_file(None)
+		self.banner_icon.clear()
 		self.banner_icon.hide() # Just clearing it doesn't work
 
 	def _set_window_banner_text(self, text, text_after = None):
@@ -1730,7 +1728,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 			dunno = True
 			subscribed = False
 
-		name = gtkgui_helpers.escape_for_pango_markup(name)
+		name = gobject.markup_escape_text(name)
 		name = '<b>%s</b>' % name
 
 		model.append((jid, node, name, dunno, subscribed))

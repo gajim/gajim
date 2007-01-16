@@ -62,9 +62,6 @@ class MessageTextView(gtk.TextView):
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
 
-if gobject.pygtk_version < (2, 8, 0):
-	gobject.type_register(MessageTextView)
-
 
 # We register depending on keysym and modifier some bindings
 # but we also pass those as param so we can construct fake Event

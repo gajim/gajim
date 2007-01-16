@@ -1,7 +1,7 @@
 ##	filetransfers_window.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
@@ -575,7 +575,7 @@ _('Connection with peer cannot be established.'))
 			(file_path, file_name) = os.path.split(file_props['file-name'])
 		else:
 			file_name = file_props['name']
-		text_props = gtkgui_helpers.escape_for_pango_markup(file_name) + '\n'
+		text_props = gobject.markup_escape_text(file_name) + '\n'
 		text_props += contact.get_shown_name()
 		self.model.set(iter, 1, text_labels, 2, text_props, C_SID,
 			file_props['type'] + file_props['sid'])

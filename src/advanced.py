@@ -72,8 +72,7 @@ class AdvancedConfigurationWindow(object):
 			renderer_text, text = 1)
 		col.set_cell_data_func(renderer_text, self.cb_value_column_data)
 
-		if gtk.gtk_version >= (2, 8, 0) and gtk.pygtk_version >= (2, 8, 0):
-			col.set_resizable(True) # there is a bug in 2.6.x series
+		col.props.resizable = True
 		col.set_max_width(250)
 
 		renderer_text = gtk.CellRendererText()

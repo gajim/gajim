@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ## history_manager.py
 ##
-## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2006-2007 Nikos Kouremenos <kourem@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -21,6 +21,7 @@ import sys
 import os
 import signal
 import gtk
+import gobject
 import time
 import locale
 
@@ -337,7 +338,7 @@ class HistoryManager:
 				if color:
 					message_ += ' foreground="%s"' % color
 				message_ += '>%s</span>' % \
-					gtkgui_helpers.escape_for_pango_markup(message)
+					gobject.markup_escape_text(message)
 				self.logs_liststore.append((log_line_id, jid_id, time_, message_,
 					subject, nickname))
 
@@ -399,8 +400,7 @@ class HistoryManager:
 		dlg = xml.get_widget('filechooserdialog')
 		dlg.set_title(_('Exporting History Logs...'))
 		dlg.set_current_folder(gajim.HOME_DIR)
-		if gtk.pygtk_version > (2, 8, 0):
-			dlg.props.do_overwrite_confirmation = True
+		dlg.props.do_overwrite_confirmation = True
 		response = dlg.run()
 		
 		if response == gtk.RESPONSE_OK: # user want us to export ;)

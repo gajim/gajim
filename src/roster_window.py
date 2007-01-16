@@ -2,7 +2,7 @@
 ##	roster_window.py
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -182,7 +182,7 @@ class RosterWindow:
 		our_jid = gajim.get_jid_from_account(account)
 
 		model.append(None, [self.jabber_state_images['16'][show],
-			gtkgui_helpers.escape_for_pango_markup(account),
+			gobject.markup_escape_text(account),
 			'account', our_jid, account, tls_pixbuf])
 
 	def draw_account(self, account):
@@ -350,7 +350,7 @@ class RosterWindow:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, [
 					self.jabber_state_images['16']['closed'],
-					gtkgui_helpers.escape_for_pango_markup(group), 'group',
+					gobject.markup_escape_text(group), 'group',
 					group, account, None])
 				self.draw_group(group, account)
 				if model.iter_n_children(IterAcct) == 1: # We added the first one
@@ -396,7 +396,7 @@ class RosterWindow:
 				accounts = accounts, groups = [group])
 			text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 		model = self.tree.get_model()
-		model.set_value(iter, 1 , gtkgui_helpers.escape_for_pango_markup(text))
+		model.set_value(iter, 1 , gobject.markup_escape_text(text))
 
 	def add_to_not_in_the_roster(self, account, jid, nick = ''):
 		''' add jid to group "not in the roster", he MUST not be in roster yet,
@@ -558,7 +558,7 @@ class RosterWindow:
 			contact_instances)
 		if not contact:
 			return
-		name = gtkgui_helpers.escape_for_pango_markup(contact.get_shown_name())
+		name = gobject.markup_escape_text(contact.get_shown_name())
 
 		nb_connected_contact = 0
 		for c in contact_instances:
@@ -599,7 +599,7 @@ class RosterWindow:
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
 				name += \
 					'\n<span size="small" style="italic" foreground="%s">%s</span>' \
-					% (colorstring, gtkgui_helpers.escape_for_pango_markup(status))
+					% (colorstring, gobject.markup_escape_text(status))
 
 		iter = iters[0] # choose the icon with the first iter
 		icon_name = helpers.get_icon_name_to_show(contact, account)
