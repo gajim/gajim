@@ -350,7 +350,7 @@ class Connection(ConnectionHandlers):
 		self._hostname = hostname
 		if use_srv:
 			# add request for srv query to the resolve, on result '_on_resolve' will be called
-			gajim.resolver.resolve('_xmpp-client._tcp.' + h.encode('utf-8'), self._on_resolve)
+			gajim.resolver.resolve('_xmpp-client._tcp.' + helpers.unicode_to_ACE(h), self._on_resolve)
 		else:
 			self._on_resolve('', [])
 

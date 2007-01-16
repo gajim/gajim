@@ -25,6 +25,7 @@ import errno
 import select
 import sha
 from encodings.punycode import punycode_encode
+from encodings import idna
 
 import gajim
 from i18n import Q_
@@ -84,6 +85,14 @@ def parse_jid(jidstring):
 	# This function comes from http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
 
 	return prep(*decompose_jid(jidstring))
+
+def unicode_to_ACE(host):
+	'''convert IDN (Internationalized Domain Names) to ACE (ASCII-compatible encoding)'''
+	labels = idna.dots.split(host)
+	converted_labels = []
+	for label in labels:
+		converted_labels.append(idna.ToASCII(label))
+	return ".".join(converted_labels)
 
 def parse_resource(resource):
 	'''Perform stringprep on resource and return it'''

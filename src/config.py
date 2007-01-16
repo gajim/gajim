@@ -2991,9 +2991,9 @@ class AccountCreationWizardWindow:
 				'.')
 				dialogs.ErrorDialog(pritext, sectext)
 				return
-			server = widgets['server_comboboxentry'].child.get_text()
+			server = widgets['server_comboboxentry'].child.get_text().decode('utf-8')
 			savepass = widgets['save_password_checkbutton'].get_active()
-			password = widgets['pass1_entry'].get_text()
+			password = widgets['pass1_entry'].get_text().decode('utf-8')
 
 			if not self.modify:
 				if password == '':
