@@ -50,7 +50,7 @@ __all__ = ['HtmlTextView']
 whitespace_rx = re.compile("\\s+")
 allwhitespace_rx = re.compile("^\\s*$")
 
-## pixels = points * display_resolution
+# pixels = points * display_resolution
 display_resolution = 0.3514598*(gtk.gdk.screen_height() /
 					float(gtk.gdk.screen_height_mm()))
 
@@ -266,7 +266,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		
 	else:
 		
-		## Workaround http://bugzilla.gnome.org/show_bug.cgi?id=317455
+		# Workaround http://bugzilla.gnome.org/show_bug.cgi?id=317455
 		def _get_current_style_attr(self, propname, comb_oper=None):
 			tags = [tag for tag in self.styles if tag is not None]
 			tags.reverse()
@@ -311,10 +311,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				font_size = attrs.font.get_size() / pango.SCALE
 				callback(frac*display_resolution*font_size, *args)
 			else:
-				## CSS says "Percentage values: refer to width of the closest
-				##           block-level ancestor"
-				## This is difficult/impossible to implement, so we use
-				## textview width instead; a reasonable approximation..
+				# CSS says "Percentage values: refer to width of the closest
+				#           block-level ancestor"
+				# This is difficult/impossible to implement, so we use
+				# textview width instead; a reasonable approximation..
 				alloc = self.textview.get_allocation()
 				self.__parse_length_frac_size_allocate(self.textview, alloc,
 													   frac, callback, args)
@@ -331,8 +331,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			callback(float(value[:-2])*display_resolution*font_size, *args)
 
 		elif value.endswith('ex'): # x-height, ~ the height of the letter 'x'
-			## FIXME: figure out how to calculate this correctly
-			##        for now 'em' size is used as approximation
+			# FIXME: figure out how to calculate this correctly
+			#        for now 'em' size is used as approximation
 			attrs = self._get_current_attributes()
 			font_size = attrs.font.get_size() / pango.SCALE
 			callback(float(value[:-2])*display_resolution*font_size, *args)
@@ -405,7 +405,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 						   tag, "right-margin")
 
 	def _parse_style_font_weight(self, tag, value):
-		## TODO: missing 'bolder' and 'lighter'
+		# TODO: missing 'bolder' and 'lighter'
 		try:
 			weight = {
 				'100': pango.WEIGHT_ULTRALIGHT,
@@ -469,7 +469,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			tag.set_property("wrap_mode", gtk.WRAP_NONE)
 	 
 	
-	## build a dictionary mapping styles to methods, for greater speed
+	# build a dictionary mapping styles to methods, for greater speed
 	__style_methods = dict()
 	for style in ["background-color", "color", "font-family", "font-size",
 				  "font-style", "font-weight", "margin-left", "margin-right",
@@ -481,7 +481,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		else:
 			__style_methods[style] = method
 	del style
-	## --
+	# --
 
 	def _get_style_tags(self):
 		return [tag for tag in self.styles if tag is not None]
@@ -681,11 +681,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				self._jump_line()
 		elif name == 'img':
 			try:
-				## Max image size = 2 MB (to try to prevent DoS)
+				# Max image size = 2 MB (to try to prevent DoS)
 				mem = urllib2.urlopen(attrs['src']).read(2*1024*1024)
-				## Caveat: GdkPixbuf is known not to be safe to load
-				## images from network... this program is now potentially
-				## hackable ;)
+				# Caveat: GdkPixbuf is known not to be safe to load
+				# images from network... this program is now potentially
+				# hackable ;)
 				loader = gtk.gdk.PixbufLoader()
 				loader.write(mem); loader.close()
 				pixbuf = loader.get_pixbuf()
