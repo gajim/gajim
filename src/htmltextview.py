@@ -341,7 +341,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			callback(int(value[:-2]), *args)
 
 		else:
-			warnings.warn('Unable to parse length value '%s'' % value)
+			warnings.warn('Unable to parse length value "%s"' % value)
 		
 	def __parse_font_size_cb(length, tag):
 		tag.set_property('size-points', length/display_resolution)
@@ -477,7 +477,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		try:
 			method = locals()['_parse_style_%s' % style.replace('-', '_')]
 		except KeyError:
-			warnings.warn('Style attribute '%s' not yet implemented' % style)
+			warnings.warn('Style attribute "%s" not yet implemented' % style)
 		else:
 			__style_methods[style] = method
 	del style
@@ -515,7 +515,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			try:
 				method = self.__style_methods[attr]
 			except KeyError:
-				warnings.warn('Style attribute '%s' requested '
+				warnings.warn('Style attribute "%s" requested '
 							  'but not yet implemented' % attr)
 			else:
 				method(self, tag, val)
@@ -717,7 +717,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		elif name in INLINE:
 			pass
 		else:
-			warnings.warn('Unhandled element '%s'' % name)
+			warnings.warn('Unhandled element "%s"' % name)
 
 	def endElement(self, name):
 		endPreserving = False
@@ -751,7 +751,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			if name == 'pre':
 				endPreserving = True
 		else:
-			warnings.warn('Unhandled element '%s'' % name)
+			warnings.warn("Unhandled element '%s'" % name)
 		self._flush_text()
 		if endPreserving:
 			self.preserve = False
