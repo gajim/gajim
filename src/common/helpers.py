@@ -86,7 +86,7 @@ def parse_jid(jidstring):
 
 	return prep(*decompose_jid(jidstring))
 
-def unicode_to_ACE(host):
+def idn_to_ascii(host):
 	'''convert IDN (Internationalized Domain Names) to ACE (ASCII-compatible encoding)'''
 	labels = idna.dots.split(host)
 	converted_labels = []
