@@ -2278,9 +2278,6 @@ class ServiceRegistrationWindow(DataFormWindow):
 			# We pressed OK button of the DataFormWindow
 			if self.infos.has_key('registered'):
 				del self.infos['registered']
-			else:
-				gajim.interface.roster.add_transport_to_roster(self.account,
-					self.service)
 			gajim.connections[self.account].register_agent(self.service,
 				self.infos, True) # True is for is_form
 		else:
@@ -2292,9 +2289,6 @@ class ServiceRegistrationWindow(DataFormWindow):
 				del self.infos['instructions']
 			if self.infos.has_key('registered'):
 				del self.infos['registered']
-			else:
-				gajim.interface.roster.add_transport_to_roster(self.account,
-					self.service)
 			gajim.connections[self.account].register_agent(self.service,
 				self.infos)
 		
