@@ -1386,7 +1386,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
 		no_log_for = gajim.config.get_per('accounts', self.name,
-			'no_log_for').split()
+			'no_log_for')
+		if not no_log_for:
+			no_log_for = ''
+		no_log_for = no_log_for.split()
 		encrypted = False
 		chatstate = None
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
