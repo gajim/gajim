@@ -16,16 +16,17 @@ msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-16 20:08+0100\n"
-"PO-Revision-Date: 2006-04-19 18:47+0200\n"
-"Last-Translator: Stavros Giannouris <stavrosg2002@freemail.gr>\n"
-"Language-Team: Hellenic-Ελληνικά-Greek\n"
+"PO-Revision-Date: 2007-01-19 16:09+0200\n"
+"Last-Translator: Stavros Giannouris <stavrosg@hellug.gr>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.10\n"
 "X-Poedit-Language: Greek\n"
 "X-Poedit-Country: GREECE\n"
+"X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,-1,-1,623\n"
 
 #: ../data/gajim.desktop.in.in.h:1
 msgid "A GTK+ Jabber client"
@@ -49,11 +50,11 @@ msgstr "_Προσθήκη επαφής..."
 
 #: ../data/glade/account_context_menu.glade.h:3
 msgid "_Discover Services..."
-msgstr "Εύρεση _Υπηρεσιών..."
+msgstr "Εύρεση _υπηρεσιών..."
 
 #: ../data/glade/account_context_menu.glade.h:4
 msgid "_Execute Command..."
-msgstr ""
+msgstr "_Εκτέλεση εντολής..."
 
 #: ../data/glade/account_context_menu.glade.h:5
 #: ../data/glade/roster_window.glade.h:16
@@ -69,7 +70,7 @@ msgstr "_Επεξεργασία λογαριασμού..."
 #: ../data/glade/account_context_menu.glade.h:7
 #, fuzzy
 msgid "_Open Gmail Inbox"
-msgstr "_Άνοιγμα προγράμματος αλληλογραφίας"
+msgstr "Άνοιγμα υπάρχοντος μενού"
 
 #: ../data/glade/account_context_menu.glade.h:8
 #: ../data/glade/zeroconf_context_menu.glade.h:2
@@ -82,7 +83,7 @@ msgid ""
 "\n"
 "Please wait..."
 msgstr ""
-"<b>Ο Λογαριασμός δημιουργείται</b>\n"
+"<b>Ο λογαριασμός δημιουργείται</b>\n"
 "\n"
 "Παρακαλώ περιμένετε..."
 
@@ -124,12 +125,12 @@ msgstr "Αν επιλεγεί, το Gajim θα θυμάται τον κωδικ�
 #: ../data/glade/account_creation_wizard_window.glade.h:12
 #: ../data/glade/manage_proxies_window.glade.h:6
 msgid "Pass_word:"
-msgstr "_Κωδικός:"
+msgstr "_Κωδικός πρόσβασης:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:13
 #: ../data/glade/account_modification_window.glade.h:38
 msgid "Save pass_word"
-msgstr "_Αποθήκευση"
+msgstr "_Αποθήκευση κωδικού"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:14
 msgid "Servers Features"
@@ -163,12 +164,12 @@ msgstr "_Τέλος"
 #: ../data/glade/account_creation_wizard_window.glade.h:21
 #: ../data/glade/manage_proxies_window.glade.h:9
 msgid "_Host:"
-msgstr "_Ξένος υπολογιστής:"
+msgstr "Ε_ξυπηρετητής:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:22
 #: ../data/glade/account_modification_window.glade.h:47
 msgid "_Password:"
-msgstr "_Κωδικός:"
+msgstr "_Κωδικός πρόσβασης:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:23
 #: ../data/glade/manage_proxies_window.glade.h:10
@@ -181,7 +182,7 @@ msgstr "Επανά_ληψη κωδικού:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:25
 msgid "_Server:"
-msgstr "_Διακομιστής:"
+msgstr "_Εξυπηρετητής:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:26
 msgid "_Use proxy"
@@ -190,7 +191,7 @@ msgstr "_Χρήση μεσολαβητή"
 #: ../data/glade/account_creation_wizard_window.glade.h:27
 #: ../data/glade/manage_proxies_window.glade.h:11
 msgid "_Username:"
-msgstr "_Όνομα χρήστη:"
+msgstr "Όν_ομα χρήστη:"
 
 #: ../data/glade/account_modification_window.glade.h:1
 #: ../data/glade/preferences_window.glade.h:8
@@ -227,7 +228,7 @@ msgstr "Σύνδεση κατά την ε_κκίνηση του Gajim"
 
 #: ../data/glade/account_modification_window.glade.h:8
 msgid "Chan_ge Password"
-msgstr "Αλλα_γή συνθηματικού"
+msgstr "Αλλα_γή κωδικού πρόσβασης"
 
 #: ../data/glade/account_modification_window.glade.h:9
 msgid ""
@@ -239,7 +240,7 @@ msgstr ""
 "Επιλέξτε το ώστε το Gajim να συνδεθεί στην θύρα 5223 όπου οι παλαιότεροι "
 "διακομιστές αναμένουν SSL σύνδεση. Σημειώστε ότι το Gajim χρησιμοποιεί "
 "κρυπτογράφηση TLS αυτόματα αν αυτή η δυνατότητα του γνωστοποιηθεί από τον "
-"διακομιστή, και ότι με αυτή την επιλογή απενεργοποιείτε το TLS"
+"διακομιστή, και ότι με αυτή την επιλογή απενεργοποιείται το TLS"
 
 #: ../data/glade/account_modification_window.glade.h:10
 #: ../data/glade/zeroconf_properties_window.glade.h:4
@@ -276,10 +277,9 @@ msgstr "Γενικά"
 
 #: ../data/glade/account_modification_window.glade.h:16
 msgid "Hostname: "
-msgstr "Ξένος υπολογιστής:"
+msgstr "Εξυπηρετητής:"
 
 #: ../data/glade/account_modification_window.glade.h:17
-#, fuzzy
 msgid ""
 "If checked, Gajim will also broadcast some more IPs except from just your "
 "IP, so file transfer has higher chances of working."
@@ -303,8 +303,8 @@ msgid ""
 "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
 "permission only for you"
 msgstr ""
-"Εάν επιλεγεί, το Gajim θα αποθηκεύσει το συνθηματικό στο ~/.gajim/config με "
-"δικαίωμα ανάγνωσης μόνο για εσάς"
+"Εάν επιλεγεί, το Gajim θα αποθηκεύσει τον κωδικό πρόσβασης στο ~/.gajim/"
+"config με δικαίωμα ανάγνωσης μόνο για εσάς"
 
 #: ../data/glade/account_modification_window.glade.h:21
 #: ../data/glade/zeroconf_properties_window.glade.h:9
@@ -328,7 +328,7 @@ msgstr ""
 
 #: ../data/glade/account_modification_window.glade.h:23
 msgid "Information about you, as stored in the server"
-msgstr "Οι πληροφορίες για εσάς αποθηκεύονται στο διακομιστή"
+msgstr "Οι πληροφορίες για εσάς, όπως αποθηκεύονται στο διακομιστή"
 
 #: ../data/glade/account_modification_window.glade.h:24
 msgid "Manage..."
@@ -338,7 +338,7 @@ msgstr "Διαχείριση..."
 #: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1617
 #: ../src/config.py:3414
 msgid "No key selected"
-msgstr "Καμία επιλογή κλειδιού"
+msgstr "Δεν έχει επιλεχτεί κλειδί"
 
 #. None means no proxy profile selected
 #: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1197
@@ -347,7 +347,7 @@ msgstr "Καμία επιλογή κλειδιού"
 #: ../src/config.py:3404 ../src/config.py:3413 ../src/dialogs.py:281
 #: ../src/dialogs.py:283
 msgid "None"
-msgstr "Τίποτα"
+msgstr "Κανένα"
 
 #: ../data/glade/account_modification_window.glade.h:28
 #: ../data/glade/profile_window.glade.h:25
@@ -395,9 +395,9 @@ msgid ""
 "account with resource 'Home' and 'Work' at the same time. The resource which "
 "has the highest priority will get the events. (see below)"
 msgstr ""
-"Ο πόρος στέλνεται στον Jabber διακομιστή ώστε να διαχωριστεί το ίδιο JID σε "
+"Ο πόρος στέλνεται στον εξυπηρετητή Jabber ώστε να διαχωριστεί το ίδιο JID σε "
 "δύο ή περισσότερα μέρη ανάλογα με τον αριθμό των εφαρμογών που είναι "
-"συνδεδεμένες στον ίδιο διακομιστή με τον ίδιο λογαριασμό. Έτσι μπορείτε να "
+"συνδεδεμένες στον ίδιο εξυπηρετητή με τον ίδιο λογαριασμό. Έτσι μπορείτε να "
 "είστε συνδεδεμένος με τον ίδιο λογαριασμό με πόρο 'Σπίτι' και 'Δουλειά' την "
 "ίδια στιγμή. Ο πόρος με τη μεγαλύτερη προτεραιότητα θα λαμβάνει τα γεγονότα. "
 "(βλέπε και πιο κάτω)"
@@ -405,7 +405,7 @@ msgstr ""
 #: ../data/glade/account_modification_window.glade.h:36
 #: ../data/glade/zeroconf_properties_window.glade.h:18
 msgid "Save _passphrase (insecure)"
-msgstr "Αποθήκευση _κωδικοφράσης (περιορισμένη ασφάλεια)"
+msgstr "Αποθήκευση _φράσης πρόσβασης (περιορισμένη ασφάλεια)"
 
 #: ../data/glade/account_modification_window.glade.h:37
 #: ../data/glade/zeroconf_properties_window.glade.h:19
@@ -434,17 +434,17 @@ msgid "Use file transfer proxies"
 msgstr "Χρήση μεσολαβητών μεταφοράς αρχείων"
 
 #: ../data/glade/account_modification_window.glade.h:44
+#, fuzzy
 msgid "_Adjust to status"
-msgstr ""
+msgstr "Αδυναμία φόρτωσης"
 
 #: ../data/glade/account_modification_window.glade.h:45
 msgid "_Jabber ID:"
 msgstr "_Jabber ID:"
 
 #: ../data/glade/account_modification_window.glade.h:46
-#, fuzzy
 msgid "_Name:"
-msgstr "_Όνομα: "
+msgstr "_Όνομα:"
 
 #: ../data/glade/accounts_window.glade.h:1
 msgid "Accounts"
@@ -469,9 +469,8 @@ msgstr ""
 "εμφανίζει τις επαφές σας σαν να είχατε ένα λογαριασμό"
 
 #: ../data/glade/accounts_window.glade.h:5
-#, fuzzy
 msgid "Mer_ge accounts"
-msgstr "_Συνένωση λογαριασμών"
+msgstr "Συ_γχώνευση λογαριασμών"
 
 #: ../data/glade/accounts_window.glade.h:6
 msgid "_Enable link-local messaging"
@@ -487,14 +486,13 @@ msgid "_Remove"
 msgstr "_Αφαίρεση"
 
 #: ../data/glade/add_new_contact_window.glade.h:1
-#, fuzzy
 msgid "A_ccount:"
-msgstr "Λογαριασμός:"
+msgstr "_Λογαριασμός:"
 
 #: ../data/glade/add_new_contact_window.glade.h:2
 #, fuzzy
 msgid "A_llow this contact to view my status"
-msgstr "Επίτρεψε τον/την να βλέπει την κατάστασή μου"
+msgstr "Επιθυμώ αυτή η επαφή να γνωρίζει την κατάστασή μου μετά την αφαίρεση"
 
 #: ../data/glade/add_new_contact_window.glade.h:3
 msgid "Add New Contact"
@@ -519,50 +517,48 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/add_new_contact_window.glade.h:11
-#, fuzzy
 msgid "_Group:"
-msgstr "Ομάδα:"
+msgstr "_Ομάδα:"
 
 #: ../data/glade/add_new_contact_window.glade.h:12
 msgid "_Nickname:"
 msgstr "_Όνομα χρήστη:"
 
 #: ../data/glade/add_new_contact_window.glade.h:13
-#, fuzzy
 msgid "_Protocol:"
-msgstr "Πρωτόκολλο:"
+msgstr "_Πρωτόκολλο:"
 
 #: ../data/glade/add_new_contact_window.glade.h:14
-#, fuzzy
 msgid "_Register"
 msgstr "_Εγγραφή"
 
 #: ../data/glade/add_new_contact_window.glade.h:15
-#, fuzzy
 msgid "_User ID:"
-msgstr "Ταυτότητα χρήστη:"
+msgstr "_Ταυτότητα χρήστη:"
 
 #: ../data/glade/adhoc_commands_window.glade.h:1
 #, fuzzy
 msgid "<b>An error has occurred:</b>"
-msgstr "Συνέβει σφάλμα πρωτοκόλου:"
+msgstr "Δημιουργήθηκε σφάλμα κατά την αφαίρεση της εργασίας !"
 
 #: ../data/glade/adhoc_commands_window.glade.h:2
+#, fuzzy
 msgid "<b>Choose command to execute:</b>"
-msgstr ""
+msgstr "Η εκτέλεση του \"%s\" απέτυχε"
 
 #: ../data/glade/adhoc_commands_window.glade.h:3
 msgid "Ad-hoc Commands - Gajim"
 msgstr ""
 
 #: ../data/glade/adhoc_commands_window.glade.h:4
+#, fuzzy
 msgid "Check once more"
-msgstr ""
+msgstr "Αντικατάσταση _όλων"
 
 #: ../data/glade/adhoc_commands_window.glade.h:5
 #, fuzzy
 msgid "Error description..."
-msgstr "Περιγραφή"
+msgstr "Σφάλμα συστήματος"
 
 #: ../data/glade/adhoc_commands_window.glade.h:6
 #, fuzzy
@@ -572,11 +568,11 @@ msgstr "Παρακαλώ περιμένετε όσο μεταφέρεται το
 #: ../data/glade/adhoc_commands_window.glade.h:7
 #, fuzzy
 msgid "Please wait while the command is sending..."
-msgstr "Παρακαλώ περιμένετε όσο μεταφέρεται το ιστορικό..."
+msgstr "Ανανέωση περιεχομένων αρχείου, παρακαλώ περιμένετε..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:8
 msgid "Please wait..."
-msgstr ""
+msgstr "Παρακαλώ περιμένετε..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:9
 msgid "This jabber entity does not expose any commands."
@@ -607,7 +603,7 @@ msgstr "Διαγραφή MOTD"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:2
 msgid "Deletes Message of the Day"
-msgstr "Διαγράφει το Μήνυμα της Ημέρας (MOTD)"
+msgstr "Διαγράφει το Μήνυμα της ημέρας (MOTD)"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:3
 #, fuzzy
@@ -621,7 +617,7 @@ msgstr "Ορισμός MOTD"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:5
 msgid "Sets Message of the Day"
-msgstr "Ορίζει το Μήνυμα της Ημέρας (MOTD)"
+msgstr "Ορίζει το Μήνυμα της ημέρας (MOTD)"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:6
 msgid "Show _XML Console"
@@ -633,7 +629,7 @@ msgstr "Ενημέρωση MOTD"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:8
 msgid "Updates Message of the Day"
-msgstr "Ενημερώνει το Μήνυμα της Ημέρας (MOTD)"
+msgstr "Ενημερώνει το Μήνυμα της ημέρας (MOTD)"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:9
 msgid "_Administrator"
@@ -656,14 +652,12 @@ msgid " a window/tab opened with that contact "
 msgstr ""
 
 #: ../data/glade/advanced_notifications_window.glade.h:2
-#, fuzzy
 msgid "<b>Actions</b>"
-msgstr "<b>Εφαρμογές</b>"
+msgstr "<b>Ενέργειες</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:3
-#, fuzzy
 msgid "<b>Conditions</b>"
-msgstr "<b>Ήχοι</b>"
+msgstr "<b>Συνθήκες</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:4
 #: ../data/glade/preferences_window.glade.h:10
@@ -671,19 +665,16 @@ msgid "<b>Sounds</b>"
 msgstr "<b>Ήχοι</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:5
-#, fuzzy
 msgid "Advanced Actions"
-msgstr "Ενέργειες για Προ_χωρημένους"
+msgstr "Προχωρημένες ενέργειες"
 
 #: ../data/glade/advanced_notifications_window.glade.h:6
-#, fuzzy
 msgid "Advanced Notifications Control"
-msgstr "Επεξεργασία ρυθμίσεων για προχωρημένους"
+msgstr "Προχωρημένος έλεγχος ειδοποιήσεων"
 
 #: ../data/glade/advanced_notifications_window.glade.h:7
-#, fuzzy
 msgid "All statuses"
-msgstr "Κατάσταση: "
+msgstr "Όλες οι καταστάσεις"
 
 #: ../data/glade/advanced_notifications_window.glade.h:8
 #: ../src/common/commands.py:91 ../src/common/helpers.py:234
@@ -691,17 +682,16 @@ msgid "Away"
 msgstr "Απομακρυσμένος"
 
 #: ../data/glade/advanced_notifications_window.glade.h:9
-#, fuzzy
 msgid "Busy "
 msgstr "Απασχολημένος"
 
 #: ../data/glade/advanced_notifications_window.glade.h:10
 msgid "Don't have "
-msgstr ""
+msgstr "Δεν έχει"
 
 #: ../data/glade/advanced_notifications_window.glade.h:11
 msgid "Have "
-msgstr ""
+msgstr "Έχει"
 
 #: ../data/glade/advanced_notifications_window.glade.h:12
 #: ../src/common/helpers.py:244
@@ -709,9 +699,8 @@ msgid "Invisible"
 msgstr "Αφανής"
 
 #: ../data/glade/advanced_notifications_window.glade.h:13
-#, fuzzy
 msgid "Launch a command"
-msgstr "εντολή"
+msgstr "Εκτέλεση εντολής"
 
 #: ../data/glade/advanced_notifications_window.glade.h:14
 #: ../src/common/helpers.py:217
@@ -719,18 +708,18 @@ msgid "Not Available"
 msgstr "Μη διαθέσιμος"
 
 #: ../data/glade/advanced_notifications_window.glade.h:15
+#, fuzzy
 msgid "One or more special statuses..."
-msgstr ""
+msgstr "Ορισμένες ειδικές καταστάσεις..."
 
 #: ../data/glade/advanced_notifications_window.glade.h:16
 #, fuzzy
 msgid "Online / Free For Chat"
-msgstr "Διαθέσιμος για κουβέντα"
+msgstr "Online εγχειρίδιο για αυτήν την εφαρμογή"
 
 #: ../data/glade/advanced_notifications_window.glade.h:17
-#, fuzzy
 msgid "Play a sound"
-msgstr "Αναπαραγωγή _ήχων"
+msgstr "Αναπαραγωγή ήχου"
 
 #: ../data/glade/advanced_notifications_window.glade.h:18
 msgid ""
@@ -746,7 +735,7 @@ msgstr ""
 
 #: ../data/glade/advanced_notifications_window.glade.h:26
 msgid "When "
-msgstr ""
+msgstr "Όταν"
 
 #: ../data/glade/advanced_notifications_window.glade.h:27
 msgid ""
@@ -759,12 +748,14 @@ msgid "_Disable auto opening chat window"
 msgstr "Αποκρύπτει τα κουμπιά σε παράθυρο ομαδικής κουβέντας"
 
 #: ../data/glade/advanced_notifications_window.glade.h:29
+#, fuzzy
 msgid "_Disable existing popup window"
-msgstr ""
+msgstr "Εμφάνιση ενός αναδυόμενου παραθύρου κατά την λήψη μιας κλήσης"
 
 #: ../data/glade/advanced_notifications_window.glade.h:30
+#, fuzzy
 msgid "_Disable existing sound for this event"
-msgstr ""
+msgstr "Το αρχείο ήχου για το παρόν γεγονός δεν υπάρχει."
 
 #: ../data/glade/advanced_notifications_window.glade.h:31
 msgid "_Disable showing event in roster"
@@ -786,16 +777,16 @@ msgstr "Χρήση ενός παραθύρου κουβέντας με _καρτ
 #: ../data/glade/advanced_notifications_window.glade.h:35
 #, fuzzy
 msgid "_Show event in roster"
-msgstr "Εμφά_νισε το μόνο στο κύριο παράθυρο"
+msgstr "_Προβολή τίτλου στο κουμπί"
 
 #: ../data/glade/advanced_notifications_window.glade.h:36
 #, fuzzy
 msgid "_Show event in systray"
-msgstr "Εμφά_νισε το μόνο στο κύριο παράθυρο"
+msgstr "_Προβολή τίτλου στο κουμπί"
 
 #: ../data/glade/advanced_notifications_window.glade.h:37
 msgid "and I "
-msgstr ""
+msgstr "και εγώ"
 
 #: ../data/glade/advanced_notifications_window.glade.h:38
 msgid ""
@@ -803,67 +794,69 @@ msgid ""
 "group(s)\n"
 "everybody"
 msgstr ""
+"επαφές\n"
+"ομάδες\n"
+"όλοι"
 
 #: ../data/glade/advanced_notifications_window.glade.h:41
-#, fuzzy
 msgid "for "
-msgstr "Θύρα: "
+msgstr "για"
 
 #: ../data/glade/advanced_notifications_window.glade.h:42
 msgid "when I'm in"
-msgstr ""
+msgstr "όταν είμαι στο"
 
 #: ../data/glade/atom_entry_window.glade.h:1
 msgid "2003-12-13T18:30:02Z"
-msgstr ""
+msgstr "2003-12-13T18:30:02Z"
 
 #: ../data/glade/atom_entry_window.glade.h:2
 msgid "<small>Romeo and Juliet</small>"
 msgstr ""
 
 #: ../data/glade/atom_entry_window.glade.h:3
-#, fuzzy
 msgid "Entry:"
-msgstr "Χώρα:"
+msgstr "Εγγραφή:"
 
 #: ../data/glade/atom_entry_window.glade.h:4
 #, fuzzy
 msgid "Feed name:"
-msgstr "όνομα θέματος"
+msgstr "Όνομα εικονιδίου"
 
 #: ../data/glade/atom_entry_window.glade.h:5
-#, fuzzy
 msgid "Last modified:"
-msgstr "Όνομα:"
+msgstr "Τελευταία τροποποίηση:"
 
 #: ../data/glade/atom_entry_window.glade.h:6
 #, fuzzy
 msgid "New entry received"
-msgstr "Όταν λαμβάνεται ένα νέο γεγονός"
+msgstr "Προσθήκη νέας εγγραφής στο μενού"
 
 #: ../data/glade/atom_entry_window.glade.h:7
+#, fuzzy
 msgid "Old stories"
-msgstr ""
+msgstr "Παλιό όνομα - Κείμενο - Αριθμός"
 
 #: ../data/glade/atom_entry_window.glade.h:8
 msgid "Soliloquy"
 msgstr ""
 
 #: ../data/glade/atom_entry_window.glade.h:9
+#, fuzzy
 msgid "You have received new entry:"
-msgstr ""
+msgstr "Προσθήκη νέας εγγραφής στο μενού"
 
 #: ../data/glade/change_password_dialog.glade.h:1
 msgid "Change Password"
-msgstr "Αλλαγή κωδικού"
+msgstr "Αλλαγή κωδικού πρόσβασης"
 
 #: ../data/glade/change_password_dialog.glade.h:2
 msgid "Enter it again for confirmation:"
-msgstr "Επαναπληκτρολογήστε για επιβεβαίωση:"
+msgstr "Εισάγετε τον ξανά για επιβεβαίωση:"
 
 #: ../data/glade/change_password_dialog.glade.h:3
 msgid "Enter new password:"
-msgstr "Πληκτρολογήστε νέο κωδικό:"
+msgstr "Εισάγετε νέο κωδικό πρόσβασης:"
 
 #: ../data/glade/change_status_message_dialog.glade.h:1
 msgid "<b>Type your new status message</b>"
@@ -879,7 +872,7 @@ msgstr "Αποθήκευση ως προκαθορισμένο..."
 
 #: ../data/glade/chat_context_menu.glade.h:1
 msgid "Join _Group Chat"
-msgstr "Συμμετοχή σε _Ομαδική συζήτηση"
+msgstr "Συμμετοχή σε _ομαδική συζήτηση"
 
 #: ../data/glade/chat_context_menu.glade.h:2
 #: ../data/glade/chat_control_popup_menu.glade.h:4
@@ -902,14 +895,14 @@ msgstr "_Άνοιγμα προγράμματος αλληλογραφίας"
 
 #: ../data/glade/chat_context_menu.glade.h:6
 msgid "_Open Link in Browser"
-msgstr "_Άνοιγμα δεσμού σε περιηγητή"
+msgstr "_Άνοιγμα δεσμού στον περιηγητή"
 
 #: ../data/glade/chat_context_menu.glade.h:7
 #: ../data/glade/roster_window.glade.h:20
 #: ../data/glade/subscription_request_popup_menu.glade.h:1
 #: ../data/glade/systray_context_menu.glade.h:7
 msgid "_Start Chat"
-msgstr "_Έναρξη κουβέντας"
+msgstr "_Έναρξη συζήτησης"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:1
 msgid "Click to see past conversations with this contact"
@@ -941,7 +934,7 @@ msgstr "_Ιστορικό"
 #: ../data/glade/data_form_window.glade.h:1
 #, fuzzy
 msgid "Fill in the form."
-msgstr "Στην ομάδα"
+msgstr "Εκτέλεση στο Τερματικό"
 
 #: ../data/glade/data_form_window.glade.h:2
 msgid "Room Configuration"
@@ -957,7 +950,7 @@ msgstr "Λίστα ενεργών, ολοκληρωμένων και σταμα�
 
 #: ../data/glade/filetransfers.glade.h:2
 msgid "Cancel file transfer"
-msgstr "Ακύρωση της μεταφοράς αρχείου"
+msgstr "Ακύρωση μεταφοράς αρχείου"
 
 #: ../data/glade/filetransfers.glade.h:3
 msgid "Cancels the selected file transfer"
@@ -1005,7 +998,7 @@ msgstr ""
 
 #: ../data/glade/filetransfers.glade.h:12
 msgid "When a file transfer is complete show a popup notification"
-msgstr "Ειδοποίησε με όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
+msgstr "Ειδοποίηση όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
 
 #: ../data/glade/filetransfers.glade.h:13 ../src/filetransfers_window.py:769
 msgid "_Continue"
@@ -1118,7 +1111,7 @@ msgstr "Πατήστε για να δείτε παλιότερες συζητή�
 
 #: ../data/glade/gc_control_popup_menu.glade.h:4
 msgid "Configure _Room"
-msgstr "Τροποποίηση _δωματίου"
+msgstr "Ρύθμιση _δωματίου"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:5
 msgid "_Bookmark This Room"
@@ -1161,8 +1154,9 @@ msgid "_Voice"
 msgstr "_Φωνή"
 
 #: ../data/glade/groups_post_window.glade.h:1
+#, fuzzy
 msgid "Create new post"
-msgstr ""
+msgstr "Δημιουργία νέου προφίλ"
 
 #: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:259
 msgid "From"
@@ -1216,7 +1210,7 @@ msgstr "Κατασκευή προσαρμοσμένου ερωτήματος"
 
 #: ../data/glade/history_window.glade.h:2
 msgid "Conversation History"
-msgstr "Ιστορικό κουβέντας"
+msgstr "Ιστορικό συζητήσεων"
 
 #: ../data/glade/history_window.glade.h:3
 msgid "Query Builder..."
@@ -1245,7 +1239,7 @@ msgstr "Παραλήφθηκε μια πρόσκληση"
 
 #: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1149
 msgid "Join Group Chat"
-msgstr "Συμμετοχή σε Ομαδική συζήτηση"
+msgstr "Συμμετοχή σε ομαδική κουβέντα"
 
 #: ../data/glade/join_groupchat_window.glade.h:2
 #, fuzzy
@@ -1257,12 +1251,12 @@ msgstr "Καθορισμός του προφίλ μου κατά τη σύνδε
 #: ../data/glade/profile_window.glade.h:23
 #: ../data/glade/vcard_information_window.glade.h:29
 msgid "Nickname:"
-msgstr "Όνομα χρήστη:"
+msgstr "Ψευδώνυμο:"
 
 #: ../data/glade/join_groupchat_window.glade.h:4
 #: ../data/glade/manage_bookmarks_window.glade.h:5
 msgid "Password:"
-msgstr "Κωδικός:"
+msgstr "Κωδικός πρόσβασης:"
 
 #: ../data/glade/join_groupchat_window.glade.h:5
 msgid "Recently:"
@@ -1289,21 +1283,20 @@ msgstr "Αυτόματη είσοδος"
 #: ../data/glade/manage_bookmarks_window.glade.h:2
 msgid "If checked, Gajim will join this group chat on startup"
 msgstr ""
-"Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτή την ομαδική συζήτηση "
-"κατά την εκκίνηση"
+"Αν επιλεγεί, το Gajim θα σας συνδέει αυτόματα σε αυτό το δωμάτιο κατά την "
+"εκκίνηση"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:3
 msgid "Manage Bookmarks"
 msgstr "Διαχείριση σελιδοδεικτών"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:6
-#, fuzzy
 msgid "Print status:"
-msgstr "Εμφάνιση χρόνου:"
+msgstr "Εμφάνιση κατάστασης:"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:8
 msgid "Server:"
-msgstr "Διακομιστής:"
+msgstr "Εξυπηρετητής:"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:9
 msgid "Title:"
@@ -1363,11 +1356,11 @@ msgstr "_Αποστολή"
 
 #: ../data/glade/passphrase_dialog.glade.h:1
 msgid "Passphrase"
-msgstr "Κωδικοφράση"
+msgstr "Φράση πρόσβασης"
 
 #: ../data/glade/preferences_window.glade.h:1
 msgid "<b>Advanced Configuration Editor</b>"
-msgstr "<b>Επεξεργασία ρυθμίσεων για προχωρημένους</b>"
+msgstr "<b>Επεξεργασία προχωρημένων ρυθμίσεων</b>"
 
 #: ../data/glade/preferences_window.glade.h:2
 msgid "<b>Applications</b>"
@@ -1383,9 +1376,8 @@ msgid "<b>Format of a line</b>"
 msgstr "<b>Μορφή μια γραμμής κουβέντας</b>"
 
 #: ../data/glade/preferences_window.glade.h:6
-#, fuzzy
 msgid "<b>GMail Options</b>"
-msgstr "<b>Εφαρμογές</b>"
+msgstr "<b>Επιλογές Gmail</b>"
 
 #: ../data/glade/preferences_window.glade.h:7
 msgid "<b>Interface Customization</b>"
@@ -1425,7 +1417,7 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:18
 msgid "Also known as iChat style"
-msgstr "Επίσης γνωστό ως στυλ iChat"
+msgstr "Γνωστό επίσης ως στυλ iChat"
 
 #: ../data/glade/preferences_window.glade.h:19
 msgid "Always check to see if Gajim is the _default Jabber client on startup"
@@ -1484,9 +1476,8 @@ msgid "Configure color and font of the interface"
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:32
-#, fuzzy
 msgid "Default Status Messages"
-msgstr "Μήνυμα κατάστασης"
+msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
 #: ../data/glade/preferences_window.glade.h:33
 msgid "Default status _iconset:"
@@ -1659,7 +1650,6 @@ msgid "Notify me about contacts that: "
 msgstr "Ειδοποίηση όταν μια επαφή:"
 
 #: ../data/glade/preferences_window.glade.h:65
-#, fuzzy
 msgid "Notify on new _GMail email"
 msgstr "Ειδοποίηση σε νέο μήνυμα στο _Gmail"
 
@@ -1700,7 +1690,7 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:74
 msgid "Show only in _roster"
-msgstr "Εμφά_νισε το μόνο στο κύριο παράθυρο"
+msgstr "Εμφά_νιση το μόνο στο κύριο παράθυρο"
 
 #: ../data/glade/preferences_window.glade.h:75
 msgid "Sign _in"
@@ -1735,15 +1725,16 @@ msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέ�
 #: ../data/glade/preferences_window.glade.h:82
 #, fuzzy
 msgid "Treat all incoming messages as:"
-msgstr "_Εισερχόμενο μήνυμα:"
+msgstr "%d μη αναγνωσμένο μεμονωμένο μήνυμα"
 
 #: ../data/glade/preferences_window.glade.h:83
 msgid "Use _transports iconsets"
 msgstr "Χρήση σετ _εικονιδίων κατάστασης:"
 
 #: ../data/glade/preferences_window.glade.h:84
+#, fuzzy
 msgid "Use system _default"
-msgstr ""
+msgstr "Χρήση _προκαθορισμένου χρώματος"
 
 #: ../data/glade/preferences_window.glade.h:85
 msgid "Use t_rayicon (aka. notification area icon)"
@@ -1757,9 +1748,9 @@ msgid ""
 "you are not already chatting with"
 msgstr ""
 "Όταν ληφθεί ένα νέο συμβάν (μήνυμα, αίτημα για μεταφορά αρχείου κλπ.), "
-"μπορεί να χρησιμοποιηθούν οι παρακάτω μέθοδοι για να ειδοποιηθείτε. ΣΗΜΕΙΩΣΗ:"
-"Συμβάντα για νέα μηνύματα δημιουργούνται μόνο όταν λαμβάνονται μηνύματα από "
-"επαφές με τις οποίες δεν κουβεντιάζετε ήδη"
+"μπορεί να χρησιμοποιηθούν οι παρακάτω μέθοδοι για να ειδοποιηθείτε. "
+"Σημειώστε πως συμβάντα για νέα μηνύματα δημιουργούνται μόνο όταν λαμβάνονται "
+"μηνύματα από επαφές με τις οποίες δεν συζητάτε ήδη"
 
 #: ../data/glade/preferences_window.glade.h:87
 msgid "When new event is received"
@@ -1772,9 +1763,8 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:89
-#, fuzzy
 msgid "_Advanced Notifications Control..."
-msgstr "Επεξεργασία ρυθμίσεων για προχωρημένους"
+msgstr "_Προχωρημένος έλεγχος ειδοποιήσεων..."
 
 #: ../data/glade/preferences_window.glade.h:90
 msgid "_Browser:"
@@ -1794,7 +1784,7 @@ msgstr "_Υπογράμμιση λέξεων με τυπογραφικά λάθ�
 
 #: ../data/glade/preferences_window.glade.h:94
 msgid "_Ignore events from contacts not in the roster"
-msgstr "_Αγνόησε γεγονότα από επαφές που δεν είναι στη λίστα επαφών"
+msgstr "Να _αγνοούνται γεγονότα από επαφές που δεν είναι στη λίστα επαφών"
 
 #: ../data/glade/preferences_window.glade.h:95
 msgid "_Incoming message:"
@@ -1858,59 +1848,56 @@ msgid "Privacy Lists:"
 msgstr "Προσωπικές συζητήσεις"
 
 #: ../data/glade/privacy_list_window.glade.h:1
+#, fuzzy
 msgid "<b>Add / Edit a rule</b>"
-msgstr ""
+msgstr "Επεξεργασία καταχώρησης μενού"
 
 #: ../data/glade/privacy_list_window.glade.h:2
-#, fuzzy
 msgid "<b>List of rules</b>"
-msgstr "<b>Μορφή μια γραμμής κουβέντας</b>"
+msgstr "<b>Λίστα κανόνων</b>"
 
 #: ../data/glade/privacy_list_window.glade.h:3
+#, fuzzy
 msgid "<i>Privacy List</i>"
-msgstr ""
+msgstr "backdrops.list"
 
 #: ../data/glade/privacy_list_window.glade.h:4
+#, fuzzy
 msgid "Active for this session"
-msgstr ""
+msgstr "Αποθήκευ_ση της συνεδρίας"
 
 #: ../data/glade/privacy_list_window.glade.h:5
 #, fuzzy
 msgid "Active on each startup"
-msgstr "Σύνδεση κατά την ε_κκίνηση του Gajim"
+msgstr "Εμφάνιση συμβουλών κατά την _εκκίνηση"
 
 #: ../data/glade/privacy_list_window.glade.h:6
 msgid "All"
-msgstr ""
+msgstr "Όλα"
 
 #: ../data/glade/privacy_list_window.glade.h:7
 msgid "Allow"
-msgstr ""
+msgstr "Επέτρεψε"
 
 #: ../data/glade/privacy_list_window.glade.h:9
-#, fuzzy
 msgid "JabberID"
-msgstr "Jabber ID:"
+msgstr "JabberID"
 
 #: ../data/glade/privacy_list_window.glade.h:10
-#, fuzzy
 msgid "Order:"
-msgstr "Διακομιστής:"
+msgstr "Σειρά:"
 
 #: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1863
-#, fuzzy
 msgid "Privacy List"
-msgstr "Λίστα Ban"
+msgstr ""
 
 #: ../data/glade/privacy_list_window.glade.h:12
-#, fuzzy
 msgid "all by subscription"
-msgstr "_Εγγραφή"
+msgstr "όλους κατά συνδρομή"
 
 #: ../data/glade/privacy_list_window.glade.h:13
-#, fuzzy
 msgid "all in the group"
-msgstr "Στην ομάδα"
+msgstr "όλους στην ομάδα"
 
 #: ../data/glade/privacy_list_window.glade.h:14
 msgid ""
@@ -1923,21 +1910,22 @@ msgstr ""
 #: ../data/glade/privacy_list_window.glade.h:18
 #, fuzzy
 msgid "to send me messages"
-msgstr "Αποστολή μηνύματος"
+msgstr "Αποστολή επιλεγμένου αρχείου στο \"%s\""
 
 #: ../data/glade/privacy_list_window.glade.h:19
+#, fuzzy
 msgid "to send me queries"
-msgstr ""
+msgstr "Αποστολή επιλεγμένου αρχείου στο \"%s\""
 
 #: ../data/glade/privacy_list_window.glade.h:20
 #, fuzzy
 msgid "to send me status"
-msgstr "Ζήτα να βλέπεις την κατάσταση του/της"
+msgstr "Αποστολή επιλεγμένου αρχείου στο \"%s\""
 
 #: ../data/glade/privacy_list_window.glade.h:21
 #, fuzzy
 msgid "to view my status"
-msgstr "Επίτρεψε τον/την να βλέπει την κατάστασή μου"
+msgstr "Επιθυμώ αυτή η επαφή να γνωρίζει την κατάστασή μου μετά την αφαίρεση"
 
 #. "About" is the text of a tab of vcard window
 #: ../data/glade/profile_window.glade.h:2
@@ -1953,7 +1941,7 @@ msgstr "Διεύθυνση"
 #: ../data/glade/profile_window.glade.h:4
 #, fuzzy
 msgid "Avatar:"
-msgstr "Κα_θορισμός Avatar"
+msgstr "_Ορισμός Avatar"
 
 #: ../data/glade/profile_window.glade.h:5
 #: ../data/glade/vcard_information_window.glade.h:6
@@ -1978,7 +1966,7 @@ msgstr "Χώρα:"
 #: ../data/glade/profile_window.glade.h:9
 #: ../data/glade/vcard_information_window.glade.h:14
 msgid "Department:"
-msgstr "Τμήμα"
+msgstr "Τμήμα:"
 
 #: ../data/glade/profile_window.glade.h:10
 #: ../data/glade/vcard_information_window.glade.h:15
@@ -1990,7 +1978,7 @@ msgstr "Ε-Mail:"
 #: ../data/glade/profile_window.glade.h:11
 #: ../data/glade/vcard_information_window.glade.h:16
 msgid "Extra Address:"
-msgstr "Επιπλέον οδός:"
+msgstr "Επιπλέον διεύθυνση:"
 
 #. Family Name
 #: ../data/glade/profile_window.glade.h:13
@@ -2008,7 +1996,7 @@ msgstr "Μορφή: ΕΕΕΕ-ΜΜ-ΗΗ"
 #: ../data/glade/profile_window.glade.h:17
 #: ../data/glade/vcard_information_window.glade.h:22
 msgid "Given:"
-msgstr "Δοθέν όνομα"
+msgstr "Δοθέν όνομα:"
 
 #: ../data/glade/profile_window.glade.h:18
 #: ../data/glade/vcard_information_window.glade.h:23
@@ -2028,9 +2016,8 @@ msgstr "Περισσότερα"
 
 #: ../data/glade/profile_window.glade.h:24
 #: ../data/glade/vcard_information_window.glade.h:31
-#, fuzzy
 msgid "Personal Info"
-msgstr "Προσωπικές Πληροφορίες"
+msgstr "Προσωπικές πληροφορίες"
 
 #: ../data/glade/profile_window.glade.h:26
 #: ../data/glade/vcard_information_window.glade.h:32
@@ -2089,7 +2076,7 @@ msgstr "Αφαίρεση λογαριασμού μόν_ο από το Gajim"
 
 #: ../data/glade/remove_account_window.glade.h:3
 msgid "Remove account from Gajim and from _server"
-msgstr "Αφαίρεση λογαριασμού από το Gajim και από το διακομι_στή"
+msgstr "Αφαίρεση λογαριασμού από το Gajim και από τον _εξυπηρετητή"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:1
 #, fuzzy
@@ -2099,12 +2086,12 @@ msgstr "Ζήτα να βλέπεις την κατάσταση του/της"
 #: ../data/glade/roster_contact_context_menu.glade.h:2
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:1
 msgid "Add Special _Notification"
-msgstr "Προσθήκη ειδικής γνωστοποίησης"
+msgstr "Προσθήκη ειδικής _γνωστοποίησης"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:3
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:2
 msgid "Assign Open_PGP Key"
-msgstr "Ανάθεση Open_PGP κλειδιού"
+msgstr "Ανάθεση κλειδιού Open_PGP"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:4
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:3
@@ -2114,13 +2101,15 @@ msgstr "Επεξεργασία _ομάδων"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:5
 #: ../src/roster_window.py:2211
+#, fuzzy
 msgid "Execute Command..."
-msgstr ""
+msgstr "Αδυναμία εκτέλεσης της εντολής:"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:6
 #: ../src/roster_window.py:2034
+#, fuzzy
 msgid "In_vite to"
-msgstr ""
+msgstr "Αδυναμία φόρτωσης"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:7
 #: ../data/glade/systray_context_menu.glade.h:2
@@ -2135,7 +2124,7 @@ msgstr "Έναρξη _συζήτησης"
 #: ../data/glade/roster_contact_context_menu.glade.h:11
 #, fuzzy
 msgid "_Allow him/her to see my status"
-msgstr "Επίτρεψε τον/την να βλέπει την κατάστασή μου"
+msgstr "Επέτρεψε τον/την να βλέπει την κατάστασή μου"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:12
 #, fuzzy
@@ -2147,7 +2136,7 @@ msgstr "Απαγόρευσε τον/την να βλέπει την κατάστ
 #: ../src/roster_window.py:2028 ../src/roster_window.py:2125
 #: ../src/roster_window.py:2232
 msgid "_Remove from Roster"
-msgstr "Α_φαίρεση από τη Λίστα επαφών"
+msgstr "Α_φαίρεση από τη λίστα επαφών"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:15
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:7
@@ -2157,7 +2146,7 @@ msgstr "_Μετονομασία"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:16
 msgid "_Subscription"
-msgstr "_Εγγραφή"
+msgstr "_Συνδρομή"
 
 #: ../data/glade/roster_window.glade.h:1
 msgid "A_ccounts"
@@ -2182,12 +2171,12 @@ msgstr "Online βοήθεια"
 #: ../data/glade/roster_window.glade.h:7
 #, fuzzy
 msgid "Profile, A_vatar"
-msgstr "Προφίλ, Avatar"
+msgstr "Όνομα προφίλ:"
 
 #: ../data/glade/roster_window.glade.h:8
 #, fuzzy
 msgid "Show Trans_ports"
-msgstr "Μεταφορές"
+msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
 #: ../data/glade/roster_window.glade.h:9
 msgid "Show _Offline Contacts"
@@ -2223,13 +2212,12 @@ msgid "_Quit"
 msgstr "_Έξοδος"
 
 #: ../data/glade/roster_window.glade.h:21
-#, fuzzy
 msgid "_View"
-msgstr "_Φωνή"
+msgstr "_Προβολή"
 
 #: ../data/glade/service_discovery_window.glade.h:1
 msgid "G_o"
-msgstr "Πάμ_ε"
+msgstr "_Μετάβαση"
 
 #: ../data/glade/service_discovery_window.glade.h:2
 msgid "_Address:"
@@ -2245,7 +2233,7 @@ msgstr "Εγγραφή σε"
 
 #: ../data/glade/service_registration_window.glade.h:2
 msgid "_Cancel"
-msgstr "_Ακύρωση"
+msgstr "_Άκυρο"
 
 #: ../data/glade/service_registration_window.glade.h:3
 msgid "_OK"
@@ -2289,12 +2277,12 @@ msgstr "_Απάντηση"
 
 #: ../data/glade/single_message_window.glade.h:10
 msgid "_Send & Close"
-msgstr "_Αποστολή & Κλείσιμο"
+msgstr "_Αποστολή & κλείσιμο"
 
 #: ../data/glade/subscription_request_window.glade.h:1
 #, fuzzy
 msgid "Au_thorize"
-msgstr "_Εξουσιοδότηση"
+msgstr "Αμερική/Πορτ-Ο-Πρενς"
 
 #: ../data/glade/subscription_request_window.glade.h:2
 #, fuzzy
@@ -2320,13 +2308,12 @@ msgid "_Deny"
 msgstr "_Άρνηση"
 
 #: ../data/glade/systray_context_menu.glade.h:1
-#, fuzzy
 msgid "Mute Sounds"
-msgstr "Αρχεία ήχου Wav"
+msgstr "Σίγαση ήχων"
 
 #: ../data/glade/systray_context_menu.glade.h:3
 msgid "Show All Pending _Events"
-msgstr "Εμφάνιση όλων των γεγονότων που εκρεμούν"
+msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμούν"
 
 #: ../data/glade/systray_context_menu.glade.h:4
 msgid "Show _Roster"
@@ -2346,15 +2333,13 @@ msgid "Client:"
 msgstr "Εφαρμογή:"
 
 #: ../data/glade/vcard_information_window.glade.h:9
-#, fuzzy
 msgid "Comments"
-msgstr "Σχόλιο: %s"
+msgstr "Σχόλια"
 
 #: ../data/glade/vcard_information_window.glade.h:11
 #: ../data/glade/zeroconf_information_window.glade.h:1
-#, fuzzy
 msgid "Contact"
-msgstr "Επαφές"
+msgstr "Επικοινωνία"
 
 #: ../data/glade/vcard_information_window.glade.h:12
 msgid "Contact Information"
@@ -2388,7 +2373,7 @@ msgstr "Εγγραφή:"
 #: ../data/glade/vcard_information_window.glade.h:47
 #: ../data/glade/zeroconf_information_window.glade.h:10
 msgid "_Log conversation history"
-msgstr "_Καταγραφή ιστορικού κουβέντας"
+msgstr "_Καταγραφή ιστορικού συζητήσεων"
 
 #: ../data/glade/xml_console_window.glade.h:1
 msgid "<b>Jabber Traffic</b>"
@@ -2423,24 +2408,21 @@ msgstr "_Παρουσία"
 
 #: ../data/glade/zeroconf_information_window.glade.h:3
 #: ../data/glade/zeroconf_properties_window.glade.h:6
-#, fuzzy
 msgid "First Name:"
 msgstr "Όνομα:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:5
 #: ../data/glade/zeroconf_properties_window.glade.h:14
-#, fuzzy
 msgid "Last Name:"
-msgstr "Όνομα:"
+msgstr "Επώνυμο:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:6
 msgid "Local jid:"
-msgstr ""
+msgstr "Τοπικό jid:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:7
-#, fuzzy
 msgid "Personal"
-msgstr "Προσωπικές Πληροφορίες"
+msgstr "Προσωπικά"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:11
 msgid ""
@@ -2450,23 +2432,19 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/zeroconf_properties_window.glade.h:15
-#, fuzzy
 msgid "Modify Account"
-msgstr "_Επεξεργασία λογαριασμού..."
+msgstr "Επεξεργασία λογαριασμού"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:21
-#, fuzzy
 msgid "Use custom port:"
-msgstr "Χρήση προσαρμοσμένου διακομιστή/θύρας"
+msgstr "Χρήση προσαρμοσμένης θύρας:"
 
 #. For i18n
 #: ../src/advanced.py:51
-#, fuzzy
 msgid "Activated"
-msgstr "Ενεργοποιημένο"
+msgstr "Ενεργό"
 
 #: ../src/advanced.py:51
-#, fuzzy
 msgid "Deactivated"
 msgstr "Ανενεργό"
 
@@ -2475,9 +2453,8 @@ msgid "Boolean"
 msgstr ""
 
 #: ../src/advanced.py:54
-#, fuzzy
 msgid "Integer"
-msgstr "Στην ομάδα"
+msgstr "Ακέραιος"
 
 #: ../src/advanced.py:55
 msgid "Text"
@@ -2485,7 +2462,7 @@ msgstr "Κείμενο"
 
 #: ../src/advanced.py:56
 msgid "Color"
-msgstr ""
+msgstr "Χρώμα"
 
 #: ../src/advanced.py:65
 msgid "Preference Name"
@@ -2516,7 +2493,7 @@ msgstr "Μυστικό"
 #. echo "{_('en'):'en'",$LANG"}"
 #: ../src/chat_control.py:52
 msgid "English"
-msgstr ""
+msgstr "Αγγλικά"
 
 #: ../src/chat_control.py:52
 msgid "Belarusian"
@@ -2524,7 +2501,7 @@ msgstr ""
 
 #: ../src/chat_control.py:52
 msgid "Bulgarian"
-msgstr ""
+msgstr "Βουλγαρικά"
 
 #: ../src/chat_control.py:52
 msgid "Briton"
@@ -2532,29 +2509,27 @@ msgstr ""
 
 #: ../src/chat_control.py:52
 msgid "Czech"
-msgstr ""
+msgstr "Τσέχικα"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "German"
-msgstr "Γενικά"
+msgstr "Γερμανικά"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Greek"
-msgstr "πράσινο"
+msgstr "Εληνικά"
 
 #: ../src/chat_control.py:52
 msgid "British"
-msgstr ""
+msgstr "Βρετανικά"
 
 #: ../src/chat_control.py:52
 msgid "Esperanto"
-msgstr ""
+msgstr "Εσπεράντο"
 
 #: ../src/chat_control.py:52
 msgid "Spanish"
-msgstr ""
+msgstr "Ισπανικά"
 
 #: ../src/chat_control.py:52
 msgid "Basc"
@@ -2562,58 +2537,55 @@ msgstr ""
 
 #: ../src/chat_control.py:52
 msgid "French"
-msgstr ""
+msgstr "Γαλλικά"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Croatian"
-msgstr "Περιοχή"
+msgstr "Κροατικά"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Italian"
-msgstr "Πλάγια"
+msgstr "Ιταλικά"
 
 #: ../src/chat_control.py:52
 msgid "Norwegian (b)"
-msgstr ""
+msgstr "Νορβηγικά (b)"
 
 #: ../src/chat_control.py:52
 msgid "Dutch"
-msgstr ""
+msgstr "Ολλανδικά"
 
 #: ../src/chat_control.py:52
 msgid "Norwegian"
-msgstr ""
+msgstr "Νορβηγικά"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Polish"
-msgstr "_Δημοσιοποίηση"
+msgstr "Πολωνέζικα"
 
 #: ../src/chat_control.py:52
 msgid "Portuguese"
-msgstr ""
+msgstr "Πορτογαλικά"
 
 #: ../src/chat_control.py:52
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Πορτογαλικά Βραζιλίας"
 
 #: ../src/chat_control.py:52
 msgid "Russian"
-msgstr ""
+msgstr "Ρώσικα"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
-msgstr ""
+msgstr "Σλοβάκικα"
 
 #: ../src/chat_control.py:52
 msgid "Swedish"
-msgstr ""
+msgstr "Σουηδικά"
 
 #: ../src/chat_control.py:52
 msgid "Chinese (Ch)"
-msgstr ""
+msgstr "Κινέζικα (Ch)"
 
 #: ../src/chat_control.py:208 ../src/dialogs.py:1517
 msgid ""
@@ -2625,11 +2597,11 @@ msgid ""
 "Highlighting misspelled words feature will not be used"
 msgstr ""
 "Αν αυτή δεν είναι η γλώσσα για την οποία επιθυμείτε να έχετε υπογράμμιση "
-"τυπογραφικών λαθών, τότε παρακαλείστε να καθορίσετε την $LANG όπως της "
+"ορθογραφικών λαθών, τότε παρακαλείστε να καθορίσετε την $LANG όπως της "
 "αρμόζει. Πχ. για Ελληνικά κάντε export LANG=el_GR ή export LANG=el_GR.UTF-8 "
 "στο ~/.bash_profile ή για όλους τους χρήστες στο /etc/profile.\n"
 "\n"
-"Η υπογράμμιση τυπογραφικών λαθών απενεργοποιήθηκε"
+"Η υπογράμμιση ορθογραφικών λαθών απενεργοποιήθηκε"
 
 #: ../src/chat_control.py:247
 msgid "Spelling language"
@@ -2646,12 +2618,12 @@ msgstr "Δε μπορεί να σταλεί το μήνυμα σας εκτός 
 
 #: ../src/chat_control.py:852
 msgid "Chats"
-msgstr "Κουβέντες"
+msgstr "Συζητήσεις"
 
 #: ../src/chat_control.py:1034
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
-msgstr "%(nickname)s: %(message)s"
+msgstr ""
 
 #. we talk about a contact here
 #: ../src/chat_control.py:1123
@@ -2706,16 +2678,16 @@ msgstr "Κάθε %s _λεπτά"
 
 #: ../src/config.py:353
 msgid "Active"
-msgstr "Ενεργοποιημένο"
+msgstr "Ενεργό"
 
 #: ../src/config.py:361
 msgid "Event"
 msgstr "Γεγονός"
 
 #: ../src/config.py:684 ../src/gajim.py:2165
-#, fuzzy, python-format
+#, python-format
 msgid "Dictionary for lang %s not available"
-msgstr "Δεν υπάρχει διαθέσιμη σύνδεση"
+msgstr "Δεν υπάρχει διαθέσιμο λεξικό για τη γλώσσα %s"
 
 #: ../src/config.py:685 ../src/gajim.py:2166
 #, python-format
@@ -2758,12 +2730,12 @@ msgstr "Επισήμανση "
 
 #: ../src/config.py:1051
 msgid "Group Chat Message Received"
-msgstr "Λήφθηκε μήνυμα ομαδικής κουβέντας"
+msgstr "Λήφθηκε μήνυμα ομαδικής συζήτησης"
 
 #: ../src/config.py:1058
 #, fuzzy
 msgid "GMail Email Received"
-msgstr "Παραλήφθηκε μια πρόσκληση"
+msgstr "Αντιγραφή διεύθυνσης email"
 
 #: ../src/config.py:1261
 msgid "OpenPGP is not usable in this computer"
@@ -2823,7 +2795,7 @@ msgstr ""
 
 #: ../src/config.py:1400
 msgid "Invalid entry"
-msgstr "Μη έγκυρη καταχώρηση"
+msgstr "Μη έγκυρη εγγραφή"
 
 #: ../src/config.py:1401
 msgid "Custom port must be a port number."
@@ -2881,7 +2853,7 @@ msgstr "Σφάλμα κατά τη λήψη μυστικών κλειδιών"
 
 #: ../src/config.py:1605 ../src/config.py:3402
 msgid "There was a problem retrieving your OpenPGP secret keys."
-msgstr "Σφάλμα κατά τη λήψη του OpenPGP μυστικών κλειδιών σας."
+msgstr "Σφάλμα κατά τη λήψη των μυστικών κλειδιών OpenPGP σας."
 
 #: ../src/config.py:1608 ../src/config.py:3405
 msgid "OpenPGP Key Selection"
@@ -2889,7 +2861,7 @@ msgstr "Επιλογή κλειδιού OpenPGP"
 
 #: ../src/config.py:1609 ../src/config.py:3406
 msgid "Choose your OpenPGP key"
-msgstr "Επιλέξτε το OpenPGP κλειδί σας"
+msgstr "Επιλέξτε το κλειδί OpenPGP σας"
 
 #. Name column
 #: ../src/config.py:1839 ../src/disco.py:741 ../src/disco.py:1467
@@ -2899,12 +2871,12 @@ msgstr "Όνομα"
 
 #: ../src/config.py:1842
 msgid "Server"
-msgstr "Διακομιστής"
+msgstr "Εξυπηρετητής"
 
 #: ../src/config.py:1906
 msgid "Read all pending events before removing this account."
 msgstr ""
-"Ανάγνωση όλων των γενονότων που εκκρεμούν, πριν την αφαίρεση αυτού του "
+"Ανάγνωση όλων των γεγονότων που εκκρεμούν, πριν την αφαίρεση αυτού του "
 "λογαριασμού."
 
 #: ../src/config.py:1943
@@ -2917,9 +2889,8 @@ msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr ""
 
 #: ../src/config.py:2003
-#, fuzzy
 msgid "Account Local already exists."
-msgstr "Το όνομα λογαριασμού είναι ήδη σε χρήση"
+msgstr "Υπάρχει ήδη τοπικό προφίλ με αυτό το όνομα"
 
 #: ../src/config.py:2004
 msgid "Please rename or remove it before enabling link-local messaging."
@@ -3064,28 +3035,27 @@ msgid "If you remove it, the connection will be lost."
 msgstr "Αν αφαιρεθεί, η σύνδεση θα χαθεί."
 
 #: ../src/config.py:2622
-#, fuzzy
 msgid "Default"
-msgstr "Διαγραφή"
+msgstr "Προεπιλογή"
 
 #: ../src/config.py:2622
 #, fuzzy
 msgid "?print_status:All"
-msgstr "Εμφάνιση χρόνου:"
+msgstr "Εκτύπωση όλων των σελίδων"
 
 #: ../src/config.py:2623
 msgid "Enter and leave only"
-msgstr ""
+msgstr "Είσοδος και έξοδος μόνο"
 
 #: ../src/config.py:2624
 #, fuzzy
 msgid "?print_status:None"
-msgstr "Εμφάνιση χρόνου:"
+msgstr "Εκτύπωση όλων των σελίδων"
 
 #: ../src/config.py:2692
 #, fuzzy
 msgid "New Group Chat"
-msgstr "Ομαδική συζήτηση"
+msgstr "Αρχηγός ομάδας παραθύρων"
 
 #: ../src/config.py:2725
 msgid "This bookmark has invalid data"
@@ -3175,7 +3145,7 @@ msgstr ""
 #: ../src/conversation_textview.py:340
 #, fuzzy, python-format
 msgid "_Actions for \"%s\""
-msgstr "Ενέργειες για \"%s\""
+msgstr "Α_ναζήτηση για:"
 
 #: ../src/conversation_textview.py:352
 msgid "Read _Wikipedia Article"
@@ -3202,8 +3172,9 @@ msgid "Web _Search for it"
 msgstr "Δικτυακή ανα_ζήτηση γι' αυτό"
 
 #: ../src/conversation_textview.py:395
+#, fuzzy
 msgid "Open as _Link"
-msgstr ""
+msgstr "Το άνοιγμα του συνδέσμου απέτυχε"
 
 #: ../src/conversation_textview.py:752
 msgid "Yesterday"
@@ -3225,12 +3196,12 @@ msgstr "Θέμα: %s\n"
 #: ../src/dialogs.py:59
 #, fuzzy, python-format
 msgid "Contact name: <i>%s</i>"
-msgstr "Όνομα επαφής: <i>%s</i>"
+msgstr "Όνομα εικονιδίου"
 
 #: ../src/dialogs.py:61
 #, fuzzy, python-format
 msgid "Jabber ID: <i>%s</i>"
-msgstr "JID: <i>%s</i>"
+msgstr "ID συστήματος:"
 
 #: ../src/dialogs.py:211
 msgid "Group"
@@ -3268,25 +3239,27 @@ msgstr "Εισάγετε ένα όνομα για αυτό το μήνυμα κ�
 #: ../src/dialogs.py:417
 #, fuzzy
 msgid "AIM Address:"
-msgstr "_Διεύθυνση:"
+msgstr "Αντιγραφή διεύθυνσης email"
 
 #: ../src/dialogs.py:418
+#, fuzzy
 msgid "GG Number:"
-msgstr ""
+msgstr "Αριθμός χώρων εργασίας:"
 
 #: ../src/dialogs.py:419
+#, fuzzy
 msgid "ICQ Number:"
-msgstr ""
+msgstr "Αριθμός χώρων εργασίας:"
 
 #: ../src/dialogs.py:420
 #, fuzzy
 msgid "MSN Address:"
-msgstr "_Διεύθυνση:"
+msgstr "Αντιγραφή διεύθυνσης email"
 
 #: ../src/dialogs.py:421
 #, fuzzy
 msgid "Yahoo! Address:"
-msgstr "Επιπλέον οδός:"
+msgstr "Αντιγραφή διεύθυνσης email"
 
 #: ../src/dialogs.py:457
 #, python-format
@@ -3318,7 +3291,7 @@ msgstr "Αυτή η επαφή υπάρχει ήδη στη λίστα επαφ�
 #: ../src/dialogs.py:668
 #, fuzzy
 msgid "User ID:"
-msgstr "Ταυτότητα χρήστη:"
+msgstr "Το αναγνωριστικό χρήστη δεν ταιριάζει"
 
 #: ../src/dialogs.py:731
 msgid "A GTK+ jabber client"
@@ -3326,16 +3299,15 @@ msgstr "Ένα πρόγραμμα για το Jabber γραμμένο σε GTK+"
 
 #: ../src/dialogs.py:732
 msgid "GTK+ Version:"
-msgstr ""
+msgstr "Έκδοση GTK+:"
 
 #: ../src/dialogs.py:733
 msgid "PyGTK Version:"
-msgstr ""
+msgstr "Έκδοση PyGTK:"
 
 #: ../src/dialogs.py:747
-#, fuzzy
 msgid "Current Developers:"
-msgstr "Προηγούμενοι δημιουργοί:"
+msgstr "Δημιουργοί:"
 
 #: ../src/dialogs.py:749
 msgid "Past Developers:"
@@ -3357,13 +3329,13 @@ msgid "translator-credits"
 msgstr ""
 "Νίκος Κουρεμένος <kourem@gmail.com>\n"
 "Φίλιππος Παπαδόπουλος <psybases@gmail.com>\n"
-"Σταύρος Γιαννούρης <stavrosg2002@freemail.gr>\n"
+"Σταύρος Γιαννούρης <stavrosg@hellug.gr>\n"
 "Στάθης Καμπέρης <ekamperi@auth.gr>"
 
 #: ../src/dialogs.py:909
 #, fuzzy, python-format
 msgid "Unable to bind to port %s."
-msgstr "Αδυναμία συμμετοχής στο δωμάτιο"
+msgstr "Δεν ήταν δυνατό το άνοιγμα της οθόνης \"%s\"."
 
 #: ../src/dialogs.py:910
 msgid ""
@@ -3409,8 +3381,9 @@ msgstr ""
 "Το όνομα του δωματίου ή του διακομιστή περιέχει μη επιτρεπόμενους χαρακτήρες."
 
 #: ../src/dialogs.py:1228
+#, fuzzy
 msgid "This is not a group chat"
-msgstr ""
+msgstr "Αυτή η μορφή συμπίεσης δεν υποστηρίζεται:"
 
 #: ../src/dialogs.py:1229
 #, fuzzy, python-format
@@ -3432,8 +3405,8 @@ msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
 msgstr ""
-"Συμπληρώστε την ταυτότητα της επαφής προς την οποία\n"
-"θέλετε να στείλετε ένα μήνυμα συζήτησης:"
+"Συμπληρώστε το jid ή το ψευδώνυμο της επαφής προς\n"
+"την οποία θέλετε να στείλετε ένα μήνυμα συζήτησης:"
 
 #. if offline or connecting
 #: ../src/dialogs.py:1296 ../src/dialogs.py:1655 ../src/dialogs.py:1786
@@ -3446,14 +3419,13 @@ msgid "Please make sure you are connected with \"%s\"."
 msgstr "Παρακαλώ βεβαιωθείτε ότι είστε συνδεδεμένοι με το \"%s\"."
 
 #: ../src/dialogs.py:1306 ../src/dialogs.py:1309
-#, fuzzy
 msgid "Invalid JID"
-msgstr "Μη έγκυρο Jabber ID"
+msgstr "Μη έγκυρο JID"
 
 #: ../src/dialogs.py:1309
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to parse \"%s\"."
-msgstr "Αδύνατη η εγγραφή αρχείου στο %s"
+msgstr "Δεν ήταν δυνατή η ανάγνωση του \"%s\"."
 
 #: ../src/dialogs.py:1318
 msgid "Without a connection, you can not change your password."
@@ -3515,9 +3487,8 @@ msgid "Groupchat Invitation"
 msgstr "Πρόσκληση ομαδικής κουβέντας"
 
 #: ../src/dialogs.py:1400 ../src/notify.py:203 ../src/notify.py:432
-#, fuzzy
 msgid "Contact Changed Status"
-msgstr "Αποσύνδεση επαφής"
+msgstr "Η επαφή άλλαξε κατάσταση"
 
 #: ../src/dialogs.py:1585
 #, fuzzy, python-format
@@ -3566,14 +3537,14 @@ msgid "XML Console"
 msgstr "XML Κονσόλα"
 
 #: ../src/dialogs.py:1857
-#, python-format
+#, fuzzy, python-format
 msgid "Privacy List <b><i>%s</i></b>"
-msgstr ""
+msgstr "backdrops.list"
 
 #: ../src/dialogs.py:1861
-#, python-format
+#, fuzzy, python-format
 msgid "Privacy List for %s"
-msgstr ""
+msgstr "Σύνταξη συντόμευσης για :"
 
 #: ../src/dialogs.py:1909
 #, python-format
@@ -3583,22 +3554,20 @@ msgstr ""
 #: ../src/dialogs.py:1912
 #, fuzzy, python-format
 msgid "Order: %s, action: %s"
-msgstr "Περιγραφή: %s"
+msgstr "Εικονίδια δράσεων"
 
 #: ../src/dialogs.py:1954
-#, fuzzy
 msgid "<b>Edit a rule</b>"
-msgstr "<b>Προσαρμοσμένες Ρυθμίσεις</b>"
+msgstr "<b>Επεξεργασία κανόνα</b>"
 
 #: ../src/dialogs.py:2041
-#, fuzzy
 msgid "<b>Add a rule</b>"
-msgstr "<b>Προσαρμοσμένες Ρυθμίσεις</b>"
+msgstr "<b>Προσθήκη κανόνα</b>"
 
 #: ../src/dialogs.py:2137
-#, python-format
+#, fuzzy, python-format
 msgid "Privacy Lists for %s"
-msgstr ""
+msgstr "Σύνταξη συντόμευσης για :"
 
 #: ../src/dialogs.py:2139
 #, fuzzy
@@ -3608,7 +3577,7 @@ msgstr "Προσωπικές συζητήσεις"
 #: ../src/dialogs.py:2209
 #, fuzzy
 msgid "Invalid List Name"
-msgstr "Μη έγκυρο όνομα χρήστη"
+msgstr "Μη έγκυρο όνομα αρχείου"
 
 #: ../src/dialogs.py:2210
 #, fuzzy
@@ -3660,16 +3629,15 @@ msgstr "Προσθήκη ειδικής ειδοποίησης για το %s"
 #. # means number
 #: ../src/dialogs.py:2508
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: ../src/dialogs.py:2514
-#, fuzzy
 msgid "Condition"
-msgstr "Σύνδεση"
+msgstr "Κατάσταση"
 
 #: ../src/dialogs.py:2635
 msgid "when I am "
-msgstr ""
+msgstr "όταν είμαι"
 
 #: ../src/disco.py:101
 msgid "Others"
@@ -3756,17 +3724,18 @@ msgstr "Περιγραφή"
 
 #. Id column
 #: ../src/disco.py:1490
+#, fuzzy
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: ../src/disco.py:1713
-#, fuzzy
 msgid "Subscribed"
-msgstr "Εγγραφή"
+msgstr "Εγγεγραμμένος"
 
 #: ../src/disco.py:1739
+#, fuzzy
 msgid "New post"
-msgstr ""
+msgstr "_Νέα λίστα..."
 
 #: ../src/disco.py:1745
 msgid "_Subscribe"
@@ -3828,21 +3797,21 @@ msgstr "Η μεταφορά αρχείου ολοκληρώθηκε"
 #: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:212
 #, fuzzy
 msgid "File transfer cancelled"
-msgstr "Η μεταφορά αρχείου ακυρώθηκε"
+msgstr "Άνοιγμα αρχείου μενού"
 
 #: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:213
 msgid "Connection with peer cannot be established."
 msgstr "Η σύνδεση με τον απομακρυσμένο ομότιμο δεν ήταν εφικτή."
 
 #: ../src/filetransfers_window.py:224
-#, fuzzy, python-format
+#, python-format
 msgid "Recipient: %s"
-msgstr "Παραλήπτης: "
+msgstr "Παραλήπτης: %s"
 
 #: ../src/filetransfers_window.py:226
-#, fuzzy, python-format
+#, python-format
 msgid "Error message: %s"
-msgstr "Πληκτρολογήστε το μήνυμα σας:"
+msgstr "Μήνυμα σφάλματος: %s"
 
 #: ../src/filetransfers_window.py:227
 #, fuzzy
@@ -3884,13 +3853,15 @@ msgstr "O %s επιθυμεί να σας στείλει ένα αρχείο:"
 #: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:705
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
-msgstr ""
+msgstr "Δεν είναι δυνατή η αντικατάσταση του υπάρχοντος αρχείου \"%s\""
 
 #: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:707
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr ""
+"Ένα αρχείο με αυτό το όνομα υπάρχει ήδη και δε μπορείτε να το "
+"αντικαταστήσετε."
 
 #: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:711
 msgid "This file already exists"
@@ -3903,11 +3874,11 @@ msgstr "Τι θέλετε να κάνετε;"
 #: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:721
 #, python-format
 msgid "Directory \"%s\" is not writable"
-msgstr ""
+msgstr "Δεν είναι δυνατή η εγγραφή στον κατάλογο \"%s\""
 
 #: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:722
 msgid "You do not have permission to create files in this directory."
-msgstr ""
+msgstr "Δε μπορείτε να δημιουργήσετε αρχεία σε αυτό τον κατάλογο."
 
 #: ../src/filetransfers_window.py:348
 msgid "Save File as..."
@@ -3954,7 +3925,6 @@ msgid "Pause"
 msgstr "Παύση"
 
 #: ../src/gajim.py:47
-#, fuzzy
 msgid "Gajim needs X server to run. Quiting..."
 msgstr "Το Gajim απαιτεί Xserver για να εκτελεστεί. Έξοδος..."
 
@@ -3999,9 +3969,8 @@ msgid "Gajim needs PySQLite2 to run"
 msgstr "Το Gajim χρειάζεται την PySQLite2 για να εκτελεστεί"
 
 #: ../src/gajim.py:77
-#, fuzzy
 msgid "Gajim needs pywin32 to run"
-msgstr "Το Gajim χρειάζεται την PySQLite2 για να εκτελεστεί"
+msgstr "Το Gajim χρειάζεται την pywin32 για να εκτελεστεί"
 
 #: ../src/gajim.py:78
 #, python-format
@@ -4013,13 +3982,15 @@ msgstr ""
 #. set the icon to all newly opened wind
 #: ../src/gajim.py:238
 msgid "Gajim is already running"
-msgstr ""
+msgstr "Το Gajim εκτελείται ήδη"
 
 #: ../src/gajim.py:239
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
 msgstr ""
+"Φαίνεται πως εκτελείται ήδη μια διεργασία του Gajim.\n"
+"Σίγουρα να εκτελεστεί;"
 
 #: ../src/gajim.py:346
 #, python-format
@@ -4031,14 +4002,13 @@ msgid "Do you accept this request?"
 msgstr "Δέχεστε αυτό το αίτημα;"
 
 #: ../src/gajim.py:393 ../src/notify.py:434
-#, fuzzy
 msgid "Connection Failed"
-msgstr "Σύνδεση"
+msgstr "Η σύνδεση απέτυχε"
 
 #: ../src/gajim.py:710
-#, fuzzy, python-format
+#, python-format
 msgid "Subject: %s"
-msgstr "Θέμα: %s\n"
+msgstr "Θέμα: %s"
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time))
 #: ../src/gajim.py:755 ../src/gajim.py:768
@@ -4087,7 +4057,7 @@ msgstr "Ο %s είναι τώρα %s"
 
 #: ../src/gajim.py:1104
 msgid "Your passphrase is incorrect"
-msgstr "H κωδική φράση είναι λανθασμένη"
+msgstr "H φράση πρόσβασης είναι λανθασμένη"
 
 #: ../src/gajim.py:1105
 msgid "You are currently connected without your OpenPGP key."
@@ -4114,6 +4084,8 @@ msgid ""
 "\n"
 "From: %(from_address)s"
 msgstr ""
+"\n"
+"Από: %(from_address)s"
 
 #: ../src/gajim.py:1375
 #, python-format
@@ -4143,8 +4115,9 @@ msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Η μεταφορά του αρχείου %(filename)s στον/ους %(name)s σταμάτησε."
 
 #: ../src/gajim.py:1574
+#, fuzzy
 msgid "Username Conflict"
-msgstr ""
+msgstr "Θα πρέπει να προσδιορίσετε ένα όνομα χρήστη !"
 
 #: ../src/gajim.py:1575
 #, fuzzy
@@ -4314,14 +4287,12 @@ msgstr ""
 "''."
 
 #: ../src/gajim-remote.py:133
-#, fuzzy
 msgid "subject"
-msgstr "Θέμα"
+msgstr "θέμα"
 
 #: ../src/gajim-remote.py:133
-#, fuzzy
 msgid "message subject"
-msgstr "Το μήνυμα στάλθηκε"
+msgstr "θέμα μηνύματος"
 
 #: ../src/gajim-remote.py:142
 msgid "Gets detailed info on a contact"
@@ -4401,12 +4372,11 @@ msgstr "Προσθέτει μια επαφή στη λίστα επαφών"
 
 #: ../src/gajim-remote.py:196
 msgid "jid"
-msgstr ""
+msgstr "jid"
 
 #: ../src/gajim-remote.py:197
-#, fuzzy
 msgid "Adds new contact to this account"
-msgstr "Προσθέτει μια επαφή σε αυτό το λογαριασμό."
+msgstr "Προσθέτει μια νέα επαφή σε αυτό το λογαριασμό."
 
 #: ../src/gajim-remote.py:202
 msgid "Returns current status (the global one unless account is specified)"
@@ -4427,22 +4397,23 @@ msgid "Returns number of unread messages"
 msgstr "Αναφέρει τον αριθμό των μη αναγνωσμένων μηνυμάτων"
 
 #: ../src/gajim-remote.py:220
+#, fuzzy
 msgid "Opens 'Start Chat' dialog"
-msgstr ""
+msgstr "Άνοιγμα του διαλόγου 'Έναρξη κουβέντας'"
 
 #: ../src/gajim-remote.py:222
-#, fuzzy
 msgid "Starts chat, using this account"
-msgstr "Έναρξη κουβέντας με χρήση του λογαριασμού %s"
+msgstr "Έναρξη κουβέντας με χρήση αυτού του λογαριασμού"
 
 #: ../src/gajim-remote.py:226
+#, fuzzy
 msgid "Sends custom XML"
-msgstr ""
+msgstr "Προσαρμοσμένο μέγεθος _γραμματοσειράς:"
 
 #: ../src/gajim-remote.py:228
 #, fuzzy
 msgid "XML to send"
-msgstr "XML Κονσόλα"
+msgstr "Αποστολή επιλεγμένου αρχείου στο \"%s\""
 
 #: ../src/gajim-remote.py:229
 msgid ""
@@ -4451,12 +4422,14 @@ msgid ""
 msgstr ""
 
 #: ../src/gajim-remote.py:235
+#, fuzzy
 msgid "Handle a xmpp:/ uri"
-msgstr ""
+msgstr "Το URI \"%s\" δεν είναι έγκυρο."
 
 #: ../src/gajim-remote.py:237
+#, fuzzy
 msgid "uri"
-msgstr ""
+msgstr "Το URI \"%s\" δεν είναι έγκυρο."
 
 #: ../src/gajim-remote.py:242
 #, fuzzy
@@ -4474,9 +4447,8 @@ msgid "nick"
 msgstr "Ψευδώνυμο"
 
 #: ../src/gajim-remote.py:246
-#, fuzzy
 msgid "password"
-msgstr "Κωδικός:"
+msgstr "κωδικός πρόσβασης"
 
 #: ../src/gajim-remote.py:269
 msgid "Missing argument \"contact_jid\""
@@ -4543,7 +4515,7 @@ msgstr ""
 #: ../src/gajim-remote.py:461
 #, fuzzy
 msgid "Wrong uri"
-msgstr "Εσφαλμένη κωδικοφράση"
+msgstr "Το URI \"%s\" δεν είναι έγκυρο."
 
 #: ../src/gajim_themes_window.py:60
 msgid "Theme"
@@ -4589,9 +4561,8 @@ msgid "Group Chats"
 msgstr "Ομαδικές συζητήσεις"
 
 #: ../src/groupchat_control.py:318
-#, fuzzy
 msgid "Insert Nickname"
-msgstr "Αλλαγή _ψευδώνυμου"
+msgstr "Εισάγετε ψευδώνυμο"
 
 #. do not print 'kicked by None'
 #: ../src/groupchat_control.py:829
@@ -4633,7 +4604,7 @@ msgstr "Ο %s έφυγε"
 #: ../src/groupchat_control.py:942
 #, fuzzy, python-format
 msgid "%s has joined the group chat"
-msgstr "Στην ομάδα"
+msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
 #: ../src/groupchat_control.py:1063 ../src/groupchat_control.py:1081
 #: ../src/groupchat_control.py:1174 ../src/groupchat_control.py:1191
@@ -4909,17 +4880,18 @@ msgstr ""
 
 #: ../src/gtkgui_helpers.py:750
 msgid "Extension not supported"
-msgstr ""
+msgstr "Η επέκταση δεν υποστηρίζεται"
 
 #: ../src/gtkgui_helpers.py:751
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr ""
+"Η εικόνα δεν είναι δυνατό να αποθηκευτεί στη μορφή %(type)s. Να αποθηκευτεί "
+"ως %(new_filename)s;"
 
 #: ../src/gtkgui_helpers.py:760
-#, fuzzy
 msgid "Save Image as..."
-msgstr "Αποθήκευση αρχείου ως..."
+msgstr "Αποθήκευση εικόνας ως..."
 
 #: ../src/history_manager.py:64
 msgid "Cannot find history logs database"
@@ -5031,9 +5003,9 @@ msgid "%s - Gajim"
 msgstr "%s - Gajim"
 
 #: ../src/notify.py:196
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s Changed Status"
-msgstr "Ο %(nick)s είναι τώρα %(status)s"
+msgstr "Ο %(nick)s άλλαξε κατάσταση"
 
 #: ../src/notify.py:206
 #, python-format
@@ -5066,8 +5038,9 @@ msgid "New Message from %(nickname)s"
 msgstr "Νέο μήνυμα από %(nickname)s"
 
 #: ../src/profile_window.py:72
+#, fuzzy
 msgid "Retrieving profile..."
-msgstr ""
+msgstr "Όνομα προφίλ:"
 
 #: ../src/profile_window.py:107 ../src/profile_window.py:210
 #: ../src/profile_window.py:219
@@ -5082,7 +5055,7 @@ msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 #: ../src/profile_window.py:245
 #, fuzzy
 msgid "Information received"
-msgstr "Παραλήφθηκε μια πρόσκληση"
+msgstr "Περισσότερες πληροφορίες..."
 
 #: ../src/profile_window.py:314
 msgid "Without a connection you can not publish your contact information."
@@ -5091,12 +5064,14 @@ msgstr ""
 "σας"
 
 #: ../src/profile_window.py:326
+#, fuzzy
 msgid "Sending profile..."
-msgstr ""
+msgstr "Όνομα προφίλ:"
 
 #: ../src/profile_window.py:341
+#, fuzzy
 msgid "Information NOT published"
-msgstr ""
+msgstr "Δεν ήταν δυνατή η εκτέλεση του \"%s\""
 
 #: ../src/profile_window.py:348
 msgid "vCard publication failed"
@@ -5154,7 +5129,7 @@ msgstr "για το λογαριασμό %s"
 #: ../src/roster_window.py:1009
 #, fuzzy
 msgid "_Manage Bookmarks..."
-msgstr "Διαχείριση σελιδοδεικτών..."
+msgstr "/Προβολή/_Διαχείριση"
 
 #: ../src/roster_window.py:1038
 #, python-format
@@ -5180,7 +5155,7 @@ msgstr "Έχετε μη-αναγνωσμένα μηνύματα"
 #, fuzzy
 msgid "You must read them before removing this transport."
 msgstr ""
-"Ανάγνωση όλων των γενονότων που εκκρεμούν, πριν την αφαίρεση αυτού του "
+"Ανάγνωση όλων των γεγονότων που εκκρεμούν, πριν την αφαίρεση αυτού του "
 "λογαριασμού."
 
 #: ../src/roster_window.py:1402
@@ -5200,7 +5175,7 @@ msgstr ""
 #: ../src/roster_window.py:1406
 #, fuzzy
 msgid "Transports will be removed"
-msgstr "Η μεταφορά \"%s\" θα αφαιρεθεί"
+msgstr "Αυτό το ραντεβού θα απομακρυνθεί οριστικά."
 
 #: ../src/roster_window.py:1411
 #, fuzzy, python-format
@@ -5215,27 +5190,26 @@ msgstr ""
 #: ../src/roster_window.py:1431
 #, fuzzy
 msgid "Rename Contact"
-msgstr "Επαφές"
+msgstr "_Μετονομασία αρχείων"
 
 #: ../src/roster_window.py:1432
 #, fuzzy, python-format
 msgid "Enter a new nickname for contact %s"
-msgstr "Πληκτρολογήστε την κωδικοφράση GPG για το λογαριασμό %s"
+msgstr "Πληκτρολογήστε τη φράση πρόσβασης GPG για το λογαριασμό %s"
 
 #: ../src/roster_window.py:1439
 #, fuzzy
 msgid "Rename Group"
-msgstr "_Μετονομασία"
+msgstr "Ιδιοκτήτης / Ομάδα"
 
 #: ../src/roster_window.py:1440
 #, fuzzy, python-format
 msgid "Enter a new name for group %s"
-msgstr "Πληκτρολογήστε την κωδικοφράση GPG για το λογαριασμό %s"
+msgstr "Επιλέξτε ένα όνομα για τη νέα συνεδρία:"
 
 #: ../src/roster_window.py:1515
-#, fuzzy
 msgid "Remove Group"
-msgstr "_Αφαίρεση"
+msgstr "Διαγραφή ομάδας"
 
 #: ../src/roster_window.py:1516
 #, python-format
@@ -5258,7 +5232,7 @@ msgstr "Επιλέξτε το κλειδί που θέλετε να εφαρμό
 #: ../src/roster_window.py:1782 ../src/roster_window.py:2043
 #, fuzzy
 msgid "_New group chat"
-msgstr "Ομαδική συζήτηση"
+msgstr "Αρχηγός ομάδας παραθύρων"
 
 #: ../src/roster_window.py:1913
 msgid "I would like to add you to my roster"
@@ -5267,7 +5241,7 @@ msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφ�
 #: ../src/roster_window.py:2088 ../src/roster_window.py:2135
 #, fuzzy
 msgid "Send Group M_essage"
-msgstr "Νέο Μήνυμα"
+msgstr "Αρχηγός ομάδας παραθύρων"
 
 #: ../src/roster_window.py:2114
 msgid "Re_name"
@@ -5275,12 +5249,11 @@ msgstr "_Μετονομασία"
 
 #: ../src/roster_window.py:2141
 msgid "To all users"
-msgstr ""
+msgstr "Σε όλους τους χρήστες"
 
 #: ../src/roster_window.py:2144
-#, fuzzy
 msgid "To all online users"
-msgstr "_Συνδεδεμένοι Χρήστες"
+msgstr "Σε όλους τους συνδεδεμένους χρήστες"
 
 #: ../src/roster_window.py:2180
 msgid "_Log on"
@@ -5378,24 +5351,24 @@ msgstr "Θα συνδεθείτε με %s χωρίς OpenPGP."
 
 #: ../src/roster_window.py:2777
 msgid "Passphrase Required"
-msgstr "Απαιτείται κωδικοφράση"
+msgstr "Απαιτείται φράση πρόσβασης"
 
 #: ../src/roster_window.py:2778
 #, python-format
 msgid "Enter GPG key passphrase for account %s."
-msgstr "Πληκτρολογήστε την κωδικοφράση GPG για το λογαριασμό %s"
+msgstr "Πληκτρολογήστε τη φράση πρόσβασης GPG για το λογαριασμό %s"
 
 #: ../src/roster_window.py:2783
 msgid "Save passphrase"
-msgstr "Αποθήκευση της κωδικοφράσης"
+msgstr "Αποθήκευση της φράσης πρόσβασης"
 
 #: ../src/roster_window.py:2791
 msgid "Wrong Passphrase"
-msgstr "Εσφαλμένη κωδικοφράση"
+msgstr "Εσφαλμένη φράση πρόσβασης"
 
 #: ../src/roster_window.py:2792
 msgid "Please retype your GPG passphrase or press Cancel."
-msgstr "Παρακαλώ εισάγετε ξανά την κωδική φράση GPG σας, ή επιλέξτε Ακύρωση."
+msgstr "Παρακαλώ εισάγετε ξανά τη φράση πρόσβασης GPG σας, ή επιλέξτε Ακύρωση."
 
 #: ../src/roster_window.py:2849 ../src/roster_window.py:2909
 msgid "You are participating in one or more group chats"
@@ -5420,9 +5393,9 @@ msgstr ""
 "άλλες επαφές."
 
 #: ../src/roster_window.py:2966
-#, python-format
+#, fuzzy, python-format
 msgid "\"%(title)s\" by %(artist)s"
-msgstr ""
+msgstr "Αριθμός - Καλλιτέχνης - Τίτλος"
 
 #: ../src/roster_window.py:3395 ../src/roster_window.py:3402
 msgid ""
@@ -5460,7 +5433,7 @@ msgstr ""
 #: ../src/roster_window.py:4199
 #, python-format
 msgid "Drop %s in group %s"
-msgstr "Αφαίρεση %s από την ομάδα %s"
+msgstr "Προσθήκη %s στην ομάδα %s"
 
 #: ../src/roster_window.py:4206
 #, python-format
@@ -5482,7 +5455,7 @@ msgstr "Απόκρυψη αυτού του μενού"
 #: ../src/tooltips.py:309 ../src/tooltips.py:492
 #, fuzzy
 msgid "Jabber ID: "
-msgstr "Jabber ID:"
+msgstr "ID συστήματος:"
 
 #: ../src/tooltips.py:312 ../src/tooltips.py:496
 msgid "Resource: "
@@ -5498,12 +5471,12 @@ msgid "Status: "
 msgstr "Κατάσταση: "
 
 #: ../src/tooltips.py:461
-#, fuzzy, python-format
+#, python-format
 msgid "Last status: %s"
-msgstr "Τελευταία κατάσταση στο %s"
+msgstr "Τελευταία κατάσταση: %s"
 
 #: ../src/tooltips.py:463
-#, fuzzy, python-format
+#, python-format
 msgid " since %s"
 msgstr "από τις %s"
 
@@ -5583,7 +5556,6 @@ msgid "since %s"
 msgstr "από τις %s"
 
 #: ../src/vcard.py:277
-#, fuzzy
 msgid "Affiliation:"
 msgstr "Συσχέτιση: "
 
@@ -5650,28 +5622,24 @@ msgid "creating %s directory"
 msgstr "δημιουργία φακέλου %s"
 
 #: ../src/common/commands.py:69
-#, fuzzy
 msgid "Change status information"
-msgstr "Πληροφορίες επαφής"
+msgstr "Αλλαγή πληροφοριών κατάστασης"
 
 #: ../src/common/commands.py:82
-#, fuzzy
 msgid "Change status"
-msgstr "Αποσύνδεση επαφής"
+msgstr "Αλλαγή κατάστασης"
 
 #: ../src/common/commands.py:83
 msgid "Set the presence type and description"
 msgstr ""
 
 #: ../src/common/commands.py:89
-#, fuzzy
 msgid "Free for chat"
-msgstr "Διαθέσιμος για κουβέντα"
+msgstr "Ελεύθερος για κουβέντα"
 
 #: ../src/common/commands.py:90
-#, fuzzy
 msgid "Online"
-msgstr "_Συνέχεια"
+msgstr "Συνδεδεμένος"
 
 #: ../src/common/commands.py:92
 msgid "Extended away"
@@ -5679,20 +5647,19 @@ msgstr ""
 
 #: ../src/common/commands.py:93
 msgid "Do not disturb"
-msgstr ""
+msgstr "Μην ενοχλείτε"
 
 #: ../src/common/commands.py:94
 msgid "Offline - disconnect"
 msgstr ""
 
 #: ../src/common/commands.py:99
-#, fuzzy
 msgid "Presence description:"
-msgstr "Περιγραφή"
+msgstr "Περιγραφή παρουσίας:"
 
 #: ../src/common/commands.py:134
 msgid "The status has been changed."
-msgstr ""
+msgstr "Η κατάσταση άλλαξε."
 
 #: ../src/common/commands.py:179
 #, fuzzy, python-format
@@ -5702,12 +5669,12 @@ msgstr "%(nickname)s: %(message)s"
 #: ../src/common/commands.py:183
 #, fuzzy
 msgid "You have not joined a groupchat."
-msgstr "Στην ομάδα"
+msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
 #: ../src/common/commands.py:189
 #, fuzzy
 msgid "Leave Groupchats"
-msgstr "Ομαδική συζήτηση"
+msgstr "Ομαδικές συζητήσεις"
 
 #: ../src/common/commands.py:190
 msgid "Choose the groupchats you want to leave"
@@ -5749,9 +5716,12 @@ msgid "Not available as a result of being idle"
 msgstr "Μη διαθέσιμος λόγω αδράνειας"
 
 #: ../src/common/config.py:83
+#, fuzzy
 msgid ""
 "List (space separated) of rows (accounts and groups) that are collapsed."
 msgstr ""
+"Λίστα (χωρισμένη με κενά) των γραμμών (λογαριασμοί και ομάδες) που έχουν "
+"συμπτυχθεί"
 
 #: ../src/common/config.py:88
 msgid "Enable link-local/zeroconf messaging"
@@ -6060,10 +6030,10 @@ msgid ""
 "the changes will take effect."
 msgstr ""
 "Καθορίζει σε ποιο παράθυρο θα εμφανίζονται τα νέα μηνύματα.\n"
-"'πάντα' - Όλα τα μηνύματα σε ένα παράθυρο.\n"
-"'ποτέ' - Κάθε μήνυμα στο δικό του παράθυρο.\n"
-"'καταλογμο' - Κάθε λογαριασμός έχει το δικό του παράθυρο μηνυμάτων.\n"
-"'κατατύπο' - Κάθε τύπος μηνύματος έχει το δικό του παράθυρο. Αυτή η επιλογή "
+"'always' - Όλα τα μηνύματα σε ένα παράθυρο.\n"
+"'never' - Κάθε μήνυμα στο δικό του παράθυρο.\n"
+"'peracct' - Κάθε λογαριασμός έχει το δικό του παράθυρο μηνυμάτων.\n"
+"'pertype' - Κάθε τύπος μηνύματος έχει το δικό του παράθυρο. Αυτή η επιλογή "
 "απαιτεί επανεκκίνηση του gajim για να εφαρμοστεί."
 
 #: ../src/common/config.py:211
@@ -6184,13 +6154,13 @@ msgstr ""
 
 #: ../src/common/config.py:340
 msgid "'yes', 'no', or 'both'"
-msgstr ""
+msgstr "'ναι', 'όχι', ή 'και τα δύο'"
 
 #: ../src/common/config.py:341 ../src/common/config.py:343
 #: ../src/common/config.py:344 ../src/common/config.py:347
 #: ../src/common/config.py:348
 msgid "'yes', 'no' or ''"
-msgstr ""
+msgstr "'ναι', 'όχι' ή ''"
 
 #: ../src/common/config.py:354
 msgid "Sleeping"
@@ -6241,32 +6211,28 @@ msgid "Out"
 msgstr "Έξω"
 
 #: ../src/common/config.py:360
-#, fuzzy
 msgid "I'm out enjoying life."
-msgstr "Είμαι έξω στη ζωή"
+msgstr "Είμαι έξω απολαμβάνοντας την πραγματική ζωή."
 
 #: ../src/common/config.py:364
-#, fuzzy
 msgid "I'm available."
-msgstr "Διαθέσιμος"
+msgstr "Είμαι διαθέσιμος."
 
 #: ../src/common/config.py:365
-#, fuzzy
 msgid "I'm free for chat."
-msgstr "Διαθέσιμος για κουβέντα"
+msgstr "Είμαι ελεύθερος για κουβέντα."
 
 #: ../src/common/config.py:367
-#, fuzzy
 msgid "I'm not available."
-msgstr "Η υπηρεσία δεν είναι διαθέσιμη"
+msgstr "Δεν είμαι διαθέσιμος."
 
 #: ../src/common/config.py:368
 msgid "Do not disturb."
-msgstr ""
+msgstr "Μην ενοχλείτε."
 
 #: ../src/common/config.py:369 ../src/common/config.py:370
 msgid "Bye!"
-msgstr ""
+msgstr "Γεια χαρά!"
 
 #: ../src/common/config.py:379
 #, fuzzy
@@ -6299,15 +6265,13 @@ msgstr "θαλασσί"
 
 #: ../src/common/connection_handlers.py:52
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:44
-#, fuzzy
 msgid "Unable to load idle module"
-msgstr "Αδυναμία συμμετοχής στο δωμάτιο"
+msgstr ""
 
 #: ../src/common/connection_handlers.py:177
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
-#, fuzzy
 msgid "Wrong host"
-msgstr "Εσφαλμένη κωδικοφράση"
+msgstr "Λάθος διακομιστής"
 
 #: ../src/common/connection_handlers.py:177
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
@@ -6324,9 +6288,9 @@ msgstr ""
 "%s"
 
 #: ../src/common/connection_handlers.py:1540
-#, fuzzy, python-format
+#, python-format
 msgid "Nickname not allowed: %s"
-msgstr "Δεν βρέθηκε το ψευδώνυμο: %s"
+msgstr "Δεν επιτρέπεται το ψευδώνυμο: %s"
 
 #. password required to join
 #. we are banned
@@ -6338,29 +6302,24 @@ msgstr "Δεν βρέθηκε το ψευδώνυμο: %s"
 #: ../src/common/connection_handlers.py:1614
 #: ../src/common/connection_handlers.py:1617
 #: ../src/common/connection_handlers.py:1625
-#, fuzzy
 msgid "Unable to join group chat"
-msgstr "Αδυναμία συμμετοχής στο δωμάτιο"
+msgstr "Δεν ήταν δυνατή η σύνδεση στην ομαδική συζήτηση"
 
 #: ../src/common/connection_handlers.py:1603
-#, fuzzy
 msgid "A password is required to join this group chat."
-msgstr "Απαιτείται συνθηματικό για τη είσοδο σας σε αυτό το δωμάτιο."
+msgstr "Απαιτείται συνθηματικό για τη είσοδο σας σε αυτή την ομαδική συζήτηση."
 
 #: ../src/common/connection_handlers.py:1606
-#, fuzzy
 msgid "You are banned from this group chat."
-msgstr "Σας έχει απαγορευτεί η είσοδος σε αυτό το δωμάτιο."
+msgstr "Σας έχει απαγορευτεί η είσοδος σε αυτή την ομαδική συζήτηση."
 
 #: ../src/common/connection_handlers.py:1609
-#, fuzzy
 msgid "Such group chat does not exist."
-msgstr "Δεν υπάρχει τέτοιο δωμάτιο."
+msgstr "Δεν υπάρχει τέτοια συζήτηση."
 
 #: ../src/common/connection_handlers.py:1612
-#, fuzzy
 msgid "Group chat creation is restricted."
-msgstr "Δεν επιτρέπεται η δημιουργία δωματίων."
+msgstr "Δεν επιτρέπεται η δημιουργία ομαδικών συζητήσεων."
 
 #: ../src/common/connection_handlers.py:1615
 msgid "Your registered nickname must be used."
@@ -6399,7 +6358,7 @@ msgid "we are now unsubscribed from %s"
 msgstr "πραγματοποιήθηκε αφαίρεση εξουσιοδότησης από %s"
 
 #: ../src/common/connection_handlers.py:1871
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
 "management tools such as http://jru.jabberstudio.org/ to remove it"
@@ -6416,7 +6375,7 @@ msgstr "Η σύνδεση με τον λογαριασμό \"%s\" χάθηκε"
 
 #: ../src/common/connection.py:176
 msgid "Reconnect manually."
-msgstr ""
+msgstr "Επανασύνδεση χειροκίνητα."
 
 #: ../src/common/connection.py:187 ../src/common/connection.py:214
 #, fuzzy, python-format
@@ -6456,7 +6415,7 @@ msgstr "Παρακαλώ ελέγξτε το όνομα χρήστη και το
 #: ../src/common/connection.py:495
 #, fuzzy
 msgid "Error while removing privacy list"
-msgstr "σφάλμα κατά την αποστολή του %s ( %s )"
+msgstr "Δημιουργήθηκε σφάλμα κατά την αφαίρεση της εργασίας !"
 
 #: ../src/common/connection.py:496
 #, python-format
@@ -6469,7 +6428,7 @@ msgstr ""
 #: ../src/common/connection.py:594
 #: ../src/common/zeroconf/connection_zeroconf.py:156
 msgid "OpenPGP passphrase was not given"
-msgstr "Δε δόθηκε κωδική-φράση για το OpenPGP"
+msgstr "Δε δόθηκε φράση πρόσβασης για το OpenPGP"
 
 #. do not show I'm invisible!
 #: ../src/common/connection.py:636
@@ -6488,9 +6447,8 @@ msgstr "Είμαι %s"
 #. we're not english
 #. one  in locale and one en
 #: ../src/common/connection.py:729
-#, fuzzy
 msgid "[This message is *encrypted* (See :JEP:`27`]"
-msgstr "[Aυτό το μήνυμα είναι κρυπτογραφημένο]"
+msgstr "[Aυτό το μήνυμα είναι *κρυπτογραφημένο* (Δείτε:JEP:`27`)]"
 
 #: ../src/common/connection.py:785
 #: ../src/common/zeroconf/connection_zeroconf.py:397
@@ -6509,7 +6467,7 @@ msgstr ""
 #: ../src/common/contacts.py:271
 #, fuzzy
 msgid "Not in roster"
-msgstr "εκτός λίστας επαφών"
+msgstr "Εκτέλεση στο Τερματικό"
 
 #. only say that to non Windows users
 #: ../src/common/dbus_support.py:33
@@ -6545,171 +6503,154 @@ msgstr ""
 "Παρακαλώ συμβουλευτείτε το http://trac.gajim.org/wiki/GajimDBus"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "one"
-msgstr "Τίποτα"
+msgstr "ένα"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "two"
-msgstr "ποιος"
+msgstr "δύο"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "three"
-msgstr "Οδός:"
+msgstr "τρία"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "four"
-msgstr "Θύρα: "
+msgstr "τέσσερα"
 
 #: ../src/common/fuzzyclock.py:42
-#, fuzzy
 msgid "five"
-msgstr "αρχείο"
+msgstr "πέντε"
 
 #: ../src/common/fuzzyclock.py:42
 msgid "six"
-msgstr ""
+msgstr "έξι"
 
 #: ../src/common/fuzzyclock.py:43
-#, fuzzy
 msgid "seven"
-msgstr "Γεγονός"
+msgstr "επτά"
 
 #: ../src/common/fuzzyclock.py:43
 msgid "eight"
-msgstr ""
+msgstr "οκτώ"
 
 #: ../src/common/fuzzyclock.py:43
-#, fuzzy
 msgid "nine"
-msgstr "_Συνέχεια"
+msgstr "εννιά"
 
 #: ../src/common/fuzzyclock.py:43
 msgid "ten"
-msgstr ""
+msgstr "δέκα"
 
 #: ../src/common/fuzzyclock.py:43
-#, fuzzy
 msgid "eleven"
-msgstr "Διαγραφή"
+msgstr "έντεκα"
 
 #: ../src/common/fuzzyclock.py:44
 msgid "twelve"
-msgstr ""
+msgstr "δώδεκα"
 
 #. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "$0 o'clock"
-msgstr ""
+msgstr "$0 ακριβώς"
 
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "five past $0"
-msgstr ""
+msgstr "$0 και πέντε"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
-#, fuzzy
 msgid "ten past $0"
-msgstr "Εγγραφή στο %s"
+msgstr "$0 και δέκα"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
 msgid "quarter past $0"
-msgstr ""
+msgstr "$0 και τέταρτο"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 msgid "twenty past $0"
-msgstr ""
+msgstr "$0 και είκοσι"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 msgid "twenty five past $0"
-msgstr ""
+msgstr "$0 και εικοσιπέντε"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 msgid "half past $0"
-msgstr ""
+msgstr "$0 και μισή"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
-#, fuzzy
 msgid "twenty five to $1"
-msgstr "Εγγραφή στο %s"
+msgstr "$1 παρά εικοσιπέντε"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
-#, fuzzy
 msgid "twenty to $1"
-msgstr "Εγγραφή στο %s"
+msgstr "$1 παρά είκοσι"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
-#, fuzzy
 msgid "quarter to $1"
-msgstr "Εγγραφή στο %s"
+msgstr "$1 παρά τέταρτο"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
-#, fuzzy
 msgid "ten to $1"
-msgstr "Εγγραφή στο %s"
+msgstr "$1 παρά δέκα"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
-#, fuzzy
 msgid "five to $1"
-msgstr "Εγγραφή στο %s"
+msgstr "$1 παρά πέντε"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:61
 msgid "$1 o'clock"
-msgstr ""
+msgstr "$1 ακριβώς"
 
 #: ../src/common/fuzzyclock.py:64
 msgid "Night"
-msgstr ""
+msgstr "Νύχτα"
 
 #: ../src/common/fuzzyclock.py:64
 msgid "Early morning"
-msgstr ""
+msgstr "Νωρίς το πρωί"
 
 #: ../src/common/fuzzyclock.py:64
-#, fuzzy
 msgid "Morning"
-msgstr "Δουλειά"
+msgstr "Πρωί"
 
 #: ../src/common/fuzzyclock.py:64
 msgid "Almost noon"
-msgstr ""
+msgstr "Σχεδόν μεσημέρι"
 
 #: ../src/common/fuzzyclock.py:65
-#, fuzzy
 msgid "Noon"
-msgstr "Τίποτα"
+msgstr "Μεσημέρι"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "Afternoon"
-msgstr ""
+msgstr "Απόγευμα"
 
 #: ../src/common/fuzzyclock.py:65
-#, fuzzy
 msgid "Evening"
-msgstr "Γεγονός"
+msgstr "Απόγευμα"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "Late evening"
-msgstr ""
+msgstr "Αργά το απόγευμα"
 
 #: ../src/common/fuzzyclock.py:67
 msgid "Start of week"
-msgstr ""
+msgstr "Αρχή εβδομάδας"
 
 #: ../src/common/fuzzyclock.py:67
 msgid "Middle of week"
-msgstr ""
+msgstr "Μέση της εβδομάδας"
 
 #: ../src/common/fuzzyclock.py:67
 msgid "End of week"
-msgstr ""
+msgstr "Τέλος εβδομάδας"
 
 #: ../src/common/fuzzyclock.py:68
 msgid "Weekend!"
-msgstr ""
+msgstr "Σαββατοκύριακο!"
 
 #: ../src/common/helpers.py:105
 msgid "Invalid character in username."
@@ -6879,19 +6820,16 @@ msgid "?Group Chat Contact Affiliation:None"
 msgstr "Κανένας"
 
 #: ../src/common/helpers.py:303
-#, fuzzy
 msgid "Owner"
-msgstr "_Ιδιοκτήτης"
+msgstr "Ιδιοκτήτης"
 
 #: ../src/common/helpers.py:305
-#, fuzzy
 msgid "Administrator"
-msgstr "_Διαχειριστής"
+msgstr "Διαχειριστής"
 
 #: ../src/common/helpers.py:307
-#, fuzzy
 msgid "Member"
-msgstr "_Μέλος"
+msgstr "Μέλος"
 
 #: ../src/common/helpers.py:346
 msgid "is paying attention to the conversation"
@@ -6915,32 +6853,32 @@ msgid "has closed the chat window or tab"
 msgstr "έκλεισε το παράθυρο ή την καρτέλα"
 
 #: ../src/common/helpers.py:881
-#, fuzzy, python-format
+#, python-format
 msgid " %d unread message"
 msgid_plural " %d unread messages"
-msgstr[0] "Gajim - %d μη αναγνωσμένο μήνυμα"
-msgstr[1] "Gajim - %d μη αναγνωσμένα μηνύματα"
+msgstr[0] "%d μη αναγνωσμένο μήνυμα"
+msgstr[1] "%d μη αναγνωσμένα μηνύματα"
 
 #: ../src/common/helpers.py:887
-#, fuzzy, python-format
+#, python-format
 msgid " %d unread single message"
 msgid_plural " %d unread single messages"
-msgstr[0] "Gajim - %d μη αναγνωσμένο μεμονωμένο μήνυμα"
-msgstr[1] "Gajim - %d μη αναγνωσμένα μεμονωμένα μηνύματα"
+msgstr[0] "%d μη αναγνωσμένο μεμονωμένο μήνυμα"
+msgstr[1] "%d μη αναγνωσμένα μεμονωμένα μηνύματα"
 
 #: ../src/common/helpers.py:893
-#, fuzzy, python-format
+#, python-format
 msgid " %d unread group chat message"
 msgid_plural " %d unread group chat messages"
-msgstr[0] "Gajim - %d μη αναγνωσμένο μήνυμα"
-msgstr[1] "Gajim - %d μη αναγνωσμένα μηνύματα"
+msgstr[0] "%d μη αναγνωσμένο μήνυμα"
+msgstr[1] "%d μη αναγνωσμένα μηνύματα"
 
 #: ../src/common/helpers.py:899
-#, fuzzy, python-format
+#, python-format
 msgid " %d unread private message"
 msgid_plural " %d unread private messages"
-msgstr[0] "Gajim - %d μη αναγνωσμένο προσωπικό μήνυμα"
-msgstr[1] "Gajim - %d μη αναγνωσμένα προσωπικά μηνύματα"
+msgstr[0] "%d μη αναγνωσμένο προσωπικό μήνυμα"
+msgstr[1] "%d μη αναγνωσμένα προσωπικά μηνύματα"
 
 #: ../src/common/helpers.py:909 ../src/common/helpers.py:911
 #, python-format
@@ -6967,9 +6905,9 @@ msgid "migrating logs database to indices"
 msgstr "δημιουργία βάσης δεδομένων ιστορικού"
 
 #: ../src/common/passwords.py:92
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim account %s"
-msgstr "για τον λογαριασμό %s"
+msgstr "Λογαριασμός gajim %s"
 
 #: ../src/common/zeroconf/client_zeroconf.py:189
 msgid ""
@@ -6977,9 +6915,8 @@ msgid ""
 msgstr ""
 
 #: ../src/common/zeroconf/client_zeroconf.py:205
-#, fuzzy
 msgid "Connection to host could not be established"
-msgstr "Η σύνδεση με τον απομακρυσμένο ομότιμο δεν ήταν εφικτή."
+msgstr "Η σύνδεση με το διακομιστή δεν ήταν εφικτή."
 
 #: ../src/common/zeroconf/client_zeroconf.py:334
 msgid ""
@@ -6998,7 +6935,7 @@ msgstr ""
 
 #: ../src/common/zeroconf/connection_zeroconf.py:207
 msgid "Avahi error"
-msgstr ""
+msgstr "Σφάλμα avahi"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:207
 #, python-format
@@ -7013,14 +6950,13 @@ msgstr ""
 
 #: ../src/common/zeroconf/connection_zeroconf.py:227
 #: ../src/common/zeroconf/connection_zeroconf.py:231
-#, fuzzy
 msgid "Could not start local service"
-msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
+msgstr "Δεν ήταν δυνατή η εκκίνηση της τοπικής υπηρεσίας"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:228
 #, fuzzy, python-format
 msgid "Unable to bind to port %d."
-msgstr "Αδυναμία συμμετοχής στο δωμάτιο"
+msgstr "Δεν ήταν δυνατό το άνοιγμα της οθόνης \"%s\"."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:232
 #: ../src/common/zeroconf/connection_zeroconf.py:325
@@ -7044,9 +6980,9 @@ msgid "[This message is encrypted]"
 msgstr "[Aυτό το μήνυμα είναι κρυπτογραφημένο]"
 
 #: ../src/common/zeroconf/zeroconf.py:180
-#, fuzzy, python-format
+#, python-format
 msgid "Error while adding service. %s"
-msgstr "σφάλμα κατά την αποστολή του %s ( %s )"
+msgstr "Σφάλμα κατά την προσθήκη της υπηρεσίας. %s"
 
 #~ msgid "A_fter nickname:"
 #~ msgstr "Με_τά από ψευδώνυμο:"
@@ -7060,58 +6996,39 @@ msgstr "σφάλμα κατά την αποστολή του %s ( %s )"
 #~ msgid "_Before time:"
 #~ msgstr "_Πριν από χρόνο:"
 
-#~ msgid "_Publish"
-#~ msgstr "_Δημοσιοποίηση"
-
-#~ msgid "_Retrieve"
-#~ msgstr "_Ανάκτηση"
-
-#~ msgid "Without a connection, you can not get your contact information."
-#~ msgstr ""
-#~ "Πρέπει να είστε συνδεδεμένος για να λάβετε τις πληροφορίες της επαφής σας"
-
 #, fuzzy
-#~ msgid "_New room"
-#~ msgstr "Νέο δωμάτιο"
+#~ msgid "Security error connecting to \"%s\""
+#~ msgstr "Η σύνδεση με \"%s\" στάθηκε αδύνατη"
 
-#~ msgid "Role: "
-#~ msgstr "Ρόλος: "
+#~ msgid "_Account:"
+#~ msgstr "_Λογαριασμός:"
 
-#~ msgid "Affiliation: "
-#~ msgstr "Συσχέτιση: "
-
-#~ msgid ""
-#~ "Sound to play when any MUC message arrives. (This setting is taken into "
-#~ "account only if notify_on_all_muc_messages is True)"
-#~ msgstr ""
-#~ "Ο ήχος που θα παιχθεί όταν ληφθεί οποιοδήποτε μήνυμα MUC. (Αυτή η ρύθμιση "
-#~ "ισχύει μόνο εάν είναι ορισμένη η notify_on_all_muc_messages)"
-
-#, fuzzy
 #~ msgid "Add"
-#~ msgstr "Διεύθυνση"
+#~ msgstr "Προσθήκη"
 
-#, fuzzy
 #~ msgid "Away "
 #~ msgstr "Απομακρυσμένος"
 
-#, fuzzy
 #~ msgid "Down"
-#~ msgstr "Λήψη"
+#~ msgstr "Κάτω"
 
-#, fuzzy
 #~ msgid "List of special notifications settings"
-#~ msgstr "Προσθήκη ειδικής ειδοποίησης για το %s"
+#~ msgstr "Λίστα ειδικών ρυθμίσεων ειδοποιήσεων"
 
-#, fuzzy
 #~ msgid "Not Available "
 #~ msgstr "Μη διαθέσιμος"
+
+#~ msgid "Up"
+#~ msgstr "Πάνω"
 
 #~ msgid "Contact _Info"
 #~ msgstr "Πλη_ροφορίες επαφής"
 
 #~ msgid "Jabber"
 #~ msgstr "Jabber"
+
+#~ msgid "_Retrieve"
+#~ msgstr "_Ανάκτηση"
 
 #~ msgid "Invalid room or server name"
 #~ msgstr "Μη έγκυρο δωμάτιο ή όνομα διακομιστή"
@@ -7133,11 +7050,25 @@ msgstr "σφάλμα κατά την αποστολή του %s ( %s )"
 #~ msgstr[0] "Gajim - %d μη αναγνωσμένο μήνυμα"
 #~ msgstr[1] "Gajim - %d μη αναγνωσμένα μηνύματα"
 
+#~ msgid "Role: "
+#~ msgstr "Ρόλος: "
+
 #~ msgid "Since %s"
 #~ msgstr "Από τις %s"
 
+#~ msgid "Without a connection, you can not get your contact information."
+#~ msgstr ""
+#~ "Πρέπει να είστε συνδεδεμένος για να λάβετε τις πληροφορίες της επαφής σας"
+
 #~ msgid "Personal details"
 #~ msgstr "Προσωπικές πληροφορίες"
+
+#~ msgid ""
+#~ "Sound to play when any MUC message arrives. (This setting is taken into "
+#~ "account only if notify_on_all_muc_messages is True)"
+#~ msgstr ""
+#~ "Ο ήχος που θα παιχθεί όταν ληφθεί οποιοδήποτε μήνυμα MUC. (Αυτή η ρύθμιση "
+#~ "ισχύει μόνο εάν είναι ορισμένη η notify_on_all_muc_messages)"
 
 #~ msgid "Automatically authorize contact"
 #~ msgstr "Αυτόματη εξουσιοδότηση επαφής"
