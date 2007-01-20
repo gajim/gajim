@@ -2,6 +2,7 @@
 # Copyright (C) 2005 THE gajim'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gajim package.
 # Fridtjof Busse <fridtjof@fbunet.de>, 2005, 2006.
+# Benjamin Drung <benjamin.drung@gmail.com>, 2007.
 #
 #: ../src/gajim-remote.py:204 ../src/gajim-remote.py:211
 #: ../src/gajim-remote.py:237 ../src/gajim-remote.py:238
@@ -12,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-16 20:08+0100\n"
-"PO-Revision-Date: 2007-01-04 18:16+0100\n"
+"PO-Revision-Date: 2007-01-20 20:31+0100\n"
 "Last-Translator: Benjamin Drung <benjamin.drung@gmail.com>\n"
 "Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +39,7 @@ msgstr "Einzelne _Nachricht senden..."
 
 #: ../data/glade/account_context_menu.glade.h:2
 msgid "_Add Contact..."
-msgstr "Kontakt _hinzufügen ..."
+msgstr "Kontakt _hinzufügen..."
 
 #: ../data/glade/account_context_menu.glade.h:3
 msgid "_Discover Services..."
@@ -46,7 +47,7 @@ msgstr "_Durchsuche Dienste..."
 
 #: ../data/glade/account_context_menu.glade.h:4
 msgid "_Execute Command..."
-msgstr "B_efehl ausführen..."
+msgstr "_Befehl ausführen..."
 
 #: ../data/glade/account_context_menu.glade.h:5
 #: ../data/glade/roster_window.glade.h:16
@@ -57,11 +58,11 @@ msgstr "_Gruppenchat"
 #: ../data/glade/account_context_menu.glade.h:6
 #: ../data/glade/zeroconf_context_menu.glade.h:1
 msgid "_Modify Account..."
-msgstr "Konto bearbeiten"
+msgstr "_Konto bearbeiten..."
 
 #: ../data/glade/account_context_menu.glade.h:7
 msgid "_Open Gmail Inbox"
-msgstr "Googlemail Posteingang_öffnen"
+msgstr "Google Mail Posteingang _öffnen"
 
 #: ../data/glade/account_context_menu.glade.h:8
 #: ../data/glade/zeroconf_context_menu.glade.h:2
@@ -76,7 +77,7 @@ msgid ""
 msgstr ""
 "<b>Account wird erstellt</b>\n"
 "\n"
-"Bitte warten..."
+"Bitte warten ..."
 
 #: ../data/glade/account_creation_wizard_window.glade.h:4
 msgid "<b>Please choose one of the options below:</b>"
@@ -98,7 +99,7 @@ msgstr "Verbinde, sobald ich Fertig klicke"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:8
 msgid "Gajim: Account Creation Wizard"
-msgstr "Gajim: Kontoeinrichtungs-Wizard"
+msgstr "Gajim: Kontoeinrichtungs-Assistent"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:9
 msgid "I already have an account I want to use"
@@ -205,10 +206,9 @@ msgstr "Konto"
 
 #: ../data/glade/account_modification_window.glade.h:5
 msgid "Account Modification"
-msgstr "Konto-Änderung"
+msgstr "Kontoänderung"
 
 #: ../data/glade/account_modification_window.glade.h:6
-#, fuzzy
 msgid "Auto-reconnect when connection is lost"
 msgstr "Automatisch neu verbinden, wenn die Verbindung abbricht"
 
@@ -248,7 +248,7 @@ msgstr "Verbindung"
 
 #: ../data/glade/account_modification_window.glade.h:13
 msgid "Edit Personal Information..."
-msgstr "Persönliche _Details bearbeiten..."
+msgstr "Persönliche Details bearbeiten ..."
 
 #: ../data/glade/account_modification_window.glade.h:14
 #: ../data/glade/roster_window.glade.h:5 ../src/notify.py:457
@@ -279,12 +279,11 @@ msgstr ""
 "wodurch Datentransfers eine höhere Erfolgswahrscheinlichkeit bekommen."
 
 #: ../data/glade/account_modification_window.glade.h:19
-#, fuzzy
 msgid ""
 "If checked, Gajim will send keep-alive packets to prevent connection timeout "
 "which results in disconnection"
 msgstr ""
-"Wenn aktiviert, sendet Gajim regelmäßig keep-alive-Pakete, um den "
+"Wenn aktiviert, sendet Gajim regelmäßig Keepalive-Pakete, um einen "
 "Verbindungsabbruch durch eine Zeitüberschreitung zu verhindern"
 
 #: ../data/glade/account_modification_window.glade.h:20
@@ -313,7 +312,7 @@ msgid ""
 "accordingly"
 msgstr ""
 "Wenn aktiviert, wird jede Änderung des globalen Status (verwaltet von der "
-"Combobox am Fuße des Kontaktfenster) auch den Status dieses Kontakts "
+"Combobox am Fuße des Kontaktfensters) auch den Status dieses Kontakts "
 "entsprechend ändern"
 
 #: ../data/glade/account_modification_window.glade.h:23
@@ -322,7 +321,7 @@ msgstr "Informationen über Sie, wie sie auf dem Server gespeichert sind"
 
 #: ../data/glade/account_modification_window.glade.h:24
 msgid "Manage..."
-msgstr "Verwalten ..."
+msgstr "_Verwalten..."
 
 #: ../data/glade/account_modification_window.glade.h:25
 #: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1617
@@ -373,7 +372,6 @@ msgid "Proxy:"
 msgstr "Proxy:"
 
 #: ../data/glade/account_modification_window.glade.h:34
-#, fuzzy
 msgid "Resour_ce:"
 msgstr "Ressour_ce: "
 
@@ -390,7 +388,7 @@ msgstr ""
 "selben Konto auf dem selben Server verbunden sind. Daher kann man "
 "gleichzeitig mit den Ressourcen \"Heim\" und \"Arbeit\" auf das selbe Konto "
 "verbinden. Die Ressource mit der höchsten Priorität wird die Nachrichten "
-"erhalten (siehe unten)"
+"erhalten (siehe unten)."
 
 #: ../data/glade/account_modification_window.glade.h:36
 #: ../data/glade/zeroconf_properties_window.glade.h:18
@@ -404,12 +402,12 @@ msgstr "Unter_haltungsverlauf für alle Kontakte dieses Kontos speichern"
 
 #: ../data/glade/account_modification_window.glade.h:39
 msgid "Send keep-alive packets"
-msgstr "Sende keep-alive Pakete"
+msgstr "Sende Keepalive-Pakete"
 
 #: ../data/glade/account_modification_window.glade.h:40
 #: ../data/glade/zeroconf_properties_window.glade.h:20
 msgid "Synch_ronize account status with global status"
-msgstr "Konto-Status mit globalem Status abgleichen"
+msgstr "Konto-Status mit globalem _Status abgleichen"
 
 #: ../data/glade/account_modification_window.glade.h:41
 msgid "Use _SSL (legacy)"
@@ -425,14 +423,13 @@ msgstr "Verwende Datentransfer-Proxies"
 
 #: ../data/glade/account_modification_window.glade.h:44
 msgid "_Adjust to status"
-msgstr "Mit dem Status _Abgleichen"
+msgstr "Mit dem Status _abgleichen"
 
 #: ../data/glade/account_modification_window.glade.h:45
 msgid "_Jabber ID:"
 msgstr "_Jabber ID:"
 
 #: ../data/glade/account_modification_window.glade.h:46
-#, fuzzy
 msgid "_Name:"
 msgstr "_Name: "
 
@@ -456,7 +453,6 @@ msgstr ""
 "(Automatische Diensterkennung)."
 
 #: ../data/glade/accounts_window.glade.h:4
-#, fuzzy
 msgid ""
 "If you have 2 or more accounts and this is checked, Gajim will list all "
 "contacts as if you had one account"
@@ -470,7 +466,7 @@ msgstr "Konten _zusammenführen"
 
 #: ../data/glade/accounts_window.glade.h:6
 msgid "_Enable link-local messaging"
-msgstr "Kontakte im LAN anzeigen"
+msgstr "_Kontakte im LAN anzeigen"
 
 #: ../data/glade/accounts_window.glade.h:7
 msgid "_Modify"
@@ -498,7 +494,6 @@ msgid "I would like to add you to my contact list."
 msgstr "Ich würde Dich gerne zu meiner Kontaktliste hinzufügen."
 
 #: ../data/glade/add_new_contact_window.glade.h:5
-#, fuzzy
 msgid ""
 "You have to register with this transport\n"
 "to be able to add a contact from this\n"
@@ -506,10 +501,9 @@ msgid ""
 "proceed."
 msgstr ""
 "Sie müssen sich bei diesem Transport\n"
-"registrieren, um einen Kontakt von\n"
-"diesem Protokoll hinzufügen zu können.\n"
-"Klicken Sie auf den Registrier-Knopf,\n"
-"um fortzufahren."
+"registrieren, um einen Kontakt von diesem\n"
+"Protokoll hinzufügen zu können. Klicken\n"
+"Sie auf Registrieren, um fortzufahren."
 
 #: ../data/glade/add_new_contact_window.glade.h:9
 msgid ""
@@ -540,7 +534,6 @@ msgid "_User ID:"
 msgstr "_Benutzer-ID:"
 
 #: ../data/glade/adhoc_commands_window.glade.h:1
-#, fuzzy
 msgid "<b>An error has occurred:</b>"
 msgstr "<b>Es ist ein Fehler aufgetreten:</b>"
 
@@ -558,19 +551,19 @@ msgstr "Nocheinmal überprüfen"
 
 #: ../data/glade/adhoc_commands_window.glade.h:5
 msgid "Error description..."
-msgstr "Fehlerbeschreibung..."
+msgstr "Fehlerbeschreibung ..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:6
 msgid "Please wait while retrieving command list..."
-msgstr "Bitte warten Sie, während die Kommandoliste empfangen wird..."
+msgstr "Bitte warten Sie, während die Kommandoliste empfangen wird ..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:7
 msgid "Please wait while the command is sending..."
-msgstr "Bitte warten Sie, während das Kommando gesendet wird..."
+msgstr "Bitte warten Sie, während das Kommando gesendet wird ..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:8
 msgid "Please wait..."
-msgstr "Bitte warten..."
+msgstr "Bitte warten ..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:9
 msgid "This jabber entity does not expose any commands."
@@ -581,10 +574,9 @@ msgid "<b>Description</b>"
 msgstr "<b>Beschreibung</b>"
 
 #: ../data/glade/advanced_configuration_window.glade.h:2
-#, fuzzy
 msgid "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
 msgstr ""
-"<b>HINWEIS:</b> Sie sollten gajim neu starten, damit alle Änderungen in "
+"<b>HINWEIS:</b> Sie sollten Gajim neu starten, damit alle Änderungen in "
 "Kraft treten"
 
 #: ../data/glade/advanced_configuration_window.glade.h:3
@@ -597,20 +589,19 @@ msgstr "Filter:"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:1
 msgid "Delete MOTD"
-msgstr "Lösche MOTD"
+msgstr "_Lösche MOTD"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:2
 msgid "Deletes Message of the Day"
 msgstr "Löscht die Nachricht des Tages"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:3
-#, fuzzy
 msgid "Sends a message to users currently connected to this server"
 msgstr "Sendet eine Nachricht an momentan angemeldete Benutzer des Servers"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:4
 msgid "Set MOTD"
-msgstr "Setze MOTD"
+msgstr "_Setze MOTD"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:5
 msgid "Sets Message of the Day"
@@ -622,7 +613,7 @@ msgstr "Zeige _XML Konsole"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:7
 msgid "Update MOTD"
-msgstr "MOTD Aktualisieren"
+msgstr "_Aktualisiere MOTD"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:8
 msgid "Updates Message of the Day"
@@ -634,7 +625,7 @@ msgstr "_Administrator"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:10
 msgid "_Privacy Lists"
-msgstr "Privatlisten"
+msgstr "_Privatlisten"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:11
 msgid "_Send Server Message"
@@ -706,7 +697,7 @@ msgstr "Nicht verfügbar"
 
 #: ../data/glade/advanced_notifications_window.glade.h:15
 msgid "One or more special statuses..."
-msgstr "Einen oder mehr spezielle Status..."
+msgstr "Einen oder mehr spezielle Status ..."
 
 #: ../data/glade/advanced_notifications_window.glade.h:16
 msgid "Online / Free For Chat"
@@ -717,7 +708,6 @@ msgid "Play a sound"
 msgstr "Klänge abspielen"
 
 #: ../data/glade/advanced_notifications_window.glade.h:18
-#, fuzzy
 msgid ""
 "Receive a Message\n"
 "Contact Disconnected \n"
@@ -729,8 +719,7 @@ msgid ""
 "File Transfer Finished"
 msgstr ""
 "Nachricht empfangen\n"
-"Kontakt verbunden\n"
-"Kontakt nicht mehr verbunden\n"
+"Kontakt abgemeldet\n"
 "Kontakt ändert Status\n"
 "Gruppenchat-Nachricht hervorgehoben\n"
 "Gruppenchat-Nachricht empfangen\n"
@@ -775,7 +764,7 @@ msgstr "_Informiere mich mit einem Popup-Fenster"
 
 #: ../data/glade/advanced_notifications_window.glade.h:34
 msgid "_Open chat window with user"
-msgstr "Ein Chat-Fenster mit Benutzer öffnen"
+msgstr "Ein _Chat-Fenster mit Benutzer öffnen"
 
 #: ../data/glade/advanced_notifications_window.glade.h:35
 msgid "_Show event in roster"
@@ -837,7 +826,7 @@ msgstr "Alte Geschichten"
 
 #: ../data/glade/atom_entry_window.glade.h:8
 msgid "Soliloquy"
-msgstr "Soliloquy"
+msgstr "Selbstgespräch"
 
 #: ../data/glade/atom_entry_window.glade.h:9
 msgid "You have received new entry:"
@@ -899,7 +888,7 @@ msgstr "Link _öffnen"
 #: ../data/glade/subscription_request_popup_menu.glade.h:1
 #: ../data/glade/systray_context_menu.glade.h:7
 msgid "_Start Chat"
-msgstr "Chat starten"
+msgstr "_Chat starten"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:1
 msgid "Click to see past conversations with this contact"
@@ -909,11 +898,11 @@ msgstr "Klicken, um die früheren Unterhaltungen mit diesem Kontakt zu sehen"
 #: ../data/glade/roster_contact_context_menu.glade.h:8
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:4
 msgid "Send _File"
-msgstr "_Datei Senden"
+msgstr "_Datei senden"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:3
 msgid "Toggle Open_PGP Encryption"
-msgstr "OpenG_PG Verschlüsselung aktivieren"
+msgstr "Open_PGP-Verschlüsselung aktivieren"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:5
 #: ../data/glade/gc_control_popup_menu.glade.h:6
@@ -974,16 +963,14 @@ msgid "Remove file transfer from the list."
 msgstr "Entferne Dateitransfer von Liste"
 
 #: ../data/glade/filetransfers.glade.h:9
-#, fuzzy
 msgid "Removes completed, cancelled and failed file transfers from the list"
 msgstr ""
-"Entferne beendete, abgebrochene und fehlgeschlagene Dateitransfers von der "
+"Entfernt beendete, abgebrochene und fehlgeschlagene Dateitransfers von der "
 "Liste"
 
 #: ../data/glade/filetransfers.glade.h:10
-#, fuzzy
 msgid "Shows a list of file transfers between you and others"
-msgstr "Zeigt eine Liste von Dateitransfers"
+msgstr "Zeigt eine Liste von Dateiübertragungen an"
 
 #: ../data/glade/filetransfers.glade.h:11
 msgid ""
@@ -1143,7 +1130,7 @@ msgstr "_Besitzer"
 
 #: ../data/glade/gc_occupants_menu.glade.h:10
 msgid "_Send Private Message"
-msgstr "Private Nachricht _Senden"
+msgstr "Private Nachricht _senden"
 
 #: ../data/glade/gc_occupants_menu.glade.h:11
 msgid "_Voice"
@@ -1173,14 +1160,14 @@ msgid ""
 "If you plan to do massive deletions, please make sure Gajim is not running. "
 "Generally avoid deletions with contacts you currently chat with."
 msgstr ""
-"<big><b>Willkommen zum Gajim Verlaufslog-Manager</b></big>\n"
+"<big><b>Willkommen zum Gajim Verlaufsmanager</b></big>\n"
 "\n"
 "Sie können Logs links auswählen und/oder unten die Datenbank durchsuchen.\n"
 "\n"
 "<b>WARNUNG:</b>\n"
 "Wenn Sie massiv Daten löschen möchten, stellen Sie sicher, dass Gajim nicht "
 "läuft. Vermeiden Sie generell Löschungen von Kontakten, mit denen Sie gerade "
-"chatte."
+"chatten."
 
 #: ../data/glade/history_manager.glade.h:7
 msgid "Delete"
@@ -1192,7 +1179,7 @@ msgstr "Export"
 
 #: ../data/glade/history_manager.glade.h:9
 msgid "Gajim History Logs Manager"
-msgstr "Gajim Verlaufs-Logmanager"
+msgstr "Gajim Verlaufsmanager"
 
 #: ../data/glade/history_manager.glade.h:10
 msgid "_Search Database"
@@ -1204,7 +1191,7 @@ msgstr "Personalisierte Anfrage bauen"
 
 #: ../data/glade/history_window.glade.h:2
 msgid "Conversation History"
-msgstr "Unterhaltungs-Verlauf"
+msgstr "Unterhaltungsverlauf"
 
 #: ../data/glade/history_window.glade.h:3
 msgid "Query Builder..."
@@ -1236,9 +1223,8 @@ msgid "Join Group Chat"
 msgstr "Betrete Gruppenchat"
 
 #: ../data/glade/join_groupchat_window.glade.h:2
-#, fuzzy
 msgid "Join this room automatically when I connect"
-msgstr "Setze mein Profil, wenn ich mich verbinde"
+msgstr "Betrete diesen Raum automatisch, wenn ich mich verbinde"
 
 #: ../data/glade/join_groupchat_window.glade.h:3
 #: ../data/glade/manage_bookmarks_window.glade.h:4
@@ -1413,7 +1399,7 @@ msgstr "Auch als iChat-Stil bekannt"
 
 #: ../data/glade/preferences_window.glade.h:19
 msgid "Always check to see if Gajim is the _default Jabber client on startup"
-msgstr ""
+msgstr "Beim Starten überprüfen, ob Gajim der _Standard-Jabber-Client ist"
 
 #: ../data/glade/preferences_window.glade.h:20
 msgid ""
@@ -1456,16 +1442,15 @@ msgid "Chat"
 msgstr "Chat"
 
 #: ../data/glade/preferences_window.glade.h:30
-#, fuzzy
 msgid ""
 "Check this option, only if someone you don't have in the roster spams/annoys "
 "you. Use with caution, because it blocks all messages from any contact that "
 "is not in the roster"
 msgstr ""
 "Aktivieren Sie diese Option nur, wenn jemand, der nicht in ihrer Liste ist, "
-"Spam an Sie verschickt oder Sie belästigt. Verwenden Sie sie mit Vorsicht, "
-"da sie alle Nachrichten von allen Kontakten blockiert, die nicht in ihrer "
-"Liste sind"
+"Spam an Sie verschickt oder Sie belästigt. Verwenden Sie diese Option mit "
+"Vorsicht, da sie alle Nachrichten von allen Kontakten blockiert, die nicht "
+"in ihrer Liste sind."
 
 #: ../data/glade/preferences_window.glade.h:31
 msgid "Configure color and font of the interface"
@@ -1485,6 +1470,9 @@ msgid ""
 "Chat message\n"
 "Single message"
 msgstr ""
+"Festgelegt vom Absender\n"
+"Chat-Nachricht\n"
+"Einzelne Nachricht"
 
 #: ../data/glade/preferences_window.glade.h:37
 msgid "Display _extra email details"
@@ -1535,7 +1523,6 @@ msgstr ""
 "Chatstates Sie Ihrem Gegenüber senden möchten."
 
 #: ../data/glade/preferences_window.glade.h:46
-#, fuzzy
 msgid ""
 "Gajim will automatically show new events by popping up the relative window"
 msgstr ""
@@ -1629,7 +1616,7 @@ msgstr "Formatierten Inhalt in ankommenden Nachrichten ignorieren"
 
 #: ../data/glade/preferences_window.glade.h:59
 msgid "Ma_nage..."
-msgstr "_Verwalte ..."
+msgstr "_Verwalte..."
 
 #: ../data/glade/preferences_window.glade.h:60
 msgid ""
@@ -1649,7 +1636,7 @@ msgstr "Über Kontakte benachrichtigen, die sich "
 
 #: ../data/glade/preferences_window.glade.h:65
 msgid "Notify on new _GMail email"
-msgstr "Über neue _Gmail E-Mail benachrichtigen"
+msgstr "Über neue _Google Mail E-Mails benachrichtigen"
 
 #: ../data/glade/preferences_window.glade.h:66
 msgid "On every _message"
@@ -1661,7 +1648,7 @@ msgstr "Ein _Nachrichtenfenster:"
 
 #: ../data/glade/preferences_window.glade.h:68
 msgid "Outgoing Chat state noti_fications:"
-msgstr "Sende Chatstadien:"
+msgstr "_Sende Chatstadien:"
 
 #: ../data/glade/preferences_window.glade.h:69
 msgid "Play _sounds"
@@ -1721,9 +1708,8 @@ msgid "The auto not available status message"
 msgstr "Automatische Statusnachricht für Nicht verfügbar"
 
 #: ../data/glade/preferences_window.glade.h:82
-#, fuzzy
 msgid "Treat all incoming messages as:"
-msgstr "_Eingehende Nachricht:"
+msgstr " Behandle alle eingehenden Nachrichten als:"
 
 #: ../data/glade/preferences_window.glade.h:83
 msgid "Use _transports iconsets"
@@ -1764,7 +1750,7 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:89
 msgid "_Advanced Notifications Control..."
-msgstr "_Erweiterter Konfigurations-Editor"
+msgstr "_Erweiterter Konfigurations-Editor..."
 
 #: ../data/glade/preferences_window.glade.h:90
 msgid "_Browser:"
@@ -1808,7 +1794,7 @@ msgstr "Be_nachrichtigen"
 
 #: ../data/glade/preferences_window.glade.h:100
 msgid "_Open..."
-msgstr "Ö_ffnen ..."
+msgstr "Ö_ffnen..."
 
 #: ../data/glade/preferences_window.glade.h:101
 msgid "_Outgoing message:"
@@ -2016,7 +2002,7 @@ msgstr "Persönliche Details"
 #: ../data/glade/profile_window.glade.h:26
 #: ../data/glade/vcard_information_window.glade.h:32
 msgid "Phone No.:"
-msgstr "Telefon-Nr.:"
+msgstr "Telefon-Nummer:"
 
 #: ../data/glade/profile_window.glade.h:27
 #: ../data/glade/vcard_information_window.glade.h:33
@@ -2074,7 +2060,7 @@ msgstr "Konto _entfernen (in Gajim und auf dem Server)"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:1
 msgid "A_sk to see his/her status"
-msgstr "Darum bitten, seinen/ihren _Status zu sehen"
+msgstr "_Bitte Kontakt, seinen Status zu sehen"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:2
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:1
@@ -2095,17 +2081,17 @@ msgstr "_Gruppen bearbeiten"
 #: ../data/glade/roster_contact_context_menu.glade.h:5
 #: ../src/roster_window.py:2211
 msgid "Execute Command..."
-msgstr "Befehl ausführen..."
+msgstr "_Befehl ausführen..."
 
 #: ../data/glade/roster_contact_context_menu.glade.h:6
 #: ../src/roster_window.py:2034
 msgid "In_vite to"
-msgstr "Einladen zu"
+msgstr "_Einladen zu"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:7
 #: ../data/glade/systray_context_menu.glade.h:2
 msgid "Send Single _Message"
-msgstr "Einzelne Nachricht Senden"
+msgstr "Einzelne Nachricht _senden..."
 
 #: ../data/glade/roster_contact_context_menu.glade.h:9
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:5
@@ -2114,11 +2100,11 @@ msgstr "_Chat starten"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:11
 msgid "_Allow him/her to see my status"
-msgstr "Er_laube ihm/ihr, meinen Status zu sehen"
+msgstr "_Erlaube Kontakt, meinen Status zu sehen"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:12
 msgid "_Forbid him/her to see my status"
-msgstr "_Verbiete ihm/ihr, meinen Status zu sehen"
+msgstr "_Verbiete Kontakt, meinen Status zu sehen"
 
 #. Remove group
 #: ../data/glade/roster_contact_context_menu.glade.h:14
@@ -2135,7 +2121,7 @@ msgstr "_Umbenennen"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:16
 msgid "_Subscription"
-msgstr "Abonnement"
+msgstr "_Abonnement"
 
 #: ../data/glade/roster_window.glade.h:1
 msgid "A_ccounts"
@@ -2271,12 +2257,10 @@ msgid "Au_thorize"
 msgstr "_Autorisieren"
 
 #: ../data/glade/subscription_request_window.glade.h:2
-#, fuzzy
 msgid "Authorize contact so he or she can know when you're connected"
-msgstr "Kontakt autorisieren, so dass er sehen kann, wann Sie verbunden sind"
+msgstr "Kontakt autorisieren, so dass er Ihren Status sehen kann"
 
 #: ../data/glade/subscription_request_window.glade.h:3
-#, fuzzy
 msgid ""
 "Deny authorization from contact so he or she cannot know when you're "
 "connected"
@@ -2294,7 +2278,7 @@ msgstr "_Ablehnen"
 
 #: ../data/glade/systray_context_menu.glade.h:1
 msgid "Mute Sounds"
-msgstr "Klänge stummschalten"
+msgstr "_Klänge stummschalten"
 
 #: ../data/glade/systray_context_menu.glade.h:3
 msgid "Show All Pending _Events"
@@ -2430,23 +2414,20 @@ msgstr "Verwende benutzerdefinierten Port:"
 
 #. For i18n
 #: ../src/advanced.py:51
-#, fuzzy
 msgid "Activated"
-msgstr "Aktiv"
+msgstr "Aktiviert"
 
 #: ../src/advanced.py:51
-#, fuzzy
 msgid "Deactivated"
-msgstr "Inaktiv"
+msgstr "Deaktiviert"
 
 #: ../src/advanced.py:53
 msgid "Boolean"
-msgstr ""
+msgstr "Boolean"
 
 #: ../src/advanced.py:54
-#, fuzzy
 msgid "Integer"
-msgstr "In der Gruppe"
+msgstr "Ganzzahl"
 
 #: ../src/advanced.py:55
 msgid "Text"
@@ -2454,7 +2435,7 @@ msgstr "Text"
 
 #: ../src/advanced.py:56
 msgid "Color"
-msgstr ""
+msgstr "Farbe"
 
 #: ../src/advanced.py:65
 msgid "Preference Name"
@@ -2488,9 +2469,8 @@ msgid "English"
 msgstr "Englisch"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Belarusian"
-msgstr "Bulgarisch"
+msgstr "Weißrussisch"
 
 #: ../src/chat_control.py:52
 msgid "Bulgarian"
@@ -2513,9 +2493,8 @@ msgid "Greek"
 msgstr "Griechisch"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "British"
-msgstr "Briton"
+msgstr "Britisch"
 
 #: ../src/chat_control.py:52
 msgid "Esperanto"
@@ -2542,16 +2521,14 @@ msgid "Italian"
 msgstr "Italienisch"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Norwegian (b)"
-msgstr "Norwegisch (Bokmal)"
+msgstr "Norwegisch (Bokmål)"
 
 #: ../src/chat_control.py:52
 msgid "Dutch"
 msgstr "Niederländisch"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Norwegian"
 msgstr "Norwegisch"
 
@@ -2961,7 +2938,6 @@ msgid "Adding Owner..."
 msgstr "Füge Besitzer hinzu ..."
 
 #: ../src/config.py:2394
-#, fuzzy
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -3036,9 +3012,8 @@ msgid "Enter and leave only"
 msgstr "Nur betreten und verlassen"
 
 #: ../src/config.py:2624
-#, fuzzy
 msgid "?print_status:None"
-msgstr "?print_status:Alle"
+msgstr "?print_status:Nichts"
 
 #: ../src/config.py:2692
 msgid "New Group Chat"
@@ -3091,14 +3066,13 @@ msgid "Account has been added successfully"
 msgstr "Account wurde erfolgreich hinzugefügt"
 
 #: ../src/config.py:3043 ../src/config.py:3078
-#, fuzzy
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menuitem under the Edit menu from the main "
 "window."
 msgstr ""
-"Sie können die erweiterten Kontooptionen durch klicken des Erweitert-Buttons "
-"oder durch klicken des Konto-Menüpunktes im Bearbeiten-Menü des "
+"Sie können die erweiterten Kontooptionen durch Klicken des Erweitert-Buttons "
+"oder durch Klicken des Konto-Menüpunktes im Bearbeiten-Menü des "
 "Hauptfensters erreichen."
 
 #: ../src/config.py:3077
@@ -3106,7 +3080,6 @@ msgid "Your new account has been created successfully"
 msgstr "Ihr neues Konto wurde erfolgreich erstellt"
 
 #: ../src/config.py:3095
-#, fuzzy
 msgid "An error occurred during account creation"
 msgstr "Während der Konto-Erstellung ist ein Fehler aufgetreten"
 
@@ -3303,7 +3276,9 @@ msgstr "Zuletzt möchten wird gerne allen Paket-Verwaltern danken."
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:779
 msgid "translator-credits"
-msgstr "Ins Deutsche übersetzt von Fridtjof Busse"
+msgstr ""
+"Fridtjof Busse\n"
+"Benjamin Drung <benjamin.drung@gmail.com>"
 
 #: ../src/dialogs.py:909
 #, python-format
@@ -3311,13 +3286,10 @@ msgid "Unable to bind to port %s."
 msgstr "Konnte nicht mit Port %s verbinden."
 
 #: ../src/dialogs.py:910
-#, fuzzy
 msgid ""
 "Maybe you have another running instance of Gajim. File Transfer will be "
 "cancelled."
-msgstr ""
-"Möglicherweise läuft Gajim bei Ihnen bereits. Dateitransfer\n"
-"wird abgebrochen."
+msgstr "Möglicherweise läuft Gajim bereits. Dateitransfer wird abgebrochen."
 
 #: ../src/dialogs.py:1061
 #, python-format
@@ -3540,7 +3512,7 @@ msgstr "Privatliste für %s"
 
 #: ../src/dialogs.py:2139
 msgid "Privacy Lists"
-msgstr "Privatlist"
+msgstr "Privatlisten"
 
 #: ../src/dialogs.py:2209
 msgid "Invalid List Name"
@@ -3553,9 +3525,9 @@ msgstr ""
 
 #. Don't translate $Contact
 #: ../src/dialogs.py:2244
-#, fuzzy, python-format
+#, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
-msgstr "%(contact_jid)s hat Sie in den Gruppenchat %(room_jid)s eingeladen"
+msgstr "$Contact hat Sie in den Gruppenchat %(room_jid)s eingeladen"
 
 #. only if not None and not ''
 #: ../src/dialogs.py:2256
@@ -3760,9 +3732,8 @@ msgid "File transfer completed"
 msgstr "Dateitransfer abgeschlossen"
 
 #: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:212
-#, fuzzy
 msgid "File transfer cancelled"
-msgstr "Dateitranfer abgebrochen"
+msgstr "Dateitransfer abgebrochen"
 
 #: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:213
 msgid "Connection with peer cannot be established."
@@ -3779,7 +3750,6 @@ msgid "Error message: %s"
 msgstr "Fehlermeldung: %s"
 
 #: ../src/filetransfers_window.py:227
-#, fuzzy
 msgid "File transfer stopped by the contact at the other end"
 msgstr "Gegenseite hat Dateitransfer gestoppt"
 
@@ -3892,9 +3862,8 @@ msgid "Pause"
 msgstr "Pause"
 
 #: ../src/gajim.py:47
-#, fuzzy
 msgid "Gajim needs X server to run. Quiting..."
-msgstr "Gajim benötigt einen laufenden Xserver. Breche ab ..."
+msgstr "Gajim benötigt einen laufenden X-Server. Breche ab ..."
 
 #: ../src/gajim.py:51
 msgid "Gajim needs PyGTK 2.6 or above"
@@ -3902,7 +3871,7 @@ msgstr "Gajim benötigt PyGTK 2.6 oder höher"
 
 #: ../src/gajim.py:52
 msgid "Gajim needs PyGTK 2.6 or above to run. Quiting..."
-msgstr "Gajim benötigt PyGTK 2.6 oder höher. Beende ..."
+msgstr "Gajim benötigt PyGTK 2.6 oder höher. Breche ab ..."
 
 #: ../src/gajim.py:54
 msgid "Gajim needs GTK 2.6 or above"
@@ -3910,7 +3879,7 @@ msgstr "Gajim benötigt GTK 2.6 oder höher"
 
 #: ../src/gajim.py:55
 msgid "Gajim needs GTK 2.6 or above to run. Quiting..."
-msgstr "Gajim benötigt GTK 2.6+. Breche ab ..."
+msgstr "Gajim benötigt GTK 2.6 oder höher. Breche ab ..."
 
 #: ../src/gajim.py:60
 msgid "GTK+ runtime is missing libglade support"
@@ -4126,12 +4095,10 @@ msgid "Shows or hides the roster window"
 msgstr "Ein- oder Ausblenden des Hauptfensters"
 
 #: ../src/gajim-remote.py:78
-#, fuzzy
 msgid "Pops up a window with the next pending event"
 msgstr "Zeige Popup-Fenster mit dem nächsten ungelesenen Ereignis"
 
 #: ../src/gajim-remote.py:82
-#, fuzzy
 msgid ""
 "Prints a list of all contacts in the roster. Each contact appears on a "
 "separate line"
@@ -4343,9 +4310,8 @@ msgstr ""
 "Account angegeben)"
 
 #: ../src/gajim-remote.py:216
-#, fuzzy
 msgid "Returns number of unread messages"
-msgstr "Gibt die Zahl der ungelesenen Nachrichten zurück"
+msgstr "Gibt die Anzahl der ungelesenen Nachrichten zurück"
 
 #: ../src/gajim-remote.py:220
 msgid "Opens 'Start Chat' dialog"
@@ -4373,31 +4339,27 @@ msgstr ""
 
 #: ../src/gajim-remote.py:235
 msgid "Handle a xmpp:/ uri"
-msgstr ""
+msgstr "Behandle eine xmpp:/ URI"
 
 #: ../src/gajim-remote.py:237
 msgid "uri"
-msgstr ""
+msgstr "URI"
 
 #: ../src/gajim-remote.py:242
-#, fuzzy
 msgid "Join a MUC room"
-msgstr "_Neuen Raum betreten"
+msgstr "Neuen Raum betreten"
 
 #: ../src/gajim-remote.py:244
-#, fuzzy
 msgid "room"
-msgstr "Von"
+msgstr "Raum"
 
 #: ../src/gajim-remote.py:245
-#, fuzzy
 msgid "nick"
 msgstr "Spitzname"
 
 #: ../src/gajim-remote.py:246
-#, fuzzy
 msgid "password"
-msgstr "Passwort:"
+msgstr "Passwort"
 
 #: ../src/gajim-remote.py:269
 msgid "Missing argument \"contact_jid\""
@@ -4444,13 +4406,13 @@ msgstr ""
 "Befehl ist einer von:\n"
 
 #: ../src/gajim-remote.py:439
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Too many arguments. \n"
 "Type \"%s help %s\" for more info"
 msgstr ""
-"Argument \"%s\" wurde nicht angegeben. \n"
-"Geben Sie \"%s help %s\" ein für Hilfe"
+"Zu viele Argumente. \n"
+"Geben Sie \"%s help %s\" ein für weitere Informationen"
 
 #: ../src/gajim-remote.py:443
 #, python-format
@@ -4462,9 +4424,8 @@ msgstr ""
 "Geben Sie \"%s help %s\" ein für Hilfe"
 
 #: ../src/gajim-remote.py:461
-#, fuzzy
 msgid "Wrong uri"
-msgstr "Falscher Host"
+msgstr "Falscher URI"
 
 #: ../src/gajim_themes_window.py:60
 msgid "Theme"
@@ -4603,13 +4564,13 @@ msgstr ""
 "ebenfalls gebannt. Unterstützt KEINE Leerzeichen im Spitznamen."
 
 #: ../src/groupchat_control.py:1260
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Usage: /%s <nickname>, opens a private chat window with the specified "
 "occupant."
 msgstr ""
-"Bedienung: /%s <Spitzname>, öffnet ein privates Chatfenster mit dem "
-"spezifierten Teilnehmer."
+"Verwendung: /%s <Spitzname>, öffnet ein privates Nachrichtenfenster mit dem "
+"Inhaber des angegebenen Spitznamens."
 
 #: ../src/groupchat_control.py:1264
 #, python-format
@@ -4669,14 +4630,14 @@ msgstr ""
 "Verwende dritte Person, z.B. /%s explodiert)."
 
 #: ../src/groupchat_control.py:1289
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message window and sends "
 "message to the occupant specified by nickname."
 msgstr ""
 "Verwendung: /%s <Spitzname> [Nachricht], öffnet ein privates "
 "Nachrichtenfenster und sendet die Nachricht zum Inhaber des angegebenen "
-"Spitznamen."
+"Spitznamens."
 
 #: ../src/groupchat_control.py:1294
 #, python-format
@@ -4821,18 +4782,17 @@ msgstr ""
 
 #. xmpp: is currently handled by another program, so ask the user
 #: ../src/gtkgui_helpers.py:649
-#, fuzzy
 msgid "Gajim is not the default Jabber client"
-msgstr "Gajim - Ein GTK+ Jabber-Client"
+msgstr "Gajim ist nicht Ihr Standard-Jabber-Client"
 
 #: ../src/gtkgui_helpers.py:650
-#, fuzzy
 msgid "Would you like to make Gajim the default Jabber client?"
-msgstr "Möchten Sie die Datei überschreiben?"
+msgstr "Möchten Sie Gajim zu Ihrem Standard-Jabber-Client machen?"
 
 #: ../src/gtkgui_helpers.py:651
 msgid "Always check to see if Gajim is the default Jabber client on startup"
 msgstr ""
+"Immer beim Programmstart prüfen, ob Gajim der Standard-Jabber-Client ist"
 
 #: ../src/gtkgui_helpers.py:750
 msgid "Extension not supported"
@@ -4851,7 +4811,7 @@ msgstr "Bild speichern unter ..."
 
 #: ../src/history_manager.py:64
 msgid "Cannot find history logs database"
-msgstr "Kann Verlaufslog-Datenkbank nicht finden"
+msgstr "Kann Verlaufs-Datenkbank nicht finden"
 
 #. holds jid
 #: ../src/history_manager.py:107
@@ -4899,7 +4859,7 @@ msgstr ""
 
 #: ../src/history_manager.py:400
 msgid "Exporting History Logs..."
-msgstr "Exportiere Verlaufslog ..."
+msgstr "Exportiere Verlauf ..."
 
 #: ../src/history_manager.py:476
 #, python-format
@@ -4993,7 +4953,7 @@ msgstr "Neue Nachricht von %(nickname)s"
 
 #: ../src/profile_window.py:72
 msgid "Retrieving profile..."
-msgstr "Empfange Profil..."
+msgstr "Empfange Profil ..."
 
 #: ../src/profile_window.py:107 ../src/profile_window.py:210
 #: ../src/profile_window.py:219
@@ -5016,7 +4976,7 @@ msgstr ""
 
 #: ../src/profile_window.py:326
 msgid "Sending profile..."
-msgstr "Sende Profil..."
+msgstr "Sende Profil ..."
 
 #: ../src/profile_window.py:341
 msgid "Information NOT published"
@@ -5077,7 +5037,7 @@ msgstr "von Konto %s"
 
 #: ../src/roster_window.py:1009
 msgid "_Manage Bookmarks..."
-msgstr "Verwalte Lesezeichen ..."
+msgstr "_Verwalte Lesezeichen..."
 
 #: ../src/roster_window.py:1038
 #, python-format
@@ -5087,7 +5047,7 @@ msgstr "für Konto %s"
 #. History manager
 #: ../src/roster_window.py:1059
 msgid "History Manager"
-msgstr "Verlaufsmanager"
+msgstr "_Verlaufsmanager"
 
 #: ../src/roster_window.py:1068
 msgid "_Join New Group Chat"
@@ -5108,7 +5068,6 @@ msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" wird entfernt"
 
 #: ../src/roster_window.py:1403
-#, fuzzy
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
@@ -5179,7 +5138,7 @@ msgstr "Ich würde dich gerne in meine Liste aufnehmen"
 
 #: ../src/roster_window.py:2088 ../src/roster_window.py:2135
 msgid "Send Group M_essage"
-msgstr "Sende Nachricht an Gruppe"
+msgstr "_Sende Nachricht an Gruppe"
 
 #: ../src/roster_window.py:2114
 msgid "Re_name"
@@ -5256,7 +5215,7 @@ msgstr ""
 #: ../src/roster_window.py:2692
 msgid "I want this contact to know my status after removal"
 msgstr ""
-"I möchte, dass dieser Kontakt meinen Status auch nach dem Entfernen sieht"
+"Ich möchte, dass dieser Kontakt meinen Status auch nach dem Entfernen sieht"
 
 #. several contact to remove at the same time
 #: ../src/roster_window.py:2696
@@ -5278,6 +5237,8 @@ msgid ""
 "Gnomekeyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
 msgstr ""
+"Gnome Keyring ist installiert, aber nicht korrekt gestartet "
+"(Umgebungsvariablen wahrscheinlich falsch gesetzt)"
 
 #. TODO: make this string translatable
 #. %s is the account name here
@@ -5365,15 +5326,14 @@ msgstr ""
 "fortfahren?"
 
 #: ../src/roster_window.py:4032
-#, fuzzy
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
 "accounts."
 msgstr ""
 "Metakontakte sind eine Möglichkeit, mehrere Kontakte in einer Zeile zu "
-"gruppieren. Normalerweise benutzt man Sie, wenn eine Person mehrere Jabber-"
-"Kontos oder Transport-Kontos hat."
+"gruppieren. Normalerweise benutzt man Sie, wenn eine Person mehrere Jabber- "
+"oder Transport-Konten hat."
 
 #: ../src/roster_window.py:4199
 #, python-format
@@ -5391,7 +5351,7 @@ msgstr "Ändere Statusnachricht ..."
 
 #: ../src/systray.py:144
 msgid "_Change Status Message..."
-msgstr "Ändere _Statusnachricht ..."
+msgstr "Ändere _Statusnachricht..."
 
 #: ../src/systray.py:234
 msgid "Hide this menu"
@@ -5548,9 +5508,9 @@ msgstr "Erstelle Log-Datenbank"
 
 #: ../src/common/check_paths.py:89 ../src/common/check_paths.py:100
 #: ../src/common/check_paths.py:107
-#, fuzzy, python-format
+#, python-format
 msgid "%s is a file but it should be a directory"
-msgstr "%s ist eine Datei, kein Verzeichnis"
+msgstr "%s ist eine Datei, aber es sollte ein Verzeichnis sein"
 
 #: ../src/common/check_paths.py:90 ../src/common/check_paths.py:101
 #: ../src/common/check_paths.py:108 ../src/common/check_paths.py:116
@@ -5558,7 +5518,7 @@ msgid "Gajim will now exit"
 msgstr "Gajim wird nun beendet"
 
 #: ../src/common/check_paths.py:115
-#, fuzzy, python-format
+#, python-format
 msgid "%s is a directory but should be a file"
 msgstr "%s ist ein Verzeichnis, sollte aber eine Datei sein"
 
@@ -5568,79 +5528,69 @@ msgid "creating %s directory"
 msgstr "Erstelle Verzeichnis %s"
 
 #: ../src/common/commands.py:69
-#, fuzzy
 msgid "Change status information"
-msgstr "Kontakt-Information"
+msgstr "Ändere Statusinformation"
 
 #: ../src/common/commands.py:82
-#, fuzzy
 msgid "Change status"
 msgstr "Kontakt hat Status verändert"
 
 #: ../src/common/commands.py:83
 msgid "Set the presence type and description"
-msgstr ""
+msgstr "Lege den Anwesenheitstyp und die Beschreibung fest"
 
 #: ../src/common/commands.py:89
-#, fuzzy
 msgid "Free for chat"
 msgstr "Frei zum Chatten"
 
 #: ../src/common/commands.py:90
-#, fuzzy
 msgid "Online"
-msgstr "Neun"
+msgstr "Online"
 
 #: ../src/common/commands.py:92
 msgid "Extended away"
-msgstr ""
+msgstr "Längere Zeit abwesend"
 
 #: ../src/common/commands.py:93
-#, fuzzy
 msgid "Do not disturb"
-msgstr "Bitte nicht stören."
+msgstr "Bitte nicht stören"
 
 #: ../src/common/commands.py:94
 msgid "Offline - disconnect"
-msgstr ""
+msgstr "Offline - Abgemeldet"
 
 #: ../src/common/commands.py:99
-#, fuzzy
 msgid "Presence description:"
-msgstr "Fehlerbeschreibung..."
+msgstr "Anwesenheitsbeschreibung:"
 
 #: ../src/common/commands.py:134
 msgid "The status has been changed."
-msgstr ""
+msgstr "Der Status hat sich verändert."
 
 #: ../src/common/commands.py:179
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s on %(room_jid)s"
-msgstr "%(nickname)s aus Gruppenchat %(room_name)s"
+msgstr "%(nickname)s aus Gruppenchat %(room_jid)s"
 
 #: ../src/common/commands.py:183
-#, fuzzy
 msgid "You have not joined a groupchat."
-msgstr "%s hat den Gruppenchat betreten"
+msgstr "Sie haben keinen Gruppenchat betreten."
 
 #: ../src/common/commands.py:189
-#, fuzzy
 msgid "Leave Groupchats"
-msgstr "Neuer Gruppenchat"
+msgstr "Verlasse Gruppenchat"
 
 #: ../src/common/commands.py:190
 msgid "Choose the groupchats you want to leave"
-msgstr ""
+msgstr "Wählen Sie den Gruppenchat, den Sie verlassen möchten"
 
 #: ../src/common/commands.py:194
-#, fuzzy
 msgid "Groupchats"
 msgstr "Gruppenchat"
 
 #: ../src/common/commands.py:230
-#, fuzzy
 msgid "You leaved the following groupchats:"
-msgstr "Sie sind bereits im Gruppenchat %s"
+msgstr "Sie haben folgenden Gruppenchat verlassen:"
 
 #: ../src/common/config.py:56
 msgid "Use D-Bus and Notification-Daemon to show notifications"
@@ -5689,16 +5639,15 @@ msgstr ""
 "'never' - Zeige nie die Zeit."
 
 #: ../src/common/config.py:93
-#, fuzzy
 msgid ""
 "Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 "
 "to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. "
 "This is used only if print_time is 'sometimes'."
 msgstr ""
-"Zeige die Zeit in Chats mittels Fuzzy Clock. Wert für Fuzzy von 1 bis 4 oder "
-"0, um die Fuzzy Clock zu deaktieren. 1 ist am genauesten, 4 ist die "
-"ungenaueste. Dies wird nur verwendet, wenn print_time auf 'sometimes' "
-"gesetzt ist."
+"Zeige die Zeit in Chats mittels ungenauer Uhr an. Werte für die "
+"Ungenauigkeit sind 1 bis 4 oder 0, um die ungenaue Uhr zu deaktivieren. 1 "
+"ist am Genauesten, 4 ist am Ungenaueste. Dies wird nur verwendet, wenn "
+"print_time auf 'sometimes' gesetzt ist."
 
 #: ../src/common/config.py:96
 msgid "Treat * / _ pairs as possible formatting characters."
@@ -5708,18 +5657,19 @@ msgstr "Behandle * / _ Paare als mögliche Formatierungszeichen."
 msgid ""
 "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
 msgstr ""
-"Falls wahr, entferne */_ nicht. So wird *abc* fett aber * * wird nicht "
-"entfernt."
+"Wenn aktiviert, wird */_ nicht entfernt. So wird *abc* fett gedruckt, aber * "
+"* wird nicht entfernt."
 
 #: ../src/common/config.py:100
-#, fuzzy
 msgid ""
 "Uses ReStructured text markup to send HTML, plus ascii formatting if "
 "selected. For syntax, see http://docutils.sourceforge.net/docs/ref/rst/"
 "restructuredtext.html (If you want to use this, install docutils)"
 msgstr ""
-"Verwendet ReStructured Textmarkierungen für HTML und ASCII-Formatierung "
-"falls aktiviere (falls Sie dies wünschen, installieren Sie docutils)."
+"Wenn aktiviert, wird reStructuredText für die HTML und ASCII-Formatierung "
+"verwendet (falls dies erwünscht ist, installieren Sie docutils). "
+"Informationen zur Syntax finden Sie unter http://docutils.sourceforge.net/"
+"docs/ref/rst/restructuredtext.html (Englisch)"
 
 #: ../src/common/config.py:109
 msgid ""
@@ -5743,14 +5693,18 @@ msgid ""
 "exemple \"[%H:%M] \" will show \"[hour:minute] \". See python doc on "
 "strftime for full documentation: http://docs.python.org/lib/module-time.html"
 msgstr ""
+"Hiermit lässt sich der Zeitstempel anpassen, der in den Unterhaltungen "
+"verwendet wird. Zum Beispiel wird \"[%H:%M] \" zu \"[Stunde:Minute] \". "
+"Weitere Informationen finden Sie in der Python-Dokumentation zu 'strftime' "
+"unter http://docs.python.org/lib/module-time.html (Englisch)."
 
 #: ../src/common/config.py:134
 msgid "Characters that are printed before the nickname in conversations"
-msgstr ""
+msgstr "Zeichen, die vor dem Spitzname gedruckt werden"
 
 #: ../src/common/config.py:135
 msgid "Characters that are printed after the nickname in conversations"
-msgstr ""
+msgstr "Zeichen, die nach dem Spitznamen gedruckt werden"
 
 #: ../src/common/config.py:142
 msgid "Add * and [n] in roster title?"
@@ -5803,10 +5757,10 @@ msgid ""
 "False and they sync with global status) based upon the status of the network "
 "connection."
 msgstr ""
-"Wenn aktiviert, reagiere auf D-Bus-Signale von NetworkManager and ändere den "
+"Wenn aktiviert, reagiere auf D-Bus-Signale vom NetworkManager und ändere den "
 "Status von Konten (vorausgesetzt, sie haben listen_to_network_manager nicht "
 "auf False gesetzt und sie synchronisieren sich mit dem globalen Status) "
-"basierend auf demStatus der Netzwerkverbindung."
+"basierend auf dem Status der Netzwerkverbindung."
 
 #: ../src/common/config.py:155
 msgid ""
@@ -5829,7 +5783,7 @@ msgid ""
 "every x minutes."
 msgstr ""
 "Wenn die Uhrzeit nicht für jede Nachricht angezeigt werden soll "
-"(print_time==sometimes), zeigesie alle x Minuten."
+"(print_time==sometimes), zeige sie alle x Minuten."
 
 #: ../src/common/config.py:159
 msgid "Ask before closing a group chat tab/window."
@@ -5896,18 +5850,19 @@ msgstr ""
 "Unterstützung aktiv ist."
 
 #: ../src/common/config.py:191
-#, fuzzy
 msgid ""
 "If True, Gajim will check if it's the default jabber client on each startup."
-msgstr "Falls wahr, registriert Gajim bei jedem Start für xmpp://."
+msgstr ""
+"Wenn aktiviert, wird Gajim beim Starten überprüfen, ob Gajim der Standard-"
+"Jabber-Client ist."
 
 #: ../src/common/config.py:192
 msgid ""
 "If True, Gajim will display an icon on each tab containing unread messages. "
 "Depending on the theme, this icon may be animated."
 msgstr ""
-"Falls wahr. wird Gajim ein Icon auf jedem Tab mit ungelesenen Nachrichten "
-"anzeigen.Abhängig vom Theme ist dieses Icon animiert."
+"Falls aktiviert, wird Gajim ein Icon auf jedem Tab mit ungelesenen "
+"Nachrichten anzeigen. Abhängig vom Thema kann dieses Icon animiert sein."
 
 #: ../src/common/config.py:193
 msgid ""
@@ -5934,7 +5889,6 @@ msgstr ""
 "Kontakt seinen Status und/oder seine Statusnachricht ändert."
 
 #: ../src/common/config.py:197
-#, fuzzy
 msgid ""
 "can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no "
 "longer print status line in groupchats when a member changes his or her "
@@ -5942,11 +5896,11 @@ msgid ""
 "status messages. If \"in_and_out\", Gajim will only print FOO enters/leaves "
 "group chat."
 msgstr ""
-"kann \"none\", \"all\" oder \"in_and_out\" sein. Falls \"none\", wird Gajim "
+"Kann \"none\", \"all\" oder \"in_and_out\" sein. Falls \"none\", wird Gajim "
 "keine Status-Zeilen mehr in Gruppenchats anzeigen, wenn ein Mitglied seinen "
-"Status oder seine Statusnachricht ändert. Falls \"alL\", wird Gajim alle "
+"Status oder seine Statusnachricht ändert. Falls \"all\", wird Gajim alle "
 "Statusnachrichten anzeigen. Falls \"in_and_out\", wird Gajim nur einen "
-"Status anzeigen, wenn jemandden Gruppenchat betritt oder verlässt."
+"Status anzeigen, wenn jemand den Gruppenchat betritt oder verlässt."
 
 #: ../src/common/config.py:199
 msgid "Background color of contacts when they just signed in."
@@ -6004,7 +5958,7 @@ msgid ""
 msgstr ""
 "Kontrolliert das Fenster in dem neue Nachrichten platziert werden.\n"
 "'always' - Alle Nachrichten landen in einem einzelnen Fenster.\n"
-"'never' Alle Nachrichten bekommen ihr eigenes Fenster.\n"
+"'never' - Alle Nachrichten bekommen ihr eigenes Fenster.\n"
 "'peracct' - Nachrichten für jeden Account landen in einem speziellen "
 "Fenster.\n"
 "'pertype' - Jede Nachrichtentyp (z.B. Chat vs. Gruppenchat) landet in in "
@@ -6049,10 +6003,9 @@ msgstr ""
 "nicht die selbe Person ist die schon die letzte Nachricht geschrieben hat."
 
 #: ../src/common/config.py:219
-#, fuzzy
 msgid "Indentation when using merge consecutive nickname."
 msgstr ""
-"Einrücken, wenn das Zusammenführen nachfolgender Spitznamen verwendet wird."
+"Einrückung, wenn das Zusammenführen nachfolgender Spitznamen verwendet wird."
 
 #: ../src/common/config.py:220
 msgid "List of colors that will be used to color nicknames in group chats."
@@ -6063,7 +6016,7 @@ msgstr ""
 #: ../src/common/config.py:221
 msgid "Ctrl-Tab go to next composing tab when none is unread."
 msgstr ""
-"Strg-Tab, um zum nächsten Reiter zu gehen, wenn keine Anderer neue "
+"Strg-Tab, um zum nächsten Reiter zu gehen, wenn kein Anderer neue "
 "Nachrichten enthält."
 
 #: ../src/common/config.py:222
@@ -6075,13 +6028,12 @@ msgstr ""
 "werden oder nicht? Bei leerer Zeichenfolge wird der Dialog nie gezeigt."
 
 #: ../src/common/config.py:223
-#, fuzzy
 msgid ""
 "If True, you will be able to set a negative priority to your account in "
 "account modification window. BE CAREFUL, when you are logged in with a "
 "negative priority, you will NOT receive any message from your server."
 msgstr ""
-"Wenn aktiviert werden Sie in der Lage sein eine negative Priorität für Ihr "
+"Wenn aktiviert, werden Sie in der Lage sein eine negative Priorität für Ihr "
 "Konto im Konto-Bearbeiten Fenster zu setzen. SEIEN SIE VORSICHTIG, wenn Sie "
 "mit einer negativen Priorität angemeldet sind: Sie werden KEINE Nachrichten "
 "mehr von Ihrem Server erhalten."
@@ -6091,18 +6043,24 @@ msgid ""
 "If True, Gajim will use Gnome Keyring (if available) to store account "
 "passwords."
 msgstr ""
+"Wenn aktiviert, wird Gnome Keyring (falls verfügbar) verwendet, um die "
+"Passwörter der Konten zu speichern."
 
 #: ../src/common/config.py:225
 msgid ""
 "If True, Gajim will show number of online and total contacts in account and "
 "group rows."
 msgstr ""
+"Wenn aktiviert, wird Gajim die Anzahl der angemeldeten und gesamten Kontakte "
+"in den Konto- und Gruppenreihen anzeigen."
 
 #: ../src/common/config.py:226
 msgid ""
 "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages "
 "as if they were of this type"
 msgstr ""
+"Kann leer, 'chat' oder 'normal' sein. Wenn nicht leer, dann werden alle "
+"eingehenden Nachrichten so behandelt, als wären sie von diesem Typ."
 
 #: ../src/common/config.py:237
 msgid ""
@@ -6123,7 +6081,7 @@ msgid ""
 "file_transfer_proxies option for file transfer."
 msgstr ""
 "Wenn aktiviert, wird Gajim Ihre IP und die in der file_transfer_proxies "
-"Optiondefinierten Proxies für den Datentransfer verwenden."
+"Option definierten Proxies für den Datentransfer verwenden."
 
 #: ../src/common/config.py:329
 msgid "Is OpenPGP enabled for this contact?"
@@ -6225,7 +6183,7 @@ msgid ""
 "muc_highlight_words, or when a group chat message contains your nickname."
 msgstr ""
 "Abzuspielender Ton, falls eine Gruppenchat-Nachricht eines der Wörter aus "
-"der muc_highlights_works-Liste- oder Ihren Spitznamen enthält."
+"der muc_highlights_works-Liste oder Ihren Spitznamen enthält."
 
 #: ../src/common/config.py:380
 msgid "Sound to play when any MUC message arrives."
@@ -6401,9 +6359,8 @@ msgid "Please check your login and password for correctness."
 msgstr "Bitte überprüfen Sie ihren Benutzernamen und Passwort."
 
 #: ../src/common/connection.py:495
-#, fuzzy
 msgid "Error while removing privacy list"
-msgstr "Fehler beim Hinzufügen des Dienstes. %s"
+msgstr "Fehler beim Entfernen der Privatliste"
 
 #: ../src/common/connection.py:496
 #, python-format
@@ -6411,6 +6368,9 @@ msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Desactivate it and try again."
 msgstr ""
+"Privatliste %s wurde nicht entfernt. Möglicherweise ist die Privatliste noch "
+"in einer Ihrer Verbindungen aktiv. Deaktivieren Sie diese und versuchen Sie "
+"es erneut."
 
 #. We didn't set a passphrase
 #: ../src/common/connection.py:594
@@ -6453,9 +6413,8 @@ msgid "Not fetched because of invisible status"
 msgstr "Nicht abgeholt aufgrund eines Unsichtbar-Status"
 
 #: ../src/common/contacts.py:271
-#, fuzzy
 msgid "Not in roster"
-msgstr "Nicht in der Liste"
+msgstr "Nicht in der Kontaktliste"
 
 #. only say that to non Windows users
 #: ../src/common/dbus_support.py:33
@@ -6474,7 +6433,8 @@ msgstr ""
 #: ../src/common/exceptions.py:30
 msgid "Service not available: Gajim is not running, or remote_control is False"
 msgstr ""
-"Dienst nicht verfügbar: Gajim ist nicht aktiv oder remote_control ist False"
+"Dienst nicht verfügbar: Gajim ist nicht aktiv oder remote_control ist "
+"deaktiviert"
 
 #: ../src/common/exceptions.py:38
 msgid "D-Bus is not present on this machine or python module is missing"
@@ -6539,67 +6499,54 @@ msgstr "Zwölf"
 #. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
-#, fuzzy
 msgid "$0 o'clock"
 msgstr "%0 Uhr"
 
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
-#, fuzzy
 msgid "five past $0"
-msgstr "Fünf nach %0"
+msgstr "fünf nach %0"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
-#, fuzzy
 msgid "ten past $0"
-msgstr "Zehn nach %0"
+msgstr "zehn nach %0"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
-#, fuzzy
 msgid "quarter past $0"
 msgstr "viertel nach %0"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
-#, fuzzy
 msgid "twenty past $0"
-msgstr "Zwanzig nach %0"
+msgstr "zwanzig nach %0"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
-#, fuzzy
 msgid "twenty five past $0"
-msgstr "Fünfundzwanzig nach %0"
+msgstr "fünfundzwanzig nach %0"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
-#, fuzzy
 msgid "half past $0"
-msgstr "Dreißig nach %0"
+msgstr "dreißig nach %0"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
-#, fuzzy
 msgid "twenty five to $1"
 msgstr "fünfundzwanzig vor %1"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
-#, fuzzy
 msgid "twenty to $1"
 msgstr "zwanzig vor %1"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
-#, fuzzy
 msgid "quarter to $1"
 msgstr "viertel vor %1"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
-#, fuzzy
 msgid "ten to $1"
 msgstr "zehn vor %1"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
-#, fuzzy
 msgid "five to $1"
 msgstr "fünf vor %1"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:61
-#, fuzzy
 msgid "$1 o'clock"
 msgstr "%1 Uhr"
 
@@ -6743,7 +6690,7 @@ msgstr "Verbinde"
 
 #: ../src/common/helpers.py:232
 msgid "A_way"
-msgstr "_Abwesend"
+msgstr "Ab_wesend"
 
 #: ../src/common/helpers.py:237
 msgid "_Offline"
@@ -6839,12 +6786,12 @@ msgstr "tut etwas anderes"
 
 #: ../src/common/helpers.py:350
 msgid "is composing a message..."
-msgstr "schreibt im Moment ..."
+msgstr "schreibt im Moment"
 
 #. paused means he or she was composing but has stopped for a while
 #: ../src/common/helpers.py:353
 msgid "paused composing a message"
-msgstr "schreibt im Moment nicht mehr ..."
+msgstr "macht gerade eine Schreibpause"
 
 #: ../src/common/helpers.py:355
 msgid "has closed the chat window or tab"
@@ -6898,7 +6845,6 @@ msgid "cyan"
 msgstr "cyan"
 
 #: ../src/common/optparser.py:306
-#, fuzzy
 msgid "migrating logs database to indices"
 msgstr "migriere Logdatenbank zu Indices"
 
@@ -6990,6 +6936,30 @@ msgstr "[Diese Nachricht ist verschlüsselt]"
 msgid "Error while adding service. %s"
 msgstr "Fehler beim Hinzufügen des Dienstes. %s"
 
+#~ msgid "%s is not a valid loglevel"
+#~ msgstr "%s ist kein gültiger Loglevel."
+
+#~ msgid "Security error connecting to \"%s\""
+#~ msgstr "Konnte nicht mit %s verbinden"
+
+#~ msgid ""
+#~ "The server's key has changed, or someone is trying to hack your "
+#~ "connection."
+#~ msgstr ""
+#~ "Der Schlüssel des Servers wurde geändert oder jemand versucht ihre "
+#~ "Verbindung zu hacken."
+
+#~ msgid "Unable to check fingerprint for %s. Connection could be insecure."
+#~ msgstr ""
+#~ "Konnte Fingerabdruck von %s nicht überprüfen. Die Verbindung ist "
+#~ "möglicherweise unsicher."
+
+#~ msgid "Missing fingerprint in SSL connection to %s"
+#~ msgstr "Fehlender Fingerabdruck in der SSL-Verbindung zu %s"
+
+#~ msgid "Fingerprint mismatch for %s: Got %s, expected %s"
+#~ msgstr "Fingerabdruck von %s stimmt nicht überein: Erhalten %s, erwartet %s"
+
 #~ msgid "A_fter nickname:"
 #~ msgstr "Nach dem Spit_znamen:"
 
@@ -7080,35 +7050,11 @@ msgstr "Fehler beim Hinzufügen des Dienstes. %s"
 #~ msgid "Be right back"
 #~ msgstr "Bin gleich zurück"
 
-#, fuzzy
-#~ msgid "_Account:"
-#~ msgstr "Konto:"
-
-#, fuzzy
-#~ msgid "Add"
-#~ msgstr "Adresse"
-
-#, fuzzy
-#~ msgid "Away "
-#~ msgstr "Abwesend"
-
-#, fuzzy
-#~ msgid "Down"
-#~ msgstr "Download"
-
-#, fuzzy
-#~ msgid "List of special notifications settings"
-#~ msgstr "Füge speziellen Hinweis für %s hinzu"
-
-#, fuzzy
-#~ msgid "Not Available "
-#~ msgstr "Nicht verfügbar"
-
 #~ msgid "Jabber"
 #~ msgstr "Jabber"
 
 #~ msgid "Migrating Logs..."
-#~ msgstr "Migriere Logs..."
+#~ msgstr "Migriere Logs ..."
 
 #~ msgid "Automatically authorize contact"
 #~ msgstr "Kontakt automatisch autorisieren"
@@ -7120,7 +7066,7 @@ msgstr "Fehler beim Hinzufügen des Dienstes. %s"
 #~ msgstr "Unterstreichen"
 
 #~ msgid "_Join New Room..."
-#~ msgstr "_Neuen Raum betreten"
+#~ msgstr "_Neuen Raum betreten..."
 
 #~ msgid "Usage: /%s, sets the groupchat window to compact mode."
 #~ msgstr "Bedienung: /%s, stellt das Gruppenchat-Fenster auf Kompaktmodus."
@@ -7217,7 +7163,7 @@ msgstr "Fehler beim Hinzufügen des Dienstes. %s"
 #~ msgstr "_Emoticons verwenden"
 
 #~ msgid "_Set Image..."
-#~ msgstr "Bild wählen..."
+#~ msgstr "_Bild wählen..."
 
 #~ msgid "Switch to %s"
 #~ msgstr "Wechseln zu %s"
@@ -7275,7 +7221,7 @@ msgstr "Fehler beim Hinzufügen des Dienstes. %s"
 #~ "pysqlite2 (auch bekannt als python-pysqlite2) Abhängigkeit fehlt. Nachdem "
 #~ "Sie pysqlite2installiert haben, wenn Sie Ihre Logs in die neue Datenbank "
 #~ "migrieren möchte, lesen Siebitte: http://trac.gajim.org/wiki/"
-#~ "MigrateLogToDot9DB Beende..."
+#~ "MigrateLogToDot9DB Beende ..."
 
 #~ msgid "Image is too big"
 #~ msgstr "Das Bild ist zu groß"
@@ -7513,7 +7459,7 @@ msgstr "Fehler beim Hinzufügen des Dienstes. %s"
 #~ msgstr "Kein aktives Konto"
 
 #~ msgid "Join _Group Chat..."
-#~ msgstr "_Chatraum beitreten"
+#~ msgstr "_Chatraum beitreten..."
 
 #~ msgid "Po_sition:"
 #~ msgstr "Position:"
@@ -7525,7 +7471,7 @@ msgstr "Fehler beim Hinzufügen des Dienstes. %s"
 #~ msgstr "_Dienste durchsuchen"
 
 #~ msgid "_Service Discovery..."
-#~ msgstr "_Dienste durchsuchen"
+#~ msgstr "_Dienste durchsuchen..."
 
 #~ msgid "error appeared while processing xmpp:"
 #~ msgstr "Fehler während der Verarbeitung von xmpp:"
