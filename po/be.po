@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: 0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-16 20:08+0100\n"
-"PO-Revision-Date: 2007-01-19 20:18+0300\n"
+"PO-Revision-Date: 2007-01-20 00:01+0300\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
@@ -660,7 +660,7 @@ msgstr "Усе станы"
 #: ../data/glade/advanced_notifications_window.glade.h:8
 #: ../src/common/commands.py:91 ../src/common/helpers.py:234
 msgid "Away"
-msgstr "Зышоў"
+msgstr "Сышоў"
 
 #: ../data/glade/advanced_notifications_window.glade.h:9
 msgid "Busy "
@@ -1382,7 +1382,7 @@ msgstr "Дазволіць адпраўку звестак аб _сістэме"
 #: ../data/glade/preferences_window.glade.h:17
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
-"Дазволіць паказ паведамленняў і нагадванні, калі я _зышоў/заняты/нябачны"
+"Дазволіць паказ паведамленняў і нагадванні, калі я _сышоў/заняты/нябачны"
 
 #: ../data/glade/preferences_window.glade.h:18
 msgid "Also known as iChat style"
@@ -1400,7 +1400,7 @@ msgid ""
 "anymore for a status message when you change your status to away; it will "
 "use the default one set here"
 msgstr ""
-"Напрыклад, калі Вы ўключылі паведамленне стану для зышоўшага стану, Gajim "
+"Напрыклад, калі Вы ўключылі паведамленне стану для сышоўшага стану, Gajim "
 "больш не будзе ў Вас пытацца пацверджання гэтага паведамлення"
 
 #: ../data/glade/preferences_window.glade.h:21
@@ -1409,7 +1409,7 @@ msgstr "Запытацца аб паведамленні змены стану, 
 
 #: ../data/glade/preferences_window.glade.h:22
 msgid "Auto _away after:"
-msgstr "Аўтаматычна змяняць стан на \"_зышоў\" праз:"
+msgstr "Аўтаматычна змяняць стан на \"_сышоў\" праз:"
 
 #: ../data/glade/preferences_window.glade.h:23
 msgid "Auto _not available after:"
@@ -1537,7 +1537,7 @@ msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed out"
 msgstr ""
-"Gajim будзе паведамляць Вам аб зышоўшых людзях у выплыўным вакне ў правым "
+"Gajim будзе паведамляць Вам аб сышоўшых людзях у выплыўным вакне ў правым "
 "верхнім куце экрана"
 
 #: ../data/glade/preferences_window.glade.h:50
@@ -1685,7 +1685,7 @@ msgstr "Т_эма:"
 
 #: ../data/glade/preferences_window.glade.h:80
 msgid "The auto away status message"
-msgstr "Паведамленне аб аўтаматычным зыходзе"
+msgstr "Паведамленне аб аўтаматычным сыходзе"
 
 #: ../data/glade/preferences_window.glade.h:81
 msgid "The auto not available status message"
@@ -1781,7 +1781,7 @@ msgstr "_Адкрыць..."
 
 #: ../data/glade/preferences_window.glade.h:101
 msgid "_Outgoing message:"
-msgstr "_Зыходнае паведамленне:"
+msgstr "_Выходнае паведамленне:"
 
 #: ../data/glade/preferences_window.glade.h:102
 msgid "_Player:"
@@ -3356,7 +3356,7 @@ msgstr "Чалавек прыйшоў"
 
 #: ../src/dialogs.py:1386 ../src/notify.py:219 ../src/notify.py:417
 msgid "Contact Signed Out"
-msgstr "Чалавек зышоў"
+msgstr "Чалавек сышоў"
 
 #. chat message
 #: ../src/dialogs.py:1388 ../src/notify.py:238 ../src/notify.py:419
@@ -4417,7 +4417,7 @@ msgstr "Памылка адпраўкі прыватнага паведамле�
 #: ../src/groupchat_control.py:125
 #, python-format
 msgid "You are no longer in group chat \"%s\" or \"%s\" has left."
-msgstr "Вы выйшлі з пакоя \"%s\", альбо \"%s\" зышоў."
+msgstr "Вы выйшлі з пакоя \"%s\", альбо \"%s\" сышоў."
 
 #: ../src/groupchat_control.py:144
 msgid "Group Chat"
@@ -4466,7 +4466,7 @@ msgstr "%s змяніў мянушку на %s"
 #: ../src/groupchat_control.py:937
 #, python-format
 msgid "%s has left"
-msgstr "%s зышоў"
+msgstr "%s сышоў"
 
 #: ../src/groupchat_control.py:942
 #, python-format
@@ -4625,7 +4625,7 @@ msgstr "Даведка па /%s адсутнічае"
 #: ../src/groupchat_control.py:1359
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
-msgstr "Вы сапраўды хочаце зысці з групавой размовы \"%s\"?"
+msgstr "Вы сапраўды хочаце сысці з групавой размовы \"%s\"?"
 
 #: ../src/groupchat_control.py:1361
 msgid ""
@@ -4879,7 +4879,7 @@ msgstr "%(nickname)s прыйшоў"
 #: ../src/notify.py:214
 #, python-format
 msgid "%(nickname)s Signed Out"
-msgstr "%(nickname)s зышоў"
+msgstr "%(nickname)s сышоў"
 
 #: ../src/notify.py:226
 #, python-format
@@ -5103,7 +5103,7 @@ msgstr "_Увайсці"
 
 #: ../src/roster_window.py:2190
 msgid "Log _off"
-msgstr "_Зысці"
+msgstr "_Сысці"
 
 #: ../src/roster_window.py:2312 ../src/roster_window.py:2383
 msgid "_Change Status Message"
@@ -5509,11 +5509,11 @@ msgstr "Вы не ўвайшлі ў пакой групавой размовы."
 
 #: ../src/common/commands.py:189
 msgid "Leave Groupchats"
-msgstr "Зысці з групавых размоў"
+msgstr "Сысці з групавых размоў"
 
 #: ../src/common/commands.py:190
 msgid "Choose the groupchats you want to leave"
-msgstr "Выберыце групавыя размовы, з якіх Вы хочаце зысці"
+msgstr "Выберыце групавыя размовы, з якіх Вы хочаце сысці"
 
 #: ../src/common/commands.py:194
 msgid "Groupchats"
@@ -5521,7 +5521,7 @@ msgstr "Групавыя размовы"
 
 #: ../src/common/commands.py:230
 msgid "You leaved the following groupchats:"
-msgstr "Вы зышлі з наступных групавых размоў:"
+msgstr "Вы сышлі з наступных групавых размоў:"
 
 #: ../src/common/config.py:56
 msgid "Use D-Bus and Notification-Daemon to show notifications"
@@ -5529,11 +5529,11 @@ msgstr "Паказваць нагадванні праз DBus і Notification-Da
 
 #: ../src/common/config.py:61
 msgid "Time in minutes, after which your status changes to away."
-msgstr "Праз колькі хвілінаў змяняць стан на зышоўшы."
+msgstr "Праз колькі хвілінаў змяняць стан на сышоўшы."
 
 #: ../src/common/config.py:62
 msgid "Away as a result of being idle"
-msgstr "Зышоў як вынік марнавання часу"
+msgstr "Сышоў як вынік марнавання часу"
 
 #: ../src/common/config.py:64
 msgid "Time in minutes, after which your status changes to not available."
@@ -5818,7 +5818,7 @@ msgstr ""
 "выстаўленая ў \"none\", Gajim не будзе паказваць паведамленні аб змене стану "
 "суразмоўцаў у вакне размовы. Калі опцыя выстаўленая ў \"all\", Gajim будзе "
 "паказваць усе такія паведамленні. Калі опцыя выстаўленая ў \"in_and_out\", "
-"Gajim будзе паказваць толькі паведамленні аб зыходзе / ўваходзе суразмоўцы."
+"Gajim будзе паказваць толькі паведамленні аб сыходзе / ўваходзе суразмоўцы."
 
 #: ../src/common/config.py:199
 msgid "Background color of contacts when they just signed in."
@@ -5826,7 +5826,7 @@ msgstr "Фонавы колер для толькі ўвайшоўшых люд�
 
 #: ../src/common/config.py:200
 msgid "Background color of contacts when they just signed out."
-msgstr "Фонавы колер для толькі зышоўшых людзей."
+msgstr "Фонавы колер для толькі сышоўшых людзей."
 
 #: ../src/common/config.py:202
 msgid ""
@@ -6062,7 +6062,7 @@ msgstr "Я на тэлефоне."
 
 #: ../src/common/config.py:360
 msgid "Out"
-msgstr "Зышоў"
+msgstr "Сышоў"
 
 #: ../src/common/config.py:360
 msgid "I'm out enjoying life."
