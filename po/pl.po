@@ -4144,7 +4144,7 @@ msgid ""
 "Usage: %s %s %s \n"
 "\t %s"
 msgstr ""
-"Użycie:·%s·%s·%s·\n"
+"Użycie: %s %s %s \n"
 "\t %s"
 
 #: ../src/gajim-remote.py:357
@@ -4854,7 +4854,7 @@ msgstr "Historia rozmowy z %s"
 #: ../src/history_window.py:258
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
-msgstr "%(nick)s·jes teraz·%(status)s:·%(status_msg)s"
+msgstr "%(nick)s jes teraz %(status)s: %(status_msg)s"
 
 #: ../src/history_window.py:262 ../src/notify.py:199
 #, python-format
