@@ -233,10 +233,8 @@ class PreferencesWindow:
 
 		if gajim.config.get('print_time') == 'never':
 			self.xml.get_widget('time_never_radiobutton').set_active(True)
-			self._set_sensitivity_for_before_after_time_widgets(False)
 		elif gajim.config.get('print_time') == 'sometimes':
 			self.xml.get_widget('time_sometimes_radiobutton').set_active(True)
-			self._set_sensitivity_for_before_after_time_widgets(False)
 		else:
 			self.xml.get_widget('time_always_radiobutton').set_active(True)
 
@@ -696,26 +694,19 @@ class PreferencesWindow:
 	def on_xhtml_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
 		
-	def _set_sensitivity_for_before_after_time_widgets(self, sensitive):
-		self.xml.get_widget('time_stamp_label').set_sensitive(sensitive)
-		self.xml.get_widget('time_stamp_textview').set_sensitive(sensitive)
-	
 	def on_time_never_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			gajim.config.set('print_time', 'never')
-		self._set_sensitivity_for_before_after_time_widgets(False)
 		gajim.interface.save_config()
 
 	def on_time_sometimes_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			gajim.config.set('print_time', 'sometimes')
-		self._set_sensitivity_for_before_after_time_widgets(False)
 		gajim.interface.save_config()
 
 	def on_time_always_radiobutton_toggled(self, widget):
 		if widget.get_active():
 			gajim.config.set('print_time', 'always')
-		self._set_sensitivity_for_before_after_time_widgets(True)
 		gajim.interface.save_config()
 
 	def update_text_tags(self):

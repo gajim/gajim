@@ -372,6 +372,6 @@ class OptionsParser:
 	def update_config_to_01101(self):
 		'''fill time_stamp from before_time and after_time'''
 		if self.old_values.has_key('before_time'):
-			gajim.config.set('time_stamp', '%s%%H:%%M%s ' % (
+			gajim.config.set('time_stamp', '%s%%X%s ' % (
 				self.old_values['before_time'], self.old_values['after_time']))
 		gajim.config.set('version', '0.11.0.1')
