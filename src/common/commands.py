@@ -227,7 +227,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
 			self.badRequest(request)
 			return False
 		response, cmd = self.buildResponse(request, status = 'completed')
-		note = _('You leaved the following groupchats:')
+		note = _('You left the following groupchats:')
 		for room_jid in gc:
 			note += '\n\t' + room_jid
 		cmd.addChild('note', {}, note)
