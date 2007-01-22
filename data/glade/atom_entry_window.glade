@@ -17,6 +17,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GtkVBox" id="vbox112">
@@ -157,7 +158,7 @@
 	  <child>
 	    <widget class="GtkLabel" id="feed_tagline_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">&lt;small&gt;Romeo and Juliet&lt;/small&gt;</property>
+	      <property name="label">&lt;small&gt;Romeo and Juliet&lt;/small&gt;</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">True</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -184,7 +185,7 @@
 	  <child>
 	    <widget class="GtkLabel" id="last_modified_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">2003-12-13T18:30:02Z</property>
+	      <property name="label">2003-12-13T18:30:02Z</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -218,7 +219,7 @@
 	      <child>
 		<widget class="GtkLabel" id="feed_title_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Old stories</property>
+		  <property name="label">Old stories</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -255,7 +256,7 @@
 	      <child>
 		<widget class="GtkLabel" id="entry_title_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Soliloquy</property>
+		  <property name="label">Soliloquy</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
