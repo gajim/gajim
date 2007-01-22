@@ -2729,7 +2729,7 @@ class RosterWindow:
 					text = _('Enter your password for account %s') % account
 					if passwords.USER_HAS_GNOMEKEYRING and \
 					not passwords.USER_USES_GNOMEKEYRING:
-						text += '\n' + _('Gnomekeyring is installed but not correctly started (environment variable probably not correctly set)')
+						text += '\n' + _('Gnome Keyring is installed but not correctly started (environment variable probably not correctly set)')
 					w = dialogs.PassphraseDialog(_('Password Required'), text,
 						_('Save password'))
 					passphrase, save = w.run()
