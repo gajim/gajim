@@ -442,7 +442,11 @@ class CommandWindow:
 
 			# no commands => no commands stage
 			# commands => command selection stage
-			items = response.getTag('query').getTags('item')
+			query = response.getTag('query')
+			if query:
+				items = query.getTags('item')
+			else:
+				items = []
 			if len(items)==0:
 				self.commandlist = []
 				self.stage4()
