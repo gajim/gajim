@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-16 20:08+0100\n"
+"POT-Creation-Date: 2007-01-23 21:28+0100\n"
 "PO-Revision-Date: 2006-12-04 01:07+0800\n"
 "Last-Translator: kangkang <kanger@gmail.com>\n"
 "Language-Team: sIyU <jabber@lzusiyu.org>\n"
@@ -48,7 +48,7 @@ msgstr "添加联系人(_A)..."
 msgid "_Discover Services..."
 msgstr "发掘服务(_D)..."
 
-#: ../data/glade/account_context_menu.glade.h:4
+#: ../data/glade/account_context_menu.glade.h:4 ../src/disco.py:1147
 msgid "_Execute Command..."
 msgstr "执行命令(_E)..."
 
@@ -252,7 +252,7 @@ msgstr "编辑个人信息..."
 
 #: ../data/glade/account_modification_window.glade.h:14
 #: ../data/glade/roster_window.glade.h:5 ../src/notify.py:457
-#: ../src/notify.py:479 ../src/notify.py:491 ../src/common/helpers.py:905
+#: ../src/notify.py:479 ../src/notify.py:491 ../src/common/helpers.py:914
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -318,22 +318,22 @@ msgid "Manage..."
 msgstr "管理..."
 
 #: ../data/glade/account_modification_window.glade.h:25
-#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1617
-#: ../src/config.py:3414
+#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1608
+#: ../src/config.py:3399
 msgid "No key selected"
 msgstr "没有选择钥匙"
 
 #. None means no proxy profile selected
-#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1197
-#: ../src/config.py:1202 ../src/config.py:1386 ../src/config.py:1607
-#: ../src/config.py:1616 ../src/config.py:1675 ../src/config.py:1749
-#: ../src/config.py:3404 ../src/config.py:3413 ../src/dialogs.py:281
+#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1188
+#: ../src/config.py:1193 ../src/config.py:1377 ../src/config.py:1598
+#: ../src/config.py:1607 ../src/config.py:1666 ../src/config.py:1740
+#: ../src/config.py:3389 ../src/config.py:3398 ../src/dialogs.py:281
 #: ../src/dialogs.py:283
 msgid "None"
 msgstr "无"
 
 #: ../data/glade/account_modification_window.glade.h:28
-#: ../data/glade/profile_window.glade.h:25
+#: ../data/glade/profile_window.glade.h:26
 #: ../data/glade/zeroconf_properties_window.glade.h:17
 msgid "Personal Information"
 msgstr "个人信息"
@@ -658,7 +658,7 @@ msgid "All statuses"
 msgstr "所有状态"
 
 #: ../data/glade/advanced_notifications_window.glade.h:8
-#: ../src/common/commands.py:91 ../src/common/helpers.py:234
+#: ../src/common/commands.py:91 ../src/common/helpers.py:243
 msgid "Away"
 msgstr "离开"
 
@@ -675,7 +675,7 @@ msgid "Have "
 msgstr "有"
 
 #: ../data/glade/advanced_notifications_window.glade.h:12
-#: ../src/common/helpers.py:244
+#: ../src/common/helpers.py:253
 msgid "Invisible"
 msgstr "隐身"
 
@@ -684,7 +684,7 @@ msgid "Launch a command"
 msgstr "启动命令"
 
 #: ../data/glade/advanced_notifications_window.glade.h:14
-#: ../src/common/helpers.py:217
+#: ../src/common/helpers.py:226
 msgid "Not Available"
 msgstr "不可用"
 
@@ -790,42 +790,26 @@ msgid "when I'm in"
 msgstr "当我在"
 
 #: ../data/glade/atom_entry_window.glade.h:1
-msgid "2003-12-13T18:30:02Z"
-msgstr ""
-
-#: ../data/glade/atom_entry_window.glade.h:2
-msgid "<small>Romeo and Juliet</small>"
-msgstr ""
-
-#: ../data/glade/atom_entry_window.glade.h:3
 #, fuzzy
 msgid "Entry:"
 msgstr "国家："
 
-#: ../data/glade/atom_entry_window.glade.h:4
+#: ../data/glade/atom_entry_window.glade.h:2
 #, fuzzy
 msgid "Feed name:"
 msgstr "主题名称"
 
-#: ../data/glade/atom_entry_window.glade.h:5
+#: ../data/glade/atom_entry_window.glade.h:3
 #, fuzzy
 msgid "Last modified:"
 msgstr "名："
 
-#: ../data/glade/atom_entry_window.glade.h:6
+#: ../data/glade/atom_entry_window.glade.h:4
 #, fuzzy
 msgid "New entry received"
 msgstr "当新事件发生时"
 
-#: ../data/glade/atom_entry_window.glade.h:7
-msgid "Old stories"
-msgstr ""
-
-#: ../data/glade/atom_entry_window.glade.h:8
-msgid "Soliloquy"
-msgstr ""
-
-#: ../data/glade/atom_entry_window.glade.h:9
+#: ../data/glade/atom_entry_window.glade.h:5
 msgid "You have received new entry:"
 msgstr ""
 
@@ -1135,7 +1119,7 @@ msgstr "语音(_V)"
 msgid "Create new post"
 msgstr "新发表"
 
-#: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:259
+#: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:268
 msgid "From"
 msgstr "来自"
 
@@ -1223,7 +1207,7 @@ msgstr "当连接上时设置我的模版"
 
 #: ../data/glade/join_groupchat_window.glade.h:3
 #: ../data/glade/manage_bookmarks_window.glade.h:4
-#: ../data/glade/profile_window.glade.h:23
+#: ../data/glade/profile_window.glade.h:24
 #: ../data/glade/vcard_information_window.glade.h:29
 msgid "Nickname:"
 msgstr "昵称："
@@ -1242,8 +1226,8 @@ msgstr "最近："
 msgid "Room:"
 msgstr "房间："
 
-#: ../data/glade/join_groupchat_window.glade.h:7 ../src/disco.py:1151
-#: ../src/disco.py:1518
+#: ../data/glade/join_groupchat_window.glade.h:7 ../src/disco.py:1165
+#: ../src/disco.py:1548
 msgid "_Join"
 msgstr "加入(_J)"
 
@@ -1292,7 +1276,7 @@ msgid "Manage Proxy Profiles"
 msgstr "代理服务器模板管理"
 
 #: ../data/glade/manage_proxies_window.glade.h:5
-#: ../data/glade/profile_window.glade.h:22
+#: ../data/glade/profile_window.glade.h:23
 #: ../data/glade/vcard_information_window.glade.h:28
 msgid "Name:"
 msgstr "名称："
@@ -1897,114 +1881,118 @@ msgid "City:"
 msgstr "城市："
 
 #: ../data/glade/profile_window.glade.h:7
+msgid "Click to set your avatar"
+msgstr "单击以设置您的明细"
+
+#: ../data/glade/profile_window.glade.h:8
 #: ../data/glade/vcard_information_window.glade.h:10
 msgid "Company:"
 msgstr "公司："
 
-#: ../data/glade/profile_window.glade.h:8
+#: ../data/glade/profile_window.glade.h:9
 #: ../data/glade/vcard_information_window.glade.h:13
 msgid "Country:"
 msgstr "国家："
 
-#: ../data/glade/profile_window.glade.h:9
+#: ../data/glade/profile_window.glade.h:10
 #: ../data/glade/vcard_information_window.glade.h:14
 msgid "Department:"
 msgstr "部门："
 
-#: ../data/glade/profile_window.glade.h:10
+#: ../data/glade/profile_window.glade.h:11
 #: ../data/glade/vcard_information_window.glade.h:15
 #: ../data/glade/zeroconf_information_window.glade.h:2
 #: ../data/glade/zeroconf_properties_window.glade.h:5
 msgid "E-Mail:"
 msgstr "E-Mail ："
 
-#: ../data/glade/profile_window.glade.h:11
+#: ../data/glade/profile_window.glade.h:12
 #: ../data/glade/vcard_information_window.glade.h:16
 msgid "Extra Address:"
 msgstr "附加地址："
 
 #. Family Name
-#: ../data/glade/profile_window.glade.h:13
+#: ../data/glade/profile_window.glade.h:14
 #: ../data/glade/vcard_information_window.glade.h:18
 msgid "Family:"
 msgstr "家族："
 
 #. Do NOT change sequence. Just translate YYYY and MM and DD (from Year, Month, Day accordingly)
-#: ../data/glade/profile_window.glade.h:15
+#: ../data/glade/profile_window.glade.h:16
 #: ../data/glade/vcard_information_window.glade.h:20
 msgid "Format: YYYY-MM-DD"
 msgstr "格式： YYYY-MM-DD"
 
 #. Given Name
-#: ../data/glade/profile_window.glade.h:17
+#: ../data/glade/profile_window.glade.h:18
 #: ../data/glade/vcard_information_window.glade.h:22
 msgid "Given:"
 msgstr "教名："
 
-#: ../data/glade/profile_window.glade.h:18
+#: ../data/glade/profile_window.glade.h:19
 #: ../data/glade/vcard_information_window.glade.h:23
 msgid "Homepage:"
 msgstr "主页："
 
 #. Middle Name
-#: ../data/glade/profile_window.glade.h:20
+#: ../data/glade/profile_window.glade.h:21
 #: ../data/glade/vcard_information_window.glade.h:26
 msgid "Middle:"
 msgstr "中间："
 
-#: ../data/glade/profile_window.glade.h:21
+#: ../data/glade/profile_window.glade.h:22
 #: ../data/glade/vcard_information_window.glade.h:27
 msgid "More"
 msgstr "更多"
 
-#: ../data/glade/profile_window.glade.h:24
+#: ../data/glade/profile_window.glade.h:25
 #: ../data/glade/vcard_information_window.glade.h:31
 msgid "Personal Info"
 msgstr "个人信息"
 
-#: ../data/glade/profile_window.glade.h:26
+#: ../data/glade/profile_window.glade.h:27
 #: ../data/glade/vcard_information_window.glade.h:32
 msgid "Phone No.:"
 msgstr "电话号码："
 
-#: ../data/glade/profile_window.glade.h:27
+#: ../data/glade/profile_window.glade.h:28
 #: ../data/glade/vcard_information_window.glade.h:33
 msgid "Position:"
 msgstr "位置："
 
-#: ../data/glade/profile_window.glade.h:28
+#: ../data/glade/profile_window.glade.h:29
 #: ../data/glade/vcard_information_window.glade.h:34
 msgid "Postal Code:"
 msgstr "邮政编码："
 
 #. Prefix in Name
-#: ../data/glade/profile_window.glade.h:30
+#: ../data/glade/profile_window.glade.h:31
 #: ../data/glade/vcard_information_window.glade.h:36
 msgid "Prefix:"
 msgstr "前缀："
 
-#: ../data/glade/profile_window.glade.h:31
+#: ../data/glade/profile_window.glade.h:32
 #: ../data/glade/vcard_information_window.glade.h:38 ../src/vcard.py:273
 msgid "Role:"
 msgstr "角色："
 
-#: ../data/glade/profile_window.glade.h:32
+#: ../data/glade/profile_window.glade.h:33
 #: ../data/glade/vcard_information_window.glade.h:39
 msgid "State:"
 msgstr "州："
 
-#: ../data/glade/profile_window.glade.h:33
+#: ../data/glade/profile_window.glade.h:34
 #: ../data/glade/vcard_information_window.glade.h:41
 msgid "Street:"
 msgstr "街道："
 
 #. Suffix in Name
-#: ../data/glade/profile_window.glade.h:35
+#: ../data/glade/profile_window.glade.h:36
 #: ../data/glade/vcard_information_window.glade.h:45
 msgid "Suffix:"
 msgstr "后缀："
 
-#: ../data/glade/profile_window.glade.h:36
+#: ../data/glade/profile_window.glade.h:37
 #: ../data/glade/vcard_information_window.glade.h:46
 msgid "Work"
 msgstr "工作"
@@ -2126,7 +2114,7 @@ msgstr "内容(_C)"
 msgid "_Discover Services"
 msgstr "发掘服务(_D)"
 
-#: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1256
+#: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1286
 #: ../src/roster_window.py:2203
 msgid "_Edit"
 msgstr "编辑(_E)"
@@ -2580,15 +2568,15 @@ msgid "Encryption disabled"
 msgstr "禁用加密"
 
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1406 ../src/conversation_textview.py:493
+#: ../src/chat_control.py:1406 ../src/conversation_textview.py:495
 #: ../src/dialogs.py:629 ../src/gajim.py:785 ../src/gajim.py:786
 #: ../src/gajim.py:1130 ../src/roster_window.py:332
 #: ../src/roster_window.py:410 ../src/roster_window.py:1498
 #: ../src/roster_window.py:1508 ../src/roster_window.py:1684
 #: ../src/roster_window.py:1890 ../src/roster_window.py:2475
 #: ../src/roster_window.py:3900 ../src/roster_window.py:3902
-#: ../src/common/contacts.py:73 ../src/common/helpers.py:42
-#: ../src/common/helpers.py:246
+#: ../src/common/contacts.py:73 ../src/common/helpers.py:43
+#: ../src/common/helpers.py:255
 msgid "Not in Roster"
 msgstr "不在名单中"
 
@@ -2604,7 +2592,7 @@ msgid ""
 "lost."
 msgstr "如果您关闭此标签并且禁用历史，此消息会丢失。"
 
-#: ../src/config.py:137 ../src/config.py:588
+#: ../src/config.py:137 ../src/config.py:586
 msgid "Disabled"
 msgstr "禁用"
 
@@ -2613,20 +2601,20 @@ msgstr "禁用"
 msgid "Every %s _minutes"
 msgstr "每 %s 分钟(m)"
 
-#: ../src/config.py:353
+#: ../src/config.py:351
 msgid "Active"
 msgstr "活动"
 
-#: ../src/config.py:361
+#: ../src/config.py:359
 msgid "Event"
 msgstr "事件"
 
-#: ../src/config.py:684 ../src/gajim.py:2165
+#: ../src/config.py:682 ../src/gajim.py:2165
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "语言 %s 的字典不可用"
 
-#: ../src/config.py:685 ../src/gajim.py:2166
+#: ../src/config.py:683 ../src/gajim.py:2166
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -2634,240 +2622,240 @@ msgid ""
 msgstr ""
 "您需安装 %s 字典以使用拼写检查，或者设置拼写检查选项以选择另外一种语言。(_L)"
 
-#: ../src/config.py:1009
+#: ../src/config.py:1000
 msgid "status message title"
 msgstr "状态消息标题"
 
-#: ../src/config.py:1009
+#: ../src/config.py:1000
 msgid "status message text"
 msgstr "状态消息文本"
 
-#: ../src/config.py:1045
+#: ../src/config.py:1036
 msgid "First Message Received"
 msgstr "最初收到的消息"
 
-#: ../src/config.py:1046
+#: ../src/config.py:1037
 msgid "Next Message Received"
 msgstr "收到的下一条消息"
 
-#: ../src/config.py:1047
+#: ../src/config.py:1038
 msgid "Contact Connected"
 msgstr "已连接的联系人"
 
-#: ../src/config.py:1048
+#: ../src/config.py:1039
 msgid "Contact Disconnected"
 msgstr "联系人已断开连接"
 
-#: ../src/config.py:1049
+#: ../src/config.py:1040
 msgid "Message Sent"
 msgstr "消息已发送"
 
-#: ../src/config.py:1050
+#: ../src/config.py:1041
 msgid "Group Chat Message Highlight"
 msgstr "群聊消息突出显示"
 
-#: ../src/config.py:1051
+#: ../src/config.py:1042
 msgid "Group Chat Message Received"
 msgstr "收到的群聊消息"
 
-#: ../src/config.py:1058
+#: ../src/config.py:1049
 msgid "GMail Email Received"
 msgstr "收到 GMail 邮件"
 
-#: ../src/config.py:1261
+#: ../src/config.py:1252
 msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP 在本机不可用"
 
-#: ../src/config.py:1307
+#: ../src/config.py:1298
 msgid "You are currently connected to the server"
 msgstr "正在连接到服务器"
 
-#: ../src/config.py:1308
+#: ../src/config.py:1299
 msgid "To change the account name, you must be disconnected."
 msgstr "如要改变账户名称，需断开连接。"
 
-#: ../src/config.py:1311 ../src/config.py:1905
+#: ../src/config.py:1302 ../src/config.py:1896
 msgid "Unread events"
 msgstr "未读取的事件"
 
-#: ../src/config.py:1312
+#: ../src/config.py:1303
 msgid "To change the account name, you must read all pending events."
 msgstr "如要更改账户名称，需先处理所有未决事件"
 
-#: ../src/config.py:1316
+#: ../src/config.py:1307
 msgid "Account Name Already Used"
 msgstr "帐户名已经被占用"
 
-#: ../src/config.py:1317
+#: ../src/config.py:1308
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr "该名称已被您的另一个帐号使用。请选择其他名称"
 
-#: ../src/config.py:1321 ../src/config.py:1325
+#: ../src/config.py:1312 ../src/config.py:1316
 msgid "Invalid account name"
 msgstr "无效的账户名称"
 
-#: ../src/config.py:1322
+#: ../src/config.py:1313
 msgid "Account name cannot be empty."
 msgstr "账户名不能为空。"
 
-#: ../src/config.py:1326
+#: ../src/config.py:1317
 msgid "Account name cannot contain spaces."
 msgstr "账户名不能包含空格。"
 
-#: ../src/config.py:1334 ../src/config.py:1340 ../src/config.py:1350
-#: ../src/config.py:3013
+#: ../src/config.py:1325 ../src/config.py:1331 ../src/config.py:1341
+#: ../src/config.py:2998
 msgid "Invalid Jabber ID"
 msgstr "无效的 Jabber ID"
 
-#: ../src/config.py:1341
+#: ../src/config.py:1332
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabber ID 的格式为 “用户@服务器名”。"
 
-#: ../src/config.py:1400
+#: ../src/config.py:1391
 msgid "Invalid entry"
 msgstr "无效输入"
 
-#: ../src/config.py:1401
+#: ../src/config.py:1392
 msgid "Custom port must be a port number."
 msgstr "自定义端口必须为端口号。"
 
-#: ../src/config.py:1529 ../src/common/config.py:366
+#: ../src/config.py:1520 ../src/common/config.py:366
 msgid "Be right back."
 msgstr "很快回来。"
 
-#: ../src/config.py:1539
+#: ../src/config.py:1530
 msgid "Relogin now?"
 msgstr "现在重新登录？"
 
-#: ../src/config.py:1540
+#: ../src/config.py:1531
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr "如果想使所有调整立即生效，您必须重新登录。"
 
-#: ../src/config.py:1566
+#: ../src/config.py:1557
 msgid "No such account available"
 msgstr "没有有效账户"
 
-#: ../src/config.py:1567
+#: ../src/config.py:1558
 msgid "You must create your account before editing your personal information."
 msgstr "您必须在编辑个人信息前创建账户。"
 
-#: ../src/config.py:1574 ../src/dialogs.py:1131 ../src/dialogs.py:1317
-#: ../src/disco.py:417 ../src/profile_window.py:313
+#: ../src/config.py:1565 ../src/dialogs.py:1131 ../src/dialogs.py:1317
+#: ../src/disco.py:418 ../src/profile_window.py:323
 msgid "You are not connected to the server"
 msgstr "尚未连接到服务器"
 
-#: ../src/config.py:1575
+#: ../src/config.py:1566
 msgid "Without a connection, you can not edit your personal information."
 msgstr "无法脱机编辑个人信息。"
 
-#: ../src/config.py:1579
+#: ../src/config.py:1570
 msgid "Your server doesn't support Vcard"
 msgstr "您的服务器不支持 Vcard"
 
-#: ../src/config.py:1580
+#: ../src/config.py:1571
 msgid "Your server can't save your personal information."
 msgstr "您的服务器无法保存您的个人信息。"
 
-#: ../src/config.py:1604 ../src/config.py:3401
+#: ../src/config.py:1595 ../src/config.py:3386
 msgid "Failed to get secret keys"
 msgstr "获取密钥失败"
 
-#: ../src/config.py:1605 ../src/config.py:3402
+#: ../src/config.py:1596 ../src/config.py:3387
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "在取回 OpenPGP 密钥时发生错误。"
 
-#: ../src/config.py:1608 ../src/config.py:3405
+#: ../src/config.py:1599 ../src/config.py:3390
 msgid "OpenPGP Key Selection"
 msgstr "OpenPGP 密钥选择"
 
-#: ../src/config.py:1609 ../src/config.py:3406
+#: ../src/config.py:1600 ../src/config.py:3391
 msgid "Choose your OpenPGP key"
 msgstr "选择您的 OpenPGP 钥匙"
 
 #. Name column
-#: ../src/config.py:1839 ../src/disco.py:741 ../src/disco.py:1467
-#: ../src/disco.py:1705 ../src/history_window.py:78
+#: ../src/config.py:1830 ../src/disco.py:742 ../src/disco.py:1497
+#: ../src/disco.py:1735 ../src/history_window.py:78
 msgid "Name"
 msgstr "名称"
 
-#: ../src/config.py:1842
+#: ../src/config.py:1833
 msgid "Server"
 msgstr "服务器"
 
-#: ../src/config.py:1906
+#: ../src/config.py:1897
 msgid "Read all pending events before removing this account."
 msgstr "移除帐号前请阅读所有未决事件。"
 
-#: ../src/config.py:1943
+#: ../src/config.py:1934
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "您已在账户 %s 打开聊天"
 
-#: ../src/config.py:1944
+#: ../src/config.py:1935
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "所有的聊天和群聊窗口将会关闭。您想继续吗？"
 
-#: ../src/config.py:2003
+#: ../src/config.py:1994
 msgid "Account Local already exists."
 msgstr "帐户本地已存在。"
 
-#: ../src/config.py:2004
+#: ../src/config.py:1995
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "请在使用本地消息前重命名或移除它。"
 
-#: ../src/config.py:2238
+#: ../src/config.py:2229
 #, python-format
 msgid "Edit %s"
 msgstr "编辑 %s"
 
-#: ../src/config.py:2240
+#: ../src/config.py:2231
 #, python-format
 msgid "Register to %s"
 msgstr "注册到 %s"
 
 #. list at the beginning
-#: ../src/config.py:2312
+#: ../src/config.py:2297
 msgid "Ban List"
 msgstr "封禁名单"
 
-#: ../src/config.py:2313
+#: ../src/config.py:2298
 msgid "Member List"
 msgstr "成员列表"
 
-#: ../src/config.py:2314
+#: ../src/config.py:2299
 msgid "Owner List"
 msgstr "房主列表"
 
-#: ../src/config.py:2315
+#: ../src/config.py:2300
 msgid "Administrator List"
 msgstr "管理员列表"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2348 ../src/disco.py:748 ../src/history_manager.py:154
+#: ../src/config.py:2333 ../src/disco.py:749 ../src/history_manager.py:154
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2356
+#: ../src/config.py:2341
 msgid "Reason"
 msgstr "原因"
 
-#: ../src/config.py:2361
+#: ../src/config.py:2346
 msgid "Nick"
 msgstr "昵称"
 
-#: ../src/config.py:2365
+#: ../src/config.py:2350
 msgid "Role"
 msgstr "角色"
 
-#: ../src/config.py:2386
+#: ../src/config.py:2371
 msgid "Banning..."
 msgstr "封禁..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2388
+#: ../src/config.py:2373
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2875,11 +2863,11 @@ msgstr ""
 "<b>想做封禁谁？</b>\n"
 "\n"
 
-#: ../src/config.py:2390
+#: ../src/config.py:2375
 msgid "Adding Member..."
 msgstr "正在添加成员..."
 
-#: ../src/config.py:2391
+#: ../src/config.py:2376
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2887,11 +2875,11 @@ msgstr ""
 "<b>想要将谁加为成员？</b>\n"
 "\n"
 
-#: ../src/config.py:2393
+#: ../src/config.py:2378
 msgid "Adding Owner..."
 msgstr "添加房主..."
 
-#: ../src/config.py:2394
+#: ../src/config.py:2379
 #, fuzzy
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
@@ -2900,11 +2888,11 @@ msgstr ""
 "<b>想要将谁加为房主？</b>\n"
 "\n"
 
-#: ../src/config.py:2396
+#: ../src/config.py:2381
 msgid "Adding Administrator..."
 msgstr "添加管理员..."
 
-#: ../src/config.py:2397
+#: ../src/config.py:2382
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2912,7 +2900,7 @@ msgstr ""
 "<b>想要指定谁为管理员？</b>\n"
 "\n"
 
-#: ../src/config.py:2398
+#: ../src/config.py:2383
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2928,100 +2916,100 @@ msgstr ""
 "4. domain (该域本身匹配, 例如任何 user@domain,\n"
 "domain/resource, 或者地址包含一个子域."
 
-#: ../src/config.py:2503
+#: ../src/config.py:2488
 #, python-format
 msgid "Removing %s account"
 msgstr "移除账户 %s"
 
-#: ../src/config.py:2520 ../src/roster_window.py:2733
+#: ../src/config.py:2505 ../src/roster_window.py:2733
 msgid "Password Required"
 msgstr "需要密码"
 
-#: ../src/config.py:2521 ../src/roster_window.py:2729
+#: ../src/config.py:2506 ../src/roster_window.py:2729
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "输入帐户 %s 的密码"
 
-#: ../src/config.py:2522 ../src/roster_window.py:2734
+#: ../src/config.py:2507 ../src/roster_window.py:2734
 msgid "Save password"
 msgstr "保存密码"
 
-#: ../src/config.py:2536
+#: ../src/config.py:2521
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "账户 “%s” 已连接到服务器"
 
-#: ../src/config.py:2537
+#: ../src/config.py:2522
 msgid "If you remove it, the connection will be lost."
 msgstr "如果移除，将会丢失连接"
 
-#: ../src/config.py:2622
+#: ../src/config.py:2607
 msgid "Default"
 msgstr "默认"
 
-#: ../src/config.py:2622
+#: ../src/config.py:2607
 msgid "?print_status:All"
 msgstr "?print_status:全部"
 
-#: ../src/config.py:2623
+#: ../src/config.py:2608
 msgid "Enter and leave only"
 msgstr "只是登录和离开"
 
-#: ../src/config.py:2624
+#: ../src/config.py:2609
 #, fuzzy
 msgid "?print_status:None"
 msgstr "?print_status:全部"
 
-#: ../src/config.py:2692
+#: ../src/config.py:2677
 msgid "New Group Chat"
 msgstr "新群聊"
 
-#: ../src/config.py:2725
+#: ../src/config.py:2710
 msgid "This bookmark has invalid data"
 msgstr "此书签含无效数据"
 
-#: ../src/config.py:2726
+#: ../src/config.py:2711
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "请确认填写服务器与房间字段或移除此书签。"
 
-#: ../src/config.py:2988
+#: ../src/config.py:2973
 msgid "Invalid username"
 msgstr "无效用户名"
 
-#: ../src/config.py:2989
+#: ../src/config.py:2974
 msgid "You must provide a username to configure this account."
 msgstr "必须提供用户名来配置此账户。"
 
-#: ../src/config.py:2999 ../src/dialogs.py:1336
+#: ../src/config.py:2984 ../src/dialogs.py:1336
 msgid "Invalid password"
 msgstr "无效密码"
 
-#: ../src/config.py:3000
+#: ../src/config.py:2985
 msgid "You must enter a password for the new account."
 msgstr "必须为新账户输入密码。"
 
-#: ../src/config.py:3004 ../src/dialogs.py:1341
+#: ../src/config.py:2989 ../src/dialogs.py:1341
 msgid "Passwords do not match"
 msgstr "密码不符"
 
-#: ../src/config.py:3005 ../src/dialogs.py:1342
+#: ../src/config.py:2990 ../src/dialogs.py:1342
 msgid "The passwords typed in both fields must be identical."
 msgstr "两次密码输入不一致。"
 
-#: ../src/config.py:3024
+#: ../src/config.py:3009
 msgid "Duplicate Jabber ID"
 msgstr "复制 Jabber ID"
 
-#: ../src/config.py:3025
+#: ../src/config.py:3010
 msgid "This account is already configured in Gajim."
 msgstr "此帐号已在 Gajim 中配置过。"
 
-#: ../src/config.py:3042
+#: ../src/config.py:3027
 msgid "Account has been added successfully"
 msgstr "成功添加账户"
 
-#: ../src/config.py:3043 ../src/config.py:3078
+#: ../src/config.py:3028 ../src/config.py:3063
 #, fuzzy
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
@@ -3031,75 +3019,75 @@ msgstr ""
 "您可以通过点击高级按钮进行高级设置，或稍后点击主窗口中编辑菜单下的账户菜单"
 "项。"
 
-#: ../src/config.py:3077
+#: ../src/config.py:3062
 msgid "Your new account has been created successfully"
 msgstr "注册新账户成功"
 
-#: ../src/config.py:3095
+#: ../src/config.py:3080
 #, fuzzy
 msgid "An error occurred during account creation"
 msgstr "创建帐户过程中发生错误"
 
-#: ../src/config.py:3153
+#: ../src/config.py:3138
 msgid "Account name is in use"
 msgstr "帐户名已经被使用"
 
-#: ../src/config.py:3154
+#: ../src/config.py:3139
 msgid "You already have an account using this name."
 msgstr "有同名账户。"
 
-#: ../src/conversation_textview.py:271
+#: ../src/conversation_textview.py:273
 msgid ""
 "Text below this line is what has been said since the last time you paid "
 "attention to this group chat"
 msgstr "以下文字是您上次发言至今的群聊内容"
 
-#: ../src/conversation_textview.py:340
+#: ../src/conversation_textview.py:342
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "“%s”的动作(_A)"
 
-#: ../src/conversation_textview.py:352
+#: ../src/conversation_textview.py:354
 msgid "Read _Wikipedia Article"
 msgstr "读取 Wikipedia 文章(_W)"
 
-#: ../src/conversation_textview.py:357
+#: ../src/conversation_textview.py:359
 msgid "Look it up in _Dictionary"
 msgstr "从字典(_D)中搜索"
 
 #. we must have %s in the url if not WIKTIONARY
-#: ../src/conversation_textview.py:373
+#: ../src/conversation_textview.py:375
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "字典地址缺少 “%s” 并且它不是 WIKTIONARY"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:386
+#: ../src/conversation_textview.py:388
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "网站搜索地址缺少 “%s”"
 
-#: ../src/conversation_textview.py:389
+#: ../src/conversation_textview.py:391
 msgid "Web _Search for it"
 msgstr "用网页搜索(_S)"
 
-#: ../src/conversation_textview.py:395
+#: ../src/conversation_textview.py:397
 msgid "Open as _Link"
 msgstr "作为链接打开(_L)："
 
-#: ../src/conversation_textview.py:752
+#: ../src/conversation_textview.py:754
 msgid "Yesterday"
 msgstr "昨天"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
-#: ../src/conversation_textview.py:756
+#: ../src/conversation_textview.py:758
 #, python-format
 msgid "%i days ago"
 msgstr "%i 天前"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:790
+#: ../src/conversation_textview.py:792
 #, python-format
 msgid "Subject: %s\n"
 msgstr "主题：%s\n"
@@ -3530,105 +3518,105 @@ msgstr "条件"
 msgid "when I am "
 msgstr "当我"
 
-#: ../src/disco.py:101
+#: ../src/disco.py:102
 msgid "Others"
 msgstr "其他"
 
-#: ../src/disco.py:102 ../src/disco.py:103 ../src/disco.py:1253
+#: ../src/disco.py:103 ../src/disco.py:104 ../src/disco.py:1283
 #: ../src/gajim.py:539 ../src/roster_window.py:271 ../src/roster_window.py:329
 #: ../src/roster_window.py:368 ../src/roster_window.py:451
 #: ../src/roster_window.py:483 ../src/roster_window.py:485
 #: ../src/roster_window.py:3896 ../src/roster_window.py:3898
-#: ../src/common/contacts.py:267 ../src/common/helpers.py:42
+#: ../src/common/contacts.py:267 ../src/common/helpers.py:43
 msgid "Transports"
 msgstr "代理"
 
 #. conference is a category for listing mostly groupchats in service discovery
-#: ../src/disco.py:105
+#: ../src/disco.py:106
 msgid "Conference"
 msgstr "会议"
 
-#: ../src/disco.py:418
+#: ../src/disco.py:419
 msgid "Without a connection, you can not browse available services"
 msgstr "连接后才可浏览可用服务"
 
-#: ../src/disco.py:497
+#: ../src/disco.py:498
 #, python-format
 msgid "Service Discovery using account %s"
 msgstr "正在使用帐号 %s 来发掘服务"
 
-#: ../src/disco.py:499
+#: ../src/disco.py:500
 msgid "Service Discovery"
 msgstr "搜索服务"
 
-#: ../src/disco.py:642
+#: ../src/disco.py:643
 msgid "The service could not be found"
 msgstr "找不到该服务"
 
-#: ../src/disco.py:643
+#: ../src/disco.py:644
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
 msgstr "此地址没有服务或无应答。请检查地址后重试。"
 
-#: ../src/disco.py:647 ../src/disco.py:928
+#: ../src/disco.py:648 ../src/disco.py:929
 msgid "The service is not browsable"
 msgstr "该服务无法浏览"
 
-#: ../src/disco.py:648
+#: ../src/disco.py:649
 msgid "This type of service does not contain any items to browse."
 msgstr "此服务没有项目可浏览。"
 
-#: ../src/disco.py:728
+#: ../src/disco.py:729
 #, python-format
 msgid "Browsing %s using account %s"
 msgstr "浏览 %s 在帐户 %s 上"
 
-#: ../src/disco.py:767
+#: ../src/disco.py:768
 msgid "_Browse"
 msgstr "浏览(_B)"
 
-#: ../src/disco.py:929
+#: ../src/disco.py:930
 msgid "This service does not contain any items to browse."
 msgstr "此服务不包含任何项目可浏览。"
 
-#: ../src/disco.py:1143 ../src/disco.py:1258
+#: ../src/disco.py:1157 ../src/disco.py:1288
 msgid "Re_gister"
 msgstr "注册(_G)"
 
-#: ../src/disco.py:1295
+#: ../src/disco.py:1325
 #, python-format
 msgid "Scanning %d / %d.."
 msgstr "已扫描 %d / %d.."
 
 #. Users column
-#: ../src/disco.py:1476
+#: ../src/disco.py:1506
 msgid "Users"
 msgstr "用户"
 
 #. Description column
-#: ../src/disco.py:1483
+#: ../src/disco.py:1513
 msgid "Description"
 msgstr "描述"
 
 #. Id column
-#: ../src/disco.py:1490
+#: ../src/disco.py:1520
 msgid "Id"
 msgstr "Id"
 
-#: ../src/disco.py:1713
+#: ../src/disco.py:1743
 msgid "Subscribed"
 msgstr "订阅"
 
-#: ../src/disco.py:1739
+#: ../src/disco.py:1769
 msgid "New post"
 msgstr "新发表"
 
-#: ../src/disco.py:1745
+#: ../src/disco.py:1775
 msgid "_Subscribe"
 msgstr "认证(_S)"
 
-#: ../src/disco.py:1751
+#: ../src/disco.py:1781
 msgid "_Unsubscribe"
 msgstr "退订(_S)"
 
@@ -3736,31 +3724,31 @@ msgstr "描述： %s"
 msgid "%s wants to send you a file:"
 msgstr "%s 想发送给您一个文件："
 
-#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:705
+#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:706
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "无法覆盖现有文件\"%s\""
 
-#: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:707
+#: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:708
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr "文件名已经存在且您没有权限覆盖它。"
 
-#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:711
+#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:712
 msgid "This file already exists"
 msgstr "文件已经存在"
 
-#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:711
+#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:712
 msgid "What do you want to do?"
 msgstr "想做什么？"
 
-#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:721
+#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:722
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "目录 \"%s\" 不可写"
 
-#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:722
+#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:723
 msgid "You do not have permission to create files in this directory."
 msgstr "您没有权限在这个目录里创建文件。"
 
@@ -3920,7 +3908,7 @@ msgstr "您将一直看到他/她的状态为离线。"
 msgid "Contact with \"%s\" cannot be established"
 msgstr "无法与对方“ %s ”建立连接。"
 
-#: ../src/gajim.py:855 ../src/common/connection.py:406
+#: ../src/gajim.py:855 ../src/common/connection.py:408
 msgid "Check your connection or try again later."
 msgstr "检查连接并稍后重试。"
 
@@ -4685,29 +4673,29 @@ msgid "Could not write to %s. Session Management support will not work"
 msgstr "不能写入到 %s 。会话管理支持功能未启用"
 
 #. xmpp: is currently handled by another program, so ask the user
-#: ../src/gtkgui_helpers.py:649
+#: ../src/gtkgui_helpers.py:650
 msgid "Gajim is not the default Jabber client"
 msgstr ""
 
-#: ../src/gtkgui_helpers.py:650
+#: ../src/gtkgui_helpers.py:651
 #, fuzzy
 msgid "Would you like to make Gajim the default Jabber client?"
 msgstr "确认覆盖该文件？"
 
-#: ../src/gtkgui_helpers.py:651
+#: ../src/gtkgui_helpers.py:652
 msgid "Always check to see if Gajim is the default Jabber client on startup"
 msgstr ""
 
-#: ../src/gtkgui_helpers.py:750
+#: ../src/gtkgui_helpers.py:751
 msgid "Extension not supported"
 msgstr "不支持扩展"
 
-#: ../src/gtkgui_helpers.py:751
+#: ../src/gtkgui_helpers.py:752
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr "图片不能被保存为 %(type)s 格式。保存为 %(new_filename)s？"
 
-#: ../src/gtkgui_helpers.py:760
+#: ../src/gtkgui_helpers.py:761
 msgid "Save Image as..."
 msgstr "图片另存为..."
 
@@ -4852,37 +4840,32 @@ msgstr "来自 %(nickname)s 的新消息"
 msgid "Retrieving profile..."
 msgstr "取回概况..."
 
-#: ../src/profile_window.py:107 ../src/profile_window.py:210
-#: ../src/profile_window.py:219
-msgid "Click to set your avatar"
-msgstr "单击以设置您的明细"
-
 #. keep identation
-#: ../src/profile_window.py:137
+#: ../src/profile_window.py:143
 msgid "Could not load image"
 msgstr "无法读取图片"
 
-#: ../src/profile_window.py:245
+#: ../src/profile_window.py:255
 msgid "Information received"
 msgstr "收到信息"
 
-#: ../src/profile_window.py:314
+#: ../src/profile_window.py:324
 msgid "Without a connection you can not publish your contact information."
 msgstr "无法脱机发布个人信息。"
 
-#: ../src/profile_window.py:326
+#: ../src/profile_window.py:336
 msgid "Sending profile..."
 msgstr "发送概况..."
 
-#: ../src/profile_window.py:341
+#: ../src/profile_window.py:351
 msgid "Information NOT published"
 msgstr "信息没有发布"
 
-#: ../src/profile_window.py:348
+#: ../src/profile_window.py:358
 msgid "vCard publication failed"
 msgstr "vCard 发布失败"
 
-#: ../src/profile_window.py:349
+#: ../src/profile_window.py:359
 msgid ""
 "There was an error while publishing your personal information, try again "
 "later."
@@ -4892,7 +4875,7 @@ msgstr "发布您的个人信息时发生错误，请稍后重试。"
 msgid "Merged accounts"
 msgstr "已合并的帐户"
 
-#: ../src/roster_window.py:344 ../src/common/helpers.py:42
+#: ../src/roster_window.py:344 ../src/common/helpers.py:43
 msgid "Observers"
 msgstr "旁观者"
 
@@ -5124,7 +5107,7 @@ msgstr ""
 
 #. TODO: make this string translatable
 #. %s is the account name here
-#: ../src/roster_window.py:2760 ../src/common/connection.py:596
+#: ../src/roster_window.py:2760 ../src/common/connection.py:598
 #: ../src/common/zeroconf/connection_zeroconf.py:158
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
@@ -6028,7 +6011,7 @@ msgstr "您配置主机为 ft_override_host_to_send 高级选项无效，忽略�
 msgid "Registration information for transport %s has not arrived in time"
 msgstr "代理 %s 所需的注册信息未按时抵达"
 
-#: ../src/common/connection_handlers.py:1540
+#: ../src/common/connection_handlers.py:1543
 #, python-format
 msgid "Nickname not allowed: %s"
 msgstr "昵称不允许： %s "
@@ -6036,41 +6019,41 @@ msgstr "昵称不允许： %s "
 #. password required to join
 #. we are banned
 #. group chat does not exist
-#: ../src/common/connection_handlers.py:1602
 #: ../src/common/connection_handlers.py:1605
 #: ../src/common/connection_handlers.py:1608
 #: ../src/common/connection_handlers.py:1611
 #: ../src/common/connection_handlers.py:1614
 #: ../src/common/connection_handlers.py:1617
-#: ../src/common/connection_handlers.py:1625
+#: ../src/common/connection_handlers.py:1620
+#: ../src/common/connection_handlers.py:1628
 msgid "Unable to join group chat"
 msgstr "无法加入群聊"
 
-#: ../src/common/connection_handlers.py:1603
+#: ../src/common/connection_handlers.py:1606
 msgid "A password is required to join this group chat."
 msgstr "该群聊要求密码才能加入。"
 
-#: ../src/common/connection_handlers.py:1606
+#: ../src/common/connection_handlers.py:1609
 msgid "You are banned from this group chat."
 msgstr "您被该群聊封禁。"
 
-#: ../src/common/connection_handlers.py:1609
+#: ../src/common/connection_handlers.py:1612
 msgid "Such group chat does not exist."
 msgstr "不存在这样的群聊"
 
-#: ../src/common/connection_handlers.py:1612
+#: ../src/common/connection_handlers.py:1615
 msgid "Group chat creation is restricted."
 msgstr "群聊创建受限。"
 
-#: ../src/common/connection_handlers.py:1615
+#: ../src/common/connection_handlers.py:1618
 msgid "Your registered nickname must be used."
 msgstr "您注册的昵称已被使用"
 
-#: ../src/common/connection_handlers.py:1618
+#: ../src/common/connection_handlers.py:1621
 msgid "You are not in the members list."
 msgstr "您不在成员名单中。"
 
-#: ../src/common/connection_handlers.py:1626
+#: ../src/common/connection_handlers.py:1629
 msgid ""
 "Your desired nickname is in use or registered by another occupant.\n"
 "Please specify another nickname below:"
@@ -6078,27 +6061,27 @@ msgstr ""
 "您申请的昵称正在使用或被其他人占有。\n"
 "从下列昵称中另外指定一个："
 
-#: ../src/common/connection_handlers.py:1676
+#: ../src/common/connection_handlers.py:1679
 msgid "I would like to add you to my roster."
 msgstr "我申请添加您到联系人名单"
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection_handlers.py:1697
+#: ../src/common/connection_handlers.py:1700
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr " %s 请求认证"
 
-#: ../src/common/connection_handlers.py:1699
+#: ../src/common/connection_handlers.py:1702
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr " %s 请求解除认证"
 
-#: ../src/common/connection_handlers.py:1701
+#: ../src/common/connection_handlers.py:1704
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "%s 解除了认证"
 
-#: ../src/common/connection_handlers.py:1871
+#: ../src/common/connection_handlers.py:1874
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -6127,37 +6110,37 @@ msgstr "服务代理 %s 对注册请求响应错误：%s"
 msgid "Invalid answer"
 msgstr "无效答案"
 
-#: ../src/common/connection.py:405 ../src/common/connection.py:440
-#: ../src/common/connection.py:898
+#: ../src/common/connection.py:407 ../src/common/connection.py:442
+#: ../src/common/connection.py:900
 #: ../src/common/zeroconf/connection_zeroconf.py:217
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "尚未连接到“%s”"
 
-#: ../src/common/connection.py:419
+#: ../src/common/connection.py:421
 #, python-format
 msgid "Connected to server %s:%s with %s"
 msgstr "连接到服务器 %s:%s 通过 %s"
 
-#: ../src/common/connection.py:441
+#: ../src/common/connection.py:443
 msgid "Check your connection or try again later"
 msgstr "检查连接并稍后重试"
 
-#: ../src/common/connection.py:467
+#: ../src/common/connection.py:469
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "“%s”登录验证失败"
 
-#: ../src/common/connection.py:468
+#: ../src/common/connection.py:470
 msgid "Please check your login and password for correctness."
 msgstr "请检查登录信息和密码的正确性"
 
-#: ../src/common/connection.py:495
+#: ../src/common/connection.py:497
 #, fuzzy
 msgid "Error while removing privacy list"
 msgstr "添加服务错误。 %s"
 
-#: ../src/common/connection.py:496
+#: ../src/common/connection.py:498
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -6165,32 +6148,32 @@ msgid ""
 msgstr ""
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:594
+#: ../src/common/connection.py:596
 #: ../src/common/zeroconf/connection_zeroconf.py:156
 msgid "OpenPGP passphrase was not given"
 msgstr "未获得 OpenPGP 密文"
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:636
+#: ../src/common/connection.py:638
 msgid "invisible"
 msgstr "隐身"
 
-#: ../src/common/connection.py:637
+#: ../src/common/connection.py:639
 msgid "offline"
 msgstr "离线"
 
-#: ../src/common/connection.py:638
+#: ../src/common/connection.py:640
 #, python-format
 msgid "I'm %s"
 msgstr "我是 %s"
 
 #. we're not english
 #. one  in locale and one en
-#: ../src/common/connection.py:729
+#: ../src/common/connection.py:731
 msgid "[This message is *encrypted* (See :JEP:`27`]"
 msgstr "[本条消息已 *加密* (见 :JEP:`27`]"
 
-#: ../src/common/connection.py:785
+#: ../src/common/connection.py:787
 #: ../src/common/zeroconf/connection_zeroconf.py:397
 #, python-format
 msgid ""
@@ -6200,7 +6183,7 @@ msgstr ""
 "主题：%s\n"
 "%s"
 
-#: ../src/common/connection.py:924
+#: ../src/common/connection.py:926
 msgid "Not fetched because of invisible status"
 msgstr "由于隐身状态不获取"
 
@@ -6401,230 +6384,230 @@ msgstr "一周末"
 msgid "Weekend!"
 msgstr "周末"
 
-#: ../src/common/helpers.py:105
+#: ../src/common/helpers.py:114
 msgid "Invalid character in username."
 msgstr "无效的用户名特征。"
 
-#: ../src/common/helpers.py:110
+#: ../src/common/helpers.py:119
 msgid "Server address required."
 msgstr "此处需要服务器地址"
 
-#: ../src/common/helpers.py:115
+#: ../src/common/helpers.py:124
 msgid "Invalid character in hostname."
 msgstr "无效的主机名特征。"
 
-#: ../src/common/helpers.py:121
+#: ../src/common/helpers.py:130
 msgid "Invalid character in resource."
 msgstr "无效的资源特征。"
 
 #. GiB means gibibyte
-#: ../src/common/helpers.py:161
+#: ../src/common/helpers.py:170
 #, python-format
 msgid "%s GiB"
 msgstr "%s GiB"
 
 #. GB means gigabyte
-#: ../src/common/helpers.py:164
+#: ../src/common/helpers.py:173
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
 #. MiB means mibibyte
-#: ../src/common/helpers.py:168
+#: ../src/common/helpers.py:177
 #, python-format
 msgid "%s MiB"
 msgstr "%s MiB"
 
 #. MB means megabyte
-#: ../src/common/helpers.py:171
+#: ../src/common/helpers.py:180
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
 #. KiB means kibibyte
-#: ../src/common/helpers.py:175
+#: ../src/common/helpers.py:184
 #, python-format
 msgid "%s KiB"
 msgstr "%s KiB"
 
 #. KB means kilo bytes
-#: ../src/common/helpers.py:178
+#: ../src/common/helpers.py:187
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
 #. B means bytes
-#: ../src/common/helpers.py:181
+#: ../src/common/helpers.py:190
 #, python-format
 msgid "%s B"
 msgstr "%s B"
 
-#: ../src/common/helpers.py:210
+#: ../src/common/helpers.py:219
 msgid "_Busy"
 msgstr "忙碌(_B)"
 
-#: ../src/common/helpers.py:212
+#: ../src/common/helpers.py:221
 msgid "Busy"
 msgstr "忙碌"
 
-#: ../src/common/helpers.py:215
+#: ../src/common/helpers.py:224
 msgid "_Not Available"
 msgstr "不可用(_N)"
 
-#: ../src/common/helpers.py:220
+#: ../src/common/helpers.py:229
 msgid "_Free for Chat"
 msgstr "自由聊天(_F)"
 
-#: ../src/common/helpers.py:222
+#: ../src/common/helpers.py:231
 msgid "Free for Chat"
 msgstr "自由聊天"
 
-#: ../src/common/helpers.py:225
+#: ../src/common/helpers.py:234
 msgid "_Available"
 msgstr "在线(_A)"
 
-#: ../src/common/helpers.py:227
+#: ../src/common/helpers.py:236
 msgid "Available"
 msgstr "在线"
 
-#: ../src/common/helpers.py:229
+#: ../src/common/helpers.py:238
 msgid "Connecting"
 msgstr "正在连接"
 
-#: ../src/common/helpers.py:232
+#: ../src/common/helpers.py:241
 msgid "A_way"
 msgstr "离开(_A)"
 
-#: ../src/common/helpers.py:237
+#: ../src/common/helpers.py:246
 msgid "_Offline"
 msgstr "离线(_O)"
 
-#: ../src/common/helpers.py:239
+#: ../src/common/helpers.py:248
 msgid "Offline"
 msgstr "离线"
 
-#: ../src/common/helpers.py:242
+#: ../src/common/helpers.py:251
 msgid "_Invisible"
 msgstr "隐身(_I)"
 
-#: ../src/common/helpers.py:248
+#: ../src/common/helpers.py:257
 msgid "?contact has status:Unknown"
 msgstr "?contact has status: 未知"
 
-#: ../src/common/helpers.py:250
+#: ../src/common/helpers.py:259
 msgid "?contact has status:Has errors"
 msgstr "?contact has status: 有错误"
 
-#: ../src/common/helpers.py:255
+#: ../src/common/helpers.py:264
 msgid "?Subscription we already have:None"
 msgstr "?Subscription we already have: 无"
 
-#: ../src/common/helpers.py:257
+#: ../src/common/helpers.py:266
 msgid "To"
 msgstr "到"
 
-#: ../src/common/helpers.py:261
+#: ../src/common/helpers.py:270
 msgid "Both"
 msgstr "双方"
 
-#: ../src/common/helpers.py:269
+#: ../src/common/helpers.py:278
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription): 无"
 
-#: ../src/common/helpers.py:271
+#: ../src/common/helpers.py:280
 msgid "Subscribe"
 msgstr "认证"
 
-#: ../src/common/helpers.py:280
+#: ../src/common/helpers.py:289
 msgid "?Group Chat Contact Role:None"
 msgstr "?Group Chat Contact Role: 无"
 
-#: ../src/common/helpers.py:283
+#: ../src/common/helpers.py:292
 msgid "Moderators"
 msgstr "主持人"
 
-#: ../src/common/helpers.py:285
+#: ../src/common/helpers.py:294
 msgid "Moderator"
 msgstr "主持人"
 
-#: ../src/common/helpers.py:288
+#: ../src/common/helpers.py:297
 msgid "Participants"
 msgstr "参与者"
 
-#: ../src/common/helpers.py:290
+#: ../src/common/helpers.py:299
 msgid "Participant"
 msgstr "参与者"
 
-#: ../src/common/helpers.py:293
+#: ../src/common/helpers.py:302
 msgid "Visitors"
 msgstr "访客"
 
-#: ../src/common/helpers.py:295
+#: ../src/common/helpers.py:304
 msgid "Visitor"
 msgstr "访客"
 
-#: ../src/common/helpers.py:301
+#: ../src/common/helpers.py:310
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "?Group Chat Contact Affiliation: 无"
 
-#: ../src/common/helpers.py:303
+#: ../src/common/helpers.py:312
 msgid "Owner"
 msgstr "所有者"
 
-#: ../src/common/helpers.py:305
+#: ../src/common/helpers.py:314
 msgid "Administrator"
 msgstr "管理员"
 
-#: ../src/common/helpers.py:307
+#: ../src/common/helpers.py:316
 msgid "Member"
 msgstr "成员"
 
-#: ../src/common/helpers.py:346
+#: ../src/common/helpers.py:355
 msgid "is paying attention to the conversation"
 msgstr "正在专注于聊天"
 
-#: ../src/common/helpers.py:348
+#: ../src/common/helpers.py:357
 msgid "is doing something else"
 msgstr "在做其他事"
 
-#: ../src/common/helpers.py:350
+#: ../src/common/helpers.py:359
 msgid "is composing a message..."
 msgstr "正在输入消息..."
 
 #. paused means he or she was composing but has stopped for a while
-#: ../src/common/helpers.py:353
+#: ../src/common/helpers.py:362
 msgid "paused composing a message"
 msgstr "中断输入消息"
 
-#: ../src/common/helpers.py:355
+#: ../src/common/helpers.py:364
 msgid "has closed the chat window or tab"
 msgstr "关闭了聊天窗口或标签"
 
-#: ../src/common/helpers.py:881
+#: ../src/common/helpers.py:890
 #, python-format
 msgid " %d unread message"
 msgid_plural " %d unread messages"
 msgstr[0] " %d 条未读消息 "
 
-#: ../src/common/helpers.py:887
+#: ../src/common/helpers.py:896
 #, python-format
 msgid " %d unread single message"
 msgid_plural " %d unread single messages"
 msgstr[0] " %d 条未读单独消息"
 
-#: ../src/common/helpers.py:893
+#: ../src/common/helpers.py:902
 #, python-format
 msgid " %d unread group chat message"
 msgid_plural " %d unread group chat messages"
 msgstr[0] " %d 条未读群聊消息"
 
-#: ../src/common/helpers.py:899
+#: ../src/common/helpers.py:908
 #, python-format
 msgid " %d unread private message"
 msgid_plural " %d unread private messages"
 msgstr[0] " %d 未读私人消息"
 
-#: ../src/common/helpers.py:909 ../src/common/helpers.py:911
+#: ../src/common/helpers.py:918 ../src/common/helpers.py:920
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
@@ -6648,7 +6631,7 @@ msgstr "青色"
 msgid "migrating logs database to indices"
 msgstr "合并日志数据库"
 
-#: ../src/common/passwords.py:92
+#: ../src/common/passwords.py:82
 #, python-format
 msgid "Gajim account %s"
 msgstr "Gajim 帐户 %s"
