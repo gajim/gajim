@@ -458,7 +458,6 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			errtxt = "Connection closed unexpectedly"
 
 		if errnum in (ERR_DISCONN, errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN):
-			self.DEBUG(errtxt, 'error')
 			log.error("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
 			self.printed_error = True
 			if not errors_only:
