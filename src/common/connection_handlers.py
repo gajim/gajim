@@ -1324,7 +1324,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.setTag('time')
 		qp.setTagData('utc', strftime("%Y-%m-%dT%TZ", gmtime()))
-		qp.setTagData('tzo', "%+03d:00"% (time.timezone/(60*60)))
+		qp.setTagData('tzo', "%+03d:00"% (-time.timezone/(60*60)))
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
@@ -1386,7 +1386,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
 		no_log_for = gajim.config.get_per('accounts', self.name,
-			'no_log_for').split()
+			'no_log_for')
+		if not no_log_for:
+			no_log_for = ''
+		no_log_for = no_log_for.split()
 		encrypted = False
 		chatstate = None
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)

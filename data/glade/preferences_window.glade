@@ -489,7 +489,7 @@ Per type</property>
 		<widget class="GtkHBox" id="hbox3024">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
+		  <property name="spacing">5</property>
 
 		  <child>
 		    <widget class="GtkLabel" id="label387">
@@ -544,7 +544,7 @@ Single message</property>
 		<widget class="GtkHBox" id="hbox2947">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">6</property>
+		  <property name="spacing">5</property>
 
 		  <child>
 		    <widget class="GtkEventBox" id="eventbox5">
@@ -564,7 +564,7 @@ Single message</property>
 			  <property name="selectable">False</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
+			  <property name="xpad">1</property>
 			  <property name="ypad">0</property>
 			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			  <property name="width_chars">-1</property>

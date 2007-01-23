@@ -1,4 +1,13 @@
-Gajim 0.11 (XX December 2006)
+Gajim 0.11.1 (XX February 2007)
+  * Fixes in gajim-remote and the way XMPP URI are handled
+  * Fix Idle under Windows
+  * Fix Gajim under non-ascii languages Windows
+  * Fix when removing active privacy list
+  * Fix problem with adhoc command and multi-step forms
+  * KDE integration for XMPP URI
+  * Support of XEP-0202 (Entity Time)
+
+Gajim 0.11 (19 December 2006)
   * New build system, using GNU autotools. See README.html
   * Support for link-local messaging via Zeroconf using Avahi (XEP-0174)
   * Automatically connect and disconnect to accounts according to network availability (if Network Manager is present)

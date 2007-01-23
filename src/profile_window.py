@@ -77,6 +77,10 @@ class ProfileWindow:
 		# Create Image for avatar button
 		image = gtk.Image()
 		self.xml.get_widget('PHOTO_button').set_image(image)
+		text_button = self.xml.get_widget('NOPHOTO_button')
+		# We use 2 buttons because some GTK theme don't show images in buttons
+		text_button.set_no_show_all(True)
+		text_button.hide()
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -104,7 +108,9 @@ class ProfileWindow:
 		button = self.xml.get_widget('PHOTO_button')
 		image = button.get_image()
 		image.set_from_pixbuf(None)
-		button.set_label(_('Click to set your avatar'))
+		button.hide()
+		text_button = self.xml.get_widget('NOPHOTO_button')
+		text_button.show()
 		self.avatar_encoded = None
 		self.avatar_mime_type = None
 
@@ -152,7 +158,9 @@ class ProfileWindow:
 			button = self.xml.get_widget('PHOTO_button')
 			image = button.get_image()
 			image.set_from_pixbuf(pixbuf)
-			button.set_label('')
+			button.show()
+			text_button = self.xml.get_widget('NOPHOTO_button')
+			text_button.hide()
 			self.avatar_encoded = base64.encodestring(data)
 			# returns None if unknown type
 			self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
@@ -202,25 +210,27 @@ class ProfileWindow:
 			pass
 
 	def set_values(self, vcard):
+		button = self.xml.get_widget('PHOTO_button')
+		image = button.get_image()
+		text_button = self.xml.get_widget('NOPHOTO_button')
 		if not 'PHOTO' in vcard:
 			# set default image
-			button = self.xml.get_widget('PHOTO_button')
-			image = button.get_image()
 			image.set_from_pixbuf(None)
-			button.set_label(_('Click to set your avatar'))
+			button.hide()
+			text_button.show()
 		for i in vcard.keys():
 			if i == 'PHOTO':
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
 					get_avatar_pixbuf_encoded_mime(vcard[i])
-				button = self.xml.get_widget('PHOTO_button')
-				image = button.get_image()
 				if not pixbuf:
 					image.set_from_pixbuf(None)
-					button.set_label(_('Click to set your avatar'))
+					button.hide()
+					text_button.show()
 					continue
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 				image.set_from_pixbuf(pixbuf)
-				button.set_label('')
+				button.show()
+				text_button.hide()
 				continue
 			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
 				for entry in vcard[i]:

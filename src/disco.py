@@ -47,6 +47,7 @@ import dialogs
 import tooltips
 import gtkgui_helpers
 import groups
+import adhoc_commands
 
 from common import gajim
 from common import xmpp
@@ -986,6 +987,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self.tooltip = tooltips.ServiceDiscoveryTooltip()
 		self.register_button = None
 		self.join_button = None
+		self.execute_button = None
 		# Keep track of our treeview signals
 		self._view_signals = []
 		self._scroll_signal = None
@@ -1140,6 +1142,18 @@ class ToplevelAgentBrowser(AgentBrowser):
 
 	def _add_actions(self):
 		AgentBrowser._add_actions(self)
+		self.execute_button = gtk.Button()
+		image = gtk.image_new_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_BUTTON)
+		label = gtk.Label(_('_Execute Command...'))
+		label.set_use_underline(True)
+		hbox = gtk.HBox()
+		hbox.pack_start(image, False, True, 6)
+		hbox.pack_end(label, True, True)
+		self.execute_button.add(hbox)
+		self.execute_button.connect('clicked', self.on_execute_button_clicked)
+		self.window.action_buttonbox.add(self.execute_button)
+		self.execute_button.show_all()
+
 		self.register_button = gtk.Button(label=_("Re_gister"),
 			use_underline=True)
 		self.register_button.connect('clicked', self.on_register_button_clicked)
@@ -1159,6 +1173,9 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self.join_button.show_all()
 
 	def _clean_actions(self):
+		if self.execute_button:
+			self.execute_button.destroy()
+			self.execute_button = None
 		if self.register_button:
 			self.register_button.destroy()
 			self.register_button = None
@@ -1177,6 +1194,15 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if bgcolor:
 			self._renderer.set_property('cell-background', bgcolor)
 		self.window.services_treeview.queue_draw()
+
+	def on_execute_button_clicked(self, widget = None):
+		'''When we want to execute a command:
+		open adhoc command window'''
+		model, iter = self.window.services_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		service = model[iter][0].decode('utf-8')
+		adhoc_commands.CommandWindow(self.account, service)
 
 	def on_register_button_clicked(self, widget = None):
 		'''When we want to register an agent:
@@ -1207,6 +1233,8 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self.window.destroy(chain = True)
 
 	def update_actions(self):
+		if self.execute_button:
+			self.execute_button.set_sensitive(False)
 		if self.register_button:
 			self.register_button.set_sensitive(False)
 		if self.browse_button:
@@ -1243,6 +1271,8 @@ class ToplevelAgentBrowser(AgentBrowser):
 
 	def _update_actions(self, jid, node, identities, features, data):
 		AgentBrowser._update_actions(self, jid, node, identities, features, data)
+		if self.execute_button and xmpp.NS_COMMANDS in features:
+			self.execute_button.set_sensitive(True)
 		if self.register_button and xmpp.NS_REGISTER in features:
 			# We can register this agent
 			registered_transports = []

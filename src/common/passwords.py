@@ -18,17 +18,7 @@ from common import gajim
 
 USER_HAS_GNOMEKEYRING = False
 USER_USES_GNOMEKEYRING = False
-if gajim.config.get('use_gnomekeyring'):
-	try:
-		import gnomekeyring
-	except ImportError:
-		pass
-	else:
-		USER_HAS_GNOMEKEYRING = True
-		if gnomekeyring.is_available():
-			USER_USES_GNOMEKEYRING = True
-		else:
-			USER_USES_GNOMEKEYRING = False
+gnomekeyring = None
 
 class PasswordStorage(object):
 	def get_password(self, account_name):
@@ -102,6 +92,20 @@ storage = None
 def get_storage():
 	global storage
 	if storage is None: # None is only in first time get_storage is called
+		if gajim.config.get('use_gnomekeyring'):
+			global gnomekeyring
+			try:
+				import gnomekeyring
+			except ImportError:
+				pass
+			else:
+				global USER_HAS_GNOMEKEYRING
+				global USER_USES_GNOMEKEYRING
+				USER_HAS_GNOMEKEYRING = True
+				if gnomekeyring.is_available():
+					USER_USES_GNOMEKEYRING = True
+				else:
+					USER_USES_GNOMEKEYRING = False
 		if USER_USES_GNOMEKEYRING:
 			try:
 				storage = GnomePasswordStorage()

@@ -354,6 +354,7 @@ def get_pixbuf_from_data(file_data, want_type = False):
 		pixbufloader.close()
 		pixbuf = pixbufloader.get_pixbuf()
 	except gobject.GError: # 'unknown image format'
+		pixbufloader.close()
 		pixbuf = None
 		if want_type:
 			return None, None

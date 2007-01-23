@@ -394,11 +394,11 @@ class SignalObject(dbus.service.Object):
 				'accounts', con.name, 'resource')))
 		return result
 
-	@dbus.service.method(INTERFACE, in_signature='s', out_signature='a{ss}')
+	@dbus.service.method(INTERFACE, in_signature='s', out_signature='av')
 	def list_contacts(self, account):
 		'''list all contacts in the roster. If the first argument is specified,
 		then return the contacts for the specified account'''
-		result = dbus.Array([], signature='s')
+		result = dbus.Array([], signature='a{sv}')
 		accounts = gajim.contacts.get_accounts()
 		if len(accounts) == 0:
 			return result
