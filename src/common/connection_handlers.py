@@ -1324,7 +1324,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.setTag('time')
 		qp.setTagData('utc', strftime("%Y-%m-%dT%TZ", gmtime()))
-		qp.setTagData('tzo', "%+03d:00"% (time.timezone/(60*60)))
+		qp.setTagData('tzo', "%+03d:00"% (-time.timezone/(60*60)))
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
