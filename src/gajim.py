@@ -501,6 +501,9 @@ class Interface:
 		# if we're here it means contact changed show
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible']
+		# Ignore invalid show
+		if array[1] not in statuss:
+			return
 		old_show = 0
 		new_show = statuss.index(array[1])
 		status_message = array[2]
@@ -1642,7 +1645,7 @@ class Interface:
 		else:
 			gajim.connections[account].change_status('offline','')
 
-	def read_sleepy(self):	
+	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
 			# idle detection is not supported in that OS
