@@ -451,7 +451,7 @@ class RosterWindow:
 			groups = [_('Transports')], show = 'offline', status = 'offline',
 			sub = 'from')
 		gajim.contacts.add_contact(account, c)
-		gajim.interface.roster.add_contact_to_roster(transport, account)
+		self.add_contact_to_roster(transport, account)
 
 	def really_remove_contact(self, contact, account):
 		if not gajim.interface.instances.has_key(account):
