@@ -1655,6 +1655,7 @@ class ManageProxiesWindow:
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.proxies_treeview = self.xml.get_widget('proxies_treeview')
 		self.proxyname_entry = self.xml.get_widget('proxyname_entry')
+		self.proxytype_combobox = self.xml.get_widget('proxytype_combobox')
 		self.init_list()
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -1670,7 +1671,7 @@ class ManageProxiesWindow:
 
 	def init_list(self):
 		self.xml.get_widget('remove_proxy_button').set_sensitive(False)
-		self.xml.get_widget('proxytype_combobox').set_sensitive(False)
+		self.proxytype_combobox.set_sensitive(False)
 		self.xml.get_widget('proxy_table').set_sensitive(False)
 		model = gtk.ListStore(str)
 		self.proxies_treeview.set_model(model)
@@ -1755,7 +1756,9 @@ class ManageProxiesWindow:
 				'user'))
 			proxypass_entry.set_text(gajim.config.get_per('proxies', proxy,
 				'pass'))
-			#FIXME: if we have several proxy types, set the combobox
+			proxytype = gajim.config.get_per('proxies', proxy, 'type')
+			types = ['http', 'socks5']
+			self.proxytype_combobox.set_active(types.index(proxytype))
 			if gajim.config.get_per('proxies', proxy, 'user'):
 				useauth_checkbutton.set_active(True)
 
@@ -1782,8 +1785,10 @@ class ManageProxiesWindow:
 		model.set_value(iter, 0, new_name)
 
 	def on_proxytype_combobox_changed(self, widget):
-		#FIXME: if we have several proxy types take them into account
-		pass
+		types = ['http', 'socks5']
+		type_ = self.proxytype_combobox.get_active()
+		proxy = self.proxyname_entry.get_text().decode('utf-8')
+		gajim.config.set_per('proxies', proxy, 'type', types[type_])
 
 	def on_proxyhost_entry_changed(self, widget):
 		value = widget.get_text().decode('utf-8')

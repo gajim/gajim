@@ -326,6 +326,7 @@ class Connection(ConnectionHandlers):
 			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
 			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
 			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
+			proxy['type'] = gajim.config.get_per('proxies', p, 'type')
 		else:
 			proxy = None
 

@@ -15,6 +15,7 @@
 ##   GNU General Public License for more details.
 
 import socket,select,base64,dispatcher_nb
+import struct
 from simplexml import ustr
 from client import PlugIn
 from idlequeue import IdleObject
@@ -885,6 +886,8 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 			self.DEBUG('Invalid proxy reply: %s %s %s' % (proto, code, desc),'error')
 			self._owner.disconnected()
 			return
+		if len(reply) != 2:
+			pass
 		self.onreceive(self._on_proxy_auth)
 	
 	def _on_proxy_auth(self, reply):
@@ -895,6 +898,155 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 				self.reply += reply.replace('\r', '')
 				return
 		self.DEBUG('Authentification successfull. Jabber server contacted.','ok')
+		if self.on_connect_proxy:
+			self.on_connect_proxy()
+
+	def DEBUG(self, text, severity):
+		''' Overwrites DEBUG tag to allow debug output be presented as "CONNECTproxy".'''
+		return self._owner.DEBUG(DBG_CONNECT_PROXY, text, severity)
+
+class NBSOCKS5PROXYsocket(NonBlockingTcp):
+	'''SOCKS5 proxy connection class. Uses TCPsocket as the base class
+		redefines only connect method. Allows to use SOCKS5 proxies with
+		(optionally) simple authentication (only USERNAME/PASSWORD auth). 
+	'''
+	def __init__(self, on_connect = None, on_connect_failure = None,
+	proxy = None, server = None, use_srv = True):
+		''' Caches proxy and target addresses.
+			'proxy' argument is a dictionary with mandatory keys 'host' and 'port'
+			(proxy address) and optional keys 'user' and 'password' to use for
+			authentication. 'server' argument is a tuple of host and port -
+			just like TCPsocket uses. '''
+		self.on_connect_proxy = on_connect  
+		self.on_connect_failure = on_connect_failure
+		NonBlockingTcp.__init__(self, self._on_tcp_connect, on_connect_failure,
+			server, use_srv)
+		self.DBG_LINE=DBG_CONNECT_PROXY
+		self.server = server
+		self.proxy = proxy
+		self.ipaddr = None
+
+	def plugin(self, owner):
+		''' Starts connection. Used interally. Returns non-empty string on
+		success.'''
+		owner.debug_flags.append(DBG_CONNECT_PROXY)
+		NonBlockingTcp.plugin(self, owner)
+
+	def connect(self, dupe = None):
+		''' Starts connection. Connects to proxy, supplies login and password to
+			it (if were specified while creating instance). Instructs proxy to make
+			connection to the target server. Returns non-empty sting on success.
+		'''
+		NonBlockingTcp.connect(self, (self.proxy['host'], self.proxy['port']))
+		
+	def _on_tcp_connect(self):
+		self.DEBUG('Proxy server contacted, performing authentification', 'start')
+		if self.proxy.has_key('user') and self.proxy.has_key('password'):
+			to_send = '\x05\x02\x00\x02'
+		else:
+			to_send = '\x05\x01\x00'
+		self.onreceive(self._on_greeting_sent)
+		self.send(to_send)
+
+	def _on_greeting_sent(self, reply):
+		if reply is None:
+			return
+		if len(reply) != 2:
+			raise error('Invalid proxy reply')
+		if reply[0] != '\x05':
+			self.DEBUG('Invalid proxy reply', 'error')
+			self._owner.disconnected()
+			return
+		if reply[1] == '\x00':
+			return self._on_proxy_auth('\x01\x00')
+		elif reply[1] == '\x02':
+			# TODO: Do authentification
+			self.onreceive(self._on_proxy_auth)
+		else:
+			if reply[1] == '\xff':
+				self.DEBUG('Authentification to proxy impossible: no acceptable '
+					'auth method', 'error')
+			else:
+				self.DEBUG('Invalid proxy reply', 'error')
+			self._owner.disconnected()
+			return
+
+	def _on_proxy_auth(self, reply):
+		if reply is None:
+			return
+		if len(reply) != 2:
+			self.DEBUG('Invalid proxy reply', 'error')
+			self._owner.disconnected()
+			raise error('Invalid proxy reply')
+		if reply[0] != '\x01':
+			self.DEBUG('Invalid proxy reply', 'error')
+			self._owner.disconnected()
+			raise error('Invalid proxy reply')
+		if reply[1] != '\x00':
+			self.DEBUG('Authentification to proxy failed', 'error')
+			self._owner.disconnected()
+			return
+		self.DEBUG('Authentification successfull. Jabber server contacted.','ok')
+		# Request connection
+		req = "\x05\x01\x00"
+		# If the given destination address is an IP address, we'll
+		# use the IPv4 address request even if remote resolving was specified.
+		try:
+			self.ipaddr = socket.inet_aton(self.server[0])
+			req = req + "\x01" + ipaddr
+		except socket.error:
+			# Well it's not an IP number,  so it's probably a DNS name.
+#			if self.__proxy[3]==True:
+			# Resolve remotely
+			self.ipaddr = None
+			req = req + "\x03" + chr(len(self.server[0])) + self.server[0]
+#			else:
+#				# Resolve locally
+#				self.ipaddr = socket.inet_aton(socket.gethostbyname(self.server[0]))
+#				req = req + "\x01" + ipaddr
+		req = req + struct.pack(">H",self.server[1])
+		self.onreceive(self._on_req_sent)
+		self.send(req)
+
+	def _on_req_sent(self, reply):
+		if reply is None:
+			return
+		if len(reply) < 10:
+			self.DEBUG('Invalid proxy reply', 'error')
+			self._owner.disconnected()
+			raise error('Invalid proxy reply')
+		if reply[0] != '\x05':
+			self.DEBUG('Invalid proxy reply', 'error')
+			self._owner.disconnected()
+			raise error('Invalid proxy reply')
+		if reply[1] != "\x00":
+			# Connection failed
+			self._owner.disconnected()
+			if ord(reply[1])<9:
+				errors = ['general SOCKS server failure',
+					'connection not allowed by ruleset',
+					'Network unreachable',
+					'Host unreachable',
+					'Connection refused',
+					'TTL expired',
+					'Command not supported',
+					'Address type not supported'
+				]
+				txt = errors[ord(reply[1])-1]
+			else:
+				txt = 'Invalid proxy reply'
+			self.DEBUG(txt, 'error')
+			return
+		# Get the bound address/port
+		elif reply[3] == "\x01":
+			begin, end = 3, 7
+		elif reply[3] == "\x03":
+			begin, end = 4, 4 + reply[4]
+		else:
+			self.DEBUG('Invalid proxy reply', 'error')
+			self._owner.disconnected()
+			return
+
 		if self.on_connect_proxy:
 			self.on_connect_proxy()
 

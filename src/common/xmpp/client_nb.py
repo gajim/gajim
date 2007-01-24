@@ -88,6 +88,8 @@ class NBCommonClient(CommonClient):
 			self.NonBlockingTLS.PlugOut()
 		if self.__dict__.has_key('NBHTTPPROXYsocket'):
 			self.NBHTTPPROXYsocket.PlugOut()
+		if self.__dict__.has_key('NBSOCKS5PROXYsocket'):
+			self.NBSOCKS5PROXYsocket.PlugOut()
 		if self.__dict__.has_key('NonBlockingTcp'):
 			self.NonBlockingTcp.PlugOut()
 		
@@ -102,9 +104,18 @@ class NBCommonClient(CommonClient):
 			server = (self.Server, self.Port)
 		self._Server,  self._Proxy, self._Ssl = server ,  proxy, ssl
 		self.on_stream_start = on_stream_start
-		if proxy: 
-			self.socket = transports_nb.NBHTTPPROXYsocket(self._on_connected, 
-				self._on_connected_failure, proxy, server)
+		if proxy:
+			if proxy.has_key('type'):
+				type_ = proxy['type']
+				if type_ == 'socks5':
+					self.socket = transports_nb.NBSOCKS5PROXYsocket(self._on_connected,
+						self._on_connected_failure, proxy, server)
+				elif type_ == 'http':
+					self.socket = transports_nb.NBHTTPPROXYsocket(self._on_connected,
+						self._on_connected_failure, proxy, server)
+			else:
+				self.socket = transports_nb.NBHTTPPROXYsocket(self._on_connected,
+					self._on_connected_failure, proxy, server)
 		else: 
 			self.connected = 'tcp'
 			self.socket = transports_nb.NonBlockingTcp(self._on_connected, 
