@@ -192,7 +192,7 @@
   </item>
   <item jid="jabber.org" name="Server hosted by the Jabber Software Foundation">
     <active port="5222"/>
-    <digest algo="sha1" value="69:AE:AE:B0:3E:5A:55:56:68:65:BB:76:87:EA:FB:B5:21:E6:07:E7"/>
+    <digest algo="sha1" value="66:9B:DB:4F:85:B7:A2:26:4D:76:01:C1:14:ED:0A:A9:24:15:8C:85"/>
   </item>
   <item jid="jabber.org.au" name="Server in Australia">
     <active port="5222"/>
