@@ -735,8 +735,16 @@ class GroupchatControl(ChatControlBase):
 		self.list_treeview.get_model().clear()
 		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
 		for nick in nick_list:
+			# Update pm chat window
+			fjid = self.room_jid + '/' + nick
+			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
 			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				nick)
+			if ctrl:
+				gc_contact.show = 'offline'
+				gc_contact.status = ''
+				ctrl.update_ui()
+				ctrl.parent_win.redraw_tab(ctrl)
 			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		gajim.gc_connected[self.account][self.room_jid] = False
 		ChatControlBase.got_disconnected(self)
@@ -1327,6 +1335,17 @@ class GroupchatControl(ChatControlBase):
 	def shutdown(self, status='offline'):
 		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
 							show='offline', status=status)
+		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
+		for nick in nick_list:
+			# Update pm chat window
+			fjid = self.room_jid + '/' + nick
+			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
+			if ctrl:
+				contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+				contact.show = 'offline'
+				contact.status = ''
+				ctrl.update_ui()
+				ctrl.parent_win.redraw_tab(ctrl)
 		# They can already be removed by the destroy function
 		if self.room_jid in gajim.contacts.get_gc_list(self.account):
 			gajim.contacts.remove_room(self.account, self.room_jid)
