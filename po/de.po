@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-23 21:28+0100\n"
-"PO-Revision-Date: 2007-01-20 20:31+0100\n"
+"PO-Revision-Date: 2007-01-25 17:39+0100\n"
 "Last-Translator: Benjamin Drung <benjamin.drung@gmail.com>\n"
 "Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
@@ -5163,7 +5163,7 @@ msgstr "Abonnement-Anforderung wurde gesendet"
 #: ../src/roster_window.py:2477
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
-msgstr "Wenn d\"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
+msgstr "Wenn \"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
 
 #: ../src/roster_window.py:2489
 msgid "Authorization has been removed"
@@ -5184,16 +5184,18 @@ msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
 msgstr ""
-"Durch entfernen dieses Kontaktes entziehen Sie ihm auch die Authorisation, "
-"wodurch der Kontakt sie nur noch als offline sehen wird."
+"Durch das Entfernen dieses Kontaktes entziehen Sie ihm auch die Berechtigung "
+"Ihren Status zu sehen, wodurch der Kontakt Sie nur noch als offline sehen "
+"wird."
 
 #: ../src/roster_window.py:2689
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
 msgstr ""
-"Durch entfernen dieses Kontaktes entziehen Sie ihm auch die Authorisation, "
-"wodurch der Kontakt sie nur noch als offline sehen wird."
+"Durch das Entfernen dieses Kontaktes entziehen Sie ihm auch standardmäßig "
+"die Berechtigung Ihren Status zu sehen, wodurch der Kontakt Sie nur noch als "
+"offline sehen wird."
 
 #: ../src/roster_window.py:2692
 msgid "I want this contact to know my status after removal"
@@ -5211,9 +5213,9 @@ msgid ""
 "By removing these contacts:%s\n"
 "you also remove authorization resulting in them always seeing you as offline."
 msgstr ""
-"Durch die Entfernung dieser Kontakte:%s\n"
-"entziehen Sie ihnen auch die Authorisation, wodurch die Kontakte Sie nur "
-"noch als offline sehen werden."
+"Durch das Entfernen dieser Kontakte:%s\n"
+"entziehen Sie ihnen auch die Berechtigung Ihren Status zu sehen, wodurch die "
+"Kontakte Sie nur noch als offline sehen werden."
 
 #: ../src/roster_window.py:2732
 msgid ""
