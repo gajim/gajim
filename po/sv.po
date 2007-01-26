@@ -1,8 +1,8 @@
 # Swedish translation for gajim
 # Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
 # This file is distributed under the same license as the gajim package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
-#
+# Oscar Hellström <oscar@oscarh.net>, 2005.
+# 
 #: ../src/gajim-remote.py:204 ../src/gajim-remote.py:211
 #: ../src/gajim-remote.py:237 ../src/gajim-remote.py:238
 #: ../src/gajim-remote.py:244 ../src/gajim-remote.py:245
@@ -12,20 +12,17 @@ msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-23 21:28+0100\n"
-"PO-Revision-Date: 2006-05-01 16:10+0200\n"
+"PO-Revision-Date: 2007-01-20 16:54+0100\n"
 "Last-Translator: Oscar Hellström <oscar@oscarh.net>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Rosetta-Version: 0.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1\n"
-"X-Poedit-Language: Swedish\n"
-"X-Poedit-Country: SWEDEN\n"
 
 #: ../data/gajim.desktop.in.in.h:1
 msgid "A GTK+ Jabber client"
-msgstr "En GTK+ jabberklient"
+msgstr "A GTK+ Jabber client"
 
 #: ../data/gajim.desktop.in.in.h:2
 msgid "Gajim Instant Messenger"
@@ -37,7 +34,7 @@ msgstr "Jabber IM-klient"
 
 #: ../data/glade/account_context_menu.glade.h:1
 msgid "Send Single _Message..."
-msgstr "Skicka Enstaka _Meddelande"
+msgstr "Skicka enstaka _meddelande"
 
 #: ../data/glade/account_context_menu.glade.h:2
 msgid "_Add Contact..."
@@ -45,11 +42,11 @@ msgstr "_Lägg till kontakt..."
 
 #: ../data/glade/account_context_menu.glade.h:3
 msgid "_Discover Services..."
-msgstr "_Upptäck tjänster"
+msgstr "_Upptäck tjänster..."
 
 #: ../data/glade/account_context_menu.glade.h:4 ../src/disco.py:1147
 msgid "_Execute Command..."
-msgstr ""
+msgstr "_Exekvera kommando..."
 
 #: ../data/glade/account_context_menu.glade.h:5
 #: ../data/glade/roster_window.glade.h:16
@@ -60,12 +57,11 @@ msgstr "_Gruppchatt"
 #: ../data/glade/account_context_menu.glade.h:6
 #: ../data/glade/zeroconf_context_menu.glade.h:1
 msgid "_Modify Account..."
-msgstr "_Redigera Konto..."
+msgstr "_Modifiera konto..."
 
 #: ../data/glade/account_context_menu.glade.h:7
-#, fuzzy
 msgid "_Open Gmail Inbox"
-msgstr "_Öppna e-postförfattning"
+msgstr "_Öppna Gmail Inbox"
 
 #: ../data/glade/account_context_menu.glade.h:8
 #: ../data/glade/zeroconf_context_menu.glade.h:2
@@ -78,17 +74,17 @@ msgid ""
 "\n"
 "Please wait..."
 msgstr ""
-"<b>konto skapas</b>\n"
+"<b>Konto skapas</b>\n"
 "\n"
-"Vänligen vänta..."
+"Var god vänta..."
 
 #: ../data/glade/account_creation_wizard_window.glade.h:4
 msgid "<b>Please choose one of the options below:</b>"
-msgstr "<b>Vänligen välj ett av alternativen nedan:</b>"
+msgstr "<b>Välj ett av alternativen nedan:</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:5
 msgid "<b>Please fill in the data for your new account</b>"
-msgstr "<b>Vänligen fyll i informationen för ditt nya konto</b>"
+msgstr "<b>Fyll i informationen för ditt nya konto</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:6
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
@@ -97,11 +93,11 @@ msgstr ""
 
 #: ../data/glade/account_creation_wizard_window.glade.h:7
 msgid "Connect when I press Finish"
-msgstr "Anslut när jag trycker Slutför"
+msgstr "Anslut när jag trycker på Slutför"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:8
 msgid "Gajim: Account Creation Wizard"
-msgstr "Gajim: Första-gången guide"
+msgstr "Gajim: Kontoskaparen"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:9
 msgid "I already have an account I want to use"
@@ -114,7 +110,7 @@ msgstr "Jag vill _registrera ett nytt konto"
 #: ../data/glade/account_creation_wizard_window.glade.h:11
 #: ../data/glade/account_modification_window.glade.h:18
 msgid "If checked, Gajim will remember the password for this account"
-msgstr "Om ibockad kommer Gajim komma ihåg lösenordet för det här kontot"
+msgstr "Om kryssad kommer Gajim komma ihåg lösenordet för det här kontot"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:12
 #: ../data/glade/manage_proxies_window.glade.h:6
@@ -139,7 +135,7 @@ msgid ""
 "You need to have an account in order to connect\n"
 "to the Jabber network."
 msgstr ""
-"Du behöver ett konto för att kunna ansluta till\n"
+"Du behöver ha ett konto för att lyckas ansluta till\n"
 "Jabber-nätverket."
 
 #: ../data/glade/account_creation_wizard_window.glade.h:18
@@ -172,7 +168,7 @@ msgstr "_Port:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:24
 msgid "_Retype Password:"
-msgstr "Skriv om _Lösenord:"
+msgstr "Skriv om _lösenord:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:25
 msgid "_Server:"
@@ -200,7 +196,7 @@ msgstr "<b>OpenPGP</b>"
 #: ../data/glade/account_modification_window.glade.h:3
 #: ../data/glade/zeroconf_properties_window.glade.h:2
 msgid "<b>Personal Information</b>"
-msgstr "<b>Personlig Information</b>"
+msgstr "<b>Personlig information</b>"
 
 #: ../data/glade/account_modification_window.glade.h:4
 msgid "Account"
@@ -218,11 +214,11 @@ msgstr "Återanslut när anslutningen förloras"
 #: ../data/glade/account_modification_window.glade.h:7
 #: ../data/glade/zeroconf_properties_window.glade.h:3
 msgid "C_onnect on Gajim startup"
-msgstr "Anslut vid start av Gajim"
+msgstr "_Anslut vid start av Gajim"
 
 #: ../data/glade/account_modification_window.glade.h:8
 msgid "Chan_ge Password"
-msgstr "Byt lösenord"
+msgstr "_Byt lösenord"
 
 #: ../data/glade/account_modification_window.glade.h:9
 msgid ""
@@ -231,10 +227,9 @@ msgid ""
 "default if broadcasted by the server, and with this option enabled TLS will "
 "be disabled"
 msgstr ""
-"Kryssa i det här så att Gajim kommer ansluta till port 5223 där tidigare "
-"servrar förväntades ha SSL-support. Notera att Gajim använder TLS kryptering "
-"som standard om servern stödjer det och med det här valet kommer TLS bli "
-"avslaget"
+"Kryssa i det här så att Gajim ansluter till port 5223 där tidigare servrar "
+"förväntades ha SSL-support. Notera att Gajim använder TLS kryptering som "
+"standard om servern stödjer det och med det här valet kommer TLS slås av"
 
 #: ../data/glade/account_modification_window.glade.h:10
 #: ../data/glade/zeroconf_properties_window.glade.h:4
@@ -274,21 +269,19 @@ msgid "Hostname: "
 msgstr "Värdnamn: "
 
 #: ../data/glade/account_modification_window.glade.h:17
-#, fuzzy
 msgid ""
 "If checked, Gajim will also broadcast some more IPs except from just your "
 "IP, so file transfer has higher chances of working."
 msgstr ""
-"Om ibockad kommer gajim att broadcasta fler IP-adresser än bara ditt IP. "
-"Detta för att öka möjligheten att filöverföring fungerar som den skall."
+"Om kryssad kommer Gajim att sända ut fler IP-adresser än bara ditt IP. Detta "
+"för att öka möjligheten att filöverföringar ska fungera som de ska."
 
 #: ../data/glade/account_modification_window.glade.h:19
-#, fuzzy
 msgid ""
 "If checked, Gajim will send keep-alive packets to prevent connection timeout "
 "which results in disconnection"
 msgstr ""
-"Om ibockad kommer Gajim skicka håll-vid-liv paket som förhindrar att "
+"Om kryssad kommer Gajim skicka keep-alive-paket som förhindrar att "
 "anslutningen gör timeout vilket leder till frånkoppling"
 
 #: ../data/glade/account_modification_window.glade.h:20
@@ -297,7 +290,7 @@ msgid ""
 "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
 "permission only for you"
 msgstr ""
-"Om ibockad kommer Gajim spara lösenordet i ~/.gajim/config med \"läs\"-"
+"Om kryssad kommer Gajim spara lösenordet i ~/.gajim/config med \"läs\"-"
 "rättigheter enbart för dig och din administratör"
 
 #: ../data/glade/account_modification_window.glade.h:21
@@ -306,7 +299,7 @@ msgid ""
 "If checked, Gajim, when launched, will automatically connect to jabber using "
 "this account"
 msgstr ""
-"Om ibockad kommer Gajim att vid start automatiskt ansluta till jabber genom "
+"Om kryssad kommer Gajim att vid start automatiskt ansluta till jabber genom "
 "det här kontot"
 
 #: ../data/glade/account_modification_window.glade.h:22
@@ -316,8 +309,8 @@ msgid ""
 "bottom of the roster window) will change the status of this account "
 "accordingly"
 msgstr ""
-"Om ibockad kommer global status (hanteras av comboboxen i botten av "
-"registerfönstret) att påverka även detta konto"
+"Om kryssad kommer varje ändring av global status (hanteras av komborutan i "
+"botten av registerfönstret) att påverka även detta konto"
 
 #: ../data/glade/account_modification_window.glade.h:23
 msgid "Information about you, as stored in the server"
@@ -346,7 +339,7 @@ msgstr "Ingen"
 #: ../data/glade/profile_window.glade.h:26
 #: ../data/glade/zeroconf_properties_window.glade.h:17
 msgid "Personal Information"
-msgstr "Personlig Information"
+msgstr "Personlig information"
 
 #: ../data/glade/account_modification_window.glade.h:29
 msgid "Port: "
@@ -363,12 +356,12 @@ msgid ""
 "client with the highest priority gets the events"
 msgstr ""
 "Prioritet används i Jabber för att fastställa vem som får händelser från "
-"jabberservern när två eller flera klienter är anslutna på samma konto: "
+"jabberservern när två eller flera klienter är anslutna till samma konto: "
 "Klienten med den högsta prioriteten får händelserna"
 
 #: ../data/glade/account_modification_window.glade.h:32
 msgid "Priority will change automatically according to your status."
-msgstr ""
+msgstr "Prioritet ändras automatiskt beroende på din status."
 
 #: ../data/glade/account_modification_window.glade.h:33
 msgid "Proxy:"
@@ -391,7 +384,7 @@ msgstr ""
 "flera delar beroende på antalet klienter anslutna till samma server med "
 "samma konto. Så du kan vara ansluten till samma konto med resurserna \"Hem\" "
 "och \"Jobb\" samtidigt. Resursen med högst prioritet kommer få händelserna. "
-"(se undertill)"
+"(se nedan)"
 
 #: ../data/glade/account_modification_window.glade.h:36
 #: ../data/glade/zeroconf_properties_window.glade.h:18
@@ -405,7 +398,7 @@ msgstr "Spara konversations_loggar för alla kontakter"
 
 #: ../data/glade/account_modification_window.glade.h:39
 msgid "Send keep-alive packets"
-msgstr "Skicka håll-vid-liv paket"
+msgstr "Skicka keep-alive-paket"
 
 #: ../data/glade/account_modification_window.glade.h:40
 #: ../data/glade/zeroconf_properties_window.glade.h:20
@@ -426,7 +419,7 @@ msgstr "Använd proxy för filöverföringar"
 
 #: ../data/glade/account_modification_window.glade.h:44
 msgid "_Adjust to status"
-msgstr ""
+msgstr "_Ändra efter status"
 
 #: ../data/glade/account_modification_window.glade.h:45
 msgid "_Jabber ID:"
@@ -449,15 +442,18 @@ msgid ""
 "This is only available if python-avahi is installed and avahi-daemon is "
 "running."
 msgstr ""
+"Om kryssad kommer alla lokala kontakter som använder en Bonjour-kompatibel "
+"chattklient (som iChat, Trillian eller Gaim) visas i registret. Du behöver "
+"inte vara ansluten till en jabberserver för att det ska fungera.Alternativet "
+"är bara tillgängligt om python-avahi är installerat och avahi-daemon körs."
 
 #: ../data/glade/accounts_window.glade.h:4
-#, fuzzy
 msgid ""
 "If you have 2 or more accounts and this is checked, Gajim will list all "
 "contacts as if you had one account"
 msgstr ""
-"Om du har 2 eller fler konton och det här är ibockad kommer Gajim lista alla "
-"kontakter som om du hade ett konto"
+"Om du har två eller fler konton och det här är kryssat kommer Gajim lista "
+"alla kontakter som om du hade ett konto"
 
 #: ../data/glade/accounts_window.glade.h:5
 #, fuzzy
@@ -466,7 +462,7 @@ msgstr "Sa_mmanfoga konton"
 
 #: ../data/glade/accounts_window.glade.h:6
 msgid "_Enable link-local messaging"
-msgstr ""
+msgstr "Använd _link-local-meddelanden"
 
 #: ../data/glade/accounts_window.glade.h:7
 msgid "_Modify"
@@ -502,26 +498,28 @@ msgid ""
 "protocol. Click on register button to\n"
 "proceed."
 msgstr ""
+"Du måste registrera dig med transportenför att kunna lägga till kontakter "
+"från dethär protokollet. Klicka på knappen Registreraför att fortsätta."
 
 #: ../data/glade/add_new_contact_window.glade.h:9
 msgid ""
 "You must be connected to the transport to be able\n"
 "to add a contact from this protocol."
 msgstr ""
+"Du måste vara ansluten till transporten för att kunnalägga till en kontakt "
+"från det här protokollet."
 
 #: ../data/glade/add_new_contact_window.glade.h:11
-#, fuzzy
 msgid "_Group:"
-msgstr "Grupp:"
+msgstr "_Grupp:"
 
 #: ../data/glade/add_new_contact_window.glade.h:12
 msgid "_Nickname:"
 msgstr "_Smeknamn:"
 
 #: ../data/glade/add_new_contact_window.glade.h:13
-#, fuzzy
 msgid "_Protocol:"
-msgstr "Protokoll:"
+msgstr "_Protokoll:"
 
 #: ../data/glade/add_new_contact_window.glade.h:14
 #, fuzzy
@@ -534,13 +532,12 @@ msgid "_User ID:"
 msgstr "Användar-ID:"
 
 #: ../data/glade/adhoc_commands_window.glade.h:1
-#, fuzzy
 msgid "<b>An error has occurred:</b>"
-msgstr "Ett protokollfel har inträffat:"
+msgstr "<b>Ett fel har uppstått:</b>"
 
 #: ../data/glade/adhoc_commands_window.glade.h:2
 msgid "<b>Choose command to execute:</b>"
-msgstr ""
+msgstr "<b>Välj kommando att exekvera:</b>"
 
 #: ../data/glade/adhoc_commands_window.glade.h:3
 msgid "Ad-hoc Commands - Gajim"
@@ -548,40 +545,37 @@ msgstr ""
 
 #: ../data/glade/adhoc_commands_window.glade.h:4
 msgid "Check once more"
-msgstr ""
+msgstr "Kontrollera igen"
 
 #: ../data/glade/adhoc_commands_window.glade.h:5
-#, fuzzy
 msgid "Error description..."
-msgstr "Beskrivning"
+msgstr "Fel beskrivning..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:6
-#, fuzzy
 msgid "Please wait while retrieving command list..."
-msgstr "Vänligen vänta medan logfiler blir migrerade..."
+msgstr "Vänta medans kommandolistan tas emot..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:7
-#, fuzzy
 msgid "Please wait while the command is sending..."
-msgstr "Vänligen vänta medan logfiler blir migrerade..."
+msgstr "Vänta medans kommandot skickar..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:8
 msgid "Please wait..."
-msgstr ""
+msgstr "Vänta..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:9
+#, fuzzy
 msgid "This jabber entity does not expose any commands."
-msgstr ""
+msgstr "Den här jabber-entiteten visar inga kommandon."
 
 #: ../data/glade/advanced_configuration_window.glade.h:1
 msgid "<b>Description</b>"
 msgstr "<b>Beskrivning</b>"
 
 #: ../data/glade/advanced_configuration_window.glade.h:2
-#, fuzzy
 msgid "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
 msgstr ""
-"<b>NOTERA:</b> Du bör starta om gajim för att vissa inställningar skall ge "
+"<b>OBSERVERA:</b> Du bör starta om Gajim för att vissa inställningarska ta "
 "effekt"
 
 #: ../data/glade/advanced_configuration_window.glade.h:3
@@ -601,22 +595,22 @@ msgid "Deletes Message of the Day"
 msgstr "Raderar dagens meddelande"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:3
-#, fuzzy
 msgid "Sends a message to users currently connected to this server"
 msgstr ""
-"Skickar ett meddelande till nuvarande anslutna klienter på den här servern"
+"Skickar ett meddelande till klienter för närvarande anslutna till den här "
+"servern"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:4
 msgid "Set MOTD"
-msgstr "Ställ in MOTD"
+msgstr "Sätt MOTD"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:5
 msgid "Sets Message of the Day"
-msgstr "Ställer in dagens meddelande"
+msgstr "Sätter dagens meddelande"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:6
 msgid "Show _XML Console"
-msgstr "Visa _XML konsol"
+msgstr "Visa _XML-konsoll"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:7
 msgid "Update MOTD"
@@ -632,7 +626,7 @@ msgstr "_Administratör"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:10
 msgid "_Privacy Lists"
-msgstr ""
+msgstr "_Personliga integritetslistor"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:11
 msgid "_Send Server Message"
@@ -644,17 +638,15 @@ msgstr "_Skicka enstaka meddelande"
 
 #: ../data/glade/advanced_notifications_window.glade.h:1
 msgid " a window/tab opened with that contact "
-msgstr ""
+msgstr " ett fönster/tabb öppnad med den kontakten "
 
 #: ../data/glade/advanced_notifications_window.glade.h:2
-#, fuzzy
 msgid "<b>Actions</b>"
-msgstr "<b>Program</b>"
+msgstr "<b>Åtgärder</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:3
-#, fuzzy
 msgid "<b>Conditions</b>"
-msgstr "<b>Ljud</b>"
+msgstr "<b>Villkor</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:4
 #: ../data/glade/preferences_window.glade.h:10
@@ -662,37 +654,33 @@ msgid "<b>Sounds</b>"
 msgstr "<b>Ljud</b>"
 
 #: ../data/glade/advanced_notifications_window.glade.h:5
-#, fuzzy
 msgid "Advanced Actions"
-msgstr "A_vancerade åtgärder"
+msgstr "Avancerade åtgärder"
 
 #: ../data/glade/advanced_notifications_window.glade.h:6
-#, fuzzy
 msgid "Advanced Notifications Control"
-msgstr "Avancerad konfigurationsredigerare"
+msgstr "Avancerad notifieringskontroll"
 
 #: ../data/glade/advanced_notifications_window.glade.h:7
-#, fuzzy
 msgid "All statuses"
-msgstr "Status: "
+msgstr "Alla statusar"
 
 #: ../data/glade/advanced_notifications_window.glade.h:8
 #: ../src/common/commands.py:91 ../src/common/helpers.py:243
 msgid "Away"
-msgstr "Borta"
+msgstr "Frånvarande"
 
 #: ../data/glade/advanced_notifications_window.glade.h:9
-#, fuzzy
 msgid "Busy "
-msgstr "Upptagen"
+msgstr "Upptagen "
 
 #: ../data/glade/advanced_notifications_window.glade.h:10
 msgid "Don't have "
-msgstr ""
+msgstr "Har inte "
 
 #: ../data/glade/advanced_notifications_window.glade.h:11
 msgid "Have "
-msgstr ""
+msgstr "Har "
 
 #: ../data/glade/advanced_notifications_window.glade.h:12
 #: ../src/common/helpers.py:253
@@ -700,9 +688,8 @@ msgid "Invisible"
 msgstr "Osynlig"
 
 #: ../data/glade/advanced_notifications_window.glade.h:13
-#, fuzzy
 msgid "Launch a command"
-msgstr "kommando"
+msgstr "Kör ett kommando"
 
 #: ../data/glade/advanced_notifications_window.glade.h:14
 #: ../src/common/helpers.py:226
@@ -711,17 +698,15 @@ msgstr "Inte tillgänglig"
 
 #: ../data/glade/advanced_notifications_window.glade.h:15
 msgid "One or more special statuses..."
-msgstr ""
+msgstr "En eller flera speciella statusar..."
 
 #: ../data/glade/advanced_notifications_window.glade.h:16
-#, fuzzy
 msgid "Online / Free For Chat"
-msgstr "Ledig för chatt"
+msgstr "Ansluten / Ledig för chatt"
 
 #: ../data/glade/advanced_notifications_window.glade.h:17
-#, fuzzy
 msgid "Play a sound"
-msgstr "_Spela ljud"
+msgstr "Spela ett ljud"
 
 #: ../data/glade/advanced_notifications_window.glade.h:18
 msgid ""
@@ -734,59 +719,65 @@ msgid ""
 "File Transfer Started \n"
 "File Transfer Finished"
 msgstr ""
+"Ta emot ett meddelande\n"
+"Kontakten kopplade ner \n"
+"Kontakten ändrade status \n"
+"Markeringsmeddelande i gruppchatt \n"
+"Meddelande mottaget i gruppchatt \n"
+"Filöverföring begärd \n"
+"Filöverföring startad \n"
+"Filöverföring stoppad"
 
 #: ../data/glade/advanced_notifications_window.glade.h:26
 msgid "When "
-msgstr ""
+msgstr "När "
 
 #: ../data/glade/advanced_notifications_window.glade.h:27
 msgid ""
 "_Activate window manager's UrgencyHint to make chat window in taskbar flash"
 msgstr ""
+"_Aktivera fönsterhanterarens UrgencyHint för att chattfönster ska blinkar i "
+"verktygsraden"
 
 #: ../data/glade/advanced_notifications_window.glade.h:28
-#, fuzzy
 msgid "_Disable auto opening chat window"
-msgstr "Gömmer knapparna i gruppchattfönstret"
+msgstr "_Inaktivera automatiskt öppning av chattfönster"
 
 #: ../data/glade/advanced_notifications_window.glade.h:29
 msgid "_Disable existing popup window"
-msgstr ""
+msgstr "_Inaktivera befintligt popup-fönster"
 
 #: ../data/glade/advanced_notifications_window.glade.h:30
 msgid "_Disable existing sound for this event"
-msgstr ""
+msgstr "_Inaktivera befintligt ljud för denna händelse"
 
 #: ../data/glade/advanced_notifications_window.glade.h:31
 msgid "_Disable showing event in roster"
-msgstr ""
+msgstr "_Inaktivera att visa händelser i registret"
 
 #: ../data/glade/advanced_notifications_window.glade.h:32
 msgid "_Disable showing event in systray"
-msgstr ""
+msgstr "_Inaktivera att visa händelser i notifieringsyta"
 
 #: ../data/glade/advanced_notifications_window.glade.h:33
 msgid "_Inform me with a popup window"
-msgstr ""
+msgstr "_Informera mig med ett popup-fönster"
 
 #: ../data/glade/advanced_notifications_window.glade.h:34
-#, fuzzy
 msgid "_Open chat window with user"
-msgstr "Använd ett enkelt chattfönster med _flikar"
+msgstr "_Öppna chattfönster med användare"
 
 #: ../data/glade/advanced_notifications_window.glade.h:35
-#, fuzzy
 msgid "_Show event in roster"
-msgstr "Visa enbart i _registret"
+msgstr "_Visa händelse i registret"
 
 #: ../data/glade/advanced_notifications_window.glade.h:36
-#, fuzzy
 msgid "_Show event in systray"
-msgstr "Visa enbart i _registret"
+msgstr "_Visa händelse i notifieringsytan"
 
 #: ../data/glade/advanced_notifications_window.glade.h:37
 msgid "and I "
-msgstr ""
+msgstr "och jag "
 
 #: ../data/glade/advanced_notifications_window.glade.h:38
 msgid ""
@@ -794,39 +785,40 @@ msgid ""
 "group(s)\n"
 "everybody"
 msgstr ""
+"kontakt(er)\n"
+"grupp(er)\n"
+"alla"
 
 #: ../data/glade/advanced_notifications_window.glade.h:41
-#, fuzzy
 msgid "for "
-msgstr "Port: "
+msgstr "för "
 
 #: ../data/glade/advanced_notifications_window.glade.h:42
 msgid "when I'm in"
-msgstr ""
+msgstr "när jag är i"
 
 #: ../data/glade/atom_entry_window.glade.h:1
 #, fuzzy
 msgid "Entry:"
-msgstr "Land:"
+msgstr "Objekt:"
 
 #: ../data/glade/atom_entry_window.glade.h:2
-#, fuzzy
 msgid "Feed name:"
-msgstr "temanamn"
+msgstr ""
 
 #: ../data/glade/atom_entry_window.glade.h:3
-#, fuzzy
 msgid "Last modified:"
-msgstr "Namn:"
+msgstr "Senast ändrad:"
 
 #: ../data/glade/atom_entry_window.glade.h:4
 #, fuzzy
 msgid "New entry received"
-msgstr "När en ny händelse är mottagen"
+msgstr "Nytt objekt mottaget"
 
 #: ../data/glade/atom_entry_window.glade.h:5
+#, fuzzy
 msgid "You have received new entry:"
-msgstr ""
+msgstr "Du har mottagit ett nytt objekt:"
 
 #: ../data/glade/change_password_dialog.glade.h:1
 msgid "Change Password"
@@ -842,7 +834,7 @@ msgstr "Skriv nytt lösenord:"
 
 #: ../data/glade/change_status_message_dialog.glade.h:1
 msgid "<b>Type your new status message</b>"
-msgstr "<b>Skriv ditt nya statusmeddelande</b>"
+msgstr "<b>Skriv in ditt nya statusmeddelande</b>"
 
 #: ../data/glade/change_status_message_dialog.glade.h:2
 msgid "Preset messages:"
@@ -850,7 +842,7 @@ msgstr "Sparade meddelanden:"
 
 #: ../data/glade/change_status_message_dialog.glade.h:3
 msgid "Save as Preset..."
-msgstr "Spara Meddeande..."
+msgstr "Spara meddelande..."
 
 #: ../data/glade/chat_context_menu.glade.h:1
 msgid "Join _Group Chat"
@@ -873,7 +865,7 @@ msgstr "_Kopiera länkadress"
 
 #: ../data/glade/chat_context_menu.glade.h:5
 msgid "_Open Email Composer"
-msgstr "_Öppna e-postförfattning"
+msgstr "_Skicka e-post"
 
 #: ../data/glade/chat_context_menu.glade.h:6
 msgid "_Open Link in Browser"
@@ -888,22 +880,22 @@ msgstr "_Starta chatt"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:1
 msgid "Click to see past conversations with this contact"
-msgstr "Klicka för att via tidigare konversationer med den här kontakten"
+msgstr "Klicka för att visa tidigare konversationer med den här kontakten"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:2
 #: ../data/glade/roster_contact_context_menu.glade.h:8
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:4
 msgid "Send _File"
-msgstr "Skicka _Fil"
+msgstr "Skicka _fil"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:3
 msgid "Toggle Open_PGP Encryption"
-msgstr "Slå på/av Open_PGP kryptering"
+msgstr "Slå på/av Open_PGP-kryptering"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:5
 #: ../data/glade/gc_control_popup_menu.glade.h:6
 msgid "_Compact View    Alt+C"
-msgstr "_Kompakt vy Alt+C"
+msgstr "_Kompakt vy    Alt+C"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:6
 #: ../data/glade/gc_control_popup_menu.glade.h:7
@@ -914,9 +906,8 @@ msgid "_History"
 msgstr "_Historik"
 
 #: ../data/glade/data_form_window.glade.h:1
-#, fuzzy
 msgid "Fill in the form."
-msgstr "I gruppen"
+msgstr "Fyll i formuläret."
 
 #: ../data/glade/data_form_window.glade.h:2
 msgid "Room Configuration"
@@ -941,7 +932,7 @@ msgstr "Avbryter den valda filöverföringen"
 #: ../data/glade/filetransfers.glade.h:4
 msgid "Cancels the selected file transfer and removes incomplete file"
 msgstr ""
-"Avbryter den valda filöverföringen och tar bort den icke-kompletta filen"
+"Avbryter den valda filöverföringen och tar bort den ofullständiga filen"
 
 #: ../data/glade/filetransfers.glade.h:5
 msgid "Clean _up"
@@ -974,12 +965,12 @@ msgid ""
 "This action removes single file transfer from the list. If the transfer is "
 "active, it is first stopped and then removed"
 msgstr ""
-"Den här handlingen tar bort en enstaka filöverföring från listan. Om "
-"överföringen är aktiv, stoppas den först och tas sen bort"
+"Den här handlingen tar bort en filöverföring från listan. Om överföringen är "
+"aktiv, stoppas den först och tas sedan bort"
 
 #: ../data/glade/filetransfers.glade.h:12
 msgid "When a file transfer is complete show a popup notification"
-msgstr "När en filöverföring är färdig, visa ett popupmeddelande"
+msgstr "När en filöverföring är färdig, visa en popupnotifiering"
 
 #: ../data/glade/filetransfers.glade.h:13 ../src/filetransfers_window.py:769
 msgid "_Continue"
@@ -990,6 +981,7 @@ msgid "_Notify me when a file transfer is complete"
 msgstr "_Meddela mig när en filöverföring är färdig"
 
 #: ../data/glade/filetransfers.glade.h:15 ../src/filetransfers_window.py:190
+#, fuzzy
 msgid "_Open Containing Folder"
 msgstr "_Öppna behållande mapp"
 
@@ -1003,20 +995,19 @@ msgstr "filöverföringslista"
 
 #: ../data/glade/gajim_themes_window.glade.h:1
 msgid "<b>Chatstate Tab Colors</b>"
-msgstr "<b>Tabfärger För Chatstatus</b>"
+msgstr "<b>Tabbfärger för chattstatus</b>"
 
 #: ../data/glade/gajim_themes_window.glade.h:2
-#, fuzzy
 msgid ""
 "Account row\n"
 "Group row\n"
 "Contact row\n"
 "Chat Banner"
 msgstr ""
-"Konto\n"
-"Grupp\n"
-"Kontakt\n"
-"Banner"
+"Kontorad\n"
+"Grupprad\n"
+"Kontaktrad\n"
+"Chattbanner"
 
 #: ../data/glade/gajim_themes_window.glade.h:6
 msgid "Bold"
@@ -1032,11 +1023,11 @@ msgstr "Teckensnitt-stil:"
 
 #: ../data/glade/gajim_themes_window.glade.h:9
 msgid "Gajim Themes Customization"
-msgstr "Gajim Temaanpassare"
+msgstr "Gajim temaanpassare"
 
 #: ../data/glade/gajim_themes_window.glade.h:10
 msgid "Gone"
-msgstr "Borta"
+msgstr "Frånvarande"
 
 #: ../data/glade/gajim_themes_window.glade.h:11
 msgid "Inactive"
@@ -1052,7 +1043,7 @@ msgid ""
 "Messages"
 msgstr ""
 "MUC\n"
-"Meddelande"
+"meddelanden"
 
 #: ../data/glade/gajim_themes_window.glade.h:15
 msgid ""
@@ -1060,7 +1051,7 @@ msgid ""
 "Messages"
 msgstr ""
 "MUC-dirigerade\n"
-"Meddelanden"
+"meddelanden"
 
 #: ../data/glade/gajim_themes_window.glade.h:17
 msgid "Paused"
@@ -1068,11 +1059,11 @@ msgstr "Pausad"
 
 #: ../data/glade/gajim_themes_window.glade.h:18
 msgid "Text _color:"
-msgstr "Textfärg:"
+msgstr "Text_färg:"
 
 #: ../data/glade/gajim_themes_window.glade.h:19
 msgid "Text _font:"
-msgstr "Text-teckensnitt:"
+msgstr "Text-_teckensnitt:"
 
 #: ../data/glade/gajim_themes_window.glade.h:20
 msgid "_Background:"
@@ -1084,7 +1075,7 @@ msgstr "Byt smek_namn"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:2
 msgid "Change _Subject"
-msgstr "Byt ämne"
+msgstr "Byt _ämne"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:3
 msgid "Click to see past conversation in this room"
@@ -1120,7 +1111,7 @@ msgstr "_Medlem"
 
 #: ../data/glade/gc_occupants_menu.glade.h:8
 msgid "_Occupant Actions"
-msgstr "_Innehavarhandlingar"
+msgstr "_Operatörsåtgärder"
 
 #: ../data/glade/gc_occupants_menu.glade.h:9
 msgid "_Owner"
@@ -1136,7 +1127,7 @@ msgstr "_Röst"
 
 #: ../data/glade/groups_post_window.glade.h:1
 msgid "Create new post"
-msgstr ""
+msgstr "Skapa ny post"
 
 #: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:268
 msgid "From"
@@ -1158,9 +1149,9 @@ msgid ""
 "If you plan to do massive deletions, please make sure Gajim is not running. "
 "Generally avoid deletions with contacts you currently chat with."
 msgstr ""
-"<big><b>Välkommen till Gajims Historikhanterare</b></big>\n"
+"<big><b>Välkommen till Gajims historikhanterare</b></big>\n"
 "\n"
-"Du kan välja loggar från vänster och/eller söka i databasen under.\n"
+"Du kan välja loggar till vänster och/eller söka i databasen härunder.\n"
 "<b>VARNING:</b>\n"
 "Se till att Gajim inte är startat om du planerar att radera mycket. Undvik i "
 "regel att radera för kontakter du just nu chattar med."
@@ -1175,11 +1166,11 @@ msgstr "Exportera"
 
 #: ../data/glade/history_manager.glade.h:9
 msgid "Gajim History Logs Manager"
-msgstr "Historikhanterare"
+msgstr "Gajims historikhanterare"
 
 #: ../data/glade/history_manager.glade.h:10
 msgid "_Search Database"
-msgstr "_Sök I Databasen"
+msgstr "_Sök i databasen"
 
 #: ../data/glade/history_window.glade.h:1
 msgid "Build custom query"
@@ -1216,12 +1207,11 @@ msgstr "Inbjudan mottagen"
 
 #: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1149
 msgid "Join Group Chat"
-msgstr "Anslut till gruppchatt"
+msgstr "Gå in i gruppchatt"
 
 #: ../data/glade/join_groupchat_window.glade.h:2
-#, fuzzy
 msgid "Join this room automatically when I connect"
-msgstr "Ställ in min profil när jag ansluter"
+msgstr "Gå in i rummet automatiskt när jag ansluter"
 
 #: ../data/glade/join_groupchat_window.glade.h:3
 #: ../data/glade/manage_bookmarks_window.glade.h:4
@@ -1247,7 +1237,7 @@ msgstr "Rum:"
 #: ../data/glade/join_groupchat_window.glade.h:7 ../src/disco.py:1165
 #: ../src/disco.py:1548
 msgid "_Join"
-msgstr "_Anslut till"
+msgstr "_Gå in i"
 
 #: ../data/glade/manage_accounts_window.glade.h:1
 msgid "Manage Accounts"
@@ -1259,16 +1249,15 @@ msgstr "Anslut automatiskt"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:2
 msgid "If checked, Gajim will join this group chat on startup"
-msgstr "Om ibockad kommer Gajim ansluta till den här gruppchatten vid start"
+msgstr "Om kryssad kommer Gajim gå in i den här gruppchatten vid start"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:3
 msgid "Manage Bookmarks"
 msgstr "Hantera bokmärken"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:6
-#, fuzzy
 msgid "Print status:"
-msgstr "Skriv ut tid:"
+msgstr "Skriv ut status:"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:8
 msgid "Server:"
@@ -1288,7 +1277,7 @@ msgstr "<b>Inställningar</b>"
 
 #: ../data/glade/manage_proxies_window.glade.h:3
 msgid "HTTP Connect"
-msgstr "HTTP anslut"
+msgstr "HTTP-anslut"
 
 #: ../data/glade/manage_proxies_window.glade.h:4
 msgid "Manage Proxy Profiles"
@@ -1310,7 +1299,7 @@ msgstr "Använd autentisering"
 
 #: ../data/glade/message_window.glade.h:1
 msgid "Click to insert an emoticon (Alt+M)"
-msgstr "Klicka för att sätta in en känsloikoner (Alt+M)"
+msgstr "Klicka för att sätta in en känsloikon (Alt+M)"
 
 #: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1109
 msgid "OpenPGP Encryption"
@@ -1352,9 +1341,8 @@ msgid "<b>Format of a line</b>"
 msgstr "<b>Format av en rad</b>"
 
 #: ../data/glade/preferences_window.glade.h:6
-#, fuzzy
 msgid "<b>GMail Options</b>"
-msgstr "<b>Program</b>"
+msgstr "<b>GMail-inställningar</b>"
 
 #: ../data/glade/preferences_window.glade.h:7
 msgid "<b>Interface Customization</b>"
@@ -1362,11 +1350,11 @@ msgstr "<b>Gränssnittsanpassning</b>"
 
 #: ../data/glade/preferences_window.glade.h:9
 msgid "<b>Preset Status Messages</b>"
-msgstr "<b>Sparade Statusmeddelanden</b>"
+msgstr "<b>Sparade statusmeddelanden</b>"
 
 #: ../data/glade/preferences_window.glade.h:11
 msgid "<b>Visual Notifications</b>"
-msgstr "<b>Visuella Meddelanden</b>"
+msgstr "<b>Visuella meddelanden</b>"
 
 #: ../data/glade/preferences_window.glade.h:12
 msgid "Advanced"
@@ -1389,7 +1377,8 @@ msgstr "Tillåt _OS-information att skickas"
 #: ../data/glade/preferences_window.glade.h:17
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
 msgstr ""
-"Tillåt popup/meddelanden när jag är bort_a/inte tillgänglig/upptagen/osynlig"
+"Tillåt popups/notifieringar när jag är _frånvarande/inte tillgänglig/"
+"upptagen/osynlig"
 
 #: ../data/glade/preferences_window.glade.h:18
 msgid "Also known as iChat style"
@@ -1397,7 +1386,7 @@ msgstr "Också känt som iChat-stil"
 
 #: ../data/glade/preferences_window.glade.h:19
 msgid "Always check to see if Gajim is the _default Jabber client on startup"
-msgstr ""
+msgstr "Kolla alltid vid start om Gajim är _standardklient för Jabber"
 
 #: ../data/glade/preferences_window.glade.h:20
 msgid ""
@@ -1405,6 +1394,9 @@ msgid ""
 "anymore for a status message when you change your status to away; it will "
 "use the default one set here"
 msgstr ""
+"Ett exempel: Om du har aktiverat statusmeddelanden för frånvarande kommer "
+"Gajim inte fråga dig efter ett statusmeddelande när du byter status till "
+"frånvarande.Det kommer använda ditt förinställda satt här"
 
 #: ../data/glade/preferences_window.glade.h:21
 msgid "Ask status message when I:"
@@ -1412,14 +1404,13 @@ msgstr "Fråga efter statusmeddelande när jag:"
 
 #: ../data/glade/preferences_window.glade.h:22
 msgid "Auto _away after:"
-msgstr "Automatiskt bort_a efter:"
+msgstr "Automatiskt _frånvarande efter:"
 
 #: ../data/glade/preferences_window.glade.h:23
 msgid "Auto _not available after:"
-msgstr "Automatiskt ej tillgä_nglig efter:"
+msgstr "Automatiskt _ej tillgänglig efter:"
 
 #: ../data/glade/preferences_window.glade.h:24
-#, fuzzy
 msgid ""
 "Autodetect on every Gajim startup\n"
 "Always use GNOME default applications\n"
@@ -1430,6 +1421,7 @@ msgstr ""
 "Detektera vid varje Gajimstart\n"
 "Använd alltid GNOMEs standardprogram\n"
 "Använd alltid KDEs standardprogram\n"
+"Använd alltid XFCE4s standardprogram\n"
 "Anpassa"
 
 #: ../data/glade/preferences_window.glade.h:29 ../src/chat_control.py:852
@@ -1449,16 +1441,15 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:31
 msgid "Configure color and font of the interface"
-msgstr ""
+msgstr "Konfigurera färger och teckensnitt för gränssnittet"
 
 #: ../data/glade/preferences_window.glade.h:32
-#, fuzzy
 msgid "Default Status Messages"
-msgstr "Statusmeddelande"
+msgstr "Förinställda statusmeddelanden"
 
 #: ../data/glade/preferences_window.glade.h:33
 msgid "Default status _iconset:"
-msgstr "Standarduppsättning av _statusikoner:"
+msgstr "Standarduppsättning av status_ikoner:"
 
 #: ../data/glade/preferences_window.glade.h:34
 msgid ""
@@ -1469,7 +1460,7 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:37
 msgid "Display _extra email details"
-msgstr ""
+msgstr "Visa _extra e-postdetaljer"
 
 #: ../data/glade/preferences_window.glade.h:38
 msgid "Display a_vatars of contacts in roster"
@@ -1480,9 +1471,8 @@ msgid "Display status _messages of contacts in roster"
 msgstr "Visa status_meddelanden för kontakter i registret"
 
 #: ../data/glade/preferences_window.glade.h:40
-#, fuzzy
 msgid "Displayed Chat state noti_fications:"
-msgstr "Chattstatusmeddelanden:"
+msgstr "Visa chattstatusnoti_fieringar:"
 
 #: ../data/glade/preferences_window.glade.h:41
 msgid "E_very 5 minutes"
@@ -1497,15 +1487,14 @@ msgid "Events"
 msgstr "Händelser"
 
 #: ../data/glade/preferences_window.glade.h:44
-#, fuzzy
 msgid ""
 "Gajim can send and receive meta-information related to a conversation you "
 "may have with a contact. Here you can specify which chatstates you want to "
 "display in chat windows."
 msgstr ""
 "Gajim kan skicka och ta emot meta-information relaterad till en konversation "
-"som du har med en kontakt: Här kan du specificera vilka "
-"chattstatusmeddelanden du vill skicka till den andra parten."
+"som du har med en kontakt. Här kan du specificera vilka chattstatusar du "
+"vill visa i chattfönster."
 
 #: ../data/glade/preferences_window.glade.h:45
 msgid ""
@@ -1514,15 +1503,14 @@ msgid ""
 "send to the other party."
 msgstr ""
 "Gajim kan skicka och ta emot meta-information relaterad till en konversation "
-"som du har med en kontakt: Här kan du specificera vilka "
-"chattstatusmeddelanden du vill skicka till den andra parten."
+"som du har med en kontakt: Här kan du specificera vilka chattstatusar du "
+"vill skicka till den andra parten."
 
 #: ../data/glade/preferences_window.glade.h:46
-#, fuzzy
 msgid ""
 "Gajim will automatically show new events by popping up the relative window"
 msgstr ""
-"Gajim kommer automatiskt visa nya inkommande meddelanden genom att öppna "
+"Gajim kommer automatiskt visa nya inkommande händelser genom att öppna "
 "relevant fönster"
 
 #: ../data/glade/preferences_window.glade.h:47
@@ -1538,7 +1526,7 @@ msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed in"
 msgstr ""
-"Gajim kommer säga till dig via ett popupfönster i det nedre högra hörnet av "
+"Gajim kommer meddela dig via ett popup-fönster i det nedre högra hörnet av "
 "skärmen om kontakter som just loggat in"
 
 #: ../data/glade/preferences_window.glade.h:49
@@ -1546,7 +1534,7 @@ msgid ""
 "Gajim will notify you via a popup window in the bottom right of the screen "
 "about contacts that just signed out"
 msgstr ""
-"Gajim kommer säga till dig via ett popupfönster i det nedre högra hörnet av "
+"Gajim kommer meddela dig via ett popup-fönster i det nedre högra hörnet av "
 "skärmen om kontakter som just loggat ut"
 
 #: ../data/glade/preferences_window.glade.h:50
@@ -1560,29 +1548,31 @@ msgid ""
 "If checked, Gajim will also include information about the sender of the new "
 "emails"
 msgstr ""
+"Om kryssad kommer Gajim också inkludera information om vem som skickade den "
+"nya e-posten"
 
 #: ../data/glade/preferences_window.glade.h:53
 msgid ""
 "If checked, Gajim will display avatars of contacts in roster window and in "
 "group chats"
 msgstr ""
-"Om ibockad kommer Gajim att visa kontakters avatarer i register- och "
-"gruppchatfönstret"
+"Om kryssad kommer Gajim att visa kontakters avatarer i register- och "
+"gruppchattsfönstren"
 
 #: ../data/glade/preferences_window.glade.h:54
 msgid ""
 "If checked, Gajim will display status messages of contacts under the contact "
 "name in roster window and in group chats"
 msgstr ""
-"Om ibockad kommer Gajim att visa statusmeddelanden för kontakter under "
-"kontaktens namn i register- och gruppchatfönstret"
+"Om kryssad kommer Gajim att visa statusmeddelanden för kontakter under "
+"kontaktens namn i register- och gruppchattsfönstren"
 
 #: ../data/glade/preferences_window.glade.h:55
 msgid ""
 "If checked, Gajim will remember the roster and chat window positions in the "
 "screen and the sizes of them next time you run it"
 msgstr ""
-"Om ibockad kommer Gajim komma ihåg registrets och chatfönstrets positioner "
+"Om kryssad kommer Gajim komma ihåg registrets och chattfönstrens positioner "
 "och storlekar på skärmen nästa gång de används"
 
 #: ../data/glade/preferences_window.glade.h:56
@@ -1591,21 +1581,22 @@ msgid ""
 "from MSN will have the equivalent msn icon for status online, away, busy, "
 "etc...)"
 msgstr ""
-"Om ibockad kommer Gajim använda protokoll-specifika statusikoner (t.ex. en "
-"kontakt för MSN kommer ha msn:s ikon för status online, borta, upptagen, "
-"osv...)"
+"Om kryssad kommer Gajim använda protokoll-specifika statusikoner (t.ex. en "
+"kontakt från MSN kommer ha msnikonen för status tillgänlig, frånvarande, "
+"upptagen, osv...)"
 
 #: ../data/glade/preferences_window.glade.h:57
+#, fuzzy
 msgid ""
 "If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
 "animated or static graphical emoticons"
 msgstr ""
-"Om inte avstängd kommer Gajim ersätta ascii smilies som ':)' med motsvarande "
-"grafiska känsloikoner"
+"Om inte avstängd kommer Gajim ersätta ascii-smilies som \":)\" med "
+"motsvarande animerade eller statiska grafiska känsloikoner"
 
 #: ../data/glade/preferences_window.glade.h:58
 msgid "Ignore rich content in incoming messages"
-msgstr ""
+msgstr "Ignorera textformatering i inkommande meddelanden"
 
 #: ../data/glade/preferences_window.glade.h:59
 msgid "Ma_nage..."
@@ -1625,12 +1616,11 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:64
 msgid "Notify me about contacts that: "
-msgstr "Meddela när kontakter: "
+msgstr "Notifiera mig om kontakter som: "
 
 #: ../data/glade/preferences_window.glade.h:65
-#, fuzzy
 msgid "Notify on new _GMail email"
-msgstr "Meddela om ny _Gmail e-post"
+msgstr "Notifiera om ny e-post på _Gmail"
 
 #: ../data/glade/preferences_window.glade.h:66
 msgid "On every _message"
@@ -1641,9 +1631,8 @@ msgid "One message _window:"
 msgstr "Ett meddelandefönster:"
 
 #: ../data/glade/preferences_window.glade.h:68
-#, fuzzy
 msgid "Outgoing Chat state noti_fications:"
-msgstr "Chattstatusmeddelanden:"
+msgstr "Utgående chattstatusnoti_fieringar:"
 
 #: ../data/glade/preferences_window.glade.h:69
 msgid "Play _sounds"
@@ -1663,7 +1652,7 @@ msgstr "Spara _position och storlek för register- och chattfönster"
 
 #: ../data/glade/preferences_window.glade.h:73
 msgid "Set status message to reflect currently playing _music track"
-msgstr ""
+msgstr "Sätt statusmeddelandet till nu spelandes _musikspår"
 
 #: ../data/glade/preferences_window.glade.h:74
 msgid "Show only in _roster"
@@ -1682,6 +1671,8 @@ msgid ""
 "Some messages may include rich content (formatting, colors etc). If checked, "
 "Gajim will just display the raw message text."
 msgstr ""
+"Vissa meddelanden kan innehålla textformatering (storlekar, färger etc). Om "
+"kryssad kommer Gajim bara att visa rå text."
 
 #: ../data/glade/preferences_window.glade.h:78
 msgid "Status"
@@ -1689,20 +1680,19 @@ msgstr "Status"
 
 #: ../data/glade/preferences_window.glade.h:79
 msgid "T_heme:"
-msgstr "Tema:"
+msgstr "_Tema:"
 
 #: ../data/glade/preferences_window.glade.h:80
 msgid "The auto away status message"
-msgstr "Det automatiska statusmeddelandet när du är borta"
+msgstr "Det automatiska statusmeddelandet när du är frånvarande"
 
 #: ../data/glade/preferences_window.glade.h:81
 msgid "The auto not available status message"
 msgstr "Det automatiska statusmeddelandet när du inte är tillgänglig"
 
 #: ../data/glade/preferences_window.glade.h:82
-#, fuzzy
 msgid "Treat all incoming messages as:"
-msgstr "_Inkommande meddelande:"
+msgstr "Behandla alla inkommande meddelanden som:"
 
 #: ../data/glade/preferences_window.glade.h:83
 msgid "Use _transports iconsets"
@@ -1712,11 +1702,11 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:84
 msgid "Use system _default"
-msgstr ""
+msgstr "Använd systemets _standard"
 
 #: ../data/glade/preferences_window.glade.h:85
 msgid "Use t_rayicon (aka. notification area icon)"
-msgstr "Använd aktivitetsfältet (aka. notifieringsyta)"
+msgstr "Använd _aktivitetsfältet (aka. notifieringsyta)"
 
 #: ../data/glade/preferences_window.glade.h:86
 msgid ""
@@ -1726,24 +1716,25 @@ msgid ""
 "you are not already chatting with"
 msgstr ""
 "När en ny händelse (meddelande, filöverföringförfrågan etc...) mottas kan "
-"följande metoder användas för att informera dig om det. Obeservera att "
+"följande metoder användas för att informera dig om det. Observera att "
 "händelser rörande nya meddelanden endast används om det är ett nytt "
 "meddelande från en kontakt du inte redan chattar med"
 
 #: ../data/glade/preferences_window.glade.h:87
 msgid "When new event is received"
-msgstr "När en ny händelse är mottagen"
+msgstr "När en ny händelse tas emot"
 
 #: ../data/glade/preferences_window.glade.h:88
 msgid ""
 "Works for Rhythmbox and Muine players. For more players, please visit http://"
 "trac.gajim.org/wiki/GajimAndMusicPlayer"
 msgstr ""
+"Fungerar för Rhythmbox och Muine. För fler spelare, se http://trac.gajim.org/"
+"wiki/GajimAndMusicPlayer"
 
 #: ../data/glade/preferences_window.glade.h:89
-#, fuzzy
 msgid "_Advanced Notifications Control..."
-msgstr "Avancerad konfigurationsredigerare"
+msgstr "_Avancerad notifieringskontroll..."
 
 #: ../data/glade/preferences_window.glade.h:90
 msgid "_Browser:"
@@ -1755,7 +1746,7 @@ msgstr "_Filhanterare:"
 
 #: ../data/glade/preferences_window.glade.h:92
 msgid "_Font:"
-msgstr "Teckensnitt:"
+msgstr "_Teckensnitt:"
 
 #: ../data/glade/preferences_window.glade.h:93
 msgid "_Highlight misspelled words"
@@ -1783,15 +1774,15 @@ msgstr "_Aldrig"
 
 #: ../data/glade/preferences_window.glade.h:99
 msgid "_Notify me about it"
-msgstr "_Meddela mig"
+msgstr "_Notifiera mig om det"
 
 #: ../data/glade/preferences_window.glade.h:100
 msgid "_Open..."
-msgstr "Öppna..."
+msgstr "_Öppna..."
 
 #: ../data/glade/preferences_window.glade.h:101
 msgid "_Outgoing message:"
-msgstr "Utgående meddelande:"
+msgstr "_Utgående meddelande:"
 
 #: ../data/glade/preferences_window.glade.h:102
 msgid "_Player:"
@@ -1803,7 +1794,7 @@ msgstr "_Öppna det"
 
 #: ../data/glade/preferences_window.glade.h:104
 msgid "_Reset to Default Colors"
-msgstr "Återställ till Standardfärger"
+msgstr "Återställ till standardfärger"
 
 #: ../data/glade/preferences_window.glade.h:105
 msgid "_Sort contacts by status"
@@ -1822,39 +1813,36 @@ msgid "minutes"
 msgstr "minuter"
 
 #: ../data/glade/privacy_lists_window.glade.h:1
-#, fuzzy
 msgid "Privacy Lists:"
-msgstr "Privat Chatt"
+msgstr "Privata integritetslistor:"
 
 #: ../data/glade/privacy_list_window.glade.h:1
 msgid "<b>Add / Edit a rule</b>"
-msgstr ""
+msgstr "<b>Lägg till / redigera en regel</b>"
 
 #: ../data/glade/privacy_list_window.glade.h:2
-#, fuzzy
 msgid "<b>List of rules</b>"
-msgstr "<b>Format av en rad</b>"
+msgstr "<b>Lista på regler</b>"
 
 #: ../data/glade/privacy_list_window.glade.h:3
 msgid "<i>Privacy List</i>"
-msgstr ""
+msgstr "<i>Privata integritetslistor</i>"
 
 #: ../data/glade/privacy_list_window.glade.h:4
 msgid "Active for this session"
-msgstr ""
+msgstr "Aktiv för den här sessionen"
 
 #: ../data/glade/privacy_list_window.glade.h:5
-#, fuzzy
 msgid "Active on each startup"
-msgstr "Anslut vid start av Gajim"
+msgstr "Anslut vid varje start"
 
 #: ../data/glade/privacy_list_window.glade.h:6
 msgid "All"
-msgstr ""
+msgstr "Alla"
 
 #: ../data/glade/privacy_list_window.glade.h:7
 msgid "Allow"
-msgstr ""
+msgstr "Tillåt"
 
 #: ../data/glade/privacy_list_window.glade.h:9
 #, fuzzy
@@ -1862,24 +1850,20 @@ msgid "JabberID"
 msgstr "Jabber-ID:"
 
 #: ../data/glade/privacy_list_window.glade.h:10
-#, fuzzy
 msgid "Order:"
-msgstr "Server:"
+msgstr "Ordning:"
 
 #: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1863
-#, fuzzy
 msgid "Privacy List"
-msgstr "Ban-lista"
+msgstr "Privat integritetslista"
 
 #: ../data/glade/privacy_list_window.glade.h:12
-#, fuzzy
 msgid "all by subscription"
-msgstr "_Prenumeration"
+msgstr "alla efter prenumeration"
 
 #: ../data/glade/privacy_list_window.glade.h:13
-#, fuzzy
 msgid "all in the group"
-msgstr "I gruppen"
+msgstr "alla i gruppen"
 
 #: ../data/glade/privacy_list_window.glade.h:14
 msgid ""
@@ -1888,25 +1872,27 @@ msgid ""
 "from\n"
 "to"
 msgstr ""
+"ingen\n"
+"båda\n"
+"från\n"
+"till"
 
 #: ../data/glade/privacy_list_window.glade.h:18
-#, fuzzy
 msgid "to send me messages"
-msgstr "Skicka meddelande"
+msgstr "att skicka mig meddelanden"
 
 #: ../data/glade/privacy_list_window.glade.h:19
+#, fuzzy
 msgid "to send me queries"
-msgstr ""
+msgstr "att skicka mig queries"
 
 #: ../data/glade/privacy_list_window.glade.h:20
-#, fuzzy
 msgid "to send me status"
-msgstr "Be om att få se hans/hennes status"
+msgstr "att skicka mig status"
 
 #: ../data/glade/privacy_list_window.glade.h:21
-#, fuzzy
 msgid "to view my status"
-msgstr "Tillåt henne/honom att se min status"
+msgstr "att visa min status"
 
 #. "About" is the text of a tab of vcard window
 #: ../data/glade/profile_window.glade.h:2
@@ -1920,9 +1906,8 @@ msgid "Address"
 msgstr "Adress"
 
 #: ../data/glade/profile_window.glade.h:4
-#, fuzzy
 msgid "Avatar:"
-msgstr "Ställ in _Avatar"
+msgstr "Ställ in _avatar"
 
 #: ../data/glade/profile_window.glade.h:5
 #: ../data/glade/vcard_information_window.glade.h:6
@@ -1936,7 +1921,7 @@ msgstr "Ort:"
 
 #: ../data/glade/profile_window.glade.h:7
 msgid "Click to set your avatar"
-msgstr ""
+msgstr "Klicka för att visa din avatar"
 
 #: ../data/glade/profile_window.glade.h:8
 #: ../data/glade/vcard_information_window.glade.h:10
@@ -2001,9 +1986,8 @@ msgstr "Mer"
 
 #: ../data/glade/profile_window.glade.h:25
 #: ../data/glade/vcard_information_window.glade.h:31
-#, fuzzy
 msgid "Personal Info"
-msgstr "Personlig Information"
+msgstr "Personlig info"
 
 #: ../data/glade/profile_window.glade.h:27
 #: ../data/glade/vcard_information_window.glade.h:32
@@ -2054,25 +2038,24 @@ msgstr "Jobb"
 
 #: ../data/glade/remove_account_window.glade.h:1
 msgid "<b>What do you want to do?</b>"
-msgstr "<b>Vad vill du?</b>"
+msgstr "<b>Vad vill du göra?</b>"
 
 #: ../data/glade/remove_account_window.glade.h:2
 msgid "Remove account _only from Gajim"
-msgstr "Ta bort konto enbart från Gajim"
+msgstr "Ta bort konto _enbart från Gajim"
 
 #: ../data/glade/remove_account_window.glade.h:3
 msgid "Remove account from Gajim and from _server"
 msgstr "Ta bort konto från Gajim och från _servern"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:1
-#, fuzzy
 msgid "A_sk to see his/her status"
-msgstr "Be om att få se hans/hennes status"
+msgstr "_Be om att få se hans/hennes status"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:2
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:1
 msgid "Add Special _Notification"
-msgstr "Lägg till Visuella Meddelanden"
+msgstr "Lägg till speciell _notifiering"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:3
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:2
@@ -2088,12 +2071,12 @@ msgstr "Redigera _grupper"
 #: ../data/glade/roster_contact_context_menu.glade.h:5
 #: ../src/roster_window.py:2211
 msgid "Execute Command..."
-msgstr ""
+msgstr "Exekvera kommando..."
 
 #: ../data/glade/roster_contact_context_menu.glade.h:6
 #: ../src/roster_window.py:2034
 msgid "In_vite to"
-msgstr ""
+msgstr "In_bjud till"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:7
 #: ../data/glade/systray_context_menu.glade.h:2
@@ -2103,17 +2086,15 @@ msgstr "Skicka enstaka _meddelande"
 #: ../data/glade/roster_contact_context_menu.glade.h:9
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:5
 msgid "Start _Chat"
-msgstr "Starta _Chatt"
+msgstr "Starta _chatt"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:11
-#, fuzzy
 msgid "_Allow him/her to see my status"
-msgstr "Tillåt henne/honom att se min status"
+msgstr "_Tillåt henne/honom att se min status"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:12
-#, fuzzy
 msgid "_Forbid him/her to see my status"
-msgstr "Förbjud henne/honom att se min status"
+msgstr "_Förbjud henne/honom att se min status"
 
 #. Remove group
 #: ../data/glade/roster_contact_context_menu.glade.h:14
@@ -2153,18 +2134,16 @@ msgid "Help online"
 msgstr "Hjälp online"
 
 #: ../data/glade/roster_window.glade.h:7
-#, fuzzy
 msgid "Profile, A_vatar"
-msgstr "Profil, avatar"
+msgstr "Profil, a_vatar"
 
 #: ../data/glade/roster_window.glade.h:8
-#, fuzzy
 msgid "Show Trans_ports"
-msgstr "Transporter"
+msgstr "Visa _transporter"
 
 #: ../data/glade/roster_window.glade.h:9
 msgid "Show _Offline Contacts"
-msgstr "Visa _Frånkopplade Kontakter"
+msgstr "Visa frånkopplade _kontakter"
 
 #: ../data/glade/roster_window.glade.h:12
 msgid "_Contents"
@@ -2196,13 +2175,12 @@ msgid "_Quit"
 msgstr "_Avsluta"
 
 #: ../data/glade/roster_window.glade.h:21
-#, fuzzy
 msgid "_View"
-msgstr "_Röst"
+msgstr "_Visa"
 
 #: ../data/glade/service_discovery_window.glade.h:1
 msgid "G_o"
-msgstr "Kör"
+msgstr "K_ör"
 
 #: ../data/glade/service_discovery_window.glade.h:2
 msgid "_Address:"
@@ -2270,17 +2248,16 @@ msgid "Au_thorize"
 msgstr "_Auktorisera"
 
 #: ../data/glade/subscription_request_window.glade.h:2
-#, fuzzy
 msgid "Authorize contact so he or she can know when you're connected"
-msgstr "Auktorisera kontakt så han kan veta när du är ansluten"
+msgstr "Auktorisera kontakt så han eller hon kan veta när du är ansluten"
 
 #: ../data/glade/subscription_request_window.glade.h:3
-#, fuzzy
 msgid ""
 "Deny authorization from contact so he or she cannot know when you're "
 "connected"
 msgstr ""
-"Avvisa auktorisering från kontakt så att han inte kan veta när du är ansluten"
+"Avvisa auktorisering från kontakt så att han eller hon inte kan veta när du "
+"är ansluten"
 
 #: ../data/glade/subscription_request_window.glade.h:4
 msgid "Subscription Request"
@@ -2291,17 +2268,16 @@ msgid "_Deny"
 msgstr "_Neka"
 
 #: ../data/glade/systray_context_menu.glade.h:1
-#, fuzzy
 msgid "Mute Sounds"
-msgstr "Wav-ljud"
+msgstr "Tysta ljud"
 
 #: ../data/glade/systray_context_menu.glade.h:3
 msgid "Show All Pending _Events"
-msgstr "Visa Alla Väntande Händelser"
+msgstr "Visa alla väntande _händelser"
 
 #: ../data/glade/systray_context_menu.glade.h:4
 msgid "Show _Roster"
-msgstr "Visa _Registret"
+msgstr "Visa _registret"
 
 #: ../data/glade/systray_context_menu.glade.h:5
 msgid "Sta_tus"
@@ -2317,15 +2293,13 @@ msgid "Client:"
 msgstr "Klient:"
 
 #: ../data/glade/vcard_information_window.glade.h:9
-#, fuzzy
 msgid "Comments"
-msgstr "Kommentar: %s"
+msgstr "Kommentarer"
 
 #: ../data/glade/vcard_information_window.glade.h:11
 #: ../data/glade/zeroconf_information_window.glade.h:1
-#, fuzzy
 msgid "Contact"
-msgstr "Kontakter"
+msgstr "Kontakt"
 
 #: ../data/glade/vcard_information_window.glade.h:12
 msgid "Contact Information"
@@ -2367,7 +2341,7 @@ msgstr "<b>Jabbertrafik</b>"
 
 #: ../data/glade/xml_console_window.glade.h:2
 msgid "<b>XML Input</b>"
-msgstr "<b>XML inskrivning</b>"
+msgstr "<b>XML-inskrivning</b>"
 
 #. XML Console enable checkbutton
 #: ../data/glade/xml_console_window.glade.h:4
@@ -2394,24 +2368,21 @@ msgstr "_Närvaro"
 
 #: ../data/glade/zeroconf_information_window.glade.h:3
 #: ../data/glade/zeroconf_properties_window.glade.h:6
-#, fuzzy
 msgid "First Name:"
-msgstr "Namn:"
+msgstr "Förnamn:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:5
 #: ../data/glade/zeroconf_properties_window.glade.h:14
-#, fuzzy
 msgid "Last Name:"
-msgstr "Namn:"
+msgstr "Efternamn:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:6
 msgid "Local jid:"
-msgstr ""
+msgstr "Lokal JID:"
 
 #: ../data/glade/zeroconf_information_window.glade.h:7
-#, fuzzy
 msgid "Personal"
-msgstr "Personliga detaljer"
+msgstr "Personlig"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:11
 msgid ""
@@ -2419,36 +2390,34 @@ msgid ""
 "setup you can select another one here.\n"
 "You might consider to change possible firewall settings."
 msgstr ""
+"Om standardporten som används för inkommande meddelanden inte passar din "
+"konfiguration kan du välja en annan här.\n"
+"Du kan vilja ändra möjliga brandväggsregler."
 
 #: ../data/glade/zeroconf_properties_window.glade.h:15
-#, fuzzy
 msgid "Modify Account"
-msgstr "_Redigera Konto..."
+msgstr "Redigera konto"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:21
-#, fuzzy
 msgid "Use custom port:"
-msgstr "Använd anpassat värdnamn/port"
+msgstr "Använd anpassad port:"
 
 #. For i18n
 #: ../src/advanced.py:51
-#, fuzzy
 msgid "Activated"
-msgstr "Aktiv"
+msgstr "Aktiverad"
 
 #: ../src/advanced.py:51
-#, fuzzy
 msgid "Deactivated"
-msgstr "Inaktiv"
+msgstr "Inaktiverad"
 
 #: ../src/advanced.py:53
 msgid "Boolean"
-msgstr ""
+msgstr "Boolesk"
 
 #: ../src/advanced.py:54
-#, fuzzy
 msgid "Integer"
-msgstr "I gruppen"
+msgstr "Heltal"
 
 #: ../src/advanced.py:55
 msgid "Text"
@@ -2456,7 +2425,7 @@ msgstr "Text"
 
 #: ../src/advanced.py:56
 msgid "Color"
-msgstr ""
+msgstr "Färg"
 
 #: ../src/advanced.py:65
 msgid "Preference Name"
@@ -2487,104 +2456,99 @@ msgstr "Dold"
 #. echo "{_('en'):'en'",$LANG"}"
 #: ../src/chat_control.py:52
 msgid "English"
-msgstr ""
+msgstr "engelska"
 
 #: ../src/chat_control.py:52
 msgid "Belarusian"
-msgstr ""
+msgstr "vitryska"
 
 #: ../src/chat_control.py:52
 msgid "Bulgarian"
-msgstr ""
+msgstr "bulgariska"
 
 #: ../src/chat_control.py:52
 msgid "Briton"
-msgstr ""
+msgstr "bretonska"
 
 #: ../src/chat_control.py:52
 msgid "Czech"
-msgstr ""
+msgstr "tjeckiska"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "German"
-msgstr "Generellt"
+msgstr "tyska"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Greek"
-msgstr "grön"
+msgstr "grekiska"
 
 #: ../src/chat_control.py:52
 msgid "British"
-msgstr ""
+msgstr "brittiska"
 
 #: ../src/chat_control.py:52
 msgid "Esperanto"
-msgstr ""
+msgstr "esperanto"
 
 #: ../src/chat_control.py:52
 msgid "Spanish"
-msgstr ""
+msgstr "spanska"
 
 #: ../src/chat_control.py:52
 msgid "Basc"
-msgstr ""
+msgstr "baskiska"
 
 #: ../src/chat_control.py:52
 msgid "French"
-msgstr ""
+msgstr "franska"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Croatian"
-msgstr "Plats"
+msgstr "kroatiska"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Italian"
-msgstr "Kursiv"
+msgstr "italienska"
 
 #: ../src/chat_control.py:52
 msgid "Norwegian (b)"
-msgstr ""
+msgstr "norska (bokmål)"
 
 #: ../src/chat_control.py:52
 msgid "Dutch"
-msgstr ""
+msgstr "nederländska"
 
 #: ../src/chat_control.py:52
 msgid "Norwegian"
-msgstr ""
+msgstr "norska (nynorsk)"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Polish"
-msgstr "_Publicera"
+msgstr "polska"
 
 #: ../src/chat_control.py:52
 msgid "Portuguese"
-msgstr ""
+msgstr "portugisiska"
 
 #: ../src/chat_control.py:52
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "brasiliansk portugisiska"
 
 #: ../src/chat_control.py:52
 msgid "Russian"
-msgstr ""
+msgstr "ryska"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
-msgstr ""
+msgstr "slovakiska"
 
 #: ../src/chat_control.py:52
 msgid "Swedish"
-msgstr ""
+msgstr "svenska"
 
 #: ../src/chat_control.py:52
 msgid "Chinese (Ch)"
-msgstr ""
+msgstr "kinesiska"
 
 #: ../src/chat_control.py:208 ../src/dialogs.py:1517
 msgid ""
@@ -2595,16 +2559,16 @@ msgid ""
 "\n"
 "Highlighting misspelled words feature will not be used"
 msgstr ""
-"Om det inte är språket för vilket du vill markera felstavade ord, vänligen "
-"sätt din $LANG variabel rätt. T.ex. för svenska gör export LANG=sv_SE eller "
-"export LANG=sv_SE.UTF-8 i ~/.bash_profile eller för att göra det globalt i /"
-"etc/profile.\n"
+"Om det inte är språket för vilket du vill markera felstavade ord, sätt din "
+"$LANG variabel rätt. T.ex. för svenska gör export LANG=sv_SE eller export "
+"LANG=sv_SE.UTF-8 i ~/.bash_profile eller för att göra det globalt i /etc/"
+"profile.\n"
 "\n"
 "Funktionen \"markera felstavade ord\" kommer inte att användas"
 
 #: ../src/chat_control.py:247
 msgid "Spelling language"
-msgstr ""
+msgstr "Stavningsspråk"
 
 #. we are not connected
 #: ../src/chat_control.py:270 ../src/chat_control.py:476
@@ -2617,19 +2581,19 @@ msgstr "Ditt meddelande kan inte skickas förren du är ansluten."
 
 #: ../src/chat_control.py:852
 msgid "Chats"
-msgstr "Chatts"
+msgstr "Chattar"
 
 #: ../src/chat_control.py:1034
 #, fuzzy, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
-msgstr "%(nickname)s: %(message)s"
+msgstr "%(nickname) från gruppchatt %(room_name)"
 
 #. we talk about a contact here
 #: ../src/chat_control.py:1123
 #, python-format
 msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 msgstr ""
-"%s har inte meddelat en OpenPGP-nyckel, du har inte heller tilldelat en"
+"%s har inte sänt ut en OpenPGP-nyckel och du har inte heller tilldelat en"
 
 #: ../src/chat_control.py:1259
 msgid "Encryption enabled"
@@ -2663,7 +2627,7 @@ msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
 msgstr ""
-"Om du stänger den här fliken och du har historik avslaget kommer meddelandet "
+"Om du stänger den här fliken och har historik avslagen kommer meddelandet "
 "att förloras."
 
 #: ../src/config.py:137 ../src/config.py:586
@@ -2684,9 +2648,9 @@ msgid "Event"
 msgstr "Händelse"
 
 #: ../src/config.py:682 ../src/gajim.py:2165
-#, fuzzy, python-format
+#, python-format
 msgid "Dictionary for lang %s not available"
-msgstr "En förbindelse är inte tillgänglig"
+msgstr "Ordbok för språket %s inte tillgängligt"
 
 #: ../src/config.py:683 ../src/gajim.py:2166
 #, python-format
@@ -2694,6 +2658,8 @@ msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
 "language by setting the speller_language option."
 msgstr ""
+"Du måste installera %s ordboken för att använda stavningskontroll, eller "
+"välj ett annat språk genom att sätta valet speller_language"
 
 #: ../src/config.py:1000
 msgid "status message title"
@@ -2705,40 +2671,41 @@ msgstr "text för statusmeddelande"
 
 #: ../src/config.py:1036
 msgid "First Message Received"
-msgstr "Första meddelandet har mottagits"
+msgstr "Första meddelandet mottaget"
 
 #: ../src/config.py:1037
 msgid "Next Message Received"
-msgstr "Nytt Meddelande Har Mottagits"
+msgstr "Nytt meddelande har mottagits"
 
 #: ../src/config.py:1038
 msgid "Contact Connected"
-msgstr "Kontakt Ansluten"
+msgstr "Kontakt loggade in"
 
 #: ../src/config.py:1039
 msgid "Contact Disconnected"
-msgstr "Kontakt Loggade Ut"
+msgstr "Kontakt loggade ut"
 
 #: ../src/config.py:1040
 msgid "Message Sent"
-msgstr "Meddelande Skickat"
+msgstr "Meddelande skickat"
 
 #: ../src/config.py:1041
+#, fuzzy
 msgid "Group Chat Message Highlight"
-msgstr "Markering av Meddelande i Gruppchatt"
+msgstr "Gruppchattsmeddelande markerat"
 
 #: ../src/config.py:1042
+#, fuzzy
 msgid "Group Chat Message Received"
-msgstr "Meddelande Mottaget i Gruppchatt"
+msgstr "Gruppchattsmeddelande mottaget"
 
 #: ../src/config.py:1049
-#, fuzzy
 msgid "GMail Email Received"
-msgstr "Inbjudan mottagen"
+msgstr "E-post mottaget på GMail"
 
 #: ../src/config.py:1252
 msgid "OpenPGP is not usable in this computer"
-msgstr "OpenPGP är inte användbart på den här datorn"
+msgstr "OpenPGP är oanvändbart på den här datorn"
 
 #: ../src/config.py:1298
 msgid "You are currently connected to the server"
@@ -2754,18 +2721,18 @@ msgstr "Olästa händelser"
 
 #: ../src/config.py:1303
 msgid "To change the account name, you must read all pending events."
-msgstr "För att ändra kontonamnet måste du först läsa alla väntande händelser."
+msgstr "För att ändra kontonamnet måste du läsa alla väntande händelser."
 
 #: ../src/config.py:1307
 msgid "Account Name Already Used"
-msgstr "Kontonamnet används redan"
+msgstr "Kontonamn används redan"
 
 #: ../src/config.py:1308
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr ""
-"Detta namn används redan av ett av dina konton. Vänligen välj ett annat namn."
+"Detta namn används redan av ett annat av dina konton. Välj ett annat namn."
 
 #: ../src/config.py:1312 ../src/config.py:1316
 msgid "Invalid account name"
@@ -2786,7 +2753,7 @@ msgstr "Ogiltigt Jabber-ID"
 
 #: ../src/config.py:1332
 msgid "A Jabber ID must be in the form \"user@servername\"."
-msgstr "Ett Jabber-ID måste vara av formen \"användare@server\"."
+msgstr "Ett Jabber-ID måste vara av formen \"användare@servernamn\"."
 
 #: ../src/config.py:1391
 msgid "Invalid entry"
@@ -2798,16 +2765,15 @@ msgstr "Inställd port måste vara ett portnummer."
 
 #: ../src/config.py:1520 ../src/common/config.py:366
 msgid "Be right back."
-msgstr "Strax tillbaka"
+msgstr "Strax tillbaka."
 
 #: ../src/config.py:1530
 msgid "Relogin now?"
-msgstr "Logga in igen nu?"
+msgstr "Återanslut nu?"
 
 #: ../src/config.py:1531
 msgid "If you want all the changes to apply instantly, you must relogin."
-msgstr ""
-"Om du vill att ändringarna skall ske omedelbart måste du logga in igen."
+msgstr "Om du vill att ändringarna skall ske omedelbart måste du återansluta."
 
 #: ../src/config.py:1557
 msgid "No such account available"
@@ -2829,13 +2795,11 @@ msgstr "Du kan inte redigera din personliga information utan en förbindelse."
 
 #: ../src/config.py:1570
 msgid "Your server doesn't support Vcard"
-msgstr ""
+msgstr "Din server stödjer inte Vcard"
 
 #: ../src/config.py:1571
-#, fuzzy
 msgid "Your server can't save your personal information."
-msgstr ""
-"Du måste skapa ditt konto innan du redigerar din personliga information."
+msgstr "Din server kan inte spara din personliga information."
 
 #: ../src/config.py:1595 ../src/config.py:3386
 msgid "Failed to get secret keys"
@@ -2865,25 +2829,24 @@ msgstr "Server"
 
 #: ../src/config.py:1897
 msgid "Read all pending events before removing this account."
-msgstr "Läs alla vändande händelser innan du tar bort detta konto."
+msgstr "Läs alla väntande händelser innan du tar bort detta konto."
 
 #: ../src/config.py:1934
-#, fuzzy, python-format
+#, python-format
 msgid "You have opened chat in account %s"
-msgstr "Du har inget aktivt konto"
+msgstr "Du har öppnat chatt i kontot %s"
 
 #: ../src/config.py:1935
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
-msgstr ""
+msgstr "Alla chatts- och gruppchattsfönster kommer stängas. Vill du fortsätta?"
 
 #: ../src/config.py:1994
-#, fuzzy
 msgid "Account Local already exists."
-msgstr "Kontonamnet används redan"
+msgstr "Kontot Local används redan."
 
 #: ../src/config.py:1995
 msgid "Please rename or remove it before enabling link-local messaging."
-msgstr ""
+msgstr "Byt namn eller ta bort det innan du aktiverar link-local-meddelanden."
 
 #: ../src/config.py:2229
 #, python-format
@@ -2898,7 +2861,7 @@ msgstr "Registrera till %s"
 #. list at the beginning
 #: ../src/config.py:2297
 msgid "Ban List"
-msgstr "Ban-lista"
+msgstr "Bannlista"
 
 #: ../src/config.py:2298
 msgid "Member List"
@@ -2906,11 +2869,11 @@ msgstr "Medlemslista"
 
 #: ../src/config.py:2299
 msgid "Owner List"
-msgstr "Ägarelista"
+msgstr "Ägarlista"
 
 #: ../src/config.py:2300
 msgid "Administrator List"
-msgstr "Administratörlista"
+msgstr "Administratörslista"
 
 #. Address column
 #. holds JID (who said this)
@@ -2960,15 +2923,16 @@ msgid "Adding Owner..."
 msgstr "Lägger till ägare..."
 
 #: ../src/config.py:2379
-#, fuzzy
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
-msgstr "<b>Vem vill du göra till ägare?</b>\n"
+msgstr ""
+"<b>Vem vill du göra till ägare?</b>\n"
+"\n"
 
 #: ../src/config.py:2381
 msgid "Adding Administrator..."
-msgstr "Lägger till Administratör..."
+msgstr "Lägger till administratör..."
 
 #: ../src/config.py:2382
 msgid ""
@@ -3001,7 +2965,7 @@ msgstr "Tar bort %s konto"
 
 #: ../src/config.py:2505 ../src/roster_window.py:2733
 msgid "Password Required"
-msgstr "Lösenord Krävs"
+msgstr "Lösenord krävs"
 
 #: ../src/config.py:2506 ../src/roster_window.py:2729
 #, python-format
@@ -3022,28 +2986,24 @@ msgid "If you remove it, the connection will be lost."
 msgstr "Om du tar bort det kommer anslutningen att förloras."
 
 #: ../src/config.py:2607
-#, fuzzy
 msgid "Default"
-msgstr "Radera"
+msgstr "Standard"
 
 #: ../src/config.py:2607
-#, fuzzy
 msgid "?print_status:All"
-msgstr "Skriv ut tid:"
+msgstr "?print_status:Alla"
 
 #: ../src/config.py:2608
 msgid "Enter and leave only"
-msgstr ""
+msgstr "In- och utgång enbart"
 
 #: ../src/config.py:2609
-#, fuzzy
 msgid "?print_status:None"
-msgstr "Skriv ut tid:"
+msgstr "?print_status:Ingen"
 
 #: ../src/config.py:2677
-#, fuzzy
 msgid "New Group Chat"
-msgstr "Gruppchatt"
+msgstr "Ny gruppchatt"
 
 #: ../src/config.py:2710
 msgid "This bookmark has invalid data"
@@ -3052,7 +3012,9 @@ msgstr "Det här bokmärket har ogiltig data"
 #: ../src/config.py:2711
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
-msgstr "Fyll i server- och rumfälten eller ta bort det här bokmärket."
+msgstr ""
+"Var säker på att fylla i server- och rumfälten eller ta bort det här "
+"bokmärket."
 
 #: ../src/config.py:2973
 msgid "Invalid username"
@@ -3080,7 +3042,7 @@ msgstr "Lösenorden skrivna i båda fälten måste vara identiska."
 
 #: ../src/config.py:3009
 msgid "Duplicate Jabber ID"
-msgstr "Dubblett av Jabber-ID"
+msgstr "Dubblerat Jabber-ID"
 
 #: ../src/config.py:3010
 msgid "This account is already configured in Gajim."
@@ -3156,7 +3118,7 @@ msgstr "_Sök på webben efter det"
 
 #: ../src/conversation_textview.py:397
 msgid "Open as _Link"
-msgstr ""
+msgstr "Öppna som _länk"
 
 #: ../src/conversation_textview.py:754
 msgid "Yesterday"
@@ -3225,11 +3187,11 @@ msgstr "_Adress:"
 
 #: ../src/dialogs.py:418
 msgid "GG Number:"
-msgstr ""
+msgstr "GG-nummer:"
 
 #: ../src/dialogs.py:419
 msgid "ICQ Number:"
-msgstr ""
+msgstr "ICQ-nummer:"
 
 #: ../src/dialogs.py:420
 #, fuzzy
@@ -3277,11 +3239,11 @@ msgstr "En GTK+ jabberklient"
 
 #: ../src/dialogs.py:732
 msgid "GTK+ Version:"
-msgstr ""
+msgstr "GTK+ version:"
 
 #: ../src/dialogs.py:733
 msgid "PyGTK Version:"
-msgstr ""
+msgstr "PyGTK version:"
 
 #: ../src/dialogs.py:747
 #, fuzzy
@@ -3319,6 +3281,7 @@ msgid ""
 "Maybe you have another running instance of Gajim. File Transfer will be "
 "cancelled."
 msgstr ""
+"Du kanske har en annan Gajiminstans igång. Filöverföringen kommer stängas."
 
 #: ../src/dialogs.py:1061
 #, python-format
@@ -3356,7 +3319,7 @@ msgstr "Rums- eller servernamnet innehåller icke tillåtna tecken."
 
 #: ../src/dialogs.py:1228
 msgid "This is not a group chat"
-msgstr ""
+msgstr "Det här är ingen gruppchatt"
 
 #: ../src/dialogs.py:1229
 #, fuzzy, python-format
@@ -3514,12 +3477,12 @@ msgstr "XML-konsol"
 #: ../src/dialogs.py:1857
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
-msgstr ""
+msgstr "Privat identitetslista <b><i>%s</i></b>"
 
 #: ../src/dialogs.py:1861
 #, python-format
 msgid "Privacy List for %s"
-msgstr ""
+msgstr "Privat integritetslista för %s"
 
 #: ../src/dialogs.py:1909
 #, python-format
@@ -3544,7 +3507,7 @@ msgstr "<b>Format av en rad</b>"
 #: ../src/dialogs.py:2137
 #, python-format
 msgid "Privacy Lists for %s"
-msgstr ""
+msgstr "Privata integritetslistor för %s"
 
 #: ../src/dialogs.py:2139
 #, fuzzy
@@ -3606,7 +3569,7 @@ msgstr "Lägger Till Speciellt Meddelande För %s"
 #. # means number
 #: ../src/dialogs.py:2508
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: ../src/dialogs.py:2514
 #, fuzzy
@@ -3615,7 +3578,7 @@ msgstr "Förbindelse"
 
 #: ../src/dialogs.py:2635
 msgid "when I am "
-msgstr ""
+msgstr "när jag är "
 
 #: ../src/disco.py:102
 msgid "Others"
@@ -3703,7 +3666,7 @@ msgstr "Beskrivning"
 #. Id column
 #: ../src/disco.py:1520
 msgid "Id"
-msgstr ""
+msgstr "ID"
 
 #: ../src/disco.py:1743
 #, fuzzy
@@ -3712,7 +3675,7 @@ msgstr "Prenumerera"
 
 #: ../src/disco.py:1769
 msgid "New post"
-msgstr ""
+msgstr "Ny post"
 
 #: ../src/disco.py:1775
 msgid "_Subscribe"
@@ -3830,13 +3793,15 @@ msgstr "%s vill skicka en fil till dig:"
 #: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:706
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
-msgstr ""
+msgstr "Kan inte skriv över filen \"%s\""
 
 #: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:708
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr ""
+"En fil med det här namnet existerar redan och du har inte rättigheter att "
+"skriva över den."
 
 #: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:712
 msgid "This file already exists"
@@ -3849,11 +3814,11 @@ msgstr "Vad vill du göra?"
 #: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:722
 #, python-format
 msgid "Directory \"%s\" is not writable"
-msgstr ""
+msgstr "Katalogen \"%s\" är inte skrivbar"
 
 #: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:723
 msgid "You do not have permission to create files in this directory."
-msgstr ""
+msgstr "Du har inte rättigheter att skapa filer i den här katalogen."
 
 #: ../src/filetransfers_window.py:348
 msgid "Save File as..."
@@ -3954,17 +3919,20 @@ msgid ""
 "Please make sure that Pywin32 is installed on your system. You can get it at "
 "%s"
 msgstr ""
+"Kontrollera att Pywin32 är installerat på ditt system. Du kan hämta det på %s"
 
 #. set the icon to all newly opened wind
 #: ../src/gajim.py:238
 msgid "Gajim is already running"
-msgstr ""
+msgstr "Gajim körs redan"
 
 #: ../src/gajim.py:239
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
 msgstr ""
+"En annan instans of Gajim verkar redan vara igång\n"
+"Starta ändå?"
 
 #: ../src/gajim.py:346
 #, python-format
@@ -4059,6 +4027,8 @@ msgid ""
 "\n"
 "From: %(from_address)s"
 msgstr ""
+"\n"
+"Från: %(from_address)"
 
 #: ../src/gajim.py:1375
 #, python-format
@@ -4089,7 +4059,7 @@ msgstr "Överföringen av %(filename)s till %(name)s har stannat."
 
 #: ../src/gajim.py:1574
 msgid "Username Conflict"
-msgstr ""
+msgstr "Användarnamn-konflikt"
 
 #: ../src/gajim.py:1575
 #, fuzzy
@@ -4333,7 +4303,7 @@ msgstr "Lägger till en kontakt till registret"
 
 #: ../src/gajim-remote.py:196
 msgid "jid"
-msgstr ""
+msgstr "JID"
 
 #: ../src/gajim-remote.py:197
 #, fuzzy
@@ -4359,7 +4329,7 @@ msgstr "Returnerar antalet olästa meddelanden"
 
 #: ../src/gajim-remote.py:220
 msgid "Opens 'Start Chat' dialog"
-msgstr ""
+msgstr "Öppnar \"Starta chatt\" dialogen"
 
 #: ../src/gajim-remote.py:222
 #, fuzzy
@@ -4368,7 +4338,7 @@ msgstr "Starta Chatt med konto %s"
 
 #: ../src/gajim-remote.py:226
 msgid "Sends custom XML"
-msgstr ""
+msgstr "Skickar anpassad XML"
 
 #: ../src/gajim-remote.py:228
 #, fuzzy
@@ -4380,14 +4350,16 @@ msgid ""
 "Account in which the xml will be sent; if not specified, xml will be sent to "
 "all accounts"
 msgstr ""
+"Konto för vilket XML kommer skickas. Om du inte specificerat kommer XML "
+"skickas till alla konton"
 
 #: ../src/gajim-remote.py:235
 msgid "Handle a xmpp:/ uri"
-msgstr ""
+msgstr "Hantera en xmpp:/ URI"
 
 #: ../src/gajim-remote.py:237
 msgid "uri"
-msgstr ""
+msgstr "URI"
 
 #: ../src/gajim-remote.py:242
 #, fuzzy
@@ -4834,16 +4806,16 @@ msgstr "Vill du skriva över den?"
 
 #: ../src/gtkgui_helpers.py:652
 msgid "Always check to see if Gajim is the default Jabber client on startup"
-msgstr ""
+msgstr "Kontrollera vid start om Gajim är standardklient för Jabber"
 
 #: ../src/gtkgui_helpers.py:751
 msgid "Extension not supported"
-msgstr ""
+msgstr "Utökning stöds inte"
 
 #: ../src/gtkgui_helpers.py:752
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
-msgstr ""
+msgstr "Bilden kan inte sparas i %(type) format. Spara som %(new_filename)?"
 
 #: ../src/gtkgui_helpers.py:761
 #, fuzzy
@@ -4992,7 +4964,7 @@ msgstr "Nytt meddelande från %(nickname)s"
 
 #: ../src/profile_window.py:72
 msgid "Retrieving profile..."
-msgstr ""
+msgstr "Hämtar profil..."
 
 #. keep identation
 #: ../src/profile_window.py:143
@@ -5010,11 +4982,11 @@ msgstr "Utan en förbindelse kan du inte publicera din kontaktinformation."
 
 #: ../src/profile_window.py:336
 msgid "Sending profile..."
-msgstr ""
+msgstr "Skickar profil..."
 
 #: ../src/profile_window.py:351
 msgid "Information NOT published"
-msgstr ""
+msgstr "Informationen INTE publicerad"
 
 #: ../src/profile_window.py:358
 msgid "vCard publication failed"
@@ -5156,7 +5128,7 @@ msgstr "Ta _bort"
 #: ../src/roster_window.py:1516
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
-msgstr ""
+msgstr "Vill du ta bort grupp %s från registret?"
 
 #: ../src/roster_window.py:1517
 #, fuzzy
@@ -5191,7 +5163,7 @@ msgstr "Döp om"
 
 #: ../src/roster_window.py:2141
 msgid "To all users"
-msgstr ""
+msgstr "Till alla användare"
 
 #: ../src/roster_window.py:2144
 #, fuzzy
@@ -5286,6 +5258,8 @@ msgid ""
 "Gnomekeyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
 msgstr ""
+"Gnomenyckelringen är installerad men inte startad (miljövariabeln är "
+"förmodligen inte korrekt satt)"
 
 #. TODO: make this string translatable
 #. %s is the account name here
@@ -5339,7 +5313,7 @@ msgstr "Du måste skapa ett konto innan du kan chatta med andra kontakter."
 #: ../src/roster_window.py:2966
 #, python-format
 msgid "\"%(title)s\" by %(artist)s"
-msgstr ""
+msgstr "\"%(title)\" av %(artist)"
 
 #: ../src/roster_window.py:3395 ../src/roster_window.py:3402
 msgid ""
@@ -5351,13 +5325,15 @@ msgstr ""
 
 #: ../src/roster_window.py:3986
 msgid "Metacontacts storage not supported by your server"
-msgstr ""
+msgstr "Metakontakter kan inte lagras på din server"
 
 #: ../src/roster_window.py:3988
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be save on next reconnection."
 msgstr ""
+"Din server stödjer inte att lagra informationen för metakontakter. Så den "
+"informationen kommer inte att sparas vid nästa återanslutning."
 
 #: ../src/roster_window.py:4030
 #, fuzzy
@@ -5371,6 +5347,9 @@ msgid ""
 "is used when the same person has several Jabber accounts or transport "
 "accounts."
 msgstr ""
+"Metakontakter är ett sätt att omgruppera flera kontakter till en rad. "
+"Normalt sätt används det när en person har flera Jabberkonton eller "
+"transportkonton."
 
 #: ../src/roster_window.py:4199
 #, python-format
@@ -5406,7 +5385,7 @@ msgstr "Resurs: "
 #: ../src/tooltips.py:317
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr ""
+msgstr "%(owner_or_admin_or_member) av den här gruppchatten"
 
 #: ../src/tooltips.py:430 ../src/tooltips.py:610
 msgid "Status: "
@@ -5461,7 +5440,7 @@ msgstr "Färdig"
 
 #: ../src/tooltips.py:601
 msgid "?transfer status:Paused"
-msgstr ""
+msgstr "?transfer status:Pausad"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
 #: ../src/tooltips.py:605
@@ -5589,15 +5568,15 @@ msgstr "_Fortsätt"
 
 #: ../src/common/commands.py:92
 msgid "Extended away"
-msgstr ""
+msgstr "Inte tillgänglig"
 
 #: ../src/common/commands.py:93
 msgid "Do not disturb"
-msgstr ""
+msgstr "Stör inte"
 
 #: ../src/common/commands.py:94
 msgid "Offline - disconnect"
-msgstr ""
+msgstr "Frånkopplad - Koppla från"
 
 #: ../src/common/commands.py:99
 #, fuzzy
@@ -5606,7 +5585,7 @@ msgstr "Beskrivning"
 
 #: ../src/common/commands.py:134
 msgid "The status has been changed."
-msgstr ""
+msgstr "Statusen har ändrats."
 
 #: ../src/common/commands.py:179
 #, fuzzy, python-format
@@ -5625,7 +5604,7 @@ msgstr "Gruppchatt"
 
 #: ../src/common/commands.py:190
 msgid "Choose the groupchats you want to leave"
-msgstr ""
+msgstr "Välj de gruppchattar du vill lämna"
 
 #: ../src/common/commands.py:194
 #, fuzzy
@@ -5664,12 +5643,14 @@ msgid ""
 msgstr ""
 
 #: ../src/common/config.py:88
+#, fuzzy
 msgid "Enable link-local/zeroconf messaging"
-msgstr ""
+msgstr "Aktivera link-local-/zeroconf-meddelanden"
 
 #: ../src/common/config.py:91
+#, fuzzy
 msgid "Language used by speller"
-msgstr ""
+msgstr "Språk använt av stavaren"
 
 #: ../src/common/config.py:92
 msgid ""
@@ -5677,6 +5658,9 @@ msgid ""
 "'sometimes' - print time every print_ichat_every_foo_minutes minute.\n"
 "'never' - never print time."
 msgstr ""
+"\"alltid\" - skriv ut tid för varje meddelande.\n"
+"\"ibland\" - skriv ut tid var print_ichat_every_foo_minutes minut.\n"
+"\"aldrig\" - skriv aldrig ut tid."
 
 #: ../src/common/config.py:93
 msgid ""
@@ -5707,12 +5691,16 @@ msgid ""
 "Character to add after nickname when using nick completion (tab) in group "
 "chat."
 msgstr ""
+"Tecken att lägga till efter smeknamnet när du använder "
+"smeknamnskomplettering (tabb) i gruppchatt."
 
 #: ../src/common/config.py:110
 msgid ""
 "Character to propose to add after desired nickname when desired nickname is "
 "used by someone else in group chat."
 msgstr ""
+"Teckens som föreslås läggas till efter ditt valda smeknamn om smeknamnet "
+"används av någon annan i gruppchatten."
 
 #: ../src/common/config.py:133
 msgid ""
@@ -5720,14 +5708,17 @@ msgid ""
 "exemple \"[%H:%M] \" will show \"[hour:minute] \". See python doc on "
 "strftime for full documentation: http://docs.python.org/lib/module-time.html"
 msgstr ""
+"Det här valet låter dig anpassa tidsstämplar som skrivs ut i konversationer. "
+"T.ex. \"[%H:%M] \" kommer visa \"[timme:minut] \". Läs python-manualen om "
+"strftime för full dokumentation: http://docs.python.org/lib/module-time.html"
 
 #: ../src/common/config.py:134
 msgid "Characters that are printed before the nickname in conversations"
-msgstr ""
+msgstr "Tecken som skrivs ut före smeknamnet i konversationer"
 
 #: ../src/common/config.py:135
 msgid "Characters that are printed after the nickname in conversations"
-msgstr ""
+msgstr "Tecken som skrivs ut efter smeknamnet i konversationer"
 
 #: ../src/common/config.py:142
 msgid "Add * and [n] in roster title?"
@@ -5772,12 +5763,16 @@ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "Om ibockad kan Gajim bli fjärrstyrd med gajim-remote."
 
 #: ../src/common/config.py:154
+#, fuzzy
 msgid ""
 "If True, listen to D-Bus signals from NetworkManager and change the status "
 "of accounts (provided they do not have listen_to_network_manager set to "
 "False and they sync with global status) based upon the status of the network "
 "connection."
 msgstr ""
+"Om True, lyssna efter D-Bussignaler från NetworkManager och ändra statusen "
+"för konton (om de nu inte har listen_to_network_manager satt till False och "
+"dem synkar med global status) baserat på om nätverkets status."
 
 #: ../src/common/config.py:155
 msgid ""
@@ -5831,8 +5826,9 @@ msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC standarden säger att KiB = 1024 bytes, KB = 1000 bytes."
 
 #: ../src/common/config.py:168
+#, fuzzy
 msgid "Notify of events in the system trayicon."
-msgstr ""
+msgstr "Notifiera om händelser in systemets statusikon."
 
 #: ../src/common/config.py:174
 msgid "Show tab when only one conversation?"
@@ -5912,11 +5908,11 @@ msgstr ""
 
 #: ../src/common/config.py:199
 msgid "Background color of contacts when they just signed in."
-msgstr ""
+msgstr "Bakgrundsfärg på kontakter när de precis loggat in."
 
 #: ../src/common/config.py:200
 msgid "Background color of contacts when they just signed out."
-msgstr ""
+msgstr "Bakgrundsfärg på kontakter när de precis loggat ut."
 
 #: ../src/common/config.py:202
 msgid ""
@@ -5925,11 +5921,11 @@ msgstr ""
 
 #: ../src/common/config.py:203
 msgid "Don't show avatar for the transport itself."
-msgstr ""
+msgstr "Visa inte avatar för transporten själv."
 
 #: ../src/common/config.py:204
 msgid "Don't show roster in the system taskbar."
-msgstr ""
+msgstr "Visa inte registret i systemets fönsterlista."
 
 #: ../src/common/config.py:205
 msgid ""
@@ -6010,6 +6006,8 @@ msgid ""
 "In a chat, show the nickname at the beginning of a line only when it's not "
 "the same person talking than in previous message."
 msgstr ""
+"I en chatt, visa bara smeknamnet vid början av en rad om det inte är samma "
+"person som pratar som i förra meddelandet."
 
 #: ../src/common/config.py:219
 msgid "Indentation when using merge consecutive nickname."
@@ -6018,10 +6016,11 @@ msgstr ""
 #: ../src/common/config.py:220
 msgid "List of colors that will be used to color nicknames in group chats."
 msgstr ""
+"Lista på färger som kommer användas för att färga smeknamnet i gruppchattar.<"
 
 #: ../src/common/config.py:221
 msgid "Ctrl-Tab go to next composing tab when none is unread."
-msgstr ""
+msgstr "Ctrl+Tab går till nästa författningsflik när ingen är oläst."
 
 #: ../src/common/config.py:222
 msgid ""
@@ -6080,21 +6079,21 @@ msgstr "OpenPGP är inte användbart på den här datorn"
 
 #: ../src/common/config.py:330 ../src/common/config.py:333
 msgid "Language for which we want to check misspelled words"
-msgstr ""
+msgstr "Språk för vilket vi vill titta efter felstavade ord"
 
 #: ../src/common/config.py:339
 msgid "all or space separated status"
-msgstr ""
+msgstr "alla eller mellanslagsseparerad status"
 
 #: ../src/common/config.py:340
 msgid "'yes', 'no', or 'both'"
-msgstr ""
+msgstr "\"yes\", \"no\" eller \"båda\""
 
 #: ../src/common/config.py:341 ../src/common/config.py:343
 #: ../src/common/config.py:344 ../src/common/config.py:347
 #: ../src/common/config.py:348
 msgid "'yes', 'no' or ''"
-msgstr ""
+msgstr "\"yes\", \"no\" eller \"\""
 
 #: ../src/common/config.py:354
 msgid "Sleeping"
@@ -6166,11 +6165,11 @@ msgstr "Tjänst är inte tillgänglig"
 
 #: ../src/common/config.py:368
 msgid "Do not disturb."
-msgstr ""
+msgstr "Stör inte."
 
 #: ../src/common/config.py:369 ../src/common/config.py:370
 msgid "Bye!"
-msgstr ""
+msgstr "Hejdå!"
 
 #: ../src/common/config.py:379
 #, fuzzy
@@ -6183,7 +6182,7 @@ msgstr ""
 
 #: ../src/common/config.py:380
 msgid "Sound to play when any MUC message arrives."
-msgstr ""
+msgstr "Ljud att spela när ett MUC-meddelande inkommer."
 
 #: ../src/common/config.py:389 ../src/common/optparser.py:193
 msgid "green"
@@ -6218,6 +6217,8 @@ msgid ""
 "The host you configured as the ft_override_host_to_send advanced option is "
 "not valid, so ignored."
 msgstr ""
+"Värden du angav för det avancerade valet ft_override_host_to_send är inte "
+"giltigt, så ignoreras."
 
 #: ../src/common/connection_handlers.py:590
 #, python-format
@@ -6318,7 +6319,7 @@ msgstr "Anslutningen med konto \"%s\" har brutits"
 
 #: ../src/common/connection.py:176
 msgid "Reconnect manually."
-msgstr ""
+msgstr "Återanslut manuellt."
 
 #: ../src/common/connection.py:187 ../src/common/connection.py:214
 #, fuzzy, python-format
@@ -6406,7 +6407,7 @@ msgstr ""
 
 #: ../src/common/connection.py:926
 msgid "Not fetched because of invisible status"
-msgstr ""
+msgstr "Inte hämtad på grund av osynlig status"
 
 #: ../src/common/contacts.py:271
 #, fuzzy
@@ -6470,7 +6471,7 @@ msgstr "fil"
 
 #: ../src/common/fuzzyclock.py:42
 msgid "six"
-msgstr ""
+msgstr "sex"
 
 #: ../src/common/fuzzyclock.py:43
 #, fuzzy
@@ -6479,7 +6480,7 @@ msgstr "Händelse"
 
 #: ../src/common/fuzzyclock.py:43
 msgid "eight"
-msgstr ""
+msgstr "åtta"
 
 #: ../src/common/fuzzyclock.py:43
 #, fuzzy
@@ -6488,7 +6489,7 @@ msgstr "_Fortsätt"
 
 #: ../src/common/fuzzyclock.py:43
 msgid "ten"
-msgstr ""
+msgstr "tio"
 
 #: ../src/common/fuzzyclock.py:43
 #, fuzzy
@@ -6497,17 +6498,17 @@ msgstr "Radera"
 
 #: ../src/common/fuzzyclock.py:44
 msgid "twelve"
-msgstr ""
+msgstr "tolv"
 
 #. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "$0 o'clock"
-msgstr ""
+msgstr "$0"
 
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "five past $0"
-msgstr ""
+msgstr "fem över $0"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
 #, fuzzy
@@ -6516,19 +6517,19 @@ msgstr "Registrera till %s"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
 msgid "quarter past $0"
-msgstr ""
+msgstr "kvart över $0"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 msgid "twenty past $0"
-msgstr ""
+msgstr "tio i halv $1"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 msgid "twenty five past $0"
-msgstr ""
+msgstr "fem i halv $1"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 msgid "half past $0"
-msgstr ""
+msgstr "halv $1"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 #, fuzzy
@@ -6557,15 +6558,15 @@ msgstr "Registrera till %s"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:61
 msgid "$1 o'clock"
-msgstr ""
+msgstr "$1"
 
 #: ../src/common/fuzzyclock.py:64
 msgid "Night"
-msgstr ""
+msgstr "Natt"
 
 #: ../src/common/fuzzyclock.py:64
 msgid "Early morning"
-msgstr ""
+msgstr "Tidig morgon"
 
 #: ../src/common/fuzzyclock.py:64
 #, fuzzy
@@ -6583,7 +6584,7 @@ msgstr "Ingen"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "Afternoon"
-msgstr ""
+msgstr "Eftermiddag"
 
 #: ../src/common/fuzzyclock.py:65
 #, fuzzy
@@ -6592,23 +6593,23 @@ msgstr "Händelse"
 
 #: ../src/common/fuzzyclock.py:65
 msgid "Late evening"
-msgstr ""
+msgstr "Sen kväll"
 
 #: ../src/common/fuzzyclock.py:67
 msgid "Start of week"
-msgstr ""
+msgstr "Början av veckan"
 
 #: ../src/common/fuzzyclock.py:67
 msgid "Middle of week"
-msgstr ""
+msgstr "Mitt i veckan"
 
 #: ../src/common/fuzzyclock.py:67
 msgid "End of week"
-msgstr ""
+msgstr "Slutet av veckan"
 
 #: ../src/common/fuzzyclock.py:68
 msgid "Weekend!"
-msgstr ""
+msgstr "Helg!"
 
 #: ../src/common/helpers.py:114
 msgid "Invalid character in username."
@@ -6874,6 +6875,7 @@ msgstr "för konto %s"
 msgid ""
 "Connection to host could not be established: Incorrect answer from server."
 msgstr ""
+"Anslutning till värd kunde inte etableras: Felaktigt svar från servern."
 
 #: ../src/common/zeroconf/client_zeroconf.py:205
 #, fuzzy
@@ -6884,10 +6886,11 @@ msgstr "Förbindelse med motpart kan inte etableras."
 msgid ""
 "Connection to host could not be established: Timeout while sending data."
 msgstr ""
+"Anslutning till värd kunde inte etableras: Timeout medan data skickades."
 
 #: ../src/common/zeroconf/client_zeroconf.py:629
 msgid "Contact is offline. Your message could not be sent."
-msgstr ""
+msgstr "Kontakten är nerkopplad. Ditt meddelande kunde inte skickas."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:197
 msgid "To continue sending and receiving messages, you will need to reconnect."
@@ -6895,7 +6898,7 @@ msgstr "För att fortsätta skicka och ta emot meddelanden måste du återanslut
 
 #: ../src/common/zeroconf/connection_zeroconf.py:207
 msgid "Avahi error"
-msgstr ""
+msgstr "Avahifel"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:207
 #, python-format
@@ -6903,10 +6906,12 @@ msgid ""
 "%s\n"
 "Link-local messaging might not work properly."
 msgstr ""
+"%s\n"
+"Link-local-meddelanden kanske inte fungerar korrekt."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:218
 msgid "Please check if Avahi is installed."
-msgstr ""
+msgstr "Kontrollera om Avahi är installerat."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:227
 #: ../src/common/zeroconf/connection_zeroconf.py:231
@@ -6922,7 +6927,7 @@ msgstr "Lyckades inte gå med i rummet"
 #: ../src/common/zeroconf/connection_zeroconf.py:232
 #: ../src/common/zeroconf/connection_zeroconf.py:325
 msgid "Please check if avahi-daemon is running."
-msgstr ""
+msgstr "Kontrollera om avahi-daemon körs."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:324
 #, fuzzy, python-format
@@ -6934,6 +6939,8 @@ msgid ""
 "You are not connected or not visible to others. Your message could not be "
 "sent."
 msgstr ""
+"Du är inte ansluten eller visas inte för andra. Ditt meddelande kunde inte "
+"skickas."
 
 #. we're not english
 #: ../src/common/zeroconf/connection_zeroconf.py:353
@@ -6944,6 +6951,19 @@ msgstr "[Det här meddelandet är krypterat]"
 #, fuzzy, python-format
 msgid "Error while adding service. %s"
 msgstr "problem vid sändning %s ( %s )"
+
+#~ msgid "2003-12-13T18:30:02Z"
+#~ msgstr "2003-12-13T18:30:02Z"
+
+#~ msgid "<small>Romeo and Juliet</small>"
+#~ msgstr "<small>Romeo och Julia</small>"
+
+#~ msgid "Old stories"
+#~ msgstr "Gamla berättelser"
+
+#, fuzzy
+#~ msgid "Soliloquy"
+#~ msgstr "Monolog"
 
 #~ msgid "A_fter nickname:"
 #~ msgstr "E_fter smeknamn:"
