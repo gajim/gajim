@@ -394,7 +394,7 @@ class Message(Protocol):
         Protocol.__init__(self, 'message', to=to, typ=typ, attrs=attrs, frm=frm, payload=payload, timestamp=timestamp, xmlns=xmlns, node=node)
         if body: self.setBody(body)
         if xhtml: self.setXHTML(xhtml)
-        if subject: self.setSubject(subject)
+        if subject != None: self.setSubject(subject)
     def getBody(self):
         """ Returns text of the message. """
         return self.getTagData('body')

@@ -1459,7 +1459,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			has_timestamp = False
 			if msg.timestamp:
 				has_timestamp = True
-			if subject:
+			if subject != None:
 				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
 			else:
 				if not msg.getTag('body'): #no <body>
