@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-20 19:00+0100\n"
-"PO-Revision-Date: 2007-01-20 20:31+0100\n"
+"POT-Creation-Date: 2007-01-24 23:57+0100\n"
+"PO-Revision-Date: 2007-01-25 21:10+0100\n"
 "Last-Translator: Benjamin Drung <benjamin.drung@gmail.com>\n"
 "Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
@@ -115,7 +115,7 @@ msgid "If checked, Gajim will remember the password for this account"
 msgstr "Falls aktiviert, speichert Gajim das Passwort für dieses Konto"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:12
-#: ../data/glade/manage_proxies_window.glade.h:6
+#: ../data/glade/manage_proxies_window.glade.h:7
 msgid "Pass_word:"
 msgstr "Pass_wort:"
 
@@ -154,7 +154,7 @@ msgid "_Finish"
 msgstr "_Beenden"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:21
-#: ../data/glade/manage_proxies_window.glade.h:9
+#: ../data/glade/manage_proxies_window.glade.h:10
 msgid "_Host:"
 msgstr "_Server:"
 
@@ -164,7 +164,7 @@ msgid "_Password:"
 msgstr "_Passwort:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:23
-#: ../data/glade/manage_proxies_window.glade.h:10
+#: ../data/glade/manage_proxies_window.glade.h:11
 msgid "_Port:"
 msgstr "_Port:"
 
@@ -181,7 +181,7 @@ msgid "_Use proxy"
 msgstr "_Proxy benutzen"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:27
-#: ../data/glade/manage_proxies_window.glade.h:11
+#: ../data/glade/manage_proxies_window.glade.h:12
 msgid "_Username:"
 msgstr "_Benutzername:"
 
@@ -256,13 +256,12 @@ msgstr "Persönliche Details bearbeiten ..."
 msgid "Gajim"
 msgstr "Gajim"
 
-#. Contact is not in a group, so count it in General group
 #: ../data/glade/account_modification_window.glade.h:15
 #: ../data/glade/preferences_window.glade.h:51
 #: ../data/glade/zeroconf_properties_window.glade.h:7
 #: ../src/roster_window.py:346 ../src/roster_window.py:1225
 #: ../src/roster_window.py:1436 ../src/roster_window.py:2112
-#: ../src/roster_window.py:2154 ../src/common/contacts.py:280
+#: ../src/roster_window.py:2154 ../src/common/contacts.py:284
 msgid "General"
 msgstr "Allgemein"
 
@@ -325,21 +324,21 @@ msgstr "_Verwalten..."
 
 #: ../data/glade/account_modification_window.glade.h:25
 #: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1608
-#: ../src/config.py:3400
+#: ../src/config.py:3405
 msgid "No key selected"
 msgstr "Kein Schlüssel gewählt"
 
 #. None means no proxy profile selected
 #: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1188
 #: ../src/config.py:1193 ../src/config.py:1377 ../src/config.py:1598
-#: ../src/config.py:1607 ../src/config.py:1666 ../src/config.py:1740
-#: ../src/config.py:3390 ../src/config.py:3399 ../src/dialogs.py:281
+#: ../src/config.py:1607 ../src/config.py:1667 ../src/config.py:1741
+#: ../src/config.py:3395 ../src/config.py:3404 ../src/dialogs.py:281
 #: ../src/dialogs.py:283
 msgid "None"
 msgstr "Kein"
 
 #: ../data/glade/account_modification_window.glade.h:28
-#: ../data/glade/profile_window.glade.h:25
+#: ../data/glade/profile_window.glade.h:26
 #: ../data/glade/zeroconf_properties_window.glade.h:17
 msgid "Personal Information"
 msgstr "Persönliche Informationen"
@@ -797,38 +796,22 @@ msgid "when I'm in"
 msgstr "wenn ich bin"
 
 #: ../data/glade/atom_entry_window.glade.h:1
-msgid "2003-12-13T18:30:02Z"
-msgstr "2003-12-13T18:30:02Z"
-
-#: ../data/glade/atom_entry_window.glade.h:2
-msgid "<small>Romeo and Juliet</small>"
-msgstr "<small>Romeo und Julia</small>"
-
-#: ../data/glade/atom_entry_window.glade.h:3
 msgid "Entry:"
 msgstr "Eintrag:"
 
-#: ../data/glade/atom_entry_window.glade.h:4
+#: ../data/glade/atom_entry_window.glade.h:2
 msgid "Feed name:"
 msgstr "Feed-Name:"
 
-#: ../data/glade/atom_entry_window.glade.h:5
+#: ../data/glade/atom_entry_window.glade.h:3
 msgid "Last modified:"
 msgstr "Zuletzt geändert:"
 
-#: ../data/glade/atom_entry_window.glade.h:6
+#: ../data/glade/atom_entry_window.glade.h:4
 msgid "New entry received"
 msgstr "Neuen Eintrag empfangen"
 
-#: ../data/glade/atom_entry_window.glade.h:7
-msgid "Old stories"
-msgstr "Alte Geschichten"
-
-#: ../data/glade/atom_entry_window.glade.h:8
-msgid "Soliloquy"
-msgstr "Selbstgespräch"
-
-#: ../data/glade/atom_entry_window.glade.h:9
+#: ../data/glade/atom_entry_window.glade.h:5
 msgid "You have received new entry:"
 msgstr "Sie haben einen neuen Eintrag erhalten:"
 
@@ -1228,7 +1211,7 @@ msgstr "Betrete diesen Raum automatisch, wenn ich mich verbinde"
 
 #: ../data/glade/join_groupchat_window.glade.h:3
 #: ../data/glade/manage_bookmarks_window.glade.h:4
-#: ../data/glade/profile_window.glade.h:23
+#: ../data/glade/profile_window.glade.h:24
 #: ../data/glade/vcard_information_window.glade.h:29
 msgid "Nickname:"
 msgstr "Spitzname:"
@@ -1289,24 +1272,28 @@ msgid "<b>Settings</b>"
 msgstr "<b>Einstellungen</b>"
 
 #: ../data/glade/manage_proxies_window.glade.h:3
-msgid "HTTP Connect"
-msgstr "HTTP Connect"
+msgid ""
+"HTTP Connect\n"
+"SOCKS5"
+msgstr ""
+"HTTP-Verbindung\n"
+"SOCKS5"
 
-#: ../data/glade/manage_proxies_window.glade.h:4
+#: ../data/glade/manage_proxies_window.glade.h:5
 msgid "Manage Proxy Profiles"
 msgstr "Proxy Verwaltung"
 
-#: ../data/glade/manage_proxies_window.glade.h:5
-#: ../data/glade/profile_window.glade.h:22
+#: ../data/glade/manage_proxies_window.glade.h:6
+#: ../data/glade/profile_window.glade.h:23
 #: ../data/glade/vcard_information_window.glade.h:28
 msgid "Name:"
 msgstr "Name:"
 
-#: ../data/glade/manage_proxies_window.glade.h:7
+#: ../data/glade/manage_proxies_window.glade.h:8
 msgid "Type:"
 msgstr "Art:"
 
-#: ../data/glade/manage_proxies_window.glade.h:8
+#: ../data/glade/manage_proxies_window.glade.h:9
 msgid "Use authentication"
 msgstr "Verwende Authentifizierung"
 
@@ -1934,114 +1921,118 @@ msgid "City:"
 msgstr "Stadt:"
 
 #: ../data/glade/profile_window.glade.h:7
+msgid "Click to set your avatar"
+msgstr "Hier klicken, um Ihren Avatar zu setzen"
+
+#: ../data/glade/profile_window.glade.h:8
 #: ../data/glade/vcard_information_window.glade.h:10
 msgid "Company:"
 msgstr "Firma:"
 
-#: ../data/glade/profile_window.glade.h:8
+#: ../data/glade/profile_window.glade.h:9
 #: ../data/glade/vcard_information_window.glade.h:13
 msgid "Country:"
 msgstr "Land:"
 
-#: ../data/glade/profile_window.glade.h:9
+#: ../data/glade/profile_window.glade.h:10
 #: ../data/glade/vcard_information_window.glade.h:14
 msgid "Department:"
 msgstr "Abteilung:"
 
-#: ../data/glade/profile_window.glade.h:10
+#: ../data/glade/profile_window.glade.h:11
 #: ../data/glade/vcard_information_window.glade.h:15
 #: ../data/glade/zeroconf_information_window.glade.h:2
 #: ../data/glade/zeroconf_properties_window.glade.h:5
 msgid "E-Mail:"
 msgstr "E-Mail:"
 
-#: ../data/glade/profile_window.glade.h:11
+#: ../data/glade/profile_window.glade.h:12
 #: ../data/glade/vcard_information_window.glade.h:16
 msgid "Extra Address:"
 msgstr "Zusatz-Adresse:"
 
 #. Family Name
-#: ../data/glade/profile_window.glade.h:13
+#: ../data/glade/profile_window.glade.h:14
 #: ../data/glade/vcard_information_window.glade.h:18
 msgid "Family:"
 msgstr "Nachname:"
 
 #. Do NOT change sequence. Just translate YYYY and MM and DD (from Year, Month, Day accordingly)
-#: ../data/glade/profile_window.glade.h:15
+#: ../data/glade/profile_window.glade.h:16
 #: ../data/glade/vcard_information_window.glade.h:20
 msgid "Format: YYYY-MM-DD"
 msgstr "Format: JJJJ-MM-TT"
 
 #. Given Name
-#: ../data/glade/profile_window.glade.h:17
+#: ../data/glade/profile_window.glade.h:18
 #: ../data/glade/vcard_information_window.glade.h:22
 msgid "Given:"
 msgstr "Vorname:"
 
-#: ../data/glade/profile_window.glade.h:18
+#: ../data/glade/profile_window.glade.h:19
 #: ../data/glade/vcard_information_window.glade.h:23
 msgid "Homepage:"
 msgstr "Homepage:"
 
 #. Middle Name
-#: ../data/glade/profile_window.glade.h:20
+#: ../data/glade/profile_window.glade.h:21
 #: ../data/glade/vcard_information_window.glade.h:26
 msgid "Middle:"
 msgstr "Mittelname"
 
-#: ../data/glade/profile_window.glade.h:21
+#: ../data/glade/profile_window.glade.h:22
 #: ../data/glade/vcard_information_window.glade.h:27
 msgid "More"
 msgstr "Mehr"
 
-#: ../data/glade/profile_window.glade.h:24
+#: ../data/glade/profile_window.glade.h:25
 #: ../data/glade/vcard_information_window.glade.h:31
 msgid "Personal Info"
 msgstr "Persönliche Details"
 
-#: ../data/glade/profile_window.glade.h:26
+#: ../data/glade/profile_window.glade.h:27
 #: ../data/glade/vcard_information_window.glade.h:32
 msgid "Phone No.:"
 msgstr "Telefon-Nummer:"
 
-#: ../data/glade/profile_window.glade.h:27
+#: ../data/glade/profile_window.glade.h:28
 #: ../data/glade/vcard_information_window.glade.h:33
 msgid "Position:"
 msgstr "Position:"
 
-#: ../data/glade/profile_window.glade.h:28
+#: ../data/glade/profile_window.glade.h:29
 #: ../data/glade/vcard_information_window.glade.h:34
 msgid "Postal Code:"
 msgstr "Postleitzahl:"
 
 #. Prefix in Name
-#: ../data/glade/profile_window.glade.h:30
+#: ../data/glade/profile_window.glade.h:31
 #: ../data/glade/vcard_information_window.glade.h:36
 msgid "Prefix:"
 msgstr "Präfix"
 
-#: ../data/glade/profile_window.glade.h:31
+#: ../data/glade/profile_window.glade.h:32
 #: ../data/glade/vcard_information_window.glade.h:38 ../src/vcard.py:273
 msgid "Role:"
 msgstr "Rolle:"
 
-#: ../data/glade/profile_window.glade.h:32
+#: ../data/glade/profile_window.glade.h:33
 #: ../data/glade/vcard_information_window.glade.h:39
 msgid "State:"
 msgstr "Staat:"
 
-#: ../data/glade/profile_window.glade.h:33
+#: ../data/glade/profile_window.glade.h:34
 #: ../data/glade/vcard_information_window.glade.h:41
 msgid "Street:"
 msgstr "Straße:"
 
 #. Suffix in Name
-#: ../data/glade/profile_window.glade.h:35
+#: ../data/glade/profile_window.glade.h:36
 #: ../data/glade/vcard_information_window.glade.h:45
 msgid "Suffix:"
 msgstr "Suffix:"
 
-#: ../data/glade/profile_window.glade.h:36
+#: ../data/glade/profile_window.glade.h:37
 #: ../data/glade/vcard_information_window.glade.h:46
 msgid "Work"
 msgstr "Arbeit"
@@ -2614,9 +2605,9 @@ msgid "Encryption disabled"
 msgstr "Verschlüsselung deaktiviert"
 
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1406 ../src/conversation_textview.py:493
-#: ../src/dialogs.py:629 ../src/gajim.py:842 ../src/gajim.py:843
-#: ../src/gajim.py:1187 ../src/roster_window.py:332
+#: ../src/chat_control.py:1406 ../src/conversation_textview.py:495
+#: ../src/dialogs.py:629 ../src/gajim.py:845 ../src/gajim.py:846
+#: ../src/gajim.py:1190 ../src/roster_window.py:332
 #: ../src/roster_window.py:410 ../src/roster_window.py:1498
 #: ../src/roster_window.py:1508 ../src/roster_window.py:1684
 #: ../src/roster_window.py:1890 ../src/roster_window.py:2475
@@ -2657,12 +2648,12 @@ msgstr "Aktiv"
 msgid "Event"
 msgstr "Ereignis"
 
-#: ../src/config.py:682 ../src/gajim.py:2222
+#: ../src/config.py:682 ../src/gajim.py:2225
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "Wörterburch für Sprache %s nicht verfügbar"
 
-#: ../src/config.py:683 ../src/gajim.py:2223
+#: ../src/config.py:683 ../src/gajim.py:2226
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -2723,7 +2714,7 @@ msgstr "Sie sind mit dem Server verbunden"
 msgid "To change the account name, you must be disconnected."
 msgstr "Verbindung muss beendet werden, um Kontonamen zu ändern."
 
-#: ../src/config.py:1302 ../src/config.py:1896
+#: ../src/config.py:1302 ../src/config.py:1901
 msgid "Unread events"
 msgstr "Ungelesene Ereignisse"
 
@@ -2756,7 +2747,7 @@ msgid "Account name cannot contain spaces."
 msgstr "Kontoname darf keine Leerzeichen enthalten."
 
 #: ../src/config.py:1325 ../src/config.py:1331 ../src/config.py:1341
-#: ../src/config.py:2999
+#: ../src/config.py:3004
 msgid "Invalid Jabber ID"
 msgstr "Ungültige Jabber ID"
 
@@ -2797,7 +2788,7 @@ msgstr ""
 "ändern können"
 
 #: ../src/config.py:1565 ../src/dialogs.py:1130 ../src/dialogs.py:1316
-#: ../src/disco.py:419 ../src/profile_window.py:313
+#: ../src/disco.py:419 ../src/profile_window.py:323
 msgid "You are not connected to the server"
 msgstr "Sie sind nicht mit dem Server verbunden"
 
@@ -2814,106 +2805,106 @@ msgstr "Ihr Server unterstützt vCard nicht"
 msgid "Your server can't save your personal information."
 msgstr "Ihr Server kann keine persönlichen Informationen speichern."
 
-#: ../src/config.py:1595 ../src/config.py:3387
+#: ../src/config.py:1595 ../src/config.py:3392
 msgid "Failed to get secret keys"
 msgstr "Holen der geheimen Schlüssel fehlgeschlagen"
 
-#: ../src/config.py:1596 ../src/config.py:3388
+#: ../src/config.py:1596 ../src/config.py:3393
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Es gab ein Problem beim Holen ihres geheimen OpenPGP-Schlüssels."
 
-#: ../src/config.py:1599 ../src/config.py:3391
+#: ../src/config.py:1599 ../src/config.py:3396
 msgid "OpenPGP Key Selection"
 msgstr "OpenPGP Schlüssel-Auswahl"
 
-#: ../src/config.py:1600 ../src/config.py:3392
+#: ../src/config.py:1600 ../src/config.py:3397
 msgid "Choose your OpenPGP key"
 msgstr "Wählen Sie Ihren OpenPGP Schlüssel"
 
 #. Name column
-#: ../src/config.py:1830 ../src/disco.py:740 ../src/disco.py:1495
+#: ../src/config.py:1835 ../src/disco.py:740 ../src/disco.py:1495
 #: ../src/disco.py:1733 ../src/history_window.py:78
 msgid "Name"
 msgstr "Name"
 
-#: ../src/config.py:1833
+#: ../src/config.py:1838
 msgid "Server"
 msgstr "Server"
 
-#: ../src/config.py:1897
+#: ../src/config.py:1902
 msgid "Read all pending events before removing this account."
 msgstr "Alle ungelesenen Ereignisse lesen, bevor der Account entfernt wird."
 
-#: ../src/config.py:1934
+#: ../src/config.py:1939
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "Sie haben mit Account %s einen Chat geöffnet"
 
-#: ../src/config.py:1935
+#: ../src/config.py:1940
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "Alle Chatfenster werden geschlossen. Fortfahren?"
 
-#: ../src/config.py:1994
+#: ../src/config.py:1999
 msgid "Account Local already exists."
 msgstr "Ein Konto mit dem Namen 'Local' ist bereits vorhanden"
 
-#: ../src/config.py:1995
+#: ../src/config.py:2000
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr ""
 "Bitte benennen Sie es um oder entfernen es, bevor Sie LAN-Kontakte "
 "aktivieren."
 
-#: ../src/config.py:2229
+#: ../src/config.py:2234
 #, python-format
 msgid "Edit %s"
 msgstr "%s ändern"
 
-#: ../src/config.py:2231
+#: ../src/config.py:2236
 #, python-format
 msgid "Register to %s"
 msgstr "Auf %s registrieren"
 
 #. list at the beginning
-#: ../src/config.py:2297
+#: ../src/config.py:2302
 msgid "Ban List"
 msgstr "Sperrliste"
 
-#: ../src/config.py:2298
+#: ../src/config.py:2303
 msgid "Member List"
 msgstr "Mitgliedsliste"
 
-#: ../src/config.py:2299
+#: ../src/config.py:2304
 msgid "Owner List"
 msgstr "Listenbesitzer"
 
-#: ../src/config.py:2300
+#: ../src/config.py:2305
 msgid "Administrator List"
 msgstr "Administratorliste"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2333 ../src/disco.py:747 ../src/history_manager.py:155
+#: ../src/config.py:2338 ../src/disco.py:747 ../src/history_manager.py:155
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2341
+#: ../src/config.py:2346
 msgid "Reason"
 msgstr "Grund"
 
-#: ../src/config.py:2346
+#: ../src/config.py:2351
 msgid "Nick"
 msgstr "Spitzname"
 
-#: ../src/config.py:2350
+#: ../src/config.py:2355
 msgid "Role"
 msgstr "Rolle"
 
-#: ../src/config.py:2371
+#: ../src/config.py:2376
 msgid "Banning..."
 msgstr "Verbanne ..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2373
+#: ../src/config.py:2378
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2921,11 +2912,11 @@ msgstr ""
 "<b>Wen möchten Sie verbannen?</b>\n"
 "\n"
 
-#: ../src/config.py:2375
+#: ../src/config.py:2380
 msgid "Adding Member..."
 msgstr "Füge Mitglied hinzu ..."
 
-#: ../src/config.py:2376
+#: ../src/config.py:2381
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2933,11 +2924,11 @@ msgstr ""
 "<b>Wen möchten Sie zum Mitglied machen?</b>\n"
 "\n"
 
-#: ../src/config.py:2378
+#: ../src/config.py:2383
 msgid "Adding Owner..."
 msgstr "Füge Besitzer hinzu ..."
 
-#: ../src/config.py:2379
+#: ../src/config.py:2384
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -2945,11 +2936,11 @@ msgstr ""
 "<b>Wen möchten Sie zum Besitzer machen?</b>\n"
 "\n"
 
-#: ../src/config.py:2381
+#: ../src/config.py:2386
 msgid "Adding Administrator..."
 msgstr "Füge Administrator hinzu ..."
 
-#: ../src/config.py:2382
+#: ../src/config.py:2387
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2957,7 +2948,7 @@ msgstr ""
 "<b>Wen möchten Sie zum Administrator machen?</b>\n"
 "\n"
 
-#: ../src/config.py:2383
+#: ../src/config.py:2388
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2972,100 +2963,100 @@ msgstr ""
 "3 domain (die Domain selbst trifft zu, als auch jeder benutzer@domain,\n"
 "jede domain/resource oder Adresse, die eine Subdomain enthält."
 
-#: ../src/config.py:2488
+#: ../src/config.py:2493
 #, python-format
 msgid "Removing %s account"
 msgstr "Entferne Konto %s"
 
-#: ../src/config.py:2505 ../src/roster_window.py:2733
+#: ../src/config.py:2510 ../src/roster_window.py:2733
 msgid "Password Required"
 msgstr "Passwort benötigt"
 
-#: ../src/config.py:2506 ../src/roster_window.py:2729
+#: ../src/config.py:2511 ../src/roster_window.py:2729
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Geben Sie ihr Passwort für %s ein"
 
-#: ../src/config.py:2507 ../src/roster_window.py:2734
+#: ../src/config.py:2512 ../src/roster_window.py:2734
 msgid "Save password"
 msgstr "Passwort speichern"
 
-#: ../src/config.py:2521
+#: ../src/config.py:2526
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Konto \"%s\" ist mit Server verbunden"
 
-#: ../src/config.py:2522
+#: ../src/config.py:2527
 msgid "If you remove it, the connection will be lost."
 msgstr "Wenn Sie es entfernen, wird die Verbindung beendet."
 
-#: ../src/config.py:2607
+#: ../src/config.py:2612
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/config.py:2607
+#: ../src/config.py:2612
 msgid "?print_status:All"
 msgstr "?print_status:Alle"
 
-#: ../src/config.py:2608
+#: ../src/config.py:2613
 msgid "Enter and leave only"
 msgstr "Nur betreten und verlassen"
 
-#: ../src/config.py:2609
+#: ../src/config.py:2614
 msgid "?print_status:None"
 msgstr "?print_status:Nichts"
 
-#: ../src/config.py:2677
+#: ../src/config.py:2682
 msgid "New Group Chat"
 msgstr "Neuer Gruppenchat"
 
-#: ../src/config.py:2710
+#: ../src/config.py:2715
 msgid "This bookmark has invalid data"
 msgstr "Dieses Lesezeichen hat ungültige Daten"
 
-#: ../src/config.py:2711
+#: ../src/config.py:2716
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "Bitte Serverfeld und Raumfeld ausfüllen oder Lesezeichen löschen."
 
-#: ../src/config.py:2974
+#: ../src/config.py:2979
 msgid "Invalid username"
 msgstr "Ungültiger Benutzername"
 
-#: ../src/config.py:2975
+#: ../src/config.py:2980
 msgid "You must provide a username to configure this account."
 msgstr ""
 "Sie müssen einen Benutzernamen angeben, um diesen Account zu konfigurieren."
 
-#: ../src/config.py:2985 ../src/dialogs.py:1335
+#: ../src/config.py:2990 ../src/dialogs.py:1335
 msgid "Invalid password"
 msgstr "Ungültiges Passwort"
 
-#: ../src/config.py:2986
+#: ../src/config.py:2991
 msgid "You must enter a password for the new account."
 msgstr "Sie müssen ein Passwort für das neue Konto eingeben."
 
-#: ../src/config.py:2990 ../src/dialogs.py:1340
+#: ../src/config.py:2995 ../src/dialogs.py:1340
 msgid "Passwords do not match"
 msgstr "Passwörter stimmen nicht überein"
 
-#: ../src/config.py:2991 ../src/dialogs.py:1341
+#: ../src/config.py:2996 ../src/dialogs.py:1341
 msgid "The passwords typed in both fields must be identical."
 msgstr "Die Passwörter in beiden Feldern müssen identisch sein."
 
-#: ../src/config.py:3010
+#: ../src/config.py:3015
 msgid "Duplicate Jabber ID"
 msgstr "Doppelte Jabber ID"
 
-#: ../src/config.py:3011
+#: ../src/config.py:3016
 msgid "This account is already configured in Gajim."
 msgstr "Dieser Kontakt bwurde in Gajim bereits konfiguriert."
 
-#: ../src/config.py:3028
+#: ../src/config.py:3033
 msgid "Account has been added successfully"
 msgstr "Account wurde erfolgreich hinzugefügt"
 
-#: ../src/config.py:3029 ../src/config.py:3064
+#: ../src/config.py:3034 ../src/config.py:3069
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menuitem under the Edit menu from the main "
@@ -3075,23 +3066,23 @@ msgstr ""
 "oder durch Klicken des Konto-Menüpunktes im Bearbeiten-Menü des "
 "Hauptfensters erreichen."
 
-#: ../src/config.py:3063
+#: ../src/config.py:3068
 msgid "Your new account has been created successfully"
 msgstr "Ihr neues Konto wurde erfolgreich erstellt"
 
-#: ../src/config.py:3081
+#: ../src/config.py:3086
 msgid "An error occurred during account creation"
 msgstr "Während der Konto-Erstellung ist ein Fehler aufgetreten"
 
-#: ../src/config.py:3139
+#: ../src/config.py:3144
 msgid "Account name is in use"
 msgstr "Kontoname ist schon vergeben"
 
-#: ../src/config.py:3140
+#: ../src/config.py:3145
 msgid "You already have an account using this name."
 msgstr "Sie haben bereits ein Konto mit diesem Namen."
 
-#: ../src/conversation_textview.py:271
+#: ../src/conversation_textview.py:273
 msgid ""
 "Text below this line is what has been said since the last time you paid "
 "attention to this group chat"
@@ -3099,52 +3090,52 @@ msgstr ""
 "Text unterhalb dieser Linie stellt dar, was seit ihrem letzten Besuch in "
 "diesem Gruppenchat gesagt wurde"
 
-#: ../src/conversation_textview.py:340
+#: ../src/conversation_textview.py:342
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_Aktionen für \"%s\""
 
-#: ../src/conversation_textview.py:352
+#: ../src/conversation_textview.py:354
 msgid "Read _Wikipedia Article"
 msgstr "_Wikipedia-Artikel lesen"
 
-#: ../src/conversation_textview.py:357
+#: ../src/conversation_textview.py:359
 msgid "Look it up in _Dictionary"
 msgstr "Im Wörterbuch _suchen"
 
 #. we must have %s in the url if not WIKTIONARY
-#: ../src/conversation_textview.py:373
+#: ../src/conversation_textview.py:375
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "In Wörterbuch URL fehlt ein \"%s\" und ist nicht Wiktionary"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:386
+#: ../src/conversation_textview.py:388
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "In Websuche URL fehlt ein \"%s\""
 
-#: ../src/conversation_textview.py:389
+#: ../src/conversation_textview.py:391
 msgid "Web _Search for it"
 msgstr "Im _Internet suchen"
 
-#: ../src/conversation_textview.py:395
+#: ../src/conversation_textview.py:397
 msgid "Open as _Link"
 msgstr "Als _Link öffnen"
 
-#: ../src/conversation_textview.py:752
+#: ../src/conversation_textview.py:754
 msgid "Yesterday"
 msgstr "Gestern"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
-#: ../src/conversation_textview.py:756
+#: ../src/conversation_textview.py:758
 #, python-format
 msgid "%i days ago"
 msgstr "Vor %i Tagen"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:790
+#: ../src/conversation_textview.py:792
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Thema: %s\n"
@@ -3401,29 +3392,29 @@ msgstr "Neue einzelne Nachricht"
 msgid "New Private Message"
 msgstr "Neue private Nachricht"
 
-#: ../src/dialogs.py:1388 ../src/gajim.py:1282 ../src/notify.py:429
+#: ../src/dialogs.py:1388 ../src/gajim.py:1285 ../src/notify.py:429
 msgid "New E-mail"
 msgstr "Neue E-Mail"
 
-#: ../src/dialogs.py:1390 ../src/gajim.py:1435 ../src/notify.py:423
+#: ../src/dialogs.py:1390 ../src/gajim.py:1438 ../src/notify.py:423
 msgid "File Transfer Request"
 msgstr "Dateitransfer Anfrage"
 
-#: ../src/dialogs.py:1392 ../src/gajim.py:1254 ../src/gajim.py:1411
+#: ../src/dialogs.py:1392 ../src/gajim.py:1257 ../src/gajim.py:1414
 #: ../src/notify.py:425
 msgid "File Transfer Error"
 msgstr "Dateitransfer-Fehler"
 
-#: ../src/dialogs.py:1394 ../src/gajim.py:1474 ../src/gajim.py:1496
-#: ../src/gajim.py:1513 ../src/notify.py:427
+#: ../src/dialogs.py:1394 ../src/gajim.py:1477 ../src/gajim.py:1499
+#: ../src/gajim.py:1516 ../src/notify.py:427
 msgid "File Transfer Completed"
 msgstr "Dateitransfer beendet"
 
-#: ../src/dialogs.py:1395 ../src/gajim.py:1477 ../src/notify.py:427
+#: ../src/dialogs.py:1395 ../src/gajim.py:1480 ../src/notify.py:427
 msgid "File Transfer Stopped"
 msgstr "Dateitransfer gestoppt"
 
-#: ../src/dialogs.py:1397 ../src/gajim.py:1151 ../src/notify.py:431
+#: ../src/dialogs.py:1397 ../src/gajim.py:1154 ../src/notify.py:431
 msgid "Groupchat Invitation"
 msgstr "Gruppenchat-Einladung"
 
@@ -3583,11 +3574,12 @@ msgid "Others"
 msgstr "Andere"
 
 #: ../src/disco.py:104 ../src/disco.py:105 ../src/disco.py:1281
-#: ../src/gajim.py:596 ../src/roster_window.py:271 ../src/roster_window.py:329
+#: ../src/gajim.py:599 ../src/roster_window.py:271 ../src/roster_window.py:329
 #: ../src/roster_window.py:368 ../src/roster_window.py:451
 #: ../src/roster_window.py:483 ../src/roster_window.py:485
 #: ../src/roster_window.py:3896 ../src/roster_window.py:3898
-#: ../src/common/contacts.py:267 ../src/common/helpers.py:43
+#: ../src/common/contacts.py:267 ../src/common/contacts.py:282
+#: ../src/common/helpers.py:43
 msgid "Transports"
 msgstr "Transports"
 
@@ -3785,12 +3777,12 @@ msgstr "Beschreibung: %s"
 msgid "%s wants to send you a file:"
 msgstr "%s möchte ihnen eine Datei senden:"
 
-#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:747
+#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:748
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Kann existierende Datei \"%s\" nicht überschreiben"
 
-#: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:749
+#: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:750
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
@@ -3798,20 +3790,20 @@ msgstr ""
 "Eine Datei mit diesem Namen existiert bereits und Sie haben nicht die Rechte "
 "sie zu überschreiben."
 
-#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:753
+#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:754
 msgid "This file already exists"
 msgstr "Diese Datei existiert bereits"
 
-#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:753
+#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:754
 msgid "What do you want to do?"
 msgstr "Was möchten Sie tun?"
 
-#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:763
+#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:764
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "Verzeichnis \"%s\" ist nicht schreibbar"
 
-#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:764
+#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:765
 msgid "You do not have permission to create files in this directory."
 msgstr ""
 "Ihre Benutzerrechte erlauben es Ihnen nicht, in diesem Verzeichnis Dateien "
@@ -3949,71 +3941,71 @@ msgstr "Akzeptieren Sie diese Anfrage?"
 msgid "Connection Failed"
 msgstr "Verbindung fehlgeschlagen"
 
-#: ../src/gajim.py:767
+#: ../src/gajim.py:770
 #, python-format
 msgid "Subject: %s"
 msgstr "Thema: %s"
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time))
-#: ../src/gajim.py:812 ../src/gajim.py:825
+#: ../src/gajim.py:815 ../src/gajim.py:828
 #, python-format
 msgid "error while sending %s ( %s )"
 msgstr "Fehler beim Senden von %s ( %s )"
 
-#: ../src/gajim.py:858
+#: ../src/gajim.py:861
 msgid "Authorization accepted"
 msgstr "Autorisierung akzeptiert"
 
-#: ../src/gajim.py:859
+#: ../src/gajim.py:862
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "Kontakt \"%s\" hat Sie autorisiert seinen oder ihren Staus zu sehen."
 
-#: ../src/gajim.py:867
+#: ../src/gajim.py:870
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Kontakt \"%s\" hat das Abonnement zurückgezogen"
 
-#: ../src/gajim.py:868
+#: ../src/gajim.py:871
 msgid "You will always see him or her as offline."
 msgstr "Sie werden den Kontakt ab sofort als offline sehen."
 
-#: ../src/gajim.py:911
+#: ../src/gajim.py:914
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kontakt mit \"%s\" konnte nicht hergestellt werden"
 
-#: ../src/gajim.py:912 ../src/common/connection.py:417
+#: ../src/gajim.py:915 ../src/common/connection.py:418
 msgid "Check your connection or try again later."
 msgstr ""
 "Überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal."
 
-#: ../src/gajim.py:1061 ../src/roster_window.py:1218
+#: ../src/gajim.py:1064 ../src/roster_window.py:1218
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s ist jetzt %s (%s)"
 
 #. No status message
-#: ../src/gajim.py:1064 ../src/groupchat_control.py:944
+#: ../src/gajim.py:1067 ../src/groupchat_control.py:944
 #: ../src/roster_window.py:1221
 #, python-format
 msgid "%s is now %s"
 msgstr "%s ist jetzt %s"
 
-#: ../src/gajim.py:1161
+#: ../src/gajim.py:1164
 msgid "Your passphrase is incorrect"
 msgstr "Ihre Passphrase ist falsch"
 
-#: ../src/gajim.py:1162
+#: ../src/gajim.py:1165
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Sie wurden ohne ihren GPG-Schlüssel verbunden"
 
-#: ../src/gajim.py:1265
+#: ../src/gajim.py:1268
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Neue E-Mail auf %(gmail_mail_address)s"
 
-#: ../src/gajim.py:1267
+#: ../src/gajim.py:1270
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
@@ -4023,7 +4015,7 @@ msgstr[1] "Sie haben %d ungelesene E-Mail-Nachrichten"
 #. FIXME: emulate Gtalk client popups. find out what they parse and how
 #. they decide what to show
 #. each message has a 'From', 'Subject' and 'Snippet' field
-#: ../src/gajim.py:1276
+#: ../src/gajim.py:1279
 #, python-format
 msgid ""
 "\n"
@@ -4032,53 +4024,53 @@ msgstr ""
 "\n"
 "Von: %(from_address)s"
 
-#: ../src/gajim.py:1432
+#: ../src/gajim.py:1435
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s möchte ihnen eine Datei senden."
 
-#: ../src/gajim.py:1497
+#: ../src/gajim.py:1500
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Sie haben %(filename)s erfolgreich von %(name)s erhalten."
 
 #. ft stopped
-#: ../src/gajim.py:1501
+#: ../src/gajim.py:1504
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Dateitransfer %(filename)s von %(name)s wurde gestoppt."
 
-#: ../src/gajim.py:1514
+#: ../src/gajim.py:1517
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Sie haben%(filename)s erfolgreich an %(name)s gesendet."
 
 #. ft stopped
-#: ../src/gajim.py:1518
+#: ../src/gajim.py:1521
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Dateitransfer von %(filename)s an %(name)s wurde gestoppt."
 
-#: ../src/gajim.py:1631
+#: ../src/gajim.py:1634
 msgid "Username Conflict"
 msgstr "Benutzernamenkonflikt"
 
-#: ../src/gajim.py:1632
+#: ../src/gajim.py:1635
 msgid "Please type a new username for your local account"
 msgstr ""
 "<b>Bitte geben Sie einen neuen Benutzernamen für Ihr lokales Konto ein</b>"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:1972
+#: ../src/gajim.py:1975
 msgid "Could not save your settings and preferences"
 msgstr "Konnte Einstellungen nicht speichern"
 
-#: ../src/gajim.py:2170
+#: ../src/gajim.py:2173
 msgid "Network Manager support not available"
 msgstr "Unterstützung für Network Manager nicht verfügbar"
 
-#: ../src/gajim.py:2249
+#: ../src/gajim.py:2252
 msgid "Session Management support not available (missing gnome.ui module)"
 msgstr "Sitzungsmanagment-Unterstützung nicht verfügbar (Modul gnome.ui fehlt)"
 
@@ -4786,31 +4778,31 @@ msgstr ""
 "funktionieren"
 
 #. xmpp: is currently handled by another program, so ask the user
-#: ../src/gtkgui_helpers.py:691
+#: ../src/gtkgui_helpers.py:692
 msgid "Gajim is not the default Jabber client"
 msgstr "Gajim ist nicht Ihr Standard-Jabber-Client"
 
-#: ../src/gtkgui_helpers.py:692
+#: ../src/gtkgui_helpers.py:693
 msgid "Would you like to make Gajim the default Jabber client?"
 msgstr "Möchten Sie Gajim zu Ihrem Standard-Jabber-Client machen?"
 
-#: ../src/gtkgui_helpers.py:693
+#: ../src/gtkgui_helpers.py:694
 msgid "Always check to see if Gajim is the default Jabber client on startup"
 msgstr ""
 "Immer beim Programmstart prüfen, ob Gajim der Standard-Jabber-Client ist"
 
-#: ../src/gtkgui_helpers.py:792
+#: ../src/gtkgui_helpers.py:793
 msgid "Extension not supported"
 msgstr "Erweiterung wird nicht unterstützt."
 
-#: ../src/gtkgui_helpers.py:793
+#: ../src/gtkgui_helpers.py:794
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr ""
 "Bild kann nicht im %(type)s-Format gespeichert werden. Als %(new_filename)s "
 "speichern?"
 
-#: ../src/gtkgui_helpers.py:802
+#: ../src/gtkgui_helpers.py:803
 msgid "Save Image as..."
 msgstr "Bild speichern unter ..."
 
@@ -4960,38 +4952,33 @@ msgstr "Neue Nachricht von %(nickname)s"
 msgid "Retrieving profile..."
 msgstr "Empfange Profil ..."
 
-#: ../src/profile_window.py:107 ../src/profile_window.py:210
-#: ../src/profile_window.py:219
-msgid "Click to set your avatar"
-msgstr "Hier klicken, um Ihren Avatar zu setzen"
-
 #. keep identation
-#: ../src/profile_window.py:137
+#: ../src/profile_window.py:143
 msgid "Could not load image"
 msgstr "Konnte Bild nicht laden"
 
-#: ../src/profile_window.py:245
+#: ../src/profile_window.py:255
 msgid "Information received"
 msgstr "Informationen empfangen"
 
-#: ../src/profile_window.py:314
+#: ../src/profile_window.py:324
 msgid "Without a connection you can not publish your contact information."
 msgstr ""
 "Sie müssen angemeldet sein, um Kontakt-Informationen zu veröffentlichen"
 
-#: ../src/profile_window.py:326
+#: ../src/profile_window.py:336
 msgid "Sending profile..."
 msgstr "Sende Profil ..."
 
-#: ../src/profile_window.py:341
+#: ../src/profile_window.py:351
 msgid "Information NOT published"
 msgstr "Informationen NICHT veröffentlicht"
 
-#: ../src/profile_window.py:348
+#: ../src/profile_window.py:358
 msgid "vCard publication failed"
 msgstr "vCard Veröffentlichung fehlgeschlagen"
 
-#: ../src/profile_window.py:349
+#: ../src/profile_window.py:359
 msgid ""
 "There was an error while publishing your personal information, try again "
 "later."
@@ -5185,7 +5172,7 @@ msgstr "Abonnement-Anforderung wurde gesendet"
 #: ../src/roster_window.py:2477
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
-msgstr "Wenn d\"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
+msgstr "Wenn \"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
 
 #: ../src/roster_window.py:2489
 msgid "Authorization has been removed"
@@ -5206,16 +5193,18 @@ msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
 msgstr ""
-"Durch entfernen dieses Kontaktes entziehen Sie ihm auch die Authorisation, "
-"wodurch der Kontakt sie nur noch als offline sehen wird."
+"Durch das Entfernen dieses Kontaktes entziehen Sie ihm auch die Berechtigung "
+"Ihren Status zu sehen, wodurch der Kontakt Sie nur noch als offline sehen "
+"wird."
 
 #: ../src/roster_window.py:2689
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
 msgstr ""
-"Durch entfernen dieses Kontaktes entziehen Sie ihm auch die Authorisation, "
-"wodurch der Kontakt sie nur noch als offline sehen wird."
+"Durch das Entfernen dieses Kontaktes entziehen Sie ihm auch standardmäßig "
+"die Berechtigung Ihren Status zu sehen, wodurch der Kontakt Sie nur noch als "
+"offline sehen wird."
 
 #: ../src/roster_window.py:2692
 msgid "I want this contact to know my status after removal"
@@ -5225,7 +5214,7 @@ msgstr ""
 #. several contact to remove at the same time
 #: ../src/roster_window.py:2696
 msgid "Contacts will be removed from your roster"
-msgstr "Kontakte werden von ihrer Kontaktliste entfernt"
+msgstr "Kontakte werden von Ihrer Kontaktliste entfernt"
 
 #: ../src/roster_window.py:2700
 #, python-format
@@ -5233,13 +5222,13 @@ msgid ""
 "By removing these contacts:%s\n"
 "you also remove authorization resulting in them always seeing you as offline."
 msgstr ""
-"Durch die Entfernung dieser Kontakte:%s\n"
-"entziehen Sie ihnen auch die Authorisation, wodurch die Kontakte Sie nur "
-"noch als offline sehen werden."
+"Durch das Entfernen dieser Kontakte:%s\n"
+"entziehen Sie ihnen auch die Berechtigung Ihren Status zu sehen, wodurch die "
+"Kontakte Sie nur noch als offline sehen werden."
 
 #: ../src/roster_window.py:2732
 msgid ""
-"Gnomekeyring is installed but not correctly started (environment variable "
+"Gnome Keyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
 msgstr ""
 "Gnome Keyring ist installiert, aber nicht korrekt gestartet "
@@ -5247,7 +5236,7 @@ msgstr ""
 
 #. TODO: make this string translatable
 #. %s is the account name here
-#: ../src/roster_window.py:2760 ../src/common/connection.py:671
+#: ../src/roster_window.py:2760 ../src/common/connection.py:672
 #: ../src/common/zeroconf/connection_zeroconf.py:158
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
@@ -5594,8 +5583,8 @@ msgid "Groupchats"
 msgstr "Gruppenchat"
 
 #: ../src/common/commands.py:230
-msgid "You leaved the following groupchats:"
-msgstr "Sie haben folgenden Gruppenchat verlassen:"
+msgid "You left the following groupchats:"
+msgstr "Sie haben folgende Gruppenchats verlassen:"
 
 #: ../src/common/config.py:56
 msgid "Use D-Bus and Notification-Daemon to show notifications"
@@ -6338,101 +6327,101 @@ msgstr ""
 msgid "Invalid answer"
 msgstr "Ungültige Antwort"
 
-#: ../src/common/connection.py:416 ../src/common/connection.py:515
-#: ../src/common/connection.py:973
+#: ../src/common/connection.py:417 ../src/common/connection.py:516
+#: ../src/common/connection.py:974
 #: ../src/common/zeroconf/connection_zeroconf.py:217
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Konnte nicht mit %s verbinden"
 
-#: ../src/common/connection.py:430
+#: ../src/common/connection.py:431
 #, python-format
 msgid "Connected to server %s:%s with %s"
 msgstr "Verbunden mit Server %s:%s mit %s"
 
-#: ../src/common/connection.py:444
+#: ../src/common/connection.py:445
 #, python-format
 msgid "Security error connecting to \"%s\""
 msgstr "Konnte nicht mit %s verbinden"
 
-#: ../src/common/connection.py:445
+#: ../src/common/connection.py:446
 msgid ""
 "The server's key has changed, or someone is trying to hack your connection."
 msgstr ""
 "Der Schlüssel des Servers wurde geändert oder jemand versucht ihre "
 "Verbindung zu hacken."
 
-#: ../src/common/connection.py:452
+#: ../src/common/connection.py:453
 #, python-format
 msgid "Unable to check fingerprint for %s. Connection could be insecure."
 msgstr ""
 "Konnte Fingerabdruck von %s nicht überprüfen. Die Verbindung ist "
 "möglicherweise unsicher."
 
-#: ../src/common/connection.py:494
+#: ../src/common/connection.py:495
 #, python-format
 msgid "Missing fingerprint in SSL connection to %s"
 msgstr "Fehlender Fingerabdruck in der SSL-Verbindung zu %s"
 
-#: ../src/common/connection.py:500
+#: ../src/common/connection.py:501
 #, python-format
 msgid "Fingerprint mismatch for %s: Got %s, expected %s"
 msgstr "Fingerabdruck von %s stimmt nicht überein: Erhalten %s, erwartet %s"
 
-#: ../src/common/connection.py:516
+#: ../src/common/connection.py:517
 msgid "Check your connection or try again later"
 msgstr "Überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal"
 
-#: ../src/common/connection.py:542
+#: ../src/common/connection.py:543
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Authentifizierung mit \"%s\" fehlgeschlagen"
 
-#: ../src/common/connection.py:543
+#: ../src/common/connection.py:544
 msgid "Please check your login and password for correctness."
 msgstr "Bitte überprüfen Sie ihren Benutzernamen und Passwort."
 
-#: ../src/common/connection.py:570
+#: ../src/common/connection.py:571
 msgid "Error while removing privacy list"
 msgstr "Fehler beim Entfernen der Privatliste"
 
-#: ../src/common/connection.py:571
+#: ../src/common/connection.py:572
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Desactivate it and try again."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Privatliste %s wurde nicht entfernt. Möglicherweise ist die Privatliste noch "
 "in einer Ihrer Verbindungen aktiv. Deaktivieren Sie diese und versuchen Sie "
 "es erneut."
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:669
+#: ../src/common/connection.py:670
 #: ../src/common/zeroconf/connection_zeroconf.py:156
 msgid "OpenPGP passphrase was not given"
 msgstr "Keine OpenPGP-Passphrase gewählt"
 
 #. do not show I'm invisible!
-#: ../src/common/connection.py:711
+#: ../src/common/connection.py:712
 msgid "invisible"
 msgstr "unsichtbar"
 
-#: ../src/common/connection.py:712
+#: ../src/common/connection.py:713
 msgid "offline"
 msgstr "abgemeldet"
 
-#: ../src/common/connection.py:713
+#: ../src/common/connection.py:714
 #, python-format
 msgid "I'm %s"
 msgstr "Ich bin %s"
 
 #. we're not english
 #. one  in locale and one en
-#: ../src/common/connection.py:804
+#: ../src/common/connection.py:805
 msgid "[This message is *encrypted* (See :JEP:`27`]"
 msgstr "[Diese Nachricht ist *verschlüsselt* (Siehe: JEP:`27`)]"
 
-#: ../src/common/connection.py:860
+#: ../src/common/connection.py:861
 #: ../src/common/zeroconf/connection_zeroconf.py:397
 #, python-format
 msgid ""
@@ -6442,7 +6431,7 @@ msgstr ""
 "Thema: %s\n"
 "%s"
 
-#: ../src/common/connection.py:999
+#: ../src/common/connection.py:1000
 msgid "Not fetched because of invisible status"
 msgstr "Nicht abgeholt aufgrund eines Unsichtbar-Status"
 
@@ -6882,7 +6871,7 @@ msgstr "cyan"
 msgid "migrating logs database to indices"
 msgstr "migriere Logdatenbank zu Indices"
 
-#: ../src/common/passwords.py:92
+#: ../src/common/passwords.py:82
 #, python-format
 msgid "Gajim account %s"
 msgstr "Gajim-Konto %s"
@@ -6969,6 +6958,18 @@ msgstr "[Diese Nachricht ist verschlüsselt]"
 #, python-format
 msgid "Error while adding service. %s"
 msgstr "Fehler beim Hinzufügen des Dienstes. %s"
+
+#~ msgid "2003-12-13T18:30:02Z"
+#~ msgstr "2003-12-13T18:30:02Z"
+
+#~ msgid "<small>Romeo and Juliet</small>"
+#~ msgstr "<small>Romeo und Julia</small>"
+
+#~ msgid "Old stories"
+#~ msgstr "Alte Geschichten"
+
+#~ msgid "Soliloquy"
+#~ msgstr "Selbstgespräch"
 
 #~ msgid "A_fter nickname:"
 #~ msgstr "Nach dem Spit_znamen:"
