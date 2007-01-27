@@ -745,6 +745,10 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
 			if node in (None, client_version):
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_CHATSTATES})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
+
 			if q.getChildren():
 				self.connection.send(iq)
 				raise common.xmpp.NodeProcessed
