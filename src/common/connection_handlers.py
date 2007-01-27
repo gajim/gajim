@@ -1850,6 +1850,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('MSGERROR', (jid, errcode, errmsg))
 
+	def _IqPingCB(self, con, iq_obj):
+		gajim.log.debug('IqPingCB')
+		iq_obj = iq_obj.buildReply('result')
+		self.connection.send(iq_obj)
+		raise common.xmpp.NodeProcessed
+
 	def _getRosterCB(self, con, iq_obj):
 		if not self.connection:
 			return
@@ -2014,6 +2020,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
 			common.xmpp.NS_DISCO_ITEMS)
+		con.RegisterHandler('iq', self._IqPingCB, 'get',
+			common.xmpp.NS_PING)
 		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
