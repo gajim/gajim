@@ -6,7 +6,7 @@
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
-##  - Stefan Bethge <stefan@lanpartei.de> 
+## - Stefan Bethge <stefan@lanpartei.de> 
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -215,7 +215,7 @@ class ConnectionBytestream:
 		if type(self.peerhost) != tuple:
 			return
 		port = gajim.config.get('file_transfers_port')
-		ft_override_host_to_send = gajim.config.get('ft_override_host_to_send')
+		ft_add_hosts_to_send = gajim.config.get('ft_add_hosts_to_send')
 		if receiver is None:
 			receiver = file_props['receiver']
 		if sender is None:
@@ -224,14 +224,16 @@ class ConnectionBytestream:
 		sha_str = helpers.get_auth_sha(file_props['sid'], sender,
 			receiver)
 		file_props['sha_str'] = sha_str
-		if not ft_override_host_to_send:
-			ft_override_host_to_send = self.peerhost[0]
-		try:
-			ft_override_host_to_send = socket.gethostbyname(
-				ft_override_host_to_send)
-		except socket.gaierror:
-			self.dispatch('ERROR', (_('Wrong host'), _('The host you configured as the ft_override_host_to_send advanced option is not valid, so ignored.')))
-			ft_override_host_to_send = self.peerhost[0]
+		ft_add_hosts = []
+		if ft_add_hosts_to_send:
+			ft_add_hosts_to_send = map(lambda e:e.strip(),
+				ft_add_hosts_to_send.split(','))
+			for ft_host in ft_add_hosts_to_send:
+				try:
+					ft_host = socket.gethostbyname(ft_host)
+					ft_add_hosts.append(ft_host)
+				except socket.gaierror:
+					self.dispatch('ERROR', (_('Wrong host'), _('The host %s you configured as the ft_add_hosts_to_send advanced option is not valid, so ignored.') % ft_host))
 		listener = gajim.socks5queue.start_listener(port,
 			sha_str, self._result_socks5_sid, file_props['sid'])
 		if listener == None:
@@ -250,10 +252,20 @@ class ConnectionBytestream:
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
 		query.setAttr('mode', 'tcp')
 		query.setAttr('sid', file_props['sid'])
-		streamhost = query.setTag('streamhost')
-		streamhost.setAttr('port', unicode(port))
-		streamhost.setAttr('host', ft_override_host_to_send)
-		streamhost.setAttr('jid', sender)
+		for ft_host in ft_add_hosts:
+			# The streamhost, if set
+			ostreamhost = common.xmpp.Node(tag = 'streamhost')
+			query.addChild(node = ostreamhost)
+			ostreamhost.setAttr('port', unicode(port))
+			ostreamhost.setAttr('host', ft_host)
+			ostreamhost.setAttr('jid', sender)
+		for thehost in self.peerhost:
+			thehost = self.peerhost[0]
+			streamhost = common.xmpp.Node(tag = 'streamhost') # My IP
+			query.addChild(node = streamhost)
+			streamhost.setAttr('port', unicode(port))
+			streamhost.setAttr('host', thehost)
+			streamhost.setAttr('jid', sender)
 		self.connection.send(iq)
 
 	def send_file_rejection(self, file_props):
