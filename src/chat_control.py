@@ -717,11 +717,15 @@ class ChatControlBase(MessageControl):
 		if diff_y != 0:
 			if conversation_height + diff_y < min_height:
 				if message_height + conversation_height - min_height > min_height:
-					self.msg_scrolledwindow.set_property('vscrollbar-policy', 
-						gtk.POLICY_AUTOMATIC)
-					self.msg_scrolledwindow.set_property('height-request', 
-						message_height + conversation_height - min_height)
-					self.bring_scroll_to_end(msg_textview)
+					policy = self.msg_scrolledwindow.get_property(
+						'vscrollbar-policy')
+					# scroll only when scrollbar appear
+					if policy != gtk.POLICY_AUTOMATIC:
+						self.msg_scrolledwindow.set_property('vscrollbar-policy', 
+							gtk.POLICY_AUTOMATIC)
+						self.msg_scrolledwindow.set_property('height-request', 
+							message_height + conversation_height - min_height)
+						self.bring_scroll_to_end(msg_textview)
 			else:
 				self.msg_scrolledwindow.set_property('vscrollbar-policy', 
 					gtk.POLICY_NEVER)
