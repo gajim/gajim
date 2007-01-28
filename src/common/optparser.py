@@ -151,6 +151,8 @@ class OptionsParser:
 			self.update_config_to_01018()
 		if old < [0, 11, 0, 1] and new >= [0, 11, 0, 1]:
 			self.update_config_to_01101()
+		if old < [0, 11, 0, 2] and new >= [0, 11, 0, 2]:
+			self.update_config_to_01102()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -375,3 +377,10 @@ class OptionsParser:
 			gajim.config.set('time_stamp', '%s%%X%s ' % (
 				self.old_values['before_time'], self.old_values['after_time']))
 		gajim.config.set('version', '0.11.0.1')
+
+	def update_config_to_01102(self):
+		'''fill time_stamp from before_time and after_time'''
+		if self.old_values.has_key('ft_override_host_to_send'):
+			gajim.config.set('ft_add_hosts_to_send',
+				self.old_values['ft_override_host_to_send'])
+		gajim.config.set('version', '0.11.0.2')
