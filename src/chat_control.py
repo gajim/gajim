@@ -1323,7 +1323,7 @@ class ChatControl(ChatControlBase):
 			if chatstate in ('inactive', 'gone') and\
 			self.parent_win.get_active_control() != self:
 				color = self.lighten_color(color)
-		elif chatstate == 'active' : # active, get color from gtk
+		else: # active or not chatstate, get color from gtk
 			color = self.parent_win.notebook.style.fg[gtk.STATE_ACTIVE]
 		
 
