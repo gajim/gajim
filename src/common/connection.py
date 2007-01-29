@@ -1170,10 +1170,10 @@ class Connection(ConnectionHandlers):
 		ptype = None
 		if show == 'offline':
 			ptype = 'unavailable'
-		show = helpers.get_xmpp_show(show)
+		xmpp_show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
-			show = show, status = status)
-		if gajim.config.get('send_sha_in_gc_presence'):
+			show = xmpp_show, status = status)
+		if gajim.config.get('send_sha_in_gc_presence') and show != 'offline':
 			p = self.add_sha(p, ptype != 'unavailable')
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server
