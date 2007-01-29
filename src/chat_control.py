@@ -1306,6 +1306,8 @@ class ChatControl(ChatControlBase):
 		# Draw tab label using chatstate 
 		theme = gajim.config.get('roster_theme')
 		color = None
+		if not chatstate:
+			chatstate = self.contact.chatstate
 		if chatstate is not None:
 			if chatstate == 'composing':
 				color = gajim.config.get_per('themes', theme,
