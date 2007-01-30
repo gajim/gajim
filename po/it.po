@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: Gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-23 21:28+0100\n"
-"PO-Revision-Date: 2007-01-19 12:17+0100\n"
+"PO-Revision-Date: 2007-01-30 17:48+0100\n"
 "Last-Translator: Matteo Dell'Amico <della@linux.it>\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -2556,7 +2556,7 @@ msgstr ""
 
 #: ../src/chat_control.py:247
 msgid "Spelling language"
-msgstr "Linguaggio da computare"
+msgstr "Lingua per la correzione ortografica"
 
 #. we are not connected
 #: ../src/chat_control.py:270 ../src/chat_control.py:476
@@ -3858,7 +3858,7 @@ msgstr "Gajim ha bisogno di GTK2.6 o superiore"
 
 #: ../src/gajim.py:55
 msgid "Gajim needs GTK 2.6 or above to run. Quiting..."
-msgstr "Gajim ha bisogno di GTK2.6 o superiore per essere eseguito. Uscita..."
+msgstr "Gajim ha bisogno di GTK 2.6 o superiore per essere eseguito. Uscita..."
 
 #: ../src/gajim.py:60
 msgid "GTK+ runtime is missing libglade support"
