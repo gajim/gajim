@@ -1673,7 +1673,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						if avatar_sha != self.vcard_shas[who]:
 							# avatar has been updated
 							self.request_vcard(who, True)
-					else: # Verify sha cached in hdd
+					else: # Verify sha cached in hdd
 						self.vcard_shas[who] = avatar_sha
 						cached_vcard = self.get_cached_vcard(who, True)
 						if cached_vcard and cached_vcard.has_key('PHOTO') and \
