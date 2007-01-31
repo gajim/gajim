@@ -28,11 +28,14 @@ class StatusIcon(systray.Systray):
 	# and can't do cool tooltips we use
 	def __init__(self):
 		systray.Systray.__init__(self)
-		self.status_icon = gtk.StatusIcon()
+		self.status_icon = None
 		
 	def show_icon(self):
-		self.status_icon.connect('activate', self.on_status_icon_left_clicked)
-		self.status_icon.connect('popup-menu', self.on_status_icon_right_clicked)
+		if not self.status_icon:
+			self.status_icon - gtk.StatusIcon()
+			self.status_icon.connect('activate', self.on_status_icon_left_clicked)
+			self.status_icon.connect('popup-menu',
+				self.on_status_icon_right_clicked)
 
 		self.set_img()
 		self.status_icon.props.visible = True	
