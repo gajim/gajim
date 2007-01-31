@@ -615,13 +615,13 @@ class FileTransfersTooltip(BaseTooltip):
 			label.set_alignment(0, 0)
 			label.set_markup(property[0])
 			ft_table.attach(label, 1, 2, current_row, current_row + 1, 
-																gtk.FILL,  gtk.FILL, 0, 0)
+				gtk.FILL,  gtk.FILL, 0, 0)
 			label = gtk.Label()
 			label.set_alignment(0, 0)
 			label.set_line_wrap(True)
 			label.set_markup(property[1])
 			ft_table.attach(label, 2, 3, current_row, current_row + 1, 
-											gtk.EXPAND | gtk.FILL, gtk.FILL, 0, 0)
+				gtk.EXPAND | gtk.FILL, gtk.FILL, 0, 0)
 		
 		self.win.add(ft_table)
 
