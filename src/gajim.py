@@ -1657,17 +1657,18 @@ class Interface:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
 				gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
-				#we go online
+				# we go online
 				self.roster.send_status(account, 'online',
 					gajim.status_before_autoaway[account])
+				gajim.status_before_autoaway[account] = ''
 				gajim.sleeper_state[account] = 'online'
 			elif state == common.sleepy.STATE_AWAY and \
 				gajim.sleeper_state[account] == 'online' and \
 				gajim.config.get('autoaway'):
-				#we save out online status
+				# we save out online status
 				gajim.status_before_autoaway[account] = \
 					gajim.connections[account].status
-				#we go away (no auto status) [we pass True to auto param]
+				# we go away (no auto status) [we pass True to auto param]
 				self.roster.send_status(account, 'away',
 					gajim.config.get('autoaway_message'), auto=True)
 				gajim.sleeper_state[account] = 'autoaway'
@@ -1675,7 +1676,7 @@ class Interface:
 				gajim.sleeper_state[account] == 'autoaway' or \
 				gajim.sleeper_state[account] == 'online') and \
 				gajim.config.get('autoxa'):
-				#we go extended away [we pass True to auto param]
+				# we go extended away [we pass True to auto param]
 				self.roster.send_status(account, 'xa',
 					gajim.config.get('autoxa_message'), auto=True)
 				gajim.sleeper_state[account] = 'autoxa'
