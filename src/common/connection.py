@@ -112,7 +112,7 @@ class Connection(ConnectionHandlers):
 	def _reconnect(self):
 		# Do not try to reco while we are already trying
 		self.time_to_reconnect = None
-		if self.connected < 2: #connection failed
+		if self.connected < 2: # connection failed
 			log.debug('reconnect')
 			self.connected = 1
 			self.dispatch('STATUS', 'connecting')
@@ -152,6 +152,11 @@ class Connection(ConnectionHandlers):
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
 				self.connected = -1
 				self.dispatch('STATUS', 'error')
+				if gajim.status_before_autoaway[self.name]:
+					# We were auto away. So go back online
+					self.status = gajim.status_before_autoaway[self.name]
+					gajim.status_before_autoaway[self.name] = ''
+					self.old_show = 'online'
 				# this check has moved from _reconnect method
 				# do exponential backoff until 15 minutes,
 				# then small linear increase
