@@ -1048,6 +1048,7 @@ class GroupchatControl(ChatControlBase):
 			# example: /nick foo
 			if len(message_array) and message_array[0] != self.nick:
 				nick = message_array[0]
+				nick = helpers.parse_resource(nick)
 				gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
 				self.clear(self.msg_textview)
 			else:
@@ -1327,6 +1328,7 @@ class GroupchatControl(ChatControlBase):
 		'''asks user for new nick and on ok it sets it on room'''
 		def on_ok(widget):
 			nick = instance.input_entry.get_text().decode('utf-8')
+			nick = helpers.parse_resource(nick)
 			gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
 			self.nick = nick
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
