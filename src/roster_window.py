@@ -2672,6 +2672,8 @@ class RosterWindow:
 					gajim.contacts.add_contact(account, contact)
 					self.add_contact_to_roster(contact.jid, account)
 				else:
+					if _('Not in Roster') in contact.groups:
+						gajim.events.remove_events(account, contact.jid)
 					self.readd_if_needed(contact, account)
 		if len(list_) == 1:
 			contact = list_[0][0]
