@@ -32,7 +32,7 @@ class StatusIcon(systray.Systray):
 		
 	def show_icon(self):
 		if not self.status_icon:
-			self.status_icon - gtk.StatusIcon()
+			self.status_icon = gtk.StatusIcon()
 			self.status_icon.connect('activate', self.on_status_icon_left_clicked)
 			self.status_icon.connect('popup-menu',
 				self.on_status_icon_right_clicked)
