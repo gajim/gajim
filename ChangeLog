@@ -1,3 +1,6 @@
+Gajim 0.11.1 (XX February 2007)
+  * Fixed avatars cache problems in group chats
+
 Gajim 0.11 (19 December 2006)
   * New build system, using GNU autotools. See README.html
   * Support for link-local messaging via Zeroconf using Avahi (XEP-0174)

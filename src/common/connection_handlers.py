@@ -1685,7 +1685,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						if cached_sha != self.vcard_shas[who]:
 							# avatar has been updated
 							self.request_vcard(who)
-					self.vcard_shas[who] = avatar_sha
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
