@@ -36,6 +36,7 @@ import re
 import warnings
 from cStringIO import StringIO
 import socket
+import time
 import urllib2
 import operator
 
@@ -689,18 +690,31 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				gajim.log.debug(str('Error loading image %s ' % attrs['src'] + ex))
 				pixbuf = None
 				alt = attrs.get('alt', 'Broken image')
-				try:
-					loader.close()
-				except:
-					pass
 			else:
 				# Wait 10ms between each byte
 				try:
 					f.fp._sock.fp._sock.settimeout(0.01)
 				except:
 					pass
-				# Max image size = 2 MB (to try to prevent DoS)
-				mem = f.read(2*1024*1024)
+				# Max image size = 2 MB (to try to prevent DoS) in Max 3s
+				mem = ''
+				deadline = time.time() + 3
+				while True:
+					if time.time() > deadline:
+						gajim.log.debug(str('Timeout loading image %s ' % \
+							attrs['src'] + ex))
+						pixbuf = None
+						alt = attrs.get('alt', 'Timeout loading image')
+						break
+					temp = f.read(100)
+					if temp:
+						mem += temp
+					else:
+						break
+					if len(mem) > 2*1024*1024:
+						alt = attrs.get('alt', 'Image is too big')
+						break
+
 				# Caveat: GdkPixbuf is known not to be safe to load
 				# images from network... this program is now potentially
 				# hackable ;)
