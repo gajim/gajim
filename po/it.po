@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: Gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-19 11:39+0100\n"
-"PO-Revision-Date: 2007-01-30 17:48+0100\n"
+"PO-Revision-Date: 2007-01-31 14:26+0100\n"
 "Last-Translator: Matteo Dell'Amico <della@linux.it>\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -2266,7 +2266,7 @@ msgstr "Disabilita suoni"
 
 #: ../data/glade/systray_context_menu.glade.h:3
 msgid "Show All Pending _Events"
-msgstr "Mostra tutti gli _eventi pendenti"
+msgstr "Mostra tutti gli _eventi in attesa"
 
 #: ../data/glade/systray_context_menu.glade.h:4
 msgid "Show _Roster"
@@ -2712,8 +2712,7 @@ msgstr "Eventi non letti"
 
 #: ../src/config.py:1312
 msgid "To change the account name, you must read all pending events."
-msgstr ""
-"Per cambiare nome account, è necessario leggere tutti gli eventi pendenti."
+msgstr "Per cambiare nome account, è necessario leggere tutti gli eventi in attesa."
 
 #: ../src/config.py:1316
 msgid "Account Name Already Used"
@@ -2824,7 +2823,7 @@ msgstr "Server"
 
 #: ../src/config.py:1906
 msgid "Read all pending events before removing this account."
-msgstr "Leggere tutti gli eventi pendenti prima di rimuovere questo account."
+msgstr "Leggere tutti gli eventi in attesa prima di rimuovere questo account."
 
 #: ../src/config.py:1943
 #, python-format
@@ -4075,7 +4074,7 @@ msgstr "Mostra o nascondi la lista contatti"
 
 #: ../src/gajim-remote.py:77
 msgid "Pops up a window with the next pending event"
-msgstr "Apre una finestra con il prossimo evento pendente"
+msgstr "Apre una finestra con il prossimo evento in attesa"
 
 #: ../src/gajim-remote.py:81
 msgid ""
