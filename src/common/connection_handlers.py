@@ -1109,20 +1109,26 @@ class ConnectionVcard:
 		puny_jid = helpers.sanitize_filename(frm)
 		puny_nick = None
 		begin_path = os.path.join(gajim.AVATAR_PATH, puny_jid)
+		frm_jid = frm
 		if frm in self.room_jids:
 			puny_nick = helpers.sanitize_filename(resource)
 			# create folder if needed
 			if not os.path.isdir(begin_path):
 				os.mkdir(begin_path, 0700)
 			begin_path = os.path.join(begin_path, puny_nick)
+			frm_jid += '/' + resource
 		if photo_decoded:
 			avatar_file = begin_path + '_notif_size_colored.png'
-			if frm == our_jid and avatar_sha != self.vcard_sha:
+			if frm_jid == our_jid and avatar_sha != self.vcard_sha:
 				gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
-			elif frm != our_jid and (not os.path.exists(avatar_file) or \
-			not self.vcard_shas.has_key(frm) or \
-			avatar_sha != self.vcard_shas[frm]):
+			elif frm_jid != our_jid and (not os.path.exists(avatar_file) or \
+			not self.vcard_shas.has_key(frm_jid) or \
+			avatar_sha != self.vcard_shas[frm_jid]):
 				gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
+				if avatar_sha:
+					self.vcard_shas[frm_jid] = avatar_sha
+			elif self.vcard_shas.has_key(frm):
+				del self.vcard_shas[frm]
 		else:
 			for ext in ('.jpeg', '.png', '_notif_size_bw.png',
 				'_notif_size_colored.png'):
@@ -1130,15 +1136,9 @@ class ConnectionVcard:
 				if os.path.isfile(path):
 					os.remove(path)
 
-		if frm != our_jid:
-			if avatar_sha:
-				self.vcard_shas[frm] = avatar_sha
-			elif self.vcard_shas.has_key(frm):
-				del self.vcard_shas[frm]
-
 		vcard['jid'] = frm
 		vcard['resource'] = resource
-		if frm == our_jid:
+		if frm_jid == our_jid:
 			self.dispatch('MYVCARD', vcard)
 			# we re-send our presence with sha if has changed and if we are
 			# not invisible
@@ -1675,16 +1675,15 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 							# avatar has been updated
 							self.request_vcard(who, True)
 					else: # Verify sha cached in hdd
-						self.vcard_shas[who] = avatar_sha
 						cached_vcard = self.get_cached_vcard(who, True)
 						if cached_vcard and cached_vcard.has_key('PHOTO') and \
 						cached_vcard['PHOTO'].has_key('SHA'):
 							cached_sha = cached_vcard['PHOTO']['SHA']
 						else:
 							cached_sha = ''
-						if cached_sha != self.vcard_shas[who]:
+						if cached_sha != avatar_sha:
 							# avatar has been updated
-							self.request_vcard(who)
+							self.request_vcard(who, True)
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
