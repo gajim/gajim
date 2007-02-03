@@ -35,6 +35,7 @@ import xml.sax, xml.sax.handler
 import re
 import warnings
 from cStringIO import StringIO
+import socket
 import urllib2
 import operator
 
@@ -680,22 +681,33 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			if not self.starting:
 				self._jump_line()
 		elif name == 'img':
+			# Wait maximum 1s for connection
+			socket.setdefaulttimeout(1)
 			try:
-				# Max image size = 2 MB (to try to prevent DoS)
-				mem = urllib2.urlopen(attrs['src']).read(2*1024*1024)
-				# Caveat: GdkPixbuf is known not to be safe to load
-				# images from network... this program is now potentially
-				# hackable ;)
-				loader = gtk.gdk.PixbufLoader()
-				loader.write(mem); loader.close()
-				pixbuf = loader.get_pixbuf()
+				f = urllib2.urlopen(attrs['src'])
 			except Exception, ex:
-				gajim.log.debug(str('Error loading image'+ex))
+				gajim.log.debug(str('Error loading image %s ' % attrs['src'] + ex))
 				pixbuf = None
 				alt = attrs.get('alt', 'Broken image')
 				try:
 					loader.close()
-				except: pass
+				except:
+					pass
+			else:
+				# Wait 10ms between each byte
+				try:
+					f.fp._sock.fp._sock.settimeout(0.01)
+				except:
+					pass
+				# Max image size = 2 MB (to try to prevent DoS)
+				mem = f.read(2*1024*1024)
+				# Caveat: GdkPixbuf is known not to be safe to load
+				# images from network... this program is now potentially
+				# hackable ;)
+				loader = gtk.gdk.PixbufLoader()
+				loader.write(mem)
+				loader.close()
+				pixbuf = loader.get_pixbuf()
 			if pixbuf is not None:
 				tags = self._get_style_tags()
 				if tags:
