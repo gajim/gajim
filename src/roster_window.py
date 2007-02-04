@@ -400,7 +400,7 @@ class RosterWindow:
 
 	def add_to_not_in_the_roster(self, account, jid, nick = '', resource = ''):
 		''' add jid to group "not in the roster", he MUST not be in roster yet,
-		 return contact '''
+		return contact '''
 		keyID = ''
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
@@ -986,7 +986,7 @@ class RosterWindow:
 			for account in connected_accounts_with_vcard:
 				# profile, avatar
 				profile_avatar_item = gtk.MenuItem(_('of account %s') % account, 
-					 False)
+					False)
 				profile_avatar_sub_menu.append(profile_avatar_item)
 				profile_avatar_item.connect('activate', 
 					self.on_profile_avatar_menuitem_activate, account)

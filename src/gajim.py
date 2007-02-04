@@ -1158,7 +1158,7 @@ class Interface:
 	def handle_event_bad_passphrase(self, account, array):
 		use_gpg_agent = gajim.config.get('use_gpg_agent')
 		if use_gpg_agent:
-		  return
+			return
 		keyID = gajim.config.get_per('accounts', account, 'keyid')
 		self.roster.forget_gpg_passphrase(keyID)
 		dialogs.WarningDialog(_('Your passphrase is incorrect'),

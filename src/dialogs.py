@@ -1658,7 +1658,7 @@ class SingleMessageWindow:
 			sender_list = [i[0].jid + '/' + i[0].resource for i in self.to]
 		else:
 			sender_list = [self.to_entry.get_text().decode('utf-8')]
- 
+
 		for to_whom_jid in sender_list:
 			if self.completion_dict.has_key(to_whom_jid):
 				to_whom_jid = self.completion_dict[to_whom_jid].jid

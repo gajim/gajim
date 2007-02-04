@@ -321,8 +321,8 @@ class ProfileWindow:
 			return
 		if gajim.connections[self.account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
-        		_('Without a connection you can not publish your contact '
-        		'information.'))
+				_('Without a connection you can not publish your contact '
+				'information.'))
 			return
 		vcard = self.make_vcard()
 		nick = ''

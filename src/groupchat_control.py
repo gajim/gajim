@@ -1491,8 +1491,8 @@ class GroupchatControl(ChatControlBase):
 			splitted_text2 = text.split(None, 1)
 			if text.startswith('/topic '):
 				if len(splitted_text2) == 2 and \
-					    self.subject.startswith(splitted_text2[1]) and\
-					    len(self.subject) > len(splitted_text2[1]):
+				self.subject.startswith(splitted_text2[1]) and\
+				len(self.subject) > len(splitted_text2[1]):
 					message_buffer.insert_at_cursor(
 						self.subject[len(splitted_text2[1]):])
 					return True

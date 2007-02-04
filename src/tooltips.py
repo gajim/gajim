@@ -298,7 +298,7 @@ class GCTooltip(BaseTooltip):
 				# escape markup entities
 				status = helpers.reduce_chars_newlines(status, 100, 5)
 				status = '<i>' +\
-					 gobject.markup_escape_text(status) + '</i>'
+					gobject.markup_escape_text(status) + '</i>'
 				properties.append((status, None))
 		else: # no status message, show SHOW instead
 			show = helpers.get_uf_show(contact.show)
@@ -588,7 +588,7 @@ class FileTransfersTooltip(BaseTooltip):
 			status =  _('Not started')
 		elif file_props.has_key('connected'):
 			if file_props.has_key('stopped') and \
-				file_props['stopped'] == True:
+			file_props['stopped'] == True:
 				status = _('Stopped')
 			elif file_props['completed']:
 					status = _('Completed')
@@ -597,10 +597,10 @@ class FileTransfersTooltip(BaseTooltip):
 					status = _('Completed')
 			else:
 				if file_props.has_key('paused') and  \
-					file_props['paused'] == True:
-                                        status = _('?transfer status:Paused')
+				file_props['paused'] == True:
+					status = _('?transfer status:Paused')
 				elif file_props.has_key('stalled') and \
-					file_props['stalled'] == True:
+				file_props['stalled'] == True:
 					#stalled is not paused. it is like 'frozen' it stopped alone
 					status = _('Stalled')
 				else:
