@@ -162,6 +162,8 @@ if pritext:
 	dlg.destroy()
 	sys.exit()
 
+del pritext
+
 path = os.getcwd()
 if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
 	# import gtkexcepthook only for those that run svn
@@ -192,12 +194,14 @@ from common import helpers
 from common import optparser
 
 if verbose: gajim.verbose = True
+del verbose
 
 import locale
 profile = unicode(profile, locale.getpreferredencoding())
 
 import common.configpaths
 common.configpaths.init_profile(profile)
+del profile
 gajimpaths = common.configpaths.gajimpaths
 
 pid_filename = gajimpaths['PID_FILE']
@@ -316,6 +320,7 @@ f = open(pid_filename, 'w')
 f.write(str(os.getpid()))
 f.close()
 del pid_dir
+del f
 
 def on_exit():
 	# delete pid file on normal exit
