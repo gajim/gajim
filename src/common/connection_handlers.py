@@ -1683,7 +1683,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 							cached_sha = ''
 						if cached_sha != avatar_sha:
 							# avatar has been updated
+							# sha in mem will be updated later
 							self.request_vcard(who, True)
+						else:
+							# save sha in mem NOW
+							self.vcard_shas[who] = avatar_sha
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
