@@ -117,7 +117,7 @@ class ChangeStatusCommand(AdHocCommand):
 		try:
 			presencetype = form['presence-type'].value
 			if not presencetype in \
-			    ('free-for-chat', 'online', 'away', 'xa', 'dnd', 'offline'):
+			('free-for-chat', 'online', 'away', 'xa', 'dnd', 'offline'):
 				self.badRequest(request)
 				return False
 		except:	# KeyError if there's no presence-type field in form or
@@ -282,8 +282,8 @@ class ConnectionCommands:
 			iq = iq_obj.buildReply('result')
 			q = iq.getTag('query')
 			q.addChild('identity', attrs = {'type': 'command-node',
-			                                'category': 'automation',
-			                                'name': cmd.commandname})
+				'category': 'automation',
+				'name': cmd.commandname})
 			q.addChild('feature', attrs = {'var': xmpp.NS_COMMANDS})
 			for feature in cmd.commandfeatures:
 				q.addChild('feature', attrs = {'var': feature})

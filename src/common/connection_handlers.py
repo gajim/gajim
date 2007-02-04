@@ -859,14 +859,14 @@ class ConnectionVcard:
 					dict[name] = []
 				entry = {}
 				for c in info.getChildren():
-					 entry[c.getName()] = c.getData()
+					entry[c.getName()] = c.getData()
 				dict[name].append(entry)
 			elif info.getChildren() == []:
 				dict[name] = info.getData()
 			else:
 				dict[name] = {}
 				for c in info.getChildren():
-					 dict[name][c.getName()] = c.getData()
+					dict[name][c.getName()] = c.getData()
 		return dict
 
 	def save_vcard_to_hd(self, full_jid, card):
