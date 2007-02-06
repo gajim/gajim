@@ -359,14 +359,14 @@ class OptionsParser:
 		trayicon_notification_on_events '''
 		if self.old_values.has_key('trayicon_notification_on_new_messages'):
 			gajim.config.set('trayicon_notification_on_events',
-				 self.old_values['trayicon_notification_on_new_messages'])
+				self.old_values['trayicon_notification_on_new_messages'])
 		gajim.config.set('version', '0.10.1.7')
 
 	def update_config_to_01018(self):
 		'''chat_state_notifications -> outgoing_chat_state_notifications'''
 		if self.old_values.has_key('chat_state_notifications'):
 			gajim.config.set('outgoing_chat_state_notifications',
-				 self.old_values['chat_state_notifications'])
+				self.old_values['chat_state_notifications'])
 		gajim.config.set('version', '0.10.1.8')
 
 	def update_config_to_01101(self):

@@ -219,7 +219,7 @@ class HistoryManager:
 
 		list_of_rowrefs = []
 		for path in list_of_paths: # make them treerowrefs (it's needed)
-			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+			list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
 		
 		for rowref in list_of_rowrefs: # FILL THE STORE, for all rows selected
 			path = rowref.get_path()
@@ -433,7 +433,7 @@ class HistoryManager:
 
 		list_of_rowrefs = []
 		for path in list_of_paths: # make them treerowrefs (it's needed)
-			 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+			list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
 		
 		for rowref in list_of_rowrefs:
 			path = rowref.get_path()
@@ -486,7 +486,7 @@ class HistoryManager:
 			self.dialog.destroy()
 			list_of_rowrefs = []
 			for path in list_of_paths: # make them treerowrefs (it's needed)
-				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+				list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
 
 			for rowref in list_of_rowrefs:
 				path = rowref.get_path()
@@ -528,7 +528,7 @@ class HistoryManager:
 			# delete rows from db that match log_line_id
 			list_of_rowrefs = []
 			for path in list_of_paths: # make them treerowrefs (it's needed)
-				 list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+				list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
 
 			for rowref in list_of_rowrefs:
 				path = rowref.get_path()

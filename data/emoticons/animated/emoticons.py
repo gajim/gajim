@@ -40,6 +40,7 @@ emoticons = {
 	'(*)': 'star.png',
 	'B-)': 'coolglasses.png',
 	'(Z)': 'boy.png',
+	'(X)': 'girl.png',
 	'(E)': 'mail.png',
 	'(N)': 'thumbdown.png',
 	'(P)': 'photo.png',

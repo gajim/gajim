@@ -717,11 +717,15 @@ class ChatControlBase(MessageControl):
 		if diff_y != 0:
 			if conversation_height + diff_y < min_height:
 				if message_height + conversation_height - min_height > min_height:
-					self.msg_scrolledwindow.set_property('vscrollbar-policy', 
-						gtk.POLICY_AUTOMATIC)
-					self.msg_scrolledwindow.set_property('height-request', 
-						message_height + conversation_height - min_height)
-					self.bring_scroll_to_end(msg_textview)
+					policy = self.msg_scrolledwindow.get_property(
+						'vscrollbar-policy')
+					# scroll only when scrollbar appear
+					if policy != gtk.POLICY_AUTOMATIC:
+						self.msg_scrolledwindow.set_property('vscrollbar-policy', 
+							gtk.POLICY_AUTOMATIC)
+						self.msg_scrolledwindow.set_property('height-request', 
+							message_height + conversation_height - min_height)
+						self.bring_scroll_to_end(msg_textview)
 			else:
 				self.msg_scrolledwindow.set_property('vscrollbar-policy', 
 					gtk.POLICY_NEVER)
@@ -1302,6 +1306,8 @@ class ChatControl(ChatControlBase):
 		# Draw tab label using chatstate 
 		theme = gajim.config.get('roster_theme')
 		color = None
+		if not chatstate:
+			chatstate = self.contact.chatstate
 		if chatstate is not None:
 			if chatstate == 'composing':
 				color = gajim.config.get_per('themes', theme,
@@ -1323,7 +1329,7 @@ class ChatControl(ChatControlBase):
 			if chatstate in ('inactive', 'gone') and\
 			self.parent_win.get_active_control() != self:
 				color = self.lighten_color(color)
-		elif chatstate == 'active' : # active, get color from gtk
+		else: # active or not chatstate, get color from gtk
 			color = self.parent_win.notebook.style.fg[gtk.STATE_ACTIVE]
 		
 

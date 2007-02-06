@@ -32,10 +32,10 @@ if sys.version_info < (2,3,2):
 	crippled = True
 
 	warnings.warn("Accented and non-Western Jabber IDs will not be properly "
-				  "case-folded with this version of Python, resulting in "
-				  "incorrect protocol-level behavior.  It is strongly "
-				  "recommended you upgrade to Python 2.3.2 or newer if you "
-				  "intend to use Twisted's Jabber support.")
+		"case-folded with this version of Python, resulting in "
+		"incorrect protocol-level behavior.  It is strongly "
+		"recommended you upgrade to Python 2.3.2 or newer if you "
+		"intend to use Twisted's Jabber support.")
 
 else:
 	import stringprep
@@ -97,7 +97,7 @@ class EmptyMappingTable:
 
 class Profile:
 	def __init__(self, mappings=[],  normalize=True, prohibiteds=[],
-					   check_unassigneds=True, check_bidi=True):
+						check_unassigneds=True, check_bidi=True):
 		self.mappings = mappings
 		self.normalize = normalize
 		self.prohibiteds = prohibiteds
@@ -183,10 +183,10 @@ class NamePrep:
 
 	# Prohibited characters.
 	prohibiteds = [unichr(n) for n in range(0x00, 0x2c + 1) +
-									   range(0x2e, 0x2f + 1) +
-									   range(0x3a, 0x40 + 1) +
-									   range(0x5b, 0x60 + 1) +
-									   range(0x7b, 0x7f + 1) ]
+										range(0x2e, 0x2f + 1) +
+										range(0x3a, 0x40 + 1) +
+										range(0x5b, 0x60 + 1) +
+										range(0x7b, 0x7f + 1) ]
 
 	def prepare(self, string):
 		result = []
@@ -206,8 +206,8 @@ class NamePrep:
 
 	def check_prohibiteds(self, string):
 		for c in string:
-		   if c in self.prohibiteds:
-			   raise UnicodeError, "Invalid character %s" % repr(c)
+			if c in self.prohibiteds:
+				raise UnicodeError, "Invalid character %s" % repr(c)
 
 	def nameprep(self, label):
 		label = idna.nameprep(label)
@@ -221,16 +221,16 @@ class NamePrep:
 if crippled:
 	case_map = MappingTableFromFunction(lambda c: c.lower())
 	nodeprep = Profile(mappings=[case_map],
-					   normalize=False,
-					   prohibiteds=[LookupTable([u' ', u'"', u'&', u"'", u'/',
-												 u':', u'<', u'>', u'@'])],
-					   check_unassigneds=False,
-					   check_bidi=False) 
+						normalize=False,
+						prohibiteds=[LookupTable([u' ', u'"', u'&', u"'", u'/',
+												u':', u'<', u'>', u'@'])],
+						check_unassigneds=False,
+						check_bidi=False) 
 
 	resourceprep = Profile(normalize=False,
-						   check_unassigneds=False,
-						   check_bidi=False)
-   
+							check_unassigneds=False,
+							check_bidi=False)
+	
 else:
 	C_11 = LookupTableFromFunction(stringprep.in_table_c11)
 	C_12 = LookupTableFromFunction(stringprep.in_table_c12)
@@ -251,10 +251,10 @@ else:
 							prohibiteds=[C_11, C_12, C_21, C_22,
 											C_3, C_4, C_5, C_6, C_7, C_8, C_9,
 							LookupTable([u'"', u'&', u"'", u'/',
-											 u':', u'<', u'>', u'@'])])
+											u':', u'<', u'>', u'@'])])
 
 	resourceprep = Profile(mappings=[B_1,],
-								   prohibiteds=[C_12, C_21, C_22,
+									prohibiteds=[C_12, C_21, C_22,
 													C_3, C_4, C_5, C_6, C_7, C_8, C_9])
 
 nameprep = NamePrep()

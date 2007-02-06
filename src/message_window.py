@@ -537,10 +537,10 @@ class MessageWindow:
 		'''Set tab label as drag source and connect the drag_data_get signal'''
 		tab_label = self.notebook.get_tab_label(child)
 		tab_label.dnd_handler = tab_label.connect('drag_data_get', 
-							  self.on_tab_label_drag_data_get_cb)
+			self.on_tab_label_drag_data_get_cb)
 		self.handlers[tab_label.dnd_handler] = tab_label
 		tab_label.drag_source_set(gtk.gdk.BUTTON1_MASK, self.DND_TARGETS,
-					 gtk.gdk.ACTION_MOVE)
+			gtk.gdk.ACTION_MOVE)
 		tab_label.page_num = self.notebook.page_num(child)
 
 	def on_tab_label_drag_data_get_cb(self, widget, drag_context, selection,
@@ -573,14 +573,14 @@ class MessageWindow:
 			tab_alloc = tab.get_allocation()
 			if horiz:
 				if (x >= tab_alloc.x) and \
-					   (x <= (tab_alloc.x + tab_alloc.width)):
+				(x <= (tab_alloc.x + tab_alloc.width)):
 					page_num = i
 					if x >= tab_alloc.x + (tab_alloc.width / 2.0):
 						to_right = True
 					break
 			else:
 				if (y >= tab_alloc.y) and \
-					   (y <= (tab_alloc.y + tab_alloc.height)):
+				(y <= (tab_alloc.y + tab_alloc.height)):
 					page_num = i
 				
 					if y > tab_alloc.y + (tab_alloc.height / 2.0):
@@ -621,10 +621,10 @@ class MessageWindowMgr:
 
 	def __init__(self):
 		''' A dictionary of windows; the key depends on the config:
-		 ONE_MSG_WINDOW_NEVER: The key is the contact JID
-		 ONE_MSG_WINDOW_ALWAYS: The key is MessageWindowMgr.MAIN_WIN 
-		 ONE_MSG_WINDOW_PERACCT: The key is the account name
-		 ONE_MSG_WINDOW_PERTYPE: The key is a message type constant'''
+		ONE_MSG_WINDOW_NEVER: The key is the contact JID
+		ONE_MSG_WINDOW_ALWAYS: The key is MessageWindowMgr.MAIN_WIN 
+		ONE_MSG_WINDOW_PERACCT: The key is the account name
+		ONE_MSG_WINDOW_PERTYPE: The key is a message type constant'''
 		self._windows = {}
 		# Map the mode to a int constant for frequent compares
 		mode = gajim.config.get('one_message_window')

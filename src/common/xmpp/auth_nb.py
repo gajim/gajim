@@ -49,7 +49,7 @@ def challenge_splitter(data):
 		if expecting == X_KEYWORD:
 			if char == '=':
 				expecting  = X_VALUE
-			elif char == ',':
+			elif char in (',', ' ', '\t'):
 				pass
 			else:
 				keyword = '%s%c' % (keyword, char)
@@ -59,7 +59,7 @@ def challenge_splitter(data):
 					end = True
 				else:
 					quotes_open = True
-			elif char == ",":
+			elif char in (',', ' ', '\t'):
 				if quotes_open:
 					if not arr:
 						arr = [value]

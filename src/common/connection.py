@@ -107,7 +107,7 @@ class Connection(ConnectionHandlers):
 	def _reconnect(self):
 		# Do not try to reco while we are already trying
 		self.time_to_reconnect = None
-		if self.connected < 2: #connection failed
+		if self.connected < 2: # connection failed
 			gajim.log.debug('reconnect')
 			self.retrycount += 1
 			signed = self.get_signed_msg(self.status)
@@ -145,6 +145,11 @@ class Connection(ConnectionHandlers):
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
 				self.connected = 1
 				self.dispatch('STATUS', 'connecting')
+				if gajim.status_before_autoaway[self.name]:
+					# We were auto away. So go back online
+					self.status = gajim.status_before_autoaway[self.name]
+					gajim.status_before_autoaway[self.name] = ''
+					self.old_show = 'online'
 				# this check has moved from _reconnect method
 				# do exponential backoff until 15 minutes,
 				# then small linear increase
@@ -1096,10 +1101,10 @@ class Connection(ConnectionHandlers):
 		ptype = None
 		if show == 'offline':
 			ptype = 'unavailable'
-		show = helpers.get_xmpp_show(show)
+		xmpp_show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
-			show = show, status = status)
-		if gajim.config.get('send_sha_in_gc_presence'):
+			show = xmpp_show, status = status)
+		if gajim.config.get('send_sha_in_gc_presence') and show != 'offline':
 			p = self.add_sha(p, ptype != 'unavailable')
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server

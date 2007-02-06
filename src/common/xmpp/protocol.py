@@ -93,6 +93,7 @@ NS_GMAILNOTIFY  ='google:mail:notify'
 NS_GTALKSETTING ='google:setting'
 NS_VCARD_UPDATE =NS_VCARD+':x:update'
 NS_VERSION      ='jabber:iq:version'
+NS_PING         ='urn:xmpp:ping'                                        # XEP-0199
 NS_WAITINGLIST  ='http://jabber.org/protocol/waitinglist'               # JEP-0130
 NS_XHTML_IM     ='http://jabber.org/protocol/xhtml-im'                  # JEP-0071
 NS_XHTML        = 'http://www.w3.org/1999/xhtml'                        #  "
@@ -394,7 +395,7 @@ class Message(Protocol):
         Protocol.__init__(self, 'message', to=to, typ=typ, attrs=attrs, frm=frm, payload=payload, timestamp=timestamp, xmlns=xmlns, node=node)
         if body: self.setBody(body)
         if xhtml: self.setXHTML(xhtml)
-        if subject: self.setSubject(subject)
+        if subject != None: self.setSubject(subject)
     def getBody(self):
         """ Returns text of the message. """
         return self.getTagData('body')

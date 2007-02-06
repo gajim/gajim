@@ -28,7 +28,7 @@ else:
 		options={}, content=[]):
 		'''Role to make handy references to Jabber Enhancement Proposals (JEP).
 
-	 	Use as :JEP:`71` (or jep, or jep-reference).
+		Use as :JEP:`71` (or jep, or jep-reference).
 		Modeled after the sample in docutils documentation.
 		'''
 
@@ -111,8 +111,8 @@ if __name__ == '__main__':
 	print Generator.create_xhtml('''
 test::
 
-  >>> print 1
-  1
+>>> print 1
+1
 
 *I* like it. It is for :JEP:`71`
 

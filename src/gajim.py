@@ -87,6 +87,8 @@ if pritext:
 	dlg.destroy()
 	sys.exit()
 
+del pritext
+
 path = os.getcwd()
 if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
 	# import gtkexcepthook only for those that run svn
@@ -134,12 +136,14 @@ for o, a in opts:
 		profile = a
 del opts
 del args
+del verbose
 
 import locale
 profile = unicode(profile, locale.getpreferredencoding())
 
 import common.configpaths
 common.configpaths.init_profile(profile)
+del profile
 gajimpaths = common.configpaths.gajimpaths
 
 pid_filename = gajimpaths['PID_FILE']
@@ -258,6 +262,7 @@ f = open(pid_filename, 'w')
 f.write(str(os.getpid()))
 f.close()
 del pid_dir
+del f
 
 def on_exit():
 	# delete pid file on normal exit
@@ -444,6 +449,9 @@ class Interface:
 		# if we're here it means contact changed show
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible']
+		# Ignore invalid show
+		if array[1] not in statuss:
+			return
 		old_show = 0
 		new_show = statuss.index(array[1])
 		status_message = array[2]
@@ -1098,7 +1106,7 @@ class Interface:
 	def handle_event_bad_passphrase(self, account, array):
 		use_gpg_agent = gajim.config.get('use_gpg_agent')
 		if use_gpg_agent:
-		  return
+			return
 		keyID = gajim.config.get_per('accounts', account, 'keyid')
 		self.roster.forget_gpg_passphrase(keyID)
 		dialogs.WarningDialog(_('Your passphrase is incorrect'),
@@ -1585,7 +1593,7 @@ class Interface:
 		else:
 			gajim.connections[account].change_status('offline','')
 
-	def read_sleepy(self):	
+	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
 			# idle detection is not supported in that OS
@@ -1597,17 +1605,18 @@ class Interface:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
 				gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
-				#we go online
+				# we go online
 				self.roster.send_status(account, 'online',
 					gajim.status_before_autoaway[account])
+				gajim.status_before_autoaway[account] = ''
 				gajim.sleeper_state[account] = 'online'
 			elif state == common.sleepy.STATE_AWAY and \
 				gajim.sleeper_state[account] == 'online' and \
 				gajim.config.get('autoaway'):
-				#we save out online status
+				# we save out online status
 				gajim.status_before_autoaway[account] = \
 					gajim.connections[account].status
-				#we go away (no auto status) [we pass True to auto param]
+				# we go away (no auto status) [we pass True to auto param]
 				self.roster.send_status(account, 'away',
 					gajim.config.get('autoaway_message'), auto=True)
 				gajim.sleeper_state[account] = 'autoaway'
@@ -1615,7 +1624,7 @@ class Interface:
 				gajim.sleeper_state[account] == 'autoaway' or \
 				gajim.sleeper_state[account] == 'online') and \
 				gajim.config.get('autoxa'):
-				#we go extended away [we pass True to auto param]
+				# we go extended away [we pass True to auto param]
 				self.roster.send_status(account, 'xa',
 					gajim.config.get('autoxa_message'), auto=True)
 				gajim.sleeper_state[account] = 'autoxa'

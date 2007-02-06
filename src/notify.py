@@ -400,7 +400,7 @@ class DesktopNotification:
 		self.title = title
 		self.text = text
 		'''0.3.1 is the only version of notification daemon that has no way to determine which version it is. If no method exists, it means they're using that one.'''
-		self.default_version = '0.3.1'
+		self.default_version = [0, 3, 1]
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
@@ -451,7 +451,7 @@ class DesktopNotification:
 		version = self.version
 		timeout = gajim.config.get('notification_timeout') # in seconds
 		ntype = self.ntype
-		if version.startswith('0.2'):
+		if version[:2] == [0, 2]:
 			try:
 				self.notif.Notify(
 					dbus.String(_('Gajim')),
@@ -469,9 +469,9 @@ class DesktopNotification:
 					reply_handler=self.attach_by_id,
 					error_handler=self.notify_another_way)
 			except AttributeError:
-				version = '0.3.1' # we're actually dealing with the newer version
-		if version.startswith('0.3'):
-			if version >= ( 0, 3, 2):
+				version = [0, 3, 1] # we're actually dealing with the newer version
+		if version > [0, 3]:
+			if version >= [0, 3, 2]:
 				hints = {}
 				hints['urgency'] = dbus.Byte(0) # Low Urgency
 				hints['category'] = dbus.String(ntype)
@@ -518,7 +518,10 @@ class DesktopNotification:
 		gajim.interface.handle_event(self.account, self.jid, self.msg_type)
 
 	def version_reply_handler(self, name, vendor, version, spec_version = None):
-		self.version = version
+		version_list = version.split('.')
+		self.version = []
+		while len(version_list):
+			self.version.append(int(version_list.pop(0)))
 		self.attempt_notify()
 
 	def get_version(self):

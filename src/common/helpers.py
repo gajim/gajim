@@ -620,7 +620,7 @@ r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
 	finally:
 		win32api.RegCloseKey(rkey)
 	return val
- 
+
 def get_my_pictures_path():
 	'''windows-only atm. [Unix lives in the past]'''
 	return get_windows_reg_env('My Pictures')
@@ -698,7 +698,7 @@ def get_os_info():
 			(2, 5, 0): '2000',
 			(2, 5, 1): 'XP',
 			(2, 5, 2): '2003',
-                        (2, 6, 0): 'Vista',
+			(2, 6, 0): 'Vista',
 		}
 		if win_version.has_key(ver_format):
 			return 'Windows' + ' ' + win_version[ver_format]
@@ -760,7 +760,7 @@ def sanitize_filename(filename):
 		filename = filename.replace('?', '_').replace(':', '_')\
 			.replace('\\', '_').replace('"', "'").replace('|', '_')\
 			.replace('*', '_').replace('<', '_').replace('>', '_')
-	   # 48 is the limit
+		# 48 is the limit
 		if len(filename) > 48:
 			extension = filename.split('.')[-1]
 			filename = filename[0:48]

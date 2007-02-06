@@ -398,18 +398,17 @@ class RosterWindow:
 		model = self.tree.get_model()
 		model.set_value(iter, 1 , gtkgui_helpers.escape_for_pango_markup(text))
 
-	def add_to_not_in_the_roster(self, account, jid, nick = ''):
+	def add_to_not_in_the_roster(self, account, jid, nick = '', resource = ''):
 		''' add jid to group "not in the roster", he MUST not be in roster yet,
-		 return contact '''
+		return contact '''
 		keyID = ''
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
 		if jid in attached_keys:
 			keyID = attached_keys[attached_keys.index(jid) + 1]
-		contact = gajim.contacts.create_contact(jid = jid,
-			name = nick, groups = [_('Not in Roster')],
-			show = 'not in roster', status = '', sub = 'none',
-			keyID = keyID)
+		contact = gajim.contacts.create_contact(jid = jid, name = nick,
+			groups = [_('Not in Roster')], show = 'not in roster', status = '',
+			sub = 'none', resource = resource, keyID = keyID)
 		gajim.contacts.add_contact(account, contact)
 		self.add_contact_to_roster(contact.jid, account)
 		return contact
@@ -451,7 +450,7 @@ class RosterWindow:
 			groups = [_('Transports')], show = 'offline', status = 'offline',
 			sub = 'from')
 		gajim.contacts.add_contact(account, c)
-		gajim.interface.roster.add_contact_to_roster(transport, account)
+		self.add_contact_to_roster(transport, account)
 
 	def really_remove_contact(self, contact, account):
 		if not gajim.interface.instances.has_key(account):
@@ -987,7 +986,7 @@ class RosterWindow:
 			for account in connected_accounts_with_vcard:
 				# profile, avatar
 				profile_avatar_item = gtk.MenuItem(_('of account %s') % account, 
-					 False)
+					False)
 				profile_avatar_sub_menu.append(profile_avatar_item)
 				profile_avatar_item.connect('activate', 
 					self.on_profile_avatar_menuitem_activate, account)
@@ -2673,6 +2672,8 @@ class RosterWindow:
 					gajim.contacts.add_contact(account, contact)
 					self.add_contact_to_roster(contact.jid, account)
 				else:
+					if _('Not in Roster') in contact.groups:
+						gajim.events.remove_events(account, contact.jid)
 					self.readd_if_needed(contact, account)
 		if len(list_) == 1:
 			contact = list_[0][0]
@@ -3052,22 +3053,27 @@ class RosterWindow:
 			# We call this here to avoid race conditions with widget validation
 			chat_control.read_queue()
 
-	def new_chat_from_jid(self, account, jid):
-		jid = gajim.get_jid_without_resource(jid)
-		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+	def new_chat_from_jid(self, account, fjid):
+		jid, resource = gajim.get_room_and_nick_from_fjid(fjid)
+		if resource:
+			contact = gajim.contacts.get_contact(account, jid, resource)
+		else:
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
 		added_to_roster = False
 		if not contact:
 			added_to_roster = True
-			contact = self.add_to_not_in_the_roster(account, jid) 
+			contact = self.add_to_not_in_the_roster(account, jid,
+				resource = resource) 
 
-		if not gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-			self.new_chat(contact, account)
-		mw = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
-		mw.set_active_tab(jid, account)
+		if not gajim.interface.msg_win_mgr.has_window(fjid, account):
+			self.new_chat(contact, account, resource = resource)
+		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
+		mw.set_active_tab(fjid, account)
 		mw.window.present()
 		# For JEP-0172
 		if added_to_roster:
-			mc = mw.get_control(jid, account)
+			mc = mw.get_control(fjid, account)
 			mc.user_nick = gajim.nicks[account]
 
 	def new_room(self, room_jid, nick, account):

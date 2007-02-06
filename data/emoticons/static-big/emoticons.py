@@ -66,6 +66,7 @@ emoticons = {
 	'(6)': 'devil.png',
 	'(W)': 'brflower.png',
 	'(Z)': 'boy.png',
+	'(X)': 'girl.png',
 	'(E)': 'mail.png',
 	'(N)': 'thumbdown.png',
 	'(P)': 'photo.png',

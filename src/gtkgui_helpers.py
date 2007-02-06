@@ -455,8 +455,8 @@ def _get_fade_color(treeview, selected, focused):
 	p = 0.3 # background
 	q = 0.7 # foreground # p + q should do 1.0
 	return gtk.gdk.Color(int(bg.red*p + fg.red*q),
-			      int(bg.green*p + fg.green*q),
-			      int(bg.blue*p + fg.blue*q))
+					int(bg.green*p + fg.green*q),
+					int(bg.blue*p + fg.blue*q))
 
 def get_scaled_pixbuf(pixbuf, kind):
 	'''returns scaled pixbuf, keeping ratio etc or None

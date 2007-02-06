@@ -60,6 +60,22 @@ class MusicTrackListener(gobject.GObject):
 			'NameOwnerChanged', 'org.freedesktop.DBus', arg0='org.gnome.Rhythmbox')
 		bus.add_signal_receiver(self._player_playing_changed_cb,
 			'playingChanged', 'org.gnome.Rhythmbox.Player')
+			
+		## Banshee
+		banshee_bus = dbus.SessionBus()
+		dubus = banshee_bus.get_object('org.freedesktop.DBus', '/org/freedesktop/dbus')
+		self.dubus_methods = dbus.Interface(dubus, 'org.freedesktop.DBus')
+		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
+			self._get_banshee_bus()
+		# Otherwise, it opens Banshee!
+		self.banshee_props ={}
+		self.current_banshee_title = ''
+		gobject.timeout_add(1000, self._banshee_check_track_status)
+
+	def _get_banshee_bus(self):
+		bus = dbus.SessionBus()
+		banshee = bus.get_object('org.gnome.Banshee', '/org/gnome/Banshee/Player')
+		self.banshee_methods = dbus.Interface(banshee, 'org.gnome.Banshee.Core')
 
 	def do_music_track_changed(self, info):
 		if info is not None:
@@ -107,6 +123,35 @@ class MusicTrackListener(gobject.GObject):
 		props = rbshell.getSongProperties(uri)
 		info = self._rhythmbox_properties_extract(props)
 		self.emit('music-track-changed', info)
+
+	def _banshee_check_track_status(self):
+		if self.dubus_methods.NameHasOwner('org.gnome.Banshee') and \
+		not hasattr(self, 'banshee_methods'):
+			self._get_banshee_bus()
+
+		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
+			self.banshee_props['title'] = self.banshee_methods.GetPlayingTitle()
+			self.banshee_props['album'] = self.banshee_methods.GetPlayingAlbum()
+			self.banshee_props['artist'] = self.banshee_methods.GetPlayingArtist()
+			self.banshee_props['duration'] = \
+				self.banshee_methods.GetPlayingDuration()
+			info = self._banshee_properties_extract(self.banshee_props)
+			if self.current_banshee_title != self.banshee_props['title']:
+				self.emit('music-track-changed', info)
+			self.current_banshee_title = self.banshee_props['title']
+		return 1
+
+	def _banshee_music_track_change_cb(self, arg):
+		info = self._banshee_properties_extract(arg)
+		self.emit('music-track-changed', info)
+
+	def _banshee_properties_extract(self, props):
+		info = MusicTrackInfo()
+		info.title = props['title']
+		info.album = props['album']
+		info.artist = props['artist']
+		info.duration = int(props['duration'])
+		return info
 
 	def get_playing_track(self):
 		'''Return a MusicTrackInfo for the currently playing

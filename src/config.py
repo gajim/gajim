@@ -2382,7 +2382,7 @@ class GroupchatConfigWindow(DataFormWindow):
 			prompt = _('<b>Whom do you want to make an administrator?</b>\n\n')
 		prompt += _('Can be one of the following:\n'
 				'1. user@domain/resource (only that resource matches).\n'
- 				'2. user@domain (any resource matches).\n'
+				'2. user@domain (any resource matches).\n'
 				'3. domain/resource (only that resource matches).\n'
 				'4. domain (the domain itself matches, as does any user@domain,\n'
 				'domain/resource, or address containing a subdomain.')

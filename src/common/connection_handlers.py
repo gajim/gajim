@@ -745,6 +745,10 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
 			if node in (None, client_version):
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_CHATSTATES})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
+
 			if q.getChildren():
 				self.connection.send(iq)
 				raise common.xmpp.NodeProcessed
@@ -838,14 +842,14 @@ class ConnectionVcard:
 					dict[name] = []
 				entry = {}
 				for c in info.getChildren():
-					 entry[c.getName()] = c.getData()
+					entry[c.getName()] = c.getData()
 				dict[name].append(entry)
 			elif info.getChildren() == []:
 				dict[name] = info.getData()
 			else:
 				dict[name] = {}
 				for c in info.getChildren():
-					 dict[name][c.getName()] = c.getData()
+					dict[name][c.getName()] = c.getData()
 		return dict
 
 	def save_vcard_to_hd(self, full_jid, card):
@@ -1049,11 +1053,13 @@ class ConnectionVcard:
 			self.get_metacontacts()
 
 		del self.awaiting_answers[id]
-	
+
 	def _vCardCB(self, con, vc):
 		'''Called when we receive a vCard
 		Parse the vCard and send it to plugins'''
 		if not vc.getTag('vCard'):
+			return
+		if not vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			return
 		frm_iq = vc.getFrom()
 		our_jid = gajim.get_jid_from_account(self.name)
@@ -1063,75 +1069,74 @@ class ConnectionVcard:
 			frm, resource = gajim.get_room_and_nick_from_fjid(who)
 		else:
 			who = frm = our_jid
-		if vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
-			card = vc.getChildren()[0]
-			vcard = self.node_to_dict(card)
-			photo_decoded = None
-			if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
-			vcard['PHOTO'].has_key('BINVAL'):
-				photo = vcard['PHOTO']['BINVAL']
-				try:
-					photo_decoded = base64.decodestring(photo)
-					avatar_sha = sha.sha(photo_decoded).hexdigest()
-				except:
-					avatar_sha = ''
-			else:
+		card = vc.getChildren()[0]
+		vcard = self.node_to_dict(card)
+		photo_decoded = None
+		if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
+		vcard['PHOTO'].has_key('BINVAL'):
+			photo = vcard['PHOTO']['BINVAL']
+			try:
+				photo_decoded = base64.decodestring(photo)
+				avatar_sha = sha.sha(photo_decoded).hexdigest()
+			except:
 				avatar_sha = ''
+		else:
+			avatar_sha = ''
 
-			if avatar_sha:
-				card.getTag('PHOTO').setTagData('SHA', avatar_sha)
+		if avatar_sha:
+			card.getTag('PHOTO').setTagData('SHA', avatar_sha)
 
-			# Save it to file
-			self.save_vcard_to_hd(who, card)
-			# Save the decoded avatar to a separate file too, and generate files for dbus notifications
-			puny_jid = helpers.sanitize_filename(frm)
-			puny_nick = None
-			begin_path = os.path.join(gajim.AVATAR_PATH, puny_jid)
-			if frm in self.room_jids:
-				puny_nick = helpers.sanitize_filename(resource)
-				# create folder if needed
-				if not os.path.isdir(begin_path):
-					os.mkdir(begin_path, 0700)
-				begin_path = os.path.join(begin_path, puny_nick)
-			if photo_decoded:
-				avatar_file = begin_path + '_notif_size_colored.png'
-				if frm == our_jid and avatar_sha != self.vcard_sha:
-					gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
-				elif frm != our_jid and (not os.path.exists(avatar_file) or \
-					not self.vcard_shas.has_key(frm) or \
-					avatar_sha != self.vcard_shas[frm]):
-					gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
-			else:
-				for ext in ('.jpeg', '.png', '_notif_size_bw.png',
-					'_notif_size_colored.png'):
-					path = begin_path + ext
-					if os.path.isfile(path):
-						os.remove(path)
-
-			if frm != our_jid:
+		# Save it to file
+		self.save_vcard_to_hd(who, card)
+		# Save the decoded avatar to a separate file too, and generate files for dbus notifications
+		puny_jid = helpers.sanitize_filename(frm)
+		puny_nick = None
+		begin_path = os.path.join(gajim.AVATAR_PATH, puny_jid)
+		frm_jid = frm
+		if frm in self.room_jids:
+			puny_nick = helpers.sanitize_filename(resource)
+			# create folder if needed
+			if not os.path.isdir(begin_path):
+				os.mkdir(begin_path, 0700)
+			begin_path = os.path.join(begin_path, puny_nick)
+			frm_jid += '/' + resource
+		if photo_decoded:
+			avatar_file = begin_path + '_notif_size_colored.png'
+			if frm_jid == our_jid and avatar_sha != self.vcard_sha:
+				gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
+			elif frm_jid != our_jid and (not os.path.exists(avatar_file) or \
+			not self.vcard_shas.has_key(frm_jid) or \
+			avatar_sha != self.vcard_shas[frm_jid]):
+				gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
 				if avatar_sha:
-					self.vcard_shas[frm] = avatar_sha
-				elif self.vcard_shas.has_key(frm):
-					del self.vcard_shas[frm]
+					self.vcard_shas[frm_jid] = avatar_sha
+			elif self.vcard_shas.has_key(frm):
+				del self.vcard_shas[frm]
+		else:
+			for ext in ('.jpeg', '.png', '_notif_size_bw.png',
+				'_notif_size_colored.png'):
+				path = begin_path + ext
+				if os.path.isfile(path):
+					os.remove(path)
 
-			vcard['jid'] = frm
-			vcard['resource'] = resource
-			if frm == our_jid:
-				self.dispatch('MYVCARD', vcard)
-				# we re-send our presence with sha if has changed and if we are
-				# not invisible
-				if self.vcard_sha == avatar_sha:
-					return
-				self.vcard_sha = avatar_sha
-				if STATUS_LIST[self.connected] == 'invisible':
-					return
-				sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
-				p = common.xmpp.Presence(typ = None, priority = self.priority,
-					show = sshow, status = self.status)
-				p = self.add_sha(p)
-				self.connection.send(p)
-			else:
-				self.dispatch('VCARD', vcard)
+		vcard['jid'] = frm
+		vcard['resource'] = resource
+		if frm_jid == our_jid:
+			self.dispatch('MYVCARD', vcard)
+			# we re-send our presence with sha if has changed and if we are
+			# not invisible
+			if self.vcard_sha == avatar_sha:
+				return
+			self.vcard_sha = avatar_sha
+			if STATUS_LIST[self.connected] == 'invisible':
+				return
+			sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+			p = common.xmpp.Presence(typ = None, priority = self.priority,
+				show = sshow, status = self.status)
+			p = self.add_sha(p)
+			self.connection.send(p)
+		else:
+			self.dispatch('VCARD', vcard)
 
 class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub):
 	def __init__(self):
@@ -1459,7 +1464,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			has_timestamp = False
 			if msg.timestamp:
 				has_timestamp = True
-			if subject:
+			if subject != None:
 				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
 			else:
 				if not msg.getTag('body'): #no <body>
@@ -1632,7 +1637,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						errmsg, errcode))
 			if not ptype or ptype == 'unavailable':
 				if gajim.config.get('log_contact_status_changes') and self.name\
-					not in no_log_for and jid_stripped not in no_log_for:
+				not in no_log_for and jid_stripped not in no_log_for:
 					gc_c = gajim.contacts.get_gc_contact(self.name, jid_stripped, resource)
 					st = status or ''
 					if gc_c:
@@ -1648,12 +1653,24 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						# contact has no avatar
 						puny_nick = helpers.sanitize_filename(resource)
 						gajim.interface.remove_avatar_files(jid_stripped, puny_nick)
-					if self.vcard_shas.has_key(who):
+					if self.vcard_shas.has_key(who): # Verify sha cached in mem
 						if avatar_sha != self.vcard_shas[who]:
 							# avatar has been updated
 							self.request_vcard(who, True)
-					else:
-						self.vcard_shas[who] = avatar_sha
+					else: # Verify sha cached in hdd
+						cached_vcard = self.get_cached_vcard(who, True)
+						if cached_vcard and cached_vcard.has_key('PHOTO') and \
+						cached_vcard['PHOTO'].has_key('SHA'):
+							cached_sha = cached_vcard['PHOTO']['SHA']
+						else:
+							cached_sha = ''
+						if cached_sha != avatar_sha:
+							# avatar has been updated
+							# sha in mem will be updated later
+							self.request_vcard(who, True)
+						else:
+							# save sha in mem NOW
+							self.vcard_shas[who] = avatar_sha
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
 					prs.getReason(), prs.getActor(), prs.getStatusCode(),
@@ -1846,6 +1863,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('MSGERROR', (jid, errcode, errmsg))
 
+	def _IqPingCB(self, con, iq_obj):
+		gajim.log.debug('IqPingCB')
+		iq_obj = iq_obj.buildReply('result')
+		self.connection.send(iq_obj)
+		raise common.xmpp.NodeProcessed
+
 	def _getRosterCB(self, con, iq_obj):
 		if not self.connection:
 			return
@@ -2010,6 +2033,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_DISCO_INFO)
 		con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
 			common.xmpp.NS_DISCO_ITEMS)
+		con.RegisterHandler('iq', self._IqPingCB, 'get',
+			common.xmpp.NS_PING)
 		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)

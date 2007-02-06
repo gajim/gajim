@@ -747,7 +747,7 @@ class ConversationTextview:
 		# number of days since epoch for current time (in GMT) -
 		# number of days since epoch for message (in GMT)
 		diff_day = int(timegm(time.localtime())) / 86400 -\
-			 int(timegm(tim)) / 86400
+			int(timegm(tim)) / 86400
 		if diff_day == 0:
 			day_str = ''
 		elif diff_day == 1:

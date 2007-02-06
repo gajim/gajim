@@ -276,8 +276,12 @@ class Contacts:
 				else:
 					contact_groups = contact.groups
 					if not contact_groups:
-						# Contact is not in a group, so count it in General group
-						contact_groups.append(_('General'))
+						# Contact is not in a group, so count it in General or
+						# Transports group
+						if common.gajim.jid_is_transport(jid):
+							contact_groups = [_('Transports')]
+						else:
+							contact_groups = [_('General')]
 					for group in groups:
 						if group in contact_groups:
 							in_groups = True

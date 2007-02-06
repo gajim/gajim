@@ -297,6 +297,9 @@ class HistoryWindow:
 		the True/False thingy depending if it's expanded or not
 		this function is called in a timeout just after expanded state changes'''
 		parent = widget.get_parent() # vbox
+		if not parent:
+			# Windows closed since we launch timeout
+			return
 		expanded = widget.get_expanded()
 		w, h = self.window.get_size()
 		if expanded: # resize to larger in height the window
