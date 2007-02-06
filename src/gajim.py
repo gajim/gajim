@@ -136,7 +136,6 @@ for o, a in opts:
 		profile = a
 del opts
 del args
-del verbose
 
 import locale
 profile = unicode(profile, locale.getpreferredencoding())
