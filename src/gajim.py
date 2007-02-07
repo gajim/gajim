@@ -1872,6 +1872,7 @@ class Interface:
 		#initialize emoticons dictionary and unique images list
 		self.emoticons_images = list()
 		self.emoticons = dict()
+		self.emoticons_animations = dict()
 
 		path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
 		if not os.path.exists(path):
