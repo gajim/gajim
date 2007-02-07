@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-07 09:02+0100\n"
+"POT-Creation-Date: 2007-02-07 20:05+0100\n"
 "PO-Revision-Date: 2007-02-06 21:51+0100\n"
 "Last-Translator: Petr Menšík <pihhan@seznam.cz>\n"
 "Language-Team:  <cs@li.org>\n"
@@ -2634,12 +2634,12 @@ msgstr "Aktivní"
 msgid "Event"
 msgstr "Událost"
 
-#: ../src/config.py:682 ../src/gajim.py:2173
+#: ../src/config.py:682 ../src/gajim.py:2174
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "Slovník pro jazyk %s není dostupný"
 
-#: ../src/config.py:683 ../src/gajim.py:2174
+#: ../src/config.py:683 ../src/gajim.py:2175
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -3097,19 +3097,19 @@ msgstr "_Hledat na Webu"
 msgid "Open as _Link"
 msgstr "Otevřít jako _Odkaz"
 
-#: ../src/conversation_textview.py:754
+#: ../src/conversation_textview.py:758
 msgid "Yesterday"
 msgstr "Včera"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
-#: ../src/conversation_textview.py:758
+#: ../src/conversation_textview.py:762
 #, python-format
 msgid "%i days ago"
 msgstr "před %i dny"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:792
+#: ../src/conversation_textview.py:796
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Předmět: %s\n"
@@ -4025,15 +4025,15 @@ msgstr "Prosím zadejte nové uživatelské jméno pro lokální účet"
 # FIXME: jaky je rozdil mezi settings a preferences?
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:1923
+#: ../src/gajim.py:1924
 msgid "Could not save your settings and preferences"
 msgstr "Nelze uložit Vaše nastavení"
 
-#: ../src/gajim.py:2121
+#: ../src/gajim.py:2122
 msgid "Network Manager support not available"
 msgstr "Podpora Network Manageru není dostupná"
 
-#: ../src/gajim.py:2196
+#: ../src/gajim.py:2197
 msgid "Session Management support not available (missing gnome.ui module)"
 msgstr "Podpora Správce sezení není dostupná (schází gnome.ui modul)"
 
