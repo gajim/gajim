@@ -582,14 +582,18 @@ class ConversationTextview:
 		possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
 		if gajim.config.get('emoticons_theme') and \
 		possible_emot_ascii_caps in gajim.interface.emoticons.keys():
-			#it's an emoticon
+			# it's an emoticon
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = buffer.get_end_iter()
 			anchor = buffer.create_child_anchor(end_iter)
 			img = gtk.Image()
-			img.set_from_file(gajim.interface.emoticons[emot_ascii])
+			animations = gajim.interface.emoticons_animations
+			if not emot_ascii in animations:
+				animations[emot_ascii] = gtk.gdk.PixbufAnimation(
+					gajim.interface.emoticons[emot_ascii])
+			img.set_from_animation(animations[emot_ascii])
 			img.show()
-			#add with possible animation
+			# add with possible animation
 			self.tv.add_child_at_anchor(img, anchor)
 		#FIXME: one day, somehow sync with regexp in gajim.py
 		elif special_text.startswith('http://') or \
@@ -603,7 +607,7 @@ class ConversationTextview:
 			special_text.startswith('irc://') or \
 			special_text.startswith('sip:') or \
 			special_text.startswith('magnet:'):
-			#it's a url
+			# it's a url
 			tags.append('url')
 			use_other_tags = False
 		elif special_text.startswith('mailto:') or \

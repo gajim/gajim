@@ -1514,7 +1514,7 @@ class Interface:
 		# block signed in notifications for 30 seconds
 		gajim.block_signed_in_notifications[account] = True
 		self.roster.actions_menu_needs_rebuild = True
-		if gajim.interface.sleeper.getState() != common.sleepy.STATE_UNKNOWN and \
+		if self.sleeper.getState() != common.sleepy.STATE_UNKNOWN and \
 		gajim.connections[account].connected in (2, 3):
 			# we go online or free for chat, so we activate auto status
 			gajim.sleeper_state[account] = 'online'
@@ -1788,8 +1788,8 @@ class Interface:
 			self.emoticon_menuitem_clicked = None
 		counter = 0
 		# Calculate the side lenght of the popup to make it a square
-		size = int(round(math.sqrt(len(gajim.interface.emoticons_images))))
-		for image in gajim.interface.emoticons_images:
+		size = int(round(math.sqrt(len(self.emoticons_images))))
+		for image in self.emoticons_images:
 			item = gtk.MenuItem()
 			img = gtk.Image()
 			if type(image[1]) == gtk.gdk.PixbufAnimation:
@@ -1814,6 +1814,7 @@ class Interface:
 		#initialize emoticons dictionary and unique images list
 		self.emoticons_images = list()
 		self.emoticons = dict()
+		self.emoticons_animations = dict()
 
 		path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
 		if not os.path.exists(path):
