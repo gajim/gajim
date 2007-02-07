@@ -368,6 +368,15 @@ class Connection(ConnectionHandlers):
 			self._hosts = [i for i in result_array]
 		self.connect_to_next_host()
 
+	def on_proxy_failure(self, reason):
+		log.debug('Connection to proxy failed')
+		self.time_to_reconnect = None
+		self.on_connect_failure = None
+		self.disconnect(on_purpose = True)
+		self.dispatch('STATUS', 'offline')
+		self.dispatch('CONNECTION_LOST',
+			(_('Connection to proxy failed'), reason))
+
 	def connect_to_next_host(self, retry = False):
 		if len(self._hosts):
 			if self.last_connection:
@@ -377,10 +386,12 @@ class Connection(ConnectionHandlers):
 			if gajim.verbose:
 				con = common.xmpp.NonBlockingClient(self._hostname, caller = self,
 					on_connect = self.on_connect_success,
+					on_proxy_failure = self.on_proxy_failure,
 					on_connect_failure = self.connect_to_next_host)
 			else:
 				con = common.xmpp.NonBlockingClient(self._hostname, debug = [], caller = self,
 					on_connect = self.on_connect_success,
+					on_proxy_failure = self.on_proxy_failure,
 					on_connect_failure = self.connect_to_next_host)
 			self.last_connection = con
 			# increase default timeout for server responses
@@ -397,7 +408,6 @@ class Connection(ConnectionHandlers):
 			log.info("Connecting to %s: [%s:%d]", self.name, host['host'], host['port'])
 			con.connect((host['host'], host['port']), proxy = self._proxy,
 				secure = self._secure)
-			return
 		else:
 			if not retry and self.retrycount == 0:
 				log.debug("Out of hosts, giving up connecting to %s", self.name)

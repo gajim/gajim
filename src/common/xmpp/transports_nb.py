@@ -374,7 +374,10 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.state = -2
 		self.sendqueue = None
 		self.remove_timeout() 
-		self._owner.disconnected()
+		try:
+			self._owner.disconnected()
+		except:
+			pass
 		self.idlequeue.unplug_idle(self.fd)
 		sock = getattr(self, '_sock', None)
 		if sock:
@@ -609,7 +612,10 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	def getName(self):
 		''' Return the server's name, or 'getHost()' if not available.'''
 		retval = None
-		retval = gattr(self._owner, 'name')
+		try:
+			retval = gattr(self._owner, 'name')
+		except:
+			pass
 		if retval: return retval
 		return self.getHost()
 
@@ -834,12 +840,13 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 		(optionally) simple authentication (using login and password). 
 		
 	'''
-	def __init__(self, on_connect =None, on_connect_failure = None,proxy = None,server = None,use_srv=True):
+	def __init__(self, on_connect =None, on_proxy_failure=None, on_connect_failure = None,proxy = None,server = None,use_srv=True):
 		''' Caches proxy and target addresses.
 			'proxy' argument is a dictionary with mandatory keys 'host' and 'port' (proxy address)
 			and optional keys 'user' and 'password' to use for authentication.
 			'server' argument is a tuple of host and port - just like TCPsocket uses. '''
 		self.on_connect_proxy = on_connect  
+		self.on_proxy_failure = on_proxy_failure
 		self.on_connect_failure = on_connect_failure
 		NonBlockingTcp.__init__(self, self._on_tcp_connect, on_connect_failure, server, use_srv)
 		self.DBG_LINE=DBG_CONNECT_PROXY
@@ -881,10 +888,12 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 		except: 
 			log.error("_on_headers_sent:", exc_info=True)
 			#traceback.print_exc()
-			raise error('Invalid proxy reply')
+			self.on_proxy_failure('Invalid proxy reply')
+			return
 		if code <> '200':
 			self.DEBUG('Invalid proxy reply: %s %s %s' % (proto, code, desc),'error')
 			self._owner.disconnected()
+			self.on_proxy_failure('Invalid proxy reply')
 			return
 		if len(reply) != 2:
 			pass
@@ -893,9 +902,11 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 	def _on_proxy_auth(self, reply):
 		if self.reply.find('\n\n') == -1:
 			if reply is None:
-				return 
+				self.on_proxy_failure('Proxy authentification failed')
+				return
 			if reply.find('\n\n') == -1:
 				self.reply += reply.replace('\r', '')
+				self.on_proxy_failure('Proxy authentification failed')
 				return
 		self.DEBUG('Authentification successfull. Jabber server contacted.','ok')
 		if self.on_connect_proxy:
@@ -910,14 +921,15 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 		redefines only connect method. Allows to use SOCKS5 proxies with
 		(optionally) simple authentication (only USERNAME/PASSWORD auth). 
 	'''
-	def __init__(self, on_connect = None, on_connect_failure = None,
-	proxy = None, server = None, use_srv = True):
+	def __init__(self, on_connect = None, on_proxy_failure = None,
+	on_connect_failure = None, proxy = None, server = None, use_srv = True):
 		''' Caches proxy and target addresses.
 			'proxy' argument is a dictionary with mandatory keys 'host' and 'port'
 			(proxy address) and optional keys 'user' and 'password' to use for
 			authentication. 'server' argument is a tuple of host and port -
 			just like TCPsocket uses. '''
 		self.on_connect_proxy = on_connect  
+		self.on_proxy_failure = on_proxy_failure
 		self.on_connect_failure = on_connect_failure
 		NonBlockingTcp.__init__(self, self._on_tcp_connect, on_connect_failure,
 			server, use_srv)
@@ -952,23 +964,31 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 		if reply is None:
 			return
 		if len(reply) != 2:
-			raise error('Invalid proxy reply')
+			self.on_proxy_failure('Invalid proxy reply')
+			return
 		if reply[0] != '\x05':
 			self.DEBUG('Invalid proxy reply', 'error')
 			self._owner.disconnected()
+			self.on_proxy_failure('Invalid proxy reply')
 			return
 		if reply[1] == '\x00':
 			return self._on_proxy_auth('\x01\x00')
 		elif reply[1] == '\x02':
-			# TODO: Do authentification
+			to_send = '\x01' + chr(len(self.proxy['user'])) + self.proxy['user'] +\
+				chr(len(self.proxy['password'])) + self.proxy['password']
 			self.onreceive(self._on_proxy_auth)
+			self.send(to_send)
 		else:
 			if reply[1] == '\xff':
 				self.DEBUG('Authentification to proxy impossible: no acceptable '
 					'auth method', 'error')
-			else:
-				self.DEBUG('Invalid proxy reply', 'error')
+				self._owner.disconnected()
+				self.on_proxy_failure('Authentification to proxy impossible: no '
+					'acceptable authentification method')
+				return
+			self.DEBUG('Invalid proxy reply', 'error')
 			self._owner.disconnected()
+			self.on_proxy_failure('Invalid proxy reply')
 			return
 
 	def _on_proxy_auth(self, reply):
@@ -977,14 +997,17 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 		if len(reply) != 2:
 			self.DEBUG('Invalid proxy reply', 'error')
 			self._owner.disconnected()
-			raise error('Invalid proxy reply')
+			self.on_proxy_failure('Invalid proxy reply')
+			return
 		if reply[0] != '\x01':
 			self.DEBUG('Invalid proxy reply', 'error')
 			self._owner.disconnected()
-			raise error('Invalid proxy reply')
+			self.on_proxy_failure('Invalid proxy reply')
+			return
 		if reply[1] != '\x00':
 			self.DEBUG('Authentification to proxy failed', 'error')
 			self._owner.disconnected()
+			self.on_proxy_failure('Authentification to proxy failed')
 			return
 		self.DEBUG('Authentification successfull. Jabber server contacted.','ok')
 		# Request connection
@@ -1014,11 +1037,13 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 		if len(reply) < 10:
 			self.DEBUG('Invalid proxy reply', 'error')
 			self._owner.disconnected()
-			raise error('Invalid proxy reply')
+			self.on_proxy_failure('Invalid proxy reply')
+			return
 		if reply[0] != '\x05':
 			self.DEBUG('Invalid proxy reply', 'error')
 			self._owner.disconnected()
-			raise error('Invalid proxy reply')
+			self.on_proxy_failure('Invalid proxy reply')
+			return
 		if reply[1] != "\x00":
 			# Connection failed
 			self._owner.disconnected()
@@ -1036,6 +1061,7 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 			else:
 				txt = 'Invalid proxy reply'
 			self.DEBUG(txt, 'error')
+			self.on_proxy_failure(txt)
 			return
 		# Get the bound address/port
 		elif reply[3] == "\x01":
@@ -1045,6 +1071,7 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 		else:
 			self.DEBUG('Invalid proxy reply', 'error')
 			self._owner.disconnected()
+			self.on_proxy_failure('Invalid proxy reply')
 			return
 
 		if self.on_connect_proxy:
