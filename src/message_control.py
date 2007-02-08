@@ -25,16 +25,13 @@ TYPE_PM = 'pm'
 class MessageControl:
 	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
 
-	def __init__(self, type_id, parent_win, widget_name, display_names, contact, account, resource = None):
-		'''The display_names argument is a two element tuple containing the desired
-		display name (pretty string) for the control in both singular and plural form'''
+	def __init__(self, type_id, parent_win, widget_name, contact, account, resource = None):
 		# dict { cb id : widget} 
 		# keep all registered callbacks of widgets, created by self.xml
 		self.handlers = {} 
 		self.type_id = type_id
 		self.parent_win = parent_win
 		self.widget_name = widget_name
-		self.display_names = display_names
 		self.contact = contact
 		self.account = account
 		self.hide_chat_buttons_current = False

@@ -103,7 +103,6 @@ class PrivateChatControl(ChatControl):
 		self.room_name = room_ctrl.name
 		ChatControl.__init__(self, parent_win, contact, acct)
 		self.TYPE_ID = 'pm'
-		self.display_names = (_('Private Chat'), _('Private Chats'))
 
 	def send_message(self, message):
 		'''call this function to send our message'''
@@ -141,8 +140,7 @@ class GroupchatControl(ChatControlBase):
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-					'muc_child_vbox', (_('Group Chat'), _('Group Chats')),
-					contact, acct);
+					'muc_child_vbox', contact, acct);
 
 		widget = self.xml.get_widget('muc_window_actions_button')
 		id = widget.connect('clicked', self.on_actions_button_clicked)

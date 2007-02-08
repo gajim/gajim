@@ -117,10 +117,10 @@ class ChatControlBase(MessageControl):
 	event_keymod):
 		pass # Derived should implement this rather than connecting to the event itself.
 
-	def __init__(self, type_id, parent_win, widget_name, display_names, contact,
-	acct, resource = None):
+	def __init__(self, type_id, parent_win, widget_name, contact, acct, 
+	resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
-			display_names,	contact, acct, resource = resource);
+			contact, acct, resource = resource);
 		# when/if we do XHTML we will put formatting buttons back
 		widget = self.xml.get_widget('emoticons_button')
 		id = widget.connect('clicked', self.on_emoticons_button_clicked)
@@ -853,7 +853,7 @@ class ChatControl(ChatControlBase):
 	
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-			'chat_child_vbox', (_('Chat'), _('Chats')), contact, acct, resource)
+			'chat_child_vbox', contact, acct, resource)
 			
 		# for muc use:
 		# widget = self.xml.get_widget('muc_window_actions_button')
