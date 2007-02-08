@@ -540,8 +540,7 @@ class ChatControlBase(MessageControl):
 		else:
 			self.sent_history.append(message)
 			self.sent_history_pos = size + 1
-
-		self.orig_msg = ''
+		self.orig_msg = None
 
 	def print_conversation_line(self, text, kind, name, tim,
 		other_tags_for_name = [], other_tags_for_time = [], 
