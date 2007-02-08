@@ -2812,7 +2812,7 @@ class RosterWindow:
 			if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
 				gajim.sleeper_state[account] = 'online'
-			else:
+			elif gajim.interface.sleeper.getState() == common.sleepy.STATE_UNKNOWN:
 				gajim.sleeper_state[account] = 'off'
 		gajim.connections[account].change_status(status, txt, auto)
 
