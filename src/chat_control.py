@@ -170,8 +170,7 @@ class ChatControlBase(MessageControl):
 		# the following vars are used to keep history of user's messages
 		self.sent_history = []
 		self.sent_history_pos = 0
-		self.typing_new = False
-		self.orig_msg = ''
+		self.orig_msg = None
 
 		# Emoticons menu
 		# set image no matter if user wants at this time emoticons or not
@@ -542,7 +541,6 @@ class ChatControlBase(MessageControl):
 			self.sent_history.append(message)
 			self.sent_history_pos = size + 1
 
-		self.typing_new = True
 		self.orig_msg = ''
 
 	def print_conversation_line(self, text, kind, name, tim,
@@ -786,14 +784,13 @@ class ChatControlBase(MessageControl):
 
 	def sent_messages_scroll(self, direction, conv_buf):
 		size = len(self.sent_history) 
-		if self.typing_new:
+		if self.orig_msg is None:
 			#user was typing something and then went into history, so save
 			#whatever is already typed
 			start_iter = conv_buf.get_start_iter()
 			end_iter = conv_buf.get_end_iter()
 			self.orig_msg = conv_buf.get_text(start_iter, end_iter, 0).decode(
 				'utf-8')
-			self.typing_new = False
 		if direction == 'up':
 			if self.sent_history_pos == 0:
 				return
@@ -802,7 +799,7 @@ class ChatControlBase(MessageControl):
 		elif direction == 'down':
 			if self.sent_history_pos >= size - 1:
 				conv_buf.set_text(self.orig_msg);
-				self.typing_new = True
+				self.orig_msg = None
 				self.sent_history_pos = size
 				return
 
