@@ -35,6 +35,10 @@ from common.exceptions import GajimGeneralException
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
+	
+	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(path_to_file)
+
 	def __init__(self, account, used_in_history_window = False):
 		'''if used_in_history_window is True, then we do not show
 		Clear menuitem in context menu'''
@@ -138,11 +142,8 @@ class ConversationTextview:
 		self.focus_out_end_iter_offset = None
 
 		self.line_tooltip = tooltips.BaseTooltip()
-		
-		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
-		self.focus_out_line_pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 		# use it for hr too
-		self.tv.focus_out_line_pixbuf = self.focus_out_line_pixbuf
+		self.tv.focus_out_line_pixbuf = ConversationTextview.FOCUS_OUT_LINE_PIXBUF
 
 	def del_handlers(self):
 		for i in self.handlers.keys():
@@ -239,7 +240,8 @@ class ConversationTextview:
 			# add the new focus out line
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, '\n')
-			buffer.insert_pixbuf(end_iter, self.focus_out_line_pixbuf)
+			buffer.insert_pixbuf(end_iter, 
+				ConversationTextview.FOCUS_OUT_LINE_PIXBUF)
 
 			end_iter = buffer.get_end_iter()
 			before_img_iter = end_iter.copy()
