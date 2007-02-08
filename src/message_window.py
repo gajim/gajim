@@ -270,11 +270,11 @@ class MessageWindow:
 		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
 			# Show the plural form since number of tabs > 1
 			if self.type == 'chat':
-					label = _('Chats')
+				label = _('Chats')
 			elif self.type == 'gc':
-					label = _('Group Chats')
+				label = _('Group Chats')
 			else:
-					label = _('Private Chats')
+				label = _('Private Chats')
 		else:
 			label = _('Messages')
 		title = _('%s - Gajim') % label
