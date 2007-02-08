@@ -137,6 +137,10 @@ class PrivateChatControl(ChatControl):
 
 class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
+	# alphanum sorted
+	MUC_CMDS = ['ban', 'chat', 'query', 'clear', 'close', 'compact',
+		'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick',
+		'part', 'names', 'say', 'topic']
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -187,10 +191,7 @@ class GroupchatControl(ChatControlBase):
 			gajim.config.get('hide_groupchat_occupants_list'))
 
 		self._last_selected_contact = None # None or holds jid, account tuple
-		# alphanum sorted
-		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact',
-			'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick',
-			'part', 'names', 'say', 'topic']
+
 		# muc attention flag (when we are mentioned in a muc)
 		# if True, the room has mentioned us
 		self.attention_flag = False
@@ -1255,7 +1256,8 @@ class GroupchatControl(ChatControlBase):
 
 	def get_command_help(self, command):
 		if command == 'help':
-			self.print_conversation(_('Commands: %s') % self.muc_cmds, 'info')
+			self.print_conversation(_('Commands: %s') % GroupchatControl.MUC_CMDS,
+				'info')
 		elif command == 'ban':
 			s = _('Usage: /%s <nickname|JID> [reason], bans the JID from the group chat.'
 				' The nickname of an occupant may be substituted, but not if it '
@@ -1503,7 +1505,7 @@ class GroupchatControl(ChatControlBase):
 			if text.startswith('/') and len(splitted_text) == 1:
 				text = splitted_text[0]
 				if len(text) == 1: # user wants to cycle all commands
-					self.cmd_hits = self.muc_cmds
+					self.cmd_hits = GroupchatControl.MUC_CMDS
 				else:
 					# cycle possible commands depending on what the user typed
 					if self.last_key_tabs and len(self.cmd_hits) and \
@@ -1512,7 +1514,7 @@ class GroupchatControl(ChatControlBase):
 						self.cmd_hits.pop(0)
 					else: # find possible commands
 						self.cmd_hits = []
-						for cmd in self.muc_cmds:
+						for cmd in GroupchatControl.MUC_CMDS:
 							if cmd.startswith(text.lstrip('/')):
 								self.cmd_hits.append(cmd)
 				if len(self.cmd_hits):
