@@ -784,8 +784,8 @@ class ChatControlBase(MessageControl):
 	def sent_messages_scroll(self, direction, conv_buf):
 		size = len(self.sent_history) 
 		if self.orig_msg is None:
-			#user was typing something and then went into history, so save
-			#whatever is already typed
+			# user was typing something and then went into history, so save
+			# whatever is already typed
 			start_iter = conv_buf.get_start_iter()
 			end_iter = conv_buf.get_end_iter()
 			self.orig_msg = conv_buf.get_text(start_iter, end_iter, 0).decode(

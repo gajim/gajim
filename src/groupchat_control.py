@@ -195,7 +195,7 @@ class GroupchatControl(ChatControlBase):
 		# muc attention flag (when we are mentioned in a muc)
 		# if True, the room has mentioned us
 		self.attention_flag = False
-		self.room_creation = time.time()
+		self.room_creation = int(time.time()) # Use int to reduce mem usage
 		self.nick_hits = []
 		self.cmd_hits = []
 		self.last_key_tabs = False

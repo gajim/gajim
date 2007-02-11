@@ -761,7 +761,7 @@ class PreferencesWindow:
 
 	def on_reset_colors_button_clicked(self, widget):
 		for i in ('inmsgcolor', 'outmsgcolor', 'statusmsgcolor', 'urlmsgcolor'):
-			gajim.config.set(i, gajim.interface.default_values[i])
+			gajim.config.set(i, gajim.interface.default_colors[i])
 
 		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(gajim.config.get('inmsgcolor')))
