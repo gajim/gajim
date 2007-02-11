@@ -1141,7 +1141,7 @@ class Connection(ConnectionHandlers):
 			t.setTagData('password', password)
 		self.connection.send(p)
 
-		#last date/time in history to avoid duplicate
+		# last date/time in history to avoid duplicate
 		if not self.last_history_line.has_key(room_jid): 
 			# Not in memory, get it from DB
 			last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
@@ -1169,13 +1169,6 @@ class Connection(ConnectionHandlers):
 		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
 			to = room_jid)
 		self.connection.send(iq)
-
-	def change_gc_nick(self, room_jid, nick):
-		if not self.connection:
-			return
-		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick))
-		p = self.add_sha(p)
-		self.connection.send(p)
 
 	def send_gc_status(self, nick, jid, show, status):
 		if not self.connection:

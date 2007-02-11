@@ -1048,7 +1048,7 @@ class GroupchatControl(ChatControlBase):
 			if len(message_array) and message_array[0] != self.nick:
 				nick = message_array[0]
 				nick = helpers.parse_resource(nick)
-				gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
+				gajim.connections[self.account].join_gc(nick, self.room_jid, None)
 				self.clear(self.msg_textview)
 			else:
 				self.get_command_help(command)
@@ -1329,7 +1329,7 @@ class GroupchatControl(ChatControlBase):
 		def on_ok(widget):
 			nick = instance.input_entry.get_text().decode('utf-8')
 			nick = helpers.parse_resource(nick)
-			gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
+			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
 			self.nick = nick
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
 			is_modal = False, ok_handler = on_ok)
