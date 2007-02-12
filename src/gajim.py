@@ -2274,7 +2274,7 @@ if __name__ == '__main__':
 				# NORMALLY]
 				try:
 					cli.set_restart_command(argv)
-				except TypeError:
+				except AttributeError:
 					cli.set_restart_command(len(argv), argv)
 		
 	check_paths.check_and_possibly_create_paths()
