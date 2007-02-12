@@ -667,6 +667,8 @@ Description=xmpp
 					f.close()
 				except IOError:
 					log.debug("I/O Error writing settings to %s", repr(path_to_kde_file), exc_info=True)
+		else: # no gajim remote, stop ask user everytime
+			gajim.config.set('check_if_gajim_is_default', False)
 
 	try:
 		import gconf
