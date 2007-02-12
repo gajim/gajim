@@ -721,12 +721,6 @@ class Connection(ConnectionHandlers):
 		if not msg:
 			msg = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		if keyID and USE_GPG and not msg:
-			lowered_uf_status_msg = helpers.get_uf_show(show).lower()
-			# do not show I'm invisible!
-			if lowered_uf_status_msg == _('invisible').lower():
-				lowered_uf_status_msg = _('offline').lower()
-			msg = _("I'm %s") % lowered_uf_status_msg
 		signed = ''
 		if not auto and not show == 'offline':
 			signed = self.get_signed_msg(msg)
