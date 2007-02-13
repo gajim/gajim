@@ -3349,6 +3349,8 @@ class RosterWindow:
 				gajim.config.set('roster_width', width)
 				gajim.config.set('roster_height', height)
 
+		gajim.config.set('show_roster_on_startup',
+			self.window.get_property('visible'))
 		gajim.interface.msg_win_mgr.shutdown()
 
 		gajim.config.set('collapsed_rows', '\t'.join(self.collapsed_rows))
