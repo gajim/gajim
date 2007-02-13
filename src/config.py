@@ -901,6 +901,12 @@ class PreferencesWindow:
 			model[iter][3])
 		gajim.config.set_per('defaultstatusmsg', status, 'message', message)
 
+	def on_default_status_expander_activate(self, expander):
+		eventbox = self.xml.get_widget('default_status_eventbox')
+		vbox = self.xml.get_widget('status_vbox')
+		vbox.set_child_packing(eventbox, not expander.get_expanded(), True, 0,
+			gtk.PACK_START)
+
 	def save_status_messages(self, model):
 		for msg in gajim.config.get_per('statusmsg'):
 			gajim.config.del_per('statusmsg', msg)
