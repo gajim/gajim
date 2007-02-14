@@ -1753,7 +1753,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		if self.subscriptions is not None:
 			dunno = False
-			subscribed = name in self.subscriptions
+			subscribed = node in self.subscriptions
 		else:
 			dunno = True
 			subscribed = False
