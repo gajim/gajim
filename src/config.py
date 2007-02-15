@@ -761,7 +761,7 @@ class PreferencesWindow:
 
 	def on_reset_colors_button_clicked(self, widget):
 		for i in ('inmsgcolor', 'outmsgcolor', 'statusmsgcolor', 'urlmsgcolor'):
-			gajim.config.set(i, gajim.interface.default_values[i])
+			gajim.config.set(i, gajim.interface.default_colors[i])
 
 		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
 			gtk.gdk.color_parse(gajim.config.get('inmsgcolor')))
@@ -900,6 +900,12 @@ class PreferencesWindow:
 		gajim.config.set_per('defaultstatusmsg', status, 'enabled',
 			model[iter][3])
 		gajim.config.set_per('defaultstatusmsg', status, 'message', message)
+
+	def on_default_status_expander_activate(self, expander):
+		eventbox = self.xml.get_widget('default_status_eventbox')
+		vbox = self.xml.get_widget('status_vbox')
+		vbox.set_child_packing(eventbox, not expander.get_expanded(), True, 0,
+			gtk.PACK_START)
 
 	def save_status_messages(self, model):
 		for msg in gajim.config.get_per('statusmsg'):

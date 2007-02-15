@@ -2009,7 +2009,7 @@ class Interface:
 		self.emoticons_menu = None
 		# handler when an emoticon is clicked in emoticons_menu
 		self.emoticon_menuitem_clicked = None
-		self.default_values = {
+		self.default_colors = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
 			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
@@ -2212,7 +2212,7 @@ if __name__ == '__main__':
 				# NORMALLY]
 				try:
 					cli.set_restart_command(argv)
-				except TypeError:
+				except AttributeError:
 					cli.set_restart_command(len(argv), argv)
 		
 	check_paths.check_and_possibly_create_paths()

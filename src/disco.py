@@ -1724,9 +1724,9 @@ class DiscussionGroupsBrowser(AgentBrowser):
 	def _create_treemodel(self):
 		''' Create treemodel for the window. '''
 		# JID, node, name (with description) - pango markup, dont have info?, subscribed?
-		model = gtk.ListStore(str, str, str, bool, bool)
-		model.set_sort_column_id(3, gtk.SORT_ASCENDING)
-		self.window.services_treeview.set_model(model)
+		self.model = gtk.ListStore(str, str, str, bool, bool)
+		self.model.set_sort_column_id(3, gtk.SORT_ASCENDING)
+		self.window.services_treeview.set_model(self.model)
 
 		# Name column
 		# Pango markup for name and description, description printed with
@@ -1748,14 +1748,14 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		self.window.services_treeview.set_headers_visible(True)
 
-	def _add_item(self, model, jid, node, item, force):
+	def _add_item(self, jid, node, item, force):
 		''' Called when we got basic information about new node from query.
 		Show the item. '''
 		name = item.get('name', '')
 
 		if self.subscriptions is not None:
 			dunno = False
-			subscribed = name in self.subscriptions
+			subscribed = node in self.subscriptions
 		else:
 			dunno = True
 			subscribed = False
@@ -1763,7 +1763,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		name = gtkgui_helpers.escape_for_pango_markup(name)
 		name = '<b>%s</b>' % name
 
-		model.append((jid, node, name, dunno, subscribed))
+		self.model.append((jid, node, name, dunno, subscribed))
 
 	def _add_actions(self):
 		self.post_button = gtk.Button(label=_('New post'), use_underline=True)
@@ -1845,33 +1845,26 @@ class DiscussionGroupsBrowser(AgentBrowser):
 	def _subscriptionsCB(self, conn, request):
 		''' We got the subscribed groups list stanza. Now, if we already
 		have items on the list, we should actualize them. '''
-		print 0
 		try:
 			subscriptions = request.getTag('pubsub').getTag('subscriptions')
 		except:
 			return 
 
-		print 1
 		groups = set()
 		for child in subscriptions.getTags('subscription'):
-			print 2, repr(child), str(child)
 			groups.add(child['node'])
-		print 3, groups
 
 		self.subscriptions = groups
 
 		# try to setup existing items in model
 		model = self.window.services_treeview.get_model()
-		print 4
 		for row in model:
-			print 5
 			# 1 = group node
 			# 3 = insensitive checkbox for subscribed
 			# 4 = subscribed?
 			groupnode = row[1]
 			row[3]=False
 			row[4]=groupnode in groups
-		print 6
 
 		# we now know subscriptions, update button states
 		self.update_actions()

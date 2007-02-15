@@ -117,10 +117,10 @@ class ChatControlBase(MessageControl):
 	event_keymod):
 		pass # Derived should implement this rather than connecting to the event itself.
 
-	def __init__(self, type_id, parent_win, widget_name, display_names, contact,
-	acct, resource = None):
+	def __init__(self, type_id, parent_win, widget_name, contact, acct, 
+	resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
-			display_names,	contact, acct, resource = resource);
+			contact, acct, resource = resource);
 		# when/if we do XHTML we will put formatting buttons back
 		widget = self.xml.get_widget('emoticons_button')
 		id = widget.connect('clicked', self.on_emoticons_button_clicked)
@@ -170,8 +170,7 @@ class ChatControlBase(MessageControl):
 		# the following vars are used to keep history of user's messages
 		self.sent_history = []
 		self.sent_history_pos = 0
-		self.typing_new = False
-		self.orig_msg = ''
+		self.orig_msg = None
 
 		# Emoticons menu
 		# set image no matter if user wants at this time emoticons or not
@@ -541,9 +540,7 @@ class ChatControlBase(MessageControl):
 		else:
 			self.sent_history.append(message)
 			self.sent_history_pos = size + 1
-
-		self.typing_new = True
-		self.orig_msg = ''
+		self.orig_msg = None
 
 	def print_conversation_line(self, text, kind, name, tim,
 		other_tags_for_name = [], other_tags_for_time = [], 
@@ -786,14 +783,13 @@ class ChatControlBase(MessageControl):
 
 	def sent_messages_scroll(self, direction, conv_buf):
 		size = len(self.sent_history) 
-		if self.typing_new:
-			#user was typing something and then went into history, so save
-			#whatever is already typed
+		if self.orig_msg is None:
+			# user was typing something and then went into history, so save
+			# whatever is already typed
 			start_iter = conv_buf.get_start_iter()
 			end_iter = conv_buf.get_end_iter()
 			self.orig_msg = conv_buf.get_text(start_iter, end_iter, 0).decode(
 				'utf-8')
-			self.typing_new = False
 		if direction == 'up':
 			if self.sent_history_pos == 0:
 				return
@@ -802,7 +798,7 @@ class ChatControlBase(MessageControl):
 		elif direction == 'down':
 			if self.sent_history_pos >= size - 1:
 				conv_buf.set_text(self.orig_msg);
-				self.typing_new = True
+				self.orig_msg = None
 				self.sent_history_pos = size
 				return
 
@@ -853,7 +849,7 @@ class ChatControl(ChatControlBase):
 	
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-			'chat_child_vbox', (_('Chat'), _('Chats')), contact, acct, resource)
+			'chat_child_vbox', contact, acct, resource)
 			
 		# for muc use:
 		# widget = self.xml.get_widget('muc_window_actions_button')

@@ -264,11 +264,17 @@ class MessageWindow:
 				name += '/' + control.resource
 
 		window_mode = gajim.interface.msg_win_mgr.mode
+
 		if self.get_num_controls() == 1:
 			label = name
 		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
 			# Show the plural form since number of tabs > 1
-			label = control.display_names[1]
+			if self.type == 'chat':
+				label = _('Chats')
+			elif self.type == 'gc':
+				label = _('Group Chats')
+			else:
+				label = _('Private Chats')
 		else:
 			label = _('Messages')
 		title = _('%s - Gajim') % label

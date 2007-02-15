@@ -366,16 +366,16 @@ class DataForm(ExtendedNode):
 		# TODO: the same code is in TextMultiField. join them
 		def fget(self):
 			value = u''
-			for valuenode in self.getTags('value'):
+			for valuenode in self.getTags('instructions'):
 				value += '\n' + valuenode.getData()
 			return value[1:]
 		def fset(self, value):
 			fdel(self)
 			if value == '': return
 			for line in value.split('\n'):
-				self.addChild('value').setData(line)
+				self.addChild('instructions').setData(line)
 		def fdel(self):
-			for value in self.getTags('value'):
+			for value in self.getTags('instructions'):
 				self.delChild(value)
 		return locals()
 

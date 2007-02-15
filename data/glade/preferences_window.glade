@@ -2024,7 +2024,7 @@ Disabled</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox43">
+	    <widget class="GtkVBox" id="status_vbox">
 	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
@@ -2383,18 +2383,19 @@ Disabled</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkEventBox" id="eventbox6">
+		<widget class="GtkEventBox" id="default_status_eventbox">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">An example: If you have enabled status message for away, Gajim won't ask you anymore for a status message when you change your status to away; it will use the default one set here</property>
 		  <property name="visible_window">True</property>
 		  <property name="above_child">False</property>
 
 		  <child>
-		    <widget class="GtkExpander" id="expander1">
+		    <widget class="GtkExpander" id="default_status_expander">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="expanded">False</property>
 		      <property name="spacing">0</property>
+		      <signal name="activate" handler="on_default_status_expander_activate" last_modification_time="Tue, 13 Feb 2007 20:20:14 GMT"/>
 
 		      <child>
 			<widget class="GtkScrolledWindow" id="scrolledwindow24">

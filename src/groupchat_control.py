@@ -103,7 +103,6 @@ class PrivateChatControl(ChatControl):
 		self.room_name = room_ctrl.name
 		ChatControl.__init__(self, parent_win, contact, acct)
 		self.TYPE_ID = 'pm'
-		self.display_names = (_('Private Chat'), _('Private Chats'))
 
 	def send_message(self, message):
 		'''call this function to send our message'''
@@ -138,11 +137,14 @@ class PrivateChatControl(ChatControl):
 
 class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
+	# alphanum sorted
+	MUC_CMDS = ['ban', 'chat', 'query', 'clear', 'close', 'compact',
+		'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick',
+		'part', 'names', 'say', 'topic']
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-					'muc_child_vbox', (_('Group Chat'), _('Group Chats')),
-					contact, acct);
+					'muc_child_vbox', contact, acct);
 
 		widget = self.xml.get_widget('muc_window_actions_button')
 		id = widget.connect('clicked', self.on_actions_button_clicked)
@@ -189,14 +191,11 @@ class GroupchatControl(ChatControlBase):
 			gajim.config.get('hide_groupchat_occupants_list'))
 
 		self._last_selected_contact = None # None or holds jid, account tuple
-		# alphanum sorted
-		self.muc_cmds = ['ban', 'chat', 'query', 'clear', 'close', 'compact',
-			'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick',
-			'part', 'names', 'say', 'topic']
+
 		# muc attention flag (when we are mentioned in a muc)
 		# if True, the room has mentioned us
 		self.attention_flag = False
-		self.room_creation = time.time()
+		self.room_creation = int(time.time()) # Use int to reduce mem usage
 		self.nick_hits = []
 		self.cmd_hits = []
 		self.last_key_tabs = False
@@ -1049,7 +1048,7 @@ class GroupchatControl(ChatControlBase):
 			if len(message_array) and message_array[0] != self.nick:
 				nick = message_array[0]
 				nick = helpers.parse_resource(nick)
-				gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
+				gajim.connections[self.account].join_gc(nick, self.room_jid, None)
 				self.clear(self.msg_textview)
 			else:
 				self.get_command_help(command)
@@ -1257,7 +1256,8 @@ class GroupchatControl(ChatControlBase):
 
 	def get_command_help(self, command):
 		if command == 'help':
-			self.print_conversation(_('Commands: %s') % self.muc_cmds, 'info')
+			self.print_conversation(_('Commands: %s') % GroupchatControl.MUC_CMDS,
+				'info')
 		elif command == 'ban':
 			s = _('Usage: /%s <nickname|JID> [reason], bans the JID from the group chat.'
 				' The nickname of an occupant may be substituted, but not if it '
@@ -1329,7 +1329,7 @@ class GroupchatControl(ChatControlBase):
 		def on_ok(widget):
 			nick = instance.input_entry.get_text().decode('utf-8')
 			nick = helpers.parse_resource(nick)
-			gajim.connections[self.account].change_gc_nick(self.room_jid, nick)
+			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
 			self.nick = nick
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
 			is_modal = False, ok_handler = on_ok)
@@ -1505,7 +1505,7 @@ class GroupchatControl(ChatControlBase):
 			if text.startswith('/') and len(splitted_text) == 1:
 				text = splitted_text[0]
 				if len(text) == 1: # user wants to cycle all commands
-					self.cmd_hits = self.muc_cmds
+					self.cmd_hits = GroupchatControl.MUC_CMDS
 				else:
 					# cycle possible commands depending on what the user typed
 					if self.last_key_tabs and len(self.cmd_hits) and \
@@ -1514,7 +1514,7 @@ class GroupchatControl(ChatControlBase):
 						self.cmd_hits.pop(0)
 					else: # find possible commands
 						self.cmd_hits = []
-						for cmd in self.muc_cmds:
+						for cmd in GroupchatControl.MUC_CMDS:
 							if cmd.startswith(text.lstrip('/')):
 								self.cmd_hits.append(cmd)
 				if len(self.cmd_hits):
