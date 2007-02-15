@@ -267,22 +267,19 @@ class Systray:
 
 	def on_left_click(self):
 		win = gajim.interface.roster.window
-		if len(gajim.events.get_systray_events()) == 0:
-			# no pending events, so toggle visible/hidden for roster window
-			if win.get_property('visible'): # visible in ANY virtual desktop?
+		# toggle visible/hidden for roster window
+		if win.get_property('visible'): # visible in ANY virtual desktop?
 
-				# we could be in another VD right now. eg vd2
-				# and we want to show it in vd2
-				if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
-					win.hide() # else we hide it from VD that was visible in
-			else:
-				# in Windows (perhaps other Window Managers too) minimize state
-				# is remembered, so make sure it's not minimized (iconified)
-				# because user wants to see roster
-				win.deiconify()
-				win.present()
+			# we could be in another VD right now. eg vd2
+			# and we want to show it in vd2
+			if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
+				win.hide() # else we hide it from VD that was visible in
 		else:
-			self.handle_first_event()
+			# in Windows (perhaps other Window Managers too) minimize state
+			# is remembered, so make sure it's not minimized (iconified)
+			# because user wants to see roster
+			win.deiconify()
+			win.present()
 
 	def handle_first_event(self):
 		account, jid, event = gajim.events.get_first_systray_event()
@@ -291,11 +288,9 @@ class Systray:
 	def on_middle_click(self):
 		'''middle click raises window to have complete focus (fe. get kbd events)
 		but if already raised, it hides it'''
-		win = gajim.interface.roster.window
-		if win.is_active(): # is it fully raised? (eg does it receive kbd events?)
-			win.hide()
-		else:
-			win.present()
+		if len(gajim.events.get_systray_events()) == 0:
+			return
+		self.handle_first_event()
 
 	def on_clicked(self, widget, event):
 		self.on_tray_leave_notify_event(widget, None)
