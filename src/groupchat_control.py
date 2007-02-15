@@ -140,7 +140,7 @@ class GroupchatControl(ChatControlBase):
 	# alphanum sorted
 	MUC_CMDS = ['ban', 'chat', 'query', 'clear', 'close', 'compact',
 		'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick',
-		'part', 'names', 'say', 'slap', 'topic']
+		'part', 'names', 'say', 'topic']
 
 	def __init__(self, parent_win, contact, acct):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1232,14 +1232,6 @@ class GroupchatControl(ChatControlBase):
 			else:
 				self.get_command_help(command)
 			return True
-		elif command == 'slap':
-			if len(message_array):
-				gajim.connections[self.account].send_gc_message(self.room_jid,
-										''.join(('/me slaps ', message[5:], '*')))
-				self.clear(self.msg_textview)
-			else:
-				self.get_command_help(command)
-			return True
 		else:
 			self.print_conversation(_('No such command: /%s (if you want to send '
 				'this, prefix it with /say)') % command, 'info')
@@ -1321,9 +1313,6 @@ class GroupchatControl(ChatControlBase):
 		elif command == 'say':
 			self.print_conversation(_('Usage: /%s <message>, sends a message '
 				'without looking for other commands.') % command, 'info')
-		elif command == 'slap':
-			self.print_conversation(_('Usage: /slap <user>, slaps the specified'
-				' user. Use with care.'), 'info')
 		else:
 			self.print_conversation(_('No help info for /%s') % command, 'info')
 
