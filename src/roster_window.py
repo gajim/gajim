@@ -1535,19 +1535,22 @@ class RosterWindow:
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
 		keys = {}
-		keyID = 'None'
+		#GPG Key
+		keyID = _('None')
 		for i in xrange(len(attached_keys)/2):
 			keys[attached_keys[2*i]] = attached_keys[2*i+1]
 			if attached_keys[2*i] == contact.jid:
 				keyID = attached_keys[2*i+1]
 		public_keys = gajim.connections[account].ask_gpg_keys()
-		public_keys['None'] = 'None'
+		#GPG Key
+		public_keys[_('None')] = _('None')
 		instance = dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'),
 			_('Select a key to apply to the contact'), public_keys, keyID)
 		keyID = instance.run()
 		if keyID is None:
 			return
-		if keyID[0] == 'None':
+		#GPG Key
+		if keyID[0] == _('None'):
 			if contact.jid in keys:
 				del keys[contact.jid]
 			for u in gajim.contacts.get_contact(account, contact.jid):
