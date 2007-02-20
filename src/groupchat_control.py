@@ -940,7 +940,8 @@ class GroupchatControl(ChatControlBase):
 				# delete ressource
 				simple_jid = gajim.get_jid_without_resource(jid)
 				nick_jid += ' (%s)' % simple_jid
-			if show == 'offline' and print_status in ('all', 'in_and_out'):
+			if show == 'offline' and print_status in ('all', 'in_and_out') and \
+			statusCode != '307':
 				st = _('%s has left') % nick_jid
 				if reason:
 					st += ' [%s]' % reason
