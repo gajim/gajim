@@ -541,8 +541,16 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._sock.connect(self._server)
 		except socket.error, e:
 			errnum = e[0]
+
+			# Ignore "Socket already connected". 
+			# FIXME: This happens when we switch an already
+			# connected socket to SSL (STARTTLS). Instead of
+			# ignoring the error, the socket should only be
+			# connected to once. See #2846.
+			workaround = (errno.EALREADY, 10056)
+
 			# 10035 - winsock equivalent of EINPROGRESS
-			if errnum not in (errno.EINPROGRESS, 10035):
+			if errnum not in (errno.EINPROGRESS, 10035) + workaround:
 				log.error("_do_connect:", exc_info=True)
 				#traceback.print_exc()
 		# in progress, or would block
@@ -732,15 +740,17 @@ class NonBlockingTLS(PlugIn):
 		tcpsock._send = wrapper.send
 
 		log.debug("Initiating handshake...")
-		tcpsock._sslObj.setblocking(False)
+		# FIXME: Figure out why _connect_success is called before the
+		# SSL handshake is completed in STARTTLS mode. See #2838.
+		tcpsock._sslObj.setblocking(True)
 		try:
 			self.starttls='in progress'
 			tcpsock._sslObj.do_handshake()
 		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
 			pass
-		#tcpsock._sslObj.setblocking(False)
-		#print "Done handshake"
-		log.debug("Async handshake started...")
+		tcpsock._sslObj.setblocking(False)
+		log.debug("Synchronous handshake completed")
+		#log.debug("Async handshake started...")
 
 		# fake it, for now
 		self.starttls='success'
