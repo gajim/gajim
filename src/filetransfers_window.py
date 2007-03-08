@@ -144,8 +144,6 @@ class FileTransfersWindow:
 
 	def show_completed(self, jid, file_props):
 		''' show a dialog saying that file (file_props) has been transferred'''
-		self.window.present()
-		self.window.window.focus()
 		def on_open(widget, file_props):
 			dialog.destroy()
 			if not file_props.has_key('file-name'):
@@ -199,23 +197,17 @@ class FileTransfersWindow:
 	def show_request_error(self, file_props):
 		''' show error dialog to the recipient saying that transfer 
 		has been canceled'''
-		self.window.present()
-		self.window.window.focus()
 		dialogs.InformationDialog(_('File transfer cancelled'), _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
 	def show_send_error(self, file_props):
 		''' show error dialog to the sender saying that transfer 
 		has been canceled'''
-		self.window.present()
-		self.window.window.focus()
 		dialogs.InformationDialog(_('File transfer cancelled'),
 _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
 	def show_stopped(self, jid, file_props, error_msg = ''):
-		self.window.present()
-		self.window.window.focus()
 		if file_props['type'] == 'r':
 			file_name = os.path.basename(file_props['file-name'])
 		else:
