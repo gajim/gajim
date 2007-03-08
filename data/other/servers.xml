@@ -181,6 +181,9 @@
   <item jid="jabber.noxa.de" name="Server in Germany">
     <active port="5222"/>
   </item>
+  <item jid="jabber.nuxo.net" name="Server in France">
+    <active port="5222"/>
+  </item>
   <item jid="jabber.obsidian.co.za" name="Server in South Africa">
     <active port="5222"/>
   </item>
