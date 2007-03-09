@@ -405,6 +405,9 @@ class Contacts:
 				score += contact.priority * 10
 		score += ['not in roster', 'error', 'offline', 'invisible', 'dnd', 'xa',
 		'away', 'chat', 'online', 'requested', 'message'].index(contact.show)
+		if contact.show == 'offline' and contact.status:
+			# Offline contacts with a status message have highest score
+			score += 1
 		return score
 
 	def get_metacontacts_big_brother(self, family):
