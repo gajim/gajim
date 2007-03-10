@@ -59,6 +59,25 @@ class Systray:
 		self.xml.signal_autoconnect(self)
 		self.popup_menus = []
 
+	def subscribe_events(self):
+		'''Register listeners to the events class'''
+		gajim.events.event_added_subscribe(self.on_event_added)
+		gajim.events.event_removed_subscribe(self.on_event_removed)
+
+	def unsubscribe_events(self):
+		'''Unregister listeners to the events class'''
+		gajim.events.event_added_unsubscribe(self.on_event_added)
+		gajim.events.event_removed_unsubscribe(self.on_event_removed)
+
+	def on_event_added(self, event):
+		'''Called when an event is added to the event list'''
+		if event.show_in_systray:
+			self.set_img()
+
+	def on_event_removed(self):
+		'''Called when one or more events are removed from the event list'''
+		self.set_img()
+
 	def set_img(self):
 		if not gajim.interface.systray_enabled:
 			return
@@ -373,9 +392,11 @@ class Systray:
 			eb.add(self.img_tray)
 			self.t.add(eb)
 			self.set_img()
+			self.subscribe_events()
 		self.t.show_all()
 
 	def hide_icon(self):
 		if self.t:
 			self.t.destroy()
 			self.t = None
+			self.unsubscribe_events()

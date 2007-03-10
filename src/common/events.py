@@ -21,7 +21,6 @@
 ##
 
 import time
-import gajim
 
 class Event:
 	'''Information concerning each event'''
@@ -48,6 +47,36 @@ class Events:
 	'''Information concerning all events'''
 	def __init__(self):
 		self._events = {} # list of events {acct: {jid1: [E1, E2]}, }
+		self._event_added_listeners = []
+		self._event_removed_listeners = []
+
+	def event_added_subscribe(self, listener):
+		'''Add a listener when an event is added to the queue'''
+		if not listener in self._event_added_listeners:
+			self._event_added_listeners.append(listener)
+
+	def event_added_unsubscribe(self, listener):
+		'''Remove a listener when an event is added to the queue'''
+		if listener in self._event_added_listeners:
+			self._event_added_listeners.remove(listener)
+
+	def event_removed_subscribe(self, listener):
+		'''Add a listener when an event is removed from the queue'''
+		if not listener in self._event_removed_listeners:
+			self._event_removed_listeners.append(listener)
+
+	def event_removed_unsubscribe(self, listener):
+		'''Remove a listener when an event is removed from the queue'''
+		if listener in self._event_removed_listeners:
+			self._event_removed_listeners.remove(listener)
+
+	def fire_event_added(self, event):
+		for listener in self._event_added_listeners:
+			listener(event)
+
+	def fire_event_removed(self):
+		for listener in self._event_removed_listeners:
+			listener()
 
 	def change_account_name(self, old_name, new_name):
 		if self._events.has_key(old_name):
@@ -77,8 +106,7 @@ class Events:
 			self._events[account][jid] = [event]
 		else:
 			self._events[account][jid].append(event)
-		if event.show_in_systray and gajim.interface.systray_capabilities:
-			gajim.interface.systray.set_img()
+		self.fire_event_added(event)
 
 	def remove_events(self, account, jid, event = None, types = []):
 		'''if event is not specified, remove all events from this jid,
@@ -94,8 +122,7 @@ class Events:
 					del self._events[account][jid]
 				else:
 					self._events[account][jid].remove(event)
-				if event.show_in_systray and gajim.interface.systray_capabilities:
-					gajim.interface.systray.set_img()
+				self.fire_event_deleted(event)
 				return
 			else:
 				return True
@@ -110,13 +137,11 @@ class Events:
 				self._events[account][jid] = new_list
 			else:
 				del self._events[account][jid]
-			if gajim.interface.systray_capabilities:
-				gajim.interface.systray.set_img()
+			self.fire_event_removed()
 			return
 		# no event nor type given, remove them all
 		del self._events[account][jid]
-		if gajim.interface.systray_capabilities:
-			gajim.interface.systray.set_img()
+		self.fire_event_removed()
 
 	def change_jid(self, account, old_jid, new_jid):
 		if not self._events[account].has_key(old_jid):
