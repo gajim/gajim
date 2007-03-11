@@ -1160,8 +1160,22 @@ class Connection(ConnectionHandlers):
 		self.connection.send(msg_iq)
 
 	def request_gc_config(self, room_jid):
+		if not self.connection:
+			return
 		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
 			to = room_jid)
+		self.connection.send(iq)
+
+	def destroy_gc_room(self, room_jid, reason = '', jid = ''):
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ = 'set', queryNS = common.xmpp.NS_MUC_OWNER,
+			to = room_jid)
+		destroy = iq.getTag('query').setTag('destroy')
+		if reason:
+			destroy.setTagData('reason', reason)
+		if jid:
+			destroy.setAttr('jid', jid)
 		self.connection.send(iq)
 
 	def send_gc_status(self, nick, jid, show, status):

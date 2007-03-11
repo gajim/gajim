@@ -1547,6 +1547,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		timestamp = None
 		is_gc = False # is it a GC presence ?
 		sigTag = None
+		ns_muc_user_x = None
 		avatar_sha = None
 		# JEP-0172 User Nickname
 		user_nick = prs.getTagData('nick')
@@ -1558,16 +1559,18 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			namespace = x.getNamespace()
 			if namespace.startswith(common.xmpp.NS_MUC):
 				is_gc = True
-			if namespace == common.xmpp.NS_SIGNED:
+				if namespace == common.xmpp.NS_MUC_USER and x.getTag('destroy'):
+					ns_muc_user_x = x
+			elif namespace == common.xmpp.NS_SIGNED:
 				sigTag = x
-			if namespace == common.xmpp.NS_VCARD_UPDATE:
+			elif namespace == common.xmpp.NS_VCARD_UPDATE:
 				avatar_sha = x.getTagData('photo')
-			if namespace == common.xmpp.NS_DELAY:
+			elif namespace == common.xmpp.NS_DELAY:
 				# JEP-0091
 				tim = prs.getTimestamp()
 				tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 				timestamp = time.localtime(timegm(tim))
-			if namespace == 'http://delx.cjb.net/protocol/roster-subsync':
+			elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
 				# see http://trac.gajim.org/ticket/326
 				agent = gajim.get_server_from_jid(jid_stripped)
 				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
@@ -1667,10 +1670,24 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						else:
 							# save sha in mem NOW
 							self.vcard_shas[who] = avatar_sha
+				if ns_muc_user_x:
+					# Room has been destroyed. see
+					# http://www.xmpp.org/extensions/xep-0045.html#destroyroom
+					reason = _('Room has been destroyed')
+					destroy = ns_muc_user_x.getTag('destroy')
+					r = destroy.getTagData('reason')
+					if r:
+						reason += ' (%s)' % r
+					jid = destroy.getAttr('jid')
+					if jid:
+						reason += '\n' + _('You can join this room instead: %s') % jid
+					statusCode = 'destroyed'
+				else:
+					reason = prs.getReason()
+					statusCode = prs.getStatusCode()
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
-					prs.getReason(), prs.getActor(), prs.getStatusCode(),
-					prs.getNewNick()))
+					reason, prs.getActor(), statusCode, prs.getNewNick()))
 			return
 
 		if ptype == 'subscribe':

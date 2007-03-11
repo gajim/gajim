@@ -222,6 +222,11 @@ class GroupchatControl(ChatControlBase):
 			self._on_configure_room_menuitem_activate)
 		self.handlers[id] = widget
 
+		widget = xm.get_widget('destroy_room_menuitem')
+		id = widget.connect('activate',
+			self._on_destroy_room_menuitem_activate)
+		self.handlers[id] = widget
+
 		widget = xm.get_widget('change_subject_menuitem')
 		id = widget.connect('activate',
 			self._on_change_subject_menuitem_activate)
@@ -472,18 +477,21 @@ class GroupchatControl(ChatControlBase):
 		sets sensitivity state for configure_room'''
 		menu = self.gc_popup_menu
 		childs = menu.get_children()
-		# hide chat buttons
-		childs[5].set_active(self.hide_chat_buttons_current)
+		# Check compact view menuitem
+		childs[6].set_active(self.hide_chat_buttons_current)
 		if gajim.gc_connected[self.account][self.room_jid]:
 			c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				self.nick)
 			if c.affiliation not in ('owner', 'admin'):
 				childs[1].set_sensitive(False)
+			if c.affiliation != 'owner':
+				childs[2].set_sensitive(False)
 		else:
 			# We are not connected to this groupchat, disable unusable menuitems
 			childs[1].set_sensitive(False)
 			childs[2].set_sensitive(False)
 			childs[3].set_sensitive(False)
+			childs[4].set_sensitive(False)
 		return menu
 
 	def on_message(self, nick, msg, tim, has_timestamp = False, xhtml = None):
@@ -888,6 +896,8 @@ class GroupchatControl(ChatControlBase):
 							os.remove(files[old_file])
 						os.rename(old_file, files[old_file])
 				self.print_conversation(s, 'info')
+			elif statusCode == 'destroyed': # Room has been destroyed
+				self.print_conversation(reason, 'info')
 
 			if len(gajim.events.get_events(self.account,
 			self.room_jid + '/' + nick)) == 0:
@@ -1441,6 +1451,29 @@ class GroupchatControl(ChatControlBase):
 				self.room_jid):
 				gajim.interface.instances[self.account]['gc_config'][self.room_jid]\
 					= config.GroupchatConfigWindow(self.account, self.room_jid)
+
+	def _on_destroy_room_menuitem_activate(self, widget):
+		# Ask for a reason
+		instance = dialogs.DubbleInputDialog(_('Destroying %s') % self.room_jid,
+			_('You are going to definitively destroy this room.\n'
+			'You may specify a reason below:'),
+			_('You may also enter an alternate venue:'))
+		response = instance.get_response()
+		if response == gtk.RESPONSE_OK:
+			reason = instance.input_entry1.get_text().decode('utf-8')
+			jid = instance.input_entry2.get_text().decode('utf-8')
+			# Test jid
+			try:
+				jid = helpers.parse_jid(jid)
+			except:
+				ErrorDialog(_('Invalid group chat Jabber ID'),
+				_('The group chat Jabber ID has not allowed characters.'))
+				return
+		else:
+			# Abord destroy operation
+			return
+		gajim.connections[self.account].destroy_gc_room(self.room_jid, reason,
+		jid)
 
 	def _on_bookmark_room_menuitem_activate(self, widget):
 		bm = {

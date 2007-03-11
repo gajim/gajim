@@ -1049,6 +1049,62 @@ class InputDialog:
 			self.dialog.destroy()
 		return response
 
+class DubbleInputDialog:
+	'''Class for Dubble Input dialog'''
+	def __init__(self, title, label_str1, label_str2, input_str1 = None,
+	input_str2 = None, is_modal = True, ok_handler = None,
+	cancel_handler = None):
+		# if modal is True you also need to call get_response()
+		# and ok_handler won't be used
+		self.xml = gtkgui_helpers.get_glade('dubbleinput_dialog.glade')
+		self.dialog = self.xml.get_widget('dubbleinput_dialog')
+		label1 = self.xml.get_widget('label1')
+		self.input_entry1 = self.xml.get_widget('input_entry1')
+		label2 = self.xml.get_widget('label2')
+		self.input_entry2 = self.xml.get_widget('input_entry2')
+		self.dialog.set_title(title)
+		label1.set_markup(label_str1)
+		label2.set_markup(label_str2)
+		self.cancel_handler = cancel_handler
+		if input_str1:
+			self.input_entry1.set_text(input_str1)
+			self.input_entry1.select_region(0, -1) # select all
+		if input_str2:
+			self.input_entry2.set_text(input_str2)
+			self.input_entry2.select_region(0, -1) # select all
+
+		self.is_modal = is_modal
+		if not is_modal and ok_handler is not None:
+			self.ok_handler = ok_handler
+			okbutton = self.xml.get_widget('okbutton')
+			okbutton.connect('clicked', self.on_okbutton_clicked)
+			cancelbutton = self.xml.get_widget('cancelbutton')
+			cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
+			self.xml.signal_autoconnect(self)
+			self.dialog.show_all()
+
+	def on_dubbleinput_dialog_destroy(self, widget):
+		if self.cancel_handler:
+			self.cancel_handler()
+
+	def on_okbutton_clicked(self, widget):
+		user_input1 = self.input_entry1.get_text().decode('utf-8')
+		user_input2 = self.input_entry2.get_text().decode('utf-8')
+		self.dialog.destroy()
+		if isinstance(self.ok_handler, tuple):
+			self.ok_handler[0](user_input1, user_input2, *self.ok_handler[1:])
+		else:
+			self.ok_handler(user_input1, user_input2)
+
+	def on_cancelbutton_clicked(self, widget):
+		self.dialog.destroy()
+
+	def get_response(self):
+		if self.is_modal:
+			response = self.dialog.run()
+			self.dialog.destroy()
+		return response
+
 class SubscriptionRequestWindow:
 	def __init__(self, jid, text, account, user_nick = None):
 		xml = gtkgui_helpers.get_glade('subscription_request_window.glade')
