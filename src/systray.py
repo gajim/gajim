@@ -74,7 +74,7 @@ class Systray:
 		if event.show_in_systray:
 			self.set_img()
 
-	def on_event_removed(self):
+	def on_event_removed(self, event_list):
 		'''Called when one or more events are removed from the event list'''
 		self.set_img()
 

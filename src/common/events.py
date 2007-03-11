@@ -74,9 +74,9 @@ class Events:
 		for listener in self._event_added_listeners:
 			listener(event)
 
-	def fire_event_removed(self):
+	def fire_event_removed(self, event_list):
 		for listener in self._event_removed_listeners:
-			listener()
+			listener(event_list)
 
 	def change_account_name(self, old_name, new_name):
 		if self._events.has_key(old_name):
@@ -122,26 +122,29 @@ class Events:
 					del self._events[account][jid]
 				else:
 					self._events[account][jid].remove(event)
-				self.fire_event_deleted(event)
+				self.fire_event_removed([event])
 				return
 			else:
 				return True
 		if types:
 			new_list = [] # list of events to keep
+			removed_list = [] # list of removed events
 			for ev in self._events[account][jid]:
 				if ev.type_ not in types:
 					new_list.append(ev)
+				else:
+					removed_list.append(ev)
 			if len(new_list) == len(self._events[account][jid]):
 				return True
 			if new_list:
 				self._events[account][jid] = new_list
 			else:
 				del self._events[account][jid]
-			self.fire_event_removed()
+			self.fire_event_removed(removed_list)
 			return
 		# no event nor type given, remove them all
 		del self._events[account][jid]
-		self.fire_event_removed()
+		self.fire_event_removed(self._events[account][jid])
 
 	def change_jid(self, account, old_jid, new_jid):
 		if not self._events[account].has_key(old_jid):
