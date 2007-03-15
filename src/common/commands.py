@@ -135,7 +135,7 @@ class ChangeStatusCommand(AdHocCommand):
 
 		# if going offline, we need to push response so it won't go into
 		# queue and disappear
-		self.connection.connection.send(response, presencetype == 'offline')
+		self.connection.connection.send(response, now = presencetype == 'offline')
 
 		# send new status
 		gajim.interface.roster.send_status(self.connection.name, presencetype,

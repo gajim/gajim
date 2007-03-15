@@ -138,7 +138,7 @@ class SSLWrapper:
 
 		raise NotImplementedException()
 
-	def send(self, data, flags=None):
+	def send(self, data, flags=None, now = False):
 		raise NotImplementedException()
 
 class PyOpenSSLWrapper(SSLWrapper):
@@ -178,7 +178,7 @@ class PyOpenSSLWrapper(SSLWrapper):
 				raise SSLWrapper.Error(self.sock or self.sslobj, e)
 		return retval
 
-	def send(self, data, flags=None):
+	def send(self, data, flags=None, now = False):
 		try:
 			if flags is None: return self.sslobj.send(data)
 			else:		  return self.sslobj.send(data, flags)
@@ -219,7 +219,7 @@ class StdlibSSLWrapper(SSLWrapper):
 				raise SSLWrapper.Error(self.sock or self.sslobj, e)
 		return None
 
-	def send(self, data, flags=None):
+	def send(self, data, flags=None, now = False):
 		# we simply ignore flags since ssl object doesn't support it
 		try:
 			return self.sslobj.write(data)
@@ -574,7 +574,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.on_connect = None
 		return True
 
-	def send(self, raw_data):
+	def send(self, raw_data, now = False):
 		'''Append raw_data to the queue of messages to be send. 
 		If supplied data is unicode string, encode it to utf-8.
 		'''
@@ -585,7 +585,11 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			r = r.encode('utf-8')
 		elif not isinstance(r, str): 
 			r = ustr(r).encode('utf-8')
-		self.sendqueue.append(r)
+		if now:
+			self.sendqueue.insert(0, r)
+			self._do_send()
+		else:
+			self.sendqueue.append(r)
 		self._plug_idle()
 
 	def _on_send(self):
