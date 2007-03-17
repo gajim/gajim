@@ -38,6 +38,7 @@ from common import gajim
 from common import helpers
 from common import passwords
 from common.exceptions import GajimGeneralException
+from common import i18n
 
 from message_window import MessageWindowMgr
 from chat_control import ChatControl
@@ -4087,6 +4088,15 @@ class RosterWindow:
 			contact.groups.remove(group)
 		self.remove_contact(contact, account)
 
+	def _on_send_files(self, account, jid, uri):
+		c = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		uri_splitted = uri.split() # we may have more than one file dropped
+		for uri in uri_splitted:
+			path = helpers.get_file_path_from_dnd_dropped_uri(uri)
+			if os.path.isfile(path): # is it file?
+				gajim.interface.instances['file_transfers'].send_file(
+					account, c, path)
+
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
 		etime):
 		model = treeview.get_model()
@@ -4127,11 +4137,17 @@ class RosterWindow:
 				jid_dest)
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
+			nb_uri = len(uri_splitted)
+			prim_text = 'Send file?'
+			sec_text =  i18n.ngettext('Do you want to send that file to %s:',
+				'Do you want to send those files to %s:', nb_uri) %\
+				c_dest.get_shown_name() 
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
-				if os.path.isfile(path): # is it file?
-					gajim.interface.instances['file_transfers'].send_file(
-						account_dest, c_dest, path)
+				sec_text += '\n' + os.path.basename(path)
+			dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
+				on_response_ok = (self._on_send_files, account_dest, jid_dest, uri))
+			dialog.popup()
 			return
 
 		if gajim.config.get_per('accounts', account_dest, 'is_zeroconf'):
