@@ -150,7 +150,7 @@ class RosterWindow:
 			self.add_contact_to_roster(jid, account)
 			iters = self.get_contact_iter(jid, account)
 			path = self.tree.get_model().get_path(iters[0])
-		if self.dragging:
+		if self.dragging or not gajim.config.get('scroll_roster_to_last_message'):
 			# do not change selection while DND'ing
 			return
 		# popup == False so we show awaiting event in roster
@@ -3181,7 +3181,8 @@ class RosterWindow:
 		if popup:
 			if not ctrl:
 				self.new_chat(contact, account, resource = resource_for_chat)
-				if path and not self.dragging:
+				if path and not self.dragging and gajim.config.get(
+				'scroll_roster_to_last_message'):
 					# we curently see contact in our roster OR he
 					# is not in the roster at all. 
 					# show and select his line in roster 
