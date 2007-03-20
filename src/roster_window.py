@@ -4088,7 +4088,7 @@ class RosterWindow:
 			contact.groups.remove(group)
 		self.remove_contact(contact, account)
 
-	def _on_send_files(self, account, jid, uri):
+	def _on_send_files(self, widget, account, jid, uri):
 		c = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		uri_splitted = uri.split() # we may have more than one file dropped
 		for uri in uri_splitted:
