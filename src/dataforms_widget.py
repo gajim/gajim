@@ -312,25 +312,35 @@ class SingleForm(gtk.Table, object):
 					xoptions=gtk.FILL, yoptions=gtk.FILL)
 
 			elif field.type == 'list-single':
-				# TODO: When more than few choices, make a list
-				# TODO: Think of moving that to another function (it could be used
-				# TODO: in stage2 of adhoc commands too).
 				# TODO: What if we have radio buttons and non-required field?
 				# TODO: We cannot deactivate them all...
-				widget = gtk.VBox()
-				first_radio = None
-				for value, label in field.iter_options():
-					radio = gtk.RadioButton(first_radio, label=label)
-					radio.connect('toggled', self.on_list_single_radiobutton_toggled,
-						field, value)
-					if first_radio is None:
-						first_radio = radio
-						if field.value=='':	# TODO: is None when done
-							field.value = value
-					if value == field.value:
-						radio.set_active(True)
-					widget.set_sensitive(readwrite)
-					widget.pack_start(radio, expand=False)
+				if len(field.options) < 6:
+					# 5 option max: show radiobutton
+					widget = gtk.VBox()
+					first_radio = None
+					for value, label in field.iter_options():
+						radio = gtk.RadioButton(first_radio, label=label)
+						radio.connect('toggled',
+							 self.on_list_single_radiobutton_toggled, field, value)
+						if first_radio is None:
+							first_radio = radio
+							if field.value == '':	# TODO: is None when done
+								field.value = value
+						if value == field.value:
+							radio.set_active(True)
+						widget.pack_start(radio, expand=False)
+				else:
+					# more than 5 options: show combobox
+					def on_list_single_combobox_changed(combobox, f):
+						iter = combobox.get_active_iter()
+						if iter:
+							model = combobox.get_model()
+							f.value = model[iter][1]
+						else:
+							f.value = ''
+					widget = gtkgui_helpers.create_combobox(field.options, field.value)
+					widget.connect('changed', on_list_single_combobox_changed, field)
+				widget.set_sensitive(readwrite)
 
 			elif field.type == 'list-multi':
 				# TODO: When more than few choices, make a list

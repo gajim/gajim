@@ -817,3 +817,20 @@ default_name = ''):
 
 def on_bm_header_changed_state(widget, event):
 	widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
+
+def create_combobox(value_list, selected_value = None):
+	'''Value_list is [(label1, value1), ]'''
+	liststore = gtk.ListStore(str, str)
+	combobox = gtk.ComboBox(liststore)
+	cell = gtk.CellRendererText()
+	combobox.pack_start(cell, True)
+	combobox.add_attribute(cell, 'text', 0)
+	i = -1
+	for value in value_list:
+		liststore.append(value)
+		if selected_value == value[1]:
+			i = value_list.index(value)
+	if i > -1:
+		combobox.set_active(i)
+	combobox.show_all()
+	return combobox
