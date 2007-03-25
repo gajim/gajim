@@ -34,6 +34,7 @@ from common import GnuPG
 from common import helpers
 from common import gajim
 from common import atom
+from common import pep
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 
@@ -1504,7 +1505,18 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		''' Called when we receive <message/> with pubsub event. '''
 		# TODO: Logging? (actually services where logging would be useful, should
 		# TODO: allow to access archives remotely...)
+		jid = msg.getAttr('from')
 		event = msg.getTag('event')
+
+		# XEP-0107: User Mood
+		items = event.getTag('items', {'node': 'http://jabber.org/protocol/mood'})
+		if items: pep.user_mood(items, self.name, jid)
+		# XEP-0118: User Tune
+		items = event.getTag('items', {'node': 'http://jabber.org/protocol/tune'})
+		if items: pep.user_tune(items, self.name, jid)
+		# XEP-0080: User Geolocation
+		items = event.getTag('items', {'node': 'http://jabber.org/protocol/geoloc'})
+		if items: pep.user_geoloc(items, self.name, jid)
 
 		items = event.getTag('items')
 		if items is None: return

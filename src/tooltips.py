@@ -478,6 +478,13 @@ class RosterTooltip(NotificationAreaTooltip):
 				show = '<i>' + show + '</i>'
 				# we append show below
 				
+				if contact.mood:
+					mood = contact.mood.strip()
+					mood_text = contact.mood_text.strip()
+					if mood:
+						#print mood
+						properties.append(('<b>%s:</b> %s' % (mood,	mood_text), None))
+
 				if contact.status:
 					status = contact.status.strip()
 					if status:
