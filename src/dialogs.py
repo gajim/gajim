@@ -1319,6 +1319,136 @@ class JoinGroupchatWindow:
 
 		self.window.destroy()
 
+class SynchroniseSelectAccountDialog:
+	def __init__(self, account):
+		# 'account' can be None if we are about to create our first one
+		if not account or gajim.connections[account].connected < 2:
+			ErrorDialog(_('You are not connected to the server'),
+				_('Without a connection, you can not synchronise your contacts.'))
+			raise GajimGeneralException, 'You are not connected to the server'
+		self.account = account
+		self.xml = gtkgui_helpers.get_glade('synchronise_select_account_dialog.glade')
+		self.dialog = self.xml.get_widget('synchronise_select_account_dialog')
+		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
+		model = gtk.ListStore(str, str, bool)
+		self.accounts_treeview.set_model(model)
+		# columns
+		renderer = gtk.CellRendererText()
+		self.accounts_treeview.insert_column_with_attributes(-1,
+					_('Name'), renderer, text = 0)
+		renderer = gtk.CellRendererText()
+		self.accounts_treeview.insert_column_with_attributes(-1,
+					_('Server'), renderer, text = 1)
+
+		self.xml.signal_autoconnect(self)
+		self.init_accounts()
+		self.dialog.show_all()
+
+	def on_accounts_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			self.window.destroy()
+
+	def init_accounts(self):
+		'''initialize listStore with existing accounts'''
+		model = self.accounts_treeview.get_model()
+		model.clear()
+		for remote_account in gajim.connections:
+			if remote_account == self.account:
+				# Do not show the account we're sync'ing
+				continue
+			iter = model.append()
+			model.set(iter, 0, remote_account, 1, gajim.get_hostname_from_account(
+				remote_account))
+
+	def on_cancel_button_clicked(self, widget):
+		self.dialog.destroy()
+
+	def on_ok_button_clicked(self, widget):
+		sel = self.accounts_treeview.get_selection()
+		(model, iter) = sel.get_selected()
+		if not iter:
+			return
+		remote_account = model.get_value(iter, 0).decode('utf-8')
+		
+		if gajim.connections[remote_account].connected < 2:
+			ErrorDialog(_('This account is not connected to the server'),
+				_('You cannot synchronize with an account unless it is connected.'))
+			return
+		else:
+			try:
+				dialog = SynchroniseSelectContactsDialog(self.account, remote_account)
+			except GajimGeneralException:
+				# if we showed ErrorDialog, there will not be dialog instance
+				return
+		self.dialog.destroy()
+
+class SynchroniseSelectContactsDialog:
+	def __init__(self, account, remote_account):
+		self.local_account = account
+		self.remote_account = remote_account
+		self.xml = gtkgui_helpers.get_glade('synchronise_select_contacts_dialog.glade')
+		self.dialog = self.xml.get_widget('synchronise_select_contacts_dialog')
+		self.contacts_treeview = self.xml.get_widget('contacts_treeview')
+		model = gtk.ListStore(bool, str)
+		self.contacts_treeview.set_model(model)
+		# columns
+		renderer1 = gtk.CellRendererToggle()
+		renderer1.set_property('activatable', True)
+		renderer1.connect('toggled', self.toggled_callback)
+		self.contacts_treeview.insert_column_with_attributes(-1,
+					_('Synchronise'), renderer1, active = 0)
+		renderer2 = gtk.CellRendererText()
+		self.contacts_treeview.insert_column_with_attributes(-1,
+					_('Name'), renderer2, text = 1)
+
+		self.xml.signal_autoconnect(self)
+		self.init_contacts()
+		self.dialog.show_all()
+
+	def toggled_callback(self, cell, path):
+		model = self.contacts_treeview.get_model()
+		iter = model.get_iter(path)
+		model[iter][0] = not cell.get_active()
+
+	def on_contacts_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			self.window.destroy()
+
+	def init_contacts(self):
+		'''initialize listStore with existing accounts'''
+		model = self.contacts_treeview.get_model()
+		model.clear()
+
+		# recover local contacts
+		local_jid_list = gajim.contacts.get_jid_list(self.local_account)
+
+		remote_jid_list = gajim.contacts.get_jid_list(self.remote_account)
+		for remote_jid in remote_jid_list:
+			if remote_jid not in local_jid_list:
+				iter = model.append()
+				model.set(iter, 0, True, 1, remote_jid)
+
+	def on_cancel_button_clicked(self, widget):
+		self.dialog.destroy()
+
+	def on_ok_button_clicked(self, widget):
+		model = self.contacts_treeview.get_model()
+		iter = model.get_iter_root()
+		while iter:
+			if model[iter][0]:
+				# it is selected
+				remote_jid = model[iter][1].decode('utf-8')
+				message = 'I\'m synchronizing my contacts from my %s account, could you please add this address to your contact list?' % \
+					gajim.get_hostname_from_account(self.remote_account)
+				remote_contact = gajim.contacts.get_first_contact_from_jid(
+					self.remote_account, remote_jid)
+				# keep same groups and same nickname
+				gajim.interface.roster.req_sub(self, remote_jid, message,
+					self.local_account, groups = remote_contact.groups,
+					nickname = remote_contact.name, auto_auth = True)
+			iter = model.iter_next(iter)
+		self.dialog.destroy()
+
 class NewChatDialog(InputDialog):
 	def __init__(self, account):
 		self.account = account

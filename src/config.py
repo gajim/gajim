@@ -1588,6 +1588,13 @@ class AccountModificationWindow:
 			gajim.interface.instances['manage_proxies'] = \
 				ManageProxiesWindow()
 
+	def on_synchronise_contacts_button_clicked(self, widget):
+		try:
+			dialog = dialogs.SynchroniseSelectAccountDialog(self.account)
+		except GajimGeneralException:
+			# If we showed ErrorDialog, there will not be dialog instance
+			return
+
 	def on_gpg_choose_button_clicked(self, widget, data = None):
 		if gajim.connections.has_key(self.account):
 			secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
