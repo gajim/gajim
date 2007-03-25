@@ -18,7 +18,7 @@ import common.gajim
 
 class Contact:
 	'''Information concerning each contact'''
-	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
+	def __init__(self, jid='', name='', groups=[], show='', status='', mood='', sub='',
 	ask='', resource='', priority=0, keyID='', our_chatstate=None,
 	chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
 		self.jid = jid
@@ -26,6 +26,7 @@ class Contact:
 		self.groups = groups
 		self.show = show
 		self.status = status
+		self.mood = mood
 		self.sub = sub
 		self.ask = ask
 		self.resource = resource
@@ -139,16 +140,17 @@ class Contacts:
 		del self._gc_contacts[account]
 		del self._metacontacts_tags[account]
 
-	def create_contact(self, jid='', name='', groups=[], show='', status='',
+	def create_contact(self, jid='', name='', groups=[], show='', status='', mood='',
 		sub='', ask='', resource='', priority=0, keyID='', our_chatstate=None,
 		chatstate=None, last_status_time=None, composing_jep=None):
-		return Contact(jid, name, groups, show, status, sub, ask, resource,
+		return Contact(jid, name, groups, show, status, mood, sub, ask, resource,
 			priority, keyID, our_chatstate, chatstate, last_status_time,
 			composing_jep)
 	
 	def copy_contact(self, contact):
 		return self.create_contact(jid = contact.jid, name = contact.name,
-			groups = contact.groups, show = contact.show, status = contact.status,
+			groups = contact.groups, show = contact.show, status =
+			contact.status, mood = contact.mood,
 			sub = contact.sub, ask = contact.ask, resource = contact.resource,
 			priority = contact.priority, keyID = contact.keyID,
 			our_chatstate = contact.our_chatstate, chatstate = contact.chatstate,
