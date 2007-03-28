@@ -717,6 +717,7 @@ class ConnectionDisco:
 			iq = iq_obj.buildReply('result')
 			q = iq.getTag('query')
 			if node:
+				print node
 				q.setAttr('node', node)
 			q.addChild('identity', attrs = {'type': 'pc', 'category': 'client',
 				'name': 'Gajim'})
@@ -732,6 +733,12 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY + '+notify'})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE + '+notify'})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD + '+notify'})
 
 			if (node is None or extension == 'cstates') and gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_CHATSTATES})
@@ -1509,14 +1516,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		event = msg.getTag('event')
 
 		# XEP-0107: User Mood
-		items = event.getTag('items', {'node': 'http://jabber.org/protocol/mood'})
+		items = event.getTag('items', {'node': common.xmpp.NS_MOOD})
 		if items: pep.user_mood(items, self.name, jid)
 		# XEP-0118: User Tune
-		items = event.getTag('items', {'node': 'http://jabber.org/protocol/tune'})
+		items = event.getTag('items', {'node': common.xmpp.NS_TUNE})
 		if items: pep.user_tune(items, self.name, jid)
 		# XEP-0080: User Geolocation
-		items = event.getTag('items', {'node': 'http://jabber.org/protocol/geoloc'})
+		items = event.getTag('items', {'node': common.xmpp.NS_GEOLOC})
 		if items: pep.user_geoloc(items, self.name, jid)
+		# XEP-0108: User Activity
+		items = event.getTag('items', {'node': common.xmpp.NS_ACTIVITY})
+		if items: pep.user_activity(items, self.name, jid)
 
 		items = event.getTag('items')
 		if items is None: return

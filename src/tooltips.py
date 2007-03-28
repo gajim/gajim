@@ -482,8 +482,13 @@ class RosterTooltip(NotificationAreaTooltip):
 					mood = contact.mood.strip()
 					mood_text = contact.mood_text.strip()
 					if mood:
-						#print mood
 						properties.append(('<b>%s:</b> %s' % (mood,	mood_text), None))
+
+				if contact.activity:
+					activity = contact.activity.strip()
+					activity_text = contact.activity_text.strip()
+					if activity:
+						properties.append(('<b>%s:</b> %s' % (activity,	activity_text), None))
 
 				if contact.status:
 					status = contact.status.strip()
