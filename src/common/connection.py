@@ -78,9 +78,10 @@ class Connection(ConnectionHandlers):
 		self.password = passwords.get_password(name)
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
 		# All valid resource substitution strings should be added to this hash. 
-		self.server_resource = Template(self.server_resource).safe_substitute({ 
-			'hostname': socket.gethostname() 
-		})
+		if self.server_resource:
+			self.server_resource = Template(self.server_resource).safe_substitute({
+				'hostname': socket.gethostname()
+			})
 		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
 			self.keepalives = gajim.config.get_per('accounts', self.name,'keep_alive_every_foo_secs')
 		else:
