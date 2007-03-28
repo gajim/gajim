@@ -292,16 +292,13 @@ class Connection(ConnectionHandlers):
 	def connect(self, data = None):
 		''' Start a connection to the Jabber server.
 		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')
-		data MUST contain name, hostname, resource, usessl, proxy,
-		use_custom_host, custom_host (if use_custom_host), custom_port (if
-		use_custom_host), '''
+		data MUST contain hostname, usessl, proxy, use_custom_host,
+		custom_host (if use_custom_host), custom_port (if use_custom_host)'''
 		if self.connection:
 			return self.connection, ''
 
 		if data:
-			name = data['name']
 			hostname = data['hostname']
-			resource = data['resource']
 			usessl = data['usessl']
 			self.try_connecting_for_foo_secs = 45
 			p = data['proxy']
@@ -311,9 +308,7 @@ class Connection(ConnectionHandlers):
 				custom_h = data['custom_host']
 				custom_p = data['custom_port']
 		else:
-			name = gajim.config.get_per('accounts', self.name, 'name')
 			hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-			resource = gajim.config.get_per('accounts', self.name, 'resource')
 			usessl = gajim.config.get_per('accounts', self.name, 'usessl')
 			self.try_connecting_for_foo_secs = gajim.config.get_per('accounts',
 				self.name, 'try_connecting_for_foo_secs')
@@ -324,7 +319,7 @@ class Connection(ConnectionHandlers):
 			custom_h = gajim.config.get_per('accounts', self.name, 'custom_host')
 			custom_p = gajim.config.get_per('accounts', self.name, 'custom_port')
 
-		#create connection if it doesn't already exist
+		# create connection if it doesn't already exist
 		self.connected = 1
 		if p and p in gajim.config.get_per('proxies'):
 			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
@@ -448,8 +443,6 @@ class Connection(ConnectionHandlers):
 		self._register_handlers(con, con_type)
 
 		name = gajim.config.get_per('accounts', self.name, 'name')
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-		resource = gajim.config.get_per('accounts', self.name, 'resource')
 		self.connection = con
 
 		fpr_good = self._check_fingerprint(con, con_type)
@@ -470,7 +463,7 @@ class Connection(ConnectionHandlers):
 		if fpr_good == True:
 			log.info("Fingerprint found and matched for %s.", hostname)
 
-		con.auth(name, self.password, resource, 1, self.__on_auth)
+		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
 		return True
 
@@ -971,6 +964,7 @@ class Connection(ConnectionHandlers):
 		if self.connection:
 			return
 		self._hostname = config['hostname']
+		self.server_resource = config['resource']
 		self.new_account_info = config
 		self.name = name
 		self.on_connect_success = self._on_new_account
