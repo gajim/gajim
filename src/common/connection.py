@@ -17,9 +17,9 @@
 ## GNU General Public License for more details.
 ##
 
-
 import os
 import random
+import socket
 
 try:
 	randomsource = random.SystemRandom()
@@ -42,6 +42,7 @@ USE_GPG = GnuPG.USE_GPG
 
 from common.rst_xhtml_generator import create_xhtml
 
+from string import Template
 import logging
 log = logging.getLogger('gajim.c.connection')
 
@@ -76,6 +77,10 @@ class Connection(ConnectionHandlers):
 		self.last_history_line = {}
 		self.password = passwords.get_password(name)
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
+		# All valid resource substitution strings should be added to this hash. 
+		self.server_resource = Template(self.server_resource).safe_substitute({ 
+			'hostname': socket.gethostname() 
+		})
 		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
 			self.keepalives = gajim.config.get_per('accounts', self.name,'keep_alive_every_foo_secs')
 		else:
