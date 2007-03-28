@@ -448,6 +448,7 @@ class Connection(ConnectionHandlers):
 		self._register_handlers(con, con_type)
 
 		name = gajim.config.get_per('accounts', self.name, 'name')
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		self.connection = con
 
 		fpr_good = self._check_fingerprint(con, con_type)
