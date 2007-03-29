@@ -3,6 +3,7 @@ from common import gajim
 
 def user_mood(items, name, jid):
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
+	print 'User: %s, Resource: %s' % (user, resource)
 	contacts = gajim.contacts.get_contact(name, user, resource=resource)
 	for item in items.getTags('item'):
 		child = item.getTag('mood')

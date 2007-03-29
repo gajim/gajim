@@ -1511,7 +1511,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		''' Called when we receive <message/> with pubsub event. '''
 		# TODO: Logging? (actually services where logging would be useful, should
 		# TODO: allow to access archives remotely...)
-		jid = helpers.get_jid_from_iq(msg)
+		jid = helpers.get_full_jid_from_iq(msg)
 		event = msg.getTag('event')
 
 		# XEP-0107: User Mood
