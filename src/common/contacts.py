@@ -26,6 +26,7 @@ class Contact:
 		self.groups = groups
 		self.show = show
 		self.status = status
+		# FIXME
 		self.mood = dict()
 		self.activity = dict()
 		self.sub = sub
