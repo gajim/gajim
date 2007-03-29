@@ -717,7 +717,6 @@ class ConnectionDisco:
 			iq = iq_obj.buildReply('result')
 			q = iq.getTag('query')
 			if node:
-				print node
 				q.setAttr('node', node)
 			q.addChild('identity', attrs = {'type': 'pc', 'category': 'client',
 				'name': 'Gajim'})
@@ -1512,7 +1511,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		''' Called when we receive <message/> with pubsub event. '''
 		# TODO: Logging? (actually services where logging would be useful, should
 		# TODO: allow to access archives remotely...)
-		jid = msg.getAttr('from')
+		jid = helpers.get_jid_from_iq(msg)
 		event = msg.getTag('event')
 
 		# XEP-0107: User Mood

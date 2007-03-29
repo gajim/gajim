@@ -18,7 +18,7 @@ import common.gajim
 
 class Contact:
 	'''Information concerning each contact'''
-	def __init__(self, jid='', name='', groups=[], show='', status='', mood='', activity='', sub='',
+	def __init__(self, jid='', name='', groups=[], show='', status='', mood={}, activity={}, sub='',
 	ask='', resource='', priority=0, keyID='', our_chatstate=None,
 	chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
 		self.jid = jid
@@ -141,7 +141,7 @@ class Contacts:
 		del self._gc_contacts[account]
 		del self._metacontacts_tags[account]
 
-	def create_contact(self, jid='', name='', groups=[], show='', status='', mood='', activity='',
+	def create_contact(self, jid='', name='', groups=[], show='', status='', mood={}, activity={},
 		sub='', ask='', resource='', priority=0, keyID='', our_chatstate=None,
 		chatstate=None, last_status_time=None, composing_jep=None):
 		return Contact(jid, name, groups, show, status, mood,
