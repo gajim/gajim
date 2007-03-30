@@ -794,6 +794,12 @@ class ConnectionDisco:
 		#FIXME: see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
 			identities = [{'category': 'server', 'type': 'im', 'name': node}]
 		if id[0] == 'p':
+			if jid == gajim.config.get_per('accounts', self.name, 'hostname'):
+				for identity in identities:
+					if identity['category'] == 'pubsub' and identity['type'] == \
+					'pep':
+						self.pep_supported = True
+						break
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
 				gajim.proxy65_manager.resolve(jid, self.connection, self.name)
 			if features.__contains__(common.xmpp.NS_MUC) and is_muc:
@@ -1859,6 +1865,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			for proxy in proxies:
 				gajim.proxy65_manager.resolve(proxy, self.connection)
 			self.discoverItems(gajim.config.get_per('accounts', self.name, 
+				'hostname'), id_prefix='p')
+			self.discoverInfo(gajim.config.get_per('accounts', self.name, 
 				'hostname'), id_prefix='p')
 	
 	def _on_roster_set(self, roster):
