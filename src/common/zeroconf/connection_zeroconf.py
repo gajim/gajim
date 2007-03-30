@@ -52,6 +52,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# system username
 		self.username = None
 		self.name = name
+		self.server_resource = '' # zeroconf has no resource, fake an empty one
 		self.connected = 0 # offline
 		self.connection = None
 		self.gpg = None
