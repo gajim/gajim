@@ -307,6 +307,33 @@ class ChooseGPGKeyDialog:
 				self.keys_treeview.set_cursor(path)
 
 
+class ChangeMoodDialog:
+	def __init__(self):
+		self.xml = gtkgui_helpers.get_glade('change_mood_dialog.glade')
+		self.window = self.xml.get_widget('change_mood_dialog')
+		self.window.set_transient_for(gajim.interface.roster.window)
+		self.window.set_title('Mood')
+
+		message_textview = self.xml.get_widget('message_textview')
+		self.message_buffer = message_textview.get_buffer()
+		#self.message_buffer.connect('changed',
+		#	self.toggle_sensitiviy_of_save_as_preset)
+
+	def run(self):
+		'''Wait for OK or Cancel button to be pressed and return mood
+		and messsage (None if users pressed Cancel or x button of WM'''
+		rep = self.window.run()
+		mood = None 
+		message = None
+		if rep == gtk.RESPONSE_OK:
+			beg, end = self.message_buffer.get_bounds()
+			message = self.message_buffer.get_text(beg, end).decode('utf-8')\
+				.strip()
+			msg = helpers.to_one_line(message)
+		self.window.destroy()
+		return (mood, message)
+
+
 class ChangeStatusMessageDialog:
 	def __init__(self, show = None):
 		self.show = show

@@ -39,6 +39,7 @@ from common import helpers
 from common import passwords
 from common.exceptions import GajimGeneralException
 from common import i18n
+from common import pep
 
 from message_window import MessageWindowMgr
 from chat_control import ChatControl
@@ -2268,6 +2269,14 @@ class RosterWindow:
 			gajim.config.get_per('accounts', account, 'name'))
 		helpers.launch_browser_mailer('url', url)
 
+	def on_change_mood_activate(self, widget, account):
+		dlg = dialogs.ChangeMoodDialog()
+		(mood, message) = dlg.run()
+		mood = 'happy'
+		print account, mood, message
+		if mood is not None: # None is if user pressed Cancel
+			self.send_mood(account, mood, message)
+
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
 		dlg = dialogs.ChangeStatusMessageDialog(show)
@@ -2330,6 +2339,17 @@ class RosterWindow:
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, 'offline')
 
+			pep_menuitem = xml.get_widget('pep_menuitem')
+			if gajim.connections[account].pep_supported:
+				pep_submenu = gtk.Menu()
+				pep_menuitem.set_submenu(pep_submenu)
+				item = gtk.MenuItem('Mood')
+				pep_submenu.append(item)
+				item.connect('activate', self.on_change_mood_activate, account)
+			else:
+				pep_menuitem.set_no_show_all(True)
+				pep_menuitem.hide()
+
 			if gajim.config.get_per('accounts', account, 'hostname') not in \
 			gajim.gmail_domains:
 				open_gmail_inbox_menuitem.set_no_show_all(True)
@@ -2359,7 +2379,7 @@ class RosterWindow:
 			if gajim.connections[account].connected < 2:
 				for widget in [add_contact_menuitem, service_discovery_menuitem,
 				join_group_chat_menuitem, new_message_menuitem,
-				execute_command_menuitem]:
+				execute_command_menuitem, pep_menuitem]:
 					widget.set_sensitive(False)
 		else:
 			xml = gtkgui_helpers.get_glade('zeroconf_context_menu.glade')
@@ -2721,6 +2741,9 @@ class RosterWindow:
 			model[accountIter][0] =	self.jabber_state_images['16']['connecting']
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status('connecting')
+
+	def send_mood(self, account, mood, message):
+		pep.user_send_mood(account, mood, message)
 
 	def send_status(self, account, status, txt, auto = False):
 		model = self.tree.get_model()
