@@ -87,6 +87,7 @@ class Connection(ConnectionHandlers):
 		else:
 			self.keepalives = 0
 		self.privacy_rules_supported = False
+		self.pep_supported = False
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
 		if USE_GPG:
