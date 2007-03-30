@@ -479,13 +479,10 @@ class RosterTooltip(NotificationAreaTooltip):
 				# we append show below
 				
 				if contact.mood.has_key('mood'):
-					mood = contact.mood['mood'].strip()
-					if contact.mood.has_key('text'):
-						mood_text = contact.mood['text'].strip()
-					else:
-						mood_text = ''
-					if mood:
-						properties.append(('Mood: <b>%s</b> (%s)' % (mood,	mood_text), None))
+					mood_string = 'Mood: <b>%s</b>' % contact.mood['mood'].strip()
+					if contact.mood.has_key('text') and contact.mood['text'] != '':
+						mood_string += ' (%s)' % contact.mood['text'].strip()
+					properties.append((mood_string, None))
 
 				if contact.activity.has_key('activity'):
 					activity = contact.activity['activity'].strip()

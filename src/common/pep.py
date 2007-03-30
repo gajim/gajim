@@ -1,18 +1,20 @@
 from common import gajim, xmpp
 
 def user_mood(items, name, jid):
-	#FIXME: text deletion
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	contacts = gajim.contacts.get_contact(name, user, resource=resource)
 	for item in items.getTags('item'):
 		child = item.getTag('mood')
 		if child is not None:
-			for ch in child.getChildren():
-				if ch.getName() != 'text':
-					for contact in contacts:
+			for contact in contacts:
+				if contact.mood.has_key('mood'):
+					del contact.mood['mood']
+				if contact.mood.has_key('text'):
+					del contact.mood['text']
+				for ch in child.getChildren():
+					if ch.getName() != 'text':
 						contact.mood['mood'] = ch.getName()
-				else:
-					for contact in contacts:
+					else:
 						contact.mood['text'] = ch.getData()
 
 def user_tune(items, name, jid):
@@ -22,21 +24,24 @@ def user_geoloc(items, name, jid):
 	pass
 
 def user_activity(items, name, jid):
-	#FIXME: text deletion
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	contacts = gajim.contacts.get_contact(name, user, resource=resource)
 	for item in items.getTags('item'):
 		child = item.getTag('activity')
 		if child is not None:
-			for ch in child.getChildren():
-				if ch.getName() != 'text':
-					for contact in contacts:
+			for contact in contacts:
+				if contact.activity.has_key('activity'):
+					del contact.activity['activity']
+				if contact.activity.has_key('subactivity'):
+					del contact.activity['subactivity']
+				if contact.activity.has_key('text'):
+					del contact.activity['text']
+				for ch in child.getChildren():
+					if ch.getName() != 'text':
 						contact.activity['activity'] = ch.getName()
-					for chi in ch.getChildren():
-						for contact in contacts:
+						for chi in ch.getChildren():
 							contact.activity['subactivity'] = chi.getName()
-				else:
-					for contact in contacts:
+					else:
 						contact.activity['text'] = ch.getData()
 
 def user_send_mood(account, mood, message = ''):
