@@ -2272,7 +2272,6 @@ class RosterWindow:
 	def on_change_mood_activate(self, widget, account):
 		dlg = dialogs.ChangeMoodDialog()
 		(mood, message) = dlg.run()
-		mood = 'happy'
 		if mood is not None: # None is if user pressed Cancel
 			self.send_mood(account, mood, message)
 
