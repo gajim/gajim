@@ -1753,8 +1753,8 @@ class Interface:
 		# \S*[^\s\W] --> in the matching string don't match ? or ) etc.. if at the end
 		# so http://be) will match http://be and http://be)be) will match http://be)be
 
-		prefixes = '|'.join(('http://', 'https://', 'gopher://', 'news://',
-			'ftp://', 'ed2k://', 'irc://', 'magnet:', 'sip:', r'www\.',
+		prefixes = '|'.join((r'http://', r'https://', r'gopher://', r'news://',
+			r'ftp://', r'ed2k://', r'irc://', r'magnet:', r'sip:', r'www\.',
 			r'ftp\.'))
 		# NOTE: it's ok to catch www.gr such stuff exist!
 		
