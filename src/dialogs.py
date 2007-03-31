@@ -308,13 +308,13 @@ class ChooseGPGKeyDialog:
 
 
 class ChangeMoodDialog:
-	moods = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused', 'ashamed', 'bored', 'brave', 'calm', 'cold', 'confused', 'contented', 'cranky', 'curious', 'depressed', 'disappointed', 'disgusted', 'distracted', 'embarrassed', 'excited', 'flirtatious', 'frustrated', 'grumpy', 'guilty', 'happy', 'hot', 'humbled', 'humiliated', 'hungry', 'hurt', 'impressed', 'in_awe', 'in_love', 'indignant', 'interested', 'intoxicated', 'invincible', 'jealous', 'lonely', 'mean', 'moody', 'nervous', 'neutral', 'offended', 'playful', 'proud', 'relieved', 'remorseful', 'restless', 'sad', 'sarcastic', 'serious', 'shocked', 'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty', 'worried', ]
+	moods = [_('afraid'), _('amazed'), _('angry'), _('annoyed'), _('anxious'), _('aroused'), _('ashamed'), _('bored'), _('brave'), _('calm'), _('cold'), _('confused'), _('contented'), _('cranky'), _('curious'), _('depressed'), _('disappointed'), _('disgusted'), _('distracted'), _('embarrassed'), _('excited'), _('flirtatious'), _('frustrated'), _('grumpy'), _('guilty'), _('happy'), _('hot'), _('humbled'), _('humiliated'), _('hungry'), _('hurt'), _('impressed'), _('in_awe'), _('in_love'), _('indignant'), _('interested'), _('intoxicated'), _('invincible'), _('jealous'), _('lonely'), _('mean'), _('moody'), _('nervous'), _('neutral'), _('offended'), _('playful'), _('proud'), _('relieved'), _('remorseful'), _('restless'), _('sad'), _('sarcastic'), _('serious'), _('shocked'), _('shy'), _('sick'), _('sleepy'), _('stressed'), _('surprised'), _('thirsty'), _('worried')]
 	def __init__(self, account):
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_mood_dialog.glade')
 		self.window = self.xml.get_widget('change_mood_dialog')
 		self.window.set_transient_for(gajim.interface.roster.window)
-		self.window.set_title('Mood')
+		self.window.set_title(_('Mood'))
 
 		self.entry = self.xml.get_widget('entry')
 
