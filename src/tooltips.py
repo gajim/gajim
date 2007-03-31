@@ -482,8 +482,9 @@ class RosterTooltip(NotificationAreaTooltip):
 					status = contact.status.strip()
 					if status:
 						# reduce long status
-						# (no more than 100 chars on line and no more than 5 lines)
-						status = helpers.reduce_chars_newlines(status, 100, 5)
+						# (no more than 300 chars on line and no more than 5 lines)
+						# status is wrapped
+						status = helpers.reduce_chars_newlines(status, 300, 5)
 						# escape markup entities. 
 						status = gobject.markup_escape_text(status)
 						properties.append(('<i>%s</i>' % status, None))
@@ -534,6 +535,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			else:
 				if isinstance(property[0], (unicode, str)): #FIXME: rm unicode?
 					label.set_markup(property[0])
+					label.set_line_wrap(True)
 				else:
 					label = property[0]
 				vcard_table.attach(label, 1, 3, vcard_current_row,
