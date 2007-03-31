@@ -1950,6 +1950,9 @@ class GroupchatControl(ChatControlBase):
 		'''Call vcard_information_window class to display user's information'''
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		c2 = gajim.contacts.contact_from_gc_contact(c)
+		if c.jid:
+			c2.jid = c.jid
+			c2.resource = c.resource
 		if gajim.interface.instances[self.account]['infos'].has_key(c2.jid):
 			gajim.interface.instances[self.account]['infos'][c2.jid].window.\
 				present()
