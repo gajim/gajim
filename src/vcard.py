@@ -105,22 +105,6 @@ class VcardWindow:
 		if event.keyval == gtk.keysyms.Escape:
 			self.window.destroy()
 
-	def on_log_history_checkbutton_toggled(self, widget):
-		#log conversation history?
-		oldlog = True
-		no_log_for = gajim.config.get_per('accounts', self.account,
-			'no_log_for').split()
-		if self.contact.jid in no_log_for:
-			oldlog = False
-		log = widget.get_active()
-		if not log and not self.contact.jid in no_log_for:
-			no_log_for.append(self.contact.jid)
-		if log and self.contact.jid in no_log_for:
-			no_log_for.remove(self.contact.jid)
-		if oldlog != log:
-			gajim.config.set_per('accounts', self.account, 'no_log_for',
-				' '.join(no_log_for))
-
 	def on_PHOTO_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
@@ -298,14 +282,6 @@ class VcardWindow:
 				tooltips.set_tip(eb,
 				_("You are waiting contact's answer about your subscription request"))
 
-		log = True
-		if self.contact.jid in gajim.config.get_per('accounts', self.account,
-			'no_log_for').split(' '):
-			log = False
-		checkbutton = self.xml.get_widget('log_history_checkbutton')
-		checkbutton.set_active(log)
-		checkbutton.connect('toggled', self.on_log_history_checkbutton_toggled)
-		
 		resources = '%s (%s)' % (self.contact.resource, unicode(
 			self.contact.priority))
 		uf_resources = self.contact.resource + _(' resource with priority ')\
@@ -385,22 +361,6 @@ class ZeroconfVcardWindow:
 		if event.keyval == gtk.keysyms.Escape:
 			self.window.destroy()
 
-	def on_log_history_checkbutton_toggled(self, widget):
-		#log conversation history?
-		oldlog = True
-		no_log_for = gajim.config.get_per('accounts', self.account,
-			'no_log_for').split()
-		if self.contact.jid in no_log_for:
-			oldlog = False
-		log = widget.get_active()
-		if not log and not self.contact.jid in no_log_for:
-			no_log_for.append(self.contact.jid)
-		if log and self.contact.jid in no_log_for:
-			no_log_for.remove(self.contact.jid)
-		if oldlog != log:
-			gajim.config.set_per('accounts', self.account, 'no_log_for',
-				' '.join(no_log_for))
-
 	def on_PHOTO_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
 		if event.button == 3: # right click
@@ -469,14 +429,6 @@ class ZeroconfVcardWindow:
 			'</span></b>')
 		self.xml.get_widget('local_jid_label').set_text(self.contact.jid)
 
-		log = True
-		if self.contact.jid in gajim.config.get_per('accounts', self.account,
-			'no_log_for').split(' '):
-			log = False
-		checkbutton = self.xml.get_widget('log_history_checkbutton')
-		checkbutton.set_active(log)
-		checkbutton.connect('toggled', self.on_log_history_checkbutton_toggled)
-		
 		resources = '%s (%s)' % (self.contact.resource, unicode(
 			self.contact.priority))
 		uf_resources = self.contact.resource + _(' resource with priority ')\
