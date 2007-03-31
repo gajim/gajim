@@ -309,15 +309,27 @@ class ChooseGPGKeyDialog:
 
 class ChangeMoodDialog:
 	def __init__(self):
+		self.moods = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused', 'ashamed', 'bored', 'brave', 'calm', 'cold', 'confused', 'contented', 'cranky', 'curious', 'depressed', 'disappointed', 'disgusted', 'distracted', 'embarrassed', 'excited', 'flirtatious', 'frustrated', 'grumpy', 'guilty', 'happy', 'hot', 'humbled', 'humiliated', 'hungry', 'hurt', 'impressed', 'in_awe', 'in_love', 'indignant', 'interested', 'intoxicated', 'invincible', 'jealous', 'lonely', 'mean', 'moody', 'nervous', 'neutral', 'offended', 'playful', 'proud', 'relieved', 'remorseful', 'restless', 'sad', 'sarcastic', 'serious', 'shocked', 'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty', 'worried', ]
 		self.xml = gtkgui_helpers.get_glade('change_mood_dialog.glade')
 		self.window = self.xml.get_widget('change_mood_dialog')
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.window.set_title('Mood')
 
-		message_textview = self.xml.get_widget('message_textview')
-		self.message_buffer = message_textview.get_buffer()
-		#self.message_buffer.connect('changed',
-		#	self.toggle_sensitiviy_of_save_as_preset)
+		self.entry = self.xml.get_widget('entry')
+
+		self.combo = self.xml.get_widget('combobox')
+		self.liststore = gtk.ListStore(str)
+		self.combo.set_model(self.liststore)
+
+		for mood in self.moods:
+			self.liststore.append((mood,))
+
+		cellrenderertext = gtk.CellRendererText()
+		self.combo.pack_start(cellrenderertext, True)
+		self.combo.add_attribute(cellrenderertext, 'text', 0)
+
+		message_entry = self.xml.get_widget('entry')
+#		self.message_buffer = message_entry.get_buffer()
 
 	def run(self):
 		'''Wait for OK or Cancel button to be pressed and return mood
@@ -326,10 +338,8 @@ class ChangeMoodDialog:
 		mood = None 
 		message = None
 		if rep == gtk.RESPONSE_OK:
-			beg, end = self.message_buffer.get_bounds()
-			message = self.message_buffer.get_text(beg, end).decode('utf-8')\
-				.strip()
-			msg = helpers.to_one_line(message)
+			mood = self.liststore[self.combo.get_active()][0].decode('utf-8')
+			message = self.entry.get_text().decode('utf-8')
 		self.window.destroy()
 		return (mood, message)
 

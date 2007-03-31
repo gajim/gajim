@@ -2273,7 +2273,6 @@ class RosterWindow:
 		dlg = dialogs.ChangeMoodDialog()
 		(mood, message) = dlg.run()
 		mood = 'happy'
-		print account, mood, message
 		if mood is not None: # None is if user pressed Cancel
 			self.send_mood(account, mood, message)
 
