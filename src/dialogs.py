@@ -308,8 +308,9 @@ class ChooseGPGKeyDialog:
 
 
 class ChangeMoodDialog:
-	def __init__(self):
-		self.moods = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused', 'ashamed', 'bored', 'brave', 'calm', 'cold', 'confused', 'contented', 'cranky', 'curious', 'depressed', 'disappointed', 'disgusted', 'distracted', 'embarrassed', 'excited', 'flirtatious', 'frustrated', 'grumpy', 'guilty', 'happy', 'hot', 'humbled', 'humiliated', 'hungry', 'hurt', 'impressed', 'in_awe', 'in_love', 'indignant', 'interested', 'intoxicated', 'invincible', 'jealous', 'lonely', 'mean', 'moody', 'nervous', 'neutral', 'offended', 'playful', 'proud', 'relieved', 'remorseful', 'restless', 'sad', 'sarcastic', 'serious', 'shocked', 'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty', 'worried', ]
+	moods = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused', 'ashamed', 'bored', 'brave', 'calm', 'cold', 'confused', 'contented', 'cranky', 'curious', 'depressed', 'disappointed', 'disgusted', 'distracted', 'embarrassed', 'excited', 'flirtatious', 'frustrated', 'grumpy', 'guilty', 'happy', 'hot', 'humbled', 'humiliated', 'hungry', 'hurt', 'impressed', 'in_awe', 'in_love', 'indignant', 'interested', 'intoxicated', 'invincible', 'jealous', 'lonely', 'mean', 'moody', 'nervous', 'neutral', 'offended', 'playful', 'proud', 'relieved', 'remorseful', 'restless', 'sad', 'sarcastic', 'serious', 'shocked', 'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty', 'worried', ]
+	def __init__(self, account):
+		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_mood_dialog.glade')
 		self.window = self.xml.get_widget('change_mood_dialog')
 		self.window.set_transient_for(gajim.interface.roster.window)
@@ -327,22 +328,23 @@ class ChangeMoodDialog:
 		cellrenderertext = gtk.CellRendererText()
 		self.combo.pack_start(cellrenderertext, True)
 		self.combo.add_attribute(cellrenderertext, 'text', 0)
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
-		message_entry = self.xml.get_widget('entry')
-#		self.message_buffer = message_entry.get_buffer()
-
-	def run(self):
-		'''Wait for OK or Cancel button to be pressed and return mood
-		and messsage (None if users pressed Cancel or x button of WM'''
-		rep = self.window.run()
+	def on_ok_button_clicked(self, widget):
+		'''Return mood and messsage (None if no mood selected)'''
 		mood = None 
 		message = None
-		if rep == gtk.RESPONSE_OK:
-			mood = self.liststore[self.combo.get_active()][0].decode('utf-8')
+		active = self.combo.get_active()
+		if active > -1:
+			mood = self.liststore[active][0].decode('utf-8')
 			message = self.entry.get_text().decode('utf-8')
-		self.window.destroy()
-		return (mood, message)
+			from common import pep
+			pep.user_send_mood(self.account, mood, message)
+			self.window.destroy()
 
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
 
 class ChangeStatusMessageDialog:
 	def __init__(self, show = None):

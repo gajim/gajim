@@ -39,7 +39,6 @@ from common import helpers
 from common import passwords
 from common.exceptions import GajimGeneralException
 from common import i18n
-from common import pep
 
 from message_window import MessageWindowMgr
 from chat_control import ChatControl
@@ -2270,10 +2269,10 @@ class RosterWindow:
 		helpers.launch_browser_mailer('url', url)
 
 	def on_change_mood_activate(self, widget, account):
-		dlg = dialogs.ChangeMoodDialog()
-		(mood, message) = dlg.run()
-		if mood is not None: # None is if user pressed Cancel
-			self.send_mood(account, mood, message)
+		dlg = dialogs.ChangeMoodDialog(account)
+#		(mood, message) = dlg.run()
+#		if mood is not None: # None is if user pressed Cancel
+#			self.send_mood(account, mood, message)
 
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
@@ -2739,9 +2738,6 @@ class RosterWindow:
 			model[accountIter][0] =	self.jabber_state_images['16']['connecting']
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status('connecting')
-
-	def send_mood(self, account, mood, message):
-		pep.user_send_mood(account, mood, message)
 
 	def send_status(self, account, status, txt, auto = False):
 		model = self.tree.get_model()
