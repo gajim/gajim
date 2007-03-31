@@ -2268,6 +2268,9 @@ class RosterWindow:
 			gajim.config.get_per('accounts', account, 'name'))
 		helpers.launch_browser_mailer('url', url)
 
+	def on_change_activity_activate(self, widget, account):
+		dlg = dialogs.ChangeActivityDialog(account)
+
 	def on_change_mood_activate(self, widget, account):
 		dlg = dialogs.ChangeMoodDialog(account)
 
@@ -2340,6 +2343,9 @@ class RosterWindow:
 				item = gtk.MenuItem('Mood')
 				pep_submenu.append(item)
 				item.connect('activate', self.on_change_mood_activate, account)
+				item = gtk.MenuItem('Activity')
+				pep_submenu.append(item)
+				item.connect('activate', self.on_change_activity_activate, account)
 			else:
 				pep_menuitem.set_no_show_all(True)
 				pep_menuitem.hide()

@@ -52,3 +52,14 @@ def user_send_mood(account, mood, message = ''):
 		i.addData(message)
 
 	gajim.connections[account].send_pb_publish('', xmpp.NS_MOOD, item, '0')
+
+def user_send_activity(account, activity, subactivity = '', message = ''):
+	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
+	i = item.addChild(activity)
+	if subactivity != '':
+		i.addChild(subactivity)
+	if message != '':
+		i = item.addChild('text')
+		i.addData(message)
+
+	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
