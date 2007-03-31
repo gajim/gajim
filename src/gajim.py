@@ -1753,20 +1753,14 @@ class Interface:
 		# \S*[^\s\W] --> in the matching string don't match ? or ) etc.. if at the end
 		# so http://be) will match http://be and http://be)be) will match http://be)be
 
-		prefixes = (r'http://', r'https://', r'gopher://', r'news://', r'ftp://', 
-			r'ed2k://', r'irc://', r'magnet:', r'sip:', r'www\.', r'ftp\.')
+		prefixes = '|'.join(('http://', 'https://', 'gopher://', 'news://',
+			'ftp://', 'ed2k://', 'irc://', 'magnet:', 'sip:', r'www\.',
+			r'ftp\.'))
 		# NOTE: it's ok to catch www.gr such stuff exist!
 		
 		#FIXME: recognize xmpp: and treat it specially
 		
-		prefix_pattern = ''
-		for prefix in prefixes:
-			prefix_pattern += prefix + '|'
-		
-		prefix_pattern = prefix_pattern[:-1] # remove last |
-		prefix_pattern = '(' + prefix_pattern + ')'
-			
-		links = r'\b' + prefix_pattern + r'\S*[\w\/\=]|'
+		links = r'\b(%s)\S*[\w\/\=]|' % prefixes
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
 		mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]'
 
