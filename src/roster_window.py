@@ -2270,9 +2270,6 @@ class RosterWindow:
 
 	def on_change_mood_activate(self, widget, account):
 		dlg = dialogs.ChangeMoodDialog(account)
-#		(mood, message) = dlg.run()
-#		if mood is not None: # None is if user pressed Cancel
-#			self.send_mood(account, mood, message)
 
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
