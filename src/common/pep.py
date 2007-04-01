@@ -18,7 +18,33 @@ def user_mood(items, name, jid):
 						contact.mood['text'] = ch.getData()
 
 def user_tune(items, name, jid):
-	pass
+	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
+	contacts = gajim.contacts.get_contact(name, user, resource=resource)
+	for item in items.getTags('item'):
+		child = item.getTag('tune')
+		if child is not None:
+			for contact in contacts:
+				if contact.tune.has_key('artist'):
+					del contact.tune['artist']
+				if contact.tune.has_key('title'):
+					del contact.tune['title']
+				if contact.tune.has_key('source'):
+					del contact.tune['source']
+				if contact.tune.has_key('track'):
+					del contact.tune['track']
+				if contact.tune.has_key('length'):
+					del contact.tune['length']
+				for ch in child.getChildren():
+					if ch.getName() == 'artist':
+						contact.tune['artist'] = ch.getData()
+					elif ch.getName() == 'title':
+						contact.tune['title'] = ch.getData()
+					elif ch.getName() == 'source':
+						contact.tune['source'] = ch.getData()
+					elif ch.getName() == 'track':
+						contact.tune['track'] = ch.getData()
+					elif ch.getName() == 'length':
+						contact.tune['length'] = ch.getData()
 
 def user_geoloc(items, name, jid):
 	pass
@@ -63,3 +89,25 @@ def user_send_activity(account, activity, subactivity = '', message = ''):
 		i.addData(message)
 
 	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
+
+def user_send_tune(account, artist = '', title = '', source = '', track = 0,length = 0, items = None):
+	item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
+	if artist != '':
+		i = item.addChild('artist')
+		i.addData(artist)
+	if title != '':
+		i = item.addChild('title')
+		i.addData(title)
+	if source != '':
+		i = item.addChild('source')
+		i.addData(source)
+	if track != 0:
+		i = item.addChild('track')
+		i.addData(track)
+	if length != 0:
+		i = item.addChild('length')
+		i.addData(length)
+	if items is not None:
+		item.addChild(payload=items)
+
+	gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item, '0')

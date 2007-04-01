@@ -29,6 +29,7 @@ class Contact:
 		# FIXME
 		self.mood = dict()
 		self.activity = dict()
+		self.tune = dict()
 		self.sub = sub
 		self.ask = ask
 		self.resource = resource

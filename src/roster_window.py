@@ -2984,14 +2984,25 @@ class RosterWindow:
 				self._music_track_changed(None, None)
 	
 	def _music_track_changed(self, unused_listener, music_track_info):
+		from common import pep
 		accounts = gajim.connections.keys()
 		if music_track_info is None:
-			status_message = ''
+				artist = ''
+				title = ''
+				source = ''
+				track = ''
+				length = ''
 		else:
 			if hasattr(music_track_info, 'paused') and \
 			music_track_info.paused == 0:
-				status_message = ''
+				artist = ''
+				title = ''
+				source = ''
+				track = ''
+				length = ''
 			else:
+				artist = music_track_info.artist
+				title = music_track_info.title
 				status_message = '♪ ' + _('"%(title)s" by %(artist)s') % \
 				{'title': music_track_info.title,
 					'artist': music_track_info.artist } + ' ♪'
@@ -2999,10 +3010,11 @@ class RosterWindow:
 			if not gajim.config.get_per('accounts', account,
 			'sync_with_global_status'):
 				continue
-			if not gajim.connections[account].connected:
+			#FIXME: updates should arrive, when all accounts are
+			# connected and we know their abilities
+			if not gajim.connections[account].pep_supported:
 				continue
-			current_show = gajim.SHOW_LIST[gajim.connections[account].connected]
-			self.send_status(account, current_show, status_message)
+			pep.user_send_tune(account, artist, title, source = '')
 
 
 	def update_status_combobox(self):

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##	tooltips.py
 ##
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
@@ -496,6 +497,23 @@ class RosterTooltip(NotificationAreaTooltip):
 						activity_text = contact.activity['text'].strip()
 						activity_string += ' (%s)' % activity_text
 					properties.append((activity_string, None))
+
+				if contact.tune.has_key('artist') or contact.tune.has_key('title'):
+					if contact.tune.has_key('artist'):
+						artist = contact.tune['artist'].strip()
+					else:
+						artist = _('Unknown Artist')
+					if contact.tune.has_key('title'):
+						title = contact.tune['title'].strip()
+					else:
+						title = _('Unknown Title')
+					if contact.tune.has_key('source'):
+						source = contact.tune['source'].strip()
+					else:
+						source = _('Unknown Source')
+					tune_string = '♪ ' + _('<b>"%(title)s"</b> by <i>%(artist)s</i>\nfrom <i>%(source)s</i>' %\
+							{'title': title, 'artist': artist, 'source': source}) + ' ♪'
+					properties.append((tune_string, None))
 
 				if contact.status:
 					status = contact.status.strip()
