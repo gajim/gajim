@@ -2809,8 +2809,15 @@ class RosterWindow:
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(
 		message_control.TYPE_GC):
 			if gc_control.account == account:
-				gajim.connections[account].send_gc_status(gc_control.nick,
-					gc_control.room_jid, status, txt)
+				if gajim.gc_connected[account][gc_control.room_jid]:
+					gajim.connections[account].send_gc_status(gc_control.nick,
+						gc_control.room_jid, status, txt)
+				else:
+					# for some reason, we are not connected to the room even if 
+					# tab is opened, send initial join_gc()
+					gajim.connections[account].join_gc(gc_control.nick, 
+					gc_control.room_jid, None)
+				
 		if gajim.account_is_connected(account):
 			if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
