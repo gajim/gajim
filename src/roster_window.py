@@ -2806,6 +2806,14 @@ class RosterWindow:
 								passphrase)
 					gajim.connections[account].gpg_passphrase(passphrase)
 
+		if gajim.account_is_connected(account):
+			if status == 'online' and gajim.interface.sleeper.getState() != \
+			common.sleepy.STATE_UNKNOWN:
+				gajim.sleeper_state[account] = 'online'
+			elif gajim.sleeper_state[account] not in ('autoaway', 'autoxa'):
+				gajim.sleeper_state[account] = 'off'
+		gajim.connections[account].change_status(status, txt, auto)
+
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(
 		message_control.TYPE_GC):
 			if gc_control.account == account:
@@ -2817,14 +2825,6 @@ class RosterWindow:
 					# tab is opened, send initial join_gc()
 					gajim.connections[account].join_gc(gc_control.nick, 
 					gc_control.room_jid, None)
-				
-		if gajim.account_is_connected(account):
-			if status == 'online' and gajim.interface.sleeper.getState() != \
-			common.sleepy.STATE_UNKNOWN:
-				gajim.sleeper_state[account] = 'online'
-			elif gajim.sleeper_state[account] not in ('autoaway', 'autoxa'):
-				gajim.sleeper_state[account] = 'off'
-		gajim.connections[account].change_status(status, txt, auto)
 
 	def get_status_message(self, show):
 		if show in gajim.config.get_per('defaultstatusmsg'):
