@@ -747,6 +747,8 @@ class Connection(ConnectionHandlers):
 			# recconect before we auth to server
 			self.old_show = show
 			self.on_purpose = False 
+			self.server_resource = gajim.config.get_per('accounts', self.name,
+				'resource')
 			self.connect_and_init(show, msg, signed)
 
 		elif show == 'offline' and self.connected:
