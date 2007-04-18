@@ -471,7 +471,7 @@ class GroupchatControl(ChatControlBase):
 			self.subject_tooltip.set_tip(self.event_box, self.subject)
 
 		self.name_label.set_markup(text)
-	
+
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
 		sets sensitivity state for configure_room'''
@@ -484,8 +484,14 @@ class GroupchatControl(ChatControlBase):
 				self.nick)
 			if c.affiliation not in ('owner', 'admin'):
 				childs[1].set_sensitive(False)
+			else:
+				childs[1].set_sensitive(True)
 			if c.affiliation != 'owner':
 				childs[2].set_sensitive(False)
+			else:
+				childs[2].set_sensitive(True)
+			childs[3].set_sensitive(True)
+			childs[4].set_sensitive(True)
 		else:
 			# We are not connected to this groupchat, disable unusable menuitems
 			childs[1].set_sensitive(False)
