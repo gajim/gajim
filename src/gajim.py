@@ -1651,6 +1651,26 @@ class Interface:
 		else:
 			gajim.connections[account].change_status('offline','')
 
+	def handle_event_ping_sent(self, account, contact):
+		ctrl = self.msg_win_mgr.get_control(contact.get_full_jid(), account)
+		if ctrl == None:
+			ctrl = self.msg_win_mgr.get_control(contact.jid, account)
+		ctrl.print_conversation(_('Ping?'), 'status')
+
+	def handle_event_ping_reply(self, account, data):
+		contact = data[0]
+		seconds = data[1]
+		ctrl = self.msg_win_mgr.get_control(contact.get_full_jid(), account)
+		if ctrl == None:
+			ctrl = self.msg_win_mgr.get_control(contact.jid, account)
+		ctrl.print_conversation(_('Pong! (%s s.)') % seconds, 'status')
+
+	def handle_event_ping_error(self, account, contact):
+		ctrl = self.msg_win_mgr.get_control(contact.get_full_jid(), account)
+		if ctrl == None:
+			ctrl = self.msg_win_mgr.get_control(contact.jid, account)
+		ctrl.print_conversation(_('Error.'), 'status')
+	
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -1963,6 +1983,9 @@ class Interface:
 				self.handle_event_privacy_lists_active_default,
 			'PRIVACY_LIST_REMOVED': self.handle_event_privacy_list_removed,
 			'ZC_NAME_CONFLICT': self.handle_event_zc_name_conflict,
+			'PING_SENT': self.handle_event_ping_sent,
+			'PING_REPLY': self.handle_event_ping_reply,
+			'PING_ERROR': self.handle_event_ping_error,
 		}
 		gajim.handlers = self.handlers
 

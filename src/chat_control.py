@@ -498,6 +498,11 @@ class ChatControlBase(MessageControl):
 		if message_array == ['']:
 			message_array = []
 
+		if command == 'ping' and not len(message_array):
+			gajim.connections[self.account].sendPing(self.contact)
+			self.clear(self.msg_textview)
+			return True
+		
 		if command == 'clear' and not len(message_array):
 			self.conv_textview.clear() # clear conversation
 			self.clear(self.msg_textview) # clear message textview too
@@ -1388,6 +1393,7 @@ class ChatControl(ChatControlBase):
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
+		ping_menuitem = xml.get_widget('ping_menuitem')
 		compact_view_menuitem = xml.get_widget('compact_view_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		
@@ -1428,6 +1434,8 @@ class ChatControl(ChatControlBase):
 		id = history_menuitem.connect('activate', 
 			self._on_history_menuitem_activate)
 		self.handlers[id] = history_menuitem
+		id = ping_menuitem.connect('activate', 
+			self._on_ping_menuitem_activate)
 		id = send_file_menuitem.connect('activate', 
 			self._on_send_file_menuitem_activate)
 		self.handlers[id] = send_file_menuitem 
@@ -1822,6 +1830,9 @@ class ChatControl(ChatControlBase):
 		cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
 		self.bigger_avatar_window.window.set_cursor(cursor)
 
+	def _on_ping_menuitem_activate(self, widget):
+		gajim.connections[self.account].sendPing(self.contact)
+	
 	def _on_send_file_menuitem_activate(self, widget):
 		gajim.interface.instances['file_transfers'].show_file_send_request( 
 			self.account, self.contact)

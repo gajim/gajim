@@ -572,6 +572,22 @@ class Connection(ConnectionHandlers):
 			return
 		common.xmpp.features_nb.getPrivacyLists(self.connection)
 
+	def sendPing(self, pingTo):
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq('get', to = pingTo.get_full_jid())
+		iq.addChild(name = 'ping', namespace = common.xmpp.NS_PING)
+		def _on_response(resp):
+			timePong = time.time()
+			if not common.xmpp.isResultNode(resp):
+				self.dispatch('PING_ERROR', (pingTo))
+				return
+			timeDiff = round(timePong - timePing,2)
+			self.dispatch('PING_REPLY', (pingTo, timeDiff))
+		self.dispatch('PING_SENT', (pingTo))
+		timePing = time.time()
+		self.connection.SendAndCallForResponse(iq, _on_response)
+
 	def get_active_default_lists(self):
 		if not self.connection:
 			return

@@ -95,6 +95,15 @@
       </child>
     </widget>
   </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="ping_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Ping</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="_on_ping_menuitem_activate" last_modification_time="Mon, 16 Apr 2007 18:23:32 GMT"/>
+    </widget>
+  </child>
 </widget>
 
 </glade-interface>
