@@ -498,11 +498,6 @@ class ChatControlBase(MessageControl):
 		if message_array == ['']:
 			message_array = []
 
-		if command == 'ping' and not len(message_array):
-			gajim.connections[self.account].sendPing(self.contact)
-			self.clear(self.msg_textview)
-			return True
-		
 		if command == 'clear' and not len(message_array):
 			self.conv_textview.clear() # clear conversation
 			self.clear(self.msg_textview) # clear message textview too
@@ -866,6 +861,7 @@ class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
+	CHAT_CMDS = ['clear', 'compact', 'help', 'ping']
 	
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1144,6 +1140,49 @@ class ChatControl(ChatControlBase):
 					self.contact.get_shown_name()
 		gtk.Tooltips().set_tip(self.xml.get_widget('gpg_eventbox'), tt)
 
+	def _process_command(self, message):
+		if message[0] != '/':
+			return False
+
+		# Handle common commands
+		if ChatControlBase._process_command(self, message):
+			return True
+
+		message = message[1:]
+		message_array = message.split(' ', 1)
+		command = message_array.pop(0).lower()
+		if message_array == ['']:
+			message_array = []
+
+		if command == 'help':
+			if len(message_array):
+				subcommand = message_array.pop(0)
+				self.get_command_help(subcommand)
+			else:
+				self.get_command_help(command)
+			self.clear(self.msg_textview)
+			return True
+		elif command == 'ping' and not len(message_array):
+			gajim.connections[self.account].sendPing(self.contact)
+			self.clear(self.msg_textview)
+			return True
+		return False
+
+	def get_command_help(self, command):
+		if command == 'help':
+			self.print_conversation(_('Commands: %s') % ChatControl.CHAT_CMDS,
+				'info')
+		elif command == 'clear':
+			self.print_conversation(_('Usage: /%s, clears the text window.'),
+				'info')
+		elif command == 'compact':
+			self.print_conversation(_('Usage: /%s, hide the chat buttons.'),
+				'info')
+		elif command == 'ping':
+			self.print_conversation(_(''), 'info')
+		else:
+			self.print_conversation(_('No help info for /%s') % command, 'info')
+
 	def send_message(self, message, keyID = '', chatstate = None):
 		'''Send a message to contact'''
 		if message in ('', None, '\n') or self._process_command(message):
@@ -1393,7 +1432,6 @@ class ChatControl(ChatControlBase):
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
-		ping_menuitem = xml.get_widget('ping_menuitem')
 		compact_view_menuitem = xml.get_widget('compact_view_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		
@@ -1434,8 +1472,6 @@ class ChatControl(ChatControlBase):
 		id = history_menuitem.connect('activate', 
 			self._on_history_menuitem_activate)
 		self.handlers[id] = history_menuitem
-		id = ping_menuitem.connect('activate', 
-			self._on_ping_menuitem_activate)
 		id = send_file_menuitem.connect('activate', 
 			self._on_send_file_menuitem_activate)
 		self.handlers[id] = send_file_menuitem 
@@ -1830,9 +1866,6 @@ class ChatControl(ChatControlBase):
 		cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
 		self.bigger_avatar_window.window.set_cursor(cursor)
 
-	def _on_ping_menuitem_activate(self, widget):
-		gajim.connections[self.account].sendPing(self.contact)
-	
 	def _on_send_file_menuitem_activate(self, widget):
 		gajim.interface.instances['file_transfers'].show_file_send_request( 
 			self.account, self.contact)
