@@ -49,7 +49,7 @@ import tooltips
 import gtkgui_helpers
 import groups
 import adhoc_commands
-import search
+import search_window
 
 from common import gajim
 from common import xmpp
@@ -1230,7 +1230,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 			gajim.interface.instances[self.account]['search'][service].present()
 		else:
 			gajim.interface.instances[self.account]['search'][service] = \
-				search.SearchWindow(self.account, service)
+				search_window.SearchWindow(self.account, service)
 
 	def on_register_button_clicked(self, widget = None):
 		'''When we want to register an agent:
