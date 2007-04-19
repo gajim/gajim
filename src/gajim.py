@@ -1670,7 +1670,14 @@ class Interface:
 		if ctrl == None:
 			ctrl = self.msg_win_mgr.get_control(contact.jid, account)
 		ctrl.print_conversation(_('Error.'), 'status')
-	
+
+	def handle_event_search_result(self, account, data):
+		# ('SEARCH_RESULT', account, (jid, dataform, is_dataform))
+		if not self.instances[account]['search'].has_key(data[0]):
+			return
+		self.instances[account]['search'][data[0]].on_form_arrived(data[1],
+			data[2])
+
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -1986,6 +1993,7 @@ class Interface:
 			'PING_SENT': self.handle_event_ping_sent,
 			'PING_REPLY': self.handle_event_ping_reply,
 			'PING_ERROR': self.handle_event_ping_error,
+			'SEARCH_RESULT': self.handle_event_search_result,
 		}
 		gajim.handlers = self.handlers
 
@@ -2169,7 +2177,8 @@ class Interface:
 		self.instances = {'logs': {}}
 		
 		for a in gajim.connections:
-			self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {}}
+			self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
+				'search': {}}
 			gajim.contacts.add_account(a)
 			gajim.groups[a] = {}
 			gajim.gc_connected[a] = {}

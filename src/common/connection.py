@@ -1345,4 +1345,17 @@ class Connection(ConnectionHandlers):
 			else:
 				self.time_to_reconnect = None
 
+	def request_search_fields(self, jid):
+		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = \
+			common.xmpp.NS_SEARCH)
+		self.connection.send(iq)
+	
+	def send_search_form(self, jid, form, is_form):
+		if is_form:
+			iq = common.xmpp.Iq(typ = 'set', to = jid, queryNS = \
+				common.xmpp.NS_SEARCH)
+			item = iq.getTag('query')
+			item.addChild(node = form)
+		self.connection.send(iq)
+
 # END Connection

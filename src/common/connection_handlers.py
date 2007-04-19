@@ -1932,6 +1932,23 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('SIGNED_IN', ())
 		self.continue_connect_info = None
 	
+	def _search_fields_received(self, con, iq_obj):
+		jid = jid = helpers.get_jid_from_iq(iq_obj)
+		tag = iq_obj.getTag('query', namespace = common.xmpp.NS_SEARCH)
+		if not tag:
+			self.dispatch('SEARCH_RESULT', (jid, None, False))
+			return
+		df = tag.getTag('x', namespace = common.xmpp.NS_DATA)
+		if df:
+			self.dispatch('SEARCH_RESULT', (jid, df, True))
+			return
+		df = {}
+		for i in iq_obj.getQueryPayload():
+			if not isinstance(i, common.xmpp.Node):
+				pass
+			df[i.getName()] = i.getData()
+		self.dispatch('SEARCH_RESULT', (jid, df, False))
+
 	def _register_handlers(self, con, con_type):
 		# try to find another way to register handlers in each class 
 		# that defines handlers
@@ -1997,6 +2014,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_DISCO_ITEMS)
 		con.RegisterHandler('iq', self._IqPingCB, 'get',
 			common.xmpp.NS_PING)
+		con.RegisterHandler('iq', self._search_fields_received, 'result',
+			common.xmpp.NS_SEARCH)
 		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)

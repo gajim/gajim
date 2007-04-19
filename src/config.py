@@ -1408,7 +1408,7 @@ class AccountModificationWindow:
 
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().\
 			decode('utf-8')
-		if config['keyname'] == '': #no key selected
+		if config['keyname'] == '': # no key selected
 			config['keyid'] = ''
 			config['savegpgpass'] = False
 			config['gpgpassword'] = ''
@@ -1419,9 +1419,9 @@ class AccountModificationWindow:
 				'gpg_save_password_checkbutton').get_active()
 			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry'
 				).get_text().decode('utf-8')
-		#if we modify the name of the account
+		# if we modify the name of the account
 		if name != self.account:
-			#update variables
+			# update variables
 			gajim.interface.instances[name] = gajim.interface.instances[
 				self.account]
 			gajim.nicks[name] = gajim.nicks[self.account]
@@ -1446,7 +1446,7 @@ class AccountModificationWindow:
 			# change account variable for chat / gc controls
 			gajim.interface.msg_win_mgr.change_account_name(self.account, name)
 			# upgrade account variable in opened windows
-			for kind in ('infos', 'disco', 'gc_config'):
+			for kind in ('infos', 'disco', 'gc_config', 'search'):
 				for j in gajim.interface.instances[name][kind]:
 					gajim.interface.instances[name][kind][j].account = name
 
@@ -2056,7 +2056,7 @@ class AccountsWindow:
 				connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
 			# update variables
 			gajim.interface.instances[gajim.ZEROCONF_ACC_NAME] = {'infos': {},
-				'disco': {}, 'gc_config': {}}
+				'disco': {}, 'gc_config': {}, 'search': {}}
 			gajim.connections[gajim.ZEROCONF_ACC_NAME].connected = 0
 			gajim.groups[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.contacts.add_account(gajim.ZEROCONF_ACC_NAME)
@@ -3080,7 +3080,7 @@ class AccountCreationWizardWindow:
 
 		# update variables
 		gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
-			'gc_config': {}}
+			'gc_config': {}, 'search': {}}
 		gajim.connections[self.account].connected = 0
 		gajim.groups[self.account] = {}
 		gajim.contacts.add_account(self.account)
