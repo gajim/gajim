@@ -1936,18 +1936,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		jid = jid = helpers.get_jid_from_iq(iq_obj)
 		tag = iq_obj.getTag('query', namespace = common.xmpp.NS_SEARCH)
 		if not tag:
-			self.dispatch('SEARCH_RESULT', (jid, None, False))
+			self.dispatch('SEARCH_FORM', (jid, None, False))
 			return
 		df = tag.getTag('x', namespace = common.xmpp.NS_DATA)
 		if df:
-			self.dispatch('SEARCH_RESULT', (jid, df, True))
+			self.dispatch('SEARCH_FORM', (jid, df, True))
 			return
 		df = {}
 		for i in iq_obj.getQueryPayload():
-			if not isinstance(i, common.xmpp.Node):
-				pass
 			df[i.getName()] = i.getData()
-		self.dispatch('SEARCH_RESULT', (jid, df, False))
+		self.dispatch('SEARCH_FORM', (jid, df, False))
 
 	def _register_handlers(self, con, con_type):
 		# try to find another way to register handlers in each class 

@@ -1349,13 +1349,34 @@ class Connection(ConnectionHandlers):
 		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = \
 			common.xmpp.NS_SEARCH)
 		self.connection.send(iq)
-	
+
 	def send_search_form(self, jid, form, is_form):
+		iq = common.xmpp.Iq(typ = 'set', to = jid, queryNS = \
+			common.xmpp.NS_SEARCH)
+		item = iq.getTag('query')
 		if is_form:
-			iq = common.xmpp.Iq(typ = 'set', to = jid, queryNS = \
-				common.xmpp.NS_SEARCH)
-			item = iq.getTag('query')
 			item.addChild(node = form)
-		self.connection.send(iq)
+		else:
+			for i in form.keys():
+				item.setTagData(i,form[i])
+		def _on_response(resp):
+			jid = jid = helpers.get_jid_from_iq(resp)
+			tag = resp.getTag('query', namespace = common.xmpp.NS_SEARCH)
+			if not tag:
+				self.dispatch('SEARCH_RESULT', (jid, None, False))
+				return
+			df = tag.getTag('x', namespace = common.xmpp.NS_DATA)
+			if df:
+				self.dispatch('SEARCH_RESULT', (jid, df, True))
+				return
+			df = []
+			for item in tag.getTags('item'):
+				f = {}
+				for i in item.getPayload():
+					f[i.getName()] = i.getData()
+				df.append(f)
+			self.dispatch('SEARCH_RESULT', (jid, df, False))
+
+		self.connection.SendAndCallForResponse(iq, _on_response)
 
 # END Connection
