@@ -3660,7 +3660,7 @@ class RosterWindow:
 						pixbuf2.composite(pixbuf1, 0, 0,
 							pixbuf2.get_property('width'),
 							pixbuf2.get_property('height'), 0, 0, 1.0, 1.0,
-							gtk.gdk.INTERP_HYPER, 255)
+							gtk.gdk.INTERP_NEAREST, 255)
 						image.set_from_pixbuf(pixbuf1)
 					break
 		return imgs
