@@ -16,8 +16,8 @@
 ##
 """ This module contains widget that can display data form (JEP-0004).
 Words single and multiple refers here to types of data forms:
-single means these with one record of data (without <recorded/> element),
-multiple - these which may contain more data (with <recorded/> element)."""
+single means these with one record of data (without <reported/> element),
+multiple - these which may contain more data (with <reported/> element)."""
 
 import gtk
 
@@ -41,7 +41,7 @@ class DataFormWidget(gtk.Alignment, object):
 		for name in ('instructions_label', 'instructions_hseparator',
 				'single_form_viewport', 'data_form_types_notebook',
 				'single_form_scrolledwindow', 'multiple_form_hbox',
-				'records_treeview', 'add_button', 'remove_button',
+				'records_treeview', 'buttons_vbox', 'add_button', 'remove_button',
 				'edit_button', 'up_button', 'down_button', 'clear_button'):
 			self.__dict__[name] = self.xml.get_widget(name)
 
@@ -141,7 +141,7 @@ class DataFormWidget(gtk.Alignment, object):
 
 		# creating model for form...
 		fieldtypes = []
-		for field in self._data_form.recorded.iter_fields():
+		for field in self._data_form.reported.iter_fields():
 			# note: we store also text-private and hidden fields,
 			# we just do not display them.
 			# TODO: boolean fields
@@ -157,8 +157,7 @@ class DataFormWidget(gtk.Alignment, object):
 			self.multiplemodel.append([field.value for field in item.iter_fields()])
 
 		# constructing columns...
-		for field, counter in zip(self._data_form.iter_fields(), itertools.count()):
-			print repr(field), repr(counter)
+		for field, counter in zip(self._data_form.reported.iter_fields(), itertools.count()):
 			self.records_treeview.append_column(
 				gtk.TreeViewColumn(field.label,	gtk.CellRendererText(),
 					text=counter))
@@ -172,8 +171,14 @@ class DataFormWidget(gtk.Alignment, object):
 
 		self.clean_data_form = self.clean_multiple_data_form
 
-		# refresh list look
-		self.refresh_multiple_buttons()
+		readwrite = self._data_form.type != 'result'
+		if not readwrite:
+			self.buttons_vbox.set_no_show_all(True)
+			self.buttons_vbox.hide()
+		else:
+			self.buttons_vbox.set_no_show_all(False)
+			# refresh list look
+			self.refresh_multiple_buttons()
 
 	def clean_multiple_data_form(self):
 		'''(Called as clean_data_form, read the docs of clean_data_form()).
@@ -186,12 +191,12 @@ class DataFormWidget(gtk.Alignment, object):
 		selection = self.records_treeview.get_selection()
 		model = self.records_treeview.get_model()
 		count = selection.count_selected_rows()
-		if count==0:
+		if count == 0:
 			self.remove_button.set_sensitive(False)
 			self.edit_button.set_sensitive(False)
 			self.up_button.set_sensitive(False)
 			self.down_button.set_sensitive(False)
-		elif count==1:
+		elif count == 1:
 			self.remove_button.set_sensitive(True)
 			self.edit_button.set_sensitive(True)
 			_, (path,) = selection.get_selected_rows()
@@ -199,7 +204,7 @@ class DataFormWidget(gtk.Alignment, object):
 			if model.iter_next(iter) is None:
 				self.up_button.set_sensitive(True)
 				self.down_button.set_sensitive(False)
-			elif path==(0,):
+			elif path == (0, ):
 				self.up_button.set_sensitive(False)
 				self.down_button.set_sensitive(True)
 			else:
@@ -211,7 +216,7 @@ class DataFormWidget(gtk.Alignment, object):
 			self.up_button.set_sensitive(False)
 			self.down_button.set_sensitive(False)
 
-		if len(model)==0:
+		if len(model) == 0:
 			self.clear_button.set_sensitive(False)
 		else:
 			self.clear_button.set_sensitive(True)
