@@ -1814,7 +1814,7 @@ class RosterWindow:
 			state_images = self.load_iconset(path)
 			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
 			status_menuitem.connect('activate', self.on_send_custom_status,
-				account, contact.jid, s)
+				[(contact, account)], s)
 			icon = state_images[s]
 			status_menuitem.set_image(icon)
 			status_menuitems.append(status_menuitem)
@@ -2178,6 +2178,25 @@ class RosterWindow:
 			self.on_send_single_message_menuitem_activate, account, list_online)
 		group_message_to_all_item.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, list_)
+
+		send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
+		# add a special img for this menuitem
+		icon = gtk.image_new_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_MENU)
+		send_custom_status_menuitem.set_image(icon)
+		status_menuitems = gtk.Menu()
+		send_custom_status_menuitem.set_submenu(status_menuitems)
+		iconset = gajim.config.get('iconset')
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
+			# icon MUST be different instance for every item 
+			state_images = self.load_iconset(path) 
+			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s)) 
+			status_menuitem.connect('activate', self.on_send_custom_status, list_,
+				s) 
+			icon = state_images[s] 
+			status_menuitem.set_image(icon) 
+			status_menuitems.append(status_menuitem)
+		menu.append(send_custom_status_menuitem)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
@@ -2880,12 +2899,13 @@ class RosterWindow:
 		else:
 			change(None, account, status)
 
-	def on_send_custom_status(self, widget, account, jid, show):
+	def on_send_custom_status(self, widget, contact_list, show):
 		'''send custom status'''
 		dlg = dialogs.ChangeStatusMessageDialog(show)
 		message = dlg.run()
 		if message is not None: # None if user pressed Cancel
-				self.send_status(account, show, message, to = jid)	
+			for (contact, account) in contact_list:
+				self.send_status(account, show, message, to = contact.jid)	
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''
