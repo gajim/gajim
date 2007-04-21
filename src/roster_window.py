@@ -21,6 +21,7 @@ import os
 import time
 import urllib
 
+import dbus
 import common.sleepy
 import history_window
 import dialogs
@@ -3012,6 +3013,23 @@ class RosterWindow:
 				self._music_track_changed_signal = None
 				self._music_track_changed(None, None)
 	
+	def _change_awn_icon_status(self, status):
+		iconset = gajim.config.get('iconset')
+		prefix = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
+		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
+			status = status + '.png'
+		elif status == 'online':
+			prefix = os.path.join(gajim.DATA_DIR, 'pixmaps')
+			status = 'gajim.png'
+		path = os.path.join(prefix, status)
+		try:	
+			bus = dbus.SessionBus()
+			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
+			awn = dbus.Interface(obj, 'com.google.code.Awn')
+			awn.SetTaskIconByName('Gajim', os.path.abspath(path))
+		except dbus.DBusException:
+			pass
+	
 	def _music_track_changed(self, unused_listener, music_track_info):
 		accounts = gajim.connections.keys()
 		if music_track_info is None:
@@ -3043,6 +3061,7 @@ class RosterWindow:
 		# in the combobox
 		self.combobox_callback_active = False
 		self.status_combobox.set_active(table[show])
+		self._change_awn_icon_status(show)
 		self.combobox_callback_active = True
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status(show)
