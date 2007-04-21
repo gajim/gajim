@@ -731,7 +731,7 @@ class Connection(ConnectionHandlers):
 			self.awaiting_answers[id] = (PRIVACY_ARRIVED, )
 			self.connection.send(iq)
 
-	def change_status(self, show, msg, auto = False):
+	def change_status(self, show, msg, auto = False, to = None):
 		if not show in STATUS_LIST:
 			return -1
 		sshow = helpers.get_xmpp_show(show)
@@ -780,7 +780,8 @@ class Connection(ConnectionHandlers):
 				self.connection.send(iq)
 				self.activate_privacy_rule('visible')
 			priority = unicode(gajim.get_priority(self.name, sshow))
-			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
+			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow,
+				to = to)
 			p = self.add_sha(p)
 			if msg:
 				p.setStatus(msg)
@@ -789,7 +790,8 @@ class Connection(ConnectionHandlers):
 			if self.connection:
 				self.connection.send(p)
 				self.priority = priority
-			self.dispatch('STATUS', show)
+			if not to:
+				self.dispatch('STATUS', show)
 
 	def _on_disconnected(self):
 		''' called when a disconnect request has completed successfully'''

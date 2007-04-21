@@ -1733,6 +1733,8 @@ class RosterWindow:
 			'roster_contact_context_menu')
 
 		start_chat_menuitem = xml.get_widget('start_chat_menuitem')
+		send_custom_status_menuitem = xml.get_widget(
+			'send_custom_status_menuitem')
 		send_single_message_menuitem = xml.get_widget(
 			'send_single_message_menuitem')
 		invite_menuitem = xml.get_widget('invite_menuitem')
@@ -1802,6 +1804,20 @@ class RosterWindow:
 			item = gtk.SeparatorMenuItem() # separator
 			invite_to_submenu.append(item)
 
+		# One or several resource, we do the same for send_custom_status
+		status_menuitems = gtk.Menu()
+		send_custom_status_menuitem.set_submenu(status_menuitems)
+		iconset = gajim.config.get('iconset')
+		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
+			# icon MUST be different instance for every item
+			state_images = self.load_iconset(path)
+			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
+			status_menuitem.connect('activate', self.on_send_custom_status,
+				account, contact.jid, s)
+			icon = state_images[s]
+			status_menuitem.set_image(icon)
+			status_menuitems.append(status_menuitem)
 		if len(contacts) > 1: # several resources
 			def resources_submenu(action, room_jid = None, room_account = None):
 				''' Build a submenu with contact's resources. 
@@ -2721,7 +2737,7 @@ class RosterWindow:
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status('connecting')
 
-	def send_status(self, account, status, txt, auto = False):
+	def send_status(self, account, status, txt, auto = False, to = None):
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if status != 'offline':
@@ -2812,7 +2828,7 @@ class RosterWindow:
 				gajim.sleeper_state[account] = 'online'
 			elif gajim.sleeper_state[account] not in ('autoaway', 'autoxa'):
 				gajim.sleeper_state[account] = 'off'
-		gajim.connections[account].change_status(status, txt, auto)
+		gajim.connections[account].change_status(status, txt, auto, to = to)
 
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(
 		message_control.TYPE_GC):
@@ -2863,6 +2879,13 @@ class RosterWindow:
 				on_response_ok = (change, account, status))
 		else:
 			change(None, account, status)
+
+	def on_send_custom_status(self, widget, account, jid, show):
+		'''send custom status'''
+		dlg = dialogs.ChangeStatusMessageDialog(show)
+		message = dlg.run()
+		if message is not None: # None if user pressed Cancel
+				self.send_status(account, show, message, to = jid)	
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''
