@@ -283,7 +283,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			else:
 				self.reannounce()
 
-	def change_status(self, show, msg, sync = False, auto = False):
+	def change_status(self, show, msg, sync = False, auto = False, to = None):
 		if not show in STATUS_LIST:
 			return -1
 		self.status = show
