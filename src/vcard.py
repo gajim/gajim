@@ -21,8 +21,11 @@ import gobject
 import base64
 import time
 import locale
+import os
 
 import gtkgui_helpers
+import dialogs
+import message_control
 
 from common import helpers
 from common import gajim
@@ -67,6 +70,27 @@ class VcardWindow:
 		self.account = account
 		self.gc_contact = gc_contact
 
+		self.xml.get_widget('no_user_avatar_label').set_no_show_all(True)
+		self.xml.get_widget('no_user_avatar_label').hide()
+		self.xml.get_widget('PHOTO_image').set_no_show_all(True)
+		self.xml.get_widget('PHOTO_image').hide()
+		image = gtk.Image()
+		self.photo_button = self.xml.get_widget('PHOTO_button')
+		self.photo_button.set_image(image)
+		self.nophoto_button = self.xml.get_widget('NOPHOTO_button')
+		puny_jid = helpers.sanitize_filename(contact.jid)
+		local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid) + \
+			'_local'
+		for extension in ('.png', '.jpeg'):
+			local_avatar_path = local_avatar_basepath + extension
+			if os.path.isfile(local_avatar_path):
+				image.set_from_file(local_avatar_path)
+				self.nophoto_button.set_no_show_all(True)
+				self.nophoto_button.hide()
+				break
+		else:
+			self.photo_button.set_no_show_all(True)
+			self.photo_button.hide()
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
 		self.vcard_arrived = False
@@ -88,6 +112,104 @@ class VcardWindow:
 		self.progressbar.pulse()
 		return True # loop forever
 
+	def update_avatar_in_gui(self):
+		jid = self.contact.jid
+		# Update roster
+		gajim.interface.roster.draw_avatar(jid, self.account)
+		# Update chat window
+		if gajim.interface.msg_win_mgr.has_window(jid, self.account):
+			win = gajim.interface.msg_win_mgr.get_window(jid, self.account)
+			ctrl = win.get_control(jid, self.account)
+			if win and ctrl.type_id != message_control.TYPE_GC:
+				ctrl.show_avatar()
+
+	def on_NOPHOTO_button_clicked(self, button):
+		def on_ok(widget, path_to_file):
+			filesize = os.path.getsize(path_to_file) # in bytes
+			invalid_file = False
+			msg = ''
+			if os.path.isfile(path_to_file):
+				stat = os.stat(path_to_file)
+				if stat[6] == 0:
+					invalid_file = True
+					msg = _('File is emty')
+			else:
+				invalid_file = True
+				msg = _('File does not exist')
+			if invalid_file:
+				dialogs.ErrorDialog(_('Could not load image'), msg)
+				return
+			pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
+			if filesize > 16384: # 16 kb
+				try:
+					# get the image at 'notification size'
+					# and use that user did not specify in ACE crazy size
+					pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'tooltip')
+				except gobject.GError, msg: # unknown format
+					# msg should be string, not object instance
+					msg = str(msg)
+					invalid_file = True
+			puny_jid = helpers.sanitize_filename(self.contact.jid)
+			path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + '_local.png'
+			pixbuf.save(path_to_file, 'png')
+			self.dialog.destroy()
+			self.update_avatar_in_gui()
+
+			# rescale it
+			pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
+			image = self.photo_button.get_image()
+			image.set_from_pixbuf(pixbuf)
+			self.photo_button.show()
+			self.nophoto_button.hide()
+
+		def on_clear(widget):
+			self.dialog.destroy()
+			self.on_clear_button_clicked(widget)
+
+		self.dialog = dialogs.AvatarChooserDialog(on_response_ok = on_ok,
+			on_response_clear = on_clear)
+
+	def on_clear_button_clicked(self, widget):
+		# empty the image
+		image = self.photo_button.get_image()
+		image.set_from_pixbuf(None)
+		self.photo_button.hide()
+		self.nophoto_button.show()
+		# Delete file:
+		puny_jid = helpers.sanitize_filename(self.contact.jid)
+		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + '_local.png'
+		try:
+			os.remove(path_to_file)
+		except OSError:
+			gajim.log.debug('Cannot remove %s' % path_to_file)
+		self.update_avatar_in_gui()
+
+	def on_PHOTO_button_press_event(self, widget, event):
+		'''If right-clicked, show popup'''
+		if event.button == 3 and self.avatar_encoded: # right click
+			menu = gtk.Menu()
+
+			# Try to get pixbuf
+#			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid)
+
+#			if pixbuf:
+#				nick = self.contact.get_shown_name()
+#				menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+#				menuitem.connect('activate',
+#					gtkgui_helpers.on_avatar_save_as_menuitem_activate, self.jid,
+#					None, nick + '.jpeg')
+#				menu.append(menuitem)
+			# show clear
+			menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+			menuitem.connect('activate', self.on_clear_button_clicked)
+			menu.append(menuitem)
+			menu.connect('selection-done', lambda w:w.destroy())
+			# show the menu
+			menu.show_all()
+			menu.popup(None, None, None, event.button, event.time)
+		elif event.button == 1: # left click
+			self.on_set_avatar_button_clicked(widget)
+
 	def on_vcard_information_window_destroy(self, widget):
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
@@ -99,7 +221,6 @@ class VcardWindow:
 		if annotation != connection.annotations.get(self.contact.jid, ''):
 			connection.annotations[self.contact.jid] = annotation
 			connection.store_annotations()
-
 
 	def on_vcard_information_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
@@ -137,12 +258,15 @@ class VcardWindow:
 			pass
 
 	def set_values(self, vcard):
+		if not 'PHOTO' in vcard:
+			self.xml.get_widget('no_user_avatar_label').show()
 		for i in vcard.keys():
 			if i == 'PHOTO' and self.xml.get_widget('information_notebook').\
 			get_n_pages() > 4:
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
 					get_avatar_pixbuf_encoded_mime(vcard[i])
 				image = self.xml.get_widget('PHOTO_image')
+				image.show()
 				if not pixbuf:
 					image.set_from_icon_name('stock_person',
 						gtk.ICON_SIZE_DIALOG)

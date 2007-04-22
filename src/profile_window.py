@@ -118,15 +118,16 @@ class ProfileWindow:
 		def on_ok(widget, path_to_file):
 			must_delete = False
 			filesize = os.path.getsize(path_to_file) # in bytes
-			#FIXME: use messages for invalid file for 0.11
 			invalid_file = False
 			msg = ''
 			if os.path.isfile(path_to_file):
 				stat = os.stat(path_to_file)
 				if stat[6] == 0:
 					invalid_file = True
+					msg = _('File is emty')
 			else:
 				invalid_file = True
+				msg = _('File does not exist')
 			if not invalid_file and filesize > 16384: # 16 kb
 				try:
 					pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
@@ -183,7 +184,8 @@ class ProfileWindow:
 			menu = gtk.Menu()
 			
 			# Try to get pixbuf
-			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid)
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid,
+				use_local = False)
 
 			if pixbuf:
 				nick = gajim.config.get_per('accounts', self.account, 'name')
