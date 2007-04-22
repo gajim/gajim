@@ -321,15 +321,13 @@ class GCTooltip(BaseTooltip):
 		# Add avatar
 		puny_name = helpers.sanitize_filename(contact.name)
 		puny_room = helpers.sanitize_filename(contact.room_jid)
-		for type_ in ('jpeg', 'png'):
-			file = os.path.join(gajim.AVATAR_PATH, puny_room,
-				puny_name + '.' + type_)
-			if os.path.exists(file):
-				self.avatar_image.set_from_file(file)
-				pix = self.avatar_image.get_pixbuf()
-				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-				self.avatar_image.set_from_pixbuf(pix)
-				break
+		file = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_room,
+			puny_name))
+		if file:
+			self.avatar_image.set_from_file(file)
+			pix = self.avatar_image.get_pixbuf()
+			pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+			self.avatar_image.set_from_pixbuf(pix)
 		else:
 			self.avatar_image.set_from_pixbuf(None)
 		while properties:
@@ -392,16 +390,14 @@ class RosterTooltip(NotificationAreaTooltip):
 		
 		puny_jid = helpers.sanitize_filename(prim_contact.jid)
 		table_size = 3
-		
-		for type_ in ('jpeg', 'png'):
-			file = os.path.join(gajim.AVATAR_PATH, puny_jid + '.' + type_)
-			if os.path.exists(file):
-				self.avatar_image.set_from_file(file)
-				pix = self.avatar_image.get_pixbuf()
-				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-				self.avatar_image.set_from_pixbuf(pix)
-				table_size = 4
-				break
+
+		file = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_jid))
+		if file:
+			self.avatar_image.set_from_file(file)
+			pix = self.avatar_image.get_pixbuf()
+			pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+			self.avatar_image.set_from_pixbuf(pix)
+			table_size = 4
 		else:
 			self.avatar_image.set_from_pixbuf(None)
 		vcard_table = gtk.Table(table_size, 1)

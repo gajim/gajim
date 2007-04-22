@@ -942,3 +942,20 @@ def get_accounts_info():
 		accounts.append({'name': account, 'status_line': single_line, 
 				'show': status, 'message': message})
 	return accounts
+
+def get_avatar_path(prefix):
+	'''Returns the filename of the avatar, distinguishes between user- and
+	contact-provided one.  Returns None if no avatar was found at all.
+	prefix is the path to the requested avatar just before the ".png" or
+	".jpeg".'''
+	# First, scan for a local, user-set avatar
+	for type_ in ('jpeg', 'png'):
+		file_ = prefix + '_local.' + type_
+		if os.path.exists(file_):
+			return file_
+	# If none available, scan for a contact-provided avatar
+	for type_ in ('jpeg', 'png'):
+		file_ = prefix + '.' + type_
+		if os.path.exists(file_):
+			return file_
+	return None
