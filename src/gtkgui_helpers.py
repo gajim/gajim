@@ -555,7 +555,7 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False, use_local = True):
 		for extension in ('.png', '.jpeg'):
 			local_avatar_path = local_avatar_basepath + extension
 			if os.path.isfile(local_avatar_path):
-				avatar_file = open(local_avatar_path)
+				avatar_file = open(local_avatar_path, 'rb')
 				avatar_data = avatar_file.read()
 				avatar_file.close()
 				return get_pixbuf_from_data(avatar_data)
