@@ -2848,7 +2848,10 @@ class RosterWindow:
 				gajim.sleeper_state[account] = 'online'
 			elif gajim.sleeper_state[account] not in ('autoaway', 'autoxa'):
 				gajim.sleeper_state[account] = 'off'
-		gajim.connections[account].change_status(status, txt, auto, to = to)
+		if to:
+			gajim.connections[account].send_custom_status(status, txt, to)
+		else:
+			gajim.connections[account].change_status(status, txt, auto)
 
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(
 		message_control.TYPE_GC):

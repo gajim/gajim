@@ -731,7 +731,33 @@ class Connection(ConnectionHandlers):
 			self.awaiting_answers[id] = (PRIVACY_ARRIVED, )
 			self.connection.send(iq)
 
-	def change_status(self, show, msg, auto = False, to = None):
+	def send_custom_status(self, show, msg, jid):
+		if not show in STATUS_LIST:
+			return -1
+		if not self.connection:
+			return
+		sshow = helpers.get_xmpp_show(show)
+		if not msg:
+			msg = ''
+		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
+		if show == 'offline':
+			p = common.xmpp.Presence(typ = 'unavailable')
+			p = self.add_sha(p, False)
+			if msg:
+				p.setStatus(msg)
+		else:
+			signed = self.get_signed_msg(msg)
+			priority = unicode(gajim.get_priority(self.name, sshow))
+			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow,
+				to = jid)
+			p = self.add_sha(p)
+			if msg:
+				p.setStatus(msg)
+			if signed:
+				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+		self.connection.send(p)
+
+	def change_status(self, show, msg, auto = False):
 		if not show in STATUS_LIST:
 			return -1
 		sshow = helpers.get_xmpp_show(show)
@@ -780,8 +806,7 @@ class Connection(ConnectionHandlers):
 				self.connection.send(iq)
 				self.activate_privacy_rule('visible')
 			priority = unicode(gajim.get_priority(self.name, sshow))
-			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow,
-				to = to)
+			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
 			p = self.add_sha(p)
 			if msg:
 				p.setStatus(msg)
@@ -790,8 +815,7 @@ class Connection(ConnectionHandlers):
 			if self.connection:
 				self.connection.send(p)
 				self.priority = priority
-			if not to:
-				self.dispatch('STATUS', show)
+			self.dispatch('STATUS', show)
 
 	def _on_disconnected(self):
 		''' called when a disconnect request has completed successfully'''
