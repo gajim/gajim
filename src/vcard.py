@@ -208,7 +208,7 @@ class VcardWindow:
 			menu.show_all()
 			menu.popup(None, None, None, event.button, event.time)
 		elif event.button == 1: # left click
-			self.on_set_avatar_button_clicked(widget)
+			self.on_NOPHOTO_button_clicked(widget)
 
 	def on_vcard_information_window_destroy(self, widget):
 		if self.update_progressbar_timeout_id is not None:
