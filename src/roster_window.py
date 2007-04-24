@@ -2853,17 +2853,17 @@ class RosterWindow:
 		else:
 			gajim.connections[account].change_status(status, txt, auto)
 
-		for gc_control in gajim.interface.msg_win_mgr.get_controls(
-		message_control.TYPE_GC):
-			if gc_control.account == account:
-				if gajim.gc_connected[account][gc_control.room_jid]:
-					gajim.connections[account].send_gc_status(gc_control.nick,
-						gc_control.room_jid, status, txt)
-				else:
-					# for some reason, we are not connected to the room even if 
-					# tab is opened, send initial join_gc()
-					gajim.connections[account].join_gc(gc_control.nick, 
-					gc_control.room_jid, None)
+			for gc_control in gajim.interface.msg_win_mgr.get_controls(
+			message_control.TYPE_GC):
+				if gc_control.account == account:
+					if gajim.gc_connected[account][gc_control.room_jid]:
+						gajim.connections[account].send_gc_status(gc_control.nick,
+							gc_control.room_jid, status, txt)
+					else:
+						# for some reason, we are not connected to the room even if 
+						# tab is opened, send initial join_gc()
+						gajim.connections[account].join_gc(gc_control.nick, 
+						gc_control.room_jid, None)
 
 	def get_status_message(self, show):
 		if show in gajim.config.get_per('defaultstatusmsg'):
