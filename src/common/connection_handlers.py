@@ -1051,6 +1051,7 @@ class ConnectionVcard:
 		elif self.awaiting_answers[id][0] == PRIVACY_ARRIVED:
 			if iq_obj.getType() != 'error':
 				self.privacy_rules_supported = True
+				self.get_privacy_list('block')
 			# Ask metacontacts before roster
 			self.get_metacontacts()
 

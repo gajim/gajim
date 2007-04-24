@@ -87,6 +87,9 @@ class Connection(ConnectionHandlers):
 		else:
 			self.keepalives = 0
 		self.privacy_rules_supported = False
+		self.blocked_list = []
+		self.blocked_contacts = []
+		self.blocked_groups = []
 		self.pep_supported = False
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
@@ -741,7 +744,7 @@ class Connection(ConnectionHandlers):
 			msg = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if show == 'offline':
-			p = common.xmpp.Presence(typ = 'unavailable')
+			p = common.xmpp.Presence(typ = 'unavailable', to = jid)
 			p = self.add_sha(p, False)
 			if msg:
 				p.setStatus(msg)

@@ -1620,6 +1620,25 @@ class Interface:
 		if self.instances[account].has_key('privacy_list_%s' % name):
 			self.instances[account]['privacy_list_%s' % name].\
 				privacy_list_received(rules)
+		if name == 'block':
+			gajim.connections[account].blocked_contacts = []
+			gajim.connections[account].blocked_groups = []
+			gajim.connections[account].blocked_list = []
+			for rule in rules:
+				if rule['type'] == 'jid' and rule['action'] == 'deny':
+					gajim.connections[account].blocked_contacts.append(rule['value'])
+				if rule['type'] == 'group' and rule['action'] == 'deny':
+					gajim.connections[account].blocked_groups.append(rule['value'])
+				gajim.connections[account].blocked_list.append(rule)
+				#elif rule['type'] == "group" and action == "deny":
+				#	text_item = _('%s group "%s"') % _(rule['action']), rule['value']
+				#	self.store.append([text_item])
+				#	self.global_rules.append(rule)
+				#else:
+				#	self.global_rules_to_append.append(rule) 
+			if self.instances[account].has_key('blocked_contacts'):
+				self.instances[account]['blocked_contacts'].\
+					privacy_list_received(rules)
 
 	def handle_event_privacy_lists_active_default(self, account, data):
 		if not data:

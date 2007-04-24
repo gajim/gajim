@@ -6504,6 +6504,21 @@ msgstr "[Ce message est chiffré]"
 msgid "Error while adding service. %s"
 msgstr "Erreur en ajoutant le service. %s"
 
+msgid "_Blocked Contacts"
+msgstr "Contacts _Bloqués"
+
+msgid "Blocked Contacts for %s"
+msgstr "Contacts Bloqués avec le compte %s"
+
+msgid "Blocked Contacts"
+msgstr "Contacts Bloqués"
+
+msgid "_Block"
+msgstr "_Bloquer"
+
+msgid "_Unblock"
+msgstr "_Débloquer"
+
 #~ msgid "2003-12-13T18:30:02Z"
 #~ msgstr "2003-12-13T18:30:02Z"
 #~ msgid "<small>Romeo and Juliet</small>"

@@ -2276,7 +2276,7 @@ class PrivacyListWindow:
 
 		gajim.connections[self.account].set_privacy_list(
 			self.privacy_list_name, tags)
-		self.privacy_list_received(tags)
+		self.refresh_rules()
 		self.add_edit_vbox.hide()
 		if 'privacy_lists' in gajim.interface.instances[self.account]:
 			win = gajim.interface.instances[self.account]['privacy_lists']
@@ -2298,6 +2298,78 @@ class PrivacyListWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+
+class BlockedContactsWindow:
+	'''Window that is the main window for ContactWindows;'''
+	def __init__(self, account):
+		self.account = account
+		self.xml = gtkgui_helpers.get_glade('blocked_contacts_window.glade')
+		self.window = self.xml.get_widget('blocked_contacts_window')
+		self.remove_button = self.xml.get_widget('remove_button')
+		self.contacts_treeview = self.xml.get_widget('contacts_treeview')
+		renderer = gtk.CellRendererText()
+
+		
+		self.store = gtk.ListStore(str)
+		self.contacts_treeview.set_model(self.store)
+		
+		column = gtk.TreeViewColumn("Contact", renderer, text=0)
+		self.contacts_treeview.append_column(column)
+	
+		if len(gajim.connections) > 1:
+			title = _('Blocked Contacts for %s') % self.account
+		else:
+			title = _('Blocked Contacts')
+		self.window.set_title(title)
+
+		self.window.show_all()
+		self.xml.signal_autoconnect(self)
+		gajim.connections[self.account].get_privacy_list('block')
+	
+	def on_blocked_contacts_window_destroy(self, widget):
+		key_name = 'blocked_contacts'
+		if key_name in gajim.interface.instances[self.account]:
+			del gajim.interface.instances[self.account][key_name]
+
+	def on_remove_button_clicked(self, widget):
+		tags=[]
+		rule_selected = self.store.get_path(
+			self.contacts_treeview.get_selection().get_selected()[1])[0]
+		for i in range(0,len(self.global_rules)):
+			if i != rule_selected:
+				tags.append(self.global_rules[i])
+		for rule in self.global_rules_to_append:
+			tags.append(rule)
+		gajim.connections[self.account].set_privacy_list(
+			'block', tags)
+		gajim.connections[self.account].set_active_list('block')
+		gajim.connections[self.account].set_default_list('block')
+		gajim.connections[self.account].get_privacy_list('block')
+		if len(tags) == 0:
+			self.privacy_list_received([])
+			gajim.connections[self.account].blocked_contacts = []
+			gajim.connections[self.account].blocked_list = []
+			gajim.connections[self.account].set_default_list('')
+			gajim.connections[self.account].set_active_list('')
+			gajim.connections[self.account].del_privacy_list('block')
+		
+	
+	def privacy_list_received(self, rules):
+		self.store.clear()
+		self.global_rules = []
+		self.global_rules_to_append = []
+		for rule in rules:
+			if rule['type'] == "jid" and rule['action'] == "deny":
+				#self.global_rules[text_item] = rule
+				self.store.append([rule['value']])
+				self.global_rules.append(rule)
+			elif rule['type'] == "group" and rule['action'] == "deny":
+				text_item = _('Group %s') % rule['value']
+				self.store.append([text_item])
+				self.global_rules.append(rule)
+			else:
+				self.global_rules_to_append.append(rule)
+
 
 class PrivacyListsWindow:
 	'''Window that is the main window for Privacy Lists;

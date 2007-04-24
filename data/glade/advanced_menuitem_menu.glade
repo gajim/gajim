@@ -11,7 +11,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1457">
+	<widget class="GtkImage" id="image1461">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-new</property>
 	  <property name="icon_size">1</property>
@@ -28,6 +28,15 @@
     <widget class="GtkMenuItem" id="xml_console_menuitem">
       <property name="label" translatable="yes">Show _XML Console</property>
       <property name="use_underline">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="blocked_contacts_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Blocked Contacts</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="on_blocked_contacts_menuitem_activate" last_modification_time="Thu, 19 Apr 2007 15:32:47 GMT"/>
     </widget>
   </child>
 
@@ -58,7 +67,7 @@
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1458">
+		<widget class="GtkImage" id="image1462">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-new</property>
 		  <property name="icon_size">1</property>
@@ -100,7 +109,7 @@
 	      <property name="use_underline">True</property>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1459">
+		<widget class="GtkImage" id="image1463">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-clear</property>
 		  <property name="icon_size">1</property>
