@@ -331,6 +331,7 @@
 		      <child>
 			<widget class="GtkButton" id="synchronise_contacts_button">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Click to request authorization to all contacts of another account</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Synchronise contacts</property>
 			  <property name="use_underline">True</property>
