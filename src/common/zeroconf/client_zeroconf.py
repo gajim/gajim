@@ -158,10 +158,6 @@ class P2PClient(IdleObject):
 		self.Connection.PlugIn(self)
 		dispatcher_nb.Dispatcher().PlugIn(self)
 		self._register_handlers()
-		if self.sock_type == TYPE_CLIENT:
-			while self.stanzaqueue:
-				stanza, is_message = self.stanzaqueue.pop(0)
-				self.send(stanza, is_message)
 
 	def StreamInit(self):
 		''' Send an initial stream header. '''
@@ -178,7 +174,6 @@ class P2PClient(IdleObject):
 	def send_stream_header(self):
 		self.Dispatcher._metastream = Node('stream:stream')
 		self.Dispatcher._metastream.setNamespace(self.Namespace)
-		# XXX TLS support
 		self.Dispatcher._metastream.setAttr('version', '1.0')
 		self.Dispatcher._metastream.setAttr('xmlns:stream', NS_STREAMS)
 		self.Dispatcher._metastream.setAttr('from', self.conn_holder.zeroconf.name)
@@ -197,6 +192,16 @@ class P2PClient(IdleObject):
 			if attrs.has_key('from'):
 				self.to = attrs['from']
 			self.send_stream_header()
+			if attrs.has_key('version') and attrs['version'] == '1.0':
+				# other part supports stream features
+				features = Node('stream:features')
+				features.T.mechanisms.setNamespace(NS_SASL)
+				features.T.mechanisms.NT.mechanism = 'PLAIN'
+				self.Dispatcher.send(features)
+			while self.stanzaqueue:
+				stanza, is_message = self.stanzaqueue.pop(0)
+				self.send(stanza, is_message)
+		elif self.sock_type == TYPE_CLIENT:
 			while self.stanzaqueue:
 				stanza, is_message = self.stanzaqueue.pop(0)
 				self.send(stanza, is_message)
