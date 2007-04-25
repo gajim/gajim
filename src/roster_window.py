@@ -560,6 +560,8 @@ class RosterWindow:
 		if not contact:
 			return
 		name = gobject.markup_escape_text(contact.get_shown_name())
+		if jid in gajim.connections[account].blocked_contacts:
+			name = '<span strikethrough="true">%s</span>' % name
 
 		nb_connected_contact = 0
 		for c in contact_instances:
@@ -1315,6 +1317,7 @@ class RosterWindow:
 					if not connected_contacts:
 						# no connected contacts, show the ofline one
 						connected_contacts = contacts
+					self.tooltip.account = account
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, connected_contacts)
 			elif model[iter][C_TYPE] == 'account':
@@ -1323,6 +1326,7 @@ class RosterWindow:
 				if account == 'all':
 					if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 						self.tooltip.id = row
+						self.tooltip.account = None
 						self.tooltip.timeout = gobject.timeout_add(500,
 							self.show_tooltip, [])
 					return
@@ -1364,6 +1368,7 @@ class RosterWindow:
 							contacts.append(contact)
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
+					self.tooltip.account = None
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, contacts)
 
@@ -1437,44 +1442,47 @@ class RosterWindow:
 			new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
 				'value' : jid, 'child':  [u'message', u'iq', u'presence-out']}
 			gajim.connections[account].blocked_list.append(new_rule)
+			# needed for draw_contact:
+			gajim.connections[account].blocked_contacts.append(jid)
+			self.draw_contact(jid, account)
 		else:
 			msg = self.get_status_message('offline')
 			if iter == None:
 				for (contact, account) in blockedlist:
 					if account not in accounts:
-						if gajim.connections[account].privacy_rules_supported:
-							accounts.append(account)
-							self.send_status(account, 'offline', msg, to = contact.jid)
-							new_rule = {'order': u'1', 'type': u'jid',
-								'action': u'deny',  'value' : contact.jid,
-								'child':  [u'message', u'iq', u'presence-out']}
-							gajim.connections[account].blocked_list.append(new_rule)
-					else:
-						self.send_status(account, 'offline', msg, to = contact.jid)
-						new_rule = {'order': u'1', 'type': u'jid',
-								'action': u'deny',  'value' : contact.jid,
-								'child':  [u'message', u'iq', u'presence-out']}
-						gajim.connections[account].blocked_list.append(new_rule)
+						if not gajim.connections[account].privacy_rules_supported:
+							continue
+						accounts.append(account)
+					self.send_status(account, 'offline', msg, to = contact.jid)
+					new_rule = {'order': u'1', 'type': u'jid',
+							'action': u'deny',  'value' : contact.jid,
+							'child':  [u'message', u'iq', u'presence-out']}
+					gajim.connections[account].blocked_list.append(new_rule)
+					# needed for draw_contact:
+					gajim.connections[account].blocked_contacts.append(contact.jid)
+					self.draw_contact(contact.jid, account)
 			else:			
 				group = model[iter][C_JID].decode('utf-8')
 				msg = self.get_status_message('offline')
 				for (contact, account) in blockedlist:
 					if account not in accounts:
-						if gajim.connections[account].privacy_rules_supported:
-							accounts.append(account)
-							self.send_status(account, 'offline', msg, to = contact.jid)
-					else:
-						self.send_status(account, 'offline', msg, to = contact.jid)	
+						if not gajim.connections[account].privacy_rules_supported:
+							continue
+						accounts.append(account)
+					self.send_status(account, 'offline', msg, to = contact.jid)
+					# needed for draw_contact:
+					gajim.connections[account].blocked_contacts.append(contact.jid)
+					self.draw_contact(contact.jid, account)
 				new_rule = {'order': u'1', 'type': u'group', 'action': u'deny',
 					'value' : group, 'child':  [u'message', u'iq', u'presence-out']}
 				gajim.connections[account].blocked_list.append(new_rule)
-			for account in accounts:
-				gajim.connections[account].set_privacy_list(
-				'block', gajim.connections[account].blocked_list)
-			if len(gajim.connections[account].blocked_list) == 1:
-				gajim.connections[account].set_active_list('block')
-				gajim.connections[account].set_default_list('block')
-			gajim.connections[account].get_privacy_list('block')
+		for account in accounts:
+			gajim.connections[account].set_privacy_list(
+			'block', gajim.connections[account].blocked_list)
+		if len(gajim.connections[account].blocked_list) == 1:
+			gajim.connections[account].set_active_list('block')
+			gajim.connections[account].set_default_list('block')
+		gajim.connections[account].get_privacy_list('block')
 
 	def on_unblock(self, widget, iter, group_list):
 		''' When clicked on the 'unblock' button in context menu. '''
@@ -1487,8 +1495,12 @@ class RosterWindow:
 			gajim.connections[jid_account].new_blocked_list = []
 			for rule in gajim.connections[jid_account].blocked_list:
 				if rule['action'] != 'deny' or rule['type'] != 'jid' \
-					or rule['value'] != jid:
+				or rule['value'] != jid:
 					gajim.connections[jid_account].new_blocked_list.append(rule)
+			# needed for draw_contact:
+			if jid in gajim.connections[jid_account].blocked_contacts:
+				gajim.connections[jid_account].blocked_contacts.remove(jid)
+			self.draw_contact(jid, jid_account)
 		else:
 			if iter == None:
 				for (contact, account) in group_list:
@@ -1500,6 +1512,11 @@ class RosterWindow:
 							gajim.connections[account].to_unblock.append(contact.jid)
 					else:
 						gajim.connections[account].to_unblock.append(contact.jid)
+					# needed for draw_contact:
+					if contact.jid in gajim.connections[account].blocked_contacts:
+						gajim.connections[account].blocked_contacts.remove(
+							contact.jid)
+					self.draw_contact(contact.jid, account)
 				for account in accounts:
 					for rule in gajim.connections[account].blocked_list:
 						if rule['action'] != 'deny' or rule['type'] != 'jid' \
@@ -1514,8 +1531,14 @@ class RosterWindow:
 							gajim.connections[account].new_blocked_list = []
 							for rule in gajim.connections[account].blocked_list:
 								if rule['action'] != 'deny' or rule['type'] != 'group' \
-									or rule['value'] != group:
-									gajim.connections[account].new_blocked_list.append(rule)
+								or rule['value'] != group:
+									gajim.connections[account].new_blocked_list.append(
+										rule)
+					# needed for draw_contact:
+					if contact.jid in gajim.connections[account].blocked_contacts:
+						gajim.connections[account].blocked_contacts.remove(
+							contact.jid)
+					self.draw_contact(contact.jid, account)
 		for account in accounts:
 			gajim.connections[account].set_privacy_list(
 				'block', gajim.connections[account].new_blocked_list)
@@ -1552,9 +1575,7 @@ class RosterWindow:
 				else:
 					self.send_status(account, show,
 						gajim.connections[account].status, to = contact.jid)	
-		
 
-	
 	def on_rename(self, widget, iter, path):
 		# this function is called either by F2 or by Rename menuitem
 		if gajim.interface.instances.has_key('rename'):

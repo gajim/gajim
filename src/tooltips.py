@@ -372,7 +372,7 @@ class RosterTooltip(NotificationAreaTooltip):
 
 	def populate(self, contacts):
 		self.create_window()
-		
+
 		self.create_table()
 		if not contacts or len(contacts) == 0:
 			# Tooltip for merged accounts row
@@ -409,6 +409,9 @@ class RosterTooltip(NotificationAreaTooltip):
 		name_markup = u'<span weight="bold">' + \
 			gobject.markup_escape_text(prim_contact.get_shown_name())\
 			+ '</span>'
+		if self.account and prim_contact.jid in gajim.connections[
+		self.account].blocked_contacts:
+			name_markup += u' [blocked]'
 		properties.append((name_markup, None))
 		
 		num_resources = 0
