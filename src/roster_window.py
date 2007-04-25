@@ -21,7 +21,6 @@ import os
 import time
 import urllib
 
-import dbus
 import common.sleepy
 import history_window
 import dialogs
@@ -49,6 +48,7 @@ from groupchat_control import PrivateChatControl
 from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
+	import dbus
 
 #(icon, name, type, jid, account, editable, second pixbuf)
 (
@@ -3235,6 +3235,9 @@ class RosterWindow:
 				self._music_track_changed(None, None)
 	
 	def _change_awn_icon_status(self, status):
+		if not dbus_support.supported:
+			# do nothing if user doesn't have D-Bus bindings
+			return
 		iconset = gajim.config.get('iconset')
 		prefix = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
 		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
