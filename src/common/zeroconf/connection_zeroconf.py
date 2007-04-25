@@ -64,7 +64,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	
 		self.call_resolve_timeout = False
 		
-		#self.time_to_reconnect = None
+		self.time_to_reconnect = None
 		#self.new_account_info = None
 		self.bookmarks = []
 
@@ -128,6 +128,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			gajim.handlers[event](self.name, data)
 
 	def _reconnect(self):
+		# Do not try to reco while we are already trying
+		self.time_to_reconnect = None
 		gajim.log.debug('reconnect')
 
 		signed = self.get_signed_msg(self.status)
@@ -199,6 +201,20 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			_('To continue sending and receiving messages, you will need to reconnect.')))
 		self.status = 'offline'
 		self.disconnect()
+
+	def _disconnectedReconnCB(self):
+		'''Called when we are disconnected. Comes from network manager for example
+		we don't try to reconnect, network manager will tell us when we can'''
+		log.debug('disconnectedReconnCB')
+		if gajim.account_is_connected(self.name):
+			# we cannot change our status to offline or connecting
+			# after we auth to server
+			self.old_show = STATUS_LIST[self.connected]
+		self.connected = 0
+		self.dispatch('STATUS', 'offline')
+		# random number to show we wait network manager to send us a reconenct
+		self.time_to_reconnect = 5
+		self.on_purpose = False
 
 	def _on_name_conflictCB(self, alt_name):
 		self.disconnect()
@@ -301,6 +317,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# 'disconnect'
 		elif show == 'offline' and self.connected:
 			self.disconnect()
+			self.time_to_reconnect = None
 			
 		# update status
 		elif show != 'offline' and self.connected:
