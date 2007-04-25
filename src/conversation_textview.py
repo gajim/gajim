@@ -14,6 +14,10 @@
 ## GNU General Public License for more details.
 ##
 
+import random
+from tempfile import gettempdir
+from subprocess import Popen
+
 import gtk
 import pango
 import gobject
@@ -572,6 +576,50 @@ class ConversationTextview:
 
 		return index # the position after *last* special text
 
+	def latex_to_image(self, str):
+		result = None
+		
+		str = str[2:len(str)-2]
+	    
+		random.seed()
+		tmpfile = os.path.join(gettempdir(), "gajimtex_" + random.randint(0, 100).__str__())
+
+		# build latex string
+		texstr = "\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}\\usepackage{amsmath}\\usepackage{amssymb}\\pagestyle{empty}"
+		texstr += "\\begin{document}\\begin{large}\\begin{gather*}"
+		texstr += str
+		texstr += "\\end{gather*}\\end{large}\\end{document}"
+
+		file = open(os.path.join(tmpfile + ".tex"), "w+")
+		file.write(texstr)
+		file.flush()
+		file.close()
+
+		p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'], cwd=gettempdir())
+		exitcode = p.wait()
+
+		if exitcode == 0:	    
+			p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'], cwd=gettempdir())
+			exitcode = p.wait()
+
+		if exitcode == 0:
+		    p = Popen(['convert', tmpfile + '.ps', tmpfile + '.png'], cwd=gettempdir())
+		    exitcode = p.wait()
+	    
+		extensions = [".tex", ".log", ".aux", ".dvi", ".ps"]
+	    
+		for ext in extensions:
+			try:
+				os.remove(tmpfile + ext)
+			except Exception:
+				pass
+	    
+		if exitcode == 0:
+			result = tmpfile + '.png'
+	    	
+		return result
+
+
 	def print_special_text(self, special_text, other_tags):
 		'''is called by detect_and_print_special_text and prints
 		special text (emots, links, formatting)'''
@@ -656,6 +704,24 @@ class ConversationTextview:
 			else:
 				if not show_ascii_formatting_chars:
 					special_text = special_text[1:-1] # remove _ _
+		elif special_text.startswith('$$') and special_text.endswith('$$'):
+			imagepath = self.latex_to_image(special_text)
+			end_iter = buffer.get_end_iter()
+			anchor = buffer.create_child_anchor(end_iter)
+			if imagepath != None:
+				img = gtk.Image()
+				img.set_from_file(imagepath)
+				img.show()
+				# add
+				self.tv.add_child_at_anchor(img, anchor)
+				# delete old file
+				try:
+					os.remove(imagepath)
+				except Exception:
+					pass
+			else:
+				buffer.insert(end_iter, special_text)
+			use_other_tags = False
 		else:
 			#it's a url
 			tags.append('url')

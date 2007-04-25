@@ -1823,7 +1823,13 @@ class Interface:
 			r'(?<!\w|\<)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\w)|'\
 			r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
 
+		latex = r'|\$\$.*\$\$'
+		
 		basic_pattern = links + mail
+		
+		if gajim.config.get('use_latex'):
+			basic_pattern += latex
+		
 		if gajim.config.get('ascii_formatting'):
 			basic_pattern += formatting
 		self.basic_pattern_re = re.compile(basic_pattern, re.IGNORECASE)
