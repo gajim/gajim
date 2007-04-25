@@ -56,7 +56,7 @@ class EditGroupsDialog:
 		if len(list_) == 1:
 			contact = list_[0][0]
 			self.xml.get_widget('nickname_label').set_markup(
-				_("Contact name: <i>%s</i>") % contact.get_shown_name())
+				_('Contact name: <i>%s</i>') % contact.get_shown_name())
 			self.xml.get_widget('jid_label').set_markup(
 				_('Jabber ID: <i>%s</i>') % contact.jid)
 		else:
@@ -2308,12 +2308,11 @@ class BlockedContactsWindow:
 		self.remove_button = self.xml.get_widget('remove_button')
 		self.contacts_treeview = self.xml.get_widget('contacts_treeview')
 		renderer = gtk.CellRendererText()
-
 		
 		self.store = gtk.ListStore(str)
 		self.contacts_treeview.set_model(self.store)
 		
-		column = gtk.TreeViewColumn("Contact", renderer, text=0)
+		column = gtk.TreeViewColumn('Contact', renderer, text=0)
 		self.contacts_treeview.append_column(column)
 	
 		if len(gajim.connections) > 1:
@@ -2321,7 +2320,6 @@ class BlockedContactsWindow:
 		else:
 			title = _('Blocked Contacts')
 		self.window.set_title(title)
-
 		self.window.show_all()
 		self.xml.signal_autoconnect(self)
 		gajim.connections[self.account].get_privacy_list('block')
@@ -2332,38 +2330,53 @@ class BlockedContactsWindow:
 			del gajim.interface.instances[self.account][key_name]
 
 	def on_remove_button_clicked(self, widget):
-		tags=[]
+		if self.contacts_treeview.get_selection().get_selected()[1] == None:
+			return
+		tags = []
 		rule_selected = self.store.get_path(
 			self.contacts_treeview.get_selection().get_selected()[1])[0]
 		for i in range(0,len(self.global_rules)):
 			if i != rule_selected:
 				tags.append(self.global_rules[i])
+			else:
+				deleted_rule = self.global_rules[i]
 		for rule in self.global_rules_to_append:
 			tags.append(rule)
 		gajim.connections[self.account].set_privacy_list(
 			'block', tags)
-		gajim.connections[self.account].set_active_list('block')
-		gajim.connections[self.account].set_default_list('block')
 		gajim.connections[self.account].get_privacy_list('block')
 		if len(tags) == 0:
 			self.privacy_list_received([])
 			gajim.connections[self.account].blocked_contacts = []
+			gajim.connections[self.account].blocked_groups = []
 			gajim.connections[self.account].blocked_list = []
 			gajim.connections[self.account].set_default_list('')
 			gajim.connections[self.account].set_active_list('')
 			gajim.connections[self.account].del_privacy_list('block')
-		
+		status = gajim.connections[self.account].connected
+		msg = gajim.connections[self.account].status
+		show = gajim.SHOW_LIST[gajim.connections[self.account].connected]
+		if deleted_rule['type'] == 'jid':
+			gajim.connections[self.account].send_custom_status(show, msg,
+				deleted_rule['value'])
+		else:
+			for jid in gajim.contacts.get_jid_list(self.account):
+				contact = gajim.contacts.get_contact_with_highest_priority(
+					self.account, jid)
+				if deleted_rule['value'] in contact.groups:
+					gajim.connections[self.account].send_custom_status(show, msg,
+						contact.jid)
 	
 	def privacy_list_received(self, rules):
 		self.store.clear()
 		self.global_rules = []
 		self.global_rules_to_append = []
 		for rule in rules:
-			if rule['type'] == "jid" and rule['action'] == "deny":
+			if rule['type'] == 'jid' and rule['action'] == 'deny':
 				#self.global_rules[text_item] = rule
 				self.store.append([rule['value']])
 				self.global_rules.append(rule)
-			elif rule['type'] == "group" and rule['action'] == "deny":
+			elif rule['type'] == 'group' and rule['action'] == 'deny':
 				text_item = _('Group %s') % rule['value']
 				self.store.append([text_item])
 				self.global_rules.append(rule)
