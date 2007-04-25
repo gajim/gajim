@@ -2335,7 +2335,7 @@ class BlockedContactsWindow:
 		tags = []
 		rule_selected = self.store.get_path(
 			self.contacts_treeview.get_selection().get_selected()[1])[0]
-		for i in range(0,len(self.global_rules)):
+		for i in range(0, len(self.global_rules)):
 			if i != rule_selected:
 				tags.append(self.global_rules[i])
 			else:

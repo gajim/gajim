@@ -1429,15 +1429,15 @@ class RosterWindow:
 		self.dialog = dialogs.ConfirmationDialog(pritext, sectext,
 			on_response_ok = (remove, list_))
 
-	def on_block(self, widget, iter, blockedlist):
+	def on_block(self, widget, iter, group_list):
 		''' When clicked on the 'block' button in context menu. '''
 		model = self.tree.get_model()
 		accounts = []
-		if blockedlist == None:
+		msg = self.get_status_message('offline')
+		if group_list == None:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			accounts.append(account)
-			msg = self.get_status_message('offline')
 			self.send_status(account, 'offline', msg, to = jid)
 			new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
 				'value' : jid, 'child':  [u'message', u'iq', u'presence-out']}
@@ -1446,14 +1446,13 @@ class RosterWindow:
 			gajim.connections[account].blocked_contacts.append(jid)
 			self.draw_contact(jid, account)
 		else:
-			msg = self.get_status_message('offline')
 			if iter == None:
-				for (contact, account) in blockedlist:
+				for (contact, account) in group_list:
 					if account not in accounts:
 						if not gajim.connections[account].privacy_rules_supported:
 							continue
 						accounts.append(account)
-					self.send_status(account, 'offline', msg, to = contact.jid)
+					self.send_status(account, 'offline', msg, to=contact.jid)
 					new_rule = {'order': u'1', 'type': u'jid',
 							'action': u'deny',  'value' : contact.jid,
 							'child':  [u'message', u'iq', u'presence-out']}
@@ -1464,12 +1463,12 @@ class RosterWindow:
 			else:			
 				group = model[iter][C_JID].decode('utf-8')
 				msg = self.get_status_message('offline')
-				for (contact, account) in blockedlist:
+				for (contact, account) in group_list:
 					if account not in accounts:
 						if not gajim.connections[account].privacy_rules_supported:
 							continue
 						accounts.append(account)
-					self.send_status(account, 'offline', msg, to = contact.jid)
+					self.send_status(account, 'offline', msg, to=contact.jid)
 					# needed for draw_contact:
 					gajim.connections[account].blocked_contacts.append(contact.jid)
 					self.draw_contact(contact.jid, account)
@@ -1560,7 +1559,7 @@ class RosterWindow:
 				show = gajim.SHOW_LIST[status]
 			else:	# accounts merged
 				show = helpers.get_global_show()
-			self.send_status(jid_account, show, msg, to = jid)
+			self.send_status(jid_account, show, msg, to=jid)
 		else:
 			for (contact, account) in group_list:
 				if not self.regroup:
@@ -1571,10 +1570,10 @@ class RosterWindow:
 					if gajim.connections[account].privacy_rules_supported:
 						accounts.append(account)
 						self.send_status(account, show,
-							gajim.connections[account].status, to = contact.jid)
+							gajim.connections[account].status, to=contact.jid)
 				else:
 					self.send_status(account, show,
-						gajim.connections[account].status, to = contact.jid)	
+						gajim.connections[account].status, to=contact.jid)	
 
 	def on_rename(self, widget, iter, path):
 		# this function is called either by F2 or by Rename menuitem
