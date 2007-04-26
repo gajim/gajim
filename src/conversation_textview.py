@@ -578,47 +578,69 @@ class ConversationTextview:
 
 	def latex_to_image(self, str):
 		result = None
-		
+		exitcode = 0
+
+		# some latex commands are really bad
+		blacklist = ["\\def", "\\let", "\\futurelet",
+			"\\newcommand", "\\renewcomment", "\\else", "\\fi", "\\write",
+			"\\input", "\\include", "\\chardef", "\\catcode", "\\makeatletter",
+			"\\noexpand", "\\toksdef", "\\every", "\\errhelp", "\\errorstopmode",
+			"\\scrollmode", "\\nonstopmode", "\\batchmode", "\\read", "\\csname",
+			"\\newhelp", "\\relax", "\\afterground", "\\afterassignment",
+			"\\expandafter", "\\noexpand", "\\special", "\\command", "\\loop",
+			"\\repeat", "\\toks", "\\output", "\\line", "\\mathcode", "\\name",
+			"\\item", "\\section", "\\mbox", "\\DeclareRobustCommand", "\\[",
+			"\\]"]
+
 		str = str[2:len(str)-2]
-	    
-		random.seed()
-		tmpfile = os.path.join(gettempdir(), "gajimtex_" + random.randint(0, 100).__str__())
 
-		# build latex string
-		texstr = "\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}\\usepackage{amsmath}\\usepackage{amssymb}\\pagestyle{empty}"
-		texstr += "\\begin{document}\\begin{large}\\begin{gather*}"
-		texstr += str
-		texstr += "\\end{gather*}\\end{large}\\end{document}"
+		# filter latex code with bad commands
+		for word in blacklist:
+			if word in str:
+				exitcode = 1
+				break
 
-		file = open(os.path.join(tmpfile + ".tex"), "w+")
-		file.write(texstr)
-		file.flush()
-		file.close()
+		if exitcode == 0:
+			random.seed()
+			tmpfile = os.path.join(gettempdir(), "gajimtex_" + random.randint(0,
+				100).__str__())
 
-		p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'], cwd=gettempdir())
-		exitcode = p.wait()
+			# build latex string
+			texstr = "\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}\\usepackage{amsmath}\\usepackage{amssymb}\\pagestyle{empty}"
+			texstr += "\\begin{document}\\begin{large}\\begin{gather*}"
+			texstr += str
+			texstr += "\\end{gather*}\\end{large}\\end{document}"
+
+			file = open(os.path.join(tmpfile + ".tex"), "w+")
+			file.write(texstr)
+			file.flush()
+			file.close()
+
+			p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
+				cwd=gettempdir())
+			exitcode = p.wait()
 
 		if exitcode == 0:	    
-			p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'], cwd=gettempdir())
+			p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
+				cwd=gettempdir())
 			exitcode = p.wait()
 
 		if exitcode == 0:
-		    p = Popen(['convert', tmpfile + '.ps', tmpfile + '.png'], cwd=gettempdir())
-		    exitcode = p.wait()
-	    
+			p = Popen(['convert', tmpfile + '.ps', tmpfile + '.png'],
+				cwd=gettempdir())
+			exitcode = p.wait()
+
 		extensions = [".tex", ".log", ".aux", ".dvi", ".ps"]
-	    
 		for ext in extensions:
 			try:
 				os.remove(tmpfile + ext)
 			except Exception:
 				pass
-	    
+
 		if exitcode == 0:
 			result = tmpfile + '.png'
-	    	
-		return result
 
+		return result
 
 	def print_special_text(self, special_text, other_tags):
 		'''is called by detect_and_print_special_text and prints
