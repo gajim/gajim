@@ -2364,18 +2364,17 @@ class BlockedContactsWindow:
 				gajim.connections[self.account].blocked_contacts.remove(jid)
 			gajim.interface.roster.draw_contact(jid, self.account)
 		else:
+			group = deleted_rule['value']
 			for jid in gajim.contacts.get_jid_list(self.account):
 				contact = gajim.contacts.get_contact_with_highest_priority(
 					self.account, jid)
-				if deleted_rule['value'] in contact.groups:
+				if group in contact.groups:
 					gajim.connections[self.account].send_custom_status(show, msg,
 						contact.jid)
-					# needed for draw_contact:
-					if contact.jid in gajim.connections[self.account].\
-					blocked_contacts:
-						gajim.connections[self.account].blocked_contacts.remove(
-							contact.jid)
-					gajim.interface.roster.draw_contact(contact.jid, self.account)
+			# needed for draw_group:
+			if group in gajim.connections[self.account].blocked_groups:
+				gajim.connections[self.account].blocked_groups.remove(group)
+			gajim.interface.roster.draw_group(group, self.account)
 	
 	def privacy_list_received(self, rules):
 		self.store.clear()
