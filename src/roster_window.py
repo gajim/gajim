@@ -392,13 +392,15 @@ class RosterWindow:
 			accounts = []
 		else:
 			accounts = [account]
-		text = group
+		text = gobject.markup_escape_text(group)
+		if group in gajim.connections[account].blocked_groups:
+			text = '<span strikethrough="true">%s</span>' % text
 		if gajim.config.get('show_contacts_number'):
 			nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
 				accounts = accounts, groups = [group])
 			text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 		model = self.tree.get_model()
-		model.set_value(iter, 1 , gobject.markup_escape_text(text))
+		model.set_value(iter, 1 , text)
 
 	def add_to_not_in_the_roster(self, account, jid, nick = '', resource = ''):
 		''' add jid to group "not in the roster", he MUST not be in roster yet,
@@ -1462,19 +1464,18 @@ class RosterWindow:
 					self.draw_contact(contact.jid, account)
 			else:			
 				group = model[iter][C_JID].decode('utf-8')
-				msg = self.get_status_message('offline')
 				for (contact, account) in group_list:
 					if account not in accounts:
 						if not gajim.connections[account].privacy_rules_supported:
 							continue
 						accounts.append(account)
 					self.send_status(account, 'offline', msg, to=contact.jid)
-					# needed for draw_contact:
-					gajim.connections[account].blocked_contacts.append(contact.jid)
-					self.draw_contact(contact.jid, account)
 				new_rule = {'order': u'1', 'type': u'group', 'action': u'deny',
 					'value' : group, 'child':  [u'message', u'iq', u'presence-out']}
 				gajim.connections[account].blocked_list.append(new_rule)
+				# needed for draw_group:
+				gajim.connections[account].blocked_groups.append(group)
+				self.draw_group(group, account)
 		for account in accounts:
 			gajim.connections[account].set_privacy_list(
 			'block', gajim.connections[account].blocked_list)
@@ -1533,11 +1534,10 @@ class RosterWindow:
 								or rule['value'] != group:
 									gajim.connections[account].new_blocked_list.append(
 										rule)
-					# needed for draw_contact:
-					if contact.jid in gajim.connections[account].blocked_contacts:
-						gajim.connections[account].blocked_contacts.remove(
-							contact.jid)
-					self.draw_contact(contact.jid, account)
+				# needed for draw_group:
+				if group in gajim.connections[account].blocked_groups:
+					gajim.connections[account].blocked_groups.remove(group)
+				self.draw_group(group, account)
 		for account in accounts:
 			gajim.connections[account].set_privacy_list(
 				'block', gajim.connections[account].new_blocked_list)
