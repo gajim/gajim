@@ -2883,24 +2883,27 @@ class RosterWindow:
 		elif event.button == 1: # Left click
 			model = self.tree.get_model()
 			type_ = model[path][C_TYPE]
-			if type_ == 'group' and x < 27:
-				# first cell in 1st column (the arrow SINGLE clicked)
-				if (self.tree.row_expanded(path)):
-					self.tree.collapse_row(path)
-				else:
-					self.tree.expand_row(path, False)
-
-			elif type_ == 'contact' and x < 27:
-				account = model[path][C_ACCOUNT].decode('utf-8')
-				jid = model[path][C_JID].decode('utf-8')
-				# first cell in 1st column (the arrow SINGLE clicked)
-				iters = self.get_contact_iter(jid, account)
-				for iter in iters:
-					path = model.get_path(iter)
+			if gajim.single_click:
+				self.on_row_activated(widget, path)
+			else:
+				if type_ == 'group' and x < 27:
+					# first cell in 1st column (the arrow SINGLE clicked)
 					if (self.tree.row_expanded(path)):
 						self.tree.collapse_row(path)
 					else:
 						self.tree.expand_row(path, False)
+	
+				elif type_ == 'contact' and x < 27:
+					account = model[path][C_ACCOUNT].decode('utf-8')
+					jid = model[path][C_JID].decode('utf-8')
+					# first cell in 1st column (the arrow SINGLE clicked)
+					iters = self.get_contact_iter(jid, account)
+					for iter in iters:
+						path = model.get_path(iter)
+						if (self.tree.row_expanded(path)):
+							self.tree.collapse_row(path)
+						else:
+							self.tree.expand_row(path, False)
 
 	def on_req_usub(self, widget, list_):
 		'''Remove a contact. list_ is a list of (contact, account) tuples'''
@@ -3785,8 +3788,9 @@ class RosterWindow:
 
 		win.window.present()
 
-	def on_roster_treeview_row_activated(self, widget, path, col = 0):
-		'''When an iter is double clicked: open the first event window'''
+	def on_row_activated(self, widget, path):
+		'''When an iter is activated (dubblick or single click if gnome is set
+		this way'''
 		model = self.tree.get_model()
 		account = model[path][C_ACCOUNT].decode('utf-8')
 		type_ = model[path][C_TYPE]
@@ -3829,6 +3833,11 @@ class RosterWindow:
 			if jid == gajim.get_jid_from_account(account):
 				resource = c.resource
 			self.on_open_chat_window(widget, c, account, resource = resource)
+
+	def on_roster_treeview_row_activated(self, widget, path, col = 0):
+		'''When an iter is double clicked: open the first event window'''
+		if not gajim.single_click:
+			self.on_row_activated(widget, path)
 
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''

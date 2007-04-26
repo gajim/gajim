@@ -124,6 +124,8 @@ status_before_autoaway = {}
 # be online
 transport_avatar = {} # {transport_jid: [jid_list]}
 
+# Is Gnome configured to activate on single click ?
+single_click = False
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
 

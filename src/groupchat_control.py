@@ -1757,8 +1757,9 @@ class GroupchatControl(ChatControlBase):
 		win.set_active_tab(nick_jid, self.account)
 		win.window.present()
 
-	def on_list_treeview_row_activated(self, widget, path, col = 0):
-		'''When an iter is double clicked: open the chat window'''
+	def on_row_activated(self, widget, path):
+		'''When an iter is activated (dubblick or single click if gnome is set
+		this way'''
 		model = widget.get_model()
 		if len(path) == 1: # It's a group
 			if (widget.row_expanded(path)):
@@ -1768,6 +1769,11 @@ class GroupchatControl(ChatControlBase):
 		else: # We want to send a private message
 			nick = model[path][C_NICK].decode('utf-8')
 			self._start_private_message(nick)
+			
+	def on_list_treeview_row_activated(self, widget, path, col = 0):
+		'''When an iter is double clicked: open the chat window'''
+		if not gajim.single_click:
+			self.on_row_activated(widget, path)
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		'''popup user's group's or agent menu'''
@@ -1808,26 +1814,30 @@ class GroupchatControl(ChatControlBase):
 				widget.get_selection().unselect_all()
 				return
 
-			model = widget.get_model()
-			iter = model.get_iter(path)
-			nick = model[iter][C_NICK].decode('utf-8')
-			if not nick in gajim.contacts.get_nick_list(self.account,
-			self.room_jid):
-				#it's a group
-				col = widget.get_column(0)
-				avatar_cell = col.get_cell_renderers()[0]
-				(pos, avatar_size) = col.cell_get_position(avatar_cell)
-				status_cell = col.get_cell_renderers()[1]
-				(pos, status_size) = col.cell_get_position(status_cell)
-				if x > avatar_size and x < avatar_size + status_size:
-					if (widget.row_expanded(path)):
-						widget.collapse_row(path)
-					else:
-						widget.expand_row(path, False)
-			elif event.state & gtk.gdk.SHIFT_MASK:
-				self.append_nick_in_msg_textview(self.msg_textview, nick)
-				self.msg_textview.grab_focus()
+			if gajim.single_click:
+				self.on_row_activated(widget, path)			
 				return True
+			else:
+				model = widget.get_model()
+				iter = model.get_iter(path)
+				nick = model[iter][C_NICK].decode('utf-8')
+				if not nick in gajim.contacts.get_nick_list(self.account,
+				self.room_jid):
+					#it's a group
+					col = widget.get_column(0)
+					avatar_cell = col.get_cell_renderers()[0]
+					(pos, avatar_size) = col.cell_get_position(avatar_cell)
+					status_cell = col.get_cell_renderers()[1]
+					(pos, status_size) = col.cell_get_position(status_cell)
+					if x > avatar_size and x < avatar_size + status_size:
+						if (widget.row_expanded(path)):
+							widget.collapse_row(path)
+						else:
+							widget.expand_row(path, False)
+				elif event.state & gtk.gdk.SHIFT_MASK:
+					self.append_nick_in_msg_textview(self.msg_textview, nick)
+					self.msg_textview.grab_focus()
+					return True
 
 	def append_nick_in_msg_textview(self, widget, nick):
 		message_buffer = self.msg_textview.get_buffer()
