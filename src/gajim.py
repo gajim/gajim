@@ -400,13 +400,16 @@ class Interface:
 			gc_control.show_change_nick_input_dialog(title, prompt, proposed_nick)
 
 	def handle_event_http_auth(self, account, data):
-		#('HTTP_AUTH', account, (method, url, transaction_id, iq_obj))
+		#('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
 		def response(widget, account, iq_obj, answer):
 			self.dialog.destroy()
 			gajim.connections[account].build_http_auth_answer(iq_obj, answer)
 
+		sec_msg = _('Do you accept this request?')
+		if data[4]:
+			sec_msg = data[4] + '\n' + sec_msg
 		self.dialog = dialogs.YesNoDialog(_('HTTP (%s) Authorization for %s (id: %s)') \
-			% (data[0], data[1], data[2]), _('Do you accept this request?'),
+			% (data[0], data[1], data[2]), sec_msg,
 			on_response_yes = (response, account, data[3], 'yes'),
 			on_response_no = (response, account, data[3], 'no'))
 
