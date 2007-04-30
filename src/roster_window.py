@@ -3268,9 +3268,10 @@ class RosterWindow:
 			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
 			awn = dbus.Interface(obj, 'com.google.code.Awn')
 			awn.SetTaskIconByName('Gajim', os.path.abspath(path))
-		except dbus.DBusException:
+		except Exception, e:
+			gajim.log.debug(str(e))
 			pass
-	
+
 	def _music_track_changed(self, unused_listener, music_track_info):
 		accounts = gajim.connections.keys()
 		if music_track_info is None:
