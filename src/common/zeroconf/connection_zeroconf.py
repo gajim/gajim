@@ -59,6 +59,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.is_zeroconf = True
 		self.privacy_rules_supported = False
 		self.blocked_contacts = []
+		self.blocked_groups = []
 		self.status = ''
 		self.old_show = ''
 		self.priority = 0
