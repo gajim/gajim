@@ -693,7 +693,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			else:
 				# Wait 10ms between each byte
 				try:
-					f.fp._sock.fp._sock.settimeout(0.01)
+					f.fp._sock.fp._sock.settimeout(0.1)
 				except:
 					pass
 				# Max image size = 2 MB (to try to prevent DoS) in Max 3s
@@ -703,25 +703,44 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 					if time.time() > deadline:
 						gajim.log.debug(str('Timeout loading image %s ' % \
 							attrs['src'] + ex))
-						pixbuf = None
-						alt = attrs.get('alt', 'Timeout loading image')
+						mem = ''
+						alt = attrs.get('alt', '')
+						if alt:
+							alt += '\n'
+						alt += _('Timeout loading image')
 						break
-					temp = f.read(100)
+					try:
+						temp = f.read(100)
+					except socket.timeout, ex:
+						gajim.log.debug('Timeout loading image %s ' % attrs['src'] + \
+							str(ex))
+						mem = ''
+						alt = attrs.get('alt', '')
+						if alt:
+							alt += '\n'
+						alt += _('Timeout loading image')
+						break
 					if temp:
 						mem += temp
 					else:
 						break
 					if len(mem) > 2*1024*1024:
-						alt = attrs.get('alt', 'Image is too big')
+						alt = attrs.get('alt', '')
+						if alt:
+							alt += '\n'
+						alt += _('Image is too big')
 						break
 
-				# Caveat: GdkPixbuf is known not to be safe to load
-				# images from network... this program is now potentially
-				# hackable ;)
-				loader = gtk.gdk.PixbufLoader()
-				loader.write(mem)
-				loader.close()
-				pixbuf = loader.get_pixbuf()
+				if mem:
+					# Caveat: GdkPixbuf is known not to be safe to load
+					# images from network... this program is now potentially
+					# hackable ;)
+					loader = gtk.gdk.PixbufLoader()
+					loader.write(mem)
+					loader.close()
+					pixbuf = loader.get_pixbuf()
+				else:
+					pixbuf = None
 			if pixbuf is not None:
 				tags = self._get_style_tags()
 				if tags:
