@@ -659,6 +659,24 @@ class ChatControlBase(MessageControl):
 		isactive = widget.get_active()
 		self.chat_buttons_set_visible(isactive)
 
+	def _on_minimize_menuitem_activate(self, widget):
+		'''When a grouchat is minimized, unparent the tab, put it in roster etc'''
+		win = gajim.interface.msg_win_mgr.get_window(self.contact.jid, self.account)
+		ctrl = win.get_control(self.contact.jid, self.account)
+
+		ctrl_page = win.notebook.page_num(ctrl.widget)
+		control = win.notebook.get_nth_page(ctrl_page)
+
+		win.notebook.remove_page(ctrl_page)
+		control.unparent()
+
+		gajim.connections[self.account].hidden_groupchats[self.contact.jid] = ctrl
+		del win._controls[self.account][self.contact.jid]
+
+		win.check_tabs()
+		gajim.interface.roster.add_groupchat_to_roster(self.account,
+			self.contact.jid, status = self.subject)
+
 	def set_control_active(self, state):
 		if state:
 			jid = self.contact.jid

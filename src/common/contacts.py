@@ -82,6 +82,11 @@ class Contact:
 			is_observer = True
 		return is_observer
 
+	def is_groupchat(self):
+		if _('Groupchats') in self.groups:
+			return True
+		return False
+
 	def is_transport(self):
 		# if not '@' or '@' starts the jid then contact is transport
 		if self.jid.find('@') <= 0:

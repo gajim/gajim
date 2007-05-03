@@ -40,7 +40,7 @@ try:
 except:
 	pass
 
-special_groups = (_('Transports'), _('Not in Roster'), _('Observers'))
+special_groups = (_('Transports'), _('Not in Roster'), _('Observers'), _('Groupchats'))
 
 class InvalidFormat(Exception):
 	pass

@@ -240,6 +240,10 @@ class GroupchatControl(ChatControlBase):
 		id = widget.connect('activate', self._on_history_menuitem_activate)
 		self.handlers[id] = widget
 
+		widget = xm.get_widget('minimize_menuitem')
+		id = widget.connect('activate', self._on_minimize_menuitem_activate)
+		self.handlers[id] = widget
+
 		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
@@ -590,7 +594,7 @@ class GroupchatControl(ChatControlBase):
 			small_attr = []
 		ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
 			small_attr, small_attr + ['restored_message'],
-			small_attr + ['restored_message'], xhtml = xhtml)
+			small_attr + ['restored_message'], count_as_new = False, xhtml = xhtml)
 
 	def print_conversation(self, text, contact = '', tim = None, xhtml = None):
 		'''Print a line in the conversation:
@@ -833,7 +837,7 @@ class GroupchatControl(ChatControlBase):
 		model[iter][C_AVATAR] = scaled_pixbuf
 
 	def chg_contact_status(self, nick, show, status, role, affiliation, jid,
-	reason, actor, statusCode, new_nick):
+	reason, actor, statusCode, new_nick, tim = None):
 		'''When an occupant changes his or her status'''
 		if show == 'invisible':
 			return
@@ -855,7 +859,7 @@ class GroupchatControl(ChatControlBase):
 						'nick': nick,
 						'who': actor,
 						'reason': reason }
-				self.print_conversation(s, 'info')
+				self.print_conversation(s, 'info', tim = tim)
 			elif statusCode == '301':
 				if actor is None: # do not print 'banned by None'
 					s = _('%(nick)s has been banned: %(reason)s') % {
@@ -866,7 +870,7 @@ class GroupchatControl(ChatControlBase):
 						'nick': nick,
 						'who': actor,
 						'reason': reason }
-				self.print_conversation(s, 'info')
+				self.print_conversation(s, 'info', tim = tim)
 			elif statusCode == '303': # Someone changed his or her nick
 				if nick == self.nick: # We changed our nick
 					self.nick = new_nick
@@ -901,9 +905,9 @@ class GroupchatControl(ChatControlBase):
 							# Windows require this
 							os.remove(files[old_file])
 						os.rename(old_file, files[old_file])
-				self.print_conversation(s, 'info')
+				self.print_conversation(s, 'info', tim)
 			elif statusCode == 'destroyed': # Room has been destroyed
-				self.print_conversation(reason, 'info')
+				self.print_conversation(reason, 'info', tim)
 
 			if len(gajim.events.get_events(self.account,
 			self.room_jid + '/' + nick)) == 0:
@@ -969,7 +973,7 @@ class GroupchatControl(ChatControlBase):
 			if st:
 				if status:
 					st += ' (' + status + ')'
-				self.print_conversation(st)
+				self.print_conversation(st, tim = tim)
 
 	def add_contact_to_roster(self, nick, show, role, affiliation, status,
 	jid = ''):
@@ -2012,3 +2016,48 @@ class GroupchatControl(ChatControlBase):
 			self.grant_owner(widget, jid)
 		else:
 			self.revoke_owner(widget, jid)
+
+	def read_queue(self, jid, account):
+		'''read queue and print messages containted in it'''
+		events = gajim.events.get_events(account, jid)
+
+		for event in events:
+			if event.type_ == 'change_subject':
+				array = event.parameters
+				jids = array[0].split('/', 1)
+				jid = jids[0]
+				self.set_subject(array[1])
+				text = None
+				if len(jids) > 1:
+					text = _('%s has set the subject to %s') % (jids[1], array[1])
+				elif array[2]:
+					text = array[2]
+				if text is not None:
+					self.print_conversation(text, tim = array[3])
+
+			if event.type_ == 'change_status':
+				array = event.parameters
+				nick = array[3]
+				if not nick:
+					return
+				room_jid = array[0]
+				fjid = room_jid + '/' + nick
+				show = array[1]
+				status = array[2]
+				self.chg_contact_status(nick, show, status, array[4], array[5],
+					array[6], array[7], array[8], array[9], array[10], array[11])
+
+				self.parent_win.redraw_tab(self)
+
+			if event.type_ in ['gc_msg', 'gc_history']:
+				array = event.parameters
+				kind = array[0]
+				if kind == 'error' or kind == 'status':
+					kind = 'info'
+				self.on_message(kind, array[1], array[2], array[3], array[4])
+
+		gajim.events.remove_events(account, jid,
+			types = ['change_status', 'gc_msg', 'gc_history',
+				'change_subject'])
+		gajim.interface.roster.draw_contact(jid, account)
+		gajim.interface.roster.show_title()

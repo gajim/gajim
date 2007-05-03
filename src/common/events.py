@@ -155,8 +155,9 @@ class Events:
 			self._events[account][new_jid] = self._events[account][old_jid]
 		del self._events[account][old_jid]
 
-	def get_nb_events(self, types = [], account = None):
-		return self._get_nb_events(types = types, account = account)
+	def get_nb_events(self, types = [], account = None, ignore_types = []):
+		return self._get_nb_events(types = types, account = account,
+			ignore_types = ignore_types)
 
 	def get_events(self, account, jid = None, types = []):
 		'''if event is not specified, get all events from this jid,
@@ -185,7 +186,8 @@ class Events:
 				first_event = event
 		return first_event
 
-	def _get_nb_events(self, account = None, jid = None, attribute = None, types = []):
+	def _get_nb_events(self, account = None, jid = None, attribute = None,
+		types = [], ignore_types = []):
 		'''return the number of pending events'''
 		nb = 0
 		if account:
@@ -204,6 +206,8 @@ class Events:
 					continue
 				for event in self._events[acct][j]:
 					if types and event.type_ not in types:
+						continue
+					if ignore_types and event.type_ in ignore_types:
 						continue
 					if not attribute or \
 					attribute == 'systray' and event.show_in_systray or \

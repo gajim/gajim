@@ -6519,6 +6519,24 @@ msgstr "_Bloquer"
 msgid "_Unblock"
 msgstr "_Débloquer"
 
+msgid " [blocked]"
+msgstr " [bloqué]"
+
+msgid "_Maximize"
+msgstr "_Maximiser"
+
+msgid "_Minimize"
+msgstr "_Minimiser"
+
+msgid " [minimized]"
+msgstr " [minimisé]"
+
+msgid "Connected"
+msgstr "Connecté"
+
+msgid "Disconnected"
+msgstr "Déconnecté"
+
 #~ msgid "2003-12-13T18:30:02Z"
 #~ msgstr "2003-12-13T18:30:02Z"
 #~ msgid "<small>Romeo and Juliet</small>"

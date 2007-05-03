@@ -318,6 +318,10 @@ class MessageWindow:
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]
 
+		self.check_tabs()
+		self.show_title()
+
+	def check_tabs(self):
 		if self.get_num_controls() == 0:
 			# These are not called when the window is destroyed like this, fake it
 			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
@@ -332,9 +336,8 @@ class MessageWindow:
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
 			if not show_tabs_if_one_tab:
 				self.alignment.set_property('top-padding', 0)
-		self.show_title()
 
-			
+
 	def redraw_tab(self, ctrl, chatstate = None):
 		hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
 		status_img = hbox.get_children()[0]

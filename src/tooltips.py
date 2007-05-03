@@ -411,9 +411,12 @@ class RosterTooltip(NotificationAreaTooltip):
 			+ '</span>'
 		if self.account and prim_contact.jid in gajim.connections[
 		self.account].blocked_contacts:
-			name_markup += u' [blocked]'
+			name_markup += _(' [blocked]')
+		if self.account and gajim.connections[self.account].\
+		hidden_groupchats.has_key(prim_contact.jid):
+			name_markup += _(' [minimized]')
 		properties.append((name_markup, None))
-		
+
 		num_resources = 0
 		# put contacts in dict, where key is priority
 		contacts_dict = {}
@@ -474,6 +477,12 @@ class RosterTooltip(NotificationAreaTooltip):
 						locale.getpreferredencoding())
 					text = text % local_time 
 					show += text
+				if self.account and \
+				gajim.gc_connected[self.account].has_key(prim_contact.jid):
+					if gajim.gc_connected[self.account][prim_contact.jid]:
+						show = _('Connected')
+					else:
+						show = _('Disconnected')
 				show = '<i>' + show + '</i>'
 				# we append show below
 				
@@ -497,7 +506,8 @@ class RosterTooltip(NotificationAreaTooltip):
 				gobject.markup_escape_text(contact.resource) +\
 				' (' + unicode(contact.priority) + ')'))
 		
-		if prim_contact.sub and prim_contact.sub != 'both':
+		if self.account and prim_contact.sub and prim_contact.sub != 'both' and\
+		not gajim.gc_connected[self.account].has_key(prim_contact.jid):
 			# ('both' is the normal sub so we don't show it)
 			properties.append(( _('Subscription: '), 
 				gobject.markup_escape_text(helpers.get_uf_sub(prim_contact.sub))))

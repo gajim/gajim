@@ -280,6 +280,7 @@ class RosterWindow:
 		if hide and contact.sub != 'from':
 			return
 		observer = contact.is_observer()
+		groupchat = contact.is_groupchat()
 
 		if observer:
 			# if he has a tag, remove it
@@ -369,6 +370,8 @@ class RosterWindow:
 			typestr = 'contact'
 			if group == _('Transports'):
 				typestr = 'agent'
+			if group == _('Groupchats'):
+				typestr = 'groupchat'
 
 			name = contact.get_shown_name()
 			# we add some values here. see draw_contact for more
@@ -415,6 +418,20 @@ class RosterWindow:
 			sub = 'none', resource = resource, keyID = keyID)
 		gajim.contacts.add_contact(account, contact)
 		self.add_contact_to_roster(contact.jid, account)
+		return contact
+
+	def add_groupchat_to_roster(self, account, jid, nick = '', resource = '',
+		status = ''):
+		''' add groupchat to roster '''
+		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		if contact == None:
+			contact = gajim.contacts.create_contact(jid = jid, name = jid,
+				groups = [_('Groupchats')], show = 'muc_active',
+				status = status, sub = 'none',
+				resource = resource)
+			gajim.contacts.add_contact(account, contact)
+			self.add_contact_to_roster(jid, account)
+		self.draw_group(_('Groupchats'), account)
 		return contact
 
 	def get_self_contact_iter(self, account):
@@ -661,6 +678,13 @@ class RosterWindow:
 			state_images = self.get_appropriate_state_images(jid,
 				icon_name = icon_name)
 	
+		if icon_name != 'message' and gajim.gc_connected[account].\
+		has_key(jid):
+			if gajim.gc_connected[account][jid]:
+				icon_name = 'muc_active'
+			else:
+				icon_name = 'muc_inactive'
+
 		img = state_images[icon_name]
 
 		for iter in iters:
@@ -695,7 +719,7 @@ class RosterWindow:
 		for iter in iters:
 			model[iter][C_SECPIXBUF] = scaled_pixbuf
 
-	def join_gc_room(self, account, room_jid, nick, password):
+	def join_gc_room(self, account, room_jid, nick, password, minimize = False):
 		'''joins the room immediatelly'''
 		if gajim.interface.msg_win_mgr.has_window(room_jid, account) and \
 				gajim.gc_connected[account][room_jid]:
@@ -704,10 +728,22 @@ class RosterWindow:
 			win.set_active_tab(room_jid,  account)
 			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
+		if gajim.connections[account].hidden_groupchats.has_key(room_jid):
+			self.on_groupchat_maximized(None, room_jid, account)
+			return
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
 			dialogs.ErrorDialog(
 				_('You cannot join a group chat while you are invisible'))
+			return
+		if minimize:
+			contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
+			gc_control = GroupchatControl(None, contact, account)
+			gajim.connections[account].hidden_groupchats[room_jid] = gc_control
+			self.add_groupchat_to_roster(account, room_jid)
+			gajim.connections[account].join_gc(nick, room_jid, password)
+			if password:
+				gajim.gc_passwords[room_jid] = password
 			return
 		if not gajim.interface.msg_win_mgr.has_window(room_jid, account):
 			self.new_room(room_jid, nick, account)
@@ -1335,6 +1371,15 @@ class RosterWindow:
 					self.tooltip.account = account
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, connected_contacts)
+			elif model[iter][C_TYPE] == 'groupchat':
+				account = model[iter][C_ACCOUNT].decode('utf-8')
+				jid = model[iter][C_JID].decode('utf-8')
+				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+					self.tooltip.id = row
+					contact = gajim.contacts.get_contact(account, jid)
+					self.tooltip.account = account
+					self.tooltip.timeout = gobject.timeout_add(500,
+						self.show_tooltip, contact)
 			elif model[iter][C_TYPE] == 'account':
 				# we're on an account entry in the roster
 				account = model[iter][C_ACCOUNT].decode('utf-8')
@@ -2330,6 +2375,48 @@ class RosterWindow:
 		menu.show_all()
 		menu.popup(None, None, None, event_button, event.time)
 
+	def make_groupchat_menu(self, event, iter):
+		model = self.tree.get_model()
+
+		path = model.get_path(iter)
+		jid = model[iter][C_JID].decode('utf-8')
+		account = model[iter][C_ACCOUNT].decode('utf-8')
+
+		menu = gtk.Menu()
+
+		maximize_menuitem = gtk.ImageMenuItem(_('_Maximize'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_GOTO_TOP, gtk.ICON_SIZE_MENU)
+		maximize_menuitem.set_image(icon)
+		maximize_menuitem.connect('activate', self.on_groupchat_maximized, \
+		  jid, account)
+
+		menu.append(maximize_menuitem)
+		
+		event_button = gtkgui_helpers.get_possible_button_event(event)
+		
+		menu.attach_to_widget(self.tree, None)
+		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
+		menu.show_all()
+		menu.popup(None, None, None, event_button, event.time)
+
+	def on_groupchat_maximized(self, widget, jid, account):
+		'''When a groupshat is maximised'''
+		ctrl = gajim.connections[account].hidden_groupchats[jid]
+		mw = gajim.interface.msg_win_mgr.get_window(ctrl.contact.jid, ctrl.account)
+		if not mw:
+			mw = gajim.interface.msg_win_mgr.create_window(ctrl.contact, \
+				ctrl.account, ctrl.type_id)
+		ctrl.parent_win = mw
+		mw.new_tab(ctrl)
+		mw.set_active_tab(jid, account)
+		mw.window.present()
+		ctrl.read_queue(jid, account)
+		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		self.remove_contact(contact, account)
+		gajim.contacts.remove_contact(account, contact)
+		self.draw_group(_('Groupchats'), account)
+		del gajim.connections[account].hidden_groupchats[jid]
+
 	def make_group_menu(self, event, iter):
 		'''Make group's popup menu'''
 		model = self.tree.get_model()
@@ -2811,6 +2898,8 @@ class RosterWindow:
 				return
 		if type_ == 'group' and len(iters) == 1:
 			self.make_group_menu(event, iters[0])
+		if type_ == 'groupchat' and len(iters) == 1:
+			self.make_groupchat_menu(event, iters[0])
 		elif type_ == 'agent' and len(iters) == 1:
 			self.make_transport_menu(event, iters[0])
 		elif type_ in ('contact', 'self_contact') and len(iters) == 1:
@@ -3697,7 +3786,8 @@ class RosterWindow:
 			# check if we have unread or recent mesages
 			unread = False
 			recent = False
-			if gajim.events.get_nb_events() > 0:
+			if gajim.events.get_nb_events(ignore_types = ['gc_history',
+					'change_status', 'change_subject']) > 0:
 				unread = True
 			for win in gajim.interface.msg_win_mgr.windows():
 				unrd = 0
@@ -3818,6 +3908,8 @@ class RosterWindow:
 				self.tree.collapse_row(path)
 			else:
 				self.tree.expand_row(path, False)
+		elif gajim.connections[account].hidden_groupchats.has_key(jid):
+			self.on_groupchat_maximized(None, jid, account)
 		else:
 			first_ev = gajim.events.get_first_event(account, jid)
 			if not first_ev:

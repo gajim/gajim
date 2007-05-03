@@ -153,10 +153,25 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		is_first_message = parameters[1]
 		nickname = parameters[2]
 		message = parameters[3]
+		if is_first_message and helpers.allow_sound_notification(
+		'first_message_received', advanced_notif_num):
+			do_sound = True
+		elif not is_first_message and helpers.allow_sound_notification(
+		'next_message_received', advanced_notif_num):
+			do_sound = True
 		if helpers.allow_showing_notification(account, 'notify_on_new_message',
 		advanced_notif_num, is_first_message):
 			do_popup = True
-		if is_first_message and helpers.allow_sound_notification(
+	elif event == 'new_gc_message':
+		message_type = 'gc_msg'
+		do_popup = parameters[0]
+		is_first_message = parameters[1]
+		nickname = parameters[2]
+		message = parameters[3]
+		is_history = parameters[4]
+		if is_history:
+			pass
+		elif is_first_message and helpers.allow_sound_notification(
 		'first_message_received', advanced_notif_num):
 			do_sound = True
 		elif not is_first_message and helpers.allow_sound_notification(
@@ -245,6 +260,19 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			popup(event_type, jid, account, message_type,
 				path_to_image = path, title = title, text = text)
+		elif event == 'new_gc_message':
+			event_type = _('New Groupchat Message')
+			room_jid = jid
+			name = gajim.connections[account].hidden_groupchats[room_jid].name
+			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+				'gc_invitation.png')
+			title = _('New Message on %s') % name
+			text = _('%(nickname)s: %(message)s') % {'nickname': nickname,
+				'message': message}
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			popup(event_type, jid, account, message_type,
+				path_to_image = path, title = title, text = text)
+
 
 	if do_sound:
 		snd_file = None
@@ -434,6 +462,8 @@ class DesktopNotification:
 			ntype = 'presence.status'
 		elif event_type == _('Connection Failed'):
 			ntype = 'connection.failed'
+		elif event_type == _('New Groupchat Message'):
+			ntype = 'im'
 		else:
 			# default failsafe values
 			self.path_to_image = os.path.abspath(

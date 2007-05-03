@@ -1052,15 +1052,6 @@ class Interface:
 		show = array[1]
 		status = array[2]
 
-		# Get the window and control for the updated status, this may be a
-		# PrivateChatControl
-		control = self.msg_win_mgr.get_control(room_jid, account)
-		if control and control.type_id != message_control.TYPE_GC:
-			return
-		if control:
-			control.chg_contact_status(nick, show, status, array[4], array[5],
-				array[6], array[7], array[8], array[9], array[10])
-
 		# print status in chat window and update status/GPG image
 		if self.msg_win_mgr.has_window(fjid, account):
 			ctrl = self.msg_win_mgr.get_control(fjid, account)
@@ -1079,13 +1070,39 @@ class Interface:
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
+		if room_jid in gajim.connections[account].hidden_groupchats:
+			my_nick = gajim.connections[account].hidden_groupchats[room_jid].nick
+			first = False
+			if not gajim.events.get_events(account, room_jid, ['change_status']):
+				first = True
+			array = array + (time.localtime(),)
+			event = gajim.events.create_event('change_status', array,
+				show_in_roster = False, show_in_systray = False)
+			gajim.events.add_event(account, room_jid, event)
+
+			# Change status icon if kicked or deconnected from gc
+			if array[3] == my_nick and array[1] in ('offline', 'error') and \
+			array[9] != '303':
+				gajim.gc_connected[account][room_jid] = False
+				gajim.interface.roster.draw_contact(room_jid, account)
+			elif array[3] == my_nick:
+				gajim.gc_connected[account][room_jid] = True
+				gajim.interface.roster.draw_contact(room_jid, account)
+			return
+
+		# Get the window and control for the updated status, this may be a
+		# PrivateChatControl
+		control = self.msg_win_mgr.get_control(room_jid, account)
+		if control and control.type_id != message_control.TYPE_GC:
+			return
+		if control:
+			control.chg_contact_status(nick, show, status, array[4], array[5],
+				array[6], array[7], array[8], array[9], array[10])
+
 	def handle_event_gc_msg(self, account, array):
 		# ('GC_MSG', account, (jid, msg, time, has_timestamp, htmlmsg))
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
-		gc_control = self.msg_win_mgr.get_control(room_jid, account)
-		if not gc_control:
-			return
 		xhtml = array[4]
 		if gajim.config.get('ignore_incoming_xhtml'):
 			xhtml = None
@@ -1095,6 +1112,47 @@ class Interface:
 		else:
 			# message from someone
 			nick = jids[1]
+
+		if room_jid in gajim.connections[account].hidden_groupchats:
+			message = array[1]
+			tim = array[2]
+			first = False
+
+			if not gajim.events.get_events(account, room_jid, ['gc_msg',
+			'gc_chat']):
+				first = True
+			contact = gajim.contacts.get_contact_with_highest_priority(
+				account, room_jid)
+			advanced_notif_num = notify.get_advanced_notification\
+				('message_received', account, contact)
+			ctrl = gajim.connections[account].hidden_groupchats[room_jid]
+			
+			type_event = 'gc_msg'
+			do_popup = False
+			is_history = False
+			show_in_systray = False
+			show_in_roster = True
+			if not array[3] and ctrl.needs_visual_notification(message):
+				do_popup = True
+				show_in_systray = True
+			if array[3] or nick == '':
+				is_history = True
+				type_event = 'gc_history'
+				show_in_roster = False
+			if not array[3]:
+				notify.notify('new_gc_message', room_jid, account, [do_popup,
+					first, nick, message, is_history], advanced_notif_num)
+			event = gajim.events.create_event(type_event, (nick, array[1],
+				array[2], array[3], xhtml), show_in_roster = show_in_roster,
+				show_in_systray = show_in_systray)
+			gajim.events.add_event(account, room_jid, event)
+			gajim.interface.roster.draw_contact(room_jid, account)
+			gajim.interface.roster.show_title()
+			return
+
+		gc_control = self.msg_win_mgr.get_control(room_jid, account)
+		if not gc_control:
+			return
 		gc_control.on_message(nick, array[1], array[2], array[3], xhtml)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
@@ -1103,6 +1161,17 @@ class Interface:
 		#('GC_SUBJECT', account, (jid, subject, body, has_timestamp))
 		jids = array[0].split('/', 1)
 		jid = jids[0]
+		if jid in gajim.connections[account].hidden_groupchats:
+			array = (array[0], array[1], array[2]) + (time.localtime(),)
+			event = gajim.events.create_event('change_subject',
+				array, show_in_roster = False, show_in_systray = False)
+			gajim.events.add_event(account, jid, event)
+			contact = gajim.contacts.\
+				get_contact_with_highest_priority(account, jid)
+			contact.status = array[1]
+			gajim.interface.roster.draw_contact(jid, account)
+			return
+
 		gc_control = self.msg_win_mgr.get_control(jid, account)
 		if not gc_control:
 			return
@@ -1246,7 +1315,8 @@ class Interface:
 		for bm in bms:
 			if bm['autojoin'] in ('1', 'true'):
 				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
-					bm['password'])
+					bm['password'],
+					minimize = gajim.config.get('minimize_autojoined_rooms'))
 								
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
