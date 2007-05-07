@@ -235,6 +235,11 @@ class MessageWindow:
 
 	def show_title(self, urgent = True, control = None):
 		'''redraw the window's title'''
+		if not control:
+			control = self.get_active_control()
+		if not control:
+			# No more control in this window
+			return
 		unread = 0
 		for ctrl in self.controls():
 			if ctrl.type_id == message_control.TYPE_GC and not \
@@ -253,8 +258,6 @@ class MessageWindow:
 		else:
 			urgent = False
 
-		if not control:
-			control = self.get_active_control()
 		if control.type_id == message_control.TYPE_GC:
 			name = control.room_jid.split('@')[0]
 			urgent = control.attention_flag
