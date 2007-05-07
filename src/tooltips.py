@@ -412,8 +412,9 @@ class RosterTooltip(NotificationAreaTooltip):
 		if self.account and prim_contact.jid in gajim.connections[
 		self.account].blocked_contacts:
 			name_markup += _(' [blocked]')
-		if self.account and gajim.connections[self.account].\
-		hidden_groupchats.has_key(prim_contact.jid):
+		if self.account and \
+		gajim.interface.minimized_controls.has_key(self.account) and \
+		prim_contact.jid in gajim.interface.minimized_controls[self.account]:
 			name_markup += _(' [minimized]')
 		properties.append((name_markup, None))
 

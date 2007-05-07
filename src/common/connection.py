@@ -70,7 +70,6 @@ class Connection(ConnectionHandlers):
 		self.last_time_to_reconnect = None
 		self.new_account_info = None
 		self.bookmarks = []
-		self.hidden_groupchats = {}
 		self.annotations = {}
 		self.on_purpose = False
 		self.last_io = gajim.idlequeue.current_time()

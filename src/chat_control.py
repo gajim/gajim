@@ -553,6 +553,7 @@ class ChatControlBase(MessageControl):
 		subject = None, old_kind = None, xhtml = None):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
+		account = self.account
 		full_jid = self.get_full_jid()
 		textview = self.conv_textview
 		end = False
@@ -566,24 +567,27 @@ class ChatControlBase(MessageControl):
 			return
 		if kind == 'incoming':
 			gajim.last_message_time[self.account][full_jid] = time.time()
-		if (not self.parent_win.get_active_jid() or \
-		full_jid != self.parent_win.get_active_jid() or \
-		not self.parent_win.is_active() or not end) and \
-		kind in ('incoming', 'incoming_queue'):
+
+		if kind in ('incoming', 'incoming_queue'):
 			gc_message = False
 			if self.type_id  == message_control.TYPE_GC:
 				gc_message = True
 			if not gc_message or \
 			(gc_message and (other_tags_for_text == ['marked'] or \
-			gajim.config.get('notify_on_all_muc_messages'))):
+			gajim.config.get('notify_on_all_muc_messages'))) or \
+			(gc_message and \
+			gajim.interface.minimized_controls.has_key(account) and \
+			jid in gajim.interface.minimized_controls[account]):
 			# we want to have save this message in events list
 			# other_tags_for_text == ['marked'] --> highlighted gc message
 				type_ = 'printed_' + self.type_id
+				event = 'message_received'
 				if gc_message:
 					type_ = 'printed_gc_msg'
-				show_in_roster = notify.get_show_in_roster('message_received',
+					event = 'gc_message_received'
+				show_in_roster = notify.get_show_in_roster(event,
 					self.account, self.contact)
-				show_in_systray = notify.get_show_in_systray('message_received',
+				show_in_systray = notify.get_show_in_systray(event,
 					self.account, self.contact)
 				event = gajim.events.create_event(type_, None,
 					show_in_roster = show_in_roster,
@@ -593,6 +597,14 @@ class ChatControlBase(MessageControl):
 				if show_in_roster:
 					gajim.interface.roster.draw_contact(self.contact.jid,
 						self.account)
+
+		if not self.parent_win:
+			return
+
+		if (not self.parent_win.get_active_jid() or \
+		full_jid != self.parent_win.get_active_jid() or \
+		not self.parent_win.is_active() or not end) and \
+		kind in ('incoming', 'incoming_queue'):
 			self.parent_win.redraw_tab(self)
 			ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, self.account)
 			if not self.parent_win.is_active():
@@ -669,8 +681,12 @@ class ChatControlBase(MessageControl):
 
 		win.notebook.remove_page(ctrl_page)
 		control.unparent()
+		ctrl.parent_win = None
 
-		gajim.connections[self.account].hidden_groupchats[self.contact.jid] = ctrl
+		if not gajim.interface.minimized_controls.has_key(self.account):
+			gajim.interface.minimized_controls[self.account] = {}
+		gajim.interface.minimized_controls[self.account][self.contact.jid] = ctrl
+
 		del win._controls[self.account][self.contact.jid]
 
 		win.check_tabs()
@@ -787,6 +803,8 @@ class ChatControlBase(MessageControl):
 			type_ = 'gc_msg'
 		if not len(gajim.events.get_events(self.account, jid, ['printed_' + type_,
 		type_])):
+			return
+		if not self.parent_win:
 			return
 		if self.conv_textview.at_the_end() and \
 		self.parent_win.get_active_control() == self and \

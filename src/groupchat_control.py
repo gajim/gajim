@@ -614,7 +614,8 @@ class GroupchatControl(ChatControlBase):
 			else:
 				kind = 'incoming'
 				# muc-specific chatstate
-				self.parent_win.redraw_tab(self, 'newmsg')
+				if self.parent_win:
+					self.parent_win.redraw_tab(self, 'newmsg')
 		else:
 			kind = 'status'
 
@@ -636,7 +637,8 @@ class GroupchatControl(ChatControlBase):
 					str(self.gc_count_nicknames_colors))
 			if highlight:
 				# muc-specific chatstate
-				self.parent_win.redraw_tab(self, 'attention')
+				if self.parent_win:
+					self.parent_win.redraw_tab(self, 'attention')
 				other_tags_for_name.append('bold')
 				other_tags_for_text.append('marked')
 			if sound == 'received':
@@ -647,7 +649,8 @@ class GroupchatControl(ChatControlBase):
 				other_tags_for_text.append('gc_nickname_color_' + \
 					str(self.gc_custom_colors[contact]))
 
-			self.check_and_possibly_add_focus_out_line()
+			if self.parent_win:
+				self.check_and_possibly_add_focus_out_line()
 
 		ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
 			other_tags_for_name, [], other_tags_for_text, xhtml = xhtml)
@@ -918,7 +921,12 @@ class GroupchatControl(ChatControlBase):
 				c.status = status
 			if nick == self.nick and statusCode != '303': # We became offline
 				self.got_disconnected()
-				self.parent_win.redraw_tab(self)
+				contact = gajim.contacts.\
+					get_contact_with_highest_priority(self.account, self.room_jid)
+				if contact:
+					gajim.interface.roster.draw_contact(self.room_jid, self.account)
+				if self.parent_win:
+					self.parent_win.redraw_tab(self)
 		else:
 			iter = self.get_contact_iter(nick)
 			if not iter:
@@ -943,8 +951,8 @@ class GroupchatControl(ChatControlBase):
 					c.affiliation = affiliation
 					c.status = status
 					self.draw_contact(nick)
-
-		self.parent_win.redraw_tab(self)
+		if self.parent_win:
+			self.parent_win.redraw_tab(self)
 		if (time.time() - self.room_creation) > 30 and \
 				nick != self.nick and statusCode != '303':
 			st = ''
@@ -2017,47 +2025,47 @@ class GroupchatControl(ChatControlBase):
 		else:
 			self.revoke_owner(widget, jid)
 
-	def read_queue(self, jid, account):
-		'''read queue and print messages containted in it'''
-		events = gajim.events.get_events(account, jid)
+	#~ def read_queue(self, jid, account):
+		#~ '''read queue and print messages containted in it'''
+		#~ events = gajim.events.get_events(account, jid)
 
-		for event in events:
-			if event.type_ == 'change_subject':
-				array = event.parameters
-				jids = array[0].split('/', 1)
-				jid = jids[0]
-				self.set_subject(array[1])
-				text = None
-				if len(jids) > 1:
-					text = _('%s has set the subject to %s') % (jids[1], array[1])
-				elif array[2]:
-					text = array[2]
-				if text is not None:
-					self.print_conversation(text, tim = array[3])
+		#~ for event in events:
+			#~ if event.type_ == 'change_subject':
+				#~ array = event.parameters
+				#~ jids = array[0].split('/', 1)
+				#~ jid = jids[0]
+				#~ self.set_subject(array[1])
+				#~ text = None
+				#~ if len(jids) > 1:
+					#~ text = _('%s has set the subject to %s') % (jids[1], array[1])
+				#~ elif array[2]:
+					#~ text = array[2]
+				#~ if text is not None:
+					#~ self.print_conversation(text, tim = array[3])
 
-			if event.type_ == 'change_status':
-				array = event.parameters
-				nick = array[3]
-				if not nick:
-					return
-				room_jid = array[0]
-				fjid = room_jid + '/' + nick
-				show = array[1]
-				status = array[2]
-				self.chg_contact_status(nick, show, status, array[4], array[5],
-					array[6], array[7], array[8], array[9], array[10], array[11])
+			#~ if event.type_ == 'change_status':
+				#~ array = event.parameters
+				#~ nick = array[3]
+				#~ if not nick:
+					#~ return
+				#~ room_jid = array[0]
+				#~ fjid = room_jid + '/' + nick
+				#~ show = array[1]
+				#~ status = array[2]
+				#~ self.chg_contact_status(nick, show, status, array[4], array[5],
+					#~ array[6], array[7], array[8], array[9], array[10], array[11])
 
-				self.parent_win.redraw_tab(self)
+				#~ self.parent_win.redraw_tab(self)
 
-			if event.type_ in ['gc_msg', 'gc_history']:
-				array = event.parameters
-				kind = array[0]
-				if kind == 'error' or kind == 'status':
-					kind = 'info'
-				self.on_message(kind, array[1], array[2], array[3], array[4])
+			#~ if event.type_ in ['gc_msg', 'gc_history']:
+				#~ array = event.parameters
+				#~ kind = array[0]
+				#~ if kind == 'error' or kind == 'status':
+					#~ kind = 'info'
+				#~ self.on_message(kind, array[1], array[2], array[3], array[4])
 
-		gajim.events.remove_events(account, jid,
-			types = ['change_status', 'gc_msg', 'gc_history',
-				'change_subject'])
-		gajim.interface.roster.draw_contact(jid, account)
-		gajim.interface.roster.show_title()
+		#~ gajim.events.remove_events(account, jid,
+			#~ types = ['change_status', 'gc_msg', 'gc_history',
+				#~ 'change_subject'])
+		#~ gajim.interface.roster.draw_contact(jid, account)
+		#~ gajim.interface.roster.show_title()
