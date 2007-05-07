@@ -553,7 +553,6 @@ class ChatControlBase(MessageControl):
 		subject = None, old_kind = None, xhtml = None):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
-		account = self.account
 		full_jid = self.get_full_jid()
 		textview = self.conv_textview
 		end = False
@@ -576,8 +575,8 @@ class ChatControlBase(MessageControl):
 			(gc_message and (other_tags_for_text == ['marked'] or \
 			gajim.config.get('notify_on_all_muc_messages'))) or \
 			(gc_message and \
-			gajim.interface.minimized_controls.has_key(account) and \
-			jid in gajim.interface.minimized_controls[account]):
+			gajim.interface.minimized_controls.has_key(self.account) and \
+			jid in gajim.interface.minimized_controls[self.account]):
 			# we want to have save this message in events list
 			# other_tags_for_text == ['marked'] --> highlighted gc message
 				type_ = 'printed_' + self.type_id
