@@ -1052,26 +1052,6 @@ class Interface:
 		show = array[1]
 		status = array[2]
 
-		ctrl = self.msg_win_mgr.get_control(fjid, account)
-
-		# print status in chat window and update status/GPG image
-		if ctrl:
-			contact = ctrl.contact
-			contact.show = show
-			contact.status = status
-			ctrl.update_ui()
-			uf_show = helpers.get_uf_show(show)
-			if status:
-				ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show,
-					status), 'status')
-			else:
-				ctrl.print_conversation(_('%s is now %s') % (nick, uf_show),
-					'status')
-			if ctrl.parent_win:
-				ctrl.parent_win.redraw_tab(ctrl)
-			if self.remote_ctrl:
-				self.remote_ctrl.raise_signal('GCPresence', (account, array))
-
 		# Get the window and control for the updated status, this may be a
 		# PrivateChatControl
 		control = self.msg_win_mgr.get_control(room_jid, account)
@@ -1080,14 +1060,32 @@ class Interface:
 		room_jid in self.minimized_controls[account]:
 			control = self.minimized_controls[account][room_jid]
 
-		if not control:
+		if control and control.type_id != message_control.TYPE_GC:
 			return
-		if control.type_id != message_control.TYPE_GC:
-			return
-		control.chg_contact_status(nick, show, status, array[4], array[5],
-			array[6], array[7], array[8], array[9], array[10])
-		if not control.parent_win:
+		if control:
+			control.chg_contact_status(nick, show, status, array[4], array[5],
+				array[6], array[7], array[8], array[9], array[10])
+		if control and not control.parent_win:
 			gajim.interface.roster.draw_contact(room_jid, account)
+
+		ctrl = self.msg_win_mgr.get_control(fjid, account)
+
+		# print status in chat window and update status/GPG image
+		if ctrl:
+			contact = ctrl.contact
+			contact.show = show
+			contact.status = status
+			uf_show = helpers.get_uf_show(show)
+			if status:
+				ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show,
+					status), 'status')
+			else:
+				ctrl.print_conversation(_('%s is now %s') % (nick, uf_show),
+					'status')
+			ctrl.parent_win.redraw_tab(ctrl)
+			ctrl.update_ui()
+			if self.remote_ctrl:
+				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
 	def handle_event_gc_msg(self, account, array):
 		# ('GC_MSG', account, (jid, msg, time, has_timestamp, htmlmsg))
