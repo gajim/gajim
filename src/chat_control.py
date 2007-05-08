@@ -571,14 +571,18 @@ class ChatControlBase(MessageControl):
 			gc_message = False
 			if self.type_id  == message_control.TYPE_GC:
 				gc_message = True
-			if not gc_message or \
-			(gc_message and (other_tags_for_text == ['marked'] or \
+
+			if ((self.parent_win and (not self.parent_win.get_active_jid() or \
+			full_jid != self.parent_win.get_active_jid() or \
+			not self.parent_win.is_active() or not end)) or \
+			((gc_message and (other_tags_for_text == ['marked'] or \
 			gajim.config.get('notify_on_all_muc_messages'))) or \
 			(gc_message and \
 			gajim.interface.minimized_controls.has_key(self.account) and \
-			jid in gajim.interface.minimized_controls[self.account]):
-			# we want to have save this message in events list
-			# other_tags_for_text == ['marked'] --> highlighted gc message
+			jid in gajim.interface.minimized_controls[self.account]))) and \
+			kind in ('incoming', 'incoming_queue'):
+				# we want to have save this message in events list
+				# other_tags_for_text == ['marked'] --> highlighted gc message
 				type_ = 'printed_' + self.type_id
 				event = 'message_received'
 				if gc_message:

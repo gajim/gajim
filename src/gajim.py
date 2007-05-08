@@ -1080,11 +1080,12 @@ class Interface:
 		room_jid in self.minimized_controls[account]:
 			control = self.minimized_controls[account][room_jid]
 
-		if control and control.type_id != message_control.TYPE_GC:
+		if not control:
 			return
-		if control:
-			control.chg_contact_status(nick, show, status, array[4], array[5],
-				array[6], array[7], array[8], array[9], array[10])
+		if control.type_id != message_control.TYPE_GC:
+			return
+		control.chg_contact_status(nick, show, status, array[4], array[5],
+			array[6], array[7], array[8], array[9], array[10])
 		if not control.parent_win:
 			gajim.interface.roster.draw_contact(room_jid, account)
 
