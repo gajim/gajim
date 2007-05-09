@@ -380,6 +380,8 @@ class ChangeStatusMessageDialog:
 		event.keyval == gtk.keysyms.KP_Enter:  # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)
+				# Stop the event
+				return True
 
 	def toggle_sensitiviy_of_save_as_preset(self, widget):
 		btn = self.xml.get_widget('save_as_preset_button')
