@@ -1484,7 +1484,7 @@ class GroupchatControl(ChatControlBase):
 			try:
 				jid = helpers.parse_jid(jid)
 			except:
-				ErrorDialog(_('Invalid group chat Jabber ID'),
+				dialogs.ErrorDialog(_('Invalid group chat Jabber ID'),
 				_('The group chat Jabber ID has not allowed characters.'))
 				return
 		else:
