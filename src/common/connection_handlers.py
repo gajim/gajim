@@ -1957,6 +1957,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			df[i.getName()] = i.getData()
 		self.dispatch('SEARCH_FORM', (jid, df, False))
 
+	def _StreamCB(self, con, obj):
+		if obj.getTag('conflict'):
+			# disconnected because of a resource conflict
+			self.dispatch('RESOURCE_CONFLICT', ())
+
 	def _register_handlers(self, con, con_type):
 		# try to find another way to register handlers in each class 
 		# that defines handlers
@@ -2031,3 +2036,4 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		con.RegisterHandler('iq', self._ResultCB, 'result')
 		con.RegisterHandler('presence', self._StanzaArrivedCB)
 		con.RegisterHandler('message', self._StanzaArrivedCB)
+		con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')

@@ -546,7 +546,7 @@ class Interface:
 				if contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
 				if old_show == new_show and contact1.status == status_message and \
-					contact1.priority == priority: # no change
+				contact1.priority == priority: # no change
 					return
 			else:
 				contact1 = gajim.contacts.get_first_contact_from_jid(account, ji)
@@ -1743,6 +1743,19 @@ class Interface:
 		self.instances[account]['search'][data[0]].on_result_arrived(data[1],
 			data[2])
 
+	def handle_event_resource_conflict(self, account, data):
+		# ('RESOURCE_CONFLICT', account, ())
+		# First we go offline, but we don't overwrite status message
+		self.roster.send_status(account, 'offline',
+			gajim.connections[account].status)
+		def on_ok(new_resource):
+			gajim.config.set_per('accounts', account, 'resource', new_resource)
+			self.roster.send_status(account, gajim.connections[account].old_show,
+				gajim.connections[account].status)
+		dlg = dialogs.InputDialog(_('Resource Conflict'),
+			_('You are already connected to this account with the same resource. Please type a new one'), input_str = gajim.connections[account].server_resource,
+			is_modal = False, ok_handler = on_ok)
+
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -2066,6 +2079,7 @@ class Interface:
 			'PING_ERROR': self.handle_event_ping_error,
 			'SEARCH_FORM': self.handle_event_search_form,
 			'SEARCH_RESULT': self.handle_event_search_result,
+			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
 		}
 		gajim.handlers = self.handlers
 

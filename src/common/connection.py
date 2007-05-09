@@ -780,7 +780,7 @@ class Connection(ConnectionHandlers):
 				'resource')
 			self.connect_and_init(show, msg, signed)
 
-		elif show == 'offline' and self.connected:
+		elif show == 'offline':
 			self.connected = 0
 			if self.connection:
 				self.on_purpose = True
