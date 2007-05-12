@@ -453,7 +453,7 @@ class VcardWindow:
 		self.fill_status_label()
 
 		gajim.connections[self.account].request_vcard(self.contact.jid,
-			self.gc_contact is not None)
+			(self.gc_contact is not None and not self.gc_contact.jid))
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
