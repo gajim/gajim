@@ -505,7 +505,7 @@ class Interface:
 
 	def handle_event_notify(self, account, array):
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
-		# keyID, timestamp))
+		# keyID, timestamp, contact_nickname))
 		# if we're here it means contact changed show
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible']
@@ -517,6 +517,7 @@ class Interface:
 		status_message = array[2]
 		jid = array[0].split('/')[0]
 		keyID = array[5]
+		contact_nickname = array[7]
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
 		if jid in attached_keys:
@@ -545,6 +546,10 @@ class Interface:
 			if contact1:
 				if contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
+				if contact_nickname is not None and \
+				contact1.contact_name != contact_nickname:
+					contact1.contact_name = contact_nickname
+					self.roster.draw_contact(jid, account)
 				if old_show == new_show and contact1.status == status_message and \
 				contact1.priority == priority: # no change
 					return
@@ -599,6 +604,7 @@ class Interface:
 			elif not gajim.block_signed_in_notifications[account]:
 				# We're connected since more that 30 seconds
 				contact1.last_status_time = time.localtime()
+			contact1.contact_nickname = contact_nickname
 		if gajim.jid_is_transport(jid):
 			# It must be an agent
 			if ji in jid_list:

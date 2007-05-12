@@ -23,6 +23,7 @@ class Contact:
 	chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
 		self.jid = jid
 		self.name = name
+		self.contact_name = '' # nick choosen by contact
 		self.groups = groups
 		self.show = show
 		self.status = status
@@ -57,6 +58,8 @@ class Contact:
 	def get_shown_name(self):
 		if self.name:
 			return self.name
+		if self.contact_name:
+			return self.contact_name
 		return self.jid.split('@')[0]
 
 	def is_hidden_from_roster(self):
