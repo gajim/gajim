@@ -1016,10 +1016,18 @@ class GroupchatControl(ChatControlBase):
 		server = gajim.get_server_from_jid(self.room_jid)
 		if gajim.config.get('ask_avatars_on_startup') and \
 		not server.startswith('irc'):
-			fjid = self.room_jid + '/' + nick
+			if j:
+				fjid = j
+				if resource:
+					fjid += '/' + resource
+			else:
+				fjid = self.room_jid + '/' + nick
 			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fjid, True)
 			if pixbuf == 'ask':
-				gajim.connections[self.account].request_vcard(fjid, True)
+				if j:
+					gajim.connections[self.account].request_vcard(fjid)
+				else:
+					gajim.connections[self.account].request_vcard(fjid, True)
 		if nick == self.nick: # we became online
 			self.got_connected()
 		self.list_treeview.expand_row((model.get_path(role_iter)), False)
