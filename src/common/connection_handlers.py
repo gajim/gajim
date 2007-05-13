@@ -1670,11 +1670,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						# contact has no avatar
 						puny_nick = helpers.sanitize_filename(resource)
 						gajim.interface.remove_avatar_files(jid_stripped, puny_nick)
-					if self.vcard_shas.has_key(who): # Verify sha cached in mem
+					# if it's a gc presence, don't ask vcard here. We may ask it to
+					# real jid in gui part.
+					if self.vcard_shas.has_key(who) and not is_gc:
+					# Verify sha cached in mem
 						if avatar_sha != self.vcard_shas[who]:
 							# avatar has been updated
 							self.request_vcard(who, True)
-					else: # Verify sha cached in hdd
+					elif not is_gc: # Verify sha cached in hdd
 						cached_vcard = self.get_cached_vcard(who, True)
 						if cached_vcard and cached_vcard.has_key('PHOTO') and \
 						cached_vcard['PHOTO'].has_key('SHA'):

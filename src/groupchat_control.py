@@ -1022,7 +1022,10 @@ class GroupchatControl(ChatControlBase):
 					fjid += '/' + resource
 			else:
 				fjid = self.room_jid + '/' + nick
-			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fjid, True)
+			if j:
+				pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fjid)
+			else:
+				pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fjid, True)
 			if pixbuf == 'ask':
 				if j:
 					gajim.connections[self.account].request_vcard(fjid)
