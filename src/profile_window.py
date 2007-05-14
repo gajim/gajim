@@ -157,7 +157,7 @@ class ProfileWindow:
 				# rescale it
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 			except AttributeError: # unknown format
-				dialogs.ErrorDialog(_('Could not load image'), msg)
+				dialogs.ErrorDialog(_('Could not load image'))
 				return
 			self.dialog.destroy()
 			button = self.xml.get_widget('PHOTO_button')
