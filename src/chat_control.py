@@ -209,14 +209,7 @@ class ChatControlBase(MessageControl):
 					self.msg_textview.lang = lang
 					spell.set_language(lang)
 			except (gobject.GError, RuntimeError), msg:
-				dialogs.ErrorDialog(unicode(msg), _('If that is not your language '
-					'for which you want to highlight misspelled words, then please '
-					'set your $LANG as appropriate. Eg. for French do export '
-					'LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to '
-					'make it global in /etc/profile.\n\nHighlighting misspelled '
-					'words feature will not be used'))
-				gajim.config.set('use_speller', False)
-
+				dialogs.AspellDictError(lang)
 		self.style_event_id = 0
 		self.conv_textview.tv.show()
 		self._paint_banner()

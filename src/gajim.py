@@ -2362,13 +2362,7 @@ class Interface:
 				import gtkspell
 				spell = gtkspell.Spell(tv, lang)
 			except:
-				dialogs.ErrorDialog(
-					_('Dictionary for lang %s not available') % lang,
-					_('You have to install %s dictionary to use spellchecking, or '
-					'choose another language by setting the speller_language option.'
-					) % lang)
-				gajim.config.set('use_speller', False)
-
+				dialogs.AspellDictError(lang)
 		self.last_ftwindow_update = 0
 
 		gobject.timeout_add(100, self.autoconnect)

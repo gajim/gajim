@@ -911,6 +911,15 @@ class BindPortError(HigDialog):
 			_('Maybe you have another running instance of Gajim. '
 			'File Transfer will be cancelled.'))
 
+class AspellDictError(HigDialog):
+	def __init__(self, lang):
+		ErrorDialog(
+			_('Dictionary for lang %s not available') % lang,
+			_('You have to install %s dictionary to use spellchecking, or '
+			'choose another language by setting the speller_language option.'
+			'\n\nHighlighting misspelled words feature will not be used') % lang)
+		gajim.config.set('use_speller', False)
+
 class ConfirmationDialog(HigDialog):
 	'''HIG compliant confirmation dialog.'''
 	def __init__(self, pritext, sectext='', on_response_ok = None,
@@ -1705,9 +1714,7 @@ class SingleMessageWindow:
 					spell1.set_language(lang)
 					spell2.set_language(lang)
 			except gobject.GError, msg:
-				ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used'))
-				gajim.config.set('use_speller', False)
-
+				dialogs.AspellDictError(lang)
 		self.send_button.set_no_show_all(True)
 		self.reply_button.set_no_show_all(True)
 		self.send_and_close_button.set_no_show_all(True)
