@@ -318,7 +318,7 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 		notification.set_data('event_type', event_type)
 		notification.set_data('jid', jid)
 		notification.set_data('account', account)
-		notification.set_data('msg_type', event_type)
+		notification.set_data('msg_type', msg_type)
 		notification.set_data('path_to_image', path_to_image)
 		notification.add_action('default', 'Default Action',
 			on_pynotify_notification_clicked)
