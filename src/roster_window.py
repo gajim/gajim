@@ -2998,7 +2998,8 @@ class RosterWindow:
 		elif event.button == 1: # Left click
 			model = self.tree.get_model()
 			type_ = model[path][C_TYPE]
-			if gajim.single_click:
+			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK and \
+			not event.state & gtk.gdk.CONTROL_MASK:
 				self.on_row_activated(widget, path)
 			else:
 				if type_ == 'group' and x < 27:

@@ -1837,7 +1837,7 @@ class GroupchatControl(ChatControlBase):
 				widget.get_selection().unselect_all()
 				return
 
-			if gajim.single_click:
+			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK:
 				self.on_row_activated(widget, path)			
 				return True
 			else:
@@ -1846,7 +1846,7 @@ class GroupchatControl(ChatControlBase):
 				nick = model[iter][C_NICK].decode('utf-8')
 				if not nick in gajim.contacts.get_nick_list(self.account,
 				self.room_jid):
-					#it's a group
+					# it's a group
 					col = widget.get_column(0)
 					avatar_cell = col.get_cell_renderers()[0]
 					(pos, avatar_size) = col.cell_get_position(avatar_cell)
