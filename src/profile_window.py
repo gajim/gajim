@@ -124,7 +124,7 @@ class ProfileWindow:
 				stat = os.stat(path_to_file)
 				if stat[6] == 0:
 					invalid_file = True
-					msg = _('File is emty')
+					msg = _('File is empty')
 			else:
 				invalid_file = True
 				msg = _('File does not exist')
