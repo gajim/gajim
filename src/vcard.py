@@ -139,16 +139,17 @@ class VcardWindow:
 			if invalid_file:
 				dialogs.ErrorDialog(_('Could not load image'), msg)
 				return
-			pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
-			if filesize > 16384: # 16 kb
-				try:
+			try:
+				pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
+				if filesize > 16384: # 16 kb
 					# get the image at 'notification size'
-					# and use that user did not specify in ACE crazy size
+					# and hope that user did not specify in ACE crazy size
 					pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'tooltip')
-				except gobject.GError, msg: # unknown format
-					# msg should be string, not object instance
-					msg = str(msg)
-					invalid_file = True
+			except gobject.GError, msg: # unknown format
+				# msg should be string, not object instance
+				msg = str(msg)
+				dialogs.ErrorDialog(_('Could not load image'), msg)
+				return
 			puny_jid = helpers.sanitize_filename(self.contact.jid)
 			path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + '_local.png'
 			pixbuf.save(path_to_file, 'png')

@@ -132,7 +132,7 @@ class ProfileWindow:
 				try:
 					pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 					# get the image at 'notification size'
-					# and use that user did not specify in ACE crazy size
+					# and hope that user did not specify in ACE crazy size
 					scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
 						'tooltip')
 				except gobject.GError, msg: # unknown format
@@ -149,13 +149,17 @@ class ProfileWindow:
 							'avatar_scaled.png')
 						scaled_pixbuf.save(path_to_file, 'png')
 						must_delete = True
-			self.dialog.destroy()
-
+			
 			fd = open(path_to_file, 'rb')
 			data = fd.read()
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
-			# rescale it
-			pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
+			try:			
+				# rescale it
+				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
+			except AttributeError: # unknown format
+				dialogs.ErrorDialog(_('Could not load image'), msg)
+				return
+			self.dialog.destroy()
 			button = self.xml.get_widget('PHOTO_button')
 			image = button.get_image()
 			image.set_from_pixbuf(pixbuf)
