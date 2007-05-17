@@ -579,6 +579,16 @@ class RosterWindow:
 		if not contact:
 			return
 		name = gobject.markup_escape_text(contact.get_shown_name())
+
+		# gets number of unread gc marked messages
+		nb_unread = len(gajim.events.get_events(account, jid,
+			['printed_marked_gc_msg']))
+
+		if nb_unread == 1:
+			name = '%s *' % name
+		elif nb_unread > 1:
+			name = '%s [%s]' % (name, str(nb_unread))
+
 		strike = False
 		if jid in gajim.connections[account].blocked_contacts:
 			strike = True
@@ -2971,7 +2981,7 @@ class RosterWindow:
 				self.tree.get_selection().unselect_all()
 				self.tree.get_selection().select_path(path)
 			type_ = model[path][C_TYPE]
-			if type_ in ('agent', 'contact', 'self_contact'):
+			if type_ in ('agent', 'contact', 'self_contact', 'groupchat'):
 				self.on_row_activated(widget, path)
 			elif type_ == 'account':
 				account = model[path][C_ACCOUNT].decode('utf-8')

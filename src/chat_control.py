@@ -578,13 +578,19 @@ class ChatControlBase(MessageControl):
 				# other_tags_for_text == ['marked'] --> highlighted gc message
 				type_ = 'printed_' + self.type_id
 				event = 'message_received'
-				if gc_message:
-					type_ = 'printed_gc_msg'
-					event = 'gc_message_received'
 				show_in_roster = notify.get_show_in_roster(event,
 					self.account, self.contact)
 				show_in_systray = notify.get_show_in_systray(event,
 					self.account, self.contact)
+				if gc_message:
+					type_ = 'printed_gc_msg'
+					event = 'gc_message_received'
+					show_in_roster = True
+					show_in_systray = False
+					if gajim.config.get('notify_on_all_muc_messages'):
+						show_in_systray = True
+					if other_tags_for_text == ['marked']:
+						type_ = 'printed_marked_gc_msg'
 				event = gajim.events.create_event(type_, None,
 					show_in_roster = show_in_roster,
 					show_in_systray = show_in_systray)
@@ -694,11 +700,11 @@ class ChatControlBase(MessageControl):
 			jid = self.contact.jid
 			if self.was_at_the_end:
 				# we are at the end
-				type_ = 'printed_' + self.type_id
+				type_ = ['printed_' + self.type_id]
 				if self.type_id == message_control.TYPE_GC:
-					type_ = 'printed_gc_msg'
+					type_ = ['printed_gc_msg', 'printed_marked_gc_msg']
 				if not gajim.events.remove_events(self.account, self.get_full_jid(),
-				types = [type_]):
+				types = type_):
 					# There were events to remove
 					self.redraw_after_event_removed(jid)
 			self.msg_textview.grab_focus()
