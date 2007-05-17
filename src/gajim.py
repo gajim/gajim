@@ -2113,7 +2113,7 @@ class Interface:
 		w = None
 		resource = gajim.get_resource_from_jid(fjid)
 		jid = gajim.get_jid_without_resource(fjid)
-		if type_ in ('printed_gc_msg', 'gc_msg'):
+		if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
 			w = self.msg_win_mgr.get_window(jid, account)
 		elif type_ in ('printed_chat', 'chat', ''):
 			# '' is for log in/out notifications
