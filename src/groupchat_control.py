@@ -543,14 +543,16 @@ class GroupchatControl(ChatControlBase):
 						self.room_jid, icon_name = 'message')
 				image = state_images['message']
 				model[iter][C_IMG] = image
-			self.parent_win.show_title()
-			self.parent_win.redraw_tab(self)
+			if self.parent_win:
+				self.parent_win.show_title()
+				self.parent_win.redraw_tab(self)
 		else:
 			self._start_private_message(nick)
 		# Scroll to line
 		self.list_treeview.expand_row(path[0:1], False)
 		self.list_treeview.scroll_to_cell(path)
 		self.list_treeview.set_cursor(path)
+		gajim.interface.roster.draw_contact(self.room_jid, self.account)
 
 	def get_contact_iter(self, nick):
 		model = self.list_treeview.get_model()

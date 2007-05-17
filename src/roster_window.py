@@ -581,13 +581,17 @@ class RosterWindow:
 		name = gobject.markup_escape_text(contact.get_shown_name())
 
 		# gets number of unread gc marked messages
-		nb_unread = len(gajim.events.get_events(account, jid,
-			['printed_marked_gc_msg']))
+		if gajim.interface.minimized_controls.has_key(account) and \
+		jid in gajim.interface.minimized_controls[account]:
+			nb_unread = len(gajim.events.get_events(account, jid,
+				['printed_marked_gc_msg']))
+			nb_unread += \
+				gajim.interface.minimized_controls[account][jid].get_nb_unread_pm()
 
-		if nb_unread == 1:
-			name = '%s *' % name
-		elif nb_unread > 1:
-			name = '%s [%s]' % (name, str(nb_unread))
+			if nb_unread == 1:
+				name = '%s *' % name
+			elif nb_unread > 1:
+				name = '%s [%s]' % (name, str(nb_unread))
 
 		strike = False
 		if jid in gajim.connections[account].blocked_contacts:

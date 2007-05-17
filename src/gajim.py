@@ -686,6 +686,10 @@ class Interface:
 			jid = jid.replace('@', '')
 
 		groupchat_control = self.msg_win_mgr.get_control(jid, account)
+		if not groupchat_control and \
+		gajim.interface.minimized_controls.has_key(account) and \
+		jid in gajim.interface.minimized_controls[account]:
+			groupchat_control = gajim.interface.minimized_controls[account][jid]
 		pm = False
 		if groupchat_control and groupchat_control.type_id == \
 		message_control.TYPE_GC:

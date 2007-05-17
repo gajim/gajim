@@ -548,6 +548,10 @@ def get_icon_name_to_show(contact, account = None):
 	if account and gajim.events.get_nb_roster_events(account,
 	contact.get_full_jid()):
 		return 'message'
+	if account and gajim.interface.minimized_controls.has_key(account) and \
+	contact.jid in gajim.interface.minimized_controls[account] and gajim.interface.\
+		minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
+		return 'message'
 	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 		return contact.show
 	if contact.sub in ('both', 'to'):
