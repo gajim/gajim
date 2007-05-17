@@ -873,7 +873,7 @@ def get_notification_icon_tooltip_text():
 		'chat'])
 	unread_single_chat = gajim.events.get_nb_events(types = ['normal'])
 	unread_gc = gajim.events.get_nb_events(types = ['printed_gc_msg',
-		'gc_msg'])
+		'printed_marked_gc_msg', 'gc_msg'])
 	unread_pm = gajim.events.get_nb_events(types = ['printed_pm', 'pm'])
 
 	accounts = get_accounts_info()

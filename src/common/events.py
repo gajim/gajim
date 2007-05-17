@@ -28,7 +28,7 @@ class Event:
 	show_in_systray = True):
 		''' type_ in chat, normal, file-request, file-error, file-completed,
 		file-request-error, file-send-error, file-stopped, gc_msg, pm,
-		printed_chat, printed_gc_msg, printed_pm
+		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm
 		parameters is (per type_):
 			chat, normal: [message, subject, kind, time, encrypted, resource,
 			msg_id]
