@@ -646,10 +646,12 @@ class GroupchatControl(ChatControlBase):
 					self.parent_win.redraw_tab(self, 'attention')
 				other_tags_for_name.append('bold')
 				other_tags_for_text.append('marked')
-				if contact not in self.attention_list:
-					self.attention_list.append(contact)
-					if len(self.attention_list) > 6:
-						self.attention_list.pop(0) # remove older
+
+				if contact in self.attention_list:
+					self.attention_list.remove(contact)
+				elif len(self.attention_list) > 6:
+					self.attention_list.pop(0) # remove older
+				self.attention_list.append(contact)
 				
 			if sound == 'received':
 				helpers.play_sound('muc_message_received')
