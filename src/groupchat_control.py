@@ -195,6 +195,9 @@ class GroupchatControl(ChatControlBase):
 		# muc attention flag (when we are mentioned in a muc)
 		# if True, the room has mentioned us
 		self.attention_flag = False
+
+		# sorted list of nicks who mentioned us (last at the end)
+		self.attention_list = []
 		self.room_creation = int(time.time()) # Use int to reduce mem usage
 		self.nick_hits = []
 		self.cmd_hits = []
@@ -643,6 +646,11 @@ class GroupchatControl(ChatControlBase):
 					self.parent_win.redraw_tab(self, 'attention')
 				other_tags_for_name.append('bold')
 				other_tags_for_text.append('marked')
+				if contact not in self.attention_list:
+					self.attention_list.append(contact)
+					if len(self.attention_list) > 6:
+						self.attention_list.pop(0) # remove older
+				
 			if sound == 'received':
 				helpers.play_sound('muc_message_received')
 			elif sound == 'highlight':
@@ -1606,6 +1614,13 @@ class GroupchatControl(ChatControlBase):
 				self.nick_hits = [] # clear the hit list
 				list_nick = gajim.contacts.get_nick_list(self.account,
 									self.room_jid)
+				if begin == '': 
+					# empty message, show lasts nicks that highlighted us first
+					for nick in self.attention_list:
+						if nick in list_nick:
+							list_nick.remove(nick)
+						list_nick.insert(0, nick)
+
 				list_nick.remove(self.nick) # Skip self
 				for nick in list_nick:
 					if nick.lower().startswith(begin.lower()):
