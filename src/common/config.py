@@ -227,6 +227,7 @@ class Config:
 		'treat_incoming_messages': [ opt_str, '', _('Can be empty, \'chat\' or \'normal\'. If not empty, treat all incoming messages as if they were of this type')],
 		'scroll_roster_to_last_message': [opt_bool, True, _('If True, Gajim will scroll and select the contact who sent you the last message, if chat window is not already opened.')],
 		'use_latex': [opt_bool, False, _('If True, Gajim will convert string between $$ and $$ to an image using dvips and convert before insterting it in chat window.')],
+		'change_status_window_timeout': [opt_int, 15, _('Time of inactivity needed before the change status window closes down.')],
 	}
 
 	__options_per_key = {

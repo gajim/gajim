@@ -315,10 +315,10 @@ class ChangeStatusMessageDialog:
 		self.window.set_transient_for(gajim.interface.roster.window)
 		if show:
 			uf_show = helpers.get_uf_show(show)
-			title_text = _('%s Status Message') % uf_show
+			self.title_text = _('%s Status Message') % uf_show
 		else:
-			title_text = _('Status Message')
-		self.window.set_title(title_text)
+			self.title_text = _('Status Message')
+		self.window.set_title(self.title_text)
 
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
@@ -340,6 +340,10 @@ class ChangeStatusMessageDialog:
 			self.preset_messages_dict[msg_name] = msg_text
 		sorted_keys_list = helpers.get_sorted_keys(self.preset_messages_dict)
 
+		self.countdown_time = gajim.config.get('change_status_window_timeout')
+		self.countdown_left = self.countdown_time
+		self.countdown_enabled = True
+
 		self.message_liststore = gtk.ListStore(str) # msg_name
 		self.message_combobox = self.xml.get_widget('message_combobox')
 		self.message_combobox.set_model(self.message_liststore)
@@ -351,9 +355,24 @@ class ChangeStatusMessageDialog:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def countdown(self):
+		if self.countdown_enabled:
+			if self.countdown_left <= 0:
+				self.window.response(gtk.RESPONSE_OK)
+				return False
+			self.window.set_title('%s [%s]' % (self.title_text,
+				str(self.countdown_left)))
+			self.countdown_left -= 1
+			return True
+		else:
+			self.window.set_title(self.title_text)
+			return False
+
 	def run(self):
 		'''Wait for OK or Cancel button to be pressed and return status messsage
 		(None if users pressed Cancel or x button of WM'''
+		if self.countdown_time > 0:
+			gobject.timeout_add(1000, self.countdown)
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
@@ -368,6 +387,7 @@ class ChangeStatusMessageDialog:
 		return message
 
 	def on_message_combobox_changed(self, widget):
+		self.countdown_enabled = False
 		model = widget.get_model()
 		active = widget.get_active()
 		if active < 0:
@@ -376,6 +396,7 @@ class ChangeStatusMessageDialog:
 		self.message_buffer.set_text(self.preset_messages_dict[name])
 
 	def on_change_status_message_dialog_key_press_event(self, widget, event):
+		self.countdown_enabled = False
 		if event.keyval == gtk.keysyms.Return or \
 		event.keyval == gtk.keysyms.KP_Enter:  # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
@@ -391,6 +412,7 @@ class ChangeStatusMessageDialog:
 			btn.set_sensitive(True)
 
 	def on_save_as_preset_button_clicked(self, widget):
+		self.countdown_enabled = False
 		start_iter, finish_iter = self.message_buffer.get_bounds()
 		status_message_to_save_as_preset = self.message_buffer.get_text(
 			start_iter, finish_iter)
