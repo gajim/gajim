@@ -372,6 +372,7 @@ class ChangeStatusMessageDialog:
 		'''Wait for OK or Cancel button to be pressed and return status messsage
 		(None if users pressed Cancel or x button of WM'''
 		if self.countdown_time > 0:
+			self.countdown()
 			gobject.timeout_add(1000, self.countdown)
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
