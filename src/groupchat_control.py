@@ -976,7 +976,7 @@ class GroupchatControl(ChatControlBase):
 						con.request_vcard(real_jid, fake_jid)
 					else:
 						# save sha in mem NOW
-						self.vcard_shas[fake_jid] = avatar_sha
+						con.vcard_shas[fake_jid] = avatar_sha
 
 				actual_role = self.get_role(nick)
 				if role != actual_role:
