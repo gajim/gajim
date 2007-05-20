@@ -811,6 +811,7 @@ class ConnectionVcard:
 		self.vcard_sha = None
 		self.vcard_shas = {} # sha of contacts
 		self.room_jids = [] # list of gc jids so that vcard are saved in a folder
+		self.groupchat_jids = {} # {ID : groupchat_jid}
 		
 	def add_sha(self, p, send_caps = True):
 		c = p.setTag('x', namespace = common.xmpp.NS_VCARD_UPDATE)
@@ -906,9 +907,10 @@ class ConnectionVcard:
 		vcard['resource'] = gajim.get_resource_from_jid(fjid)
 		return vcard
 
-	def request_vcard(self, jid = None, is_fake_jid = False):
-		'''request the VCARD. If is_fake_jid is True, it means we request a vcard
-		to a fake jid, like in private messages in groupchat'''
+	def request_vcard(self, jid = None, groupchat_jid = None):
+		'''request the VCARD. If groupchat_jid is not nul, it means we request a vcard
+		to a fake jid, like in private messages in groupchat. jid can be the
+		real jid of the contact, but we want to consider it comes from a fake jid'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'get')
@@ -921,13 +923,13 @@ class ConnectionVcard:
 		j = jid
 		if not j:
 			j = gajim.get_jid_from_account(self.name)
-		self.awaiting_answers[id] = (VCARD_ARRIVED, j)
-		if is_fake_jid:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+		self.awaiting_answers[id] = (VCARD_ARRIVED, j, groupchat_jid)
+		if groupchat_jid:
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(groupchat_jid)
 			if not room_jid in self.room_jids:
 				self.room_jids.append(room_jid)
+			self.groupchat_jids[id] = groupchat_jid
 		self.connection.send(iq)
-			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 
 	def send_vcard(self, vcard):
 		if not self.connection:
@@ -1010,17 +1012,22 @@ class ConnectionVcard:
 			# If vcard is empty, we send to the interface an empty vcard so that
 			# it knows it arrived
 			jid = self.awaiting_answers[id][1]
+			groupchat_jid = self.awaiting_answers[id][2]
+			frm = jid
+			if groupchat_jid:
+				# We do as if it comes from the fake_jid
+				frm = groupchat_jid
 			our_jid = gajim.get_jid_from_account(self.name)
 			if iq_obj.getType() == 'error' and jid == our_jid:
 				# our server doesn't support vcard
 				self.vcard_supported = False
 			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
-				if jid and jid != our_jid:
+				if frm and frm != our_jid:
 					# Write an empty file
-					self.save_vcard_to_hd(jid, '')
-					self.dispatch('VCARD', {'jid': jid})
-				elif jid == our_jid:
-					self.dispatch('MYVCARD', {'jid': jid})
+					self.save_vcard_to_hd(frm, '')
+					self.dispatch('VCARD', {'jid': frm})
+				elif frm == our_jid:
+					self.dispatch('MYVCARD', {'jid': frm})
 		elif self.awaiting_answers[id][0] == AGENT_REMOVED:
 			jid = self.awaiting_answers[id][1]
 			self.dispatch('AGENT_REMOVED', jid)
@@ -1064,10 +1071,15 @@ class ConnectionVcard:
 			return
 		if not vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			return
+		id = vc.getID()
 		frm_iq = vc.getFrom()
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = ''
-		if frm_iq:
+		if id in self.groupchat_jids:
+			who = self.groupchat_jids[id]
+			frm, resource = gajim.get_room_and_nick_from_fjid(who)
+			del self.groupchat_jids[id]
+		elif frm_iq:
 			who = helpers.get_full_jid_from_iq(vc)
 			frm, resource = gajim.get_room_and_nick_from_fjid(who)
 		else:
@@ -1139,6 +1151,7 @@ class ConnectionVcard:
 			p = self.add_sha(p)
 			self.connection.send(p)
 		else:
+			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 			self.dispatch('VCARD', vcard)
 
 class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub):
@@ -1655,7 +1668,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if not ptype or ptype == 'unavailable':
 				if gajim.config.get('log_contact_status_changes') and self.name\
 				not in no_log_for and jid_stripped not in no_log_for:
-					gc_c = gajim.contacts.get_gc_contact(self.name, jid_stripped, resource)
+					gc_c = gajim.contacts.get_gc_contact(self.name, jid_stripped,
+						resource)
 					st = status or ''
 					if gc_c:
 						jid = gc_c.jid
@@ -1672,25 +1686,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						gajim.interface.remove_avatar_files(jid_stripped, puny_nick)
 					# if it's a gc presence, don't ask vcard here. We may ask it to
 					# real jid in gui part.
-					if self.vcard_shas.has_key(who) and not is_gc:
-					# Verify sha cached in mem
-						if avatar_sha != self.vcard_shas[who]:
-							# avatar has been updated
-							self.request_vcard(who, True)
-					elif not is_gc: # Verify sha cached in hdd
-						cached_vcard = self.get_cached_vcard(who, True)
-						if cached_vcard and cached_vcard.has_key('PHOTO') and \
-						cached_vcard['PHOTO'].has_key('SHA'):
-							cached_sha = cached_vcard['PHOTO']['SHA']
-						else:
-							cached_sha = ''
-						if cached_sha != avatar_sha:
-							# avatar has been updated
-							# sha in mem will be updated later
-							self.request_vcard(who, True)
-						else:
-							# save sha in mem NOW
-							self.vcard_shas[who] = avatar_sha
 				if ns_muc_user_x:
 					# Room has been destroyed. see
 					# http://www.xmpp.org/extensions/xep-0045.html#destroyroom
@@ -1708,7 +1703,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					statusCode = prs.getStatusCode()
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
-					reason, prs.getActor(), statusCode, prs.getNewNick()))
+					reason, prs.getActor(), statusCode, prs.getNewNick(),
+					avatar_sha))
 			return
 
 		if ptype == 'subscribe':
