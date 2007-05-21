@@ -409,14 +409,13 @@ class GroupchatControl(ChatControlBase):
 		label_str = self.name
 		
 		# count waiting highlighted messages
-		if gajim.config.get('notify_on_all_muc_messages'):
-			unread = ''
-			num_unread = self.get_nb_unread()
-			if num_unread == 1:
-				unread = '*'
-			elif num_unread > 1:
-				unread = '[' + unicode(num_unread) + ']'
-			label_str = unread + label_str
+		unread = ''
+		num_unread = self.get_nb_unread()
+		if num_unread == 1:
+			unread = '*'
+		elif num_unread > 1:
+			unread = '[' + unicode(num_unread) + ']'
+		label_str = unread + label_str
 		return (label_str, color)
 
 	def get_tab_image(self):
@@ -671,7 +670,10 @@ class GroupchatControl(ChatControlBase):
 
 	def get_nb_unread(self):
 		nb = len(gajim.events.get_events(self.account, self.room_jid,
-			['printed_gc_msg', 'printed_marked_gc_msg']))
+			['printed_marked_gc_msg']))
+		if gajim.config.get('notify_on_all_muc_messages'):
+			nb += len(gajim.events.get_events(self.account, self.room_jid,
+				['printed_gc_msg']))
 		nb += self.get_nb_unread_pm()
 		return nb
 
