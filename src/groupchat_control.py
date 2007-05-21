@@ -669,11 +669,11 @@ class GroupchatControl(ChatControlBase):
 			other_tags_for_name, [], other_tags_for_text, xhtml = xhtml)
 
 	def get_nb_unread(self):
-		nb = len(gajim.events.get_events(self.account, self.room_jid,
-			['printed_marked_gc_msg']))
+		type_events = ['printed_marked_gc_msg']
 		if gajim.config.get('notify_on_all_muc_messages'):
-			nb += len(gajim.events.get_events(self.account, self.room_jid,
-				['printed_gc_msg']))
+			type_events.append('printed_gc_msg')
+		nb = len(gajim.events.get_events(self.account, self.room_jid,
+			type_events))
 		nb += self.get_nb_unread_pm()
 		return nb
 
