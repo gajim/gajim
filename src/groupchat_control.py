@@ -409,13 +409,14 @@ class GroupchatControl(ChatControlBase):
 		label_str = self.name
 		
 		# count waiting highlighted messages
-		unread = ''
-		num_unread = self.get_nb_unread()
-		if num_unread == 1:
-			unread = '*'
-		elif num_unread > 1:
-			unread = '[' + unicode(num_unread) + ']'
-		label_str = unread + label_str
+		if gajim.config.get('notify_on_all_muc_messages'):
+			unread = ''
+			num_unread = self.get_nb_unread()
+			if num_unread == 1:
+				unread = '*'
+			elif num_unread > 1:
+				unread = '[' + unicode(num_unread) + ']'
+			label_str = unread + label_str
 		return (label_str, color)
 
 	def get_tab_image(self):
