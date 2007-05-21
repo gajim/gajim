@@ -660,7 +660,7 @@ class Interface:
 			# remove in 2007
 			# It's maybe a GC_NOTIFY (specialy for MSN gc)
 			self.handle_event_gc_notify(account, (jid, array[1], status_message,
-				array[3], None, None, None, None, None, None, None))
+				array[3], None, None, None, None, None, None, None, None))
 			
 
 	def handle_event_msg(self, account, array):
