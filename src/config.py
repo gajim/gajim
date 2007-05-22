@@ -2087,44 +2087,23 @@ class AccountsWindow:
 
 		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
 
-class ServiceRegistrationWindow:
-	'''Class for Service registration window:
-	Window that appears when we want to subscribe to a service
-	if is_form we use dataforms_widget else we use service_registarion_window'''
-	def __init__(self, service, infos, account, is_form):
-		self.service = service
+class FakeDataForm(gtk.Table, object):
+	'''Class for forms that are in XML format <entry1>value1</entry1>
+	infos in a table {entry1: value1, }'''
+	def __init__(self, infos):
+		gtk.Table.__init__(self)
 		self.infos = infos
-		self.account = account
-		self.is_form = is_form
-		self.xml = gtkgui_helpers.get_glade('service_registration_window.glade')
-		self.window = self.xml.get_widget('service_registration_window')
-		self.window.set_transient_for(gajim.interface.roster.window)
-		if self.is_form:
-			dataform = dataforms.ExtendForm(node = self.infos)
-			self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
-			if self.data_form_widget.title:
-				self.window.set_title("%s - Gajim" % self.data_form_widget.title)
-			table = self.xml.get_widget('table')
-			table.attach(self.data_form_widget, 0, 2, 0, 1)
-		else:
-			if infos.has_key('registered'):
-				self.window.set_title(_('Edit %s') % service)
-			else:
-				self.window.set_title(_('Register to %s') % service)
-			self.xml.get_widget('label').set_text(infos['instructions'])
-			self.entries = {}
-			self.draw_table()
+		self.entries = {}
+		self._draw_table()
 
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
-
-	def on_cancel_button_clicked(self, widget):
-		self.window.destroy()
-
-	def draw_table(self):
+	def _draw_table(self):
 		'''Draw the table in the window'''
 		nbrow = 0
-		table = self.xml.get_widget('table')
+		if self.infos.has_key('instructions'):
+			nbrow = 1
+			self.resize(rows = nbrow, columns = 2)
+			label = gtk.Label(self.infos['instructions'])
+			self.attach(label, 0, 2, 0, 1, 0, 0, 0, 0)
 		for name in self.infos.keys():
 			if name in ('key', 'instructions', 'x', 'registered'):
 				continue
@@ -2132,40 +2111,73 @@ class ServiceRegistrationWindow:
 				continue
 
 			nbrow = nbrow + 1
-			table.resize(rows = nbrow, columns = 2)
+			self.resize(rows = nbrow, columns = 2)
 			label = gtk.Label(name.capitalize() + ':')
-			table.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
+			self.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
 			entry = gtk.Entry()
 			entry.set_activates_default(True)
 			if self.infos[name]:
 				entry.set_text(self.infos[name])
 			if name == 'password':
 				entry.set_visibility(False)
-			table.attach(entry, 1, 2, nbrow - 1, nbrow, 0, 0, 0, 0)
+			self.attach(entry, 1, 2, nbrow - 1, nbrow, 0, 0, 0, 0)
 			self.entries[name] = entry
 			if nbrow == 1:
 				entry.grab_focus()
-		table.show_all()
+
+	def get_infos(self):
+		for name in self.entries.keys():
+			self.infos[name] = self.entries[name].get_text().decode('utf-8')
+		return self.infos
+
+class ServiceRegistrationWindow:
+	'''Class for Service registration window:
+	Window that appears when we want to subscribe to a service
+	if is_form we use dataforms_widget else we use service_registarion_window'''
+	def __init__(self, service, infos, account, is_form):
+		self.service = service
+		self.account = account
+		self.is_form = is_form
+		self.xml = gtkgui_helpers.get_glade('service_registration_window.glade')
+		self.window = self.xml.get_widget('service_registration_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
+		if self.is_form:
+			dataform = dataforms.ExtendForm(node = infos)
+			self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
+			if self.data_form_widget.title:
+				self.window.set_title('%s - Gajim' % self.data_form_widget.title)
+			table = self.xml.get_widget('table')
+			table.attach(self.data_form_widget, 0, 2, 0, 1)
+		else:
+			if infos.has_key('registered'):
+				self.window.set_title(_('Edit %s') % service)
+			else:
+				self.window.set_title(_('Register to %s') % service)
+			self.data_form_widget = FakeDataForm(infos)
+			table = self.xml.get_widget('table')
+			table.attach(self.data_form_widget, 0, 2, 0, 1)
+
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
 
 	def on_ok_button_clicked(self, widget):
+		# send registration info to the core
 		if self.is_form:
 			form = self.data_form_widget.data_form
 			gajim.connections[self.account].register_agent(self.service,
 				form, True) # True is for is_form
 		else:
-			# we pressed OK of service_registration_window
-			# send registration info to the core
-			for name in self.entries.keys():
-				self.infos[name] = self.entries[name].get_text().decode('utf-8')
-			if self.infos.has_key('instructions'):
-				del self.infos['instructions']
-			if self.infos.has_key('registered'):
-				del self.infos['registered']
-			gajim.connections[self.account].register_agent(self.service,
-				self.infos)
-		
-		self.window.destroy()
+			infos = self.data_form_widget.get_infos()
+			if infos.has_key('instructions'):
+				del infos['instructions']
+			if infos.has_key('registered'):
+				del infos['registered']
+			gajim.connections[self.account].register_agent(self.service, infos)
 
+		self.window.destroy()
 
 class GroupchatConfigWindow:
 	'''GroupchatConfigWindow class'''
