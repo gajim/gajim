@@ -2868,81 +2868,79 @@ class AccountCreationWizardWindow:
 			self.back_button.set_sensitive(True)
 			return
 
-		else:
-			widgets = self.get_widgets()
-			username = widgets['username_entry'].get_text().decode('utf-8')
-			if not username:
-				pritext = _('Invalid username')
-				sectext = _('You must provide a username to configure this account'
-				'.')
-				dialogs.ErrorDialog(pritext, sectext)
-				return
-			server = widgets['server_comboboxentry'].child.get_text().decode('utf-8')
-			savepass = widgets['save_password_checkbutton'].get_active()
-			password = widgets['pass1_entry'].get_text().decode('utf-8')
+		widgets = self.get_widgets()
+		username = widgets['username_entry'].get_text().decode('utf-8')
+		if not username:
+			pritext = _('Invalid username')
+			sectext = _('You must provide a username to configure this account.')
+			dialogs.ErrorDialog(pritext, sectext)
+			return
+		server = widgets['server_comboboxentry'].child.get_text().decode('utf-8')
+		savepass = widgets['save_password_checkbutton'].get_active()
+		password = widgets['pass1_entry'].get_text().decode('utf-8')
 
-			if not self.modify:
-				if password == '':
-					dialogs.ErrorDialog(_('Invalid password'),
-						_('You must enter a password for the new account.'))
-					return
-
-				if widgets['pass2_entry'].get_text() != password:
-					dialogs.ErrorDialog(_('Passwords do not match'),
-						_('The passwords typed in both fields must be identical.'))
-					return
-
-			jid = username + '@' + server
-			# check if jid is conform to RFC and stringprep it
-			try:
-				jid = helpers.parse_jid(jid)
-			except helpers.InvalidFormat, s:
-				pritext = _('Invalid Jabber ID')
-				dialogs.ErrorDialog(pritext, str(s))
+		if not self.modify:
+			if password == '':
+				dialogs.ErrorDialog(_('Invalid password'),
+					_('You must enter a password for the new account.'))
 				return
 
-			already_in_jids = []
-			for account in gajim.connections:
-				j = gajim.config.get_per('accounts', account, 'name')
-				j += '@' + gajim.config.get_per('accounts', account, 'hostname')
-				already_in_jids.append(j)
-
-			if jid in already_in_jids:
-				pritext = _('Duplicate Jabber ID')
-				sectext = _('This account is already configured in Gajim.')
-				dialogs.ErrorDialog(pritext, sectext)
+			if widgets['pass2_entry'].get_text() != password:
+				dialogs.ErrorDialog(_('Passwords do not match'),
+					_('The passwords typed in both fields must be identical.'))
 				return
 
-			self.account = server
-			i = 1
-			while self.account in gajim.connections:
-				self.account = server + str(i)
-				i += 1
+		jid = username + '@' + server
+		# check if jid is conform to RFC and stringprep it
+		try:
+			jid = helpers.parse_jid(jid)
+		except helpers.InvalidFormat, s:
+			pritext = _('Invalid Jabber ID')
+			dialogs.ErrorDialog(pritext, str(s))
+			return
 
-			username, server = gajim.get_name_and_server_from_jid(jid)
-			self.save_account(username, server, savepass, password)
-			self.cancel_button.hide()
-			self.back_button.hide()
-			self.forward_button.hide()
-			if self.modify:
-				finish_text = '<big><b>%s</b></big>\n\n%s' % (
-					_('Account has been added successfully'),
-					_('You can set advanced account options by pressing the '
-					'Advanced button, or later by choosing the Accounts menuitem '
+		already_in_jids = []
+		for account in gajim.connections:
+			j = gajim.config.get_per('accounts', account, 'name')
+			j += '@' + gajim.config.get_per('accounts', account, 'hostname')
+			already_in_jids.append(j)
+
+		if jid in already_in_jids:
+			pritext = _('Duplicate Jabber ID')
+			sectext = _('This account is already configured in Gajim.')
+			dialogs.ErrorDialog(pritext, sectext)
+			return
+
+		self.account = server
+		i = 1
+		while self.account in gajim.connections:
+			self.account = server + str(i)
+			i += 1
+
+		username, server = gajim.get_name_and_server_from_jid(jid)
+		self.save_account(username, server, savepass, password)
+		self.cancel_button.hide()
+		self.back_button.hide()
+		self.forward_button.hide()
+		if self.modify:
+			finish_text = '<big><b>%s</b></big>\n\n%s' % (
+				_('Account has been added successfully'),
+				_('You can set advanced account options by pressing the '
+				'Advanced button, or later by choosing the Accounts menuitem '
 					'under the Edit menu from the main window.'))
-				self.finish_label.set_markup(finish_text)
-				self.finish_button.show()
-				self.finish_button.set_property('has-default', True)
-				self.advanced_button.show()
-				self.go_online_checkbutton.show()
-				img = self.xml.get_widget('finish_image')
-				img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
-				self.notebook.set_current_page(3) # show finish page
-				self.show_vcard_checkbutton.set_active(False)
-			else:
-				self.notebook.set_current_page(2) # show creating page
-				self.update_progressbar_timeout_id = gobject.timeout_add(100,
-					self.update_progressbar)
+			self.finish_label.set_markup(finish_text)
+			self.finish_button.show()
+			self.finish_button.set_property('has-default', True)
+			self.advanced_button.show()
+			self.go_online_checkbutton.show()
+			img = self.xml.get_widget('finish_image')
+			img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
+			self.notebook.set_current_page(3) # show finish page
+			self.show_vcard_checkbutton.set_active(False)
+		else:
+			self.notebook.set_current_page(2) # show creating page
+			self.update_progressbar_timeout_id = gobject.timeout_add(100,
+				self.update_progressbar)
 
 	def update_progressbar(self):
 		self.progressbar.pulse()
