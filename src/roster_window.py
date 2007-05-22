@@ -3387,7 +3387,6 @@ class RosterWindow:
 			awn = dbus.Interface(obj, 'com.google.code.Awn')
 			awn.SetTaskIconByName('Gajim', os.path.abspath(path))
 		except Exception, e:
-			gajim.log.debug(str(e))
 			pass
 
 	def _music_track_changed(self, unused_listener, music_track_info):
