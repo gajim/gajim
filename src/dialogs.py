@@ -7,6 +7,7 @@
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -2088,6 +2089,16 @@ class PrivacyListWindow:
 		self.privacy_list_active_checkbutton.set_sensitive(False)
 		self.privacy_list_default_checkbutton.set_sensitive(False)
 		self.list_of_rules_combobox.set_sensitive(False)
+
+		# set jabber id completion
+		jids_list_store = gtk.ListStore(gobject.TYPE_STRING)
+		for jid in gajim.contacts.get_jid_list(self.account):
+			jids_list_store.append([jid])	
+		jid_entry_completion = gtk.EntryCompletion()
+		jid_entry_completion.set_text_column(0)
+		jid_entry_completion.set_model(jids_list_store)
+		jid_entry_completion.set_popup_completion(True)
+  		self.edit_type_jabberid_entry.set_completion(jid_entry_completion)			
 
 		if action == 'EDIT':
 			self.refresh_rules()
