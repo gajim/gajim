@@ -1408,7 +1408,6 @@ class GroupchatControl(ChatControlBase):
 			nick = instance.input_entry.get_text().decode('utf-8')
 			nick = helpers.parse_resource(nick)
 			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
-			self.nick = nick
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
 			is_modal = False, ok_handler = on_ok)
 
