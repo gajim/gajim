@@ -21,39 +21,70 @@ try:
 	from docutils import nodes,utils
 	from docutils.parsers.rst.roles import set_classes
 except:
+	print "Requires docutils 0.4 for set_classes to be available"
 	def create_xhtml(text):
 		return None
 else:
-	def jep_reference_role(role, rawtext, text, lineno, inliner,
-		options={}, content=[]):
-		'''Role to make handy references to Jabber Enhancement Proposals (JEP).
+	def pos_int_validator(text):
+		"""Validates that text can be evaluated as a positive integer."""
+		result = int(text)
+		if result < 0:
+			raise ValueError("Error: value '%(text)s' "
+							"must be a positive integer")
+		return result
 
-		Use as :JEP:`71` (or jep, or jep-reference).
-		Modeled after the sample in docutils documentation.
+	def generate_uri_role( role_name, aliases,
+					anchor_text, base_url,
+					interpret_url, validator):
+		'''Creates and register a uri based "interpreted role".
+
+		Those are similar to the RFC, and PEP ones, and take
+		role_name:
+			name that will be registered
+		aliases:
+			list of alternate names
+		anchor_text:
+			text that will be used, together with the role
+		base_url:
+			base url for the link
+		interpret_url:
+			this, modulo the validated text, will be added to it
+		validator:
+			should return the validated text, or raise ValueError 
 		'''
+		def uri_reference_role(role, rawtext, text, lineno, inliner,
+			options={}, content=[]):
+			try:
+				valid_text = validator(text)
+			except ValueError, e:
+				msg = inliner.reporter.error( e.message % dict(text=text), line=lineno)
+				prb = inliner.problematic(rawtext, rawtext, msg)
+				return [prb], [msg]
+			ref = base_url + interpret_url % valid_text
+			set_classes(options)
+			node = nodes.reference(rawtext, anchor_text + utils.unescape(text), refuri=ref,
+					**options)
+			return [node], []
 
-		jep_base_url = 'http://www.jabber.org/jeps/'
-		jep_url = 'jep-%04d.html'
-		try:
-			jepnum = int(text)
-			if jepnum <= 0:
-				raise ValueError
-		except ValueError:
-			msg = inliner.reporter.error(
-			'JEP number must be a number greater than or equal to 1; '
-			'"%s" is invalid.' % text, line=lineno)
-			prb = inliner.problematic(rawtext, rawtext, msg)
-			return [prb], [msg]
-		ref = jep_base_url + jep_url % jepnum
-		set_classes(options)
-		node = nodes.reference(rawtext, 'JEP ' + utils.unescape(text), refuri=ref,
-			**options)
-		return [node], []
+		uri_reference_role.__doc__ = """Role to make handy references to URIs.
 
-	roles.register_canonical_role('jep-reference', jep_reference_role)
-	from docutils.parsers.rst.languages.en import roles
-	roles['jep-reference'] = 'jep-reference'
-	roles['jep'] = 'jep-reference'
+	 		Use as :%(role_name)s:`71` (or any of %(aliases)s).
+			It will use %(base_url)s+%(interpret_url)s
+			validator should throw a ValueError, containing optionally
+			a %%(text)s format, if the interpreted text is not valid.
+			""" % locals()
+		roles.register_canonical_role(role_name, uri_reference_role)
+		from docutils.parsers.rst.languages import en
+		en.roles[role_name] = role_name
+		for alias in aliases:
+			en.roles[alias] = role_name
+
+	generate_uri_role('xep-reference', ('jep', 'xep'),
+				'XEP #', 'http://www.xmpp.org/extensions/', 'xep-%04d.html',
+				pos_int_validator)
+	generate_uri_role('gajim-ticket-reference', ('ticket','gtrack'),
+				'Gajim Ticket #', 'http://trac.gajim.org/ticket/', '%d',
+				pos_int_validator)
 
 	class HTMLGenerator:
 		'''Really simple HTMLGenerator starting from publish_parts.
@@ -108,7 +139,7 @@ else:
 	
 
 if __name__ == '__main__':
-	print Generator.create_xhtml('''
+	print "test 1\n", Generator.create_xhtml("""
 test::
 
 >>> print 1
@@ -118,9 +149,10 @@ test::
 
 this `` should    trigger`` should trigger the &nbsp; problem.
 
-''')
-	print Generator.create_xhtml('''
+""")
+	print "test 2\n", Generator.create_xhtml("""
 *test1
 
 test2_
-''')
+""")
+	print "test 3\n", Generator.create_xhtml(""":ticket:`316` implements :xep:`71`""")

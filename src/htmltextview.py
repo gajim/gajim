@@ -40,9 +40,9 @@ import time
 import urllib2
 import operator
 
+if __name__ == '__main__':
+	from common import i18n
 from common import gajim
-#from common import i18n
-
 
 import tooltips
 
@@ -56,13 +56,13 @@ allwhitespace_rx = re.compile('^\\s*$')
 display_resolution = 0.3514598*(gtk.gdk.screen_height() /
 					float(gtk.gdk.screen_height_mm()))
 
-#embryo of CSS classes
+# embryo of CSS classes
 classes = {
 	#'system-message':';display: none',
 	'problematic':';color: red',
 }
 
-#styles for elemens
+# styles for elements
 element_styles = {
 		'u'			: ';text-decoration: underline',
 		'em'		: ';font-style: oblique',
@@ -82,9 +82,6 @@ element_styles['var'] = element_styles['em']
 element_styles['tt']  = element_styles['kbd']
 element_styles['i']   = element_styles['em']
 element_styles['b']   = element_styles['strong']
-
-class_styles = {
-}
 
 '''
 ==========
@@ -182,40 +179,43 @@ for name in BLOCK_HEAD:
 
 
 def build_patterns(view, config, interface):
-	#extra, rst does not mark _underline_ or /it/ up
-	#actually <b>, <i> or <u> are not in the JEP-0071, but are seen in the wild
+	# extra, rst does not mark _underline_ or /it/ up
+	# actually <b>, <i> or <u> are not in the JEP-0071, but are seen in the wild
 	basic_pattern = r'(?<!\w|\<|/|:)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\w|/|:)|'\
 					r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
 	view.basic_pattern_re = re.compile(basic_pattern)
-	#TODO: emoticons
+	# emoticons
 	emoticons_pattern = ''
-	if config.get('emoticons_theme'):
-		# When an emoticon is bordered by an alpha-numeric character it is NOT
-		# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
-		# We still allow multiple emoticons side-by-side like :P:P:P
-		# sort keys by length so :qwe emot is checked before :q
-		keys = interface.emoticons.keys()
-		keys.sort(interface.on_emoticon_sort)
-		emoticons_pattern_prematch = ''
-		emoticons_pattern_postmatch = ''
-		emoticon_length = 0
-		for emoticon in keys: # travel thru emoticons list
-			emoticon_escaped = re.escape(emoticon) # espace regexp metachars
-			emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
-			if (emoticon_length != len(emoticon)):
-				# Build up expressions to match emoticons next to other emoticons
-				emoticons_pattern_prematch  = emoticons_pattern_prematch[:-1]  + ')|(?<='
-				emoticons_pattern_postmatch = emoticons_pattern_postmatch[:-1] + ')|(?='
-				emoticon_length = len(emoticon)
-			emoticons_pattern_prematch += emoticon_escaped  + '|'
-			emoticons_pattern_postmatch += emoticon_escaped + '|'
-		# We match from our list of emoticons, but they must either have
-		# whitespace, or another emoticon next to it to match successfully
-		# [\w.] alphanumeric and dot (for not matching 8) in (2.8))
-		emoticons_pattern = '|' + \
+	try:
+		if config.get('emoticons_theme'):
+			# When an emoticon is bordered by an alpha-numeric character it is NOT
+			# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
+			# We still allow multiple emoticons side-by-side like :P:P:P
+			# sort keys by length so :qwe emot is checked before :q
+			keys = interface.emoticons.keys()
+			keys.sort(interface.on_emoticon_sort)
+			emoticons_pattern_prematch = ''
+			emoticons_pattern_postmatch = ''
+			emoticon_length = 0
+			for emoticon in keys: # travel thru emoticons list
+				emoticon_escaped = re.escape(emoticon) # espace regexp metachars
+				emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
+				if (emoticon_length != len(emoticon)):
+					# Build up expressions to match emoticons next to other emoticons
+					emoticons_pattern_prematch  = emoticons_pattern_prematch[:-1]  + ')|(?<='
+					emoticons_pattern_postmatch = emoticons_pattern_postmatch[:-1] + ')|(?='
+					emoticon_length = len(emoticon)
+				emoticons_pattern_prematch += emoticon_escaped  + '|'
+				emoticons_pattern_postmatch += emoticon_escaped + '|'
+			# We match from our list of emoticons, but they must either have
+			# whitespace, or another emoticon next to it to match successfully
+			# [\w.] alphanumeric and dot (for not matching 8) in (2.8))
+			emoticons_pattern = '|' + \
 			'(?:(?<![\w.]' + emoticons_pattern_prematch[:-1]   + '))' + \
 			'(?:'       + emoticons_pattern[:-1]            + ')'  + \
 			'(?:(?![\w.]'  + emoticons_pattern_postmatch[:-1]  + '))'
+	except:
+		pass
 
 	# because emoticons match later (in the string) they need to be after
 	# basic matches that may occur earlier
@@ -230,10 +230,17 @@ def _parse_css_color(color):
 		return gtk.gdk.Color(r, g, b)
 	else:
 		return gtk.gdk.color_parse(color)
+
+def style_iter(style):
+	return (map(lambda x:x.strip(),item.split(':', 1)) for item in style.split(';') if len(item.strip()))
 	
 
 class HtmlHandler(xml.sax.handler.ContentHandler):
-	
+	"""A handler to display html to a gtk textview.
+
+	It keeps a stack of "style spans" (start/end element pairs)
+	and a stack of list counters, for nested lists.
+	"""
 	def __init__(self, textview, startiter):
 		xml.sax.handler.ContentHandler.__init__(self)
 		self.textbuf = textview.get_buffer()
@@ -303,16 +310,20 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 										  frac, callback, args):
 		callback(allocation.width*frac, *args)
 
-	def _parse_length(self, value, font_relative, callback, *args):
+	def _parse_length(self, value, font_relative, block_relative, minl, maxl, callback, *args):
 		'''Parse/calc length, converting to pixels, calls callback(length, *args)
 		when the length is first computed or changes'''
 		if value.endswith('%'):
-			frac = float(value[:-1])/100
+			val = float(value[:-1])
+			sign = cmp(val,0)
+			# limits: 1% to 500%
+			val = sign*max(1,min(abs(val),500))
+			frac = val/100 
 			if font_relative:
 				attrs = self._get_current_attributes()
 				font_size = attrs.font.get_size() / pango.SCALE
 				callback(frac*display_resolution*font_size, *args)
-			else:
+			elif block_relative:
 				# CSS says 'Percentage values: refer to width of the closest
 				#           block-level ancestor'
 				# This is difficult/impossible to implement, so we use
@@ -323,27 +334,42 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				self.textview.connect('size-allocate',
 									  self.__parse_length_frac_size_allocate,
 									  frac, callback, args)
+			else:
+				callback(frac, *args)
+			return
 
-		elif value.endswith('pt'): # points
-			callback(float(value[:-2])*display_resolution, *args)
+		val = float(value[:-2])
+		sign = cmp(val,0)
+		# validate length
+		val = sign*max(minl,min(abs(val*display_resolution),maxl))
+		if value.endswith('pt'): # points
+			callback(val*display_resolution, *args)
 
-		elif value.endswith('em'): # ems, the height of the element's font
+		elif value.endswith('em'): # ems, the width of the element's font
 			attrs = self._get_current_attributes()
 			font_size = attrs.font.get_size() / pango.SCALE
-			callback(float(value[:-2])*display_resolution*font_size, *args)
+			callback(val*display_resolution*font_size, *args)
 
 		elif value.endswith('ex'): # x-height, ~ the height of the letter 'x'
 			# FIXME: figure out how to calculate this correctly
 			#        for now 'em' size is used as approximation
 			attrs = self._get_current_attributes()
 			font_size = attrs.font.get_size() / pango.SCALE
-			callback(float(value[:-2])*display_resolution*font_size, *args)
+			callback(val*display_resolution*font_size, *args)
 
 		elif value.endswith('px'): # pixels
-			callback(int(value[:-2]), *args)
+			callback(val, *args)
 
 		else:
-			warnings.warn('Unable to parse length value "%s"' % value)
+			try:
+				# TODO: isn't "no units" interpreted as pixels?
+				val = int(value)
+				sign = cmp(val,0)
+				# validate length
+				val = sign*max(minl,min(abs(val),maxl))
+				callback(val, *args)
+			except:
+				warnings.warn('Unable to parse length value "%s"' % value)
 		
 	def __parse_font_size_cb(length, tag):
 		tag.set_property('size-points', length/display_resolution)
@@ -352,7 +378,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	def _parse_style_display(self, tag, value):
 		if value == 'none':
 			tag.set_property('invisible','true')
-		#Fixme: display: block, inline
+		# FIXME: display: block, inline
 
 	def _parse_style_font_size(self, tag, value):
 		try:
@@ -377,7 +403,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		if value == 'larger':
 			tag.set_property('scale', pango.SCALE_LARGE)
 			return
-		self._parse_length(value, True, self.__parse_font_size_cb, tag)
+		# font relative (5 ~ 4pt, 110 ~ 72pt)
+		self._parse_length(value, True, False, 5, 110, self.__parse_font_size_cb, tag)
 
 	def _parse_style_font_style(self, tag, value):
 		try:
@@ -399,11 +426,13 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	#__frac_length_tag_cb = staticmethod(__frac_length_tag_cb)
 		
 	def _parse_style_margin_left(self, tag, value):
-		self._parse_length(value, False, self.__frac_length_tag_cb,
+		# block relative
+		self._parse_length(value, False, True, 1, 1000, self.__frac_length_tag_cb,
 						   tag, 'left-margin')
 
 	def _parse_style_margin_right(self, tag, value):
-		self._parse_length(value, False, self.__frac_length_tag_cb,
+		# block relative
+		self._parse_length(value, False, True, 1, 1000, self.__frac_length_tag_cb,
 						   tag, 'right-margin')
 
 	def _parse_style_font_weight(self, tag, value):
@@ -469,13 +498,32 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			tag.set_property('wrap_mode', gtk.WRAP_WORD)
 		elif value == 'nowrap':
 			tag.set_property('wrap_mode', gtk.WRAP_NONE)
+
+	def __length_tag_cb(self, value, tag, propname):
+		try:
+			tag.set_property(propname, value)
+		except:
+			gajim.log.warn( "Error with prop: " + propname + " for tag: " + str(tag))
+		
+
+	def _parse_style_width(self, tag, value):
+		if value == 'auto':
+			return
+		self._parse_length(value, False, False, 1, 1000, self.__length_tag_cb,
+						   tag, "width")
+	def _parse_style_height(self, tag, value):
+		if value == 'auto':
+			return
+		self._parse_length(value, False, False, 1, 1000, self.__length_tag_cb,
+						   tag, "height")
 	 
 	
 	# build a dictionary mapping styles to methods, for greater speed
 	__style_methods = dict()
 	for style in ['background-color', 'color', 'font-family', 'font-size',
 				  'font-style', 'font-weight', 'margin-left', 'margin-right',
-				  'text-align', 'text-decoration', 'white-space', 'display' ]:
+				  'text-align', 'text-decoration', 'white-space', 'display',
+				  'width', 'height' ]:
 		try:
 			method = locals()['_parse_style_%s' % style.replace('-', '_')]
 		except KeyError:
@@ -489,6 +537,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		return [tag for tag in self.styles if tag is not None]
 
 	def _create_url(self, href, title, type_, id_):
+		'''Process a url tag.
+		'''
 		tag = self.textbuf.create_tag(id_)
 		if href and href[0] != '#':
 			tag.href = href
@@ -501,6 +551,125 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			tag.title = title
 		return tag
 
+	def _process_img(self, attrs):
+		'''Process a img tag.
+		'''
+		try:
+			# Wait maximum 1s for connection 
+			socket.setdefaulttimeout(1)
+			try: 
+				f = urllib2.urlopen(attrs['src']) 
+			except Exception, ex: 
+				gajim.log.debug(str('Error loading image %s ' % attrs['src'] + ex)) 
+				pixbuf = None 
+				alt = attrs.get('alt', 'Broken image') 
+			else: 
+				# Wait 0.1s between each byte 
+				try: 
+					f.fp._sock.fp._sock.settimeout(0.5) 
+				except: 
+					pass 
+			# Max image size = 2 MB (to try to prevent DoS)
+			mem = ''
+			deadline = time.time() + 3
+			while True:
+				if time.time() > deadline:
+					gajim.log.debug(str('Timeout loading image %s ' % \
+						attrs['src'] + ex))
+					mem = ''
+					alt = attrs.get('alt', '')
+					if alt:
+						alt += '\n'
+					alt += _('Timeout loading image')
+					break
+				try:
+					temp = f.read(100)
+				except socket.timeout, ex:
+					gajim.log.debug('Timeout loading image %s ' % attrs['src'] + \
+						str(ex))
+					mem = ''
+					alt = attrs.get('alt', '')
+					if alt:
+						alt += '\n'
+					alt += _('Timeout loading image')
+					break
+				if temp:
+					mem += temp
+				else:
+					break
+				if len(mem) > 2*1024*1024:
+					alt = attrs.get('alt', '')
+					if alt:
+						alt += '\n'
+					alt += _('Image is too big')
+					break
+			pixbuf = None
+			if mem:
+				# Caveat: GdkPixbuf is known not to be safe to load
+				# images from network... this program is now potentially
+				# hackable ;)
+				loader = gtk.gdk.PixbufLoader()
+				dims = [0,0]
+				def height_cb(length):
+					dims[1] = length
+				def width_cb(length):
+					dims[0] = length
+				# process width and height attributes
+				w = attrs.get('width')
+				h = attrs.get('height')
+				# override with width and height styles
+				for attr, val in style_iter(attrs.get('style', '')):
+					if attr == 'width':
+						w = val
+					elif attr == 'height':
+						h = val
+				if w:
+					self._parse_length(w, False, False, 1, 1000, width_cb)
+				if h:
+					self._parse_length(h, False, False, 1, 1000, height_cb)
+				def set_size(pixbuf, w, h, dims):
+					'''FIXME: floats should be relative to the whole
+					textview, and resize with it. This needs new
+					pifbufs for every resize, gtk.gdk.Pixbuf.scale_simple
+					or similar.
+					'''
+					if type(dims[0]) == float:
+						dims[0] = int(dims[0]*w)
+					elif not dims[0]:
+						dims[0] = w
+					if type(dims[1]) == float:
+						dims[1] = int(dims[1]*h)
+					if not dims[1]:
+						dims[1] = h
+					loader.set_size(*dims)
+				if w or h:
+					loader.connect('size-prepared', set_size, dims)
+				loader.write(mem)
+				loader.close()
+				pixbuf = loader.get_pixbuf()
+				alt = attrs.get('alt', '')
+			if pixbuf is not None:
+				tags = self._get_style_tags()
+				if tags:
+					tmpmark = self.textbuf.create_mark(None, self.iter, True)
+				self.textbuf.insert_pixbuf(self.iter, pixbuf)
+				self.starting = False
+				if tags:
+					start = self.textbuf.get_iter_at_mark(tmpmark)
+					for tag in tags:
+						self.textbuf.apply_tag(tag, start, self.iter)
+					self.textbuf.delete_mark(tmpmark)
+			else:
+				self._insert_text('[IMG: %s]' % alt)
+		except Exception, ex:
+			gajim.log.error('Error loading image ' + str(ex))
+			pixbuf = None
+			alt = attrs.get('alt', 'Broken image')
+			try:
+				loader.close()
+			except:
+				pass
+		return pixbuf
 
 	def _begin_span(self, style, tag=None, id_=None):
 		if style is None:
@@ -511,9 +680,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				tag = self.textbuf.create_tag(id_)
 			else:
 				tag = self.textbuf.create_tag() # we create anonymous tag
-		for attr, val in [item.split(':', 1) for item in style.split(';') if len(item.strip())]:
-			attr = attr.strip().lower()
-			val = val.strip()
+		for attr, val in style_iter(style):
+			attr = attr.lower()
+			val = val
 			try:
 				method = self.__style_methods[attr]
 			except KeyError:
@@ -603,6 +772,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			self.text += content
 			return
 		if allwhitespace_rx.match(content) is not None and self._starts_line():
+			self.text += ' '
 			return
 		self.text += content
 		self.starting = False
@@ -611,9 +781,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	def startElement(self, name, attrs):
 		self._flush_text()
 		klass = [i for i in attrs.get('class',' ').split(' ') if i]
-		style = attrs.get('style','')
+		style = ''
 		#Add styles defined for classes
-		#TODO: priority between class and style elements?
 		for k in klass:
 			if k  in classes:
 				style += classes[k]
@@ -641,9 +810,13 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				tag.is_anchor = True
 		elif name in LIST_ELEMS:
 			style += ';margin-left: 2em'
+		elif name == 'img':
+			tag = self._process_img(attrs)
 		if name in element_styles:
 			style += element_styles[name]
-
+		# so that explicit styles override implicit ones, 
+		# we add the attribute last
+		style += ";"+attrs.get('style','')
 		if style == '':
 			style = None        
 		self._begin_span(style, tag, id_)
@@ -681,83 +854,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		elif name == 'dt':
 			if not self.starting:
 				self._jump_line()
-		elif name == 'img':
-			# Wait maximum 1s for connection
-			socket.setdefaulttimeout(1)
-			try:
-				f = urllib2.urlopen(attrs['src'])
-			except Exception, ex:
-				gajim.log.debug(str('Error loading image %s ' % attrs['src'] + ex))
-				pixbuf = None
-				alt = attrs.get('alt', 'Broken image')
-			else:
-				# Wait 10ms between each byte
-				try:
-					f.fp._sock.fp._sock.settimeout(0.1)
-				except:
-					pass
-				# Max image size = 2 MB (to try to prevent DoS) in Max 3s
-				mem = ''
-				deadline = time.time() + 3
-				while True:
-					if time.time() > deadline:
-						gajim.log.debug(str('Timeout loading image %s ' % \
-							attrs['src'] + ex))
-						mem = ''
-						alt = attrs.get('alt', '')
-						if alt:
-							alt += '\n'
-						alt += _('Timeout loading image')
-						break
-					try:
-						temp = f.read(100)
-					except socket.timeout, ex:
-						gajim.log.debug('Timeout loading image %s ' % attrs['src'] + \
-							str(ex))
-						mem = ''
-						alt = attrs.get('alt', '')
-						if alt:
-							alt += '\n'
-						alt += _('Timeout loading image')
-						break
-					if temp:
-						mem += temp
-					else:
-						break
-					if len(mem) > 2*1024*1024:
-						alt = attrs.get('alt', '')
-						if alt:
-							alt += '\n'
-						alt += _('Image is too big')
-						break
-
-				if mem:
-					# Caveat: GdkPixbuf is known not to be safe to load
-					# images from network... this program is now potentially
-					# hackable ;)
-					loader = gtk.gdk.PixbufLoader()
-					loader.write(mem)
-					loader.close()
-					pixbuf = loader.get_pixbuf()
-				else:
-					pixbuf = None
-			if pixbuf is not None:
-				tags = self._get_style_tags()
-				if tags:
-					tmpmark = self.textbuf.create_mark(None, self.iter, True)
-
-				self.textbuf.insert_pixbuf(self.iter, pixbuf)
-
-				if tags:
-					start = self.textbuf.get_iter_at_mark(tmpmark)
-					for tag in tags:
-						self.textbuf.apply_tag(tag, start, self.iter)
-					self.textbuf.delete_mark(tmpmark)
-			else:
-				self._insert_text('[IMG: %s]' % alt)
-		elif name == 'body' or name == 'html':
-			pass
-		elif name == 'a':
+		elif name in ('a', 'img', 'body', 'html'):
 			pass
 		elif name in INLINE:
 			pass
@@ -807,10 +904,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		#    self.text = ' '
 
 class HtmlTextView(gtk.TextView):
-	__gtype_name__ = 'HtmlTextView'
-	__gsignals__ = {
-		'url-clicked': (gobject.SIGNAL_RUN_LAST, None, (str, str)), # href, type
-	}
 	
 	def __init__(self):
 		gobject.GObject.__init__(self)
@@ -886,15 +979,38 @@ class HtmlTextView(gtk.TextView):
 		parser.setContentHandler(HtmlHandler(self, eob))
 		parser.parse(StringIO(html))
 		
+		# too much space after :)
 		#if not eob.starts_line():
 		#    buffer.insert(eob, '\n')
+
 
 
 change_cursor = None
 
 if __name__ == '__main__':
+	import os
+	from common import gajim
+
+	class log(object):
+
+		def debug(self, text):
+			print "debug:", text
+		def warn(self, text):
+			print "warn;", text
+		def error(self,text):
+			print "error;", text
+
+	gajim.log=log()
+
+	if gajim.config.get('emoticons_theme'):
+		print "emoticons"
 
 	htmlview = HtmlTextView()
+
+	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+	# use this for hr
+	htmlview.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path_to_file)
+
 
 	tooltip = tooltips.BaseTooltip()
 	def on_textview_motion_notify_event(widget, event):
@@ -965,9 +1081,9 @@ if __name__ == '__main__':
 	<body xmlns='http://www.w3.org/1999/xhtml'>
 	  <p style='text-align:center'>Hey, are you licensed to <a href='http://www.jabber.org/'>Jabber</a>?</p>
 	  <p style='text-align:right'><img src='http://www.jabber.org/images/psa-license.jpg'
-			  alt='A License to Jabber'
-			  height='261'
-			  width='537'/></p>
+			  alt='A License to Jabber' 
+			  width='50%' height='50%' 
+			  /></p>
 	</body>
 		''')
 	htmlview.display_html('<hr />')
@@ -992,8 +1108,9 @@ if __name__ == '__main__':
 	   <li> One </li>
 	   <li> Two is nested: <ul style='background-color:rgb(200,200,100)'>
 			 <li> One </li>
-			 <li> Two </li>
-			 <li> Three </li>
+			 <li style='font-size:50%'> Two </li>
+			 <li style='font-size:200%'> Three </li>
+			 <li style='font-size:9999pt'> Four </li>
 			</ul></li>
 	   <li> Three </li></ol>
 	</body>
