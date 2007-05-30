@@ -1686,7 +1686,7 @@ class SingleMessageWindow:
 	or 'receive'.
 	'''
 	def __init__(self, account, to = '', action = '', from_whom = '',
-	subject = '', message = '', resource = ''):
+	subject = '', message = '', resource = '', thread = None):
 		self.account = account
 		self.action = action
 
@@ -1695,6 +1695,7 @@ class SingleMessageWindow:
 		self.to = to
 		self.from_whom = from_whom
 		self.resource = resource
+		self.thread = thread
 
 		self.xml = gtkgui_helpers.get_glade('single_message_window.glade')
 		self.window = self.xml.get_widget('single_message_window')
@@ -1896,7 +1897,7 @@ class SingleMessageWindow:
 
 			# FIXME: allow GPG message some day
 			gajim.connections[self.account].send_message(to_whom_jid, message,
-				keyID = None, type = 'normal', subject=subject)
+				keyID = None, type = 'normal', subject=subject, thread = self.thread)
 
 		self.subject_entry.set_text('') # we sent ok, clear the subject
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
@@ -1913,7 +1914,7 @@ class SingleMessageWindow:
 		self.window.destroy()
 		SingleMessageWindow(self.account, to = self.from_whom,
 			action = 'send',	from_whom = self.from_whom, subject = self.subject,
-			message = self.message)
+			message = self.message, thread = self.thread)
 
 	def on_send_and_close_button_clicked(self, widget):
 		self.send_single_message()

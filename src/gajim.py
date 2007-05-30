@@ -665,7 +665,7 @@ class Interface:
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
-		# chatstate, msg_id, composing_jep, user_nick, xhtml))
+		# chatstate, msg_id, composing_jep, user_nick, xhtml, thread))
 		# user_nick is JEP-0172
 
 		full_jid_with_resource = array[0]
@@ -680,6 +680,7 @@ class Interface:
 		msg_id = array[7]
 		composing_jep = array[8]
 		xhtml = array[10]
+		thread = array[11]
 		if gajim.config.get('ignore_incoming_xhtml'):
 			xhtml = None
 		if gajim.jid_is_transport(jid):
@@ -775,12 +776,12 @@ class Interface:
 			if encrypted:
 				self.roster.on_message(jid, message, array[2], account, array[3],
 					msg_type, subject, resource, msg_id, array[9],
-					advanced_notif_num)
+					advanced_notif_num, thread = thread)
 			else:
 				# xhtml in last element
 				self.roster.on_message(jid, message, array[2], account, array[3],
 					msg_type, subject, resource, msg_id, array[9],
-					advanced_notif_num, xhtml = xhtml)
+					advanced_notif_num, xhtml = xhtml, thread = thread)
 			nickname = gajim.get_name_from_jid(account, jid)
 		# Check and do wanted notifications	
 		msg = message

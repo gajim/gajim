@@ -839,7 +839,7 @@ class Connection(ConnectionHandlers):
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None,
-	user_nick = None, xhtml = None):
+	user_nick = None, xhtml = None, thread = None):
 		if not self.connection:
 			return 1
 		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
@@ -882,6 +882,10 @@ class Connection(ConnectionHandlers):
 					typ = 'normal', xhtml = xhtml)
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
+
+		# XEP-0201
+		if thread:
+			msg_iq.setTag("thread").setData(thread)
 
 		# JEP-0172: user_nickname
 		if user_nick:

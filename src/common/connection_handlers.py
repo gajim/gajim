@@ -1407,6 +1407,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		msghtml = msg.getXHTML()
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
+		thread = msg.getThread()
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
@@ -1523,7 +1524,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if treat_as:
 			mtype = treat_as
 		self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype,
-			subject, chatstate, msg_id, composing_jep, user_nick, msghtml))
+			subject, chatstate, msg_id, composing_jep, user_nick, msghtml, thread))
 	# END messageCB
 
 	def _pubsubEventCB(self, con, msg):

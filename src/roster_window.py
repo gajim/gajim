@@ -3531,7 +3531,7 @@ class RosterWindow:
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,
 			msg_type = '', subject = None, resource = '', msg_id = None,
-			user_nick = '', advanced_notif_num = None, xhtml = None):
+			user_nick = '', advanced_notif_num = None, xhtml = None, thread = None):
 		'''when we receive a message'''
 		contact = None
 		# if chat window will be for specific resource
@@ -3588,7 +3588,7 @@ class RosterWindow:
 		if msg_type == 'normal' and popup: # it's single message to be autopopuped
 			dialogs.SingleMessageWindow(account, contact.jid,
 				action = 'receive', from_whom = jid, subject = subject,
-				message = msg, resource = resource)
+				message = msg, resource = resource, thread = thread)
 			return
 
 		# We print if window is opened and it's not a single message
@@ -3611,7 +3611,7 @@ class RosterWindow:
 		show_in_roster = notify.get_show_in_roster(event_type, account, contact)
 		show_in_systray = notify.get_show_in_systray(event_type, account, contact)
 		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-			encrypted, resource, msg_id, xhtml), show_in_roster = show_in_roster,
+			encrypted, resource, msg_id, xhtml, thread), show_in_roster = show_in_roster,
 			show_in_systray = show_in_systray)
 		gajim.events.add_event(account, fjid, event)
 		if popup:
@@ -3873,7 +3873,7 @@ class RosterWindow:
 		if event.type_ == 'normal':
 			dialogs.SingleMessageWindow(account, jid,
 				action = 'receive', from_whom = jid, subject = data[1],
-				message = data[0], resource = data[5])
+				message = data[0], resource = data[5], thread = data[8])
 			gajim.interface.remove_first_event(account, jid, event.type_)
 			return True
 		elif event.type_ == 'file-request':
