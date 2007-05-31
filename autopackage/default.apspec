@@ -9,7 +9,7 @@ Packager: Filippos Papadopoulos <psybases@gmail.com>
 Summary: Gajim is a Jabber client written in Python.
 URL: http://www.gajim.org/
 License: GNU General Public License, Version 2
-SoftwareVersion: 0.10
+SoftwareVersion: 0.11.1
 AutopackageTarget: 1.0
 PackageVersion: 1
 
@@ -28,13 +28,7 @@ File tranfers, Emoticons, URL grabber, Systray icon, GPG support, Multiple accou
 
 
 [BuildPrepare]
-echo "-------==========$USER i am making the package...===============------"
-export build_root="/tmp/build-root.$$"
-echo "Build root is $build_root"
-mkdir "$build_root"
-make PREFIX=$build_root CC=apgcc CXX=apg++ || exit 1
-make install PREFIX=$build_root CC=apgcc CXX=apg++ || exit 1
-
+prepareBuild
 
 
 [BuildUnprepare]
@@ -44,24 +38,28 @@ unprepareBuild
 [Imports]
 echo '*' | import
 import <<EOF
-$source_dir/gajim.desktop
-$source_dir/gajim.1
 EOF
 
 
 [Prepare]
 # Dependency checking
+#PyGTK 2.4 requires python 2.3
 
 require @python.org/python 2.4
 require @python.org/python-xml 2.4
 require @gtk.org/gtk 2.6
-
-########The 2.5 version is for SUSE 9.3
 require @gnome.org/pygtk 2.5
 require @gnome.org/pyglade 2.5
 require @glade.gnome.org/libglade 2
 require @pysqlite.org/pysqlite 2
 recommend @gtkspell.sourceforge.net/gtkspell 0
+if ! require @dnspython.org/dnspython 1; then
+recommend @pydns.sourceforge.net/pydns 2
+fi
+
+#recommend @dnspython.org/dnspython 1
+#recommend @pydns.sourceforge.net/pydns 2
+
 
 
 [Install]
@@ -69,17 +67,25 @@ recommend @gtkspell.sourceforge.net/gtkspell 0
 
 copyFiles  lib/gajim "$PREFIX/lib"
 copyFiles  share/gajim "$PREFIX/share/"
+copyFiles  share/doc "$PREFIX/share/"
 installLocale share/locale
 installIcon share/pixmaps/gajim.png
-installDesktop "Network/Instant Messaging" gajim.desktop
-installMan 1 gajim.1
+installIcon share/pixmaps/gajim_about.png
+installDesktop "Network/Instant Messaging" share/applications/gajim.desktop
+installMan 1 share/man/man1/gajim.1 share/man/man1/gajim-remote.1
+
 #In the following safeSed we assume that the original Makefile is a bit modified so that to be relocatable by AP
 #so you have to manually remove the sed in Makefile for AP to work
 safeSed bin/gajim "s!PREFIX!$PREFIX!g"
 safeSed bin/gajim-remote "s!PREFIX!$PREFIX!g"
+locateCommand python
+safeSed bin/gajim "s!PYBIN!$lc_location!g"
+safeSed bin/gajim-remote "s!PYBIN!$lc_location!g"
 installExe bin/*
-chmod +x "$PREFIX/bin/gajim"
-chmod +x "$PREFIX/bin/gajim-remote"
+#chmod +x "$PREFIX/bin/gajim"
+#chmod +x "$PREFIX/bin/gajim-remote"
+
+
 
 
 [Uninstall]
