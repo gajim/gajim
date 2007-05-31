@@ -3596,6 +3596,8 @@ class RosterWindow:
 			typ = ''
 			if msg_type == 'error':
 				typ = 'status'
+			if thread:
+				ctrl.set_thread_id(thread)
 			ctrl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
 						subject = subject, xhtml = xhtml)
 			if msg_id:

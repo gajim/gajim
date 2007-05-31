@@ -37,6 +37,8 @@ class MessageControl:
 		self.hide_chat_buttons_current = False
 		self.resource = resource
 
+		self.thread_id = self.contact.get_session()
+
 		gajim.last_message_time[self.account][self.get_full_jid()] = 0
 
 		self.xml = gtkgui_helpers.get_glade('message_window.glade', widget_name)
@@ -110,14 +112,26 @@ class MessageControl:
 	def get_specific_unread(self):
 		return len(gajim.events.get_events(self.account, self.contact.jid))
 
+	def set_thread_id(self, thread_id):
+		if thread_id == self.thread_id:
+			return
+		if self.thread_id:
+			print "starting a new session, forgetting about the old one!"
+		self.thread_id = thread_id
+		self.contact.sessions[self.contact.get_full_jid()] = thread_id
+
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None,
 	user_nick = None):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		jid = self.contact.jid
+
+		if not self.thread_id:
+			self.thread_id = self.contact.new_session()
+
 		# Send and update history
 		return gajim.connections[self.account].send_message(jid, message, keyID,
 			type = type, chatstate = chatstate, msg_id = msg_id,
 			composing_jep = composing_jep, resource = self.resource,
-			user_nick = user_nick)
+			user_nick = user_nick, thread = self.thread_id)

@@ -1815,6 +1815,9 @@ class ChatControl(ChatControlBase):
 				encrypted = data[4], subject = data[1], xhtml = data[7])
 			if len(data) > 6 and isinstance(data[6], int):
 				message_ids.append(data[6])
+
+			if len(data) > 8:
+				self.set_thread_id(data[8])
 		if message_ids:
 			gajim.logger.set_read_messages(message_ids)
 		gajim.events.remove_events(self.account, jid_with_resource,
