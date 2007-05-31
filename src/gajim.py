@@ -948,6 +948,17 @@ class Interface:
 		except AttributeError:
 			return
 
+	def handle_event_new_acc_connected(self, account, array):
+		#('NEW_ACC_CONNECTED', account, (infos, is_form))
+		if self.instances.has_key('account_creation_wizard'):
+			self.instances['account_creation_wizard'].new_acc_connected(array[0],
+				array[1])
+
+	def handle_event_new_acc_not_connected(self, account, array):
+		#('NEW_ACC_NOT_CONNECTED', account, (reason))
+		if self.instances.has_key('account_creation_wizard'):
+			self.instances['account_creation_wizard'].new_acc_not_connected(array)
+
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (config))
 		if self.instances.has_key('account_creation_wizard'):
@@ -2047,6 +2058,8 @@ class Interface:
 			'AGENT_INFO_ITEMS': self.handle_event_agent_info_items,
 			'AGENT_INFO_INFO': self.handle_event_agent_info_info,
 			'QUIT': self.handle_event_quit,
+			'NEW_ACC_CONNECTED': self.handle_event_new_acc_connected,
+			'NEW_ACC_NOT_CONNECTED': self.handle_event_new_acc_not_connected,
 			'ACC_OK': self.handle_event_acc_ok,
 			'ACC_NOT_OK': self.handle_event_acc_not_ok,
 			'MYVCARD': self.handle_event_myvcard,

@@ -206,30 +206,15 @@ class Connection(ConnectionHandlers):
 					# it's a new account
 					if not data[1]: # wrong answer
 						self.dispatch('ACC_NOT_OK', (
-							_('Transport %s answered wrongly to register request: %s')\
+							_('Server %s answered wrongly to register request: %s')\
 							% (data[0], data[3])))
 						return
-					req = data[1].asDict()
-					req['username'] = self.new_account_info['name']
-					req['password'] = self.new_account_info['password']
-					def _on_register_result(result):
-						if not common.xmpp.isResultNode(result):
-							self.dispatch('ACC_NOT_OK', (result.getError()))
-							return
-						self.password = self.new_account_info['password']
-						if USE_GPG:
-							self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
-							gajim.config.set('usegpg', True)
-						else:
-							gajim.config.set('usegpg', False)
-						gajim.connections[self.name] = self
-						self.dispatch('ACC_OK', (self.new_account_info))
-						self.new_account_info = None
-						if self.connection:
-							self.connection.UnregisterDisconnectHandler(self._on_new_account)
-						self.disconnect(on_purpose=True)
-					common.xmpp.features_nb.register(self.connection, data[0],
-						req, _on_register_result)
+					is_form = data[2]
+					if is_form:
+						conf = data[1]
+					else:
+						conf = data[1].asDict()
+					self.dispatch('NEW_ACC_CONNECTED', (conf, is_form))
 					return
 				if not data[1]: # wrong answer
 					self.dispatch('ERROR', (_('Invalid answer'),
@@ -1014,12 +999,46 @@ class Connection(ConnectionHandlers):
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
 
+	def send_new_account_infos(self, form, is_form):
+		def _on_register_result(result):
+			if not common.xmpp.isResultNode(result):
+				self.dispatch('ACC_NOT_OK', (result.getError()))
+				return
+			if USE_GPG:
+				self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
+				gajim.config.set('usegpg', True)
+			else:
+				gajim.config.set('usegpg', False)
+			gajim.connections[self.name] = self
+			self.dispatch('ACC_OK', (self.new_account_info))
+			self.new_account_info = None
+			if self.connection:
+				self.connection.UnregisterDisconnectHandler(self._on_new_account)
+			self.disconnect(on_purpose=True)
+		if is_form:
+			# Get username and password and put them in new_account_info
+			for field in self._data_form.iter_fields():
+				if field.var == 'username':
+					self.new_account_info['name'] = field.value
+				if field.var == 'password':
+					self.new_account_info['password'] = field.value
+			iq=Iq('set', NS_REGISTER, to = self._hostname)
+			iq.setTag('query').addChild(node = form)
+			self.connection.SendAndCallForResponse(iq, _on_register_result)
+		else:
+			# Get username and password and put them in new_account_info
+			if form.has_key('username'):
+				self.new_account_info['name'] = form['username']
+			if form.has_key('password'):
+				self.new_account_info['password'] = form['password']
+			common.xmpp.features_nb.register(self.connection, self._hostname,
+				form, _on_register_result)
+
 	def new_account(self, name, config, sync = False):
 		# If a connection already exist we cannot create a new account
 		if self.connection:
 			return
 		self._hostname = config['hostname']
-		self.server_resource = config['resource']
 		self.new_account_info = config
 		self.name = name
 		self.on_connect_success = self._on_new_account
@@ -1028,13 +1047,11 @@ class Connection(ConnectionHandlers):
 
 	def _on_new_account(self, con = None, con_type = None):
 		if not con_type:
-			self.dispatch('ACC_NOT_OK',
+			self.dispatch('NEW_ACC_NOT_CONNECTED',
 				(_('Could not connect to "%s"') % self._hostname))
 			return
 		self.on_connect_failure = None
 		self.connection = con
-		#if con:
-		#	con.RegisterDisconnectHandler(self._on_new_account)
 		common.xmpp.features_nb.getRegInfo(con, self._hostname)
 
 	def account_changed(self, new_name):
