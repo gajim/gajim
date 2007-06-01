@@ -632,6 +632,8 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def send_invisible_presence(self, msg, signed, initial = False):
+		if not self.connection:
+			return
 		# try to set the privacy rule
 		iq = self.build_privacy_rule('invisible', 'deny')
 		self.connection.SendAndCallForResponse(iq, self._continue_invisible,
