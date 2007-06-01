@@ -1658,6 +1658,8 @@ class Interface:
 	def handle_session_negotiation(self, account, data):
 		jid, thread_id, form = data
 		# XXX check negotiation state, etc.
+
+		# XXX check if the user has chosen to autoaccept these values
 		negotiation.FeatureNegotiationWindow(account, jid, thread_id, form)
 
 	def handle_event_privacy_lists_received(self, account, data):
