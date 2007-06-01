@@ -1658,9 +1658,23 @@ class Interface:
 	def handle_session_negotiation(self, account, data):
 		jid, thread_id, form = data
 		# XXX check negotiation state, etc.
+		# XXX check if we can autoaccept
 
-		# XXX check if the user has chosen to autoaccept these values
-		negotiation.FeatureNegotiationWindow(account, jid, thread_id, form)
+		if form.getType() == 'form':
+			ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+			if not ctrl:
+				resource = jid.getResource()
+				contact = gajim.contacts.get_contact(account, str(jid), resource)
+				if not contact:
+					connection = gajim.connections[account]
+					contact = gajim.contacts.create_contact(jid = jid.getStripped(), resource = resource, show = connection.get_status())
+				self.roster.new_chat(contact, account, resource = resource)
+
+				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+
+			ctrl.set_thread_id(thread_id)
+
+			negotiation.FeatureNegotiationWindow(account, jid, thread_id, form)
 
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)

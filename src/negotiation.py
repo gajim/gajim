@@ -25,6 +25,21 @@ class FeatureNegotiationWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def on_ok_button_clicked(self, widget):
+		acceptance = xmpp.Message(self.jid)
+		acceptance.setThread(self.thread_id)
+		feature = acceptance.NT.feature
+		feature.setNamespace(xmpp.NS_FEATURE)
+
+		form = self.data_form_widget.data_form
+		form.setAttr('type', 'submit')
+
+		feature.addChild(node=form)
+
+		gajim.connections[self.account].send_stanza(acceptance)
+
+		self.window.destroy()
+
 	def on_cancel_button_clicked(self, widget):
 		# XXX determine whether to reveal presence
 
