@@ -3201,6 +3201,8 @@ class RosterWindow:
 		if to:
 			gajim.connections[account].send_custom_status(status, txt, to)
 		else:
+			was_invisible = gajim.connections[account].connected == \
+				gajim.SHOW_LIST.index('invisible')
 			gajim.connections[account].change_status(status, txt, auto)
 
 			if not gajim.interface.minimized_controls.has_key(account):
@@ -3217,6 +3219,15 @@ class RosterWindow:
 						# tab is opened, send initial join_gc()
 						gajim.connections[account].join_gc(gc_control.nick, 
 						gc_control.room_jid, None)
+			if was_invisible:
+				# We come back from invisible, join bookmarks
+				for bm in gajim.connections[account].bookmarks:
+					room_jid = bm['jid']
+					if room_jid in gajim.gc_connected[account] and \
+					gajim.gc_connected[account][room_jid]:
+						continue
+					self.join_gc_room(account, room_jid, bm['nick'], bm['password'],
+						minimize = gajim.config.get('minimize_autojoined_rooms'))
 
 	def get_status_message(self, show):
 		if show in gajim.config.get_per('defaultstatusmsg'):
