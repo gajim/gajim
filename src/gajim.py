@@ -103,6 +103,8 @@ import message_control
 from chat_control import ChatControlBase
 from atom_window import AtomWindow
 
+import negotiation
+
 from common import exceptions
 from common.zeroconf import connection_zeroconf
 from common import dbus_support
@@ -1653,6 +1655,11 @@ class Interface:
 		atom_entry, = data
 		AtomWindow.newAtomEntry(atom_entry)
 
+	def handle_session_negotiation(self, account, data):
+		jid, thread_id, form = data
+		# XXX check negotiation state, etc.
+		negotiation.FeatureNegotiationWindow(account, jid, thread_id, form)
+
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
 		if not self.instances.has_key(account):
@@ -2090,6 +2097,7 @@ class Interface:
 			'SEARCH_FORM': self.handle_event_search_form,
 			'SEARCH_RESULT': self.handle_event_search_result,
 			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
+			'SESSION_NEG': self.handle_session_negotiation,
 		}
 		gajim.handlers = self.handlers
 

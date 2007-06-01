@@ -1197,6 +1197,22 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg));
 		raise common.xmpp.NodeProcessed
 
+	def _FeatureNegCB(self, con, stanza):
+		gajim.log.debug('FeatureNegCB')
+		feature = stanza.getTag('feature')
+		form = common.xmpp.DataForm(node=feature.getTag('x'))
+
+		if form['FORM_TYPE'] == 'urn:xmpp:ssn':
+			self.dispatch('SESSION_NEG', (stanza.getFrom(), stanza.getThread(), form))
+		else:
+			reply = stanza.buildReply()
+			reply.setType('error')
+
+			reply.addChild(feature)
+			reply.addChild(node=xmpp.ErrorNode('service-unavailable', typ='cancel'))
+
+			con.send(reply)
+
 	def _ErrorCB(self, con, iq_obj):
 		gajim.log.debug('ErrorCB')
 		if iq_obj.getQueryNS() == common.xmpp.NS_VERSION:
@@ -1403,6 +1419,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		common.xmpp.NS_HTTP_AUTH:
 			self._HttpAuthCB(con, msg)
 			return
+		if msg.getTag('feature') and msg.getTag('feature').namespace == \
+		common.xmpp.NS_FEATURE:
+			self._FeatureNegCB(con, msg)
+			return
+
 		msgtxt = msg.getBody()
 		msghtml = msg.getXHTML()
 		mtype = msg.getType()
