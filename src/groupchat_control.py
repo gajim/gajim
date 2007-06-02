@@ -217,28 +217,30 @@ class GroupchatControl(ChatControlBase):
 			self._on_bookmark_room_menuitem_activate)
 		self.handlers[id] = widget
 
-		widget = xm.get_widget('change_nick_menuitem')
-		id = widget.connect('activate', self._on_change_nick_menuitem_activate)
-		self.handlers[id] = widget
+		self.change_nick_menuitem = xm.get_widget('change_nick_menuitem')
+		id = self.change_nick_menuitem.connect('activate',
+			self._on_change_nick_menuitem_activate)
+		self.handlers[id] = self.change_nick_menuitem
 
-		widget = xm.get_widget('configure_room_menuitem')
-		id = widget.connect('activate',
+		self.configure_room_menuitem = xm.get_widget('configure_room_menuitem')
+		id = self.configure_room_menuitem.connect('activate',
 			self._on_configure_room_menuitem_activate)
-		self.handlers[id] = widget
+		self.handlers[id] = self.configure_room_menuitem
 
-		widget = xm.get_widget('destroy_room_menuitem')
-		id = widget.connect('activate',
+		self.destroy_room_menuitem = xm.get_widget('destroy_room_menuitem')
+		id = self.destroy_room_menuitem.connect('activate',
 			self._on_destroy_room_menuitem_activate)
-		self.handlers[id] = widget
+		self.handlers[id] = self.destroy_room_menuitem
 
-		widget = xm.get_widget('change_subject_menuitem')
-		id = widget.connect('activate',
+		self.change_subject_menuitem = xm.get_widget('change_subject_menuitem')
+		id = self.change_subject_menuitem.connect('activate',
 			self._on_change_subject_menuitem_activate)
-		self.handlers[id] = widget
+		self.handlers[id] = self.change_subject_menuitem
 
-		widget = xm.get_widget('compact_view_menuitem')
-		id = widget.connect('activate', self._on_compact_view_menuitem_activate)
-		self.handlers[id] = widget
+		self.compact_view_menuitem = xm.get_widget('compact_view_menuitem')
+		id = self.compact_view_menuitem.connect('activate',
+			self._on_compact_view_menuitem_activate)
+		self.handlers[id] = self.compact_view_menuitem
 
 		widget = xm.get_widget('history_menuitem')
 		id = widget.connect('activate', self._on_history_menuitem_activate)
@@ -483,30 +485,28 @@ class GroupchatControl(ChatControlBase):
 	def prepare_context_menu(self):
 		'''sets compact view menuitem active state
 		sets sensitivity state for configure_room'''
-		menu = self.gc_popup_menu
-		childs = menu.get_children()
 		# Check compact view menuitem
-		childs[6].set_active(self.hide_chat_buttons_current)
+		self.compact_view_menuitem.set_active(self.hide_chat_buttons_current)
 		if gajim.gc_connected[self.account][self.room_jid]:
 			c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				self.nick)
 			if c.affiliation not in ('owner', 'admin'):
-				childs[1].set_sensitive(False)
+				self.configure_room_menuitem.set_sensitive(False)
 			else:
-				childs[1].set_sensitive(True)
+				self.configure_room_menuitem.set_sensitive(True)
 			if c.affiliation != 'owner':
-				childs[2].set_sensitive(False)
+				self.destroy_room_menuitem.set_sensitive(False)
 			else:
-				childs[2].set_sensitive(True)
-			childs[3].set_sensitive(True)
-			childs[4].set_sensitive(True)
+				self.destroy_room_menuitem.set_sensitive(True)
+			self.change_subject_menuitem.set_sensitive(True)
+			self.change_nick_menuitem.set_sensitive(True)
 		else:
 			# We are not connected to this groupchat, disable unusable menuitems
-			childs[1].set_sensitive(False)
-			childs[2].set_sensitive(False)
-			childs[3].set_sensitive(False)
-			childs[4].set_sensitive(False)
-		return menu
+			self.configure_room_menuitem.set_sensitive(False)
+			self.destroy_room_menuitem.set_sensitive(False)
+			self.change_subject_menuitem.set_sensitive(False)
+			self.change_nick_menuitem.set_sensitive(False)
+		return self.gc_popup_menu
 
 	def on_message(self, nick, msg, tim, has_timestamp = False, xhtml = None):
 		if not nick:
