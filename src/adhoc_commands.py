@@ -309,8 +309,8 @@ class CommandWindow:
 		else:
 			self.data_form_widget.hide()
 
-		action = command.getTag('action')
-		if action is None:
+		actions = command.getTag('actions')
+		if actions is None:
 			self.close_button.set_sensitive(True)
 			self.back_button.set_sensitive(False)
 			self.forward_button.set_sensitive(False)
@@ -318,8 +318,8 @@ class CommandWindow:
 		else:
 			# actions, actions, actions...
 			self.close_button.set_sensitive(True)
-			self.back_button.set_sensitive(action.getTag('prev') is not None)
-			self.forward_button.set_sensitive(action.getTag('next') is not None)
+			self.back_button.set_sensitive(actions.getTag('prev') is not None)
+			self.forward_button.set_sensitive(actions.getTag('next') is not None)
 			self.execute_button.set_sensitive(True)
 
 		if self.form_status == 'completed':
