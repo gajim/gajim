@@ -477,7 +477,7 @@ class Connection(ConnectionHandlers):
 		try:
 			errnum = con.Connection.ssl_errnum
 		except AttributeError:
-			errnum = -1 # we don't have an errnum
+			errnum = -1 # we don't have an errnum
 		if errnum > 0:
 			# FIXME: tell the user that the certificat is untrusted, and ask him what to do
 			try:
