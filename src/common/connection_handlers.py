@@ -743,6 +743,7 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
 
 			if node is None:
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_PING})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_TIME_REVISED})
 
 			if q.getChildren():
