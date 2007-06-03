@@ -48,6 +48,40 @@ log = logging.getLogger('gajim.c.connection')
 
 import gtkgui_helpers
 
+ssl_error = { 
+2: "Unable to get issuer certificate",
+3: "Unable to get certificate CRL",
+4: "Unable to decrypt certificate's signature",
+5: "Unable to decrypt CRL's signature",
+6: "Unable to decode issuer public key",
+7: "Certificate signature failure",
+8: "CRL signature failure",
+9: "Certificate is not yet valid",
+10: "Certificate has expired",
+11: "CRL is not yet valid",
+12: "CRL has expired",
+13: "Format error in certificate's notBefore field",
+14: "Format error in certificate's notAfter field",
+15: "Format error in CRL's lastUpdate field",
+16: "Format error in CRL's nextUpdate field",
+17: "Out of memory",
+18: "Self signed certificate in certificate chain",
+19: "Unable to get local issuer certificate",
+20: "Unable to verify the first certificate",
+21: "Unable to verify the first certificate",
+22: "Certificate chain too long",
+23: "Certificate revoked",
+24: "Invalid CA certificate",
+25: "Path length constraint exceeded",
+26: "Unsupported certificate purpose",
+27: "Certificate not trusted",
+28: "Certificate rejected",
+29: "Subject issuer mismatch",
+30: "Authority and subject key identifier mismatch",
+31: "Authority and issuer serial number mismatch",
+32: "Key usage does not include certificate signing",
+50: "Application verification failure"
+}
 class Connection(ConnectionHandlers):
 	'''Connection class'''
 	def __init__(self, name):
@@ -440,71 +474,19 @@ class Connection(ConnectionHandlers):
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		self.connection = con
-
-		fpr_good = self._check_fingerprint(con, con_type)
-		if fpr_good == False:
-			self.disconnect(on_purpose = True)
-			self.dispatch('STATUS', 'offline')
-			self.dispatch('CONNECTION_LOST',
-				(_('Security error connecting to "%s"') % self._hostname,
-				_("The server's key has changed, or someone is trying to hack your connection.")))
-			if self.on_connect_auth:
-				self.on_connect_auth(None)
-				self.on_connect_auth = None
-			return
-
-		if fpr_good == None:
-			log.warning(_("Unable to check fingerprint for %s. Connection could be insecure."), hostname)
-
-		if fpr_good == True:
-			log.info("Fingerprint found and matched for %s.", hostname)
-
+		try:
+			errnum = con.Connection.ssl_errnum
+		except AttributeError:
+			errnum = -1 # we don't have an errnum
+		if errnum > 0:
+			# FIXME: tell the user that the certificat is untrusted, and ask him what to do
+			try:
+				log.warning("The authenticity of the "+hostname+" certificate could be unvalid.\nSSL Error: "+ssl_error[errnum])
+			except KeyError:
+				log.warning("Unknown SSL error: %d" % errnum)
 		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
 		return True
-
-	def _check_fingerprint(self, con, con_type):
-		fpr_good = None # None: Unable to check fpr, False: mismatch, True: match
-
-		# FIXME: not tidy
-		if not common.xmpp.transports_nb.USE_PYOPENSSL: return None
-
-		# FIXME: find a more permanent place for loading servers.xml
-		servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
-		servers = gtkgui_helpers.parse_server_xml(servers_xml)
-		servers = dict(map(lambda e: (e[0], e), servers))
-
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-
-		try:
-			log.debug("con: %s", con)
-			log.debug("con.Connection: %s", con.Connection)
-			log.debug("con.Connection.serverDigestSHA1: %s", con.Connection.serverDigestSHA1)
-			log.debug("con.Connection.serverDigestMD5: %s", con.Connection.serverDigestMD5)
-			sha1 = gtkgui_helpers.HashDigest('sha1', con.Connection.serverDigestSHA1)
-			md5 = gtkgui_helpers.HashDigest('md5', con.Connection.serverDigestMD5)
-			log.debug("sha1: %s", repr(sha1))
-			log.debug("md5: %s", repr(md5))
-
-			sv = servers.get(hostname)
-			if sv:
-				for got in (sha1, md5):
-					expected = sv[2]['digest'].get(got.algo)
-					if expected:
-						fpr_good = (got == expected)
-						break
-
-		except AttributeError:
-			if con_type in ('ssl', 'tls'):
-				log.error(_("Missing fingerprint in SSL connection to %s") + ':', hostname, exc_info=True)
-				# fpr_good = False # FIXME: enable this when sequence is sorted
-			else:
-				log.debug("Connection to %s doesn't seem to have a fingerprint:", hostname, exc_info=True)
-
-		if fpr_good == False:
-			log.error(_("Fingerprint mismatch for %s: Got %s, expected %s"), hostname, got, expected)
-
-		return fpr_good
 
 	def _register_handlers(self, con, con_type):
 		self.peerhost = con.get_peerhost()
