@@ -697,7 +697,7 @@ class GroupchatControl(ChatControlBase):
 		if self.needs_visual_notification(text):
 			highlight = True
 			if gajim.config.get_per('soundevents', 'muc_message_highlight',
-									'enabled'):
+			'enabled'):
 				sound = 'highlight'
 
 		# Is it a history message? Don't want sound-floods when we join.
@@ -891,8 +891,7 @@ class GroupchatControl(ChatControlBase):
 						'reason': reason }
 				self.print_conversation(s, 'info', tim = tim)
 			elif statusCode == '303': # Someone changed his or her nick
-				if nick == self.nick: # We changed our nick
-					self.nick = new_nick
+				if new_nick == self.nick: # We changed our nick
 					s = _('You are now known as %s') % new_nick
 				else:
 					s = _('%s is now known as %s') % (nick, new_nick)
@@ -902,6 +901,8 @@ class GroupchatControl(ChatControlBase):
 					# after that, but that doesn't hurt
 					self.add_contact_to_roster(new_nick, show, role, affiliation,
 						status, jid)
+					if nick in self.attention_list:
+						self.attention_list.remove(nick)
 					# keep nickname color
 					if nick in self.gc_custom_colors:
 						self.gc_custom_colors[new_nick] = self.gc_custom_colors[nick]
@@ -1011,6 +1012,9 @@ class GroupchatControl(ChatControlBase):
 				# delete ressource
 				simple_jid = gajim.get_jid_without_resource(jid)
 				nick_jid += ' (%s)' % simple_jid
+			if show == 'offline':
+				if nick in self.attention_list:
+					self.attention_list.remove(nick)
 			if show == 'offline' and print_status in ('all', 'in_and_out') and \
 			statusCode != '307':
 				st = _('%s has left') % nick_jid
@@ -1127,6 +1131,7 @@ class GroupchatControl(ChatControlBase):
 				nick = message_array[0]
 				nick = helpers.parse_resource(nick)
 				gajim.connections[self.account].join_gc(nick, self.room_jid, None)
+				self.nick = nick
 				self.clear(self.msg_textview)
 			else:
 				self.get_command_help(command)
@@ -1408,6 +1413,7 @@ class GroupchatControl(ChatControlBase):
 			nick = instance.input_entry.get_text().decode('utf-8')
 			nick = helpers.parse_resource(nick)
 			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
+			self.nick = nick
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
 			is_modal = False, ok_handler = on_ok)
 

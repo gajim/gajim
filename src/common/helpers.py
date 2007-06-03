@@ -552,6 +552,11 @@ def get_icon_name_to_show(contact, account = None):
 	contact.jid in gajim.interface.minimized_controls[account] and gajim.interface.\
 		minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
 		return 'message'
+	if account and gajim.gc_connected[account].has_key(contact.jid):
+		if gajim.gc_connected[account][contact.jid]:
+			return 'muc_active'
+		else:
+			return 'muc_inactive'
 	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 		return contact.show
 	if contact.sub in ('both', 'to'):

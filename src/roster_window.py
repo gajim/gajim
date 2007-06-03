@@ -370,7 +370,7 @@ class RosterWindow:
 			typestr = 'contact'
 			if group == _('Transports'):
 				typestr = 'agent'
-			if group == _('Groupchats'):
+			if gajim.gc_connected[account].has_key(jid):
 				typestr = 'groupchat'
 
 			name = contact.get_shown_name()
@@ -426,12 +426,18 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if contact == None:
 			contact = gajim.contacts.create_contact(jid = jid, name = jid,
-				groups = [_('Groupchats')], show = 'muc_active',
+				groups = [_('Groupchats')], show = 'online',
 				status = status, sub = 'none',
 				resource = resource)
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact_to_roster(jid, account)
-		self.draw_group(_('Groupchats'), account)
+			self.draw_group(_('Groupchats'), account)
+		else:
+			contact.show = 'online'
+			self.draw_contact(jid, account)
+			self.add_contact_to_roster(jid, account)
+			for group in contact.groups:
+				self.draw_group(group, account)
 		return contact
 
 	def get_self_contact_iter(self, account):
@@ -645,22 +651,28 @@ class RosterWindow:
 				status = helpers.reduce_chars_newlines(status, max_lines = 1)
 				# escape markup entities and make them small italic and fg color
 				color = gtkgui_helpers._get_fade_color(self.tree, selected, focus)
-				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
+				colorstring = '#%04x%04x%04x' % (color.red, color.green, color.blue)
 				name += \
 					'\n<span size="small" style="italic" foreground="%s">%s</span>' \
 					% (colorstring, gobject.markup_escape_text(status))
 
 		iter = iters[0] # choose the icon with the first iter
+
+		if gajim.gc_connected[account].has_key(jid):
+			contact.show = 'online'
+			model[iter][C_TYPE] = 'groupchat'
+
 		icon_name = helpers.get_icon_name_to_show(contact, account)
 		# look if another resource has awaiting events
 		for c in contact_instances:
 			c_icon_name = helpers.get_icon_name_to_show(c, account)
-			if c_icon_name == 'message':
+			if c_icon_name in ('message', 'muc_active', 'muc_inactive'):
 				icon_name = c_icon_name
 				break
 		path = model.get_path(iter)
 		if model.iter_has_child(iter):
-			if not self.tree.row_expanded(path) and icon_name != 'message':
+			if not self.tree.row_expanded(path) and \
+			icon_name not in ('message', 'muc_active', 'muc_inactive'):
 				child_iter = model.iter_children(iter)
 				if icon_name in ('error', 'offline'):
 					# get the icon from the first child as they are sorted by show
@@ -691,13 +703,6 @@ class RosterWindow:
 			self.draw_parent_contact(jid, account)
 			state_images = self.get_appropriate_state_images(jid,
 				icon_name = icon_name)
-	
-		if icon_name != 'message' and gajim.gc_connected[account].\
-		has_key(jid):
-			if gajim.gc_connected[account][jid]:
-				icon_name = 'muc_active'
-			else:
-				icon_name = 'muc_inactive'
 
 		img = state_images[icon_name]
 
@@ -754,18 +759,20 @@ class RosterWindow:
 		if minimize:
 			contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
 			gc_control = GroupchatControl(None, contact, account)
-
 			if not gajim.interface.minimized_controls.has_key(account):
 				gajim.interface.minimized_controls[account] = {}
 			gajim.interface.minimized_controls[account][room_jid] = gc_control
-
-			self.add_groupchat_to_roster(account, room_jid)
 			gajim.connections[account].join_gc(nick, room_jid, password)
 			if password:
 				gajim.gc_passwords[room_jid] = password
+			self.add_groupchat_to_roster(account, room_jid)
 			return
 		if not gajim.interface.msg_win_mgr.has_window(room_jid, account):
 			self.new_room(room_jid, nick, account)
+		contact = gajim.contacts.get_contact_with_highest_priority(account, \
+			room_jid)
+		if contact:
+			self.add_groupchat_to_roster(account, room_jid)
 		gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
 		gc_win.set_active_tab(room_jid, account)
 		gc_win.window.present()
@@ -2403,14 +2410,17 @@ class RosterWindow:
 
 		menu = gtk.Menu()
 
-		maximize_menuitem = gtk.ImageMenuItem(_('_Maximize'))
-		icon = gtk.image_new_from_stock(gtk.STOCK_GOTO_TOP, gtk.ICON_SIZE_MENU)
-		maximize_menuitem.set_image(icon)
-		maximize_menuitem.connect('activate', self.on_groupchat_maximized, \
-		  jid, account)
+		if gajim.interface.minimized_controls.has_key(account) and \
+		jid in gajim.interface.minimized_controls[account]:
+			maximize_menuitem = gtk.ImageMenuItem(_('_Maximize'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_GOTO_TOP, gtk.ICON_SIZE_MENU)
+			maximize_menuitem.set_image(icon)
+			maximize_menuitem.connect('activate', self.on_groupchat_maximized, \
+				jid, account)
+			menu.append(maximize_menuitem)
 
-		menu.append(maximize_menuitem)
-		
+
+
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 		
 		menu.attach_to_widget(self.tree, None)
@@ -2437,9 +2447,10 @@ class RosterWindow:
 		mw.window.present()
 
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		self.remove_contact(contact, account)
-		gajim.contacts.remove_contact(account, contact)
-		self.draw_group(_('Groupchats'), account)
+		if contact.groups == [_('Groupchats')]:
+			self.remove_contact(contact, account)
+			gajim.contacts.remove_contact(account, contact)
+			self.draw_group(_('Groupchats'), account)
 		del gajim.interface.minimized_controls[account][jid]
 
 	def make_group_menu(self, event, iter):
@@ -4373,6 +4384,10 @@ class RosterWindow:
 			if name1 == _('Not in Roster'):
 				return 1
 			if name2 == _('Not in Roster'):
+				return -1
+			if name1 == _('Groupchats'):
+				return 1
+			if name2 == _('Groupchats'):
 				return -1
 		account1 = model[iter1][C_ACCOUNT]
 		account2 = model[iter2][C_ACCOUNT]

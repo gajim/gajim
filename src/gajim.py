@@ -2127,6 +2127,14 @@ class Interface:
 		jid = gajim.get_jid_without_resource(fjid)
 		if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
 			w = self.msg_win_mgr.get_window(jid, account)
+			if gajim.interface.minimized_controls.has_key(account) and \
+			gajim.interface.minimized_controls[account].has_key(fjid):
+				ctrl = gajim.interface.minimized_controls[account][fjid]
+				if not w:
+					w = gajim.interface.msg_win_mgr.create_window(ctrl.contact, \
+						ctrl.account, ctrl.type_id)
+				ctrl.parent_win = w
+				w.new_tab(ctrl)
 		elif type_ in ('printed_chat', 'chat', ''):
 			# '' is for log in/out notifications
 			if self.msg_win_mgr.has_window(fjid, account):
