@@ -2005,10 +2005,10 @@ class RosterWindow:
 		add_special_notification_menuitem.set_no_show_all(True)
 
 		# send custom status icon
-		if gajim.interface.status_sent.has_key(account) and \
-		jid in gajim.interface.status_sent[account]:
+		if gajim.interface.status_sent_to_users.has_key(account) and \
+		jid in gajim.interface.status_sent_to_users[account]:
 			send_custom_status_menuitem.set_image(
-				self.load_icon(gajim.interface.status_sent[account][jid]))
+				self.load_icon(gajim.interface.status_sent_to_users[account][jid]))
 		else:
 			send_custom_status_menuitem.set_image(None) 
 
@@ -2521,8 +2521,12 @@ class RosterWindow:
 
 		send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
 		# add a special img for this menuitem
-		icon = gtk.image_new_from_stock(gtk.STOCK_GO_UP, gtk.ICON_SIZE_MENU)
-		send_custom_status_menuitem.set_image(icon)
+		if gajim.interface.status_sent_to_groups.has_key(account) and \
+		group in gajim.interface.status_sent_to_groups[account]:
+			send_custom_status_menuitem.set_image(self.load_icon(
+				gajim.interface.status_sent_to_groups[account][group]))
+		else:
+			send_custom_status_menuitem.set_image(None)
 		status_menuitems = gtk.Menu()
 		send_custom_status_menuitem.set_submenu(status_menuitems)
 		iconset = gajim.config.get('iconset')
@@ -2532,7 +2536,7 @@ class RosterWindow:
 			state_images = self.load_iconset(path) 
 			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s)) 
 			status_menuitem.connect('activate', self.on_send_custom_status, list_,
-				s) 
+				s, group)
 			icon = state_images[s] 
 			status_menuitem.set_image(icon) 
 			status_menuitems.append(status_menuitem)
@@ -3222,8 +3226,10 @@ class RosterWindow:
 				gajim.SHOW_LIST.index('invisible')
 			gajim.connections[account].change_status(status, txt, auto)
 
-			if gajim.interface.status_sent.has_key(account):
-				gajim.interface.status_sent[account] = {}
+			if gajim.interface.status_sent_to_users.has_key(account):
+				gajim.interface.status_sent_to_users[account] = {}
+			if gajim.interface.status_sent_to_groups.has_key(account):
+				gajim.interface.status_sent_to_groups[account] = {}
 			if not gajim.interface.minimized_controls.has_key(account):
 				gajim.interface.minimized_controls[account] = {}
 			for gc_control in gajim.interface.msg_win_mgr.get_controls(
@@ -3286,16 +3292,22 @@ class RosterWindow:
 		else:
 			change(None, account, status)
 
-	def on_send_custom_status(self, widget, contact_list, show):
+	def on_send_custom_status(self, widget, contact_list, show, group=None):
 		'''send custom status'''
 		dlg = dialogs.ChangeStatusMessageDialog(show)
 		message = dlg.run()
 		if message is not None: # None if user pressed Cancel
 			for (contact, account) in contact_list:
+				accounts = []
+				if group and account not in accounts:
+					if not gajim.interface.status_sent_to_groups.has_key(account):
+						gajim.interface.status_sent_to_groups[account] = {}
+					gajim.interface.status_sent_to_groups[account][group] = show
+					accounts.append(group)
 				self.send_status(account, show, message, to = contact.jid)
-				if not gajim.interface.status_sent.has_key(account):
-					gajim.interface.status_sent[account] = {}
-				gajim.interface.status_sent[account][contact.jid] = show
+				if not gajim.interface.status_sent_to_users.has_key(account):
+					gajim.interface.status_sent_to_users[account] = {}
+				gajim.interface.status_sent_to_users[account][contact.jid] = show
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''

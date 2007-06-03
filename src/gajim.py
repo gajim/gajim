@@ -2215,7 +2215,8 @@ class Interface:
 		# handler when an emoticon is clicked in emoticons_menu
 		self.emoticon_menuitem_clicked = None
 		self.minimized_controls = {}
-		self.status_sent = {}
+		self.status_sent_to_users = {}
+		self.status_sent_to_groups = {}
 		self.default_colors = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
