@@ -1,5 +1,7 @@
 import xmpp
 import gajim
+import dataforms
+import connection_handlers
 
 class ConnectionPubSub:
 	def __init__(self):
@@ -92,3 +94,12 @@ class ConnectionPubSub:
 			cb(conn, stanza, *args, **kwargs)
 		except KeyError:
 			pass
+
+	def request_pb_configuration(self, jid, node):
+		query = xmpp.Iq('get', to=jid)
+		e = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB_OWNER)
+		e = e.addChild('configure', {'node': node})
+		id = self.connection.getAnID()
+		query.setID(id)
+		self.awaiting_answers[id] = (connection_handlers.PEP_ACCESS_MODEL,)
+		self.connection.send(query)

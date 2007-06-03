@@ -3360,7 +3360,7 @@ class ZeroconfPropertiesWindow:
 	
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().\
 			decode('utf-8')
-		if config['keyname'] == '': #no key selected
+		if config['keyname'] == '': # no key selected
 			config['keyid'] = ''
 			config['savegpgpass'] = False
 			config['gpgpassword'] = ''
@@ -3430,3 +3430,65 @@ class ZeroconfPropertiesWindow:
 		st = widget.get_active()
 		w = self.xml.get_widget('gpg_password_entry')
 		w.set_sensitive(bool(st))
+
+class ManagePEPServicesWindow:
+	def __init__(self, account):
+		self.xml = gtkgui_helpers.get_glade('manage_pep_services_window.glade')
+		self.window = self.xml.get_widget('manage_pep_services_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
+		self.xml.signal_autoconnect(self)
+		self.account = account
+
+		self.init_services()
+		self.window.show_all()
+
+	def on_manage_pep_services_window_destroy(self, widget):
+		'''close window'''
+		del gajim.interface.instances[self.account]['pep_services']
+
+	def cellrenderer_combo_edited(self, cellrenderer, path, new_text):
+		self.treestore[path][1] = new_text
+
+	def init_services(self):
+		treeview = self.xml.get_widget('services_treeview')
+		# service, access_model, group
+		self.treestore = gtk.ListStore(str, str, str)
+		treeview.set_model(self.treestore)
+
+		col = gtk.TreeViewColumn('Service')
+		treeview.append_column(col)
+
+		cellrenderer_text = gtk.CellRendererText()
+		col.pack_start(cellrenderer_text)
+		col.add_attribute(cellrenderer_text, 'text', 0)
+
+		col = gtk.TreeViewColumn('access model')
+		treeview.append_column(col)
+
+		model = gtk.ListStore(str)
+		model.append(['open'])
+		model.append(['presence'])
+		model.append(['roster'])
+		model.append(['whitelist'])
+		cellrenderer_combo = gtk.CellRendererCombo()
+		cellrenderer_combo.set_property('text-column', 0)
+		cellrenderer_combo.set_property('model', model)
+		cellrenderer_combo.set_property('has-entry', False)
+		cellrenderer_combo.set_property('editable', True)
+		cellrenderer_combo.connect('edited', self.cellrenderer_combo_edited)
+		col.pack_start(cellrenderer_combo)
+		col.add_attribute(cellrenderer_combo, 'text', 1)
+
+		our_jid = gajim.get_jid_from_account(self.account)
+		gajim.connections[self.account].discoverItems(our_jid)
+
+	def items_received(self, items):
+		our_jid = gajim.get_jid_from_account(self.account)
+		for item in items:
+			if 'jid' in item and item['jid'] == our_jid and 'node' in item:
+				# ask <configure> to have access model
+				gajim.connections[self.account].request_pb_configuration(
+					item['jid'], item['node'])
+
+	def new_service(self, node, model):
+		self.treestore.append([node, model, ''])

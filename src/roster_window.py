@@ -903,7 +903,8 @@ class RosterWindow:
 		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
 		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
-		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')	
+		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
+		pep_services_menuitem = self.xml.get_widget('pep_services_menuitem')
 
 		# destroy old advanced menus
 		for m in self.advanced_menus:
@@ -927,10 +928,10 @@ class RosterWindow:
 				self.new_chat_menuitem_handler_id)
 			self.new_chat_menuitem_handler_id = None
 
-		if self.profile_avatar_menuitem_handler_id:
-			profile_avatar_menuitem.handler_disconnect(
-				self.profile_avatar_menuitem_handler_id)
-			self.profile_avatar_menuitem_handler_id = None
+		if self.pep_services_menuitem_handler_id:
+			pep_services_menuitem.handler_disconnect(
+				self.pep_services_menuitem_handler_id)
+			self.pep_services_menuitem_handler_id = None
 
 
 		# remove the existing submenus
@@ -940,6 +941,7 @@ class RosterWindow:
 		new_chat_menuitem.remove_submenu()
 		advanced_menuitem.remove_submenu()
 		profile_avatar_menuitem.remove_submenu()
+		pep_services_menuitem.remove_submenu()
 
 		# remove the existing accelerator
 		if self.have_new_chat_accel:
@@ -1068,27 +1070,43 @@ class RosterWindow:
 		if len(connected_accounts_with_vcard) > 1:
 			# 2 or more accounts? make submenus
 			profile_avatar_sub_menu = gtk.Menu()
+			pep_services_sub_menu = gtk.Menu()
 			for account in connected_accounts_with_vcard:
 				# profile, avatar
-				profile_avatar_item = gtk.MenuItem(_('of account %s') % account, 
+				profile_avatar_item = gtk.MenuItem(_('of account %s') % account,
 					False)
 				profile_avatar_sub_menu.append(profile_avatar_item)
-				profile_avatar_item.connect('activate', 
+				profile_avatar_item.connect('activate',
 					self.on_profile_avatar_menuitem_activate, account)
+				# PEP services
+				pep_services_item = gtk.MenuItem(_('of account %s') % account,
+					False)
+				pep_services_sub_menu.append(pep_services_item)
+				pep_services_item.connect('activate',
+					self.on_pep_services_menuitem_activate, account)
 			profile_avatar_menuitem.set_submenu(profile_avatar_sub_menu)
 			profile_avatar_sub_menu.show_all()
+			pep_services_menuitem.set_submenu(pep_services_sub_menu)
+			pep_services_sub_menu.show_all()
 		elif len(connected_accounts_with_vcard) == 1: # user has only one account
 			account = connected_accounts_with_vcard[0]
 			# profile, avatar
 			if not self.profile_avatar_menuitem_handler_id:
 				self.profile_avatar_menuitem_handler_id = \
-				profile_avatar_menuitem.connect('activate', self.\
-				on_profile_avatar_menuitem_activate, account)
+					profile_avatar_menuitem.connect('activate',
+					self.on_profile_avatar_menuitem_activate, account)
+			# PEP services
+			if not self.pep_services_menuitem_handler_id:
+				self.pep_services_menuitem_handler_id = \
+					pep_services_menuitem.connect('activate',
+					self.on_pep_services_menuitem_activate, account)
 
 		if len(connected_accounts_with_vcard) == 0:
 			profile_avatar_menuitem.set_sensitive(False)
+			pep_services_menuitem.set_sensitive(False)
 		else:
 			profile_avatar_menuitem.set_sensitive(True)
+			pep_services_menuitem.set_sensitive(True)
 
 			newitem = gtk.ImageMenuItem(_('_Manage Bookmarks...'))
 			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
@@ -3684,6 +3702,13 @@ class RosterWindow:
 		else:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
 
+	def on_pep_services_menuitem_activate(self, widget, account):
+		if gajim.interface.instances[account].has_key('pep_services'):
+			gajim.interface.instances[account]['pep_services'].window.present()
+		else:
+			gajim.interface.instances[account]['pep_services'] = \
+				config.ManagePEPServicesWindow(account)
+
 	def on_add_new_contact(self, widget, account):
 		dialogs.AddNewContactWindow(account)
 
@@ -4840,6 +4865,7 @@ class RosterWindow:
 		self.service_disco_handler_id = False
 		self.new_chat_menuitem_handler_id = False
 		self.profile_avatar_menuitem_handler_id = False
+		self.pep_services_menuitem_handler_id = False
 		self.actions_menu_needs_rebuild = True
 		self.regroup = gajim.config.get('mergeaccounts')
 		if len(gajim.connections) < 2: # Do not merge accounts if only one exists
