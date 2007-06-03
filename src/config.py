@@ -3446,6 +3446,12 @@ class ManagePEPServicesWindow:
 		'''close window'''
 		del gajim.interface.instances[self.account]['pep_services']
 
+	def on_ok_button_clicked(self, widget):
+		pass
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+
 	def cellrenderer_combo_edited(self, cellrenderer, path, new_text):
 		self.treestore[path][1] = new_text
 
@@ -3470,6 +3476,7 @@ class ManagePEPServicesWindow:
 		model.append(['presence'])
 		model.append(['roster'])
 		model.append(['whitelist'])
+		model.append(['delete'])
 		cellrenderer_combo = gtk.CellRendererCombo()
 		cellrenderer_combo.set_property('text-column', 0)
 		cellrenderer_combo.set_property('model', model)

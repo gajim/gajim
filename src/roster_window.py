@@ -1072,18 +1072,19 @@ class RosterWindow:
 			profile_avatar_sub_menu = gtk.Menu()
 			pep_services_sub_menu = gtk.Menu()
 			for account in connected_accounts_with_vcard:
-				# profile, avatar
-				profile_avatar_item = gtk.MenuItem(_('of account %s') % account,
-					False)
-				profile_avatar_sub_menu.append(profile_avatar_item)
-				profile_avatar_item.connect('activate',
-					self.on_profile_avatar_menuitem_activate, account)
-				# PEP services
-				pep_services_item = gtk.MenuItem(_('of account %s') % account,
-					False)
-				pep_services_sub_menu.append(pep_services_item)
-				pep_services_item.connect('activate',
-					self.on_pep_services_menuitem_activate, account)
+				if gajim.connections[account].pep_supported:
+					# profile, avatar
+					profile_avatar_item = gtk.MenuItem(_('of account %s') % account,
+						False)
+					profile_avatar_sub_menu.append(profile_avatar_item)
+					profile_avatar_item.connect('activate',
+						self.on_profile_avatar_menuitem_activate, account)
+					# PEP services
+					pep_services_item = gtk.MenuItem(_('of account %s') % account,
+						False)
+					pep_services_sub_menu.append(pep_services_item)
+					pep_services_item.connect('activate',
+						self.on_pep_services_menuitem_activate, account)
 			profile_avatar_menuitem.set_submenu(profile_avatar_sub_menu)
 			profile_avatar_sub_menu.show_all()
 			pep_services_menuitem.set_submenu(pep_services_sub_menu)
