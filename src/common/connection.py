@@ -1070,7 +1070,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq3 = iq2.addChild(name='gajim', namespace='gajim:prefs')
 		self.connection.send(iq)
 
@@ -1080,7 +1080,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq2.addChild(name='storage', namespace='storage:bookmarks')
 		self.connection.send(iq)
 
@@ -1089,7 +1089,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq3 = iq2.addChild(name='storage', namespace='storage:bookmarks')
 		for bm in self.bookmarks:
 			iq4 = iq3.addChild(name = "conference")
@@ -1113,7 +1113,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq2.addChild(name='storage', namespace='storage:rosternotes')
 		self.connection.send(iq)
 
@@ -1122,7 +1122,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq3 = iq2.addChild(name='storage', namespace='storage:rosternotes')
 		for jid in self.annotations.keys():
 			if self.annotations[jid]:
@@ -1137,7 +1137,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq2.addChild(name='storage', namespace='storage:metacontacts')
 		id = self.connection.getAnID()
 		iq.setID(id)
@@ -1149,7 +1149,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq3 = iq2.addChild(name='storage', namespace='storage:metacontacts')
 		for tag in tags_list:
 			for data in tags_list[tag]:
