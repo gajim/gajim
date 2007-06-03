@@ -2204,11 +2204,9 @@ class RosterWindow:
 
 		# Remove many items when it's self contact row
 		if our_jid:
-			for menuitem in (rename_menuitem, edit_groups_menuitem,
-			above_subscription_separator, subscription_menuitem,
-			remove_from_roster_menuitem):
-				menuitem.set_no_show_all(True)
-				menuitem.hide()
+			menuitem = xml.get_widget('manage_contact')
+			menuitem.set_no_show_all(True)
+			menuitem.hide()
 
 		# Unsensitive many items when account is offline
 		if gajim.connections[account].connected < 2:
