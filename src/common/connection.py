@@ -566,14 +566,14 @@ class Connection(ConnectionHandlers):
 		iq = common.xmpp.Iq('get', to = pingTo.get_full_jid())
 		iq.addChild(name = 'ping', namespace = common.xmpp.NS_PING)
 		def _on_response(resp):
-			timePong = time.time()
+			timePong = time_time()
 			if not common.xmpp.isResultNode(resp):
 				self.dispatch('PING_ERROR', (pingTo))
 				return
 			timeDiff = round(timePong - timePing,2)
 			self.dispatch('PING_REPLY', (pingTo, timeDiff))
 		self.dispatch('PING_SENT', (pingTo))
-		timePing = time.time()
+		timePing = time_time()
 		self.connection.SendAndCallForResponse(iq, _on_response)
 
 	def get_active_default_lists(self):
@@ -850,7 +850,7 @@ class Connection(ConnectionHandlers):
 						' ([This message is *encrypted* (See :JEP:`27`])'
 			else:
 				# Encryption failed, do not send message
-				tim = time.localtime()
+				tim = localtime()
 				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim))
 				return 3
 		if msgtxt and not xhtml and gajim.config.get(
@@ -1264,7 +1264,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 		# Save the time we quit to avoid duplicate logs AND be faster than 
 		# get that date from DB
-		self.last_history_line[jid] = time.time()
+		self.last_history_line[jid] = time_time()
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		'''role is for all the life of the room so it's based on nick'''

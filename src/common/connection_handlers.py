@@ -18,13 +18,13 @@
 ##
 
 import os
-import time
 import base64
 import sha
 import socket
 import sys
 
-from time import localtime, strftime, gmtime
+from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
+                  strptime, time as time_time, timezone, tzname)
 from calendar import timegm
 
 import socks5
@@ -412,7 +412,7 @@ class ConnectionBytestream:
 
 	def _ResultCB(self, con, iq_obj):
 		gajim.log.debug('_ResultCB')
-		# if we want to respect jep-0065 we have to check for proxy
+		# if we want to respect xep-0065 we have to check for proxy
 		# activation result in any result iq
 		real_id = unicode(iq_obj.getAttr('id'))
 		if real_id[:3] != 'au_':
@@ -586,12 +586,12 @@ class ConnectionBytestream:
 class ConnectionDisco:
 	''' hold xmpppy handlers and public methods for discover services'''
 	def discoverItems(self, jid, node = None, id_prefix = None):
-		'''According to JEP-0030: jid is mandatory,
+		'''According to XEP-0030: jid is mandatory,
 		name, node, action is optional.'''
 		self._discover(common.xmpp.NS_DISCO_ITEMS, jid, node, id_prefix)
 
 	def discoverInfo(self, jid, node = None, id_prefix = None):
-		'''According to JEP-0030:
+		'''According to XEP-0030:
 			For identity: category, type is mandatory, name is optional.
 			For feature: var is mandatory'''
 		self._discover(common.xmpp.NS_DISCO_INFO, jid, node, id_prefix)
@@ -738,6 +738,9 @@ class ConnectionDisco:
 			if (node is None or extension == 'xhtml') and not gajim.config.get('ignore_incoming_xhtml'):
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
 
+			if node is None:
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_TIME_REVISED})
+
 			if q.getChildren():
 				self.connection.send(iq)
 				raise common.xmpp.NodeProcessed
@@ -749,7 +752,7 @@ class ConnectionDisco:
 
 	def _DiscoverInfoCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoCB')
-		# According to JEP-0030:
+		# According to XEP-0030:
 		# For identity: category, type is mandatory, name is optional.
 		# For feature: var is mandatory
 		identities, features, data = [], [], []
@@ -822,7 +825,7 @@ class ConnectionVcard:
 		return p
 	
 	def add_caps(self, p):
-		''' advertise our capabilities in presence stanza (jep-0115)'''
+		''' advertise our capabilities in presence stanza (xep-0115)'''
 		c = p.setTag('c', namespace = common.xmpp.NS_CAPS)
 		c.setAttr('node', 'http://gajim.org/caps')
 		ext = []
@@ -1034,7 +1037,7 @@ class ConnectionVcard:
 		elif self.awaiting_answers[id][0] == METACONTACTS_ARRIVED:
 			if iq_obj.getType() == 'result':
 				# Metacontact tags
-				# http://www.jabber.org/jeps/jep-XXXX.html
+				# http://www.xmpp.org/extensions/xep-0209.html
 				meta_list = {}
 				query = iq_obj.getTag('query')
 				storage = query.getTag('storage')
@@ -1212,7 +1215,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 	
 	def _PrivateCB(self, con, iq_obj):
 		'''
-		Private Data (JEP 048 and 049)
+		Private Data (XEP 048 and 049)
 		'''
 		gajim.log.debug('PrivateCB')
 		query = iq_obj.getTag('query')
@@ -1221,7 +1224,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			ns = storage.getNamespace()
 			if ns == 'storage:bookmarks':
 				# Bookmarked URLs and Conferences
-				# http://www.jabber.org/jeps/jep-0048.html
+				# http://www.xmpp.org/extensions/xep-0048.html
 				confs = storage.getTags('conference')
 				for conf in confs:
 					autojoin_val = conf.getAttr('autojoin')
@@ -1242,7 +1245,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 			elif ns == 'gajim:prefs':
 				# Preferences data
-				# http://www.jabber.org/jeps/jep-0049.html
+				# http://www.xmpp.org/extensions/xep-0049.html
 				#TODO: implement this
 				pass
 			elif ns == 'storage:rosternotes':
@@ -1262,7 +1265,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			ns = storage_tag.getNamespace()
 			if ns == 'storage:metacontacts':
 				self.metacontacts_supported = False
-				# Private XML Storage (JEP49) is not supported by server
+				# Private XML Storage (XEP49) is not supported by server
 				# Continue connecting
 				self.connection.initRoster()
 
@@ -1335,18 +1338,21 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		gajim.log.debug('TimeCB')
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
-		qp.setTagData('utc', strftime("%Y%m%dT%T", gmtime()))
-		qp.setTagData('tz', strftime("%Z", gmtime()))
-		qp.setTagData('display', strftime("%c", localtime()))
+		qp.setTagData('utc', strftime('%Y%m%dT%T', gmtime()))
+		qp.setTagData('tz', tzname[daylight])
+		qp.setTagData('display', strftime('%c', localtime()))
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
 	def _TimeRevisedCB(self, con, iq_obj):
 		gajim.log.debug('TimeRevisedCB')
 		iq_obj = iq_obj.buildReply('result')
-		qp = iq_obj.setTag('time')
-		qp.setTagData('utc', strftime("%Y-%m-%dT%TZ", gmtime()))
-		qp.setTagData('tzo', "%+03d:00"% (-time.timezone/(60*60)))
+		qp = iq_obj.setTag('time',
+                                   namespace=common.xmpp.NS_TIME_REVISED)
+		qp.setTagData('utc', strftime('%Y-%m-%dT%TZ', gmtime()))
+		zone = -(timezone, altzone)[daylight] / 60
+		tzo = (zone / 60, abs(zone % 60))
+		qp.setTagData('tzo', '%+03d:%02d' % (tzo))
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
@@ -1408,8 +1414,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
 		tim = msg.getTimestamp()
-		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
-		tim = time.localtime(timegm(tim))
+		tim = strptime(tim, '%Y%m%dT%H:%M:%S')
+		tim = localtime(timegm(tim))
 		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
 		no_log_for = gajim.config.get_per('accounts', self.name,
@@ -1429,10 +1435,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				invite = None
 		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) != None
 		msg_id = None
-		composing_jep = None
+		composing_xep = None
 		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
 		# invitation
-		# stanza (MUC JEP) remove in 2007, as we do not do NOT RECOMMENDED
+		# stanza (MUC XEP) remove in 2007, as we do not do NOT RECOMMENDED
 		xtags = msg.getTags('x')
 		for xtag in xtags:
 			if xtag.getNamespace() == common.xmpp.NS_CONFERENCE and not invite:
@@ -1441,22 +1447,22 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				return
 		# chatstates - look for chatstate tags in a message if not delayed
 		if not delayed:
-			composing_jep = False
+			composing_xep = False
 			children = msg.getChildren()
 			for child in children:
 				if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
 					chatstate = child.getName()
-					composing_jep = 'JEP-0085'
+					composing_xep = 'XEP-0085'
 					break
-			# No JEP-0085 support, fallback to JEP-0022
+			# No XEP-0085 support, fallback to XEP-0022
 			if not chatstate:
 				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
 				if chatstate_child:
 					chatstate = 'active'
-					composing_jep = 'JEP-0022'
+					composing_xep = 'XEP-0022'
 					if not msgtxt and chatstate_child.getTag('composing'):
 						chatstate = 'composing'
-		# JEP-0172 User Nickname
+		# XEP-0172 User Nickname
 		user_nick = msg.getTagData('nick')
 		if not user_nick:
 			user_nick = ''
@@ -1495,7 +1501,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if not self.last_history_line.has_key(jid):
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
-				if self.name not in no_log_for and not int(float(time.mktime(tim)))\
+				if self.name not in no_log_for and not int(float(mktime(tim)))\
 				<= self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 			return
@@ -1523,7 +1529,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if treat_as:
 			mtype = treat_as
 		self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype,
-			subject, chatstate, msg_id, composing_jep, user_nick, msghtml))
+			subject, chatstate, msg_id, composing_xep, user_nick, msghtml))
 	# END messageCB
 
 	def _pubsubEventCB(self, con, msg):
@@ -1578,7 +1584,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		sigTag = None
 		ns_muc_user_x = None
 		avatar_sha = None
-		# JEP-0172 User Nickname
+		# XEP-0172 User Nickname
 		user_nick = prs.getTagData('nick')
 		if not user_nick:
 			user_nick = ''
@@ -1597,10 +1603,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				avatar_sha = x.getTagData('photo')
 				contact_nickname = x.getTagData('nickname')
 			elif namespace == common.xmpp.NS_DELAY:
-				# JEP-0091
+				# XEP-0091
 				tim = prs.getTimestamp()
-				tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
-				timestamp = time.localtime(timegm(tim))
+				tim = strptime(tim, '%Y%m%dT%H:%M:%S')
+				timestamp = localtime(timegm(tim))
 			elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
 				# see http://trac.gajim.org/ticket/326
 				agent = gajim.get_server_from_jid(jid_stripped)
@@ -1732,10 +1738,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				# detect a subscription loop
 				if not self.subscribed_events.has_key(jid_stripped):
 					self.subscribed_events[jid_stripped] = []
-				self.subscribed_events[jid_stripped].append(time.time())
+				self.subscribed_events[jid_stripped].append(time_time())
 				block = False
 				if len(self.subscribed_events[jid_stripped]) > 5:
-					if time.time() - self.subscribed_events[jid_stripped][0] < 5:
+					if time_time() - self.subscribed_events[jid_stripped][0] < 5:
 						block = True
 					self.subscribed_events[jid_stripped] = self.subscribed_events[jid_stripped][1:]
 				if block:
@@ -1752,10 +1758,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			# detect a unsubscription loop
 			if not self.subscribed_events.has_key(jid_stripped):
 				self.subscribed_events[jid_stripped] = []
-			self.subscribed_events[jid_stripped].append(time.time())
+			self.subscribed_events[jid_stripped].append(time_time())
 			block = False
 			if len(self.subscribed_events[jid_stripped]) > 5:
-				if time.time() - self.subscribed_events[jid_stripped][0] < 5:
+				if time_time() - self.subscribed_events[jid_stripped][0] < 5:
 					block = True
 				self.subscribed_events[jid_stripped] = self.subscribed_events[jid_stripped][1:]
 			if block:
