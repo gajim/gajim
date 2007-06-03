@@ -2004,6 +2004,14 @@ class RosterWindow:
 		add_special_notification_menuitem.hide()
 		add_special_notification_menuitem.set_no_show_all(True)
 
+		# send custom status icon
+		if gajim.interface.status_sent.has_key(account) and \
+		jid in gajim.interface.status_sent[account]:
+			send_custom_status_menuitem.set_image(
+				self.load_icon(gajim.interface.status_sent[account][jid]))
+		else:
+			send_custom_status_menuitem.set_image(None) 
+
 		if not our_jid:
 			# add a special img for rename menuitem
 			path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
@@ -3214,6 +3222,8 @@ class RosterWindow:
 				gajim.SHOW_LIST.index('invisible')
 			gajim.connections[account].change_status(status, txt, auto)
 
+			if gajim.interface.status_sent.has_key(account):
+				gajim.interface.status_sent[account] = {}
 			if not gajim.interface.minimized_controls.has_key(account):
 				gajim.interface.minimized_controls[account] = {}
 			for gc_control in gajim.interface.msg_win_mgr.get_controls(
@@ -3282,7 +3292,10 @@ class RosterWindow:
 		message = dlg.run()
 		if message is not None: # None if user pressed Cancel
 			for (contact, account) in contact_list:
-				self.send_status(account, show, message, to = contact.jid)	
+				self.send_status(account, show, message, to = contact.jid)
+				if not gajim.interface.status_sent.has_key(account):
+					gajim.interface.status_sent[account] = {}
+				gajim.interface.status_sent[account][contact.jid] = show
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''

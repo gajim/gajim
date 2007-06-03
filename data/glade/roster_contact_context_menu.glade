@@ -65,7 +65,7 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkMenuItem" id="send_custom_status_menuitem">
+      <widget class="GtkImageMenuItem" id="send_custom_status_menuitem">
         <property name="visible">True</property>
         <property name="label" translatable="yes">Send cus_tom status</property>
         <property name="use_underline">True</property>
