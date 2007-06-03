@@ -528,7 +528,7 @@ def get_scaled_pixbuf(pixbuf, kind):
 	scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 	return scaled_buf
 
-def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False):
+def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False, use_local = True):
 	'''checks if jid has cached avatar and if that avatar is valid image
 	(can be shown)
 	returns None if there is no image in vcard
@@ -545,8 +545,21 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False):
 	if is_fake_jid:
 		puny_nick = helpers.sanitize_filename(nick)
 		path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
+		local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid,
+			puny_nick) + '_local'
 	else:
 		path = os.path.join(gajim.VCARD_PATH, puny_jid)
+		local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid) + \
+			'_local'
+	if use_local:
+		for extension in ('.png', '.jpeg'):
+			local_avatar_path = local_avatar_basepath + extension
+			if os.path.isfile(local_avatar_path):
+				avatar_file = open(local_avatar_path, 'rb')
+				avatar_data = avatar_file.read()
+				avatar_file.close()
+				return get_pixbuf_from_data(avatar_data)
+
 	if not os.path.isfile(path):
 		return 'ask'
 
@@ -591,6 +604,10 @@ def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
 	if jid:
 		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
+		filepath, extension = os.path.splitext(path_to_file) 
+		path_to_local_file = filepath + '_local' + extension 
+		if os.path.exists(path_to_local_file): 
+			return path_to_local_file
 		if os.path.exists(path_to_file):
 			return path_to_file
 	return os.path.abspath(generic)
@@ -773,7 +790,7 @@ default_name = ''):
 		is_fake = False
 		if account and gajim.contacts.is_pm_from_jid(account, jid):
 			is_fake = True
-		pixbuf = get_avatar_pixbuf_from_cache(jid, is_fake)
+		pixbuf = get_avatar_pixbuf_from_cache(jid, is_fake, False)
 		ext = file_path.split('.')[-1]
 		type_ = ''
 		if not ext:

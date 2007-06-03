@@ -1214,7 +1214,7 @@ class AccountModificationWindow:
 		self.xml.get_widget('save_password_checkbutton').set_active(
 			gajim.config.get_per('accounts', self.account, 'savepass'))
 		if gajim.config.get_per('accounts', self.account, 'savepass'):
-			passstr = passwords.get_password(self.account)
+			passstr = passwords.get_password(self.account) or ''
 			password_entry = self.xml.get_widget('password_entry')
 			password_entry.set_sensitive(True)
 			password_entry.set_text(passstr)
@@ -1408,7 +1408,7 @@ class AccountModificationWindow:
 
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().\
 			decode('utf-8')
-		if config['keyname'] == '': #no key selected
+		if config['keyname'] == '': # no key selected
 			config['keyid'] = ''
 			config['savegpgpass'] = False
 			config['gpgpassword'] = ''
@@ -1419,9 +1419,9 @@ class AccountModificationWindow:
 				'gpg_save_password_checkbutton').get_active()
 			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry'
 				).get_text().decode('utf-8')
-		#if we modify the name of the account
+		# if we modify the name of the account
 		if name != self.account:
-			#update variables
+			# update variables
 			gajim.interface.instances[name] = gajim.interface.instances[
 				self.account]
 			gajim.nicks[name] = gajim.nicks[self.account]
@@ -1446,7 +1446,7 @@ class AccountModificationWindow:
 			# change account variable for chat / gc controls
 			gajim.interface.msg_win_mgr.change_account_name(self.account, name)
 			# upgrade account variable in opened windows
-			for kind in ('infos', 'disco', 'gc_config'):
+			for kind in ('infos', 'disco', 'gc_config', 'search'):
 				for j in gajim.interface.instances[name][kind]:
 					gajim.interface.instances[name][kind][j].account = name
 
@@ -1587,6 +1587,13 @@ class AccountModificationWindow:
 		else:
 			gajim.interface.instances['manage_proxies'] = \
 				ManageProxiesWindow()
+
+	def on_synchronise_contacts_button_clicked(self, widget):
+		try:
+			dialog = dialogs.SynchroniseSelectAccountDialog(self.account)
+		except GajimGeneralException:
+			# If we showed ErrorDialog, there will not be dialog instance
+			return
 
 	def on_gpg_choose_button_clicked(self, widget, data = None):
 		if gajim.connections.has_key(self.account):
@@ -2049,7 +2056,7 @@ class AccountsWindow:
 				connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
 			# update variables
 			gajim.interface.instances[gajim.ZEROCONF_ACC_NAME] = {'infos': {},
-				'disco': {}, 'gc_config': {}}
+				'disco': {}, 'gc_config': {}, 'search': {}}
 			gajim.connections[gajim.ZEROCONF_ACC_NAME].connected = 0
 			gajim.groups[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.contacts.add_account(gajim.ZEROCONF_ACC_NAME)
@@ -2080,44 +2087,23 @@ class AccountsWindow:
 
 		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
 
-class ServiceRegistrationWindow:
-	'''Class for Service registration window:
-	Window that appears when we want to subscribe to a service
-	if is_form we use dataforms_widget else we use service_registarion_window'''
-	def __init__(self, service, infos, account, is_form):
-		self.service = service
+class FakeDataForm(gtk.Table, object):
+	'''Class for forms that are in XML format <entry1>value1</entry1>
+	infos in a table {entry1: value1, }'''
+	def __init__(self, infos):
+		gtk.Table.__init__(self)
 		self.infos = infos
-		self.account = account
-		self.is_form = is_form
-		self.xml = gtkgui_helpers.get_glade('service_registration_window.glade')
-		self.window = self.xml.get_widget('service_registration_window')
-		self.window.set_transient_for(gajim.interface.roster.window)
-		if self.is_form:
-			dataform = dataforms.ExtendForm(node = self.infos)
-			self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
-			if self.data_form_widget.title:
-				self.window.set_title("%s - Gajim" % self.data_form_widget.title)
-			table = self.xml.get_widget('table')
-			table.attach(self.data_form_widget, 0, 2, 0, 1)
-		else:
-			if infos.has_key('registered'):
-				self.window.set_title(_('Edit %s') % service)
-			else:
-				self.window.set_title(_('Register to %s') % service)
-			self.xml.get_widget('label').set_text(infos['instructions'])
-			self.entries = {}
-			self.draw_table()
+		self.entries = {}
+		self._draw_table()
 
-		self.xml.signal_autoconnect(self)
-		self.window.show_all()
-
-	def on_cancel_button_clicked(self, widget):
-		self.window.destroy()
-
-	def draw_table(self):
-		'''Draw the table in the window'''
+	def _draw_table(self):
+		'''Draw the table'''
 		nbrow = 0
-		table = self.xml.get_widget('table')
+		if self.infos.has_key('instructions'):
+			nbrow = 1
+			self.resize(rows = nbrow, columns = 2)
+			label = gtk.Label(self.infos['instructions'])
+			self.attach(label, 0, 2, 0, 1, 0, 0, 0, 0)
 		for name in self.infos.keys():
 			if name in ('key', 'instructions', 'x', 'registered'):
 				continue
@@ -2125,40 +2111,73 @@ class ServiceRegistrationWindow:
 				continue
 
 			nbrow = nbrow + 1
-			table.resize(rows = nbrow, columns = 2)
+			self.resize(rows = nbrow, columns = 2)
 			label = gtk.Label(name.capitalize() + ':')
-			table.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
+			self.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
 			entry = gtk.Entry()
 			entry.set_activates_default(True)
 			if self.infos[name]:
 				entry.set_text(self.infos[name])
 			if name == 'password':
 				entry.set_visibility(False)
-			table.attach(entry, 1, 2, nbrow - 1, nbrow, 0, 0, 0, 0)
+			self.attach(entry, 1, 2, nbrow - 1, nbrow, 0, 0, 0, 0)
 			self.entries[name] = entry
 			if nbrow == 1:
 				entry.grab_focus()
-		table.show_all()
+
+	def get_infos(self):
+		for name in self.entries.keys():
+			self.infos[name] = self.entries[name].get_text().decode('utf-8')
+		return self.infos
+
+class ServiceRegistrationWindow:
+	'''Class for Service registration window:
+	Window that appears when we want to subscribe to a service
+	if is_form we use dataforms_widget else we use service_registarion_window'''
+	def __init__(self, service, infos, account, is_form):
+		self.service = service
+		self.account = account
+		self.is_form = is_form
+		self.xml = gtkgui_helpers.get_glade('service_registration_window.glade')
+		self.window = self.xml.get_widget('service_registration_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
+		if self.is_form:
+			dataform = dataforms.ExtendForm(node = infos)
+			self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
+			if self.data_form_widget.title:
+				self.window.set_title('%s - Gajim' % self.data_form_widget.title)
+			table = self.xml.get_widget('table')
+			table.attach(self.data_form_widget, 0, 2, 0, 1)
+		else:
+			if infos.has_key('registered'):
+				self.window.set_title(_('Edit %s') % service)
+			else:
+				self.window.set_title(_('Register to %s') % service)
+			self.data_form_widget = FakeDataForm(infos)
+			table = self.xml.get_widget('table')
+			table.attach(self.data_form_widget, 0, 2, 0, 1)
+
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
 
 	def on_ok_button_clicked(self, widget):
+		# send registration info to the core
 		if self.is_form:
 			form = self.data_form_widget.data_form
 			gajim.connections[self.account].register_agent(self.service,
 				form, True) # True is for is_form
 		else:
-			# we pressed OK of service_registration_window
-			# send registration info to the core
-			for name in self.entries.keys():
-				self.infos[name] = self.entries[name].get_text().decode('utf-8')
-			if self.infos.has_key('instructions'):
-				del self.infos['instructions']
-			if self.infos.has_key('registered'):
-				del self.infos['registered']
-			gajim.connections[self.account].register_agent(self.service,
-				self.infos)
-		
-		self.window.destroy()
+			infos = self.data_form_widget.get_infos()
+			if infos.has_key('instructions'):
+				del infos['instructions']
+			if infos.has_key('registered'):
+				del infos['registered']
+			gajim.connections[self.account].register_agent(self.service, infos)
 
+		self.window.destroy()
 
 class GroupchatConfigWindow:
 	'''GroupchatConfigWindow class'''
@@ -2759,13 +2778,21 @@ class AccountCreationWizardWindow:
 			'account_creation_wizard_window.glade')
 		self.window = self.xml.get_widget('account_creation_wizard_window')
 
+		completion = gtk.EntryCompletion()
 		# Connect events from comboboxentry.child
 		server_comboboxentry = self.xml.get_widget('server_comboboxentry')
 		entry = server_comboboxentry.child
 		entry.connect('key_press_event',
-			self.on_server_comboboxentry_key_press_event)
-		completion = gtk.EntryCompletion()
+			self.on_server_comboboxentry_key_press_event, server_comboboxentry)
 		entry.set_completion(completion)
+		# Do the same for the other server comboboxentry
+		server_comboboxentry1 = self.xml.get_widget('server_comboboxentry1')
+		entry = server_comboboxentry1.child
+		entry.connect('key_press_event',
+			self.on_server_comboboxentry_key_press_event, server_comboboxentry1)
+		entry.set_completion(completion)
+
+		self.update_proxy_list()
 
 		# parse servers.xml
 		servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
@@ -2781,6 +2808,8 @@ class AccountCreationWizardWindow:
 		# Put servers into comboboxentries
 		server_comboboxentry.set_model(servers_model)
 		server_comboboxentry.set_text_column(0)
+		server_comboboxentry1.set_model(servers_model)
+		server_comboboxentry1.set_text_column(0)
 
 		# Generic widgets
 		self.notebook = self.xml.get_widget('notebook')
@@ -2819,28 +2848,18 @@ class AccountCreationWizardWindow:
 		self.window.destroy()
 
 	def on_back_button_clicked(self, widget):
-		if self.notebook.get_current_page() == 1:
+		if self.notebook.get_current_page() in (1, 2):
 			self.notebook.set_current_page(0)
 			self.back_button.set_sensitive(False)
-		elif self.notebook.get_current_page() == 3: # finish page
+		elif self.notebook.get_current_page() == 3:
+			self.notebook.set_current_page(2)
+			self.xml.get_widget('form_vbox').remove(self.data_form_widget)
+		elif self.notebook.get_current_page() == 5: # finish page
 			self.forward_button.show()
-			self.notebook.set_current_page(1) # Goto parameters page
-
-	def get_widgets(self):
-		widgets = {}
-		for widget in (
-						'username_entry',
-						'server_comboboxentry',
-						'pass1_entry',
-						'pass2_entry',
-						'save_password_checkbutton',
-						'proxyhost_entry',
-						'proxyport_entry',
-						'proxyuser_entry',
-						'proxypass_entry',
-						'jid_label'):
-			widgets[widget] = self.xml.get_widget(widget)
-		return widgets
+			if self.modify:
+				self.notebook.set_current_page(1) # Go to parameters page
+			else:
+				self.notebook.set_current_page(2) # Go to server page
 
 	def on_forward_button_clicked(self, widget):
 		cur_page = self.notebook.get_current_page()
@@ -2849,41 +2868,29 @@ class AccountCreationWizardWindow:
 			widget = self.xml.get_widget('use_existing_account_radiobutton')
 			if widget.get_active():
 				self.modify = True
-				self.xml.get_widget('server_features_button').hide()
-				self.xml.get_widget('pass2_entry').hide()
-				self.xml.get_widget('pass2_label').hide()
+				self.notebook.set_current_page(1)
 			else:
 				self.modify = False
-				self.xml.get_widget('server_features_button').show()
-				self.xml.get_widget('pass2_entry').show()
-				self.xml.get_widget('pass2_label').show()
-			self.notebook.set_current_page(1)
+				self.notebook.set_current_page(2)
 			self.back_button.set_sensitive(True)
 			return
 
-		else:
-			widgets = self.get_widgets()
-			username = widgets['username_entry'].get_text().decode('utf-8')
+		elif cur_page == 1:
+			# We are adding an existing account
+			username = self.xml.get_widget('username_entry').get_text().decode(
+				'utf-8')
 			if not username:
 				pritext = _('Invalid username')
-				sectext = _('You must provide a username to configure this account'
-				'.')
+				sectext = _(
+					'You must provide a username to configure this account.')
 				dialogs.ErrorDialog(pritext, sectext)
 				return
-			server = widgets['server_comboboxentry'].child.get_text().decode('utf-8')
-			savepass = widgets['save_password_checkbutton'].get_active()
-			password = widgets['pass1_entry'].get_text().decode('utf-8')
-
-			if not self.modify:
-				if password == '':
-					dialogs.ErrorDialog(_('Invalid password'),
-						_('You must enter a password for the new account.'))
-					return
-
-				if widgets['pass2_entry'].get_text() != password:
-					dialogs.ErrorDialog(_('Passwords do not match'),
-						_('The passwords typed in both fields must be identical.'))
-					return
+			server = self.xml.get_widget('server_comboboxentry').child.get_text().\
+				decode('utf-8')
+			savepass = self.xml.get_widget('save_password_checkbutton').\
+				get_active()
+			password = self.xml.get_widget('password_entry').get_text().decode(
+				'utf-8')
 
 			jid = username + '@' + server
 			# check if jid is conform to RFC and stringprep it
@@ -2919,31 +2926,141 @@ class AccountCreationWizardWindow:
 			self.forward_button.hide()
 			if self.modify:
 				finish_text = '<big><b>%s</b></big>\n\n%s' % (
-					_('Account has been added successfully'),
-					_('You can set advanced account options by pressing the '
-					'Advanced button, or later by choosing the Accounts menuitem '
+				_('Account has been added successfully'),
+				_('You can set advanced account options by pressing the '
+				'Advanced button, or later by choosing the Accounts menuitem '
 					'under the Edit menu from the main window.'))
-				self.finish_label.set_markup(finish_text)
-				self.finish_button.show()
-				self.finish_button.set_property('has-default', True)
-				self.advanced_button.show()
-				self.go_online_checkbutton.show()
-				img = self.xml.get_widget('finish_image')
-				img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
-				self.notebook.set_current_page(3) # show finish page
-				self.show_vcard_checkbutton.set_active(False)
+			self.finish_label.set_markup(finish_text)
+			self.finish_button.show()
+			self.finish_button.set_property('has-default', True)
+			self.advanced_button.show()
+			self.go_online_checkbutton.show()
+			img = self.xml.get_widget('finish_image')
+			img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
+			self.notebook.set_current_page(5) # show finish page
+			self.show_vcard_checkbutton.set_active(False)
+		elif cur_page == 2:
+			server = self.xml.get_widget('server_comboboxentry1').child.get_text()\
+				.decode('utf-8')
+
+			if not server:
+				dialogs.ErrorDialog(_('Invalid server'),
+					_('Please provide a server on which you want to register.'))
+				return
+			self.account = server
+			i = 1
+			while self.account in gajim.connections:
+				self.account = server + str(i)
+				i += 1
+
+			config = self.get_config('', server, '', '')
+			# Get advanced options
+			proxies_combobox = self.xml.get_widget('proxies_combobox')
+			active = proxies_combobox.get_active()
+			proxy = proxies_combobox.get_model()[active][0].decode('utf-8')
+			if proxy == _('None'):
+				proxy = ''
+			config['proxy'] = proxy
+
+			config['use_custom_host'] = self.xml.get_widget(
+				'custom_host_port_checkbutton').get_active()
+			custom_port = self.xml.get_widget('custom_port_entry').get_text()
+			try:
+				custom_port = int(custom_port)
+			except:
+				dialogs.ErrorDialog(_('Invalid entry'),
+					_('Custom port must be a port number.'))
+				return
+			config['custom_port'] = custom_port
+			config['custom_host'] = self.xml.get_widget(
+				'custom_host_entry').get_text().decode('utf-8')
+
+			self.notebook.set_current_page(4) # show creating page
+			self.back_button.hide()
+			self.forward_button.hide()
+			self.update_progressbar_timeout_id = gobject.timeout_add(100,
+				self.update_progressbar)
+			# Get form from serveur
+			con = connection.Connection(self.account)
+			con.new_account(self.account, config)
+			gajim.connections[self.account] = con
+		elif cur_page == 3:
+			if self.is_form:
+				form = self.data_form_widget.data_form
 			else:
-				self.notebook.set_current_page(2) # show creating page
-				self.update_progressbar_timeout_id = gobject.timeout_add(100,
-					self.update_progressbar)
+				form = self.data_form_widget.get_infos()
+			gajim.connections[self.account].send_new_account_infos(form,
+				self.is_form)
+			self.xml.get_widget('form_vbox').remove(self.data_form_widget)
+			self.xml.get_widget('progressbar_label').set_markup('<b>Account is being created</b>\n\nPlease wait...')
+			self.notebook.set_current_page(4) # show creating page
+			self.back_button.hide()
+			self.forward_button.hide()
+			self.update_progressbar_timeout_id = gobject.timeout_add(100,
+				self.update_progressbar)
+
+	def update_proxy_list(self):
+		proxies_combobox = self.xml.get_widget('proxies_combobox')
+		model = gtk.ListStore(str)
+		proxies_combobox.set_model(model)
+		l = gajim.config.get_per('proxies')
+		l.insert(0, _('None'))
+		for i in xrange(len(l)):
+			model.append([l[i]])
+		proxies_combobox.set_active(0)
+
+	def on_manage_proxies_button_clicked(self, widget):
+		if gajim.interface.instances.has_key('manage_proxies'):
+			gajim.interface.instances['manage_proxies'].window.present()
+		else:
+			gajim.interface.instances['manage_proxies'] = \
+				ManageProxiesWindow()
+
+	def on_custom_host_port_checkbutton_toggled(self, widget):
+		self.xml.get_widget('custom_host_hbox').set_sensitive(widget.get_active())
 
 	def update_progressbar(self):
 		self.progressbar.pulse()
 		return True # loop forever
 
+	def new_acc_connected(self, form, is_form):
+		'''connection to server succeded, present the form to the user'''
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+		self.back_button.show()
+		self.forward_button.show()
+		self.notebook.set_current_page(3) # show form page
+		self.is_form = is_form
+		if is_form:
+			dataform = dataforms.ExtendForm(node = form)
+			self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
+		else:
+			self.data_form_widget = FakeDataForm(form)
+		self.data_form_widget.show_all()
+		self.xml.get_widget('form_vbox').pack_start(self.data_form_widget)
+
+	def new_acc_not_connected(self, reason):
+		'''Account creation failed: connection to server failed'''
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
+		del gajim.connections[self.account]
+		self.back_button.show()
+		self.cancel_button.show()
+		self.go_online_checkbutton.hide()
+		self.show_vcard_checkbutton.hide()
+		img = self.xml.get_widget('finish_image')
+		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
+		finish_text = '<big><b>%s</b></big>\n\n%s' % (
+			_('An error occurred during account creation') , reason)
+		self.finish_label.set_markup(finish_text)
+		self.notebook.set_current_page(5) # show finish page
+
 	def acc_is_ok(self, config):
 		'''Account creation succeeded'''
 		self.create_vars(config)
+		self.cancel_button.hide()
+		self.back_button.hide()
+		self.forward_button.hide()
 		self.finish_button.show()
 		self.finish_button.set_property('has-default', True)
 		self.advanced_button.show()
@@ -2959,7 +3076,7 @@ class AccountCreationWizardWindow:
 			'button, or later by choosing the Accounts menuitem under the Edit '
 			'menu from the main window.'))
 		self.finish_label.set_markup(finish_text)
-		self.notebook.set_current_page(3) # show finish page
+		self.notebook.set_current_page(5) # show finish page
 
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
@@ -2970,12 +3087,16 @@ class AccountCreationWizardWindow:
 		self.cancel_button.show()
 		self.go_online_checkbutton.hide()
 		self.show_vcard_checkbutton.hide()
+		del gajim.connections[self.account]
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
 		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occurred during '
 			'account creation') , reason)
 		self.finish_label.set_markup(finish_text)
-		self.notebook.set_current_page(3) # show finish page
+		self.notebook.set_current_page(5) # show finish page
+
+		if self.update_progressbar_timeout_id is not None:
+			gobject.source_remove(self.update_progressbar_timeout_id)
 
 	def on_advanced_button_clicked(self, widget):
 		gajim.interface.instances[self.account]['account_modification'] = \
@@ -3005,12 +3126,11 @@ class AccountCreationWizardWindow:
 			combobox.child.set_position(-1)
 			return True
 
-	def on_server_comboboxentry_key_press_event(self, widget, event):
+	def on_server_comboboxentry_key_press_event(self, widget, event, combobox):
 		# If backspace is pressed in empty field, return to the nick entry field
 		backspace = event.keyval == gtk.keysyms.BackSpace
-		combobox = self.xml.get_widget('server_comboboxentry')
 		empty = len(combobox.get_active_text()) == 0
-		if backspace and empty:
+		if backspace and empty and self.modify:
 			username_entry = self.xml.get_widget('username_entry')
 			username_entry.grab_focus()
 			username_entry.set_position(-1)
@@ -3028,14 +3148,7 @@ class AccountCreationWizardWindow:
 			string = '<b>%s@%s</b>' % (name, server)
 			jid_label.set_label(string)
 
-	def save_account(self, login, server, savepass, password):
-		if self.account in gajim.connections:
-			dialogs.ErrorDialog(_('Account name is in use'),
-				_('You already have an account using this name.'))
-			return
-		con = connection.Connection(self.account)
-		con.password = password
-
+	def get_config(self, login, server, savepass, password):
 		config = {}
 		config['name'] = login
 		config['hostname'] = server
@@ -3055,6 +3168,17 @@ class AccountCreationWizardWindow:
 		config['keyid'] = ''
 		config['savegpgpass'] = False
 		config['gpgpassword'] = ''
+		return config
+
+	def save_account(self, login, server, savepass, password):
+		if self.account in gajim.connections:
+			dialogs.ErrorDialog(_('Account name is in use'),
+				_('You already have an account using this name.'))
+			return
+		con = connection.Connection(self.account)
+		con.password = password
+
+		config = self.get_config(login, server, savepass, password)
 
 		if not self.modify:
 			con.new_account(self.account, config)
@@ -3073,7 +3197,7 @@ class AccountCreationWizardWindow:
 
 		# update variables
 		gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
-			'gc_config': {}}
+			'gc_config': {}, 'search': {}}
 		gajim.connections[self.account].connected = 0
 		gajim.groups[self.account] = {}
 		gajim.contacts.add_account(self.account)

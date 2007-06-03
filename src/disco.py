@@ -49,6 +49,7 @@ import tooltips
 import gtkgui_helpers
 import groups
 import adhoc_commands
+import search_window
 
 from common import gajim
 from common import xmpp
@@ -986,6 +987,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self.register_button = None
 		self.join_button = None
 		self.execute_button = None
+		self.search_button = None
 		# Keep track of our treeview signals
 		self._view_signals = []
 		self._scroll_signal = None
@@ -1142,7 +1144,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		AgentBrowser._add_actions(self)
 		self.execute_button = gtk.Button()
 		image = gtk.image_new_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_BUTTON)
-		label = gtk.Label(_('_Execute Command...'))
+		label = gtk.Label(_('_Execute Command'))
 		label.set_use_underline(True)
 		hbox = gtk.HBox()
 		hbox.pack_start(image, False, True, 6)
@@ -1170,6 +1172,18 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self.window.action_buttonbox.add(self.join_button)
 		self.join_button.show_all()
 
+		self.search_button = gtk.Button()
+		image = gtk.image_new_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_BUTTON)
+		label = gtk.Label(_('_Search'))
+		label.set_use_underline(True)
+		hbox = gtk.HBox()
+		hbox.pack_start(image, False, True, 6)
+		hbox.pack_end(label, True, True)
+		self.search_button.add(hbox)
+		self.search_button.connect('clicked', self.on_search_button_clicked)
+		self.window.action_buttonbox.add(self.search_button)
+		self.search_button.show_all()
+
 	def _clean_actions(self):
 		if self.execute_button:
 			self.execute_button.destroy()
@@ -1180,6 +1194,56 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if self.join_button:
 			self.join_button.destroy()
 			self.join_button = None
+		if self.search_button:
+			self.search_button.destroy()
+			self.search_button = None
+		AgentBrowser._clean_actions(self)
+
+	def cleanup(self):
+		self.tooltip.hide_tooltip()
+		AgentBrowser.cleanup(self)
+
+	def update_theme(self):
+		theme = gajim.config.get('roster_theme')
+		bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
+		if bgcolor:
+			self._renderer.set_property('cell-background', bgcolor)
+		self.window.services_treeview.queue_draw()
+
+	def on_execute_button_clicked(self, widget = None):
+		'''When we want to execute a command:
+		open adhoc command window'''
+		model, iter = self.window.services_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		service = model[iter][0].decode('utf-8')
+		adhoc_commands.CommandWindow(self.account, service)
+
+	def on_search_button_clicked(self, widget = None):
+		'''When we want to search something:
+		open search window'''
+		model, iter = self.window.services_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		service = model[iter][0].decode('utf-8')
+		if gajim.interface.instances[self.account]['search'].has_key(service):
+			gajim.interface.instances[self.account]['search'][service].present()
+		else:
+			gajim.interface.instances[self.account]['search'][service] = \
+				search_window.SearchWindow(self.account, service)
+
+	def on_register_button_clicked(self, widget = None):
+		'''When we want to register an agent:
+		request information about registering with the agent and close the
+		window.'''
+		model, iter = self.window.services_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		jid = model[iter][0].decode('utf-8')
+		if jid:
+			gajim.connections[self.account].request_register_agent_info(jid)
+			self.window.destroy(chain = True)
+
 		AgentBrowser._clean_actions(self)
 
 	def cleanup(self):
@@ -1239,6 +1303,9 @@ class ToplevelAgentBrowser(AgentBrowser):
 			self.browse_button.set_sensitive(False)
 		if self.join_button:
 			self.join_button.set_sensitive(False)
+		if self.search_button:
+			self.search_button.set_sensitive(False)
+		model, iter = self.window.services_treeview.get_selection().get_selected()
 		model, iter = self.window.services_treeview.get_selection().get_selected()
 		if not iter:
 			return
@@ -1271,6 +1338,8 @@ class ToplevelAgentBrowser(AgentBrowser):
 		AgentBrowser._update_actions(self, jid, node, identities, features, data)
 		if self.execute_button and xmpp.NS_COMMANDS in features:
 			self.execute_button.set_sensitive(True)
+		if self.search_button and xmpp.NS_SEARCH in features:
+			self.search_button.set_sensitive(True)
 		if self.register_button and xmpp.NS_REGISTER in features:
 			# We can register this agent
 			registered_transports = []

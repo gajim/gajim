@@ -143,7 +143,6 @@ def _ReceivedRegInfo(con, resp, agent):
 def register(disp, host, info, cb):
 	""" Perform registration on remote server with provided info.
 		disp must be connected dispatcher instance.
-		Returns true or false depending on registration result.
 		If registration fails you can get additional info from the dispatcher's owner
 		attributes lastErrNode, lastErr and lastErrCode.
 	"""

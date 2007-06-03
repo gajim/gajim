@@ -40,7 +40,7 @@ try:
 except:
 	pass
 
-special_groups = (_('Transports'), _('Not in Roster'), _('Observers'))
+special_groups = (_('Transports'), _('Not in Roster'), _('Observers'), _('Groupchats'))
 
 class InvalidFormat(Exception):
 	pass
@@ -548,6 +548,10 @@ def get_icon_name_to_show(contact, account = None):
 	if account and gajim.events.get_nb_roster_events(account,
 	contact.get_full_jid()):
 		return 'message'
+	if account and gajim.interface.minimized_controls.has_key(account) and \
+	contact.jid in gajim.interface.minimized_controls[account] and gajim.interface.\
+		minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
+		return 'message'
 	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 		return contact.show
 	if contact.sub in ('both', 'to'):
@@ -869,7 +873,7 @@ def get_notification_icon_tooltip_text():
 		'chat'])
 	unread_single_chat = gajim.events.get_nb_events(types = ['normal'])
 	unread_gc = gajim.events.get_nb_events(types = ['printed_gc_msg',
-		'gc_msg'])
+		'printed_marked_gc_msg', 'gc_msg'])
 	unread_pm = gajim.events.get_nb_events(types = ['printed_pm', 'pm'])
 
 	accounts = get_accounts_info()
@@ -942,3 +946,20 @@ def get_accounts_info():
 		accounts.append({'name': account, 'status_line': single_line, 
 				'show': status, 'message': message})
 	return accounts
+
+def get_avatar_path(prefix):
+	'''Returns the filename of the avatar, distinguishes between user- and
+	contact-provided one.  Returns None if no avatar was found at all.
+	prefix is the path to the requested avatar just before the ".png" or
+	".jpeg".'''
+	# First, scan for a local, user-set avatar
+	for type_ in ('jpeg', 'png'):
+		file_ = prefix + '_local.' + type_
+		if os.path.exists(file_):
+			return file_
+	# If none available, scan for a contact-provided avatar
+	for type_ in ('jpeg', 'png'):
+		file_ = prefix + '.' + type_
+		if os.path.exists(file_):
+			return file_
+	return None

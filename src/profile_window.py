@@ -118,20 +118,21 @@ class ProfileWindow:
 		def on_ok(widget, path_to_file):
 			must_delete = False
 			filesize = os.path.getsize(path_to_file) # in bytes
-			#FIXME: use messages for invalid file for 0.11
 			invalid_file = False
 			msg = ''
 			if os.path.isfile(path_to_file):
 				stat = os.stat(path_to_file)
 				if stat[6] == 0:
 					invalid_file = True
+					msg = _('File is empty')
 			else:
 				invalid_file = True
+				msg = _('File does not exist')
 			if not invalid_file and filesize > 16384: # 16 kb
 				try:
 					pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 					# get the image at 'notification size'
-					# and use that user did not specify in ACE crazy size
+					# and hope that user did not specify in ACE crazy size
 					scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
 						'tooltip')
 				except gobject.GError, msg: # unknown format
@@ -148,13 +149,17 @@ class ProfileWindow:
 							'avatar_scaled.png')
 						scaled_pixbuf.save(path_to_file, 'png')
 						must_delete = True
-			self.dialog.destroy()
-
+			
 			fd = open(path_to_file, 'rb')
 			data = fd.read()
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
-			# rescale it
-			pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
+			try:			
+				# rescale it
+				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
+			except AttributeError: # unknown format
+				dialogs.ErrorDialog(_('Could not load image'))
+				return
+			self.dialog.destroy()
 			button = self.xml.get_widget('PHOTO_button')
 			image = button.get_image()
 			image.set_from_pixbuf(pixbuf)
@@ -183,7 +188,8 @@ class ProfileWindow:
 			menu = gtk.Menu()
 			
 			# Try to get pixbuf
-			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid)
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid,
+				use_local = False)
 
 			if pixbuf:
 				nick = gajim.config.get_per('accounts', self.account, 'name')

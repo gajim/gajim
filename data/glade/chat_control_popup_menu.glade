@@ -13,7 +13,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1366">
+	<widget class="GtkImage" id="image1370">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-justify-fill</property>
 	  <property name="icon_size">1</property>
@@ -42,7 +42,7 @@
       <signal name="activate" handler="_on_send_file_menuitem_activate" last_modification_time="Tue, 03 Jan 2006 04:26:55 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1367">
+	<widget class="GtkImage" id="image1371">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-file</property>
 	  <property name="icon_size">1</property>
@@ -83,7 +83,7 @@
       <signal name="activate" handler="_on_add_to_roster_menuitem_activate" last_modification_time="Tue, 03 Jan 2006 04:26:37 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1368">
+	<widget class="GtkImage" id="image1372">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>

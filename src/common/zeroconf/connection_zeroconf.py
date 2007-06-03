@@ -52,18 +52,21 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# system username
 		self.username = None
 		self.name = name
+		self.server_resource = '' # zeroconf has no resource, fake an empty one
 		self.connected = 0 # offline
 		self.connection = None
 		self.gpg = None
 		self.is_zeroconf = True
 		self.privacy_rules_supported = False
+		self.blocked_contacts = []
+		self.blocked_groups = []
 		self.status = ''
 		self.old_show = ''
 		self.priority = 0
 	
 		self.call_resolve_timeout = False
 		
-		#self.time_to_reconnect = None
+		self.time_to_reconnect = None
 		#self.new_account_info = None
 		self.bookmarks = []
 
@@ -127,10 +130,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			gajim.handlers[event](self.name, data)
 
 	def _reconnect(self):
+		# Do not try to reco while we are already trying
+		self.time_to_reconnect = None
 		gajim.log.debug('reconnect')
 
-		signed = self.get_signed_msg(self.status)
-		self.reconnect()
+#		signed = self.get_signed_msg(self.status)
+		self.connect(self.old_show, self.status)
 
 	def quit(self, kill_core):
 		if kill_core and self.connected > 1:
@@ -174,7 +179,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.dispatch('ROSTER_INFO', (key, self.roster.getName(key),
 							'both', 'no', self.roster.getGroups(key)))
 				self.dispatch('NOTIFY', (key, self.roster.getStatus(key),
-							self.roster.getMessage(key), 'local', 0, None, 0))
+							self.roster.getMessage(key), 'local', 0, None, 0, None))
 				#XXX open chat windows don't get refreshed (full name), add that
 		return self.call_resolve_timeout
 
@@ -182,13 +187,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def _on_new_service(self,jid):
 		self.roster.setItem(jid)
 		self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
-		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
+		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0, None))
 	
 	def _on_remove_service(self, jid):
 		self.roster.delItem(jid)
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
-		# keyID, timestamp))
-		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0))
+		# keyID, timestamp, contact_nickname))
+		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0, None))
 
 	def _on_disconnected(self):
 		self.disconnect()
@@ -198,6 +203,19 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			_('To continue sending and receiving messages, you will need to reconnect.')))
 		self.status = 'offline'
 		self.disconnect()
+
+	def _disconnectedReconnCB(self):
+		'''Called when we are disconnected. Comes from network manager for example
+		we don't try to reconnect, network manager will tell us when we can'''
+		if gajim.account_is_connected(self.name):
+			# we cannot change our status to offline or connecting
+			# after we auth to server
+			self.old_show = STATUS_LIST[self.connected]
+		self.connected = 0
+		self.dispatch('STATUS', 'offline')
+		# random number to show we wait network manager to send us a reconenct
+		self.time_to_reconnect = 5
+		self.on_purpose = False
 
 	def _on_name_conflictCB(self, alt_name):
 		self.disconnect()
@@ -241,7 +259,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		#display contacts already detected and resolved
 		for jid in self.roster.keys():
 			self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
-			self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
+			self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0, None))
 
 		self.connected = STATUS_LIST.index(show)
 
@@ -300,6 +318,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# 'disconnect'
 		elif show == 'offline' and self.connected:
 			self.disconnect()
+			self.time_to_reconnect = None
 			
 		# update status
 		elif show != 'offline' and self.connected:
@@ -332,12 +351,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	chatstate = None, msg_id = None, composing_jep = None, resource = None, 
 	user_nick = None):
 		fjid = jid
-		
+
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
 			return
-		
+
 		if self.status in ('invisible', 'offline'):
 			self.dispatch('MSGERROR', [unicode(jid), '-1', _('You are not connected or not visible to others. Your message could not be sent.'), None, None])
 			return
@@ -345,19 +364,23 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		msgtxt = msg
 		msgenc = ''
 		if keyID and USE_GPG:
-			#encrypt
-			msgenc = self.gpg.encrypt(msg, [keyID])
-			if msgenc:
+			# encrypt
+			msgenc, error = self.gpg.encrypt(msg, [keyID])
+			if msgenc and not error:
 				msgtxt = '[This message is encrypted]'
 				lang = os.getenv('LANG')
 				if lang is not None or lang != 'en': # we're not english
 					msgtxt = _('[This message is encrypted]') +\
 						' ([This message is encrypted])' # one  in locale and one en
+			else:
+				# Encryption failed, do not send message
+				tim = time.localtime()
+				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim))
+				return 3
 
-		
 		if type == 'chat':
 			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type)
-			
+
 		else:
 			if subject:
 				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
@@ -368,7 +391,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
-		
+
 		# chatstates - if peer supports jep85 or jep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
@@ -386,7 +409,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				# when msgtxt, requests JEP-0022 composing notification
 				if chatstate is 'composing' or msgtxt: 
 					chatstate_node.addChild(name = 'composing') 
-		
+
 		if not self.connection.send(msg_iq, msg != None):
 			return
 

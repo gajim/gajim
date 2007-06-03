@@ -144,6 +144,11 @@ class ChatControlBase(MessageControl):
 		id = widget.connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
 		self.handlers[id] = widget
+		id = widget.connect('changed',
+			self.on_conversation_vadjustment_changed)
+		self.handlers[id] = widget
+		self.scroll_to_end_id = None
+		self.was_at_the_end = True
 		# add MessageTextView to UI and connect signals
 		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
@@ -204,14 +209,7 @@ class ChatControlBase(MessageControl):
 					self.msg_textview.lang = lang
 					spell.set_language(lang)
 			except (gobject.GError, RuntimeError), msg:
-				dialogs.ErrorDialog(unicode(msg), _('If that is not your language '
-					'for which you want to highlight misspelled words, then please '
-					'set your $LANG as appropriate. Eg. for French do export '
-					'LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to '
-					'make it global in /etc/profile.\n\nHighlighting misspelled '
-					'words feature will not be used'))
-				gajim.config.set('use_speller', False)
-
+				dialogs.AspellDictError(lang)
 		self.style_event_id = 0
 		self.conv_textview.tv.show()
 		self._paint_banner()
@@ -551,7 +549,7 @@ class ChatControlBase(MessageControl):
 		full_jid = self.get_full_jid()
 		textview = self.conv_textview
 		end = False
-		if textview.at_the_end() or kind == 'outgoing':
+		if self.was_at_the_end or kind == 'outgoing':
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
@@ -561,25 +559,36 @@ class ChatControlBase(MessageControl):
 			return
 		if kind == 'incoming':
 			gajim.last_message_time[self.account][full_jid] = time.time()
-		if (not self.parent_win.get_active_jid() or \
-		full_jid != self.parent_win.get_active_jid() or \
-		not self.parent_win.is_active() or not end) and \
-		kind in ('incoming', 'incoming_queue'):
+
+		if kind in ('incoming', 'incoming_queue'):
 			gc_message = False
 			if self.type_id  == message_control.TYPE_GC:
 				gc_message = True
-			if not gc_message or \
-			(gc_message and (other_tags_for_text == ['marked'] or \
-			gajim.config.get('notify_on_all_muc_messages'))):
-			# we want to have save this message in events list
-			# other_tags_for_text == ['marked'] --> highlighted gc message
+
+			if ((self.parent_win and (not self.parent_win.get_active_jid() or \
+			full_jid != self.parent_win.get_active_jid() or \
+			not self.parent_win.is_active() or not end)) or \
+			(gc_message and \
+			gajim.interface.minimized_controls.has_key(self.account) and \
+			jid in gajim.interface.minimized_controls[self.account])) and \
+			kind in ('incoming', 'incoming_queue'):
+				# we want to have save this message in events list
+				# other_tags_for_text == ['marked'] --> highlighted gc message
 				type_ = 'printed_' + self.type_id
+				event = 'message_received'
+				show_in_roster = notify.get_show_in_roster(event,
+					self.account, self.contact)
+				show_in_systray = notify.get_show_in_systray(event,
+					self.account, self.contact)
 				if gc_message:
 					type_ = 'printed_gc_msg'
-				show_in_roster = notify.get_show_in_roster('message_received',
-					self.account, self.contact)
-				show_in_systray = notify.get_show_in_systray('message_received',
-					self.account, self.contact)
+					event = 'gc_message_received'
+					show_in_roster = True
+					show_in_systray = False
+					if gajim.config.get('notify_on_all_muc_messages'):
+						show_in_systray = True
+					if other_tags_for_text == ['marked']:
+						type_ = 'printed_marked_gc_msg'
 				event = gajim.events.create_event(type_, None,
 					show_in_roster = show_in_roster,
 					show_in_systray = show_in_systray)
@@ -588,6 +597,14 @@ class ChatControlBase(MessageControl):
 				if show_in_roster:
 					gajim.interface.roster.draw_contact(self.contact.jid,
 						self.account)
+
+		if not self.parent_win:
+			return
+
+		if (not self.parent_win.get_active_jid() or \
+		full_jid != self.parent_win.get_active_jid() or \
+		not self.parent_win.is_active() or not end) and \
+		kind in ('incoming', 'incoming_queue'):
 			self.parent_win.redraw_tab(self)
 			ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, self.account)
 			if not self.parent_win.is_active():
@@ -654,16 +671,38 @@ class ChatControlBase(MessageControl):
 		isactive = widget.get_active()
 		self.chat_buttons_set_visible(isactive)
 
+	def _on_minimize_menuitem_activate(self, widget):
+		'''When a grouchat is minimized, unparent the tab, put it in roster etc'''
+		win = gajim.interface.msg_win_mgr.get_window(self.contact.jid, self.account)
+		ctrl = win.get_control(self.contact.jid, self.account)
+
+		ctrl_page = win.notebook.page_num(ctrl.widget)
+		control = win.notebook.get_nth_page(ctrl_page)
+
+		win.notebook.remove_page(ctrl_page)
+		control.unparent()
+		ctrl.parent_win = None
+
+		if not gajim.interface.minimized_controls.has_key(self.account):
+			gajim.interface.minimized_controls[self.account] = {}
+		gajim.interface.minimized_controls[self.account][self.contact.jid] = ctrl
+
+		del win._controls[self.account][self.contact.jid]
+
+		win.check_tabs()
+		gajim.interface.roster.add_groupchat_to_roster(self.account,
+			self.contact.jid, status = self.subject)
+
 	def set_control_active(self, state):
 		if state:
 			jid = self.contact.jid
-			if self.conv_textview.at_the_end():
+			if self.was_at_the_end:
 				# we are at the end
-				type_ = 'printed_' + self.type_id
+				type_ = ['printed_' + self.type_id]
 				if self.type_id == message_control.TYPE_GC:
-					type_ = 'printed_gc_msg'
+					type_ = ['printed_gc_msg', 'printed_marked_gc_msg']
 				if not gajim.events.remove_events(self.account, self.get_full_jid(),
-				types = [type_]):
+				types = type_):
 					# There were events to remove
 					self.redraw_after_event_removed(jid)
 			self.msg_textview.grab_focus()
@@ -672,18 +711,23 @@ class ChatControlBase(MessageControl):
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
+		if self.scroll_to_end_id:
+			# a scroll is already planned
+			return
 		buffer = textview.get_buffer()
 		end_iter = buffer.get_end_iter()
 		end_rect = textview.get_iter_location(end_iter)
 		visible_rect = textview.get_visible_rect()
 		# scroll only if expected end is not visible
 		if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
-			gobject.idle_add(self.scroll_to_end_iter, textview)
+			self.scroll_to_end_id = gobject.idle_add(self.scroll_to_end_iter,
+				textview)
 
 	def scroll_to_end_iter(self, textview):
 		buffer = textview.get_buffer()
 		end_iter = buffer.get_end_iter()
 		textview.scroll_to_iter(end_iter, 0, False, 1, 1)
+		self.scroll_to_end_id = None
 		return False
 
 	def size_request(self, msg_textview , requisition):
@@ -741,7 +785,15 @@ class ChatControlBase(MessageControl):
 
 		return True
 
-	def on_conversation_vadjustment_value_changed(self, widget):
+	def on_conversation_vadjustment_changed(self, adjustment):
+		# used to stay at the end of the textview when we shrink conversation
+		# textview.
+		if self.was_at_the_end:
+			self.conv_textview.bring_scroll_to_end(-18)
+		self.was_at_the_end = (adjustment.upper - adjustment.value - adjustment.page_size) < 18
+
+	def on_conversation_vadjustment_value_changed(self, adjustment):
+		self.was_at_the_end = (adjustment.upper - adjustment.value - adjustment.page_size) < 18
 		if self.resource:
 			jid = self.contact.get_full_jid()
 		else:
@@ -752,13 +804,12 @@ class ChatControlBase(MessageControl):
 		if not len(gajim.events.get_events(self.account, jid, ['printed_' + type_,
 		type_])):
 			return
+		if not self.parent_win:
+			return
 		if self.conv_textview.at_the_end() and \
-				self.parent_win.get_active_control() == self and \
-				self.parent_win.window.is_active():
+		self.parent_win.get_active_control() == self and \
+		self.parent_win.window.is_active():
 			# we are at the end
-			type_ = self.type_id
-			if type_ == message_control.TYPE_GC:
-				type_ = 'gc_msg'
 			if not gajim.events.remove_events(self.account, self.get_full_jid(),
 			types = ['printed_' + type_, type_]):
 				# There were events to remove
@@ -774,9 +825,15 @@ class ChatControlBase(MessageControl):
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			groupchat_control = gajim.interface.msg_win_mgr.get_control(
 				room_jid, self.account)
+			if not groupchat_control and \
+			gajim.interface.minimized_controls.has_key(self.account) and \
+			room_jid in gajim.interface.minimized_controls[self.account]:
+				groupchat_control = \
+					gajim.interface.minimized_controls[self.account][room_jid]
 			groupchat_control.draw_contact(nick)
 			mw = gajim.interface.msg_win_mgr.get_window(room_jid, self.account)
-			mw.redraw_tab(groupchat_control)
+			if mw:
+				mw.redraw_tab(groupchat_control)
 		else:
 			gajim.interface.roster.draw_contact(jid, self.account)
 			gajim.interface.roster.show_title()
@@ -846,6 +903,7 @@ class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
+	CHAT_CMDS = ['clear', 'compact', 'help', 'ping']
 	
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1124,6 +1182,49 @@ class ChatControl(ChatControlBase):
 					self.contact.get_shown_name()
 		gtk.Tooltips().set_tip(self.xml.get_widget('gpg_eventbox'), tt)
 
+	def _process_command(self, message):
+		if message[0] != '/':
+			return False
+
+		# Handle common commands
+		if ChatControlBase._process_command(self, message):
+			return True
+
+		message = message[1:]
+		message_array = message.split(' ', 1)
+		command = message_array.pop(0).lower()
+		if message_array == ['']:
+			message_array = []
+
+		if command == 'help':
+			if len(message_array):
+				subcommand = message_array.pop(0)
+				self.get_command_help(subcommand)
+			else:
+				self.get_command_help(command)
+			self.clear(self.msg_textview)
+			return True
+		elif command == 'ping' and not len(message_array):
+			gajim.connections[self.account].sendPing(self.contact)
+			self.clear(self.msg_textview)
+			return True
+		return False
+
+	def get_command_help(self, command):
+		if command == 'help':
+			self.print_conversation(_('Commands: %s') % ChatControl.CHAT_CMDS,
+				'info')
+		elif command == 'clear':
+			self.print_conversation(_('Usage: /%s, clears the text window.'),
+				'info')
+		elif command == 'compact':
+			self.print_conversation(_('Usage: /%s, hide the chat buttons.'),
+				'info')
+		elif command == 'ping':
+			self.print_conversation(_(''), 'info')
+		else:
+			self.print_conversation(_('No help info for /%s') % command, 'info')
+
 	def send_message(self, message, keyID = '', chatstate = None):
 		'''Send a message to contact'''
 		if message in ('', None, '\n') or self._process_command(message):
@@ -1153,13 +1254,9 @@ class ChatControl(ChatControlBase):
 				# because we want it sent with REAL message
 				# (not standlone) eg. one that has body
 				
-				#FIXME:
-				# Enable 3 next lines after 0.11 release.
-				# Having this disabled violate xep85 5.1.2 but then we don't break
-				# notifications between 0.10.1 and 0.11 See #2637
-				# if contact.our_chatstate:
-				#	# We already ask for xep 85, don't ask it twice
-				#	composing_jep = 'asked_once'
+				if contact.our_chatstate:
+					# We already asked for xep 85, don't ask it twice
+					composing_jep = 'asked_once'
 
 				chatstate_to_send = 'active'
 				contact.our_chatstate = 'ask' # pseudo state
@@ -1575,24 +1672,34 @@ class ChatControl(ChatControlBase):
 		if not gajim.config.get('show_avatar_in_chat'):
 			return
 
-		jid = self.contact.jid
-		jid_with_resource = jid
-		if resource:
-			jid_with_resource += '/' + resource
+		is_fake = False
+		if self.TYPE_ID == message_control.TYPE_PM:
+			is_fake = True
+			jid_with_resource = self.contact.jid # fake jid
+		else:
+			jid_with_resource = self.contact.jid
+			if resource:
+				jid_with_resource += '/' + resource
 
 		# we assume contact has no avatar
 		scaled_pixbuf = None
 
-		pixbuf = None
-		is_fake = False
-		if gajim.contacts.is_pm_from_jid(self.account, jid):
-			is_fake = True
 		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid_with_resource,
 			is_fake)
 		if pixbuf == 'ask':
 			# we don't have the vcard
-			gajim.connections[self.account].request_vcard(jid_with_resource,
-				is_fake)
+			if self.TYPE_ID == message_control.TYPE_PM:
+				if self.gc_contact.jid:
+					# We know the real jid of this contact
+					real_jid = self.gc_contact.jid
+					if self.gc_contact.resource:
+						real_jid += '/' + self.gc_contact.resource
+				else:
+					real_jid = jid_with_resource
+				gajim.connections[self.account].request_vcard(real_jid,
+					jid_with_resource)
+			else:
+				gajim.connections[self.account].request_vcard(jid_with_resource)
 			return
 		if pixbuf is not None:
 			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'chat')

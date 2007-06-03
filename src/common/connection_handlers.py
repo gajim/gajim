@@ -818,6 +818,7 @@ class ConnectionVcard:
 		self.vcard_sha = None
 		self.vcard_shas = {} # sha of contacts
 		self.room_jids = [] # list of gc jids so that vcard are saved in a folder
+		self.groupchat_jids = {} # {ID : groupchat_jid}
 		
 	def add_sha(self, p, send_caps = True):
 		c = p.setTag('x', namespace = common.xmpp.NS_VCARD_UPDATE)
@@ -913,9 +914,10 @@ class ConnectionVcard:
 		vcard['resource'] = gajim.get_resource_from_jid(fjid)
 		return vcard
 
-	def request_vcard(self, jid = None, is_fake_jid = False):
-		'''request the VCARD. If is_fake_jid is True, it means we request a vcard
-		to a fake jid, like in private messages in groupchat'''
+	def request_vcard(self, jid = None, groupchat_jid = None):
+		'''request the VCARD. If groupchat_jid is not nul, it means we request a vcard
+		to a fake jid, like in private messages in groupchat. jid can be the
+		real jid of the contact, but we want to consider it comes from a fake jid'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'get')
@@ -928,13 +930,13 @@ class ConnectionVcard:
 		j = jid
 		if not j:
 			j = gajim.get_jid_from_account(self.name)
-		self.awaiting_answers[id] = (VCARD_ARRIVED, j)
-		if is_fake_jid:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+		self.awaiting_answers[id] = (VCARD_ARRIVED, j, groupchat_jid)
+		if groupchat_jid:
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(groupchat_jid)
 			if not room_jid in self.room_jids:
 				self.room_jids.append(room_jid)
+			self.groupchat_jids[id] = groupchat_jid
 		self.connection.send(iq)
-			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 
 	def send_vcard(self, vcard):
 		if not self.connection:
@@ -1017,17 +1019,22 @@ class ConnectionVcard:
 			# If vcard is empty, we send to the interface an empty vcard so that
 			# it knows it arrived
 			jid = self.awaiting_answers[id][1]
+			groupchat_jid = self.awaiting_answers[id][2]
+			frm = jid
+			if groupchat_jid:
+				# We do as if it comes from the fake_jid
+				frm = groupchat_jid
 			our_jid = gajim.get_jid_from_account(self.name)
 			if iq_obj.getType() == 'error' and jid == our_jid:
 				# our server doesn't support vcard
 				self.vcard_supported = False
 			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
-				if jid and jid != our_jid:
+				if frm and frm != our_jid:
 					# Write an empty file
-					self.save_vcard_to_hd(jid, '')
-					self.dispatch('VCARD', {'jid': jid})
-				elif jid == our_jid:
-					self.dispatch('MYVCARD', {'jid': jid})
+					self.save_vcard_to_hd(frm, '')
+					self.dispatch('VCARD', {'jid': frm})
+				elif frm == our_jid:
+					self.dispatch('MYVCARD', {'jid': frm})
 		elif self.awaiting_answers[id][0] == AGENT_REMOVED:
 			jid = self.awaiting_answers[id][1]
 			self.dispatch('AGENT_REMOVED', jid)
@@ -1058,6 +1065,7 @@ class ConnectionVcard:
 		elif self.awaiting_answers[id][0] == PRIVACY_ARRIVED:
 			if iq_obj.getType() != 'error':
 				self.privacy_rules_supported = True
+				self.get_privacy_list('block')
 			# Ask metacontacts before roster
 			self.get_metacontacts()
 
@@ -1070,10 +1078,15 @@ class ConnectionVcard:
 			return
 		if not vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
 			return
+		id = vc.getID()
 		frm_iq = vc.getFrom()
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = ''
-		if frm_iq:
+		if id in self.groupchat_jids:
+			who = self.groupchat_jids[id]
+			frm, resource = gajim.get_room_and_nick_from_fjid(who)
+			del self.groupchat_jids[id]
+		elif frm_iq:
 			who = helpers.get_full_jid_from_iq(vc)
 			frm, resource = gajim.get_room_and_nick_from_fjid(who)
 		else:
@@ -1145,6 +1158,7 @@ class ConnectionVcard:
 			p = self.add_sha(p)
 			self.connection.send(p)
 		else:
+			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 			self.dispatch('VCARD', vcard)
 
 class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub):
@@ -1186,7 +1200,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			id = iq_obj.getTagAttr('confirm', 'id')
 			method = iq_obj.getTagAttr('confirm', 'method')
 			url = iq_obj.getTagAttr('confirm', 'url')
-			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj));
+			msg = iq_obj.getTagData('body') # In case it's a message with a body
+			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg));
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
@@ -1390,6 +1405,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if msg.getTag('event') is not None:
 			self._pubsubEventCB(con, msg)
 			return
+		# check if the message is a xep70-confirmation-request
+		if msg.getTag('confirm') and msg.getTag('confirm').namespace == \
+		common.xmpp.NS_HTTP_AUTH:
+			self._HttpAuthCB(con, msg)
+			return
 		msgtxt = msg.getBody()
 		msghtml = msg.getXHTML()
 		mtype = msg.getType()
@@ -1558,6 +1578,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		ptype = prs.getType()
 		if ptype == 'available':
 			ptype = None
+		rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed', 'unsubscribe', 'unsubscribed')
+		if ptype and not ptype in rfc_types:
+			ptype = None
 		gajim.log.debug('PresenceCB: %s' % ptype)
 		try:
 			who = helpers.get_full_jid_from_iq(prs)
@@ -1580,6 +1603,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		user_nick = prs.getTagData('nick')
 		if not user_nick:
 			user_nick = ''
+		contact_nickname = None
 		transport_auto_auth = False
 		xtags = prs.getTags('x')
 		for x in xtags:
@@ -1592,6 +1616,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				sigTag = x
 			elif namespace == common.xmpp.NS_VCARD_UPDATE:
 				avatar_sha = x.getTagData('photo')
+				contact_nickname = x.getTagData('nickname')
 			elif namespace == common.xmpp.NS_DELAY:
 				# JEP-0091
 				tim = prs.getTimestamp()
@@ -1631,7 +1656,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				errcode = prs.getErrorCode()
 				if errcode == '502': # Internal Timeout:
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
-						prio, keyID, timestamp))
+						prio, keyID, timestamp, None))
 				elif errcode == '401': # password required to join
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('A password is required to join this group chat.')))
@@ -1664,7 +1689,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if not ptype or ptype == 'unavailable':
 				if gajim.config.get('log_contact_status_changes') and self.name\
 				not in no_log_for and jid_stripped not in no_log_for:
-					gc_c = gajim.contacts.get_gc_contact(self.name, jid_stripped, resource)
+					gc_c = gajim.contacts.get_gc_contact(self.name, jid_stripped,
+						resource)
 					st = status or ''
 					if gc_c:
 						jid = gc_c.jid
@@ -1679,24 +1705,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						# contact has no avatar
 						puny_nick = helpers.sanitize_filename(resource)
 						gajim.interface.remove_avatar_files(jid_stripped, puny_nick)
-					if self.vcard_shas.has_key(who): # Verify sha cached in mem
-						if avatar_sha != self.vcard_shas[who]:
-							# avatar has been updated
-							self.request_vcard(who, True)
-					else: # Verify sha cached in hdd
-						cached_vcard = self.get_cached_vcard(who, True)
-						if cached_vcard and cached_vcard.has_key('PHOTO') and \
-						cached_vcard['PHOTO'].has_key('SHA'):
-							cached_sha = cached_vcard['PHOTO']['SHA']
-						else:
-							cached_sha = ''
-						if cached_sha != avatar_sha:
-							# avatar has been updated
-							# sha in mem will be updated later
-							self.request_vcard(who, True)
-						else:
-							# save sha in mem NOW
-							self.vcard_shas[who] = avatar_sha
+					# if it's a gc presence, don't ask vcard here. We may ask it to
+					# real jid in gui part.
 				if ns_muc_user_x:
 					# Room has been destroyed. see
 					# http://www.xmpp.org/extensions/xep-0045.html#destroyroom
@@ -1714,7 +1724,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					statusCode = prs.getStatusCode()
 				self.dispatch('GC_NOTIFY', (jid_stripped, show, status, resource,
 					prs.getRole(), prs.getAffiliation(), prs.getJid(),
-					reason, prs.getActor(), statusCode, prs.getNewNick()))
+					reason, prs.getActor(), statusCode, prs.getNewNick(),
+					avatar_sha))
 			return
 
 		if ptype == 'subscribe':
@@ -1727,7 +1738,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					self.connection.send(p)
 				if who.find("@") <= 0 or transport_auto_auth:
 					self.dispatch('NOTIFY', (jid_stripped, 'offline', 'offline',
-						resource, prio, keyID, timestamp))
+						resource, prio, keyID, timestamp, None))
 				if transport_auto_auth:
 					self.automatically_added.append(jid_stripped)
 					self.request_subscription(jid_stripped, name = user_nick)
@@ -1778,7 +1789,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			errcode = prs.getErrorCode()
 			if errcode == '502': # Internal Timeout:
 				self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
-					prio, keyID, timestamp))
+					prio, keyID, timestamp, None))
 			else:	# print in the window the error
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
@@ -1799,7 +1810,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				not in no_log_for and jid_stripped not in no_log_for:
 				gajim.logger.write('status', jid_stripped, status, show)
 			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
-				keyID, timestamp))
+				keyID, timestamp, contact_nickname))
 	# END presenceCB
 
 	def _StanzaArrivedCB(self, con, obj):
@@ -1953,6 +1964,26 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('SIGNED_IN', ())
 		self.continue_connect_info = None
 	
+	def _search_fields_received(self, con, iq_obj):
+		jid = jid = helpers.get_jid_from_iq(iq_obj)
+		tag = iq_obj.getTag('query', namespace = common.xmpp.NS_SEARCH)
+		if not tag:
+			self.dispatch('SEARCH_FORM', (jid, None, False))
+			return
+		df = tag.getTag('x', namespace = common.xmpp.NS_DATA)
+		if df:
+			self.dispatch('SEARCH_FORM', (jid, df, True))
+			return
+		df = {}
+		for i in iq_obj.getQueryPayload():
+			df[i.getName()] = i.getData()
+		self.dispatch('SEARCH_FORM', (jid, df, False))
+
+	def _StreamCB(self, con, obj):
+		if obj.getTag('conflict'):
+			# disconnected because of a resource conflict
+			self.dispatch('RESOURCE_CONFLICT', ())
+
 	def _register_handlers(self, con, con_type):
 		# try to find another way to register handlers in each class 
 		# that defines handlers
@@ -2018,6 +2049,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_DISCO_ITEMS)
 		con.RegisterHandler('iq', self._IqPingCB, 'get',
 			common.xmpp.NS_PING)
+		con.RegisterHandler('iq', self._search_fields_received, 'result',
+			common.xmpp.NS_SEARCH)
 		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
@@ -2025,3 +2058,4 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		con.RegisterHandler('iq', self._ResultCB, 'result')
 		con.RegisterHandler('presence', self._StanzaArrivedCB)
 		con.RegisterHandler('message', self._StanzaArrivedCB)
+		con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')

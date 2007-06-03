@@ -34,7 +34,7 @@ def Field(typ, **attrs):
 	''' Helper function to create a field of given type. '''
 	f = {
 		'boolean': BooleanField,
-		'fixed': StringField,
+		'fixed': TextMultiField, # not editable, still can have multiple lines of text
 		'hidden': StringField,
 		'text-private': StringField,
 		'text-single': StringField,
@@ -54,7 +54,7 @@ def ExtendField(node):
 	typ=node.getAttr('type')
 	f = {
 		'boolean': BooleanField,
-		'fixed': StringField,
+		'fixed': TextMultiField,
 		'hidden': StringField,
 		'text-private': StringField,
 		'text-single': StringField,
@@ -63,12 +63,14 @@ def ExtendField(node):
 		'list-multi': ListMultiField,
 		'list-single': ListSingleField,
 		'text-multi': TextMultiField,
-	}[typ](extend=node)
-	return f
+	}
+	if typ not in f:
+		typ = 'text-single'
+	return f[typ](extend=node)
 
 def ExtendForm(node):
 	''' Helper function to extend a node to form of appropriate type. '''
-	if node.getTag('recorded') is not None:
+	if node.getTag('reported') is not None:
 		return MultipleDataForm(extend=node)
 	else:
 		return SimpleDataForm(extend=node)
@@ -194,7 +196,6 @@ class StringField(DataField):
 			except ValueError: # if there already were no value tag
 				pass
 		return locals()
-
 
 class ListField(DataField):
 	''' Covers fields of types: jid-multi, jid-single, list-multi, list-single. '''
@@ -385,9 +386,25 @@ class SimpleDataForm(DataForm, DataRecord):
 		DataRecord.__init__(self, fields=fields, extend=self, associated=self)
 
 class MultipleDataForm(DataForm):
-	def __init__(self):
+	def __init__(self, type=None, title=None, instructions=None, items=None, extend=None):
+		DataForm.__init__(self, type=type, title=title, instructions=instructions, extend=extend)
 		# all records, recorded into DataRecords
-		pass
+		if extend is None:
+			# we have to build this object from scratch
+			xmpp.Node.__init__(self)
+
+			if items is not None: self.items = items
+		else:
+			# we already have xmpp.Node inside - try to convert all
+			# fields into DataField objects
+			if items is None:
+				self.items = list(self.iterTags('item'))
+			else:
+				for item in self.getTags('item'):
+					self.delChild(item)
+				self.items = items
+		reported_tag = self.getTag('reported')
+		self.reported = DataRecord(extend = reported_tag)
 
 	@nested_property
 	def items():
@@ -401,7 +418,7 @@ class MultipleDataForm(DataForm):
 					DataRecord(extend=record)
 				self.addChild(node=record)
 		def fdel(self):
-			for record in self.getTags('record'):
+			for record in self.getTags('item'):
 				self.delChild(record)
 		return locals()
 
@@ -409,18 +426,18 @@ class MultipleDataForm(DataForm):
 		for record in self.getTags('item'):
 			yield record
 
-	@nested_property
-	def recorded():
-		''' DataRecord that contains descriptions of fields in records.'''
-		def fget(self):
-			return self.getTag('recorded')
-		def fset(self, record):
-			try:
-				self.delChild('recorded')
-			except:
-				pass
-
-			record.setName('recorded')
-			self.addChild(node=record)
-		return locals()
+#	@nested_property
+#	def reported():
+#		''' DataRecord that contains descriptions of fields in records.'''
+#		def fget(self):
+#			return self.getTag('reported')
+#		def fset(self, record):
+#			try:
+#				self.delChild('reported')
+#			except:
+#				pass
+#
+#			record.setName('reported')
+#			self.addChild(node=record)
+#		return locals()
 

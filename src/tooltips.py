@@ -322,15 +322,13 @@ class GCTooltip(BaseTooltip):
 		# Add avatar
 		puny_name = helpers.sanitize_filename(contact.name)
 		puny_room = helpers.sanitize_filename(contact.room_jid)
-		for type_ in ('jpeg', 'png'):
-			file = os.path.join(gajim.AVATAR_PATH, puny_room,
-				puny_name + '.' + type_)
-			if os.path.exists(file):
-				self.avatar_image.set_from_file(file)
-				pix = self.avatar_image.get_pixbuf()
-				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-				self.avatar_image.set_from_pixbuf(pix)
-				break
+		file = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_room,
+			puny_name))
+		if file:
+			self.avatar_image.set_from_file(file)
+			pix = self.avatar_image.get_pixbuf()
+			pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+			self.avatar_image.set_from_pixbuf(pix)
 		else:
 			self.avatar_image.set_from_pixbuf(None)
 		while properties:
@@ -375,7 +373,7 @@ class RosterTooltip(NotificationAreaTooltip):
 
 	def populate(self, contacts):
 		self.create_window()
-		
+
 		self.create_table()
 		if not contacts or len(contacts) == 0:
 			# Tooltip for merged accounts row
@@ -393,16 +391,14 @@ class RosterTooltip(NotificationAreaTooltip):
 		
 		puny_jid = helpers.sanitize_filename(prim_contact.jid)
 		table_size = 3
-		
-		for type_ in ('jpeg', 'png'):
-			file = os.path.join(gajim.AVATAR_PATH, puny_jid + '.' + type_)
-			if os.path.exists(file):
-				self.avatar_image.set_from_file(file)
-				pix = self.avatar_image.get_pixbuf()
-				pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-				self.avatar_image.set_from_pixbuf(pix)
-				table_size = 4
-				break
+
+		file = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_jid))
+		if file:
+			self.avatar_image.set_from_file(file)
+			pix = self.avatar_image.get_pixbuf()
+			pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+			self.avatar_image.set_from_pixbuf(pix)
+			table_size = 4
 		else:
 			self.avatar_image.set_from_pixbuf(None)
 		vcard_table = gtk.Table(table_size, 1)
@@ -414,8 +410,15 @@ class RosterTooltip(NotificationAreaTooltip):
 		name_markup = u'<span weight="bold">' + \
 			gobject.markup_escape_text(prim_contact.get_shown_name())\
 			+ '</span>'
+		if self.account and prim_contact.jid in gajim.connections[
+		self.account].blocked_contacts:
+			name_markup += _(' [blocked]')
+		if self.account and \
+		gajim.interface.minimized_controls.has_key(self.account) and \
+		prim_contact.jid in gajim.interface.minimized_controls[self.account]:
+			name_markup += _(' [minimized]')
 		properties.append((name_markup, None))
-		
+
 		num_resources = 0
 		# put contacts in dict, where key is priority
 		contacts_dict = {}
@@ -476,6 +479,12 @@ class RosterTooltip(NotificationAreaTooltip):
 						locale.getpreferredencoding())
 					text = text % local_time 
 					show += text
+				if self.account and \
+				gajim.gc_connected[self.account].has_key(prim_contact.jid):
+					if gajim.gc_connected[self.account][prim_contact.jid]:
+						show = _('Connected')
+					else:
+						show = _('Disconnected')
 				show = '<i>' + show + '</i>'
 				# we append show below
 				
@@ -519,8 +528,9 @@ class RosterTooltip(NotificationAreaTooltip):
 					status = contact.status.strip()
 					if status:
 						# reduce long status
-						# (no more than 100 chars on line and no more than 5 lines)
-						status = helpers.reduce_chars_newlines(status, 100, 5)
+						# (no more than 300 chars on line and no more than 5 lines)
+						# status is wrapped
+						status = helpers.reduce_chars_newlines(status, 300, 5)
 						# escape markup entities. 
 						status = gobject.markup_escape_text(status)
 						properties.append(('<i>%s</i>' % status, None))
@@ -534,7 +544,8 @@ class RosterTooltip(NotificationAreaTooltip):
 				gobject.markup_escape_text(contact.resource) +\
 				' (' + unicode(contact.priority) + ')'))
 		
-		if prim_contact.sub and prim_contact.sub != 'both':
+		if self.account and prim_contact.sub and prim_contact.sub != 'both' and\
+		not gajim.gc_connected[self.account].has_key(prim_contact.jid):
 			# ('both' is the normal sub so we don't show it)
 			properties.append(( _('Subscription: '), 
 				gobject.markup_escape_text(helpers.get_uf_sub(prim_contact.sub))))
@@ -571,6 +582,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			else:
 				if isinstance(property[0], (unicode, str)): #FIXME: rm unicode?
 					label.set_markup(property[0])
+					label.set_line_wrap(True)
 				else:
 					label = property[0]
 				vcard_table.attach(label, 1, 3, vcard_current_row,

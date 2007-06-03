@@ -1150,7 +1150,7 @@ msgstr "Rejoindre un salon de discussion"
 
 #: ../data/glade/join_groupchat_window.glade.h:2
 msgid "Join this room automatically when I connect"
-msgstr "Joindre ce groupe de discution quand je me connecte"
+msgstr "Joindre ce groupe de discussion quand je me connecte"
 
 #: ../data/glade/join_groupchat_window.glade.h:3
 #: ../data/glade/manage_bookmarks_window.glade.h:4
@@ -2445,11 +2445,11 @@ msgstr "%s n'a pas envoyé de clé OpenPGP et vous ne lui en avez pas assigné u
 
 #: ../src/chat_control.py:1263
 msgid "Encryption enabled"
-msgstr "Chiffrement activée"
+msgstr "Chiffrement activé"
 
 #: ../src/chat_control.py:1268
 msgid "Encryption disabled"
-msgstr "Chiffrement désactivée"
+msgstr "Chiffrement désactivé"
 
 #. add_to_roster_menuitem
 #: ../src/chat_control.py:1412
@@ -4218,7 +4218,7 @@ msgstr "Joindre un groupe de discussions"
 
 #: ../src/gajim-remote.py:244
 msgid "room"
-msgstr "groupe de discution"
+msgstr "groupe de discussion"
 
 #: ../src/gajim-remote.py:245
 msgid "nick"
@@ -6503,6 +6503,39 @@ msgstr "[Ce message est chiffré]"
 #, python-format
 msgid "Error while adding service. %s"
 msgstr "Erreur en ajoutant le service. %s"
+
+msgid "_Blocked Contacts"
+msgstr "Contacts _Bloqués"
+
+msgid "Blocked Contacts for %s"
+msgstr "Contacts Bloqués avec le compte %s"
+
+msgid "Blocked Contacts"
+msgstr "Contacts Bloqués"
+
+msgid "_Block"
+msgstr "_Bloquer"
+
+msgid "_Unblock"
+msgstr "_Débloquer"
+
+msgid " [blocked]"
+msgstr " [bloqué]"
+
+msgid "_Maximize"
+msgstr "_Maximiser"
+
+msgid "_Minimize"
+msgstr "_Minimiser"
+
+msgid " [minimized]"
+msgstr " [minimisé]"
+
+msgid "Connected"
+msgstr "Connecté"
+
+msgid "Disconnected"
+msgstr "Déconnecté"
 
 #~ msgid "2003-12-13T18:30:02Z"
 #~ msgstr "2003-12-13T18:30:02Z"

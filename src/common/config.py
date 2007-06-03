@@ -187,6 +187,7 @@ class Config:
 		'notification_avatar_width': [opt_int, 48],
 		'notification_avatar_height': [opt_int, 48],
 		'muc_highlight_words': [opt_str, '', _('A semicolon-separated list of words that will be highlighted in group chats.')],
+		'minimize_autojoined_rooms': [opt_bool, False, _('If True, autojoined bookmarked rooms will be minimized on startup.')],
 		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used.')],
 		'check_if_gajim_is_default': [opt_bool, True, _('If True, Gajim will check if it\'s the default jabber client on each startup.')],
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
@@ -225,6 +226,8 @@ class Config:
 		'show_contacts_number': [opt_bool, True, _('If True, Gajim will show number of online and total contacts in account and group rows.')],
 		'treat_incoming_messages': [ opt_str, '', _('Can be empty, \'chat\' or \'normal\'. If not empty, treat all incoming messages as if they were of this type')],
 		'scroll_roster_to_last_message': [opt_bool, True, _('If True, Gajim will scroll and select the contact who sent you the last message, if chat window is not already opened.')],
+		'use_latex': [opt_bool, False, _('If True, Gajim will convert string between $$ and $$ to an image using dvips and convert before insterting it in chat window.')],
+		'change_status_window_timeout': [opt_int, 15, _('Time of inactivity needed before the change status window closes down.')],
 	}
 
 	__options_per_key = {

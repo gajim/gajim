@@ -7,6 +7,7 @@
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -56,7 +57,7 @@ class EditGroupsDialog:
 		if len(list_) == 1:
 			contact = list_[0][0]
 			self.xml.get_widget('nickname_label').set_markup(
-				_("Contact name: <i>%s</i>") % contact.get_shown_name())
+				_('Contact name: <i>%s</i>') % contact.get_shown_name())
 			self.xml.get_widget('jid_label').set_markup(
 				_('Jabber ID: <i>%s</i>') % contact.jid)
 		else:
@@ -434,10 +435,10 @@ class ChangeStatusMessageDialog:
 		self.window.set_transient_for(gajim.interface.roster.window)
 		if show:
 			uf_show = helpers.get_uf_show(show)
-			title_text = _('%s Status Message') % uf_show
+			self.title_text = _('%s Status Message') % uf_show
 		else:
-			title_text = _('Status Message')
-		self.window.set_title(title_text)
+			self.title_text = _('Status Message')
+		self.window.set_title(self.title_text)
 
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
@@ -459,6 +460,10 @@ class ChangeStatusMessageDialog:
 			self.preset_messages_dict[msg_name] = msg_text
 		sorted_keys_list = helpers.get_sorted_keys(self.preset_messages_dict)
 
+		self.countdown_time = gajim.config.get('change_status_window_timeout')
+		self.countdown_left = self.countdown_time
+		self.countdown_enabled = True
+
 		self.message_liststore = gtk.ListStore(str) # msg_name
 		self.message_combobox = self.xml.get_widget('message_combobox')
 		self.message_combobox.set_model(self.message_liststore)
@@ -470,9 +475,25 @@ class ChangeStatusMessageDialog:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def countdown(self):
+		if self.countdown_enabled:
+			if self.countdown_left <= 0:
+				self.window.response(gtk.RESPONSE_OK)
+				return False
+			self.window.set_title('%s [%s]' % (self.title_text,
+				str(self.countdown_left)))
+			self.countdown_left -= 1
+			return True
+		else:
+			self.window.set_title(self.title_text)
+			return False
+
 	def run(self):
 		'''Wait for OK or Cancel button to be pressed and return status messsage
 		(None if users pressed Cancel or x button of WM'''
+		if self.countdown_time > 0:
+			self.countdown()
+			gobject.timeout_add(1000, self.countdown)
 		rep = self.window.run()
 		if rep == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
@@ -487,6 +508,7 @@ class ChangeStatusMessageDialog:
 		return message
 
 	def on_message_combobox_changed(self, widget):
+		self.countdown_enabled = False
 		model = widget.get_model()
 		active = widget.get_active()
 		if active < 0:
@@ -495,10 +517,13 @@ class ChangeStatusMessageDialog:
 		self.message_buffer.set_text(self.preset_messages_dict[name])
 
 	def on_change_status_message_dialog_key_press_event(self, widget, event):
+		self.countdown_enabled = False
 		if event.keyval == gtk.keysyms.Return or \
 		event.keyval == gtk.keysyms.KP_Enter:  # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)
+				# Stop the event
+				return True
 
 	def toggle_sensitiviy_of_save_as_preset(self, widget):
 		btn = self.xml.get_widget('save_as_preset_button')
@@ -508,6 +533,7 @@ class ChangeStatusMessageDialog:
 			btn.set_sensitive(True)
 
 	def on_save_as_preset_button_clicked(self, widget):
+		self.countdown_enabled = False
 		start_iter, finish_iter = self.message_buffer.get_bounds()
 		status_message_to_save_as_preset = self.message_buffer.get_text(
 			start_iter, finish_iter)
@@ -582,21 +608,21 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.available_types = []
 		for acct in accounts:
 			for j in gajim.contacts.get_jid_list(acct):
-				contact = gajim.contacts.get_first_contact_from_jid(acct, j)
 				if gajim.jid_is_transport(j):
-					type_ = gajim.get_transport_name_from_jid(j)
+					type_ = gajim.get_transport_name_from_jid(j, False)
 					if self.agents.has_key(type_):
 						self.agents[type_].append(j)
 					else:
 						self.agents[type_] = [j]
 		# Now add the one to which we can register
 		for acct in accounts:
-			for type_ in gajim.connections[account].available_transports:
+			for type_ in gajim.connections[acct].available_transports:
 				if type_ in self.agents:
 					continue
 				self.agents[type_] = []
-				for jid_ in gajim.connections[account].available_transports[type_]:
-					self.agents[type_].append(jid_)
+				for jid_ in gajim.connections[acct].available_transports[type_]:
+					if not jid_ in self.agents[type_]:
+						self.agents[type_].append(jid_)
 				self.available_types.append(type_)
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
@@ -835,7 +861,7 @@ class AboutDialog:
 		dlg.set_transient_for(gajim.interface.roster.window)
 		dlg.set_name('Gajim')
 		dlg.set_version(gajim.version)
-		s = u'Copyright © 2003-2006 Gajim Team'
+		s = u'Copyright © 2003-2007 Gajim Team'
 		dlg.set_copyright(s)
 		copying_file_path = None
 		if os.path.isfile(os.path.join(gajim.defs.docdir, 'COPYING')):
@@ -1027,6 +1053,15 @@ class BindPortError(HigDialog):
 		ErrorDialog(_('Unable to bind to port %s.') % port,
 			_('Maybe you have another running instance of Gajim. '
 			'File Transfer will be cancelled.'))
+
+class AspellDictError(HigDialog):
+	def __init__(self, lang):
+		ErrorDialog(
+			_('Dictionary for lang %s not available') % lang,
+			_('You have to install %s dictionary to use spellchecking, or '
+			'choose another language by setting the speller_language option.'
+			'\n\nHighlighting misspelled words feature will not be used') % lang)
+		gajim.config.set('use_speller', False)
 
 class ConfirmationDialog(HigDialog):
 	'''HIG compliant confirmation dialog.'''
@@ -1438,6 +1473,136 @@ class JoinGroupchatWindow:
 
 		self.window.destroy()
 
+class SynchroniseSelectAccountDialog:
+	def __init__(self, account):
+		# 'account' can be None if we are about to create our first one
+		if not account or gajim.connections[account].connected < 2:
+			ErrorDialog(_('You are not connected to the server'),
+				_('Without a connection, you can not synchronise your contacts.'))
+			raise GajimGeneralException, 'You are not connected to the server'
+		self.account = account
+		self.xml = gtkgui_helpers.get_glade('synchronise_select_account_dialog.glade')
+		self.dialog = self.xml.get_widget('synchronise_select_account_dialog')
+		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
+		model = gtk.ListStore(str, str, bool)
+		self.accounts_treeview.set_model(model)
+		# columns
+		renderer = gtk.CellRendererText()
+		self.accounts_treeview.insert_column_with_attributes(-1,
+					_('Name'), renderer, text = 0)
+		renderer = gtk.CellRendererText()
+		self.accounts_treeview.insert_column_with_attributes(-1,
+					_('Server'), renderer, text = 1)
+
+		self.xml.signal_autoconnect(self)
+		self.init_accounts()
+		self.dialog.show_all()
+
+	def on_accounts_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			self.window.destroy()
+
+	def init_accounts(self):
+		'''initialize listStore with existing accounts'''
+		model = self.accounts_treeview.get_model()
+		model.clear()
+		for remote_account in gajim.connections:
+			if remote_account == self.account:
+				# Do not show the account we're sync'ing
+				continue
+			iter = model.append()
+			model.set(iter, 0, remote_account, 1, gajim.get_hostname_from_account(
+				remote_account))
+
+	def on_cancel_button_clicked(self, widget):
+		self.dialog.destroy()
+
+	def on_ok_button_clicked(self, widget):
+		sel = self.accounts_treeview.get_selection()
+		(model, iter) = sel.get_selected()
+		if not iter:
+			return
+		remote_account = model.get_value(iter, 0).decode('utf-8')
+		
+		if gajim.connections[remote_account].connected < 2:
+			ErrorDialog(_('This account is not connected to the server'),
+				_('You cannot synchronize with an account unless it is connected.'))
+			return
+		else:
+			try:
+				dialog = SynchroniseSelectContactsDialog(self.account, remote_account)
+			except GajimGeneralException:
+				# if we showed ErrorDialog, there will not be dialog instance
+				return
+		self.dialog.destroy()
+
+class SynchroniseSelectContactsDialog:
+	def __init__(self, account, remote_account):
+		self.local_account = account
+		self.remote_account = remote_account
+		self.xml = gtkgui_helpers.get_glade('synchronise_select_contacts_dialog.glade')
+		self.dialog = self.xml.get_widget('synchronise_select_contacts_dialog')
+		self.contacts_treeview = self.xml.get_widget('contacts_treeview')
+		model = gtk.ListStore(bool, str)
+		self.contacts_treeview.set_model(model)
+		# columns
+		renderer1 = gtk.CellRendererToggle()
+		renderer1.set_property('activatable', True)
+		renderer1.connect('toggled', self.toggled_callback)
+		self.contacts_treeview.insert_column_with_attributes(-1,
+					_('Synchronise'), renderer1, active = 0)
+		renderer2 = gtk.CellRendererText()
+		self.contacts_treeview.insert_column_with_attributes(-1,
+					_('Name'), renderer2, text = 1)
+
+		self.xml.signal_autoconnect(self)
+		self.init_contacts()
+		self.dialog.show_all()
+
+	def toggled_callback(self, cell, path):
+		model = self.contacts_treeview.get_model()
+		iter = model.get_iter(path)
+		model[iter][0] = not cell.get_active()
+
+	def on_contacts_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			self.window.destroy()
+
+	def init_contacts(self):
+		'''initialize listStore with existing accounts'''
+		model = self.contacts_treeview.get_model()
+		model.clear()
+
+		# recover local contacts
+		local_jid_list = gajim.contacts.get_jid_list(self.local_account)
+
+		remote_jid_list = gajim.contacts.get_jid_list(self.remote_account)
+		for remote_jid in remote_jid_list:
+			if remote_jid not in local_jid_list:
+				iter = model.append()
+				model.set(iter, 0, True, 1, remote_jid)
+
+	def on_cancel_button_clicked(self, widget):
+		self.dialog.destroy()
+
+	def on_ok_button_clicked(self, widget):
+		model = self.contacts_treeview.get_model()
+		iter = model.get_iter_root()
+		while iter:
+			if model[iter][0]:
+				# it is selected
+				remote_jid = model[iter][1].decode('utf-8')
+				message = 'I\'m synchronizing my contacts from my %s account, could you please add this address to your contact list?' % \
+					gajim.get_hostname_from_account(self.remote_account)
+				remote_contact = gajim.contacts.get_first_contact_from_jid(
+					self.remote_account, remote_jid)
+				# keep same groups and same nickname
+				gajim.interface.roster.req_sub(self, remote_jid, message,
+					self.local_account, groups = remote_contact.groups,
+					nickname = remote_contact.name, auto_auth = True)
+			iter = model.iter_next(iter)
+		self.dialog.destroy()
+
 class NewChatDialog(InputDialog):
 	def __init__(self, account):
 		self.account = account
@@ -1692,9 +1857,7 @@ class SingleMessageWindow:
 					spell1.set_language(lang)
 					spell2.set_language(lang)
 			except gobject.GError, msg:
-				ErrorDialog(unicode(msg), _('If that is not your language for which you want to highlight misspelled words, then please set your $LANG as appropriate. Eg. for French do export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to make it global in /etc/profile.\n\nHighlighting misspelled words feature will not be used'))
-				gajim.config.set('use_speller', False)
-
+				dialogs.AspellDictError(lang)
 		self.send_button.set_no_show_all(True)
 		self.reply_button.set_no_show_all(True)
 		self.send_and_close_button.set_no_show_all(True)
@@ -2046,6 +2209,16 @@ class PrivacyListWindow:
 		self.privacy_list_default_checkbutton.set_sensitive(False)
 		self.list_of_rules_combobox.set_sensitive(False)
 
+		# set jabber id completion
+		jids_list_store = gtk.ListStore(gobject.TYPE_STRING)
+		for jid in gajim.contacts.get_jid_list(self.account):
+			jids_list_store.append([jid])	
+		jid_entry_completion = gtk.EntryCompletion()
+		jid_entry_completion.set_text_column(0)
+		jid_entry_completion.set_model(jids_list_store)
+		jid_entry_completion.set_popup_completion(True)
+  		self.edit_type_jabberid_entry.set_completion(jid_entry_completion)			
+
 		if action == 'EDIT':
 			self.refresh_rules()
 
@@ -2265,7 +2438,7 @@ class PrivacyListWindow:
 
 		gajim.connections[self.account].set_privacy_list(
 			self.privacy_list_name, tags)
-		self.privacy_list_received(tags)
+		self.refresh_rules()
 		self.add_edit_vbox.hide()
 		if 'privacy_lists' in gajim.interface.instances[self.account]:
 			win = gajim.interface.instances[self.account]['privacy_lists']
@@ -2287,6 +2460,101 @@ class PrivacyListWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+
+class BlockedContactsWindow:
+	'''Window that is the main window for ContactWindows;'''
+	def __init__(self, account):
+		self.account = account
+		self.xml = gtkgui_helpers.get_glade('blocked_contacts_window.glade')
+		self.window = self.xml.get_widget('blocked_contacts_window')
+		self.remove_button = self.xml.get_widget('remove_button')
+		self.contacts_treeview = self.xml.get_widget('contacts_treeview')
+		renderer = gtk.CellRendererText()
+		
+		self.store = gtk.ListStore(str)
+		self.contacts_treeview.set_model(self.store)
+		
+		column = gtk.TreeViewColumn('Contact', renderer, text=0)
+		self.contacts_treeview.append_column(column)
+	
+		if len(gajim.connections) > 1:
+			title = _('Blocked Contacts for %s') % self.account
+		else:
+			title = _('Blocked Contacts')
+		self.window.set_title(title)
+		self.window.show_all()
+		self.xml.signal_autoconnect(self)
+		gajim.connections[self.account].get_privacy_list('block')
+	
+	def on_blocked_contacts_window_destroy(self, widget):
+		key_name = 'blocked_contacts'
+		if key_name in gajim.interface.instances[self.account]:
+			del gajim.interface.instances[self.account][key_name]
+
+	def on_remove_button_clicked(self, widget):
+		if self.contacts_treeview.get_selection().get_selected()[1] == None:
+			return
+		tags = []
+		rule_selected = self.store.get_path(
+			self.contacts_treeview.get_selection().get_selected()[1])[0]
+		for i in range(0, len(self.global_rules)):
+			if i != rule_selected:
+				tags.append(self.global_rules[i])
+			else:
+				deleted_rule = self.global_rules[i]
+		for rule in self.global_rules_to_append:
+			tags.append(rule)
+		gajim.connections[self.account].set_privacy_list(
+			'block', tags)
+		gajim.connections[self.account].get_privacy_list('block')
+		if len(tags) == 0:
+			self.privacy_list_received([])
+			gajim.connections[self.account].blocked_contacts = []
+			gajim.connections[self.account].blocked_groups = []
+			gajim.connections[self.account].blocked_list = []
+			gajim.connections[self.account].set_default_list('')
+			gajim.connections[self.account].set_active_list('')
+			gajim.connections[self.account].del_privacy_list('block')
+		status = gajim.connections[self.account].connected
+		msg = gajim.connections[self.account].status
+		show = gajim.SHOW_LIST[gajim.connections[self.account].connected]
+		if deleted_rule['type'] == 'jid':
+			jid = deleted_rule['value']
+			gajim.connections[self.account].send_custom_status(show, msg, jid)
+			# needed for draw_contact:
+			if jid in gajim.connections[self.account].blocked_contacts:
+				gajim.connections[self.account].blocked_contacts.remove(jid)
+			gajim.interface.roster.draw_contact(jid, self.account)
+		else:
+			group = deleted_rule['value']
+			# needed for draw_group:
+			if group in gajim.connections[self.account].blocked_groups:
+				gajim.connections[self.account].blocked_groups.remove(group)
+			gajim.interface.roster.draw_group(group, self.account)
+			for jid in gajim.contacts.get_jid_list(self.account):
+				contact = gajim.contacts.get_contact_with_highest_priority(
+					self.account, jid)
+				if group in contact.groups:
+					gajim.connections[self.account].send_custom_status(show, msg,
+						contact.jid)
+					gajim.interface.roster.draw_contact(contact.jid, self.account)
+	
+	def privacy_list_received(self, rules):
+		self.store.clear()
+		self.global_rules = []
+		self.global_rules_to_append = []
+		for rule in rules:
+			if rule['type'] == 'jid' and rule['action'] == 'deny':
+				#self.global_rules[text_item] = rule
+				self.store.append([rule['value']])
+				self.global_rules.append(rule)
+			elif rule['type'] == 'group' and rule['action'] == 'deny':
+				text_item = _('Group %s') % rule['value']
+				self.store.append([text_item])
+				self.global_rules.append(rule)
+			else:
+				self.global_rules_to_append.append(rule)
+
 
 class PrivacyListsWindow:
 	'''Window that is the main window for Privacy Lists;

@@ -235,6 +235,11 @@ class MessageWindow:
 
 	def show_title(self, urgent = True, control = None):
 		'''redraw the window's title'''
+		if not control:
+			control = self.get_active_control()
+		if not control:
+			# No more control in this window
+			return
 		unread = 0
 		for ctrl in self.controls():
 			if ctrl.type_id == message_control.TYPE_GC and not \
@@ -253,8 +258,6 @@ class MessageWindow:
 		else:
 			urgent = False
 
-		if not control:
-			control = self.get_active_control()
 		if control.type_id == message_control.TYPE_GC:
 			name = control.room_jid.split('@')[0]
 			urgent = control.attention_flag
@@ -318,6 +321,10 @@ class MessageWindow:
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]
 
+		self.check_tabs()
+		self.show_title()
+
+	def check_tabs(self):
 		if self.get_num_controls() == 0:
 			# These are not called when the window is destroyed like this, fake it
 			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
@@ -332,9 +339,8 @@ class MessageWindow:
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
 			if not show_tabs_if_one_tab:
 				self.alignment.set_property('top-padding', 0)
-		self.show_title()
 
-			
+
 	def redraw_tab(self, ctrl, chatstate = None):
 		hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
 		status_img = hbox.get_children()[0]

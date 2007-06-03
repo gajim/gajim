@@ -126,6 +126,14 @@ class HistoryWindow:
 		self.calendar.select_month(gtk_month, y)
 		self.calendar.select_day(d)
 		self.add_lines_for_date(y, m, d)
+
+		log = True
+		if self.jid in gajim.config.get_per('accounts', self.account,
+			'no_log_for').split(' '):
+			log = False
+		checkbutton = xml.get_widget('log_history_checkbutton')
+		checkbutton.set_active(log)
+		checkbutton.connect('toggled', self.on_log_history_checkbutton_toggled)
 		
 		self.window.show_all()
 
@@ -391,3 +399,20 @@ class HistoryWindow:
 			match_start_mark = self.history_buffer.create_mark('match_start',
 				match_start_iter, True)
 			self.history_textview.tv.scroll_to_mark(match_start_mark, 0, True)
+
+	def on_log_history_checkbutton_toggled(self, widget):
+		# log conversation history?
+		oldlog = True
+		no_log_for = gajim.config.get_per('accounts', self.account,
+			'no_log_for').split()
+		if self.jid in no_log_for:
+			oldlog = False
+		log = widget.get_active()
+		if not log and not self.jid in no_log_for:
+			no_log_for.append(self.jid)
+		if log and self.jid in no_log_for:
+			no_log_for.remove(self.jid)
+		if oldlog != log:
+			gajim.config.set_per('accounts', self.account, 'no_log_for',
+				' '.join(no_log_for))
+
