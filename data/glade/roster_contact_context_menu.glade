@@ -261,7 +261,7 @@
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1714">
                     <property name="visible">True</property>
-                    <property name="stock">gtk-stop</property>
+                    <property name="stock">gtk-no</property>
                     <property name="icon_size">1</property>
                   </widget>
                 </child>
@@ -312,7 +312,7 @@
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="information_menuitem">
-        <property name="label">gtk-dialog-info</property>
+        <property name="label">gtk-info</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
       </widget>
