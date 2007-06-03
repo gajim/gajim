@@ -2170,8 +2170,7 @@ class Interface:
 					show = 'offline'
 					gc_contact = gajim.contacts.create_gc_contact(
 						room_jid = room_jid, name = nick, show = show)
-				c = gajim.contacts.contact_from_gc_contact(gc_contact)
-				self.roster.new_chat(c, account, private_chat = True)
+				self.roster.new_private_chat(gc_contact, account)
 				w = self.msg_win_mgr.get_window(fjid, account)
 		elif type_ in ('normal', 'file-request', 'file-request-error',
 		'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
