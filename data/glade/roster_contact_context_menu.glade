@@ -67,7 +67,7 @@
     <child>
       <widget class="GtkImageMenuItem" id="send_custom_status_menuitem">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Send cus_tom status</property>
+        <property name="label" translatable="yes">Send Cus_tom Status</property>
         <property name="use_underline">True</property>
         <child>
           <widget class="GtkMenu" id="menu5">
@@ -95,7 +95,7 @@
       <widget class="GtkImageMenuItem" id="manage_contact">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="label" translatable="yes">_Manage contact</property>
+        <property name="label" translatable="yes">_Manage Contact</property>
         <property name="use_underline">True</property>
         <child>
           <widget class="GtkMenu" id="menu2">
@@ -246,7 +246,7 @@
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1715">
                     <property name="visible">True</property>
-                    <property name="stock">gtk-yes</property>
+                    <property name="stock">gtk-stop</property>
                     <property name="icon_size">1</property>
                   </widget>
                 </child>
@@ -261,7 +261,7 @@
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1714">
                     <property name="visible">True</property>
-                    <property name="stock">gtk-no</property>
+                    <property name="stock">gtk-stop</property>
                     <property name="icon_size">1</property>
                   </widget>
                 </child>

@@ -10,17 +10,17 @@
         <child internal-child="image">
           <widget class="GtkImage" id="image1409">
             <property name="visible">True</property>
-            <property name="stock">gtk-redo</property>
+            <property name="stock">gtk-edit</property>
             <property name="icon_size">1</property>
           </widget>
         </child>
       </widget>
     </child>
     <child>
-      <widget class="GtkMenuItem" id="manage_room_menuitem">
+      <widget class="GtkImageMenuItem" id="manage_room_menuitem">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="label" translatable="yes">_Manage room</property>
+        <property name="label" translatable="yes">_Manage Room</property>
         <property name="use_underline">True</property>
         <child>
           <widget class="GtkMenu" id="menu1">
@@ -60,7 +60,7 @@
             <child>
               <widget class="GtkImageMenuItem" id="destroy_room_menuitem">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Destroy room</property>
+                <property name="label" translatable="yes">_Destroy Room</property>
                 <property name="use_underline">True</property>
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1407">
@@ -71,6 +71,14 @@
                 </child>
               </widget>
             </child>
+          </widget>
+        </child>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image8">
+            <property name="visible">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="stock">gtk-properties</property>
+            <property name="icon_size">1</property>
           </widget>
         </child>
       </widget>
@@ -96,21 +104,8 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkSeparatorMenuItem" id="separatormenuitem2">
+      <widget class="GtkSeparatorMenuItem" id="seperator">
         <property name="visible">True</property>
-      </widget>
-    </child>
-    <child>
-      <widget class="GtkImageMenuItem" id="bookmark_room_menuitem">
-        <property name="label" translatable="yes">_Bookmark</property>
-        <property name="use_underline">True</property>
-        <child internal-child="image">
-          <widget class="GtkImage" id="image1410">
-            <property name="visible">True</property>
-            <property name="stock">gtk-add</property>
-            <property name="icon_size">1</property>
-          </widget>
-        </child>
       </widget>
     </child>
     <child>
@@ -122,6 +117,19 @@
           <widget class="GtkImage" id="image1405">
             <property name="visible">True</property>
             <property name="stock">gtk-justify-fill</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkImageMenuItem" id="bookmark_room_menuitem">
+        <property name="label" translatable="yes">_Bookmark</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image1410">
+            <property name="visible">True</property>
+            <property name="stock">gtk-add</property>
             <property name="icon_size">1</property>
           </widget>
         </child>

@@ -1156,9 +1156,14 @@ class RosterWindow:
 		
 	def add_bookmarks_list(self, gc_sub_menu, account):
 		'''Show join new group chat item and bookmarks list for an account'''
-		item = gtk.MenuItem(_('_Join New Group Chat'))
+		item = gtk.ImageMenuItem(_('_Join New Group Chat'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
 		item.connect('activate', self.on_join_gc_activate, account)
 		gc_sub_menu.append(item)
+
+		item = gtk.SeparatorMenuItem() # separator
+		gc_sub_menu.append(item) 
 
 		for bookmark in gajim.connections[account].bookmarks:
 			item = gtk.MenuItem(bookmark['name'], False) # Do not use underline
@@ -2042,7 +2047,7 @@ class RosterWindow:
 		# Invite to
 		invite_to_submenu = gtk.Menu()
 		invite_menuitem.set_submenu(invite_to_submenu)
-		invite_to_new_room_menuitem = gtk.ImageMenuItem(_('_New group chat'))
+		invite_to_new_room_menuitem = gtk.ImageMenuItem(_('_New Group Chat'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
 		invite_to_new_room_menuitem.set_image(icon)
 		contact_transport = gajim.get_transport_name_from_jid(contact.jid)
@@ -2442,7 +2447,7 @@ class RosterWindow:
 		menu.popup(None, None, None, event_button, event.time)
 
 	def on_groupchat_maximized(self, widget, jid, account):
-		'''When a groupshat is maximised'''
+		'''When a groupchat is maximised'''
 		if not gajim.interface.minimized_controls.has_key(account):
 			return
 		if not gajim.interface.minimized_controls[account].has_key(jid):
@@ -2474,30 +2479,11 @@ class RosterWindow:
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 
 		menu = gtk.Menu()
-		if not group in helpers.special_groups + (_('General'),):
-
-			rename_item = gtk.ImageMenuItem(_('Re_name'))
-			# add a special img for rename menuitem
-			path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-				'kbd_input.png')
-			img = gtk.Image()
-			img.set_from_file(path_to_kbd_input_img)
-			rename_item.set_image(img)
-			menu.append(rename_item)
-			rename_item.connect('activate', self.on_rename, iter, path)
-
-			# Remove group
-			remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
-			icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
-			remove_item.set_image(icon)
-			menu.append(remove_item)
-			remove_item.connect('activate', self.on_remove_group_item_activated,
-				group, account)
-
-			# unsensitive if account is not connected
-			if gajim.connections[account].connected < 2:
-				rename_item.set_sensitive(False)
-		send_group_message_item = gtk.MenuItem(_('Send Group M_essage'))
+	
+		# Send Group Message
+		send_group_message_item = gtk.ImageMenuItem(_('Send Group M_essage'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+		send_group_message_item.set_image(icon)
 
 		send_group_message_submenu = gtk.Menu()
 		send_group_message_item.set_submenu(send_group_message_submenu)
@@ -2526,6 +2512,7 @@ class RosterWindow:
 		group_message_to_all_item.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, list_)
 
+		# Send Custom Status
 		send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
 		# add a special img for this menuitem
 		if gajim.interface.status_sent_to_groups.has_key(account) and \
@@ -2548,28 +2535,55 @@ class RosterWindow:
 			status_menuitem.set_image(icon) 
 			status_menuitems.append(status_menuitem)
 		menu.append(send_custom_status_menuitem)
-		is_blocked = False
-		if self.regroup:
-			for g_account in gajim.connections:
-				if group in gajim.connections[g_account].blocked_groups:
+
+		if not group in helpers.special_groups + (_('General'),):
+			item = gtk.SeparatorMenuItem() # separator
+                	menu.append(item)  		
+
+			# Rename
+			rename_item = gtk.ImageMenuItem(_('Re_name'))
+			# add a special img for rename menuitem
+			path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'kbd_input.png')
+			img = gtk.Image()
+			img.set_from_file(path_to_kbd_input_img)
+			rename_item.set_image(img)
+			menu.append(rename_item)
+			rename_item.connect('activate', self.on_rename, iter, path)
+			
+			# Block group
+			is_blocked = False
+			if self.regroup:
+				for g_account in gajim.connections:
+					if group in gajim.connections[g_account].blocked_groups:
+						is_blocked = True
+			else:
+				if group in gajim.connections[account].blocked_groups:
 					is_blocked = True
-		else:
-			if group in gajim.connections[account].blocked_groups:
-				is_blocked = True
-		
-		if group not in helpers.special_groups + (_('General'),):
+
 			if is_blocked:
 				unblock_menuitem = gtk.ImageMenuItem(_('_Unblock'))
-				icon = gtk.image_new_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
+				icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 				unblock_menuitem.set_image(icon)
 				unblock_menuitem.connect('activate', self.on_unblock, iter, list_)
 				menu.append(unblock_menuitem)
 			else:
 				block_menuitem = gtk.ImageMenuItem(_('_Block'))
-				icon = gtk.image_new_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
+				icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 				block_menuitem.set_image(icon)
 				block_menuitem.connect('activate', self.on_block, iter, list_)
 				menu.append(block_menuitem)
+
+			# Remove group
+			remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
+			remove_item.set_image(icon)
+			menu.append(remove_item)
+			remove_item.connect('activate', self.on_remove_group_item_activated,
+				group, account)
+			# unsensitive if account is not connected
+			if gajim.connections[account].connected < 2:
+				rename_item.set_sensitive(False)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
@@ -2699,7 +2713,6 @@ class RosterWindow:
 			if muc_icon:
 				join_group_chat_menuitem.set_image(muc_icon)
 			open_gmail_inbox_menuitem = xml.get_widget('open_gmail_inbox_menuitem')
-			new_message_menuitem = xml.get_widget('new_message_menuitem')
 			add_contact_menuitem = xml.get_widget('add_contact_menuitem')
 			service_discovery_menuitem = xml.get_widget(
 				'service_discovery_menuitem')
@@ -2730,6 +2743,9 @@ class RosterWindow:
 			if gajim.connections[account].connected < 2:
 				item.set_sensitive(False)
 
+			item = gtk.SeparatorMenuItem()
+			sub_menu.append(item)
+
 			uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
 			item = gtk.ImageMenuItem(uf_show)
 			icon = state_images['offline']
@@ -2759,13 +2775,11 @@ class RosterWindow:
 			gc_sub_menu = gtk.Menu() # gc is always a submenu
 			join_group_chat_menuitem.set_submenu(gc_sub_menu)
 			self.add_bookmarks_list(gc_sub_menu, account)
-			new_message_menuitem.connect('activate',
-				self.on_new_message_menuitem_activate, account)
 
 			# make some items insensitive if account is offline
 			if gajim.connections[account].connected < 2:
 				for widget in [add_contact_menuitem, service_discovery_menuitem,
-				join_group_chat_menuitem, new_message_menuitem,
+				join_group_chat_menuitem, 
 				execute_command_menuitem]:
 					widget.set_sensitive(False)
 		else:
@@ -2773,7 +2787,6 @@ class RosterWindow:
 			account_context_menu = xml.get_widget('zeroconf_context_menu')
 
 			status_menuitem = xml.get_widget('status_menuitem')
-			new_message_menuitem = xml.get_widget('new_message_menuitem')
 			zeroconf_properties_menuitem = xml.get_widget(
 				'zeroconf_properties_menuitem')
 			sub_menu = gtk.Menu()
@@ -3712,9 +3725,6 @@ class RosterWindow:
 					dialogs.JoinGroupchatWindow(account)
 			except GajimGeneralException:
 				pass
-
-	def on_new_message_menuitem_activate(self, widget, account):
-		dialogs.SingleMessageWindow(account, action = 'send')
 	
 	def on_new_chat_menuitem_activate(self, widget, account):
 		dialogs.NewChatDialog(account)
