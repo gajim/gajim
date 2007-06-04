@@ -2413,7 +2413,7 @@ class RosterWindow:
 		path = model.get_path(iter)
 		jid = model[iter][C_JID].decode('utf-8')
 		account = model[iter][C_ACCOUNT].decode('utf-8')
-
+		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		menu = gtk.Menu()
 
 		if gajim.interface.minimized_controls.has_key(account) and \
@@ -2425,7 +2425,13 @@ class RosterWindow:
 				jid, account)
 			menu.append(maximize_menuitem)
 
-
+		history_menuitem = gtk.ImageMenuItem(_('_History'))
+		history_icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL, \
+			gtk.ICON_SIZE_MENU)
+		history_menuitem.set_image(history_icon)
+		history_menuitem .connect('activate', self.on_history, \
+				contact, account)
+		menu.append(history_menuitem)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 		
