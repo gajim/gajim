@@ -2098,7 +2098,7 @@ class PrivacyListWindow:
 		jid_entry_completion.set_text_column(0)
 		jid_entry_completion.set_model(jids_list_store)
 		jid_entry_completion.set_popup_completion(True)
-  		self.edit_type_jabberid_entry.set_completion(jid_entry_completion)			
+		self.edit_type_jabberid_entry.set_completion(jid_entry_completion)
 
 		if action == 'EDIT':
 			self.refresh_rules()
