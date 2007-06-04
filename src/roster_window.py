@@ -2505,27 +2505,26 @@ class RosterWindow:
 			maximize_menuitem.connect('activate', self.on_all_groupchat_maximized, \
 				list_)
 			menu.append(maximize_menuitem)
+		else:
+			# Send Group Message
+			send_group_message_item = gtk.ImageMenuItem(_('Send Group M_essage'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+			send_group_message_item.set_image(icon)
 
+			send_group_message_submenu = gtk.Menu()
+			send_group_message_item.set_submenu(send_group_message_submenu)
+			menu.append(send_group_message_item)
 
-		# Send Group Message
-		send_group_message_item = gtk.ImageMenuItem(_('Send Group M_essage'))
-		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
-		send_group_message_item.set_image(icon)
+			group_message_to_all_item = gtk.MenuItem(_('To all users'))
+			send_group_message_submenu.append(group_message_to_all_item)
 
-		send_group_message_submenu = gtk.Menu()
-		send_group_message_item.set_submenu(send_group_message_submenu)
-		menu.append(send_group_message_item)
+			group_message_to_all_online_item = gtk.MenuItem(_('To all online users'))
+			send_group_message_submenu.append(group_message_to_all_online_item)
 
-		group_message_to_all_item = gtk.MenuItem(_('To all users'))
-		send_group_message_submenu.append(group_message_to_all_item)
-
-		group_message_to_all_online_item = gtk.MenuItem(_('To all online users'))
-		send_group_message_submenu.append(group_message_to_all_online_item)
-
-		group_message_to_all_online_item.connect('activate',
-			self.on_send_single_message_menuitem_activate, account, list_online)
-		group_message_to_all_item.connect('activate',
-			self.on_send_single_message_menuitem_activate, account, list_)
+			group_message_to_all_online_item.connect('activate',
+				self.on_send_single_message_menuitem_activate, account, list_online)
+			group_message_to_all_item.connect('activate',
+				self.on_send_single_message_menuitem_activate, account, list_)
 
 		# Send Custom Status
 		send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
