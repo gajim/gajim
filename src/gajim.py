@@ -687,9 +687,9 @@ class Interface:
 
 		groupchat_control = self.msg_win_mgr.get_control(jid, account)
 		if not groupchat_control and \
-		gajim.interface.minimized_controls.has_key(account) and \
-		jid in gajim.interface.minimized_controls[account]:
-			groupchat_control = gajim.interface.minimized_controls[account][jid]
+		self.minimized_controls.has_key(account) and \
+		jid in self.minimized_controls[account]:
+			groupchat_control = self.minimized_controls[account][jid]
 		pm = False
 		if groupchat_control and groupchat_control.type_id == \
 		message_control.TYPE_GC:
@@ -1086,7 +1086,7 @@ class Interface:
 			control.chg_contact_status(nick, show, status, array[4], array[5],
 				array[6], array[7], array[8], array[9], array[10], array[11])
 		if control and not control.parent_win:
-			gajim.interface.roster.draw_contact(room_jid, account)
+			self.roster.draw_contact(room_jid, account)
 
 		ctrl = self.msg_win_mgr.get_control(fjid, account)
 
@@ -1136,7 +1136,7 @@ class Interface:
 		contact = gajim.contacts.\
 			get_contact_with_highest_priority(account, room_jid)
 		if contact:
-			gajim.interface.roster.draw_contact(room_jid, account)
+			self.roster.draw_contact(room_jid, account)
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
@@ -1157,7 +1157,7 @@ class Interface:
 			get_contact_with_highest_priority(account, jid)
 		if contact:
 			contact.status = array[1]
-			gajim.interface.roster.draw_contact(jid, account)
+			self.roster.draw_contact(jid, account)
 
 		if not gc_control:
 			return

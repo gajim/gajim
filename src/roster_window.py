@@ -4681,7 +4681,7 @@ class RosterWindow:
 				it = model.iter_parent(it)
 			grp_dest = model[it][C_JID].decode('utf-8')
 
-		if type_dest == 'groupchat' or type_source == 'groupchat':
+		if type_dest == 'groupchat':
 			return
 
 		if (type_dest == 'account' or not self.regroup) and \
