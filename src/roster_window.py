@@ -143,8 +143,8 @@ class RosterWindow:
 			path = None
 		return path
 
-	def show_and_select_path(self, path, jid, account):	
-		'''Show contact in roster (if he is invisible for example) 
+	def show_and_select_path(self, path, jid, account):
+		'''Show contact in roster (if he is invisible for example)
 		and select line'''
 		if not path:
 			# contact is in roster but we curently don't see him online
@@ -234,7 +234,7 @@ class RosterWindow:
 		gajim.get_number_of_connected_accounts())) and gajim.config.get(
 		'show_contacts_number'):
 			nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
-				accounts = accounts)		
+				accounts = accounts)
 			account_name += ' (%s/%s)' % (repr(nbr_on),repr(nbr_total))
 		model[iter][C_NAME] = account_name
 
@@ -293,7 +293,7 @@ class RosterWindow:
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 
 		# family members that are in roster and belong to the same account.
-		shown_family = [] 
+		shown_family = []
 		if family:
 			for data in family:
 				_account = data['account']
@@ -301,7 +301,7 @@ class RosterWindow:
 				if _account != account and not self.regroup:
 					continue
 				_jid = data['jid']
-				
+
 				if self.get_contact_iter(_jid, _account):
 					shown_family.append(data)
 				if _jid == jid and _account == account:
@@ -491,8 +491,8 @@ class RosterWindow:
 			return
 		if contact.jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(contact.jid)
-		
-		
+
+
 		hide = contact.is_hidden_from_roster()
 
 		show_offline = gajim.config.get('showoffline')
@@ -532,7 +532,7 @@ class RosterWindow:
 			c_account = model[child_iter][C_ACCOUNT].decode('utf-8')
 			children.append((c_jid, c_account))
 			child_iter = model.iter_next(child_iter)
-		
+
 		# Remove iters and group iter if they are empty
 		for i in iters:
 			parent_i = model.iter_parent(i)
@@ -782,11 +782,11 @@ class RosterWindow:
 
 	def on_actions_menuitem_activate(self, widget):
 		self.make_menu()
-	
+
 	def on_edit_menuitem_activate(self, widget):
 		'''need to call make_menu to build profile, avatar item'''
 		self.make_menu()
-		
+
 	def on_bookmark_menuitem_activate(self, widget, account, bookmark):
 		self.join_gc_room(account, bookmark['jid'], bookmark['nick'],
 			bookmark['password'])
@@ -809,7 +809,7 @@ class RosterWindow:
 		else:
 			gajim.interface.instances[account]['privacy_lists'] = \
 				dialogs.PrivacyListsWindow(account)
-	
+
 	def on_blocked_contacts_menuitem_activate(self, widget, account):
 		if gajim.interface.instances[account].has_key('blocked_contacts'):
 			gajim.interface.instances[account]['blocked_contacts'].window.present()
@@ -881,7 +881,7 @@ class RosterWindow:
 		else:
 			send_single_message_menuitem.connect('activate',
 				self.on_send_single_message_menuitem_activate, account)
-			
+
 			send_server_message_menuitem.connect('activate',
 				self.on_send_server_message_menuitem_activate, account)
 
@@ -910,7 +910,7 @@ class RosterWindow:
 		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
 		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
-		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')	
+		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
 
 		# destroy old advanced menus
 		for m in self.advanced_menus:
@@ -957,15 +957,15 @@ class RosterWindow:
 
 		gc_sub_menu = gtk.Menu() # gc is always a submenu
 		join_gc_menuitem.set_submenu(gc_sub_menu)
-		
+
 		connected_accounts = gajim.get_number_of_connected_accounts()
 		if connected_accounts > 1: # 2 or more accounts? make submenus
 			add_sub_menu = gtk.Menu()
 			disco_sub_menu = gtk.Menu()
 			new_chat_sub_menu = gtk.Menu()
 
-			accounts_list = gajim.contacts.get_accounts() 
-			accounts_list.sort() 
+			accounts_list = gajim.contacts.get_accounts()
+			accounts_list.sort()
 			for account in accounts_list:
 				if gajim.connections[account].connected <= 1:
 					# if offline or connecting
@@ -978,8 +978,8 @@ class RosterWindow:
 				new_chat_item.connect('activate',
 					self.on_new_chat_menuitem_activate,	account)
 
-				if gajim.config.get_per('accounts', account, 'is_zeroconf'): 
-					continue 	
+				if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+					continue
 
 				# join gc
 				label = gtk.Label()
@@ -990,7 +990,7 @@ class RosterWindow:
 				gc_item.connect('state-changed',
 					gtkgui_helpers.on_bm_header_changed_state)
 				gc_sub_menu.append(gc_item)
-				
+
 				self.add_bookmarks_list(gc_sub_menu, account)
 
 				# the 'manage gc bookmarks' item is shown
@@ -1041,9 +1041,9 @@ class RosterWindow:
 						new_chat_menuitem.add_accelerator('activate', ag,
 							gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 						self.have_new_chat_accel = True
-					
+
 					break # No other account connected
-		
+
 		if connected_accounts == 0:
 			# no connected accounts, make the menuitems insensitive
 			for item in [new_chat_menuitem, join_gc_menuitem,\
@@ -1053,7 +1053,7 @@ class RosterWindow:
 			for item in [new_chat_menuitem, join_gc_menuitem,\
 						add_new_contact_menuitem, service_disco_menuitem]:
 				item.set_sensitive(True)
-			
+
 			# disable some fields if only local account is there
 			if connected_accounts == 1:
 				for account in gajim.connections:
@@ -1077,10 +1077,10 @@ class RosterWindow:
 			profile_avatar_sub_menu = gtk.Menu()
 			for account in connected_accounts_with_vcard:
 				# profile, avatar
-				profile_avatar_item = gtk.MenuItem(_('of account %s') % account, 
+				profile_avatar_item = gtk.MenuItem(_('of account %s') % account,
 					False)
 				profile_avatar_sub_menu.append(profile_avatar_item)
-				profile_avatar_item.connect('activate', 
+				profile_avatar_item.connect('activate',
 					self.on_profile_avatar_menuitem_activate, account)
 			profile_avatar_menuitem.set_submenu(profile_avatar_sub_menu)
 			profile_avatar_sub_menu.show_all()
@@ -1105,7 +1105,7 @@ class RosterWindow:
 				self.on_manage_bookmarks_menuitem_activate)
 			gc_sub_menu.append(newitem)
 			gc_sub_menu.show_all()
-			
+
 		# Advanced Actions
 		if len(gajim.connections) == 0: # user has no accounts
 			advanced_menuitem.set_sensitive(False)
@@ -1114,7 +1114,7 @@ class RosterWindow:
 			advanced_menuitem_menu = self.get_and_connect_advanced_menuitem_menu(
 				account)
 			self.advanced_menus.append(advanced_menuitem_menu)
-		
+
 			self._add_history_manager_menuitem(advanced_menuitem_menu)
 
 			advanced_menuitem.set_submenu(advanced_menuitem_menu)
@@ -1132,20 +1132,20 @@ class RosterWindow:
 					self.get_and_connect_advanced_menuitem_menu(account)
 				self.advanced_menus.append(advanced_menuitem_menu)
 				advanced_item.set_submenu(advanced_menuitem_menu)
-			
+
 			self._add_history_manager_menuitem(advanced_sub_menu)
-			
+
 			advanced_menuitem.set_submenu(advanced_sub_menu)
 			advanced_sub_menu.show_all()
 
 		self.actions_menu_needs_rebuild = False
 
 	def _add_history_manager_menuitem(self, menu):
-		'''adds a seperator and History Manager menuitem BELOW for account 
+		'''adds a seperator and History Manager menuitem BELOW for account
 		menuitems'''
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
-		
+
 		# History manager
 		item = gtk.ImageMenuItem(_('History Manager'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL,
@@ -1153,7 +1153,7 @@ class RosterWindow:
 		item.set_image(icon)
 		menu.append(item)
 		item.connect('activate', self.on_history_manager_menuitem_activate)
-		
+
 	def add_bookmarks_list(self, gc_sub_menu, account):
 		'''Show join new group chat item and bookmarks list for an account'''
 		item = gtk.ImageMenuItem(_('_Join New Group Chat'))
@@ -1163,7 +1163,7 @@ class RosterWindow:
 		gc_sub_menu.append(item)
 
 		item = gtk.SeparatorMenuItem() # separator
-		gc_sub_menu.append(item) 
+		gc_sub_menu.append(item)
 
 		for bookmark in gajim.connections[account].bookmarks:
 			item = gtk.MenuItem(bookmark['name'], False) # Do not use underline
@@ -1172,7 +1172,7 @@ class RosterWindow:
 			gc_sub_menu.append(item)
 
 	def _change_style(self, model, path, iter, option):
-		if option is None or model[iter][C_TYPE] == option: 
+		if option is None or model[iter][C_TYPE] == option:
 			# We changed style for this type of row
 			model[iter][C_NAME] = model[iter][C_NAME]
 
@@ -1308,9 +1308,9 @@ class RosterWindow:
 				if (len(contact_instances) > 1 or (len(contact_instances) == 1 and \
 				show in ('offline', 'error'))) and contact.resource != '':
 					name += '/' + contact.resource
-				
+
 				uf_show = helpers.get_uf_show(show)
-				if status: 
+				if status:
 					ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
 						status), 'status')
 				else: # No status message
@@ -1323,7 +1323,7 @@ class RosterWindow:
 			for group in contact.groups:
 				self.draw_group(group, account)
 
-		self.draw_account(account) 
+		self.draw_account(account)
 
 	def on_info(self, widget, contact, account):
 		'''Call vcard_information_window class to display contact's information'''
@@ -1342,7 +1342,7 @@ class RosterWindow:
 		if info.has_key(contact.jid):
 			info[contact.jid].window.present()
 		else:
-			contact = gajim.contacts.get_first_contact_from_jid(account, 
+			contact = gajim.contacts.get_first_contact_from_jid(account,
 							contact.jid)
 			if contact.show in ('offline', 'error'):
 				# don't show info on offline contacts
@@ -1358,7 +1358,7 @@ class RosterWindow:
 		if props and self.tooltip.id == props[0]:
 			# bounding rectangle of coordinates for the cell within the treeview
 			rect = self.tree.get_cell_area(props[0], props[1])
-			
+
 			# position of the treeview on the screen
 			position = self.tree.window.get_origin()
 			self.tooltip.show_tooltip(contact, rect.height, position[1] + rect.y)
@@ -1551,7 +1551,7 @@ class RosterWindow:
 					# needed for draw_contact:
 					gajim.connections[account].blocked_contacts.append(contact.jid)
 					self.draw_contact(contact.jid, account)
-			else:			
+			else:
 				group = model[iter][C_JID].decode('utf-8')
 				for (contact, account) in group_list:
 					if account not in accounts:
@@ -1664,7 +1664,7 @@ class RosterWindow:
 							gajim.connections[account].status, to=contact.jid)
 				else:
 					self.send_status(account, show,
-						gajim.connections[account].status, to=contact.jid)	
+						gajim.connections[account].status, to=contact.jid)
 
 	def on_rename(self, widget, iter, path):
 		# this function is called either by F2 or by Rename menuitem
@@ -1738,7 +1738,7 @@ class RosterWindow:
 		def on_canceled():
 			if gajim.interface.instances.has_key('rename'):
 				del gajim.interface.instances['rename']
-			
+
 		gajim.interface.instances['rename'] = dialogs.InputDialog(title, message,
 			old_text, False, (on_renamed, account, row_type, jid, old_text),
 			on_canceled)
@@ -1778,7 +1778,7 @@ class RosterWindow:
 						contact.name, contact.groups)
 					self.add_contact_to_roster(contact.jid, account)
 				else:
-					gajim.connections[account].unsubscribe(contact.jid) 
+					gajim.connections[account].unsubscribe(contact.jid)
 					for c in gajim.contacts.get_contact(account, contact.jid):
 						self.remove_contact(c, account)
 					gajim.contacts.remove_jid(account, c.jid)
@@ -2015,7 +2015,7 @@ class RosterWindow:
 			send_custom_status_menuitem.set_image(
 				self.load_icon(gajim.interface.status_sent_to_users[account][jid]))
 		else:
-			send_custom_status_menuitem.set_image(None) 
+			send_custom_status_menuitem.set_image(None)
 
 		if not our_jid:
 			# add a special img for rename menuitem
@@ -2085,7 +2085,7 @@ class RosterWindow:
 			status_menuitems.append(status_menuitem)
 		if len(contacts) > 1: # several resources
 			def resources_submenu(action, room_jid = None, room_account = None):
-				''' Build a submenu with contact's resources. 
+				''' Build a submenu with contact's resources.
 				room_jid and room_account are for action self.on_invite_to_room '''
 				sub_menu = gtk.Menu()
 
@@ -2103,7 +2103,7 @@ class RosterWindow:
 					item.set_image(icon)
 					sub_menu.append(item)
 					if action == self.on_invite_to_room:
-						item.connect('activate', action, [(c, account)], 
+						item.connect('activate', action, [(c, account)],
 							room_jid, room_account, c.resource)
 					elif action == self.on_invite_to_new_room:
 						item.connect('activate', action, [(c, account)], c.resource)
@@ -2119,7 +2119,7 @@ class RosterWindow:
 				self.on_invite_to_new_room))
 			for (room_jid, room_account) in rooms:
 				menuitem = gtk.MenuItem(room_jid.split('@')[0])
-				menuitem.set_submenu(resources_submenu(self.on_invite_to_room, 
+				menuitem.set_submenu(resources_submenu(self.on_invite_to_room,
 					room_jid, room_account))
 				invite_to_submenu.append(menuitem)
 
@@ -2139,16 +2139,16 @@ class RosterWindow:
 			our_jid_other_resource = None
 			if our_jid:
 				# It's another resource of us, be sure to send invite to her
-				our_jid_other_resource = contact.resource 
+				our_jid_other_resource = contact.resource
 			# Else this var is useless but harmless in next connect calls
-				
-			invite_to_new_room_menuitem.connect('activate', 
-				self.on_invite_to_new_room, [(contact, account)], 
+
+			invite_to_new_room_menuitem.connect('activate',
+				self.on_invite_to_new_room, [(contact, account)],
 				our_jid_other_resource)
 			for (room_jid, room_account) in rooms:
 				menuitem = gtk.MenuItem(room_jid.split('@')[0])
 				menuitem.connect('activate', self.on_invite_to_room,
-					[(contact, account)], room_jid, room_account, 
+					[(contact, account)], room_jid, room_account,
 					our_jid_other_resource)
 				invite_to_submenu.append(menuitem)
 
@@ -2245,7 +2245,7 @@ class RosterWindow:
 			unblock_menuitem.set_no_show_all(True)
 			block_menuitem.hide()
 			unblock_menuitem.hide()
-			
+
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
 		roster_contact_context_menu.attach_to_widget(self.tree, None)
@@ -2256,7 +2256,7 @@ class RosterWindow:
 			event.time)
 
 	def on_invite_to_new_room(self, widget, list_, resource = None):
-		''' resource parameter MUST NOT be used if more than one contact in 
+		''' resource parameter MUST NOT be used if more than one contact in
 		list '''
 		account_list = []
 		jid_list = []
@@ -2285,16 +2285,16 @@ class RosterWindow:
 					continue
 				break
 
-	def on_invite_to_room(self, widget, list_, room_jid, room_account, 
+	def on_invite_to_room(self, widget, list_, room_jid, room_account,
 		resource = None):
-		''' resource parameter MUST NOT be used if more than one contact in 
+		''' resource parameter MUST NOT be used if more than one contact in
 		list '''
 		for (contact, acct) in list_:
 			contact_jid = contact.jid
 			if resource: # we MUST have one contact only in list_
 				contact_jid += '/' + resource
 			gajim.connections[room_account].send_invite(room_jid, contact_jid)
-		
+
 
 	def make_multiple_contact_menu(self, event, iters):
 		'''Make group's popup menu'''
@@ -2369,14 +2369,14 @@ class RosterWindow:
 					menuitem.connect('activate', self.on_invite_to_room, list_,
 						room_jid, account)
 					sub_menu.append(menuitem)
-		
+
 			invite_item.set_submenu(sub_menu)
 		menu.append(invite_item)
 
 		edit_groups_item = gtk.MenuItem(_('Edit _Groups'))
 		menu.append(edit_groups_item)
 		edit_groups_item.connect('activate', self.on_edit_groups, list_)
-		
+
 		account = None
 		for (contact, current_account) in list_:
 			# check that we use the same account for every sender
@@ -2440,7 +2440,7 @@ class RosterWindow:
 		menu.append(history_menuitem)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
-		
+
 		menu.attach_to_widget(self.tree, None)
 		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
 		menu.show_all()
@@ -2452,8 +2452,8 @@ class RosterWindow:
 			return
 		if not gajim.interface.minimized_controls[account].has_key(jid):
 			return
-		
-		
+
+
 		ctrl = gajim.interface.minimized_controls[account][jid]
 		mw = gajim.interface.msg_win_mgr.get_window(ctrl.contact.jid, ctrl.account)
 		if not mw:
@@ -2479,7 +2479,7 @@ class RosterWindow:
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 
 		menu = gtk.Menu()
-	
+
 		# Send Group Message
 		send_group_message_item = gtk.ImageMenuItem(_('Send Group M_essage'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
@@ -2526,19 +2526,19 @@ class RosterWindow:
 		iconset = gajim.config.get('iconset')
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
-			# icon MUST be different instance for every item 
-			state_images = self.load_iconset(path) 
-			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s)) 
+			# icon MUST be different instance for every item
+			state_images = self.load_iconset(path)
+			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
 			status_menuitem.connect('activate', self.on_send_custom_status, list_,
 				s, group)
-			icon = state_images[s] 
-			status_menuitem.set_image(icon) 
+			icon = state_images[s]
+			status_menuitem.set_image(icon)
 			status_menuitems.append(status_menuitem)
 		menu.append(send_custom_status_menuitem)
 
 		if not group in helpers.special_groups + (_('General'),):
 			item = gtk.SeparatorMenuItem() # separator
-                	menu.append(item)  		
+                	menu.append(item)
 
 			# Rename
 			rename_item = gtk.ImageMenuItem(_('Re_name'))
@@ -2550,7 +2550,7 @@ class RosterWindow:
 			rename_item.set_image(img)
 			menu.append(rename_item)
 			rename_item.connect('activate', self.on_rename, iter, path)
-			
+
 			# Block group
 			is_blocked = False
 			if self.regroup:
@@ -2771,7 +2771,7 @@ class RosterWindow:
 			contact = gajim.contacts.create_contact(jid = hostname) # Fake contact
 			execute_command_menuitem.connect('activate',
 				self.on_execute_command, contact, account)
-			
+
 			gc_sub_menu = gtk.Menu() # gc is always a submenu
 			join_group_chat_menuitem.set_submenu(gc_sub_menu)
 			self.add_bookmarks_list(gc_sub_menu, account)
@@ -2779,7 +2779,7 @@ class RosterWindow:
 			# make some items insensitive if account is offline
 			if gajim.connections[account].connected < 2:
 				for widget in [add_contact_menuitem, service_discovery_menuitem,
-				join_group_chat_menuitem, 
+				join_group_chat_menuitem,
 				execute_command_menuitem]:
 					widget.set_sensitive(False)
 		else:
@@ -3063,7 +3063,7 @@ class RosterWindow:
 						self.tree.collapse_row(path)
 					else:
 						self.tree.expand_row(path, False)
-	
+
 				elif type_ == 'contact' and x < 27:
 					account = model[path][C_ACCOUNT].decode('utf-8')
 					jid = model[path][C_JID].decode('utf-8')
@@ -3260,9 +3260,9 @@ class RosterWindow:
 						gajim.connections[account].send_gc_status(gc_control.nick,
 							gc_control.room_jid, status, txt)
 					else:
-						# for some reason, we are not connected to the room even if 
+						# for some reason, we are not connected to the room even if
 						# tab is opened, send initial join_gc()
-						gajim.connections[account].join_gc(gc_control.nick, 
+						gajim.connections[account].join_gc(gc_control.nick,
 						gc_control.room_jid, None)
 			if was_invisible:
 				# We come back from invisible, join bookmarks
@@ -3279,7 +3279,7 @@ class RosterWindow:
 			if gajim.config.get_per('defaultstatusmsg', show, 'enabled'):
 				return gajim.config.get_per('defaultstatusmsg', show, 'message')
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
-		(show in ('offline', 'invisible') 
+		(show in ('offline', 'invisible')
 		and not gajim.config.get('ask_offline_status')):
 			return ''
 		dlg = dialogs.ChangeStatusMessageDialog(show)
@@ -3433,7 +3433,7 @@ class RosterWindow:
 				listener.disconnect(self._music_track_changed_signal)
 				self._music_track_changed_signal = None
 				self._music_track_changed(None, None)
-	
+
 	def _change_awn_icon_status(self, status):
 		if not dbus_support.supported:
 			# do nothing if user doesn't have D-Bus bindings
@@ -3446,7 +3446,7 @@ class RosterWindow:
 			prefix = os.path.join(gajim.DATA_DIR, 'pixmaps')
 			status = 'gajim.png'
 		path = os.path.join(prefix, status)
-		try:	
+		try:
 			bus = dbus.SessionBus()
 			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
 			awn = dbus.Interface(obj, 'com.google.code.Awn')
@@ -3572,7 +3572,7 @@ class RosterWindow:
 		if not contact:
 			added_to_roster = True
 			contact = self.add_to_not_in_the_roster(account, jid,
-				resource = resource) 
+				resource = resource)
 
 		if not gajim.interface.msg_win_mgr.has_window(fjid, account):
 			self.new_chat(contact, account, resource = resource)
@@ -3685,8 +3685,8 @@ class RosterWindow:
 				if path and not self.dragging and gajim.config.get(
 				'scroll_roster_to_last_message'):
 					# we curently see contact in our roster OR he
-					# is not in the roster at all. 
-					# show and select his line in roster 
+					# is not in the roster at all.
+					# show and select his line in roster
 					# do not change selection while DND'ing
 					self.tree.expand_row(path[0:1], False)
 					self.tree.expand_row(path[0:2], False)
@@ -3725,7 +3725,7 @@ class RosterWindow:
 					dialogs.JoinGroupchatWindow(account)
 			except GajimGeneralException:
 				pass
-	
+
 	def on_new_chat_menuitem_activate(self, widget, account):
 		dialogs.NewChatDialog(account)
 
@@ -3758,7 +3758,7 @@ class RosterWindow:
 
 	def on_manage_bookmarks_menuitem_activate(self, widget):
 		config.ManageBookmarksWindow()
-		
+
 	def on_profile_avatar_menuitem_activate(self, widget, account):
 		gajim.interface.edit_own_details(account)
 
@@ -3769,7 +3769,7 @@ class RosterWindow:
 				self.close_all_from_dict(w)
 			else:
 				w.window.destroy()
-	
+
 	def close_all(self, account, force = False):
 		'''close all the windows from an account
 		if force is True, do not ask confirmation before closing chat/gc windows
@@ -3798,7 +3798,7 @@ class RosterWindow:
 				if message is None:
 					# user pressed Cancel to change status message dialog
 					message = ''
-				
+
 				for acct in accounts:
 					if gajim.connections[acct].connected:
 						self.quit_on_next_offline += 1
@@ -4130,16 +4130,16 @@ class RosterWindow:
 				list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 					'offline', 'error', 'requested', 'message', 'not in roster')
 		return self._load_icon_list(list, path, pixbuf2)
-		
+
 	def load_icon(self, icon_name):
 		'''load an icon from the iconset in 16x16'''
 		iconset = gajim.config.get('iconset')
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16'+ '/')
 		icon_list = self._load_icon_list([icon_name], path)
 		return icon_list[icon_name]
-		
+
 	def _load_icon_list(self, icons_list, path, pixbuf2 = None):
-		'''load icons in icons_list from the given path, 
+		'''load icons in icons_list from the given path,
 		and add pixbuf2 on top left of each static images'''
 		imgs = {}
 		for icon in icons_list:
@@ -4172,7 +4172,7 @@ class RosterWindow:
 			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 			if not os.path.exists(path):
 				iconset = gajim.config.DEFAULT_ICONSET
-		else: 
+		else:
 			iconset = gajim.config.DEFAULT_ICONSET
 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
@@ -4236,7 +4236,7 @@ class RosterWindow:
 		redraw the treeview'''
 		gajim.config.set('showoffline', not gajim.config.get('showoffline'))
 		self.draw_roster()
-	
+
 	def set_renderer_color(self, renderer, style, set_background = True):
 		'''set style for treeview cell, using PRELIGHT system color'''
 		if set_background:
@@ -4245,7 +4245,7 @@ class RosterWindow:
 		else:
 			fgcolor = self.tree.style.fg[style]
 			renderer.set_property('foreground-gdk', fgcolor)
-	
+
 	def iconCellDataFunc(self, column, renderer, model, iter, data = None):
 		'''When a row is added, set properties for icon renderer'''
 		theme = gajim.config.get('roster_theme')
@@ -4643,7 +4643,7 @@ class RosterWindow:
 			prim_text = 'Send file?'
 			sec_text =  i18n.ngettext('Do you want to send that file to %s:',
 				'Do you want to send those files to %s:', nb_uri) %\
-				c_dest.get_shown_name() 
+				c_dest.get_shown_name()
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				sec_text += '\n' + os.path.basename(path)
@@ -4763,7 +4763,7 @@ class RosterWindow:
 				is_big_brother = True
 			item.connect('activate', self.on_drop_in_contact, account_source,
 				c_source, account_dest, c_dest, is_big_brother, context, etime)
-			
+
 			menu.append(item)
 
 			menu.attach_to_widget(self.tree, None)
@@ -5005,7 +5005,7 @@ class RosterWindow:
 		self.tree.append_column(col)
 		col.set_visible(False)
 		self.tree.set_expander_column(col)
-		
+
 		#signals
 		self.TARGET_TYPE_URI_LIST = 80
 		TARGETS = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0)]
