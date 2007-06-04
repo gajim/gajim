@@ -2538,7 +2538,7 @@ class RosterWindow:
 
 		if not group in helpers.special_groups + (_('General'),):
 			item = gtk.SeparatorMenuItem() # separator
-                	menu.append(item)
+			menu.append(item)
 
 			# Rename
 			rename_item = gtk.ImageMenuItem(_('Re_name'))
