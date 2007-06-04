@@ -2446,6 +2446,11 @@ class RosterWindow:
 		menu.show_all()
 		menu.popup(None, None, None, event_button, event.time)
 
+	def on_all_groupchat_maximized(self, widget, group_list):
+		for (contact, account) in group_list:
+			self.on_groupchat_maximized(widget, contact.jid, account)
+
+
 	def on_groupchat_maximized(self, widget, jid, account):
 		'''When a groupchat is maximised'''
 		if not gajim.interface.minimized_controls.has_key(account):
@@ -2478,7 +2483,29 @@ class RosterWindow:
 		group = model[iter][C_JID].decode('utf-8')
 		account = model[iter][C_ACCOUNT].decode('utf-8')
 
+		list_ = [] # list of (jid, account) tuples
+		list_online = [] # list of (jid, account) tuples
+
+		group = model[iter][C_JID]
+		for jid in gajim.contacts.get_jid_list(account):
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+					jid)
+			if group in contact.groups or (contact.groups == [] and group == \
+			_('General')):
+				if contact.show not in ('offline', 'error'):
+					list_online.append((contact, account))
+				list_.append((contact, account))
 		menu = gtk.Menu()
+
+		# Make special context menu if group is Groupchats
+		if group == _('Groupchats'):
+			maximize_menuitem = gtk.ImageMenuItem(_('_Maximize All'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_GOTO_TOP, gtk.ICON_SIZE_MENU)
+			maximize_menuitem.set_image(icon)
+			maximize_menuitem.connect('activate', self.on_all_groupchat_maximized, \
+				list_)
+			menu.append(maximize_menuitem)
+
 
 		# Send Group Message
 		send_group_message_item = gtk.ImageMenuItem(_('Send Group M_essage'))
@@ -2494,18 +2521,6 @@ class RosterWindow:
 
 		group_message_to_all_online_item = gtk.MenuItem(_('To all online users'))
 		send_group_message_submenu.append(group_message_to_all_online_item)
-		list_ = [] # list of (jid, account) tuples
-		list_online = [] # list of (jid, account) tuples
-
-		group = model[iter][C_JID]
-		for jid in gajim.contacts.get_jid_list(account):
-			contact = gajim.contacts.get_contact_with_highest_priority(account,
-					jid)
-			if group in contact.groups or (contact.groups == [] and group == \
-			_('General')):
-				if contact.show not in ('offline', 'error'):
-					list_online.append((contact, account))
-				list_.append((contact, account))
 
 		group_message_to_all_online_item.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, list_online)
