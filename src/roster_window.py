@@ -2332,8 +2332,10 @@ class RosterWindow:
 		remove_item.connect('activate', self.on_req_usub, list_)
 
 		invite_item = gtk.ImageMenuItem(_('In_vite to'))
-		icon = gtk.image_new_from_stock(gtk.STOCK_GO_BACK, gtk.ICON_SIZE_MENU)
-		invite_item.set_image(icon)
+		muc_icon = self.load_icon('muc_active')
+		if muc_icon:
+			invite_item.set_image(muc_icon)
+
 		if contacts_transport == False:
 			# they are not all from the same transport
 			invite_item.set_sensitive(False)
@@ -2373,7 +2375,9 @@ class RosterWindow:
 			invite_item.set_submenu(sub_menu)
 		menu.append(invite_item)
 
-		edit_groups_item = gtk.MenuItem(_('Edit _Groups'))
+		edit_groups_item = gtk.ImageMenuItem(_('Edit _Groups'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+		edit_groups_item.set_image(icon)
 		menu.append(edit_groups_item)
 		edit_groups_item.connect('activate', self.on_edit_groups, list_)
 
@@ -2385,20 +2389,22 @@ class RosterWindow:
 				break
 			account = current_account
 		if account is not None:
-			send_group_message_item = gtk.MenuItem(_('Send Group M_essage'))
+			send_group_message_item = gtk.ImageMenuItem(_('Send Group M_essage'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+			send_group_message_item.set_image(icon)
 			menu.append(send_group_message_item)
 			send_group_message_item.connect('activate',
 				self.on_send_single_message_menuitem_activate, account, list_)
 
 		if is_blocked:
 			unblock_menuitem = gtk.ImageMenuItem(_('_Unblock'))
-			icon = gtk.image_new_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
+			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 			unblock_menuitem.set_image(icon)
 			unblock_menuitem.connect('activate', self.on_unblock, None, list_)
 			menu.append(unblock_menuitem)
 		else:
 			block_menuitem = gtk.ImageMenuItem(_('_Block'))
-			icon = gtk.image_new_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
+			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 			block_menuitem.set_image(icon)
 			block_menuitem.connect('activate', self.on_block, None, list_)
 			menu.append(block_menuitem)
