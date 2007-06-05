@@ -820,7 +820,7 @@ def allow_sound_notification(sound_event, advanced_notif_num = None):
 		return True
 	return False
 
-def get_chat_control(account, contact):
+def get_chat_control(account, contact, session):
 	full_jid_with_resource = contact.jid
 	if contact.resource:
 		full_jid_with_resource += '/' + contact.resource
@@ -829,16 +829,16 @@ def get_chat_control(account, contact):
 	# Look for a chat control that has the given resource, or default to
 	# one without resource
 	ctrl = gajim.interface.msg_win_mgr.get_control(full_jid_with_resource,
-		account)
+		account, session.thread_id)
 	if ctrl:
 		return ctrl
 	elif not highest_contact or not highest_contact.resource:
 		# unknow contact or offline message
-		return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+		return gajim.interface.msg_win_mgr.get_control(contact.jid, account, session.thread_id)
 	elif highest_contact and contact.resource != \
 	highest_contact.resource:
 		return None
-	return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+	return gajim.interface.msg_win_mgr.get_control(contact.jid, account, session.thread_id)
 
 def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
 	'''Cut the chars after 'max_chars' on each line

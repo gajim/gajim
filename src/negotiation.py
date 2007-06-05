@@ -7,11 +7,11 @@ from common import xmpp
 
 class FeatureNegotiationWindow:
 	'''FeatureNegotiotionWindow class'''
-	def __init__(self, account, jid, thread_id, form):
+	def __init__(self, account, jid, session, form):
 		self.account = account
 		self.jid = jid
 		self.form = form
-		self.thread_id = thread_id
+		self.session = session
 
 		self.xml = gtkgui_helpers.get_glade('data_form_window.glade', 'data_form_window')
 		self.window = self.xml.get_widget('data_form_window')
@@ -27,7 +27,7 @@ class FeatureNegotiationWindow:
 
 	def on_ok_button_clicked(self, widget):
 		acceptance = xmpp.Message(self.jid)
-		acceptance.setThread(self.thread_id)
+		acceptance.setThread(self.session.thread_id)
 		feature = acceptance.NT.feature
 		feature.setNamespace(xmpp.NS_FEATURE)
 
@@ -44,7 +44,7 @@ class FeatureNegotiationWindow:
 		# XXX determine whether to reveal presence
 
 		rejection = xmpp.Message(self.jid)
-		rejection.setThread(self.thread_id)
+		rejection.setThread(self.session.thread_id)
 		feature = rejection.NT.feature
 		feature.setNamespace(xmpp.NS_FEATURE)
 

@@ -37,6 +37,8 @@ from common import atom
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 
+from common.stanza_session import StanzaSession
+
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
 # kind of events we can wait for an answer
@@ -1171,6 +1173,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# keep the latest subscribed event for each jid to prevent loop when we 
 		# acknoledge presences
 		self.subscribed_events = {}
+
+		# keep track of sessions this connection has with other JIDs
+		self.sessions = {}
+
 		try:
 			idle.init()
 		except:
@@ -1197,13 +1203,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg));
 		raise common.xmpp.NodeProcessed
 
-	def _FeatureNegCB(self, con, stanza):
+	def _FeatureNegCB(self, con, stanza, session):
 		gajim.log.debug('FeatureNegCB')
 		feature = stanza.getTag('feature')
 		form = common.xmpp.DataForm(node=feature.getTag('x'))
 
 		if form['FORM_TYPE'] == 'urn:xmpp:ssn':
-			self.dispatch('SESSION_NEG', (stanza.getFrom(), stanza.getThread(), form))
+			self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
 		else:
 			reply = stanza.buildReply()
 			reply.setType('error')
@@ -1410,6 +1416,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
+		frm = helpers.get_full_jid_from_iq(msg)
+		mtype = msg.getType()
+		thread_id = msg.getThread()
+		if not mtype:
+			mtype = 'normal'
+
+		session = self.get_session(frm, thread_id, mtype)
+
+		if thread_id and not session.received_thread_id:
+			session.received_thread_id = True
+
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
 			self._pubsubEventCB(con, msg)
@@ -1421,18 +1438,15 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 		if msg.getTag('feature') and msg.getTag('feature').namespace == \
 		common.xmpp.NS_FEATURE:
-			self._FeatureNegCB(con, msg)
+			self._FeatureNegCB(con, msg, session)
 			return
 
 		msgtxt = msg.getBody()
 		msghtml = msg.getXHTML()
-		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
-		thread = msg.getThread()
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
-		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for')
@@ -1541,12 +1555,41 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			mtype = 'normal'
+
 		treat_as = gajim.config.get('treat_incoming_messages')
 		if treat_as:
 			mtype = treat_as
 		self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype,
-			subject, chatstate, msg_id, composing_jep, user_nick, msghtml, thread))
+			subject, chatstate, msg_id, composing_jep, user_nick, msghtml, session))
 	# END messageCB
+
+	def get_session(self, jid, thread_id, type):
+		'''returns an existing session between this connection and 'jid' or starts a new one.'''
+		try:
+			if type == 'chat' and not thread_id:
+				return self.find_null_session(jid)
+			else:
+				return self.sessions[jid][thread_id]
+		except KeyError:
+			return self.make_new_session(jid, thread_id, type)
+
+	def find_null_session(self, jid):
+		'''returns the session between this connecting and 'jid' that we last sent a message in.'''
+		all = self.sessions[jid].values()
+		null_sessions = filter(lambda s: not s.received_thread_id, all)
+		null_sessions.sort(key=lambda s: s.last_send)
+
+		return null_sessions[-1]
+
+	def make_new_session(self, jid, thread_id = None, type = 'chat'):
+		sess = StanzaSession(self, jid, thread_id, type)
+
+		if not jid in self.sessions:
+			self.sessions[jid] = {}
+
+		self.sessions[jid][sess.thread_id] = sess
+
+		return sess
 
 	def _pubsubEventCB(self, con, msg):
 		''' Called when we receive <message/> with pubsub event. '''
