@@ -2353,7 +2353,8 @@ class RosterWindow:
 			sub_menu.append(menuitem)
 			rooms = [] # a list of (room_jid, account) tuple
 			for gc_control in gajim.interface.msg_win_mgr.get_controls(
-			message_control.TYPE_GC):
+			message_control.TYPE_GC) + \
+			gajim.interface.minimized_controls[account].values():
 				account = gc_control.account
 				room_jid = gc_control.room_jid
 				if gajim.gc_connected[account].has_key(room_jid) and \
