@@ -982,16 +982,11 @@ class RosterWindow:
 					continue
 
 				# join gc
-				label = gtk.Label()
-				label.set_markup('<u>' + account.upper() +'</u>')
-				label.set_use_underline(False)
-				gc_item = gtk.MenuItem()
-				gc_item.add(label)
-				gc_item.connect('state-changed',
-					gtkgui_helpers.on_bm_header_changed_state)
+				gc_item = gtk.MenuItem(_('using account %s') % account, False)
 				gc_sub_menu.append(gc_item)
-
-				self.add_bookmarks_list(gc_sub_menu, account)
+				gc_menuitem_menu = gtk.Menu()
+				self.add_bookmarks_list(gc_menuitem_menu, account)
+				gc_item.set_submenu(gc_menuitem_menu)
 
 				# the 'manage gc bookmarks' item is shown
 				# below to avoid duplicate code
@@ -1014,6 +1009,7 @@ class RosterWindow:
 			disco_sub_menu.show_all()
 			new_chat_menuitem.set_submenu(new_chat_sub_menu)
 			new_chat_sub_menu.show_all()
+			gc_sub_menu.show_all()
 
 		elif connected_accounts == 1: # user has only one account
 			for account in gajim.connections:
@@ -1161,9 +1157,10 @@ class RosterWindow:
 		item.set_image(icon)
 		item.connect('activate', self.on_join_gc_activate, account)
 		gc_sub_menu.append(item)
-
-		item = gtk.SeparatorMenuItem() # separator
-		gc_sub_menu.append(item)
+		
+		if len(gajim.connections[account].bookmarks) > 0: # user has at least one bookmark
+			item = gtk.SeparatorMenuItem() # separator
+			gc_sub_menu.append(item)
 
 		for bookmark in gajim.connections[account].bookmarks:
 			item = gtk.MenuItem(bookmark['name'], False) # Do not use underline
