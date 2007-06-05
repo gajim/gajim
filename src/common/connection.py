@@ -21,6 +21,8 @@ import os
 import random
 import socket
 
+import time
+
 try:
 	randomsource = random.SystemRandom()
 except:
@@ -47,8 +49,6 @@ import logging
 log = logging.getLogger('gajim.c.connection')
 
 import gtkgui_helpers
-
-import time
 
 class Connection(ConnectionHandlers):
 	'''Connection class'''
@@ -888,8 +888,7 @@ class Connection(ConnectionHandlers):
 		# XEP-0201
 		if session:
 			session.last_send = time.time()
-			if session.thread_id:
-				msg_iq.setThread(session.thread_id)
+			msg_iq.setThread(session.thread_id)
 
 		# JEP-0172: user_nickname
 		if user_nick:

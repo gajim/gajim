@@ -577,7 +577,7 @@ class ChatControlBase(MessageControl):
 				type_ = 'printed_' + self.type_id
 				event = 'message_received'
 				show_in_roster = notify.get_show_in_roster(event,
-					self.account, self.contact, self.session)
+					self.account, self.contact)
 				show_in_systray = notify.get_show_in_systray(event,
 					self.account, self.contact)
 				if gc_message:
@@ -606,7 +606,7 @@ class ChatControlBase(MessageControl):
 		not self.parent_win.is_active() or not end) and \
 		kind in ('incoming', 'incoming_queue'):
 			self.parent_win.redraw_tab(self)
-			ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, self.account, self.session.thread_id)
+			ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, self.account)
 			if not self.parent_win.is_active():
 				self.parent_win.show_title(True, ctrl) # Enabled Urgent hint
 			else:
@@ -904,7 +904,7 @@ class ChatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
 	CHAT_CMDS = ['clear', 'compact', 'help', 'ping']
-	
+
 	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
 			'chat_child_vbox', contact, acct, resource)
@@ -935,7 +935,7 @@ class ChatControl(ChatControlBase):
 		# it is on enter-notify and leave-notify so no need to be per jid
 		self.show_bigger_avatar_timeout_id = None
 		self.bigger_avatar_window = None
-		self.show_avatar(self.contact.resource)	
+		self.show_avatar(self.contact.resource)
 
 		# chatstate timers and state
 		self.reset_kbd_mouse_timeout_vars()
@@ -1799,7 +1799,7 @@ class ChatControl(ChatControlBase):
 		# Is it a pm ?
 		is_pm = False
 		room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-		control = gajim.interface.msg_win_mgr.get_control(room_jid, self.account, self.session.thread_id)
+		control = gajim.interface.msg_win_mgr.get_control(room_jid, self.account)
 		if control and control.type_id == message_control.TYPE_GC:
 			is_pm = True
 		# list of message ids which should be marked as read
@@ -1817,6 +1817,9 @@ class ChatControl(ChatControlBase):
 				encrypted = data[4], subject = data[1], xhtml = data[7])
 			if len(data) > 6 and isinstance(data[6], int):
 				message_ids.append(data[6])
+
+			if len(data) > 8:
+				self.set_session(data[8])
 		if message_ids:
 			gajim.logger.set_read_messages(message_ids)
 		gajim.events.remove_events(self.account, jid_with_resource,

@@ -16,8 +16,6 @@
 
 import common.gajim
 
-#import random, string
-
 class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
@@ -51,20 +49,6 @@ class Contact:
 		# this is contact's chatstate
 		self.chatstate = chatstate
 		self.last_status_time = last_status_time
-
-		# XEP-0201
-#		self.sessions = {}
-
-#	def new_session(self):
-#		thread_id = "".join([random.choice(string.letters) for x in xrange(0,32)])
-#		self.sessions[self.get_full_jid()] = thread_id
-#		return thread_id
-
-#	def get_session(self):
-#		try:
-#			return self.sessions[self.get_full_jid()]
-#		except KeyError:
-#			return None
 
 	def get_full_jid(self):
 		if self.resource:
@@ -169,7 +153,7 @@ class Contacts:
 		return Contact(jid, name, groups, show, status, sub, ask, resource,
 			priority, keyID, our_chatstate, chatstate, last_status_time,
 			composing_jep)
-
+	
 	def copy_contact(self, contact):
 		return self.create_contact(jid = contact.jid, name = contact.name,
 			groups = contact.groups, show = contact.show, status = contact.status,

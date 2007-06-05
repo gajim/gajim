@@ -110,6 +110,13 @@ class MessageControl:
 	def get_specific_unread(self):
 		return len(gajim.events.get_events(self.account, self.contact.jid))
 
+	def set_session(self, session):
+		if session == self.session:
+			return
+		if self.session:
+			print "starting a new session, forgetting about the old one!"
+		self.session = session
+
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_jep = None, resource = None,
 	user_nick = None):

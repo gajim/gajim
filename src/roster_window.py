@@ -1191,9 +1191,8 @@ class RosterWindow:
 		for jid in gajim.contacts.get_jid_list(account):
 			results = gajim.logger.get_unread_msgs_for_jid(jid)
 
-			# XXX results should contain sessions anyways
+			# XXX unread messages should probably have their session with them
 			session = gajim.connections[account].make_new_session(jid)
-
 			for result in results:
 				tim = time.localtime(float(result[2]))
 				self.on_message(jid, result[1], tim, account, msg_type = 'chat',
@@ -1259,8 +1258,8 @@ class RosterWindow:
 							gajim.transport_avatar[account][host].append(contact1.jid)
 			# If we already have a chat window opened, update it with new contact
 			# instance
-			chat_controls = gajim.interface.msg_win_mgr.get_controls(jid=ji, acct=account)
-			for chat_control in chat_controls:
+			chat_control = gajim.interface.msg_win_mgr.get_control(ji, account)
+			if chat_control:
 				chat_control.contact = contact1
 
 	def chg_contact_status(self, contact, show, status, account):
@@ -1287,14 +1286,14 @@ class RosterWindow:
 		jid_list = [contact.jid]
 		for jid in jid_list:
 			if gajim.interface.msg_win_mgr.has_window(jid, account):
-				for win in gajim.interface.msg_win_mgr.get_windows(jid, account):
-					for ctrl in win.get_controls(jid=jid, acct=account):
-						ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
-							account, contact.jid)
-						ctrl.update_ui()
-					win.redraw_tab(ctrl)
+				win = gajim.interface.msg_win_mgr.get_window(jid, account)
+				ctrl = win.get_control(jid, account)
+				ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
+					account, contact.jid)
+				ctrl.update_ui()
+				win.redraw_tab(ctrl)
 
-					name = contact.get_shown_name()
+				name = contact.get_shown_name()
 
 				# if multiple resources (or second one disconnecting)
 				if (len(contact_instances) > 1 or (len(contact_instances) == 1 and \
@@ -3492,7 +3491,7 @@ class RosterWindow:
 		if not session:
 			session = gajim.connections[account].make_new_session(fjid)
 
-		mw = gajim.interface.msg_win_mgr.get_window(fjid, account, session.thread_id)
+		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
 
@@ -3503,8 +3502,6 @@ class RosterWindow:
 		if len(gajim.events.get_events(account, fjid)):
 			# We call this here to avoid race conditions with widget validation
 			chat_control.read_queue()
-
-		return session
 
 	def new_chat_from_jid(self, account, fjid):
 		jid, resource = gajim.get_room_and_nick_from_fjid(fjid)
@@ -3579,18 +3576,16 @@ class RosterWindow:
 
 		path = self.get_path(jid, account) # Try to get line of contact in roster
 
-		ctrl = session.get_control(advanced_notif_num)
-
 		# Look for a chat control that has the given resource
-#		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
-#		if not ctrl:
+		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
+		if not ctrl:
 			# if not, if message comes from highest prio, get control or open one
 			# without resource
-#			if highest_contact and contact.resource == highest_contact.resource \
-#			and not jid == gajim.get_jid_from_account(account):
-#				ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
-#				fjid = jid
-#				resource_for_chat = None
+			if highest_contact and contact.resource == highest_contact.resource \
+			and not jid == gajim.get_jid_from_account(account):
+				ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
+				fjid = jid
+				resource_for_chat = None
 
 		# Do we have a queue?
 		no_queue = len(gajim.events.get_events(account, fjid)) == 0
@@ -3608,6 +3603,8 @@ class RosterWindow:
 			typ = ''
 			if msg_type == 'error':
 				typ = 'status'
+			if session:
+				ctrl.set_session(session)
 			ctrl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
 						subject = subject, xhtml = xhtml)
 			if msg_id:
@@ -3620,26 +3617,26 @@ class RosterWindow:
 		if msg_type == 'normal':
 			type_ = 'normal'
 			event_type = 'single_message_received'
-		show_in_roster = notify.get_show_in_roster(event_type, account, contact, session)
+		show_in_roster = notify.get_show_in_roster(event_type, account, contact)
 		show_in_systray = notify.get_show_in_systray(event_type, account, contact)
 		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
 			encrypted, resource, msg_id, xhtml, session), show_in_roster = show_in_roster,
 			show_in_systray = show_in_systray)
 		gajim.events.add_event(account, fjid, event)
-#		if popup:
-#			if not ctrl:
-#				self.new_chat(contact, account, resource = resource_for_chat)
-#				if path and not self.dragging and gajim.config.get(
-#				'scroll_roster_to_last_message'):
-#					# we curently see contact in our roster OR he
-#					# is not in the roster at all. 
+		if popup:
+			if not ctrl:
+				self.new_chat(contact, account, resource = resource_for_chat)
+				if path and not self.dragging and gajim.config.get(
+				'scroll_roster_to_last_message'):
+					# we curently see contact in our roster OR he
+					# is not in the roster at all. 
 					# show and select his line in roster 
 					# do not change selection while DND'ing
-#					self.tree.expand_row(path[0:1], False)
-#					self.tree.expand_row(path[0:2], False)
-#					self.tree.scroll_to_cell(path)
-#					self.tree.set_cursor(path)
-		if not popup:
+					self.tree.expand_row(path[0:1], False)
+					self.tree.expand_row(path[0:2], False)
+					self.tree.scroll_to_cell(path)
+					self.tree.set_cursor(path)
+		else:
 			if no_queue: # We didn't have a queue: we change icons
 				self.draw_contact(jid, account)
 			self.show_title() # we show the * or [n]
@@ -3927,17 +3924,17 @@ class RosterWindow:
 		fjid = contact.jid
 		if resource:
 			fjid += '/' + resource
-
-		session = self.new_chat(contact, account, resource=resource, session=session)
-		win = gajim.interface.msg_win_mgr.get_window(fjid, account, session.thread_id)
-		ctrl = win.get_control(fjid, account, session.thread_id)
-		# last message is long time ago
-		gajim.last_message_time[account][ctrl.get_full_jid()] = 0
-
-		win.set_active_tab(fjid, account, session.thread_id)
+		win = gajim.interface.msg_win_mgr.get_window(fjid, account)
+		if not win:
+			self.new_chat(contact, account, resource = resource, session = session)
+			win = gajim.interface.msg_win_mgr.get_window(fjid, account)
+			ctrl = win.get_control(fjid, account)
+			# last message is long time ago
+			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
+		win.set_active_tab(fjid, account)
 		if gajim.connections[account].is_zeroconf and \
 				gajim.connections[account].status in ('offline', 'invisible'):
-			win.get_control(fjid, account, session.thread_id).got_disconnected()
+			win.get_control(fjid, account).got_disconnected()
 
 		win.window.present()
 
@@ -3977,7 +3974,6 @@ class RosterWindow:
 						jid = child_jid
 					else:
 						child_iter = model.iter_next(child_iter)
-
 			session = None
 			if first_ev:
 				session = first_ev.parameters[8]
@@ -3991,7 +3987,7 @@ class RosterWindow:
 				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
 			if jid == gajim.get_jid_from_account(account):
 				resource = c.resource
-			self.on_open_chat_window(widget, c, account, resource = resource, session=session)
+			self.on_open_chat_window(widget, c, account, resource = resource, session = session)
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the first event window'''

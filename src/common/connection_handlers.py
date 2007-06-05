@@ -37,6 +37,8 @@ from common import atom
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 
+from common.stanza_session import StanzaSession 
+
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
 # kind of events we can wait for an answer
@@ -55,7 +57,7 @@ except:
 class ConnectionBytestream:
 	def __init__(self):
 		self.files_props = {}
-	
+
 	def is_transfer_stoped(self, file_props):
 		if file_props.has_key('error') and file_props['error'] != 0:
 			return True
@@ -1168,14 +1170,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# keep the jids we auto added (transports contacts) to not send the
 		# SUBSCRIBED event to gui
 		self.automatically_added = []
-		# keep the latest subscribed event for each jid to prevent loop when we 
+		# keep the latest subscribed event for each jid to prevent loop when we
 		# acknoledge presences
 		self.subscribed_events = {}
+
+		# keep track of sessions this connection has with other JIDs
+		self.sessions = {}
 		try:
 			idle.init()
 		except:
 			HAS_IDLE = False
-	
+
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':
 			self.connection.send(iq_obj.buildReply('result'))
@@ -1197,13 +1202,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg));
 		raise common.xmpp.NodeProcessed
 
-	def _FeatureNegCB(self, con, stanza):
+	def _FeatureNegCB(self, con, stanza, session):
 		gajim.log.debug('FeatureNegCB')
 		feature = stanza.getTag('feature')
 		form = common.xmpp.DataForm(node=feature.getTag('x'))
 
 		if form['FORM_TYPE'] == 'urn:xmpp:ssn':
-			self.dispatch('SESSION_NEG', (stanza.getFrom(), stanza.getThread(), form))
+			self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
 		else:
 			reply = stanza.buildReply()
 			reply.setType('error')
@@ -1410,6 +1415,18 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
+		frm = helpers.get_full_jid_from_iq(msg)
+		mtype = msg.getType()
+		thread_id = msg.getThread()
+
+		if not mtype:
+			mtype = 'normal'
+
+		session = self.get_session(frm, thread_id, mtype)
+
+		if thread_id and not session.received_thread_id:
+			session.received_thread_id = True
+
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
 			self._pubsubEventCB(con, msg)
@@ -1421,18 +1438,15 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 		if msg.getTag('feature') and msg.getTag('feature').namespace == \
 		common.xmpp.NS_FEATURE:
-			self._FeatureNegCB(con, msg)
+			self._FeatureNegCB(con, msg, session)
 			return
 
 		msgtxt = msg.getBody()
 		msghtml = msg.getXHTML()
-		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
-		thread = msg.getThread()
 		tim = msg.getTimestamp()
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
-		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for')
@@ -1486,7 +1500,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if encTag and GnuPG.USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
-			
+
 			keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 			if keyID:
 				decmsg = self.gpg.decrypt(encmsg, keyID)
@@ -1545,7 +1559,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if treat_as:
 			mtype = treat_as
 		self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype,
-			subject, chatstate, msg_id, composing_jep, user_nick, msghtml, thread))
+			subject, chatstate, msg_id, composing_jep, user_nick, msghtml, session))
 	# END messageCB
 
 	def get_session(self, jid, thread_id, type):
@@ -1557,7 +1571,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		else:
 			# it's possible we initiated a session with a bare JID and this is the
 			# first time we've seen a resource
-			bare_jid = gajim.get_jid_without_resource(original_jid)
+			bare_jid = gajim.get_jid_without_resource(jid)
 			if bare_jid != jid:
 				session = self.find_session(bare_jid, thread_id, type)
 				if session:
@@ -1576,9 +1590,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return None
 
 	def move_session(self, original_jid, thread_id, to_resource):
-		session = self.sessions[jid][thread_id]
+		session = self.sessions[original_jid][thread_id]
 
-		del self.sessions[jid][thread_id]
+		del self.sessions[original_jid][thread_id]
 
 		new_jid = gajim.get_jid_without_resource(original_jid) + '/' + to_resource
 		session.jid = new_jid

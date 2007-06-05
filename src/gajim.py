@@ -443,9 +443,9 @@ class Interface:
 					(jid_from, file_props))
 				conn.disconnect_transfer(file_props)
 				return
-		for ctrl in self.msg_win_mgr.get_controls(jid=jid_from, acct=account):
-			if ctrl and ctrl.type_id == message_control.TYPE_GC:
-				ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
+		ctrl = self.msg_win_mgr.get_control(jid_from, account)
+		if ctrl and ctrl.type_id == message_control.TYPE_GC:
+			ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
 
 	def handle_event_con_type(self, account, con_type):
 		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
@@ -663,7 +663,7 @@ class Interface:
 			# It's maybe a GC_NOTIFY (specialy for MSN gc)
 			self.handle_event_gc_notify(account, (jid, array[1], status_message,
 				array[3], None, None, None, None, None, None, None, None))
-			
+
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
@@ -688,7 +688,7 @@ class Interface:
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
 
-		groupchat_control = self.msg_win_mgr.get_control(jid, account, session.thread_id)
+		groupchat_control = self.msg_win_mgr.get_control(jid, account)
 		if not groupchat_control and \
 		gajim.interface.minimized_controls.has_key(account) and \
 		jid in gajim.interface.minimized_controls[account]:
@@ -700,29 +700,28 @@ class Interface:
 			pm = True
 			msg_type = 'pm'
 
-#		chat_control = None
-#		jid_of_control = full_jid_with_resource
+		chat_control = None
+		jid_of_control = full_jid_with_resource
 		highest_contact = gajim.contacts.get_contact_with_highest_priority(
 			account, jid)
 		# Look for a chat control that has the given resource, or default to one
 		# without resource
-		chat_control = session.get_control()
-#		ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account, session.thread_id)
-#		if ctrl:
-#			chat_control = ctrl
-#		elif not pm and (not highest_contact or not highest_contact.resource):
+		ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
+		if ctrl:
+			chat_control = ctrl
+		elif not pm and (not highest_contact or not highest_contact.resource):
 			# unknow contact or offline message
-#			jid_of_control = jid
-#			chat_control = self.msg_win_mgr.get_control(jid, account, session.thread_id)
-#		elif highest_contact and resource != highest_contact.resource and \
-#		highest_contact.show != 'offline':
-#			jid_of_control = full_jid_with_resource
-#			chat_control = None
-#		elif not pm:
-#			jid_of_control = jid
-#			chat_control = self.msg_win_mgr.get_control(jid, account, session.thread_id)
+			jid_of_control = jid
+			chat_control = self.msg_win_mgr.get_control(jid, account)
+		elif highest_contact and resource != highest_contact.resource and \
+		highest_contact.show != 'offline':
+			jid_of_control = full_jid_with_resource
+			chat_control = None
+		elif not pm:
+			jid_of_control = jid
+			chat_control = self.msg_win_mgr.get_control(jid, account)
 
-		# Handle chat states
+		# Handle chat states  
 		contact = gajim.contacts.get_contact(account, jid, resource)
 		if contact and isinstance(contact, list):
 			contact = contact[0]
@@ -740,7 +739,7 @@ class Interface:
 					# got no valid jep85 answer, peer does not support it
 					contact.chatstate = False
 			elif chatstate == 'active':
-				# Brand new message, incoming.
+				# Brand new message, incoming.  
 				contact.our_chatstate = chatstate
 				contact.chatstate = chatstate
 				if msg_id: # Do not overwrite an existing msg_id with None
@@ -754,12 +753,10 @@ class Interface:
 		if gajim.config.get('ignore_unknown_contacts') and \
 			not gajim.contacts.get_contact(account, jid) and not pm:
 			return
-
 		if not contact:
 			# contact is not in the roster, create a fake one to display
 			# notification
-			contact = common.contacts.Contact(jid = jid, resource = resource)
-
+			contact = common.contacts.Contact(jid = jid, resource = resource) 
 		advanced_notif_num = notify.get_advanced_notification('message_received',
 			account, contact)
 
@@ -768,8 +765,8 @@ class Interface:
 		if msg_type == 'normal':
 			if not gajim.events.get_events(account, jid, ['normal']):
 				first = True
-		elif not chat_control and not gajim.events.get_events(account,
-		full_jid_with_resource, [msg_type]): # msg_type can be chat or pm
+		elif not chat_control and not gajim.events.get_events(account, 
+		jid_of_control, [msg_type]): # msg_type can be chat or pm
 			first = True
 
 		if pm:
@@ -788,12 +785,11 @@ class Interface:
 					msg_type, subject, resource, msg_id, array[9],
 					advanced_notif_num, xhtml = xhtml, session = session)
 			nickname = gajim.get_name_from_jid(account, jid)
-
 		# Check and do wanted notifications
 		msg = message
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
-		notify.notify('new_message', full_jid_with_resource, account, [msg_type,
+		notify.notify('new_message', jid_of_control, account, [msg_type,
 			first, nickname, msg], advanced_notif_num)
 
 		if self.remote_ctrl:
@@ -990,7 +986,7 @@ class Interface:
 		resource = ''
 		if vcard.has_key('resource'):
 			resource = vcard['resource']
-
+		
 		# vcard window
 		win = None
 		if self.instances[account]['infos'].has_key(jid):
@@ -1012,14 +1008,11 @@ class Interface:
 		elif self.msg_win_mgr.has_window(jid, account):
 			win = self.msg_win_mgr.get_window(jid, account)
 			ctrl = win.get_control(jid, account)
-
-		for ctrl in self.msg_win_mgr.get_controls(jid=jid, acct=account):
-			if ctrl.type_id != message_control.TYPE_GC:
-				ctrl.show_avatar()
+		if win and ctrl.type_id != message_control.TYPE_GC:
+			ctrl.show_avatar()
 
 		# Show avatar in roster or gc_roster
 		gc_ctrl = self.msg_win_mgr.get_control(jid, account)
-		# XXX get_gc_control?
 		if gc_ctrl and gc_ctrl.type_id == message_control.TYPE_GC:
 			gc_ctrl.draw_avatar(resource)
 		else:
@@ -1668,17 +1661,18 @@ class Interface:
 		# XXX check if we can autoaccept
 
 		if form.getType() == 'form':
-			ctrl = session.get_control()
-#			ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
-#			if not ctrl:
-#				resource = jid.getResource()
-#				contact = gajim.contacts.get_contact(account, str(jid), resource)
-#				if not contact:
-#					connection = gajim.connections[account]
-#					contact = gajim.contacts.create_contact(jid = jid.getStripped(), resource = resource, show = connection.get_status())
-#				self.roster.new_chat(contact, account, resource = resource)
+			ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+			if not ctrl:
+				resource = jid.getResource()
+				contact = gajim.contacts.get_contact(account, str(jid), resource)
+				if not contact:
+					connection = gajim.connections[account]
+					contact = gajim.contacts.create_contact(jid = jid.getStripped(), resource = resource, show = connection.get_status())
+				self.roster.new_chat(contact, account, resource = resource)
 
-#				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+
+			ctrl.set_session(session)
 
 			negotiation.FeatureNegotiationWindow(account, jid, session, form)
 

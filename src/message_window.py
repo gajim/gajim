@@ -123,9 +123,8 @@ class MessageWindow:
 
 	def get_num_controls(self):
 		n = 0
-		for sess_dict in self._controls.values():
-			for dict in sess_dict.values():
-				n += len(dict)
+		for dict in self._controls.values():
+			n += len(dict)
 		return n
 
 	def _on_window_focus(self, widget, event):
@@ -166,9 +165,7 @@ class MessageWindow:
 		if not self._controls.has_key(control.account):
 			self._controls[control.account] = {}
 		fjid = control.get_full_jid()
-		if not self._controls.has_key(fjid):
-			self._controls[control.account][fjid] = {}
-		self._controls[control.account][fjid][control.session.thread_id] = control
+		self._controls[control.account][fjid] = control
 
 		if self.get_num_controls() == 2:
 			# is first conversation_textview scrolled down ?
@@ -295,11 +292,11 @@ class MessageWindow:
 		else:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, False)
 
-	def set_active_tab(self, jid, acct, thread_id):
-		ctrl = self._controls[acct][jid][thread_id]
+	def set_active_tab(self, jid, acct):
+		ctrl = self._controls[acct][jid]
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
-
+	
 	def remove_tab(self, ctrl, method, reason = None, force = False):
 		'''reason is only for gc (offline status message)
 		if force is True, do not ask any confirmation'''
@@ -320,9 +317,7 @@ class MessageWindow:
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
 		fjid = ctrl.get_full_jid()
-		del self._controls[ctrl.account][fjid][ctrl.session.thread_id]
-		if len(self._controls[ctrl.account][fjid]) == 0:
-			del self._controls[ctrl.account][fjid]
+		del self._controls[ctrl.account][fjid]
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]
 
@@ -420,19 +415,7 @@ class MessageWindow:
 		for ctrl in self.controls():
 			ctrl.update_tags()
 
-	def has_control(self, jid, acct, thread_id = None):
-		try:
-			if thread_id:
-				return (thread_id in self._controls[acct][jid])
-			else:
-				return (jid in self._controls[acct])
-		except KeyError:
-			return False
-
-	def get_controls(self, jid, acct):
-		return self._controls[acct][jid].values()
-
-	def get_control(self, key, acct, thread_id):
+	def get_control(self, key, acct):
 		'''Return the MessageControl for jid or n, where n is a notebook page index.
 		When key is an int index acct may be None'''
 		if isinstance(key, str):
@@ -441,7 +424,7 @@ class MessageWindow:
 		if isinstance(key, unicode):
 			jid = key
 			try:
-				return self._controls[acct][jid][thread_id]
+				return self._controls[acct][jid]
 			except:
 				return None
 		else:
@@ -453,10 +436,9 @@ class MessageWindow:
 			return self._widget_to_control(nth_child)
 
 	def controls(self):
-		for jid_dict in self._controls.values():
-			for sess_dict in jid_dict.values():
-				for ctrl in sess_dict.values():
-					yield ctrl
+		for ctrl_dict in self._controls.values():
+			for ctrl in ctrl_dict.values():
+				yield ctrl
 
 	def move_to_next_unread_tab(self, forward):
 		ind = self.notebook.get_current_page()
@@ -513,7 +495,7 @@ class MessageWindow:
 		if old_no >= 0:
 			old_ctrl = self._widget_to_control(notebook.get_nth_page(old_no))
 			old_ctrl.set_control_active(False)
-
+		
 		new_ctrl = self._widget_to_control(notebook.get_nth_page(page_num))
 		new_ctrl.set_control_active(True)
 		self.show_title(control = new_ctrl)
@@ -587,11 +569,11 @@ class MessageWindow:
 		source_child = self.notebook.get_nth_page(source_page_num)
 		if dest_page_num != source_page_num:
 			self.notebook.reorder_child(source_child, dest_page_num)
-
+		
 	def get_tab_at_xy(self, x, y):
 		'''Thanks to Gaim
 		Return the tab under xy and
-		if its nearer from left or right side of the tab
+		if its nearer from left or right side of the tab	
 		'''
 		page_num = -1
 		to_right = False
@@ -612,7 +594,7 @@ class MessageWindow:
 				if (y >= tab_alloc.y) and \
 				(y <= (tab_alloc.y + tab_alloc.height)):
 					page_num = i
-
+				
 					if y > tab_alloc.y + (tab_alloc.height / 2.0):
 						to_right = True
 					break
@@ -677,22 +659,14 @@ class MessageWindowMgr:
 				return w
 		return None
 
-	def get_window(self, jid, acct, thread_id):
+	def get_window(self, jid, acct):
 		for win in self.windows():
-			if win.has_control(jid, acct, thread_id):
+			if win.get_control(jid, acct):
 				return win
 		return None
 
-	def get_windows(self, jid, acct):
-		for win in self.windows():
-			if win.has_control(jid, acct):
-				yield win
-
-	def has_window(self, jid, acct, thread_id = None):
-		for win in self.windows():
-			if win.has_control(jid, acct, thread_id):
-				return True
-		return False
+	def has_window(self, jid, acct):
+		return self.get_window(jid, acct) != None
 
 	def one_window_opened(self, contact, acct, type):
 		try:
@@ -704,7 +678,7 @@ class MessageWindowMgr:
 		'''Resizes window according to config settings'''
 		if not gajim.config.get('saveposition'):
 			return
-
+			
 		if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
 			size = (gajim.config.get('msgwin-width'),
 				gajim.config.get('msgwin-height'))
@@ -721,7 +695,7 @@ class MessageWindowMgr:
 			return
 
 		gtkgui_helpers.resize_window(win.window, size[0], size[1])
-
+	
 	def _position_window(self, win, acct, type):
 		'''Moves window according to config settings'''
 		if not gajim.config.get('saveposition') or\
@@ -799,19 +773,17 @@ class MessageWindowMgr:
 				del self._windows[k]
 				return
 
-	def get_control(self, jid, acct, thread_id):
+	def get_control(self, jid, acct):
 		'''Amongst all windows, return the MessageControl for jid'''
-		win = self.get_window(jid, acct, thread_id)
+		win = self.get_window(jid, acct)
 		if win:
-			return win.get_control(jid, acct, thread_id)
+			return win.get_control(jid, acct)
 		return None
 
-	def get_controls(self, type = None, acct = None, jid = None):
+	def get_controls(self, type = None, acct = None):
 		ctrls = []
 		for c in self.controls():
 			if acct and c.account != acct:
-				continue
-			if jid and c.get_full_jid() != jid:
 				continue
 			if not type or c.type_id == type:
 				ctrls.append(c)
@@ -836,7 +808,7 @@ class MessageWindowMgr:
 	def save_state(self, msg_win):
 		if not gajim.config.get('saveposition'):
 			return
-
+		
 		# Save window size and position
 		pos_x_key = 'msgwin-x-position'
 		pos_y_key = 'msgwin-y-position'
@@ -871,11 +843,11 @@ class MessageWindowMgr:
 			if self.mode != self.ONE_MSG_WINDOW_NEVER:
 				gajim.config.set_per('accounts', acct, pos_x_key, x)
 				gajim.config.set_per('accounts', acct, pos_y_key, y)
-
+		
 		else:
 			gajim.config.set(size_width_key, width)
 			gajim.config.set(size_height_key, height)
-
+			
 			if self.mode != self.ONE_MSG_WINDOW_NEVER:
 				gajim.config.set(pos_x_key, x)
 				gajim.config.set(pos_y_key, y)
