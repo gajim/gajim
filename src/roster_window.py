@@ -3282,7 +3282,7 @@ class RosterWindow:
 						# tab is opened, send initial join_gc()
 						gajim.connections[account].join_gc(gc_control.nick,
 						gc_control.room_jid, None)
-			if was_invisible:
+			if was_invisible and status != 'offline':
 				# We come back from invisible, join bookmarks
 				for bm in gajim.connections[account].bookmarks:
 					room_jid = bm['jid']
