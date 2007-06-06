@@ -2842,7 +2842,7 @@ class AccountCreationWizardWindow:
 			'http://www.jabber.org/network/oldnetwork.shtml')
 
 	def on_save_password_checkbutton_toggled(self, widget):
-		self.xml.get_widget('pass1_entry').grab_focus()
+		self.xml.get_widget('password_entry').grab_focus()
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
