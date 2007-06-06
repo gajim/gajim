@@ -2393,7 +2393,7 @@ class Interface:
 
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(200, self.process_connections)
-		gobject.timeout_add(500, self.read_sleepy)
+		gobject.timeout_add(10000, self.read_sleepy)
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):
