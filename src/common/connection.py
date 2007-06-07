@@ -87,7 +87,11 @@ class Connection(ConnectionHandlers):
 	def __init__(self, name):
 		ConnectionHandlers.__init__(self)
 		self.name = name
-		self.connected = 0 # offline
+		# self.connected:
+		# 0=>offline,
+		# 1=>connection in progress,
+		# 2=>authorised
+		self.connected = 0
 		self.connection = None # xmpppy ClientCommon instance
 		# this property is used to prevent double connections
 		self.last_connection = None # last ClientCommon instance
@@ -296,6 +300,8 @@ class Connection(ConnectionHandlers):
 				self.dispatch('STANZA_SENT', unicode(data))
 
 	def select_next_host(self, hosts):
+		'''Chooses best 'real' host basing on the SRV priority and weight data;
+		more info in RFC2782'''
 		hosts_best_prio = []
 		best_prio = 65535
 		sum_weight = 0

@@ -298,7 +298,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.renew_send_timeout()
 		
 	def connect(self,server=None, proxy = None, secure = None):
-		''' Try to establish connection. Returns non-empty string on success. '''
+		''' Try to establish connection. Returns True/False on success/failure. '''
 		if not server:
 			server=self._server
 		else: 
@@ -418,6 +418,12 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.idlequeue.remove_timeout(self.fd)
 	
 	def onreceive(self, recv_handler):
+		''' Sets the on_receive callback. Do not confuse it with
+		on_receive() method, which is the callback itself.
+		
+		If recv_handler==None, it tries to set that callback assuming that
+		our owner also has a Dispatcher object plugged in, to its
+		ProcessNonBlocking method.'''
 		if not recv_handler:
 			if hasattr(self._owner, 'Dispatcher'):
 				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
