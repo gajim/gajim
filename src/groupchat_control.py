@@ -97,12 +97,15 @@ def tree_cell_data_func(column, renderer, model, iter, tv=None):
 class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
 
-	def __init__(self, parent_win, gc_contact, contact, acct):
+	def __init__(self, parent_win, gc_contact, contact, account):
 		room_jid = contact.jid.split('/')[0]
-		room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, acct)
+		room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, account)
+		if gajim.interface.minimized_controls.has_key(account) and \
+		gajim.interface.minimized_controls[account].has_key(room_jid):
+			room_ctrl = gajim.interface.minimized_controls[account][room_jid]
 		self.room_name = room_ctrl.name
 		self.gc_contact = gc_contact
-		ChatControl.__init__(self, parent_win, contact, acct)
+		ChatControl.__init__(self, parent_win, contact, account)
 		self.TYPE_ID = 'pm'
 
 	def send_message(self, message):
@@ -127,7 +130,7 @@ class PrivateChatControl(ChatControl):
 				return
 
 		ChatControl.send_message(self, message)
-	
+
 	def update_ui(self):
 		if self.contact.show == 'offline':
 			self.got_disconnected()
@@ -556,7 +559,10 @@ class GroupchatControl(ChatControlBase):
 		self.list_treeview.expand_row(path[0:1], False)
 		self.list_treeview.scroll_to_cell(path)
 		self.list_treeview.set_cursor(path)
-		gajim.interface.roster.draw_contact(self.room_jid, self.account)
+		contact = gajim.contacts.get_contact_with_highest_priority(self.account, \
+			self.room_jid)
+		if contact:
+			gajim.interface.roster.draw_contact(self.room_jid, self.account)
 
 	def get_contact_iter(self, nick):
 		model = self.list_treeview.get_model()
@@ -1841,7 +1847,7 @@ class GroupchatControl(ChatControlBase):
 		else: # We want to send a private message
 			nick = model[path][C_NICK].decode('utf-8')
 			self._start_private_message(nick)
-			
+
 	def on_list_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the chat window'''
 		if not gajim.single_click:
