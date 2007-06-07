@@ -1451,6 +1451,10 @@ class GroupchatControl(ChatControlBase):
 			del self.handlers[i]
 		# Remove unread events from systray
 		gajim.events.remove_events(self.account, self.room_jid)
+		contact = gajim.contacts.get_contact_with_highest_priority(self.account, \
+			self.room_jid)
+		if contact:
+			gajim.interface.roster.remove_contact(contact, self.account)
 
 	def allow_shutdown(self, method):
 		'''If check_selection is True, '''
