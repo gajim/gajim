@@ -248,10 +248,7 @@ class Connection(ConnectionHandlers):
 							% (data[0], data[3])))
 						return
 					is_form = data[2]
-					if is_form:
-						conf = data[1]
-					else:
-						conf = data[1].asDict()
+					conf = data[1]
 					self.dispatch('NEW_ACC_CONNECTED', (conf, is_form))
 					return
 				if not data[1]: # wrong answer
@@ -260,10 +257,7 @@ class Connection(ConnectionHandlers):
 						(data[0], data[3])))
 					return
 				is_form = data[2]
-				if is_form:
-					conf = data[1]
-				else:
-					conf = data[1].asDict()
+				conf = data[1]
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))
 		elif realm == common.xmpp.NS_PRIVACY:
 			if event == common.xmpp.features_nb.PRIVACY_LISTS_RECEIVED:
