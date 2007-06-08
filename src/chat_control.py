@@ -1255,7 +1255,7 @@ class ChatControl(ChatControlBase):
 				# this is here (and not in send_chatstate)
 				# because we want it sent with REAL message
 				# (not standlone) eg. one that has body
-				
+
 				if contact.our_chatstate:
 					# We already asked for xep 85, don't ask it twice
 					composing_jep = 'asked_once'
@@ -1938,6 +1938,12 @@ class ChatControl(ChatControlBase):
 		# this is reverse logic, as we are on 'activate' (before change happens)
 		tb = self.xml.get_widget('gpg_togglebutton')
 		tb.set_active(not tb.get_active())
+
+	def _on_toggle_e2e_menuitem_activate(self, widget):
+		if 'security' in self.session.features and self.session.features['security'] == 'e2e':
+			self.session.negotiate_e2e()
+		else:
+			self.session.terminate_e2e()
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)

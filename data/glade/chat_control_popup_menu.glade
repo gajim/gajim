@@ -66,6 +66,16 @@
   </child>
 
   <child>
+    <widget class="GtkCheckMenuItem" id="toggle_e2e_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Toggle XEP-0116 Encryption</property>
+      <property name="use_underline">True</property>
+      <property name="active">False</property>
+      <signal name="activate" handler="_on_toggle_e2e_menuitem_activate" last_modification_time="Tue, 05 Jun 2007 22:22:40 MDT"/>
+    </widget>
+  </child>
+
+  <child>
     <widget class="GtkCheckMenuItem" id="compact_view_menuitem">
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Compact View    Alt+C</property>
