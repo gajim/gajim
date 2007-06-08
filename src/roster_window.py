@@ -2321,13 +2321,22 @@ class RosterWindow:
 			list_.append((contact, account))
 
 		menu = gtk.Menu()
-
-		remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
-		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
-		remove_item.set_image(icon)
-		menu.append(remove_item)
-		remove_item.connect('activate', self.on_req_usub, list_)
-
+		account = None
+		for (contact, current_account) in list_:
+			# check that we use the same account for every sender
+			if account is not None and account != current_account:
+				account = None
+				break
+			account = current_account
+		if account is not None:
+			send_group_message_item = gtk.ImageMenuItem(_('Send Group M_essage'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+			send_group_message_item.set_image(icon)
+			menu.append(send_group_message_item)
+			send_group_message_item.connect('activate',
+				self.on_send_single_message_menuitem_activate, account, list_)
+		
+		# Invite to Groupchat
 		invite_item = gtk.ImageMenuItem(_('In_vite to'))
 		muc_icon = self.load_icon('muc_active')
 		if muc_icon:
@@ -2373,27 +2382,20 @@ class RosterWindow:
 			invite_item.set_submenu(sub_menu)
 		menu.append(invite_item)
 
+		item = gtk.SeparatorMenuItem() # separator
+		menu.append(item)
+
+		# Edit Groups
 		edit_groups_item = gtk.ImageMenuItem(_('Edit _Groups'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
 		edit_groups_item.set_image(icon)
 		menu.append(edit_groups_item)
 		edit_groups_item.connect('activate', self.on_edit_groups, list_)
 
-		account = None
-		for (contact, current_account) in list_:
-			# check that we use the same account for every sender
-			if account is not None and account != current_account:
-				account = None
-				break
-			account = current_account
-		if account is not None:
-			send_group_message_item = gtk.ImageMenuItem(_('Send Group M_essage'))
-			icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
-			send_group_message_item.set_image(icon)
-			menu.append(send_group_message_item)
-			send_group_message_item.connect('activate',
-				self.on_send_single_message_menuitem_activate, account, list_)
+		item = gtk.SeparatorMenuItem() # separator
+		menu.append(item)
 
+		# Block
 		if is_blocked:
 			unblock_menuitem = gtk.ImageMenuItem(_('_Unblock'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
@@ -2406,7 +2408,14 @@ class RosterWindow:
 			block_menuitem.set_image(icon)
 			block_menuitem.connect('activate', self.on_block, None, list_)
 			menu.append(block_menuitem)
-		# unsensitive if one account is not connected
+		
+		# Remove 
+		remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
+		remove_item.set_image(icon)
+		menu.append(remove_item)
+		remove_item.connect('activate', self.on_req_usub, list_)
+		# unsensitive remove if one account is not connected
 		if one_account_offline:
 			remove_item.set_sensitive(False)
 
