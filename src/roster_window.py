@@ -2048,7 +2048,6 @@ class RosterWindow:
 		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
 		invite_to_new_room_menuitem.set_image(icon)
 		contact_transport = gajim.get_transport_name_from_jid(contact.jid)
-		print gajim.connections[account].muc_jid
 		t = contact_transport or 'jabber' # transform None in 'jabber'
 		if not gajim.connections[account].muc_jid.has_key(t):
 			invite_to_new_room_menuitem.set_sensitive(False)
