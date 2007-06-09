@@ -109,6 +109,24 @@
       </widget>
     </child>
     <child>
+      <widget class="GtkImageMenuItem" id="bookmark_room_menuitem">
+        <property name="label" translatable="yes">_Bookmark</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image1410">
+            <property name="visible">True</property>
+            <property name="stock">gtk-add</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="seperator">
+        <property name="visible">True</property>
+      </widget>
+    </child>
+    <child>
       <widget class="GtkImageMenuItem" id="history_menuitem">
         <property name="tooltip" translatable="yes">Click to see past conversation in this room</property>
         <property name="label" translatable="yes">_History</property>
@@ -117,19 +135,6 @@
           <widget class="GtkImage" id="image1405">
             <property name="visible">True</property>
             <property name="stock">gtk-justify-fill</property>
-            <property name="icon_size">1</property>
-          </widget>
-        </child>
-      </widget>
-    </child>
-    <child>
-      <widget class="GtkImageMenuItem" id="bookmark_room_menuitem">
-        <property name="label" translatable="yes">_Bookmark</property>
-        <property name="use_underline">True</property>
-        <child internal-child="image">
-          <widget class="GtkImage" id="image1410">
-            <property name="visible">True</property>
-            <property name="stock">gtk-add</property>
             <property name="icon_size">1</property>
           </widget>
         </child>

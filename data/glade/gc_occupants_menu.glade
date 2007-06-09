@@ -93,6 +93,25 @@
       </widget>
     </child>
     <child>
+      <widget class="GtkImageMenuItem" id="add_to_roster_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Add to Roster</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image1052">
+            <property name="visible">True</property>
+            <property name="stock">gtk-add</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="separator6">
+        <property name="visible">True</property>
+      </widget>
+    </child>
+    <child>
       <widget class="GtkImageMenuItem" id="information_menuitem">
         <property name="visible">True</property>
         <property name="label">gtk-info</property>
@@ -109,20 +128,6 @@
           <widget class="GtkImage" id="image1053">
             <property name="visible">True</property>
             <property name="stock">gtk-justify-fill</property>
-            <property name="icon_size">1</property>
-          </widget>
-        </child>
-      </widget>
-    </child>
-    <child>
-      <widget class="GtkImageMenuItem" id="add_to_roster_menuitem">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">_Add to Roster</property>
-        <property name="use_underline">True</property>
-        <child internal-child="image">
-          <widget class="GtkImage" id="image1052">
-            <property name="visible">True</property>
-            <property name="stock">gtk-add</property>
             <property name="icon_size">1</property>
           </widget>
         </child>
