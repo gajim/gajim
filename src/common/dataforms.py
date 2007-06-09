@@ -13,7 +13,7 @@ class WrongFieldValue(Error): pass	# when we get xmpp.Node which contains bad fi
 class ExtendedNode(xmpp.Node, object):
 	@classmethod
 	def __new__(cls,  *a, **b):
-		if 'extend' not in b.keys() or not b[keys]:
+		if 'extend' not in b.keys() or not b['extend']:
 			return object.__new__(cls)
 
 		extend = b['extend']
