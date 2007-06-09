@@ -2048,6 +2048,7 @@ class RosterWindow:
 		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
 		invite_to_new_room_menuitem.set_image(icon)
 		contact_transport = gajim.get_transport_name_from_jid(contact.jid)
+		print gajim.connections[account].muc_jid
 		t = contact_transport or 'jabber' # transform None in 'jabber'
 		if not gajim.connections[account].muc_jid.has_key(t):
 			invite_to_new_room_menuitem.set_sensitive(False)
@@ -2628,6 +2629,7 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		menu = gtk.Menu()
 
+		# Log on
 		item = gtk.ImageMenuItem(_('_Log on'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
@@ -2638,6 +2640,7 @@ class RosterWindow:
 			item.set_sensitive(False)
 		item.connect('activate', self.on_agent_logging, jid, None, account)
 
+		# Log off
 		item = gtk.ImageMenuItem(_('Log _off'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
@@ -2651,14 +2654,7 @@ class RosterWindow:
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
 
-		item = gtk.ImageMenuItem(_('_Edit'))
-		icon = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
-		item.set_image(icon)
-		menu.append(item)
-		item.connect('activate', self.on_edit_agent, contact, account)
-		if gajim.account_is_disconnected(account):
-			item.set_sensitive(False)
-
+		# Execute Command
 		item = gtk.ImageMenuItem(_('Execute Command...'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
@@ -2668,6 +2664,16 @@ class RosterWindow:
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 
+		# Edit
+		item = gtk.ImageMenuItem(_('_Edit'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		menu.append(item)
+		item.connect('activate', self.on_edit_agent, contact, account)
+		if gajim.account_is_disconnected(account):
+			item.set_sensitive(False)
+
+		# Rename
 		item = gtk.ImageMenuItem(_('_Rename'))
 		# add a special img for rename menuitem
 		path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
@@ -2679,7 +2685,11 @@ class RosterWindow:
 		item.connect('activate', self.on_rename, iter, path)
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
+		
+		item = gtk.SeparatorMenuItem() # sepator
+		menu.append(item)
 
+		# Remove
 		item = gtk.ImageMenuItem(_('_Remove from Roster'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
