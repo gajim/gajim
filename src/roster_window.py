@@ -2007,7 +2007,24 @@ class RosterWindow:
 		add_special_notification_menuitem.set_no_show_all(True)
 
 		# send custom status icon
-		if gajim.interface.status_sent_to_users.has_key(account) and \
+		blocked = False
+		if jid in gajim.connections[account].blocked_contacts:
+			blocked = True
+		else:
+			groups = contact.groups
+			if contact.is_observer():
+				groups = [_('Observers')]
+			elif not groups:
+				groups = [_('General')]
+			for group in groups:
+				if group in gajim.connections[account].blocked_groups:
+					blocked = True
+					break
+		if blocked:
+			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
+			send_custom_status_menuitem.set_image(icon)
+			send_custom_status_menuitem.set_sensitive(False)
+		elif gajim.interface.status_sent_to_users.has_key(account) and \
 		jid in gajim.interface.status_sent_to_users[account]:
 			send_custom_status_menuitem.set_image(
 				self.load_icon(gajim.interface.status_sent_to_users[account][jid]))
