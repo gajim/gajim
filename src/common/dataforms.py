@@ -390,8 +390,6 @@ class MultipleDataForm(DataForm):
 		DataForm.__init__(self, type=type, title=title, instructions=instructions, extend=extend)
 		# all records, recorded into DataRecords
 		if extend is None:
-			# we have to build this object from scratch
-			xmpp.Node.__init__(self)
 
 			if items is not None: self.items = items
 		else:
