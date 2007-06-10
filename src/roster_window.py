@@ -2559,7 +2559,11 @@ class RosterWindow:
 		# Send Custom Status
 		send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
 		# add a special img for this menuitem
-		if gajim.interface.status_sent_to_groups.has_key(account) and \
+		if group in gajim.connections[account].blocked_groups:
+			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
+			send_custom_status_menuitem.set_image(icon)
+			send_custom_status_menuitem.set_sensitive(False)
+		elif gajim.interface.status_sent_to_groups.has_key(account) and \
 		group in gajim.interface.status_sent_to_groups[account]:
 			send_custom_status_menuitem.set_image(self.load_icon(
 				gajim.interface.status_sent_to_groups[account][group]))
