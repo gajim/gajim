@@ -396,6 +396,9 @@ class Interface:
 		prompt = data[2]
 		proposed_nick = data[3]
 		gc_control = self.msg_win_mgr.get_control(room_jid, account)
+		if not gc_control and \
+		room_jid in self.minimized_controls[account]:
+			gc_control = self.minimized_controls[account][room_jid]
 		if gc_control: # user may close the window before we are here
 			gc_control.show_change_nick_input_dialog(title, prompt, proposed_nick)
 
@@ -479,16 +482,18 @@ class Interface:
 			model[self.roster.status_message_menuitem_iter][3] = True
 
 		# Inform all controls for this account of the connection state change
-		for ctrl in self.msg_win_mgr.get_controls():
+		for ctrl in self.msg_win_mgr.get_controls() + \
+		self.minimized_controls[account].values():
 			if ctrl.account == account:
 				if status == 'offline' or (status == 'invisible' and \
-						gajim.connections[account].is_zeroconf):
+				gajim.connections[account].is_zeroconf):
 					ctrl.got_disconnected()
 				else:
 					# Other code rejoins all GCs, so we don't do it here
 					if not ctrl.type_id == message_control.TYPE_GC:
 						ctrl.got_connected()
-				ctrl.parent_win.redraw_tab(ctrl)
+				if ctrl.parent_win:
+					ctrl.parent_win.redraw_tab(ctrl)
 
 		self.roster.on_status_changed(account, status)
 		if account in self.show_vcard_when_connect:
@@ -687,7 +692,6 @@ class Interface:
 
 		groupchat_control = self.msg_win_mgr.get_control(jid, account)
 		if not groupchat_control and \
-		self.minimized_controls.has_key(account) and \
 		jid in self.minimized_controls[account]:
 			groupchat_control = self.minimized_controls[account][jid]
 		pm = False
@@ -798,6 +802,9 @@ class Interface:
 		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
 		gc_control = self.msg_win_mgr.get_control(jid, account)
+		if not gc_control and \
+		jid in self.minimized_controls[account]:
+			gc_control = self.minimized_controls[account][jid]
 		if gc_control and gc_control.type_id != message_control.TYPE_GC:
 			gc_control = None
 		if gc_control:
@@ -821,7 +828,7 @@ class Interface:
 				return
 
 			gc_control.print_conversation('Error %s: %s' % (array[1], array[2]))
-			if gc_control.parent_win.get_active_jid() == jid:
+			if gc_control.parent_win and gc_control.parent_win.get_active_jid() == jid:
 				gc_control.set_subject(gc_control.subject)
 			return
 
@@ -1021,6 +1028,9 @@ class Interface:
 
 		# Show avatar in roster or gc_roster
 		gc_ctrl = self.msg_win_mgr.get_control(jid, account)
+		if not gc_ctrl and \
+		jid in self.minimized_controls[account]:
+			gc_ctrl = self.minimized_controls[account][jid]
 		if gc_ctrl and gc_ctrl.type_id == message_control.TYPE_GC:
 			gc_ctrl.draw_avatar(resource)
 		else:
@@ -1076,7 +1086,6 @@ class Interface:
 		# PrivateChatControl
 		control = self.msg_win_mgr.get_control(room_jid, account)
 		if not control and \
-		self.minimized_controls.has_key(account) and \
 		room_jid in self.minimized_controls[account]:
 			control = self.minimized_controls[account][room_jid]
 
@@ -1085,7 +1094,10 @@ class Interface:
 		if control:
 			control.chg_contact_status(nick, show, status, array[4], array[5],
 				array[6], array[7], array[8], array[9], array[10], array[11])
-		if control and not control.parent_win:
+
+		contact = gajim.contacts.\
+			get_contact_with_highest_priority(account, room_jid)
+		if contact:
 			self.roster.draw_contact(room_jid, account)
 
 		ctrl = self.msg_win_mgr.get_control(fjid, account)
@@ -1114,7 +1126,6 @@ class Interface:
 
 		gc_control = self.msg_win_mgr.get_control(room_jid, account)
 		if not gc_control and \
-		self.minimized_controls.has_key(account) and \
 		room_jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][room_jid]
 
@@ -1149,7 +1160,6 @@ class Interface:
 		gc_control = self.msg_win_mgr.get_control(jid, account)
 
 		if not gc_control and \
-		self.minimized_controls.has_key(account) and \
 		jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][jid]
 
@@ -1303,7 +1313,7 @@ class Interface:
 				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
 					bm['password'],
 					minimize = gajim.config.get('minimize_autojoined_rooms'))
-								
+
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
 		file_props = array[1]
@@ -1615,7 +1625,8 @@ class Interface:
 		if self.instances[account].has_key('profile'):
 			win = self.instances[account]['profile']
 			win.vcard_published()
-		for gc_control in self.msg_win_mgr.get_controls(message_control.TYPE_GC):
+		for gc_control in self.msg_win_mgr.get_controls(message_control.TYPE_GC) + \
+		self.minimized_controls[account].values():
 			if gc_control.account == account:
 				show = gajim.SHOW_LIST[gajim.connections[account].connected]
 				status = gajim.connections[account].status
@@ -1643,7 +1654,8 @@ class Interface:
 		if gajim.connections[account].connected == invisible_show:
 			return
 		# join already open groupchats
-		for gc_control in self.msg_win_mgr.get_controls(message_control.TYPE_GC):
+		for gc_control in self.msg_win_mgr.get_controls(message_control.TYPE_GC) + \
+		self.minimized_controls[account].values():
 			if account != gc_control.account:
 				continue
 			room_jid = gc_control.room_jid
@@ -2127,8 +2139,7 @@ class Interface:
 		jid = gajim.get_jid_without_resource(fjid)
 		if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
 			w = self.msg_win_mgr.get_window(jid, account)
-			if self.minimized_controls.has_key(account) and \
-			self.minimized_controls[account].has_key(jid):
+			if self.minimized_controls[account].has_key(jid):
 				if not w:
 					ctrl = self.minimized_controls[account][jid]
 					w = self.msg_win_mgr.create_window(ctrl.contact, \
@@ -2308,6 +2319,8 @@ class Interface:
 		for a in gajim.connections:
 			self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
 				'search': {}}
+			if not a in self.minimized_controls:
+				self.minimized_controls[a] = {}
 			gajim.contacts.add_account(a)
 			gajim.groups[a] = {}
 			gajim.gc_connected[a] = {}

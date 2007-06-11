@@ -569,7 +569,6 @@ class ChatControlBase(MessageControl):
 			full_jid != self.parent_win.get_active_jid() or \
 			not self.parent_win.is_active() or not end)) or \
 			(gc_message and \
-			gajim.interface.minimized_controls.has_key(self.account) and \
 			jid in gajim.interface.minimized_controls[self.account])) and \
 			kind in ('incoming', 'incoming_queue'):
 				# we want to have save this message in events list
@@ -683,8 +682,6 @@ class ChatControlBase(MessageControl):
 		control.unparent()
 		ctrl.parent_win = None
 
-		if not gajim.interface.minimized_controls.has_key(self.account):
-			gajim.interface.minimized_controls[self.account] = {}
 		gajim.interface.minimized_controls[self.account][self.contact.jid] = ctrl
 
 		del win._controls[self.account][self.contact.jid]
@@ -825,8 +822,7 @@ class ChatControlBase(MessageControl):
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			groupchat_control = gajim.interface.msg_win_mgr.get_control(
 				room_jid, self.account)
-			if gajim.interface.minimized_controls.has_key(self.account) and \
-			room_jid in gajim.interface.minimized_controls[self.account]:
+			if room_jid in gajim.interface.minimized_controls[self.account]:
 				groupchat_control = \
 					gajim.interface.minimized_controls[self.account][room_jid]
 			contact = \

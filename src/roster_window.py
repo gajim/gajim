@@ -588,8 +588,7 @@ class RosterWindow:
 		name = gobject.markup_escape_text(contact.get_shown_name())
 
 		# gets number of unread gc marked messages
-		if gajim.interface.minimized_controls.has_key(account) and \
-		jid in gajim.interface.minimized_controls[account]:
+		if jid in gajim.interface.minimized_controls[account]:
 			nb_unread = len(gajim.events.get_events(account, jid,
 				['printed_marked_gc_msg']))
 			nb_unread += \
@@ -748,38 +747,37 @@ class RosterWindow:
 			win.set_active_tab(room_jid,  account)
 			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
-		if gajim.interface.minimized_controls.has_key(account) and \
-		room_jid in gajim.interface.minimized_controls[account]:
-			self.on_groupchat_maximized(None, room_jid, account)
-			return
+		minimized_control_exists = False
+		if room_jid in gajim.interface.minimized_controls[account]:
+			minimized_control_exists = True
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
 			dialogs.ErrorDialog(
 				_('You cannot join a group chat while you are invisible'))
 			return
-		if minimize:
+		if minimize and not minimized_control_exists:
 			contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
 			gc_control = GroupchatControl(None, contact, account)
-			if not gajim.interface.minimized_controls.has_key(account):
-				gajim.interface.minimized_controls[account] = {}
 			gajim.interface.minimized_controls[account][room_jid] = gc_control
 			gajim.connections[account].join_gc(nick, room_jid, password)
 			if password:
 				gajim.gc_passwords[room_jid] = password
 			self.add_groupchat_to_roster(account, room_jid)
 			return
-		if not gajim.interface.msg_win_mgr.has_window(room_jid, account):
+		if not minimized_control_exists and \
+			not gajim.interface.msg_win_mgr.has_window(room_jid, account):
 			self.new_room(room_jid, nick, account)
-		contact = gajim.contacts.get_contact_with_highest_priority(account, \
-			room_jid)
-		if contact:
-			self.add_groupchat_to_roster(account, room_jid)
-		gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
-		gc_win.set_active_tab(room_jid, account)
-		gc_win.window.present()
+		if not minimized_control_exists:
+			gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
+			gc_win.set_active_tab(room_jid, account)
+			gc_win.window.present()
 		gajim.connections[account].join_gc(nick, room_jid, password)
 		if password:
 			gajim.gc_passwords[room_jid] = password
+		contact = gajim.contacts.get_contact_with_highest_priority(account, \
+			room_jid)
+		if contact or minimized_control_exists:
+			self.add_groupchat_to_roster(account, room_jid)
 
 	def on_actions_menuitem_activate(self, widget):
 		self.make_menu()
@@ -2456,8 +2454,7 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		menu = gtk.Menu()
 
-		if gajim.interface.minimized_controls.has_key(account) and \
-		jid in gajim.interface.minimized_controls[account]:
+		if jid in gajim.interface.minimized_controls[account]:
 			maximize_menuitem = gtk.ImageMenuItem(_('_Maximize'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_GOTO_TOP, gtk.ICON_SIZE_MENU)
 			maximize_menuitem.set_image(icon)
@@ -2487,8 +2484,6 @@ class RosterWindow:
 
 	def on_groupchat_maximized(self, widget, jid, account):
 		'''When a groupchat is maximised'''
-		if not gajim.interface.minimized_controls.has_key(account):
-			return
 		if not gajim.interface.minimized_controls[account].has_key(jid):
 			return
 
@@ -2502,13 +2497,15 @@ class RosterWindow:
 		mw.new_tab(ctrl)
 		mw.set_active_tab(jid, account)
 		mw.window.present()
+		del gajim.interface.minimized_controls[account][jid]
 
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		if not contact:
+			return
 		if contact.groups == [_('Groupchats')]:
 			self.remove_contact(contact, account)
 			gajim.contacts.remove_contact(account, contact)
 			self.draw_group(_('Groupchats'), account)
-		del gajim.interface.minimized_controls[account][jid]
 
 	def make_group_menu(self, event, iter):
 		'''Make group's popup menu'''
@@ -3312,8 +3309,6 @@ class RosterWindow:
 				gajim.interface.status_sent_to_users[account] = {}
 			if gajim.interface.status_sent_to_groups.has_key(account):
 				gajim.interface.status_sent_to_groups[account] = {}
-			if not gajim.interface.minimized_controls.has_key(account):
-				gajim.interface.minimized_controls[account] = {}
 			for gc_control in gajim.interface.msg_win_mgr.get_controls(
 			message_control.TYPE_GC) + \
 			gajim.interface.minimized_controls[account].values():
@@ -4067,8 +4062,7 @@ class RosterWindow:
 				self.tree.collapse_row(path)
 			else:
 				self.tree.expand_row(path, False)
-		elif gajim.interface.minimized_controls.has_key(account) and \
-		gajim.interface.minimized_controls[account].has_key(jid):
+		elif jid in gajim.interface.minimized_controls[account]:
 			self.on_groupchat_maximized(None, jid, account)
 		else:
 			first_ev = gajim.events.get_first_event(account, jid)

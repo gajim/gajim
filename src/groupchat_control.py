@@ -100,8 +100,7 @@ class PrivateChatControl(ChatControl):
 	def __init__(self, parent_win, gc_contact, contact, account):
 		room_jid = contact.jid.split('/')[0]
 		room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, account)
-		if gajim.interface.minimized_controls.has_key(account) and \
-		gajim.interface.minimized_controls[account].has_key(room_jid):
+		if gajim.interface.minimized_controls[account].has_key(room_jid):
 			room_ctrl = gajim.interface.minimized_controls[account][room_jid]
 		self.room_name = room_ctrl.name
 		self.gc_contact = gc_contact
@@ -788,7 +787,8 @@ class GroupchatControl(ChatControlBase):
 				gc_contact.show = 'offline'
 				gc_contact.status = ''
 				ctrl.update_ui()
-				ctrl.parent_win.redraw_tab(ctrl)
+				if ctrl.parent_win:
+					ctrl.parent_win.redraw_tab(ctrl)
 			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		gajim.gc_connected[self.account][self.room_jid] = False
 		ChatControlBase.got_disconnected(self)
@@ -1455,10 +1455,6 @@ class GroupchatControl(ChatControlBase):
 			del self.handlers[i]
 		# Remove unread events from systray
 		gajim.events.remove_events(self.account, self.room_jid)
-		contact = gajim.contacts.get_contact_with_highest_priority(self.account, \
-			self.room_jid)
-		if contact:
-			gajim.interface.roster.remove_contact(contact, self.account)
 
 	def allow_shutdown(self, method):
 		'''If check_selection is True, '''
