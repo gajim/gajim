@@ -16,6 +16,7 @@
 ##
 
 import gtk
+import pango
 import gobject
 import os
 import time
@@ -1188,6 +1189,8 @@ class RosterWindow:
 		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
 			self.add_account_contacts(acct)
+		# Recalculate column width for ellipsizing 
+		self.tree.columns_autosize()
 
 	def add_account_contacts(self, account):
 		'''adds contacts of group to roster treeview'''
@@ -5045,6 +5048,7 @@ class RosterWindow:
 		col.set_cell_data_func(render_image, self.iconCellDataFunc, None)
 
 		render_text = gtk.CellRendererText() # contact or group or account name
+		render_text.set_property("ellipsize", pango.ELLIPSIZE_END)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)

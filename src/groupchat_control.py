@@ -288,14 +288,8 @@ class GroupchatControl(ChatControlBase):
 		# first one img, second one text, third is sec pixbuf
 		column = gtk.TreeViewColumn()
 
-		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
-		column.pack_start(renderer_pixbuf, expand = False)
-		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
-		column.set_cell_data_func(renderer_pixbuf, tree_cell_data_func,
-			self.list_treeview)
-		renderer_pixbuf.set_property('xalign', 1) # align pixbuf to the right
-
 		renderer_image = cell_renderer_image.CellRendererImage(0, 0) # status img
+		renderer_image.set_property('width', 26)
 		column.pack_start(renderer_image, expand = False)
 		column.add_attribute(renderer_image, 'image', C_IMG)
 		column.set_cell_data_func(renderer_image, tree_cell_data_func, 
@@ -304,8 +298,16 @@ class GroupchatControl(ChatControlBase):
 		renderer_text = gtk.CellRendererText() # nickname
 		column.pack_start(renderer_text, expand = True)
 		column.add_attribute(renderer_text, 'markup', C_TEXT)
+		renderer_text.set_property("ellipsize", pango.ELLIPSIZE_END)
 		column.set_cell_data_func(renderer_text, tree_cell_data_func,
 			self.list_treeview)
+
+		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
+		column.pack_start(renderer_pixbuf, expand = False)
+		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
+		column.set_cell_data_func(renderer_pixbuf, tree_cell_data_func,
+			self.list_treeview)
+		renderer_pixbuf.set_property('xalign', 1) # align pixbuf to the right
 
 		self.list_treeview.append_column(column)
 
@@ -801,6 +803,8 @@ class GroupchatControl(ChatControlBase):
 			self.add_contact_to_roster(nick, gc_contact.show, gc_contact.role,
 						gc_contact.affiliation, gc_contact.status,
 						gc_contact.jid)
+		# Recalculate column width for ellipsizin
+		self.list_treeview.columns_autosize()
 
 	def on_send_pm(self, widget = None, model = None, iter = None, nick = None,
 	msg = None):
