@@ -81,6 +81,7 @@ NS_SESSION      ='urn:ietf:params:xml:ns:xmpp-session'
 NS_SI           ='http://jabber.org/protocol/si'                        # JEP-0096
 NS_SI_PUB       ='http://jabber.org/protocol/sipub'                     # JEP-0137
 NS_SIGNED       ='jabber:x:signed'                                      # JEP-0027
+NS_STANZA_CRYPTO='http://www.xmpp.org/extensions/xep-0200.html#ns'			# JEP-0200
 NS_STANZAS      ='urn:ietf:params:xml:ns:xmpp-stanzas'
 NS_STREAM       ='http://affinix.com/jabber/stream'
 NS_STREAMS      ='http://etherx.jabber.org/streams'

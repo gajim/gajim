@@ -37,7 +37,7 @@ from common import atom
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 
-from common.stanza_session import StanzaSession 
+from common.stanza_session import EncryptedStanzaSession 
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
@@ -1440,6 +1440,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		common.xmpp.NS_FEATURE:
 			self._FeatureNegCB(con, msg, session)
 			return
+		
+		e2eTag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
+		if e2eTag:
+			msg = session.decrypt_stanza(msg)
 
 		msgtxt = msg.getBody()
 		msghtml = msg.getXHTML()
@@ -1611,7 +1615,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		return null_sessions[-1]
 
 	def make_new_session(self, jid, thread_id = None, type = 'chat'):
-		sess = StanzaSession(self, jid, thread_id, type)
+		sess = EncryptedStanzaSession(self, jid, thread_id, type)
 
 		if not jid in self.sessions:
 			self.sessions[jid] = {}

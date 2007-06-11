@@ -1474,6 +1474,7 @@ class ChatControl(ChatControlBase):
 		
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
+		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		compact_view_menuitem = xml.get_widget('compact_view_menuitem')
@@ -1492,7 +1493,7 @@ class ChatControl(ChatControlBase):
 		is_sensitive = gpg_btn.get_property('sensitive')
 		toggle_gpg_menuitem.set_active(isactive)
 		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
-		
+	
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
 		if contact.resource and contact.jid.find('@') != -1:
@@ -1527,6 +1528,8 @@ class ChatControl(ChatControlBase):
 		self.handlers[id] = add_to_roster_menuitem 
 		id = toggle_gpg_menuitem.connect('activate', 
 			self._on_toggle_gpg_menuitem_activate)
+		id = toggle_e2e_menuitem.connect('activate', 
+			self._on_toggle_e2e_menuitem_activate)
 		self.handlers[id] = toggle_gpg_menuitem 
 		id = information_menuitem.connect('activate', 
 			self._on_contact_information_menuitem_activate)
@@ -1940,10 +1943,15 @@ class ChatControl(ChatControlBase):
 		tb.set_active(not tb.get_active())
 
 	def _on_toggle_e2e_menuitem_activate(self, widget):
-		if 'security' in self.session.features and self.session.features['security'] == 'e2e':
-			self.session.negotiate_e2e()
+		#if 'security' in self.session.features and self.session.features['security'] == 'e2e':
+		if self.session.enable_encryption:
+			self.session.enable_encryption = False
+			print "e2e disabled."
+#			self.session.terminate_e2e()
 		else:
-			self.session.terminate_e2e()
+			self.session.enable_encryption = True
+			print "e2e enabled."
+#			self.session.negotiate_e2e()
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)

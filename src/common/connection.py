@@ -885,11 +885,6 @@ class Connection(ConnectionHandlers):
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
-		# XEP-0201
-		if session:
-			session.last_send = time.time()
-			msg_iq.setThread(session.thread_id)
-
 		# JEP-0172: user_nickname
 		if user_nick:
 			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
@@ -915,7 +910,17 @@ class Connection(ConnectionHandlers):
 				if chatstate is 'composing' or msgtxt: 
 					chatstate_node.addChild(name = 'composing') 
 
+		if session:
+			# XEP-0201
+			session.last_send = time.time()
+			msg_iq.setThread(session.thread_id)
+
+			# XEP-0200
+			if session.enable_encryption:
+				msg_iq = session.encrypt_stanza(msg_iq)
+
 		self.connection.send(msg_iq)
+
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
 			.split()
 		ji = gajim.get_jid_without_resource(jid)
