@@ -2254,9 +2254,8 @@ class RosterWindow:
 					block_menuitem.connect('activate', self.on_block, iter, None)
 					unblock_menuitem.hide()
 		else:
-			block_menuitem.set_no_show_all(True)
 			unblock_menuitem.set_no_show_all(True)
-			block_menuitem.hide()
+			block_menuitem.set_sensitive(False)
 			unblock_menuitem.hide()
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
@@ -2412,7 +2411,7 @@ class RosterWindow:
 		menu.append(item)
 
 		# Block
-		if is_blocked:
+		if is_blocked and gajim.connections[account].privacy_rules_supported:
 			unblock_menuitem = gtk.ImageMenuItem(_('_Unblock'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 			unblock_menuitem.set_image(icon)
@@ -2424,7 +2423,10 @@ class RosterWindow:
 			block_menuitem.set_image(icon)
 			block_menuitem.connect('activate', self.on_block, None, list_)
 			menu.append(block_menuitem)
-		
+
+			if not gajim.connections[account].privacy_rules_supported:
+				block_menuitem.set_sensitive(False)
+
 		# Remove 
 		remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
@@ -2607,7 +2609,7 @@ class RosterWindow:
 				if group in gajim.connections[account].blocked_groups:
 					is_blocked = True
 
-			if is_blocked:
+			if is_blocked and gajim.connections[account].privacy_rules_supported:
 				unblock_menuitem = gtk.ImageMenuItem(_('_Unblock'))
 				icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 				unblock_menuitem.set_image(icon)
@@ -2619,6 +2621,8 @@ class RosterWindow:
 				block_menuitem.set_image(icon)
 				block_menuitem.connect('activate', self.on_block, iter, list_)
 				menu.append(block_menuitem)
+				if not gajim.connections[account].privacy_rules_supported:
+					block_menuitem.set_sensitive(False)
 
 			# Remove group
 			remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
