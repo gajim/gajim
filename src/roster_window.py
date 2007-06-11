@@ -16,7 +16,6 @@
 ##
 
 import gtk
-import pango
 import gobject
 import os
 import time
@@ -1187,8 +1186,6 @@ class RosterWindow:
 		for acct in gajim.connections:
 			self.add_account_to_roster(acct)
 			self.add_account_contacts(acct)
-		# Recalculate column width for ellipsizing 
-		self.tree.columns_autosize()
 
 	def add_account_contacts(self, account):
 		'''adds contacts of group to roster treeview'''
@@ -2557,32 +2554,32 @@ class RosterWindow:
 			group_message_to_all_item.connect('activate',
 				self.on_send_single_message_menuitem_activate, account, list_)
 
-		# Send Custom Status
-		send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
-		# add a special img for this menuitem
-		if group in gajim.connections[account].blocked_groups:
-			send_custom_status_menuitem.set_image(self.load_icon('offline'))
-			send_custom_status_menuitem.set_sensitive(False)
-		elif gajim.interface.status_sent_to_groups.has_key(account) and \
-		group in gajim.interface.status_sent_to_groups[account]:
-			send_custom_status_menuitem.set_image(self.load_icon(
-				gajim.interface.status_sent_to_groups[account][group]))
-		else:
-			send_custom_status_menuitem.set_image(None)
-		status_menuitems = gtk.Menu()
-		send_custom_status_menuitem.set_submenu(status_menuitems)
-		iconset = gajim.config.get('iconset')
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
-		for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
-			# icon MUST be different instance for every item
-			state_images = self.load_iconset(path)
-			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
-			status_menuitem.connect('activate', self.on_send_custom_status, list_,
-				s, group)
-			icon = state_images[s]
-			status_menuitem.set_image(icon)
-			status_menuitems.append(status_menuitem)
-		menu.append(send_custom_status_menuitem)
+			# Send Custom Status
+			send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
+			# add a special img for this menuitem
+			if group in gajim.connections[account].blocked_groups:
+				send_custom_status_menuitem.set_image(self.load_icon('offline'))
+				send_custom_status_menuitem.set_sensitive(False)
+			elif gajim.interface.status_sent_to_groups.has_key(account) and \
+			group in gajim.interface.status_sent_to_groups[account]:
+				send_custom_status_menuitem.set_image(self.load_icon(
+					gajim.interface.status_sent_to_groups[account][group]))
+			else:
+				send_custom_status_menuitem.set_image(None)
+			status_menuitems = gtk.Menu()
+			send_custom_status_menuitem.set_submenu(status_menuitems)
+			iconset = gajim.config.get('iconset')
+			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+			for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
+				# icon MUST be different instance for every item
+				state_images = self.load_iconset(path)
+				status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
+				status_menuitem.connect('activate', self.on_send_custom_status, list_,
+					s, group)
+				icon = state_images[s]
+				status_menuitem.set_image(icon)
+				status_menuitems.append(status_menuitem)
+			menu.append(send_custom_status_menuitem)
 
 		if not group in helpers.special_groups + (_('General'),):
 			item = gtk.SeparatorMenuItem() # separator
@@ -5042,7 +5039,6 @@ class RosterWindow:
 		col.set_cell_data_func(render_image, self.iconCellDataFunc, None)
 
 		render_text = gtk.CellRendererText() # contact or group or account name
-		render_text.set_property("ellipsize", pango.ELLIPSIZE_END)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
