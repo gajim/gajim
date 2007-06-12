@@ -755,7 +755,8 @@ class RosterWindow:
 			dialogs.ErrorDialog(
 				_('You cannot join a group chat while you are invisible'))
 			return
-		if minimize and not minimized_control_exists:
+		if minimize and not minimized_control_exists and \
+		not gajim.interface.msg_win_mgr.has_window(room_jid, account):
 			contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
 			gc_control = GroupchatControl(None, contact, account)
 			gajim.interface.minimized_controls[account][room_jid] = gc_control
