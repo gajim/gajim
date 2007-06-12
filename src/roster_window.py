@@ -2720,6 +2720,13 @@ class RosterWindow:
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 
+		information_menuitem = gtk.ImageMenuItem(_('_Information'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_INFO, gtk.ICON_SIZE_MENU)
+		information_menuitem.set_image(icon)
+		menu.append(information_menuitem)
+		information_menuitem.connect('activate', self.on_info, contact, account)
+
+
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
 		menu.attach_to_widget(self.tree, None)
