@@ -669,8 +669,7 @@ class GroupchatControl(ChatControlBase):
 				other_tags_for_text.append('gc_nickname_color_' + \
 					str(self.gc_custom_colors[contact]))
 
-			if self.parent_win:
-				self.check_and_possibly_add_focus_out_line()
+			self.check_and_possibly_add_focus_out_line()
 
 		ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
 			other_tags_for_name, [], other_tags_for_text, xhtml = xhtml)
@@ -719,7 +718,7 @@ class GroupchatControl(ChatControlBase):
 		it removes previous line first'''
 
 		win = gajim.interface.msg_win_mgr.get_window(self.room_jid, self.account)
-		if self.room_jid == win.get_active_jid() and\
+		if win and self.room_jid == win.get_active_jid() and\
 		win.window.get_property('has-toplevel-focus') and\
 		self.parent_win.get_active_control() == self:
 			# it's the current room and it's the focused window.
