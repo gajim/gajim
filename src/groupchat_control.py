@@ -976,7 +976,9 @@ class GroupchatControl(ChatControlBase):
 					real_jid = fake_jid
 				if con.vcard_shas.has_key(fake_jid):
 					if avatar_sha != con.vcard_shas[fake_jid]:
-						con.request_vcard(real_jid, fake_jid)
+						server = gajim.get_server_from_jid(self.room_jid)
+						if not server.startswith('irc'):
+							con.request_vcard(real_jid, fake_jid)
 				else:
 					cached_vcard = con.get_cached_vcard(fake_jid, True)
 					if cached_vcard and cached_vcard.has_key('PHOTO') and \
@@ -987,7 +989,9 @@ class GroupchatControl(ChatControlBase):
 					if cached_sha != avatar_sha:
 						# avatar has been updated
 						# sha in mem will be updated later
-						con.request_vcard(real_jid, fake_jid)
+						server = gajim.get_server_from_jid(self.room_jid)
+						if not server.startswith('irc'):
+							con.request_vcard(real_jid, fake_jid)
 					else:
 						# save sha in mem NOW
 						con.vcard_shas[fake_jid] = avatar_sha
