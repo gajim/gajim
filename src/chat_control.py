@@ -1204,9 +1204,16 @@ class ChatControl(ChatControlBase):
 				self.get_command_help(command)
 			self.clear(self.msg_textview)
 			return True
-		elif command == 'ping' and not len(message_array):
-			gajim.connections[self.account].sendPing(self.contact)
+		elif command == 'ping':
+			if not len(message_array):
+				gajim.connections[self.account].sendPing(self.contact)
+			else: 
+				self.get_command_help(command)
 			self.clear(self.msg_textview)
+			return True
+		else:
+			self.print_conversation(_('No such command: /%s (if you want to send '
+				'this, prefix it with /say)') % command, 'info')
 			return True
 		return False
 
