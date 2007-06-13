@@ -903,7 +903,7 @@ class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
-	CHAT_CMDS = ['clear', 'compact', 'help', 'ping']
+	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping']
 	
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1196,6 +1196,9 @@ class ChatControl(ChatControlBase):
 		if message_array == ['']:
 			message_array = []
 
+		if command == 'me':
+			return False # This is not really a command
+
 		if command == 'help':
 			if len(message_array):
 				subcommand = message_array.pop(0)
@@ -1227,6 +1230,10 @@ class ChatControl(ChatControlBase):
 		elif command == 'compact':
 			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % \
 				command, 'info')
+		elif command == 'me':
+			self.print_conversation(_('Usage: /%s <action>, sends action to the '
+				'current group chat. Use third person. (e.g. /%s explodes.)') % \
+				(command, command), 'info')
 		elif command == 'ping':
 			self.print_conversation(_('Usage: /%s, sends a ping to the contact') %\
 				command, 'info')
