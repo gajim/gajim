@@ -1235,12 +1235,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					autojoin_val = conf.getAttr('autojoin')
 					if autojoin_val is None: # not there (it's optional)
 						autojoin_val = False
+					minimize_val = conf.getAttr('minimize')
+					if minimize_val is None: # not there (it's optional)
+						minimize_val = False
 					print_status = conf.getTagData('print_status')
 					if not print_status:
 						print_status = conf.getTagData('show_status')
 					bm = {'name': conf.getAttr('name'),
 							'jid': conf.getAttr('jid'),
 							'autojoin': autojoin_val,
+							'minimize': minimize_val,
 							'password': conf.getTagData('password'),
 							'nick': conf.getTagData('nick'),
 							'print_status': print_status}

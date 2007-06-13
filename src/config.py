@@ -2486,8 +2486,9 @@ class ManageBookmarksWindow:
 		self.window = self.xml.get_widget('manage_bookmarks_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 
-		# Account-JID, RoomName, Room-JID, Autojoin, Passowrd, Nick, Show_Status
-		self.treestore = gtk.TreeStore(str, str, str, bool, str, str, str)
+		# Account-JID, RoomName, Room-JID, Autojoin, Minimize, Passowrd, Nick,
+		# Show_Status
+		self.treestore = gtk.TreeStore(str, str, str, bool, bool, str, str, str)
 
 		# Store bookmarks in treeview.
 		for account in gajim.connections:
@@ -2495,7 +2496,7 @@ class ManageBookmarksWindow:
 				continue
 			if gajim.connections[account].is_zeroconf:
 				continue
-			iter = self.treestore.append(None, [None, account,None,
+			iter = self.treestore.append(None, [None, account, None, None,
 				None, None, None, None])
 
 			for bookmark in gajim.connections[account].bookmarks:
@@ -2509,6 +2510,9 @@ class ManageBookmarksWindow:
 				autojoin = helpers.from_xs_boolean_to_python_boolean(
 					bookmark['autojoin'])
 
+				minimize = helpers.from_xs_boolean_to_python_boolean(
+					bookmark['minimize'])
+
 				print_status = bookmark.get('print_status', '')
 				if print_status not in ('', 'all', 'in_and_out', 'none'):
 					print_status = ''
@@ -2517,6 +2521,7 @@ class ManageBookmarksWindow:
 						bookmark['name'],
 						bookmark['jid'],
 						autojoin,
+						minimize,
 						bookmark['password'],
 						bookmark['nick'],
 						print_status ])
@@ -2558,6 +2563,7 @@ class ManageBookmarksWindow:
 		self.pass_entry = self.xml.get_widget('pass_entry')
 		self.pass_entry.connect('changed', self.on_pass_entry_changed)
 		self.autojoin_checkbutton = self.xml.get_widget('autojoin_checkbutton')
+		self.minimize_checkbutton = self.xml.get_widget('minimize_checkbutton')
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -2652,10 +2658,12 @@ class ManageBookmarksWindow:
 			for bm in account.iterchildren():
 				#Convert True/False/None to '1' or '0'
 				autojoin = unicode(int(bm[3]))
+				minimize = unicode(int(bm[4]))
 
 				#create the bookmark-dict
 				bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
-					'password': bm[4], 'nick': bm[5], 'print_status': bm[6]}
+					'minimize': minimize, 'password': bm[5], 'nick': bm[6],
+					'print_status': bm[7]}
 
 				gajim.connections[account_unicode].bookmarks.append(bmdict)
 
@@ -2679,7 +2687,7 @@ class ManageBookmarksWindow:
 
 		widgets = [ self.title_entry, self.nick_entry, self.room_entry,
 			self.server_entry, self.pass_entry, self.autojoin_checkbutton,
-			self.print_status_combobox]
+			self.minimize_checkbutton, self.print_status_combobox]
 
 		if model.iter_parent(iter):
 			# make the fields sensitive
@@ -2706,8 +2714,10 @@ class ManageBookmarksWindow:
 		self.server_entry.set_text(server)
 
 		self.autojoin_checkbutton.set_active(model[iter][3])
-		if model[iter][4] is not None:
-			password = model[iter][4].decode('utf-8')
+		self.minimize_checkbutton.set_active(model[iter][4])
+
+		if model[iter][5] is not None:
+			password = model[iter][5].decode('utf-8')
 		else:
 			password = None
 
@@ -2722,7 +2732,7 @@ class ManageBookmarksWindow:
 		else:
 			self.nick_entry.set_text('')
 
-		print_status = model[iter][6]
+		print_status = model[iter][7]
 		opts = self.option_list.keys()
 		opts.sort()
 		self.print_status_combobox.set_active(opts.index(print_status))
@@ -2737,7 +2747,7 @@ class ManageBookmarksWindow:
 	def on_nick_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
-			model[iter][5] = self.nick_entry.get_text()
+			model[iter][6] = self.nick_entry.get_text()
 
 	def on_server_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
@@ -2756,12 +2766,17 @@ class ManageBookmarksWindow:
 	def on_pass_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
-			model[iter][4] = self.pass_entry.get_text()
+			model[iter][5] = self.pass_entry.get_text()
 
 	def on_autojoin_checkbutton_toggled(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
 			model[iter][3] = self.autojoin_checkbutton.get_active()
+
+	def on_minimize_checkbutton_toggled(self, widget):
+		(model, iter) = self.selection.get_selected()
+		if iter:
+			model[iter][4] = self.minimize_checkbutton.get_active()
 
 	def on_print_status_combobox_changed(self, widget):
 		active = widget.get_active()
@@ -2769,7 +2784,7 @@ class ManageBookmarksWindow:
 		print_status = model[active][1]
 		(model2, iter) = self.selection.get_selected()
 		if iter:
-			model2[iter][6] = print_status
+			model2[iter][7] = print_status
 
 	def clear_fields(self):
 		widgets = [ self.title_entry, self.nick_entry, self.room_entry,
@@ -2777,6 +2792,7 @@ class ManageBookmarksWindow:
 		for field in widgets:
 			field.set_text('')
 		self.autojoin_checkbutton.set_active(False)
+		self.minimize_checkbutton.set_active(False)
 		self.print_status_combobox.set_active(1)
 
 class AccountCreationWizardWindow:

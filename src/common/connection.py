@@ -1095,6 +1095,7 @@ class Connection(ConnectionHandlers):
 			iq4 = iq3.addChild(name = "conference")
 			iq4.setAttr('jid', bm['jid'])
 			iq4.setAttr('autojoin', bm['autojoin'])
+			iq4.setAttr('minimize', bm['minimize'])
 			iq4.setAttr('name', bm['name'])
 			# Only add optional elements if not empty
 			# Note: need to handle both None and '' as empty

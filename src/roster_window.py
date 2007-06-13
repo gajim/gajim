@@ -3337,7 +3337,7 @@ class RosterWindow:
 					gajim.gc_connected[account][room_jid]:
 						continue
 					self.join_gc_room(account, room_jid, bm['nick'], bm['password'],
-						minimize = gajim.config.get('minimize_autojoined_rooms'))
+						minimize = bm['minimize'])
 
 	def get_status_message(self, show):
 		if show in gajim.config.get_per('defaultstatusmsg'):

@@ -1311,8 +1311,7 @@ class Interface:
 		for bm in bms:
 			if bm['autojoin'] in ('1', 'true'):
 				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
-					bm['password'],
-					minimize = gajim.config.get('minimize_autojoined_rooms'))
+					bm['password'], minimize = bm['minimize'])
 
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
