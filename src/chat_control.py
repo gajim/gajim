@@ -1215,13 +1215,14 @@ class ChatControl(ChatControlBase):
 			self.print_conversation(_('Commands: %s') % ChatControl.CHAT_CMDS,
 				'info')
 		elif command == 'clear':
-			self.print_conversation(_('Usage: /%s, clears the text window.'),
-				'info')
+			self.print_conversation(_('Usage: /%s, clears the text window.') % \
+				command, 'info')
 		elif command == 'compact':
-			self.print_conversation(_('Usage: /%s, hide the chat buttons.'),
-				'info')
+			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % \
+				command, 'info')
 		elif command == 'ping':
-			self.print_conversation(_(''), 'info')
+			self.print_conversation(_('Usage: /%s, sends a ping to the contact') %\
+				command, 'info')
 		else:
 			self.print_conversation(_('No help info for /%s') % command, 'info')
 
