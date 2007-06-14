@@ -4537,12 +4537,6 @@ class RosterWindow:
 				return -1
 			elif show1 > show2:
 				return 1
-			if show1 == 6 and show2 == 6:
-				# If both are offline, and one has a status message, it is above
-				if contact1.status and not contact2.status:
-					return -1
-				elif contact2.status and not contact1.status:
-					return 1
 		# We compare names
 		if name1.lower() < name2.lower():
 			return -1
