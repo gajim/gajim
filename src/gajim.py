@@ -2318,8 +2318,7 @@ class Interface:
 		for a in gajim.connections:
 			self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
 				'search': {}}
-			if not a in self.minimized_controls:
-				self.minimized_controls[a] = {}
+			self.minimized_controls[a] = {}
 			gajim.contacts.add_account(a)
 			gajim.groups[a] = {}
 			gajim.gc_connected[a] = {}

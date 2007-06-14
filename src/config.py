@@ -2064,6 +2064,7 @@ class AccountsWindow:
 			# update variables
 			gajim.interface.instances[gajim.ZEROCONF_ACC_NAME] = {'infos': {},
 				'disco': {}, 'gc_config': {}, 'search': {}}
+			gajim.interface.minimized_controls[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.connections[gajim.ZEROCONF_ACC_NAME].connected = 0
 			gajim.groups[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.contacts.add_account(gajim.ZEROCONF_ACC_NAME)
@@ -2456,6 +2457,7 @@ class RemoveAccountWindow:
 		gajim.config.del_per('accounts', self.account)
 		gajim.interface.save_config()
 		del gajim.interface.instances[self.account]
+		del gajim.interface.minimized_controls[self.account]
 		del gajim.nicks[self.account]
 		del gajim.block_signed_in_notifications[self.account]
 		del gajim.groups[self.account]
@@ -3224,6 +3226,7 @@ class AccountCreationWizardWindow:
 		# update variables
 		gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
 			'gc_config': {}, 'search': {}}
+		gajim.interface.minimized_controls[self.account] = {}
 		gajim.connections[self.account].connected = 0
 		gajim.groups[self.account] = {}
 		gajim.contacts.add_account(self.account)
