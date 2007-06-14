@@ -2715,6 +2715,8 @@ class ManageBookmarksWindow:
 
 		self.autojoin_checkbutton.set_active(model[iter][3])
 		self.minimize_checkbutton.set_active(model[iter][4])
+		# sensitive only if auto join is checked
+		self.minimize_checkbutton.set_sensitive(model[iter][3])
 
 		if model[iter][5] is not None:
 			password = model[iter][5].decode('utf-8')
@@ -2772,6 +2774,7 @@ class ManageBookmarksWindow:
 		(model, iter) = self.selection.get_selected()
 		if iter:
 			model[iter][3] = self.autojoin_checkbutton.get_active()
+			self.minimize_checkbutton.set_sensitive(model[iter][3])
 
 	def on_minimize_checkbutton_toggled(self, widget):
 		(model, iter) = self.selection.get_selected()
