@@ -670,25 +670,21 @@ class ChatControlBase(MessageControl):
 		isactive = widget.get_active()
 		self.chat_buttons_set_visible(isactive)
 
-	def _on_minimize_menuitem_activate(self, widget):
+	def on_minimize_menuitem_toggled(self, widget):
 		'''When a grouchat is minimized, unparent the tab, put it in roster etc'''
-		win = gajim.interface.msg_win_mgr.get_window(self.contact.jid, self.account)
-		ctrl = win.get_control(self.contact.jid, self.account)
-
-		ctrl_page = win.notebook.page_num(ctrl.widget)
-		control = win.notebook.get_nth_page(ctrl_page)
-
-		win.notebook.remove_page(ctrl_page)
-		control.unparent()
-		ctrl.parent_win = None
-
-		gajim.interface.minimized_controls[self.account][self.contact.jid] = ctrl
-
-		del win._controls[self.account][self.contact.jid]
-
-		win.check_tabs()
-		gajim.interface.roster.add_groupchat_to_roster(self.account,
-			self.contact.jid, status = self.subject)
+		old_value = False
+		minimized_gc = gajim.config.get_per('accounts', self.account,
+			'minimized_gc').split()
+		if self.contact.jid in minimized_gc:
+			old_value = True
+		minimize = widget.get_active()
+		if minimize and not self.contact.jid in minimized_gc:
+			minimized_gc.append(self.contact.jid)
+		if not minimize and self.contact.jid in minimized_gc:
+			minimized_gc.remove(self.contact.jid)
+		if old_value != minimize:
+			gajim.config.set_per('accounts', self.account, 'minimized_gc',
+				' '.join(minimized_gc))
 
 	def set_control_active(self, state):
 		if state:
@@ -1515,7 +1511,7 @@ class ChatControl(ChatControlBase):
 		
 		# compact_view_menuitem
 		compact_view_menuitem.set_active(self.hide_chat_buttons_current)
-		
+
 		# add_to_roster_menuitem
 		if _('Not in Roster') in contact.groups:
 			add_to_roster_menuitem.show()
@@ -1653,7 +1649,6 @@ class ChatControl(ChatControlBase):
 			del self.handlers[i]
 		self.conv_textview.del_handlers()
 		self.msg_textview.destroy()
-		
 
 	def allow_shutdown(self, method):
 		if time.time() - gajim.last_message_time[self.account]\

@@ -248,9 +248,10 @@ class GroupchatControl(ChatControlBase):
 		id = widget.connect('activate', self._on_history_menuitem_activate)
 		self.handlers[id] = widget
 
-		widget = xm.get_widget('minimize_menuitem')
-		id = widget.connect('activate', self._on_minimize_menuitem_activate)
-		self.handlers[id] = widget
+		self.minimize_menuitem = xm.get_widget('minimize_menuitem')
+		id = self.minimize_menuitem.connect('toggled',
+			self.on_minimize_menuitem_toggled)
+		self.handlers[id] = self.minimize_menuitem
 
 		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
@@ -491,6 +492,9 @@ class GroupchatControl(ChatControlBase):
 		sets sensitivity state for configure_room'''
 		# Check compact view menuitem
 		self.compact_view_menuitem.set_active(self.hide_chat_buttons_current)
+		if self.contact.jid in gajim.config.get_per('accounts', self.account,
+		'minimized_gc').split(' '):
+			self.minimize_menuitem.set_active(True)
 		if gajim.gc_connected[self.account][self.room_jid]:
 			c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				self.nick)
@@ -1431,6 +1435,28 @@ class GroupchatControl(ChatControlBase):
 			is_modal = False, ok_handler = on_ok)
 
 	def shutdown(self, status='offline'):
+		if self.contact.jid in gajim.config.get_per('accounts', self.account,
+		'minimized_gc').split(' '):
+			# Minimize it
+			win = gajim.interface.msg_win_mgr.get_window(self.contact.jid,
+				self.account)
+			ctrl = win.get_control(self.contact.jid, self.account)
+
+			ctrl_page = win.notebook.page_num(ctrl.widget)
+			control = win.notebook.get_nth_page(ctrl_page)
+
+			win.notebook.remove_page(ctrl_page)
+			control.unparent()
+			ctrl.parent_win = None
+
+			gajim.interface.minimized_controls[self.account][self.contact.jid] = \
+				ctrl
+
+			del win._controls[self.account][self.contact.jid]
+
+			gajim.interface.roster.add_groupchat_to_roster(self.account,
+				self.contact.jid, status = self.subject)
+			return
 		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
 							show='offline', status=status)
 		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
@@ -1461,6 +1487,9 @@ class GroupchatControl(ChatControlBase):
 
 	def allow_shutdown(self, method):
 		'''If check_selection is True, '''
+		if self.contact.jid in gajim.config.get_per('accounts', self.account,
+		'minimized_gc').split(' '):
+			return True
 		if method == self.parent_win.CLOSE_ESC:
 			model, iter = self.list_treeview.get_selection().get_selected()
 			if iter:

@@ -259,6 +259,7 @@ class Config:
 			'gpgpassword': [ opt_str, '' ],
 			'sync_with_global_status': [ opt_bool, False, ],
 			'no_log_for': [ opt_str, '' ],
+			'minimized_gc': [ opt_str, '' ],
 			'attached_gpg_keys': [ opt_str, '' ],
 			'keep_alives_enabled': [ opt_bool, True],
 			# send keepalive every N seconds of inactivity

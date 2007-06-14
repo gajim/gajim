@@ -90,17 +90,10 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkImageMenuItem" id="minimize_menuitem">
+      <widget class="GtkCheckMenuItem" id="minimize_menuitem">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">_Minimize</property>
+        <property name="label" translatable="yes">_Minimize on close</property>
         <property name="use_underline">True</property>
-        <child internal-child="image">
-          <widget class="GtkImage" id="image1411">
-            <property name="visible">True</property>
-            <property name="stock">gtk-goto-bottom</property>
-            <property name="icon_size">1</property>
-          </widget>
-        </child>
       </widget>
     </child>
     <child>
