@@ -1832,6 +1832,20 @@ class RosterWindow:
 			gajim.interface.instances['logs'][contact.jid] = history_window.\
 				HistoryWindow(contact.jid, account)
 
+	def on_disconnect(self, widget, jid, account):
+		'''When disconnect menuitem is activated: disconect from room'''
+		ctrl = gajim.interface.minimized_controls[account][jid]
+		del gajim.interface.minimized_controls[account][jid]
+		ctrl.shutdown()
+
+		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		if not contact:
+			return
+		if contact.groups == [_('Groupchats')]:
+			self.remove_contact(contact, account)
+			gajim.contacts.remove_contact(account, contact)
+			self.draw_group(_('Groupchats'), account)
+
 	def on_send_single_message_menuitem_activate(self, widget, account,
 	contact = None):
 		if contact is None:
@@ -2470,6 +2484,16 @@ class RosterWindow:
 		history_menuitem .connect('activate', self.on_history, \
 				contact, account)
 		menu.append(history_menuitem)
+
+		item = gtk.SeparatorMenuItem() # separator
+		menu.append(item)
+
+		disconnect_menuitem = gtk.ImageMenuItem(_('_Disconnect'))
+		disconnect_icon = gtk.image_new_from_stock(gtk.STOCK_DISCONNECT, \
+			gtk.ICON_SIZE_MENU)
+		disconnect_menuitem.set_image(disconnect_icon)
+		disconnect_menuitem .connect('activate', self.on_disconnect, jid, account)
+		menu.append(disconnect_menuitem)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
