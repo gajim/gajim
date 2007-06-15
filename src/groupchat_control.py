@@ -1439,29 +1439,28 @@ class GroupchatControl(ChatControlBase):
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
 			is_modal = False, ok_handler = on_ok)
 
+	def minimize(self, status='offline'):
+		# Minimize it
+		win = gajim.interface.msg_win_mgr.get_window(self.contact.jid,
+			self.account)
+		ctrl = win.get_control(self.contact.jid, self.account)
+
+		ctrl_page = win.notebook.page_num(ctrl.widget)
+		control = win.notebook.get_nth_page(ctrl_page)
+
+		win.notebook.remove_page(ctrl_page)
+		control.unparent()
+		ctrl.parent_win = None
+
+		gajim.interface.minimized_controls[self.account][self.contact.jid] = \
+			ctrl
+
+		del win._controls[self.account][self.contact.jid]
+
+		gajim.interface.roster.add_groupchat_to_roster(self.account,
+			self.contact.jid, status = self.subject)
+
 	def shutdown(self, status='offline'):
-		if self.contact.jid in gajim.config.get_per('accounts', self.account,
-		'minimized_gc').split(' '):
-			# Minimize it
-			win = gajim.interface.msg_win_mgr.get_window(self.contact.jid,
-				self.account)
-			ctrl = win.get_control(self.contact.jid, self.account)
-
-			ctrl_page = win.notebook.page_num(ctrl.widget)
-			control = win.notebook.get_nth_page(ctrl_page)
-
-			win.notebook.remove_page(ctrl_page)
-			control.unparent()
-			ctrl.parent_win = None
-
-			gajim.interface.minimized_controls[self.account][self.contact.jid] = \
-				ctrl
-
-			del win._controls[self.account][self.contact.jid]
-
-			gajim.interface.roster.add_groupchat_to_roster(self.account,
-				self.contact.jid, status = self.subject)
-			return
 		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
 							show='offline', status=status)
 		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
@@ -1491,16 +1490,15 @@ class GroupchatControl(ChatControlBase):
 		gajim.events.remove_events(self.account, self.room_jid)
 
 	def allow_shutdown(self, method):
-		'''If check_selection is True, '''
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 		'minimized_gc').split(' '):
-			return True
+			return 'minimize'
 		if method == self.parent_win.CLOSE_ESC:
 			model, iter = self.list_treeview.get_selection().get_selected()
 			if iter:
 				self.list_treeview.get_selection().unselect_all()
-				return False
-		retval = True
+				return 'no'
+		retval = 'yes'
 		includes = gajim.config.get('confirm_close_muc_rooms').split(' ')
 		excludes = gajim.config.get('noconfirm_close_muc_rooms').split(' ')
 		# whether to ask for comfirmation before closing muc
@@ -1516,7 +1514,7 @@ class GroupchatControl(ChatControlBase):
 						_('Do _not ask me again'))
 
 			if dialog.get_response() != gtk.RESPONSE_OK:
-				retval = False
+				retval = 'no'
 
 			if dialog.is_checked(): # user does not want to be asked again
 				gajim.config.set('confirm_close_muc', False)

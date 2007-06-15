@@ -56,9 +56,9 @@ class MessageControl:
 	def allow_shutdown(self, method):
 		'''Called to check is a control is allowed to shutdown.
 		If a control is not in a suitable shutdown state this method
-		should return False'''
+		should return 'no', else 'yes' or 'minimize' '''
 		# NOTE: Derived classes MAY implement this
-		return True
+		return 'yes'
 
 	def shutdown(self):
 		# NOTE: Derived classes MUST implement this

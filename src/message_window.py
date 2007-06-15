@@ -147,8 +147,12 @@ class MessageWindow:
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
 		for ctrl in self.controls():
-			if not ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON):
+			if ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON) == 'no':
 				return True # halt the delete
+		# If all are ok, minimize the one that need to be minimized
+		for ctrl in self.controls():
+			if ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON) == 'minimize':
+				ctrl.minimize()
 		return False
 
 	def _on_window_destroy(self, win):
@@ -301,7 +305,12 @@ class MessageWindow:
 		'''reason is only for gc (offline status message)
 		if force is True, do not ask any confirmation'''
 		# Shutdown the MessageControl
-		if not force and not ctrl.allow_shutdown(method):
+		allow_shutdown = ctrl.allow_shutdown(method)
+		if not force and allow_shutdown == 'no':
+			return
+		if allow_shutdown == 'minimize' and method != self.CLOSE_COMMAND:
+			ctrl.minimize()
+			self.check_tabs()
 			return
 		if reason is not None: # We are leaving gc with a status message
 			ctrl.shutdown(reason)
