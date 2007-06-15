@@ -1504,7 +1504,10 @@ class ChatControl(ChatControlBase):
 		
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
-		if contact.resource and contact.jid.find('@') != -1:
+		if self.TYPE_ID == message_control.TYPE_PM and self.gc_contact.jid and \
+		self.gc_contact.resource:
+			send_file_menuitem.set_sensitive(True)
+		elif contact.resource and contact.jid.find('@') != -1:
 			send_file_menuitem.set_sensitive(True)
 		else:
 			send_file_menuitem.set_sensitive(False)
@@ -1721,7 +1724,11 @@ class ChatControl(ChatControlBase):
 	def _on_drag_data_received(self, widget, context, x, y, selection,
 		target_type, timestamp):
 		# If not resource, we can't send file
-		if not self.contact.resource:
+		if self.TYPE_ID == message_control.TYPE_PM:
+			c = self.gc_contact
+		else:
+			c = self.contact
+		if not c.resource:
 			return
 		if target_type == self.TARGET_TYPE_URI_LIST:
 			uri = selection.data.strip()
@@ -1730,7 +1737,7 @@ class ChatControl(ChatControlBase):
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				if os.path.isfile(path): # is it file?
 					ft = gajim.interface.instances['file_transfers']
-					ft.send_file(self.account, self.contact, path)
+					ft.send_file(self.account, c, path)
 
 	def _on_message_tv_buffer_changed(self, textbuffer):
 		self.kbd_activity_in_last_5_secs = True
@@ -1929,8 +1936,12 @@ class ChatControl(ChatControlBase):
 		self.bigger_avatar_window.window.set_cursor(cursor)
 
 	def _on_send_file_menuitem_activate(self, widget):
+		if self.TYPE_ID == message_control.TYPE_PM:
+			c = self.gc_contact
+		else:
+			c = self.contact
 		gajim.interface.instances['file_transfers'].show_file_send_request( 
-			self.account, self.contact)
+			self.account, c)
 
 	def _on_add_to_roster_menuitem_activate(self, widget):
 		dialogs.AddNewContactWindow(self.account, self.contact.jid)

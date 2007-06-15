@@ -822,6 +822,11 @@ class GroupchatControl(ChatControlBase):
 			gajim.interface.msg_win_mgr.get_control(fjid, self.account).\
 				send_message(msg)
 
+	def on_send_file(self, widget, gc_contact):
+		'''sends a file to a contact in the room'''
+		gajim.interface.instances['file_transfers'].show_file_send_request(
+			self.account, gc_contact)
+
 	def draw_contact(self, nick, selected=False, focus=False):
 		iter = self.get_contact_iter(nick)
 		if not iter:
@@ -1848,12 +1853,20 @@ class GroupchatControl(ChatControlBase):
 		item = xml.get_widget('add_to_roster_menuitem')
 		if not jid:
 			item.set_sensitive(False)
-		id = item.connect('activate', self.on_add_to_roster, jid)
-		self.handlers[id] = item
+		else:
+			id = item.connect('activate', self.on_add_to_roster, jid)
+			self.handlers[id] = item
 
 		item = xml.get_widget('send_private_message_menuitem')
 		id = item.connect('activate', self.on_send_pm, model, iter)
 		self.handlers[id] = item
+
+		item = xml.get_widget('send_file_menuitem')
+		if not c.resource:
+			item.set_sensitive(False)
+		else:
+			id = item.connect('activate', self.on_send_file, c)
+			self.handlers[id] = item
 
 		# show the popup now!
 		menu = xml.get_widget('gc_occupants_menu')
