@@ -214,16 +214,13 @@ class Systray:
 					account_menu_for_single_message.append(item)
 
 					# join gc 
-					label = gtk.Label()
-					label.set_markup('<u>' + account.upper() +'</u>')
-					label.set_use_underline(False)
-					gc_item = gtk.MenuItem()
-					gc_item.add(label)
-					gc_item.connect('state-changed',
-						gtkgui_helpers.on_bm_header_changed_state)
+					gc_item = gtk.MenuItem(_('using account %s') % account, False)
 					gc_sub_menu.append(gc_item)
-					gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
+					gc_menuitem_menu = gtk.Menu()
+					gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
 						account)
+					gc_item.set_submenu(gc_menuitem_menu)
+					gc_sub_menu.show_all()
 
 		elif connected_accounts == 1: # one account
 			# one account connected, no need to show 'as jid'
