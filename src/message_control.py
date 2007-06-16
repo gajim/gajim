@@ -111,7 +111,7 @@ class MessageControl:
 		return len(gajim.events.get_events(self.account, self.contact.jid))
 
 	def send_message(self, message, keyID = '', type = 'chat',
-	chatstate = None, msg_id = None, composing_jep = None, resource = None,
+	chatstate = None, msg_id = None, composing_xep = None, resource = None,
 	user_nick = None):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
@@ -119,5 +119,5 @@ class MessageControl:
 		# Send and update history
 		return gajim.connections[self.account].send_message(jid, message, keyID,
 			type = type, chatstate = chatstate, msg_id = msg_id,
-			composing_jep = composing_jep, resource = self.resource,
+			composing_xep = composing_xep, resource = self.resource,
 			user_nick = user_nick)

@@ -641,7 +641,7 @@ class Interface:
 			# (when contact signs out or has errors)
 			if array[1] in ('offline', 'error'):
 				contact1.our_chatstate = contact1.chatstate = \
-					contact1.composing_jep = None
+					contact1.composing_xep = None
 				gajim.connections[account].remove_transfers_for_contact(contact1)
 			self.roster.chg_contact_status(contact1, array[1], status_message,
 				account)
@@ -670,7 +670,7 @@ class Interface:
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
-		# chatstate, msg_id, composing_jep, user_nick, xhtml))
+		# chatstate, msg_id, composing_xep, user_nick, xhtml))
 		# user_nick is JEP-0172
 
 		full_jid_with_resource = array[0]
@@ -683,7 +683,7 @@ class Interface:
 		subject = array[5]
 		chatstate = array[6]
 		msg_id = array[7]
-		composing_jep = array[8]
+		composing_xep = array[8]
 		xhtml = array[10]
 		if gajim.config.get('ignore_incoming_xhtml'):
 			xhtml = None
@@ -727,8 +727,8 @@ class Interface:
 		if contact and isinstance(contact, list):
 			contact = contact[0]
 		if contact:
-			if contact.composing_jep != 'JEP-0085': # We cache xep85 support
-				contact.composing_jep = composing_jep
+			if contact.composing_xep != 'XEP-0085': # We cache xep85 support
+				contact.composing_xep = composing_xep
 			if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
 				if chatstate is not None:
 					# other peer sent us reply, so he supports jep85 or jep22
