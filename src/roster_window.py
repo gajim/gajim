@@ -1668,7 +1668,7 @@ class RosterWindow:
 	def on_rename(self, widget, iter, path):
 		# this function is called either by F2 or by Rename menuitem
 		if gajim.interface.instances.has_key('rename'):
-			gajim.interface.instances['rename'].dialog.window.present()
+			gajim.interface.instances['rename'].dialog.present()
 			return
 		model = self.tree.get_model()
 
