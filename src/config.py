@@ -2603,7 +2603,7 @@ class ManageBookmarksWindow:
 		account = model[add_to][1].decode('utf-8')
 		nick = gajim.nicks[account]
 		iter_ = self.treestore.append(add_to, [account, _('New Group Chat'), '',
-			False, '', nick, 'in_and_out'])
+			False, False, '', nick, 'in_and_out'])
 
 		self.view.expand_row(model.get_path(add_to), True)
 		self.view.set_cursor(model.get_path(iter_))
