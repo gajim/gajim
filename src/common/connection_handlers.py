@@ -1204,7 +1204,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _FeatureNegCB(self, con, stanza, session):
 		gajim.log.debug('FeatureNegCB')
-		feature = stanza.getTag('feature')
+		feature = stanza.getTag(name='feature', namespace=common.xmpp.NS_FEATURE)
 		form = common.xmpp.DataForm(node=feature.getTag('x'))
 
 		if form['FORM_TYPE'] == 'urn:xmpp:ssn':
@@ -1217,6 +1217,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			reply.addChild(node=xmpp.ErrorNode('service-unavailable', typ='cancel'))
 
 			con.send(reply)
+
+	def _InitE2ECB(self, con, stanza, session):
+		gajim.log.debug('InitE2ECB')
+		init = stanza.getTag(name='init', namespace='http://www.xmpp.org/extensions/xep-0116.html#ns-init')
+		form = common.xmpp.DataForm(node=init.getTag('x'))
+
+		self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
 
 	def _ErrorCB(self, con, iq_obj):
 		gajim.log.debug('ErrorCB')
@@ -1440,6 +1447,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		common.xmpp.NS_FEATURE:
 			self._FeatureNegCB(con, msg, session)
 			return
+		if msg.getTag('init') and msg.getTag('init').namespace == 'http://www.xmpp.org/extensions/xep-0116.html#ns-init':
+			self._InitE2ECB(con, msg, session)
 		
 		e2eTag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
 		if e2eTag:

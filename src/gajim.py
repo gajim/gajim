@@ -1660,6 +1660,22 @@ class Interface:
 		# XXX check negotiation state, etc.
 		# XXX check if we can autoaccept
 
+		# order of e2e statuses:
+		# 1. Alice, Bob:  None
+		# 2. Alice: 			requested-e2e
+		# 3. Bob: 				responded-e2e
+		# 4. Alice:				identified-alice
+		# 5. Bob:				  identified-bob
+		# 6. Alice, Bob:	active
+
+		if session.status == 'requested-e2e' and form.getType() == 'submit':
+			print 'accepting'
+			session.accept_e2e_alice(form)
+			return
+		elif session.status == 'identified-alice' and form.getType() == 'result':
+			session.final_steps_alice(form)
+			return
+
 		if form.getType() == 'form':
 			ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
 			if not ctrl:

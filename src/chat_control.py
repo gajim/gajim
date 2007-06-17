@@ -1946,12 +1946,12 @@ class ChatControl(ChatControlBase):
 		#if 'security' in self.session.features and self.session.features['security'] == 'e2e':
 		if self.session.enable_encryption:
 			self.session.enable_encryption = False
-			print "e2e disabled."
-#			self.session.terminate_e2e()
+			print "terminating e2e."
+			self.session.terminate_e2e()
 		else:
 			self.session.enable_encryption = True
-			print "e2e enabled."
-#			self.session.negotiate_e2e()
+			print "negotiating e2e."
+			self.session.negotiate_e2e()
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)
