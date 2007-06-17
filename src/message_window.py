@@ -146,13 +146,16 @@ class MessageWindow:
 
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
+		ctrl_to_minimize = []
 		for ctrl in self.controls():
-			if ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON) == 'no':
+			allow_shutdown = ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON)
+			if allow_shutdown == 'no':
 				return True # halt the delete
+			elif allow_shutdown == 'minimize':
+				ctrl_to_minimize.append(ctrl)
 		# If all are ok, minimize the one that need to be minimized
-		for ctrl in self.controls():
-			if ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON) == 'minimize':
-				ctrl.minimize()
+		for ctrl in ctrl_to_minimize:
+			ctrl.minimize()
 		return False
 
 	def _on_window_destroy(self, win):
