@@ -993,6 +993,9 @@ class Interface:
 			win.set_values(array)
 			if account in self.show_vcard_when_connect:
 				self.show_vcard_when_connect.remove(account)
+		jid = array['jid']
+		if self.instances[account]['infos'].has_key(jid):
+			self.instances[account]['infos'][jid].set_values(array)
 
 	def handle_event_vcard(self, account, vcard):
 		# ('VCARD', account, data)
