@@ -2406,7 +2406,7 @@ class Interface:
 		self.last_ftwindow_update = 0
 
 		gobject.timeout_add(100, self.autoconnect)
-		gobject.timeout_add(200, self.process_connections)
+		gobject.timeout_add(2000, self.process_connections)
 		gobject.timeout_add(10000, self.read_sleepy)
 
 if __name__ == '__main__':
