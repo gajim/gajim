@@ -1597,6 +1597,7 @@ class GroupchatControl(ChatControlBase):
 			'name': self.name,
 			'jid': self.room_jid,
 			'autojoin': '0',
+			'minimize': '0',
 			'password': '',
 			'nick': self.nick
 		}

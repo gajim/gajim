@@ -1341,7 +1341,7 @@ class JoinGroupchatWindow:
 			if not room_jid_bookmarked:
 				name = gajim.get_nick_from_jid(room_jid)
 				bmdict = { 'name': name, 'jid': room_jid, 'autojoin': u'1',
-					'password': password, 'nick': nickname,
+					'minimize': '0', 'password': password, 'nick': nickname,
 					'print_status': gajim.config.get('print_status_in_muc')}
 
 				gajim.connections[self.account].bookmarks.append(bmdict)
