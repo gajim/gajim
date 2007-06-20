@@ -1665,14 +1665,22 @@ class Interface:
 		# 2. Alice: 			requested-e2e
 		# 3. Bob: 				responded-e2e
 		# 4. Alice:				identified-alice
-		# 5. Bob:				  identified-bob
-		# 6. Alice, Bob:	active
+		# 5. Alice, Bob:	active
 
-		if session.status == 'requested-e2e' and form.getType() == 'submit':
-			print 'accepting'
+		if form.getType() == 'form' and u'e2e' in map(lambda x: x[1], form.getField('security').getOptions()):
+			print 'responding'
+			session.respond_e2e_bob(form)
+			return
+		elif session.status == 'requested-e2e' and form.getType() == 'submit':
+			print 'accepting (alice)'
 			session.accept_e2e_alice(form)
 			return
+		elif session.status == 'responded-e2e' and form.getType() == 'result':
+			print 'accepting (bob)'
+			session.accept_e2e_bob(form)
+			return
 		elif session.status == 'identified-alice' and form.getType() == 'result':
+			print 'completing'
 			session.final_steps_alice(form)
 			return
 

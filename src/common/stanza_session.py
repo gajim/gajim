@@ -160,7 +160,7 @@ class EncryptedStanzaSession(StanzaSession):
 		sh = SHA256.new()
 		sh.update(string)
 		return sh.digest()
-  
+	
 	def generate_initiator_keys(self, k):
 		return (self.hmac(k, 'Initiator Cipher Key'),
 						self.hmac(k, 'Initiator MAC Key'),
@@ -186,9 +186,13 @@ class EncryptedStanzaSession(StanzaSession):
 
 		return self.encrypter.encrypt(encryptable)
 
+	# FIXME: get a real PRNG
+	def random_bytes(self, bytes):
+		return os.urandom(bytes)
+
 	def generate_nonce(self):
 		# FIXME: this isn't a very good PRNG
-		return os.urandom(8)
+		return self.random_bytes(8)
 
 	def decrypt_stanza(self, stanza):
 		c = stanza.getTag(name='c', namespace='http://www.xmpp.org/extensions/xep-0200.html#ns')
@@ -271,54 +275,92 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = 'requested-e2e'
 
 		self.send(request)
+	
+	# 4.3 esession response (bob)
+	def respond_e2e_bob(self, request_form):
+		response = xmpp.Message()
+		feature = response.NT.feature
+		feature.setNamespace(xmpp.NS_FEATURE)
 
-	# generate a random number between 'bottom' and 'top'
-	def srand(self, bottom, top):
-		# minimum number of bytes needed to represent that range
-		bytes = int(math.ceil(math.log(top - bottom, 256)))
+		x = xmpp.DataForm(typ='submit')
 
-		# FIXME: use a real PRNG
-		# in retrospect, this is horribly inadequate.
-		return (self.decode_mpi(os.urandom(bytes)) % (top - bottom)) + bottom
+		fixed = { 'disclosure': 'never',
+								'security': 'e2e',
+							'crypt_algs': 'aes128-ctr',
+							'hash_algs': 'sha256',
+								'compress': 'none',
+								'stanzas': 'message',
+						'init_pubkey': 'none',
+						'resp_pubkey': 'none',
+										'ver': '1.0',
+								'sas_algs': 'sas28x5',
+								'logging': 'may'			}
 
-	def make_dhhash(self, modp):
-		p = dh.primes[modp]
-		g = dh.generators[modp]
+		not_acceptable = []
 
-		x = self.srand(2 ** (2 * self.n - 1), p - 1)
+		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
+		x.addChild(node=xmpp.DataField(name='accept', value='true'))
 
-		# XXX this may be a source of performance issues
-		e = self.powmod(g, x, p)
+		for name, field in map(lambda name: (name, request_form.getField(name)), request_form.asDict().keys()):
+			options = map(lambda x: x[1], field.getOptions())
+			values = field.getValues()
 
-		self.xes[modp] = x
-		self.es[modp] = e
+			if not field.getType() in ('list-single', 'list-multi'):
+				options = values
 
-		He = self.sha256(self.encode_mpi(e))
+			if name in fixed:
+				if fixed[name] in options:
+					x.addChild(node=xmpp.DataField(name=name, value=fixed[name]))
+				else:
+					not_acceptable.append(name)
+			elif name == 'modp':
+				# the offset of the group we chose (need it to match up with the dhhash)
+				group_order = 0
+				self.modp = int(options[group_order])
+				x.addChild(node=xmpp.DataField(name='modp', value=self.modp))
 
-		return base64.b64encode(He)
+				g = dh.generators[self.modp]
+				p = dh.primes[self.modp]
+			elif name == 'rekey_freq':
+				preferred = int(options[0])
+				x.addChild(node=xmpp.DataField(name='rekey_freq', value=preferred))
 
-	# a faster version of (base ** exp) % mod
-	# 	taken from <http://lists.danga.com/pipermail/yadis/2005-September/001445.html> 
-	def powmod(self, base, exp, mod):
-		square = base % mod
-		result = 1
+				self.rekey_freq = preferred
+			elif name == 'my_nonce':
+				self.n_o = base64.b64decode(field.getValue())
 
-		while exp > 0:
-			if exp & 1: # exponent is odd
-				result = (result * square) % mod
+		# XXX do something with not_acceptable
 
-			square = (square * square) % mod
-			exp /= 2
+		self.He = request_form.getField('dhhashes').getValues()[group_order].encode("utf8")
 
-		return result
+		bytes = int(self.n / 8)
 
-	def terminate_e2e(self):
-		self.status = None
+		self.n_s = self.generate_nonce()
+
+		self.c_o = self.decode_mpi(self.random_bytes(bytes)) # n-bit random number
+		self.c_s = self.c_o ^ (2 ** (self.n - 1))
+
+		self.y = self.srand(2 ** (2 * self.n - 1), p - 1)
+		self.d = self.powmod(g, self.y, p)
+
+		to_add = { 'my_nonce': self.n_s, 'dhkeys': self.encode_mpi(self.d), 'counter': self.encode_mpi(self.c_o), 'nonce': self.n_o }
+
+		for name in to_add:
+			b64ed = base64.b64encode(to_add[name])
+			x.addChild(node=xmpp.DataField(name=name, value=b64ed))
+
+		self.form_a = ''.join(map(lambda el: xmpp.c14n.c14n(el), request_form.getChildren()))
+		self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
+
+		self.status = 'responded-e2e'
+
+		feature.addChild(node=x)
+		self.send(response)
 
 	# 'Alice Accepts'
 	def accept_e2e_alice(self, form):
-#   1.  Verify that the ESession options selected by Bob are acceptable
-#   2.  Return a <not-acceptable/> error to Bob unless: 1 < d < p - 1
+#		1.	Verify that the ESession options selected by Bob are acceptable
+#		2.	Return a <not-acceptable/> error to Bob unless: 1 < d < p - 1
 		self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
 
 		accept = xmpp.Message()
@@ -369,6 +411,100 @@ class EncryptedStanzaSession(StanzaSession):
 		self.send(accept)
 		
 		self.status = 'identified-alice'
+	
+	# 4.5 esession accept (bob)
+	def accept_e2e_bob(self, form):
+		response = xmpp.Message()
+
+		init = response.NT.init
+		init.setNamespace('http://www.xmpp.org/extensions/xep-0116.html#ns-init')
+
+		x = xmpp.DataForm(typ='result')
+
+		for field in ('nonce', 'dhkeys', 'rshashes', 'identity', 'mac'):
+			assert field in form.asDict(), "your acceptance form didn't have a %s field" % repr(field)
+
+		# 4.5.1 generating provisory session keys
+		e = self.decode_mpi(base64.b64decode(form['dhkeys']))
+		p = dh.primes[self.modp]
+
+		if not self.sha256(self.encode_mpi(e)) == self.He:
+			# XXX return <feature-not-implemented/>
+			pass
+
+		if not e > 1 and e < (p - 1):
+			# XXX return <feature-not-implemented/>
+			pass
+
+		k = self.sha256(self.encode_mpi(self.powmod(e, self.y, p)))
+
+		self.kc_o, self.km_o, self.ks_o = self.generate_initiator_keys(k)
+
+		# 4.5.2 verifying alice's identity
+		id_a = base64.b64decode(form['identity'])
+		m_a = base64.b64decode(form['mac'])
+
+		m_a_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_a)
+
+		if m_a_calculated != m_a:
+			# XXX return <feature-not-implemented/>
+			pass
+
+		mac_a = self.decrypt(id_a)
+
+		macable_children = filter(lambda x: x.getVar() not in ('mac', 'identity'), form.getChildren())
+		form_a2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), macable_children))
+
+		mac_a_calculated = self.hmac(self.ks_o, self.n_s + self.n_o + self.encode_mpi(e) + self.form_a + form_a2)
+
+		if mac_a_calculated != mac_a:
+			# XXX return <feature-not-implemented/>
+			pass
+
+		# TODO: 4.5.3
+
+		# 4.5.4 generating bob's final session keys
+		self.srs = ''
+		oss = ''
+
+		k = self.sha256(k + self.srs + oss)
+
+		# XXX I can skip generating ks_o here
+		self.kc_s, self.km_s, self.ks_s = self.generate_responder_keys(k)
+		self.kc_o, self.km_o, self.ks_o = self.generate_initiator_keys(k)
+
+		# 4.5.5
+		if self.srs:
+			srshash = self.hmac(self.srs, 'Shared Retained Secret')
+		else:
+			srshash = self.random_bytes(32)
+
+		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
+		x.addChild(node=xmpp.DataField(name='nonce', value=base64.b64encode(self.n_o)))
+		x.addChild(node=xmpp.DataField(name='srshash', value=base64.b64encode(srshash)))
+
+		form_b2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
+
+		old_c_s = self.c_s
+		mac_b = self.hmac(self.n_o + self.n_s + self.encode_mpi(self.d) + self.form_b + form_b2, self.ks_s)
+		id_b = self.encrypt(mac_b)
+
+		m_b = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_b)
+
+		x.addChild(node=xmpp.DataField(name='identity', value=base64.b64encode(id_b)))
+		x.addChild(node=xmpp.DataField(name='mac', value=base64.b64encode(m_b)))
+
+		init.addChild(node=x)
+
+		self.send(response)
+
+		# destroy all copies of srs
+
+		self.srs = self.hmac(k, 'New Retained Secret')
+
+		# destroy k
+		self.status = 'active'
+		self.enable_encryption = True
 
 	def final_steps_alice(self, form):
 		# Alice MUST identify the shared retained secret (SRS) by selecting from her client's list of the secrets it retained from sessions with Bob's clients (the most recent secret for each of the clients he has used to negotiate ESessions with Alice's client).
@@ -409,24 +545,63 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = 'active'
 		self.enable_encryption = True
 
-	def accept_e2e_bob(self):
-		pass
- 
+	# generate a random number between 'bottom' and 'top'
+	def srand(self, bottom, top):
+		# minimum number of bytes needed to represent that range
+		bytes = int(math.ceil(math.log(top - bottom, 256)))
 
+		# FIXME: use a real PRNG
+		# in retrospect, this is horribly inadequate.
+		return (self.decode_mpi(os.urandom(bytes)) % (top - bottom)) + bottom
+
+	def make_dhhash(self, modp):
+		p = dh.primes[modp]
+		g = dh.generators[modp]
+
+		x = self.srand(2 ** (2 * self.n - 1), p - 1)
+
+		# XXX this may be a source of performance issues
+		e = self.powmod(g, x, p)
+
+		self.xes[modp] = x
+		self.es[modp] = e
+
+		He = self.sha256(self.encode_mpi(e))
+
+		return base64.b64encode(He)
+
+	# a faster version of (base ** exp) % mod
+	#		taken from <http://lists.danga.com/pipermail/yadis/2005-September/001445.html> 
+	def powmod(self, base, exp, mod):
+		square = base % mod
+		result = 1
+
+		while exp > 0:
+			if exp & 1: # exponent is odd
+				result = (result * square) % mod
+
+			square = (square * square) % mod
+			exp /= 2
+
+		return result
+
+	def terminate_e2e(self):
+		self.status = None
+ 
 #<message from='alice@example.org/pda' to='bob@example.com/laptop'>
 #  <thread>ffd7076498744578d10edabfe7f4a866</thread>
 #  <c xmlns='http://www.xmpp.org/extensions/xep-0200.html#ns'>
-#    <data> ** Base64 encoded encrypted terminate form ** </data>
-#    <old> ** Base64 encoded old MAC key ** </old>
-#    <mac> ** Base64 encoded a_mac ** </mac>
+#		 <data> ** Base64 encoded encrypted terminate form ** </data>
+#		 <old> ** Base64 encoded old MAC key ** </old>
+#		 <mac> ** Base64 encoded a_mac ** </mac>
 #  </c>
 #</message>
 
 # <feature xmlns='http://jabber.org/protocol/feature-neg'>
-#    <x xmlns='jabber:x:data' type='submit'>
-#      <field var='FORM_TYPE'>
-#        <value>urn:xmpp:ssn</value>
-#      </field>
-#      <field var='terminate'><value>1</value></field>
-#    </x>
+#		 <x xmlns='jabber:x:data' type='submit'>
+#			 <field var='FORM_TYPE'>
+#				 <value>urn:xmpp:ssn</value>
+#			 </field>
+#			 <field var='terminate'><value>1</value></field>
+#		 </x>
 #  </feature>
