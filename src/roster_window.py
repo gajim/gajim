@@ -4729,18 +4729,18 @@ class RosterWindow:
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				sec_text += '\n' + os.path.basename(path)
-			def _on_send_files(widget, account, jid, uri):
+			def _on_send_files(widget, account, jid, uris):
 				dialog.destroy()
 				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
-				uri_splitted = uri.split() # we may have more than one file dropped
-				for uri in uri_splitted:
+				for uri in uris:
 					path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 					if os.path.isfile(path): # is it file?
 						gajim.interface.instances['file_transfers'].send_file(
 							account, c, path)
 
 			dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
-				on_response_ok = (_on_send_files, account_dest, jid_dest, uri))
+				on_response_ok = (_on_send_files, account_dest, jid_dest,
+				uri_splitted))
 			dialog.popup()
 			return
 
