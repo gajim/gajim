@@ -4268,9 +4268,23 @@ class RosterWindow:
 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
 		self.jabber_state_images['16'] = self.load_iconset(path)
-		pixo = gtk.gdk.pixbuf_new_from_file(os.path.join(path, 'opened.png'))
+		# try to find opened_meta.png file, else opened.png else nopixbuf merge
+		path_opened = os.path.join(path, 'opened_meta.png')
+		if not os.path.isfile(path_opened):
+			path_opened = os.path.join(path, 'opened.png')
+		if os.path.isfile(path_opened):
+			pixo = gtk.gdk.pixbuf_new_from_file(path_opened))
+		else:
+			pixo = None
 		self.jabber_state_images['opened'] = self.load_iconset(path, pixo)
-		pixc = gtk.gdk.pixbuf_new_from_file(os.path.join(path, 'closed.png'))
+		# Same thing for closed
+		path_closed = os.path.join(path, 'opened_meta.png')
+		if not os.path.isfile(path_closed):
+			path_closed = os.path.join(path, 'closed.png')
+		if os.path.isfile(path_closed):
+			pixc = gtk.gdk.pixbuf_new_from_file(path_closed))
+		else:
+			pixc = None
 		self.jabber_state_images['closed'] = self.load_iconset(path, pixc)
 
 		if gajim.config.get('use_transports_iconsets'):
