@@ -19,6 +19,7 @@ from common import xmpp, gajim, dataforms
 
 import gtkgui_helpers
 import dialogs
+import config
 import dataforms_widget
 
 class SearchWindow:
@@ -35,9 +36,6 @@ class SearchWindow:
 		for name in ('label', 'progressbar', 'search_vbox', 'search_button'):
 			self.__dict__[name] = self.xml.get_widget(name)
 
-		self.data_form_widget = dataforms_widget.DataFormWidget()
-		self.table = None
-
 		# displaying the window
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -45,10 +43,6 @@ class SearchWindow:
 		self.pulse_id = gobject.timeout_add(80, self.pulse_callback)
 
 		self.is_form = None
-		
-		# for non-dataform forms
-		self.entries = {}
-		self.info = {}
 
 	def request_form(self):
 		gajim.connections[self.account].request_search_fields(self.jid)
@@ -74,15 +68,14 @@ class SearchWindow:
 			self.data_form_widget.data_form.type = 'submit'
 			gajim.connections[self.account].send_search_form(self.jid,
 				self.data_form_widget.data_form, True)
-			self.search_vbox.remove(self.data_form_widget)
 		else:
-			for name in self.entries.keys():
-				self.infos[name] = self.entries[name].get_text().decode('utf-8')
-			if self.infos.has_key('instructions'):
-				del self.infos['instructions']
-			gajim.connections[self.account].send_search_form(self.jid, self.infos,
+			infos = self.data_form_widget.get_infos()
+			if infos.has_key('instructions'):
+				del infos['instructions']
+			gajim.connections[self.account].send_search_form(self.jid, infos,
 				False)
-			self.search_vbox.remove(self.table)
+
+		self.search_vbox.remove(self.data_form_widget)
 
 		self.progressbar.show()
 		self.label.set_text(_('Waiting for results'))
@@ -96,52 +89,26 @@ class SearchWindow:
 		self.progressbar.hide()
 		self.label.hide()
 
-		if not is_form:
-			self.is_form = False
-			self.infos = form
-			nbrow = 0
-			if self.infos.has_key('instructions'):
-				self.label.set_text(self.infos['instructions'])
+		if is_form:
+			self.is_form = True
+			self.data_form_widget = dataforms_widget.DataFormWidget()
+			self.dataform = dataforms.ExtendForm(node = form)
+			self.data_form_widget.set_sensitive(True)
+			try:
+				self.data_form_widget.data_form = self.dataform
+			except dataforms.Error:
+				self.label.set_text(_('Error in received dataform'))
 				self.label.show()
-			self.table = gtk.Table()
-			for name in self.infos.keys():
-				if not name:
-					continue
-				if name == 'instructions':
-					continue
+				return
+			if self.data_form_widget.title:
+				self.window.set_title('%s - Search - Gajim' % \
+					self.data_form_widget.title)
+		else:
+			self.is_form = False
+			self.data_form_widget = config.FakeDataForm(form)
 
-				nbrow = nbrow + 1
-				self.table.resize(rows = nbrow, columns = 2)
-				label = gtk.Label(name.capitalize() + ':')
-				self.table.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
-				entry = gtk.Entry()
-				entry.set_activates_default(True)
-				if self.infos[name]:
-					entry.set_text(self.infos[name])
-				if name == 'password':
-					entry.set_visibility(False)
-				self.table.attach(entry, 1, 2, nbrow - 1, nbrow, 0, 0, 0, 0)
-				self.entries[name] = entry
-			self.table.show_all()
-			self.search_vbox.pack_start(self.table)
-			return
-
-		self.dataform = dataforms.ExtendForm(node = form)
-
-		self.data_form_widget.set_sensitive(True)
-		try:
-			self.data_form_widget.data_form = self.dataform
-		except dataforms.Error:
-			self.label.set_text(_('Error in received dataform'))
-			self.label.show()
-			return
-		self.is_form = True
-
+		self.data_form_widget.show_all()
 		self.search_vbox.pack_start(self.data_form_widget)
-		self.data_form_widget.show()
-		if self.data_form_widget.title:
-			self.window.set_title('%s - Search - Gajim' % \
-				self.data_form_widget.title)
 
 	def on_result_arrived(self, form, is_form):
 		if self.pulse_id:
