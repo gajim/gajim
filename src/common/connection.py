@@ -808,7 +808,7 @@ class Connection(ConnectionHandlers):
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
-	user_nick = None, xhtml = None):
+	user_nick = None, xhtml = None, forward_from = None):
 		if not self.connection:
 			return 1
 		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
@@ -877,21 +877,27 @@ class Connection(ConnectionHandlers):
 				if chatstate is 'composing' or msgtxt: 
 					chatstate_node.addChild(name = 'composing') 
 
+		if forward_from:
+			addresses = msg_iq.addChild('addresses',
+				namespace=common.xmpp.NS_ADDRESS)
+			addresses.addChild('address', attrs = {'type': 'ofrom',
+				'jid': forward_from})
 		self.connection.send(msg_iq)
-		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
-			.split()
-		ji = gajim.get_jid_without_resource(jid)
-		if self.name not in no_log_for and ji not in no_log_for:
-			log_msg = msg
-			if subject:
-				log_msg = _('Subject: %s\n%s') % (subject, msg)
-			if log_msg:
-				if type == 'chat':
-					kind = 'chat_msg_sent'
-				else:
-					kind = 'single_msg_sent'
-				gajim.logger.write(kind, jid, log_msg)
-		self.dispatch('MSGSENT', (jid, msg, keyID))
+		if not forward_from:
+			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
+				.split()
+			ji = gajim.get_jid_without_resource(jid)
+			if self.name not in no_log_for and ji not in no_log_for:
+				log_msg = msg
+				if subject:
+					log_msg = _('Subject: %s\n%s') % (subject, msg)
+				if log_msg:
+					if type == 'chat':
+						kind = 'chat_msg_sent'
+					else:
+						kind = 'single_msg_sent'
+					gajim.logger.write(kind, jid, log_msg)
+			self.dispatch('MSGSENT', (jid, msg, keyID))
 	
 	def send_stanza(self, stanza):
 		''' send a stanza untouched '''

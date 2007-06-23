@@ -1427,6 +1427,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		tim = localtime(timegm(tim))
 		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
+		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
+		if addressTag:
+			address = addressTag.getTag('address', attrs={'type': 'ofrom'})
+			if address:
+				frm = address.getAttr('jid')
+				jid = gajim.get_jid_without_resource(frm)
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for')
 		if not no_log_for:
