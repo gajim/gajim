@@ -4273,7 +4273,7 @@ class RosterWindow:
 		if not os.path.isfile(path_opened):
 			path_opened = os.path.join(path, 'opened.png')
 		if os.path.isfile(path_opened):
-			pixo = gtk.gdk.pixbuf_new_from_file(path_opened))
+			pixo = gtk.gdk.pixbuf_new_from_file(path_opened)
 		else:
 			pixo = None
 		self.jabber_state_images['opened'] = self.load_iconset(path, pixo)
@@ -4282,7 +4282,7 @@ class RosterWindow:
 		if not os.path.isfile(path_closed):
 			path_closed = os.path.join(path, 'closed.png')
 		if os.path.isfile(path_closed):
-			pixc = gtk.gdk.pixbuf_new_from_file(path_closed))
+			pixc = gtk.gdk.pixbuf_new_from_file(path_closed)
 		else:
 			pixc = None
 		self.jabber_state_images['closed'] = self.load_iconset(path, pixc)
