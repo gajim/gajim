@@ -1431,6 +1431,8 @@ class AccountModificationWindow:
 			# update variables
 			gajim.interface.instances[name] = gajim.interface.instances[
 				self.account]
+			gajim.interface.minimized_controls[name] = \
+				gajim.interface.minimized_controls[self.account]
 			gajim.nicks[name] = gajim.nicks[self.account]
 			gajim.block_signed_in_notifications[name] = \
 				gajim.block_signed_in_notifications[self.account]
@@ -1461,6 +1463,7 @@ class AccountModificationWindow:
 			if hasattr(gajim.connections[self.account], 'services_cache'):
 				gajim.connections[self.account].services_cache.account = name
 			del gajim.interface.instances[self.account]
+			del gajim.interface.minimized_controls[self.account]
 			del gajim.nicks[self.account]
 			del gajim.block_signed_in_notifications[self.account]
 			del gajim.groups[self.account]
@@ -2034,6 +2037,7 @@ class AccountsWindow:
 			del gajim.connections[gajim.ZEROCONF_ACC_NAME]
 			gajim.interface.save_config()
 			del gajim.interface.instances[gajim.ZEROCONF_ACC_NAME]
+			del gajim.interface.minimized_controls[gajim.ZEROCONF_ACC_NAME]
 			del gajim.nicks[gajim.ZEROCONF_ACC_NAME]
 			del gajim.block_signed_in_notifications[gajim.ZEROCONF_ACC_NAME]
 			del gajim.groups[gajim.ZEROCONF_ACC_NAME]
