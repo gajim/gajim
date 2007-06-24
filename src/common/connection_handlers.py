@@ -1658,8 +1658,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
 						prio, keyID, timestamp, None))
 				elif errcode == '401': # password required to join
-					self.dispatch('ERROR', (_('Unable to join group chat'),
-						_('A password is required to join this group chat.')))
+					room_jid, nick = gajim.get_room_and_nick_from_fjid(who)
+					self.dispatch('GC_PASSWORD_REQUIRED', (room_jid, nick))
 				elif errcode == '403': # we are banned
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are banned from this group chat.')))

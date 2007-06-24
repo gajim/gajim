@@ -1212,6 +1212,27 @@ class Interface:
 			self.instances[account]['gc_config'][room_jid].\
 				affiliation_list_received(array[1], array[2])
 
+	def handle_event_gc_password_required(self, account, array):
+		#('GC_PASSWORD_REQUIRED', account, (room_jid, nick))
+		room_jid = array[0]
+		nick = array[1]
+		dlg = dialogs.InputDialog(_('Password Required'),
+			_('A Password is required to join the room %s. Please type it') % \
+			room_jid, is_modal = True)
+		response = dlg.get_response()
+		if response == gtk.RESPONSE_OK:
+			password = dlg.input_entry.get_text()
+			gajim.connections[account].join_gc(nick, room_jid, password)
+			gajim.gc_passwords[room_jid] = password
+		else:
+			# get and destroy window
+			if room_jid in gajim.interface.minimized_controls[account]:
+				self.roster.on_disconnect(None, room_jid, account)
+			else:
+				win = self.msg_win_mgr.get_window(room_jid, account)
+				ctrl = win.get_control(room_jid, account)
+				win.remove_tab(ctrl, 3)
+
 	def handle_event_gc_invitation(self, account, array):
 		#('GC_INVITATION', (room_jid, jid_from, reason, password))
 		jid = gajim.get_jid_without_resource(array[1])
@@ -2086,6 +2107,7 @@ class Interface:
 			'GC_CONFIG': self.handle_event_gc_config,
 			'GC_INVITATION': self.handle_event_gc_invitation,
 			'GC_AFFILIATION': self.handle_event_gc_affiliation,
+			'GC_PASSWORD_REQUIRED': self.handle_event_gc_password_required,
 			'BAD_PASSPHRASE': self.handle_event_bad_passphrase,
 			'ROSTER_INFO': self.handle_event_roster_info,
 			'BOOKMARKS': self.handle_event_bookmarks,
