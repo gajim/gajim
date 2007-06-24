@@ -63,10 +63,11 @@ class OldEntry(xmpp.Node, object):
 		else:
 			main_feed = None
 
-		if self.getTag('source-feed') is not None:
-			source_feed = self.getTag('source-feed').getTagData('title')
+		if self.getTag('feed') is not None:
+			source_feed = self.getTag('feed').getTagData('title')
 		else:
 			source_feed = None
+		
 
 		if main_feed is not None and source_feed is not None:
 			return u'%s: %s' % (main_feed, source_feed)
@@ -78,14 +79,13 @@ class OldEntry(xmpp.Node, object):
 			return u''
 
 	feed_title = property(get_feed_title, None, None, 
-		''' Title of feed. It is built from entry's original feed title and title of feed
+		''' Title of feed. It is built from entry''s original feed title and title of feed
 		which delivered this entry. ''')
 
 	def get_feed_link(self):
-		''' Get a link to main page of feed (in pubsub.com: second link of rel='alternate',
-		first contains raw xml data). '''
+		''' Get source link '''
 		try:
-			return self.getTag('source-feed').getTags('link', {'rel':'alternate'})[1].getData()
+			return self.getTag('feed').getTags('link',{'rel':'alternate'})[1].getData()
 		except:
 			return None
 

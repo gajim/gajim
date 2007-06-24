@@ -76,7 +76,7 @@ def _gen_agent_type_info():
 		('_jid', 'weather'):			(False, 'weather.png'),
 		('gateway', 'sip'):			(False, 'sip.png'),
 		('directory', 'user'):		(None, 'jud.png'),
-		('pubsub', 'generic'):		(None, 'pubsub.png'),
+		('pubsub', 'generic'):		(PubSubBrowser, 'pubsub.png'),
 		('pubsub', 'service'):		(PubSubBrowser, 'pubsub.png'),
 		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
 
@@ -1792,7 +1792,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		''' Create treemodel for the window. '''
 		# JID, node, name (with description) - pango markup, dont have info?, subscribed?
 		self.model = gtk.ListStore(str, str, str, bool, bool)
-		self.model.set_sort_column_id(3, gtk.SORT_ASCENDING)
+		# sort by name
+		self.model.set_sort_column_id(2, gtk.SORT_ASCENDING)
 		self.window.services_treeview.set_model(self.model)
 
 		# Name column
@@ -1803,7 +1804,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		col.pack_start(renderer)
 		col.set_attributes(renderer, markup=2)
 		col.set_resizable(True)
-		self.window.services_treeview.insert_column(col, -1)
+    		self.window.services_treeview.insert_column(col, -1)
+		self.window.services_treeview.set_headers_visible(True)
 
 		# Subscription state
 		renderer = gtk.CellRendererToggle()
@@ -1813,7 +1815,13 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		col.set_resizable(False)
 		self.window.services_treeview.insert_column(col, -1)
 
-		self.window.services_treeview.set_headers_visible(True)
+		# Node Column
+		renderer = gtk.CellRendererText()
+		col = gtk.TreeViewColumn(_('Node'))
+		col.pack_start(renderer)
+		col.set_attributes(renderer, markup=1)
+		col.set_resizable(True)
+		self.window.services_treeview.insert_column(col, -1)
 
 	def _add_item(self, jid, node, item, force):
 		''' Called when we got basic information about new node from query.
@@ -1829,7 +1837,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		name = gobject.markup_escape_text(name)
 		name = '<b>%s</b>' % name
-
+		
 		self.model.append((jid, node, name, dunno, subscribed))
 
 	def _add_actions(self):

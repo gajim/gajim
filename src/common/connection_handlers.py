@@ -1557,20 +1557,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if items is None: return
 
 		for item in items.getTags('item'):
-			# check for event type (for now only one type supported: pubsub.com events)
-			child = item.getTag('pubsub-message')
-			if child is not None:
-				# we have pubsub.com notification
-				child = child.getTag('feed')
-				if child is None: continue
-
-				for entry in child.getTags('entry'):
-					# for each entry in feed (there shouldn't be more than one,
-					# but to be sure...
-					self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
+			entry = item.getTag('entry')
+			if entry is not None:
+				# for each entry in feed (there shouldn't be more than one,
+				# but to be sure...
+				self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
 				continue
 			# unknown type... probably user has another client who understands that event
-		
 		raise common.xmpp.NodeProcessed
 
 	def _presenceCB(self, con, prs):
