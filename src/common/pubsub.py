@@ -47,5 +47,5 @@ class ConnectionPubSub:
 		try:
 			cb, args, kwargs = self.__callbacks.pop(stanza.getID())
 			cb(conn, stanza, *args, **kwargs)
-		except KeyError:
+		except:
 			pass
