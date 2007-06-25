@@ -439,6 +439,7 @@ class RosterWindow:
 			self.add_contact_to_roster(jid, account)
 			for group in contact.groups:
 				self.draw_group(group, account)
+		self.draw_account(account)
 		return contact
 
 	def get_self_contact_iter(self, account):
@@ -1845,6 +1846,7 @@ class RosterWindow:
 			self.remove_contact(contact, account)
 			gajim.contacts.remove_contact(account, contact)
 			self.draw_group(_('Groupchats'), account)
+			self.draw_account(account)
 
 	def on_send_single_message_menuitem_activate(self, widget, account,
 	contact = None):
@@ -2531,6 +2533,7 @@ class RosterWindow:
 			self.remove_contact(contact, account)
 			gajim.contacts.remove_contact(account, contact)
 			self.draw_group(_('Groupchats'), account)
+			self.draw_account(account)
 
 	def make_group_menu(self, event, iter):
 		'''Make group's popup menu'''
