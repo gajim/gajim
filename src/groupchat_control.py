@@ -527,7 +527,7 @@ class GroupchatControl(ChatControlBase):
 			else:
 				self.print_conversation(msg, nick, tim, xhtml)
 
-	def on_private_message(self, nick, msg, tim, xhtml):
+	def on_private_message(self, nick, msg, tim, xhtml, msg_id = None):
 		# Do we have a queue?
 		fjid = self.room_jid + '/' + nick
 		no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
@@ -539,7 +539,7 @@ class GroupchatControl(ChatControlBase):
 			return
 
 		event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
-			False, '', None, xhtml))
+			False, '', msg_id, xhtml))
 		gajim.events.add_event(self.account, fjid, event)
 
 		autopopup = gajim.config.get('autopopup')
