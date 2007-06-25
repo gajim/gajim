@@ -496,7 +496,7 @@ class ChatControlBase(MessageControl):
 			self.clear(self.msg_textview) # clear message textview too
 			return True
 		elif message == 'compact' and not len(message_array):
-			self.chat_buttons_set_visible(not self.hide_chat_buttons_current)
+			self.chat_buttons_set_visible(not self.hide_chat_buttons)
 			self.clear(self.msg_textview)
 			return True
 		return False
@@ -665,10 +665,6 @@ class ChatControlBase(MessageControl):
 		else:
 			gajim.interface.instances['logs'][jid] = \
 				history_window.HistoryWindow(jid, self.account)
-
-	def _on_compact_view_menuitem_activate(self, widget):
-		isactive = widget.get_active()
-		self.chat_buttons_set_visible(isactive)
 
 	def on_minimize_menuitem_toggled(self, widget):
 		'''When a grouchat is minimized, unparent the tab, put it in roster etc'''
@@ -911,9 +907,8 @@ class ChatControl(ChatControlBase):
 		id = widget.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = widget
 
-		hide_chat_buttons_always = gajim.config.get(
-			'always_hide_chat_buttons')
-		self.chat_buttons_set_visible(hide_chat_buttons_always)
+		compact_view = gajim.config.get('compact_view')
+		self.chat_buttons_set_visible(compact_view)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_chat_banner'))
 		# Initialize drag-n-drop
@@ -1485,7 +1480,6 @@ class ChatControl(ChatControlBase):
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
-		compact_view_menuitem = xml.get_widget('compact_view_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		
 		contact = self.parent_win.get_active_contact()
@@ -1512,9 +1506,6 @@ class ChatControl(ChatControlBase):
 		else:
 			send_file_menuitem.set_sensitive(False)
 		
-		# compact_view_menuitem
-		compact_view_menuitem.set_active(self.hide_chat_buttons_current)
-
 		# add_to_roster_menuitem
 		if _('Not in Roster') in contact.groups:
 			add_to_roster_menuitem.show()
@@ -1531,9 +1522,6 @@ class ChatControl(ChatControlBase):
 		id = send_file_menuitem.connect('activate', 
 			self._on_send_file_menuitem_activate)
 		self.handlers[id] = send_file_menuitem 
-		id = compact_view_menuitem.connect('activate', 
-			self._on_compact_view_menuitem_activate)
-		self.handlers[id] = compact_view_menuitem 
 		id = add_to_roster_menuitem.connect('activate', 
 			self._on_add_to_roster_menuitem_activate)
 		self.handlers[id] = add_to_roster_menuitem 

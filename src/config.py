@@ -186,6 +186,10 @@ class PreferencesWindow:
 		else:
 			self.one_window_type_combobox.set_active(0)
 
+		# Compact View
+		st = gajim.config.get('compact_view')
+		self.xml.get_widget('compact_view_checkbutton').set_active(st)
+		
 		# Set default for treat incoming messages
 		choices = common.config.opt_treat_incoming_messages
 		type = gajim.config.get('treat_incoming_messages')
@@ -675,6 +679,15 @@ class PreferencesWindow:
 					if spell_obj:
 						spell_obj.detach()
 
+	def on_compact_view_checkbutton_toggled(self, widget):
+		active = widget.get_active()
+		for ctl in gajim.interface.msg_win_mgr.controls():
+			ctl.chat_buttons_set_visible(active)
+		gajim.config.set('compact_view', active)
+		gajim.interface.save_config()
+		gajim.interface.roster.draw_roster()
+
+	
 	def on_speller_checkbutton_toggled(self, widget):
 		active = widget.get_active()
 		gajim.config.set('use_speller', active)

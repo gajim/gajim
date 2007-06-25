@@ -185,9 +185,8 @@ class GroupchatControl(ChatControlBase):
 		self.nick = contact.name
 		self.name = self.room_jid.split('@')[0]
 
-		hide_chat_buttons_always = gajim.config.get(
-			'always_hide_groupchat_buttons')
-		self.chat_buttons_set_visible(hide_chat_buttons_always)
+		compact_view = gajim.config.get('compact_view')
+		self.chat_buttons_set_visible(compact_view)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_groupchat_banner'))
 		self.widget_set_visible(self.xml.get_widget('list_scrolledwindow'),
@@ -238,11 +237,6 @@ class GroupchatControl(ChatControlBase):
 		id = self.change_subject_menuitem.connect('activate',
 			self._on_change_subject_menuitem_activate)
 		self.handlers[id] = self.change_subject_menuitem
-
-		self.compact_view_menuitem = xm.get_widget('compact_view_menuitem')
-		id = self.compact_view_menuitem.connect('activate',
-			self._on_compact_view_menuitem_activate)
-		self.handlers[id] = self.compact_view_menuitem
 
 		widget = xm.get_widget('history_menuitem')
 		id = widget.connect('activate', self._on_history_menuitem_activate)
@@ -488,10 +482,7 @@ class GroupchatControl(ChatControlBase):
 		self.name_label.set_markup(text)
 
 	def prepare_context_menu(self):
-		'''sets compact view menuitem active state
-		sets sensitivity state for configure_room'''
-		# Check compact view menuitem
-		self.compact_view_menuitem.set_active(self.hide_chat_buttons_current)
+		'''sets sensitivity state for configure_room'''
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 		'minimized_gc').split(' '):
 			self.minimize_menuitem.set_active(True)

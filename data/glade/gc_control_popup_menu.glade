@@ -84,12 +84,6 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkCheckMenuItem" id="compact_view_menuitem">
-        <property name="label" translatable="yes">_Compact View    Alt+C</property>
-        <property name="use_underline">True</property>
-      </widget>
-    </child>
-    <child>
       <widget class="GtkCheckMenuItem" id="minimize_menuitem">
         <property name="visible">True</property>
         <property name="label" translatable="yes">_Minimize on close</property>

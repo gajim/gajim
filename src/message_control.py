@@ -34,7 +34,7 @@ class MessageControl:
 		self.widget_name = widget_name
 		self.contact = contact
 		self.account = account
-		self.hide_chat_buttons_current = False
+		self.hide_chat_buttons = False
 		self.resource = resource
 
 		gajim.last_message_time[self.account][self.get_full_jid()] = 0
@@ -99,7 +99,7 @@ class MessageControl:
 
 	def chat_buttons_set_visible(self, state):
 		# NOTE: Derived classes MAY implement this
-		self.hide_chat_buttons_current = state
+		self.hide_chat_buttons = state
 
 	def got_connected(self):
 		pass
