@@ -1602,6 +1602,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		except KeyError:
 			return None
 
+	def delete_session(self, jid, thread_id):
+		del self.sessions[jid][thread_id]
+
+		if not self.sessions[jid]:
+			del self.sessions[jid]
+
 	def move_session(self, original_jid, thread_id, to_resource):
 		session = self.sessions[original_jid][thread_id]
 
@@ -1616,7 +1622,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.sessions[new_jid][thread_id] = session
 
 	def find_null_session(self, jid):
-		'''returns the session between this connecting and 'jid' that we last sent a message in.'''
+		'''returns the session between this connecting and 'jid' that we last sent a message in.
+this is needed to handle clients that don't support threads; see XEP-0201.'''
 		all = self.sessions[jid].values()
 		null_sessions = filter(lambda s: not s.received_thread_id, all)
 		null_sessions.sort(key=lambda s: s.last_send)

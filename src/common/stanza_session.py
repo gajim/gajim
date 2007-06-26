@@ -55,6 +55,25 @@ class StanzaSession(object):
 
 		self.last_send = time.time()
 
+	def terminate(self):
+		msg = xmpp.Message()
+		feature = msg.NT.feature
+		feature.setNamespace(xmpp.NS_FEATURE)
+
+		x = xmpp.DataForm(typ='submit')
+		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
+		x.addChild(node=xmpp.DataField(name='terminate', value='1'))
+
+		feature.addChild(node=x)
+
+		self.send(msg)
+
+		self.status = None
+
+	def acknowledge_termination(self):
+		# we could send an acknowledgement message here, but we won't.
+		self.status = None
+
 # an encrypted stanza negotiation has several states. i've represented them as the following values in the 'status' 
 # attribute of the session object:
 
@@ -74,9 +93,6 @@ class StanzaSession(object):
 #				an encrypted session has been successfully negotiated. messages of
 #				any of the types listed in 'encryptable_stanzas' should be encrypted
 # 			before they're sent.
-# 6. 'sent-terminate':
-#				this client has sent a termination notice and is waiting for
-#				acknowledgement.
 
 # the transition between these states is handled in gajim.py's
 #	handle_session_negotiation method.
@@ -623,22 +639,11 @@ class EncryptedStanzaSession(StanzaSession):
 		return result
 
 	def terminate_e2e(self):
-		self.status = None
- 
-#<message from='alice@example.org/pda' to='bob@example.com/laptop'>
-#  <thread>ffd7076498744578d10edabfe7f4a866</thread>
-#  <c xmlns='http://www.xmpp.org/extensions/xep-0200.html#ns'>
-#		 <data> ** Base64 encoded encrypted terminate form ** </data>
-#		 <old> ** Base64 encoded old MAC key ** </old>
-#		 <mac> ** Base64 encoded a_mac ** </mac>
-#  </c>
-#</message>
+		self.terminate()
 
-# <feature xmlns='http://jabber.org/protocol/feature-neg'>
-#		 <x xmlns='jabber:x:data' type='submit'>
-#			 <field var='FORM_TYPE'>
-#				 <value>urn:xmpp:ssn</value>
-#			 </field>
-#			 <field var='terminate'><value>1</value></field>
-#		 </x>
-#  </feature>
+		self.enable_encryption = False
+
+	def acknowledge_termination(self):
+		StanzaSession.acknowledge_termination(self)
+		
+		self.enable_encryption = False
