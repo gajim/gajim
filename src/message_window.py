@@ -103,7 +103,7 @@ class MessageWindow:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
-		# set up DnD if GTK+ version < 2.10, use OUR way to reorder tabs
+		# if GTK+ version < 2.10, use OUR way to reorder tabs (set up DnD)
 		if gtk.pygtk_version < (2, 10, 0) or gtk.gtk_version < (2, 10, 0):
 			self.hid = self.notebook.connect('drag_data_received',
 				self.on_tab_label_drag_data_received_cb)
