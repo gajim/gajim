@@ -1493,7 +1493,11 @@ class ChatControl(ChatControlBase):
 		is_sensitive = gpg_btn.get_property('sensitive')
 		toggle_gpg_menuitem.set_active(isactive)
 		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
-	
+
+		# TODO: check that the remote client supports e2e
+		isactive = self.session.enable_encryption
+		toggle_e2e_menuitem.set_active(isactive)
+
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
 		if contact.resource and contact.jid.find('@') != -1:
@@ -1943,14 +1947,11 @@ class ChatControl(ChatControlBase):
 		tb.set_active(not tb.get_active())
 
 	def _on_toggle_e2e_menuitem_activate(self, widget):
-		#if 'security' in self.session.features and self.session.features['security'] == 'e2e':
 		if self.session.enable_encryption:
 			self.session.enable_encryption = False
-			print "terminating e2e."
 			self.session.terminate_e2e()
 		else:
 			self.session.enable_encryption = True
-			print "negotiating e2e."
 			self.session.negotiate_e2e()
 
 	def got_connected(self):

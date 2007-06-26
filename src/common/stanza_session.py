@@ -55,23 +55,47 @@ class StanzaSession(object):
 
 		self.last_send = time.time()
 
+# an encrypted stanza negotiation has several states. i've represented them as the following values in the 'status' 
+# attribute of the session object:
+
+# 1. None:
+#				default state
+# 2. 'requested-e2e':
+#				this client has initiated an esession negotiation and is waiting for
+#				a response
+# 3. 'responded-e2e':
+#				this client has responded to an esession negotiation request and is
+#				waiting for the initiator to identify itself and complete the
+#				negotiation
+# 4. 'identified-alice':
+#				this client identified itself and is waiting for the responder to 
+#				identify itself and complete the negotiation
+# 5. 'active':
+#				an encrypted session has been successfully negotiated. messages of
+#				any of the types listed in 'encryptable_stanzas' should be encrypted
+# 			before they're sent.
+# 6. 'sent-terminate':
+#				this client has sent a termination notice and is waiting for
+#				acknowledgement.
+
+# the transition between these states is handled in gajim.py's
+#	handle_session_negotiation method.
+
 class EncryptedStanzaSession(StanzaSession):
 	def __init__(self, conn, jid, thread_id, type = 'chat'):
 		StanzaSession.__init__(self, conn, jid, thread_id, type = 'chat')
 
-		self.n = 128
-
-		self.cipher = AES
-		self.hash_alg = SHA256
-
-		self.compression = None
-
 		self.xes = {}
 		self.es = {}
 
+		self.n = 128
+
 		self.enable_encryption = False
 
+		# _s denotes 'self' (ie. this client)
 		self._kc_s = None
+	
+		# _o denotes 'other' (ie. the client at the other end of the session)
 		self._kc_o = None
 
 	# keep the encrypter updated with my latest cipher key
@@ -298,6 +322,12 @@ class EncryptedStanzaSession(StanzaSession):
 
 		not_acceptable = []
 
+		self.encryptable_stanzas = ['message']
+		self.sas_algs = 'sas28x5'
+		self.cipher = AES
+		self.hash_alg = SHA256
+		self.compression = None
+
 		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
 		x.addChild(node=xmpp.DataField(name='accept', value='true'))
 
@@ -360,6 +390,13 @@ class EncryptedStanzaSession(StanzaSession):
 	# 'Alice Accepts'
 	def accept_e2e_alice(self, form):
 #		1.	Verify that the ESession options selected by Bob are acceptable
+
+		self.encryptable_stanzas = ['message']
+		self.sas_algs = 'sas28x5'
+		self.cipher = AES
+		self.hash_alg = SHA256
+		self.compression = None
+
 #		2.	Return a <not-acceptable/> error to Bob unless: 1 < d < p - 1
 		self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
 
