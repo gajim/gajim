@@ -153,8 +153,8 @@ class OptionsParser:
 			self.update_config_to_01101()
 		if old < [0, 11, 0, 2] and new >= [0, 11, 0, 2]:
 			self.update_config_to_01102()
-		if old < [0, 12] and new >= [0, 12]:
-			self.update_config_to_012()
+		if old < [0, 11, 1, 1] and new >= [0, 11, 1, 1]:
+			self.update_config_to_01111()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -387,11 +387,11 @@ class OptionsParser:
 				self.old_values['ft_override_host_to_send'])
 		gajim.config.set('version', '0.11.0.2')
 	
-	def update_config_to_012(self):
+	def update_config_to_01111(self):
 		'''always_hide_chatbuttons -> compact_view'''
 		if self.old_values.has_key('always_hide_groupchat_buttons') and \
 		self.old_values.has_key('always_hide_chat_buttons'):
 			gajim.config.set('compact_view', self.old_values['always_hide_groupchat_buttons'] and \
 			self.old_values['always_hide_chat_buttons'])
-		gajim.config.set('version', '0.12')
+		gajim.config.set('version', '0.11.1.1')
 
