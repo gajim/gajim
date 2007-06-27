@@ -33,6 +33,12 @@ class Contact:
 		self.priority = priority
 		self.keyID = keyID
 
+		# Capabilities; filled by caps.py/ConnectionCaps object
+		# every time it gets these from presence stanzas
+		self.caps_node=None
+		self.caps_ver=None
+		self.caps_exts=None
+
 		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
 		# we keep track of jep85 support with the peer by three extra states:
 		# None, False and 'ask'
