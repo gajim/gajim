@@ -63,6 +63,12 @@ def tree_cell_data_func(column, renderer, model, iter, tv=None):
 	# cell data func is global, because we don't want it to keep
 	# reference to GroupchatControl instance (self)
 	theme = gajim.config.get('roster_theme')
+	# allocate space for avatar only if needed
+	if isinstance(renderer, gtk.CellRendererPixbuf):
+		if model[iter][C_AVATAR]:
+			renderer.set_property('visible', True)
+		else:
+			renderer.set_property('visible', False)
 	if model.iter_parent(iter):
 		bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
 		if bgcolor:

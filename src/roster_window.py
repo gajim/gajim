@@ -4468,6 +4468,7 @@ class RosterWindow:
 		padlock)'''
 		theme = gajim.config.get('roster_theme')
 		type_ = model[iter][C_TYPE]
+		# allocate space for the icon only if needed
 		if model[iter][C_SECPIXBUF]:
 			renderer.set_property('visible', True)
 		else:
