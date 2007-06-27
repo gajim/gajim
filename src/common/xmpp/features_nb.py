@@ -71,6 +71,7 @@ def discoverItems(disp,jid,node=None, cb=None):
 			cb(ret)
 	_discover(disp, NS_DISCO_ITEMS, jid, node, _on_response)
 
+# this one is
 def discoverInfo(disp,jid,node=None, cb=None):
 	""" Query remote object about info that it publishes. Returns identities and features lists."""
 	""" According to JEP-0030:

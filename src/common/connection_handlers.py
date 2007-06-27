@@ -36,6 +36,7 @@ from common import gajim
 from common import atom
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
+from common.caps import ConnectionCaps
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
@@ -1162,7 +1163,7 @@ class ConnectionVcard:
 			#('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
 			self.dispatch('VCARD', vcard)
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub):
+class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
@@ -1982,6 +1983,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# that defines handlers
 		con.RegisterHandler('message', self._messageCB)
 		con.RegisterHandler('presence', self._presenceCB)
+		con.RegisterHandler('presence', self._capsPresenceCB)
 		con.RegisterHandler('iq', self._vCardCB, 'result',
 			common.xmpp.NS_VCARD)
 		con.RegisterHandler('iq', self._rosterSetCB, 'set',

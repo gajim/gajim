@@ -11,10 +11,14 @@
 ## GNU General Public License for more details.
 ##
 
-#import xmpp
 #import logger
 #import gajim
 from itertools import *
+import gajim
+import xmpp
+import xmpp.features_nb
+
+from meta import VerboseClassType
 
 class CapsCache(object):
 	''' This object keeps the mapping between caps data and real disco
@@ -74,6 +78,7 @@ class CapsCache(object):
 	>>> cc[newcaps]['csn']+=chatstates # adding data as if ext was 'csn'
 	# warning: no feature removal!
 	'''
+	__metaclass__ = VerboseClassType
 	def __init__(self, logger=None):
 		''' Create a cache for entity capabilities. '''
 		# our containers:
@@ -89,6 +94,7 @@ class CapsCache(object):
 		self.__names = {}
 		self.__cache = {}
 		class CacheQuery(object):
+			__metaclass__ = VerboseClassType
 			def __init__(cqself, proxied):
 				cqself.proxied=proxied
 
@@ -98,6 +104,7 @@ class CapsCache(object):
 
 		class CacheItem(object):
 			''' TODO: logging data into db '''
+			__metaclass__ = VerboseClassType
 			def __init__(ciself, node, version, ext=None):
 				# cached into db
 				ciself.node = node
@@ -105,11 +112,8 @@ class CapsCache(object):
 				ciself.features = set()
 				ciself.exts = {}
 
-				ciself.identities = []
-				# reported as first... important?
-				ciself.category = None
-				ciself.type = None
-				ciself.name = None
+				# set of tuples: (category, type, name)
+				ciself.identities = set()
 
 				ciself.cache = self
 
@@ -121,21 +125,21 @@ class CapsCache(object):
 				ciself.queried = 0
 
 			def __iadd__(ciself, newfeature):
-				newfeature=self.cache.__names.setdefault(newfeature, newfeature)
+				newfeature=self.__names.setdefault(newfeature, newfeature)
 				ciself.features.add(newfeature)
 
 			def __getitem__(ciself, exts):
-				if len(ext)==0:
-					return self
-				if len(ext)==1:
+				if len(exts)==0:
+					return ciself
+				if len(exts)==1:
 					ext=exts[0]
 					if ext in ciself.exts:
 						return ciself.exts[ext]
 					x=CacheItem(ciself.node, ciself.version, ext)
 					ciself.exts[ext]=x
 					return x
-				proxied = [self]
-				proxied.extend(ciself[(e,)] for e in ext)
+				proxied = [ciself]
+				proxied.extend(ciself[(e,)] for e in exts)
 				return CacheQuery(proxied)
 
 		self.__CacheItem = CacheItem
@@ -146,11 +150,11 @@ class CapsCache(object):
 		gajimcaps=self[(gajim, '0.11.1')]
 		gajimcaps.category='client'
 		gajimcaps.type='pc'
-		gajimcaps.features=set((common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
-			common.xmpp.NS_FILE, common.xmpp.NS_MUC, common.xmpp.NS_COMMANDS,
-			common.xmpp.NS_DISCO_INFO, common.xmpp.NS_PING, common.xmpp.NS_TIME_REVISED))
-		gajimcaps['cstates'].features=set((common.xmpp.NS_CHATSTATES,))
-		gajimcaps['xhtml'].features=set((common.xmpp.NS_XHTML_IM,))
+		gajimcaps.features=set((xmpp.NS_BYTESTREAM, xmpp.NS_SI,
+			xmpp.NS_FILE, xmpp.NS_MUC, xmpp.NS_COMMANDS,
+			xmpp.NS_DISCO_INFO, xmpp.NS_PING, xmpp.NS_TIME_REVISED))
+		gajimcaps['cstates'].features=set((xmpp.NS_CHATSTATES,))
+		gajimcaps['xhtml'].features=set((xmpp.NS_XHTML_IM,))
 
 		# TODO: older gajim versions
 
@@ -171,33 +175,45 @@ class CapsCache(object):
 		node_version = caps[:2]
 		if node_version in self.__cache:
 			return self.__cache[node_version][caps[2]]
-		node, version = self.__names[caps[0]], caps[1]
-		x=self.__cache[(node, version)]=self.__CacheItem(node, version)
+		node, version = self.__names.setdefault(caps[0], caps[0]), caps[1]
+		x=self.__CacheItem(node, version)
+		self.__cache[(node, version)]=x
 		return x
 
-	def preload(self, connection, jid, node, ver, exts):
+	def preload(self, con, jid, node, ver, exts):
 		''' Preload data about (node, ver, exts) caps using disco
 		query to jid using proper connection. Don't query if
 		the data is already in cache. '''
 		q=self[(node, ver, ())]
+		qq=q
+		def callback(identities, features):
+			try:
+				qq.identities=set(
+					(i['category'], i['type'], i.get('name'))
+					for i in identities)
+				qq.features=set(self.__names[f] for f in features)
+				qq.queried=2
+				print 'Got features!'
+				print '%s/%s:' % (qq.node, qq.version)
+				print '%s\n%s' % (qq.identities, qq.features)
+			except KeyError: # improper answer, ignore
+				qq.queried=0
+
 		if q.queried==0:
 			# do query for bare node+version pair
 			# this will create proper object
 			q.queried=1
-			def callback(identities, features):
-				q.queried=2
-				# TODO: put features and identities
-			xmpp.discoverInfo(con, jid, node='%s#%s' % (node, ver), callback)
+			xmpp.features_nb.discoverInfo(con, jid, '%s#%s' % (node, ver), callback)
 
 		for ext in exts:
 			qq=q[ext]
 			if qq.queried==0:
 				# do query for node+version+ext triple
 				qq.queried=1
-				def callback(identities, features):
-					qq.queried=2
-					# TODO: put features and identities
-				xmpp.discoverInfo(con, jid, node='%s#%s' % (node, ext))
+				xmpp.features_nb.discoverInfo(con, jid,
+					'%s#%s' % (node, ext), callback)
+
+capscache = CapsCache()
 
 class ConnectionCaps(object):
 	''' This class highly depends on that it is a part of Connection class. '''
@@ -225,12 +241,12 @@ class ConnectionCaps(object):
 		# for disco... so that disco will learn how to interpret
 		# these caps
 
-		jid=presence.getFrom()
+		jid=str(presence.getFrom())
 
 		# start disco query...
-		gajim.capscache.preload(self, connection, jid, node, ver, exts)
+		capscache.preload(con, jid, node, ver, exts)
 
-		contact=gajim.contacts.get_contact_from_full_jid(self, jid)
+		contact=gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if contact is None:
 			return	# TODO: a way to put contact not-in-roster into Contacts
 
