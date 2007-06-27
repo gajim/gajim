@@ -18,7 +18,7 @@ import gajim
 import xmpp
 import xmpp.features_nb
 
-from meta import VerboseClassType
+#from meta import VerboseClassType
 
 class CapsCache(object):
 	''' This object keeps the mapping between caps data and real disco
@@ -78,7 +78,7 @@ class CapsCache(object):
 	>>> cc[newcaps]['csn']+=chatstates # adding data as if ext was 'csn'
 	# warning: no feature removal!
 	'''
-	__metaclass__ = VerboseClassType
+#	__metaclass__ = VerboseClassType
 	def __init__(self, logger=None):
 		''' Create a cache for entity capabilities. '''
 		# our containers:
@@ -94,7 +94,7 @@ class CapsCache(object):
 		self.__names = {}
 		self.__cache = {}
 		class CacheQuery(object):
-			__metaclass__ = VerboseClassType
+#			__metaclass__ = VerboseClassType
 			def __init__(cqself, proxied):
 				cqself.proxied=proxied
 
@@ -104,7 +104,7 @@ class CapsCache(object):
 
 		class CacheItem(object):
 			''' TODO: logging data into db '''
-			__metaclass__ = VerboseClassType
+#			__metaclass__ = VerboseClassType
 			def __init__(ciself, node, version, ext=None):
 				# cached into db
 				ciself.node = node
