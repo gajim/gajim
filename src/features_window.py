@@ -29,6 +29,7 @@ class FeaturesWindow:
 		self.xml = gtkgui_helpers.get_glade('features_window.glade')
 		self.window = self.xml.get_widget('features_window')
 		treeview = self.xml.get_widget('features_treeview')
+		self.desc_label = self.xml.get_widget('feature_desc_label')
 
 		# {name: (available_function, unix_text, windows_text)}
 		self.features = {
@@ -64,7 +65,7 @@ class FeaturesWindow:
 				_('This feature is not available under Windows.')),
 			_('Trayicon'): (self.trayicon_available,
 				_('You need to install python-gnome2-extras or compile trayicon module from Gajim sources to use the trayicon.'),
-				_('You need PyGTK > 2.10 to use the trayicon.')),
+				_('You need PyGTK >= 2.10 to use the trayicon.')),
 			_('Idle'): (self.idle_available,
 				_('You need to compile idle module from Gajim sources to use it.'),
 				_('You need to compile idle module from Gajim sources to use it.')),
@@ -83,6 +84,7 @@ class FeaturesWindow:
 		col = gtk.TreeViewColumn(_('Available'))
 		treeview.append_column(col)
 		cell = gtk.CellRendererToggle()
+		cell.set_property('sensitive', False)
 		col.pack_start(cell)
 		col.set_attributes(cell, active = 1)
 
@@ -100,14 +102,12 @@ class FeaturesWindow:
 
 	def on_features_treeview_row_activated(self, widget, path, col):
 		available = self.model[path][1]
-		if available:
-			return
 		feature = self.model[path][0]
 		if os.name == 'nt':
 			text = self.features[feature][2]
 		else:
 			text = self.features[feature][1]
-		dialogs.InformationDialog(_('Feature not available'), text)
+		self.desc_label.set_text(text)
 
 	def pyopenssl_available(self):
 		try:
