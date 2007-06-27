@@ -354,6 +354,7 @@ class RosterWindow:
 		elif not groups:
 			groups = [_('General')]
 		for group in groups:
+			self.draw_group(group, account)
 			iterG = self.get_group_iter(group, account)
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
@@ -556,6 +557,8 @@ class RosterWindow:
 					else:
 						if gajim.groups[account].has_key(group):
 							del gajim.groups[account][group]
+				else:
+					self.draw_group(group, account)
 
 		# re-add children
 		for child in children:
