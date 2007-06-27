@@ -464,7 +464,7 @@ def play_sound(event):
 
 def play_sound_file(path_to_soundfile):
 	if path_to_soundfile == 'beep':
-		print '\a' # make a speaker beep
+		exec_command('beep')
 		return
 	if path_to_soundfile is None or not os.path.exists(path_to_soundfile):
 		return
