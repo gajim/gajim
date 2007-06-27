@@ -34,6 +34,7 @@ import tooltips
 import message_control
 import adhoc_commands
 import notify
+import features_window
 
 from common import gajim
 from common import helpers
@@ -3831,6 +3832,9 @@ class RosterWindow:
 	def on_faq_menuitem_activate(self, widget):
 		helpers.launch_browser_mailer('url',
 			'http://trac.gajim.org/wiki/GajimFaq')
+
+	def on_features_menuitem_activate(self, widget):
+		features_window.FeaturesWindow()
 
 	def on_about_menuitem_activate(self, widget):
 		dialogs.AboutDialog()
