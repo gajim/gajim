@@ -65,6 +65,7 @@ class RosterWindow:
 	'''Class for main window of the GTK+ interface'''
 
 	def get_account_iter(self, name):
+		''' Returns a gtk.TreeIter of accounts in roster data model or None '''
 		model = self.tree.get_model()
 		if model is None:
 			return
@@ -79,6 +80,7 @@ class RosterWindow:
 		return account_iter
 
 	def get_group_iter(self, name, account):
+		''' Returns a gtk.TreeIter of groups in roster data model or None '''
 		model = self.tree.get_model()
 		root = self.get_account_iter(account)
 		group_iter = model.iter_children(root)
@@ -164,10 +166,12 @@ class RosterWindow:
 		self.tree.set_cursor(path)
 
 	def add_account_to_roster(self, account):
+		''' Add an account to roster data model. '''
 		model = self.tree.get_model()
 		if self.get_account_iter(account):
 			return
 
+		# if we merge accounts...
 		if self.regroup:
 			show = helpers.get_global_show()
 			model.append(None, [self.jabber_state_images['16'][show],

@@ -13,6 +13,8 @@
 ## GNU General Public License for more details.
 ##
 
+''' This module allows to access the on-disk database of logs. '''
+
 import os
 import sys
 import time
@@ -627,3 +629,7 @@ class Logger:
 		for result in results:
 			answer[result[0]] = self.convert_api_values_to_human_transport_type(result[1])
 		return answer
+
+	# initial interface for accessing logs of stored caps
+	def get_stored_caps(self): pass
+	def add_caps_entry(self): pass
