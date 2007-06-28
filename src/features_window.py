@@ -100,7 +100,9 @@ class FeaturesWindow:
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
-	def on_features_treeview_row_activated(self, widget, path, col):
+	def on_features_treeview_cursor_changed(self, widget):
+		selection = widget.get_selection()
+		path = selection.get_selected_rows()[1][0]
 		available = self.model[path][1]
 		feature = self.model[path][0]
 		if os.name == 'nt':

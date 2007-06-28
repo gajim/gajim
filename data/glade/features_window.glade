@@ -38,7 +38,7 @@
                 <property name="can_focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="headers_clickable">True</property>
-                <signal name="row_activated" handler="on_features_treeview_row_activated"/>
+                <signal name="cursor_changed" handler="on_features_treeview_cursor_changed"/>
               </widget>
             </child>
           </widget>
