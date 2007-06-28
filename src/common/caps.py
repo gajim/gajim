@@ -225,15 +225,14 @@ class ConnectionCaps(object):
 		caps=presence.getTag('c')
 		if not caps: return
 
-		try:
-			node, ver=caps['node'], caps['ver']
-		except KeyError:
+		node, ver=caps['node'], caps['ver']
+		if node is None or ver is None:
 			# improper caps in stanza, ignoring
 			return
 
 		try:
 			exts=caps['ext'].split(' ')
-		except KeyError:
+		except AttributeError:
 			# no exts means no exts, a perfectly valid case
 			exts=[]
 
