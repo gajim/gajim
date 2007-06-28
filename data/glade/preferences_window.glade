@@ -1322,7 +1322,7 @@ Disabled</property>
                 <property name="border_width">12</property>
                 <property name="spacing">12</property>
                 <child>
-                  <widget class="GtkTable" id="table19">
+                  <widget class="GtkTable" id="autoaway_table">
                     <property name="visible">True</property>
                     <property name="n_rows">2</property>
                     <property name="n_columns">4</property>
