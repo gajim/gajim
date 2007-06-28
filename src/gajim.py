@@ -482,8 +482,11 @@ class Interface:
 			model[self.roster.status_message_menuitem_iter][3] = True
 
 		# Inform all controls for this account of the connection state change
-		for ctrl in self.msg_win_mgr.get_controls() + \
-		self.minimized_controls[account].values():
+		ctrls = self.msg_win_mgr.get_controls()
+		if self.minimized_controls.has_key(account):
+			# Can not be the case when we remove account
+			ctrls += self.minimized_controls[account].values()
+		for ctrl in ctrls:
 			if ctrl.account == account:
 				if status == 'offline' or (status == 'invisible' and \
 				gajim.connections[account].is_zeroconf):
