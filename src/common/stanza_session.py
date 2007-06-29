@@ -41,7 +41,7 @@ class StanzaSession(object):
 
 		self.last_send = 0
 		self.status = None
-		self.features = {}
+		self.negotiated = {}
 
 	def generate_thread_id(self):
 		return "".join([random.choice(string.letters) for x in xrange(0,32)])
@@ -54,6 +54,29 @@ class StanzaSession(object):
 		self.conn.send_stanza(msg)
 
 		self.last_send = time.time()
+
+	def reject_negotiation(self, body = None):
+		msg = xmpp.Message()
+		feature = msg.NT.feature
+		feature.setNamespace(xmpp.NS_FEATURE)
+
+		x = xmpp.DataForm(typ='submit')
+		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
+		x.addChild(node=xmpp.DataField(name='accept', value='0'))
+
+		feature.addChild(node=x)
+
+		if body:
+			msg.setBody(body)
+
+		self.send(msg)
+
+		self.cancelled_negotiation()
+
+	def cancelled_negotiation(self):
+		'''A negotiation has been cancelled, so reset this session to its default state.'''
+		self.status = None
+		self.negotiated = {}
 
 	def terminate(self):
 		msg = xmpp.Message()
@@ -100,6 +123,8 @@ class StanzaSession(object):
 class EncryptedStanzaSession(StanzaSession):
 	def __init__(self, conn, jid, thread_id, type = 'chat'):
 		StanzaSession.__init__(self, conn, jid, thread_id, type = 'chat')
+
+		self.loggable = True
 
 		self.xes = {}
 		self.es = {}
@@ -195,12 +220,24 @@ class EncryptedStanzaSession(StanzaSession):
 	def hmac(self, key, content):
 		return HMAC.new(key, content, self.hash_alg).digest()
 
-	# this should be more generic?
 	def sha256(self, string):
 		sh = SHA256.new()
 		sh.update(string)
 		return sh.digest()
 	
+	base28_chr = "acdefghikmopqruvwxy123456789"
+
+	def sas_28x5(self, m_a, form_b):
+		sha = self.sha256(m_a + form_b + 'Short Authentication String')
+		lsb24 = self.decode_mpi(sha[-3:])
+		return self.base28(lsb24)
+
+	def base28(self, n):
+		if n >= 28:
+			return self.base28(n / 28) + self.base28_chr[n % 28]
+		else:
+			return self.base28_chr[n]
+
 	def generate_initiator_keys(self, k):
 		return (self.hmac(k, 'Initiator Cipher Key'),
 						self.hmac(k, 'Initiator MAC Key'),
@@ -265,7 +302,15 @@ class EncryptedStanzaSession(StanzaSession):
 	def decrypt(self, ciphertext):
 		return self.decrypter.decrypt(ciphertext)
 
+	def logging_preference(self):
+		if gajim.config.get('log_encrypted_sessions'):
+			return ["may", "mustnot"]
+		else:
+			return ["mustnot", "may"]
+
 	def negotiate_e2e(self):
+		self.negotiated = {}
+
 		request = xmpp.Message()
 		feature = request.NT.feature
 		feature.setNamespace(xmpp.NS_FEATURE)
@@ -276,8 +321,7 @@ class EncryptedStanzaSession(StanzaSession):
 		x.addChild(node=xmpp.DataField(name='accept', value='1', typ='boolean', required=True))
 
 		# this field is incorrectly called 'otr' in XEPs 0116 and 0217
-		# unsupported options: 'mustnot'
-		x.addChild(node=xmpp.DataField(name='logging', typ='list-single', options=['may'], required=True))
+		x.addChild(node=xmpp.DataField(name='logging', typ='list-single', options=self.logging_preference(), required=True))
 
 		# unsupported options: 'disabled', 'enabled'
 		x.addChild(node=xmpp.DataField(name='disclosure', typ='list-single', options=['never'], required=True))
@@ -317,12 +361,10 @@ class EncryptedStanzaSession(StanzaSession):
 		self.send(request)
 	
 	# 4.3 esession response (bob)
-	def respond_e2e_bob(self, request_form):
-		response = xmpp.Message()
-		feature = response.NT.feature
-		feature.setNamespace(xmpp.NS_FEATURE)
-
-		x = xmpp.DataForm(typ='submit')
+	def verify_options_bob(self, form):
+		negotiated = {}
+		not_acceptable = []
+		ask_user = {}
 
 		fixed = { 'disclosure': 'never',
 								'security': 'e2e',
@@ -333,21 +375,16 @@ class EncryptedStanzaSession(StanzaSession):
 						'init_pubkey': 'none',
 						'resp_pubkey': 'none',
 										'ver': '1.0',
-								'sas_algs': 'sas28x5',
-								'logging': 'may'			}
-
-		not_acceptable = []
+								'sas_algs': 'sas28x5' }
 
 		self.encryptable_stanzas = ['message']
+
 		self.sas_algs = 'sas28x5'
 		self.cipher = AES
 		self.hash_alg = SHA256
 		self.compression = None
 
-		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
-		x.addChild(node=xmpp.DataField(name='accept', value='true'))
-
-		for name, field in map(lambda name: (name, request_form.getField(name)), request_form.asDict().keys()):
+		for name, field in map(lambda name: (name, form.getField(name)), form.asDict().keys()):
 			options = map(lambda x: x[1], field.getOptions())
 			values = field.getValues()
 
@@ -356,28 +393,61 @@ class EncryptedStanzaSession(StanzaSession):
 
 			if name in fixed:
 				if fixed[name] in options:
-					x.addChild(node=xmpp.DataField(name=name, value=fixed[name]))
+					negotiated[name] = fixed[name]
 				else:
 					not_acceptable.append(name)
-			elif name == 'modp':
-				# the offset of the group we chose (need it to match up with the dhhash)
-				group_order = 0
-				self.modp = int(options[group_order])
-				x.addChild(node=xmpp.DataField(name='modp', value=self.modp))
-
-				g = dh.generators[self.modp]
-				p = dh.primes[self.modp]
 			elif name == 'rekey_freq':
 				preferred = int(options[0])
-				x.addChild(node=xmpp.DataField(name='rekey_freq', value=preferred))
-
+				negotiated['rekey_freq'] = preferred
 				self.rekey_freq = preferred
-			elif name == 'my_nonce':
-				self.n_o = base64.b64decode(field.getValue())
+			elif name == 'logging':
+				my_prefs = self.logging_preference()
 
-		# XXX do something with not_acceptable
+				if my_prefs[0] in options:
+					pref = my_prefs[0]
+					negotiated['logging'] = pref
+				else:
+					for pref in my_prefs:
+						if pref in options:
+							ask_user['logging'] = pref
+							break
 
-		self.He = request_form.getField('dhhashes').getValues()[group_order].encode("utf8")
+					if not 'logging' in ask_user:
+						not_acceptable.append(name)
+			else:
+				# some things are handled elsewhere, some things are not-implemented
+				pass
+
+		return (negotiated, not_acceptable, ask_user)
+
+	# 4.3 esession response (bob)
+	def respond_e2e_bob(self, form, negotiated, not_acceptable):
+		response = xmpp.Message()
+		feature = response.NT.feature
+		feature.setNamespace(xmpp.NS_FEATURE)
+
+		x = xmpp.DataForm(typ='submit')
+
+		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
+		x.addChild(node=xmpp.DataField(name='accept', value='true'))
+
+		for name in negotiated:
+			x.addChild(node=xmpp.DataField(name=name, value=negotiated[name]))
+
+		self.negotiated = negotiated
+
+		# the offset of the group we chose (need it to match up with the dhhash)
+		group_order = 0
+		self.modp = int(form.getField('modp').getOptions()[group_order][1])
+		x.addChild(node=xmpp.DataField(name='modp', value=self.modp))
+
+		g = dh.generators[self.modp]
+		p = dh.primes[self.modp]
+
+		self.n_o = base64.b64decode(form['my_nonce'])
+
+		dhhashes = form.getField('dhhashes').getValues()
+		self.He = dhhashes[group_order].encode("utf8")
 
 		bytes = int(self.n / 8)
 
@@ -389,29 +459,60 @@ class EncryptedStanzaSession(StanzaSession):
 		self.y = self.srand(2 ** (2 * self.n - 1), p - 1)
 		self.d = self.powmod(g, self.y, p)
 
-		to_add = { 'my_nonce': self.n_s, 'dhkeys': self.encode_mpi(self.d), 'counter': self.encode_mpi(self.c_o), 'nonce': self.n_o }
+		to_add = { 'my_nonce': self.n_s,
+							 'dhkeys': self.encode_mpi(self.d), 
+							 'counter': self.encode_mpi(self.c_o), 
+							 'nonce': self.n_o }
 
 		for name in to_add:
 			b64ed = base64.b64encode(to_add[name])
 			x.addChild(node=xmpp.DataField(name=name, value=b64ed))
 
-		self.form_a = ''.join(map(lambda el: xmpp.c14n.c14n(el), request_form.getChildren()))
+		self.form_a = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
 		self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
 
 		self.status = 'responded-e2e'
 
 		feature.addChild(node=x)
+		
+		if not_acceptable:
+			pass
+# XXX
+#  <error code='406' type='modify'>
+#    <not-acceptable xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>
+#    <feature xmlns='http://jabber.org/protocol/feature-neg'>
+#      <field var='security'/>
+#    </feature>
+#  </error>
+
 		self.send(response)
 
 	# 'Alice Accepts'
-	def accept_e2e_alice(self, form):
+	def verify_options_alice(self, form):
 #		1.	Verify that the ESession options selected by Bob are acceptable
 
+		negotiated = {}
+		ask_user = {}
+		not_acceptable = []
+
+		if not form['logging'] in self.logging_preference():
+			not_acceptable.append(form['logging'])
+		elif form['logging'] != self.logging_preference()[0]:
+			ask_user['logging'] = form['logging']
+		else:
+			negotiated['logging'] = self.logging_preference()[0]
+
+		return (negotiated, not_acceptable, ask_user)
+
+	# 'Alice Accepts', continued
+	def accept_e2e_alice(self, form, negotiated):
 		self.encryptable_stanzas = ['message']
 		self.sas_algs = 'sas28x5'
 		self.cipher = AES
 		self.hash_alg = SHA256
 		self.compression = None
+
+		self.negotiated = negotiated
 
 #		2.	Return a <not-acceptable/> error to Bob unless: 1 < d < p - 1
 		self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
@@ -457,6 +558,11 @@ class EncryptedStanzaSession(StanzaSession):
 
 		m_a = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_a)
 
+		# check for a retained secret
+		# if none exists, prompt the user with the SAS
+		if self.sas_algs == 'sas28x5':
+			print "sas: %s" % self.sas_28x5(m_a, self.form_b)
+			
 		result.addChild(node=xmpp.DataField(name='identity', value=base64.b64encode(id_a)))
 		result.addChild(node=xmpp.DataField(name='mac', value=base64.b64encode(m_a)))
 
@@ -520,6 +626,11 @@ class EncryptedStanzaSession(StanzaSession):
 		self.srs = ''
 		oss = ''
 
+		# check for a retained secret
+		# if none exists, prompt the user with the SAS
+		if self.sas_algs == 'sas28x5':
+			print "sas: %s" % self.sas_28x5(m_a, self.form_b)
+
 		k = self.sha256(k + self.srs + oss)
 
 		# XXX I can skip generating ks_o here
@@ -556,6 +667,10 @@ class EncryptedStanzaSession(StanzaSession):
 		self.srs = self.hmac(k, 'New Retained Secret')
 
 		# destroy k
+
+		if self.negotiated['logging'] == 'mustnot':
+			self.loggable = False
+
 		self.status = 'active'
 		self.enable_encryption = True
 
@@ -594,6 +709,9 @@ class EncryptedStanzaSession(StanzaSession):
 
 # Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
 		# XXX check for MAC equality?
+	
+		if self.negotiated['logging'] == 'mustnot':
+			self.loggable = False
 
 		self.status = 'active'
 		self.enable_encryption = True
@@ -647,3 +765,14 @@ class EncryptedStanzaSession(StanzaSession):
 		StanzaSession.acknowledge_termination(self)
 		
 		self.enable_encryption = False
+
+	def is_loggable(self):
+		name = self.conn.name
+		no_log_for = gajim.config.get_per('accounts', name, 'no_log_for')
+
+		if not no_log_for:
+			no_log_for = ''
+
+		no_log_for = no_log_for.split()
+
+		return self.loggable and name not in no_log_for and self.jid not in no_log_for

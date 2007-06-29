@@ -115,6 +115,8 @@ class MessageControl:
 			return
 		if self.session:
 			print "starting a new session, forgetting about the old one!"
+			gajim.connections[self.account].delete_session(self.contact.jid, self.session.thread_id)
+
 		self.session = session
 
 	def send_message(self, message, keyID = '', type = 'chat',

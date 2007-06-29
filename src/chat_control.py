@@ -1948,10 +1948,13 @@ class ChatControl(ChatControlBase):
 
 	def _on_toggle_e2e_menuitem_activate(self, widget):
 		if self.session.enable_encryption:
-			self.session.enable_encryption = False
 			self.session.terminate_e2e()
+
+			jid = str(self.session.jid)
+
+			gajim.connections[self.account].delete_session(jid, self.session.thread_id)
+			self.session = gajim.connections[self.account].make_new_session(jid)
 		else:
-			self.session.enable_encryption = True
 			self.session.negotiate_e2e()
 
 	def got_connected(self):

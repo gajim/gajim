@@ -1657,13 +1657,64 @@ class Interface:
 
 	def handle_session_negotiation(self, account, data):
 		jid, session, form = data
-		
-		# encrypted session states
-		if form.getType() == 'form' and u'e2e' in map(lambda x: x[1], form.getField('security').getOptions()):
-			session.respond_e2e_bob(form)
+	
+		if form.getField('accept') and not form['accept'] in ('1', 'true'):
+			dialogs.InformationDialog(_('Session negotiation cancelled.'),
+					_('The client at %s cancelled the session negotiation.') % (jid))
+			session.cancelled_negotiation()
 			return
+
+		# encrypted session states. these are descriped in stanza_session.py
+
+		# bob responds
+		if form.getType() == 'form' and u'e2e' in map(lambda x: x[1], form.getField('security').getOptions()):
+			negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
+
+			if ask_user:
+				def accept_nondefault_options(widget):
+					negotiated.update(ask_user)
+					session.respond_e2e_bob(form, negotiated, not_acceptable)
+					
+					dialog.destroy()
+
+				def reject_nondefault_options(widget):
+					for key in ask_user.keys():
+						not_acceptable.append(key)   # XXX for some reason I can't concatenate using += here?
+					session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+					dialog.destroy()
+
+				dialog = dialogs.ConfirmationDialog(_('confirm these negotiation options'),
+						_('are the following options acceptable? %s') % (ask_user),
+						on_response_ok = accept_nondefault_options,
+						on_response_cancel = reject_nondefault_options)
+			else:
+				session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+			return
+
+		# alice accepts
 		elif session.status == 'requested-e2e' and form.getType() == 'submit':
-			session.accept_e2e_alice(form)
+			negotiated, not_acceptable, ask_user = session.verify_options_alice(form)
+
+			if ask_user:
+				def accept_nondefault_options(widget):
+					negotiated.update(ask_user)
+					session.accept_e2e_alice(form, negotiated)
+
+					dialog.destroy()
+
+				def reject_nondefault_options(widget):
+					session.reject_negotiation()
+					dialog.destroy()
+
+				dialog = dialogs.ConfirmationDialog(_('confirm these negotiation options'),
+						_('are the following options acceptable? %s') % (ask_user),
+						on_response_ok = accept_nondefault_options,
+						on_response_cancel = reject_nondefault_options)
+			else:
+				session.accept_e2e_alice(form, negotiated)
+
 			return
 		elif session.status == 'responded-e2e' and form.getType() == 'result':
 			session.accept_e2e_bob(form)
@@ -1671,6 +1722,18 @@ class Interface:
 		elif session.status == 'identified-alice' and form.getType() == 'result':
 			session.final_steps_alice(form)
 			return
+		
+		if form.getField('terminate'):
+			if form.getField('terminate').getValue() in ('1', 'true'):
+				session.acknowledge_termination()
+				gajim.connections[account].delete_session(str(jid), session.thread_id)
+			
+				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+
+				if ctrl:
+					ctrl.session = gajim.connections[self.account].make_new_session(str(jid))
+
+				return
 
 		# non-esession negotiation. this isn't very useful, but i'm keeping it around
 		# to test my test suite.

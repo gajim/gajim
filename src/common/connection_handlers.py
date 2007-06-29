@@ -1461,11 +1461,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
 		jid = helpers.get_jid_from_iq(msg)
-		no_log_for = gajim.config.get_per('accounts', self.name,
-			'no_log_for')
-		if not no_log_for:
-			no_log_for = ''
-		no_log_for = no_log_for.split()
 		encrypted = False
 		chatstate = None
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
@@ -1525,7 +1520,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if not error_msg:
 				error_msg = msgtxt
 				msgtxt = None
-			if self.name not in no_log_for:
+			if session.is_loggable():
 				gajim.logger.write('error', frm, error_msg, tim = tim,
 					subject = subject)
 			self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
@@ -1544,15 +1539,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if not self.last_history_line.has_key(jid):
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
-				if self.name not in no_log_for and not int(float(time.mktime(tim)))\
+				if session.is_loggable() and not int(float(time.mktime(tim)))\
 				<= self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 			return
 		elif mtype == 'chat': # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
-			if msg.getTag('body') and self.name not in no_log_for and jid not in\
-				no_log_for and msgtxt:
+			if msg.getTag('body') and session.is_loggable() and msgtxt:
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 		else: # it's single message
@@ -1564,7 +1558,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				password = invite.getTagData('password')
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 				return
-			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
+			if session.is_loggable()and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			mtype = 'normal'
@@ -1576,7 +1570,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 	# END messageCB
 
 	def get_session(self, jid, thread_id, type):
-		'''returns an existing session between this connection and 'jid' or starts a new one.'''
+		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
 		session = self.find_session(jid, thread_id, type)
 
 		if session:
@@ -1588,6 +1582,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if bare_jid != jid:
 				session = self.find_session(bare_jid, thread_id, type)
 				if session:
+					print repr(bare_jid), repr(thread_id), repr(jid.split("/")[1])
 					self.move_session(bare_jid, thread_id, jid.split("/")[1])
 					return session
 
@@ -1609,6 +1604,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			del self.sessions[jid]
 
 	def move_session(self, original_jid, thread_id, to_resource):
+		'''moves a session to another resource.'''
 		session = self.sessions[original_jid][thread_id]
 
 		del self.sessions[original_jid][thread_id]
@@ -1622,13 +1618,15 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.sessions[new_jid][thread_id] = session
 
 	def find_null_session(self, jid):
-		'''returns the session between this connecting and 'jid' that we last sent a message in.
-this is needed to handle clients that don't support threads; see XEP-0201.'''
-		all = self.sessions[jid].values()
-		null_sessions = filter(lambda s: not s.received_thread_id, all)
-		null_sessions.sort(key=lambda s: s.last_send)
+		'''finds all of the sessions between us and jid that jid hasn't sent a thread_id in yet.
 
-		return null_sessions[-1]
+returns the session that we last sent a message to.'''
+		
+		sessions_with_jid = self.sessions[jid].values()
+		no_threadid_sessions = filter(lambda s: not s.received_thread_id, sessions_with_jid)
+		no_threadid_sessions.sort(key=lambda s: s.last_send)
+
+		return no_threadid_sessions[-1]
 
 	def make_new_session(self, jid, thread_id = None, type = 'chat'):
 		sess = EncryptedStanzaSession(self, jid, thread_id, type)
