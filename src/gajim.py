@@ -1219,15 +1219,12 @@ class Interface:
 		#('GC_PASSWORD_REQUIRED', account, (room_jid, nick))
 		room_jid = array[0]
 		nick = array[1]
-		dlg = dialogs.InputDialog(_('Password Required'),
-			_('A Password is required to join the room %s. Please type it') % \
-			room_jid, is_modal = True)
-		response = dlg.get_response()
-		if response == gtk.RESPONSE_OK:
-			password = dlg.input_entry.get_text()
-			gajim.connections[account].join_gc(nick, room_jid, password)
-			gajim.gc_passwords[room_jid] = password
-		else:
+
+		def on_ok(text):
+			gajim.connections[account].join_gc(nick, room_jid, text)
+			gajim.gc_passwords[room_jid] = text
+
+		def on_cancel():
 			# get and destroy window
 			if room_jid in gajim.interface.minimized_controls[account]:
 				self.roster.on_disconnect(None, room_jid, account)
@@ -1235,6 +1232,11 @@ class Interface:
 				win = self.msg_win_mgr.get_window(room_jid, account)
 				ctrl = win.get_control(room_jid, account)
 				win.remove_tab(ctrl, 3)
+
+		dlg = dialogs.InputDialog(_('Password Required'),
+			_('A Password is required to join the room %s. Please type it') % \
+			room_jid, is_modal=False, ok_handler=on_ok, cancel_handler=on_cancel)
+		dlg.input_entry.set_visibility(False)
 
 	def handle_event_gc_invitation(self, account, array):
 		#('GC_INVITATION', (room_jid, jid_from, reason, password))

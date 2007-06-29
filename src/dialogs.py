@@ -1073,6 +1073,7 @@ class InputDialog:
 
 	def on_okbutton_clicked(self, widget):
 		user_input = self.input_entry.get_text().decode('utf-8')
+		self.cancel_handler = None
 		self.dialog.destroy()
 		if isinstance(self.ok_handler, tuple):
 			self.ok_handler[0](user_input, *self.ok_handler[1:])
