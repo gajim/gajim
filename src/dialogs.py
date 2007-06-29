@@ -1209,7 +1209,8 @@ class SubscriptionRequestWindow:
 
 
 class JoinGroupchatWindow:
-	def __init__(self, account, room_jid = '', nick = '', automatic = False):
+	def __init__(self, account, room_jid = '', nick = '', password = '',
+	automatic = False):
 		'''automatic is a dict like {'invities': []}
 		If automatic is not empty, this means room must be automaticaly configured
 		and when done, invities must be automatically invited'''
@@ -1233,9 +1234,12 @@ class JoinGroupchatWindow:
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self._room_jid_entry = self.xml.get_widget('room_jid_entry')
 		self._nickname_entry = self.xml.get_widget('nickname_entry')
+		self._password_entry = self.xml.get_widget('password_entry')
 
 		self._room_jid_entry.set_text(room_jid)
 		self._nickname_entry.set_text(nick)
+		if password:
+			self._password_entry.set_text(password)
 		self.xml.signal_autoconnect(self)
 		gajim.interface.instances[account]['join_gc'] = self #now add us to open windows
 		if len(gajim.connections) > 1:
@@ -1303,8 +1307,7 @@ class JoinGroupchatWindow:
 		'''When Join button is clicked'''
 		nickname = self._nickname_entry.get_text().decode('utf-8')
 		room_jid = self._room_jid_entry.get_text().decode('utf-8')
-		password = self.xml.get_widget('password_entry').get_text().decode(
-			'utf-8')
+		password = self._password_entry.get_text().decode('utf-8')
 		user, server, resource = helpers.decompose_jid(room_jid)
 		if not user or not server or resource:
 			ErrorDialog(_('Invalid group chat Jabber ID'),
@@ -2565,6 +2568,7 @@ class InvitationReceivedDialog:
 
 		self.room_jid = room_jid
 		self.account = account
+		self.password = password
 		xml = gtkgui_helpers.get_glade('invitation_received_dialog.glade')
 		self.dialog = xml.get_widget('invitation_received_dialog')
 
@@ -2598,7 +2602,8 @@ class InvitationReceivedDialog:
 	def on_accept_button_clicked(self, widget):
 		self.dialog.destroy()
 		try:
-			JoinGroupchatWindow(self.account, self.room_jid)
+			JoinGroupchatWindow(self.account, self.room_jid,
+				password=self.password)
 		except GajimGeneralException:
 			pass
 
