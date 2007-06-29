@@ -233,14 +233,11 @@ class Contacts:
 			return contacts_instances
 		return []
 
-	def get_contact_from_full_jid(self, account, jid):
+	def get_contact_from_full_jid(self, account, fjid):
 		'''we will split the jid into bare jid and resource part,
 		then get proper contact.'''
-		try:
-			barejid, resource=jid.split('/',1)
-			return self.get_contact(account, barejid, resource)
-		except ValueError: # no resource causes split to fail
-			return None # how to handle that case?
+		barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
+		return self.get_contact(account, barejid, resource)
 
 	def get_highest_prio_contact_from_contacts(self, contacts):
 		if not contacts:
