@@ -970,3 +970,15 @@ def get_avatar_path(prefix):
 		if os.path.exists(file_):
 			return file_
 	return None
+
+def datetime_tuple(timestamp):
+	'''Converts timestamp using strptime and the format: %Y%m%dT%H:%M:%S
+	Because of various datetime formats are used the following exceptions
+	are handled:
+		- Optional milliseconds appened to the string are removed
+		- XEP-082 datetime strings have all '-' cahrs removed to meet
+		  the above format.'''
+	timestamp = timestamp.split('.')[0]
+	timestamp = timestamp.replace('-', '')
+	from time import strptime
+	return strptime(timestamp, '%Y%m%dT%H:%M:%S')

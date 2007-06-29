@@ -24,7 +24,7 @@ import socket
 import sys
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
-                  strptime, time as time_time, timezone, tzname)
+                  time as time_time, timezone, tzname)
 from calendar import timegm
 
 import socks5
@@ -1424,7 +1424,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
 		tim = msg.getTimestamp()
-		tim = strptime(tim, '%Y%m%dT%H:%M:%S')
+		tim = helpers.datetime_tuple(tim)
 		tim = localtime(timegm(tim))
 		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
@@ -1614,7 +1614,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			elif namespace == common.xmpp.NS_DELAY:
 				# XEP-0091
 				tim = prs.getTimestamp()
-				tim = strptime(tim, '%Y%m%dT%H:%M:%S')
+				tim = helpers.datetime_tuple(tim)
 				timestamp = localtime(timegm(tim))
 			elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
 				# see http://trac.gajim.org/ticket/326
