@@ -246,8 +246,10 @@ class ConnectionCaps(object):
 		capscache.preload(con, jid, node, ver, exts)
 
 		contact=gajim.contacts.get_contact_from_full_jid(self.name, jid)
-		if contact is None:
+		if contact in [None, []]:
 			return	# TODO: a way to put contact not-in-roster into Contacts
+		elif isinstance(contact, list):
+			contact = contact[0]
 
 		# overwriting old data
 		contact.caps_node=node
