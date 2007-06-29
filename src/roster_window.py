@@ -3538,6 +3538,13 @@ class RosterWindow:
 		if not dbus_support.supported:
 			# do nothing if user doesn't have D-Bus bindings
 			return
+		bus = dbus.SessionBus()
+		try:
+			if not 'com.google.code.Awn' in bus.list_names():
+				# Awn is not installed
+				return
+		except:
+			pass
 		iconset = gajim.config.get('iconset')
 		prefix = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
 		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
@@ -3547,7 +3554,6 @@ class RosterWindow:
 			status = 'gajim.png'
 		path = os.path.join(prefix, status)
 		try:
-			bus = dbus.SessionBus()
 			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
 			awn = dbus.Interface(obj, 'com.google.code.Awn')
 			awn.SetTaskIconByName('Gajim', os.path.abspath(path))
