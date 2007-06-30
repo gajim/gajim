@@ -234,10 +234,14 @@ class Contacts:
 		return []
 
 	def get_contact_from_full_jid(self, account, fjid):
-		'''we will split the jid into bare jid and resource part,
-		then get proper contact.'''
+		''' Get Contact object for specific resource of given jid'''
 		barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
-		return self.get_contact(account, barejid, resource)
+		if barejid in self._contacts[account]:
+			contacts = self._contacts[account][barejid]
+			for c in contacts:
+				if c.resource==resource:
+					return c
+		return None
 
 	def get_highest_prio_contact_from_contacts(self, contacts):
 		if not contacts:

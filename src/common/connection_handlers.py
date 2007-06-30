@@ -776,11 +776,13 @@ class ConnectionDisco:
 				attr = {}
 				for key in i.getAttrs().keys():
 					attr[key] = i.getAttr(key)
-				if attr.has_key('category') and attr['category'] in ('gateway', 'headline')\
-				and attr.has_key('type'):
+				if attr.has_key('category') and \
+				   attr['category'] in ('gateway', 'headline') and \
+				   attr.has_key('type'):
 					transport_type = attr['type']
-				if attr.has_key('category') and attr['category'] == 'conference' \
-				and attr.has_key('type') and attr['type'] == 'text':
+				if attr.has_key('category') and \
+				   attr['category'] == 'conference' and \
+				   attr.has_key('type') and attr['type'] == 'text':
 					is_muc = True
 				identities.append(attr)
 			elif i.getName() == 'feature':
@@ -812,8 +814,10 @@ class ConnectionDisco:
 					self.available_transports[transport_type].append(jid)
 				else:
 					self.available_transports[transport_type] = [jid]
+
 		self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
 			features, data))
+		self._capsDiscoCB(jid, node, identities, features, data)
 
 class ConnectionVcard:
 	def __init__(self):

@@ -53,10 +53,8 @@ class CapsCache(object):
 	True
 	>>> chatstates in cc[caps]
 	False
-	>>> cc[caps].category
-	'client'
-	>>> cc[caps].type
-	'pc'
+	>>> cc[caps].identities
+	set({'category':'client', 'type':'pc'})
 	>>> x=cc[caps] # more efficient if making several queries for one set of caps
 	ATypicalBlackBoxObject
 	>>> muc in x
@@ -71,14 +69,12 @@ class CapsCache(object):
 
 	# setting data
 	>>> newcaps=('http://exodus.jabberstudio.org/caps', '0.9a', None)
-	>>> cc[newcaps].category='client'
-	>>> cc[newcaps].type='pc'
+	>>> cc[newcaps].identities.add({'category':'client', 'type':'pc', 'name':'Gajim'})
 	>>> cc[newcaps].features+=muc # same as:
 	>>> cc[newcaps]+=muc
 	>>> cc[newcaps]['csn']+=chatstates # adding data as if ext was 'csn'
 	# warning: no feature removal!
 	'''
-#	__metaclass__ = VerboseClassType
 	def __init__(self, logger=None):
 		''' Create a cache for entity capabilities. '''
 		# our containers:
@@ -93,18 +89,9 @@ class CapsCache(object):
 		#   client (node/version pair)
 		self.__names = {}
 		self.__cache = {}
-		class CacheQuery(object):
-#			__metaclass__ = VerboseClassType
-			def __init__(cqself, proxied):
-				cqself.proxied=proxied
-
-			def __getattr__(cqself, obj):
-				if obj!='exts': return getattr(cqself.proxied[0], obj)
-				return set(chain(ci.features for ci in cqself.proxied))
 
 		class CacheItem(object):
 			''' TODO: logging data into db '''
-#			__metaclass__ = VerboseClassType
 			def __init__(ciself, node, version, ext=None):
 				# cached into db
 				ciself.node = node
@@ -113,9 +100,8 @@ class CapsCache(object):
 				ciself.exts = {}
 
 				# set of tuples: (category, type, name)
+				# (dictionaries are not hashable, so cannot be in sets)
 				ciself.identities = set()
-
-				ciself.cache = self
 
 				# not cached into db:
 				# have we sent the query?
@@ -128,8 +114,16 @@ class CapsCache(object):
 				newfeature=self.__names.setdefault(newfeature, newfeature)
 				ciself.features.add(newfeature)
 
+			class CacheQuery(object):
+				def __init__(cqself, proxied):
+					cqself.proxied=proxied
+
+				def __getattr__(cqself, obj):
+					if obj!='exts': return getattr(cqself.proxied[0], obj)
+					return set(chain(ci.features for ci in cqself.proxied))
+
 			def __getitem__(ciself, exts):
-				if len(exts)==0:
+				if not exts:	# (), [], None, False, whatever
 					return ciself
 				if len(exts)==1:
 					ext=exts[0]
@@ -140,8 +134,7 @@ class CapsCache(object):
 					return x
 				proxied = [ciself]
 				proxied.extend(ciself[(e,)] for e in exts)
-				return CacheQuery(proxied)
-
+				return ciself.CacheQuery(proxied)
 		self.__CacheItem = CacheItem
 
 		# prepopulate data which we are sure of; note: we do not log these info
@@ -180,38 +173,25 @@ class CapsCache(object):
 		self.__cache[(node, version)]=x
 		return x
 
-	def preload(self, con, jid, node, ver, exts):
+	def preload(self, account, jid, node, ver, exts):
 		''' Preload data about (node, ver, exts) caps using disco
 		query to jid using proper connection. Don't query if
 		the data is already in cache. '''
 		q=self[(node, ver, ())]
 		qq=q
-		def callback(identities, features):
-			try:
-				qq.identities=set(
-					(i['category'], i['type'], i.get('name'))
-					for i in identities)
-				qq.features=set(self.__names[f] for f in features)
-				qq.queried=2
-				print 'Got features!'
-				print '%s/%s:' % (qq.node, qq.version)
-				print '%s\n%s' % (qq.identities, qq.features)
-			except KeyError: # improper answer, ignore
-				qq.queried=0
 
 		if q.queried==0:
 			# do query for bare node+version pair
 			# this will create proper object
 			q.queried=1
-			xmpp.features_nb.discoverInfo(con, jid, '%s#%s' % (node, ver), callback)
+			account.discoverInfo(jid, '%s#%s' % (node, ver))
 
 		for ext in exts:
 			qq=q[ext]
 			if qq.queried==0:
 				# do query for node+version+ext triple
 				qq.queried=1
-				xmpp.features_nb.discoverInfo(con, jid,
-					'%s#%s' % (node, ext), callback)
+				account.discoverInfo(jid, '%s#%s' % (node, ext))
 
 capscache = CapsCache()
 
@@ -243,7 +223,7 @@ class ConnectionCaps(object):
 		jid=str(presence.getFrom())
 
 		# start disco query...
-		capscache.preload(con, jid, node, ver, exts)
+		capscache.preload(self, jid, node, ver, exts)
 
 		contact=gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if contact in [None, []]:
@@ -255,3 +235,27 @@ class ConnectionCaps(object):
 		contact.caps_node=node
 		contact.caps_ver=ver
 		contact.caps_exts=exts
+
+	def _capsDiscoCB(self, jid, node, identities, features, data):
+		gajim.log.debug('capsDiscoCB(jid=%r, node=%r, identities=%r, features=%r, data=%r)' %\
+			(jid, node, identities, features, data))
+		contact=gajim.contacts.get_contact_from_full_jid(self.name, jid)
+		gajim.log.debug('   contact=%r' % contact)
+		if not contact: return
+		if not contact.caps_node: return # we didn't asked for that?
+		if not node.startswith(contact.caps_node+'#'): return
+		node, ext = node.split('#')
+		if ext==contact.caps_ver:	# this can be also version (like '0.9')
+			exts=None
+		else:
+			exts=(ext,)
+
+		# if we don't have this info already...
+		caps=capscache[(node, contact.caps_ver, exts)]
+		if caps.queried==2: return
+
+		caps.identities=set((i['category'], i['type'], i.get('name')) for i in identities)
+		caps.features=set(features)
+
+		gajim.log.debug('capsDiscoCB: added caps for %r:\n    identities=%r\n    features=%r'\
+			% ((node, contact.caps_ver, exts), caps.identities, caps.features))
