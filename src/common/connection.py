@@ -747,6 +747,12 @@ class Connection(ConnectionHandlers):
 			self.on_purpose = False 
 			self.server_resource = gajim.config.get_per('accounts', self.name,
 				'resource')
+			# All valid resource substitution strings should be added to this hash.
+			if self.server_resource:
+				self.server_resource = Template(self.server_resource).\
+					safe_substitute({
+						'hostname': socket.gethostname()
+					})
 			self.connect_and_init(show, msg, signed)
 
 		elif show == 'offline':
