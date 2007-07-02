@@ -1659,7 +1659,7 @@ class Interface:
 		jid, session, form = data
 	
 		if form.getField('accept') and not form['accept'] in ('1', 'true'):
-			dialogs.InformationDialog(_('Session negotiation cancelled.'),
+			dialogs.InformationDialog(_('Session negotiation cancelled'),
 					_('The client at %s cancelled the session negotiation.') % (jid))
 			session.cancelled_negotiation()
 			return
@@ -1679,15 +1679,15 @@ class Interface:
 
 				def reject_nondefault_options(widget):
 					for key in ask_user.keys():
-						not_acceptable.append(key)   # XXX for some reason I can't concatenate using += here?
+						not_acceptable.append(key)
 					session.respond_e2e_bob(form, negotiated, not_acceptable)
 
 					dialog.destroy()
 
-				dialog = dialogs.ConfirmationDialog(_('confirm these negotiation options'),
-						_('are the following options acceptable? %s') % (ask_user),
-						on_response_ok = accept_nondefault_options,
-						on_response_cancel = reject_nondefault_options)
+				dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+						_('The remote client wants to negotiate an session with these features:\n\n%s\n\nAre these options acceptable?') % (negotiation.describe_features(ask_user)),
+						on_response_yes = accept_nondefault_options,
+						on_response_no = reject_nondefault_options)
 			else:
 				session.respond_e2e_bob(form, negotiated, not_acceptable)
 
@@ -1708,10 +1708,10 @@ class Interface:
 					session.reject_negotiation()
 					dialog.destroy()
 
-				dialog = dialogs.ConfirmationDialog(_('confirm these negotiation options'),
-						_('are the following options acceptable? %s') % (ask_user),
-						on_response_ok = accept_nondefault_options,
-						on_response_cancel = reject_nondefault_options)
+				dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+						_('The remote client selected these options:\n\n%s\n\nContinue with the session?') % (negotiation.describe_features(ask_user)),
+						on_response_yes = accept_nondefault_options,
+						on_response_no = reject_nondefault_options)
 			else:
 				session.accept_e2e_alice(form, negotiated)
 

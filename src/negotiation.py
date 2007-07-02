@@ -5,6 +5,13 @@ from common import dataforms
 from common import gajim
 from common import xmpp
 
+def describe_features(features):
+	'''a human-readable description of the features that have been negotiated'''
+	if features['logging'] == 'may':
+		return '- messages will be logged'
+	elif features['logging'] == 'mustnot':
+		return '- messages will not be logged'
+
 class FeatureNegotiationWindow:
 	'''FeatureNegotiotionWindow class'''
 	def __init__(self, account, jid, session, form):
