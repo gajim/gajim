@@ -508,7 +508,6 @@ class ChatControlBase(MessageControl):
 		if not message or message == '\n':
 			return 1
 
-
 		if not self._process_command(message):
 			ret = MessageControl.send_message(self, message, keyID, type = type,
 				chatstate = chatstate, msg_id = msg_id,
@@ -1495,7 +1494,7 @@ class ChatControl(ChatControlBase):
 		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
 
 		# TODO: check that the remote client supports e2e
-		isactive = self.session.enable_encryption
+		isactive = int(self.session != None and self.session.enable_encryption)
 		toggle_e2e_menuitem.set_active(isactive)
 
 		# If we don't have resource, we can't do file transfer
@@ -1947,7 +1946,7 @@ class ChatControl(ChatControlBase):
 		tb.set_active(not tb.get_active())
 
 	def _on_toggle_e2e_menuitem_activate(self, widget):
-		if self.session.enable_encryption:
+		if self.session and self.session.enable_encryption:
 			self.session.terminate_e2e()
 
 			jid = str(self.session.jid)
@@ -1955,6 +1954,9 @@ class ChatControl(ChatControlBase):
 			gajim.connections[self.account].delete_session(jid, self.session.thread_id)
 			self.session = gajim.connections[self.account].make_new_session(jid)
 		else:
+			if not self.session:
+				self.session = gajim.connections[self.account].make_new_session(self.contact.jid)
+
 			self.session.negotiate_e2e()
 
 	def got_connected(self):

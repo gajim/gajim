@@ -3488,9 +3488,6 @@ class RosterWindow:
 		if resource:
 			fjid += '/' + resource
 
-		if not session:
-			session = gajim.connections[account].make_new_session(fjid)
-
 		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)

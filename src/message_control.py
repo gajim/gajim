@@ -113,9 +113,10 @@ class MessageControl:
 	def set_session(self, session):
 		if session == self.session:
 			return
+
 		if self.session:
-			print "starting a new session, forgetting about the old one!"
-			gajim.connections[self.account].delete_session(self.contact.jid, self.session.thread_id)
+			print "starting a new session, dropping the old one!"
+			gajim.connections[self.account].delete_session(self.contact.get_full_jid(), self.session.thread_id)
 
 		self.session = session
 
@@ -125,6 +126,9 @@ class MessageControl:
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		jid = self.contact.jid
+
+		if not self.session:
+			self.session = gajim.connections[self.account].make_new_session(self.contact.get_full_jid())
 
 		# Send and update history
 		return gajim.connections[self.account].send_message(jid, message, keyID,

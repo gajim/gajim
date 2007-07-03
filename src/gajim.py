@@ -1726,6 +1726,7 @@ class Interface:
 		if form.getField('terminate'):
 			if form.getField('terminate').getValue() in ('1', 'true'):
 				session.acknowledge_termination()
+
 				gajim.connections[account].delete_session(str(jid), session.thread_id)
 			
 				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
