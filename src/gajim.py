@@ -543,7 +543,7 @@ class Interface:
 		# Update contact
 		jid_list = gajim.contacts.get_jid_list(account)
 		if ji in jid_list or jid == gajim.get_jid_from_account(account):
-			lcontact = gajim.contacts.get_contacts_from_jid(account, ji)
+			lcontact = gajim.contacts.get_contact(account, ji)
 			contact1 = None
 			resources = []
 			for c in lcontact:
@@ -1274,7 +1274,7 @@ class Interface:
 		sub = array[2]
 		ask = array[3]
 		groups = array[4]
-		contacts = gajim.contacts.get_contacts_from_jid(account, jid)
+		contacts = gajim.contacts.get_contact(account, jid)
 		# contact removes us.
 		if (not sub or sub == 'none') and (not ask or ask == 'none') and \
 		not name and not groups:

@@ -3717,7 +3717,7 @@ class RosterWindow:
 		if not contact:
 			# If there is another resource, it may be a message from an invisible
 			# resource
-			lcontact = gajim.contacts.get_contacts_from_jid(account, jid)
+			lcontact = gajim.contacts.get_contact(account, jid)
 			if (len(lcontact) > 1 or (lcontact and lcontact[0].resource and \
 			lcontact[0].show != 'offline')) and jid.find('@') > 0:
 				contact = gajim.contacts.copy_contact(highest_contact)
@@ -3883,7 +3883,8 @@ class RosterWindow:
 		'''close all the windows from an account
 		if force is True, do not ask confirmation before closing chat/gc windows
 		'''
-		self.close_all_from_dict(gajim.interface.instances[account])
+		if account in gajim.interface.instances:
+			self.close_all_from_dict(gajim.interface.instances[account])
 		for ctrl in gajim.interface.msg_win_mgr.get_controls(acct = account):
 			ctrl.parent_win.remove_tab(ctrl, ctrl.parent_win.CLOSE_CLOSE_BUTTON,
 				force = force)

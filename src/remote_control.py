@@ -531,12 +531,12 @@ class SignalObject(dbus.service.Object):
 		nick_in_roster = None # Is jid a nick ?
 		for account in accounts:
 			# Does jid exists in roster of one account ?
-			if gajim.contacts.get_contacts_from_jid(account, jid):
+			if gajim.contacts.get_contact(account, jid):
 				return jid
 			if not nick_in_roster:
 				# look in all contact if one has jid as nick
 				for jid_ in gajim.contacts.get_jid_list(account):
-					c = gajim.contacts.get_contacts_from_jid(account, jid_)
+					c = gajim.contacts.get_contact(account, jid_)
 					if c[0].name == jid:
 						nick_in_roster = jid_
 						break

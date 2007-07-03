@@ -226,13 +226,6 @@ class Contacts:
 			return None
 		return []
 
-	def get_contacts_from_jid(self, account, jid):
-		'''we may have two or more resources on that jid'''
-		if jid in self._contacts[account]:
-			contacts_instances = self._contacts[account][jid]
-			return contacts_instances
-		return []
-
 	def get_contact_from_full_jid(self, account, fjid):
 		''' Get Contact object for specific resource of given jid'''
 		barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
@@ -253,7 +246,7 @@ class Contacts:
 		return prim_contact
 
 	def get_contact_with_highest_priority(self, account, jid):
-		contacts = self.get_contacts_from_jid(account, jid)
+		contacts = self.get_contact(account, jid)
 		if not contacts and '/' in jid:
 			# jid may be a fake jid, try it
 			room, nick = jid.split('/', 1)
@@ -270,7 +263,7 @@ class Contacts:
 		'''Returns all contacts in the given group'''
 		group_contacts = []
 		for jid in self._contacts[account]:
-			contacts = self.get_contacts_from_jid(account, jid)
+			contacts = self.get_contact(account, jid)
 			if group in contacts[0].groups:
 				group_contacts += contacts
 		return group_contacts
