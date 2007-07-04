@@ -1433,7 +1433,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
 		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
-		if addressTag:
+		# Be sure it comes from one of our resource, else ignore address element
+		if addressTag and jid == gajim.get_jid_from_account(self.name):
 			address = addressTag.getTag('address', attrs={'type': 'ofrom'})
 			if address:
 				frm = address.getAttr('jid')
