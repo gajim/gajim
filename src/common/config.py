@@ -81,7 +81,7 @@ class Config:
 		'markedmsgcolor': [ opt_color, '#ff8080', '', True ],
 		'urlmsgcolor': [ opt_color, '#0000ff', '', True ],
 		'collapsed_rows': [ opt_str, '', _('List (space separated) of rows (accounts and groups) that are collapsed.'), True ],
-		'roster_theme': [ opt_str, 'gtk+', '', True ],
+		'roster_theme': [ opt_str, _('default'), '', True ],
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
@@ -386,8 +386,8 @@ class Config:
 
 	themes_default = {
 		# sorted alphanum
-		'gtk+': [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','', '',
-			'B' ],
+		_('default'): [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','',
+			'', 'B' ],
 
 		_('green'): [ '', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
 					'', 'I', '#000000', '', '', '', '',

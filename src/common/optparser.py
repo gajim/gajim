@@ -155,6 +155,8 @@ class OptionsParser:
 			self.update_config_to_01102()
 		if old < [0, 11, 1, 1] and new >= [0, 11, 1, 1]:
 			self.update_config_to_01111()
+		if old < [0, 11, 1, 2] and new >= [0, 11, 1, 2]:
+			self.update_config_to_01112()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -180,7 +182,7 @@ class OptionsParser:
 			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
 			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont', 
 			'bannerfontattrs']
-		for theme_name in (_('grocery'), _('gtk+')):
+		for theme_name in (_('grocery'), _('default')):
 			if theme_name not in gajim.config.get_per('themes'):
 				gajim.config.add_per('themes', theme_name)
 				theme = gajim.config.themes_default[theme_name]
@@ -211,7 +213,6 @@ class OptionsParser:
 
 	def assert_unread_msgs_table_exists(self):
 		'''create table unread_messages if there is no such table'''
-		#FIXME see #2812
 		back = os.getcwd()
 		os.chdir(logger.LOG_DB_FOLDER)
 		con = sqlite.connect(logger.LOG_DB_FILE)
@@ -395,3 +396,9 @@ class OptionsParser:
 			self.old_values['always_hide_chat_buttons'])
 		gajim.config.set('version', '0.11.1.1')
 
+	def update_config_to_01112(self):
+		'''gtk+ theme is renamed to default'''
+		if self.old_values.has_key('roster_theme') and \
+		self.old_values['roster_theme'] == 'gtk+':
+			gajim.config.set('roster_theme', _('default'))
+		gajim.config.set('version', '0.11.1.2')
