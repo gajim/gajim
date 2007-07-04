@@ -6,6 +6,7 @@
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -543,7 +544,7 @@ class Interface:
 		# Update contact
 		jid_list = gajim.contacts.get_jid_list(account)
 		if ji in jid_list or jid == gajim.get_jid_from_account(account):
-			lcontact = gajim.contacts.get_contact(account, ji)
+			lcontact = gajim.contacts.get_contacts(account, ji)
 			contact1 = None
 			resources = []
 			for c in lcontact:
@@ -726,7 +727,7 @@ class Interface:
 			chat_control = self.msg_win_mgr.get_control(jid, account)
 
 		# Handle chat states  
-		contact = gajim.contacts.get_contact(account, jid, resource)
+		contact = gajim.contacts.get_contacts(account, jid, resource)
 		if contact and isinstance(contact, list):
 			contact = contact[0]
 		if contact:
@@ -755,7 +756,7 @@ class Interface:
 			return
 
 		if gajim.config.get('ignore_unknown_contacts') and \
-			not gajim.contacts.get_contact(account, jid) and not pm:
+			not gajim.contacts.get_contacts(account, jid) and not pm:
 			return
 		if not contact:
 			# contact is not in the roster, create a fake one to display
@@ -1052,7 +1053,7 @@ class Interface:
 		elif self.instances[account]['infos'].has_key(array[0] + '/' + array[1]):
 			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
 		if win:
-			c = gajim.contacts.get_contact(account, array[0], array[1])
+			c = gajim.contacts.get_contacts(account, array[0], array[1])
 			# c is a list when no resource is given. it probably means that contact
 			# is offline, so only on Contact instance
 			if isinstance(c, list) and len(c):
@@ -1274,7 +1275,7 @@ class Interface:
 		sub = array[2]
 		ask = array[3]
 		groups = array[4]
-		contacts = gajim.contacts.get_contact(account, jid)
+		contacts = gajim.contacts.get_contacts(account, jid)
 		# contact removes us.
 		if (not sub or sub == 'none') and (not ask or ask == 'none') and \
 		not name and not groups:
@@ -2189,7 +2190,7 @@ class Interface:
 					gajim.events.change_jid(account, fjid, jid)
 					resource = None
 					fjid = jid
-				contact = gajim.contacts.get_contact(account, jid, resource)
+				contact = gajim.contacts.get_contacts(account, jid, resource)
 				if not contact or isinstance(contact, list):
 					contact = highest_contact
 				self.roster.new_chat(contact, account, resource = resource)

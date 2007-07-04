@@ -4,6 +4,7 @@
 ## Copyright (C) 2006-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -1838,7 +1839,7 @@ class ChatControl(ChatControlBase):
 			show_transports = gajim.config.get('show_transports_group')
 			if (not show_transports and gajim.jid_is_transport(jid)) or \
 			(not show_offline and typ == 'chat' and \
-			len(gajim.contacts.get_contact(self.account, jid)) < 2):
+			len(gajim.contacts.get_contacts(self.account, jid)) < 2):
 				gajim.interface.roster.really_remove_contact(self.contact,
 					self.account)
 			elif typ == 'pm':

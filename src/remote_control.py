@@ -4,6 +4,7 @@
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -410,7 +411,7 @@ class SignalObject(dbus.service.Object):
 			if acct in accounts:
 				for jid in gajim.contacts.get_jid_list(acct):
 					item = self._contacts_as_dbus_structure(
-						gajim.contacts.get_contact(acct, jid))
+						gajim.contacts.get_contacts(acct, jid))
 					if item:
 						result.append(item)
 		return result
@@ -503,7 +504,7 @@ class SignalObject(dbus.service.Object):
 			accounts = [account]
 		contact_exists = False
 		for account in accounts:
-			contacts = gajim.contacts.get_contact(account, jid)
+			contacts = gajim.contacts.get_contacts(account, jid)
 			if contacts:
 				gajim.connections[account].unsubscribe(jid)
 				for contact in contacts:
@@ -531,12 +532,12 @@ class SignalObject(dbus.service.Object):
 		nick_in_roster = None # Is jid a nick ?
 		for account in accounts:
 			# Does jid exists in roster of one account ?
-			if gajim.contacts.get_contact(account, jid):
+			if gajim.contacts.get_contacts(account, jid):
 				return jid
 			if not nick_in_roster:
 				# look in all contact if one has jid as nick
 				for jid_ in gajim.contacts.get_jid_list(account):
-					c = gajim.contacts.get_contact(account, jid_)
+					c = gajim.contacts.get_contacts(account, jid_)
 					if c[0].name == jid:
 						nick_in_roster = jid_
 						break

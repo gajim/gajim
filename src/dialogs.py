@@ -115,7 +115,7 @@ class EditGroupsDialog:
 				if not gajim.interface.roster.regroup and _account != account:
 					continue
 				for _jid in all_jid[_account]:
-					contacts = gajim.contacts.get_contact(_account, _jid)
+					contacts = gajim.contacts.get_contacts(_account, _jid)
 					for c in contacts:
 						if group in c.groups:
 							c.groups.remove(group)
@@ -133,7 +133,7 @@ class EditGroupsDialog:
 				if not gajim.interface.roster.regroup and _account != account:
 					continue
 				for _jid in all_jid[_account]:
-					contacts = gajim.contacts.get_contact(_account, _jid)
+					contacts = gajim.contacts.get_contacts(_account, _jid)
 					for c in contacts:
 						if not group in c.groups:
 							c.groups.append(group)

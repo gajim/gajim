@@ -3,6 +3,7 @@
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -334,7 +335,7 @@ class VcardWindow:
 	def fill_status_label(self):
 		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
 			return
-		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
 		connected_contact_list = []
 		for c in contact_list:
 			if c.show not in ('offline', 'error'):
@@ -429,7 +430,7 @@ class VcardWindow:
 		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
 			'os': ''}}
 		i = 1
-		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
 		if contact_list:
 			for c in contact_list:
 				if c.resource != self.contact.resource:
@@ -522,7 +523,7 @@ class ZeroconfVcardWindow:
 	def fill_status_label(self):
 		if self.xml.get_widget('information_notebook').get_n_pages() < 2:
 			return
-		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
 		# stats holds show and status message
 		stats = ''
 		one = True # Are we adding the first line ?

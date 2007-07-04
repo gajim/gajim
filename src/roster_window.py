@@ -4,6 +4,7 @@
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -260,7 +261,7 @@ class RosterWindow:
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		nb_events = gajim.events.get_nb_roster_events(account, contact.jid)
 		# count events from all resources
-		for contact_ in gajim.contacts.get_contact(account, jid):
+		for contact_ in gajim.contacts.get_contacts(account, jid):
 			if contact_.resource:
 				nb_events += gajim.events.get_nb_roster_events(account,
 					contact_.get_full_jid())
@@ -337,14 +338,14 @@ class RosterWindow:
 		if (contact.show in ('offline', 'error') or hide) and \
 		not showOffline and (not _('Transports') in contact.groups or \
 		gajim.connections[account].connected < 2) and \
-		len(gajim.contacts.get_contact(account, jid)) == 1 and nb_events == 0 and\
+		len(gajim.contacts.get_contacts(account, jid)) == 1 and nb_events == 0 and\
 		not _('Not in Roster') in contact.groups:
 			return
 
 		# Remove brother contacts that are already in roster to add them
 		# under this iter
 		for data in shown_family:
-			contacts = gajim.contacts.get_contact(data['account'],
+			contacts = gajim.contacts.get_contacts(data['account'],
 				data['jid'])
 			for c in contacts:
 				self.remove_contact(c, data['account'])
@@ -390,7 +391,7 @@ class RosterWindow:
 		self.draw_avatar(jid, account)
 		# put the children under this iter
 		for data in shown_family:
-			contacts = gajim.contacts.get_contact(data['account'],
+			contacts = gajim.contacts.get_contacts(data['account'],
 				data['jid'])
 			self.add_contact_to_roster(data['jid'], data['account'])
 
@@ -589,7 +590,7 @@ class RosterWindow:
 		iters = self.get_contact_iter(jid, account)
 		if len(iters) == 0:
 			return
-		contact_instances = gajim.contacts.get_contact(account, jid)
+		contact_instances = gajim.contacts.get_contacts(account, jid)
 		contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contact_instances)
 		if not contact:
@@ -1281,7 +1282,7 @@ class RosterWindow:
 
 	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his or her status'''
-		contact_instances = gajim.contacts.get_contact(account, contact.jid)
+		contact_instances = gajim.contacts.get_contacts(account, contact.jid)
 		contact.show = show
 		contact.status = status
 		if show in ('offline', 'error') and \
@@ -1399,7 +1400,7 @@ class RosterWindow:
 				jid = model[iter][C_JID].decode('utf-8')
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
-					contacts = gajim.contacts.get_contact(account, jid)
+					contacts = gajim.contacts.get_contacts(account, jid)
 					connected_contacts = []
 					for c in contacts:
 						if c.show not in ('offline', 'error'):
@@ -1415,7 +1416,7 @@ class RosterWindow:
 				jid = model[iter][C_JID].decode('utf-8')
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
-					contact = gajim.contacts.get_contact(account, jid)
+					contact = gajim.contacts.get_contacts(account, jid)
 					self.tooltip.account = account
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, contact)
@@ -1706,7 +1707,7 @@ class RosterWindow:
 			if row_type in ('contact', 'agent'):
 				if old_text == new_text:
 					return
-				for u in gajim.contacts.get_contact(account, jid):
+				for u in gajim.contacts.get_contacts(account, jid):
 					u.name = new_text
 				gajim.connections[account].update_contact(jid, new_text, u.groups)
 				self.draw_contact(jid, account)
@@ -1787,7 +1788,7 @@ class RosterWindow:
 					self.add_contact_to_roster(contact.jid, account)
 				else:
 					gajim.connections[account].unsubscribe(contact.jid)
-					for c in gajim.contacts.get_contact(account, contact.jid):
+					for c in gajim.contacts.get_contacts(account, contact.jid):
 						self.remove_contact(c, account)
 					gajim.contacts.remove_jid(account, c.jid)
 					self.readd_if_needed(contact, account)
@@ -1815,11 +1816,11 @@ class RosterWindow:
 		if keyID[0] == _('None'):
 			if contact.jid in keys:
 				del keys[contact.jid]
-			for u in gajim.contacts.get_contact(account, contact.jid):
+			for u in gajim.contacts.get_contacts(account, contact.jid):
 				u.keyID = ''
 		else:
 			keys[contact.jid] = keyID[0]
-			for u in gajim.contacts.get_contact(account, contact.jid):
+			for u in gajim.contacts.get_contacts(account, contact.jid):
 				u.keyID = keyID[0]
 		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
@@ -1920,7 +1921,7 @@ class RosterWindow:
 			information_menuitem = xml.get_widget('information_menuitem')
 			history_menuitem = xml.get_widget('history_menuitem')
 
-			contacts = gajim.contacts.get_contact(account, jid)
+			contacts = gajim.contacts.get_contacts(account, jid)
 			if len(contacts) > 1: # several resources
 				sub_menu = gtk.Menu()
 				start_chat_menuitem.set_submenu(sub_menu)
@@ -2081,7 +2082,7 @@ class RosterWindow:
 		information_menuitem = xml.get_widget('information_menuitem')
 		history_menuitem = xml.get_widget('history_menuitem')
 
-		contacts = gajim.contacts.get_contact(account, jid)
+		contacts = gajim.contacts.get_contacts(account, jid)
 
 		# Invite to
 		invite_to_submenu = gtk.Menu()
@@ -3189,7 +3190,7 @@ class RosterWindow:
 					remove_auth = False
 			for (contact, account) in list_:
 				gajim.connections[account].unsubscribe(contact.jid, remove_auth)
-				for c in gajim.contacts.get_contact(account, contact.jid):
+				for c in gajim.contacts.get_contacts(account, contact.jid):
 					self.remove_contact(c, account)
 				gajim.contacts.remove_jid(account, contact.jid)
 				# redraw group rows for contact numbers
@@ -3625,7 +3626,7 @@ class RosterWindow:
 			if gajim.con_types.has_key(account):
 				gajim.con_types[account] = None
 			for jid in gajim.contacts.get_jid_list(account):
-				lcontact = gajim.contacts.get_contact(account, jid)
+				lcontact = gajim.contacts.get_contacts(account, jid)
 				lcontact_copy = []
 				for contact in lcontact:
 					lcontact_copy.append(contact)
@@ -3717,7 +3718,7 @@ class RosterWindow:
 		if not contact:
 			# If there is another resource, it may be a message from an invisible
 			# resource
-			lcontact = gajim.contacts.get_contact(account, jid)
+			lcontact = gajim.contacts.get_contacts(account, jid)
 			if (len(lcontact) > 1 or (lcontact and lcontact[0].resource and \
 			lcontact[0].show != 'offline')) and jid.find('@') > 0:
 				contact = gajim.contacts.copy_contact(highest_contact)
@@ -4121,7 +4122,7 @@ class RosterWindow:
 			first_ev = gajim.events.get_first_event(account, jid)
 			if not first_ev:
 				# look in other resources
-				for c in gajim.contacts.get_contact(account, jid):
+				for c in gajim.contacts.get_contacts(account, jid):
 					fjid = c.get_full_jid()
 					first_ev = gajim.events.get_first_event(account, fjid)
 					if first_ev:
@@ -4570,13 +4571,13 @@ class RosterWindow:
 		jid1 = model[iter1][C_JID].decode('utf-8')
 		jid2 = model[iter2][C_JID].decode('utf-8')
 		if type1 == 'contact':
-			lcontact1 = gajim.contacts.get_contact(account1, jid1)
+			lcontact1 = gajim.contacts.get_contacts(account1, jid1)
 			contact1 = gajim.contacts.get_first_contact_from_jid(account1, jid1)
 			if not contact1:
 				return 0
 			name1 = contact1.get_shown_name()
 		if type2 == 'contact':
-			lcontact2 = gajim.contacts.get_contact(account2, jid2)
+			lcontact2 = gajim.contacts.get_contacts(account2, jid2)
 			contact2 = gajim.contacts.get_first_contact_from_jid(account2, jid2)
 			if not contact2:
 				return 0

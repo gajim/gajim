@@ -2,6 +2,7 @@
 ##
 ## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -210,31 +211,26 @@ class Contacts:
 		# remove metacontacts info
 		self.remove_metacontact(account, jid)
 
-	def get_contact(self, account, jid, resource = None):
-		'''Returns the list of contact instances for this jid (one per resource)
-		or [] if no resource is given
-		returns the contact instance for the given resource if it's given
+	def get_contacts(self, account, jid):
+		'''Returns the list of contact instances for this jid.'''
+		if jid in self._contacts[account]:
+			return self._contacts[account][jid]
+		else:
+			return []
+	
+	def get_contact(self, account, jid, resource):
+		'''Returns the contact instance for the given resource if it's given
 		or None if there is not'''
 		if jid in self._contacts[account]:
-			contacts = self._contacts[account][jid]
-			if not resource:
-				return contacts
-			for c in contacts:
+			for c in self._contacts[account][jid]:
 				if c.resource == resource:
 					return c
-		if resource:
-			return None
-		return []
+		return None
 
 	def get_contact_from_full_jid(self, account, fjid):
 		''' Get Contact object for specific resource of given jid'''
 		barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
-		if barejid in self._contacts[account]:
-			contacts = self._contacts[account][barejid]
-			for c in contacts:
-				if c.resource==resource:
-					return c
-		return None
+		return self.get_contact(account, barejid, resource)
 
 	def get_highest_prio_contact_from_contacts(self, contacts):
 		if not contacts:
@@ -246,7 +242,7 @@ class Contacts:
 		return prim_contact
 
 	def get_contact_with_highest_priority(self, account, jid):
-		contacts = self.get_contact(account, jid)
+		contacts = self.get_contacts(account, jid)
 		if not contacts and '/' in jid:
 			# jid may be a fake jid, try it
 			room, nick = jid.split('/', 1)
@@ -263,7 +259,7 @@ class Contacts:
 		'''Returns all contacts in the given group'''
 		group_contacts = []
 		for jid in self._contacts[account]:
-			contacts = self.get_contact(account, jid)
+			contacts = self.get_contacts(account, jid)
 			if group in contacts[0].groups:
 				group_contacts += contacts
 		return group_contacts
