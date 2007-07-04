@@ -2772,20 +2772,18 @@ class RosterWindow:
 		menu.popup(None, None, None, event_button, event.time)
 
 	def on_edit_account(self, widget, account):
-		if gajim.interface.instances[account].has_key('account_modification'):
-			gajim.interface.instances[account]['account_modification'].\
-			window.present()
+		if gajim.interface.instances.has_key('accounts'):
+			gajim.interface.instances['accounts'].window.present()
 		else:
-			gajim.interface.instances[account]['account_modification'] = \
-				config.AccountModificationWindow(account)
+			gajim.interface.instances['accounts'] = config.AccountsWindow()
+		gajim.interface.instances['accounts'].select_account(account)
 
 	def on_zeroconf_properties(self, widget, account):
-		if gajim.interface.instances.has_key('zeroconf_properties'):
-			gajim.interface.instances['zeroconf_properties'].\
-			window.present()
+		if gajim.interface.instances.has_key('accounts'):
+			gajim.interface.instances['accounts'].window.present()
 		else:
-			gajim.interface.instances['zeroconf_properties'] = \
-				config.ZeroconfPropertiesWindow()
+			gajim.interface.instances['accounts'] = config.AccountsWindow()
+		gajim.interface.instances['accounts'].select_account(account)
 
 	def on_open_gmail_inbox(self, widget, account):
 		url = 'http://mail.google.com/mail?account_id=%s' % urllib.quote(

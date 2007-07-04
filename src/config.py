@@ -1153,542 +1153,6 @@ class PreferencesWindow:
 		gajim.interface.roster.enable_syncing_status_msg_from_current_music_track(
 			widget.get_active())
 
-#---------- AccountModificationWindow class -------------#
-class AccountModificationWindow:
-	'''Class for account informations'''
-	def on_account_modification_window_destroy(self, widget):
-		'''close window'''
-		if gajim.interface.instances.has_key(self.account):
-			if gajim.interface.instances[self.account].has_key(
-			'account_modification'):
-				del gajim.interface.instances[self.account]['account_modification']
-				return
-		if gajim.interface.instances.has_key('account_modification'):
-			del gajim.interface.instances['account_modification']
-
-	def on_cancel_button_clicked(self, widget):
-		self.window.destroy()
-
-	def __init__(self, account):
-		self.xml = gtkgui_helpers.get_glade('account_modification_window.glade')
-		self.window = self.xml.get_widget('account_modification_window')
-		self.window.set_transient_for(gajim.interface.roster.window)
-		self.account = account
-
-		# init proxy list
-		self.update_proxy_list()
-
-		self.xml.signal_autoconnect(self)
-		self.init_account()
-		self.xml.get_widget('save_button').grab_focus()
-		self.window.show_all()
-
-	def on_checkbutton_toggled(self, widget, widgets):
-		'''set or unset sensitivity of widgets when widget is toggled'''
-		for w in widgets:
-			w.set_sensitive(widget.get_active())
-
-	def init_account_gpg(self):
-		keyid = gajim.config.get_per('accounts', self.account, 'keyid')
-		keyname = gajim.config.get_per('accounts', self.account, 'keyname')
-		savegpgpass = gajim.config.get_per('accounts', self.account,
-																'savegpgpass')
-
-		if not keyid or not gajim.config.get('usegpg'):
-			return
-
-		self.xml.get_widget('gpg_key_label').set_text(keyid)
-		self.xml.get_widget('gpg_name_label').set_text(keyname)
-		gpg_save_password_checkbutton = \
-			self.xml.get_widget('gpg_save_password_checkbutton')
-		gpg_save_password_checkbutton.set_sensitive(True)
-		gpg_save_password_checkbutton.set_active(savegpgpass)
-
-		if savegpgpass:
-			entry = self.xml.get_widget('gpg_password_entry')
-			entry.set_sensitive(True)
-			gpgpassword = gajim.config.get_per('accounts',
-						self.account, 'gpgpassword')
-			entry.set_text(gpgpassword)
-
-	def update_proxy_list(self):
-		if self.account:
-			our_proxy = gajim.config.get_per('accounts', self.account, 'proxy')
-		else:
-			our_proxy = ''
-		if not our_proxy:
-			our_proxy = _('None')
-		self.proxy_combobox = self.xml.get_widget('proxies_combobox')
-		model = gtk.ListStore(str)
-		self.proxy_combobox.set_model(model)
-		l = gajim.config.get_per('proxies')
-		l.insert(0, _('None'))
-		for i in xrange(len(l)):
-			model.append([l[i]])
-			if our_proxy == l[i]:
-				self.proxy_combobox.set_active(i)
-
-	def init_account(self):
-		'''Initialize window with defaults values'''
-		self.xml.get_widget('name_entry').set_text(self.account)
-		jid = gajim.config.get_per('accounts', self.account, 'name') \
-			+ '@' + gajim.config.get_per('accounts',
-						self.account, 'hostname')
-		self.xml.get_widget('jid_entry').set_text(jid)
-		self.xml.get_widget('save_password_checkbutton').set_active(
-			gajim.config.get_per('accounts', self.account, 'savepass'))
-		if gajim.config.get_per('accounts', self.account, 'savepass'):
-			passstr = passwords.get_password(self.account) or ''
-			password_entry = self.xml.get_widget('password_entry')
-			password_entry.set_sensitive(True)
-			password_entry.set_text(passstr)
-
-		self.xml.get_widget('resource_entry').set_text(gajim.config.get_per(
-			'accounts', self.account, 'resource'))
-		self.xml.get_widget('adjust_priority_with_status_checkbutton').set_active(
-			gajim.config.get_per('accounts', self.account,
-			'adjust_priority_with_status'))
-		spinbutton = self.xml.get_widget('priority_spinbutton')
-		if gajim.config.get('enable_negative_priority'):
-			spinbutton.set_range(-128, 127)
-		spinbutton.set_value(gajim.config.get_per('accounts', self.account,
-			'priority'))
-
-		usessl = gajim.config.get_per('accounts', self.account, 'usessl')
-		self.xml.get_widget('use_ssl_checkbutton').set_active(usessl)
-
-		self.xml.get_widget('send_keepalive_checkbutton').set_active(
-			gajim.config.get_per('accounts', self.account,
-			'keep_alives_enabled'))
-
-		use_custom_host = gajim.config.get_per('accounts', self.account,
-			'use_custom_host')
-		self.xml.get_widget('custom_host_port_checkbutton').set_active(
-			use_custom_host)
-		custom_host = gajim.config.get_per('accounts', self.account,
-			'custom_host')
-		if not custom_host:
-			custom_host = gajim.config.get_per('accounts',
-				self.account, 'hostname')
-		self.xml.get_widget('custom_host_entry').set_text(custom_host)
-		custom_port = gajim.config.get_per('accounts', self.account,
-			'custom_port')
-		if not custom_port:
-			custom_port = 5222
-		self.xml.get_widget('custom_port_entry').set_text(unicode(custom_port))
-
-		gpg_key_label = self.xml.get_widget('gpg_key_label')
-		if gajim.config.get('usegpg'):
-			self.init_account_gpg()
-		else:
-			gpg_key_label.set_text(_('OpenPGP is not usable in this computer'))
-			self.xml.get_widget('gpg_choose_button').set_sensitive(False)
-		self.xml.get_widget('autoconnect_checkbutton').set_active(gajim.config.\
-			get_per('accounts', self.account, 'autoconnect'))
-		self.xml.get_widget('autoreconnect_checkbutton').set_active(gajim.config.\
-			get_per('accounts', self.account, 'autoreconnect'))
-
-		self.xml.get_widget('sync_with_global_status_checkbutton').set_active(
-			gajim.config.get_per('accounts', self.account,
-			'sync_with_global_status'))
-		self.xml.get_widget('autoconnect_checkbutton').set_active(
-			gajim.config.get_per('accounts', self.account, 'autoconnect'))
-		self.xml.get_widget('use_ft_proxies_checkbutton').set_active(
-			gajim.config.get_per('accounts', self.account, 'use_ft_proxies'))
-		list_no_log_for = gajim.config.get_per('accounts', self.account,
-			'no_log_for').split()
-		if self.account in list_no_log_for:
-			self.xml.get_widget('log_history_checkbutton').set_active(0)
-
-	def option_changed(self, config, opt): 
-		if gajim.config.get_per('accounts', self.account, opt) != config[opt]:
-			return True
-		return False
-
-	def options_changed_need_relogin(self, config, options):
-		'''accepts configuration and options
-		(tupple of strings of the name of options changed)
-		and returns True or False depending on if at least one of the options
-		need relogin to server to apply'''
-		for option in options:
-			if self.option_changed(config, option):
-				return True
-		return False
-
-	def on_adjust_priority_with_status_checkbutton_toggled(self, widget):
-		self.xml.get_widget('priority_spinbutton').set_sensitive(
-			not widget.get_active())
-
-	def on_save_button_clicked(self, widget):
-		'''When save button is clicked: Save information in config file'''
-		config = {}
-		name = self.xml.get_widget('name_entry').get_text().decode('utf-8')
-		if gajim.connections.has_key(self.account):
-			if name != self.account:
-				if gajim.connections[self.account].connected != 0:
-					dialogs.ErrorDialog(
-						_('You are currently connected to the server'),
-						_('To change the account name, you must be disconnected.'))
-					return
-				if len(gajim.events.get_events(self.account)):
-					dialogs.ErrorDialog(_('Unread events'),
-						_('To change the account name, you must read all pending '
-						'events.'))
-					return
-				if name in gajim.connections:
-					dialogs.ErrorDialog(_('Account Name Already Used'),
-						_('This name is already used by another of your accounts. '
-						'Please choose another name.'))
-					return
-		if (name == ''):
-			dialogs.ErrorDialog(_('Invalid account name'),
-				_('Account name cannot be empty.'))
-			return
-		if name.find(' ') != -1:
-			dialogs.ErrorDialog(_('Invalid account name'),
-				_('Account name cannot contain spaces.'))
-			return
-		jid = self.xml.get_widget('jid_entry').get_text().decode('utf-8')
-
-		# check if jid is conform to RFC and stringprep it
-		try:
-			jid = helpers.parse_jid(jid)
-		except helpers.InvalidFormat, s:
-			pritext = _('Invalid Jabber ID')
-			dialogs.ErrorDialog(pritext, str(s))
-			return
-
-		n, hn = jid.split('@', 1)
-		if not n:
-			pritext = _('Invalid Jabber ID')
-			sectext = _('A Jabber ID must be in the form "user@servername".')
-			dialogs.ErrorDialog(pritext, sectext)
-			return
-
-		resource = self.xml.get_widget('resource_entry').get_text().decode(
-			'utf-8')
-		try:
-			resource = helpers.parse_resource(resource)
-		except helpers.InvalidFormat, s:
-			pritext = _('Invalid Jabber ID')
-			dialogs.ErrorDialog(pritext, (s))
-			return
-
-		config['savepass'] = self.xml.get_widget(
-				'save_password_checkbutton').get_active()
-		config['password'] = self.xml.get_widget('password_entry').get_text().\
-			decode('utf-8')
-		config['resource'] = resource
-		config['adjust_priority_with_status'] = self.xml.get_widget(
-			'adjust_priority_with_status_checkbutton').get_active()
-		config['priority'] = self.xml.get_widget('priority_spinbutton').\
-			get_value_as_int()
-		config['autoconnect'] = self.xml.get_widget('autoconnect_checkbutton').\
-			get_active()
-		config['autoreconnect'] = self.xml.get_widget(
-			'autoreconnect_checkbutton').get_active()
-
-		if self.account:
-			list_no_log_for = gajim.config.get_per('accounts', self.account,
-				'no_log_for').split()
-		else:
-			list_no_log_for = []
-		if self.account in list_no_log_for:
-			list_no_log_for.remove(self.account)
-		if not self.xml.get_widget('log_history_checkbutton').get_active():
-			list_no_log_for.append(name)
-		config['no_log_for'] = ' '.join(list_no_log_for)
-
-		config['sync_with_global_status'] = self.xml.get_widget(
-			'sync_with_global_status_checkbutton').get_active()
-		config['use_ft_proxies'] = self.xml.get_widget(
-			'use_ft_proxies_checkbutton').get_active()
-
-		active = self.proxy_combobox.get_active()
-		proxy = self.proxy_combobox.get_model()[active][0].decode('utf-8')
-		if proxy == _('None'):
-			proxy = ''
-		config['proxy'] = proxy
-
-		config['usessl'] = self.xml.get_widget('use_ssl_checkbutton').get_active()
-		config['name'] = n
-		config['hostname'] = hn
-
-		config['use_custom_host'] = self.xml.get_widget(
-			'custom_host_port_checkbutton').get_active()
-		custom_port = self.xml.get_widget('custom_port_entry').get_text()
-		try:
-			custom_port = int(custom_port)
-		except:
-			dialogs.ErrorDialog(_('Invalid entry'),
-				_('Custom port must be a port number.'))
-			return
-		config['custom_port'] = custom_port
-		config['custom_host'] = self.xml.get_widget(
-			'custom_host_entry').get_text().decode('utf-8')
-
-		# update in case the name was changed to local account's name
-		config['is_zeroconf'] = False
-
-		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().\
-			decode('utf-8')
-		if config['keyname'] == '': # no key selected
-			config['keyid'] = ''
-			config['savegpgpass'] = False
-			config['gpgpassword'] = ''
-		else:
-			config['keyid'] = self.xml.get_widget('gpg_key_label').get_text().\
-				decode('utf-8')
-			config['savegpgpass'] = self.xml.get_widget(
-				'gpg_save_password_checkbutton').get_active()
-			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry'
-				).get_text().decode('utf-8')
-		# if we modify the name of the account
-		if name != self.account:
-			# update variables
-			gajim.interface.instances[name] = gajim.interface.instances[
-				self.account]
-			gajim.interface.minimized_controls[name] = \
-				gajim.interface.minimized_controls[self.account]
-			gajim.nicks[name] = gajim.nicks[self.account]
-			gajim.block_signed_in_notifications[name] = \
-				gajim.block_signed_in_notifications[self.account]
-			gajim.groups[name] = gajim.groups[self.account]
-			gajim.gc_connected[name] = gajim.gc_connected[self.account]
-			gajim.automatic_rooms[name] = gajim.automatic_rooms[self.account]
-			gajim.newly_added[name] = gajim.newly_added[self.account]
-			gajim.to_be_removed[name] = gajim.to_be_removed[self.account]
-			gajim.sleeper_state[name] = gajim.sleeper_state[self.account]
-			gajim.encrypted_chats[name] = gajim.encrypted_chats[self.account]
-			gajim.last_message_time[name] = \
-				gajim.last_message_time[self.account]
-			gajim.status_before_autoaway[name] = \
-				gajim.status_before_autoaway[self.account]
-			gajim.transport_avatar[name] = gajim.transport_avatar[self.account]
-
-			gajim.contacts.change_account_name(self.account, name)
-			gajim.events.change_account_name(self.account, name)
-
-			# change account variable for chat / gc controls
-			gajim.interface.msg_win_mgr.change_account_name(self.account, name)
-			# upgrade account variable in opened windows
-			for kind in ('infos', 'disco', 'gc_config', 'search'):
-				for j in gajim.interface.instances[name][kind]:
-					gajim.interface.instances[name][kind][j].account = name
-
-			# ServiceCache object keep old property account
-			if hasattr(gajim.connections[self.account], 'services_cache'):
-				gajim.connections[self.account].services_cache.account = name
-			del gajim.interface.instances[self.account]
-			del gajim.interface.minimized_controls[self.account]
-			del gajim.nicks[self.account]
-			del gajim.block_signed_in_notifications[self.account]
-			del gajim.groups[self.account]
-			del gajim.gc_connected[self.account]
-			del gajim.automatic_rooms[self.account]
-			del gajim.newly_added[self.account]
-			del gajim.to_be_removed[self.account]
-			del gajim.sleeper_state[self.account]
-			del gajim.encrypted_chats[self.account]
-			del gajim.last_message_time[self.account]
-			del gajim.status_before_autoaway[self.account]
-			del gajim.transport_avatar[self.account]
-			gajim.connections[self.account].name = name
-			gajim.connections[name] = gajim.connections[self.account]
-			del gajim.connections[self.account]
-			gajim.config.del_per('accounts', self.account)
-			gajim.config.add_per('accounts', name)
-			self.account = name
-
-		resend_presence = False
-		if gajim.connections[self.account].connected == 0: # we're disconnected
-			relogin_needed = False
-		else: # we're connected to the account we want to apply changes
-			# check if relogin is needed
-			relogin_needed = False
-			if self.options_changed_need_relogin(config,
-			('resource', 'proxy', 'usessl', 'keyname',
-			'use_custom_host', 'custom_host')):
-				relogin_needed = True
-
-			elif config['use_custom_host'] and (self.option_changed(config,
-			'custom_host') or self.option_changed(config, 'custom_port')):
-				relogin_needed = True
-
-			if self.option_changed(config, 'use_ft_proxies') and \
-			config['use_ft_proxies']:
-				gajim.connections[self.account].discover_ft_proxies()
-
-			if self.option_changed(config, 'priority') or self.option_changed(
-			config, 'adjust_priority_with_status'):
-				resend_presence = True
-
-		for opt in config:
-			gajim.config.set_per('accounts', name, opt, config[opt])
-		if config['savepass']:
-			passwords.save_password(name, config['password'])
-		else:
-			passwords.save_password(name, '')
-		# refresh accounts window
-		if gajim.interface.instances.has_key('accounts'):
-			gajim.interface.instances['accounts'].init_accounts()
-		# refresh roster
-		gajim.interface.roster.draw_roster()
-		gajim.interface.save_config()
-		self.window.destroy()
-
-		if relogin_needed:
-			def login(account, show_before, status_before):
-				''' login with previous status'''
-				# first make sure connection is really closed, 
-				# 0.5 may not be enough
-				gajim.connections[account].disconnect(True)
-				gajim.interface.roster.send_status(account, show_before, 
-					status_before)
-
-			def relog(widget):
-				self.dialog.destroy()
-				show_before = gajim.SHOW_LIST[gajim.connections[self.account].\
-					connected]
-				status_before = gajim.connections[self.account].status
-				gajim.interface.roster.send_status(self.account, 'offline',
-					_('Be right back.'))
-				gobject.timeout_add(500, login, self.account, show_before, 
-					status_before)
-
-			def resend(widget):
-				self.resend_presence()
-
-			on_no = None
-			if resend_presence:
-				on_no = resend
-			self.dialog = dialogs.YesNoDialog(_('Relogin now?'),
-				_('If you want all the changes to apply instantly, '
-				'you must relogin.'), on_response_yes = relog,
-					on_response_no = on_no)
-		elif resend_presence:
-			self.resend_presence()
-
-	def resend_presence(self):
-		show = gajim.SHOW_LIST[gajim.connections[self.account].connected]
-		status = gajim.connections[self.account].status
-		gajim.connections[self.account].change_status(show, status)
-
-	def on_change_password_button_clicked(self, widget):
-		try:
-			dialog = dialogs.ChangePasswordDialog(self.account)
-		except GajimGeneralException:
-			#if we showed ErrorDialog, there will not be dialog instance
-			return
-
-		new_password = dialog.run()
-		if new_password != -1:
-			gajim.connections[self.account].change_password(new_password)
-			if self.xml.get_widget('save_password_checkbutton').get_active():
-				self.xml.get_widget('password_entry').set_text(new_password)
-
-	def on_edit_details_button_clicked(self, widget):
-		if not gajim.interface.instances.has_key(self.account):
-			dialogs.ErrorDialog(_('No such account available'),
-				_('You must create your account before editing your personal '
-				'information.'))
-			return
-
-		# show error dialog if account is newly created (not in gajim.connections)
-		if not gajim.connections.has_key(self.account) or \
-			gajim.connections[self.account].connected < 2:
-			dialogs.ErrorDialog(_('You are not connected to the server'),
-			_('Without a connection, you can not edit your personal information.'))
-			return
-
-		if not gajim.connections[self.account].vcard_supported:
-			dialogs.ErrorDialog(_("Your server doesn't support Vcard"),
-			_("Your server can't save your personal information."))
-			return
-
-		gajim.interface.edit_own_details(self.account)
-
-	def on_manage_proxies_button_clicked(self, widget):
-		if gajim.interface.instances.has_key('manage_proxies'):
-			gajim.interface.instances['manage_proxies'].window.present()
-		else:
-			gajim.interface.instances['manage_proxies'] = \
-				ManageProxiesWindow()
-
-	def on_synchronise_contacts_button_clicked(self, widget):
-		try:
-			dialog = dialogs.SynchroniseSelectAccountDialog(self.account)
-		except GajimGeneralException:
-			# If we showed ErrorDialog, there will not be dialog instance
-			return
-
-	def on_gpg_choose_button_clicked(self, widget, data = None):
-		if gajim.connections.has_key(self.account):
-			secret_keys = gajim.connections[self.account].ask_gpg_secrete_keys()
-
-		# self.account is None and/or gajim.connections is {}
-		else:
-			from common import GnuPG
-			if GnuPG.USE_GPG:
-				secret_keys = GnuPG.GnuPG().get_secret_keys()
-			else:
-				secret_keys = []
-		if not secret_keys:
-			dialogs.ErrorDialog(_('Failed to get secret keys'),
-				_('There was a problem retrieving your OpenPGP secret keys.'))
-			return
-		secret_keys[_('None')] = _('None')
-		instance = dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
-			_('Choose your OpenPGP key'), secret_keys)
-		keyID = instance.run()
-		if keyID is None:
-			return
-		checkbutton = self.xml.get_widget('gpg_save_password_checkbutton')
-		gpg_key_label = self.xml.get_widget('gpg_key_label')
-		gpg_name_label = self.xml.get_widget('gpg_name_label')
-		if keyID[0] == _('None'):
-			gpg_key_label.set_text(_('No key selected'))
-			gpg_name_label.set_text('')
-			checkbutton.set_sensitive(False)
-			self.xml.get_widget('gpg_password_entry').set_sensitive(False)
-		else:
-			gpg_key_label.set_text(keyID[0])
-			gpg_name_label.set_text(keyID[1])
-			checkbutton.set_sensitive(True)
-		checkbutton.set_active(False)
-		self.xml.get_widget('gpg_password_entry').set_text('')
-
-	def on_checkbutton_toggled_and_clear(self, widget, widgets):
-		self.on_checkbutton_toggled(widget, widgets)
-		for w in widgets:
-			if not widget.get_active():
-				w.set_text('')
-
-	def on_use_ssl_checkbutton_toggled(self, widget):
-		isactive = widget.get_active()
-		if isactive:
-			self.xml.get_widget('custom_port_entry').set_text('5223')
-		else:
-			self.xml.get_widget('custom_port_entry').set_text('5222')
-
-	def on_send_keepalive_checkbutton_toggled(self, widget):
-		isactive = widget.get_active()
-		gajim.config.set_per('accounts', self.account,
-			'keep_alives_enabled', isactive)
-
-	def on_custom_host_port_checkbutton_toggled(self, widget):
-		isactive = widget.get_active()
-		self.xml.get_widget('custom_host_port_hbox').set_sensitive(isactive)
-
-	def on_gpg_save_password_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled_and_clear(widget, [
-			self.xml.get_widget('gpg_password_entry')])
-
-	def on_save_password_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled_and_clear(widget,
-			[self.xml.get_widget('password_entry')])
-		self.xml.get_widget('password_entry').grab_focus()
-
 #---------- ManageProxiesWindow class -------------#
 class ManageProxiesWindow:
 	def __init__(self):
@@ -1727,11 +1191,9 @@ class ManageProxiesWindow:
 
 	def on_manage_proxies_window_destroy(self, widget):
 		for account in gajim.connections:
-			if gajim.interface.instances[account].has_key('account_modification'):
-				gajim.interface.instances[account]['account_modification'].\
+			if gajim.interface.instances.has_key('accounts'):
+				gajim.interface.instances[account]['accounts'].\
 					update_proxy_list()
-		if gajim.interface.instances.has_key('account_modification'):
-			gajim.interface.instances['account_modification'].update_proxy_list()
 		del gajim.interface.instances['manage_proxies']
 
 	def on_add_proxy_button_clicked(self, widget):
@@ -1862,69 +1324,335 @@ class AccountsWindow:
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
+	def on_accounts_window_destroy(self, widget):
+		if gajim.interface.instances.has_key('accounts'):
+			del gajim.interface.instances['accounts']
+
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('accounts_window.glade')
 		self.window = self.xml.get_widget('accounts_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
-		self.modify_button = self.xml.get_widget('modify_button')
 		self.remove_button = self.xml.get_widget('remove_button')
-		model = gtk.ListStore(str, str, bool)
+		self.rename_button = self.xml.get_widget('rename_button')
+		#FIXME: I don't understand why this import is necessary
+		import os
+		path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+			'kbd_input.png')
+		img = self.xml.get_widget('rename_image')
+		img.set_from_file(path_to_kbd_input_img)
+		self.notebook = self.xml.get_widget('notebook')
+		# Name
+		model = gtk.ListStore(str)
 		self.accounts_treeview.set_model(model)
-		#columns
+		# column
 		renderer = gtk.CellRendererText()
 		self.accounts_treeview.insert_column_with_attributes(-1,
 					_('Name'), renderer, text = 0)
-		renderer = gtk.CellRendererText()
-		self.accounts_treeview.insert_column_with_attributes(-1,
-					_('Server'), renderer, text = 1)
+
+		self.current_account = None
+		# When we fill info, we don't want to handle the changed signals
+		self.ignore_events = False
+		self.need_relogin = False
+		self.resend_presence = False
+
+		self.update_proxy_list()
 		self.xml.signal_autoconnect(self)
 		self.init_accounts()
 		self.window.show_all()
 
-		#Merge accounts
+		# Merge accounts
 		st = gajim.config.get('mergeaccounts')
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
 		import os
 
-		avahi_error = False
+		self.avahi_available = True
 		try:
 			import avahi
 		except ImportError:
-			avahi_error = True
-
-		# enable zeroconf
-		st = gajim.config.get('enable_zeroconf')
-		w = self.xml.get_widget('enable_zeroconf_checkbutton')
-		w.set_active(st)
-		if os.name == 'nt' or (avahi_error and not w.get_active()):
-			w.set_sensitive(False)
-		self.zeroconf_toggled_id = w.connect('toggled',
-			self.on_enable_zeroconf_checkbutton_toggled)
+			self.avahi_available = False
 
 	def on_accounts_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
 			self.window.destroy()
 
+	def select_account(self, account):
+		model = self.accounts_treeview.get_model()
+		iter = model.get_iter_root()
+		while iter:
+			acct = model[iter][0].decode('utf-8')
+			if account == acct:
+				self.accounts_treeview.set_cursor(model.get_path(iter))
+				return
+			iter = model.iter_next(iter)
+
 	def init_accounts(self):
 		'''initialize listStore with existing accounts'''
-		self.modify_button.set_sensitive(False)
 		self.remove_button.set_sensitive(False)
+		self.rename_button.set_sensitive(False)
+		self.current_account = None
+		self.init_account()
 		model = self.accounts_treeview.get_model()
 		model.clear()
-		for account in gajim.connections:
+		for account in gajim.config.get_per('accounts'):
 			iter = model.append()
-			model.set(iter, 0, account, 1, gajim.get_hostname_from_account(
-				account))
+			model.set(iter, 0, account)
+
+	def resend(self):
+		show = gajim.SHOW_LIST[gajim.connections[self.current_account].connected]
+		status = gajim.connections[self.current_account].status
+		gajim.connections[self.current_account].change_status(show, status)
 
 	def on_accounts_treeview_cursor_changed(self, widget):
-		'''Activate delete and modify buttons when a row is selected'''
-		self.modify_button.set_sensitive(True)
-		self.remove_button.set_sensitive(True)
+		'''Activate modify buttons when a row is selected, update accounts info'''
+		# Select previous row
+		sel = self.accounts_treeview.get_selection()
+		(model, iter) = sel.get_selected()
+		if self.need_relogin and self.current_account == gajim.ZEROCONF_ACCT_NAME:
+			if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
+				gajim.connections[gajim.ZEROCONF_ACC_NAME].update_details()
+				return
+			
+		elif self.need_relogin and gajim.connections[self.current_account].\
+		connected > 0:
+			def login(account, show_before, status_before):
+				''' login with previous status'''
+				# first make sure connection is really closed, 
+				# 0.5 may not be enough
+				gajim.connections[account].disconnect(True)
+				gajim.interface.roster.send_status(account, show_before,
+					status_before)
 
-	def on_new_button_clicked(self, widget):
-		'''When new button is clicked: open an account information window'''
+			def relog():
+				self.dialog.destroy()
+				show_before = gajim.SHOW_LIST[gajim.connections[
+					self.current_account].connected]
+				status_before = gajim.connections[self.current_account].status
+				gajim.interface.roster.send_status(self.current_account, 'offline',
+					_('Be right back.'))
+				gobject.timeout_add(500, login, self.current_account, show_before,
+					status_before)
+
+			self.dialog = dialogs.YesNoDialog(_('Relogin now?'),
+				_('If you want all the changes to apply instantly, '
+				'you must relogin.'))
+			resp = self.dialog.get_response()
+			if resp == gtk.RESPONSE_YES:
+				relog()
+			elif self.resend_presence:
+				self.resend()
+		elif self.resend_presence:
+			self.resend()
+
+		self.need_relogin = False
+		self.resend_presence = False
+		self.remove_button.set_sensitive(True)
+		self.rename_button.set_sensitive(True)
+		if iter:
+			account = model[iter][0].decode('utf-8')
+			self.current_account = account
+			if account == gajim.ZEROCONF_ACC_NAME:
+				self.remove_button.set_sensitive(False)
+				self.rename_button.set_sensitive(False)
+		self.init_account()
+		self.update_proxy_list()
+
+	def update_proxy_list(self):
+		if self.current_account:
+			our_proxy = gajim.config.get_per('accounts', self.current_account,
+				'proxy')
+		else:
+			our_proxy = ''
+
+		if not our_proxy:
+			our_proxy = _('None')
+		proxy_combobox = self.xml.get_widget('proxies_combobox1')
+		model = gtk.ListStore(str)
+		proxy_combobox.set_model(model)
+		l = gajim.config.get_per('proxies')
+		l.insert(0, _('None'))
+		for i in xrange(len(l)):
+			model.append([l[i]])
+			if our_proxy == l[i]:
+				proxy_combobox.set_active(i)
+
+	def init_account(self):
+		if not self.current_account:
+			self.notebook.set_current_page(0)
+			return
+		if gajim.config.get_per('accounts', self.current_account, 'is_zeroconf'):
+			self.ignore_events = True
+			self.init_zeroconf_account()
+			self.ignore_events = False
+			self.notebook.set_current_page(2)
+			return
+		self.ignore_events = True
+		self.init_normal_account()
+		self.ignore_events = False
+		self.notebook.set_current_page(1)
+
+	def init_zeroconf_account(self):
+		enable = gajim.config.get('enable_zeroconf')
+		self.xml.get_widget('enable_zeroconf_checkbutton2').set_active(enable)
+		self.xml.get_widget('zeroconf_notebook').set_sensitive(enable)
+		# General tab
+		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
+			'autoconnect')
+		self.xml.get_widget('autoconnect_checkbutton2').set_active(st)
+		
+		list_no_log_for = gajim.config.get_per('accounts',
+			gajim.ZEROCONF_ACC_NAME, 'no_log_for').split()
+		if gajim.ZEROCONF_ACC_NAME in list_no_log_for:
+			self.xml.get_widget('log_history_checkbutton2').set_active(0)
+		else:
+			self.xml.get_widget('log_history_checkbutton2').set_active(1)
+
+		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
+			'sync_with_global_status')
+		self.xml.get_widget('sync_with_global_status_checkbutton2').set_active(st)
+
+		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
+			'use_custom_host')
+		self.xml.get_widget('custom_port_checkbutton2').set_active(st)
+		self.xml.get_widget('custom_port_entry2').set_sensitive(st)
+
+		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
+			'custom_port')
+		if not st:
+			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME,
+				'custom_port', '5298')
+			st = '5298'
+		self.xml.get_widget('custom_port_entry2').set_text(str(st))
+
+		# Personal tab
+		gpg_key_label = self.xml.get_widget('gpg_key_label2')
+		if gajim.config.get('usegpg'):
+			self.xml.get_widget('gpg_choose_button2').set_sensitive(True)
+			self.init_account_gpg()
+		else:
+			gpg_key_label.set_text(_('OpenPGP is not usable in this computer'))
+			self.xml.get_widget('gpg_choose_button2').set_sensitive(False)
+
+		for opt in ('first_name', 'last_name', 'jabber_id', 'email'):
+			st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
+				'zeroconf_' + opt)
+			self.xml.get_widget(opt + '_entry2').set_text(st)
+
+	def init_account_gpg(self):
+		account = self.current_account
+		keyid = gajim.config.get_per('accounts', account, 'keyid')
+		keyname = gajim.config.get_per('accounts', account, 'keyname')
+		savegpgpass = gajim.config.get_per('accounts', account, 'savegpgpass')
+
+		if account == gajim.ZEROCONF_ACC_NAME:
+			widget_name_add = '2'
+		else:
+			widget_name_add = '1'
+
+		gpg_key_label = self.xml.get_widget('gpg_key_label' + widget_name_add)
+		gpg_name_label = self.xml.get_widget('gpg_name_label' + widget_name_add)
+		gpg_save_password_checkbutton = \
+			self.xml.get_widget('gpg_save_password_checkbutton' + widget_name_add)
+		gpg_password_entry = self.xml.get_widget('gpg_password_entry' + \
+			widget_name_add)
+
+		if not keyid or not gajim.config.get('usegpg'):
+			gpg_save_password_checkbutton.set_sensitive(False)
+			gpg_password_entry.set_sensitive(False)
+			gpg_key_label.set_text(_('No key selected'))
+			gpg_name_label.set_text('')
+			return
+
+		gpg_key_label.set_text(keyid)
+		gpg_name_label.set_text(keyname)
+		gpg_save_password_checkbutton.set_sensitive(True)
+		gpg_save_password_checkbutton.set_active(savegpgpass)
+
+		if savegpgpass:
+			gpg_password_entry.set_sensitive(True)
+			gpgpassword = gajim.config.get_per('accounts', account, 'gpgpassword')
+			gpg_password_entry.set_text(gpgpassword)
+
+	def init_normal_account(self):
+		account = self.current_account
+		# Account tab
+		jid = gajim.config.get_per('accounts', account, 'name') \
+			+ '@' + gajim.config.get_per('accounts', account, 'hostname')
+		self.xml.get_widget('jid_entry1').set_text(jid)
+		savepass = gajim.config.get_per('accounts', account, 'savepass')
+		self.xml.get_widget('save_password_checkbutton1').set_active(savepass)
+		password_entry = self.xml.get_widget('password_entry1')
+		if savepass:
+			passstr = passwords.get_password(account) or ''
+			password_entry.set_sensitive(True)
+		else:
+			passstr = ''
+			password_entry.set_sensitive(False)
+		password_entry.set_text(passstr)
+
+		self.xml.get_widget('resource_entry1').set_text(gajim.config.get_per(
+			'accounts', account, 'resource'))
+		self.xml.get_widget('adjust_priority_with_status_checkbutton1').\
+			set_active(gajim.config.get_per('accounts', account,
+			'adjust_priority_with_status'))
+		spinbutton = self.xml.get_widget('priority_spinbutton1')
+		if gajim.config.get('enable_negative_priority'):
+			spinbutton.set_range(-128, 127)
+		else:
+			spinbutton.set_range(0, 127)
+		spinbutton.set_value(gajim.config.get_per('accounts', account,
+			'priority'))
+
+		# Connection tab
+		usessl = gajim.config.get_per('accounts', account, 'usessl')
+		self.xml.get_widget('use_ssl_checkbutton1').set_active(usessl)
+
+		self.xml.get_widget('send_keepalive_checkbutton1').set_active(
+			gajim.config.get_per('accounts', account, 'keep_alives_enabled'))
+
+		use_custom_host = gajim.config.get_per('accounts', account,
+			'use_custom_host')
+		self.xml.get_widget('custom_host_port_checkbutton1').set_active(
+			use_custom_host)
+		custom_host = gajim.config.get_per('accounts', account, 'custom_host')
+		if not custom_host:
+			custom_host = gajim.config.get_per('accounts', account, 'hostname')
+		self.xml.get_widget('custom_host_entry1').set_text(custom_host)
+		custom_port = gajim.config.get_per('accounts', account, 'custom_port')
+		if not custom_port:
+			custom_port = 5222
+		self.xml.get_widget('custom_port_entry1').set_text(unicode(custom_port))
+
+		# Personal tab
+		gpg_key_label = self.xml.get_widget('gpg_key_label1')
+		if gajim.config.get('usegpg'):
+			self.xml.get_widget('gpg_choose_button1').set_sensitive(True)
+			self.init_account_gpg()
+		else:
+			gpg_key_label.set_text(_('OpenPGP is not usable in this computer'))
+			self.xml.get_widget('gpg_choose_button1').set_sensitive(False)
+
+		# General tab
+		self.xml.get_widget('autoconnect_checkbutton1').set_active(gajim.config.\
+			get_per('accounts', account, 'autoconnect'))
+		self.xml.get_widget('autoreconnect_checkbutton1').set_active(gajim.
+			config.get_per('accounts', account, 'autoreconnect'))
+
+		list_no_log_for = gajim.config.get_per('accounts', account,
+			'no_log_for').split()
+		if account in list_no_log_for:
+			self.xml.get_widget('log_history_checkbutton1').set_active(False)
+		else:
+			self.xml.get_widget('log_history_checkbutton1').set_active(True)
+
+		self.xml.get_widget('sync_with_global_status_checkbutton1').set_active(
+			gajim.config.get_per('accounts', account, 'sync_with_global_status'))
+		self.xml.get_widget('use_ft_proxies_checkbutton1').set_active(
+			gajim.config.get_per('accounts', account, 'use_ft_proxies'))
+
+	def on_add_button_clicked(self, widget):
+		'''When add button is clicked: open an account information window'''
 		if gajim.interface.instances.has_key('account_creation_wizard'):
 			gajim.interface.instances['account_creation_wizard'].window.present()
 		else:
@@ -1934,27 +1662,17 @@ class AccountsWindow:
 	def on_remove_button_clicked(self, widget):
 		'''When delete button is clicked:
 		Remove an account from the listStore and from the config file'''
-		sel = self.accounts_treeview.get_selection()
-		(model, iter) = sel.get_selected()
-		if not iter:
+		if not self.current_account:
 			return
-		account = model.get_value(iter, 0).decode('utf-8')
+		account = self.current_account
 		if len(gajim.events.get_events(account)):
 			dialogs.ErrorDialog(_('Unread events'),
 				_('Read all pending events before removing this account.'))
 			return
 
 		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
-			w = self.xml.get_widget('enable_zeroconf_checkbutton')
-			w.set_active(False)
+			# Should never happen as button is insensitive
 			return
-		else:
-			if gajim.interface.instances[account].has_key('remove_account'):
-				gajim.interface.instances[account]['remove_account'].window.present(
-					)
-			else:
-				gajim.interface.instances[account]['remove_account'] = \
-					RemoveAccountWindow(account)
 
 		win_opened = False
 		if gajim.interface.msg_win_mgr.get_controls(acct = account):
@@ -1985,39 +1703,417 @@ class AccountsWindow:
 		else:
 			remove(widget, account)
 
-	def on_modify_button_clicked(self, widget):
-		'''When modify button is clicked:
-		open/show the account modification window for this account'''
-		sel = self.accounts_treeview.get_selection()
-		(model, iter) = sel.get_selected()
-		if not iter:
+	def on_rename_button_clicked(self, widget):
+		if gajim.connections[self.current_account].connected != 0:
+			dialogs.ErrorDialog(
+				_('You are currently connected to the server'),
+				_('To change the account name, you must be disconnected.'))
 			return
-		account = model[iter][0].decode('utf-8')
-		self.show_modification_window(account)
+		if len(gajim.events.get_events(self.current_account)):
+			dialogs.ErrorDialog(_('Unread events'),
+				_('To change the account name, you must read all pending '
+				'events.'))
+			return
+		# Get the new name
+		def on_renamed(new_name, old_name):
+			if new_name in gajim.connections:
+				dialogs.ErrorDialog(_('Account Name Already Used'),
+					_('This name is already used by another of your accounts. '
+					'Please choose another name.'))
+				return
+			if (new_name == ''):
+				dialogs.ErrorDialog(_('Invalid account name'),
+					_('Account name cannot be empty.'))
+				return
+			if new_name.find(' ') != -1:
+				dialogs.ErrorDialog(_('Invalid account name'),
+					_('Account name cannot contain spaces.'))
+				return
+			# update variables
+			gajim.interface.instances[new_name] = gajim.interface.instances[
+				old_name]
+			gajim.interface.minimized_controls[new_name] = \
+				gajim.interface.minimized_controls[old_name]
+			gajim.nicks[new_name] = gajim.nicks[old_name]
+			gajim.block_signed_in_notifications[new_name] = \
+				gajim.block_signed_in_notifications[old_name]
+			gajim.groups[new_name] = gajim.groups[old_name]
+			gajim.gc_connected[new_name] = gajim.gc_connected[old_name]
+			gajim.automatic_rooms[new_name] = gajim.automatic_rooms[old_name]
+			gajim.newly_added[new_name] = gajim.newly_added[old_name]
+			gajim.to_be_removed[new_name] = gajim.to_be_removed[old_name]
+			gajim.sleeper_state[new_name] = gajim.sleeper_state[old_name]
+			gajim.encrypted_chats[new_name] = gajim.encrypted_chats[old_name]
+			gajim.last_message_time[new_name] = gajim.last_message_time[old_name]
+			gajim.status_before_autoaway[new_name] = \
+				gajim.status_before_autoaway[old_name]
+			gajim.transport_avatar[new_name] = gajim.transport_avatar[old_name]
 
-	def on_accounts_treeview_row_activated(self, widget, path, column):
-		model = widget.get_model()
-		account = model[path][0].decode('utf-8')
-		self.show_modification_window(account)
+			gajim.contacts.change_account_name(old_name, new_name)
+			gajim.events.change_account_name(old_name, new_name)
 
-	def show_modification_window(self, account):
-		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
-			if gajim.interface.instances.has_key('zeroconf_properties'):
-				gajim.interface.instances['zeroconf_properties'].window.present()
-			else:
-				gajim.interface.instances['zeroconf_properties'] = \
-					ZeroconfPropertiesWindow()
+			# change account variable for chat / gc controls
+			gajim.interface.msg_win_mgr.change_account_name(old_name, new_name)
+			# upgrade account variable in opened windows
+			for kind in ('infos', 'disco', 'gc_config', 'search'):
+				for j in gajim.interface.instances[new_name][kind]:
+					gajim.interface.instances[new_name][kind][j].account = new_name
+
+			# ServiceCache object keep old property account
+			if hasattr(gajim.connections[old_name], 'services_cache'):
+				gajim.connections[self.account].services_cache.account = new_name
+			del gajim.interface.instances[old_name]
+			del gajim.interface.minimized_controls[old_name]
+			del gajim.nicks[old_name]
+			del gajim.block_signed_in_notifications[old_name]
+			del gajim.groups[old_name]
+			del gajim.gc_connected[old_name]
+			del gajim.automatic_rooms[old_name]
+			del gajim.newly_added[old_name]
+			del gajim.to_be_removed[old_name]
+			del gajim.sleeper_state[old_name]
+			del gajim.encrypted_chats[old_name]
+			del gajim.last_message_time[old_name]
+			del gajim.status_before_autoaway[old_name]
+			del gajim.transport_avatar[old_name]
+			gajim.connections[old_name].name = new_name
+			gajim.connections[new_name] = gajim.connections[old_name]
+			del gajim.connections[old_name]
+			gajim.config.add_per('accounts', new_name)
+			old_config = gajim.config.get_per('accounts', old_name)
+			for opt in old_config:
+				gajim.config.set_per('accounts', new_name, opt, old_config[opt][1])
+			gajim.config.del_per('accounts', old_name)
+			if self.current_account == old_name:
+				self.current_account = new_name
+			# refresh roster
+			gajim.interface.roster.draw_roster()
+			self.init_accounts()
+			self.select_account(new_name)
+
+		title = _('Rename Account')
+		message = _('Enter a new name for account %s') % self.current_account
+		old_text = self.current_account
+		dialogs.InputDialog(title, message, old_text, is_modal=False,
+			ok_handler=(on_renamed, self.current_account))
+
+	def option_changed(self, option, value):
+		return gajim.config.get_per('accounts', self.current_account, option) != \
+			value
+
+	def on_jid_entry1_focus_out_event(self, widget, event):
+		if self.ignore_events:
+			return
+		jid = widget.get_text()
+		# check if jid is conform to RFC and stringprep it
+		try:
+			jid = helpers.parse_jid(jid)
+		except helpers.InvalidFormat, s:
+			if not widget.is_focus():
+				pritext = _('Invalid Jabber ID')
+				dialogs.ErrorDialog(pritext, str(s))
+				gobject.idle_add(lambda: widget.grab_focus())
+			return
+
+		jid_splited = jid.split('@', 1)
+		if len(jid_splited) != 2:
+			if not widget.is_focus():
+				pritext = _('Invalid Jabber ID')
+				sectext = _('A Jabber ID must be in the form "user@servername".')
+				dialogs.ErrorDialog(pritext, sectext)
+				gobject.idle_add(lambda: widget.grab_focus())
+			return
+
+		if self.option_changed('name', jid_splited[0]) or \
+		self.option_changed('hostname', jid_splited[1]):
+			self.need_relogin = True
+
+		gajim.config.set_per('accounts', self.current_account, 'name',
+			jid_splited[0])
+		gajim.config.set_per('accounts', self.current_account, 'hostname',
+			jid_splited[1])
+
+	def on_password_entry1_changed(self, widget):
+		if self.ignore_events:
+			return
+		passwords.save_password(self.current_account, widget.get_text())
+
+	def on_save_password_checkbutton1_toggled(self, widget):
+		if self.ignore_events:
+			return
+		active = widget.get_active()
+		gajim.config.set_per('accounts', self.current_account, 'savepass', active)
+		if active:
+			password = self.xml.get_widget('password_entry1').get_text()
+			passwords.save_password(self.current_account, password)
 		else:
-			if gajim.interface.instances[account].has_key('account_modification'):
-				gajim.interface.instances[account]['account_modification'].window.\
-					present()
+			passwords.save_password(self.current_account, '')
+		
+	def on_resource_entry1_focus_out_event(self, widget, event):
+		if self.ignore_events:
+			return
+		resource = self.xml.get_widget('resource_entry1').get_text().decode(
+			'utf-8')
+		try:
+			resource = helpers.parse_resource(resource)
+		except helpers.InvalidFormat, s:
+			if not widget.is_focus():
+				pritext = _('Invalid Jabber ID')
+				dialogs.ErrorDialog(pritext, str(s))
+				gobject.idle_add(lambda: widget.grab_focus())
+			return
+
+		if self.option_changed('resource', resource):
+			self.need_relogin = True
+
+		gajim.config.set_per('accounts', self.current_account, 'resource',
+			resource)
+
+	def on_adjust_priority_with_status_checkbutton1_toggled(self, widget):
+		self.xml.get_widget('priority_spinbutton1').set_sensitive(
+			not widget.get_active())
+		self.on_checkbutton_toggled(widget, 'adjust_priority_with_status',
+			account = self.current_account)
+
+	def on_priority_spinbutton1_value_changed(self, widget):
+		prio = widget.get_value_as_int()
+
+		if self.option_changed('priority', prio):
+			self.resend_presence = True
+
+		gajim.config.set_per('accounts', self.current_account, 'priority', prio)
+
+	def on_synchronise_contacts_button1_clicked(self, widget):
+		try:
+			dialog = dialogs.SynchroniseSelectAccountDialog(self.current_account)
+		except GajimGeneralException:
+			# If we showed ErrorDialog, there will not be dialog instance
+			return
+
+	def on_change_password_button1_clicked(self, widget):
+		try:
+			dialog = dialogs.ChangePasswordDialog(self.current_account)
+		except GajimGeneralException:
+			# if we showed ErrorDialog, there will not be dialog instance
+			return
+
+		new_password = dialog.run()
+		if new_password != -1:
+			gajim.connections[self.current_account].change_password(new_password)
+			if self.xml.get_widget('save_password_checkbutton1').get_active():
+				self.xml.get_widget('password_entry1').set_text(new_password)
+
+	def on_autoconnect_checkbutton_toggled(self, widget):
+		if self.ignore_events:
+			return
+		self.on_checkbutton_toggled(widget, 'autoconnect',
+			account=self.current_account)
+
+	def on_autoreconnect_checkbutton_toggled(self, widget):
+		if self.ignore_events:
+			return
+		self.on_checkbutton_toggled(widget, 'autoreconnect',
+			account=self.current_account)
+
+	def on_log_history_checkbutton_toggled(self, widget):
+		if self.ignore_events:
+			return
+		list_no_log_for = gajim.config.get_per('accounts', self.current_account,
+			'no_log_for').split()
+		if self.current_account in list_no_log_for:
+			list_no_log_for.remove(self.current_account)
+		if not self.xml.get_widget('log_history_checkbutton').get_active():
+			list_no_log_for.append(self.current_account)
+		gajim.config.set_per('accounts', self.current_account, 'no_log_for',
+			' '.join(list_no_log_for))
+
+	def on_sync_with_global_status_checkbutton_toggled(self, widget):
+		if self.ignore_events:
+			return
+		self.on_checkbutton_toggled(widget, 'sync_with_global_status',
+			account=self.current_account)
+
+	def on_use_ft_proxies_checkbutton1_toggled(self, widget):
+		if self.ignore_events:
+			return
+		self.on_checkbutton_toggled(widget, 'use_ft_proxies',
+			account=self.current_account)
+
+	def on_proxies_combobox1_changed(self, widget):
+		active = widget.get_active()
+		proxy = widget.get_model()[active][0].decode('utf-8')
+		if proxy == _('None'):
+			proxy = ''
+
+		if self.option_changed('proxy', proxy):
+			self.need_relogin = True
+
+		gajim.config.set_per('accounts', self.current_account, 'proxy', proxy)
+
+	def on_manage_proxies_button1_clicked(self, widget):
+		if gajim.interface.instances.has_key('manage_proxies'):
+			gajim.interface.instances['manage_proxies'].window.present()
+		else:
+			gajim.interface.instances['manage_proxies'] = ManageProxiesWindow()
+
+	def on_use_ssl_checkbutton1_toggled(self, widget):
+		if self.ignore_events:
+			return
+
+		if self.option_changed('usessl', widget.get_active()):
+			self.need_relogin = True
+
+		isactive = widget.get_active()
+		if isactive:
+			self.xml.get_widget('custom_port_entry1').set_text('5223')
+		else:
+			self.xml.get_widget('custom_port_entry1').set_text('5222')
+
+		self.on_checkbutton_toggled(widget, 'usessl',
+			account=self.current_account)
+
+	def on_send_keepalive_checkbutton1_toggled(self, widget):
+		if self.ignore_events:
+			return
+		self.on_checkbutton_toggled(widget, 'keep_alives_enabled',
+			account=self.current_account)
+
+	def on_custom_host_port_checkbutton1_toggled(self, widget):
+		if self.option_changed('use_custom_host', widget.get_active()):
+			self.need_relogin = True
+
+		self.on_checkbutton_toggled(widget, 'use_custom_host',
+			account=self.current_account)
+		active = widget.get_active()
+		self.xml.get_widget('custom_host_port_hbox1').set_sensitive(active)
+
+	def on_custom_host_entry1_changed(self, widget):
+		if self.ignore_events:
+			return
+		host = widget.get_text().decode('utf-8')
+		if self.option_changed('custom_host', host):
+			self.need_relogin = True
+		gajim.config.set_per('accounts', self.current_account, 'custom_host',
+			host)
+
+	def on_custom_port_entry_focus_out_event(self, widget, event):
+		if self.ignore_events:
+			return
+		custom_port = widget.get_text()
+		try:
+			custom_port = int(custom_port)
+		except:
+			if not widget.is_focus():
+				dialogs.ErrorDialog(_('Invalid entry'),
+					_('Custom port must be a port number.'))
+				gobject.idle_add(lambda: widget.grab_focus())
+			return
+		if self.option_changed('custom_port', custom_port):
+			self.need_relogin = True
+		gajim.config.set_per('accounts', self.current_account, 'custom_port',
+			custom_port)
+
+	def on_gpg_choose_button_clicked(self, widget, data = None):
+		if gajim.connections.has_key(self.current_account):
+			secret_keys = gajim.connections[self.current_account].\
+				ask_gpg_secrete_keys()
+
+		# self.current_account is None and/or gajim.connections is {}
+		else:
+			from common import GnuPG
+			if GnuPG.USE_GPG:
+				secret_keys = GnuPG.GnuPG().get_secret_keys()
 			else:
-				gajim.interface.instances[account]['account_modification'] = \
-					AccountModificationWindow(account)
+				secret_keys = []
+		if not secret_keys:
+			dialogs.ErrorDialog(_('Failed to get secret keys'),
+				_('There was a problem retrieving your OpenPGP secret keys.'))
+			return
+		secret_keys[_('None')] = _('None')
+		instance = dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
+			_('Choose your OpenPGP key'), secret_keys)
+		keyID = instance.run()
+		if keyID is None:
+			return
+		if self.current_account == gajim.ZEROCONF_ACC_NAME:
+			wiget_name_ext = '2'
+		else:
+			wiget_name_ext = '1'
+		checkbutton = self.xml.get_widget('gpg_save_password_checkbutton' + \
+			wiget_name_ext)
+		gpg_key_label = self.xml.get_widget('gpg_key_label' + wiget_name_ext)
+		gpg_name_label = self.xml.get_widget('gpg_name_label' + wiget_name_ext)
+		gpg_password_entry = self.xml.get_widget('gpg_password_entry' + \
+			wiget_name_ext)
+		if keyID[0] == _('None'):
+			gpg_key_label.set_text(_('No key selected'))
+			gpg_name_label.set_text('')
+			checkbutton.set_sensitive(False)
+			gpg_password_entry.set_sensitive(False)
+			if self.option_changed('keyid', ''):
+				self.need_relogin = True
+			gajim.config.set_per('accounts', self.current_account, 'keyname', '')
+			gajim.config.set_per('accounts', self.current_account, 'keyid', '')
+		else:
+			gpg_key_label.set_text(keyID[0])
+			gpg_name_label.set_text(keyID[1])
+			checkbutton.set_sensitive(True)
+			if self.option_changed('keyid', keyID[0]):
+				self.need_relogin = True
+			gajim.config.set_per('accounts', self.current_account, 'keyname',
+				keyID[1])
+			gajim.config.set_per('accounts', self.current_account, 'keyid',
+				keyID[0])
+		gajim.config.set_per('accounts', self.current_account, 'savegpgpass',
+			False)
+		gajim.config.set_per('accounts', self.current_account, 'gpgpassword', '')
+		checkbutton.set_active(False)
+		gpg_password_entry.set_text('')
+
+	def on_gpg_save_password_checkbutton_toggled(self, widget):
+		if self.current_account == gajim.ZEROCONF_ACC_NAME:
+			wiget_name_ext = '2'
+		else:
+			wiget_name_ext = '1'
+		self.xml.get_widget('gpg_password_entry' + wiget_name_ext).set_sensitive(
+			widget.get_active())
+		self.on_checkbutton_toggled(widget, 'savegpgpass',
+			account = self.current_account)
+
+	def on_gpg_password_entry_changed(self, widget):
+		if self.ignore_events:
+			return
+		gajim.config.set_per('accounts', self.current_account, 'gpgpassword',
+			widget.get_text().decode('utf-8'))
+
+	def on_edit_details_button1_clicked(self, widget):
+		if not gajim.interface.instances.has_key(self.current_account):
+			dialogs.ErrorDialog(_('No such account available'),
+				_('You must create your account before editing your personal '
+				'information.'))
+			return
+
+		# show error dialog if account is newly created (not in gajim.connections)
+		if not gajim.connections.has_key(self.current_account) or \
+		gajim.connections[self.current_account].connected < 2:
+			dialogs.ErrorDialog(_('You are not connected to the server'),
+			_('Without a connection, you can not edit your personal information.'))
+			return
+
+		if not gajim.connections[self.current_account].vcard_supported:
+			dialogs.ErrorDialog(_("Your server doesn't support Vcard"),
+			_("Your server can't save your personal information."))
+			return
+
+		gajim.interface.edit_own_details(self.current_account)
 
 	def on_checkbutton_toggled(self, widget, config_name,
-		change_sensitivity_widgets = None):
-		gajim.config.set(config_name, widget.get_active())
+		change_sensitivity_widgets = None, account = None):
+		if account:
+			gajim.config.set_per('accounts', account, config_name,
+				widget.get_active())
+		else:
+			gajim.config.set(config_name, widget.get_active())
 		if change_sensitivity_widgets:
 			for w in change_sensitivity_widgets:
 				w.set_sensitive(widget.get_active())
@@ -2031,8 +2127,7 @@ class AccountsWindow:
 			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
 
-	
-	def on_enable_zeroconf_checkbutton_toggled(self, widget):
+	def on_enable_zeroconf_checkbutton2_toggled(self, widget):
 		# don't do anything if there is an account with the local name but is a 
 		# normal account
 		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME) and not \
@@ -2041,14 +2136,11 @@ class AccountsWindow:
 				(_('Account Local already exists.'),
 				_('Please rename or remove it before enabling link-local messaging'
 				'.')))
-			widget.disconnect(self.zeroconf_toggled_id)
-			widget.set_active(False)
-			self.zeroconf_toggled_id = widget.connect('toggled',
-				self.on_enable_zeroconf_checkbutton_toggled)
 			return
 
-		if gajim.config.get('enable_zeroconf'):
-			#disable
+		if gajim.config.get('enable_zeroconf') and not widget.get_active():
+			self.xml.get_widget('zeroconf_notebook').set_sensitive(False)
+			# disable
 			gajim.interface.roster.close_all(gajim.ZEROCONF_ACC_NAME)
 			gajim.connections[gajim.ZEROCONF_ACC_NAME].disable_account()
 			del gajim.connections[gajim.ZEROCONF_ACC_NAME]
@@ -2075,10 +2167,9 @@ class AccountsWindow:
 				gajim.interface.roster.regroup = False
 			gajim.interface.roster.draw_roster()
 			gajim.interface.roster.actions_menu_needs_rebuild = True
-			if gajim.interface.instances.has_key('accounts'):
-				gajim.interface.instances['accounts'].init_accounts()
-			
-		else:
+
+		elif not gajim.config.get('enable_zeroconf') and widget.get_active():
+			self.xml.get_widget('zeroconf_notebook').set_sensitive(True)
 			# enable (will create new account if not present)
 			gajim.connections[gajim.ZEROCONF_ACC_NAME] = common.zeroconf.\
 				connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
@@ -2100,9 +2191,6 @@ class AccountsWindow:
 			gajim.last_message_time[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.status_before_autoaway[gajim.ZEROCONF_ACC_NAME] = ''
 			gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME] = {}
-			# refresh accounts window
-			if gajim.interface.instances.has_key('accounts'):
-				gajim.interface.instances['accounts'].init_accounts()
 			# refresh roster
 			if len(gajim.connections) >= 2:
 				# Do not merge accounts if only one exists
@@ -2112,9 +2200,52 @@ class AccountsWindow:
 			gajim.interface.roster.draw_roster()
 			gajim.interface.roster.actions_menu_needs_rebuild = True
 			gajim.interface.save_config()
-			gajim.connections[gajim.ZEROCONF_ACC_NAME].change_status('online', '')
 
 		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
+
+	def on_custom_port_checkbutton2_toggled(self, widget):
+		self.xml.get_widget('custom_port_entry2').set_sensitive(
+			widget.get_active())
+		self.on_checkbutton_toggled(widget, 'use_custom_host',
+			account = self.current_account)
+		if not widget.get_active():
+			self.xml.get_widget('custom_port_entry2').set_text('5298')
+
+	def on_first_name_entry2_changed(self, widget):
+		if self.ignore_events:
+			return
+		name = widget.get_text().decode('utf-8')
+		if self.option_changed('zeroconf_first_name', name):
+			self.need_relogin = True
+		gajim.config.set_per('accounts', self.current_account,
+			'zeroconf_first_name', name)
+
+	def on_last_name_entry2_changed(self, widget):
+		if self.ignore_events:
+			return
+		name = widget.get_text().decode('utf-8')
+		if self.option_changed('zeroconf_last_name', name):
+			self.need_relogin = True
+		gajim.config.set_per('accounts', self.current_account,
+			'zeroconf_last_name', name)
+
+	def on_jabber_id_entry2_changed(self, widget):
+		if self.ignore_events:
+			return
+		id = widget.get_text().decode('utf-8')
+		if self.option_changed('zeroconf_jabber_id', id):
+			self.need_relogin = True
+		gajim.config.set_per('accounts', self.current_account,
+			'zeroconf_jabber_id', id)
+
+	def on_email_entry2_changed(self, widget):
+		if self.ignore_events:
+			return
+		email = widget.get_text().decode('utf-8')
+		if self.option_changed('zeroconf_email', mail):
+			self.need_relogin = True
+		gajim.config.set_per('accounts', self.current_account,
+			'zeroconf_email', email)
 
 class FakeDataForm(gtk.Table, object):
 	'''Class for forms that are in XML format <entry1>value1</entry1>
@@ -3148,8 +3279,12 @@ class AccountCreationWizardWindow:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 
 	def on_advanced_button_clicked(self, widget):
-		gajim.interface.instances[self.account]['account_modification'] = \
-			AccountModificationWindow(self.account)
+		if gajim.interface.instances.has_key('accounts'):
+			gajim.interface.instances['accounts'].window.present()
+		else:
+			gajim.interface.instances['accounts'] = AccountsWindow()
+		gajim.interface.instances['accounts'].select_account(
+			self.account)
 		self.window.destroy()
 
 	def on_finish_button_clicked(self, widget):
@@ -3273,210 +3408,3 @@ class AccountCreationWizardWindow:
 		gajim.interface.roster.draw_roster()
 		gajim.interface.roster.actions_menu_needs_rebuild = True
 		gajim.interface.save_config()
-
-#---------- ZeroconfPropertiesWindow class -------------#
-class ZeroconfPropertiesWindow:
-	def __init__(self):
-		self.xml = gtkgui_helpers.get_glade('zeroconf_properties_window.glade')
-		self.window = self.xml.get_widget('zeroconf_properties_window')
-		self.window.set_transient_for(gajim.interface.roster.window)
-		self.xml.signal_autoconnect(self)
-
-		self.init_account()
-		self.init_account_gpg()
-
-		self.xml.get_widget('save_button').grab_focus()
-		self.window.show_all()
-	
-	def init_account(self):
-		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
-			'autoconnect')
-		if st:
-			self.xml.get_widget('autoconnect_checkbutton').set_active(st)
-		
-		list_no_log_for = gajim.config.get_per('accounts',
-			gajim.ZEROCONF_ACC_NAME,'no_log_for').split()
-		if gajim.ZEROCONF_ACC_NAME in list_no_log_for:
-			self.xml.get_widget('log_history_checkbutton').set_active(0)
-		else:
-			self.xml.get_widget('log_history_checkbutton').set_active(1)
-
-
-		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
-			'sync_with_global_status')
-		if st:
-			self.xml.get_widget('sync_with_global_status_checkbutton').set_active(
-				st)
-
-		for opt in ('first_name', 'last_name', 'jabber_id', 'email'):
-			st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
-				'zeroconf_' + opt)
-			if st:
-				self.xml.get_widget(opt + '_entry').set_text(st)
-
-		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
-			'custom_port')
-		if st:
-			self.xml.get_widget('custom_port_entry').set_text(str(st))
-		
-		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
-			'use_custom_host')
-		if st:
-			self.xml.get_widget('custom_port_checkbutton').set_active(st)
-	
-		self.xml.get_widget('custom_port_entry').set_sensitive(bool(st))
-
-		if not st:
-			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME,
-				'custom_port', '5298')
-
-	def init_account_gpg(self):
-		keyid = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'keyid')
-		keyname = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
-			'keyname')
-		savegpgpass = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
-			'savegpgpass')
-
-		if not keyid or not gajim.config.get('usegpg'):
-			return
-
-		self.xml.get_widget('gpg_key_label').set_text(keyid)
-		self.xml.get_widget('gpg_name_label').set_text(keyname)
-		gpg_save_password_checkbutton = \
-			self.xml.get_widget('gpg_save_password_checkbutton')
-		gpg_save_password_checkbutton.set_sensitive(True)
-		gpg_save_password_checkbutton.set_active(savegpgpass)
-
-		if savegpgpass:
-			entry = self.xml.get_widget('gpg_password_entry')
-			entry.set_sensitive(True)
-			gpgpassword = gajim.config.get_per('accounts',
-						gajim.ZEROCONF_ACC_NAME, 'gpgpassword')
-			entry.set_text(gpgpassword)
-
-	def on_zeroconf_properties_window_destroy(self, widget):
-		# close window
-		if gajim.interface.instances.has_key('zeroconf_properties'):
-			del gajim.interface.instances['zeroconf_properties']
-	
-	def on_custom_port_checkbutton_toggled(self, widget):
-		st = self.xml.get_widget('custom_port_checkbutton').get_active()
-		self.xml.get_widget('custom_port_entry').set_sensitive(bool(st))
-	
-	def on_cancel_button_clicked(self, widget):
-		self.window.destroy()
-	
-	def on_save_button_clicked(self, widget):
-		config = {}
-
-		st = self.xml.get_widget('autoconnect_checkbutton').get_active()
-		config['autoconnect'] = st
-		list_no_log_for = gajim.config.get_per('accounts',
-				gajim.ZEROCONF_ACC_NAME, 'no_log_for').split()
-		if gajim.ZEROCONF_ACC_NAME in list_no_log_for:
-			list_no_log_for.remove(gajim.ZEROCONF_ACC_NAME)
-		if not self.xml.get_widget('log_history_checkbutton').get_active():
-			list_no_log_for.append(gajim.ZEROCONF_ACC_NAME)
-		config['no_log_for'] =  ' '.join(list_no_log_for)
-		
-		st = self.xml.get_widget('sync_with_global_status_checkbutton').\
-			get_active()
-		config['sync_with_global_status'] = st
-
-		st = self.xml.get_widget('first_name_entry').get_text()
-		config['zeroconf_first_name'] = st.decode('utf-8')
-		
-		st = self.xml.get_widget('last_name_entry').get_text()
-		config['zeroconf_last_name'] = st.decode('utf-8')
-
-		st = self.xml.get_widget('jabber_id_entry').get_text()
-		config['zeroconf_jabber_id'] = st.decode('utf-8')
-
-		st = self.xml.get_widget('email_entry').get_text()
-		config['zeroconf_email'] = st.decode('utf-8')
-
-		use_custom_port = self.xml.get_widget('custom_port_checkbutton').\
-			get_active()
-		config['use_custom_host'] = use_custom_port
-
-		old_port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
-			'custom_port')
-		if use_custom_port:
-			port = self.xml.get_widget('custom_port_entry').get_text()
-		else:
-			port = 5298
-			
-		config['custom_port'] = port
-	
-		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().\
-			decode('utf-8')
-		if config['keyname'] == '': #no key selected
-			config['keyid'] = ''
-			config['savegpgpass'] = False
-			config['gpgpassword'] = ''
-		else:
-			config['keyid'] = self.xml.get_widget('gpg_key_label').get_text().\
-				decode('utf-8')
-			config['savegpgpass'] = self.xml.get_widget(
-					'gpg_save_password_checkbutton').get_active()
-			config['gpgpassword'] = self.xml.get_widget('gpg_password_entry'
-				).get_text().decode('utf-8')
-
-		reconnect = False
-		for opt in ('zeroconf_first_name','zeroconf_last_name',
-			'zeroconf_jabber_id', 'zeroconf_email', 'custom_port'):
-			if gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, opt) != \
-			config[opt]:
-				reconnect = True
-
-		for opt	in config:
-			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, opt,
-				config[opt])
-
-		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
-			if port != old_port or reconnect:
-				gajim.connections[gajim.ZEROCONF_ACC_NAME].update_details()
-
-		self.window.destroy()
-
-	def on_gpg_choose_button_clicked(self, widget, data = None):
-		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
-			secret_keys = gajim.connections[gajim.ZEROCONF_ACC_NAME].\
-				ask_gpg_secrete_keys()
-
-		# self.account is None and/or gajim.connections is {}
-		else:
-			from common import GnuPG
-			if GnuPG.USE_GPG:
-				secret_keys = GnuPG.GnuPG().get_secret_keys()
-			else:
-				secret_keys = []
-		if not secret_keys:
-			dialogs.ErrorDialog(_('Failed to get secret keys'),
-				_('There was a problem retrieving your OpenPGP secret keys.'))
-			return
-		secret_keys[_('None')] = _('None')
-		instance = dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
-			_('Choose your OpenPGP key'), secret_keys)
-		keyID = instance.run()
-		if keyID is None:
-			return
-		checkbutton = self.xml.get_widget('gpg_save_password_checkbutton')
-		gpg_key_label = self.xml.get_widget('gpg_key_label')
-		gpg_name_label = self.xml.get_widget('gpg_name_label')
-		if keyID[0] == _('None'):
-			gpg_key_label.set_text(_('No key selected'))
-			gpg_name_label.set_text('')
-			checkbutton.set_sensitive(False)
-			self.xml.get_widget('gpg_password_entry').set_sensitive(False)
-		else:
-			gpg_key_label.set_text(keyID[0])
-			gpg_name_label.set_text(keyID[1])
-			checkbutton.set_sensitive(True)
-		checkbutton.set_active(False)
-		self.xml.get_widget('gpg_password_entry').set_text('')
-
-	def on_gpg_save_password_checkbutton_toggled(self, widget):
-		st = widget.get_active()
-		w = self.xml.get_widget('gpg_password_entry')
-		w.set_sensitive(bool(st))
