@@ -1699,10 +1699,12 @@ class Interface:
 
 			if ask_user:
 				def accept_nondefault_options(widget):
+					dialog.destroy()
+
 					negotiated.update(ask_user)
 					session.accept_e2e_alice(form, negotiated)
 
-					dialog.destroy()
+					negotiation.show_sas_dialog(jid, session.sas)
 
 				def reject_nondefault_options(widget):
 					session.reject_negotiation()
@@ -1714,10 +1716,13 @@ class Interface:
 						on_response_no = reject_nondefault_options)
 			else:
 				session.accept_e2e_alice(form, negotiated)
+				
+				negotiation.show_sas_dialog(jid, session.sas)
 
 			return
 		elif session.status == 'responded-e2e' and form.getType() == 'result':
 			session.accept_e2e_bob(form)
+			negotiation.show_sas_dialog(jid, session.sas)
 			return
 		elif session.status == 'identified-alice' and form.getType() == 'result':
 			session.final_steps_alice(form)

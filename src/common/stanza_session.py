@@ -561,7 +561,7 @@ class EncryptedStanzaSession(StanzaSession):
 		# check for a retained secret
 		# if none exists, prompt the user with the SAS
 		if self.sas_algs == 'sas28x5':
-			print "sas: %s" % self.sas_28x5(m_a, self.form_b)
+			self.sas = self.sas_28x5(m_a, self.form_b)
 			
 		result.addChild(node=xmpp.DataField(name='identity', value=base64.b64encode(id_a)))
 		result.addChild(node=xmpp.DataField(name='mac', value=base64.b64encode(m_a)))
@@ -629,7 +629,7 @@ class EncryptedStanzaSession(StanzaSession):
 		# check for a retained secret
 		# if none exists, prompt the user with the SAS
 		if self.sas_algs == 'sas28x5':
-			print "sas: %s" % self.sas_28x5(m_a, self.form_b)
+			self.sas = self.sas_28x5(m_a, self.form_b)
 
 		k = self.sha256(k + self.srs + oss)
 

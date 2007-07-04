@@ -1,6 +1,8 @@
 import gtkgui_helpers
 import dataforms_widget
 
+import dialogs
+
 from common import dataforms
 from common import gajim
 from common import xmpp
@@ -8,9 +10,14 @@ from common import xmpp
 def describe_features(features):
 	'''a human-readable description of the features that have been negotiated'''
 	if features['logging'] == 'may':
-		return '- messages will be logged'
+		return _('- messages will be logged')
 	elif features['logging'] == 'mustnot':
-		return '- messages will not be logged'
+		return _('- messages will not be logged')
+
+def show_sas_dialog(jid, sas):
+	dialogs.InformationDialog(_('''Verify the remote client's identity'''), _('''You've begun an encrypted session with %s, but it can't be guaranteed that you're talking directly to the person you think you are.
+
+You should speak with them directly (in person or on the phone) and confirm that their Short Authentication String is identical to this one: %s''') % (jid, sas))
 
 class FeatureNegotiationWindow:
 	'''FeatureNegotiotionWindow class'''
