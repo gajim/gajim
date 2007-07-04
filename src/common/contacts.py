@@ -218,10 +218,12 @@ class Contacts:
 		else:
 			return []
 	
-	def get_contact(self, account, jid, resource):
-		'''Returns the contact instance for the given resource if it's given
-		or None if there is not'''
+	def get_contact(self, account, jid, resource = None):
+		'''Returns the contact instance for the given resource if it's given else
+		the first contact is no resource is given or None if there is not'''
 		if jid in self._contacts[account]:
+			if not resource:
+				return self._contacts[account][jid][0]
 			for c in self._contacts[account][jid]:
 				if c.resource == resource:
 					return c

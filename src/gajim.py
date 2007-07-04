@@ -727,9 +727,7 @@ class Interface:
 			chat_control = self.msg_win_mgr.get_control(jid, account)
 
 		# Handle chat states  
-		contact = gajim.contacts.get_contacts(account, jid, resource)
-		if contact and isinstance(contact, list):
-			contact = contact[0]
+		contact = gajim.contacts.get_contact(account, jid, resource)
 		if contact:
 			if contact.composing_xep != 'XEP-0085': # We cache xep85 support
 				contact.composing_xep = composing_xep
@@ -1053,11 +1051,7 @@ class Interface:
 		elif self.instances[account]['infos'].has_key(array[0] + '/' + array[1]):
 			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
 		if win:
-			c = gajim.contacts.get_contacts(account, array[0], array[1])
-			# c is a list when no resource is given. it probably means that contact
-			# is offline, so only on Contact instance
-			if isinstance(c, list) and len(c):
-				c = c[0]
+			c = gajim.contacts.get_contact(account, array[0], array[1])
 			if c: # c can be none if it's a gc contact
 				c.last_status_time = time.localtime(time.time() - array[2])
 				if array[3]:
@@ -2190,8 +2184,10 @@ class Interface:
 					gajim.events.change_jid(account, fjid, jid)
 					resource = None
 					fjid = jid
-				contact = gajim.contacts.get_contacts(account, jid, resource)
-				if not contact or isinstance(contact, list):
+				contact = None
+				if resource:
+					contact = gajim.contacts.get_contact(account, jid, resource)
+				if not contact:
 					contact = highest_contact
 				self.roster.new_chat(contact, account, resource = resource)
 				w = self.msg_win_mgr.get_window(fjid, account)
