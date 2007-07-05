@@ -498,6 +498,8 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			for j in gajim.contacts.get_jid_list(acct):
 				if gajim.jid_is_transport(j):
 					type_ = gajim.get_transport_name_from_jid(j, False)
+					if not type_:
+						continue
 					if self.agents.has_key(type_):
 						self.agents[type_].append(j)
 					else:
@@ -532,7 +534,10 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		for type_ in self.agents:
 			if type_ == 'jabber':
 				continue
-			img = gajim.interface.roster.transports_state_images['16'][type_]['online']
+			imgs = gajim.interface.roster.transports_state_images
+			img = None
+			if imgs['16'].has_key(type_) and imgs['16'][type_].has_key('online'):
+				img = gajim.interface.roster.transports_state_images['16'][type_]['online']
 			if type_ in uf_type:
 				liststore.append([uf_type[type_], img.get_pixbuf(), type_])
 			else:
