@@ -1664,10 +1664,17 @@ class Interface:
 			session.cancelled_negotiation()
 			return
 
-		# encrypted session states. these are descriped in stanza_session.py
+		# encrypted session states. these are described in stanza_session.py
 
 		# bob responds
-		if form.getType() == 'form' and u'e2e' in map(lambda x: x[1], form.getField('security').getOptions()):
+		if form.getType() == 'form' and u'e2e' in \
+		map(lambda x: x[1], form.getField('security').getOptions()):
+			contact = gajim.contacts.get_contact(account, jid.getStripped(), jid.getResource())
+
+			if gajim.SHOW_LIST[gajim.connections[account].connected] == 'invisible' or \
+			contact.sub not in ('from', 'both'):
+				return
+
 			negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
 
 			if ask_user:
@@ -1685,7 +1692,11 @@ class Interface:
 					dialog.destroy()
 
 				dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-						_('The remote client wants to negotiate an session with these features:\n\n%s\n\nAre these options acceptable?') % (negotiation.describe_features(ask_user)),
+					_('''The remote client wants to negotiate an session with these features:
+
+%s
+
+Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
 						on_response_yes = accept_nondefault_options,
 						on_response_no = reject_nondefault_options)
 			else:
