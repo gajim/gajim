@@ -377,7 +377,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		self.create_table()
 		if not contacts or len(contacts) == 0:
 			# Tooltip for merged accounts row
-			accounts = helpers.get_accounts_info()
+			accounts = helpers.get_notification_icon_tooltip_dict()
 			self.table.resize(2, 1)
 			self.spacer_label = ''
 			self.fill_table_with_accounts(accounts)
