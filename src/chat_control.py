@@ -896,7 +896,7 @@ class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
-	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping']
+	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping', 'say']
 	
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1202,10 +1202,12 @@ class ChatControl(ChatControlBase):
 		elif command == 'ping':
 			if not len(message_array):
 				gajim.connections[self.account].sendPing(self.contact)
-			else: 
+			else:
 				self.get_command_help(command)
 			self.clear(self.msg_textview)
 			return True
+		elif command == 'say':
+			return False
 		else:
 			self.print_conversation(_('No such command: /%s (if you want to send '
 				'this, prefix it with /say)') % command, 'info')
@@ -1229,6 +1231,9 @@ class ChatControl(ChatControlBase):
 		elif command == 'ping':
 			self.print_conversation(_('Usage: /%s, sends a ping to the contact') %\
 				command, 'info')
+		elif command == 'say':
+			self.print_conversation(_('Usage: /%s, send the message to the contact') %\
+				command, 'info')
 		else:
 			self.print_conversation(_('No help info for /%s') % command, 'info')
 
@@ -1236,6 +1241,9 @@ class ChatControl(ChatControlBase):
 		'''Send a message to contact'''
 		if message in ('', None, '\n') or self._process_command(message):
 			return
+
+		if message.startswith('/say'):
+			message = message[5:]
 
 		# refresh timers
 		self.reset_kbd_mouse_timeout_vars()
