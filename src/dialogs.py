@@ -513,20 +513,30 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 						self.agents[type_].append(jid_)
 				self.available_types.append(type_)
 		liststore = gtk.ListStore(str)
-		self.group_comboboxentry.set_model(liststore)
-		liststore = gtk.ListStore(str, str)
+		self.group_comboboxentry.set_model(liststore)		
+		# Combobox with transport/jabber icons
+		liststore = gtk.ListStore(str, gtk.gdk.Pixbuf, str)
+		cell = gtk.CellRendererPixbuf()
+		self.protocol_combobox.pack_start(cell, False)
+		self.protocol_combobox.add_attribute(cell, 'pixbuf', 1)
+		cell = gtk.CellRendererText()
+		cell.set_property('xpad', 5)
+		self.protocol_combobox.pack_start(cell, True)
+		self.protocol_combobox.add_attribute(cell, 'text', 0)
+		self.protocol_combobox.set_model(liststore)
 		uf_type = {'jabber': 'Jabber', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
 			'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
 		# Jabber as first
-		liststore.append(['Jabber', 'jabber'])
+		img = gajim.interface.roster.jabber_state_images['16']['online']
+		liststore.append(['Jabber', img.get_pixbuf(), 'jabber'])
 		for type_ in self.agents:
 			if type_ == 'jabber':
 				continue
+			img = gajim.interface.roster.transports_state_images['16'][type_]['online']
 			if type_ in uf_type:
-				liststore.append([uf_type[type_], type_])
+				liststore.append([uf_type[type_], img.get_pixbuf(), type_])
 			else:
-				liststore.append([type_, type_])
-		self.protocol_combobox.set_model(liststore)
+				liststore.append([type_, img.get_pixbuf(), type_])
 		self.protocol_combobox.set_active(0)
 		self.protocol_jid_combobox.set_no_show_all(True)
 		self.protocol_jid_combobox.hide()
@@ -554,7 +564,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			iter = model.get_iter_first()
 			i = 0
 			while iter:
-				if model[iter][1] == type_:
+				if model[iter][2] == type_:
 					self.protocol_combobox.set_active(i)
 					break
 				iter = model.iter_next(iter)
@@ -629,7 +639,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 
 		model = self.protocol_combobox.get_model()
 		iter = self.protocol_combobox.get_active_iter()
-		type_ = model[iter][1]
+		type_ = model[iter][2]
 		if type_ != 'jabber':
 			transport = self.protocol_jid_combobox.get_active_text().decode(
 				'utf-8')
@@ -683,7 +693,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 	def on_protocol_combobox_changed(self, widget):
 		model = widget.get_model()
 		iter = widget.get_active_iter()
-		type_ = model[iter][1]
+		type_ = model[iter][2]
 		model = self.protocol_jid_combobox.get_model()
 		model.clear()
 		if len(self.agents[type_]):
