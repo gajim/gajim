@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.2 on Wed Jun 27 14:25:13 2007 by stephan@ThinkPad-->
+<!--Generated with glade3 3.2.2 on Sat Jul  7 01:08:57 2007 by stephan@ThinkPad-->
 <glade-interface>
   <widget class="GtkWindow" id="features_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Features</property>
     <property name="default_width">300</property>
-    <property name="default_height">525</property>
+    <property name="default_height">530</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -17,11 +17,13 @@
           <widget class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="xalign">0</property>
             <property name="label" translatable="yes">&lt;b&gt;List of possible features in Gajim:&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </widget>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">False</property>
           </packing>
         </child>
         <child>
@@ -56,6 +58,8 @@
               <widget class="GtkAlignment" id="alignment2">
                 <property name="visible">True</property>
                 <property name="border_width">6</property>
+                <property name="xalign">0</property>
+                <property name="xscale">0.5</property>
                 <property name="left_padding">12</property>
                 <child>
                   <widget class="GtkLabel" id="feature_desc_label">

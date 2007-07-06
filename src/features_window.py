@@ -34,59 +34,71 @@ class FeaturesWindow:
 		# {name: (available_function, unix_text, windows_text)}
 		self.features = {
 			_('PyOpenSSL'): (self.pyopenssl_available,
-				_('You need to install python-pyopenssl to have a more secure connection.'),
-				_('You need to install python-pyopenssl to have a more secure connection.')),
+				_('A library used to validate server certificates to ensure a secure connection.'),
+				_('Requires python-pyopenssl.'),
+				_('Requires python-pyopenssl.')),
 			_('Bonjour / Zeroconf'): (self.zeroconf_available,
-				_('You need to install python-avahai to use Zeroconf network.'),
-				_('This feature is not available under Windows.')),
-			_('Gajim-remote'): (self.dbus_available,
-				_('You need to install python-dbus to control gajim from a script.'),
-				_('This feature is not available under Windows.')),
+				_('Serverless chatting with autodetected clients in a local network.'),
+				_('Requires python-avahai.'),
+				_('Feature not available under Windows.')),
+			_('gajim-remote'): (self.dbus_available,
+				_('A script to controle gajim via commandline.'),
+				_('Requires python-dbus.'),
+				_('Feature not available under Windows.')),
 			_('OpenGPG'): (self.gpg_available,
-				_('You need to install gpg and python-GnuPGIntergace to use OpenGPG.'),
-				_('This feature is not available under Windows.')),
-			_('Network Manager'): (self.network_manager_available,
-				_('You need to install network-manager and python-dbus to use Network Manager.'),
-				_('This feature is not available under Windows.')),
+				_('Encrypting chatmessages with gpg keys.'),
+				_('Requires gpg and python-GnuPGInterface.'),
+				_('Feature not available under Windows.')),
+			_('network-manager'): (self.network_manager_available,
+				_('Autodetection of network status.'),
+				_('Requires gnome-network-manager and python-dbus.'),
+				_('Feature not available under Windows.')),
 			_('Session Management'): (self.session_management_available,
-				_('You need to install python-gnome2 to use Session Management.'),
-				_('This feature is not available under Windows.')),
-			_('Gnome-Keyring'): (self.gnome_keyring_available,
-				_('You need to install python-gnome2-desktop to use Gnome Keyring.'),
-				_('This feature is not available under Windows.')),
+				_('Gajim session is stored on logout and restored on login.'),
+				_('Requires python-gnome2.'),
+				_('Feature not available under Windows.')),
+			_('gnome-keyring'): (self.gnome_keyring_available,
+				_('Passwords can be stored securely and not just in plaintext.'),
+				_('Requires gnome-keyring and python-gnome2-desktop.'),
+				_('Feature not available under Windows.')),
 			_('SRV'): (self.srv_available,
-				_('You need to install dnsutils to have nslookup to use SRV records.'),
-				_('You need to have nslookup to use SRV records.')),
+				_('Ability to connect to servers which is using SRV records.'),
+				_('Requires dnsutils.'),
+				_('Requires nslookup to use SRV records.')),
 			_('Spell Checker'): (self.speller_available,
-				_('You need to install python-gnome2-extras or compile gtkspell module from Gajim sources to use spell checker.'),
-				_('This feature is not available under Windows.')),
+				_('Spellchecking of composed messages.'),
+				_('Requires python-gnome2-extras or compilation of gtkspell module from Gajim sources.'),
+				_('Feature not available under Windows.')),
 			_('Notification-daemon'): (self.notification_available,
-				_('You need to have dbus available and to install notification-daemon. Another solution is to install python-notify.'),
-				_('This feature is not available under Windows.')),
+				_('Passive popups notifying for new events.'),	
+				_('Requires python-notify or instead python-dbus in conjunction with notification-daemon.'),
+				_('Feature not available under Windows.')),
 			_('Trayicon'): (self.trayicon_available,
-				_('You need to install python-gnome2-extras or compile trayicon module from Gajim sources to use the trayicon.'),
-				_('You need PyGTK >= 2.10 to use the trayicon.')),
+				_('A icon in systemtray reflecting the current presence.'), 
+				_('Requires python-gnome2-extras or compiled  trayicon module from Gajim sources.'),
+				_('Requires PyGTK >= 2.10.')),
 			_('Idle'): (self.idle_available,
-				_('You need to compile idle module from Gajim sources to use it.'),
-				_('You need to compile idle module from Gajim sources to use it.')),
+				_('Ability to measure idle time, in order to set auto status.'),
+				_('Requires compilation of the idle module from Gajim sources.'),
+				_('Requires compilation of the idle module from Gajim sources.')),
 		}
 
 		# name, supported
 		self.model = gtk.ListStore(str, bool)
 		treeview.set_model(self.model)
 
+		col = gtk.TreeViewColumn(_('Available'))
+		treeview.append_column(col)
+		cell = gtk.CellRendererToggle()
+		cell.set_property('radio', True)
+		col.pack_start(cell)
+		col.set_attributes(cell, active = 1)
+
 		col = gtk.TreeViewColumn(_('Feature'))
 		treeview.append_column(col)
 		cell = gtk.CellRendererText()
 		col.pack_start(cell, expand = True)
 		col.add_attribute(cell, 'text', 0)
-
-		col = gtk.TreeViewColumn(_('Available'))
-		treeview.append_column(col)
-		cell = gtk.CellRendererToggle()
-		cell.set_property('sensitive', False)
-		col.pack_start(cell)
-		col.set_attributes(cell, active = 1)
 
 		# Fill model
 		for feature in self.features:
@@ -105,10 +117,11 @@ class FeaturesWindow:
 		path = selection.get_selected_rows()[1][0]
 		available = self.model[path][1]
 		feature = self.model[path][0]
+		text = self.features[feature][1] + '\n'
 		if os.name == 'nt':
-			text = self.features[feature][2]
+			text = text + self.features[feature][3]
 		else:
-			text = self.features[feature][1]
+			text = text + self.features[feature][2]
 		self.desc_label.set_text(text)
 
 	def pyopenssl_available(self):
