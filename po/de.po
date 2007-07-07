@@ -2752,11 +2752,11 @@ msgstr "Sperrliste"
 
 #: ../src/config.py:2180
 msgid "Member List"
-msgstr "Mitgliedsliste"
+msgstr "Mitgliederliste"
 
 #: ../src/config.py:2181
 msgid "Owner List"
-msgstr "Listenbesitzer"
+msgstr "Besitzerliste"
 
 #: ../src/config.py:2182
 msgid "Administrator List"
