@@ -3476,7 +3476,6 @@ class ManagePEPServicesWindow:
 		model.append(['presence'])
 		model.append(['roster'])
 		model.append(['whitelist'])
-		model.append(['delete'])
 		cellrenderer_combo = gtk.CellRendererCombo()
 		cellrenderer_combo.set_property('text-column', 0)
 		cellrenderer_combo.set_property('model', model)
