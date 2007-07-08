@@ -5167,3 +5167,7 @@ class RosterWindow:
 		if len(gajim.connections) == 0: # if we have no account
 			gajim.interface.instances['account_creation_wizard'] = \
 				config.AccountCreationWizardWindow()
+		if not gajim.ZEROCONF_ACC_NAME in gajim.config.get_per('accounts'):
+			# Create zeroconf in config file
+			zeroconf = common.zeroconf.connection_zeroconf.ConnectionZeroconf(
+				gajim.ZEROCONF_ACC_NAME)
