@@ -1333,9 +1333,10 @@ class Interface:
 
 		# join autojoinable rooms
 		for bm in bms:
+			minimize = bm['minimize'] in ('1', 'true')
 			if bm['autojoin'] in ('1', 'true'):
 				self.roster.join_gc_room(account, bm['jid'], bm['nick'],
-					bm['password'], minimize = bm['minimize'])
+					bm['password'], minimize = minimize)
 
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
