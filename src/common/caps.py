@@ -188,7 +188,6 @@ class CapsCache(object):
 			# this will create proper object
 			q.queried=1
 			account.discoverInfo(jid, '%s#%s' % (node, ver))
-		else:
 
 		for ext in exts:
 			qq=q[ext]
@@ -196,7 +195,6 @@ class CapsCache(object):
 				# do query for node+version+ext triple
 				qq.queried=1
 				account.discoverInfo(jid, '%s#%s' % (node, ext))
-			else:
 
 gajim.capscache = CapsCache(gajim.logger)
 
