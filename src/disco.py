@@ -1798,7 +1798,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 	def _create_treemodel(self):
 		''' Create treemodel for the window. '''
 		# JID, node, name (with description) - pango markup, dont have info?, subscribed?
-		self.model = gtk.ListStore(str, str, str, bool, bool)
+		self.model = gtk.TreeStore(str, str, str, bool, bool)
 		# sort by name
 		self.model.set_sort_column_id(2, gtk.SORT_ASCENDING)
 		self.window.services_treeview.set_model(self.model)
@@ -1830,6 +1830,13 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		col.set_resizable(True)
 		self.window.services_treeview.insert_column(col, -1)
 
+	def _add_items(self, jid, node, items, force):
+		for item in items:
+			jid = item['jid']
+			node = item.get('node', '')
+			self._total_items += 1
+			self._add_item(jid, node, item, force)
+
 	def _add_item(self, jid, node, item, force):
 		''' Called when we got basic information about new node from query.
 		Show the item. '''
@@ -1844,8 +1851,24 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		name = gobject.markup_escape_text(name)
 		name = '<b>%s</b>' % name
-		
-		self.model.append((jid, node, name, dunno, subscribed))
+
+		node_splitted = node.split('/')
+		parent_iter = None
+		while len(node_splitted) > 1:
+			parent_node = node_splitted.pop(0)
+			parent_iter = self._get_child_iter(parent_iter, parent_node)
+			node_splitted[0] = parent_node + '/' + node_splitted[0]
+		self.model.append(parent_iter, (jid, node, name, dunno, subscribed))
+		self.cache.get_items(jid, node, self._add_items, force = force,
+			args = (force,))
+
+	def _get_child_iter(self, parent_iter, node):
+		child_iter = self.model.iter_children(parent_iter)
+		while child_iter:
+			if self.model[child_iter][1] == node:
+				return child_iter
+			child_iter = self.model.iter_next(child_iter)
+		return None
 
 	def _add_actions(self):
 		self.post_button = gtk.Button(label=_('New post'), use_underline=True)
