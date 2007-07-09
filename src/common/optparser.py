@@ -157,9 +157,13 @@ class OptionsParser:
 			self.update_config_to_01111()
 		if old < [0, 11, 1, 2] and new >= [0, 11, 1, 2]:
 			self.update_config_to_01112()
+		if old < [0, 11, 1, 3] and new >= [0, 11, 1, 3]:
+			self.update_config_to_01113()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
+
+		gajim.capscache.load_from_db()
 	
 	def update_config_x_to_09(self):
 		# Var name that changed:
@@ -402,3 +406,28 @@ class OptionsParser:
 		self.old_values['roster_theme'] == 'gtk+':
 			gajim.config.set('roster_theme', _('default'))
 		gajim.config.set('version', '0.11.1.2')
+
+	def update_config_to_01113(self):
+		# copy&pasted from update_config_to_01013, possibly 'FIXME see #2812' applies too
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE caps_cache (
+					node TEXT,
+					ver TEXT,
+					ext TEXT,
+					data BLOB
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+		gajim.config.set('version', '0.11.1.3')
+

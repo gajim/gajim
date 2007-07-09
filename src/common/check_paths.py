@@ -42,6 +42,7 @@ def create_log_db():
 	# logs.jid_id --> jids.jid_id but Sqlite doesn't do FK etc so it's done in python code
 	# jids.jid text column will be JID if TC-related, room_jid if GC-related,
 	# ROOM_JID/nick if pm-related.
+	# also check optparser.py, which updates databases on gajim updates
 	cur.executescript(
 		'''
 		CREATE TABLE jids(
@@ -74,6 +75,12 @@ def create_log_db():
 		);
 		
 		CREATE INDEX idx_logs_jid_id_kind ON logs (jid_id, kind);
+
+		CREATE TABLE caps_cache (
+			node TEXT,
+			ver TEXT,
+			ext TEXT,
+			data BLOB);
 		'''
 		)
 

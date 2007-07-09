@@ -11,14 +11,10 @@
 ## GNU General Public License for more details.
 ##
 
-#import logger
-#import gajim
 from itertools import *
-import gajim
 import xmpp
 import xmpp.features_nb
-
-#from meta import VerboseClassType
+import gajim
 
 class CapsCache(object):
 	''' This object keeps the mapping between caps data and real disco
@@ -97,6 +93,7 @@ class CapsCache(object):
 				ciself.node = node
 				ciself.version = version
 				ciself.features = set()
+				ciself.ext = ext
 				ciself.exts = {}
 
 				# set of tuples: (category, type, name)
@@ -110,10 +107,6 @@ class CapsCache(object):
 				# 2 == got the answer
 				ciself.queried = 0
 
-			def __iadd__(ciself, newfeature):
-				newfeature=self.__names.setdefault(newfeature, newfeature)
-				ciself.features.add(newfeature)
-
 			class CacheQuery(object):
 				def __init__(cqself, proxied):
 					cqself.proxied=proxied
@@ -125,6 +118,8 @@ class CapsCache(object):
 			def __getitem__(ciself, exts):
 				if not exts:	# (), [], None, False, whatever
 					return ciself
+				if isinstance(exts, basestring):
+					exts=(exts,)
 				if len(exts)==1:
 					ext=exts[0]
 					if ext in ciself.exts:
@@ -135,12 +130,21 @@ class CapsCache(object):
 				proxied = [ciself]
 				proxied.extend(ciself[(e,)] for e in exts)
 				return ciself.CacheQuery(proxied)
+
+			def update(ciself, identities, features):
+				# NOTE: self refers to CapsCache object, not to CacheItem
+				self.identities=identities
+				self.features=features
+				self.logger.add_caps_entry(
+					ciself.node, ciself.version, ciself.ext,
+					identities, features)
+
 		self.__CacheItem = CacheItem
 
 		# prepopulate data which we are sure of; note: we do not log these info
-		gajim = 'http://gajim.org/caps'
+		gajimnode = 'http://gajim.org/caps'
 
-		gajimcaps=self[(gajim, '0.11.1')]
+		gajimcaps=self[(gajimnode, '0.11.1')]
 		gajimcaps.category='client'
 		gajimcaps.type='pc'
 		gajimcaps.features=set((xmpp.NS_BYTESTREAM, xmpp.NS_SI,
@@ -152,17 +156,16 @@ class CapsCache(object):
 		# TODO: older gajim versions
 
 		# start logging data from the net
-		self.__logger = logger
+		self.logger = logger
 
+	def load_from_db(self):
 		# get data from logger...
-		if self.__logger is not None:
-			for node, version, category, type_, name in self.__logger.get_caps_cache():
-				x=self.__clients[(node, version)]
-				x.category=category
-				x.type=type_
-				x.name=name
-			for node, version, ext, feature in self.__logger.get_caps_features_cache():
-				self.__clients[(node, version)][ext]+=feature
+		if self.logger is not None:
+			for node, ver, ext, identities, features in self.logger.iter_caps_data():
+				x=self[(node, ver, ext)]
+				x.identities=identities
+				x.features=features
+				x.queried=2
 
 	def __getitem__(self, caps):
 		node_version = caps[:2]
@@ -185,6 +188,7 @@ class CapsCache(object):
 			# this will create proper object
 			q.queried=1
 			account.discoverInfo(jid, '%s#%s' % (node, ver))
+		else:
 
 		for ext in exts:
 			qq=q[ext]
@@ -192,8 +196,9 @@ class CapsCache(object):
 				# do query for node+version+ext triple
 				qq.queried=1
 				account.discoverInfo(jid, '%s#%s' % (node, ext))
+			else:
 
-capscache = CapsCache()
+gajim.capscache = CapsCache(gajim.logger)
 
 class ConnectionCaps(object):
 	''' This class highly depends on that it is a part of Connection class. '''
@@ -223,7 +228,7 @@ class ConnectionCaps(object):
 		jid=str(presence.getFrom())
 
 		# start disco query...
-		capscache.preload(self, jid, node, ver, exts)
+		gajim.capscache.preload(self, jid, node, ver, exts)
 
 		contact=gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if contact in [None, []]:
@@ -237,10 +242,7 @@ class ConnectionCaps(object):
 		contact.caps_exts=exts
 
 	def _capsDiscoCB(self, jid, node, identities, features, data):
-		gajim.log.debug('capsDiscoCB(jid=%r, node=%r, identities=%r, features=%r, data=%r)' %\
-			(jid, node, identities, features, data))
 		contact=gajim.contacts.get_contact_from_full_jid(self.name, jid)
-		gajim.log.debug('   contact=%r' % contact)
 		if not contact: return
 		if not contact.caps_node: return # we didn't asked for that?
 		if not node.startswith(contact.caps_node+'#'): return
@@ -251,11 +253,9 @@ class ConnectionCaps(object):
 			exts=(ext,)
 
 		# if we don't have this info already...
-		caps=capscache[(node, contact.caps_ver, exts)]
+		caps=gajim.capscache[(node, contact.caps_ver, exts)]
 		if caps.queried==2: return
 
-		caps.identities=set((i['category'], i['type'], i.get('name')) for i in identities)
-		caps.features=set(features)
+		identities=set((i['category'], i['type'], i.get('name')) for i in identities)
+		caps.update(identities, features)
 
-		gajim.log.debug('capsDiscoCB: added caps for %r:\n    identities=%r\n    features=%r'\
-			% ((node, contact.caps_ver, exts), caps.identities, caps.features))
