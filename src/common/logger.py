@@ -289,7 +289,10 @@ class Logger:
 	def commit_to_db(self, values, write_unread = False):
 		#print 'saving', values
 		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
-		self.cur.execute(sql, values)
+		try:
+			self.cur.execute(sql, values)
+		except sqlite.OperationalError, e:
+			raise exceptions.PysqliteOperationalError(str(e))
 		message_id = None
 		try:
 			self.con.commit()

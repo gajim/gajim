@@ -34,6 +34,7 @@ from common import GnuPG
 from common import helpers
 from common import gajim
 from common import atom
+from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
@@ -885,9 +886,12 @@ class ConnectionVcard:
 			path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
 		else:
 			path_to_file = path
-		fil = open(path_to_file, 'w')
-		fil.write(str(card))
-		fil.close()
+		try:
+			fil = open(path_to_file, 'w')
+			fil.write(str(card))
+			fil.close()
+		except IOError, e:
+			self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 	
 	def get_cached_vcard(self, fjid, is_fake_jid = False):
 		'''return the vcard as a dict
@@ -1504,8 +1508,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				error_msg = msgtxt
 				msgtxt = None
 			if self.name not in no_log_for:
-				gajim.logger.write('error', frm, error_msg, tim = tim,
-					subject = subject)
+				try:
+					gajim.logger.write('error', frm, error_msg, tim = tim,
+						subject = subject)
+				except exceptions.PysqliteOperationalError, e:
+					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 			self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
 				tim))
 			return
@@ -1524,15 +1531,21 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
 				if self.name not in no_log_for and not int(float(mktime(tim)))\
 				<= self.last_history_line[jid] and msgtxt:
-					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
+					try:
+						gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
+					except exceptions.PysqliteOperationalError, e:
+						self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 			return
 		elif mtype == 'chat': # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
 			if msg.getTag('body') and self.name not in no_log_for and jid not in\
 				no_log_for and msgtxt:
-				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
-					subject = subject)
+				try:
+					msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt,
+						tim = tim, subject = subject)
+				except exceptions.PysqliteOperationalError, e:
+					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 		else: # it's single message
 			if invite is not None:
 				item = invite.getTag('invite')
@@ -1543,8 +1556,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
 				return
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
-				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
-					subject = subject)
+				try:
+					gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
+						subject = subject)
+				except exceptions.PysqliteOperationalError, e:
+					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 			mtype = 'normal'
 		treat_as = gajim.config.get('treat_incoming_messages')
 		if treat_as:
@@ -1698,7 +1714,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					if jid:
 						# we know real jid, save it in db
 						st += ' (%s)' % jid
-					gajim.logger.write('gcstatus', who, st, show)
+					try:
+						gajim.logger.write('gcstatus', who, st, show)
+					except exceptions.PysqliteOperationalError, e:
+						self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 				if avatar_sha or avatar_sha == '':
 					if avatar_sha == '':
 						# contact has no avatar
@@ -1805,9 +1824,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				# avatar has been updated
 				self.request_vcard(jid_stripped)
 		if not ptype or ptype == 'unavailable':
-			if gajim.config.get('log_contact_status_changes') and self.name\
-				not in no_log_for and jid_stripped not in no_log_for:
-				gajim.logger.write('status', jid_stripped, status, show)
+			if gajim.config.get('log_contact_status_changes') and self.name \
+			not in no_log_for and jid_stripped not in no_log_for:
+				try:
+					gajim.logger.write('status', jid_stripped, status, show)
+				except exceptions.PysqliteOperationalError, e:
+					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
 				keyID, timestamp, contact_nickname))
 	# END presenceCB

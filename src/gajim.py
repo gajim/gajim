@@ -317,9 +317,15 @@ pid_dir =  os.path.dirname(pid_filename)
 if not os.path.exists(pid_dir):
 	check_paths.create_path(pid_dir)
 # Create pid file
-f = open(pid_filename, 'w')
-f.write(str(os.getpid()))
-f.close()
+try:
+	f = open(pid_filename, 'w')
+	f.write(str(os.getpid()))
+	f.close()
+except IOError, e:
+	dlg = dialogs.ErrorDialog(_('Disk Write Error'), str(e))
+	dlg.run()
+	dlg.destroy()
+	sys.exit()
 del pid_dir
 del f
 
