@@ -263,12 +263,11 @@ class EncryptedStanzaSession(StanzaSession):
 
 		return self.encrypter.encrypt(encryptable)
 
-	# FIXME: get a real PRNG
+	# FIXME: use a real PRNG
 	def random_bytes(self, bytes):
 		return os.urandom(bytes)
 
 	def generate_nonce(self):
-		# FIXME: this isn't a very good PRNG
 		return self.random_bytes(8)
 
 	def decrypt_stanza(self, stanza):
@@ -581,19 +580,19 @@ class EncryptedStanzaSession(StanzaSession):
 		x = xmpp.DataForm(typ='result')
 
 		for field in ('nonce', 'dhkeys', 'rshashes', 'identity', 'mac'):
-			assert field in form.asDict(), "your acceptance form didn't have a %s field" % repr(field)
+			assert field in form.asDict(), "alice's form didn't have a %s field" % field
 
 		# 4.5.1 generating provisory session keys
 		e = self.decode_mpi(base64.b64decode(form['dhkeys']))
 		p = dh.primes[self.modp]
 
-		if not self.sha256(self.encode_mpi(e)) == self.He:
-			# XXX return <feature-not-implemented/>
-			pass
-
-		if not e > 1 and e < (p - 1):
-			# XXX return <feature-not-implemented/>
-			pass
+		if (not self.sha256(self.encode_mpi(e)) == self.He): or \
+		(not e > 1 and e < (p - 1)):
+			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
+			err.T.error.T.text.setData("invalid DH value 'e'")
+			self.send(err)
+			self.status = None
+			return
 
 		k = self.sha256(self.encode_mpi(self.powmod(e, self.y, p)))
 
@@ -606,8 +605,11 @@ class EncryptedStanzaSession(StanzaSession):
 		m_a_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_a)
 
 		if m_a_calculated != m_a:
-			# XXX return <feature-not-implemented/>
-			pass
+			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
+			err.T.error.T.text.setData('calculated m_a differs from received m_a')
+			self.send(err)
+			self.status = None
+			return
 
 		mac_a = self.decrypt(id_a)
 
@@ -617,10 +619,11 @@ class EncryptedStanzaSession(StanzaSession):
 		mac_a_calculated = self.hmac(self.ks_o, self.n_s + self.n_o + self.encode_mpi(e) + self.form_a + form_a2)
 
 		if mac_a_calculated != mac_a:
-			# XXX return <feature-not-implemented/>
-			pass
-
-		# TODO: 4.5.3
+			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
+			err.T.error.T.text.setData('calculated mac_a differs from received mac_a')
+			self.send(err)
+			self.status = None
+			return
 
 		# 4.5.4 generating bob's final session keys
 		self.srs = ''
@@ -697,18 +700,32 @@ class EncryptedStanzaSession(StanzaSession):
 
 #4.6.2 Verifying Bob's Identity
 
+		m_b = base64.b64decode(form['mac'])
 		id_b = base64.b64decode(form['identity'])
 
-		m_b = self.hmac(self.encode_mpi(self.c_o) + id_b, self.km_o)
+		m_b_calculated = self.hmac(self.encode_mpi(self.c_o) + id_b, self.km_o)
+
+		if m_b_calculated != m_b:
+			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
+			err.T.error.T.text.setData('calculated m_b differs from received m_b')
+			self.send(err)
+			self.status = None
+			return
 
 		mac_b = self.decrypt(id_b)
 
 		form_b2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
 
-		mac_b = self.hmac(self.n_s + self.n_o + self.encode_mpi(self.d) + self.form_b + form_b2, self.ks_o)
+		mac_b_calculated = self.hmac(self.n_s + self.n_o + self.encode_mpi(self.d) + self.form_b + form_b2, self.ks_o)
+
+		if mac_b_calculated != mac_b:
+			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
+			err.T.error.T.text.setData('calculated mac_b differs from received mac_b')
+			self.send(err)
+			self.status = None
+			return
 
 # Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
-		# XXX check for MAC equality?
 	
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
@@ -721,9 +738,8 @@ class EncryptedStanzaSession(StanzaSession):
 		# minimum number of bytes needed to represent that range
 		bytes = int(math.ceil(math.log(top - bottom, 256)))
 
-		# FIXME: use a real PRNG
 		# in retrospect, this is horribly inadequate.
-		return (self.decode_mpi(os.urandom(bytes)) % (top - bottom)) + bottom
+		return (self.decode_mpi(self.random_bytes(bytes)) % (top - bottom)) + bottom
 
 	def make_dhhash(self, modp):
 		p = dh.primes[modp]
