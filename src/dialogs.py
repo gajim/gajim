@@ -2705,7 +2705,10 @@ class ImageChooserDialog(FileChooserDialog):
 			path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
 				(path_to_file,))[0]
 			if os.path.exists(path_to_file):
-				callback(widget, path_to_file)
+				if isinstance(callback, tuple):
+					callback[0](widget, path_to_file, *callback[1:])
+				else:
+					callback(widget, path_to_file)
 
 		try:
 			if os.name == 'nt':
@@ -2765,11 +2768,18 @@ class AvatarChooserDialog(ImageChooserDialog):
 		ImageChooserDialog.__init__(self, path_to_file, on_response_ok,
 			on_response_cancel)
 		button = gtk.Button(None, gtk.STOCK_CLEAR)
+		self.response_clear = on_response_clear
 		if on_response_clear:
-			button.connect('clicked', on_response_clear)
+			button.connect('clicked', self.on_clear)
 		button.show_all()
 		self.action_area.pack_start(button)
 		self.action_area.reorder_child(button, 0)
+
+	def on_clear(self, widget):
+		if isinstance(self.response_clear, tuple):
+			self.response_clear[0](widget, *self.response_clear[1:])
+		else:
+			self.response_clear(widget)
 
 class AddSpecialNotificationDialog:
 	def __init__(self, jid):
