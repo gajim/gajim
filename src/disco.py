@@ -1837,6 +1837,15 @@ class DiscussionGroupsBrowser(AgentBrowser):
 			self._total_items += 1
 			self._add_item(jid, node, item, force)
 
+	def _in_list_foreach(self, model, path, iter, node):
+		if model[path][1] == node:
+			self.in_list = True
+
+	def _in_list(self, node):
+		self.in_list = False
+		self.model.foreach(self._in_list_foreach, node)
+		return self.in_list
+
 	def _add_item(self, jid, node, item, force):
 		''' Called when we got basic information about new node from query.
 		Show the item. '''
@@ -1858,9 +1867,10 @@ class DiscussionGroupsBrowser(AgentBrowser):
 			parent_node = node_splitted.pop(0)
 			parent_iter = self._get_child_iter(parent_iter, parent_node)
 			node_splitted[0] = parent_node + '/' + node_splitted[0]
-		self.model.append(parent_iter, (jid, node, name, dunno, subscribed))
-		self.cache.get_items(jid, node, self._add_items, force = force,
-			args = (force,))
+		if not self._in_list(node):
+			self.model.append(parent_iter, (jid, node, name, dunno, subscribed))
+			self.cache.get_items(jid, node, self._add_items, force = force,
+				args = (force,))
 
 	def _get_child_iter(self, parent_iter, node):
 		child_iter = self.model.iter_children(parent_iter)
