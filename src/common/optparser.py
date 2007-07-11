@@ -159,6 +159,8 @@ class OptionsParser:
 			self.update_config_to_01112()
 		if old < [0, 11, 1, 3] and new >= [0, 11, 1, 3]:
 			self.update_config_to_01113()
+		if old < [0, 11, 1, 4] and new >= [0, 11, 1, 4]:
+			self.update_config_to_01114()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -431,3 +433,25 @@ class OptionsParser:
 		con.close()
 		gajim.config.set('version', '0.11.1.3')
 
+	def update_config_to_01114(self):
+		# add default theme if it doesn't exist
+		d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
+			'accountfontattrs', 'grouptextcolor', 'groupbgcolor', 'groupfont',
+			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
+			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont', 
+			'bannerfontattrs']
+		theme_name = _('default')
+		if theme_name not in gajim.config.get_per('themes'):
+			gajim.config.add_per('themes', theme_name)
+			if gajim.config.get_per('themes', 'gtk+'):
+				# copy from old gtk+ theme
+				for o in d:
+					val = gajim.config.get_per('themes', 'gtk+', o)
+					gajim.config.set_per('themes', theme_name, o, val)
+				gajim.config.del_per('themes', 'gtk+')
+			else:
+				# copy from default theme
+				theme = gajim.config.themes_default[theme_name]
+				for o in d:
+					gajim.config.set_per('themes', theme_name, o, theme[d.index(o)])
+		gajim.config.set('version', '0.11.1.4')
