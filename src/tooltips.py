@@ -257,9 +257,8 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		self.create_table()
 
 		accounts = helpers.get_notification_icon_tooltip_dict()
-		if len(accounts) > 1:
-			self.table.resize(2, 1)
-			self.fill_table_with_accounts(accounts)
+		self.table.resize(2, 1)
+		self.fill_table_with_accounts(accounts)
 		self.hbox = gtk.HBox()
 		self.table.set_property('column-spacing', 1)
 
