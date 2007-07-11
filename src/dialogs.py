@@ -8,6 +8,7 @@
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published

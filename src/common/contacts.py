@@ -3,6 +3,7 @@
 ## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ##
 ## This program is free software; you can redistribute it and/or modify

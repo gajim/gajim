@@ -5,6 +5,7 @@
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
