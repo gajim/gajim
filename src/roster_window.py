@@ -2846,9 +2846,9 @@ class RosterWindow:
 		gajim.interface.instances['accounts'].select_account(account)
 
 	def on_open_gmail_inbox(self, widget, account):
-		url = 'http://mail.google.com/mail?account_id=%s' % urllib.quote(
-			gajim.config.get_per('accounts', account, 'name'))
-		helpers.launch_browser_mailer('url', url)
+		url = gajim.connections[account].gmail_url
+		if url:
+			helpers.launch_browser_mailer('url', url)
 
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
@@ -2914,8 +2914,7 @@ class RosterWindow:
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, 'offline')
 
-			if gajim.config.get_per('accounts', account, 'hostname') not in \
-			gajim.gmail_domains:
+			if not gajim.connections[account].gmail_url:
 				open_gmail_inbox_menuitem.set_no_show_all(True)
 				open_gmail_inbox_menuitem.hide()
 			else:

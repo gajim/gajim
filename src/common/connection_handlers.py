@@ -800,6 +800,9 @@ class ConnectionDisco:
 			identities = [{'category': 'server', 'type': 'im', 'name': node}]
 		if id[0] == 'p':
 			if jid == gajim.config.get_per('accounts', self.name, 'hostname'):
+				if features.__contains__(common.xmpp.NS_GMAILNOTIFY):
+					gajim.gmail_domains.append(jid)
+					self.request_gmail_notifications()
 				for identity in identities:
 					if identity['category'] == 'pubsub' and identity['type'] == \
 					'pep':
@@ -1177,6 +1180,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
 		ConnectionPubSub.__init__(self)
+		self.gmail_url=None
 		# List of IDs we are waiting answers for {id: (type_of_request, data), }
 		self.awaiting_answers = {}
 		# List of IDs that will produce a timeout is answer doesn't arrive
@@ -1393,6 +1397,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		'''Called when we receive results from Querying the server for mail messages in gmail account'''
 		if not gm.getTag('mailbox'):
 			return
+		self.gmail_url = gm.getTag('mailbox').getAttr('url')
 		if gm.getTag('mailbox').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
 			newmsgs = gm.getTag('mailbox').getAttr('total-matched')
 			if newmsgs != '0':
@@ -1962,28 +1967,30 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			# Get annotations from private namespace
 			self.get_annotations()
 
-			# If it's a gmail account,
-			# inform the server that we want e-mail notifications
-			if gajim.get_server_from_jid(our_jid) in gajim.gmail_domains:
-				gajim.log.debug(('%s is a gmail account. Setting option '
-					'to get e-mail notifications on the server.') % (our_jid))
-				iq = common.xmpp.Iq(typ = 'set', to = our_jid)
-				iq.setAttr('id', 'MailNotify')
-				query = iq.setTag('usersetting')
-				query.setNamespace(common.xmpp.NS_GTALKSETTING)
-				query = query.setTag('mailnotifications')
-				query.setAttr('value', 'true')
-				self.connection.send(iq)
-				# Ask how many messages there are now
-				iq = common.xmpp.Iq(typ = 'get')
-				iq.setAttr('id', '13')
-				query = iq.setTag('query')
-				query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
-				self.connection.send(iq)
-
 			#Inform GUI we just signed in
 			self.dispatch('SIGNED_IN', ())
 		self.continue_connect_info = None
+	
+	def request_gmail_notifications(self):
+		# It's a gmail account,
+		# inform the server that we want e-mail notifications
+		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
+		gajim.log.debug(('%s is a gmail account. Setting option '
+			'to get e-mail notifications on the server.') % (our_jid))
+		iq = common.xmpp.Iq(typ = 'set', to = our_jid)
+		iq.setAttr('id', 'MailNotify')
+		query = iq.setTag('usersetting')
+		query.setNamespace(common.xmpp.NS_GTALKSETTING)
+		query = query.setTag('mailnotifications')
+		query.setAttr('value', 'true')
+		self.connection.send(iq)
+		# Ask how many messages there are now
+		iq = common.xmpp.Iq(typ = 'get')
+		iq.setID(self.connection.getAnID())
+		query = iq.setTag('query')
+		query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
+		self.connection.send(iq)
+
 	
 	def _search_fields_received(self, con, iq_obj):
 		jid = jid = helpers.get_jid_from_iq(iq_obj)

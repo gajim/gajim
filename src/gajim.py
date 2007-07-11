@@ -2230,9 +2230,9 @@ class Interface:
 				# Open the window
 				self.roster.open_event(account, fjid, event)
 		elif type_ == 'gmail':
-			url = 'http://mail.google.com/mail?account_id=%s' % urllib.quote(
-				gajim.config.get_per('accounts', account, 'name'))
-			helpers.launch_browser_mailer('url', url)
+			url=gajim.connections[account].gmail_url
+			if url:
+				helpers.launch_browser_mailer('url', url)
 		elif type_ == 'gc-invitation':
 			event = gajim.events.get_first_event(account, jid, type_)
 			data = event.parameters
