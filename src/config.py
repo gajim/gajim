@@ -1409,7 +1409,7 @@ class AccountsWindow:
 		# Select previous row
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
-		if self.need_relogin and self.current_account == gajim.ZEROCONF_ACCT_NAME:
+		if self.need_relogin and self.current_account == gajim.ZEROCONF_ACC_NAME:
 			if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
 				gajim.connections[gajim.ZEROCONF_ACC_NAME].update_details()
 				return
