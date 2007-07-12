@@ -2,6 +2,7 @@ import gajim
 
 from common import xmpp
 from common import helpers
+from common import exceptions
 
 import random
 import string
@@ -47,13 +48,14 @@ class StanzaSession(object):
 		return "".join([random.choice(string.letters) for x in xrange(0,32)])
 
 	def send(self, msg):
-		if self.thread_id:
+		if self.thread_id and isinstance(msg, xmpp.Message):
 			msg.setThread(self.thread_id)
 
 		msg.setAttr('to', self.jid)
 		self.conn.send_stanza(msg)
-
-		self.last_send = time.time()
+	
+		if isinstance(msg, xmpp.Message):
+			self.last_send = time.time()
 
 	def reject_negotiation(self, body = None):
 		msg = xmpp.Message()
@@ -291,7 +293,7 @@ class EncryptedStanzaSession(StanzaSession):
 		try:
 			parsed = xmpp.Node(node='<node>' + plaintext + '</node>')
 		except:
-			raise DecryptionError
+			raise exceptions.DecryptionError
 
 		for child in parsed.getChildren():
 			stanza.addChild(node=child)
@@ -446,7 +448,7 @@ class EncryptedStanzaSession(StanzaSession):
 		self.n_o = base64.b64decode(form['my_nonce'])
 
 		dhhashes = form.getField('dhhashes').getValues()
-		self.He = dhhashes[group_order].encode("utf8")
+		self.He = base64.b64decode(dhhashes[group_order].encode("utf8"))
 
 		bytes = int(self.n / 8)
 
@@ -586,13 +588,8 @@ class EncryptedStanzaSession(StanzaSession):
 		e = self.decode_mpi(base64.b64decode(form['dhkeys']))
 		p = dh.primes[self.modp]
 
-		if (not self.sha256(self.encode_mpi(e)) == self.He): or \
-		(not e > 1 and e < (p - 1)):
-			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
-			err.T.error.T.text.setData("invalid DH value 'e'")
-			self.send(err)
-			self.status = None
-			return
+		if (self.sha256(self.encode_mpi(e)) != self.He) or (not 1 < e < (p - 1)):
+			raise exceptions.NegotiationError, "invalid DH value 'e'"
 
 		k = self.sha256(self.encode_mpi(self.powmod(e, self.y, p)))
 
@@ -605,11 +602,7 @@ class EncryptedStanzaSession(StanzaSession):
 		m_a_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_a)
 
 		if m_a_calculated != m_a:
-			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
-			err.T.error.T.text.setData('calculated m_a differs from received m_a')
-			self.send(err)
-			self.status = None
-			return
+			raise exceptions.NegotiationError, 'calculated m_a differs from received m_a'
 
 		mac_a = self.decrypt(id_a)
 
@@ -619,11 +612,7 @@ class EncryptedStanzaSession(StanzaSession):
 		mac_a_calculated = self.hmac(self.ks_o, self.n_s + self.n_o + self.encode_mpi(e) + self.form_a + form_a2)
 
 		if mac_a_calculated != mac_a:
-			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
-			err.T.error.T.text.setData('calculated mac_a differs from received mac_a')
-			self.send(err)
-			self.status = None
-			return
+			raise exceptions.NegotiationError, 'calculated mac_a differs from received mac_a'
 
 		# 4.5.4 generating bob's final session keys
 		self.srs = ''
@@ -653,7 +642,8 @@ class EncryptedStanzaSession(StanzaSession):
 		form_b2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
 
 		old_c_s = self.c_s
-		mac_b = self.hmac(self.n_o + self.n_s + self.encode_mpi(self.d) + self.form_b + form_b2, self.ks_s)
+
+		mac_b = self.hmac(self.ks_s, self.n_o + self.n_s + self.encode_mpi(self.d) + self.form_b + form_b2)
 		id_b = self.encrypt(mac_b)
 
 		m_b = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_b)
@@ -703,27 +693,20 @@ class EncryptedStanzaSession(StanzaSession):
 		m_b = base64.b64decode(form['mac'])
 		id_b = base64.b64decode(form['identity'])
 
-		m_b_calculated = self.hmac(self.encode_mpi(self.c_o) + id_b, self.km_o)
+		m_b_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_b)
 
 		if m_b_calculated != m_b:
-			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
-			err.T.error.T.text.setData('calculated m_b differs from received m_b')
-			self.send(err)
-			self.status = None
-			return
+			raise exceptions.NegotiationError, 'calculated m_b differs from received m_b'
 
 		mac_b = self.decrypt(id_b)
 
-		form_b2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
+		macable_children = filter(lambda x: x.getVar() not in ('mac', 'identity'), form.getChildren())
+		form_b2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), macable_children))
 
-		mac_b_calculated = self.hmac(self.n_s + self.n_o + self.encode_mpi(self.d) + self.form_b + form_b2, self.ks_o)
+		mac_b_calculated = self.hmac(self.ks_o, self.n_s + self.n_o + self.encode_mpi(self.d) + self.form_b + form_b2)
 
 		if mac_b_calculated != mac_b:
-			err = xmpp.Error(response, xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
-			err.T.error.T.text.setData('calculated mac_b differs from received mac_b')
-			self.send(err)
-			self.status = None
-			return
+			raise exceptions.NegotiationError, 'calculated mac_b differs from received mac_b'
 
 # Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
 	
@@ -781,6 +764,13 @@ class EncryptedStanzaSession(StanzaSession):
 		StanzaSession.acknowledge_termination(self)
 		
 		self.enable_encryption = False
+
+	def fail_bad_negotiation(self, reason):
+		'''they've tried to feed us a bogus value, send an error and cancel everything.'''
+		err = xmpp.Error(xmpp.Message(), xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
+		err.T.error.T.text.setData(reason)
+		self.send(err)
+		self.status = None
 
 	def is_loggable(self):
 		name = self.conn.name

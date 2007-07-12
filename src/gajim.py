@@ -1669,38 +1669,50 @@ class Interface:
 		# bob responds
 		if form.getType() == 'form' and u'e2e' in \
 		map(lambda x: x[1], form.getField('security').getOptions()):
-			contact = gajim.contacts.get_contact(account, jid.getStripped(), jid.getResource())
+			def continue_with_negotiation(*args):
+				if len(args):
+					self.dialog.destroy()
 
-			if gajim.SHOW_LIST[gajim.connections[account].connected] == 'invisible' or \
-			contact.sub not in ('from', 'both'):
+				negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
+
+				if ask_user:
+					def accept_nondefault_options(widget):
+						self.dialog.destroy()
+						negotiated.update(ask_user)
+						session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+					def reject_nondefault_options(widget):
+						self.dialog.destroy()
+						for key in ask_user.keys():
+							not_acceptable.append(key)
+						session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+					self.dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+						_('''The remote client wants to negotiate an session with these features:
+
+	%s
+
+	Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
+							on_response_yes = accept_nondefault_options,
+							on_response_no = reject_nondefault_options)
+				else:
+					session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+			def ignore_negotiation(widget):
+				self.dialog.destroy()
 				return
-
-			negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
-
-			if ask_user:
-				def accept_nondefault_options(widget):
-					negotiated.update(ask_user)
-					session.respond_e2e_bob(form, negotiated, not_acceptable)
-					
-					dialog.destroy()
-
-				def reject_nondefault_options(widget):
-					for key in ask_user.keys():
-						not_acceptable.append(key)
-					session.respond_e2e_bob(form, negotiated, not_acceptable)
-
-					dialog.destroy()
-
-				dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-					_('''The remote client wants to negotiate an session with these features:
-
-%s
-
-Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
-						on_response_yes = accept_nondefault_options,
-						on_response_no = reject_nondefault_options)
+			
+			contact = gajim.contacts.get_contact_with_highest_priority(account, str(jid))
+				
+			if gajim.SHOW_LIST[gajim.connections[account].connected] == 'invisible' or not contact or\
+			contact.sub not in ('from', 'both'):
+				self.dialog = dialogs.YesNoDialog(_('Start session?'),
+					_('''%s would like to start a session with you. Should I respond?''') % jid,
+							on_response_yes = continue_with_negotiation,
+							on_response_no = ignore_negotiation,
+					)
 			else:
-				session.respond_e2e_bob(form, negotiated, not_acceptable)
+				continue_with_negotiation()
 
 			return
 
@@ -1727,16 +1739,24 @@ Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
 						on_response_no = reject_nondefault_options)
 			else:
 				session.accept_e2e_alice(form, negotiated)
-				
 				negotiation.show_sas_dialog(jid, session.sas)
 
 			return
 		elif session.status == 'responded-e2e' and form.getType() == 'result':
-			session.accept_e2e_bob(form)
-			negotiation.show_sas_dialog(jid, session.sas)
+			try:
+				session.accept_e2e_bob(form)
+			except exceptions.NegotiationError, details: 
+				session.fail_bad_negotiation(details)
+			else:
+				negotiation.show_sas_dialog(jid, session.sas)
+
 			return
 		elif session.status == 'identified-alice' and form.getType() == 'result':
-			session.final_steps_alice(form)
+			try:
+				session.final_steps_alice(form)
+			except exceptions.NegotiationError, details: 
+				session.fail_bad_negotiation(details)
+
 			return
 		
 		if form.getField('terminate'):

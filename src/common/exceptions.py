@@ -45,8 +45,16 @@ class SessionBusNotPresent(Exception):
 	def __str__(self):
 		return _('Session bus is not available.\nTry reading http://trac.gajim.org/wiki/GajimDBus')
 
+class NegotiationError(Exception):
+	'''A session negotiation failed'''
+	pass
+
+class DecryptionError(Exception):
+	'''A message couldn't be decrypted into usable XML'''
+	pass
+
 class GajimGeneralException(Exception):
-	'''This exception ir our general exception'''
+	'''This exception is our general exception'''
 	def __init__(self, text=''):
 		Exception.__init__(self)
 		self.text = text
