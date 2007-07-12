@@ -123,7 +123,6 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 	do_popup = False
 	do_sound = False
 	do_cmd = False
-	do_preview = True  # defaults to true: do not reset emtpy text in new_message
 	if event == 'status_change':
 		new_show = parameters[0]
 		status_message = parameters[1]
@@ -158,7 +157,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		if gajim.config.get('notification_preview_message'):
 			message = parameters[3]
 		else:
-			do_preview = False
+			# We don't want message preview, do_preview = False
 			message = ''
 		if helpers.allow_showing_notification(account, 'notify_on_new_message',
 		advanced_notif_num, is_first_message):
@@ -240,7 +239,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 					'priv_msg_recv.png')
 				title = _('New Private Message from group chat %s') % room_name
-				if do_preview:
+				if message:
 					text = _('%(nickname)s: %(message)s') % {'nickname': nickname,
 						'message': message}
 				else:
@@ -308,7 +307,8 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 			gajim.log.debug(str(e))
 	# we failed to speak to notification daemon via D-Bus
 	if USER_HAS_PYNOTIFY: # try via libnotify
-		if not text and do_preview:
+		if not text and event_type == 'new_message':
+			# empty text for new_message means do_preview = False
 			text = gajim.get_name_from_jid(account, jid) # default value of text
 		if not title:
 			title = event_type
