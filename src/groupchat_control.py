@@ -521,7 +521,9 @@ class GroupchatControl(ChatControlBase):
 		else:
 			# message from someone
 			if has_timestamp:
-				self.print_old_conversation(msg, nick, tim, xhtml)
+				# don't print xhtml if it's an old message.
+				# Like that xhtml messages are grayed too.
+				self.print_old_conversation(msg, nick, tim, None)
 			else:
 				self.print_conversation(msg, nick, tim, xhtml)
 
