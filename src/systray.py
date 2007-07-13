@@ -6,6 +6,7 @@
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -82,7 +83,7 @@ class Systray:
 		if not gajim.interface.systray_enabled:
 			return
 		if gajim.events.get_nb_systray_events():
-			state = 'message'
+			state = 'event'
 		else:
 			state = self.status
 		image = gajim.interface.roster.jabber_state_images['16'][state]

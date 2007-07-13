@@ -10,6 +10,7 @@
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -552,8 +553,8 @@ class GroupchatControl(ChatControlBase):
 				model = self.list_treeview.get_model()
 				state_images =\
 					gajim.interface.roster.get_appropriate_state_images(
-						self.room_jid, icon_name = 'message')
-				image = state_images['message']
+						self.room_jid, icon_name = 'event')
+				image = state_images['event']
 				model[iter][C_IMG] = image
 			if self.parent_win:
 				self.parent_win.show_title()
@@ -836,7 +837,7 @@ class GroupchatControl(ChatControlBase):
 			nick)
 		state_images = gajim.interface.roster.jabber_state_images['16']
 		if len(gajim.events.get_events(self.account, self.room_jid + '/' + nick)):
-			image = state_images['message']
+			image = state_images['event']
 		else:
 			image = state_images[gc_contact.show]
 

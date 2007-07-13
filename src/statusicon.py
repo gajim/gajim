@@ -1,6 +1,7 @@
 ## statusicon.py
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License
@@ -56,7 +57,7 @@ class StatusIcon(systray.Systray):
 		text = helpers.get_notification_icon_tooltip_text()
 		self.status_icon.set_tooltip(text)
 		if gajim.events.get_nb_systray_events():
-			state = 'message' # FIXME: this state should be called event, not message
+			state = 'event'
 			self.status_icon.props.blinking = True
 		else:
 			state = self.status

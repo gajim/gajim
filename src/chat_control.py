@@ -1457,13 +1457,13 @@ class ChatControl(ChatControlBase):
 			jid = self.contact.jid
 		num_unread = len(gajim.events.get_events(self.account, jid,
 			['printed_' + self.type_id, self.type_id]))
-		# Set tab image (always 16x16); unread messages show the 'message' image
+		# Set tab image (always 16x16); unread messages show the 'event' image
 		tab_img = None
 		
 		if num_unread and gajim.config.get('show_unread_tab_icon'):
 			img_16 = gajim.interface.roster.get_appropriate_state_images(
-				self.contact.jid, icon_name = 'message')
-			tab_img = img_16['message']
+				self.contact.jid, icon_name = 'event')
+			tab_img = img_16['event']
 		else:
 			contact = gajim.contacts.get_contact_with_highest_priority(
 				self.account, self.contact.jid)

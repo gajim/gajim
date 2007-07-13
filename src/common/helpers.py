@@ -547,14 +547,14 @@ def get_global_status():
 def get_icon_name_to_show(contact, account = None):
 	'''Get the icon name to show in online, away, requested, ...'''
 	if account and gajim.events.get_nb_roster_events(account, contact.jid):
-		return 'message'
+		return 'event'
 	if account and gajim.events.get_nb_roster_events(account,
 	contact.get_full_jid()):
-		return 'message'
+		return 'event'
 	if account and gajim.interface.minimized_controls.has_key(account) and \
 	contact.jid in gajim.interface.minimized_controls[account] and gajim.interface.\
 		minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
-		return 'message'
+		return 'event'
 	if account and gajim.gc_connected[account].has_key(contact.jid):
 		if gajim.gc_connected[account][contact.jid]:
 			return 'muc_active'

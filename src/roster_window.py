@@ -677,13 +677,13 @@ class RosterWindow:
 		# look if another resource has awaiting events
 		for c in contact_instances:
 			c_icon_name = helpers.get_icon_name_to_show(c, account)
-			if c_icon_name in ('message', 'muc_active', 'muc_inactive'):
+			if c_icon_name in ('event', 'muc_active', 'muc_inactive'):
 				icon_name = c_icon_name
 				break
 		path = model.get_path(iter)
 		if model.iter_has_child(iter):
 			if not self.tree.row_expanded(path) and \
-			icon_name not in ('message', 'muc_active', 'muc_inactive'):
+			icon_name not in ('event', 'muc_active', 'muc_inactive'):
 				child_iter = model.iter_children(iter)
 				if icon_name in ('error', 'offline'):
 					# get the icon from the first child as they are sorted by show
@@ -700,7 +700,7 @@ class RosterWindow:
 					child_jid = model[child_iter][C_JID].decode('utf-8')
 					child_account = model[child_iter][C_ACCOUNT].decode('utf-8')
 					if len(gajim.events.get_events(child_account, child_jid)):
-						icon_name = 'message'
+						icon_name = 'event'
 						break
 					child_iter = model.iter_next(child_iter)
 			if self.tree.row_expanded(path):
@@ -4292,11 +4292,11 @@ class RosterWindow:
 				'not in roster')
 		else:
 			list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-				'invisible', 'offline', 'error', 'requested', 'message', 'opened',
+				'invisible', 'offline', 'error', 'requested', 'event', 'opened',
 				'closed', 'not in roster', 'muc_active', 'muc_inactive')
 			if pixbuf2:
 				list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-					'offline', 'error', 'requested', 'message', 'not in roster')
+					'offline', 'error', 'requested', 'event', 'not in roster')
 		return self._load_icon_list(list, path, pixbuf2)
 
 	def load_icon(self, icon_name):
