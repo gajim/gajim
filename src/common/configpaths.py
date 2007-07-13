@@ -77,8 +77,8 @@ def init():
 	paths = ConfigPaths()
 
 	# LOG is deprecated
-	k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS' )
-	v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons')
+	k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS',   'SECRETS' )
+	v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons', u'secrets')
 
 	if os.name == 'nt':
 		v = map(lambda x: x.capitalize(), v)
