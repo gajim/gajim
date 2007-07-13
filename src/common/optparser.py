@@ -161,6 +161,8 @@ class OptionsParser:
 			self.update_config_to_01113()
 		if old < [0, 11, 1, 4] and new >= [0, 11, 1, 4]:
 			self.update_config_to_01114()
+		if old < [0, 11, 1, 5] and new >= [0, 11, 1, 5]:
+			self.update_config_to_01115()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -455,3 +457,22 @@ class OptionsParser:
 				for o in d:
 					gajim.config.set_per('themes', theme_name, o, theme[d.index(o)])
 		gajim.config.set('version', '0.11.1.4')
+	
+	def update_config_to_01115(self):
+		# copy&pasted from update_config_to_01013, possibly 'FIXME see #2812' applies too
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				DELETE FROM caps_cache;
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+		gajim.config.set('version', '0.11.1.5')

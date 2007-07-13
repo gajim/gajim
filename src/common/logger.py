@@ -664,7 +664,7 @@ class Logger:
 			# (format: (category, type, name, category, type, name, ...
 			#   ..., 'FEAT', feature1, feature2, ...).join(' '))
 			# NOTE: if there's a need to do more gzip, put that to a function
-			data=GzipFile(fileobj=StringIO(str(data))).read().split(' ') # (2) -- note above
+			data=GzipFile(fileobj=StringIO(str(data))).read().split('\0') # (2) -- note above
 			i=0
 			identities=set()
 			features=set()
@@ -694,7 +694,7 @@ class Logger:
 				data.extend(identity)
 		data.append('FEAT')
 		data.extend(features)
-		data = ' '.join(data)
+		data = '\0'.join(data)
 		string = StringIO()	# if there's a need to do more gzip, put that to a function
 		gzip=GzipFile(fileobj=string, mode='w')
 		gzip.write(data)
