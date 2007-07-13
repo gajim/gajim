@@ -668,7 +668,7 @@ class Logger:
 			i=0
 			identities=set()
 			features=set()
-			while i<len(data) and data[i]!='FEAT':
+			while i<(len(data)-2) and data[i]!='FEAT':
 				category=data[i]
 				type=data[i+1]
 				name=data[i+2]
