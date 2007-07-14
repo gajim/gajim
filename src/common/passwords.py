@@ -111,6 +111,8 @@ def get_storage():
 				storage = GnomePasswordStorage()
 			except gnomekeyring.NoKeyringDaemonError:
 				storage = SimplePasswordStorage()
+			except gnomekeyring.DeniedError:
+				storage = SimplePasswordStorage()
 		else:
 			storage = SimplePasswordStorage()
 	return storage
