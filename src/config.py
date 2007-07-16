@@ -1190,10 +1190,9 @@ class ManageProxiesWindow:
 		self.xml.get_widget('proxytype_combobox').set_active(0)
 
 	def on_manage_proxies_window_destroy(self, widget):
-		for account in gajim.connections:
-			if gajim.interface.instances.has_key('accounts'):
-				gajim.interface.instances[account]['accounts'].\
-					update_proxy_list()
+		if gajim.interface.instances.has_key('accounts'):
+			gajim.interface.instances['accounts'].\
+				update_proxy_list()
 		del gajim.interface.instances['manage_proxies']
 
 	def on_add_proxy_button_clicked(self, widget):
