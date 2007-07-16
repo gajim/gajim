@@ -538,11 +538,13 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			imgs = gajim.interface.roster.transports_state_images
 			img = None
 			if imgs['16'].has_key(type_) and imgs['16'][type_].has_key('online'):
-				img = gajim.interface.roster.transports_state_images['16'][type_]['online']
-			if type_ in uf_type:
-				liststore.append([uf_type[type_], img.get_pixbuf(), type_])
+				img = imgs['16'][type_]['online']
+				if type_ in uf_type:
+					liststore.append([uf_type[type_], img.get_pixbuf(), type_])
+				else:
+					liststore.append([type_, img.get_pixbuf(), type_])
 			else:
-				liststore.append([type_, img.get_pixbuf(), type_])
+				liststore.append([type_, img, type_])
 		self.protocol_combobox.set_active(0)
 		self.protocol_jid_combobox.set_no_show_all(True)
 		self.protocol_jid_combobox.hide()
