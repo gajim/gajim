@@ -1744,9 +1744,11 @@ class Interface:
 			def ignore_negotiation(widget):
 				self.dialog.destroy()
 				return
-			
-			contact = gajim.contacts.get_contact_with_highest_priority(account, str(jid))
-				
+
+			contact = gajim.contacts.get_contact(account, jid.getStripped(), jid.getResource())
+
+			# FIXME: shouldn't prompt if i don't have a subscription for remote but
+			# he has one for me. get_contact() returns None in this case?
 			if gajim.SHOW_LIST[gajim.connections[account].connected] == 'invisible' or not contact or\
 			contact.sub not in ('from', 'both'):
 				self.dialog = dialogs.YesNoDialog(_('Start session?'),
