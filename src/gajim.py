@@ -109,6 +109,8 @@ from common import exceptions
 from common.zeroconf import connection_zeroconf
 from common import dbus_support
 
+import pickle
+
 if os.name == 'posix': # dl module is Unix Only
 	try: # rename the process name to gajim
 		import dl
@@ -208,6 +210,7 @@ gajimpaths = common.configpaths.gajimpaths
 
 pid_filename = gajimpaths['PID_FILE']
 config_filename = gajimpaths['CONFIG_FILE']
+secrets_filename = gajimpaths['SECRETS_FILE']
 
 import traceback
 import errno
@@ -1390,6 +1393,46 @@ class Interface:
 			if os.path.isfile(path_to_original_file):
 				os.remove(path_to_original_file)
 
+	def list_secrets(self, account, jid):
+		f = open(secrets_filename)
+
+		try:
+			s = pickle.load(f)[account][jid]
+		except KeyError:
+			s = []
+
+		f.close()
+		return s
+
+	def save_new_secret(self, account, jid, secret):
+		f = open(secrets_filename, 'r')
+		secrets = pickle.load(f)
+		f.close()
+
+		if not account in secrets:
+			secrets[account] = {}
+
+		if not jid in secrets[account]:
+			secrets[account][jid] = []
+
+		secrets[account][jid].append(secret)
+
+		f = open(secrets_filename, 'w')
+		pickle.dump(secrets, f)
+		f.close()
+
+	def replace_secret(self, account, jid, old_secret, new_secret):
+		f = open(secrets_filename, 'r')
+		secrets = pickle.load(f)
+		f.close()
+
+		this_secrets = secrets[account][jid]
+		this_secrets[this_secrets.index(old_secret)] = new_secret
+
+		f = open(secrets_filename, 'w')
+		pickle.dump(secrets, f)
+		f.close()
+		
 	def add_event(self, account, jid, type_, event_args):
 		'''add an event to the gajim.events var'''
 		# We add it to the gajim.events queue
@@ -1657,7 +1700,7 @@ class Interface:
 
 	def handle_session_negotiation(self, account, data):
 		jid, session, form = data
-	
+
 		if form.getField('accept') and not form['accept'] in ('1', 'true'):
 			dialogs.InformationDialog(_('Session negotiation cancelled'),
 					_('The client at %s cancelled the session negotiation.') % (jid))
@@ -1727,8 +1770,6 @@ class Interface:
 					negotiated.update(ask_user)
 					session.accept_e2e_alice(form, negotiated)
 
-					negotiation.show_sas_dialog(jid, session.sas)
-
 				def reject_nondefault_options(widget):
 					session.reject_negotiation()
 					dialog.destroy()
@@ -1739,19 +1780,20 @@ class Interface:
 						on_response_no = reject_nondefault_options)
 			else:
 				session.accept_e2e_alice(form, negotiated)
-				negotiation.show_sas_dialog(jid, session.sas)
 
 			return
 		elif session.status == 'responded-e2e' and form.getType() == 'result':
+			session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
+
 			try:
 				session.accept_e2e_bob(form)
 			except exceptions.NegotiationError, details: 
 				session.fail_bad_negotiation(details)
-			else:
-				negotiation.show_sas_dialog(jid, session.sas)
 
 			return
 		elif session.status == 'identified-alice' and form.getType() == 'result':
+			session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
+
 			try:
 				session.final_steps_alice(form)
 			except exceptions.NegotiationError, details: 
@@ -2548,6 +2590,12 @@ if __name__ == '__main__':
 					cli.set_restart_command(len(argv), argv)
 		
 	check_paths.check_and_possibly_create_paths()
+
+	# create secrets file (unless it exists)
+	if not os.path.exists(secrets_filename):
+		f = open(secrets_filename, 'w')
+		pickle.dump({}, f)
+		f.close()
 
 	Interface()
 	gtk.main()

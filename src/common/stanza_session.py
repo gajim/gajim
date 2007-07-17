@@ -1,4 +1,4 @@
-import gajim
+from common import gajim
 
 from common import xmpp
 from common import helpers
@@ -23,10 +23,7 @@ class StanzaSession(object):
 	def __init__(self, conn, jid, thread_id, type):
 		self.conn = conn
 
-		if isinstance(jid, str) or isinstance(jid, unicode):
-			self.jid = xmpp.JID(jid)
-		else:
-			self.jid = jid
+		self.jid = jid
 
 		self.type = type
 
@@ -43,7 +40,7 @@ class StanzaSession(object):
 		self.last_send = 0
 		self.status = None
 		self.negotiated = {}
-
+	
 	def generate_thread_id(self):
 		return "".join([random.choice(string.letters) for x in xrange(0,32)])
 
@@ -543,8 +540,15 @@ class EncryptedStanzaSession(StanzaSession):
 		result.addChild(node=xmpp.DataField(name='nonce', value=base64.b64encode(self.n_o)))
 		result.addChild(node=xmpp.DataField(name='dhkeys', value=base64.b64encode(self.encode_mpi(e))))
 
-		# TODO: store and return rshashes, or at least randomly generate some
-		result.addChild(node=xmpp.DataField(name='rshashes', value=[]))
+		secrets = gajim.interface.list_secrets(self.conn.name, self.jid.getStripped()) 
+		rshashes = [self.hmac(self.n_s, rs) for rs in secrets]
+
+		# XXX add some random fake rshashes here
+
+		rshashes.sort()
+
+		rshashes = [base64.b64encode(rshash) for rshash in rshashes]
+		result.addChild(node=xmpp.DataField(name='rshashes', value=rshashes))
 
 		form_a2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), result.getChildren()))
 
@@ -615,23 +619,34 @@ class EncryptedStanzaSession(StanzaSession):
 			raise exceptions.NegotiationError, 'calculated mac_a differs from received mac_a'
 
 		# 4.5.4 generating bob's final session keys
-		self.srs = ''
+
+		srs = ''
+	
+		secrets = gajim.interface.list_secrets(self.conn.name, self.jid.getStripped())
+		rshashes = [base64.b64decode(rshash) for rshash in form.getField('rshashes').getValues()]
+
+		for secret in secrets:
+			if self.hmac(self.n_o, secret) in rshashes:
+				srs = secret
+				break
+
+		# other shared secret, we haven't got one.
 		oss = ''
 
 		# check for a retained secret
 		# if none exists, prompt the user with the SAS
 		if self.sas_algs == 'sas28x5':
 			self.sas = self.sas_28x5(m_a, self.form_b)
-
-		k = self.sha256(k + self.srs + oss)
+		
+		k = self.sha256(k + srs + oss)
 
 		# XXX I can skip generating ks_o here
 		self.kc_s, self.km_s, self.ks_s = self.generate_responder_keys(k)
 		self.kc_o, self.km_o, self.ks_o = self.generate_initiator_keys(k)
 
 		# 4.5.5
-		if self.srs:
-			srshash = self.hmac(self.srs, 'Shared Retained Secret')
+		if srs:
+			srshash = self.hmac(srs, 'Shared Retained Secret')
 		else:
 			srshash = self.random_bytes(32)
 
@@ -655,11 +670,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.send(response)
 
-		# destroy all copies of srs
-
-		self.srs = self.hmac(k, 'New Retained Secret')
-
-		# destroy k
+		self.do_retained_secret(k, srs)
 
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
@@ -668,27 +679,28 @@ class EncryptedStanzaSession(StanzaSession):
 		self.enable_encryption = True
 
 	def final_steps_alice(self, form):
-		# Alice MUST identify the shared retained secret (SRS) by selecting from her client's list of the secrets it retained from sessions with Bob's clients (the most recent secret for each of the clients he has used to negotiate ESessions with Alice's client).
-
-		# Alice does this by using each secret in the list in turn as the key to calculate the HMAC (with SHA256) of the string "Shared Retained Secret", and comparing the calculated value with the value in the 'srshash' field she received from Bob (see Sending Bob's Identity). Once she finds a match, and has confirmed that the secret has not expired (because it is older than an implementation-defined period of time), then she has found the SRS.
-
-
 		srs = ''
+		secrets = gajim.interface.list_secrets(self.conn.name, self.jid.getStripped())
+
+		srshash = base64.b64decode(form['srshash'])
+
+		for secret in secrets:
+			if self.hmac(secret, 'Shared Retained Secret') == srshash:
+				srs = secret
+				break
+
 		oss = ''
-		self.k = self.sha256(self.k + srs + oss)
+		k = self.sha256(self.k + srs + oss)
+		del self.k
 
-		# Alice MUST destroy all her copies of the old retained secret (SRS) she was keeping for Bob's client, and calculate a new retained secret for this session:
-
-		srs = self.hmac('New Retained Secret', self.k)
-
-		# Alice MUST securely store the new value along with the retained secrets her client shares with Bob's other clients.
+		self.do_retained_secret(k, srs)
 
 		# don't need to calculate ks_s here
 
-		self.kc_s, self.km_s, self.ks_s = self.generate_initiator_keys(self.k)
-		self.kc_o, self.km_o, self.ks_o = self.generate_responder_keys(self.k) 
+		self.kc_s, self.km_s, self.ks_s = self.generate_initiator_keys(k)
+		self.kc_o, self.km_o, self.ks_o = self.generate_responder_keys(k)
 
-#4.6.2 Verifying Bob's Identity
+		# 4.6.2 Verifying Bob's Identity
 
 		m_b = base64.b64decode(form['mac'])
 		id_b = base64.b64decode(form['identity'])
@@ -715,6 +727,19 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.status = 'active'
 		self.enable_encryption = True
+
+	# calculate and store the new retained secret
+	# prompt the user to check the remote party's identity (if necessary)
+	def do_retained_secret(self, k, srs):
+		new_srs = self.hmac(k, 'New Retained Secret')
+		account = self.conn.name
+		bjid = self.jid.getStripped()
+
+		if srs:
+			gajim.interface.replace_secret(account, bjid, srs, new_srs)
+		else:
+			self.check_identity()
+			gajim.interface.save_new_secret(account, bjid, new_srs)
 
 	# generate a random number between 'bottom' and 'top'
 	def srand(self, bottom, top):
@@ -773,12 +798,12 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = None
 
 	def is_loggable(self):
-		name = self.conn.name
-		no_log_for = gajim.config.get_per('accounts', name, 'no_log_for')
+		account = self.conn.name
+		no_log_for = gajim.config.get_per('accounts', account, 'no_log_for')
 
 		if not no_log_for:
 			no_log_for = ''
 
 		no_log_for = no_log_for.split()
 
-		return self.loggable and name not in no_log_for and self.jid not in no_log_for
+		return self.loggable and account not in no_log_for and self.jid not in no_log_for

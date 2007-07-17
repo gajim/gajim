@@ -1609,7 +1609,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		del self.sessions[original_jid][thread_id]
 
 		new_jid = gajim.get_jid_without_resource(original_jid) + '/' + to_resource
-		session.jid = new_jid
+		session.jid = common.xmpp.JID(new_jid)
 
 		if not new_jid in self.sessions:
 			self.sessions[new_jid] = {}
@@ -1628,7 +1628,7 @@ returns the session that we last sent a message to.'''
 		return no_threadid_sessions[-1]
 
 	def make_new_session(self, jid, thread_id = None, type = 'chat'):
-		sess = EncryptedStanzaSession(self, jid, thread_id, type)
+		sess = EncryptedStanzaSession(self, common.xmpp.JID(jid), thread_id, type)
 
 		if not jid in self.sessions:
 			self.sessions[jid] = {}
