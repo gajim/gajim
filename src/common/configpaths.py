@@ -77,8 +77,8 @@ def init():
 	paths = ConfigPaths()
 
 	# LOG is deprecated
-	k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS',   'SECRETS' )
-	v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons', u'secrets')
+	k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS' )
+	v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons')
 
 	if os.name == 'nt':
 		v = map(lambda x: x.capitalize(), v)
@@ -106,13 +106,17 @@ gajimpaths = init()
 def init_profile(profile, paths=gajimpaths):
 	conffile = windowsify(u'config')
 	pidfile = windowsify(u'gajim')
+	secretsfile = windowsify(u'secrets')
 
 	if len(profile) > 0:
 		conffile += u'.' + profile
 		pidfile += u'.' + profile
+		secretsfile += u'.' + profile
+
 	pidfile += u'.pid'
 	paths.add_from_root('CONFIG_FILE', conffile)
 	paths.add_from_root('PID_FILE', pidfile)
+	paths.add_from_root('SECRETS_FILE', secretsfile)
 
 	# for k, v in paths.iteritems():
 	# 	print "%s: %s" % (repr(k), repr(v))

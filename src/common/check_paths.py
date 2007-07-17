@@ -20,8 +20,6 @@ import stat
 from common import gajim
 import logger
 
-import pickle
-
 # DO NOT MOVE ABOVE OF import gajim
 try:
 	import sqlite3 as sqlite # python 2.5
@@ -86,7 +84,6 @@ def check_and_possibly_create_paths():
 	LOG_DB_PATH = logger.LOG_DB_PATH
 	VCARD_PATH = gajim.VCARD_PATH
 	AVATAR_PATH = gajim.AVATAR_PATH
-	SECRETS_PATH = gajim.SECRETS_PATH
 	dot_gajim = os.path.dirname(VCARD_PATH)
 	if os.path.isfile(dot_gajim):
 		print _('%s is a file but it should be a directory') % dot_gajim
@@ -119,13 +116,6 @@ def check_and_possibly_create_paths():
 			print _('Gajim will now exit')
 			sys.exit()
 		
-		if not os.path.exists(SECRETS_PATH):
-			pickle.dump({}, SECRETS_PATH)
-		elif os.path.isdir(SECRETS_PATH):
-			print _('%s is a directory but should be a file') % SECRETS_PATH
-			print _('Gajim will now exit')
-			sys.exit()
-
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that
 			create_path(dot_gajim)
@@ -136,8 +126,6 @@ def check_and_possibly_create_paths():
 		if not os.path.isfile(LOG_DB_PATH):
 			create_log_db()
 			gajim.logger.init_vars()
-		if not os.path.isfile(SECRETS_PATH):
-			pickle.dump({}, SECRETS_PATH)
 
 def create_path(directory):
 	print _('creating %s directory') % directory
