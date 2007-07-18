@@ -225,6 +225,31 @@ class SignalObject(dbus.service.Object):
 
 		return connected_account, contact
 
+	def _get_account_for_groupchat(self, account, room_jid):
+		'''get the account which is connected to groupchat (if not given)
+		or check if the given account is connected to the groupchat'''
+		correct_account = None
+		accounts = gajim.contacts.get_accounts()
+		# if there is only one account in roster, take it as default
+		# if user did not ask for account
+		if not account and len(accounts) == 1:
+			account = accounts[0]
+		if account:
+			if gajim.connections[account].connected > 1 and \
+			room_jid in gajim.gc_connected[account] and \
+			gajim.gc_connected[account][room_jid]:
+				# account and groupchat are connected
+				connected_account = account
+		else:
+			for account in accounts:
+				if gajim.connections[account].connected > 1 and \
+				room_jid in gajim.gc_connected[account] and \
+				gajim.gc_connected[account][room_jid]:
+					# account and groupchat are connected
+					connected_account = account
+					break
+		return connected_account
+
 	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
 	def send_file(self, file_path, jid, account):
 		'''send file, located at 'file_path' to 'jid', using account 
@@ -270,6 +295,19 @@ class SignalObject(dbus.service.Object):
 		if keyID is specified, encrypt the message with the pgp key '''
 		jid = self._get_real_jid(jid, account)
 		return self._send_message(jid, message, keyID, account, type, subject)
+
+	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
+	def send_groupchat_message(self, room_jid, message, account):
+		'''Send 'message' to groupchat 'room_jid',
+		using account (optional) 'account'.'''
+		if not room_jid or not message:
+			return DBUS_BOOLEAN(False)
+		connected_account = self._get_account_for_groupchat(account, room_jid)
+		if connected_account:
+			connection = gajim.connections[connected_account]
+			connection.send_gc_message(room_jid, message)
+			return DBUS_BOOLEAN(True)
+		return DBUS_BOOLEAN(False)
 
 	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='b')
 	def open_chat(self, jid, account):

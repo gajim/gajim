@@ -137,6 +137,15 @@ class GajimRemote:
 							'using this account'), False),
 					]
 				], 
+			'send_groupchat_message':[
+					_('Sends new message to a groupchat you\'ve joined.'), 
+					[
+						('room_jid', _('JID of the room that will receive the message'), True),
+						(_('message'), _('message contents'), True),
+						(_('account'), _('if specified, the message will be sent '
+							'using this account'), False),
+					]
+				],
 			'contact_info': [
 					_('Gets detailed info on a contact'), 
 					[
