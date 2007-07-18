@@ -228,7 +228,7 @@ class SignalObject(dbus.service.Object):
 	def _get_account_for_groupchat(self, account, room_jid):
 		'''get the account which is connected to groupchat (if not given)
 		or check if the given account is connected to the groupchat'''
-		correct_account = None
+		connected_account = None
 		accounts = gajim.contacts.get_accounts()
 		# if there is only one account in roster, take it as default
 		# if user did not ask for account
