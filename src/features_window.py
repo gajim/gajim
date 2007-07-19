@@ -22,6 +22,10 @@ import dialogs
 from common import gajim
 from common import helpers
 
+import random
+from tempfile import gettempdir
+from subprocess import Popen
+
 class FeaturesWindow:
 	'''Class for features window'''
 
@@ -81,6 +85,10 @@ class FeaturesWindow:
 				_('Ability to measure idle time, in order to set auto status.'),
 				_('Requires compilation of the idle module from Gajim sources.'),
 				_('Requires compilation of the idle module from Gajim sources.')),
+			_('LaTeX'): (self.latex_available,
+				_('Transform LaTeX espressions between $$ $$.'),
+				_('Requires latex, dvips and imagemagick. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
+				_('Feature not available under Windows.')),
 		}
 
 		# name, supported
@@ -214,3 +222,45 @@ class FeaturesWindow:
 	def idle_available(self):
 		from common import sleepy
 		return sleepy.SUPPORTED
+
+	def latex_available(self):
+		'''check is latex is available and if it can create a picture.'''
+
+		if os.name == 'nt':
+			return False
+
+		exitcode = 0
+		random.seed()
+		tmpfile = os.path.join(gettempdir(), "gajimtex_" + \
+			random.randint(0,100).__str__())
+
+		# build latex string
+		texstr = '\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}'
+		texstr += '\\usepackage{amsmath}\\usepackage{amssymb}\\pagestyle{empty}'
+		texstr += '\\begin{document}\\begin{large}\\begin{gather*}test'
+		texstr += '\\end{gather*}\\end{large}\\end{document}'
+
+		file = open(os.path.join(tmpfile + ".tex"), "w+")
+		file.write(texstr)
+		file.flush()
+		file.close()
+		p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
+			cwd=gettempdir())
+		exitcode = p.wait()
+		if exitcode == 0:
+			p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
+				cwd=gettempdir())
+			exitcode = p.wait()
+		if exitcode == 0:
+			p = Popen(['convert', tmpfile + '.ps', tmpfile + '.png'],
+				cwd=gettempdir())
+			exitcode = p.wait()
+		extensions = [".tex", ".log", ".aux", ".dvi", ".ps", ".png"]
+		for ext in extensions:
+			try:
+				os.remove(tmpfile + ext)
+			except Exception:
+				pass
+		if exitcode == 0:
+			return True
+		return False
