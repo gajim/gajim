@@ -1741,7 +1741,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					jid = destroy.getAttr('jid')
 					if jid:
 						reason += '\n' + _('You can join this room instead: %s') % jid
-					statusCode = 'destroyed'
+					statusCode = ['destroyed']
 				else:
 					reason = prs.getReason()
 					statusCode = prs.getStatusCode()
