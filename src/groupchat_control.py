@@ -886,8 +886,20 @@ class GroupchatControl(ChatControlBase):
 			affiliation = 'none'
 		fake_jid = self.room_jid + '/' + nick
 		newly_created = False
+
+		# statusCode
+		# http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-init
+		if '100' in statusCode:
+			self.print_conversation(\
+				_('Any occupant is allowed to see your full JID'))
 		if '170' in statusCode:
 			self.print_conversation(_('Room logging is enabled'))
+		if '201' in statusCode:
+			self.print_conversation(_('A new room has been created'))
+		if '210' in statusCode:
+			self.print_conversation(\
+				_('The server has assigned or modified your roomnick'))
+
 		if show in ('offline', 'error'):
 			if '307' in statusCode:
 				if actor is None: # do not print 'kicked by None'

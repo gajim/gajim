@@ -1213,6 +1213,7 @@ class Interface:
 	def handle_event_gc_config_change(self, account, array):
 		#('GC_CONFIG_CHANGE', account, (jid, statusCode))  statuscode is a list
 		# http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
+		# http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-init
 		jid = array[0]
 		statusCode = array[1]
 
@@ -1224,6 +1225,13 @@ class Interface:
 			return
 
 		changes = []
+		if '102' in statusCode:
+			changes.append(_('Room now shows unavailable member'))
+		if '103' in statusCode:
+			changes.append(_('room now does not show unavailable members'))
+		if '104' in statusCode:
+			changes.append(\
+				_('A non-privacy-related room configuration change has occurred'))
 		if '170' in statusCode:
 			changes.append(_('Room logging is now enabled'))
 		if '171' in statusCode:
@@ -1234,8 +1242,6 @@ class Interface:
 			changes.append(_('Room is now semi-anonymous'))
 		if '174' in statusCode:
 			changes.append(_('Room is now fully-anonymous'))
-		if '104' in statusCode:
-			changes.append(_('Room configuration has changed'))
 
 		for change in changes:
 			gc_control.print_conversation(change)
