@@ -889,94 +889,96 @@ class GroupchatControl(ChatControlBase):
 
 		# statusCode
 		# http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-init
-		if '100' in statusCode:
-			# Can be a message (see handle_event_gc_config_change in gajim.py)
-			self.print_conversation(\
-				_('Any occupant is allowed to see your full JID'))
-		if '170' in statusCode:
-			# Can be a message (see handle_event_gc_config_change in gajim.py)
-			self.print_conversation(_('Room logging is enabled'))
-		if '201' in statusCode:
-			self.print_conversation(_('A new room has been created'))
-		if '210' in statusCode:
-			self.print_conversation(\
-				_('The server has assigned or modified your roomnick'))
+		if statusCode:
+			if '100' in statusCode:
+				# Can be a message (see handle_event_gc_config_change in gajim.py)
+				self.print_conversation(\
+					_('Any occupant is allowed to see your full JID'))
+			if '170' in statusCode:
+				# Can be a message (see handle_event_gc_config_change in gajim.py)
+				self.print_conversation(_('Room logging is enabled'))
+			if '201' in statusCode:
+				self.print_conversation(_('A new room has been created'))
+			if '210' in statusCode:
+				self.print_conversation(\
+					_('The server has assigned or modified your roomnick'))
 
 		if show in ('offline', 'error'):
-			if '307' in statusCode:
-				if actor is None: # do not print 'kicked by None'
-					s = _('%(nick)s has been kicked: %(reason)s') % {
+			if statusCode:
+				if statuscode '307' in statusCode:
+					if actor is None: # do not print 'kicked by None'
+						s = _('%(nick)s has been kicked: %(reason)s') % {
+							'nick': nick,
+							'reason': reason }
+					else:
+						s = _('%(nick)s has been kicked by %(who)s: %(reason)s') % {
+							'nick': nick,
+							'who': actor,
+							'reason': reason }
+					self.print_conversation(s, 'info', tim = tim)
+				elif '301' in statusCode:
+					if actor is None: # do not print 'banned by None'
+						s = _('%(nick)s has been banned: %(reason)s') % {
+							'nick': nick,
+							'reason': reason }
+					else:
+						s = _('%(nick)s has been banned by %(who)s: %(reason)s') % {
+							'nick': nick,
+							'who': actor,
+							'reason': reason }
+					self.print_conversation(s, 'info', tim = tim)
+				elif '303' in statusCode: # Someone changed his or her nick
+					if new_nick == self.nick: # We changed our nick
+						s = _('You are now known as %s') % new_nick
+					else:
+						s = _('%s is now known as %s') % (nick, new_nick)
+						# We add new nick to muc roster here, so we don't see 
+						# that "new_nick has joined the room" when he just changed nick.
+						# add_contact_to_roster will be called a second time 
+						# after that, but that doesn't hurt
+						self.add_contact_to_roster(new_nick, show, role, affiliation,
+							status, jid)
+						if nick in self.attention_list:
+							self.attention_list.remove(nick)
+						# keep nickname color
+						if nick in self.gc_custom_colors:
+							self.gc_custom_colors[new_nick] = self.gc_custom_colors[nick]
+					# rename vcard / avatar
+					puny_jid = helpers.sanitize_filename(self.room_jid)
+					puny_nick = helpers.sanitize_filename(nick)
+					puny_new_nick = helpers.sanitize_filename(new_nick)
+					old_path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
+					new_path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_new_nick)
+					files = {old_path: new_path}
+					path = os.path.join(gajim.AVATAR_PATH, puny_jid)
+					# possible extensions
+					for ext in ('.png', '.jpeg', '_notif_size_bw.png',
+					'_notif_size_colored.png'):
+						files[os.path.join(path, puny_nick + ext)] = \
+							os.path.join(path, puny_new_nick + ext)
+					for old_file in files:
+						if os.path.exists(old_file):
+							if os.path.exists(files[old_file]):
+								# Windows require this
+								os.remove(files[old_file])
+							os.rename(old_file, files[old_file])
+					self.print_conversation(s, 'info', tim)
+				elif '321' in statusCode:
+					s = _('%(nick)s has been removed from the room (%(reason)s)') % {
+						'nick': nick, 'reason': _('affiliation changed') }
+					self.print_conversation(s, 'info', tim = tim)
+				elif '322' in statusCode:
+					s = _('%(nick)s has been removed from the room (%(reason)s)') % {
 						'nick': nick,
-						'reason': reason }
-				else:
-					s = _('%(nick)s has been kicked by %(who)s: %(reason)s') % {
+						'reason': _('room configuration changed to members-only') }
+					self.print_conversation(s, 'info', tim = tim)
+				elif '332' in statusCode:
+					s = _('%(nick)s has been removed from the room (%(reason)s)') % {
 						'nick': nick,
-						'who': actor,
-						'reason': reason }
-				self.print_conversation(s, 'info', tim = tim)
-			elif '301' in statusCode:
-				if actor is None: # do not print 'banned by None'
-					s = _('%(nick)s has been banned: %(reason)s') % {
-						'nick': nick,
-						'reason': reason }
-				else:
-					s = _('%(nick)s has been banned by %(who)s: %(reason)s') % {
-						'nick': nick,
-						'who': actor,
-						'reason': reason }
-				self.print_conversation(s, 'info', tim = tim)
-			elif '303' in statusCode: # Someone changed his or her nick
-				if new_nick == self.nick: # We changed our nick
-					s = _('You are now known as %s') % new_nick
-				else:
-					s = _('%s is now known as %s') % (nick, new_nick)
-					# We add new nick to muc roster here, so we don't see 
-					# that "new_nick has joined the room" when he just changed nick.
-					# add_contact_to_roster will be called a second time 
-					# after that, but that doesn't hurt
-					self.add_contact_to_roster(new_nick, show, role, affiliation,
-						status, jid)
-					if nick in self.attention_list:
-						self.attention_list.remove(nick)
-					# keep nickname color
-					if nick in self.gc_custom_colors:
-						self.gc_custom_colors[new_nick] = self.gc_custom_colors[nick]
-				# rename vcard / avatar
-				puny_jid = helpers.sanitize_filename(self.room_jid)
-				puny_nick = helpers.sanitize_filename(nick)
-				puny_new_nick = helpers.sanitize_filename(new_nick)
-				old_path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
-				new_path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_new_nick)
-				files = {old_path: new_path}
-				path = os.path.join(gajim.AVATAR_PATH, puny_jid)
-				# possible extensions
-				for ext in ('.png', '.jpeg', '_notif_size_bw.png',
-				'_notif_size_colored.png'):
-					files[os.path.join(path, puny_nick + ext)] = \
-						os.path.join(path, puny_new_nick + ext)
-				for old_file in files:
-					if os.path.exists(old_file):
-						if os.path.exists(files[old_file]):
-							# Windows require this
-							os.remove(files[old_file])
-						os.rename(old_file, files[old_file])
-				self.print_conversation(s, 'info', tim)
-			elif '321' in statusCode:
-				s = _('%(nick)s has been removed from the room (%(reason)s)') % {
-					'nick': nick, 'reason': _('affiliation changed') }
-				self.print_conversation(s, 'info', tim = tim)
-			elif '322' in statusCode:
-				s = _('%(nick)s has been removed from the room (%(reason)s)') % {
-					'nick': nick,
-					'reason': _('room configuration changed to members-only') }
-				self.print_conversation(s, 'info', tim = tim)
-			elif '332' in statusCode:
-				s = _('%(nick)s has been removed from the room (%(reason)s)') % {
-					'nick': nick,
-					'reason': _('system shutdown') }
-				self.print_conversation(s, 'info', tim = tim)
-			elif 'destroyed' in statusCode: # Room has been destroyed
-				self.print_conversation(reason, 'info', tim)
+						'reason': _('system shutdown') }
+					self.print_conversation(s, 'info', tim = tim)
+				elif 'destroyed' in statusCode: # Room has been destroyed
+					self.print_conversation(reason, 'info', tim)
 
 			if len(gajim.events.get_events(self.account, fake_jid)) == 0:
 				self.remove_contact(nick)
@@ -984,7 +986,8 @@ class GroupchatControl(ChatControlBase):
 				c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 				c.show = show
 				c.status = status
-			if nick == self.nick and '303' not in statusCode: # We became offline
+			if nick == self.nick and (not statusCode or \
+			'303' not in statusCode): # We became offline
 				self.got_disconnected()
 				contact = gajim.contacts.\
 					get_contact_with_highest_priority(self.account, self.room_jid)
@@ -998,7 +1001,7 @@ class GroupchatControl(ChatControlBase):
 				iter = self.add_contact_to_roster(nick, show, role, affiliation,
 					status, jid)
 				newly_created = True
-				if '201' in statusCode: # We just created the room
+				if statusCode and '201' in statusCode: # We just created the room
 					gajim.connections[self.account].request_gc_config(self.room_jid)
 			else:
 				gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
@@ -1051,7 +1054,8 @@ class GroupchatControl(ChatControlBase):
 		if self.parent_win:
 			self.parent_win.redraw_tab(self)
 		if (time.time() - self.room_creation) > 30 and \
-				nick != self.nick and '303' not in statusCode:
+				nick != self.nick and (not statusCode or \
+				'303' not in statusCode):
 			st = ''
 			print_status = None
 			for bookmark in gajim.connections[self.account].bookmarks:
@@ -1069,7 +1073,7 @@ class GroupchatControl(ChatControlBase):
 				if nick in self.attention_list:
 					self.attention_list.remove(nick)
 			if show == 'offline' and print_status in ('all', 'in_and_out') and \
-			'307' not in statusCode:
+			(not statusCode or '307' not in statusCode):
 				st = _('%s has left') % nick_jid
 				if reason:
 					st += ' [%s]' % reason
