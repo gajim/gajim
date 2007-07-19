@@ -449,6 +449,14 @@ class Message(Protocol):
         th=self.getThread()
         if th: m.setThread(th)
         return m
+    def getStatusCode(self):
+        """Returns the status code of the message (for groupchat config
+        change)"""
+        attrs = []
+        for xtag in self.getTags('x'):
+            for child in xtag.getTags('status'):
+                attrs.append(child.getAttr('code'))
+        return attrs
 
 class Presence(Protocol):
     """ XMPP Presence object."""

@@ -887,7 +887,7 @@ class GroupchatControl(ChatControlBase):
 		fake_jid = self.room_jid + '/' + nick
 		newly_created = False
 		if '170' in statusCode:
-			self.print_conversation(_('Room logging is enabled'), 'info')
+			self.print_conversation(_('Room logging is enabled'))
 		if show in ('offline', 'error'):
 			if '307' in statusCode:
 				if actor is None: # do not print 'kicked by None'

@@ -1529,6 +1529,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
 			else:
 				if not msg.getTag('body'): #no <body>
+					# It could be a config change. See
+					# http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
+					if msg.getTag('x'):
+						statusCode = msg.getStatusCode()
+						if statusCode != []:
+							self.dispatch('GC_CONFIG_CHANGE', (jid, statusCode))
 					return
 				# Ignore message from room in which we are not
 				if not self.last_history_line.has_key(jid):

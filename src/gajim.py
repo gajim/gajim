@@ -1210,6 +1210,36 @@ class Interface:
 			self.instances[account]['gc_config'][room_jid] = \
 			config.GroupchatConfigWindow(account, room_jid, array[1])
 
+	def handle_event_gc_config_change(self, account, array):
+		#('GC_CONFIG_CHANGE', account, (jid, statusCode))  statuscode is a list
+		# http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
+		jid = array[0]
+		statusCode = array[1]
+
+		gc_control = self.msg_win_mgr.get_control(jid, account)
+		if not gc_control and \
+		jid in self.minimized_controls[account]:
+			gc_control = self.minimized_controls[account][jid]
+		if not gc_control:
+			return
+
+		changes = []
+		if '170' in statusCode:
+			changes.append(_('Room logging is now enabled'))
+		if '171' in statusCode:
+			changes.append(_('Room logging is now disabled'))
+		if '172' in statusCode:
+			changes.append(_('Room is now non-anonymous'))
+		if '173' in statusCode:
+			changes.append(_('Room is now semi-anonymous'))
+		if '174' in statusCode:
+			changes.append(_('Room is now fully-anonymous'))
+		if '104' in statusCode:
+			changes.append(_('Room configuration has changed'))
+
+		for change in changes:
+			gc_control.print_conversation(change)
+
 	def handle_event_gc_affiliation(self, account, array):
 		#('GC_AFFILIATION', account, (room_jid, affiliation, list)) list is list
 		room_jid = array[0]
@@ -2113,6 +2143,7 @@ class Interface:
 			'GC_MSG': self.handle_event_gc_msg,
 			'GC_SUBJECT': self.handle_event_gc_subject,
 			'GC_CONFIG': self.handle_event_gc_config,
+			'GC_CONFIG_CHANGE': self.handle_event_gc_config_change,
 			'GC_INVITATION': self.handle_event_gc_invitation,
 			'GC_AFFILIATION': self.handle_event_gc_affiliation,
 			'GC_PASSWORD_REQUIRED': self.handle_event_gc_password_required,
