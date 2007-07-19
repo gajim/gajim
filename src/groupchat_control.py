@@ -905,7 +905,7 @@ class GroupchatControl(ChatControlBase):
 
 		if show in ('offline', 'error'):
 			if statusCode:
-				if statuscode '307' in statusCode:
+				if '307' in statusCode:
 					if actor is None: # do not print 'kicked by None'
 						s = _('%(nick)s has been kicked: %(reason)s') % {
 							'nick': nick,
