@@ -1225,6 +1225,9 @@ class Interface:
 			return
 
 		changes = []
+		if '100' in statusCode:
+			# Can be a presence (see chg_contact_status in groupchat_contol.py)
+			changes.append(_('Any occupant is allowed to see your full JID'))
 		if '102' in statusCode:
 			changes.append(_('Room now shows unavailable member'))
 		if '103' in statusCode:
@@ -1233,6 +1236,7 @@ class Interface:
 			changes.append(\
 				_('A non-privacy-related room configuration change has occurred'))
 		if '170' in statusCode:
+			# Can be a presence (see chg_contact_status in groupchat_contol.py)
 			changes.append(_('Room logging is now enabled'))
 		if '171' in statusCode:
 			changes.append(_('Room logging is now disabled'))

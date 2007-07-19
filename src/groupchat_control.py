@@ -890,9 +890,11 @@ class GroupchatControl(ChatControlBase):
 		# statusCode
 		# http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-init
 		if '100' in statusCode:
+			# Can be a message (see handle_event_gc_config_change in gajim.py)
 			self.print_conversation(\
 				_('Any occupant is allowed to see your full JID'))
 		if '170' in statusCode:
+			# Can be a message (see handle_event_gc_config_change in gajim.py)
 			self.print_conversation(_('Room logging is enabled'))
 		if '201' in statusCode:
 			self.print_conversation(_('A new room has been created'))
@@ -959,6 +961,20 @@ class GroupchatControl(ChatControlBase):
 							os.remove(files[old_file])
 						os.rename(old_file, files[old_file])
 				self.print_conversation(s, 'info', tim)
+			elif '321' in statusCode:
+				s = _('%(nick)s has been removed from the room (%(reason)s)') % {
+					'nick': nick, 'reason': _('affiliation changed') }
+				self.print_conversation(s, 'info', tim = tim)
+			elif '322' in statusCode:
+				s = _('%(nick)s has been removed from the room (%(reason)s)') % {
+					'nick': nick,
+					'reason': _('room configuration changed to members-only') }
+				self.print_conversation(s, 'info', tim = tim)
+			elif '332' in statusCode:
+				s = _('%(nick)s has been removed from the room (%(reason)s)') % {
+					'nick': nick,
+					'reason': _('system shutdown') }
+				self.print_conversation(s, 'info', tim = tim)
 			elif 'destroyed' in statusCode: # Room has been destroyed
 				self.print_conversation(reason, 'info', tim)
 
