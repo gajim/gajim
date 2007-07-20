@@ -87,7 +87,7 @@ class FeaturesWindow:
 				_('Requires compilation of the idle module from Gajim sources.')),
 			_('LaTeX'): (self.latex_available,
 				_('Transform LaTeX espressions between $$ $$.'),
-				_('Requires latex, dvips and imagemagick. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
+				_('Requires texlive-latex-base, dvips and imagemagick. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
 				_('Feature not available under Windows.')),
 		}
 
@@ -244,17 +244,26 @@ class FeaturesWindow:
 		file.write(texstr)
 		file.flush()
 		file.close()
-		p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
-			cwd=gettempdir())
-		exitcode = p.wait()
-		if exitcode == 0:
-			p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
+		try:
+			p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
 				cwd=gettempdir())
 			exitcode = p.wait()
+		except:
+			exitcode = 1
 		if exitcode == 0:
-			p = Popen(['convert', tmpfile + '.ps', tmpfile + '.png'],
-				cwd=gettempdir())
-			exitcode = p.wait()
+			try:
+				p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
+					cwd=gettempdir())
+				exitcode = p.wait()
+			except:
+				exitcode = 1
+		if exitcode == 0:
+			try:
+				p = Popen(['convert', tmpfile + '.ps', tmpfile + '.png'],
+					cwd=gettempdir())
+				exitcode = p.wait()
+			except:
+				exitcode = 1
 		extensions = [".tex", ".log", ".aux", ".dvi", ".ps", ".png"]
 		for ext in extensions:
 			try:
