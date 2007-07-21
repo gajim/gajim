@@ -26,6 +26,7 @@ import os
 import tooltips
 import dialogs
 import locale
+import Queue
 
 import gtkgui_helpers
 from common import gajim
@@ -140,6 +141,10 @@ class ConversationTextview:
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 
 		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
+
+		size = gajim.config.get('max_conversation_lines')
+		size = 2 * size - 1
+		self.marks_queue = Queue.Queue(size)
 
 		self.allow_focus_out_line = True
 		# holds the iter's offset which points to the end of --- line
@@ -315,6 +320,9 @@ class ConversationTextview:
 		buffer = self.tv.get_buffer()
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
+		size = gajim.config.get('max_conversation_lines')
+		size = 2 * size - 1
+		self.marks_queue = Queue.Queue(size)
 		self.focus_out_end_iter_offset = None
 
 	def visit_url_from_menuitem(self, widget, link):
@@ -767,13 +775,29 @@ class ConversationTextview:
 		'''prints 'chat' type messages'''
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
+		if self.marks_queue.full():
+			# remove oldest line
+			m1 = self.marks_queue.get()
+			m2 = self.marks_queue.get()
+			i1 = buffer.get_iter_at_mark(m1)
+			i2 = buffer.get_iter_at_mark(m2)
+			buffer.delete(i1, i2)
+			buffer.delete_mark(m1)
 		end_iter = buffer.get_end_iter()
 		at_the_end = False
 		if self.at_the_end():
 			at_the_end = True
 
+		# Create one mark and add it to queue once if it's the first line
+		# else twice (one for end bound, one for start bound)
+		mark = None
 		if buffer.get_char_count() > 0:
 			buffer.insert_with_tags_by_name(end_iter, '\n', 'eol')
+			mark = buffer.create_mark(None, end_iter, left_gravity=True)
+			self.marks_queue.put(mark)
+		if not mark:
+			mark = buffer.create_mark(None, end_iter, left_gravity=True)
+		self.marks_queue.put(mark)
 		if kind == 'incoming_queue':
 			kind = 'incoming'
 		if old_kind == 'incoming_queue':

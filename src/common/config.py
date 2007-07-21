@@ -228,6 +228,7 @@ class Config:
 		'scroll_roster_to_last_message': [opt_bool, True, _('If True, Gajim will scroll and select the contact who sent you the last message, if chat window is not already opened.')],
 		'use_latex': [opt_bool, False, _('If True, Gajim will convert string between $$ and $$ to an image using dvips and convert before insterting it in chat window.')],
 		'change_status_window_timeout': [opt_int, 15, _('Time of inactivity needed before the change status window closes down.')],
+		'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],
 	}
 
 	__options_per_key = {
