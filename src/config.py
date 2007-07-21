@@ -2883,7 +2883,7 @@ class ManageBookmarksWindow:
 			self.pass_entry.set_text(password)
 		else:
 			self.pass_entry.set_text('')
-		nick = model[iter][5]
+		nick = model[iter][6]
 		if nick:
 			nick = nick.decode('utf-8')
 			self.nick_entry.set_text(nick)
