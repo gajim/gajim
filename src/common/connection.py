@@ -1419,7 +1419,8 @@ class Connection(ConnectionHandlers):
 				return
 			df = []
 			for item in tag.getTags('item'):
-				f = {}
+				# We also show attributes. jid is there
+				f = item.attrs
 				for i in item.getPayload():
 					f[i.getName()] = i.getData()
 				df.append(f)
