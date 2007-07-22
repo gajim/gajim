@@ -133,6 +133,10 @@ class Connection(ConnectionHandlers):
 		self.pep_supported = False
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
+		# To know the groupchat jid associated with a sranza ID. Useful to
+		# request vcard or os info... to a real JID but act as if it comes from
+		# the fake jid
+		self.groupchat_jids = {} # {ID : groupchat_jid}
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 			gajim.config.set('usegpg', True)
@@ -1058,7 +1062,9 @@ class Connection(ConnectionHandlers):
 	def account_changed(self, new_name):
 		self.name = new_name
 
-	def request_last_status_time(self, jid, resource):
+	def request_last_status_time(self, jid, resource, groupchat_jid=None):
+		'''groupchat_jid is used when we want to send a request to a real jid
+		and act as if the answer comes from the groupchat_jid'''
 		if not self.connection:
 			return
 		to_whom_jid = jid
@@ -1066,9 +1072,15 @@ class Connection(ConnectionHandlers):
 			to_whom_jid += '/' + resource
 		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_LAST)
+		id = self.connection.getAnID()
+		iq.setID(id)
+		if groupchat_jid:
+			self.groupchat_jids[id] = groupchat_jid
 		self.connection.send(iq)
 
-	def request_os_info(self, jid, resource):
+	def request_os_info(self, jid, resource, groupchat_jid=None):
+		'''groupchat_jid is used when we want to send a request to a real jid
+		and act as if the answer comes from the groupchat_jid'''
 		if not self.connection:
 			return
 		# If we are invisible, do not request
@@ -1080,6 +1092,10 @@ class Connection(ConnectionHandlers):
 			to_whom_jid += '/' + resource
 		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_VERSION)
+		id = self.connection.getAnID()
+		iq.setID(id)
+		if groupchat_jid:
+			self.groupchat_jids[id] = groupchat_jid
 		self.connection.send(iq)
 
 	def get_settings(self):

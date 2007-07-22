@@ -329,8 +329,13 @@ class VcardWindow:
 			self.contact.status = ''
 
 		# Request list time status
-		gajim.connections[self.account].request_last_status_time(self.contact.jid,
-			self.contact.resource)
+		if self.gc_contact:
+			j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
+			gajim.connections[self.account].request_last_status_time(j, r,
+				self.contact.jid)
+		else:
+			gajim.connections[self.account].request_last_status_time(
+				self.contact.jid, self.contact.resource)
 
 		# do not wait for os_info if contact is not connected or has error
 		# additional check for observer is needed, as show is offline for him
@@ -338,8 +343,13 @@ class VcardWindow:
 		and not self.contact.is_observer():
 			self.os_info_arrived = True
 		else: # Request os info if contact is connected
-			gobject.idle_add(gajim.connections[self.account].request_os_info,
-				self.contact.jid, self.contact.resource)
+			if self.gc_contact:
+				j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
+				gobject.idle_add(gajim.connections[self.account].request_os_info,
+					j, r, self.contact.jid)
+			else:
+				gobject.idle_add(gajim.connections[self.account].request_os_info,
+					self.contact.jid, self.contact.resource)
 		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
 			'os': ''}}
 		i = 1
