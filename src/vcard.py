@@ -71,6 +71,17 @@ class VcardWindow:
 		self.account = account
 		self.gc_contact = gc_contact
 
+		# Get real jid
+		if gc_contact:
+			if gc_contact.jid:
+				self.real_jid = gc_contact.jid
+				if gc_contact.resource:
+					self.real_jid += '/' + gc_contact.resource
+			else:
+				self.real_jid = gc_contact.get_full_jid()
+		else:
+			self.real_jid = contact.get_full_jid()
+
 		puny_jid = helpers.sanitize_filename(contact.jid)
 		local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid) + \
 			'_local'
@@ -357,7 +368,7 @@ class VcardWindow:
 		self.fill_status_label()
 
 		if self.gc_contact:
-			gajim.connections[self.account].request_vcard(self.contact.jid,
+			gajim.connections[self.account].request_vcard(self.real_jid,
 				self.gc_contact.get_full_jid())
 		else:
 			gajim.connections[self.account].request_vcard(self.contact.jid)
