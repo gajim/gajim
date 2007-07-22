@@ -19,6 +19,7 @@ from common import xmpp, gajim, dataforms
 
 import gtkgui_helpers
 import dialogs
+import vcard
 import config
 import dataforms_widget
 
@@ -33,7 +34,8 @@ class SearchWindow:
 		# retrieving widgets from xml
 		self.xml = gtkgui_helpers.get_glade('search_window.glade')
 		self.window = self.xml.get_widget('search_window')
-		for name in ('label', 'progressbar', 'search_vbox', 'search_button'):
+		for name in ('label', 'progressbar', 'search_vbox', 'search_button',
+		'add_contact_button', 'information_button'):
 			self.__dict__[name] = self.xml.get_widget(name)
 
 		# displaying the window
@@ -43,6 +45,9 @@ class SearchWindow:
 		self.pulse_id = gobject.timeout_add(80, self.pulse_callback)
 
 		self.is_form = None
+
+		# Is there a jid column in results ? if -1: no, else column number
+		self.jid_column = -1
 
 	def request_form(self):
 		gajim.connections[self.account].request_search_fields(self.jid)
@@ -83,6 +88,27 @@ class SearchWindow:
 		self.pulse_id = gobject.timeout_add(80, self.pulse_callback)
 		self.search_button.hide()
 
+	def on_add_contact_button_clicked(self, widget):
+		(model, iter) = self.result_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		jid = model[iter][self.jid_column]
+		dialogs.AddNewContactWindow(self.account, jid)
+	
+	def on_information_button_clicked(self, widget):
+		(model, iter) = self.result_treeview.get_selection().get_selected()
+		if not iter:
+			return
+		jid = model[iter][self.jid_column]
+		if gajim.interface.instances[self.account]['infos'].has_key(jid):
+			gajim.interface.instances[self.account]['infos'][jid].window.present()
+		else:
+			contact = gajim.contacts.create_contact(jid = jid, name='', groups=[],
+				show='', status='', sub='', ask='', resource='', priority=0,
+				keyID='', our_chatstate=None, chatstate=None)
+			gajim.interface.instances[self.account]['infos'][jid] = \
+				vcard.VcardWindow(contact, self.account)
+
 	def on_form_arrived(self, form, is_form):
 		if self.pulse_id:
 			gobject.source_remove(self.pulse_id)
@@ -110,6 +136,19 @@ class SearchWindow:
 		self.data_form_widget.show_all()
 		self.search_vbox.pack_start(self.data_form_widget)
 
+	def on_result_treeview_cursor_changed(self, treeview):
+		if self.jid_column == -1:
+			return
+		(model, iter) = treeview.get_selection().get_selected()
+		if not iter:
+			return
+		if model[iter][self.jid_column]:
+			self.add_contact_button.set_sensitive(True)
+			self.information_button.set_sensitive(True)
+		else:
+			self.add_contact_button.set_sensitive(False)
+			self.information_button.set_sensitive(False)
+
 	def on_result_arrived(self, form, is_form):
 		if self.pulse_id:
 			gobject.source_remove(self.pulse_id)
@@ -124,8 +163,10 @@ class SearchWindow:
 			# We suppose all items have the same fields
 			sw = gtk.ScrolledWindow()
 			sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-			treeview = gtk.TreeView()
-			sw.add(treeview)
+			self.result_treeview = gtk.TreeView()
+			self.result_treeview.connect('cursor-changed',
+				self.on_result_treeview_cursor_changed)
+			sw.add(self.result_treeview)
 			# Create model
 			fieldtypes = [str]*len(form[0])
 			model = gtk.ListStore(*fieldtypes)
@@ -135,13 +176,18 @@ class SearchWindow:
 			# Create columns
 			counter = 0
 			for field in form[0].keys():
-				treeview.append_column(
+				self.result_treeview.append_column(
 					gtk.TreeViewColumn(field, gtk.CellRendererText(),
 					text = counter))
+				if field == 'jid':
+					self.jid_column = counter
 				counter += 1
-			treeview.set_model(model)
+			self.result_treeview.set_model(model)
 			sw.show_all()
 			self.search_vbox.pack_start(sw)
+			if self.jid_column > -1:
+				self.add_contact_button.show()
+				self.information_button.show()
 			return
 
 		self.dataform = dataforms.ExtendForm(node = form)
@@ -154,8 +200,23 @@ class SearchWindow:
 			self.label.show()
 			return
 
+		self.result_treeview = self.data_form_widget.records_treeview
+		selection = self.result_treeview.get_selection()
+		selection.set_mode(gtk.SELECTION_SINGLE)
+		self.result_treeview.connect('cursor-changed',
+			self.on_result_treeview_cursor_changed)
+
+		counter = 0
+		for field in self.dataform.items[0].fields:
+			if field.var == 'jid':
+				self.jid_column = counter
+				break
+			counter += 1
 		self.search_vbox.pack_start(self.data_form_widget)
 		self.data_form_widget.show()
+		if self.jid_column > -1:
+			self.add_contact_button.show()
+			self.information_button.show()
 		if self.data_form_widget.title:
 			self.window.set_title('%s - Search - Gajim' % \
 				self.data_form_widget.title)
