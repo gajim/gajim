@@ -923,6 +923,19 @@ class ChatControl(ChatControlBase):
 			gtk.DEST_DEFAULT_HIGHLIGHT |
 			gtk.DEST_DEFAULT_DROP,
 			self.dnd_list, gtk.gdk.ACTION_COPY)
+		 # FIXME: DND on non editable TextView, find a better way
+		self.drag_entered = False
+		id = self.conv_textview.tv.connect('drag_data_received',
+			self._on_drag_data_received)
+		self.handlers[id] = self.conv_textview.tv
+		id = self.conv_textview.tv.connect('drag_motion', self._on_drag_motion)
+		self.handlers[id] = self.conv_textview.tv
+		id = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
+		self.handlers[id] = self.conv_textview.tv
+		self.conv_textview.tv.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
+			gtk.DEST_DEFAULT_HIGHLIGHT |
+			gtk.DEST_DEFAULT_DROP,
+			self.dnd_list, gtk.gdk.ACTION_COPY)
 
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be per jid
@@ -1721,7 +1734,7 @@ class ChatControl(ChatControlBase):
 
 	def _on_drag_data_received(self, widget, context, x, y, selection,
 		target_type, timestamp):
-		# If not resource, we can't send file
+		# If no resource is known, we can't send a file
 		if self.TYPE_ID == message_control.TYPE_PM:
 			c = self.gc_contact
 		else:
@@ -1736,6 +1749,20 @@ class ChatControl(ChatControlBase):
 				if os.path.isfile(path): # is it file?
 					ft = gajim.interface.instances['file_transfers']
 					ft.send_file(self.account, c, path)
+		# FIXME: DND on non editable TextView, find a better way
+		self.conv_textview.tv.set_editable(False)
+					
+	def _on_drag_leave(self, widget, context, time):
+		# FIXME: DND on non editable TextView, find a better way
+		self.drag_entered = False
+		self.conv_textview.tv.set_editable(False)
+
+	def _on_drag_motion(self, widget, context, x, y, time):
+		# FIXME: DND on non editable TextView, find a better way
+		if not self.drag_entered:
+			# We drag new data over the TextView, make it editable to catch dnd
+			self.drag_entered = True
+			self.conv_textview.tv.set_editable(True)
 
 	def _on_message_tv_buffer_changed(self, textbuffer):
 		self.kbd_activity_in_last_5_secs = True
