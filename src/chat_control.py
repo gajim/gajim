@@ -196,8 +196,7 @@ class ChatControlBase(MessageControl):
 			self._on_drag_data_received)
 		self.handlers[id] = self.msg_textview
 		self.msg_textview.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
-			gtk.DEST_DEFAULT_HIGHLIGHT |
-			gtk.DEST_DEFAULT_DROP,
+			gtk.DEST_DEFAULT_HIGHLIGHT,
 			self.dnd_list, gtk.gdk.ACTION_COPY)
 	
 		self.update_font()
@@ -1775,7 +1774,7 @@ class ChatControl(ChatControlBase):
 				if os.path.isfile(path): # is it file?
 					ft = gajim.interface.instances['file_transfers']
 					ft.send_file(self.account, c, path)
-					
+
 	def _on_message_tv_buffer_changed(self, textbuffer):
 		self.kbd_activity_in_last_5_secs = True
 		self.kbd_activity_in_last_30_secs = True
