@@ -1653,8 +1653,13 @@ class GroupchatControl(ChatControlBase):
 				_('Bookmark has been added successfully'),
 				_('You can manage your bookmarks via Actions menu in your roster.'))
 
+	def _on_drag_data_received(self, widget, context, x, y, selection,
+		target_type, timestamp):
+		# TODO: Invite to groupchat on dnd of a contact
+		pass
+
 	def handle_message_textview_mykey_press(self, widget, event_keyval,
-	event_keymod):
+		event_keymod):
 		# NOTE: handles mykeypress which is custom signal connected to this
 		# CB in new_room(). for this singal see message_textview.py
 

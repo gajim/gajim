@@ -131,13 +131,37 @@ class ChatControlBase(MessageControl):
 		id = self.widget.connect('key_press_event', self._on_keypress_event)
 		self.handlers[id] = self.widget
 
+		# Create banner and connect signals
 		widget = self.xml.get_widget('banner_eventbox')
 		id = widget.connect('button-press-event',
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id] = widget
+		# Init DND
+		self.TARGET_TYPE_URI_LIST = 80
+		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
+		id = self.widget.connect('drag_data_received',
+			self._on_drag_data_received)
+		self.handlers[id] = self.widget
+		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
+			gtk.DEST_DEFAULT_HIGHLIGHT |
+			gtk.DEST_DEFAULT_DROP,
+			self.dnd_list, gtk.gdk.ACTION_COPY)
 
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
+		# FIXME: DND on non editable TextView, find a better way
+		self.drag_entered = False
+		id = self.conv_textview.tv.connect('drag_data_received',
+			self._on_drag_data_received)
+		self.handlers[id] = self.conv_textview.tv
+		id = self.conv_textview.tv.connect('drag_motion', self._on_drag_motion)
+		self.handlers[id] = self.conv_textview.tv
+		id = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
+		self.handlers[id] = self.conv_textview.tv
+		self.conv_textview.tv.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
+			gtk.DEST_DEFAULT_HIGHLIGHT |
+			gtk.DEST_DEFAULT_DROP,
+			self.dnd_list, gtk.gdk.ACTION_COPY)
 
 		self.conv_scrolledwindow = self.xml.get_widget(
 			'conversation_scrolledwindow')
@@ -151,6 +175,7 @@ class ChatControlBase(MessageControl):
 		self.handlers[id] = widget
 		self.scroll_to_end_id = None
 		self.was_at_the_end = True
+
 		# add MessageTextView to UI and connect signals
 		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
@@ -166,6 +191,14 @@ class ChatControlBase(MessageControl):
 		id = self.msg_textview.connect('populate_popup',
 			self.on_msg_textview_populate_popup)
 		self.handlers[id] = self.msg_textview
+		# Setup DND
+		id = self.msg_textview.connect('drag_data_received',
+			self._on_drag_data_received)
+		self.handlers[id] = self.msg_textview
+		self.msg_textview.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
+			gtk.DEST_DEFAULT_HIGHLIGHT |
+			gtk.DEST_DEFAULT_DROP,
+			self.dnd_list, gtk.gdk.ACTION_COPY)
 	
 		self.update_font()
 
@@ -482,6 +515,22 @@ class ChatControlBase(MessageControl):
 			# Give the control itself a chance to process
 			self.handle_message_textview_mykey_press(widget, event_keyval,
 				event_keymod)
+
+	def _on_drag_data_received(self, widget, context, x, y, selection,
+		target_type, timestamp):
+		pass  # Derived classes SHOULD implement this method
+
+	def _on_drag_leave(self, widget, context, time):
+		# FIXME: DND on non editable TextView, find a better way
+		self.drag_entered = False
+		self.conv_textview.tv.set_editable(False)
+
+	def _on_drag_motion(self, widget, context, x, y, time):
+		# FIXME: DND on non editable TextView, find a better way
+		if not self.drag_entered:
+			# We drag new data over the TextView, make it editable to catch dnd
+			self.drag_entered_conv = True
+			self.conv_textview.tv.set_editable(True)
 
 	def _process_command(self, message):
 		if not message or message[0] != '/':
@@ -913,29 +962,6 @@ class ChatControl(ChatControlBase):
 		self.chat_buttons_set_visible(compact_view)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_chat_banner'))
-		# Initialize drag-n-drop
-		self.TARGET_TYPE_URI_LIST = 80
-		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
-		id = self.widget.connect('drag_data_received',
-			self._on_drag_data_received)
-		self.handlers[id] = self.widget
-		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
-			gtk.DEST_DEFAULT_HIGHLIGHT |
-			gtk.DEST_DEFAULT_DROP,
-			self.dnd_list, gtk.gdk.ACTION_COPY)
-		 # FIXME: DND on non editable TextView, find a better way
-		self.drag_entered = False
-		id = self.conv_textview.tv.connect('drag_data_received',
-			self._on_drag_data_received)
-		self.handlers[id] = self.conv_textview.tv
-		id = self.conv_textview.tv.connect('drag_motion', self._on_drag_motion)
-		self.handlers[id] = self.conv_textview.tv
-		id = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
-		self.handlers[id] = self.conv_textview.tv
-		self.conv_textview.tv.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
-			gtk.DEST_DEFAULT_HIGHLIGHT |
-			gtk.DEST_DEFAULT_DROP,
-			self.dnd_list, gtk.gdk.ACTION_COPY)
 
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be per jid
@@ -1749,21 +1775,7 @@ class ChatControl(ChatControlBase):
 				if os.path.isfile(path): # is it file?
 					ft = gajim.interface.instances['file_transfers']
 					ft.send_file(self.account, c, path)
-		# FIXME: DND on non editable TextView, find a better way
-		self.conv_textview.tv.set_editable(False)
 					
-	def _on_drag_leave(self, widget, context, time):
-		# FIXME: DND on non editable TextView, find a better way
-		self.drag_entered = False
-		self.conv_textview.tv.set_editable(False)
-
-	def _on_drag_motion(self, widget, context, x, y, time):
-		# FIXME: DND on non editable TextView, find a better way
-		if not self.drag_entered:
-			# We drag new data over the TextView, make it editable to catch dnd
-			self.drag_entered = True
-			self.conv_textview.tv.set_editable(True)
-
 	def _on_message_tv_buffer_changed(self, textbuffer):
 		self.kbd_activity_in_last_5_secs = True
 		self.kbd_activity_in_last_30_secs = True
