@@ -5190,7 +5190,8 @@ class RosterWindow:
 
 		#signals
 		self.TARGET_TYPE_URI_LIST = 80
-		TARGETS = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0)]
+		TARGETS = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP | gtk.TARGET_SAME_WIDGET,
+			0)]
 		TARGETS2 = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
 					('text/uri-list', 0, self.TARGET_TYPE_URI_LIST)]
 		self.tree.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, TARGETS,

@@ -138,7 +138,8 @@ class ChatControlBase(MessageControl):
 		self.handlers[id] = widget
 		# Init DND
 		self.TARGET_TYPE_URI_LIST = 80
-		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
+		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ),
+				('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0)]
 		id = self.widget.connect('drag_data_received',
 			self._on_drag_data_received)
 		self.handlers[id] = self.widget

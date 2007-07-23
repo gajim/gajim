@@ -1653,10 +1653,20 @@ class GroupchatControl(ChatControlBase):
 				_('Bookmark has been added successfully'),
 				_('You can manage your bookmarks via Actions menu in your roster.'))
 
-	def _on_drag_data_received(self, widget, context, x, y, selection,
-		target_type, timestamp):
-		# TODO: Invite to groupchat on dnd of a contact
-		pass
+	def _on_drag_data_received(self, widget, context, x, y, selection, 
+			target_type, timestamp):	
+		# Invite contact to groupchat
+		treeview = gajim.interface.roster.tree
+		model = treeview.get_model()
+		data = selection.data
+		path = treeview.get_selection().get_selected_rows()[1][0]
+		iter = model.get_iter(path)
+		type = model[iter][2]
+		account = model[iter][4].decode('utf-8')
+		if type != 'contact': # source is not a contact
+			return
+		contact_jid = data.decode('utf-8')
+		gajim.connections[self.account].send_invite(self.room_jid, contact_jid)
 
 	def handle_message_textview_mykey_press(self, widget, event_keyval,
 		event_keymod):
