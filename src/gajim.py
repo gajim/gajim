@@ -72,10 +72,11 @@ def parseAndSetLogLevels(arg):
 def parseOpts():
 	profile = ''
 	verbose = False
+	config_path = None
 
 	try:
-		shortargs = 'hqvl:p:'
-		longargs = 'help quiet verbose loglevel= profile='
+		shortargs = 'hqvl:p:c:'
+		longargs = 'help quiet verbose loglevel= profile= config_path='
 		opts, args = getopt.getopt(sys.argv[1:], shortargs, longargs.split())
 	except getopt.error, msg:
 		print msg
@@ -95,10 +96,21 @@ def parseOpts():
 			profile = a
 		elif o in ('-l', '--loglevel'):
 			parseAndSetLogLevels(a)
-	return profile, verbose
+		elif o in ('-c', '--config-path'):
+			config_path = a
+	return profile, verbose, config_path
 
-profile, verbose = parseOpts()
+profile, verbose, config_path = parseOpts()
 del parseOpts, parseAndSetLogLevels, parseLogTarget, parseLogLevel
+
+import locale
+profile = unicode(profile, locale.getpreferredencoding())
+
+import common.configpaths
+common.configpaths.gajimpaths.init(config_path)
+del config_path
+common.configpaths.gajimpaths.init_profile(profile)
+del profile
 
 import message_control
 
@@ -198,12 +210,6 @@ from common import optparser
 if verbose: gajim.verbose = True
 del verbose
 
-import locale
-profile = unicode(profile, locale.getpreferredencoding())
-
-import common.configpaths
-common.configpaths.init_profile(profile)
-del profile
 gajimpaths = common.configpaths.gajimpaths
 
 pid_filename = gajimpaths['PID_FILE']

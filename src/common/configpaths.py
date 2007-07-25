@@ -25,6 +25,11 @@ def fse(s):
 	'''Convert from filesystem encoding if not already Unicode'''
 	return unicode(s, sys.getfilesystemencoding())
 
+def windowsify(s):
+	if os.name == 'nt':
+		return s.capitalize()
+	return s
+
 class ConfigPaths:
 	def __init__(self, root=None):
 		self.root = root
@@ -68,51 +73,45 @@ class ConfigPaths:
 		for key in self.paths.iterkeys():
 			yield (key, self[key])
 
-def windowsify(s):
-	if os.name == 'nt':
-		return s.capitalize()
-	return s
+	def init(self, root = None):
+		if self.root is not None:
+			self.root = root
 
-def init():
-	paths = ConfigPaths()
+		# LOG is deprecated
+		k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS' )
+		v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons')
 
-	# LOG is deprecated
-	k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS' )
-	v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons')
+		if os.name == 'nt':
+			v = map(lambda x: x.capitalize(), v)
 
-	if os.name == 'nt':
-		v = map(lambda x: x.capitalize(), v)
+		for n, p in zip(k, v):
+			self.add_from_root(n, p)
 
-	for n, p in zip(k, v):
-		paths.add_from_root(n, p)
+		self.add('DATA', os.path.join(u'..', windowsify(u'data')))
+		self.add('HOME', fse(os.path.expanduser('~')))
+		self.add('TMP', fse(tempfile.gettempdir()))
 
-	paths.add('DATA', os.path.join(u'..', windowsify(u'data')))
-	paths.add('HOME', fse(os.path.expanduser('~')))
-	paths.add('TMP', fse(tempfile.gettempdir()))
+		try:
+			import svn_config
+			svn_config.configure(self)
+		except (ImportError, AttributeError):
+			pass
 
-	try:
-		import svn_config
-		svn_config.configure(paths)
-	except (ImportError, AttributeError):
-		pass
+		# for k, v in paths.iteritems():
+		# 	print "%s: %s" % (repr(k), repr(v))
 
-	# for k, v in paths.iteritems():
-	# 	print "%s: %s" % (repr(k), repr(v))
+	def init_profile(self, profile):
+		conffile = windowsify(u'config')
+		pidfile = windowsify(u'gajim')
 
-	return paths
+		if len(profile) > 0:
+			conffile += u'.' + profile
+			pidfile += u'.' + profile
+		pidfile += u'.pid'
+		self.add_from_root('CONFIG_FILE', conffile)
+		self.add_from_root('PID_FILE', pidfile)
 
-gajimpaths = init()
+		# for k, v in paths.iteritems():
+		# 	print "%s: %s" % (repr(k), repr(v))
 
-def init_profile(profile, paths=gajimpaths):
-	conffile = windowsify(u'config')
-	pidfile = windowsify(u'gajim')
-
-	if len(profile) > 0:
-		conffile += u'.' + profile
-		pidfile += u'.' + profile
-	pidfile += u'.pid'
-	paths.add_from_root('CONFIG_FILE', conffile)
-	paths.add_from_root('PID_FILE', pidfile)
-
-	# for k, v in paths.iteritems():
-	# 	print "%s: %s" % (repr(k), repr(v))
+gajimpaths = ConfigPaths()
