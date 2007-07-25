@@ -420,10 +420,18 @@ _('Connection with peer cannot be established.'))
 		#they are not translatable.
 		return _('%(hours)02.d:%(minutes)02.d:%(seconds)02.d')  % times
 
-	def _get_eta_and_speed(self, full_size, transfered_size, elapsed_time):
-		if elapsed_time == 0:
+	def _get_eta_and_speed(self, full_size, transfered_size, file_props):
+		if len(file_props['transfered_size']) == 0:
 			return 0., 0.
-		speed = round(float(transfered_size) / elapsed_time)
+		elif len(file_props['transfered_size']) == 1:
+			speed = round(float(transfered_size) / file_props['elapsed-time'])
+		else:
+			# first and last are (time, transfered_size)
+			first = file_props['transfered_size'][0]
+			last = file_props['transfered_size'][-1]
+			transfered = last[1] - first[1]
+			tim = last[0] - first[0]
+			speed = round(float(transfered) / tim)
 		if speed == 0.:
 			return 0., 0.
 		remaining_size = full_size - transfered_size
@@ -484,8 +492,13 @@ _('Connection with peer cannot be established.'))
 			if file_props.has_key('offset') and file_props['offset']:
 				transfered_size -= file_props['offset'] 
 				full_size -= file_props['offset']
+
+			if file_props['elapsed-time'] > 0:
+				file_props['transfered_size'].append((file_props['last-time'], transfered_size))
+			if len(file_props['transfered_size']) > 6:
+				file_props['transfered_size'].pop(0)
 			eta, speed = self._get_eta_and_speed(full_size, transfered_size, 
-				file_props['elapsed-time'])
+				file_props)
 
 			self.model.set(iter, C_PROGRESS, text)
 			self.model.set(iter, C_PERCENT, int(percent))
@@ -547,6 +560,8 @@ _('Connection with peer cannot be established.'))
 		file_props['sender'] = account
 		file_props['receiver'] = contact
 		file_props['tt_account'] = account
+		# keep the last time: transfered_size to compute transfer speed
+		file_props['transfered_size'] = []
 		return file_props
 
 	def add_transfer(self, account, contact, file_props):
@@ -784,6 +799,8 @@ _('Connection with peer cannot be established.'))
 		elif self.is_transfer_active(file_props):
 			file_props['paused'] = True
 			self.set_status(file_props['type'], file_props['sid'], 'pause')
+			# reset that to compute speed only when we resume
+			file_props['transfered_size'] = []
 			self.toggle_pause_continue(False)
 
 	def on_cancel_button_clicked(self, widget):
