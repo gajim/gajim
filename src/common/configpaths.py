@@ -74,7 +74,7 @@ class ConfigPaths:
 			yield (key, self[key])
 
 	def init(self, root = None):
-		if self.root is not None:
+		if root is not None:
 			self.root = root
 
 		# LOG is deprecated
