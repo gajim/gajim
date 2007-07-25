@@ -1768,6 +1768,8 @@ class ChatControl(ChatControlBase):
 		if not c.resource:
 			return
 		if target_type == self.TARGET_TYPE_URI_LIST:
+			if not selection.data:
+				return
 			uri = selection.data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
 			for uri in uri_splitted:
