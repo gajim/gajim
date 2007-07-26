@@ -1286,10 +1286,15 @@ class RosterWindow:
 		contact_instances = gajim.contacts.get_contacts(account, contact.jid)
 		contact.show = show
 		contact.status = status
+		# name is to show in conversation window
+		name = contact.get_shown_name()
+
 		if show in ('offline', 'error') and \
 		len(gajim.events.get_events(account, contact.get_full_jid())) == 0:
 			if len(contact_instances) > 1:
 				# if multiple resources
+				if contact.resource != '':
+					name += '/' + contact.resource
 				jid_with_resource = contact.jid + '/' + contact.resource
 				if gajim.interface.msg_win_mgr.has_window(jid_with_resource,
 				account):
@@ -1299,33 +1304,26 @@ class RosterWindow:
 					ctrl.update_ui()
 					win.redraw_tab(ctrl)
 				gajim.contacts.remove_contact(account, contact)
+		elif len(contact_instances) > 1 and contact.resource != '':
+			name += '/' + contact.resource
 		self.remove_contact(contact, account)
 		self.add_contact_to_roster(contact.jid, account)
 		# print status in chat window and update status/GPG image
-		jid_list = [contact.jid]
-		for jid in jid_list:
-			if gajim.interface.msg_win_mgr.has_window(jid, account):
-				win = gajim.interface.msg_win_mgr.get_window(jid, account)
-				ctrl = win.get_control(jid, account)
-				ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
-					account, contact.jid)
-				ctrl.update_ui()
-				win.redraw_tab(ctrl)
+		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
+			ctrl = win.get_control(contact.jid, account)
+			ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
+				account, contact.jid)
+			ctrl.update_ui()
+			win.redraw_tab(ctrl)
 
-				name = contact.get_shown_name()
-
-				# if multiple resources (or second one disconnecting)
-				if (len(contact_instances) > 1 or (len(contact_instances) == 1 and \
-				show in ('offline', 'error'))) and contact.resource != '':
-					name += '/' + contact.resource
-
-				uf_show = helpers.get_uf_show(show)
-				if status:
-					ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
-						status), 'status')
-				else: # No status message
-					ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
-						'status')
+			uf_show = helpers.get_uf_show(show)
+			if status:
+				ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
+					status), 'status')
+			else: # No status message
+				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
+					'status')
 
 		if not contact.groups:
 			self.draw_group(_('General'), account)
