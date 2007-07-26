@@ -61,6 +61,8 @@ class MusicTrackListener(gobject.GObject):
 			'NameOwnerChanged', 'org.freedesktop.DBus', arg0='org.gnome.Rhythmbox')
 		bus.add_signal_receiver(self._player_playing_changed_cb,
 			'playingChanged', 'org.gnome.Rhythmbox.Player')
+		bus.add_signal_receiver(self._player_playing_song_property_changed_cb,
+			'playingSongPropertyChanged', 'org.gnome.Rhythmbox.Player')
 			
 		## Banshee
 		banshee_bus = dbus.SessionBus()
@@ -77,7 +79,7 @@ class MusicTrackListener(gobject.GObject):
 		# Otherwise, it opens Banshee!
 		self.banshee_props ={}
 		gobject.timeout_add(1000, self._banshee_check_track_status)
-	
+
 	def _check_if_banshee_bus(self):
 		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
 			self._get_banshee_bus()
@@ -86,7 +88,6 @@ class MusicTrackListener(gobject.GObject):
 			self.banshee_is_here = False
 		return True
 
-		
 	def _get_banshee_bus(self):
 		bus = dbus.SessionBus()
 		banshee = bus.get_object('org.gnome.Banshee', '/org/gnome/Banshee/Player')
@@ -105,6 +106,10 @@ class MusicTrackListener(gobject.GObject):
 			self.emit('music-track-changed', self._last_playing_music)
 		else:
 			self.emit('music-track-changed', None)
+
+	def _player_playing_song_property_changed_cb(self, a, b, c, d):
+		if b == 'rb:stream-song-title':
+			self.emit('music-track-changed', self._last_playing_music)
 
 	def _muine_properties_extract(self, song_string):
 		d = dict((x.strip() for x in  s1.split(':', 1)) for s1 in \
