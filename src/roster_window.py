@@ -4750,13 +4750,24 @@ class RosterWindow:
 		if not confirm_metacontacts: # First time we see this window
 			dlg.checkbutton.set_active(True)
 
-	def on_drop_in_group(self, widget, account, c_source, grp_dest, context,
-		etime, grp_source = None):
+	def on_drop_in_group(self, widget, account, c_source, grp_dest, is_big_brother,
+		context, etime, grp_source = None):
 		if grp_source:
 			self.remove_contact_from_group(account, c_source, grp_source)
-		# remove tag
-		gajim.contacts.remove_metacontact(account, c_source.jid)
+		if not is_big_brother:
+			# remove tag before readding
+			gajim.contacts.remove_metacontact(account, c_source.jid)
 		self.add_contact_to_group(account, c_source, grp_dest)
+		if is_big_brother:
+			# add whole metacontact to new group
+			tag = gajim.contacts.get_metacontacts_tag(account, c_source.jid)
+			all_jid = gajim.contacts.get_metacontacts_jids(tag)
+			for _account in all_jid:
+				for _jid in all_jid[_account]:
+					_c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
+					if grp_source:
+						self.remove_contact_from_group(_account, _c, grp_source)
+					self.add_contact_to_group(_account, _c, grp_dest)
 		if context.action in (gtk.gdk.ACTION_MOVE, gtk.gdk.ACTION_COPY):
 			context.finish(True, True, etime)
 
@@ -4780,36 +4791,36 @@ class RosterWindow:
 
 	def drag_data_received_data(self, treeview, context, x, y, selection, info,
 		etime):
-		model = treeview.get_model()
-		if not selection.data:
-			return
-		data = selection.data
 		drop_info = treeview.get_dest_row_at_pos(x, y)
 		if not drop_info:
 			return
+		if not selection.data:
+			return # prevents tb when several entrys are dragged
+		model = treeview.get_model()
+		data = selection.data
 		path_dest, position = drop_info
+
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2 \
 			and path_dest[1] == 0: # dropped before the first group
 			return
+		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
+			# dropped before a group: we drop it in the previous group every time
+			path_dest = (path_dest[0], path_dest[1]-1)	
+		# destination: the row something got dropped on
 		iter_dest = model.get_iter(path_dest)
 		type_dest = model[iter_dest][C_TYPE].decode('utf-8')
 		jid_dest = model[iter_dest][C_JID].decode('utf-8')
 		account_dest = model[iter_dest][C_ACCOUNT].decode('utf-8')
 
+		# drop on account row in merged mode, we cannot know the desired account
 		if account_dest == 'all':
-			# drop on account row in merged mode: we can't know which account it is
 			return
-
-		# if account is not connected, do nothing
+		# nothing can be done, if destination account is offline
 		if gajim.connections[account_dest].connected < 2:
 			return
 
-		# drop on self contact row
-		if type_dest == 'self_contact':
-			return
-
+		# A file got dropped on the roster
 		if info == self.TARGET_TYPE_URI_LIST:
-			# User dropped a file on the roster
 			if len(path_dest) < 3:
 				return
 			if type_dest != 'contact':
@@ -4819,13 +4830,6 @@ class RosterWindow:
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
 			nb_uri = len(uri_splitted)
-			prim_text = 'Send file?'
-			sec_text =  i18n.ngettext('Do you want to send that file to %s:',
-				'Do you want to send those files to %s:', nb_uri) %\
-				c_dest.get_shown_name()
-			for uri in uri_splitted:
-				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
-				sec_text += '\n' + os.path.basename(path)
 			def _on_send_files(widget, account, jid, uris):
 				dialog.destroy()
 				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
@@ -4834,40 +4838,64 @@ class RosterWindow:
 					if os.path.isfile(path): # is it file?
 						gajim.interface.instances['file_transfers'].send_file(
 							account, c, path)
-
+			# Popup dialog to confirm sending
+			prim_text = 'Send file?'
+			sec_text =  i18n.ngettext('Do you want to send that file to %s:',
+				'Do you want to send those files to %s:', nb_uri) %\
+				c_dest.get_shown_name()
+			for uri in uri_splitted:
+				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
+				sec_text += '\n' + os.path.basename(path)
 			dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
 				on_response_ok = (_on_send_files, account_dest, jid_dest,
 				uri_splitted))
 			dialog.popup()
 			return
+		
+		# a roster entry was dragged and dropped somewhere in the roster
 
-		if gajim.config.get_per('accounts', account_dest, 'is_zeroconf'):
-			# drop on zeroconf account, no contact adds possible
-			return
-
-		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
-			# dropped before a group : we drop it in the previous group
-			path_dest = (path_dest[0], path_dest[1]-1)
+		# source: the row that was dragged
 		path_source = treeview.get_selection().get_selected_rows()[1][0]
 		iter_source = model.get_iter(path_source)
 		type_source = model[iter_source][C_TYPE]
 		account_source = model[iter_source][C_ACCOUNT].decode('utf-8')
-		if type_source != 'contact': # source is not a contact
-			return
-		if type_dest == 'account' and account_source == account_dest:
+		
+		# Only normal contacts can be dragged	
+		if type_source != 'contact': 
 			return
 		if gajim.config.get_per('accounts', account_source, 'is_zeroconf'):
 			return
+
+		# A contact was dropped 	
+		if gajim.config.get_per('accounts', account_dest, 'is_zeroconf'):
+			# drop on zeroconf account, adding not possible
+			return
+		if type_dest == 'self_contact':
+			# drop on self contact row
+			return
+		if type_dest == 'account' and account_source == account_dest:
+			# drop on the account it was dragged from
+			return
+		if type_dest == 'groupchat':
+			# drop on a minimized groupchat
+			# TODO: Invite to groupchat
+			return
+
+		# Get valid source group, jid and contact
 		it = iter_source
 		while model[it][C_TYPE] == 'contact':
 			it = model.iter_parent(it)
 		grp_source = model[it][C_JID].decode('utf-8')
-		if grp_source in helpers.special_groups:
+		if grp_source in helpers.special_groups and \
+			grp_source not in ('Not in Roster', 'Observers'):
+			# a transport or a minimized groupchat was dragged
+			# we can add it to other accounts but not move it to another group, see below
 			return
 		jid_source = data.decode('utf-8')
 		c_source = gajim.contacts.get_contact_with_highest_priority(
 			account_source, jid_source)
 
+		# Get destination group
 		grp_dest = None
 		if type_dest == 'group':
 			grp_dest = model[iter_dest][C_JID].decode('utf-8')
@@ -4876,79 +4904,53 @@ class RosterWindow:
 			while model[it][C_TYPE] != 'group':
 				it = model.iter_parent(it)
 			grp_dest = model[it][C_JID].decode('utf-8')
-
-		if type_dest == 'groupchat':
+		if grp_dest in helpers.special_groups:
 			return
 
+		if jid_source == jid_dest:
+			if grp_source == grp_dest and account_source == account_dest:
+				# Drop on self
+				return
+		
+		# contact drop somewhere in or on a foreign account
 		if (type_dest == 'account' or not self.regroup) and \
-		account_source != account_dest:
-			# add contact to this account in that group
+				account_source != account_dest:
+			# add to account in specified group
 			dialogs.AddNewContactWindow(account = account_dest, jid = jid_source,
 				user_nick = c_source.name, group = grp_dest)
 			return
+		
+		# we may not add contacts from special_groups
+		if grp_source in helpers.special_groups :
+			return
 
-		# Get destination group
-		if type_dest == 'group':
-			if grp_dest in helpers.special_groups:
-				return
-			if context.action == gtk.gdk.ACTION_COPY:
-				self.on_drop_in_group(None, account_source, c_source, grp_dest,
-					context, etime)
-				return
-			self.on_drop_in_group(None, account_source, c_source, grp_dest,
-				context, etime, grp_source)
-			return
-		if grp_dest in helpers.special_groups:
-			return
-		if jid_source == jid_dest:
-			if grp_source == grp_dest and account_source == account_dest:
-				return
-		if grp_source == grp_dest:
-			# Add meta contact
-			#FIXME: doesn't work under windows:
-			# http://bugzilla.gnome.org/show_bug.cgi?id=329797
-#			if context.action == gtk.gdk.ACTION_COPY:
-#				# Keep only MOVE
-#				return
-			c_dest = gajim.contacts.get_contact_with_highest_priority(account_dest,
-				jid_dest)
-			is_big_brother = False
+		# Is the contact we drag a meta contact?
+		is_meta_contact = False
+		is_big_brother = False
+		tag = gajim.contacts.get_metacontacts_tag(account_source, jid_source)
+		if tag:
+			is_meta_contact = True
 			if model.iter_has_child(iter_source):
 				is_big_brother = True
+
+		# Contact drop on group row or between two contacts
+		if type_dest == 'group' or position == gtk.TREE_VIEW_DROP_BEFORE or \
+				position == gtk.TREE_VIEW_DROP_AFTER:
+			self.on_drop_in_group(None, account_source, c_source, grp_dest,
+				is_big_brother, context, etime, grp_source)
+			return
+		
+		# Contact drop on another contact, make meta contacts
+		if position == gtk.TREE_VIEW_DROP_INTO_OR_AFTER or \
+				position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE:
+			c_dest = gajim.contacts.get_contact_with_highest_priority(account_dest,
+				jid_dest)
 			if not c_dest:
 				# c_dest is None if jid_dest doesn't belong to account
 				return
 			self.on_drop_in_contact(treeview, account_source, c_source,
 				account_dest, c_dest, is_big_brother, context, etime)
 			return
-		# We upgrade only the first user because user2.groups is a pointer to
-		# user1.groups
-		if context.action == gtk.gdk.ACTION_COPY:
-			self.on_drop_in_group(None, account_source, c_source, grp_dest,
-				context, etime)
-		else:
-			menu = gtk.Menu()
-			item = gtk.MenuItem(_('Drop %s in group %s') % (c_source.name,
-				grp_dest))
-			item.connect('activate', self.on_drop_in_group, account_source,
-				c_source, grp_dest, context, etime, grp_source)
-			menu.append(item)
-			c_dest = gajim.contacts.get_contact_with_highest_priority(
-				account_dest, jid_dest)
-			item = gtk.MenuItem(_('Make %s and %s metacontacts') %
-				(c_source.get_shown_name(), c_dest.get_shown_name()))
-			is_big_brother = False
-			if model.iter_has_child(iter_source):
-				is_big_brother = True
-			item.connect('activate', self.on_drop_in_contact, account_source,
-				c_source, account_dest, c_dest, is_big_brother, context, etime)
-
-			menu.append(item)
-
-			menu.attach_to_widget(self.tree, None)
-			menu.connect('selection-done', gtkgui_helpers.destroy_widget)
-			menu.show_all()
-			menu.popup(None, None, None, 1, etime)
 
 	def show_title(self):
 		change_title_allowed = gajim.config.get('change_roster_title')
