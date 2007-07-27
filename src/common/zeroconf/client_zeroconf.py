@@ -121,6 +121,7 @@ class P2PClient(IdleObject):
 			self.sock_type = TYPE_SERVER
 		else:
 			self.sock_type = TYPE_CLIENT
+		self.fd = -1
 		conn = P2PConnection('', _sock, host, port, self._caller, self.on_connect, self)
 		self.sock_hash = conn._sock.__hash__
 		self.fd = conn.fd
@@ -129,10 +130,14 @@ class P2PClient(IdleObject):
 		for val in self.stanzaqueue:
 			stanza, is_message = val
 			if is_message:
-				if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-					self.conn_holder.number_of_awaiting_messages[self.fd]+=1
+				if self.fd == -1:
+					self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
+                                        _('Connection to host could not be established'), None, None])
 				else:
-					self.conn_holder.number_of_awaiting_messages[self.fd]=1
+					if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
+						self.conn_holder.number_of_awaiting_messages[self.fd]+=1
+					else:
+						self.conn_holder.number_of_awaiting_messages[self.fd]=1
 	
 	def add_stanza(self, stanza, is_message = False):
 		if self.Connection:
@@ -207,11 +212,11 @@ class P2PClient(IdleObject):
 	
 	def on_disconnect(self):
 		if self.conn_holder:
-			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-				if self.conn_holder.number_of_awaiting_messages[self.fd] > 0:
+			if self.conn_holder.number_of_awaiting_messages.has_key(self.conn_holder.fd):
+				if self.conn_holder.number_of_awaiting_messages[self.conn_holder.fd] > 0:
 					self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
 					_('Connection to host could not be established'), None, None])
-				del self.conn_holder.number_of_awaiting_messages[self.fd]
+				del self.conn_holder.number_of_awaiting_messages[self.conn_holder.fd]
 			self.conn_holder.remove_connection(self.sock_hash) 
 		if self.__dict__.has_key('Dispatcher'):
 			self.Dispatcher.PlugOut()
