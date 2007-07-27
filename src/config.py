@@ -2244,7 +2244,7 @@ class AccountsWindow:
 		if self.ignore_events:
 			return
 		email = widget.get_text().decode('utf-8')
-		if self.option_changed('zeroconf_email', mail):
+		if self.option_changed('zeroconf_email', email):
 			self.need_relogin = True
 		gajim.config.set_per('accounts', self.current_account,
 			'zeroconf_email', email)
