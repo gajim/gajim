@@ -512,7 +512,6 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.negotiated = negotiated
 
-#		2.	Return a <not-acceptable/> error to Bob unless: 1 < d < p - 1
 		self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
 
 		accept = xmpp.Message()
@@ -532,6 +531,9 @@ class EncryptedStanzaSession(StanzaSession):
 		e = self.es[mod_p]
 
 		self.d = self.decode_mpi(base64.b64decode(form['dhkeys']))
+		
+		if (not 1 < self.d < (p - 1)):
+			raise exceptions.NegotiationError, "invalid DH value 'd'"
 
 		self.k = self.sha256(self.encode_mpi(self.powmod(self.d, x, p)))
 
