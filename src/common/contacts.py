@@ -277,10 +277,6 @@ class Contacts:
 		for account in accounts:
 			our_jid = common.gajim.get_jid_from_account(account)
 			for jid in self.get_jid_list(account):
-				if self.has_brother(account, jid) and not \
-					self.is_big_brother(account, jid):
-					# count metacontacts only once
-					continue
 				if jid == our_jid:
 					continue
 				if common.gajim.jid_is_transport(jid) and not \
@@ -371,17 +367,6 @@ class Contacts:
 		for account in self._metacontacts_tags:
 			tag = self.get_metacontacts_tag(account, jid)
 			if tag and len(self._metacontacts_tags[account][tag]) > 1:
-				return True
-		return False
-
-	def is_big_brother(self, account, jid):
-		tag = self.get_metacontacts_tag(account, jid)
-		if tag:
-			family = self.get_metacontacts_family(account, jid)
-			bb_data = self.get_metacontacts_big_brother(family)
-			bb_jid = bb_data['jid']
-			bb_account = bb_data['account']
-			if bb_jid == jid and bb_account == account: 
 				return True
 		return False
 
