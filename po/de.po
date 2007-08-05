@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-03-29 13:38+0200\n"
-"PO-Revision-Date: 2007-03-29 13:41+0100\n"
-"Last-Translator: Benjamin Drung <benjamin.drung@gmail.com>\n"
+"PO-Revision-Date: 2007-08-03 23:11+0100\n"
+"Last-Translator: Michael Skiba <michael@michael-skiba.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -204,9 +204,8 @@ msgid "Account Modification"
 msgstr "Kontoänderung"
 
 #: ../data/glade/account_modification_window.glade.h:6
-#, fuzzy
 msgid "Administration operations"
-msgstr "Administratorliste"
+msgstr "Administrative Aktionen"
 
 #: ../data/glade/account_modification_window.glade.h:7
 msgid "Auto-reconnect when connection is lost"
@@ -379,9 +378,8 @@ msgid "Synch_ronize account status with global status"
 msgstr "Konto-Status mit globalem _Status abgleichen"
 
 #: ../data/glade/account_modification_window.glade.h:42
-#, fuzzy
 msgid "Synchronise contacts"
-msgstr "_Abgemeldete Kontakte anzeigen"
+msgstr "Synchronisiere Kontakte"
 
 #: ../data/glade/account_modification_window.glade.h:43
 msgid "Use _SSL (legacy)"
@@ -1039,9 +1037,8 @@ msgid "_Bookmark This Room"
 msgstr "Raum zu _Lesezeichen hinzufügen"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:7
-#, fuzzy
 msgid "_Destroy room"
-msgstr "_Neuer Raum"
+msgstr "_Raum zerstören"
 
 #: ../data/glade/gc_occupants_menu.glade.h:1
 msgid "Mo_derator"
@@ -2338,9 +2335,8 @@ msgid "Bulgarian"
 msgstr "Bulgarisch"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Breton"
-msgstr "Briton"
+msgstr "Bretonisch"
 
 #: ../src/chat_control.py:52
 msgid "Czech"
@@ -2367,7 +2363,6 @@ msgid "Spanish"
 msgstr "Spanisch"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Basque"
 msgstr "Baskisch"
 
@@ -3203,23 +3198,20 @@ msgid "%s is not the name of a group chat."
 msgstr "%s ist kein Name eines Gruppenchats."
 
 #: ../src/dialogs.py:1327
-#, fuzzy
 msgid "Without a connection, you can not synchronise your contacts."
-msgstr "Sie müssen verbunden sein, um Ihr Passwort zu ändern"
+msgstr "Sie müssen verbunden sein, um Ihre Kontakte zu Synchronisieren."
 
 #: ../src/dialogs.py:1374
-#, fuzzy
 msgid "This account is not connected to the server"
-msgstr "Konto \"%s\" ist mit Server verbunden"
+msgstr "Konto \"%s\" ist nicht mit dem Server verbunden"
 
 #: ../src/dialogs.py:1375
-#, fuzzy
 msgid "You cannot synchronize with an account unless it is connected."
-msgstr "Sie können einem Gruppenchat erst beitreten, wenn Sie verbunden sind."
+msgstr "Sie können nicht mit einem Konto Synchronisieren, solange es nicht verbunden ist."
 
 #: ../src/dialogs.py:1399
 msgid "Synchronise"
-msgstr ""
+msgstr "Synchronisieren"
 
 #: ../src/dialogs.py:1457
 #, python-format
@@ -4557,19 +4549,21 @@ msgstr "Bitte geben Sie an, welchen Spitznamen Sie verwenden möchten:"
 
 #. Ask for a reason
 #: ../src/groupchat_control.py:1457
-#, fuzzy, python-format
+#, python-format
 msgid "Destroying %s"
-msgstr "Beschreibung: %s"
+msgstr "Zerstöre %s"
 
 #: ../src/groupchat_control.py:1458
 msgid ""
 "You are going to definitively destroy this room.\n"
 "You may specify a reason below:"
 msgstr ""
+"Sie werden den Raum endgültig zerstören.\n"
+"Sie können hier einen Grund angeben:"
 
 #: ../src/groupchat_control.py:1460
 msgid "You may also enter an alternate venue:"
-msgstr ""
+msgstr "Sie können auch einen alternativen Raum eintragen:"
 
 #: ../src/groupchat_control.py:1490
 msgid "Bookmark already set"
@@ -5161,11 +5155,11 @@ msgid "Metacontacts are a way to regroup several contacts in one line. Generally
 msgstr "Metakontakte sind eine Möglichkeit, mehrere Kontakte in einer Zeile zu gruppieren. Normalerweise benutzt man Sie, wenn eine Person mehrere Jabber- oder Transport-Konten hat."
 
 #: ../src/roster_window.py:4132
-#, fuzzy, python-format
+#, python-format
 msgid "Do you want to send that file to %s:"
 msgid_plural "Do you want to send those files to %s:"
 msgstr[0] "%s möchte ihnen eine Datei senden:"
-msgstr[1] "%s möchte ihnen eine Datei senden:"
+msgstr[1] "%s möchte ihnen diese Datei senden:"
 
 #: ../src/roster_window.py:4237
 #, python-format
@@ -5722,7 +5716,7 @@ msgstr "Kann leer, 'chat' oder 'normal' sein. Wenn nicht leer, dann werden alle 
 
 #: ../src/common/config.py:227
 msgid "If True, Gajim will scroll and select the contact who sent you the last message, if chat window is not already opened."
-msgstr ""
+msgstr "Wenn aktiviert, wird Gajim automatisch zu der Person springen und auswählen, die die letzte Nachricht geschickt hat, falls das Chat Fenster nicht bereits offen ist."
 
 #: ../src/common/config.py:238
 msgid "Priority will change automatically according to your status. Priorities are defined in autopriority_* options."
@@ -5874,13 +5868,13 @@ msgstr "Falscher Host"
 
 #: ../src/common/connection_handlers.py:180
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:236
-#, fuzzy, python-format
+#, python-format
 msgid "The host %s you configured as the ft_add_hosts_to_send advanced option is not valid, so ignored."
-msgstr "Der Host, den Sie für die erweiterte Option ft_override_host_to_send angeben haben ist ungültig und wird ignoriert."
+msgstr "Der Host %s, den Sie für die erweiterte Option ft_override_host_to_send angeben haben ist ungültig und wird ignoriert."
 
 #: ../src/common/connection_handlers.py:216
 msgid "Invalid local address? :-O"
-msgstr ""
+msgstr "Ungültige Lokale Adresse? :-O"
 
 #: ../src/common/connection_handlers.py:607
 #, python-format
@@ -5940,14 +5934,13 @@ msgstr ""
 #. Room has been destroyed. see
 #. http://www.xmpp.org/extensions/xep-0045.html#destroyroom
 #: ../src/common/connection_handlers.py:1676
-#, fuzzy
 msgid "Room has been destroyed"
-msgstr "Autorisierung wurde entfernt"
+msgstr "Raum wurde zerstört"
 
 #: ../src/common/connection_handlers.py:1683
 #, python-format
 msgid "You can join this room instead: %s"
-msgstr ""
+msgstr "Sie können stattdessen diesem Raum beitreten: %s"
 
 #: ../src/common/connection_handlers.py:1709
 msgid "I would like to add you to my roster."
@@ -5996,9 +5989,8 @@ msgid "Invalid answer"
 msgstr "Ungültige Antwort"
 
 #: ../src/common/connection.py:379
-#, fuzzy
 msgid "Connection to proxy failed"
-msgstr "Verbindung fehlgeschlagen"
+msgstr "Verbindung mit Proxy fehlgeschlagen"
 
 #: ../src/common/connection.py:433
 #: ../src/common/connection.py:531
