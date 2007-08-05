@@ -78,8 +78,10 @@ class ConfigPaths:
 			self.root = root
 
 		# LOG is deprecated
-		k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS' )
-		v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons')
+		k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS',
+			'MY_ICONSETS' )
+		v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons',
+			u'iconsets')
 
 		if os.name == 'nt':
 			v = map(lambda x: x.capitalize(), v)

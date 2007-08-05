@@ -1044,3 +1044,9 @@ def datetime_tuple(timestamp):
 	timestamp = timestamp.replace('-', '')
 	from time import strptime
 	return strptime(timestamp, '%Y%m%dT%H:%M:%S')
+
+def get_iconset_path(iconset):
+	if os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', iconset)):
+		return os.path.join(gajim.DATA_DIR, 'iconsets', iconset)
+	elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, iconset)):
+		return os.path.join(gajim.MY_ICONSETS_PATH, iconset)

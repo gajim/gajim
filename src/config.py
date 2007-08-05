@@ -146,6 +146,8 @@ class PreferencesWindow:
 
 		# iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
+		if os.path.isdir(gajim.MY_ICONSETS_PATH):
+			iconsets_list += os.listdir(gajim.MY_ICONSETS_PATH) 
 		# new model, image in 0, string in 1
 		model = gtk.ListStore(gtk.Image, str)
 		renderer_image = cell_renderer_image.CellRendererImage(0, 0)
@@ -158,7 +160,8 @@ class PreferencesWindow:
 		self.iconset_combobox.set_model(model)
 		l = []
 		for dir in iconsets_list:
-			if not os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', dir)):
+			if not os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', dir)) \
+			and not os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, dir)):
 				continue
 			if dir != '.svn' and dir != 'transports':
 				l.append(dir)
@@ -167,9 +170,9 @@ class PreferencesWindow:
 		for i in xrange(len(l)):
 			preview = gtk.Image()
 			files = []
-			files.append(os.path.join(gajim.DATA_DIR, 'iconsets', l[i], '16x16',
+			files.append(os.path.join(helpers.get_iconset_path(l[i]), '16x16',
 				'online.png'))
-			files.append(os.path.join(gajim.DATA_DIR, 'iconsets', l[i], '16x16',
+			files.append(os.path.join(helpers.get_iconset_path(l[i]), '16x16',
 				'online.gif'))
 			for file in files:
 				if os.path.exists(file):

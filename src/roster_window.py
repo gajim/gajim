@@ -1983,7 +1983,7 @@ class RosterWindow:
 				start_chat_menuitem.set_submenu(sub_menu)
 
 				iconset = gajim.config.get('iconset')
-				path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+				path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 				for c in contacts:
 					# icon MUST be different instance for every item
 					state_images = self.load_iconset(path)
@@ -2170,7 +2170,7 @@ class RosterWindow:
 		status_menuitems = gtk.Menu()
 		send_custom_status_menuitem.set_submenu(status_menuitems)
 		iconset = gajim.config.get('iconset')
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
 			# icon MUST be different instance for every item
 			state_images = self.load_iconset(path)
@@ -2189,7 +2189,7 @@ class RosterWindow:
 				iconset = gajim.config.get('iconset')
 				if not iconset:
 					iconset = gajim.config.DEFAULT_ICONSET
-				path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+				path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 				for c in contacts:
 					# icon MUST be different instance for every item
 					state_images = self.load_iconset(path)
@@ -2668,7 +2668,7 @@ class RosterWindow:
 			status_menuitems = gtk.Menu()
 			send_custom_status_menuitem.set_submenu(status_menuitems)
 			iconset = gajim.config.get('iconset')
-			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+			path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 			for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
 				# icon MUST be different instance for every item
 				state_images = self.load_iconset(path)
@@ -2860,7 +2860,7 @@ class RosterWindow:
 		# we have to create our own set of icons for the menu
 		# using self.jabber_status_images is poopoo
 		iconset = gajim.config.get('iconset')
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		state_images = self.load_iconset(path)
 
 		if not gajim.config.get_per('accounts', account, 'is_zeroconf'):
@@ -3006,7 +3006,7 @@ class RosterWindow:
 		else:
 			menu = gtk.Menu()
 			iconset = gajim.config.get('iconset')
-			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+			path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 			accounts = [] # Put accounts in a list to sort them
 			for account in gajim.connections:
 				accounts.append(account)
@@ -3603,7 +3603,7 @@ class RosterWindow:
 		except:
 			pass
 		iconset = gajim.config.get('iconset')
-		prefix = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
+		prefix = os.path.join(helpers.get_iconset_path(iconset), '32x32')
 		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
 			status = status + '.png'
 		elif status == 'online':
@@ -4300,7 +4300,7 @@ class RosterWindow:
 	def load_icon(self, icon_name):
 		'''load an icon from the iconset in 16x16'''
 		iconset = gajim.config.get('iconset')
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16'+ '/')
+		path = os.path.join(helpers.get_iconset_path(iconset), '16x16'+ '/')
 		icon_list = self._load_icon_list([icon_name], path)
 		return icon_list[icon_name]
 
@@ -4335,16 +4335,16 @@ class RosterWindow:
 		'''initialise jabber_state_images dict'''
 		iconset = gajim.config.get('iconset')
 		if iconset:
-			path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+			path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 			if not os.path.exists(path):
 				iconset = gajim.config.DEFAULT_ICONSET
 		else:
 			iconset = gajim.config.DEFAULT_ICONSET
 
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '32x32')
+		path = os.path.join(helpers.get_iconset_path(iconset), '32x32')
 		self.jabber_state_images['32'] = self.load_iconset(path)
 
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		self.jabber_state_images['16'] = self.load_iconset(path)
 		# try to find opened_meta.png file, else opened.png else nopixbuf merge
 		path_opened = os.path.join(path, 'opened_meta.png')

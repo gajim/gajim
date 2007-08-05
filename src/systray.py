@@ -145,7 +145,7 @@ class Systray:
 
 		# We need our own set of status icons, let's make 'em!
 		iconset = gajim.config.get('iconset')
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		state_images = gajim.interface.roster.load_iconset(path)
 
 		if state_images.has_key('muc_active'):

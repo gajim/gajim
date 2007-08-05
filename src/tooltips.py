@@ -228,7 +228,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'dcraven'
-		file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		for acct in accounts:
 			message = acct['message']
 			# before reducing the chars we should assure we send unicode, else 
@@ -441,8 +441,8 @@ class RosterTooltip(NotificationAreaTooltip):
 				iconset = gajim.config.get('iconset')
 				if not iconset:
 					iconset = 'dcraven'
-				file_path = os.path.join(gajim.DATA_DIR,
-					'iconsets', iconset, '16x16')
+				file_path = os.path.join(helpers.get_iconset_path(iconsets),
+					'16x16')
 
 			contact_keys = contacts_dict.keys()
 			contact_keys.sort()

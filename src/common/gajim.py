@@ -71,6 +71,7 @@ LOGPATH = gajimpaths['LOG'] # deprecated
 VCARD_PATH = gajimpaths['VCARD']
 AVATAR_PATH = gajimpaths['AVATAR']
 MY_EMOTS_PATH = gajimpaths['MY_EMOTS']
+MY_ICONSETS_PATH = gajimpaths['MY_ICONSETS']
 TMP = gajimpaths['TMP']
 DATA_DIR = gajimpaths['DATA']
 HOME_DIR = gajimpaths['HOME']
