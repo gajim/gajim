@@ -1191,6 +1191,10 @@ class ChatControl(ChatControlBase):
 		gajim.config.set_per('contacts', self.contact.jid, 'gpg_enabled',
 			widget.get_active())
 
+	def _on_start_voip_menuitem_activate(self, *things):
+		print 'Start VoiP'
+		gajim.connections[self.account].startVoiP(self.contact.jid)
+
 	def _update_gpg(self):
 		tb = self.xml.get_widget('gpg_togglebutton')
 		# we can do gpg
@@ -1533,6 +1537,7 @@ class ChatControl(ChatControlBase):
 		
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
+		start_voip_menuitem = xml.get_widget('start_voip_menuitem')
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
@@ -1583,6 +1588,9 @@ class ChatControl(ChatControlBase):
 		id = toggle_gpg_menuitem.connect('activate', 
 			self._on_toggle_gpg_menuitem_activate)
 		self.handlers[id] = toggle_gpg_menuitem 
+		id = start_voip_menuitem.connect('activate',
+			self._on_start_voip_menuitem_activate)
+		self.handlers[id] = start_voip_menuitem
 		id = information_menuitem.connect('activate', 
 			self._on_contact_information_menuitem_activate)
 		self.handlers[id] = information_menuitem

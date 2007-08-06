@@ -66,6 +66,15 @@
   </child>
 
   <child>
+    <widget class="GtkMenuItem" id="start_voip_menuitem">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Start _Voice chat</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="_on_start_voip_menuitem_activate" last_modification_time="Tue, 03 Jan 2006 04:26:46 GMT"/>
+    </widget>
+  </child>
+
+  <child>
     <widget class="GtkImageMenuItem" id="add_to_roster_menuitem">
       <property name="visible">True</property>
       <property name="label" translatable="yes">_Add to Roster</property>
