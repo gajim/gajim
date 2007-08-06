@@ -554,14 +554,14 @@ class ChatControlBase(MessageControl):
 		return False
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None,
-	msg_id = None, composing_xep = None, resource = None):
+	msg_id = None, composing_xep = None, resource = None,
+	process_command = True):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
 			return 1
 
-
-		if not self._process_command(message):
+		if not process_command or not self._process_command(message):
 			ret = MessageControl.send_message(self, message, keyID, type = type,
 				chatstate = chatstate, msg_id = msg_id,
 				composing_xep = composing_xep, resource = resource,
@@ -1284,8 +1284,11 @@ class ChatControl(ChatControlBase):
 		if message in ('', None, '\n') or self._process_command(message):
 			return
 
+		# Do we need to process command for the message ?
+		process_command = True
 		if message.startswith('/say'):
 			message = message[5:]
+			process_command = False
 
 		# refresh timers
 		self.reset_kbd_mouse_timeout_vars()
@@ -1329,7 +1332,8 @@ class ChatControl(ChatControlBase):
 				self._schedule_activity_timers()
 				
 		if not ChatControlBase.send_message(self, message, keyID, type = 'chat',
-		chatstate = chatstate_to_send, composing_xep = composing_xep):
+		chatstate = chatstate_to_send, composing_xep = composing_xep,
+		process_command = process_command):
 			self.print_conversation(message, self.contact.jid,
 				encrypted = encrypted)
 
