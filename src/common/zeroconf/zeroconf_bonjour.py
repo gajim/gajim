@@ -224,12 +224,12 @@ class Zeroconf:
 			self.service_sdRef = sdRef
 		except pybonjour.BonjourError, e:
 			self.service_add_fail_callback(e)
-		
-		gajim.log.debug('Publishing service %s of type %s' % (self.name, self.stype))
+		else:
+			gajim.log.debug('Publishing service %s of type %s' % (self.name, self.stype))
 
-		ready = select.select([sdRef], [], [], resolve_timeout)
-		if sdRef in ready[0]:
-			pybonjour.DNSServiceProcessResult(sdRef)
+			ready = select.select([sdRef], [], [], resolve_timeout)
+			if sdRef in ready[0]:
+				pybonjour.DNSServiceProcessResult(sdRef)
 
 	def announce(self):
 		if not self.connected:
@@ -297,8 +297,6 @@ class Zeroconf:
 		self.browse_loop()
 
 		for val in self.contacts.values():
-			print val[C_BARE_NAME]
-			print val[C_DOMAIN]
 			resolve_sdRef = pybonjour.DNSServiceResolve(0, pybonjour.kDNSServiceInterfaceIndexAny, val[C_BARE_NAME], self.stype+'.', val[C_DOMAIN]+'.', self.service_resolved_all_callback)
 
 			try:
