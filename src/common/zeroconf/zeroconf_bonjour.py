@@ -16,15 +16,13 @@ from common import gajim
 import sys
 import select
 from string import split
+from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN
 
 try:
 	import pybonjour
 except ImportError, e:
 	pass
 
-
-C_NAME, C_DOMAIN, C_INTERFACE, C_PROTOCOL, C_HOST, \
-C_ADDRESS, C_PORT, C_BARE_NAME, C_TXT = range(9)
 
 resolve_timeout  = 1
 
@@ -297,7 +295,10 @@ class Zeroconf:
 		self.browse_loop()
 
 		for val in self.contacts.values():
-			resolve_sdRef = pybonjour.DNSServiceResolve(0, pybonjour.kDNSServiceInterfaceIndexAny, val[C_BARE_NAME], self.stype+'.', val[C_DOMAIN]+'.', self.service_resolved_all_callback)
+			resolve_sdRef = pybonjour.DNSServiceResolve(0,
+				pybonjour.kDNSServiceInterfaceIndexAny, val[C_BARE_NAME],
+				self.stype + '.', val[C_DOMAIN] + '.',
+				self.service_resolved_all_callback)
 
 			try:
 				ready = select.select([resolve_sdRef], [], [], resolve_timeout)

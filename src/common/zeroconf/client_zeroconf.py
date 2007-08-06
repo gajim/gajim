@@ -523,13 +523,6 @@ class ClientZeroconf:
 		self.listener = None
 		self.number_of_awaiting_messages = {}
 
-	def test_avahi(self):
-		try:
-			import avahi
-		except ImportError:
-			return False
-		return True
-
 	def connect(self, show, msg):
 		self.port = self.start_listener(self.caller.port)
 		if not self.port:

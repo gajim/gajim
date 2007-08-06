@@ -41,6 +41,7 @@ import gobject
 from common import gajim
 from common import GnuPG
 from common.zeroconf import client_zeroconf
+from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
 
 USE_GPG = GnuPG.USE_GPG
@@ -228,7 +229,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.get_config_values_or_default()
 		if not self.connection:
 			self.connection = client_zeroconf.ClientZeroconf(self)
-			if not self.connection.test_avahi():
+			if not zeroconf.test_zeroconf():
 				self.dispatch('STATUS', 'offline')
 				self.status = 'offline'
 				self.dispatch('CONNECTION_LOST',
