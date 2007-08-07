@@ -30,7 +30,7 @@ class NoCommonCodec(Exception): pass
 class JingleSession(object):
 	''' This represents one jingle session. '''
 	__metaclass__=meta.VerboseClassType
-	def __init__(self, con, weinitiate, jid):
+	def __init__(self, con, weinitiate, jid, sid=None):
 		''' con -- connection object,
 		    weinitiate -- boolean, are we the initiator?
 		    jid - jid of the other entity'''
@@ -47,19 +47,26 @@ class JingleSession(object):
 		self.weinitiate=weinitiate
 		# what state is session in? (one from JingleStates)
 		self.state=JingleStates.ended
-		self.sid=con.connection.getAnID()	# sessionid
+		if not sid:
+			sid=con.connection.getAnID()
+		self.sid=sid		# sessionid
 
 		# callbacks to call on proper contents
-		# use .prepend() to add new callbacks
-		self.callbacks=dict((key, [self.__defaultCB]) for key in
-			('content-add', 'content-modify',
-			 'content-remove', 'session-accept', 'session-info',
-			 'session-initiate', 'session-terminate',
-			 'transport-info'))
-		self.callbacks['iq-result']=[]
-		self.callbacks['iq-error']=[]
-
-		self.callbacks['content-accept']=[self.__contentAcceptCB, self.__defaultCB]
+		# use .prepend() to add new callbacks, especially when you're going
+		# to send error instead of ack
+		self.callbacks={
+			'content-accept':	[self.__contentAcceptCB, self.__defaultCB],
+			'content-add':		[self.__defaultCB],
+			'content-modify':	[self.__defaultCB],
+			'content-remove':	[self.__defaultCB],
+			'session-accept':	[self.__contentAcceptCB, self.__defaultCB],
+			'session-info':		[self.__defaultCB],
+			'session-initiate':	[self.__sessionInitiateCB, self.__defaultCB],
+			'session-terminate':	[self.__defaultCB],
+			'transport-info':	[self.__defaultCB],
+			'iq-result':		[],
+			'iq-error':		[],
+		}
 
 	''' Middle-level functions to manage contents. Handle local content
 	cache and send change notifications. '''
@@ -93,7 +100,7 @@ class JingleSession(object):
 	''' Middle-level function to do stanza exchange. '''
 	def startSession(self):
 		''' Start session. '''
-		self.__sessionInitiate(self)
+		self.__sessionInitiate()
 
 	def sendSessionInfo(self): pass
 	def sendTransportInfo(self): pass
@@ -128,8 +135,7 @@ class JingleSession(object):
 		''' Default callback for action stanzas -- simple ack
 		and stop processing. '''
 		response = stanza.buildReply('result')
-		self.connection.send(response)
-		raise xmpp.NodeProcessed
+		self.connection.connection.send(response)
 
 	def __contentAcceptCB(self, stanza, jingle, error):
 		''' Called when we get content-accept stanza or equivalent one
@@ -140,10 +146,37 @@ class JingleSession(object):
 			name = content['name']
 			
 
+	def sessionInitiateCB(self, stanza):
+		''' We got a jingle session request from other entity,
+		therefore we are the receiver... Unpack the data. '''
+		jingle = stanza.getTag('jingle')
+		self.initiator = jingle['initiator']
+		self.responder = self.ourjid
+		self.jid = self.initiator
+
+		fail = True
+		for element in jingle.iterTags('content'):
+			# checking what kind of session this will be
+			desc_ns = element.getTag('description').getNamespace()
+			tran_ns = element.getTag('transport').getNamespace()
+			if desc_ns==xmpp.NS_JINGLE_AUDIO and tran_ns==xmpp.NS_JINGLE_ICE_UDP:
+				# we've got voip content
+				self.addContent(element['name'], JingleVoiP(self, node=element), 'peer')
+				fail = False
+
+		if fail:
+			# TODO: we should send <unsupported-content/> inside too
+			self.connection.connection.send(
+				xmpp.Error(stanza, xmpp.NS_STANZAS + 'feature-not-implemented'))
+			self.connection.deleteJingle(self)
+			raise xmpp.NodeProcessed
+
+		self.state = JingleStates.pending
+
 	''' Methods that make/send proper pieces of XML. They check if the session
 	is in appropriate state. '''
 	def __makeJingle(self, action):
-		stanza = xmpp.Iq(typ='set', to=xmpp.JID(self.jid))
+		stanza = xmpp.Iq(typ='set', to=xmpp.JID(self.peerjid))
 		jingle = stanza.addChild('jingle', attrs={
 			'xmlns': 'http://www.xmpp.org/extensions/xep-0166.html#ns',
 			'action': action,
@@ -161,7 +194,6 @@ class JingleSession(object):
 		else:
 			jingle.addChild('content',
 				attrs={'name': content.name, 'creator': content.creator})
-		return c
 
 	def __appendContents(self, jingle, full=True):
 		''' Append all <content/> elements to <jingle/>.'''
@@ -174,13 +206,13 @@ class JingleSession(object):
 		assert self.state==JingleStates.ended
 		stanza, jingle = self.__makeJingle('session-initiate')
 		self.__appendContents(jingle)
-		self.connection.send(jingle)
+		self.connection.connection.send(stanza)
 
 	def __sessionAccept(self):
 		assert self.state==JingleStates.pending
 		stanza, jingle = self.__jingle('session-accept')
 		self.__appendContents(jingle, False)
-		self.connection.send(stanza)
+		self.connection.connection.send(stanza)
 		self.state=JingleStates.active
 
 	def __sessionInfo(self, payload=None):
@@ -188,12 +220,12 @@ class JingleSession(object):
 		stanza, jingle = self.__jingle('session-info')
 		if payload:
 			jingle.addChild(node=payload)
-		self.connection.send(stanza)
+		self.connection.connection.send(stanza)
 
 	def __sessionTerminate(self):
 		assert self.state!=JingleStates.ended
 		stanza, jingle = self.__jingle('session-terminate')
-		self.connection.send(stanza)
+		self.connection.connection.send(stanza)
 
 	def __contentAdd(self):
 		assert self.state==JingleStates.active
@@ -211,58 +243,48 @@ class JingleSession(object):
 		assert self.state!=JingleStates.ended
 
 	'''Callbacks'''
-	def sessionInitiateCB(self, stanza):
-		''' We got a jingle session request from other entity,
-		therefore we are the receiver... Unpack the data. '''
-		jingle = stanza.getTag('jingle')
-		self.initiator = jingle['initiator']
-		self.responder = self.ourjid
-		self.jid = self.initiator
-		self.state = JingleStates.pending
-		self.sid = jingle['sid']
-		for element in jingle.iterTags('content'):
-			content={'creator': 'initiator',
-				'name': element['name'],
-				'description': element.getTag('description'),
-				'transport': element.getTag('transport')}
-			if element.has_attr('profile'):
-				content['profile']=element['profile']
-			self.contents[('initiator', content['name'])]=content
-
 	def sessionTerminateCB(self, stanza): pass
+
+class Codec(object):
+	''' This class keeps description of a single codec. '''
+	def __init__(self, name, id=None, **params):
+		''' Create new codec description. '''
+		self.name = name
+		self.id = id
+		self.attrs = {'name': self.name, 'id': self.id, 'channels': 1}
+		for key in ('channels', 'clockrate', 'maxptime', 'ptime'):
+			if key in params:
+				self.attrs[key]=params[key]
+				del params[key]
+		self.params = params
+
+	def __eq__(a, b):
+		''' Compare two codec descriptions. '''
+		# TODO: check out what should be tested...
+		if a.name!=b.name: return False
+		# ...
+		return True
+
+	def toXML(self):
+		return xmpp.Node('payload',
+			attrs=self.attrs,
+			payload=(xmpp.Node('parameter', {'name': k, 'value': v}) for k,v in self.params))
 
 class JingleAudioSession(object):
 	__metaclass__=meta.VerboseClassType
-	class Codec(object):
-		''' This class keeps description of a single codec. '''
-		def __init__(self, name, id=None, **params):
-			''' Create new codec description. '''
-			self.name = name
-			self.id = id
-			self.attrs = {'name': self.name, 'id': self.id, 'channels': 1}
-			for key in ('channels', 'clockrate', 'maxptime', 'ptime'):
-				if key in params:
-					self.attrs[key]=params[key]
-				del params[key]
-			self.params = params
-
-		def __eq__(a, b):
-			''' Compare two codec descriptions. '''
-			# TODO: check out what should be tested...
-			if a.name!=b.name: return False
-			# ...
-			return True
-
-		def toXML(self):
-			return xmpp.Node('payload',
-				attrs=self.attrs,
-				payload=(xmpp.Node('parameter', {'name': k, 'value': v}) for k,v in self.params))
-
-	def __init__(self, content):
+	def __init__(self, content, fromNode):
 		self.content = content
 
 		self.initiator_codecs=[]
 		self.responder_codecs=[]
+
+		if fromNode:
+			# read all codecs peer understand
+			for payload in fromNode.iterTags('payload-type'):
+				attrs = fromNode.getAttrs().copy()
+				for param in fromNode.iterTags('parameter'):
+					attrs[param['name']]=param['value']
+				self.initiator_codecs.append(Codec(**attrs))
 
 	def sessionInitiateCB(self, stanza, ourcontent):
 		pass
@@ -284,7 +306,7 @@ class JingleAudioSession(object):
 		our_l = supported_codecs[:]
 		out = []
 		ids = range(128)
-		for codec in other:
+		for codec in other_l:
 			if codec in our_l:
 				out.append(codec)
 				our_l.remove(codec)
@@ -304,8 +326,7 @@ class JingleAudioSession(object):
 	''' Methods for making proper pieces of XML. '''
 	def __codecsList(self, codecs):
 		''' Prepares a description element with codecs given as a parameter. '''
-		return xmpp.Node('description',
-			xmlns=xmpp.NS_JINGLE_AUDIO,
+		return xmpp.Node(xmpp.NS_JINGLE_AUDIO+' description',
 			payload=(codec.toXML() for codec in codecs))
 
 	def toXML(self):
@@ -329,25 +350,26 @@ class JingleICEUDPSession(object):
 
 	def toXML(self):
 		''' ICE-UDP doesn't send much in its transport stanza... '''
-		return xmpp.Node('transport', xmlns=xmpp.JINGLE_ICE_UDP)
+		return xmpp.Node(xmpp.NS_JINGLE_ICE_UDP+' transport')
 
 class JingleVoiP(object):
 	''' Jingle VoiP sessions consist of audio content transported
 	over an ICE UDP protocol. '''
 	__metaclass__=meta.VerboseClassType
-	def __init__(self):
-		self.audio = JingleAudioSession(self)
+	def __init__(self, session, node=None):
+		self.session = session
+
+		if node is None:
+			self.audio = JingleAudioSession(self)
+		else:
+			self.audio = JingleAudioSession(self, node.getTag('content'))
 		self.transport = JingleICEUDPSession(self)
 
 	def toXML(self):
 		''' Return proper XML for <content/> element. '''
 		return xmpp.Node('content',
 			attrs={'name': self.name, 'creator': self.creator, 'profile': 'RTP/AVP'},
-			childs=[self.audio.toXML(), self.transport.toXML()])
-
-	def _sessionInitiateCB(self):
-		''' Called when we initiate the session. '''
-		self.transport._sessionInitiateCB()
+			payload=[self.audio.toXML(), self.transport.toXML()])
 
 class ConnectionJingle(object):
 	''' This object depends on that it is a part of Connection class. '''
@@ -391,12 +413,14 @@ class ConnectionJingle(object):
 
 		# do we need to create a new jingle object
 		if (jid, sid) not in self.__sessions:
-			# we should check its type here...
-			newjingle = JingleAudioSession(con=self, weinitiate=False, jid=jid)
+			# TODO: we should check its type here...
+			newjingle = JingleSession(con=self, weinitiate=False, jid=jid, sid=sid)
 			self.addJingle(newjingle)
 
 		# we already have such session in dispatcher...
-		return self.__sessions[(jid, sid)].stanzaCB(stanza)
+		self.__sessions[(jid, sid)].stanzaCB(stanza)
+
+		raise xmpp.NodeProcessed
 
 	def addJingleIqCallback(self, jid, id, jingle):
 		self.__iq_responses[(jid, id)]=jingle

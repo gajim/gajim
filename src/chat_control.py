@@ -1192,8 +1192,7 @@ class ChatControl(ChatControlBase):
 			widget.get_active())
 
 	def _on_start_voip_menuitem_activate(self, *things):
-		print 'Start VoiP'
-		gajim.connections[self.account].startVoiP(self.contact.jid)
+		gajim.connections[self.account].startVoiP(self.contact.jid+'/'+self.contact.resource)
 
 	def _update_gpg(self):
 		tb = self.xml.get_widget('gpg_togglebutton')
