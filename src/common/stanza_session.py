@@ -305,8 +305,104 @@ class EncryptedStanzaSession(StanzaSession):
 			return ["may", "mustnot"]
 		else:
 			return ["mustnot", "may"]
+	
+	def get_shared_secret(self, e, y, p):
+		if (not 1 < e < (p - 1)):
+			raise exceptions.NegotiationError, "invalid DH value"
 
-	def negotiate_e2e(self):
+		return self.sha256(self.encode_mpi(self.powmod(e, y, p)))
+
+	def c7lize_mac_id(self, form):
+		kids = form.getChildren()
+		macable = filter(lambda x: x.getVar() not in ('mac', 'identity'), kids)
+		return ''.join(map(lambda el: xmpp.c14n.c14n(el), macable))
+
+	def verify_alices_identity(self, form, e):
+		m_a = base64.b64decode(form['mac'])
+		id_a = base64.b64decode(form['identity'])
+
+		m_a_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_a)
+
+		if m_a_calculated != m_a:
+			raise exceptions.NegotiationError, 'calculated m_a differs from received m_a'
+
+		# check for a retained secret
+		# if none exists, prompt the user with the SAS
+		if self.sas_algs == 'sas28x5':
+			self.sas = self.sas_28x5(m_a, self.form_b)
+		
+		mac_a = self.decrypt(id_a)
+
+		form_a2 = self.c7lize_mac_id(form)
+
+		mac_a_calculated = self.hmac(self.ks_o, self.n_s + self.n_o + self.encode_mpi(e) + self.form_a + form_a2)
+
+		if mac_a_calculated != mac_a:
+			raise exceptions.NegotiationError, 'calculated mac_a differs from received mac_a'
+
+	def verify_bobs_identity(self, form, sigmai):
+		m_b = base64.b64decode(form['mac'])
+		id_b = base64.b64decode(form['identity'])
+
+		m_b_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_b)
+
+		if m_b_calculated != m_b:
+			raise exceptions.NegotiationError, 'calculated m_b differs from received m_b'
+
+		mac_b = self.decrypt(id_b)
+		pubkey_b = ''
+
+		c7l_form = self.c7lize_mac_id(form)
+
+		content = self.n_s + self.n_o + self.encode_mpi(self.d) + pubkey_b
+
+		if sigmai:
+			form_b = c7l_form
+			content += form_b
+		else:
+			form_b2 = c7l_form
+			content += self.form_b + form_b2
+
+		mac_b_calculated = self.hmac(self.ks_o, content)
+
+		if mac_b_calculated != mac_b:
+			raise exceptions.NegotiationError, 'calculated mac_b differs from received mac_b'
+
+	def make_alices_identity(self, form, e):
+		form_a2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
+
+		old_c_s = self.c_s
+		content = self.n_o + self.n_s + self.encode_mpi(e) + self.form_a + form_a2
+
+		mac_a = self.hmac(self.ks_s, content)
+		id_a = self.encrypt(mac_a)
+
+		m_a = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_a)
+
+		# check for a retained secret
+		# if none exists, prompt the user with the SAS
+		if self.sas_algs == 'sas28x5':
+			self.sas = self.sas_28x5(m_a, self.form_b)
+			
+		return (xmpp.DataField(name='identity', value=base64.b64encode(id_a)), \
+						xmpp.DataField(name='mac', value=base64.b64encode(m_a)))
+
+	def make_bobs_identity(self, form, d):
+		pubkey_b = ''
+
+		form_b2 = ''.join(map(lambda el: c14n.c14n(el), form.getChildren()))
+		content = self.n_o + self.n_s + self.encode_mpi(d) + pubkey_b + self.form_b + form_b2
+
+		old_c_s = self.c_s
+		mac_b = self.hmac(self.ks_s, content)
+		id_b = self.encrypt(mac_b)
+
+		m_b = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_b)
+
+		return (xmpp.DataField(name='identity', value=base64.b64encode(id_b)), \
+						xmpp.DataField(name='mac', value=base64.b64encode(m_b)))
+
+	def negotiate_e2e(self, sigmai):
 		self.negotiated = {}
 
 		request = xmpp.Message()
@@ -347,8 +443,8 @@ class EncryptedStanzaSession(StanzaSession):
 
 		x.addChild(node=xmpp.DataField(name='modp', typ='list-single', options=map(lambda x: [ None, x ], modp_options)))
 
-		dhhashes = map(lambda x: self.make_dhhash(x), modp_options)
-		x.addChild(node=xmpp.DataField(name='dhhashes', typ='hidden', value=dhhashes))
+		x.addChild(node=self.make_dhfield(modp_options, sigmai))
+		self.sigmai = sigmai
 
 		self.form_a = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
 
@@ -413,7 +509,7 @@ class EncryptedStanzaSession(StanzaSession):
 					if not 'logging' in ask_user:
 						not_acceptable.append(name)
 			else:
-				# some things are handled elsewhere, some things are not-implemented
+				# XXX some things are handled elsewhere, some things are not-implemented
 				pass
 
 		return (negotiated, not_acceptable, ask_user)
@@ -487,8 +583,6 @@ class EncryptedStanzaSession(StanzaSession):
 
 	# 'Alice Accepts'
 	def verify_options_alice(self, form):
-#		1.	Verify that the ESession options selected by Bob are acceptable
-
 		negotiated = {}
 		ask_user = {}
 		not_acceptable = []
@@ -531,52 +625,42 @@ class EncryptedStanzaSession(StanzaSession):
 		e = self.es[mod_p]
 
 		self.d = self.decode_mpi(base64.b64decode(form['dhkeys']))
-		
-		if (not 1 < self.d < (p - 1)):
-			raise exceptions.NegotiationError, "invalid DH value 'd'"
 
-		self.k = self.sha256(self.encode_mpi(self.powmod(self.d, x, p)))
+		self.k = self.get_shared_secret(self.d, x, p)
 
 		result.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
 		result.addChild(node=xmpp.DataField(name='accept', value='1'))
 		result.addChild(node=xmpp.DataField(name='nonce', value=base64.b64encode(self.n_o)))
-		result.addChild(node=xmpp.DataField(name='dhkeys', value=base64.b64encode(self.encode_mpi(e))))
-
-		secrets = gajim.interface.list_secrets(self.conn.name, self.jid.getStripped()) 
-		rshashes = [self.hmac(self.n_s, rs) for rs in secrets]
-
-		# XXX add some random fake rshashes here
-
-		rshashes.sort()
-
-		rshashes = [base64.b64encode(rshash) for rshash in rshashes]
-		result.addChild(node=xmpp.DataField(name='rshashes', value=rshashes))
-
-		form_a2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), result.getChildren()))
 
 		self.kc_s, self.km_s, self.ks_s = self.generate_initiator_keys(self.k)
-		
+
+		if self.sigmai:
+			self.kc_o, self.km_o, self.ks_o = self.generate_responder_keys(self.k)
+			self.verify_bobs_identity(form, True)
+		else:
+			secrets = gajim.interface.list_secrets(self.conn.name, self.jid.getStripped()) 
+			rshashes = [self.hmac(self.n_s, rs) for rs in secrets]
+
+			# XXX add some random fake rshashes here
+			rshashes.sort()
+
+			rshashes = [base64.b64encode(rshash) for rshash in rshashes]
+			result.addChild(node=xmpp.DataField(name='rshashes', value=rshashes))
+			result.addChild(node=xmpp.DataField(name='dhkeys', value=base64.b64encode(self.encode_mpi(e))))
+
 		# MUST securely destroy K unless it will be used later to generate the final shared secret
 
-		old_c_s = self.c_s
-
-		mac_a = self.hmac(self.ks_s, self.n_o + self.n_s + self.encode_mpi(e) + self.form_a + form_a2)
-		id_a = self.encrypt(mac_a)
-
-		m_a = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_a)
-
-		# check for a retained secret
-		# if none exists, prompt the user with the SAS
-		if self.sas_algs == 'sas28x5':
-			self.sas = self.sas_28x5(m_a, self.form_b)
-			
-		result.addChild(node=xmpp.DataField(name='identity', value=base64.b64encode(id_a)))
-		result.addChild(node=xmpp.DataField(name='mac', value=base64.b64encode(m_a)))
+		for datafield in self.make_alices_identity(result, e):
+			result.addChild(node=datafield)
 
 		feature.addChild(node=result)
 		self.send(accept)
-		
-		self.status = 'identified-alice'
+	
+		if self.sigmai:
+			self.status = 'active'
+			self.enable_encryption = True
+		else:
+			self.status = 'identified-alice'
 	
 	# 4.5 esession accept (bob)
 	def accept_e2e_bob(self, form):
@@ -594,31 +678,13 @@ class EncryptedStanzaSession(StanzaSession):
 		e = self.decode_mpi(base64.b64decode(form['dhkeys']))
 		p = dh.primes[self.modp]
 
-		if (self.sha256(self.encode_mpi(e)) != self.He) or (not 1 < e < (p - 1)):
-			raise exceptions.NegotiationError, "invalid DH value 'e'"
-
-		k = self.sha256(self.encode_mpi(self.powmod(e, self.y, p)))
+		k = self.get_shared_secret(e, self.y, p)
 
 		self.kc_o, self.km_o, self.ks_o = self.generate_initiator_keys(k)
 
 		# 4.5.2 verifying alice's identity
-		id_a = base64.b64decode(form['identity'])
-		m_a = base64.b64decode(form['mac'])
 
-		m_a_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_a)
-
-		if m_a_calculated != m_a:
-			raise exceptions.NegotiationError, 'calculated m_a differs from received m_a'
-
-		mac_a = self.decrypt(id_a)
-
-		macable_children = filter(lambda x: x.getVar() not in ('mac', 'identity'), form.getChildren())
-		form_a2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), macable_children))
-
-		mac_a_calculated = self.hmac(self.ks_o, self.n_s + self.n_o + self.encode_mpi(e) + self.form_a + form_a2)
-
-		if mac_a_calculated != mac_a:
-			raise exceptions.NegotiationError, 'calculated mac_a differs from received mac_a'
+		self.verify_alices_identity(form)
 
 		# 4.5.4 generating bob's final session keys
 
@@ -635,11 +701,6 @@ class EncryptedStanzaSession(StanzaSession):
 		# other shared secret, we haven't got one.
 		oss = ''
 
-		# check for a retained secret
-		# if none exists, prompt the user with the SAS
-		if self.sas_algs == 'sas28x5':
-			self.sas = self.sas_28x5(m_a, self.form_b)
-		
 		k = self.sha256(k + srs + oss)
 
 		# XXX I can skip generating ks_o here
@@ -704,24 +765,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		# 4.6.2 Verifying Bob's Identity
 
-		m_b = base64.b64decode(form['mac'])
-		id_b = base64.b64decode(form['identity'])
-
-		m_b_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_b)
-
-		if m_b_calculated != m_b:
-			raise exceptions.NegotiationError, 'calculated m_b differs from received m_b'
-
-		mac_b = self.decrypt(id_b)
-
-		macable_children = filter(lambda x: x.getVar() not in ('mac', 'identity'), form.getChildren())
-		form_b2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), macable_children))
-
-		mac_b_calculated = self.hmac(self.ks_o, self.n_s + self.n_o + self.encode_mpi(self.d) + self.form_b + form_b2)
-
-		if mac_b_calculated != mac_b:
-			raise exceptions.NegotiationError, 'calculated mac_b differs from received mac_b'
-
+		self.verify_bobs_identity(form, False)
 # Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
 	
 		if self.negotiated['logging'] == 'mustnot':
@@ -751,21 +795,30 @@ class EncryptedStanzaSession(StanzaSession):
 		# in retrospect, this is horribly inadequate.
 		return (self.decode_mpi(self.random_bytes(bytes)) % (top - bottom)) + bottom
 
-	def make_dhhash(self, modp):
-		p = dh.primes[modp]
-		g = dh.generators[modp]
+	def make_dhfield(self, modp_options, sigmai):
+		dhs = []
 
-		x = self.srand(2 ** (2 * self.n - 1), p - 1)
+		for modp in modp_options:
+			p = dh.primes[modp]
+			g = dh.generators[modp]
 
-		# XXX this may be a source of performance issues
-		e = self.powmod(g, x, p)
+			x = self.srand(2 ** (2 * self.n - 1), p - 1)
 
-		self.xes[modp] = x
-		self.es[modp] = e
+			# XXX this may be a source of performance issues
+			e = self.powmod(g, x, p)
 
-		He = self.sha256(self.encode_mpi(e))
+			self.xes[modp] = x
+			self.es[modp] = e
 
-		return base64.b64encode(He)
+			if sigmai:
+				dhs.append(base64.b64encode(self.encode_mpi(e)))
+				name = 'dhkeys'
+			else:
+				He = self.sha256(self.encode_mpi(e))
+				dhs.append(base64.b64encode(He))
+				name = 'dhhashes'
+
+		return xmpp.DataField(name=name, typ='hidden', value=dhs)
 
 	# a faster version of (base ** exp) % mod
 	#		taken from <http://lists.danga.com/pipermail/yadis/2005-September/001445.html> 
