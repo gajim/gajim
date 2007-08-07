@@ -142,13 +142,14 @@ class ConversationTextview:
 
 		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
 
+		# One mark at the begining then 2 marks between each lines
 		size = gajim.config.get('max_conversation_lines')
 		size = 2 * size - 1
 		self.marks_queue = Queue.Queue(size)
 
 		self.allow_focus_out_line = True
-		# holds the iter's offset which points to the end of --- line
-		self.focus_out_end_iter_offset = None
+		# holds a mark at the end of --- line
+		self.focus_out_end_mark = None
 
 		self.line_tooltip = tooltips.BaseTooltip()
 		# use it for hr too
@@ -218,13 +219,14 @@ class ConversationTextview:
 		print_focus_out_line = False
 		buffer = self.tv.get_buffer()
 
-		if self.focus_out_end_iter_offset is None:
+		if self.focus_out_end_mark is None:
 			# this happens only first time we focus out on this room
 			print_focus_out_line = True
 
 		else:
-			if self.focus_out_end_iter_offset != buffer.get_end_iter().\
-			get_offset():
+			focus_out_end_iter = buffer.get_iter_at_mark(self.focus_out_end_mark)
+			focus_out_end_iter_offset = focus_out_end_iter.get_offset()
+			if focus_out_end_iter_offset != buffer.get_end_iter().get_offset():
 				# this means after last-focus something was printed
 				# (else end_iter's offset is the same as before)
 				# only then print ---- line (eg. we avoid printing many following
@@ -235,9 +237,9 @@ class ConversationTextview:
 			buffer.begin_user_action()
 
 			# remove previous focus out line if such focus out line exists
-			if self.focus_out_end_iter_offset is not None:
-				end_iter_for_previous_line = buffer.get_iter_at_offset(
-					self.focus_out_end_iter_offset)
+			if self.focus_out_end_mark is not None:
+				end_iter_for_previous_line = buffer.get_iter_at_mark(
+					self.focus_out_end_mark)
 				begin_iter_for_previous_line = end_iter_for_previous_line.copy()
 				# img_char+1 (the '\n')
 				begin_iter_for_previous_line.backward_chars(2)
@@ -245,6 +247,7 @@ class ConversationTextview:
 				# remove focus out line
 				buffer.delete(begin_iter_for_previous_line,
 					end_iter_for_previous_line)
+				buffer.delete_mark(self.focus_out_end_mark)
 
 			# add the new focus out line
 			end_iter = buffer.get_end_iter()
@@ -260,7 +263,8 @@ class ConversationTextview:
 			self.allow_focus_out_line = False
 
 			# update the iter we hold to make comparison the next time
-			self.focus_out_end_iter_offset = buffer.get_end_iter().get_offset()
+			self.focus_out_end_mark = buffer.create_mark(None,
+				buffer.get_end_iter(), left_gravity=True)
 
 			buffer.end_user_action()
 
@@ -323,7 +327,7 @@ class ConversationTextview:
 		size = gajim.config.get('max_conversation_lines')
 		size = 2 * size - 1
 		self.marks_queue = Queue.Queue(size)
-		self.focus_out_end_iter_offset = None
+		self.focus_out_end_mark = None
 
 	def visit_url_from_menuitem(self, widget, link):
 		'''basically it filters out the widget instance'''
