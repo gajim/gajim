@@ -330,7 +330,7 @@ class EncryptedStanzaSession(StanzaSession):
 		# if none exists, prompt the user with the SAS
 		if self.sas_algs == 'sas28x5':
 			self.sas = self.sas_28x5(m_a, self.form_b)
-		
+
 		mac_a = self.decrypt(id_a)
 
 		form_a2 = self.c7lize_mac_id(form)
@@ -357,8 +357,8 @@ class EncryptedStanzaSession(StanzaSession):
 		content = self.n_s + self.n_o + self.encode_mpi(self.d) + pubkey_b
 
 		if sigmai:
-			form_b = c7l_form
-			content += form_b
+			self.form_b = c7l_form
+			content += self.form_b
 		else:
 			form_b2 = c7l_form
 			content += self.form_b + form_b2
@@ -383,6 +383,9 @@ class EncryptedStanzaSession(StanzaSession):
 		# if none exists, prompt the user with the SAS
 		if self.sas_algs == 'sas28x5':
 			self.sas = self.sas_28x5(m_a, self.form_b)
+
+			if self.sigmai:
+				self.check_identity()
 			
 		return (xmpp.DataField(name='identity', value=base64.b64encode(id_a)), \
 						xmpp.DataField(name='mac', value=base64.b64encode(m_a)))
@@ -606,8 +609,6 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.negotiated = negotiated
 
-		self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
-
 		accept = xmpp.Message()
 		feature = accept.NT.feature
 		feature.setNamespace(xmpp.NS_FEATURE)
@@ -647,6 +648,9 @@ class EncryptedStanzaSession(StanzaSession):
 			rshashes = [base64.b64encode(rshash) for rshash in rshashes]
 			result.addChild(node=xmpp.DataField(name='rshashes', value=rshashes))
 			result.addChild(node=xmpp.DataField(name='dhkeys', value=base64.b64encode(self.encode_mpi(e))))
+		
+			self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
+
 
 		# MUST securely destroy K unless it will be used later to generate the final shared secret
 

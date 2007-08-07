@@ -1957,7 +1957,8 @@ class ChatControl(ChatControlBase):
 			if not self.session:
 				self.session = gajim.connections[self.account].make_new_session(self.contact.jid)
 
-			self.session.negotiate_e2e()
+			# XXX decide whether to use 4 or 3 message negotiation
+			self.session.negotiate_e2e(False)
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)

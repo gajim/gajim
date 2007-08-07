@@ -1765,11 +1765,15 @@ class Interface:
 		elif session.status == 'requested-e2e' and form.getType() == 'submit':
 			negotiated, not_acceptable, ask_user = session.verify_options_alice(form)
 
+			if session.sigmai:
+				session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
+
 			if ask_user:
 				def accept_nondefault_options(widget):
 					dialog.destroy()
 
 					negotiated.update(ask_user)
+				
 					session.accept_e2e_alice(form, negotiated)
 
 				def reject_nondefault_options(widget):
