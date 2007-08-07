@@ -1690,11 +1690,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if ptype == 'error':
 				errmsg = prs.getError()
 				errcode = prs.getErrorCode()
+				room_jid, nick = gajim.get_room_and_nick_from_fjid(who)
 				if errcode == '502': # Internal Timeout:
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
 						prio, keyID, timestamp, None))
 				elif errcode == '401': # password required to join
-					room_jid, nick = gajim.get_room_and_nick_from_fjid(who)
 					self.dispatch('GC_PASSWORD_REQUIRED', (room_jid, nick))
 				elif errcode == '403': # we are banned
 					self.dispatch('ERROR', (_('Unable to join group chat'),
