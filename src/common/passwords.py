@@ -81,9 +81,14 @@ class GnomePasswordStorage(PasswordStorage):
 	def save_password(self, account_name, password, update=True):
 		display_name = _('Gajim account %s') % account_name
 		attributes = dict(account_name=str(account_name), gajim=1)
-		auth_token = gnomekeyring.item_create_sync(
-			self.keyring, gnomekeyring.ITEM_GENERIC_SECRET,
-			display_name, attributes, password, update)
+		try:
+			auth_token = gnomekeyring.item_create_sync(
+				self.keyring, gnomekeyring.ITEM_GENERIC_SECRET,
+				display_name, attributes, password, update)
+		except gnomekeyring.DeniedError:
+			set_storage(SimplePasswordStorage())
+			storage.save_password(account_name, password)
+			return
 		token = 'gnomekeyring:%i' % auth_token
 		gajim.config.set_per('accounts', account_name, 'password', token)
 		if gajim.connections.has_key(account_name):
