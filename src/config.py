@@ -1411,9 +1411,35 @@ class AccountsWindow:
 
 	def on_accounts_treeview_cursor_changed(self, widget):
 		'''Activate modify buttons when a row is selected, update accounts info'''
-		# Select previous row
 		sel = self.accounts_treeview.get_selection()
 		(model, iter) = sel.get_selected()
+		if iter:
+			account = model[iter][0].decode('utf-8')
+		else:
+			account = None
+		if self.current_account and self.current_account == account:
+			# We're comming back to our current account, no need to update widgets
+			return
+		# Save config for previous account if needed cause focus_out event is
+		# called after the changed event
+		if self.current_account:
+			focused_widget = self.window.get_focus()
+			focused_widget_name = focused_widget.get_name()
+			if focused_widget_name in ('jid_entry1', 'resource_entry1',
+			'custom_port_entry'):
+				if focused_widget_name == 'jid_entry1':
+					func = self.on_jid_entry1_focus_out_event
+				elif focused_widget_name == 'resource_entry1':
+					func = self.on_resource_entry1_focus_out_event
+				elif focused_widget_name == 'custom_port_entry':
+					func = self.on_custom_port_entry_focus_out_event
+				if func(focused_widget, None):
+					# Error detected in entry, don't change account, re-put cursor on
+					# previous row
+					self.select_account(self.current_account)
+					return True
+				self.window.set_focus(widget)
+
 		if self.need_relogin and self.current_account == gajim.ZEROCONF_ACC_NAME:
 			if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
 				gajim.connections[gajim.ZEROCONF_ACC_NAME].update_details()
@@ -1455,7 +1481,6 @@ class AccountsWindow:
 		self.remove_button.set_sensitive(True)
 		self.rename_button.set_sensitive(True)
 		if iter:
-			account = model[iter][0].decode('utf-8')
 			self.current_account = account
 			if account == gajim.ZEROCONF_ACC_NAME:
 				self.remove_button.set_sensitive(False)
@@ -1818,7 +1843,7 @@ class AccountsWindow:
 				pritext = _('Invalid Jabber ID')
 				dialogs.ErrorDialog(pritext, str(s))
 				gobject.idle_add(lambda: widget.grab_focus())
-			return
+			return True
 
 		jid_splited = jid.split('@', 1)
 		if len(jid_splited) != 2:
@@ -1827,7 +1852,7 @@ class AccountsWindow:
 				sectext = _('A Jabber ID must be in the form "user@servername".')
 				dialogs.ErrorDialog(pritext, sectext)
 				gobject.idle_add(lambda: widget.grab_focus())
-			return
+			return True
 
 		if self.option_changed('name', jid_splited[0]) or \
 		self.option_changed('hostname', jid_splited[1]):
@@ -1866,7 +1891,7 @@ class AccountsWindow:
 				pritext = _('Invalid Jabber ID')
 				dialogs.ErrorDialog(pritext, str(s))
 				gobject.idle_add(lambda: widget.grab_focus())
-			return
+			return True
 
 		if self.option_changed('resource', resource):
 			self.need_relogin = True
@@ -2012,7 +2037,7 @@ class AccountsWindow:
 				dialogs.ErrorDialog(_('Invalid entry'),
 					_('Custom port must be a port number.'))
 				gobject.idle_add(lambda: widget.grab_focus())
-			return
+			return True
 		if self.option_changed('custom_port', custom_port):
 			self.need_relogin = True
 		gajim.config.set_per('accounts', self.current_account, 'custom_port',
