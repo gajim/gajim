@@ -642,7 +642,7 @@ class PreferencesWindow:
 	def update_theme_list(self):
 		theme_combobox = self.xml.get_widget('theme_combobox')
 		model = gtk.ListStore(str)
-                theme_combobox.set_model(model) 
+		theme_combobox.set_model(model) 
 		i = 0
 		for config_theme in gajim.config.get_per('themes'):
 			theme = config_theme.replace('_', ' ')
