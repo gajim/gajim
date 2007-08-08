@@ -1,0 +1,36 @@
+%%
+headers
+#include <Python.h>
+#include "pygobject.h"
+#include "farsight.h"
+%%
+modulename farsight
+%%
+import gtk.Plug as PyGtkPlug_Type
+import gobject.GObject as PyGObject_Type
+import gobject.GType as PyGTypeModule_Type
+import gst.Element as PyGstElement_Type
+import gst.Pad as PyGstPad_Type
+%%
+ignore-glob
+  *_get_type
+%%
+override farsight_session_list_supported_codecs noargs
+static PyObject* _wrap_farsight_session_list_supported_codecs(PyGObject *self)
+{
+	const GList *list, *tmp;
+	PyObject* ret;
+
+	list=farsight_session_list_supported_codecs(FARSIGHT_SESSION(self->obj));
+
+	ret=PyList_New(0);
+	for (tmp=list; tmp!=NULL; tmp=tmp->next) {
+		FarsightCodec *codec = tmp->data;
+		PyObject *item = pygobject_new((GObject *) codec);
+
+		PyList_Append(ret, item);
+		Py_DECREF(item);
+	}
+	// g_list_free(list); (a const list, we don't free it?)
+	return ret;
+}
