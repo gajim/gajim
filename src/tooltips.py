@@ -297,7 +297,7 @@ class GCTooltip(BaseTooltip):
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities
-				status = helpers.reduce_chars_newlines(status, 100, 5)
+				status = helpers.reduce_chars_newlines(status, 300, 5)
 				status = '<i>' +\
 					gobject.markup_escape_text(status) + '</i>'
 				properties.append((status, None))
@@ -352,6 +352,7 @@ class GCTooltip(BaseTooltip):
 					vertical_fill, 0, 0)
 			else:
 				label.set_markup(property[0])
+				label.set_line_wrap(True)
 				vcard_table.attach(label, 1, 3, vcard_current_row,
 					vcard_current_row + 1, gtk.FILL, vertical_fill, 0)
 		
