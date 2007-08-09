@@ -43,6 +43,7 @@ from common import passwords
 from common import zeroconf
 from common import dbus_support
 from common import dataforms
+from common import pep
 
 from common.exceptions import GajimGeneralException
 
@@ -496,6 +497,25 @@ class PreferencesWindow:
 			widget.set_active(st)
 		else:
 			widget.set_sensitive(False)
+
+		# PEP
+		st = gajim.config.get('publish_mood')
+		self.xml.get_widget('pub_mood').set_active(st)
+		
+		st = gajim.config.get('publish_activity')
+		self.xml.get_widget('pub_activity').set_active(st)
+		
+		st = gajim.config.get('publish_tune')
+		self.xml.get_widget('pub_tune').set_active(st)
+		
+		st = gajim.config.get('subscribe_mood')
+		self.xml.get_widget('sub_mood').set_active(st)
+		
+		st = gajim.config.get('subscribe_activity')
+		self.xml.get_widget('sub_activity').set_active(st)
+		
+		st = gajim.config.get('subscribe_tune')
+		self.xml.get_widget('sub_tune').set_active(st)
 		
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
@@ -560,6 +580,38 @@ class PreferencesWindow:
 			gajim.config.set('show_roster_on_startup', True)
 		gajim.interface.roster.draw_roster()
 		gajim.interface.save_config()
+
+	def on_pub_mood_toggled(self, widget):
+		if widget.get_active() == False:
+			for account in gajim.connections:
+				if gajim.connections[account].pep_supported:
+					pep.user_send_mood(account, '')
+		self.on_checkbutton_toggled(widget, 'publish_mood')
+
+	def on_pub_activity_toggled(self, widget):
+		if widget.get_active() == False:
+			for account in gajim.connections:
+				if gajim.connections[account].pep_supported:
+					pep.user_send_activity(account, '')
+		self.on_checkbutton_toggled(widget, 'publish_activity')
+
+	def on_pub_tune_toggled(self, widget):
+		if widget.get_active() == False:
+			for account in gajim.connections:
+				if gajim.connections[account].pep_supported:
+					pep.user_send_tune(account, '')
+		self.on_checkbutton_toggled(widget, 'publish_tune')
+		gajim.interface.roster.enable_syncing_status_msg_from_current_music_track(
+			widget.get_active())
+
+	def on_sub_mood_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'subscribe_mood')
+
+	def on_sub_activity_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'subscribe_activity')
+
+	def on_sub_tune_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'subscribe_tune')
 
 	def on_save_position_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'saveposition')

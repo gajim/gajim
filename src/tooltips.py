@@ -458,6 +458,10 @@ class RosterTooltip(NotificationAreaTooltip):
 						contact.last_status_time)
 			properties.append((self.table,	None))
 		else: # only one resource
+
+			#FIXME: User {Mood, Activity, Tune} not shown if there are
+			#multiple resources
+			#FIXME: User {Mood, Activity, Tune} not shown for self
 			if contact.show:
 				show = helpers.get_uf_show(contact.show) 
 				if contact.last_status_time:

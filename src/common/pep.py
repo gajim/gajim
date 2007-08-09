@@ -74,8 +74,12 @@ def user_activity(items, name, jid):
 					contact.activity['text'] = ch.getData()
 
 def user_send_mood(account, mood, message = ''):
+	print "Sending %s: %s" % (mood, message)
+	if gajim.config.get('publish_mood') == False:
+		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
-	item.addChild(mood)
+	if mood != '':
+		item.addChild(mood)
 	if message != '':
 		i = item.addChild('text')
 		i.addData(message)
@@ -83,8 +87,11 @@ def user_send_mood(account, mood, message = ''):
 	gajim.connections[account].send_pb_publish('', xmpp.NS_MOOD, item, '0')
 
 def user_send_activity(account, activity, subactivity = '', message = ''):
+	if gajim.config.get('publish_activity') == False:
+		return
 	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
-	i = item.addChild(activity)
+	if activity != '':
+		i = item.addChild(activity)
 	if subactivity != '':
 		i.addChild(subactivity)
 	if message != '':
@@ -94,6 +101,8 @@ def user_send_activity(account, activity, subactivity = '', message = ''):
 	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
 
 def user_send_tune(account, artist = '', title = '', source = '', track = 0,length = 0, items = None):
+	if gajim.config.get('publish_tune') == False:
+		return
 	item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
 	if artist != '':
 		i = item.addChild('artist')

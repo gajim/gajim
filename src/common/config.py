@@ -229,6 +229,12 @@ class Config:
 		'use_latex': [opt_bool, False, _('If True, Gajim will convert string between $$ and $$ to an image using dvips and convert before insterting it in chat window.')],
 		'change_status_window_timeout': [opt_int, 15, _('Time of inactivity needed before the change status window closes down.')],
 		'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],
+		'publish_mood': [opt_bool, False],
+		'publish_activity': [opt_bool, False],
+		'publish_tune': [opt_bool, False],
+		'subscribe_mood': [opt_bool, True],
+		'subscribe_activity': [opt_bool, True],
+		'subscribe_tune': [opt_bool, True],
 	}
 
 	__options_per_key = {

@@ -2942,12 +2942,14 @@ class RosterWindow:
 			if gajim.connections[account].pep_supported:
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
-				item = gtk.MenuItem('Mood')
-				pep_submenu.append(item)
-				item.connect('activate', self.on_change_mood_activate, account)
-				item = gtk.MenuItem('Activity')
-				pep_submenu.append(item)
-				item.connect('activate', self.on_change_activity_activate, account)
+				if gajim.config.get('publish_mood'):
+					item = gtk.MenuItem('Mood')
+					pep_submenu.append(item)
+					item.connect('activate', self.on_change_mood_activate, account)
+				if gajim.config.get('publish_activity'):
+					item = gtk.MenuItem('Activity')
+					pep_submenu.append(item)
+					item.connect('activate', self.on_change_activity_activate, account)
 			else:
 				pep_menuitem.set_no_show_all(True)
 				pep_menuitem.hide()
@@ -5273,7 +5275,7 @@ class RosterWindow:
 		## accounts has no effect until they are connected.
 		gobject.timeout_add(1000,
 			self.enable_syncing_status_msg_from_current_music_track,
-			gajim.config.get('set_status_msg_from_current_music_track'))
+			gajim.config.get('pub_tune'))
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
