@@ -5,6 +5,7 @@
 ## Copyright (C) 2005
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -206,6 +207,8 @@ def get_contact_dict_for_account(account):
 			contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
 			contacts_dict['%s (%s)' % (name, jid)] = contact
 		else:
+			if contact.name == gajim.get_nick_from_jid(jid):
+				del contacts_dict[jid]
 			contacts_dict[name] = contact
 	return contacts_dict
 
@@ -462,7 +465,7 @@ def play_sound(event):
 
 def play_sound_file(path_to_soundfile):
 	if path_to_soundfile == 'beep':
-		print '\a' # make a speaker beep
+		exec_command('beep')
 		return
 	if path_to_soundfile is None or not os.path.exists(path_to_soundfile):
 		return
@@ -544,14 +547,19 @@ def get_global_status():
 def get_icon_name_to_show(contact, account = None):
 	'''Get the icon name to show in online, away, requested, ...'''
 	if account and gajim.events.get_nb_roster_events(account, contact.jid):
-		return 'message'
+		return 'event'
 	if account and gajim.events.get_nb_roster_events(account,
 	contact.get_full_jid()):
-		return 'message'
+		return 'event'
 	if account and gajim.interface.minimized_controls.has_key(account) and \
 	contact.jid in gajim.interface.minimized_controls[account] and gajim.interface.\
 		minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
-		return 'message'
+		return 'event'
+	if account and gajim.gc_connected[account].has_key(contact.jid):
+		if gajim.gc_connected[account][contact.jid]:
+			return 'muc_active'
+		else:
+			return 'muc_inactive'
 	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
 		return contact.show
 	if contact.sub in ('both', 'to'):
@@ -863,66 +871,127 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
 			lines = map(lambda e: _cut_if_long(e), lines)
 	if lines:
 		reduced_text = reduce(lambda e, e1: e + '\n' + e1, lines)
+		if reduced_text != text:
+			reduced_text += '...'
 	else:
 		reduced_text = ''
 	return reduced_text
 
-def get_notification_icon_tooltip_text():
-	text = None
-	unread_chat = gajim.events.get_nb_events(types = ['printed_chat',
-		'chat'])
-	unread_single_chat = gajim.events.get_nb_events(types = ['normal'])
-	unread_gc = gajim.events.get_nb_events(types = ['printed_gc_msg',
-		'printed_marked_gc_msg', 'gc_msg'])
-	unread_pm = gajim.events.get_nb_events(types = ['printed_pm', 'pm'])
+def get_account_status(account):
+	status = reduce_chars_newlines(account['status_line'], 100, 1)
+	return status
+
+def get_notification_icon_tooltip_dict():
+	'''returns a dict of the form {acct: {'show': show, 'message': message, 
+	'event_lines': [list of text lines to show in tooltip]}'''
+	# How many events must there be before they're shown summarized, not per-user
+	max_ungrouped_events = 10
 
 	accounts = get_accounts_info()
 
-	if unread_chat or unread_single_chat or unread_gc or unread_pm:
-		text = 'Gajim '
-		awaiting_events = unread_chat + unread_single_chat + unread_gc + unread_pm
-		if awaiting_events == unread_chat or awaiting_events == unread_single_chat \
-			or awaiting_events == unread_gc or awaiting_events == unread_pm:
-			# This condition is like previous if but with xor... 
-			# Print in one line
-			text += '-'
-		else:
-			# Print in multiple lines
-			text += '\n   '
-		if unread_chat:
-			text += ngettext(
-				' %d unread message',
-				' %d unread messages',
-				unread_chat, unread_chat, unread_chat)
-			text += '\n   '
-		if unread_single_chat:
-			text += ngettext(
-				' %d unread single message',
-				' %d unread single messages',
-				unread_single_chat, unread_single_chat, unread_single_chat)
-			text += '\n   '
-		if unread_gc:
-			text += ngettext(
-				' %d unread group chat message',
-				' %d unread group chat messages',
-				unread_gc, unread_gc, unread_gc)
-			text += '\n   '
-		if unread_pm:
-			text += ngettext(
-				' %d unread private message',
-				' %d unread private messages',
-				unread_pm, unread_pm, unread_pm)
-			text += '\n   '
-		text = text[:-4] # remove latest '\n   '
-	elif len(accounts) > 1:
-		text = _('Gajim')
-	elif len(accounts) == 1:
-		message = accounts[0]['status_line']
-		message = reduce_chars_newlines(message, 100, 1)
-		text = _('Gajim - %s') % message
-	else:
-		text = _('Gajim - %s') % get_uf_show('offline')
+	# Gather events. (With accounts, when there are more.)
+	for account in accounts:
+		account_name = account['name']
+		account['event_lines'] = []
+		# Gather events per-account
+		pending_events = gajim.events.get_events(account = account_name)
+		messages, non_messages, total_messages, total_non_messages = {}, {}, 0, 0
+		for jid in pending_events:
+			for event in pending_events[jid]:
+				if event.type_.count('file') > 0:
+					# This is a non-messagee event.
+					messages[jid] = non_messages.get(jid, 0) + 1
+					total_non_messages = total_non_messages + 1
+				else:
+					# This is a message.
+					messages[jid] = messages.get(jid, 0) + 1
+					total_messages = total_messages + 1
+		# Display unread messages numbers, if any
+		if total_messages > 0:
+			if total_messages > max_ungrouped_events:
+				text = ngettext(
+					'%d message pending',
+					'%d messages pending',
+					total_messages, total_messages, total_messages)
+				account['event_lines'].append(text)
+			else:
+				for jid in messages.keys():
+					text = ngettext(
+						'%d message pending',
+						'%d messages pending',
+						messages[jid], messages[jid], messages[jid])
+					contact = gajim.contacts.get_first_contact_from_jid(
+						account['name'], jid)
+					if jid in gajim.gc_connected[account['name']]:
+						text += _(' from room %s') % (jid)
+					elif contact:
+						name = contact.get_shown_name()
+						text += _(' from user %s') % (name)
+					else:
+						text += _(' from %s') % (jid)
+					account['event_lines'].append(text)
 		
+		# Display unseen events numbers, if any
+		if total_non_messages > 0:
+			if total_non_messages > max_ungrouped_events:
+				text = ngettext(
+					'%d event pending',
+					'%d events pending',
+					total_non_messages, total_non_messages, total_non_messages)
+				accounts[account]['event_lines'].append(text)
+			else:
+				for jid in non_messages.keys():
+					text = ngettext(
+						'%d event pending',
+						'%d events pending',
+						non_messages[jid], non_messages[jid], non_messages[jid])
+					text += _(' from user %s') % (jid)
+					accounts[account]['event_lines'].append(text)
+
+	return accounts
+
+def get_notification_icon_tooltip_text():
+	text = None
+	# How many events must there be before they're shown summarized, not per-user
+	max_ungrouped_events = 10
+	# Character which should be used to indent in the tooltip.
+	indent_with = ' '
+
+	accounts = get_notification_icon_tooltip_dict()
+
+	if len(accounts) == 0:
+		# No configured account
+		return _('Gajim')
+
+	# at least one account present
+
+	# Is there more that one account?
+	if len(accounts) == 1:
+		show_more_accounts = False
+	else:
+		show_more_accounts = True
+
+	# If there is only one account, its status is shown on the first line.
+	if show_more_accounts:
+		text = _('Gajim')
+	else:		
+		text = _('Gajim - %s') % (get_account_status(accounts[0]))
+
+	# Gather and display events. (With accounts, when there are more.)
+	for account in accounts:
+		account_name = account['name']
+		# Set account status, if not set above
+		if (show_more_accounts):
+			message = '\n' + indent_with + ' %s - %s'
+			text += message % (account_name, get_account_status(account))
+			# Account list shown, messages need to be indented more
+			indent_how = 2
+		else:
+			# If no account list is shown, messages could have default indenting.
+			indent_how = 1
+		for line in account['event_lines']:
+			text += '\n' + indent_with * indent_how + ' '
+			text += line
 	return text
 
 def get_accounts_info():
@@ -963,3 +1032,21 @@ def get_avatar_path(prefix):
 		if os.path.exists(file_):
 			return file_
 	return None
+
+def datetime_tuple(timestamp):
+	'''Converts timestamp using strptime and the format: %Y%m%dT%H:%M:%S
+	Because of various datetime formats are used the following exceptions
+	are handled:
+		- Optional milliseconds appened to the string are removed
+		- XEP-082 datetime strings have all '-' cahrs removed to meet
+		  the above format.'''
+	timestamp = timestamp.split('.')[0]
+	timestamp = timestamp.replace('-', '')
+	from time import strptime
+	return strptime(timestamp, '%Y%m%dT%H:%M:%S')
+
+def get_iconset_path(iconset):
+	if os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', iconset)):
+		return os.path.join(gajim.DATA_DIR, 'iconsets', iconset)
+	elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, iconset)):
+		return os.path.join(gajim.MY_ICONSETS_PATH, iconset)

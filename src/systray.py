@@ -6,6 +6,7 @@
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -82,7 +83,7 @@ class Systray:
 		if not gajim.interface.systray_enabled:
 			return
 		if gajim.events.get_nb_systray_events():
-			state = 'message'
+			state = 'event'
 		else:
 			state = self.status
 		image = gajim.interface.roster.jabber_state_images['16'][state]
@@ -144,7 +145,7 @@ class Systray:
 
 		# We need our own set of status icons, let's make 'em!
 		iconset = gajim.config.get('iconset')
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		state_images = gajim.interface.roster.load_iconset(path)
 
 		if state_images.has_key('muc_active'):
@@ -214,16 +215,13 @@ class Systray:
 					account_menu_for_single_message.append(item)
 
 					# join gc 
-					label = gtk.Label()
-					label.set_markup('<u>' + account.upper() +'</u>')
-					label.set_use_underline(False)
-					gc_item = gtk.MenuItem()
-					gc_item.add(label)
-					gc_item.connect('state-changed',
-						gtkgui_helpers.on_bm_header_changed_state)
+					gc_item = gtk.MenuItem(_('using account %s') % account, False)
 					gc_sub_menu.append(gc_item)
-					gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
+					gc_menuitem_menu = gtk.Menu()
+					gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
 						account)
+					gc_item.set_submenu(gc_menuitem_menu)
+					gc_sub_menu.show_all()
 
 		elif connected_accounts == 1: # one account
 			# one account connected, no need to show 'as jid'

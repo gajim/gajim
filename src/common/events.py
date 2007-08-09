@@ -143,8 +143,8 @@ class Events:
 			self.fire_event_removed(removed_list)
 			return
 		# no event nor type given, remove them all
-		del self._events[account][jid]
 		self.fire_event_removed(self._events[account][jid])
+		del self._events[account][jid]
 
 	def change_jid(self, account, old_jid, new_jid):
 		if not self._events[account].has_key(old_jid):

@@ -154,7 +154,11 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		message_type = parameters[0]
 		is_first_message = parameters[1]
 		nickname = parameters[2]
-		message = parameters[3]
+		if gajim.config.get('notification_preview_message'):
+			message = parameters[3]
+		else:
+			# We don't want message preview, do_preview = False
+			message = ''
 		if helpers.allow_showing_notification(account, 'notify_on_new_message',
 		advanced_notif_num, is_first_message):
 			do_popup = True
@@ -235,8 +239,12 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 					'priv_msg_recv.png')
 				title = _('New Private Message from group chat %s') % room_name
-				text = _('%(nickname)s: %(message)s') % {'nickname': nickname,
-					'message': message}
+				if message:
+					text = _('%(nickname)s: %(message)s') % {'nickname': nickname,
+						'message': message}
+				else:
+					text = _('Messaged by %(nickname)s') % {'nickname': nickname}
+
 			else: # chat message
 				event_type = _('New Message')
 				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
@@ -299,7 +307,8 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 			gajim.log.debug(str(e))
 	# we failed to speak to notification daemon via D-Bus
 	if USER_HAS_PYNOTIFY: # try via libnotify
-		if not text:
+		if not text and event_type == 'new_message':
+			# empty text for new_message means do_preview = False
 			text = gajim.get_name_from_jid(account, jid) # default value of text
 		if not title:
 			title = event_type
@@ -408,8 +417,9 @@ class DesktopNotification:
 		self.jid = jid
 		self.msg_type = msg_type
 
-		if not text:
-			# default value of text
+		# default value of text
+		if not text and event_type == 'new_message':
+			# empty text for new_message means do_preview = False
 			self.text = gajim.get_name_from_jid(account, jid)
 
 		if not title:

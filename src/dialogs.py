@@ -8,6 +8,7 @@
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -115,7 +116,7 @@ class EditGroupsDialog:
 				if not gajim.interface.roster.regroup and _account != account:
 					continue
 				for _jid in all_jid[_account]:
-					contacts = gajim.contacts.get_contact(_account, _jid)
+					contacts = gajim.contacts.get_contacts(_account, _jid)
 					for c in contacts:
 						if group in c.groups:
 							c.groups.remove(group)
@@ -133,7 +134,7 @@ class EditGroupsDialog:
 				if not gajim.interface.roster.regroup and _account != account:
 					continue
 				for _jid in all_jid[_account]:
-					contacts = gajim.contacts.get_contact(_account, _jid)
+					contacts = gajim.contacts.get_contacts(_account, _jid)
 					for c in contacts:
 						if not group in c.groups:
 							c.groups.append(group)
@@ -547,13 +548,20 @@ class ChangeStatusMessageDialog:
 			if not msg_name: # msg_name was ''
 				msg_name = msg_text_1l
 			msg_name = msg_name.decode('utf-8')
-			iter_ = self.message_liststore.append((msg_name,))
 
-			gajim.config.add_per('statusmsg', msg_name)
+			if msg_name in self.preset_messages_dict:
+				dlg2 = ConfirmationDialog(_('Overwrite Status Message?'),
+					_('This name is already used. Do you want to overwrite this status message?'))
+				resp = dlg2.run()
+				if resp != gtk.RESPONSE_OK:
+					return
+			else:
+				iter_ = self.message_liststore.append((msg_name,))
+				gajim.config.add_per('statusmsg', msg_name)
+				# select in combobox the one we just saved 
+				self.message_combobox.set_active_iter(iter_)
 			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text_1l)
 			self.preset_messages_dict[msg_name] = msg_text
-			# select in combobox the one we just saved 
-			self.message_combobox.set_active_iter(iter_)
 
 
 class AddNewContactWindow:
@@ -610,6 +618,8 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			for j in gajim.contacts.get_jid_list(acct):
 				if gajim.jid_is_transport(j):
 					type_ = gajim.get_transport_name_from_jid(j, False)
+					if not type_:
+						continue
 					if self.agents.has_key(type_):
 						self.agents[type_].append(j)
 					else:
@@ -625,30 +635,37 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 						self.agents[type_].append(jid_)
 				self.available_types.append(type_)
 		liststore = gtk.ListStore(str)
-		self.group_comboboxentry.set_model(liststore)
-		liststore = gtk.ListStore(str, str)
+		self.group_comboboxentry.set_model(liststore)		
+		# Combobox with transport/jabber icons
+		liststore = gtk.ListStore(str, gtk.gdk.Pixbuf, str)
+		cell = gtk.CellRendererPixbuf()
+		self.protocol_combobox.pack_start(cell, False)
+		self.protocol_combobox.add_attribute(cell, 'pixbuf', 1)
+		cell = gtk.CellRendererText()
+		cell.set_property('xpad', 5)
+		self.protocol_combobox.pack_start(cell, True)
+		self.protocol_combobox.add_attribute(cell, 'text', 0)
+		self.protocol_combobox.set_model(liststore)
 		uf_type = {'jabber': 'Jabber', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
 			'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
 		# Jabber as first
-		liststore.append(['Jabber', 'jabber'])
+		img = gajim.interface.roster.jabber_state_images['16']['online']
+		liststore.append(['Jabber', img.get_pixbuf(), 'jabber'])
 		for type_ in self.agents:
 			if type_ == 'jabber':
 				continue
-			if type_ in uf_type:
-				liststore.append([uf_type[type_], type_])
+			imgs = gajim.interface.roster.transports_state_images
+			img = None
+			if imgs['16'].has_key(type_) and imgs['16'][type_].has_key('online'):
+				img = imgs['16'][type_]['online']
+				if type_ in uf_type:
+					liststore.append([uf_type[type_], img.get_pixbuf(), type_])
+				else:
+					liststore.append([type_, img.get_pixbuf(), type_])
 			else:
-				liststore.append([type_, type_])
-		self.protocol_combobox.set_model(liststore)
+				liststore.append([type_, img, type_])
 		self.protocol_combobox.set_active(0)
-		self.protocol_jid_combobox.set_no_show_all(True)
-		self.protocol_jid_combobox.hide()
-		self.subscription_table.set_no_show_all(True)
 		self.auto_authorize_checkbutton.show()
-		self.message_scrolledwindow.set_no_show_all(True)
-		self.register_hbox.set_no_show_all(True)
-		self.register_hbox.hide()
-		self.connected_label.set_no_show_all(True)
-		self.connected_label.hide()
 		liststore = gtk.ListStore(str)
 		self.protocol_jid_combobox.set_model(liststore)
 		self.xml.signal_autoconnect(self)
@@ -666,7 +683,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			iter = model.get_iter_first()
 			i = 0
 			while iter:
-				if model[iter][1] == type_:
+				if model[iter][2] == type_:
 					self.protocol_combobox.set_active(i)
 					break
 				iter = model.iter_next(iter)
@@ -741,7 +758,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 
 		model = self.protocol_combobox.get_model()
 		iter = self.protocol_combobox.get_active_iter()
-		type_ = model[iter][1]
+		type_ = model[iter][2]
 		if type_ != 'jabber':
 			transport = self.protocol_jid_combobox.get_active_text().decode(
 				'utf-8')
@@ -795,7 +812,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 	def on_protocol_combobox_changed(self, widget):
 		model = widget.get_model()
 		iter = widget.get_active_iter()
-		type_ = model[iter][1]
+		type_ = model[iter][2]
 		model = self.protocol_jid_combobox.get_model()
 		model.clear()
 		if len(self.agents[type_]):
@@ -1192,6 +1209,7 @@ class InputDialog:
 
 	def on_okbutton_clicked(self, widget):
 		user_input = self.input_entry.get_text().decode('utf-8')
+		self.cancel_handler = None
 		self.dialog.destroy()
 		if isinstance(self.ok_handler, tuple):
 			self.ok_handler[0](user_input, *self.ok_handler[1:])
@@ -1327,7 +1345,8 @@ class SubscriptionRequestWindow:
 
 
 class JoinGroupchatWindow:
-	def __init__(self, account, room_jid = '', nick = '', automatic = False):
+	def __init__(self, account, room_jid = '', nick = '', password = '',
+	automatic = False):
 		'''automatic is a dict like {'invities': []}
 		If automatic is not empty, this means room must be automaticaly configured
 		and when done, invities must be automatically invited'''
@@ -1351,9 +1370,12 @@ class JoinGroupchatWindow:
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self._room_jid_entry = self.xml.get_widget('room_jid_entry')
 		self._nickname_entry = self.xml.get_widget('nickname_entry')
+		self._password_entry = self.xml.get_widget('password_entry')
 
 		self._room_jid_entry.set_text(room_jid)
 		self._nickname_entry.set_text(nick)
+		if password:
+			self._password_entry.set_text(password)
 		self.xml.signal_autoconnect(self)
 		gajim.interface.instances[account]['join_gc'] = self #now add us to open windows
 		if len(gajim.connections) > 1:
@@ -1421,8 +1443,7 @@ class JoinGroupchatWindow:
 		'''When Join button is clicked'''
 		nickname = self._nickname_entry.get_text().decode('utf-8')
 		room_jid = self._room_jid_entry.get_text().decode('utf-8')
-		password = self.xml.get_widget('password_entry').get_text().decode(
-			'utf-8')
+		password = self._password_entry.get_text().decode('utf-8')
 		user, server, resource = helpers.decompose_jid(room_jid)
 		if not user or not server or resource:
 			ErrorDialog(_('Invalid group chat Jabber ID'),
@@ -1460,7 +1481,7 @@ class JoinGroupchatWindow:
 			if not room_jid_bookmarked:
 				name = gajim.get_nick_from_jid(room_jid)
 				bmdict = { 'name': name, 'jid': room_jid, 'autojoin': u'1',
-					'password': password, 'nick': nickname,
+					'minimize': '0', 'password': password, 'nick': nickname,
 					'print_status': gajim.config.get('print_status_in_muc')}
 
 				gajim.connections[self.account].bookmarks.append(bmdict)
@@ -1858,17 +1879,6 @@ class SingleMessageWindow:
 					spell2.set_language(lang)
 			except gobject.GError, msg:
 				dialogs.AspellDictError(lang)
-		self.send_button.set_no_show_all(True)
-		self.reply_button.set_no_show_all(True)
-		self.send_and_close_button.set_no_show_all(True)
-		self.to_label.set_no_show_all(True)
-		self.to_entry.set_no_show_all(True)
-		self.from_label.set_no_show_all(True)
-		self.from_entry.set_no_show_all(True)
-		self.close_button.set_no_show_all(True)
-		self.cancel_button.set_no_show_all(True)
-		self.message_scrolledwindow.set_no_show_all(True)
-		self.conversation_scrolledwindow.set_no_show_all(True)
 
 		self.prepare_widgets_for(self.action)
 
@@ -2217,7 +2227,7 @@ class PrivacyListWindow:
 		jid_entry_completion.set_text_column(0)
 		jid_entry_completion.set_model(jids_list_store)
 		jid_entry_completion.set_popup_completion(True)
-  		self.edit_type_jabberid_entry.set_completion(jid_entry_completion)			
+		self.edit_type_jabberid_entry.set_completion(jid_entry_completion)
 
 		if action == 'EDIT':
 			self.refresh_rules()
@@ -2231,7 +2241,6 @@ class PrivacyListWindow:
 
 		self.window.set_title(title)
 
-		self.add_edit_vbox.set_no_show_all(True)
 		self.window.show_all()
 		self.add_edit_vbox.hide()
 
@@ -2683,6 +2692,7 @@ class InvitationReceivedDialog:
 
 		self.room_jid = room_jid
 		self.account = account
+		self.password = password
 		xml = gtkgui_helpers.get_glade('invitation_received_dialog.glade')
 		self.dialog = xml.get_widget('invitation_received_dialog')
 
@@ -2716,7 +2726,8 @@ class InvitationReceivedDialog:
 	def on_accept_button_clicked(self, widget):
 		self.dialog.destroy()
 		try:
-			JoinGroupchatWindow(self.account, self.room_jid)
+			JoinGroupchatWindow(self.account, self.room_jid,
+				password=self.password)
 		except GajimGeneralException:
 			pass
 
@@ -2796,7 +2807,10 @@ class ImageChooserDialog(FileChooserDialog):
 			path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
 				(path_to_file,))[0]
 			if os.path.exists(path_to_file):
-				callback(widget, path_to_file)
+				if isinstance(callback, tuple):
+					callback[0](widget, path_to_file, *callback[1:])
+				else:
+					callback(widget, path_to_file)
 
 		try:
 			if os.name == 'nt':
@@ -2856,11 +2870,18 @@ class AvatarChooserDialog(ImageChooserDialog):
 		ImageChooserDialog.__init__(self, path_to_file, on_response_ok,
 			on_response_cancel)
 		button = gtk.Button(None, gtk.STOCK_CLEAR)
+		self.response_clear = on_response_clear
 		if on_response_clear:
-			button.connect('clicked', on_response_clear)
+			button.connect('clicked', self.on_clear)
 		button.show_all()
 		self.action_area.pack_start(button)
 		self.action_area.reorder_child(button, 0)
+
+	def on_clear(self, widget):
+		if isinstance(self.response_clear, tuple):
+			self.response_clear[0](widget, *self.response_clear[1:])
+		else:
+			self.response_clear(widget)
 
 class AddSpecialNotificationDialog:
 	def __init__(self, jid):
@@ -2983,9 +3004,6 @@ class AdvancedNotificationsWindow:
 		self.delete_button.set_sensitive(False)
 		self.down_button.set_sensitive(False)
 		self.up_button.set_sensitive(False)
-		self.recipient_list_entry.set_no_show_all(True)
-		for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
-			self.__dict__[st + '_cb'].set_no_show_all(True)
 
 		self.window.show_all()
 

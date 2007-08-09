@@ -26,6 +26,7 @@ import os
 import tooltips
 import dialogs
 import locale
+import Queue
 
 import gtkgui_helpers
 from common import gajim
@@ -141,9 +142,14 @@ class ConversationTextview:
 
 		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
 
+		# One mark at the begining then 2 marks between each lines
+		size = gajim.config.get('max_conversation_lines')
+		size = 2 * size - 1
+		self.marks_queue = Queue.Queue(size)
+
 		self.allow_focus_out_line = True
-		# holds the iter's offset which points to the end of --- line
-		self.focus_out_end_iter_offset = None
+		# holds a mark at the end of --- line
+		self.focus_out_end_mark = None
 
 		self.line_tooltip = tooltips.BaseTooltip()
 		# use it for hr too
@@ -213,13 +219,14 @@ class ConversationTextview:
 		print_focus_out_line = False
 		buffer = self.tv.get_buffer()
 
-		if self.focus_out_end_iter_offset is None:
+		if self.focus_out_end_mark is None:
 			# this happens only first time we focus out on this room
 			print_focus_out_line = True
 
 		else:
-			if self.focus_out_end_iter_offset != buffer.get_end_iter().\
-			get_offset():
+			focus_out_end_iter = buffer.get_iter_at_mark(self.focus_out_end_mark)
+			focus_out_end_iter_offset = focus_out_end_iter.get_offset()
+			if focus_out_end_iter_offset != buffer.get_end_iter().get_offset():
 				# this means after last-focus something was printed
 				# (else end_iter's offset is the same as before)
 				# only then print ---- line (eg. we avoid printing many following
@@ -230,9 +237,9 @@ class ConversationTextview:
 			buffer.begin_user_action()
 
 			# remove previous focus out line if such focus out line exists
-			if self.focus_out_end_iter_offset is not None:
-				end_iter_for_previous_line = buffer.get_iter_at_offset(
-					self.focus_out_end_iter_offset)
+			if self.focus_out_end_mark is not None:
+				end_iter_for_previous_line = buffer.get_iter_at_mark(
+					self.focus_out_end_mark)
 				begin_iter_for_previous_line = end_iter_for_previous_line.copy()
 				# img_char+1 (the '\n')
 				begin_iter_for_previous_line.backward_chars(2)
@@ -240,6 +247,7 @@ class ConversationTextview:
 				# remove focus out line
 				buffer.delete(begin_iter_for_previous_line,
 					end_iter_for_previous_line)
+				buffer.delete_mark(self.focus_out_end_mark)
 
 			# add the new focus out line
 			end_iter = buffer.get_end_iter()
@@ -255,7 +263,8 @@ class ConversationTextview:
 			self.allow_focus_out_line = False
 
 			# update the iter we hold to make comparison the next time
-			self.focus_out_end_iter_offset = buffer.get_end_iter().get_offset()
+			self.focus_out_end_mark = buffer.create_mark(None,
+				buffer.get_end_iter(), left_gravity=True)
 
 			buffer.end_user_action()
 
@@ -315,7 +324,10 @@ class ConversationTextview:
 		buffer = self.tv.get_buffer()
 		start, end = buffer.get_bounds()
 		buffer.delete(start, end)
-		self.focus_out_end_iter_offset = None
+		size = gajim.config.get('max_conversation_lines')
+		size = 2 * size - 1
+		self.marks_queue = Queue.Queue(size)
+		self.focus_out_end_mark = None
 
 	def visit_url_from_menuitem(self, widget, link):
 		'''basically it filters out the widget instance'''
@@ -767,13 +779,29 @@ class ConversationTextview:
 		'''prints 'chat' type messages'''
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
+		if self.marks_queue.full():
+			# remove oldest line
+			m1 = self.marks_queue.get()
+			m2 = self.marks_queue.get()
+			i1 = buffer.get_iter_at_mark(m1)
+			i2 = buffer.get_iter_at_mark(m2)
+			buffer.delete(i1, i2)
+			buffer.delete_mark(m1)
 		end_iter = buffer.get_end_iter()
 		at_the_end = False
 		if self.at_the_end():
 			at_the_end = True
 
+		# Create one mark and add it to queue once if it's the first line
+		# else twice (one for end bound, one for start bound)
+		mark = None
 		if buffer.get_char_count() > 0:
 			buffer.insert_with_tags_by_name(end_iter, '\n', 'eol')
+			mark = buffer.create_mark(None, end_iter, left_gravity=True)
+			self.marks_queue.put(mark)
+		if not mark:
+			mark = buffer.create_mark(None, end_iter, left_gravity=True)
+		self.marks_queue.put(mark)
 		if kind == 'incoming_queue':
 			kind = 'incoming'
 		if old_kind == 'incoming_queue':

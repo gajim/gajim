@@ -408,7 +408,7 @@ Chat Banner</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkTable" id="table36">
+	    <widget class="GtkTable" id="theme_options_table">
 	      <property name="visible">True</property>
 	      <property name="n_rows">9</property>
 	      <property name="n_columns">2</property>

@@ -33,6 +33,8 @@ import thread
 import logging
 log = logging.getLogger('gajim.c.x.transports_nb')
 
+from common import gajim
+
 USE_PYOPENSSL = False
 
 try:
@@ -296,7 +298,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.renew_send_timeout()
 		
 	def connect(self,server=None, proxy = None, secure = None):
-		''' Try to establish connection. Returns non-empty string on success. '''
+		''' Try to establish connection. Returns True/False on success/failure. '''
 		if not server:
 			server=self._server
 		else: 
@@ -416,6 +418,12 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.idlequeue.remove_timeout(self.fd)
 	
 	def onreceive(self, recv_handler):
+		''' Sets the on_receive callback. Do not confuse it with
+		on_receive() method, which is the callback itself.
+		
+		If recv_handler==None, it tries to set that callback assuming that
+		our owner also has a Dispatcher object plugged in, to its
+		ProcessNonBlocking method.'''
 		if not recv_handler:
 			if hasattr(self._owner, 'Dispatcher'):
 				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
@@ -735,7 +743,12 @@ class NonBlockingTLS(PlugIn):
 		# FIXME: should method be configurable?
 		tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
 		#tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
-		tcpsock._sslContext.set_info_callback(self._ssl_info_callback)
+		tcpsock.ssl_errnum = 0
+		tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER, self._ssl_verify_callback)
+		try:
+			tcpsock._sslContext.load_verify_locations(os.path.join(gajim.DATA_DIR, 'other', 'cacerts.pem'))
+		except:
+			log.warning(_("Unable to load SSL certificats from file %s" % os.path.abspath(os.path.join(gajim.DATA_DIR,'other','ca.crt'))))
 		tcpsock._sslObj = OpenSSL.SSL.Connection(tcpsock._sslContext, tcpsock._sock)
 		tcpsock._sslObj.set_connect_state() # set to client mode
 
@@ -759,29 +772,6 @@ class NonBlockingTLS(PlugIn):
 		# fake it, for now
 		self.starttls='success'
 
-	def _on_ssl_handshake_done(self):
-		log.debug("Handshake done!")
-		#self.starttls='success'
-
-		tcpsock = self._owner.Connection
-		cert = tcpsock._sslObj.get_peer_certificate()
-		peer = cert.get_subject()
-		issuer = cert.get_issuer()
-		tcpsock._sslIssuer = unicode(issuer)
-		tcpsock._sslServer = unicode(peer)
-		tcpsock.serverDigestSHA1 = cert.digest('sha1')
-		tcpsock.serverDigestMD5 = cert.digest('md5')
-
-		if log.getEffectiveLevel() <= logging.DEBUG:
-			peercert = tcpsock._sslObj.get_peer_certificate()
-			ciphers = tcpsock._sslObj.get_cipher_list()
-
-			print >> sys.stderr, "Ciphers:", ciphers
-			print >> sys.stderr, "Peer cert:", peercert
-			self._dumpX509(peercert)
-
-			print >> sys.stderr, OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, peercert)
-
 	def _startSSL_stdlib(self):
 		log.debug("_startSSL_stdlib called")
 		tcpsock=self._owner.Connection
@@ -795,36 +785,16 @@ class NonBlockingTLS(PlugIn):
 		tcpsock._send = wrapper.send
 		self.starttls='success'
 
-	def _ssl_info_callback(self, sslconn, type, st):
+	def _ssl_verify_callback(self, sslconn, cert, errnum, depth, ok):
 		# Exceptions can't propagate up through this callback, so print them here.
 		try:
-			self._ssl_info_callback_guarded(sslconn, type, st)
+			if errnum == 0:
+				return True
+			self._owner.Connection.ssl_errnum = errnum
+			return True
 		except:
 			log.error("Exception caught in _ssl_info_callback:", exc_info=True)
 			traceback.print_exc() # Make sure something is printed, even if log is disabled.
-
-	def _ssl_info_callback_guarded(self, sslconn, type, st):
-		b = self.ssl_h_bits
-
-		#if type & b['SSL_CB_LOOP']:
-		#	if type & SSL_ST_CONNECT: tls_state = "connect"
-		#	elif type & SSL_ST_ACCEPT: tls_state = "accept"
-		#	else: tls_state = "undefined"
-		#	print "tls_state: %s: %s" % (tls_state, sslconn.state_string())
-
-		#if type & b['SSL_CB_ALERT']:
-		#	if type & SSL_CB_READ: rdwr = "read"
-		#	elif type & SSL_CB_WRITE: rdwr = "write"
-		#	else: rdwr = "unknown"
-		#	print "tls_alert: %s:%d: %s" % (rdwr, st, sslconn.state_string())
-
-		#mask = ""
-		#for k, v in b.iteritems():
-		#	if type & v: mask += " " + k
-		#print "mask:", mask, st
-
-		if type & b['SSL_CB_HANDSHAKE_DONE']:
-			self._on_ssl_handshake_done()
 
 	def StartTLSHandler(self, conn, starttls):
 		''' Handle server reply if TLS is allowed to process. Behaves accordingly.

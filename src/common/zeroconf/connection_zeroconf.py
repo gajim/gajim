@@ -41,6 +41,7 @@ import gobject
 from common import gajim
 from common import GnuPG
 from common.zeroconf import client_zeroconf
+from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
 
 USE_GPG = GnuPG.USE_GPG
@@ -103,12 +104,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'password', 'zeroconf')
 			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'sync_with_global_status', True)
 
-			#XXX make sure host is US-ASCII
-			self.host = unicode(socket.gethostname())
-			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'hostname', self.host)
 			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port', 5298)
 			gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'is_zeroconf', True)
-		self.host = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'hostname')
+		#XXX make sure host is US-ASCII
+		self.host = unicode(socket.gethostname())
+		gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'hostname', self.host)
 		self.port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'custom_port')
 		self.autoconnect = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'autoconnect')
 		self.sync_with_global_status = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'sync_with_global_status')
@@ -229,7 +229,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.get_config_values_or_default()
 		if not self.connection:
 			self.connection = client_zeroconf.ClientZeroconf(self)
-			if not self.connection.test_avahi():
+			if not zeroconf.test_zeroconf():
 				self.dispatch('STATUS', 'offline')
 				self.status = 'offline'
 				self.dispatch('CONNECTION_LOST',
@@ -348,7 +348,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		return STATUS_LIST[self.connected]
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
-	chatstate = None, msg_id = None, composing_jep = None, resource = None, 
+	chatstate = None, msg_id = None, composing_xep = None, resource = None, 
 	user_nick = None):
 		fjid = jid
 
@@ -396,10 +396,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
 		if chatstate is not None:
-			if composing_jep == 'JEP-0085' or not composing_jep:
+			if composing_xep == 'XEP-0085' or not composing_xep:
 				# JEP-0085
 				msg_iq.setTag(chatstate, namespace = common.xmpp.NS_CHATSTATES)
-			if composing_jep == 'JEP-0022' or not composing_jep:
+			if composing_xep == 'XEP-0022' or not composing_xep:
 				# JEP-0022
 				chatstate_node = msg_iq.setTag('x', namespace = common.xmpp.NS_EVENT)
 				if not msgtxt: # when no <body>, add <id>

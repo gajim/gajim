@@ -27,23 +27,25 @@ def device_no_longer_active(self, *args):
 		'listen_to_network_manager') and connection.connected > 1:
 			connection._disconnectedReconnCB()
 
+supported = False
 
-from common.dbus_support import system_bus
+try:
+	from common.dbus_support import system_bus
 
-import dbus
-import dbus.glib
+	bus = system_bus.SystemBus()
 
-bus = system_bus.SystemBus()
+	if 'org.freedesktop.NetworkManager' in bus.list_names():
+		supported = True
+		bus.add_signal_receiver(device_no_longer_active,
+			'DeviceNoLongerActive',
+			'org.freedesktop.NetworkManager',
+			'org.freedesktop.NetworkManager',
+			'/org/freedesktop/NetworkManager')
 
-bus.add_signal_receiver(device_no_longer_active,
-	'DeviceNoLongerActive',
-	'org.freedesktop.NetworkManager',
-	'org.freedesktop.NetworkManager',
-	'/org/freedesktop/NetworkManager')
-
-bus.add_signal_receiver(device_now_active,
-	'DeviceNowActive',
-	'org.freedesktop.NetworkManager',
-	'org.freedesktop.NetworkManager',
-	'/org/freedesktop/NetworkManager')
-
+		bus.add_signal_receiver(device_now_active,
+			'DeviceNowActive',
+			'org.freedesktop.NetworkManager',
+			'org.freedesktop.NetworkManager',
+			'/org/freedesktop/NetworkManager')
+except:
+	pass

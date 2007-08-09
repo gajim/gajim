@@ -60,6 +60,8 @@ class SystemBus:
 				return False
 			if self.system_bus is None:
 				return False
+			# Don't exit Gajim when dbus is stopped
+			self.system_bus.set_exit_on_disconnect(False)
 		return True
 
 system_bus = SystemBus()

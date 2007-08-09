@@ -50,6 +50,7 @@ class GajimThemesWindow:
 		self.italic_togglebutton = self.xml.get_widget('italic_togglebutton')
 		self.themes_tree = self.xml.get_widget('themes_treeview')
 		self.theme_options_vbox = self.xml.get_widget('theme_options_vbox')
+		self.theme_options_table = self.xml.get_widget('theme_options_table')
 		self.colorbuttons = {}
 		for chatstate in ('inactive', 'composing', 'paused', 'gone',
 		'muc_msg', 'muc_directed_msg'):
@@ -67,6 +68,7 @@ class GajimThemesWindow:
 		self.current_theme = gajim.config.get('roster_theme')
 		self.no_update = False
 		self.fill_themes_treeview()
+		self.select_active_theme()
 		self.current_option = self.options[0]
 		self.set_theme_options(self.current_theme, self.current_option)
 		
@@ -81,6 +83,8 @@ class GajimThemesWindow:
 		return True # do NOT destroy the window
 	
 	def on_close_button_clicked(self, widget):
+		if gajim.interface.instances.has_key('preferences'):
+			gajim.interface.instances['preferences'].update_theme_list()
 		self.window.hide()
 
 	def on_theme_cell_edited(self, cell, row, new_name):
@@ -89,6 +93,11 @@ class GajimThemesWindow:
 		old_name = model.get_value(iter, 0).decode('utf-8')
 		new_name = new_name.decode('utf-8')
 		if old_name == new_name:
+			return
+		if old_name == 'default':
+			dialogs.ErrorDialog(
+				_('You cannot make changes to the default theme'),
+			_('Please create a clean new theme with your desired name.'))
 			return
 		new_config_name = new_name.replace(' ', '_')
 		if new_config_name in gajim.config.get_per('themes'):
@@ -110,28 +119,31 @@ class GajimThemesWindow:
 		self.current_theme = new_name
 
 	def fill_themes_treeview(self):
-		self.xml.get_widget('remove_button').set_sensitive(False)
-		self.theme_options_vbox.set_sensitive(False)
 		model = self.themes_tree.get_model()
 		model.clear()
 		for config_theme in gajim.config.get_per('themes'):
 			theme = config_theme.replace('_', ' ')
 			iter = model.append([theme])
-			if gajim.config.get('roster_theme') == config_theme:
-				self.themes_tree.get_selection().select_iter(iter)
-				self.xml.get_widget('remove_button').set_sensitive(True)
-				self.theme_options_vbox.set_sensitive(True)
 
 	def select_active_theme(self):
 		model = self.themes_tree.get_model()
 		iter = model.get_iter_root()
-		active_theme = gajim.config.get('roster_theme')
+		active_theme = gajim.config.get('roster_theme').replace('_', ' ')
 		while iter:
 			theme = model[iter][0]
 			if theme == active_theme:
 				self.themes_tree.get_selection().select_iter(iter)
 				self.xml.get_widget('remove_button').set_sensitive(True)
 				self.theme_options_vbox.set_sensitive(True)
+				self.theme_options_table.set_sensitive(True)
+				if active_theme == 'default':
+					self.xml.get_widget('remove_button').set_sensitive(False)
+					self.theme_options_vbox.set_sensitive(False)
+					self.theme_options_table.set_sensitive(False)
+				else: 
+					self.xml.get_widget('remove_button').set_sensitive(True)
+					self.theme_options_vbox.set_sensitive(True)
+					self.theme_options_table.set_sensitive(True)
 				break
 			iter = model.iter_next(iter)
 
@@ -140,12 +152,19 @@ class GajimThemesWindow:
 		selected = self.themes_tree.get_selection().get_selected_rows()
 		if not iter or selected[1] == []:
 			self.theme_options_vbox.set_sensitive(False)
+			self.theme_options_table.set_sensitive(False)
 			return
-		self.xml.get_widget('remove_button').set_sensitive(True)
-		self.theme_options_vbox.set_sensitive(True)
 		self.current_theme = model.get_value(iter, 0).decode('utf-8')
 		self.current_theme = self.current_theme.replace(' ', '_')
 		self.set_theme_options(self.current_theme)
+		if self.current_theme == 'default':
+			self.xml.get_widget('remove_button').set_sensitive(False)
+			self.theme_options_vbox.set_sensitive(False)
+			self.theme_options_table.set_sensitive(False)
+		else: 
+			self.xml.get_widget('remove_button').set_sensitive(True)
+			self.theme_options_vbox.set_sensitive(True)
+			self.theme_options_table.set_sensitive(True)
 
 	def on_add_button_clicked(self, widget):
 		model = self.themes_tree.get_model()
@@ -173,6 +192,8 @@ class GajimThemesWindow:
 			_('Please first choose another for your current theme.'))
 			return
 		self.theme_options_vbox.set_sensitive(False)
+		self.theme_options_table.set_sensitive(False)
+		self.xml.get_widget('remove_button').set_sensitive(False)
 		gajim.config.del_per('themes', self.current_theme)
 		model.remove(iter)
 	

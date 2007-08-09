@@ -3,6 +3,7 @@
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -70,27 +71,28 @@ class VcardWindow:
 		self.account = account
 		self.gc_contact = gc_contact
 
-		self.xml.get_widget('no_user_avatar_label').set_no_show_all(True)
-		self.xml.get_widget('no_user_avatar_label').hide()
-		self.xml.get_widget('PHOTO_image').set_no_show_all(True)
-		self.xml.get_widget('PHOTO_image').hide()
-		image = gtk.Image()
-		self.photo_button = self.xml.get_widget('PHOTO_button')
-		self.photo_button.set_image(image)
-		self.nophoto_button = self.xml.get_widget('NOPHOTO_button')
+		# Get real jid
+		if gc_contact:
+			if gc_contact.jid:
+				self.real_jid = gc_contact.jid
+				if gc_contact.resource:
+					self.real_jid += '/' + gc_contact.resource
+			else:
+				self.real_jid = gc_contact.get_full_jid()
+		else:
+			self.real_jid = contact.get_full_jid()
+
 		puny_jid = helpers.sanitize_filename(contact.jid)
 		local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid) + \
 			'_local'
 		for extension in ('.png', '.jpeg'):
 			local_avatar_path = local_avatar_basepath + extension
 			if os.path.isfile(local_avatar_path):
+				image = self.xml.get_widget('custom_avatar_image')
 				image.set_from_file(local_avatar_path)
-				self.nophoto_button.set_no_show_all(True)
-				self.nophoto_button.hide()
+				image.show()
+				self.xml.get_widget('custom_avatar_label').show()
 				break
-		else:
-			self.photo_button.set_no_show_all(True)
-			self.photo_button.hide()
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
 		self.vcard_arrived = False
@@ -122,94 +124,6 @@ class VcardWindow:
 			ctrl = win.get_control(jid, self.account)
 			if win and ctrl.type_id != message_control.TYPE_GC:
 				ctrl.show_avatar()
-
-	def on_NOPHOTO_button_clicked(self, button):
-		def on_ok(widget, path_to_file):
-			filesize = os.path.getsize(path_to_file) # in bytes
-			invalid_file = False
-			msg = ''
-			if os.path.isfile(path_to_file):
-				stat = os.stat(path_to_file)
-				if stat[6] == 0:
-					invalid_file = True
-					msg = _('File is empty')
-			else:
-				invalid_file = True
-				msg = _('File does not exist')
-			if invalid_file:
-				dialogs.ErrorDialog(_('Could not load image'), msg)
-				return
-			try:
-				pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
-				if filesize > 16384: # 16 kb
-					# get the image at 'notification size'
-					# and hope that user did not specify in ACE crazy size
-					pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'tooltip')
-			except gobject.GError, msg: # unknown format
-				# msg should be string, not object instance
-				msg = str(msg)
-				dialogs.ErrorDialog(_('Could not load image'), msg)
-				return
-			puny_jid = helpers.sanitize_filename(self.contact.jid)
-			path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + '_local.png'
-			pixbuf.save(path_to_file, 'png')
-			self.dialog.destroy()
-			self.update_avatar_in_gui()
-
-			# rescale it
-			pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
-			image = self.photo_button.get_image()
-			image.set_from_pixbuf(pixbuf)
-			self.photo_button.show()
-			self.nophoto_button.hide()
-
-		def on_clear(widget):
-			self.dialog.destroy()
-			self.on_clear_button_clicked(widget)
-
-		self.dialog = dialogs.AvatarChooserDialog(on_response_ok = on_ok,
-			on_response_clear = on_clear)
-
-	def on_clear_button_clicked(self, widget):
-		# empty the image
-		image = self.photo_button.get_image()
-		image.set_from_pixbuf(None)
-		self.photo_button.hide()
-		self.nophoto_button.show()
-		# Delete file:
-		puny_jid = helpers.sanitize_filename(self.contact.jid)
-		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + '_local.png'
-		try:
-			os.remove(path_to_file)
-		except OSError:
-			gajim.log.debug('Cannot remove %s' % path_to_file)
-		self.update_avatar_in_gui()
-
-	def on_PHOTO_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
-		if event.button == 3 and self.avatar_encoded: # right click
-			menu = gtk.Menu()
-
-			# Try to get pixbuf
-#			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid)
-
-#			if pixbuf:
-#				nick = self.contact.get_shown_name()
-#				menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
-#				menuitem.connect('activate',
-#					gtkgui_helpers.on_avatar_save_as_menuitem_activate, self.jid,
-#					None, nick + '.jpeg')
-#				menu.append(menuitem)
-			# show clear
-			menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
-			menuitem.connect('activate', self.on_clear_button_clicked)
-			menu.append(menuitem)
-			menu.connect('selection-done', lambda w:w.destroy())
-			# show the menu
-			menu.show_all()
-			menu.popup(None, None, None, event.button, event.time)
-		elif event.button == 1: # left click
-			self.on_NOPHOTO_button_clicked(widget)
 
 	def on_vcard_information_window_destroy(self, widget):
 		if self.update_progressbar_timeout_id is not None:
@@ -334,7 +248,7 @@ class VcardWindow:
 	def fill_status_label(self):
 		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
 			return
-		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
 		connected_contact_list = []
 		for c in contact_list:
 			if c.show not in ('offline', 'error'):
@@ -415,8 +329,13 @@ class VcardWindow:
 			self.contact.status = ''
 
 		# Request list time status
-		gajim.connections[self.account].request_last_status_time(self.contact.jid,
-			self.contact.resource)
+		if self.gc_contact:
+			j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
+			gajim.connections[self.account].request_last_status_time(j, r,
+				self.contact.jid)
+		else:
+			gajim.connections[self.account].request_last_status_time(
+				self.contact.jid, self.contact.resource)
 
 		# do not wait for os_info if contact is not connected or has error
 		# additional check for observer is needed, as show is offline for him
@@ -424,12 +343,17 @@ class VcardWindow:
 		and not self.contact.is_observer():
 			self.os_info_arrived = True
 		else: # Request os info if contact is connected
-			gobject.idle_add(gajim.connections[self.account].request_os_info,
-				self.contact.jid, self.contact.resource)
+			if self.gc_contact:
+				j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
+				gobject.idle_add(gajim.connections[self.account].request_os_info,
+					j, r, self.contact.jid)
+			else:
+				gobject.idle_add(gajim.connections[self.account].request_os_info,
+					self.contact.jid, self.contact.resource)
 		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
 			'os': ''}}
 		i = 1
-		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
 		if contact_list:
 			for c in contact_list:
 				if c.resource != self.contact.resource:
@@ -454,7 +378,7 @@ class VcardWindow:
 		self.fill_status_label()
 
 		if self.gc_contact:
-			gajim.connections[self.account].request_vcard(self.contact.jid,
+			gajim.connections[self.account].request_vcard(self.real_jid,
 				self.gc_contact.get_full_jid())
 		else:
 			gajim.connections[self.account].request_vcard(self.contact.jid)
@@ -522,7 +446,7 @@ class ZeroconfVcardWindow:
 	def fill_status_label(self):
 		if self.xml.get_widget('information_notebook').get_n_pages() < 2:
 			return
-		contact_list = gajim.contacts.get_contact(self.account, self.contact.jid)
+		contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
 		# stats holds show and status message
 		stats = ''
 		one = True # Are we adding the first line ?

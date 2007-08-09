@@ -2,6 +2,8 @@
 ##
 ## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -20,7 +22,7 @@ class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
 	ask='', resource='', priority=0, keyID='', our_chatstate=None,
-	chatstate=None, last_status_time=None, msg_id = None, composing_jep = None):
+	chatstate=None, last_status_time=None, msg_id = None, composing_xep = None):
 		self.jid = jid
 		self.name = name
 		self.contact_name = '' # nick choosen by contact
@@ -37,6 +39,12 @@ class Contact:
 		self.priority = priority
 		self.keyID = keyID
 
+		# Capabilities; filled by caps.py/ConnectionCaps object
+		# every time it gets these from presence stanzas
+		self.caps_node=None
+		self.caps_ver=None
+		self.caps_exts=None
+
 		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
 		# we keep track of jep85 support with the peer by three extra states:
 		# None, False and 'ask'
@@ -47,9 +55,9 @@ class Contact:
 		self.our_chatstate = our_chatstate
 		self.msg_id = msg_id
 		# tell which JEP we're using for composing state
-		# None = have to ask, JEP-0022 = use this jep,
-		# JEP-0085 = use this jep, False = no composing support
-		self.composing_jep = composing_jep
+		# None = have to ask, XEP-0022 = use this jep,
+		# XEP-0085 = use this jep, False = no composing support
+		self.composing_xep = composing_xep
 		# this is contact's chatstate
 		self.chatstate = chatstate
 		self.last_status_time = last_status_time
@@ -153,10 +161,10 @@ class Contacts:
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=0, keyID='', our_chatstate=None,
-		chatstate=None, last_status_time=None, composing_jep=None):
+		chatstate=None, last_status_time=None, composing_xep=None):
 		return Contact(jid, name, groups, show, status, sub, ask, resource,
 			priority, keyID, our_chatstate, chatstate, last_status_time,
-			composing_jep)
+			composing_xep)
 	
 	def copy_contact(self, contact):
 		return self.create_contact(jid = contact.jid, name = contact.name,
@@ -208,28 +216,28 @@ class Contacts:
 		# remove metacontacts info
 		self.remove_metacontact(account, jid)
 
-	def get_contact(self, account, jid, resource = None):
-		'''Returns the list of contact instances for this jid (one per resource)
-		or [] if no resource is given
-		returns the contact instance for the given resource if it's given
-		or None if there is not'''
+	def get_contacts(self, account, jid):
+		'''Returns the list of contact instances for this jid.'''
 		if jid in self._contacts[account]:
-			contacts = self._contacts[account][jid]
+			return self._contacts[account][jid]
+		else:
+			return []
+	
+	def get_contact(self, account, jid, resource = None):
+		'''Returns the contact instance for the given resource if it's given else
+		the first contact is no resource is given or None if there is not'''
+		if jid in self._contacts[account]:
 			if not resource:
-				return contacts
-			for c in contacts:
+				return self._contacts[account][jid][0]
+			for c in self._contacts[account][jid]:
 				if c.resource == resource:
 					return c
-		if resource:
-			return None
-		return []
+		return None
 
-	def get_contacts_from_jid(self, account, jid):
-		'''we may have two or more resources on that jid'''
-		if jid in self._contacts[account]:
-			contacts_instances = self._contacts[account][jid]
-			return contacts_instances
-		return []
+	def get_contact_from_full_jid(self, account, fjid):
+		''' Get Contact object for specific resource of given jid'''
+		barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
+		return self.get_contact(account, barejid, resource)
 
 	def get_highest_prio_contact_from_contacts(self, contacts):
 		if not contacts:
@@ -241,7 +249,7 @@ class Contacts:
 		return prim_contact
 
 	def get_contact_with_highest_priority(self, account, jid):
-		contacts = self.get_contacts_from_jid(account, jid)
+		contacts = self.get_contacts(account, jid)
 		if not contacts and '/' in jid:
 			# jid may be a fake jid, try it
 			room, nick = jid.split('/', 1)
@@ -258,7 +266,7 @@ class Contacts:
 		'''Returns all contacts in the given group'''
 		group_contacts = []
 		for jid in self._contacts[account]:
-			contacts = self.get_contacts_from_jid(account, jid)
+			contacts = self.get_contacts(account, jid)
 			if group in contacts[0].groups:
 				group_contacts += contacts
 		return group_contacts

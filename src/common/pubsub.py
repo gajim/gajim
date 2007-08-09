@@ -92,7 +92,7 @@ class ConnectionPubSub:
 		try:
 			cb, args, kwargs = self.__callbacks.pop(stanza.getID())
 			cb(conn, stanza, *args, **kwargs)
-		except KeyError:
+		except:
 			pass
 
 	def request_pb_configuration(self, jid, node):

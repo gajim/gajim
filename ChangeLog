@@ -1,5 +1,15 @@
-Gajim 0.11.1 (XX February 2007)
+Gajim 0.11.1 (18 February 2007)
+  * Fixes in gajim-remote and the way XMPP URI are handled
+  * Fix Idle under Windows
+  * Fix Gajim under non-ascii languages Windows
+  * Fix International Domain Name usage
+  * Fix when removing active privacy list
+  * Fix problem with adhoc command and multi-step forms
   * Fixed avatars cache problems in group chats
+  * KDE integration for XMPP URI
+  * Support of Banshee Music player
+  * Support of XEP-0202 (Entity Time)
+  * Support of XEP-0199 (XMPP Ping)
 
 Gajim 0.11 (19 December 2006)
   * New build system, using GNU autotools. See README.html

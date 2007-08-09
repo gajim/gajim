@@ -13,7 +13,7 @@ class WrongFieldValue(Error): pass	# when we get xmpp.Node which contains bad fi
 class ExtendedNode(xmpp.Node, object):
 	@classmethod
 	def __new__(cls,  *a, **b):
-		if 'extend' not in b.keys():
+		if 'extend' not in b.keys() or not b['extend']:
 			return object.__new__(cls)
 
 		extend = b['extend']
@@ -76,7 +76,9 @@ def ExtendForm(node):
 		return SimpleDataForm(extend=node)
 
 class DataField(ExtendedNode):
-	""" Keeps data about one field - var, field type, labels, instructions... """
+	""" Keeps data about one field - var, field type, labels, instructions...
+	Base class for different kinds of fields. Use Field() function to
+	construct one of these. """
 	def __init__(self, typ=None, var=None, value=None, label=None, desc=None, required=False,
 		options=None, extend=None):
 
@@ -390,8 +392,6 @@ class MultipleDataForm(DataForm):
 		DataForm.__init__(self, type=type, title=title, instructions=instructions, extend=extend)
 		# all records, recorded into DataRecords
 		if extend is None:
-			# we have to build this object from scratch
-			xmpp.Node.__init__(self)
 
 			if items is not None: self.items = items
 		else:

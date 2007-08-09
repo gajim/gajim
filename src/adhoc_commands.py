@@ -53,6 +53,7 @@ class CommandWindow:
 		# retrieving widgets from xml
 		self.xml = gtkgui_helpers.get_glade('adhoc_commands_window.glade')
 		self.window = self.xml.get_widget('adhoc_commands_window')
+		self.window.connect('delete-event', self.on_adhoc_commands_window_delete_event)
 		for name in ('back_button', 'forward_button',
 			'execute_button','close_button','stages_notebook',
 			'retrieving_commands_stage_vbox',
@@ -101,7 +102,7 @@ class CommandWindow:
 		self.remove_pulsing()
 
 	def on_adhoc_commands_window_delete_event(self, *anything):
-		return self.stage_adhoc_commands_window_delete_event(self, *anything)
+		return self.stage_adhoc_commands_window_delete_event(self.window)
 
 	def __del__(self):
 		print "Object has been deleted."
@@ -171,7 +172,7 @@ class CommandWindow:
 		for (commandnode, commandname) in self.commandlist:
 			radio = gtk.RadioButton(first_radio, label=commandname)
 			radio.connect("toggled", self.on_command_radiobutton_toggled, commandnode)
-			if first_radio is None:
+			if not first_radio:
 				first_radio = radio
 				self.commandnode = commandnode
 			self.command_list_vbox.pack_start(radio, expand=False)
@@ -252,6 +253,7 @@ class CommandWindow:
 			else:
 				self.window.destroy()
 			return False
+		return True
 
 	def stage3_back_button_clicked(self, widget):
 		self.stage3_submit_form('prev')
@@ -264,10 +266,10 @@ class CommandWindow:
 
 	def stage3_submit_form(self, action='execute'):
 		self.data_form_widget.set_sensitive(False)
-		if self.data_form_widget.get_data_form() is None:
-			self.data_form_widget.hide()
-		else:
+		if self.data_form_widget.get_data_form():
 			self.data_form_widget.data_form.type='submit'
+		else:
+			self.data_form_widget.hide()
 
 		self.close_button.set_sensitive(True)
 		self.back_button.set_sensitive(False)
@@ -284,13 +286,13 @@ class CommandWindow:
 		self.remove_pulsing()
 		self.sending_form_progressbar.hide()
 
-		if self.sessionid is None:
+		if not self.sessionid:
 			self.sessionid = command.getAttr('sessionid')
 
 		self.form_status = command.getAttr('status')
 
 		self.commandnode = command.getAttr('node')
-		if command.getTag('x') is not None:
+		if command.getTag('x'):
 			self.dataform = dataforms.ExtendForm(node=command.getTag('x'))
 
 			self.data_form_widget.set_sensitive(True)
@@ -307,17 +309,17 @@ class CommandWindow:
 		else:
 			self.data_form_widget.hide()
 
-		action = command.getTag('action')
-		if action is None:
+		actions = command.getTag('actions')
+		if actions:
+			# actions, actions, actions...
+			self.close_button.set_sensitive(True)
+			self.back_button.set_sensitive(actions.getTag('prev') is not None)
+			self.forward_button.set_sensitive(actions.getTag('next') is not None)
+			self.execute_button.set_sensitive(True)
+		else:
 			self.close_button.set_sensitive(True)
 			self.back_button.set_sensitive(False)
 			self.forward_button.set_sensitive(False)
-			self.execute_button.set_sensitive(True)
-		else:
-			# actions, actions, actions...
-			self.close_button.set_sensitive(True)
-			self.back_button.set_sensitive(action.getTag('prev') is not None)
-			self.forward_button.set_sensitive(action.getTag('next') is not None)
 			self.execute_button.set_sensitive(True)
 
 		if self.form_status == 'completed':
@@ -329,7 +331,7 @@ class CommandWindow:
 			self.stage_adhoc_commands_window_delete_event = self.stage3_close_button_clicked
 
 		note = command.getTag('note')
-		if note is not None:
+		if note:
 			self.notes_label.set_text(note.getData().decode('utf-8'))
 			self.notes_label.set_no_show_all(False)
 			self.notes_label.show()
@@ -369,9 +371,9 @@ class CommandWindow:
 		# close old stage
 		self.stage_finish()
 
-		assert errorid is not None or error is not None
+		assert errorid or error
 
-		if errorid is not None:
+		if errorid:
 			# we've got error code, display appropriate message
 			try:
 				errorname = xmpp.NS_STANZAS + ' ' + str(errorid)
@@ -380,7 +382,7 @@ class CommandWindow:
 				del errorname, errordesc
 			except KeyError:	# when stanza doesn't have error description
 				error = 'Service returned an error.'
-		elif error is not None:
+		elif error:
 			# we've got error message
 			pass
 		else:
@@ -409,7 +411,7 @@ class CommandWindow:
 	def setup_pulsing(self, progressbar):
 		'''Set the progressbar to pulse. Makes a custom
 		function to repeatedly call progressbar.pulse() method.'''
-		assert self.pulse_id is None
+		assert not self.pulse_id
 		assert isinstance(progressbar, gtk.ProgressBar)
 
 		def callback():
@@ -421,7 +423,7 @@ class CommandWindow:
 
 	def remove_pulsing(self):
 		'''Stop pulsing, useful when especially when removing widget.'''
-		if self.pulse_id is not None:
+		if self.pulse_id:
 			gobject.source_remove(self.pulse_id)
 		self.pulse_id=None
 
@@ -436,7 +438,7 @@ class CommandWindow:
 			# FIXME: move to connection_handlers.py
 			# is error => error stage
 			error = response.getError()
-			if error is not None:
+			if error:
 				# extracting error description from xmpp/protocol.py
 				self.stage5(errorid = error)
 				return
@@ -470,10 +472,10 @@ class CommandWindow:
 				'action':action
 			})
 
-		if self.sessionid is not None:
+		if self.sessionid:
 			cmdnode.setAttr('sessionid', self.sessionid)
 
-		if self.data_form_widget.data_form is not None:
+		if self.data_form_widget.data_form:
 #			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
 			# FIXME: simplified form to send
 			
@@ -482,7 +484,7 @@ class CommandWindow:
 		def callback(response):
 			# FIXME: move to connection_handlers.py
 			err = response.getError()
-			if err is not None:
+			if err:
 				self.stage5(errorid = err)
 			else:
 				self.stage3_next_form(response.getTag('command'))
@@ -491,8 +493,8 @@ class CommandWindow:
 
 	def send_cancel(self):
 		'''Send the command with action='cancel'. '''
-		assert self.commandnode is not None
-		if self.sessionid is not None and self.account.connection:
+		assert self.commandnode
+		if self.sessionid and self.account.connection:
 			# we already have sessionid, so the service sent at least one reply.
 			stanza = xmpp.Iq(typ='set', to=self.jid)
 			stanza.addChild('command', attrs={

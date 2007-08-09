@@ -348,9 +348,10 @@ class Socks5:
 	def __init__(self, idlequeue, host, port, initiator, target, sid):
 		if host is not None:
 			try:
-				self.host = socket.gethostbyname(host)
+				self.host = host
+				self.ais = socket.getaddrinfo(host, port, socket.AF_UNSPEC, socket.SOCK_STREAM)
 			except socket.gaierror:
-				self.host = None
+				self.ais = None
 		self.idlequeue = idlequeue
 		self.fd = -1
 		self.port = port
@@ -793,6 +794,8 @@ class Socks5Listener(IdleObject):
 		only pollin events though
 		'''
 		self.port = port
+		self.ais = socket.getaddrinfo(None, port, socket.AF_UNSPEC,
+					socket.SOCK_STREAM, socket.SOL_TCP, socket.AI_PASSIVE)
 		self.queue_idx = -1	
 		self.idlequeue = idlequeue
 		self.queue = None
@@ -801,14 +804,21 @@ class Socks5Listener(IdleObject):
 		self.fd = -1
 		
 	def bind(self):
-		self._serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-		self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-		# will fail when port as busy, or we don't have rights to bind
-		try:
-			self._serv.bind(('0.0.0.0', self.port))
-		except Exception, e:
+		for ai in self.ais:
+			#try the different possibilities (ipv6, ipv4, etc.)
+			self._serv = socket.socket(*ai[:3])
+			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+			self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+			# will fail when port as busy, or we don't have rights to bind
+			try:
+				self._serv.bind(ai[4])
+				self.ai = ai
+				break
+			except:
+				self.ai = None
+				continue
+		if not self.ai:
 			# unable to bind, show error dialog
 			return None
 		self._serv.listen(socket.SOMAXCONN)
@@ -884,9 +894,18 @@ class Socks5Receiver(Socks5, IdleObject):
 	
 	def connect(self):
 		''' create the socket and plug it to the idlequeue '''
-		self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		# this will not block the GUI
-		self._sock.setblocking(False)
+		for ai in self.ais:
+			try:
+				self._sock=socket.socket(*ai[:3])
+				# this will not block the GUI
+				self._sock.setblocking(False)
+				self._server=ai[4]
+				break
+			except:
+				if sys.exc_value[0] == errno.EINPROGRESS:
+					break
+				#for all errors, we try other addresses
+				continue
 		self.fd = self._sock.fileno()
 		self.state = 0 # about to be connected
 		self.idlequeue.plug_idle(self, True, False)
@@ -950,7 +969,7 @@ class Socks5Receiver(Socks5, IdleObject):
 	
 	def do_connect(self):
 		try:
-			self._sock.connect((self.host, self.port))
+			self._sock.connect(self._server)
 			self._sock.setblocking(False)
 			self._send=self._sock.send
 			self._recv=self._sock.recv

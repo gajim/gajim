@@ -76,10 +76,7 @@ class HistoryManager:
 		self.search_results_scrolledwindow = xml.get_widget(
 			'search_results_scrolledwindow')
 		self.welcome_label = xml.get_widget('welcome_label')
-			
-		self.logs_scrolledwindow.set_no_show_all(True)
-		self.search_results_scrolledwindow.set_no_show_all(True)
-		
+
 		self.jids_already_in = [] # holds jids that we already have in DB
 		self.AT_LEAST_ONE_DELETION_DONE = False
 		

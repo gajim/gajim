@@ -76,7 +76,7 @@ def _gen_agent_type_info():
 		('_jid', 'weather'):			(False, 'weather.png'),
 		('gateway', 'sip'):			(False, 'sip.png'),
 		('directory', 'user'):		(None, 'jud.png'),
-		('pubsub', 'generic'):		(None, 'pubsub.png'),
+		('pubsub', 'generic'):		(PubSubBrowser, 'pubsub.png'),
 		('pubsub', 'service'):		(PubSubBrowser, 'pubsub.png'),
 		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
 
@@ -438,8 +438,6 @@ _('Without a connection, you can not browse available services'))
 			self.on_services_treeview_selection_changed)
 		self.services_scrollwin = self.xml.get_widget('services_scrollwin')
 		self.progressbar = self.xml.get_widget('services_progressbar')
-		self.progressbar.set_no_show_all(True)
-		self.progressbar.hide()
 		self.banner = self.xml.get_widget('banner_agent_label')
 		self.banner_icon = self.xml.get_widget('banner_agent_icon')
 		self.banner_eventbox = self.xml.get_widget('banner_agent_eventbox')
@@ -447,8 +445,6 @@ _('Without a connection, you can not browse available services'))
 		self.banner.realize()
 		self.paint_banner()
 		self.filter_hbox = self.xml.get_widget('filter_hbox')
-		self.filter_hbox.set_no_show_all(True)
-		self.filter_hbox.hide()
 		self.action_buttonbox = self.xml.get_widget('action_buttonbox')
 
 		# Address combobox
@@ -1047,7 +1043,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		# as it was before setting the timeout
 		if props and self.tooltip.id == props[0]:
 			# bounding rectangle of coordinates for the cell within the treeview
-			rect =  view.get_cell_area(props[0], props[1])
+			rect = view.get_cell_area(props[0], props[1])
 			# position of the treeview on the screen
 			position = view.window.get_origin()
 			self.tooltip.show_tooltip(state, rect.height, position[1] + rect.y)
@@ -1554,10 +1550,10 @@ class MucBrowser(AgentBrowser):
 		self.join_button = None
 
 	def _create_treemodel(self):
-		# JID, node, name, users, description, fetched
+		# JID, node, name, users_int, users_str, description, fetched
 		# This is rather long, I'd rather not use a data_func here though.
 		# Users is a string, because want to be able to leave it empty.
-		self.model = gtk.ListStore(str, str, str, str, str, bool)
+		self.model = gtk.ListStore(str, str, str, int, str, str, bool)
 		self.model.set_sort_column_id(2, gtk.SORT_ASCENDING)
 		self.window.services_treeview.set_model(self.model)
 		# Name column
@@ -1567,20 +1563,23 @@ class MucBrowser(AgentBrowser):
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = 2)
+		col.set_sort_column_id(2)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
 		# Users column
 		col = gtk.TreeViewColumn(_('Users'))
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text = 3)
+		col.set_attributes(renderer, text = 4)
+		col.set_sort_column_id(3)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
 		# Description column
 		col = gtk.TreeViewColumn(_('Description'))
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text = 4)
+		col.set_attributes(renderer, text = 5)
+		col.set_sort_column_id(4)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
 		# Id column
@@ -1588,9 +1587,11 @@ class MucBrowser(AgentBrowser):
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = 0)
+		col.set_sort_column_id(0)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
 		self.window.services_treeview.set_headers_visible(True)
+		self.window.services_treeview.set_headers_clickable(True)
 		# Source id for idle callback used to start disco#info queries.
 		self._fetch_source = None
 		# Query failure counter
@@ -1692,7 +1693,7 @@ class MucBrowser(AgentBrowser):
 			# We're at the end of the model, we can leave end=None though.
 			pass
 		while iter and self.model.get_path(iter) != end:
-			if not self.model.get_value(iter, 5):
+			if not self.model.get_value(iter, 6):
 				jid = self.model.get_value(iter, 0).decode('utf-8')
 				node = self.model.get_value(iter, 1).decode('utf-8')
 				self.cache.get_info(jid, node, self._agent_info)
@@ -1723,13 +1724,14 @@ class MucBrowser(AgentBrowser):
 			if iter:
 				if name:
 					self.model[iter][2] = name
-				self.model[iter][3] = len(items)		# The number of users
-				self.model[iter][5] = True
+				self.model[iter][3] = len(items) # The number of users
+				self.model[iter][4] = str(len(items)) # The number of users
+				self.model[iter][6] = True
 		self._fetch_source = None
 		self._query_visible()
 
 	def _add_item(self, jid, node, item, force):
-		self.model.append((jid, node, item.get('name', ''), '', '', False))
+		self.model.append((jid, node, item.get('name', ''), -1, '', '', False))
 		if not self._fetch_source:
 			self._fetch_source = gobject.idle_add(self._start_info_query)
 
@@ -1743,14 +1745,15 @@ class MucBrowser(AgentBrowser):
 				users = form.getField('muc#roominfo_occupants')
 				descr = form.getField('muc#roominfo_description')
 				if users:
-					self.model[iter][3] = users.getValue()
+					self.model[iter][3] = int(users.getValue())
+					self.model[iter][4] = users.getValue()
 				if descr:
-					self.model[iter][4] = descr.getValue()
+					self.model[iter][5] = descr.getValue()
 				# Only set these when we find a form with additional info
 				# Some servers don't support forms and put extra info in
 				# the name attribute, so we preserve it in that case.
 				self.model[iter][2] = name
-				self.model[iter][5] = True
+				self.model[iter][6] = True
 				break
 		else:
 			# We didn't find a form, switch to alternate query mode
@@ -1791,8 +1794,9 @@ class DiscussionGroupsBrowser(AgentBrowser):
 	def _create_treemodel(self):
 		''' Create treemodel for the window. '''
 		# JID, node, name (with description) - pango markup, dont have info?, subscribed?
-		self.model = gtk.ListStore(str, str, str, bool, bool)
-		self.model.set_sort_column_id(3, gtk.SORT_ASCENDING)
+		self.model = gtk.TreeStore(str, str, str, bool, bool)
+		# sort by name
+		self.model.set_sort_column_id(2, gtk.SORT_ASCENDING)
 		self.window.services_treeview.set_model(self.model)
 
 		# Name column
@@ -1804,6 +1808,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		col.set_attributes(renderer, markup=2)
 		col.set_resizable(True)
 		self.window.services_treeview.insert_column(col, -1)
+		self.window.services_treeview.set_headers_visible(True)
 
 		# Subscription state
 		renderer = gtk.CellRendererToggle()
@@ -1813,7 +1818,29 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		col.set_resizable(False)
 		self.window.services_treeview.insert_column(col, -1)
 
-		self.window.services_treeview.set_headers_visible(True)
+		# Node Column
+		renderer = gtk.CellRendererText()
+		col = gtk.TreeViewColumn(_('Node'))
+		col.pack_start(renderer)
+		col.set_attributes(renderer, markup=1)
+		col.set_resizable(True)
+		self.window.services_treeview.insert_column(col, -1)
+
+	def _add_items(self, jid, node, items, force):
+		for item in items:
+			jid = item['jid']
+			node = item.get('node', '')
+			self._total_items += 1
+			self._add_item(jid, node, item, force)
+
+	def _in_list_foreach(self, model, path, iter, node):
+		if model[path][1] == node:
+			self.in_list = True
+
+	def _in_list(self, node):
+		self.in_list = False
+		self.model.foreach(self._in_list_foreach, node)
+		return self.in_list
 
 	def _add_item(self, jid, node, item, force):
 		''' Called when we got basic information about new node from query.
@@ -1830,7 +1857,24 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		name = gobject.markup_escape_text(name)
 		name = '<b>%s</b>' % name
 
-		self.model.append((jid, node, name, dunno, subscribed))
+		node_splitted = node.split('/')
+		parent_iter = None
+		while len(node_splitted) > 1:
+			parent_node = node_splitted.pop(0)
+			parent_iter = self._get_child_iter(parent_iter, parent_node)
+			node_splitted[0] = parent_node + '/' + node_splitted[0]
+		if not self._in_list(node):
+			self.model.append(parent_iter, (jid, node, name, dunno, subscribed))
+			self.cache.get_items(jid, node, self._add_items, force = force,
+				args = (force,))
+
+	def _get_child_iter(self, parent_iter, node):
+		child_iter = self.model.iter_children(parent_iter)
+		while child_iter:
+			if self.model[child_iter][1] == node:
+				return child_iter
+			child_iter = self.model.iter_next(child_iter)
+		return None
 
 	def _add_actions(self):
 		self.post_button = gtk.Button(label=_('New post'), use_underline=True)
@@ -1905,7 +1949,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		model, iter = self.window.services_treeview.get_selection().get_selected()
 		if iter is None: return
 
-		groupnode = model.get_value(iter, 1)    # 1 = groupnode
+		groupnode = model.get_value(iter, 1) # 1 = groupnode
 		
 		gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._unsubscribeCB, groupnode)
 

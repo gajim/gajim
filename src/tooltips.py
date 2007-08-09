@@ -4,6 +4,7 @@
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -161,13 +162,15 @@ class StatusTable:
 		self.table = gtk.Table(4, 1)
 		self.table.set_property('column-spacing', 2)
 	
-	def add_text_row(self, text):
+	def add_text_row(self, text, col_inc = 0):
+		self.current_row += 1
 		self.text_label = gtk.Label()
 		self.text_label.set_line_wrap(True)
 		self.text_label.set_alignment(0, 0)
 		self.text_label.set_selectable(False)
 		self.text_label.set_markup(text)
-		self.table.attach(self.text_label, 1, 4, 1, 2)
+		self.table.attach(self.text_label, 1 + col_inc, 4, self.current_row,
+			self.current_row + 1)
 		
 	def get_status_info(self, resource, priority, show, status):
 		str_status = resource + ' (' + unicode(priority) + ')'
@@ -226,7 +229,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		iconset = gajim.config.get('iconset')
 		if not iconset:
 			iconset = 'dcraven'
-		file_path = os.path.join(gajim.DATA_DIR, 'iconsets', iconset, '16x16')
+		file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		for acct in accounts:
 			message = acct['message']
 			# before reducing the chars we should assure we send unicode, else 
@@ -248,21 +251,19 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				self.add_status_row(file_path, acct['show'], 
 					gobject.markup_escape_text(acct['name']) 
 					, show_lock=show_lock)
+			for line in acct['event_lines']:
+				self.add_text_row('  ' + line, 2)
 
 	def populate(self, data):
 		self.create_window()
 		self.create_table()
-		accounts = helpers.get_accounts_info()
-		if len(accounts) > 1:
-			self.table.resize(2, 1)
-			self.fill_table_with_accounts(accounts)
+
+		accounts = helpers.get_notification_icon_tooltip_dict()
+		self.table.resize(2, 1)
+		self.fill_table_with_accounts(accounts)
 		self.hbox = gtk.HBox()
 		self.table.set_property('column-spacing', 1)
 
-		text = helpers.get_notification_icon_tooltip_text()
-		text = gobject.markup_escape_text(text)
-		
-		self.add_text_row(text)
 		self.hbox.add(self.table)
 		self.win.add(self.hbox)
 
@@ -297,7 +298,7 @@ class GCTooltip(BaseTooltip):
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities
-				status = helpers.reduce_chars_newlines(status, 100, 5)
+				status = helpers.reduce_chars_newlines(status, 300, 5)
 				status = '<i>' +\
 					gobject.markup_escape_text(status) + '</i>'
 				properties.append((status, None))
@@ -352,6 +353,7 @@ class GCTooltip(BaseTooltip):
 					vertical_fill, 0, 0)
 			else:
 				label.set_markup(property[0])
+				label.set_line_wrap(True)
 				vcard_table.attach(label, 1, 3, vcard_current_row,
 					vcard_current_row + 1, gtk.FILL, vertical_fill, 0)
 		
@@ -377,7 +379,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		self.create_table()
 		if not contacts or len(contacts) == 0:
 			# Tooltip for merged accounts row
-			accounts = helpers.get_accounts_info()
+			accounts = helpers.get_notification_icon_tooltip_dict()
 			self.table.resize(2, 1)
 			self.spacer_label = ''
 			self.fill_table_with_accounts(accounts)
@@ -441,8 +443,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				iconset = gajim.config.get('iconset')
 				if not iconset:
 					iconset = 'dcraven'
-				file_path = os.path.join(gajim.DATA_DIR,
-					'iconsets', iconset, '16x16')
+				file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 
 			contact_keys = contacts_dict.keys()
 			contact_keys.sort()

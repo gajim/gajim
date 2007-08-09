@@ -4,6 +4,8 @@
 ## Copyright (C) 2006-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -129,13 +131,39 @@ class ChatControlBase(MessageControl):
 		id = self.widget.connect('key_press_event', self._on_keypress_event)
 		self.handlers[id] = self.widget
 
+		# Create banner and connect signals
 		widget = self.xml.get_widget('banner_eventbox')
+		widget.set_property('height-request', gajim.config.get('chat_avatar_height'))
 		id = widget.connect('button-press-event',
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id] = widget
+		# Init DND
+		self.TARGET_TYPE_URI_LIST = 80
+		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ),
+				('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0)]
+		id = self.widget.connect('drag_data_received',
+			self._on_drag_data_received)
+		self.handlers[id] = self.widget
+		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
+			gtk.DEST_DEFAULT_HIGHLIGHT |
+			gtk.DEST_DEFAULT_DROP,
+			self.dnd_list, gtk.gdk.ACTION_COPY)
 
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
+		# FIXME: DND on non editable TextView, find a better way
+		self.drag_entered = False
+		id = self.conv_textview.tv.connect('drag_data_received',
+			self._on_drag_data_received)
+		self.handlers[id] = self.conv_textview.tv
+		id = self.conv_textview.tv.connect('drag_motion', self._on_drag_motion)
+		self.handlers[id] = self.conv_textview.tv
+		id = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
+		self.handlers[id] = self.conv_textview.tv
+		self.conv_textview.tv.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
+			gtk.DEST_DEFAULT_HIGHLIGHT |
+			gtk.DEST_DEFAULT_DROP,
+			self.dnd_list, gtk.gdk.ACTION_COPY)
 
 		self.conv_scrolledwindow = self.xml.get_widget(
 			'conversation_scrolledwindow')
@@ -149,6 +177,7 @@ class ChatControlBase(MessageControl):
 		self.handlers[id] = widget
 		self.scroll_to_end_id = None
 		self.was_at_the_end = True
+
 		# add MessageTextView to UI and connect signals
 		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
@@ -164,6 +193,13 @@ class ChatControlBase(MessageControl):
 		id = self.msg_textview.connect('populate_popup',
 			self.on_msg_textview_populate_popup)
 		self.handlers[id] = self.msg_textview
+		# Setup DND
+		id = self.msg_textview.connect('drag_data_received',
+			self._on_drag_data_received)
+		self.handlers[id] = self.msg_textview
+		self.msg_textview.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
+			gtk.DEST_DEFAULT_HIGHLIGHT,
+			self.dnd_list, gtk.gdk.ACTION_COPY)
 	
 		self.update_font()
 
@@ -481,6 +517,22 @@ class ChatControlBase(MessageControl):
 			self.handle_message_textview_mykey_press(widget, event_keyval,
 				event_keymod)
 
+	def _on_drag_data_received(self, widget, context, x, y, selection,
+		target_type, timestamp):
+		pass  # Derived classes SHOULD implement this method
+
+	def _on_drag_leave(self, widget, context, time):
+		# FIXME: DND on non editable TextView, find a better way
+		self.drag_entered = False
+		self.conv_textview.tv.set_editable(False)
+
+	def _on_drag_motion(self, widget, context, x, y, time):
+		# FIXME: DND on non editable TextView, find a better way
+		if not self.drag_entered:
+			# We drag new data over the TextView, make it editable to catch dnd
+			self.drag_entered_conv = True
+			self.conv_textview.tv.set_editable(True)
+
 	def _process_command(self, message):
 		if not message or message[0] != '/':
 			return False
@@ -496,23 +548,23 @@ class ChatControlBase(MessageControl):
 			self.clear(self.msg_textview) # clear message textview too
 			return True
 		elif message == 'compact' and not len(message_array):
-			self.chat_buttons_set_visible(not self.hide_chat_buttons_current)
+			self.chat_buttons_set_visible(not self.hide_chat_buttons)
 			self.clear(self.msg_textview)
 			return True
 		return False
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None,
-	msg_id = None, composing_jep = None, resource = None):
+	msg_id = None, composing_xep = None, resource = None,
+	process_command = True):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
 			return 1
 
-
-		if not self._process_command(message):
+		if not process_command or not self._process_command(message):
 			ret = MessageControl.send_message(self, message, keyID, type = type,
 				chatstate = chatstate, msg_id = msg_id,
-				composing_jep = composing_jep, resource = resource,
+				composing_xep = composing_xep, resource = resource,
 				user_nick = self.user_nick)
 			if ret:
 				return ret
@@ -569,7 +621,6 @@ class ChatControlBase(MessageControl):
 			full_jid != self.parent_win.get_active_jid() or \
 			not self.parent_win.is_active() or not end)) or \
 			(gc_message and \
-			gajim.interface.minimized_controls.has_key(self.account) and \
 			jid in gajim.interface.minimized_controls[self.account])) and \
 			kind in ('incoming', 'incoming_queue'):
 				# we want to have save this message in events list
@@ -667,31 +718,21 @@ class ChatControlBase(MessageControl):
 			gajim.interface.instances['logs'][jid] = \
 				history_window.HistoryWindow(jid, self.account)
 
-	def _on_compact_view_menuitem_activate(self, widget):
-		isactive = widget.get_active()
-		self.chat_buttons_set_visible(isactive)
-
-	def _on_minimize_menuitem_activate(self, widget):
+	def on_minimize_menuitem_toggled(self, widget):
 		'''When a grouchat is minimized, unparent the tab, put it in roster etc'''
-		win = gajim.interface.msg_win_mgr.get_window(self.contact.jid, self.account)
-		ctrl = win.get_control(self.contact.jid, self.account)
-
-		ctrl_page = win.notebook.page_num(ctrl.widget)
-		control = win.notebook.get_nth_page(ctrl_page)
-
-		win.notebook.remove_page(ctrl_page)
-		control.unparent()
-		ctrl.parent_win = None
-
-		if not gajim.interface.minimized_controls.has_key(self.account):
-			gajim.interface.minimized_controls[self.account] = {}
-		gajim.interface.minimized_controls[self.account][self.contact.jid] = ctrl
-
-		del win._controls[self.account][self.contact.jid]
-
-		win.check_tabs()
-		gajim.interface.roster.add_groupchat_to_roster(self.account,
-			self.contact.jid, status = self.subject)
+		old_value = False
+		minimized_gc = gajim.config.get_per('accounts', self.account,
+			'minimized_gc').split()
+		if self.contact.jid in minimized_gc:
+			old_value = True
+		minimize = widget.get_active()
+		if minimize and not self.contact.jid in minimized_gc:
+			minimized_gc.append(self.contact.jid)
+		if not minimize and self.contact.jid in minimized_gc:
+			minimized_gc.remove(self.contact.jid)
+		if old_value != minimize:
+			gajim.config.set_per('accounts', self.account, 'minimized_gc',
+				' '.join(minimized_gc))
 
 	def set_control_active(self, state):
 		if state:
@@ -825,11 +866,14 @@ class ChatControlBase(MessageControl):
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			groupchat_control = gajim.interface.msg_win_mgr.get_control(
 				room_jid, self.account)
-			if not groupchat_control and \
-			gajim.interface.minimized_controls.has_key(self.account) and \
-			room_jid in gajim.interface.minimized_controls[self.account]:
+			if room_jid in gajim.interface.minimized_controls[self.account]:
 				groupchat_control = \
 					gajim.interface.minimized_controls[self.account][room_jid]
+			contact = \
+				gajim.contacts.get_contact_with_highest_priority(self.account, \
+				room_jid)
+			if contact:
+				gajim.interface.roster.draw_contact(room_jid, self.account)
 			groupchat_control.draw_contact(nick)
 			mw = gajim.interface.msg_win_mgr.get_window(room_jid, self.account)
 			if mw:
@@ -903,7 +947,7 @@ class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
-	CHAT_CMDS = ['clear', 'compact', 'help', 'ping']
+	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping', 'say']
 	
 	def __init__(self, parent_win, contact, acct, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -915,21 +959,10 @@ class ChatControl(ChatControlBase):
 		id = widget.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = widget
 
-		hide_chat_buttons_always = gajim.config.get(
-			'always_hide_chat_buttons')
-		self.chat_buttons_set_visible(hide_chat_buttons_always)
+		compact_view = gajim.config.get('compact_view')
+		self.chat_buttons_set_visible(compact_view)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_chat_banner'))
-		# Initialize drag-n-drop
-		self.TARGET_TYPE_URI_LIST = 80
-		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ) ]
-		id = self.widget.connect('drag_data_received',
-			self._on_drag_data_received)
-		self.handlers[id] = self.widget
-		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
-			gtk.DEST_DEFAULT_HIGHLIGHT |
-			gtk.DEST_DEFAULT_DROP,
-			self.dnd_list, gtk.gdk.ACTION_COPY)
 
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be per jid
@@ -1085,6 +1118,8 @@ class ChatControl(ChatControlBase):
 		jid = contact.jid
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
+		banner_eventbox = self.xml.get_widget('banner_eventbox')
+		
 		name = contact.get_shown_name()
 		if self.resource:
 			name += '/' + self.resource
@@ -1111,8 +1146,10 @@ class ChatControl(ChatControlBase):
 
 		status = contact.status
 		if status is not None:
+			self.status_tooltip.set_tip(banner_eventbox, status)
+			self.status_tooltip.enable()
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
-			status = helpers.reduce_chars_newlines(status, max_lines = 2)
+			status = helpers.reduce_chars_newlines(status, max_lines = 1)
 		status_escaped = gobject.markup_escape_text(status)
 
 		font_attrs, font_attrs_small = self.get_font_attrs()
@@ -1121,12 +1158,12 @@ class ChatControl(ChatControlBase):
 		if cs and st in ('composing_only', 'all'):
 			if contact.show == 'offline':
 				chatstate = ''
-			elif contact.composing_jep == 'JEP-0085':
+			elif contact.composing_xep == 'XEP-0085':
 				if st == 'all' or cs == 'composing':
 					chatstate = helpers.get_uf_chatstate(cs)
 				else:
 					chatstate = ''
-			elif contact.composing_jep == 'JEP-0022':
+			elif contact.composing_xep == 'XEP-0022':
 				if cs in ('composing', 'paused'):
 					# only print composing, paused
 					chatstate = helpers.get_uf_chatstate(cs)
@@ -1145,9 +1182,6 @@ class ChatControl(ChatControlBase):
 		if status_escaped:
 			label_text += '\n<span %s>%s</span>' %\
 				(font_attrs_small, status_escaped)
-			banner_eventbox = self.xml.get_widget('banner_eventbox')
-			self.status_tooltip.set_tip(banner_eventbox, status)
-			self.status_tooltip.enable()
 		else:
 			self.status_tooltip.disable()
 		# setup the label that holds name and jid
@@ -1196,6 +1230,9 @@ class ChatControl(ChatControlBase):
 		if message_array == ['']:
 			message_array = []
 
+		if command == 'me':
+			return False # This is not really a command
+
 		if command == 'help':
 			if len(message_array):
 				subcommand = message_array.pop(0)
@@ -1204,9 +1241,18 @@ class ChatControl(ChatControlBase):
 				self.get_command_help(command)
 			self.clear(self.msg_textview)
 			return True
-		elif command == 'ping' and not len(message_array):
-			gajim.connections[self.account].sendPing(self.contact)
+		elif command == 'ping':
+			if not len(message_array):
+				gajim.connections[self.account].sendPing(self.contact)
+			else:
+				self.get_command_help(command)
 			self.clear(self.msg_textview)
+			return True
+		elif command == 'say':
+			return False
+		else:
+			self.print_conversation(_('No such command: /%s (if you want to send '
+				'this, prefix it with /say)') % command, 'info')
 			return True
 		return False
 
@@ -1215,13 +1261,21 @@ class ChatControl(ChatControlBase):
 			self.print_conversation(_('Commands: %s') % ChatControl.CHAT_CMDS,
 				'info')
 		elif command == 'clear':
-			self.print_conversation(_('Usage: /%s, clears the text window.'),
-				'info')
+			self.print_conversation(_('Usage: /%s, clears the text window.') % \
+				command, 'info')
 		elif command == 'compact':
-			self.print_conversation(_('Usage: /%s, hide the chat buttons.'),
-				'info')
+			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % \
+				command, 'info')
+		elif command == 'me':
+			self.print_conversation(_('Usage: /%s <action>, sends action to the '
+				'current group chat. Use third person. (e.g. /%s explodes.)') % \
+				(command, command), 'info')
 		elif command == 'ping':
-			self.print_conversation(_(''), 'info')
+			self.print_conversation(_('Usage: /%s, sends a ping to the contact') %\
+				command, 'info')
+		elif command == 'say':
+			self.print_conversation(_('Usage: /%s, send the message to the contact') %\
+				command, 'info')
 		else:
 			self.print_conversation(_('No help info for /%s') % command, 'info')
 
@@ -1229,6 +1283,12 @@ class ChatControl(ChatControlBase):
 		'''Send a message to contact'''
 		if message in ('', None, '\n') or self._process_command(message):
 			return
+
+		# Do we need to process command for the message ?
+		process_command = True
+		if message.startswith('/say'):
+			message = message[5:]
+			process_command = False
 
 		# refresh timers
 		self.reset_kbd_mouse_timeout_vars()
@@ -1244,10 +1304,10 @@ class ChatControl(ChatControlBase):
 
 		chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
 			'disabled'
-		composing_jep = contact.composing_jep
+		composing_xep = contact.composing_xep
 		chatstate_to_send = None
 		if chatstates_on and contact is not None:
-			if composing_jep is None:
+			if composing_xep is None:
 				# no info about peer
 				# send active to discover chat state capabilities
 				# this is here (and not in send_chatstate)
@@ -1256,13 +1316,13 @@ class ChatControl(ChatControlBase):
 				
 				if contact.our_chatstate:
 					# We already asked for xep 85, don't ask it twice
-					composing_jep = 'asked_once'
+					composing_xep = 'asked_once'
 
 				chatstate_to_send = 'active'
 				contact.our_chatstate = 'ask' # pseudo state
 			# if peer supports jep85 and we are not 'ask', send 'active'
 			# NOTE: first active and 'ask' is set in gajim.py
-			elif composing_jep is not False:
+			elif composing_xep is not False:
 				#send active chatstate on every message (as JEP says)
 				chatstate_to_send = 'active'
 				contact.our_chatstate = 'active'
@@ -1272,7 +1332,8 @@ class ChatControl(ChatControlBase):
 				self._schedule_activity_timers()
 				
 		if not ChatControlBase.send_message(self, message, keyID, type = 'chat',
-		chatstate = chatstate_to_send, composing_jep = composing_jep):
+		chatstate = chatstate_to_send, composing_xep = composing_xep,
+		process_command = process_command):
 			self.print_conversation(message, self.contact.jid,
 				encrypted = encrypted)
 
@@ -1441,13 +1502,13 @@ class ChatControl(ChatControlBase):
 			jid = self.contact.jid
 		num_unread = len(gajim.events.get_events(self.account, jid,
 			['printed_' + self.type_id, self.type_id]))
-		# Set tab image (always 16x16); unread messages show the 'message' image
+		# Set tab image (always 16x16); unread messages show the 'event' image
 		tab_img = None
 		
 		if num_unread and gajim.config.get('show_unread_tab_icon'):
 			img_16 = gajim.interface.roster.get_appropriate_state_images(
-				self.contact.jid, icon_name = 'message')
-			tab_img = img_16['message']
+				self.contact.jid, icon_name = 'event')
+			tab_img = img_16['event']
 		else:
 			contact = gajim.contacts.get_contact_with_highest_priority(
 				self.account, self.contact.jid)
@@ -1474,7 +1535,6 @@ class ChatControl(ChatControlBase):
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
-		compact_view_menuitem = xml.get_widget('compact_view_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		
 		contact = self.parent_win.get_active_contact()
@@ -1493,13 +1553,13 @@ class ChatControl(ChatControlBase):
 		
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
-		if contact.resource and contact.jid.find('@') != -1:
+		if self.TYPE_ID == message_control.TYPE_PM and self.gc_contact.jid and \
+		self.gc_contact.resource:
+			send_file_menuitem.set_sensitive(True)
+		elif contact.resource and contact.jid.find('@') != -1:
 			send_file_menuitem.set_sensitive(True)
 		else:
 			send_file_menuitem.set_sensitive(False)
-		
-		# compact_view_menuitem
-		compact_view_menuitem.set_active(self.hide_chat_buttons_current)
 		
 		# add_to_roster_menuitem
 		if _('Not in Roster') in contact.groups:
@@ -1517,9 +1577,6 @@ class ChatControl(ChatControlBase):
 		id = send_file_menuitem.connect('activate', 
 			self._on_send_file_menuitem_activate)
 		self.handlers[id] = send_file_menuitem 
-		id = compact_view_menuitem.connect('activate', 
-			self._on_compact_view_menuitem_activate)
-		self.handlers[id] = compact_view_menuitem 
 		id = add_to_roster_menuitem.connect('activate', 
 			self._on_add_to_roster_menuitem_activate)
 		self.handlers[id] = add_to_roster_menuitem 
@@ -1565,7 +1622,7 @@ class ChatControl(ChatControlBase):
 		if contact.show == 'offline':
 			return
 
-		if contact.composing_jep is False: # jid cannot do jep85 nor jep22
+		if contact.composing_xep is False: # jid cannot do xep85 nor xep22
 			return
 
 		# if the new state we wanna send (state) equals 
@@ -1573,7 +1630,7 @@ class ChatControl(ChatControlBase):
 		if contact.our_chatstate == state:
 			return
 
-		if contact.composing_jep is None:
+		if contact.composing_xep is None:
 			# we don't know anything about jid, so return
 			# NOTE:
 			# send 'active', set current state to 'ask' and return is done
@@ -1587,7 +1644,7 @@ class ChatControl(ChatControlBase):
 
 		# in JEP22, when we already sent stop composing
 		# notification on paused, don't resend it
-		if contact.composing_jep == 'JEP-0022' and \
+		if contact.composing_xep == 'XEP-0022' and \
 		contact.our_chatstate in ('paused', 'active', 'inactive') and \
 		state is not 'composing': # not composing == in (active, inactive, gone)
 			contact.our_chatstate = 'active'
@@ -1609,7 +1666,7 @@ class ChatControl(ChatControlBase):
 			self.reset_kbd_mouse_timeout_vars()
 
 		MessageControl.send_message(self, None, chatstate = state,
-			msg_id = contact.msg_id, composing_jep = contact.composing_jep)
+			msg_id = contact.msg_id, composing_xep = contact.composing_xep)
 		contact.our_chatstate = state
 		if contact.our_chatstate == 'active':
 			self.reset_kbd_mouse_timeout_vars()
@@ -1638,20 +1695,19 @@ class ChatControl(ChatControlBase):
 			del self.handlers[i]
 		self.conv_textview.del_handlers()
 		self.msg_textview.destroy()
-		
 
 	def allow_shutdown(self, method):
 		if time.time() - gajim.last_message_time[self.account]\
 		[self.get_full_jid()] < 2:
 			# 2 seconds
 			dialog = dialogs.ConfirmationDialog(
-				#%s is being replaced in the code with JID
+				# %s is being replaced in the code with JID
 				_('You just received a new message from "%s"') % self.contact.jid,
 				_('If you close this tab and you have history disabled, '\
 				'this message will be lost.'))
 			if dialog.get_response() != gtk.RESPONSE_OK:
-				return False #stop the propagation of the event
-		return True
+				return 'no' # stop the propagation of the event
+		return 'yes'
 
 	def handle_incoming_chatstate(self):
 		''' handle incoming chatstate that jid SENT TO us '''
@@ -1710,17 +1766,23 @@ class ChatControl(ChatControlBase):
 
 	def _on_drag_data_received(self, widget, context, x, y, selection,
 		target_type, timestamp):
-		# If not resource, we can't send file
-		if not self.contact.resource:
+		# If no resource is known, we can't send a file
+		if self.TYPE_ID == message_control.TYPE_PM:
+			c = self.gc_contact
+		else:
+			c = self.contact
+		if not c.resource:
 			return
 		if target_type == self.TARGET_TYPE_URI_LIST:
+			if not selection.data:
+				return
 			uri = selection.data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				if os.path.isfile(path): # is it file?
 					ft = gajim.interface.instances['file_transfers']
-					ft.send_file(self.account, self.contact, path)
+					ft.send_file(self.account, c, path)
 
 	def _on_message_tv_buffer_changed(self, textbuffer):
 		self.kbd_activity_in_last_5_secs = True
@@ -1833,7 +1895,7 @@ class ChatControl(ChatControlBase):
 			show_transports = gajim.config.get('show_transports_group')
 			if (not show_transports and gajim.jid_is_transport(jid)) or \
 			(not show_offline and typ == 'chat' and \
-			len(gajim.contacts.get_contact(self.account, jid)) < 2):
+			len(gajim.contacts.get_contacts(self.account, jid)) < 2):
 				gajim.interface.roster.really_remove_contact(self.contact,
 					self.account)
 			elif typ == 'pm':
@@ -1919,8 +1981,12 @@ class ChatControl(ChatControlBase):
 		self.bigger_avatar_window.window.set_cursor(cursor)
 
 	def _on_send_file_menuitem_activate(self, widget):
+		if self.TYPE_ID == message_control.TYPE_PM:
+			c = self.gc_contact
+		else:
+			c = self.contact
 		gajim.interface.instances['file_transfers'].show_file_send_request( 
-			self.account, self.contact)
+			self.account, c)
 
 	def _on_add_to_roster_menuitem_activate(self, widget):
 		dialogs.AddNewContactWindow(self.account, self.contact.jid)

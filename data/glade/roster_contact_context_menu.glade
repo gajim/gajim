@@ -65,9 +65,9 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkMenuItem" id="send_custom_status_menuitem">
+      <widget class="GtkImageMenuItem" id="send_custom_status_menuitem">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Send cus_tom status</property>
+        <property name="label" translatable="yes">Send Cus_tom Status</property>
         <property name="use_underline">True</property>
         <child>
           <widget class="GtkMenu" id="menu5">
@@ -95,7 +95,7 @@
       <widget class="GtkImageMenuItem" id="manage_contact">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="label" translatable="yes">_Manage contact</property>
+        <property name="label" translatable="yes">_Manage Contact</property>
         <property name="use_underline">True</property>
         <child>
           <widget class="GtkMenu" id="menu2">
@@ -123,6 +123,7 @@
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="stock">gtk-edit</property>
+                    <property name="icon_size">1</property>
                   </widget>
                 </child>
               </widget>
@@ -142,7 +143,7 @@
               </widget>
             </child>
             <child>
-              <widget class="GtkImageMenuItem" id="custom_avatar">
+              <widget class="GtkImageMenuItem" id="set_custom_avatar_menuitem">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">Set Custom _Avatar</property>
@@ -152,6 +153,7 @@
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="stock">gtk-orientation-portrait</property>
+                    <property name="icon_size">1</property>
                   </widget>
                 </child>
               </widget>
@@ -159,6 +161,7 @@
             <child>
               <widget class="GtkImageMenuItem" id="add_special_notification_menuitem">
                 <property name="visible">True</property>
+                <property name="no_show_all">True</property>
                 <property name="label" translatable="yes">Add Special _Notification</property>
                 <property name="use_underline">True</property>
                 <child internal-child="image">
@@ -244,7 +247,7 @@
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1715">
                     <property name="visible">True</property>
-                    <property name="stock">gtk-yes</property>
+                    <property name="stock">gtk-stop</property>
                     <property name="icon_size">1</property>
                   </widget>
                 </child>
@@ -298,6 +301,7 @@
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="stock">gtk-properties</property>
+            <property name="icon_size">1</property>
           </widget>
         </child>
       </widget>
@@ -309,7 +313,7 @@
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="information_menuitem">
-        <property name="label">gtk-dialog-info</property>
+        <property name="label">gtk-info</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
       </widget>

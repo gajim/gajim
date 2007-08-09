@@ -21,8 +21,8 @@ xmpp-related data structures.
 
 from simplexml import Node,NodeBuilder,ustr
 import time
-NS_ACTIVITY     ='http://jabber.org/protocol/activity'                  # JEP-0108
-NS_ADDRESS      ='http://jabber.org/protocol/address'                   # JEP-0033
+NS_ACTIVITY     ='http://jabber.org/protocol/activity'                  # XEP-0108
+NS_ADDRESS      ='http://jabber.org/protocol/address'                   # XEP-0033
 NS_AGENTS       ='jabber:iq:agents'
 NS_AMP          ='http://jabber.org/protocol/amp'
 NS_AMP_ERRORS   =NS_AMP+'#errors'
@@ -39,58 +39,58 @@ NS_CLIENT       ='jabber:client'
 NS_COMMANDS     ='http://jabber.org/protocol/commands'
 NS_COMPONENT_ACCEPT='jabber:component:accept'
 NS_COMPONENT_1  ='http://jabberd.jabberstudio.org/ns/component/1.0'
-NS_COMPRESS     ='http://jabber.org/protocol/compress'                  # JEP-0138
+NS_COMPRESS     ='http://jabber.org/protocol/compress'                  # XEP-0138
 NS_CONFERENCE   ='jabber:x:conference'
-NS_DATA         ='jabber:x:data'                                        # JEP-0004
+NS_DATA         ='jabber:x:data'                                        # XEP-0004
 NS_DELAY        ='jabber:x:delay'
 NS_DIALBACK     ='jabber:server:dialback'
 NS_DISCO        ='http://jabber.org/protocol/disco'
 NS_DISCO_INFO   =NS_DISCO+'#info'
 NS_DISCO_ITEMS  =NS_DISCO+'#items'
-NS_ENCRYPTED    ='jabber:x:encrypted'                                   # JEP-0027
-NS_EVENT        ='jabber:x:event'                                       # JEP-0022
+NS_ENCRYPTED    ='jabber:x:encrypted'                                   # XEP-0027
+NS_EVENT        ='jabber:x:event'                                       # XEP-0022
 NS_FEATURE      ='http://jabber.org/protocol/feature-neg'  
 NS_FILE         ='http://jabber.org/protocol/si/profile/file-transfer'  # JEP-0096
 NS_GAMING       ='http://jabber.org/protocol/gaming'                    # XEP-0196
 NS_GEOLOC       ='http://jabber.org/protocol/geoloc'                    # JEP-0080
 NS_GROUPCHAT    ='gc-1.0'
-NS_HTTP_AUTH    ='http://jabber.org/protocol/http-auth'         # JEP-0070
-NS_HTTP_BIND    ='http://jabber.org/protocol/httpbind'                  # JEP-0124
+NS_HTTP_AUTH    ='http://jabber.org/protocol/http-auth'                 # XEP-0070
+NS_HTTP_BIND    ='http://jabber.org/protocol/httpbind'                  # XEP-0124
 NS_IBB          ='http://jabber.org/protocol/ibb'
 NS_INVISIBLE    ='presence-invisible'                                   # Jabberd2
 NS_IQ           ='iq'                                                   # Jabberd2
 NS_LAST         ='jabber:iq:last'
 NS_MESSAGE      ='message'                                              # Jabberd2
-NS_MOOD         ='http://jabber.org/protocol/mood'                      # JEP-0107
+NS_MOOD         ='http://jabber.org/protocol/mood'                      # XEP-0107
 NS_MUC          ='http://jabber.org/protocol/muc'
 NS_MUC_USER     =NS_MUC+'#user'
 NS_MUC_ADMIN    =NS_MUC+'#admin'
 NS_MUC_OWNER    =NS_MUC+'#owner'
-NS_NICK         ='http://jabber.org/protocol/nick'                      # JEP-0172
-NS_OFFLINE      ='http://www.jabber.org/jeps/jep-0030.html'             # JEP-0013
-NS_PHYSLOC      ='http://jabber.org/protocol/physloc'                   # JEP-0112
+NS_NICK         ='http://jabber.org/protocol/nick'                      # XEP-0172
+NS_OFFLINE      ='http://www.jabber.org/jeps/jep-0030.html'             # XEP-0013
+NS_PHYSLOC      ='http://jabber.org/protocol/physloc'                   # XEP-0112
 NS_PRESENCE     ='presence'                                             # Jabberd2
 NS_PRIVACY      ='jabber:iq:privacy'
 NS_PRIVATE      ='jabber:iq:private'
-NS_PROFILE      ='http://jabber.org/protocol/profile'                   # JEP-0154
-NS_PUBSUB       ='http://jabber.org/protocol/pubsub'                    # JEP-0060
+NS_PROFILE      ='http://jabber.org/protocol/profile'                   # XEP-0154
+NS_PUBSUB       ='http://jabber.org/protocol/pubsub'                    # XEP-0060
 NS_PUBSUB_OWNER ='http://jabber.org/protocol/pubsub#owner'              # JEP-0060
 NS_REGISTER     ='jabber:iq:register'
 NS_ROSTER       ='jabber:iq:roster'
-NS_ROSTERX      ='http://jabber.org/protocol/rosterx'                   # JEP-0144
-NS_RPC          ='jabber:iq:rpc'                                        # JEP-0009
+NS_ROSTERX      ='http://jabber.org/protocol/rosterx'                   # XEP-0144
+NS_RPC          ='jabber:iq:rpc'                                        # XEP-0009
 NS_SASL         ='urn:ietf:params:xml:ns:xmpp-sasl'
 NS_SEARCH       ='jabber:iq:search'
 NS_SERVER       ='jabber:server'
 NS_SESSION      ='urn:ietf:params:xml:ns:xmpp-session'
-NS_SI           ='http://jabber.org/protocol/si'                        # JEP-0096
-NS_SI_PUB       ='http://jabber.org/protocol/sipub'                     # JEP-0137
-NS_SIGNED       ='jabber:x:signed'                                      # JEP-0027
+NS_SI           ='http://jabber.org/protocol/si'                        # XEP-0096
+NS_SI_PUB       ='http://jabber.org/protocol/sipub'                     # XEP-0137
+NS_SIGNED       ='jabber:x:signed'                                      # XEP-0027
 NS_STANZAS      ='urn:ietf:params:xml:ns:xmpp-stanzas'
 NS_STREAM       ='http://affinix.com/jabber/stream'
 NS_STREAMS      ='http://etherx.jabber.org/streams'
-NS_TIME         ='jabber:iq:time'                                       # JEP-0900
-NS_TIME_REVISED ='http://www.xmpp.org/extensions/xep-0202.html#ns'      # JEP-0202
+NS_TIME         ='jabber:iq:time'                                       # XEP-0900
+NS_TIME_REVISED ='urn:xmpp:time'                                        # XEP-0202
 NS_TLS          ='urn:ietf:params:xml:ns:xmpp-tls'
 NS_TUNE         ='http://jabber.org/protocol/tune'                      # XEP-0118
 NS_VACATION     ='http://jabber.org/protocol/vacation'
@@ -101,11 +101,11 @@ NS_VCARD_UPDATE =NS_VCARD+':x:update'
 NS_VERSION      ='jabber:iq:version'
 NS_VIEWING      ='http://jabber.org/protocol/viewing'                   # XEP--197
 NS_PING         ='urn:xmpp:ping'                                        # XEP-0199
-NS_WAITINGLIST  ='http://jabber.org/protocol/waitinglist'               # JEP-0130
-NS_XHTML_IM     ='http://jabber.org/protocol/xhtml-im'                  # JEP-0071
+NS_WAITINGLIST  ='http://jabber.org/protocol/waitinglist'               # XEP-0130
+NS_XHTML_IM     ='http://jabber.org/protocol/xhtml-im'                  # XEP-0071
 NS_XHTML        = 'http://www.w3.org/1999/xhtml'                        #  "
-NS_DATA_LAYOUT  ='http://jabber.org/protocol/xdata-layout'              # JEP-0141
-NS_DATA_VALIDATE='http://jabber.org/protocol/xdata-validate'            # JEP-0122
+NS_DATA_LAYOUT  ='http://jabber.org/protocol/xdata-layout'              # XEP-0141
+NS_DATA_VALIDATE='http://jabber.org/protocol/xdata-validate'            # XEP-0122
 NS_XMPP_STREAMS ='urn:ietf:params:xml:ns:xmpp-streams'
 
 xmpp_stream_error_conditions="""
@@ -429,7 +429,7 @@ class Message(Protocol):
         self.setTagData('body',val)
 
     def setXHTML(self,val,xmllang=None):
-        """ Sets the xhtml text of the message (JEP-0071).
+        """ Sets the xhtml text of the message (XEP-0071).
             The parameter is the "inner html" to the body."""
         try:
             if xmllang:
@@ -456,6 +456,14 @@ class Message(Protocol):
         th=self.getThread()
         if th: m.setThread(th)
         return m
+    def getStatusCode(self):
+        """Returns the status code of the message (for groupchat config
+        change)"""
+        attrs = []
+        for xtag in self.getTags('x'):
+            for child in xtag.getTags('status'):
+                attrs.append(child.getAttr('code'))
+        return attrs
 
 class Presence(Protocol):
     """ XMPP Presence object."""
@@ -516,7 +524,11 @@ class Presence(Protocol):
         return self._muc_getSubTagDataAttr('actor','jid')[1]
     def getStatusCode(self):
         """Returns the status code of the presence (for groupchat)"""
-        return self._muc_getItemAttr('status','code')
+        attrs = []
+        for xtag in self.getTags('x'):
+            for child in xtag.getTags('status'):
+                attrs.append(child.getAttr('code'))
+        return attrs
 
 class Iq(Protocol): 
     """ XMPP Iq object - get/set dialog mechanism. """
@@ -597,7 +609,7 @@ class Error(Protocol):
 
 class DataField(Node):
     """ This class is used in the DataForm class to describe the single data item.
-        If you are working with jabber:x:data (JEP-0004, JEP-0068, JEP-0122) 
+        If you are working with jabber:x:data (XEP-0004, XEP-0068, XEP-0122) 
         then you will need to work with instances of this class. """
     def __init__(self,name=None,value=None,typ=None,required=0,desc=None,options=[],node=None):
         """ Create new data field of specified name,value and type.
@@ -674,7 +686,7 @@ class DataField(Node):
 
 class DataForm(Node):
     """ DataForm class. Used for manipulating dataforms in XMPP.
-        Relevant JEPs: 0004, 0068, 0122.
+        Relevant XEPs: 0004, 0068, 0122.
         Can be used in disco, pub-sub and many other applications."""
     def __init__(self, typ=None, data=[], title=None, node=None):
         """

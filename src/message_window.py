@@ -103,13 +103,13 @@ class MessageWindow:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
-		# set up DnD
-		self.hid = self.notebook.connect('drag_data_received',
-			self.on_tab_label_drag_data_received_cb)
-		self.handlers[self.hid] = self.notebook
-		
-		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
-			gtk.gdk.ACTION_MOVE)
+		# if GTK+ version < 2.10, use OUR way to reorder tabs (set up DnD)
+		if gtk.pygtk_version < (2, 10, 0) or gtk.gtk_version < (2, 10, 0):
+			self.hid = self.notebook.connect('drag_data_received',
+				self.on_tab_label_drag_data_received_cb)
+			self.handlers[self.hid] = self.notebook
+			self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
+				gtk.gdk.ACTION_MOVE)
 
 	def change_account_name(self, old_name, new_name):
 		if self._controls.has_key(old_name):
@@ -146,9 +146,16 @@ class MessageWindow:
 
 	def _on_window_delete(self, win, event):
 		# Make sure all controls are okay with being deleted
+		ctrl_to_minimize = []
 		for ctrl in self.controls():
-			if not ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON):
+			allow_shutdown = ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON)
+			if allow_shutdown == 'no':
 				return True # halt the delete
+			elif allow_shutdown == 'minimize':
+				ctrl_to_minimize.append(ctrl)
+		# If all are ok, minimize the one that need to be minimized
+		for ctrl in ctrl_to_minimize:
+			ctrl.minimize()
 		return False
 
 	def _on_window_destroy(self, win):
@@ -191,7 +198,11 @@ class MessageWindow:
 		control.handlers[id] = tab_label_box
 		self.notebook.append_page(control.widget, tab_label_box)
 
-		self.setup_tab_dnd(control.widget)
+		# If GTK+ version >= 2.10, use gtk native way to reorder tabs
+		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
+			self.notebook.set_tab_reorderable(control.widget, True)
+		else:
+			self.setup_tab_dnd(control.widget)
 
 		self.redraw_tab(control)
 		self.window.show_all()
@@ -301,7 +312,12 @@ class MessageWindow:
 		'''reason is only for gc (offline status message)
 		if force is True, do not ask any confirmation'''
 		# Shutdown the MessageControl
-		if not force and not ctrl.allow_shutdown(method):
+		allow_shutdown = ctrl.allow_shutdown(method)
+		if not force and allow_shutdown == 'no':
+			return
+		if allow_shutdown == 'minimize' and method != self.CLOSE_COMMAND:
+			ctrl.minimize()
+			self.check_tabs()
 			return
 		if reason is not None: # We are leaving gc with a status message
 			ctrl.shutdown(reason)
@@ -313,7 +329,10 @@ class MessageWindow:
 			types = ['printed_msg', 'chat', 'gc_msg'])
 		del gajim.last_message_time[ctrl.account][ctrl.get_full_jid()]
 
-		self.disconnect_tab_dnd(ctrl.widget)
+		# Disconnect tab DnD only if GTK version < 2.10
+		if gtk.pygtk_version < (2, 10, 0) or gtk.gtk_version < (2, 10, 0):
+			self.disconnect_tab_dnd(ctrl.widget)
+
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
 		fjid = ctrl.get_full_jid()
@@ -533,7 +552,7 @@ class MessageWindow:
 					(event.state & gtk.gdk.MOD1_MASK): # ALT + 1,2,3..
 				self.notebook.set_current_page(st.index(event.string))
 			elif event.keyval == gtk.keysyms.c: # ALT + C toggles chat buttons
-				ctrl.chat_buttons_set_visible(not ctrl.hide_chat_buttons_current)
+				ctrl.chat_buttons_set_visible(not ctrl.hide_chat_buttons)
 		# Close tab bindings
 		elif event.keyval == gtk.keysyms.Escape and \
 				gajim.config.get('escape_key_closes'): # Escape

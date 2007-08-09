@@ -1,6 +1,7 @@
 ##   features.py 
 ##
 ##   Copyright (C) 2003-2004 Alexey "Snake" Nezhdanov
+##   Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License as published by
@@ -71,6 +72,7 @@ def discoverItems(disp,jid,node=None, cb=None):
 			cb(ret)
 	_discover(disp, NS_DISCO_ITEMS, jid, node, _on_response)
 
+# this one is
 def discoverInfo(disp,jid,node=None, cb=None):
 	""" Query remote object about info that it publishes. Returns identities and features lists."""
 	""" According to JEP-0030:
@@ -128,16 +130,13 @@ def _ReceivedRegInfo(con, resp, agent):
 		return
 	df=tag.getTag('x',namespace=NS_DATA)
 	if df:
-		con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,DataForm(node=df),True,''))
+		con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,df,True,''))
 		return
-	df=DataForm(typ='form')
+	df={}
 	for i in resp.getQueryPayload():
 		if not isinstance(i, Node):
-			pass
-		elif i.getName()=='instructions':
-			df.addInstructions(i.getData())
-		else:
-			df.setField(i.getName()).setValue(i.getData())
+			continue
+		df[i.getName()] = i.getData()
 	con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent,df,False,''))
 
 def register(disp, host, info, cb):

@@ -6,6 +6,7 @@
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -36,6 +37,7 @@ from common import helpers
 from common import gajim
 from common import GnuPG
 from common import passwords
+from common import exceptions
 
 from connection_handlers import *
 USE_GPG = GnuPG.USE_GPG
@@ -48,12 +50,50 @@ log = logging.getLogger('gajim.c.connection')
 
 import gtkgui_helpers
 
+ssl_error = { 
+2: "Unable to get issuer certificate",
+3: "Unable to get certificate CRL",
+4: "Unable to decrypt certificate's signature",
+5: "Unable to decrypt CRL's signature",
+6: "Unable to decode issuer public key",
+7: "Certificate signature failure",
+8: "CRL signature failure",
+9: "Certificate is not yet valid",
+10: "Certificate has expired",
+11: "CRL is not yet valid",
+12: "CRL has expired",
+13: "Format error in certificate's notBefore field",
+14: "Format error in certificate's notAfter field",
+15: "Format error in CRL's lastUpdate field",
+16: "Format error in CRL's nextUpdate field",
+17: "Out of memory",
+18: "Self signed certificate in certificate chain",
+19: "Unable to get local issuer certificate",
+20: "Unable to verify the first certificate",
+21: "Unable to verify the first certificate",
+22: "Certificate chain too long",
+23: "Certificate revoked",
+24: "Invalid CA certificate",
+25: "Path length constraint exceeded",
+26: "Unsupported certificate purpose",
+27: "Certificate not trusted",
+28: "Certificate rejected",
+29: "Subject issuer mismatch",
+30: "Authority and subject key identifier mismatch",
+31: "Authority and issuer serial number mismatch",
+32: "Key usage does not include certificate signing",
+50: "Application verification failure"
+}
 class Connection(ConnectionHandlers):
 	'''Connection class'''
 	def __init__(self, name):
 		ConnectionHandlers.__init__(self)
 		self.name = name
-		self.connected = 0 # offline
+		# self.connected:
+		# 0=>offline,
+		# 1=>connection in progress,
+		# 2=>authorised
+		self.connected = 0
 		self.connection = None # xmpppy ClientCommon instance
 		# this property is used to prevent double connections
 		self.last_connection = None # last ClientCommon instance
@@ -93,6 +133,10 @@ class Connection(ConnectionHandlers):
 		self.pep_supported = False
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
+		# To know the groupchat jid associated with a sranza ID. Useful to
+		# request vcard or os info... to a real JID but act as if it comes from
+		# the fake jid
+		self.groupchat_jids = {} # {ID : groupchat_jid}
 		if USE_GPG:
 			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 			gajim.config.set('usegpg', True)
@@ -210,10 +254,7 @@ class Connection(ConnectionHandlers):
 							% (data[0], data[3])))
 						return
 					is_form = data[2]
-					if is_form:
-						conf = data[1]
-					else:
-						conf = data[1].asDict()
+					conf = data[1]
 					self.dispatch('NEW_ACC_CONNECTED', (conf, is_form))
 					return
 				if not data[1]: # wrong answer
@@ -222,10 +263,7 @@ class Connection(ConnectionHandlers):
 						(data[0], data[3])))
 					return
 				is_form = data[2]
-				if is_form:
-					conf = data[1]
-				else:
-					conf = data[1].asDict()
+				conf = data[1]
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))
 		elif realm == common.xmpp.NS_PRIVACY:
 			if event == common.xmpp.features_nb.PRIVACY_LISTS_RECEIVED:
@@ -262,6 +300,8 @@ class Connection(ConnectionHandlers):
 				self.dispatch('STANZA_SENT', unicode(data))
 
 	def select_next_host(self, hosts):
+		'''Chooses best 'real' host basing on the SRV priority and weight data;
+		more info in RFC2782'''
 		hosts_best_prio = []
 		best_prio = 65535
 		sum_weight = 0
@@ -440,71 +480,19 @@ class Connection(ConnectionHandlers):
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		self.connection = con
-
-		fpr_good = self._check_fingerprint(con, con_type)
-		if fpr_good == False:
-			self.disconnect(on_purpose = True)
-			self.dispatch('STATUS', 'offline')
-			self.dispatch('CONNECTION_LOST',
-				(_('Security error connecting to "%s"') % self._hostname,
-				_("The server's key has changed, or someone is trying to hack your connection.")))
-			if self.on_connect_auth:
-				self.on_connect_auth(None)
-				self.on_connect_auth = None
-			return
-
-		if fpr_good == None:
-			log.warning(_("Unable to check fingerprint for %s. Connection could be insecure."), hostname)
-
-		if fpr_good == True:
-			log.info("Fingerprint found and matched for %s.", hostname)
-
+		try:
+			errnum = con.Connection.ssl_errnum
+		except AttributeError:
+			errnum = -1 # we don't have an errnum
+		if errnum > 0:
+			# FIXME: tell the user that the certificat is untrusted, and ask him what to do
+			try:
+				log.warning("The authenticity of the "+hostname+" certificate could be unvalid.\nSSL Error: "+ssl_error[errnum])
+			except KeyError:
+				log.warning("Unknown SSL error: %d" % errnum)
 		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
 		return True
-
-	def _check_fingerprint(self, con, con_type):
-		fpr_good = None # None: Unable to check fpr, False: mismatch, True: match
-
-		# FIXME: not tidy
-		if not common.xmpp.transports_nb.USE_PYOPENSSL: return None
-
-		# FIXME: find a more permanent place for loading servers.xml
-		servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
-		servers = gtkgui_helpers.parse_server_xml(servers_xml)
-		servers = dict(map(lambda e: (e[0], e), servers))
-
-		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-
-		try:
-			log.debug("con: %s", con)
-			log.debug("con.Connection: %s", con.Connection)
-			log.debug("con.Connection.serverDigestSHA1: %s", con.Connection.serverDigestSHA1)
-			log.debug("con.Connection.serverDigestMD5: %s", con.Connection.serverDigestMD5)
-			sha1 = gtkgui_helpers.HashDigest('sha1', con.Connection.serverDigestSHA1)
-			md5 = gtkgui_helpers.HashDigest('md5', con.Connection.serverDigestMD5)
-			log.debug("sha1: %s", repr(sha1))
-			log.debug("md5: %s", repr(md5))
-
-			sv = servers.get(hostname)
-			if sv:
-				for got in (sha1, md5):
-					expected = sv[2]['digest'].get(got.algo)
-					if expected:
-						fpr_good = (got == expected)
-						break
-
-		except AttributeError:
-			if con_type in ('ssl', 'tls'):
-				log.error(_("Missing fingerprint in SSL connection to %s") + ':', hostname, exc_info=True)
-				# fpr_good = False # FIXME: enable this when sequence is sorted
-			else:
-				log.debug("Connection to %s doesn't seem to have a fingerprint:", hostname, exc_info=True)
-
-		if fpr_good == False:
-			log.error(_("Fingerprint mismatch for %s: Got %s, expected %s"), hostname, got, expected)
-
-		return fpr_good
 
 	def _register_handlers(self, con, con_type):
 		self.peerhost = con.get_peerhost()
@@ -566,14 +554,14 @@ class Connection(ConnectionHandlers):
 		iq = common.xmpp.Iq('get', to = pingTo.get_full_jid())
 		iq.addChild(name = 'ping', namespace = common.xmpp.NS_PING)
 		def _on_response(resp):
-			timePong = time.time()
+			timePong = time_time()
 			if not common.xmpp.isResultNode(resp):
 				self.dispatch('PING_ERROR', (pingTo))
 				return
 			timeDiff = round(timePong - timePing,2)
 			self.dispatch('PING_REPLY', (pingTo, timeDiff))
 		self.dispatch('PING_SENT', (pingTo))
-		timePing = time.time()
+		timePing = time_time()
 		self.connection.SendAndCallForResponse(iq, _on_response)
 
 	def get_active_default_lists(self):
@@ -765,6 +753,12 @@ class Connection(ConnectionHandlers):
 			self.on_purpose = False 
 			self.server_resource = gajim.config.get_per('accounts', self.name,
 				'resource')
+			# All valid resource substitution strings should be added to this hash.
+			if self.server_resource:
+				self.server_resource = Template(self.server_resource).\
+					safe_substitute({
+						'hostname': socket.gethostname()
+					})
 			self.connect_and_init(show, msg, signed)
 
 		elif show == 'offline':
@@ -825,8 +819,8 @@ class Connection(ConnectionHandlers):
 		self.connection.send(msg_iq)
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
-	chatstate = None, msg_id = None, composing_jep = None, resource = None,
-	user_nick = None, xhtml = None):
+	chatstate = None, msg_id = None, composing_xep = None, resource = None,
+	user_nick = None, xhtml = None, forward_from = None):
 		if not self.connection:
 			return 1
 		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
@@ -850,7 +844,7 @@ class Connection(ConnectionHandlers):
 						' ([This message is *encrypted* (See :JEP:`27`])'
 			else:
 				# Encryption failed, do not send message
-				tim = time.localtime()
+				tim = localtime()
 				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim))
 				return 3
 		if msgtxt and not xhtml and gajim.config.get(
@@ -879,12 +873,12 @@ class Connection(ConnectionHandlers):
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
 		if chatstate is not None:
-			if (composing_jep == 'JEP-0085' or not composing_jep) and \
-			composing_jep != 'asked_once':
-				# JEP-0085
+			if (composing_xep == 'XEP-0085' or not composing_xep) and \
+			composing_xep != 'asked_once':
+				# XEP-0085
 				msg_iq.setTag(chatstate, namespace = common.xmpp.NS_CHATSTATES)
-			if composing_jep in ('JEP-0022', 'asked_once') or not composing_jep:
-				# JEP-0022
+			if composing_xep in ('XEP-0022', 'asked_once') or not composing_xep:
+				# XEP-0022
 				chatstate_node = msg_iq.setTag('x',
 					namespace = common.xmpp.NS_EVENT)
 				if not msgtxt: # when no <body>, add <id>
@@ -895,21 +889,30 @@ class Connection(ConnectionHandlers):
 				if chatstate is 'composing' or msgtxt: 
 					chatstate_node.addChild(name = 'composing') 
 
+		if forward_from:
+			addresses = msg_iq.addChild('addresses',
+				namespace=common.xmpp.NS_ADDRESS)
+			addresses.addChild('address', attrs = {'type': 'ofrom',
+				'jid': forward_from})
 		self.connection.send(msg_iq)
-		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
-			.split()
-		ji = gajim.get_jid_without_resource(jid)
-		if self.name not in no_log_for and ji not in no_log_for:
-			log_msg = msg
-			if subject:
-				log_msg = _('Subject: %s\n%s') % (subject, msg)
-			if log_msg:
-				if type == 'chat':
-					kind = 'chat_msg_sent'
-				else:
-					kind = 'single_msg_sent'
-				gajim.logger.write(kind, jid, log_msg)
-		self.dispatch('MSGSENT', (jid, msg, keyID))
+		if not forward_from:
+			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
+				.split()
+			ji = gajim.get_jid_without_resource(jid)
+			if self.name not in no_log_for and ji not in no_log_for:
+				log_msg = msg
+				if subject:
+					log_msg = _('Subject: %s\n%s') % (subject, msg)
+				if log_msg:
+					if type == 'chat':
+						kind = 'chat_msg_sent'
+					else:
+						kind = 'single_msg_sent'
+					try:
+						gajim.logger.write(kind, jid, log_msg)
+					except exceptions.PysqliteOperationalError, e:
+						self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+			self.dispatch('MSGSENT', (jid, msg, keyID))
 	
 	def send_stanza(self, stanza):
 		''' send a stanza untouched '''
@@ -1059,7 +1062,9 @@ class Connection(ConnectionHandlers):
 	def account_changed(self, new_name):
 		self.name = new_name
 
-	def request_last_status_time(self, jid, resource):
+	def request_last_status_time(self, jid, resource, groupchat_jid=None):
+		'''groupchat_jid is used when we want to send a request to a real jid
+		and act as if the answer comes from the groupchat_jid'''
 		if not self.connection:
 			return
 		to_whom_jid = jid
@@ -1067,9 +1072,15 @@ class Connection(ConnectionHandlers):
 			to_whom_jid += '/' + resource
 		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_LAST)
+		id = self.connection.getAnID()
+		iq.setID(id)
+		if groupchat_jid:
+			self.groupchat_jids[id] = groupchat_jid
 		self.connection.send(iq)
 
-	def request_os_info(self, jid, resource):
+	def request_os_info(self, jid, resource, groupchat_jid=None):
+		'''groupchat_jid is used when we want to send a request to a real jid
+		and act as if the answer comes from the groupchat_jid'''
 		if not self.connection:
 			return
 		# If we are invisible, do not request
@@ -1081,6 +1092,10 @@ class Connection(ConnectionHandlers):
 			to_whom_jid += '/' + resource
 		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_VERSION)
+		id = self.connection.getAnID()
+		iq.setID(id)
+		if groupchat_jid:
+			self.groupchat_jids[id] = groupchat_jid
 		self.connection.send(iq)
 
 	def get_settings(self):
@@ -1088,7 +1103,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq3 = iq2.addChild(name='gajim', namespace='gajim:prefs')
 		self.connection.send(iq)
 
@@ -1098,7 +1113,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq2.addChild(name='storage', namespace='storage:bookmarks')
 		self.connection.send(iq)
 
@@ -1107,12 +1122,13 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq3 = iq2.addChild(name='storage', namespace='storage:bookmarks')
 		for bm in self.bookmarks:
 			iq4 = iq3.addChild(name = "conference")
 			iq4.setAttr('jid', bm['jid'])
 			iq4.setAttr('autojoin', bm['autojoin'])
+			iq4.setAttr('minimize', bm['minimize'])
 			iq4.setAttr('name', bm['name'])
 			# Only add optional elements if not empty
 			# Note: need to handle both None and '' as empty
@@ -1131,7 +1147,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq2.addChild(name='storage', namespace='storage:rosternotes')
 		self.connection.send(iq)
 
@@ -1140,7 +1156,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq3 = iq2.addChild(name='storage', namespace='storage:rosternotes')
 		for jid in self.annotations.keys():
 			if self.annotations[jid]:
@@ -1155,7 +1171,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq2.addChild(name='storage', namespace='storage:metacontacts')
 		id = self.connection.getAnID()
 		iq.setID(id)
@@ -1167,7 +1183,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace='jabber:iq:private')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq3 = iq2.addChild(name='storage', namespace='storage:metacontacts')
 		for tag in tags_list:
 			for data in tags_list[tag]:
@@ -1264,7 +1280,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 		# Save the time we quit to avoid duplicate logs AND be faster than 
 		# get that date from DB
-		self.last_history_line[jid] = time.time()
+		self.last_history_line[jid] = time_time()
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		'''role is for all the life of the room so it's based on nick'''
@@ -1419,7 +1435,8 @@ class Connection(ConnectionHandlers):
 				return
 			df = []
 			for item in tag.getTags('item'):
-				f = {}
+				# We also show attributes. jid is there
+				f = item.attrs
 				for i in item.getPayload():
 					f[i.getName()] = i.getData()
 				df.append(f)

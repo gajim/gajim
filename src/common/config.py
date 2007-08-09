@@ -7,6 +7,7 @@
 ## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ## 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -81,7 +82,7 @@ class Config:
 		'markedmsgcolor': [ opt_color, '#ff8080', '', True ],
 		'urlmsgcolor': [ opt_color, '#0000ff', '', True ],
 		'collapsed_rows': [ opt_str, '', _('List (space separated) of rows (accounts and groups) that are collapsed.'), True ],
-		'roster_theme': [ opt_str, 'gtk+', '', True ],
+		'roster_theme': [ opt_str, _('default'), '', True ],
 		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
@@ -182,12 +183,12 @@ class Config:
 		'tooltip_avatar_height': [opt_int, 125],
 		'vcard_avatar_width': [opt_int, 200],
 		'vcard_avatar_height': [opt_int, 200],
+		'notification_preview_message': [opt_bool, True, _('Preview new messages in notification popup?')],
 		'notification_position_x': [opt_int, -1],
 		'notification_position_y': [opt_int, -1],
 		'notification_avatar_width': [opt_int, 48],
 		'notification_avatar_height': [opt_int, 48],
 		'muc_highlight_words': [opt_str, '', _('A semicolon-separated list of words that will be highlighted in group chats.')],
-		'minimize_autojoined_rooms': [opt_bool, False, _('If True, autojoined bookmarked rooms will be minimized on startup.')],
 		'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used.')],
 		'check_if_gajim_is_default': [opt_bool, True, _('If True, Gajim will check if it\'s the default jabber client on each startup.')],
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
@@ -211,8 +212,7 @@ class Config:
 			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect.')],
 		'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window.')],
 		'escape_key_closes': [opt_bool, True, _('If True, pressing the escape key closes a tab/window.')],
-		'always_hide_groupchat_buttons': [opt_bool, False, _('Hides the buttons in group chat window.')],
-		'always_hide_chat_buttons': [opt_bool, False, _('Hides the buttons in two persons chat window.')],
+		'compact_view': [opt_bool, False, _('Hides the buttons in chat windows.')],
 		'hide_groupchat_banner': [opt_bool, False, _('Hides the banner in a group chat window')],
 		'hide_chat_banner': [opt_bool, False, _('Hides the banner in two persons chat window')],
 		'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the group chat occupants list in group chat window.')],
@@ -228,6 +228,7 @@ class Config:
 		'scroll_roster_to_last_message': [opt_bool, True, _('If True, Gajim will scroll and select the contact who sent you the last message, if chat window is not already opened.')],
 		'use_latex': [opt_bool, False, _('If True, Gajim will convert string between $$ and $$ to an image using dvips and convert before insterting it in chat window.')],
 		'change_status_window_timeout': [opt_int, 15, _('Time of inactivity needed before the change status window closes down.')],
+		'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],
 	}
 
 	__options_per_key = {
@@ -260,6 +261,7 @@ class Config:
 			'gpgpassword': [ opt_str, '' ],
 			'sync_with_global_status': [ opt_bool, False, ],
 			'no_log_for': [ opt_str, '' ],
+			'minimized_gc': [ opt_str, '' ],
 			'attached_gpg_keys': [ opt_str, '' ],
 			'keep_alives_enabled': [ opt_bool, True],
 			# send keepalive every N seconds of inactivity
@@ -387,8 +389,8 @@ class Config:
 
 	themes_default = {
 		# sorted alphanum
-		'gtk+': [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','', '',
-			'B' ],
+		_('default'): [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','',
+			'', 'B' ],
 
 		_('green'): [ '', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
 					'', 'I', '#000000', '', '', '', '',
