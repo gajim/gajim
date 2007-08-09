@@ -120,6 +120,8 @@ from atom_window import AtomWindow
 from common import exceptions
 from common.zeroconf import connection_zeroconf
 from common import dbus_support
+if dbus_support.supported:
+	import dbus
 
 if os.name == 'posix': # dl module is Unix Only
 	try: # rename the process name to gajim
@@ -2430,6 +2432,31 @@ class Interface:
 			import network_manager_listener
 			if not network_manager_listener.supported:
 				print >> sys.stderr, _('Network Manager support not available')
+
+		# Handle gnome screensaver
+		if dbus_support.supported:
+			def gnome_screensaver_ActiveChanged_cb(active):
+				if not active:
+					return
+				for account in gajim.connections:
+					if not gajim.sleeper_state.has_key(account) or \
+							not gajim.sleeper_state[account]:
+						continue
+					if gajim.sleeper_state[account] == 'online':
+						# we save out online status
+						gajim.status_before_autoaway[account] = \
+							gajim.connections[account].status
+						# we go away (no auto status) [we pass True to auto param]
+						auto_message = gajim.config.get('autoaway_message')
+						if not auto_message:
+							auto_message = gajim.connections[account].status
+						self.roster.send_status(account, 'away', auto_message,
+							auto=True)
+						gajim.sleeper_state[account] = 'autoaway'
+
+			bus = dbus.SessionBus()
+			bus.add_signal_receiver(gnome_screensaver_ActiveChanged_cb,
+				'ActiveChanged', 'org.gnome.ScreenSaver')
 
 		self.show_vcard_when_connect = []
 
