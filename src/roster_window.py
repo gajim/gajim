@@ -1959,9 +1959,6 @@ class RosterWindow:
 			add_special_notification_menuitem = xml.get_widget(
 				'add_special_notification_menuitem')
 
-			add_special_notification_menuitem.hide()
-			add_special_notification_menuitem.set_no_show_all(True)
-
 			if not our_jid:
 				# add a special img for rename menuitem
 				path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
@@ -2086,9 +2083,6 @@ class RosterWindow:
 			'add_special_notification_menuitem')
 		execute_command_menuitem = xml.get_widget(
 			'execute_command_menuitem')
-
-		add_special_notification_menuitem.hide()
-		add_special_notification_menuitem.set_no_show_all(True)
 
 		# send custom status icon
 		blocked = False

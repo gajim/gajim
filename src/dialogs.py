@@ -546,15 +546,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			else:
 				liststore.append([type_, img, type_])
 		self.protocol_combobox.set_active(0)
-		self.protocol_jid_combobox.set_no_show_all(True)
-		self.protocol_jid_combobox.hide()
-		self.subscription_table.set_no_show_all(True)
 		self.auto_authorize_checkbutton.show()
-		self.message_scrolledwindow.set_no_show_all(True)
-		self.register_hbox.set_no_show_all(True)
-		self.register_hbox.hide()
-		self.connected_label.set_no_show_all(True)
-		self.connected_label.hide()
 		liststore = gtk.ListStore(str)
 		self.protocol_jid_combobox.set_model(liststore)
 		self.xml.signal_autoconnect(self)
@@ -1768,17 +1760,6 @@ class SingleMessageWindow:
 					spell2.set_language(lang)
 			except gobject.GError, msg:
 				dialogs.AspellDictError(lang)
-		self.send_button.set_no_show_all(True)
-		self.reply_button.set_no_show_all(True)
-		self.send_and_close_button.set_no_show_all(True)
-		self.to_label.set_no_show_all(True)
-		self.to_entry.set_no_show_all(True)
-		self.from_label.set_no_show_all(True)
-		self.from_entry.set_no_show_all(True)
-		self.close_button.set_no_show_all(True)
-		self.cancel_button.set_no_show_all(True)
-		self.message_scrolledwindow.set_no_show_all(True)
-		self.conversation_scrolledwindow.set_no_show_all(True)
 
 		self.prepare_widgets_for(self.action)
 
@@ -2141,7 +2122,6 @@ class PrivacyListWindow:
 
 		self.window.set_title(title)
 
-		self.add_edit_vbox.set_no_show_all(True)
 		self.window.show_all()
 		self.add_edit_vbox.hide()
 
@@ -2905,9 +2885,6 @@ class AdvancedNotificationsWindow:
 		self.delete_button.set_sensitive(False)
 		self.down_button.set_sensitive(False)
 		self.up_button.set_sensitive(False)
-		self.recipient_list_entry.set_no_show_all(True)
-		for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
-			self.__dict__[st + '_cb'].set_no_show_all(True)
 
 		self.window.show_all()
 

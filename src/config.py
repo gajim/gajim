@@ -89,10 +89,7 @@ class PreferencesWindow:
 		self.treat_incoming_messages_combobox =\
 			self.xml.get_widget('treat_incoming_messages_combobox')
 
-		#FIXME: remove when ANC will be implemented
-		w = self.xml.get_widget('hbox3020')
-		w.set_no_show_all(True)
-		w.hide()
+		w = self.xml.get_widget('anc_hbox')
 
 		# trayicon
 		if gajim.interface.systray_capabilities:
@@ -506,8 +503,7 @@ class PreferencesWindow:
 		notify_gmail_checkbutton = self.xml.get_widget('notify_gmail_checkbutton')
 		notify_gmail_extra_checkbutton = self.xml.get_widget(
 			'notify_gmail_extra_checkbutton')
-		frame_gmail.set_no_show_all(True)
-		
+
 		for account in gajim.config.get_per('accounts'):
 			jid = gajim.get_jid_from_account(account)
 			if gajim.get_server_from_jid(jid) in gajim.gmail_domains:
@@ -3039,8 +3035,6 @@ class AccountCreationWizardWindow:
 		self.update_progressbar_timeout_id = None
 
 		self.notebook.set_current_page(0)
-		self.advanced_button.set_no_show_all(True)
-		self.finish_button.set_no_show_all(True)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 

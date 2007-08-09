@@ -116,8 +116,6 @@ class FileTransfersWindow:
 		self.cancel_menuitem = self.xml.get_widget('cancel_menuitem')
 		self.pause_menuitem = self.xml.get_widget('pause_menuitem')
 		self.continue_menuitem = self.xml.get_widget('continue_menuitem')
-		self.continue_menuitem.hide()
-		self.continue_menuitem.set_no_show_all(True)
 		self.remove_menuitem = self.xml.get_widget('remove_menuitem')
 		self.xml.signal_autoconnect(self)
 

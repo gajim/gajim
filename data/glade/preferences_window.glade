@@ -976,8 +976,9 @@ Single message</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox3020">
+                              <widget class="GtkHBox" id="anc_hbox">
                                 <property name="visible">True</property>
+                                <property name="no_show_all">True</property>
                                 <child>
                                   <widget class="GtkButton" id="button1">
                                     <property name="visible">True</property>
@@ -1896,6 +1897,7 @@ Custom</property>
                 <child>
                   <widget class="GtkFrame" id="frame_gmail">
                     <property name="visible">True</property>
+                    <property name="no_show_all">True</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">GTK_SHADOW_NONE</property>
                     <child>

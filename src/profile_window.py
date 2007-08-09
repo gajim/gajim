@@ -77,10 +77,6 @@ class ProfileWindow:
 		# Create Image for avatar button
 		image = gtk.Image()
 		self.xml.get_widget('PHOTO_button').set_image(image)
-		text_button = self.xml.get_widget('NOPHOTO_button')
-		# We use 2 buttons because some GTK theme don't show images in buttons
-		text_button.set_no_show_all(True)
-		text_button.hide()
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
