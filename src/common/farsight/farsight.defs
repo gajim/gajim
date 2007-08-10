@@ -182,8 +182,8 @@
   (c-name "farsight_session_create_stream")
   (return-type "FarsightStream*")
   (parameters
-    '("FarsightMediaType" "media_type")
-    '("FarsightStreamDirection" "dir")
+    '("int" "media_type")
+    '("int" "dir")
   )
 )
 

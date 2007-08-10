@@ -2,7 +2,13 @@
 headers
 #include <Python.h>
 #include "pygobject.h"
-#include "farsight.h"
+#include <gst/gstelement.h>
+#include <farsight/farsight.h>
+#include <farsight/farsight-transport.h>
+
+#define GetString(name) PyString_AsString(PyMapping_GetItemString(item, name))
+#define GetLong(name)   PyInt_AsLong(PyMapping_GetItemString(item, name))
+#define GetFloat(name)  PyFloat_AsDouble(PyMapping_GetItemString(item, name))
 %%
 modulename farsight
 %%
@@ -33,4 +39,168 @@ static PyObject* _wrap_farsight_session_list_supported_codecs(PyGObject *self)
 	}
 	// g_list_free(list); (a const list, we don't free it?)
 	return ret;
+}
+%%
+override farsight_stream_get_local_codecs noargs
+static PyObject* _wrap_farsight_stream_get_local_codecs(PyGObject *self)
+{
+	const GList *list, *tmp;
+	PyObject* ret;
+
+	list=farsight_stream_get_local_codecs(FARSIGHT_STREAM(self->obj));
+
+	ret=PyList_New(0);
+	for (tmp=list; tmp!=NULL; tmp=g_list_next(tmp)) {
+		FarsightCodec *codec = tmp->data;
+		PyObject *item = pygobject_new((GObject *) codec);
+
+		PyList_Append(ret, item);
+		Py_DECREF(item);
+	}
+	// g_list_free(list); (a const list, we don't free it?)
+	return ret;
+}
+%%
+override farsight_stream_get_native_candidate_list noargs
+static PyObject* _wrap_farsight_stream_get_native_candidate_list(PyGObject *self)
+{
+	const GList *list, *tmp;
+	PyObject* ret;
+
+	list=farsight_stream_get_native_candidate_list(FARSIGHT_STREAM(self->obj));
+
+	ret=PyList_New(0);
+	for (tmp=list; tmp!=NULL; tmp=g_list_next(tmp)) {
+		FarsightCodec *codec = tmp->data;
+		PyObject *item = pygobject_new((GObject *) codec);
+
+		PyList_Append(ret, item);
+		Py_DECREF(item);
+	}
+	// g_list_free(list); (a const list, we don't free it?)
+	return ret;
+}
+%%
+override farsight_stream_set_codec_preference_list kwargs
+static PyObject* _wrap_farsight_stream_set_codec_preference_list(PyGObject *self,
+                                                                 PyObject *args,
+								 PyObject *kwargs)
+{
+	/* one could try to unpack tuples right into the array */
+	static char *kwlist[] = {"codec_pref", NULL};
+	PyObject* list;
+	GArray* codec_pref_array;
+	FarsightCodecPreference codec_pref;
+	int i;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O", kwlist, &list))
+		return NULL;
+	
+	codec_pref_array = g_array_sized_new(FALSE, FALSE,
+		sizeof(FarsightCodecPreference), PySequence_Size(list));
+
+	for(i=0; i<PySequence_Size(list); i++) {
+		PyArg_ParseTuple(PySequence_GetItem(list, i), "si",
+			&codec_pref.encoding_name,
+			&codec_pref.clock_rate);
+		g_array_append_val(codec_pref_array, codec_pref);
+	}
+
+	farsight_stream_set_codec_preference_list(FARSIGHT_STREAM(self->obj),
+		(const GArray*) codec_pref_array);
+
+	g_array_free(codec_pref_array, FALSE);
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+%%
+override farsight_stream_set_remote_candidate_list kwargs
+static PyObject* _wrap_farsight_stream_set_remote_candidate_list(PyGObject *self,
+                                                                 PyObject *args,
+								 PyObject *kwargs)
+{
+	static char* kwlist[] = {"remote_candidates", NULL};
+	PyObject* list;
+	GArray* candidate_array;
+	GList* candidate_list=NULL;
+	int i, listsize;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O", kwlist, &list))
+		return NULL;
+
+	candidate_array=g_array_sized_new(FALSE, TRUE,
+		sizeof(FarsightTransportInfo), PySequence_Size(list));
+
+	listsize=PySequence_Size(list);
+	for(i=0;i<listsize;i++) {
+		FarsightTransportInfo fti;
+		PyObject* item = PySequence_GetItem(list, listsize-i-1);
+
+		fti.candidate_id=GetString("candidate_id");
+		fti.component=GetLong("component");
+		fti.ip=GetString("ip");
+		fti.port=GetLong("port");
+		fti.proto=GetLong("proto");
+		fti.proto_subtype=GetString("proto_subtype");
+		fti.proto_profile=GetString("proto_profile");
+		fti.preference=GetFloat("preference");
+		fti.type=GetLong("type");
+		fti.username=GetString("username");
+		fti.password=GetString("password");
+
+		g_array_append_val(candidate_array, fti);
+		candidate_list = g_list_prepend(candidate_list,
+			&g_array_index(candidate_array, FarsightTransportInfo, i));
+	}
+
+	farsight_stream_set_remote_candidate_list(FARSIGHT_STREAM(self->obj), candidate_list);
+
+	g_array_free(candidate_array, FALSE);
+	g_list_free(candidate_list);
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+%%
+override farsight_stream_set_remote_codecs kwargs
+static PyObject* _wrap_farsight_stream_set_remote_codecs(PyGObject *self,
+                                                         PyObject *args,
+							 PyObject *kwargs)
+{
+	static char* kwlist[] = {"codecs", NULL};
+	PyObject* list, * item;
+	GArray* codecs_array;
+	GList* codecs_list;
+	int i, listsize;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O", kwlist, &list))
+		return NULL;
+
+	codecs_array=g_array_sized_new(FALSE, TRUE,
+		sizeof(FarsightCodec), PySequence_Size(list));
+
+	listsize=PySequence_Size(list);
+	for(i=0;i<listsize;i++) {
+		FarsightCodec fc;
+		PyObject* item = PySequence_GetItem(list, listsize-i-1);
+
+		fc.id = GetLong("id");
+		fc.encoding_name = GetString("encoding_name");
+		fc.media_type = GetLong("media_type");
+		fc.clock_rate = GetLong("clock_rate");
+		fc.channels = GetLong("channels");
+
+		g_array_append_val(codecs_array, fc);
+		codecs_list = g_list_prepend(codecs_list,
+			&g_array_index(codecs_array, FarsightCodec, i));
+	}
+
+	farsight_stream_set_remote_codecs(FARSIGHT_STREAM(self->obj), codecs_list);
+
+	g_array_free(codecs_array, FALSE);
+	g_list_free(codecs_list);
+
+	Py_INCREF(Py_None);
+	return Py_None;
 }

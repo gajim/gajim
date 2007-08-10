@@ -17,3 +17,8 @@ farsight.defs:
 		farsight/farsight-session.h \
 		farsight/farsight-stream.h \
 		>$@
+
+clean:
+	-rm farsight.c farsightmodule.o  farsight.o farsight.so
+
+.PHONY: clean
