@@ -1,4 +1,4 @@
-CFLAGS=`pkg-config --cflags farsight-0.1 pygtk-2.0` -I /usr/include/python2.5 -I. -I farsight/
+CFLAGS=-g `pkg-config --cflags farsight-0.1 pygtk-2.0` -I /usr/include/python2.5 -I. -I farsight/
 LDFLAGS=`pkg-config --libs farsight-0.1`
 
 farsight.so: farsight.o farsightmodule.o
