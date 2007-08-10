@@ -50,11 +50,6 @@ log = logging.getLogger('gajim.c.connection')
 
 import gtkgui_helpers
 
-from common import dbus_support
-if dbus_support.supported:
-	from music_track_listener import MusicTrackListener
-	import dbus
-
 ssl_error = { 
 2: "Unable to get issuer certificate",
 3: "Unable to get certificate CRL",
@@ -532,11 +527,6 @@ class Connection(ConnectionHandlers):
 			if self.on_connect_auth:
 				self.on_connect_auth(con)
 				self.on_connect_auth = None
-			#FIXME: should set the Tune per account only
-			listener = MusicTrackListener.get()
-			track = listener.get_playing_track()
-			gajim.interface.roster._music_track_changed(listener, track)
-#			print "%s - %s" % (track.artist, track.title)
 		else:
 			# Forget password if needed
 			if not gajim.config.get_per('accounts', self.name, 'savepass'):

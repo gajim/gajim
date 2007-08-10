@@ -40,6 +40,11 @@ from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
 
+from common import dbus_support
+if dbus_support.supported:
+	import dbus
+	from music_track_listener import MusicTrackListener
+
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
 # kind of events we can wait for an answer
@@ -816,6 +821,11 @@ class ConnectionDisco:
 					if identity['category'] == 'pubsub' and identity['type'] == \
 					'pep':
 						self.pep_supported = True
+						listener = MusicTrackListener.get()
+						track = listener.get_playing_track()
+						if gajim.config.get('publish_tune'):
+							gajim.interface.roster._music_track_changed(listener,
+									track, self.name)
 						break
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
 				gajim.proxy65_manager.resolve(jid, self.connection, self.name)

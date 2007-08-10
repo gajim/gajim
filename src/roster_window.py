@@ -3623,14 +3623,14 @@ class RosterWindow:
 				listener = MusicTrackListener.get()
 				self._music_track_changed_signal = listener.connect(
 					'music-track-changed', self._music_track_changed)
-				track = listener.get_playing_track()
-				self._music_track_changed(listener, track)
+			track = listener.get_playing_track()
+			self._music_track_changed(listener, track)
 		else:
 			if self._music_track_changed_signal is not None:
 				listener = MusicTrackListener.get()
 				listener.disconnect(self._music_track_changed_signal)
 				self._music_track_changed_signal = None
-				self._music_track_changed(None, None)
+			self._music_track_changed(None, None)
 
 	def _change_awn_icon_status(self, status):
 		if not dbus_support.supported:
@@ -3658,9 +3658,11 @@ class RosterWindow:
 		except Exception, e:
 			pass
 
-	def _music_track_changed(self, unused_listener, music_track_info):
+	def _music_track_changed(self, unused_listener, music_track_info,
+			account=''):
 		from common import pep
-		accounts = gajim.connections.keys()
+		if account == '':
+			accounts = gajim.connections.keys()
 		if music_track_info is None:
 				artist = ''
 				title = ''
@@ -3681,14 +3683,18 @@ class RosterWindow:
 				status_message = '♪ ' + _('"%(title)s" by %(artist)s') % \
 				{'title': music_track_info.title,
 					'artist': music_track_info.artist } + ' ♪'
-		for account in accounts:
-			if not gajim.config.get_per('accounts', account,
-			'sync_with_global_status'):
-				continue
-			#FIXME: updates should arrive, when all accounts are
-			# connected and we know their abilities
-			if not gajim.connections[account].pep_supported:
-				continue
+		print "change (%s - %s) for %s" % (artist, title, account)
+		if account == '':
+			print "Multi accounts"
+			for account in accounts:
+				if not gajim.config.get_per('accounts', account,
+				'sync_with_global_status'):
+					continue
+				if not gajim.connections[account].pep_supported:
+					continue
+				pep.user_send_tune(account, artist, title, source = '')
+		else:
+			print "Single account"
 			pep.user_send_tune(account, artist, title, source = '')
 
 
@@ -5270,12 +5276,7 @@ class RosterWindow:
 		self.tooltip = tooltips.RosterTooltip()
 		self.draw_roster()
 
-		## Music Track notifications
-		## FIXME: we use a timeout because changing status of
-		## accounts has no effect until they are connected.
-		gobject.timeout_add(1000,
-			self.enable_syncing_status_msg_from_current_music_track,
-			gajim.config.get('pub_tune'))
+		self.enable_syncing_status_msg_from_current_music_track(gajim.config.get('publish_tune'))
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
