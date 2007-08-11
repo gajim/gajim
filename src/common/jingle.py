@@ -15,6 +15,16 @@
 import gajim
 import xmpp
 
+# ugly hack
+import sys, dl, gst
+sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_GLOBAL)
+import farsight
+sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_LOCAL)
+FARSIGHT_MEDIA_TYPE_AUDIO=0
+FARSIGHT_STREAM_DIRECTION_BOTH=3
+FARSIGHT_NETWORK_PROTOCOL_UDP=0
+FARSIGHT_CANDIDATE_TYPE_LOCAL=0
+
 import meta
 
 class JingleStates(object):
@@ -67,6 +77,10 @@ class JingleSession(object):
 			'iq-result':		[],
 			'iq-error':		[],
 		}
+
+		# for making streams using farsight
+		self.p2psession = farsight.farsight_session_factory_make('rtp')
+		self.p2psession.connect('error', self.on_p2psession_error)
 
 	''' Middle-level functions to manage contents. Handle local content
 	cache and send change notifications. '''
@@ -146,10 +160,9 @@ class JingleSession(object):
 			name = content['name']
 			
 
-	def sessionInitiateCB(self, stanza):
+	def __sessionInitiateCB(self, stanza, jingle, error):
 		''' We got a jingle session request from other entity,
 		therefore we are the receiver... Unpack the data. '''
-		jingle = stanza.getTag('jingle')
 		self.initiator = jingle['initiator']
 		self.responder = self.ourjid
 		self.jid = self.initiator
@@ -172,6 +185,9 @@ class JingleSession(object):
 			raise xmpp.NodeProcessed
 
 		self.state = JingleStates.pending
+
+	def on_p2psession_error(self, *anything):
+		print "Farsight session error!"
 
 	''' Methods that make/send proper pieces of XML. They check if the session
 	is in appropriate state. '''
@@ -358,18 +374,44 @@ class JingleVoiP(object):
 	__metaclass__=meta.VerboseClassType
 	def __init__(self, session, node=None):
 		self.session = session
+		self.codecs = None
 
-		if node is None:
-			self.audio = JingleAudioSession(self)
-		else:
-			self.audio = JingleAudioSession(self, node.getTag('content'))
-		self.transport = JingleICEUDPSession(self)
+		#if node is None:
+		#	self.audio = JingleAudioSession(self)
+		#else:
+		#	self.audio = JingleAudioSession(self, node.getTag('content'))
+		#self.transport = JingleICEUDPSession(self)
+		self.setupStream()
 
 	def toXML(self):
 		''' Return proper XML for <content/> element. '''
 		return xmpp.Node('content',
 			attrs={'name': self.name, 'creator': self.creator, 'profile': 'RTP/AVP'},
-			payload=[self.audio.toXML(), self.transport.toXML()])
+			payload=[
+				xmpp.Node(xmpp.NS_JINGLE_AUDIO+' description', payload=self.getCodecs()),
+				xmpp.Node(xmpp.NS_JINGLE_ICE_UDP+' transport')
+			])
+
+	def setupStream(self):
+		self.p2pstream = self.session.p2psession.create_stream(FARSIGHT_MEDIA_TYPE_AUDIO, FARSIGHT_STREAM_DIRECTION_BOTH)
+		self.p2pstream.set_property('transmitter', 'libjingle')
+		self.p2pstream.connect('error', self.on_p2pstream_error)
+		self.p2pstream.connect('new-active-candidate-pair', self.on_p2pstream_new_active_candidate_pair)
+		self.p2pstream.connect('codec-changed', self.on_p2pstream_codec_changed)
+		self.p2pstream.connect('native-candidates-prepared', self.on_p2pstream_native_candidates_prepared)
+		self.p2pstream.connect('state-changed', self.on_p2pstream_state_changed)
+		self.p2pstream.connect('new-native-candidate', self.on_p2pstream_new_native_candidate)
+		self.p2pstream.prepare_transports()
+
+	def on_p2pstream_error(self, *whatever): pass
+	def on_p2pstream_new_active_candidate_pair(self, *whatever): pass
+	def on_p2pstream_codec_changed(self, *whatever): pass
+	def on_p2pstream_native_candidates_prepared(self, *whatever): pass
+	def on_p2pstream_state_changed(self, *whatever): pass
+	def on_p2pstream_new_native_candidate(self, *whatever): pass
+	def getCodecs(self):
+		codecs=self.p2pstream.get_local_codecs()
+		return (xmpp.Node('payload', attrs=a) for a in codecs)
 
 class ConnectionJingle(object):
 	''' This object depends on that it is a part of Connection class. '''
@@ -428,5 +470,5 @@ class ConnectionJingle(object):
 	def startVoiP(self, jid):
 		jingle = JingleSession(self, weinitiate=True, jid=jid)
 		self.addJingle(jingle)
-		jingle.addContent('voice', JingleVoiP())
+		jingle.addContent('voice', JingleVoiP(jingle))
 		jingle.startSession()

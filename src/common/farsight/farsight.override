@@ -84,6 +84,64 @@ static PyObject* _wrap_farsight_stream_get_local_codecs(PyGObject *self)
 	return ret;
 }
 %%
+override farsight_stream_get_native_candidate kwargs
+static PyObject* _wrap_farsight_stream_get_native_candidate(PyGObject *self,
+                                                            PyObject *args,
+							    PyObject *kwargs)
+{
+	static char* kwlist[] = {"candidate_id", NULL};
+	char* candidate_id;
+	GList* list;
+	FarsightTransportInfo* data;
+	PyObject* ret;
+	PyObject* item;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "s", kwlist, &candidate_id))
+		return NULL;
+
+	list = farsight_stream_get_native_candidate(FARSIGHT_STREAM(self->obj), candidate_id);
+	data = list->data;
+
+	ret = PyDict_New();
+
+	PyDict_SetItemString(ret, "candidate_id",	item=PyString_FromString(data->candidate_id));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "component",		item=PyInt_FromLong(data->component));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "ip",			item=PyString_FromString(data->ip));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "port",		item=PyInt_FromLong(data->port));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "proto",		item=PyInt_FromLong(data->proto));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "proto_subtype",	item=PyString_FromString(data->proto_subtype));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "proto_profile",	item=PyString_FromString(data->proto_profile));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "preference",		item=PyFloat_FromDouble(data->preference));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "type",		item=PyInt_FromLong(data->type));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "username",		item=PyString_FromString(data->username));
+	Py_DECREF(item);
+
+	PyDict_SetItemString(ret, "password",		item=PyString_FromString(data->password));
+	Py_DECREF(item);
+
+	g_list_free(list);
+
+	return ret;
+}
+%%
 override farsight_stream_get_native_candidate_list noargs
 static PyObject* _wrap_farsight_stream_get_native_candidate_list(PyGObject *self)
 {
