@@ -6,31 +6,168 @@ headers
 #include <farsight/farsight.h>
 #include <farsight/farsight-transport.h>
 
-#define GetString(name) PyString_AsString(PyMapping_GetItemString(item, name))
-#define GetLong(name)   PyInt_AsLong(PyMapping_GetItemString(item, name))
-#define GetFloat(name)  PyFloat_AsDouble(PyMapping_GetItemString(item, name))
+/* functions to put data into dict */
+inline static void insert_long_into_dict(PyObject* dict, char* key, long value) {
+	PyObject* item=PyInt_FromLong(value);
+	PyDict_SetItemString(dict, key, item);
+	Py_DECREF(item);
+}
 
-static PyObject* farsight_codec_to_dict(FarsightCodec* fc) {
+inline static void insert_str_into_dict(PyObject* dict, char* key, const char* value) {
+	if (!value) return;
+	PyObject* item=PyString_FromString(value);
+	PyDict_SetItemString(dict, key, item);
+	Py_DECREF(item);
+}
+
+inline static void insert_double_into_dict(PyObject* dict, char* key, double value) {
+	PyObject* item=PyFloat_FromDouble(value);
+	PyDict_SetItemString(dict, key, item);
+	Py_DECREF(item);
+}
+
+static PyObject* farsight_transport_info_to_dict(FarsightTransportInfo* fti) {
 	PyObject* dict = PyDict_New();
-	PyObject* item;
 
-	PyDict_SetItemString(dict, "id",		item=PyInt_FromLong(fc->id));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(dict, "encoding_name",	item=PyString_FromString(fc->encoding_name));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(dict, "media_type",	item=PyInt_FromLong(fc->media_type));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(dict, "clock_rate", 	item=PyInt_FromLong(fc->clock_rate));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(dict, "channels",		item=PyInt_FromLong(fc->channels));
-	Py_DECREF(item);
+	insert_str_into_dict	(dict, "candidate_id",	fti->candidate_id);
+	insert_long_into_dict	(dict, "component",	fti->component);
+	insert_str_into_dict	(dict, "ip",		fti->ip);
+	insert_long_into_dict	(dict, "port",		fti->port);
+	insert_long_into_dict	(dict, "proto",		fti->proto);
+	insert_str_into_dict	(dict, "proto_subtype",	fti->proto_subtype);
+	insert_str_into_dict	(dict, "proto_profile",	fti->proto_profile);
+	insert_double_into_dict	(dict, "preference",	fti->preference);
+	insert_long_into_dict	(dict, "type",		fti->type);
+	insert_str_into_dict	(dict, "username",	fti->username);
+	insert_str_into_dict	(dict, "password",	fti->password);
 
 	return dict;
 }
+
+static PyObject* farsight_codec_to_dict(FarsightCodec* fc) {
+	PyObject* dict = PyDict_New();
+
+	/* these two are required */
+	insert_long_into_dict(dict, "id", fc->id);
+	insert_str_into_dict(dict, "encoding_name", fc->encoding_name);
+
+	/* next are optional */
+	if (fc->media_type)	insert_long_into_dict(dict, "media_type", fc->media_type);
+	if (fc->clock_rate)	insert_long_into_dict(dict, "clock_rate", fc->clock_rate);
+	if (fc->channels)	insert_long_into_dict(dict, "channels", fc->channels);
+
+	if (fc->optional_params) {
+		PyObject* params = PyDict_New();
+		GList* list;
+
+		for(list=fc->optional_params; list; list=g_list_next(list)) {
+			FarsightCodecParameter *fcp=list->data;
+			insert_str_into_dict(params, fcp->name, fcp->value);
+		}
+
+		PyDict_SetItemString(dict, "params", params);
+		Py_DECREF(params);
+	}
+
+	return dict;
+}
+
+/* functions to get data from dict */
+/* next three functions might raise an error */
+inline static long get_long_from_dict(PyObject* dict, char* key) {
+	PyObject* pyint=PyMapping_GetItemString(dict, key);
+	return(pyint?PyInt_AsLong(pyint):0);
+}
+
+inline static char* get_str_from_dict(PyObject* dict, char* key) {
+	PyObject* str=PyMapping_GetItemString(dict, key);
+	return(str?PyString_AsString(str):NULL);
+}
+
+inline static double get_double_from_dict(PyObject* dict, char* key) {
+	PyObject* pyfloat=PyMapping_GetItemString(dict, key);
+	return(pyfloat?PyFloat_AsDouble(pyfloat):0.0);
+}
+
+/* may raise an exception */
+static void dict_to_farsight_transport_info(PyObject* dict, FarsightTransportInfo* fti) {
+	if (!dict) return;
+
+	/* required */
+	fti->candidate_id	= get_str_from_dict(dict, "candidate_id");
+	fti->component		= get_long_from_dict(dict, "component");
+	fti->ip			= get_str_from_dict(dict, "ip");
+	fti->port		= get_long_from_dict(dict, "port");
+	fti->proto		= get_long_from_dict(dict, "proto");
+	fti->proto_subtype	= get_str_from_dict(dict, "proto_subtype");
+	fti->proto_profile	= get_str_from_dict(dict, "proto_profile");
+	fti->preference		= get_double_from_dict(dict, "preference");
+	fti->type		= get_long_from_dict(dict, "type");
+
+	if (PyError_Occurred()) return;
+
+	/* optional */
+	fti->username		= get_str_from_dict(dict, "username");
+	fti->password		= get_str_from_dict(dict, "password");
+
+	PyError_Clear();
+}
+
+/* GArray must be freed if not NULL;
+   may raise an exception */
+static void dict_to_farsight_codec(PyObject* dict, FarsightCodec* fc, GArray** fcp) {
+	GArray* array=*fcp;
+
+	if (!dict) return;
+
+	/* required data */
+	fc->id			= get_long_from_dict(dict, "id");
+	fc->encoding_name	= get_str_from_dict(dict, "encoding_name");
+
+	if (PyError_Occured()) return;
+
+	/* optional data */
+	fc->media_type		= get_long_from_dict(dict, "media_type");
+	fc->clock_rate		= get_long_from_dict(dict, "clock_rate");
+	fc->channels		= get_long_from_dict(dict, "channels");
+
+	if (PyMapping_HasKeyString(dict, "params")) {
+		PyObject* params = PyMapping_GetItemString(dict, "params");
+		if (PyDict_Check(params)) {
+			PyObject *key, *value;
+			int pos=0;
+			GList* list=NULL;
+			int i=0;
+
+			if (!array)
+				array = g_array_new(FALSE, FALSE, sizeof(FarsightCodecParameter));
+
+			while (PyDict_Next(params, &pos, &key, &value)) {
+				if (PyString_Check(key) && PyString_Check(value)) {
+					FarsightCodecParameter fcp;
+					fcp.name = PyString_AsString(key);
+					fcp.value= PyString_AsString(value);
+					g_array_append_val(array, fcp);
+					list=g_list_prepend(list,
+						&g_array_index(array, FarsightCodecParameter, i++));
+				} else {
+					/* this is not a string? not good... */
+					puts("keys and values must be strings here!");
+				}
+			}
+
+			fc->optional_params = list;
+		} else {
+			/* this is not a dictionary? fail miserably... */
+			puts("params must be a dictionary!");
+		}
+	}
+
+	PyErr_Clear();
+
+	*fcp = array;
+}
+
 %%
 modulename farsight
 %%
@@ -91,7 +228,7 @@ static PyObject* _wrap_farsight_stream_get_native_candidate(PyGObject *self,
 {
 	static char* kwlist[] = {"candidate_id", NULL};
 	char* candidate_id;
-	GList* list;
+	GList* list, *tmp;
 	FarsightTransportInfo* data;
 	PyObject* ret;
 	PyObject* item;
@@ -100,42 +237,15 @@ static PyObject* _wrap_farsight_stream_get_native_candidate(PyGObject *self,
 		return NULL;
 
 	list = farsight_stream_get_native_candidate(FARSIGHT_STREAM(self->obj), candidate_id);
-	data = list->data;
 
-	ret = PyDict_New();
+	ret = PyList_New(0);
+	for(tmp=list;list;list=g_list_next(list)) {
+		FarsightTransportInfo *fti = tmp->data;
+		PyObject *item = farsight_transport_info_to_dict(fti);
 
-	PyDict_SetItemString(ret, "candidate_id",	item=PyString_FromString(data->candidate_id));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "component",		item=PyInt_FromLong(data->component));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "ip",			item=PyString_FromString(data->ip));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "port",		item=PyInt_FromLong(data->port));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "proto",		item=PyInt_FromLong(data->proto));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "proto_subtype",	item=PyString_FromString(data->proto_subtype));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "proto_profile",	item=PyString_FromString(data->proto_profile));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "preference",		item=PyFloat_FromDouble(data->preference));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "type",		item=PyInt_FromLong(data->type));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "username",		item=PyString_FromString(data->username));
-	Py_DECREF(item);
-
-	PyDict_SetItemString(ret, "password",		item=PyString_FromString(data->password));
-	Py_DECREF(item);
+		PyList_Append(ret, item);
+		Py_DECREF(item);
+	}
 
 	g_list_free(list);
 
@@ -150,15 +260,15 @@ static PyObject* _wrap_farsight_stream_get_native_candidate_list(PyGObject *self
 
 	list=farsight_stream_get_native_candidate_list(FARSIGHT_STREAM(self->obj));
 
-	ret=PyList_New(0);
-	for (tmp=list; tmp!=NULL; tmp=g_list_next(tmp)) {
-		FarsightCodec *codec = tmp->data;
-		PyObject *item = pygobject_new((GObject *) codec);
+	ret = PyList_New(0);
+	for(tmp=list;list;list=g_list_next(list)) {
+		FarsightTransportInfo *fti = tmp->data;
+		PyObject *item = farsight_transport_info_to_dict(fti);
 
 		PyList_Append(ret, item);
 		Py_DECREF(item);
 	}
-	// g_list_free(list); (a const list, we don't free it?)
+
 	return ret;
 }
 %%
@@ -217,19 +327,7 @@ static PyObject* _wrap_farsight_stream_set_remote_candidate_list(PyGObject *self
 	for(i=0;i<listsize;i++) {
 		FarsightTransportInfo fti;
 
-		PyObject* item = PySequence_GetItem(list, listsize-i-1);
-
-		fti.candidate_id=GetString("candidate_id");
-		fti.component=GetLong("component");
-		fti.ip=GetString("ip");
-		fti.port=GetLong("port");
-		fti.proto=GetLong("proto");
-		fti.proto_subtype=GetString("proto_subtype");
-		fti.proto_profile=GetString("proto_profile");
-		fti.preference=GetFloat("preference");
-		fti.type=GetLong("type");
-		fti.username="";
-		fti.password="";
+		dict_to_farsight_transport_info(PySequence_GetItem(list, listsize-i-1), &fti);
 
 		g_array_append_val(candidate_array, fti);
 
@@ -237,13 +335,19 @@ static PyObject* _wrap_farsight_stream_set_remote_candidate_list(PyGObject *self
 			&g_array_index(candidate_array, FarsightTransportInfo, i));
 	}
 
-	farsight_stream_set_remote_candidate_list(FARSIGHT_STREAM(self->obj), candidate_list);
+	if(!PyError_Occurred()) {
+		farsight_stream_set_remote_candidate_list(FARSIGHT_STREAM(self->obj), candidate_list);
+	}
 
 	g_array_free(candidate_array, FALSE);
 	g_list_free(candidate_list);
 
-	Py_INCREF(Py_None);
-	return Py_None;
+	if(!PyError_Occurred()) {
+		Py_INCREF(Py_None);
+		return Py_None;
+	} else {
+		return NULL;
+	}
 }
 %%
 override farsight_stream_set_remote_codecs kwargs
@@ -254,6 +358,7 @@ static PyObject* _wrap_farsight_stream_set_remote_codecs(PyGObject *self,
 	static char* kwlist[] = {"codecs", NULL};
 	PyObject* list, * item;
 	GArray* codecs_array;
+	GArray* fcp_array=NULL;
 	GList* codecs_list=NULL;
 	int i, listsize;
 
@@ -266,25 +371,26 @@ static PyObject* _wrap_farsight_stream_set_remote_codecs(PyGObject *self,
 	listsize=PySequence_Size(list);
 	for(i=0;i<listsize;i++) {
 		FarsightCodec fc;
-		PyObject* item = PySequence_GetItem(list, listsize-i-1);
 
-		fc.id = GetLong("id");
-		fc.encoding_name = GetString("encoding_name");
-		fc.media_type = GetLong("media_type");
-		fc.clock_rate = GetLong("clock_rate");
-		fc.channels = GetLong("channels");
-		fc.optional_params = NULL;
+		dict_to_farsight_codec(PySequence_GetItem(list, listsize-i-1), &fc, &fcp_array);
 
 		g_array_append_val(codecs_array, fc);
 		codecs_list = g_list_prepend(codecs_list,
 			&g_array_index(codecs_array, FarsightCodec, i));
 	}
 
-	farsight_stream_set_remote_codecs(FARSIGHT_STREAM(self->obj), codecs_list);
+	if (!PyError_Occurred()) {
+		farsight_stream_set_remote_codecs(FARSIGHT_STREAM(self->obj), codecs_list);
+	}
 
+	g_array_free(fcp_array, FALSE);
 	g_array_free(codecs_array, FALSE);
 	g_list_free(codecs_list);
 
-	Py_INCREF(Py_None);
-	return Py_None;
+	if (!PyError_Occurred()) {
+		Py_INCREF(Py_None);
+		return Py_None;
+	} else {
+		return NULL;
+	}
 }

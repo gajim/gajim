@@ -408,7 +408,10 @@ class JingleVoiP(object):
 	def on_p2pstream_codec_changed(self, *whatever): pass
 	def on_p2pstream_native_candidates_prepared(self, *whatever): pass
 	def on_p2pstream_state_changed(self, *whatever): pass
-	def on_p2pstream_new_native_candidate(self, *whatever): pass
+	def on_p2pstream_new_native_candidate(self, p2pstream, candidate_id):
+		candidate = p2pstream.get_native_candidate(candidate_id)
+
+
 	def getCodecs(self):
 		codecs=self.p2pstream.get_local_codecs()
 		return (xmpp.Node('payload', attrs=a) for a in codecs)

@@ -121,7 +121,7 @@
   (parameters
     '("int" "id")
     '("const-char*" "encoding_name")
-    '("FarsightMediaType" "media_type")
+    '("int" "media_type")
     '("guint" "clock_rate")
   )
 )
@@ -205,7 +205,7 @@
 (define-method get_media_type
   (of-object "FarsightStream")
   (c-name "farsight_stream_get_media_type")
-  (return-type "FarsightMediaType")
+  (return-type "int")
 )
 
 (define-method prepare_transports
@@ -362,25 +362,19 @@
 (define-method get_state
   (of-object "FarsightStream")
   (c-name "farsight_stream_get_state")
-  (return-type "FarsightStreamState")
+  (return-type "int")
 )
 
 (define-method get_direction
   (of-object "FarsightStream")
   (c-name "farsight_stream_get_direction")
-  (return-type "FarsightStreamDirection")
+  (return-type "int")
 )
 
 (define-method get_current_direction
   (of-object "FarsightStream")
   (c-name "farsight_stream_get_current_direction")
-  (return-type "FarsightStreamDirection")
-)
-
-(define-method get_media_type
-  (of-object "FarsightStream")
-  (c-name "farsight_stream_get_media_type")
-  (return-type "FarsightMediaType")
+  (return-type "int")
 )
 
 (define-method get_pipeline
@@ -424,7 +418,7 @@
   (c-name "farsight_stream_signal_error")
   (return-type "none")
   (parameters
-    '("FarsightStreamError" "err")
+    '("int" "err")
     '("const-gchar*" "mesg")
   )
 )
@@ -468,8 +462,8 @@
   (c-name "farsight_stream_signal_state_changed")
   (return-type "none")
   (parameters
-    '("FarsightStreamState" "state")
-    '("FarsightStreamDirection" "direction")
+    '("int" "state")
+    '("int" "direction")
   )
 )
 
