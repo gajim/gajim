@@ -104,13 +104,13 @@ static void dict_to_farsight_transport_info(PyObject* dict, FarsightTransportInf
 	fti->preference		= get_double_from_dict(dict, "preference");
 	fti->type		= get_long_from_dict(dict, "type");
 
-	if (PyError_Occurred()) return;
+	if (PyErr_Occurred()) return;
 
 	/* optional */
 	fti->username		= get_str_from_dict(dict, "username");
 	fti->password		= get_str_from_dict(dict, "password");
 
-	PyError_Clear();
+	PyErr_Clear();
 }
 
 /* GArray must be freed if not NULL;
@@ -124,7 +124,7 @@ static void dict_to_farsight_codec(PyObject* dict, FarsightCodec* fc, GArray** f
 	fc->id			= get_long_from_dict(dict, "id");
 	fc->encoding_name	= get_str_from_dict(dict, "encoding_name");
 
-	if (PyError_Occured()) return;
+	if (PyErr_Occurred()) return;
 
 	/* optional data */
 	fc->media_type		= get_long_from_dict(dict, "media_type");
@@ -335,14 +335,14 @@ static PyObject* _wrap_farsight_stream_set_remote_candidate_list(PyGObject *self
 			&g_array_index(candidate_array, FarsightTransportInfo, i));
 	}
 
-	if(!PyError_Occurred()) {
+	if(!PyErr_Occurred()) {
 		farsight_stream_set_remote_candidate_list(FARSIGHT_STREAM(self->obj), candidate_list);
 	}
 
 	g_array_free(candidate_array, FALSE);
 	g_list_free(candidate_list);
 
-	if(!PyError_Occurred()) {
+	if(!PyErr_Occurred()) {
 		Py_INCREF(Py_None);
 		return Py_None;
 	} else {
@@ -379,7 +379,7 @@ static PyObject* _wrap_farsight_stream_set_remote_codecs(PyGObject *self,
 			&g_array_index(codecs_array, FarsightCodec, i));
 	}
 
-	if (!PyError_Occurred()) {
+	if (!PyErr_Occurred()) {
 		farsight_stream_set_remote_codecs(FARSIGHT_STREAM(self->obj), codecs_list);
 	}
 
@@ -387,7 +387,7 @@ static PyObject* _wrap_farsight_stream_set_remote_codecs(PyGObject *self,
 	g_array_free(codecs_array, FALSE);
 	g_list_free(codecs_list);
 
-	if (!PyError_Occurred()) {
+	if (!PyErr_Occurred()) {
 		Py_INCREF(Py_None);
 		return Py_None;
 	} else {

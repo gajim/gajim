@@ -20,10 +20,6 @@ import sys, dl, gst
 sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_GLOBAL)
 import farsight
 sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_LOCAL)
-FARSIGHT_MEDIA_TYPE_AUDIO=0
-FARSIGHT_STREAM_DIRECTION_BOTH=3
-FARSIGHT_NETWORK_PROTOCOL_UDP=0
-FARSIGHT_CANDIDATE_TYPE_LOCAL=0
 
 import meta
 
@@ -84,21 +80,21 @@ class JingleSession(object):
 
 	''' Middle-level functions to manage contents. Handle local content
 	cache and send change notifications. '''
-	def addContent(self, name, content, initiator='we'):
+	def addContent(self, name, content, creator='we'):
 		''' Add new content to session. If the session is active,
 		this will send proper stanza to update session. 
 		The protocol prohibits changing that when pending.
-		Initiator must be one of ('we', 'peer', 'initiator', 'responder')'''
+		Creator must be one of ('we', 'peer', 'initiator', 'responder')'''
 		if self.state==JingleStates.pending:
 			raise WrongState
 
-		if (initiator=='we' and self.weinitiate) or (initiator=='peer' and not self.weinitiate):
-			initiator='initiator'
-		elif (initiator=='peer' and self.weinitiate) or (initiator=='we' and not self.weinitiate):
-			initiator='responder'
-		content.creator = initiator
+		if (creator=='we' and self.weinitiate) or (creator=='peer' and not self.weinitiate):
+			creator='initiator'
+		elif (creator=='peer' and self.weinitiate) or (creator=='we' and not self.weinitiate):
+			creator='responder'
+		content.creator = creator
 		content.name = name
-		self.contents[(initiator,name)]=content
+		self.contents[(creator,name)]=content
 
 		if self.state==JingleStates.active:
 			pass # TODO: send proper stanza, shouldn't be needed now
@@ -117,7 +113,6 @@ class JingleSession(object):
 		self.__sessionInitiate()
 
 	def sendSessionInfo(self): pass
-	def sendTransportInfo(self): pass
 
 	''' Callbacks. '''
 	def stanzaCB(self, stanza):
@@ -165,7 +160,7 @@ class JingleSession(object):
 		therefore we are the receiver... Unpack the data. '''
 		self.initiator = jingle['initiator']
 		self.responder = self.ourjid
-		self.jid = self.initiator
+		self.peerjid = self.initiator
 
 		fail = True
 		for element in jingle.iterTags('content'):
@@ -255,8 +250,11 @@ class JingleSession(object):
 	def __contentRemove(self):
 		assert self.state!=JingleStates.ended
 
-	def __transportInfo(self):
+	def sendTransportInfo(self, content):
 		assert self.state!=JingleStates.ended
+		stanza, jingle = self.__makeJingle('transport-info')
+		jingle.addChild(node=content)
+		self.connection.connection.send(stanza)
 
 	'''Callbacks'''
 	def sessionTerminateCB(self, stanza): pass
@@ -368,12 +366,22 @@ class JingleICEUDPSession(object):
 		''' ICE-UDP doesn't send much in its transport stanza... '''
 		return xmpp.Node(xmpp.NS_JINGLE_ICE_UDP+' transport')
 
-class JingleVoiP(object):
+class JingleContent(object):
+	''' An abstraction of content in Jingle sessions. '''
+	def __init__(self, session, node=None):
+		self.session = session
+		# will be filled by JingleSession.add_content()
+		# don't uncomment these lines, we will catch more buggy code then
+		# (a JingleContent not added to session shouldn't send anything)
+		#self.creator = None
+		#self.name = None
+
+class JingleVoiP(JingleContent):
 	''' Jingle VoiP sessions consist of audio content transported
 	over an ICE UDP protocol. '''
 	__metaclass__=meta.VerboseClassType
 	def __init__(self, session, node=None):
-		self.session = session
+		JingleContent.__init__(self, session, node)
 		self.codecs = None
 
 		#if node is None:
@@ -392,8 +400,15 @@ class JingleVoiP(object):
 				xmpp.Node(xmpp.NS_JINGLE_ICE_UDP+' transport')
 			])
 
+	def __content(self, payload=[]):
+		''' Build a XML content-wrapper for our data. '''
+		return xmpp.Node('content',
+			attrs={'name': self.name, 'creator': self.creator, 'profile': 'RTP/AVP'},
+			payload=payload)
+
 	def setupStream(self):
-		self.p2pstream = self.session.p2psession.create_stream(FARSIGHT_MEDIA_TYPE_AUDIO, FARSIGHT_STREAM_DIRECTION_BOTH)
+		self.p2pstream = self.session.p2psession.create_stream(
+			farsight.MEDIA_TYPE_AUDIO, farsight.STREAM_DIRECTION_BOTH)
 		self.p2pstream.set_property('transmitter', 'libjingle')
 		self.p2pstream.connect('error', self.on_p2pstream_error)
 		self.p2pstream.connect('new-active-candidate-pair', self.on_p2pstream_new_active_candidate_pair)
@@ -409,8 +424,25 @@ class JingleVoiP(object):
 	def on_p2pstream_native_candidates_prepared(self, *whatever): pass
 	def on_p2pstream_state_changed(self, *whatever): pass
 	def on_p2pstream_new_native_candidate(self, p2pstream, candidate_id):
-		candidate = p2pstream.get_native_candidate(candidate_id)
+		candidates = p2pstream.get_native_candidate(candidate_id)
 
+		for candidate in candidates:
+			attrs={
+				'component': candidate['component'],
+				'foundation': '1', # hack
+				'generation': '0',
+				'ip': candidate['ip'],
+				'network': '0',
+				'port': candidate['port'],
+				'priority': int(100000*candidate['preference']), # hack
+				'protocol': candidate['proto']==farsight.NETWORK_PROTOCOL_UDP and 'udp' or 'tcp',
+			}
+			if 'username' in candidate: attrs['ufrag']=candidate['username']
+			if 'password' in candidate: attrs['pwd']=candidate['password']
+			c=self.__content()
+			t=c.addChild(xmpp.NS_JINGLE_ICE_UDP+' transport')
+			t.addChild('candidate', attrs=attrs)
+			self.session.sendTransportInfo(c)
 
 	def getCodecs(self):
 		codecs=self.p2pstream.get_local_codecs()
