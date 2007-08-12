@@ -352,7 +352,7 @@ import config
 
 class GlibIdleQueue(idlequeue.IdleQueue):
 	''' 
-	Extends IdleQueue to use glib io_add_wath, instead of select/poll
+	Extends IdleQueue to use glib io_add_watch, instead of select/poll
 	In another, `non gui' implementation of Gajim IdleQueue can be used safetly.
 	'''
 	def init_idle(self):
