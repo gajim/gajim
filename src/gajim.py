@@ -367,8 +367,7 @@ class GlibIdleQueue(idlequeue.IdleQueue):
 		''' this method is called when we plug a new idle object.
 		Start listening for events from fd
 		'''
-		res = gobject.io_add_watch(fd, flags, self.process_events, 
-			priority=gobject.PRIORITY_LOW)
+		res = gobject.io_add_watch(fd, flags, self.process_events)
 		# store the id of the watch, so that we can remove it on unplug
 		self.events[fd] = res
 	
@@ -2369,7 +2368,7 @@ class Interface:
 		
 		# pygtk2.8+ on win, breaks io_add_watch.
 		# We use good old select.select()
-		if True or os.name == 'nt':
+		if os.name == 'nt':
 			gajim.idlequeue = idlequeue.SelectIdleQueue()
 		else:
 			# in a nongui implementation, just call:

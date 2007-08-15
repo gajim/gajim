@@ -586,7 +586,6 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		'''Append raw_data to the queue of messages to be send. 
 		If supplied data is unicode string, encode it to utf-8.
 		'''
-		now = True
 		if self.state <= 0:
 			return
 		r = raw_data
