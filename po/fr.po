@@ -2524,19 +2524,19 @@ msgstr "texte du message d'état :"
 
 #: ../src/config.py:1036
 msgid "First Message Received"
-msgstr "Premier Message Reçu"
+msgstr "Premier message reçu"
 
 #: ../src/config.py:1037
 msgid "Next Message Received"
-msgstr "Message Suivant Reçu"
+msgstr "Message reçu suivant"
 
 #: ../src/config.py:1038
 msgid "Contact Connected"
-msgstr "Contacte Connecté"
+msgstr "Contact connecté"
 
 #: ../src/config.py:1039
 msgid "Contact Disconnected"
-msgstr "Contacte déconnecté"
+msgstr "Contact déconnecté"
 
 #: ../src/config.py:1040
 msgid "Message Sent"
