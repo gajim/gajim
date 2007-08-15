@@ -50,9 +50,9 @@ static PyObject* farsight_codec_to_dict(FarsightCodec* fc) {
 	/* these two are required */
 	insert_long_into_dict(dict, "id", fc->id);
 	insert_str_into_dict(dict, "encoding_name", fc->encoding_name);
+	insert_long_into_dict(dict, "media_type", fc->media_type);
 
 	/* next are optional */
-	if (fc->media_type)	insert_long_into_dict(dict, "media_type", fc->media_type);
 	if (fc->clock_rate)	insert_long_into_dict(dict, "clock_rate", fc->clock_rate);
 	if (fc->channels)	insert_long_into_dict(dict, "channels", fc->channels);
 
@@ -123,6 +123,10 @@ static void dict_to_farsight_codec(PyObject* dict, FarsightCodec* fc, GArray** f
 	/* required data */
 	fc->id			= get_long_from_dict(dict, "id");
 	fc->encoding_name	= get_str_from_dict(dict, "encoding_name");
+	fc->media_type		= 0;
+	fc->clock_rate		= 0;
+	fc->channels		= 0;
+	fc->optional_params	= NULL;
 
 	if (PyErr_Occurred()) return;
 
@@ -388,6 +392,59 @@ static PyObject* _wrap_farsight_stream_set_remote_codecs(PyGObject *self,
 	g_list_free(codecs_list);
 
 	if (!PyErr_Occurred()) {
+		Py_INCREF(Py_None);
+		return Py_None;
+	} else {
+		return NULL;
+	}
+}
+%%
+override farsight_stream_add_remote_candidate kwargs
+static PyObject* _wrap_farsight_stream_add_remote_candidate(PyGObject *self,
+                                                            PyObject *args,
+							    PyObject *kwargs)
+{
+	static char* kwlist[] = {"remote_candidate", NULL};
+	PyObject* list;
+	GArray* candidate_array;
+	GList* candidate_list=NULL;
+	int i, listsize;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O", kwlist, &list))
+		return NULL;
+
+	candidate_array=g_array_sized_new(FALSE, TRUE,
+		sizeof(FarsightTransportInfo), PySequence_Size(list));
+
+	listsize=PySequence_Size(list);
+	for(i=0;i<listsize;i++) {
+		FarsightTransportInfo fti;
+
+		dict_to_farsight_transport_info(PySequence_GetItem(list, listsize-i-1), &fti);
+
+		g_array_append_val(candidate_array, fti);
+
+		candidate_list = g_list_prepend(candidate_list,
+			&g_array_index(candidate_array, FarsightTransportInfo, i));
+	}
+
+	GList* t;
+	for(t=candidate_list;t;t=g_list_next(t)) {
+		FarsightTransportInfo* info=t->data;
+		printf ("Remote transport candidate: %s %d %s %s %s %d pref %f",
+		        info->candidate_id, info->component,
+		        (info->proto == FARSIGHT_NETWORK_PROTOCOL_TCP) ? "TCP" : "UDP",
+		        info->proto_subtype, info->ip, info->port, (double) info->preference);
+	}
+
+	if(!PyErr_Occurred()) {
+		farsight_stream_add_remote_candidate(FARSIGHT_STREAM(self->obj), candidate_list);
+	}
+
+	g_array_free(candidate_array, FALSE);
+	g_list_free(candidate_list);
+
+	if(!PyErr_Occurred()) {
 		Py_INCREF(Py_None);
 		return Py_None;
 	} else {
