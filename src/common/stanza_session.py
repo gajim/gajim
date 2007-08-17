@@ -387,7 +387,7 @@ class EncryptedStanzaSession(StanzaSession):
 		elif mac_o_calculated != mac_o:
 			raise exceptions.NegotiationError, 'calculated mac_%s differs from received mac_%s' % (i_o, i_o)
 
-	def make_alices_identity(self, form, e):
+	def make_identity(self, form, dh_i):
 		if self.negotiated['send_pubkey']:
 			if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
 				fields = (gajim.interface.pubkey.n, gajim.interface.pubkey.e)
@@ -401,12 +401,12 @@ class EncryptedStanzaSession(StanzaSession):
 		form_s2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
 
 		old_c_s = self.c_s
-		content = self.n_o + self.n_s + self.encode_mpi(e) + pubkey_s + self.form_s + form_s2
+		content = self.n_o + self.n_s + self.encode_mpi(dh_i) + pubkey_s + self.form_s + form_s2
 
-		mac_a = self.hmac(self.ks_s, content)
+		mac_s = self.hmac(self.ks_s, content)
 
 		if self.negotiated['send_pubkey']:
-			signature = self.sign(mac_a)
+			signature = self.sign(mac_s)
 
 			sign_s = '<SignatureValue xmlns="http://www.w3.org/2000/09/xmldsig#">%s</SignatureValue>' % base64.b64encode(signature)
 
@@ -414,37 +414,22 @@ class EncryptedStanzaSession(StanzaSession):
 				b64ed = base64.b64encode(self.hash(pubkey_s))
 				pubkey_s = '<fingerprint>%s</fingerprint>' % b64ed
 		
-			id_a = self.encrypt(pubkey_s + sign_s)
+			id_s = self.encrypt(pubkey_s + sign_s)
 		else:
-			id_a = self.encrypt(mac_a)
+			id_s = self.encrypt(mac_s)
 
-		m_a = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_a)
+		m_s = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_s)
 
-		# check for a retained secret
-		# if none exists, prompt the user with the SAS
-		if self.sas_algs == 'sas28x5':
-			self.sas = self.sas_28x5(m_a, self.form_o)
+		if self.status == 'requested-e2e' and self.sas_algs == 'sas28x5':
+			# we're alice; check for a retained secret
+			# if none exists, prompt the user with the SAS
+			self.sas = self.sas_28x5(m_s, self.form_o)
 
 			if self.sigmai:
 				self.check_identity()
 		
-		return (xmpp.DataField(name='identity', value=base64.b64encode(id_a)), \
-						xmpp.DataField(name='mac', value=base64.b64encode(m_a)))
-
-	def make_bobs_identity(self, form, d):
-		pubkey_b = ''
-
-		form_s2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
-		content = self.n_o + self.n_s + self.encode_mpi(d) + pubkey_b + self.form_s + form_s2
-
-		old_c_s = self.c_s
-		mac_b = self.hmac(self.ks_s, content)
-		id_b = self.encrypt(mac_b)
-
-		m_b = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_b)
-
-		return (xmpp.DataField(name='identity', value=base64.b64encode(id_b)), \
-						xmpp.DataField(name='mac', value=base64.b64encode(m_b)))
+		return (xmpp.DataField(name='identity', value=base64.b64encode(id_s)), \
+						xmpp.DataField(name='mac', value=base64.b64encode(m_s)))
 
 	def negotiate_e2e(self, sigmai):
 		self.negotiated = {}
@@ -724,7 +709,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		# MUST securely destroy K unless it will be used later to generate the final shared secret
 
-		for datafield in self.make_alices_identity(result, e):
+		for datafield in self.make_identity(result, e):
 			result.addChild(node=datafield)
 
 		feature.addChild(node=result)
@@ -793,7 +778,7 @@ class EncryptedStanzaSession(StanzaSession):
 		x.addChild(node=xmpp.DataField(name='nonce', value=base64.b64encode(self.n_o)))
 		x.addChild(node=xmpp.DataField(name='srshash', value=base64.b64encode(srshash)))
 
-		for datafield in self.make_bobs_identity(x, self.d):
+		for datafield in self.make_identity(x, self.d):
 			x.addChild(node=datafield)
 
 		init.addChild(node=x)
