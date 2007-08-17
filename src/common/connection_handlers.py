@@ -1450,8 +1450,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if msg.getTag('init') and msg.getTag('init').namespace == 'http://www.xmpp.org/extensions/xep-0116.html#ns-init':
 			self._InitE2ECB(con, msg, session)
 		
+		encrypted = False
+
 		e2eTag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
 		if e2eTag:
+			encrypted = True
 			msg = session.decrypt_stanza(msg)
 
 		msgtxt = msg.getBody()
@@ -1461,7 +1464,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
 		tim = time.localtime(timegm(tim))
 		jid = helpers.get_jid_from_iq(msg)
-		encrypted = False
 		chatstate = None
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
 		decmsg = ''
