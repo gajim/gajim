@@ -104,6 +104,7 @@ from chat_control import ChatControlBase
 from atom_window import AtomWindow
 
 import negotiation
+import Crypto.PublicKey.RSA
 
 from common import exceptions
 from common.zeroconf import connection_zeroconf
@@ -1393,6 +1394,7 @@ class Interface:
 			if os.path.isfile(path_to_original_file):
 				os.remove(path_to_original_file)
 
+	# list the retained secrets we have for a local account and a remote jid
 	def list_secrets(self, account, jid):
 		f = open(secrets_filename)
 
@@ -1404,6 +1406,7 @@ class Interface:
 		f.close()
 		return s
 
+	# save a new retained secret
 	def save_new_secret(self, account, jid, secret):
 		f = open(secrets_filename, 'r')
 		secrets = pickle.load(f)
@@ -2558,6 +2561,10 @@ class Interface:
 		gobject.timeout_add(100, self.autoconnect)
 		gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add(500, self.read_sleepy)
+
+		# public key for XEP-0116
+		# XXX os.urandom is not a cryptographic PRNG
+		self.pubkey = Crypto.PublicKey.RSA.generate(384, os.urandom)
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):

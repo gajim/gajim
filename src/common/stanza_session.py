@@ -16,8 +16,11 @@ import xmpp.c14n
 
 from Crypto.Cipher import AES
 from Crypto.Hash import HMAC, SHA256
+from Crypto.PublicKey import RSA
 
 import base64
+
+XmlDsig = 'http://www.w3.org/2000/09/xmldsig#'
 
 class StanzaSession(object):
 	def __init__(self, conn, jid, thread_id, type):
@@ -189,6 +192,11 @@ class EncryptedStanzaSession(StanzaSession):
 		self.c_o = (self.c_o + 1) % (2 ** self.n)
 		return self.encode_mpi_with_padding(self.c_o)
 
+	def sign(self, string):
+		if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
+			hash = self.sha256(string)
+			return self.encode_mpi(gajim.interface.pubkey.sign(hash, '')[0])
+
 	def encrypt_stanza(self, stanza):
 		encryptable = filter(lambda x: x.getName() not in ('error', 'amp', 'thread'), stanza.getChildren())
 
@@ -317,84 +325,117 @@ class EncryptedStanzaSession(StanzaSession):
 		macable = filter(lambda x: x.getVar() not in ('mac', 'identity'), kids)
 		return ''.join(map(lambda el: xmpp.c14n.c14n(el), macable))
 
-	def verify_alices_identity(self, form, e):
-		m_a = base64.b64decode(form['mac'])
-		id_a = base64.b64decode(form['identity'])
+	def verify_identity(self, form, dh_i, sigmai, i_o):
+		m_o = base64.b64decode(form['mac'])
+		id_o = base64.b64decode(form['identity'])
 
-		m_a_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_a)
+		m_o_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_o)
 
-		if m_a_calculated != m_a:
-			raise exceptions.NegotiationError, 'calculated m_a differs from received m_a'
+		if m_o_calculated != m_o:
+			raise exceptions.NegotiationError, 'calculated m_%s differs from received m_%s' % (i_o, i_o)
 
-		# check for a retained secret
-		# if none exists, prompt the user with the SAS
-		if self.sas_algs == 'sas28x5':
-			self.sas = self.sas_28x5(m_a, self.form_b)
+		if i_o == 'a' and self.sas_algs == 'sas28x5':
+			# XXX not necessary if there's a verified retained secret
+			self.sas = self.sas_28x5(m_o, self.form_s)
 
-		mac_a = self.decrypt(id_a)
+		if self.negotiated['recv_pubkey']:
+			plaintext = self.decrypt(id_o)
+			parsed = xmpp.Node(node='<node>' + plaintext + '</node>')
 
-		form_a2 = self.c7lize_mac_id(form)
+			if self.negotiated['recv_pubkey'] == 'hash':
+				fingerprint = parsed.getTagData('fingerprint')
 
-		mac_a_calculated = self.hmac(self.ks_o, self.n_s + self.n_o + self.encode_mpi(e) + self.form_a + form_a2)
+				# XXX find stored pubkey or terminate session
+				raise 'unimplemented'
+			else:
+				if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
+					keyvalue = parsed.getTag(name='RSAKeyValue', namespace=XmlDsig)
 
-		if mac_a_calculated != mac_a:
-			raise exceptions.NegotiationError, 'calculated mac_a differs from received mac_a'
+					n, e = map(lambda x: self.decode_mpi(base64.b64decode(keyvalue.getTagData(x))), ('Modulus', 'Exponent'))
+					eir_pubkey = RSA.construct((n,long(e)))
 
-	def verify_bobs_identity(self, form, sigmai):
-		m_b = base64.b64decode(form['mac'])
-		id_b = base64.b64decode(form['identity'])
+					pubkey_o = xmpp.c14n.c14n(keyvalue)
+				else:
+					# XXX DSA, etc.
+					raise 'unimplemented'
 
-		m_b_calculated = self.hmac(self.km_o, self.encode_mpi(self.c_o) + id_b)
-
-		if m_b_calculated != m_b:
-			raise exceptions.NegotiationError, 'calculated m_b differs from received m_b'
-
-		mac_b = self.decrypt(id_b)
-		pubkey_b = ''
+			enc_sig = parsed.getTag(name='SignatureValue', namespace=XmlDsig).getData()
+			signature = (self.decode_mpi(base64.b64decode(enc_sig)),)
+		else:
+			mac_o = self.decrypt(id_o)
+			pubkey_o = ''
 
 		c7l_form = self.c7lize_mac_id(form)
 
-		content = self.n_s + self.n_o + self.encode_mpi(self.d) + pubkey_b
+		content = self.n_s + self.n_o + self.encode_mpi(dh_i) + pubkey_o
 
 		if sigmai:
-			self.form_b = c7l_form
-			content += self.form_b
+			self.form_o = c7l_form
+			content += self.form_o
 		else:
-			form_b2 = c7l_form
-			content += self.form_b + form_b2
+			form_o2 = c7l_form
+			content += self.form_o + form_o2
 
-		mac_b_calculated = self.hmac(self.ks_o, content)
+		mac_o_calculated = self.hmac(self.ks_o, content)
+		
+		if self.negotiated['recv_pubkey']:
+			hash = self.sha256(mac_o_calculated)
 
-		if mac_b_calculated != mac_b:
-			raise exceptions.NegotiationError, 'calculated mac_b differs from received mac_b'
+			if not eir_pubkey.verify(hash, signature):
+				raise exceptions.NegotiationError, 'public key signature verification failed!'
+
+		elif mac_o_calculated != mac_o:
+			raise exceptions.NegotiationError, 'calculated mac_%s differs from received mac_%s' % (i_o, i_o)
 
 	def make_alices_identity(self, form, e):
-		form_a2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
+		if self.negotiated['send_pubkey']:
+			if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
+				fields = (gajim.interface.pubkey.n, gajim.interface.pubkey.e)
+
+				cb_fields = map(lambda f: base64.b64encode(self.encode_mpi(f)), fields)
+
+				pubkey_s = '<RSAKeyValue xmlns="http://www.w3.org/2000/09/xmldsig#"><Modulus>%s</Modulus><Exponent>%s</Exponent></RSAKeyValue>' % tuple(cb_fields)
+		else:
+			pubkey_s = ''
+
+		form_s2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
 
 		old_c_s = self.c_s
-		content = self.n_o + self.n_s + self.encode_mpi(e) + self.form_a + form_a2
+		content = self.n_o + self.n_s + self.encode_mpi(e) + pubkey_s + self.form_s + form_s2
 
 		mac_a = self.hmac(self.ks_s, content)
-		id_a = self.encrypt(mac_a)
+
+		if self.negotiated['send_pubkey']:
+			signature = self.sign(mac_a)
+
+			sign_s = '<SignatureValue xmlns="http://www.w3.org/2000/09/xmldsig#">%s</SignatureValue>' % base64.b64encode(signature)
+
+			if self.negotiated['send_pubkey'] == 'hash':
+				b64ed = base64.b64encode(self.hash(pubkey_s))
+				pubkey_s = '<fingerprint>%s</fingerprint>' % b64ed
+		
+			id_a = self.encrypt(pubkey_s + sign_s)
+		else:
+			id_a = self.encrypt(mac_a)
 
 		m_a = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_a)
 
 		# check for a retained secret
 		# if none exists, prompt the user with the SAS
 		if self.sas_algs == 'sas28x5':
-			self.sas = self.sas_28x5(m_a, self.form_b)
+			self.sas = self.sas_28x5(m_a, self.form_o)
 
 			if self.sigmai:
 				self.check_identity()
-			
+		
 		return (xmpp.DataField(name='identity', value=base64.b64encode(id_a)), \
 						xmpp.DataField(name='mac', value=base64.b64encode(m_a)))
 
 	def make_bobs_identity(self, form, d):
 		pubkey_b = ''
 
-		form_b2 = ''.join(map(lambda el: c14n.c14n(el), form.getChildren()))
-		content = self.n_o + self.n_s + self.encode_mpi(d) + pubkey_b + self.form_b + form_b2
+		form_s2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
+		content = self.n_o + self.n_s + self.encode_mpi(d) + pubkey_b + self.form_s + form_s2
 
 		old_c_s = self.c_s
 		mac_b = self.hmac(self.ks_s, content)
@@ -430,13 +471,17 @@ class EncryptedStanzaSession(StanzaSession):
 		# unsupported options: 'iq', 'presence'
 		x.addChild(node=xmpp.DataField(name='stanzas', typ='list-multi', options=['message']))
 
-		x.addChild(node=xmpp.DataField(name='init_pubkey', value='none', typ='hidden'))
-		x.addChild(node=xmpp.DataField(name='resp_pubkey', value='none', typ='hidden'))
+		x.addChild(node=xmpp.DataField(name='init_pubkey', options=['none', 'key', 'hash'], typ='list-single'))
+
+		# XXX store key, use hash
+		x.addChild(node=xmpp.DataField(name='resp_pubkey', options=['none', 'key'], typ='list-single'))
+
 		x.addChild(node=xmpp.DataField(name='ver', value='1.0', typ='hidden'))
 
 		x.addChild(node=xmpp.DataField(name='rekey_freq', value='4294967295', typ='hidden'))
 
 		x.addChild(node=xmpp.DataField(name='sas_algs', value='sas28x5', typ='hidden'))
+		x.addChild(node=xmpp.DataField(name='sign_algs', value='http://www.w3.org/2000/09/xmldsig#rsa-sha256', typ='hidden'))
 
 		self.n_s = self.generate_nonce()
 	
@@ -449,7 +494,7 @@ class EncryptedStanzaSession(StanzaSession):
 		x.addChild(node=self.make_dhfield(modp_options, sigmai))
 		self.sigmai = sigmai
 
-		self.form_a = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
+		self.form_s = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
 
 		feature.addChild(node=x)
 
@@ -459,7 +504,7 @@ class EncryptedStanzaSession(StanzaSession):
 	
 	# 4.3 esession response (bob)
 	def verify_options_bob(self, form):
-		negotiated = {}
+		negotiated = {'recv_pubkey': None, 'send_pubkey': None}
 		not_acceptable = []
 		ask_user = {}
 
@@ -511,6 +556,19 @@ class EncryptedStanzaSession(StanzaSession):
 
 					if not 'logging' in ask_user:
 						not_acceptable.append(name)
+			elif name == 'init_pubkey':
+				for x in ('key'):
+					if x in options:
+						negotiated['recv_pubkey'] = x
+						break
+			elif name == 'resp_pubkey':
+				for x in ('hash', 'key'):
+					if x in options:
+						negotiated['send_pubkey'] = x
+						break
+			elif name == 'sign_algs':
+				if (XmlDsig + 'rsa-sha256') in options:
+					negotiated['sign_algs'] = XmlDsig + 'rsa-sha256'
 			else:
 				# XXX some things are handled elsewhere, some things are not-implemented
 				pass
@@ -565,8 +623,8 @@ class EncryptedStanzaSession(StanzaSession):
 			b64ed = base64.b64encode(to_add[name])
 			x.addChild(node=xmpp.DataField(name=name, value=b64ed))
 
-		self.form_a = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
-		self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
+		self.form_o = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
+		self.form_s = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
 
 		self.status = 'responded-e2e'
 
@@ -596,6 +654,18 @@ class EncryptedStanzaSession(StanzaSession):
 			ask_user['logging'] = form['logging']
 		else:
 			negotiated['logging'] = self.logging_preference()[0]
+
+		for r,a in (('recv_pubkey', 'resp_pubkey'), ('send_pubkey', 'init_pubkey')):
+			negotiated[r] = None
+
+			if a in form.asDict() and form[a] in ('key', 'hash'):
+				negotiated[r] = form[a]
+
+		if 'sign_algs' in form.asDict():
+			if form['sign_algs'] in (XmlDsig + 'rsa-sha256',):
+				negotiated['sign_algs'] = form['sign_algs']
+			else:
+				not_acceptable.append(form['sign_algs'])
 
 		return (negotiated, not_acceptable, ask_user)
 
@@ -637,7 +707,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		if self.sigmai:
 			self.kc_o, self.km_o, self.ks_o = self.generate_responder_keys(self.k)
-			self.verify_bobs_identity(form, True)
+			self.verify_identity(form, self.d, True, 'b')
 		else:
 			secrets = gajim.interface.list_secrets(self.conn.name, self.jid.getStripped()) 
 			rshashes = [self.hmac(self.n_s, rs) for rs in secrets]
@@ -649,7 +719,7 @@ class EncryptedStanzaSession(StanzaSession):
 			result.addChild(node=xmpp.DataField(name='rshashes', value=rshashes))
 			result.addChild(node=xmpp.DataField(name='dhkeys', value=base64.b64encode(self.encode_mpi(e))))
 		
-			self.form_b = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
+			self.form_o = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
 
 
 		# MUST securely destroy K unless it will be used later to generate the final shared secret
@@ -682,13 +752,15 @@ class EncryptedStanzaSession(StanzaSession):
 		e = self.decode_mpi(base64.b64decode(form['dhkeys']))
 		p = dh.primes[self.modp]
 
+		# XXX return <feature-not-implemented> if hash(e) != He
+
 		k = self.get_shared_secret(e, self.y, p)
 
 		self.kc_o, self.km_o, self.ks_o = self.generate_initiator_keys(k)
 
 		# 4.5.2 verifying alice's identity
 
-		self.verify_alices_identity(form)
+		self.verify_identity(form, e, False, 'a')
 
 		# 4.5.4 generating bob's final session keys
 
@@ -721,17 +793,8 @@ class EncryptedStanzaSession(StanzaSession):
 		x.addChild(node=xmpp.DataField(name='nonce', value=base64.b64encode(self.n_o)))
 		x.addChild(node=xmpp.DataField(name='srshash', value=base64.b64encode(srshash)))
 
-		form_b2 = ''.join(map(lambda el: xmpp.c14n.c14n(el), x.getChildren()))
-
-		old_c_s = self.c_s
-
-		mac_b = self.hmac(self.ks_s, self.n_o + self.n_s + self.encode_mpi(self.d) + self.form_b + form_b2)
-		id_b = self.encrypt(mac_b)
-
-		m_b = self.hmac(self.km_s, self.encode_mpi(old_c_s) + id_b)
-
-		x.addChild(node=xmpp.DataField(name='identity', value=base64.b64encode(id_b)))
-		x.addChild(node=xmpp.DataField(name='mac', value=base64.b64encode(m_b)))
+		for datafield in self.make_bobs_identity(x, self.d):
+			x.addChild(node=datafield)
 
 		init.addChild(node=x)
 
@@ -769,7 +832,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		# 4.6.2 Verifying Bob's Identity
 
-		self.verify_bobs_identity(form, False)
+		self.verify_identity(form, self.d, False, 'b')
 # Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
 	
 		if self.negotiated['logging'] == 'mustnot':
