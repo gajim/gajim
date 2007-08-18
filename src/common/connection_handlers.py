@@ -1584,6 +1584,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if bare_jid != jid:
 				session = self.find_session(bare_jid, thread_id, type)
 				if session:
+					if not session.received_thread_id:
+						thread_id = session.thread_id
+
 					self.move_session(bare_jid, thread_id, jid.split("/")[1])
 					return session
 

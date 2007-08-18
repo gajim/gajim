@@ -48,8 +48,8 @@ class StanzaSession(object):
 		return "".join([random.choice(string.letters) for x in xrange(0,32)])
 
 	def send(self, msg):
-		if self.thread_id and isinstance(msg, xmpp.Message):
-			msg.setThread(self.thread_id)
+		if self.thread_id:
+			msg.NT.thread = self.thread_id
 
 		msg.setAttr('to', self.jid)
 		self.conn.send_stanza(msg)
@@ -530,10 +530,10 @@ class EncryptedStanzaSession(StanzaSession):
 			elif name == 'logging':
 				my_prefs = self.logging_preference()
 
-				if my_prefs[0] in options:
+				if my_prefs[0] in options: # our first choice is offered, select it
 					pref = my_prefs[0]
 					negotiated['logging'] = pref
-				else:
+				else:	# see if other acceptable choices are offered
 					for pref in my_prefs:
 						if pref in options:
 							ask_user['logging'] = pref
@@ -572,7 +572,9 @@ class EncryptedStanzaSession(StanzaSession):
 		x.addChild(node=xmpp.DataField(name='accept', value='true'))
 
 		for name in negotiated:
-			x.addChild(node=xmpp.DataField(name=name, value=negotiated[name]))
+			# some fields are internal and should not be sent
+			if not name in ('send_pubkey', 'recv_pubkey'):
+				x.addChild(node=xmpp.DataField(name=name, value=negotiated[name]))
 
 		self.negotiated = negotiated
 
@@ -616,14 +618,16 @@ class EncryptedStanzaSession(StanzaSession):
 		feature.addChild(node=x)
 		
 		if not_acceptable:
-			pass
-# XXX
-#  <error code='406' type='modify'>
-#    <not-acceptable xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>
-#    <feature xmlns='http://jabber.org/protocol/feature-neg'>
-#      <field var='security'/>
-#    </feature>
-#  </error>
+			response = xmpp.Error(response, xmpp.ERR_NOT_ACCEPTABLE)
+
+			feature = xmpp.Node(xmpp.NS_FEATURE + ' feature')
+
+			for f in not_acceptable:
+				n = xmpp.Node('field')
+				n['var'] = f
+				feature.addChild(node=n)
+
+			response.T.error.addChild(node=feature)
 
 		self.send(response)
 
