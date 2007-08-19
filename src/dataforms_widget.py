@@ -141,20 +141,23 @@ class DataFormWidget(gtk.Alignment, object):
 
 		# creating model for form...
 		fieldtypes = []
+		fieldvars = []
 		for field in self._data_form.reported.iter_fields():
 			# note: we store also text-private and hidden fields,
 			# we just do not display them.
 			# TODO: boolean fields
 			#elif field.type=='boolean': fieldtypes.append(bool)
 			fieldtypes.append(str)
+			fieldvars.append(field.var)
 
 		self.multiplemodel = gtk.ListStore(*fieldtypes)
 
 		# moving all data to model
 		for item in self._data_form.iter_records():
-			# TODO: probably wrong... (.value[s]?, fields not in the same order?)
-			# not checking multiple-item forms...
-			self.multiplemodel.append([field.value for field in item.iter_fields()])
+			iter = self.multiplemodel.append()
+			for field in item.iter_fields():
+				self.multiplemodel.set_value(iter, fieldvars.index(field.var),
+					field.value)
 
 		# constructing columns...
 		for field, counter in zip(self._data_form.reported.iter_fields(), itertools.count()):
