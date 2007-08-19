@@ -102,7 +102,7 @@ class ConfigPaths:
 		# for k, v in paths.iteritems():
 		# 	print "%s: %s" % (repr(k), repr(v))
 
-	def init_profile(self, profile):
+	def init_profile(self, profile = ''):
 		conffile = windowsify(u'config')
 		pidfile = windowsify(u'gajim')
 

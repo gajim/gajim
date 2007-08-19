@@ -26,6 +26,9 @@ import time
 import locale
 
 from common import i18n
+import common.configpaths 
+common.configpaths.gajimpaths.init()
+common.configpaths.gajimpaths.init_profile()
 import exceptions
 import dialogs
 import gtkgui_helpers
