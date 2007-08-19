@@ -151,7 +151,7 @@ class Connection(ConnectionHandlers):
 		self.available_transports = {} # list of available transports on this
 		# server {'icq': ['icq.server.com', 'icq2.server.com'], }
 		self.vcard_supported = True
-		self.metacontacts_supported = True
+		self.private_storage_supported = True
 	# END __init__
 
 	def put_event(self, ev):

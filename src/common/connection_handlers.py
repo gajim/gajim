@@ -1072,7 +1072,7 @@ class ConnectionVcard:
 						meta_list[tag] = [data]
 				self.dispatch('METACONTACTS', meta_list)
 			else:
-				self.metacontacts_supported = False
+				self.private_storage_supported = False
 			# We can now continue connection by requesting the roster
 			self.connection.initRoster()
 		elif self.awaiting_answers[id][0] == PRIVACY_ARRIVED:
@@ -1286,7 +1286,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if storage_tag:
 			ns = storage_tag.getNamespace()
 			if ns == 'storage:metacontacts':
-				self.metacontacts_supported = False
+				self.private_storage_supported = False
 				# Private XML Storage (XEP49) is not supported by server
 				# Continue connecting
 				self.connection.initRoster()

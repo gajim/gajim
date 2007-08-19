@@ -1289,6 +1289,9 @@ class JoinGroupchatWindow:
 		if len(self._empty_required_widgets):
 			self.xml.get_widget('join_button').set_sensitive(False)
 
+		if not gajim.connections[account].private_storage_supported:
+			self.xml.get_widget('auto_join_checkbutton').set_sensitive(False)
+
 		self.window.show_all()
 
 	def on_join_groupchat_window_destroy(self, widget):
