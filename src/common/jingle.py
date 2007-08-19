@@ -325,7 +325,10 @@ class JingleAudioSession(object):
 			Codec('speex', clockrate='16000'),
 		]
 
-		other_l = other if other is not None else []
+		if other is not None:
+			other_l = other
+		else:
+			other_l = []
 		our_l = supported_codecs[:]
 		out = []
 		ids = range(128)
