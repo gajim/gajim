@@ -258,18 +258,24 @@ class VcardWindow:
 			connected_contact_list = contact_list
 		# stats holds show and status message
 		stats = ''
-		one = True # Are we adding the first line ?
 		if connected_contact_list:
+			# Start with self.contact, as with resources
+			stats = helpers.get_uf_show(self.contact.show)
+			if self.contact.status:
+				stats += ': ' + self.contact.status
+			if self.contact.last_status_time:
+				stats += '\n' + _('since %s') % time.strftime('%c',
+					self.contact.last_status_time).decode(
+					locale.getpreferredencoding())
 			for c in connected_contact_list:
-				if not one:
+				if c.resource != self.contact.resource:
 					stats += '\n'
-				stats += helpers.get_uf_show(c.show)
-				if c.status:
-					stats += ': ' + c.status
-				if c.last_status_time:
-					stats += '\n' + _('since %s') % time.strftime('%c',
-						c.last_status_time).decode(locale.getpreferredencoding())
-				one = False
+					stats += helpers.get_uf_show(c.show)
+					if c.status:
+						stats += ': ' + c.status
+					if c.last_status_time:
+						stats += '\n' + _('since %s') % time.strftime('%c',
+							c.last_status_time).decode(locale.getpreferredencoding())
 		else: # Maybe gc_vcard ?
 			stats = helpers.get_uf_show(self.contact.show)
 			if self.contact.status:
