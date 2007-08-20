@@ -289,7 +289,7 @@ class EncryptedStanzaSession(StanzaSession):
 		calculated_mac = self.hmac(self.km_o, macable + self.encode_mpi_with_padding(self.c_o))
 
 		if not calculated_mac == received_mac:
-			raise 'bad signature (%s != %s)' % (repr(received_mac), repr(calculated_mac))
+			raise exceptions.DecryptionError, 'bad signature'
 
 		m_final = base64.b64decode(c.getTagData('data'))
 		m_compressed = self.decrypt(m_final)
@@ -298,7 +298,7 @@ class EncryptedStanzaSession(StanzaSession):
 		try:
 			parsed = xmpp.Node(node='<node>' + plaintext + '</node>')
 		except:
-			raise exceptions.DecryptionError
+			raise exceptions.DecryptionError, 'decrypted <data/> not parseable as XML'
 
 		for child in parsed.getChildren():
 			stanza.addChild(node=child)
@@ -377,12 +377,12 @@ class EncryptedStanzaSession(StanzaSession):
 			content += self.form_o + form_o2
 
 		mac_o_calculated = self.hmac(self.ks_o, content)
-		
+	
 		if self.negotiated['recv_pubkey']:
 			hash = self.sha256(mac_o_calculated)
 
 			if not eir_pubkey.verify(hash, signature):
-				raise exceptions.NegotiationError, 'public key signature verification failed!'
+				raise exceptions.NegotiationError, 'public key signature verification failed!' 
 
 		elif mac_o_calculated != mac_o:
 			raise exceptions.NegotiationError, 'calculated mac_%s differs from received mac_%s' % (i_o, i_o)
@@ -589,7 +589,7 @@ class EncryptedStanzaSession(StanzaSession):
 		self.n_o = base64.b64decode(form['my_nonce'])
 
 		dhhashes = form.getField('dhhashes').getValues()
-		self.He = base64.b64decode(dhhashes[group_order].encode("utf8"))
+		self.negotiated['He'] = base64.b64decode(dhhashes[group_order].encode("utf8"))
 
 		bytes = int(self.n / 8)
 
@@ -741,7 +741,8 @@ class EncryptedStanzaSession(StanzaSession):
 		e = self.decode_mpi(base64.b64decode(form['dhkeys']))
 		p = dh.primes[self.modp]
 
-		# XXX return <feature-not-implemented> if hash(e) != He
+		if self.sha256(self.encode_mpi(e)) != self.negotiated['He']:
+			raise exceptions.NegotiationError, 'SHA256(e) != He'
 
 		k = self.get_shared_secret(e, self.y, p)
 
@@ -903,10 +904,17 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def fail_bad_negotiation(self, reason):
 		'''they've tried to feed us a bogus value, send an error and cancel everything.'''
+
 		err = xmpp.Error(xmpp.Message(), xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
 		err.T.error.T.text.setData(reason)
 		self.send(err)
+
 		self.status = None
+		self.enable_encryption = False
+
+		# this prevents the MAC check on decryption from succeeding,
+		# preventing falsified messages from going through.
+		self.km_o = ''
 
 	def is_loggable(self):
 		account = self.conn.name

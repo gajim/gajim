@@ -1701,6 +1701,15 @@ class Interface:
 		atom_entry, = data
 		AtomWindow.newAtomEntry(atom_entry)
 
+	def handle_event_failed_decrypt(self, account, data):
+		jid, tim = data
+
+		ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			ctrl.print_conversation_line('Unable to decrypt message from %s\nIt may have been tampered with.' % (jid), 'status', '', tim)
+		else:
+			print 'failed decrypt, unable to find a control to notify you in.'
+
 	def handle_session_negotiation(self, account, data):
 		jid, session, form = data
 
@@ -1713,11 +1722,24 @@ class Interface:
 		# encrypted session states. these are described in stanza_session.py
 
 		# bob responds
-		if form.getType() == 'form' and u'e2e' in \
-		map(lambda x: x[1], form.getField('security').getOptions()):
+		if form.getType() == 'form' and 'security' in form.asDict():
 			def continue_with_negotiation(*args):
 				if len(args):
 					self.dialog.destroy()
+
+				# we don't support 3-message negotiation as the responder
+				if 'dhkeys' in form.asDict():
+					err = xmpp.Error(xmpp.Message(), xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
+
+					feature = xmpp.Node(xmpp.NS_FEATURE + ' feature')
+					field = xmpp.Node('field')
+					field['var'] = 'dhkeys'
+					
+					feature.addChild(node=field)
+					err.addChild(node=feature)
+
+					session.send(err)
+					return
 
 				negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
 
@@ -1776,8 +1798,11 @@ class Interface:
 					dialog.destroy()
 
 					negotiated.update(ask_user)
-				
-					session.accept_e2e_alice(form, negotiated)
+		
+					try:
+						session.accept_e2e_alice(form, negotiated)
+					except exceptions.NegotiationError, details:
+						session.fail_bad_negotiation(details)
 
 				def reject_nondefault_options(widget):
 					session.reject_negotiation()
@@ -1788,7 +1813,10 @@ class Interface:
 						on_response_yes = accept_nondefault_options,
 						on_response_no = reject_nondefault_options)
 			else:
-				session.accept_e2e_alice(form, negotiated)
+				try:
+					session.accept_e2e_alice(form, negotiated)
+				except exceptions.NegotiationError, details: 
+					session.fail_bad_negotiation(details)
 
 			return
 		elif session.status == 'responded-e2e' and form.getType() == 'result':
@@ -1802,7 +1830,7 @@ class Interface:
 			return
 		elif session.status == 'identified-alice' and form.getType() == 'result':
 			session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
-
+			
 			try:
 				session.final_steps_alice(form)
 			except exceptions.NegotiationError, details: 
@@ -1819,7 +1847,7 @@ class Interface:
 				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
 
 				if ctrl:
-					ctrl.session = gajim.connections[self.account].make_new_session(str(jid))
+					ctrl.session = gajim.connections[account].make_new_session(str(jid))
 
 				return
 
@@ -2266,6 +2294,7 @@ class Interface:
 			'SIGNED_IN': self.handle_event_signed_in,
 			'METACONTACTS': self.handle_event_metacontacts,
 			'ATOM_ENTRY': self.handle_atom_entry,
+			'FAILED_DECRYPT': self.handle_event_failed_decrypt,
 			'PRIVACY_LISTS_RECEIVED': self.handle_event_privacy_lists_received,
 			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
 			'PRIVACY_LISTS_ACTIVE_DEFAULT': \

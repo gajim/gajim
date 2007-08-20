@@ -971,6 +971,9 @@ class ChatControl(ChatControlBase):
 
 		self.session = session
 
+		# does this window have an existing, active esession?
+		self.esessioned = False
+
 		self.status_tooltip = gtk.Tooltips()
 		self.update_ui()
 		# restore previous conversation
@@ -1236,12 +1239,12 @@ class ChatControl(ChatControlBase):
 
 		contact = self.contact
 
+		encrypted = bool(self.session) and self.session.enable_encryption
+
 		keyID = ''
-		encrypted = False
 		if self.xml.get_widget('gpg_togglebutton').get_active():
 			keyID = contact.keyID
 			encrypted = True
-
 
 		chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
 			'disabled'
@@ -1352,18 +1355,46 @@ class ChatControl(ChatControlBase):
 			kind = 'info'
 			name = ''
 		else:
-			ec = gajim.encrypted_chats[self.account]
-			if encrypted and jid not in ec:
-				msg = _('Encryption enabled')
+			# ESessions
+			if self.session.enable_encryption:
+				if not self.esessioned:
+					msg = _('Encryption enabled')
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+
+					if self.session.loggable:
+						msg = _('Session WILL be logged')
+					else:
+						msg = _('Session WILL NOT be logged')
+
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+
+					self.esessioned = True
+				elif not encrypted:
+					msg = _('The following message was NOT encrypted')
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+			elif self.esessioned:
+				msg = _('Encryption disabled')
 				ChatControlBase.print_conversation_line(self, msg, 
 					'status', '', tim)
-				ec.append(jid)
-			elif not encrypted and jid in ec:
-				msg = _('Encryption disabled')
-				ChatControlBase.print_conversation_line(self, msg,
-					'status', '', tim)
-				ec.remove(jid)
-			self.xml.get_widget('gpg_togglebutton').set_active(encrypted)
+				self.esessioned = False
+			else:
+				# GPG encryption
+				ec = gajim.encrypted_chats[self.account]
+				if encrypted and jid not in ec:
+					msg = _('Encryption enabled')
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+					ec.append(jid)
+				elif not encrypted and jid in ec:
+					msg = _('Encryption disabled')
+					ChatControlBase.print_conversation_line(self, msg,
+						'status', '', tim)
+					ec.remove(jid)
+				self.xml.get_widget('gpg_togglebutton').set_active(encrypted)
+
 			if not frm:
 				kind = 'incoming'
 				name = contact.get_shown_name()
@@ -1949,9 +1980,15 @@ class ChatControl(ChatControlBase):
 		if self.session and self.session.enable_encryption:
 			self.session.terminate_e2e()
 
+			msg = _('Encryption disabled')
+			ChatControlBase.print_conversation_line(self, msg, 
+				'status', '', None)
+			self.esessioned = False
+
 			jid = str(self.session.jid)
 
 			gajim.connections[self.account].delete_session(jid, self.session.thread_id)
+
 			self.session = gajim.connections[self.account].make_new_session(jid)
 		else:
 			if not self.session:

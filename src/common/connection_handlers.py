@@ -1451,18 +1451,22 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self._InitE2ECB(con, msg, session)
 		
 		encrypted = False
+		tim = msg.getTimestamp()
+		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
+		tim = time.localtime(timegm(tim))
 
-		e2eTag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
-		if e2eTag:
+		e2e_tag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
+		if e2e_tag:
 			encrypted = True
-			msg = session.decrypt_stanza(msg)
+
+			try:
+				msg = session.decrypt_stanza(msg)
+			except:
+				self.dispatch('FAILED_DECRYPT', (frm, tim))
 
 		msgtxt = msg.getBody()
 		msghtml = msg.getXHTML()
 		subject = msg.getSubject() # if not there, it's None
-		tim = msg.getTimestamp()
-		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
-		tim = time.localtime(timegm(tim))
 		jid = helpers.get_jid_from_iq(msg)
 		chatstate = None
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
@@ -1573,6 +1577,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def get_session(self, jid, thread_id, type):
 		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
+		print repr(self.sessions)
+
 		session = self.find_session(jid, thread_id, type)
 
 		if session:
