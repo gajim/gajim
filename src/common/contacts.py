@@ -303,6 +303,8 @@ class Contacts:
 						# Transports group
 						if common.gajim.jid_is_transport(jid):
 							contact_groups = [_('Transports')]
+						if contact.is_observer():
+							contact_groups = [_('Observers')]
 						else:
 							contact_groups = [_('General')]
 					for group in groups:
