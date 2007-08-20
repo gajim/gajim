@@ -332,6 +332,7 @@ class RosterWindow:
 					model.append(i, (None, name, 'contact', jid, account, None))
 				self.draw_contact(jid, account)
 				self.draw_avatar(jid, account)
+				self.draw_account(account)
 				# Redraw parent to change icon
 				self.draw_contact(big_brother_jid, big_brother_account)
 				return
@@ -390,6 +391,7 @@ class RosterWindow:
 				self.tree.expand_row(model.get_path(iterG), False)
 		self.draw_contact(jid, account)
 		self.draw_avatar(jid, account)
+		self.draw_account(account)
 		# put the children under this iter
 		for data in shown_family:
 			contacts = gajim.contacts.get_contacts(data['account'],
@@ -4739,7 +4741,7 @@ class RosterWindow:
 			# FIXME: Why do groups have to be redrawn by hand?
 			for g in old_groups:
 				self.draw_group(g, account_source)
-			
+			self.draw_account(account_source)	
 			context.finish(True, True, etime)
 
 		confirm_metacontacts = gajim.config.get('confirm_metacontacts')
