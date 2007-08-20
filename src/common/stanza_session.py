@@ -769,7 +769,6 @@ class EncryptedStanzaSession(StanzaSession):
 
 		k = self.sha256(k + srs + oss)
 
-		# XXX I can skip generating ks_o here
 		self.kc_s, self.km_s, self.ks_s = self.generate_responder_keys(k)
 		self.kc_o, self.km_o, self.ks_o = self.generate_initiator_keys(k)
 

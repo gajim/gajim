@@ -1429,7 +1429,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not mtype:
 			mtype = 'normal'
 
-		session = self.get_session(frm, thread_id, mtype)
+		if not mtype == 'groupchat':
+			session = self.get_session(frm, thread_id, mtype)
 
 		if thread_id and not session.received_thread_id:
 			session.received_thread_id = True
@@ -1545,7 +1546,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if not self.last_history_line.has_key(jid):
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
-				if session.is_loggable() and not int(float(time.mktime(tim)))\
+				if not int(float(time.mktime(tim)))\
 				<= self.last_history_line[jid] and msgtxt:
 					gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 			return
@@ -1577,8 +1578,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def get_session(self, jid, thread_id, type):
 		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
-		print repr(self.sessions)
-
 		session = self.find_session(jid, thread_id, type)
 
 		if session:

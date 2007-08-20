@@ -1356,7 +1356,7 @@ class ChatControl(ChatControlBase):
 			name = ''
 		else:
 			# ESessions
-			if self.session.enable_encryption:
+			if self.session and self.session.enable_encryption:
 				if not self.esessioned:
 					msg = _('Encryption enabled')
 					ChatControlBase.print_conversation_line(self, msg, 

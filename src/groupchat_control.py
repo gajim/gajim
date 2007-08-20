@@ -97,12 +97,12 @@ def tree_cell_data_func(column, renderer, model, iter, tv=None):
 class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
 
-	def __init__(self, parent_win, gc_contact, contact, acct):
+	def __init__(self, parent_win, gc_contact, contact, acct, session):
 		room_jid = contact.jid.split('/')[0]
 		room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, acct)
 		self.room_name = room_ctrl.name
 		self.gc_contact = gc_contact
-		ChatControl.__init__(self, parent_win, contact, acct)
+		ChatControl.__init__(self, parent_win, contact, acct, session)
 		self.TYPE_ID = 'pm'
 
 	def send_message(self, message):
@@ -519,7 +519,7 @@ class GroupchatControl(ChatControlBase):
 			else:
 				self.print_conversation(msg, nick, tim, xhtml)
 
-	def on_private_message(self, nick, msg, tim, xhtml):
+	def on_private_message(self, nick, msg, tim, xhtml, session):
 		# Do we have a queue?
 		fjid = self.room_jid + '/' + nick
 		no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
@@ -531,7 +531,7 @@ class GroupchatControl(ChatControlBase):
 			return
 
 		event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
-			False, '', None, xhtml))
+			False, '', None, xhtml, session))
 		gajim.events.add_event(self.account, fjid, event)
 
 		autopopup = gajim.config.get('autopopup')
@@ -551,7 +551,7 @@ class GroupchatControl(ChatControlBase):
 				self.parent_win.show_title()
 				self.parent_win.redraw_tab(self)
 		else:
-			self._start_private_message(nick)
+			self._start_private_message(nick, session)
 		# Scroll to line
 		self.list_treeview.expand_row(path[0:1], False)
 		self.list_treeview.scroll_to_cell(path)
@@ -1812,7 +1812,7 @@ class GroupchatControl(ChatControlBase):
 		menu.show_all()
 		menu.popup(None, None, None, event.button, event.time)
 
-	def _start_private_message(self, nick):
+	def _start_private_message(self, nick, session = None):
 		gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		nick_jid = gc_c.get_full_jid()
 
