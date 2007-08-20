@@ -730,7 +730,7 @@ class EncryptedStanzaSession(StanzaSession):
 		response = xmpp.Message()
 
 		init = response.NT.init
-		init.setNamespace('http://www.xmpp.org/extensions/xep-0116.html#ns-init')
+		init.setNamespace(xmpp.NS_ESESSION_INIT)
 
 		x = xmpp.DataForm(typ='result')
 

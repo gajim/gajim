@@ -733,6 +733,7 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_ESESSION_INIT})
 
 			if (node is None or extension == 'cstates') and gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_CHATSTATES})
@@ -1220,7 +1221,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _InitE2ECB(self, con, stanza, session):
 		gajim.log.debug('InitE2ECB')
-		init = stanza.getTag(name='init', namespace='http://www.xmpp.org/extensions/xep-0116.html#ns-init')
+		init = stanza.getTag(name='init', namespace=common.xmpp.NS_ESESSION_INIT)
 		form = common.xmpp.DataForm(node=init.getTag('x'))
 
 		self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
@@ -1448,7 +1449,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		common.xmpp.NS_FEATURE:
 			self._FeatureNegCB(con, msg, session)
 			return
-		if msg.getTag('init') and msg.getTag('init').namespace == 'http://www.xmpp.org/extensions/xep-0116.html#ns-init':
+		if msg.getTag('init') and msg.getTag('init').namespace == \
+		common.xmpp.NS_ESESSION_INIT:
 			self._InitE2ECB(con, msg, session)
 		
 		encrypted = False
