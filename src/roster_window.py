@@ -2751,28 +2751,25 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		menu = gtk.Menu()
 
-		# Log on
-		item = gtk.ImageMenuItem(_('_Log on'))
-		icon = gtk.image_new_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
-		item.set_image(icon)
-		menu.append(item)
-		show = contact.show
+		# Connect/Didconnect
+		show = contact.show	
 		if (show != 'offline' and show != 'error') or\
 			gajim.account_is_disconnected(account):
-			item.set_sensitive(False)
-		item.connect('activate', self.on_agent_logging, jid, None, account)
-
-		# Log off
-		item = gtk.ImageMenuItem(_('Log _off'))
-		icon = gtk.image_new_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
+			# Log Off
+			item = gtk.ImageMenuItem(_('_Log off'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
+			item.connect('activate', self.on_agent_logging, jid, 'unavailable',
+				account)
+		else:
+			# Log on
+			item = gtk.ImageMenuItem(_('_Log on'))
+			icon = gtk.image_new_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_MENU)
+			item.connect('activate', self.on_agent_logging, jid, None, account)
 		item.set_image(icon)
 		menu.append(item)
-		if show in ('offline', 'error') or gajim.account_is_disconnected(
-			account):
+		if show == 'error':
 			item.set_sensitive(False)
-		item.connect('activate', self.on_agent_logging, jid, 'unavailable',
-			account)
-
+		
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
 
@@ -2786,11 +2783,19 @@ class RosterWindow:
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 
-		# Edit
-		item = gtk.ImageMenuItem(_('_Edit'))
+		# Manage Transport submenu
+		item = gtk.ImageMenuItem(_('_Manage Transport'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_PROPERTIES, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		manage_transport_submenu = gtk.Menu()
+		item.set_submenu(manage_transport_submenu)
+		menu.append(item)
+
+		# Modify Transport
+		item = gtk.ImageMenuItem(_('_Modify Transport'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
-		menu.append(item)
+		manage_transport_submenu.append(item)
 		item.connect('activate', self.on_edit_agent, contact, account)
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
@@ -2803,23 +2808,27 @@ class RosterWindow:
 		img = gtk.Image()
 		img.set_from_file(path_to_kbd_input_img)
 		item.set_image(img)
-		menu.append(item)
+		manage_transport_submenu.append(item)
 		item.connect('activate', self.on_rename, iter, path)
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 		
-		item = gtk.SeparatorMenuItem() # sepator
-		menu.append(item)
+		item = gtk.SeparatorMenuItem() # separator
+		manage_transport_submenu.append(item)
 
 		# Remove
-		item = gtk.ImageMenuItem(_('_Remove from Roster'))
+		item = gtk.ImageMenuItem(_('_Remove'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
-		menu.append(item)
+		manage_transport_submenu.append(item)
 		item.connect('activate', self.on_remove_agent, [(contact, account)])
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
+		
+		item = gtk.SeparatorMenuItem() # separator
+		menu.append(item)
 
+		# Information
 		information_menuitem = gtk.ImageMenuItem(_('_Information'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_INFO, gtk.ICON_SIZE_MENU)
 		information_menuitem.set_image(icon)
