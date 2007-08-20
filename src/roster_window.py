@@ -2490,15 +2490,23 @@ class RosterWindow:
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
 
+		# Manage Transport submenu
+		item = gtk.ImageMenuItem(_('_Manage Contacts'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_PROPERTIES, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		manage_contacts_submenu = gtk.Menu()
+		item.set_submenu(manage_contacts_submenu)
+		menu.append(item)
+		
 		# Edit Groups
 		edit_groups_item = gtk.ImageMenuItem(_('Edit _Groups'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
 		edit_groups_item.set_image(icon)
-		menu.append(edit_groups_item)
+		manage_contacts_submenu.append(edit_groups_item)
 		edit_groups_item.connect('activate', self.on_edit_groups, list_)
 
 		item = gtk.SeparatorMenuItem() # separator
-		menu.append(item)
+		manage_contacts_submenu.append(item)
 
 		# Block
 		if is_blocked and gajim.connections[account].privacy_rules_supported:
@@ -2506,22 +2514,22 @@ class RosterWindow:
 			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 			unblock_menuitem.set_image(icon)
 			unblock_menuitem.connect('activate', self.on_unblock, None, list_)
-			menu.append(unblock_menuitem)
+			manage_contacts_submenu.append(unblock_menuitem)
 		else:
 			block_menuitem = gtk.ImageMenuItem(_('_Block'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 			block_menuitem.set_image(icon)
 			block_menuitem.connect('activate', self.on_block, None, list_)
-			menu.append(block_menuitem)
+			manage_contacts_submenu.append(block_menuitem)
 
 			if not gajim.connections[account].privacy_rules_supported:
 				block_menuitem.set_sensitive(False)
 
 		# Remove 
-		remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
+		remove_item = gtk.ImageMenuItem(_('_Remove'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		remove_item.set_image(icon)
-		menu.append(remove_item)
+		manage_contacts_submenu.append(remove_item)
 		remove_item.connect('activate', self.on_req_usub, list_)
 		# unsensitive remove if one account is not connected
 		if one_account_offline:
