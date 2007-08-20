@@ -3348,8 +3348,7 @@ class RosterWindow:
 					'savegpgpass')
 			keyid = gajim.config.get_per('accounts', account, 'keyid')
 			if keyid and not gajim.config.get('usegpg'):
-				#TODO: make this string translatable
-				dialog = dialogs.WarningDialog('GPG is not usable', _('You will be connected to %s without OpenPGP.') % account)
+				dialog = dialogs.WarningDialog(_('GPG is not usable'), _('You will be connected to %s without OpenPGP.') % account)
 			if keyid and gajim.connections[account].connected < 2 and \
 				gajim.config.get('usegpg'):
 
