@@ -136,7 +136,7 @@
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1707">
                     <property name="visible">True</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="stock">gtk-dialog-authentication</property>
                     <property name="icon_size">1</property>
                   </widget>
                 </child>
@@ -160,7 +160,6 @@
             </child>
             <child>
               <widget class="GtkImageMenuItem" id="add_special_notification_menuitem">
-                <property name="visible">True</property>
                 <property name="no_show_all">True</property>
                 <property name="label" translatable="yes">Add Special _Notification</property>
                 <property name="use_underline">True</property>
