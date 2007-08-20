@@ -610,6 +610,11 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				liststore.append([acct, acct])
 			self.account_combobox.set_model(liststore)
 			self.account_combobox.set_active(0)
+		# FIXME: Hide stuff. Is there a way to do this in glade?
+		self.protocol_jid_combobox.hide()
+		self.register_hbox.hide()
+		self.connected_label.hide()
+
 		self.window.show_all()
 
 	def on_add_new_contact_window_destroy(self, widget):
