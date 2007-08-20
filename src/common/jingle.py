@@ -431,21 +431,24 @@ class JingleVoiP(JingleContent):
 		candidates = []
 		for candidate in content.getTag('transport').iterTags('candidate'):
 			cand={
-			#	'candidate_id':	str(self.session.connection.connection.getAnID()),
 				'candidate_id':	candidate['cid'],
 				'component':	int(candidate['component']),
 				'ip':		candidate['ip'],
 				'port':		int(candidate['port']),
-				'proto':	candidate['protocol']=='udp' and farsight.NETWORK_PROTOCOL_UDP \
-						or farsight.NETWORK_PROTOCOL_TCP,
 				'proto_subtype':'RTP',
 				'proto_profile':'AVP',
 				'preference':	float(candidate['priority'])/100000,
-			#	'type':		farsight.CANDIDATE_TYPE_LOCAL,
-				'type':		int(candidate['type']),
+				'type':		farsight.CANDIDATE_TYPE_LOCAL,
 			}
-			if 'ufrag' in candidate: cand['username']=candidate['ufrag']
-			if 'pwd' in candidate: cand['password']=candidate['pwd']
+			if candidate['protocol']=='udp':
+				cand['proto']=farsight.NETWORK_PROTOCOL_UDP
+			else:
+				# we actually don't handle properly different tcp options in jingle
+				cand['proto']=farsight.NETWORK_PROTOCOL_TCP
+			if 'ufrag' in candidate:
+				cand['username']=candidate['ufrag']
+			if 'pwd' in candidate:
+				cand['password']=candidate['pwd']
 
 			candidates.append(cand)
 		print self.session.weinitiate, "#add_remote_candidate"
@@ -540,8 +543,12 @@ class JingleVoiP(JingleContent):
 			'network': '0',
 			'port': candidate['port'],
 			'priority': int(100000*candidate['preference']), # hack
-			'protocol': candidate['proto']==farsight.NETWORK_PROTOCOL_UDP and 'udp' or 'tcp',
 		}
+		if candidate['proto']==farsight.NETWORK_PROTOCOL_UDP:
+			attrs['protocol']='udp'
+		else:
+			# we actually don't handle properly different tcp options in jingle
+			attrs['protocol']='tcp'
 		if 'username' in candidate: attrs['ufrag']=candidate['username']
 		if 'password' in candidate: attrs['pwd']=candidate['password']
 		c=self.__content()
