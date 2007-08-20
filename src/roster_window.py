@@ -4715,6 +4715,7 @@ class RosterWindow:
 			# remove the source row
 			self.remove_contact(c_source, account_source)
 			# brother inherite big brother groups
+			old_groups = c_source.groups
 			c_source.groups = []
 			for g in c_dest.groups:
 				c_source.groups.append(g)
@@ -4735,7 +4736,10 @@ class RosterWindow:
 						self.draw_contact(_jid, _account)
 			self.add_contact_to_roster(c_source.jid, account_source)
 			self.draw_contact(c_dest.jid, account_dest)
-
+			# FIXME: Why do groups have to be redrawn by hand?
+			for g in old_groups:
+				self.draw_group(g, account_source)
+			
 			context.finish(True, True, etime)
 
 		confirm_metacontacts = gajim.config.get('confirm_metacontacts')
@@ -4927,13 +4931,7 @@ class RosterWindow:
 			return
 
 		# Is the contact we drag a meta contact?
-		is_meta_contact = False
-		is_big_brother = False
-		tag = gajim.contacts.get_metacontacts_tag(account_source, jid_source)
-		if tag:
-			is_meta_contact = True
-			if model.iter_has_child(iter_source):
-				is_big_brother = True
+		is_big_brother =  gajim.contacts.is_big_brother(account_source, jid_source)
 
 		# Contact drop on group row or between two contacts
 		if type_dest == 'group' or position == gtk.TREE_VIEW_DROP_BEFORE or \
