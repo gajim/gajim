@@ -1984,7 +1984,6 @@ class RosterWindow:
 			above_information_separator = xml.get_widget(
 				'above_information_separator')
 
-			# skip a separator
 			information_menuitem = xml.get_widget('information_menuitem')
 			history_menuitem = xml.get_widget('history_menuitem')
 
@@ -2014,7 +2013,7 @@ class RosterWindow:
 			if contact.resource:
 				send_file_menuitem.connect('activate',
 					self.on_send_file_menuitem_activate, account, contact)
-			else: # if we do not have resource we cannot send file
+			else: # if we do no have resource we cannot do much
 				send_file_menuitem.set_sensitive(False)
 
 			rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
@@ -2675,6 +2674,11 @@ class RosterWindow:
 				status_menuitem.set_image(icon)
 				status_menuitems.append(status_menuitem)
 			menu.append(send_custom_status_menuitem)
+			
+			# there is no singlemessage and custom status for zeroconf
+			if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+				send_custom_status_menuitem.set_sensitive(False)
+				send_group_message_item.set_sensitive(False)
 
 		if not group in helpers.special_groups:
 			item = gtk.SeparatorMenuItem() # separator
