@@ -431,9 +431,12 @@ class Contacts:
 			for data_ in family:
 				if data_.has_key('order') and data_['order'] > max_order:
 					max_order = data_['order']
-		contact = self.get_contact_with_highest_priority(account, jid)
 		score = (max_order - order)*10000
-		
+
+		contact = self.get_contact_with_highest_priority(account, jid)
+		if not contact:
+			return score
+
 		if common.gajim.get_transport_name_from_jid(jid) is None and \
 		contact.show not in ('error', 'offline'):
 			score += 10
