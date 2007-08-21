@@ -824,13 +824,6 @@ class RosterWindow:
 			gajim.interface.instances[account]['privacy_lists'] = \
 				dialogs.PrivacyListsWindow(account)
 
-	def on_blocked_contacts_menuitem_activate(self, widget, account):
-		if gajim.interface.instances[account].has_key('blocked_contacts'):
-			gajim.interface.instances[account]['blocked_contacts'].window.present()
-		else:
-			gajim.interface.instances[account]['blocked_contacts'] = \
-				dialogs.BlockedContactsWindow(account)
-
 	def on_set_motd_menuitem_activate(self, widget, account):
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		server += '/announce/motd'
@@ -863,7 +856,6 @@ class RosterWindow:
 		send_single_message_menuitem = xml.get_widget(
 			'send_single_message_menuitem')
 		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
-		blocked_contacts_menuitem = xml.get_widget('blocked_contacts_menuitem')
 		privacy_lists_menuitem = xml.get_widget('privacy_lists_menuitem')
 		administrator_menuitem = xml.get_widget('administrator_menuitem')
 		send_server_message_menuitem = xml.get_widget(
@@ -877,12 +869,9 @@ class RosterWindow:
 
 		if gajim.connections[account] and gajim.connections[account].\
 		privacy_rules_supported:
-			blocked_contacts_menuitem.connect('activate',
-				self.on_blocked_contacts_menuitem_activate, account)
 			privacy_lists_menuitem.connect('activate',
 				self.on_privacy_lists_menuitem_activate, account)
 		else:
-			blocked_contacts_menuitem.set_sensitive(False)
 			privacy_lists_menuitem.set_sensitive(False)
 
 		if gajim.connections[account].is_zeroconf:
