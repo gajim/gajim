@@ -2733,7 +2733,7 @@ class RosterWindow:
 					block_menuitem.set_sensitive(False)
 
 			# Remove group
-			remove_item = gtk.ImageMenuItem(_('_Remove from Roster'))
+			remove_item = gtk.ImageMenuItem(_('_Remove'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 			remove_item.set_image(icon)
 			menu.append(remove_item)
@@ -2889,6 +2889,7 @@ class RosterWindow:
 			account_context_menu = xml.get_widget('account_context_menu')
 
 			status_menuitem = xml.get_widget('status_menuitem')
+			start_chat_menuitem = xml.get_widget('start_chat_menuitem')
 			join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
 			muc_icon = self.load_icon('muc_active')
 			if muc_icon:
@@ -2951,6 +2952,9 @@ class RosterWindow:
 			contact = gajim.contacts.create_contact(jid = hostname) # Fake contact
 			execute_command_menuitem.connect('activate',
 				self.on_execute_command, contact, account)
+			
+			start_chat_menuitem.connect('activate', 
+				self.on_new_chat_menuitem_activate, account)
 
 			gc_sub_menu = gtk.Menu() # gc is always a submenu
 			join_group_chat_menuitem.set_submenu(gc_sub_menu)
@@ -2960,7 +2964,8 @@ class RosterWindow:
 			if gajim.connections[account].connected < 2:
 				for widget in [add_contact_menuitem, service_discovery_menuitem,
 				join_group_chat_menuitem,
-				execute_command_menuitem]:
+				execute_command_menuitem,
+				start_chat_menuitem]:
 					widget.set_sensitive(False)
 		else:
 			xml = gtkgui_helpers.get_glade('zeroconf_context_menu.glade')

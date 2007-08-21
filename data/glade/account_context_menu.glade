@@ -18,15 +18,25 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkSeparatorMenuItem" id="seperator">
+      <widget class="GtkSeparatorMenuItem" id="separatormenuitem1">
         <property name="visible">True</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
       </widget>
     </child>
     <child>
-      <widget class="GtkMenuItem" id="open_gmail_inbox_menuitem">
+      <widget class="GtkImageMenuItem" id="start_chat_menuitem">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">_Open Gmail Inbox</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+        <property name="label" translatable="yes">_Start Chat</property>
         <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image7">
+            <property name="visible">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="stock">gtk-jump-to</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
       </widget>
     </child>
     <child>
@@ -44,9 +54,28 @@
       </widget>
     </child>
     <child>
+      <widget class="GtkSeparatorMenuItem" id="seperator">
+        <property name="visible">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkImageMenuItem" id="add_contact_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Add Contact</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image1238">
+            <property name="visible">True</property>
+            <property name="stock">gtk-add</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
       <widget class="GtkImageMenuItem" id="service_discovery_menuitem">
         <property name="visible">True</property>
-	<property name="label" translatable="yes">_Discover Services</property>
+        <property name="label" translatable="yes">_Discover Services</property>
         <property name="use_underline">True</property>
         <child internal-child="image">
           <widget class="GtkImage" id="image1239">
@@ -72,22 +101,15 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkSeparatorMenuItem" id="seperator">
+      <widget class="GtkMenuItem" id="open_gmail_inbox_menuitem">
         <property name="visible">True</property>
+        <property name="label" translatable="yes">_Open Gmail Inbox</property>
+        <property name="use_underline">True</property>
       </widget>
     </child>
     <child>
-      <widget class="GtkImageMenuItem" id="add_contact_menuitem">
+      <widget class="GtkSeparatorMenuItem" id="seperator">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">_Add Contact</property>
-        <property name="use_underline">True</property>
-        <child internal-child="image">
-          <widget class="GtkImage" id="image1238">
-            <property name="visible">True</property>
-            <property name="stock">gtk-add</property>
-            <property name="icon_size">1</property>
-          </widget>
-        </child>
       </widget>
     </child>
     <child>
