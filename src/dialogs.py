@@ -29,6 +29,8 @@ import vcard
 import conversation_textview
 import message_control
 
+from random import randrange
+
 try:
 	import gtkspell
 	HAS_GTK_SPELL = True
@@ -401,7 +403,7 @@ class ChangeStatusMessageDialog:
 	def on_change_status_message_dialog_key_press_event(self, widget, event):
 		self.countdown_enabled = False
 		if event.keyval == gtk.keysyms.Return or \
-		event.keyval == gtk.keysyms.KP_Enter:  # catch CTRL+ENTER
+		event.keyval == gtk.keysyms.KP_Enter: # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)
 				# Stop the event
@@ -1532,7 +1534,7 @@ class NewChatDialog(InputDialog):
 		keys.sort()
 		for jid in keys:
 			contact = self.completion_dict[jid]
-			img =  gajim.interface.roster.jabber_state_images['16'][contact.show]
+			img = gajim.interface.roster.jabber_state_images['16'][contact.show]
 			liststore.append((img.get_pixbuf(), jid))
 
 		self.ok_handler = self.new_chat_response
@@ -2577,17 +2579,21 @@ class PrivacyListsWindow:
 
 class InvitationReceivedDialog:
 	def __init__(self, account, room_jid, contact_jid, password = None,
-	comment = None):
+	comment = None, is_continued = False):
 
 		self.room_jid = room_jid
 		self.account = account
 		self.password = password
+		self.is_continued = is_continued
 		xml = gtkgui_helpers.get_glade('invitation_received_dialog.glade')
 		self.dialog = xml.get_widget('invitation_received_dialog')
 
 		#Don't translate $Contact
-		pritext = _('$Contact has invited you to group chat %(room_jid)s')\
-			% {'room_jid': room_jid}
+		if is_continued:
+			pritext = _('$Contact has invited you to join a discussion')
+		else:
+			pritext = _('$Contact has invited you to group chat %(room_jid)s')\
+				% {'room_jid': room_jid}
 		contact = gajim.contacts.get_first_contact_from_jid(account, contact_jid)
 		if contact and contact.name:
 			contact_text = '%s (%s)' % (contact.name, contact_jid)
@@ -2615,8 +2621,11 @@ class InvitationReceivedDialog:
 	def on_accept_button_clicked(self, widget):
 		self.dialog.destroy()
 		try:
-			JoinGroupchatWindow(self.account, self.room_jid,
-				password=self.password)
+			if self.is_continued:
+				gajim.interface.roster.join_gc_room(self.account, self.room_jid,
+					gajim.nicks[self.account], None, is_continued=True)
+			else:
+				JoinGroupchatWindow(self.account, self.room_jid)
 		except GajimGeneralException:
 			pass
 
@@ -3283,3 +3292,135 @@ class AdvancedNotificationsWindow:
 
 	def on_close_window(self, widget):
 		self.window.destroy()
+
+class TransformChatToMUC:
+	def __init__(self, account, jids):
+		'''This window is used to trasform a one-to-one chat to a MUC.
+		We do 2 things: first select the server and then make a guests list.'''
+
+		self.account = account
+		self.auto_jids = jids
+
+		self.xml = gtkgui_helpers.get_glade('chat_to_muc_window.glade')
+		self.window = self.xml.get_widget('chat_to_muc_window')
+		self.window.connect('key_press_event', self._on_keypress_event)
+
+		for widget_to_add in ('invite_button', 'cancel_button',
+		'server_list_comboboxentry', 'guests_treeview',
+		'server_and_guests_hseparator', 'server_select_label'):
+			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
+		self.window.connect('key_press_event', self._on_keypress_event)
+
+		# set a list of servers which support it
+		self.servers_support = {}
+
+		# set comboboxentry
+		renderer_servers = gtk.CellRendererText()
+
+		server_list = []
+		self.servers = gtk.ListStore(str)
+		self.server_list_comboboxentry.set_model(self.servers)
+
+		self.server_list_comboboxentry.set_text_column(0)
+
+		# get the muc server of our server
+		if 'jabber' in gajim.connections[account].muc_jid:
+			server_list.append(gajim.connections[account].muc_jid['jabber'])
+		# add servers or recently joined groupchats
+		recently_groupchat = gajim.config.get('recently_groupchat').split()
+		for g in recently_groupchat:
+			server = gajim.get_server_from_jid(g)
+			if server not in server_list:
+				server_list.append(gajim.get_server_from_jid(g))
+		# add a default server
+		if not server_list:
+			server_list.append('conference.jabber.org')
+
+		for s in server_list:
+			self.servers.append([s])
+
+		self.server_list_comboboxentry.set_active(0)
+
+		# set treeview
+		# name, jid
+		self.store = gtk.ListStore(str, str)
+		self.guests_treeview.set_model(self.store)
+
+		renderer1 = gtk.CellRendererText()
+		column = gtk.TreeViewColumn('Name', renderer1, text=0)
+		self.guests_treeview.append_column(column)
+
+		self.guests_treeview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+
+		# set jabber id and pseudos
+		for jid in gajim.contacts.get_jid_list(self.account):
+			contact = \
+				gajim.contacts.get_contact_with_highest_priority(self.account, jid)
+			if contact.jid not in self.auto_jids:
+				if contact.show not in ('offline', 'error'):
+					name = contact.name
+					if name == '':
+						name = jid.split('@')[0]
+					self.store.append([name, jid])
+
+		# show all but...
+		self.window.show_all()
+
+		# ...hide this
+		self.server_selection_visible = True
+		self.toggle_server_selection_visible()
+
+		self.xml.signal_autoconnect(self)
+
+	def toggle_server_selection_visible(self):
+		if self.server_selection_visible:
+			self.server_selection_visible = False
+			self.server_and_guests_hseparator.hide()
+			self.server_list_comboboxentry.hide()
+			self.server_select_label.hide()
+		else:
+			self.server_selection_visible = True
+			self.server_and_guests_hseparator.show()
+			self.server_list_comboboxentry.show()
+			self.server_select_label.show()
+
+	def _on_keypress_event(self, widget, event):
+		if (event.state & gtk.gdk.MOD1_MASK) and (event.keyval == gtk.keysyms.c \
+		or event.keyval == gtk.keysyms.C):
+				self.toggle_server_selection_visible()
+				return True
+
+	def on_invite_button_clicked(self, widget):
+		server = self.server_list_comboboxentry.get_active_text()
+		if server == '':
+			return
+		room_id = gajim.nicks[self.account] + str(randrange(9999999))
+#		if self.servers_support.has_key(server):
+#			self.unique_room_id_supported(server, self.servers_support[server])
+#			return
+#		gajim.connections[self.account].check_unique_room_id_support(server, self)
+
+#	def unique_room_id_supported(self, server, room_id):
+#		if not self.servers_support.has_key(server):
+#			self.servers_support[server] = room_id
+		guest_list = []
+		guests = self.guests_treeview.get_selection().get_selected_rows()
+		for guest in guests[1]:
+			iter = self.store.get_iter(guest)
+			guest_list.append(self.store[iter][1].decode('utf-8'))
+		for guest in self.auto_jids:
+			guest_list.append(guest)
+		room_jid = room_id + '@' + server
+		gajim.automatic_rooms[self.account][room_jid] = {}
+		gajim.automatic_rooms[self.account][room_jid]['invities'] = guest_list 
+		gajim.automatic_rooms[self.account][room_jid]['continue_tag'] = True
+		gajim.interface.roster.join_gc_room(self.account, room_jid,
+			gajim.nicks[self.account], None, is_continued=True)
+		self.window.destroy()
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+
+	def unique_room_id_error(self, server):
+		self.unique_room_id_supported(server,
+			gajim.nicks[self.account] + str(randrange(9999999)))

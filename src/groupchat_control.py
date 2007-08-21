@@ -153,9 +153,11 @@ class GroupchatControl(ChatControlBase):
 		'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick',
 		'part', 'names', 'say', 'topic']
 
-	def __init__(self, parent_win, contact, acct):
+	def __init__(self, parent_win, contact, acct, is_continued=False):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
 					'muc_child_vbox', contact, acct);
+
+		self.is_continued=is_continued
 
 		widget = self.xml.get_widget('muc_window_actions_button')
 		id = widget.connect('clicked', self.on_actions_button_clicked)
@@ -478,7 +480,19 @@ class GroupchatControl(ChatControlBase):
 		'''
 		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
 		font_attrs, font_attrs_small = self.get_font_attrs()
-		text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
+		if self.is_continued:
+			nicks = []
+			for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
+				if nick != self.nick:
+					nicks.append(nick)
+			if nicks != []:
+				title = ', '
+				title = 'Conversation with ' + title.join(nicks)
+			else:
+				title = 'Continued conversation'
+			text = '<span %s>%s</span>' % (font_attrs, title)
+		else:
+			text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
 		if self.subject:
 			subject = helpers.reduce_chars_newlines(self.subject, max_lines = 2)
 			subject = gobject.markup_escape_text(subject)
@@ -1135,6 +1149,8 @@ class GroupchatControl(ChatControlBase):
 		if nick == self.nick: # we became online
 			self.got_connected()
 		self.list_treeview.expand_row((model.get_path(role_iter)), False)
+		if self.is_continued:
+			self.draw_banner_text()
 		return iter
 
 	def get_role_iter(self, role):

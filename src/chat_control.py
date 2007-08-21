@@ -1536,6 +1536,7 @@ class ChatControl(ChatControlBase):
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
+		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
 		
 		contact = self.parent_win.get_active_contact()
 		jid = contact.jid
@@ -1550,7 +1551,7 @@ class ChatControl(ChatControlBase):
 		is_sensitive = gpg_btn.get_property('sensitive')
 		toggle_gpg_menuitem.set_active(isactive)
 		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
-		
+
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
 		if self.TYPE_ID == message_control.TYPE_PM and self.gc_contact.jid and \
@@ -1560,7 +1561,14 @@ class ChatControl(ChatControlBase):
 			send_file_menuitem.set_sensitive(True)
 		else:
 			send_file_menuitem.set_sensitive(False)
-		
+
+		# compact_view_menuitem
+		compact_view_menuitem.set_active(self.hide_chat_buttons_current)
+
+		# check if it's possible to convert to groupchat
+		if gajim.get_transport_name_from_jid(jid):
+			convert_to_gc_menuitem.set_sensitive(False)
+
 		# add_to_roster_menuitem
 		if _('Not in Roster') in contact.groups:
 			add_to_roster_menuitem.show()
@@ -1568,8 +1576,7 @@ class ChatControl(ChatControlBase):
 		else:
 			add_to_roster_menuitem.hide()
 			add_to_roster_menuitem.set_no_show_all(True)
-		
-		
+
 		# connect signals
 		id = history_menuitem.connect('activate', 
 			self._on_history_menuitem_activate)
@@ -1586,6 +1593,9 @@ class ChatControl(ChatControlBase):
 		id = information_menuitem.connect('activate', 
 			self._on_contact_information_menuitem_activate)
 		self.handlers[id] = information_menuitem
+		id = convert_to_gc_menuitem.connect('activate',
+			self._on_convert_to_gc_menuitem_activate)
+		self.handlers[id] = convert_to_gc_menuitem
 		menu.connect('selection-done', lambda w:w.destroy())	
 		return menu
 
@@ -1999,6 +2009,11 @@ class ChatControl(ChatControlBase):
 		# this is reverse logic, as we are on 'activate' (before change happens)
 		tb = self.xml.get_widget('gpg_togglebutton')
 		tb.set_active(not tb.get_active())
+	
+	def _on_convert_to_gc_menuitem_activate(self, widget):
+		'''user want to invite some friends to chat'''
+		dialogs.TransformChatToMUC(self.account, [self.contact.jid])
+
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)

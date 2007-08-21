@@ -751,7 +751,8 @@ class RosterWindow:
 		for iter in iters:
 			model[iter][C_SECPIXBUF] = scaled_pixbuf
 
-	def join_gc_room(self, account, room_jid, nick, password, minimize = False):
+	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
+		is_continued=False):
 		'''joins the room immediatelly'''
 		if gajim.interface.msg_win_mgr.has_window(room_jid, account) and \
 				gajim.gc_connected[account][room_jid]:
@@ -780,7 +781,7 @@ class RosterWindow:
 			return
 		if not minimized_control_exists and \
 			not gajim.interface.msg_win_mgr.has_window(room_jid, account):
-			self.new_room(room_jid, nick, account)
+			self.new_room(room_jid, nick, account, is_continued=is_continued)
 		if not minimized_control_exists:
 			gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
 			gc_win.set_active_tab(room_jid, account)
@@ -3804,14 +3805,15 @@ class RosterWindow:
 			mc = mw.get_control(fjid, account)
 			mc.user_nick = gajim.nicks[account]
 
-	def new_room(self, room_jid, nick, account):
+	def new_room(self, room_jid, nick, account, is_continued=False):
 		# Get target window, create a control, and associate it with the window
 		contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
 		mw = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account,
-								GroupchatControl.TYPE_ID)
-		gc_control = GroupchatControl(mw, contact, account)
+				GroupchatControl.TYPE_ID)
+		gc_control = GroupchatControl(mw, contact, account,
+			is_continued=is_continued)
 		mw.new_tab(gc_control)
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,

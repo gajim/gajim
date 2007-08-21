@@ -1210,9 +1210,14 @@ class Interface:
 			# use default configuration
 			gajim.connections[account].send_gc_config(room_jid, array[1])
 			# invite contacts
+			# check if it is necessary to add <continue />
+			continue_tag = False
+			if gajim.automatic_rooms[account][room_jid].has_key('continue_tag'):
+				continue_tag = True
 			if gajim.automatic_rooms[account][room_jid].has_key('invities'):
 				for jid in gajim.automatic_rooms[account][room_jid]['invities']:
-					gajim.connections[account].send_invite(room_jid, jid)
+					gajim.connections[account].send_invite(room_jid, jid,
+						continue_tag=continue_tag)
 			del gajim.automatic_rooms[account][room_jid]
 		elif not self.instances[account]['gc_config'].has_key(room_jid):
 			self.instances[account]['gc_config'][room_jid] = \
@@ -1289,16 +1294,16 @@ class Interface:
 		dlg.input_entry.set_visibility(False)
 
 	def handle_event_gc_invitation(self, account, array):
-		#('GC_INVITATION', (room_jid, jid_from, reason, password))
+		#('GC_INVITATION', (room_jid, jid_from, reason, password, is_continued))
 		jid = gajim.get_jid_without_resource(array[1])
 		room_jid = array[0]
 		if helpers.allow_popup_window(account) or not self.systray_enabled:
 			dialogs.InvitationReceivedDialog(account, room_jid, jid, array[3],
-				array[2])
+				array[2], is_continued=array[4])
 			return
 
 		self.add_event(account, jid, 'gc-invitation', (room_jid, array[2],
-			array[3]))
+			array[3], array[4]))
 
 		if helpers.allow_showing_notification(account):
 			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
@@ -1867,6 +1872,17 @@ class Interface:
 			_('You are already connected to this account with the same resource. Please type a new one'), input_str = gajim.connections[account].server_resource,
 			is_modal = False, ok_handler = on_ok)
 
+	def handle_event_unique_room_id_supported(self, account, data):
+		'''Receive confirmation that unique_room_id are supported'''
+		# ('UNIQUE_ROOM_ID_SUPPORTED', server, instance, room_id)
+		instance = data[1]
+		instance.unique_room_id_supported(data[0], data[2])
+
+	def handle_event_unique_room_id_unsupported(self, account, data):
+		# ('UNIQUE_ROOM_ID_UNSUPPORTED', server, instance)
+		instance = data[1]
+		instance.unique_room_id_error(data[0])
+
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -2195,6 +2211,9 @@ class Interface:
 			'SEARCH_FORM': self.handle_event_search_form,
 			'SEARCH_RESULT': self.handle_event_search_result,
 			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
+			'UNIQUE_ROOM_ID_UNSUPPORTED': \
+				self.handle_event_unique_room_id_unsupported,
+			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
 		}
 		gajim.handlers = self.handlers
 
@@ -2287,7 +2306,7 @@ class Interface:
 			event = gajim.events.get_first_event(account, jid, type_)
 			data = event.parameters
 			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
-				data[1])
+				data[1], data[3])
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
 		if w:

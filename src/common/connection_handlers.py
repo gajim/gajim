@@ -1483,7 +1483,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		for xtag in xtags:
 			if xtag.getNamespace() == common.xmpp.NS_CONFERENCE and not invite:
 				room_jid = xtag.getAttr('jid')
-				self.dispatch('GC_INVITATION', (room_jid, frm, '', None))
+				is_continued = False
+				if xtag.getTag('continue'):
+					is_continued = True
+				self.dispatch('GC_INVITATION', (room_jid, frm, '', None,
+					is_continued))
 				return
 		# chatstates - look for chatstate tags in a message if not delayed
 		if not delayed:
@@ -1574,7 +1578,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				reason = item.getTagData('reason')
 				item = invite.getTag('password')
 				password = invite.getTagData('password')
-				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
+				is_continued = False
+				if invite.getTag('invite').getTag('continue'):
+					is_continued = True
+				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password,
+					is_continued))
 				return
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				try:

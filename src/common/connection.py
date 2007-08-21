@@ -1201,6 +1201,21 @@ class Connection(ConnectionHandlers):
 		p = self.add_sha(p, ptype != 'unavailable')
 		self.connection.send(p)
 
+	def check_unique_room_id_support(self, server, instance):
+		if not self.connection:
+			return
+		iq = common.xmpp.Iq(typ = 'get', to = server)
+		iq.setAttr('id', 'unique1')
+		iq.addChild('unique', namespace=common.xmpp.NS_MUC_UNIQUE)
+		def _on_response(resp):
+			if not common.xmpp.isResultNode(resp):
+				self.dispatch('UNIQUE_ROOM_ID_UNSUPPORTED', (server, instance))
+				return
+			print resp.getTag('unique').getData()
+			self.dispatch('UNIQUE_ROOM_ID_SUPPORTED', (server, instance,
+				resp.getTag('unique').getData()))
+		self.connection.SendAndCallForResponse(iq, _on_response)
+
 	def join_gc(self, nick, room_jid, password):
 		# FIXME: This room JID needs to be normalized; see #1364
 		if not self.connection:
@@ -1387,11 +1402,13 @@ class Connection(ConnectionHandlers):
 		else:
 			_on_unregister_account_connect(self.connection)
 
-	def send_invite(self, room, to, reason=''):
+	def send_invite(self, room, to, reason='', continue_tag=False):
 		'''sends invitation'''
 		message=common.xmpp.Message(to = room)
 		c = message.addChild(name = 'x', namespace = common.xmpp.NS_MUC_USER)
 		c = c.addChild(name = 'invite', attrs={'to' : to})
+		if continue_tag:
+			c.addChild(name = 'continue')
 		if reason != '':
 			c.setTagData('reason', reason)
 		self.connection.send(message)
