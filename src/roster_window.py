@@ -1952,7 +1952,8 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			return
-
+		
+		# Zeroconf Account
 		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 			xml = gtkgui_helpers.get_glade('zeroconf_contact_context_menu.glade')
 			zeroconf_contact_context_menu = xml.get_widget(
@@ -1961,8 +1962,6 @@ class RosterWindow:
 			start_chat_menuitem = xml.get_widget('start_chat_menuitem')
 			rename_menuitem = xml.get_widget('rename_menuitem')
 			edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
-			# separator has with send file, assign_openpgp_key_menuitem, etc..
-			above_send_file_separator = xml.get_widget('above_send_file_separator')
 			send_file_menuitem = xml.get_widget('send_file_menuitem')
 			assign_openpgp_key_menuitem = xml.get_widget(
 				'assign_openpgp_key_menuitem')
@@ -2011,8 +2010,7 @@ class RosterWindow:
 				send_file_menuitem.connect('activate',
 					self.on_send_file_menuitem_activate, account, contact)
 			else: # if we do not have resource we cannot send file
-				send_file_menuitem.hide()
-				send_file_menuitem.set_no_show_all(True)
+				send_file_menuitem.set_sensitive(False)
 
 			rename_menuitem.connect('activate', self.on_rename, iter, tree_path)
 			if contact.show in ('offline', 'error'):
@@ -2036,13 +2034,9 @@ class RosterWindow:
 						self.on_assign_pgp_key, contact, account)
 
 			else: # contact is in group 'Not in Roster'
-				edit_groups_menuitem.hide()
+				edit_groups_menuitem.set_sensitive(False)
 				edit_groups_menuitem.set_no_show_all(True)
-				# hide first of the two consecutive separators
-				above_send_file_separator.hide()
-				above_send_file_separator.set_no_show_all(True)
-				assign_openpgp_key_menuitem.hide()
-				assign_openpgp_key_menuitem.set_no_show_all(True)
+				assign_openpgp_key_menuitem.set_sensitive(False)
 
 			# Remove many items when it's self contact row
 			if our_jid:
@@ -2083,8 +2077,6 @@ class RosterWindow:
 		unblock_menuitem = xml.get_widget('unblock_menuitem')
 		rename_menuitem = xml.get_widget('rename_menuitem')
 		edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
-		# separator has with send file, assign_openpgp_key_menuitem, etc..
-		above_send_file_separator = xml.get_widget('above_send_file_separator')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		assign_openpgp_key_menuitem = xml.get_widget(
 			'assign_openpgp_key_menuitem')
@@ -2115,8 +2107,9 @@ class RosterWindow:
 		jid in gajim.interface.status_sent_to_users[account]:
 			send_custom_status_menuitem.set_image(
 				self.load_icon(gajim.interface.status_sent_to_users[account][jid]))
-		else:
-			send_custom_status_menuitem.set_image(None)
+		else:	
+			icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_MENU)
+			send_custom_status_menuitem.set_image(icon)
 
 		if not our_jid:
 			# add a special img for rename menuitem
@@ -2130,8 +2123,7 @@ class RosterWindow:
 		if muc_icon:
 			invite_menuitem.set_image(muc_icon)
 
-		above_subscription_separator = xml.get_widget(
-			'above_subscription_separator')
+		# Subscription submenu
 		subscription_menuitem = xml.get_widget('subscription_menuitem')
 		send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem =\
 			subscription_menuitem.get_submenu().get_children()
@@ -2139,7 +2131,6 @@ class RosterWindow:
 		remove_from_roster_menuitem = xml.get_widget(
 			'remove_from_roster_menuitem')
 
-		# skip a separator
 		information_menuitem = xml.get_widget('information_menuitem')
 		history_menuitem = xml.get_widget('history_menuitem')
 
@@ -2154,7 +2145,7 @@ class RosterWindow:
 		contact_transport = gajim.get_transport_name_from_jid(contact.jid)
 		t = contact_transport or 'jabber' # transform None in 'jabber'
 		if not gajim.connections[account].muc_jid.has_key(t):
-			invite_to_new_room_menuitem.set_sensitive(False)
+			invite_menuitem.set_sensitive(False)
 		invite_to_submenu.append(invite_to_new_room_menuitem)
 		rooms = [] # a list of (room_jid, account) tuple
 		for gc_control in gajim.interface.msg_win_mgr.get_controls(
@@ -2234,8 +2225,7 @@ class RosterWindow:
 				execute_command_menuitem.connect('activate',
 					self.on_execute_command, contact, account, contact.resource)
 			else:
-				execute_command_menuitem.hide()
-				execute_command_menuitem.set_no_show_all(True)
+				execute_command_menuitem.set_sensitive(False)
 
 			our_jid_other_resource = None
 			if our_jid:
@@ -2257,8 +2247,7 @@ class RosterWindow:
 			send_file_menuitem.connect('activate',
 				self.on_send_file_menuitem_activate, account, contact)
 		else: # if we do not have resource we cannot send file
-			send_file_menuitem.hide()
-			send_file_menuitem.set_no_show_all(True)
+			send_file_menuitem.set_sensitive(False)
 
 		send_single_message_menuitem.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, contact)
@@ -2273,8 +2262,6 @@ class RosterWindow:
 
 		if _('Not in Roster') not in contact.groups:
 			# contact is in normal group
-			edit_groups_menuitem.set_no_show_all(False)
-			assign_openpgp_key_menuitem.set_no_show_all(False)
 			add_to_roster_menuitem.hide()
 			add_to_roster_menuitem.set_no_show_all(True)
 			edit_groups_menuitem.connect('activate', self.on_edit_groups, [(
@@ -2304,33 +2291,27 @@ class RosterWindow:
 
 		else: # contact is in group 'Not in Roster'
 			add_to_roster_menuitem.set_no_show_all(False)
-			edit_groups_menuitem.hide()
-			edit_groups_menuitem.set_no_show_all(True)
-			# hide first of the two consecutive separators
-			above_send_file_separator.hide()
-			above_send_file_separator.set_no_show_all(True)
-			assign_openpgp_key_menuitem.hide()
-			assign_openpgp_key_menuitem.set_no_show_all(True)
-			subscription_menuitem.hide()
-			subscription_menuitem.set_no_show_all(True)
+			edit_groups_menuitem.set_sensitive(False)
+			assign_openpgp_key_menuitem.set_sensitive(False)
+			subscription_menuitem.set_sensitive(False)
 
 			add_to_roster_menuitem.connect('activate',
 				self.on_add_to_roster, contact, account)
 
 		set_custom_avatar_menuitem.connect('activate',
 			self.on_set_custom_avatar_activate, contact, account)
-		# Remove many items when it's self contact row
+		# Hide items when it's self contact row
 		if our_jid:
 			menuitem = xml.get_widget('manage_contact')
-			menuitem.set_no_show_all(True)
-			menuitem.hide()
+			menuitem.set_sensitive(False)
 
 		# Unsensitive many items when account is offline
 		if gajim.connections[account].connected < 2:
 			for widget in [start_chat_menuitem, send_single_message_menuitem,
 			rename_menuitem, edit_groups_menuitem, send_file_menuitem,
 			subscription_menuitem, add_to_roster_menuitem,
-			remove_from_roster_menuitem, execute_command_menuitem]:
+			remove_from_roster_menuitem, execute_command_menuitem,
+			send_custom_status_menuitem]:
 				widget.set_sensitive(False)
 
 		if gajim.connections[account] and gajim.connections[account].\
@@ -2558,7 +2539,17 @@ class RosterWindow:
 			maximize_menuitem.connect('activate', self.on_groupchat_maximized, \
 				jid, account)
 			menu.append(maximize_menuitem)
-
+			
+		disconnect_menuitem = gtk.ImageMenuItem(_('_Disconnect'))
+		disconnect_icon = gtk.image_new_from_stock(gtk.STOCK_DISCONNECT, \
+			gtk.ICON_SIZE_MENU)
+		disconnect_menuitem.set_image(disconnect_icon)
+		disconnect_menuitem .connect('activate', self.on_disconnect, jid, account)
+		menu.append(disconnect_menuitem)		
+		
+		item = gtk.SeparatorMenuItem() # separator
+		menu.append(item)
+		
 		history_menuitem = gtk.ImageMenuItem(_('_History'))
 		history_icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL, \
 			gtk.ICON_SIZE_MENU)
@@ -2566,16 +2557,6 @@ class RosterWindow:
 		history_menuitem .connect('activate', self.on_history, \
 				contact, account)
 		menu.append(history_menuitem)
-
-		item = gtk.SeparatorMenuItem() # separator
-		menu.append(item)
-
-		disconnect_menuitem = gtk.ImageMenuItem(_('_Disconnect'))
-		disconnect_icon = gtk.image_new_from_stock(gtk.STOCK_DISCONNECT, \
-			gtk.ICON_SIZE_MENU)
-		disconnect_menuitem.set_image(disconnect_icon)
-		disconnect_menuitem .connect('activate', self.on_disconnect, jid, account)
-		menu.append(disconnect_menuitem)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
@@ -2676,7 +2657,9 @@ class RosterWindow:
 				send_custom_status_menuitem.set_image(self.load_icon(
 					gajim.interface.status_sent_to_groups[account][group]))
 			else:
-				send_custom_status_menuitem.set_image(None)
+				icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK,
+					gtk.ICON_SIZE_MENU)
+				send_custom_status_menuitem.set_image(icon)
 			status_menuitems = gtk.Menu()
 			send_custom_status_menuitem.set_submenu(status_menuitems)
 			iconset = gajim.config.get('iconset')
@@ -2692,7 +2675,7 @@ class RosterWindow:
 				status_menuitems.append(status_menuitem)
 			menu.append(send_custom_status_menuitem)
 
-		if not group in helpers.special_groups + (_('General'),):
+		if not group in helpers.special_groups:
 			item = gtk.SeparatorMenuItem() # separator
 			menu.append(item)
 
@@ -2739,9 +2722,16 @@ class RosterWindow:
 			menu.append(remove_item)
 			remove_item.connect('activate', self.on_remove_group_item_activated,
 				group, account)
+				
 			# unsensitive if account is not connected
 			if gajim.connections[account].connected < 2:
 				rename_item.set_sensitive(False)
+			
+			# General group cannot be changed
+			if group == _('General'):
+				rename_item.set_sensitive(False)
+				block_menuitem.set_sensitive(False)
+				remove_item.set_sensitive(False)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 
@@ -2777,6 +2767,43 @@ class RosterWindow:
 		menu.append(item)
 		if show == 'error':
 			item.set_sensitive(False)
+		
+		item = gtk.SeparatorMenuItem() # separator
+		menu.append(item)
+		
+		# Send single message
+		item = gtk.ImageMenuItem(_('Send Single Message'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		item.connect('activate',
+			self.on_send_single_message_menuitem_activate, account, contact)
+		menu.append(item)
+
+		# Send Custom Status
+		send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
+		# add a special img for this menuitem
+		if gajim.interface.status_sent_to_users.has_key(account) and \
+			jid in gajim.interface.status_sent_to_users[account]:
+			send_custom_status_menuitem.set_image(self.load_icon(
+				gajim.interface.status_sent_to_users[account][jid]))
+		else:
+			icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK,
+				gtk.ICON_SIZE_MENU)
+			send_custom_status_menuitem.set_image(icon)
+		status_menuitems = gtk.Menu()
+		send_custom_status_menuitem.set_submenu(status_menuitems)
+		iconset = gajim.config.get('iconset')
+		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+		for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
+			# icon MUST be different instance for every item
+			state_images = self.load_iconset(path)
+			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
+			status_menuitem.connect('activate', self.on_send_custom_status,
+				[(contact, account)], s)
+			icon = state_images[s]
+			status_menuitem.set_image(icon)
+			status_menuitems.append(status_menuitem)
+		menu.append(send_custom_status_menuitem)
 		
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
