@@ -1335,6 +1335,11 @@ class RosterWindow:
 				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
 					'status')
 
+		# unset custom status  
+		if gajim.interface.status_sent_to_users.has_key(account) and \
+			contact.jid in gajim.interface.status_sent_to_users[account]:
+			del gajim.interface.status_sent_to_users[account][contact.jid]
+
 		if not contact.groups:
 			self.draw_group(_('General'), account)
 		else:
@@ -2652,10 +2657,6 @@ class RosterWindow:
 			if group in gajim.connections[account].blocked_groups:
 				send_custom_status_menuitem.set_image(self.load_icon('offline'))
 				send_custom_status_menuitem.set_sensitive(False)
-			elif gajim.interface.status_sent_to_groups.has_key(account) and \
-			group in gajim.interface.status_sent_to_groups[account]:
-				send_custom_status_menuitem.set_image(self.load_icon(
-					gajim.interface.status_sent_to_groups[account][group]))
 			else:
 				icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK,
 					gtk.ICON_SIZE_MENU)
