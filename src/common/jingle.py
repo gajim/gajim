@@ -21,8 +21,6 @@ sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_GLOBAL)
 import farsight
 sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_LOCAL)
 
-import meta
-
 class JingleStates(object):
 	''' States in which jingle session may exist. '''
 	ended=0
@@ -35,7 +33,6 @@ class NoCommonCodec(Exception): pass
 
 class JingleSession(object):
 	''' This represents one jingle session. '''
-	__metaclass__=meta.VerboseClassType
 	def __init__(self, con, weinitiate, jid, sid=None):
 		''' con -- connection object,
 		    weinitiate -- boolean, are we the initiator?
@@ -75,9 +72,6 @@ class JingleSession(object):
 		}
 
 		# for making streams using farsight
-		import gc
-		gc.disable()
-		print self.weinitiate, "#farsight_session_factory_make"
 		self.p2psession = farsight.farsight_session_factory_make('rtp')
 		self.p2psession.connect('error', self.on_p2psession_error)
 
@@ -190,8 +184,7 @@ class JingleSession(object):
 			cn = self.contents[(creator, name)]
 			cn.stanzaCB(stanza, content, error, action)
 
-	def on_p2psession_error(self, *anything):
-		print self.weinitiate, "Farsight session error!"
+	def on_p2psession_error(self, *anything): pass
 
 	''' Methods that make/send proper pieces of XML. They check if the session
 	is in appropriate state. '''
@@ -268,103 +261,6 @@ class JingleSession(object):
 	'''Callbacks'''
 	def sessionTerminateCB(self, stanza): pass
 
-class Codec(object):
-	''' This class keeps description of a single codec. '''
-	def __init__(self, name, id=None, **params):
-		''' Create new codec description. '''
-		self.name = name
-		self.id = id
-		self.attrs = {'name': self.name, 'id': self.id, 'channels': 1}
-		for key in ('channels', 'clockrate', 'maxptime', 'ptime'):
-			if key in params:
-				self.attrs[key]=params[key]
-				del params[key]
-		self.params = params
-
-	def __eq__(a, b):
-		''' Compare two codec descriptions. '''
-		# TODO: check out what should be tested...
-		if a.name!=b.name: return False
-		# ...
-		return True
-
-	def toXML(self):
-		return xmpp.Node('payload-type',
-			attrs=self.attrs,
-			payload=(xmpp.Node('parameter', {'name': k, 'value': v}) for k,v in self.params))
-
-class JingleAudioSession(object):
-#	__metaclass__=meta.VerboseClassType
-	def __init__(self, content, fromNode):
-		self.content = content
-
-		self.initiator_codecs=[]
-		self.responder_codecs=[]
-
-		if fromNode:
-			# read all codecs peer understand
-			for payload in fromNode.iterTags('payload-type'):
-				attrs = fromNode.getAttrs().copy()
-				for param in fromNode.iterTags('parameter'):
-					attrs[param['name']]=param['value']
-				self.initiator_codecs.append(Codec(**attrs))
-
-	def sessionInitiateCB(self, stanza, ourcontent):
-		pass
-
-	''' "Negotiation" of codecs... simply presenting what *we* can do, nothing more... '''
-	def getOurCodecs(self, other=None):
-		''' Get a list of codecs we support. Try to get them in the same
-		order as the codecs of our peer. If other!=None, raise
-		a NoCommonCodec error if no codecs both sides support (None means
-		we are initiating the connection and we don't know the other
-		peer's codecs.) '''
-		# for now we "understand" only one codec -- speex with clockrate 16000
-		# so we have an easy job to do... (codecs sorted in order of preference)
-		supported_codecs=[
-			Codec('speex', clockrate='16000'),
-		]
-
-		if other is not None:
-			other_l = other
-		else:
-			other_l = []
-		our_l = supported_codecs[:]
-		out = []
-		ids = range(128)
-		for codec in other_l:
-			if codec in our_l:
-				out.append(codec)
-				our_l.remove(codec)
-				try: ids.remove(codec.id)
-				except ValueError: pass	# when id is not a dynamic one
-
-		if other is not None and len(out)==0:
-			raise NoCommonCodec
-
-		for codec in our_l:
-			if not codec.id or codec.id not in ids:
-				codec.id = ids.pop()
-			out.append(codec)
-
-		return out
-
-	''' Methods for making proper pieces of XML. '''
-	def __codecsList(self, codecs):
-		''' Prepares a description element with codecs given as a parameter. '''
-		return xmpp.Node(xmpp.NS_JINGLE_AUDIO+' description',
-			payload=(codec.toXML() for codec in codecs))
-
-	def toXML(self):
-		if not self.initiator_codecs:
-			# we are the initiator, so just send our codecs
-			self.initiator_codecs = self.getOurCodecs()
-			return self.__codecsList(self.initiator_codecs)
-		else:
-			# we are the responder, we SHOULD adjust our codec list
-			self.responder_codecs = self.getOurCodecs(self.initiator_codecs)
-			return self.__codecsList(self.responder_codecs)
-
 class JingleContent(object):
 	''' An abstraction of content in Jingle sessions. '''
 	def __init__(self, session, node=None):
@@ -378,7 +274,6 @@ class JingleContent(object):
 class JingleVoiP(JingleContent):
 	''' Jingle VoiP sessions consist of audio content transported
 	over an ICE UDP protocol. '''
-#	__metaclass__=meta.VerboseClassType
 	def __init__(self, session, node=None):
 		JingleContent.__init__(self, session, node)
 		self.got_codecs = False
@@ -422,7 +317,6 @@ class JingleVoiP(JingleContent):
 			codecs.append(c)
 		if len(codecs)==0: return
 
-		print self.session.weinitiate, "#farsight_stream_set_remote_codecs"
 		self.p2pstream.set_remote_codecs(codecs)
 		self.got_codecs=True
 
@@ -431,7 +325,7 @@ class JingleVoiP(JingleContent):
 		candidates = []
 		for candidate in content.getTag('transport').iterTags('candidate'):
 			cand={
-				'candidate_id':	candidate['cid'],
+				'candidate_id':	self.session.connection.connection.getAnID(),
 				'component':	int(candidate['component']),
 				'ip':		candidate['ip'],
 				'port':		int(candidate['port']),
@@ -451,7 +345,6 @@ class JingleVoiP(JingleContent):
 				cand['password']=candidate['pwd']
 
 			candidates.append(cand)
-		print self.session.weinitiate, "#add_remote_candidate"
 		self.p2pstream.add_remote_candidate(candidates)
 
 	def toXML(self):
@@ -470,7 +363,6 @@ class JingleVoiP(JingleContent):
 			payload=payload)
 
 	def setupStream(self):
-		print self.session.weinitiate, "#farsight_session_create_stream"
 		self.p2pstream = self.session.p2psession.create_stream(
 			farsight.MEDIA_TYPE_AUDIO, farsight.STREAM_DIRECTION_BOTH)
 		self.p2pstream.set_property('transmitter', 'libjingle')
@@ -483,10 +375,8 @@ class JingleVoiP(JingleContent):
 
 		self.p2pstream.set_remote_codecs(self.p2pstream.get_local_codecs())
 
-		print self.session.weinitiate, "#farsight_stream_prepare_transports"
 		self.p2pstream.prepare_transports()
 
-		print self.session.weinitiate, "#farsight_stream_set_active_codec"
 		self.p2pstream.set_active_codec(8)	#???
 
 		sink = gst.element_factory_make('alsasink')
@@ -499,46 +389,29 @@ class JingleVoiP(JingleContent):
 		#src.set_property('latency-time', 20000)
 		src.set_property('is-live', True)
 
-		print self.session.weinitiate, "#farsight_stream_set_sink"
 		self.p2pstream.set_sink(sink)
-		print self.session.weinitiate, "#farsight_stream_set_source"
 		self.p2pstream.set_source(src)
 
 	def on_p2pstream_error(self, *whatever): pass
-	def on_p2pstream_new_active_candidate_pair(self, stream, native, remote):
-		print self.session.weinitiate, "##new_active_candidate_pair"
-		#print "New native candidate pair: %s, %s" % (native, remote)
-	def on_p2pstream_codec_changed(self, stream, codecid):
-		print self.session.weinitiate, "##codec_changed"
-		#print "Codec changed: %d" % codecid
+	def on_p2pstream_new_active_candidate_pair(self, stream, native, remote): pass
+	def on_p2pstream_codec_changed(self, stream, codecid): pass
 	def on_p2pstream_native_candidates_prepared(self, *whatever):
-		print self.session.weinitiate, "##native_candidates_prepared"
-		#print "Native candidates prepared: %r" % whatever
 		for candidate in self.p2pstream.get_native_candidate_list():
 			self.send_candidate(candidate)
 	def on_p2pstream_state_changed(self, stream, state, dir):
-		print self.session.weinitiate, "##state_changed"
-		#print "State: %d, Dir: %d" % (state, dir)
 		if state==farsight.STREAM_STATE_CONNECTED:
-			print self.session.weinitiate, "#farsight_stream_signal_native_candidates_prepared"
 			stream.signal_native_candidates_prepared()
-			print self.session.weinitiate, "#farsight_stream_start"
 			stream.start()
 	def on_p2pstream_new_native_candidate(self, p2pstream, candidate_id):
-		print self.session.weinitiate, "##new_native_candidate"
-		print self.session.weinitiate, "#get_native_candidate"
 		candidates = p2pstream.get_native_candidate(candidate_id)
-		print self.session.weinitiate, "#!", repr(candidates)
 
 		for candidate in candidates:
 			self.send_candidate(candidate)
 	def send_candidate(self, candidate):
 		attrs={
-			'cid': candidate['candidate_id'],
 			'component': candidate['component'],
 			'foundation': '1', # hack
 			'generation': '0',
-			'type': candidate['type'],
 			'ip': candidate['ip'],
 			'network': '0',
 			'port': candidate['port'],
@@ -557,7 +430,6 @@ class JingleVoiP(JingleContent):
 		self.session.sendTransportInfo(c)
 
 	def iterCodecs(self):
-		print self.session.weinitiate, "#farsight_stream_get_local_codecs"
 		codecs=self.p2pstream.get_local_codecs()
 		for codec in codecs:
 			a = {'name': codec['encoding_name'],
