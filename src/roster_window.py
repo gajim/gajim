@@ -4439,8 +4439,9 @@ class RosterWindow:
 			# standard transport iconsets are loaded one time in init()
 			t_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
 			folders = os.listdir(t_path)
-			t_path = os.path.join(gajim.MY_ICONSETS_PATH, 'transports')
-			folders += os.listdir(t_path)
+			if os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, 'transports')):
+				t_path = os.path.join(gajim.MY_ICONSETS_PATH, 'transports')
+				folders += os.listdir(t_path)
 			for transport in folders:
 				if transport == '.svn':
 					continue
@@ -5149,8 +5150,9 @@ class RosterWindow:
 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
 		folders = os.listdir(path)
-		path = os.path.join(gajim.MY_ICONSETS_PATH, 'transports')
-		folders += os.listdir(path)
+		if os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, 'transports')):
+			path = os.path.join(gajim.MY_ICONSETS_PATH, 'transports')
+			folders += os.listdir(path)
 		for transport in folders:
 			if transport == '.svn':
 				continue
