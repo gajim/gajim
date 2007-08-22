@@ -3244,6 +3244,7 @@ class TransformChatToMUC:
 		# set treeview
 		# name, jid
 		self.store = gtk.ListStore(gtk.gdk.Pixbuf, str, str)
+		self.store.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.guests_treeview.set_model(self.store)
 
 		renderer1 = gtk.CellRendererText()
