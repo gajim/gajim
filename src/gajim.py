@@ -208,6 +208,7 @@ from common import socks5
 from common import gajim
 from common import helpers
 from common import optparser
+from common import dataforms
 
 if verbose: gajim.verbose = True
 del verbose
@@ -1207,8 +1208,16 @@ class Interface:
 		#('GC_CONFIG', account, (jid, form))  config is a dict
 		room_jid = array[0].split('/')[0]
 		if room_jid in gajim.automatic_rooms[account]:
-			# use default configuration
-			gajim.connections[account].send_gc_config(room_jid, array[1])
+			if gajim.automatic_rooms[account][room_jid].has_key('continue_tag'):
+				# We're converting chat to muc. allow participants to invite
+				form = dataforms.ExtendForm(node = array[1])
+				for f in form.iter_fields():
+					if f.var == 'muc#roomconfig_allowinvites':
+						f.value = True
+				gajim.connections[account].send_gc_config(room_jid, form)
+			else:
+				# use default configuration
+				gajim.connections[account].send_gc_config(room_jid, array[1])
 			# invite contacts
 			# check if it is necessary to add <continue />
 			continue_tag = False
