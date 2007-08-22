@@ -3230,8 +3230,8 @@ class TransformChatToMUC:
 		recently_groupchat = gajim.config.get('recently_groupchat').split()
 		for g in recently_groupchat:
 			server = gajim.get_server_from_jid(g)
-			if server not in server_list:
-				server_list.append(gajim.get_server_from_jid(g))
+			if server not in server_list and not server.startswith('irc'):
+				server_list.append(server)
 		# add a default server
 		if not server_list:
 			server_list.append('conference.jabber.org')
