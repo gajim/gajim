@@ -10,13 +10,14 @@
 ##
 ## This program is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
 ## GNU General Public License for more details.
 ##
 
 import random
 from tempfile import gettempdir
 from subprocess import Popen
+from threading import Timer # for smooth scrolling
 
 import gtk
 import pango
@@ -43,6 +44,10 @@ class ConversationTextview:
 	
 	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
 	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(path_to_file)
+
+	# smooth scroll constants
+	MAX_SCROLL_TIME = 0.4 # seconds
+	SCROLL_DELAY = 33 # milliseconds
 
 	def __init__(self, account, used_in_history_window = False):
 		'''if used_in_history_window is True, then we do not show
@@ -154,6 +159,7 @@ class ConversationTextview:
 		self.line_tooltip = tooltips.BaseTooltip()
 		# use it for hr too
 		self.tv.focus_out_line_pixbuf = ConversationTextview.FOCUS_OUT_LINE_PIXBUF
+		self.smooth_id = None
 
 	def del_handlers(self):
 		for i in self.handlers.keys():
@@ -181,6 +187,41 @@ class ConversationTextview:
 			return True
 		return False
 
+	# Smooth scrolling inspired by Pidgin code
+	def smooth_scroll(self):
+		parent = self.tv.get_parent()
+		if not parent:
+			return False
+		vadj = parent.get_vadjustment()
+		max_val = vadj.upper - vadj.page_size + 1
+		cur_val = vadj.get_value()
+		# scroll by 1/3rd of remaining distance
+		onethird = cur_val + ((max_val - cur_val) / 3.0)
+		vadj.set_value(onethird)
+		if max_val - onethird < 0.01:
+			self.smooth_id = None
+			self.smooth_scroll_timer.cancel()
+			return False
+		return True		   
+
+	def smooth_scroll_timeout(self):
+		gobject.source_remove(self.smooth_id)
+		self.smooth_id = None
+		parent = self.tv.get_parent()
+		if parent:
+			vadj = parent.get_vadjustment()
+			vadj.set_value(vadj.upper - vadj.page_size + 1)
+
+	def smooth_scroll_to_end(self):
+		if None != self.smooth_id: # already scrolling
+			return False
+		self.smooth_id = gobject.timeout_add(self.SCROLL_DELAY,
+											 self.smooth_scroll)
+		self.smooth_scroll_timer = Timer(self.MAX_SCROLL_TIME,
+										 self.smooth_scroll_timeout)
+		self.smooth_scroll_timer.start()
+		return False
+
 	def scroll_to_end(self):
 		parent = self.tv.get_parent()
 		buffer = self.tv.get_buffer()
@@ -192,7 +233,9 @@ class ConversationTextview:
 		adjustment.set_value(0)
 		return False # when called in an idle_add, just do it once
 
-	def bring_scroll_to_end(self, diff_y = 0):
+	def bring_scroll_to_end(self, diff_y = 0,\
+							use_smooth =\
+							gajim.config.get('use_smooth_scrolling')):
 		''' scrolls to the end of textview if end is not visible '''
 		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
@@ -200,7 +243,10 @@ class ConversationTextview:
 		visible_rect = self.tv.get_visible_rect()
 		# scroll only if expected end is not visible
 		if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
-			gobject.idle_add(self.scroll_to_end_iter)
+			if use_smooth:
+				gobject.idle_add(self.smooth_scroll_to_end)
+			else:
+				gobject.idle_add(self.scroll_to_end_iter)
 
 	def scroll_to_end_iter(self):
 		buffer = self.tv.get_buffer()
@@ -407,7 +453,7 @@ class ConversationTextview:
 				item.set_property('sensitive', False)
 			else:
 				item = gtk.MenuItem(_('Web _Search for it'))
-				link =  search_link % self.selected_phrase
+				link =	search_link % self.selected_phrase
 				id = item.connect('activate', self.visit_url_from_menuitem, link)
 				self.handlers[id] = item
 			submenu.append(item)
@@ -632,7 +678,7 @@ class ConversationTextview:
 				cwd=gettempdir())
 			exitcode = p.wait()
 
-		if exitcode == 0:	    
+		if exitcode == 0:		
 			p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
 				cwd=gettempdir())
 			exitcode = p.wait()
@@ -857,7 +903,10 @@ class ConversationTextview:
 		if at_the_end or kind == 'outgoing':
 			# we are at the end or we are sending something
 			# scroll to the end (via idle in case the scrollbar has appeared)
-			gobject.idle_add(self.scroll_to_end)
+			if gajim.config.get('use_smooth_scrolling'):
+				gobject.idle_add(self.smooth_scroll_to_end)
+			else:
+				gobject.idle_add(self.scroll_to_end)
 
 		buffer.end_user_action()
 

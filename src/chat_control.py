@@ -253,6 +253,8 @@ class ChatControlBase(MessageControl):
 		# For JEP-0172
 		self.user_nick = None
 
+		self.smooth = True
+
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch languages'''
 		def _on_select_dictionary(widget, lang):
@@ -812,9 +814,10 @@ class ChatControlBase(MessageControl):
 				self.msg_scrolledwindow.set_property('vscrollbar-policy', 
 					gtk.POLICY_NEVER)
 				self.msg_scrolledwindow.set_property('height-request', -1)
-
-		self.conv_textview.bring_scroll_to_end(diff_y - 18)
-		
+			self.conv_textview.bring_scroll_to_end(diff_y - 18, False)
+		else:
+			self.conv_textview.bring_scroll_to_end(diff_y - 18, self.smooth)
+		self.smooth = True # reinit the flag
 		# enable scrollbar automatic policy for horizontal scrollbar
 		# if message we have in message_textview is too big
 		if requisition.width > message_width:
@@ -895,6 +898,7 @@ class ChatControlBase(MessageControl):
 			if self.sent_history_pos == 0:
 				return
 			self.sent_history_pos = self.sent_history_pos - 1
+			self.smooth = False
 			conv_buf.set_text(self.sent_history[self.sent_history_pos])
 		elif direction == 'down':
 			if self.sent_history_pos >= size - 1:
@@ -904,6 +908,7 @@ class ChatControlBase(MessageControl):
 				return
 
 			self.sent_history_pos = self.sent_history_pos + 1
+			self.smooth = False
 			conv_buf.set_text(self.sent_history[self.sent_history_pos])
 
 	def lighten_color(self, color):
