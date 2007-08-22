@@ -315,6 +315,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				check = self.connection.announce()
 			else:
 				self.connected = STATUS_LIST.index(show)
+			self.dispatch('SIGNED_IN', ())
 
 		# 'disconnect'
 		elif show == 'offline' and self.connected:

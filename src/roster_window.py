@@ -875,7 +875,7 @@ class RosterWindow:
 			privacy_lists_menuitem.set_sensitive(False)
 
 		if gajim.connections[account].is_zeroconf:
-			send_single_message_menuitem.set_sensitive(False)
+			send_single_message_menuitem.set_sensitive(True)
 			administrator_menuitem.set_sensitive(False)
 			send_server_message_menuitem.set_sensitive(False)
 			set_motd_menuitem.set_sensitive(False)
