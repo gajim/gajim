@@ -3291,7 +3291,7 @@ class TransformChatToMUC:
 	def unique_room_id_supported(self, server, room_id):
 		guest_list = []
 		guests = self.guests_treeview.get_selection().get_selected_rows()
-		for guest in guests[2]:
+		for guest in guests[1]:
 			iter = self.store.get_iter(guest)
 			guest_list.append(self.store[iter][2].decode('utf-8'))
 		for guest in self.auto_jids:
