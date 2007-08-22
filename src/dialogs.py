@@ -3261,9 +3261,9 @@ class TransformChatToMUC:
 			for jid in gajim.contacts.get_jid_list(account):
 				contact = \
 					gajim.contacts.get_contact_with_highest_priority(account, jid)
-				contact_transport = contact.is_transport()
+				contact_transport = gajim.get_transport_name_from_jid(jid)
 				if contact.jid not in self.auto_jids and \
-					not contact_transport and \
+					not contact_transport and not contact.is_transport() and \
 					contact.jid not in gajim.interface.minimized_controls[account]:
 					if contact.show not in ('offline', 'error'):
 						img = gajim.interface.roster.jabber_state_images['16'][
