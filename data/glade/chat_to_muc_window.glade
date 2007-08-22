@@ -10,6 +10,7 @@
     <child>
       <widget class="GtkVBox" id="general_vbox">
         <property name="visible">True</property>
+        <property name="spacing">6</property>
         <child>
           <widget class="GtkLabel" id="label3">
             <property name="visible">True</property>
