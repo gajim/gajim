@@ -3199,12 +3199,13 @@ class AdvancedNotificationsWindow:
 		self.window.destroy()
 
 class TransformChatToMUC:
-	def __init__(self, account, jids):
+	def __init__(self, account, jids, preselected = None):
 		'''This window is used to trasform a one-to-one chat to a MUC.
 		We do 2 things: first select the server and then make a guests list.'''
 
 		self.account = account
 		self.auto_jids = jids
+		self.preselected_jids = preselected
 
 		self.xml = gtkgui_helpers.get_glade('chat_to_muc_window.glade')
 		self.window = self.xml.get_widget('chat_to_muc_window')
@@ -3271,7 +3272,12 @@ class TransformChatToMUC:
 						name = contact.name
 						if name == '':
 							name = jid.split('@')[0]
-						self.store.append([img.get_pixbuf(), name, jid])
+						iter = self.store.append([img.get_pixbuf(), name, jid])
+						# preselect treeview rows
+						if self.preselected_jids and jid in self.preselected_jids:
+							path = self.store.get_path(iter)
+							self.guests_treeview.get_selection().\
+								select_path(path)
 
 		# show all
 		self.window.show_all()

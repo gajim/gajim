@@ -1773,15 +1773,14 @@ class ChatControl(ChatControlBase):
 
 	def _on_drag_data_received(self, widget, context, x, y, selection,
 		target_type, timestamp):
-		# If no resource is known, we can't send a file
+		if not selection.data:
+			return
 		if self.TYPE_ID == message_control.TYPE_PM:
 			c = self.gc_contact
 		else:
 			c = self.contact
-		if not c.resource:
-			return
 		if target_type == self.TARGET_TYPE_URI_LIST:
-			if not selection.data:
+			if not c.resource: # If no resource is known, we can't send a file
 				return
 			uri = selection.data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
@@ -1790,6 +1789,26 @@ class ChatControl(ChatControlBase):
 				if os.path.isfile(path): # is it file?
 					ft = gajim.interface.instances['file_transfers']
 					ft.send_file(self.account, c, path)
+			return
+
+		# chat2muc
+		treeview = gajim.interface.roster.tree
+		model = treeview.get_model()
+		data = selection.data
+		path = treeview.get_selection().get_selected_rows()[1][0]
+		iter = model.get_iter(path)
+		type = model[iter][2]
+		account = model[iter][4].decode('utf-8')
+		if type != 'contact': # source is not a contact
+			return
+		dropped_jid = data.decode('utf-8')
+
+		dropped_transport = gajim.get_transport_name_from_jid(dropped_jid)
+		c_transport = gajim.get_transport_name_from_jid(c.jid)
+		if dropped_transport or c_transport:
+			return # transport contacts cannot be invited
+
+		dialogs.TransformChatToMUC(self.account, [c.jid], [dropped_jid])
 
 	def _on_message_tv_buffer_changed(self, textbuffer):
 		self.kbd_activity_in_last_5_secs = True
