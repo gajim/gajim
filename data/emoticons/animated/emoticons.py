@@ -1,3 +1,4 @@
+# coding=utf-8
 emoticons = {
 	':-[': 'bat.gif',
 	':[': 'bat.gif',
