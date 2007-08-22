@@ -1562,9 +1562,6 @@ class ChatControl(ChatControlBase):
 		else:
 			send_file_menuitem.set_sensitive(False)
 
-		# compact_view_menuitem
-		compact_view_menuitem.set_active(self.hide_chat_buttons_current)
-
 		# check if it's possible to convert to groupchat
 		if gajim.get_transport_name_from_jid(jid):
 			convert_to_gc_menuitem.set_sensitive(False)

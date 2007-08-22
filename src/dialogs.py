@@ -3258,15 +3258,19 @@ class TransformChatToMUC:
 		self.guests_treeview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
 		# set jabber id and pseudos
-		for jid in gajim.contacts.get_jid_list(self.account):
-			contact = \
-				gajim.contacts.get_contact_with_highest_priority(self.account, jid)
-			if contact.jid not in self.auto_jids:
-				if contact.show not in ('offline', 'error'):
-					name = contact.name
-					if name == '':
-						name = jid.split('@')[0]
-					self.store.append([name, jid])
+		for account in gajim.contacts.get_accounts():
+			for jid in gajim.contacts.get_jid_list(account):
+				contact = \
+					gajim.contacts.get_contact_with_highest_priority(account, jid)
+				contact_transport = gajim.get_transport_name_from_jid(jid)
+				if contact.jid not in self.auto_jids and \
+					not contact_transport and \
+					contact.jid not in gajim.interface.minimized_controls[account]:
+					if contact.show not in ('offline', 'error'):
+						name = contact.name
+						if name == '':
+							name = jid.split('@')[0]
+						self.store.append([name, jid])
 
 		# show all but...
 		self.window.show_all()
