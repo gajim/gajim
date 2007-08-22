@@ -3208,13 +3208,11 @@ class TransformChatToMUC:
 
 		self.xml = gtkgui_helpers.get_glade('chat_to_muc_window.glade')
 		self.window = self.xml.get_widget('chat_to_muc_window')
-		self.window.connect('key_press_event', self._on_keypress_event)
 
 		for widget_to_add in ('invite_button', 'cancel_button',
 		'server_list_comboboxentry', 'guests_treeview',
 		'server_and_guests_hseparator', 'server_select_label'):
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
-		self.window.connect('key_press_event', self._on_keypress_event)
 
 		# set comboboxentry
 		renderer_servers = gtk.CellRendererText()
@@ -3269,32 +3267,14 @@ class TransformChatToMUC:
 							name = jid.split('@')[0]
 						self.store.append([name, jid])
 
-		# show all but...
+		# show all
 		self.window.show_all()
-
-		# ...hide this
-		self.server_selection_visible = True
-		self.toggle_server_selection_visible()
 
 		self.xml.signal_autoconnect(self)
 
-	def toggle_server_selection_visible(self):
-		if self.server_selection_visible:
-			self.server_selection_visible = False
-			self.server_and_guests_hseparator.hide()
-			self.server_list_comboboxentry.hide()
-			self.server_select_label.hide()
-		else:
-			self.server_selection_visible = True
-			self.server_and_guests_hseparator.show()
-			self.server_list_comboboxentry.show()
-			self.server_select_label.show()
-
-	def _on_keypress_event(self, widget, event):
-		if (event.state & gtk.gdk.MOD1_MASK) and (event.keyval == gtk.keysyms.c \
-		or event.keyval == gtk.keysyms.C):
-				self.toggle_server_selection_visible()
-				return True
+	def on_chat_to_muc_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			self.window.destroy()
 
 	def on_invite_button_clicked(self, widget):
 		server = self.server_list_comboboxentry.get_active_text()
