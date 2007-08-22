@@ -91,6 +91,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.vcard_supported = False
+		self.private_storage_supported = False
 
 	def get_config_values_or_default(self):
 		''' get name, host, port from config, or 
