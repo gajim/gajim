@@ -853,8 +853,6 @@ class RosterWindow:
 		xml = gtkgui_helpers.get_glade('advanced_menuitem_menu.glade')
 		advanced_menuitem_menu = xml.get_widget('advanced_menuitem_menu')
 
-		send_single_message_menuitem = xml.get_widget(
-			'send_single_message_menuitem')
 		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
 		privacy_lists_menuitem = xml.get_widget('privacy_lists_menuitem')
 		administrator_menuitem = xml.get_widget('administrator_menuitem')
@@ -875,16 +873,12 @@ class RosterWindow:
 			privacy_lists_menuitem.set_sensitive(False)
 
 		if gajim.connections[account].is_zeroconf:
-			send_single_message_menuitem.set_sensitive(True)
 			administrator_menuitem.set_sensitive(False)
 			send_server_message_menuitem.set_sensitive(False)
 			set_motd_menuitem.set_sensitive(False)
 			update_motd_menuitem.set_sensitive(False)
 			delete_motd_menuitem.set_sensitive(False)
 		else:
-			send_single_message_menuitem.connect('activate',
-				self.on_send_single_message_menuitem_activate, account)
-
 			send_server_message_menuitem.connect('activate',
 				self.on_send_server_message_menuitem_activate, account)
 
@@ -906,6 +900,7 @@ class RosterWindow:
 		if not self.actions_menu_needs_rebuild:
 			return
 		new_chat_menuitem = self.xml.get_widget('new_chat_menuitem')
+		single_message_menuitem = self.xml.get_widget('send_single_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
 		muc_icon = self.load_icon('muc_active')
 		if muc_icon:
@@ -937,6 +932,11 @@ class RosterWindow:
 				self.new_chat_menuitem_handler_id)
 			self.new_chat_menuitem_handler_id = None
 
+		if self.single_message_menuitem_handler_id:
+			single_message_menuitem.handler_disconnect(
+				self.single_message_menuitem_handler_id)
+			self.single_message_menuitem_handler_id = None
+
 		if self.profile_avatar_menuitem_handler_id:
 			profile_avatar_menuitem.handler_disconnect(
 				self.profile_avatar_menuitem_handler_id)
@@ -947,6 +947,7 @@ class RosterWindow:
 		add_new_contact_menuitem.remove_submenu()
 		service_disco_menuitem.remove_submenu()
 		join_gc_menuitem.remove_submenu()
+		single_message_menuitem.remove_submenu()
 		new_chat_menuitem.remove_submenu()
 		advanced_menuitem.remove_submenu()
 		profile_avatar_menuitem.remove_submenu()
@@ -969,6 +970,7 @@ class RosterWindow:
 			add_sub_menu = gtk.Menu()
 			disco_sub_menu = gtk.Menu()
 			new_chat_sub_menu = gtk.Menu()
+			single_message_sub_menu = gtk.Menu()
 
 			accounts_list = gajim.contacts.get_accounts()
 			accounts_list.sort()
@@ -982,10 +984,17 @@ class RosterWindow:
 					False)
 				new_chat_sub_menu.append(new_chat_item)
 				new_chat_item.connect('activate',
-					self.on_new_chat_menuitem_activate,	account)
+					self.on_new_chat_menuitem_activate, account)
 
 				if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 					continue
+				
+				# single message
+				single_message_item = gtk.MenuItem(_('using account %s') % account,
+					False)
+				single_message_sub_menu.append(single_message_item)
+				single_message_item.connect('activate',
+					self.on_send_single_message_menuitem_activate, account)
 
 				# join gc
 				if gajim.connections[account].private_storage_supported:
@@ -1013,6 +1022,8 @@ class RosterWindow:
 			disco_sub_menu.show_all()
 			new_chat_menuitem.set_submenu(new_chat_sub_menu)
 			new_chat_sub_menu.show_all()
+			single_message_menuitem.set_submenu(single_message_sub_menu)
+			single_message_sub_menu.show_all()
 			gc_sub_menu.show_all()
 
 		elif connected_accounts == 1: # user has only one account
@@ -1038,6 +1049,13 @@ class RosterWindow:
 						self.new_chat_menuitem_handler_id = new_chat_menuitem.\
 							connect('activate', self.on_new_chat_menuitem_activate,
 							account)
+
+					# single message
+					if not self.single_message_menuitem_handler_id:
+						self.single_message_menuitem_handler_id = \
+						single_message_menuitem.connect('activate', \
+						self.on_send_single_message_menuitem_activate, account)
+
 					# new chat accel
 					if not self.have_new_chat_accel:
 						ag = gtk.accel_groups_from_object(self.window)[0]
@@ -1050,20 +1068,22 @@ class RosterWindow:
 		if connected_accounts == 0:
 			# no connected accounts, make the menuitems insensitive
 			for item in [new_chat_menuitem, join_gc_menuitem,\
-					add_new_contact_menuitem, service_disco_menuitem]:
+					add_new_contact_menuitem, service_disco_menuitem,\
+					single_message_menuitem]:
 				item.set_sensitive(False)
 		else: # we have one or more connected accounts
 			for item in [new_chat_menuitem, join_gc_menuitem,\
-						add_new_contact_menuitem, service_disco_menuitem]:
+					add_new_contact_menuitem, service_disco_menuitem,\
+					single_message_menuitem]:
 				item.set_sensitive(True)
-
 			# disable some fields if only local account is there
 			if connected_accounts == 1:
 				for account in gajim.connections:
 					if gajim.account_is_connected(account) and \
 							gajim.connections[account].is_zeroconf:
 						for item in [join_gc_menuitem,\
-								add_new_contact_menuitem, service_disco_menuitem]:
+								add_new_contact_menuitem, service_disco_menuitem,
+								single_message_menuitem]:
 							item.set_sensitive(False)
 
 		if connected_accounts_with_private_storage > 0:
@@ -5093,6 +5113,7 @@ class RosterWindow:
 		self.add_new_contact_handler_id = False
 		self.service_disco_handler_id = False
 		self.new_chat_menuitem_handler_id = False
+		self.single_message_menuitem_handler_id = False
 		self.profile_avatar_menuitem_handler_id = False
 		self.actions_menu_needs_rebuild = True
 		self.regroup = gajim.config.get('mergeaccounts')

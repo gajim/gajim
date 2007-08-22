@@ -42,7 +42,7 @@
     <child>
       <widget class="GtkImageMenuItem" id="join_group_chat_menuitem">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">_Group Chat</property>
+        <property name="label" translatable="yes">Join _Group Chat</property>
         <property name="use_underline">True</property>
         <child internal-child="image">
           <widget class="GtkImage" id="image1236">
