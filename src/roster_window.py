@@ -756,9 +756,9 @@ class RosterWindow:
 		'''joins the room immediatelly'''
 		if gajim.interface.msg_win_mgr.has_window(room_jid, account) and \
 				gajim.gc_connected[account][room_jid]:
-			win = gajim.interface.msg_win_mgr.get_window(room_jid,  account)
+			win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
 			win.window.present()
-			win.set_active_tab(room_jid,  account)
+			win.set_active_tab(room_jid, account)
 			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
 		minimized_control_exists = False
@@ -1345,7 +1345,7 @@ class RosterWindow:
 				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
 					'status')
 
-		# unset custom status  
+		# unset custom status
 		if gajim.interface.status_sent_to_users.has_key(account) and \
 			contact.jid in gajim.interface.status_sent_to_users[account]:
 			del gajim.interface.status_sent_to_users[account][contact.jid]
@@ -1564,7 +1564,7 @@ class RosterWindow:
 			accounts.append(account)
 			self.send_status(account, 'offline', msg, to = jid)
 			new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
-				'value' : jid, 'child':  [u'message', u'iq', u'presence-out']}
+				'value' : jid, 'child': [u'message', u'iq', u'presence-out']}
 			gajim.connections[account].blocked_list.append(new_rule)
 			# needed for draw_contact:
 			gajim.connections[account].blocked_contacts.append(jid)
@@ -1578,8 +1578,8 @@ class RosterWindow:
 						accounts.append(account)
 					self.send_status(account, 'offline', msg, to=contact.jid)
 					new_rule = {'order': u'1', 'type': u'jid',
-							'action': u'deny',  'value' : contact.jid,
-							'child':  [u'message', u'iq', u'presence-out']}
+							'action': u'deny', 'value' : contact.jid,
+							'child': [u'message', u'iq', u'presence-out']}
 					gajim.connections[account].blocked_list.append(new_rule)
 					# needed for draw_contact:
 					gajim.connections[account].blocked_contacts.append(contact.jid)
@@ -1597,7 +1597,7 @@ class RosterWindow:
 					self.send_status(account, 'offline', msg, to=contact.jid)
 					self.draw_contact(contact.jid, account)
 				new_rule = {'order': u'1', 'type': u'group', 'action': u'deny',
-					'value' : group, 'child':  [u'message', u'iq', u'presence-out']}
+					'value' : group, 'child': [u'message', u'iq', u'presence-out']}
 				gajim.connections[account].blocked_list.append(new_rule)
 		for account in accounts:
 			gajim.connections[account].set_privacy_list(
@@ -3197,7 +3197,7 @@ class RosterWindow:
 			self.make_transport_menu(event, iters[0])
 		elif type_ in ('contact', 'self_contact') and len(iters) == 1:
 			self.make_contact_menu(event, iters[0])
-		elif type_  == 'contact':
+		elif type_ == 'contact':
 			self.make_multiple_contact_menu(event, iters)
 		elif type_ == 'account' and len(iters) == 1:
 			self.make_account_menu(event, iters[0])
@@ -4307,7 +4307,7 @@ class RosterWindow:
 					self.tree.expand_row(pathG, False)
 			self.draw_account(account)
 		elif type_ == 'contact':
-			jid =  model[iter][C_JID].decode('utf-8')
+			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			self.draw_contact(jid, account)
 
@@ -4334,7 +4334,7 @@ class RosterWindow:
 				self.collapsed_rows.append(account)
 			self.draw_account(account)
 		elif type_ == 'contact':
-			jid =  model[iter][C_JID].decode('utf-8')
+			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			self.draw_contact(jid, account)
 
@@ -4439,10 +4439,13 @@ class RosterWindow:
 			# standard transport iconsets are loaded one time in init()
 			t_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
 			folders = os.listdir(t_path)
+			t_path = os.path.join(gajim.MY_ICONSETS_PATH, 'transports')
+			folders += os.listdir(t_path)
 			for transport in folders:
 				if transport == '.svn':
 					continue
-				folder = os.path.join(t_path, transport, '16x16')
+				folder = os.path.join(helpers.get_transport_path(transport),
+					'16x16')
 				self.transports_state_images['opened'][transport] = \
 					self.load_iconset(folder, pixo, transport = True)
 				self.transports_state_images['closed'][transport] = \
@@ -4913,7 +4916,7 @@ class RosterWindow:
 							account, c, path)
 			# Popup dialog to confirm sending
 			prim_text = 'Send file?'
-			sec_text =  i18n.ngettext('Do you want to send that file to %s:',
+			sec_text = i18n.ngettext('Do you want to send that file to %s:',
 				'Do you want to send those files to %s:', nb_uri) %\
 				c_dest.get_shown_name()
 			for uri in uri_splitted:
@@ -4998,7 +5001,7 @@ class RosterWindow:
 			return
 
 		# Is the contact we drag a meta contact?
-		is_big_brother =  gajim.contacts.is_big_brother(account_source, jid_source)
+		is_big_brother = gajim.contacts.is_big_brother(account_source, jid_source)
 
 		# Contact drop on group row or between two contacts
 		if type_dest == 'group' or position == gtk.TREE_VIEW_DROP_BEFORE or \
@@ -5109,7 +5112,7 @@ class RosterWindow:
 			'closed': {}}
 
 		self.last_save_dir = None
-		self.editing_path = None  # path of row with cell in edit mode
+		self.editing_path = None # path of row with cell in edit mode
 		self.add_new_contact_handler_id = False
 		self.service_disco_handler_id = False
 		self.new_chat_menuitem_handler_id = False
@@ -5146,13 +5149,15 @@ class RosterWindow:
 
 		path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
 		folders = os.listdir(path)
+		path = os.path.join(gajim.MY_ICONSETS_PATH, 'transports')
+		folders += os.listdir(path)
 		for transport in folders:
 			if transport == '.svn':
 				continue
-			folder = os.path.join(path, transport, '32x32')
+			folder = os.path.join(helpers.get_transport_path(transport), '32x32')
 			self.transports_state_images['32'][transport] = self.load_iconset(
 				folder, transport = True)
-			folder = os.path.join(path, transport, '16x16')
+			folder = os.path.join(helpers.get_transport_path(transport), '16x16')
 			self.transports_state_images['16'][transport] = self.load_iconset(
 				folder, transport = True)
 

@@ -191,12 +191,12 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 			transport_name = gajim.get_transport_name_from_jid(jid)
 			img = None
 			if transport_name:
-				img = os.path.join(gajim.DATA_DIR, 'iconsets',
-					'transports', transport_name, '48x48', show_image) 
+				img = os.path.join(helpers.get_transport_path(transport_name),
+					'48x48', show_image) 
 			if not img or not os.path.isfile(img):
 				iconset = gajim.config.get('iconset')
-				img = os.path.join(gajim.DATA_DIR, 'iconsets',
-						iconset, '48x48', show_image)
+				img = os.path.join(helpers.get_iconset_path(iconset), '48x48',
+					show_image)
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
 				jid = jid, suffix = suffix)
 			if event == 'status_change':
@@ -206,7 +206,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 					{'nick': gajim.get_name_from_jid(account, jid),\
 					'status': helpers.get_uf_show(gajim.SHOW_LIST[new_show])}
 				if status_message:
-					text =  text + " : " + status_message
+					text = text + " : " + status_message
 				popup(_('Contact Changed Status'), jid, account,
 					path_to_image = path, title = title, text = text)
 			elif event == 'contact_connected':

@@ -89,7 +89,7 @@ class BaseTooltip:
 		half_width = requisition.width / 2 + 1
 		if self.preferred_position[0] < half_width: 
 			self.preferred_position[0] = 0
-		elif self.preferred_position[0]  + requisition.width > \
+		elif self.preferred_position[0] + requisition.width > \
 			self.screen.get_width() + half_width:
 			self.preferred_position[0] = self.screen.get_width() - \
 				requisition.width
@@ -99,7 +99,7 @@ class BaseTooltip:
 		if self.preferred_position[1] + requisition.height > \
 			self.screen.get_height():
 			# flip tooltip up
-			self.preferred_position[1] -= requisition.height  + \
+			self.preferred_position[1] -= requisition.height + \
 				self.widget_height + 8
 		if self.preferred_position[1] < 0:
 			self.preferred_position[1] = 0
@@ -436,8 +436,8 @@ class RosterTooltip(NotificationAreaTooltip):
 			transport = gajim.get_transport_name_from_jid(
 				prim_contact.jid)
 			if transport:
-				file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 
-					'transports', transport , '16x16')
+				file_path = os.path.join(helpers.get_transport_path(transport),
+					'16x16')
 			else:
 				iconset = gajim.config.get('iconset')
 				if not iconset:
@@ -535,7 +535,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			if property[1]:
 				label.set_markup(property[0])
 				vcard_table.attach(label, 1, 2, vcard_current_row,
-					vcard_current_row + 1, gtk.FILL,  vertical_fill, 0, 0)
+					vcard_current_row + 1, gtk.FILL, vertical_fill, 0, 0)
 				label = gtk.Label()
 				label.set_alignment(0, 0)
 				label.set_markup(property[1])
@@ -576,7 +576,7 @@ class FileTransfersTooltip(BaseTooltip):
 		properties.append((_('Name: '), 
 			gobject.markup_escape_text(file_name)))
 		if file_props['type'] == 'r':
-			type =  _('Download')
+			type = _('Download')
 			actor = _('Sender: ') 
 			sender = unicode(file_props['sender']).split('/')[0]
 			name = gajim.contacts.get_first_contact_from_jid( 
@@ -598,7 +598,7 @@ class FileTransfersTooltip(BaseTooltip):
 		properties.append((_('Transferred: '), helpers.convert_bytes(transfered_len)))
 		status = '' 
 		if not file_props.has_key('started') or not file_props['started']:
-			status =  _('Not started')
+			status = _('Not started')
 		elif file_props.has_key('connected'):
 			if file_props.has_key('stopped') and \
 			file_props['stopped'] == True:
@@ -609,7 +609,7 @@ class FileTransfersTooltip(BaseTooltip):
 				if file_props['completed']:
 					status = _('Completed')
 			else:
-				if file_props.has_key('paused') and  \
+				if file_props.has_key('paused') and \
 				file_props['paused'] == True:
 					status = _('?transfer status:Paused')
 				elif file_props.has_key('stalled') and \
@@ -619,7 +619,7 @@ class FileTransfersTooltip(BaseTooltip):
 				else:
 					status = _('Transferring')
 		else:
-			status =  _('Not started')
+			status = _('Not started')
 		properties.append((_('Status: '), status))
 		while properties:
 			property = properties.pop(0)
@@ -628,7 +628,7 @@ class FileTransfersTooltip(BaseTooltip):
 			label.set_alignment(0, 0)
 			label.set_markup(property[0])
 			ft_table.attach(label, 1, 2, current_row, current_row + 1, 
-				gtk.FILL,  gtk.FILL, 0, 0)
+				gtk.FILL, gtk.FILL, 0, 0)
 			label = gtk.Label()
 			label.set_alignment(0, 0)
 			label.set_line_wrap(True)

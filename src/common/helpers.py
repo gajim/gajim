@@ -1050,3 +1050,11 @@ def get_iconset_path(iconset):
 		return os.path.join(gajim.DATA_DIR, 'iconsets', iconset)
 	elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, iconset)):
 		return os.path.join(gajim.MY_ICONSETS_PATH, iconset)
+
+def get_transport_path(transport):
+	if os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', 'transports',
+	transport)):
+		return os.path.join(gajim.DATA_DIR, 'iconsets', 'transports', transport)
+	elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, 'transports',
+	transport)):
+		return os.path.join(gajim.MY_ICONSETS_PATH, 'transports', transport)
