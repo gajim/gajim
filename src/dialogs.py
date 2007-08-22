@@ -3243,11 +3243,14 @@ class TransformChatToMUC:
 
 		# set treeview
 		# name, jid
-		self.store = gtk.ListStore(str, str)
+		self.store = gtk.ListStore(gtk.gdk.Pixbuf, str, str)
 		self.guests_treeview.set_model(self.store)
 
 		renderer1 = gtk.CellRendererText()
-		column = gtk.TreeViewColumn('Name', renderer1, text=0)
+		renderer2 = gtk.CellRendererPixbuf()
+		column = gtk.TreeViewColumn('Status', renderer2, pixbuf=0)
+		self.guests_treeview.append_column(column)
+		column = gtk.TreeViewColumn('Name', renderer1, text=1)
 		self.guests_treeview.append_column(column)
 
 		self.guests_treeview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
@@ -3262,10 +3265,12 @@ class TransformChatToMUC:
 					not contact_transport and \
 					contact.jid not in gajim.interface.minimized_controls[account]:
 					if contact.show not in ('offline', 'error'):
+						img = gajim.interface.roster.jabber_state_images['16'][
+							contact.show]
 						name = contact.name
 						if name == '':
 							name = jid.split('@')[0]
-						self.store.append([name, jid])
+						self.store.append([img.get_pixbuf(), name, jid])
 
 		# show all
 		self.window.show_all()
@@ -3286,9 +3291,9 @@ class TransformChatToMUC:
 	def unique_room_id_supported(self, server, room_id):
 		guest_list = []
 		guests = self.guests_treeview.get_selection().get_selected_rows()
-		for guest in guests[1]:
+		for guest in guests[2]:
 			iter = self.store.get_iter(guest)
-			guest_list.append(self.store[iter][1].decode('utf-8'))
+			guest_list.append(self.store[iter][2].decode('utf-8'))
 		for guest in self.auto_jids:
 			guest_list.append(guest)
 		room_jid = room_id + '@' + server
