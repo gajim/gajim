@@ -3216,9 +3216,6 @@ class TransformChatToMUC:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 		self.window.connect('key_press_event', self._on_keypress_event)
 
-		# set a list of servers which support it
-		self.servers_support = {}
-
 		# set comboboxentry
 		renderer_servers = gtk.CellRendererText()
 
@@ -3304,14 +3301,9 @@ class TransformChatToMUC:
 		if server == '':
 			return
 		room_id = gajim.nicks[self.account] + str(randrange(9999999))
-#		if self.servers_support.has_key(server):
-#			self.unique_room_id_supported(server, self.servers_support[server])
-#			return
-#		gajim.connections[self.account].check_unique_room_id_support(server, self)
+		gajim.connections[self.account].check_unique_room_id_support(server, self)
 
-#	def unique_room_id_supported(self, server, room_id):
-#		if not self.servers_support.has_key(server):
-#			self.servers_support[server] = room_id
+	def unique_room_id_supported(self, server, room_id):
 		guest_list = []
 		guests = self.guests_treeview.get_selection().get_selected_rows()
 		for guest in guests[1]:
