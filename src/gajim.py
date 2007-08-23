@@ -1864,6 +1864,41 @@ class Interface:
 			_('You are already connected to this account with the same resource. Please type a new one'), input_str = gajim.connections[account].server_resource,
 			is_modal = False, ok_handler = on_ok)
 
+	def handle_event_jingle_incoming(self, account, data):
+		# ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type, data...))
+		# TODO: conditional blocking if peer is not in roster
+		
+		# unpack data
+		peerjid, sid, contents = data
+		content_types = set(c[0] for c in contents)
+
+		# check type of jingle session
+		if 'VOIP' in content_types:
+			# a voip session...
+			# we now handle only voip, so the only thing we will do here is
+			# not to return from function
+			pass
+		else:
+			# unknown session type... it should be declined in common/jingle.py
+			return
+
+		if helpers.allow_popup_window(account):
+			dialogs.VoIPCallReceivedDialog(account, peerjid, sid)
+
+		# TODO: not checked
+		self.add_event(account, peerjid, 'jingle-session', (sid, contents))
+
+		if helpers.allow_showing_notification(account):
+			# TODO: we should use another pixmap ;-)
+			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+				'ft_request.png')
+			txt = _('%s wants to start a jingle session.') % gajim.get_name_from_jid(
+				account, jid)
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			event_type = _('Jingle Session Request')
+			notify.popup(event_type, jid, account, 'jingle-request',
+				path_to_image = path, title = event_type, text = txt)
+
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -2192,6 +2227,7 @@ class Interface:
 			'SEARCH_FORM': self.handle_event_search_form,
 			'SEARCH_RESULT': self.handle_event_search_result,
 			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
+			'JINGLE_INCOMING': self.handle_event_jingle_incoming,
 		}
 		gajim.handlers = self.handlers
 

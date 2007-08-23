@@ -52,7 +52,6 @@ def state_changed(stream, state, dir):
 		print "state_changed: connectied"
 		print "WW: stream.signal_native_candidates_prepared()"
 		print "WW: stream.start()"
-		exit()
 		stream.signal_native_candidates_prepared()
 		stream.start()
 
