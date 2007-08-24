@@ -78,7 +78,7 @@ class JingleSession(object):
 			'session-accept':	[self.__contentAcceptCB, self.__broadcastCB, self.__defaultCB],
 			'session-info':		[self.__defaultCB],
 			'session-initiate':	[self.__sessionInitiateCB, self.__broadcastCB, self.__defaultCB],
-			'session-terminate':	[self.__defaultCB],
+			'session-terminate':	[self.__broadcastAllCB, self.__defaultCB],
 			'transport-info':	[self.__broadcastCB, self.__defaultCB],
 			'iq-result':		[],
 			'iq-error':		[],
@@ -136,7 +136,6 @@ class JingleSession(object):
 		    self.accepted and \
 		    all(c.negotiated for c in self.contents.itervalues()):
 			self.__sessionAccept()
-		else:
 	''' Middle-level function to do stanza exchange. '''
 	def startSession(self):
 		''' Start session. '''
@@ -232,6 +231,11 @@ class JingleSession(object):
 			cn = self.contents[(creator, name)]
 			cn.stanzaCB(stanza, content, error, action)
 
+	def __broadcastAllCB(self, stanza, jingle, error, action):
+		''' Broadcast the stanza to all content handlers. '''
+		for content in self.contents.itervalues():
+			content.stanzaCB(stanza, None, error, action)
+
 	def on_p2psession_error(self, *anything): pass
 
 	''' Methods that make/send proper pieces of XML. They check if the session
@@ -285,8 +289,8 @@ class JingleSession(object):
 	def __sessionTerminate(self):
 		assert self.state!=JingleStates.ended
 		stanza, jingle = self.__makeJingle('session-terminate')
+		self.__broadcastAllCB(stanza, jingle, None, 'session-terminate-sent')
 		self.connection.connection.send(stanza)
-		self.__broadcastCB(stanza, jingle, None, 'session-terminate-sent')
 
 	def __contentAdd(self):
 		assert self.state==JingleStates.active
