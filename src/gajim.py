@@ -1887,16 +1887,15 @@ class Interface:
 
 		self.add_event(account, peerjid, 'voip-incoming', (peerjid, sid,))
 
-		# TODO: check this too
 		if helpers.allow_showing_notification(account):
 			# TODO: we should use another pixmap ;-)
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'ft_request.png')
-			txt = _('%s wants to start a jingle session.') % gajim.get_name_from_jid(
+			txt = _('%s wants to start a voice chat.') % gajim.get_name_from_jid(
 				account, peerjid)
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
-			event_type = _('Jingle Session Request')
-			notify.popup(event_type, peerjid, account, 'jingle-request',
+			event_type = _('Voice Chat Request')
+			notify.popup(event_type, peerjid, account, 'voip-incoming',
 				path_to_image = path, title = event_type, text = txt)
 
 	def read_sleepy(self):
