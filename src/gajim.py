@@ -1488,33 +1488,33 @@ class Interface:
 		'''add an event to the gajim.events var'''
 		# We add it to the gajim.events queue
 		# Do we have a queue?
-		jid = gajim.get_jid_without_resource(jid)
-		no_queue = len(gajim.events.get_events(account, jid)) == 0
+		barejid = gajim.get_jid_without_resource(jid)
+		no_queue = len(gajim.events.get_events(account, barejid)) == 0
 		event_type = None
 		# type_ can be gc-invitation file-send-error file-error file-request-error
-		# file-request file-completed file-stopped
+		# file-request file-completed file-stopped voip-incoming
 		# event_type can be in advancedNotificationWindow.events_list
 		event_types = {'file-request': 'ft_request',
 			'file-completed': 'ft_finished'}
 		if type_ in event_types:
 			event_type = event_types[type_]
-		show_in_roster = notify.get_show_in_roster(event_type, account, jid)
-		show_in_systray = notify.get_show_in_systray(event_type, account, jid)
+		show_in_roster = notify.get_show_in_roster(event_type, account, barejid)
+		show_in_systray = notify.get_show_in_systray(event_type, account, barejid)
 		event = gajim.events.create_event(type_, event_args,
 			show_in_roster = show_in_roster,
 			show_in_systray = show_in_systray)
-		gajim.events.add_event(account, jid, event)
+		gajim.events.add_event(account, barejid, event)
 
 		self.roster.show_title()
 		if no_queue: # We didn't have a queue: we change icons
-			if not gajim.contacts.get_contact_with_highest_priority(account, jid):
+			if not gajim.contacts.get_contact_with_highest_priority(account, barejid):
 				# add contact to roster ("Not In The Roster") if he is not
-				self.roster.add_to_not_in_the_roster(account, jid) 
-			self.roster.draw_contact(jid, account)
+				self.roster.add_to_not_in_the_roster(account, barejid) 
+			self.roster.draw_contact(barejid, account)
 
 		# Show contact in roster (if he is invisible for example) and select line
-		path = self.roster.get_path(jid, account)		
-		self.roster.show_and_select_path(path, jid, account)
+		path = self.roster.get_path(barejid, account)		
+		self.roster.show_and_select_path(path, barejid, account)
 
 	def remove_first_event(self, account, jid, type_ = None):
 		event = gajim.events.get_first_event(account, jid, type_)
@@ -1885,18 +1885,18 @@ class Interface:
 		if helpers.allow_popup_window(account):
 			dialogs.VoIPCallReceivedDialog(account, peerjid, sid)
 
-		# TODO: not checked
-		self.add_event(account, peerjid, 'jingle-session', (sid, contents))
+		self.add_event(account, peerjid, 'voip-incoming', (peerjid, sid,))
 
+		# TODO: check this too
 		if helpers.allow_showing_notification(account):
 			# TODO: we should use another pixmap ;-)
 			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'ft_request.png')
 			txt = _('%s wants to start a jingle session.') % gajim.get_name_from_jid(
-				account, jid)
+				account, peerjid)
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			event_type = _('Jingle Session Request')
-			notify.popup(event_type, jid, account, 'jingle-request',
+			notify.popup(event_type, peerjid, account, 'jingle-request',
 				path_to_image = path, title = event_type, text = txt)
 
 	def read_sleepy(self):
@@ -2323,6 +2323,11 @@ class Interface:
 				data[1])
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
+		elif type_ == 'voip-incoming':
+			event = gajim.events.get_first_event(account, jid, type_)
+			peerjid, sid = event.parameters
+			dialogs.VoIPCallReceivedDialog(account, peerjid, sid)
+			gajim.events.remove_events(account, jid, event)
 		if w:
 			w.set_active_tab(fjid, account)
 			w.window.present()

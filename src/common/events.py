@@ -28,7 +28,8 @@ class Event:
 	show_in_systray = True):
 		''' type_ in chat, normal, file-request, file-error, file-completed,
 		file-request-error, file-send-error, file-stopped, gc_msg, pm,
-		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm
+		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm,
+		jingle-incoming
 		parameters is (per type_):
 			chat, normal: [message, subject, kind, time, encrypted, resource,
 			msg_id]
@@ -36,7 +37,8 @@ class Event:
 			file-*: file_props
 			gc_msg: None
 			printed_*: None
-				messages that are already printed in chat, but not read'''
+				messages that are already printed in chat, but not read
+			jingle-*: (fulljid, sessionid) '''
 		self.type_ = type_
 		self.time_ = time_
 		self.parameters = parameters
