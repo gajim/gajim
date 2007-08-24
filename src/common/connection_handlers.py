@@ -1064,6 +1064,10 @@ class ConnectionVcard:
 					tag = meta.getAttr('tag')
 					data = {'jid': jid}
 					order = meta.getAttr('order')
+					try:
+						order = int(order)
+					except:
+						order = 0
 					if order != None:
 						data['order'] = order
 					if meta_list.has_key(tag):
