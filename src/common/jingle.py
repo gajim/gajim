@@ -25,6 +25,12 @@ sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_GLOBAL)
 import farsight
 sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_LOCAL)
 
+def all(iterable):		# backport of py2.5 function
+	for element in iterable:
+		if not element:
+			return False
+	return True
+
 def timeout_add_and_call(timeout, callable, *args, **kwargs):
 	''' Call a callback once. If it returns True, add a timeout handler to call it more times.
 	Helper function. '''
