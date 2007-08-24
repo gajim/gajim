@@ -285,7 +285,8 @@ class Systray:
 	def on_left_click(self):
 		win = gajim.interface.roster.window
 		# toggle visible/hidden for roster window
-		if win.get_property('visible'): # visible in ANY virtual desktop?
+		if win.get_property('visible') and win.get_property('has-toplevel-focus'):
+			# visible in ANY virtual desktop?
 
 			# we could be in another VD right now. eg vd2
 			# and we want to show it in vd2
