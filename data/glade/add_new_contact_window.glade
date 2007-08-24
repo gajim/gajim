@@ -206,6 +206,7 @@
           <widget class="GtkCheckButton" id="auto_authorize_checkbutton">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="no_show_all">True</property>
             <property name="label" translatable="yes">A_llow this contact to view my status</property>
             <property name="use_underline">True</property>
             <property name="response_id">0</property>

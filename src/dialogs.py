@@ -601,23 +601,17 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				self.group_comboboxentry.set_active(i)
 			i += 1
 
+		self.window.show_all()
+
 		if self.account:
 			self.account_label.hide()
 			self.account_hbox.hide()
-			self.account_label.set_no_show_all(True)
-			self.account_hbox.set_no_show_all(True)
 		else:
 			liststore = gtk.ListStore(str, str)
 			for acct in accounts:
 				liststore.append([acct, acct])
 			self.account_combobox.set_model(liststore)
 			self.account_combobox.set_active(0)
-		# FIXME: Hide stuff. Is there a way to do this in glade?
-		self.protocol_jid_combobox.hide()
-		self.register_hbox.hide()
-		self.connected_label.hide()
-
-		self.window.show_all()
 
 	def on_add_new_contact_window_destroy(self, widget):
 		if self.account:
@@ -708,8 +702,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				model.append([jid_])
 			self.protocol_jid_combobox.set_active(0)
 		if len(self.agents[type_]) > 1:
-			self.protocol_jid_combobox.set_no_show_all(False)
-			self.protocol_jid_combobox.show_all()
+			self.protocol_jid_combobox.show()
 		else:
 			self.protocol_jid_combobox.hide()
 		if type_ in self.uid_labels:
@@ -721,8 +714,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		else:
 			self.message_scrolledwindow.hide()
 		if type_ in self.available_types:
-			self.register_hbox.set_no_show_all(False)
-			self.register_hbox.show_all()
+			self.register_hbox.show()
 			self.auto_authorize_checkbutton.hide()
 			self.connected_label.hide()
 			self.subscription_table.hide()
@@ -739,8 +731,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 					self.add_button.set_sensitive(False)
 					self.auto_authorize_checkbutton.hide()
 					return
-			self.subscription_table.set_no_show_all(False)
-			self.subscription_table.show_all()
+			self.subscription_table.show()
 			self.auto_authorize_checkbutton.show()
 			self.connected_label.hide()
 			self.add_button.set_sensitive(True)
@@ -749,13 +740,14 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if self.protocol_jid_combobox.get_active_text() == jid:
 			self.register_hbox.hide()
 			self.connected_label.hide()
-			self.subscription_table.set_no_show_all(False)
-			self.subscription_table.show_all()
+			self.subscription_table.show()
+			self.auto_authorize_checkbutton.show()
 			self.add_button.set_sensitive(True)
 
 	def transport_signed_out(self, jid):
 		if self.protocol_jid_combobox.get_active_text() == jid:
 			self.subscription_table.hide()
+			self.auto_authorize_checkbutton.hide()
 			self.connected_label.show()
 			self.add_button.set_sensitive(False)
 
