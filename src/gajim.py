@@ -117,11 +117,16 @@ import message_control
 from chat_control import ChatControlBase
 from atom_window import AtomWindow
 
+import negotiation
+import Crypto.PublicKey.RSA
+
 from common import exceptions
 from common.zeroconf import connection_zeroconf
 from common import dbus_support
 if dbus_support.supported:
 	import dbus
+
+import pickle
 
 if os.name == 'posix': # dl module is Unix Only
 	try: # rename the process name to gajim
@@ -217,6 +222,7 @@ gajimpaths = common.configpaths.gajimpaths
 
 pid_filename = gajimpaths['PID_FILE']
 config_filename = gajimpaths['CONFIG_FILE']
+secrets_filename = gajimpaths['SECRETS_FILE']
 
 import traceback
 import errno
@@ -686,11 +692,11 @@ class Interface:
 			# It's maybe a GC_NOTIFY (specialy for MSN gc)
 			self.handle_event_gc_notify(account, (jid, array[1], status_message,
 				array[3], None, None, None, None, None, None, None, None))
-			
+
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
-		# chatstate, msg_id, composing_xep, user_nick, xhtml))
+		# chatstate, msg_id, composing_xep, user_nick, xhtml, session))
 		# user_nick is JEP-0172
 
 		full_jid_with_resource = array[0]
@@ -705,6 +711,7 @@ class Interface:
 		msg_id = array[7]
 		composing_xep = array[8]
 		xhtml = array[10]
+		session = array[11]
 		if gajim.config.get('ignore_incoming_xhtml'):
 			xhtml = None
 		if gajim.jid_is_transport(jid):
@@ -791,20 +798,20 @@ class Interface:
 		if pm:
 			nickname = resource
 			groupchat_control.on_private_message(nickname, message, array[2],
-				xhtml, msg_id)
+				xhtml, session, msg_id)
 		else:
 			# array: (jid, msg, time, encrypted, msg_type, subject)
 			if encrypted:
 				self.roster.on_message(jid, message, array[2], account, array[3],
 					msg_type, subject, resource, msg_id, array[9],
-					advanced_notif_num)
+					advanced_notif_num, session = session)
 			else:
 				# xhtml in last element
 				self.roster.on_message(jid, message, array[2], account, array[3],
 					msg_type, subject, resource, msg_id, array[9],
-					advanced_notif_num, xhtml = xhtml)
+					advanced_notif_num, xhtml = xhtml, session = session)
 			nickname = gajim.get_name_from_jid(account, jid)
-		# Check and do wanted notifications	
+		# Check and do wanted notifications
 		msg = message
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
@@ -1501,6 +1508,48 @@ class Interface:
 			if os.path.isfile(path_to_original_file):
 				os.remove(path_to_original_file)
 
+	# list the retained secrets we have for a local account and a remote jid
+	def list_secrets(self, account, jid):
+		f = open(secrets_filename)
+
+		try:
+			s = pickle.load(f)[account][jid]
+		except KeyError:
+			s = []
+
+		f.close()
+		return s
+
+	# save a new retained secret
+	def save_new_secret(self, account, jid, secret):
+		f = open(secrets_filename, 'r')
+		secrets = pickle.load(f)
+		f.close()
+
+		if not account in secrets:
+			secrets[account] = {}
+
+		if not jid in secrets[account]:
+			secrets[account][jid] = []
+
+		secrets[account][jid].append(secret)
+
+		f = open(secrets_filename, 'w')
+		pickle.dump(secrets, f)
+		f.close()
+
+	def replace_secret(self, account, jid, old_secret, new_secret):
+		f = open(secrets_filename, 'r')
+		secrets = pickle.load(f)
+		f.close()
+
+		this_secrets = secrets[account][jid]
+		this_secrets[this_secrets.index(old_secret)] = new_secret
+
+		f = open(secrets_filename, 'w')
+		pickle.dump(secrets, f)
+		f.close()
+		
 	def add_event(self, account, jid, type_, event_args):
 		'''add an event to the gajim.events var'''
 		# We add it to the gajim.events queue
@@ -1767,6 +1816,162 @@ class Interface:
 	def handle_atom_entry(self, account, data):
 		atom_entry, = data
 		AtomWindow.newAtomEntry(atom_entry)
+
+	def handle_event_failed_decrypt(self, account, data):
+		jid, tim = data
+
+		ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			ctrl.print_conversation_line('Unable to decrypt message from %s\nIt may have been tampered with.' % (jid), 'status', '', tim)
+		else:
+			print 'failed decrypt, unable to find a control to notify you in.'
+
+	def handle_session_negotiation(self, account, data):
+		jid, session, form = data
+
+		if form.getField('accept') and not form['accept'] in ('1', 'true'):
+			dialogs.InformationDialog(_('Session negotiation cancelled'),
+					_('The client at %s cancelled the session negotiation.') % (jid))
+			session.cancelled_negotiation()
+			return
+
+		# encrypted session states. these are described in stanza_session.py
+
+		# bob responds
+		if form.getType() == 'form' and 'security' in form.asDict():
+			def continue_with_negotiation(*args):
+				if len(args):
+					self.dialog.destroy()
+
+				# we don't support 3-message negotiation as the responder
+				if 'dhkeys' in form.asDict():
+					err = xmpp.Error(xmpp.Message(), xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
+
+					feature = xmpp.Node(xmpp.NS_FEATURE + ' feature')
+					field = xmpp.Node('field')
+					field['var'] = 'dhkeys'
+					
+					feature.addChild(node=field)
+					err.addChild(node=feature)
+
+					session.send(err)
+					return
+
+				negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
+
+				if ask_user:
+					def accept_nondefault_options(widget):
+						self.dialog.destroy()
+						negotiated.update(ask_user)
+						session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+					def reject_nondefault_options(widget):
+						self.dialog.destroy()
+						for key in ask_user.keys():
+							not_acceptable.append(key)
+						session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+					self.dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+						_('''The remote client wants to negotiate an session with these features:
+
+	%s
+
+	Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
+							on_response_yes = accept_nondefault_options,
+							on_response_no = reject_nondefault_options)
+				else:
+					session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+			def ignore_negotiation(widget):
+				self.dialog.destroy()
+				return
+
+			continue_with_negotiation()
+
+			return
+
+		# alice accepts
+		elif session.status == 'requested-e2e' and form.getType() == 'submit':
+			negotiated, not_acceptable, ask_user = session.verify_options_alice(form)
+
+			if session.sigmai:
+				session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
+
+			if ask_user:
+				def accept_nondefault_options(widget):
+					dialog.destroy()
+
+					negotiated.update(ask_user)
+		
+					try:
+						session.accept_e2e_alice(form, negotiated)
+					except exceptions.NegotiationError, details:
+						session.fail_bad_negotiation(details)
+
+				def reject_nondefault_options(widget):
+					session.reject_negotiation()
+					dialog.destroy()
+
+				dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+						_('The remote client selected these options:\n\n%s\n\nContinue with the session?') % (negotiation.describe_features(ask_user)),
+						on_response_yes = accept_nondefault_options,
+						on_response_no = reject_nondefault_options)
+			else:
+				try:
+					session.accept_e2e_alice(form, negotiated)
+				except exceptions.NegotiationError, details: 
+					session.fail_bad_negotiation(details)
+
+			return
+		elif session.status == 'responded-e2e' and form.getType() == 'result':
+			session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
+
+			try:
+				session.accept_e2e_bob(form)
+			except exceptions.NegotiationError, details: 
+				session.fail_bad_negotiation(details)
+
+			return
+		elif session.status == 'identified-alice' and form.getType() == 'result':
+			session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
+			
+			try:
+				session.final_steps_alice(form)
+			except exceptions.NegotiationError, details: 
+				session.fail_bad_negotiation(details)
+
+			return
+		
+		if form.getField('terminate'):
+			if form.getField('terminate').getValue() in ('1', 'true'):
+				session.acknowledge_termination()
+
+				gajim.connections[account].delete_session(str(jid), session.thread_id)
+			
+				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+
+				if ctrl:
+					ctrl.session = gajim.connections[account].make_new_session(str(jid))
+
+				return
+
+		# non-esession negotiation. this isn't very useful, but i'm keeping it around
+		# to test my test suite.
+		if form.getType() == 'form':
+			ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+			if not ctrl:
+				resource = jid.getResource()
+				contact = gajim.contacts.get_contact(account, str(jid), resource)
+				if not contact:
+					connection = gajim.connections[account]
+					contact = gajim.contacts.create_contact(jid = jid.getStripped(), resource = resource, show = connection.get_status())
+				self.roster.new_chat(contact, account, resource = resource)
+
+				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+
+			ctrl.set_session(session)
+
+			negotiation.FeatureNegotiationWindow(account, jid, session, form)
 
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
@@ -2208,6 +2413,7 @@ class Interface:
 			'SIGNED_IN': self.handle_event_signed_in,
 			'METACONTACTS': self.handle_event_metacontacts,
 			'ATOM_ENTRY': self.handle_atom_entry,
+			'FAILED_DECRYPT': self.handle_event_failed_decrypt,
 			'PRIVACY_LISTS_RECEIVED': self.handle_event_privacy_lists_received,
 			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
 			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
@@ -2223,6 +2429,7 @@ class Interface:
 			'UNIQUE_ROOM_ID_UNSUPPORTED': \
 				self.handle_event_unique_room_id_unsupported,
 			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
+			'SESSION_NEG': self.handle_session_negotiation,
 		}
 		gajim.handlers = self.handlers
 
@@ -2545,6 +2752,10 @@ class Interface:
 			gobject.timeout_add(2000, self.process_connections)
 		gobject.timeout_add(10000, self.read_sleepy)
 
+		# public key for XEP-0116
+		# XXX os.urandom is not a cryptographic PRNG
+		self.pubkey = Crypto.PublicKey.RSA.generate(384, os.urandom)
+
 if __name__ == '__main__':
 	def sigint_cb(num, stack):
 		sys.exit(5)
@@ -2582,6 +2793,12 @@ if __name__ == '__main__':
 					cli.set_restart_command(len(argv), argv)
 		
 	check_paths.check_and_possibly_create_paths()
+
+	# create secrets file (unless it exists)
+	if not os.path.exists(secrets_filename):
+		f = open(secrets_filename, 'w')
+		pickle.dump({}, f)
+		f.close()
 
 	Interface()
 	gtk.main()

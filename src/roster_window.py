@@ -1230,10 +1230,15 @@ class RosterWindow:
 		'''reads from db the unread messages, and fire them up'''
 		for jid in gajim.contacts.get_jid_list(account):
 			results = gajim.logger.get_unread_msgs_for_jid(jid)
+
+			# XXX unread messages should probably have their session saved with them
+			if results:
+				session = gajim.connections[account].make_new_session(jid)
+
 			for result in results:
 				tim = time.localtime(float(result[2]))
 				self.on_message(jid, result[1], tim, account, msg_type = 'chat',
-					msg_id = result[0])
+					msg_id = result[0], session = session)
 
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
@@ -3758,7 +3763,7 @@ class RosterWindow:
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
 
-	def new_private_chat(self, gc_contact, account):
+	def new_private_chat(self, gc_contact, account, session = None):
 		contact = gajim.contacts.contact_from_gc_contact(gc_contact)
 		type_ = message_control.TYPE_PM
 		fjid = gc_contact.room_jid + '/' + gc_contact.name
@@ -3766,24 +3771,25 @@ class RosterWindow:
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
 
-		chat_control = PrivateChatControl(mw, gc_contact, contact, account)
+		chat_control = PrivateChatControl(mw, gc_contact, contact, account, session)
 		mw.new_tab(chat_control)
 		if len(gajim.events.get_events(account, fjid)):
 			# We call this here to avoid race conditions with widget validation
 			chat_control.read_queue()
 
-	def new_chat(self, contact, account, resource = None):
+	def new_chat(self, contact, account, resource = None, session = None):
 		# Get target window, create a control, and associate it with the window
 		type_ = message_control.TYPE_CHAT
 
 		fjid = contact.jid
 		if resource:
 			fjid += '/' + resource
+
 		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
 
-		chat_control = ChatControl(mw, contact, account, resource)
+		chat_control = ChatControl(mw, contact, account, session, resource)
 
 		mw.new_tab(chat_control)
 
@@ -3827,7 +3833,7 @@ class RosterWindow:
 
 	def on_message(self, jid, msg, tim, account, encrypted = False,
 			msg_type = '', subject = None, resource = '', msg_id = None,
-			user_nick = '', advanced_notif_num = None, xhtml = None):
+			user_nick = '', advanced_notif_num = None, xhtml = None, session = None):
 		'''when we receive a message'''
 		contact = None
 		# if chat window will be for specific resource
@@ -3884,7 +3890,7 @@ class RosterWindow:
 		if msg_type == 'normal' and popup: # it's single message to be autopopuped
 			dialogs.SingleMessageWindow(account, contact.jid,
 				action = 'receive', from_whom = jid, subject = subject,
-				message = msg, resource = resource)
+				message = msg, resource = resource, session = session)
 			return
 
 		# We print if window is opened and it's not a single message
@@ -3892,6 +3898,8 @@ class RosterWindow:
 			typ = ''
 			if msg_type == 'error':
 				typ = 'status'
+			if session:
+				ctrl.set_session(session)
 			ctrl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
 						subject = subject, xhtml = xhtml)
 			if msg_id:
@@ -3907,7 +3915,7 @@ class RosterWindow:
 		show_in_roster = notify.get_show_in_roster(event_type, account, contact)
 		show_in_systray = notify.get_show_in_systray(event_type, account, contact)
 		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-			encrypted, resource, msg_id, xhtml), show_in_roster = show_in_roster,
+			encrypted, resource, msg_id, xhtml, session), show_in_roster = show_in_roster,
 			show_in_systray = show_in_systray)
 		gajim.events.add_event(account, fjid, event)
 		if popup:
@@ -4171,7 +4179,7 @@ class RosterWindow:
 		if event.type_ == 'normal':
 			dialogs.SingleMessageWindow(account, jid,
 				action = 'receive', from_whom = jid, subject = data[1],
-				message = data[0], resource = data[5])
+				message = data[0], resource = data[5], session = data[8])
 			gajim.interface.remove_first_event(account, jid, event.type_)
 			return True
 		elif event.type_ == 'file-request':
@@ -4208,14 +4216,14 @@ class RosterWindow:
 			jid = jid + u'/' + resource
 		adhoc_commands.CommandWindow(account, jid)
 
-	def on_open_chat_window(self, widget, contact, account, resource = None):
+	def on_open_chat_window(self, widget, contact, account, resource = None, session = None):
 		# Get the window containing the chat
 		fjid = contact.jid
 		if resource:
 			fjid += '/' + resource
 		win = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		if not win:
-			self.new_chat(contact, account, resource = resource)
+			self.new_chat(contact, account, resource = resource, session = session)
 			win = gajim.interface.msg_win_mgr.get_window(fjid, account)
 			ctrl = win.get_control(fjid, account)
 			# last message is long time ago
@@ -4262,7 +4270,9 @@ class RosterWindow:
 						jid = child_jid
 					else:
 						child_iter = model.iter_next(child_iter)
+			session = None
 			if first_ev:
+				session = first_ev.parameters[8]
 				fjid = jid
 				if resource:
 					fjid += '/' + resource
@@ -4273,7 +4283,7 @@ class RosterWindow:
 				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
 			if jid == gajim.get_jid_from_account(account):
 				resource = c.resource
-			self.on_open_chat_window(widget, c, account, resource = resource)
+			self.on_open_chat_window(widget, c, account, resource = resource, session = session)
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the first event window'''

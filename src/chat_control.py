@@ -953,11 +953,11 @@ class ChatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
 	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping', 'say']
-	
-	def __init__(self, parent_win, contact, acct, resource = None):
+
+	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
 			'chat_child_vbox', contact, acct, resource)
-			
+
 		# for muc use:
 		# widget = self.xml.get_widget('muc_window_actions_button')
 		widget = self.xml.get_widget('message_window_actions_button')
@@ -973,7 +973,7 @@ class ChatControl(ChatControlBase):
 		# it is on enter-notify and leave-notify so no need to be per jid
 		self.show_bigger_avatar_timeout_id = None
 		self.bigger_avatar_window = None
-		self.show_avatar(self.contact.resource)			
+		self.show_avatar(self.contact.resource)
 
 		# chatstate timers and state
 		self.reset_kbd_mouse_timeout_vars()
@@ -987,7 +987,7 @@ class ChatControl(ChatControlBase):
 		id = message_tv_buffer.connect('changed',
 			self._on_message_tv_buffer_changed)
 		self.handlers[id] = message_tv_buffer
-		
+
 		widget = self.xml.get_widget('avatar_eventbox')
 		id = widget.connect('enter-notify-event',
 			self.on_avatar_eventbox_enter_notify_event)
@@ -1007,7 +1007,12 @@ class ChatControl(ChatControlBase):
 
 		if self.contact.jid in gajim.encrypted_chats[self.account]:
 			self.xml.get_widget('gpg_togglebutton').set_active(True)
-		
+
+		self.session = session
+
+		# does this window have an existing, active esession?
+		self.esessioned = False
+
 		self.status_tooltip = gtk.Tooltips()
 		self.update_ui()
 		# restore previous conversation
@@ -1300,12 +1305,12 @@ class ChatControl(ChatControlBase):
 
 		contact = self.contact
 
+		encrypted = bool(self.session) and self.session.enable_encryption
+
 		keyID = ''
-		encrypted = False
 		if self.xml.get_widget('gpg_togglebutton').get_active():
 			keyID = contact.keyID
 			encrypted = True
-
 
 		chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
 			'disabled'
@@ -1318,7 +1323,7 @@ class ChatControl(ChatControlBase):
 				# this is here (and not in send_chatstate)
 				# because we want it sent with REAL message
 				# (not standlone) eg. one that has body
-				
+
 				if contact.our_chatstate:
 					# We already asked for xep 85, don't ask it twice
 					composing_xep = 'asked_once'
@@ -1417,18 +1422,46 @@ class ChatControl(ChatControlBase):
 			kind = 'info'
 			name = ''
 		else:
-			ec = gajim.encrypted_chats[self.account]
-			if encrypted and jid not in ec:
-				msg = _('Encryption enabled')
+			# ESessions
+			if self.session and self.session.enable_encryption:
+				if not self.esessioned:
+					msg = _('Encryption enabled')
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+
+					if self.session.loggable:
+						msg = _('Session WILL be logged')
+					else:
+						msg = _('Session WILL NOT be logged')
+
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+
+					self.esessioned = True
+				elif not encrypted:
+					msg = _('The following message was NOT encrypted')
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+			elif self.esessioned:
+				msg = _('Encryption disabled')
 				ChatControlBase.print_conversation_line(self, msg, 
 					'status', '', tim)
-				ec.append(jid)
-			elif not encrypted and jid in ec:
-				msg = _('Encryption disabled')
-				ChatControlBase.print_conversation_line(self, msg,
-					'status', '', tim)
-				ec.remove(jid)
-			self.xml.get_widget('gpg_togglebutton').set_active(encrypted)
+				self.esessioned = False
+			else:
+				# GPG encryption
+				ec = gajim.encrypted_chats[self.account]
+				if encrypted and jid not in ec:
+					msg = _('Encryption enabled')
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+					ec.append(jid)
+				elif not encrypted and jid in ec:
+					msg = _('Encryption disabled')
+					ChatControlBase.print_conversation_line(self, msg,
+						'status', '', tim)
+					ec.remove(jid)
+				self.xml.get_widget('gpg_togglebutton').set_active(encrypted)
+
 			if not frm:
 				kind = 'incoming'
 				name = contact.get_shown_name()
@@ -1538,6 +1571,7 @@ class ChatControl(ChatControlBase):
 		
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
+		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
@@ -1556,6 +1590,10 @@ class ChatControl(ChatControlBase):
 		is_sensitive = gpg_btn.get_property('sensitive')
 		toggle_gpg_menuitem.set_active(isactive)
 		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
+
+		# TODO: check that the remote client supports e2e
+		isactive = int(self.session != None and self.session.enable_encryption)
+		toggle_e2e_menuitem.set_active(isactive)
 
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
@@ -1591,6 +1629,8 @@ class ChatControl(ChatControlBase):
 		self.handlers[id] = add_to_roster_menuitem 
 		id = toggle_gpg_menuitem.connect('activate', 
 			self._on_toggle_gpg_menuitem_activate)
+		id = toggle_e2e_menuitem.connect('activate', 
+			self._on_toggle_e2e_menuitem_activate)
 		self.handlers[id] = toggle_gpg_menuitem 
 		id = information_menuitem.connect('activate', 
 			self._on_contact_information_menuitem_activate)
@@ -1908,6 +1948,9 @@ class ChatControl(ChatControlBase):
 				encrypted = data[4], subject = data[1], xhtml = data[7])
 			if len(data) > 6 and isinstance(data[6], int):
 				message_ids.append(data[6])
+
+			if len(data) > 8:
+				self.set_session(data[8])
 		if message_ids:
 			gajim.logger.set_read_messages(message_ids)
 		gajim.events.remove_events(self.account, jid_with_resource,
@@ -2035,6 +2078,28 @@ class ChatControl(ChatControlBase):
 		'''user want to invite some friends to chat'''
 		dialogs.TransformChatToMUC(self.account, [self.contact.jid])
 
+	def _on_toggle_e2e_menuitem_activate(self, widget):
+		if self.session and self.session.enable_encryption:
+			self.session.terminate_e2e()
+
+			msg = _('Encryption disabled')
+			ChatControlBase.print_conversation_line(self, msg, 
+				'status', '', None)
+			self.esessioned = False
+
+			jid = str(self.session.jid)
+
+			gajim.connections[self.account].delete_session(jid,
+				self.session.thread_id)
+
+			self.session = gajim.connections[self.account].make_new_session(jid)
+		else:
+			if not self.session:
+				self.session = gajim.connections[self.account].make_new_session(
+					self.contact.jid)
+
+			# XXX decide whether to use 4 or 3 message negotiation
+			self.session.negotiate_e2e(False)
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)

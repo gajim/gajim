@@ -22,6 +22,8 @@ import os
 import random
 import socket
 
+import time
+
 try:
 	randomsource = random.SystemRandom()
 except:
@@ -819,7 +821,7 @@ class Connection(ConnectionHandlers):
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
-	user_nick = None, xhtml = None, forward_from = None):
+	user_nick = None, xhtml = None, session = None, forward_from = None):
 		if not self.connection:
 			return 1
 		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
@@ -868,7 +870,7 @@ class Connection(ConnectionHandlers):
 			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
 				user_nick)
 
-		# chatstates - if peer supports jep85 or jep22, send chatstates
+		# chatstates - if peer supports xep85 or xep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
 		if chatstate is not None:
@@ -893,6 +895,15 @@ class Connection(ConnectionHandlers):
 				namespace=common.xmpp.NS_ADDRESS)
 			addresses.addChild('address', attrs = {'type': 'ofrom',
 				'jid': forward_from})
+		if session:
+			# XEP-0201
+			session.last_send = time.time()
+			msg_iq.setThread(session.thread_id)
+
+			# XEP-0200
+			if session.enable_encryption:
+				msg_iq = session.encrypt_stanza(msg_iq)
+
 		self.connection.send(msg_iq)
 		if not forward_from:
 			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
@@ -912,6 +923,18 @@ class Connection(ConnectionHandlers):
 					except exceptions.PysqliteOperationalError, e:
 						self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 			self.dispatch('MSGSENT', (jid, msg, keyID))
+
+		if session.is_loggable():
+			log_msg = msg
+			if subject:
+				log_msg = _('Subject: %s\n%s') % (subject, msg)
+			if log_msg:
+				if type == 'chat':
+					kind = 'chat_msg_sent'
+				else:
+					kind = 'single_msg_sent'
+				gajim.logger.write(kind, jid, log_msg)
+		self.dispatch('MSGSENT', (jid, msg, keyID))
 	
 	def send_stanza(self, stanza):
 		''' send a stanza untouched '''

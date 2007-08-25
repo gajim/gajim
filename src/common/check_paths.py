@@ -122,7 +122,7 @@ def check_and_possibly_create_paths():
 			print _('%s is a directory but should be a file') % LOG_DB_PATH
 			print _('Gajim will now exit')
 			sys.exit()
-
+		
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that
 			create_path(dot_gajim)

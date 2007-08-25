@@ -105,6 +105,7 @@ class ConfigPaths:
 	def init_profile(self, profile = ''):
 		conffile = windowsify(u'config')
 		pidfile = windowsify(u'gajim')
+		secretsfile = windowsify(u'secrets')
 
 		if len(profile) > 0:
 			conffile += u'.' + profile
@@ -112,6 +113,7 @@ class ConfigPaths:
 		pidfile += u'.pid'
 		self.add_from_root('CONFIG_FILE', conffile)
 		self.add_from_root('PID_FILE', pidfile)
+		self.add_from_root('SECRETS_FILE', secretsfile)
 
 		# for k, v in paths.iteritems():
 		# 	print "%s: %s" % (repr(k), repr(v))
