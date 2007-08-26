@@ -1888,7 +1888,7 @@ class RosterWindow:
 			try:
 				pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
 				if filesize > 16384: # 16 kb
-					# get the image at 'notification size'
+					# get the image at 'tooltip size'
 					# and hope that user did not specify in ACE crazy size
 					pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'tooltip')
 			except gobject.GError, msg: # unknown format
@@ -1896,21 +1896,14 @@ class RosterWindow:
 				msg = str(msg)
 				dialogs.ErrorDialog(_('Could not load image'), msg)
 				return
-			puny_jid = helpers.sanitize_filename(contact.jid)
-			path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + '_local.png'
-			pixbuf.save(path_to_file, 'png')
+			gajim.interface.save_avatar_files(contact.jid, pixbuf, local = True)
 			dlg.destroy()
 			self.update_avatar_in_gui(contact.jid, account)
 
 		def on_clear(widget):
 			dlg.destroy()
 			# Delete file:
-			puny_jid = helpers.sanitize_filename(contact.jid)
-			path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + '_local.png'
-			try:
-				os.remove(path_to_file)
-			except OSError:
-				gajim.log.debug('Cannot remove %s' % path_to_file)
+			gajim.interface.remove_avatar_files(contact.jid, local = True)
 			self.update_avatar_in_gui(contact.jid, account)
 
 		dlg = dialogs.AvatarChooserDialog(on_response_ok = on_ok,

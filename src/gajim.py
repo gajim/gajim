@@ -1463,50 +1463,63 @@ class Interface:
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewGmail', (account, array))
 
-	def save_avatar_files(self, jid, photo_decoded, puny_nick = None):
-		'''Save the decoded avatar to a separate file, and generate files for dbus notifications'''
+	def save_avatar_files(self, jid, photo, puny_nick = None, local = False):
+		'''Saves an avatar to a separate file, and generate files for dbus notifications. An avatar can be given as a pixmap directly or as an decoded image.'''
 		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
 		if puny_nick:
 			path_to_file = os.path.join(path_to_file, puny_nick)
 		# remove old avatars
 		for typ in ('jpeg', 'png'):
-			path_to_original_file = path_to_file + '.' + typ
+			if local:
+				path_to_original_file = path_to_file + '_local'+  '.' + typ
+			else:
+				path_to_original_file = path_to_file + '.' + typ
 			if os.path.isfile(path_to_original_file):
 				os.remove(path_to_original_file)
-		pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo_decoded,
-			want_type = True)
-		if pixbuf is None:
-			return
-		if typ not in ('jpeg', 'png'):
-			gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. saving %s\'avatar as png file (originaly %s)' % (jid, typ))
-			typ = 'png'
-		path_to_original_file = path_to_file + '.' + typ
+		if local and photo:
+			pixbuf = photo
+			type = 'png'
+			extension = '_local.png' # save local avatars as png file
+		else:
+			pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo, want_type = True)
+			extension = '.' + typ
+			if  pixbuf is None:
+				return
+			if typ not in ('jpeg', 'png'):
+				gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. saving %s\'avatar as png file (originaly %s)' % (jid, typ))
+				typ = 'png'
+				extension = '.png'
+		path_to_original_file = path_to_file + extension
 		pixbuf.save(path_to_original_file, typ)
 		# Generate and save the resized, color avatar
-		pixbuf = gtkgui_helpers.get_scaled_pixbuf(
-			gtkgui_helpers.get_pixbuf_from_data(photo_decoded), 'notification')
+		pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'notification')
 		if pixbuf:
-			path_to_normal_file = path_to_file + '_notif_size_colored.png'
+			path_to_normal_file = path_to_file + '_notif_size_colored' + extension
 			pixbuf.save(path_to_normal_file, 'png')
 			# Generate and save the resized, black and white avatar
 			bwbuf = gtkgui_helpers.get_scaled_pixbuf(
 				gtkgui_helpers.make_pixbuf_grayscale(pixbuf), 'notification')
 			if bwbuf:
-				path_to_bw_file = path_to_file + '_notif_size_bw.png'
+				path_to_bw_file = path_to_file + '_notif_size_bw' + extension
 				bwbuf.save(path_to_bw_file, 'png')
 
-	def remove_avatar_files(self, jid, puny_nick = None):
+	def remove_avatar_files(self, jid, puny_nick = None, local = False):
 		'''remove avatar files of a jid'''
 		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
 		if puny_nick:
 			path_to_file = os.path.join(path_to_file, puny_nick)
-		for ext in ('.jpeg', '.png', '_notif_size_colored.png',
-		'_notif_size_bw.png'):
+		for ext in ('.jpeg', '.png'):
+			if local:
+				ext = '_local' + ext
 			path_to_original_file = path_to_file + ext
-			if os.path.isfile(path_to_original_file):
-				os.remove(path_to_original_file)
+			if os.path.isfile(path_to_file + ext):
+				os.remove(path_to_file + ext)
+			if os.path.isfile(path_to_file + '_notif_size_colored' + ext):
+				os.remove(path_to_file + '_notif_size_colored' + ext)
+			if os.path.isfile(path_to_file + '_notif_size_bw' + ext):
+				os.remove(path_to_file + '_notif_size_bw' + ext)
 
 	# list the retained secrets we have for a local account and a remote jid
 	def list_secrets(self, account, jid):

@@ -605,7 +605,7 @@ def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
 		filepath, extension = os.path.splitext(path_to_file) 
 		path_to_local_file = filepath + '_local' + extension 
-		if os.path.exists(path_to_local_file): 
+		if os.path.exists(path_to_local_file):
 			return path_to_local_file
 		if os.path.exists(path_to_file):
 			return path_to_file
