@@ -24,7 +24,7 @@ import socket
 import sys
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
-	time as time_time, timezone, tzname)
+	time as time_time, timezone, tzname, strptime)
 from calendar import timegm
 
 import socks5
