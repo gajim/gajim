@@ -554,8 +554,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			# FIXME: This happens when we switch an already
 			# connected socket to SSL (STARTTLS). Instead of
 			# ignoring the error, the socket should only be
-			# connected to once. See #2846.
-			workaround = (errno.EALREADY, 10056)
+			# connected to once. See #2846 and #3396.
+			workaround = (errno.EALREADY, 10056, 56)
 
 			# 10035 - winsock equivalent of EINPROGRESS
 			if errnum not in (errno.EINPROGRESS, 10035) + workaround:
