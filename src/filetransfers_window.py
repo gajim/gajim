@@ -471,7 +471,7 @@ _('Connection with peer cannot be established.'))
 		if full_size == 0:
 			percent = 0
 		else:
-			percent = round(float(transfered_size) / full_size * 100)
+			percent = round(float(transfered_size) / full_size * 100, 1)
 		if iter is None:
 			iter = self.get_iter_by_sid(typ, sid)
 		if iter is not None:
