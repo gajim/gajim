@@ -905,7 +905,7 @@ class Connection(ConnectionHandlers):
 				msg_iq = session.encrypt_stanza(msg_iq)
 
 		self.connection.send(msg_iq)
-		if not forward_from:
+		if not forward_from and session.is_loggable():
 			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
 				.split()
 			ji = gajim.get_jid_without_resource(jid)
@@ -922,20 +922,8 @@ class Connection(ConnectionHandlers):
 						gajim.logger.write(kind, jid, log_msg)
 					except exceptions.PysqliteOperationalError, e:
 						self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
-			self.dispatch('MSGSENT', (jid, msg, keyID))
-
-		if session.is_loggable():
-			log_msg = msg
-			if subject:
-				log_msg = _('Subject: %s\n%s') % (subject, msg)
-			if log_msg:
-				if type == 'chat':
-					kind = 'chat_msg_sent'
-				else:
-					kind = 'single_msg_sent'
-				gajim.logger.write(kind, jid, log_msg)
 		self.dispatch('MSGSENT', (jid, msg, keyID))
-	
+
 	def send_stanza(self, stanza):
 		''' send a stanza untouched '''
 		if not self.connection:
