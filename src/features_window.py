@@ -89,6 +89,10 @@ class FeaturesWindow:
 				_('Transform LaTeX espressions between $$ $$.'),
 				_('Requires texlive-latex-base, dvips and imagemagick. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
 				_('Feature not available under Windows.')),
+			_('End to end encryption'): (self.pycrypto_available,
+				_('Encrypting chatmessages.'),
+				_('Requires python-crypto.'),
+				_('Requires python-crypto.')),
 		}
 
 		# name, supported
@@ -274,3 +278,7 @@ class FeaturesWindow:
 		if exitcode == 0:
 			return True
 		return False
+
+	def pycrypto_available(self):
+		from common import gajim
+		return gajim.HAVE_PYCRYPTO
