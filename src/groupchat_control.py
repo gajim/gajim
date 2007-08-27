@@ -1289,29 +1289,29 @@ class GroupchatControl(ChatControlBase):
 			# example: /join room@conference.example.com/nick
 			if len(message_array):
 				room_jid = message_array[0]
-				if room_jid.find('@') >= 0:
-					if room_jid.find('/') >= 0:
-						room_jid, nick = room_jid.split('/', 1)
-					else:
-						nick = ''
-					# join_gc window is needed in order to provide for password entry.
-					if gajim.interface.instances[self.account].has_key('join_gc'):
-						gajim.interface.instances[self.account]['join_gc'].\
-							window.present()
-					else:
-						try:
-							gajim.interface.instances[self.account]['join_gc'] =\
-								dialogs.JoinGroupchatWindow(self.account,
-									room_jid = room_jid, nick = nick)
-						except GajimGeneralException:
-							pass
-					self.clear(self.msg_textview)
-				else:
-					#%s is something the user wrote but it is not a jid so we inform
-					s = _('%s does not appear to be a valid JID') % message_array[0]
-					self.print_conversation(s, 'info')
 			else:
-				self.get_command_help(command)
+				room_jid = '@' + gajim.get_server_from_jid(self.room_jid)
+			if room_jid.find('@') >= 0:
+				if room_jid.find('/') >= 0:
+					room_jid, nick = room_jid.split('/', 1)
+				else:
+					nick = ''
+				# join_gc window is needed in order to provide for password entry.
+				if gajim.interface.instances[self.account].has_key('join_gc'):
+					gajim.interface.instances[self.account]['join_gc'].\
+						window.present()
+				else:
+					try:
+						gajim.interface.instances[self.account]['join_gc'] =\
+							dialogs.JoinGroupchatWindow(self.account,
+								room_jid = room_jid, nick = nick)
+					except GajimGeneralException:
+						pass
+				self.clear(self.msg_textview)
+			else:
+				#%s is something the user wrote but it is not a jid so we inform
+				s = _('%s does not appear to be a valid JID') % message_array[0]
+				self.print_conversation(s, 'info')
 			return True
 		elif command == 'leave' or command == 'part' or command == 'close':
 			# Leave the room and close the tab or window
