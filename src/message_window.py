@@ -349,7 +349,6 @@ class MessageWindow:
 			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
 			gajim.interface.msg_win_mgr._on_window_destroy(self.window)
 			# dnd clean up
-			self.notebook.disconnect(self.hid)
 			self.notebook.drag_dest_unset()
 			self.window.destroy()
 			return # don't show_title, we are dead
