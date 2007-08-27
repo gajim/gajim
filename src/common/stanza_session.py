@@ -14,10 +14,6 @@ import time
 from common import dh
 import xmpp.c14n
 
-from Crypto.Cipher import AES
-from Crypto.Hash import HMAC, SHA256
-from Crypto.PublicKey import RSA
-
 import base64
 
 XmlDsig = 'http://www.w3.org/2000/09/xmldsig#'
@@ -99,25 +95,31 @@ class StanzaSession(object):
 		# we could send an acknowledgement message here, but we won't.
 		self.status = None
 
-# an encrypted stanza negotiation has several states. i've represented them as the following values in the 'status' 
+if gajim.HAVE_PYCRYPTO:
+	from Crypto.Cipher import AES
+	from Crypto.Hash import HMAC, SHA256
+	from Crypto.PublicKey import RSA
+
+# an encrypted stanza negotiation has several states. i've represented them
+# as the following values in the 'status' 
 # attribute of the session object:
 
 # 1. None:
 #				default state
 # 2. 'requested-e2e':
-#				this client has initiated an esession negotiation and is waiting for
-#				a response
+#				this client has initiated an esession negotiation and is waiting
+#				for a response
 # 3. 'responded-e2e':
-#				this client has responded to an esession negotiation request and is
-#				waiting for the initiator to identify itself and complete the
+#				this client has responded to an esession negotiation request and
+#				is waiting for the initiator to identify itself and complete the
 #				negotiation
 # 4. 'identified-alice':
-#				this client identified itself and is waiting for the responder to 
+#				this client identified itself and is waiting for the responder to
 #				identify itself and complete the negotiation
 # 5. 'active':
-#				an encrypted session has been successfully negotiated. messages of
-#				any of the types listed in 'encryptable_stanzas' should be encrypted
-# 			before they're sent.
+#				an encrypted session has been successfully negotiated. messages
+#				of any of the types listed in 'encryptable_stanzas' should be
+#				encrypted before they're sent.
 
 # the transition between these states is handled in gajim.py's
 #	handle_session_negotiation method.
@@ -144,7 +146,8 @@ class EncryptedStanzaSession(StanzaSession):
 	# keep the encrypter updated with my latest cipher key
 	def set_kc_s(self, value):
 		self._kc_s = value
-		self.encrypter = self.cipher.new(self._kc_s, self.cipher.MODE_CTR, counter=self.encryptcounter)
+		self.encrypter = self.cipher.new(self._kc_s, self.cipher.MODE_CTR,
+			counter=self.encryptcounter)
 
 	def get_kc_s(self):
 		return self._kc_s
@@ -152,7 +155,8 @@ class EncryptedStanzaSession(StanzaSession):
 	# keep the decrypter updated with the other party's latest cipher key
 	def set_kc_o(self, value):
 		self._kc_o = value
-		self.decrypter = self.cipher.new(self._kc_o, self.cipher.MODE_CTR, counter=self.decryptcounter)
+		self.decrypter = self.cipher.new(self._kc_o, self.cipher.MODE_CTR,
+			counter=self.decryptcounter)
 	
 	def get_kc_o(self):
 		return self._kc_o
@@ -167,7 +171,8 @@ class EncryptedStanzaSession(StanzaSession):
 		else:
 			return chr(n)
 
-	# convert a large integer to a big-endian bitstring, padded with \x00s to 16 bytes
+	# convert a large integer to a big-endian bitstring, padded with \x00s to
+	# 16 bytes
 	def encode_mpi_with_padding(self, n):
 		ret = self.encode_mpi(n)
 
@@ -195,13 +200,16 @@ class EncryptedStanzaSession(StanzaSession):
 	def sign(self, string):
 		if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
 			hash = self.sha256(string)
-			return self.encode_mpi(gajim.interface.pubkey.sign(hash, '')[0])
+			return self.encode_mpi(gajim.pubkey.sign(hash, '')[0])
 
 	def encrypt_stanza(self, stanza):
-		encryptable = filter(lambda x: x.getName() not in ('error', 'amp', 'thread'), stanza.getChildren())
+		encryptable = filter(lambda x: x.getName() not in ('error', 'amp',
+			'thread'), stanza.getChildren())
 
-		# XXX can also encrypt contents of <error/> elements in stanzas @type = 'error'
-		# (except for <defined-condition xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/> child elements)
+		# XXX can also encrypt contents of <error/> elements in stanzas @type =
+		# 'error'
+		# (except for <defined-condition
+		# xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/> child elements)
 
 		old_en_counter = self.c_s
 
@@ -220,7 +228,8 @@ class EncryptedStanzaSession(StanzaSession):
 		# XXX check for rekey request, handle <key/> elements
 
 		m_content = ''.join(map(str, c.getChildren()))
-		c.NT.mac = base64.b64encode(self.hmac(self.km_s, m_content + self.encode_mpi(old_en_counter)))
+		c.NT.mac = base64.b64encode(self.hmac(self.km_s, m_content + \
+			self.encode_mpi(old_en_counter)))
 
 		return stanza
 
@@ -278,15 +287,18 @@ class EncryptedStanzaSession(StanzaSession):
 		return self.random_bytes(8)
 
 	def decrypt_stanza(self, stanza):
-		c = stanza.getTag(name='c', namespace='http://www.xmpp.org/extensions/xep-0200.html#ns')
+		c = stanza.getTag(name='c',
+			namespace='http://www.xmpp.org/extensions/xep-0200.html#ns')
 
 		stanza.delChild(c)
 
 		# contents of <c>, minus <mac>, minus whitespace
-		macable = ''.join(map(str, filter(lambda x: x.getName() != 'mac', c.getChildren())))
+		macable = ''.join(map(str, filter(lambda x: x.getName() != 'mac',
+			c.getChildren())))
 
 		received_mac = base64.b64decode(c.getTagData('mac'))
-		calculated_mac = self.hmac(self.km_o, macable + self.encode_mpi_with_padding(self.c_o))
+		calculated_mac = self.hmac(self.km_o, macable + \
+			self.encode_mpi_with_padding(self.c_o))
 
 		if not calculated_mac == received_mac:
 			raise exceptions.DecryptionError, 'bad signature'
@@ -351,7 +363,8 @@ class EncryptedStanzaSession(StanzaSession):
 				if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
 					keyvalue = parsed.getTag(name='RSAKeyValue', namespace=XmlDsig)
 
-					n, e = map(lambda x: self.decode_mpi(base64.b64decode(keyvalue.getTagData(x))), ('Modulus', 'Exponent'))
+					n, e = map(lambda x: self.decode_mpi(base64.b64decode(
+						keyvalue.getTagData(x))), ('Modulus', 'Exponent'))
 					eir_pubkey = RSA.construct((n,long(e)))
 
 					pubkey_o = xmpp.c14n.c14n(keyvalue)
@@ -359,7 +372,8 @@ class EncryptedStanzaSession(StanzaSession):
 					# XXX DSA, etc.
 					raise 'unimplemented'
 
-			enc_sig = parsed.getTag(name='SignatureValue', namespace=XmlDsig).getData()
+			enc_sig = parsed.getTag(name='SignatureValue',
+				namespace=XmlDsig).getData()
 			signature = (self.decode_mpi(base64.b64decode(enc_sig)),)
 		else:
 			mac_o = self.decrypt(id_o)
@@ -390,7 +404,7 @@ class EncryptedStanzaSession(StanzaSession):
 	def make_identity(self, form, dh_i):
 		if self.negotiated['send_pubkey']:
 			if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
-				fields = (gajim.interface.pubkey.n, gajim.interface.pubkey.e)
+				fields = (gajim.pubkey.n, gajim.pubkey.e)
 
 				cb_fields = map(lambda f: base64.b64encode(self.encode_mpi(f)), fields)
 

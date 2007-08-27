@@ -118,7 +118,6 @@ from chat_control import ChatControlBase
 from atom_window import AtomWindow
 
 import negotiation
-import Crypto.PublicKey.RSA
 
 from common import exceptions
 from common.zeroconf import connection_zeroconf
@@ -2764,10 +2763,6 @@ class Interface:
 		else:
 			gobject.timeout_add(2000, self.process_connections)
 		gobject.timeout_add(10000, self.read_sleepy)
-
-		# public key for XEP-0116
-		# XXX os.urandom is not a cryptographic PRNG
-		self.pubkey = Crypto.PublicKey.RSA.generate(384, os.urandom)
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):

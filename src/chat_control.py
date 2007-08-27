@@ -1592,8 +1592,11 @@ class ChatControl(ChatControlBase):
 		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
 
 		# TODO: check that the remote client supports e2e
-		isactive = int(self.session != None and self.session.enable_encryption)
-		toggle_e2e_menuitem.set_active(isactive)
+		if not gajim.HAVE_PYCRYPTO:
+			toggle_e2e_menuitem.set_sensitive(False)
+		else:
+			isactive = int(self.session != None and self.session.enable_encryption)
+			toggle_e2e_menuitem.set_active(isactive)
 
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too

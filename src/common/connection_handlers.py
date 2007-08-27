@@ -1490,7 +1490,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 		if msg.getTag('feature') and msg.getTag('feature').namespace == \
 		common.xmpp.NS_FEATURE:
-			self._FeatureNegCB(con, msg, session)
+			if gajim.HAVE_PYCRYPTO:
+				self._FeatureNegCB(con, msg, session)
 			return
 		if msg.getTag('init') and msg.getTag('init').namespace == \
 		common.xmpp.NS_ESESSION_INIT:
