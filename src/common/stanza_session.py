@@ -41,7 +41,7 @@ class StanzaSession(object):
 		self.negotiated = {}
 	
 	def generate_thread_id(self):
-		return "".join([random.choice(string.letters) for x in xrange(0,32)])
+		return "".join([random.choice(string.ascii_letters) for x in xrange(0,32)])
 
 	def send(self, msg):
 		if self.thread_id:
