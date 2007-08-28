@@ -4486,6 +4486,8 @@ class RosterWindow:
 		for account in gajim.connections:
 			for addr in gajim.interface.instances[account]['disco']:
 				gajim.interface.instances[account]['disco'][addr].paint_banner()
+			for ctrl in gajim.interface.minimized_controls[account].values():
+				ctrl.repaint_themed_widgets()
 
 	def on_show_offline_contacts_menuitem_activate(self, widget):
 		'''when show offline option is changed:
