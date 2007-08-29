@@ -529,9 +529,8 @@ def make_python_month_gtk_month(month):
 def make_color_string(color):
 	'''create #aabbcc color string from gtk color'''
 	col = '#'
-	for i in (color.red, color.green, color.blue):
-		# GTK sometime return a value > 256
-		h = hex(i%256)[2:4]
+	for i in ('red', 'green', 'blue'):
+		h = hex(getattr(color, i) / (16*16)).split('x')[1]
 		if len(h) == 1:
 			h = '0' + h
 		col += h
