@@ -1326,8 +1326,7 @@ class RosterWindow:
 				contact = gajim.contacts.create_contact(jid = jid,
 					name = account_name, show = connection.get_status(), sub = '',
 					status = connection.status,
-					resource = gajim.config.get_per('accounts', connection.name,
-						'resource'),
+					resource = connection.server_resource,
 					priority = connection.priority,
 					keyID = gajim.config.get_per('accounts', connection.name,
 						'keyid'))
@@ -2659,7 +2658,7 @@ class RosterWindow:
 				gajim.connections[account].unsubscribe(contact.jid, remove_auth)
 				for c in gajim.contacts.get_contact(account, contact.jid):
 					self.remove_contact(c, account)
-				gajim.contacts.remove_jid(account, c.jid)
+				gajim.contacts.remove_jid(account, contact.jid)
 				# redraw group rows for contact numbers
 				for group in c.groups:
 					self.draw_group(group, account)
