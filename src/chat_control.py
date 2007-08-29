@@ -144,6 +144,11 @@ class ChatControlBase(MessageControl):
 		id = widget.connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
 		self.handlers[id] = widget
+		id = widget.connect('changed',
+			self.on_conversation_vadjustment_changed)
+		self.handlers[id] = widget
+		self.scroll_to_end_id = None
+		self.was_at_the_end = True
 		# add MessageTextView to UI and connect signals
 		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
@@ -551,7 +556,7 @@ class ChatControlBase(MessageControl):
 		full_jid = self.get_full_jid()
 		textview = self.conv_textview
 		end = False
-		if textview.at_the_end() or kind == 'outgoing':
+		if self.was_at_the_end or kind == 'outgoing':
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
@@ -657,7 +662,7 @@ class ChatControlBase(MessageControl):
 	def set_control_active(self, state):
 		if state:
 			jid = self.contact.jid
-			if self.conv_textview.at_the_end():
+			if self.was_at_the_end:
 				# we are at the end
 				type_ = 'printed_' + self.type_id
 				if self.type_id == message_control.TYPE_GC:
@@ -672,18 +677,23 @@ class ChatControlBase(MessageControl):
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
+		if self.scroll_to_end_id:
+			# a scroll is already planned
+			return
 		buffer = textview.get_buffer()
 		end_iter = buffer.get_end_iter()
 		end_rect = textview.get_iter_location(end_iter)
 		visible_rect = textview.get_visible_rect()
 		# scroll only if expected end is not visible
 		if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
-			gobject.idle_add(self.scroll_to_end_iter, textview)
+			self.scroll_to_end_id = gobject.idle_add(self.scroll_to_end_iter,
+				textview)
 
 	def scroll_to_end_iter(self, textview):
 		buffer = textview.get_buffer()
 		end_iter = buffer.get_end_iter()
 		textview.scroll_to_iter(end_iter, 0, False, 1, 1)
+		self.scroll_to_end_id = None
 		return False
 
 	def size_request(self, msg_textview , requisition):
@@ -741,7 +751,15 @@ class ChatControlBase(MessageControl):
 
 		return True
 
-	def on_conversation_vadjustment_value_changed(self, widget):
+	def on_conversation_vadjustment_changed(self, adjustment):
+		# used to stay at the end of the textview when we shrink conversation
+		# textview.
+		if self.was_at_the_end:
+			self.conv_textview.bring_scroll_to_end(-18)
+		self.was_at_the_end = (adjustment.upper - adjustment.value - adjustment.page_size) < 18
+
+	def on_conversation_vadjustment_value_changed(self, adjustment):
+		self.was_at_the_end = (adjustment.upper - adjustment.value - adjustment.page_size) < 18
 		if self.resource:
 			jid = self.contact.get_full_jid()
 		else:
@@ -753,12 +771,9 @@ class ChatControlBase(MessageControl):
 		type_])):
 			return
 		if self.conv_textview.at_the_end() and \
-				self.parent_win.get_active_control() == self and \
-				self.parent_win.window.is_active():
+		self.parent_win.get_active_control() == self and \
+		self.parent_win.window.is_active():
 			# we are at the end
-			type_ = self.type_id
-			if type_ == message_control.TYPE_GC:
-				type_ = 'gc_msg'
 			if not gajim.events.remove_events(self.account, self.get_full_jid(),
 			types = ['printed_' + type_, type_]):
 				# There were events to remove
