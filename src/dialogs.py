@@ -723,7 +723,7 @@ class AboutDialog:
 		dlg.set_transient_for(gajim.interface.roster.window)
 		dlg.set_name('Gajim')
 		dlg.set_version(gajim.version)
-		s = u'Copyright © 2003-2006 Gajim Team'
+		s = u'Copyright © 2003-2007 Gajim Team'
 		dlg.set_copyright(s)
 		copying_file_path = None
 		if os.path.isfile(os.path.join(gajim.defs.docdir, 'COPYING')):
