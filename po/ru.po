@@ -546,7 +546,7 @@ msgstr "<b>Произошла ошибка:</b>"
 
 #: ../data/glade/adhoc_commands_window.glade.h:2
 msgid "<b>Choose command to execute:</b>"
-msgstr "<b>Выберите команду:</a>"
+msgstr "<b>Выберите команду:</b>"
 
 #: ../data/glade/adhoc_commands_window.glade.h:3
 msgid "Ad-hoc Commands - Gajim"
