@@ -1,3 +1,4 @@
+# coding=utf-8
 emoticons = {
 	':-)': 'smile.png',
 	':)': 'smile.png',
