@@ -86,7 +86,7 @@ class GnomePasswordStorage(PasswordStorage):
 			display_name, attributes, password, update)
 		token = 'gnomekeyring:%i' % auth_token
 		gajim.config.set_per('accounts', account_name, 'password', token)
-
+		gajim.connections[account_name].password = password
 
 storage = None
 def get_storage():
