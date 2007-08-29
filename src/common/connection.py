@@ -36,6 +36,7 @@ from common import helpers
 from common import gajim
 from common import GnuPG
 from common import passwords
+from common import exceptions
 
 from connection_handlers import *
 USE_GPG = GnuPG.USE_GPG
@@ -781,7 +782,10 @@ class Connection(ConnectionHandlers):
 					kind = 'chat_msg_sent'
 				else:
 					kind = 'single_msg_sent'
-				gajim.logger.write(kind, jid, log_msg)
+				try:
+					gajim.logger.write(kind, jid, log_msg)
+				except exceptions.PysqliteOperationalError, e:
+					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 	
 	def send_stanza(self, stanza):

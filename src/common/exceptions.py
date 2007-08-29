@@ -21,6 +21,15 @@ class PysqliteNotAvailable(Exception):
 	def __str__(self):
 		return _('pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting...')
 
+class PysqliteOperationalError(Exception):
+	'''sqlite2 raised pysqlite2.dbapi2.OperationalError'''
+	def __init__(self, text=''):
+		Exception.__init__(self)
+		self.text = text
+
+	def __str__(self):
+		return self.text
+
 class ServiceNotAvailable(Exception):
 	'''This exception is raised when we cannot use Gajim remotely'''
 	def __init__(self):
