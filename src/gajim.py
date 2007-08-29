@@ -208,7 +208,7 @@ def pid_alive():
 					return b.contents.szExeFile
 				f = k.Process32Next(h, b)
 
-		if get_p(pid) == 'python.exe':
+		if get_p(pid) in ('python.exe', 'gajim.exe'):
 			return True
 		return False
 	try:
