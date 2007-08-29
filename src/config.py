@@ -2686,9 +2686,9 @@ class ManageBookmarksWindow:
 		nick = gajim.nicks[account]
 		iter_ = self.treestore.append(add_to, [account, _('New Group Chat'), '',
 			False, '', nick, 'in_and_out'])
-		self.view.set_cursor(model.get_path(iter_))
 
 		self.view.expand_row(model.get_path(add_to), True)
+		self.view.set_cursor(model.get_path(iter_))
 
 	def on_remove_bookmark_button_clicked(self, widget):
 		'''
