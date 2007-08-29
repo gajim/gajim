@@ -392,6 +392,10 @@ class PreferencesWindow:
 		self.auto_xa_message_entry.set_text(st)
 		self.auto_xa_message_entry.set_sensitive(gajim.config.get('autoxa'))
 
+		from common import sleepy
+		if not sleepy.SUPPORTED:
+			self.xml.get_widget('autoaway_table').set_sensitive(False)
+
 		# ask_status when online / offline
 		st = gajim.config.get('ask_online_status')
 		self.xml.get_widget('prompt_online_status_message_checkbutton').\
