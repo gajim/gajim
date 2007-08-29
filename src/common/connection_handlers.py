@@ -1873,6 +1873,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not self.connection:
 			return
 		self.connection.getRoster(self._on_roster_set)
+		self.discoverItems(gajim.config.get_per('accounts', self.name, 
+			'hostname'), id_prefix='p')
 		if gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
 			self.discover_ft_proxies()
 	
@@ -1883,9 +1885,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
 			for proxy in proxies:
 				gajim.proxy65_manager.resolve(proxy, self.connection)
-			self.discoverItems(gajim.config.get_per('accounts', self.name, 
-				'hostname'), id_prefix='p')
-	
+
 	def _on_roster_set(self, roster):
 		raw_roster = roster.getRaw()
 		roster = {}
