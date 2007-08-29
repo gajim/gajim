@@ -402,13 +402,20 @@ class ChangeStatusMessageDialog:
 			if not msg_name: # msg_name was ''
 				msg_name = msg_text_1l
 			msg_name = msg_name.decode('utf-8')
-			iter_ = self.message_liststore.append((msg_name,))
 
-			gajim.config.add_per('statusmsg', msg_name)
+			if msg_name in self.preset_messages_dict:
+				dlg2 = ConfirmationDialog(_('Overwrite Status Message?'),
+					_('This name is already used. Do you want to overwrite this status message?'))
+				resp = dlg2.run()
+				if resp != gtk.RESPONSE_OK:
+					return
+			else:
+				iter_ = self.message_liststore.append((msg_name,))
+				gajim.config.add_per('statusmsg', msg_name)
+				# select in combobox the one we just saved 
+				self.message_combobox.set_active_iter(iter_)
 			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text_1l)
 			self.preset_messages_dict[msg_name] = msg_text
-			# select in combobox the one we just saved 
-			self.message_combobox.set_active_iter(iter_)
 
 
 class AddNewContactWindow:
