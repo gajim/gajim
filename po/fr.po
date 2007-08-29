@@ -3522,7 +3522,7 @@ msgstr "Vous devez entrer un nom pour créer une liste privée."
 #: ../src/dialogs.py:2244
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
-msgstr "%Contact vous a invité dans le salon de discussion %(room_jid)s"
+msgstr "$Contact vous a invité dans le salon de discussion %(room_jid)s"
 
 #. only if not None and not ''
 #: ../src/dialogs.py:2256
