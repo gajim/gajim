@@ -1,4 +1,4 @@
-Gajim 0.11.1 (XX February 2007)
+Gajim 0.11.1 (18 February 2007)
   * Fixes in gajim-remote and the way XMPP URI are handled
   * Fix Idle under Windows
   * Fix Gajim under non-ascii languages Windows
