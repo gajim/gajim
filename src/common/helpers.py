@@ -859,6 +859,8 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
 			lines = map(lambda e: _cut_if_long(e), lines)
 	if lines:
 		reduced_text = reduce(lambda e, e1: e + '\n' + e1, lines)
+		if reduced_text != text:
+			reduced_text += '...'
 	else:
 		reduced_text = ''
 	return reduced_text

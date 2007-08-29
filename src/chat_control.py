@@ -130,6 +130,7 @@ class ChatControlBase(MessageControl):
 		self.handlers[id] = self.widget
 
 		widget = self.xml.get_widget('banner_eventbox')
+		widget.set_property('height-request', gajim.config.get('chat_avatar_height'))
 		id = widget.connect('button-press-event',
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id] = widget
@@ -1042,6 +1043,8 @@ class ChatControl(ChatControlBase):
 		jid = contact.jid
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
+		banner_eventbox = self.xml.get_widget('banner_eventbox')
+		
 		name = contact.get_shown_name()
 		if self.resource:
 			name += '/' + self.resource
@@ -1068,8 +1071,10 @@ class ChatControl(ChatControlBase):
 
 		status = contact.status
 		if status is not None:
+			self.status_tooltip.set_tip(banner_eventbox, status)
+			self.status_tooltip.enable()
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
-			status = helpers.reduce_chars_newlines(status, max_lines = 2)
+			status = helpers.reduce_chars_newlines(status, max_lines = 1)
 		status_escaped = gtkgui_helpers.escape_for_pango_markup(status)
 
 		font_attrs, font_attrs_small = self.get_font_attrs()
@@ -1102,9 +1107,6 @@ class ChatControl(ChatControlBase):
 		if status_escaped:
 			label_text += '\n<span %s>%s</span>' %\
 				(font_attrs_small, status_escaped)
-			banner_eventbox = self.xml.get_widget('banner_eventbox')
-			self.status_tooltip.set_tip(banner_eventbox, status)
-			self.status_tooltip.enable()
 		else:
 			self.status_tooltip.disable()
 		# setup the label that holds name and jid
