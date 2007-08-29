@@ -169,19 +169,21 @@ class Logger:
 				jid = jid.split('/', 1)[0] # remove the resource
 		if jid in self.jids_already_in: # we already have jids in DB
 			self.cur.execute('SELECT jid_id FROM jids WHERE jid=?', [jid])
-			jid_id = self.cur.fetchone()[0]
-		else: # oh! a new jid :), we add it now
-			if typestr == 'ROOM':
-				typ = constants.JID_ROOM_TYPE
-			else:
-				typ = constants.JID_NORMAL_TYPE
-			self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, typ))
-			try:
-				self.con.commit()
-			except sqlite.OperationalError, e:
-				print >> sys.stderr, str(e)
-			jid_id = self.cur.lastrowid
-			self.jids_already_in.append(jid)
+			row = self.cur.fetchone()
+			if row:
+				return row[0]
+		# oh! a new jid :), we add it now
+		if typestr == 'ROOM':
+			typ = constants.JID_ROOM_TYPE
+		else:
+			typ = constants.JID_NORMAL_TYPE
+		self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, typ))
+		try:
+			self.con.commit()
+		except sqlite.OperationalError, e:
+			print >> sys.stderr, str(e)
+		jid_id = self.cur.lastrowid
+		self.jids_already_in.append(jid)
 		return jid_id
 	
 	def convert_human_values_to_db_api_values(self, kind, show):
