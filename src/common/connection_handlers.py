@@ -1557,6 +1557,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		ptype = prs.getType()
 		if ptype == 'available':
 			ptype = None
+		rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed', 'unsubscribe', 'unsubscribed')
+		if ptype and not ptype in rfc_types:
+			ptype = None
 		gajim.log.debug('PresenceCB: %s' % ptype)
 		try:
 			who = helpers.get_full_jid_from_iq(prs)
