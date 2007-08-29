@@ -177,7 +177,13 @@ class Logger:
 			typ = constants.JID_ROOM_TYPE
 		else:
 			typ = constants.JID_NORMAL_TYPE
-		self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, typ))
+		try:
+			self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid,
+				typ))
+		except sqlite.IntegrityError, e:
+			# Jid already in DB, maybe added by another instance. re-read DB
+			self.get_jids_already_in_db()
+			return self.get_jid_id(jid, typestr)
 		try:
 			self.con.commit()
 		except sqlite.OperationalError, e:
