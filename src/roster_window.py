@@ -1197,26 +1197,26 @@ class RosterWindow:
 					ctrl.update_ui()
 					win.redraw_tab(ctrl)
 				gajim.contacts.remove_contact(account, contact)
- 		elif len(contact_instances) > 1 and contact.resource != '':
- 			name += '/' + contact.resource
+		elif len(contact_instances) > 1 and contact.resource != '':
+			name += '/' + contact.resource
 		self.remove_contact(contact, account)
 		self.add_contact_to_roster(contact.jid, account)
 		# print status in chat window and update status/GPG image
- 		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
- 			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
- 			ctrl = win.get_control(contact.jid, account)
- 			ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
- 				account, contact.jid)
- 			ctrl.update_ui()
- 			win.redraw_tab(ctrl)
- 
- 			uf_show = helpers.get_uf_show(show)
- 			if status:
- 				ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
- 					status), 'status')
- 			else: # No status message
- 				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
- 					'status')
+		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
+			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
+			ctrl = win.get_control(contact.jid, account)
+			ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
+				account, contact.jid)
+			ctrl.update_ui()
+			win.redraw_tab(ctrl)
+
+			uf_show = helpers.get_uf_show(show)
+			if status:
+				ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
+					status), 'status')
+			else: # No status message
+				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
+					'status')
 
 
 		if not contact.groups:
