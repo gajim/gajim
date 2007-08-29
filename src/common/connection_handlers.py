@@ -1531,7 +1531,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not no_log_for:
 			no_log_for = ''
 		no_log_for = no_log_for.split()
-		encrypted = False
 		chatstate = None
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
 		decmsg = ''
