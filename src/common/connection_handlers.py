@@ -1181,7 +1181,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			id = iq_obj.getTagAttr('confirm', 'id')
 			method = iq_obj.getTagAttr('confirm', 'method')
 			url = iq_obj.getTagAttr('confirm', 'url')
-			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj));
+			msg = iq_obj.getTagData('body') # In case it's a message with a body
+			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg));
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
@@ -1384,6 +1385,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
 			self._pubsubEventCB(con, msg)
+			return
+		# check if the message is a xep70-confirmation-request
+		if msg.getTag('confirm') and msg.getTag('confirm').namespace == \
+		common.xmpp.NS_HTTP_AUTH:
+			self._HttpAuthCB(con, msg)
 			return
 		msgtxt = msg.getBody()
 		msghtml = msg.getXHTML()
