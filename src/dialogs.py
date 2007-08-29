@@ -480,6 +480,7 @@ class AddNewContactWindow:
 			return
 		location['add_contact'] = self
 		self.xml = gtkgui_helpers.get_glade('add_new_contact_window.glade')
+		self.xml.signal_autoconnect(self)
 		self.window = self.xml.get_widget('add_new_contact_window')
 		for w in ('account_combobox', 'account_hbox', 'account_label',
 		'uid_label', 'uid_entry', 'protocol_combobox', 'protocol_jid_combobox',
@@ -551,7 +552,6 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.auto_authorize_checkbutton.show()
 		liststore = gtk.ListStore(str)
 		self.protocol_jid_combobox.set_model(liststore)
-		self.xml.signal_autoconnect(self)
 		if jid:
 			type_ = gajim.get_transport_name_from_jid(jid)
 			if not type_:
