@@ -444,7 +444,6 @@ _('Without a connection, you can not browse available services'))
 		self.style_event_id = 0
 		self.banner.realize()
 		self.paint_banner()
-		self.filter_hbox = self.xml.get_widget('filter_hbox')
 		self.action_buttonbox = self.xml.get_widget('action_buttonbox')
 
 		# Address combobox
