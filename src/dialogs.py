@@ -940,6 +940,8 @@ class WarningDialog(HigDialog):
 		'''HIG compliant warning dialog.'''
 		HigDialog.__init__( self, None, 
 			gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, pritext, sectext)
+		self.set_modal(False)
+		self.set_transient_for(gajim.interface.roster.window)
 		self.popup()
 
 class InformationDialog(HigDialog):
@@ -947,6 +949,8 @@ class InformationDialog(HigDialog):
 		'''HIG compliant info dialog.'''
 		HigDialog.__init__( self, None, 
 			gtk.MESSAGE_INFO, gtk.BUTTONS_OK, pritext, sectext)
+		self.set_modal(False)
+		self.set_transient_for(gajim.interface.roster.window)
 		self.popup()
 
 class ErrorDialog(HigDialog):
