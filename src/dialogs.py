@@ -470,21 +470,21 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.available_types = []
 		for acct in accounts:
 			for j in gajim.contacts.get_jid_list(acct):
-				contact = gajim.contacts.get_first_contact_from_jid(acct, j)
 				if gajim.jid_is_transport(j):
-					type_ = gajim.get_transport_name_from_jid(j)
+					type_ = gajim.get_transport_name_from_jid(j, False)
 					if self.agents.has_key(type_):
 						self.agents[type_].append(j)
 					else:
 						self.agents[type_] = [j]
 		# Now add the one to which we can register
 		for acct in accounts:
-			for type_ in gajim.connections[account].available_transports:
+			for type_ in gajim.connections[acct].available_transports:
 				if type_ in self.agents:
 					continue
 				self.agents[type_] = []
-				for jid_ in gajim.connections[account].available_transports[type_]:
-					self.agents[type_].append(jid_)
+				for jid_ in gajim.connections[acct].available_transports[type_]:
+					if not jid_ in self.agents[type_]:
+						self.agents[type_].append(jid_)
 				self.available_types.append(type_)
 		liststore = gtk.ListStore(str)
 		self.group_comboboxentry.set_model(liststore)
