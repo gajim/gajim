@@ -289,6 +289,7 @@ class CommandWindow:
 
 		self.form_status = command.getAttr('status')
 
+		self.commandnode = command.getAttr('node')
 		if command.getTag('x') is not None:
 			self.dataform = dataforms.ExtendForm(node=command.getTag('x'))
 
