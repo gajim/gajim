@@ -310,8 +310,9 @@ class P2PConnection(IdleObject, PlugIn):
 		if not recv_handler(None) and _tmp == self.on_receive:
 			self.on_receive = recv_handler
 		
-	def send(self, packet, is_message = False):
-		'''Append stanza to the queue of messages to be send. 
+	def send(self, packet, is_message = False, now = False):
+		'''Append stanza to the queue of messages to be send if now is
+		False, else send it instantly. 
 		If supplied data is unicode string, encode it to utf-8.
 		'''
 		if self.state <= 0:
@@ -324,7 +325,11 @@ class P2PConnection(IdleObject, PlugIn):
 		elif not isinstance(r, str): 
 			r = ustr(r).encode('utf-8')
 
-		self.sendqueue.append((r, is_message))
+		if now:
+			self.sendqueue.insert(0, (r, is_message))
+			self._do_send()
+		else:
+			self.sendqueue.append((r, is_message))
 		self._plug_idle()
 		
 	def read_timeout(self):
@@ -619,7 +624,7 @@ class ClientZeroconf:
 			return self.roster.getRoster()
 		return {}
 
-	def send(self, stanza, is_message = False):
+	def send(self, stanza, is_message = False, now = False):
 		stanza.setFrom(self.roster.zeroconf.name)
 		to = stanza.getTo()
 		
