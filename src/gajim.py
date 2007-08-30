@@ -904,14 +904,10 @@ class Interface:
 
 	def handle_event_myvcard(self, account, array):
 		nick = ''
-		if array.has_key('NICKNAME'):
-			nick = array['NICKNAME']
-			if nick:
-				gajim.nicks[account] = nick
-		if not gajim.nicks[account] and array.has_key('FN'):
-			nick = array['FN']
-			if nick:
-				gajim.nicks[account] = nick
+		if array.has_key('NICKNAME') and array['NICKNAME']:
+			gajim.nicks[account] = array['NICKNAME']
+		elif array.has_key('FN') and array['FN']:
+			gajim.nicks[account] = array['FN']
 		if self.instances[account].has_key('profile'):
 			win = self.instances[account]['profile']
 			win.set_values(array)
