@@ -430,6 +430,7 @@ class Connection(ConnectionHandlers):
 		self.dispatch('CON_TYPE', con_type)
 		ConnectionHandlers._register_handlers(self, con, con_type)
 		name = gajim.config.get_per('accounts', self.name, 'name')
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		self.connection = con
 		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
