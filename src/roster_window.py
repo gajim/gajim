@@ -4265,7 +4265,8 @@ class RosterWindow:
 						child_iter = model.iter_next(child_iter)
 			session = None
 			if first_ev:
-				session = first_ev.parameters[8]
+				if first_ev.type_ in ('chat', 'normal'):
+					session = first_ev.parameters[8]
 				fjid = jid
 				if resource:
 					fjid += '/' + resource
