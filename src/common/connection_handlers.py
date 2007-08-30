@@ -653,22 +653,12 @@ class ConnectionDisco:
 			common.xmpp.NS_DISCO, frm = to)
 		iq.setAttr('id', id)
 		query = iq.setTag('query')
-		# bytestream transfers
-		feature = common.xmpp.Node('feature')
-		feature.setAttr('var', common.xmpp.NS_BYTESTREAM)
-		query.addChild(node=feature)
-		# si methods
-		feature = common.xmpp.Node('feature')
-		feature.setAttr('var', common.xmpp.NS_SI)
-		query.addChild(node=feature)
-		# filetransfers transfers
-		feature = common.xmpp.Node('feature')
-		feature.setAttr('var', common.xmpp.NS_FILE)
-		query.addChild(node=feature)
-		# exposing adhoc commands
-		feature = common.xmpp.Node('feature')
-		feature.setAttr('var', common.xmpp.NS_COMMANDS)
-		query.addChild(node=feature)
+		query.setAttr('node','http://gajim.org/caps#' + gajim.version)
+		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI, \
+						common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
+			feature = common.xmpp.Node('feature')
+			feature.setAttr('var', f)
+			query.addChild(node=feature)
 		
 		self.connection.send(iq)
 		raise common.xmpp.NodeProcessed
@@ -731,6 +721,8 @@ class ConnectionDisco:
 		else:
 			iq = iq_obj.buildReply('result')
 			q = iq.getTag('query')
+			if node:
+				q.setAttr('node', node)
 			q.addChild('identity', attrs = {'type': 'pc', 'category': 'client',
 				'name': 'Gajim'})
 			extension = None
@@ -738,17 +730,19 @@ class ConnectionDisco:
 				extension = node[node.index('#') + 1:]
 			client_version = 'http://gajim.org/caps#' + gajim.version
 
-			if node in (None, client_version) or extension == 'ftrans':
+			if node in (None, client_version):
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_SI})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_FILE})
-			if node in (None, client_version) or extension == 'xhtml':
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
-			if node in (None, client_version):
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_CHATSTATES})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
+
+			if (node is None or extension == 'cstates') and gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_CHATSTATES})
+
+			if (node is None or extension == 'xhtml') and not gajim.config.get('ignore_incoming_xhtml'):
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
 
 			if q.getChildren():
 				self.connection.send(iq)
@@ -830,7 +824,14 @@ class ConnectionVcard:
 		''' advertise our capabilities in presence stanza (jep-0115)'''
 		c = p.setTag('c', namespace = common.xmpp.NS_CAPS)
 		c.setAttr('node', 'http://gajim.org/caps')
-		c.setAttr('ext', 'ftrans xhtml')
+		ext = []
+		if not gajim.config.get('ignore_incoming_xhtml'):
+			ext.append('xhtml')
+		if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
+			ext.append('cstates')
+ 
+		if len(ext):
+			c.setAttr('ext', ' '.join(ext))
 		c.setAttr('ver', gajim.version)
 		return p
 	
