@@ -24,7 +24,8 @@ if dbus_support.supported:
 	import dbus.glib
 
 class MusicTrackInfo(object):
-	__slots__ = ['title', 'album', 'artist', 'duration', 'track_number']
+	__slots__ = ['title', 'album', 'artist', 'duration', 'track_number',
+		'paused']
 
 
 class MusicTrackListener(gobject.GObject):
@@ -63,15 +64,29 @@ class MusicTrackListener(gobject.GObject):
 			
 		## Banshee
 		banshee_bus = dbus.SessionBus()
-		dubus = banshee_bus.get_object('org.freedesktop.DBus', '/org/freedesktop/dbus')
+		dubus = banshee_bus.get_object('org.freedesktop.DBus',
+			'/org/freedesktop/dbus')
 		self.dubus_methods = dbus.Interface(dubus, 'org.freedesktop.DBus')
+		self.current_banshee_title = ''
+		self.banshee_paused_before = False
+		self.banshee_is_here = False
+		gobject.timeout_add(10000, self._check_if_banshee_bus)
 		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
 			self._get_banshee_bus()
+			self.banshee_is_here = True
 		# Otherwise, it opens Banshee!
 		self.banshee_props ={}
-		self.current_banshee_title = ''
 		gobject.timeout_add(1000, self._banshee_check_track_status)
+	
+	def _check_if_banshee_bus(self):
+		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
+			self._get_banshee_bus()
+			self.banshee_is_here = True
+		else:
+			self.banshee_is_here = False
+		return True
 
+		
 	def _get_banshee_bus(self):
 		bus = dbus.SessionBus()
 		banshee = bus.get_object('org.gnome.Banshee', '/org/gnome/Banshee/Player')
@@ -129,15 +144,35 @@ class MusicTrackListener(gobject.GObject):
 		not hasattr(self, 'banshee_methods'):
 			self._get_banshee_bus()
 
-		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
-			self.banshee_props['title'] = self.banshee_methods.GetPlayingTitle()
-			self.banshee_props['album'] = self.banshee_methods.GetPlayingAlbum()
-			self.banshee_props['artist'] = self.banshee_methods.GetPlayingArtist()
-			self.banshee_props['duration'] = \
+		if self.dubus_methods.NameHasOwner('org.gnome.Banshee') and self.banshee_is_here:
+			try:
+				self.banshee_props['title'] = self.banshee_methods.GetPlayingTitle()
+				self.banshee_props['album'] = self.banshee_methods.GetPlayingAlbum()
+				self.banshee_props['artist'] = self.banshee_methods.\
+					GetPlayingArtist()
+				self.banshee_props['duration'] = \
 				self.banshee_methods.GetPlayingDuration()
-			info = self._banshee_properties_extract(self.banshee_props)
+				self.banshee_props['paused'] = self.banshee_methods.\
+					GetPlayingStatus()
+				info = self._banshee_properties_extract(self.banshee_props)
+			except dbus.DBusException, err:
+				info = None
+
+				for key in self.banshee_props.keys():
+					self.banshee_props[key] = ''
+				self.banshee_is_here = False
+
 			if self.current_banshee_title != self.banshee_props['title']:
 				self.emit('music-track-changed', info)
+				self.banshee_paused_before = False
+			if self.banshee_props['paused'] == 0 and self.banshee_paused_before ==\
+			False:
+				self.emit('music-track-changed', info)
+				self.banshee_paused_before = True
+			else: 
+				if self.banshee_paused_before and self.banshee_props['paused'] == 1:
+					self.emit('music-track-changed', info)
+					self.banshee_paused_before = False
 			self.current_banshee_title = self.banshee_props['title']
 		return 1
 
@@ -151,6 +186,7 @@ class MusicTrackListener(gobject.GObject):
 		info.album = props['album']
 		info.artist = props['artist']
 		info.duration = int(props['duration'])
+		info.paused = props['paused']
 		return info
 
 	def get_playing_track(self):

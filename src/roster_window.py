@@ -2962,7 +2962,11 @@ class RosterWindow:
 		if music_track_info is None:
 			status_message = ''
 		else:
-			status_message = '♪ ' + _('"%(title)s" by %(artist)s') % \
+			if hasattr(music_track_info, 'paused') and \
+			music_track_info.paused == 0:
+				status_message = ''
+			else:
+				status_message = '♪ ' + _('"%(title)s" by %(artist)s') % \
 				{'title': music_track_info.title,
 					'artist': music_track_info.artist } + ' ♪'
 		for account in accounts:
