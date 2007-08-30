@@ -3272,7 +3272,8 @@ class RosterWindow:
 		'''
 		self.close_all_from_dict(gajim.interface.instances[account])
 		for ctrl in gajim.interface.msg_win_mgr.get_controls(acct = account):
-			ctrl.parent_win.remove_tab(ctrl, force = force)
+			ctrl.parent_win.remove_tab(ctrl, ctrl.parent_win.CLOSE_CLOSE_BUTTON,
+				force = force)
 
 	def on_roster_window_delete_event(self, widget, event):
 		'''When we want to close the window'''
