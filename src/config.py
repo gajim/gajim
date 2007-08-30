@@ -1216,7 +1216,7 @@ class AccountModificationWindow:
 		self.xml.get_widget('save_password_checkbutton').set_active(
 			gajim.config.get_per('accounts', self.account, 'savepass'))
 		if gajim.config.get_per('accounts', self.account, 'savepass'):
-			passstr = passwords.get_password(self.account)
+			passstr = passwords.get_password(self.account) or ''
 			password_entry = self.xml.get_widget('password_entry')
 			password_entry.set_sensitive(True)
 			password_entry.set_text(passstr)
