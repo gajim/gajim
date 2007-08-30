@@ -67,6 +67,8 @@ class Roster:
 			status = txt_dict['status']
 		else:
 			status = ''
+		if not status:
+			status = 'avail'
 		nm = ''
 		if txt_dict.has_key('1st'):
 			nm = txt_dict['1st']
