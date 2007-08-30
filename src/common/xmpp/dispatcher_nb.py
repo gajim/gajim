@@ -399,11 +399,11 @@ class Dispatcher(PlugIn):
 			Additional callback arguments can be specified in args. '''
 		self.SendAndWaitForResponse(stanza, 0, func, args)
 	
-	def send(self, stanza, is_message = False):
+	def send(self, stanza, is_message = False, now = False):
 		''' Serialise stanza and put it on the wire. Assign an unique ID to it before send.
 			Returns assigned ID.'''
 		if type(stanza) in [type(''), type(u'')]: 
-			return self._owner.Connection.send(stanza)
+			return self._owner.Connection.send(stanza, now = now)
 		if not isinstance(stanza, Protocol): 
 			_ID=None
 		elif not stanza.getID():
@@ -427,9 +427,9 @@ class Dispatcher(PlugIn):
 		stanza.setNamespace(self._owner.Namespace)
 		stanza.setParent(self._metastream)
 		if is_message:
-			self._owner.Connection.send(stanza, True)
+			self._owner.Connection.send(stanza, True, now = now)
 		else:
-			self._owner.Connection.send(stanza)
+			self._owner.Connection.send(stanza, now = now)
 		return _ID
 	
 	def disconnect(self):

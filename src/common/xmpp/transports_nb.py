@@ -325,7 +325,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.on_connect = None
 		return True
 
-	def send(self, raw_data):
+	def send(self, raw_data, now = False):
 		'''Append raw_data to the queue of messages to be send. 
 		If supplied data is unicode string, encode it to utf-8.
 		'''
@@ -336,7 +336,11 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			r = r.encode('utf-8')
 		elif not isinstance(r, str): 
 			r = ustr(r).encode('utf-8')
-		self.sendqueue.append(r)
+		if now:
+			self.sendqueue.insert(0, r)
+			self._do_send()
+		else:
+			self.sendqueue.append(r)
 		self._plug_idle()
 
 	def _on_send(self):
