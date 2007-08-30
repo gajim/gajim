@@ -331,12 +331,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	chatstate = None, msg_id = None, composing_jep = None, resource = None, 
 	user_nick = None):
 		fjid = jid
-		
+
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
 			return
-		
+
 		if self.status in ('invisible', 'offline'):
 			self.dispatch('MSGERROR', [unicode(jid), '-1', _('You are not connected or not visible to others. Your message could not be sent.'), None, None])
 			return
@@ -344,19 +344,23 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		msgtxt = msg
 		msgenc = ''
 		if keyID and USE_GPG:
-			#encrypt
-			msgenc = self.gpg.encrypt(msg, [keyID])
-			if msgenc:
+			# encrypt
+			msgenc, error = self.gpg.encrypt(msg, [keyID])
+			if msgenc and not error:
 				msgtxt = '[This message is encrypted]'
 				lang = os.getenv('LANG')
 				if lang is not None or lang != 'en': # we're not english
 					msgtxt = _('[This message is encrypted]') +\
 						' ([This message is encrypted])' # one  in locale and one en
+			else:
+				# Encryption failed, do not send message
+				tim = time.localtime()
+				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim))
+				return 3
 
-		
 		if type == 'chat':
 			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type)
-			
+
 		else:
 			if subject:
 				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
@@ -367,7 +371,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
-		
+
 		# chatstates - if peer supports jep85 or jep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
@@ -385,7 +389,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				# when msgtxt, requests JEP-0022 composing notification
 				if chatstate is 'composing' or msgtxt: 
 					chatstate_node.addChild(name = 'composing') 
-		
+
 		if not self.connection.send(msg_iq, msg != None):
 			return
 
