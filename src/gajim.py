@@ -1625,16 +1625,20 @@ class Interface:
 				gajim.status_before_autoaway[account] = \
 					gajim.connections[account].status
 				# we go away (no auto status) [we pass True to auto param]
-				self.roster.send_status(account, 'away',
-					gajim.config.get('autoaway_message'), auto=True)
+				auto_message = gajim.config.get('autoaway_message')
+				if not auto_message:
+					auto_message = gajim.connections[account].status
+				self.roster.send_status(account, 'away', auto_message, auto=True)
 				gajim.sleeper_state[account] = 'autoaway'
 			elif state == common.sleepy.STATE_XA and (\
 				gajim.sleeper_state[account] == 'autoaway' or \
 				gajim.sleeper_state[account] == 'online') and \
 				gajim.config.get('autoxa'):
 				# we go extended away [we pass True to auto param]
-				self.roster.send_status(account, 'xa',
-					gajim.config.get('autoxa_message'), auto=True)
+				auto_message = gajim.config.get('autoxa_message')
+				if not auto_message:
+					auto_message = gajim.connections[account].status
+				self.roster.send_status(account, 'xa', auto_message, auto=True)
 				gajim.sleeper_state[account] = 'autoxa'
 		return True # renew timeout (loop for ever)
 
