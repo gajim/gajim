@@ -1907,9 +1907,14 @@ class SingleMessageWindow:
 					message)
 				return
 
+			if self.session:
+				session = self.session
+			else:
+				session = gajim.connections[self.account].make_new_session(to_whom_jid)
+
 			# FIXME: allow GPG message some day
 			gajim.connections[self.account].send_message(to_whom_jid, message,
-				keyID = None, type = 'normal', subject=subject, session = self.session)
+				keyID = None, type = 'normal', subject=subject, session = session)
 
 		self.subject_entry.set_text('') # we sent ok, clear the subject
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
