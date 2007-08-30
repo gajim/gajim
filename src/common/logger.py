@@ -495,7 +495,7 @@ class Logger:
 			
 		else: # user just typed something, we search in message column
 			where_sql = self._build_contact_where(account, jid)
-			like_sql = '%' + query + '%'
+			like_sql = '%' + query.replace("'", "''") + '%'
 			self.cur.execute('''
 				SELECT contact_name, time, kind, show, message, subject FROM logs
 				WHERE (%s) AND message LIKE '%s'
