@@ -62,11 +62,12 @@ class PreferencesWindow:
 		self.xml = gtkgui_helpers.get_glade('preferences_window.glade')
 		self.window = self.xml.get_widget('preferences_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
+		self.notebook = self.xml.get_widget('preferences_notebook')
+		self.treat_incoming_messages_combobox =\
+			self.xml.get_widget('treat_incoming_messages_combobox')
+		self.one_window_type_combobox =\
+			self.xml.get_widget('one_window_type_combobox')
 		self.iconset_combobox = self.xml.get_widget('iconset_combobox')
-		self.notify_on_new_message_radiobutton = self.xml.get_widget(
-			'notify_on_new_message_radiobutton')
-		self.popup_new_message_radiobutton = self.xml.get_widget(
-			'popup_new_message_radiobutton')
 		self.notify_on_signin_checkbutton = self.xml.get_widget(
 			'notify_on_signin_checkbutton')
 		self.notify_on_signout_checkbutton = self.xml.get_widget(
@@ -82,30 +83,10 @@ class PreferencesWindow:
 		self.auto_xa_time_spinbutton = self.xml.get_widget(
 			'auto_xa_time_spinbutton')
 		self.auto_xa_message_entry = self.xml.get_widget('auto_xa_message_entry')
-		self.trayicon_checkbutton = self.xml.get_widget('trayicon_checkbutton')
-		self.notebook = self.xml.get_widget('preferences_notebook')
-		self.one_window_type_combobox =\
-			self.xml.get_widget('one_window_type_combobox')
-		self.treat_incoming_messages_combobox =\
-			self.xml.get_widget('treat_incoming_messages_combobox')
 
 		w = self.xml.get_widget('anc_hbox')
 
-		# trayicon
-		if gajim.interface.systray_capabilities:
-			st = gajim.config.get('trayicon')
-			self.trayicon_checkbutton.set_active(st)
-		else:
-			self.trayicon_checkbutton.set_sensitive(False)
-
-		# Save position
-		st = gajim.config.get('saveposition')
-		self.xml.get_widget('save_position_checkbutton').set_active(st)
-
-		# Sort contacts by show
-		st = gajim.config.get('sort_by_show')
-		self.xml.get_widget('sort_by_show_checkbutton').set_active(st)
-
+		### General tab ###
 		# Display avatars in roster
 		st = gajim.config.get('show_avatars_in_roster')
 		self.xml.get_widget('show_avatars_in_roster_checkbutton').set_active(st)
@@ -114,6 +95,10 @@ class PreferencesWindow:
 		st = gajim.config.get('show_status_msgs_in_roster')
 		self.xml.get_widget('show_status_msgs_in_roster_checkbutton').set_active(
 			st)
+
+		# Sort contacts by show
+		st = gajim.config.get('sort_by_show')
+		self.xml.get_widget('sort_by_show_checkbutton').set_active(st)
 
 		# emoticons
 		emoticons_combobox = self.xml.get_widget('emoticons_combobox')
@@ -140,6 +125,44 @@ class PreferencesWindow:
 				emoticons_combobox.set_active(i)
 		if not gajim.config.get('emoticons_theme'):
 			emoticons_combobox.set_active(len(l)-1)
+
+		# Set default for treat incoming messages
+		choices = common.config.opt_treat_incoming_messages
+		type = gajim.config.get('treat_incoming_messages')
+		if type in choices:
+			self.treat_incoming_messages_combobox.set_active(choices.index(type))
+		else:
+			self.treat_incoming_messages_combobox.set_active(0)
+
+		# Set default for single window type
+		choices = common.config.opt_one_window_types
+		type = gajim.config.get('one_message_window')
+		if type in choices:
+			self.one_window_type_combobox.set_active(choices.index(type))
+		else:
+			self.one_window_type_combobox.set_active(0)
+
+		# Compact View
+		st = gajim.config.get('compact_view')
+		self.xml.get_widget('compact_view_checkbutton').set_active(st)
+
+		# Ignore XHTML
+		st = gajim.config.get('ignore_incoming_xhtml')
+		self.xml.get_widget('xhtml_checkbutton').set_active(st)
+
+		# use speller
+		if HAS_GTK_SPELL:
+			st = gajim.config.get('use_speller')
+			self.xml.get_widget('speller_checkbutton').set_active(st)
+		else:
+			self.xml.get_widget('speller_checkbutton').set_sensitive(False)
+
+		# Themes
+		theme_combobox = self.xml.get_widget('theme_combobox')
+		cell = gtk.CellRendererText()
+		theme_combobox.pack_start(cell, True)
+		theme_combobox.add_attribute(cell, 'text', 0)
+		self.update_theme_list()
 
 		# iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
@@ -178,121 +201,11 @@ class PreferencesWindow:
 			if gajim.config.get('iconset') == l[i]:
 				self.iconset_combobox.set_active(i)
 
-		# Set default for single window type
-		choices = common.config.opt_one_window_types
-		type = gajim.config.get('one_message_window')
-		if type in choices:
-			self.one_window_type_combobox.set_active(choices.index(type))
-		else:
-			self.one_window_type_combobox.set_active(0)
-
-		# Compact View
-		st = gajim.config.get('compact_view')
-		self.xml.get_widget('compact_view_checkbutton').set_active(st)
-		
-		# Set default for treat incoming messages
-		choices = common.config.opt_treat_incoming_messages
-		type = gajim.config.get('treat_incoming_messages')
-		if type in choices:
-			self.treat_incoming_messages_combobox.set_active(choices.index(type))
-		else:
-			self.treat_incoming_messages_combobox.set_active(0)
-
 		# Use transports iconsets
 		st = gajim.config.get('use_transports_iconsets')
 		self.xml.get_widget('transports_iconsets_checkbutton').set_active(st)
 
-		# Themes
-		theme_combobox = self.xml.get_widget('theme_combobox')
-		cell = gtk.CellRendererText()
-		theme_combobox.pack_start(cell, True)
-		theme_combobox.add_attribute(cell, 'text', 0)
-		self.update_theme_list()
-
-		# use speller
-		if os.name == 'nt':
-			self.xml.get_widget('speller_checkbutton').set_no_show_all(True)
-		else:
-			if HAS_GTK_SPELL:
-				st = gajim.config.get('use_speller')
-				self.xml.get_widget('speller_checkbutton').set_active(st)
-			else:
-				self.xml.get_widget('speller_checkbutton').set_sensitive(False)
-
-		# Ignore XHTML
-		st = gajim.config.get('ignore_incoming_xhtml')
-		self.xml.get_widget('xhtml_checkbutton').set_active(st)
-
-		# Print time
-		st = gajim.config.get('print_ichat_every_foo_minutes')
-		text = _('Every %s _minutes') % st
-		self.xml.get_widget('time_sometimes_radiobutton').set_label(text)
-
-		if gajim.config.get('print_time') == 'never':
-			self.xml.get_widget('time_never_radiobutton').set_active(True)
-		elif gajim.config.get('print_time') == 'sometimes':
-			self.xml.get_widget('time_sometimes_radiobutton').set_active(True)
-		else:
-			self.xml.get_widget('time_always_radiobutton').set_active(True)
-
-		# Color for incoming messages
-		colSt = gajim.config.get('inmsgcolor')
-		self.xml.get_widget('incoming_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Color for outgoing messages
-		colSt = gajim.config.get('outmsgcolor')
-		self.xml.get_widget('outgoing_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Color for status messages
-		colSt = gajim.config.get('statusmsgcolor')
-		self.xml.get_widget('status_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-		
-		# Color for hyperlinks
-		colSt = gajim.config.get('urlmsgcolor')
-		self.xml.get_widget('url_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Font for messages
-		font = gajim.config.get('conversation_font')
-		# try to set default font for the current desktop env
-		fontbutton = self.xml.get_widget('conversation_fontbutton')
-		if font == '':
-			fontbutton.set_sensitive(False)
-			self.xml.get_widget('default_chat_font').set_active(True)
-		else:
-			fontbutton.set_font_name(font)
-
-		# on new message
-		only_in_roster = True
-		if gajim.config.get('notify_on_new_message'):
-			self.xml.get_widget('notify_on_new_message_radiobutton').set_active(
-				True)
-			only_in_roster = False
-		if gajim.config.get('autopopup'):
-			self.xml.get_widget('popup_new_message_radiobutton').set_active(True)
-			only_in_roster = False
-		if only_in_roster:
-			self.xml.get_widget('only_in_roster_radiobutton').set_active(True)
-
-		# notify on online statuses
-		st = gajim.config.get('notify_on_signin')
-		self.notify_on_signin_checkbutton.set_active(st)
-
-		# notify on offline statuses
-		st = gajim.config.get('notify_on_signout')
-		self.notify_on_signout_checkbutton.set_active(st)
-
-		# autopopupaway
-		st = gajim.config.get('autopopupaway')
-		self.auto_popup_away_checkbutton.set_active(st)
-
-		# Ignore messages from unknown contacts
-		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
-			set_active(gajim.config.get('ignore_unknown_contacts'))
-
+		### Privacy tab ###
 		# outgoing send chat state notifications
 		st = gajim.config.get('outgoing_chat_state_notifications')
 		combo = self.xml.get_widget('outgoing_chat_states_combobox')
@@ -312,6 +225,32 @@ class PreferencesWindow:
 			combo.set_active(1)
 		else: # disabled
 			combo.set_active(2)
+
+		# Ignore messages from unknown contacts
+		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
+			set_active(gajim.config.get('ignore_unknown_contacts'))
+
+		### Events tab ###
+		# On new event
+		on_event_combobox = self.xml.get_widget('on_event_combobox')
+		if gajim.config.get('autopopup'):
+			on_event_combobox.set_active(0)
+		elif gajim.config.get('notify_on_new_message'):
+			on_event_combobox.set_active(1)
+		else:
+			on_event_combobox.set_active(2)
+
+		# notify on online statuses
+		st = gajim.config.get('notify_on_signin')
+		self.notify_on_signin_checkbutton.set_active(st)
+
+		# notify on offline statuses
+		st = gajim.config.get('notify_on_signout')
+		self.notify_on_signout_checkbutton.set_active(st)
+
+		# autopopupaway
+		st = gajim.config.get('autopopupaway')
+		self.auto_popup_away_checkbutton.set_active(st)
 
 		# sounds
 		if os.name == 'nt':
@@ -361,7 +300,7 @@ class PreferencesWindow:
 
 		self.fill_sound_treeview()
 
-		#Autoaway
+		# Autoaway
 		st = gajim.config.get('autoaway')
 		self.auto_away_checkbutton.set_active(st)
 
@@ -496,7 +435,7 @@ class PreferencesWindow:
 			widget.set_active(st)
 		else:
 			widget.set_sensitive(False)
-		
+
 		# Notify user of new gmail e-mail messages,
 		# only show checkbox if user has a gtalk account
 		frame_gmail = self.xml.get_widget('frame_gmail')
@@ -515,7 +454,37 @@ class PreferencesWindow:
 				break
 		else:
 			frame_gmail.hide()
-		
+
+		# Color for incoming messages
+		colSt = gajim.config.get('inmsgcolor')
+		self.xml.get_widget('incoming_msg_colorbutton').set_color(
+			gtk.gdk.color_parse(colSt))
+
+		# Color for outgoing messages
+		colSt = gajim.config.get('outmsgcolor')
+		self.xml.get_widget('outgoing_msg_colorbutton').set_color(
+			gtk.gdk.color_parse(colSt))
+
+		# Color for status messages
+		colSt = gajim.config.get('statusmsgcolor')
+		self.xml.get_widget('status_msg_colorbutton').set_color(
+			gtk.gdk.color_parse(colSt))
+
+		# Color for hyperlinks
+		colSt = gajim.config.get('urlmsgcolor')
+		self.xml.get_widget('url_msg_colorbutton').set_color(
+			gtk.gdk.color_parse(colSt))
+
+		# Font for messages
+		font = gajim.config.get('conversation_font')
+		# try to set default font for the current desktop env
+		fontbutton = self.xml.get_widget('conversation_fontbutton')
+		if font == '':
+			fontbutton.set_sensitive(False)
+			self.xml.get_widget('default_chat_font').set_active(True)
+		else:
+			fontbutton.set_font_name(font)
+
 		self.xml.signal_autoconnect(self)
 
 		self.sound_tree.get_model().connect('row-changed',
@@ -545,36 +514,6 @@ class PreferencesWindow:
 				w.set_sensitive(widget.get_active())
 		gajim.interface.save_config()
 
-	def on_trayicon_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			gajim.config.set('trayicon', True)
-			gajim.interface.show_systray()
-			show = helpers.get_global_show()
-			gajim.interface.systray.change_status(show)
-		else:
-			gajim.config.set('trayicon', False)
-			if not gajim.interface.roster.window.get_property('visible'):
-				gajim.interface.roster.window.present()
-			gajim.interface.hide_systray()
-			# no tray, show roster!
-			gajim.config.set('show_roster_on_startup', True)
-		gajim.interface.roster.draw_roster()
-		gajim.interface.save_config()
-
-	def on_save_position_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'saveposition')
-
-	def on_sort_by_show_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'sort_by_show')
-		gajim.interface.roster.draw_roster()
-
-	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
-		gajim.interface.roster.draw_roster()
-		for ctl in gajim.interface.msg_win_mgr.controls():
-			if ctl.type_id == message_control.TYPE_GC:
-				ctl.update_ui()
-
 	def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
 		gajim.interface.roster.draw_roster()
@@ -585,7 +524,18 @@ class PreferencesWindow:
 					message_control.TYPE_GC) + \
 					gajim.interface.minimized_controls[account].values():
 						gc_control.draw_roster()
-	
+
+	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
+		gajim.interface.roster.draw_roster()
+		for ctl in gajim.interface.msg_win_mgr.controls():
+			if ctl.type_id == message_control.TYPE_GC:
+				ctl.update_ui()
+
+	def on_sort_by_show_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'sort_by_show')
+		gajim.interface.roster.draw_roster()
+
 	def on_emoticons_combobox_changed(self, widget):
 		active = widget.get_active()
 		model = widget.get_model()
@@ -604,51 +554,10 @@ class PreferencesWindow:
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.toggle_emoticons()
 
-	def on_iconset_combobox_changed(self, widget):
-		model = widget.get_model()
+	def on_treat_incoming_messages_combobox_changed(self, widget):
 		active = widget.get_active()
-		icon_string = model[active][1].decode('utf-8')
-		gajim.config.set('iconset', icon_string)
-		gajim.interface.roster.reload_jabber_state_images()
-		gajim.interface.save_config()
-
-	def on_transports_iconsets_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
-		gajim.interface.roster.reload_jabber_state_images()
-
-	def on_manage_theme_button_clicked(self, widget):
-		if self.theme_preferences is None:
-			self.theme_preferences = dialogs.GajimThemesWindow()
-		else:
-			self.theme_preferences.window.present()
-			self.theme_preferences.select_active_theme()
-
-	def on_theme_combobox_changed(self, widget):
-		model = widget.get_model()
-		active = widget.get_active()
-		config_theme = model[active][0].decode('utf-8').replace(' ', '_')
-
-		gajim.config.set('roster_theme', config_theme)
-
-		# begin repainting themed widgets throughout
-		gajim.interface.roster.repaint_themed_widgets()
-		gajim.interface.roster.change_roster_style(None)
-		gajim.interface.save_config()
-
-	def update_theme_list(self):
-		theme_combobox = self.xml.get_widget('theme_combobox')
-		model = gtk.ListStore(str)
-		theme_combobox.set_model(model) 
-		i = 0
-		for config_theme in gajim.config.get_per('themes'):
-			theme = config_theme.replace('_', ' ')
-			model.append([theme])
-			if gajim.config.get('roster_theme') == config_theme:
-				theme_combobox.set_active(i)
-			i += 1
-
-	def on_open_advanced_notifications_button_clicked(self, widget):
-		dialogs.AdvancedNotificationsWindow()
+		config_type = common.config.opt_treat_incoming_messages[active]
+		gajim.config.set('treat_incoming_messages', config_type)
 
 	def on_one_window_type_combo_changed(self, widget):
 		active = widget.get_active()
@@ -657,10 +566,16 @@ class PreferencesWindow:
 		gajim.interface.save_config()
 		gajim.interface.msg_win_mgr.reconfig()
 
-	def on_treat_incoming_messages_combobox_changed(self, widget):
+	def on_compact_view_checkbutton_toggled(self, widget):
 		active = widget.get_active()
-		config_type = common.config.opt_treat_incoming_messages[active]
-		gajim.config.set('treat_incoming_messages', config_type)
+		for ctl in gajim.interface.msg_win_mgr.controls():
+			ctl.chat_buttons_set_visible(active)
+		gajim.config.set('compact_view', active)
+		gajim.interface.save_config()
+		gajim.interface.roster.draw_roster()
+
+	def on_xhtml_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
 
 	def apply_speller(self):
 		for acct in gajim.connections:
@@ -685,15 +600,6 @@ class PreferencesWindow:
 					if spell_obj:
 						spell_obj.detach()
 
-	def on_compact_view_checkbutton_toggled(self, widget):
-		active = widget.get_active()
-		for ctl in gajim.interface.msg_win_mgr.controls():
-			ctl.chat_buttons_set_visible(active)
-		gajim.config.set('compact_view', active)
-		gajim.interface.save_config()
-		gajim.interface.roster.draw_roster()
-
-	
 	def on_speller_checkbutton_toggled(self, widget):
 		active = widget.get_active()
 		gajim.config.set('use_speller', active)
@@ -719,22 +625,111 @@ class PreferencesWindow:
 		else:
 			self.remove_speller()
 
-	def on_xhtml_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
-		
-	def on_time_never_radiobutton_toggled(self, widget):
-		if widget.get_active():
-			gajim.config.set('print_time', 'never')
+	def on_theme_combobox_changed(self, widget):
+		model = widget.get_model()
+		active = widget.get_active()
+		config_theme = model[active][0].decode('utf-8').replace(' ', '_')
+
+		gajim.config.set('roster_theme', config_theme)
+
+		# begin repainting themed widgets throughout
+		gajim.interface.roster.repaint_themed_widgets()
+		gajim.interface.roster.change_roster_style(None)
 		gajim.interface.save_config()
 
-	def on_time_sometimes_radiobutton_toggled(self, widget):
-		if widget.get_active():
-			gajim.config.set('print_time', 'sometimes')
+	def update_theme_list(self):
+		theme_combobox = self.xml.get_widget('theme_combobox')
+		model = gtk.ListStore(str)
+		theme_combobox.set_model(model) 
+		i = 0
+		for config_theme in gajim.config.get_per('themes'):
+			theme = config_theme.replace('_', ' ')
+			model.append([theme])
+			if gajim.config.get('roster_theme') == config_theme:
+				theme_combobox.set_active(i)
+			i += 1
+
+	def on_manage_theme_button_clicked(self, widget):
+		if self.theme_preferences is None:
+			self.theme_preferences = dialogs.GajimThemesWindow()
+		else:
+			self.theme_preferences.window.present()
+			self.theme_preferences.select_active_theme()
+
+	def on_iconset_combobox_changed(self, widget):
+		model = widget.get_model()
+		active = widget.get_active()
+		icon_string = model[active][1].decode('utf-8')
+		gajim.config.set('iconset', icon_string)
+		gajim.interface.roster.reload_jabber_state_images()
 		gajim.interface.save_config()
 
-	def on_time_always_radiobutton_toggled(self, widget):
-		if widget.get_active():
-			gajim.config.set('print_time', 'always')
+	def on_transports_iconsets_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
+		gajim.interface.roster.reload_jabber_state_images()
+
+	def on_outgoing_chat_states_combobox_changed(self, widget):
+		active = widget.get_active()
+		if active == 0: # all
+			gajim.config.set('outgoing_chat_state_notifications', 'all')
+		elif active == 1: # only composing
+			gajim.config.set('outgoing_chat_state_notifications', 'composing_only')
+		else: # disabled
+			gajim.config.set('outgoing_chat_state_notifications', 'disabled')
+
+	def on_displayed_chat_states_combobox_changed(self, widget):
+		active = widget.get_active()
+		if active == 0: # all
+			gajim.config.set('displayed_chat_state_notifications', 'all')
+		elif active == 1: # only composing
+			gajim.config.set('displayed_chat_state_notifications',
+				'composing_only')
+		else: # disabled
+			gajim.config.set('displayed_chat_state_notifications', 'disabled')
+
+	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
+
+	def on_on_event_combobox_changed(self, widget):
+		active = widget.get_active()
+		if active == 0:
+			gajim.config.set('autopopup', True)
+			gajim.config.set('notify_on_new_message', False)
+		elif active == 1:
+			gajim.config.set('autopopup', False)
+			gajim.config.set('notify_on_new_message', True)
+		else:
+			gajim.config.set('autopopup', False)
+			gajim.config.set('notify_on_new_message', False)
+
+	def on_notify_on_signin_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'notify_on_signin')
+
+	def on_notify_on_signout_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'notify_on_signout')
+
+	def on_auto_popup_away_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'autopopupaway')
+
+	def on_open_advanced_notifications_button_clicked(self, widget):
+		dialogs.AdvancedNotificationsWindow()
+
+	def on_play_sounds_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'sounds_on',
+				[self.xml.get_widget('soundplayer_hbox'),
+				self.xml.get_widget('sounds_scrolledwindow'),
+				self.xml.get_widget('browse_sounds_hbox')])
+
+	def on_soundplayer_entry_changed(self, widget):
+		gajim.config.set('soundplayer', widget.get_text().decode('utf-8'))
+		gajim.interface.save_config()
+
+	def on_sounds_treemodel_row_changed(self, model, path, iter):
+		sound_event = model[iter][3].decode('utf-8')
+		gajim.config.set_per('soundevents', sound_event, 'enabled',
+					bool(model[path][0]))
+		gajim.config.set_per('soundevents', sound_event, 'path',
+					model[iter][2].decode('utf-8'))
 		gajim.interface.save_config()
 
 	def update_text_tags(self):
@@ -802,73 +797,6 @@ class PreferencesWindow:
 		self.update_text_tags()
 		gajim.interface.save_config()
 
-	def on_notify_on_new_message_radiobutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'notify_on_new_message',
-					[self.auto_popup_away_checkbutton])
-
-	def on_popup_new_message_radiobutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'autopopup',
-					[self.auto_popup_away_checkbutton])
-
-	def on_only_in_roster_radiobutton_toggled(self, widget):
-		if widget.get_active():
-			self.auto_popup_away_checkbutton.set_sensitive(False)
-
-	def on_notify_on_signin_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'notify_on_signin')
-
-	def on_notify_on_signout_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'notify_on_signout')
-
-	def on_auto_popup_away_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'autopopupaway')
-
-	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
-
-	def on_outgoing_chat_states_combobox_changed(self, widget):
-		active = widget.get_active()
-		if active == 0: # all
-			gajim.config.set('outgoing_chat_state_notifications', 'all')
-		elif active == 1: # only composing
-			gajim.config.set('outgoing_chat_state_notifications', 'composing_only')
-		else: # disabled
-			gajim.config.set('outgoing_chat_state_notifications', 'disabled')
-
-	def on_displayed_chat_states_combobox_changed(self, widget):
-		active = widget.get_active()
-		if active == 0: # all
-			gajim.config.set('displayed_chat_state_notifications', 'all')
-		elif active == 1: # only composing
-			gajim.config.set('displayed_chat_state_notifications',
-				'composing_only')
-		else: # disabled
-			gajim.config.set('displayed_chat_state_notifications', 'disabled')
-
-	def on_play_sounds_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'sounds_on',
-				[self.xml.get_widget('soundplayer_hbox'),
-				self.xml.get_widget('sounds_scrolledwindow'),
-				self.xml.get_widget('browse_sounds_hbox')])
-
-	def on_soundplayer_entry_changed(self, widget):
-		gajim.config.set('soundplayer', widget.get_text().decode('utf-8'))
-		gajim.interface.save_config()
-
-	def on_prompt_online_status_message_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'ask_online_status')
-
-	def on_prompt_offline_status_message_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'ask_offline_status')
-
-	def on_sounds_treemodel_row_changed(self, model, path, iter):
-		sound_event = model[iter][3].decode('utf-8')
-		gajim.config.set_per('soundevents', sound_event, 'enabled',
-					bool(model[path][0]))
-		gajim.config.set_per('soundevents', sound_event, 'path',
-					model[iter][2].decode('utf-8'))
-		gajim.interface.save_config()
-
 	def on_auto_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autoaway',
 					[self.auto_away_time_spinbutton, self.auto_away_message_entry])
@@ -898,6 +826,12 @@ class PreferencesWindow:
 
 	def on_auto_xa_message_entry_changed(self, widget):
 		gajim.config.set('autoxa_message', widget.get_text().decode('utf-8'))
+
+	def on_prompt_online_status_message_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'ask_online_status')
+
+	def on_prompt_offline_status_message_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'ask_offline_status')
 
 	def fill_default_msg_treeview(self):
 		model = self.default_msg_tree.get_model()
