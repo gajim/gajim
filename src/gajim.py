@@ -908,6 +908,10 @@ class Interface:
 			nick = array['NICKNAME']
 			if nick:
 				gajim.nicks[account] = nick
+		if not gajim.nicks[account] and array.has_key('FN'):
+			nick = array['FN']
+			if nick:
+				gajim.nicks[account] = nick
 		if self.instances[account].has_key('profile'):
 			win = self.instances[account]['profile']
 			win.set_values(array)
