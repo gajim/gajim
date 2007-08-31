@@ -1,6 +1,7 @@
 ##	features_window.py
 ##
 ## Copyright (C) 2007 Yann Le Boulanger <asterix@lagaule.org>
+##                    Stephan Erb <steve-e@h3c.de> 
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published

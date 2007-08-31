@@ -3,6 +3,7 @@
 ## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
 ## Notification daemon connection via D-Bus code:
 ## Copyright (C) 2005 by Sebastian Estienne

@@ -5,6 +5,7 @@
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published

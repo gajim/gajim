@@ -4,8 +4,9 @@
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
-## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
-## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
+##                    Travis Shirk <travis@pobox.com>
+##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published

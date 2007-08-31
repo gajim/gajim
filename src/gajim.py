@@ -4,10 +4,11 @@
 ##
 ## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
+##                         Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
-## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
+##                    Julien Pivotto <roidelapluie@gmail.com>
+##                    Stephan Erb <steve-e@h3c.de>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published

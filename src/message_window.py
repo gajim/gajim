@@ -9,7 +9,8 @@
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
-## Copyright (C) 2006 Geobert Quach <geobert@gmail.com>
+##                    Geobert Quach <geobert@gmail.com>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
