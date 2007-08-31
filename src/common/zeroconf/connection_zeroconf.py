@@ -204,7 +204,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected. Comes from network manager for example
 		we don't try to reconnect, network manager will tell us when we can'''
-		log.debug('disconnectedReconnCB')
 		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
 			# after we auth to server
