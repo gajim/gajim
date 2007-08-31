@@ -131,8 +131,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.time_to_reconnect = None
 		gajim.log.debug('reconnect')
 
-		signed = self.get_signed_msg(self.status)
-		self.reconnect()
+#		signed = self.get_signed_msg(self.status)
+		self.connect(self.old_show, self.status)
 
 	def quit(self, kill_core):
 		if kill_core and self.connected > 1:
