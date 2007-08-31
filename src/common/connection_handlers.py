@@ -1582,6 +1582,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		user_nick = prs.getTagData('nick')
 		if not user_nick:
 			user_nick = ''
+		contact_nickname = None
 		transport_auto_auth = False
 		xtags = prs.getTags('x')
 		for x in xtags:
@@ -1592,7 +1593,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				sigTag = x
 			if namespace == common.xmpp.NS_VCARD_UPDATE:
 				avatar_sha = x.getTagData('photo')
-			if namespace == common.xmpp.NS_DELAY:
+				contact_nickname = x.getTagData('nickname')
+			elif namespace == common.xmpp.NS_DELAY:
 				# JEP-0091
 				tim = prs.getTimestamp()
 				tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
@@ -1631,7 +1633,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				errcode = prs.getErrorCode()
 				if errcode == '502': # Internal Timeout:
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
-						prio, keyID, timestamp))
+						prio, keyID, timestamp, None))
 				elif errcode == '401': # password required to join
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('A password is required to join this group chat.')))
@@ -1716,7 +1718,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					self.connection.send(p)
 				if who.find("@") <= 0 or transport_auto_auth:
 					self.dispatch('NOTIFY', (jid_stripped, 'offline', 'offline',
-						resource, prio, keyID, timestamp))
+						resource, prio, keyID, timestamp, None))
 				if transport_auto_auth:
 					self.automatically_added.append(jid_stripped)
 					self.request_subscription(jid_stripped, name = user_nick)
@@ -1767,7 +1769,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			errcode = prs.getErrorCode()
 			if errcode == '502': # Internal Timeout:
 				self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
-					prio, keyID, timestamp))
+					prio, keyID, timestamp, None))
 			else:	# print in the window the error
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
@@ -1791,7 +1793,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				except exceptions.PysqliteOperationalError, e:
 					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
-				keyID, timestamp))
+				keyID, timestamp, contact_nickname))
 	# END presenceCB
 	def _StanzaArrivedCB(self, con, obj):
 		self.last_io = gajim.idlequeue.current_time()
