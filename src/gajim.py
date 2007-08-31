@@ -1996,6 +1996,8 @@ class Interface:
 			if not event:
 				# default to jid without resource
 				event = gajim.events.get_first_event(account, jid, type_)
+				if not event:
+					return
 				# Open the window
 				self.roster.open_event(account, jid, event)
 			else:
