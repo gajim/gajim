@@ -128,16 +128,13 @@ def _ReceivedRegInfo(con, resp, agent):
 		return
 	df=tag.getTag('x',namespace=NS_DATA)
 	if df:
-		con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,DataForm(node=df),True,''))
+		con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,df,True,''))
 		return
-	df=DataForm(typ='form')
+	df={}
 	for i in resp.getQueryPayload():
 		if not isinstance(i, Node):
-			pass
-		elif i.getName()=='instructions':
-			df.addInstructions(i.getData())
-		else:
-			df.setField(i.getName()).setValue(i.getData())
+			continue
+		df[i.getName()] = i.getData()
 	con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent,df,False,''))
 
 def register(disp, host, info, cb):
