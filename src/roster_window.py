@@ -2599,7 +2599,7 @@ class RosterWindow:
 				self.tree.get_selection().select_path(path)
 			type_ = model[path][C_TYPE]
 			if type_ in ('agent', 'contact', 'self_contact'):
-				self.on_roster_treeview_row_activated(widget, path)
+				self.on_row_activated(widget, path)
 			elif type_ == 'account':
 				account = model[path][C_ACCOUNT].decode('utf-8')
 				if account != 'all':
