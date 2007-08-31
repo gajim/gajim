@@ -2931,7 +2931,7 @@ class RosterWindow:
 			# status
 
 			if not global_sync_connected_accounts > 0 or \
-			gajim.account_is_connected(account):
+			gajim.connections[account].connected > 0:
 				self.send_status(account, status, message)
 		self.update_status_combobox()
 
