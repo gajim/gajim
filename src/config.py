@@ -2125,11 +2125,14 @@ class FakeDataForm(gtk.Table, object):
 class ServiceRegistrationWindow:
 	'''Class for Service registration window:
 	Window that appears when we want to subscribe to a service
-	if is_form we use DataFormWindow else we use service_registarion_window'''
+	if is_form we use dataforms_widget else we use service_registarion_window'''
 	def __init__(self, service, infos, account, is_form):
 		self.service = service
 		self.account = account
 		self.is_form = is_form
+		self.xml = gtkgui_helpers.get_glade('service_registration_window.glade')
+		self.window = self.xml.get_widget('service_registration_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 		if self.is_form:
 			dataform = dataforms.ExtendForm(node = infos)
 			self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
@@ -2145,8 +2148,9 @@ class ServiceRegistrationWindow:
 			self.data_form_widget = FakeDataForm(infos)
 			table = self.xml.get_widget('table')
 			table.attach(self.data_form_widget, 0, 2, 0, 1)
-			self.xml.signal_autoconnect(self)
-			self.window.show_all()
+
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
@@ -2154,11 +2158,9 @@ class ServiceRegistrationWindow:
 	def on_ok_button_clicked(self, widget):
 		# send registration info to the core
 		if self.is_form:
-			# We pressed OK button of the DataFormWindow
-			if self.infos.has_key('registered'):
-				del self.infos['registered']
+			form = self.data_form_widget.data_form
 			gajim.connections[self.account].register_agent(self.service,
-				self.infos, True) # True is for is_form
+				form, True) # True is for is_form
 		else:
 			infos = self.data_form_widget.get_infos()
 			if infos.has_key('instructions'):
@@ -2340,7 +2342,6 @@ class GroupchatConfigWindow:
 		del gajim.interface.instances[self.account]['gc_config'][self.room_jid]
 
 	def on_ok_button_clicked(self, widget):
-		# We pressed OK button of the DataFormWindow
 		if self.form:
 			form = self.data_form_widget.data_form
 			gajim.connections[self.account].send_gc_config(self.room_jid, form)

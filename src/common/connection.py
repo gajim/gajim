@@ -222,7 +222,7 @@ class Connection(ConnectionHandlers):
 					return
 				is_form = data[2]
 				if is_form:
-					conf = self.parse_data_form(data[1])
+					conf = data[1]
 				else:
 					conf = data[1].asDict()
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))

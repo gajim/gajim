@@ -868,8 +868,9 @@ class Interface:
 				self.roster.remove_contact(c, account)
 
 	def handle_event_register_agent_info(self, account, array):
-		#('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
-		if array[1].has_key('instructions'):
+		# ('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
+		# info in a dataform if is_form is True
+		if array[2] or array[1].has_key('instructions'):
 			config.ServiceRegistrationWindow(array[0], array[1], account,
 				array[2])
 		else:

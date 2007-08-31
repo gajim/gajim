@@ -592,37 +592,15 @@ class ConnectionDisco:
 			agent)
 		self.connection.SendAndCallForResponse(iq, self._ReceivedRegInfo,
 			{'agent': agent})
-	
-	def build_data_from_dict(self, query, config):
-		x = query.setTag(common.xmpp.NS_DATA + ' x', attrs = {'type': 'submit'})
-		i = 0
-		while config.has_key(i):
-			if not config[i].has_key('type'):
-				i += 1
-				continue
-			if config[i]['type'] == 'fixed':
-				i += 1
-				continue
-			tag = x.addChild('field')
-			if config[i].has_key('var'):
-				tag.setAttr('var', config[i]['var'])
-			if config[i].has_key('values'):
-				for val in config[i]['values']:
-					if val == False:
-						val = '0'
-					elif val == True:
-						val = '1'
-					# Force to create a new child
-					tag.addChild('value').addData(val)
-			i += 1
-	
+
 	def register_agent(self, agent, info, is_form = False):
 		if not self.connection:
 			return
 		if is_form:
 			iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
 			query = iq.getTag('query')
-			self.build_data_from_dict(query, info)
+			info.setAttr('type', 'submit')
+			query.addChild(node = info)
 			self.connection.send(iq)
 		else:
 			# fixed: blocking
@@ -1795,67 +1773,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
 				keyID, timestamp, contact_nickname))
 	# END presenceCB
+
 	def _StanzaArrivedCB(self, con, obj):
 		self.last_io = gajim.idlequeue.current_time()
-	
-	
-	def parse_data_form(self, node):
-		dic = {}
-		tag = node.getTag('title')
-		if tag:
-			dic['title'] = tag.getData()
-		tag = node.getTag('instructions')
-		if tag:
-			dic['instructions'] = tag.getData()
-		i = 0
-		for child in node.getChildren():
-			if child.getName() != 'field':
-				continue
-			var = child.getAttr('var')
-			ctype = child.getAttr('type')
-			label = child.getAttr('label')
-			if not var and ctype != 'fixed': # We must have var if type != fixed
-				continue
-			dic[i] = {}
-			if var:
-				dic[i]['var'] = var
-			if ctype:
-				dic[i]['type'] = ctype
-			if label:
-				dic[i]['label'] = label
-			tags = child.getTags('value')
-			if len(tags):
-				dic[i]['values'] = []
-				for tag in tags:
-					data = tag.getData()
-					if ctype == 'boolean':
-						if data in ('yes', 'true', 'assent', '1'):
-							data = True
-						else:
-							data = False
-					dic[i]['values'].append(data)
-			tag = child.getTag('desc')
-			if tag:
-				dic[i]['desc'] = tag.getData()
-			option_tags = child.getTags('option')
-			if len(option_tags):
-				dic[i]['options'] = {}
-				j = 0
-				for option_tag in option_tags:
-					dic[i]['options'][j] = {}
-					label = option_tag.getAttr('label')
-					tags = option_tag.getTags('value')
-					dic[i]['options'][j]['values'] = []
-					for tag in tags:
-						dic[i]['options'][j]['values'].append(tag.getData())
-					if not label:
-						label = dic[i]['options'][j]['values'][0]
-					dic[i]['options'][j]['label'] = label
-					j += 1
-				if not dic[i].has_key('values'):
-					dic[i]['values'] = [dic[i]['options'][0]['values'][0]]
-			i += 1
-		return dic
 
 	def _MucOwnerCB(self, con, iq_obj):
 		gajim.log.debug('MucOwnerCB')
