@@ -206,6 +206,8 @@ def get_contact_dict_for_account(account):
 			contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
 			contacts_dict['%s (%s)' % (name, jid)] = contact
 		else:
+			if contact.name == gajim.get_nick_from_jid(jid):
+				del contacts_dict[jid]
 			contacts_dict[name] = contact
 	return contacts_dict
 
