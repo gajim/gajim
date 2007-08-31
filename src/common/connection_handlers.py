@@ -684,6 +684,10 @@ class ConnectionDisco:
 	def _DiscoverItemsGetCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsGetCB')
 		node = iq_obj.getTagAttr('query', 'node')
+                if node is None:
+			result = iq_obj.buildReply('result')
+			self.connection.send(result)
+			raise common.xmpp.NodeProcessed
 		if node==common.xmpp.NS_COMMANDS:
 			self.commandListQuery(con, iq_obj)
 			raise common.xmpp.NodeProcessed
