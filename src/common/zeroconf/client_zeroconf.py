@@ -195,8 +195,6 @@ class P2PClient(IdleObject):
 			if attrs.has_key('version') and attrs['version'] == '1.0':
 				# other part supports stream features
 				features = Node('stream:features')
-				features.T.mechanisms.setNamespace(NS_SASL)
-				features.T.mechanisms.NT.mechanism = 'PLAIN'
 				self.Dispatcher.send(features)
 			while self.stanzaqueue:
 				stanza, is_message = self.stanzaqueue.pop(0)
