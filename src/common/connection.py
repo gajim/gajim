@@ -1148,11 +1148,12 @@ class Connection(ConnectionHandlers):
 		item.setAttr('affiliation', affiliation)
 		self.connection.send(iq)
 
-	def send_gc_config(self, room_jid, config):
+	def send_gc_config(self, room_jid, form):
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
 			common.xmpp.NS_MUC_OWNER)
 		query = iq.getTag('query')
-		self.build_data_from_dict(query, config)
+		form.setAttr('type', 'submit')
+		query.addChild(node = form)
 		self.connection.send(iq)
 
 	def gpg_passphrase(self, passphrase):

@@ -1076,7 +1076,7 @@ class Interface:
 				gc_control.print_conversation(text)
 
 	def handle_event_gc_config(self, account, array):
-		#('GC_CONFIG', account, (jid, config))  config is a dict
+		#('GC_CONFIG', account, (jid, form))  config is a dict
 		room_jid = array[0].split('/')[0]
 		if room_jid in gajim.automatic_rooms[account]:
 			# use default configuration

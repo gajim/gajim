@@ -28,6 +28,7 @@ import dialogs
 import cell_renderer_image
 import message_control
 import chat_control
+import dataforms_widget
 
 try:
 	import gtkspell
@@ -41,6 +42,7 @@ from common import connection
 from common import passwords
 from common import zeroconf
 from common import dbus_support
+from common import dataforms
 
 from common.exceptions import GajimGeneralException
 
@@ -2167,11 +2169,12 @@ class ServiceRegistrationWindow:
 
 		self.window.destroy()
 
-class GroupchatConfigWindow(DataFormWindow):
+class GroupchatConfigWindow:
 	'''GroupchatConfigWindow class'''
-	def __init__(self, account, room_jid, config = None):
-		DataFormWindow.__init__(self, account, config)
+	def __init__(self, account, room_jid, form = None):
+		self.account = account
 		self.room_jid = room_jid
+		self.form = form
 		self.remove_button = {}
 		self.affiliation_treeview = {}
 		self.list_init = {} # list at the beginning
@@ -2180,9 +2183,25 @@ class GroupchatConfigWindow(DataFormWindow):
 			'owner': _('Owner List'),
 			'admin':_('Administrator List')}
 
-		# Draw the edit affiliation list things		
+		self.xml = gtkgui_helpers.get_glade('data_form_window.glade', 'data_form_window')
+		self.window = self.xml.get_widget('data_form_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
+
+		if self.form:
+			config_vbox = self.xml.get_widget('config_vbox')
+			dataform = dataforms.ExtendForm(node = self.form)
+			self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
+			# hide scrollbar of this data_form_widget, we already have in this
+			# widget
+			sw = self.data_form_widget.xml.get_widget('single_form_scrolledwindow')
+			sw.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+
+			self.data_form_widget.show()
+			config_vbox.pack_start(self.data_form_widget)
+
+		# Draw the edit affiliation list things
 		add_on_vbox = self.xml.get_widget('add_on_vbox')
-		
+
 		for affiliation in ('outcast', 'member', 'owner', 'admin'):
 			self.list_init[affiliation] = {}
 			hbox = gtk.HBox(spacing = 5)
@@ -2239,7 +2258,11 @@ class GroupchatConfigWindow(DataFormWindow):
 			gajim.connections[self.account].get_affiliation_list(self.room_jid,
 				affiliation)
 
-		add_on_vbox.show_all() 
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
 
 	def on_cell_edited(self, cell, path, new_text):
 		model = self.affiliation_treeview['outcast'].get_model()
@@ -2318,9 +2341,9 @@ class GroupchatConfigWindow(DataFormWindow):
 
 	def on_ok_button_clicked(self, widget):
 		# We pressed OK button of the DataFormWindow
-		if self.config:
-			gajim.connections[self.account].send_gc_config(self.room_jid,
-				self.config)
+		if self.form:
+			form = self.data_form_widget.data_form
+			gajim.connections[self.account].send_gc_config(self.room_jid, form)
 		for affiliation in ('outcast', 'member', 'owner', 'admin'):
 			list = {}
 			actual_jid_list = []

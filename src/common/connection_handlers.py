@@ -1866,8 +1866,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				node = q
 		if not node:
 			return
-		dic = self.parse_data_form(node)
-		self.dispatch('GC_CONFIG', (helpers.get_full_jid_from_iq(iq_obj), dic))
+		self.dispatch('GC_CONFIG', (helpers.get_full_jid_from_iq(iq_obj), node))
 
 	def _MucAdminCB(self, con, iq_obj):
 		gajim.log.debug('MucAdminCB')
