@@ -179,10 +179,11 @@ class P2PClient(IdleObject):
 		self.Dispatcher._metastream = Node('stream:stream')
 		self.Dispatcher._metastream.setNamespace(self.Namespace)
 		# XXX TLS support
-		#~ self._metastream.setAttr('version', '1.0')
+		self.Dispatcher._metastream.setAttr('version', '1.0')
 		self.Dispatcher._metastream.setAttr('xmlns:stream', NS_STREAMS)
 		self.Dispatcher._metastream.setAttr('from', self.conn_holder.zeroconf.name)
-		self.Dispatcher._metastream.setAttr('to', self.to)
+		if self.to:
+			self.Dispatcher._metastream.setAttr('to', self.to)
 		self.Dispatcher.send("<?xml version='1.0'?>%s>" % str(self.Dispatcher._metastream)[:-2])
 	
 	def _check_stream_start(self, ns, tag, attrs):
@@ -193,6 +194,8 @@ class P2PClient(IdleObject):
 			self.Connection.disconnect()
 			return
 		if self.sock_type == TYPE_SERVER:
+			if attrs.has_key('from'):
+				self.to = attrs['from']
 			self.send_stream_header()
 			while self.stanzaqueue:
 				stanza, is_message = self.stanzaqueue.pop(0)
