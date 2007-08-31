@@ -727,7 +727,7 @@ class Connection(ConnectionHandlers):
 						' ([This message is *encrypted* (See :JEP:`27`])'
 			else:
 				# Encryption failed, do not send message
-				tim = time.localtime()
+				tim = localtime()
 				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim))
 				return 3
 		if msgtxt and not xhtml and gajim.config.get(
@@ -1098,7 +1098,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 		# Save the time we quit to avoid duplicate logs AND be faster than 
 		# get that date from DB
-		self.last_history_line[jid] = time.time()
+		self.last_history_line[jid] = time_time()
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		'''role is for all the life of the room so it's based on nick'''
