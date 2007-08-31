@@ -53,6 +53,7 @@ class CommandWindow:
 		# retrieving widgets from xml
 		self.xml = gtkgui_helpers.get_glade('adhoc_commands_window.glade')
 		self.window = self.xml.get_widget('adhoc_commands_window')
+		self.window.connect('delete-event', self.on_adhoc_commands_window_delete_event)
 		for name in ('back_button', 'forward_button',
 			'execute_button','close_button','stages_notebook',
 			'retrieving_commands_stage_vbox',
@@ -101,7 +102,7 @@ class CommandWindow:
 		self.remove_pulsing()
 
 	def on_adhoc_commands_window_delete_event(self, *anything):
-		return self.stage_adhoc_commands_window_delete_event(self, *anything)
+		return self.stage_adhoc_commands_window_delete_event(self.window)
 
 	def __del__(self):
 		print "Object has been deleted."
@@ -252,6 +253,7 @@ class CommandWindow:
 			else:
 				self.window.destroy()
 			return False
+		return True
 
 	def stage3_back_button_clicked(self, widget):
 		self.stage3_submit_form('prev')
