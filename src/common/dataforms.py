@@ -34,7 +34,7 @@ def Field(typ, **attrs):
 	''' Helper function to create a field of given type. '''
 	f = {
 		'boolean': BooleanField,
-		'fixed': StringField,
+		'fixed': TextMultiField, # not editable, still can have multiple lines of text
 		'hidden': StringField,
 		'text-private': StringField,
 		'text-single': StringField,
@@ -54,7 +54,7 @@ def ExtendField(node):
 	typ=node.getAttr('type')
 	f = {
 		'boolean': BooleanField,
-		'fixed': StringField,
+		'fixed': TextMultiField,
 		'hidden': StringField,
 		'text-private': StringField,
 		'text-single': StringField,
@@ -196,7 +196,6 @@ class StringField(DataField):
 			except ValueError: # if there already were no value tag
 				pass
 		return locals()
-
 
 class ListField(DataField):
 	''' Covers fields of types: jid-multi, jid-single, list-multi, list-single. '''
