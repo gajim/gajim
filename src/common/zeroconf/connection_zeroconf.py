@@ -345,7 +345,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		return STATUS_LIST[self.connected]
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
-	chatstate = None, msg_id = None, composing_jep = None, resource = None, 
+	chatstate = None, msg_id = None, composing_xep = None, resource = None, 
 	user_nick = None):
 		fjid = jid
 
@@ -393,10 +393,10 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
 		if chatstate is not None:
-			if composing_jep == 'JEP-0085' or not composing_jep:
+			if composing_xep == 'XEP-0085' or not composing_xep:
 				# JEP-0085
 				msg_iq.setTag(chatstate, namespace = common.xmpp.NS_CHATSTATES)
-			if composing_jep == 'JEP-0022' or not composing_jep:
+			if composing_xep == 'XEP-0022' or not composing_xep:
 				# JEP-0022
 				chatstate_node = msg_iq.setTag('x', namespace = common.xmpp.NS_EVENT)
 				if not msgtxt: # when no <body>, add <id>

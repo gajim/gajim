@@ -651,23 +651,23 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 				invite = None
 		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) != None
 		msg_id = None
-		composing_jep = None
+		composing_xep = None
 		xtags = msg.getTags('x')
 		# chatstates - look for chatstate tags in a message if not delayed
 		if not delayed:
-			composing_jep = False
+			composing_xep = False
 			children = msg.getChildren()
 			for child in children:
 				if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
 					chatstate = child.getName()
-					composing_jep = 'JEP-0085'
+					composing_xep = 'XEP-0085'
 					break
 			# No JEP-0085 support, fallback to JEP-0022
 			if not chatstate:
 				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
 				if chatstate_child:
 					chatstate = 'active'
-					composing_jep = 'JEP-0022'
+					composing_xep = 'XEP-0022'
 					if not msgtxt and chatstate_child.getTag('composing'):
 						chatstate = 'composing'
 		# JEP-0172 User Nickname
@@ -703,14 +703,14 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id, composing_jep, user_nick, msghtml))
+				chatstate, msg_id, composing_xep, user_nick, msghtml))
 		elif mtype == 'normal': # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			if invite:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, chatstate, msg_id, composing_jep, user_nick))
+					subject, chatstate, msg_id, composing_xep, user_nick))
 	# END messageCB
 	
 	def parse_data_form(self, node):

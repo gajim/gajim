@@ -510,7 +510,7 @@ class ChatControlBase(MessageControl):
 		return False
 
 	def send_message(self, message, keyID = '', type = 'chat', chatstate = None,
-	msg_id = None, composing_jep = None, resource = None):
+	msg_id = None, composing_xep = None, resource = None):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
@@ -520,7 +520,7 @@ class ChatControlBase(MessageControl):
 		if not self._process_command(message):
 			ret = MessageControl.send_message(self, message, keyID, type = type,
 				chatstate = chatstate, msg_id = msg_id,
-				composing_jep = composing_jep, resource = resource,
+				composing_xep = composing_xep, resource = resource,
 				user_nick = self.user_nick)
 			if ret:
 				return ret
@@ -1083,12 +1083,12 @@ class ChatControl(ChatControlBase):
 		if cs and st in ('composing_only', 'all'):
 			if contact.show == 'offline':
 				chatstate = ''
-			elif contact.composing_jep == 'JEP-0085':
+			elif contact.composing_xep == 'XEP-0085':
 				if st == 'all' or cs == 'composing':
 					chatstate = helpers.get_uf_chatstate(cs)
 				else:
 					chatstate = ''
-			elif contact.composing_jep == 'JEP-0022':
+			elif contact.composing_xep == 'XEP-0022':
 				if cs in ('composing', 'paused'):
 					# only print composing, paused
 					chatstate = helpers.get_uf_chatstate(cs)
@@ -1160,29 +1160,25 @@ class ChatControl(ChatControlBase):
 
 		chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
 			'disabled'
-		composing_jep = contact.composing_jep
+		composing_xep = contact.composing_xep
 		chatstate_to_send = None
 		if chatstates_on and contact is not None:
-			if composing_jep is None:
+			if composing_xep is None:
 				# no info about peer
 				# send active to discover chat state capabilities
 				# this is here (and not in send_chatstate)
 				# because we want it sent with REAL message
 				# (not standlone) eg. one that has body
-				
-				#FIXME:
-				# Enable 3 next lines after 0.11 release.
-				# Having this disabled violate xep85 5.1.2 but then we don't break
-				# notifications between 0.10.1 and 0.11 See #2637
-				# if contact.our_chatstate:
-				#	# We already ask for xep 85, don't ask it twice
-				#	composing_jep = 'asked_once'
+
+				if contact.our_chatstate:
+					# We already asked for xep 85, don't ask it twice
+					composing_xep = 'asked_once'
 
 				chatstate_to_send = 'active'
 				contact.our_chatstate = 'ask' # pseudo state
 			# if peer supports jep85 and we are not 'ask', send 'active'
 			# NOTE: first active and 'ask' is set in gajim.py
-			elif composing_jep is not False:
+			elif composing_xep is not False:
 				#send active chatstate on every message (as JEP says)
 				chatstate_to_send = 'active'
 				contact.our_chatstate = 'active'
@@ -1192,7 +1188,7 @@ class ChatControl(ChatControlBase):
 				self._schedule_activity_timers()
 				
 		if not ChatControlBase.send_message(self, message, keyID, type = 'chat',
-		chatstate = chatstate_to_send, composing_jep = composing_jep):
+		chatstate = chatstate_to_send, composing_xep = composing_xep):
 			self.print_conversation(message, self.contact.jid,
 				encrypted = encrypted)
 
@@ -1485,7 +1481,7 @@ class ChatControl(ChatControlBase):
 		if contact.show == 'offline':
 			return
 
-		if contact.composing_jep is False: # jid cannot do jep85 nor jep22
+		if contact.composing_xep is False: # jid cannot do xep85 nor xep22
 			return
 
 		# if the new state we wanna send (state) equals 
@@ -1493,7 +1489,7 @@ class ChatControl(ChatControlBase):
 		if contact.our_chatstate == state:
 			return
 
-		if contact.composing_jep is None:
+		if contact.composing_xep is None:
 			# we don't know anything about jid, so return
 			# NOTE:
 			# send 'active', set current state to 'ask' and return is done
@@ -1507,7 +1503,7 @@ class ChatControl(ChatControlBase):
 
 		# in JEP22, when we already sent stop composing
 		# notification on paused, don't resend it
-		if contact.composing_jep == 'JEP-0022' and \
+		if contact.composing_xep == 'XEP-0022' and \
 		contact.our_chatstate in ('paused', 'active', 'inactive') and \
 		state is not 'composing': # not composing == in (active, inactive, gone)
 			contact.our_chatstate = 'active'
@@ -1529,7 +1525,7 @@ class ChatControl(ChatControlBase):
 			self.reset_kbd_mouse_timeout_vars()
 
 		MessageControl.send_message(self, None, chatstate = state,
-			msg_id = contact.msg_id, composing_jep = contact.composing_jep)
+			msg_id = contact.msg_id, composing_xep = contact.composing_xep)
 		contact.our_chatstate = state
 		if contact.our_chatstate == 'active':
 			self.reset_kbd_mouse_timeout_vars()
