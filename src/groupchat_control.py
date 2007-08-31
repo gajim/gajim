@@ -908,6 +908,40 @@ class GroupchatControl(ChatControlBase):
 				if statusCode == '201': # We just created the room
 					gajim.connections[self.account].request_gc_config(self.room_jid)
 			else:
+				gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+					nick)
+				# Re-get vcard if avatar has changed
+				# We do that here because we may request it to the real JID if we
+				# knows it. connections.py doesn't know it.
+				con = gajim.connections[self.account]
+				if gc_c.jid:
+					real_jid = gc_c.jid
+					if gc_c.resource:
+						real_jid += '/' + gc_c.resource
+				else:
+					real_jid = fake_jid
+				if con.vcard_shas.has_key(fake_jid):
+					if avatar_sha != con.vcard_shas[fake_jid]:
+						server = gajim.get_server_from_jid(self.room_jid)
+						if not server.startswith('irc'):
+							con.request_vcard(real_jid, fake_jid)
+				else:
+					cached_vcard = con.get_cached_vcard(fake_jid, True)
+					if cached_vcard and cached_vcard.has_key('PHOTO') and \
+					cached_vcard['PHOTO'].has_key('SHA'):
+						cached_sha = cached_vcard['PHOTO']['SHA']
+					else:
+						cached_sha = ''
+					if cached_sha != avatar_sha:
+						# avatar has been updated
+						# sha in mem will be updated later
+						server = gajim.get_server_from_jid(self.room_jid)
+						if not server.startswith('irc'):
+							con.request_vcard(real_jid, fake_jid)
+					else:
+						# save sha in mem NOW
+						con.vcard_shas[fake_jid] = avatar_sha
+
 				actual_role = self.get_role(nick)
 				if role != actual_role:
 					self.remove_contact(nick)
