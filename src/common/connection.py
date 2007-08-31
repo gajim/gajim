@@ -193,7 +193,7 @@ class Connection(ConnectionHandlers):
 							_('Transport %s answered wrongly to register request: %s')\
 							% (data[0], data[3])))
 						return
-					req = data[1].asDict()
+					req = data[1]
 					req['username'] = self.new_account_info['name']
 					req['password'] = self.new_account_info['password']
 					def _on_register_result(result):
@@ -221,10 +221,7 @@ class Connection(ConnectionHandlers):
 						(data[0], data[3])))
 					return
 				is_form = data[2]
-				if is_form:
-					conf = data[1]
-				else:
-					conf = data[1].asDict()
+				conf = data[1]
 				self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))
 		elif realm == common.xmpp.NS_PRIVACY:
 			if event == common.xmpp.features_nb.PRIVACY_LISTS_RECEIVED:
