@@ -94,6 +94,10 @@ class FeaturesWindow:
 				_('Encrypting chatmessages.'),
 				_('Requires python-crypto.'),
 				_('Requires python-crypto.')),
+			_('RST Generator'): (self.docutils_available,
+				_('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
+				_('Requires python-docutils.'),
+				_('Requires python-docutils.')),
 		}
 
 		# name, supported
@@ -283,3 +287,10 @@ class FeaturesWindow:
 	def pycrypto_available(self):
 		from common import gajim
 		return gajim.HAVE_PYCRYPTO
+
+	def docutils_available(self):
+		try:
+			import docutils
+		except:
+			return False
+		return True
