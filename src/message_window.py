@@ -104,12 +104,13 @@ class MessageWindow:
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
 		# set up DnD
-		self.hid = self.notebook.connect('drag_data_received',
-			self.on_tab_label_drag_data_received_cb)
-		self.handlers[self.hid] = self.notebook
-		
-		self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
-			gtk.gdk.ACTION_MOVE)
+		# If GTK+ version < 2.10, use OUR way to reorder tabs
+		if gtk.pygtk_version < (2, 10, 0) or gtk.gtk_version < (2, 10, 0):
+			self.hid = self.notebook.connect('drag_data_received',
+				self.on_tab_label_drag_data_received_cb)
+			self.handlers[self.hid] = self.notebook
+			self.notebook.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.DND_TARGETS,
+				gtk.gdk.ACTION_MOVE)
 
 	def change_account_name(self, old_name, new_name):
 		if self._controls.has_key(old_name):
@@ -191,7 +192,11 @@ class MessageWindow:
 		control.handlers[id] = tab_label_box
 		self.notebook.append_page(control.widget, tab_label_box)
 
-		self.setup_tab_dnd(control.widget)
+		# If GTK+ version >= 2.10, use gtk native way to reorder tabs
+		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
+			self.notebook.set_tab_reorderable(control.widget, True)
+		else:
+			self.setup_tab_dnd(control.widget)
 
 		self.redraw_tab(control)
 		self.window.show_all()
