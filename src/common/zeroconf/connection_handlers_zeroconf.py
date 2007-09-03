@@ -628,7 +628,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
 		tim = msg.getTimestamp()
-		tim = time.strptime(tim, '%Y%m%dT%H:%M:%S')
+		tim = helpers.datetime_tuple(tim)
 		tim = time.localtime(timegm(tim))
 		frm = msg.getFrom()
 		if frm == None:
