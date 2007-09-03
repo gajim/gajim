@@ -1487,10 +1487,10 @@ class MucBrowser(AgentBrowser):
 		self.join_button = None
 
 	def _create_treemodel(self):
-		# JID, node, name, users, description, fetched
+		# JID, node, name, users_int, users_str, description, fetched
 		# This is rather long, I'd rather not use a data_func here though.
 		# Users is a string, because want to be able to leave it empty.
-		self.model = gtk.ListStore(str, str, str, str, str, bool)
+		self.model = gtk.ListStore(str, str, str, int, str, str, bool)
 		self.model.set_sort_column_id(2, gtk.SORT_ASCENDING)
 		self.window.services_treeview.set_model(self.model)
 		# Name column
@@ -1507,7 +1507,7 @@ class MucBrowser(AgentBrowser):
 		col = gtk.TreeViewColumn(_('Users'))
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text = 3)
+		col.set_attributes(renderer, text = 4)
 		col.set_sort_column_id(3)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
@@ -1515,7 +1515,7 @@ class MucBrowser(AgentBrowser):
 		col = gtk.TreeViewColumn(_('Description'))
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
-		col.set_attributes(renderer, text = 4)
+		col.set_attributes(renderer, text = 5)
 		col.set_sort_column_id(4)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
@@ -1630,7 +1630,7 @@ class MucBrowser(AgentBrowser):
 			# We're at the end of the model, we can leave end=None though.
 			pass
 		while iter and self.model.get_path(iter) != end:
-			if not self.model.get_value(iter, 5):
+			if not self.model.get_value(iter, 6):
 				jid = self.model.get_value(iter, 0).decode('utf-8')
 				node = self.model.get_value(iter, 1).decode('utf-8')
 				self.cache.get_info(jid, node, self._agent_info)
@@ -1661,13 +1661,14 @@ class MucBrowser(AgentBrowser):
 			if iter:
 				if name:
 					self.model[iter][2] = name
-				self.model[iter][3] = len(items)		# The number of users
-				self.model[iter][5] = True
+				self.model[iter][3] = len(items) # The number of users
+				self.model[iter][4] = str(len(items)) # The number of users
+				self.model[iter][6] = True
 		self._fetch_source = None
 		self._query_visible()
 
 	def _add_item(self, jid, node, item, force):
-		self.model.append((jid, node, item.get('name', ''), '', '', False))
+		self.model.append((jid, node, item.get('name', ''), -1, '', '', False))
 		if not self._fetch_source:
 			self._fetch_source = gobject.idle_add(self._start_info_query)
 
@@ -1681,14 +1682,15 @@ class MucBrowser(AgentBrowser):
 				users = form.getField('muc#roominfo_occupants')
 				descr = form.getField('muc#roominfo_description')
 				if users:
-					self.model[iter][3] = users.getValue()
+					self.model[iter][3] = int(users.getValue())
+					self.model[iter][4] = users.getValue()
 				if descr:
-					self.model[iter][4] = descr.getValue()
+					self.model[iter][5] = descr.getValue()
 				# Only set these when we find a form with additional info
 				# Some servers don't support forms and put extra info in
 				# the name attribute, so we preserve it in that case.
 				self.model[iter][2] = name
-				self.model[iter][5] = True
+				self.model[iter][6] = True
 				break
 		else:
 			# We didn't find a form, switch to alternate query mode
