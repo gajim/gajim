@@ -47,3 +47,5 @@ try:
 			'org.freedesktop.NetworkManager',
 			'org.freedesktop.NetworkManager',
 			'/org/freedesktop/NetworkManager')
+except:
+	pass
