@@ -3875,6 +3875,11 @@ class RosterWindow:
 		padlock)'''
 		theme = gajim.config.get('roster_theme')
 		type_ = model[iter][C_TYPE]
+		# allocate space for the icon only if needed
+		if model[iter][C_SECPIXBUF]:
+			renderer.set_property('visible', True)
+		else:
+			renderer.set_property('visible', False)
 		if type_ == 'account':
 			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
