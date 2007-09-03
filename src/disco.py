@@ -1047,7 +1047,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		# as it was before setting the timeout
 		if props and self.tooltip.id == props[0]:
 			# bounding rectangle of coordinates for the cell within the treeview
-			rect =  view.get_cell_area(props[0], props[1])
+			rect = view.get_cell_area(props[0], props[1])
 			# position of the treeview on the screen
 			position = view.window.get_origin()
 			self.tooltip.show_tooltip(state, rect.height, position[1] + rect.y)
@@ -1500,6 +1500,7 @@ class MucBrowser(AgentBrowser):
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = 2)
+		col.set_sort_column_id(2)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
 		# Users column
@@ -1507,6 +1508,7 @@ class MucBrowser(AgentBrowser):
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = 3)
+		col.set_sort_column_id(3)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
 		# Description column
@@ -1514,6 +1516,7 @@ class MucBrowser(AgentBrowser):
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = 4)
+		col.set_sort_column_id(4)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
 		# Id column
@@ -1521,9 +1524,11 @@ class MucBrowser(AgentBrowser):
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = 0)
+		col.set_sort_column_id(0)
 		self.window.services_treeview.insert_column(col, -1)
 		col.set_resizable(True)
 		self.window.services_treeview.set_headers_visible(True)
+		self.window.services_treeview.set_headers_clickable(True)
 		# Source id for idle callback used to start disco#info queries.
 		self._fetch_source = None
 		# Query failure counter
@@ -1737,6 +1742,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		col.set_attributes(renderer, markup=2)
 		col.set_resizable(True)
 		self.window.services_treeview.insert_column(col, -1)
+		self.window.services_treeview.set_headers_visible(True)
 
 		# Subscription state
 		renderer = gtk.CellRendererToggle()
@@ -1838,7 +1844,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		model, iter = self.window.services_treeview.get_selection().get_selected()
 		if iter is None: return
 
-		groupnode = model.get_value(iter, 1)    # 1 = groupnode
+		groupnode = model.get_value(iter, 1) # 1 = groupnode
 		
 		gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._unsubscribeCB, groupnode)
 
