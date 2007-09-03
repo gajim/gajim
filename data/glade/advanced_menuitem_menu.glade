@@ -11,7 +11,7 @@
     </child>
     <child>
       <widget class="GtkMenuItem" id="privacy_lists_menuitem">
-        <property name="label" translatable="yes">Edit _Privacy Lists</property>
+        <property name="label" translatable="yes">Edit _Privacy Lists...</property>
         <property name="use_underline">True</property>
       </widget>
     </child>
@@ -28,7 +28,7 @@
             <child>
               <widget class="GtkImageMenuItem" id="send_server_message_menuitem">
                 <property name="tooltip" translatable="yes">Sends a message to users currently connected to this server</property>
-                <property name="label" translatable="yes">_Send Server Message</property>
+                <property name="label" translatable="yes">_Send Server Message...</property>
                 <property name="use_underline">True</property>
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1468">
@@ -47,14 +47,14 @@
             <child>
               <widget class="GtkMenuItem" id="set_motd_menuitem">
                 <property name="tooltip" translatable="yes">Sets Message of the Day</property>
-                <property name="label" translatable="yes">Set MOTD</property>
+                <property name="label" translatable="yes">Set MOTD...</property>
                 <property name="use_underline">True</property>
               </widget>
             </child>
             <child>
               <widget class="GtkMenuItem" id="update_motd_menuitem">
                 <property name="tooltip" translatable="yes">Updates Message of the Day</property>
-                <property name="label" translatable="yes">Update MOTD</property>
+                <property name="label" translatable="yes">Update MOTD...</property>
                 <property name="use_underline">True</property>
               </widget>
             </child>
