@@ -103,8 +103,7 @@ class MessageWindow:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
 
-		# set up DnD
-		# If GTK+ version < 2.10, use OUR way to reorder tabs
+		# set up DnD if GTK+ version < 2.10, use OUR way to reorder tabs
 		if gtk.pygtk_version < (2, 10, 0) or gtk.gtk_version < (2, 10, 0):
 			self.hid = self.notebook.connect('drag_data_received',
 				self.on_tab_label_drag_data_received_cb)
@@ -318,7 +317,10 @@ class MessageWindow:
 			types = ['printed_msg', 'chat', 'gc_msg'])
 		del gajim.last_message_time[ctrl.account][ctrl.get_full_jid()]
 
-		self.disconnect_tab_dnd(ctrl.widget)
+		# Disconnect tab DnD only if GTK version < 2.10
+		if gtk.pygtk_version < (2, 10, 0) or gtk.gtk_version < (2, 10, 0):
+			self.disconnect_tab_dnd(ctrl.widget)
+
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
 		fjid = ctrl.get_full_jid()
