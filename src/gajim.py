@@ -713,7 +713,7 @@ class Interface:
 		if pm:
 			nickname = resource
 			groupchat_control.on_private_message(nickname, message, array[2],
-				xhtml)
+				xhtml, msg_id)
 		else:
 			# array: (jid, msg, time, encrypted, msg_type, subject)
 			if encrypted:
