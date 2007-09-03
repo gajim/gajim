@@ -2141,9 +2141,8 @@ class Interface:
 			self.remote_ctrl = None
 
 		if gajim.config.get('networkmanager_support') and dbus_support.supported:
-			try:
-				import network_manager_listener
-			except:
+			import network_manager_listener
+			if not network_manager_listener.supported:
 				print >> sys.stderr, _('Network Manager support not available')
 
 		self.show_vcard_when_connect = []
