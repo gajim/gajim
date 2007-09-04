@@ -837,8 +837,10 @@ class GroupchatControl(ChatControlBase):
 			affiliation = 'none'
 		fake_jid = self.room_jid + '/' + nick
 		newly_created = False
+		if '170' in statusCode:
+			self.print_conversation(_('Room logging is enabled'), 'info')
 		if show in ('offline', 'error'):
-			if statusCode == '307':
+			if '307' in statusCode:
 				if actor is None: # do not print 'kicked by None'
 					s = _('%(nick)s has been kicked: %(reason)s') % {
 						'nick': nick,
@@ -849,7 +851,7 @@ class GroupchatControl(ChatControlBase):
 						'who': actor,
 						'reason': reason }
 				self.print_conversation(s, 'info')
-			elif statusCode == '301':
+			elif '301' in statusCode:
 				if actor is None: # do not print 'banned by None'
 					s = _('%(nick)s has been banned: %(reason)s') % {
 						'nick': nick,
@@ -860,7 +862,7 @@ class GroupchatControl(ChatControlBase):
 						'who': actor,
 						'reason': reason }
 				self.print_conversation(s, 'info')
-			elif statusCode == '303': # Someone changed his or her nick
+			elif '303' in statusCode: # Someone changed his or her nick
 				if nick == self.nick: # We changed our nick
 					self.nick = new_nick
 					s = _('You are now known as %s') % new_nick
@@ -902,7 +904,7 @@ class GroupchatControl(ChatControlBase):
 				c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 				c.show = show
 				c.status = status
-			if nick == self.nick and statusCode != '303': # We became offline
+			if nick == self.nick and '303' not in statusCode: # We became offline
 				self.got_disconnected()
 				self.parent_win.redraw_tab(self)
 		else:
@@ -911,7 +913,7 @@ class GroupchatControl(ChatControlBase):
 				iter = self.add_contact_to_roster(nick, show, role, affiliation,
 					status, jid)
 				newly_created = True
-				if statusCode == '201': # We just created the room
+				if '201' in statusCode: # We just created the room
 					gajim.connections[self.account].request_gc_config(self.room_jid)
 			else:
 				gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
@@ -964,7 +966,7 @@ class GroupchatControl(ChatControlBase):
 
 		self.parent_win.redraw_tab(self)
 		if (time.time() - self.room_creation) > 30 and \
-				nick != self.nick and statusCode != '303':
+				nick != self.nick and '303' not in statusCode:
 			st = ''
 			print_status = None
 			for bookmark in gajim.connections[self.account].bookmarks:
@@ -979,7 +981,7 @@ class GroupchatControl(ChatControlBase):
 				simple_jid = gajim.get_jid_without_resource(jid)
 				nick_jid += ' (%s)' % simple_jid
 			if show == 'offline' and print_status in ('all', 'in_and_out') and \
-			statusCode != '307':
+			'307' not in statusCode:
 				st = _('%s has left') % nick_jid
 				if reason:
 					st += ' [%s]' % reason

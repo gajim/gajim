@@ -509,7 +509,11 @@ class Presence(Protocol):
         return self._muc_getSubTagDataAttr('actor','jid')[1]
     def getStatusCode(self):
         """Returns the status code of the presence (for groupchat)"""
-        return self._muc_getItemAttr('status','code')
+        attrs = []
+        for xtag in self.getTags('x'):
+            for child in xtag.getTags('status'):
+                attrs.append(child.getAttr('code'))
+        return attrs
 
 class Iq(Protocol): 
     """ XMPP Iq object - get/set dialog mechanism. """
