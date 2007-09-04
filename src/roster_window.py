@@ -3430,8 +3430,9 @@ class RosterWindow:
 
 				for ctrl in win.controls():
 					fjid = ctrl.get_full_jid()
-					if gajim.last_message_time[acct].has_key(fjid):
-						if time.time() - gajim.last_message_time[acct][fjid] < 2:
+					if gajim.last_message_time[ctrl.account].has_key(fjid):
+						if time.time() - gajim.last_message_time[ctrl.accountt][fjid]\
+						< 2:
 							recent = True
 							break
 			if unread:
