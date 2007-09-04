@@ -203,16 +203,7 @@ class PreferencesWindow:
 		cell = gtk.CellRendererText()
 		theme_combobox.pack_start(cell, True)
 		theme_combobox.add_attribute(cell, 'text', 0)
-		model = gtk.ListStore(str)
-		theme_combobox.set_model(model)
-
-		i = 0
-		for config_theme in gajim.config.get_per('themes'):
-			theme = config_theme.replace('_', ' ')
-			model.append([theme])
-			if gajim.config.get('roster_theme') == config_theme:
-				theme_combobox.set_active(i)
-			i += 1
+		self.update_theme_list()
 
 		# use speller
 		if os.name == 'nt':
@@ -633,6 +624,18 @@ class PreferencesWindow:
 		gajim.interface.roster.repaint_themed_widgets()
 		gajim.interface.roster.change_roster_style(None)
 		gajim.interface.save_config()
+
+	def update_theme_list(self):
+		theme_combobox = self.xml.get_widget('theme_combobox')
+		model = gtk.ListStore(str)
+                theme_combobox.set_model(model) 
+		i = 0
+		for config_theme in gajim.config.get_per('themes'):
+			theme = config_theme.replace('_', ' ')
+			model.append([theme])
+			if gajim.config.get('roster_theme') == config_theme:
+				theme_combobox.set_active(i)
+			i += 1
 
 	def on_open_advanced_notifications_button_clicked(self, widget):
 		dialogs.AdvancedNotificationsWindow()

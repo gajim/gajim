@@ -81,6 +81,8 @@ class GajimThemesWindow:
 		return True # do NOT destroy the window
 	
 	def on_close_button_clicked(self, widget):
+		if gajim.interface.instances.has_key('preferences'):
+			gajim.interface.instances['preferences'].update_theme_list()
 		self.window.hide()
 
 	def on_theme_cell_edited(self, cell, row, new_name):
