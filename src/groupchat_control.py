@@ -1205,7 +1205,13 @@ class GroupchatControl(ChatControlBase):
 			# example: /nick foo
 			if len(message_array) and message_array[0] != self.nick:
 				nick = message_array[0]
-				nick = helpers.parse_resource(nick)
+				try:
+					nick = helpers.parse_resource(nick)
+				except:
+					# Invalid Nickname
+					dialogs.ErrorDialog(_('Invalid nickname'),
+					_('The nickname has not allowed characters.'))
+					return True
 				gajim.connections[self.account].join_gc(nick, self.room_jid, None)
 				self.nick = nick
 				self.clear(self.msg_textview)
@@ -1487,7 +1493,13 @@ class GroupchatControl(ChatControlBase):
 		'''asks user for new nick and on ok it sets it on room'''
 		def on_ok(widget):
 			nick = instance.input_entry.get_text().decode('utf-8')
-			nick = helpers.parse_resource(nick)
+			try:
+				nick = helpers.parse_resource(nick)
+			except:
+				# invalid char
+				dialogs.ErrorDialog(_('Invalid nickname'),
+				_('The nickname has not allowed characters.'))
+				return
 			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
 			self.nick = nick
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
