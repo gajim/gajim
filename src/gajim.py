@@ -758,8 +758,7 @@ class Interface:
 						show = 'offline'
 					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
 						name = nick, show = show)
-					c = gajim.contacts.contact_from_gc_contact(gc_c)
-					self.roster.new_chat(c, account, private_chat = True)
+					self.roster.new_private_chat(gc_c, account)
 				ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
 				ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
 							'status')
@@ -1000,7 +999,7 @@ class Interface:
 
 	def handle_event_gc_notify(self, account, array):
 		#'GC_NOTIFY' (account, (room_jid, show, status, nick,
-		# role, affiliation, jid, reason, actor, statusCode, newNick))
+		# role, affiliation, jid, reason, actor, statusCode, newNick, avatar_sha))
 		nick = array[3]
 		if not nick:
 			return
@@ -1016,7 +1015,7 @@ class Interface:
 			return
 		if control:
 			control.chg_contact_status(nick, show, status, array[4], array[5],
-				array[6], array[7], array[8], array[9], array[10])
+				array[6], array[7], array[8], array[9], array[10], array[11])
 
 		# print status in chat window and update status/GPG image
 		if self.msg_win_mgr.has_window(fjid, account):

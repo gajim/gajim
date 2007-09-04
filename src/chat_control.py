@@ -1588,24 +1588,34 @@ class ChatControl(ChatControlBase):
 		if not gajim.config.get('show_avatar_in_chat'):
 			return
 
-		jid = self.contact.jid
-		jid_with_resource = jid
-		if resource:
-			jid_with_resource += '/' + resource
+		is_fake = False
+		if self.TYPE_ID == message_control.TYPE_PM:
+			is_fake = True
+			jid_with_resource = self.contact.jid # fake jid
+		else:
+			jid_with_resource = self.contact.jid
+			if resource:
+				jid_with_resource += '/' + resource
 
 		# we assume contact has no avatar
 		scaled_pixbuf = None
 
-		pixbuf = None
-		is_fake = False
-		if gajim.contacts.is_pm_from_jid(self.account, jid):
-			is_fake = True
 		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid_with_resource,
 			is_fake)
 		if pixbuf == 'ask':
 			# we don't have the vcard
-			gajim.connections[self.account].request_vcard(jid_with_resource,
-				is_fake)
+			if self.TYPE_ID == message_control.TYPE_PM:
+				if self.gc_contact.jid:
+					# We know the real jid of this contact
+					real_jid = self.gc_contact.jid
+					if self.gc_contact.resource:
+						real_jid += '/' + self.gc_contact.resource
+				else:
+					real_jid = jid_with_resource
+				gajim.connections[self.account].request_vcard(real_jid,
+					jid_with_resource)
+			else:
+				gajim.connections[self.account].request_vcard(jid_with_resource)
 			return
 		if pixbuf is not None:
 			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'chat')

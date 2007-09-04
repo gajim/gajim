@@ -103,10 +103,11 @@ def tree_cell_data_func(column, renderer, model, iter, tv=None):
 class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
 
-	def __init__(self, parent_win, contact, acct):
+	def __init__(self, parent_win, gc_contact, contact, acct):
 		room_jid = contact.jid.split('/')[0]
 		room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, acct)
 		self.room_name = room_ctrl.name
+		self.gc_contact = gc_contact
 		ChatControl.__init__(self, parent_win, contact, acct)
 		self.TYPE_ID = 'pm'
 
@@ -825,7 +826,7 @@ class GroupchatControl(ChatControlBase):
 		model[iter][C_AVATAR] = scaled_pixbuf
 
 	def chg_contact_status(self, nick, show, status, role, affiliation, jid,
-	reason, actor, statusCode, new_nick):
+	reason, actor, statusCode, new_nick, avatar_sha, tim = None):
 		'''When an occupant changes his or her status'''
 		if show == 'invisible':
 			return
@@ -834,7 +835,7 @@ class GroupchatControl(ChatControlBase):
 			role = 'visitor'
 		if not affiliation:
 			affiliation = 'none'
-
+		fake_jid = self.room_jid + '/' + nick
 		newly_created = False
 		if show in ('offline', 'error'):
 			if statusCode == '307':
@@ -895,8 +896,7 @@ class GroupchatControl(ChatControlBase):
 						os.rename(old_file, files[old_file])
 				self.print_conversation(s, 'info')
 
-			if len(gajim.events.get_events(self.account,
-			self.room_jid + '/' + nick)) == 0:
+			if len(gajim.events.get_events(self.account, fake_jid)) == 0:
 				self.remove_contact(nick)
 			else:
 				c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
@@ -954,14 +954,12 @@ class GroupchatControl(ChatControlBase):
 					self.add_contact_to_roster(nick, show, role,
 						affiliation, status, jid)
 				else:
-					c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
-						nick)
-					if c.show == show and c.status == status and \
-						c.affiliation == affiliation: #no change
+					if gc_c.show == show and gc_c.status == status and \
+						gc_c.affiliation == affiliation: # no change
 						return
-					c.show = show
-					c.affiliation = affiliation
-					c.status = status
+					gc_c.show = show
+					gc_c.affiliation = affiliation
+					gc_c.status = status
 					self.draw_contact(nick)
 
 		self.parent_win.redraw_tab(self)
@@ -1028,10 +1026,16 @@ class GroupchatControl(ChatControlBase):
 		server = gajim.get_server_from_jid(self.room_jid)
 		if gajim.config.get('ask_avatars_on_startup') and \
 		not server.startswith('irc'):
-			fjid = self.room_jid + '/' + nick
-			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fjid, True)
+			fake_jid = self.room_jid + '/' + nick
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid, True)
 			if pixbuf == 'ask':
-				gajim.connections[self.account].request_vcard(fjid, True)
+				if j:
+					fjid = j
+					if resource:
+						fjid += '/' + resource
+					gajim.connections[self.account].request_vcard(fjid, fake_jid)
+				else:
+					gajim.connections[self.account].request_vcard(fake_jid, fake_jid)
 		if nick == self.nick: # we became online
 			self.got_connected()
 		self.list_treeview.expand_row((model.get_path(role_iter)), False)
@@ -1747,12 +1751,11 @@ class GroupchatControl(ChatControlBase):
 
 	def _start_private_message(self, nick):
 		gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-		c = gajim.contacts.contact_from_gc_contact(gc_c)
-		nick_jid = c.jid
+		nick_jid = gc_c.get_full_jid()
 
 		win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
 		if not win:
-			gajim.interface.roster.new_chat(c, self.account, private_chat = True)
+			gajim.interface.roster.new_private_chat(gc_c, self.account)
 			win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
 		win.set_active_tab(nick_jid, self.account)
 		win.window.present()

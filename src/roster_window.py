@@ -3055,12 +3055,23 @@ class RosterWindow:
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
 
-	def new_chat(self, contact, account, private_chat = False, resource = None):
+	def new_private_chat(self, gc_contact, account):
+		contact = gajim.contacts.contact_from_gc_contact(gc_contact)
+		type_ = message_control.TYPE_PM
+		fjid = gc_contact.room_jid + '/' + gc_contact.name
+		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
+		if not mw:
+			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
+
+		chat_control = PrivateChatControl(mw, gc_contact, contact, account)
+		mw.new_tab(chat_control)
+		if len(gajim.events.get_events(account, fjid)):
+			# We call this here to avoid race conditions with widget validation
+			chat_control.read_queue()
+
+	def new_chat(self, contact, account, resource = None):
 		# Get target window, create a control, and associate it with the window
-		if not private_chat:
-			type_ = message_control.TYPE_CHAT
-		else:
-			type_ = message_control.TYPE_PM
+		type_ = message_control.TYPE_CHAT
 
 		fjid = contact.jid
 		if resource:
@@ -3069,10 +3080,7 @@ class RosterWindow:
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
 
-		if not private_chat:
-			chat_control = ChatControl(mw, contact, account, resource)
-		else:
-			chat_control = PrivateChatControl(mw, contact, account)
+		chat_control = ChatControl(mw, contact, account, resource)
 
 		mw.new_tab(chat_control)
 
