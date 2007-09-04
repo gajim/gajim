@@ -796,8 +796,7 @@ class ConnectionVcard:
 		self.vcard_sha = None
 		self.vcard_shas = {} # sha of contacts
 		self.room_jids = [] # list of gc jids so that vcard are saved in a folder
-		self.groupchat_jids = {} # {ID : groupchat_jid}
-		
+
 	def add_sha(self, p, send_caps = True):
 		c = p.setTag('x', namespace = common.xmpp.NS_VCARD_UPDATE)
 		if self.vcard_sha is not None:
@@ -1299,7 +1298,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			seconds = int(seconds)
 		except:
 			return
-		who = helpers.get_full_jid_from_iq(iq_obj)
+		id = iq_obj.getID()
+		if id in self.groupchat_jids:
+			who = self.groupchat_jids[id]
+			del self.groupchat_jids[id]
+		else:
+			who = helpers.get_full_jid_from_iq(iq_obj)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 	
@@ -1314,7 +1318,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			client_info += ' ' + qp.getTag('version').getData()
 		if qp.getTag('os'):
 			os_info += qp.getTag('os').getData()
-		who = helpers.get_full_jid_from_iq(iq_obj)
+		id = iq_obj.getID()
+		if id in self.groupchat_jids:
+			who = self.groupchat_jids[id]
+			del self.groupchat_jids[id]
+		else:
+			who = helpers.get_full_jid_from_iq(iq_obj)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
 
