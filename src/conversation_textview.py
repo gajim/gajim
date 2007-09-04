@@ -205,6 +205,9 @@ class ConversationTextview:
 		return True		   
 
 	def smooth_scroll_timeout(self):
+		if not self.smooth_id:
+			# we finished scrolling
+			return
 		gobject.source_remove(self.smooth_id)
 		self.smooth_id = None
 		parent = self.tv.get_parent()
