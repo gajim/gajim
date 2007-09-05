@@ -2813,11 +2813,6 @@ class RosterWindow:
 								passphrase)
 					gajim.connections[account].gpg_passphrase(passphrase)
 
-		for gc_control in gajim.interface.msg_win_mgr.get_controls(
-		message_control.TYPE_GC):
-			if gc_control.account == account:
-				gajim.connections[account].send_gc_status(gc_control.nick,
-					gc_control.room_jid, status, txt)
 		if gajim.account_is_connected(account):
 			if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
