@@ -1276,19 +1276,13 @@ class GroupchatControl(ChatControlBase):
 			if len(message_array):
 				message_array = message_array[0].split()
 				invitee = message_array.pop(0)
-				if invitee.find('@') >= 0:
-					reason = ' '.join(message_array)
-					gajim.connections[self.account].send_invite(self.room_jid,
-						invitee, reason)
-					s = _('Invited %(contact_jid)s to %(room_jid)s.') % {
-						'contact_jid': invitee,
-						'room_jid': self.room_jid}
-					self.print_conversation(s, 'info')
-					self.clear(self.msg_textview)
-				else:
-					#%s is something the user wrote but it is not a jid so we inform
-					s = _('%s does not appear to be a valid JID') % invitee
-					self.print_conversation(s, 'info')
+				reason = ' '.join(message_array)
+				gajim.connections[self.account].send_invite(self.room_jid, invitee, reason)
+				s = _('Invited %(contact_jid)s to %(room_jid)s.') % {
+					'contact_jid': invitee,
+					'room_jid': self.room_jid}
+				self.print_conversation(s, 'info')
+				self.clear(self.msg_textview)
 			else:
 				self.get_command_help(command)
 			return True
