@@ -575,7 +575,14 @@ class PreferencesWindow:
 	def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
 		gajim.interface.roster.draw_roster()
-
+		# Redraw connected groupchats (in an ugly way)
+		for account in gajim.connections:
+			if gajim.connections[account].connected:
+				for gc_control in gajim.interface.msg_win_mgr.get_controls(
+					message_control.TYPE_GC) + \
+					gajim.interface.minimized_controls[account].values():
+						gc_control.draw_roster()
+	
 	def on_emoticons_combobox_changed(self, widget):
 		active = widget.get_active()
 		model = widget.get_model()
