@@ -2976,6 +2976,11 @@ class AccountCreationWizardWindow:
 		self.window.show_all()
 
 	def on_wizard_window_destroy(self, widget):
+		page = self.notebook.get_current_page()
+		if page > 2 and page < 5 and self.account in gajim.connections:
+			# connection instance is saved in gajim.connections and we canceled the
+			# addition of the account
+			del gajim.connections[self.account]
 		del gajim.interface.instances['account_creation_wizard']
 
 	def on_register_server_features_button_clicked(self, widget):
@@ -2993,6 +2998,8 @@ class AccountCreationWizardWindow:
 			self.notebook.set_current_page(0)
 			self.back_button.set_sensitive(False)
 		elif self.notebook.get_current_page() == 3:
+			if self.account in gajim.connections:
+				del gajim.connections[self.account]
 			self.notebook.set_current_page(2)
 			self.xml.get_widget('form_vbox').remove(self.data_form_widget)
 		elif self.notebook.get_current_page() == 5: # finish page
