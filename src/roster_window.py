@@ -870,6 +870,9 @@ class RosterWindow:
 		join_gc_menuitem.set_submenu(gc_sub_menu)
 		
 		connected_accounts = gajim.get_number_of_connected_accounts()
+
+		connected_accounts_with_private_storage = 0
+
 		if connected_accounts > 1: # 2 or more accounts? make submenus
 			add_sub_menu = gtk.Menu()
 			disco_sub_menu = gtk.Menu()
@@ -893,6 +896,8 @@ class RosterWindow:
 					continue 	
 
 				# join gc
+				if gajim.connections[account].private_storage_supported:
+					connected_accounts_with_private_storage += 1
 				label = gtk.Label()
 				label.set_markup('<u>' + account.upper() +'</u>')
 				label.set_use_underline(False)
@@ -900,12 +905,10 @@ class RosterWindow:
 				gc_item.add(label)
 				gc_item.connect('state-changed',
 					gtkgui_helpers.on_bm_header_changed_state)
+				gc_item = gtk.MenuItem(_('using account %s') % account, False)
 				gc_sub_menu.append(gc_item)
 				
 				self.add_bookmarks_list(gc_sub_menu, account)
-
-				# the 'manage gc bookmarks' item is shown
-				# below to avoid duplicate code
 
 				# add
 				add_item = gtk.MenuItem(_('to %s account') % account, False)
@@ -918,7 +921,6 @@ class RosterWindow:
 				disco_item.connect('activate',
 					self.on_service_disco_menuitem_activate, account)
 
-
 			add_new_contact_menuitem.set_submenu(add_sub_menu)
 			add_sub_menu.show_all()
 			service_disco_menuitem.set_submenu(disco_sub_menu)
@@ -930,7 +932,10 @@ class RosterWindow:
 			for account in gajim.connections:
 				if gajim.account_is_connected(account): # THE connected account
 					# gc
+					if gajim.connections[account].private_storage_supported:
+						connected_accounts_with_private_storage += 1
 					self.add_bookmarks_list(gc_sub_menu, account)
+					gc_sub_menu.show_all()
 					# add
 					if not self.add_new_contact_handler_id:
 						self.add_new_contact_handler_id =\
@@ -974,9 +979,20 @@ class RosterWindow:
 								add_new_contact_menuitem, service_disco_menuitem]:
 							item.set_sensitive(False)
 
+		if connected_accounts_with_private_storage > 0:
+			# At least one account with private storage support
 			# show the 'manage gc bookmarks' item
 			newitem = gtk.SeparatorMenuItem() # separator
 			gc_sub_menu.append(newitem)
+
+			newitem = gtk.ImageMenuItem(_('_Manage Bookmarks...'))
+			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
+				gtk.ICON_SIZE_MENU)
+			newitem.set_image(img)
+			newitem.connect('activate',
+				self.on_manage_bookmarks_menuitem_activate)
+			gc_sub_menu.append(newitem)
+			gc_sub_menu.show_all()
 
 		connected_accounts_with_vcard = []
 		for account in gajim.connections:
@@ -1008,15 +1024,6 @@ class RosterWindow:
 		else:
 			profile_avatar_menuitem.set_sensitive(True)
 
-			newitem = gtk.ImageMenuItem(_('_Manage Bookmarks...'))
-			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
-				gtk.ICON_SIZE_MENU)
-			newitem.set_image(img)
-			newitem.connect('activate',
-				self.on_manage_bookmarks_menuitem_activate)
-			gc_sub_menu.append(newitem)
-			gc_sub_menu.show_all()
-			
 		# Advanced Actions
 		if len(gajim.connections) == 0: # user has no accounts
 			advanced_menuitem.set_sensitive(False)
@@ -4033,8 +4040,8 @@ class RosterWindow:
 
 	def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
 		c_dest, was_big_brother, context, etime):
-		if not gajim.connections[account_source].metacontacts_supported or not \
-		gajim.connections[account_dest].metacontacts_supported:
+		if not gajim.connections[account_source].private_storage_supported or not\
+		gajim.connections[account_dest].private_storage_supported:
 			dialogs.WarningDialog(_('Metacontacts storage not supported by your '
 				'server'),
 				_('Your server does not support storing metacontacts information. '

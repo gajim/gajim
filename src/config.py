@@ -2483,7 +2483,9 @@ class ManageBookmarksWindow:
 				continue
 			if gajim.connections[account].is_zeroconf:
 				continue
-			iter = self.treestore.append(None, [None, account,None,
+			if not gajim.connections[account].private_storage_supported:
+				continue
+			iter = self.treestore.append(None, [None, account, None,
 				None, None, None, None])
 
 			for bookmark in gajim.connections[account].bookmarks:

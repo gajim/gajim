@@ -215,10 +215,10 @@ class GroupchatControl(ChatControlBase):
 		# connect the menuitems to their respective functions
 		xm = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
 
-		widget = xm.get_widget('bookmark_room_menuitem')
-		id = widget.connect('activate',
+		self.bookmark_room_menuitem = xm.get_widget('bookmark_room_menuitem')
+		id = self.bookmark_room_menuitem.connect('activate',
 			self._on_bookmark_room_menuitem_activate)
-		self.handlers[id] = widget
+		self.handlers[id] = self.bookmark_room_menuitem
 
 		widget = xm.get_widget('change_nick_menuitem')
 		id = widget.connect('activate', self._on_change_nick_menuitem_activate)
@@ -481,6 +481,8 @@ class GroupchatControl(ChatControlBase):
 		childs = menu.get_children()
 		# hide chat buttons
 		childs[5].set_active(self.hide_chat_buttons_current)
+		if not gajim.connections[self.account].private_storage_supported:
+			self.bookmark_room_menuitem.set_sensitive(False)
 		if gajim.gc_connected[self.account][self.room_jid]:
 			c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				self.nick)
