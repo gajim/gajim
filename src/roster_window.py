@@ -3699,7 +3699,9 @@ class RosterWindow:
 			if not gajim.config.get_per('accounts', account,
 			'sync_with_global_status'):
 				continue
-			if not gajim.connections[account].connected:
+			if gajim.connections[account].connected < gajim.SHOW_LIST.index(
+			'online') or gajim.connections[account].connected > gajim.SHOW_LIST.\
+			index('invisible'):
 				continue
 			current_show = gajim.SHOW_LIST[gajim.connections[account].connected]
 			self.send_status(account, current_show, status_message)
