@@ -906,7 +906,6 @@ class RosterWindow:
 				gc_item.add(label)
 				gc_item.connect('state-changed',
 					gtkgui_helpers.on_bm_header_changed_state)
-				gc_item = gtk.MenuItem(_('using account %s') % account, False)
 				gc_sub_menu.append(gc_item)
 				
 				self.add_bookmarks_list(gc_sub_menu, account)
