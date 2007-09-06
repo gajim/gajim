@@ -24,7 +24,7 @@ import socket
 import sys
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
-                  time as time_time, timezone, tzname)
+	time as time_time, timezone, tzname)
 from calendar import timegm
 
 import socks5
@@ -328,7 +328,7 @@ class ConnectionBytestream:
 		iq.setID(auth_id)
 		query = iq.setTag('query')
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		query.setAttr('sid',  proxy['sid'])
+		query.setAttr('sid', proxy['sid'])
 		activate = query.setTag('activate')
 		activate.setData(file_props['proxy_receiver'])
 		iq.setID(auth_id)
@@ -419,7 +419,7 @@ class ConnectionBytestream:
 		gajim.proxy65_manager.resolve_result(frm, query)
 		
 		try:
-			streamhost =  query.getTag('streamhost-used')
+			streamhost = query.getTag('streamhost-used')
 		except: # this bytestream result is not what we need
 			pass
 		id = real_id[3:]
@@ -684,7 +684,7 @@ class ConnectionDisco:
 	def _DiscoverItemsGetCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsGetCB')
 		node = iq_obj.getTagAttr('query', 'node')
-                if node is None:
+		if node is None:
 			result = iq_obj.buildReply('result')
 			self.connection.send(result)
 			raise common.xmpp.NodeProcessed
@@ -1259,10 +1259,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
-			jid  = helpers.parse_jid(item.getAttr('jid'))
+			jid = helpers.parse_jid(item.getAttr('jid'))
 			name = item.getAttr('name')
-			sub  = item.getAttr('subscription')
-			ask  = item.getAttr('ask')
+			sub = item.getAttr('subscription')
+			ask = item.getAttr('ask')
 			groups = []
 			for group in item.getTags('group'):
 				groups.append(group.getData())
@@ -1345,7 +1345,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		gajim.log.debug('TimeRevisedCB')
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.setTag('time',
-                                   namespace=common.xmpp.NS_TIME_REVISED)
+			namespace=common.xmpp.NS_TIME_REVISED)
 		qp.setTagData('utc', strftime('%Y-%m-%dT%TZ', gmtime()))
 		zone = -(timezone, altzone)[daylight] / 60
 		tzo = (zone / 60, abs(zone % 60))
