@@ -597,6 +597,7 @@ class ConversationTextview:
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 3: # right click
 				self.make_link_menu(event, kind, href)
+				return True
 			else:
 				# we launch the correct application
 				helpers.launch_browser_mailer(kind, href)
