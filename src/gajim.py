@@ -2609,7 +2609,8 @@ class Interface:
 					gajim.config.set_per('themes', theme_name, o,
 						theme[d.index(o)])
 			
-		if gajim.config.get('autodetect_browser_mailer'):
+		if gajim.config.get('autodetect_browser_mailer') or \
+		len(gajim.connections) == 0:
 			gtkgui_helpers.autodetect_browser_mailer()
 
 		if gajim.verbose:
@@ -2645,7 +2646,7 @@ class Interface:
 		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
 			gtk.link_button_set_uri_hook(self.on_launch_browser_mailer, 'url')
 		
-		self.instances = {'logs': {}}
+		self.instances = {}
 		
 		for a in gajim.connections:
 			self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
