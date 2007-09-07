@@ -2892,6 +2892,11 @@ class AccountCreationWizardWindow:
 				'.')
 				dialogs.ErrorDialog(pritext, sectext)
 				return
+			if '@' in username:
+				pritext = _('Invalid username')
+				sectext = _('Invalid username')
+				dialogs.ErrorDialog(pritext, sectext)
+				return
 			server = widgets['server_comboboxentry'].child.get_text().decode('utf-8')
 			savepass = widgets['save_password_checkbutton'].get_active()
 			password = widgets['pass1_entry'].get_text().decode('utf-8')
