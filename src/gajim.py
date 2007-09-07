@@ -2074,7 +2074,8 @@ class Interface:
 					gajim.config.set_per('themes', theme_name, o,
 						theme[d.index(o)])
 			
-		if gajim.config.get('autodetect_browser_mailer'):
+		if gajim.config.get('autodetect_browser_mailer') or \
+		len(gajim.connections) == 0:
 			gtkgui_helpers.autodetect_browser_mailer()
 
 		if gajim.verbose:
