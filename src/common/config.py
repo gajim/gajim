@@ -126,7 +126,7 @@ class Config:
 		'single-msg-height': [opt_int, 280],
 		'roster_x-position': [ opt_int, 0 ],
 		'roster_y-position': [ opt_int, 0 ],
-		'roster_width': [ opt_int, 150 ],
+		'roster_width': [ opt_int, 200 ],
 		'roster_height': [ opt_int, 400 ],
 		'latest_disco_addresses': [ opt_str, '' ],
 		'recently_groupchat': [ opt_str, '' ],
