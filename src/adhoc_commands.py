@@ -286,8 +286,7 @@ class CommandWindow:
 		self.remove_pulsing()
 		self.sending_form_progressbar.hide()
 
-		if self.sessionid is None:
-			self.sessionid = command.getAttr('sessionid')
+		self.sessionid = command.getAttr('sessionid')
 
 		self.form_status = command.getAttr('status')
 
