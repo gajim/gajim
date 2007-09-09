@@ -1,4 +1,19 @@
+Gajim 0.11.2 (XX September 2007)
+
+  * Improve idle, transports support
+  * Enable ellipsization in roster and chatwindow
+  * Fixed some metacontacts problems (#2156, #2761)
+  * Beter support of XEP-0070 (Verifying HTTP Requests via XMPP)
+  * Make the same height of a banner for all chat tabs
+  * Fix a bug with french translation and invitations (#3043)
+  * Fix a bug with UTF-8 and emoticons
+  * Corrected many bugs with passwords and gnome-keyring
+  * Improve xhtml-im and pictures support
+  * Improve Ad-Hoc support
+  * And many other bufixes
+
 Gajim 0.11.1 (18 February 2007)
+
   * Fixes in gajim-remote and the way XMPP URI are handled
   * Fix Idle under Windows
   * Fix Gajim under non-ascii languages Windows
