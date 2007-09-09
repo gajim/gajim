@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
-"PO-Revision-Date: 2007-01-20 00:01+0300\n"
+"POT-Creation-Date: 2007-09-09 20:27+0200\n"
+"PO-Revision-Date: 2007-09-09 21:15+0300\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
@@ -2515,9 +2515,8 @@ msgid "Russian"
 msgstr "Расейская"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Serbian"
-msgstr "Нямецкая"
+msgstr "Сербская"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
@@ -3152,15 +3151,15 @@ msgid "Please type a name for this status message"
 msgstr "Вызначце назву гэтага паведамлення аб змене стану"
 
 #: ../src/dialogs.py:409
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Паведамленне аб змене стану"
+msgstr "Надпісаць паведамленне аб змене стану?"
 
 #: ../src/dialogs.py:410
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
-msgstr "Гэтая назва ўжо скарыстаная для іншага рахунка. Выберыце іншую назву."
+msgstr ""
+"Гэтая назва ўжо выкарыстаная. Хочаш надпісаць гэтае паведамленне аб змене "
+"стану?"
 
 #: ../src/dialogs.py:426
 msgid "AIM Address:"
@@ -3900,7 +3899,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr ""
+msgstr "Памылка запісу на дыск"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4043,9 +4042,8 @@ msgstr "Немагчыма захаваць настаўленні"
 #: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
 #: ../src/common/optparser.py:189 ../src/common/optparser.py:407
 #: ../src/common/optparser.py:441
-#, fuzzy
 msgid "default"
-msgstr "Прадвызначана"
+msgstr "змоўчаны"
 
 #: ../src/gajim.py:2146
 msgid "Network Manager support not available"
@@ -4478,14 +4476,12 @@ msgstr "%s далучыўся да групавой размовы"
 #. Invalid Nickname
 #. invalid char
 #: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
-#, fuzzy
 msgid "Invalid nickname"
-msgstr "Няправільнае імя карыстальніка"
+msgstr "Няправільная мянушка"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
-#, fuzzy
 msgid "The nickname has not allowed characters."
-msgstr "Jabber ID групавой размовы ўтрымлівае няправільныя знакі."
+msgstr "Мянушка ўтрымвае недазволеныя знакі."
 
 #: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
 #: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
@@ -4872,13 +4868,12 @@ msgid "Status is now: %(status)s"
 msgstr "Цяперашні стан: %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
-#, fuzzy
 msgid "Timeout loading image"
-msgstr "Немагчыма загрузіць малюнак"
+msgstr "Перавышаны тэрмін чакання загрузкі выявы"
 
 #: ../src/htmltextview.py:604
 msgid "Image is too big"
-msgstr ""
+msgstr "Выява надта вялікая"
 
 #: ../src/message_window.py:280
 msgid "Chats"
