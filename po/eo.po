@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-18 22:20+0100\n"
+"POT-Creation-Date: 2007-09-09 13:49+0200\n"
 "PO-Revision-Date: 2007-01-29 14:01+0400\n"
 "Last-Translator: Sergio Ĥlutĉin <Sergey.Khlutchin@gmail.com>\n"
 "Language-Team: Esperanto <translation-team-eo@lists.sourceforge.net>\n"
@@ -250,16 +250,16 @@ msgstr "Korekti personan informon..."
 
 #: ../data/glade/account_modification_window.glade.h:14
 #: ../data/glade/roster_window.glade.h:5 ../src/notify.py:457
-#: ../src/notify.py:479 ../src/notify.py:491 ../src/common/helpers.py:914
+#: ../src/notify.py:479 ../src/notify.py:491 ../src/common/helpers.py:918
 msgid "Gajim"
 msgstr "Gajim"
 
 #: ../data/glade/account_modification_window.glade.h:15
 #: ../data/glade/preferences_window.glade.h:51
 #: ../data/glade/zeroconf_properties_window.glade.h:7
-#: ../src/roster_window.py:346 ../src/roster_window.py:1224
-#: ../src/roster_window.py:1435 ../src/roster_window.py:2111
-#: ../src/roster_window.py:2153 ../src/common/contacts.py:284
+#: ../src/roster_window.py:347 ../src/roster_window.py:1237
+#: ../src/roster_window.py:1447 ../src/roster_window.py:2123
+#: ../src/roster_window.py:2165 ../src/common/contacts.py:290
 msgid "General"
 msgstr "Ĝenerala"
 
@@ -318,16 +318,16 @@ msgid "Manage..."
 msgstr "Administri..."
 
 #: ../data/glade/account_modification_window.glade.h:25
-#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1614
-#: ../src/config.py:3405
+#: ../data/glade/zeroconf_properties_window.glade.h:16 ../src/config.py:1630
+#: ../src/config.py:3321
 msgid "No key selected"
 msgstr "Neniu ŝlosilo elektita"
 
 #. None means no proxy profile selected
-#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1194
-#: ../src/config.py:1199 ../src/config.py:1383 ../src/config.py:1604
-#: ../src/config.py:1613 ../src/config.py:1672 ../src/config.py:1746
-#: ../src/config.py:3395 ../src/config.py:3404 ../src/dialogs.py:281
+#: ../data/glade/account_modification_window.glade.h:27 ../src/config.py:1210
+#: ../src/config.py:1215 ../src/config.py:1399 ../src/config.py:1620
+#: ../src/config.py:1629 ../src/config.py:1688 ../src/config.py:1762
+#: ../src/config.py:3311 ../src/config.py:3320 ../src/dialogs.py:281
 #: ../src/dialogs.py:283
 msgid "None"
 msgstr "Neniu"
@@ -654,7 +654,7 @@ msgid "All statuses"
 msgstr "ia ajn stato"
 
 #: ../data/glade/advanced_notifications_window.glade.h:8
-#: ../src/common/commands.py:91 ../src/common/helpers.py:243
+#: ../src/common/commands.py:91 ../src/common/helpers.py:245
 msgid "Away"
 msgstr "Fora"
 
@@ -671,7 +671,7 @@ msgid "Have "
 msgstr "Havas "
 
 #: ../data/glade/advanced_notifications_window.glade.h:12
-#: ../src/common/helpers.py:253
+#: ../src/common/helpers.py:255
 msgid "Invisible"
 msgstr "Nevidebla"
 
@@ -680,7 +680,7 @@ msgid "Launch a command"
 msgstr "Lanĉi komandon"
 
 #: ../data/glade/advanced_notifications_window.glade.h:14
-#: ../src/common/helpers.py:226
+#: ../src/common/helpers.py:228
 msgid "Not Available"
 msgstr "Nedisponebla"
 
@@ -956,7 +956,7 @@ msgstr ""
 msgid "When a file transfer is complete show a popup notification"
 msgstr "Kiam dosiertransmeto estos plenumita, montri ŝprucfenestron kun avizo"
 
-#: ../data/glade/filetransfers.glade.h:13 ../src/filetransfers_window.py:769
+#: ../data/glade/filetransfers.glade.h:13 ../src/filetransfers_window.py:761
 msgid "_Continue"
 msgstr "_Daŭrigi"
 
@@ -964,7 +964,7 @@ msgstr "_Daŭrigi"
 msgid "_Notify me when a file transfer is complete"
 msgstr "_Avizi min kiam dosiero estas transdonita"
 
-#: ../data/glade/filetransfers.glade.h:15 ../src/filetransfers_window.py:190
+#: ../data/glade/filetransfers.glade.h:15 ../src/filetransfers_window.py:188
 msgid "_Open Containing Folder"
 msgstr "_Malfermi enhavantan dosierujon"
 
@@ -1112,7 +1112,7 @@ msgstr "_Voĉo"
 msgid "Create new post"
 msgstr "Krei novan mesaĝon"
 
-#: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:268
+#: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:270
 msgid "From"
 msgstr "De"
 
@@ -1190,7 +1190,7 @@ msgstr "Rifuzi"
 msgid "Invitation Received"
 msgstr "Invito estas ricevita"
 
-#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1149
+#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1166
 msgid "Join Group Chat"
 msgstr "Eniri babilejen"
 
@@ -1220,7 +1220,7 @@ msgid "Room:"
 msgstr "Babilejo:"
 
 #: ../data/glade/join_groupchat_window.glade.h:7 ../src/disco.py:1165
-#: ../src/disco.py:1548
+#: ../src/disco.py:1553
 msgid "_Join"
 msgstr "_Aliĝi"
 
@@ -1286,7 +1286,7 @@ msgstr "Uzi aŭtentokontrolon"
 msgid "Click to insert an emoticon (Alt+M)"
 msgstr "Klaku por enigi mienon (Alt+M)"
 
-#: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1109
+#: ../data/glade/message_window.glade.h:2 ../src/chat_control.py:1126
 msgid "OpenPGP Encryption"
 msgstr "Ĉifrado per OpenPGP"
 
@@ -1300,7 +1300,7 @@ msgstr "_Agoj"
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/glade/message_window.glade.h:6
 #: ../data/glade/xml_console_window.glade.h:11
-#: ../src/filetransfers_window.py:253
+#: ../src/filetransfers_window.py:245
 msgid "_Send"
 msgstr "_Sendi"
 
@@ -1832,7 +1832,7 @@ msgstr "Jabber-ID"
 msgid "Order:"
 msgstr "Ordnumero:"
 
-#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1863
+#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1882
 msgid "Privacy List"
 msgstr "Privata listo"
 
@@ -1989,7 +1989,7 @@ msgid "Prefix:"
 msgstr "Prefikso:"
 
 #: ../data/glade/profile_window.glade.h:32
-#: ../data/glade/vcard_information_window.glade.h:38 ../src/vcard.py:273
+#: ../data/glade/vcard_information_window.glade.h:38 ../src/vcard.py:290
 msgid "Role:"
 msgstr "Rolo:"
 
@@ -2042,17 +2042,17 @@ msgstr "Enigi Open_PGP-ŝlosilon"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:4
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:3
-#: ../src/roster_window.py:2075
+#: ../src/roster_window.py:2087
 msgid "Edit _Groups"
 msgstr "Aranĝi _Grupojn"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:5
-#: ../src/roster_window.py:2210
+#: ../src/roster_window.py:2222
 msgid "Execute Command..."
 msgstr "Plenumi komandon..."
 
 #: ../data/glade/roster_contact_context_menu.glade.h:6
-#: ../src/roster_window.py:2033
+#: ../src/roster_window.py:2045
 msgid "In_vite to"
 msgstr "In_viti al"
 
@@ -2076,14 +2076,14 @@ msgstr "_Malpermesi al li/ŝi vidi vian staton"
 
 #. Remove group
 #: ../data/glade/roster_contact_context_menu.glade.h:14
-#: ../src/roster_window.py:2027 ../src/roster_window.py:2124
-#: ../src/roster_window.py:2231
+#: ../src/roster_window.py:2039 ../src/roster_window.py:2136
+#: ../src/roster_window.py:2243
 msgid "_Remove from Roster"
 msgstr "_Forigi el kontaktlisto"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:15
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:7
-#: ../src/roster_window.py:2219
+#: ../src/roster_window.py:2231
 msgid "_Rename"
 msgstr "_Renomigi"
 
@@ -2132,7 +2132,7 @@ msgid "_Discover Services"
 msgstr "_Serĉi servojn"
 
 #: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1286
-#: ../src/roster_window.py:2202
+#: ../src/roster_window.py:2214
 msgid "_Edit"
 msgstr "A_dministri"
 
@@ -2283,7 +2283,7 @@ msgstr "Kontakta informo"
 
 #: ../data/glade/vcard_information_window.glade.h:24
 #: ../data/glade/zeroconf_information_window.glade.h:4
-#: ../data/glade/zeroconf_properties_window.glade.h:13 ../src/dialogs.py:416
+#: ../data/glade/zeroconf_properties_window.glade.h:13 ../src/dialogs.py:425
 msgid "Jabber ID:"
 msgstr "Jabber-ID:"
 
@@ -2531,7 +2531,7 @@ msgstr "Sveda"
 msgid "Chinese (Ch)"
 msgstr "Ĉina (Ch)"
 
-#: ../src/chat_control.py:207 ../src/dialogs.py:1517
+#: ../src/chat_control.py:213 ../src/dialogs.py:1536
 msgid ""
 "If that is not your language for which you want to highlight misspelled "
 "words, then please set your $LANG as appropriate. Eg. for French do export "
@@ -2547,58 +2547,58 @@ msgstr ""
 "\n"
 "Emfazado de mistajpoj ne funkcios"
 
-#: ../src/chat_control.py:246
+#: ../src/chat_control.py:252
 msgid "Spelling language"
 msgstr "Lingvo de literumado"
 
 #. we are not connected
-#: ../src/chat_control.py:269 ../src/chat_control.py:475
+#: ../src/chat_control.py:275 ../src/chat_control.py:481
 msgid "A connection is not available"
 msgstr "Konekto mankas"
 
-#: ../src/chat_control.py:270 ../src/chat_control.py:476
+#: ../src/chat_control.py:276 ../src/chat_control.py:482
 msgid "Your message can not be sent until you are connected."
 msgstr "Via mesaĝo ne povas esti sendita dum vi senkonektas."
 
-#: ../src/chat_control.py:1034
+#: ../src/chat_control.py:1052
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s de babilejo %(room_name)s"
 
 #. we talk about a contact here
-#: ../src/chat_control.py:1123
+#: ../src/chat_control.py:1140
 #, python-format
 msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 msgstr "Nek %s publicis OpenPGP-ŝlosilon, nek vi enigis ĝin"
 
-#: ../src/chat_control.py:1259
+#: ../src/chat_control.py:1272
 msgid "Encryption enabled"
 msgstr "Ĉifrado ebligata"
 
-#: ../src/chat_control.py:1264
+#: ../src/chat_control.py:1277
 msgid "Encryption disabled"
 msgstr "Ĉifrado malebligata"
 
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1408 ../src/conversation_textview.py:497
-#: ../src/dialogs.py:629 ../src/gajim.py:792 ../src/gajim.py:793
-#: ../src/gajim.py:1137 ../src/roster_window.py:332
-#: ../src/roster_window.py:410 ../src/roster_window.py:1497
-#: ../src/roster_window.py:1507 ../src/roster_window.py:1683
-#: ../src/roster_window.py:1889 ../src/roster_window.py:2474
-#: ../src/roster_window.py:2675 ../src/roster_window.py:3906
-#: ../src/roster_window.py:3908 ../src/common/contacts.py:73
-#: ../src/common/helpers.py:43 ../src/common/helpers.py:255
+#: ../src/chat_control.py:1421 ../src/conversation_textview.py:497
+#: ../src/dialogs.py:638 ../src/gajim.py:806 ../src/gajim.py:807
+#: ../src/gajim.py:1155 ../src/roster_window.py:333
+#: ../src/roster_window.py:412 ../src/roster_window.py:1509
+#: ../src/roster_window.py:1519 ../src/roster_window.py:1695
+#: ../src/roster_window.py:1901 ../src/roster_window.py:2486
+#: ../src/roster_window.py:2687 ../src/roster_window.py:3958
+#: ../src/roster_window.py:3960 ../src/common/contacts.py:76
+#: ../src/common/helpers.py:43 ../src/common/helpers.py:257
 msgid "Not in Roster"
 msgstr "Mankas en kontaktlisto"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:1552
+#: ../src/chat_control.py:1565
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Vi ĵus ricevis novan mesaĝon de \"%s\""
 
-#: ../src/chat_control.py:1553
+#: ../src/chat_control.py:1566
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -2606,29 +2606,29 @@ msgstr ""
 "Se vi fermos tiun ĉi slipon kaj la historio estas malŝalta, tiu ĉi mesaĝo "
 "perdiĝos."
 
-#: ../src/config.py:137 ../src/config.py:586
+#: ../src/config.py:139 ../src/config.py:590
 msgid "Disabled"
 msgstr "malŝaltitaj"
 
-#: ../src/config.py:231
+#: ../src/config.py:224
 #, python-format
 msgid "Every %s _minutes"
 msgstr "Ĉiujn %s _minutojn"
 
-#: ../src/config.py:351
+#: ../src/config.py:344
 msgid "Active"
 msgstr "Aktiva"
 
-#: ../src/config.py:359
+#: ../src/config.py:352
 msgid "Event"
 msgstr "Evento"
 
-#: ../src/config.py:682 ../src/gajim.py:2174
+#: ../src/config.py:698 ../src/gajim.py:2198
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "Vortaro mankas por %s lingvo"
 
-#: ../src/config.py:683 ../src/gajim.py:2175
+#: ../src/config.py:699 ../src/gajim.py:2199
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -2637,241 +2637,241 @@ msgstr ""
 "Vi bezonas Instali la vortaron %s por uzi literumadon, aŭ elekti alian "
 "lingvon ĉe la agordero \"speller_language\"."
 
-#: ../src/config.py:1006
+#: ../src/config.py:1022
 msgid "status message title"
 msgstr "statmesaĝa titolo"
 
-#: ../src/config.py:1006
+#: ../src/config.py:1022
 msgid "status message text"
 msgstr "statmesaĝa teksto"
 
-#: ../src/config.py:1042
+#: ../src/config.py:1058
 msgid "First Message Received"
 msgstr "Unua mesaĝo ricevita"
 
-#: ../src/config.py:1043
+#: ../src/config.py:1059
 msgid "Next Message Received"
 msgstr "Sekva mesaĝo ricevita"
 
-#: ../src/config.py:1044
+#: ../src/config.py:1060
 msgid "Contact Connected"
 msgstr "Kontakto konektita"
 
-#: ../src/config.py:1045
+#: ../src/config.py:1061
 msgid "Contact Disconnected"
 msgstr "Kontakto malkonektita"
 
-#: ../src/config.py:1046
+#: ../src/config.py:1062
 msgid "Message Sent"
 msgstr "Mesaĝo sendita"
 
-#: ../src/config.py:1047
+#: ../src/config.py:1063
 msgid "Group Chat Message Highlight"
 msgstr "Emfazado de mesaĝoj en babilejo"
 
-#: ../src/config.py:1048
+#: ../src/config.py:1064
 msgid "Group Chat Message Received"
 msgstr "Ricevitas mesaĝo en babilejo"
 
-#: ../src/config.py:1055
+#: ../src/config.py:1071
 msgid "GMail Email Received"
 msgstr "GMail-retletero venis"
 
-#: ../src/config.py:1258
+#: ../src/config.py:1274
 msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP estas neuzebla ĉe tiu ĉi komputilo"
 
-#: ../src/config.py:1304
+#: ../src/config.py:1320
 msgid "You are currently connected to the server"
 msgstr "Nun vi estas konektita al la servilo"
 
-#: ../src/config.py:1305
+#: ../src/config.py:1321
 msgid "To change the account name, you must be disconnected."
 msgstr "Por ke ŝanĝi kontnomon, vi devas esti senkonekta."
 
-#: ../src/config.py:1308 ../src/config.py:1902
+#: ../src/config.py:1324 ../src/config.py:1918
 msgid "Unread events"
 msgstr "Nelegitaj eventoj"
 
-#: ../src/config.py:1309
+#: ../src/config.py:1325
 msgid "To change the account name, you must read all pending events."
 msgstr "Por ŝanĝi la nomon de konto, vi devas legi atendantajn eventojn."
 
-#: ../src/config.py:1313
+#: ../src/config.py:1329
 msgid "Account Name Already Used"
 msgstr "Kontnomo jam estas uzata"
 
-#: ../src/config.py:1314
+#: ../src/config.py:1330
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr ""
 "Tiu nomo jam estas uzata de alia el viaj kontoj. Bonvolu elekti alian nomon."
 
-#: ../src/config.py:1318 ../src/config.py:1322
+#: ../src/config.py:1334 ../src/config.py:1338
 msgid "Invalid account name"
 msgstr "Malkorekta kontnomo"
 
-#: ../src/config.py:1319
+#: ../src/config.py:1335
 msgid "Account name cannot be empty."
 msgstr "Kontnomo ne povas esti malplena."
 
-#: ../src/config.py:1323
+#: ../src/config.py:1339
 msgid "Account name cannot contain spaces."
 msgstr "Kontnomo ne povas enteni spacetojn."
 
-#: ../src/config.py:1331 ../src/config.py:1337 ../src/config.py:1347
-#: ../src/config.py:3004
+#: ../src/config.py:1347 ../src/config.py:1353 ../src/config.py:1363
+#: ../src/config.py:2920
 msgid "Invalid Jabber ID"
 msgstr "Malkorekta jabber-ID"
 
-#: ../src/config.py:1338
+#: ../src/config.py:1354
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabber-ID devas esti en la formo \"uzulo@servilnomo\"."
 
-#: ../src/config.py:1397
+#: ../src/config.py:1413
 msgid "Invalid entry"
 msgstr "Malkorekta rikordo"
 
-#: ../src/config.py:1398
+#: ../src/config.py:1414
 msgid "Custom port must be a port number."
 msgstr "La pordo devas esti nombro."
 
-#: ../src/config.py:1526 ../src/common/config.py:366
+#: ../src/config.py:1542 ../src/common/config.py:366
 msgid "Be right back."
 msgstr "Revenos baldaŭ."
 
-#: ../src/config.py:1536
+#: ../src/config.py:1552
 msgid "Relogin now?"
 msgstr "Ĉu rekonektu nun?"
 
-#: ../src/config.py:1537
+#: ../src/config.py:1553
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr "Se vi volas ekuzi la ĉiujn ŝanĝojn, vi devas rekonekti."
 
-#: ../src/config.py:1563
+#: ../src/config.py:1579
 msgid "No such account available"
 msgstr "Tia konto nedisponebla"
 
-#: ../src/config.py:1564
+#: ../src/config.py:1580
 msgid "You must create your account before editing your personal information."
 msgstr "Vi devas krei konton antaŭ korekti vian personan informon."
 
-#: ../src/config.py:1571 ../src/dialogs.py:1131 ../src/dialogs.py:1317
+#: ../src/config.py:1587 ../src/dialogs.py:1145 ../src/dialogs.py:1336
 #: ../src/disco.py:418 ../src/profile_window.py:323
 msgid "You are not connected to the server"
 msgstr "Vi nekonektitas al la servilo"
 
-#: ../src/config.py:1572
+#: ../src/config.py:1588
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Senkonekte vi ne povas ŝanĝi vian personan informon."
 
-#: ../src/config.py:1576
+#: ../src/config.py:1592
 msgid "Your server doesn't support Vcard"
 msgstr "Via servilo ne subtenas Vizitkarton"
 
-#: ../src/config.py:1577
+#: ../src/config.py:1593
 msgid "Your server can't save your personal information."
 msgstr "Via servilo ne povas konservi vian personan informon."
 
-#: ../src/config.py:1601 ../src/config.py:3392
+#: ../src/config.py:1617 ../src/config.py:3308
 msgid "Failed to get secret keys"
 msgstr "Ricevado de sekreta ĉifroŝlosilo malsukcesis"
 
-#: ../src/config.py:1602 ../src/config.py:3393
+#: ../src/config.py:1618 ../src/config.py:3309
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Estas problemo ricevi vian sekretan OpenPGP-ĉifrŝlosilon."
 
-#: ../src/config.py:1605 ../src/config.py:3396
+#: ../src/config.py:1621 ../src/config.py:3312
 msgid "OpenPGP Key Selection"
 msgstr "Elekto de OpenPGP-ĉifrŝlosilo"
 
-#: ../src/config.py:1606 ../src/config.py:3397
+#: ../src/config.py:1622 ../src/config.py:3313
 msgid "Choose your OpenPGP key"
 msgstr "Elektu vian OpenPGP-ĉifrŝlosilon"
 
 #. Name column
-#: ../src/config.py:1836 ../src/disco.py:742 ../src/disco.py:1497
-#: ../src/disco.py:1735 ../src/history_window.py:78
+#: ../src/config.py:1852 ../src/disco.py:742 ../src/disco.py:1497
+#: ../src/disco.py:1742 ../src/history_window.py:78
 msgid "Name"
 msgstr "Nomo"
 
-#: ../src/config.py:1839
+#: ../src/config.py:1855
 msgid "Server"
 msgstr "Servilo"
 
-#: ../src/config.py:1903
+#: ../src/config.py:1919
 msgid "Read all pending events before removing this account."
 msgstr "Legu ĉiujn atendantajn eventojn antaŭ forigi tiun konton."
 
-#: ../src/config.py:1940
+#: ../src/config.py:1956
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "Vi havas aktivan konversacion ĉe konto %s"
 
-#: ../src/config.py:1941
+#: ../src/config.py:1957
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "Ĉiuj konversaciajn fenestrojn fermitos. Ĉu daŭrigu?"
 
-#: ../src/config.py:2000
+#: ../src/config.py:2016
 msgid "Account Local already exists."
 msgstr "Loka konto jam ekzistas."
 
-#: ../src/config.py:2001
+#: ../src/config.py:2017
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "Bonvolu renomigi aŭ forigi ĝin antaŭ ebligi lig-lokan komunikadon."
 
-#: ../src/config.py:2235
+#: ../src/config.py:2155
 #, python-format
 msgid "Edit %s"
 msgstr "Administri %s"
 
-#: ../src/config.py:2237
+#: ../src/config.py:2157
 #, python-format
 msgid "Register to %s"
 msgstr "Registri ĉe %s"
 
 #. list at the beginning
-#: ../src/config.py:2303
+#: ../src/config.py:2193
 msgid "Ban List"
 msgstr "Listo de malpermesoj"
 
-#: ../src/config.py:2304
+#: ../src/config.py:2194
 msgid "Member List"
 msgstr "Membra listo"
 
-#: ../src/config.py:2305
+#: ../src/config.py:2195
 msgid "Owner List"
 msgstr "Listo de mastroj"
 
-#: ../src/config.py:2306
+#: ../src/config.py:2196
 msgid "Administrator List"
 msgstr "Estra listo"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2339 ../src/disco.py:749 ../src/history_manager.py:154
+#: ../src/config.py:2245 ../src/disco.py:749 ../src/history_manager.py:154
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2347
+#: ../src/config.py:2253
 msgid "Reason"
 msgstr "Kialo"
 
-#: ../src/config.py:2352
+#: ../src/config.py:2258
 msgid "Nick"
 msgstr "Kaŝnomo"
 
-#: ../src/config.py:2356
+#: ../src/config.py:2262
 msgid "Role"
 msgstr "Rolo"
 
-#: ../src/config.py:2377
+#: ../src/config.py:2287
 msgid "Banning..."
 msgstr "Malpermesas..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2379
+#: ../src/config.py:2289
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2879,11 +2879,11 @@ msgstr ""
 "<b>Por kiu vi volas malpermesi aliĝon?</b>\n"
 "\n"
 
-#: ../src/config.py:2381
+#: ../src/config.py:2291
 msgid "Adding Member..."
 msgstr "Aligas membron..."
 
-#: ../src/config.py:2382
+#: ../src/config.py:2292
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2891,11 +2891,11 @@ msgstr ""
 "<b>Kiun vi volas fari membro?</b>\n"
 "\n"
 
-#: ../src/config.py:2384
+#: ../src/config.py:2294
 msgid "Adding Owner..."
 msgstr "Aligas mastron..."
 
-#: ../src/config.py:2385
+#: ../src/config.py:2295
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -2903,11 +2903,11 @@ msgstr ""
 "<b>Kiun vi volas fari mastro?</b>\n"
 "\n"
 
-#: ../src/config.py:2387
+#: ../src/config.py:2297
 msgid "Adding Administrator..."
 msgstr "Aligas administriston..."
 
-#: ../src/config.py:2388
+#: ../src/config.py:2298
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2915,7 +2915,7 @@ msgstr ""
 "<b>Kiun vi volas fari administristo?</b>\n"
 "\n"
 
-#: ../src/config.py:2389
+#: ../src/config.py:2299
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2931,101 +2931,101 @@ msgstr ""
 "4. domajno (iu kombinaĵo de risurco kaj uzulo\n"
 "kun tiu domajno aŭ subdomajno)."
 
-#: ../src/config.py:2494
+#: ../src/config.py:2403
 #, python-format
 msgid "Removing %s account"
 msgstr "Forigado de konto %s"
 
-#: ../src/config.py:2511 ../src/roster_window.py:2734
+#: ../src/config.py:2420 ../src/roster_window.py:2746
 msgid "Password Required"
 msgstr "Pasvorto necesas"
 
-#: ../src/config.py:2512 ../src/roster_window.py:2730
+#: ../src/config.py:2421 ../src/roster_window.py:2742
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Enigi vian pasvorton por konto %s"
 
-#: ../src/config.py:2513 ../src/roster_window.py:2735
+#: ../src/config.py:2422 ../src/roster_window.py:2747
 msgid "Save password"
 msgstr "Konservi pasvorton"
 
-#: ../src/config.py:2527
+#: ../src/config.py:2436
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Konto \"%s\" estas konektita al la servilo"
 
-#: ../src/config.py:2528
+#: ../src/config.py:2437
 msgid "If you remove it, the connection will be lost."
 msgstr "Se vi forigos ĝin, la konekto disiĝos."
 
-#: ../src/config.py:2613
+#: ../src/config.py:2524
 msgid "Default"
 msgstr "Defaŭlte"
 
-#: ../src/config.py:2613
+#: ../src/config.py:2524
 msgid "?print_status:All"
 msgstr "Ĉiujn"
 
-#: ../src/config.py:2614
+#: ../src/config.py:2525
 msgid "Enter and leave only"
 msgstr "Nur en/el-iradojn"
 
-#: ../src/config.py:2615
+#: ../src/config.py:2526
 msgid "?print_status:None"
 msgstr "Neniujn"
 
-#: ../src/config.py:2683
+#: ../src/config.py:2594
 msgid "New Group Chat"
 msgstr "Nova babilejo"
 
-#: ../src/config.py:2716
+#: ../src/config.py:2627
 msgid "This bookmark has invalid data"
 msgstr "Tiu ĉi legosigno havas malkorektan datumon"
 
-#: ../src/config.py:2717
+#: ../src/config.py:2628
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Bonvolu konvinkiĝi, ke kampoj Servilo kaj Babilejo estas plenitaj aŭ forigi "
 "tiun ĉi legosignon."
 
-#: ../src/config.py:2979
+#: ../src/config.py:2890 ../src/config.py:2896 ../src/config.py:2897
 msgid "Invalid username"
 msgstr "Malkorekta salutnomo"
 
-#: ../src/config.py:2980
+#: ../src/config.py:2891
 msgid "You must provide a username to configure this account."
 msgstr "Vi devas enigi salutnomon por administri tiun ĉi konton."
 
-#: ../src/config.py:2990 ../src/dialogs.py:1336
+#: ../src/config.py:2906 ../src/dialogs.py:1355
 msgid "Invalid password"
 msgstr "Malkorekta pasvorto"
 
-#: ../src/config.py:2991
+#: ../src/config.py:2907
 msgid "You must enter a password for the new account."
 msgstr "Vi devas enigi pasvorton por la nova konto."
 
-#: ../src/config.py:2995 ../src/dialogs.py:1341
+#: ../src/config.py:2911 ../src/dialogs.py:1360
 msgid "Passwords do not match"
 msgstr "Pasvortoj diversas"
 
-#: ../src/config.py:2996 ../src/dialogs.py:1342
+#: ../src/config.py:2912 ../src/dialogs.py:1361
 msgid "The passwords typed in both fields must be identical."
 msgstr "En ambaŭ kampoj la pasvortoj devas esti identaj."
 
-#: ../src/config.py:3015
+#: ../src/config.py:2931
 msgid "Duplicate Jabber ID"
 msgstr "Ripeta Jabber-ID"
 
-#: ../src/config.py:3016
+#: ../src/config.py:2932
 msgid "This account is already configured in Gajim."
 msgstr "Tiu ĉi konto jam ĉeestas en kontlisto de Gajim."
 
-#: ../src/config.py:3033
+#: ../src/config.py:2949
 msgid "Account has been added successfully"
 msgstr "Konto estas sukcese aldonita"
 
-#: ../src/config.py:3034 ../src/config.py:3069
+#: ../src/config.py:2950 ../src/config.py:2985
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menuitem under the Edit menu from the main "
@@ -3034,19 +3034,19 @@ msgstr ""
 "Vi povas agordi kromajn kontajn parametrojn alklakinte la butonon \"Krome\" "
 "aŭ pli poste menueron Kontoj en menuo Administri de la ĉefa fenestro."
 
-#: ../src/config.py:3068
+#: ../src/config.py:2984
 msgid "Your new account has been created successfully"
 msgstr "Via nova konto estas sukcese kreita"
 
-#: ../src/config.py:3086
+#: ../src/config.py:3002
 msgid "An error occurred during account creation"
 msgstr "Eraro okazis dum kreado de konto"
 
-#: ../src/config.py:3144
+#: ../src/config.py:3060
 msgid "Account name is in use"
 msgstr "Kontnomo estas uzata"
 
-#: ../src/config.py:3145
+#: ../src/config.py:3061
 msgid "You already have an account using this name."
 msgstr "Vi jam havas konto kun tiu nomo."
 
@@ -3091,19 +3091,19 @@ msgstr "Retserĉi tion"
 msgid "Open as _Link"
 msgstr "Malfermi  kiel _ligilon"
 
-#: ../src/conversation_textview.py:760
+#: ../src/conversation_textview.py:761
 msgid "Yesterday"
 msgstr "Hieraŭ"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
-#: ../src/conversation_textview.py:764
+#: ../src/conversation_textview.py:765
 #, python-format
 msgid "%i days ago"
 msgstr "Antaŭ %i tagoj"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:798
+#: ../src/conversation_textview.py:799
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Temo: %s\n"
@@ -3143,105 +3143,117 @@ msgstr "Mesaĝo por la stato \"%s\""
 msgid "Status Message"
 msgstr "Statmesaĝo"
 
-#: ../src/dialogs.py:395
+#: ../src/dialogs.py:397
 msgid "Save as Preset Status Message"
 msgstr "Konservi kiel antaŭpreparita statmesaĝo"
 
-#: ../src/dialogs.py:396
+#: ../src/dialogs.py:398
 msgid "Please type a name for this status message"
 msgstr "Bonvolu tajpi nomon de tiu statmesaĝo"
 
-#: ../src/dialogs.py:417
+#: ../src/dialogs.py:409
+#, fuzzy
+msgid "Overwrite Status Message?"
+msgstr "Statmesaĝo"
+
+#: ../src/dialogs.py:410
+#, fuzzy
+msgid ""
+"This name is already used. Do you want to overwrite this status message?"
+msgstr ""
+"Tiu nomo jam estas uzata de alia el viaj kontoj. Bonvolu elekti alian nomon."
+
+#: ../src/dialogs.py:426
 msgid "AIM Address:"
 msgstr "AIM-adreso:"
 
-#: ../src/dialogs.py:418
+#: ../src/dialogs.py:427
 msgid "GG Number:"
 msgstr "GG numero:"
 
-#: ../src/dialogs.py:419
+#: ../src/dialogs.py:428
 msgid "ICQ Number:"
 msgstr "ICQ numero:"
 
-#: ../src/dialogs.py:420
+#: ../src/dialogs.py:429
 msgid "MSN Address:"
 msgstr "MSN-adreso:"
 
-#: ../src/dialogs.py:421
+#: ../src/dialogs.py:430
 msgid "Yahoo! Address:"
 msgstr "Yahoo-adreso:"
 
-#: ../src/dialogs.py:457
+#: ../src/dialogs.py:466
 #, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
 msgstr ""
 "Bonvolu pleni la datumon pri kontakto, kiun vi volas aldoni ĉe konto %s"
 
-#: ../src/dialogs.py:459
+#: ../src/dialogs.py:468
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Bonvolu pleni la datumon pri kontakto, kiun vi volas aldoni"
 
-#: ../src/dialogs.py:609 ../src/dialogs.py:615
+#: ../src/dialogs.py:618 ../src/dialogs.py:624
 msgid "Invalid User ID"
 msgstr "Malkorekta uzula ID"
 
-#: ../src/dialogs.py:616
+#: ../src/dialogs.py:625
 msgid "The user ID must not contain a resource."
 msgstr "La uzula ID devas ne enteni risurcon."
 
-#: ../src/dialogs.py:630
+#: ../src/dialogs.py:639
 msgid "Contact already in roster"
 msgstr "Kontakto jam estas en kontaktlisto"
 
-#: ../src/dialogs.py:631
+#: ../src/dialogs.py:640
 msgid "This contact is already listed in your roster."
 msgstr "Tiu kontakto jam ĉeestas en via kontaktlisto."
 
-#: ../src/dialogs.py:668
+#: ../src/dialogs.py:677
 msgid "User ID:"
 msgstr "Uzula ID:"
 
-#: ../src/dialogs.py:731
+#: ../src/dialogs.py:740
 msgid "A GTK+ jabber client"
 msgstr "GTK+ jabber-kliento"
 
-#: ../src/dialogs.py:732
+#: ../src/dialogs.py:741
 msgid "GTK+ Version:"
 msgstr "Versio de GTK+:"
 
-#: ../src/dialogs.py:733
+#: ../src/dialogs.py:742
 msgid "PyGTK Version:"
 msgstr "Versio de PyGTK:"
 
-#: ../src/dialogs.py:747
+#: ../src/dialogs.py:756
 msgid "Current Developers:"
 msgstr "Nunaj programistoj:"
 
-#: ../src/dialogs.py:749
+#: ../src/dialogs.py:758
 msgid "Past Developers:"
 msgstr "Ĝisnunaj programistoj:"
 
-#: ../src/dialogs.py:759
+#: ../src/dialogs.py:768
 msgid "THANKS:"
 msgstr "DANKON AL:"
 
 #. remove one english sentence
 #. and add it manually as translatable
-#: ../src/dialogs.py:765
+#: ../src/dialogs.py:774
 msgid "Last but not least, we would like to thank all the package maintainers."
 msgstr "Fine ne malpli ol aliajn ni dankas ĉiujn pakaĵvartistojn."
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
-#: ../src/dialogs.py:779
+#: ../src/dialogs.py:788
 msgid "translator-credits"
 msgstr "Sergio Ĥlutĉin <Sergey.Khlutchin@gmail.com>"
 
-#: ../src/dialogs.py:909
+#: ../src/dialogs.py:918
 #, python-format
 msgid "Unable to bind to port %s."
 msgstr "Neeblas aliĝi al pordo %s."
 
-#: ../src/dialogs.py:910
+#: ../src/dialogs.py:919
 msgid ""
 "Maybe you have another running instance of Gajim. File Transfer will be "
 "cancelled."
@@ -3249,57 +3261,57 @@ msgstr ""
 "Eble vi havas alian ekzempleron kiu estas plenumata nun. Dosiertransmeto "
 "estos nuligita."
 
-#: ../src/dialogs.py:1061
+#: ../src/dialogs.py:1074
 #, python-format
 msgid "Subscription request for account %s from %s"
 msgstr "Demando pri abono por konto %s de %s"
 
-#: ../src/dialogs.py:1064
+#: ../src/dialogs.py:1077
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Demando pri abono de %s"
 
-#: ../src/dialogs.py:1124 ../src/roster_window.py:686
+#: ../src/dialogs.py:1138 ../src/roster_window.py:690
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Vi jam estas en babilejo %s"
 
-#: ../src/dialogs.py:1132
+#: ../src/dialogs.py:1146
 msgid "You can not join a group chat unless you are connected."
 msgstr "Vi ne povas aliĝi al babilejo dum vi estas senkonekta."
 
-#: ../src/dialogs.py:1147
+#: ../src/dialogs.py:1164
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "Eniri en babilejon per konto %s"
 
-#: ../src/dialogs.py:1215 ../src/dialogs.py:1221
+#: ../src/dialogs.py:1234 ../src/dialogs.py:1240
 msgid "Invalid group chat Jabber ID"
 msgstr "Malkorekta babileja jabber-ID"
 
-#: ../src/dialogs.py:1216 ../src/dialogs.py:1222
+#: ../src/dialogs.py:1235 ../src/dialogs.py:1241
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "La babileja jabber-ID enhavas nepermesajn signojn."
 
-#: ../src/dialogs.py:1228
+#: ../src/dialogs.py:1247
 msgid "This is not a group chat"
 msgstr "Tio ne estas babilejo"
 
-#: ../src/dialogs.py:1229
+#: ../src/dialogs.py:1248
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s ne estas la nomo de babilejo."
 
-#: ../src/dialogs.py:1268
+#: ../src/dialogs.py:1287
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "Babili per konto %s"
 
-#: ../src/dialogs.py:1270
+#: ../src/dialogs.py:1289
 msgid "Start Chat"
 msgstr "Babili"
 
-#: ../src/dialogs.py:1271
+#: ../src/dialogs.py:1290
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
@@ -3308,230 +3320,230 @@ msgstr ""
 "al kiu vi volas sendi mesaĝon:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:1296 ../src/dialogs.py:1655 ../src/dialogs.py:1786
+#: ../src/dialogs.py:1315 ../src/dialogs.py:1674 ../src/dialogs.py:1805
 msgid "Connection not available"
 msgstr "Konekto mankas"
 
-#: ../src/dialogs.py:1297 ../src/dialogs.py:1656 ../src/dialogs.py:1787
+#: ../src/dialogs.py:1316 ../src/dialogs.py:1675 ../src/dialogs.py:1806
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Bonvolu konvinkiĝi, ke vi estas konektita kun \"%s\"."
 
-#: ../src/dialogs.py:1306 ../src/dialogs.py:1309
+#: ../src/dialogs.py:1325 ../src/dialogs.py:1328
 msgid "Invalid JID"
 msgstr "Malkorekta jabber-ID"
 
-#: ../src/dialogs.py:1309
+#: ../src/dialogs.py:1328
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr "Neeblas analizi \"%s\"."
 
-#: ../src/dialogs.py:1318
+#: ../src/dialogs.py:1337
 msgid "Without a connection, you can not change your password."
 msgstr "Senkonekta vi ne povas ŝanĝi vian pasvorton."
 
-#: ../src/dialogs.py:1337
+#: ../src/dialogs.py:1356
 msgid "You must enter a password."
 msgstr "Vi devas enigi pasvorton."
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:1384 ../src/notify.py:211 ../src/notify.py:415
+#: ../src/dialogs.py:1403 ../src/notify.py:211 ../src/notify.py:415
 msgid "Contact Signed In"
 msgstr "Kontakto ensalutis"
 
-#: ../src/dialogs.py:1386 ../src/notify.py:219 ../src/notify.py:417
+#: ../src/dialogs.py:1405 ../src/notify.py:219 ../src/notify.py:417
 msgid "Contact Signed Out"
 msgstr "Kontakto elsalutis"
 
 #. chat message
-#: ../src/dialogs.py:1388 ../src/notify.py:238 ../src/notify.py:419
+#: ../src/dialogs.py:1407 ../src/notify.py:238 ../src/notify.py:419
 msgid "New Message"
 msgstr "Nova mesaĝo"
 
 #. single message
-#: ../src/dialogs.py:1388 ../src/notify.py:223 ../src/notify.py:419
+#: ../src/dialogs.py:1407 ../src/notify.py:223 ../src/notify.py:419
 msgid "New Single Message"
 msgstr "Nova unuobla mesaĝo"
 
 #. private message
-#: ../src/dialogs.py:1389 ../src/notify.py:230 ../src/notify.py:420
+#: ../src/dialogs.py:1408 ../src/notify.py:230 ../src/notify.py:420
 msgid "New Private Message"
 msgstr "Nova privata mesaĝo"
 
-#: ../src/dialogs.py:1389 ../src/gajim.py:1232 ../src/notify.py:428
+#: ../src/dialogs.py:1408 ../src/gajim.py:1250 ../src/notify.py:428
 msgid "New E-mail"
 msgstr "Nova retletero"
 
-#: ../src/dialogs.py:1391 ../src/gajim.py:1385 ../src/notify.py:422
+#: ../src/dialogs.py:1410 ../src/gajim.py:1403 ../src/notify.py:422
 msgid "File Transfer Request"
 msgstr "Mendo de dosiera transmeto"
 
-#: ../src/dialogs.py:1393 ../src/gajim.py:1204 ../src/gajim.py:1361
+#: ../src/dialogs.py:1412 ../src/gajim.py:1222 ../src/gajim.py:1379
 #: ../src/notify.py:424
 msgid "File Transfer Error"
 msgstr "Dosiertransmeta eraro"
 
-#: ../src/dialogs.py:1395 ../src/gajim.py:1424 ../src/gajim.py:1446
-#: ../src/gajim.py:1463 ../src/notify.py:426
+#: ../src/dialogs.py:1414 ../src/gajim.py:1442 ../src/gajim.py:1464
+#: ../src/gajim.py:1481 ../src/notify.py:426
 msgid "File Transfer Completed"
 msgstr "Dosiera transmeto plenumis"
 
-#: ../src/dialogs.py:1396 ../src/gajim.py:1427 ../src/notify.py:426
+#: ../src/dialogs.py:1415 ../src/gajim.py:1445 ../src/notify.py:426
 msgid "File Transfer Stopped"
 msgstr "Dosiera transmeto haltitas"
 
-#: ../src/dialogs.py:1398 ../src/gajim.py:1101 ../src/notify.py:430
+#: ../src/dialogs.py:1417 ../src/gajim.py:1119 ../src/notify.py:430
 msgid "Groupchat Invitation"
 msgstr "Babileja invitilo"
 
-#: ../src/dialogs.py:1400 ../src/notify.py:203 ../src/notify.py:432
+#: ../src/dialogs.py:1419 ../src/notify.py:203 ../src/notify.py:432
 msgid "Contact Changed Status"
 msgstr "Kontakto ŝanĝis sian staton"
 
-#: ../src/dialogs.py:1585
+#: ../src/dialogs.py:1604
 #, python-format
 msgid "Single Message using account %s"
 msgstr "unuopa mesaĝo per konto %s"
 
-#: ../src/dialogs.py:1587
+#: ../src/dialogs.py:1606
 #, python-format
 msgid "Single Message in account %s"
 msgstr "unuopa mesaĝo ĉe konto %s"
 
-#: ../src/dialogs.py:1589
+#: ../src/dialogs.py:1608
 msgid "Single Message"
 msgstr "unuopa mesaĝo"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:1592
+#: ../src/dialogs.py:1611
 #, python-format
 msgid "Send %s"
 msgstr "Sendota %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:1615
+#: ../src/dialogs.py:1634
 #, python-format
 msgid "Received %s"
 msgstr "Ricevita %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:1687
+#: ../src/dialogs.py:1706
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: ../src/dialogs.py:1688
+#: ../src/dialogs.py:1707
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s skribis:\n"
 
-#: ../src/dialogs.py:1732
+#: ../src/dialogs.py:1751
 #, python-format
 msgid "XML Console for %s"
 msgstr "XML-konzolo por %s"
 
-#: ../src/dialogs.py:1734
+#: ../src/dialogs.py:1753
 msgid "XML Console"
 msgstr "XML-konzolo"
 
-#: ../src/dialogs.py:1857
+#: ../src/dialogs.py:1876
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "Privata listo <b><i>%s</i></b>"
 
-#: ../src/dialogs.py:1861
+#: ../src/dialogs.py:1880
 #, python-format
 msgid "Privacy List for %s"
 msgstr "Privata listo por %s"
 
-#: ../src/dialogs.py:1909
+#: ../src/dialogs.py:1928
 #, python-format
 msgid "Order: %s, action: %s, type: %s, value: %s"
 msgstr "Ordnumero: %s, ago: %s, tipo: %s, valoro: %s"
 
-#: ../src/dialogs.py:1912
+#: ../src/dialogs.py:1931
 #, python-format
 msgid "Order: %s, action: %s"
 msgstr "Ordnumero: %s, ago: %s"
 
-#: ../src/dialogs.py:1954
+#: ../src/dialogs.py:1973
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Redakti regulon</b>"
 
-#: ../src/dialogs.py:2041
+#: ../src/dialogs.py:2060
 msgid "<b>Add a rule</b>"
 msgstr "<b>Aldoni regulon</b>"
 
-#: ../src/dialogs.py:2137
+#: ../src/dialogs.py:2156
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "Privataj listoj por %s"
 
-#: ../src/dialogs.py:2139
+#: ../src/dialogs.py:2158
 msgid "Privacy Lists"
 msgstr "Privataj listoj"
 
-#: ../src/dialogs.py:2209
+#: ../src/dialogs.py:2228
 msgid "Invalid List Name"
 msgstr "Malkorekta listnomo"
 
-#: ../src/dialogs.py:2210
+#: ../src/dialogs.py:2229
 msgid "You must enter a name to create a privacy list."
 msgstr "Vi devas enigi nomon por krei privatan liston."
 
 #. Don't translate $Contact
-#: ../src/dialogs.py:2244
+#: ../src/dialogs.py:2264
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact invitas vin al la babilejo %(room_jid)s"
 
 #. only if not None and not ''
-#: ../src/dialogs.py:2256
+#: ../src/dialogs.py:2276
 #, python-format
 msgid "Comment: %s"
 msgstr "Komento: %s"
 
-#: ../src/dialogs.py:2318
+#: ../src/dialogs.py:2339
 msgid "Choose Sound"
 msgstr "Elektu sonon"
 
-#: ../src/dialogs.py:2328 ../src/dialogs.py:2373
+#: ../src/dialogs.py:2349 ../src/dialogs.py:2394
 msgid "All files"
 msgstr "Ĉiuj dosieroj"
 
-#: ../src/dialogs.py:2333
+#: ../src/dialogs.py:2354
 msgid "Wav Sounds"
 msgstr "Wav-sonoj"
 
-#: ../src/dialogs.py:2363
+#: ../src/dialogs.py:2384
 msgid "Choose Image"
 msgstr "Elektu bildon"
 
-#: ../src/dialogs.py:2378
+#: ../src/dialogs.py:2399
 msgid "Images"
 msgstr "Bildoj"
 
-#: ../src/dialogs.py:2435
+#: ../src/dialogs.py:2456
 #, python-format
 msgid "When %s becomes:"
 msgstr "Kiam %s venas:"
 
-#: ../src/dialogs.py:2437
+#: ../src/dialogs.py:2458
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Aligado de speciala avizo por %s"
 
 #. # means number
-#: ../src/dialogs.py:2508
+#: ../src/dialogs.py:2529
 msgid "#"
 msgstr "n°"
 
-#: ../src/dialogs.py:2514
+#: ../src/dialogs.py:2535
 msgid "Condition"
 msgstr "Kondiĉo"
 
-#: ../src/dialogs.py:2635
+#: ../src/dialogs.py:2656
 msgid "when I am "
 msgstr "dum mi estas "
 
@@ -3540,11 +3552,11 @@ msgid "Others"
 msgstr "Aliaj"
 
 #: ../src/disco.py:103 ../src/disco.py:104 ../src/disco.py:1283
-#: ../src/gajim.py:546 ../src/roster_window.py:271 ../src/roster_window.py:329
-#: ../src/roster_window.py:368 ../src/roster_window.py:450
-#: ../src/roster_window.py:482 ../src/roster_window.py:484
-#: ../src/roster_window.py:3902 ../src/roster_window.py:3904
-#: ../src/common/contacts.py:267 ../src/common/contacts.py:282
+#: ../src/gajim.py:561 ../src/roster_window.py:272 ../src/roster_window.py:330
+#: ../src/roster_window.py:370 ../src/roster_window.py:452
+#: ../src/roster_window.py:484 ../src/roster_window.py:486
+#: ../src/roster_window.py:3954 ../src/roster_window.py:3956
+#: ../src/common/contacts.py:273 ../src/common/contacts.py:288
 #: ../src/common/helpers.py:43
 msgid "Transports"
 msgstr "Transportiloj"
@@ -3610,33 +3622,33 @@ msgid "Scanning %d / %d.."
 msgstr "Skanas %d / %d.."
 
 #. Users column
-#: ../src/disco.py:1506
+#: ../src/disco.py:1507
 msgid "Users"
 msgstr "Uzuloj"
 
 #. Description column
-#: ../src/disco.py:1513
+#: ../src/disco.py:1515
 msgid "Description"
 msgstr "Priskribo"
 
 #. Id column
-#: ../src/disco.py:1520
+#: ../src/disco.py:1523
 msgid "Id"
 msgstr "Id"
 
-#: ../src/disco.py:1743
+#: ../src/disco.py:1751
 msgid "Subscribed"
 msgstr "Abonita"
 
-#: ../src/disco.py:1769
+#: ../src/disco.py:1777
 msgid "New post"
 msgstr "Nova mesaĝo"
 
-#: ../src/disco.py:1775
+#: ../src/disco.py:1783
 msgid "_Subscribe"
 msgstr "_Aboni"
 
-#: ../src/disco.py:1781
+#: ../src/disco.py:1789
 msgid "_Unsubscribe"
 msgstr "_Malaboni"
 
@@ -3652,133 +3664,133 @@ msgstr "Tempo"
 msgid "Progress"
 msgstr "Progreso"
 
-#: ../src/filetransfers_window.py:163 ../src/filetransfers_window.py:223
+#: ../src/filetransfers_window.py:161 ../src/filetransfers_window.py:215
 #, python-format
 msgid "Filename: %s"
 msgstr "Dosiernomo: %s"
 
-#: ../src/filetransfers_window.py:164 ../src/filetransfers_window.py:298
+#: ../src/filetransfers_window.py:162 ../src/filetransfers_window.py:290
 #, python-format
 msgid "Size: %s"
 msgstr "Longo: %s"
 
 #. You is a reply of who sent a file
 #. You is a reply of who received a file
-#: ../src/filetransfers_window.py:173 ../src/filetransfers_window.py:183
+#: ../src/filetransfers_window.py:171 ../src/filetransfers_window.py:181
 #: ../src/history_manager.py:463
 msgid "You"
 msgstr "Vi"
 
-#: ../src/filetransfers_window.py:174
+#: ../src/filetransfers_window.py:172
 #, python-format
 msgid "Sender: %s"
 msgstr "Sendanto: %s"
 
-#: ../src/filetransfers_window.py:175 ../src/filetransfers_window.py:572
+#: ../src/filetransfers_window.py:173 ../src/filetransfers_window.py:564
 #: ../src/tooltips.py:573
 msgid "Recipient: "
 msgstr "Ricevanto: "
 
-#: ../src/filetransfers_window.py:186
+#: ../src/filetransfers_window.py:184
 #, python-format
 msgid "Saved in: %s"
 msgstr "Konservita kiel: %s"
 
-#: ../src/filetransfers_window.py:188
+#: ../src/filetransfers_window.py:186
 msgid "File transfer completed"
 msgstr "Dosiertransmeto plenumitas"
 
-#: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:212
+#: ../src/filetransfers_window.py:200 ../src/filetransfers_window.py:206
 msgid "File transfer cancelled"
 msgstr "Dosiera transmeto nuligitas"
 
-#: ../src/filetransfers_window.py:204 ../src/filetransfers_window.py:213
+#: ../src/filetransfers_window.py:200 ../src/filetransfers_window.py:207
 msgid "Connection with peer cannot be established."
 msgstr "Konekto kun punkto neestableblas."
 
-#: ../src/filetransfers_window.py:224
+#: ../src/filetransfers_window.py:216
 #, python-format
 msgid "Recipient: %s"
 msgstr "Ricevanto: %s"
 
-#: ../src/filetransfers_window.py:226
+#: ../src/filetransfers_window.py:218
 #, python-format
 msgid "Error message: %s"
 msgstr "Erara mesaĝo: %s"
 
-#: ../src/filetransfers_window.py:227
+#: ../src/filetransfers_window.py:219
 msgid "File transfer stopped by the contact at the other end"
 msgstr "Dosiertransmeto estas hatlita de aliflanka kontakto"
 
-#: ../src/filetransfers_window.py:244
+#: ../src/filetransfers_window.py:236
 msgid "Choose File to Send..."
 msgstr "Elektu dosieron por sendi..."
 
-#: ../src/filetransfers_window.py:263
+#: ../src/filetransfers_window.py:255
 msgid "Gajim cannot access this file"
 msgstr "Gajim ne povas atingi tiun dosieron"
 
-#: ../src/filetransfers_window.py:264
+#: ../src/filetransfers_window.py:256
 msgid "This file is being used by another process."
 msgstr "Tiu ĉi dosiero estas uzata de alia procezo."
 
-#: ../src/filetransfers_window.py:296
+#: ../src/filetransfers_window.py:288
 #, python-format
 msgid "File: %s"
 msgstr "Dosiero: %s"
 
-#: ../src/filetransfers_window.py:301
+#: ../src/filetransfers_window.py:293
 #, python-format
 msgid "Type: %s"
 msgstr "Tipo: %s"
 
-#: ../src/filetransfers_window.py:303
+#: ../src/filetransfers_window.py:295
 #, python-format
 msgid "Description: %s"
 msgstr "Priskribo: %s"
 
-#: ../src/filetransfers_window.py:304
+#: ../src/filetransfers_window.py:296
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "%s volas sendi al vi dosieron:"
 
-#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:706
+#: ../src/filetransfers_window.py:310 ../src/gtkgui_helpers.py:705
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Ne povas reskribi ekzistan dosieron \"%s\""
 
-#: ../src/filetransfers_window.py:319 ../src/gtkgui_helpers.py:708
+#: ../src/filetransfers_window.py:311 ../src/gtkgui_helpers.py:707
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr ""
 "Dosiero kun tiu nomo jam ekzistas kaj vi ne havas permeson reskribi ĝin."
 
-#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:712
+#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:711
 msgid "This file already exists"
 msgstr "Tiu dosiero jam ekzistas"
 
-#: ../src/filetransfers_window.py:326 ../src/gtkgui_helpers.py:712
+#: ../src/filetransfers_window.py:318 ../src/gtkgui_helpers.py:711
 msgid "What do you want to do?"
 msgstr "Kion vi volas fari?"
 
-#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:722
+#: ../src/filetransfers_window.py:330 ../src/gtkgui_helpers.py:721
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "Dosierujo \"%s\" ne skribeblas"
 
-#: ../src/filetransfers_window.py:338 ../src/gtkgui_helpers.py:723
+#: ../src/filetransfers_window.py:330 ../src/gtkgui_helpers.py:722
 msgid "You do not have permission to create files in this directory."
 msgstr "Vi ne havas permeson krei dosierojn en ĉi tiu dosierujo."
 
-#: ../src/filetransfers_window.py:348
+#: ../src/filetransfers_window.py:340
 msgid "Save File as..."
 msgstr "Konservi dosieron kiel..."
 
 #. Print remaining time in format 00:00:00
 #. You can change the places of (hours), (minutes), (seconds) -
 #. they are not translatable.
-#: ../src/filetransfers_window.py:429
+#: ../src/filetransfers_window.py:421
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
@@ -3786,32 +3798,32 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
 #. Only the 's' after / (which means second) should be translated.
-#: ../src/filetransfers_window.py:505
+#: ../src/filetransfers_window.py:497
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: ../src/filetransfers_window.py:544 ../src/filetransfers_window.py:547
+#: ../src/filetransfers_window.py:536 ../src/filetransfers_window.py:539
 msgid "Invalid File"
 msgstr "Malkorekta dosiero"
 
-#: ../src/filetransfers_window.py:544
+#: ../src/filetransfers_window.py:536
 msgid "File: "
 msgstr "Dosiero: "
 
-#: ../src/filetransfers_window.py:548
+#: ../src/filetransfers_window.py:540
 msgid "It is not possible to send empty files"
 msgstr "Neeblas sendi senenhavajn dosierojn"
 
-#: ../src/filetransfers_window.py:568 ../src/tooltips.py:563
+#: ../src/filetransfers_window.py:560 ../src/tooltips.py:563
 msgid "Name: "
 msgstr "Nomo: "
 
-#: ../src/filetransfers_window.py:570 ../src/tooltips.py:567
+#: ../src/filetransfers_window.py:562 ../src/tooltips.py:567
 msgid "Sender: "
 msgstr "Sendanto: "
 
-#: ../src/filetransfers_window.py:758
+#: ../src/filetransfers_window.py:750
 msgid "Pause"
 msgstr "Paŭzo"
 
@@ -3885,83 +3897,93 @@ msgstr ""
 "Alia ekzemplero de Gajim ŝajne estas lanĉita\n"
 "Ĉu lanĉu malgraŭ tio?"
 
-#: ../src/gajim.py:350
+#: ../src/gajim.py:265 ../src/common/connection_handlers.py:864
+#: ../src/common/connection_handlers.py:1487
+#: ../src/common/connection_handlers.py:1509
+#: ../src/common/connection_handlers.py:1520
+#: ../src/common/connection_handlers.py:1535
+#: ../src/common/connection_handlers.py:1696
+#: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
+msgid "Disk Write Error"
+msgstr ""
+
+#: ../src/gajim.py:356
+msgid "Do you accept this request?"
+msgstr "Ĉu vi akceptas tiun peton?"
+
+#: ../src/gajim.py:359
 #, python-format
 msgid "HTTP (%s) Authorization for %s (id: %s)"
 msgstr "HTTP (%s) Aŭtentokontrolo por %s (id: %s)"
 
-#: ../src/gajim.py:351
-msgid "Do you accept this request?"
-msgstr "Ĉu vi akceptas tiun peton?"
-
-#: ../src/gajim.py:397 ../src/notify.py:434
+#: ../src/gajim.py:406 ../src/notify.py:434
 msgid "Connection Failed"
 msgstr "Konektado malsukcesis"
 
-#: ../src/gajim.py:717
+#: ../src/gajim.py:732
 #, python-format
 msgid "Subject: %s"
 msgstr "Temo: %s"
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time))
-#: ../src/gajim.py:762 ../src/gajim.py:775
+#: ../src/gajim.py:776 ../src/gajim.py:789
 #, python-format
 msgid "error while sending %s ( %s )"
 msgstr "eraro dum sendado %s ( %s )"
 
-#: ../src/gajim.py:808
+#: ../src/gajim.py:822
 msgid "Authorization accepted"
 msgstr "Permespeto akceptitas"
 
-#: ../src/gajim.py:809
+#: ../src/gajim.py:823
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "La kontakto \"%s\" permesas al vi vidi lian aŭ ŝian staton."
 
-#: ../src/gajim.py:817
+#: ../src/gajim.py:831
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Kontakto \"%s\" nuligis abonon de vi"
 
-#: ../src/gajim.py:818
+#: ../src/gajim.py:832
 msgid "You will always see him or her as offline."
 msgstr "Vi ĉiam vidos ŝin aŭ lin senkonekta."
 
-#: ../src/gajim.py:861
+#: ../src/gajim.py:876
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kontakto kun \"%s\" neestableblas"
 
-#: ../src/gajim.py:862 ../src/common/connection.py:413
+#: ../src/gajim.py:877 ../src/common/connection.py:410
 msgid "Check your connection or try again later."
 msgstr "Kontrolu vian konekton aŭ provu denove poste."
 
-#: ../src/gajim.py:1011 ../src/roster_window.py:1217
+#: ../src/gajim.py:1029 ../src/roster_window.py:1229
 #, python-format
 msgid "%s is now %s (%s)"
 msgstr "%s nun estas %s (%s)"
 
 #. No status message
-#: ../src/gajim.py:1014 ../src/groupchat_control.py:951
-#: ../src/roster_window.py:1220
+#: ../src/gajim.py:1032 ../src/groupchat_control.py:996
+#: ../src/roster_window.py:1232
 #, python-format
 msgid "%s is now %s"
 msgstr "%s nun estas %s"
 
-#: ../src/gajim.py:1111
+#: ../src/gajim.py:1129
 msgid "Your passphrase is incorrect"
 msgstr "Via pasfrazo estas malvalida"
 
-#: ../src/gajim.py:1112
+#: ../src/gajim.py:1130
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Nun vi estas konekta sen uzado de via OpenPGP-ŝlosilo."
 
-#: ../src/gajim.py:1215
+#: ../src/gajim.py:1233
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Nova retletero ĉe %(gmail_mail_address)s"
 
-#: ../src/gajim.py:1217
+#: ../src/gajim.py:1235
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
@@ -3971,7 +3993,7 @@ msgstr[1] "Vi havas %d novajn retleterojn"
 #. FIXME: emulate Gtalk client popups. find out what they parse and how
 #. they decide what to show
 #. each message has a 'From', 'Subject' and 'Snippet' field
-#: ../src/gajim.py:1226
+#: ../src/gajim.py:1244
 #, python-format
 msgid ""
 "\n"
@@ -3980,52 +4002,60 @@ msgstr ""
 "\n"
 "De: %(from_address)s"
 
-#: ../src/gajim.py:1382
+#: ../src/gajim.py:1400
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s volas sendi dosieron al vi."
 
-#: ../src/gajim.py:1447
+#: ../src/gajim.py:1465
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "La dosiero %(filename)s de %(name)s estas sukcese ricevita."
 
 #. ft stopped
-#: ../src/gajim.py:1451
+#: ../src/gajim.py:1469
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Transmeto de dosiero %(filename)s de %(name)s haltitas."
 
-#: ../src/gajim.py:1464
+#: ../src/gajim.py:1482
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Vi sukcese sendis %(filename)s al %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1468
+#: ../src/gajim.py:1486
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Transmeto de dosiero %(filename)s al %(name)s haltitas."
 
-#: ../src/gajim.py:1581
+#: ../src/gajim.py:1599
 msgid "Username Conflict"
 msgstr "Konflikto de salutnomoj"
 
-#: ../src/gajim.py:1582
+#: ../src/gajim.py:1600
 msgid "Please type a new username for your local account"
 msgstr "Bonvolu enigi novan salutnomon por via loka konto"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:1924
+#: ../src/gajim.py:1946
 msgid "Could not save your settings and preferences"
 msgstr "Ne povis konservi vian agordon"
 
-#: ../src/gajim.py:2122
+#. sorted alphanum
+#: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
+#: ../src/common/optparser.py:189 ../src/common/optparser.py:407
+#: ../src/common/optparser.py:441
+#, fuzzy
+msgid "default"
+msgstr "Defaŭlte"
+
+#: ../src/gajim.py:2146
 msgid "Network Manager support not available"
 msgstr "Subteno de retadministrilo mankas"
 
-#: ../src/gajim.py:2197
+#: ../src/gajim.py:2224
 msgid "Session Management support not available (missing gnome.ui module)"
 msgstr "Subteno de seancagordo nedisponeblas (mankas modulo gnome.ui)"
 
@@ -4381,106 +4411,118 @@ msgid "Theme"
 msgstr "Etoso"
 
 #. don't confuse translators
-#: ../src/gajim_themes_window.py:155
+#: ../src/gajim_themes_window.py:157
 msgid "theme name"
 msgstr "Etosa nomo"
 
-#: ../src/gajim_themes_window.py:172
+#: ../src/gajim_themes_window.py:174
 msgid "You cannot delete your current theme"
 msgstr "Vi ne povas forigi aktivan etoson"
 
-#: ../src/gajim_themes_window.py:173
+#: ../src/gajim_themes_window.py:175
 msgid "Please first choose another for your current theme."
 msgstr "Bonvolu komence aktivigi alian etoson."
 
-#: ../src/groupchat_control.py:122
+#: ../src/groupchat_control.py:129
 msgid "Sending private message failed"
 msgstr "Sendado de privata mesaĝo malsukcesis"
 
 #. in second %s code replaces with nickname
-#: ../src/groupchat_control.py:124
+#: ../src/groupchat_control.py:131
 #, python-format
 msgid "You are no longer in group chat \"%s\" or \"%s\" has left."
 msgstr "Vi ne plu ĉeestas en babilejo \"%s\" aŭ \"%s\" foriris."
 
-#: ../src/groupchat_control.py:317
+#: ../src/groupchat_control.py:326
 msgid "Insert Nickname"
 msgstr "Enmeti kaŝnomon"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:836
+#: ../src/groupchat_control.py:849
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s estas elpelita: %(reason)s"
 
-#: ../src/groupchat_control.py:840
+#: ../src/groupchat_control.py:853
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s estas elpelita de %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:847
+#: ../src/groupchat_control.py:860
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "Aliĝo de %(nick)s nun estas malpermesa: %(reason)s"
 
-#: ../src/groupchat_control.py:851
+#: ../src/groupchat_control.py:864
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "Aliĝo de %(nick)s estas malpermesita de %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:859
+#: ../src/groupchat_control.py:872
 #, python-format
 msgid "You are now known as %s"
 msgstr "Vi nomiĝas %s"
 
-#: ../src/groupchat_control.py:861
+#: ../src/groupchat_control.py:874
 #, python-format
 msgid "%s is now known as %s"
 msgstr "%s nomiĝas %s"
 
-#: ../src/groupchat_control.py:944
+#: ../src/groupchat_control.py:989
 #, python-format
 msgid "%s has left"
 msgstr "%s foriris"
 
-#: ../src/groupchat_control.py:949
+#: ../src/groupchat_control.py:994
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s aliĝis al la babilejo"
 
-#: ../src/groupchat_control.py:1071 ../src/groupchat_control.py:1089
-#: ../src/groupchat_control.py:1182 ../src/groupchat_control.py:1199
+#. Invalid Nickname
+#. invalid char
+#: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
+#, fuzzy
+msgid "Invalid nickname"
+msgstr "Malkorekta salutnomo"
+
+#: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
+#, fuzzy
+msgid "The nickname has not allowed characters."
+msgstr "La babileja jabber-ID enhavas nepermesajn signojn."
+
+#: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
+#: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "Kaŝnomo ne trovitas: %s"
 
-#: ../src/groupchat_control.py:1105
+#: ../src/groupchat_control.py:1162
 msgid "This group chat has no subject"
 msgstr "Tiu ĉi babilejo ne havas temon"
 
-#: ../src/groupchat_control.py:1118
+#: ../src/groupchat_control.py:1173
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "%(contact_jid)s invititas al %(room_jid)s."
 
 #. %s is something the user wrote but it is not a jid so we inform
-#: ../src/groupchat_control.py:1125 ../src/groupchat_control.py:1153
+#: ../src/groupchat_control.py:1204
 #, python-format
 msgid "%s does not appear to be a valid JID"
 msgstr "Tio ne estas valida JID: %s"
 
-#: ../src/groupchat_control.py:1236
+#: ../src/groupchat_control.py:1287
 #, python-format
 msgid "No such command: /%s (if you want to send this, prefix it with /say)"
 msgstr "Ne estas tiu komando: /%s (se vi volas sendi tion, metu /say antaŭen)"
 
-#: ../src/groupchat_control.py:1259
+#: ../src/groupchat_control.py:1310
 #, python-format
 msgid "Commands: %s"
 msgstr "Komandoj: %s"
 
-#: ../src/groupchat_control.py:1262
+#: ../src/groupchat_control.py:1313
 #, python-format
 msgid ""
 "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
@@ -4492,7 +4534,7 @@ msgstr ""
 "babilejo. Eblas uzi la kaŝnomon de uzulo, sed ne se ĝi entenas \"@\" aŭ "
 "spaceton. Se la JID ĉeestas en la babilejo, tiu estos ankaŭ elpelita."
 
-#: ../src/groupchat_control.py:1269
+#: ../src/groupchat_control.py:1320
 #, python-format
 msgid ""
 "Usage: /%s <nickname>, opens a private chat window with the specified "
@@ -4501,12 +4543,12 @@ msgstr ""
 "Uzado: /%s <kaŝnomo>, - malfermas privatan interparolan fenestron por "
 "specifita persono."
 
-#: ../src/groupchat_control.py:1273
+#: ../src/groupchat_control.py:1324
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Uzado: /%s, - malplenigas la tekstan fenestron."
 
-#: ../src/groupchat_control.py:1275
+#: ../src/groupchat_control.py:1326
 #, python-format
 msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
@@ -4515,12 +4557,12 @@ msgstr ""
 "Uzado: /%s [kialo], - fermas la nuntempan fenestron aŭ slipon, informe pri "
 "kialo se specifita."
 
-#: ../src/groupchat_control.py:1278
+#: ../src/groupchat_control.py:1329
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
 
-#: ../src/groupchat_control.py:1281
+#: ../src/groupchat_control.py:1332
 #, python-format
 msgid ""
 "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
@@ -4529,7 +4571,7 @@ msgstr ""
 "Uzado: /%s <JID> [kialo], - invitas JID al la nuntempa babilejo, fakultative "
 "informante pri kialo."
 
-#: ../src/groupchat_control.py:1285
+#: ../src/groupchat_control.py:1336
 #, python-format
 msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
@@ -4538,7 +4580,7 @@ msgstr ""
 "Uzado: /%s <babilejo>@<servilo>[/kaŝnomo], - aliĝas al room@server "
 "fakultative uze specifitan kaŝnomon."
 
-#: ../src/groupchat_control.py:1289
+#: ../src/groupchat_control.py:1340
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
@@ -4548,7 +4590,7 @@ msgstr ""
 "Uzado: /%s <kaŝnomo> [kialo], - forigas la uzulon specifitan per kaŝnomo el "
 "la babilejo kaj fakultative montras kialon. NE SUBTENAS spacetojn en kaŝnomo."
 
-#: ../src/groupchat_control.py:1294
+#: ../src/groupchat_control.py:1345
 #, python-format
 msgid ""
 "Usage: /%s <action>, sends action to the current group chat. Use third "
@@ -4556,7 +4598,7 @@ msgid ""
 msgstr ""
 "Uzado: /%s <ago>, sendas agon en aktualan babilejon (ekzemple /%s eksplodas)."
 
-#: ../src/groupchat_control.py:1298
+#: ../src/groupchat_control.py:1349
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message window and sends "
@@ -4565,93 +4607,93 @@ msgstr ""
 "Uzado: /%s <kaŝnomo> [mesaĝo], malfermas privatan mesaĝan fenestron kaj "
 "sendas mesaĝon al la uzulo specifita per kaŝnomo."
 
-#: ../src/groupchat_control.py:1303
+#: ../src/groupchat_control.py:1354
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 msgstr "Uzado: /%s <kaŝnomo>, ŝanĝas vian kaŝnomon en nuntempa babilejo."
 
-#: ../src/groupchat_control.py:1307
+#: ../src/groupchat_control.py:1358
 #, python-format
 msgid "Usage: /%s , display the names of group chat occupants."
 msgstr "Uzado: /%s , - eligas la nomoj de babilejaj ĉeestantoj."
 
-#: ../src/groupchat_control.py:1311
+#: ../src/groupchat_control.py:1362
 #, python-format
 msgid "Usage: /%s [topic], displays or updates the current group chat topic."
 msgstr "Uzado: /%s [temo], - eligas aŭ novigas la nuntempan babilejan temon."
 
-#: ../src/groupchat_control.py:1314
+#: ../src/groupchat_control.py:1365
 #, python-format
 msgid ""
 "Usage: /%s <message>, sends a message without looking for other commands."
 msgstr ""
 "Uzado: /%s <mesaĝo>, - sendas mesaĝon preter rekonado de aliaj komandoj."
 
-#: ../src/groupchat_control.py:1317
+#: ../src/groupchat_control.py:1368
 #, python-format
 msgid "No help info for /%s"
 msgstr "helpinformo mankas por /%s"
 
-#: ../src/groupchat_control.py:1380
+#: ../src/groupchat_control.py:1436
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
 
-#: ../src/groupchat_control.py:1382
+#: ../src/groupchat_control.py:1438
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Se vi fermos tiun fenestron, vi senkonektiĝos de tiu ĉi babilejo."
 
-#: ../src/groupchat_control.py:1386 ../src/roster_window.py:4042
+#: ../src/groupchat_control.py:1442 ../src/roster_window.py:4094
 msgid "Do _not ask me again"
 msgstr "_Ne plu demandi"
 
-#: ../src/groupchat_control.py:1420
+#: ../src/groupchat_control.py:1476
 msgid "Changing Subject"
 msgstr "Korektas temon"
 
-#: ../src/groupchat_control.py:1421
+#: ../src/groupchat_control.py:1477
 msgid "Please specify the new subject:"
 msgstr "Bonvolu enigi novan temon:"
 
-#: ../src/groupchat_control.py:1430
+#: ../src/groupchat_control.py:1486
 msgid "Changing Nickname"
 msgstr "Ŝanĝas kaŝnomon"
 
-#: ../src/groupchat_control.py:1431
+#: ../src/groupchat_control.py:1487
 msgid "Please specify the new nickname you want to use:"
 msgstr "Bonvolu enigi la novan kaŝnomon, kiun vi volas uzi:"
 
-#: ../src/groupchat_control.py:1456
+#: ../src/groupchat_control.py:1512
 msgid "Bookmark already set"
 msgstr "Legosigno jam estas metita"
 
-#: ../src/groupchat_control.py:1457
+#: ../src/groupchat_control.py:1513
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Babilejo \"%s\" jam estas en viajn legosignojn."
 
-#: ../src/groupchat_control.py:1466
+#: ../src/groupchat_control.py:1522
 msgid "Bookmark has been added successfully"
 msgstr "Legosigno sukcese aldonitas"
 
-#: ../src/groupchat_control.py:1467
+#: ../src/groupchat_control.py:1523
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "Vi povas aranĝi viajn legosignojn per menuero \"Agoj\" en la kontaktlisto."
 
 #. ask for reason
-#: ../src/groupchat_control.py:1595
+#: ../src/groupchat_control.py:1651
 #, python-format
 msgid "Kicking %s"
 msgstr "Elpelatas %s"
 
-#: ../src/groupchat_control.py:1596 ../src/groupchat_control.py:1879
+#: ../src/groupchat_control.py:1652 ../src/groupchat_control.py:1934
 msgid "You may specify a reason below:"
 msgstr "Vi povas specifi kialon sube:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:1878
+#: ../src/groupchat_control.py:1933
 #, python-format
 msgid "Banning %s"
 msgstr "Malpermesas %s"
@@ -4696,29 +4738,29 @@ msgid "Could not write to %s. Session Management support will not work"
 msgstr "Ne povas skribi en %s. Subteno de seancagordo ne funkcios"
 
 #. xmpp: is currently handled by another program, so ask the user
-#: ../src/gtkgui_helpers.py:650
+#: ../src/gtkgui_helpers.py:649
 msgid "Gajim is not the default Jabber client"
 msgstr "Gajim ne estas la defaŭlta jabber-kliento"
 
-#: ../src/gtkgui_helpers.py:651
+#: ../src/gtkgui_helpers.py:650
 msgid "Would you like to make Gajim the default Jabber client?"
 msgstr "Ĉu vi deziras fari Gajim la defaŭlta jabber-kliento?"
 
-#: ../src/gtkgui_helpers.py:652
+#: ../src/gtkgui_helpers.py:651
 msgid "Always check to see if Gajim is the default Jabber client on startup"
 msgstr "Ĉiam kontrolu ĉu Gajim estas la defaŭlta jabber-kliento dum lanĉo"
 
-#: ../src/gtkgui_helpers.py:751
+#: ../src/gtkgui_helpers.py:750
 msgid "Extension not supported"
 msgstr "Kromaĵo ne subtenatas"
 
-#: ../src/gtkgui_helpers.py:752
+#: ../src/gtkgui_helpers.py:751
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr ""
 "Bildo nekonserveblas en %(type)s formato. Ĉu konservu kiel %(new_filename)s?"
 
-#: ../src/gtkgui_helpers.py:761
+#: ../src/gtkgui_helpers.py:760
 msgid "Save Image as..."
 msgstr "Konservi bildon kiel..."
 
@@ -4819,23 +4861,32 @@ msgstr "Stato nun estas: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "Stato nun estas: %(status)s"
 
-#: ../src/message_window.py:273
+#: ../src/htmltextview.py:583 ../src/htmltextview.py:594
+#, fuzzy
+msgid "Timeout loading image"
+msgstr "Ne povas alŝuti bildon"
+
+#: ../src/htmltextview.py:604
+msgid "Image is too big"
+msgstr ""
+
+#: ../src/message_window.py:280
 msgid "Chats"
 msgstr "Babilejoj"
 
-#: ../src/message_window.py:275
+#: ../src/message_window.py:282
 msgid "Group Chats"
 msgstr "Babilejoj"
 
-#: ../src/message_window.py:277
+#: ../src/message_window.py:284
 msgid "Private Chats"
 msgstr "Privataj interparoloj"
 
-#: ../src/message_window.py:279
+#: ../src/message_window.py:286
 msgid "Messages"
 msgstr "Mesaĝoj"
 
-#: ../src/message_window.py:280
+#: ../src/message_window.py:287
 #, python-format
 msgid "%s - Gajim"
 msgstr "%s - Gajim"
@@ -4910,79 +4961,77 @@ msgid ""
 "later."
 msgstr "Estis eraro dum publicado de persona informo, provu denove pli poste."
 
-#: ../src/roster_window.py:171 ../src/roster_window.py:226
+#: ../src/roster_window.py:172 ../src/roster_window.py:227
 msgid "Merged accounts"
 msgstr "Unuigaj kontoj"
 
-#: ../src/roster_window.py:344 ../src/common/helpers.py:43
+#: ../src/roster_window.py:345 ../src/common/helpers.py:43
 msgid "Observers"
 msgstr "Rigardiloj"
 
-#: ../src/roster_window.py:691 ../src/roster_window.py:3207
+#: ../src/roster_window.py:695 ../src/roster_window.py:3250
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Vi ne povas aliĝi al babilejo dum vi estas nevidebla"
 
 #. new chat
 #. for chat_with
 #. for single message
-#: ../src/roster_window.py:883 ../src/systray.py:187 ../src/systray.py:192
+#: ../src/roster_window.py:890 ../src/systray.py:187 ../src/systray.py:192
 #, python-format
 msgid "using account %s"
 msgstr "per konto %s"
 
-#. the 'manage gc bookmarks' item is shown
-#. below to avoid duplicate code
 #. add
-#: ../src/roster_window.py:908
+#: ../src/roster_window.py:914
 #, python-format
 msgid "to %s account"
 msgstr "al konto %s"
 
 #. disco
-#: ../src/roster_window.py:913
+#: ../src/roster_window.py:919
 #, python-format
 msgid "using %s account"
 msgstr "per konto %s"
 
-#. profile, avatar
 #: ../src/roster_window.py:988
+msgid "_Manage Bookmarks..."
+msgstr "Aranĝi _legosignojn..."
+
+#. profile, avatar
+#: ../src/roster_window.py:1007
 #, python-format
 msgid "of account %s"
 msgstr "de konto %s"
 
-#: ../src/roster_window.py:1008
-msgid "_Manage Bookmarks..."
-msgstr "Aranĝi _legosignojn..."
-
-#: ../src/roster_window.py:1037
+#: ../src/roster_window.py:1047
 #, python-format
 msgid "for account %s"
 msgstr "por konto %s"
 
 #. History manager
-#: ../src/roster_window.py:1058
+#: ../src/roster_window.py:1068
 msgid "History Manager"
 msgstr "Historia administrilo"
 
-#: ../src/roster_window.py:1067
+#: ../src/roster_window.py:1077
 msgid "_Join New Group Chat"
 msgstr "_Eniri babilejen"
 
-#: ../src/roster_window.py:1397 ../src/roster_window.py:3400
-#: ../src/roster_window.py:3407
+#: ../src/roster_window.py:1409 ../src/roster_window.py:3447
+#: ../src/roster_window.py:3454
 msgid "You have unread messages"
 msgstr "Vi havas nelegitajn mesaĝojn"
 
-#: ../src/roster_window.py:1398
+#: ../src/roster_window.py:1410
 msgid "You must read them before removing this transport."
 msgstr "Legu ilin antaŭ forigi tiun transportilon."
 
-#: ../src/roster_window.py:1401
+#: ../src/roster_window.py:1413
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "Transportilo \"%s\" estos forigita"
 
-#: ../src/roster_window.py:1402
+#: ../src/roster_window.py:1414
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
@@ -4990,11 +5039,11 @@ msgstr ""
 "Vi ne plu eblos sendi kaj ricevi mesaĝojn kun kontaktoj el tiu ĉi "
 "transportilo."
 
-#: ../src/roster_window.py:1405
+#: ../src/roster_window.py:1417
 msgid "Transports will be removed"
 msgstr "Transportiloj estos forigita"
 
-#: ../src/roster_window.py:1410
+#: ../src/roster_window.py:1422
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
@@ -5004,114 +5053,114 @@ msgstr ""
 "transportiloj:%s"
 
 #. it's jid
-#: ../src/roster_window.py:1430
+#: ../src/roster_window.py:1442
 msgid "Rename Contact"
 msgstr "Renomigado de kontakto"
 
-#: ../src/roster_window.py:1431
+#: ../src/roster_window.py:1443
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "Enigu novan kaŝnomon por kontakto %s"
 
-#: ../src/roster_window.py:1438
+#: ../src/roster_window.py:1450
 msgid "Rename Group"
 msgstr "Renomigi grupon"
 
-#: ../src/roster_window.py:1439
+#: ../src/roster_window.py:1451
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "Enigu novan nomon por la grupo %s"
 
-#: ../src/roster_window.py:1514
+#: ../src/roster_window.py:1526
 msgid "Remove Group"
 msgstr "Forigi grupon"
 
-#: ../src/roster_window.py:1515
+#: ../src/roster_window.py:1527
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "Ĉu vi volas forigi la grupon %s de la kontaktlisto?"
 
-#: ../src/roster_window.py:1516
+#: ../src/roster_window.py:1528
 msgid "Remove also all contacts in this group from your roster"
 msgstr "Forigi ankaŭ ĉiujn kontaktojn de la grupo el via kontaktlisto"
 
-#: ../src/roster_window.py:1545
+#: ../src/roster_window.py:1557
 msgid "Assign OpenPGP Key"
 msgstr "Atribui OpenPGP-ŝlosilon"
 
-#: ../src/roster_window.py:1546
+#: ../src/roster_window.py:1558
 msgid "Select a key to apply to the contact"
 msgstr "Elektu ŝlosilon por atribui al la kontakto"
 
-#: ../src/roster_window.py:1781 ../src/roster_window.py:2042
+#: ../src/roster_window.py:1793 ../src/roster_window.py:2054
 msgid "_New group chat"
 msgstr "_Nova babilejo"
 
-#: ../src/roster_window.py:1912
+#: ../src/roster_window.py:1924
 msgid "I would like to add you to my roster"
 msgstr "Mi volus aldoni vin en mian kontaktliston"
 
-#: ../src/roster_window.py:2087 ../src/roster_window.py:2134
+#: ../src/roster_window.py:2099 ../src/roster_window.py:2146
 msgid "Send Group M_essage"
 msgstr "Sendi _grupan mesaĝon"
 
-#: ../src/roster_window.py:2113
+#: ../src/roster_window.py:2125
 msgid "Re_name"
 msgstr "Re_nomigi"
 
-#: ../src/roster_window.py:2140
+#: ../src/roster_window.py:2152
 msgid "To all users"
 msgstr "Al ĉiuj uzantoj"
 
-#: ../src/roster_window.py:2143
+#: ../src/roster_window.py:2155
 msgid "To all online users"
 msgstr "Al ĉiuj konektitaj uzantoj"
 
-#: ../src/roster_window.py:2179
+#: ../src/roster_window.py:2191
 msgid "_Log on"
 msgstr "E_nsaluti"
 
-#: ../src/roster_window.py:2189
+#: ../src/roster_window.py:2201
 msgid "Log _off"
 msgstr "E_lsaluti"
 
-#: ../src/roster_window.py:2311 ../src/roster_window.py:2382
+#: ../src/roster_window.py:2323 ../src/roster_window.py:2394
 msgid "_Change Status Message"
 msgstr "Ŝanĝi stat_mesaĝon"
 
-#: ../src/roster_window.py:2454
+#: ../src/roster_window.py:2466
 msgid "Authorization has been sent"
 msgstr "Permeso estas sendita"
 
-#: ../src/roster_window.py:2455
+#: ../src/roster_window.py:2467
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "Ekde nun \"%s\" konos vian staton."
 
-#: ../src/roster_window.py:2475
+#: ../src/roster_window.py:2487
 msgid "Subscription request has been sent"
 msgstr "Demando pri abono estas sendita"
 
-#: ../src/roster_window.py:2476
+#: ../src/roster_window.py:2488
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Se \"%s\" akceptas tiun peton vi povos koni lian aŭ ŝian staton."
 
-#: ../src/roster_window.py:2488
+#: ../src/roster_window.py:2500
 msgid "Authorization has been removed"
 msgstr "Permeso estas forigita"
 
-#: ../src/roster_window.py:2489
+#: ../src/roster_window.py:2501
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "Ekde nun \"%s\" ĉiam vidos vin kiel senkonekta."
 
-#: ../src/roster_window.py:2681
+#: ../src/roster_window.py:2693
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Kontakto \"%s\" estos forigita el via kontaktlisto"
 
-#: ../src/roster_window.py:2685
+#: ../src/roster_window.py:2697
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -5119,7 +5168,7 @@ msgstr ""
 "Forigante tiun kontakton vi forigas ankaŭ permeson, rezulte ŝi aŭ li ĉiam "
 "vidos vin kiel senkonekta."
 
-#: ../src/roster_window.py:2690
+#: ../src/roster_window.py:2702
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -5127,16 +5176,16 @@ msgstr ""
 "Forigante tiu ĉi konton vi defaŭlte ankaŭ forigas permeson pro kio li aŭ ŝi "
 "ĉiam vidos vin senkonekta."
 
-#: ../src/roster_window.py:2693
+#: ../src/roster_window.py:2705
 msgid "I want this contact to know my status after removal"
 msgstr "Permesi al tiu ĉi konto koni mian staton post forigado"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:2697
+#: ../src/roster_window.py:2709
 msgid "Contacts will be removed from your roster"
 msgstr "Kontaktoj estos forigita el via kontaktlisto"
 
-#: ../src/roster_window.py:2701
+#: ../src/roster_window.py:2713
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -5145,7 +5194,7 @@ msgstr ""
 "Forigante tiujn kontaktojn: %s\n"
 "vi forigas ankaŭ permesojn, rezulte ili ĉiam vidos vin kiel senkonekta."
 
-#: ../src/roster_window.py:2733
+#: ../src/roster_window.py:2745
 msgid ""
 "Gnomekeyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
@@ -5155,38 +5204,38 @@ msgstr ""
 
 #. TODO: make this string translatable
 #. %s is the account name here
-#: ../src/roster_window.py:2761 ../src/common/connection.py:603
-#: ../src/common/zeroconf/connection_zeroconf.py:158
+#: ../src/roster_window.py:2773 ../src/common/connection.py:598
+#: ../src/common/zeroconf/connection_zeroconf.py:161
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Vi estos konektita al %s sen OpenPGP."
 
-#: ../src/roster_window.py:2778
+#: ../src/roster_window.py:2790
 msgid "Passphrase Required"
 msgstr "Pasfrazo necesas"
 
-#: ../src/roster_window.py:2779
+#: ../src/roster_window.py:2791
 #, python-format
 msgid "Enter GPG key passphrase for account %s."
 msgstr "Enigi GPG-ŝlosilan pasfrazon por konto %s."
 
-#: ../src/roster_window.py:2784
+#: ../src/roster_window.py:2796
 msgid "Save passphrase"
 msgstr "Konservi pasfrazon"
 
-#: ../src/roster_window.py:2792
+#: ../src/roster_window.py:2804
 msgid "Wrong Passphrase"
 msgstr "Malprava pasfrazo"
 
-#: ../src/roster_window.py:2793
+#: ../src/roster_window.py:2805
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Bonvolu ripeti vian GPG-pasvorton aŭ klaku Nuligi."
 
-#: ../src/roster_window.py:2850 ../src/roster_window.py:2910
+#: ../src/roster_window.py:2879 ../src/roster_window.py:2939
 msgid "You are participating in one or more group chats"
 msgstr "Vi partoprenas en unu aŭ kelkaj babilejoj"
 
-#: ../src/roster_window.py:2851 ../src/roster_window.py:2911
+#: ../src/roster_window.py:2880 ../src/roster_window.py:2940
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -5194,30 +5243,30 @@ msgstr ""
 "Ŝanĝo de via stato per nevidebla okazigos diskonektadon de tiuj babilejoj. "
 "Ĉu vi certas ke vi volas iĝi nevidebla?"
 
-#: ../src/roster_window.py:2868
+#: ../src/roster_window.py:2897
 msgid "No account available"
 msgstr "Neniu konto disponeblas"
 
-#: ../src/roster_window.py:2869
+#: ../src/roster_window.py:2898
 msgid "You must create an account before you can chat with other contacts."
 msgstr "Vi devas krei konton antaŭ vi povos paroli kun aliaj kontaktoj."
 
-#: ../src/roster_window.py:2967
+#: ../src/roster_window.py:3000
 #, python-format
 msgid "\"%(title)s\" by %(artist)s"
 msgstr "\"%(title)s\" de %(artist)s"
 
-#: ../src/roster_window.py:3401 ../src/roster_window.py:3408
+#: ../src/roster_window.py:3448 ../src/roster_window.py:3455
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
 msgstr "Mesaĝoj disponeblos por legi ĝin poste nur se vi ŝaltis historion."
 
-#: ../src/roster_window.py:3992
+#: ../src/roster_window.py:4044
 msgid "Metacontacts storage not supported by your server"
 msgstr "Metakontakta tenejo ne estas subtenata de via servilo"
 
-#: ../src/roster_window.py:3994
+#: ../src/roster_window.py:4046
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be save on next reconnection."
@@ -5225,12 +5274,12 @@ msgstr ""
 "Via servilo ne subtenas konservadon de metakontakta informo. Do tia informo "
 "ne estas konservota dum sekva rekonekto."
 
-#: ../src/roster_window.py:4036
+#: ../src/roster_window.py:4088
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "Pri kreado de metakontakto. Ĉu vi certas ke vi volas daŭrigi?"
 
-#: ../src/roster_window.py:4038
+#: ../src/roster_window.py:4090
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
@@ -5240,17 +5289,17 @@ msgstr ""
 "Ĝenerale ĝi estas uzata kiam unu persono havas kelkajn jabber-kontojn aŭ "
 "transportajn kontojn."
 
-#: ../src/roster_window.py:4205
+#: ../src/roster_window.py:4257
 #, python-format
 msgid "Drop %s in group %s"
 msgstr "Movi %s en la grupon %s"
 
-#: ../src/roster_window.py:4212
+#: ../src/roster_window.py:4264
 #, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "Igi %s kaj %s metakontaktoj"
 
-#: ../src/roster_window.py:4399
+#: ../src/roster_window.py:4451
 msgid "Change Status Message..."
 msgstr "Ŝanĝi statmesaĝon..."
 
@@ -5351,24 +5400,24 @@ msgstr ""
 "Tiu ĉi servo ne povis respondi per detala informo.\n"
 "Ĝi verŝajne estas malnova aŭ rompita"
 
-#: ../src/vcard.py:217
+#: ../src/vcard.py:228
 msgid "?Client:Unknown"
 msgstr "Nekonata"
 
-#: ../src/vcard.py:219
+#: ../src/vcard.py:230
 msgid "?OS:Unknown"
 msgstr "Nekonata"
 
-#: ../src/vcard.py:247 ../src/vcard.py:449
+#: ../src/vcard.py:255 ../src/vcard.py:265 ../src/vcard.py:479
 #, python-format
 msgid "since %s"
 msgstr "ekde %s"
 
-#: ../src/vcard.py:277
+#: ../src/vcard.py:294
 msgid "Affiliation:"
 msgstr "Aparteneco:"
 
-#: ../src/vcard.py:285
+#: ../src/vcard.py:302
 msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in his/her presence"
@@ -5376,29 +5425,29 @@ msgstr ""
 "Tiu ĉi kontakto interesiĝas pri via ĉeesta informo, sed vi ne interesiĝas "
 "pri ŝia/lia ĉeesto"
 
-#: ../src/vcard.py:287
+#: ../src/vcard.py:304
 msgid ""
 "You are interested in the contact's presence information, but he/she is not "
 "interested in yours"
 msgstr ""
 "Vi interesiĝas pri kontakta ĉeesta informo, sed li/ŝi ne interesiĝas pri via"
 
-#: ../src/vcard.py:289
+#: ../src/vcard.py:306
 msgid "You and the contact are interested in each other's presence information"
 msgstr "Vi kaj la kontakto interesiĝas unu pri alia ĉeesta informo"
 
 #. None
-#: ../src/vcard.py:291
+#: ../src/vcard.py:308
 msgid ""
 "You are not interested in the contact's presence, and neither he/she is "
 "interested in yours"
 msgstr "Nek vi nek kontakto ne interesiĝas unu pri ĉeesto de alia"
 
-#: ../src/vcard.py:299
+#: ../src/vcard.py:316
 msgid "You are waiting contact's answer about your subscription request"
 msgstr "Vi atendas respondon de kontakto pri via abona mendo"
 
-#: ../src/vcard.py:311 ../src/vcard.py:338 ../src/vcard.py:482
+#: ../src/vcard.py:328 ../src/vcard.py:365 ../src/vcard.py:512
 msgid " resource with priority "
 msgstr " risurco kun prioritato "
 
@@ -6070,11 +6119,11 @@ msgstr ""
 msgid "Sound to play when any MUC message arrives."
 msgstr "Sono ludota kiam ĉiu babileja mesaĝo venas."
 
-#: ../src/common/config.py:389 ../src/common/optparser.py:193
+#: ../src/common/config.py:389 ../src/common/optparser.py:203
 msgid "green"
 msgstr "verda"
 
-#: ../src/common/config.py:393 ../src/common/optparser.py:179
+#: ../src/common/config.py:393 ../src/common/optparser.py:189
 msgid "grocery"
 msgstr "manĝbutiko"
 
@@ -6086,17 +6135,17 @@ msgstr "homa"
 msgid "marine"
 msgstr "mara"
 
-#: ../src/common/connection_handlers.py:52
+#: ../src/common/connection_handlers.py:53
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:44
 msgid "Unable to load idle module"
 msgstr "Neeblas ŝargi senfaran modulon"
 
-#: ../src/common/connection_handlers.py:177
+#: ../src/common/connection_handlers.py:178
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
 msgid "Wrong host"
 msgstr "Malprava servilnomo"
 
-#: ../src/common/connection_handlers.py:177
+#: ../src/common/connection_handlers.py:178
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
 msgid ""
 "The host you configured as the ft_override_host_to_send advanced option is "
@@ -6105,12 +6154,12 @@ msgstr ""
 "La servilnomo, specifita de vi en la agordero \"ft_override_host_to_send\" "
 "de la detala agordo, ne ekzistas aŭ malkorektas, tial estas ignorata."
 
-#: ../src/common/connection_handlers.py:590
+#: ../src/common/connection_handlers.py:591
 #, python-format
 msgid "Registration information for transport %s has not arrived in time"
 msgstr "Registrada informo por transportilo %s ne venis ĝustatempe"
 
-#: ../src/common/connection_handlers.py:1548
+#: ../src/common/connection_handlers.py:1588
 #, python-format
 msgid "Nickname not allowed: %s"
 msgstr "Kaŝnomo malpermesita: %s"
@@ -6118,41 +6167,41 @@ msgstr "Kaŝnomo malpermesita: %s"
 #. password required to join
 #. we are banned
 #. group chat does not exist
-#: ../src/common/connection_handlers.py:1610
-#: ../src/common/connection_handlers.py:1613
-#: ../src/common/connection_handlers.py:1616
-#: ../src/common/connection_handlers.py:1619
-#: ../src/common/connection_handlers.py:1622
-#: ../src/common/connection_handlers.py:1625
-#: ../src/common/connection_handlers.py:1633
+#: ../src/common/connection_handlers.py:1652
+#: ../src/common/connection_handlers.py:1655
+#: ../src/common/connection_handlers.py:1658
+#: ../src/common/connection_handlers.py:1661
+#: ../src/common/connection_handlers.py:1664
+#: ../src/common/connection_handlers.py:1667
+#: ../src/common/connection_handlers.py:1675
 msgid "Unable to join group chat"
 msgstr "Neeblas aliĝi al babilejo"
 
-#: ../src/common/connection_handlers.py:1611
+#: ../src/common/connection_handlers.py:1653
 msgid "A password is required to join this group chat."
 msgstr "Necesas pasvorto por aliĝi al la babilejo."
 
-#: ../src/common/connection_handlers.py:1614
+#: ../src/common/connection_handlers.py:1656
 msgid "You are banned from this group chat."
 msgstr "Al vi oni malpermesis esti en la babilejo."
 
-#: ../src/common/connection_handlers.py:1617
+#: ../src/common/connection_handlers.py:1659
 msgid "Such group chat does not exist."
 msgstr "Tiu babilejo ne ekzistas."
 
-#: ../src/common/connection_handlers.py:1620
+#: ../src/common/connection_handlers.py:1662
 msgid "Group chat creation is restricted."
 msgstr "Babileja kreado limigitas."
 
-#: ../src/common/connection_handlers.py:1623
+#: ../src/common/connection_handlers.py:1665
 msgid "Your registered nickname must be used."
 msgstr "Vi devas uzi vian registritan kaŝnomon."
 
-#: ../src/common/connection_handlers.py:1626
+#: ../src/common/connection_handlers.py:1668
 msgid "You are not in the members list."
 msgstr "Vi ne ĉeestas en membrolisto."
 
-#: ../src/common/connection_handlers.py:1634
+#: ../src/common/connection_handlers.py:1676
 msgid ""
 "Your desired nickname is in use or registered by another occupant.\n"
 "Please specify another nickname below:"
@@ -6160,27 +6209,27 @@ msgstr ""
 "Via dezirata kaŝnomo estas uzata aŭ registrita per alia uzulo.\n"
 "Bonvolu specifi alian kaŝnomon jene:"
 
-#: ../src/common/connection_handlers.py:1696
+#: ../src/common/connection_handlers.py:1726
 msgid "I would like to add you to my roster."
 msgstr "Mi volus aldoni vin al mia kontaktlisto."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection_handlers.py:1717
+#: ../src/common/connection_handlers.py:1747
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr "nun ni abonas %s"
 
-#: ../src/common/connection_handlers.py:1719
+#: ../src/common/connection_handlers.py:1749
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "ordono pri abona fino de %s"
 
-#: ../src/common/connection_handlers.py:1721
+#: ../src/common/connection_handlers.py:1751
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "ni nun ne abonas pri %s"
 
-#: ../src/common/connection_handlers.py:1897
+#: ../src/common/connection_handlers.py:1871
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -6189,56 +6238,56 @@ msgstr ""
 "JID %s ne estas norma laŭ la RFC. Ĝi ne aldonitos al via kontaktlisto. Uzu "
 "kontaktlistan agordan ilon kiel http://jru.jabberstudio.org/ por forigi ĝin"
 
-#: ../src/common/connection.py:180
-#: ../src/common/zeroconf/connection_zeroconf.py:196
+#: ../src/common/connection.py:185
+#: ../src/common/zeroconf/connection_zeroconf.py:199
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Konekto kun konto \"%s\" rompiĝis"
 
-#: ../src/common/connection.py:181
+#: ../src/common/connection.py:186
 msgid "Reconnect manually."
 msgstr "Rekonektu mane."
 
-#: ../src/common/connection.py:192 ../src/common/connection.py:219
+#: ../src/common/connection.py:197 ../src/common/connection.py:224
 #, python-format
 msgid "Transport %s answered wrongly to register request: %s"
 msgstr "Transportilo %s respondis malprave al registra peto: %s"
 
 #. wrong answer
-#: ../src/common/connection.py:218
+#: ../src/common/connection.py:223
 msgid "Invalid answer"
 msgstr "Nekorekta respondo"
 
-#: ../src/common/connection.py:412 ../src/common/connection.py:447
-#: ../src/common/connection.py:899
-#: ../src/common/zeroconf/connection_zeroconf.py:217
+#: ../src/common/connection.py:409 ../src/common/connection.py:443
+#: ../src/common/connection.py:900
+#: ../src/common/zeroconf/connection_zeroconf.py:233
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Ne povas konekti al \"%s\""
 
-#: ../src/common/connection.py:426
+#: ../src/common/connection.py:423
 #, python-format
 msgid "Connected to server %s:%s with %s"
 msgstr "Konektis al servilo %s:%s per %s"
 
-#: ../src/common/connection.py:448
+#: ../src/common/connection.py:444
 msgid "Check your connection or try again later"
 msgstr "Kontrolu vian konekton aŭ provu denove poste"
 
-#: ../src/common/connection.py:474
+#: ../src/common/connection.py:469
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Aŭtentokontrolo malsukcesis ĉe \"%s\""
 
-#: ../src/common/connection.py:475
+#: ../src/common/connection.py:470
 msgid "Please check your login and password for correctness."
 msgstr "Bonvolu kontroli korektecon de viaj salutnomo kaj pasvorto."
 
-#: ../src/common/connection.py:502
+#: ../src/common/connection.py:497
 msgid "Error while removing privacy list"
 msgstr "Eraro dum forigado de privata listo"
 
-#: ../src/common/connection.py:503
+#: ../src/common/connection.py:498
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -6248,19 +6297,19 @@ msgstr ""
 "konektitaj risurcoj. Malaktivigu ĝin kaj provu denove."
 
 #. We didn't set a passphrase
-#: ../src/common/connection.py:601
-#: ../src/common/zeroconf/connection_zeroconf.py:156
+#: ../src/common/connection.py:596
+#: ../src/common/zeroconf/connection_zeroconf.py:159
 msgid "OpenPGP passphrase was not given"
 msgstr "OpenPGP-pasfrazo ne estis donita"
 
 #. we're not english
 #. one  in locale and one en
-#: ../src/common/connection.py:730
+#: ../src/common/connection.py:727
 msgid "[This message is *encrypted* (See :JEP:`27`]"
 msgstr "[Tiu ĉi mesaĝo estas *ĉifrita* (Vidu :JEP:`27`]"
 
-#: ../src/common/connection.py:786
-#: ../src/common/zeroconf/connection_zeroconf.py:397
+#: ../src/common/connection.py:783
+#: ../src/common/zeroconf/connection_zeroconf.py:418
 #, python-format
 msgid ""
 "Subject: %s\n"
@@ -6269,11 +6318,11 @@ msgstr ""
 "Temo: %s\n"
 "%s"
 
-#: ../src/common/connection.py:925
+#: ../src/common/connection.py:934
 msgid "Not fetched because of invisible status"
 msgstr "Ne obtenita pro nevidebla stato"
 
-#: ../src/common/contacts.py:271
+#: ../src/common/contacts.py:277
 msgid "Not in roster"
 msgstr "Mankas en kontaktlisto"
 
@@ -6290,16 +6339,16 @@ msgstr "D-BUS kunigeblo de Gajim ne uzeblas"
 msgid "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
 msgstr "pysqlite2 (ankaŭ konata kiel python-pysqlite2) mankas. Finas..."
 
-#: ../src/common/exceptions.py:30
+#: ../src/common/exceptions.py:39
 msgid "Service not available: Gajim is not running, or remote_control is False"
 msgstr ""
 "Servo nedisponeblas: Gajim ne aktivas, aŭ opcio remote_control estas False"
 
-#: ../src/common/exceptions.py:38
+#: ../src/common/exceptions.py:47
 msgid "D-Bus is not present on this machine or python module is missing"
 msgstr "D-BUS aŭ konforma pitona modulo mankas ĉe tiu ĉi komputilo."
 
-#: ../src/common/exceptions.py:46
+#: ../src/common/exceptions.py:55
 msgid ""
 "Session bus is not available.\n"
 "Try reading http://trac.gajim.org/wiki/GajimDBus"
@@ -6515,176 +6564,176 @@ msgstr "%s KB"
 msgid "%s B"
 msgstr "%s B"
 
-#: ../src/common/helpers.py:219
+#: ../src/common/helpers.py:221
 msgid "_Busy"
 msgstr "_Okupata"
 
-#: ../src/common/helpers.py:221
+#: ../src/common/helpers.py:223
 msgid "Busy"
 msgstr "Okupata"
 
-#: ../src/common/helpers.py:224
+#: ../src/common/helpers.py:226
 msgid "_Not Available"
 msgstr "_Nedisponebla"
 
-#: ../src/common/helpers.py:229
+#: ../src/common/helpers.py:231
 msgid "_Free for Chat"
 msgstr "_Babilema"
 
-#: ../src/common/helpers.py:231
+#: ../src/common/helpers.py:233
 msgid "Free for Chat"
 msgstr "Babilema"
 
-#: ../src/common/helpers.py:234
+#: ../src/common/helpers.py:236
 msgid "_Available"
 msgstr "_Enrete"
 
-#: ../src/common/helpers.py:236
+#: ../src/common/helpers.py:238
 msgid "Available"
 msgstr "Enrete"
 
-#: ../src/common/helpers.py:238
+#: ../src/common/helpers.py:240
 msgid "Connecting"
 msgstr "Konektas"
 
-#: ../src/common/helpers.py:241
+#: ../src/common/helpers.py:243
 msgid "A_way"
 msgstr "_Fora"
 
-#: ../src/common/helpers.py:246
+#: ../src/common/helpers.py:248
 msgid "_Offline"
 msgstr "_Senkonekta"
 
-#: ../src/common/helpers.py:248
+#: ../src/common/helpers.py:250
 msgid "Offline"
 msgstr "Senkonekta"
 
-#: ../src/common/helpers.py:251
+#: ../src/common/helpers.py:253
 msgid "_Invisible"
 msgstr "Ne_videbla"
 
-#: ../src/common/helpers.py:257
+#: ../src/common/helpers.py:259
 msgid "?contact has status:Unknown"
 msgstr "Nekonata"
 
-#: ../src/common/helpers.py:259
+#: ../src/common/helpers.py:261
 msgid "?contact has status:Has errors"
 msgstr "Eraroj"
 
-#: ../src/common/helpers.py:264
+#: ../src/common/helpers.py:266
 msgid "?Subscription we already have:None"
 msgstr "Neniu"
 
-#: ../src/common/helpers.py:266
+#: ../src/common/helpers.py:268
 msgid "To"
 msgstr "Al"
 
-#: ../src/common/helpers.py:270
+#: ../src/common/helpers.py:272
 msgid "Both"
 msgstr "Ambaŭ"
 
-#: ../src/common/helpers.py:278
+#: ../src/common/helpers.py:280
 msgid "?Ask (for Subscription):None"
 msgstr "Nenion"
 
-#: ../src/common/helpers.py:280
+#: ../src/common/helpers.py:282
 msgid "Subscribe"
 msgstr "Aboni"
 
-#: ../src/common/helpers.py:289
+#: ../src/common/helpers.py:291
 msgid "?Group Chat Contact Role:None"
 msgstr "Neniu"
 
-#: ../src/common/helpers.py:292
+#: ../src/common/helpers.py:294
 msgid "Moderators"
 msgstr "Moderigantoj"
 
-#: ../src/common/helpers.py:294
+#: ../src/common/helpers.py:296
 msgid "Moderator"
 msgstr "Moderiganto"
 
-#: ../src/common/helpers.py:297
+#: ../src/common/helpers.py:299
 msgid "Participants"
 msgstr "Partoprenantoj"
 
-#: ../src/common/helpers.py:299
+#: ../src/common/helpers.py:301
 msgid "Participant"
 msgstr "Partoprenanto"
 
-#: ../src/common/helpers.py:302
+#: ../src/common/helpers.py:304
 msgid "Visitors"
 msgstr "Vizitantoj"
 
-#: ../src/common/helpers.py:304
+#: ../src/common/helpers.py:306
 msgid "Visitor"
 msgstr "Vizitanto"
 
-#: ../src/common/helpers.py:310
+#: ../src/common/helpers.py:312
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "Neniu"
 
-#: ../src/common/helpers.py:312
+#: ../src/common/helpers.py:314
 msgid "Owner"
 msgstr "Mastro"
 
-#: ../src/common/helpers.py:314
+#: ../src/common/helpers.py:316
 msgid "Administrator"
 msgstr "Administristo"
 
-#: ../src/common/helpers.py:316
+#: ../src/common/helpers.py:318
 msgid "Member"
 msgstr "Membro"
 
-#: ../src/common/helpers.py:355
+#: ../src/common/helpers.py:357
 msgid "is paying attention to the conversation"
 msgstr "atentas al la komunikado"
 
-#: ../src/common/helpers.py:357
+#: ../src/common/helpers.py:359
 msgid "is doing something else"
 msgstr "faras ion alian"
 
-#: ../src/common/helpers.py:359
+#: ../src/common/helpers.py:361
 msgid "is composing a message..."
 msgstr "tajpas mesaĝon..."
 
 #. paused means he or she was composing but has stopped for a while
-#: ../src/common/helpers.py:362
+#: ../src/common/helpers.py:364
 msgid "paused composing a message"
 msgstr "paŭzas tajpi mesaĝon"
 
-#: ../src/common/helpers.py:364
+#: ../src/common/helpers.py:366
 msgid "has closed the chat window or tab"
 msgstr "fermis la interparolan fenestron aŭ slipon"
 
-#: ../src/common/helpers.py:890
+#: ../src/common/helpers.py:894
 #, python-format
 msgid " %d unread message"
 msgid_plural " %d unread messages"
 msgstr[0] " %d nelegita mesaĝo"
 msgstr[1] " %d nelegitaj mesaĝoj"
 
-#: ../src/common/helpers.py:896
+#: ../src/common/helpers.py:900
 #, python-format
 msgid " %d unread single message"
 msgid_plural " %d unread single messages"
 msgstr[0] " %d nelegita unuopa mesaĝo"
 msgstr[1] " %d nelegitaj unuopaj mesaĝoj"
 
-#: ../src/common/helpers.py:902
+#: ../src/common/helpers.py:906
 #, python-format
 msgid " %d unread group chat message"
 msgid_plural " %d unread group chat messages"
 msgstr[0] " %d nelegita babileja mesaĝo"
 msgstr[1] " %d nelegitaj babilejaj mesaĝoj"
 
-#: ../src/common/helpers.py:908
+#: ../src/common/helpers.py:912
 #, python-format
 msgid " %d unread private message"
 msgid_plural " %d unread private messages"
 msgstr[0] " %d nelegita privata mesaĝo"
 msgstr[1] "%d nelegitaj privataj mesaĝoj"
 
-#: ../src/common/helpers.py:918 ../src/common/helpers.py:920
+#: ../src/common/helpers.py:922 ../src/common/helpers.py:924
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
@@ -6695,15 +6744,11 @@ msgstr "Gajim - %s"
 msgid "error: cannot open %s for reading"
 msgstr "eraro: %s nedisponeblas por legi"
 
-#: ../src/common/optparser.py:179
-msgid "gtk+"
-msgstr "gtk+"
-
-#: ../src/common/optparser.py:188 ../src/common/optparser.py:189
+#: ../src/common/optparser.py:198 ../src/common/optparser.py:199
 msgid "cyan"
 msgstr "blua"
 
-#: ../src/common/optparser.py:306
+#: ../src/common/optparser.py:315
 msgid "migrating logs database to indices"
 msgstr "indeksigas protokolan datumbazon"
 
@@ -6712,33 +6757,34 @@ msgstr "indeksigas protokolan datumbazon"
 msgid "Gajim account %s"
 msgstr "Gajim-konto %s"
 
-#: ../src/common/zeroconf/client_zeroconf.py:189
+#: ../src/common/zeroconf/client_zeroconf.py:135
+#: ../src/common/zeroconf/client_zeroconf.py:218
+msgid "Connection to host could not be established"
+msgstr "Konekto kun retnodo neestableblas."
+
+#: ../src/common/zeroconf/client_zeroconf.py:192
 msgid ""
 "Connection to host could not be established: Incorrect answer from server."
 msgstr "Konekto kun retnodo masukcesis: Nekorekta respondo de servilo."
 
-#: ../src/common/zeroconf/client_zeroconf.py:205
-msgid "Connection to host could not be established"
-msgstr "Konekto kun retnodo neestableblas."
-
-#: ../src/common/zeroconf/client_zeroconf.py:334
+#: ../src/common/zeroconf/client_zeroconf.py:352
 msgid ""
 "Connection to host could not be established: Timeout while sending data."
 msgstr "Konekto kun retnodo malsukcesis: Templimo atingitis dum datumsendado."
 
-#: ../src/common/zeroconf/client_zeroconf.py:629
+#: ../src/common/zeroconf/client_zeroconf.py:647
 msgid "Contact is offline. Your message could not be sent."
 msgstr "Kontakto estas senkonekta. Via mesaĝo ne estas sendita."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:197
+#: ../src/common/zeroconf/connection_zeroconf.py:200
 msgid "To continue sending and receiving messages, you will need to reconnect."
 msgstr "Por plu sendi kaj ricevi mesaĝojn, vi bezonas rekonekti."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:207
+#: ../src/common/zeroconf/connection_zeroconf.py:223
 msgid "Avahi error"
 msgstr "Eraro de Avahi"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:207
+#: ../src/common/zeroconf/connection_zeroconf.py:223
 #, python-format
 msgid ""
 "%s\n"
@@ -6747,31 +6793,31 @@ msgstr ""
 "%s\n"
 "Lig-loka komunikado ne povas funkcii korekte."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:218
+#: ../src/common/zeroconf/connection_zeroconf.py:234
 msgid "Please check if Avahi is installed."
 msgstr "Bonvolu certiĝi ke Avahi estas instalita."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:227
-#: ../src/common/zeroconf/connection_zeroconf.py:231
+#: ../src/common/zeroconf/connection_zeroconf.py:243
+#: ../src/common/zeroconf/connection_zeroconf.py:247
 msgid "Could not start local service"
 msgstr "Ne povas lanĉi lokan servon"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:228
+#: ../src/common/zeroconf/connection_zeroconf.py:244
 #, python-format
 msgid "Unable to bind to port %d."
 msgstr "Neeblas aliĝi al pordo %d."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:232
-#: ../src/common/zeroconf/connection_zeroconf.py:325
+#: ../src/common/zeroconf/connection_zeroconf.py:248
+#: ../src/common/zeroconf/connection_zeroconf.py:342
 msgid "Please check if avahi-daemon is running."
 msgstr "Bonvolu certiĝi ke avahi-demono estas aktiva."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:324
+#: ../src/common/zeroconf/connection_zeroconf.py:341
 #, python-format
 msgid "Could not change status of account \"%s\""
 msgstr "Ne povas ŝanĝi staton de konto \"%s\""
 
-#: ../src/common/zeroconf/connection_zeroconf.py:341
+#: ../src/common/zeroconf/connection_zeroconf.py:358
 msgid ""
 "You are not connected or not visible to others. Your message could not be "
 "sent."
@@ -6779,7 +6825,7 @@ msgstr ""
 "Vi estas senkonekta aŭ nevidebla por aliaj. Via mesaĝo ne estis sendita."
 
 #. we're not english
-#: ../src/common/zeroconf/connection_zeroconf.py:353
+#: ../src/common/zeroconf/connection_zeroconf.py:370
 msgid "[This message is encrypted]"
 msgstr "[Tiu ĉi mesaĝo estas ĉifrita]"
 
@@ -6787,6 +6833,9 @@ msgstr "[Tiu ĉi mesaĝo estas ĉifrita]"
 #, python-format
 msgid "Error while adding service. %s"
 msgstr "eraro dum aldonado de servo %s"
+
+#~ msgid "gtk+"
+#~ msgstr "gtk+"
 
 #~ msgid "Private Chat"
 #~ msgstr "Privata interparolo"
