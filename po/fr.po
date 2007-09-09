@@ -3185,16 +3185,14 @@ msgid "Please type a name for this status message"
 msgstr "Tapez un nom pour ce message d'état"
 
 #: ../src/dialogs.py:409
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Message d'état"
+msgstr "Écraser le message d'état ?"
 
 #: ../src/dialogs.py:410
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr ""
-"Ce nom est déjà utilisé par un autre de vos comptes. Choisissez un autre nom."
+"Ce nom est déjà utilisé. Voulez-vous écraser ce message d'état ?"
 
 #: ../src/dialogs.py:426
 msgid "AIM Address:"
@@ -3942,7 +3940,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr ""
+msgstr "Erreur d'écriture sur le disque"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4085,9 +4083,8 @@ msgstr "Impossible d'enregistrer vos informations de configuration"
 #: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
 #: ../src/common/optparser.py:189 ../src/common/optparser.py:407
 #: ../src/common/optparser.py:441
-#, fuzzy
 msgid "default"
-msgstr "Par défaut"
+msgstr "défaut"
 
 #: ../src/gajim.py:2146
 msgid "Network Manager support not available"
@@ -4525,16 +4522,12 @@ msgstr "%s a rejoint le salon de discussion"
 #. Invalid Nickname
 #. invalid char
 #: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
-#, fuzzy
 msgid "Invalid nickname"
-msgstr "Nom d'utilisateur non valide"
+msgstr "Surnom non valide"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
-#, fuzzy
 msgid "The nickname has not allowed characters."
-msgstr ""
-"L'identifiant jabber du salon de discussion contient des caractères "
-"interdits."
+msgstr "Le surnom contient des caractères interdits."
 
 #: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
 #: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
@@ -4919,13 +4912,12 @@ msgid "Status is now: %(status)s"
 msgstr "L'état est maintenant : %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
-#, fuzzy
 msgid "Timeout loading image"
-msgstr "Impossible de charger l'image"
+msgstr "Délais de téléchargement de l'image dépassé"
 
 #: ../src/htmltextview.py:604
 msgid "Image is too big"
-msgstr ""
+msgstr "Image trop grosse"
 
 #: ../src/message_window.py:280
 msgid "Chats"
