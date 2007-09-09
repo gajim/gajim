@@ -2646,7 +2646,7 @@ class Interface:
 		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
 			gtk.link_button_set_uri_hook(self.on_launch_browser_mailer, 'url')
 		
-		self.instances = {}
+		self.instances = {'logs': {}}
 		
 		for a in gajim.connections:
 			self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
