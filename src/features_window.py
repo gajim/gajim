@@ -67,7 +67,7 @@ class FeaturesWindow:
 				_('Requires gnome-keyring and python-gnome2-desktop.'),
 				_('Feature not available under Windows.')),
 			_('SRV'): (self.srv_available,
-				_('Ability to connect to servers which is using SRV records.'),
+				_('Ability to connect to servers which are using SRV records.'),
 				_('Requires dnsutils.'),
 				_('Requires nslookup to use SRV records.')),
 			_('Spell Checker'): (self.speller_available,
