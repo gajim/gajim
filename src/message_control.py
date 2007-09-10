@@ -117,7 +117,7 @@ class MessageControl:
 
 		if self.session:
 			print "starting a new session, dropping the old one!"
-			gajim.connections[self.account].delete_session(self.contact.get_full_jid(), self.session.thread_id)
+			gajim.connections[self.account].delete_session(self.session.jid, self.session.thread_id)
 
 		self.session = session
 

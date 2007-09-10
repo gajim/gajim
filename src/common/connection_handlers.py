@@ -1696,10 +1696,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return None
 
 	def delete_session(self, jid, thread_id):
-		del self.sessions[jid][thread_id]
-
-		if not self.sessions[jid]:
-			del self.sessions[jid]
+		try:
+			del self.sessions[jid][thread_id]
+			
+			if not self.sessions[jid]:
+				del self.sessions[jid]
+		except KeyError
+			print "jid %s should have been in %s, but it wasn't. missing session?" % (repr(jid), repr(self.sessions.keys())
 
 	def move_session(self, original_jid, thread_id, to_resource):
 		'''moves a session to another resource.'''
@@ -1722,9 +1725,12 @@ returns the session that we last sent a message to.'''
 		
 		sessions_with_jid = self.sessions[jid].values()
 		no_threadid_sessions = filter(lambda s: not s.received_thread_id, sessions_with_jid)
-		no_threadid_sessions.sort(key=lambda s: s.last_send)
 
-		return no_threadid_sessions[-1]
+		if no_threadid_sessions:
+			no_threadid_sessions.sort(key=lambda s: s.last_send)
+			return no_threadid_sessions[-1]
+		else:
+			return None
 
 	def make_new_session(self, jid, thread_id = None, type = 'chat'):
 		sess = EncryptedStanzaSession(self, common.xmpp.JID(jid), thread_id, type)
