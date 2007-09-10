@@ -1,9 +1,7 @@
 # Bulgarian translation of Gajim.
 # Copyright (C) 2005, 2006, 2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the Gajim package.
-# Yavor Doganov <yavor@doganov.org>, 2005, 2006, 2007.
-#
-# 
+# Yavor Doganov <yavor@gnu.org>, 2005, 2006, 2007.
 # 
 #: ../src/gajim-remote.py:204 ../src/gajim-remote.py:211
 #: ../src/gajim-remote.py:237 ../src/gajim-remote.py:238
@@ -11,11 +9,11 @@
 #: ../src/gajim-remote.py:246 ../src/gajim-remote.py:247
 msgid ""
 msgstr ""
-"Project-Id-Version: Gajim 0.11.1\n"
+"Project-Id-Version: Gajim 0.11.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-10 16:34+0200\n"
-"PO-Revision-Date: 2007-01-17 18:54+0200\n"
-"Last-Translator: Yavor Doganov <yavor@doganov.org>\n"
+"POT-Creation-Date: 2007-09-10 20:33+0200\n"
+"PO-Revision-Date: 2007-09-10 18:34+0300\n"
+"Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -82,7 +80,7 @@ msgstr ""
 
 #: ../data/glade/account_creation_wizard_window.glade.h:4
 msgid "<b>Please choose one of the options below:</b>"
-msgstr "<b>Изберете една от опциите по-долу:</b>"
+msgstr "<b>Изберете една от възможностите по-долу:</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:5
 msgid "<b>Please fill in the data for your new account</b>"
@@ -104,7 +102,7 @@ msgstr "Gajim: Помощник за създаване на акаунт"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:9
 msgid "I already have an account I want to use"
-msgstr "Вече имам регистриран акаунт, който искам да използвам"
+msgstr "_Вече имам регистриран акаунт, който искам да използвам"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:10
 msgid "I want to _register for a new account"
@@ -137,9 +135,7 @@ msgstr "Настройване на профила при свързване"
 msgid ""
 "You need to have an account in order to connect\n"
 "to the Jabber network."
-msgstr ""
-"Трябва да имате акаунт, за да се свържете с\n"
-"мрежата на Джабър."
+msgstr "Трябва да имате акаунт, за да се свържете с мрежата на Джабър."
 
 #: ../data/glade/account_creation_wizard_window.glade.h:18
 msgid "Your JID:"
@@ -2530,9 +2526,8 @@ msgid "Russian"
 msgstr "руски"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Serbian"
-msgstr "немски"
+msgstr "сръбски"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
@@ -3172,15 +3167,15 @@ msgid "Please type a name for this status message"
 msgstr "Напишете име за това съобщение за състояние"
 
 #: ../src/dialogs.py:409
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Съобщение за състояние"
+msgstr "Презаписвване на съобщението за състояние?"
 
 #: ../src/dialogs.py:410
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
-msgstr "Това име вече се използва от друг акаунт. Изберете друго име."
+msgstr ""
+"Това име вече се използва. Искате ли да презапишете това съобщение за "
+"състояние?"
 
 #: ../src/dialogs.py:426
 msgid "AIM Address:"
@@ -3268,7 +3263,7 @@ msgstr ""
 #: ../src/dialogs.py:788
 msgid "translator-credits"
 msgstr ""
-"Явор Доганов <yavor@doganov.org>\n"
+"Явор Доганов <yavor@gnu.org>\n"
 "\n"
 "Проектът за превод на GNOME има нужда от подкрепа.\n"
 "Научете повече за нас на http://gnome.cult.bg\n"
@@ -3929,7 +3924,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr ""
+msgstr "Грешка при запис на диска"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4071,9 +4066,8 @@ msgstr "Неуспех при запазването на настройките
 #: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
 #: ../src/common/optparser.py:189 ../src/common/optparser.py:407
 #: ../src/common/optparser.py:441
-#, fuzzy
 msgid "default"
-msgstr "По подразбиране"
+msgstr "по подразбиране"
 
 #: ../src/gajim.py:2146
 msgid "Network Manager support not available"
@@ -4514,14 +4508,12 @@ msgstr "%s влезе в стаята"
 #. Invalid Nickname
 #. invalid char
 #: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
-#, fuzzy
 msgid "Invalid nickname"
-msgstr "Невалидно потребителско име"
+msgstr "Невалиден псевдоним"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
-#, fuzzy
 msgid "The nickname has not allowed characters."
-msgstr "Jabber ID на стаята съдържа непозволени знаци."
+msgstr "Псевдонимът съдържа непозволени знаци."
 
 #: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
 #: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
@@ -4904,13 +4896,12 @@ msgid "Status is now: %(status)s"
 msgstr "Сегашното състояние е: %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
-#, fuzzy
 msgid "Timeout loading image"
-msgstr "Неуспех при зареждането на изображението"
+msgstr "Изтече времето за връзка при зареждане на изображението"
 
 #: ../src/htmltextview.py:604
 msgid "Image is too big"
-msgstr ""
+msgstr "Изображението е твърде голямо"
 
 #: ../src/message_window.py:280
 msgid "Chats"
@@ -6359,7 +6350,7 @@ msgid "Error while removing privacy list"
 msgstr "Грешка при премахването на списъка за уединение"
 
 #: ../src/common/connection.py:498
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and try again."
@@ -6915,56 +6906,3 @@ msgstr "[Това съобщение е шифрирано]"
 #, python-format
 msgid "Error while adding service. %s"
 msgstr "Грешка при добавянето на услугата. %s"
-
-#~ msgid "gtk+"
-#~ msgstr "GTK+"
-
-#~ msgid "Private Chat"
-#~ msgstr "Личен разговор"
-
-#~ msgid "Group Chat"
-#~ msgstr "Стая"
-
-#~ msgid "invisible"
-#~ msgstr "невидим"
-
-#~ msgid "offline"
-#~ msgstr "изключен"
-
-#~ msgid "I'm %s"
-#~ msgstr "%s"
-
-#~ msgid "2003-12-13T18:30:02Z"
-#~ msgstr "13-12-2003T18:30:02Z"
-
-#~ msgid "<small>Romeo and Juliet</small>"
-#~ msgstr "<small>Ромео и Жулиета</small>"
-
-#~ msgid "Old stories"
-#~ msgstr "Стари записи"
-
-#~ msgid "Soliloquy"
-#~ msgstr "Монолог"
-
-#~ msgid "%s is not a valid loglevel"
-#~ msgstr "%s не е валидно ниво за дневник"
-
-#~ msgid "Security error connecting to \"%s\""
-#~ msgstr "Грешка в сигурността при свързването с „%s“"
-
-#~ msgid ""
-#~ "The server's key has changed, or someone is trying to hack your "
-#~ "connection."
-#~ msgstr ""
-#~ "Ключът на сървъра е променен, или някой се опитва да взломи връзката ви."
-
-#~ msgid "Unable to check fingerprint for %s. Connection could be insecure."
-#~ msgstr ""
-#~ "Неуспех при проверката на отпечатъка на %s. Свързването може да е "
-#~ "несигурно."
-
-#~ msgid "Missing fingerprint in SSL connection to %s"
-#~ msgstr "Липсва отпечатък при свързването чрез SSL с %s"
-
-#~ msgid "Fingerprint mismatch for %s: Got %s, expected %s"
-#~ msgstr "Отпечатъкът на %s не съвпада; получи се %s, а се очакваше %s"
