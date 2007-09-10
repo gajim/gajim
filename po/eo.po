@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
+"POT-Creation-Date: 2007-09-10 16:34+0200\n"
 "PO-Revision-Date: 2007-01-29 14:01+0400\n"
 "Last-Translator: Sergio Ĥlutĉin <Sergey.Khlutchin@gmail.com>\n"
 "Language-Team: Esperanto <translation-team-eo@lists.sourceforge.net>\n"
@@ -6288,10 +6288,10 @@ msgid "Error while removing privacy list"
 msgstr "Eraro dum forigado de privata listo"
 
 #: ../src/common/connection.py:498
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Desactivate it and try again."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Privata listo %s ne forigitis. Ĝi eble estas aktiva en unu el viaj "
 "konektitaj risurcoj. Malaktivigu ĝin kaj provu denove."

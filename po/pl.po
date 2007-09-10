@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
+"POT-Creation-Date: 2007-09-10 16:34+0200\n"
 "PO-Revision-Date: 2006-11-08 09:01+0100\n"
 "Last-Translator: Maciej Chojnacki <byte@byte.livenet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -6355,10 +6355,10 @@ msgid "Error while removing privacy list"
 msgstr "Błąd usuwaniu listy prywatności"
 
 #: ../src/common/connection.py:498
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Desactivate it and try again."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Lista prywatności %s nie została usunięta. Prawdopodobnie jest aktywna w "
 "jednym z połączonych zasobów. Wyłącz ją i spróbuj ponownie."

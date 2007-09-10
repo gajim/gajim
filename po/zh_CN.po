@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
+"POT-Creation-Date: 2007-09-10 16:34+0200\n"
 "PO-Revision-Date: 2006-12-04 01:07+0800\n"
 "Last-Translator: kangkang <kanger@gmail.com>\n"
 "Language-Team: sIyU <jabber@lzusiyu.org>\n"
@@ -6189,7 +6189,7 @@ msgstr "添加服务错误。 %s"
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Desactivate it and try again."
+"connected resources. Deactivate it and try again."
 msgstr ""
 
 #. We didn't set a passphrase

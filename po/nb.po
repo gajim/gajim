@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
+"POT-Creation-Date: 2007-09-10 16:34+0200\n"
 "PO-Revision-Date: 2007-01-22 16:02+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: \n"
@@ -6322,10 +6322,10 @@ msgid "Error while removing privacy list"
 msgstr "Feil ved fjerning av liste over uønskede"
 
 #: ../src/common/connection.py:498
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Desactivate it and try again."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Listen over utestengte %s har ikke blitt fjernet. Den er kanskje aktiv i en "
 "av dine tilkoblede ressurser. Deaktiver den og prøv igjen."

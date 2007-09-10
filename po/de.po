@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
+"POT-Creation-Date: 2007-09-10 16:34+0200\n"
 "PO-Revision-Date: 2007-01-25 17:39+0100\n"
 "Last-Translator: Benjamin Drung <benjamin.drung@gmail.com>\n"
 "Language-Team: German <translators@gajim.org>\n"
@@ -6396,10 +6396,10 @@ msgid "Error while removing privacy list"
 msgstr "Fehler beim Entfernen der Privatliste"
 
 #: ../src/common/connection.py:498
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Desactivate it and try again."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Privatliste %s wurde nicht entfernt. Möglicherweise ist die Privatliste noch "
 "in einer Ihrer Verbindungen aktiv. Deaktivieren Sie diese und versuchen Sie "

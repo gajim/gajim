@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
+"POT-Creation-Date: 2007-09-10 16:34+0200\n"
 "PO-Revision-Date: 2005-12-19 18:44+0100\n"
 "Last-Translator: Stéphan Kochen <stephan@kochen.nl>\n"
 "Language-Team: none\n"
@@ -6461,7 +6461,7 @@ msgstr "fout tijdens versturen"
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Desactivate it and try again."
+"connected resources. Deactivate it and try again."
 msgstr ""
 
 #. We didn't set a passphrase

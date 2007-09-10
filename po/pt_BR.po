@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
+"POT-Creation-Date: 2007-09-10 16:34+0200\n"
 "PO-Revision-Date: 2007-05-03 13:50-0300\n"
 "Last-Translator: Davidson Paulo <davidsonpaulo@gmail.com>\n"
 "Language-Team: Português Brasileiro <gajim-devel@gajim.org>\n"
@@ -6352,10 +6352,10 @@ msgid "Error while removing privacy list"
 msgstr "Erro ao remover lista de privacidade"
 
 #: ../src/common/connection.py:498
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Desactivate it and try again."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "A lista de privacidade %s não foi removida. Ela pode estar ativa em um ou "
 "mais recursos conectados. Desative-os e tente novamente."

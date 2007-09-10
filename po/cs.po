@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
+"POT-Creation-Date: 2007-09-10 16:34+0200\n"
 "PO-Revision-Date: 2007-02-06 21:51+0100\n"
 "Last-Translator: Petr Menšík <pihhan@seznam.cz>\n"
 "Language-Team:  <cs@li.org>\n"
@@ -6302,10 +6302,10 @@ msgid "Error while removing privacy list"
 msgstr "chyba při odebírání privacy listu"
 
 #: ../src/common/connection.py:498
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Desactivate it and try again."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Privacy list %s nebyl odstraněn. Možná je aktivní v jednom z připojených "
 "zdrojů. Zruště jeho používání a zkuste znovu."
