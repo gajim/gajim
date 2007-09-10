@@ -253,8 +253,7 @@ class HostTester(Socks5, IdleObject):
 			self._recv=self._sock.recv
 		except Exception, ee:
 			(errnum, errstr) = ee
-			# 56 is for freebsd
-			if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK, 56):
+			if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
 				# still trying to connect
 				return
 			# win32 needs this
