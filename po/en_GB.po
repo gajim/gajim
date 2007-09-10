@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
-"PO-Revision-Date: 2007-01-21 15:27+1100\n"
+"POT-Creation-Date: 2007-09-09 20:27+0200\n"
+"PO-Revision-Date: 2007-09-10 18:15+1000\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2515,9 +2515,8 @@ msgid "Russian"
 msgstr "Russian"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Serbian"
-msgstr "German"
+msgstr "Serbian"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
@@ -3154,17 +3153,14 @@ msgid "Please type a name for this status message"
 msgstr "Please type a name for this status message"
 
 #: ../src/dialogs.py:409
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Status Message"
+msgstr "Overwrite Status Message?"
 
 #: ../src/dialogs.py:410
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr ""
-"This name is already used by another of your accounts. Please choose another "
-"name."
+"This name is already used. Do you want to overwrite this status message?"
 
 #: ../src/dialogs.py:426
 msgid "AIM Address:"
@@ -3908,7 +3904,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr ""
+msgstr "Disk Write Error"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4050,9 +4046,8 @@ msgstr "Could not save your settings and preferences"
 #: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
 #: ../src/common/optparser.py:189 ../src/common/optparser.py:407
 #: ../src/common/optparser.py:441
-#, fuzzy
 msgid "default"
-msgstr "Default"
+msgstr "default"
 
 #: ../src/gajim.py:2146
 msgid "Network Manager support not available"
@@ -4484,14 +4479,12 @@ msgstr "%s has joined the group chat"
 #. Invalid Nickname
 #. invalid char
 #: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
-#, fuzzy
 msgid "Invalid nickname"
-msgstr "Invalid username"
+msgstr "Invalid nickname"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
-#, fuzzy
 msgid "The nickname has not allowed characters."
-msgstr "The group chat Jabber ID has invalid characters."
+msgstr "The nickname has invalid characters."
 
 #: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
 #: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
@@ -4869,13 +4862,12 @@ msgid "Status is now: %(status)s"
 msgstr "Status is now: %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
-#, fuzzy
 msgid "Timeout loading image"
-msgstr "Could not load image"
+msgstr "Timeout loading image"
 
 #: ../src/htmltextview.py:604
 msgid "Image is too big"
-msgstr ""
+msgstr "Image is too big"
 
 #: ../src/message_window.py:280
 msgid "Chats"
