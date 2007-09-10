@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-09 13:49+0200\n"
-"PO-Revision-Date: 2007-01-30 17:48+0100\n"
-"Last-Translator: Matteo Dell'Amico <della@linux.it>\n"
+"POT-Creation-Date: 2007-09-09 20:27+0200\n"
+"PO-Revision-Date: 2007-09-10 12:58+0100\n"
+"Last-Translator: neoex <neoex.dc@gmail.com>\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2526,9 +2526,8 @@ msgid "Russian"
 msgstr "Russo"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Serbian"
-msgstr "Tedesco"
+msgstr "Serbo"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
@@ -3175,15 +3174,15 @@ msgid "Please type a name for this status message"
 msgstr "Inserire un nome per questo messaggio di stato"
 
 #: ../src/dialogs.py:409
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Messaggio di stato"
+msgstr "Sovrascrivere messagio di stato?"
 
 #: ../src/dialogs.py:410
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
-msgstr "Questo nome è già usato da un altro account. Scegliere un altro nome."
+msgstr ""
+"Questo nome è già stato utilizzato. Vuoi sovrascrivere questo messaggio di "
+"stato?"
 
 #: ../src/dialogs.py:426
 msgid "AIM Address:"
@@ -3928,7 +3927,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr ""
+msgstr "Errore nella scrittura su disco"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4070,9 +4069,8 @@ msgstr "Impossibile salvare impostazioni e preferenze"
 #: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
 #: ../src/common/optparser.py:189 ../src/common/optparser.py:407
 #: ../src/common/optparser.py:441
-#, fuzzy
 msgid "default"
-msgstr "Predefinito"
+msgstr "predefinito"
 
 #: ../src/gajim.py:2146
 msgid "Network Manager support not available"
@@ -4510,14 +4508,12 @@ msgstr "%s è entrato nella chat di gruppo"
 #. Invalid Nickname
 #. invalid char
 #: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
-#, fuzzy
 msgid "Invalid nickname"
 msgstr "Nome utente non valido"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
-#, fuzzy
 msgid "The nickname has not allowed characters."
-msgstr "Il nome della stanza o del server contiene caratteri non permessi."
+msgstr "Il nickname contiene caratteri non consentiti."
 
 #: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
 #: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
@@ -4902,7 +4898,6 @@ msgid "Status is now: %(status)s"
 msgstr "Lo stato ora è: %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
-#, fuzzy
 msgid "Timeout loading image"
 msgstr "Impossibile caricare l'immagine"
 
