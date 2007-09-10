@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-10 16:34+0200\n"
-"PO-Revision-Date: 2006-11-08 09:01+0100\n"
-"Last-Translator: Maciej Chojnacki <byte@byte.livenet.pl>\n"
+"POT-Creation-Date: 2007-09-10 20:33+0200\n"
+"PO-Revision-Date: 2007-09-10 19:04+0100\n"
+"Last-Translator: Maciej Chojnacki <maciej.chojnacki@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2522,9 +2522,8 @@ msgid "Russian"
 msgstr "rosyjski"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Serbian"
-msgstr "niemiecki"
+msgstr "serbski"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
@@ -3165,15 +3164,13 @@ msgid "Please type a name for this status message"
 msgstr "Podaj nazwę dla tego szablonu"
 
 #: ../src/dialogs.py:409
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Opis statusu"
+msgstr "Zmienić status opisowy?"
 
 #: ../src/dialogs.py:410
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
-msgstr "Posiadasz już konto o tej nazwie. Zmień nazwę konta na unikalną."
+msgstr "Istnieje już status opisowy o tej nazwie. Czy chcesz go zastąpić?"
 
 #: ../src/dialogs.py:426
 msgid "AIM Address:"
@@ -3257,9 +3254,7 @@ msgstr "I wreszcie, chcielibyśmy podziękować wszystkim opiekunom pakietów."
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:788
 msgid "translator-credits"
-msgstr ""
-"Tłumaczenie na język polski: Witold Kieraś <pambuk@gmail.com>\n"
-"Maciej Chojnacki <byte@byte.livenet.pl>"
+msgstr "Maciej Chojnacki <maciej.chojnacki@gmail.com>"
 
 #: ../src/dialogs.py:918
 #, python-format
@@ -3920,7 +3915,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr ""
+msgstr "Błąd zapisu na dysku"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4063,7 +4058,6 @@ msgstr "Nie można zapisać twoich ustawień i opcji"
 #: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
 #: ../src/common/optparser.py:189 ../src/common/optparser.py:407
 #: ../src/common/optparser.py:441
-#, fuzzy
 msgid "default"
 msgstr "Domyślny"
 
@@ -4501,14 +4495,12 @@ msgstr "%s dołączył do pokoju"
 #. Invalid Nickname
 #. invalid char
 #: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
-#, fuzzy
 msgid "Invalid nickname"
 msgstr "Niepoprawna nazwa użytkownika"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
-#, fuzzy
 msgid "The nickname has not allowed characters."
-msgstr "Używane przez ciebie Jabber ID zawiera niedozwolone znaki."
+msgstr "Ta nazwa użytkownika zawiera niedozwolone znaki."
 
 #: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
 #: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
@@ -4889,13 +4881,12 @@ msgid "Status is now: %(status)s"
 msgstr "Obecny status: %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
-#, fuzzy
 msgid "Timeout loading image"
-msgstr "Nie można załadować obrazka."
+msgstr "Przekroczony czas odczytu obrazka"
 
 #: ../src/htmltextview.py:604
 msgid "Image is too big"
-msgstr ""
+msgstr "Obraz jest za duży"
 
 #: ../src/message_window.py:280
 msgid "Chats"
@@ -6355,7 +6346,7 @@ msgid "Error while removing privacy list"
 msgstr "Błąd usuwaniu listy prywatności"
 
 #: ../src/common/connection.py:498
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and try again."
