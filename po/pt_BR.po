@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-10 16:34+0200\n"
-"PO-Revision-Date: 2007-05-03 13:50-0300\n"
+"POT-Creation-Date: 2007-09-10 20:33+0200\n"
+"PO-Revision-Date: 2007-09-10 18:06-0300\n"
 "Last-Translator: Davidson Paulo <davidsonpaulo@gmail.com>\n"
 "Language-Team: Português Brasileiro <gajim-devel@gajim.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: ../data/gajim.desktop.in.in.h:1
 msgid "A GTK+ Jabber client"
-msgstr "Um cliente jabber GTK+"
+msgstr "Um cliente Jabber em GTK+"
 
 #: ../data/gajim.desktop.in.in.h:2
 msgid "Gajim Instant Messenger"
@@ -62,7 +62,7 @@ msgstr "_Conferência"
 #: ../data/glade/account_context_menu.glade.h:6
 #: ../data/glade/zeroconf_context_menu.glade.h:1
 msgid "_Modify Account..."
-msgstr "_Alterar Conta..."
+msgstr "_Modificar Conta..."
 
 #: ../data/glade/account_context_menu.glade.h:7
 msgid "_Open Gmail Inbox"
@@ -210,7 +210,7 @@ msgstr "Conta"
 
 #: ../data/glade/account_modification_window.glade.h:5
 msgid "Account Modification"
-msgstr "Alteração da Conta"
+msgstr "Modificação da Conta"
 
 #: ../data/glade/account_modification_window.glade.h:6
 msgid "Auto-reconnect when connection is lost"
@@ -240,7 +240,7 @@ msgstr ""
 #: ../data/glade/account_modification_window.glade.h:10
 #: ../data/glade/zeroconf_properties_window.glade.h:4
 msgid "Choose _Key..."
-msgstr "_Escolha a chave..."
+msgstr "_Escolha a Chave..."
 
 #: ../data/glade/account_modification_window.glade.h:11
 msgid "Click to change account's password"
@@ -867,14 +867,14 @@ msgstr "_Abrir Cliente de E-mail"
 
 #: ../data/glade/chat_context_menu.glade.h:6
 msgid "_Open Link in Browser"
-msgstr "_Visualizar no Navegador"
+msgstr "_Abrir no Navegador"
 
 #: ../data/glade/chat_context_menu.glade.h:7
 #: ../data/glade/roster_window.glade.h:20
 #: ../data/glade/subscription_request_popup_menu.glade.h:1
 #: ../data/glade/systray_context_menu.glade.h:7
 msgid "_Start Chat"
-msgstr "_Iniciar conversa"
+msgstr "_Iniciar Conversa"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:1
 msgid "Click to see past conversations with this contact"
@@ -3176,17 +3176,15 @@ msgid "Please type a name for this status message"
 msgstr "Por favor, escreva um nome para esta mensagem de status"
 
 #: ../src/dialogs.py:409
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Mensagem de status"
+msgstr "Sobrescrever Mensagem de Status?"
 
 #: ../src/dialogs.py:410
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr ""
-"Este nome já está sendo usado por outra de suas contas. Por favor, escolha "
-"outro nome."
+"Este nome já está sendo usado. Você quer sobrescrever essa mensagem de "
+"status?"
 
 #: ../src/dialogs.py:426
 msgid "AIM Address:"
@@ -3934,7 +3932,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr ""
+msgstr "Erro de Escrita no Disco"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4076,9 +4074,8 @@ msgstr "Impossível salvar suas preferências"
 #: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
 #: ../src/common/optparser.py:189 ../src/common/optparser.py:407
 #: ../src/common/optparser.py:441
-#, fuzzy
 msgid "default"
-msgstr "Padrão"
+msgstr "padrão"
 
 #: ../src/gajim.py:2146
 msgid "Network Manager support not available"
@@ -4518,14 +4515,12 @@ msgstr "%s entrou na conferência"
 #. Invalid Nickname
 #. invalid char
 #: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
-#, fuzzy
 msgid "Invalid nickname"
-msgstr "Nome de usuário inválido"
+msgstr "Apelido inválido"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
-#, fuzzy
 msgid "The nickname has not allowed characters."
-msgstr "O Jabber ID da conferência possui caracteres não permitidos."
+msgstr "O apelido possui caracteres não permitidos."
 
 #: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
 #: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
@@ -4904,13 +4899,12 @@ msgid "Status is now: %(status)s"
 msgstr "Status agora é: %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
-#, fuzzy
 msgid "Timeout loading image"
-msgstr "A imagem não pode ser carregada"
+msgstr "Tempo esgotado ao carregar a imagem"
 
 #: ../src/htmltextview.py:604
 msgid "Image is too big"
-msgstr ""
+msgstr "Imagem muito grande"
 
 #: ../src/message_window.py:280
 msgid "Chats"
@@ -6352,7 +6346,7 @@ msgid "Error while removing privacy list"
 msgstr "Erro ao remover lista de privacidade"
 
 #: ../src/common/connection.py:498
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and try again."
