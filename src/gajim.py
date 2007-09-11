@@ -1483,9 +1483,9 @@ class Interface:
 			extension = '_local.png' # save local avatars as png file
 		else:
 			pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo, want_type = True)
-			extension = '.' + typ
 			if  pixbuf is None:
 				return
+			extension = '.' + typ
 			if typ not in ('jpeg', 'png'):
 				gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. saving %s\'avatar as png file (originaly %s)' % (jid, typ))
 				typ = 'png'
