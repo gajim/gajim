@@ -1,4 +1,4 @@
-# Biełarusji pierakład Gajim
+# Biełaruski pierakład Gajim
 # Copyright (C) 2006-2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as Gajim.
 # Ihar Hrachyshka <ihar.hrachyshka@gmail.com>, 2006-2007.
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-10 20:33+0200\n"
-"PO-Revision-Date: 2007-03-10 02:03+0300\n"
+"PO-Revision-Date: 2007-09-12 11:27+0300\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
@@ -739,7 +739,7 @@ msgstr "_Nie pakazvaj vypłyŭnych voknaŭ"
 
 #: ../data/glade/advanced_notifications_window.glade.h:30
 msgid "_Disable existing sound for this event"
-msgstr "_Nie ahučvaj hetaj padzieji"
+msgstr "_Nie ahučvaj hetaj padziei"
 
 #: ../data/glade/advanced_notifications_window.glade.h:31
 msgid "_Disable showing event in roster"
@@ -1060,7 +1060,7 @@ msgstr "Źmiani _temu"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:3
 msgid "Click to see past conversation in this room"
-msgstr "Klikni, kab pahladzieć tekst minułych razmoŭ u hetym pakoji"
+msgstr "Klikni, kab pahladzieć tekst minułych razmoŭ u hetym pakoi"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:4
 msgid "Configure _Room"
@@ -1261,9 +1261,8 @@ msgid "<b>Settings</b>"
 msgstr "<b>Nałady</b>"
 
 #: ../data/glade/manage_proxies_window.glade.h:3
-#, fuzzy
 msgid "HTTP Connect"
-msgstr "Złučeńnie HTTP"
+msgstr "Spałučeńnie HTTP"
 
 #: ../data/glade/manage_proxies_window.glade.h:4
 msgid "Manage Proxy Profiles"
@@ -1473,7 +1472,7 @@ msgstr "Smajliki:"
 
 #: ../data/glade/preferences_window.glade.h:43
 msgid "Events"
-msgstr "Padzieji"
+msgstr "Padziei"
 
 #: ../data/glade/preferences_window.glade.h:44
 msgid ""
@@ -1496,11 +1495,11 @@ msgstr ""
 "surazmoŭcam."
 
 #: ../data/glade/preferences_window.glade.h:46
-#, fuzzy
 msgid ""
 "Gajim will automatically show new events by popping up the relative window"
 msgstr ""
-"Gajim budzie aŭtamatyčna pakazvać novyja paviedamleńni ŭ adpaviednym aknie"
+"Gajim budzie aŭtamatyčna pakazvać novyja padziei, vykidvajučy adpaviednaje "
+"vakno"
 
 #: ../data/glade/preferences_window.glade.h:47
 msgid ""
@@ -1740,7 +1739,7 @@ msgstr "_Padśviatlaj słovy z pamyłkami"
 
 #: ../data/glade/preferences_window.glade.h:94
 msgid "_Ignore events from contacts not in the roster"
-msgstr "_Ihnaruj padzieji ad kantaktaŭ, jakich niama ŭ śpisie kantaktaŭ"
+msgstr "_Ihnaruj padziei ad kantaktaŭ, jakich niama ŭ śpisie kantaktaŭ"
 
 #: ../data/glade/preferences_window.glade.h:95
 msgid "_Incoming message:"
@@ -1915,7 +1914,7 @@ msgstr "Firma:"
 #: ../data/glade/profile_window.glade.h:9
 #: ../data/glade/vcard_information_window.glade.h:13
 msgid "Country:"
-msgstr "Krajina:"
+msgstr "Kraina:"
 
 #: ../data/glade/profile_window.glade.h:10
 #: ../data/glade/vcard_information_window.glade.h:14
@@ -2257,7 +2256,7 @@ msgstr "Ściš huki"
 
 #: ../data/glade/systray_context_menu.glade.h:3
 msgid "Show All Pending _Events"
-msgstr "Pakažy ŭsie niahledžanyja _padzieji"
+msgstr "Pakažy ŭsie niahledžanyja _padziei"
 
 #: ../data/glade/systray_context_menu.glade.h:4
 msgid "Show _Roster"
@@ -2451,7 +2450,6 @@ msgid "Bulgarian"
 msgstr "Baŭharskaja"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Briton"
 msgstr "Brytonskaja"
 
@@ -2676,11 +2674,11 @@ msgstr "Paviedamleńnie dasłanaje"
 
 #: ../src/config.py:1063
 msgid "Group Chat Message Highlight"
-msgstr "Padśviatleńnie paviedamleńnia ŭ pakoji"
+msgstr "Padśviatleńnie paviedamleńnia ŭ pakoi"
 
 #: ../src/config.py:1064
 msgid "Group Chat Message Received"
-msgstr "Novaje paviedamleńnie ŭ pakoji"
+msgstr "Novaje paviedamleńnie ŭ pakoi"
 
 #: ../src/config.py:1071
 msgid "GMail Email Received"
@@ -3162,15 +3160,14 @@ msgid "Please type a name for this status message"
 msgstr "Kali łaska, uviadzi nazvu dla hetaha paviedamleńnia statusu"
 
 #: ../src/dialogs.py:409
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Paviedamleńnie statusu"
+msgstr "Nadpisać paviedamleńnie statusu?"
 
 #: ../src/dialogs.py:410
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
-msgstr "Kont z takoj nazvaj užo zaniaty. Kali łaska, abiary inšuju nazvu."
+msgstr ""
+"Hetaja nazva ŭžo zaniataja. Chočaš nadpisać hetaja paviedamleńnie statusu?"
 
 #: ../src/dialogs.py:426
 msgid "AIM Address:"
@@ -3216,7 +3213,7 @@ msgstr "Kantakt užo jość u śpisie kantaktaŭ"
 
 #: ../src/dialogs.py:640
 msgid "This contact is already listed in your roster."
-msgstr "Hety kantakt užo jość u tvajim śpisie kantaktaŭ."
+msgstr "Hety kantakt užo jość u tvaim śpisie kantaktaŭ."
 
 #: ../src/dialogs.py:677
 msgid "User ID:"
@@ -3282,7 +3279,7 @@ msgstr "Zapyt aŭtaryzacyi ad %s"
 #: ../src/dialogs.py:1138 ../src/roster_window.py:690
 #, python-format
 msgid "You are already in group chat %s"
-msgstr "Užo ŭdzielničaješ u razmovie ŭ pakoji %s"
+msgstr "Užo ŭdzielničaješ u razmovie ŭ pakoi %s"
 
 #: ../src/dialogs.py:1146
 msgid "You can not join a group chat unless you are connected."
@@ -3842,22 +3839,18 @@ msgid "Gajim needs X server to run. Quiting..."
 msgstr "Gajimu patrebny X-server. Vychad..."
 
 #: ../src/gajim.py:51
-#, fuzzy
 msgid "Gajim needs PyGTK 2.6 or above"
 msgstr "Gajimu treba PyGTK 2.6 albo paźniejšaj versii"
 
 #: ../src/gajim.py:52
-#, fuzzy
 msgid "Gajim needs PyGTK 2.6 or above to run. Quiting..."
 msgstr "Gajimu treba PyGTK 2.6 albo paźniejšaj versii. Vychad..."
 
 #: ../src/gajim.py:54
-#, fuzzy
 msgid "Gajim needs GTK 2.6 or above"
 msgstr "Gajimu treba GTK 2.6 albo paźniejšaj versii"
 
 #: ../src/gajim.py:55
-#, fuzzy
 msgid "Gajim needs GTK 2.6 or above to run. Quiting..."
 msgstr "Gajimu treba GTK 2.6 albo paźniejšaj versii. Vychad..."
 
@@ -3919,7 +3912,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr ""
+msgstr "Pamyłka zapisu na dysk"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4063,9 +4056,8 @@ msgstr "Niemahčyma zapisać tvaje nałady i opcyi"
 #: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
 #: ../src/common/optparser.py:189 ../src/common/optparser.py:407
 #: ../src/common/optparser.py:441
-#, fuzzy
 msgid "default"
-msgstr "Zmoŭčany"
+msgstr "zmoŭčany"
 
 #: ../src/gajim.py:2146
 msgid "Network Manager support not available"
@@ -4368,7 +4360,7 @@ msgid ""
 "'%s' is not in your roster.\n"
 "Please specify account for sending the message."
 msgstr ""
-"'%s' niama ŭ tvajim śpisie kantaktaŭ.\n"
+"'%s' niama ŭ tvaim śpisie kantaktaŭ.\n"
 "Kali łaska, akreśli kont dla dasyłańnia paviedamleńnia."
 
 #: ../src/gajim-remote.py:291
@@ -4449,7 +4441,7 @@ msgstr "Pamyłka dasyłańnia pryvatnaha paviedamleńnia"
 #: ../src/groupchat_control.py:131
 #, python-format
 msgid "You are no longer in group chat \"%s\" or \"%s\" has left."
-msgstr "Ciabie niama ŭ pakoji \"%s\", albo \"%s\" pakinuŭ jaho."
+msgstr "Ciabie niama ŭ pakoi \"%s\", albo \"%s\" pakinuŭ jaho."
 
 #: ../src/groupchat_control.py:326
 msgid "Insert Nickname"
@@ -4500,14 +4492,12 @@ msgstr "%s dałučyŭsia da pakoju"
 #. Invalid Nickname
 #. invalid char
 #: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
-#, fuzzy
 msgid "Invalid nickname"
-msgstr "Niapravilnaje imia karystalnika"
+msgstr "Niapravilnaja mianuška"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
-#, fuzzy
 msgid "The nickname has not allowed characters."
-msgstr "JID pakoju ŭtrymlivaje niedazvolenyja znaki."
+msgstr "Mianuška ŭtrymlivaje niedazvolenyja znaki."
 
 #: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
 #: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
@@ -4552,7 +4542,7 @@ msgid ""
 msgstr ""
 "Užyvańnie: /%s <mianyška|JID> [pryčyna], blakuje JID dla pakoju. Mianušku "
 "možna źmianić, kali jana nia ŭtrymlivaje znaka \"@\". Kali JID jašče "
-"znachodzicca ŭ pakoji, jon budzie vypchnuty preč. Prabieły ŭ mianuškach nie "
+"znachodzicca ŭ pakoi, jon budzie vypchnuty preč. Prabieły ŭ mianuškach nie "
 "padtrymvajucca."
 
 #: ../src/groupchat_control.py:1320
@@ -4696,7 +4686,7 @@ msgstr "Zakładka ŭžo dadana"
 #: ../src/groupchat_control.py:1513
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
-msgstr "Pakoj \"%s\" užo jość u tvajich zakładkach."
+msgstr "Pakoj \"%s\" užo jość u tvaich zakładkach."
 
 #: ../src/groupchat_control.py:1522
 msgid "Bookmark has been added successfully"
@@ -4705,7 +4695,7 @@ msgstr "Zakładka paśpiachova dadanaja"
 #: ../src/groupchat_control.py:1523
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
-"Možaš kiravać svajimi zakładkami praz menu \"Dziejańni\" śpisu kantaktaŭ."
+"Možaš kiravać svaimi zakładkami praz menu \"Dziejańni\" śpisu kantaktaŭ."
 
 #. ask for reason
 #: ../src/groupchat_control.py:1651
@@ -4891,13 +4881,12 @@ msgid "Status is now: %(status)s"
 msgstr "Dziejny status: %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
-#, fuzzy
 msgid "Timeout loading image"
-msgstr "Niemahčyma adčytać vyjavu"
+msgstr "Skonvyŭsia termin čakańnia zahruzki vyjavy"
 
 #: ../src/htmltextview.py:604
 msgid "Image is too big"
-msgstr ""
+msgstr "Vyjava nadta vialikaja"
 
 #: ../src/message_window.py:280
 msgid "Chats"
@@ -4905,7 +4894,7 @@ msgstr "Razmovy"
 
 #: ../src/message_window.py:282
 msgid "Group Chats"
-msgstr "Pakoji"
+msgstr "Pakoi"
 
 #: ../src/message_window.py:284
 msgid "Private Chats"
@@ -4943,7 +4932,7 @@ msgstr "Novaje asobnaje paviedamleńnie ad %(nickname)s"
 #: ../src/notify.py:234
 #, python-format
 msgid "New Private Message from group chat %s"
-msgstr "Novaje pryvatnaje paviedamleńnie ŭ pakoji %s"
+msgstr "Novaje pryvatnaje paviedamleńnie ŭ pakoi %s"
 
 #: ../src/notify.py:235
 #, python-format
@@ -5227,13 +5216,12 @@ msgstr ""
 "ciabie adłučanym."
 
 #: ../src/roster_window.py:2745
-#, fuzzy
 msgid ""
 "Gnomekeyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
 msgstr ""
-"Kiraŭnik parolaŭ GNOME instalavany, ale niapravilna vykonvajecca (mahčyma, "
-"źmiennaja asiarodździa niapravilna akreślenaja)"
+"Klučnik Gnome zainstalavany, ale niapravilna ŭruchomleny (mabyć, źmiennaja "
+"asiarodździa niapravilna akreślenaja)"
 
 #. TODO: make this string translatable
 #. %s is the account name here
@@ -5457,7 +5445,7 @@ msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in his/her presence"
 msgstr ""
-"Hety kantakt cikavicca tvajim statusam, ale ciabie jahony status nie cikavić"
+"Hety kantakt cikavicca tvaim statusam, ale ciabie jahony status nie cikavić"
 
 #: ../src/vcard.py:304
 msgid ""
@@ -5561,20 +5549,19 @@ msgstr "Ty nie dałučyŭsia da pakoju."
 
 #: ../src/common/commands.py:189
 msgid "Leave Groupchats"
-msgstr "Pakiń pakoji"
+msgstr "Pakiń pakoi"
 
 #: ../src/common/commands.py:190
 msgid "Choose the groupchats you want to leave"
-msgstr "Zaznač pakoji, jakija chočaš pakinuć"
+msgstr "Zaznač pakoi, jakija chočaš pakinuć"
 
 #: ../src/common/commands.py:194
 msgid "Groupchats"
-msgstr "Pakoji"
+msgstr "Pakoi"
 
 #: ../src/common/commands.py:230
-#, fuzzy
 msgid "You leaved the following groupchats:"
-msgstr "Ty pakinuŭ nastupnyja pakoji:"
+msgstr "Ty pakidaješ nastupnyja pakoi:"
 
 #: ../src/common/config.py:56
 msgid "Use D-Bus and Notification-Daemon to show notifications"
@@ -5659,7 +5646,7 @@ msgid ""
 "Character to add after nickname when using nick completion (tab) in group "
 "chat."
 msgstr ""
-"Znak, jaki dadajecca paśla mianuški pry dapaŭnieńni (klavišaj TAB) u pakoji."
+"Znak, jaki dadajecca paśla mianuški pry dapaŭnieńni (klavišaj TAB) u pakoi."
 
 #: ../src/common/config.py:110
 msgid ""
@@ -5787,13 +5774,12 @@ msgstr ""
 "hetaha śpisu padzielenych prabiełami nazvaŭ pakojaŭ."
 
 #: ../src/common/config.py:164
-#, fuzzy
 msgid ""
 "Overrides the host we send for File Transfer in case of address translation/"
 "port forwarding."
 msgstr ""
-"Nadpisvaje host, jaki vysyłajecca dla Pieradačy fajłaŭ, u vypadku tranślacyi "
-"adrasoŭ/pieranakiravańnia partoŭ."
+"Nadpisvaje host, jaki dasyłajecca dla pieradačy fajłu, u vypadku tranślacyi/"
+"pieranakiravańnia partoŭ."
 
 #: ../src/common/config.py:166
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -5984,7 +5970,7 @@ msgid ""
 "In a chat, show the nickname at the beginning of a line only when it's not "
 "the same person talking than in previous message."
 msgstr ""
-"U pakoji pakazvaj mianušku pierad paviedamleńniem, tolki kali jaho napisała "
+"U pakoi pakazvaj mianušku pierad paviedamleńniem, tolki kali jaho napisała "
 "nia taja asoba, što napisała papiaredniaje paviedamleńnie."
 
 #: ../src/common/config.py:219
@@ -6163,7 +6149,7 @@ msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
 msgstr ""
-"Hukm jaki treba hrać, kali paviedamleńnie ŭ pakoji ŭtrymlivaje adno sa "
+"Hukm jaki treba hrać, kali paviedamleńnie ŭ pakoi ŭtrymlivaje adno sa "
 "słovaŭ, akreślenych u opcyi muc_highlight_words, albo tvaju mianušku."
 
 #: ../src/common/config.py:380
@@ -6198,13 +6184,12 @@ msgstr "Niapravilny host"
 
 #: ../src/common/connection_handlers.py:178
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:233
-#, fuzzy
 msgid ""
 "The host you configured as the ft_override_host_to_send advanced option is "
 "not valid, so ignored."
 msgstr ""
-"Host, akreśleny ŭ opcyi ft_override_host_to_send, niapravilny, tamu "
-"ihnarujecca."
+"Host, jaki ty skanfihuravaŭ dla prasunutaj opcyi \"ft_override_host_to_send"
+"\", niapravilny, tamu ihnarujecca."
 
 #: ../src/common/connection_handlers.py:591
 #, python-format
@@ -6235,7 +6220,7 @@ msgstr "Treba ŭvieści parol, kab dałučycca da pakoju."
 
 #: ../src/common/connection_handlers.py:1656
 msgid "You are banned from this group chat."
-msgstr "Ty zablakavany ŭ hetym pakoji."
+msgstr "Ty zablakavany ŭ hetym pakoi."
 
 #: ../src/common/connection_handlers.py:1659
 msgid "Such group chat does not exist."
@@ -6341,13 +6326,13 @@ msgid "Error while removing privacy list"
 msgstr "Pamyłka vydaleńnia śpisu pryvatnaści"
 
 #: ../src/common/connection.py:498
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and try again."
 msgstr ""
-"Śpis pryvatnaści %s nia vydaleny. Jon vykarystoŭvajecca adnoj z dałučanych "
-"krynic. Adklučy jaje i paŭtary znoŭ."
+"Śpis pryvatnaści %s nia byŭ vydaleny. Jon, mabyć, zadziejničany dla adnaho z "
+"tvaich spałučanych resursaŭ. Adklučy jaho i paŭtary znoŭ."
 
 #. We didn't set a passphrase
 #: ../src/common/connection.py:596
@@ -6696,7 +6681,7 @@ msgstr "Aŭtaryzuj"
 
 #: ../src/common/helpers.py:291
 msgid "?Group Chat Contact Role:None"
-msgstr "?Funkcyja kantaktu ŭ pakoji:Niama"
+msgstr "?Funkcyja kantaktu ŭ pakoi:Niama"
 
 #: ../src/common/helpers.py:294
 msgid "Moderators"
@@ -6892,80 +6877,3 @@ msgstr "[Hetaje paviedamleńnie zašyfravanaje]"
 #, python-format
 msgid "Error while adding service. %s"
 msgstr "Pamyłka dadańnia servisu. %s"
-
-#, fuzzy
-#~ msgid "Destroying %s"
-#~ msgstr "Apisańnie: %s"
-
-#, fuzzy
-#~ msgid "Do you want to send that file to %s:"
-#~ msgid_plural "Do you want to send those files to %s:"
-#~ msgstr[0] "%s choča dasłać tabie fajł:"
-#~ msgstr[1] "%s choča dasłać tabie fajł:"
-#~ msgstr[2] "%s choča dasłać tabie fajł:"
-
-#, fuzzy
-#~ msgid "Room has been destroyed"
-#~ msgstr "Aŭtaryzacyja anulavanaja"
-
-#, fuzzy
-#~ msgid "Connection to proxy failed"
-#~ msgstr "Niemahvyma dałučycca"
-
-#, fuzzy
-#~ msgid "Security error connecting to \"%s\""
-#~ msgstr "Niemahčyma złučycca z \"%s\""
-
-#~ msgid "gtk+"
-#~ msgstr "gtk+"
-
-#~ msgid "Private Chat"
-#~ msgstr "Прыватная размова"
-
-#~ msgid "Group Chat"
-#~ msgstr "Групавая размова"
-
-#~ msgid "invisible"
-#~ msgstr "нябачны"
-
-#~ msgid "offline"
-#~ msgstr "адключаны"
-
-#~ msgid "I'm %s"
-#~ msgstr "Я %s"
-
-#~ msgid "2003-12-13T18:30:02Z"
-#~ msgstr "2003-12-13T18:30:02Z"
-
-#~ msgid "<small>Romeo and Juliet</small>"
-#~ msgstr "<small>Рамэа і Джульета</small>"
-
-#~ msgid "Old stories"
-#~ msgstr "Старыя казкі"
-
-#~ msgid "Soliloquy"
-#~ msgstr "Маналог"
-
-#~ msgid "A_fter nickname:"
-#~ msgstr "_Пасля мянушкі:"
-
-#~ msgid "B_efore nickname:"
-#~ msgstr "П_ерад мянушкай:"
-
-#~ msgid "_After time:"
-#~ msgstr "_Праз пэўны час:"
-
-#~ msgid "_Before time:"
-#~ msgstr "_За пэўны час да:"
-
-#~ msgid "_Publish"
-#~ msgstr "_Абнавіць"
-
-#~ msgid "_Retrieve"
-#~ msgstr "_Атрымаць"
-
-#~ msgid "Information published"
-#~ msgstr "Звесткі абноўлены"
-
-#~ msgid "Without a connection, you can not get your contact information."
-#~ msgstr "Вы не можаце атрымаць звесткі аб сабе, не злучыўшыся з сэрвэрам."
