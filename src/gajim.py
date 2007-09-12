@@ -1648,7 +1648,16 @@ class Interface:
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
 		if jid not in gajim.contacts.get_jid_list(account):
-			return
+			keyID = ''
+			attached_keys = gajim.config.get_per('accounts', account,
+				'attached_gpg_keys').split()
+			if jid in attached_keys:
+				keyID = attached_keys[attached_keys.index(jid) + 1]
+			contact = gajim.contacts.create_contact(jid = jid, name = '',
+				groups = [_('Not in Roster')], show = 'not in roster', status = '',
+				sub = 'none', keyID = keyID)
+			gajim.contacts.add_contact(account, contact)
+			self.roster.add_contact_to_roster(contact.jid, account)
 		file_props = array[1]
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 
