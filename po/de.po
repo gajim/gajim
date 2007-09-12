@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the gajim package.
 # Fridtjof Busse <fridtjof@fbunet.de>, 2005, 2006.
 # Benjamin Drung <benjamin.drung@gmail.com>, 2007.
+# Fabian Fingerle <otih@datensalat.eu>, 2007.
 #
 #: ../src/gajim-remote.py:204 ../src/gajim-remote.py:211
 #: ../src/gajim-remote.py:237 ../src/gajim-remote.py:238
@@ -12,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-10 16:34+0200\n"
+"POT-Creation-Date: 2007-09-10 20:33+0200\n"
 "PO-Revision-Date: 2007-01-25 17:39+0100\n"
 "Last-Translator: Benjamin Drung <benjamin.drung@gmail.com>\n"
 "Language-Team: German <translators@gajim.org>\n"
@@ -2537,9 +2538,8 @@ msgid "Russian"
 msgstr "Russsich"
 
 #: ../src/chat_control.py:52
-#, fuzzy
 msgid "Serbian"
-msgstr "Deutsch"
+msgstr "Serbisch"
 
 #: ../src/chat_control.py:52
 msgid "Slovak"
@@ -3182,17 +3182,15 @@ msgid "Please type a name for this status message"
 msgstr "Bitte geben Sie einen Namen für diese Statusnachricht ein:"
 
 #: ../src/dialogs.py:409
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Status-Nachricht"
+msgstr "Status-Nachricht überschreiben?"
 
 #: ../src/dialogs.py:410
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr ""
-"Dieser Name wird bereits für einen anderen Ihrer Accounts verwendet. Bitte "
-"wählenSie einen anderen Namen."
+"Dieser Name wird bereits verwendet.Möchten Sie die Status-Nachricht "
+"überschreiben?"
 
 #: ../src/dialogs.py:426
 msgid "AIM Address:"
@@ -3942,7 +3940,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr ""
+msgstr "Schreibfehler"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4086,7 +4084,6 @@ msgstr "Konnte Einstellungen nicht speichern"
 #: ../src/gajim.py:2061 ../src/common/config.py:84 ../src/common/config.py:386
 #: ../src/common/optparser.py:189 ../src/common/optparser.py:407
 #: ../src/common/optparser.py:441
-#, fuzzy
 msgid "default"
 msgstr "Standard"
 
@@ -4526,12 +4523,10 @@ msgstr "%s hat den Gruppenchat betreten"
 #. Invalid Nickname
 #. invalid char
 #: ../src/groupchat_control.py:1105 ../src/groupchat_control.py:1386
-#, fuzzy
 msgid "Invalid nickname"
 msgstr "Ungültiger Benutzername"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
-#, fuzzy
 msgid "The nickname has not allowed characters."
 msgstr "Die Jabber-ID für den Gruppenchat enthält nicht erlaubte Zeichen."
 
@@ -4925,7 +4920,6 @@ msgid "Status is now: %(status)s"
 msgstr "Status ist jetzt: %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
-#, fuzzy
 msgid "Timeout loading image"
 msgstr "Konnte Bild nicht laden"
 
@@ -6396,7 +6390,7 @@ msgid "Error while removing privacy list"
 msgstr "Fehler beim Entfernen der Privatliste"
 
 #: ../src/common/connection.py:498
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and try again."
