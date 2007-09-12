@@ -3189,7 +3189,7 @@ msgstr "Status-Nachricht überschreiben?"
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr ""
-"Dieser Name wird bereits verwendet.Möchten Sie die Status-Nachricht "
+"Dieser Name wird bereits verwendet. Möchten Sie die Status-Nachricht "
 "überschreiben?"
 
 #: ../src/dialogs.py:426
@@ -3929,7 +3929,7 @@ msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
 msgstr ""
-"Eine andere Instanz von Gajim schein bereits zu laufen\n"
+"Eine andere Instanz von Gajim scheint bereits zu laufen\n"
 "Trotzdem starten?"
 
 #: ../src/gajim.py:265 ../src/common/connection_handlers.py:864
@@ -3940,7 +3940,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1696
 #: ../src/common/connection_handlers.py:1793 ../src/common/connection.py:792
 msgid "Disk Write Error"
-msgstr "Schreibfehler"
+msgstr "Fehler beim Schreiben auf die Festplatte"
 
 #: ../src/gajim.py:356
 msgid "Do you accept this request?"
@@ -4528,7 +4528,7 @@ msgstr "Ungültiger Benutzername"
 
 #: ../src/groupchat_control.py:1106 ../src/groupchat_control.py:1387
 msgid "The nickname has not allowed characters."
-msgstr "Die Jabber-ID für den Gruppenchat enthält nicht erlaubte Zeichen."
+msgstr "Der Benutzername für den Gruppenchat enthält nicht erlaubte Zeichen."
 
 #: ../src/groupchat_control.py:1128 ../src/groupchat_control.py:1146
 #: ../src/groupchat_control.py:1233 ../src/groupchat_control.py:1250
@@ -4921,7 +4921,7 @@ msgstr "Status ist jetzt: %(status)s"
 
 #: ../src/htmltextview.py:583 ../src/htmltextview.py:594
 msgid "Timeout loading image"
-msgstr "Konnte Bild nicht laden"
+msgstr "Zeitüberschreitung beim Laden des Bildes"
 
 #: ../src/htmltextview.py:604
 msgid "Image is too big"
