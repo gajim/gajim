@@ -159,6 +159,7 @@ class GroupchatControl(ChatControlBase):
 					'muc_child_vbox', contact, acct);
 
 		self.is_continued=is_continued
+		self.is_anonymous = True
 
 		widget = self.xml.get_widget('muc_window_actions_button')
 		id = widget.connect('clicked', self.on_actions_button_clicked)
@@ -532,7 +533,11 @@ class GroupchatControl(ChatControlBase):
 			self.change_nick_menuitem.set_sensitive(False)
 		return self.gc_popup_menu
 
-	def on_message(self, nick, msg, tim, has_timestamp = False, xhtml = None):
+	def on_message(self, nick, msg, tim, has_timestamp = False, xhtml = None,
+	status_code = []):
+		if '100' in status_code:
+			# Room is not anonymous
+			self.is_anonymous = False
 		if not nick:
 			# message from server
 			self.print_conversation(msg, tim = tim, xhtml = xhtml)
@@ -842,8 +847,22 @@ class GroupchatControl(ChatControlBase):
 
 	def on_send_file(self, widget, gc_contact):
 		'''sends a file to a contact in the room'''
-		gajim.interface.instances['file_transfers'].show_file_send_request(
-			self.account, gc_contact)
+		def _on_send_files(widget, gc_c):
+			if widget:
+				widget.destroy()
+			gajim.interface.instances['file_transfers'].show_file_send_request(
+				self.account, gc_c)
+		self_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+			self.nick)
+		if self.is_anonymous and gc_contact.affiliation not in ['admin', 'owner']\
+		and self_contact.affiliation in ['admin', 'owner']:
+			prim_text = _('Really send file?')
+			sec_text = _('If you send a file to %s, he/she will know your real Jabber ID.') % gc_contact.name
+			dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
+				on_response_ok = (_on_send_files, gc_contact))
+			dialog.popup()
+		else:
+			_on_send_files(None, gc_contact)
 
 	def draw_contact(self, nick, selected=False, focus=False):
 		iter = self.get_contact_iter(nick)

@@ -1144,7 +1144,8 @@ class Interface:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
 	def handle_event_gc_msg(self, account, array):
-		# ('GC_MSG', account, (jid, msg, time, has_timestamp, htmlmsg))
+		# ('GC_MSG', account, (jid, msg, time, has_timestamp, htmlmsg,
+		# [status_codes]))
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
 
@@ -1166,7 +1167,7 @@ class Interface:
 			# message from someone
 			nick = jids[1]
 
-		gc_control.on_message(nick, array[1], array[2], array[3], xhtml)
+		gc_control.on_message(nick, array[1], array[2], array[3], xhtml, array[5])
 
 		contact = gajim.contacts.\
 			get_contact_with_highest_priority(account, room_jid)
@@ -1257,6 +1258,7 @@ class Interface:
 		if '100' in statusCode:
 			# Can be a presence (see chg_contact_status in groupchat_contol.py)
 			changes.append(_('Any occupant is allowed to see your full JID'))
+			gc_control.is_anonymous = False
 		if '102' in statusCode:
 			changes.append(_('Room now shows unavailable member'))
 		if '103' in statusCode:
@@ -1271,10 +1273,13 @@ class Interface:
 			changes.append(_('Room logging is now disabled'))
 		if '172' in statusCode:
 			changes.append(_('Room is now non-anonymous'))
+			gc_control.is_anonymous = False
 		if '173' in statusCode:
 			changes.append(_('Room is now semi-anonymous'))
+			gc_control.is_anonymous = True
 		if '174' in statusCode:
 			changes.append(_('Room is now fully-anonymous'))
+			gc_control.is_anonymous = True
 
 		for change in changes:
 			gc_control.print_conversation(change)

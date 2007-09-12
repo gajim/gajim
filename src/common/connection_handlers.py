@@ -1609,18 +1609,19 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if subject != None:
 				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
 			else:
+				statusCode = msg.getStatusCode()
 				if not msg.getTag('body'): #no <body>
 					# It could be a config change. See
 					# http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
 					if msg.getTag('x'):
-						statusCode = msg.getStatusCode()
 						if statusCode != []:
 							self.dispatch('GC_CONFIG_CHANGE', (jid, statusCode))
 					return
 				# Ignore message from room in which we are not
 				if not self.last_history_line.has_key(jid):
 					return
-				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
+				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml,
+					statusCode))
 				if self.name not in no_log_for and not int(float(mktime(tim)))\
 				<= self.last_history_line[jid] and msgtxt:
 					try:
@@ -1774,12 +1775,12 @@ returns the session that we last sent a message to.'''
 			who = helpers.get_full_jid_from_iq(prs)
 		except:
 			if prs.getTag('error').getTag('jid-malformed'):
-				# wrong jid, we probably tried to change our nick in a room to a non valid
-				# one
+				# wrong jid, we probably tried to change our nick in a room to a non
+				# valid one
 				who = str(prs.getFrom())
 				jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 				self.dispatch('GC_MSG', (jid_stripped,
-					_('Nickname not allowed: %s') % resource, None, False, None))
+					_('Nickname not allowed: %s') % resource, None, False, None, []))
 			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
