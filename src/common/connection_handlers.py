@@ -177,11 +177,7 @@ class ConnectionBytestream:
 			ft_add_hosts_to_send = map(lambda e:e.strip(),
 				ft_add_hosts_to_send.split(','))
 			for ft_host in ft_add_hosts_to_send:
-				try:
-					ft_host = socket.gethostbyname(ft_host)
-					ft_add_hosts.append(ft_host)
-				except socket.gaierror:
-					self.dispatch('ERROR', (_('Wrong host'), _('The host %s you configured as the ft_add_hosts_to_send advanced option is not valid, so ignored.') % ft_host))
+			    	ft_add_hosts.append(ft_host)
 		listener = gajim.socks5queue.start_listener(port,
 			sha_str, self._result_socks5_sid, file_props['sid'])
 		if listener == None:
