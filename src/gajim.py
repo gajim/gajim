@@ -2717,9 +2717,12 @@ class Interface:
 							auto=True)
 						gajim.sleeper_state[account] = 'autoaway'
 
-			bus = dbus.SessionBus()
-			bus.add_signal_receiver(gnome_screensaver_ActiveChanged_cb,
-				'ActiveChanged', 'org.gnome.ScreenSaver')
+			try:
+				bus = dbus.SessionBus()
+				bus.add_signal_receiver(gnome_screensaver_ActiveChanged_cb,
+					'ActiveChanged', 'org.gnome.ScreenSaver')
+			except:
+				pass
 
 		self.show_vcard_when_connect = []
 

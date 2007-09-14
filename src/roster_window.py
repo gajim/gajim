@@ -3681,13 +3681,13 @@ class RosterWindow:
 		if not dbus_support.supported:
 			# do nothing if user doesn't have D-Bus bindings
 			return
-		bus = dbus.SessionBus()
 		try:
+			bus = dbus.SessionBus()
 			if not 'com.google.code.Awn' in bus.list_names():
 				# Awn is not installed
 				return
 		except:
-			pass
+			return
 		iconset = gajim.config.get('iconset')
 		prefix = os.path.join(helpers.get_iconset_path(iconset), '32x32')
 		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
