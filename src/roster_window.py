@@ -4800,7 +4800,7 @@ class RosterWindow:
 			dialogs.WarningDialog(_('Metacontacts storage not supported by your '
 				'server'),
 				_('Your server does not support storing metacontacts information. '
-				'So those information will not be save on next reconnection.'))
+				'So those information will not be saved on next reconnection.'))
 		def merge_contacts(widget = None):
 			if widget: # dialog has been shown
 				dlg.destroy()
