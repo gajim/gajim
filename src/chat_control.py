@@ -715,10 +715,11 @@ class ChatControlBase(MessageControl):
 		if not jid:
 			jid = self.contact.jid
 
-		if gajim.interface.instances['logs'].has_key(jid):
-			gajim.interface.instances['logs'][jid].window.present()
+		if gajim.interface.instances.has_key('logs'):
+			gajim.interface.instances['logs'].window.present()
+			gajim.interface.instances['logs'].open_history(jid, self.account)
 		else:
-			gajim.interface.instances['logs'][jid] = \
+			gajim.interface.instances['logs'] = \
 				history_window.HistoryWindow(jid, self.account)
 
 	def on_minimize_menuitem_toggled(self, widget):

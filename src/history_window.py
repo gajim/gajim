@@ -49,14 +49,19 @@ C_TIME
 class HistoryWindow:
 	'''Class for browsing logs of conversations with contacts'''
 
-	def __init__(self, jid, account):
-		self.jid = jid
+	def __init__(self, jid = None, account = None):
+		if jid is None:
+			self.jid = 'Enter jid or contact name here'
+		else:
+			self.jid = jid
 		self.account = account
+
 		self.mark_days_idle_call_id = None
 		
 		xml = gtkgui_helpers.get_glade('history_window.glade')
 		self.window = xml.get_widget('history_window')
 		
+		self.jid_entry = xml.get_widget('jid_entry')
 		self.calendar = xml.get_widget('calendar')
 		scrolledwindow = xml.get_widget('scrolledwindow')
 		self.history_textview = conversation_textview.ConversationTextview(
@@ -64,6 +69,8 @@ class HistoryWindow:
 		scrolledwindow.add(self.history_textview.tv)
 		self.history_buffer = self.history_textview.tv.get_buffer()
 		self.history_buffer.create_tag('highlight', background = 'yellow')
+		self.checkbutton = xml.get_widget('log_history_checkbutton')
+		self.checkbutton.connect('toggled', self.on_log_history_checkbutton_toggled)
 		self.query_entry = xml.get_widget('query_entry')
 		self.search_button = xml.get_widget('search_button')
 		query_builder_button = xml.get_widget('query_builder_button')
@@ -72,6 +79,29 @@ class HistoryWindow:
 		self.expander_vbox = xml.get_widget('expander_vbox')
 		
 		self.results_treeview = xml.get_widget('results_treeview')
+		
+		# create jid dict for auto completion  
+		self.completion_dict = {}
+		liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry)
+		
+		# Add all jids in the db
+		db_jids = gajim.logger.get_jids_in_db()
+		for jid in db_jids:
+			self.completion_dict[jid] = jid
+		
+		# Enhance contacts of online accounts with their names
+		for account in gajim.contacts.get_accounts():
+			self.completion_dict.update(helpers.get_contact_dict_for_account(account))
+		keys = self.completion_dict.keys()
+		keys.sort()
+		# Add icons
+		for jid in keys:
+			if gajim.logger.jid_is_room_jid(jid):
+				img = gajim.interface.roster.load_icon('muc_active')
+			else:
+				img = gajim.interface.roster.jabber_state_images['16']['online']
+			liststore.append((img.get_pixbuf(), jid))
+
 		# contact_name, date, message, time
 		model = gtk.ListStore(str, str, str, str)
 		self.results_treeview.set_model(model)
@@ -98,43 +128,10 @@ class HistoryWindow:
 		col.set_attributes(renderer, text = C_MESSAGE)
 		col.set_resizable(True)
 		
-		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-		if contact:
-			title = _('Conversation History with %s') % contact.get_shown_name()
-		else:
-			title = _('Conversation History with %s') % jid
-		self.window.set_title(title)
+		self.jid_entry.set_text(self.jid)
 		
 		xml.signal_autoconnect(self)
-		
-		# fake event so we start mark days procedure for selected month
-		# selected month is current month as calendar defaults to selecting
-		# current date
-		self.calendar.emit('month-changed')
-
-		# select and show logs for last date we have logs with contact
-		# and if we don't have logs at all, default to today
-		result = gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
-		if result is None:
-			date = time.localtime()
-		else:
-			tim = result
-			date = time.localtime(tim)
-
-		y, m, d = date[0], date[1], date[2]
-		gtk_month = gtkgui_helpers.make_python_month_gtk_month(m)
-		self.calendar.select_month(gtk_month, y)
-		self.calendar.select_day(d)
-		self.add_lines_for_date(y, m, d)
-
-		log = True
-		if self.jid in gajim.config.get_per('accounts', self.account,
-			'no_log_for').split(' '):
-			log = False
-		checkbutton = xml.get_widget('log_history_checkbutton')
-		checkbutton.set_active(log)
-		checkbutton.connect('toggled', self.on_log_history_checkbutton_toggled)
-		
+		self.jid_entry.emit('activate')
 		self.window.show_all()
 
 	def on_history_window_destroy(self, widget):
@@ -143,10 +140,79 @@ class HistoryWindow:
 			# stop him!
 			gobject.source_remove(self.mark_days_idle_call_id)
 		self.history_textview.del_handlers()
-		del gajim.interface.instances['logs'][self.jid]
+		del gajim.interface.instances['logs']
+
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+
+	def on_jid_entry_activate(self, widget):
+		self.jid = self.jid_entry.get_text()
+		
+		if self.completion_dict.has_key(self.jid): # a full qualified jid or contact name was entered
+			contact_name = self.completion_dict[self.jid]
+			if self.jid != contact_name:
+				self.jid = contact_name.jid # jid enhanced with contact
+			
+			accounts = gajim.contacts.get_accounts()
+			self.account = None
+			for account in accounts:
+				contact = gajim.contacts.get_first_contact_from_jid(account ,self.jid)
+				if contact:
+					self.account = account
+					break
+			if self.account is None:
+				# We do not know an account. This can only happen if the contact is offine,
+				# or if we browse a groupchat history. The account is not needed, a dummy can
+				# be set.
+				# FIXME: This may leed to wrong self nick in the displayed history
+				self.account = gajim.contacts.get_accounts()[0]
+
+			# select logs for last date we have logs with contact
+			self.calendar.set_sensitive(True)
+			lastlog = gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
+			
+			# Set the logging checkbutton
+			log = True
+			if self.jid in gajim.config.get_per('accounts', self.account,
+				'no_log_for').split(' '):
+				log = False
+			self.checkbutton.set_active(log)
+			self.checkbutton.set_sensitive(True)
+			self.checkbutton.set_inconsistent(False)
+
+			if contact:
+				title = _('Conversation History with %s') % contact.get_shown_name()
+			else:
+				title = _('Conversation History with %s') % self.jid
+			self.window.set_title(title)
+
+
+		else:	# neither a valid jid, nor an existing contact name was entered
+			lastlog = None
+			
+			self.checkbutton.set_inconsistent(True)
+			self.checkbutton.set_sensitive(False)
+
+			self.calendar.set_sensitive(False)
+			
+			title = _('Conversation History')
+			self.window.set_title(title)
+
+		self.calendar.emit('month-changed')
+
+		# Show logs for contact. If we don't have logs at all, default to today
+		if lastlog is None:
+			date = time.localtime()
+		else:
+			tim = lastlog
+			date = time.localtime(tim)
+
+		y, m, d = date[0], date[1], date[2]
+		gtk_month = gtkgui_helpers.make_python_month_gtk_month(m)
+		self.calendar.select_month(gtk_month, y)
+		self.calendar.select_day(d)
+		self.add_lines_for_date(y, m, d)
 
 	def on_calendar_day_selected(self, widget):
 		year, month, day = widget.get_date() # integers
@@ -415,4 +481,9 @@ class HistoryWindow:
 		if oldlog != log:
 			gajim.config.set_per('accounts', self.account, 'no_log_for',
 				' '.join(no_log_for))
+
+	def open_history(self, jid, account):
+		# Simulate that the jid was entered by hand
+		self.jid_entry.set_text(jid)
+		self.jid_entry.emit('activate')
 

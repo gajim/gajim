@@ -137,6 +137,9 @@ class Logger:
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
+	
+	def get_jids_in_db(self):
+		return self.jids_already_in
 
 	def jid_is_from_pm(self, jid):
 		'''if jid is gajim@conf/nkour it's likely a pm one, how we know

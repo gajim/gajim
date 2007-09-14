@@ -1916,10 +1916,11 @@ class RosterWindow:
 
 	def on_history(self, widget, contact, account):
 		'''When history menuitem is activated: call log window'''
-		if gajim.interface.instances['logs'].has_key(contact.jid):
-			gajim.interface.instances['logs'][contact.jid].window.present()
+		if gajim.interface.instances.has_key('logs'):
+			gajim.interface.instances['logs'].window.present()
+			gajim.interface.instances['logs'].open_history(contact.jid, account)
 		else:
-			gajim.interface.instances['logs'][contact.jid] = history_window.\
+			gajim.interface.instances['logs'] = history_window.\
 				HistoryWindow(contact.jid, account)
 
 	def on_disconnect(self, widget, jid, account):
@@ -4008,6 +4009,13 @@ class RosterWindow:
 			gajim.interface.instances['file_transfers'].window.present()
 		else:
 			gajim.interface.instances['file_transfers'].window.show_all()
+	
+	def on_history_menuitem_activate(self, widget):
+		if gajim.interface.instances.has_key('logs'):
+			gajim.interface.instances['logs'].window.present()
+		else:
+			gajim.interface.instances['logs'] = history_window.\
+				HistoryWindow()
 
 	def on_show_transports_menuitem_activate(self, widget):
 		gajim.config.set('show_transports_group', widget.get_active())
