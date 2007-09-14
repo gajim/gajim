@@ -3221,6 +3221,21 @@ class RosterWindow:
 
 		return True
 
+	def on_roster_treeview_button_release_event(self, widget, event):
+		try:
+			path, column, x, y = self.tree.get_path_at_pos(int(event.x),
+				int(event.y))
+		except TypeError:
+			return False
+
+		if event.button == 1: # Left click
+			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK and \
+			not event.state & gtk.gdk.CONTROL_MASK:
+				# Check if button has been pressed on the same row
+				if self.clicked_path == path:
+					self.on_row_activated(widget, path)
+				self.clicked_path = None
+
 	def on_roster_treeview_button_press_event(self, widget, event):
 		# hide tooltip, no matter the button is pressed
 		self.tooltip.hide_tooltip()
@@ -3281,6 +3296,10 @@ class RosterWindow:
 			type_ = model[path][C_TYPE]
 			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK and \
 			not event.state & gtk.gdk.CONTROL_MASK:
+				# We just save on which row we press button, and open chat window on
+				# button release to be able to do DND without opening chat window
+				self.clicked_path = path
+				return
 				self.on_row_activated(widget, path)
 			else:
 				if type_ == 'group' and x < 27:
@@ -5130,6 +5149,7 @@ class RosterWindow:
 		self.profile_avatar_menuitem_handler_id = False
 		self.actions_menu_needs_rebuild = True
 		self.regroup = gajim.config.get('mergeaccounts')
+		self.clicked_path = None # Used remember on wich row we clicked
 		if len(gajim.connections) < 2: # Do not merge accounts if only one exists
 			self.regroup = False
 		#FIXME: When list_accel_closures will be wrapped in pygtk
