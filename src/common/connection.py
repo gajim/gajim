@@ -1248,8 +1248,13 @@ class Connection(ConnectionHandlers):
 		# last date/time in history to avoid duplicate
 		if not self.last_history_line.has_key(room_jid): 
 			# Not in memory, get it from DB
-			last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
-				is_room = True)
+			last_log = None
+			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
+				.split()
+			if self.name not in no_log_for and room_jid not in no_log_for:
+			# Do not check if we are not logging for this room
+				last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
+					is_room = True)
 			if last_log is None:
 				last_log = 0
 			self.last_history_line[room_jid]= last_log
