@@ -392,6 +392,7 @@ class ChatControlBase(MessageControl):
 					event.keyval == gtk.keysyms.Page_Up:
 				self.parent_win.notebook.emit('key_press_event', event)
 				return True
+
 		elif event.keyval == gtk.keysyms.m and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + m opens emoticons menu
 			if gajim.config.get('emoticons_theme'):
@@ -965,6 +966,12 @@ class ChatControl(ChatControlBase):
 		widget = self.xml.get_widget('message_window_actions_button')
 		id = widget.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = widget
+
+		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
+		key, mod = gtk.accelerator_parse("<Control>h")
+		ag.connect_group(key, mod, gtk.ACCEL_VISIBLE, self.accel_group_func)
+		key, mod = gtk.accelerator_parse("<Control>i")
+		ag.connect_group(key, mod, gtk.ACCEL_VISIBLE, self.accel_group_func)
 
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
@@ -1570,7 +1577,7 @@ class ChatControl(ChatControlBase):
 		'''
 		xml = gtkgui_helpers.get_glade('chat_control_popup_menu.glade')
 		menu = xml.get_widget('chat_control_popup_menu')
-		
+
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
@@ -1578,14 +1585,16 @@ class ChatControl(ChatControlBase):
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
-		
+
+		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
+		history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK,
+			gtk.ACCEL_VISIBLE)
+		information_menuitem.add_accelerator('activate', ag, gtk.keysyms.i,
+			gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+
 		contact = self.parent_win.get_active_contact()
 		jid = contact.jid
-		
-		# history_menuitem
-		if gajim.jid_is_transport(jid):
-			history_menuitem.set_sensitive(False)
-		
+
 		# check if gpg capabitlies or else make gpg toggle insensitive
 		gpg_btn = self.xml.get_widget('gpg_togglebutton')
 		isactive = gpg_btn.get_active()
@@ -1643,8 +1652,24 @@ class ChatControl(ChatControlBase):
 		id = convert_to_gc_menuitem.connect('activate',
 			self._on_convert_to_gc_menuitem_activate)
 		self.handlers[id] = convert_to_gc_menuitem
-		menu.connect('selection-done', lambda w:w.destroy())	
+		menu.connect('selection-done', self.destroy_menu, history_menuitem,
+			information_menuitem)
 		return menu
+
+	def destroy_menu(self, menu, history_menuitem, information_menuitem):
+		# destroy accelerators
+		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
+		history_menuitem.remove_accelerator(ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK)
+		information_menuitem.remove_accelerator(ag, gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
+		# destroy menu
+		menu.destroy()
+
+	def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
+		if modifier & gtk.gdk.CONTROL_MASK:
+			if keyval == gtk.keysyms.h:
+				self._on_history_menuitem_activate()
+			if keyval == gtk.keysyms.i:
+				self._on_contact_information_menuitem_activate(None)
 
 	def send_chatstate(self, state, contact = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)

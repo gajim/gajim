@@ -70,6 +70,9 @@ class MessageWindow:
 		id = self.window.connect('focus-in-event', self._on_window_focus)
 		self.handlers[id] = self.window
 
+		accel_group = gtk.AccelGroup()
+		self.window.add_accel_group(accel_group)
+
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
 		self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)

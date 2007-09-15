@@ -193,6 +193,10 @@ class GroupchatControl(ChatControlBase):
 			self.on_list_treeview_leave_notify_event)
 		self.handlers[id] = widget
 
+		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
+		key, mod = gtk.accelerator_parse("<Control>h")
+		ag.connect_group(key, mod, gtk.ACCEL_VISIBLE, self.accel_group_func)
+
 		self.room_jid = self.contact.jid
 		self.nick = contact.name
 		self.name = self.room_jid.split('@')[0]
@@ -250,9 +254,9 @@ class GroupchatControl(ChatControlBase):
 			self._on_change_subject_menuitem_activate)
 		self.handlers[id] = self.change_subject_menuitem
 
-		widget = xm.get_widget('history_menuitem')
-		id = widget.connect('activate', self._on_history_menuitem_activate)
-		self.handlers[id] = widget
+		self.history_menuitem = xm.get_widget('history_menuitem')
+		id = self.history_menuitem.connect('activate', self._on_history_menuitem_activate)
+		self.handlers[id] = self.history_menuitem
 
 		self.minimize_menuitem = xm.get_widget('minimize_menuitem')
 		id = self.minimize_menuitem.connect('toggled',
@@ -507,6 +511,9 @@ class GroupchatControl(ChatControlBase):
 
 	def prepare_context_menu(self):
 		'''sets sensitivity state for configure_room'''
+		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
+		self.history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h,
+			gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 		'minimized_gc').split(' '):
 			self.minimize_menuitem.set_active(True)
@@ -532,6 +539,11 @@ class GroupchatControl(ChatControlBase):
 			self.change_subject_menuitem.set_sensitive(False)
 			self.change_nick_menuitem.set_sensitive(False)
 		return self.gc_popup_menu
+
+	def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
+		if modifier & gtk.gdk.CONTROL_MASK:
+			if keyval == gtk.keysyms.h:
+				self._on_history_menuitem_activate()
 
 	def on_message(self, nick, msg, tim, has_timestamp = False, xhtml = None,
 	status_code = []):
