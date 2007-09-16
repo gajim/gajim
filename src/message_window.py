@@ -71,6 +71,12 @@ class MessageWindow:
 		self.handlers[id] = self.window
 
 		accel_group = gtk.AccelGroup()
+		key, mod = gtk.accelerator_parse('<Control>h')
+		accel_group.connect_group(key, mod, gtk.ACCEL_VISIBLE,
+			self.accel_group_func)
+		key, mod = gtk.accelerator_parse('<Control>i')
+		accel_group.connect_group(key, mod, gtk.ACCEL_VISIBLE,
+			self.accel_group_func)
 		self.window.add_accel_group(accel_group)
 
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
@@ -243,6 +249,18 @@ class MessageWindow:
 				self.notebook.emit('key_press_event', event)
 			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
+
+	def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
+		control = self.get_active_control()
+		if not control:
+			# No more control in this window
+			return
+		if modifier & gtk.gdk.CONTROL_MASK:
+			if keyval == gtk.keysyms.h:
+				control._on_history_menuitem_activate()
+			if control.type_id == message_control.TYPE_CHAT and \
+			keyval == gtk.keysyms.i:
+				control._on_contact_information_menuitem_activate(None)
 
 	def _on_close_button_clicked(self, button, control):
 		'''When close button is pressed: close a tab'''

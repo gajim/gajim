@@ -967,12 +967,6 @@ class ChatControl(ChatControlBase):
 		id = widget.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = widget
 
-		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
-		key, mod = gtk.accelerator_parse("<Control>h")
-		ag.connect_group(key, mod, gtk.ACCEL_VISIBLE, self.accel_group_func)
-		key, mod = gtk.accelerator_parse("<Control>i")
-		ag.connect_group(key, mod, gtk.ACCEL_VISIBLE, self.accel_group_func)
-
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
@@ -1663,13 +1657,6 @@ class ChatControl(ChatControlBase):
 		information_menuitem.remove_accelerator(ag, gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
 		# destroy menu
 		menu.destroy()
-
-	def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
-		if modifier & gtk.gdk.CONTROL_MASK:
-			if keyval == gtk.keysyms.h:
-				self._on_history_menuitem_activate()
-			if keyval == gtk.keysyms.i:
-				self._on_contact_information_menuitem_activate(None)
 
 	def send_chatstate(self, state, contact = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
