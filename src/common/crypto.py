@@ -1,5 +1,10 @@
 # common crypto functions (mostly specific to XEP-0116, but useful elsewhere)
 
+import os
+import math
+
+from Crypto.Hash import SHA256
+
 # convert a large integer to a big-endian bitstring
 def encode_mpi(n):
 	if n >= 256:
@@ -8,15 +13,23 @@ def encode_mpi(n):
 		return chr(n)
 
 # convert a large integer to a big-endian bitstring, padded with \x00s to
-# 16 bytes
+# a multiple of 16 bytes
 def encode_mpi_with_padding(n):
-	ret = encode_mpi(n)
+	return pad_to_multiple(encode_mpi(n), 16, '\x00', True)
 
-	mod = len(ret) % 16
-	if mod != 0:
-		ret = ((16 - mod) * '\x00') + ret
+# pad 'string' to a multiple of 'multiple_of' with 'char'.
+# pad on the left if 'left', otherwise pad on the right.
+def pad_to_multiple(string, multiple_of, char, left):
+	mod = len(string) % multiple_of
+	if mod == 0:
+		return string
+	else:
+		padding = (multiple_of - mod) * char
 
-	return ret
+	if left:
+		return padding + string
+	else:
+		return string + padding
 
 # convert a big-endian bitstring to an integer
 def decode_mpi(s):
