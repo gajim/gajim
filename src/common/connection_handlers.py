@@ -203,17 +203,16 @@ class ConnectionBytestream:
 			ostreamhost.setAttr('port', unicode(port))
 			ostreamhost.setAttr('host', ft_host)
 			ostreamhost.setAttr('jid', sender)
-		for thehost in self.peerhost:
-			try:
-				thehost = self.peerhost[0]
-				streamhost = common.xmpp.Node(tag = 'streamhost') # My IP
-				query.addChild(node = streamhost)
-				streamhost.setAttr('port', unicode(port))
-				streamhost.setAttr('host', thehost)
-				streamhost.setAttr('jid', sender)
-			except socket.gaierror:
-				self.dispatch('ERROR', (_('Wrong host'),
-					_('Invalid local address? :-O')))
+		try:
+			thehost = self.peerhost[0]
+			streamhost = common.xmpp.Node(tag = 'streamhost') # My IP
+			query.addChild(node = streamhost)
+			streamhost.setAttr('port', unicode(port))
+			streamhost.setAttr('host', thehost)
+			streamhost.setAttr('jid', sender)
+		except socket.gaierror:
+			self.dispatch('ERROR', (_('Wrong host'),
+				_('Invalid local address? :-O')))
 
 		if fast and proxyhosts != [] and gajim.config.get_per('accounts',
 		self.name, 'use_ft_proxies'):
