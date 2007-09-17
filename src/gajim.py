@@ -432,6 +432,8 @@ class Interface:
 			gajim.connections[account].build_http_auth_answer(iq_obj, answer)
 
 		sec_msg = _('Do you accept this request?')
+		if gajim.get_number_of_connected_accounts() > 1:
+			sec_msg = _('Do you accept this request on account %s?') % account
 		if data[4]:
 			sec_msg = data[4] + '\n' + sec_msg
 		self.dialog = dialogs.YesNoDialog(_('HTTP (%s) Authorization for %s (id: %s)') \
