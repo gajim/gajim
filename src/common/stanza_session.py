@@ -12,7 +12,6 @@ import os
 import time
 
 from common import dh
-from common import crypto
 import xmpp.c14n
 
 import base64
@@ -100,6 +99,7 @@ if gajim.HAVE_PYCRYPTO:
 	from Crypto.Cipher import AES
 	from Crypto.Hash import HMAC, SHA256
 	from Crypto.PublicKey import RSA
+	from common import crypto
 
 # an encrypted stanza negotiation has several states. i've represented them
 # as the following values in the 'status' 
