@@ -1223,7 +1223,6 @@ class Connection(ConnectionHandlers):
 			if not common.xmpp.isResultNode(resp):
 				self.dispatch('UNIQUE_ROOM_ID_UNSUPPORTED', (server, instance))
 				return
-			print resp.getTag('unique').getData()
 			self.dispatch('UNIQUE_ROOM_ID_SUPPORTED', (server, instance,
 				resp.getTag('unique').getData()))
 		self.connection.SendAndCallForResponse(iq, _on_response)
