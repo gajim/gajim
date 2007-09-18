@@ -244,7 +244,7 @@ class ConnectionCaps(object):
 		if not contact: return
 		if not contact.caps_node: return # we didn't asked for that?
 		if not node.startswith(contact.caps_node+'#'): return
-		node, ext = node.split('#')
+		node, ext = node.split('#', 1)
 		if ext==contact.caps_ver:	# this can be also version (like '0.9')
 			exts=None
 		else:
