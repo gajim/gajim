@@ -490,7 +490,7 @@ class Connection(ConnectionHandlers):
 		if errnum > 0:
 			# FIXME: tell the user that the certificat is untrusted, and ask him what to do
 			try:
-				log.warning("The authenticity of the "+hostname+" certificate could be unvalid.\nSSL Error: "+ssl_error[errnum])
+				log.warning("The authenticity of the "+hostname+" certificate could be invalid.\nSSL Error: "+ssl_error[errnum])
 			except KeyError:
 				log.warning("Unknown SSL error: %d" % errnum)
 		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
