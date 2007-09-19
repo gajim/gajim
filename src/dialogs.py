@@ -1011,6 +1011,7 @@ class YesNoDialog(HigDialog):
 		HigDialog.__init__( self, None, 
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, pritext, sectext,
 				on_response_yes = on_response_yes, on_response_no = on_response_no)
+		self.set_modal(False)
 		self.popup()
 
 class ConfirmationDialogCheck(ConfirmationDialog):
