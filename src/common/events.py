@@ -164,11 +164,18 @@ class Events:
 		optionnaly only from given type'''
 		if not self._events.has_key(account):
 			return []
+		events_list = [] # list of events
 		if not jid:
-			return self._events[account]
+			for jid_ in self._events[account]:
+				events = []
+				for ev in self._events[account][jid_]:
+					if not types or ev.type_ in types:
+						events.append(ev)
+				if events:
+					events_list[jid_] = events
+			return events_list
 		if not self._events[account].has_key(jid):
 			return []
-		events_list = [] # list of events
 		for ev in self._events[account][jid]:
 			if not types or ev.type_ in types:
 				events_list.append(ev)
