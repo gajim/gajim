@@ -2402,6 +2402,7 @@ class ImageChooserDialog(FileChooserDialog):
 		filter.add_mime_type('image/jpeg')
 		filter.add_mime_type('image/gif')
 		filter.add_mime_type('image/tiff')
+		filter.add_mime_type('image/svg+xml')
 		filter.add_mime_type('image/x-xpixmap') # xpm
 		self.add_filter(filter)
 		self.set_filter(filter)
