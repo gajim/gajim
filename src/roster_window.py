@@ -2232,14 +2232,8 @@ class RosterWindow:
 		else: # one resource
 			start_chat_menuitem.connect('activate',
 				self.on_open_chat_window, contact, account)
-			# we cannot execute commands when the resource is unknown
-			# TODO: that's true only if the entity is a contact,
-			# TODO: we need to show this also for transports
-			if contact.resource:
-				execute_command_menuitem.connect('activate',
-					self.on_execute_command, contact, account, contact.resource)
-			else:
-				execute_command_menuitem.set_sensitive(False)
+			execute_command_menuitem.connect('activate', self.on_execute_command,
+				contact, account, contact.resource)
 
 			our_jid_other_resource = None
 			if our_jid:
