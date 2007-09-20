@@ -281,7 +281,7 @@ class EncryptedStanzaSession(StanzaSession):
 		if (not 1 < e < (p - 1)):
 			raise exceptions.NegotiationError, "invalid DH value"
 
-		return self.sha256(self.encode_mpi(self.powmod(e, y, p)))
+		return crypto.sha256(crypto.encode_mpi(crypto.powmod(e, y, p)))
 
 	def c7lize_mac_id(self, form):
 		kids = form.getChildren()
@@ -741,7 +741,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		# 4.5.5
 		if srs:
-			srshash = crypto.hmac(srs, 'Shared Retained Secret')
+			srshash = self.hmac(srs, 'Shared Retained Secret')
 		else:
 			srshash = crypto.random_bytes(32)
 
