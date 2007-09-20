@@ -136,6 +136,8 @@ class MusicTrackListener(gobject.GObject):
 		return info
 	
 	def _rhythmbox_music_track_change_cb(self, uri):
+		if not uri:
+			return
 		bus = dbus.SessionBus()
 		rbshellobj = bus.get_object('org.gnome.Rhythmbox',
 			'/org/gnome/Rhythmbox/Shell')
