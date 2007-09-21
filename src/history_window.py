@@ -12,6 +12,7 @@
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de>
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
@@ -167,20 +168,20 @@ class HistoryWindow:
 				# be set.
 				# FIXME: This may leed to wrong self nick in the displayed history
 				self.account = gajim.contacts.get_accounts()[0]
+				self.checkbutton.set_sensitive(False)
+			else:
+				# Set the logging checkbutton, can only work if we have got an account.
+				log = True
+				if self.jid in gajim.config.get_per('accounts', self.account,
+					'no_log_for').split(' '):
+					log = False
+				self.checkbutton.set_active(log)
+				self.checkbutton.set_sensitive(True)
 
 			# select logs for last date we have logs with contact
 			self.calendar.set_sensitive(True)
 			lastlog = gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
 			
-			# Set the logging checkbutton
-			log = True
-			if self.jid in gajim.config.get_per('accounts', self.account,
-				'no_log_for').split(' '):
-				log = False
-			self.checkbutton.set_active(log)
-			self.checkbutton.set_sensitive(True)
-			self.checkbutton.set_inconsistent(False)
-
 			if contact:
 				title = _('Conversation History with %s') % contact.get_shown_name()
 			else:
@@ -191,7 +192,6 @@ class HistoryWindow:
 		else:	# neither a valid jid, nor an existing contact name was entered
 			lastlog = None
 			
-			self.checkbutton.set_inconsistent(True)
 			self.checkbutton.set_sensitive(False)
 
 			self.calendar.set_sensitive(False)
