@@ -1,3 +1,16 @@
+gajim (0.11.2-1) unstable; urgency=low
+
+  * New upstream release.
+  * Don't optionaly depend on python2.5. Closes: #418252
+  * Better handle gnome-keyring. Closes: #433315, #424293
+  * Handle dbus restart. Closes: #434993
+  * Don't allow bookmark creation on server that don't support that.
+    Closes: #438620
+  * Fix list_contact dbus signature. Closes: #440225
+  * Remove changelog.gz from /usr/share/doc/gajim. Closes: #412632
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Sun, 22 Sep 2007 22:22:34 +0100
+
 gajim (0.11.1-1) unstable; urgency=low
 
   * New upstream release.
