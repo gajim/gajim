@@ -496,7 +496,7 @@ class Connection(ConnectionHandlers):
 			else:
 				self.dispatch('ERROR', (_('Error while removing privacy list'),
 					_('Privacy list %s has not been removed. It is maybe active in '
-					'one of your connected resources. Desactivate it and try '
+					'one of your connected resources. Deactivate it and try '
 					'again.') % privacy_list))
 		common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list,
 			_on_del_privacy_list_result)
