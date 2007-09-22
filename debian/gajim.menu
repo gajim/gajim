@@ -1,6 +1,6 @@
 ?package(gajim): \
    needs="X11" \
-   section="Apps/Net" \
+   section="Applications/Network/Communication" \
    command="/usr/bin/gajim" \
    icon="/usr/share/pixmaps/gajim.xpm" \
    title="Gajim" \
