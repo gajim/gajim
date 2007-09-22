@@ -1,3 +1,33 @@
+gajim (0.11.2-1) unstable; urgency=low
+
+  * New upstream release.
+  * Don't optionaly depend on python2.5. Closes: #418252
+  * Better handle gnome-keyring. Closes: #433315, #424293
+  * Handle dbus restart. Closes: #434993
+  * Don't allow bookmark creation on server that don't support that.
+    Closes: #438620
+  * Fix list_contact dbus signature. Closes: #440225
+  * Remove changelog.gz from /usr/share/doc/gajim. Closes: #412632
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Sun, 22 Sep 2007 22:22:34 +0100
+
+gajim (0.11.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Don't depend on python2.4 specifically
+  * Don't recommand libdbus, python-dbus does
+  * Tooltips in chat window are now correctly destroyed. Closes: #404693
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Sun, 18 Feb 2007 22:15:57 +0100
+
+gajim (0.11-2) unstable; urgency=low
+
+  * Add missing build depends to get gajim-remote. Closes: #405969
+  * Update recommands to support dbus. Closes: #402355
+  * Make python-gnupginterface a recommanded package. Closes: #405808
+
+ -- Yann Le Boulanger <asterix@lagaule.org>  Tue, 09 Jan 2007 18:32:26 +0100
+
 gajim (0.11-1) unstable; urgency=low
 
   * New upstream release. Closes: #403806
