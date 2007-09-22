@@ -131,12 +131,14 @@ class Events:
 		return self._get_nb_events(types = types, account = account)
 
 	def get_events(self, account, jid = None, types = []):
-		'''if event is not specified, get all events from this jid,
+		'''returns all events from the given account of the form
+		{jid1: [], jid2: []}
+		if jid is given, returns all events from the given jid in a list: []
 		optionnaly only from given type'''
 		if not self._events.has_key(account):
 			return []
-		events_list = [] # list of events
 		if not jid:
+			events_list = {} # list of events
 			for jid_ in self._events[account]:
 				events = []
 				for ev in self._events[account][jid_]:
@@ -147,6 +149,7 @@ class Events:
 			return events_list
 		if not self._events[account].has_key(jid):
 			return []
+		events_list = [] # list of events
 		for ev in self._events[account][jid]:
 			if not types or ev.type_ in types:
 				events_list.append(ev)
