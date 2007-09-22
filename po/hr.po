@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.11.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-10 20:33+0200\n"
+"POT-Creation-Date: 2007-09-22 21:59+0200\n"
 "PO-Revision-Date: 2007-09-11 03:10+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -262,8 +262,8 @@ msgstr "Gajim"
 #: ../data/glade/preferences_window.glade.h:51
 #: ../data/glade/zeroconf_properties_window.glade.h:7
 #: ../src/roster_window.py:347 ../src/roster_window.py:1237
-#: ../src/roster_window.py:1447 ../src/roster_window.py:2123
-#: ../src/roster_window.py:2165 ../src/common/contacts.py:290
+#: ../src/roster_window.py:1447 ../src/roster_window.py:2116
+#: ../src/roster_window.py:2158 ../src/common/contacts.py:290
 msgid "General"
 msgstr "Općenito"
 
@@ -1199,7 +1199,7 @@ msgstr "Odbij"
 msgid "Invitation Received"
 msgstr "Primljen Poziv"
 
-#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1166
+#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1167
 msgid "Join Group Chat"
 msgstr "Pridružiti se Grupnom Razgovoru"
 
@@ -1841,7 +1841,7 @@ msgstr "JabberID"
 msgid "Order:"
 msgstr "Poredak:"
 
-#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1882
+#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1883
 msgid "Privacy List"
 msgstr "Lista Privatnosti"
 
@@ -2051,17 +2051,17 @@ msgstr "Pridruži Open_PGP Ključ"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:4
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:3
-#: ../src/roster_window.py:2087
+#: ../src/roster_window.py:2080
 msgid "Edit _Groups"
 msgstr "Izmjeni _Grupe"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:5
-#: ../src/roster_window.py:2222
+#: ../src/roster_window.py:2215
 msgid "Execute Command..."
 msgstr "Izvršiti Naredbu..."
 
 #: ../data/glade/roster_contact_context_menu.glade.h:6
-#: ../src/roster_window.py:2045
+#: ../src/roster_window.py:2038
 msgid "In_vite to"
 msgstr "Pozo_vi u"
 
@@ -2085,14 +2085,14 @@ msgstr "_Zabrani mu/joj da vidi moj status"
 
 #. Remove group
 #: ../data/glade/roster_contact_context_menu.glade.h:14
-#: ../src/roster_window.py:2039 ../src/roster_window.py:2136
-#: ../src/roster_window.py:2243
+#: ../src/roster_window.py:2032 ../src/roster_window.py:2129
+#: ../src/roster_window.py:2236
 msgid "_Remove from Roster"
 msgstr "_Ukloni sa Liste kontakata"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:15
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:7
-#: ../src/roster_window.py:2231
+#: ../src/roster_window.py:2224
 msgid "_Rename"
 msgstr "_Preimenuj"
 
@@ -2141,7 +2141,7 @@ msgid "_Discover Services"
 msgstr "_Otkrivanje Usluga"
 
 #: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1286
-#: ../src/roster_window.py:2214
+#: ../src/roster_window.py:2207
 msgid "_Edit"
 msgstr "_Uredi"
 
@@ -2538,7 +2538,7 @@ msgstr "Švedski"
 msgid "Chinese (Ch)"
 msgstr "Kineski (Ch)"
 
-#: ../src/chat_control.py:213 ../src/dialogs.py:1536
+#: ../src/chat_control.py:213 ../src/dialogs.py:1537
 msgid ""
 "If that is not your language for which you want to highlight misspelled "
 "words, then please set your $LANG as appropriate. Eg. for French do export "
@@ -2592,9 +2592,9 @@ msgstr "Enkripcija onemogućena"
 #: ../src/gajim.py:1155 ../src/roster_window.py:333
 #: ../src/roster_window.py:412 ../src/roster_window.py:1509
 #: ../src/roster_window.py:1519 ../src/roster_window.py:1695
-#: ../src/roster_window.py:1901 ../src/roster_window.py:2486
-#: ../src/roster_window.py:2687 ../src/roster_window.py:3958
-#: ../src/roster_window.py:3960 ../src/common/contacts.py:76
+#: ../src/roster_window.py:1894 ../src/roster_window.py:2479
+#: ../src/roster_window.py:2680 ../src/roster_window.py:3951
+#: ../src/roster_window.py:3953 ../src/common/contacts.py:76
 #: ../src/common/helpers.py:43 ../src/common/helpers.py:257
 msgid "Not in Roster"
 msgstr "Nije na Listi Kontakata"
@@ -2766,7 +2766,7 @@ msgstr "Takav račun nije dostupan"
 msgid "You must create your account before editing your personal information."
 msgstr "Morate napravit svoj račun prije izmjena osobnih informacija."
 
-#: ../src/config.py:1587 ../src/dialogs.py:1145 ../src/dialogs.py:1336
+#: ../src/config.py:1587 ../src/dialogs.py:1146 ../src/dialogs.py:1337
 #: ../src/disco.py:418 ../src/profile_window.py:323
 msgid "You are not connected to the server"
 msgstr "Niste spojeni na poslužitelj"
@@ -2947,16 +2947,16 @@ msgstr ""
 msgid "Removing %s account"
 msgstr "Uklanjanje %s računa"
 
-#: ../src/config.py:2420 ../src/roster_window.py:2746
+#: ../src/config.py:2420 ../src/roster_window.py:2739
 msgid "Password Required"
 msgstr "Potrebna Lozinka"
 
-#: ../src/config.py:2421 ../src/roster_window.py:2742
+#: ../src/config.py:2421 ../src/roster_window.py:2735
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Unesite svoju lozinku za račun %s"
 
-#: ../src/config.py:2422 ../src/roster_window.py:2747
+#: ../src/config.py:2422 ../src/roster_window.py:2740
 msgid "Save password"
 msgstr "Snimiti lozinku"
 
@@ -3008,7 +3008,7 @@ msgstr "Neispravno korisničko ime"
 msgid "You must provide a username to configure this account."
 msgstr "Morate ponuditi korisničko ime za postavke ovog računa."
 
-#: ../src/config.py:2906 ../src/dialogs.py:1355
+#: ../src/config.py:2906 ../src/dialogs.py:1356
 msgid "Invalid password"
 msgstr "Neispravna lozinka"
 
@@ -3016,11 +3016,11 @@ msgstr "Neispravna lozinka"
 msgid "You must enter a password for the new account."
 msgstr "Morate unesti lozinku za novi račun"
 
-#: ../src/config.py:2911 ../src/dialogs.py:1360
+#: ../src/config.py:2911 ../src/dialogs.py:1361
 msgid "Passwords do not match"
 msgstr "Lozinke se ne podudaraju"
 
-#: ../src/config.py:2912 ../src/dialogs.py:1361
+#: ../src/config.py:2912 ../src/dialogs.py:1362
 msgid "The passwords typed in both fields must be identical."
 msgstr "Lozinke upisane u oba polja moraju biti identične."
 
@@ -3274,57 +3274,57 @@ msgstr ""
 "Možda već imate pokrenutu jednu instancu Gajima. Prijenos Datoteka će biti "
 "otkazan."
 
-#: ../src/dialogs.py:1074
+#: ../src/dialogs.py:1075
 #, python-format
 msgid "Subscription request for account %s from %s"
 msgstr "Zahtjev pretplate za račun %s od %s"
 
-#: ../src/dialogs.py:1077
+#: ../src/dialogs.py:1078
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Zahtjev za pretplatom od %s"
 
-#: ../src/dialogs.py:1138 ../src/roster_window.py:690
+#: ../src/dialogs.py:1139 ../src/roster_window.py:690
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Već ste u grupnom razgovoru %s"
 
-#: ../src/dialogs.py:1146
+#: ../src/dialogs.py:1147
 msgid "You can not join a group chat unless you are connected."
 msgstr "Ne možete se pridružiti grupnom razgovoru ukoliko niste spojeni."
 
-#: ../src/dialogs.py:1164
+#: ../src/dialogs.py:1165
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "Pridružiti se Grupnom Razgovoru sa računom %s"
 
-#: ../src/dialogs.py:1234 ../src/dialogs.py:1240
+#: ../src/dialogs.py:1235 ../src/dialogs.py:1241
 msgid "Invalid group chat Jabber ID"
 msgstr "Neispravan Jabber ID grupnog razgovora"
 
-#: ../src/dialogs.py:1235 ../src/dialogs.py:1241
+#: ../src/dialogs.py:1236 ../src/dialogs.py:1242
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "Jabber ID grupnog razgovora ima nedozvoljene znakove."
 
-#: ../src/dialogs.py:1247
+#: ../src/dialogs.py:1248
 msgid "This is not a group chat"
 msgstr "Ovo nije grupni razgovor"
 
-#: ../src/dialogs.py:1248
+#: ../src/dialogs.py:1249
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s nije ime grupnog razgovora."
 
-#: ../src/dialogs.py:1287
+#: ../src/dialogs.py:1288
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "Započeti Razgovor sa računom %s"
 
-#: ../src/dialogs.py:1289
+#: ../src/dialogs.py:1290
 msgid "Start Chat"
 msgstr "Započeti Razgovor"
 
-#: ../src/dialogs.py:1290
+#: ../src/dialogs.py:1291
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
@@ -3333,230 +3333,230 @@ msgstr ""
 "poslati razgovornu poruku:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:1315 ../src/dialogs.py:1674 ../src/dialogs.py:1805
+#: ../src/dialogs.py:1316 ../src/dialogs.py:1675 ../src/dialogs.py:1806
 msgid "Connection not available"
 msgstr "Veza nije dostupna"
 
-#: ../src/dialogs.py:1316 ../src/dialogs.py:1675 ../src/dialogs.py:1806
+#: ../src/dialogs.py:1317 ../src/dialogs.py:1676 ../src/dialogs.py:1807
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Molim potvrdite da ste spojeni na \"%s\"."
 
-#: ../src/dialogs.py:1325 ../src/dialogs.py:1328
+#: ../src/dialogs.py:1326 ../src/dialogs.py:1329
 msgid "Invalid JID"
 msgstr "Neispravan JID"
 
-#: ../src/dialogs.py:1328
+#: ../src/dialogs.py:1329
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr "Nije moguće učitati \"%s\"."
 
-#: ../src/dialogs.py:1337
+#: ../src/dialogs.py:1338
 msgid "Without a connection, you can not change your password."
 msgstr "Bez veze nije moguća promjena lozinke."
 
-#: ../src/dialogs.py:1356
+#: ../src/dialogs.py:1357
 msgid "You must enter a password."
 msgstr "Morate unesti lozinku."
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:1403 ../src/notify.py:211 ../src/notify.py:415
+#: ../src/dialogs.py:1404 ../src/notify.py:211 ../src/notify.py:415
 msgid "Contact Signed In"
 msgstr "Kontakt Se Prijavio"
 
-#: ../src/dialogs.py:1405 ../src/notify.py:219 ../src/notify.py:417
+#: ../src/dialogs.py:1406 ../src/notify.py:219 ../src/notify.py:417
 msgid "Contact Signed Out"
 msgstr "Kontakt Se Odjavio"
 
 #. chat message
-#: ../src/dialogs.py:1407 ../src/notify.py:238 ../src/notify.py:419
+#: ../src/dialogs.py:1408 ../src/notify.py:238 ../src/notify.py:419
 msgid "New Message"
 msgstr "Nova Poruka"
 
 #. single message
-#: ../src/dialogs.py:1407 ../src/notify.py:223 ../src/notify.py:419
+#: ../src/dialogs.py:1408 ../src/notify.py:223 ../src/notify.py:419
 msgid "New Single Message"
 msgstr "Nova Jedna Poruka"
 
 #. private message
-#: ../src/dialogs.py:1408 ../src/notify.py:230 ../src/notify.py:420
+#: ../src/dialogs.py:1409 ../src/notify.py:230 ../src/notify.py:420
 msgid "New Private Message"
 msgstr "Nova Privatna Poruka"
 
-#: ../src/dialogs.py:1408 ../src/gajim.py:1250 ../src/notify.py:428
+#: ../src/dialogs.py:1409 ../src/gajim.py:1250 ../src/notify.py:428
 msgid "New E-mail"
 msgstr "Novi E-mail"
 
-#: ../src/dialogs.py:1410 ../src/gajim.py:1403 ../src/notify.py:422
+#: ../src/dialogs.py:1411 ../src/gajim.py:1403 ../src/notify.py:422
 msgid "File Transfer Request"
 msgstr "Zahtjev Razmjene Datoteka"
 
-#: ../src/dialogs.py:1412 ../src/gajim.py:1222 ../src/gajim.py:1379
+#: ../src/dialogs.py:1413 ../src/gajim.py:1222 ../src/gajim.py:1379
 #: ../src/notify.py:424
 msgid "File Transfer Error"
 msgstr "Greška u Razmjeni Datoteka"
 
-#: ../src/dialogs.py:1414 ../src/gajim.py:1442 ../src/gajim.py:1464
+#: ../src/dialogs.py:1415 ../src/gajim.py:1442 ../src/gajim.py:1464
 #: ../src/gajim.py:1481 ../src/notify.py:426
 msgid "File Transfer Completed"
 msgstr "Razmjena Datoteka Završena"
 
-#: ../src/dialogs.py:1415 ../src/gajim.py:1445 ../src/notify.py:426
+#: ../src/dialogs.py:1416 ../src/gajim.py:1445 ../src/notify.py:426
 msgid "File Transfer Stopped"
 msgstr "Razmjena Datoteka Zaustavljena"
 
-#: ../src/dialogs.py:1417 ../src/gajim.py:1119 ../src/notify.py:430
+#: ../src/dialogs.py:1418 ../src/gajim.py:1119 ../src/notify.py:430
 msgid "Groupchat Invitation"
 msgstr "Poziv na Grupni Razgovor"
 
-#: ../src/dialogs.py:1419 ../src/notify.py:203 ../src/notify.py:432
+#: ../src/dialogs.py:1420 ../src/notify.py:203 ../src/notify.py:432
 msgid "Contact Changed Status"
 msgstr "Kontakt Promjenio Status"
 
-#: ../src/dialogs.py:1604
+#: ../src/dialogs.py:1605
 #, python-format
 msgid "Single Message using account %s"
 msgstr "Jedna Poruka koristeći račun %s"
 
-#: ../src/dialogs.py:1606
+#: ../src/dialogs.py:1607
 #, python-format
 msgid "Single Message in account %s"
 msgstr "Jedna Poruka u računu %s"
 
-#: ../src/dialogs.py:1608
+#: ../src/dialogs.py:1609
 msgid "Single Message"
 msgstr "Jedna Poruka"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:1611
+#: ../src/dialogs.py:1612
 #, python-format
 msgid "Send %s"
 msgstr "Poslati %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:1634
+#: ../src/dialogs.py:1635
 #, python-format
 msgid "Received %s"
 msgstr "Primljene %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:1706
+#: ../src/dialogs.py:1707
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: ../src/dialogs.py:1707
+#: ../src/dialogs.py:1708
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s piše:\n"
 
-#: ../src/dialogs.py:1751
+#: ../src/dialogs.py:1752
 #, python-format
 msgid "XML Console for %s"
 msgstr "XML Konzola za %s"
 
-#: ../src/dialogs.py:1753
+#: ../src/dialogs.py:1754
 msgid "XML Console"
 msgstr "XML Konzola"
 
-#: ../src/dialogs.py:1876
+#: ../src/dialogs.py:1877
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "Lista Privatnosti <b><i>%s</i></b>"
 
-#: ../src/dialogs.py:1880
+#: ../src/dialogs.py:1881
 #, python-format
 msgid "Privacy List for %s"
 msgstr "Lista Privatnosti za %s"
 
-#: ../src/dialogs.py:1928
+#: ../src/dialogs.py:1929
 #, python-format
 msgid "Order: %s, action: %s, type: %s, value: %s"
 msgstr "Redoslijed: %s, akcija: %s, tip: %s, vrijednost: %s"
 
-#: ../src/dialogs.py:1931
+#: ../src/dialogs.py:1932
 #, python-format
 msgid "Order: %s, action: %s"
 msgstr "Redosljed: %s, akcija: %s"
 
-#: ../src/dialogs.py:1973
+#: ../src/dialogs.py:1974
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Izmjena pravila</b>"
 
-#: ../src/dialogs.py:2060
+#: ../src/dialogs.py:2061
 msgid "<b>Add a rule</b>"
 msgstr "<b>Dodaj pravilo</b>"
 
-#: ../src/dialogs.py:2156
+#: ../src/dialogs.py:2157
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "Liste Privatnosti za %s"
 
-#: ../src/dialogs.py:2158
+#: ../src/dialogs.py:2159
 msgid "Privacy Lists"
 msgstr "Liste Privatnosti"
 
-#: ../src/dialogs.py:2228
+#: ../src/dialogs.py:2229
 msgid "Invalid List Name"
 msgstr "Neispravno Ime Liste"
 
-#: ../src/dialogs.py:2229
+#: ../src/dialogs.py:2230
 msgid "You must enter a name to create a privacy list."
 msgstr "Morate unesti ime za stvaranje liste privatnosti."
 
 #. Don't translate $Contact
-#: ../src/dialogs.py:2264
+#: ../src/dialogs.py:2265
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact vas je pozvao na grupni razgovor %(room_jid)s"
 
 #. only if not None and not ''
-#: ../src/dialogs.py:2276
+#: ../src/dialogs.py:2277
 #, python-format
 msgid "Comment: %s"
 msgstr "Komentar: %s"
 
-#: ../src/dialogs.py:2339
+#: ../src/dialogs.py:2340
 msgid "Choose Sound"
 msgstr "Odabir Zvuka"
 
-#: ../src/dialogs.py:2349 ../src/dialogs.py:2394
+#: ../src/dialogs.py:2350 ../src/dialogs.py:2395
 msgid "All files"
 msgstr "Sve datoteke"
 
-#: ../src/dialogs.py:2354
+#: ../src/dialogs.py:2355
 msgid "Wav Sounds"
 msgstr "Wav Zvukovi"
 
-#: ../src/dialogs.py:2384
+#: ../src/dialogs.py:2385
 msgid "Choose Image"
 msgstr "Odabir Slike"
 
-#: ../src/dialogs.py:2399
+#: ../src/dialogs.py:2400
 msgid "Images"
 msgstr "Slike"
 
-#: ../src/dialogs.py:2456
+#: ../src/dialogs.py:2458
 #, python-format
 msgid "When %s becomes:"
 msgstr "Kad %s postane:"
 
-#: ../src/dialogs.py:2458
+#: ../src/dialogs.py:2460
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Dodavanje Posebne Obavijesti za %s"
 
 #. # means number
-#: ../src/dialogs.py:2529
+#: ../src/dialogs.py:2531
 msgid "#"
 msgstr "#"
 
-#: ../src/dialogs.py:2535
+#: ../src/dialogs.py:2537
 msgid "Condition"
 msgstr "Uvjet"
 
-#: ../src/dialogs.py:2656
+#: ../src/dialogs.py:2658
 msgid "when I am "
 msgstr "kada sam "
 
@@ -3568,7 +3568,7 @@ msgstr "Ostali"
 #: ../src/gajim.py:561 ../src/roster_window.py:272 ../src/roster_window.py:330
 #: ../src/roster_window.py:370 ../src/roster_window.py:452
 #: ../src/roster_window.py:484 ../src/roster_window.py:486
-#: ../src/roster_window.py:3954 ../src/roster_window.py:3956
+#: ../src/roster_window.py:3947 ../src/roster_window.py:3949
 #: ../src/common/contacts.py:273 ../src/common/contacts.py:288
 #: ../src/common/helpers.py:43
 msgid "Transports"
@@ -4665,7 +4665,7 @@ msgid ""
 msgstr ""
 "Ako zatvorite ovaj prozor, biti ćete odspojeni iz ovog grupnog razgovora."
 
-#: ../src/groupchat_control.py:1442 ../src/roster_window.py:4094
+#: ../src/groupchat_control.py:1442 ../src/roster_window.py:4087
 msgid "Do _not ask me again"
 msgstr "_Ne pitaj me više"
 
@@ -4997,7 +4997,7 @@ msgstr "Spojeni računi"
 msgid "Observers"
 msgstr "Posmatrači"
 
-#: ../src/roster_window.py:695 ../src/roster_window.py:3250
+#: ../src/roster_window.py:695 ../src/roster_window.py:3243
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Nije moguće pridruživanje grupnom razgovoru dok ste nevidljivi"
 
@@ -5045,8 +5045,8 @@ msgstr "Upravitelj Povijesti"
 msgid "_Join New Group Chat"
 msgstr "Pridružit_i se Novom Grupnom Razgovoru"
 
-#: ../src/roster_window.py:1409 ../src/roster_window.py:3447
-#: ../src/roster_window.py:3454
+#: ../src/roster_window.py:1409 ../src/roster_window.py:3440
+#: ../src/roster_window.py:3447
 msgid "You have unread messages"
 msgstr "Imte nepročitane poruke"
 
@@ -5120,75 +5120,75 @@ msgstr "Dodjeli OpenPGP Ključ"
 msgid "Select a key to apply to the contact"
 msgstr "Odaberite ključ za dodavanje kontaktu"
 
-#: ../src/roster_window.py:1793 ../src/roster_window.py:2054
+#: ../src/roster_window.py:1793 ../src/roster_window.py:2047
 msgid "_New group chat"
 msgstr "_Novi grupni razgovor"
 
-#: ../src/roster_window.py:1924
+#: ../src/roster_window.py:1917
 msgid "I would like to add you to my roster"
 msgstr "Želio bih vas dodati na svoju listu kontakata"
 
-#: ../src/roster_window.py:2099 ../src/roster_window.py:2146
+#: ../src/roster_window.py:2092 ../src/roster_window.py:2139
 msgid "Send Group M_essage"
 msgstr "Pošalji _Grupnu Poruku"
 
-#: ../src/roster_window.py:2125
+#: ../src/roster_window.py:2118
 msgid "Re_name"
 msgstr "Pre_imenuj"
 
-#: ../src/roster_window.py:2152
+#: ../src/roster_window.py:2145
 msgid "To all users"
 msgstr "Svim korisnicima"
 
-#: ../src/roster_window.py:2155
+#: ../src/roster_window.py:2148
 msgid "To all online users"
 msgstr "Svim spojenim korisnicima"
 
-#: ../src/roster_window.py:2191
+#: ../src/roster_window.py:2184
 msgid "_Log on"
 msgstr "_Prijava"
 
-#: ../src/roster_window.py:2201
+#: ../src/roster_window.py:2194
 msgid "Log _off"
 msgstr "_Odjava"
 
-#: ../src/roster_window.py:2323 ../src/roster_window.py:2394
+#: ../src/roster_window.py:2316 ../src/roster_window.py:2387
 msgid "_Change Status Message"
 msgstr "_Izmjena Statusne Poruke"
 
-#: ../src/roster_window.py:2466
+#: ../src/roster_window.py:2459
 msgid "Authorization has been sent"
 msgstr "Odobrenje je poslano"
 
-#: ../src/roster_window.py:2467
+#: ../src/roster_window.py:2460
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "Sada će \"%s\" znati vaš status."
 
-#: ../src/roster_window.py:2487
+#: ../src/roster_window.py:2480
 msgid "Subscription request has been sent"
 msgstr "Zahtjev za pretplatom je poslan"
 
-#: ../src/roster_window.py:2488
+#: ../src/roster_window.py:2481
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Ako \"%s\" prihvati ovaj zahtjev znati će te njegov/njezin status."
 
-#: ../src/roster_window.py:2500
+#: ../src/roster_window.py:2493
 msgid "Authorization has been removed"
 msgstr "Odobrenje je uklonjeno"
 
-#: ../src/roster_window.py:2501
+#: ../src/roster_window.py:2494
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "Sada će vas \"%s\" uvijek vidjeti kao odspojenog."
 
-#: ../src/roster_window.py:2693
+#: ../src/roster_window.py:2686
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Kontakt \"%s\" biti će uklonjen sa vaše liste kontakata"
 
-#: ../src/roster_window.py:2697
+#: ../src/roster_window.py:2690
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -5196,7 +5196,7 @@ msgstr ""
 "Uklanjanjem ovog kontakta ujedno i uklanjate odobrenje što konačno znači da "
 "će vas ta osoba uvijek vidjeti kao da ste odspojeni."
 
-#: ../src/roster_window.py:2702
+#: ../src/roster_window.py:2695
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -5204,16 +5204,16 @@ msgstr ""
 "Uklanjanjem ovog kontakta ujedno po pretpostavljenom uklanjate i odobrenje "
 "što konačno znači da će vas ta osoba uvijek vidjeti kao da ste odspojeni."
 
-#: ../src/roster_window.py:2705
+#: ../src/roster_window.py:2698
 msgid "I want this contact to know my status after removal"
 msgstr "Želim da ovaj kontakt zna moj status nakon uklanjanja"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:2709
+#: ../src/roster_window.py:2702
 msgid "Contacts will be removed from your roster"
 msgstr "Kontakti će biti uklonjeni sa vaše liste kontakata"
 
-#: ../src/roster_window.py:2713
+#: ../src/roster_window.py:2706
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -5223,7 +5223,7 @@ msgstr ""
 "ujedno uklanjate i odobrenje što konačno znači da će vas ta osoba uvijek "
 "vidjeti kao da ste odspojeni."
 
-#: ../src/roster_window.py:2745
+#: ../src/roster_window.py:2738
 msgid ""
 "Gnomekeyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
@@ -5233,38 +5233,38 @@ msgstr ""
 
 #. TODO: make this string translatable
 #. %s is the account name here
-#: ../src/roster_window.py:2773 ../src/common/connection.py:598
+#: ../src/roster_window.py:2766 ../src/common/connection.py:598
 #: ../src/common/zeroconf/connection_zeroconf.py:161
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Biti će te spojeni na %s bez OpenPGP-a."
 
-#: ../src/roster_window.py:2790
+#: ../src/roster_window.py:2783
 msgid "Passphrase Required"
 msgstr "Potrebna Lozinka"
 
-#: ../src/roster_window.py:2791
+#: ../src/roster_window.py:2784
 #, python-format
 msgid "Enter GPG key passphrase for account %s."
 msgstr "Unesite lozinku GPG ključa za račun %s."
 
-#: ../src/roster_window.py:2796
+#: ../src/roster_window.py:2789
 msgid "Save passphrase"
 msgstr "Snimi lozinku"
 
-#: ../src/roster_window.py:2804
+#: ../src/roster_window.py:2797
 msgid "Wrong Passphrase"
 msgstr "Kriva Lozinka"
 
-#: ../src/roster_window.py:2805
+#: ../src/roster_window.py:2798
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Molim ponovo utipkajte svoju GPG lozinku ili pritisnite Odustani"
 
-#: ../src/roster_window.py:2879 ../src/roster_window.py:2939
+#: ../src/roster_window.py:2872 ../src/roster_window.py:2932
 msgid "You are participating in one or more group chats"
 msgstr "Sudjelujete u jednom ili više grupnih razovora"
 
-#: ../src/roster_window.py:2880 ../src/roster_window.py:2940
+#: ../src/roster_window.py:2873 ../src/roster_window.py:2933
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -5272,21 +5272,21 @@ msgstr ""
 "Promjena vašeg statusa u nevidljivo rezultirati će odspajanjem sa tih "
 "grupnih razgovora. Jeste li sigurni da želite ići na nevidljivo?"
 
-#: ../src/roster_window.py:2897
+#: ../src/roster_window.py:2890
 msgid "No account available"
 msgstr "Nema dostupnih računa"
 
-#: ../src/roster_window.py:2898
+#: ../src/roster_window.py:2891
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "Morate stvoriti račun prije nego što možete razgovarati sa drugim kontaktima."
 
-#: ../src/roster_window.py:3000
+#: ../src/roster_window.py:2993
 #, python-format
 msgid "\"%(title)s\" by %(artist)s"
 msgstr "\"%(title)s\" od %(artist)s"
 
-#: ../src/roster_window.py:3448 ../src/roster_window.py:3455
+#: ../src/roster_window.py:3441 ../src/roster_window.py:3448
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
@@ -5294,11 +5294,11 @@ msgstr ""
 "Poruke će biti dostupne za čitanje i kasnije ukoliko imate omogućenu "
 "povijest."
 
-#: ../src/roster_window.py:4044
+#: ../src/roster_window.py:4037
 msgid "Metacontacts storage not supported by your server"
 msgstr "Spremanje metakontakata nije podržano na vašem poslužitelju"
 
-#: ../src/roster_window.py:4046
+#: ../src/roster_window.py:4039
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be save on next reconnection."
@@ -5306,13 +5306,13 @@ msgstr ""
 "Vaš poslužitelj ne podržava spremanje informacija o metakontaktima. Te "
 "informacije neće biti spremljene kod sljedećeg spajanja."
 
-#: ../src/roster_window.py:4088
+#: ../src/roster_window.py:4081
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr ""
 "Upravo ćete stvoriti metakontakt. Jeste li sigurni da želite nastaviti?"
 
-#: ../src/roster_window.py:4090
+#: ../src/roster_window.py:4083
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
@@ -5322,17 +5322,17 @@ msgstr ""
 "oni se koriste kada ista osoba ima nekoliko Jabber računa ili računa na "
 "transportima."
 
-#: ../src/roster_window.py:4257
+#: ../src/roster_window.py:4250
 #, python-format
 msgid "Drop %s in group %s"
 msgstr "Spusti %s u grupu %s"
 
-#: ../src/roster_window.py:4264
+#: ../src/roster_window.py:4257
 #, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "Učini %s i %s pseudo kontaktima"
 
-#: ../src/roster_window.py:4451
+#: ../src/roster_window.py:4444
 msgid "Change Status Message..."
 msgstr "Promijeni Statusnu Poruku..."
 

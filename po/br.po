@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-10 16:34+0200\n"
+"POT-Creation-Date: 2007-09-22 21:59+0200\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -267,8 +267,8 @@ msgstr "Gajim"
 #: ../data/glade/preferences_window.glade.h:51
 #: ../data/glade/zeroconf_properties_window.glade.h:7
 #: ../src/roster_window.py:347 ../src/roster_window.py:1237
-#: ../src/roster_window.py:1447 ../src/roster_window.py:2123
-#: ../src/roster_window.py:2165 ../src/common/contacts.py:290
+#: ../src/roster_window.py:1447 ../src/roster_window.py:2116
+#: ../src/roster_window.py:2158 ../src/common/contacts.py:290
 msgid "General"
 msgstr "Hollek"
 
@@ -1202,7 +1202,7 @@ msgstr "Nac'hañ"
 msgid "Invitation Received"
 msgstr "Resevet ar bedadenn"
 
-#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1166
+#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1167
 msgid "Join Group Chat"
 msgstr "Ebarzhiñ ur sal-flapiñ"
 
@@ -1851,7 +1851,7 @@ msgstr "ID Jabber:"
 msgid "Order:"
 msgstr "Servijer:"
 
-#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1882
+#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:1883
 #, fuzzy
 msgid "Privacy List"
 msgstr "Roll argas"
@@ -2066,17 +2066,17 @@ msgstr ""
 
 #: ../data/glade/roster_contact_context_menu.glade.h:4
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:3
-#: ../src/roster_window.py:2087
+#: ../src/roster_window.py:2080
 msgid "Edit _Groups"
 msgstr "Kemmañ ar _strolladoù"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:5
-#: ../src/roster_window.py:2222
+#: ../src/roster_window.py:2215
 msgid "Execute Command..."
 msgstr ""
 
 #: ../data/glade/roster_contact_context_menu.glade.h:6
-#: ../src/roster_window.py:2045
+#: ../src/roster_window.py:2038
 msgid "In_vite to"
 msgstr ""
 
@@ -2102,14 +2102,14 @@ msgstr "Difenn dezhañ/dezhi gwelet ma stad"
 
 #. Remove group
 #: ../data/glade/roster_contact_context_menu.glade.h:14
-#: ../src/roster_window.py:2039 ../src/roster_window.py:2136
-#: ../src/roster_window.py:2243
+#: ../src/roster_window.py:2032 ../src/roster_window.py:2129
+#: ../src/roster_window.py:2236
 msgid "_Remove from Roster"
 msgstr "_Dilemel diouzh ar roll"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:15
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:7
-#: ../src/roster_window.py:2231
+#: ../src/roster_window.py:2224
 msgid "_Rename"
 msgstr "_Adenvel"
 
@@ -2160,7 +2160,7 @@ msgid "_Discover Services"
 msgstr "_Dizoleiñ ar servijoù"
 
 #: ../data/glade/roster_window.glade.h:14 ../src/disco.py:1286
-#: ../src/roster_window.py:2214
+#: ../src/roster_window.py:2207
 msgid "_Edit"
 msgstr "_Aozañ"
 
@@ -2575,7 +2575,7 @@ msgstr ""
 msgid "Chinese (Ch)"
 msgstr ""
 
-#: ../src/chat_control.py:213 ../src/dialogs.py:1536
+#: ../src/chat_control.py:213 ../src/dialogs.py:1537
 msgid ""
 "If that is not your language for which you want to highlight misspelled "
 "words, then please set your $LANG as appropriate. Eg. for French do export "
@@ -2625,9 +2625,9 @@ msgstr "Lazhet eo ar sifrañ"
 #: ../src/gajim.py:1155 ../src/roster_window.py:333
 #: ../src/roster_window.py:412 ../src/roster_window.py:1509
 #: ../src/roster_window.py:1519 ../src/roster_window.py:1695
-#: ../src/roster_window.py:1901 ../src/roster_window.py:2486
-#: ../src/roster_window.py:2687 ../src/roster_window.py:3958
-#: ../src/roster_window.py:3960 ../src/common/contacts.py:76
+#: ../src/roster_window.py:1894 ../src/roster_window.py:2479
+#: ../src/roster_window.py:2680 ../src/roster_window.py:3951
+#: ../src/roster_window.py:3953 ../src/common/contacts.py:76
 #: ../src/common/helpers.py:43 ../src/common/helpers.py:257
 msgid "Not in Roster"
 msgstr "Ket er roll"
@@ -2798,7 +2798,7 @@ msgstr "Kont dihegerz"
 msgid "You must create your account before editing your personal information."
 msgstr "Rankout a rit krouiñ ho kont a-raok kemmañ an titouroù hiniennel."
 
-#: ../src/config.py:1587 ../src/dialogs.py:1145 ../src/dialogs.py:1336
+#: ../src/config.py:1587 ../src/dialogs.py:1146 ../src/dialogs.py:1337
 #: ../src/disco.py:418 ../src/profile_window.py:323
 msgid "You are not connected to the server"
 msgstr "N'oc'h ket luget d'ar servijer"
@@ -2981,16 +2981,16 @@ msgstr ""
 msgid "Removing %s account"
 msgstr "Lemel ar gont %s"
 
-#: ../src/config.py:2420 ../src/roster_window.py:2746
+#: ../src/config.py:2420 ../src/roster_window.py:2739
 msgid "Password Required"
 msgstr "Ger-kuzh ret"
 
-#: ../src/config.py:2421 ../src/roster_window.py:2742
+#: ../src/config.py:2421 ../src/roster_window.py:2735
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Roit ho ker-kuzh evit ar gont %s"
 
-#: ../src/config.py:2422 ../src/roster_window.py:2747
+#: ../src/config.py:2422 ../src/roster_window.py:2740
 msgid "Save password"
 msgstr "Enrollañ ar ger-kuzh"
 
@@ -3046,7 +3046,7 @@ msgstr "Anv-arveriad-ez direizh"
 msgid "You must provide a username to configure this account."
 msgstr "Rankout a rit reiñ un anv-arveriad-ez evit kefluniañ ar gont-mañ."
 
-#: ../src/config.py:2906 ../src/dialogs.py:1355
+#: ../src/config.py:2906 ../src/dialogs.py:1356
 msgid "Invalid password"
 msgstr "Ger-kuzh direizh"
 
@@ -3054,11 +3054,11 @@ msgstr "Ger-kuzh direizh"
 msgid "You must enter a password for the new account."
 msgstr "Rankout a rit reiñ ur ger-kuzh evit enrollañ ar gont nevez."
 
-#: ../src/config.py:2911 ../src/dialogs.py:1360
+#: ../src/config.py:2911 ../src/dialogs.py:1361
 msgid "Passwords do not match"
 msgstr "Ne glot ket ar gerioù-kuzh"
 
-#: ../src/config.py:2912 ../src/dialogs.py:1361
+#: ../src/config.py:2912 ../src/dialogs.py:1362
 msgid "The passwords typed in both fields must be identical."
 msgstr "Rankout a ra an daou c'her-kuzh bezañ heñvel en daou dakad."
 
@@ -3319,59 +3319,59 @@ msgid ""
 "cancelled."
 msgstr ""
 
-#: ../src/dialogs.py:1074
+#: ../src/dialogs.py:1075
 #, python-format
 msgid "Subscription request for account %s from %s"
 msgstr "Goulenn enskrivañ evit ar gont %s digant %s"
 
-#: ../src/dialogs.py:1077
+#: ../src/dialogs.py:1078
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Goulenn enskrivañ digant %s"
 
-#: ../src/dialogs.py:1138 ../src/roster_window.py:690
+#: ../src/dialogs.py:1139 ../src/roster_window.py:690
 #, fuzzy, python-format
 msgid "You are already in group chat %s"
 msgstr "Emaoc'h er webgaoz %s dija"
 
-#: ../src/dialogs.py:1146
+#: ../src/dialogs.py:1147
 msgid "You can not join a group chat unless you are connected."
 msgstr "N'hellit ket ebarzhiñ ur sal-flapiñ keit ha ma n'oc'h ket luget."
 
-#: ../src/dialogs.py:1164
+#: ../src/dialogs.py:1165
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "Ebarzhiñ ur sal-flapiñ gant ar gont %s"
 
-#: ../src/dialogs.py:1234 ../src/dialogs.py:1240
+#: ../src/dialogs.py:1235 ../src/dialogs.py:1241
 #, fuzzy
 msgid "Invalid group chat Jabber ID"
 msgstr "ID jabber direizh"
 
-#: ../src/dialogs.py:1235 ../src/dialogs.py:1241
+#: ../src/dialogs.py:1236 ../src/dialogs.py:1242
 #, fuzzy
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "Bez ez eus arouezioù difennet en anv ar sal pe hini ar servijer."
 
-#: ../src/dialogs.py:1247
+#: ../src/dialogs.py:1248
 msgid "This is not a group chat"
 msgstr ""
 
-#: ../src/dialogs.py:1248
+#: ../src/dialogs.py:1249
 #, fuzzy, python-format
 msgid "%s is not the name of a group chat."
 msgstr "A guzha an nozelennoù er prenestr flapiñ"
 
-#: ../src/dialogs.py:1287
+#: ../src/dialogs.py:1288
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "Kregiñ da flapiñ gant ar gont %s"
 
-#: ../src/dialogs.py:1289
+#: ../src/dialogs.py:1290
 msgid "Start Chat"
 msgstr "Kregiñ da flapiñ"
 
-#: ../src/dialogs.py:1290
+#: ../src/dialogs.py:1291
 #, fuzzy
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
@@ -3381,238 +3381,238 @@ msgstr ""
 "dezhañ:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:1315 ../src/dialogs.py:1674 ../src/dialogs.py:1805
+#: ../src/dialogs.py:1316 ../src/dialogs.py:1675 ../src/dialogs.py:1806
 msgid "Connection not available"
 msgstr "N'eus ket tu en em lugañ"
 
-#: ../src/dialogs.py:1316 ../src/dialogs.py:1675 ../src/dialogs.py:1806
+#: ../src/dialogs.py:1317 ../src/dialogs.py:1676 ../src/dialogs.py:1807
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Gwiriekait oc'h luget gant \"%s\"."
 
-#: ../src/dialogs.py:1325 ../src/dialogs.py:1328
+#: ../src/dialogs.py:1326 ../src/dialogs.py:1329
 #, fuzzy
 msgid "Invalid JID"
 msgstr "ID jabber direizh"
 
-#: ../src/dialogs.py:1328
+#: ../src/dialogs.py:1329
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr ""
 
-#: ../src/dialogs.py:1337
+#: ../src/dialogs.py:1338
 msgid "Without a connection, you can not change your password."
 msgstr "Rankout a rit bezañ luget evit cheñch ger-kuzh."
 
-#: ../src/dialogs.py:1356
+#: ../src/dialogs.py:1357
 msgid "You must enter a password."
 msgstr "Rankout a rit reiñ ur ger-kuzh."
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:1403 ../src/notify.py:211 ../src/notify.py:415
+#: ../src/dialogs.py:1404 ../src/notify.py:211 ../src/notify.py:415
 msgid "Contact Signed In"
 msgstr "Darempred luget"
 
-#: ../src/dialogs.py:1405 ../src/notify.py:219 ../src/notify.py:417
+#: ../src/dialogs.py:1406 ../src/notify.py:219 ../src/notify.py:417
 msgid "Contact Signed Out"
 msgstr "Darempred diluget"
 
 #. chat message
-#: ../src/dialogs.py:1407 ../src/notify.py:238 ../src/notify.py:419
+#: ../src/dialogs.py:1408 ../src/notify.py:238 ../src/notify.py:419
 msgid "New Message"
 msgstr "Kemennadenn nevez"
 
 #. single message
-#: ../src/dialogs.py:1407 ../src/notify.py:223 ../src/notify.py:419
+#: ../src/dialogs.py:1408 ../src/notify.py:223 ../src/notify.py:419
 msgid "New Single Message"
 msgstr "Kemennadenn simpl nevez"
 
 #. private message
-#: ../src/dialogs.py:1408 ../src/notify.py:230 ../src/notify.py:420
+#: ../src/dialogs.py:1409 ../src/notify.py:230 ../src/notify.py:420
 msgid "New Private Message"
 msgstr "Kemennadenn hiniennel nevez"
 
-#: ../src/dialogs.py:1408 ../src/gajim.py:1250 ../src/notify.py:428
+#: ../src/dialogs.py:1409 ../src/gajim.py:1250 ../src/notify.py:428
 msgid "New E-mail"
 msgstr "Postel nevez"
 
-#: ../src/dialogs.py:1410 ../src/gajim.py:1403 ../src/notify.py:422
+#: ../src/dialogs.py:1411 ../src/gajim.py:1403 ../src/notify.py:422
 msgid "File Transfer Request"
 msgstr "Goulenn treuzkas"
 
-#: ../src/dialogs.py:1412 ../src/gajim.py:1222 ../src/gajim.py:1379
+#: ../src/dialogs.py:1413 ../src/gajim.py:1222 ../src/gajim.py:1379
 #: ../src/notify.py:424
 msgid "File Transfer Error"
 msgstr "Fazi treuzkas"
 
-#: ../src/dialogs.py:1414 ../src/gajim.py:1442 ../src/gajim.py:1464
+#: ../src/dialogs.py:1415 ../src/gajim.py:1442 ../src/gajim.py:1464
 #: ../src/gajim.py:1481 ../src/notify.py:426
 msgid "File Transfer Completed"
 msgstr "Echu an treuzkasadenn"
 
-#: ../src/dialogs.py:1415 ../src/gajim.py:1445 ../src/notify.py:426
+#: ../src/dialogs.py:1416 ../src/gajim.py:1445 ../src/notify.py:426
 msgid "File Transfer Stopped"
 msgstr "Sac'het an treuzkas"
 
-#: ../src/dialogs.py:1417 ../src/gajim.py:1119 ../src/notify.py:430
+#: ../src/dialogs.py:1418 ../src/gajim.py:1119 ../src/notify.py:430
 msgid "Groupchat Invitation"
 msgstr "Pedadenn evit ur sal-flapiñ"
 
-#: ../src/dialogs.py:1419 ../src/notify.py:203 ../src/notify.py:432
+#: ../src/dialogs.py:1420 ../src/notify.py:203 ../src/notify.py:432
 #, fuzzy
 msgid "Contact Changed Status"
 msgstr "Darempred diluget"
 
-#: ../src/dialogs.py:1604
+#: ../src/dialogs.py:1605
 #, fuzzy, python-format
 msgid "Single Message using account %s"
 msgstr "Kemennadenn simpl gant ar gont %s"
 
-#: ../src/dialogs.py:1606
+#: ../src/dialogs.py:1607
 #, fuzzy, python-format
 msgid "Single Message in account %s"
 msgstr "Kemennadenn simpl gant ar gont %s"
 
-#: ../src/dialogs.py:1608
+#: ../src/dialogs.py:1609
 msgid "Single Message"
 msgstr "Kemennadenn simpl"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:1611
+#: ../src/dialogs.py:1612
 #, python-format
 msgid "Send %s"
 msgstr "Kas %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:1634
+#: ../src/dialogs.py:1635
 #, python-format
 msgid "Received %s"
 msgstr "%s resevet"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:1706
+#: ../src/dialogs.py:1707
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: ../src/dialogs.py:1707
+#: ../src/dialogs.py:1708
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s a skrivas:\n"
 
-#: ../src/dialogs.py:1751
+#: ../src/dialogs.py:1752
 #, python-format
 msgid "XML Console for %s"
 msgstr ""
 
-#: ../src/dialogs.py:1753
+#: ../src/dialogs.py:1754
 msgid "XML Console"
 msgstr ""
 
-#: ../src/dialogs.py:1876
+#: ../src/dialogs.py:1877
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr ""
 
-#: ../src/dialogs.py:1880
+#: ../src/dialogs.py:1881
 #, python-format
 msgid "Privacy List for %s"
 msgstr ""
 
-#: ../src/dialogs.py:1928
+#: ../src/dialogs.py:1929
 #, python-format
 msgid "Order: %s, action: %s, type: %s, value: %s"
 msgstr ""
 
-#: ../src/dialogs.py:1931
+#: ../src/dialogs.py:1932
 #, fuzzy, python-format
 msgid "Order: %s, action: %s"
 msgstr "Taolennadur: %s"
 
-#: ../src/dialogs.py:1973
+#: ../src/dialogs.py:1974
 #, fuzzy
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Furmad ul linenn</b>"
 
-#: ../src/dialogs.py:2060
+#: ../src/dialogs.py:2061
 #, fuzzy
 msgid "<b>Add a rule</b>"
 msgstr "<b>Furmad ul linenn</b>"
 
-#: ../src/dialogs.py:2156
+#: ../src/dialogs.py:2157
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr ""
 
-#: ../src/dialogs.py:2158
+#: ../src/dialogs.py:2159
 #, fuzzy
 msgid "Privacy Lists"
 msgstr "Flapoù prevez"
 
-#: ../src/dialogs.py:2228
+#: ../src/dialogs.py:2229
 #, fuzzy
 msgid "Invalid List Name"
 msgstr "Anv-arveriad-ez direizh"
 
-#: ../src/dialogs.py:2229
+#: ../src/dialogs.py:2230
 #, fuzzy
 msgid "You must enter a name to create a privacy list."
 msgstr "Rankout a rit reiñ ur ger-kuzh evit enrollañ ar gont nevez."
 
 #. Don't translate $Contact
-#: ../src/dialogs.py:2264
+#: ../src/dialogs.py:2265
 #, fuzzy, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "Pedet oc'h bet gant %(contact_jid)s er sal-flapiñ %(room_jid)s"
 
 #. only if not None and not ''
-#: ../src/dialogs.py:2276
+#: ../src/dialogs.py:2277
 #, python-format
 msgid "Comment: %s"
 msgstr "Evezhiadenn: %s"
 
-#: ../src/dialogs.py:2339
+#: ../src/dialogs.py:2340
 msgid "Choose Sound"
 msgstr "Dibabit ur son"
 
-#: ../src/dialogs.py:2349 ../src/dialogs.py:2394
+#: ../src/dialogs.py:2350 ../src/dialogs.py:2395
 msgid "All files"
 msgstr "An holl restroù"
 
-#: ../src/dialogs.py:2354
+#: ../src/dialogs.py:2355
 msgid "Wav Sounds"
 msgstr "Sonioù wav"
 
-#: ../src/dialogs.py:2384
+#: ../src/dialogs.py:2385
 msgid "Choose Image"
 msgstr "Dibabit ur skeudenn"
 
-#: ../src/dialogs.py:2399
+#: ../src/dialogs.py:2400
 msgid "Images"
 msgstr "Skeudennoù"
 
-#: ../src/dialogs.py:2456
+#: ../src/dialogs.py:2458
 #, python-format
 msgid "When %s becomes:"
 msgstr "Pa teu %s da vezañ:"
 
-#: ../src/dialogs.py:2458
+#: ../src/dialogs.py:2460
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
 
 #. # means number
-#: ../src/dialogs.py:2529
+#: ../src/dialogs.py:2531
 msgid "#"
 msgstr ""
 
-#: ../src/dialogs.py:2535
+#: ../src/dialogs.py:2537
 #, fuzzy
 msgid "Condition"
 msgstr "Kevreadenn"
 
-#: ../src/dialogs.py:2656
+#: ../src/dialogs.py:2658
 msgid "when I am "
 msgstr ""
 
@@ -3624,7 +3624,7 @@ msgstr "Traoù all"
 #: ../src/gajim.py:561 ../src/roster_window.py:272 ../src/roster_window.py:330
 #: ../src/roster_window.py:370 ../src/roster_window.py:452
 #: ../src/roster_window.py:484 ../src/roster_window.py:486
-#: ../src/roster_window.py:3954 ../src/roster_window.py:3956
+#: ../src/roster_window.py:3947 ../src/roster_window.py:3949
 #: ../src/common/contacts.py:273 ../src/common/contacts.py:288
 #: ../src/common/helpers.py:43
 msgid "Transports"
@@ -4734,7 +4734,7 @@ msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Ma serrit ar prenestr-mañ, e tigevreoc'h diouzh ar flap-mañ."
 
-#: ../src/groupchat_control.py:1442 ../src/roster_window.py:4094
+#: ../src/groupchat_control.py:1442 ../src/roster_window.py:4087
 msgid "Do _not ask me again"
 msgstr "_Chom hep goulenn ket"
 
@@ -5060,7 +5060,7 @@ msgstr "Kontoù strollet"
 msgid "Observers"
 msgstr "Sellerien"
 
-#: ../src/roster_window.py:695 ../src/roster_window.py:3250
+#: ../src/roster_window.py:695 ../src/roster_window.py:3243
 #, fuzzy
 msgid "You cannot join a group chat while you are invisible"
 msgstr "N'hellit ket ebarzhiñ ur webgaoz keit ha m'emaoc'h diwelus."
@@ -5111,8 +5111,8 @@ msgstr "Merour an istoradur"
 msgid "_Join New Group Chat"
 msgstr "Ebarzhiñ ur sal-flapiñ"
 
-#: ../src/roster_window.py:1409 ../src/roster_window.py:3447
-#: ../src/roster_window.py:3454
+#: ../src/roster_window.py:1409 ../src/roster_window.py:3440
+#: ../src/roster_window.py:3447
 msgid "You have unread messages"
 msgstr "Kemennadennoù nevez ho peus"
 
@@ -5194,78 +5194,78 @@ msgstr "Assigner une clé OpenPGP"
 msgid "Select a key to apply to the contact"
 msgstr "Dibabit un alc'hwezh da"
 
-#: ../src/roster_window.py:1793 ../src/roster_window.py:2054
+#: ../src/roster_window.py:1793 ../src/roster_window.py:2047
 #, fuzzy
 msgid "_New group chat"
 msgstr "Flap a-stroll"
 
-#: ../src/roster_window.py:1924
+#: ../src/roster_window.py:1917
 msgid "I would like to add you to my roster"
 msgstr "Laouen 'vefen d'az ouzhpennañ em roll-darempredoù"
 
-#: ../src/roster_window.py:2099 ../src/roster_window.py:2146
+#: ../src/roster_window.py:2092 ../src/roster_window.py:2139
 #, fuzzy
 msgid "Send Group M_essage"
 msgstr "_Kas ur gemennadenn d'ar servijer"
 
-#: ../src/roster_window.py:2125
+#: ../src/roster_window.py:2118
 msgid "Re_name"
 msgstr "_Adenvel"
 
-#: ../src/roster_window.py:2152
+#: ../src/roster_window.py:2145
 msgid "To all users"
 msgstr ""
 
-#: ../src/roster_window.py:2155
+#: ../src/roster_window.py:2148
 #, fuzzy
 msgid "To all online users"
 msgstr "Utilisateurs En _Ligne"
 
-#: ../src/roster_window.py:2191
+#: ../src/roster_window.py:2184
 msgid "_Log on"
 msgstr "_Lugañ"
 
-#: ../src/roster_window.py:2201
+#: ../src/roster_window.py:2194
 msgid "Log _off"
 msgstr "_Dilugañ"
 
-#: ../src/roster_window.py:2323 ../src/roster_window.py:2394
+#: ../src/roster_window.py:2316 ../src/roster_window.py:2387
 msgid "_Change Status Message"
 msgstr "_Kemmañ an titour-stad"
 
-#: ../src/roster_window.py:2466
+#: ../src/roster_window.py:2459
 msgid "Authorization has been sent"
 msgstr "Kaset eo bet an aotre"
 
-#: ../src/roster_window.py:2467
+#: ../src/roster_window.py:2460
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "Anavezout a raio \"%s\" ho stad adalek bremañ."
 
-#: ../src/roster_window.py:2487
+#: ../src/roster_window.py:2480
 msgid "Subscription request has been sent"
 msgstr "Kaset eo bet ar goulenn goumanantiñ"
 
-#: ../src/roster_window.py:2488
+#: ../src/roster_window.py:2481
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Ma asant \"%s\" ar c'houmanant e weloc'h he/e stad."
 
-#: ../src/roster_window.py:2500
+#: ../src/roster_window.py:2493
 msgid "Authorization has been removed"
 msgstr "Dilamet eo bet an aotre"
 
-#: ../src/roster_window.py:2501
+#: ../src/roster_window.py:2494
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "Adalek bremañ e welo ac'hanoc'h \"%s\" atav evel pa vefec'h ezlinenn."
 
-#: ../src/roster_window.py:2693
+#: ../src/roster_window.py:2686
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Dilamet e vo an darempred \"%s\" diouzh ar roll"
 
-#: ../src/roster_window.py:2697
+#: ../src/roster_window.py:2690
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -5273,7 +5273,7 @@ msgstr ""
 "En ur zilemel an darempred-mañ, e tilamit ivez e/he aotre. Atav e welo "
 "ac'hanoc'h evel pa vefec'h ezlinenn."
 
-#: ../src/roster_window.py:2702
+#: ../src/roster_window.py:2695
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -5281,17 +5281,17 @@ msgstr ""
 "En ur zilemel an darempred-mañ, e tilamit dre-ziouer he/e aotre. Atav e welo "
 "ac'hanoc'h evel pa vefec'h ezlinenn."
 
-#: ../src/roster_window.py:2705
+#: ../src/roster_window.py:2698
 msgid "I want this contact to know my status after removal"
 msgstr "Aotreañ an darempred-mañ da welout ma stad war-lerc'h e zilam"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:2709
+#: ../src/roster_window.py:2702
 #, fuzzy
 msgid "Contacts will be removed from your roster"
 msgstr "Dilamet e vo an darempred \"%s\" diouzh ar roll"
 
-#: ../src/roster_window.py:2713
+#: ../src/roster_window.py:2706
 #, fuzzy, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -5300,7 +5300,7 @@ msgstr ""
 "En ur zilemel an darempred-mañ, e tilamit ivez e/he aotre. Atav e welo "
 "ac'hanoc'h evel pa vefec'h ezlinenn."
 
-#: ../src/roster_window.py:2745
+#: ../src/roster_window.py:2738
 msgid ""
 "Gnomekeyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
@@ -5308,38 +5308,38 @@ msgstr ""
 
 #. TODO: make this string translatable
 #. %s is the account name here
-#: ../src/roster_window.py:2773 ../src/common/connection.py:598
+#: ../src/roster_window.py:2766 ../src/common/connection.py:598
 #: ../src/common/zeroconf/connection_zeroconf.py:161
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Luget e voc'h da %s hep OpenPGP."
 
-#: ../src/roster_window.py:2790
+#: ../src/roster_window.py:2783
 msgid "Passphrase Required"
 msgstr "Ger-kuzh ret"
 
-#: ../src/roster_window.py:2791
+#: ../src/roster_window.py:2784
 #, python-format
 msgid "Enter GPG key passphrase for account %s."
 msgstr "Roit ho ker-kuzh GPG evit ar gont %s."
 
-#: ../src/roster_window.py:2796
+#: ../src/roster_window.py:2789
 msgid "Save passphrase"
 msgstr "Enrollañ ar ger-kuzh"
 
-#: ../src/roster_window.py:2804
+#: ../src/roster_window.py:2797
 msgid "Wrong Passphrase"
 msgstr "Ger-kuzh faos"
 
-#: ../src/roster_window.py:2805
+#: ../src/roster_window.py:2798
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Adroit ho ker-kuzh GPG pe pouezit war Nullañ."
 
-#: ../src/roster_window.py:2879 ../src/roster_window.py:2939
+#: ../src/roster_window.py:2872 ../src/roster_window.py:2932
 msgid "You are participating in one or more group chats"
 msgstr "Kemer a rit perzh e unan pe meur a webgaoz"
 
-#: ../src/roster_window.py:2880 ../src/roster_window.py:2940
+#: ../src/roster_window.py:2873 ../src/roster_window.py:2933
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -5347,60 +5347,60 @@ msgstr ""
 "Tremen d'ar stad diwelus a lakao ac'hanoc'h da zilugañ diouzh ar webkaozioù-"
 "se. Ha sur oc'h e fell deoc'h bezañ diwelus?"
 
-#: ../src/roster_window.py:2897
+#: ../src/roster_window.py:2890
 msgid "No account available"
 msgstr "Kont ebet hegerz"
 
-#: ../src/roster_window.py:2898
+#: ../src/roster_window.py:2891
 msgid "You must create an account before you can chat with other contacts."
 msgstr "Rankout a rit krouiñ ur gont a-raok gellout flapiñ gant tud all."
 
-#: ../src/roster_window.py:3000
+#: ../src/roster_window.py:2993
 #, python-format
 msgid "\"%(title)s\" by %(artist)s"
 msgstr ""
 
-#: ../src/roster_window.py:3448 ../src/roster_window.py:3455
+#: ../src/roster_window.py:3441 ../src/roster_window.py:3448
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
 msgstr ""
 "Posubl e vo lenn ar gemennadennoù diwezhatoc'h m'emañ an istoradur war enaou."
 
-#: ../src/roster_window.py:4044
+#: ../src/roster_window.py:4037
 msgid "Metacontacts storage not supported by your server"
 msgstr ""
 
-#: ../src/roster_window.py:4046
+#: ../src/roster_window.py:4039
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be save on next reconnection."
 msgstr ""
 
-#: ../src/roster_window.py:4088
+#: ../src/roster_window.py:4081
 #, fuzzy
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "Rankout a rit krouiñ ur gont a-raok gellout flapiñ gant tud all."
 
-#: ../src/roster_window.py:4090
+#: ../src/roster_window.py:4083
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
 "accounts."
 msgstr ""
 
-#: ../src/roster_window.py:4257
+#: ../src/roster_window.py:4250
 #, python-format
 msgid "Drop %s in group %s"
 msgstr "Kas %s er strollad %s"
 
-#: ../src/roster_window.py:4264
+#: ../src/roster_window.py:4257
 #, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "Strollañ %s ha %s"
 
-#: ../src/roster_window.py:4451
+#: ../src/roster_window.py:4444
 msgid "Change Status Message..."
 msgstr "Kemmañ an titour-stad..."
 
