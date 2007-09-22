@@ -1,7 +1,7 @@
 [Setup]
 AppName=Gajim
-AppVerName=Gajim version 0.11.1+gtk-1
-OutputBaseFilename=gajim-0.11.1+gtk-1
+AppVerName=Gajim version 0.11.2
+OutputBaseFilename=gajim-0.11.2-1
 DefaultDirName={pf}\Gajim
 DefaultGroupName=Gajim
 UninstallDisplayIcon={app}\src\Gajim.exe
@@ -27,7 +27,9 @@ Source: "dist\gajim.exe"; DestDir: "{app}\src"; components: main
 Source: "dist\history_manager.exe"; DestDir: "{app}\src"; components: main
 Source: "data\*"; DestDir: "{app}\data"; Flags: recursesubdirs
 Source: "po\*.mo"; DestDir: "{app}\po"; Flags: recursesubdirs
-Source: "gtk\*"; DestDir: "{app}\src\gtk"; Flags: recursesubdirs
+;Source: "gtk\*"; DestDir: "{app}\src\gtk"; Flags: recursesubdirs
+;Source: "gtk\bin\xmlparse.dll"; DestDir: "{app}\src"
+;Source: "gtk\bin\xmltok.dll"; DestDir: "{app}\src"
 
 [Icons]
 Name: "{group}\Gajim"; Filename: "{app}\src\Gajim.exe"; WorkingDir: "{app}\src"
