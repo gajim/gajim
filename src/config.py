@@ -579,8 +579,7 @@ class PreferencesWindow:
 		for account in gajim.connections:
 			if gajim.connections[account].connected:
 				for gc_control in gajim.interface.msg_win_mgr.get_controls(
-					message_control.TYPE_GC) + \
-					gajim.interface.minimized_controls[account].values():
+					message_control.TYPE_GC):
 						gc_control.draw_roster()
 	
 	def on_emoticons_combobox_changed(self, widget):
