@@ -24,7 +24,7 @@ import socket
 import sys
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
-	time as time_time, timezone, tzname, strptime)
+	time as time_time, timezone, tzname)
 from calendar import timegm
 
 import socks5
@@ -1494,7 +1494,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		
 		encrypted = False
 		tim = msg.getTimestamp()
-		tim = strptime(tim, '%Y%m%dT%H:%M:%S')
+		tim = helpers.datetime_tuple(tim)
 		tim = localtime(timegm(tim))
 
 		e2e_tag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
