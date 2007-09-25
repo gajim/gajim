@@ -445,7 +445,7 @@ class CommandWindow:
 			# no commands => no commands stage
 			# commands => command selection stage
 			query = response.getTag('query')
-			if query:
+			if query and query.getAttr('node') == xmpp.NS_COMMANDS:
 				items = query.getTags('item')
 			else:
 				items = []
