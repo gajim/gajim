@@ -846,9 +846,9 @@ class RosterWindow:
 			if os.path.exists('history_manager.exe'): # user is running stable
 				helpers.exec_command('history_manager.exe')
 			else: # user is running svn
-				helpers.exec_command('%s history_manager.py' % (sys.executable,))
+				helpers.exec_command('python history_manager.py')
 		else: # Unix user
-			helpers.exec_command('%s history_manager.py &' % (sys.executable,))
+			helpers.exec_command('python history_manager.py &')
 
 	def get_and_connect_advanced_menuitem_menu(self, account):
 		'''adds FOR ACCOUNT options'''
