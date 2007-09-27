@@ -1551,6 +1551,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('GC_INVITATION', (room_jid, frm, '', None,
 					is_continued))
 				return
+		form_node = None
+		for xtag in xtags:
+			if xtag.getNamespace() == common.xmpp.NS_DATA:
+				form_node = xtag
+				break
 		# chatstates - look for chatstate tags in a message if not delayed
 		if not delayed:
 			composing_xep = False
@@ -1658,7 +1663,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			mtype = treat_as
 		self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype,
 			subject, chatstate, msg_id, composing_xep, user_nick, msghtml,
-			session))
+			session, form_node))
 	# END messageCB
 
 	def get_session(self, jid, thread_id, type):

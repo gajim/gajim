@@ -3842,9 +3842,9 @@ class RosterWindow:
 			is_continued=is_continued)
 		mw.new_tab(gc_control)
 
-	def on_message(self, jid, msg, tim, account, encrypted = False,
-			msg_type = '', subject = None, resource = '', msg_id = None,
-			user_nick = '', advanced_notif_num = None, xhtml = None, session = None):
+	def on_message(self, jid, msg, tim, account, encrypted=False, msg_type='',
+	subject=None, resource='', msg_id=None, user_nick='',
+	advanced_notif_num=None, xhtml=None, session=None, form_node=None):
 		'''when we receive a message'''
 		contact = None
 		# if chat window will be for specific resource
@@ -3899,9 +3899,9 @@ class RosterWindow:
 		popup = helpers.allow_popup_window(account, advanced_notif_num)
 
 		if msg_type == 'normal' and popup: # it's single message to be autopopuped
-			dialogs.SingleMessageWindow(account, contact.jid,
-				action = 'receive', from_whom = jid, subject = subject,
-				message = msg, resource = resource, session = session)
+			dialogs.SingleMessageWindow(account, contact.jid, action='receive',
+				from_whom=jid, subject=subject, message=msg, resource=resource,
+				session=session, form_node=form_node)
 			return
 
 		# We print if window is opened and it's not a single message
@@ -3926,12 +3926,12 @@ class RosterWindow:
 		show_in_roster = notify.get_show_in_roster(event_type, account, contact)
 		show_in_systray = notify.get_show_in_systray(event_type, account, contact)
 		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-			encrypted, resource, msg_id, xhtml, session), show_in_roster = show_in_roster,
-			show_in_systray = show_in_systray)
+			encrypted, resource, msg_id, xhtml, session, form_node),
+			show_in_roster=show_in_roster, show_in_systray=show_in_systray)
 		gajim.events.add_event(account, fjid, event)
 		if popup:
 			if not ctrl:
-				self.new_chat(contact, account, resource = resource_for_chat)
+				self.new_chat(contact, account, resource=resource_for_chat)
 				if path and not self.dragging and gajim.config.get(
 				'scroll_roster_to_last_message'):
 					# we curently see contact in our roster OR he
@@ -4196,8 +4196,8 @@ class RosterWindow:
 		ft = gajim.interface.instances['file_transfers']
 		if event.type_ == 'normal':
 			dialogs.SingleMessageWindow(account, jid,
-				action = 'receive', from_whom = jid, subject = data[1],
-				message = data[0], resource = data[5], session = data[8])
+				action='receive', from_whom=jid, subject=data[1], message=data[0],
+				resource=data[5], session=data[8], form_node=data[9])
 			gajim.interface.remove_first_event(account, jid, event.type_)
 			return True
 		elif event.type_ == 'file-request':

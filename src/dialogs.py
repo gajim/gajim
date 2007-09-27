@@ -29,6 +29,7 @@ import gtkgui_helpers
 import vcard
 import conversation_textview
 import message_control
+import dataforms_widget
 
 from random import randrange
 
@@ -46,6 +47,7 @@ from advanced import AdvancedConfigurationWindow
 
 from common import gajim
 from common import helpers
+from common import dataforms
 from common.exceptions import GajimGeneralException
 
 class EditGroupsDialog:
@@ -1756,8 +1758,8 @@ class SingleMessageWindow:
 	singled message depending on action argument which can be 'send'
 	or 'receive'.
 	'''
-	def __init__(self, account, to = '', action = '', from_whom = '',
-	subject = '', message = '', resource = '', session = None):
+	def __init__(self, account, to='', action='', from_whom='', subject='',
+	message='', resource='', session=None, form_node=None):
 		self.account = account
 		self.action = action
 
@@ -1788,6 +1790,18 @@ class SingleMessageWindow:
 		self.conversation_tv_buffer = self.conversation_textview.tv.get_buffer()
 		self.xml.get_widget('conversation_scrolledwindow').add(
 			self.conversation_textview.tv)
+
+		self.form_widget = None
+		parent_box = self.xml.get_widget('conversation_scrolledwindow').get_parent()
+		if form_node:
+			dataform = dataforms.ExtendForm(node = form_node)
+			self.form_widget = dataforms_widget.DataFormWidget(dataform)
+			self.form_widget.show_all()
+			parent_box.add(self.form_widget)
+			parent_box.child_set_property(self.form_widget, 'position',
+				parent_box.child_get_property(self.xml.get_widget('conversation_scrolledwindow'), 'position'))
+			self.action = 'form'
+
 		self.send_button = self.xml.get_widget('send_button')
 		self.reply_button = self.xml.get_widget('reply_button')
 		self.send_and_close_button = self.xml.get_widget('send_and_close_button')
@@ -1917,6 +1931,17 @@ class SingleMessageWindow:
 			self.reply_button.grab_focus()
 			self.cancel_button.hide()
 			self.close_button.show()
+		elif action == 'form': # prepare UI for Receiving
+			title = _('Form %s') % title 
+			self.send_button.show() 
+			self.send_and_close_button.show() 
+			self.to_label.show() 
+			self.to_entry.show() 
+			self.reply_button.hide() 
+			self.from_label.hide() 
+			self.from_entry.hide() 
+			self.conversation_scrolledwindow.hide() 
+			self.message_scrolledwindow.hide() 
 
 		self.window.set_title(title)
 
@@ -1960,9 +1985,14 @@ class SingleMessageWindow:
 			else:
 				session = gajim.connections[self.account].make_new_session(to_whom_jid)
 
+			if self.form_widget:
+				form_node = self.form_widget.data_form
+			else:
+				form_node = None
 			# FIXME: allow GPG message some day
 			gajim.connections[self.account].send_message(to_whom_jid, message,
-				keyID = None, type = 'normal', subject=subject, session = session)
+				keyID=None, type='normal', subject=subject, session=session,
+				form_node=form_node)
 
 		self.subject_entry.set_text('') # we sent ok, clear the subject
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview

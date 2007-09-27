@@ -820,14 +820,14 @@ class Connection(ConnectionHandlers):
 
 		self.connection.send(msg_iq)
 
-	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
-	chatstate = None, msg_id = None, composing_xep = None, resource = None,
-	user_nick = None, xhtml = None, session = None, forward_from = None):
+	def send_message(self, jid, msg, keyID, type='chat', subject='',
+	chatstate=None, msg_id=None, composing_xep=None, resource=None,
+	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None):
 		if not self.connection:
 			return 1
 		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
 			xhtml = create_xhtml(msg)
-		if not msg and chatstate is None:
+		if not msg and chatstate is None and form_node is None:
 			return 2
 		fjid = jid
 		if resource:
@@ -865,6 +865,9 @@ class Connection(ConnectionHandlers):
 					typ = 'normal', xhtml = xhtml)
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
+
+		if form_node:
+			msg_iq.addChild(node=form_node)
 
 		# JEP-0172: user_nickname
 		if user_nick:
