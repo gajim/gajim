@@ -647,7 +647,8 @@ class ConnectionDisco:
 			common.xmpp.NS_DISCO, frm = to)
 		iq.setAttr('id', id)
 		query = iq.setTag('query')
-		query.setAttr('node','http://gajim.org/caps#' + gajim.version)
+		query.setAttr('node','http://gajim.org/caps#' + gajim.version.split('-',
+			1)[0])
 		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI, \
 						common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
 			feature = common.xmpp.Node('feature')
@@ -726,7 +727,8 @@ class ConnectionDisco:
 			extension = None
 			if node and node.find('#') != -1:
 				extension = node[node.index('#') + 1:]
-			client_version = 'http://gajim.org/caps#' + gajim.version
+			client_version = 'http://gajim.org/caps#' + gajim.version.split('-',
+				1)[0]
 
 			if node in (None, client_version):
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
@@ -848,7 +850,7 @@ class ConnectionVcard:
  
 		if len(ext):
 			c.setAttr('ext', ' '.join(ext))
-		c.setAttr('ver', gajim.version)
+		c.setAttr('ver', gajim.version.split('-', 1)[0])
 		return p
 	
 	def node_to_dict(self, node):

@@ -61,6 +61,7 @@ class OptionsParser:
 			return
 
 		new_version = gajim.config.get('version')
+		new_version = new_version.split('-', 1)[0]
 		for line in fd.readlines():
 			try:
 				line = line.decode('utf-8')
@@ -68,6 +69,7 @@ class OptionsParser:
 				line = line.decode(locale.getpreferredencoding())
 			self.read_line(line)
 		old_version = gajim.config.get('version')
+		old_version = old_version.split('-', 1)[0]
 
 		self.update_config(old_version, new_version)
 		self.old_values = {} # clean mem
