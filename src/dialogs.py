@@ -2601,6 +2601,7 @@ class InvitationReceivedDialog:
 		label_text = '<big><b>%s</b></big>' % pritext
 
 		if comment: # only if not None and not ''
+			comment = gobject.markup_escape_text(comment)
 			sectext = _('Comment: %s') % comment
 			label_text += '\n\n%s' % sectext
 
