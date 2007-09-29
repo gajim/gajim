@@ -1240,6 +1240,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			reply.addChild(node=xmpp.ErrorNode('service-unavailable', typ='cancel'))
 
 			con.send(reply)
+		
+		raise common.xmpp.NodeProcessed
 
 	def _InitE2ECB(self, con, stanza, session):
 		gajim.log.debug('InitE2ECB')
@@ -1247,6 +1249,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		form = common.xmpp.DataForm(node=init.getTag('x'))
 
 		self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
+
+		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
 		gajim.log.debug('ErrorCB')

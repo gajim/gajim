@@ -14,10 +14,22 @@ def describe_features(features):
 	elif features['logging'] == 'mustnot':
 		return _('- messages will not be logged')
 
-def show_sas_dialog(jid, sas):
-	dialogs.InformationDialog(_('''Verify the remote client's identity'''), _('''You've begun an encrypted session with %s, but it can't be guaranteed that you're talking directly to the person you think you are.
+def show_sas_dialog(session, jid, sas, on_success):
+	def success_cb(checked):
+		on_success(checked)
 
-You should speak with them directly (in person or on the phone) and confirm that their Short Authentication String is identical to this one: %s''') % (jid, sas))
+	def failure_cb():
+		session.cancelled_negotiation()
+
+	dialogs.ConfirmationDialogCheck(_('''OK to continue with negotiation?'''),
+		_('''You've begun an encrypted session with %s, but it can't be guaranteed that you're talking directly to the person you think you are.
+
+You should speak with them directly (in person or on the phone) and confirm that their Short Authentication String is identical to this one: %s
+
+Would you like to continue with the encrypted session?''') % (jid, sas),
+
+		_('Yes, I verified the Short Authentication String'),
+		on_response_ok=success_cb, on_response_cancel=failure_cb, is_modal=False)
 
 class FeatureNegotiationWindow:
 	'''FeatureNegotiotionWindow class'''

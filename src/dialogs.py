@@ -294,7 +294,10 @@ class PassphraseDialog:
 
 		self.window.destroy()
 
-		self.ok_handler(passph, checked)
+		if isinstance(self.ok_handler, tuple):
+			self.ok_handler[0](passph, checked, *self.ok_handler[1:])
+		else:
+			self.ok_handler(passph, checked)
 
 	def on_cancelbutton_clicked(self, widget):
 		self.window.destroy()
@@ -1065,10 +1068,13 @@ class YesNoDialog(HigDialog):
 class ConfirmationDialogCheck(ConfirmationDialog):
 	'''HIG compliant confirmation dialog with checkbutton.'''
 	def __init__(self, pritext, sectext='', checktext = '',
-	on_response_ok = None, on_response_cancel = None):
+	on_response_ok = None, on_response_cancel = None, is_modal = True):
+		self.user_response_ok = on_response_ok
+		self.user_response_cancel = on_response_cancel
+
 		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
-			gtk.BUTTONS_OK_CANCEL, pritext, sectext, on_response_ok,
-			on_response_cancel)
+			gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
+			self.on_response_cancel)
 
 		self.set_default_response(gtk.RESPONSE_OK)
 
@@ -1077,7 +1083,18 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 
 		self.checkbutton = gtk.CheckButton(checktext)
 		self.vbox.pack_start(self.checkbutton, expand = False, fill = True)
+		self.set_modal(is_modal)
 		self.popup()
+
+	# XXX should cancel if somebody closes the dialog
+
+	def on_response_ok(self, widget):
+		self.user_response_ok(self.is_checked())
+		self.destroy()
+
+	def on_response_cancel(self, widget):
+		self.user_response_cancel()
+		self.destroy()
 
 	def is_checked(self):
 		''' Get active state of the checkbutton '''

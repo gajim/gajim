@@ -177,6 +177,7 @@ class Config:
 		'tabs_border': [opt_bool, False, _('Show tabbed notebook border in chat windows?')],
 		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
 		'log_encrypted_sessions': [opt_bool, False, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
+		'e2e_public_key': [opt_bool, False, _('When negotiating an encrypted session, should Gajim prefer to use public keys for identification?')],
 		'chat_avatar_width': [opt_int, 52],
 		'chat_avatar_height': [opt_int, 52],
 		'roster_avatar_width': [opt_int, 32],

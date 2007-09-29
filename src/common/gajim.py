@@ -138,14 +138,9 @@ for status in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 
 HAVE_PYCRYPTO = True
 try:
-	from Crypto.PublicKey.RSA import generate
-	import os
+	import Crypto
 except ImportError:
 	HAVE_PYCRYPTO = False
-else:
-	# public key for XEP-0116
-	#FIXME os.urandom is not a cryptographic PRNG
-	pubkey = generate(384, os.urandom)
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')

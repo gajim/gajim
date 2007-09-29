@@ -62,6 +62,10 @@ class DecryptionError(Exception):
 	'''A message couldn't be decrypted into usable XML'''
 	pass
 
+class Cancelled(Exception):
+	'''The user cancelled an operation'''
+	pass
+
 class GajimGeneralException(Exception):
 	'''This exception is our general exception'''
 	def __init__(self, text=''):

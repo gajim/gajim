@@ -7,11 +7,8 @@ from common import exceptions
 import random
 import string
 
-import math
-import os
 import time
 
-from common import dh
 import xmpp.c14n
 
 import base64
@@ -73,6 +70,9 @@ class StanzaSession(object):
 
 	def cancelled_negotiation(self):
 		'''A negotiation has been cancelled, so reset this session to its default state.'''
+
+		# XXX notify the user	
+		
 		self.status = None
 		self.negotiated = {}
 
@@ -100,6 +100,9 @@ if gajim.HAVE_PYCRYPTO:
 	from Crypto.Hash import HMAC, SHA256
 	from Crypto.PublicKey import RSA
 	from common import crypto
+
+	from common import dh
+	import secrets
 
 # an encrypted stanza negotiation has several states. i've represented them
 # as the following values in the 'status' 
@@ -231,11 +234,9 @@ class EncryptedStanzaSession(StanzaSession):
 			return compressed 
 
 	def encrypt(self, encryptable):
-		len_padding = 16 - (len(encryptable) % 16)
-		if len_padding != 16:
-			encryptable += len_padding * ' '
+		padded = crypto.pad_to_multiple(encryptable, 16, ' ', False)
 
-		return self.encrypter.encrypt(encryptable)
+		return self.encrypter.encrypt(padded)
 
 	def decrypt_stanza(self, stanza):
 		c = stanza.getTag(name='c',
@@ -355,7 +356,7 @@ class EncryptedStanzaSession(StanzaSession):
 	def make_identity(self, form, dh_i):
 		if self.negotiated['send_pubkey']:
 			if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
-				pubkey = gajim.interface.get_pubkey(self.conn.name)
+				pubkey = secrets.secrets().my_pubkey(self.conn.name)
 				fields = (pubkey.n, pubkey.e)
 
 				cb_fields = map(lambda f: base64.b64encode(crypto.encode_mpi(f)), fields)
@@ -392,7 +393,8 @@ class EncryptedStanzaSession(StanzaSession):
 			self.sas = crypto.sas_28x5(m_s, self.form_o)
 
 			if self.sigmai:
-				self.check_identity()
+				# XXX save retained secret?
+				self.check_identity(lambda : ())
 		
 		return (xmpp.DataField(name='identity', value=base64.b64encode(id_s)), \
 						xmpp.DataField(name='mac', value=base64.b64encode(m_s)))
@@ -664,18 +666,19 @@ class EncryptedStanzaSession(StanzaSession):
 			self.kc_o, self.km_o, self.ks_o = self.generate_responder_keys(self.k)
 			self.verify_identity(form, self.d, True, 'b')
 		else:
-			secrets = gajim.interface.list_secrets(self.conn.name, self.jid.getStripped()) 
-			rshashes = [self.hmac(self.n_s, rs) for rs in secrets]
+			srses = secrets.secrets().retained_secrets(self.conn.name, self.jid.getStripped()) 
+			rshashes = [self.hmac(self.n_s, rs) for (rs,v) in srses]
 
-			# XXX add some random fake rshashes here
-			rshashes.sort()
+			if not rshashes:
+				# we've never spoken before, but we'll pretend we have
+				rshash_size = self.hash_alg.digest_size
+				rshashes.append(crypto.random_bytes(rshash_size))
 
 			rshashes = [base64.b64encode(rshash) for rshash in rshashes]
 			result.addChild(node=xmpp.DataField(name='rshashes', value=rshashes))
 			result.addChild(node=xmpp.DataField(name='dhkeys', value=base64.b64encode(crypto.encode_mpi(e))))
 		
 			self.form_o = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
-
 
 		# MUST securely destroy K unless it will be used later to generate the final shared secret
 
@@ -722,10 +725,10 @@ class EncryptedStanzaSession(StanzaSession):
 
 		srs = ''
 	
-		secrets = gajim.interface.list_secrets(self.conn.name, self.jid.getStripped())
+		srses = secrets.secrets().retained_secrets(self.conn.name, self.jid.getStripped())
 		rshashes = [base64.b64decode(rshash) for rshash in form.getField('rshashes').getValues()]
 
-		for secret in secrets:
+		for (secret, verified) in srses:
 			if self.hmac(self.n_o, secret) in rshashes:
 				srs = secret
 				break
@@ -766,11 +769,11 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def final_steps_alice(self, form):
 		srs = ''
-		secrets = gajim.interface.list_secrets(self.conn.name, self.jid.getStripped())
+		srses = secrets.secrets().retained_secrets(self.conn.name, self.jid.getStripped())
 
 		srshash = base64.b64decode(form['srshash'])
 
-		for secret in secrets:
+		for (secret, verified) in srses:
 			if self.hmac(secret, 'Shared Retained Secret') == srshash:
 				srs = secret
 				break
@@ -805,10 +808,18 @@ class EncryptedStanzaSession(StanzaSession):
 		bjid = self.jid.getStripped()
 
 		if srs:
-			gajim.interface.replace_secret(account, bjid, srs, new_srs)
+			if secrets.secrets().srs_verified(account, bjid, srs):
+				secrets.secrets().replace_srs(account, bjid, srs, new_srs, True)
+			else:
+				def _cb(verified):
+					secrets.secrets().replace_srs(account, bjid, srs, new_srs, verified)
+
+				self.check_identity(_cb)
 		else:
-			self.check_identity()
-			gajim.interface.save_new_secret(account, bjid, new_srs)
+			def _cb(verified):
+				secrets.secrets().save_new_srs(account, bjid, new_srs, verified)
+
+			self.check_identity(_cb)
 
 	def make_dhfield(self, modp_options, sigmai):
 		dhs = []

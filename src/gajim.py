@@ -126,8 +126,6 @@ from common import dbus_support
 if dbus_support.supported:
 	import dbus
 
-import pickle
-
 if os.name == 'posix': # dl module is Unix Only
 	try: # rename the process name to gajim
 		import dl
@@ -222,7 +220,6 @@ gajimpaths = common.configpaths.gajimpaths
 
 pid_filename = gajimpaths['PID_FILE']
 config_filename = gajimpaths['CONFIG_FILE']
-secrets_filename = gajimpaths['SECRETS_FILE']
 
 import traceback
 import errno
@@ -1529,48 +1526,6 @@ class Interface:
 			if os.path.isfile(path_to_file + '_notif_size_bw' + ext):
 				os.remove(path_to_file + '_notif_size_bw' + ext)
 
-	# list the retained secrets we have for a local account and a remote jid
-	def list_secrets(self, account, jid):
-		f = open(secrets_filename)
-
-		try:
-			s = pickle.load(f)[account][jid]
-		except KeyError:
-			s = []
-
-		f.close()
-		return s
-
-	# save a new retained secret
-	def save_new_secret(self, account, jid, secret):
-		f = open(secrets_filename, 'r')
-		secrets = pickle.load(f)
-		f.close()
-
-		if not account in secrets:
-			secrets[account] = {}
-
-		if not jid in secrets[account]:
-			secrets[account][jid] = []
-
-		secrets[account][jid].append(secret)
-
-		f = open(secrets_filename, 'w')
-		pickle.dump(secrets, f)
-		f.close()
-
-	def replace_secret(self, account, jid, old_secret, new_secret):
-		f = open(secrets_filename, 'r')
-		secrets = pickle.load(f)
-		f.close()
-
-		this_secrets = secrets[account][jid]
-		this_secrets[this_secrets.index(old_secret)] = new_secret
-
-		f = open(secrets_filename, 'w')
-		pickle.dump(secrets, f)
-		f.close()
-		
 	def add_event(self, account, jid, type_, event_args):
 		'''add an event to the gajim.events var'''
 		# We add it to the gajim.events queue
@@ -1867,109 +1822,126 @@ class Interface:
 
 		# encrypted session states. these are described in stanza_session.py
 
-		# bob responds
-		if form.getType() == 'form' and 'security' in form.asDict():
-			def continue_with_negotiation(*args):
-				if len(args):
+		try:
+			# bob responds
+			if form.getType() == 'form' and 'security' in form.asDict():
+				def continue_with_negotiation(*args):
+					if len(args):
+						self.dialog.destroy()
+
+					# we don't support 3-message negotiation as the responder
+					if 'dhkeys' in form.asDict():
+						err = xmpp.Error(xmpp.Message(), xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
+
+						feature = xmpp.Node(xmpp.NS_FEATURE + ' feature')
+						field = xmpp.Node('field')
+						field['var'] = 'dhkeys'
+						
+						feature.addChild(node=field)
+						err.addChild(node=feature)
+
+						session.send(err)
+						return
+
+					negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
+
+					if ask_user:
+						def accept_nondefault_options(widget):
+							self.dialog.destroy()
+							negotiated.update(ask_user)
+							session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+						def reject_nondefault_options(widget):
+							self.dialog.destroy()
+							for key in ask_user.keys():
+								not_acceptable.append(key)
+							session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+						self.dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+							_('''The remote client wants to negotiate an session with these features:
+
+		%s
+
+		Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
+								on_response_yes = accept_nondefault_options,
+								on_response_no = reject_nondefault_options)
+					else:
+						session.respond_e2e_bob(form, negotiated, not_acceptable)
+
+				def ignore_negotiation(widget):
 					self.dialog.destroy()
-
-				# we don't support 3-message negotiation as the responder
-				if 'dhkeys' in form.asDict():
-					err = xmpp.Error(xmpp.Message(), xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
-
-					feature = xmpp.Node(xmpp.NS_FEATURE + ' feature')
-					field = xmpp.Node('field')
-					field['var'] = 'dhkeys'
-					
-					feature.addChild(node=field)
-					err.addChild(node=feature)
-
-					session.send(err)
 					return
 
-				negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
+				continue_with_negotiation()
+
+				return
+
+			# alice accepts
+			elif session.status == 'requested-e2e' and form.getType() == 'submit':
+				negotiated, not_acceptable, ask_user = session.verify_options_alice(form)
+
+				if session.sigmai:
+					def _cb(on_success):
+						negotiation.show_sas_dialog(session, jid, session.sas, on_success)
+
+					session.check_identity = _cb
 
 				if ask_user:
 					def accept_nondefault_options(widget):
-						self.dialog.destroy()
+						dialog.destroy()
+
 						negotiated.update(ask_user)
-						session.respond_e2e_bob(form, negotiated, not_acceptable)
+			
+						try:
+							session.accept_e2e_alice(form, negotiated)
+						except exceptions.NegotiationError, details:
+							session.fail_bad_negotiation(details)
 
 					def reject_nondefault_options(widget):
-						self.dialog.destroy()
-						for key in ask_user.keys():
-							not_acceptable.append(key)
-						session.respond_e2e_bob(form, negotiated, not_acceptable)
+						session.reject_negotiation()
+						dialog.destroy()
 
-					self.dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-						_('''The remote client wants to negotiate an session with these features:
-
-	%s
-
-	Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
+					dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+							_('The remote client selected these options:\n\n%s\n\nContinue with the session?') % (negotiation.describe_features(ask_user)),
 							on_response_yes = accept_nondefault_options,
 							on_response_no = reject_nondefault_options)
 				else:
-					session.respond_e2e_bob(form, negotiated, not_acceptable)
-
-			def ignore_negotiation(widget):
-				self.dialog.destroy()
-				return
-
-			continue_with_negotiation()
-
-			return
-
-		# alice accepts
-		elif session.status == 'requested-e2e' and form.getType() == 'submit':
-			negotiated, not_acceptable, ask_user = session.verify_options_alice(form)
-
-			if session.sigmai:
-				session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
-
-			if ask_user:
-				def accept_nondefault_options(widget):
-					dialog.destroy()
-
-					negotiated.update(ask_user)
-		
 					try:
 						session.accept_e2e_alice(form, negotiated)
-					except exceptions.NegotiationError, details:
+					except exceptions.NegotiationError, details: 
 						session.fail_bad_negotiation(details)
 
-				def reject_nondefault_options(widget):
-					session.reject_negotiation()
-					dialog.destroy()
+				return
+			elif session.status == 'responded-e2e' and form.getType() == 'result':
 
-				dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-						_('The remote client selected these options:\n\n%s\n\nContinue with the session?') % (negotiation.describe_features(ask_user)),
-						on_response_yes = accept_nondefault_options,
-						on_response_no = reject_nondefault_options)
-			else:
+				def _cb(on_success):
+					negotiation.show_sas_dialog(session, jid, session.sas, on_success)
+
+				session.check_identity = _cb
+
 				try:
-					session.accept_e2e_alice(form, negotiated)
+					session.accept_e2e_bob(form)
 				except exceptions.NegotiationError, details: 
 					session.fail_bad_negotiation(details)
 
-			return
-		elif session.status == 'responded-e2e' and form.getType() == 'result':
-			session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
+				return
+			elif session.status == 'identified-alice' and form.getType() == 'result':
+				def _cb(on_success):
+					negotiation.show_sas_dialog(session, jid, session.sas, on_success)
 
-			try:
-				session.accept_e2e_bob(form)
-			except exceptions.NegotiationError, details: 
-				session.fail_bad_negotiation(details)
+				session.check_identity = _cb
+				
+				try:
+					session.final_steps_alice(form)
+				except exceptions.NegotiationError, details: 
+					session.fail_bad_negotiation(details)
 
-			return
-		elif session.status == 'identified-alice' and form.getType() == 'result':
-			session.check_identity = lambda: negotiation.show_sas_dialog(jid, session.sas)
+				return
+		except exceptions.Cancelled:
+			# user cancelled the negotiation
+
+			session.cancelled_negotiation()
 			
-			try:
-				session.final_steps_alice(form)
-			except exceptions.NegotiationError, details: 
-				session.fail_bad_negotiation(details)
-
 			return
 		
 		if form.getField('terminate'):
@@ -2823,12 +2795,6 @@ if __name__ == '__main__':
 					cli.set_restart_command(len(argv), argv)
 		
 	check_paths.check_and_possibly_create_paths()
-
-	# create secrets file (unless it exists)
-	if not os.path.exists(secrets_filename):
-		f = open(secrets_filename, 'w')
-		pickle.dump({}, f)
-		f.close()
 
 	Interface()
 	gtk.main()

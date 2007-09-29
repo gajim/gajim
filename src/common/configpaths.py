@@ -110,6 +110,7 @@ class ConfigPaths:
 		if len(profile) > 0:
 			conffile += u'.' + profile
 			pidfile += u'.' + profile
+			secretsfile += u'.' + profile
 		pidfile += u'.pid'
 		self.add_from_root('CONFIG_FILE', conffile)
 		self.add_from_root('PID_FILE', pidfile)
