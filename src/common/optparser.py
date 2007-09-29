@@ -166,6 +166,8 @@ class OptionsParser:
 			self.update_config_to_01114()
 		if old < [0, 11, 1, 5] and new >= [0, 11, 1, 5]:
 			self.update_config_to_01115()
+		if old < [0, 11, 2, 1] and new >= [0, 11, 2, 1]:
+			self.update_config_to_01121()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -479,3 +481,16 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.1.5')
+
+	def update_config_to_01121(self):
+		# remove old unencrypted secrets file
+		from common.configpaths import gajimpaths
+
+		new_file = gajimpaths['SECRETS_FILE']
+
+		old_file = os.path.dirname(new_file) + '/secrets'
+
+		if os.path.exists(old_file):
+			os.remove(old_file)
+
+		gajim.config.set('version', '0.11.2.1')
