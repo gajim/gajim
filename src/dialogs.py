@@ -1089,11 +1089,13 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 	# XXX should cancel if somebody closes the dialog
 
 	def on_response_ok(self, widget):
-		self.user_response_ok(self.is_checked())
+		if self.user_response_ok:
+			self.user_response_ok(self.is_checked())
 		self.destroy()
 
 	def on_response_cancel(self, widget):
-		self.user_response_cancel()
+		if self.user_response_cancel:
+			self.user_response_cancel()
 		self.destroy()
 
 	def is_checked(self):
