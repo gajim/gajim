@@ -1244,7 +1244,11 @@ class ChatControl(ChatControlBase):
 			message_array = []
 
 		if command == 'me':
-			return False # This is not really a command
+			if len(message_array):
+				return False # /me is not really a command
+			else:
+				self.get_command_help(command)
+				return True  # do not send "/me" as message
 
 		if command == 'help':
 			if len(message_array):
