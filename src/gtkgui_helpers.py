@@ -644,12 +644,10 @@ def possibly_set_gajim_as_xmpp_handler():
 	else:
 		path_to_kde_file = None
 
-	def set_gajim_as_xmpp_handler(widget = None):
-		if widget:
+	def set_gajim_as_xmpp_handler(is_checked=None):
+		if is_checked != None:
 			# come from confirmation dialog
-			gajim.config.set('check_if_gajim_is_default',
-				dlg.checkbutton.get_active())
-			dlg.destroy()
+			gajim.config.set('check_if_gajim_is_default', is_checked)
 		path_to_gajim_script, typ = get_abspath_for_script('gajim-remote', True)
 		if path_to_gajim_script:
 			if typ == 'svn':
@@ -712,10 +710,9 @@ Description=xmpp
 		sectext = _('Would you like to make Gajim the default Jabber client?')
 		checktext = _('Always check to see if Gajim is the default Jabber client '
 			'on startup')
-		def on_cancel(widget):
+		def on_cancel():
 			gajim.config.set('check_if_gajim_is_default',
-				dlg.checkbutton.get_active())
-			dlg.destroy()
+				dlg.is_checked())
 		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
 			set_gajim_as_xmpp_handler, on_cancel)
 		if gajim.config.get('check_if_gajim_is_default'):

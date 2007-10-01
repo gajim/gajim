@@ -1598,8 +1598,6 @@ class GroupchatControl(ChatControlBase):
 			if dialog.is_checked(): # user does not want to be asked again
 				gajim.config.set('confirm_close_muc', False)
 
-			dialog.destroy()
-
 		return retval
 
 	def set_control_active(self, state):

@@ -3319,12 +3319,11 @@ class RosterWindow:
 
 	def on_req_usub(self, widget, list_):
 		'''Remove a contact. list_ is a list of (contact, account) tuples'''
-		def on_ok(widget, list_):
-			self.dialog.destroy()
+		def on_ok(is_checked, list_):
 			remove_auth = True
 			if len(list_) == 1:
 				contact = list_[0][0]
-				if contact.sub != 'to' and self.dialog.is_checked():
+				if contact.sub != 'to' and is_checked:
 					remove_auth = False
 			for (contact, account) in list_:
 				gajim.connections[account].unsubscribe(contact.jid, remove_auth)
@@ -4804,10 +4803,9 @@ class RosterWindow:
 				'server'),
 				_('Your server does not support storing metacontacts information. '
 				'So those information will not be saved on next reconnection.'))
-		def merge_contacts(widget = None):
-			if widget: # dialog has been shown
-				dlg.destroy()
-				if dlg.is_checked(): # user does not want to be asked again
+		def merge_contacts(is_checked=None):
+			if is_checked != None: # dialog has been shown
+				if is_checked: # user does not want to be asked again
 					gajim.config.set('confirm_metacontacts', 'no')
 				else:
 					gajim.config.set('confirm_metacontacts', 'yes')
