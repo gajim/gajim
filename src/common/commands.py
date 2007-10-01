@@ -288,6 +288,8 @@ class ConnectionCommands:
 		iq = iq_obj.buildReply('result')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		q = iq.getTag('query')
+		# buildReply don't copy the node attribute. Re-add it
+		q.setAttr('node', xmpp.NS_COMMANDS)
 
 		for node, cmd in self.__commands.iteritems():
 			if cmd.isVisibleFor(self.isSameJID(jid)):
