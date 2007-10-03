@@ -64,6 +64,7 @@ class BaseTooltip:
 		self.win.set_border_width(3)
 		self.win.set_resizable(False)
 		self.win.set_name('gtk-tooltips')
+		self.win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
 		
 		self.win.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.win.connect_after('expose_event', self.expose)
