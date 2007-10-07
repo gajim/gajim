@@ -3398,10 +3398,14 @@ class TransformChatToMUC:
 
 		# set jabber id and pseudos
 		for account in gajim.contacts.get_accounts():
+			if gajim.connections[account].is_zeroconf:
+				continue
 			for jid in gajim.contacts.get_jid_list(account):
 				contact = \
 					gajim.contacts.get_contact_with_highest_priority(account, jid)
 				contact_transport = gajim.get_transport_name_from_jid(jid)
+				# do not add transports, zeroconf contacs, minimized groupchats
+				# and selfjid to list of invitable jids
 				if contact.jid not in self.auto_jids and contact.jid != \
 				gajim.get_jid_from_account(self.account) and not contact_transport \
 				and not contact.is_transport() and contact.jid not in \
