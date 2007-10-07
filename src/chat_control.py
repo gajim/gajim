@@ -2038,7 +2038,8 @@ class ChatControl(ChatControlBase):
 		# so this line adds that
 		window.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		window.set_app_paintable(True)
-		window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
+		if gtk.gtk_version >= (2, 10, 0) and gtk.pygtk_version >= (2, 10, 0):
+			window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
 		
 		window.realize()
 		window.window.set_back_pixmap(pixmap, False) # make it transparent
