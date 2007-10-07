@@ -716,7 +716,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id, composing_jep, user_nick, msghtml, thread))
+				chatstate, msg_id, composing_xep, user_nick, msghtml, thread))
 		elif mtype == 'normal': # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
