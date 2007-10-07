@@ -50,7 +50,7 @@ except:
 # the next script, executed in the "po" directory,
 # generates the following list.
 ##!/bin/sh
-#LANG=$(for i in *.po; do  j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
+#LANG=$(for i in *.po; do j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
 #echo "{_('en'):'en'",$LANG"}"
 langs = {_('English'): 'en', _('Belarusian'): 'be', _('Bulgarian'): 'bg', _('Breton'): 'br', _('Czech'): 'cs', _('German'): 'de', _('Greek'): 'el', _('British'): 'en_GB', _('Esperanto'): 'eo', _('Spanish'): 'es', _('Basque'): 'eu', _('French'): 'fr', _('Croatian'): 'hr', _('Italian'): 'it', _('Norwegian (b)'): 'nb', _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl', _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR', _('Russian'): 'ru', _('Serbian'): 'sr', _('Slovak'): 'sk', _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
 
@@ -60,7 +60,7 @@ class ChatControlBase(MessageControl):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
 	def get_font_attrs(self):
-		''' get pango font  attributes for banner from theme settings '''
+		''' get pango font attributes for banner from theme settings '''
 		theme = gajim.config.get('roster_theme')
 		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
 		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
@@ -406,7 +406,7 @@ class ChatControlBase(MessageControl):
 					# get the cursor position
 					cursor = msg_tv.get_iter_location(buf.get_iter_at_mark(
 						buf.get_insert()))
-					cursor =  msg_tv.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
+					cursor = msg_tv.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
 						cursor.x, cursor.y)
 					x = origin[0] + cursor[0]
 					y = origin[1] + size[1]
@@ -523,7 +523,7 @@ class ChatControlBase(MessageControl):
 
 	def _on_drag_data_received(self, widget, context, x, y, selection,
 		target_type, timestamp):
-		pass  # Derived classes SHOULD implement this method
+		pass # Derived classes SHOULD implement this method
 
 	def _on_drag_leave(self, widget, context, time):
 		# FIXME: DND on non editable TextView, find a better way
@@ -618,7 +618,7 @@ class ChatControlBase(MessageControl):
 
 		if kind in ('incoming', 'incoming_queue'):
 			gc_message = False
-			if self.type_id  == message_control.TYPE_GC:
+			if self.type_id == message_control.TYPE_GC:
 				gc_message = True
 
 			if ((self.parent_win and (not self.parent_win.get_active_jid() or \
@@ -800,7 +800,7 @@ class ChatControlBase(MessageControl):
 		# but we also want to avoid window resizing so if we reach that 
 		# minimum for conversation_textview and maximum for message_textview
 		# we set to automatic the scrollbar policy
-		diff_y =  message_height - requisition.height
+		diff_y = message_height - requisition.height
 		if diff_y != 0:
 			if conversation_height + diff_y < min_height:
 				if message_height + conversation_height - min_height > min_height:
@@ -1058,7 +1058,7 @@ class ChatControl(ChatControlBase):
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			id = menuitem.connect('activate', 
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.contact.jid, self.account, self.contact.get_shown_name() +  
+				self.contact.jid, self.account, self.contact.get_shown_name() + \
 					'.jpeg')
 			self.handlers[id] = menuitem
 			menu.append(menuitem)
@@ -1248,7 +1248,7 @@ class ChatControl(ChatControlBase):
 				return False # /me is not really a command
 			else:
 				self.get_command_help(command)
-				return True  # do not send "/me" as message
+				return True # do not send "/me" as message
 
 		if command == 'help':
 			if len(message_array):
@@ -1584,8 +1584,8 @@ class ChatControl(ChatControlBase):
 		information_menuitem = xml.get_widget('information_menuitem')
 		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
 		muc_icon = gajim.interface.roster.load_icon('muc_active')
-                if muc_icon:
-                        convert_to_gc_menuitem.set_image(muc_icon) 
+		if muc_icon:
+			convert_to_gc_menuitem.set_image(muc_icon) 
 
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
 		history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK,
@@ -1621,8 +1621,8 @@ class ChatControl(ChatControlBase):
 			send_file_menuitem.set_sensitive(False)
 
 		# check if it's possible to convert to groupchat
-		if gajim.get_transport_name_from_jid(jid) or gajim.connections[self.account].\
-				is_zeroconf:
+		if gajim.get_transport_name_from_jid(jid) or \
+		gajim.connections[self.account].is_zeroconf:
 			convert_to_gc_menuitem.set_sensitive(False)
 
 		# add_to_roster_menuitem
