@@ -1583,6 +1583,9 @@ class ChatControl(ChatControlBase):
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
+		muc_icon = gajim.interface.roster.load_icon('muc_active')
+                if muc_icon:
+                        convert_to_gc_menuitem.set_image(muc_icon) 
 
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
 		history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK,
@@ -1618,7 +1621,8 @@ class ChatControl(ChatControlBase):
 			send_file_menuitem.set_sensitive(False)
 
 		# check if it's possible to convert to groupchat
-		if gajim.get_transport_name_from_jid(jid):
+		if gajim.get_transport_name_from_jid(jid) or gajim.connections[self.account].\
+				is_zeroconf:
 			convert_to_gc_menuitem.set_sensitive(False)
 
 		# add_to_roster_menuitem
