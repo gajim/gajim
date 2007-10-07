@@ -656,6 +656,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 		chatstate = None
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
 		decmsg = ''
+		form_node = msg.getTag('x', namespace = common.xmpp.NS_DATA)
 		# invitations
 		invite = None
 		if not encTag:
@@ -716,14 +717,16 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id, composing_xep, user_nick, msghtml, thread))
+				chatstate, msg_id, composing_xep, user_nick, msghtml, thread,
+				form_node))
 		elif mtype == 'normal': # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			if invite:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, chatstate, msg_id, composing_xep, user_nick))
+					subject, chatstate, msg_id, composing_xep, user_nick, msghtml,
+					thread, form_node))
 	# END messageCB
 	
 	def parse_data_form(self, node):
