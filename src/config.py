@@ -1645,10 +1645,7 @@ class AccountsWindow:
 					win_opened = True
 					break
 		# Detect if we have opened windows for this account
-		self.dialog = None
-		def remove(widget, account):
-			if self.dialog:
-				self.dialog.destroy()
+		def remove(account):
 			if gajim.interface.instances[account].has_key('remove_account'):
 				gajim.interface.instances[account]['remove_account'].window.\
 					present()
@@ -1656,13 +1653,13 @@ class AccountsWindow:
 				gajim.interface.instances[account]['remove_account'] = \
 					RemoveAccountWindow(account)
 		if win_opened:
-			self.dialog = dialogs.ConfirmationDialog(
+			dialog = dialogs.ConfirmationDialog(
 				_('You have opened chat in account %s') % account,
 				_('All chat and groupchat windows will be closed. Do you want to '
 				'continue?'),
 				on_response_ok = (remove, account))
 		else:
-			remove(widget, account)
+			remove(account)
 
 	def on_rename_button_clicked(self, widget):
 		if gajim.connections[self.current_account].connected != 0:
@@ -2524,9 +2521,7 @@ class RemoveAccountWindow:
 		self.window.show_all()
 
 	def on_remove_button_clicked(self, widget):
-		def remove(widget):
-			if self.dialog:
-				self.dialog.destroy()
+		def remove():
 			if gajim.connections[self.account].connected and \
 			not self.remove_and_unregister_radiobutton.get_active():
 				# change status to offline only if we will not remove this JID from
@@ -2549,14 +2544,13 @@ class RemoveAccountWindow:
 			else:
 				self._on_remove_success(True)
 
-		self.dialog = None
 		if gajim.connections[self.account].connected:
-			self.dialog = dialogs.ConfirmationDialog(
+			dialog = dialogs.ConfirmationDialog(
 				_('Account "%s" is connected to the server') % self.account,
 				_('If you remove it, the connection will be lost.'),
 				on_response_ok = remove)
 		else:
-			remove(None)
+			remove()
 	
 	def _on_remove_success(self, res):
 		# action of unregistration has failed, we don't remove the account

@@ -1524,8 +1524,7 @@ class RosterWindow:
 				gajim.contacts.remove_contact(account, contact)
 				return
 
-		def remove(widget, list_):
-			self.dialog.destroy()
+		def remove(list_):
 			for (contact, account) in list_:
 				full_jid = contact.get_full_jid()
 				gajim.connections[account].unsubscribe_agent(full_jid)
@@ -1557,7 +1556,7 @@ class RosterWindow:
 			jids = jids[:-1] + '.'
 			sectext = _('You will no longer be able to send and receive messages '
 				'to contacts from these transports:%s') % jids
-		self.dialog = dialogs.ConfirmationDialog(pritext, sectext,
+		dialogs.ConfirmationDialog(pritext, sectext,
 			on_response_ok = (remove, list_))
 
 	def on_block(self, widget, iter, group_list):
@@ -3345,18 +3344,22 @@ class RosterWindow:
 					if _('Not in Roster') in contact.groups:
 						gajim.events.remove_events(account, contact.jid)
 					self.readd_if_needed(contact, account)
+
+		def on_ok2(list_):
+			on_ok(False, list_)
+
 		if len(list_) == 1:
 			contact = list_[0][0]
 			account = list_[0][1]
 			pritext = _('Contact "%s" will be removed from your roster') % \
 				contact.get_shown_name()
 			if contact.sub == 'to':
-				self.dialog = dialogs.ConfirmationDialog(pritext,
+				dialogs.ConfirmationDialog(pritext,
 					_('By removing this contact you also remove authorization '
 					'resulting in him or her always seeing you as offline.'),
-					on_response_ok = (on_ok, list_))
+					on_response_ok = (on_ok2, list_))
 			else:
-				self.dialog = dialogs.ConfirmationDialogCheck(pritext,
+				dialogs.ConfirmationDialogCheck(pritext,
 					_('By removing this contact you also by default remove '
 					'authorization resulting in him or her always seeing you as '
 					'offline.'),
@@ -3371,7 +3374,7 @@ class RosterWindow:
 			sectext = _('By removing these contacts:%s\nyou also remove '
 				'authorization resulting in them always seeing you as offline.') % \
 				jids
-			self.dialog = dialogs.ConfirmationDialog(pritext, sectext,
+			dialogs.ConfirmationDialog(pritext, sectext,
 				on_response_ok = (on_ok, list_))
 
 
@@ -3530,24 +3533,21 @@ class RosterWindow:
 		return False
 
 	def change_status(self, widget, account, status):
-		def change(widget, account, status):
-			if self.dialog:
-				self.dialog.destroy()
+		def change(account, status):
 			message = self.get_status_message(status)
 			if message is None:
 				# user pressed Cancel to change status message dialog
 				return
 			self.send_status(account, status, message)
 
-		self.dialog = None
 		if status == 'invisible' and self.connected_rooms(account):
-			self.dialog = dialogs.ConfirmationDialog(
+			dialogs.ConfirmationDialog(
 				_('You are participating in one or more group chats'),
 				_('Changing your status to invisible will result in disconnection '
 				'from those group chats. Are you sure you want to go invisible?'),
 				on_response_ok = (change, account, status))
 		else:
-			change(None, account, status)
+			change(account, status)
 
 	def on_send_custom_status(self, widget, contact_list, show, group=None):
 		'''send custom status'''
@@ -4936,8 +4936,7 @@ class RosterWindow:
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
 			nb_uri = len(uri_splitted)
-			def _on_send_files(widget, account, jid, uris):
-				dialog.destroy()
+			def _on_send_files(account, jid, uris):
 				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
 				for uri in uris:
 					path = helpers.get_file_path_from_dnd_dropped_uri(uri)
@@ -4952,7 +4951,7 @@ class RosterWindow:
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				sec_text += '\n' + os.path.basename(path)
-			dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
+			dialogs.NonModalConfirmationDialog(prim_text, sec_text,
 				on_response_ok = (_on_send_files, account_dest, jid_dest,
 				uri_splitted))
 			dialog.popup()

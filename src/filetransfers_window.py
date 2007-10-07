@@ -294,8 +294,7 @@ _('Connection with peer cannot be established.'))
 		prim_text = _('%s wants to send you a file:') % contact.jid
 		dialog, dialog2 = None, None
 
-		def on_response_ok(widget, account, contact, file_props):
-			dialog.destroy()
+		def on_response_ok(account, contact, file_props):
 
 			def on_ok(widget, account, contact, file_props):
 				file_path = dialog2.get_filename()
@@ -348,8 +347,7 @@ _('Connection with peer cannot be established.'))
 			dialog2.connect('delete-event', lambda widget, event:
 				on_cancel(widget, account, contact, file_props))
 
-		def on_response_cancel(widget, account, file_props):
-			dialog.destroy()
+		def on_response_cancel(account, file_props):
 			gajim.connections[account].send_file_rejection(file_props)
 
 		dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,

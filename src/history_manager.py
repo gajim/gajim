@@ -481,9 +481,8 @@ class HistoryManager:
 		if paths_len == 0: # nothing is selected
 			return
 
-		def on_ok(widget, liststore, list_of_paths):
+		def on_ok(liststore, list_of_paths):
 			# delete all rows from db that match jid_id
-			self.dialog.destroy()
 			list_of_rowrefs = []
 			for path in list_of_paths: # make them treerowrefs (it's needed)
 				list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
@@ -514,7 +513,7 @@ class HistoryManager:
 			'Do you really want to delete logs of the selected contact?',
 			'Do you really want to delete logs of the selected contacts?',
 			paths_len)
-		self.dialog = dialogs.ConfirmationDialog(pri_text,
+		dialogs.ConfirmationDialog(pri_text,
 			_('This is an irreversible operation.'), on_response_ok = (on_ok,
 			liststore, list_of_paths))
 
@@ -523,8 +522,7 @@ class HistoryManager:
 		if paths_len == 0: # nothing is selected
 			return
 
-		def on_ok(widget, liststore, list_of_paths):
-			self.dialog.destroy()
+		def on_ok(liststore, list_of_paths):
 			# delete rows from db that match log_line_id
 			list_of_rowrefs = []
 			for path in list_of_paths: # make them treerowrefs (it's needed)
@@ -550,7 +548,7 @@ class HistoryManager:
 		pri_text = i18n.ngettext(
 			'Do you really want to delete the selected message?',
 			'Do you really want to delete the selected messages?', paths_len)
-		self.dialog = dialogs.ConfirmationDialog(pri_text,
+		dialogs.ConfirmationDialog(pri_text,
 			_('This is an irreversible operation.'), on_response_ok = (on_ok,
 			liststore, list_of_paths))
 

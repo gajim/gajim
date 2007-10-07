@@ -850,9 +850,7 @@ class GroupchatControl(ChatControlBase):
 
 	def on_send_file(self, widget, gc_contact):
 		'''sends a file to a contact in the room'''
-		def _on_send_files(widget, gc_c):
-			if widget:
-				widget.destroy()
+		def _on_send_files(gc_c):
 			gajim.interface.instances['file_transfers'].show_file_send_request(
 				self.account, gc_c)
 		self_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
@@ -865,7 +863,7 @@ class GroupchatControl(ChatControlBase):
 				on_response_ok = (_on_send_files, gc_contact))
 			dialog.popup()
 		else:
-			_on_send_files(None, gc_contact)
+			_on_send_files(gc_contact)
 
 	def draw_contact(self, nick, selected=False, focus=False):
 		iter = self.get_contact_iter(nick)
