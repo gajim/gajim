@@ -593,6 +593,7 @@ class ConnectionBytestream:
 		file_props['sender'] = unicode(iq_obj.getFrom())
 		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
 		file_props['sid'] = unicode(si.getAttr('id'))
+		file_props['transfered_size'] = []
 		gajim.socks5queue.add_file_props(self.name, file_props)
 		self.dispatch('FILE_REQUEST', (jid, file_props))
 		raise common.xmpp.NodeProcessed
