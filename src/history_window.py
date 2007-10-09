@@ -142,6 +142,10 @@ class HistoryWindow:
 		self.history_textview.del_handlers()
 		del gajim.interface.instances['logs']
 
+	def on_history_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape:
+			self.window.destroy()
+
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
