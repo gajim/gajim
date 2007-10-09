@@ -1945,7 +1945,7 @@ returns the session that we last sent a message to.'''
 			else:
 				if not status:
 					status = _('I would like to add you to my roster.')
-				self.dispatch('SUBSCRIBE', (who, status, user_nick))
+				self.dispatch('SUBSCRIBE', (jid_stripped, status, user_nick))
 		elif ptype == 'subscribed':
 			if jid_stripped in self.automatically_added:
 				self.automatically_added.remove(jid_stripped)
