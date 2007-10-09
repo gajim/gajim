@@ -351,7 +351,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None, 
-	user_nick = None):
+	user_nick = None, session=None):
 		fjid = jid
 
 		if not self.connection:
@@ -412,12 +412,20 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				if chatstate is 'composing' or msgtxt: 
 					chatstate_node.addChild(name = 'composing') 
 
+		if session:
+			session.last_send = time.time()
+			msg_iq.setThread(session.thread_id)
+
+			if session.enable_encryption:
+				msg_iq = session.encrypt_stanza(msg_iq)
+
 		if not self.connection.send(msg_iq, msg != None):
 			return
 
 		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 		ji = gajim.get_jid_without_resource(jid)
-		if self.name not in no_log_for and ji not in no_log_for:
+		if session.is_loggable() and self.name not in no_log_for and\
+		ji not in no_log_for:
 			log_msg = msg
 			if subject:
 				log_msg = _('Subject: %s\n%s') % (subject, msg)
