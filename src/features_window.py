@@ -98,6 +98,10 @@ class FeaturesWindow:
 				_('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
 				_('Requires python-docutils.'),
 				_('Requires python-docutils.')),
+			_('libsexy'): (self.pysexy_available,
+				_('Ability to have clickable URLs in chat window.'),
+				_('Requires python-sexy.'),
+				_('Requires python-sexy.')),
 		}
 
 		# name, supported
@@ -294,3 +298,7 @@ class FeaturesWindow:
 		except:
 			return False
 		return True
+
+	def pysexy_available(self):
+		from common import gajim
+		return gajim.HAVE_PYSEXY

@@ -481,6 +481,7 @@ class GroupchatControl(ChatControlBase):
 		houses the room jid, subject. 
 		'''
 		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
+		self.banner_status_label.set_ellipsize(pango.ELLIPSIZE_END)
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		if self.is_continued:
 			nicks = []
@@ -495,15 +496,21 @@ class GroupchatControl(ChatControlBase):
 			text = '<span %s>%s</span>' % (font_attrs, title)
 		else:
 			text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
+		self.name_label.set_markup(text)
+
 		if self.subject:
 			subject = helpers.reduce_chars_newlines(self.subject, max_lines = 2)
 			subject = gobject.markup_escape_text(subject)
-			text += '\n<span %s>%s</span>' % (font_attrs_small, subject)
+			if gajim.HAVE_PYSEXY:
+				subject_text = self.urlfinder.sub(self.make_href, subject)
+				subject_text = '<span %s>%s</span>' % (font_attrs_small,
+					subject_text)
+			else:
+				subject_text = '<span %s>%s</span>' % (font_attrs_small, subject)
+			self.banner_status_label.set_markup(subject_text)
 
 			# tooltip must always hold ALL the subject
 			self.subject_tooltip.set_tip(self.event_box, self.subject)
-
-		self.name_label.set_markup(text)
 
 	def prepare_context_menu(self):
 		'''sets sensitivity state for configure_room'''

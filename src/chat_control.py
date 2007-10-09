@@ -28,6 +28,7 @@ import message_control
 import dialogs
 import history_window
 import notify
+import re
 
 from common import gajim
 from common import helpers
@@ -46,7 +47,6 @@ try:
 except:
 	HAS_GTK_SPELL = False
 
-
 # the next script, executed in the "po" directory,
 # generates the following list.
 ##!/bin/sh
@@ -54,11 +54,15 @@ except:
 #echo "{_('en'):'en'",$LANG"}"
 langs = {_('English'): 'en', _('Belarusian'): 'be', _('Bulgarian'): 'bg', _('Breton'): 'br', _('Czech'): 'cs', _('German'): 'de', _('Greek'): 'el', _('British'): 'en_GB', _('Esperanto'): 'eo', _('Spanish'): 'es', _('Basque'): 'eu', _('French'): 'fr', _('Croatian'): 'hr', _('Italian'): 'it', _('Norwegian (b)'): 'nb', _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl', _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR', _('Russian'): 'ru', _('Serbian'): 'sr', _('Slovak'): 'sk', _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
 
-
 ################################################################################
 class ChatControlBase(MessageControl):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
+	def make_href(self, match):
+		url_color = gajim.config.get('urlmsgcolor')
+		return '<a href="%s"><span color="%s">%s</span></a>' % (match.group(),
+			url_color, match.group())
+
 	def get_font_attrs(self):
 		''' get pango font attributes for banner from theme settings '''
 		theme = gajim.config.get('roster_theme')
@@ -120,6 +124,9 @@ class ChatControlBase(MessageControl):
 	event_keymod):
 		pass # Derived should implement this rather than connecting to the event itself.
 
+	def status_url_clicked(self, widget, url):
+		helpers.launch_browser_mailer('url', url)
+
 	def __init__(self, type_id, parent_win, widget_name, contact, acct, 
 	resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
@@ -138,6 +145,22 @@ class ChatControlBase(MessageControl):
 		id = widget.connect('button-press-event',
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id] = widget
+
+		self.urlfinder = re.compile("(https?://|www|ftp)[^ ]+")
+
+		if gajim.HAVE_PYSEXY:
+			import sexy
+			self.banner_status_label = sexy.UrlLabel()
+			self.banner_status_label.connect('url_activated', self.status_url_clicked)
+		else:
+			self.banner_status_label = gtk.Label()
+		self.banner_status_label.set_selectable(True)
+		self.banner_status_label.set_alignment(0,0.5)
+
+		banner_vbox = self.xml.get_widget('banner_vbox')
+		banner_vbox.pack_start(self.banner_status_label)
+		self.banner_status_label.show()
+
 		# Init DND
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ),
@@ -247,7 +270,6 @@ class ChatControlBase(MessageControl):
 					spell.set_language(lang)
 			except (gobject.GError, RuntimeError), msg:
 				dialogs.AspellDictError(lang)
-		self.style_event_id = 0
 		self.conv_textview.tv.show()
 		self._paint_banner()
 
@@ -324,6 +346,7 @@ class ChatControlBase(MessageControl):
 		banner_eventbox = self.xml.get_widget('banner_eventbox')
 		banner_name_label = self.xml.get_widget('banner_name_label')
 		self.disconnect_style_event(banner_name_label)
+		self.disconnect_style_event(self.banner_status_label)
 		if bgcolor:
 			banner_eventbox.modify_bg(gtk.STATE_NORMAL, 
 				gtk.gdk.color_parse(bgcolor))
@@ -333,25 +356,33 @@ class ChatControlBase(MessageControl):
 		if textcolor:
 			banner_name_label.modify_fg(gtk.STATE_NORMAL,
 				gtk.gdk.color_parse(textcolor))
+			self.banner_status_label.modify_fg(gtk.STATE_NORMAL,
+				gtk.gdk.color_parse(textcolor))
 			default_fg = False
 		else:
 			default_fg = True
 		if default_bg or default_fg:
 			self._on_style_set_event(banner_name_label, None, default_fg,
 				default_bg)
-	
+			self._on_style_set_event(self.banner_status_label, None, default_fg,
+				default_bg)
+
 	def disconnect_style_event(self, widget):
-		if self.style_event_id:
-			widget.disconnect(self.style_event_id)
-			del self.handlers[self.style_event_id]
-			self.style_event_id = 0	
+		# Try to find the event_id
+		found = False
+		for id in self.handlers:
+			if self.handlers[id] == widget:
+				found = True
+				break
+		if found:
+			widget.disconnect(id)
+			del self.handlers[id]
 	
 	def connect_style_event(self, widget, set_fg = False, set_bg = False):
 		self.disconnect_style_event(widget)
-		self.style_event_id = widget.connect('style-set',
-			self._on_style_set_event, set_fg, set_bg)
-		self.handlers[self.style_event_id] = widget
-	
+		id = widget.connect('style-set', self._on_style_set_event, set_fg, set_bg)
+		self.handlers[id] = widget
+
 	def _on_style_set_event(self, widget, style, *opts):
 		'''set style of widget from style class *.Frame.Eventbox 
 			opts[0] == True -> set fg color
@@ -365,7 +396,7 @@ class ChatControlBase(MessageControl):
 			fg_color = widget.style.fg[gtk.STATE_SELECTED]
 			widget.modify_fg(gtk.STATE_NORMAL, fg_color)
 		self.connect_style_event(widget, opts[0], opts[1])
-	
+
 	def _on_keypress_event(self, widget, event):
 		if event.state & gtk.gdk.CONTROL_MASK:
 			# CTRL + l|L: clear conv_textview
@@ -1162,6 +1193,7 @@ class ChatControl(ChatControlBase):
 			self.status_tooltip.set_tip(banner_eventbox, status)
 			self.status_tooltip.enable()
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
+			self.banner_status_label.set_ellipsize(pango.ELLIPSIZE_END)
 			status = helpers.reduce_chars_newlines(status, max_lines = 1)
 		status_escaped = gobject.markup_escape_text(status)
 
@@ -1192,9 +1224,15 @@ class ChatControl(ChatControlBase):
 			# weight="heavy" size="x-large"
 			label_text = '<span %s>%s</span><span %s>%s</span>' % \
 				(font_attrs, name, font_attrs_small, acct_info)
+
 		if status_escaped:
-			label_text += '\n<span %s>%s</span>' %\
-				(font_attrs_small, status_escaped)
+			if gajim.HAVE_PYSEXY:
+				status_text = self.urlfinder.sub(self.make_href, status_escaped)
+				status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
+			else:
+				status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
+
+			self.banner_status_label.set_markup(status_text)
 		else:
 			self.status_tooltip.disable()
 		# setup the label that holds name and jid

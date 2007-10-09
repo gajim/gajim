@@ -142,6 +142,12 @@ try:
 except ImportError:
 	HAVE_PYCRYPTO = False
 
+HAVE_PYSEXY = True
+try:
+	import sexy
+except ImportError:
+	HAVE_PYSEXY = False
+
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]
