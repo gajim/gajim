@@ -175,6 +175,9 @@ class ChatControlBase(MessageControl):
 
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
+		id = self.conv_textview.tv.connect('key_press_event',
+			self._conv_textview_key_press_event)
+		self.handlers[id] = self.conv_textview.tv
 		# FIXME: DND on non editable TextView, find a better way
 		self.drag_entered = False
 		id = self.conv_textview.tv.connect('drag_data_received',
@@ -396,6 +399,11 @@ class ChatControlBase(MessageControl):
 			fg_color = widget.style.fg[gtk.STATE_SELECTED]
 			widget.modify_fg(gtk.STATE_NORMAL, fg_color)
 		self.connect_style_event(widget, opts[0], opts[1])
+
+	def _conv_textview_key_press_event(self, widget, event):
+		if event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.CONTROL_MASK):
+			return False
+		self.parent_win.notebook.emit('key_press_event', event)
 
 	def _on_keypress_event(self, widget, event):
 		if event.state & gtk.gdk.CONTROL_MASK:
