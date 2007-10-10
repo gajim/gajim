@@ -140,7 +140,7 @@ class ConnectionBytestream:
 	def __init__(self):
 		self.files_props = {}
 	
-	def is_transfer_stoped(self, file_props):
+	def is_transfer_stopped(self, file_props):
 		if file_props.has_key('error') and file_props['error'] != 0:
 			return True
 		if file_props.has_key('completed') and file_props['completed']:
@@ -169,7 +169,7 @@ class ConnectionBytestream:
 	def remove_transfers_for_contact(self, contact):
 		''' stop all active transfer for contact '''
 		for file_props in self.files_props.values():
-			if self.is_transfer_stoped(file_props):
+			if self.is_transfer_stopped(file_props):
 				continue
 			receiver_jid = unicode(file_props['receiver']).split('/')[0]
 			if contact.jid == receiver_jid:

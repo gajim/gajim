@@ -128,7 +128,7 @@ class FileTransfersWindow:
 			if file_props['tt_account'] == account:
 				receiver_jid = unicode(file_props['receiver']).split('/')[0]
 				if jid == receiver_jid:
-					if not self.is_transfer_stoped(file_props):
+					if not self.is_transfer_stopped(file_props):
 						active_transfers[0].append(file_props)
 
 		# 'account' is the recipient
@@ -136,7 +136,7 @@ class FileTransfersWindow:
 			if file_props['tt_account'] == account:
 				sender_jid = unicode(file_props['sender']).split('/')[0]
 				if jid == sender_jid:
-					if not self.is_transfer_stoped(file_props):
+					if not self.is_transfer_stopped(file_props):
 						active_transfers[1].append(file_props)
 		return active_transfers
 
@@ -654,7 +654,7 @@ _('Connection with peer cannot be established.'))
 			return True
 		return not file_props['paused']
 
-	def is_transfer_stoped(self, file_props):
+	def is_transfer_stopped(self, file_props):
 		if file_props.has_key('error') and file_props['error'] != 0:
 			return True
 		if file_props.has_key('completed') and file_props['completed']:
@@ -696,7 +696,7 @@ _('Connection with peer cannot be established.'))
 		self.remove_menuitem.set_sensitive(is_row_selected)
 		self.open_folder_menuitem.set_sensitive(is_row_selected)
 		is_stopped = False
-		if self.is_transfer_stoped(file_props):
+		if self.is_transfer_stopped(file_props):
 			is_stopped = True
 		self.cancel_button.set_sensitive(not is_stopped)
 		self.cancel_menuitem.set_sensitive(not is_stopped)
@@ -750,7 +750,7 @@ _('Connection with peer cannot be established.'))
 			iter = self.model.get_iter((i))
 			sid = self.model[iter][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
-			if self.is_transfer_stoped(file_props):
+			if self.is_transfer_stopped(file_props):
 				self._remove_transfer(iter, sid, file_props)
 			i -= 1
 		self.tree.get_selection().unselect_all()
