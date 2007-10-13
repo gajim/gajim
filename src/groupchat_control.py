@@ -195,6 +195,7 @@ class GroupchatControl(ChatControlBase):
 
 		self.room_jid = self.contact.jid
 		self.nick = contact.name
+		self.new_nick = ''
 		self.name = self.room_jid.split('@')[0]
 
 		compact_view = gajim.config.get('compact_view')
@@ -973,7 +974,9 @@ class GroupchatControl(ChatControlBase):
 							'reason': reason }
 					self.print_conversation(s, 'info', tim = tim)
 				elif '303' in statusCode: # Someone changed his or her nick
-					if new_nick == self.nick: # We changed our nick
+					if new_nick == self.new_nick: # We changed our nick
+						self.nick = self.new_nick
+						self.new_nick = ''
 						s = _('You are now known as %s') % new_nick
 					else:
 						s = _('%s is now known as %s') % (nick, new_nick)
@@ -1242,7 +1245,7 @@ class GroupchatControl(ChatControlBase):
 					_('The nickname has not allowed characters.'))
 					return True
 				gajim.connections[self.account].join_gc(nick, self.room_jid, None)
-				self.nick = nick
+				self.new_nick = nick
 				self.clear(self.msg_textview)
 			else:
 				self.get_command_help(command)
@@ -1521,9 +1524,11 @@ class GroupchatControl(ChatControlBase):
 				_('The nickname has not allowed characters.'))
 				return
 			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
-			self.nick = nick
+			self.new_nick = nick
+		def on_cancel():
+			self.new_nick = ''
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
-			is_modal = False, ok_handler = on_ok)
+			is_modal = False, ok_handler = on_ok, cancel_handler = on_cancel)
 
 	def minimize(self, status='offline'):
 		# Minimize it
