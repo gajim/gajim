@@ -251,7 +251,8 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = self.change_subject_menuitem
 
 		self.history_menuitem = xm.get_widget('history_menuitem')
-		id = self.history_menuitem.connect('activate', self._on_history_menuitem_activate)
+		id = self.history_menuitem.connect('activate',
+			self._on_history_menuitem_activate)
 		self.handlers[id] = self.history_menuitem
 
 		self.minimize_menuitem = xm.get_widget('minimize_menuitem')
@@ -986,7 +987,8 @@ class GroupchatControl(ChatControlBase):
 							self.attention_list.remove(nick)
 						# keep nickname color
 						if nick in self.gc_custom_colors:
-							self.gc_custom_colors[new_nick] = self.gc_custom_colors[nick]
+							self.gc_custom_colors[new_nick] = \
+								self.gc_custom_colors[nick]
 					# rename vcard / avatar
 					puny_jid = helpers.sanitize_filename(self.room_jid)
 					puny_nick = helpers.sanitize_filename(nick)

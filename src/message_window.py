@@ -511,6 +511,16 @@ class MessageWindow:
 			nth_child = notebook.get_nth_page(page_num)
 			return self._widget_to_control(nth_child)
 
+	def change_key(self, old_jid, new_jid, acct):
+		'''Change the key of a control'''
+		try:
+			# Check if control exists
+			ctrl = self._controls[acct][old_jid]
+		except:
+			return
+		self._controls[acct][new_jid] = self._controls[acct][old_jid]
+		del self._controls[acct][old_jid]
+
 	def controls(self):
 		for ctrl_dict in self._controls.values():
 			for ctrl in ctrl_dict.values():
@@ -800,6 +810,17 @@ class MessageWindowMgr:
 
 		self._windows[key] = win
 		return win
+
+	def change_key(self, old_jid, new_jid, acct):
+		win = self.get_window(old_jid, acct)
+		if self.mode == self.ONE_MSG_WINDOW_NEVER:
+			old_key = acct + old_jid
+			if old_jid not in self._windows:
+				return
+			new_key = acct + new_jid
+			self._windows[new_key] = self._windows[old_key]
+			del self._windows[old_key]
+		win.change_key(old_jid, new_jid, acct)
 
 	def _on_window_delete(self, win, event):
 		self.save_state(self._gtk_win_to_msg_win(win))
