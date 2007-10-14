@@ -401,6 +401,8 @@ class ChatControlBase(MessageControl):
 		self.connect_style_event(widget, opts[0], opts[1])
 
 	def _conv_textview_key_press_event(self, widget, event):
+		if gtk.gtk_version < (2, 12, 0):
+			return
 		if event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.CONTROL_MASK):
 			return False
 		self.parent_win.notebook.emit('key_press_event', event)
