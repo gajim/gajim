@@ -3729,7 +3729,10 @@ class RosterWindow:
 		# temporarily block signal in order not to send status that we show
 		# in the combobox
 		self.combobox_callback_active = False
-		self.status_combobox.set_active(table[show])
+		if helpers.statuses_unified():
+			self.status_combobox.set_active(table[show])
+		else:
+			self.status_combobox.set_active(-1)
 		self._change_awn_icon_status(show)
 		self.combobox_callback_active = True
 		if gajim.interface.systray_enabled:

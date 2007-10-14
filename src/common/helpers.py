@@ -544,6 +544,19 @@ def get_global_status():
 			status = gajim.connections[account].status
 	return status
 
+def statuses_unified(): 
+	'''testing if all statuses are the same.'''
+	reference = None
+	for account in gajim.connections:
+		if not gajim.config.get_per('accounts', account,
+		'sync_with_global_status'):
+			continue
+		if reference == None:
+			reference = gajim.connections[account].connected
+		elif reference != gajim.connections[account].connected:
+			return False
+	return True
+
 def get_icon_name_to_show(contact, account = None):
 	'''Get the icon name to show in online, away, requested, ...'''
 	if account and gajim.events.get_nb_roster_events(account, contact.jid):
