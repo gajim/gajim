@@ -463,7 +463,7 @@ class ConnectionBytestream:
 			raise common.xmpp.NodeProcessed
 
 		if real_id[:3] == 'au_':
-			if file_props['stopped']:
+			if file.has_key('stopped') and file_props['stopped']:
 				self.remove_transfer(file_props)
 			else:
 				gajim.socks5queue.send_file(file_props, self.name)
@@ -488,7 +488,7 @@ class ConnectionBytestream:
 			raise common.xmpp.NodeProcessed
 
 		else:
-			if file_props['stopped']:
+			if file_props.has_key('stopped') and file_props['stopped']:
 				self.remove_transfer(file_props)
 			else:
 				gajim.socks5queue.send_file(file_props, self.name)
