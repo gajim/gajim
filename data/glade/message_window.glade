@@ -43,16 +43,6 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkImage" id="banner_typing_image">
-                                <property name="visible">True</property>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <widget class="GtkVBox" id="banner_vbox">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -70,7 +60,7 @@
                                 </child>
                               </widget>
                               <packing>
-                                <property name="position">2</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
@@ -87,7 +77,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">3</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                           </widget>
@@ -437,14 +427,12 @@
                               <widget class="GtkVBox" id="banner_vbox">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="border_width">5</property>
                                 <child>
                                   <widget class="GtkLabel" id="banner_name_label">
                                     <property name="visible">True</property>
-                                    <property name="xalign">0.05000000074505806</property>
-                                    <property name="xpad">6</property>
-                                    <property name="ypad">6</property>
-                                    <property name="label">&lt;span weight="heavy" size="large"&gt;room jid&lt;/span&gt;
-topic</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label">&lt;span weight="heavy" size="large"&gt;room jid&lt;/span&gt;</property>
                                     <property name="use_markup">True</property>
                                   </widget>
                                 </child>
