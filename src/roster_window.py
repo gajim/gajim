@@ -4956,7 +4956,7 @@ class RosterWindow:
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)
 				sec_text += '\n' + os.path.basename(path)
-			dialogs.NonModalConfirmationDialog(prim_text, sec_text,
+			dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
 				on_response_ok = (_on_send_files, account_dest, jid_dest,
 				uri_splitted))
 			dialog.popup()
