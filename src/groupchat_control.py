@@ -1668,18 +1668,19 @@ class GroupchatControl(ChatControlBase):
 		if response == gtk.RESPONSE_OK:
 			reason = instance.input_entry1.get_text().decode('utf-8')
 			jid = instance.input_entry2.get_text().decode('utf-8')
-			# Test jid
-			try:
-				jid = helpers.parse_jid(jid)
-			except:
-				dialogs.ErrorDialog(_('Invalid group chat Jabber ID'),
-				_('The group chat Jabber ID has not allowed characters.'))
-				return
+			if jid:
+				# Test jid
+				try:
+					jid = helpers.parse_jid(jid)
+				except:
+					dialogs.ErrorDialog(_('Invalid group chat Jabber ID'),
+					_('The group chat Jabber ID has not allowed characters.'))
+					return
 		else:
 			# Abord destroy operation
 			return
 		gajim.connections[self.account].destroy_gc_room(self.room_jid, reason,
-		jid)
+			jid)
 
 	def _on_bookmark_room_menuitem_activate(self, widget):
 		bm = {
