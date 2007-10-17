@@ -203,8 +203,8 @@ class Connection(ConnectionHandlers):
 			# after we auth to server
 			self.old_show = STATUS_LIST[self.connected]
 		self.connected = 0
-		self.dispatch('STATUS', 'offline')
 		if not self.on_purpose:
+			self.dispatch('STATUS', 'offline')
 			self.disconnect()
 			if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
 				self.connected = -1

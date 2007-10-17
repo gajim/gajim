@@ -3762,17 +3762,19 @@ class RosterWindow:
 				self.quit_on_next_offline -= 1
 				if self.quit_on_next_offline < 1:
 					self.quit_gtkgui_interface()
-			if accountIter:
-				model[accountIter][C_SECPIXBUF] = None
-			if gajim.con_types.has_key(account):
-				gajim.con_types[account] = None
-			for jid in gajim.contacts.get_jid_list(account):
-				lcontact = gajim.contacts.get_contacts(account, jid)
-				lcontact_copy = []
-				for contact in lcontact:
-					lcontact_copy.append(contact)
-				for contact in lcontact_copy:
-					self.chg_contact_status(contact, 'offline', '', account)
+			else:
+				# No need to redraw contacts if we're quitting
+				if accountIter:
+					model[accountIter][C_SECPIXBUF] = None
+				if gajim.con_types.has_key(account):
+					gajim.con_types[account] = None
+				for jid in gajim.contacts.get_jid_list(account):
+					lcontact = gajim.contacts.get_contacts(account, jid)
+					lcontact_copy = []
+					for contact in lcontact:
+						lcontact_copy.append(contact)
+					for contact in lcontact_copy:
+						self.chg_contact_status(contact, 'offline', '', account)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
 
