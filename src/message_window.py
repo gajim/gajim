@@ -588,9 +588,12 @@ class MessageWindow:
 
 	def _on_notebook_key_press(self, widget, event):
 		control = self.get_active_control()
-		#when we get a key press event in conversation textview,
+		# Ctrl+PageUP / DOWN has to be handled by notebook
+		if event.state & gtk.gdk.CONTROL_MASK and event.keyval in (
+		gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
+			return False
 		if isinstance(control, ChatControlBase):
-			#we forwarded it to message textview
+			# we forwarded it to message textview
 			control.msg_textview.emit('key_press_event', event)
 			control.msg_textview.grab_focus()
 
