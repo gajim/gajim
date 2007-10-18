@@ -3582,8 +3582,10 @@ class RosterWindow:
 			self.update_status_combobox()
 			return
 		status = model[active][2].decode('utf-8')
-
-		if active == 7: # We choose change status message (7 is that)
+		statuses_unified = helpers.statuses_unified()
+		if (active == 7 and statuses_unified) or (active == 9 and not statuses_unified):
+			print active
+			# We choose change status message (7 is that, or 9 if there is the "desync'ed" option)
 			# do not change show, just show change status dialog
 			status = model[self.previous_status_combobox_active][2].decode('utf-8')
 			dlg = dialogs.ChangeStatusMessageDialog(status)
@@ -3725,6 +3727,12 @@ class RosterWindow:
 		# table to change index in connection.connected to index in combobox
 		table = {'offline':9, 'connecting':9, 'online':0, 'chat':1, 'away':2,
 			'xa':3, 'dnd':4, 'invisible':5}
+
+		# we check if there are more options in the combobox that it should
+		# if yes, we remove the first ones
+		while len(self.status_combobox.get_model()) > len(table)+2:
+			self.status_combobox.remove_text(0)
+
 		show = helpers.get_global_show()
 		# temporarily block signal in order not to send status that we show
 		# in the combobox
@@ -3732,7 +3740,12 @@ class RosterWindow:
 		if helpers.statuses_unified():
 			self.status_combobox.set_active(table[show])
 		else:
-			self.status_combobox.set_active(-1)
+			uf_show = helpers.get_uf_show(show)
+			liststore = self.status_combobox.get_model()
+			liststore.prepend(['SEPARATOR', None, '', True])
+			liststore.prepend([uf_show+" "+"(desync'ed)", self.jabber_state_images['16'][show],
+			show, False])
+			self.status_combobox.set_active(0)
 		self._change_awn_icon_status(show)
 		self.combobox_callback_active = True
 		if gajim.interface.systray_enabled:
