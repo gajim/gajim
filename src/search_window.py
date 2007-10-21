@@ -191,6 +191,11 @@ class SearchWindow:
 			return
 
 		self.dataform = dataforms.ExtendForm(node = form)
+		if len(self.dataform.items) == 0:
+			# No result
+			self.label.set_text(_('No result'))
+			self.label.show()
+			return
 
 		self.data_form_widget.set_sensitive(True)
 		try:
