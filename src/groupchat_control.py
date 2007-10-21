@@ -194,7 +194,7 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = widget
 
 		self.room_jid = self.contact.jid
-		self.nick = contact.name
+		self.nick = contact.name.decode('utf-8')
 		self.new_nick = ''
 		self.name = self.room_jid.split('@')[0]
 
