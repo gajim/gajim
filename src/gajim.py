@@ -113,6 +113,17 @@ del config_path
 common.configpaths.gajimpaths.init_profile(profile)
 del profile
 
+# PyGTK2.10+ only throws a warning
+import warnings
+warnings.filterwarnings('error', module='gtk')
+try:
+	import gtk
+except Warning, msg:
+	if str(msg) == 'could not open display':
+		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
+		sys.exit()
+warnings.resetwarnings()
+
 import message_control
 
 from chat_control import ChatControlBase
@@ -134,12 +145,6 @@ if os.name == 'posix': # dl module is Unix Only
 	except:
 		pass
 
-try:
-	import gtk
-except RuntimeError, msg:
-	if str(msg) == 'could not open display':
-		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
-		sys.exit()
 pritext = ''
 if gtk.pygtk_version < (2, 8, 0):
 	pritext = _('Gajim needs PyGTK 2.8 or above')
