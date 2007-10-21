@@ -38,6 +38,107 @@ from common.fuzzyclock import FuzzyClock
 from htmltextview import HtmlTextView
 from common.exceptions import GajimGeneralException
 
+
+def is_selection_modified(mark):
+	name = mark.get_name()
+	if name and name in ('selection_bound', 'insert'):
+		return True
+	else:
+		return False
+
+def has_focus(widget):
+	return widget.flags() & gtk.HAS_FOCUS == gtk.HAS_FOCUS
+
+class TextViewImage(gtk.Image):
+
+	def __init__(self, anchor):
+		super(TextViewImage, self).__init__()
+		self.anchor = anchor
+		self._selected = False
+		self._disconnect_funcs = []
+		self.connect("parent-set", self.on_parent_set)
+		self.connect("expose-event", self.on_expose)
+
+	def _get_selected(self):
+		parent = self.get_parent()
+		if not parent or not self.anchor: return False
+		buffer = parent.get_buffer()
+		position = buffer.get_iter_at_child_anchor(self.anchor)
+		bounds = buffer.get_selection_bounds()
+		if bounds and position.in_range(*bounds):
+			return True
+		else:
+			return False
+	
+	def get_state(self):
+		parent = self.get_parent()
+		if not parent:
+			return gtk.STATE_NORMAL
+		if self._selected:
+			if has_focus(parent):
+				return gtk.STATE_SELECTED
+			else:
+				return gtk.STATE_ACTIVE
+		else:
+			return gtk.STATE_NORMAL
+
+	def _update_selected(self):
+		selected = self._get_selected()
+		if self._selected != selected:
+			self._selected = selected
+			self.queue_draw()
+
+	def _do_connect(self, widget, signal, callback):
+		id = widget.connect(signal, callback)
+		def disconnect():
+			widget.disconnect(id)
+		self._disconnect_funcs.append(disconnect)
+
+	def _disconnect_signals(self):
+		for func in self._disconnect_funcs:
+			func()
+		self._disconnect_funcs = []
+
+	def on_parent_set(self, widget, old_parent):
+		parent = self.get_parent()
+		if not parent:
+			self._disconnect_signals()
+			return
+
+		self._do_connect(parent, "style-set", self.do_queue_draw)
+		self._do_connect(parent, "focus-in-event", self.do_queue_draw)
+		self._do_connect(parent, "focus-out-event", self.do_queue_draw)
+
+		textbuf = parent.get_buffer()
+		self._do_connect(textbuf, "mark-set", self.on_mark_set)
+		self._do_connect(textbuf, "mark-deleted", self.on_mark_deleted)
+	
+	def do_queue_draw(self, *args):
+		self.queue_draw()
+		return False
+	
+	def on_mark_set(self, buf, iterat, mark):
+		self.on_mark_modified(mark)
+		return False
+	
+	def on_mark_deleted(self, buf, mark):
+		self.on_mark_modified(mark)
+		return False
+
+	def on_mark_modified(self, mark):
+		if is_selection_modified(mark):
+			self._update_selected()
+
+	def on_expose(self, widget, event):
+		state = self.get_state()
+		if state != gtk.STATE_NORMAL:
+			gc = widget.get_style().base_gc[state]
+			area = widget.allocation
+			widget.window.draw_rectangle(gc, True, area.x, area.y,
+				area.width, area.height)
+		return False
+	
+
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
@@ -67,6 +168,8 @@ class ConversationTextview:
 		self.tv.set_left_margin(2)
 		self.tv.set_right_margin(2)
 		self.handlers = {}
+		self.images = []
+		self.image_cache = {}
 
 		# connect signals
 		id = self.tv.connect('motion_notify_event',
@@ -77,6 +180,11 @@ class ConversationTextview:
 		id = self.tv.connect('button_press_event',
 			self.on_textview_button_press_event)
 		self.handlers[id] = self.tv
+		
+		id = self.tv.connect("expose-event",
+			self.on_textview_expose_event)
+		self.handlers[id] = self.tv
+
 
 		self.account = account
 		self.change_cursor = None
@@ -336,6 +444,32 @@ class ConversationTextview:
 			position = self.tv.window.get_origin()
 			self.line_tooltip.show_tooltip(_('Text below this line is what has '
 			'been said since the last time you paid attention to this group chat'),	8, position[1] + pointer[1])
+
+	def on_textview_expose_event(self, widget, event):
+		expalloc = event.area
+		exp_x0 = expalloc.x
+		exp_y0 = expalloc.y
+		exp_x1 = exp_x0 + expalloc.width
+		exp_y1 = exp_y0 + expalloc.height
+		
+		try:
+			tryfirst = [self.image_cache[(exp_x0, exp_y0)]]
+		except KeyError:
+			tryfirst = []
+
+		for image in tryfirst + self.images:
+			imgalloc = image.allocation
+			img_x0 = imgalloc.x
+			img_y0 = imgalloc.y
+			img_x1 = img_x0 + imgalloc.width
+			img_y1 = img_y0 + imgalloc.height
+
+			if img_x0 <= exp_x0 and img_y0 <= exp_y0 and \
+			exp_x1 <= img_x1 and exp_y1 <= img_y1:
+				self.image_cache[(img_x0, img_y0)] = image
+				widget.propagate_expose(image, event)
+				return True
+		return False
 
 	def on_textview_motion_notify_event(self, widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
@@ -720,13 +854,14 @@ class ConversationTextview:
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = buffer.get_end_iter()
 			anchor = buffer.create_child_anchor(end_iter)
-			img = gtk.Image()
+			img = TextViewImage(anchor)
 			animations = gajim.interface.emoticons_animations
 			if not emot_ascii in animations:
 				animations[emot_ascii] = gtk.gdk.PixbufAnimation(
 					gajim.interface.emoticons[emot_ascii])
 			img.set_from_animation(animations[emot_ascii])
 			img.show()
+			self.images.append(img)
 			# add with possible animation
 			self.tv.add_child_at_anchor(img, anchor)
 		#FIXME: one day, somehow sync with regexp in gajim.py
