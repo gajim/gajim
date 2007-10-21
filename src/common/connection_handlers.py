@@ -1082,7 +1082,8 @@ class ConnectionVcard:
 						meta_list[tag] = [data]
 				self.dispatch('METACONTACTS', meta_list)
 			else:
-				self.private_storage_supported = False
+				if iq_obj.getErrorCode() not in ('403', '406', '404'):
+					self.private_storage_supported = False
 			# We can now continue connection by requesting the roster
 			self.connection.initRoster()
 		elif self.awaiting_answers[id][0] == PRIVACY_ARRIVED:
