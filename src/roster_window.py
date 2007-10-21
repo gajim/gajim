@@ -3375,7 +3375,7 @@ class RosterWindow:
 				'authorization resulting in them always seeing you as offline.') % \
 				jids
 			dialogs.ConfirmationDialog(pritext, sectext,
-				on_response_ok = (on_ok, list_))
+				on_response_ok = (on_ok2, list_))
 
 
 	def forget_gpg_passphrase(self, keyid):
