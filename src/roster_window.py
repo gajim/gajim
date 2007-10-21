@@ -992,7 +992,7 @@ class RosterWindow:
 			newitem.connect('activate',
 				self.on_manage_bookmarks_menuitem_activate)
 			gc_sub_menu.append(newitem)
-			gc_sub_menu.show_all()
+		gc_sub_menu.show_all()
 
 		connected_accounts_with_vcard = []
 		for account in gajim.connections:
