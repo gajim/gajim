@@ -3584,7 +3584,6 @@ class RosterWindow:
 		status = model[active][2].decode('utf-8')
 		statuses_unified = helpers.statuses_unified()
 		if (active == 7 and statuses_unified) or (active == 9 and not statuses_unified):
-			print active
 			# We choose change status message (7 is that, or 9 if there is the "desync'ed" option)
 			# do not change show, just show change status dialog
 			status = model[self.previous_status_combobox_active][2].decode('utf-8')
