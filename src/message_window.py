@@ -1,8 +1,8 @@
 ##	message_window.py
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005 Yann Leboulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>

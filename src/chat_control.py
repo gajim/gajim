@@ -1,6 +1,6 @@
 ##	chat_control.py
 ##
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2006-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>

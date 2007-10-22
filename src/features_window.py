@@ -1,6 +1,6 @@
 ##	features_window.py
 ##
-## Copyright (C) 2007 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2007 Yann Leboulanger <asterix@lagaule.org>
 ##                    Stephan Erb <steve-e@h3c.de> 
 ##
 ## This file is part of Gajim.

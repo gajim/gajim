@@ -1,15 +1,15 @@
 ##	common/zeroconf/connection_zeroconf.py
 ##
 ## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Yann Leboulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
 ##  - Stefan Bethge <stefan@lanpartei.de>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Nikos Kouremenos <nkour@jabber.org>
 ##                    Dimitur Kirov <dkirov@gmail.com>

@@ -1,12 +1,12 @@
 ## common/sleepy.py
 ##
 ## Contributors for this file:
-##	  - Yann Le Boulanger <asterix@lagaule.org>
+##	  - Yann Leboulanger <asterix@lagaule.org>
 ##	  - Nikos Kouremenos <kourem@gmail.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
 ##						 Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ##					Nikos Kouremenos <kourem@gmail.com>
 ##
 ## This file is part of Gajim.

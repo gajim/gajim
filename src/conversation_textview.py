@@ -1,6 +1,6 @@
 ##	conversation_textview.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ##

@@ -2,11 +2,11 @@
 ##
 ## Contributors for this file:
 ##
-## - Yann Le Boulanger <asterix@lagaule.org>
+## - Yann Leboulanger <asterix@lagaule.org>
 ## - Christoph Neuroth <delmonico@gmx.net>
 ##
 ## Copyright (C) 2006 Christoph Neuroth <delmonico@gmx.net>
-##                    Yann Le Boulanger <asterix@lagaule.org>
+##                    Yann Leboulanger <asterix@lagaule.org>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##

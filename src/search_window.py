@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##	search_window.py
 ##
-## Copyright (C) 2007 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2007 Yann Leboulanger <asterix@lagaule.org>
 ##
 ## This file is part of Gajim.
 ##

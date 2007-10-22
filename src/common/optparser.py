@@ -1,5 +1,5 @@
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##

@@ -1,6 +1,6 @@
 ##  dbus_support.py
 ##
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005 Andrew Sayman <lorien420@myrealbox.com>

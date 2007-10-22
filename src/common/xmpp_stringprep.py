@@ -1,7 +1,7 @@
 ##	common/xmpp_stringprep.py
 ##
 ## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Yann Leboulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##
 ##	Copyright (C) 2001-2005 Twisted Matrix Laboratories.

@@ -1,6 +1,6 @@
 ##	vcard.py (has VcardWindow class and a func get_avatar_pixbuf_encoded_mime)
 ##
-## Copyright (C) 2003-2007 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>

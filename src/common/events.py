@@ -1,9 +1,9 @@
 ## common/events.py
 ##
 ## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Yann Leboulanger <asterix@lagaule.org>
 ##
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>

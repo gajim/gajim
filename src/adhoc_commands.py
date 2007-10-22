@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##	adhoc_commands.py
 ##
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
 ##                    Nikos Kouremenos <nkour@jabber.org>
 ##
 ## This file is part of Gajim.

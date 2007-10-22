@@ -2,7 +2,7 @@
 ##
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
 ## This file is part of Gajim.

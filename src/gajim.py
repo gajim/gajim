@@ -2,7 +2,7 @@
 ##	gajim.py
 ##
 ##
-## Copyright (C) 2003-2007 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ##                         Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
