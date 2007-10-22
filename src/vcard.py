@@ -1,18 +1,23 @@
 ##	vcard.py (has VcardWindow class and a func get_avatar_pixbuf_encoded_mime)
 ##
-## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2007 Yann Le Boulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 # THIS FILE IS FOR **OTHERS'** PROFILE (when we VIEW their INFO)
