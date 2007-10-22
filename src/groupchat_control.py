@@ -514,10 +514,14 @@ class GroupchatControl(ChatControlBase):
 					subject_text)
 			else:
 				subject_text = '<span %s>%s</span>' % (font_attrs_small, subject)
-			self.banner_status_label.set_markup(subject_text)
 
 			# tooltip must always hold ALL the subject
 			self.subject_tooltip.set_tip(self.event_box, self.subject)
+		else:
+			subject_text = ''
+			self.subject_tooltip.disable()
+
+		self.banner_status_label.set_markup(subject_text)
 
 	def prepare_context_menu(self):
 		'''sets sensitivity state for configure_room'''
