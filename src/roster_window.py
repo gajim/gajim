@@ -3296,6 +3296,20 @@ class RosterWindow:
 			type_ = model[path][C_TYPE]
 			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK and \
 			not event.state & gtk.gdk.CONTROL_MASK:
+				# Don't handle dubble click if we press icon of a metacontact
+				iter = model.get_iter(path)
+				if x < 27 and type_ == 'contact' and model.iter_has_child(iter):
+					account = model[path][C_ACCOUNT].decode('utf-8')
+					jid = model[path][C_JID].decode('utf-8')
+					# first cell in 1st column (the arrow SINGLE clicked)
+					iters = self.get_contact_iter(jid, account)
+					for iter in iters:
+						path = model.get_path(iter)
+						if (self.tree.row_expanded(path)):
+							self.tree.collapse_row(path)
+						else:
+							self.tree.expand_row(path, False)
+					return
 				# We just save on which row we press button, and open chat window on
 				# button release to be able to do DND without opening chat window
 				self.clicked_path = path
