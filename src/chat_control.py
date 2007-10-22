@@ -1246,10 +1246,11 @@ class ChatControl(ChatControlBase):
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
 			else:
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
-
-			self.banner_status_label.set_markup(status_text)
 		else:
+			status_text = ''
 			self.status_tooltip.disable()
+
+		self.banner_status_label.set_markup(status_text)
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
 
