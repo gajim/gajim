@@ -173,6 +173,8 @@ class OptionsParser:
 			self.update_config_to_01115()
 		if old < [0, 11, 2, 1] and new >= [0, 11, 2, 1]:
 			self.update_config_to_01121()
+		if old < [0, 11, 2, 2] and new >= [0, 11, 2, 2]:
+			self.update_config_to_01122()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -499,3 +501,27 @@ class OptionsParser:
 			os.remove(old_file)
 
 		gajim.config.set('version', '0.11.2.1')
+
+	def update_config_to_01122(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE IF NOT EXISTS caps_cache (
+					node TEXT,
+					ver TEXT,
+					ext TEXT,
+					data BLOB
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+		gajim.config.set('version', '0.11.2.2')
+
