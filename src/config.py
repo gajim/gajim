@@ -1509,7 +1509,7 @@ class AccountsWindow:
 		account = self.current_account
 		keyid = gajim.config.get_per('accounts', account, 'keyid')
 		keyname = gajim.config.get_per('accounts', account, 'keyname')
-		savegpgpass = gajim.config.get_per('accounts', account, 'savegpgpass')
+		use_gpg_agent = gajim.config.get('use_gpg_agent')
 
 		if account == gajim.ZEROCONF_ACC_NAME:
 			widget_name_add = '2'
@@ -1518,27 +1518,19 @@ class AccountsWindow:
 
 		gpg_key_label = self.xml.get_widget('gpg_key_label' + widget_name_add)
 		gpg_name_label = self.xml.get_widget('gpg_name_label' + widget_name_add)
-		gpg_save_password_checkbutton = \
-			self.xml.get_widget('gpg_save_password_checkbutton' + widget_name_add)
-		gpg_password_entry = self.xml.get_widget('gpg_password_entry' + \
-			widget_name_add)
+		use_gpg_agent_checkbutton = self.xml.get_widget(
+			'use_gpg_agent_checkbutton' + widget_name_add)
 
 		if not keyid or not gajim.config.get('usegpg'):
-			gpg_save_password_checkbutton.set_sensitive(False)
-			gpg_password_entry.set_sensitive(False)
+			use_gpg_agent_checkbutton.set_sensitive(False)
 			gpg_key_label.set_text(_('No key selected'))
 			gpg_name_label.set_text('')
 			return
 
 		gpg_key_label.set_text(keyid)
 		gpg_name_label.set_text(keyname)
-		gpg_save_password_checkbutton.set_sensitive(True)
-		gpg_save_password_checkbutton.set_active(savegpgpass)
-
-		if savegpgpass:
-			gpg_password_entry.set_sensitive(True)
-			gpgpassword = gajim.config.get_per('accounts', account, 'gpgpassword')
-			gpg_password_entry.set_text(gpgpassword)
+		use_gpg_agent_checkbutton.set_sensitive(True)
+		use_gpg_agent_checkbutton.set_active(use_gpg_agent)
 
 	def init_normal_account(self):
 		account = self.current_account
@@ -2002,17 +1994,14 @@ class AccountsWindow:
 			wiget_name_ext = '2'
 		else:
 			wiget_name_ext = '1'
-		checkbutton = self.xml.get_widget('gpg_save_password_checkbutton' + \
-			wiget_name_ext)
 		gpg_key_label = self.xml.get_widget('gpg_key_label' + wiget_name_ext)
 		gpg_name_label = self.xml.get_widget('gpg_name_label' + wiget_name_ext)
-		gpg_password_entry = self.xml.get_widget('gpg_password_entry' + \
-			wiget_name_ext)
+		use_gpg_agent_checkbutton = self.xml.get_widget(
+			'use_gpg_agent_checkbutton' + wiget_name_ext)
 		if keyID[0] == _('None'):
 			gpg_key_label.set_text(_('No key selected'))
 			gpg_name_label.set_text('')
-			checkbutton.set_sensitive(False)
-			gpg_password_entry.set_sensitive(False)
+			use_gpg_agent_checkbutton.set_sensitive(False)
 			if self.option_changed('keyid', ''):
 				self.need_relogin = True
 			gajim.config.set_per('accounts', self.current_account, 'keyname', '')
@@ -2020,34 +2009,20 @@ class AccountsWindow:
 		else:
 			gpg_key_label.set_text(keyID[0])
 			gpg_name_label.set_text(keyID[1])
-			checkbutton.set_sensitive(True)
+			use_gpg_agent_checkbutton.set_sensitive(True)
 			if self.option_changed('keyid', keyID[0]):
 				self.need_relogin = True
 			gajim.config.set_per('accounts', self.current_account, 'keyname',
 				keyID[1])
 			gajim.config.set_per('accounts', self.current_account, 'keyid',
 				keyID[0])
-		gajim.config.set_per('accounts', self.current_account, 'savegpgpass',
-			False)
-		gajim.config.set_per('accounts', self.current_account, 'gpgpassword', '')
-		checkbutton.set_active(False)
-		gpg_password_entry.set_text('')
 
-	def on_gpg_save_password_checkbutton_toggled(self, widget):
+	def on_use_gpg_agent_checkbutton_toggled(self, widget):
 		if self.current_account == gajim.ZEROCONF_ACC_NAME:
 			wiget_name_ext = '2'
 		else:
 			wiget_name_ext = '1'
-		self.xml.get_widget('gpg_password_entry' + wiget_name_ext).set_sensitive(
-			widget.get_active())
-		self.on_checkbutton_toggled(widget, 'savegpgpass',
-			account = self.current_account)
-
-	def on_gpg_password_entry_changed(self, widget):
-		if self.ignore_events:
-			return
-		gajim.config.set_per('accounts', self.current_account, 'gpgpassword',
-			widget.get_text().decode('utf-8'))
+		self.on_checkbutton_toggled(widget, 'use_gpg_agent')
 
 	def on_edit_details_button1_clicked(self, widget):
 		if not gajim.interface.instances.has_key(self.current_account):
@@ -3317,8 +3292,6 @@ class AccountCreationWizardWindow:
 		config['custom_host'] = ''
 		config['keyname'] = ''
 		config['keyid'] = ''
-		config['savegpgpass'] = False
-		config['gpgpassword'] = ''
 		return config
 
 	def save_account(self, login, server, savepass, password):

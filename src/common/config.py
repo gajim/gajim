@@ -266,8 +266,6 @@ class Config:
 			'use_custom_host': [ opt_bool, False, '', True ],
 			'custom_port': [ opt_int, 5222, '', True ],
 			'custom_host': [ opt_str, '', '', True ],
-			'savegpgpass': [ opt_bool, False, '', True ],
-			'gpgpassword': [ opt_str, '' ],
 			'sync_with_global_status': [ opt_bool, False, ],
 			'no_log_for': [ opt_str, '' ],
 			'minimized_gc': [ opt_str, '' ],

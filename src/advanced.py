@@ -103,8 +103,7 @@ class AdvancedConfigurationWindow(object):
 		make the cellrenderertext not editable else it's editable'''
 		optname = model[iter][C_PREFNAME]
 		opttype = model[iter][C_TYPE]
-		if opttype == self.types['boolean'] or optname in ('password', 
-			'gpgpassword'):
+		if opttype == self.types['boolean'] or optname == 'password':
 			cell.set_property('editable', False)
 		else:
 			cell.set_property('editable', True)
@@ -239,7 +238,7 @@ class AdvancedConfigurationWindow(object):
 			type = val[OPT_TYPE][0]
 			type = self.types[type] # i18n
 		value = val[OPT_VAL]
-		if name in ('password', 'gpgpassword'):
+		if name == 'password':
 			#we talk about password
 			value = _('Hidden') # override passwords with this string
 		if value in self.right_true_dict:
