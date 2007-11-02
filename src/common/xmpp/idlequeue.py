@@ -206,13 +206,13 @@ class SelectIdleQueue(IdleQueue):
 			if e[0] != 4: # interrupt
 				raise
 		for fd in waiting_descriptors[0]:
-			self.queue.get(fd).pollin()
-			self.check_time_events()
-			return True
+			q = self.queue.get(fd)
+			if q:
+				q.pollin()
 		for fd in waiting_descriptors[1]:
-			self.queue.get(fd).pollout()
-			self.check_time_events()
-			return True
+			q = self.queue.get(fd)
+			if q:
+				q.pollout()
 		for fd in waiting_descriptors[2]:
 			self.queue.get(fd).pollend()
 		self.check_time_events()
