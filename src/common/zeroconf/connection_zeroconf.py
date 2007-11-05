@@ -176,7 +176,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.dispatch('ROSTER_INFO', (key, self.roster.getName(key),
 							'both', 'no', self.roster.getGroups(key)))
 				self.dispatch('NOTIFY', (key, self.roster.getStatus(key),
-							self.roster.getMessage(key), 'local', 0, None, 0))
+							self.roster.getMessage(key), 'local', 0, None, 0, None))
 				#XXX open chat windows don't get refreshed (full name), add that
 		return self.call_resolve_timeout
 
@@ -184,13 +184,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def _on_new_service(self,jid):
 		self.roster.setItem(jid)
 		self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
-		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
+		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0, None))
 	
 	def _on_remove_service(self, jid):
 		self.roster.delItem(jid)
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
-		# keyID, timestamp))
-		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0))
+		# keyID, timestamp, contact_nickname))
+		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0, None))
 
 	def _on_disconnected(self):
 		self.disconnect()
@@ -256,7 +256,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		#display contacts already detected and resolved
 		for jid in self.roster.keys():
 			self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
-			self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0))
+			self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0, None))
 
 		self.connected = STATUS_LIST.index(show)
 
