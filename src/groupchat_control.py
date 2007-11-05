@@ -1533,11 +1533,9 @@ class GroupchatControl(ChatControlBase):
 				_('The nickname has not allowed characters.'))
 				return
 			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
-			self.new_nick = nick
-		def on_cancel():
-			self.new_nick = ''
+			self.nick = nick
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
-			is_modal = False, ok_handler = on_ok, cancel_handler = on_cancel)
+			is_modal = False, ok_handler = on_ok)
 
 	def minimize(self, status='offline'):
 		# Minimize it
