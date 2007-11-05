@@ -42,7 +42,8 @@ class SimplePasswordStorage(PasswordStorage):
 
 	def save_password(self, account_name, password):
 		gajim.config.set_per('accounts', account_name, 'password', password)
-		gajim.connections[account_name].password = password
+		if account_name in gajim.connections:
+			gajim.connections[account_name].password = password
 
 
 class GnomePasswordStorage(PasswordStorage):
