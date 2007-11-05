@@ -1387,6 +1387,7 @@ class GroupchatControl(ChatControlBase):
 				_('The nickname has not allowed characters.'))
 				return
 			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
+			self.nick = nick
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
 			is_modal = False, ok_handler = on_ok)
 
