@@ -1493,6 +1493,14 @@ class RosterWindow:
 						resources = roster.getResources(jid)
 						# ...get the contact info for our other online resources
 						for resource in resources:
+							# Check if we already have this resource
+							found = False
+							for contact_ in contacts:
+								if contact_.resource == resource:
+									found = True
+									break
+							if found:
+								continue
 							show = roster.getShow(jid+'/'+resource)
 							if not show:
 								show = 'online'
