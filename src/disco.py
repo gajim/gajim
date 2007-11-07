@@ -85,6 +85,7 @@ def _gen_agent_type_info():
 		('pubsub', 'generic'):		(PubSubBrowser, 'pubsub.png'),
 		('pubsub', 'service'):		(PubSubBrowser, 'pubsub.png'),
 		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
+		('headline', 'newmail'):	(ToplevelAgentBrowser, 'mail.png'),
 
 		# Transports
 		('conference', 'irc'):		(ToplevelAgentBrowser, 'irc.png'),
