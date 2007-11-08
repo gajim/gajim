@@ -192,19 +192,19 @@ class ProfileWindow:
 		except AttributeError:
 			pass
 
-	def set_values(self, vcard):
+	def set_values(self, vcard_):
 		button = self.xml.get_widget('PHOTO_button')
 		image = button.get_image()
 		text_button = self.xml.get_widget('NOPHOTO_button')
-		if not 'PHOTO' in vcard:
+		if not 'PHOTO' in vcard_:
 			# set default image
 			image.set_from_pixbuf(None)
 			button.hide()
 			text_button.show()
-		for i in vcard.keys():
+		for i in vcard_.keys():
 			if i == 'PHOTO':
 				pixbuf, self.avatar_encoded, self.avatar_mime_type = \
-					vcard.get_avatar_pixbuf_encoded_mime(vcard[i])
+					vcard.get_avatar_pixbuf_encoded_mime(vcard_[i])
 				if not pixbuf:
 					image.set_from_pixbuf(None)
 					button.hide()
@@ -216,21 +216,21 @@ class ProfileWindow:
 				text_button.hide()
 				continue
 			if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
-				for entry in vcard[i]:
+				for entry in vcard_[i]:
 					add_on = '_HOME'
 					if 'WORK' in entry:
 						add_on = '_WORK'
 					for j in entry.keys():
 						self.set_value(i + add_on + '_' + j + '_entry', entry[j])
-			if isinstance(vcard[i], dict):
-				for j in vcard[i].keys():
-					self.set_value(i + '_' + j + '_entry', vcard[i][j])
+			if isinstance(vcard_[i], dict):
+				for j in vcard_[i].keys():
+					self.set_value(i + '_' + j + '_entry', vcard_[i][j])
 			else:
 				if i == 'DESC':
 					self.xml.get_widget('DESC_textview').get_buffer().set_text(
-						vcard[i], 0)
+						vcard_[i], 0)
 				else:
-					self.set_value(i + '_entry', vcard[i])
+					self.set_value(i + '_entry', vcard_[i])
 		if self.update_progressbar_timeout_id is not None:
 			if self.message_id:
 				self.statusbar.remove(self.context_id, self.message_id)
@@ -243,10 +243,10 @@ class ProfileWindow:
 			self.progressbar.set_fraction(0)
 			self.update_progressbar_timeout_id = None
 
-	def add_to_vcard(self, vcard, entry, txt):
+	def add_to_vcard(self, vcard_, entry, txt):
 		'''Add an information to the vCard dictionary'''
 		entries = entry.split('_')
-		loc = vcard
+		loc = vcard_
 		if len(entries) == 3: # We need to use lists
 			if not loc.has_key(entries[0]):
 				loc[entries[0]] = []
@@ -259,14 +259,14 @@ class ProfileWindow:
 				e[entries[2]] = txt
 			else:
 				loc[entries[0]].append({entries[1]: '', entries[2]: txt})
-			return vcard
+			return vcard_
 		while len(entries) > 1:
 			if not loc.has_key(entries[0]):
 				loc[entries[0]] = {}
 			loc = loc[entries[0]]
 			del entries[0]
 		loc[entries[0]] = txt
-		return vcard
+		return vcard_
 
 	def make_vcard(self):
 		'''make the vCard dictionary'''
@@ -277,11 +277,11 @@ class ProfileWindow:
 			'ORG_ORGUNIT', 'TITLE', 'ROLE', 'TEL_WORK_NUMBER', 'EMAIL_WORK_USERID',
 			'ADR_WORK_STREET', 'ADR_WORK_EXTADR', 'ADR_WORK_LOCALITY',
 			'ADR_WORK_REGION', 'ADR_WORK_PCODE', 'ADR_WORK_CTRY']
-		vcard = {}
+		vcard_ = {}
 		for e in entries: 
 			txt = self.xml.get_widget(e + '_entry').get_text().decode('utf-8')
 			if txt != '':
-				vcard = self.add_to_vcard(vcard, e, txt)
+				vcard_ = self.add_to_vcard(vcard_, e, txt)
 
 		# DESC textview
 		buff = self.xml.get_widget('DESC_textview').get_buffer()
@@ -289,14 +289,14 @@ class ProfileWindow:
 		end_iter = buff.get_end_iter()
 		txt = buff.get_text(start_iter, end_iter, 0)
 		if txt != '':
-			vcard['DESC'] = txt.decode('utf-8')
+			vcard_['DESC'] = txt.decode('utf-8')
 
 		# Avatar
 		if self.avatar_encoded:
-			vcard['PHOTO'] = {'BINVAL': self.avatar_encoded}
+			vcard_['PHOTO'] = {'BINVAL': self.avatar_encoded}
 			if self.avatar_mime_type:
-				vcard['PHOTO']['TYPE'] = self.avatar_mime_type
-		return vcard
+				vcard_['PHOTO']['TYPE'] = self.avatar_mime_type
+		return vcard_
 
 	def on_ok_button_clicked(self, widget):
 		if self.update_progressbar_timeout_id:
@@ -307,14 +307,14 @@ class ProfileWindow:
 				_('Without a connection you can not publish your contact '
 				'information.'))
 			return
-		vcard = self.make_vcard()
+		vcard_ = self.make_vcard()
 		nick = ''
-		if vcard.has_key('NICKNAME'):
-			nick = vcard['NICKNAME']
+		if vcard_.has_key('NICKNAME'):
+			nick = vcard_['NICKNAME']
 		if nick == '':
 			nick = gajim.config.get_per('accounts', self.account, 'name')
 		gajim.nicks[self.account] = nick
-		gajim.connections[self.account].send_vcard(vcard)
+		gajim.connections[self.account].send_vcard(vcard_)
 		self.message_id = self.statusbar.push(self.context_id,
 			_('Sending profile...'))
 		self.progressbar.show()
