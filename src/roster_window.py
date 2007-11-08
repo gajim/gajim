@@ -279,7 +279,8 @@ class RosterWindow:
 		if len(self.get_contact_iter(jid, account)):
 			return
 		if jid == gajim.get_jid_from_account(account):
-			self.add_self_contact(account)
+			if contact.resource != gajim.connections[account].server_resource:
+				self.add_self_contact(account)
 			return
 		if gajim.jid_is_transport(contact.jid):
 			# if jid is transport, check if we wanna show it in roster
