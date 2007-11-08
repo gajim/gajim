@@ -263,7 +263,8 @@ class RosterWindow:
 		if len(self.get_contact_iter(jid, account)):
 			return
 		if jid == gajim.get_jid_from_account(account):
-			self.add_self_contact(account)
+			if contact.resource != gajim.connections[account].server_resource:
+				self.add_self_contact(account)
 			return
 		if gajim.jid_is_transport(contact.jid):
 			# if jid is transport, check if we wanna show it in roster
@@ -1353,6 +1354,14 @@ class RosterWindow:
 						resources = roster.getResources(jid)
 						# ...get the contact info for our other online resources
 						for resource in resources:
+							# Check if we already have this resource
+							found = False
+							for contact_ in contacts:
+								if contact_.resource == resource:
+									found = True
+									break
+							if found:
+								continue
 							show = roster.getShow(jid+'/'+resource)
 							if not show:
 								show = 'online'
