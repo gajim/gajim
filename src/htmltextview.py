@@ -910,15 +910,20 @@ class HtmlTextView(gtk.TextView):
 		self.set_wrap_mode(gtk.WRAP_CHAR)
 		self.set_editable(False)
 		self._changed_cursor = False
-		self.connect("motion-notify-event", self.__motion_notify_event)
-		self.connect("leave-notify-event", self.__leave_event)
-		self.connect("enter-notify-event", self.__motion_notify_event)
+		self.connect('destroy', self.__destroy_event)
+		self.connect('motion-notify-event', self.__motion_notify_event)
+		self.connect('leave-notify-event', self.__leave_event)
+		self.connect('enter-notify-event', self.__motion_notify_event)
 		self.get_buffer().create_tag('eol', scale = pango.SCALE_XX_SMALL)
 		self.tooltip = tooltips.BaseTooltip()
 		self.config = gajim.config
 		self.interface = gajim.interface
 		# end big hack
 		build_patterns(self,gajim.config,gajim.interface)
+
+	def __destroy_event(self, widget):
+		if self.tooltip.timeout != 0:
+			self.tooltip.hide_tooltip()
 
 	def __leave_event(self, widget, event):
 		if self._changed_cursor:
