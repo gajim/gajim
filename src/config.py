@@ -1887,6 +1887,7 @@ class AccountsWindow:
 			return
 		self.on_checkbutton_toggled(widget, 'sync_with_global_status',
 			account=self.current_account)
+		gajim.interface.roster.update_status_combobox()
 
 	def on_use_ft_proxies_checkbutton1_toggled(self, widget):
 		if self.ignore_events:
