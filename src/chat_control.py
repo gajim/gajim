@@ -137,6 +137,9 @@ class ChatControlBase(MessageControl):
 
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
+		id = self.conv_textview.tv.connect('key_press_event',
+			self._conv_textview_key_press_event)
+		self.handlers[id] = self.conv_textview.tv
 
 		self.conv_scrolledwindow = self.xml.get_widget(
 			'conversation_scrolledwindow')
@@ -335,6 +338,13 @@ class ChatControlBase(MessageControl):
 			widget.modify_fg(gtk.STATE_NORMAL, fg_color)
 		self.connect_style_event(widget, opts[0], opts[1])
 	
+	def _conv_textview_key_press_event(self, widget, event):
+		if gtk.gtk_version < (2, 12, 0):
+			return
+		if event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.CONTROL_MASK):
+			return False
+		self.parent_win.notebook.emit('key_press_event', event)
+
 	def _on_keypress_event(self, widget, event):
 		if event.state & gtk.gdk.CONTROL_MASK:
 			# CTRL + l|L: clear conv_textview

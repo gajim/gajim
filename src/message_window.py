@@ -69,6 +69,17 @@ class MessageWindow:
 		id = self.window.connect('focus-in-event', self._on_window_focus)
 		self.handlers[id] = self.window
 
+		keys=['<Control>h', '<Control>i', '<Control><Shift>Tab',
+				'<Control>Tab', '<Control>F4', '<Control>w',
+				'<Alt>Right', '<Alt>Left', '<Alt>c', 'Escape'] +\
+				['<Alt>'+str(i) for i in xrange(10)]
+		accel_group = gtk.AccelGroup()
+		for key in keys:
+			keyval, mod = gtk.accelerator_parse(key)
+			accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
+				self.accel_group_func)
+		self.window.add_accel_group(accel_group)
+
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
 		self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
@@ -233,6 +244,52 @@ class MessageWindow:
 			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
 
+	def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
+		st = '1234567890' # alt+1 means the first tab (tab 0)
+		control = self.get_active_control()
+		if not control:
+			# No more control in this window
+			return
+		
+		# CTRL mask
+		if modifier & gtk.gdk.CONTROL_MASK:
+			if keyval == gtk.keysyms.h:
+				control._on_history_menuitem_activate()
+			elif control.type_id == message_control.TYPE_CHAT and \
+			keyval == gtk.keysyms.i:
+				control._on_contact_information_menuitem_activate(None)
+			# Tab switch bindings
+			elif keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
+				self.move_to_next_unread_tab(False)
+			elif keyval == gtk.keysyms.Tab: # CTRL + TAB
+				self.move_to_next_unread_tab(True)
+			elif keyval == gtk.keysyms.F4: # CTRL + F4
+				self.remove_tab(control, self.CLOSE_CTRL_KEY)
+			elif keyval == gtk.keysyms.w: # CTRL + W
+				self.remove_tab(control, self.CLOSE_CTRL_KEY)
+
+		# MOD1 (ALT) mask
+		elif modifier & gtk.gdk.MOD1_MASK:
+			# Tab switch bindings
+			if keyval == gtk.keysyms.Right: # ALT + RIGHT
+				new = self.notebook.get_current_page() + 1
+				if new >= self.notebook.get_n_pages(): 
+					new = 0
+				self.notebook.set_current_page(new)
+			elif keyval == gtk.keysyms.Left: # ALT + LEFT
+				new = self.notebook.get_current_page() - 1
+				if new < 0:
+					new = self.notebook.get_n_pages() - 1
+				self.notebook.set_current_page(new)
+			elif chr(keyval) in st: # ALT + 1,2,3..
+				self.notebook.set_current_page(st.index(chr(keyval)))
+			elif keyval == gtk.keysyms.c: # ALT + C toggles chat buttons
+				control.chat_buttons_set_visible(not control.hide_chat_buttons)
+		# Close tab bindings
+		elif keyval == gtk.keysyms.Escape and \
+				gajim.config.get('escape_key_closes'): # Escape
+			self.remove_tab(control, self.CLOSE_ESC)
+
 	def _on_close_button_clicked(self, button, control):
 		'''When close button is pressed: close a tab'''
 		self.remove_tab(control, self.CLOSE_CLOSE_BUTTON)
@@ -333,7 +390,6 @@ class MessageWindow:
 			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
 			gajim.interface.msg_win_mgr._on_window_destroy(self.window)
 			# dnd clean up
-			self.notebook.disconnect(self.hid)
 			self.notebook.drag_dest_unset()
 			self.window.destroy()
 			return # don't show_title, we are dead
@@ -515,49 +571,12 @@ class MessageWindow:
 		self.show_title(control = new_ctrl)
 
 	def _on_notebook_key_press(self, widget, event):
-		st = '1234567890' # alt+1 means the first tab (tab 0)
-		ctrl = self.get_active_control()
-
-		# CTRL mask
-		if event.state & gtk.gdk.CONTROL_MASK:
-			# Tab switch bindings
-			if event.keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
-				self.move_to_next_unread_tab(False)
-			elif event.keyval == gtk.keysyms.Tab: # CTRL + TAB
-				self.move_to_next_unread_tab(True)
-			elif event.keyval == gtk.keysyms.F4: # CTRL + F4
-				self.remove_tab(ctrl, self.CLOSE_CTRL_KEY)
-			elif event.keyval == gtk.keysyms.w: # CTRL + W
-				self.remove_tab(ctrl, self.CLOSE_CTRL_KEY)
-
-		# MOD1 (ALT) mask
-		elif event.state & gtk.gdk.MOD1_MASK:
-			# Tab switch bindings
-			if event.keyval == gtk.keysyms.Right: # ALT + RIGHT
-				new = self.notebook.get_current_page() + 1
-				if new >= self.notebook.get_n_pages(): 
-					new = 0
-				self.notebook.set_current_page(new)
-			elif event.keyval == gtk.keysyms.Left: # ALT + LEFT
-				new = self.notebook.get_current_page() - 1
-				if new < 0:
-					new = self.notebook.get_n_pages() - 1
-				self.notebook.set_current_page(new)
-			elif event.string and event.string in st and \
-					(event.state & gtk.gdk.MOD1_MASK): # ALT + 1,2,3..
-				self.notebook.set_current_page(st.index(event.string))
-			elif event.keyval == gtk.keysyms.c: # ALT + C toggles chat buttons
-				ctrl.chat_buttons_set_visible(not ctrl.hide_chat_buttons_current)
-		# Close tab bindings
-		elif event.keyval == gtk.keysyms.Escape and \
-				gajim.config.get('escape_key_closes'): # Escape
-			self.remove_tab(ctrl, self.CLOSE_ESC)
-		else:
-			# If the active control has a message_textview pass the event to it
-			active_ctrl = self.get_active_control()
-			if isinstance(active_ctrl, ChatControlBase):
-				active_ctrl.msg_textview.emit('key_press_event', event)
-				active_ctrl.msg_textview.grab_focus()
+		control = self.get_active_control()
+		#when we get a key press event in conversation textview,
+		if isinstance(control, ChatControlBase):
+			#we forwarded it to message textview
+			control.msg_textview.emit('key_press_event', event)
+			control.msg_textview.grab_focus()
 
 	def setup_tab_dnd(self, child):
 		'''Set tab label as drag source and connect the drag_data_get signal'''
