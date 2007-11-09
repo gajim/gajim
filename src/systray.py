@@ -332,13 +332,12 @@ class Systray:
 		l = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'SEPARATOR',
 			'CHANGE_STATUS_MSG_MENUITEM', 'SEPARATOR', 'offline']
 		index = l.index(show)
+		if not helpers.statuses_unified():
+			gajim.interface.roster.status_combobox.set_active(index + 2)
+			return
 		current = gajim.interface.roster.status_combobox.get_active()
 		if index != current:
 			gajim.interface.roster.status_combobox.set_active(index)
-		elif not helpers.statuses_unified():
-			# We maybe need to emit the changed signal if all globaly sync'ed
-			# account don't have the global status
-			gajim.interface.roster.status_combobox.emit('changed')
 
 	def on_change_status_message_activate(self, widget):
 		model = gajim.interface.roster.status_combobox.get_model()
