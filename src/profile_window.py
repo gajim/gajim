@@ -47,6 +47,7 @@ class ProfileWindow:
 		self.account = account
 		self.jid = gajim.get_jid_from_account(account)
 
+		self.dialog = None
 		self.avatar_mime_type = None
 		self.avatar_encoded = None
 		self.message_id = self.statusbar.push(self.context_id,
@@ -75,6 +76,8 @@ class ProfileWindow:
 		if self.remove_statusbar_timeout_id is not None:
 			gobject.source_remove(self.remove_statusbar_timeout_id)
 		del gajim.interface.instances[self.account]['profile']
+		if self.dialog: # Image chooser dialog
+			self.dialog.destroy()
 
 	def on_profile_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
@@ -137,6 +140,7 @@ class ProfileWindow:
 				dialogs.ErrorDialog(_('Could not load image'))
 				return
 			self.dialog.destroy()
+			self.dialog = None
 			button = self.xml.get_widget('PHOTO_button')
 			image = button.get_image()
 			image.set_from_pixbuf(pixbuf)
@@ -154,10 +158,18 @@ class ProfileWindow:
 
 		def on_clear(widget):
 			self.dialog.destroy()
+			self.dialog = None
 			self.on_clear_button_clicked(widget)
 
-		self.dialog = dialogs.AvatarChooserDialog(on_response_ok = on_ok,
-			on_response_clear = on_clear)
+		def on_cancel(widget):
+			self.dialog.destroy()
+			self.dialog = None
+
+		if self.dialog:
+			self.dialog.present()
+		else:
+			self.dialog = dialogs.AvatarChooserDialog(on_response_ok = on_ok,
+				on_response_cancel = on_cancel, on_response_clear = on_clear)
 
 	def on_PHOTO_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
