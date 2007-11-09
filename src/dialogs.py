@@ -2775,7 +2775,8 @@ class ImageChooserDialog(FileChooserDialog):
 			on_response_ok = (on_ok, on_response_ok),
 			on_response_cancel = on_response_cancel)
 
-		self.connect('destroy', on_response_cancel)
+		if on_response_cancel:
+			self.connect('destroy', on_response_cancel)
 
 		filter = gtk.FileFilter()
 		filter.set_name(_('All files'))
