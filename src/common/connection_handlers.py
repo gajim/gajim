@@ -448,7 +448,10 @@ class ConnectionBytestream:
 			raise common.xmpp.NodeProcessed
 
 		if real_id[:3] == 'au_':
-			gajim.socks5queue.send_file(file_props, self.name)
+			if file.has_key('stopped') and file_props['stopped']:
+				self.remove_transfer(file_props)
+			else:
+				gajim.socks5queue.send_file(file_props, self.name)
 			raise common.xmpp.NodeProcessed
 
 		proxy = None
@@ -470,7 +473,10 @@ class ConnectionBytestream:
 			raise common.xmpp.NodeProcessed
 
 		else:
-			gajim.socks5queue.send_file(file_props, self.name)
+			if file_props.has_key('stopped') and file_props['stopped']:
+				self.remove_transfer(file_props)
+			else:
+				gajim.socks5queue.send_file(file_props, self.name)
 			if file_props.has_key('fast'):
 				fasts = file_props['fast']
 				if len(fasts) > 0:
@@ -1043,7 +1049,8 @@ class ConnectionVcard:
 						meta_list[tag] = [data]
 				self.dispatch('METACONTACTS', meta_list)
 			else:
-				self.private_storage_supported = False
+				if iq_obj.getErrorCode() not in ('403', '406', '404'):
+					self.private_storage_supported = False
 			# We can now continue connection by requesting the roster
 			self.connection.initRoster()
 		elif self.awaiting_answers[id][0] == PRIVACY_ARRIVED:

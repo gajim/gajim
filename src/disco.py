@@ -65,6 +65,7 @@ def _gen_agent_type_info():
 		# Jabber server
 		('server', 'im'):				(ToplevelAgentBrowser, 'jabber.png'),
 		('services', 'jabber'):		(ToplevelAgentBrowser, 'jabber.png'),
+		('hierarchy', 'branch'):	(AgentBrowser, 'jabber.png'),
 
 		# Services
 		('conference', 'text'):		(MucBrowser, 'conference.png'),
@@ -77,6 +78,7 @@ def _gen_agent_type_info():
 		('pubsub', 'generic'):		(None, 'pubsub.png'),
 		('pubsub', 'service'):		(PubSubBrowser, 'pubsub.png'),
 		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
+		('headline', 'newmail'):	(ToplevelAgentBrowser, 'mail.png'),
 
 		# Transports
 		('conference', 'irc'):		(ToplevelAgentBrowser, 'irc.png'),
@@ -959,6 +961,7 @@ _('This service does not contain any items to browse.'))
 		disco#items query.'''
 		self.model.append((jid, node, item.get('name', ''),
 			get_agent_address(jid, node)))
+		self.cache.get_info(jid, node, self._agent_info, force = force)
 
 	def _update_item(self, iter, jid, node, item):
 		'''Called when an item should be updated in the model. The result of a
@@ -969,7 +972,9 @@ _('This service does not contain any items to browse.'))
 	def _update_info(self, iter, jid, node, identities, features, data):
 		'''Called when an item should be updated in the model with further info.
 		The result of a disco#info query.'''
-		self.model[iter][2] = identities[0].get('name', '')
+		name = identities[0].get('name', '')
+		if name:
+			self.model[iter][2] = name
 
 	def _update_error(self, iter, jid, node):
 		'''Called when a disco#info query failed for an item.'''

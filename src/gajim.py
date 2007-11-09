@@ -23,6 +23,17 @@ import urllib
 
 from common import i18n
 
+# PyGTK2.10+ only throws a warning
+import warnings
+warnings.filterwarnings('error', module='gtk')
+try:
+	import gtk
+except Warning, msg:
+	if str(msg) == 'could not open display':
+		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
+		sys.exit()
+warnings.resetwarnings()
+
 import message_control
 
 from chat_control import ChatControlBase
@@ -40,12 +51,6 @@ if os.name == 'posix': # dl module is Unix Only
 	except:
 		pass
 
-try:
-	import gtk
-except RuntimeError, msg:
-	if str(msg) == 'could not open display':
-		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
-		sys.exit()
 pritext = ''
 if gtk.pygtk_version < (2, 6, 0):
 	pritext = _('Gajim needs PyGTK 2.6 or above')
@@ -1020,18 +1025,32 @@ class Interface:
 		# print status in chat window and update status/GPG image
 		if self.msg_win_mgr.has_window(fjid, account):
 			ctrl = self.msg_win_mgr.get_control(fjid, account)
-			contact = ctrl.contact
-			contact.show = show
-			contact.status = status
-			ctrl.update_ui()
-			uf_show = helpers.get_uf_show(show)
-			if status:
-				ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show,
-					status), 'status')
+			statusCode = array[9]
+			if '303' in statusCode:
+				new_nick = array[10]
+				ctrl.print_conversation(_('%s is now known as %s') % (nick,
+					new_nick), 'status')
+				gc_c = gajim.contacts.get_gc_contact(account, room_jid, new_nick)
+				c = gajim.contacts.contact_from_gc_contact(gc_c)
+				ctrl.gc_contact = gc_c
+				ctrl.contact = c
+				ctrl.draw_banner()
+				old_jid = room_jid + '/' + nick
+				new_jid = room_jid + '/' + new_nick
+				self.msg_win_mgr.change_key(old_jid, new_jid, account)
 			else:
-				ctrl.print_conversation(_('%s is now %s') % (nick, uf_show),
-					'status')
-			ctrl.parent_win.redraw_tab(ctrl)
+				contact = ctrl.contact
+				contact.show = show
+				contact.status = status
+				uf_show = helpers.get_uf_show(show)
+				if status:
+					ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show,
+						status), 'status')
+				else:
+					ctrl.print_conversation(_('%s is now %s') % (nick, uf_show),
+						'status')
+				ctrl.parent_win.redraw_tab(ctrl)
+				ctrl.update_ui()
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
 

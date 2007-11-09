@@ -212,11 +212,11 @@ class P2PClient(IdleObject):
 	
 	def on_disconnect(self):
 		if self.conn_holder:
-			if self.conn_holder.number_of_awaiting_messages.has_key(self.conn_holder.fd):
-				if self.conn_holder.number_of_awaiting_messages[self.conn_holder.fd] > 0:
+			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
+				if self.conn_holder.number_of_awaiting_messages[self.fd] > 0:
 					self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
 					_('Connection to host could not be established'), None, None])
-				del self.conn_holder.number_of_awaiting_messages[self.conn_holder.fd]
+				del self.conn_holder.number_of_awaiting_messages[self.fd]
 			self.conn_holder.remove_connection(self.sock_hash) 
 		if self.__dict__.has_key('Dispatcher'):
 			self.Dispatcher.PlugOut()

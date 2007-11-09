@@ -186,7 +186,8 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = widget
 
 		self.room_jid = self.contact.jid
-		self.nick = contact.name
+		self.nick = contact.name.decode('utf-8')
+		self.new_nick = ''
 		self.name = self.room_jid.split('@')[0]
 
 		hide_chat_buttons_always = gajim.config.get(
@@ -867,8 +868,9 @@ class GroupchatControl(ChatControlBase):
 						'reason': reason }
 				self.print_conversation(s, 'info')
 			elif '303' in statusCode: # Someone changed his or her nick
-				if nick == self.nick: # We changed our nick
-					self.nick = new_nick
+				if nick == self.new_nick: # We changed our nick
+					self.nick = self.new_nick
+					self.new_nick = ''
 					s = _('You are now known as %s') % new_nick
 				else:
 					s = _('%s is now known as %s') % (nick, new_nick)
@@ -895,7 +897,7 @@ class GroupchatControl(ChatControlBase):
 					files[os.path.join(path, puny_nick + ext)] = \
 						os.path.join(path, puny_new_nick + ext)
 				for old_file in files:
-					if os.path.exists(old_file):
+					if os.path.exists(old_file) and old_file != files[old_file]:
 						if os.path.exists(files[old_file]):
 							# Windows require this
 							os.remove(files[old_file])
@@ -1106,6 +1108,7 @@ class GroupchatControl(ChatControlBase):
 					_('The nickname has not allowed characters.'))
 					return True
 				gajim.connections[self.account].join_gc(nick, self.room_jid, None)
+				self.new_nick = nick
 				self.clear(self.msg_textview)
 			else:
 				self.get_command_help(command)
@@ -1388,6 +1391,7 @@ class GroupchatControl(ChatControlBase):
 				return
 			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
 			self.nick = nick
+
 		instance = dialogs.InputDialog(title, prompt, proposed_nick,
 			is_modal = False, ok_handler = on_ok)
 

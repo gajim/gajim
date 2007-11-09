@@ -89,6 +89,8 @@ class CellRendererImage(gtk.GenericCellRenderer):
 
 		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			if self.image not in self.iters:
+				if not isinstance(widget, gtk.TreeView):
+					return
 				animation = self.image.get_animation()
 				iter =  animation.get_iter()
 				self.iters[self.image] = iter
