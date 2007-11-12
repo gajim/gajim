@@ -518,9 +518,15 @@ class SingleForm(gtk.Table, object):
 		field.values = values
 
 	def on_jid_multi_add_button_clicked(self, widget, treeview, model, field):
-		iter = model.insert(999999, ("new@jabber.id",))
+		jid = 'new@jabber.id'
+		if jid in field.values:
+			i = 1
+			while 'new%d@jabber.id' % i in field.values:
+				i += 1
+			jid = 'new%d@jabber.id' % i
+		iter = model.insert(999999, (jid,))
 		treeview.set_cursor(model.get_path(iter), treeview.get_column(0), True)
-		field.values = field.values + ["new@jabber.id"]
+		field.values = field.values + [jid]
 
 	def on_jid_multi_edit_button_clicked(self, widget, treeview):
 		model, iter = treeview.get_selection().get_selected()
