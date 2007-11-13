@@ -92,19 +92,36 @@ else:
 				return str, 'GnuPG not usable'
 			self.options.recipients = recipients   # a list!
 
-			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout',
+			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout', 'status',
 				'stderr'])
 			proc.handles['stdin'].write(str)
-			proc.handles['stdin'].close()
+			try:
+				proc.handles['stdin'].close()
+			except IOError:
+				pass
 
 			output = proc.handles['stdout'].read()
-			proc.handles['stdout'].close()
+			try:
+				proc.handles['stdout'].close()
+			except IOError:
+				pass
+
+			stat = proc.handles['status']
+			resp = self._read_response(stat)
+			try:
+				proc.handles['status'].close()
+			except IOError:
+				pass
 
 			error = proc.handles['stderr'].read()
 			proc.handles['stderr'].close()
 
 			try: proc.wait()
 			except IOError: pass
+			if 'BEGIN_ENCRYPTION' in resp and 'END_ENCRYPTION' in resp:
+				# Encryption succeeded, even if there is output on stderr. Maybe
+				# verbose is on
+				error = ''
 			return self._stripHeaderFooter(output), error
 
 		def decrypt(self, str, keyID):
