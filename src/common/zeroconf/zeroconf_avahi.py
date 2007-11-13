@@ -243,8 +243,13 @@ class Zeroconf:
 				txt['status'] = 'avail'
 
 			self.txt = txt
-			gajim.log.debug('Publishing service %s of type %s' % (self.name, self.stype))
-			self.entrygroup.AddService(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, self.avahi_txt(), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
+			gajim.log.debug('Publishing service %s of type %s' % (self.name,
+				self.stype))
+			self.entrygroup.AddService(self.avahi.IF_UNSPEC,
+				self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
+				'', dbus.UInt16(self.port), self.avahi_txt(),
+				reply_handler=self.service_added_callback,
+				error_handler=self.service_add_fail_callback)
 			
 			self.entrygroup.Commit(reply_handler=self.service_committed_callback, 
 				error_handler=self.entrygroup_commit_error_CB)
