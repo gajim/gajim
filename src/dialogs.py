@@ -1068,7 +1068,7 @@ class NonModalConfirmationDialog(HigDialog):
 	def on_response_cancel(self, widget):
 		if self.user_response_cancel:
 			if isinstance(self.user_response_cancel, tuple):
-				self.user_response_cancel[0](*self.user_response_ok[1:])
+				self.user_response_cancel[0](*self.user_response_cancel[1:])
 			else:
 				self.user_response_cancel()
 		self.destroy()
