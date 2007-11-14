@@ -18,6 +18,7 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import sys
 from common import gajim
 
 def device_now_active(self, *args):
@@ -34,23 +35,26 @@ def device_no_longer_active(self, *args):
 
 supported = False
 
-try:
-	from common.dbus_support import system_bus
+if sys.platform == 'darwin':
+	supported = True
+else:
+	try:
+		from common.dbus_support import system_bus
 
-	bus = system_bus.SystemBus()
+		bus = system_bus.SystemBus()
 
-	if 'org.freedesktop.NetworkManager' in bus.list_names():
-		supported = True
-		bus.add_signal_receiver(device_no_longer_active,
-			'DeviceNoLongerActive',
-			'org.freedesktop.NetworkManager',
-			'org.freedesktop.NetworkManager',
-			'/org/freedesktop/NetworkManager')
+		if 'org.freedesktop.NetworkManager' in bus.list_names():
+			supported = True
+			bus.add_signal_receiver(device_no_longer_active,
+									'DeviceNoLongerActive',
+									'org.freedesktop.NetworkManager',
+									'org.freedesktop.NetworkManager',
+									'/org/freedesktop/NetworkManager')
 
-		bus.add_signal_receiver(device_now_active,
-			'DeviceNowActive',
-			'org.freedesktop.NetworkManager',
-			'org.freedesktop.NetworkManager',
-			'/org/freedesktop/NetworkManager')
-except:
-	pass
+			bus.add_signal_receiver(device_now_active,
+									'DeviceNowActive',
+									'org.freedesktop.NetworkManager',
+									'org.freedesktop.NetworkManager',
+									'/org/freedesktop/NetworkManager')
+	except:
+		pass

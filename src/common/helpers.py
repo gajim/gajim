@@ -30,6 +30,7 @@ import urllib
 import errno
 import select
 import sha
+import sys
 from encodings.punycode import punycode_encode
 from encodings import idna
 
@@ -38,6 +39,9 @@ from i18n import Q_
 from i18n import ngettext
 from xmpp_stringprep import nodeprep, resourceprep, nameprep
 
+
+if sys.platform == 'darwin':
+	from osx import nsapp
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -474,7 +478,9 @@ def play_sound_file(path_to_soundfile):
 		return
 	if path_to_soundfile is None or not os.path.exists(path_to_soundfile):
 		return
-	if os.name == 'nt':
+	if sys.platform == 'darwin':
+		nsapp.playFile(path_to_soundfile)
+	elif os.name == 'nt':
 		try:
 			winsound.PlaySound(path_to_soundfile,
 				winsound.SND_FILENAME|winsound.SND_ASYNC)

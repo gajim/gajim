@@ -46,6 +46,14 @@ try:
 except ImportError:
 	USER_HAS_PYNOTIFY = False
 
+USER_HAS_GROWL = True
+try:
+	import osx.growler
+	osx.growler.init()
+except:
+	USER_HAS_GROWL = False
+
+
 def get_show_in_roster(event, account, contact):
 	'''Return True if this event must be shown in roster, else False'''
 	if event == 'gc_message_received':
@@ -344,6 +352,11 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 		except gobject.GError, e:
 			# Connection to notification-daemon failed, see #2893
 			gajim.log.debug(str(e))
+	# try os/x growl
+	if USER_HAS_GROWL:
+		osx.growler.notify(event_type, jid, account, msg_type, path_to_image,
+			title, text)
+		return
 
 	# go old style
 	instance = dialogs.PopupNotificationWindow(event_type, jid, account,

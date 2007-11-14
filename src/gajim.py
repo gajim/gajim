@@ -25,9 +25,16 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+
 import sys
 import os
 import urllib
+
+if sys.platform == 'darwin':
+	OSX_FRAMEWORK='/Library/Frameworks/GTK+.framework/Versions/Current'
+	sys.path.append('%s/lib/python2.5/site-packages' % OSX_FRAMEWORK)
+	sys.path.append('%s/lib/python2.5/site-packages/gtk-2.0' % OSX_FRAMEWORK)
+	os.environ['PATH'] = '%s/bin:' % OSX_FRAMEWORK + os.environ['PATH']
 
 import logging
 consoleloghandler = logging.StreamHandler()
@@ -294,6 +301,9 @@ def pid_alive():
 		if get_p(pid) in ('python.exe', 'gajim.exe'):
 			return True
 		return False
+	elif sys.platform == 'darwin':
+		from osx import checkPID
+		return checkPID(pid, 'gajim')
 	try:
 		if not os.path.exists('/proc'):
 			return True # no /proc, assume Gajim is running
@@ -356,6 +366,9 @@ def on_exit():
 	# delete pid file on normal exit
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)
+	if sys.platform == 'darwin':
+		import osx
+		osx.shutdown()
 
 import atexit
 atexit.register(on_exit)
@@ -1430,7 +1443,7 @@ class Interface:
 		# We received a bookmark item from the server (JEP48)
 		# Auto join GC windows if neccessary
 		
-		self.roster.actions_menu_needs_rebuild = True
+		self.roster.set_actions_menu_needs_rebuild()
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		# do not autojoin if we are invisible
 		if gajim.connections[account].connected == invisible_show:
@@ -1793,7 +1806,7 @@ class Interface:
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
 		# block signed in notifications for 30 seconds
 		gajim.block_signed_in_notifications[account] = True
-		self.roster.actions_menu_needs_rebuild = True
+		self.roster.set_actions_menu_needs_rebuild()
 		if self.sleeper.getState() != common.sleepy.STATE_UNKNOWN and \
 		gajim.connections[account].connected in (2, 3):
 			# we go online or free for chat, so we activate auto status
@@ -2736,9 +2749,10 @@ class Interface:
 
 		self.systray_enabled = False
 		self.systray_capabilities = False
-		
-		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and\
-		gtk.gtk_version >= (2, 10, 0):
+
+		if (((os.name == 'nt') or (sys.platform == 'darwin')) and
+			(gtk.pygtk_version >= (2, 10, 0)) and
+			(gtk.gtk_version >= (2, 10, 0))):
 			import statusicon 
 			self.systray = statusicon.StatusIcon() 
 			self.systray_capabilities = True
@@ -2792,7 +2806,7 @@ if __name__ == '__main__':
 		print >> sys.stderr, "Encodings: d:%s, fs:%s, p:%s" % \
 		(sys.getdefaultencoding(), sys.getfilesystemencoding(), locale.getpreferredencoding())
 
-	if os.name != 'nt':
+	if ((os.name != 'nt') and (sys.platform != 'darwin')):
 		# Session Management support
 		try:
 			import gnome.ui
@@ -2819,6 +2833,10 @@ if __name__ == '__main__':
 					cli.set_restart_command(len(argv), argv)
 		
 	check_paths.check_and_possibly_create_paths()
+
+	if sys.platform == 'darwin':
+		import osx
+		osx.init()
 
 	Interface()
 	gtk.main()

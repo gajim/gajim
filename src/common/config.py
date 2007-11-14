@@ -26,6 +26,7 @@
 ##
 
 
+import sys
 import re
 import copy
 import defs
@@ -50,6 +51,16 @@ opt_treat_incoming_messages = ['', 'chat', 'normal']
 class Config:
 
 	DEFAULT_ICONSET = 'dcraven'
+	if sys.platform == 'darwin':
+		DEFAULT_OPENWITH = 'open'
+		DEFAULT_BROWSER = 'open -a firefox'
+		DEFAULT_MAILAPP = 'open -a thunderbird'
+		DEFAULT_FILE_MANAGER = 'open'
+	else:
+		DEFAULT_OPENWITH = 'gnome-open'
+		DEFAULT_BROWSER = 'firefox'
+		DEFAULT_MAILAPP = 'mozilla-thunderbird -compose'
+		DEFAULT_FILE_MANAGER = 'xffm'
 
 	__options = {
 		# name: [ type, default_value, help_string ]
@@ -108,10 +119,10 @@ class Config:
 		'sounds_on': [ opt_bool, True ],
 		# 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
 		'soundplayer': [ opt_str, '' ],
-		'openwith': [ opt_str, 'gnome-open' ],
-		'custombrowser': [ opt_str, 'firefox' ],
-		'custommailapp': [ opt_str, 'mozilla-thunderbird -compose' ],
-		'custom_file_manager': [ opt_str, 'xffm' ],
+		'openwith': [ opt_str, DEFAULT_OPENWITH ],
+		'custombrowser': [ opt_str, DEFAULT_BROWSER ],
+		'custommailapp': [ opt_str, DEFAULT_MAILAPP ],
+		'custom_file_manager': [ opt_str, DEFAULT_FILE_MANAGER ],
 		'gc-hpaned-position': [opt_int, 430],
 		'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nick completion (tab) in group chat.')],
 		'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when desired nickname is used by someone else in group chat.')],

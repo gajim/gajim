@@ -881,7 +881,9 @@ class AboutDialog:
 		artists = ['Anders Ström', 'Christophe Got', 'Dennis Craven',
 			'Guillaume Morin', 'Josef Vybíral', 'Membris Khan']
 		dlg.set_artists(artists)
+		gobject.idle_add(self.dorun, dlg)
 
+	def dorun(self, dlg):
 		rep = dlg.run()
 		dlg.destroy()
 
@@ -1932,6 +1934,7 @@ class SingleMessageWindow:
 			self.message_tv_buffer.place_cursor(end_iter)
 
 	def save_pos(self):
+		print 'save_pos'
 		if gajim.config.get('saveposition'):
 			# save the window size and position
 			x, y = self.window.get_position()
@@ -1943,6 +1946,7 @@ class SingleMessageWindow:
 			gajim.interface.save_config()
 
 	def on_single_message_window_delete_event(self, window, ev):
+		print 'delete_event'
 		self.save_pos()
 
 	def prepare_widgets_for(self, action):
@@ -2019,6 +2023,7 @@ class SingleMessageWindow:
 		self.window.destroy()
 
 	def on_close_button_clicked(self, widget):
+		print 'close'
 		self.save_pos()
 		self.window.destroy()
 

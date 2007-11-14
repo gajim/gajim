@@ -40,6 +40,9 @@ def send_error(error_message):
 	sys.exit(1)
 
 try:
+	if sys.platform == 'darwin':
+		import osx.dbus
+		osx.dbus.load(False)
 	import dbus
 	import dbus.service
 	import dbus.glib

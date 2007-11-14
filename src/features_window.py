@@ -19,6 +19,7 @@
 ##
 
 import os
+import sys
 import gtk
 import gobject
 import gtkgui_helpers
@@ -219,6 +220,12 @@ class FeaturesWindow:
 	def notification_available(self):
 		if os.name == 'nt':
 			return False
+		elif sys.platform == 'darwin':
+			try:
+				import osx.growler
+			except:
+				return False
+			return True
 		from common import dbus_support
 		if self.dbus_available() and dbus_support.get_notifications_interface():
 			return True

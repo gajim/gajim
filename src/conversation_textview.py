@@ -318,6 +318,10 @@ class ConversationTextview:
 		return True		   
 
 	def smooth_scroll_timeout(self):
+		gobject.idle_add(self.do_smooth_scroll_timeout)
+		return
+
+	def do_smooth_scroll_timeout(self):
 		if not self.smooth_id:
 			# we finished scrolling
 			return

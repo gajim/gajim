@@ -20,7 +20,7 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
+import os, sys
 
 from common import gajim
 from common import exceptions
@@ -28,10 +28,13 @@ from common import exceptions
 _GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
 
 try:
+	if sys.platform == 'darwin':
+		import osx.dbus
+		osx.dbus.load(True)
 	import dbus
 	import dbus.service
 	import dbus.glib
-	supported = True # does use have D-Bus bindings?
+	supported = True # does user have D-Bus bindings?
 except ImportError:
 	supported = False
 	if not os.name == 'nt': # only say that to non Windows users
@@ -103,7 +106,7 @@ class SessionBus:
 session_bus = SessionBus()
 
 def get_interface(interface, path):
-	'''Returns an interface on the current SessionBus. If the interface isn't 
+	'''Returns an interface on the current SessionBus. If the interface isn\'t 
 	running, it tries to start it first.'''
 	if not supported:
 		return None

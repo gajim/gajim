@@ -61,6 +61,11 @@ if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
 	import dbus
 
+import sys
+if sys.platform == 'darwin':
+	from osx import syncmenu
+
+
 #(icon, name, type, jid, account, editable, second pixbuf)
 (
 C_IMG, # image to show state (online, new message etc)
@@ -903,9 +908,17 @@ class RosterWindow:
 
 		return advanced_menuitem_menu
 
-	def make_menu(self):
-		'''create the main window's menus'''
-		if not self.actions_menu_needs_rebuild:
+	def set_actions_menu_needs_rebuild(self):
+		self.actions_menu_needs_rebuild = True
+		# Force the rebuild now since the on_activates on the menu itself does
+		# not work with the os/x top level menubar
+		if sys.platform == 'darwin':
+			self.make_menu(force = True)
+		return
+
+	def make_menu(self, force = False):
+		'''create the main window\'s menus'''
+		if not force and not self.actions_menu_needs_rebuild:
 			return
 		new_chat_menuitem = self.xml.get_widget('new_chat_menuitem')
 		single_message_menuitem = self.xml.get_widget('send_single_message_menuitem')
@@ -1170,6 +1183,9 @@ class RosterWindow:
 
 			advanced_menuitem.set_submenu(advanced_sub_menu)
 			advanced_sub_menu.show_all()
+
+		if sys.platform == 'darwin':
+			syncmenu.takeover_menu(self.xml.get_widget('menubar'))
 
 		self.actions_menu_needs_rebuild = False
 
@@ -1973,7 +1989,7 @@ class RosterWindow:
 		dialogs.AddSpecialNotificationDialog(jid)
 
 	def make_contact_menu(self, event, iter):
-		'''Make contact's popup menu'''
+		'''Make contact\'s popup menu'''
 		model = self.tree.get_model()
 		jid = model[iter][C_JID].decode('utf-8')
 		tree_path = model.get_path(iter)
@@ -2206,7 +2222,7 @@ class RosterWindow:
 			status_menuitems.append(status_menuitem)
 		if len(contacts) > 1: # several resources
 			def resources_submenu(action, room_jid = None, room_account = None):
-				''' Build a submenu with contact's resources.
+				''' Build a submenu with contact\'s resources.
 				room_jid and room_account are for action self.on_invite_to_room '''
 				sub_menu = gtk.Menu()
 
@@ -2767,7 +2783,7 @@ class RosterWindow:
 		menu.popup(None, None, None, event_button, event.time)
 
 	def make_transport_menu(self, event, iter):
-		'''Make transport's popup menu'''
+		'''Make transport\'s popup menu'''
 		model = self.tree.get_model()
 		jid = model[iter][C_JID].decode('utf-8')
 		path = model.get_path(iter)
@@ -3806,6 +3822,10 @@ class RosterWindow:
 						self.chg_contact_status(contact, 'offline', '', account)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
+		# Force the rebuild now since the on_activates on the menu itself does
+		# not work with the os/x top level menubar
+		if sys.platform == 'darwin':
+			self.make_menu(force = True)
 
 	def new_private_chat(self, gc_contact, account, session = None):
 		contact = gajim.contacts.contact_from_gc_contact(gc_contact)
@@ -4164,6 +4184,9 @@ class RosterWindow:
 		gtk.main_quit()
 
 	def on_quit_menuitem_activate(self, widget):
+		gobject.idle_add(self.on_quit_menuitem_activate_real, widget)
+
+	def on_quit_menuitem_activate_real(self, widget):
 		accounts = gajim.connections.keys()
 		get_msg = False
 		for acct in accounts:
@@ -5154,6 +5177,52 @@ class RosterWindow:
 			self._last_selected_contact.append((jid, account))
 			self.draw_contact(jid, account, selected = True)
 
+	def setup_for_osx(self):
+		# Massage the GTK menu so it will match up to the OS/X nib style menu
+		# when passed to sync-menu and merged
+		main_menu = self.xml.get_widget('menubar')
+		app_item = gtk.MenuItem('Gajim')
+		main_menu.insert(app_item, 0)
+		win_item = gtk.MenuItem('Window')
+		main_menu.insert(win_item, 4)
+		actions_menu = self.xml.get_widget('actions_menu_menu')
+		quit_item = self.xml.get_widget('quit_menuitem')
+		actions_menu.remove(quit_item)
+		actions_menu.remove(self.xml.get_widget('separator1'))
+		edit_menu = self.xml.get_widget('edit_menu_menu')
+		edit_menu.remove(self.xml.get_widget('preferences_menuitem'))
+		edit_menu.remove(self.xml.get_widget('separator2'))
+		help_menu = self.xml.get_widget('help_menu_menu')
+		about_item = self.xml.get_widget('about_menuitem')
+		help_menu.remove(about_item)
+		# Build up App menu
+		app_menu = gtk.Menu()
+		app_item.set_submenu(app_menu)
+		app_menu.append(about_item)
+		app_menu.append(gtk.MenuItem('__SKIP__'))
+		prefs_item = gtk.MenuItem('Preferences...')
+		prefs_item.connect("activate", self.on_preferences_menuitem_activate)
+		accels = gtk.AccelGroup()
+		self.xml.get_widget('roster_window').add_accel_group(accels)
+		prefs_item.add_accelerator('activate', accels, ord(','),
+								   gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+		app_menu.append(prefs_item)
+		app_menu.append(gtk.MenuItem('__SKIP__'))
+		app_menu.append(gtk.MenuItem('__SKIP__'))
+		app_menu.append(gtk.MenuItem('__SKIP__'))
+		app_menu.append(gtk.MenuItem('__SKIP__'))
+		app_menu.append(gtk.MenuItem('__SKIP__'))
+		app_menu.append(gtk.MenuItem('__SKIP__'))
+		app_menu.append(gtk.MenuItem('__SKIP__'))
+		app_menu.append(quit_item)
+		app_menu.show_all()
+		# Do the merge baby!
+		syncmenu.takeover_menu(main_menu)
+		self.make_menu(force = True)
+		# Hide the GTK menubar itself and let the OS/X menubar do its thing
+		self.xml.get_widget('menubar').hide()
+		return
+
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
 		self.window = self.xml.get_widget('roster_window')
@@ -5370,3 +5439,6 @@ class RosterWindow:
 			# Create zeroconf in config file
 			zeroconf = common.zeroconf.connection_zeroconf.ConnectionZeroconf(
 				gajim.ZEROCONF_ACC_NAME)
+
+		if sys.platform == 'darwin':
+			self.setup_for_osx()

@@ -25,7 +25,7 @@
 ##
 
 from common import gajim
-import os
+import os, sys
 
 
 STATE_UNKNOWN  = 'OS probably not supported'
@@ -47,6 +47,8 @@ try:
 			lastInputInfo = LASTINPUTINFO()
 			lastInputInfo.cbSize = ctypes.sizeof(lastInputInfo)
 
+		elif sys.platform == 'darwin':
+			import osx.idle as idle
 		else: # unix
 			import idle
 except:
