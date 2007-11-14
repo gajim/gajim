@@ -1964,7 +1964,8 @@ class RosterWindow:
 				jid += '/' + contact.resource
 			dialogs.SingleMessageWindow(account, jid, 'send')
 
-	def on_send_file_menuitem_activate(self, widget, account, contact):
+	def on_send_file_menuitem_activate(self, widget, contact, account,
+	resource=None):
 		gajim.interface.instances['file_transfers'].show_file_send_request(
 			account, contact)
 
@@ -2036,7 +2037,7 @@ class RosterWindow:
 
 			if contact.resource:
 				send_file_menuitem.connect('activate',
-					self.on_send_file_menuitem_activate, account, contact)
+					self.on_send_file_menuitem_activate, contact, account)
 			else: # if we do no have resource we cannot do much
 				send_file_menuitem.set_sensitive(False)
 
@@ -2233,6 +2234,8 @@ class RosterWindow:
 
 			start_chat_menuitem.set_submenu(resources_submenu(
 				self.on_open_chat_window))
+			send_file_menuitem.set_submenu(resources_submenu(
+				self.on_send_file_menuitem_activate))
 			execute_command_menuitem.set_submenu(resources_submenu(
 				self.on_execute_command))
 			invite_to_new_room_menuitem.set_submenu(resources_submenu(
@@ -2265,11 +2268,11 @@ class RosterWindow:
 					our_jid_other_resource)
 				invite_to_submenu.append(menuitem)
 
-		if contact.resource:
-			send_file_menuitem.connect('activate',
-				self.on_send_file_menuitem_activate, account, contact)
-		else: # if we do not have resource we cannot send file
-			send_file_menuitem.set_sensitive(False)
+			if contact.resource:
+				send_file_menuitem.connect('activate',
+					self.on_send_file_menuitem_activate, contact, account)
+			else: # if we do not have resource we cannot send file
+				send_file_menuitem.set_sensitive(False)
 
 		send_single_message_menuitem.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, contact)
