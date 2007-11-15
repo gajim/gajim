@@ -3752,8 +3752,13 @@ class RosterWindow:
 			index('invisible'):
 				continue
 			current_show = gajim.SHOW_LIST[gajim.connections[account].connected]
-			self.send_status(account, current_show, status_message)
-
+			# Keep the last status message, replacing only the current song part
+			current_status_message = gajim.connections[account].status
+			song_offset = current_status_message.find('♪')
+			if song_offset > 0:
+				current_status_message = current_status_message[0:song_offset]
+			status_message = current_status_message.strip() + '\n' + status_message
+			self.send_status(account, current_show, status_message.strip())
 
 	def update_status_combobox(self):
 		# table to change index in connection.connected to index in combobox
