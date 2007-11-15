@@ -1829,8 +1829,11 @@ class SingleMessageWindow:
 	singled message depending on action argument which can be 'send'
 	or 'receive'.
 	'''
+	# Keep a reference on windows so garbage collector don't restroy them
+	instances = []
 	def __init__(self, account, to='', action='', from_whom='', subject='',
 	message='', resource='', session=None, form_node=None):
+		self.instances.append(self)
 		self.account = account
 		self.action = action
 
@@ -1929,12 +1932,14 @@ class SingleMessageWindow:
 				gajim.config.get('single-msg-height'))
 		self.window.show_all()
 
+	def on_single_message_window_destroy(self, widget):
+		self.instances.remove(self)
+
 	def set_cursor_to_end(self):
 			end_iter = self.message_tv_buffer.get_end_iter()
 			self.message_tv_buffer.place_cursor(end_iter)
 
 	def save_pos(self):
-		print 'save_pos'
 		if gajim.config.get('saveposition'):
 			# save the window size and position
 			x, y = self.window.get_position()
@@ -1946,7 +1951,6 @@ class SingleMessageWindow:
 			gajim.interface.save_config()
 
 	def on_single_message_window_delete_event(self, window, ev):
-		print 'delete_event'
 		self.save_pos()
 
 	def prepare_widgets_for(self, action):
@@ -2023,7 +2027,6 @@ class SingleMessageWindow:
 		self.window.destroy()
 
 	def on_close_button_clicked(self, widget):
-		print 'close'
 		self.save_pos()
 		self.window.destroy()
 
