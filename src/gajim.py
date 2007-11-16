@@ -30,12 +30,6 @@ import sys
 import os
 import urllib
 
-if sys.platform == 'darwin':
-	OSX_FRAMEWORK='/Library/Frameworks/GTK+.framework/Versions/Current'
-	sys.path.append('%s/lib/python2.5/site-packages' % OSX_FRAMEWORK)
-	sys.path.append('%s/lib/python2.5/site-packages/gtk-2.0' % OSX_FRAMEWORK)
-	os.environ['PATH'] = '%s/bin:' % OSX_FRAMEWORK + os.environ['PATH']
-
 import logging
 consoleloghandler = logging.StreamHandler()
 consoleloghandler.setLevel(1)
