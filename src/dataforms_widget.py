@@ -20,10 +20,13 @@ single means these with one record of data (without <reported/> element),
 multiple - these which may contain more data (with <reported/> element)."""
 
 import gtk
+import gobject
 
 import gtkgui_helpers
+import dialogs
 
 import common.dataforms as dataforms
+from common import helpers
 
 import itertools
 
@@ -356,7 +359,8 @@ class SingleForm(gtk.Table, object):
 			elif field.type == 'jid-multi':
 				commonwidget = False
 
-				xml = gtkgui_helpers.get_glade('data_form_window.glade', 'item_list_table')
+				xml = gtkgui_helpers.get_glade('data_form_window.glade',
+					'item_list_table')
 				widget = xml.get_widget('item_list_table')
 				treeview = xml.get_widget('item_treeview')
 
@@ -370,7 +374,8 @@ class SingleForm(gtk.Table, object):
 				renderer = gtk.CellRendererText()
 				renderer.set_property('editable', True)
 				renderer.connect('edited',
-					self.on_jid_multi_cellrenderertext_edited, listmodel, field)
+					self.on_jid_multi_cellrenderertext_edited, treeview, listmodel,
+					field)
 
 				treeview.append_column(gtk.TreeViewColumn(None, renderer,
 					text=0))
@@ -491,8 +496,22 @@ class SingleForm(gtk.Table, object):
 			widget.get_start_iter(),
 			widget.get_end_iter())
 
-	def on_jid_multi_cellrenderertext_edited(self, cell, path, newtext, model, field):
-		old=model[path][0]
+	def on_jid_multi_cellrenderertext_edited(self, cell, path, newtext, treeview,
+	model, field):
+		old = model[path][0]
+		if old == newtext:
+			return
+		try:
+			newtext = helpers.parse_jid(newtext)
+		except helpers.InvalidFormat, s:
+			dialogs.ErrorDialog(_('Invalid Jabber ID'), str(s))
+			return
+		if newtext in field.values:
+			dialogs.ErrorDialog(
+				_('Jabber ID already in list'),
+				_('The Jabber ID you entered is already in the list. Choose another one.'))
+			gobject.idle_add(treeview.set_cursor, path)
+			return
 		model[path][0]=newtext
 
 		values = field.values
@@ -500,9 +519,15 @@ class SingleForm(gtk.Table, object):
 		field.values = values
 
 	def on_jid_multi_add_button_clicked(self, widget, treeview, model, field):
-		iter = model.insert(999999, ("new@jabber.id",))
+		jid = 'new@jabber.id'
+		if jid in field.values:
+			i = 1
+			while 'new%d@jabber.id' % i in field.values:
+				i += 1
+			jid = 'new%d@jabber.id' % i
+		iter = model.insert(999999, (jid,))
 		treeview.set_cursor(model.get_path(iter), treeview.get_column(0), True)
-		field.values = field.values + ["new@jabber.id"]
+		field.values = field.values + [jid]
 
 	def on_jid_multi_edit_button_clicked(self, widget, treeview):
 		model, iter = treeview.get_selection().get_selected()
