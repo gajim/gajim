@@ -1481,8 +1481,11 @@ class SingleMessageWindow:
 	singled message depending on action argument which can be 'send'
 	or 'receive'.
 	'''
+	# Keep a reference on windows so garbage collector don't restroy them
+	instances = []
 	def __init__(self, account, to = '', action = '', from_whom = '',
 	subject = '', message = '', resource = ''):
+		self.instances.append(self)
 		self.account = account
 		self.action = action
 
@@ -1580,6 +1583,9 @@ class SingleMessageWindow:
 				gajim.config.get('single-msg-width'),
 				gajim.config.get('single-msg-height'))
 		self.window.show_all()
+
+	def on_single_message_window_destroy(self, widget):
+		self.instances.remove(self)
 
 	def set_cursor_to_end(self):
 			end_iter = self.message_tv_buffer.get_end_iter()
