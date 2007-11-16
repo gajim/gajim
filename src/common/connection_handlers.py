@@ -1721,7 +1721,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if not self.sessions[jid]:
 				del self.sessions[jid]
 		except KeyError:
-			print "jid %s should have been in %s, but it wasn't. missing session?" % (repr(jid), repr(self.sessions.keys()))
+			pass
 
 	def move_session(self, original_jid, thread_id, to_resource):
 		'''moves a session to another resource.'''
