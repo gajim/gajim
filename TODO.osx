@@ -23,12 +23,10 @@ The bits that dont work
    - fix user session management
 -integrate the Gajim and gajim-remote scripts with autoconf and add GTK
  framework detection
--Pass icons to OS/X menu
--set the LSEnvironment in Info.plist for gtk paths instead of hard coding in
- gajim.py
--Maybe setup the pasteboard  services for an OS/X alternative to the
+-Maybe setup the pasteboard services for an OS/X alternative to the
  gajim_remote
 -CFBundleDocumentTypes.NSDocument
+-zeroconf has a parsing problem with the MDNS result.
 
 
 Native GTK bugs

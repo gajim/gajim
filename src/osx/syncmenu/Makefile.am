@@ -10,8 +10,8 @@ if BUILD_COCOA
 syncmenulib_LTLIBRARIES = syncmenu.la
 syncmenulibdir = $(libdir)/gajim
 syncmenu_la_SOURCES = sync-menu.c pysyncmenu.c
-syncmenu_la_LDFLAGS = -module -avoid-version $(GTKLDFLAGS)
-syncmenu_la_CFLAGS = $(GTKCFLAGS) -Wall -g $(INCLUDES)
+syncmenu_la_LDFLAGS = -module -avoid-version -Xcompiler -isysroot -Xcompiler /Developer/SDKs/MacOSX10.4u.sdk -Xcompiler -arch -Xcompiler ppc -Xcompiler -arch -Xcompiler i386 $(GTKLDFLAGS)
+syncmenu_la_CFLAGS = -Xcompiler -isysroot -Xcompiler /Developer/SDKs/MacOSX10.4u.sdk -Xcompiler -arch -Xcompiler ppc -Xcompiler -arch -Xcompiler i386 $(GTKCFLAGS) -Wall -g $(INCLUDES)
 endif
 
 DISTCLEANFILES = 
