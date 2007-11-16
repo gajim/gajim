@@ -2841,6 +2841,8 @@ class RosterWindow:
 		if was_invisible:
 			# We come back from invisible, join bookmarks
 			for bm in gajim.connections[account].bookmarks:
+				if bm['autojoin'] not in ('1', 'true'):
+					continue
 				room_jid = bm['jid']
 				if room_jid in gajim.gc_connected[account] and \
 				gajim.gc_connected[account][room_jid]:
