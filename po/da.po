@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.11.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-13 23:01+0100\n"
+"POT-Creation-Date: 2007-11-16 19:14+0100\n"
 "PO-Revision-Date: 2007-11-13 22:48+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team: \n"
@@ -2598,8 +2598,8 @@ msgstr "Kryptering ikke aktiveret"
 #: ../src/roster_window.py:413 ../src/roster_window.py:1518
 #: ../src/roster_window.py:1528 ../src/roster_window.py:1704
 #: ../src/roster_window.py:1903 ../src/roster_window.py:2488
-#: ../src/roster_window.py:2689 ../src/roster_window.py:3960
-#: ../src/roster_window.py:3962 ../src/common/contacts.py:76
+#: ../src/roster_window.py:2689 ../src/roster_window.py:3962
+#: ../src/roster_window.py:3964 ../src/common/contacts.py:76
 #: ../src/common/helpers.py:43 ../src/common/helpers.py:257
 msgid "Not in Roster"
 msgstr "Ikke i Kontaktvinduet"
@@ -3567,7 +3567,7 @@ msgstr "Andre"
 #: ../src/gajim.py:566 ../src/roster_window.py:273 ../src/roster_window.py:331
 #: ../src/roster_window.py:371 ../src/roster_window.py:453
 #: ../src/roster_window.py:485 ../src/roster_window.py:487
-#: ../src/roster_window.py:3956 ../src/roster_window.py:3958
+#: ../src/roster_window.py:3958 ../src/roster_window.py:3960
 #: ../src/common/contacts.py:273 ../src/common/contacts.py:288
 #: ../src/common/helpers.py:43
 msgid "Transports"
@@ -4671,7 +4671,7 @@ msgid ""
 msgstr ""
 "Hvis du lukker dette vindue vil du blive frakoblet fra denne gruppe samtale."
 
-#: ../src/groupchat_control.py:1447 ../src/roster_window.py:4096
+#: ../src/groupchat_control.py:1447 ../src/roster_window.py:4098
 msgid "Do _not ask me again"
 msgstr "Ikke spørg mig ige_n"
 
@@ -4998,7 +4998,7 @@ msgstr "Flettede kontoer"
 msgid "Observers"
 msgstr "Iagttagere"
 
-#: ../src/roster_window.py:696 ../src/roster_window.py:3252
+#: ../src/roster_window.py:696 ../src/roster_window.py:3254
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Du kan ikke deltage i en gruppe samtale mens du er usynlig"
 
@@ -5046,8 +5046,8 @@ msgstr "Historik Håndterer"
 msgid "_Join New Group Chat"
 msgstr "_Deltag i Ny Gruppe Samtale"
 
-#: ../src/roster_window.py:1418 ../src/roster_window.py:3449
-#: ../src/roster_window.py:3456
+#: ../src/roster_window.py:1418 ../src/roster_window.py:3451
+#: ../src/roster_window.py:3458
 msgid "You have unread messages"
 msgstr "Du har ulæste beskeder"
 
@@ -5263,11 +5263,11 @@ msgstr "Forkert Adgangskode"
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Indtast din GPG adgangskode igen eller annuller."
 
-#: ../src/roster_window.py:2881 ../src/roster_window.py:2941
+#: ../src/roster_window.py:2883 ../src/roster_window.py:2943
 msgid "You are participating in one or more group chats"
 msgstr "Du deltager i en eller flere gruppesamtaler"
 
-#: ../src/roster_window.py:2882 ../src/roster_window.py:2942
+#: ../src/roster_window.py:2884 ../src/roster_window.py:2944
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -5275,31 +5275,31 @@ msgstr ""
 "Hvis du ændrer din status til usynlig vil det resultere i at du bliver "
 "frakoblet fra disse gruppesamtaler. Er du sikker på du vil gøre dig usynlig?"
 
-#: ../src/roster_window.py:2899
+#: ../src/roster_window.py:2901
 msgid "No account available"
 msgstr "Ingen konto tilgængelig"
 
-#: ../src/roster_window.py:2900
+#: ../src/roster_window.py:2902
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "Du må oprette en konto før du kan begynde en samtale med andre kontakter."
 
-#: ../src/roster_window.py:3002
+#: ../src/roster_window.py:3004
 #, python-format
 msgid "\"%(title)s\" by %(artist)s"
 msgstr "\"%(title)s\" by %(artist)s"
 
-#: ../src/roster_window.py:3450 ../src/roster_window.py:3457
+#: ../src/roster_window.py:3452 ../src/roster_window.py:3459
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled."
 msgstr "Beskeder vil kun kunne læses senere hvis du har aktiveret historik."
 
-#: ../src/roster_window.py:4046
+#: ../src/roster_window.py:4048
 msgid "Metacontacts storage not supported by your server"
 msgstr "Metakontakt lagring er ikke understøttet af din server"
 
-#: ../src/roster_window.py:4048
+#: ../src/roster_window.py:4050
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be save on next reconnection."
@@ -5308,12 +5308,12 @@ msgstr ""
 "information. Så denne information vil ikke blive gemt til næste gang du "
 "tilslutter dig."
 
-#: ../src/roster_window.py:4090
+#: ../src/roster_window.py:4092
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "Du er ved at oprette en metakontakt. Er du sikker på du vil fortsætte?"
 
-#: ../src/roster_window.py:4092
+#: ../src/roster_window.py:4094
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
@@ -5322,17 +5322,17 @@ msgstr ""
 "Metakontakter er en måde at gruppere flere kontakter på en linie. Oftest "
 "bruges det når den samme person har flere Jabber eller transport kontoer."
 
-#: ../src/roster_window.py:4259
+#: ../src/roster_window.py:4261
 #, python-format
 msgid "Drop %s in group %s"
 msgstr "Udelad %s i gruppen %s"
 
-#: ../src/roster_window.py:4266
+#: ../src/roster_window.py:4268
 #, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "Lav %s og %s til metakontakter"
 
-#: ../src/roster_window.py:4453
+#: ../src/roster_window.py:4455
 msgid "Change Status Message..."
 msgstr "Ændre Status Besked..."
 
@@ -6279,7 +6279,7 @@ msgstr "forespørsel om ophør på abonnement fra %s"
 msgid "we are now unsubscribed from %s"
 msgstr "nu abonnerer vi ikke længere på %s"
 
-#: ../src/common/connection_handlers.py:1878
+#: ../src/common/connection_handlers.py:1883
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -6810,24 +6810,24 @@ msgstr "flytter log databasen til flere indeks"
 msgid "Gajim account %s"
 msgstr "Gajim konto %s"
 
-#: ../src/common/zeroconf/client_zeroconf.py:135
-#: ../src/common/zeroconf/client_zeroconf.py:218
+#: ../src/common/zeroconf/client_zeroconf.py:144
+#: ../src/common/zeroconf/client_zeroconf.py:227
 msgid "Connection to host could not be established"
 msgstr "Tilslutning til vært kunne ikke etableres"
 
-#: ../src/common/zeroconf/client_zeroconf.py:192
+#: ../src/common/zeroconf/client_zeroconf.py:201
 msgid ""
 "Connection to host could not be established: Incorrect answer from server."
 msgstr "Tilslutning til vært kunne ikke etableres: Forkert svar fra server."
 
-#: ../src/common/zeroconf/client_zeroconf.py:352
+#: ../src/common/zeroconf/client_zeroconf.py:361
 msgid ""
 "Connection to host could not be established: Timeout while sending data."
 msgstr ""
 "Tilslutning til vært kunne ikke etableres: Tidsudløb mens data var blevet "
 "sendt."
 
-#: ../src/common/zeroconf/client_zeroconf.py:647
+#: ../src/common/zeroconf/client_zeroconf.py:656
 msgid "Contact is offline. Your message could not be sent."
 msgstr "Kontakt er afkoblet. Din besked kunne ikke sendes."
 
