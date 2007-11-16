@@ -1798,8 +1798,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					gajim.logger.write('status', jid_stripped, status, show)
 				except exceptions.PysqliteOperationalError, e:
 					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
-			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
-				keyID, timestamp, contact_nickname))
+			our_jid = gajim.get_jid_from_account(self.name)
+			if jid_stripped == our_jid and resource == self.server_resource:
+				# We got our own presence
+				self.dispatch('STATUS', show)
+			else:
+				self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
+					keyID, timestamp, contact_nickname))
 	# END presenceCB
 
 	def _StanzaArrivedCB(self, con, obj):
