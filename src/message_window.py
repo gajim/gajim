@@ -504,6 +504,10 @@ class MessageWindow:
 			return
 		self._controls[acct][new_jid] = self._controls[acct][old_jid]
 		del self._controls[acct][old_jid]
+		if old_jid in gajim.last_message_time[acct]:
+			gajim.last_message_time[acct][new_jid] = \
+				gajim.last_message_time[acct][old_jid]
+			del gajim.last_message_time[acct][old_jid]
 
 	def controls(self):
 		for ctrl_dict in self._controls.values():
