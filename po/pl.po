@@ -4629,7 +4629,7 @@ msgstr "Otrzymałeś plik %(filename)s od %(name)s."
 #: ../src/gajim.py:1730
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
-msgstr "Przesyłanie pliku %(filename)s·od·%(name)s·zostało zatrzymane."
+msgstr "Przesyłanie pliku %(filename)s od %(name)s zostało zatrzymane."
 
 #: ../src/gajim.py:1743
 #, python-format
@@ -4640,7 +4640,7 @@ msgstr "Przesłałeś plik %(filename)s do %(name)s."
 #: ../src/gajim.py:1747
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
-msgstr "Przesyłanie pliku·%(filename)s·do·%(name)s·zostało zatrzymane."
+msgstr "Przesyłanie pliku %(filename)s do %(name)s zostało zatrzymane."
 
 #: ../src/gajim.py:1842
 msgid "Session negotiation cancelled"
@@ -5085,7 +5085,7 @@ msgid ""
 "Type \"%s help %s\" for more info"
 msgstr ""
 "Za dużo argumentów. \n"
-"Wpisz \"%s·help·%s\" aby uzyskać więcej informacji"
+"Wpisz \"%s help %s\" aby uzyskać więcej informacji"
 
 #: ../src/gajim-remote.py:456
 #, python-format
@@ -7489,43 +7489,43 @@ msgstr "Niepoprawna litera w zasobach."
 #: ../src/common/helpers.py:176
 #, python-format
 msgid "%s GiB"
-msgstr "%s·GiB"
+msgstr "%s GiB"
 
 #. GB means gigabyte
 #: ../src/common/helpers.py:179
 #, python-format
 msgid "%s GB"
-msgstr "%s·GB"
+msgstr "%s GB"
 
 #. MiB means mibibyte
 #: ../src/common/helpers.py:183
 #, python-format
 msgid "%s MiB"
-msgstr "%s·MiB"
+msgstr "%s MiB"
 
 #. MB means megabyte
 #: ../src/common/helpers.py:186
 #, python-format
 msgid "%s MB"
-msgstr "%s·MB"
+msgstr "%s MB"
 
 #. KiB means kibibyte
 #: ../src/common/helpers.py:190
 #, python-format
 msgid "%s KiB"
-msgstr "%s·KiB"
+msgstr "%s KiB"
 
 #. KB means kilo bytes
 #: ../src/common/helpers.py:193
 #, python-format
 msgid "%s KB"
-msgstr "%s·KB"
+msgstr "%s KB"
 
 #. B means bytes
 #: ../src/common/helpers.py:196
 #, python-format
 msgid "%s B"
-msgstr "%s·B"
+msgstr "%s B"
 
 #: ../src/common/helpers.py:227
 msgid "_Busy"
