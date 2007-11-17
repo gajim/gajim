@@ -403,8 +403,9 @@ class PreferencesWindow:
 				self.applications_combobox.remove_text(3)
 				self.applications_combobox.remove_text(2)
 				self.applications_combobox.remove_text(1)
-				self.applications_combobox.append_text("Always use OS/X default applications")
-				self.applications_combobox.append_text("Custom")
+				self.applications_combobox.append_text(
+					_('Always use OS/X default applications'))
+				self.applications_combobox.append_text(_('Custom'))
 
 			if gajim.config.get('autodetect_browser_mailer'):
 				self.applications_combobox.set_active(0)
