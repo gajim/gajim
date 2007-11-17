@@ -503,8 +503,17 @@ class DesktopNotification:
 			except AttributeError:
 				version = [0, 3, 1] # we're actually dealing with the newer version
 		if version > [0, 3]:
-			if version >= [0, 3, 2]:
+			if gajim.interface.systray_enabled and \
+			gajim.config.get('attach_notifications_to_systray'):
+				x, y = gajim.interface.systray.img_tray.window.get_position()
+				x_, y_, width, height, depth = \
+					gajim.interface.systray.img_tray.window.get_geometry()
+				pos_x = x + (width / 2)
+				pos_y = y + (height / 2)
+				hints = {'x': pos_x, 'y': pos_y}
+			else:
 				hints = {}
+			if version >= [0, 3, 2]:
 				hints['urgency'] = dbus.Byte(0) # Low Urgency
 				hints['category'] = dbus.String(ntype)
 				self.notif.Notify(
@@ -526,7 +535,7 @@ class DesktopNotification:
 					dbus.String(self.title),
 					dbus.String(self.text),
 					dbus.String(''),
-					{},
+					hints,
 					dbus.UInt32(timeout*1000),
 					reply_handler=self.attach_by_id,
 					error_handler=self.notify_another_way)
