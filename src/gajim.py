@@ -2585,7 +2585,7 @@ class Interface:
 			'urlmsgcolor': gajim.config.get('urlmsgcolor'),
 		}
 
-		parser.read()
+		cfg_was_read = parser.read()
 		# Do not set gajim.verbose to False if -v option was given
 		if gajim.config.get('verbose'):
 			gajim.verbose = True
@@ -2629,8 +2629,7 @@ class Interface:
 					gajim.config.set_per('themes', theme_name, o,
 						theme[d.index(o)])
 			
-		if gajim.config.get('autodetect_browser_mailer') or \
-		len(gajim.connections) == 0:
+		if gajim.config.get('autodetect_browser_mailer') or not cfg_was_read:
 			gtkgui_helpers.autodetect_browser_mailer()
 
 		if gajim.verbose:

@@ -63,7 +63,7 @@ class OptionsParser:
 			if os.path.exists(self.__filename):
 				#we talk about a file
 				print _('error: cannot open %s for reading') % self.__filename
-			return
+			return False
 
 		new_version = gajim.config.get('version')
 		new_version = new_version.split('-', 1)[0]
@@ -80,6 +80,7 @@ class OptionsParser:
 		self.old_values = {} # clean mem
 
 		fd.close()
+		return True
 
 	def write_line(self, fd, opt, parents, value):
 		if value == None:

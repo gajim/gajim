@@ -399,9 +399,12 @@ class PreferencesWindow:
 			self.xml.get_widget('custom_apps_frame').set_no_show_all(True)
 
 			if sys.platform == 'darwin':
+				self.applications_combobox.remove_text(4)
 				self.applications_combobox.remove_text(3)
 				self.applications_combobox.remove_text(2)
 				self.applications_combobox.remove_text(1)
+				self.applications_combobox.append_text("Always use OS/X default applications")
+				self.applications_combobox.append_text("Custom")
 
 			if gajim.config.get('autodetect_browser_mailer'):
 				self.applications_combobox.set_active(0)
@@ -412,10 +415,13 @@ class PreferencesWindow:
 			elif gajim.config.get('openwith') == 'kfmclient exec':
 				self.applications_combobox.set_active(2)
 			elif gajim.config.get('openwith') == 'exo-open':
-				self.applications_combobox.set_active(3)				
+				self.applications_combobox.set_active(3)
+			elif ((sys.platform == 'darwin') and
+				  (gajim.config.get('openwith') == 'open')):
+				self.applications_combobox.set_active(1)
 			elif gajim.config.get('openwith') == 'custom':
 				if sys.platform == 'darwin':
-					self.applications_combobox.set_active(1)
+					self.applications_combobox.set_active(2)
 				else:
 					self.applications_combobox.set_active(4)
 				self.xml.get_widget('custom_apps_frame').show()
@@ -912,6 +918,9 @@ class PreferencesWindow:
 				gajim.config.set('autodetect_browser_mailer', True)
 				self.xml.get_widget('custom_apps_frame').hide()
 			elif widget.get_active() == 1:
+				self.xml.get_widget('custom_apps_frame').hide()
+				gajim.config.set('openwith', 'open')
+			elif widget.get_active() == 2:
 				self.xml.get_widget('custom_apps_frame').show()
 				gajim.config.set('openwith', 'custom')
 		else:
