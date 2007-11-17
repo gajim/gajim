@@ -5184,7 +5184,6 @@ class RosterWindow:
 	def setup_for_osx(self):
 		# Massage the GTK menu so it will match up to the OS/X nib style menu
 		# when passed to sync-menu and merged
-		print "FOOOOO"
 		main_menu = self.xml.get_widget('menubar')
 		app_item = gtk.MenuItem('Gajim')
 		main_menu.insert(app_item, 0)
