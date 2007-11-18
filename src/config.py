@@ -1408,8 +1408,8 @@ class AccountsWindow:
 				gajim.connections[gajim.ZEROCONF_ACC_NAME].update_details()
 				return
 			
-		elif self.need_relogin and gajim.connections[self.current_account].\
-		connected > 0:
+		elif self.need_relogin and self.current_account and \
+		gajim.connections[self.current_account].connected > 0:
 			def login(account, show_before, status_before):
 				''' login with previous status'''
 				# first make sure connection is really closed, 
