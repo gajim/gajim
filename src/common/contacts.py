@@ -420,6 +420,13 @@ class Contacts:
 			return 1
 		if jid2 > jid1:
 			return -1
+		# If all is the same, compare accounts, they can't be the same
+		account1 = data1['account']
+		account2 = data2['account']
+		if account1 > account2:
+			return 1
+		if account2 > account1:
+			return -1
 		return 0
 
 	def get_metacontacts_big_brother(self, family):
