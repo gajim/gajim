@@ -20,6 +20,7 @@
 from common import gajim
 import sys
 import select
+import re
 from string import split
 from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN
 
@@ -114,7 +115,8 @@ class Zeroconf:
 		r'\064': '@',
 		}
 
-		name, stype, protocol, domain, dummy = split(fullname, '.')
+		# Split on '.' but do not split on '\.'
+		name, stype, protocol, domain, dummy = re.split('(?<!\\\\)\.', fullname)
 		
 		# Replace the escaped values
 		for src, trg in escaping.items():
