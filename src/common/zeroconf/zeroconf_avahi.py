@@ -184,9 +184,12 @@ class Zeroconf:
 		self.disconnect()
 
 	def server_state_changed_callback(self, state, error):
+		gajim.log.debug('server state changed to %s' % state)
 		if state == self.avahi.SERVER_RUNNING:
 			self.create_service()
-		elif state == self.avahi.SERVER_COLLISION:
+		elif state in (self.avahi.SERVER_COLLISION,
+				self.avahi.SERVER_REGISTERING):
+			self.disconnect()
 			self.entrygroup.Reset()
 		elif state == self.avahi.CLIENT_FAILURE:
 			# does it ever go here?
@@ -197,6 +200,8 @@ class Zeroconf:
 		if state == self.avahi.ENTRY_GROUP_COLLISION:
 			self.service_add_fail_callback('Local name collision')
 		elif state == self.avahi.ENTRY_GROUP_FAILURE:
+			self.disconnect()
+			self.entrygroup.Reset()
 			gajim.log.debug('zeroconf.py: ENTRY_GROUP_FAILURE reached(that'
 				' should not happen)')
 
@@ -278,8 +283,7 @@ class Zeroconf:
 				self.entrygroup.Reset()
 				self.entrygroup.Free()
 				# .Free() has mem leaks
-				obj = self.entrygroup._obj
-				obj._bus = None
+				self.entrygroup._obj._bus = None
 				self.entrygroup._obj = None
 				self.entrygroup = None
 				self.announced = False
