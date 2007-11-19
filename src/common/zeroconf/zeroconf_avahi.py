@@ -176,7 +176,7 @@ class Zeroconf:
 
 	def service_add_fail_callback(self, err):
 		gajim.log.debug('Error while adding service. %s' % str(err))
-		if str(err) == 'Local name collision':
+		if 'Local name collision' in str(err):
 			alternative_name = self.server.GetAlternativeServiceName(self.username)
 			self.name_conflictCB(alternative_name)
 			return
@@ -198,6 +198,7 @@ class Zeroconf:
 	def entrygroup_state_changed_callback(self, state, error):
 		# the name is already present, so recreate
 		if state == self.avahi.ENTRY_GROUP_COLLISION:
+			gajim.log.debug('zeroconf.py: local name collision')
 			self.service_add_fail_callback('Local name collision')
 		elif state == self.avahi.ENTRY_GROUP_FAILURE:
 			self.disconnect()
