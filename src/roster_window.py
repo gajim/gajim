@@ -60,6 +60,7 @@ from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
 	import dbus
+from lastfm_track_listener import LastFMTrackListener
 
 import sys
 if sys.platform == 'darwin':
@@ -3707,6 +3708,26 @@ class RosterWindow:
 				self._music_track_changed_signal = None
 				self._music_track_changed(None, None)
 
+	## enable setting status msg from a Last.fm account
+	def enable_syncing_status_msg_from_lastfm(self, enabled):
+		'''if enabled is True, we start polling the Last.fm server,
+		and we update our status message accordinly'''
+		if enabled:
+			if self._music_track_changed_signal is None:
+				listener = LastFMTrackListener.get(
+					gajim.config.get('lastfm_username'))
+				self._music_track_changed_signal = listener.connect(
+					'music-track-changed', self._music_track_changed)
+				track = listener.get_playing_track()
+				self._music_track_changed(listener, track)
+		else:
+			if self._music_track_changed_signal is not None:
+				listener = LastFMTrackListener.get(
+					gajim.config.get('lastfm_username'))
+				listener.disconnect(self._music_track_changed_signal)
+				self._music_track_changed_signal = None
+				self._music_track_changed(None, None)
+
 	def _change_awn_icon_status(self, status):
 		if not dbus_support.supported:
 			# do nothing if user doesn't have D-Bus bindings
@@ -5423,9 +5444,15 @@ class RosterWindow:
 		## Music Track notifications
 		## FIXME: we use a timeout because changing status of
 		## accounts has no effect until they are connected.
-		gobject.timeout_add(1000,
-			self.enable_syncing_status_msg_from_current_music_track,
-			gajim.config.get('set_status_msg_from_current_music_track'))
+		st = gajim.config.get('set_status_msg_from_current_music_track')
+		if st:
+		    gobject.timeout_add(1000,
+			    self.enable_syncing_status_msg_from_current_music_track,
+			    st)
+		else:
+		    gobject.timeout_add(1000,
+			    self.enable_syncing_status_msg_from_lastfm,
+			    gajim.config.get('set_status_msg_from_lastfm'))
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
