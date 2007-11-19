@@ -3778,7 +3778,7 @@ class RosterWindow:
 			# Keep the last status message, replacing only the current song part
 			current_status_message = gajim.connections[account].status
 			song_offset = current_status_message.find('♪')
-			if song_offset > 0:
+			if song_offset >= 0:
 				current_status_message = current_status_message[0:song_offset]
 			status_message = current_status_message.strip() + '\n' + status_message
 			self.send_status(account, current_show, status_message.strip())
