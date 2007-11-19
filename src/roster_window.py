@@ -5018,6 +5018,15 @@ class RosterWindow:
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
 			nb_uri = len(uri_splitted)
+			# Check the URIs
+			bad_uris = []
+			for a_uri in uri_splitted:
+				path = helpers.get_file_path_from_dnd_dropped_uri(a_uri)
+				if not os.path.isfile(path):
+					bad_uris.append(a_uri)
+			if len(bad_uris):
+				dialogs.ErrorDialog(_('Invalid file URI:'), '\n'.join(bad_uris))
+				return
 			def _on_send_files(account, jid, uris):
 				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
 				for uri in uris:
@@ -5027,7 +5036,7 @@ class RosterWindow:
 							account, c, path)
 			# Popup dialog to confirm sending
 			prim_text = 'Send file?'
-			sec_text = i18n.ngettext('Do you want to send that file to %s:',
+			sec_text = i18n.ngettext('Do you want to send this file to %s:',
 				'Do you want to send those files to %s:', nb_uri) %\
 				c_dest.get_shown_name()
 			for uri in uri_splitted:

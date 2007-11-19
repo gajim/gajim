@@ -506,7 +506,11 @@ def get_file_path_from_dnd_dropped_uri(uri):
 	if path.startswith('file:\\\\\\'): # windows
 		path = path[8:] # 8 is len('file:///')
 	elif path.startswith('file://'): # nautilus, rox
-		path = path[7:] # 7 is len('file://')
+		if sys.platform == 'darwin':
+			# OS/X includes hostname in file:// URI
+			path = re.sub('file://[^/]*', '', path)
+		else:
+			path = path[7:] # 7 is len('file://')
 	elif path.startswith('file:'): # xffm
 		path = path[5:] # 5 is len('file:')
 	return path
