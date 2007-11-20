@@ -3356,10 +3356,13 @@ class AdvancedNotificationsWindow:
 		self.window.destroy()
 
 class TransformChatToMUC:
+	# Keep a reference on windows so garbage collector don't restroy them
+	instances = []
 	def __init__(self, account, jids, preselected = None):
 		'''This window is used to trasform a one-to-one chat to a MUC.
 		We do 2 things: first select the server and then make a guests list.'''
 
+		self.instances.append(self)
 		self.account = account
 		self.auto_jids = jids
 		self.preselected_jids = preselected
@@ -3445,6 +3448,9 @@ class TransformChatToMUC:
 		self.window.show_all()
 
 		self.xml.signal_autoconnect(self)
+
+	def on_chat_to_muc_window_destroy(self, widget):
+		self.instances.remove(self)
 
 	def on_chat_to_muc_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE

@@ -7,6 +7,7 @@
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Invite Friends !</property>
     <signal name="key_press_event" handler="on_chat_to_muc_window_key_press_event"/>
+    <signal name="destroy" handler="on_chat_to_muc_window_destroy"/>
     <child>
       <widget class="GtkVBox" id="general_vbox">
         <property name="visible">True</property>
