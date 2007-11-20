@@ -34,7 +34,7 @@
                               <widget class="GtkImage" id="banner_status_image">
                                 <property name="visible">True</property>
                                 <property name="ypad">5</property>
-                                <property name="stock">gtk-missing-image</property>
+                                <property name="stock">None</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -70,7 +70,7 @@
                                 <child>
                                   <widget class="GtkImage" id="avatar_image">
                                     <property name="visible">True</property>
-                                    <property name="stock">gtk-missing-image</property>
+                                    <property name="stock">None</property>
                                   </widget>
                                 </child>
                               </widget>
@@ -188,7 +188,7 @@
                                   <widget class="GtkImage" id="emoticons_button_image">
                                     <property name="visible">True</property>
                                     <property name="xpad">2</property>
-                                    <property name="stock">gtk-missing-image</property>
+                                    <property name="stock">None</property>
                                   </widget>
                                 </child>
                                 <child>
@@ -348,7 +348,7 @@
                     <child>
                       <widget class="GtkImage" id="tab_image">
                         <property name="visible">True</property>
-                        <property name="stock">gtk-missing-image</property>
+                        <property name="stock">None</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -415,7 +415,7 @@
                             <child>
                               <widget class="GtkImage" id="gc_banner_status_image">
                                 <property name="visible">True</property>
-                                <property name="stock">gtk-missing-image</property>
+                                <property name="stock">None</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -563,7 +563,7 @@
                                   <widget class="GtkImage" id="emoticons_button_image">
                                     <property name="visible">True</property>
                                     <property name="xpad">2</property>
-                                    <property name="stock">gtk-missing-image</property>
+                                    <property name="stock">None</property>
                                   </widget>
                                 </child>
                                 <child>
@@ -726,7 +726,7 @@
                     <child>
                       <widget class="GtkImage" id="image1346">
                         <property name="visible">True</property>
-                        <property name="stock">gtk-missing-image</property>
+                        <property name="stock">None</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
