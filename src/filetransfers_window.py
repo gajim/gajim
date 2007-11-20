@@ -264,7 +264,7 @@ _('Connection with peer cannot be established.'))
 		btn.show()
 		desc_hbox.show_all()
 
-	def send_file(self, account, contact, file_path, file_desc=None):
+	def send_file(self, account, contact, file_path, file_desc=''):
 		''' start the real transfer(upload) of the file '''
 		if gtkgui_helpers.file_is_locked(file_path):
 			pritext = _('Gajim cannot access this file')
@@ -551,7 +551,8 @@ _('Connection with peer cannot be established.'))
 				return iter
 			iter = self.model.iter_next(iter)
 
-	def get_send_file_props(self, account, contact, file_path, file_name, file_desc=None):
+	def get_send_file_props(self, account, contact, file_path, file_name,
+	file_desc=''):
 		''' create new file_props dict and set initial file transfer 
 		properties in it'''
 		file_props = {'file-name' : file_path, 'name' : file_name, 
