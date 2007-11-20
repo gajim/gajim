@@ -1,3 +1,13 @@
+gajim (0.11.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix depand list so that Gajim will work when python2.5 will be the
+    default. Closes: #445275
+  * Fix focus bug. Closes: #447985
+  * Depend on dnsutils to use SRV records. Closes: #434690
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Fri, 16 Nov 2007 19:01:54 +0100
+
 gajim (0.11.2-1) unstable; urgency=low
 
   * New upstream release.
