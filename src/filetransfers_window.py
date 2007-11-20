@@ -224,13 +224,17 @@ _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
 	def show_file_send_request(self, account, contact):
+	
+		desc_entry = gtk.Entry()
+	
 		def on_ok(widget):
 			file_dir = None
 			files_path_list = dialog.get_filenames()
 			files_path_list = gtkgui_helpers.decode_filechooser_file_paths(
 				files_path_list)
+			desc = desc_entry.get_text()
 			for file_path in files_path_list:
-				if self.send_file(account, contact, file_path) and file_dir is None:
+				if self.send_file(account, contact, file_path, desc) and file_dir is None:
 					file_dir = os.path.dirname(file_path)
 			if file_dir:
 				gajim.config.set('last_send_dir', file_dir)
@@ -250,9 +254,17 @@ _('Connection with peer cannot be established.'))
 		# FIXME: add send icon to this button (JUMP_TO)
 		dialog.add_action_widget(btn, gtk.RESPONSE_OK)
 		dialog.set_default_response(gtk.RESPONSE_OK)
+		
+		desc_hbox = gtk.HBox(False, 5)
+		desc_hbox.pack_start(gtk.Label(_('Description: ')),False,False,0)
+		desc_hbox.pack_start(desc_entry,True,True,0)
+		
+		dialog.vbox.pack_start(desc_hbox, False, False, 0)
+		
 		btn.show()
+		desc_hbox.show_all()
 
-	def send_file(self, account, contact, file_path):
+	def send_file(self, account, contact, file_path, file_desc=None):
 		''' start the real transfer(upload) of the file '''
 		if gtkgui_helpers.file_is_locked(file_path):
 			pritext = _('Gajim cannot access this file')
@@ -268,7 +280,7 @@ _('Connection with peer cannot be established.'))
 				resource = resource)
 		(file_dir, file_name) = os.path.split(file_path)
 		file_props = self.get_send_file_props(account, contact, 
-				file_path, file_name)
+				file_path, file_name, file_desc)
 		if file_props is None:
 			return False
 		self.add_transfer(account, contact, file_props)
@@ -539,11 +551,11 @@ _('Connection with peer cannot be established.'))
 				return iter
 			iter = self.model.iter_next(iter)
 
-	def get_send_file_props(self, account, contact, file_path, file_name):
+	def get_send_file_props(self, account, contact, file_path, file_name, file_desc=None):
 		''' create new file_props dict and set initial file transfer 
 		properties in it'''
 		file_props = {'file-name' : file_path, 'name' : file_name, 
-			'type' : 's'}
+			'type' : 's', 'desc' : file_desc}
 		if os.path.isfile(file_path):
 			stat = os.stat(file_path)
 		else:
