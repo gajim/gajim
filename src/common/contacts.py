@@ -389,29 +389,36 @@ class Contacts:
 		'''compare 2 metacontacts.
 		Data is {'jid': jid, 'account': account, 'order': order}
 		order is optional'''
+		jid1 = data1['jid']
+		jid2 = data2['jid']
+		account1 = data1['account']
+		account2 = data2['account']
+		contact1 = self.get_contact_with_highest_priority(account1, jid1)
+		contact2 = self.get_contact_with_highest_priority(account2, jid2)
+		show_list = ['not in roster', 'error', 'offline', 'invisible', 'dnd',
+			'xa', 'away', 'chat', 'online', 'requested', 'message']
+		show1 = show_list.index(contact1.show)
+		show2 = show_list.index(contact2.show)
+		# If only one is offline, it's always second
+		if show1 > 2 and show2 < 3:
+			return 1
+		if show2 > 2 and show1 < 3:
+			return -1
 		if 'order' in data1 and 'order' in data2:
 			if data1['order'] > data2['order']:
 				return 1
 			if data1['order'] < data2['order']:
 				return -1
-		jid1 = data1['jid']
-		jid2 = data2['jid']
 		transport1 = common.gajim.get_transport_name_from_jid(jid1)
 		transport2 = common.gajim.get_transport_name_from_jid(jid2)
 		if transport2 and not transport1:
 			return 1
 		if transport1 and not transport2:
 			return -1
-		contact1 = self.get_contact_with_highest_priority(data1['account'], jid1)
-		contact2 = self.get_contact_with_highest_priority(data2['account'], jid2)
 		if contact1.priority > contact2.priority:
 			return 1
 		if contact2.priority > contact1.priority:
 			return -1
-		show_list = ['not in roster', 'error', 'offline', 'invisible', 'dnd',
-			'xa', 'away', 'chat', 'online', 'requested', 'message']
-		show1 = show_list.index(contact1.show)
-		show2 = show_list.index(contact2.show)
 		if show1 > show2:
 			return 1
 		if show2 > show1:
@@ -421,8 +428,6 @@ class Contacts:
 		if jid2 > jid1:
 			return -1
 		# If all is the same, compare accounts, they can't be the same
-		account1 = data1['account']
-		account2 = data2['account']
 		if account1 > account2:
 			return 1
 		if account2 > account1:
