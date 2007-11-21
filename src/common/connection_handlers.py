@@ -1344,7 +1344,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		qp = iq_obj.getTag('query')
 		qp.setTagData('utc', strftime('%Y%m%dT%T', gmtime()))
 		qp.setTagData('tz', tzname[daylight])
-		qp.setTagData('display', strftime('%c', localtime()))
+		qp.setTagData('display', helpers.decode_string(strftime('%c',
+			localtime())))
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
