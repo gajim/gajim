@@ -698,8 +698,8 @@ class Connection(ConnectionHandlers):
 		self.on_connect_failure = self._connect_failure
 		self.connect()
 
-	def connect_and_init(self, show, msg, signe_msg):
-		self.continue_connect_info = [show, msg, signe_msg]
+	def connect_and_init(self, show, msg, sign_msg):
+		self.continue_connect_info = [show, msg, sign_msg]
 		self.on_connect_auth = self._init_roster
 		self.connect_and_auth()
 
@@ -748,9 +748,9 @@ class Connection(ConnectionHandlers):
 		if not msg:
 			msg = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		signe_msg = False
+		sign_msg = False
 		if not auto and not show == 'offline':
-			signe_msg = True
+			sign_msg = True
 		self.status = msg
 		if show != 'offline' and not self.connected:
 			# set old_show to requested 'show' in case we need to
@@ -770,7 +770,7 @@ class Connection(ConnectionHandlers):
 				gajim.config.set('usegpg', True)
 			else:
 				gajim.config.set('usegpg', False)
-			self.connect_and_init(show, msg, signe_msg)
+			self.connect_and_init(show, msg, sign_msg)
 
 		elif show == 'offline':
 			self.connected = 0
