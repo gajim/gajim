@@ -2132,8 +2132,8 @@ returns the session that we last sent a message to.'''
 			msg = self.continue_connect_info[1]
 			signe_msg = self.continue_connect_info[2]
 			signed = ''
-			if signed_msg:
-				signed = self.get_signed_msg(signe_msg, self._send_first_presence)
+			if signe_msg:
+				signed = self.get_signed_msg(msg, self._send_first_presence)
 				if signed is None:
 					self.dispatch('GPG_PASSWORD_REQUIRED',
 						(self._send_first_presence,))
