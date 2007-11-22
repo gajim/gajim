@@ -2129,11 +2129,11 @@ returns the session that we last sent a message to.'''
 
 		# continue connection
 		if self.connected > 1 and self.continue_connect_info:
-			to_be_signed = self.continue_connect_info[2]
+			msg = self.continue_connect_info[1]
+			signe_msg = self.continue_connect_info[2]
 			signed = ''
-			if to_be_signed:
-				signed = self.get_signed_msg(to_be_signed,
-					self._send_first_presence)
+			if signed_msg:
+				signed = self.get_signed_msg(signe_msg, self._send_first_presence)
 				if signed is None:
 					self.dispatch('GPG_PASSWORD_REQUIRED',
 						(self._send_first_presence,))
@@ -2144,9 +2144,9 @@ returns the session that we last sent a message to.'''
 	def _send_first_presence(self, signed = ''):
 		show = self.continue_connect_info[0]
 		msg = self.continue_connect_info[1]
-		to_be_signed = self.continue_connect_info[2]
-		if to_be_signed and not signed:
-			signed = self.get_signed_msg(self.continue_connect_info[2])
+		signe_msg = self.continue_connect_info[2]
+		if signed_msg and not signed:
+			signed = self.get_signed_msg(msg)
 			if signed is None:
 				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
 					#%s is the account name here

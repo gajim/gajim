@@ -2308,6 +2308,7 @@ class Interface:
 			emoticons_pattern_postmatch = ''
 			emoticon_length = 0
 			for emoticon in keys: # travel thru emoticons list
+				emoticon = emoticon.decode('utf-8')
 				emoticon_escaped = re.escape(emoticon) # espace regexp metachars
 				emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
 				if (emoticon_length != len(emoticon)):
@@ -2409,6 +2410,7 @@ class Interface:
 		emots = emoticons.emoticons
 		for emot in emots:
 			emot_file = os.path.join(path, emots[emot])
+			emot = emot.decode('utf-8')
 			if not self.image_is_ok(emot_file):
 				continue
 			# This avoids duplicated emoticons with the same image eg. :) and :-)
