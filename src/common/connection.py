@@ -139,18 +139,13 @@ class Connection(ConnectionHandlers):
 		self.blocked_contacts = []
 		self.blocked_groups = []
 		self.pep_supported = False
-		# Do we continue connection when we get roster (send presence,get vcard...)
+		# Do we continue connection when we get roster (send presence,get vcard..)
 		self.continue_connect_info = None
 		# To know the groupchat jid associated with a sranza ID. Useful to
 		# request vcard or os info... to a real JID but act as if it comes from
 		# the fake jid
 		self.groupchat_jids = {} # {ID : groupchat_jid}
-		if USE_GPG:
-			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
-			gajim.config.set('usegpg', True)
-		else:
-			gajim.config.set('usegpg', False)
-		
+
 		self.on_connect_success = None
 		self.on_connect_failure = None
 		self.retrycount = 0
@@ -179,9 +174,8 @@ class Connection(ConnectionHandlers):
 			self.connected = 1
 			self.dispatch('STATUS', 'connecting')
 			self.retrycount += 1
-			signed = self.get_signed_msg(self.status)
 			self.on_connect_auth = self._init_roster
-			self.connect_and_init(self.old_show, self.status, signed)
+			self.connect_and_init(self.old_show, self.status, self.gpg != None)
 		else:
 			# reconnect succeeded
 			self.time_to_reconnect = None
@@ -539,7 +533,8 @@ class Connection(ConnectionHandlers):
 			gajim.log.debug("Couldn't authenticate to %s" % self._hostname)
 			self.disconnect(on_purpose = True)
 			self.dispatch('STATUS', 'offline')
-			self.dispatch('ERROR', (_('Authentication failed with "%s"') % self._hostname,
+			self.dispatch('ERROR', (_('Authentication failed with "%s"') % \
+				self._hostname,
 				_('Please check your login and password for correctness.')))
 			if self.on_connect_auth:
 				self.on_connect_auth(None)
@@ -670,29 +665,32 @@ class Connection(ConnectionHandlers):
 			self.dispatch('SIGNED_IN', ())
 
 	def test_gpg_passphrase(self, password):
+		if not self.gpg:
+			return False
 		self.gpg.passphrase = password
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		signed = self.gpg.sign('test', keyID)
 		self.gpg.password = None
 		return signed != 'BAD_PASSPHRASE'
 
-	def get_signed_msg(self, msg):
+	def get_signed_msg(self, msg, callback = None):
+		'''returns the signed message if possible
+		or an empty string if gpg is not used
+		or None if waiting for passphrase.
+		callback is the function to call when user give the passphrase'''
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		if keyID and USE_GPG:
+		if keyID and self.gpg:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
-			if self.connected < 2 and self.gpg.passphrase is None and \
-				not use_gpg_agent:
+			if self.gpg.passphrase is None and not use_gpg_agent:
 				# We didn't set a passphrase
-				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
-					#%s is the account name here
-					_('You will be connected to %s without OpenPGP.') % self.name))
-			elif self.gpg.passphrase is not None or use_gpg_agent:
+				return None
+			if self.gpg.passphrase is not None or use_gpg_agent:
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
+					self.gpg = None
 					signed = ''
-					if self.connected < 2:
-						self.dispatch('BAD_PASSPHRASE', ())
+					self.dispatch('BAD_PASSPHRASE', ())
 		return signed
 
 	def connect_and_auth(self):
@@ -700,21 +698,22 @@ class Connection(ConnectionHandlers):
 		self.on_connect_failure = self._connect_failure
 		self.connect()
 
-	def connect_and_init(self, show, msg, signed):
-		self.continue_connect_info = [show, msg, signed]
+	def connect_and_init(self, show, msg, signe_msg):
+		self.continue_connect_info = [show, msg, signe_msg]
 		self.on_connect_auth = self._init_roster
 		self.connect_and_auth()
 
 	def _init_roster(self, con):
 		self.connection = con
-		if self.connection:
-			con.set_send_timeout(self.keepalives, self.send_keepalive)
-			self.connection.onreceive(None)
-			iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
-			id = self.connection.getAnID()
-			iq.setID(id)
-			self.awaiting_answers[id] = (PRIVACY_ARRIVED, )
-			self.connection.send(iq)
+		if not self.connection:
+			return
+		self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
+		self.connection.onreceive(None)
+		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
+		id = self.connection.getAnID()
+		iq.setID(id)
+		self.awaiting_answers[id] = (PRIVACY_ARRIVED, )
+		self.connection.send(iq)
 
 	def send_custom_status(self, show, msg, jid):
 		if not show in STATUS_LIST:
@@ -749,9 +748,9 @@ class Connection(ConnectionHandlers):
 		if not msg:
 			msg = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		signed = ''
+		signe_msg = False
 		if not auto and not show == 'offline':
-			signed = self.get_signed_msg(msg)
+			signe_msg = True
 		self.status = msg
 		if show != 'offline' and not self.connected:
 			# set old_show to requested 'show' in case we need to
@@ -766,7 +765,12 @@ class Connection(ConnectionHandlers):
 					safe_substitute({
 						'hostname': socket.gethostname()
 					})
-			self.connect_and_init(show, msg, signed)
+			if USE_GPG and not self.gpg:
+				self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
+				gajim.config.set('usegpg', True)
+			else:
+				gajim.config.set('usegpg', False)
+			self.connect_and_init(show, msg, signe_msg)
 
 		elif show == 'offline':
 			self.connected = 0
@@ -801,6 +805,7 @@ class Connection(ConnectionHandlers):
 			p = self.add_sha(p)
 			if msg:
 				p.setStatus(msg)
+			signed = self.get_signed_msg(msg)
 			if signed:
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			if self.connection:
@@ -839,7 +844,7 @@ class Connection(ConnectionHandlers):
 			fjid += '/' + resource
 		msgtxt = msg
 		msgenc = ''
-		if keyID and USE_GPG:
+		if keyID and self.gpg:
 			#encrypt
 			msgenc, error = self.gpg.encrypt(msg, [keyID])
 			if msgenc and not error:
@@ -1377,7 +1382,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def gpg_passphrase(self, passphrase):
-		if USE_GPG:
+		if self.gpg:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
 			if use_gpg_agent:
 				self.gpg.passphrase = None
@@ -1385,13 +1390,13 @@ class Connection(ConnectionHandlers):
 				self.gpg.passphrase = passphrase
 
 	def ask_gpg_keys(self):
-		if USE_GPG:
+		if self.gpg:
 			keys = self.gpg.get_keys()
 			return keys
 		return None
 
 	def ask_gpg_secrete_keys(self):
-		if USE_GPG:
+		if self.gpg:
 			keys = self.gpg.get_secret_keys()
 			return keys
 		return None

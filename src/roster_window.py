@@ -1498,9 +1498,10 @@ class RosterWindow:
 					name = account_name, show = connection.get_status(), sub = '',
 					status = connection.status,
 					resource = connection.server_resource,
-					priority = connection.priority,
-					keyID = gajim.config.get_per('accounts', connection.name,
-						'keyid'))
+					priority = connection.priority)
+				if gajim.connections[account].gpg:
+					contact.keyID = gajim.config.get_per('accounts', connection.name,
+						'keyid')
 				contacts.append(contact)
 				# if we're online ...
 				if connection.connection:
@@ -3426,11 +3427,6 @@ class RosterWindow:
 				on_response_ok = (on_ok2, list_))
 
 
-	def forget_gpg_passphrase(self, keyid):
-		if self.gpg_passphrase.has_key(keyid):
-			del self.gpg_passphrase[keyid]
-		return False
-
 	def set_connecting_state(self, account):
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
@@ -3468,46 +3464,10 @@ class RosterWindow:
 						gajim.config.set_per('accounts', account, 'savepass', True)
 						passwords.save_password(account, passphrase)
 
-			keyid = None
-			use_gpg_agent = gajim.config.get('use_gpg_agent')
-			# we don't need to bother with the passphrase if we use the agent
-			keyid = gajim.config.get_per('accounts', account, 'keyid')
-			if keyid and not gajim.config.get('usegpg'):
-				dialog = dialogs.WarningDialog(_('GPG is not usable'), _('You will be connected to %s without OpenPGP.') % account)
-			if keyid and gajim.connections[account].connected < 2 and \
-				gajim.config.get('usegpg'):
-
-				if use_gpg_agent:
-					self.gpg_passphrase[keyid] = None
-				else:
-					if self.gpg_passphrase.has_key(keyid):
-						passphrase = self.gpg_passphrase[keyid]
-						save = False
-					else:
-						password_ok = False
-						count = 0
-						title = _('Passphrase Required')
-						second = _('Enter GPG key passphrase for account %s.') % \
-							account
-						while not password_ok and count < 3:
-							count += 1
-							w = dialogs.PassphraseDialog(title, second,
-								_('Save passphrase'))
-							passphrase, save = w.run()
-							if passphrase == -1:
-								passphrase = None
-								password_ok = True
-							else:
-								password_ok = gajim.connections[account].\
-									test_gpg_passphrase(passphrase)
-								title = _('Wrong Passphrase')
-								second = _('Please retype your GPG passphrase or '
-									'press Cancel.')
-						if passphrase != None:
-							self.gpg_passphrase[keyid] = passphrase
-							gobject.timeout_add(30000, self.forget_gpg_passphrase,
-								keyid)
-					gajim.connections[account].gpg_passphrase(passphrase)
+				keyid = gajim.config.get_per('accounts', account, 'keyid')
+				if keyid and not common.connection.USE_GPG:
+					dialog = dialogs.WarningDialog(_('GPG is not usable'),
+						_('You will be connected to %s without OpenPGP.') % account)
 
 		if gajim.account_is_connected(account):
 			if status == 'online' and gajim.interface.sleeper.getState() != \
@@ -5302,7 +5262,6 @@ class RosterWindow:
 
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []
-		self.gpg_passphrase = {}
 
 		#(icon, name, type, jid, account, editable, secondary_pixbuf)
 		model = gtk.TreeStore(gtk.Image, str, str, str, str, gtk.gdk.Pixbuf)

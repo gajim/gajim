@@ -1419,7 +1419,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		qp.setTagData('utc', strftime('%Y%m%dT%T', gmtime()))
 		qp.setTagData('tz', tzname[daylight])
 		qp.setTagData('display', helpers.decode_string(strftime('%c',
-			localtime())))
+			localtime()))
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
@@ -2129,41 +2129,62 @@ returns the session that we last sent a message to.'''
 
 		# continue connection
 		if self.connected > 1 and self.continue_connect_info:
-			show = self.continue_connect_info[0]
-			msg = self.continue_connect_info[1]
-			signed = self.continue_connect_info[2]
-			self.connected = STATUS_LIST.index(show)
-			sshow = helpers.get_xmpp_show(show)
-			# send our presence
-			if show == 'invisible':
-				self.send_invisible_presence(msg, signed, True)
-				return
-			priority = gajim.get_priority(self.name, sshow)
-			vcard = self.get_cached_vcard(jid)
-			if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
-				self.vcard_sha = vcard['PHOTO']['SHA']
-			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
-			p = self.add_sha(p)
-			if msg:
-				p.setStatus(msg)
-			if signed:
-				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+			to_be_signed = self.continue_connect_info[2]
+			signed = ''
+			if to_be_signed:
+				signed = self.get_signed_msg(to_be_signed,
+					self._send_first_presence)
+				if signed is None:
+					self.dispatch('GPG_PASSWORD_REQUIRED',
+						(self._send_first_presence,))
+					# _send_first_presence will be called when user enter passphrase
+					return
+			self._send_first_presence(signed)
 
-			if self.connection:
-				self.connection.send(p)
-				self.priority = priority
-			self.dispatch('STATUS', show)
-			# ask our VCard
-			self.request_vcard(None)
+	def _send_first_presence(self, signed = ''):
+		show = self.continue_connect_info[0]
+		msg = self.continue_connect_info[1]
+		to_be_signed = self.continue_connect_info[2]
+		if to_be_signed and not signed:
+			signed = self.get_signed_msg(self.continue_connect_info[2])
+			if signed is None:
+				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
+					#%s is the account name here
+					_('You will be connected to %s without OpenPGP.') % self.name))
+				signed = ''
+		self.connected = STATUS_LIST.index(show)
+		sshow = helpers.get_xmpp_show(show)
+		# send our presence
+		if show == 'invisible':
+			self.send_invisible_presence(msg, signed, True)
+			return
+		priority = gajim.get_priority(self.name, sshow)
+		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
+		vcard = self.get_cached_vcard(our_jid)
+		if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
+			self.vcard_sha = vcard['PHOTO']['SHA']
+		p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
+		p = self.add_sha(p)
+		if msg:
+			p.setStatus(msg)
+		if signed:
+			p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 
-			# Get bookmarks from private namespace
-			self.get_bookmarks()
+		if self.connection:
+			self.connection.send(p)
+			self.priority = priority
+		self.dispatch('STATUS', show)
+		# ask our VCard
+		self.request_vcard(None)
 
-			# Get annotations from private namespace
-			self.get_annotations()
+		# Get bookmarks from private namespace
+		self.get_bookmarks()
 
-			#Inform GUI we just signed in
-			self.dispatch('SIGNED_IN', ())
+		# Get annotations from private namespace
+		self.get_annotations()
+
+		# Inform GUI we just signed in
+		self.dispatch('SIGNED_IN', ())
 		self.continue_connect_info = None
 	
 	def request_gmail_notifications(self):

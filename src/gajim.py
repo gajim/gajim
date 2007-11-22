@@ -1365,14 +1365,50 @@ class Interface:
 			notify.popup(event_type, jid, account, 'gc-invitation', path,
 				event_type, room_jid)
 
+	def forget_gpg_passphrase(self, keyid):
+		if self.gpg_passphrase.has_key(keyid):
+			del self.gpg_passphrase[keyid]
+		return False
+
 	def handle_event_bad_passphrase(self, account, array):
 		use_gpg_agent = gajim.config.get('use_gpg_agent')
 		if use_gpg_agent:
 			return
 		keyID = gajim.config.get_per('accounts', account, 'keyid')
-		self.roster.forget_gpg_passphrase(keyID)
+		self.forget_gpg_passphrase(keyID)
 		dialogs.WarningDialog(_('Your passphrase is incorrect'),
 			_('You are currently connected without your OpenPGP key.'))
+
+	def handle_event_gpg_password_required(self, account, array):
+		#('GPG_PASSWORD_REQUIRED', account, (callback,))
+		callback = array[0]
+		keyid = gajim.config.get_per('accounts', account, 'keyid')
+		if self.gpg_passphrase.has_key(keyid):
+			gajim.connections[account].gpg_passphrase(self.gpg_passphrase[keyid])
+			callback()
+			return
+		password_ok = False
+		count = 0
+		title = _('Passphrase Required')
+		second = _('Enter GPG key passphrase for account %s.') % account
+		while not password_ok and count < 3:
+			count += 1
+			w = dialogs.PassphraseDialog(title, second, '')
+			passphrase, save = w.run()
+			if passphrase == -1:
+				# User pressed cancel
+				passphrase = None
+				password_ok = True
+			else:
+				password_ok = gajim.connections[account].\
+					test_gpg_passphrase(passphrase)
+				title = _('Wrong Passphrase')
+				second = _('Please retype your GPG passphrase or press Cancel.')
+		if passphrase != None:
+			self.gpg_passphrase[keyid] = passphrase
+			gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
+		gajim.connections[account].gpg_passphrase(passphrase)
+		callback()
 
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
@@ -2463,6 +2499,7 @@ class Interface:
 				self.handle_event_unique_room_id_unsupported,
 			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
 			'SESSION_NEG': self.handle_session_negotiation,
+			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
 		}
 		gajim.handlers = self.handlers
 
@@ -2578,6 +2615,7 @@ class Interface:
 		self.minimized_controls = {}
 		self.status_sent_to_users = {}
 		self.status_sent_to_groups = {}
+		self.gpg_passphrase = {}
 		self.default_colors = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
