@@ -3740,8 +3740,9 @@ class RosterWindow:
 			song_offset = current_status_message.find('♪')
 			if song_offset >= 0:
 				current_status_message = current_status_message[0:song_offset]
-			status_message = current_status_message.strip() + '\n' + status_message
-			self.send_status(account, current_show, status_message.strip())
+			current_status_message = current_status_message.strip() + '\n' + \
+				status_message
+			self.send_status(account, current_show, current_status_message.strip())
 
 	def update_status_combobox(self):
 		# table to change index in connection.connected to index in combobox
