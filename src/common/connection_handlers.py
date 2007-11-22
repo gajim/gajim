@@ -2145,7 +2145,7 @@ returns the session that we last sent a message to.'''
 		show = self.continue_connect_info[0]
 		msg = self.continue_connect_info[1]
 		signe_msg = self.continue_connect_info[2]
-		if signed_msg and not signed:
+		if signe_msg and not signed:
 			signed = self.get_signed_msg(msg)
 			if signed is None:
 				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
