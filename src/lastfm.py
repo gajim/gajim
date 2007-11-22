@@ -87,7 +87,7 @@ class LastFM:
 		tracklist = recenttracks.getElementsByTagName('track')
 
 		# do not update if nothing more has been scrobbled since last time
- 		if len(tracklist) > 0 and \
+		if len(tracklist) > 0 and \
 		int(tracklist[0].getElementsByTagName('date')[0].
 		getAttribute('uts')) != self.getLastScrobbledTime(): 
 			self.lastSongs = []
