@@ -420,51 +420,55 @@ class Contacts:
 					answers.append(data)
 		return answers
 
-	def _get_data_score(self, data):
-		'''compute thescore of a gived data
-		data is {'jid': jid, 'account': account, 'order': order}
-		order is optional
-		score = (max_order - order)*10000 + is_jabber*priority*10 + status'''
-		jid = data['jid']
-		account = data['account']
-		max_order = 0
-		order = 0
-		if data.has_key('order'):
-			order = data['order']
-		if order:
-			family = self.get_metacontacts_family(account, jid)
-			for data_ in family:
-				if data_.has_key('order') and data_['order'] > max_order:
-					max_order = data_['order']
-		score = (max_order - order)*10000
-
-		contact = self.get_contact_with_highest_priority(account, jid)
-		if not contact:
-			return score
-
-		if common.gajim.get_transport_name_from_jid(jid) is None and \
-		contact.show not in ('error', 'offline'):
-			score += 10
-			if contact.priority > 0:
-				score += contact.priority * 10
-		score += ['not in roster', 'error', 'offline', 'invisible', 'dnd', 'xa',
-		'away', 'chat', 'online', 'requested', 'message'].index(contact.show)
-		if contact.show == 'offline' and contact.status:
-			# Offline contacts with a status message have highest score
-			score += 1
-		return score
+	def compare_metacontacts(self, data1, data2):
+		'''compare 2 metacontacts.
+		Data is {'jid': jid, 'account': account, 'order': order}
+		order is optional'''
+		if 'order' in data1 and 'order' in data2:
+			if data1['order'] > data2['order']:
+				return 1
+			if data1['order'] < data2['order']:
+				return -1
+		jid1 = data1['jid']
+		jid2 = data2['jid']
+		transport1 = common.gajim.get_transport_name_from_jid(jid1)
+		transport2 = common.gajim.get_transport_name_from_jid(jid2)
+		if transport2 and not transport1:
+			return 1
+		if transport1 and not transport2:
+			return -1
+		contact1 = self.get_contact_with_highest_priority(data1['account'], jid1)
+		contact2 = self.get_contact_with_highest_priority(data2['account'], jid2)
+		if contact1.priority > contact2.priority:
+			return 1
+		if contact2.priority > contact1.priority:
+			return -1
+		show_list = ['not in roster', 'error', 'offline', 'invisible', 'dnd',
+			'xa', 'away', 'chat', 'online', 'requested', 'message']
+		show1 = show_list.index(contact1.show)
+		show2 = show_list.index(contact2.show)
+		if show1 > show2:
+			return 1
+		if show2 > show1:
+			return -1
+		if jid1 > jid2:
+			return 1
+		if jid2 > jid1:
+			return -1
+		# If all is the same, compare accounts, they can't be the same
+		account1 = data1['account']
+		account2 = data2['account']
+		if account1 > account2:
+			return 1
+		if account2 > account1:
+			return -1
+		return 0
 
 	def get_metacontacts_big_brother(self, family):
 		'''which of the family will be the big brother under wich all
 		others will be ?'''
-		max_score = 0
-		max_data = family[0]
-		for data in family:
-			score = self._get_data_score(data)
-			if score > max_score:
-				max_score = score
-				max_data = data
-		return max_data
+		family.sort(cmp=self.compare_metacontacts)
+		return family[-1]
 
 	def is_pm_from_jid(self, account, jid):
 		'''Returns True if the given jid is a private message jid'''
