@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+  AM_ARGS="--add-missing --gnu --copy"
+  CONF_ARGS=""
+  if test x`uname -s 2>/dev/null` = 'xDarwin';then
+    . /Library/Frameworks/GTK+.framework/Versions/Current/env
+    AM_ARGS="${AM_ARGS} --ignore-deps"
+    CONF_ARGS="${CONF_ARGS} --disable-idle --without-x"
+  fi
+
   echo "[encoding: UTF-8]" > po/POTFILES.in \
   && ls -1 -U data/gajim.desktop.in.in data/glade/*.glade \
   src/*py src/common/*py src/common/zeroconf/*.py >> \
@@ -8,15 +16,7 @@
 	echo "See README.html for build requirements."
 	exit 1
   fi
-  AM_ARGS="--add-missing --gnu --copy"
-  CONF_ARGS=""
-  if test x`uname -s 2>/dev/null` = 'xDarwin';then
-    . /Library/Frameworks/GTK+.framework/Versions/Current/env
-    #export PATH=/Library/Frameworks/GTK+.framework/Versions/Current/bin/:$PATH
-    #export PKG_CONFIG_PATH=/Library/Frameworks/GTK+.framework/Versions/Current/lib/pkgconfig
-    AM_ARGS="${AM_ARGS} --ignore-deps"
-    CONF_ARGS="${CONF_ARGS} --disable-idle --without-x"
-  fi
+
   intltoolize --force --automake \
   && aclocal -I ./m4 \
   && libtoolize --copy --force --automake \
