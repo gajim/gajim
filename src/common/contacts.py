@@ -432,8 +432,19 @@ class Contacts:
 		contact2 = self.get_contact_with_highest_priority(account2, jid2)
 		show_list = ['not in roster', 'error', 'offline', 'invisible', 'dnd',
 			'xa', 'away', 'chat', 'online', 'requested', 'message']
-		show1 = show_list.index(contact1.show)
-		show2 = show_list.index(contact2.show)
+		# contact can be null when we fill the roster on connection
+		if not contact1:
+			show1 = 0
+			priority1 = 0
+		else:
+			show1 = show_list.index(contact1.show)
+			priority1 = contact1.priority
+		if not contact1:
+			show2 = 0
+			priority2 = 0
+		else:
+			show2 = show_list.index(contact2.show)
+			priority2 = contact2.priority
 		# If only one is offline, it's always second
 		if show1 > 2 and show2 < 3:
 			return 1
@@ -450,9 +461,9 @@ class Contacts:
 			return 1
 		if transport1 and not transport2:
 			return -1
-		if contact1.priority > contact2.priority:
+		if priority1 > priority2:
 			return 1
-		if contact2.priority > contact1.priority:
+		if priority2 > priority1:
 			return -1
 		if show1 > show2:
 			return 1
