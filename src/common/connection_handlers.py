@@ -1853,8 +1853,8 @@ returns the session that we last sent a message to.'''
 		except:
 			prio = 0
 		keyID = ''
-		if sigTag and GnuPG.USE_GPG:
-			#verify
+		if sigTag and self.gpg:
+			# verify
 			sigmsg = sigTag.getData()
 			keyID = self.gpg.verify(status, sigmsg)
 
