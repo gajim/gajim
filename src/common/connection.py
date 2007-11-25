@@ -794,6 +794,7 @@ class Connection(ConnectionHandlers):
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
+				signed = self.get_signed_msg(msg)
 				self.send_invisible_presence(msg, signed)
 				return
 			if was_invisible and self.privacy_rules_supported:
