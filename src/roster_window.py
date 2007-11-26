@@ -2076,9 +2076,11 @@ class RosterWindow:
 				edit_groups_menuitem.connect('activate', self.on_edit_groups, [(
 					contact,account)])
 
-				if gajim.config.get('usegpg'):
+				if gajim.connections[account].gpg:
 					assign_openpgp_key_menuitem.connect('activate',
 						self.on_assign_pgp_key, contact, account)
+				else:
+					assign_openpgp_key_menuitem.set_sensitive(False)
 
 			else: # contact is in group 'Not in Roster'
 				edit_groups_menuitem.set_sensitive(False)
@@ -2310,9 +2312,11 @@ class RosterWindow:
 			edit_groups_menuitem.connect('activate', self.on_edit_groups, [(
 				contact,account)])
 
-			if gajim.config.get('usegpg'):
+			if gajim.connections[account].gpg:
 				assign_openpgp_key_menuitem.connect('activate',
 					self.on_assign_pgp_key, contact, account)
+			else:
+				assign_openpgp_key_menuitem.set_sensitive(False)
 
 			if contact.sub in ('from', 'both'):
 				send_auth_menuitem.set_sensitive(False)
@@ -3465,7 +3469,7 @@ class RosterWindow:
 						passwords.save_password(account, passphrase)
 
 				keyid = gajim.config.get_per('accounts', account, 'keyid')
-				if keyid and not common.connection.USE_GPG:
+				if keyid and not gajim.connections[account].gpg:
 					dialog = dialogs.WarningDialog(_('GPG is not usable'),
 						_('You will be connected to %s without OpenPGP.') % account)
 
