@@ -2329,7 +2329,8 @@ class Interface:
 		# because emoticons match later (in the string) they need to be after
 		# basic matches that may occur earlier
 		emot_and_basic_pattern = basic_pattern + emoticons_pattern
-		self.emot_and_basic_re = re.compile(emot_and_basic_pattern, re.IGNORECASE)
+		self.emot_and_basic_re = re.compile(emot_and_basic_pattern,
+			re.IGNORECASE + re.UNICODE)
 
 		# at least one character in 3 parts (before @, after @, after .)
 		self.sth_at_sth_dot_sth_re = re.compile(r'\S+@\S+\.\S*[^\s)?]')
