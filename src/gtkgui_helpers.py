@@ -127,7 +127,7 @@ def get_theme_font_for_option(theme, option):
 	
 def get_default_font():
 	'''Get the desktop setting for application font
-	first check for GNOME, then XFCE and last KDE
+	first check for GNOME, then Xfce and last KDE
 	it returns None on failure or else a string 'Font Size' '''
 	
 	try:

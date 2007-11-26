@@ -1678,7 +1678,7 @@ Show only in roster</property>
                                 <property name="items" translatable="yes">Autodetect on every Gajim startup
 Always use GNOME default applications
 Always use KDE default applications
-Always use XFCE4 default applications
+Always use Xfce default applications
 Custom</property>
                                 <signal name="changed" handler="on_applications_combobox_changed"/>
                               </widget>
