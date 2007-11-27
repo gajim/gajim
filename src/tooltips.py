@@ -611,7 +611,7 @@ class FileTransfersTooltip(BaseTooltip):
 			file_props['stopped'] == True:
 				status = _('Stopped')
 			elif file_props['completed']:
-					status = _('Completed')
+				status = _('Completed')
 			elif file_props['connected'] == False:
 				if file_props['completed']:
 					status = _('Completed')
