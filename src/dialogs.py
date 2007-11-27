@@ -484,7 +484,7 @@ class ChangeStatusMessageDialog:
 			_('Please type a name for this status message'), is_modal = True)
 		response = dlg.get_response()
 		if response == gtk.RESPONSE_OK:
-			msg_name = dlg.input_entry.get_text()
+			msg_name = dlg.input_entry.get_text().decode('utf-8')
 			msg_text = status_message_to_save_as_preset.decode('utf-8')
 			msg_text_1l = helpers.to_one_line(msg_text)
 			if not msg_name: # msg_name was ''
