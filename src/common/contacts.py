@@ -42,9 +42,9 @@ class Contact:
 
 		# Capabilities; filled by caps.py/ConnectionCaps object
 		# every time it gets these from presence stanzas
-		self.caps_node=None
-		self.caps_ver=None
-		self.caps_exts=None
+		self.caps_node = None
+		self.caps_ver = None
+		self.caps_exts = None
 
 		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
 		# we keep track of jep85 support with the peer by three extra states:
@@ -372,7 +372,7 @@ class Contacts:
 					found = data
 					break
 			if found:
-				self._metacontacts_tags[account][tag].remove(data)
+				self._metacontacts_tags[account][tag].remove(found)
 				break
 		common.gajim.connections[account].store_metacontacts(
 			self._metacontacts_tags[account])
