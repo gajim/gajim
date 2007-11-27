@@ -284,7 +284,8 @@ class MessageWindow:
 			elif chr(keyval) in st: # ALT + 1,2,3..
 				self.notebook.set_current_page(st.index(chr(keyval)))
 			elif keyval == gtk.keysyms.c: # ALT + C toggles chat buttons
-				control.chat_buttons_set_visible(not control.hide_chat_buttons)
+				control.chat_buttons_set_visible(not \
+					control.hide_chat_buttons_current)
 		# Close tab bindings
 		elif keyval == gtk.keysyms.Escape and \
 				gajim.config.get('escape_key_closes'): # Escape
