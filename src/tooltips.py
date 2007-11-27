@@ -30,7 +30,6 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
-from common import i18n
 
 class BaseTooltip:
 	''' Base Tooltip class;

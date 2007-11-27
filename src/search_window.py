@@ -20,7 +20,7 @@
 import gobject
 import gtk
 
-from common import xmpp, gajim, dataforms
+from common import gajim, dataforms
 
 import gtkgui_helpers
 import dialogs

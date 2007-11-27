@@ -2364,13 +2364,13 @@ class RosterWindow:
 		if gajim.connections[account] and gajim.connections[account].\
 			privacy_rules_supported:
 			if jid in gajim.connections[account].blocked_contacts:
-					block_menuitem.set_no_show_all(True)
-					unblock_menuitem.connect('activate', self.on_unblock, iter, None)
-					block_menuitem.hide()
+				block_menuitem.set_no_show_all(True)
+				unblock_menuitem.connect('activate', self.on_unblock, iter, None)
+				block_menuitem.hide()
 			else:
-					unblock_menuitem.set_no_show_all(True)
-					block_menuitem.connect('activate', self.on_block, iter, None)
-					unblock_menuitem.hide()
+				unblock_menuitem.set_no_show_all(True)
+				block_menuitem.connect('activate', self.on_block, iter, None)
+				unblock_menuitem.hide()
 		else:
 			unblock_menuitem.set_no_show_all(True)
 			block_menuitem.set_sensitive(False)
@@ -5419,13 +5419,13 @@ class RosterWindow:
 		## accounts has no effect until they are connected.
 		st = gajim.config.get('set_status_msg_from_current_music_track')
 		if st:
-		    gobject.timeout_add(1000,
-			    self.enable_syncing_status_msg_from_current_music_track,
-			    st)
+			gobject.timeout_add(1000,
+				self.enable_syncing_status_msg_from_current_music_track,
+				st)
 		else:
-		    gobject.timeout_add(1000,
-			    self.enable_syncing_status_msg_from_lastfm,
-			    gajim.config.get('set_status_msg_from_lastfm'))
+			gobject.timeout_add(1000,
+				self.enable_syncing_status_msg_from_lastfm,
+				gajim.config.get('set_status_msg_from_lastfm'))
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()

@@ -1333,8 +1333,6 @@ class AccountsWindow:
 		st = gajim.config.get('mergeaccounts')
 		self.xml.get_widget('merge_checkbutton').set_active(st)
 
-		import os
-
 		self.avahi_available = True
 		try:
 			import avahi
