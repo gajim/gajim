@@ -66,7 +66,6 @@
                             <property name="xalign">1</property>
                             <property name="yalign">0</property>
                             <property name="stock">gtk-info</property>
-                            <property name="icon_size">64</property>
                           </widget>
                         </child>
                         <child>
@@ -102,7 +101,6 @@ Use this program to delete or export logs. You can select logs from the left and
                             <property name="xalign">1</property>
                             <property name="yalign">0</property>
                             <property name="stock">gtk-dialog-warning</property>
-                            <property name="icon_size">64</property>
                           </widget>
                         </child>
                         <child>
