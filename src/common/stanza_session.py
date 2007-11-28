@@ -584,7 +584,7 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = 'responded-e2e'
 
 		feature.addChild(node=x)
-		
+
 		if not_acceptable:
 			response = xmpp.Error(response, xmpp.ERR_NOT_ACCEPTABLE)
 
@@ -853,14 +853,29 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def acknowledge_termination(self):
 		StanzaSession.acknowledge_termination(self)
-		
+
 		self.enable_encryption = False
 
-	def fail_bad_negotiation(self, reason):
-		'''they've tried to feed us a bogus value, send an error and cancel everything.'''
+	def fail_bad_negotiation(self, reason, fields = None):
+		'''sends an error and cancels everything.
+
+if fields == None, the remote party has given us a bad cryptographic value of some kind
+
+otherwise, list the fields we haven't implemented'''
 
 		err = xmpp.Error(xmpp.Message(), xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
 		err.T.error.T.text.setData(reason)
+
+		if fields:
+			feature = xmpp.Node(xmpp.NS_FEATURE + ' feature')
+
+			for field in fields:
+				fn = xmpp.Node('field')
+				fn['var'] = field
+				feature.addChild(node=feature)
+
+			err.addChild(node=feature)
+
 		self.send(err)
 
 		self.status = None

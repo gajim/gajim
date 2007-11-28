@@ -1898,16 +1898,7 @@ class Interface:
 
 					# we don't support 3-message negotiation as the responder
 					if 'dhkeys' in form.asDict():
-						err = xmpp.Error(xmpp.Message(), xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
-
-						feature = xmpp.Node(xmpp.NS_FEATURE + ' feature')
-						field = xmpp.Node('field')
-						field['var'] = 'dhkeys'
-
-						feature.addChild(node=field)
-						err.addChild(node=feature)
-
-						session.send(err)
+						session.fail_bad_negotiation('3 message negotiation not supported when responding', ('dhkeys',))
 						return
 
 					negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
