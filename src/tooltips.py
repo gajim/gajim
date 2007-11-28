@@ -627,8 +627,10 @@ class FileTransfersTooltip(BaseTooltip):
 		else:
 			status = _('Not started')
 		properties.append((_('Status: '), status))
-		file_desc = file_props['desc']
-		properties.append((_('Description: '), gobject.markup_escape_text(file_desc)))
+		if 'desc' in file_props:
+			file_desc = file_props['desc']
+			properties.append((_('Description: '), gobject.markup_escape_text(
+				file_desc)))
 		while properties:
 			property = properties.pop(0)
 			current_row += 1
