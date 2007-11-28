@@ -1898,7 +1898,7 @@ class SingleMessageWindow:
 					spell1.set_language(lang)
 					spell2.set_language(lang)
 			except gobject.GError, msg:
-				self.AspellDictError(lang)
+				AspellDictError(lang)
 
 		self.prepare_widgets_for(self.action)
 
