@@ -517,9 +517,13 @@ class GroupchatControl(ChatControlBase):
 
 			# tooltip must always hold ALL the subject
 			self.subject_tooltip.set_tip(self.event_box, self.subject)
+			self.banner_status_label.show()
+			self.banner_status_label.set_no_show_all(False)
 		else:
 			subject_text = ''
 			self.subject_tooltip.disable()
+			self.banner_status_label.hide()
+			self.banner_status_label.set_no_show_all(True)
 
 		self.banner_status_label.set_markup(subject_text)
 

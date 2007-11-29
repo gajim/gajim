@@ -1205,12 +1205,10 @@ class ChatControl(ChatControlBase):
 
 		status = contact.status
 		if status is not None:
-			self.status_tooltip.set_tip(banner_eventbox, status)
-			self.status_tooltip.enable()
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
 			self.banner_status_label.set_ellipsize(pango.ELLIPSIZE_END)
-			status = helpers.reduce_chars_newlines(status, max_lines = 1)
-		status_escaped = gobject.markup_escape_text(status)
+			status_reduced = helpers.reduce_chars_newlines(status, max_lines = 1)
+		status_escaped = gobject.markup_escape_text(status_reduced)
 
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		st = gajim.config.get('displayed_chat_state_notifications')
@@ -1246,9 +1244,14 @@ class ChatControl(ChatControlBase):
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
 			else:
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
+			self.status_tooltip.set_tip(banner_eventbox, status)
+			self.banner_status_label.show()
+			self.banner_status_label.set_no_show_all(False)
 		else:
 			status_text = ''
 			self.status_tooltip.disable()
+			self.banner_status_label.hide()
+			self.banner_status_label.set_no_show_all(True)
 
 		self.banner_status_label.set_markup(status_text)
 		# setup the label that holds name and jid
