@@ -34,7 +34,7 @@ from common import i18n
 import common.configpaths 
 common.configpaths.gajimpaths.init()
 common.configpaths.gajimpaths.init_profile()
-import exceptions
+from common import exceptions
 import dialogs
 import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants
