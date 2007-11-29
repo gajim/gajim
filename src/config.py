@@ -1292,10 +1292,6 @@ class AccountsWindow:
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
-	def on_accounts_window_destroy(self, widget):
-		if gajim.interface.instances.has_key('accounts'):
-			del gajim.interface.instances['accounts']
-
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('accounts_window.glade')
 		self.window = self.xml.get_widget('accounts_window')
@@ -1741,7 +1737,7 @@ class AccountsWindow:
 
 			# ServiceCache object keep old property account
 			if hasattr(gajim.connections[old_name], 'services_cache'):
-				gajim.connections[self.account].services_cache.account = new_name
+				gajim.connections[old_name].services_cache.account = new_name
 			del gajim.interface.instances[old_name]
 			del gajim.interface.minimized_controls[old_name]
 			del gajim.nicks[old_name]
