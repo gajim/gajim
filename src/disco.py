@@ -1204,26 +1204,6 @@ class ToplevelAgentBrowser(AgentBrowser):
 			self.search_button = None
 		AgentBrowser._clean_actions(self)
 
-	def cleanup(self):
-		self.tooltip.hide_tooltip()
-		AgentBrowser.cleanup(self)
-
-	def update_theme(self):
-		theme = gajim.config.get('roster_theme')
-		bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
-		if bgcolor:
-			self._renderer.set_property('cell-background', bgcolor)
-		self.window.services_treeview.queue_draw()
-
-	def on_execute_button_clicked(self, widget = None):
-		'''When we want to execute a command:
-		open adhoc command window'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
-			return
-		service = model[iter][0].decode('utf-8')
-		adhoc_commands.CommandWindow(self.account, service)
-
 	def on_search_button_clicked(self, widget = None):
 		'''When we want to search something:
 		open search window'''
@@ -1236,20 +1216,6 @@ class ToplevelAgentBrowser(AgentBrowser):
 		else:
 			gajim.interface.instances[self.account]['search'][service] = \
 				search_window.SearchWindow(self.account, service)
-
-	def on_register_button_clicked(self, widget = None):
-		'''When we want to register an agent:
-		request information about registering with the agent and close the
-		window.'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
-			return
-		jid = model[iter][0].decode('utf-8')
-		if jid:
-			gajim.connections[self.account].request_register_agent_info(jid)
-			self.window.destroy(chain = True)
-
-		AgentBrowser._clean_actions(self)
 
 	def cleanup(self):
 		self.tooltip.hide_tooltip()
