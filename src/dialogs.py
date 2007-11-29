@@ -484,7 +484,7 @@ class ChangeStatusMessageDialog:
 			_('Please type a name for this status message'), is_modal = True)
 		response = dlg.get_response()
 		if response == gtk.RESPONSE_OK:
-			msg_name = dlg.input_entry.get_text().decode('utf-8')
+			msg_name = dlg.input_entry.get_text()
 			msg_text = status_message_to_save_as_preset.decode('utf-8')
 			msg_text_1l = helpers.to_one_line(msg_text)
 			if not msg_name: # msg_name was ''
@@ -497,14 +497,14 @@ class ChangeStatusMessageDialog:
 				resp = dlg2.run()
 				if resp != gtk.RESPONSE_OK:
 					return
+				self.preset_messages_dict[msg_name] = msg_text
 			else:
+				self.preset_messages_dict[msg_name] = msg_text
 				iter_ = self.message_liststore.append((msg_name,))
 				gajim.config.add_per('statusmsg', msg_name)
 				# select in combobox the one we just saved 
 				self.message_combobox.set_active_iter(iter_)
 			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text_1l)
-			self.preset_messages_dict[msg_name] = msg_text
-
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
