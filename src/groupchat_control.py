@@ -1563,6 +1563,8 @@ class GroupchatControl(ChatControlBase):
 			self.contact.jid, status = self.subject)
 
 	def shutdown(self, status='offline'):
+		# destroy banner tooltip - bug #pygtk for that!
+		self.subject_tooltip.destroy()
 		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
 							show='offline', status=status)
 		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
