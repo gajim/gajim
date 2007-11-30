@@ -107,6 +107,8 @@ class Connection(ConnectionHandlers):
 		self.last_connection = None # last ClientCommon instance
 		self.is_zeroconf = False
 		self.gpg = None
+		if USE_GPG:
+			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 		self.status = ''
 		self.priority = gajim.get_priority(name, 'offline')
 		self.old_show = ''
@@ -767,9 +769,6 @@ class Connection(ConnectionHandlers):
 					})
 			if USE_GPG and not self.gpg:
 				self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
-				gajim.config.set('usegpg', True)
-			else:
-				gajim.config.set('usegpg', False)
 			self.connect_and_init(show, msg, sign_msg)
 
 		elif show == 'offline':
@@ -1036,9 +1035,6 @@ class Connection(ConnectionHandlers):
 				return
 			if USE_GPG:
 				self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
-				gajim.config.set('usegpg', True)
-			else:
-				gajim.config.set('usegpg', False)
 			gajim.connections[self.name] = self
 			self.dispatch('ACC_OK', (self.new_account_info))
 			self.new_account_info = None

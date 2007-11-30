@@ -1514,7 +1514,7 @@ class AccountsWindow:
 
 		# Personal tab
 		gpg_key_label = self.xml.get_widget('gpg_key_label2')
-		if gajim.config.get('usegpg'):
+		if rajim.connections[gajim.ZEROCONF_ACC_NAME].gpg:
 			self.xml.get_widget('gpg_choose_button2').set_sensitive(True)
 			self.init_account_gpg()
 		else:
@@ -1542,7 +1542,7 @@ class AccountsWindow:
 		use_gpg_agent_checkbutton = self.xml.get_widget(
 			'use_gpg_agent_checkbutton' + widget_name_add)
 
-		if not keyid or not gajim.config.get('usegpg'):
+		if not keyid or not gajim.connections[account].gpg:
 			use_gpg_agent_checkbutton.set_sensitive(False)
 			gpg_key_label.set_text(_('No key selected'))
 			gpg_name_label.set_text('')
@@ -1605,7 +1605,7 @@ class AccountsWindow:
 
 		# Personal tab
 		gpg_key_label = self.xml.get_widget('gpg_key_label1')
-		if gajim.config.get('usegpg'):
+		if gajim.connections[account].gpg:
 			self.xml.get_widget('gpg_choose_button1').set_sensitive(True)
 			self.init_account_gpg()
 		else:

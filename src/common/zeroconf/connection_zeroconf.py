@@ -62,6 +62,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connected = 0 # offline
 		self.connection = None
 		self.gpg = None
+		if USE_GPG:
+			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 		self.is_zeroconf = True
 		self.privacy_rules_supported = False
 		self.blocked_contacts = []
@@ -87,10 +89,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
 		if USE_GPG:
-			self.gpg = GnuPG.GnuPG()
-			gajim.config.set('usegpg', True)
-		else:
-			gajim.config.set('usegpg', False)
+			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 		
 		self.get_config_values_or_default()
 		
