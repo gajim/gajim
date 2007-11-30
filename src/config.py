@@ -1514,7 +1514,7 @@ class AccountsWindow:
 
 		# Personal tab
 		gpg_key_label = self.xml.get_widget('gpg_key_label2')
-		if rajim.connections[gajim.ZEROCONF_ACC_NAME].gpg:
+		if gajim.connections[gajim.ZEROCONF_ACC_NAME].gpg:
 			self.xml.get_widget('gpg_choose_button2').set_sensitive(True)
 			self.init_account_gpg()
 		else:
