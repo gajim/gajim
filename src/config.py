@@ -1514,7 +1514,8 @@ class AccountsWindow:
 
 		# Personal tab
 		gpg_key_label = self.xml.get_widget('gpg_key_label2')
-		if gajim.connections[gajim.ZEROCONF_ACC_NAME].gpg:
+		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME) and \
+		gajim.connections[gajim.ZEROCONF_ACC_NAME].gpg:
 			self.xml.get_widget('gpg_choose_button2').set_sensitive(True)
 			self.init_account_gpg()
 		else:
@@ -2133,6 +2134,9 @@ class AccountsWindow:
 			# enable (will create new account if not present)
 			gajim.connections[gajim.ZEROCONF_ACC_NAME] = common.zeroconf.\
 				connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
+			if gajim.connections[gajim.ZEROCONF_ACC_NAME].gpg:
+				self.xml.get_widget('gpg_choose_button2').set_sensitive(True)
+			self.init_account_gpg()
 			# update variables
 			gajim.interface.instances[gajim.ZEROCONF_ACC_NAME] = {'infos': {},
 				'disco': {}, 'gc_config': {}, 'search': {}}
