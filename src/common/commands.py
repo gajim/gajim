@@ -306,8 +306,8 @@ class ConnectionCommands:
 
 		self.connection.send(iq)
 
-	def commandQuery(self, con, iq_obj):
-		''' Send disco result for query for command (JEP-0050, example 6.).
+	def commandInfoQuery(self, con, iq_obj):
+		''' Send disco#info result for query for command (JEP-0050, example 6.).
 		Return True if the result was sent, False if not. '''
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		node = iq_obj.getTagAttr('query', 'node')
@@ -325,6 +325,22 @@ class ConnectionCommands:
 			for feature in cmd.commandfeatures:
 				q.addChild('feature', attrs = {'var': feature})
 
+			self.connection.send(iq)
+			return True
+
+		return False
+
+	def commandItemsQuery(self, con, iq_obj):
+		''' Send disco#items result for query for command.
+		Return True if the result was sent, False if not. '''
+		jid = helpers.get_full_jid_from_iq(iq_obj)
+		node = iq_obj.getTagAttr('query', 'node')
+
+		if node not in self.__commands: return False
+
+		cmd = self.__commands[node]
+		if cmd.isVisibleFor(self.isSameJID(jid)):
+			iq = iq_obj.buildReply('result')
 			self.connection.send(iq)
 			return True
 

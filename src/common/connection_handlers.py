@@ -711,6 +711,8 @@ class ConnectionDisco:
 
 	def _DiscoverItemsGetCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsGetCB')
+		if self.commandItemsQuery(con, iq_obj):
+			raise common.xmpp.NodeProcessed
 		node = iq_obj.getTagAttr('query', 'node')
 		if node is None:
 			result = iq_obj.buildReply('result')
@@ -725,7 +727,7 @@ class ConnectionDisco:
 		q = iq_obj.getTag('query')
 		node = q.getAttr('node')
 
-		if self.commandQuery(con, iq_obj):
+		if self.commandInfoQuery(con, iq_obj):
 			raise common.xmpp.NodeProcessed
 		
 		else:
