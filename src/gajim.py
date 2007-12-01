@@ -1371,13 +1371,16 @@ class Interface:
 		return False
 
 	def handle_event_bad_passphrase(self, account, array):
+		#('BAD_PASSPHRASE', account, ())
 		use_gpg_agent = gajim.config.get('use_gpg_agent')
+		sectext = ''
 		if use_gpg_agent:
-			return
+			sectext = _('You configured Gajim to use GPG agent, but there is no '
+			'GPG agent running or it returned a wrong passphrase.\n')
+		sectext += _('You are currently connected without your OpenPGP key.')
 		keyID = gajim.config.get_per('accounts', account, 'keyid')
 		self.forget_gpg_passphrase(keyID)
-		dialogs.WarningDialog(_('Your passphrase is incorrect'),
-			_('You are currently connected without your OpenPGP key.'))
+		dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
 
 	def handle_event_gpg_password_required(self, account, array):
 		#('GPG_PASSWORD_REQUIRED', account, (callback,))

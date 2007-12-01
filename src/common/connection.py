@@ -767,7 +767,7 @@ class Connection(ConnectionHandlers):
 					safe_substitute({
 						'hostname': socket.gethostname()
 					})
-			if USE_GPG and not self.gpg:
+			if USE_GPG:
 				self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 			self.connect_and_init(show, msg, sign_msg)
 
