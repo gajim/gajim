@@ -105,7 +105,7 @@ class FeaturesWindow:
 				_('Requires python-docutils.'),
 				_('Requires python-docutils.')),
 			_('libsexy'): (self.pysexy_available,
-				_('Ability to have clickable URLs in chat window.'),
+				_('Ability to have clickable URLs in chat and groupchat window banners.'),
 				_('Requires python-sexy.'),
 				_('Requires python-sexy.')),
 		}
