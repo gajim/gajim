@@ -167,7 +167,7 @@ def find_current_groupchats(account):
 
 class LeaveGroupchatsCommand(AdHocCommand):
 	commandnode = 'leave-groupchats'
-	commandname = 'Leave Groupchats'
+	commandname = _('Leave Groupchats')
 
 	@staticmethod
 	def isVisibleFor(samejid):
