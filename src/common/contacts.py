@@ -439,7 +439,7 @@ class Contacts:
 		else:
 			show1 = show_list.index(contact1.show)
 			priority1 = contact1.priority
-		if not contact1:
+		if not contact2:
 			show2 = 0
 			priority2 = 0
 		else:
