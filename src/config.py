@@ -3088,6 +3088,7 @@ class AccountCreationWizardWindow:
 			self.notebook.set_current_page(5) # show finish page
 			self.show_vcard_checkbutton.set_active(False)
 		elif cur_page == 2:
+			# We are creating a new account
 			server = self.xml.get_widget('server_comboboxentry1').child.get_text()\
 				.decode('utf-8')
 
@@ -3172,7 +3173,7 @@ class AccountCreationWizardWindow:
 		return True # loop forever
 
 	def new_acc_connected(self, form, is_form):
-		'''connection to server succeded, present the form to the user'''
+		'''connection to server succeded, present the form to the user.'''
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		self.back_button.show()

@@ -119,6 +119,7 @@ class Connection(ConnectionHandlers):
 		self.time_to_reconnect = None
 		self.last_time_to_reconnect = None
 		self.new_account_info = None
+		self.new_account_form = None
 		self.bookmarks = []
 		self.annotations = {}
 		self.on_purpose = False
@@ -184,7 +185,7 @@ class Connection(ConnectionHandlers):
 			self.retrycount = 0
 	
 	# We are doing disconnect at so many places, better use one function in all
-	def disconnect(self, on_purpose = False):
+	def disconnect(self, on_purpose=False):
 		self.on_purpose = on_purpose
 		self.connected = 0
 		self.time_to_reconnect = None
@@ -259,8 +260,47 @@ class Connection(ConnectionHandlers):
 						return
 					is_form = data[2]
 					conf = data[1]
-					self.dispatch('NEW_ACC_CONNECTED', (conf, is_form))
-					return
+					if self.new_account_form:
+						def _on_register_result(result):
+							if not common.xmpp.isResultNode(result):
+								self.dispatch('ACC_NOT_OK', (result.getError()))
+								return
+							if USE_GPG:
+								self.gpg = GnuPG.GnuPG(gajim.config.get(
+									'use_gpg_agent'))
+							self.dispatch('ACC_OK', (self.new_account_info))
+							self.new_account_info = None
+							self.new_account_form = None
+							if self.connection:
+								self.connection.UnregisterDisconnectHandler(
+									self._on_new_account)
+							self.disconnect(on_purpose=True)
+						# it's the second time we get the form, we have info user
+						# typed, so send them
+						if is_form:
+							#TODO: Check if form has changed
+							iq = Iq('set', NS_REGISTER, to=self._hostname)
+							iq.setTag('query').addChild(node=self.new_account_form)
+							self.connection.SendAndCallForResponse(iq,
+								_on_register_result)
+						else:
+							if self.new_account_form.keys().sort() != \
+							conf.keys().sort():
+								# requested config has changed since first connection
+								self.dispatch('ACC_NOT_OK', (_(
+									'Server %s provided a different registration form')\
+									% data[0]))
+								return
+							common.xmpp.features_nb.register(self.connection,
+								self._hostname, self.new_account_form,
+								_on_register_result)
+						return
+					else:
+						self.dispatch('NEW_ACC_CONNECTED', (conf, is_form))
+						self.connection.UnregisterDisconnectHandler(
+							self._on_new_account)
+						self.disconnect(on_purpose=True)
+						return
 				if not data[1]: # wrong answer
 					self.dispatch('ERROR', (_('Invalid answer'),
 						_('Transport %s answered wrongly to register request: %s') % \
@@ -1029,18 +1069,6 @@ class Connection(ConnectionHandlers):
 				groups = groups)
 
 	def send_new_account_infos(self, form, is_form):
-		def _on_register_result(result):
-			if not common.xmpp.isResultNode(result):
-				self.dispatch('ACC_NOT_OK', (result.getError()))
-				return
-			if USE_GPG:
-				self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
-			gajim.connections[self.name] = self
-			self.dispatch('ACC_OK', (self.new_account_info))
-			self.new_account_info = None
-			if self.connection:
-				self.connection.UnregisterDisconnectHandler(self._on_new_account)
-			self.disconnect(on_purpose=True)
 		if is_form:
 			# Get username and password and put them in new_account_info
 			for field in self._data_form.iter_fields():
@@ -1048,17 +1076,14 @@ class Connection(ConnectionHandlers):
 					self.new_account_info['name'] = field.value
 				if field.var == 'password':
 					self.new_account_info['password'] = field.value
-			iq=Iq('set', NS_REGISTER, to = self._hostname)
-			iq.setTag('query').addChild(node = form)
-			self.connection.SendAndCallForResponse(iq, _on_register_result)
 		else:
 			# Get username and password and put them in new_account_info
 			if form.has_key('username'):
 				self.new_account_info['name'] = form['username']
 			if form.has_key('password'):
 				self.new_account_info['password'] = form['password']
-			common.xmpp.features_nb.register(self.connection, self._hostname,
-				form, _on_register_result)
+		self.new_account_form = form
+		self.new_account(self.name, self.new_account_info)
 
 	def new_account(self, name, config, sync = False):
 		# If a connection already exist we cannot create a new account
