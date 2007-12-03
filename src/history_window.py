@@ -155,7 +155,7 @@ class HistoryWindow:
 		self.window.destroy()
 
 	def on_jid_entry_activate(self, widget):
-		self.jid = self.jid_entry.get_text()
+		self.jid = self.jid_entry.get_text().decode('utf-8')
 		
 		if self.completion_dict.has_key(self.jid): # a full qualified jid or a contact name was entered
 			contact = self.completion_dict[self.jid]
