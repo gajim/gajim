@@ -1479,6 +1479,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 			if keyID:
 				decmsg = self.gpg.decrypt(encmsg, keyID)
+				# \x00 chars are not allowed in C (so in GTK)
+				decmsg = decmsg.replace('\x00', '')
 		if decmsg:
 			msgtxt = decmsg
 			encrypted = True
