@@ -326,7 +326,9 @@ _('Connection with peer cannot be established.'))
 						file_props['offset'] = dl_size
 				else:
 					dirname = os.path.dirname(file_path)
-					if not os.access(dirname, os.W_OK):
+					if not os.access(dirname, os.W_OK) and os.name != 'nt':
+						# read-only bit is used to mark special folder under windows,
+						# not to mark that a folder is read-only. See ticket #3587
 						dialogs.ErrorDialog(_('Directory "%s" is not writable') % dirname, _('You do not have permission to create files in this directory.'))
 						return
 				dialog2.destroy()
