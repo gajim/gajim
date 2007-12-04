@@ -3680,10 +3680,8 @@ class RosterWindow:
 			else:
 				artist = music_track_info.artist
 				title = music_track_info.title
-				status_message = '♪ ' + _('"%(title)s" by %(artist)s') % \
-				{'title': music_track_info.title,
-					'artist': music_track_info.artist } + ' ♪'
-		print "change (%s - %s) for %s" % (artist, title, account)
+				source = music_track_info.album
+		print "change (%s - %s - %s) for %s" % (artist, source, title, account)
 		if account == '':
 			print "Multi accounts"
 			for account in accounts:
@@ -3692,10 +3690,10 @@ class RosterWindow:
 					continue
 				if not gajim.connections[account].pep_supported:
 					continue
-				pep.user_send_tune(account, artist, title, source = '')
+				pep.user_send_tune(account, artist, title, source)
 		else:
 			print "Single account"
-			pep.user_send_tune(account, artist, title, source = '')
+			pep.user_send_tune(account, artist, title, source)
 
 
 	def update_status_combobox(self):
