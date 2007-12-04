@@ -2977,7 +2977,7 @@ class AccountCreationWizardWindow:
 
 	def on_wizard_window_destroy(self, widget):
 		page = self.notebook.get_current_page()
-		if page > 2 and page < 5 and self.account in gajim.connections:
+		if page in (4, 5) and self.account in gajim.connections:
 			# connection instance is saved in gajim.connections and we canceled the
 			# addition of the account
 			del gajim.connections[self.account]
@@ -2994,15 +2994,19 @@ class AccountCreationWizardWindow:
 		self.window.destroy()
 
 	def on_back_button_clicked(self, widget):
-		if self.notebook.get_current_page() in (1, 2):
+		cur_page = self.notebook.get_current_page()
+		if cur_page in (1, 2):
 			self.notebook.set_current_page(0)
 			self.back_button.set_sensitive(False)
-		elif self.notebook.get_current_page() == 3:
+		elif cur_page == 3:
+			self.xml.get_widget('form_vbox').remove(self.data_form_widget)
+			self.notebook.set_current_page(2) # show server page
+		elif cur_page == 4:
 			if self.account in gajim.connections:
 				del gajim.connections[self.account]
 			self.notebook.set_current_page(2)
 			self.xml.get_widget('form_vbox').remove(self.data_form_widget)
-		elif self.notebook.get_current_page() == 5: # finish page
+		elif cur_page == 6: # finish page
 			self.forward_button.show()
 			if self.modify:
 				self.notebook.set_current_page(1) # Go to parameters page
@@ -3085,7 +3089,7 @@ class AccountCreationWizardWindow:
 			self.go_online_checkbutton.show()
 			img = self.xml.get_widget('finish_image')
 			img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
-			self.notebook.set_current_page(5) # show finish page
+			self.notebook.set_current_page(6) # show finish page
 			self.show_vcard_checkbutton.set_active(False)
 		elif cur_page == 2:
 			# We are creating a new account
@@ -3124,7 +3128,7 @@ class AccountCreationWizardWindow:
 			config['custom_host'] = self.xml.get_widget(
 				'custom_host_entry').get_text().decode('utf-8')
 
-			self.notebook.set_current_page(4) # show creating page
+			self.notebook.set_current_page(5) # show creating page
 			self.back_button.hide()
 			self.forward_button.hide()
 			self.update_progressbar_timeout_id = gobject.timeout_add(100,
@@ -3134,6 +3138,18 @@ class AccountCreationWizardWindow:
 			con.new_account(self.account, config)
 			gajim.connections[self.account] = con
 		elif cur_page == 3:
+			checked = self.xml.get_widget('ssl_checkbutton').get_active()
+			if checked:
+				hostname = gajim.connections[self.account].new_account_info[
+					'hostname']
+				f = open(gajim.MY_CACERTS, 'a')
+				f.write(hostname + '\n')
+				f.write(self.ssl_cert + '\n\n')
+				f.close()
+				gajim.connections[self.account].new_account_info[
+					'ssl_fingerprint_sha1'] = self.ssl_fingerprint
+			self.notebook.set_current_page(4) # show fom page
+		elif cur_page == 4:
 			if self.is_form:
 				form = self.data_form_widget.data_form
 			else:
@@ -3142,7 +3158,7 @@ class AccountCreationWizardWindow:
 				self.is_form)
 			self.xml.get_widget('form_vbox').remove(self.data_form_widget)
 			self.xml.get_widget('progressbar_label').set_markup('<b>Account is being created</b>\n\nPlease wait...')
-			self.notebook.set_current_page(4) # show creating page
+			self.notebook.set_current_page(5) # show creating page
 			self.back_button.hide()
 			self.forward_button.hide()
 			self.update_progressbar_timeout_id = gobject.timeout_add(100,
@@ -3172,13 +3188,13 @@ class AccountCreationWizardWindow:
 		self.progressbar.pulse()
 		return True # loop forever
 
-	def new_acc_connected(self, form, is_form):
+	def new_acc_connected(self, form, is_form, ssl_msg, ssl_cert,
+	ssl_fingerprint):
 		'''connection to server succeded, present the form to the user.'''
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		self.back_button.show()
 		self.forward_button.show()
-		self.notebook.set_current_page(3) # show form page
 		self.is_form = is_form
 		if is_form:
 			dataform = dataforms.ExtendForm(node = form)
@@ -3187,6 +3203,21 @@ class AccountCreationWizardWindow:
 			self.data_form_widget = FakeDataForm(form)
 		self.data_form_widget.show_all()
 		self.xml.get_widget('form_vbox').pack_start(self.data_form_widget)
+		self.ssl_fingerprint = ssl_fingerprint
+		self.ssl_cert = ssl_cert
+		if ssl_msg:
+			# An SSL warning occured, show it
+			hostname = gajim.connections[self.account].new_account_info['hostname']
+			self.xml.get_widget('ssl_label').set_markup(_('<b>Security Warning</b>'
+				'\n\nThe authenticity of the %s SSL certificate could be invalid.\n'
+				'SSL Error: %s\n'
+				'Do you still want to connect to this server?') % (hostname,
+				ssl_msg))
+			text = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % ssl_fingerprint
+			self.xml.get_widget('ssl_checkbutton').set_label(text)
+			self.notebook.set_current_page(3) # show SSL page
+		else:
+			self.notebook.set_current_page(4) # show form page
 
 	def new_acc_not_connected(self, reason):
 		'''Account creation failed: connection to server failed'''
@@ -3202,7 +3233,7 @@ class AccountCreationWizardWindow:
 		finish_text = '<big><b>%s</b></big>\n\n%s' % (
 			_('An error occurred during account creation') , reason)
 		self.finish_label.set_markup(finish_text)
-		self.notebook.set_current_page(5) # show finish page
+		self.notebook.set_current_page(6) # show finish page
 
 	def acc_is_ok(self, config):
 		'''Account creation succeeded'''
@@ -3225,7 +3256,7 @@ class AccountCreationWizardWindow:
 			'button, or later by choosing the Accounts menuitem under the Edit '
 			'menu from the main window.'))
 		self.finish_label.set_markup(finish_text)
-		self.notebook.set_current_page(5) # show finish page
+		self.notebook.set_current_page(6) # show finish page
 
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
@@ -3242,7 +3273,7 @@ class AccountCreationWizardWindow:
 		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occurred during '
 			'account creation') , reason)
 		self.finish_label.set_markup(finish_text)
-		self.notebook.set_current_page(5) # show finish page
+		self.notebook.set_current_page(6) # show finish page
 
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)

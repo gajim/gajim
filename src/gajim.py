@@ -998,10 +998,11 @@ class Interface:
 			return
 
 	def handle_event_new_acc_connected(self, account, array):
-		#('NEW_ACC_CONNECTED', account, (infos, is_form))
+		#('NEW_ACC_CONNECTED', account, (infos, is_form, ssl_msg, ssl_cert,
+		# ssl_fingerprint))
 		if self.instances.has_key('account_creation_wizard'):
 			self.instances['account_creation_wizard'].new_acc_connected(array[0],
-				array[1])
+				array[1], array[2], array[3], array[4])
 
 	def handle_event_new_acc_not_connected(self, account, array):
 		#('NEW_ACC_NOT_CONNECTED', account, (reason))
@@ -2160,6 +2161,45 @@ class Interface:
 		instance = data[1]
 		instance.unique_room_id_error(data[0])
 
+	def handle_event_ssl_error(self, account, data):
+		# ('SSL_ERROR', account, (text, cert, sha1_fingerprint))
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		def on_ok(is_checked):
+			if is_checked:
+				f = open(gajim.MY_CACERTS, 'a')
+				f.write(server + '\n')
+				f.write(data[1] + '\n\n')
+				f.close()
+				gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
+					data[2])
+			gajim.connections[account].ssl_certificate_accepted()
+		def on_cancel():
+			gajim.connections[account].disconnect(on_purpose=True)
+			self.handle_event_status(account, 'offline')
+		pritext = _('Error verifying SSL certificate')
+		sectext = _('There was an error verifying the SSL certificate of your jabber server: %(error)s\nDo you still want to connect to this server?') % {'error': data[0]}
+		checktext = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % data[2]
+		dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
+			on_response_ok=on_ok, on_response_cancel=on_cancel)
+
+	def handle_event_fingerprint_error(self, account, data):
+		# ('FINGERPRINT_ERROR', account, (fingerprint,))
+		def on_yes(widget):
+			dialog.destroy()
+			gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
+				data[0])
+			gajim.connections[account].ssl_certificate_accepted()
+		def on_no(widget):
+			dialog.destroy()
+			gajim.connections[account].disconnect(on_purpose=True)
+			self.handle_event_status(account, 'offline')
+		pritext = _('SSL certificate error')
+		sectext = _('It seems SSL certificate has changed or your connection is '
+			'being hacked. Do you still want to connect and update the fingerprint'
+			'of the certificate?')
+		dialog = dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
+			on_response_no=on_no)
+
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -2497,6 +2537,8 @@ class Interface:
 			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
 			'SESSION_NEG': self.handle_session_negotiation,
 			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
+			'SSL_ERROR': self.handle_event_ssl_error,
+			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
 		}
 		gajim.handlers = self.handlers
 

@@ -79,9 +79,9 @@ class ConfigPaths:
 
 		# LOG is deprecated
 		k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS',
-			'MY_ICONSETS' )
+			'MY_ICONSETS', 'MY_CACERTS')
 		v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons',
-			u'iconsets')
+			u'iconsets',  u'cacerts.pem')
 
 		if os.name == 'nt':
 			v = map(lambda x: x.capitalize(), v)

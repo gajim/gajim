@@ -275,6 +275,7 @@ class Config:
 			'keyid': [ opt_str, '', '', True ],
 			'keyname': [ opt_str, '', '', True ],
 			'usessl': [ opt_bool, False, '', True ],
+			'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
 			'use_srv': [ opt_bool, True, '', True ],
 			'use_custom_host': [ opt_bool, False, '', True ],
 			'custom_port': [ opt_int, 5222, '', True ],

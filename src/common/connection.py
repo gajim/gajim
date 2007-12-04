@@ -58,39 +58,39 @@ log = logging.getLogger('gajim.c.connection')
 
 import gtkgui_helpers
 
-ssl_error = { 
-2: "Unable to get issuer certificate",
-3: "Unable to get certificate CRL",
-4: "Unable to decrypt certificate's signature",
-5: "Unable to decrypt CRL's signature",
-6: "Unable to decode issuer public key",
-7: "Certificate signature failure",
-8: "CRL signature failure",
-9: "Certificate is not yet valid",
-10: "Certificate has expired",
-11: "CRL is not yet valid",
-12: "CRL has expired",
-13: "Format error in certificate's notBefore field",
-14: "Format error in certificate's notAfter field",
-15: "Format error in CRL's lastUpdate field",
-16: "Format error in CRL's nextUpdate field",
-17: "Out of memory",
-18: "Self signed certificate in certificate chain",
-19: "Unable to get local issuer certificate",
-20: "Unable to verify the first certificate",
-21: "Unable to verify the first certificate",
-22: "Certificate chain too long",
-23: "Certificate revoked",
-24: "Invalid CA certificate",
-25: "Path length constraint exceeded",
-26: "Unsupported certificate purpose",
-27: "Certificate not trusted",
-28: "Certificate rejected",
-29: "Subject issuer mismatch",
-30: "Authority and subject key identifier mismatch",
-31: "Authority and issuer serial number mismatch",
-32: "Key usage does not include certificate signing",
-50: "Application verification failure"
+ssl_error = {
+2: _("Unable to get issuer certificate"),
+3: _("Unable to get certificate CRL"),
+4: _("Unable to decrypt certificate's signature"),
+5: _("Unable to decrypt CRL's signature"),
+6: _("Unable to decode issuer public key"),
+7: _("Certificate signature failure"),
+8: _("CRL signature failure"),
+9: _("Certificate is not yet valid"),
+10: _("Certificate has expired"),
+11: _("CRL is not yet valid"),
+12: _("CRL has expired"),
+13: _("Format error in certificate's notBefore field"),
+14: _("Format error in certificate's notAfter field"),
+15: _("Format error in CRL's lastUpdate field"),
+16: _("Format error in CRL's nextUpdate field"),
+17: _("Out of memory"),
+18: _("Self signed certificate in certificate chain"),
+19: _("Unable to get local issuer certificate"),
+20: _("Unable to verify the first certificate"),
+21: _("Unable to verify the first certificate"),
+22: _("Certificate chain too long"),
+23: _("Certificate revoked"),
+24: _("Invalid CA certificate"),
+25: _("Path length constraint exceeded"),
+26: _("Unsupported certificate purpose"),
+27: _("Certificate not trusted"),
+28: _("Certificate rejected"),
+29: _("Subject issuer mismatch"),
+30: _("Authority and subject key identifier mismatch"),
+31: _("Authority and issuer serial number mismatch"),
+32: _("Key usage does not include certificate signing"),
+50: _("Application verification failure")
 }
 class Connection(ConnectionHandlers):
 	'''Connection class'''
@@ -128,7 +128,7 @@ class Connection(ConnectionHandlers):
 		self.last_history_line = {}
 		self.password = passwords.get_password(name)
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
-		# All valid resource substitution strings should be added to this hash. 
+		# All valid resource substitution strings should be added to this hash.
 		if self.server_resource:
 			self.server_resource = Template(self.server_resource).safe_substitute({
 				'hostname': socket.gethostname()
@@ -183,7 +183,7 @@ class Connection(ConnectionHandlers):
 			# reconnect succeeded
 			self.time_to_reconnect = None
 			self.retrycount = 0
-	
+
 	# We are doing disconnect at so many places, better use one function in all
 	def disconnect(self, on_purpose=False):
 		self.on_purpose = on_purpose
@@ -196,7 +196,7 @@ class Connection(ConnectionHandlers):
 			self.connection.disconnect()
 			self.last_connection = None
 			self.connection = None
-	
+
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
 		log.debug('disconnectedReconnCB')
@@ -238,7 +238,7 @@ class Connection(ConnectionHandlers):
 			self.disconnect()
 		self.on_purpose = False
 	# END disconenctedReconnCB
-	
+
 	def _connection_lost(self):
 		self.disconnect(on_purpose = False)
 		self.dispatch('STATUS', 'offline')
@@ -295,12 +295,29 @@ class Connection(ConnectionHandlers):
 								self._hostname, self.new_account_form,
 								_on_register_result)
 						return
-					else:
-						self.dispatch('NEW_ACC_CONNECTED', (conf, is_form))
-						self.connection.UnregisterDisconnectHandler(
-							self._on_new_account)
-						self.disconnect(on_purpose=True)
-						return
+					try:
+						errnum = self.connection.Connection.ssl_errnum
+					except AttributeError:
+						errnum = -1 # we don't have an errnum
+					ssl_msg = ''
+					if errnum > 0:
+						if errnum in ssl_error:
+							ssl_msg = ssl_error[errnum]
+						else:
+							ssl_msg = _('Unknown SSL error: %d') % errnum
+					ssl_cert = ''
+					if hasattr(self.connection.Connection, 'ssl_cert_pem'):
+						ssl_cert = self.connection.Connection.ssl_cert_pem
+					ssl_fingerprint = ''
+					if hasattr(self.connection.Connection, 'ssl_fingerprint_sha1'):
+						ssl_fingerprint = \
+							self.connection.Connection.ssl_fingerprint_sha1
+					self.dispatch('NEW_ACC_CONNECTED', (conf, is_form, ssl_msg,
+						ssl_cert, ssl_fingerprint))
+					self.connection.UnregisterDisconnectHandler(
+						self._on_new_account)
+					self.disconnect(on_purpose=True)
+					return
 				if not data[1]: # wrong answer
 					self.dispatch('ERROR', (_('Invalid answer'),
 						_('Transport %s answered wrongly to register request: %s') % \
@@ -519,7 +536,6 @@ class Connection(ConnectionHandlers):
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 		log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
 			self._current_host['port'], con_type))
-		self._register_handlers(con, con_type)
 
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
@@ -529,14 +545,31 @@ class Connection(ConnectionHandlers):
 		except AttributeError:
 			errnum = -1 # we don't have an errnum
 		if errnum > 0:
-			# FIXME: tell the user that the certificat is untrusted, and ask him what to do
-			try:
-				log.warning("The authenticity of the "+hostname+" certificate could be invalid.\nSSL Error: "+ssl_error[errnum])
-			except KeyError:
-				log.warning("Unknown SSL error: %d" % errnum)
+			text = _('The authenticity of the %s certificate could be invalid.') %\
+				hostname
+			if errnum in ssl_error:
+				text += _('\nSSL Error: %s') % ssl_error[errnum]
+			else:
+				text += _('\nUnknown SSL error: %d') % errnum
+			self.dispatch('SSL_ERROR', (text, con.Connection.ssl_cert_pem,
+				con.Connection.ssl_fingerprint_sha1))
+			return True
+		if hasattr(con.Connection, 'ssl_fingerprint_sha1'):
+			saved_fingerprint = gajim.config.get_per('accounts', self.name, 'ssl_fingerprint_sha1')
+			if saved_fingerprint:
+				# Check sha1 fingerprint
+				if con.Connection.ssl_fingerprint_sha1 != saved_fingerprint:
+					self.dispatch('FINGERPRINT_ERROR',
+						(con.Connection.ssl_fingerprint_sha1,))
+					return True
+		self._register_handlers(con, con_type)
 		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
-		return True
+
+	def ssl_certificate_accepted(self):
+		name = gajim.config.get_per('accounts', self.name, 'name')
+		self._register_handlers(self.connection, 'ssl')
+		self.connection.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
 	def _register_handlers(self, con, con_type):
 		self.peerhost = con.get_peerhost()
@@ -585,8 +618,8 @@ class Connection(ConnectionHandlers):
 
 	def quit(self, kill_core):
 		if kill_core and gajim.account_is_connected(self.name):
-			self.disconnect(on_purpose = True)
-	
+			self.disconnect(on_purpose=True)
+
 	def get_privacy_lists(self):
 		if not self.connection:
 			return
@@ -612,7 +645,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		common.xmpp.features_nb.getActiveAndDefaultPrivacyLists(self.connection)
-	
+
 	def del_privacy_list(self, privacy_list):
 		if not self.connection:
 			return
@@ -626,17 +659,17 @@ class Connection(ConnectionHandlers):
 					'again.') % privacy_list))
 		common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list,
 			_on_del_privacy_list_result)
-	
+
 	def get_privacy_list(self, title):
 		if not self.connection:
 			return
 		common.xmpp.features_nb.getPrivacyList(self.connection, title)
-	
+
 	def set_privacy_list(self, listname, tags):
 		if not self.connection:
 			return
 		common.xmpp.features_nb.setPrivacyList(self.connection, listname, tags)
-	
+
 	def set_active_list(self, listname):
 		if not self.connection:
 			return
@@ -646,7 +679,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		common.xmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
-	
+
 	def build_privacy_rule(self, name, action):
 		'''Build a Privacy rule stanza for invisibility'''
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
@@ -699,7 +732,7 @@ class Connection(ConnectionHandlers):
 
 			#Get bookmarks from private namespace
 			self.get_bookmarks()
-			
+
 			#Get annotations
 			self.get_annotations()
 
@@ -798,7 +831,7 @@ class Connection(ConnectionHandlers):
 			# set old_show to requested 'show' in case we need to
 			# recconect before we auth to server
 			self.old_show = show
-			self.on_purpose = False 
+			self.on_purpose = False
 			self.server_resource = gajim.config.get_per('accounts', self.name,
 				'resource')
 			# All valid resource substitution strings should be added to this hash.
@@ -941,8 +974,8 @@ class Connection(ConnectionHandlers):
 						msg_id = ''
 					chatstate_node.setTagData('id', msg_id)
 				# when msgtxt, requests JEP-0022 composing notification
-				if chatstate is 'composing' or msgtxt: 
-					chatstate_node.addChild(name = 'composing') 
+				if chatstate is 'composing' or msgtxt:
+					chatstate_node.addChild(name = 'composing')
 
 		if forward_from:
 			addresses = msg_iq.addChild('addresses',
@@ -983,7 +1016,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		self.connection.send(stanza)
-	
+
 	def ack_subscribed(self, jid):
 		if not self.connection:
 			return
@@ -1280,7 +1313,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 
 		# last date/time in history to avoid duplicate
-		if not self.last_history_line.has_key(room_jid): 
+		if not self.last_history_line.has_key(room_jid):
 			# Not in memory, get it from DB
 			last_log = None
 			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
@@ -1343,7 +1376,7 @@ class Connection(ConnectionHandlers):
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server
 		self.connection.send(p)
-		# Save the time we quit to avoid duplicate logs AND be faster than 
+		# Save the time we quit to avoid duplicate logs AND be faster than
 		# get that date from DB
 		self.last_history_line[jid] = time_time()
 

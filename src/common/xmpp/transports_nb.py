@@ -745,10 +745,34 @@ class NonBlockingTLS(PlugIn):
 		#tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
 		tcpsock.ssl_errnum = 0
 		tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER, self._ssl_verify_callback)
+		cacerts = os.path.join(gajim.DATA_DIR, 'other', 'cacerts.pem')
 		try:
-			tcpsock._sslContext.load_verify_locations(os.path.join(gajim.DATA_DIR, 'other', 'cacerts.pem'))
+			tcpsock._sslContext.load_verify_locations(cacerts)
 		except:
-			log.warning(_("Unable to load SSL certificats from file %s" % os.path.abspath(os.path.join(gajim.DATA_DIR,'other','ca.crt'))))
+			log.warning('Unable to load SSL certificats from file %s' % \
+				os.path.abspath(cacerts))
+		# load users certs
+		if os.path.isfile(gajim.MY_CACERTS):
+			store = tcpsock._sslContext.get_cert_store()
+			f = open(gajim.MY_CACERTS)
+			lines = f.readlines()
+			i = 0
+			begin = -1
+			for line in lines:
+				if 'BEGIN CERTIFICATE' in line:
+					begin = i
+					continue
+				elif 'END CERTIFICATE' in line and begin > -1:
+					cert = ''.join(lines[begin:i+2])
+					try:
+						X509cert = OpenSSL.crypto.load_certificate(
+							OpenSSL.crypto.FILETYPE_PEM, cert)
+						store.add_cert(X509cert)
+					except:
+						log.warning('Unable to load a certificate from file %s' % \
+							gajim.MY_CACERTS)
+					begin = -1
+				i += 1
 		tcpsock._sslObj = OpenSSL.SSL.Connection(tcpsock._sslContext, tcpsock._sock)
 		tcpsock._sslObj.set_connect_state() # set to client mode
 
@@ -788,9 +812,12 @@ class NonBlockingTLS(PlugIn):
 	def _ssl_verify_callback(self, sslconn, cert, errnum, depth, ok):
 		# Exceptions can't propagate up through this callback, so print them here.
 		try:
+			self._owner.Connection.ssl_fingerprint_sha1 = cert.digest('sha1')
 			if errnum == 0:
 				return True
 			self._owner.Connection.ssl_errnum = errnum
+			self._owner.Connection.ssl_cert_pem = OpenSSL.crypto.dump_certificate(
+				OpenSSL.crypto.FILETYPE_PEM, cert)
 			return True
 		except:
 			log.error("Exception caught in _ssl_info_callback:", exc_info=True)
