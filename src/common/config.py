@@ -273,6 +273,7 @@ class Config:
 			'active': [ opt_bool, True],
 			'proxy': [ opt_str, '', '', True ],
 			'keyid': [ opt_str, '', '', True ],
+			'gpg_sign_presence': [ opt_bool, True, _('If disabled, don\'t sign presences with GPG key, even if GPG is configured.') ],
 			'keyname': [ opt_str, '', '', True ],
 			'usessl': [ opt_bool, False, '', True ],
 			'ssl_fingerprint_sha1': [ opt_str, '', '', True ],

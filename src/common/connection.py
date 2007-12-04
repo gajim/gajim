@@ -748,6 +748,11 @@ class Connection(ConnectionHandlers):
 		self.gpg.password = None
 		return signed != 'BAD_PASSPHRASE'
 
+	def get_signed_presence(self, msg, callback = None):
+		if gajim.config.get_per('accounts', self.name, 'gpg_sign_presence'):
+			return self.get_signed_msg(msg, callback)
+		return ''
+
 	def get_signed_msg(self, msg, callback = None):
 		'''returns the signed message if possible
 		or an empty string if gpg is not used
@@ -805,7 +810,7 @@ class Connection(ConnectionHandlers):
 			if msg:
 				p.setStatus(msg)
 		else:
-			signed = self.get_signed_msg(msg)
+			signed = self.get_signed_presence(msg)
 			priority = unicode(gajim.get_priority(self.name, sshow))
 			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow,
 				to = jid)
@@ -866,7 +871,7 @@ class Connection(ConnectionHandlers):
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
 			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
-				signed = self.get_signed_msg(msg)
+				signed = self.get_signed_presence(msg)
 				self.send_invisible_presence(msg, signed)
 				return
 			if was_invisible and self.privacy_rules_supported:
@@ -878,7 +883,7 @@ class Connection(ConnectionHandlers):
 			p = self.add_sha(p)
 			if msg:
 				p.setStatus(msg)
-			signed = self.get_signed_msg(msg)
+			signed = self.get_signed_presence(msg)
 			if signed:
 				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 			if self.connection:
