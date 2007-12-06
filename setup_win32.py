@@ -23,7 +23,7 @@ includes = ['encodings', 'encodings.utf-8',]
 
 opts = {
     'py2exe': {
-        'includes': 'pango,atk,gobject,cairo,pangocairo,gtk.keysyms,encodings,encodings.*',
+        'includes': 'pango,atk,gobject,cairo,pangocairo,gtk.keysyms,encodings,encodings.*,docutils.readers.*,docutils.writers.html4css1',
         'dll_excludes': [
             'iconv.dll','intl.dll','libatk-1.0-0.dll',
             'libgdk_pixbuf-2.0-0.dll','libgdk-win32-2.0-0.dll',
