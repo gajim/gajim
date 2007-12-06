@@ -27,7 +27,7 @@ includes = ['encodings', 'encodings.utf-8',]
 
 opts = {
     'py2exe': {
-        'includes': 'pango,atk,gobject,cairo,pangocairo,gtk.keysyms,encodings,encodings.*',
+        'includes': 'pango,atk,gobject,cairo,pangocairo,gtk.keysyms,encodings,encodings.*,docutils.readers.*,docutils.writers.html4css1',
         'dll_excludes': [
             'iconv.dll','intl.dll','libatk-1.0-0.dll',
             'libgdk_pixbuf-2.0-0.dll','libgdk-win32-2.0-0.dll',
@@ -42,7 +42,7 @@ opts = {
 
 setup(
     name = 'Gajim',
-    version = '0.11',
+    version = '0.11.4',
     description = 'A full featured Jabber client',
     author = 'Gajim Development Team',
     url = 'http://www.gajim.org/',

@@ -1,3 +1,12 @@
+gajim (0.11.4-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix tab switching. Closes: #452257
+  * update to 3.7.3 Debian Policy
+  * Add Homepage, Vcs-Svn, Vcs-Browser fields to control file
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Wed, 05 Dec 2007 22:23:30 +0100
+
 gajim (0.11.3-1) unstable; urgency=low
 
   * New upstream release.
