@@ -1464,6 +1464,9 @@ class ChatControl(ChatControlBase):
 		self.mouse_over_in_last_30_secs = False
 		self.kbd_activity_in_last_30_secs = False
 
+	def on_cancel_session_negotiation(self):
+		msg = _('Session negotiation cancelled')
+		ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
 	# print esession settings to textview
 	def print_esession_details(self):
@@ -2155,7 +2158,7 @@ class ChatControl(ChatControlBase):
 		# this is reverse logic, as we are on 'activate' (before change happens)
 		tb = self.xml.get_widget('gpg_togglebutton')
 		tb.set_active(not tb.get_active())
-	
+
 	def _on_convert_to_gc_menuitem_activate(self, widget):
 		'''user want to invite some friends to chat'''
 		dialogs.TransformChatToMUC(self.account, [self.contact.jid])
@@ -2164,9 +2167,7 @@ class ChatControl(ChatControlBase):
 		if self.session and self.session.enable_encryption:
 			self.session.terminate_e2e()
 
-			msg = _('Encryption disabled')
-			ChatControlBase.print_conversation_line(self, msg, 
-				'status', '', None)
+			self.print_esession_details()
 
 			jid = str(self.session.jid)
 

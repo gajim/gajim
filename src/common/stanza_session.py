@@ -36,7 +36,7 @@ class StanzaSession(object):
 		self.last_send = 0
 		self.status = None
 		self.negotiated = {}
-	
+
 	def generate_thread_id(self):
 		return "".join([random.choice(string.ascii_letters) for x in xrange(0,32)])
 
@@ -46,7 +46,7 @@ class StanzaSession(object):
 
 		msg.setAttr('to', self.jid)
 		self.conn.send_stanza(msg)
-	
+
 		if isinstance(msg, xmpp.Message):
 			self.last_send = time.time()
 
@@ -72,8 +72,7 @@ class StanzaSession(object):
 		'''A negotiation has been cancelled, so reset this session to its default state.'''
 
 		if hasattr(self, 'control'):
-			msg = _('Session negotiation cancelled')
-			self.control.print_conversation_line(self, msg, 'status', '', None)
+			self.control.on_cancel_session_negotiation()
 
 		self.status = None
 		self.negotiated = {}
@@ -350,7 +349,7 @@ class EncryptedStanzaSession(StanzaSession):
 			hash = crypto.sha256(mac_o_calculated)
 
 			if not eir_pubkey.verify(hash, signature):
-				raise exceptions.NegotiationError, 'public key signature verification failed!' 
+				raise exceptions.NegotiationError, 'public key signature verification failed!'
 
 		elif mac_o_calculated != mac_o:
 			raise exceptions.NegotiationError, 'calculated mac_%s differs from received mac_%s' % (i_o, i_o)
@@ -903,3 +902,9 @@ otherwise, list the fields we haven't implemented'''
 		no_log_for = no_log_for.split()
 
 		return self.loggable and account not in no_log_for and self.jid not in no_log_for
+
+	def cancelled_negotiation(self):
+		StanzaSession.cancelled_negotiation(self)
+		self.enable_encryption = False
+
+		self.km_o = ''
