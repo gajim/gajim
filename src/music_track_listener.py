@@ -51,6 +51,13 @@ class MusicTrackListener(gobject.GObject):
 		
 		bus = dbus.SessionBus()
 
+		## MPRIS
+		bus.add_signal_receiver(self._mpris_music_track_change_cb, 'TrackChange',
+			'org.freedesktop.MediaPlayer')
+		bus.add_signal_receiver(self._player_playing_changed_cb, 'StatusChange',
+			'org.freedesktop.MediaPlayer')
+			
+
 		## Muine
 		bus.add_signal_receiver(self._muine_music_track_change_cb, 'SongChanged',
 			'org.gnome.Muine.Player')
@@ -68,7 +75,7 @@ class MusicTrackListener(gobject.GObject):
 			'playingChanged', 'org.gnome.Rhythmbox.Player')
 		bus.add_signal_receiver(self._player_playing_song_property_changed_cb,
 			'playingSongPropertyChanged', 'org.gnome.Rhythmbox.Player')
-			
+
 		## Banshee
 		banshee_bus = dbus.SessionBus()
 		dubus = banshee_bus.get_object('org.freedesktop.DBus',
@@ -115,6 +122,18 @@ class MusicTrackListener(gobject.GObject):
 	def _player_playing_song_property_changed_cb(self, a, b, c, d):
 		if b == 'rb:stream-song-title':
 			self.emit('music-track-changed', self._last_playing_music)
+
+	def _mpris_properties_extract(self, song):
+		info = MusicTrackInfo()
+		info.title = song['title']
+		info.album = song['album']
+		info.artist = song['artist']
+		info.duration = int(song['length'])
+		return info
+
+	def _mpris_music_track_change_cb(self, arg):
+		info = self._mpris_properties_extract(arg)
+		self.emit('music-track-changed', info)
 
 	def _muine_properties_extract(self, song_string):
 		d = dict((x.strip() for x in  s1.split(':', 1)) for s1 in \
