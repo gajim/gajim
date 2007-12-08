@@ -1057,10 +1057,7 @@ class ChatControl(ChatControlBase):
 		if self.contact.jid in gajim.encrypted_chats[self.account]:
 			self.xml.get_widget('gpg_togglebutton').set_active(True)
 
-		self.session = session
-
-		# does this window have an existing, active esession?
-		self.esessioned = False
+		self.set_session(session)
 
 		self.status_tooltip = gtk.Tooltips()
 		self.update_ui()
@@ -1467,6 +1464,23 @@ class ChatControl(ChatControlBase):
 		self.mouse_over_in_last_30_secs = False
 		self.kbd_activity_in_last_30_secs = False
 
+
+	# print esession settings to textview
+	def print_esession_details(self):
+		if self.session and self.session.enable_encryption:
+			msg = _('E2E encryption enabled')
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
+			if self.session.loggable:
+				msg = _('Session WILL be logged')
+			else:
+				msg = _('Session WILL NOT be logged')
+
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+		else:
+			msg = _('E2E encryption disabled')
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
 	def print_conversation(self, text, frm = '', tim = None,
 		encrypted = False, subject = None, xhtml = None):
 		'''Print a line in the conversation:
@@ -1486,41 +1500,21 @@ class ChatControl(ChatControlBase):
 			kind = 'info'
 			name = ''
 		else:
-			# ESessions
 			if self.session and self.session.enable_encryption:
-				if not self.esessioned:
-					msg = _('Encryption enabled')
-					ChatControlBase.print_conversation_line(self, msg, 
-						'status', '', tim)
-
-					if self.session.loggable:
-						msg = _('Session WILL be logged')
-					else:
-						msg = _('Session WILL NOT be logged')
-
-					ChatControlBase.print_conversation_line(self, msg, 
-						'status', '', tim)
-
-					self.esessioned = True
-				elif not encrypted:
+				if not encrypted:
 					msg = _('The following message was NOT encrypted')
 					ChatControlBase.print_conversation_line(self, msg, 
 						'status', '', tim)
-			elif self.esessioned:
-				msg = _('Encryption disabled')
-				ChatControlBase.print_conversation_line(self, msg, 
-					'status', '', tim)
-				self.esessioned = False
 			else:
 				# GPG encryption
 				ec = gajim.encrypted_chats[self.account]
 				if encrypted and jid not in ec:
-					msg = _('Encryption enabled')
+					msg = _('OpenPGP Encryption enabled')
 					ChatControlBase.print_conversation_line(self, msg, 
 						'status', '', tim)
 					ec.append(jid)
 				elif not encrypted and jid in ec:
-					msg = _('Encryption disabled')
+					msg = _('OpenPGP Encryption disabled')
 					ChatControlBase.print_conversation_line(self, msg,
 						'status', '', tim)
 					ec.remove(jid)
@@ -2003,11 +1997,15 @@ class ChatControl(ChatControlBase):
 
 	def read_queue(self):
 		'''read queue and print messages containted in it'''
+
 		jid = self.contact.jid
 		jid_with_resource = jid
 		if self.resource:
 			jid_with_resource += '/' + self.resource
 		events = gajim.events.get_events(self.account, jid_with_resource)
+
+		if hasattr(self, 'session') and self.session and self.session.enable_encryption:
+			self.print_esession_details()
 
 		# Is it a pm ?
 		is_pm = False
@@ -2169,18 +2167,18 @@ class ChatControl(ChatControlBase):
 			msg = _('Encryption disabled')
 			ChatControlBase.print_conversation_line(self, msg, 
 				'status', '', None)
-			self.esessioned = False
 
 			jid = str(self.session.jid)
 
 			gajim.connections[self.account].delete_session(jid,
 				self.session.thread_id)
 
-			self.session = gajim.connections[self.account].make_new_session(jid)
+			self.set_session(gajim.connections[self.account].make_new_session(jid))
 		else:
 			if not self.session:
-				self.session = gajim.connections[self.account].make_new_session(
-					self.contact.jid)
+				fjid = self.contact.get_full_jid()
+				new_sess = gajim.connections[self.account].make_new_session(fjid)
+				self.set_session(new_sess)
 
 			# XXX decide whether to use 4 or 3 message negotiation
 			self.session.negotiate_e2e(False)

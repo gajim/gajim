@@ -71,8 +71,10 @@ class StanzaSession(object):
 	def cancelled_negotiation(self):
 		'''A negotiation has been cancelled, so reset this session to its default state.'''
 
-		# XXX notify the user	
-		
+		if hasattr(self, 'control'):
+			msg = _('Session negotiation cancelled')
+			self.control.print_conversation_line(self, msg, 'status', '', None)
+
 		self.status = None
 		self.negotiated = {}
 
@@ -92,7 +94,7 @@ class StanzaSession(object):
 		self.status = None
 
 	def acknowledge_termination(self):
-		# we could send an acknowledgement message here, but we won't.
+		# we could send an acknowledgement message to the remote client here
 		self.status = None
 
 if gajim.HAVE_PYCRYPTO:
@@ -105,7 +107,7 @@ if gajim.HAVE_PYCRYPTO:
 	import secrets
 
 # an encrypted stanza negotiation has several states. i've represented them
-# as the following values in the 'status' 
+# as the following values in the 'status'
 # attribute of the session object:
 
 # 1. None:
@@ -143,7 +145,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		# _s denotes 'self' (ie. this client)
 		self._kc_s = None
-	
+
 		# _o denotes 'other' (ie. the client at the other end of the session)
 		self._kc_o = None
 
@@ -161,17 +163,17 @@ class EncryptedStanzaSession(StanzaSession):
 		self._kc_o = value
 		self.decrypter = self.cipher.new(self._kc_o, self.cipher.MODE_CTR,
 			counter=self.decryptcounter)
-	
+
 	def get_kc_o(self):
 		return self._kc_o
 
 	kc_s = property(get_kc_s, set_kc_s)
 	kc_o = property(get_kc_o, set_kc_o)
-	
+
 	def encryptcounter(self):
 		self.c_s = (self.c_s + 1) % (2 ** self.n)
 		return crypto.encode_mpi_with_padding(self.c_s)
-	
+
 	def decryptcounter(self):
 		self.c_o = (self.c_o + 1) % (2 ** self.n)
 		return crypto.encode_mpi_with_padding(self.c_o)
@@ -231,7 +233,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def decompress(self, compressed):
 		if self.compression == None:
-			return compressed 
+			return compressed
 
 	def encrypt(self, encryptable):
 		padded = crypto.pad_to_multiple(encryptable, 16, ' ', False)
@@ -343,7 +345,7 @@ class EncryptedStanzaSession(StanzaSession):
 			content += self.form_o + form_o2
 
 		mac_o_calculated = self.hmac(self.ks_o, content)
-	
+
 		if self.negotiated['recv_pubkey']:
 			hash = crypto.sha256(mac_o_calculated)
 
@@ -380,7 +382,7 @@ class EncryptedStanzaSession(StanzaSession):
 			if self.negotiated['send_pubkey'] == 'hash':
 				b64ed = base64.b64encode(self.hash(pubkey_s))
 				pubkey_s = '<fingerprint>%s</fingerprint>' % b64ed
-		
+
 			id_s = self.encrypt(pubkey_s + sign_s)
 		else:
 			id_s = self.encrypt(mac_s)
@@ -395,7 +397,7 @@ class EncryptedStanzaSession(StanzaSession):
 			if self.sigmai:
 				# XXX save retained secret?
 				self.check_identity(lambda : ())
-		
+
 		return (xmpp.DataField(name='identity', value=base64.b64encode(id_s)), \
 						xmpp.DataField(name='mac', value=base64.b64encode(m_s)))
 
@@ -437,7 +439,7 @@ class EncryptedStanzaSession(StanzaSession):
 		x.addChild(node=xmpp.DataField(name='sign_algs', value='http://www.w3.org/2000/09/xmldsig#rsa-sha256', typ='hidden'))
 
 		self.n_s = crypto.generate_nonce()
-	
+
 		x.addChild(node=xmpp.DataField(name='my_nonce', value=base64.b64encode(self.n_s), typ='hidden'))
 
 		modp_options = [ 5, 14, 2, 1 ]
@@ -454,7 +456,7 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = 'requested-e2e'
 
 		self.send(request)
-	
+
 	# 4.3 esession response (bob)
 	def verify_options_bob(self, form):
 		negotiated = {'recv_pubkey': None, 'send_pubkey': None}
@@ -570,8 +572,8 @@ class EncryptedStanzaSession(StanzaSession):
 		self.d = crypto.powmod(g, self.y, p)
 
 		to_add = { 'my_nonce': self.n_s,
-							 'dhkeys': crypto.encode_mpi(self.d), 
-							 'counter': crypto.encode_mpi(self.c_o), 
+							 'dhkeys': crypto.encode_mpi(self.d),
+							 'counter': crypto.encode_mpi(self.c_o),
 							 'nonce': self.n_o }
 
 		for name in to_add:
@@ -666,7 +668,7 @@ class EncryptedStanzaSession(StanzaSession):
 			self.kc_o, self.km_o, self.ks_o = self.generate_responder_keys(self.k)
 			self.verify_identity(form, self.d, True, 'b')
 		else:
-			srses = secrets.secrets().retained_secrets(self.conn.name, self.jid.getStripped()) 
+			srses = secrets.secrets().retained_secrets(self.conn.name, self.jid.getStripped())
 			rshashes = [self.hmac(self.n_s, rs) for (rs,v) in srses]
 
 			if not rshashes:
@@ -677,7 +679,7 @@ class EncryptedStanzaSession(StanzaSession):
 			rshashes = [base64.b64encode(rshash) for rshash in rshashes]
 			result.addChild(node=xmpp.DataField(name='rshashes', value=rshashes))
 			result.addChild(node=xmpp.DataField(name='dhkeys', value=base64.b64encode(crypto.encode_mpi(e))))
-		
+
 			self.form_o = ''.join(map(lambda el: xmpp.c14n.c14n(el), form.getChildren()))
 
 		# MUST securely destroy K unless it will be used later to generate the final shared secret
@@ -687,13 +689,13 @@ class EncryptedStanzaSession(StanzaSession):
 
 		feature.addChild(node=result)
 		self.send(accept)
-	
+
 		if self.sigmai:
 			self.status = 'active'
 			self.enable_encryption = True
 		else:
 			self.status = 'identified-alice'
-	
+
 	# 4.5 esession accept (bob)
 	def accept_e2e_bob(self, form):
 		response = xmpp.Message()
@@ -724,7 +726,7 @@ class EncryptedStanzaSession(StanzaSession):
 		# 4.5.4 generating bob's final session keys
 
 		srs = ''
-	
+
 		srses = secrets.secrets().retained_secrets(self.conn.name, self.jid.getStripped())
 		rshashes = [base64.b64decode(rshash) for rshash in form.getField('rshashes').getValues()]
 
@@ -767,6 +769,9 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = 'active'
 		self.enable_encryption = True
 
+		if hasattr(self, 'control'):
+			self.control.print_esession_details()
+
 	def final_steps_alice(self, form):
 		srs = ''
 		srses = secrets.secrets().retained_secrets(self.conn.name, self.jid.getStripped())
@@ -793,12 +798,15 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.verify_identity(form, self.d, False, 'b')
 # Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
-	
+
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
 
 		self.status = 'active'
 		self.enable_encryption = True
+
+		if hasattr(self, 'control'):
+			self.control.print_esession_details()
 
 	# calculate and store the new retained secret
 	# prompt the user to check the remote party's identity (if necessary)

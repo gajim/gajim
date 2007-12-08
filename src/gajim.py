@@ -2031,7 +2031,8 @@ class Interface:
 				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
 
 				if ctrl:
-					ctrl.session = gajim.connections[account].make_new_session(str(jid))
+					new_sess = gajim.connections[account].make_new_session(str(jid))
+					ctrl.set_session(new_sess)
 
 				return
 
@@ -2044,7 +2045,8 @@ class Interface:
 				contact = gajim.contacts.get_contact(account, str(jid), resource)
 				if not contact:
 					connection = gajim.connections[account]
-					contact = gajim.contacts.create_contact(jid = jid.getStripped(), resource = resource, show = connection.get_status())
+					contact = gajim.contacts.create_contact(jid = jid.getStripped(), 
+							resource = resource, show = connection.get_status())
 				self.roster.new_chat(contact, account, resource = resource)
 
 				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
