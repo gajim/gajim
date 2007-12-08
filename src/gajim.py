@@ -1902,8 +1902,6 @@ class Interface:
 		jid, session, form = data
 
 		if form.getField('accept') and not form['accept'] in ('1', 'true'):
-			dialogs.InformationDialog(_('Session negotiation cancelled'),
-					_('The client at %s cancelled the session negotiation.') % (jid))
 			session.cancelled_negotiation()
 			return
 
@@ -2018,23 +2016,26 @@ class Interface:
 		except exceptions.Cancelled:
 			# user cancelled the negotiation
 
-			session.cancelled_negotiation()
+			session.reject_negotiation()
 
 			return
 
-		if form.getField('terminate'):
-			if form.getField('terminate').getValue() in ('1', 'true'):
-				session.acknowledge_termination()
+		if form.getField('terminate') and\
+		form.getField('terminate').getValue() in ('1', 'true'):
+			was_encrypted = session.enable_encryption
+			ctrl = session.control
 
-				gajim.connections[account].delete_session(str(jid), session.thread_id)
+			session.acknowledge_termination()
+			gajim.connections[account].delete_session(str(jid), session.thread_id)
 
-				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+			if ctrl:
+				new_sess = gajim.connections[account].make_new_session(str(jid))
+				ctrl.set_session(new_sess)
 
-				if ctrl:
-					new_sess = gajim.connections[account].make_new_session(str(jid))
-					ctrl.set_session(new_sess)
+				if was_encrypted:
+					ctrl.print_esession_details()
 
-				return
+			return
 
 		# non-esession negotiation. this isn't very useful, but i'm keeping it around
 		# to test my test suite.

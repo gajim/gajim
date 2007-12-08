@@ -19,7 +19,7 @@ def show_sas_dialog(session, jid, sas, on_success):
 		on_success(checked)
 
 	def failure_cb():
-		session.cancelled_negotiation()
+		session.reject_negotiation()
 
 	dialogs.ConfirmationDialogCheck(_('''OK to continue with negotiation?'''),
 		_('''You've begun an encrypted session with %s, but it can't be guaranteed that you're talking directly to the person you think you are.
