@@ -151,7 +151,7 @@ class ChatControlBase(MessageControl):
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id] = widget
 
-		self.urlfinder = re.compile("(https?://|www|ftp)[^ ]+")
+		self.urlfinder = re.compile(r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
 		if gajim.HAVE_PYSEXY:
 			import sexy

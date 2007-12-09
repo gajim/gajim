@@ -2328,7 +2328,7 @@ class Interface:
 
 		#FIXME: recognize xmpp: and treat it specially
 
-		links = r'\b(%s)\S*[\w\/\=]|' % prefixes
+		links = r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]"
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
 		mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]'
 
@@ -2340,7 +2340,7 @@ class Interface:
 
 		latex = r'|\$\$[^$\\]*?([\]\[0-9A-Za-z()|+*/-]|[\\][\]\[0-9A-Za-z()|{}$])(.*?[^\\])?\$\$'
 
-		basic_pattern = links + mail
+		basic_pattern = links + '|' + mail
 
 		if gajim.config.get('use_latex'):
 			basic_pattern += latex
