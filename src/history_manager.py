@@ -100,7 +100,7 @@ class HistoryManager:
 		self.logs_scrolledwindow = xml.get_widget('logs_scrolledwindow')
 		self.search_results_scrolledwindow = xml.get_widget(
 			'search_results_scrolledwindow')
-		self.welcome_label = xml.get_widget('welcome_label')
+		self.welcome_vbox = xml.get_widget('welcome_vbox')
 
 		self.jids_already_in = [] # holds jids that we already have in DB
 		self.AT_LEAST_ONE_DELETION_DONE = False
@@ -236,7 +236,7 @@ class HistoryManager:
 
 		self.logs_liststore.clear() # clear the store
 		
-		self.welcome_label.hide()
+		self.welcome_vbox.hide()
 		self.search_results_scrolledwindow.hide()
 		self.logs_scrolledwindow.show()
 
@@ -579,7 +579,7 @@ class HistoryManager:
 		if text == '':
 			return
 
-		self.welcome_label.hide()
+		self.welcome_vbox.hide()
 		self.logs_scrolledwindow.hide()
 		self.search_results_scrolledwindow.show()
 		
