@@ -279,7 +279,7 @@ class Connection(ConnectionHandlers):
 						# typed, so send them
 						if is_form:
 							#TODO: Check if form has changed
-							iq = Iq('set', NS_REGISTER, to=self._hostname)
+							iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to=self._hostname)
 							iq.setTag('query').addChild(node=self.new_account_form)
 							self.connection.SendAndCallForResponse(iq,
 								_on_register_result)
